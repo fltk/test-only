@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.18 2004/06/19 23:02:11 spitzak Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.19 2004/07/10 08:29:56 laza2000 Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -72,6 +72,22 @@ public:
     XSetFillStyle(xdisplay, gc, FillSolid);
     // put line width back to zero:
     //XSetLineAttributes(xdisplay, gc, 0, LineSolid, CapButt, JoinMiter);
+
+#elif defined(_WIN32) || defined(_WIN32_WCE)
+  // Windows 95/98/ME do not implement the dotted line style, so draw
+  // every other pixel around the focus area...
+  //
+  // Also, QuickDraw (MacOS) does not support line styles specifically,
+  // and the hack we use in fl_line_style() will not draw horizontal lines
+  // on odd-numbered rows...
+  int i, xx, yy; 
+	w--; h--;
+
+  for (xx = 0, i = 1; xx < w; xx ++, i ++) if (i & 1) drawpoint(x + xx, y);
+  for (yy = 0; yy < h; yy ++, i ++) if (i & 1) drawpoint(x + w, y + yy);
+  for (xx = w; xx > 0; xx --, i ++) if (i & 1) drawpoint(x + xx, y + h);
+  for (yy = h; yy > 0; yy --, i ++) if (i & 1) drawpoint(x, y + yy);
+
 #else
     line_style(DOT);
     strokerect(x, y, w, h);
@@ -319,5 +335,5 @@ static HighlightBox highlightDownBox("highlight_down", THIN_DOWN_BOX);
 Box* const fltk::HIGHLIGHT_DOWN_BOX = &highlightDownBox;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.18 2004/06/19 23:02:11 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.19 2004/07/10 08:29:56 laza2000 Exp $".
 //
