@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.52 2002/12/18 08:34:20 spitzak Exp $"
+ * "$Id: configh.in,v 1.53 2002/12/22 05:30:21 easysw Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -166,13 +166,17 @@
 
 
 /*
- * String functions and headers...
+ * String headers and functions...
  */
 
+#undef HAVE_STRING_H
 #undef HAVE_STRINGS_H
+
 #undef HAVE_STRCASECMP
+#undef HAVE_STRDUP
 #undef HAVE_STRLCAT
 #undef HAVE_STRLCPY
+#undef HAVE_STRNCASECMP
 
 
 /*
@@ -267,5 +271,5 @@
 
 
 /*
- * End of "$Id: configh.in,v 1.52 2002/12/18 08:34:20 spitzak Exp $".
+ * End of "$Id: configh.in,v 1.53 2002/12/22 05:30:21 easysw Exp $".
  */

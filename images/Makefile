@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.20 2002/12/18 20:13:15 easysw Exp $"
+# "$Id: Makefile,v 1.21 2002/12/22 05:30:22 easysw Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -127,5 +127,14 @@ libfltk_images_s.a: $(OBJECTS)
 install:
 
 #
-# End of "$Id: Makefile,v 1.20 2002/12/18 20:13:15 easysw Exp $".
+# End of "$Id: Makefile,v 1.21 2002/12/22 05:30:22 easysw Exp $".
 #
+# DO NOT DELETE
+
+Fl_Guess_Image.o: ../config.h ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h
+Fl_Guess_Image.o: ../fltk/FL_API.h ../fltk/SharedImage.h ../fltk/Image.h
+Fl_Guess_Image.o: ../fltk/xbmImage.h ../fltk/x.h
+fl_jpeg.o: ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h ../fltk/FL_API.h
+fl_jpeg.o: ../fltk/x.h ../fltk/SharedImage.h ../fltk/Image.h ../config.h
+fl_png.o: ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h ../fltk/FL_API.h
+fl_png.o: ../fltk/x.h ../fltk/SharedImage.h ../fltk/Image.h ../config.h

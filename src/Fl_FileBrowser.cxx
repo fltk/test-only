@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileBrowser.cxx,v 1.16 2002/12/10 02:00:40 easysw Exp $"
+// "$Id: Fl_FileBrowser.cxx,v 1.17 2002/12/22 05:30:22 easysw Exp $"
 //
 // FileBrowser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -38,10 +38,9 @@
 #include <fltk/FileBrowser.h>
 #include <fltk/draw.h>
 #include <fltk/filename.h>
-#include <fltk/vsnprintf.h>
+#include <fltk/string.h>
 #include <stdlib.h>
 #include <config.h>
-#include <string.h>
 
 #if defined(_WIN32)
 #  include <windows.h>
@@ -438,5 +437,5 @@ FileBrowser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_FileBrowser.cxx,v 1.16 2002/12/10 02:00:40 easysw Exp $".
+// End of "$Id: Fl_FileBrowser.cxx,v 1.17 2002/12/22 05:30:22 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 /*
- * "$Id: vsnprintf.c,v 1.12 2002/12/10 02:01:03 easysw Exp $"
+ * "$Id: vsnprintf.c,v 1.13 2002/12/22 05:30:22 easysw Exp $"
  *
  * vsnprintf() function for the Fast Light Tool Kit (FLTK).
  *
@@ -17,7 +17,7 @@
  * Only handles formats that are both documented in the glibc man page
  * for printf and also handled by your system's sprintf().
  *
- * Copyright 1998-2003 by Bill Spitzak and others.
+ * Copyright 1998-2002 by Bill Spitzak and others.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -37,16 +37,24 @@
  * Please report all bugs and problems to "fltk-bugs@fltk.org".
  */
 
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdarg.h>
 #include <config.h>
-#include <fltk/vsnprintf.h>
+#include <fltk/string.h>
 
-#ifdef need_fl_vsnprintf
 
-int fl_vsnprintf(char* str, size_t size, const char* fmt, va_list ap) {
-#if HAVE_VSNPRINTF
-#undef vsnprintf
-  return vsnprintf(str, size, fmt, ap);
-#else
+#ifdef HAVE_SYS_STDTYPES_H
+#  include <sys/stdtypes.h>
+#endif /* HAVE_SYS_STDTYPES_H */
+
+#ifdef __cplusplus
+extern "C" {
+#endif
+
+#if !HAVE_VSNPRINTF
+
+int fltk_vsnprintf(char* str, size_t size, const char* fmt, va_list ap) {
   const char* e = str+size-1;
   char* p = str;
   char copy[20];
@@ -108,10 +116,13 @@ int fl_vsnprintf(char* str, size_t size, const char* fmt, va_list ap) {
   *p = 0;
   if (*fmt) return -1;
   return p-str;
-#endif
 }
 
-int fl_snprintf(char* str, size_t size, const char* fmt, ...) {
+#endif
+
+#if !HAVE_SNPRINTF
+
+int fltk_snprintf(char* str, size_t size, const char* fmt, ...) {
   int ret;
   va_list ap;
   va_start(ap, fmt);
@@ -122,7 +133,11 @@ int fl_snprintf(char* str, size_t size, const char* fmt, ...) {
 
 #endif
 
+#ifdef __cplusplus
+}
+#endif
+
 /*
- * End of "$Id: vsnprintf.c,v 1.12 2002/12/10 02:01:03 easysw Exp $".
+ * End of "$Id: vsnprintf.c,v 1.13 2002/12/22 05:30:22 easysw Exp $".
  */
 

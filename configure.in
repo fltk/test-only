@@ -1,7 +1,7 @@
 dnl -*- sh -*-
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.103 2002/12/18 20:13:15 easysw Exp $"
+dnl "$Id: configure.in,v 1.104 2002/12/22 05:30:21 easysw Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -25,8 +25,8 @@ dnl
 dnl Please report all bugs and problems to "fltk-bugs@fltk.org".
 dnl
 
-dnl We need at least autoconf 2.13...
-AC_PREREQ(2.13)
+dnl We need at least autoconf 2.50...
+AC_PREREQ(2.50)
 
 dnl Required file in package...
 AC_INIT(src/Fl.cxx)
@@ -294,28 +294,18 @@ AC_CHECK_FUNC(scandir,
     else
         AC_DEFINE(HAVE_SCANDIR)
     fi)
-AC_CHECK_FUNC(vsnprintf,[
-    case $uname in
-    	HP-UX*)
-	    if test "$uversion" = "1020"; then
-	        AC_MSG_WARN(Not using built-in vsnprintf function because you are running HP-UX 10.20.)
-	    else
-        	AC_DEFINE(HAVE_VSNPRINTF)
-	    fi
-	    ;;
 
-    	OSF1*)
-	    if test "$uversion" = "40"; then
-                AC_MSG_WARN(Not using built-in vsnprintf function because you are running Tru64 4.0.)
-	    else
-        	AC_DEFINE(HAVE_VSNPRINTF)
-	    fi
-	    ;;
+dnl String headers and functions...
+AC_CHECK_HEADER(string.h,
+    AC_DEFINE(HAVE_STRING_H)
+    FLTK_STRING_H=1,
+    FLTK_STRING_H=0)
+AC_CHECK_HEADER(strings.h,
+    AC_DEFINE(HAVE_STRINGS_H)
+    FLTK_STRINGS_H=1,
+    FLTK_STRINGS_H=0)
 
-        *)
-            AC_DEFINE(HAVE_VSNPRINTF)
-	    ;;
-    esac])
+FLTK_SNPRINTF=1
 AC_CHECK_FUNC(snprintf,[
     case $uname in
     	HP-UX*)
@@ -323,6 +313,7 @@ AC_CHECK_FUNC(snprintf,[
 	        AC_MSG_WARN(Not using built-in snprintf function because you are running HP-UX 10.20.)
 	    else
         	AC_DEFINE(HAVE_SNPRINTF)
+		FLTK_SNPRINTF=0
 	    fi
 	    ;;
 
@@ -331,15 +322,89 @@ AC_CHECK_FUNC(snprintf,[
                 AC_MSG_WARN(Not using built-in snprintf function because you are running Tru64 4.0.)
 	    else
         	AC_DEFINE(HAVE_SNPRINTF)
+		FLTK_SNPRINTF=0
 	    fi
 	    ;;
 
         *)
             AC_DEFINE(HAVE_SNPRINTF)
+	    FLTK_SNPRINTF=0
 	    ;;
     esac])
-AC_CHECK_HEADER(strings.h, AC_DEFINE(HAVE_STRINGS_H))
-AC_CHECK_FUNCS(strcasecmp strlcat strlcpy)
+
+FLTK_VSNPRINTF=1
+AC_CHECK_FUNC(vsnprintf,[
+    case $uname in
+    	HP-UX*)
+	    if test "$uversion" = "1020"; then
+	        AC_MSG_WARN(Not using built-in vsnprintf function because you are running HP-UX 10.20.)
+	    else
+        	AC_DEFINE(HAVE_VSNPRINTF)
+		FLTK_VSNPRINTF=0
+	    fi
+	    ;;
+
+    	OSF1*)
+	    if test "$uversion" = "40"; then
+                AC_MSG_WARN(Not using built-in vsnprintf function because you are running Tru64 4.0.)
+	    else
+        	AC_DEFINE(HAVE_VSNPRINTF)
+		FLTK_VSNPRINTF=0
+	    fi
+	    ;;
+
+        *)
+            AC_DEFINE(HAVE_VSNPRINTF)
+	    FLTK_VSNPRINTF=0
+	    ;;
+    esac])
+
+AC_CHECK_FUNC(strcasecmp,
+    AC_DEFINE(HAVE_STRCASECMP)
+    FLTK_STRCASECMP=0,
+    [case $uname in
+        CYGWIN* | MINGW*)
+            AC_DEFINE(HAVE_STRCASECMP)
+            FLTK_STRCASECMP=0
+	    ;;
+	*)
+            FLTK_STRCASECMP=1
+	    ;;
+    esac])
+AC_CHECK_FUNC(strdup,
+    AC_DEFINE(HAVE_STRDUP)
+    FLTK_STRDUP=0,
+    FLTK_STRDUP=1)
+AC_CHECK_FUNC(strncasecmp,
+    AC_DEFINE(HAVE_STRNCASECMP)
+    FLTK_STRNCASECMP=0,
+    [case $uname in
+        CYGWIN* | MINGW*)
+            AC_DEFINE(HAVE_STRNCASECMP)
+            FLTK_STRNCASECMP=0
+	    ;;
+	*)
+            FLTK_STRNCASECMP=1
+	    ;;
+    esac])
+AC_CHECK_FUNC(strlcat,
+    AC_DEFINE(HAVE_STRLCAT)
+    FLTK_STRLCAT=0,
+    FLTK_STRLCAT=1)
+AC_CHECK_FUNC(strlcpy,
+    AC_DEFINE(HAVE_STRLCPY)
+    FLTK_STRLCPY=0,
+    FLTK_STRLCPY=1)
+
+AC_SUBST(FLTK_SNPRINTF)
+AC_SUBST(FLTK_STRCASECMP)
+AC_SUBST(FLTK_STRDUP)
+AC_SUBST(FLTK_STRING_H)
+AC_SUBST(FLTK_STRINGS_H)
+AC_SUBST(FLTK_STRLCAT)
+AC_SUBST(FLTK_STRLCPY)
+AC_SUBST(FLTK_STRNCASECMP)
+AC_SUBST(FLTK_VSNPRINTF)
 
 dnl FLTK library uses math library functions...
 AC_SEARCH_LIBS(pow, m)
@@ -829,11 +894,11 @@ fi
 
 dnl Write all of the files...
 AC_CONFIG_HEADER(config.h:configh.in)
-AC_OUTPUT(makeinclude fltk.list fltk-config)
+AC_OUTPUT(makeinclude fltk.list fltk-config fltk/string.h)
 
 dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.103 2002/12/18 20:13:15 easysw Exp $".
+dnl End of "$Id: configure.in,v 1.104 2002/12/22 05:30:21 easysw Exp $".
 dnl

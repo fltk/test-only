@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.27 2002/12/10 02:00:56 easysw Exp $"
+// "$Id: fl_ask.cxx,v 1.28 2002/12/22 05:30:22 easysw Exp $"
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
@@ -36,8 +36,8 @@
 #include <fltk/Window.h>
 #include <fltk/Input.h>
 #include <fltk/SecretInput.h>
-#include <fltk/vsnprintf.h>
-#include <string.h>
+#include <fltk/string.h>
+
 using namespace fltk;
 
 static void m_revert(Style* s) {
@@ -229,5 +229,5 @@ const char *fltk::password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.27 2002/12/10 02:00:56 easysw Exp $".
+// End of "$Id: fl_ask.cxx,v 1.28 2002/12/22 05:30:22 easysw Exp $".
 //

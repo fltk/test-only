@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.41 2002/12/10 11:37:34 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.42 2002/12/22 05:30:22 easysw Exp $"
 //
 // Code for managing Style structures.
 //
@@ -25,8 +25,7 @@
 
 #include <fltk/Widget.h>
 #include <fltk/load_plugin.h>
-#include <fltk/vsnprintf.h>
-#include <string.h>
+#include <fltk/string.h>
 #include <stdlib.h>
 #include <config.h>
 #if defined(_WIN32)
@@ -340,5 +339,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.41 2002/12/10 11:37:34 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.42 2002/12/22 05:30:22 easysw Exp $".
 //
