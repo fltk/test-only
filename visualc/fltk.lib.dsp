@@ -132,6 +132,14 @@ LIB32=link.exe -lib
 # Name "fltk - Win32 Release MinSize"
 # Begin Source File
 
+SOURCE=..\src\array.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\CycleButton.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\fastarrow.h
 # End Source File
 # Begin Source File
@@ -285,10 +293,6 @@ SOURCE=..\src\Fl_display.cxx
 # Begin Source File
 
 SOURCE=..\src\fl_dnd.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Double_Window.cxx
 # End Source File
 # Begin Source File
 
@@ -456,6 +460,10 @@ SOURCE=..\src\Fl_Menu_Window.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\Fl_Multi_Image.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\Fl_Numeric_Input.cxx
 # End Source File
 # Begin Source File
@@ -473,10 +481,6 @@ SOURCE=..\src\fl_overlay.cxx
 # Begin Source File
 
 SOURCE=..\src\fl_overlay_visual.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Overlay_Window.cxx
 # End Source File
 # Begin Source File
 
@@ -668,6 +672,10 @@ SOURCE=..\OpenGL\gl_start.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\IFont.h
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\mediumarrow.h
 # End Source File
 # Begin Source File
@@ -680,6 +688,10 @@ SOURCE=..\src\slowarrow.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\string.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\glut\trackball.c
 # End Source File
 # Begin Source File
@@ -688,7 +700,15 @@ SOURCE=..\glut\trackball.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\utf.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\ValueOutput.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\vsnprintf.c
 # End Source File
 # End Target
 # End Project

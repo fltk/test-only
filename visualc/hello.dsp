@@ -153,10 +153,6 @@ LINK32=link.exe
 # Name "hello - Win32 Release MinSize"
 # Begin Source File
 
-SOURCE=..\src\fl_call_main.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\test\hello.cxx
 # End Source File
 # End Target

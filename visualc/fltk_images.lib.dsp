@@ -136,11 +136,23 @@ SOURCE=..\images\Fl_Guess_Image.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\Fl_Help_Dialog.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Help_View.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\images\fl_jpeg.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=..\images\fl_png.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_xpm.cxx
 # End Source File
 # End Target
 # End Project

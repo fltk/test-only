@@ -153,6 +153,31 @@ LINK32=link.exe
 # Name "fltkdll - Win32 Release MinSize"
 # Begin Source File
 
+SOURCE=..\src\array.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\CycleButton.cxx
+DEP_CPP_CYCLE=\
+	"..\fltk\box.h"\
+	"..\fltk\button.h"\
+	"..\fltk\color.h"\
+	"..\fltk\cyclebutton.h"\
+	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\group.h"\
+	"..\fltk\item.h"\
+	"..\fltk\menu.h"\
+	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
+	"..\fltk\widget.h"\
+	
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\fastarrow.h
 # End Source File
 # Begin Source File
@@ -217,21 +242,30 @@ DEP_CPP_FILENAME_S=\
 
 SOURCE=..\src\Fl.cxx
 DEP_CPP_FL_CX=\
+	"..\fltk\browser.h"\
 	"..\fltk\color.h"\
 	"..\fltk\damage.h"\
 	"..\fltk\draw.h"\
 	"..\fltk\error.h"\
 	"..\fltk\events.h"\
+	"..\fltk\filename.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\fl_version.h"\
 	"..\fltk\flags.h"\
+	"..\fltk\font.h"\
 	"..\fltk\group.h"\
 	"..\fltk\layout.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
+	"..\fltk\menu.h"\
+	"..\fltk\Monitor.h"\
 	"..\fltk\run.h"\
-	"..\fltk\screeninfo.h"\
+	"..\fltk\scrollbar.h"\
+	"..\fltk\slider.h"\
 	"..\fltk\style.h"\
 	"..\fltk\tooltip.h"\
+	"..\fltk\utf.h"\
+	"..\fltk\valuator.h"\
+	"..\fltk\visual.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\window.h"\
@@ -239,7 +273,18 @@ DEP_CPP_FL_CX=\
 	"..\src\Fl_mac.cxx"\
 	"..\src\fl_win32.cxx"\
 	"..\src\Fl_x.cxx"\
+	"..\src\xutf8.cxx"\
 	".\config.h"\
+	{$(INCLUDE)}"iconv.h"\
+	{$(INCLUDE)}"X11\extensions\Xdbe.h"\
+	{$(INCLUDE)}"X11\extensions\Xdbeproto.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -273,6 +318,7 @@ DEP_CPP_FL_ADJ=\
 	"..\fltk\flags.h"\
 	"..\fltk\image.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\valuator.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\xbmimage.h"\
@@ -303,7 +349,18 @@ DEP_CPP_FL_AR=\
 	"..\fltk\draw.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
+	"..\fltk\mac.h"\
 	"..\fltk\math.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\x.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -314,10 +371,18 @@ DEP_CPP_FL_ARC=\
 	"..\fltk\draw.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\math.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -325,19 +390,28 @@ DEP_CPP_FL_ARC=\
 SOURCE=..\src\Fl_arg.cxx
 DEP_CPP_FL_ARG=\
 	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
 	"..\fltk\error.h"\
 	"..\fltk\filename.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\group.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
+	"..\fltk\Monitor.h"\
 	"..\fltk\run.h"\
-	"..\fltk\screeninfo.h"\
 	"..\fltk\style.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\window.h"\
 	"..\fltk\x.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -374,6 +448,7 @@ DEP_CPP_FL_BA=\
 	"..\fltk\flags.h"\
 	"..\fltk\group.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
 	
 # End Source File
@@ -387,10 +462,45 @@ DEP_CPP_FL_BI=\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\image.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	"..\fltk\xbmimage.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_bmp.cxx
+DEP_CPP_FL_BM=\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\error.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\image.h"\
+	"..\fltk\mac.h"\
+	"..\fltk\sharedimage.h"\
+	"..\fltk\symbol.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\x.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -407,20 +517,29 @@ DEP_CPP_FL_BO=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\fl_boxtype.cxx
+SOURCE=..\src\Fl_Boxtype.cxx
 DEP_CPP_FL_BOX=\
 	"..\fltk\box.h"\
 	"..\fltk\color.h"\
 	"..\fltk\draw.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
+	"..\fltk\math.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
 	".\fltk\string.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -429,7 +548,9 @@ SOURCE=..\src\Fl_Browser.cxx
 DEP_CPP_FL_BR=\
 	"..\fltk\box.h"\
 	"..\fltk\browser.h"\
+	"..\fltk\button.h"\
 	"..\fltk\color.h"\
+	"..\fltk\cursor.h"\
 	"..\fltk\damage.h"\
 	"..\fltk\draw.h"\
 	"..\fltk\error.h"\
@@ -438,11 +559,13 @@ DEP_CPP_FL_BR=\
 	"..\fltk\flags.h"\
 	"..\fltk\group.h"\
 	"..\fltk\image.h"\
+	"..\fltk\item.h"\
 	"..\fltk\layout.h"\
 	"..\fltk\menu.h"\
 	"..\fltk\scrollbar.h"\
 	"..\fltk\slider.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\valuator.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\xbmimage.h"\
@@ -464,6 +587,7 @@ DEP_CPP_FL_BU=\
 	"..\fltk\flags.h"\
 	"..\fltk\group.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
 	
 # End Source File
@@ -484,6 +608,7 @@ DEP_CPP_FL_CH=\
 	"..\fltk\flags.h"\
 	"..\fltk\group.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
 	
 # End Source File
@@ -500,8 +625,10 @@ DEP_CPP_FL_CHO=\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\group.h"\
+	"..\fltk\item.h"\
 	"..\fltk\menu.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
 	
 # End Source File
@@ -514,12 +641,20 @@ DEP_CPP_FL_CL=\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\group.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\style.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\window.h"\
 	"..\fltk\x.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -549,7 +684,7 @@ DEP_CPP_FL_CO=\
 	"..\fltk\draw.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	"..\src\fl_cmap.h"\
@@ -558,6 +693,13 @@ DEP_CPP_FL_CO=\
 	"..\src\fl_color_x.cxx"\
 	"..\src\XColorMap.h"\
 	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -584,6 +726,7 @@ DEP_CPP_FL_COL=\
 	"..\fltk\numericinput.h"\
 	"..\fltk\returnbutton.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\valuator.h"\
 	"..\fltk\valueinput.h"\
 	"..\fltk\widget.h"\
@@ -596,6 +739,7 @@ SOURCE=..\src\Fl_compose.cxx
 DEP_CPP_FL_COM=\
 	"..\fltk\events.h"\
 	"..\fltk\fl_api.h"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File
@@ -608,12 +752,20 @@ DEP_CPP_FL_CU=\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\group.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\style.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\window.h"\
 	"..\fltk\x.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -624,7 +776,18 @@ DEP_CPP_FL_CUR=\
 	"..\fltk\draw.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
+	"..\fltk\mac.h"\
 	"..\fltk\math.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\x.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -641,6 +804,7 @@ DEP_CPP_FL_DI=\
 	"..\fltk\flags.h"\
 	"..\fltk\math.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\valuator.h"\
 	"..\fltk\widget.h"\
 	
@@ -655,6 +819,7 @@ DEP_CPP_FL_DIA=\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
 	
 # End Source File
@@ -672,11 +837,12 @@ SOURCE=..\src\fl_dnd.cxx
 DEP_CPP_FL_DN=\
 	"..\fltk\color.h"\
 	"..\fltk\cursor.h"\
+	"..\fltk\draw.h"\
 	"..\fltk\events.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\group.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\run.h"\
 	"..\fltk\style.h"\
 	"..\fltk\widget.h"\
@@ -687,27 +853,13 @@ DEP_CPP_FL_DN=\
 	"..\src\fl_dnd_win32.cxx"\
 	"..\src\fl_dnd_x.cxx"\
 	".\config.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Double_Window.cxx
-DEP_CPP_FL_DO=\
-	"..\fltk\color.h"\
-	"..\fltk\damage.h"\
-	"..\fltk\doublebufferwindow.h"\
-	"..\fltk\draw.h"\
-	"..\fltk\fl_api.h"\
-	"..\fltk\flags.h"\
-	"..\fltk\group.h"\
-	"..\fltk\layout.h"\
-	"..\fltk\mac.H"\
-	"..\fltk\style.h"\
-	"..\fltk\widget.h"\
-	"..\fltk\win32.h"\
-	"..\fltk\window.h"\
-	"..\fltk\x.h"\
-	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -718,8 +870,10 @@ DEP_CPP_FL_DR=\
 	"..\fltk\draw.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
+	"..\fltk\font.h"\
 	"..\fltk\math.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
 	
 # End Source File
@@ -733,7 +887,7 @@ DEP_CPP_FL_DRA=\
 	"..\fltk\events.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	"..\src\fl_draw_image_mac.cxx"\
@@ -741,6 +895,13 @@ DEP_CPP_FL_DRA=\
 	"..\src\fl_draw_image_x.cxx"\
 	"..\src\XColorMap.h"\
 	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -842,6 +1003,7 @@ DEP_CPP_FL_FILE=\
 	"..\fltk\scrollbar.h"\
 	"..\fltk\slider.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\valuator.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\window.h"\
@@ -948,9 +1110,10 @@ DEP_CPP_FL_FO=\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\font.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\math.h"\
 	"..\fltk\style.h"\
+	"..\fltk\utf.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	"..\src\fl_font_mac.cxx"\
@@ -960,6 +1123,13 @@ DEP_CPP_FL_FO=\
 	"..\src\IFont.h"\
 	".\config.h"\
 	".\fltk\string.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -971,14 +1141,47 @@ SOURCE=..\src\fl_fontsize.h
 SOURCE=..\src\Fl_get_key.cxx
 DEP_CPP_FL_GE=\
 	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
 	"..\fltk\events.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	"..\src\Fl_get_key_mac.cxx"\
 	"..\src\fl_get_key_win32.cxx"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_gif.cxx
+DEP_CPP_FL_GI=\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\image.h"\
+	"..\fltk\mac.h"\
+	"..\fltk\sharedimage.h"\
+	"..\fltk\symbol.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\x.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -986,11 +1189,12 @@ DEP_CPP_FL_GE=\
 SOURCE=..\OpenGL\Fl_Gl_Choice.cxx
 DEP_CPP_FL_GL=\
 	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\gl.h"\
 	"..\fltk\group.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\style.h"\
 	"..\fltk\visual.h"\
 	"..\fltk\widget.h"\
@@ -999,6 +1203,13 @@ DEP_CPP_FL_GL=\
 	"..\fltk\x.h"\
 	"..\opengl\glchoice.h"\
 	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1011,12 +1222,13 @@ SOURCE=..\OpenGL\Fl_Gl_Overlay.cxx
 DEP_CPP_FL_GL_=\
 	"..\fltk\color.h"\
 	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\gl.h"\
 	"..\fltk\glwindow.h"\
 	"..\fltk\group.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\style.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
@@ -1024,6 +1236,13 @@ DEP_CPP_FL_GL_=\
 	"..\fltk\x.h"\
 	"..\opengl\glchoice.h"\
 	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1032,13 +1251,16 @@ SOURCE=..\OpenGL\Fl_Gl_Window.cxx
 DEP_CPP_FL_GL_W=\
 	"..\fltk\color.h"\
 	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
 	"..\fltk\error.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\gl.h"\
 	"..\fltk\glwindow.h"\
 	"..\fltk\group.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\layout.h"\
+	"..\fltk\mac.h"\
+	"..\fltk\run.h"\
 	"..\fltk\style.h"\
 	"..\fltk\visual.h"\
 	"..\fltk\widget.h"\
@@ -1047,6 +1269,13 @@ DEP_CPP_FL_GL_W=\
 	"..\fltk\x.h"\
 	"..\opengl\glchoice.h"\
 	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1059,6 +1288,7 @@ DEP_CPP_FL_GLY=\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
 	
 # End Source File
@@ -1076,7 +1306,9 @@ DEP_CPP_FL_GR=\
 	"..\fltk\group.h"\
 	"..\fltk\layout.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File
@@ -1103,11 +1335,20 @@ DEP_CPP_FL_IM=\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\image.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1124,6 +1365,8 @@ DEP_CPP_FL_IN=\
 	"..\fltk\input.h"\
 	"..\fltk\math.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
+	"..\fltk\utf.h"\
 	"..\fltk\widget.h"\
 	
 # End Source File
@@ -1144,10 +1387,11 @@ DEP_CPP_FL_INP=\
 	"..\fltk\inputbrowser.h"\
 	"..\fltk\menu.h"\
 	"..\fltk\menuwindow.h"\
-	"..\fltk\screeninfo.h"\
+	"..\fltk\Monitor.h"\
 	"..\fltk\scrollbar.h"\
 	"..\fltk\slider.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\valuator.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\window.h"\
@@ -1161,6 +1405,7 @@ DEP_CPP_FL_IT=\
 	"..\fltk\button.h"\
 	"..\fltk\checkbutton.h"\
 	"..\fltk\color.h"\
+	"..\fltk\damage.h"\
 	"..\fltk\divider.h"\
 	"..\fltk\draw.h"\
 	"..\fltk\fl_api.h"\
@@ -1171,6 +1416,7 @@ DEP_CPP_FL_IT=\
 	"..\fltk\itemgroup.h"\
 	"..\fltk\menu.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
 	
 # End Source File
@@ -1183,11 +1429,19 @@ DEP_CPP_FL_KE=\
 	"..\fltk\events.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\style.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1204,6 +1458,7 @@ DEP_CPP_FL_LA=\
 	"..\fltk\image.h"\
 	"..\fltk\labeltype.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\window.h"\
 	".\config.h"\
@@ -1222,6 +1477,7 @@ DEP_CPP_FL_LI=\
 	"..\fltk\flags.h"\
 	"..\fltk\lightbutton.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
 	
 # End Source File
@@ -1230,12 +1486,14 @@ DEP_CPP_FL_LI=\
 SOURCE=..\src\fl_list_fonts.cxx
 DEP_CPP_FL_LIS=\
 	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
 	"..\fltk\events.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\font.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\style.h"\
+	"..\fltk\utf.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	"..\src\fl_list_fonts_mac.cxx"\
@@ -1244,6 +1502,13 @@ DEP_CPP_FL_LIS=\
 	"..\src\IFont.h"\
 	".\config.h"\
 	".\fltk\string.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1281,9 +1546,10 @@ DEP_CPP_FL_ME=\
 	"..\fltk\labeltype.h"\
 	"..\fltk\menu.h"\
 	"..\fltk\menuwindow.h"\
+	"..\fltk\Monitor.h"\
 	"..\fltk\run.h"\
-	"..\fltk\screeninfo.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\window.h"\
 	
@@ -1336,6 +1602,7 @@ DEP_CPP_FL_MENU_=\
 	"..\fltk\menu.h"\
 	"..\fltk\menubar.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\tooltip.h"\
 	"..\fltk\widget.h"\
 	".\config.h"\
@@ -1357,6 +1624,7 @@ DEP_CPP_FL_MENU_B=\
 	"..\fltk\menu.h"\
 	"..\fltk\popupmenu.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
 	
 # End Source File
@@ -1404,7 +1672,7 @@ DEP_CPP_FL_MENU_W=\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\group.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\menuwindow.h"\
 	"..\fltk\style.h"\
 	"..\fltk\widget.h"\
@@ -1412,6 +1680,25 @@ DEP_CPP_FL_MENU_W=\
 	"..\fltk\window.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Multi_Image.cxx
+DEP_CPP_FL_MU=\
+	"..\fltk\color.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\image.h"\
+	"..\fltk\multiimage.h"\
+	"..\fltk\symbol.h"\
 	
 # End Source File
 # Begin Source File
@@ -1453,6 +1740,7 @@ DEP_CPP_FL_OV=\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	
 # End Source File
 # Begin Source File
@@ -1463,9 +1751,17 @@ DEP_CPP_FL_OVE=\
 	"..\fltk\draw.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1473,34 +1769,21 @@ DEP_CPP_FL_OVE=\
 SOURCE=..\src\fl_overlay_visual.cxx
 DEP_CPP_FL_OVER=\
 	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
 	"..\fltk\events.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Overlay_Window.cxx
-DEP_CPP_FL_OVERL=\
-	"..\fltk\color.h"\
-	"..\fltk\damage.h"\
-	"..\fltk\doublebufferwindow.h"\
-	"..\fltk\draw.h"\
-	"..\fltk\fl_api.h"\
-	"..\fltk\flags.h"\
-	"..\fltk\group.h"\
-	"..\fltk\mac.H"\
-	"..\fltk\overlaywindow.h"\
-	"..\fltk\style.h"\
-	"..\fltk\widget.h"\
-	"..\fltk\win32.h"\
-	"..\fltk\window.h"\
-	"..\fltk\x.h"\
-	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1508,13 +1791,21 @@ DEP_CPP_FL_OVERL=\
 SOURCE=..\src\Fl_own_colormap.cxx
 DEP_CPP_FL_OW=\
 	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\visual.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1529,6 +1820,7 @@ DEP_CPP_FL_PA=\
 	"..\fltk\layout.h"\
 	"..\fltk\packedgroup.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
 	
 # End Source File
@@ -1541,10 +1833,21 @@ DEP_CPP_FL_PI=\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\image.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
+	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	"..\fltk\xpmimage.h"\
+	".\config.h"\
+	".\fltk\string.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1557,6 +1860,7 @@ DEP_CPP_FL_PL=\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	
 # End Source File
 # Begin Source File
@@ -1571,6 +1875,7 @@ DEP_CPP_FL_PR=\
 	"..\fltk\flags.h"\
 	"..\fltk\progressbar.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
 	
 # End Source File
@@ -1587,6 +1892,7 @@ DEP_CPP_FL_RA=\
 	"..\fltk\flags.h"\
 	"..\fltk\radiobutton.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
 	
 # End Source File
@@ -1598,9 +1904,18 @@ DEP_CPP_FL_RE=\
 	"..\fltk\draw.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
+	"..\fltk\math.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1637,11 +1952,20 @@ DEP_CPP_FL_RET=\
 SOURCE=..\src\fl_rgb.cxx
 DEP_CPP_FL_RG=\
 	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1654,11 +1978,24 @@ DEP_CPP_FL_RGB=\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\image.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\rgbimage.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"jconfig.h"\
+	{$(INCLUDE)}"jerror.h"\
+	{$(INCLUDE)}"jmorecfg.h"\
+	{$(INCLUDE)}"jpegint.h"\
+	{$(INCLUDE)}"jpeglib.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1674,6 +2011,7 @@ DEP_CPP_FL_RO=\
 	"..\fltk\flags.h"\
 	"..\fltk\math.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\thumbwheel.h"\
 	"..\fltk\valuator.h"\
 	"..\fltk\widget.h"\
@@ -1689,6 +2027,7 @@ DEP_CPP_FL_ROU=\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	
 # End Source File
 # Begin Source File
@@ -1701,6 +2040,7 @@ DEP_CPP_FL_ROUN=\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	
 # End Source File
 # Begin Source File
@@ -1720,6 +2060,7 @@ DEP_CPP_FL_SC=\
 	"..\fltk\scrollgroup.h"\
 	"..\fltk\slider.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\valuator.h"\
 	"..\fltk\widget.h"\
 	
@@ -1732,9 +2073,17 @@ DEP_CPP_FL_SCR=\
 	"..\fltk\draw.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1751,8 +2100,10 @@ DEP_CPP_FL_SCRO=\
 	"..\fltk\scrollbar.h"\
 	"..\fltk\slider.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\valuator.h"\
 	"..\fltk\widget.h"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File
@@ -1765,6 +2116,7 @@ DEP_CPP_FL_SH=\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	
 # End Source File
 # Begin Source File
@@ -1772,19 +2124,55 @@ DEP_CPP_FL_SH=\
 SOURCE=..\src\Fl_Shaped_Window.cxx
 DEP_CPP_FL_SHA=\
 	"..\fltk\color.h"\
-	"..\fltk\doublebufferwindow.h"\
+	"..\fltk\draw.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\group.h"\
 	"..\fltk\image.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\shapedwindow.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\window.h"\
 	"..\fltk\x.h"\
 	"..\fltk\xbmimage.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\extensions\shape.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Shared_Image.cxx
+DEP_CPP_FL_SHAR=\
+	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
+	"..\fltk\fl_api.h"\
+	"..\fltk\flags.h"\
+	"..\fltk\image.h"\
+	"..\fltk\mac.h"\
+	"..\fltk\sharedimage.h"\
+	"..\fltk\symbol.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\x.h"\
+	"..\fltk\xbmimage.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1800,9 +2188,10 @@ DEP_CPP_FL_SHO=\
 	"..\fltk\flags.h"\
 	"..\fltk\group.h"\
 	"..\fltk\menuwindow.h"\
-	"..\fltk\screeninfo.h"\
+	"..\fltk\Monitor.h"\
 	"..\fltk\show_colormap.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\window.h"\
 	
@@ -1821,6 +2210,7 @@ DEP_CPP_FL_SL=\
 	"..\fltk\math.h"\
 	"..\fltk\slider.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\valuator.h"\
 	"..\fltk\widget.h"\
 	".\config.h"\
@@ -1848,8 +2238,8 @@ DEP_CPP_FL_STY=\
 	"..\fltk\color.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
-	"..\fltk\load_plugin.h"\
 	"..\fltk\math.h"\
+	"..\fltk\run.h"\
 	"..\fltk\style.h"\
 	"..\fltk\widget.h"\
 	".\config.h"\
@@ -1874,10 +2264,11 @@ SOURCE=..\src\fl_symbols.cxx
 DEP_CPP_FL_SY=\
 	"..\fltk\color.h"\
 	"..\fltk\draw.h"\
-	"..\fltk\events.h"\
+	"..\fltk\error.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
-	"..\fltk\style.h"\
+	"..\fltk\math.h"\
+	"..\fltk\symbol.h"\
 	
 # End Source File
 # Begin Source File
@@ -1894,9 +2285,11 @@ DEP_CPP_FL_TA=\
 	"..\fltk\group.h"\
 	"..\fltk\layout.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\tabgroup.h"\
 	"..\fltk\tooltip.h"\
 	"..\fltk\widget.h"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File
@@ -1905,6 +2298,7 @@ SOURCE=..\src\Fl_Text_Buffer.cxx
 DEP_CPP_FL_TE=\
 	"..\fltk\fl_api.h"\
 	"..\fltk\textbuffer.h"\
+	"..\fltk\utf.h"\
 	
 # End Source File
 # Begin Source File
@@ -1922,8 +2316,10 @@ DEP_CPP_FL_TEX=\
 	"..\fltk\scrollbar.h"\
 	"..\fltk\slider.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\textbuffer.h"\
 	"..\fltk\textdisplay.h"\
+	"..\fltk\utf.h"\
 	"..\fltk\valuator.h"\
 	"..\fltk\widget.h"\
 	
@@ -1972,7 +2368,7 @@ DEP_CPP_FL_TIL=\
 	"..\fltk\draw.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
-	"..\fltk\image.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\tiledimage.h"\
 	
 # End Source File
@@ -1980,6 +2376,7 @@ DEP_CPP_FL_TIL=\
 
 SOURCE=..\src\Fl_Tooltip.cxx
 DEP_CPP_FL_TO=\
+	"..\fltk\box.h"\
 	"..\fltk\color.h"\
 	"..\fltk\draw.h"\
 	"..\fltk\events.h"\
@@ -1987,9 +2384,10 @@ DEP_CPP_FL_TO=\
 	"..\fltk\flags.h"\
 	"..\fltk\group.h"\
 	"..\fltk\menuwindow.h"\
+	"..\fltk\Monitor.h"\
 	"..\fltk\run.h"\
-	"..\fltk\screeninfo.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\tooltip.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\window.h"\
@@ -2026,6 +2424,7 @@ DEP_CPP_FL_VAL=\
 	"..\fltk\math.h"\
 	"..\fltk\numericinput.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\valuator.h"\
 	"..\fltk\valueinput.h"\
 	"..\fltk\widget.h"\
@@ -2043,9 +2442,11 @@ DEP_CPP_FL_VALU=\
 	"..\fltk\flags.h"\
 	"..\fltk\slider.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\valuator.h"\
 	"..\fltk\valueslider.h"\
 	"..\fltk\widget.h"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File
@@ -2056,10 +2457,18 @@ DEP_CPP_FL_VE=\
 	"..\fltk\draw.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\math.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -2067,13 +2476,23 @@ DEP_CPP_FL_VE=\
 SOURCE=..\src\Fl_visual.cxx
 DEP_CPP_FL_VI=\
 	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\visual.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"X11\extensions\Xdbe.h"\
+	{$(INCLUDE)}"X11\extensions\Xdbeproto.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -2099,12 +2518,13 @@ SOURCE=..\src\Fl_Window.cxx
 DEP_CPP_FL_WIN=\
 	"..\fltk\color.h"\
 	"..\fltk\damage.h"\
+	"..\fltk\draw.h"\
 	"..\fltk\events.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\group.h"\
 	"..\fltk\layout.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\run.h"\
 	"..\fltk\style.h"\
 	"..\fltk\widget.h"\
@@ -2112,6 +2532,13 @@ DEP_CPP_FL_WIN=\
 	"..\fltk\window.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -2119,17 +2546,26 @@ DEP_CPP_FL_WIN=\
 SOURCE=..\src\Fl_Window_fullscreen.cxx
 DEP_CPP_FL_WIND=\
 	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
 	"..\fltk\events.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\group.h"\
-	"..\fltk\mac.H"\
-	"..\fltk\screeninfo.h"\
+	"..\fltk\mac.h"\
+	"..\fltk\Monitor.h"\
 	"..\fltk\style.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\window.h"\
 	"..\fltk\x.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -2137,15 +2573,25 @@ DEP_CPP_FL_WIND=\
 SOURCE=..\src\Fl_Window_hotspot.cxx
 DEP_CPP_FL_WINDO=\
 	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
 	"..\fltk\events.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\group.h"\
-	"..\fltk\screeninfo.h"\
+	"..\fltk\mac.h"\
+	"..\fltk\Monitor.h"\
 	"..\fltk\style.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\window.h"\
+	"..\fltk\x.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -2153,15 +2599,24 @@ DEP_CPP_FL_WINDO=\
 SOURCE=..\src\Fl_Window_iconize.cxx
 DEP_CPP_FL_WINDOW=\
 	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
 	"..\fltk\group.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\style.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\window.h"\
 	"..\fltk\x.h"\
+	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -2173,9 +2628,28 @@ SOURCE=..\src\Fl_XColor.H
 SOURCE=..\src\fltk_theme.cxx
 DEP_CPP_FLTK_=\
 	"..\fltk\color.h"\
+	"..\fltk\draw.h"\
+	"..\fltk\events.h"\
 	"..\fltk\fl_api.h"\
 	"..\fltk\flags.h"\
+	"..\fltk\mac.h"\
+	"..\fltk\Monitor.h"\
 	"..\fltk\style.h"\
+	"..\fltk\utf.h"\
+	"..\fltk\widget.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\x.h"\
+	"..\src\fltk_theme_win32.cxx"\
+	"..\src\fltk_theme_x.cxx"\
+	".\config.h"\
+	".\fltk\string.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -2188,14 +2662,22 @@ DEP_CPP_GL_DR=\
 	"..\fltk\flags.h"\
 	"..\fltk\gl.h"\
 	"..\fltk\group.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\style.h"\
+	"..\fltk\utf.h"\
 	"..\fltk\widget.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\window.h"\
 	"..\fltk\x.h"\
 	"..\opengl\glchoice.h"\
 	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -2208,7 +2690,7 @@ DEP_CPP_GL_ST=\
 	"..\fltk\flags.h"\
 	"..\fltk\gl.h"\
 	"..\fltk\group.h"\
-	"..\fltk\mac.H"\
+	"..\fltk\mac.h"\
 	"..\fltk\style.h"\
 	"..\fltk\visual.h"\
 	"..\fltk\widget.h"\
@@ -2217,7 +2699,18 @@ DEP_CPP_GL_ST=\
 	"..\fltk\x.h"\
 	"..\opengl\glchoice.h"\
 	".\config.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\IFont.h
 # End Source File
 # Begin Source File
 
@@ -2227,6 +2720,8 @@ SOURCE=..\src\mediumarrow.h
 
 SOURCE=..\src\scandir.c
 DEP_CPP_SCAND=\
+	"..\fltk\fl_api.h"\
+	"..\fltk\utf.h"\
 	"..\src\scandir_win32.c"\
 	".\config.h"\
 	
@@ -2234,6 +2729,14 @@ DEP_CPP_SCAND=\
 # Begin Source File
 
 SOURCE=..\src\slowarrow.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\string.c
+DEP_CPP_STRIN=\
+	"..\fltk\fl_api.h"\
+	".\fltk\string.h"\
+	
 # End Source File
 # Begin Source File
 
@@ -2248,6 +2751,14 @@ SOURCE=..\glut\trackball.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\utf.c
+DEP_CPP_UTF_C=\
+	"..\fltk\fl_api.h"\
+	"..\fltk\utf.h"\
+	
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\ValueOutput.cxx
 DEP_CPP_VALUE=\
 	"..\fltk\box.h"\
@@ -2259,9 +2770,19 @@ DEP_CPP_VALUE=\
 	"..\fltk\flags.h"\
 	"..\fltk\run.h"\
 	"..\fltk\style.h"\
+	"..\fltk\symbol.h"\
 	"..\fltk\valuator.h"\
 	"..\fltk\valueoutput.h"\
 	"..\fltk\widget.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\vsnprintf.c
+DEP_CPP_VSNPR=\
+	"..\fltk\fl_api.h"\
+	".\config.h"\
+	".\fltk\string.h"\
 	
 # End Source File
 # End Target
