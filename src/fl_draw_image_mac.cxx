@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_mac.cxx,v 1.10 2005/01/24 12:03:30 matthiaswm Exp $"
+// "$Id: fl_draw_image_mac.cxx,v 1.11 2005/01/24 17:25:17 spitzak Exp $"
 //
 // MacOS image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -54,8 +54,7 @@ static void innards(const uchar *buf,
 		    int delta, int linedelta,
 		    DrawImageCallback cb, void* userdata)
 {
-  int X = rect.x(), Y = rect.y(), W = rect.w(), H = rect.h();
-  if (!linedelta) linedelta = W*delta;
+  if (!linedelta) linedelta = r.w()*delta;
 
   // theoretically, if the current GPort permits, we could write
   // directly into it, avoiding the temporary GWorld. For now I
@@ -63,9 +62,9 @@ static void innards(const uchar *buf,
   char direct = 0;
   GWorldPtr gw;
   Rect bounds;
-  bounds.left=0; bounds.right=W; bounds.top=0; bounds.bottom=H;
+  bounds.left=0; bounds.right=r.w(); bounds.top=0; bounds.bottom=r.h();
   QDErr err = NewGWorld( &gw, 32, &bounds, 0L, 0L, useTempMem );
-  bool mono = (pixeltype==Y);
+  bool mono = (pixeltype==LUMINANCE);
   if (err==noErr && gw) {
     PixMapHandle pm = GetGWorldPixMap( gw );
     if ( pm ) {
@@ -80,17 +79,17 @@ static void innards(const uchar *buf,
             int rowBytes = pmp->rowBytes & 0x3fff;
             if ( cb )
             {
-              uchar *tmpBuf = new uchar[ W*delta ];
+              uchar *tmpBuf = new uchar[ r.w()*delta ];
               if ( mono ) delta -= 1; else delta -= 3; 
-              for ( int i=0; i<H; i++ )
+              for ( int i=0; i<r.h(); i++ )
               {
                 uchar *dst = base + i*rowBytes;
-                const uchar* src = cb( userdata, 0, i, W, tmpBuf );
+                const uchar* src = cb( userdata, 0, i, r.w(), tmpBuf );
                 if ( mono ) {
-                  for ( int j=0; j<W; j++ )
+                  for ( int j=0; j<r.w(); j++ )
                     { uchar c = *src++; *dst++ = 0; *dst++ = c; *dst++ = c; *dst++ = c; src += delta; }
                 } else {
-                  for ( int j=0; j<W; j++ )
+                  for ( int j=0; j<r.w(); j++ )
                     { *dst++ = 0; *dst++ = *src++; *dst++ = *src++; *dst++ = *src++; src += delta; }
                 }
               }
@@ -99,15 +98,15 @@ static void innards(const uchar *buf,
             else
             {
               if ( mono ) delta -= 1; else delta -= 3; 
-              for ( int i=0; i<H; i++ )
+              for ( int i=0; i<r.h(); i++ )
               {
                 const uchar *src = buf+i*linedelta;
                 uchar *dst = base + i*rowBytes;
                 if ( mono ) {
-                  for ( int j=0; j<W; j++ )
+                  for ( int j=0; j<r.w(); j++ )
                     { uchar c = *src++; *dst++ = 0; *dst++ = c; *dst++ = c; *dst++ = c; src += delta; }
                 } else {
-                  for ( int j=0; j<W; j++ )
+                  for ( int j=0; j<r.w(); j++ )
                     { *dst++ = 0; *dst++ = *src++; *dst++ = *src++; *dst++ = *src++; src += delta; }
                 }
               }
@@ -133,17 +132,17 @@ static void innards(const uchar *buf,
   // following the very safe (and very slow) way to write the image into the give port
   if ( cb )
   {
-    uchar *tmpBuf = new uchar[ W*3 ];
-    for ( int i=0; i<H; i++ )
+    uchar *tmpBuf = new uchar[ r.w()*3 ];
+    for ( int i=0; i<r.h(); i++ )
     {
-      const uchar* src = cb( userdata, 0, i, W, tmpBuf );
-      for ( int j=0; j<W; j++ )
+      const uchar* src = cb( userdata, 0, i, r.w(), tmpBuf );
+      for ( int j=0; j<r.w(); j++ )
       {
         if ( mono )          
           { color( src[0], src[0], src[0] ); src++; }
         else
           { color( src[0], src[1], src[2] ); src+=3; }
-        MoveTo( X+j, Y+i );
+        MoveTo( r.x()+j, r.y()+i );
         Line( 0, 0 );
       }
     }
@@ -151,16 +150,16 @@ static void innards(const uchar *buf,
   }
   else
   {
-    for ( int i=0; i<H; i++ )
+    for ( int i=0; i<r.h(); i++ )
     {
       const uchar *src = buf+i*linedelta;
-      for ( int j=0; j<W; j++ )
+      for ( int j=0; j<r.w(); j++ )
       {
         if ( mono )          
           color( src[0], src[0], src[0] );
         else
           color( src[0], src[1], src[2] );
-        MoveTo( X+j, Y+i );
+        MoveTo( r.x()+j, r.y()+i );
         Line( 0, 0 );
         src += delta;
       }
@@ -170,7 +169,7 @@ static void innards(const uchar *buf,
 // \todo Mac : the above function does not support subregions yet
 #ifdef later_we_do_this
 // \todo Mac : the following code is taken from drawimage_win32 and needs to be modified for Mac Carbon
-//  if (!linedelta) linedelta = W*delta;
+//  if (!linedelta) linedelta = r.w()*delta;
 
   int x, y, w, h;
   clip_box(X,Y,W,H,x,y,w,h);
@@ -257,5 +256,5 @@ static void innards(const uchar *buf,
 }
 
 //
-// End of "$Id: fl_draw_image_mac.cxx,v 1.10 2005/01/24 12:03:30 matthiaswm Exp $".
+// End of "$Id: fl_draw_image_mac.cxx,v 1.11 2005/01/24 17:25:17 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.28 2005/01/24 12:03:29 matthiaswm Exp $"
+// "$Id: fl_clip.cxx,v 1.29 2005/01/24 17:25:17 spitzak Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -257,8 +257,8 @@ void fltk::pop_clip() {
 /*! Returns true if any or all of the Rectangle is inside the
   clip region.
 */
-bool fltk::not_clipped(const Rectangle& rect) {
-  Rectangle r(rect); transform(r);
+bool fltk::not_clipped(const Rectangle& r1) {
+  Rectangle r(r1); transform(r);
   // first check against the window so we get rid of coordinates
   // outside the 16-bit range the X/Win32 calls take:
   if (r.r() <= 0 || r.b() <= 0 || r.x() >= Window::current()->w()
@@ -272,9 +272,9 @@ bool fltk::not_clipped(const Rectangle& rect) {
   rect.left = r.x(); rect.top = r.y(); rect.right = r.r(); rect.bottom = r.b();
   return RectInRegion(r,&rect);
 #elif defined(__APPLE__)
-  Rect r2;
-  r2.left = r.x(); r2.top = r.y(); r2.right = r.r(); r2.bottom = r.b();
-  return RectInRgn(&r2, region);
+  Rect rect;
+  rect.left = r.x(); rect.top = r.y(); rect.right = r.r(); rect.bottom = r.b();
+  return RectInRgn(&rect, region);
 #endif
 }
 
@@ -363,5 +363,5 @@ int fltk::intersect_with_clip(Rectangle& r) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.28 2005/01/24 12:03:29 matthiaswm Exp $"
+// End of "$Id: fl_clip.cxx,v 1.29 2005/01/24 17:25:17 spitzak Exp $"
 //

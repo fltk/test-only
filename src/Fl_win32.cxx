@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.241 2004/12/16 18:40:41 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.242 2005/01/24 17:25:15 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -453,10 +453,10 @@ const Monitor& Monitor::all() {
     reload_info = false;
 
 #if USE_MULTIMONITOR
-    monitor.x_ = GetSystemMetrics(SM_XVIRTUALSCREEN);
-    monitor.y_ = GetSystemMetrics(SM_YVIRTUALSCREEN);
-    monitor.w_ = GetSystemMetrics(SM_CXVIRTUALSCREEN);
-    monitor.h_ = GetSystemMetrics(SM_CYVIRTUALSCREEN);
+    monitor.set(GetSystemMetrics(SM_XVIRTUALSCREEN),
+		GetSystemMetrics(SM_YVIRTUALSCREEN),
+		GetSystemMetrics(SM_CXVIRTUALSCREEN),
+		GetSystemMetrics(SM_CYVIRTUALSCREEN));
 #endif
 
     // This is wrong, we should get the work area from the union of
@@ -468,10 +468,7 @@ const Monitor& Monitor::all() {
     DEVMODE mode;
     EnumDisplaySettings(0, ENUM_CURRENT_SETTINGS, &mode);
 #if !USE_MULTIMONITOR
-    monitor.x_ = 0;
-    monitor.y_ = 0;
-    monitor.w_ = mode.dmPelsWidth;
-    monitor.h_ = mode.dmPelsHeight;
+    monitor.set(0, 0, mode.dmPelsWidth, mode.dmPelsHeight);
 #endif
     monitor.depth_ = mode.dmBitsPerPel;
     HDC screen = GetDC(0);
@@ -496,14 +493,14 @@ static BOOL CALLBACK monitor_cb(HMONITOR hMonitor,
   MONITORINFO mi;
   mi.cbSize = sizeof(mi);
   GetMonitorInfo(hMonitor, &mi);
-  m.x_ = mi.rcMonitor.left;
-  m.y_ = mi.rcMonitor.top;
-  m.w_ = mi.rcMonitor.right - m.x_;
-  m.h_ = mi.rcMonitor.bottom - m.y_;
-  m.work.x_ = mi.rcWork.left;
-  m.work.y_ = mi.rcWork.top;
-  m.work.w_ = mi.rcWork.right - m.work.x_;
-  m.work.h_ = mi.rcWork.bottom - m.work.y_;
+  m.set(mi.rcMonitor.left,
+	mi.rcMonitor.top,
+	mi.rcMonitor.right - mi.rcMonitor.left,
+	mi.rcMonitor.bottom - mi.rcMonitor.top;
+  m.work.set(mi.rcWork.left,
+	     mi.rcWork.top,
+	     mi.rcWork.right - mi.rcWork.left,
+	     mi.rcWork.bottom - mi.rcWork.top);
   // put the primary monitor first in list:
   if (monitor_index && (mi.dwFlags&MONITORINFOF_PRIMARY)) {
     Monitor t = monitors[0];
@@ -547,11 +544,12 @@ int Monitor::list(const Monitor** p) {
       num_monitors = 2;
       monitors = new Monitor[2];
       monitors[0] = monitors[1] = all();
-      monitors[0].w_ = monitors[1].x_ = w;
-      monitors[1].w_ -= w;
-      monitors[0].work.w_ = w-monitors[0].work.x_;
-      monitors[1].work.w_ -= monitors[0].work.w_;
-      monitors[1].work.x_ = w;
+      monitors[0].w(w);
+      monitors[1].x(w);
+      monitors[1].move_r(-w);
+      monitors[0].work.w(w-monitors[0].work.x());
+      monitors[1].work.move_w(-monitors[0].work.w());
+      monitors[1].work.x(w);
     }
 #endif
 //      printf("Got %d monitors:\n", num_monitors);
@@ -2379,5 +2377,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.241 2004/12/16 18:40:41 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.242 2005/01/24 17:25:15 spitzak Exp $".
 //

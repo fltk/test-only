@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.20 2005/01/24 12:03:28 matthiaswm Exp $"
+// "$Id: Fl_mac.cxx,v 1.21 2005/01/24 17:25:14 spitzak Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -987,7 +987,7 @@ void fltk::get_mouse(int &x, int &y)
 // Damage all the child windows as well as this one...
 static void recursive_expose(CreatedWindow* i) {
   i->wait_for_expose = false;
-  i->expose(Rectangle(0, 0, i->window->w(), i->window->h()));
+  i->expose(Rectangle(i->window->w(), i->window->h()));
   for (CreatedWindow* c = i->children; c; c = c->brother) recursive_expose(c);
 }
 
@@ -1609,6 +1609,6 @@ bool fltk::dnd()
 }
 
 //
-// End of "$Id: Fl_mac.cxx,v 1.20 2005/01/24 12:03:28 matthiaswm Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.21 2005/01/24 17:25:14 spitzak Exp $".
 //
 

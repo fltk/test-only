@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.28 2004/07/29 09:07:53 spitzak Exp $"
+// "$Id: win32.h,v 1.29 2005/01/24 17:25:04 spitzak Exp $"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -122,7 +122,7 @@ public:
   HDC bdc;
   Window* window;
   HRGN region;
-  void expose(int x, int y, int w, int h);
+  void expose(const Rectangle&);
   CreatedWindow* next;
   bool wait_for_expose;
   bool backbuffer_bad; // used for XDBE
@@ -150,5 +150,5 @@ extern FL_API HCURSOR default_cursor;
 #endif
 
 //
-// End of "$Id: win32.h,v 1.28 2004/07/29 09:07:53 spitzak Exp $".
+// End of "$Id: win32.h,v 1.29 2005/01/24 17:25:04 spitzak Exp $".
 //
