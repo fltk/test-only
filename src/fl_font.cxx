@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.43 2004/01/25 06:55:05 spitzak Exp $"
+// "$Id: fl_font.cxx,v 1.44 2004/06/19 23:02:24 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -49,7 +49,7 @@ with constants. Don't use the undocumented fields.
 // Static variables containing the currently selected font, size, encoding:
 fltk::Font* fltk::current_font_;
 float fltk::current_size_;
-const char *fltk::encoding_ = "iso8859-1";
+const char *fltk::encoding_ = "iso10646-1";
 
 #if USE_X11
 # if USE_XFT
@@ -114,5 +114,5 @@ const char* fltk::Font::name() const {
 */
 
 //
-// End of "$Id: fl_font.cxx,v 1.43 2004/01/25 06:55:05 spitzak Exp $".
+// End of "$Id: fl_font.cxx,v 1.44 2004/06/19 23:02:24 spitzak Exp $".
 //

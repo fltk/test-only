@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.29 2004/06/11 08:07:20 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.30 2004/06/19 23:02:25 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -531,7 +531,7 @@ void fltk::addcircle(float x, float y, float r) {
   closepath();
   cairo_arc(cc,x,y,r,0,M_PI*2);
   closepath();
-#elif
+#else
   transform(x,y);
   float rt = r * sqrtf(fabsf(m.a*m.d-m.b*m.c));
   circle_w = circle_h = int(rt*2 + .5);
@@ -808,5 +808,5 @@ void fltk::fillstrokepath(Color color) {
 /** \} */
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.29 2004/06/11 08:07:20 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.30 2004/06/19 23:02:25 spitzak Exp $".
 //

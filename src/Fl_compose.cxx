@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_compose.cxx,v 1.18 2004/06/04 16:39:59 spitzak Exp $"
+// "$Id: Fl_compose.cxx,v 1.19 2004/06/19 23:02:13 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -196,14 +196,26 @@ bool fltk::compose(int& del) {
   else if (ascii == '/') ascii = '|';
   else if (ascii == '_' || ascii == '=') ascii = '-';
 
+  static int plen;
+
   if (compose_state == 1) { // after the compose key
-    
+
+    plen = e_length;
+
     // see if it is either character of any pair:
     for (const char *p = compose_pairs; *p; p += 2) 
       if (p[0] == ascii || p[1] == ascii) {
 	compose_state = ascii;
 	// prefer the single-character versions:
-	if (p[1] == ' ') {e_text[0] = (p-compose_pairs)/2+0xA0; return true;}
+	if (p[1] == ' ') {
+	  int code = (p-compose_pairs)/2+0xA0;
+	  // convert code to utf8:
+	  e_text[0] = 0xc0 | code>>6;
+	  e_text[1] = 0x80 | (code & 0x3f);
+	  e_text[2] = 0;
+	  plen = e_length = 2;
+	  return true;
+	}
       }
     if (compose_state != 1) return true;
 
@@ -219,8 +231,13 @@ bool fltk::compose(int& del) {
     // now search for the pair in either order:
     for (const char *p = compose_pairs; *p; p += 2) {
       if (p[0] == ascii && p[1] == c1 || p[1] == ascii && p[0] == c1) {
-	e_text[0] = (p-compose_pairs)/2+0xA0;
-	del = 1; // delete the old character and insert new one
+	int code = (p-compose_pairs)/2+0xA0;
+	// convert code to utf8:
+	e_text[0] = 0xc0 | code>>6;
+	e_text[1] = 0x80 | (code & 0x3f);
+	e_text[2] = 0;
+	e_length = 2;
+	del = plen; // delete the old character and insert new one
 	compose_state = 0;
 	return true;
       }

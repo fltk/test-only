@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_x.cxx,v 1.19 2004/05/04 07:30:43 spitzak Exp $"
+// "$Id: fl_font_x.cxx,v 1.20 2004/06/19 23:02:25 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
+#include <fltk/utf.h>
 #include "IFont.h"
 using namespace fltk;
 
@@ -110,6 +111,51 @@ FontSize::~FontSize() {
 ////////////////////////////////////////////////////////////////
 // Things you can do once the font+size has been selected:
 
+// I see no sign of "FontSets" working. Instead this supposedly will
+// draw the correct letters if you happen to pick an iso10646-1 font.
+// We draw as bytes if all characters are errors or 1 byte.
+// This function will look at the string. If all characters are 1
+// byte or errors it returns null. Otherwise it converts it to 16-bit
+// and returns the allocated buffer and size:
+static XChar2b* convert_utf8(const char* text, int n, int* charcount) {
+  const char* p = text;
+  const char* e = text+n;
+  bool sawutf8 = false;
+  int count = 0;
+  while (p < e) {
+    unsigned char c = *(unsigned char*)p;
+    if (c < 0xC2) p++; // ascii letter or bad code
+    else {
+      int len = utf8valid(p,e);
+      if (len > 1) sawutf8 = true;
+      else if (!len) len = 1;
+      p += len;
+    }
+    count++;
+  }
+  if (!sawutf8) return 0;
+  *charcount = count;
+  XChar2b* buffer = new XChar2b[count];
+  count = 0;
+  p = text;
+  while (p < e) {
+    unsigned char c = *(unsigned char*)p;
+    if (c < 0xC2) { // ascii letter or bad code
+      buffer[count].byte1 = 0;
+      buffer[count].byte2 = c;
+      p++;
+    } else {
+      int len;
+      unsigned n = utf8decode(p,e,&len);
+      p += len;
+      buffer[count].byte1 = n>>8;
+      buffer[count].byte2 = n;
+    }
+    count++;
+  }
+  return buffer;
+}
+
 /*! Draw text starting at a point returned by fltk::transform(). This
   is needed for complex text layout when the current transform may
   not match the transform being used by the font.
@@ -121,9 +167,18 @@ void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
     font_gc = gc;
     XSetFont(xdisplay, gc, current->font->fid);
   }
-  XDrawString(xdisplay, xwindow, gc,
-	      int(floorf(x+.5f)),
-	      int(floorf(y+.5f)), text, n);
+  int count;
+  XChar2b* buffer = convert_utf8(text,n,&count);
+  if (buffer) {
+    XDrawString16(xdisplay, xwindow, gc,
+		  int(floorf(x+.5f)),
+		  int(floorf(y+.5f)), buffer, count);
+    delete[] buffer;
+  } else {
+    XDrawString(xdisplay, xwindow, gc,
+		int(floorf(x+.5f)),
+		int(floorf(y+.5f)), text, n);
+  }
 }
 
 /*! Return the distance from the baseline to the top of letters in
@@ -137,7 +192,15 @@ float fltk::getdescent() { return current->font->descent; }
 /*! Return the width of the first \a n \e bytes (not characters if
   utf8 is used!) of the text. */
 float fltk::getwidth(const char *text, int n) {
-  return XTextWidth(current->font, text, n);
+  int count;
+  XChar2b* buffer = convert_utf8(text,n,&count);
+  if (buffer) {
+    float r = XTextWidth16(current->font, buffer, count);
+    delete[] buffer;
+    return r;
+  } else {
+    return XTextWidth(current->font, text, n);
+  }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -203,7 +266,7 @@ void fltk::setfont(Font* font, float psize) {
   for (f = t->first; f; f = f->next)
     if (f->minsize <= size && f->maxsize >= size
         && (f->encoding==encoding_ ||
-	    !f->encoding || !strcmp(f->encoding, encoding_))) {
+ 	    !f->encoding || !strcmp(f->encoding, encoding_))) {
       goto DONE;
     }
 
@@ -318,7 +381,7 @@ void fltk::setfont(Font* font, float psize) {
   the future. It is likely that when this happens support for
   fltk::encoding() will be removed.
 
-  The default is "iso8859-1"
+  The default is "iso10646-1"
 */
 void fltk::set_encoding(const char* f) {
   encoding_ = f;
@@ -371,5 +434,5 @@ fltk::Font* const fltk::ZAPF_DINGBATS		= &(fonts[15].f);
 fltk::Font* fltk::font(int i) {return &(fonts[i%16].f);}
 
 //
-// End of "$Id: fl_font_x.cxx,v 1.19 2004/05/04 07:30:43 spitzak Exp $"
+// End of "$Id: fl_font_x.cxx,v 1.20 2004/06/19 23:02:25 spitzak Exp $"
 //

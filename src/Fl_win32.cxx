@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.211 2004/06/09 05:38:58 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.212 2004/06/19 23:02:14 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -34,6 +34,7 @@
 #include <fltk/Style.h>
 #include <fltk/win32.h>
 #include <fltk/filename.h>
+#include <fltk/utf.h>
 #include <string.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -86,6 +87,98 @@ using namespace fltk;
 // to make wait() return to the main loop so the windows version acts
 // like GUI programs on more sensible operating systems
 #define WM_MAKEWAITRETURN (WM_USER+0x401)
+
+#pragma comment(lib, "imm32.lib")
+void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
+{
+#if 0
+  int change = 0;
+  const char *fnt = NULL;
+  static fltk::Font *spotf = NULL;
+  static Widget *spotw = NULL;
+  static RECT spot, spot_set;
+
+  if (w != spotw) {
+	spotw = w;
+	change = 1;
+  }
+  transform(x, y);
+  if (x != spot.left || y != spot.top) {
+	spot.left = x;
+	spot.top = y;
+	change = 1;
+  }
+  if (f != spotf) {
+	spotf = f;
+	change = 1;
+  }
+
+  if (!change) return;
+
+  HIMC himc = ImmGetContext(xid(w->window()));
+  if (himc) {
+    COMPOSITIONFORM	cfs;
+	LOGFONTW lf;
+    cfs.dwStyle = CFS_POINT;
+    cfs.ptCurrentPos.x = spot.left;
+    cfs.ptCurrentPos.y = spot.top;
+    ImmSetCompositionWindow(himc, &cfs);
+	GetObject(fltk::xfont(), sizeof(LOGFONTW), &lf);
+	ImmSetCompositionFontW(himc, &lf);
+    ImmReleaseContext(xid(w->window()), himc);
+  }
+}
+
+// THESE ARE NOT RIGHT. They do not handle the ucs16 "combining characters"
+// where 2 ucs words turn into one character. However this bug is replicated
+// in lots of Windows programs:
+
+int ucs2utf(unsigned short ucs, char *buf)
+{
+  if (ucs < 0x000080) {
+    buf[0] = ucs;
+    return 1;
+  } else if (ucs < 0x000800) {
+    buf[0] = 0xC0 | (ucs >> 6);
+    buf[1] = 0x80 | (ucs & 0x3F);
+    return 2;
+  } else { 
+    buf[0] = 0xE0 | (ucs >> 12);
+    buf[1] = 0x80 | ((ucs >> 6) & 0x3F);
+    buf[2] = 0x80 | (ucs & 0x3F);
+    return 3;
+  }
+}
+
+int utf2ucs(const char* utf, unsigned short* ucs) {
+  unsigned char v = *(unsigned char*)utf;
+  *ucs = v; // by default we return code unchanged
+  if (v < 0xc2) return 1;
+  int len = utf8valid(utf, utf+8);
+  switch (len) {
+  case 0:
+  case 1:
+    // illegal sequences return first byte unchanged
+    return 1;
+  case 2:
+    *ucs =
+      ((utf[0] & ~0xC0) << 6) +
+      (utf[1] & ~0x80);
+    return 2;
+  case 3:
+    *ucs =
+      ((utf[0] & ~0xE0) << 12) +
+      ((utf[1] & ~0x80) << 6) +
+      (utf[2] & ~0x80);
+    return 3;
+  default:
+    // Anything larger does not fit in ucs (though some would if we
+    // did combining-characters correctly). Send a question mark
+    // instead:
+    *ucs = '?';
+    return len;
+  }
+}    
 
 /**
  * returns pointer to the filename, or "" if name ends with '/' or ':'
@@ -502,7 +595,9 @@ void fltk::copy(const char *stuff, int len, bool clipboard) {
     // set up for "delayed rendering":
     if (OpenClipboard(xid(Window::first()))) {
       EmptyClipboard();
-      SetClipboardData(CF_TEXT, NULL);
+      // We might want to use CF_TEXT if there are any illegal UTF-8
+      // characters so the bytes are preserved?
+      SetClipboardData(CF_UNICODETEXT, NULL);
       CloseClipboard();
     }
     i_own_selection = true;
@@ -520,9 +615,15 @@ void fltk::paste(Widget &receiver, bool clipboard) {
     receiver.handle(PASTE);
   } else {
     if (!OpenClipboard(NULL)) return;
-    HANDLE h = GetClipboardData(CF_TEXT);
+    HANDLE h = GetClipboardData(CF_UNICODETEXT);
     if (h) {
-      e_text = (LPSTR)GlobalLock(h);
+      unsigned short *ucs = (LPWSTR)GlobalLock(h);
+      int l = wcslen(ucs);
+      char *pbuf, *buf = new char[l*3+1];
+      pbuf = buf;
+      for(int i = 0; i < l; i++) pbuf += ucs2utf(ucs[i], pbuf);
+      *pbuf = 0;
+      e_text = buf;
       LPSTR a,b;
       a = b = e_text;
       while (*a) { // strip the CRLF pairs ($%$#@^)
@@ -542,13 +643,20 @@ void fltk::paste(Widget &receiver, bool clipboard) {
 // copies the given selection to such a block and returns it. It appears
 // this block is usually handed to Windows and Windows deletes it.
 HANDLE fl_global_selection(int clipboard) {
-  HANDLE h = GlobalAlloc(GHND, selection_length[clipboard]+1);
+  int n = 0;
+  unsigned short *ucs =
+    new unsigned short[selection_length[clipboard]+1];
+  const char* ptr = selection_buffer[clipboard];
+  const char* end = ptr+selection_length[clipboard];
+  for (; ptr<end; n++) ptr += utf2ucs(ptr, ucs+n);
+  ucs[n] = 0;
+  HANDLE h = GlobalAlloc(GHND, sizeof(unsigned short) * (n+1));
   if (h) {
-    LPSTR p = (LPSTR)GlobalLock(h);
-    memcpy(p, selection_buffer[clipboard], selection_length[clipboard]);
-    p[selection_length[clipboard]] = 0;
+    LPWSTR p = (LPWSTR)GlobalLock(h);
+    memcpy(p, ucs, sizeof(unsigned short) * (n+1));
     GlobalUnlock(h);
   }
+  delete[] ucs;
   return h;
 }
 
@@ -742,7 +850,9 @@ public:
 //
 
 #if !defined(__GNUC__)
+# if (_WIN32_WINNT >= 0x0400)
 #  define USE_TRACK_MOUSE
+# endif
 #endif // !__GNUC__
 
 static bool mouse_event(Window *window, int what, int button,
@@ -1078,22 +1188,45 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     }
     lastkeysym = e_keysym;
     // translate to text:
-    static char buffer[2];
+    static char buffer[3];
     if (uMsg == WM_CHAR || uMsg == WM_SYSCHAR) {
-      buffer[0] = char(wParam);
+      if (!buffer[0]) {
+	buffer[0] = char(wParam);
+	if (IsDBCSLeadByte((unsigned char)buffer[0]))
+	  break;
+      } else {
+	buffer[1] = char(wParam);
+      }
       if (e_keysym==ReturnKey || e_keysym==KeypadEnter) buffer[0] = '\r';
-      e_length = 1;
-//      } else if (e_keysym >= Keypad && e_keysym <= KeypadLast) {
+      if (buffer[0] && buffer[1]) {
+	unsigned short ucs[11];
+	int ucslen, len = 0;
+	ucslen = MultiByteToWideChar(GetACP(), MB_PRECOMPOSED,
+				     (char*)buffer, 2, (wchar_t*)ucs, 10);
+      	for (int i = 0; i < ucslen; i++) { 
+          int l = ucs2utf(ucs[i], buffer + len);
+          if (l > 0) len += l;
+      	}
+      	buffer[len] = 0;
+	e_length = len;
+//    } else if (e_keysym >= Keypad && e_keysym <= KeypadLast) {
 //        buffer[0] = e_keysym-Keypad;
 //        e_length = 1;
+      } else {
+	e_length = 1;
+      }
     } else {
       buffer[0] = 0;
       e_length = 0;
     }
+
     e_text = buffer;
     // for (int i = lParam&0xff; i--;)
     if (window) while (window->parent()) window = window->window();
-    if (handle(KEY,window)) return 0;
+    int r = handle(KEY,window);
+	buffer[0] = 0;
+	if (r)
+	  return 0;
     break;}
 
   case WM_MOUSEWHEEL: {
@@ -1231,7 +1364,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     OpenClipboard(NULL);
     // fall through...
   case WM_RENDERFORMAT:
-    SetClipboardData(CF_TEXT, fl_global_selection(1));
+    SetClipboardData(CF_UNICODETEXT, fl_global_selection(1));
     // Windoze also seems unhappy if I don't do this. Documentation very
     // unclear on what is correct:
     if (msg.message == WM_RENDERALLFORMATS) CloseClipboard();
@@ -1656,5 +1789,5 @@ Cleanup::~Cleanup() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.211 2004/06/09 05:38:58 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.212 2004/06/19 23:02:14 spitzak Exp $".
 //

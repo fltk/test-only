@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.17 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.18 2004/06/19 23:02:11 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -241,19 +241,19 @@ static FrameBox thinUpBox("thin_up", "HHWW", &thinDownBox);
 Box* const fltk::THIN_UP_BOX = &thinUpBox;
 
 // in fltk 1.0 these used to point at each other as a "down" version:
-static FrameBox engravedBox("engraved", "2HHWWWWHH");
+static FrameBox engravedBox("engraved", "2HHWWWWHH", &downBox);
 /*! \ingroup boxes
   2-pixel thick engraved line around edge.
 */
 Box* const fltk::ENGRAVED_BOX = &engravedBox;
 
-static FrameBox embossedBox("embossed", "2WWHHHHWW");
+static FrameBox embossedBox("embossed", "2WWHHHHWW", &downBox);
 /*! \ingroup boxes
   2-pixel thick raised line around edge.
 */
 Box* const fltk::EMBOSSED_BOX = &embossedBox;
 
-static FrameBox borderBox("border", "HHHH");
+static FrameBox borderBox("border", "HHHH", &downBox);
 /*! \ingroup boxes
   1-pixel thick gray line around rectangle.
 */
@@ -264,7 +264,8 @@ Box* const fltk::BORDER_BOX = &borderBox;
 
 class BorderFrame : public Box {
 public:
-  void _draw(int x, int y, int w, int h, const Style* style, Flags) const {
+  void _draw(int x, int y, int w, int h, const Style* style,Flags flags) const
+  {
     setcolor(style->textcolor());
     strokerect(x, y, w, h);
   }
@@ -318,5 +319,5 @@ static HighlightBox highlightDownBox("highlight_down", THIN_DOWN_BOX);
 Box* const fltk::HIGHLIGHT_DOWN_BOX = &highlightDownBox;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.17 2004/03/25 18:13:18 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.18 2004/06/19 23:02:11 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.52 2004/06/09 05:38:58 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.53 2004/06/19 23:02:25 spitzak Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,7 @@
 #include <stdlib.h>
 #include <fltk/math.h>
 #include <fltk/string.h>
+#include <fltk/utf.h>
 
 using namespace fltk;
 
@@ -40,7 +41,7 @@ struct FontSize {
   int charset;
   unsigned size;
   int width[256];
-  TEXTMETRIC metr;
+  TEXTMETRICW metr;
   FontSize(const char* fontname, int attr, int size, int charset);
   ~FontSize();
 };
@@ -101,7 +102,7 @@ FontSize::FontSize(const char* name, int attr, int size, int charset) {
 
   HDC dc = getDC();
   SelectObject(dc, font);
-  GetTextMetrics(dc, &current->metr);
+  GetTextMetricsW(dc, &current->metr);
 //    printf("FontSize '%s' %d %d %d -> %d %d\n",
 //  	 name, attr, size, charset,
 //  	 current->metr.tmAscent,
@@ -200,7 +201,7 @@ Font* fl_make_font(const char* name, int attrib) {
 // Public interface:
 
 HFONT fltk::xfont() {return current->font;}
-TEXTMETRIC* fltk::textmetric() {return &(current->metr);}
+TEXTMETRICW* fltk::textmetric() {return &(current->metr);}
 
 const char* fltk::Font::current_name() {
   return current_font_->name_;
@@ -235,22 +236,73 @@ void fltk::setfont(Font* font, float psize) {
 float fltk::getascent()  { return current->metr.tmAscent; }
 float fltk::getdescent() { return current->metr.tmDescent; }
   
-float fltk::getwidth(const char* c, int n) {
+// This function will look at the string. If all characters are 1
+// byte or errors it returns null. Otherwise it converts it to 16-bit
+// and returns the allocated buffer and size:
+static U16* convert_utf8(const char* text, int n, int* charcount) {
+  const char* p = text;
+  const char* e = text+n;
+  bool sawutf8 = false;
+  int count = 0;
+  while (p < e) {
+    unsigned char c = *(unsigned char*)p;
+    if (c < 0xC2) p++; // ascii letter or bad code
+    else {
+      int len = utf8valid(p,e);
+      if (len > 1) sawutf8 = true;
+      else if (!len) len = 1;
+      p += len;
+    }
+    count++;
+  }
+  if (!sawutf8) return 0;
+  *charcount = count;
+  U16* buffer = new U16[count];
+  count = 0;
+  p = text;
+  while (p < e) {
+    unsigned char c = *(unsigned char*)p;
+    if (c < 0xC2) { // ascii letter or bad code
+      buffer[count] = c;
+      p++;
+    } else {
+      int len;
+      buffer[count] = utf8decode(p,e,&len);
+      p += len;
+    }
+    count++;
+  }
+  return buffer;
+}
+
+float fltk::getwidth(const char* text, int n) {
   SIZE size;
   HDC dc = getDC();
   SelectObject(dc, current->font);
   // I think win32 has a fractional version of this:
-  GetTextExtentPoint(dc, c, n, &size);
+  int count; U16* buffer = convert_utf8(text,n,&count);
+  if (buffer) {
+    GetTextExtentPointW(dc, buffer, count, &size);
+    delete[] buffer;
+  } else {
+    GetTextExtentPoint(dc, text, n, &size);
+  }
   return size.cx;
 }
 
-void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
+void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
   SetTextColor(dc, current_xpixel);
   HGDIOBJ oldfont = SelectObject(dc, current->font);
-  TextOut(dc, int(floorf(x+.5f)), int(floorf(y+.5f)), str, n);
+  int count; U16* buffer = convert_utf8(text,n,&count);
+  if (buffer) {
+    TextOutW(dc, int(floorf(x+.5f)), int(floorf(y+.5f)), buffer, count);
+    delete[] buffer;
+  } else {
+    TextOut(dc, int(floorf(x+.5f)), int(floorf(y+.5f)), text, n);
+  }
   SelectObject(dc, oldfont);
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.52 2004/06/09 05:38:58 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.53 2004/06/19 23:02:25 spitzak Exp $".
 //

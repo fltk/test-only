@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.90 2004/06/09 05:38:58 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.91 2004/06/19 23:02:12 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -27,11 +27,16 @@
 #include <fltk/Box.h>
 #include <fltk/draw.h>
 #include <fltk/math.h>
+#include <fltk/utf.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
 
 using namespace fltk;
+
+extern void fl_set_spot(fltk::Font *f, Widget *w, int x, int y);
+
+////////////////////////////////////////////////////////////////
 
 /*! \class fltk::Input
 
@@ -72,11 +77,18 @@ using namespace fltk;
   allow. If you don't like the keybindings you can override handle()
   to change them.
 
+  Warning: although UTF-8 is understood by the text editor, all positions
+  are measured in \e bytes, not in "characters". For some reason some
+  people are under the mistaken impression that there is some reason
+  to store all lengths in "characters", which is totally wrong, as the
+  "characters" are only used at the very last moment to decide how to
+  draw the string. It makes as much sense as storing the length of the
+  string as a count of the words in it. Please understand that \e bytes
+  are important, and maybe we will get working I18N in the 21st century...
+
 */
 
 #define MAXBUF 1024
-
-////////////////////////////////////////////////////////////////
 
 /*! Copy string p to the buffer, replacing control characters with ^X.
   Stop at then end of the line, or truncate if necessary so the resulting
@@ -345,6 +357,8 @@ void Input::draw(int X, int Y, int W, int H)
 
   // visit each line and draw it:
   p = value();
+  int spot_x = X;
+  int spot_y = Y;
   for (; ypos < H;) {
 
     // re-expand line unless it is the last one calculated above:
@@ -416,6 +430,8 @@ void Input::draw(int X, int Y, int W, int H)
 	cursor_position >= p-value() && cursor_position <= e-value()) {
       setcolor(textcolor);
       fillrect(xpos+curx, Y+ypos, 2, height);
+	  spot_x = xpos+curx;
+	  spot_y = Y+ypos;
     }
 
   CONTINUE:
@@ -434,6 +450,8 @@ void Input::draw(int X, int Y, int W, int H)
   }
 
   pop_clip();
+  transform(spot_x, spot_y);
+  fl_set_spot(textfont(), this, spot_x, spot_y);
 }
 
 static int isword(char c) {
@@ -543,14 +561,16 @@ int Input::mouse_position(int X, int Y, int W, int /*H*/) const
   const char *l, *r, *t; float f0 = event_x()-xpos;
   for (l = p, r = e; l<r; ) {
     t = l+(r-l+1)/2;
+    if (t < r) t = utf8fwd(t, l, r);
     int f = xpos+int(expandpos(p, t, buf, 0)+.5);
     if (f <= event_x()) {l = t; f0 = event_x()-f;}
-    else r = t-1;
+    else r = utf8back(t-1,l,r);
   }
   // see if closer to character on the right:
   if (l < e) {
-    int f1 = xpos+int(expandpos(p, l+1, buf, 0)+.5)-event_x();
-    if (f1 < f0) l = l+1;
+    t = utf8fwd(l+1, p, e);
+    int f1 = xpos+int(expandpos(p, t, buf, 0)+.5)-event_x();
+    if (f1 < f0) l = t;
   }
   return l-value();
 }
@@ -572,6 +592,9 @@ int Input::mouse_position(int X, int Y, int W, int /*H*/) const
 
   Changing these values causes a redraw(). The new values are bounds
   checked and limited to the size of the string.
+
+  It is up to the caller to make sure the position and mark are
+  at the borders of UTF-8 characters!
 */
 void Input::position(int new_position, int new_mark) {
   was_up_down = false;
@@ -579,6 +602,7 @@ void Input::position(int new_position, int new_mark) {
   if (new_position>size()) new_position = size();
   if (new_mark<0) new_mark = 0;
   if (new_mark>size()) new_mark = size();
+
   if (new_position == position_ && new_mark == mark_) return;
   if (new_position != new_mark) {
     // new position is a selection:
@@ -607,8 +631,10 @@ void Input::up_down_position(int i, bool keepmark) {
   const char *l, *r, *t;
   for (l = p, r = e; l<r; ) {
     t = l+(r-l+1)/2;
+    if (t < r) t = utf8fwd(t, l, r);
     int f = (int)expandpos(p, t, buf, 0);
-    if (f <= up_down_pos) l = t; else r = t-1;
+    if (f <= up_down_pos) l = t;
+    else r = utf8back(t-1,l,r);
   }
   int j = l-value();
   position(j, keepmark ? mark_ : j);
@@ -696,7 +722,11 @@ bool Input::replace(int b, int e, const char* text, int ilen) {
   if (b>size_) b = size_;
   if (e>size_) e = size_;
   if (e<b) {int t=b; b=e; e=t;}
-  if (e<=b && !ilen) return false; // don't clobber undo for a null operation
+
+  // Submitted utf-8 patch tried to fix b,e to point at legal utf-8
+  // characters. I removed this as I feel this code should be called
+  // with literal bytes and the caller must make sure the pointers
+  // are correct:
 #if 0
   // this can be done by a subclass!
   if (size_+ilen-(e-b) > maximum_size_) {
@@ -1101,7 +1131,11 @@ bool Input::handle_key() {
     if (key_is_shortcut()) return true;
     ctrl = alt;
   case LeftKey:
-    i = position_-1; if (!shift && mark_<i) i = mark_;
+    if (!shift && mark_<position_) i = mark_;
+    else {
+      i = position_-1;
+      if (i > 0) i = utf8back(value_+i,value_,value_+size_)-value_;
+    }
     shift_position(ctrl ? word_start(i) : i);
     return true;
 
@@ -1109,7 +1143,11 @@ bool Input::handle_key() {
     if (key_is_shortcut()) return true;
     ctrl = alt;
   case RightKey:
-    i = position_+1; if (!shift && mark_>i) i = mark_;
+    if (!shift && mark_>position_) i = mark_;
+    else {
+      i = position_+1;
+      if (i < size_) i = utf8fwd(value_+i,value_,value_+size_)-value_;
+    }
     shift_position(ctrl ? word_end(i) : i);
     return true;
 
@@ -1186,7 +1224,10 @@ bool Input::handle_key() {
     // I don't know what CUA does with ctrl+delete, I made it delete words
     if (shift) copy();
     if (mark() != position()) cut();
-    else cut(ctrl ? word_end(position()+1)-position() : 1);
+    else if (position() < size()) {
+      i = utf8fwd(value_+position_+1,value_,value_+size_)-value_;
+      cut(ctrl ? word_end(i)-position() : i-position());
+    }
     return true;
 
   case 'h': // retro-Emacs, modern versions do "help"
@@ -1195,7 +1236,10 @@ bool Input::handle_key() {
   case BackSpaceKey:
     // I don't know what CUA does with ctrl+backspace, I made it delete words
     if (mark() != position()) cut();
-    else cut(ctrl ? word_start(position()-1)-position() : -1);
+    else if (position()>0) {
+      i = utf8back(value_+position_-1,value_,value_+size_)-value_;
+      cut(ctrl ? word_start(i)-position() : i-position());
+    }
     return true;
 
   case ReturnKey:
@@ -1242,6 +1286,8 @@ bool Input::handle_key() {
     i = position();
     if (i <= 0 || value_[i-1]=='\n') i++;
     if (i >= size() || value_[i]=='\n') i--;
+    // just punt on utf-8 characters:
+    if ((value_[i-1]|value_[i])&0x80) return 1;
     {char t[2]; t[0] = value_[i]; t[1] = value_[i-1];
     if (!replace(i-1,i+1,t,2)) break;}
     position(i+1);
@@ -1596,5 +1642,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.90 2004/06/09 05:38:58 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.91 2004/06/19 23:02:12 spitzak Exp $".
 //

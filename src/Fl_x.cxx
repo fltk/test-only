@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.174 2004/06/11 08:07:19 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.175 2004/06/19 23:02:23 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -37,7 +37,10 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <limits.h>
+#include <locale.h>
 #include <fltk/visual.h>
+#include <fltk/Font.h>
+#include <fltk/Browser.h>
 
 using namespace fltk;
 
@@ -76,6 +79,185 @@ static struct FD {
   void (*cb)(int, void*);
   void* arg;
 } *fd = 0;
+
+XIM fl_xim_im = 0;
+XIC fl_xim_ic = 0;
+XFontSet fl_xim_fs = NULL;
+char fl_is_over_the_spot = 0;
+static XRectangle status_area;
+
+void fl_new_ic()
+{
+  XVaNestedList preedit_attr;
+  XVaNestedList status_attr;
+  char          **missing_list;
+  int           missing_count;
+  char          *def_string;
+  int predit = 0;
+  int sarea = 0;
+  XIMStyles* xim_styles = NULL;
+
+  if (!fl_xim_fs) {
+    fl_xim_fs = XCreateFontSet(xdisplay,
+			       "-misc-fixed-medium-r-normal--14-*",
+			       &missing_list, &missing_count, &def_string);
+  }
+
+  XPoint	spot;
+  spot.x = 0;
+  spot.y = 0;
+  preedit_attr = XVaCreateNestedList(0,
+				     XNSpotLocation, &spot,
+				     XNFontSet, fl_xim_fs, NULL);
+  status_attr = XVaCreateNestedList(0,
+				    XNAreaNeeded, &status_area,
+				    XNFontSet, fl_xim_fs, NULL);
+
+  if (!XGetIMValues (fl_xim_im, XNQueryInputStyle, 
+		     &xim_styles, NULL, NULL)) {
+    int i;
+    XIMStyle *style;
+    for (i = 0, style = xim_styles->supported_styles;
+	 i < xim_styles->count_styles; i++, style++) {
+      if (*style == (XIMPreeditPosition | XIMStatusArea)) {
+	sarea = 1;
+	predit = 1;
+      } else if (*style == (XIMPreeditPosition | XIMStatusNothing)) {
+	predit = 1;
+      }
+    }
+  }
+  XFree(xim_styles);
+
+  if (fl_xim_ic)
+    XDestroyIC(fl_xim_ic);
+  fl_xim_ic = NULL;
+  if (sarea)
+    fl_xim_ic = XCreateIC(fl_xim_im,
+			  XNInputStyle, (XIMPreeditPosition | XIMStatusArea),
+			  XNPreeditAttributes, preedit_attr,
+			  XNStatusAttributes, status_attr,
+			  NULL);
+
+  if (!fl_xim_ic && predit)
+    fl_xim_ic = XCreateIC(fl_xim_im,
+			  XNInputStyle,(XIMPreeditPosition | XIMStatusNothing),
+			  XNPreeditAttributes, preedit_attr,
+			  NULL);
+
+  XFree(preedit_attr);
+  XFree(status_attr);
+
+  if (!fl_xim_ic) {
+    fl_is_over_the_spot = 0;
+    fl_xim_ic = XCreateIC(fl_xim_im,
+			  XNInputStyle, (XIMPreeditNothing | XIMStatusNothing),
+			  NULL);
+  } else {
+    fl_is_over_the_spot = 1;
+    XVaNestedList status_attr;
+    status_attr = XVaCreateNestedList(0, XNAreaNeeded, &status_area, NULL);
+    if (status_area.height != 0)
+      XGetICValues(fl_xim_ic, XNStatusAttributes, status_attr, NULL);
+    XFree(status_attr);
+  }
+}
+
+void fl_init_xim()
+{	
+  XIMStyles *xim_styles;
+  if (!xdisplay) return;
+  if (fl_xim_im) return;
+
+  XSetLocaleModifiers("@im=");
+  fl_xim_im = XOpenIM(xdisplay, NULL, NULL, NULL);
+  xim_styles = NULL;
+  fl_xim_ic = NULL;
+
+  if (fl_xim_im) {
+    XGetIMValues (fl_xim_im, XNQueryInputStyle,
+      &xim_styles, NULL, NULL);
+  } else {
+    warning("XOpenIM() failed\n");
+    return;
+  }
+
+  if (xim_styles && xim_styles->count_styles) {
+    fl_new_ic();
+  } else {
+    warning("No XIM style found\n");
+    XCloseIM(fl_xim_im);
+    fl_xim_im = NULL;
+    return;
+  }
+  if (!fl_xim_ic) {
+    warning("XCreateIC() failed\n");
+    XCloseIM(fl_xim_im);
+    XFree(xim_styles);
+    fl_xim_im = NULL;
+  }
+}
+
+void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
+{
+  int change = 0;
+  XVaNestedList preedit_attr;
+  char          **missing_list;
+  int           missing_count;
+  char          *def_string;
+  const char *fnt = NULL;
+  static XIC ic = NULL;
+  static fltk::Font *spotf = NULL;
+  static Widget *spotw = NULL;
+  static XPoint	spot, spot_set;
+  XFontSet fs = NULL;
+
+  if (!fl_xim_ic || !fl_is_over_the_spot) return;
+  if (w != spotw) {
+    spotw = w;
+    change = 1;
+  }
+  if (x != spot.x || y != spot.y) {
+    spot.x = x;
+    spot.y = y;
+    change = 1;
+  }
+  if (f != spotf) {
+    spotf = f;
+    fnt = f->system_name();
+    if (fnt)
+      fs = XCreateFontSet(xdisplay, fnt, &missing_list,
+			  &missing_count, &def_string);
+    else
+      return;
+    if (fs) {
+      XFreeFontSet(xdisplay, fl_xim_fs);
+      fl_xim_fs = fs;
+      change = 1;
+    }
+  }
+  if (fl_xim_ic != ic) {
+    ic = fl_xim_ic;
+    change = 1;
+  }
+
+  if (!change) return;
+
+  XFontSetExtents *extents;
+  int ascent;
+  extents = XExtentsOfFontSet(fl_xim_fs);
+  ascent=-extents->max_logical_extent.y;
+  spot_set = spot;
+  spot_set.y += ascent;
+  preedit_attr =
+    XVaCreateNestedList(0,
+			XNSpotLocation, &spot_set,
+			XNFontSet, fl_xim_fs, NULL);
+  if (preedit_attr) {
+    XSetICValues(fl_xim_ic, XNPreeditAttributes, preedit_attr, NULL);
+    XFree(preedit_attr);
+  }
+}
 
 /*!
 
@@ -306,6 +488,7 @@ static int xerror_handler(Display* d, XErrorEvent* e) {
 void fltk::open_display() {
   if (xdisplay) return;
 
+  setlocale(LC_ALL, "");
   XSetIOErrorHandler(io_error_handler);
   XSetErrorHandler(xerror_handler);
 
@@ -363,6 +546,7 @@ void fltk::open_display(Display* d) {
   templt.visualid = XVisualIDFromVisual(DefaultVisual(d, xscreen));
   xvisual = XGetVisualInfo(d, VisualIDMask, &templt, &num);
   xcolormap = DefaultColormap(d, xscreen);
+  fl_init_xim();
 
 #if !USE_COLORMAP
   visual(RGB);
@@ -799,6 +983,27 @@ bool fltk::handle()
 {
   Window* window = find(xevent.xany.window);
   int event = 0;
+  static XWindow xim_win = 0;
+
+  if (XFilterEvent((XEvent *)&xevent, 0)) {
+    printf("Filtered event of type %d\n", xevent.type);
+#if 0
+    if (fl_xim_ic) {
+      Status status;
+      len = Xutf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
+			      buffer, buffer_len, &keysym, &status);
+      while (status == XBufferOverflow && buffer_len < 50000) {
+	buffer_len = buffer_len * 5 + 1;
+	buffer = (char*)realloc(buffer, buffer_len);
+	len = Xutf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
+				buffer, buffer_len, &keysym, &status);
+      }
+    } else {
+      keysym = XKeycodeToKeysym(xdisplay, keycode, 0);
+    }
+#endif
+    return 1;
+  }
 
   switch (xevent.type) {
 
@@ -965,6 +1170,12 @@ bool fltk::handle()
   }
 
   case UnmapNotify:
+    if (xim_win) {
+	  xim_win = 0;
+	  if (fl_xim_ic)
+	    XDestroyIC(fl_xim_ic);
+	  fl_xim_ic = NULL;
+    }
     window = find(xevent.xmapping.window);
     if (!window) break;
     if (window->parent()) break; // ignore child windows
@@ -1066,11 +1277,24 @@ bool fltk::handle()
     return false;
 
   case FocusIn:
+    if (xim_win != xevent.xclient.window) {
+      xim_win = xevent.xclient.window;
+      if (fl_xim_ic)
+	XDestroyIC(fl_xim_ic);
+      fl_xim_ic = NULL;
+      fl_new_ic();
+      if (fl_xim_ic)
+	XSetICValues(fl_xim_ic,
+		     XNClientWindow, xim_win,
+		     NULL);
+    }
+    if (fl_xim_ic) XSetICFocus(fl_xim_ic);
     xfocus = window;
     if (window) {fix_focus(); return true;}
     break;
 
   case FocusOut:
+    if (fl_xim_ic) XUnsetICFocus(fl_xim_ic);
     if (window && window == xfocus) {xfocus = 0; fix_focus(); return true;}
     break;
 
@@ -1088,9 +1312,15 @@ bool fltk::handle()
       e_is_click = keycode+100;
     }
     fl_key_vector[keycode/8] |= (1 << (keycode%8));
-    static char buffer[21];
+    static char* buffer = 0;
+    static int buffer_len = 0;
+    if (buffer_len == 0) {
+      buffer_len = 128;
+      buffer = (char*) malloc(buffer_len);
+    }
     KeySym keysym;
-    int len = XLookupString(&(xevent.xkey), buffer, 20, &keysym, 0);
+    int len = 0;
+    len = XLookupString(&(xevent.xkey), buffer, buffer_len-1, &keysym, 0);
     fl_actual_keysym = int(keysym);
     // Make ctrl+dash produce ^_ like it used to:
     if (xevent.xbutton.state&4 && keysym == '-') buffer[0] = 0x1f;
@@ -1653,6 +1883,7 @@ void fltk::draw_into(XWindow window) {
   // if no text is drawn into this window. It is created when the
   // xft text is drawn the first time.
   load_identity();
+#if USE_CAIRO
   // Cairo context created as well:
   if (cc) {
     if (cairo_status(cc)) {
@@ -1664,6 +1895,7 @@ void fltk::draw_into(XWindow window) {
     cairo_set_line_width(cc,1);
   }
   cairo_set_target_drawable (cc, xdisplay, window);
+#endif
 }
 
 /*! \fn void fltk::stop_drawing(XWindow window);
@@ -1841,5 +2073,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.174 2004/06/11 08:07:19 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.175 2004/06/19 23:02:23 spitzak Exp $".
 //

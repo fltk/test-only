@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Buffer.cxx,v 1.10 2002/12/09 04:52:26 spitzak Exp $"
+// "$Id: Fl_Text_Buffer.cxx,v 1.11 2004/06/19 23:02:13 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -27,6 +27,7 @@
 #include <string.h>
 #include <ctype.h>
 #include <fltk/TextBuffer.h>
+#include <fltk/utf.h>
 using namespace fltk;
 
 #define PREFERRED_GAP_SIZE 80
@@ -741,8 +742,21 @@ int TextBuffer::word_end( int pos ) {
 ** equal in length to MAX_EXP_CHAR_LEN
 */
 int TextBuffer::expand_character( int pos, int indent, char *outStr ) {
-  return expand_character( character( pos ), indent, outStr,
+  int ret;
+  char c = character( pos );
+  ret = expand_character( c, indent, outStr,
                            mTabDist, mNullSubsChar );
+  if (ret > 1) {
+    int i;
+    i = utf8len(c);
+    while (i > 1) {
+      i--;
+      pos++;
+      outStr++;
+      *outStr = character( pos );
+    }
+  }
+  return ret;
 }
 
 /*
@@ -776,6 +790,9 @@ int TextBuffer::expand_character( char c, int indent, char *outStr, int tabDist,
   } else if ( c == nullSubsChar ) {
     sprintf( outStr, "<nul>" );
     return 5;
+  } else {
+    *outStr = c;
+    return utf8len(c);
   }
 
   /* Otherwise, just return the character */
@@ -800,6 +817,8 @@ int TextBuffer::character_width( char c, int indent, int tabDist, char nullSubsC
     return 5;
   else if ( c == nullSubsChar )
     return 5;
+  else
+    return utf8len(c);
   return 1;
 }
 
@@ -2283,5 +2302,5 @@ TextBuffer::outputfile(const char *file, int start, int end, int buflen) {
 
 
 //
-// End of "$Id: Fl_Text_Buffer.cxx,v 1.10 2002/12/09 04:52:26 spitzak Exp $".
+// End of "$Id: Fl_Text_Buffer.cxx,v 1.11 2004/06/19 23:02:13 spitzak Exp $".
 //

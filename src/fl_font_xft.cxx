@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.22 2004/06/09 05:38:58 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.23 2004/06/19 23:02:25 spitzak Exp $"
 //
 // Copyright 2004 Bill Spitzak and others.
 //
@@ -41,7 +41,8 @@
 #include <fltk/Font.h>
 #include <fltk/draw.h>
 #include <fltk/math.h>
-
+#include <fltk/string.h>
+#include <fltk/utf.h>
 #include <fltk/x.h>
 #define Window XWindow
 #include <X11/Xft/Xft.h>
@@ -57,7 +58,6 @@ typedef struct _XftMatrix {
     double xx, xy, yx, yy;
 } XftMatrix;
 #endif                                                        
-#include <string.h>
 #include <stdlib.h>
 
 using namespace fltk;
@@ -103,12 +103,12 @@ static XftFont* fontopen(const char* name, int attributes, bool core) {
   if (attributes&BOLD) weight = XFT_WEIGHT_BOLD;
   int slant = XFT_SLANT_ROMAN;
   if (attributes&ITALIC) slant = XFT_SLANT_ITALIC;
-  // this call is extremely slow...
+
   return XftFontOpen(xdisplay, xscreen,
 		     XFT_FAMILY, XftTypeString, name,
 		     XFT_WEIGHT, XftTypeInteger, weight,
 		     XFT_SLANT, XftTypeInteger, slant,
-		     XFT_ENCODING, XftTypeString, encoding_,
+		     //XFT_ENCODING, XftTypeString, encoding_,
 		     XFT_PIXEL_SIZE, XftTypeDouble, (double)current_size_,
 		     core ? XFT_CORE : 0, XftTypeBool, true,
 		     XFT_RENDER, XftTypeBool, false,
@@ -156,33 +156,33 @@ FontSize::~FontSize() {
 // completely hidden or removed this interface...
 XFontStruct* fltk::xfont() {
   if (!current->xfont) {
-#if defined(XFT_MAJOR) && XFT_MAJOR >= 2
+#if 1 //defined(XFT_MAJOR) && XFT_MAJOR >= 2
     // kludge! Select Xfonts for the fltk built-in ones, uses "variable"
     // for everything else. Assummes the Xfont setup from RedHat 9:
     const char *name = current_font_->name();
     char *myname, xname[1024];
     int slo = 0;
     if (strncmp(name, "sans", 4)==0) {
-      myname = "-*-helvetica-%s-%s-normal-*-%d-*-*-*-*-*-*-*";
+      myname = "-*-helvetica-%s-%s-normal-*-*-%d-*-*-*-*-*-*";
     } else if (strncmp(name, "mono", 4)==0) {
-      myname = "-*-courier-%s-%s-normal-*-%d-*-*-*-*-*-*-*";
+      myname = "-*-courier-%s-%s-normal-*-*-%d-*-*-*-*-*-*";
     } else if (strncmp(name, "serif", 5)==0) {
-      myname = "-*-times-%s-%s-normal-*-%d-*-*-*-*-*-*-*"; slo = 2;
+      myname = "-*-times-%s-%s-normal-*-*-%d-*-*-*-*-*-*"; slo = 2;
     } else if (strncmp(name, "symbol", 6)==0) {
-      myname = "-*-symbol-%s-%s-*-*-%d-*-*-*-*-*-*-*";
+      myname = "-*-symbol-%s-%s-*-*-*-%d-*-*-*-*-*-*";
     } else if (strncmp(name, "screen", 6)==0) {
-      myname = "-*-clean-%s-%s-*-*-%d-*-*-*-*-*-*-*"; slo = 2;
+      myname = "-*-clean-%s-%s-*-*-*-%d-*-*-*-*-*-*"; slo = 2;
     } else if (strncmp(name, "dingbats", 8)==0) {
-      myname = "-*-*zapf dingbats-%s-%s-*-*-%d-*-*-*-*-*-*-*";
+      myname = "-*-*zapf dingbats-%s-%s-*-*-*-%d-*-*-*-*-*-*";
     } else {
-      myname = "-*-helvetica-%s-%s-normal-*-%d-*-*-*-*-*-*-*";
+      myname = "-*-helvetica-%s-%s-normal-*-*-%d-*-*-*-*-*-*";
     }
     static char *wghtLUT[] = { "medium", "bold" };
     static char *slantLUT[] = { "r", "o", "r", "i" };
     sprintf(xname, myname, 
 	    wghtLUT[(current_font_->attributes_&BOLD)!=0],
 	    slantLUT[slo+((current_font_->attributes_&ITALIC)!=0)],
-	    int(current_size_+0.5));
+	    int(current_size_*10+0.5));
     XFontStruct *myFont = XLoadQueryFont(xdisplay, xname);
     if (!myFont) {
       static XFontStruct* some_font = 0;
@@ -214,7 +214,27 @@ float fltk::getdescent() { return current->font->descent; }
 
 float fltk::getwidth(const char *str, int n) {
   XGlyphInfo i;
-  XftTextExtents8(xdisplay, current->font, (XftChar8 *)str, n, &i);
+  // Unfortunately the Utf8 drawing code barfs on illegal sequences and
+  // on some fonts. I check here to see if a UTF-8 character is in the
+  // string and no errors, and only then use the Utf8 drawing code:
+  const char* p = str;
+  const char* e = str+n;
+  bool sawutf8 = false;
+  while (p < e) {
+    unsigned char c = *(unsigned char*)p;
+    if (c < 0x80) p++; // ascii letter encountered
+    else if (c < 0xC2) {sawutf8 = false; break;} // bad code encountered
+    else {
+      int len = utf8valid(p,e);
+      if (!len) {sawutf8 = false; break;}
+      if (len > 1) sawutf8 = true;
+      p += len;
+    }
+  }
+  if (sawutf8)
+    XftTextExtentsUtf8(xdisplay, current->font, (XftChar8*)str, n, &i);
+  else
+    XftTextExtents8(xdisplay, current->font, (XftChar8*)str, n, &i);
   return i.xOff;
 }
 
@@ -260,9 +280,31 @@ void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
   color.color.blue  = b*0x101;
   color.color.alpha = 0xffff;
 
-  XftDrawString8(xft_gc, &color, current->font,
-		 int(floorf(x+.5f)), int(floorf(y+.5f)),	
-		 (XftChar8 *)str, n);
+  // Unfortunately the Utf8 drawing code barfs on illegal sequences and
+  // on some fonts. I check here to see if a UTF-8 character is in the
+  // string and no errors, and only then use the Utf8 drawing code:
+  const char* p = str;
+  const char* e = str+n;
+  bool sawutf8 = false;
+  while (p < e) {
+    unsigned char c = *(unsigned char*)p;
+    if (c < 0x80) p++; // ascii letter encountered
+    else if (c < 0xC2) {sawutf8 = false; break;} // bad code encountered
+    else {
+      int len = utf8valid(p,e);
+      if (!len) {sawutf8 = false; break;}
+      if (len > 1) sawutf8 = true;
+      p += len;
+    }
+  }
+  if (sawutf8)
+    XftDrawStringUtf8(xft_gc, &color, current->font,
+		      int(floorf(x+.5f)), int(floorf(y+.5f)),	
+		      (XftChar8*)str, n);
+  else
+    XftDrawString8(xft_gc, &color, current->font,
+		   int(floorf(x+.5f)), int(floorf(y+.5f)),	
+		   (XftChar8*)str, n);
 }
 
 void fltk::stop_drawing(XWindow window) {
@@ -431,5 +473,5 @@ int fltk::Font::encodings(const char**& arrayp) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.22 2004/06/09 05:38:58 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.23 2004/06/19 23:02:25 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.118 2004/05/04 07:30:43 spitzak Exp $"
+# "$Id: Makefile,v 1.119 2004/06/19 23:02:24 spitzak Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -163,6 +163,7 @@ CPPFILES = \
 CFILES	= \
 	scandir.c \
 	string.c \
+	utf.c \
 	vsnprintf.c
 
 LIBNAME	=	$(LIBPREFIX)fltk$(LIBSUFFIX)
@@ -284,5 +285,5 @@ uninstall:
 	$(RM) $(libdir)/$(DSOLINK)
 
 #
-# End of "$Id: Makefile,v 1.118 2004/05/04 07:30:43 spitzak Exp $".
+# End of "$Id: Makefile,v 1.119 2004/06/19 23:02:24 spitzak Exp $".
 #

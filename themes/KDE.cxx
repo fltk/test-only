@@ -1,5 +1,5 @@
 //
-// "$Id: KDE.cxx,v 1.20 2004/03/07 20:40:31 spitzak Exp $"
+// "$Id: KDE.cxx,v 1.21 2004/06/19 23:02:27 spitzak Exp $"
 //
 // Copyright 2004 Bill Spitzak and others.
 //
@@ -37,6 +37,7 @@
 #include <fltk/string.h>
 #ifndef _WIN32
 # include <fltk/x.h>
+# include <unistd.h>
 #endif
 #ifndef PATH_MAX
 # define PATH_MAX 1024
@@ -164,7 +165,7 @@ static fltk::Font* grok_font(char* s, float& fontsize, char* fontencoding)
 // one first.
 
 class INIFile {
-  struct {
+  typedef struct {
     const char* section;
     const char* name;
     const char* value;
@@ -220,19 +221,20 @@ bool INIFile::load(const char* filename) {
       char* value = "";
       if (q) {
 	while (isspace(*q)) q++;
-	for (r = q; *r && *r != '\n') r++;
+	for (r = q; *r && *r != '\n'; r++);
 	while (r>q && isspace(*(r-1))) r--;
 	if (r > q) {*r = 0; value = strdup(q);}
       }
       printf("Creating %s,%s,%s\n", section,name,value);
-      Entry* entry = new Entry();
+      //Entry* entry = new Entry();
+      Entry entry;
       entry.section = strdup(section);
       entry.name = name;
       entry.value = value;
       entry.serial = count;
       if (count >= array_size) {
 	array_size = array_size ? 2*array_size : 100;
-	Entry** newarray = new Entry*[array_size];
+	Entry* newarray = new Entry[array_size];
 	if (count) memcpy(newarray, entries, count*sizeof(*entries));
 	delete[] entries;
 	entries = newarray;
@@ -240,7 +242,7 @@ bool INIFile::load(const char* filename) {
       entries[count++] = entry;
     }
   }
-  fclose(FILE);
+  fclose(file);
   qsort(entries, count, sizeof(*entries), compare);
   return true;
 }
@@ -253,7 +255,7 @@ const char* INIFile::get(const char* section, const char* name) {
   int b = count;
   while (a < b) {
     int c = (a+b)/2;
-    Entry* e = entries[c];
+    Entry* e = entries+c;
     int n = strcasecmp(e->section, section);
     if (!n) n = strcasecmp(e->name, name);
     if (n < 0) a = c+1;
@@ -261,23 +263,23 @@ const char* INIFile::get(const char* section, const char* name) {
     else {
       // search backwards for earliest one read:
       while (c>0) {
-	Entry* e1 = entries[--c];
+	Entry* e1 = entries + --c;
 	if (strcasecmp(e->section, section)) break;
 	if (strcasecmp(e->name, name)) break;
 	e = e1;
       }
-      return e->value;
+      return e.value;
+    }
   }
   return 0;
 }
 
 void INIFile::clear() {
   for (int i = count; i--;) {
-    Entry* e = entries[i];
+    Entry* e = entries+i;
     free((void*)(e->section));
     free((void*)(e->name));
     if (e->value[0]) free((void*)(e->value));
-    delete e;
   }
   delete[] entries;
   entries = 0;
@@ -292,7 +294,7 @@ extern "C" bool fltk_theme() {
   fltk::reset_theme();
 
   const char* home = getenv("HOME");
-  if (!home) return;
+  if (!home) return false;
   char kderc[PATH_MAX];
   int kde1 = 0;
   snprintf(kderc, sizeof(kderc), "%s/.kde/share/config/kdeglobals", home);
@@ -302,9 +304,9 @@ extern "C" bool fltk_theme() {
   }
 
   INIFile f;
-  f.read(kderc);
+  f.load(kderc);
   // skipt the rest if it looks like kde does not exist:
-  if (!f.read("/usr/share/config/kdeglobals")) return;
+  if (!f.load("/usr/share/config/kdeglobals")) return false;
 
   const char* s;
 
@@ -326,7 +328,7 @@ extern "C" bool fltk_theme() {
 #endif
 
   Color foreground = NO_COLOR;
-  if ((s=f.getf("General", "foreground")))
+  if ((s=f.get("General", "foreground")))
     foreground = color(s);
 
   Color background = NO_COLOR;
@@ -360,7 +362,7 @@ extern "C" bool fltk_theme() {
 
   if ((s=f.get("General", "font"))) {
     float fontsize; static char fontencoding[32];
-    fltk::Font* font = grok_font(s, fontsize, fontencoding);
+    fltk::Font* font = grok_font((char*)s, fontsize, fontencoding);
     if (font) {
 // CET - FIXME    if (*fontencoding) fltk::encoding(fontencoding);
       Widget::default_style->labelfont(font);
@@ -372,7 +374,7 @@ extern "C" bool fltk_theme() {
 
   if ((s=f.get("General", "menuFont"))) {
     float fontsize; static char fontencoding[32];
-    fltk::Font* font = grok_font(s, fontsize, fontencoding);
+    fltk::Font* font = grok_font((char*)s, fontsize, fontencoding);
     Style* style;
     if ((style = Style::find("MenuBar"))) {
       if (font) style->textfont(font);
@@ -469,5 +471,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: KDE.cxx,v 1.20 2004/03/07 20:40:31 spitzak Exp $".
+// End of "$Id: KDE.cxx,v 1.21 2004/06/19 23:02:27 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: label.cxx,v 1.19 2004/05/15 20:52:47 spitzak Exp $"
+// "$Id: label.cxx,v 1.20 2004/06/19 23:02:27 spitzak Exp $"
 //
 // Label test program for the Fast Light Tool Kit (FLTK).
 //
@@ -55,8 +55,8 @@ void button_cb(Widget *,void *) {
 }
 
 void font_cb(Widget *,void *) {
-  Widget::default_style->leading_ = int(fontslider->value());
-  //textbox->labelfont(font(int(fontslider->value())));
+  //Widget::default_style->leading_ = int(fontslider->value());
+  textbox->labelfont(font(int(fontslider->value())));
   window->redraw();
 }
 
@@ -168,5 +168,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: label.cxx,v 1.19 2004/05/15 20:52:47 spitzak Exp $".
+// End of "$Id: label.cxx,v 1.20 2004/06/19 23:02:27 spitzak Exp $".
 //

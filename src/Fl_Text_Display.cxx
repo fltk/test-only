@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.27 2004/05/15 20:52:45 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.28 2004/06/19 23:02:13 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -28,6 +28,7 @@
 #include <fltk/damage.h>
 #include <fltk/Box.h>
 #include <fltk/draw.h>
+#include <fltk/utf.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -35,6 +36,7 @@
 #include <ctype.h>
 using namespace fltk;
 
+extern void fl_set_spot(fltk::Font *f, Widget *w, int x, int y);
 #undef min
 #undef max
 
@@ -576,11 +578,17 @@ int TextDisplay::position_to_xy( int pos, int* X, int* Y ) {
   xStep = text_area.x - mHorizOffset;
   outIndex = 0;
   for ( charIndex = 0; charIndex < pos - lineStartPos; charIndex++ ) {
-    charLen =
-      TextBuffer::expand_character( lineStr[ charIndex ], outIndex,
-				    expandedChar,
-				    mBuffer->tab_distance(),
-				    mBuffer->null_substitution_character() );
+    charLen = TextBuffer::expand_character( lineStr[ charIndex ], outIndex, expandedChar,
+              mBuffer->tab_distance(), mBuffer->null_substitution_character() );
+    if (charLen > 1) {
+      int i, ii = 0;;
+      i = utf8len(lineStr[ charIndex ]);
+      while (i > 1) {
+        i--;
+        ii++;
+        expandedChar[ii] = lineStr[ charIndex + ii];
+      }
+	}
     charStyle = position_style( lineStartPos, lineLen, charIndex,
                                 outIndex );
     xStep += string_width( expandedChar, charLen, charStyle );
@@ -664,20 +672,43 @@ void TextDisplay::show_insert_position() {
   relayout();
 }
 
+static void adjust_cursor_left( TextBuffer *CurBuffer, int *CursorPos )
+{
+  int l, newPos = CurBuffer->line_start( *CursorPos );
+  while ( newPos + ( l = utf8len( CurBuffer->character( newPos ) ) ) < *CursorPos ) {
+    newPos += l;
+  }
+  *CursorPos = newPos;
+}
+
+static void adjust_cursor_right( TextBuffer *CurBuffer, int *CursorPos )
+{
+  int newPos = CurBuffer->line_start( *CursorPos );
+  while ( newPos < *CursorPos ) {
+    newPos += utf8len( CurBuffer->character( newPos ) );
+  }
+  *CursorPos = newPos;
+}
+
 /*
 ** Cursor movement functions
 */
 int TextDisplay::move_right() {
   if ( mCursorPos >= mBuffer->length() )
     return 0;
-  insert_position( mCursorPos + 1 );
+  int newPos = mCursorPos + 1;
+  adjust_cursor_right( buffer(), &newPos );
+  insert_position( newPos );
   return 1;
 }
 
 int TextDisplay::move_left() {
   if ( mCursorPos <= 0 )
     return 0;
-  insert_position( mCursorPos - 1 );
+
+  int newPos = mCursorPos - 1;
+  adjust_cursor_left( buffer(), &newPos );
+  insert_position( newPos );
   return 1;
 }
 
@@ -706,6 +737,8 @@ int TextDisplay::move_up() {
     prevLineStartPos = buffer()->rewind_lines( lineStartPos, 1 );
   newPos = mBuffer->skip_displayed_characters( prevLineStartPos, column );
 
+  adjust_cursor_right( buffer(), &newPos );
+
   /* move the cursor */
   insert_position( newPos );
 
@@ -728,6 +761,8 @@ int TextDisplay::move_down() {
            mBuffer->count_displayed_characters( lineStartPos, mCursorPos );
   nextLineStartPos = buffer()->skip_lines( lineStartPos, 1 );
   newPos = mBuffer->skip_displayed_characters( nextLineStartPos, column );
+
+  adjust_cursor_right( buffer(), &newPos );
 
   insert_position( newPos );
   mCursorPreferredCol = column;
@@ -952,6 +987,17 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
     charLen = charIndex >= lineLen ? 1 :
               TextBuffer::expand_character( lineStr[ charIndex ], outIndex,
                                                 expandedChar, buf->tab_distance(), buf->null_substitution_character() );
+
+    if (charIndex < lineLen && charLen > 1) {
+      int i, ii = 0;;
+      i = utf8len(lineStr[ charIndex ]);
+      while (i > 1) {
+        i--;
+        ii++;
+        expandedChar[ii] = lineStr[ charIndex + ii];
+      }
+    }
+
     style = position_style( lineStartPos, lineLen, charIndex,
                             outIndex + dispIndexOffset );
     charWidth = charIndex >= lineLen ? stdCharWidth :
@@ -989,6 +1035,17 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
 				    expandedChar,
 				    buf->tab_distance(),
 				    buf->null_substitution_character());
+
+    if (charIndex < lineLen && charLen > 1) {
+      int i, ii = 0;;
+      i = utf8len(lineStr[ charIndex ]);
+      while (i > 1) {
+        i--;
+        ii++;
+        expandedChar[ii] = lineStr[ charIndex + ii];
+      }
+    }
+
     charStyle = position_style( lineStartPos, lineLen, charIndex,
                                 outIndex + dispIndexOffset );
     for ( i = 0; i < charLen; i++ ) {
@@ -1003,7 +1060,8 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
       }
       if ( charIndex < lineLen ) {
         *outPtr = expandedChar[ i ];
-        charWidth = string_width( &expandedChar[ i ], 1, charStyle );
+		int l = utf8len(*outPtr);
+        charWidth = string_width( &expandedChar[ i ], l, charStyle );
       } else
         charWidth = stdCharWidth;
       outPtr++;
@@ -1206,6 +1264,10 @@ void TextDisplay::draw_cursor( int X, int Y ) {
   for ( int k = 0; k < nSegs; k++ ) {
     drawline( segs[ k ].x1, segs[ k ].y1, segs[ k ].x2, segs[ k ].y2 );
   }
+  int spot_x = X;
+  int spot_y = Y;
+  transform(spot_x, spot_y);
+  fl_set_spot(textfont(), this, spot_x, spot_y);
 }
 
 /*
@@ -1316,6 +1378,15 @@ int TextDisplay::xy_to_position( int X, int Y, int posType ) {
 				    expandedChar,
 				    mBuffer->tab_distance(),
 				    mBuffer->null_substitution_character() );
+    if (charLen > 1) {
+      int i, ii = 0;;
+      i = utf8len(lineStr[ charIndex ]);
+      while (i > 1) {
+        i--;
+        ii++;
+        expandedChar[ii] = lineStr[ charIndex + ii];
+      }
+    }
     charStyle = position_style( lineStart, lineLen, charIndex, outIndex );
     charWidth = string_width( expandedChar, charLen, charStyle );
     if ( X < xStep + ( posType == CURSOR_POS ? charWidth / 2 : charWidth ) ) {
@@ -2014,5 +2085,5 @@ int TextDisplay::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.27 2004/05/15 20:52:45 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.28 2004/06/19 23:02:13 spitzak Exp $".
 //

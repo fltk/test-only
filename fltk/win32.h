@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.24 2004/06/09 05:38:57 spitzak Exp $"
+// "$Id: win32.h,v 1.25 2004/06/19 23:02:10 spitzak Exp $"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -63,7 +63,7 @@ extern FL_API MSG msg;
 extern FL_API HDC	dc;
 extern FL_API HDC	getDC();
 extern FL_API HFONT	xfont();
-extern FL_API TEXTMETRIC* textmetric();
+extern FL_API TEXTMETRICW* textmetric();
 extern FL_API COLORREF	current_xpixel;
 extern FL_API COLORREF	xpixel(Color i);
 extern FL_API HPEN	setpen();
@@ -118,5 +118,5 @@ extern FL_API HCURSOR default_cursor;
 #endif
 
 //
-// End of "$Id: win32.h,v 1.24 2004/06/09 05:38:57 spitzak Exp $".
+// End of "$Id: win32.h,v 1.25 2004/06/19 23:02:10 spitzak Exp $".
 //

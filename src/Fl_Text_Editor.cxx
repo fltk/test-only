@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Editor.cxx,v 1.18 2003/09/06 22:37:36 spitzak Exp $"
+// "$Id: Fl_Text_Editor.cxx,v 1.19 2004/06/19 23:02:13 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -245,9 +245,35 @@ int TextEditor::kf_ignore(int, TextEditor*) {
   return 0; // don't handle
 }
 
+// WARNING: THIS IS WRONG. We cannot determine the exact length of
+// a UTF8 sequence, with correct handling of errors, unless we have
+// the surrounding bytes. This should be fixed to use pointers:
+// Search for calls to this and fix the code to use the utf8.h functions
+static int utf_len(char c)
+{
+  if ((unsigned char)c < 0xc2) return 1;
+  if (c & 0x20) {
+    if (c & 0x10) {
+      if (c & 0x08) {
+	if (c & 0x04) {
+	  if (c & 0x2) return 1; // 0xFE and 0xFF are illegal
+	  return 6;
+	}
+	return 5;
+      }
+      return 4;
+    }
+    return 3;
+  }
+  return 2;
+}
+
 int TextEditor::kf_backspace(int, TextEditor* e) {
   if (!e->buffer()->selected() && e->move_left())
-    e->buffer()->select(e->insert_position(), e->insert_position()+1);
+  {
+    int len = utf_len(e->buffer()->character(e->insert_position()));
+    e->buffer()->select(e->insert_position(), e->insert_position()+len);
+  }
   kill_selection(e);
   e->show_insert_position();
   return 1;
@@ -398,7 +424,10 @@ int TextEditor::kf_insert(int, TextEditor* e) {
 
 int TextEditor::kf_delete(int, TextEditor* e) {
   if (!e->buffer()->selected())
-    e->buffer()->select(e->insert_position(), e->insert_position()+1);
+  {
+    int len = utf_len(e->buffer()->character(e->insert_position()));
+    e->buffer()->select(e->insert_position(), e->insert_position()+len);
+  }
   kill_selection(e);
   e->show_insert_position();
   return 1;
@@ -503,5 +532,5 @@ int TextEditor::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Text_Editor.cxx,v 1.18 2003/09/06 22:37:36 spitzak Exp $".
+// End of "$Id: Fl_Text_Editor.cxx,v 1.19 2004/06/19 23:02:13 spitzak Exp $".
 //
