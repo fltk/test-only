@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_startup.cxx,v 1.5 2001/07/24 21:14:27 robertk Exp $"
+// "$Id: Fl_startup.cxx,v 1.6 2001/07/25 17:22:20 clip Exp $"
 //
 // Startup, scheme and theme handling code for the Fast Light
 // Tool Kit (FLTK).
@@ -40,13 +40,18 @@
 #include <fltk/x.h>
 #include <config.h>
 
+#ifndef WIN32
+#include <unistd.h>
+#else
+#include <io.h>
+#define access(a,b) _access(a,b)
+#define R_OK        04
+#endif
+
 #ifndef PATH_MAX
 #define PATH_MAX 128
 #endif
 
-#ifdef _MSC_VER	// MSVC++
-#define R_OK	04
-#endif
 
 const char* Fl::scheme_ = 0;
 Fl_Color fl_bg_switch = 0; // set by -bg in Fl_arg.cxx
@@ -372,5 +377,5 @@ static struct Startup {
 
 
 //
-// End of "$Id: Fl_startup.cxx,v 1.5 2001/07/24 21:14:27 robertk Exp $".
+// End of "$Id: Fl_startup.cxx,v 1.6 2001/07/25 17:22:20 clip Exp $".
 //
