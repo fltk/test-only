@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.178 2004/06/24 07:05:19 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.179 2004/06/25 18:38:42 xpxqx Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -44,6 +44,11 @@
 #include <fltk/Font.h>
 #include <fltk/Browser.h>
 #include <fltk/utf.h>
+
+#if !defined(X_HAVE_UTF8_STRING) && defined(HAVE_ICONV_H)
+#  include <errno.h>
+#  include <iconv.h>
+#endif
 
 using namespace fltk;
 
@@ -1319,8 +1324,19 @@ bool fltk::handle()
     RETRY:
       buffer[0] = 0;
       keysym = 0;
+#if defined(X_HAVE_UTF8_STRING)
       len = Xutf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
 			      buffer, buffer_len-1, &keysym, &status);
+#elif defined(HAVE_ICONV_H)
+      // Locale-dependent multibyte to UTF-8 trancoding using iconv (Yuck!).
+      static iconv_t cd_to = iconv_open("UTF-8", "char");
+      if (cd_to == (iconv_t)(-1))
+	goto NO_XIM;
+      len = XmbLookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
+                            buffer, buffer_len - 1, &keysym, &status);
+#else
+      goto NO_XIM;
+#endif
       switch (status) {
       case XBufferOverflow:
 	buffer_len = len+1;
@@ -1333,6 +1349,34 @@ bool fltk::handle()
       default:
 	goto NO_XIM;
       }
+#if !defined(X_HAVE_UTF8_STRING) && defined(HAVE_ICONV_H)
+      static char* buffer2 = 0;
+      static int buffer2_len;
+      if (!buffer2) buffer2 = (char*) malloc(buffer2_len = 20);
+      if (buffer2_len < buffer_len)
+        buffer2 = (char*) realloc(buffer2, (buffer2_len = buffer_len));
+      RETRY2:
+      const char* inbuf = buffer;
+      size_t inbytesleft = len;
+      char* outbuf = buffer2;
+      size_t outbytesleft = buffer2_len - 1;
+      if (iconv(cd_to,&inbuf,&inbytesleft,&outbuf,&outbytesleft)==(size_t)(-1)){
+        switch (errno) {
+        case EILSEQ:
+        case EINVAL:
+          outbuf = 0; // Terminate the buffer at the error.
+          break;
+        case E2BIG:
+          buffer2_len += (inbytesleft+1);
+          buffer2 = (char*)realloc(buffer2, buffer2_len);
+          goto RETRY2;
+        }
+      }
+      len = int(outbuf - buffer2);
+      // swap buffers
+      char* tmpbuf = buffer; buffer = buffer2; buffer2 = tmpbuf;
+      int tmplen = buffer_len; buffer_len = buffer2_len; buffer2_len = tmplen;
+#endif
     } else {
     NO_XIM:
       len = XLookupString(&(xevent.xkey), buffer, buffer_len-1, &keysym, 0);
@@ -2128,5 +2172,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.178 2004/06/24 07:05:19 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.179 2004/06/25 18:38:42 xpxqx Exp $".
 //

@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.58 2004/06/11 08:07:13 spitzak Exp $"
+ * "$Id: configh.in,v 1.59 2004/06/25 18:38:41 xpxqx Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -168,6 +168,14 @@
 
 
 /*
+ * Do we have iconv (needed by non-XFree86 X impl. for UTF-8 transcoding)
+ * (only used with X11)
+ */
+
+#undef HAVE_ICONV_H
+
+
+/*
  * Set this to 0 if your system does not have OpenGL. This will
  * disable all the code in libfltk_gl and disable the demo programs
  * that use OpenGL.
@@ -331,5 +339,5 @@
 
 
 /*
- * End of "$Id: configh.in,v 1.58 2004/06/11 08:07:13 spitzak Exp $".
+ * End of "$Id: configh.in,v 1.59 2004/06/25 18:38:41 xpxqx Exp $".
  */

@@ -2500,3 +2500,12 @@ work on it...
 
 Changed strings.c to the official bsd code that returns the correct
 values for strlcat and strlcpy.
+
+////////////////////////////////////////////////////////////////
+
+If X_HAVE_UTF8_STRING is not defined, then the X implementation lacks 
+Xutf8LookupString() and is probably not XFree86. XmbLookupString(3X11) 
+is used in its place and returns a locale-dependent multibyte-encoded 
+buffer which is trancoded to UTF-8 via iconv(3). If iconv_open() does 
+not find a conversion description for multibyte to UTF-8, the 
+non-XInput method is used.
