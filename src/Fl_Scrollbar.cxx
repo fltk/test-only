@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.11 1999/04/05 06:38:05 carl Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.12 1999/04/05 17:42:55 carl Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -148,7 +148,8 @@ void Fl_Scrollbar::draw() {
     { dc1 = (Fl_Color)42; dc2 = (Fl_Color)42; lc1 = (Fl_Color)53; lc2 = (Fl_Color)53; }
   else
     { dc1 = (Fl_Color)32; dc2 = (Fl_Color)43; lc1 = (Fl_Color)54; lc2 = (Fl_Color)53; }
-
+  if (!active_r())
+    { dc1 = inactive(dc1); dc2 = inactive(dc2); lc1 = inactive(lc1); lc2 = inactive(lc2); }
   int bdx = Fl::box_dx(box()), bdy = Fl::box_dy(box());
 
   if (horizontal()) {
@@ -340,5 +341,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L) : Fl_Slide
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.11 1999/04/05 06:38:05 carl Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.12 1999/04/05 17:42:55 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Return_Button.cxx,v 1.7 1999/03/18 22:59:08 carl Exp $"
+// "$Id: Fl_Return_Button.cxx,v 1.8 1999/04/05 17:42:55 carl Exp $"
 //
 // Return button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -65,24 +65,29 @@ void Fl_Return_Button::loadstyle() const {
   }
 }
 
-Fl_Return_Button::Fl_Return_Button(int x,int y,int w,int h,const char *l) : Fl_Button(x,y,w,h,l) {}
+Fl_Return_Button::Fl_Return_Button(int x,int y,int w,int h,const char *l)
+  : Fl_Button(x,y,w,h,l) {}
 
-int fl_return_arrow(int x, int y, int w, int h) {
+int fl_return_arrow(int x, int y, int w, int h, int active) {
   int size = w; if (h<size) size = h;
   int d = (size+2)/4; if (d<3) d = 3;
   int t = (size+9)/12; if (t<1) t = 1;
   int x0 = x+(w-2*d-2*t-1)/2;
   int x1 = x0+d;
   int y0 = y+h/2;
-  fl_color(FL_LIGHT3);
+  fl_color(active ? FL_LIGHT3 : inactive(FL_LIGHT3));
   fl_line(x0, y0, x1, y0+d);
   fl_yxline(x1, y0+d, y0+t, x1+d+2*t, y0-d);
   fl_yxline(x1, y0-t, y0-d);
   fl_color(fl_gray_ramp(0));
   fl_line(x0, y0, x1, y0-d);
-  fl_color(FL_DARK3);
+  fl_color(active ? FL_DARK3 : inactive(FL_DARK3));
   fl_xyline(x1+1,y0-t,x1+d,y0-d,x1+d+2*t);
   return 1;
+}
+
+int fl_return_arrow(int x, int y, int w, int h) {
+  return fl_return_arrow(x, y, w, h, 1);
 }
 
 void Fl_Return_Button::draw() {
@@ -95,7 +100,7 @@ void Fl_Return_Button::draw() {
   draw_box(bt, col);
   int W = h();
   if (w()/3 < W) W = w()/3;
-  fl_return_arrow(x()+w()-W-4, y(), W, h());
+  fl_return_arrow(x()+w()-W-4, y(), W, h(), active_r());
 
   Fl_Color lc = value() ? down_labelcolor() : labelcolor();
   draw_label(x(), y(), w()-W+4, h(), lc);
@@ -111,5 +116,5 @@ int Fl_Return_Button::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Return_Button.cxx,v 1.7 1999/03/18 22:59:08 carl Exp $".
+// End of "$Id: Fl_Return_Button.cxx,v 1.8 1999/04/05 17:42:55 carl Exp $".
 //
