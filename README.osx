@@ -1,0 +1,24 @@
+
+BUILDING AND INSTALLING FLTK UNDER APPLE OS X
+
+    The support for OS X on FLTK2 at this time is spotty at best. FLTK1.1.6
+    offers full support for OS X based on Carbon and QuickDraw. There is also
+    a flag to compile a somewhat experimental Carbon/Quartz version of 
+    FLTK1.1.6.
+    
+    Currently, and experimental port of FLTK2 compiles successfully by running 
+    the following commands from a shell window:
+    
+      > autoconf
+      > ./configure --enable-debug --disable-gl
+      > make
+      > test/demo
+      
+    Not all demo applications will be compiled. A few test will fail and abort.
+    
+    FLTK2 will work with Carbon and Quartz. I expect a useful version to be
+    finished by the end of January 2005. Testing and bug fixing should 
+    be finished by the end of February.
+
+    - Matthias Melcher
+    
