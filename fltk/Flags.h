@@ -1,5 +1,5 @@
 //
-// "$Id: Flags.h,v 1.6 2004/08/01 22:28:20 spitzak Exp $"
+// "$Id: Flags.h,v 1.7 2004/09/29 16:31:46 leka Exp $"
 //
 // Unified flags set for fltk. These flags control the appearance of
 // boxes and widgets. This same value is used to:
@@ -99,3 +99,7 @@ enum {
 }
 
 #endif
+
+//
+// End of "$Id: Flags.h,v 1.7 2004/09/29 16:31:46 leka Exp $".
+//
