@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.8 1999/11/27 15:44:52 carl Exp $"
+ * "$Id: config.h,v 1.9 2000/06/11 06:56:25 carl Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -123,16 +123,9 @@
 #define HAVE_SNPRINTF 0
 #define HAVE_VSPRINTF 1
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-
-extern int snprintf(char* str, size_t size, const char* fmt, ...);
-extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+#include <FL/vsnprintf.h>
+#define snprintf fl_snprintf
+#define vsnprintf fl_vsnprintf
 
 /*
  * HAVE_SYS_SELECT_H:
@@ -191,5 +184,5 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define HAVE_PTHREAD_SETSCHEDPARAM 0
 
 /*
- * End of "$Id: config.h,v 1.8 1999/11/27 15:44:52 carl Exp $".
+ * End of "$Id: config.h,v 1.9 2000/06/11 06:56:25 carl Exp $".
  */
