@@ -1,5 +1,5 @@
 //
-// "$Id: x.cxx,v 1.1.2.6 2004/11/25 03:21:25 rokan Exp $"
+// "$Id$"
 //
 // Xlib X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -774,7 +774,9 @@ int fl_handle(const XEvent& thisevent)
     }
     Fl::e_text = buffer ? (char*)buffer : (char *)"";
     Fl::e_length = bytesread;
-    fl_selection_requestor->handle(FL_PASTE);
+    int old_event = Fl::e_number;
+    fl_selection_requestor->handle(Fl::e_number = FL_PASTE);
+    Fl::e_number = old_event;
     // Detect if this paste is due to Xdnd by the property name (I use
     // XA_SECONDARY for that) and send an XdndFinished message. It is not
     // clear if this has to be delayed until now or if it can be done
@@ -1378,7 +1380,9 @@ void Fl_X::make_xid(Fl_Window* win, XVisualInfo *visual, Colormap colormap)
   XMapWindow(fl_display, xp->xid);
   if (showit) {
     win->set_visible();
-    win->handle(FL_SHOW); // get child windows to appear
+    int old_event = Fl::e_number;
+    win->handle(Fl::e_number = FL_SHOW); // get child windows to appear
+    Fl::e_number = old_event;
     win->redraw();
   }
 }
@@ -1537,5 +1541,5 @@ void Fl_Window::make_current() {
 
 
 //
-// End of "$Id: x.cxx,v 1.1.2.6 2004/11/25 03:21:25 rokan Exp $".
+// End of "$Id$".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: x.cxx,v 1.1.2.3 2004/11/09 01:52:34 rokan Exp $"
+// "$Id$"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -1098,7 +1098,9 @@ Fl_X* Fl_X::make(Fl_Window* w) {
   if (fl_show_iconic) {showit = 0; fl_show_iconic = 0;}
   if (showit) {
     w->set_visible();
-    w->handle(FL_SHOW); // get child windows to appear
+    int old_event = Fl::e_number;
+    w->handle(Fl::e_number = FL_SHOW); // get child windows to appear
+    Fl::e_number = old_event;
     w->redraw(); // force draw to happen
   }
   // If we've captured the mouse, we dont want do activate any
@@ -1245,5 +1247,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: x.cxx,v 1.1.2.3 2004/11/09 01:52:34 rokan Exp $".
+// End of "$Id$".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.24.2.41.2.55.2.10 2005/01/27 21:24:35 rokan Exp $"
+// "$Id$"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -446,10 +446,13 @@ void Fl::focus(Fl_Widget *o) {
     Fl::compose_reset();
     focus_ = o;
     fl_oldfocus = 0;
+    int old_event = e_number;
+    e_number = FL_UNFOCUS;
     for (; p; p = p->parent()) {
       p->handle(FL_UNFOCUS);
       fl_oldfocus = p;
     }
+    e_number = old_event;
   }
 }
 
@@ -460,9 +463,12 @@ void Fl::belowmouse(Fl_Widget *o) {
   Fl_Widget *p = belowmouse_;
   if (o != p) {
     belowmouse_ = o;
+    int old_event = e_number;
+    e_number = dnd_flag ? FL_DND_LEAVE : FL_LEAVE;
     for (; p && !p->contains(o); p = p->parent()) {
       p->handle(dnd_flag ? FL_DND_LEAVE : FL_LEAVE);
     }
+     e_number = old_event;
   }
 }
 
@@ -493,6 +499,7 @@ void fl_fix_focus() {
   // set focus based on Fl::modal() and fl_xfocus
   Fl_Widget* w = fl_xfocus;
   if (w) {
+    int saved = Fl::e_keysym;
     if (Fl::e_keysym < (FL_Button + FL_LEFT_MOUSE) ||
         Fl::e_keysym > (FL_Button + FL_RIGHT_MOUSE))
       Fl::e_keysym = 0; // make sure widgets don't think a keystroke moved focus
@@ -500,6 +507,7 @@ void fl_fix_focus() {
     if (Fl::modal()) w = Fl::modal();
     if (!w->contains(Fl::focus()))
       if (!w->take_focus()) Fl::focus(w);
+    Fl::e_keysym = saved;
   } else
     Fl::focus(0);
 
@@ -512,13 +520,17 @@ void fl_fix_focus() {
     if (w) {
       if (Fl::modal()) w = Fl::modal();
       if (!w->contains(Fl::belowmouse())) {
-	w->handle(FL_ENTER);
+	int old_event = Fl::e_number;
+        w->handle(Fl::e_number = FL_ENTER);
+        Fl::e_number = old_event;
 	if (!w->contains(Fl::belowmouse())) Fl::belowmouse(w);
       } else {
 	// send a FL_MOVE event so the enter/leave state is up to date
 	Fl::e_x = Fl::e_x_root-fl_xmousewin->x();
 	Fl::e_y = Fl::e_y_root-fl_xmousewin->y();
-	w->handle(FL_MOVE);
+	int old_event = Fl::e_number;
+        w->handle(Fl::e_number = FL_MOVE);
+        Fl::e_number = old_event;
       }
     } else {
       Fl::belowmouse(0);
@@ -560,6 +572,7 @@ void fl_throw_focus(Fl_Widget *o) {
 // window the event was posted to by X:
 static int send(int event, Fl_Widget* to, Fl_Window* window) {
   int dx, dy;
+  int old_event = Fl::e_number;
   if (window) {
     dx = window->x();
     dy = window->y();
@@ -570,7 +583,8 @@ static int send(int event, Fl_Widget* to, Fl_Window* window) {
     if (w->type()>=FL_WINDOW) {dx -= w->x(); dy -= w->y();}
   int save_x = Fl::e_x; Fl::e_x += dx;
   int save_y = Fl::e_y; Fl::e_y += dy;
-  int ret = to->handle(event);
+  int ret = to->handle(Fl::e_number = event);
+  Fl::e_number = old_event;
   Fl::e_y = save_y;
   Fl::e_x = save_x;
   return ret;
@@ -1051,5 +1065,5 @@ Fl::do_widget_deletion() {
 
 
 //
-// End of "$Id: Fl.cxx,v 1.24.2.41.2.55.2.10 2005/01/27 21:24:35 rokan Exp $".
+// End of "$Id$".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.cxx,v 1.12.2.4.2.5.2.5 2004/11/25 03:21:22 rokan Exp $"
+// "$Id$"
 //
 // Double-buffered window code for the Fast Light Tool Kit (FLTK).
 //
@@ -201,8 +201,10 @@ void Fl_Double_Window::flush(int eraseoverlay) {
     //
     // BTW: Windows2000 and later also forces doublebuffering if
     // transparent windows are beeing used (alpha channel)
-    if ( ( !QDIsPortBuffered( GetWindowPort(myi->xid) ) ) || force_doublebuffering_ )
+    if ( ( !QDIsPortBuffered( GetWindowPort(myi->xid) ) )
+         || force_doublebuffering_ ) {
       myi->other_xid = fl_create_offscreen(w(), h());
+      clear_damage(FL_DAMAGE_ALL);
 #else
     myi->other_xid = fl_create_offscreen(w(), h());
 #endif
@@ -295,5 +297,5 @@ Fl_Double_Window::~Fl_Double_Window() {
 }
 
 //
-// End of "$Id: Fl_Double_Window.cxx,v 1.12.2.4.2.5.2.5 2004/11/25 03:21:22 rokan Exp $".
+// End of "$Id$".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Free.H,v 1.5.2.4.2.2.2.4 2004/03/18 08:00:30 matthiaswm Exp $"
+// "$Id$"
 //
 // Forms free header file for the Fast Light Tool Kit (FLTK).
 //
@@ -80,11 +80,11 @@ handle_function(Fl_Widget *w,
 \code
 // old event names for compatability:
 #define FL_MOUSE                FL_DRAG
-#define FL_DRAW                 0
-#define FL_STEP                 9
-#define FL_FREEMEM              12
-#define FL_FREEZE               FL_UNMAP
-#define FL_THAW                 FL_MAP
+#define FL_DRAW                 100 // NOT USED
+#define FL_STEP                 101 
+#define FL_FREEMEM              102 // NOT USED
+#define FL_FREEZE               103 // NOT USED
+#define FL_THAW                 104 // NOT USED
 \endcode
        */
     Fl_Free(uchar t,int x,int y,int w,int h,const char *l,FL_HANDLEPTR hdl);
@@ -104,5 +104,5 @@ handle_function(Fl_Widget *w,
 #endif
 
 //
-// End of "$Id: Fl_Free.H,v 1.5.2.4.2.2.2.4 2004/03/18 08:00:30 matthiaswm Exp $".
+// End of "$Id$".
 //

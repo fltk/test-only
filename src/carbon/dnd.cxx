@@ -1,5 +1,5 @@
 //
-// "$Id: dnd.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// "$Id$"
 //
 // Carbon Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
@@ -66,7 +66,9 @@ int Fl::dnd()
   Fl_Widget *w = Fl::pushed();
   if ( w )
   {
-    w->handle( FL_RELEASE );
+    int old_event = Fl::e_number;
+    w->handle(Fl::e_number = FL_RELEASE);
+    Fl::e_number = old_event;
     Fl::pushed( 0 );
   }
 
@@ -79,5 +81,5 @@ int Fl::dnd()
   
 
 //
-// End of "$Id: dnd.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $".
+// End of "$Id$".
 //

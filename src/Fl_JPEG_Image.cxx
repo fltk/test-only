@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_JPEG_Image.cxx,v 1.1.2.6.2.4 2004/03/18 08:01:00 matthiaswm Exp $"
+// "$Id$"
 //
 // Fl_JPEG_Image routines.
 //
@@ -85,7 +85,8 @@ Fl_JPEG_Image::Fl_JPEG_Image(const char *jpeg)	// I - File to load
 
   cinfo.err = jpeg_std_error(&jerr);
   jerr.error_exit = jpeg_error_handler;
-
+  jerr.output_message = jpeg_error_handler;
+  
   jpeg_create_decompress(&cinfo);
   jpeg_stdio_src(&cinfo, fp);
   jpeg_read_header(&cinfo, 1);
@@ -118,9 +119,24 @@ Fl_JPEG_Image::Fl_JPEG_Image(const char *jpeg)	// I - File to load
   jpeg_destroy_decompress(&cinfo);
 
   fclose(fp);
+ #  if 0
+   // JPEG error handling...
+   error_return:
+   if (array) jpeg_finish_decompress(&cinfo);
+   jpeg_destroy_decompress(&cinfo);
+   fclose(fp);
+   if (array) {
+     w(0);
+     h(0);
+     d(0);
+     delete[] array;
+     array = 0;
+     alloc_array = 0;
+   }
+ #  endif // 0
 #endif // HAVE_LIBJPEG
 }
 
 //
-// End of "$Id: Fl_JPEG_Image.cxx,v 1.1.2.6.2.4 2004/03/18 08:01:00 matthiaswm Exp $".
+// End of "$Id$".
 //

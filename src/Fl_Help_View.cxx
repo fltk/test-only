@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Help_View.cxx,v 1.1.2.43.2.11 2004/11/09 01:52:32 rokan Exp $"
+// "$Id$"
 //
 // Fl_Help_View widget routines.
 //
@@ -2597,7 +2597,7 @@ Fl_Help_View::topline(int t)	// I - Top line number
 
   scrollbar_.value(topline_, h() - 24, 0, size_);
 
-  set_changed();
+  // set_changed();
   do_callback();
 
   redraw();
@@ -2801,5 +2801,5 @@ hscrollbar_callback(Fl_Widget *s, void *)
 
 
 //
-// End of "$Id: Fl_Help_View.cxx,v 1.1.2.43.2.11 2004/11/09 01:52:32 rokan Exp $".
+// End of "$Id$".
 //

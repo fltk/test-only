@@ -1,5 +1,5 @@
 //
-// "$Id: dnd.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $"
+// "$Id$"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
@@ -172,7 +172,9 @@ public:
       //long len = GlobalSize( medium.hGlobal );
       Fl::e_length = strlen( (char*)stuff ); // min(strlen, len)
       Fl::e_text = (char*)stuff;
-      Fl::belowmouse()->handle(FL_PASTE); // e_text will be invalid after this call
+      int old_event = Fl::e_number;
+      Fl::belowmouse()->handle(Fl::e_number = FL_PASTE); // e_text will be invalid after this call
+      Fl::e_number = old_event;
       GlobalUnlock( medium.hGlobal );
       ReleaseStgMedium( &medium );
       SetForegroundWindow( hwnd );
@@ -197,7 +199,9 @@ public:
 	if ( i<nf-1 ) *dst++ = '\n';
       }
       *dst = 0;
-      Fl::belowmouse()->handle(FL_PASTE);
+      int old_event = Fl::e_number;
+      Fl::belowmouse()->handle(Fl::e_number = FL_PASTE);
+      Fl::e_number = old_event;
       free( Fl::e_text );
       ReleaseStgMedium( &medium );
       SetForegroundWindow( hwnd );
@@ -333,7 +337,9 @@ int Fl::dnd()
   Fl_Widget *w = Fl::pushed();
   if ( w )
   {
-    w->handle( FL_RELEASE );
+    int old_event = Fl::e_number;
+    w->handle(Fl::e_number = FL_RELEASE);
+    Fl::e_number = old_event;
     Fl::pushed( 0 );
   }
   if ( ret==DRAGDROP_S_DROP ) return 1; // or DD_S_CANCEL
@@ -349,5 +355,5 @@ int Fl::dnd()
 
 
 //
-// End of "$Id: dnd.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $".
+// End of "$Id$".
 //

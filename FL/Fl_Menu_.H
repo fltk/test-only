@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.H,v 1.7.2.4.2.4.2.7 2004/04/06 19:19:57 easysw Exp $"
+// "$Id$"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -160,7 +160,7 @@ public:
   const Fl_Menu_Item *mvalue() const {return value_;}
     /** The value is the index into menu() of the last item chosen by the
      * user. It is zero initially. */
-  int value() const {return (int)(value_-menu_);}
+  int value() const {return value_? (int)(value_-menu_) : -1;}
   int value(const Fl_Menu_Item*);
     /** The value is the index into menu() of the last item chosen by the
      * user. You can set it as an integer, or set it with a pointer to a
@@ -199,5 +199,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Menu_.H,v 1.7.2.4.2.4.2.7 2004/04/06 19:19:57 easysw Exp $".
+// End of "$Id$".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.23.2.18.2.6 2004/11/10 00:38:28 rokan Exp $"
+// "$Id$"
 //
 // Shared image code for the Fast Light Tool Kit (FLTK).
 //
@@ -245,14 +245,16 @@ Fl_Shared_Image::reload() {
   if (img) {
     if (alloc_image_) delete image_;
 
-    image_       = img;
+    //image_       = img;
     alloc_image_ = 1;
 
     if ((img->w() != w() && w()) || (img->h() != h() && h())) {
       // Make sure the reloaded image is the same size as the existing one.
       Fl_Image *temp = img->copy(w(), h());
       delete img;
-      img = temp;
+      image_ = temp;
+    } else {
+       image_ = img;
     }
 
     update();
@@ -460,5 +462,5 @@ Fl_Shared_Image::remove_handler(Fl_Shared_Handler f) {
 
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.23.2.18.2.6 2004/11/10 00:38:28 rokan Exp $".
+// End of "$Id$".
 //
