@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.33 2000/10/19 05:48:26 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.34 2000/11/29 21:43:21 vincentp Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -786,6 +786,8 @@ int Fl_Browser::handle(int event) {
       goto_mark(FOCUS);
       execute();
       return 1;
+    default:     /// VP : the default case was missing ?
+      return 0;
     }
 
     if (send(event,scrollbar)) return 1;
@@ -926,5 +928,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.33 2000/10/19 05:48:26 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.34 2000/11/29 21:43:21 vincentp Exp $".
 //

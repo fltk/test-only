@@ -86,10 +86,6 @@ SOURCE=..\src\conf.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\conf_atol.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\conf_del.c
 # End Source File
 # Begin Source File
@@ -115,10 +111,6 @@ SOURCE=..\src\conf_getlong.c
 # Begin Source File
 
 SOURCE=..\src\conf_keys.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_level_indent.c
 # End Source File
 # Begin Source File
 
@@ -238,14 +230,6 @@ SOURCE=..\src\Fl_Browser.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Browser_.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Browser_load.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\Fl_Button.cxx
 # End Source File
 # Begin Source File
@@ -259,6 +243,10 @@ SOURCE=..\src\Fl_Check_Button.cxx
 # Begin Source File
 
 SOURCE=..\src\Fl_Choice.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_clip.cxx
 # End Source File
 # Begin Source File
 
@@ -287,10 +275,6 @@ SOURCE=..\src\fl_cursor.cxx
 # Begin Source File
 
 SOURCE=..\src\fl_curve.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_cutpaste.cxx
 # End Source File
 # Begin Source File
 
@@ -354,6 +338,10 @@ SOURCE=..\src\Fl_FileInput.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\Fl_Float_Input.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\fl_font.cxx
 # End Source File
 # Begin Source File
@@ -374,6 +362,10 @@ SOURCE=..\src\Fl_Group.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\images\Fl_Guess_Image.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\Fl_Highlight_Button.cxx
 # End Source File
 # Begin Source File
@@ -386,19 +378,19 @@ SOURCE=..\src\Fl_Input.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Input_.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Input_Style.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\Fl_Item.cxx
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_labeltype.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\images\fl_jpeg.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_key_name.cxx
 # End Source File
 # Begin Source File
 
@@ -490,6 +482,10 @@ SOURCE=..\src\Fl_Pixmap.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\images\fl_png.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\fl_rect.cxx
 # End Source File
 # Begin Source File
@@ -539,10 +535,6 @@ SOURCE=..\src\fl_shadow_box.cxx
 # Begin Source File
 
 SOURCE=..\src\Fl_Shared_Image.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\fl_shortcut.cxx
 # End Source File
 # Begin Source File
 

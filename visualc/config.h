@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.17 2000/07/20 05:28:33 clip Exp $"
+ * "$Id: config.h,v 1.18 2000/11/29 21:43:24 vincentp Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -147,6 +147,8 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #ifdef __cplusplus
 }
 #endif /* __cplusplus */
+#define fl_snprintf snprintf
+#define fl_vsnprintf vsnprintf
 
 /*
  * HAVE_SYS_SELECT_H:
@@ -197,5 +199,5 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define CONF_CACHED
 
 /*
- * End of "$Id: config.h,v 1.17 2000/07/20 05:28:33 clip Exp $".
+ * End of "$Id: config.h,v 1.18 2000/11/29 21:43:24 vincentp Exp $".
  */

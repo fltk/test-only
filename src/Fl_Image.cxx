@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.14 2000/07/14 08:35:01 clip Exp $"
+// "$Id: Fl_Image.cxx,v 1.15 2000/11/29 21:43:22 vincentp Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -74,12 +74,28 @@ void Fl_Image::_draw(int XP, int YP, int WP, int HP, int cx, int cy)
     if (id) {
       // both color and mask:
 #ifdef WIN32
+# if 0
       HDC new_gc = CreateCompatibleDC(fl_gc);
       SelectObject(new_gc, (void*)mask);
       BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCAND);
       SelectObject(new_gc, (void*)id);
       BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCPAINT);
       DeleteDC(new_gc);
+# else
+      // VP : new code to draw masked image under windows. Maybe not optimal, but works for win2k/95 and probably 98
+      fl_color(0);
+      SetTextColor(fl_gc, 0);
+      HDC new_gc = CreateCompatibleDC(fl_gc);
+      HDC new_gc2 = CreateCompatibleDC(fl_gc);
+      SelectObject(new_gc, (void*)mask);
+      SelectObject(new_gc2, (void*)id);
+      BitBlt(new_gc2, 0, 0, w, h, new_gc, 0, 0, SRCAND); // This should be done only once for performance
+      // secret bitblt code found in old MSWindows reference manual:
+      BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, 0xE20746L);
+      BitBlt(fl_gc, X, Y, W, H, new_gc2, cx, cy, SRCPAINT);
+      DeleteDC(new_gc);
+      DeleteDC(new_gc2);
+# endif
 #else
       // I can't figure out how to combine a mask with existing region,
       // so cut the image down to a clipped rectangle:
@@ -101,6 +117,7 @@ void Fl_Image::_draw(int XP, int YP, int WP, int HP, int cx, int cy)
 #ifdef WIN32
       HDC tempdc = CreateCompatibleDC(fl_gc);
       SelectObject(tempdc, (HGDIOBJ)mask);
+      SetTextColor(fl_gc, 0); // VP : seems necessary at least under win95
       SelectObject(fl_gc, fl_brush);
       // secret bitblt code found in old MSWindows reference manual:
       BitBlt(fl_gc, X, Y, W, H, tempdc, cx, cy, 0xE20746L);
@@ -147,5 +164,5 @@ void Fl_Image::label(Fl_Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.14 2000/07/14 08:35:01 clip Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.15 2000/11/29 21:43:22 vincentp Exp $".
 //

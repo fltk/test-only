@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.60 2000/11/15 18:20:24 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.61 2000/11/29 21:43:22 vincentp Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -195,7 +195,8 @@ int Fl_Window::handle(int event) {
       //      }
 #ifdef WIN32
       // Try to stop the annoying "raise another program" behavior
-      if (modal_for()) modal_for()->show();
+      Fl_Window* w = (Fl_Window*) modal_for();
+      if (w) w->show();
 #endif
       break;
   }
@@ -349,5 +350,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.60 2000/11/15 18:20:24 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.61 2000/11/29 21:43:22 vincentp Exp $".
 //
