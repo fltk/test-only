@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.37 2004/01/21 09:18:10 spitzak Exp $"
+// "$Id: Fl_Clock.cxx,v 1.38 2004/07/04 17:28:31 laza2000 Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -101,7 +101,7 @@ void ClockOutput::draw(int x, int y, int w, int h) {
   // draw the shadows:
   push_matrix();
   translate(0.60f, 0.60f);
-  Color c = lerp(color(), BLACK, .3);
+  Color c = lerp(color(), BLACK, .3f);
   drawhands(c, c);
   pop_matrix();
   // draw the tick marks:
@@ -199,5 +199,5 @@ ClockOutput::ClockOutput(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Clock.cxx,v 1.37 2004/01/21 09:18:10 spitzak Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.38 2004/07/04 17:28:31 laza2000 Exp $".
 //

@@ -28,7 +28,10 @@
   your replacement should be prepared for this.
 
 */
-extern "C" bool fltk_theme();
+
+#include <fltk/FL_API.h>
+
+extern "C" FL_API bool fltk_theme();
 
 #if USE_X11
 

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_gif.cxx,v 1.19 2004/05/04 07:30:43 spitzak Exp $"
+// "$Id: fl_gif.cxx,v 1.20 2004/07/04 17:28:31 laza2000 Exp $"
 //
 // gif.cxx
 //
@@ -64,7 +64,8 @@ bool gifImage::test(const uchar *datas, unsigned size)
 void gifImage::_measure(float &W, float &H) const
 {
   if (w() >= 0) { 
-    W = w(); H = h(); 
+    W = (float)w(); 
+	H = (float)h(); 
     return; 
   }
 
@@ -95,7 +96,8 @@ void gifImage::_measure(float &W, float &H) const
 
   int w,h; GETSHORT(w); GETSHORT(h);
   const_cast<gifImage*>(this)->setsize(w,h);
-  W = w; H = h;
+  W = (float)w; 
+  H = (float)h;
   if(!datas) fclose(GifFile);
 }
 
@@ -412,5 +414,5 @@ void gifImage::read()
 }
 
 //
-// End of "$Id: fl_gif.cxx,v 1.19 2004/05/04 07:30:43 spitzak Exp $"
+// End of "$Id: fl_gif.cxx,v 1.20 2004/07/04 17:28:31 laza2000 Exp $"
 //

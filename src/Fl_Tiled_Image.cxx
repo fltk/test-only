@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tiled_Image.cxx,v 1.7 2004/05/07 06:36:23 spitzak Exp $"
+// "$Id: Fl_Tiled_Image.cxx,v 1.8 2004/07/04 17:28:31 laza2000 Exp $"
 //
 // Tiled image code for the Fast Light Tool Kit (FLTK).
 //
@@ -47,8 +47,8 @@ void TiledImage::_measure(float& w, float& h) const {
 void TiledImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
 {
   if (!image_) return;
-  float fW = w;
-  float fH = h;
+  float fW = (float)w;
+  float fH = (float)h;
   image_->measure(fW,fH); if (fW <= 0 || fH <= 0) return;
   int iw = int(fW);
   int ih = int(fH);
@@ -85,5 +85,5 @@ const BoxInfo* TiledImage::boxinfo() const {
 }
 
 //
-// End of "$Id: Fl_Tiled_Image.cxx,v 1.7 2004/05/07 06:36:23 spitzak Exp $".
+// End of "$Id: Fl_Tiled_Image.cxx,v 1.8 2004/07/04 17:28:31 laza2000 Exp $".
 //

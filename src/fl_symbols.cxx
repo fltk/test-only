@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.42 2004/01/25 06:55:06 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.43 2004/07/04 17:28:31 laza2000 Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -273,8 +273,8 @@ const char* Symbol::text_ = "";
     to the nearest integer.
 */
 void Symbol::measure(int& w, int& h) const {
-  float fw = w;
-  float fh = h;
+  float fw = (float)w;
+  float fh = (float)h;
   measure(fw,fh);
   w = int(fw+.5f);
   h = int(fh+.5f);
@@ -509,7 +509,7 @@ void SymbolSymbol::_draw(float x, float y, float w, float h, const Style*, Flags
   push_matrix();
   // use integer translate & scale to avoid crooked shapes:
   translate(int(floorf(x)), int(floorf(y)));
-  scale(int(w+.5)/2, int(h+.5)/2); // note that w,h are integers!
+  scale((float)(int(w+.5)/2), (float)(int(h+.5)/2)); // note that w,h are integers!
   rotate(rotangle);
   drawit(getcolor());
   pop_matrix();
@@ -701,5 +701,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.42 2004/01/25 06:55:06 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.43 2004/07/04 17:28:31 laza2000 Exp $".
 //

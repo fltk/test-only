@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.33 2004/05/04 07:30:43 spitzak Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.34 2004/07/04 17:28:31 laza2000 Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -205,7 +205,7 @@ int SharedImage::remove(const char* name)
 
 void SharedImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
 {
-  if (this->w() < 0) {float W=w; float H=h; measure(W,H);}
+  if (this->w() < 0) { float W=(float)w; float H=(float)h; measure(W,H); }
   if (this->w() == 0) return;
   const_cast<SharedImage*>(this)->used =
     image_used++; // do this before check_mem_usage
@@ -225,5 +225,5 @@ void SharedImage::_draw(int x, int y, int w, int h, const Style* style, Flags fl
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.33 2004/05/04 07:30:43 spitzak Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.34 2004/07/04 17:28:31 laza2000 Exp $"
 //

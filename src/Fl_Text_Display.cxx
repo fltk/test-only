@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.30 2004/07/02 05:40:58 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.31 2004/07/04 17:28:31 laza2000 Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -208,7 +208,7 @@ void TextDisplay::layout() {
   setfont(textfont(), textsize());
   mMaxsize = int(getascent()+getdescent()+leading());
   for (i = 0; i < mNStyles; i++) {
-    setfont(mStyleTable[i].font, mStyleTable[i].size);
+    setfont(mStyleTable[i].font, (float)mStyleTable[i].size);
     mMaxsize = max(mMaxsize, int(getascent()+getdescent()+leading()));
   }
 
@@ -1142,7 +1142,7 @@ void TextDisplay::draw_string( int style, int X, int Y, int toX,
   if ( style & STYLE_LOOKUP_MASK ) {
     styleRec = &mStyleTable[ ( style & STYLE_LOOKUP_MASK ) - 'A' ];
     font = styleRec->font;
-    size = styleRec->size;
+    size = (float)styleRec->size;
     foreground = styleRec->color;
     background = style & PRIMARY_MASK ? selection_color() :
                  style & HIGHLIGHT_MASK ? highlight_color() : color();
@@ -1785,7 +1785,7 @@ int TextDisplay::measure_vline( int visLineNum ) {
       style = ( unsigned char ) mStyleBuffer->character(
                 lineStartPos + i ) - 'A';
 
-      setfont( mStyleTable[ style ].font, mStyleTable[ style ].size );
+      setfont( mStyleTable[ style ].font, (float)mStyleTable[ style ].size );
 
       width += int(getwidth(expandedChar, len));
 
@@ -2117,5 +2117,5 @@ int TextDisplay::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.30 2004/07/02 05:40:58 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.31 2004/07/04 17:28:31 laza2000 Exp $".
 //

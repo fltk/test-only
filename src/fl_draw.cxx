@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.43 2004/06/04 08:30:47 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.44 2004/07/04 17:28:31 laza2000 Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -198,7 +198,7 @@ public:
   DxSymbol() : Symbol("x") {}
   void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
   void _measure(float& w, float& h) const {
-    ::dx += strtod(text()+1,0)*h/12;
+    ::dx += (float)(strtod(text()+1,0)*h/12);
     w = 0;
   }
 };
@@ -217,7 +217,7 @@ public:
   DySymbol() : Symbol("y") {}
   void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
   void _measure(float& w, float& h) const {
-    ::dy -= strtod(text()+1,0)*h/12;
+    ::dy -= (float)(strtod(text()+1,0)*h/12);
     w = 0;
   }
 };
@@ -372,7 +372,7 @@ static float align(int first_segment,
   float my = y;
   for (i = first_segment; i < segment_count; i++) {
     segments[i].x += dx;
-    float dy = max_a-segments[i].ascent;
+    float dy = (float)max_a-segments[i].ascent;
     segments[i].y += dy;
     float yy = y+segments[i].height+dy;
     if (yy > my) my = yy;
@@ -539,7 +539,7 @@ static float split(
       w = W-x;
     } else if (*p == '\t') {
       if (column && *column) {
-        w = *column++;
+        w = (float)(*column++);
       }
       else w = ((p-str+4)&-4)*getwidth("2",1);
     } else {
@@ -698,5 +698,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.43 2004/06/04 08:30:47 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.44 2004/07/04 17:28:31 laza2000 Exp $".
 //

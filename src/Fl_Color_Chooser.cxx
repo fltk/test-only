@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.36 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.37 2004/07/04 17:28:31 laza2000 Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -185,9 +185,9 @@ int ccHueBox::handle(int e) {
     Xf = (event_x()-ix)/float(iw);
     Yf = (event_y()-iy)/float(ih);
     tohs(Xf, Yf, H, S);
-    if (fabsf(H-ih) < 3*6.0f/w()) H = ih;
-    if (fabsf(S-is) < 3*1.0f/h()) S = is;
-    if (event_state(CTRL)) H = ih;
+    if (fabsf(H-ih) < 3*6.0f/w()) H = (float)ih;
+    if (fabsf(S-is) < 3*1.0f/h()) S = (float)is;
+    if (event_state(CTRL)) H = (float)ih;
     if (c->hsv(H, S, c->v())) c->do_callback();
     } return 1;
   default:
@@ -535,5 +535,5 @@ int fltk::color_chooser(const char* name, Color& c) {
 /*! \} */
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.36 2004/01/20 07:27:28 spitzak Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.37 2004/07/04 17:28:31 laza2000 Exp $".
 //
