@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Function_Type.cxx,v 1.40 2002/02/05 14:23:58 robertk Exp $"
+// "$Id: Fl_Function_Type.cxx,v 1.41 2002/05/02 14:58:59 easysw Exp $"
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
 //
@@ -361,11 +361,11 @@ void Fl_Function_Type::write_code() {
 
   if (ismain()) {
     if (havewidgets) write_c("%sw->show(argc, argv);\n", get_indent_string(1));
-    write_c("%sreturn%s%sFl::run()%s;\n", get_indent_string(1),
+    write_c("%sreturn %s%sFl::run()%s;\n", get_indent_string(1),
 			gno_space_parens ? "" : " ",
 			galways_return_parens ? "(" : "", galways_return_parens ? ")" : "");
   } else if (havewidgets && !constructor && !return_type)
-    write_c("%sreturn%s%sw%s;\n", get_indent_string(1), 
+    write_c("%sreturn %s%sw%s;\n", get_indent_string(1), 
 			gno_space_parens ? "" : " ",
 			galways_return_parens ? "(" : "", galways_return_parens ? ")" : "");
   write_c("}\n");
@@ -827,5 +827,5 @@ void Fl_Class_Type::write_code() {
 }
 
 //
-// End of "$Id: Fl_Function_Type.cxx,v 1.40 2002/02/05 14:23:58 robertk Exp $".
+// End of "$Id: Fl_Function_Type.cxx,v 1.41 2002/05/02 14:58:59 easysw Exp $".
 //
