@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.113 2004/08/01 22:28:23 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.114 2004/09/19 08:54:24 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -537,6 +537,10 @@ MyClass::draw() {
   An outside label of this widget needs
   to be redrawn. This is handled (and this bit is cleared) by the
   parent group.
+
+  Because anti-aliasing cannot be redrawn atop itself, this is not
+  used anymore. Instead if an outside label needs to change the entire
+  parent widget is redrawn.
 */
 /*! \var fltk::DAMAGE_EXPOSE
   Damage caused by damage() or by expose
@@ -637,8 +641,20 @@ void Widget::redraw_label() {
   if (!label() && !image()) return;
   // inside label redraws the widget:
   if (!(flags()&15) || (flags() & ALIGN_INSIDE)) redraw();
+#if 0
   // outside label requires a marker flag and damage to parent:
+  // This does not work for antialiased labels...
   else redraw(DAMAGE_CHILD_LABEL);
+#else
+  // Find the parent with a box and redraw it...
+  else {
+    Widget* widget = this->parent();
+    if (widget) {
+      widget = (Widget*)(widget->window());
+      if (widget) widget->redraw();
+    }
+  }
+#endif
 }
 
 /** Causes a redraw if highlighting changes.
@@ -1141,5 +1157,5 @@ bool Widget::focused() const {return this == fltk::focus();}
 bool Widget::belowmouse() const {return this == fltk::belowmouse();}
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.113 2004/08/01 22:28:23 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.114 2004/09/19 08:54:24 spitzak Exp $".
 //

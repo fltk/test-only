@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.59 2004/08/03 07:26:35 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.60 2004/09/19 08:54:24 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -592,15 +592,16 @@ bool fltk::reset_theme() {
 void fltk::set_background(Color c) {
   uchar r, g, b;
   split_color( c, r, g, b );
-  double powr;
-  if (r < 0x30 || r > 0xf0) powr = 1;
-  else powr = log(r/255.0)/log((GRAY75-GRAY00)/float(GRAY99-GRAY00));
-  double powg;
-  if (g < 0x30 || g > 0xf0) powg = 1;
-  else powg = log(g/255.0)/log((GRAY75-GRAY00)/float(GRAY99-GRAY00));
-  double powb;
-  if (b < 0x30 || b > 0xf0) powb = 1;
-  else powb = log(b/255.0)/log((GRAY75-GRAY00)/float(GRAY99-GRAY00));
+  double powr,powg,powb;
+  if (r < 0x10 || g < 0x10 || b < 0x10) {
+    powr = powg = powb = 1;
+  } else if (r <= 0xf0 && g <= 0xf0 && b <= 0xf0) {
+    powr = log(r/255.0)/log((GRAY75-GRAY00)/float(GRAY99-GRAY00));
+    powg = log(g/255.0)/log((GRAY75-GRAY00)/float(GRAY99-GRAY00));
+    powb = log(b/255.0)/log((GRAY75-GRAY00)/float(GRAY99-GRAY00));
+  } else {
+    powr = powg = powb = 4;
+  }
   for (int i = 0; i <= (GRAY99-GRAY00); i++) if (i != GRAY75) {
     double gray = i/float(GRAY99-GRAY00);
     set_color_index(Color(GRAY00+i),
@@ -612,5 +613,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.59 2004/08/03 07:26:35 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.60 2004/09/19 08:54:24 spitzak Exp $".
 //
