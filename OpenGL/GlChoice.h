@@ -68,8 +68,8 @@
 # define GLContext AGLContext
 # include <fltk/x.h>
 #else
-# define Window XWindow
 # include <fltk/x.h>
+# define Window XWindow
 # include <GL/glx.h>
 # undef Window
 # define GLContext GLXContext
