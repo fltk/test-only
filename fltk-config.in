@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# "$Id: fltk-config.in,v 1.14 2003/04/20 03:17:45 easysw Exp $"
+# "$Id$"
 # 
 # FLTK configuration utility.
 #
@@ -120,6 +120,12 @@ do
 	    if test $exec_prefix_set = no ; then
               exec_prefix=$optarg
 	    fi
+## FIXME
+#     This fixes --prefix=<path> bug - fltk-config didn't return proper stuff
+      bindir=${exec_prefix}
+      includedir=${prefix}/include
+      libdir=${prefix}/lib
+      DSOLINK="-Wl,-rpath,${prefix}/lib"
 	    ;;
 	--prefix)
 	    echo_prefix=yes
@@ -292,5 +298,5 @@ if test "$echo_libs" = "yes"; then
 fi
 
 #
-# End of "$Id: fltk-config.in,v 1.14 2003/04/20 03:17:45 easysw Exp $".
+# End of "$Id$".
 #
