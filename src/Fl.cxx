@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.86 2000/04/11 17:14:11 bill Exp $"
+// "$Id: Fl.cxx,v 1.87 2000/04/14 17:15:46 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -58,7 +58,7 @@ char		*Fl::e_text = "";
 int		Fl::e_length;
 
 static Fl_Window *fl_xfocus;	// which window X thinks has focus
-static Fl_Window *fl_xmousewin;// which window X thinks has FL_ENTER
+Fl_Window *fl_xmousewin;// which window X thinks has FL_ENTER
 
 // Timeouts are insert-sorted into order.  This works good if there
 // are only a small number:
@@ -261,14 +261,14 @@ void Fl::pushed(Fl_Widget *o) {
   pushed_ = o;
 }
 
-// Update focus() and belowmouse() in response to anything that might
-// change them.  If the argument is non-zero then a move event is sent
-// to wake up the widget that is below the mouse.
+// Update focus() in response to anything that might change it.  We
+// need to keep the focus pointing at modal windows, even if the window
+// system thinks otherwise...
 
 // This is called whenever a window is added or hidden, and whenever
 // X says the focus or mouse window have changed.
 
-void fl_fix_focus(int sendmove) {
+void fl_fix_focus() {
 
   if (Fl::grab()) return; // don't do anything while grab is on.
 
@@ -288,24 +288,6 @@ void fl_fix_focus(int sendmove) {
   } else
     Fl::focus(0);
 
-//  if (!Fl::pushed()) {
-    // set belowmouse based on Fl::modal() and fl_xmousewin:
-    w = fl_xmousewin;
-    if (w) {
-      if (Fl::modal()) w = Fl::modal();
-      if (!w->contains(Fl::belowmouse())) {
-	Fl::belowmouse(w);
-	w->handle(FL_ENTER);
-      } else if (sendmove) {
-	// send a FL_MOVE event so the enter/leave state is up to date
-	Fl::e_x = Fl::e_x_root-fl_xmousewin->x();
-	Fl::e_y = Fl::e_y_root-fl_xmousewin->y();
-	w->handle(FL_MOVE);
-      }
-    } else {
-      Fl::belowmouse(0);
-    }
-//  }
 }
 
 #ifndef WIN32
@@ -331,7 +313,7 @@ void Fl_Widget::throw_focus() {
   if (this == fl_xfocus) fl_xfocus = 0;
   if (this == fl_xmousewin) fl_xmousewin = 0;
   Fl_Tooltip::exit(this);
-  fl_fix_focus(0);
+  fl_fix_focus();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -398,14 +380,9 @@ int Fl::handle(int event, Fl_Window* window)
     return 1;
 
   case FL_MOVE:
-//  case FL_DRAG: // does not happen
+//case FL_DRAG: // does not happen
     fl_xmousewin = window; // this should already be set, but just in case.
-    if (grab()) {
-      w = grab();
-//     } else if (belowmouse()) {
-//       if (event_inside(belowmouse())) w = belowmouse();
-//       else belowmouse(0);
-    }
+    if (grab()) w = grab();
     if (w != pushed()) send(FL_MOVE, w, window);
     if (pushed()) send(FL_DRAG, pushed(), window);
     return 1;
@@ -414,30 +391,33 @@ int Fl::handle(int event, Fl_Window* window)
     w = pushed();
     if (!(event_state()&(FL_BUTTON1|FL_BUTTON2|FL_BUTTON3))) pushed_=0;
     int r = w ? send(event, w, window) : 0;
-    fl_fix_focus(1);
+    // fl_fix_focus(); // not needed?
     return r;}
 
   case FL_UNFOCUS:
     window = 0;
   case FL_FOCUS:
     fl_xfocus = window;
-    fl_fix_focus(0);
+    fl_fix_focus();
     return 1;
 
   case FL_ENTER:
     fl_xmousewin = window;
-    fl_fix_focus(0);
+    if (!grab()) send(event, w, window);
     return 1;
 
   case FL_LEAVE:
-    if (window == fl_xmousewin) {fl_xmousewin = 0; fl_fix_focus(0);}
+    if (window == fl_xmousewin) {
+      fl_xmousewin = 0;
+      if (!grab()) belowmouse(0);
+    }
     return 1;
 
   case FL_KEYBOARD:
 
     Fl_Tooltip::enter((Fl_Widget*)0);
     fl_xfocus = window; // this should already be set, but just in case.
-    // fl_fix_focus(0); clobbers e_keysym, so do not call this, or save it
+    // fl_fix_focus(); clobbers e_keysym, so do not call this, or save it
 
     // Try sending keystroke to the focus, if any:
     w = grab(); if (!w) w = focus();
@@ -594,7 +574,7 @@ void Fl_Window::show() {
     fl_modal_for = 0;
     set_visible();
     handle(FL_SHOW);
-    if (modal()) {Fl::modal_ = this; fl_fix_focus(0);}
+    if (modal()) {Fl::modal_ = this; fl_fix_focus();}
   } else {
 #ifdef WIN32
     if (IsIconic(i->xid)) OpenIcon(i->xid);
@@ -674,5 +654,5 @@ void Fl_Window::flush() {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.86 2000/04/11 17:14:11 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.87 2000/04/14 17:15:46 bill Exp $".
 //

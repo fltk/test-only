@@ -84,10 +84,12 @@ int main(int argc, char **argv) {
   options.end();
   Fl_Item item("&Item"); item.type(FL_TOGGLE_ITEM);
   menubar.end();
+  menubar.tooltip("This is a menu bar");
 
-  Fl_Box box(0,HEIGHT,WIDTH,400-HEIGHT, "Press right button\nfor a pop-up menu");
+  Fl_Box box(0,HEIGHT,WIDTH,400-HEIGHT);
   box.color(FL_WHITE);
   box.box(FL_FLAT_BOX);
+  box.tooltip("Press right button for a pop-up menu");
 
   Fl_Menu_Button mb(0,25,WIDTH,400-HEIGHT, "popup");
   mb.callback(callback);

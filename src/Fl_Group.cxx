@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.65 2000/04/11 17:14:12 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.66 2000/04/14 17:15:46 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -520,14 +520,10 @@ void Fl_Group::draw_group_box() const {
 // region:
 void Fl_Group::draw_child(Fl_Widget& w) const {
   if (!w.visible() || w.is_window()) return;
-  int i = fl_not_clipped(w.x(), w.y(), w.w(), w.h());
-  if (!i) return;
-  // Partially-clipped children are not going to be redrawn so we must
-  // preserve their damage bits:
-  uchar save = (i>1) ? w.damage() : 0;
+  if (!fl_not_clipped(w.x(), w.y(), w.w(), w.h())) return;
   w.set_damage(FL_DAMAGE_ALL);
   w.draw_n_clip();
-  w.set_damage(save);
+  w.set_damage(0);
 }
 
 // Redraw a single child in response to it's damage:
@@ -571,5 +567,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.65 2000/04/11 17:14:12 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.66 2000/04/14 17:15:46 bill Exp $".
 //

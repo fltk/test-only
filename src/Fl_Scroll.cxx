@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.20 2000/04/11 08:16:44 bill Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.21 2000/04/14 17:15:47 bill Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,13 +28,27 @@
 #include <FL/fl_draw.H>
 
 void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
-  // Full redraw of the group:
   fl_clip(X,Y,W,H);
   Fl_Scroll* s = (Fl_Scroll*)v;
   // draw all the children, clipping them out of the region:
   Fl_Widget*const* a = s->array();
   Fl_Widget*const* e = a+s->children();
-  while (e > a) s->draw_child(**--e);
+  while (e > a) {
+    Fl_Widget& w = **--e;
+    if (!fl_not_clipped(w.x(), w.y(), w.w(), w.h())) continue;
+    // Partial-clipped children with their own damage will still need
+    // to be redrawn before the scroll is finished drawing.  Don't clear
+    // their damage in this case:
+    uchar save = 0;
+    if (!(s->damage()&FL_DAMAGE_ALL)) {
+      if (w.x() < X || w.y() < Y ||
+	  w.x()+w.w() > X+W || w.y()+w.h() > Y+H)
+	save = w.damage();
+    }
+    w.set_damage(FL_DAMAGE_ALL);
+    w.draw_n_clip();
+    w.set_damage(save);
+  }
   // fill the rest of the region with color:
   fl_color(s->color()); fl_rectf(X,Y,W,H);
   // draw the outside labels:
@@ -229,5 +243,5 @@ int Fl_Scroll::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.20 2000/04/11 08:16:44 bill Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.21 2000/04/14 17:15:47 bill Exp $".
 //
