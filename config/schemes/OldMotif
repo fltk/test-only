@@ -23,6 +23,8 @@ FLTK version = 2.0.0
 
   [widgets/default]
     box = motif thick
+    label font = courier
+    label size = 12
 
   [widgets/window]
     box = motif thick
