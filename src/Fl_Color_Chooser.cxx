@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.21 2000/05/23 02:23:38 carl Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.22 2000/05/30 07:42:11 bill Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -214,7 +214,7 @@ static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
 }
 
 void Flcc_HueBox::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_window_frame();
+  if (damage()&FL_DAMAGE_ALL) draw_text_frame();
   int x1 = x(); int y1 = y(); int w1 = w(); int h1 = h();
   box()->inset(x1,y1,w1,h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_clip(x1+px,y1+py,6,6);
@@ -271,7 +271,7 @@ static void generate_vimage(void* vv, int X, int Y, int W, uchar* buf) {
 }
 
 void Flcc_ValueBox::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_window_frame();
+  if (damage()&FL_DAMAGE_ALL) draw_text_frame();
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
   c->hsv2rgb(c->h(),c->s(),1.0,tr,tg,tb);
   int x1 = x(); int y1 = y(); int w1 = w(); int h1 = h();
@@ -506,5 +506,5 @@ int fl_color_chooser(const char* name, Fl_Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.21 2000/05/23 02:23:38 carl Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.22 2000/05/30 07:42:11 bill Exp $".
 //

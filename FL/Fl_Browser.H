@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.H,v 1.15 2000/05/15 05:52:19 bill Exp $"
+// "$Id: Fl_Browser.H,v 1.16 2000/05/30 07:41:57 bill Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -111,6 +111,8 @@ public:
   int displayed(int line);
   void display(int line, int value = 1);
   int topline() const {return item_number[FIRST_VISIBLE];}
+  void value(int v) {goto_number(v); set_focus();}
+  int value() const {return Fl_Menu_::value();}
 
 private:
 
@@ -129,7 +131,6 @@ private:
 
   // Mark and current item storage:
   Fl_Widget* widget;
-  int item_height_;
   struct Data;
   Data* data;
   int item_level[NUMMARKS];
@@ -151,5 +152,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser.H,v 1.15 2000/05/15 05:52:19 bill Exp $".
+// End of "$Id: Fl_Browser.H,v 1.16 2000/05/30 07:41:57 bill Exp $".
 //

@@ -21,8 +21,8 @@ Fl_Pixmap* folderSmall;
 Fl_Pixmap* fileSmall;
 
 void
-cb_test(Fl_Widget* t, void*) {
-  Fl_Widget* w = ((Fl_Browser*)t)->item();
+cb_test(Fl_Widget* t, void* u) {
+  Fl_Widget* w = (Fl_Widget*)u;
   printf("callback for '%s'\n", w && w->label() ? w->label() : "null");
 }
 
@@ -63,7 +63,7 @@ cb_multi(Fl_Widget* w, void* ptr) {
 void
 cb_colors(Fl_Widget* w, void* ptr) {
   Fl_Browser* tree = (Fl_Browser*) ptr;
-  tree->color(w->value() ? Fl_Color(FL_LIGHT2) : tree->window_color());
+  tree->color(w->value() ? Fl_Color(FL_LIGHT2) : tree->text_background());
   tree->redraw();
 }
 
@@ -71,7 +71,7 @@ static Fl_Group* current_group(Fl_Browser* tree) {
   Fl_Widget* w = tree->goto_mark(Fl_Browser::FOCUS);
   if (!w) return tree;
   if (w->is_group() && w->flags()&FL_OPEN) return (Fl_Group*)w;
-  return w->parent();
+  return w->parent() ? w->parent() : tree;
 }
 
 static Fl_Group* add_folder(Fl_Group* parent,
@@ -114,7 +114,13 @@ void cb_sort_reverse(Fl_Widget*, void*) {
 void cb_sort_random(Fl_Widget*, void*) {
 }
 
+#if 0
 #include <FL/Fl_String_List.H>
+
+const char* const strings[] = {
+  "foo", "bar", "number 2", "number 3", "another item", "blah", "zoo"
+};
+#endif
 
 int main(int argc,char** argv) {
   Fl_Window win(240, 304, "Browser Example");
@@ -144,14 +150,16 @@ int main(int argc,char** argv) {
   colors_button.set();
   tree.callback(cb_test);
 
+  folderSmall = new Fl_Pixmap(folder_small);
+  fileSmall = new Fl_Pixmap(file_small);
+
 #if 0
-  tree.list(new Fl_String_List("alpha\0beta\0ceta\0delta\0red\0green\0blue\0"));
+  //tree.list(new Fl_String_List("alpha\0beta\0ceta\0delta\0red\0green\0blue\0"));
+  tree.list(new Fl_String_List(strings, sizeof(strings)/sizeof(*strings)));
+  //tree.list(new Fl_String_List(strings));
 #else
   //int w[3] = {150, 200, 0};
   //tree.column_widths(w);
-
-  folderSmall = new Fl_Pixmap(folder_small);
-  fileSmall = new Fl_Pixmap(file_small);
 
   // Add some nodes with icons -- some open, some closed.
   // Fl_ToggleNode::Fl_ToggleNode( LABEL , CAN_OPEN (default=1) , ICON )

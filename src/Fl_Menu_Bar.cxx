@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.35 2000/04/12 08:05:41 bill Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.36 2000/05/30 07:42:13 bill Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,17 +32,16 @@ void Fl_Menu_Bar::draw() {
   if (!children()) { last_ = -1; return; }
   int X = x()+3;
   for (int i = 0; i < children(); i++) {
-    Fl_Widget* o = child(i);
-    if (!o->visible()) continue;
-    if (!o->h() || o->damage() & FL_DAMAGE_LAYOUT) o->layout();
-    int W = o->w() + 10;
+    Fl_Widget* widget = child(i);
+    if (!widget->visible()) continue;
+    int W = widget->width() + 10;
     if (damage()&(~FL_DAMAGE_HIGHLIGHT) || last_ == i || highlight_ == i) {
       // If you change how the items are drawn, you probably need to
       // change MenuTitle::draw and the functions find_selected and
       // titlex in Fl_Menu.cxx.
-      Fl_Flags flags = (o->flags()&FL_INACTIVE);
+      Fl_Flags flags = (widget->flags()&FL_INACTIVE);
       Fl_Color bgcolor = color();
-      Fl_Color label_color = o->label_color();
+      Fl_Color label_color = widget->label_color();
       if (i == highlight_ && highlight_color() && takesevents()) {
 	flags |= FL_HIGHLIGHT;
 	bgcolor = highlight_color();
@@ -50,12 +49,12 @@ void Fl_Menu_Bar::draw() {
       }
       int x1 = X; int y1 = y(); int w1 = W; int h1 = this->h();
       box()->inset(x1,y1,w1,h1);
-      window_box()->draw(X, y1+1, W, h1-2, bgcolor, flags);
-      o->x(X+5);
-      o->y(y()+(h()-o->h())/2);
-      int save_w = o->w(); o->w(W-10);
-      fl_color(label_color); o->draw();
-      o->w(save_w);
+      text_box()->draw(X, y1+1, W, h1-2, bgcolor, flags);
+      widget->x(X+5);
+      widget->y(y()+(h()-widget->h())/2);
+      int save_w = widget->w(); widget->w(W-10);
+      fl_color(label_color); widget->draw();
+      widget->w(save_w);
     }
     X += W;
   }
@@ -69,10 +68,9 @@ int Fl_Menu_Bar::handle(int event) {
   highlight_ = -1;
   // FL_LEAVE events don't get the right coordinates
   if (event != FL_LEAVE) for (i = 0; i < children(); ++i) {
-    Fl_Widget* m = child(i);
-    if (!m->visible()) continue;
-    if (!m->h() || m->damage() & FL_DAMAGE_LAYOUT) m->layout();
-    int W = m->w() + 10;
+    Fl_Widget* widget = child(i);
+    if (!widget->visible()) continue;
+    int W = widget->width() + 10;
     if (Fl::event_inside(X, y(), W, h())) {
       highlight_ = i;
       break;
@@ -117,17 +115,17 @@ int Fl_Menu_Bar::handle(int event) {
   return 0;
 }
 
-// The default style for menu bars.  The window_box is used to draw
+// The default style for menu bars.  The text_box() is used to draw
 // the boxes around the popup titles, this is done by Fl_Menu.cxx.
 
 static void revert(Fl_Style* s) {
   s->box = FL_FLAT_BOX;
 #if 0
   // NT 4.0 style
-  s->window_box = FL_FLAT_BOX;
+  s->text_box = FL_FLAT_BOX;
 #else
   // Windows98 style:
-  s->window_box = FL_HIGHLIGHT_BOX;
+  s->text_box = FL_HIGHLIGHT_BOX;
   s->selection_color = FL_GRAY;
   s->selection_text_color = FL_BLACK;
 #endif
@@ -142,5 +140,5 @@ Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.35 2000/04/12 08:05:41 bill Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.36 2000/05/30 07:42:13 bill Exp $".
 //

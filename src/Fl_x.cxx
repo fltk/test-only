@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.72 2000/05/17 07:08:10 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.73 2000/05/30 07:42:18 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -717,20 +717,10 @@ void Fl_X::create(Fl_Window* w,
     // send size limits and border:
     x->sendxjunk();
 
-    // set the class property, which controls the icon used:
-    if (w->xclass()) {
-      char buffer[1024];
-      char *p; const char *q;
-      // truncate on any punctuation, because they break XResource lookup:
-      for (p = buffer, q = w->xclass(); isalnum(*q)||(*q&128);) *p++ = *q++;
-      *p++ = 0;
-      // create the capitalized version:
-      q = buffer;
-      *p = toupper(*q++); if (*p++ == 'X') *p++ = toupper(*q++);
-      while ((*p++ = *q++));
-      XChangeProperty(fl_display, x->xid, XA_WM_CLASS, XA_STRING, 8, 0,
-		      (unsigned char *)buffer, p-buffer-1);
-    }
+    // Setting this allows the window manager to use the window's class
+    // to look up things like border colors and icons in the xrdb database:
+    XChangeProperty(fl_display, x->xid, XA_WM_CLASS, XA_STRING, 8, 0,
+		    (unsigned char *)w->xclass(), strlen(w->xclass()));
 
     if (fl_modal_for) {
       XSetTransientForHint(fl_display, x->xid, fl_modal_for->i->xid);
@@ -866,7 +856,51 @@ void Fl_Window::make_current() {
   fl_clip_region(0);
 }
 
+////////////////////////////////////////////////////////////////
+// Get the KDE colors that it writes to the xrdb database:
+
+static const char* get_default(const char* a, const char* b) {
+  return XGetDefault(fl_display, a, b);
+}
+
+static const char* get_default(const char* a) {
+  return XGetDefault(fl_display, Fl_Window::xclass(), a);
+}
+
+static Fl_Color to_color(const char* p) {
+  return p ? fl_rgb(p) : 0;
+}
+
+void fl_get_system_colors() {
+  Fl_Color color;
+
+  color = to_color(get_default("background"));
+  if (color) fl_background(color);
+
+  color = to_color(get_default("foreground"));
+  if (color) {
+    Fl_Widget::default_style->label_color = color;
+    Fl_Widget::default_style->highlight_label_color = color;
+  }
+
+  color = to_color(get_default("Text","background"));
+  if (color) Fl_Widget::default_style->text_background = color;
+
+  color = to_color(get_default("Text","foreground"));
+  if (color) Fl_Widget::default_style->text_color = color;
+
+  color = to_color(get_default("Text","selectBackground"));
+  if (color) Fl_Widget::default_style->selection_color = color;
+
+  color = to_color(get_default("Text","selectForeground"));
+  if (color) Fl_Widget::default_style->selection_text_color = color;
+
+  // also Scrollbar,width
+  // does not appear to be anything there for setting the tooltips...
+  // Maybe I should just add Tooltip,back/foreground.
+
+}
 
 //
-// End of "$Id: Fl_x.cxx,v 1.72 2000/05/17 07:08:10 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.73 2000/05/30 07:42:18 bill Exp $".
 //

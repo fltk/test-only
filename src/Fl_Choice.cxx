@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.45 2000/05/15 05:52:25 bill Exp $"
+// "$Id: Fl_Choice.cxx,v 1.46 2000/05/30 07:42:10 bill Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -49,13 +49,12 @@ void Fl_Choice::draw() {
 //    }
 //  }
   if (o) {
-    if (!o->h() || o->damage() & FL_DAMAGE_LAYOUT) o->layout();
     fl_clip(X+2, Y+2, W-w1-2, H-4);
     int save_flags = o->flags();
     if (active_r()) o->clear_flag(FL_INACTIVE);
     else o->set_flag(FL_INACTIVE);
     o->x(X);
-    o->y(Y+(H-o->h())/2);
+    o->y(Y+(H-o->height())/2);
     int save_w = o->w(); o->w(W-w1);
     fl_color(o->label_color());
     if (!(flags() & FL_NO_SHORTCUT_LABEL)) fl_draw_shortcut = 2;
@@ -68,9 +67,9 @@ void Fl_Choice::draw() {
   }
   // draw the little mark at the right:
   Fl_Flags f = 0;
-  Fl_Color gc = (window_box() == FL_NO_BOX) ? lc : text_color();
+  Fl_Color gc = (text_box() == FL_NO_BOX) ? lc : text_color();
   if (!active_r()) f |= FL_INACTIVE;
-  glyph()(FL_GLYPH_CHOICE, X+W-w1-2, Y, w1, H, window_color(), gc, f, window_box());
+  glyph()(FL_GLYPH_CHOICE, X+W-w1-2, Y, w1, H, text_background(),gc,f,text_box());
 }
 
 // int Fl_Choice::value(int v) {
@@ -91,6 +90,7 @@ int Fl_Choice::handle(int e) {
   case FL_ENTER:
   case FL_LEAVE:
     if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
+  case FL_MOVE:
     return 1;
 
   case FL_PUSH:
@@ -141,8 +141,8 @@ int Fl_Choice::handle(int e) {
 static void revert(Fl_Style* s) {
 //  s->selection_color = FL_GRAY;
 //  s->selection_text_color = FL_BLACK;
-  s->window_box = FL_NO_BOX;
-  s->window_color = FL_GRAY;
+  s->text_box = FL_NO_BOX;
+  s->text_background = FL_GRAY;
 }
 
 static Fl_Named_Style* style = new Fl_Named_Style("Choice", revert, &style);
@@ -156,5 +156,5 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.45 2000/05/15 05:52:25 bill Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.46 2000/05/30 07:42:10 bill Exp $".
 //

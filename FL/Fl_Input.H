@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.H,v 1.14 2000/04/03 17:09:12 bill Exp $"
+// "$Id: Fl_Input.H,v 1.15 2000/05/30 07:41:57 bill Exp $"
 //
 // Input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -40,16 +40,16 @@ public:
   void draw();
   int handle(int);
   Fl_Input(int,int,int,int,const char * = 0);
-#ifndef FLTK_2
-  Fl_Boxtype box() const {return window_box();}
-  void box(Fl_Boxtype b) {window_box(b);}
-  Fl_Color color() const {return window_color();}
-  void color(Fl_Color c) {window_color(c);}
+#if 0 // back compatability, but perhaps not a good idea as it breaks fluid:
+  Fl_Boxtype box() const {return text_box();}
+  void box(Fl_Boxtype b) {text_box(b);}
+  Fl_Color color() const {return text_background();}
+  void color(Fl_Color c) {text_background(c);}
 #endif
 };
 
 #endif 
 
 //
-// End of "$Id: Fl_Input.H,v 1.14 2000/04/03 17:09:12 bill Exp $".
+// End of "$Id: Fl_Input.H,v 1.15 2000/05/30 07:41:57 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: x.H,v 1.23 2000/05/17 22:11:17 carl Exp $"
+// "$Id: x.H,v 1.24 2000/05/30 07:41:59 bill Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -96,11 +96,11 @@ static inline ulong fl_create_bitmap(const uchar* bitmap, int w, int h) {
 }
 #define fl_delete_bitmap(bitmap) XFreePixmap(fl_display, bitmap)
 
+#ifdef Fl_Window_H // only include this if <FL/Fl_Window.H> was included
+
 // this object contains all X-specific stuff about a window:
 // Warning: this object is highly subject to change!  It's definition
 // is only here so that fl_xid can be declared inline:
-
-#include <FL/Fl_Window.H>
 
 class FL_API Fl_X {
 public:
@@ -125,7 +125,8 @@ Fl_Window* fl_find(Window xid);
 
 #endif
 #endif
+#endif
 
 //
-// End of "$Id: x.H,v 1.23 2000/05/17 22:11:17 carl Exp $".
+// End of "$Id: x.H,v 1.24 2000/05/30 07:41:59 bill Exp $".
 //

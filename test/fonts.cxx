@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.19 2000/05/27 01:17:33 carl Exp $"
+// "$Id: fonts.cxx,v 1.20 2000/05/30 07:42:19 bill Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -71,7 +71,7 @@ int pickedsize = 14;
 
 void font_cb(Fl_Widget *, long) {
   int fn = fontobj->value();
-printf("font: %d    name: %s   bigname: %s\n", fn, fonts[fn]->name(), fonts[fn]->system_name());
+//printf("font: %d    name: %s   bigname: %s\n", fn, fonts[fn]->name(), fonts[fn]->system_name());
 
 // CET - FIXME - new browser code has value starting from 0!
 //  if (!fn) return;
@@ -118,7 +118,7 @@ printf("font: %d    name: %s   bigname: %s\n", fn, fonts[fn]->name(), fonts[fn]-
       else sprintf(buf,"%d",i);
       sizeobj->add(buf);
     }
-    sizeobj->value(pickedsize);
+    sizeobj->value(pickedsize-1);
     textobj->size = pickedsize;
   } else {
     // some sizes
@@ -129,11 +129,10 @@ printf("font: %d    name: %s   bigname: %s\n", fn, fonts[fn]->name(), fonts[fn]-
       sprintf(buf,"@b%d",s[i]);
       sizeobj->add(buf);
     }
-    sizeobj->value(w+1);
+    sizeobj->value(w);
     textobj->size = s[w];
   }
   encobj->redraw();
-  sizeobj->goto_number(2); sizeobj->item_select();
   sizeobj->redraw();
   textobj->redraw();
   id_box->label(textobj->font->system_name());
@@ -199,5 +198,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.19 2000/05/27 01:17:33 carl Exp $".
+// End of "$Id: fonts.cxx,v 1.20 2000/05/30 07:42:19 bill Exp $".
 //

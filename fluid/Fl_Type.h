@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.h,v 1.22 2000/03/17 09:50:01 bill Exp $"
+// "$Id: Fl_Type.h,v 1.23 2000/05/30 07:42:04 bill Exp $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -61,7 +61,6 @@ public:	// things that should not be public:
   char selected; // copied here by selection_changed()
   char open_;	// state of triangle in browser
   char visible; // true if all parents are open
-  char rtti;	// hack because I have no rtti, this is 0 for base class
   int level;	// number of parents over this
   static Fl_Type *first;
   static Fl_Type *last; // linked list of all objects
@@ -138,7 +137,6 @@ public:
   virtual int is_value_input() const;
   virtual int is_value_output() const;
   virtual int is_value_slider() const;
-
 
   const char* class_name(const int need_nest) const;
 };
@@ -255,7 +253,6 @@ protected:
 
 public:
 
-  const char *xclass; // junk string, used for shortcut
   Fl_Widget *o;
   int public_;
   char set_xy;
@@ -524,5 +521,5 @@ FLUID_API int storestring(const char *n, const char * & p, int nostrip=0);
 FLUID_API extern int include_H_from_C;
 
 //
-// End of "$Id: Fl_Type.h,v 1.22 2000/03/17 09:50:01 bill Exp $".
+// End of "$Id: Fl_Type.h,v 1.23 2000/05/30 07:42:04 bill Exp $".
 //

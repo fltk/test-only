@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.26 2000/03/17 09:50:03 bill Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.27 2000/05/30 07:42:05 bill Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -224,25 +224,8 @@ void border_cb(Fl_Light_Button* i, void* v) {
   }
 }
 
-void xclass_cb(Fl_Input* i, void* v) {
-  if (v == LOAD) {
-    if (!current_widget->is_window()) {i->hide(); return;}
-    i->show();
-    i->value(((Fl_Widget_Type *)current_widget)->xclass);
-  } else {
-    for (Fl_Type *o = Fl_Type::first; o; o = o->next)
-      if (o->selected && o->is_widget()) {
-	Fl_Widget_Type* w = (Fl_Widget_Type*)o;
-	if (w->is_window() || w->is_button())
-	  storestring(i->value(),w->xclass);
-	if (w->is_window()) ((Fl_Window*)(w->o))->xclass(w->xclass);
-	else if (w->is_menu_item()) w->redraw();
-      }
-  }
-  Fl_Color tc = FL_BLACK;
-  if (i->value() && *i->value()) tc = FL_RED;
-  if (i->label_color() != tc)
-    { i->label_color(tc); i->damage_label(); }
+void xclass_cb(Fl_Input* i, void* v) { // obsolete, delete this!
+  if (v == LOAD) i->hide();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -613,7 +596,6 @@ void Fl_Window_Type::write_properties() {
   if (modal) write_string("modal");
   else if (non_modal) write_string("non_modal");
   if (!border) write_string("noborder");
-  if (xclass) {write_string("xclass"); write_word(xclass);}
   if (o->visible()) write_string("visible");
 }
 
@@ -628,8 +610,7 @@ void Fl_Window_Type::read_property(const char *c) {
   } else if (!strcmp(c,"noborder")) {
     border = 0;
   } else if (!strcmp(c,"xclass")) {
-    storestring(read_word(),xclass);
-    ((Fl_Window*)o)->xclass(xclass);
+    ; // obsolete string, ignore it
   } else if (!strcmp(c,"xywh")) {
     Fl_Widget_Type::read_property(c);
     pasteoffset = 0; // make it not apply to contents
@@ -658,5 +639,5 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.26 2000/03/17 09:50:03 bill Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.27 2000/05/30 07:42:05 bill Exp $".
 //

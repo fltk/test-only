@@ -1,12 +1,12 @@
 //
-// "$Id: colbrowser.cxx,v 1.4 2000/05/17 07:08:04 bill Exp $"
+// "$Id: colbrowser.cxx,v 1.5 2000/05/30 07:42:07 bill Exp $"
 //
 // Forms test program for the Fast Light Tool Kit (FLTK).
 //
 // This is an XForms program from the 0.86 distribution of XForms.
 // It has been modified as little as possible to work under fltk by
 // using fltk's Forms emulation.  Search for "fltk" to find all the
-// changes
+// changes.
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -110,9 +110,9 @@ br_cb(Fl_Widget * ob, long)
 {
     int r = fl_get_browser(ob);
 
-    if (r <= 0)
+    if (r < 0) // fltk: replace <= with <
 	return;
-    set_entry(r - 1);
+    set_entry(r); // fltk: replaced r+1 with r
 }
 
 static int
@@ -250,8 +250,8 @@ search_rgb(Fl_Widget *, long)
     i = search_entry(r, g, b);
     /* change topline only if necessary */
     if(i < top || i > (top+15))
-       fl_set_browser_topline(colbr, i-8);
-    fl_select_browser_line(colbr, i + 1);
+        fl_set_browser_topline(colbr, i-8);
+    fl_select_browser_line(colbr, i); // fltk: replaced i+1 with i
     fl_unfreeze_form(cl);
 }
 
@@ -301,25 +301,25 @@ create_form_cl(void)
                         FL_INDIANRED);
     fl_set_object_callback(obj, db_cb, 0);
     rs = obj = fl_add_valslider(FL_VERT_FILL_SLIDER, 225, 130, 30, 200, "");
-    fl_set_object_color(obj, FL_INDIANRED, FL_RED);
+    fl_set_object_color(obj, FL_RED, FL_INDIANRED); // colors swapped for fltk
     fl_set_slider_bounds(obj, 0, 255);
     fl_set_slider_precision(obj, 0);
     fl_set_object_callback(obj, search_rgb, 0);
-    fl_set_slider_return(obj, 0);
+    //fl_set_slider_return(obj, 0); // removed for fltk for better feedback
 
     gs = obj = fl_add_valslider(FL_VERT_FILL_SLIDER, 255, 130, 30, 200, "");
-    fl_set_object_color(obj, FL_INDIANRED, FL_GREEN);
+    fl_set_object_color(obj, FL_GREEN, FL_INDIANRED); // colors swapped for fltk
     fl_set_slider_bounds(obj, 0, 255);
     fl_set_slider_precision(obj, 0);
     fl_set_object_callback(obj, search_rgb, 1);
-    fl_set_slider_return(obj, 0);
+    //fl_set_slider_return(obj, 0); // removed for fltk for better feedback
 
     bs = obj = fl_add_valslider(FL_VERT_FILL_SLIDER, 285, 130, 30, 200, "");
-    fl_set_object_color(obj, FL_INDIANRED, FL_BLUE);
+    fl_set_object_color(obj, FL_BLUE, FL_INDIANRED); // colors swapped for fltk
     fl_set_slider_bounds(obj, 0, 255);
     fl_set_slider_precision(obj, 0);
     fl_set_object_callback(obj, search_rgb, 2);
-    fl_set_slider_return(obj, 0);
+    //fl_set_slider_return(obj, 0); // removed for fltk for better feedback
 
 
     colbr = obj = fl_add_browser(FL_HOLD_BROWSER, 10, 90, 205, 240, "");
@@ -340,5 +340,5 @@ create_form_cl(void)
 }
 
 //
-// End of "$Id: colbrowser.cxx,v 1.4 2000/05/17 07:08:04 bill Exp $".
+// End of "$Id: colbrowser.cxx,v 1.5 2000/05/30 07:42:07 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.93 2000/05/27 01:17:28 carl Exp $"
+// "$Id: Fl.cxx,v 1.94 2000/05/30 07:42:09 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -351,8 +351,10 @@ void Fl::selection_owner(Fl_Widget *owner) {
 
 // CET - FIXME - Would someone look at this window grab stuff and see
 // whether this is done properly?
-static int window_grab(int e, void* w) { return ((Fl_Window*)w)->handle(e); }
-void Fl::grab(Fl_Window* w) { w->show(); grab(window_grab, w); }
+// WAS - It didn't do show(), but otherwise this was correct.  I also
+// changed it so an arbitrary widget can be used, not just a window
+static int widget_grab(int e, void* w) { return ((Fl_Widget*)w)->handle(e); }
+void Fl::grab(Fl_Widget* w) { grab(widget_grab, w); }
 
 void Fl::grab(int (*cb)(int, void*), void* user_data) {
   grab_ = cb;
@@ -439,50 +441,45 @@ int Fl::handle(int event, Fl_Window* window)
 {
   if (grab_) return grab_(event, grab_data);
 
-  Fl_Widget* w = window;
-
   switch (event) {
 
   case FL_PUSH:
-    Fl_Tooltip::enter((Fl_Widget*)0);
-    if (pushed()) w = pushed();
-    else if (modal() && w != modal()) return 0;
-    pushed_ = w;
-    if (send(event, w, window)) return 1;
-    pushed_ = 0; // stops drag+release from being sent
-    // raise windows that are clicked on:
-    window->show();
-    return 1;
+    if (!pushed()) {
+      Fl_Tooltip::enter((Fl_Widget*)0);
+      if (modal() && window != modal()) return 0;
+      pushed_ = window;
+    }
+    return send(event, pushed(), window);
 
   case FL_ENTER:
   case FL_MOVE:
 //case FL_DRAG: // does not happen
     xmousewin = window; // this should already be set, but just in case.
-    if (w != pushed() && (!modal() || w == modal())) send(event, w, window);
-    if (pushed()) send(FL_DRAG, pushed(), window);
+    if (window != pushed() && (!modal() || window == modal()))
+      send(event, window, window);
+    send(FL_DRAG, pushed(), window);
     return 1;
 
   case FL_LEAVE:
     belowmouse(0);
     return 1;
 
-  case FL_RELEASE:
-    w = pushed();
+  case FL_RELEASE: {
+    Fl_Widget* w = pushed();
     if (!(event_pushed())) pushed_=0;
-    if (w) return send(event, w, window);
-    return 0;
+    return send(event, w, window);}
 
   // only send FL_KEYUP to focus widget since FL_KEY only goes there
   case FL_KEYUP:
     return send(FL_KEYUP, focus(), window);
+    break;
 
   case FL_KEY:
     Fl_Tooltip::enter((Fl_Widget*)0);
     xfocus = window; // this should already be set, but just in case.
 
     // Try sending keystroke to the focus, if any:
-    w = focus();
-    if (w && send(FL_KEY, w, window)) return 1;
+    if (send(FL_KEY, focus(), window)) return 1;
     // try flipping the case of letter shortcuts:
     if (isalpha(event_text()[0])) {
       if (handle(FL_SHORTCUT, window)) return 1;
@@ -494,29 +491,21 @@ int Fl::handle(int event, Fl_Window* window)
     // fall through to the shortcut handling case:
 
   default:
-    // This includes FL_SHORTCUT, FL_MOUSEWHEEL, FL_KEYUP, FL_ENTER,
-    // and many other events of interest.
-#if 1
-    // nice simple sending of the event to outermost windows:
+    // This includes FL_SHORTCUT, FL_MOUSEWHEEL, FL_ENTER,
+    // and many other events of interest.  They are sent to the
+    // outermost window and that must pass them to the children:
     if (send(event, modal() ? modal() : window, window)) return 1;
-#else
-    // Old code that preferred to send these near the focus first:
-    w = window;
-    if (w->contains(focus())) w = focus();
-    if (modal() && !modal()->contains(w)) w = modal();
-    for (; w; w = w->parent()) if (send(event, w, window)) return 1;
-#endif
-    // otherwise fall through to the unknown case:
-
-  case 0:
-    // try the chain of global event handlers:
-    {for (const handler_link *h = handlers; h; h = h->next)
-      if (h->handle(event)) return 1;}
-    return 0;
+    break;
 
   }
+
+  // try the chain of global event handlers:
+  for (const handler_link *h = handlers; h; h = h->next)
+    if (h->handle(event)) return 1;
+  return 0;
+
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.93 2000/05/27 01:17:28 carl Exp $".
+// End of "$Id: Fl.cxx,v 1.94 2000/05/30 07:42:09 bill Exp $".
 //

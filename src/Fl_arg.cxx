@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.25 2000/05/27 01:17:29 carl Exp $"
+// "$Id: Fl_arg.cxx,v 1.26 2000/05/30 07:42:17 bill Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -163,9 +163,9 @@ void Fl_Window::show(int argc, char **argv) {
     geometry = 0;
   }
 
-  if (!xclass()) xclass(filename_name(argv[0]));
-  if (name) {label(name); name = 0;}
-  else if (!label()) label(xclass());
+  if (!name) name = filename_name(argv[0]);
+  xclass(name);
+  if (!label()) label(name);
 
   show();
 
@@ -347,5 +347,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.25 2000/05/27 01:17:29 carl Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.26 2000/05/30 07:42:17 bill Exp $".
 //

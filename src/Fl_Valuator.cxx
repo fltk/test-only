@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.12 2000/04/03 17:09:20 bill Exp $"
+// "$Id: Fl_Valuator.cxx,v 1.13 2000/05/30 07:42:16 bill Exp $"
 //
 // Valuator widget for the Fast Light Tool Kit (FLTK).
 //
@@ -132,6 +132,7 @@ int Fl_Valuator::handle(int event) {
   case FL_ENTER:
   case FL_LEAVE:
     if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
+  case FL_MOVE:
     return 1;
   case FL_FOCUS:
   case FL_UNFOCUS:
@@ -165,5 +166,5 @@ int Fl_Valuator::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.12 2000/04/03 17:09:20 bill Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.13 2000/05/30 07:42:16 bill Exp $".
 //

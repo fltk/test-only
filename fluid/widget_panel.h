@@ -49,7 +49,7 @@ extern void tooltip_cb(Fl_Input*, void*);
 #include <FL/Fl_Choice.H>
 extern Fl_Menu_Item boxmenu[];
 extern void box_cb(Fl_Choice*, void*);
-extern void window_box_cb(Fl_Choice*, void*);
+extern void text_box_cb(Fl_Choice*, void*);
 extern Fl_Menu_Item labeltypemenu[];
 extern void labeltype_cb(Fl_Choice*, void*);
 extern Fl_Menu_Item fontmenu[];

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.cxx,v 1.6 2000/05/01 17:25:15 carl Exp $"
+// "$Id: Fl_Gl_Choice.cxx,v 1.7 2000/05/30 07:42:00 bill Exp $"
 //
 // OpenGL visual selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,7 @@
 #if HAVE_GL
 
 #include <FL/Fl.H>
+#include <FL/Fl_Window.H>
 #include <FL/x.H>
 #include <stdlib.h>
 
@@ -204,5 +205,5 @@ void fl_no_gl_context() {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.cxx,v 1.6 2000/05/01 17:25:15 carl Exp $".
+// End of "$Id: Fl_Gl_Choice.cxx,v 1.7 2000/05/30 07:42:00 bill Exp $".
 //

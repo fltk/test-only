@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.21 2000/05/17 07:14:20 bill Exp $"
+// "$Id: Fl_Browser.cxx,v 1.22 2000/05/30 07:42:09 bill Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -63,30 +63,19 @@ void Fl_Browser::set_level(int n) {
   item_level[0] = n;
 }
 
-static int measure(Fl_Widget* widget) {
-  if (!widget->h() || widget->damage()&FL_DAMAGE_LAYOUT) widget->layout();
-  return widget->h();
-}
-
 Fl_Widget* Fl_Browser::goto_top() {
   item_level[0] = 0;
   item_position[0] = 0;
   item_number[0] = 0;
   data[0].index[0] = 0;
   if (!children()) {
-    item_height_ = 0;
     data[0].widget = 0;
     widget = 0;
     return 0;
   }
   widget = data[0].widget = child(0);
-  if (!widget->visible()) {
-    // skip leading invisible widgets
-    item_height_ = 0; // makes it not mess up position
-    item_number[0] = -1;
-    return forward();
-  }
-  item_height_ = measure(widget);
+  // skip leading invisible widgets:
+  if (!widget->visible()) return forward();
   return widget;
 }
 
@@ -102,7 +91,6 @@ Fl_Widget* Fl_Browser::goto_mark(int n) {
     widget = data[L].widget = parent->child(i);
     parent = (Fl_Group*)widget;
   }
-  item_height_ = measure(widget);
   return widget;
 }
 
@@ -140,8 +128,10 @@ int Fl_Browser::is_set(int n) {
 }
 
 Fl_Widget* Fl_Browser::forward() {
-  item_position[0] += item_height_;
-  item_number[0]++;
+  if (widget->visible()) {
+    item_position[0] += widget->height();
+    item_number[0]++;
+  }
 
   Fl_Group* parent =
     item_level[0] ? (Fl_Group*)(data[item_level[0]-1].widget) : this;
@@ -177,7 +167,6 @@ Fl_Widget* Fl_Browser::forward() {
 
   data[item_level[0]].index[0] = index;
   data[item_level[0]].widget = widget;
-  item_height_ = measure(widget);
   return widget;
 }
 
@@ -222,15 +211,15 @@ Fl_Widget* Fl_Browser::backward() {
   }
 
   data[item_level[0]].widget = widget;
-  item_height_ = measure(widget);
-  item_position[0] -= item_height_;
+  item_position[0] -= widget->height();
   item_number[0]--;
   return widget;
 }
 
 Fl_Widget* Fl_Browser::goto_position(int Y) {
   if (Y < 0) Y = 0;
-  if (damage()&FL_DAMAGE_LAYOUT || Y<=yposition_/2 || !goto_mark(FIRST_VISIBLE)) {
+  if (damage()&FL_DAMAGE_LAYOUT) layout();
+  if (Y<=yposition_/2 || !goto_mark(FIRST_VISIBLE)) {
     goto_top();
   } else {
     // move backwards until we are before or at the position:
@@ -240,9 +229,10 @@ Fl_Widget* Fl_Browser::goto_position(int Y) {
   }
   // move forward to the item:
   if (widget) for (;;) {
-    if (item_position[0]+item_height_ > Y) break;
+    int h = widget->height();
+    if (item_position[0]+h > Y) break;
     if (!forward()) {
-      item_position[0] -= item_height_;
+      item_position[0] -= h;
       item_number[0]--;
       break;
     }
@@ -326,7 +316,7 @@ static char openclose_drag;
 void Fl_Browser::draw_item() {
 
   int y = Y+item_position[0]-yposition_;
-  int h = item_height_;
+  int h = widget->height();
 
   Fl_Color label_color;
   Fl_Color glyph_color;
@@ -340,7 +330,7 @@ void Fl_Browser::draw_item() {
   } else {
     glyph_color = text_color();
     label_color = widget->text_color();
-    Fl_Color c0 = window_color();
+    Fl_Color c0 = text_background();
     Fl_Color c1 = color();
     if (item_number[0] & 1 && c1 != c0) {
       // draw odd-numbered items with a dark stripe, plus contrast-enhancing
@@ -381,12 +371,13 @@ void Fl_Browser::draw_item() {
   if (focused() && is_focus) {
     fl_color(glyph_color);
     fl_line_style(FL_DASH);
-    if (x + widget->w() > X+W) {
+    int w = widget->width();
+    if (x + w > X+W) {
       // X bug?  clipped dashed rectangles don't draw exactly correct...
       fl_xyline(x, y, X+W);
       fl_yxline(x, y, y+h-1, X+W);
     } else {
-      fl_rect(x, y, widget->w(), h);
+      fl_rect(x, y, w, h);
     }
     fl_line_style(0);
   }
@@ -408,15 +399,14 @@ void Fl_Browser::draw_clip(int x, int y, int w, int h) {
   if (goto_mark(FIRST_VISIBLE)) for (;;) {
     int item_y = Y+item_position[0]-yposition_;
     if (item_y >= y+h) break;
-    if (item_y+item_height_ > y)
-      if (draw_all || !at_mark(REDRAW_0) && !at_mark(REDRAW_1)) draw_item();
+    if (draw_all || !at_mark(REDRAW_0) && !at_mark(REDRAW_1)) draw_item();
     if (!forward()) break;
   }
 
   // erase the area below the last item:
   int bottom_y = Y+item_position[0]-yposition_;
   if (bottom_y < y+h) {
-    fl_color(window_color());
+    fl_color(text_background());
     fl_rectf(x, bottom_y, w, y+h-bottom_y);
   }
   fl_pop_clip();
@@ -425,7 +415,7 @@ void Fl_Browser::draw_clip(int x, int y, int w, int h) {
 void Fl_Browser::draw() {
   uchar d = damage();
   if (d & FL_DAMAGE_ALL) { // full redraw
-    draw_window_frame();
+    draw_text_frame();
     draw_clip(X, Y, W, H);
   } else if (d & (FL_DAMAGE_EXPOSE|FL_DAMAGE_LAYOUT)) { // redraw contents
     draw_clip(X, Y, W, H);
@@ -472,15 +462,15 @@ void Fl_Browser::layout() {
   int arrow_size = text_size()|1;
   widget = goto_top();
   while (widget) {
-    if (item_position[0]+item_height_ > yposition_) break;
-    int w = widget->w()+arrow_size*item_level[0];
+    if (item_position[0]+widget->height() > yposition_) break;
+    int w = widget->width()+arrow_size*item_level[0];
     if (w > max_width) max_width = w;
     widget = forward();
   }
   set_mark(FIRST_VISIBLE);
   // count all the rest of the items:
   while (widget) {
-    int w = widget->w()+arrow_size*item_level[0];
+    int w = widget->width()+arrow_size*item_level[0];
     if (w > max_width) max_width = w;
     widget = forward();
   }
@@ -491,7 +481,7 @@ void Fl_Browser::layout() {
   // figure out the visible area:
 
   X = x(); Y = y(); W = w(); H = h();
-  window_box()->inset(X,Y,W,H);
+  text_box()->inset(X,Y,W,H);
   if (scrollbar.visible()) {
     W -= scrollbar.w();
     if (scrollbar.flags() & FL_ALIGN_LEFT) X += scrollbar.w();
@@ -579,8 +569,10 @@ int Fl_Browser::set_focus() {
   set_mark(FOCUS);
   if (item_position[0] < yposition_)
     yposition(item_position[0]);
-  else if (item_position[0]+item_height_-yposition_ > H)
-    yposition(item_position[0]+item_height_-H);
+  else {
+    int h = widget->height();
+    if (item_position[0]+h-yposition_ > H) yposition(item_position[0]+h-H);
+  }
   return 1;
 }
 
@@ -725,7 +717,7 @@ int Fl_Browser::handle(int event) {
     case FL_Up:
     case FL_Down:
       if (!goto_visible_focus()) break;
-      Fl::event_key() == FL_Up ? backward() : forward();
+      if (!(Fl::event_key() == FL_Up ? backward() : forward())) return 1;
       if (multi() && Fl::event_state(FL_SHIFT|FL_CTRL)) {
 	if (Fl::event_state(FL_SHIFT)) item_select(1,FL_WHEN_CHANGED);
 	set_focus();
@@ -780,25 +772,26 @@ Fl_Widget* Fl_Browser::goto_visible_focus() {
 
 ////////////////////////////////////////////////////////////////
 // Fltk 1.0 emulation
+// Items are numbered and children of top-level items are ignored.
+// In 1.0 the item numbers started at 1, I changed this to zero so
+// this matches Fl_Menu.
 
 Fl_Widget* Fl_Browser::goto_number(int number) {
   if (number < 0) number = 0;
-  if (damage()&FL_DAMAGE_LAYOUT || number <= item_number[0]/2) {
+  if (number >= children()) number = children()-1;
+  if (damage() & FL_DAMAGE_LAYOUT) layout();
+  if (data->index[0] <= 0 || number <= data->index[0]/2) {
     goto_top();
   } else {
     // move backwards until we are before or at the position:
-    while (item_number[0] > number) {
+    while (data->index[0] > number || item_level[0] > 0) {
       if (!backward()) {goto_top(); break;}
     }
   }
   // move forward to the item:
-  if (widget) for (;;) {
-    if (item_number[0] >= number) break;
-    if (!forward()) {
-      item_position[0] -= item_height_;
-      item_number[0]--;
-      break;
-    }
+  for (;;) {
+    if (data->index[0] >= number) break;
+    forward();
   }
   return widget;
 }
@@ -817,6 +810,7 @@ void Fl_Browser::set_top() {
   set_mark(FIRST_VISIBLE);
   scrolldy += (yposition_-item_position[0]); damage(FL_DAMAGE_SCROLL);
   yposition_ = item_position[0];
+  ((Fl_Slider*)&scrollbar)->value(yposition_);
 }
 
 int Fl_Browser::displayed(int line) {
@@ -876,5 +870,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.21 2000/05/17 07:14:20 bill Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.22 2000/05/30 07:42:09 bill Exp $".
 //

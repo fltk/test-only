@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.54 2000/05/27 01:17:32 carl Exp $"
+// "$Id: fl_options.cxx,v 1.55 2000/05/30 07:42:18 bill Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -92,7 +92,7 @@ static int display_match(const char* s) {
 
 static int theme_handler(int);
 
-extern void fl_windows_colors();
+extern void fl_get_system_colors();
 
 // one-time startup stuff
 void fl_startup() {
@@ -119,9 +119,7 @@ void fl_startup() {
   char temp[PATH_MAX];
   if (Fl::scheme()) Fl::scheme(Fl::scheme());
   else if (!Fl::getconf("scheme", temp, sizeof(temp))) Fl::scheme(temp);
-#ifdef WIN32
-  else fl_windows_colors();
-#endif
+  else fl_get_system_colors();
   if (fl_startup_theme) Fl::theme(fl_startup_theme);
   Fl::add_handler(theme_handler);
 
@@ -270,9 +268,9 @@ int Fl::scheme(const char *s) {
 
 
       // glyph box type
-      snprintf(temp, sizeof(temp), "widgets/%s/window box", cent->data);
+      snprintf(temp, sizeof(temp), "widgets/%s/text box", cent->data);
       if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->window_box = boxtype;
+        if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->text_box = boxtype;
 
       // color
       snprintf(temp, sizeof(temp), "widgets/%s/color", cent->data);
@@ -295,9 +293,9 @@ int Fl::scheme(const char *s) {
         style->selection_text_color = grok_color(sfile, valstr);
 
       // off color
-      snprintf(temp, sizeof(temp), "widgets/%s/window color", cent->data);
+      snprintf(temp, sizeof(temp), "widgets/%s/text background", cent->data);
       if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->window_color = grok_color(sfile, valstr);
+        style->text_background = grok_color(sfile, valstr);
 
       // highlight color
       snprintf(temp, sizeof(temp), "widgets/%s/highlight color", cent->data);
@@ -348,8 +346,8 @@ int Fl::scheme(const char *s) {
 }
 
 int Fl::theme(const char *t) {
+  fl_get_system_colors();
   if (!t) { Fl_Style::revert(); return 0; }
-
   char temp[PATH_MAX];
   strncpy(temp, t, sizeof(temp));
   if (strlen(temp)<6 || strcasecmp(temp+strlen(temp)-6, ".theme"))
@@ -428,60 +426,8 @@ int Fl::getconf(const char *key, char *value, int value_length) {
   return ::getconf(flconfig, temp, value, value_length);
 }
 
-static void style_clear(Fl_Style *s) {
-  Fl_Style temp = *s;
-  memset((void*)s, 0, sizeof(*s));
-
-  s->parent = temp.parent;
-  s->revertfunc = temp.revertfunc;
-}
-
-extern const char* fl_up_box_revert;
-extern const char* fl_down_box_revert;
-
-void Fl_Style::revert() {
-  Fl::theme_handler(0);
-
-  fl_background((Fl_Color)0xc0c0c000);
-  fl_up_box.data = fl_up_box_revert;
-  fl_down_box.data = fl_down_box_revert;
-  Fl_Style::draw_boxes_inactive = 1;
-
-  for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
-    if (p->name) {
-      style_clear(p);
-      p->revertfunc(p);
-    }
-  }
-  Fl::redraw();
-}
-
-////////////////////////////////////////////////////////////////
-
-#include <FL/math.h>
-
-void fl_background(Fl_Color c) {
-  // replace the gray ramp so that FL_GRAY is this color
-  int r = (c>>24)&255;
-  if (!r) r = 1; else if (r==255) r = 254;
-  double powr = log(r/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
-  int g = (c>>16)&255;
-  if (!g) g = 1; else if (g==255) g = 254;
-  double powg = log(g/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
-  int b = (c>>8)&255;
-  if (!b) b = 1; else if (b==255) b = 254;
-  double powb = log(b/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
-  for (int i = 0; i < FL_NUM_GRAY; i++) {
-    double gray = i/(FL_NUM_GRAY-1.0);
-    fl_set_color(fl_gray_ramp(i),
-		 fl_rgb(uchar(pow(gray,powr)*255+.5),
-			uchar(pow(gray,powg)*255+.5),
-			uchar(pow(gray,powb)*255+.5)));
-  }
-}
-
 //
-// End of "$Id: fl_options.cxx,v 1.54 2000/05/27 01:17:32 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.55 2000/05/30 07:42:18 bill Exp $".
 //
 
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileIcon2.cxx,v 1.7 2000/04/24 05:09:46 carl Exp $"
+// "$Id: Fl_FileIcon2.cxx,v 1.8 2000/05/30 07:42:11 bill Exp $"
 //
 // Fl_FileIcon loading routines for the Fast Light Tool Kit (FLTK).
 //
@@ -148,7 +148,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
     {
       if (ch == '(')
         break;
-      else if ((ptr - command) < (sizeof(command) - 1))
+      else if (ptr < command + sizeof(command) - 1)
         *ptr++ = ch;
     }
 
@@ -169,7 +169,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
     {
       if (ch == ')')
         break;
-      else if ((ptr - command) < (sizeof(command) - 1))
+      else if (ptr < command + sizeof(command) - 1)
         *ptr++ = ch;
     }
 
@@ -808,5 +808,5 @@ get_kde_val(char       *str,
 
 
 //
-// End of "$Id: Fl_FileIcon2.cxx,v 1.7 2000/04/24 05:09:46 carl Exp $".
+// End of "$Id: Fl_FileIcon2.cxx,v 1.8 2000/05/30 07:42:11 bill Exp $".
 //

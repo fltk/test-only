@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.26 2000/04/15 04:47:22 carl Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.27 2000/05/30 07:42:10 bill Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -36,10 +36,10 @@ void Fl_Check_Button::draw() {
   // Draw the check box:
   int d = h()/6;
   int W = (w()<h() ? w() : h()) - 2*d - 2;
-  Fl_Color gc = (window_box() == FL_NO_BOX) ? lc : text_color();
+  Fl_Color gc = (text_box() == FL_NO_BOX) ? lc : text_color();
   if (!active_r()) f |= FL_INACTIVE;
   glyph()(/* type() == FL_RADIO_BUTTON ? FL_GLYPH_ROUND : */ shape,
-          x()+d, y()+d+1, W, W, window_color(), gc, f, window_box());
+          x()+d, y()+d+1, W, W, text_background(), gc, f, text_box());
 
   draw_button_label(x()+W+d, y(), w()-W-d, h(), lc);
 }

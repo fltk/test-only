@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.62 2000/05/27 01:17:28 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.63 2000/05/30 07:42:16 bill Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -121,6 +121,16 @@ void Fl_Widget::layout() {
   damage_ &= ~FL_DAMAGE_LAYOUT;
 }
 
+int Fl_Widget::height() {
+  if (!h_) layout();
+  return h_;
+}
+
+int Fl_Widget::width() {
+  if (!w_) layout();
+  return w_;
+}
+
 int Fl_Widget::resize(int X, int Y, int W, int H) {
   if (x_ == X && y_ == Y && w_ == W && h_ == H) return 0;
   x_ = X; y_ = Y; w_ = W; h_ = H;
@@ -216,8 +226,14 @@ int Fl_Widget::handle(int event) {
   // Must return 1 for tooltips and mouse tracking to work.  A
   // subclass can return zero to make itself "invisible" so that
   // it does not effect highlighting.
-  if (event == FL_ENTER) return 1;
-  else return 0;
+  switch (event) {
+  case FL_ENTER:
+  case FL_LEAVE:
+  case FL_MOVE:
+    return 1;
+  default:
+    return 0;
+  }
 }
 
 int Fl_Widget::take_focus() {
@@ -320,15 +336,15 @@ void Fl_Widget::draw_frame() const {
 }
 
 // Draw the surrounding box of a text area widget:
-void Fl_Widget::draw_window_box() const {
-  window_box()->draw(x(),y(),w(),h(), window_color(),
-		     active_r() ? FL_NO_FLAGS : FL_INACTIVE);
+void Fl_Widget::draw_text_box() const {
+  text_box()->draw(x(),y(),w(),h(), text_background(),
+		   active_r() ? FL_NO_FLAGS : FL_INACTIVE);
 }
 
 // Draw the surrounding box but no interior:
-void Fl_Widget::draw_window_frame() const {
-  window_box()->draw(x(), y(), w(), h(), window_color(),
-		     active_r() ? FL_FRAME_ONLY : (FL_INACTIVE|FL_FRAME_ONLY));
+void Fl_Widget::draw_text_frame() const {
+  text_box()->draw(x(), y(), w(), h(), text_background(),
+		   active_r() ? FL_FRAME_ONLY : (FL_INACTIVE|FL_FRAME_ONLY));
 }
 
 // Draw the box of a widget that acts as a button, and return the color
@@ -389,5 +405,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.62 2000/05/27 01:17:28 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.63 2000/05/30 07:42:16 bill Exp $".
 //

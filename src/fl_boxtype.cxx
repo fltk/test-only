@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.35 2000/04/11 08:16:45 bill Exp $"
+// "$Id: fl_boxtype.cxx,v 1.36 2000/05/30 07:42:18 bill Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -116,8 +116,9 @@ void Fl_Frame_Box::inset(int& x, int& y, int& w, int& h) const
 
 int Fl_Frame_Box::fills_rectangle() const {return true;}
 
-const char* fl_up_box_revert = "2AAWWMMTT";
-const char* fl_down_box_revert = "2WWMMPPAA";
+// for some reason putting "const" in front of these makes gcc make them private:
+char fl_up_box_revert[] = "2AAWWMMTT";
+char fl_down_box_revert[] = "2WWMMPPAA";
 
       Fl_Frame_Box fl_down_box("down", fl_down_box_revert, &fl_up_box);
       Fl_Frame_Box fl_up_box("up", fl_up_box_revert, &fl_down_box);
@@ -176,5 +177,5 @@ const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
 const Fl_Boxtype_* Fl_Boxtype_::first = 0;
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.35 2000/04/11 08:16:45 bill Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.36 2000/05/30 07:42:18 bill Exp $".
 //

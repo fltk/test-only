@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.18 2000/05/17 20:03:04 carl Exp $"
+// "$Id: file.cxx,v 1.19 2000/05/30 07:42:06 bill Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -628,7 +628,7 @@ void fl_end_group() {
     int ry = o->y();
     int rw = rx+o->w();
     int rh = ry+o->h();
-    for (int i = 1; i < g->children(); i++) {
+    for (int i=g->children()-1; i>0; i--) {
       o = g->child(i);
       if (o->x() < rx) rx = o->x();
       if (o->y() < ry) ry = o->y();
@@ -644,7 +644,7 @@ void fl_end_group() {
   //if (fl_flip) {
     Fl_Widget* o = (g->type()>=FL_WINDOW) ? g : g->window();
     int Y = o->h();
-    for (int i = 0; i < g->children(); i++) {
+    for (int i=g->children(); i--;) {
       Fl_Widget* o = g->child(i);
 //      o->y(Y-o->y()-o->h());
       // I think this is equivalent?
@@ -656,5 +656,5 @@ void fl_end_group() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.18 2000/05/17 20:03:04 carl Exp $".
+// End of "$Id: file.cxx,v 1.19 2000/05/30 07:42:06 bill Exp $".
 //

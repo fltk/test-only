@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.42 2000/05/15 05:52:27 bill Exp $"
+// "$Id: Fl_Slider.cxx,v 1.43 2000/05/30 07:42:15 bill Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,7 @@
 // Draw the background behind the slider, draw() calls this more than
 // once with different clipping so the slider does not blink:
 void Fl_Slider::draw_bg(int x, int y, int w, int h, Fl_Flags f) {
-  fl_color(window_color());
+  fl_color(text_background());
   fl_rectf(x, y, w, h);
   if (type() == FL_VERT_NICE_SLIDER) {
     FL_THIN_DOWN_BOX->draw(x+w/2-2, y, 4, h, fl_inactive(FL_BLACK, f), f);
@@ -71,7 +71,7 @@ int Fl_Slider::slider_position(int W, int S) {
 
 // Fltk 2.0 is incompatable with the use of color:
 // color area:                          1.0:                    2.0:
-// background behind slider             color                   window_color
+// background behind slider             color                   text_background
 
 // normal slider                        selection_color         color
 // normal slider symbol                 N/A                     text_color
@@ -131,8 +131,8 @@ void Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags f) {
 }
 
 void Fl_Slider::draw() {
-  if (damage()&(~FL_DAMAGE_HIGHLIGHT)) draw_window_frame();
-  int X=x(); int Y=y(); int W=w(); int H=h(); window_box()->inset(X,Y,W,H);
+  if (damage()&(~FL_DAMAGE_HIGHLIGHT)) draw_text_frame();
+  int X=x(); int Y=y(); int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
   Fl_Flags f = 0;
   if (belowmouse()) f = FL_HIGHLIGHT;
   draw(X,Y,W,H, f);
@@ -212,14 +212,14 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
 }
 
 int Fl_Slider::handle(int event) {
-  int X=x(); int Y=y(); int W=w(); int H=h(); window_box()->inset(X,Y,W,H);
+  int X=x(); int Y=y(); int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
   if (event == FL_PUSH) take_focus();
 
   return handle(event,X,Y,W,H);
 }
 
 static void revert(Fl_Style *s) {
-  s->window_color = FL_DARK2;
+  s->text_background = FL_DARK2;
 }
 
 static Fl_Named_Style* style = new Fl_Named_Style("Slider", revert, &style);
@@ -240,5 +240,5 @@ Fl_Slider::Fl_Slider(uchar t, int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.42 2000/05/15 05:52:27 bill Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.43 2000/05/30 07:42:15 bill Exp $".
 //

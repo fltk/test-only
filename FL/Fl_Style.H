@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.30 2000/05/27 01:17:23 carl Exp $"
+// "$Id: Fl_Style.H,v 1.31 2000/05/30 07:41:57 bill Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -38,13 +38,13 @@ struct Fl_Named_Style;
 
 struct FL_API Fl_Style {
   Fl_Boxtype	box;
-  Fl_Boxtype	window_box;
+  Fl_Boxtype	text_box;
   Fl_Glyph	glyph;
   Fl_Font	label_font;
   Fl_Font	text_font;
   Fl_Labeltype	label_type;
   Fl_Color	color;
-  Fl_Color	window_color;
+  Fl_Color	text_background;
   Fl_Color	label_color;
   Fl_Color	selection_color;
   Fl_Color	selection_text_color;
@@ -54,7 +54,10 @@ struct FL_API Fl_Style {
   unsigned	label_size;
   unsigned	text_size;
   unsigned	leading;
-  static int draw_boxes_inactive; // should boxes ever be drawn inactive?
+
+  static int	draw_boxes_inactive;
+  static int	scrollbar_width;
+  static int	scrollbar_align;
 
   Fl_Style* parent;
 
@@ -100,5 +103,5 @@ struct FL_API Fl_Named_Style : public Fl_Style {
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.30 2000/05/27 01:17:23 carl Exp $".
+// End of "$Id: Fl_Style.H,v 1.31 2000/05/30 07:41:57 bill Exp $".
 //

@@ -28,10 +28,10 @@ The type of box to draw around the outer edge of the widget, or around
 raised button-like things in a complex widget such as a scrollbar.
 The default is <code>FL_UP_BOX</code>.
 
-<h4><a href=Fl_Boxtype.html>Fl_Boxtype</a> window_box;</h4>
+<h4><a href=Fl_Boxtype.html>Fl_Boxtype</a> text_box;</h4>
 
-The type of box to draw around sunken parts of a widget, such as input
-fields or the checkmark in a check button or the background of a
+The type of box to draw around text fields and other sunken parts of a
+widget, such as the checkmark in a check button or the background of a
 slider.  The default is <code>FL_DOWN_BOX</code>.
 
 <h4>void (*glyph)(int type, int x,int y,int w,int h, <a
@@ -124,9 +124,9 @@ zero disables highlighting.
 Color to draw labels atop the <code>highlight_color</code>.  The
 default of zero leaves the <code>label_color</code> unchanged.
 
-<h4><a href=Fl_Color.html>Fl_Color</a> window_color;</h4>
+<h4><a href=Fl_Color.html>Fl_Color</a> text_background;</h4>
 
-Color passed to <code>window_box</code>.  Default is
+Color passed to <code>text_box</code>.  Default is
 <code>FL_LIGHT2</code>.
 
 <h4><a href=Fl_Color.html>Fl_Color</a> text_color;</h4>
@@ -140,7 +140,7 @@ default is Windows 95 blue.
 
 <p>Check buttons, radio buttons, menu items, and light buttons use
 this to color in the glyph that indicates check/radio state when the
-button is turned on (<code>window_color</code> is used for the check
+button is turned on (<code>text_background</code> is used for the check
 marks when they are off).
 
 <h4><a href=Fl_Color.html>Fl_Color</a> selection_text_color;</h4>
@@ -226,7 +226,7 @@ here to get check marks correct.
 <h4>Fl_Style::find("menu")</h4>
 
 This style is used for the pop-up menu windows.
-<code>window_box</code> is drawn around each item, and
+<code>text_box</code> is drawn around each item, and
 <code>selection_color</code> is used to color the current one.
 
 <h4>Fl_Style::find("item")</h4>

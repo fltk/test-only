@@ -55,6 +55,7 @@ to call <tt>redraw()</tt> after these. </P>
 <LI><A href=#deactivate>deactivate</A></LI>
 <LI><A href=#default_callback>default_callback</A></LI>
 <LI><A href=#do_callback>do_callback</A></LI>
+<LI><A href=#height>height</A></LI>
 </UL>
 </TD><TD align=left valign=top>
 <UL>
@@ -89,6 +90,7 @@ to call <tt>redraw()</tt> after these. </P>
 <LI><A href=#visible>visible</A></LI>
 <LI><A href=#visible_r>visible_r</A></LI>
 <LI><A href=#w>w</A></LI>
+<LI><A href=#width>width</A></LI>
 <LI><A href=#when>when</A></LI>
 <LI><A href=#window>window</A></LI>
 <LI><A href=#x>x</A></LI>
@@ -114,14 +116,21 @@ destroy that group <I>immediately</I> after destroying the children.
 
 This value is used for Forms compatability and to simulate RTTI. 
 
-<h4><A name=x>short Fl_Widget::x() const</A>
-<BR><A name=y>short Fl_Widget::y() const</A>
-<BR><A name=w>short Fl_Widget::w() const</A>
-<BR><A name=h>short Fl_Widget::h() const</A></h4>
+<h4><A name=x>int Fl_Widget::x() const</A>
+<BR><A name=y>int Fl_Widget::y() const</A>
+<BR><A name=w>int Fl_Widget::w() const</A>
+<BR><A name=h>int Fl_Widget::h() const</A></h4>
 
 The position of the upper-left corner of the widget in its enclosing 
 Fl_Window (<I>not</I> its parent if that is not an Fl_Window), and its 
 width and height. 
+
+<h4><A name=height>int Fl_Widget::height()</a>
+<br><A name=width>int Fl_Widget::width()</a></h4>
+
+Returns h() (or w()), but if the current value is zero it calls
+layout() before returning the value.  Using these calls allows a
+widget to delay the calculation of size until it is needed.
 
 <h4><A name=resize>void Fl_Widget::resize(int x, int y, int w, int h)</A>
 <BR><A name=position>void Fl_Widget::position(short x, short y)</A>
@@ -175,7 +184,7 @@ either widget may be destroyed without deleting the style used by the
 other one.
 
 <h4>Fl_Boxtype Fl_Widget::box();<br>
-Fl_Boxtype Fl_Widget::window_box();<br>
+Fl_Boxtype Fl_Widget::text_box();<br>
 Fl_Glyph Fl_Widget::glyph();<br>
 Fl_Font Fl_Widget::label_font();<br>
 Fl_Font Fl_Widget::text_font();<br>
@@ -184,7 +193,7 @@ Fl_Color Fl_Widget::color();<br>
 Fl_Color Fl_Widget::label_color();<br>
 Fl_Color Fl_Widget::highlight_color();<br>
 Fl_Color Fl_Widget::highlight_label_color();<br>
-Fl_Color Fl_Widget::window_color();<br>
+Fl_Color Fl_Widget::text_background();<br>
 Fl_Color Fl_Widget::text_color();<br>
 Fl_Color Fl_Widget::selection_color();<br>
 Fl_Color Fl_Widget::selection_text_color();<br>
@@ -195,7 +204,7 @@ unsigned Fl_Widget::leading();</h4>
 Return the given field out of the <a href=#style>style()</a>.
 
 <h4>void Fl_Widget::box(Fl_Boxtype);<br>
-void Fl_Widget::window_box(Fl_Boxtype);<br>
+void Fl_Widget::text_box(Fl_Boxtype);<br>
 void Fl_Widget::glyph(Fl_Glyph);<br>
 void Fl_Widget::label_font(Fl_Font);<br>
 void Fl_Widget::text_font(Fl_Font);<br>
@@ -204,7 +213,7 @@ void Fl_Widget::color(Fl_Color);<br>
 void Fl_Widget::label_color(Fl_Color);<br>
 void Fl_Widget::highlight_color(Fl_Color);<br>
 void Fl_Widget::highlight_label_color(Fl_Color);<br>
-void Fl_Widget::window_color(Fl_Color);<br>
+void Fl_Widget::text_background(Fl_Color);<br>
 void Fl_Widget::text_color(Fl_Color);<br>
 void Fl_Widget::selection_color(Fl_Color);<br>
 void Fl_Widget::selection_text_color(Fl_Color);<br>

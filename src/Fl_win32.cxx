@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.105 2000/05/27 01:17:30 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.106 2000/05/30 07:42:17 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -30,8 +30,8 @@
 
 #include <config.h>
 #include <FL/Fl.H>
-#include <FL/win32.H>
 #include <FL/Fl_Window.H>
+#include <FL/win32.H>
 #include <string.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -535,7 +535,7 @@ static int ms2fltk(int vk, int extended) {
 extern HPALETTE fl_select_palette(void); // in fl_color_win32.C
 #endif
 
-extern void fl_windows_colors();
+void fl_get_system_colors();
 static Fl_Window* resize_from_system;
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -748,7 +748,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_SYSCOLORCHANGE:
   case WM_SETTINGCHANGE:
     // reload windows colors only if we haven't forced a scheme
-    if (!Fl::scheme()) fl_windows_colors();
+    if (!Fl::scheme()) fl_get_system_colors();
     break;
 
   default:
@@ -1039,14 +1039,14 @@ static int win_fontsize(int winsize) {
   return winsize*3/4; // cellsize: convert to charsize
 }
 
+void fl_get_system_colors() {
 
-void fl_windows_colors() {
   Fl_Color background = win_color(GetSysColor(COLOR_BTNFACE));
   Fl_Color foreground = win_color(GetSysColor(COLOR_BTNTEXT));
   Fl_Color select_background = win_color(GetSysColor(COLOR_HIGHLIGHT));
   Fl_Color select_foreground = win_color(GetSysColor(COLOR_HIGHLIGHTTEXT));
-  Fl_Color window_background = win_color(GetSysColor(COLOR_WINDOW));
-  Fl_Color window_foreground = win_color(GetSysColor(COLOR_WINDOWTEXT));
+  Fl_Color text_background = win_color(GetSysColor(COLOR_WINDOW));
+  Fl_Color text_foreground = win_color(GetSysColor(COLOR_WINDOWTEXT));
   Fl_Color menuitem_background = win_color(GetSysColor(COLOR_MENU));
   Fl_Color menuitem_foreground = win_color(GetSysColor(COLOR_MENUTEXT));
   Fl_Color tooltip_background = win_color(GetSysColor(COLOR_INFOBK));
@@ -1057,16 +1057,16 @@ void fl_windows_colors() {
   fl_background(background);
   Fl_Widget::default_style->label_color = foreground;
   Fl_Widget::default_style->highlight_label_color = foreground;
-  Fl_Widget::default_style->window_color = window_background;
-  Fl_Widget::default_style->text_color = window_foreground;
+  Fl_Widget::default_style->text_background = text_background;
+  Fl_Widget::default_style->text_color = text_foreground;
   Fl_Widget::default_style->selection_color = select_background;
   Fl_Widget::default_style->selection_text_color = select_foreground;
 
   Fl_Style* style;
 
   if ((style = Fl_Style::find("scrollbar"))) {
-//    style->window_color = fl_color_average(slider_background, window_background, .5);
-    style->window_color = fl_color_average(background, window_background, .5);
+//    style->text_background = fl_color_average(slider_background, text_background, .5);
+    style->text_background = fl_color_average(background, text_background, .5);
   }
 
   if ((style = Fl_Style::find("item"))) {
@@ -1076,13 +1076,14 @@ void fl_windows_colors() {
     style->selection_text_color = select_foreground;
   }
 
+/* This is the same as the defaults:
   if ((style = Fl_Style::find("menu title"))) {
-    style->box = FL_HIGHLIGHT_BOX;
     style->highlight_color = FL_GRAY;
     style->highlight_label_color = foreground;
     style->selection_color = FL_GRAY;
     style->selection_text_color = foreground;
   }
+*/
 
   if ((style = Fl_Style::find("menu bar"))) {
     style->highlight_color = FL_GRAY; // enable title highlightig
@@ -1172,5 +1173,5 @@ void fl_windows_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.105 2000/05/27 01:17:30 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.106 2000/05/30 07:42:17 bill Exp $".
 //

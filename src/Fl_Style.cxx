@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.13 2000/04/24 08:31:26 bill Exp $"
+// "$Id: Fl_Style.cxx,v 1.14 2000/05/30 07:42:15 bill Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -33,7 +33,7 @@ Fl_Named_Style* Fl_Named_Style::first;
 // a known state initially.
 static void revert(Fl_Style* s) {
   s->box                   = FL_NORMAL_BOX;
-  s->window_box            = FL_DOWN_BOX;
+  s->text_box		   = FL_DOWN_BOX;
   s->glyph                 = fl_glyph;
   s->label_font            = FL_HELVETICA;
   s->text_font             = FL_HELVETICA;
@@ -42,7 +42,7 @@ static void revert(Fl_Style* s) {
   s->label_color           = FL_BLACK;
   s->selection_color	   = FL_BLUE_SELECTION_COLOR;
   s->selection_text_color  = FL_WHITE;
-  s->window_color          = fl_gray_ramp(FL_NUM_GRAY-1);
+  s->text_background	   = fl_gray_ramp(FL_NUM_GRAY-1);
   s->highlight_color       = FL_NO_COLOR;
   s->highlight_label_color = FL_NO_COLOR;
   s->text_color            = FL_BLACK;
@@ -95,7 +95,7 @@ void Fl_Widget::FIELD(TYPE v) {		\
 }
 
 style_functions(Fl_Boxtype,box);
-style_functions(Fl_Boxtype,window_box);
+style_functions(Fl_Boxtype,text_box);
 style_functions(Fl_Glyph,glyph);
 style_functions(Fl_Font,label_font);
 style_functions(Fl_Font,text_font);
@@ -104,7 +104,7 @@ style_functions(Fl_Color,color);
 style_functions(Fl_Color,label_color);
 style_functions(Fl_Color,selection_color);
 style_functions(Fl_Color,selection_text_color);
-style_functions(Fl_Color,window_color);
+style_functions(Fl_Color,text_background);
 style_functions(Fl_Color,highlight_color);
 style_functions(Fl_Color,highlight_label_color);
 style_functions(Fl_Color,text_color);
@@ -141,8 +141,6 @@ Fl_Style::Fl_Style() {
   memset((void*)this, 0, sizeof(*this));
 }
 
-int Fl_Style::draw_boxes_inactive = 1;
-
 #include <ctype.h>
 Fl_Named_Style* Fl_Style::find(const char* name) {
   for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
@@ -162,6 +160,56 @@ Fl_Named_Style* Fl_Style::find(const char* name) {
   return 0;
 }
 
+int Fl_Style::draw_boxes_inactive = 1;
+int Fl_Style::scrollbar_width = 15;
+int Fl_Style::scrollbar_align = FL_ALIGN_RIGHT|FL_ALIGN_BOTTOM;
+
+// for some reason putting "const" in front of these makes gcc make them private:
+extern char fl_up_box_revert[];
+extern char fl_down_box_revert[];
+
+void Fl_Style::revert() {
+  fl_background((Fl_Color)0xc0c0c000);
+  fl_up_box.data = fl_up_box_revert;
+  fl_down_box.data = fl_down_box_revert;
+  draw_boxes_inactive = 1;
+  scrollbar_width = 15;
+  scrollbar_align = FL_ALIGN_RIGHT|FL_ALIGN_BOTTOM;
+  for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
+    if (p->name) {
+      Fl_Style temp = *p;
+      memset((void*)p, 0, sizeof(*p));
+      p->parent = temp.parent;
+      p->revertfunc = temp.revertfunc;
+      p->revertfunc(p);
+    }
+  }
+}
+
+////////////////////////////////////////////////////////////////
+
+#include <FL/math.h>
+
+void fl_background(Fl_Color c) {
+  // replace the gray ramp so that FL_GRAY is this color
+  int r = (c>>24)&255;
+  if (!r) r = 1; else if (r==255) r = 254;
+  double powr = log(r/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
+  int g = (c>>16)&255;
+  if (!g) g = 1; else if (g==255) g = 254;
+  double powg = log(g/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
+  int b = (c>>8)&255;
+  if (!b) b = 1; else if (b==255) b = 254;
+  double powb = log(b/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
+  for (int i = 0; i < FL_NUM_GRAY; i++) {
+    double gray = i/(FL_NUM_GRAY-1.0);
+    fl_set_color(fl_gray_ramp(i),
+		 fl_rgb(uchar(pow(gray,powr)*255+.5),
+			uchar(pow(gray,powg)*255+.5),
+			uchar(pow(gray,powb)*255+.5)));
+  }
+}
+
 //
-// End of "$Id: Fl_Style.cxx,v 1.13 2000/04/24 08:31:26 bill Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.14 2000/05/30 07:42:15 bill Exp $".
 //

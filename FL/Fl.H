@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.49 2000/05/27 01:17:21 carl Exp $"
+// "$Id: Fl.H,v 1.50 2000/05/30 07:41:56 bill Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -112,8 +112,8 @@ public:
   static Fl_Window* modal() {return modal_;}
   static int (*grab())(int, void*) {return grab_;}
   static void grab(int (*)(int, void*), void*);
-  static void grab(Fl_Window*);
-  static void grab(Fl_Window& w) { grab(&w); }
+  static void grab(Fl_Widget*);
+  static void grab(Fl_Widget& w) { grab(&w); }
   static void release();
 
   // event information:
@@ -233,5 +233,5 @@ FL_API const char* fl_find_config_file(const char*, int = 0);
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.49 2000/05/27 01:17:21 carl Exp $".
+// End of "$Id: Fl.H,v 1.50 2000/05/30 07:41:56 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.43 2000/05/18 22:22:35 carl Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.44 2000/05/30 07:42:15 bill Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -35,7 +35,7 @@ int Fl_Scrollbar::value(int p, int w, int t, int l) {
 //	l = length, total number of lines
   if (p+w > t+l) l = p+w-t;
   int b = l-w+t;
-  int X=x(); int Y=y(); int W=this->w(); int H=h(); window_box()->inset(X,Y,W,H);
+  int X=x(); int Y=y(); int W=this->w(); int H=h(); text_box()->inset(X,Y,W,H);
   if (!horizontal()) {int T = W; W = H; H = T; T = b; b = t; t = T;}
   if (W >= 3*H) W -= 2*H;
   int S = W*w/l; if (S < H) S = H; if (S > W) S = W;
@@ -68,7 +68,7 @@ void Fl_Scrollbar::timeout_cb(void* v) {
 
 int Fl_Scrollbar::handle(int event) {
   // area of scrollbar:
-  int X=x(); int Y=y(); int W=w(); int H=h(); window_box()->inset(X,Y,W,H);
+  int X=x(); int Y=y(); int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
 
   // adjust slider area to be inside the arrow buttons:
   if (horizontal()) {
@@ -81,7 +81,7 @@ int Fl_Scrollbar::handle(int event) {
   int mx = Fl::event_x();
   int my = Fl::event_y();
   int which_part;
-  if (!Fl::event_inside(this)) which_part = 0;
+  if (event == FL_LEAVE) which_part = 0;
   else if (horizontal()) {
     if (mx < X) which_part = 1;
     else if (mx >= X+W) which_part = 2;
@@ -142,16 +142,16 @@ int Fl_Scrollbar::handle(int event) {
 
 // Fltk 2.0 is incompatable with the use of color:
 // color area:                                  1.0:            2.0:
-// background behind scrollbar                  color           window_color
+// background behind scrollbar                  color           text_background
 // scrollbar slider & buttons                   FL_GRAY         color
 // scrollbar slider & buttons when selected     FL_GRAY         selection_color
 // scrollbar button symbols                     selection_color text_color
 // scrollbar button symbols when selected       selection_color selection_text_color
 
 void Fl_Scrollbar::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_window_frame();
+  if (damage()&FL_DAMAGE_ALL) draw_text_frame();
 
-  int X=x(); int Y=y(); int W=w(); int H=h(); window_box()->inset(X,Y,W,H);
+  int X=x(); int Y=y(); int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
 
   Fl_Flags f1 = 0;
   if (pushed_ == 1)
@@ -186,8 +186,8 @@ void Fl_Scrollbar::draw() {
 static void revert(Fl_Style* s) {
   s->selection_color = FL_GRAY;
   s->selection_text_color = FL_BLACK;
-  s->window_box = FL_FLAT_BOX;
-  s->window_color = FL_DARK2;
+  s->text_box = FL_FLAT_BOX;
+  s->text_background = FL_DARK2;
 }
 
 static Fl_Named_Style* style = new Fl_Named_Style("Scrollbar", revert, &style);
@@ -201,5 +201,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.43 2000/05/18 22:22:35 carl Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.44 2000/05/30 07:42:15 bill Exp $".
 //

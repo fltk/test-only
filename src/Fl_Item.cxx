@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.4 2000/04/24 08:31:25 bill Exp $"
+// "$Id: Fl_Item.cxx,v 1.5 2000/05/30 07:42:12 bill Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -65,10 +65,10 @@ void Fl_Item::draw() {
     }
     glyph()(type()==FL_RADIO_ITEM ? FL_GLYPH_ROUND : FL_GLYPH_CHECK,
 	    x+3, y+(h-13)/2, 13, 13,
-	    window_color(),
-	    window_box()==FL_NO_BOX ? label_color : selection_color(),
+	    text_background(),
+	    text_box()==FL_NO_BOX ? label_color : selection_color(),
 	    lflags,
-	    window_box());
+	    text_box());
     x += 15; w -= 15;
   }
 

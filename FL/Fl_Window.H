@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.35 2000/05/02 06:09:13 carl Exp $"
+// "$Id: Fl_Window.H,v 1.36 2000/05/30 07:41:58 bill Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -59,10 +59,10 @@ public:
   void label(const char*);
   void iconlabel(const char*);
   void label(const char* label, const char* iconlabel);
-  const char* xclass() const	{return xclass_;}
-  void xclass(const char* c)	{xclass_ = c;}
   const void* icon() const	{return icon_;}
   void icon(const void * ic)	{icon_ = ic;}
+  static const char* xclass()	{return xclass_;}
+  static void xclass(const char* v) {xclass_ = v;}
 
   int shown() const {return i != 0;}
   void show();
@@ -100,7 +100,6 @@ private:
 
   friend class Fl_X; Fl_X *i; // points at the system-specific stuff
   const char* iconlabel_;
-  const char* xclass_;
   const void* icon_;
   // size_range stuff:
   short minw, minh, maxw, maxh;
@@ -113,11 +112,12 @@ private:
     FL_NON_MODAL 	= 0x10000000
   };
   static Fl_Window *current_;
+  static const char* xclass_;
   void _Fl_Window(); // constructor innards
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.35 2000/05/02 06:09:13 carl Exp $".
+// End of "$Id: Fl_Window.H,v 1.36 2000/05/30 07:41:58 bill Exp $".
 //

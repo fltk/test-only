@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.25 2000/05/17 07:08:13 bill Exp $"
+// "$Id: essai.cxx,v 1.26 2000/05/30 07:42:21 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -129,14 +129,14 @@ int fltk_theme(int, char**) {
   }
   if ((s = Fl_Style::find("menu"))) {
     s->selection_text_color = FL_BLACK;
-    s->window_box = flat2;
+    s->text_box = flat2;
   }
   if ((s = Fl_Style::find("menu bar"))) {
     s->highlight_color = FL_GRAY;
     s->highlight_label_color = FL_BLACK;
     s->box = flat2;
     s->selection_text_color = FL_BLACK;
-    s->window_box = flat2;
+    s->text_box = flat2;
   }
   if ((s = Fl_Style::find("highlight button"))) {
     s->box = flat1;
@@ -154,5 +154,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: essai.cxx,v 1.25 2000/05/17 07:08:13 bill Exp $".
+// End of "$Id: essai.cxx,v 1.26 2000/05/30 07:42:21 bill Exp $".
 //

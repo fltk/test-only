@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.40 2000/05/02 06:09:14 carl Exp $"
+// "$Id: Fl_Window.cxx,v 1.41 2000/05/30 07:42:17 bill Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -80,7 +80,6 @@ void Fl_Window::_Fl_Window() {
   style(::style);
   type(FL_WINDOW);
   i = 0;
-  xclass_ = 0;
   icon_ = 0;
   iconlabel_ = 0;
   //resizable(0); // new default for group
@@ -185,6 +184,10 @@ Fl_Window::~Fl_Window() {
 // not on screen:	!window->shown();
 // not on screen but known by system: does not happen in fltk
 
+// This is set by Fl::arg to argv[0], or the user can set it.
+// It is used by X to look up stuff in the X resource database.
+const char* Fl_Window::xclass_ = "fltk";
+
 extern void fl_startup();
 extern const Fl_Window* fl_modal_for;
 extern void fl_fix_focus();
@@ -288,6 +291,12 @@ int Fl_Window::handle(int event) {
     do_callback();
     return 1;
   }
+  // Raise windows that are clicked on, but don't raise when the
+  // user hits buttons.  Unfortunately stupid ol' Win32 does this
+  // all the time so there is not much I can do here...
+#ifndef WIN32
+  if (event == FL_PUSH && !parent()) show();
+#endif
   return 0;
 }
 
@@ -299,5 +308,5 @@ void Fl_Window::flush() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.40 2000/05/02 06:09:14 carl Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.41 2000/05/30 07:42:17 bill Exp $".
 //

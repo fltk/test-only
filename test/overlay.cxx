@@ -1,5 +1,5 @@
 //
-// "$Id: overlay.cxx,v 1.5 2000/01/16 07:44:44 robertk Exp $"
+// "$Id: overlay.cxx,v 1.6 2000/05/30 07:42:19 bill Exp $"
 //
 // Overlay window test program for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,7 @@
 #include <FL/Fl_Button.H>
 #include <FL/fl_draw.H>
 
-int width=10,height=10;
+int width=10, height=10;
 
 class overlay : public Fl_Overlay_Window {
 public:
@@ -40,7 +40,7 @@ public:
 };
 
 void overlay::draw_overlay() {
-  fl_color(FL_RED); fl_rect((w()-width)/2,(h()-height)/2,width,height);
+  fl_color(FL_RED); fl_rect((w()-::width)/2,(h()-::height)/2,::width,::height);
 }
 
 overlay *ovl;
@@ -80,5 +80,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: overlay.cxx,v 1.5 2000/01/16 07:44:44 robertk Exp $".
+// End of "$Id: overlay.cxx,v 1.6 2000/05/30 07:42:19 bill Exp $".
 //

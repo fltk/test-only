@@ -45,8 +45,8 @@ Fl_Window* make_widget_panel() {
           o->callback((Fl_Callback*)image_cb);
           o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
           o->tooltip("Select an image to label the widget");
-          o->color(o->window_color());
-          o->box(o->window_box());
+          o->color(o->text_background());
+          o->box(o->text_box());
         }
         { Fl_Light_Button* o = include_image_button = new Fl_Light_Button(285, 70, 80, 25, "image inlined");
           o->label_size(10);
@@ -265,7 +265,7 @@ ete the shortcut type backspace.  To stop setting the shortcut click the mouse\
           o->end();
         }
         { Fl_Choice* o = new Fl_Choice(95, 70, 270, 25, "Window Box:"); o->begin();
-          o->callback((Fl_Callback*)window_box_cb);
+          o->callback((Fl_Callback*)text_box_cb);
           o->tooltip("Type of box to draw around a text display or other sunken area of the widget.");
           o->menu(boxmenu);
           o->end();

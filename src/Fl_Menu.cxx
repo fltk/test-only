@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.89 2000/05/11 22:03:27 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.90 2000/05/30 07:42:13 bill Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -59,12 +59,12 @@
 
 ////////////////////////////////////////////////////////////////
 
-// Style used by both classes.  The window_box is used to draw the box
+// Style used by both classes.  The text_box is used to draw the box
 // around selected items:
 
 static void revert(Fl_Style* s) {
   s->box = FL_UP_BOX;
-  s->window_box = FL_FLAT_BOX;
+  s->text_box = FL_FLAT_BOX;
   s->leading = 4;
 }
 
@@ -75,7 +75,7 @@ static Fl_Named_Style* style = new Fl_Named_Style("Menu", revert, &style);
 class MenuTitle : public Fl_Menu_Window {
   void draw();
 public:
-  Fl_Widget* item;
+  Fl_Widget* widget;
   MenuTitle(int X, int Y, int W, int H, Fl_Widget*, Fl_Group*);
 };
 
@@ -86,22 +86,22 @@ MenuTitle::MenuTitle(int X, int Y, int W, int H, Fl_Widget* L, Fl_Group* button)
   copy_style(button->style());
   set_modal();
   clear_border();
-  item = L;
+  widget = L;
   // can't use sgi overlay for images:
   if (L->image()) clear_overlay();
 }
 
 void MenuTitle::draw() {
-  Fl_Boxtype box = window_box(); // used for menubars
+  Fl_Boxtype box = text_box(); // used for menubars
   if (box == FL_NO_BOX) box = FL_DOWN_BOX; // used for popup menus
   box->draw(0, 0, w(), h(), selection_color(), FL_VALUE);
   // this allow a toggle or other widget to preview it's state:
-  if (Fl::event_pushed()) Fl::pushed_ = item;
-  item->x(5);
-  item->y((h()-item->h())/2);
-  int save_w = item->w(); item->w(w()-10);
-  fl_color(selection_text_color()); item->draw();
-  item->w(save_w);
+  if (Fl::event_pushed()) Fl::pushed_ = widget;
+  widget->x(5);
+  widget->y((h()-widget->height())/2);
+  int save_w = widget->w(); widget->w(w()-10);
+  fl_color(selection_text_color()); widget->draw();
+  widget->w(save_w);
   Fl::pushed_ = 0;
 }
 
@@ -111,13 +111,13 @@ class MenuWindow : public Fl_Menu_Window {
   void draw();
 public:
   int which_item;	// which item in parent's menu this is
-  int real_leading;	// includes the size of the window_box()+leading()
+  int real_leading;	// includes the size of the text_box()+leading()
   MenuTitle* title;
   int is_menubar;
   int numitems;
   int selected;
   int drawn_selected;	// last redraw has this selected
-  Fl_Group* list;
+  Fl_Group* group;
   MenuWindow(Fl_Group*, int X, int Y, int W, int H,
 	     Fl_Widget* title, Fl_Menu_* button);
   ~MenuWindow();
@@ -137,7 +137,7 @@ MenuWindow::MenuWindow(Fl_Group* m, int X, int Y, int Wp, int Hp,
   clear_border();
   style(::style);
 
-  list = m;
+  group = m;
   numitems = m ? m->children() : 0;
   selected = m ? m->focus() : -1;
 
@@ -152,20 +152,19 @@ MenuWindow::MenuWindow(Fl_Group* m, int X, int Y, int Wp, int Hp,
   // If pulldown is going to point at a submenu, we must make the
   // higher-level menus have minimum width:
   if (selected >= 0) {
-    Fl_Widget* w = m->child(selected);
-    if (w->active() && w->is_group() && ((Fl_Group*)w)->focus() >= 0)
+    Fl_Widget* widget = m->child(selected);
+    if (widget->active() && widget->is_group() && ((Fl_Group*)widget)->focus()>=0)
       Wp = Hp = 0;
   }
 
-  int dx=0; int dy=0; int dw=0; int dh=0; window_box()->inset(dx,dy,dw,dh);
+  int dx=0; int dy=0; int dw=0; int dh=0; text_box()->inset(dx,dy,dw,dh);
   real_leading = leading()-dh;
 
   int Wtitle = 0;
   int Htitle = 0;
   if (t) {
-    if (!t->h() || t->damage() & FL_DAMAGE_LAYOUT) t->layout();
-    Wtitle = t->w()+10;
-    Htitle = t->h()+real_leading;
+    Wtitle = t->width()+10;
+    Htitle = t->height()+real_leading;
   }
 
   int W = 0;
@@ -173,20 +172,21 @@ MenuWindow::MenuWindow(Fl_Group* m, int X, int Y, int Wp, int Hp,
   int H = 0;
   int selected_y = 0;
   for (int i = 0; i < numitems; i++) {
-    Fl_Widget* o = list->child(i);
-    if (!o->visible()) continue;
-    if (!o->h() || o->damage() & FL_DAMAGE_LAYOUT) o->layout();
-    if (i == selected) selected_y = H+(o->h()+real_leading)/2;
-    H += o->h()+real_leading;
-    if (o->w() > W) W = o->w();
-    if (o->is_group()) {
+    Fl_Widget* widget = group->child(i);
+    if (!widget->visible()) continue;
+    int ih = widget->height();
+    if (i == selected) selected_y = H+(ih+real_leading)/2;
+    H += ih+real_leading;
+    int iw = widget->width();
+    if (iw > W) W = iw;
+    if (widget->is_group()) {
       if (16 > hotKeysW) hotKeysW = 16;
-    } else if (o->shortcut()) {
-      int w1 = fl_width(fl_shortcut_label(o->shortcut())) + 8;
+    } else if (widget->shortcut()) {
+      int w1 = fl_width(fl_shortcut_label(widget->shortcut())) + 8;
       if (w1 > hotKeysW) hotKeysW = w1;
     }
     // can't use sgi overlay for images:
-    if (o->image()) clear_overlay();
+    if (widget->image()) clear_overlay();
   }
   W -= dw;
 
@@ -204,7 +204,7 @@ MenuWindow::MenuWindow(Fl_Group* m, int X, int Y, int Wp, int Hp,
 
   x(X); w(W); h(H-dh);
   if (selected >= 0) Y += Hp/2-selected_y-dy; else Y += Hp;
-  if (list) y(Y); else {y(Y-2); w(1); h(1);}
+  if (group) y(Y); else {y(Y-2); w(1); h(1);}
 
   if (t) {
     title = new MenuTitle(X, Y-Htitle-2+dh, Wtitle, Htitle-dh, t, button);
@@ -229,8 +229,8 @@ int MenuWindow::autoscroll(int i) {
   if (Y <= Fl::y()) Y = Fl::y()-Y+10;
   else if (i <= 0) return 0;
   else {
-    Fl_Widget* o = list->child(i-1);
-    Y = Y+o->h()-Fl::h()-Fl::y();
+    Fl_Widget* widget = group->child(i-1);
+    Y = Y+widget->height()-Fl::h()-Fl::y();
     if (Y < 0) return 0;
     Y = -Y-10;
   }
@@ -243,10 +243,9 @@ int MenuWindow::autoscroll(int i) {
 int MenuWindow::ypos(int index) {
   int x=0; int y=0; int w=0; int h=0; box()->inset(x,y,w,h);
   for (int i = 0; i < index; i++) {
-    Fl_Widget* o = list->child(i);
-    if (!o->visible()) continue;
-    if (!o->h() || o->damage() & FL_DAMAGE_LAYOUT) o->layout();
-    y += o->h()+real_leading;
+    Fl_Widget* widget = group->child(i);
+    if (!widget->visible()) continue;
+    y += widget->height()+real_leading;
   }
   return y;
 }
@@ -256,45 +255,45 @@ void MenuWindow::draw() {
     box()->draw(0, 0, w(), h(), color(), FL_FRAME_ONLY);
   int x=0; int y=0; int w=this->w(); int h=0; box()->inset(x,y,w,h);
   for (int i = 0; i < numitems; i++) {
-    Fl_Widget* o = list->child(i);
-    if (!o->visible()) continue;
-    if (!o->h() || o->damage() & FL_DAMAGE_LAYOUT) o->layout();
+    Fl_Widget* widget = group->child(i);
+    if (!widget->visible()) continue;
+    int ih = widget->height();
     // for minimal update, only draw the items that changed selection:
     if (damage() != FL_DAMAGE_CHILD || i == selected || i == drawn_selected) {
 
-      Fl_Flags flags = o->flags() & ~FL_VALUE;
+      Fl_Flags flags = widget->flags() & ~FL_VALUE;
       Fl_Color bgcolor = color();
-      Fl_Color label_color = o->label_color();
+      Fl_Color label_color = widget->label_color();
       if (i == selected && !(flags & FL_OUTPUT)) {
 	flags |= FL_VALUE;
 	bgcolor = selection_color();
 	label_color = selection_text_color();
 	// this allow a toggle or other widget to preview it's state:
-	if (Fl::event_pushed() && o->takesevents()) Fl::pushed_ = o;
+	if (Fl::event_pushed() && widget->takesevents()) Fl::pushed_ = widget;
       }
 
-      int X = x; int Y = y; int W = w; int H = o->h()+real_leading;
-      window_box()->draw(X, Y, W, H, bgcolor, flags);
-      window_box()->inset(X, Y, W, H);
-      o->x(X);
-      o->y(Y+leading()/2);
-      int save_w = o->w(); o->w(W);
-      fl_color(label_color); o->draw();
-      o->w(save_w);
+      int X = x; int Y = y; int W = w; int H = ih+real_leading;
+      text_box()->draw(X, Y, W, H, bgcolor, flags);
+      text_box()->inset(X, Y, W, H);
+      widget->x(X);
+      widget->y(Y+leading()/2);
+      int save_w = widget->w(); widget->w(W);
+      fl_color(label_color); widget->draw();
+      widget->w(save_w);
       Fl::pushed_ = 0;
 
-      if (o->is_group()) {
+      if (widget->is_group()) {
 	// Use the item's fontsize for the size of the arrow, rather than h:
-	int nh = o->label_size()+2;
+	int nh = widget->label_size()+2;
 	glyph()(FL_GLYPH_RIGHT, X+W-nh, Y+(H-nh)/2, nh, nh, bgcolor,
 		label_color, flags, FL_NO_BOX);
-      } else if (o->shortcut()) {
+      } else if (widget->shortcut()) {
 	flags = flags & ~FL_ALIGN_MASK | FL_ALIGN_RIGHT;
-	o->label_type()->draw(fl_shortcut_label(o->shortcut()),
+	widget->label_type()->draw(fl_shortcut_label(widget->shortcut()),
 			      X, Y, W-3, H, label_color, flags);
       }
     }
-    y += o->h()+real_leading;
+    y += ih+real_leading;
   }
   drawn_selected = selected;
 }
@@ -308,10 +307,9 @@ int MenuWindow::find_selected(int mx, int my) {
     int x = 3; int i = 0;
     for (;;i++) {
       if (i >= numitems) return -1;
-      Fl_Widget* o = list->child(i);
-      if (!o->visible()) continue;
-      if (!o->h() || o->damage() & FL_DAMAGE_LAYOUT) o->layout();
-      x += o->w()+10;
+      Fl_Widget* widget = group->child(i);
+      if (!widget->visible()) continue;
+      x += widget->width()+10;
       if (x > mx) break;
     }
     return i;
@@ -319,10 +317,9 @@ int MenuWindow::find_selected(int mx, int my) {
     int x=0; int y=0; int w=this->w(); int h=this->h(); box()->inset(x,y,w,h);
     if (mx < x || mx >= w) return -1;
     int i; for (i = 0; i < numitems-1; i++) {
-      Fl_Widget* o = list->child(i);
-      if (!o->visible()) continue;
-      if (!o->h() || o->damage() & FL_DAMAGE_LAYOUT) o->layout();
-      y += o->h()+real_leading;
+      Fl_Widget* widget = group->child(i);
+      if (!widget->visible()) continue;
+      y += widget->height()+real_leading;
       if (y > my) break;
     }
     if (i < 0) return 0;
@@ -335,10 +332,9 @@ int MenuWindow::find_selected(int mx, int my) {
 int MenuWindow::titlex(int index) {
   int x = 3;
   for (int i = 0; i < index; i++) {
-    Fl_Widget* o = list->child(i);
-    if (!o->visible()) continue;
-    if (!o->h() || o->damage() & FL_DAMAGE_LAYOUT) o->layout();
-    x += o->w()+10;
+    Fl_Widget* widget = group->child(i);
+    if (!widget->visible()) continue;
+    x += widget->width()+10;
   }
   return x;
 }
@@ -375,8 +371,7 @@ static int forward(MenuState& p, int menu) {
   MenuWindow &m = *(p.menus[menu]);
   int item = (menu == p.menu_number) ? p.item_number : m.selected;
   while (++item < m.numitems) {
-    Fl_Widget* w = m.list->child(item);
-    if (w->takesevents()) {setitem(p, menu, item); return 1;}
+    if (m.group->child(item)->takesevents()) {setitem(p, menu, item); return 1;}
   }
   return 0;
 }
@@ -387,8 +382,7 @@ static int backward(MenuState& p, int menu) {
   int item = (menu == p.menu_number) ? p.item_number : m.selected;
   if (item < 0) item = m.numitems;
   while (--item >= 0) {
-    Fl_Widget* w = m.list->child(item);
-    if (w->takesevents()) {setitem(p, menu, item); return 1;}
+    if (m.group->child(item)->takesevents()) {setitem(p, menu, item); return 1;}
   }
   return 0;
 }
@@ -397,7 +391,7 @@ static int last_event;
 
 static int handle(int e, void* data) {
   MenuState &p = *((MenuState*)data);
-  Fl_Widget* w;
+  Fl_Widget* widget = 0;
   last_event = e;
   switch (e) {
 
@@ -433,8 +427,8 @@ static int handle(int e, void* data) {
     for (int menu = p.nummenus; menu--;) {
       MenuWindow &mw = *(p.menus[menu]);
       for (int item = 0; item < mw.numitems; item++) {
-	w = mw.list->child(item);
-	if (w->takesevents() && w->test_shortcut()) {
+	widget = mw.group->child(item);
+	if (widget->takesevents() && widget->test_shortcut()) {
 	  setitem(p, menu, item);
 	  goto EXECUTE;
 	}
@@ -466,12 +460,12 @@ static int handle(int e, void* data) {
     if (e == FL_PUSH) {
       p.state = PUSH_STATE;
       if (item >= 0) {
-	Fl_Widget* w = p.menus[menu]->list->child(item);
-  	if (w->is_group() // this is a submenu title
+	Fl_Widget* widget = p.menus[menu]->group->child(item);
+  	if (widget->is_group() // this is a submenu title
   	    && item != p.menus[menu]->selected) // and it is not already on
   	  p.state = INITIAL_STATE;
 	// redraw checkboxes so they preview the state they will be in:
-	if (w->type()==FL_TOGGLE_ITEM || w->type()==FL_RADIO_ITEM)
+	if (widget->type()==FL_TOGGLE_ITEM || widget->type()==FL_RADIO_ITEM)
 	  p.menus[menu]->damage(FL_DAMAGE_CHILD);
       }
     }
@@ -485,8 +479,8 @@ static int handle(int e, void* data) {
     if (p.state == INITIAL_STATE && Fl::event_is_click()) {
       // redraw checkboxes so they preview the state they will be in:
       if (p.item_number >= 0) {
-	w = p.menus[p.menu_number]->list->child(p.item_number);
-	if (w->type()==FL_TOGGLE_ITEM || w->type()==FL_RADIO_ITEM)
+	widget = p.menus[p.menu_number]->group->child(p.item_number);
+	if (widget->type()==FL_TOGGLE_ITEM || widget->type()==FL_RADIO_ITEM)
 	  p.menus[p.menu_number]->damage(FL_DAMAGE_CHILD);
       }
       return 1;
@@ -495,19 +489,19 @@ static int handle(int e, void* data) {
     // If they click outside menu we quit:
     if (p.item_number < 0) {p.state = ABORT_STATE; return 1;}
     // Do nothing if they click inactive items:
-    w = p.menus[p.menu_number]->list->child(p.item_number);
-    if (!w->takesevents() || w->is_group() && !w->user_data()) {
+    widget = p.menus[p.menu_number]->group->child(p.item_number);
+    if (!widget->takesevents() || widget->is_group() && !widget->user_data()) {
       // except if they click on an already-up menu title, in which case
       // we are done:
       // if (p.menubar && !p.menu_number && Fl::event_is_click())
       //   p.state = ABORT_STATE;
       return 1;
     }
-    if ((w->flags() & FL_MENU_STAYS_UP) && (!p.menubar || p.menu_number)) {
-      p.widget->execute(w);
+    if ((widget->flags() & FL_MENU_STAYS_UP) && (!p.menubar || p.menu_number)) {
+      p.widget->execute(widget);
       Fl_Window* mw = p.menus[p.menu_number];
-      if (w->type() == FL_RADIO_ITEM) mw->redraw();
-      else if (w->type() == FL_TOGGLE_ITEM) mw->damage(FL_DAMAGE_CHILD);
+      if (widget->type() == FL_RADIO_ITEM) mw->redraw();
+      else if (widget->type() == FL_TOGGLE_ITEM) mw->damage(FL_DAMAGE_CHILD);
     } else {
       p.state = DONE_STATE;
     }
@@ -558,13 +552,13 @@ int Fl_Menu_::pulldown(
       MenuWindow* mw = p.menus[p.nummenus-1];
       p.item_number = mw->selected;
       if (p.item_number < 0) break;
-      Fl_Widget* m = mw->list->child(p.item_number);
-      if (!m || !m->takesevents() || !m->is_group()) break;
-      Fl_Group* g = (Fl_Group*)m;
-      if (g->focus() < 0) break;
+      Fl_Widget* widget = mw->group->child(p.item_number);
+      if (!widget->takesevents() || !widget->is_group()) break;
+      Fl_Group* group = (Fl_Group*)widget;
+      if (group->focus() < 0) break;
       int nX = mw->x() + mw->w();
       int nY = mw->y() + mw->ypos(p.item_number)-mw->ypos(0);
-      MenuWindow* n = new MenuWindow(g, X,Y,W,H, 0, this);
+      MenuWindow* n = new MenuWindow(group, X,Y,W,H, 0, this);
       n->which_item = p.item_number;
       p.menus[p.nummenus++] = n;
       // move all earlier menus to line up with this new one:
@@ -606,9 +600,9 @@ int Fl_Menu_::pulldown(
 	Fl::add_timeout(.1,autoscroll_timeout, &p);
     }
 
-    Fl_Widget* m = mw->list->child(p.item_number);
+    Fl_Widget* widget = mw->group->child(p.item_number);
 
-    if (m->takesevents() && m->is_group()) {
+    if (widget->takesevents() && widget->is_group()) {
       // a submenu title has been selected
       if (p.nummenus > p.menu_number+1) {
 	// there are already submenus up:
@@ -632,15 +626,15 @@ int Fl_Menu_::pulldown(
       if (!p.menu_number && p.menubar) { // menu off a menubar:
 	nX = mw->x() + mw->titlex(p.item_number);
 	nY = mw->y() + mw->h();
-	title = m;
+	title = widget;
       } else {
 	nX = mw->x() + mw->w();
 	nY = mw->y() + mw->ypos(p.item_number)-mw->ypos(0);
 	title = 0;
       }
-      ((Fl_Group*)m)->focus(-1); // don't preselect anything on this menu
+      ((Fl_Group*)widget)->focus(-1); // don't preselect anything on this menu
       p.menus[p.nummenus++] = mw =
-	new MenuWindow((Fl_Group*)m, nX, nY, 0, 0, title, this);
+	new MenuWindow((Fl_Group*)widget, nX, nY, 0, 0, title, this);
       mw->which_item = p.item_number;
       if (title) goto SHOW_MENUBAR_TITLE;
       mw->show();
@@ -654,7 +648,7 @@ int Fl_Menu_::pulldown(
       if (!p.menu_number && p.menubar) {
 	fakemenu = new MenuWindow(0,
 			mw->x() + mw->titlex(p.item_number),
-			mw->y() + mw->h(), 0, 0, m, this);
+			mw->y() + mw->h(), 0, 0, widget, this);
 	mw = fakemenu;
       SHOW_MENUBAR_TITLE:
 	// fix the title box size to match menubar thickness:
@@ -670,12 +664,12 @@ int Fl_Menu_::pulldown(
 
   Fl::remove_timeout(autoscroll_timeout, &p);
 
-  Fl_Widget* w = 0;
+  Fl_Widget* widget = 0;
   if (p.state == DONE_STATE) {
-    w = p.menus[p.menu_number]->list->child(p.item_number);
+    widget = p.menus[p.menu_number]->group->child(p.item_number);
     // set the value of all the submenus:
     for (int i=0; i < p.nummenus; i++)
-      p.menus[i]->list->focus(p.menus[i]->selected);
+      p.menus[i]->group->focus(p.menus[i]->selected);
   }
 
   delete fakemenu;
@@ -683,10 +677,10 @@ int Fl_Menu_::pulldown(
   mw.hide();
   Fl::release();
 
-  if (w) {
-    execute(w);
+  if (widget) {
+    execute(widget);
     if (menubar && !p.menu_number &&
-	(w->type() == FL_RADIO_ITEM || w->type() == FL_TOGGLE_ITEM))
+	(widget->type() == FL_RADIO_ITEM || widget->type() == FL_TOGGLE_ITEM))
       redraw();
     return 1;
   }
@@ -700,5 +694,5 @@ int Fl_Menu_::popup(int X, int Y, const char* title) {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.89 2000/05/11 22:03:27 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.90 2000/05/30 07:42:13 bill Exp $".
 //

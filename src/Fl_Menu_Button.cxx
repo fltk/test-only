@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.35 2000/05/15 05:52:26 bill Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.36 2000/05/30 07:42:14 bill Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -35,9 +35,9 @@ void Fl_Menu_Button::draw() {
   int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
   int w1 = H*4/5;
   Fl_Flags f = 0;
-  Fl_Color gc = (window_box() == FL_NO_BOX) ? lc : text_color();
+  Fl_Color gc = (text_box() == FL_NO_BOX) ? lc : text_color();
   if (!active_r()) f |= FL_INACTIVE;
-  glyph()(FL_GLYPH_DOWN, X+W-w1, Y, w1, H, window_color(), gc, f, window_box());
+  glyph()(FL_GLYPH_DOWN, X+W-w1, Y, w1, H, text_background(), gc, f, text_box());
 }
 
 void Fl_Menu_Button::draw_n_clip() {
@@ -70,6 +70,7 @@ int Fl_Menu_Button::handle(int e) {
   case FL_LEAVE:
     if (type()&7) return 0;
     if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
+  case FL_MOVE:
     return 1;
 
   case FL_PUSH:
@@ -102,7 +103,7 @@ int Fl_Menu_Button::handle(int e) {
 }
 
 static void revert(Fl_Style* s) {
-  s->window_box = FL_NO_BOX;
+  s->text_box = FL_NO_BOX;
   s->selection_color = FL_GRAY;
   s->selection_text_color = FL_BLACK;
 }
@@ -117,5 +118,5 @@ Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.35 2000/05/15 05:52:26 bill Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.36 2000/05/30 07:42:14 bill Exp $".
 //

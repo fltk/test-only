@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.31 2000/05/17 07:08:07 bill Exp $"
+// "$Id: Fl_Button.cxx,v 1.32 2000/05/30 07:42:10 bill Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -73,6 +73,7 @@ int Fl_Button::handle(int event) {
   case FL_ENTER:
   case FL_LEAVE:
     if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
+  case FL_MOVE:
     return 1;
   case FL_PUSH:
     take_focus();
@@ -135,5 +136,5 @@ Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.31 2000/05/17 07:08:07 bill Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.32 2000/05/30 07:42:10 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1.cxx,v 1.4 2000/05/27 01:17:34 carl Exp $"
+// "$Id: fl_kde1.cxx,v 1.5 2000/05/30 07:42:21 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -45,7 +45,7 @@
 
 static int colors_only;
 
-static const Fl_Frame_Box kdewin_menu_window_box(
+static const Fl_Frame_Box kdewin_menu_text_box(
   "kde windows menu window", "2AAUUIIXX", FL_DOWN_BOX);
 
 ////////////////////////////////////////////////////////////////
@@ -161,7 +161,7 @@ int fl_kde1(int co) {
     style->selection_text_color = foreground;
   }
 
-  if (window_background) style->window_color = window_background;
+  if (window_background) style->text_background = window_background;
 
   if (select_background) style->selection_color = select_background;
 
@@ -208,17 +208,17 @@ int fl_kde1(int co) {
       }
       if ((style = Fl_Style::find("check button"))) {
 	style->selection_color = FL_DARK1;
-	style->window_color = FL_GRAY;
+	style->text_background = FL_GRAY;
       }
     } else {
 
       if ((style = Fl_Style::find("menu"))) {
 	style->leading = 8;
-	style->box = &kdewin_menu_window_box;
+	style->box = &kdewin_menu_text_box;
       }
 
       if ((style = Fl_Style::find("scrollbar"))) {
-	style->box = &kdewin_menu_window_box;
+	style->box = &kdewin_menu_text_box;
       }
     }
   }
@@ -233,5 +233,5 @@ int fl_kde1(int co) {
 }
 
 //
-// End of "$Id: fl_kde1.cxx,v 1.4 2000/05/27 01:17:34 carl Exp $".
+// End of "$Id: fl_kde1.cxx,v 1.5 2000/05/30 07:42:21 bill Exp $".
 //

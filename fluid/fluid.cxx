@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.38 2000/04/11 08:16:41 bill Exp $"
+// "$Id: fluid.cxx,v 1.39 2000/05/30 07:42:06 bill Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -406,7 +406,7 @@ void make_main_window() {
     main_window = new Fl_Double_Window(WINWIDTH,WINHEIGHT,"fluid");
     main_window->box(FL_NO_BOX);
     o = make_widget_browser(0,MENUHEIGHT,BROWSERWIDTH,BROWSERHEIGHT);
-    o->window_box(FL_FLAT_BOX);
+    o->text_box(FL_FLAT_BOX);
     main_window->resizable(o);
     menubar = new Fl_Menu_Bar(0,0,BROWSERWIDTH,MENUHEIGHT);
     menubar->box(FL_FLAT_BOX);
@@ -501,5 +501,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.38 2000/04/11 08:16:41 bill Exp $".
+// End of "$Id: fluid.cxx,v 1.39 2000/05/30 07:42:06 bill Exp $".
 //
