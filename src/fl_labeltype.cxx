@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.11 1999/11/01 22:51:40 carl Exp $"
+// "$Id: fl_labeltype.cxx,v 1.12 1999/11/19 10:06:53 bill Exp $"
 //
 // Label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -32,23 +32,18 @@
 #include <string.h>
 #include <config.h>
 
-void fl_no_label_draw(Fl_Labeltype, const char*,
-		    int, int, int, int, Fl_Color, Fl_Flags)
-{}
+void Fl_No_Label::draw(const char*, int, int, int, int, Fl_Color, Fl_Flags)
+const {}
+Fl_No_Label fl_no_label("none");
 
-Fl_Labeltype_ fl_no_label = {fl_no_label_draw, 0};
-static Fl_Labeltype_Definer none("none", fl_no_label);
-
-void fl_normal_label_draw(Fl_Labeltype, const char* label,
-		    int X, int Y, int W, int H,
-		    Fl_Color c, Fl_Flags f)
+void Fl_Labeltype_::draw(const char* label,
+			 int X, int Y, int W, int H,
+			 Fl_Color c, Fl_Flags f) const
 {
   fl_color(f&FL_INACTIVE ? fl_inactive(c) : c);
   fl_draw(label, X, Y, W, H, f);
 }
-
-Fl_Labeltype_ fl_normal_label = {fl_normal_label_draw, 0};
-static Fl_Labeltype_Definer normal("normal", fl_normal_label);
+Fl_Labeltype_ fl_normal_label("normal");
 
 ////////////////////////////////////////////////////////////////
 
@@ -60,10 +55,9 @@ extern char fl_draw_shortcut;
 // skips outside labels:
 void Fl_Widget::draw_label(Fl_Color c) const {
   if (!(flags()&15) || (flags() & FL_ALIGN_INSIDE)) {
-    int X = x_+box()->dx();
-    int W = w_-box()->dw();
+    int X=x_; int Y=y_; int W=w_; int H=h_; box()->inset(X,Y,W,H);
     if (W > 11 && flags()&(FL_ALIGN_LEFT|FL_ALIGN_RIGHT)) {X += 3; W -= 6;}
-    draw_label(X, y_+box()->dy(), W, h_-box()->dh(), c, flags());
+    draw_label(X, Y, W, H, c, flags());
   }
 }
 
@@ -113,13 +107,13 @@ void Fl_Widget::measure_label(int& w, int& h) const {
 }
 
 const Fl_Labeltype_* Fl_Labeltype_::find(const char* name) {
-  for (Fl_Labeltype_Definer* p = Fl_Labeltype_Definer::first; p; p = p->next)
-    if (!strcasecmp(name, p->name)) return p->labeltype;
+  for (const Fl_Labeltype_* p = Fl_Labeltype_::first; p; p = p->next)
+    if (p->name && !strcasecmp(name, p->name)) return p;
   return 0;
 }
 
-Fl_Labeltype_Definer* Fl_Labeltype_Definer::first = 0;
+const Fl_Labeltype_* Fl_Labeltype_::first = 0;
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.11 1999/11/01 22:51:40 carl Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.12 1999/11/19 10:06:53 bill Exp $".
 //

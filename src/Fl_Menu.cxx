@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.62 1999/11/18 19:32:09 carl Exp $"
+// "$Id: Fl_Menu.cxx,v 1.63 1999/11/19 10:06:48 bill Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -184,7 +184,9 @@ int Fl_Menu_Item::measure(int* hp, const Fl_Menu_*) const {
     if (H > *hp) *hp = H;
     w += W;
   }
-  *hp += box()->dh();
+  int X=0; int Y=0; int W=0; int H=0; box()->inset(X,Y,W,H);
+  *hp -= H;
+  w -= W;
   return w;
 }
 
@@ -332,14 +334,15 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
   W += itemheight; // More extra spacing
 
   if (selected >= 0 && !Wp) X -= W/2;
-  W += hotKeysw + box()->dw() + 7;
+  int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
+  W += hotKeysw-dw + 7;
   if (Wp > W) W = Wp;
   if (Wtitle > W) W = Wtitle;
 
   if (!Wp) {if (X < 0) X = 0; if (X > Fl::w()-W) X= Fl::w()-W;}
 
   x(X); w(W);
-  h(itemheight*numitems+2*num_dividers+box()->dh());
+  h(itemheight*numitems+2*num_dividers-dh);
   if (selected >= 0) {
     Y = Y+(Hp-itemheight)/2-ypos(selected)+1;
   } else {
@@ -348,7 +351,7 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
   if (m) y(Y-1); else {y(Y-3); w(1); h(1);}
 
   if (t) {
-    int ht = menubar_title ? button->h()-6 : Htitle + box()->dw() + 3;
+    int ht = menubar_title ? button->h()-6 : Htitle-dw + 3;
     title = new menutitle(X, Y-ht-3, Wtitle, ht, t);
   } else
     title = 0;
@@ -366,7 +369,8 @@ void menuwindow::position(int X, int Y) {
 
 // return the top edge of item i:
 int menuwindow::ypos(int i) {
-  int Y = box()->dy()+i*itemheight;
+  int X=0; int Y=0; int W=0; int H=0; box()->inset(X,Y,W,H);
+  Y += i*itemheight;
   for (const Fl_Menu_Item* m = menu; i>0 && m->text; m = m->next(), i--)
     if (m->flags() & FL_MENU_DIVIDER) Y += 2;
   return Y;
@@ -394,10 +398,9 @@ void menutitle::draw() {
 void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int /*erase*/) {
   if (!m) return; // this happens if -1 is selected item and redrawn
 
-  int x = box()->dx();
-  int w = this->w()-box()->dw();
-  int y = ypos(i);
-  int h = itemheight;
+  int x=0; int y=0; int w=this->w(); int h=0; box()->inset(x,y,w,h);
+  y = ypos(i);
+  h = itemheight;
 
   m->draw(x, y, w, h, button, (i == selected));
 
@@ -414,10 +417,9 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int /*erase*/) {
   }
 
   if (m->submenu()) {
-    int dx = m->box()->down->dx();
-    int dy = m->box()->down->dy();
-    int dh = m->box()->down->dh();
-    glyph()(FL_GLYPH_RIGHT, x+w-h+dx, y+dy, h-dh, h-dh, bc, fc,f, FL_NO_BOX);
+    int X=x; int Y=y; int W=w; int H=h;
+    m->box()->inset(X,Y,W,H);
+    glyph()(FL_GLYPH_RIGHT, X+W-H, Y, H, H, bc, fc,f, FL_NO_BOX);
   } else if (m->shortcut_) {
     fl_font(label_font(), label_size());
     // hack so that selected menu items aren't drawn inactive--
@@ -467,8 +469,9 @@ int menuwindow::find_selected(int mx, int my) {
     }
     return i;
   }
-  if (mx < box()->dx() || mx >= w()) return -1;
-  int i = (my-box()->dy()-1)/itemheight;
+  int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
+  if (mx < dx || mx >= w()+dw) return -1;
+  int i = (my-dy-1)/itemheight;
   if (i < 0) return 0;
   if (i >= numitems) return numitems-1;
   return i;
@@ -853,5 +856,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.62 1999/11/18 19:32:09 carl Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.63 1999/11/19 10:06:48 bill Exp $".
 //

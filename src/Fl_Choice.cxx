@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.27 1999/11/14 08:42:45 bill Exp $"
+// "$Id: Fl_Choice.cxx,v 1.28 1999/11/19 10:06:46 bill Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -35,9 +35,11 @@ extern char fl_draw_shortcut;
 
 void Fl_Choice::draw() {
   draw_button();
+  int ix = x(); int iy = y(); int iw = w(); int ih = h();
+  box()->inset(ix, iy, iw, ih);
   // draw the tick mark:
-  int H = h() - box()->dh() - 4;
-  int X = x()+ w() - box()->dx() - H - 2;
+  int H = ih - 4;
+  int X = ix + iw - H - 2;
   int Y = y()+(h()-H)/2;
   Fl_Flags f = active_r() ? Fl::belowmouse() == this ? FL_HIGHLIGHT : 0
                             : FL_INACTIVE;
@@ -46,10 +48,9 @@ void Fl_Choice::draw() {
     // Shouldn't do this, but we can handle it
     Fl_Menu_Item m = *mvalue();
     if (active_r()) m.activate(); else m.deactivate();
-    fl_clip(x(), y(), X-x(), h());
+    fl_clip(ix, iy, X-ix, ih);
     fl_draw_shortcut = 2; // hack value to make '&' disappear
-    Fl_Boxtype b = box();
-    m.draw(x()+b->dx(), y()+b->dy(), X-x(), h()-b->dh(), this, 5);
+    m.draw(ix, iy, X-ix, ih, this, 5);
     fl_draw_shortcut = 0;
     fl_pop_clip();
   }
@@ -98,5 +99,5 @@ int Fl_Choice::handle(int e) {
 Fl_Style Fl_Choice::default_style("Choice");
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.27 1999/11/14 08:42:45 bill Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.28 1999/11/19 10:06:46 bill Exp $".
 //

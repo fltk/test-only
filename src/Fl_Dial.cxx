@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.23 1999/11/10 18:06:03 carl Exp $"
+// "$Id: Fl_Dial.cxx,v 1.24 1999/11/19 10:06:47 bill Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -78,10 +78,9 @@ void Fl_Dial::draw(int x, int y, int w, int h) {
 
 void Fl_Dial::draw() {
   if (damage()&FL_DAMAGE_ALL) draw_box();
-  draw(x()+box()->dx(),
-       y()+box()->dy(),
-       w()-box()->dw(),
-       h()-box()->dh());
+  int X = x(); int Y = y(); int W = w(); int H = h();
+  box()->inset(X,Y,W,H);
+  draw(X,Y,W,H);
   draw_label();
 }
 
@@ -117,11 +116,9 @@ int Fl_Dial::handle(int event, int x, int y, int w, int h) {
 }
 
 int Fl_Dial::handle(int e) {
-  return handle(e,
-		x()+box()->dx(),
-		y()+box()->dy(),
-		w()-box()->dw(),
-		h()-box()->dh());
+  int X = x(); int Y = y(); int W = w(); int H = h();
+  box()->inset(X,Y,W,H);
+  return handle(e,X,Y,W,H);
 }
 
 static void revert(Fl_Style* s) {
@@ -140,5 +137,5 @@ Fl_Dial::Fl_Dial(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.23 1999/11/10 18:06:03 carl Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.24 1999/11/19 10:06:47 bill Exp $".
 //

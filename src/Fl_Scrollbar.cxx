@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.30 1999/11/15 04:02:42 carl Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.31 1999/11/19 10:06:50 bill Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -35,8 +35,7 @@ int Fl_Scrollbar::value(int p, int w, int t, int l) {
 //	l = length, total number of lines
   if (p+w > t+l) l = p+w-t;
   int b = l-w+t;
-  int W = this->w()-box()->dw();
-  int H = h()-box()->dh();
+  int X=x(); int Y=y(); int W=this->w(); int H=h(); box()->inset(X,Y,W,H);
   if (!horizontal()) {int T = W; W = H; H = T;}
   if (W >= 3*H) W -= 2*H;
   int S = W*w/l; if (S < H) S = H; if (S > W) S = W;
@@ -70,10 +69,8 @@ void Fl_Scrollbar::timeout_cb(void* v) {
 
 int Fl_Scrollbar::handle(int event) {
   // area of scrollbar:
-  int SX = x()+box()->dx(); int X = SX;
-  int SY = y()+box()->dy(); int Y = SY;
-  int SW = w()-box()->dw(); int W = SW;
-  int SH = h()-box()->dh(); int H = SH;
+  int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
+  int SX = X; int SY = Y; int SW = W; int SH = H;
 
   // adjust slider area to be inside the arrow buttons:
   if (horizontal()) {
@@ -200,10 +197,7 @@ int Fl_Scrollbar::handle(int event) {
 
 void Fl_Scrollbar::draw() {
   if (damage()&FL_DAMAGE_ALL) draw_box();
-  int X = x()+box()->dx();
-  int Y = y()+box()->dy();
-  int W = w()-box()->dw();
-  int H = h()-box()->dh();
+  int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
 
   Fl_Flags f1 = 0, f2 = 0;
   if (!active_r()) {
@@ -260,5 +254,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.30 1999/11/15 04:02:42 carl Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.31 1999/11/19 10:06:50 bill Exp $".
 //

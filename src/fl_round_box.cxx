@@ -1,5 +1,5 @@
 //
-// "$Id: fl_round_box.cxx,v 1.15 1999/11/18 19:32:13 carl Exp $"
+// "$Id: fl_round_box.cxx,v 1.16 1999/11/19 10:06:54 bill Exp $"
 //
 // Round box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -41,7 +41,7 @@ void fl_arc_i(int x,int y,int w,int h,double a1,double a2) {
 
 enum {UPPER_LEFT, LOWER_RIGHT, CLOSED, FILL};
 
-static void draw(int which, int x,int y,int w,int h, Fl_Color color)
+static void arc(int which, int x,int y,int w,int h, Fl_Color color)
 {
   int d = w <= h ? w : h;
   if (d <= 1) return;
@@ -76,46 +76,39 @@ static void draw(int which, int x,int y,int w,int h, Fl_Color color)
 
 extern void fl_to_inactive(const char* s, char* to);
 
-static void round_draw(Fl_Boxtype b, int x, int y, int w, int h,
-		       Fl_Color c, Fl_Flags f)
+void Fl_Round_Box::draw(int x, int y, int w, int h,
+			Fl_Color c, Fl_Flags f) const
 {
-  if (f & FL_VALUE) b = b->down;
+  const char* s = (f & FL_VALUE) ? data_from->down->data : data_from->data;
+  char buf[26]; if (f&FL_INACTIVE && Fl_Style::draw_boxes_inactive) {
+    fl_to_inactive(s, buf); s = buf;}
   if (!(f & FL_FRAME_ONLY)) {
     // draw the interior, assumming the edges are the same thickness
     // as the normal square box:
-    int d = b->dx();
-    if (w > 2*d && h > 2*(d-1)) draw(FILL, x+d, y+d-1, w-2*d, h-2*(d-1), c);
+    int d = strlen(s)/4;
+    if (w > 2*d && h > 2*(d-1)) arc(FILL, x+d, y+d-1, w-2*d, h-2*(d-1), c);
   }
-  const char* s = (const char*)(b->data);
-  if (!Fl_Style::draw_boxes_inactive) f &= (~FL_INACTIVE);
-  char buf[26]; if (f&FL_INACTIVE) {fl_to_inactive(s, buf); s = buf;}
   const char* t;
   if (*s == '2') {t = s+1; s += 3;} else {t = s+2;}
   while (*s && *t && w > 0 && h > 0) {
     Fl_Color c1 = *s + (FL_GRAY_RAMP-'A'); s += 4;
     Fl_Color c2 = *t + (FL_GRAY_RAMP-'A'); t += 4;
-    draw(UPPER_LEFT,  x+1, y,   w-2, h, *s&&*t ? c1 : c);
-    draw(UPPER_LEFT,  x,   y,   w,   h, c1);
-    draw(LOWER_RIGHT, x+1, y,   w-2, h, *s&&*t ? c2 : c);
-    draw(LOWER_RIGHT, x,   y,   w,   h, c2);
+    arc(UPPER_LEFT,  x+1, y,   w-2, h, *s&&*t ? c1 : c);
+    arc(UPPER_LEFT,  x,   y,   w,   h, c1);
+    arc(LOWER_RIGHT, x+1, y,   w-2, h, *s&&*t ? c2 : c);
+    arc(LOWER_RIGHT, x,   y,   w,   h, c2);
     x++; y++; w -= 2; h -= 2;
   }
 }
 
-static void wrapper(Fl_Boxtype b, int x, int y, int w, int h,
-		    Fl_Color c, Fl_Flags f)
-{
-  round_draw((Fl_Boxtype)(b->data),x,y,w,h,c,f);
+void Fl_Round_Box::inset(int& x,int& y,int& w,int& h) const {
+  data_from->inset(x,y,w,h);
 }
+int Fl_Round_Box::fills_rectangle() const {return false;}
 
-const Fl_Boxtype_ fl_round_box = {
-  wrapper, FL_UP_BOX, 0, 3,3,6,6,
-};
-
-const Fl_Boxtype_ fl_round_down_box = {
-  wrapper, FL_DOWN_BOX, 0, 3,3,6,6,
-};
+const Fl_Round_Box fl_round_box(0, FL_UP_BOX);
+const Fl_Round_Box fl_round_down_box(0, FL_DOWN_BOX);
 
 //
-// End of "$Id: fl_round_box.cxx,v 1.15 1999/11/18 19:32:13 carl Exp $".
+// End of "$Id: fl_round_box.cxx,v 1.16 1999/11/19 10:06:54 bill Exp $".
 //

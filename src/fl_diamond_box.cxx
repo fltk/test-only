@@ -1,5 +1,5 @@
 //
-// "$Id: fl_diamond_box.cxx,v 1.11 1999/11/18 19:32:11 carl Exp $"
+// "$Id: fl_diamond_box.cxx,v 1.12 1999/11/19 10:06:52 bill Exp $"
 //
 // Diamond box code for the Fast Light Tool Kit (FLTK).
 //
@@ -34,26 +34,25 @@
 
 extern void fl_to_inactive(const char* s, char* to);
 
-static void diamond_draw(Fl_Boxtype b, int x, int y, int w, int h,
-			 Fl_Color c, Fl_Flags f)
+void Fl_Diamond_Box::draw(int x, int y, int w, int h,
+			  Fl_Color c, Fl_Flags f) const
 {
   w &= -2;
   h &= -2;
   int x1 = x+w/2;
   int y1 = y+h/2;
-  if (f & FL_VALUE) b = b->down;
+  const char* s = (f & FL_VALUE) ? data_from->down->data : data_from->data;
+  char buf[26]; if (f&FL_INACTIVE && Fl_Style::draw_boxes_inactive) {
+    fl_to_inactive(s, buf); s = buf;}
   if (!(f & FL_FRAME_ONLY)) {
     // draw the interior, assumming the edges are the same thickness
     // as the normal square box:
-    int d = b->dx();
+    int d = strlen(s)/4;
     if (w > 2*d && h > 2*d) {
       fl_color(c);
       fl_polygon(x+d, y1, x1,y+d, x+w-d,y1, x1,y+h-d);
     }
   }
-  const char* s = (const char*)(b->data);
-  if (!Fl_Style::draw_boxes_inactive) f &= (~FL_INACTIVE);
-  char buf[26]; if (f&FL_INACTIVE) {fl_to_inactive(s, buf); s = buf;}
   const char* t;
   if (*s == '2') {t = s+1; s += 3;} else {t = s+2;}
   while (*s && *t && w > 0 && h > 0) {
@@ -75,20 +74,14 @@ static void diamond_draw(Fl_Boxtype b, int x, int y, int w, int h,
   }
 }
 
-static void wrapper(Fl_Boxtype b, int x, int y, int w, int h,
-		    Fl_Color c, Fl_Flags f)
-{
-  diamond_draw((Fl_Boxtype)(b->data),x,y,w,h,c,f);
+void Fl_Diamond_Box::inset(int& x,int& y,int& w,int& h) const {
+  data_from->inset(x,y,w,h);
 }
+int Fl_Diamond_Box::fills_rectangle() const {return false;}
 
-const Fl_Boxtype_ fl_diamond_box = {
-  wrapper, FL_UP_BOX, 0, 0, 0,0,0,0
-};
-
-const Fl_Boxtype_ fl_diamond_down_box = {
-  wrapper, FL_DOWN_BOX, 0, 0, 0,0,0,0
-};
+const Fl_Diamond_Box fl_diamond_box(0, FL_UP_BOX);
+const Fl_Diamond_Box fl_diamond_down_box(0, FL_UP_BOX);
 
 //
-// End of "$Id: fl_diamond_box.cxx,v 1.11 1999/11/18 19:32:11 carl Exp $".
+// End of "$Id: fl_diamond_box.cxx,v 1.12 1999/11/19 10:06:52 bill Exp $".
 //

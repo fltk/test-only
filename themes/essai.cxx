@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.10 1999/11/18 04:33:26 carl Exp $"
+// "$Id: essai.cxx,v 1.11 1999/11/19 10:06:57 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -45,64 +45,57 @@
 #include <FL/Fl_Boxtype.H>
 #include <FL/Fl_Shared_Image.H>
 
-struct Fl_Image_Box : Fl_Boxtype_ {
+class Fl_Image_Box : public Fl_Boxtype_ {
+  void inset(int& x,int& y,int& w,int& h) const {fl_up_box.inset(x,y,w,h);}
+  int fills_rectangle() const {return true;}
+public:
+  void draw(int,int,int,int, Fl_Color fill, Fl_Flags) const;
   Fl_Shared_Image* normal_img;
   Fl_Shared_Image* down_img;
   Fl_Shared_Image* highlight_img;
-
   Fl_Image_Box(char*, char*, char*);
 };
 
-static void image_box_draw(const Fl_Boxtype_* bt, int x, int y, int w, int h,
-		      Fl_Color fill, Fl_Flags flags)
+void Fl_Image_Box::draw(int x, int y, int w, int h,
+			Fl_Color fill, Fl_Flags flags) const
 {
   Fl_Shared_Image* img;
 
-  if (flags&FL_VALUE) img = ((Fl_Image_Box*)bt)->down_img;
-  else if (flags&FL_HIGHLIGHT) img = ((Fl_Image_Box*)bt)->highlight_img;
-  else img = ((Fl_Image_Box*)bt)->normal_img;
+  if (flags&FL_VALUE) img = down_img;
+  else if (flags&FL_HIGHLIGHT) img = highlight_img;
+  else img = normal_img;
 
-  if (!(flags&FL_FRAME_ONLY))
-    img->draw_tiled(x+bt->dx_, y+bt->dy_, w-bt->dw_, h-bt->dh_, -w/2, -h/2);
-  FL_UP_BOX->draw(x,y,w,h,fill,flags|FL_FRAME_ONLY);
+  fl_up_box.draw(x,y,w,h,fill,flags|FL_FRAME_ONLY);
+  if (!(flags&FL_FRAME_ONLY)) {
+    fl_up_box.inset(x,y,w,h);
+    img->draw_tiled(x,y,w,h, -w/2, -h/2);
+  }
 }
 
-Fl_Image_Box::Fl_Image_Box(char* normal_b, char* down_b, char* highlight_b) {
-  draw_ = image_box_draw;
-  down = this;
+Fl_Image_Box::Fl_Image_Box(char* normal_b, char* down_b, char* highlight_b) :
+Fl_Boxtype_(0) {
   normal_img = Fl_JPEG_Image::get(fl_find_config_file(normal_b));
   down_img = Fl_JPEG_Image::get(fl_find_config_file(down_b));
   highlight_img = Fl_JPEG_Image::get(fl_find_config_file(highlight_b));
-  dx_=dy_=2; dw_=dh_=4;
-  rectangular = 1;
 }
 
-struct Fl_Image_NoBorderBox : Fl_Image_Box {
-  Fl_Image_NoBorderBox(char*, char*, char*);
+class Fl_Image_NoBorderBox : public Fl_Image_Box {
+  void draw(int,int,int,int, Fl_Color fill, Fl_Flags) const;
+public:
+  Fl_Image_NoBorderBox(char*a, char*b, char*c) : Fl_Image_Box(a,b,c) {}
 };
 
-static void image_noborderbox_draw(const Fl_Boxtype_* bt, int x, int y, int w, int h,
-		      Fl_Color fill, Fl_Flags flags)
+void Fl_Image_NoBorderBox::draw(int x, int y, int w, int h,
+				Fl_Color fill, Fl_Flags flags) const
 {
+  if (flags&(FL_VALUE|FL_HIGHLIGHT)) {
+    Fl_Image_Box::draw(x,y,w,h,fill,flags);
+    return;
+  }
   Fl_Shared_Image* img;
-
-  if (flags&FL_VALUE) img = ((Fl_Image_Box*)bt)->down_img;
-  else if (flags&FL_HIGHLIGHT) img = ((Fl_Image_Box*)bt)->highlight_img;
-  else img = ((Fl_Image_Box*)bt)->normal_img;
-
+  img = normal_img;
   if (!(flags&FL_FRAME_ONLY))
     img->draw_tiled(x, y, w, h, -w/2, -h/2);
-  if (flags&(FL_HIGHLIGHT|FL_VALUE))
-    FL_UP_BOX->draw(x,y,w,h,fill,(flags|FL_FRAME_ONLY)&(~FL_VALUE));
-  else
-    FL_FLAT_BOX->draw(x,y,w,h,fill,flags|FL_FRAME_ONLY);
-}
-
-Fl_Image_NoBorderBox::Fl_Image_NoBorderBox(char* normal_b, char* down_b,
-  char* highlight_b) : Fl_Image_Box(normal_b, down_b, highlight_b)
-{
-  draw_ = image_noborderbox_draw;
-  dx_=dy_=0; dw_=dh_=0;
 }
 
 extern "C" int fltk_theme(int, char**);
@@ -149,5 +142,5 @@ int fltk_theme(int, char** argv) {
 }
 
 //
-// End of "$Id: essai.cxx,v 1.10 1999/11/18 04:33:26 carl Exp $".
+// End of "$Id: essai.cxx,v 1.11 1999/11/19 10:06:57 bill Exp $".
 //

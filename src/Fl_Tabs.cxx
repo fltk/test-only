@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.27 1999/11/17 01:39:45 vincent Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.28 1999/11/19 10:06:50 bill Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -95,11 +95,12 @@ int Fl_Tabs::tab_height() {
     if (o->y()+o->h() > H2) H2 = o->y()+o->h();
   }
   H2 = y()+h()-H2;
+  int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
   if (H2 > H) {
-    H = H2-box()->dy();
+    H = H2-dy;
     return (H <= 0) ? 0 : -H-2;
   } else {
-    H = H-box()->dy();
+    H = H-dy;
     return (H <= 0) ? 0 : H+1;
   }
 }
@@ -314,5 +315,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.27 1999/11/17 01:39:45 vincent Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.28 1999/11/19 10:06:50 bill Exp $".
 //

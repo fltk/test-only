@@ -14,18 +14,17 @@ void fl_glyph(int t, int x,int y,int w,int h,
     box->draw(x,y,w,h, bc, f);
     if (f & FL_VALUE) {
       fl_color(fc);
+      box->inset(x,y,w,h);
 #if 0 // Draws an X
-      x += box->dx();
-      y += box->dy();
-      int r = x+h-box->dh()-1;
-      int b = y+h-box->dh()-1;
+      int r = x+w-1;
+      int b = y+h-1;
       fl_line(x+1,y+1,r-1,b-1);
       fl_line(x,y+1,r-2,b-1);
       fl_line(x,b-1,r-2,y+1);
       fl_line(x+1,b-1,r-1,y+1);
 #else // draw Windows check:
-      x += box->dx()+1;
-      w = h - box->dh() - 2;
+      x += 1;
+      w = h - 2;
       int d1 = w/3;
       int d2 = w-d1;
       y = y+(h+d2)/2-d1-2;

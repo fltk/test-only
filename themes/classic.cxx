@@ -1,5 +1,5 @@
 //
-// "$Id: classic.cxx,v 1.7 1999/11/10 12:21:57 bill Exp $"
+// "$Id: classic.cxx,v 1.8 1999/11/19 10:06:57 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -42,15 +42,7 @@ int fltk_theme(int, char**) {
   Fl_Style::revert(); // revert to FLTK default styles
 
   fl_up_box.data = "AAAAWUJJUTNN";
-  fl_up_box.dx_ = 3;
-  fl_up_box.dy_ = 3;
-  fl_up_box.dw_ = 6;
-  fl_up_box.dh_ = 6;
   fl_down_box.data = "NNTUJJUWAAAA";
-  fl_down_box.dx_ = 3;
-  fl_down_box.dy_ = 3;
-  fl_down_box.dw_ = 6;
-  fl_down_box.dh_ = 6;
   Fl_Style* s;
   if ((s = Fl_Style::find("menu_item"))) {
     s->set_box(FL_FLAT_BOX);
@@ -68,17 +60,24 @@ int fltk_theme(int, char**) {
   if ((s = Fl_Style::find("scrollbar"))) {
     s->set_box(FL_FLAT_BOX);
   }
+  if ((s = Fl_Style::find("slider"))) {
+    //s->set_box(FL_DOWN_BOX);
+    s->set_glyph_box(FL_UP_BOX);
+  }
   if ((s = Fl_Style::find("input"))) {
     s->set_box(FL_DOWN_BOX);
     s->set_selection_color(FL_DARK2);
     s->set_selection_text_color(FL_BLACK);
   }
   if ((s = Fl_Style::find("output"))) {
+    s->set_box(FL_DOWN_BOX);
     s->set_color(FL_GRAY);
+    s->set_selection_color(FL_DARK2);
+    s->set_selection_text_color(FL_BLACK);
   }
   return 0;
 }
 
 //
-// End of "$Id: classic.cxx,v 1.7 1999/11/10 12:21:57 bill Exp $".
+// End of "$Id: classic.cxx,v 1.8 1999/11/19 10:06:57 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Labeltype.H,v 1.6 1999/11/18 16:42:23 carl Exp $"
+// "$Id: Fl_Labeltype.H,v 1.7 1999/11/19 10:06:41 bill Exp $"
 //
 // Labeltypes used by FLTK styles.
 //
@@ -29,44 +29,50 @@
 #include "Fl_Color.H"
 #include "Fl_Flags.H"
 
-// struct rather than class to allow static constants:
-struct FL_API Fl_Labeltype_ {
-  void (*draw_)(const Fl_Labeltype_*, const char*,
-	       int,int,int,int, Fl_Color fill, Fl_Flags);
-  void* data;
-// public:
-  void draw(const char* m, int x,int y,int w,int h, Fl_Color c, Fl_Flags f=0)
-    const {draw_(this, m, x, y, w, h, c, f);}
-
+// the abstract base class:
+class FL_API Fl_Labeltype_ {
+public:
+  virtual void draw(const char*, int,int,int,int, Fl_Color fill, Fl_Flags=0) const;
+  const char* name;
+  const Fl_Labeltype_* next;
+  static const Fl_Labeltype_* first;
+  Fl_Labeltype_(const char* n) : name(n), next(first) {first = this;}
   static const Fl_Labeltype_* find(const char* name);
 };
 
 typedef const Fl_Labeltype_* Fl_Labeltype;
 
-// Create a global object of this type with correct parameter to define
-// a new labeltype class.  Plugins can search this to find the labeltypes
-// used by a program:
-class FL_API Fl_Labeltype_Definer {
-public:
-  const char* name;
-  const Fl_Labeltype_* labeltype;
-  Fl_Labeltype_Definer* next;
-  static Fl_Labeltype_Definer* first;
-  Fl_Labeltype_Definer(char* n, const Fl_Labeltype_& s) : name(n), labeltype(&s), next(first) {
-    first = this;}
-};
-
-extern FL_API Fl_Labeltype_ fl_no_label;
-#define FL_NO_LABEL (&fl_no_label)
 extern FL_API Fl_Labeltype_ fl_normal_label;
 #define FL_NORMAL_LABEL (&fl_normal_label)
-extern FL_API const Fl_Labeltype_ fl_symbol_label;
+
+class FL_API Fl_No_Label : public Fl_Labeltype_ {
+  void draw(const char*, int,int,int,int, Fl_Color fill, Fl_Flags=0) const;
+public:
+  Fl_No_Label(const char * n) : Fl_Labeltype_(n) {}
+};
+extern FL_API Fl_No_Label fl_no_label;
+#define FL_NO_LABEL (&fl_no_label)
+
+class FL_API Fl_Symbol_Label : public Fl_Labeltype_ {
+  void draw(const char*, int,int,int,int, Fl_Color fill, Fl_Flags=0) const;
+public:
+  Fl_Symbol_Label(const char * n) : Fl_Labeltype_(n) {}
+};
+extern FL_API const Fl_Symbol_Label fl_symbol_label;
 #define FL_SYMBOL_LABEL (&fl_symbol_label)
-extern FL_API const Fl_Labeltype_ fl_shadow_label;
+
+class FL_API Fl_Engraved_Label : public Fl_Labeltype_ {
+public:
+  void draw(const char*, int,int,int,int, Fl_Color fill, Fl_Flags=0) const;
+  const int* data;
+  Fl_Engraved_Label(const char * n, const int p[][3])
+    : Fl_Labeltype_(n), data((const int*)p) {}
+};
+extern FL_API const Fl_Engraved_Label fl_shadow_label;
 #define FL_SHADOW_LABEL (&fl_shadow_label)
-extern FL_API const Fl_Labeltype_ fl_engraved_label;
+extern FL_API const Fl_Engraved_Label fl_engraved_label;
 #define FL_ENGRAVED_LABEL (&fl_engraved_label)
-extern FL_API const Fl_Labeltype_ fl_embossed_label;
+extern FL_API const Fl_Engraved_Label fl_embossed_label;
 #define FL_EMBOSSED_LABEL (&fl_embossed_label)
 
 #endif

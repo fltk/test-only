@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.15 1999/11/16 07:36:08 bill Exp $"
+// "$Id: Fl_Browser.cxx,v 1.16 1999/11/19 10:06:44 bill Exp $"
 //
 // Browser widget for the Fast Light Tool Kit (FLTK).
 //
@@ -229,6 +229,8 @@ int Fl_Browser::item_height(void* lv) const {
 	case 'b': font = font->bold; break;
 	case 'i': font = font->italic; break;
 	case 'f': case 't': font = FL_COURIER; break;
+	case 'B':
+	case 'C': strtol(str, &str, 10); break; // skip a color number
 	case 'S': size = strtol(str,&str,10); break;
 	case 'F': font = (Fl_Font)strtol(str,&str,10); break;
 	case 0: case '@': str--;
@@ -276,6 +278,8 @@ int Fl_Browser::item_width(void* v) const {
     case 'b': font = font->bold; break;
     case 'i': font = font->italic; break;
     case 'f': case 't': font = FL_COURIER; break;
+    case 'B':
+    case 'C': strtol(str, &str, 10); break; // skip a color number
     case 'S':
       size = strtol(str, &str, 10);
       break;
@@ -485,5 +489,5 @@ int Fl_Browser::value() const {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.15 1999/11/16 07:36:08 bill Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.16 1999/11/19 10:06:44 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.10 1999/11/18 21:05:39 carl Exp $"
+// "$Id: fl_motif.cxx,v 1.11 1999/11/19 10:06:53 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -39,50 +39,26 @@
 #include <stdio.h>
 #include <string.h>
 
-// a boxtype drawing function in fl_boxtype.cxx
-extern void fl_frame(Fl_Boxtype b, int x, int y, int w, int h,
-                     Fl_Color c, Fl_Flags f);
-
-// a boxtype drawing function in fl_boxtype.cxx
-extern void fl_flatx(Fl_Boxtype b, int x, int y, int w, int h,
-                     Fl_Color c, Fl_Flags f);
-
-// a boxtype drawing function in fl_boxtype.cxx
-extern void fl_highlightx(Fl_Boxtype b, int x, int y, int w, int h,
-                     Fl_Color c, Fl_Flags f);
-
 // some new boxtypes (look familiar?)
-static const Fl_Boxtype_ thick_motif_down_box = {
-  fl_frame, "HHVVHHVVHHVV", &thick_motif_down_box, 3,3,6,6, 1
-};
+static const Fl_Frame_Box thick_motif_down_box(
+  "motif thick down", "HHVVHHVVHHVV");
 
-static const Fl_Boxtype_ thick_motif_up_box = {
-  fl_frame, "VVHHVVHHVVHH", &thick_motif_down_box, 3,3,6,6, 1
-};
+static const Fl_Frame_Box thick_motif_up_box(
+  "motif thick up", "VVHHVVHHVVHH", &thick_motif_down_box);
 
-static const Fl_Boxtype_ thin_motif_down_box = {
-  fl_frame, "HHVVHHVV", &thin_motif_down_box, 2,2,4,4, 1
-};
+static const Fl_Frame_Box thin_motif_down_box(
+  "motif down", "HHVVHHVV");
 
-static const Fl_Boxtype_ thin_motif_up_box = {
-  fl_frame, "VVHHVVHH", &thin_motif_down_box, 2,2,4,4, 1
-};
+static const Fl_Frame_Box thin_motif_up_box(
+  "motif", "VVHHVVHH", &thin_motif_down_box);
 
-static const Fl_Boxtype_ thick_motif_highlight_box = {
-  fl_highlightx, 0, &thick_motif_down_box, 3,3,6,6, 1
-};
+static const Fl_Frame_Box always_up_box(0,"VVHHVVHH");
 
-static const Fl_Boxtype_ thin_motif_highlight_box = {
-  fl_highlightx, 0, &thin_motif_down_box, 2,2,4,4, 1
-};
+static const Fl_Highlight_Box thick_motif_highlight_box(
+  "motif thick highlight", &thick_motif_up_box);
 
-static const Fl_Boxtype_ thick_motif_title_box = {
-  fl_flatx, 0, &thick_motif_up_box, 3,3,6,6, 1
-};
-
-static const Fl_Boxtype_ thin_motif_title_box = {
-  fl_flatx, 0, &thin_motif_up_box, 2,2,4,4, 1
-};
+static const Fl_Highlight_Box thin_motif_highlight_box(
+  "motif thin highlight", &always_up_box);
 
 static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
                 Fl_Flags f, Fl_Boxtype box)
@@ -176,10 +152,9 @@ static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color
 int fl_motif() {
   Fl_Style::revert(); // revert to FLTK default styles
 
+  fl_up_box.data = thin_motif_up_box.data;
+  fl_down_box.data = thin_motif_down_box.data;
   Fl_Style::draw_boxes_inactive = 0;
-
-  fl_up_box.data = "VVHHVVHH";
-  fl_down_box.data = "HHVVHHVV";
 
   Fl_Widget::default_style.set_box(&thin_motif_up_box);
   Fl_Widget::default_style.set_selection_color(FL_DARK1);
@@ -190,7 +165,7 @@ int fl_motif() {
   Fl_Style* s;
 
   if ((s = Fl_Style::find("menu item"))) {
-    s->set_box(&thin_motif_title_box);
+    s->set_box(&thin_motif_highlight_box);
     s->set_glyph_box(FL_NO_BOX);
     s->set_selection_color(FL_NO_COLOR);
     s->set_selection_text_color(FL_NO_COLOR);
@@ -202,7 +177,7 @@ int fl_motif() {
   }
 
   if ((s = Fl_Style::find("menu title"))) {
-    s->set_box(&thin_motif_title_box);
+    s->set_box(&thin_motif_highlight_box);
     s->set_glyph_box(FL_NO_BOX);
     s->set_selection_color(FL_NO_COLOR);
     s->set_selection_text_color(FL_NO_COLOR);
@@ -261,21 +236,10 @@ int fl_motif() {
     s->set_box(&thin_motif_down_box);
   }
 
-  static Fl_Boxtype_Definer motif("motif", thin_motif_up_box);
-  static Fl_Boxtype_Definer motif_up("motif up", thin_motif_up_box);
-  static Fl_Boxtype_Definer motif_down("motif down", thin_motif_down_box);
-  static Fl_Boxtype_Definer motif_highlight("motif highlight", thin_motif_highlight_box);
-  static Fl_Boxtype_Definer motif_title("motif title", thin_motif_title_box);
-  static Fl_Boxtype_Definer motif_thick("motif thick", thick_motif_up_box);
-  static Fl_Boxtype_Definer motif_thick_up("motif thick up", thick_motif_up_box);
-  static Fl_Boxtype_Definer motif_thick_down("motif thick down", thick_motif_down_box);
-  static Fl_Boxtype_Definer motif_thick_highlight("motif thick highlight", thick_motif_highlight_box);
-  static Fl_Boxtype_Definer motif_thick_title("motif thick title", thick_motif_title_box);
-
   Fl::redraw();
   return 0;
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.10 1999/11/18 21:05:39 carl Exp $".
+// End of "$Id: fl_motif.cxx,v 1.11 1999/11/19 10:06:53 bill Exp $".
 //

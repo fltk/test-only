@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.29 1999/11/15 04:02:42 carl Exp $"
+// "$Id: Fl_Slider.cxx,v 1.30 1999/11/19 10:06:50 bill Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -123,11 +123,8 @@ void Fl_Slider::draw() {
   if (!active_r()) f = FL_INACTIVE;
   else if (Fl::belowmouse() == this && highlight_color()) f = FL_HIGHLIGHT;
   else f = 0;
-  draw(x()+box()->dx(),
-       y()+box()->dy(),
-       w()-box()->dw(),
-       h()-box()->dh(),
-       f);
+  int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
+  draw(X,Y,W,H,f);
   if (damage()&FL_DAMAGE_ALL) draw_label();
 }
 
@@ -195,11 +192,8 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
 }
 
 int Fl_Slider::handle(int event) {
-  return handle(event,
-		x()+box()->dx(),
-		y()+box()->dy(),
-		w()-box()->dw(),
-		h()-box()->dh());
+  int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
+  return handle(event,X,Y,W,H);
 }
 
 static void revert(Fl_Style *s) {
@@ -210,5 +204,5 @@ static void revert(Fl_Style *s) {
 Fl_Style Fl_Slider::default_style("Slider", revert);
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.29 1999/11/15 04:02:42 carl Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.30 1999/11/19 10:06:50 bill Exp $".
 //

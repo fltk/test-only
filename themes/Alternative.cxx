@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.9 1999/11/18 04:33:26 carl Exp $"
+// "$Id: Alternative.cxx,v 1.10 1999/11/19 10:06:56 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -29,34 +29,12 @@
 #include <FL/Fl_Widget.H>
 #include <FL/fl_draw.H>
 
-// a boxtype drawing function in fl_boxtype.cxx
-extern void fl_frame(Fl_Boxtype b, int x, int y, int w, int h,
-                     Fl_Color c, Fl_Flags f);
-
-// a boxtype drawing function in fl_boxtype.cxx
-extern void fl_flatx(Fl_Boxtype b, int x, int y, int w, int h,
-                     Fl_Color c, Fl_Flags f);
-
-// a boxtype drawing function in fl_boxtype.cxx
-extern void fl_highlightx(Fl_Boxtype b, int x, int y, int w, int h,
-                     Fl_Color c, Fl_Flags f);
-
 // a couple of of new boxtypes (look familiar?)
-static const Fl_Boxtype_ alt_down_box = {
-  fl_frame, "NNUUJJXXAAAA", &alt_down_box, 3,3,6,6, 1
-};
+static const Fl_Frame_Box alt_down_box("alternative down", "NNUUJJXXAAAA");
 
-static const Fl_Boxtype_ alt_up_box = {
-  fl_frame, "AAAAXXJJUUNN", &alt_down_box, 3,3,6,6, 1
-};
+static const Fl_Frame_Box alt_up_box("alternative up", "AAAAXXJJUUNN");
 
-static const Fl_Boxtype_ alt_menu_box = {
-  fl_flatx, 0, FL_THIN_DOWN_BOX, 1,1,2,2, 1
-};
-
-static const Fl_Boxtype_ alt_menu_title_box = {
-  fl_highlightx, 0, FL_THIN_UP_BOX, 1,1,2,2, 1
-};
+static const Fl_Highlight_Box alt_menu_box("alternative menu",FL_THIN_DOWN_BOX);
 
 // some old stuff for boxtype drawing
 enum {UPPER_LEFT, LOWER_RIGHT, CLOSED, FILL};
@@ -158,21 +136,21 @@ static void alt_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color f
     }
     case FL_GLYPH_HSLIDER: {
       box->draw(x,y,w,h, bc, f);
-      int dy = box->dy()+1;
-      FL_THIN_UP_BOX->draw(x+w/2-1, y+dy, 2, h-dy*2, fc, f);
+      box->inset(x,y,w,h);
+      FL_THIN_UP_BOX->draw(x+w/2-1, y+1, 2, h-2, fc, f);
       if (w>18) {
-        FL_THIN_UP_BOX->draw(x+w/2-1-4, y+dy, 2, h-dy*2, fc, f);
-        FL_THIN_UP_BOX->draw(x+w/2-1+4, y+dy, 2, h-dy*2, fc, f);
+        FL_THIN_UP_BOX->draw(x+w/2-1-4, y+1, 2, h-2, fc, f);
+        FL_THIN_UP_BOX->draw(x+w/2-1+4, y+1, 2, h-2, fc, f);
       }
       break;
     }
     case FL_GLYPH_VSLIDER: {
       box->draw(x,y,w,h, bc, f);
-      int dx = box->dx()+1;
-      FL_THIN_UP_BOX->draw(x+dx, y+h/2-1, w-dx*2, 2, fc, f);
+      box->inset(x,y,w,h);
+      FL_THIN_UP_BOX->draw(x+1, y+h/2-1, w-2, 2, fc, f);
       if (h>18) {
-        FL_THIN_UP_BOX->draw(x+dx, y+h/2-1-4, w-dx*2, 2, fc, f);
-        FL_THIN_UP_BOX->draw(x+dx, y+h/2-1+4, w-dx*2, 2, fc, f);
+        FL_THIN_UP_BOX->draw(x+1, y+h/2-1-4, w-2, 2, fc, f);
+        FL_THIN_UP_BOX->draw(x+1, y+h/2-1+4, w-2, 2, fc, f);
       }
       break;
     }
@@ -230,11 +208,6 @@ extern "C" int fltk_theme(int, char**);
 int fltk_theme(int, char** argv) {
   Fl_Style::revert();
 
-  static Fl_Boxtype_Definer alt_down("alternative down", alt_down_box);
-  static Fl_Boxtype_Definer alt_up("alternative up", alt_up_box);
-  static Fl_Boxtype_Definer alt_menu("alternative menu", alt_menu_box);
-  static Fl_Boxtype_Definer alt_menu_title("alternative menu title", alt_menu_title_box);
-
   Fl_Style* s;
   if ((s = Fl_Style::find("menu title"))) {
     s->set_glyph_box(FL_NO_BOX);
@@ -250,5 +223,5 @@ int fltk_theme(int, char** argv) {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.9 1999/11/18 04:33:26 carl Exp $".
+// End of "$Id: Alternative.cxx,v 1.10 1999/11/19 10:06:56 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_shadow_box.cxx,v 1.8 1999/11/14 08:42:52 bill Exp $"
+// "$Id: fl_shadow_box.cxx,v 1.9 1999/11/19 10:06:55 bill Exp $"
 //
 // Shadow box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -28,9 +28,8 @@
 
 #define BW 3
 
-static void shadow_draw(Fl_Boxtype, int x, int y, int w, int h,
-			Fl_Color c, Fl_Flags f)
-{
+void Fl_Shadow_Box::draw(int x, int y, int w, int h,
+			 Fl_Color c, Fl_Flags f) const {
   w-=BW; h-=BW;
   if (!(f & FL_FRAME_ONLY)) {
     fl_color(c);
@@ -42,10 +41,12 @@ static void shadow_draw(Fl_Boxtype, int x, int y, int w, int h,
   fl_color((f&FL_INACTIVE) ? FL_INACTIVE_COLOR : FL_NO_COLOR);
   fl_rect(x,y,w,h);
 }
-const Fl_Boxtype_ fl_shadow_box = {
-  shadow_draw, 0, 0, 1,1,2+BW,2+BW
-};
+void Fl_Shadow_Box::inset(int& x,int& y,int& w,int& h) const {
+  x++; y++; w-=2+BW; h-=2+BW;
+}
+int Fl_Shadow_Box::fills_rectangle() const {return false;} // unfortunate...
+const Fl_Shadow_Box fl_shadow_box(0);
 
 //
-// End of "$Id: fl_shadow_box.cxx,v 1.8 1999/11/14 08:42:52 bill Exp $".
+// End of "$Id: fl_shadow_box.cxx,v 1.9 1999/11/19 10:06:55 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_engraved_label.cxx,v 1.7 1999/11/18 19:32:11 carl Exp $"
+// "$Id: fl_engraved_label.cxx,v 1.8 1999/11/19 10:06:52 bill Exp $"
 //
 // Engraved label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -30,16 +30,16 @@
 
 // data is dx, dy, color triples
 
-void fl_pattern_label(Fl_Labeltype l, const char* label,
-		      int X, int Y, int W, int H,
-		      Fl_Color fill, Fl_Flags f)
+void Fl_Engraved_Label::draw(const char* label,
+			     int X, int Y, int W, int H,
+			     Fl_Color fill, Fl_Flags f) const
 {
   Fl_Flags a1 = f;
   if (a1 & FL_ALIGN_CLIP) {
     fl_clip(X, Y, W, H);
     a1 = (Fl_Flags)(a1&~FL_ALIGN_CLIP);
   }
-  for (int *data = (int*)(l->data); ; data += 3) {
+  for (const int *data = this->data; ; data += 3) {
     Fl_Color c = (Fl_Color)(data[2]);
     fl_color(c ? c : fl_inactive(fill, f));
     fl_draw(label, X+data[0], Y+data[1], W, H, a1);
@@ -48,24 +48,21 @@ void fl_pattern_label(Fl_Labeltype l, const char* label,
   if (f & FL_ALIGN_CLIP) fl_pop_clip();
 }
 
-static int shadow_data[2][3] = {{2,2,FL_DARK3},{0,0,0}};
-const Fl_Labeltype_ fl_shadow_label = {fl_pattern_label, shadow_data};
-static Fl_Labeltype_Definer shadow("shadow", fl_shadow_label);
+static const int shadow_data[2][3] = {{2,2,FL_DARK3},{0,0,0}};
+const Fl_Engraved_Label fl_shadow_label("shadow", shadow_data);
 
-static int engraved_data[7][3] = {
+static const int engraved_data[7][3] = {
   {1,0,FL_LIGHT3},{1,1,FL_LIGHT3},{0,1,FL_LIGHT3},
   {-1,0,FL_DARK3},{-1,-1,FL_DARK3},{0,-1,FL_DARK3},
   {0,0,0}};
-const Fl_Labeltype_ fl_engraved_label = {fl_pattern_label, engraved_data};
-static Fl_Labeltype_Definer engraved("engraved", fl_engraved_label);
+const Fl_Engraved_Label fl_engraved_label("engraved", engraved_data);
 
-static int embossed_data[7][3] = {
+static const int embossed_data[7][3] = {
   {-1,0,FL_LIGHT3},{-1,-1,FL_LIGHT3},{0,-1,FL_LIGHT3},
   {1,0,FL_DARK3},{1,1,FL_DARK3},{0,1,FL_DARK3},
   {0,0,0}};
-const Fl_Labeltype_ fl_embossed_label = {fl_pattern_label, embossed_data};
-static Fl_Labeltype_Definer embossed("embossed", fl_embossed_label);
+const Fl_Engraved_Label fl_embossed_label("embossed", embossed_data);
 
 //
-// End of "$Id: fl_engraved_label.cxx,v 1.7 1999/11/18 19:32:11 carl Exp $".
+// End of "$Id: fl_engraved_label.cxx,v 1.8 1999/11/19 10:06:52 bill Exp $".
 //

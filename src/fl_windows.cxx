@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.12 1999/11/19 03:59:12 carl Exp $"
+// "$Id: fl_windows.cxx,v 1.13 1999/11/19 10:06:55 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -36,43 +36,36 @@
 #include <stdio.h>
 #include <string.h>
 
-// a labeltype drawing function in fl_engraved_label.cxx
-extern void fl_pattern_label(Fl_Labeltype l, const char* label,
-                             int X, int Y, int W, int H,
-                             Fl_Color fill, Fl_Flags f);
-
 static int engraved_data[2][3] = {{1,1,FL_LIGHT3},{0,0,0}};
 static int embossed_data[2][3] = {{-1,-1,FL_LIGHT3},{0,0,0}};
 
-static const Fl_Labeltype_ win98_engraved_label = {fl_pattern_label, engraved_data};
-static const Fl_Labeltype_ win98_embossed_label = {fl_pattern_label, embossed_data};
+static const Fl_Engraved_Label win98_engraved_label(
+  "windows engraved", engraved_data);
 
-static void win98_labelfunc(Fl_Labeltype, const char* label,
-                            int X, int Y, int W, int H,
-                            Fl_Color fill, Fl_Flags f)
+static const Fl_Engraved_Label win98_embossed_label(
+  "windows embossed", embossed_data);
+
+class Win98_Label : public Fl_Engraved_Label {
+  void draw(const char*, int,int,int,int, Fl_Color fill, Fl_Flags=0) const;
+public:
+  Win98_Label(const char* n, const int p[][3]) : Fl_Engraved_Label(n,p) {}
+};
+
+void Win98_Label::draw(const char* label,
+		       int X, int Y, int W, int H,
+		       Fl_Color fill, Fl_Flags f) const
 {
-  if (f&FL_INACTIVE) win98_engraved_label.draw(label, X, Y, W, H, fill, f);
-  else FL_NORMAL_LABEL->draw(label, X, Y, W, H, fill, f);
+  if (f&FL_INACTIVE) Fl_Engraved_Label::draw(label, X, Y, W, H, fill, f);
+  else Fl_Labeltype_::draw(label, X, Y, W, H, fill, f);
 }
 
-static const Fl_Labeltype_ win98_label = {win98_labelfunc, engraved_data};
+static const Win98_Label win98_label("windows", engraved_data);
 
-// a boxtype drawing function in fl_boxtype.cxx
-extern void fl_frame(Fl_Boxtype b, int x, int y, int w, int h,
-                     Fl_Color c, Fl_Flags f);
+static const Fl_Highlight_Box win98_menu_title_box(
+  "win98 menu title", FL_THIN_UP_BOX);
 
-// a boxtype drawing function in fl_boxtype.cxx
-extern void fl_highlightx(Fl_Boxtype b, int x, int y, int w, int h,
-			  Fl_Color c, Fl_Flags f);
-
-// some new boxtypes (look familiar?)
-static const Fl_Boxtype_ win98_menu_title_box = {
-  fl_highlightx, 0, FL_THIN_UP_BOX, 1,1,2,2,1
-};
-
-static const Fl_Boxtype_ win98_menu_window_box = {
-  fl_frame, "2AARRMMUU", FL_DOWN_BOX, 2,2,4,4, 1
-};
+static const Fl_Frame_Box win98_menu_window_box(
+  "win98 menu window", "2AARRMMUU", FL_DOWN_BOX);
 
 int fl_windows() {
   Fl_Style::revert(); // revert to FLTK default styles
@@ -154,17 +147,11 @@ int fl_windows() {
     s->set_highlight_color(FL_GRAY);
   }
 
-  static Fl_Boxtype_Definer win98_menu_title("windows menu title", win98_menu_title_box);
-  static Fl_Boxtype_Definer win98_menu_window("windows menu window", win98_menu_window_box);
-  static Fl_Labeltype_Definer win98_l("windows", win98_label);
-  static Fl_Labeltype_Definer win98_engraved("windows engraved", win98_engraved_label);
-  static Fl_Labeltype_Definer win98_embossed("windows embossed", win98_embossed_label);
-
   Fl::redraw();
 
   return 0;
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.12 1999/11/19 03:59:12 carl Exp $".
+// End of "$Id: fl_windows.cxx,v 1.13 1999/11/19 10:06:55 bill Exp $".
 //

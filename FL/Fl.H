@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.29 1999/11/13 23:47:53 carl Exp $"
+// "$Id: Fl.H,v 1.30 1999/11/19 10:06:40 bill Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -182,10 +182,10 @@ public:
 
   //static void set_boxtype(Fl_Boxtype,Fl_Box_Draw_F*,uchar,uchar,uchar,uchar);
   //static void set_boxtype(Fl_Boxtype, Fl_Boxtype from);
-  static int box_dx(Fl_Boxtype b) {return b->dx();}
-  static int box_dy(Fl_Boxtype b) {return b->dy();}
-  static int box_dw(Fl_Boxtype b) {return b->dw();}
-  static int box_dh(Fl_Boxtype b) {return b->dh();}
+  //static int box_dx(Fl_Boxtype b)
+  //static int box_dy(Fl_Boxtype b)
+  //static int box_dw(Fl_Boxtype b)
+  //static int box_dh(Fl_Boxtype b)
 
   static void set_abort(void (*f)(const char*,...)) {fatal = f;}
   static int event_shift() {return e_state&FL_SHIFT;}
@@ -227,5 +227,5 @@ const char* fl_find_config_file(const  char* fn);
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.29 1999/11/13 23:47:53 carl Exp $".
+// End of "$Id: Fl.H,v 1.30 1999/11/19 10:06:40 bill Exp $".
 //

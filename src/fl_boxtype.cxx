@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.24 1999/11/18 19:32:10 carl Exp $"
+// "$Id: fl_boxtype.cxx,v 1.25 1999/11/19 10:06:51 bill Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -34,26 +34,22 @@
 
 ////////////////////////////////////////////////////////////////
 
-static void no_draw(Fl_Boxtype, int, int, int, int,
-		    Fl_Color, Fl_Flags)
-{}
-const Fl_Boxtype_ fl_no_box = {
-  no_draw, 0, &fl_no_box, 0,0,0,0, false
-};
-static Fl_Boxtype_Definer none("none", fl_no_box);
+void Fl_No_Box::draw(int, int, int, int, Fl_Color, Fl_Flags) const {}
+void Fl_No_Box::inset(int&,int&,int&,int&) const {}
+int Fl_No_Box::fills_rectangle() const {return false;}
+const Fl_No_Box fl_no_box("none");
 
-static void flat_draw(Fl_Boxtype, int x, int y, int w, int h,
-		      Fl_Color c, Fl_Flags f)
+void Fl_Flat_Box::draw(int x, int y, int w, int h,
+		       Fl_Color c, Fl_Flags f) const
 {
   if (!(f & FL_FRAME_ONLY)) {
     fl_color(c);
     fl_rectf(x,y,w,h);
   }
 }
-const Fl_Boxtype_ fl_flat_box = {
-  flat_draw, 0, &fl_flat_box, 0,0,0,0, true
-};
-static Fl_Boxtype_Definer flat("flat", fl_flat_box);
+void Fl_Flat_Box::inset(int&,int&,int&,int&) const {}
+int Fl_Flat_Box::fills_rectangle() const {return true;}
+const Fl_Flat_Box fl_flat_box("flat");
 
 ////////////////////////////////////////////////////////////////
 
@@ -63,15 +59,13 @@ FL_EXPORT void fl_to_inactive(const char* s, char* to) {
   *to = 0;
 }
 
-FL_EXPORT void fl_frame(Fl_Boxtype b, int x, int y, int w, int h,
-			Fl_Color c, Fl_Flags f)
+void Fl_Frame_Box::draw(int x, int y, int w, int h,
+			Fl_Color c, Fl_Flags f) const
 {
-  if (f & FL_VALUE)
-    { b->down->draw(x, y, w, h, c, f&~FL_VALUE); return; }
-
-  const char* s = (const char*)(b->data);
-  if (!Fl_Style::draw_boxes_inactive) f &= (~FL_INACTIVE);
-  char buf[26]; if (f&FL_INACTIVE) { fl_to_inactive(s, buf); s = buf; }
+  const char* s = data;
+  if (f & FL_VALUE) s = down->data;
+  char buf[26]; if (f&FL_INACTIVE && Fl_Style::draw_boxes_inactive) {
+    fl_to_inactive(s, buf); s = buf;}
   if (h > 0 && w > 0) {
     if (*s == '2') {s++; goto HACK;}
     for (;;) {
@@ -102,121 +96,77 @@ FL_EXPORT void fl_frame(Fl_Boxtype b, int x, int y, int w, int h,
   }
 }
 
-Fl_Boxtype_ fl_up_box = {
-  fl_frame, "2AAUWMMTT", &fl_down_box, 2,2,4,4, true
-};
-static Fl_Boxtype_Definer up("up", fl_up_box);
-
-Fl_Boxtype_ fl_down_box = {
-  fl_frame, "2UWMMPPAA", &fl_down_box, 2,2,4,4, true
-};
-static Fl_Boxtype_Definer down("down", fl_down_box);
-
-const Fl_Boxtype_ fl_thin_box = {
-  fl_frame, "2HHWW", &fl_thin_down_box, 1,1,2,2,true
-};
-static Fl_Boxtype_Definer thin("thin", fl_thin_box);
-
-const Fl_Boxtype_ fl_thin_down_box = {
-  fl_frame, "2WWHH", &fl_thin_down_box, 1,1,2,2,true
-};
-static Fl_Boxtype_Definer thindown("thin down", fl_thin_down_box);
-
-const Fl_Boxtype_ fl_engraved_box = {
-  fl_frame, "HHWWWWHH", &fl_engraved_box, 2,2,4,4,true
-};
-static Fl_Boxtype_Definer engraved("engraved", fl_engraved_box);
-
-const Fl_Boxtype_ fl_embossed_box = {
-  fl_frame, "WWHHHHWW", &fl_engraved_box, 2,2,4,4,true
-};
-static Fl_Boxtype_Definer embossed("embossed", fl_embossed_box);
-
-////////////////////////////////////////////////////////////////
-
-static void border_draw(Fl_Boxtype, int x, int y, int w, int h,
-			Fl_Color c, Fl_Flags f)
+void Fl_Frame_Box::inset(int& x, int& y, int& w, int& h) const
 {
-  if (!Fl_Style::draw_boxes_inactive) f &= (~FL_INACTIVE);
-  fl_color(fl_inactive(FL_DARK3, f));
-  fl_rect(x, y, w, h);
-  if (!(f & FL_FRAME_ONLY)) {
-    fl_color(c);
-    fl_rectf(x+1, y+1, w-2, h-2);
-  }
+  int i = strlen(data)/2;
+  w -= i; h -= i;
+  i /= 2;
+  x += i; y += i;
 }
-const Fl_Boxtype_ fl_border_box = {
-  border_draw, 0, &fl_border_box, 1,1,2,2,true
-};
-static Fl_Boxtype_Definer border("border", fl_border_box);
+
+int Fl_Frame_Box::fills_rectangle() const {return true;}
+
+const char* fl_up_box_revert = "2AAUWMMTT";
+Fl_Frame_Box fl_up_box("up", fl_up_box_revert, &fl_down_box);
+
+const char* fl_down_box_revert = "2UWMMPPAA";
+Fl_Frame_Box fl_down_box("down", fl_down_box_revert, &fl_down_box);
+
+const Fl_Frame_Box fl_thin_box("thin", "2HHWW", &fl_thin_down_box);
+
+const Fl_Frame_Box fl_thin_down_box("thin down", "2WWHH", &fl_thin_down_box);
+
+const Fl_Frame_Box fl_engraved_box("engraved", "HHWWWWHH", &fl_engraved_box);
+
+const Fl_Frame_Box fl_embossed_box("embossed", "WWHHHHWW", &fl_engraved_box);
+
+const Fl_Frame_Box fl_border_box("border", "AAAA", &fl_border_box);
 
 ////////////////////////////////////////////////////////////////
 // Deprecated "frame" values:
 
-static void bf_draw(Fl_Boxtype, int x, int y, int w, int h,
-		    Fl_Color c, Fl_Flags)
+void Fl_Border_Frame::draw(int x, int y, int w, int h,
+			   Fl_Color c, Fl_Flags) const
 {
   fl_color(c); fl_rect(x, y, w, h);
 }
-const Fl_Boxtype_ fl_border_frame = {
-  bf_draw, 0, &fl_border_frame, 1,1,2,2, false
-};
-static Fl_Boxtype_Definer borderframe("border frame", fl_border_frame);
-
-////////////////////////////////////////////////////////////////
-// draw a box when down, but be flat when up:
-
-void fl_flatx(Fl_Boxtype b, int x, int y, int w, int h,
-	      Fl_Color c, Fl_Flags f)
-{
-
-  if (f & FL_VALUE)
-    b->down->draw(x,y,w,h,c,f&~FL_VALUE);
-  else
-    FL_FLAT_BOX->draw(x,y,w,h,c,f);
+void Fl_Border_Frame::inset(int& x, int& y, int& w, int& h) const {
+  x++; y++; w-=2; h-=2;
 }
+int Fl_Border_Frame::fills_rectangle() const {return false;}
 
-const Fl_Boxtype_ fl_flat_up_box = {
-  fl_flatx, 0, FL_THIN_UP_BOX, 2,2,4,4, true
-};
-static Fl_Boxtype_Definer flatup("flat up", fl_flat_up_box);
-
-const Fl_Boxtype_ fl_flat_down_box = {
-  fl_flatx, 0, FL_THIN_DOWN_BOX, 2,2,4,4, true
-};
-static Fl_Boxtype_Definer flatdown("flat down", fl_flat_down_box);
+const Fl_Border_Frame fl_border_frame("border frame");
 
 ////////////////////////////////////////////////////////////////
-// draw a box (which may itself be up/down) when highlighted:
+// draw a box only when highlighted or value:
 
-void fl_highlightx(Fl_Boxtype b, int x, int y, int w, int h,
-		   Fl_Color c, Fl_Flags f)
+void Fl_Highlight_Box::draw(int x, int y, int w, int h,
+			    Fl_Color c, Fl_Flags f) const
 {
-
   if (f & (FL_HIGHLIGHT|FL_VALUE))
-    b->down->draw(x,y,w,h,c,f);
+    down->draw(x,y,w,h,c,f);
   else
-    FL_FLAT_BOX->draw(x,y,w,h,c,f);
+    Fl_Flat_Box::draw(x,y,w,h,c,f);
+}
+void Fl_Highlight_Box::inset(int& x, int& y, int& w, int& h) const {
+  down->inset(x,y,w,h);
+}
+int Fl_Highlight_Box::fills_rectangle() const {
+  return down->fills_rectangle();
 }
 
-const Fl_Boxtype_ fl_highlight_up_box = {
-  fl_highlightx, 0, FL_THIN_UP_BOX, 2,2,4,4, true
-};
-static Fl_Boxtype_Definer highlightup("highlight up", fl_highlight_up_box);
+const Fl_Highlight_Box fl_highlight_up_box("highlight up", &fl_thin_box);
 
-const Fl_Boxtype_ fl_highlight_down_box = {
-  fl_highlightx, 0, FL_THIN_DOWN_BOX, 2,2,4,4, true
-};
-static Fl_Boxtype_Definer highlightdown("highlight down", fl_highlight_down_box);
+const Fl_Highlight_Box fl_highlight_down_box("highlight down", &fl_thin_down_box);
 
 const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
-  for (Fl_Boxtype_Definer* p = Fl_Boxtype_Definer::first; p; p = p->next)
-    if (!strcasecmp(name, p->name)) return p->boxtype;
+  for (const Fl_Boxtype_* p = Fl_Boxtype_::first; p; p = p->next)
+    if (p->name && !strcasecmp(name, p->name)) return p;
   return 0;
 }
 
-Fl_Boxtype_Definer* Fl_Boxtype_Definer::first = 0;
+const Fl_Boxtype_* Fl_Boxtype_::first = 0;
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.24 1999/11/18 19:32:10 carl Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.25 1999/11/19 10:06:51 bill Exp $".
 //

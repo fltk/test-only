@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.21 1999/10/31 02:54:39 bill Exp $"
+// "$Id: Fl_Input.cxx,v 1.22 1999/11/19 10:06:47 bill Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -38,8 +38,8 @@
 
 void Fl_Input::draw() {
   if (damage() & FL_DAMAGE_ALL) draw_frame();
-  Fl_Input_::drawtext(x()+box()->dx(), y()+box()->dy(),
-		      w()-box()->dw(), h()-box()->dh());
+  int X = x(); int Y = y(); int W = w(); int H = h(); box()->inset(X,Y,W,H);
+  Fl_Input_::drawtext(X,Y,W,H);
 }
 
 // kludge so shift causes selection to extend:
@@ -332,9 +332,8 @@ int Fl_Input::handle(int event) {
     return 1;
 
   }
-  return Fl_Input_::handletext(event,
-			       x()+box()->dx(), y()+box()->dy(),
-			       w()-box()->dw(), h()-box()->dh());
+  int X = x(); int Y = y(); int W = w(); int H = h(); box()->inset(X,Y,W,H);
+  return Fl_Input_::handletext(event,X,Y,W,H);
 }
 
 Fl_Input::Fl_Input(int x, int y, int w, int h, const char *l)
@@ -344,5 +343,5 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.21 1999/10/31 02:54:39 bill Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.22 1999/11/19 10:06:47 bill Exp $".
 //

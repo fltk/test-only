@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.14 1999/10/27 08:40:54 bill Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.15 1999/11/19 10:06:46 bill Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -184,8 +184,10 @@ int Flcc_HueBox::handle(int e) {
     is = c->s();
   case FL_DRAG: {
     double Xf, Yf, H, S;
-    Xf = (Fl::event_x()-x()-box()->dx())/double(w()-box()->dw());
-    Yf = (Fl::event_y()-y()-box()->dy())/double(h()-box()->dh());
+    int ix = x(); int iy = y(); int iw = w(); int ih = h();
+    box()->inset(ix, iy, iw, ih);
+    Xf = (Fl::event_x()-ix)/double(iw);
+    Yf = (Fl::event_y()-iy)/double(ih);
     tohs(Xf, Yf, H, S);
     if (fabs(H-ih) < 3*6.0/w()) H = ih;
     if (fabs(S-is) < 3*1.0/h()) S = is;
@@ -199,15 +201,16 @@ int Flcc_HueBox::handle(int e) {
 
 static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
   Flcc_HueBox* v = (Flcc_HueBox*)vv;
-  int iw = v->w()-v->box()->dw();
-  double Yf = double(Y)/(v->h()-v->box()->dh());
+  int x1 = v->x(); int y1 = v->y(); int w1 = v->w(); int h1 = v->h();
+  v->box()->inset(x1,y1,w1,h1);
+  double Yf = double(Y)/h1;
 #ifdef UPDATE_HUE_BOX
   const double V = ((Fl_Color_Chooser*)(v->parent()))->v();
 #else
   const double V = 1.0;
 #endif
   for (int x = X; x < X+W; x++) {
-    double Xf = double(x)/iw;
+    double Xf = double(x)/w1;
     double H,S; tohs(Xf,Yf,H,S);
     double r,g,b;
     Fl_Color_Chooser::hsv2rgb(H,S,V,r,g,b);
@@ -219,10 +222,8 @@ static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
 
 void Flcc_HueBox::draw() {
   if (damage()&FL_DAMAGE_ALL) draw_frame();
-  int x1 = x()+box()->dx();
-  int y1 = y()+box()->dy();
-  int w1 = w()-box()->dw();
-  int h1 = h()-box()->dh();
+  int x1 = x(); int y1 = y(); int w1 = w(); int h1 = h();
+  box()->inset(x1,y1,w1,h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_clip(x1+px,y1+py,6,6);
   fl_draw_image(generate_image, this, x1, y1, w1, h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
@@ -251,7 +252,9 @@ int Flcc_ValueBox::handle(int e) {
     iv = c->v();
   case FL_DRAG: {
     double Yf;
-    Yf = 1-(Fl::event_y()-y()-box()->dy())/double(h()-box()->dh());
+    int x1 = x(); int y1 = y(); int w1 = w(); int h1 = h();
+    box()->inset(x1,y1,w1,h1);
+    Yf = 1-(Fl::event_y()-y1)/double(h1);
     if (fabs(Yf-iv)<(3*1.0/h())) Yf = iv;
     if (c->hsv(c->h(),c->s(),Yf)) c->do_callback();
     } return 1;
@@ -263,7 +266,9 @@ int Flcc_ValueBox::handle(int e) {
 static double tr, tg, tb;
 static void generate_vimage(void* vv, int X, int Y, int W, uchar* buf) {
   Flcc_ValueBox* v = (Flcc_ValueBox*)vv;
-  double Yf = 255*(1.0-double(Y)/(v->h()-v->box()->dh()));
+  int x1 = v->x(); int y1 = v->y(); int w1 = v->w(); int h1 = v->h();
+  v->box()->inset(x1,y1,w1,h1);
+  double Yf = 255*(1.0-double(Y)/h1);
   uchar r = uchar(tr*Yf+.5);
   uchar g = uchar(tg*Yf+.5);
   uchar b = uchar(tb*Yf+.5);
@@ -276,10 +281,8 @@ void Flcc_ValueBox::draw() {
   if (damage()&FL_DAMAGE_ALL) draw_frame();
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
   c->hsv2rgb(c->h(),c->s(),1.0,tr,tg,tb);
-  int x1 = x()+box()->dx();
-  int y1 = y()+box()->dy();
-  int w1 = w()-box()->dw();
-  int h1 = h()-box()->dh();
+  int x1 = x(); int y1 = y(); int w1 = w(); int h1 = h();
+  box()->inset(x1,y1,w1,h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_clip(x1,y1+py,w1,6);
   fl_draw_image(generate_vimage, this, x1, y1, w1, h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
@@ -508,5 +511,5 @@ int fl_color_chooser(const char* name, Fl_Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.14 1999/10/27 08:40:54 bill Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.15 1999/11/19 10:06:46 bill Exp $".
 //

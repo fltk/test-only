@@ -1,5 +1,5 @@
 //
-// "$Id: fl_oval_box.cxx,v 1.9 1999/11/14 08:42:51 bill Exp $"
+// "$Id: fl_oval_box.cxx,v 1.10 1999/11/19 10:06:54 bill Exp $"
 //
 // Oval box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,39 +30,40 @@
 #include <FL/Fl_Boxtype.H>
 #include <FL/fl_draw.H>
 
-static void oval_flat_draw(Fl_Boxtype, int x, int y, int w, int h,
-			   Fl_Color c, Fl_Flags)
-{
+void Fl_Oval_Flat_Box::draw(int x, int y, int w, int h,
+			    Fl_Color c, Fl_Flags) const {
   fl_color(c);
   fl_pie(x, y, w, h, 0, 360);
 }
-const Fl_Boxtype_ fl_oval_flat_box = {
-  oval_flat_draw, 0, 0,0,0,0,
-};
+void Fl_Oval_Flat_Box::inset(int&,int&,int&,int&) const {}
+int Fl_Oval_Flat_Box::fills_rectangle() const {return false;}
+const Fl_Oval_Flat_Box fl_oval_flat_box(0);
 
-static void oval_draw(Fl_Boxtype, int x, int y, int w, int h,
-		      Fl_Color c, Fl_Flags f)
-{
+void Fl_Oval_Box::draw(int x, int y, int w, int h,
+		       Fl_Color c, Fl_Flags f) const {
   fl_color(c);
   fl_pie(x, y, w-1, h-1, 0, 360);
   fl_color((f&FL_INACTIVE) ? FL_INACTIVE_COLOR : FL_NO_COLOR);
   fl_arc(x, y, w, h, 0, 360);
 }
-const Fl_Boxtype_ fl_oval_box = {
-  oval_draw, 0, 0, 1,1,2,2,
-};
-
-static void oval_shadow_draw(Fl_Boxtype b, int x, int y, int w, int h,
-			     Fl_Color c, Fl_Flags f)
-{
-  w-=3; h-=3;
-  oval_flat_draw(b, x+3, y+3, w, h, FL_DARK3, FL_NO_FLAGS);
-  oval_draw(b, x, y, w, h, c, f);
+void Fl_Oval_Box::inset(int& x,int& y,int& w,int& h) const {
+  x++; y++; w-=2; h-=2;
 }
-const Fl_Boxtype_ fl_oval_shadow_box = {
-  oval_shadow_draw, 0, 0, 1,1,2+3,2+3,
-};
+int Fl_Oval_Box::fills_rectangle() const {return false;}
+const Fl_Oval_Box fl_oval_box(0);
+
+void Fl_Oval_Shadow_Box::draw(int x, int y, int w, int h,
+			      Fl_Color c, Fl_Flags f) const {
+  w-=3; h-=3;
+  fl_oval_flat_box.draw(x+3, y+3, w, h, FL_DARK3, FL_NO_FLAGS);
+  fl_oval_box.draw(x, y, w, h, c, f);
+}
+void Fl_Oval_Shadow_Box::inset(int& x,int& y,int& w,int& h) const {
+  x++; y++; w-=5; h-=5;
+}
+int Fl_Oval_Shadow_Box::fills_rectangle() const {return false;}
+const Fl_Oval_Shadow_Box fl_oval_shadow_box(0);
 
 //
-// End of "$Id: fl_oval_box.cxx,v 1.9 1999/11/14 08:42:51 bill Exp $".
+// End of "$Id: fl_oval_box.cxx,v 1.10 1999/11/19 10:06:54 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Output.cxx,v 1.20 1999/11/10 15:45:38 carl Exp $"
+// "$Id: Fl_Output.cxx,v 1.21 1999/11/19 10:06:49 bill Exp $"
 //
 // Output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,16 +32,15 @@
 
 void Fl_Output::draw() {
   if (damage() & FL_DAMAGE_ALL) draw_frame();
-  Fl_Input_::drawtext(x()+box()->dx(), y()+box()->dy(),
-		      w()-box()->dw(), h()-box()->dh());
+  int X = x(); int Y = y(); int W = w(); int H = h(); box()->inset(X,Y,W,H);
+  Fl_Input_::drawtext(X,Y,W,H);
 }
 
 int Fl_Output::handle(int event) {
   if (event == FL_ENTER) return 1; // For tooltips
   if (event == FL_FOCUS) return 0;
-  return Fl_Input_::handletext(event,
-			       x()+box()->dx(), y()+box()->dy(),
-			       w()-box()->dw(), h()-box()->dh());
+  int X = x(); int Y = y(); int W = w(); int H = h(); box()->inset(X,Y,W,H);
+  return Fl_Input_::handletext(event,X,Y,W,H);
 }
 
 #include <FL/Fl_Input.H>
@@ -52,5 +51,5 @@ Fl_Output::Fl_Output(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Output.cxx,v 1.20 1999/11/10 15:45:38 carl Exp $".
+// End of "$Id: Fl_Output.cxx,v 1.21 1999/11/19 10:06:49 bill Exp $".
 //
