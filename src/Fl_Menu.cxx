@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.24 1999/03/31 02:53:04 carl Exp $"
+// "$Id: Fl_Menu.cxx,v 1.25 1999/03/31 05:56:52 carl Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -310,7 +310,7 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
     }
     if (m->labelcolor()) clear_overlay();
   }
-  itemheight += itemheight/2; // Add extra spacing.  This seems OK.
+  itemheight += itemheight/6 + 6; // Add extra spacing.  This seems OK.
   if (selected >= 0 && !Wp) X -= W/2;
   int BW = Fl::box_dx(box());
   W += hotKeysw+2*BW+7;
@@ -870,5 +870,5 @@ Fl_Color Fl_Menu_Item::down_labelcolor() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.24 1999/03/31 02:53:04 carl Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.25 1999/03/31 05:56:52 carl Exp $".
 //
