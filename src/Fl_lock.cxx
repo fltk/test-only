@@ -108,19 +108,19 @@ void Fl::awake(void* msg) {
 extern void (*fl_lock_function)();
 extern void (*fl_unlock_function)();
 
-static CRITICAL_SECTION cs;
-
-static unsigned long main_thread;
+static DWORD main_thread;
 
 static void unlock_function() {
-  main_thread = ???;
   LeaveCriticalSection(&cs);
 }
 
 void Fl::lock() {
   EnterCriticalSection(&cs);
-  fl_lock_function = lock;
-  fl_unlock_function = unlock_function;
+  if (!main_thread) {
+    fl_lock_function = lock;
+    fl_unlock_function = unlock_function;
+    main_thread = GetCurrentThreadId();
+  }
 }
 
 void Fl::unlock() {
