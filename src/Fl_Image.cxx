@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.43 2004/07/06 05:49:30 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.44 2004/07/15 16:14:15 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,38 @@
 #include <fltk/events.h>
 #include <fltk/draw.h>
 #include <fltk/x.h>
+
+#if !USE_X11 && defined(_WIN32)
+// Extra bitblt functions:
+#define NOTSRCAND       0x00220326 /* dest = (NOT source) AND dest */
+#define NOTSRCINVERT    0x00990066 /* dest = (NOT source) XOR dest */
+#define SRCORREVERSE    0x00DD0228 /* dest = source OR (NOT dest) */
+#define SRCNAND         0x007700E6 /* dest = NOT (source AND dest) */
+#define MASKPAT         0x00E20746 /* dest = (src & pat) | (!src & dst) */
+#define COPYFG          0x00CA0749 /* dest = (pat & src) | (!pat & dst) */
+#define COPYBG          0x00AC0744 /* dest = (!pat & src) | (pat & dst) */
+#endif
+
+/*
+We support both "old" 1-bit alpha in a seperate object, and "new"
+8-bit alpha merged in with the rgb data. This is stored in the following
+way:
+
+if (rgb) {
+  if (alpha == rgb) {
+    rgb = 4-channel 8-bit image, do not use alpha independently
+  } else if (alpha) {
+    rgb = 3-channel 8-bit image, alpha = 1-bit image
+  } else {
+    rgb = 3-channel image, pretend alpha == 1 everywhere
+  }
+} else if (alpha) {
+  act like rgb==0, alpha = 1-bit alpha image (bitmap)
+} else {
+  image has not been set, don't draw anything
+}
+
+*/
 
 using namespace fltk;
 
@@ -97,15 +129,15 @@ void Image::setsize(int w, int h) {
 void Image::destroy_cache() {
 #if USE_X11
   stop_drawing((XWindow)rgb);
-  if (alpha) {XFreePixmap(xdisplay, (Pixmap)alpha); alpha = 0;}
+  if (alpha && alpha!=rgb) {XFreePixmap(xdisplay, (Pixmap)alpha); alpha = 0;}
   if (rgb) {XFreePixmap(xdisplay, (Pixmap)rgb); rgb = 0;}
 #elif defined(_WIN32)
   stop_drawing((HBITMAP)rgb);
-  if (alpha) {DeleteObject((HBITMAP)alpha); alpha = 0;}
+  if (alpha && alpha != rgb) {DeleteObject((HBITMAP)alpha); alpha = 0;}
   if (rgb) {DeleteObject((HBITMAP)rgb); rgb = 0;}
 #elif defined(__APPLE__)
   stop_drawing((GWorldPtr)rgb);
-  if (alpha) {DisposeGWorld((GWorldPtr)alpha); alpha = 0;}
+  if (alpha && alpha != rgb) {DisposeGWorld((GWorldPtr)alpha); alpha = 0;}
   if (rgb) {DisposeGWorld((GWorldPtr)rgb); rgb = 0;}
 #else
 #error
@@ -180,10 +212,10 @@ void Image::make_current() {
 void Image::set_alpha_bitmap(const uchar* bitmap, int w, int h) {
   if (!rgb) {w_ = w; h_ = h;}
 #if USE_X11
-  if (alpha) XFreePixmap(xdisplay, (Pixmap)alpha);
+  if (alpha && alpha != rgb) XFreePixmap(xdisplay, (Pixmap)alpha);
   alpha = (void*)XCreateBitmapFromData(xdisplay, xwindow, (char*)bitmap, (w+7)&-8, h);
 #elif defined(_WIN32)
-  if (alpha) DeleteObject((HBITMAP)alpha);
+  if (alpha && alpha != rgb) DeleteObject((HBITMAP)alpha);
   // this won't work when the user changes display mode during run or
   // has two screens with differnet depths
   static uchar hiNibble[16] =
@@ -343,11 +375,12 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
   XSetClipOrigin(xdisplay, gc, 0, 0);
   fl_restore_clip();
 #elif defined(_WIN32)
-# if 0
+# if 1
   // Old version, are we sure this does not work?
+  SetTextColor(dc, 0);
   HDC new_dc = CreateCompatibleDC(dc);
   SelectObject(new_dc, (HBITMAP)alpha);
-  BitBlt(dc, x, y, w, h, new_dc, src_x, src_y, SRCAND);
+  BitBlt(dc, x, y, w, h, new_dc, src_x, src_y, NOTSRCAND);
   SelectObject(new_dc, (HBITMAP)rgb);
   BitBlt(dc, x, y, w, h, new_dc, src_x, src_y, SRCPAINT);
   DeleteDC(new_dc);
@@ -367,16 +400,14 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
   // WAS: This can probably be fixed by having set_bitmap_alpha mangle
   // the rgb buffer to do this "premultiply". However I really suspect
   // there is a direct method of doing this...
-  setcolor(0);
-  setbrush();
+  //setbrush();
   SetTextColor(dc, 0);
   HDC new_dc = CreateCompatibleDC(dc);
-  HDC new_dc2 = CreateCompatibleDC(dc);
   SelectObject(new_dc, (HBITMAP)alpha);
+  BitBlt(dc, x, y, w, h, new_dc, src_x, src_y, NOTSRCAND);
+  HDC new_dc2 = CreateCompatibleDC(dc);
   SelectObject(new_dc2, (HBITMAP)rgb);
   BitBlt(new_dc2, 0, 0, w_, h_, new_dc, 0, 0, SRCAND); // This should be done only once for performance
-  // secret bitblt code found in old MSWindows reference manual:
-  BitBlt(dc, x, y, w, h, new_dc, src_x, src_y, 0xE20746L);
   BitBlt(dc, x, y, w, h, new_dc2, src_x, src_y, SRCPAINT);
   DeleteDC(new_dc2);
   DeleteDC(new_dc);
@@ -446,39 +477,38 @@ void Image::fill(int X, int Y, int W, int H, int src_x, int src_y) const
   XFillRectangle(xdisplay, xwindow, gc, x, y, w, h);
   XSetFillStyle(xdisplay, gc, FillSolid);
 #elif defined(_WIN32)
-  HDC tempdc = CreateCompatibleDC(dc);
 #ifdef USE_ALPHABLEND
-  // This code is probably wrong! It is irrelevant if rgb is here, this
-  // code probably belongs in the "over" method...
-  if (rgb) {
-    if (alpha) {
-      SelectObject(tempdc, (HGDIOBJ)alpha);	
-      SetTextColor(dc, 0); // VP : seems necessary at least under win95
-      setbrush();
-      // secret bitblt code found in old MSWindows reference manual:
-      BitBlt(dc, x, y, w, h, tempdc, src_x, src_y, 0xE20746L);
-      SelectObject(tempdc, (HGDIOBJ)rgb);	
-      BitBlt(dc, x, y, w, h, tempdc, src_x, src_y, SRCPAINT);
-    } else {
-      fillrect(X,Y,w,h);
-      SelectObject(tempdc, (HGDIOBJ)rgb);	
-      BLENDFUNCTION m_bf;
-      m_bf.BlendOp = AC_SRC_OVER;
-      m_bf.BlendFlags = 0;
-      m_bf.SourceConstantAlpha = 100;
-      m_bf.AlphaFormat = 0;
-      AlphaBlend(dc, x,y,w,h, tempdc, src_x,src_y,w, h,m_bf); 
-    }
-  } else 
+  if (alpha == rgb) {
+    HDC tempdc = CreateCompatibleDC(dc);
+    SelectObject(tempdc, (HGDIOBJ)rgb);	
+    BLENDFUNCTION m_bf;
+    m_bf.BlendOp = AC_SRC_OVER;
+    m_bf.BlendFlags = 0;
+    m_bf.SourceConstantAlpha = 100;
+    m_bf.AlphaFormat = 0;
+    AlphaBlend(dc, x,y,w,h, tempdc, src_x,src_y,w, h,m_bf); 
+    DeleteDC(tempdc);
+    return;
+  }
 #endif
-    {
-      SelectObject(tempdc, (HGDIOBJ)alpha);	
-      SetTextColor(dc, 0); // VP : seems necessary at least under win95
-      setbrush();
-      // secret bitblt code found in old MSWindows reference manual:
-      BitBlt(dc, x, y, w, h, tempdc, src_x, src_y, 0xE20746L);
-    }
-  DeleteDC(tempdc);
+#if 0
+  HBRUSH brush = CreatePatternBrush((HBITMAP)alpha);
+  int ox = x-src_x; if (ox < 0) ox += w_;
+  int oy = y-src_y; if (oy < 0) oy += h_;
+  SetBrushOrgEx(dc, ox, oy, 0);
+  SetTextColor(dc, current_xpixel);
+  HRGN rgn = CreateRectRgn(x,y,x+w,y+h);
+  FillRgn(dc, rgn, brush);
+  DeleteObject(rgn);
+  DeleteObject(brush);
+#else
+  SetTextColor(dc, 0); // VP : seems necessary at least under win95
+  setbrush();
+  HDC new_dc = CreateCompatibleDC(dc);
+  SelectObject(new_dc, (HBITMAP)alpha);
+  BitBlt(dc, x, y, w, h, new_dc, src_x, src_y, MASKPAT);
+  DeleteDC(new_dc);
+#endif
 #elif defined(__APPLE__)
   // OSX version nyi
 #else
@@ -535,5 +565,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.43 2004/07/06 05:49:30 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.44 2004/07/15 16:14:15 spitzak Exp $".
 //
