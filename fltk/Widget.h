@@ -188,13 +188,13 @@ public:
   uchar layout_damage() const	{ return layout_damage_; }
   void	layout_damage(uchar c)	{ layout_damage_ = c; }
 
-  void	make_current() const	;
   void	add_timeout(float)	;
   void	repeat_timeout(float)	;
   void  remove_timeout()	;
 
   Flags current_flags() const	;
   Flags current_flags_highlight() const	;
+  void	make_current() const	;
   void	draw_background() const	;
   void  draw_frame() const	;
   void  draw_box() const	;

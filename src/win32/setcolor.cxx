@@ -210,7 +210,7 @@ static void free_color(Color) {
 // Thanks to Michael Sweet @ Easy Software Products for this
 
 HPALETTE
-fl_select_palette(void)
+fl_select_palette(HDC dc)
 {
   static char beenhere;
   if (!beenhere) {

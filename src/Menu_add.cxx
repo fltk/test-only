@@ -331,11 +331,10 @@ Widget* Menu::replace(const char* label, void* data) {
   Does find(l) and then deletes that widget.
 */
 
-#if 0
 /*! This is a Forms (and SGI GL library) compatable add function, it
   adds many menu items, with '|' seperating the menu items, and tab
   seperating the menu item names from an optional shortcut string. */
-Widget* Menu::add(const char *str) {
+Widget* Menu::add_many(const char *str) {
   int bufsize = strlen(str)+1;
   ARRAY(char, buf, bufsize);
   Widget* r = 0;
@@ -358,7 +357,6 @@ Widget* Menu::add(const char *str) {
   }
   return r;
 }
-#endif
 
 //
 // End of "$Id$".

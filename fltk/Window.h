@@ -94,9 +94,6 @@ public:
   void fullscreen(const Monitor&);
   void fullscreen_off(int,int,int,int);
 
-  static const Window *current() {return current_;}
-  void make_current() const;
-
   static void default_callback(Window*, void* v);
 
   virtual int handle(int);
@@ -110,9 +107,11 @@ public:
 
   void borders( Rectangle *r ) const;
 
+  static const Window* drawing_window() {return drawing_window_;}
+  static const Window* drawing_window_;
+
 protected:
   virtual void create();
-  static const Window *current_;
 
 private:
 

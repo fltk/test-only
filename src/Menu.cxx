@@ -1,12 +1,6 @@
-//
 // "$Id$"
 //
-// The Menu base class is used by browsers, choices, menu bars
-// menu buttons, and perhaps other things.  It is simply an Group
-// but provides functions to select and identify one of the widgets
-// in the hierarchy below it and do that widget's callback directly.
-//
-// Copyright 1998-2000 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -24,7 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #include <fltk/events.h>
 #include <fltk/Menu.h>
@@ -183,13 +176,12 @@ static List default_list;
 
 /*! \class fltk::Menu
 
-  All widgets that display a (possibly hierarchial) list of similar
-  items are subclassed off of fltk::Menu. This includes scrolling
-  browsers, pop-up and pull-down menus and menubars, and the
-  Windows-style "combo box".
-
-  This is a subclass of Group and each item is a child Widget, usually
-  Item widgets, or ItemGroup widgets to make a hierarchy.
+  The Menu base class is used by Browser, Choice, MenuBar, PopupMenu,
+  ComboBox, and other widgets.  It is simply a Group and each item is
+  a child Widget, but it provides functions to select and identify one
+  of the widgets in the hierarchy below it and do that widget's
+  callback directly, and functions to create and add Item and
+  ItemGroup widgets to a hierarchy.
 
   A Menu can take a pointer to a List object, which allows the
   user program to dynamically provide the items as they are

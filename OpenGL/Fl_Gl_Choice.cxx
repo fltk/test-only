@@ -202,7 +202,15 @@ GlChoice* GlChoice::find(int mode) {
 
 static GLContext first_context;
 
-#ifdef _WIN32
+#if USE_X11
+
+GLContext fltk::create_gl_context(XVisualInfo* vis) {
+  GLContext context = glXCreateContext(xdisplay, vis, first_context, 1);
+  if (!first_context) first_context = context;
+  return context;
+}
+
+#elif defined(_WIN32)
 
 GLContext fltk::create_gl_context(const Window* window, const GlChoice* g, int layer) {
   CreatedWindow* i = CreatedWindow::find(window);
@@ -224,23 +232,6 @@ GLContext fltk::create_gl_context(const Window* window, const GlChoice* g, int l
   context = aglCreateContext(g->pixelformat, first_context);
   if (!context) return 0;
   if (!first_context) first_context = context;
-  if ( window->parent() ) {
-    Rect wrect; GetWindowPortBounds( xid(window), &wrect );
-    GLint rect[] = { 
-        window->x(), wrect.bottom-window->h()-window->y(), 
-        window->w(), window->h() };
-    aglSetInteger( (GLContext)context, AGL_BUFFER_RECT, rect );
-    aglEnable( (GLContext)context, AGL_BUFFER_RECT );
-  }
-  aglSetDrawable( context, GetWindowPort( xid(window) ) );
-  return context;
-}
-
-#else
-
-GLContext fltk::create_gl_context(XVisualInfo* vis) {
-  GLContext context = glXCreateContext(xdisplay, vis, first_context, 1);
-  if (!first_context) first_context = context;
   return context;
 }
 
@@ -249,62 +240,57 @@ GLContext fltk::create_gl_context(XVisualInfo* vis) {
 GLContext fl_current_glcontext;
 static const Window* cached_window;
 
-void fltk::set_gl_context(const Window* w, GLContext context) {
-#ifdef __APPLE__
-  static int px=0, py=0, pw=0, ph=0;
-#endif
-  if (context != fl_current_glcontext || w != cached_window
-#ifdef __APPLE__
-     || w->w()!=pw || w->h()!=ph || w->x()!=px || w->y()!=py
-#endif
-     ) {
+void fltk::set_gl_context(const Window* window, GLContext context) {
+  if (context != fl_current_glcontext || window != cached_window) {
     fl_current_glcontext = context;
-    cached_window = w;
-#ifdef _WIN32
-    wglMakeCurrent(CreatedWindow::find(w)->dc, context);
+    cached_window = window;
+#if USE_X11
+    glXMakeCurrent(xdisplay, xid(window), context);
+#elif defined(_WIN32)
+    wglMakeCurrent(CreatedWindow::find(window)->dc, context);
 #elif defined(__APPLE__)
   // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
-  px = w->x(); py = w->y(); ph = w->h(); pw = w->w();
-  if ( w->parent() ) { //: resize our GL buffer rectangle
-    //++ this gets called a lot if we have more than one GL buffer... .
-    Rect wrect; GetWindowPortBounds( xid(w), &wrect );
-    GLint rect[] = { w->x(), wrect.bottom-w->h()-w->y(), w->w(), w->h() };
-    aglSetInteger( context, AGL_BUFFER_RECT, rect );
-    aglEnable( context, AGL_BUFFER_RECT );
-  }
-  aglSetDrawable(context, GetWindowPort( xid(w) ) );
-  aglSetCurrentContext(context);
-#else
-    glXMakeCurrent(xdisplay, xid(w), context);
+    if ( window->parent() ) { //: resize our GL buffer rectangle
+      //++ this gets called a lot if we have more than one GL buffer... .
+      fltk::Rectangle r(*window);
+      for (Widget* p = window->parent(); p->parent(); p = p->parent())
+	r.move(p->x(), p->y());
+      Rect wrect; GetWindowPortBounds( xid(window), &wrect );
+      GLint rect[] = { r.x(), wrect.bottom-wrect.top-r.b(), r.w(), r.h() };
+      aglSetInteger( context, AGL_BUFFER_RECT, rect );
+      aglEnable( context, AGL_BUFFER_RECT );
+    }
+    aglSetDrawable(context, GetWindowPort( xid(window) ) );
+    aglSetCurrentContext(context);
 #endif
   }
 }
 
 void fltk::no_gl_context() {
-  fl_current_glcontext = 0;
-  cached_window = 0;
-#ifdef _WIN32
+#if USE_X11
+  glXMakeCurrent(xdisplay, 0, 0);
+#elif defined(_WIN32)
   wglMakeCurrent(0, 0);
 #elif defined(__APPLE__)
   // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
-  aglSetCurrentContext(0);
-#else
-  glXMakeCurrent(xdisplay, 0, 0);
+  if (fl_current_glcontext) aglSetCurrentContext(0);
 #endif
+  fl_current_glcontext = 0;
+  cached_window = 0;
 }
 
 void fltk::delete_gl_context(GLContext context) {
   if (fl_current_glcontext == context) no_gl_context();
   if (context != first_context) {
-#ifdef _WIN32
+#if USE_X11
+    glXDestroyContext(xdisplay, context);
+#elif defined(_WIN32)
     wglDeleteContext(context);
 #elif defined(__APPLE__)
     // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
     aglSetCurrentContext( NULL );
     aglSetDrawable( context, NULL );
     aglDestroyContext( context );
-#else
-    glXDestroyContext(xdisplay, context);
 #endif
   }
 }

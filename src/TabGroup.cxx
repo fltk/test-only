@@ -394,14 +394,19 @@ void TabGroup::draw() {
 
   // draw the tabs if needed:
   if (damage() & (DAMAGE_VALUE|DAMAGE_ALL)) {
+    if ( damage() & DAMAGE_ALL ) {
+      draw_tab_background();
+    }
     int w[128];
     int selected = tab_positions(p,w);
     int i;
 
-    for (i=0; i<selected; i++)
+    for (i=0; i<selected; i++) {
       draw_tab(p[i], p[i+1], w[i], H, child(i), LEFT);
-    for (i=children()-1; i > selected; i--)
+    }
+    for (i=children()-1; i > selected; i--) {
       draw_tab(p[i], p[i+1], w[i], H, child(i), RIGHT);
+    }
     if (v) {
       i = selected;
       draw_tab(p[i], p[i+1], w[i], H, child(i), SELECTED);
@@ -424,7 +429,6 @@ void TabGroup::draw() {
     draw_tab_background();
     pop_clip();
 #else
-    draw_tab_background();
     if (v) draw_child(*v);
 #endif
   } else { // redraw the child

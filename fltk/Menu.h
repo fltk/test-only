@@ -1,5 +1,5 @@
 //
-// "$Id: Menu.h,v 1.12 2005/01/24 08:07:06 spitzak Exp $"
+// "$Id$"
 //
 // Base class for MenuBar, Choice, Browser. This manages a set
 // of child Item widgets, and handles a "List" object that can
@@ -95,6 +95,7 @@ public:
   Widget* replace(const char*, unsigned shortcut, Callback*, void* = 0, int = 0);
   Widget* insert(int n, const char*, unsigned shortcut, Callback*, void* = 0, int = 0);
   Widget* add(const char*, void* = 0);
+  Widget* add_many(const char*);
   Widget* replace(const char*, void* = 0);
   Widget* insert(int n, const char*, void* = 0);
 
@@ -153,5 +154,5 @@ private:
 #endif
 
 //
-// End of "$Id: Menu.h,v 1.12 2005/01/24 08:07:06 spitzak Exp $".
+// End of "$Id$".
 //

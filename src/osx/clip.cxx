@@ -71,7 +71,7 @@ void fl_restore_clip() {
     GrafPtr port = GetWindowPort( quartz_window );
     if ( port ) { 
       RgnHandle portClip = NewRgn();
-      CopyRgn( CreatedWindow::find(Window::current())->subRegion, 
+      CopyRgn( CreatedWindow::find(Window::drawing_window())->subRegion, 
                portClip ); // changed
       if ( r )
         SectRgn( portClip, r, portClip );
@@ -162,8 +162,8 @@ bool fltk::not_clipped(const Rectangle& r1) {
   Rectangle r(r1); transform(r);
   // first check against the window so we get rid of coordinates
   // outside the 16-bit range the X/Win32 calls take:
-  if (r.r() <= 0 || r.b() <= 0 || r.x() >= Window::current()->w()
-      || r.y() >= Window::current()->h()) return false;
+  if (r.r() <= 0 || r.b() <= 0 || r.x() >= Window::drawing_window()->w()
+      || r.y() >= Window::drawing_window()->h()) return false;
   Region region = rstack[rstackptr];
   if (!region) return true;
   Rect rect;
@@ -192,9 +192,9 @@ int fltk::intersect_with_clip(Rectangle& r) {
   // Test against the window to get 16-bit values:
   int ret = 1;
   if (r.x() < 0) {r.set_x(0); ret = 2;}
-  int t = Window::current()->w(); if (r.r() > t) {r.set_r(t); ret = 2;}
+  int t = Window::drawing_window()->w(); if (r.r() > t) {r.set_r(t); ret = 2;}
   if (r.y() < 0) {r.set_y(0); ret = 2;}
-  t = Window::current()->h(); if (r.b() > t) {r.set_b(t); ret = 2;}
+  t = Window::drawing_window()->h(); if (r.b() > t) {r.set_b(t); ret = 2;}
   // check for total clip (or for empty rectangle):
   if (r.empty()) return 0;
   RgnHandle rr = NewRgn();

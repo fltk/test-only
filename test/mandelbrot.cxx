@@ -1,5 +1,5 @@
 //
-// "$Id: mandelbrot.cxx,v 1.15 2004/01/06 06:43:03 spitzak Exp $"
+// "$Id$"
 //
 // Mandelbrot set demo for the Fast Light Tool Kit (FLTK).
 //
@@ -43,6 +43,7 @@ static void window_callback(Fl_Widget*, void*) {exit(0);}
 
 int main(int argc, char **argv) {
   mbrot.make_window();
+  mbrot.window->clear_double_buffer(); // otherwise make_current does not work
   mbrot.d->X = -.75;
   mbrot.d->scale = 2.5;
   mbrot.update_label();
@@ -165,6 +166,7 @@ int Drawing_Area::handle(int event) {
     } else if (!julia) {
       if (!jbrot.d) {
 	jbrot.make_window();
+	jbrot.window->clear_double_buffer(); // otherwise make_current does not work
 	jbrot.d->julia = 1;
 	jbrot.d->X = 0;
 	jbrot.d->Y = 0;
@@ -180,8 +182,9 @@ int Drawing_Area::handle(int event) {
       jbrot.d->new_display();
     }
     return 1;
+  default:
+    return Widget::handle(event);
   }
-  return 0;
 }
 
 void Drawing_Area::new_display() {
@@ -201,5 +204,5 @@ void Drawing_Area::layout() {
 }
 
 //
-// End of "$Id: mandelbrot.cxx,v 1.15 2004/01/06 06:43:03 spitzak Exp $".
+// End of "$Id$".
 //

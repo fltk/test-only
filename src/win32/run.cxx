@@ -1362,7 +1362,9 @@ static inline int ms2fltk(int vk, LPARAM lParam) {
 }
 
 #if USE_COLORMAP
-extern HPALETTE fl_select_palette(void); // in color_win32.C
+extern HPALETTE fl_select_palette(HDC dc); // in color_win32.C
+#else
+static inline bool fl_select_palette(HDC) {return false;}
 #endif
 
 static Window* resize_from_system;
@@ -1720,28 +1722,22 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 #if USE_COLORMAP
   case WM_QUERYNEWPALETTE :
-    window->make_current();
-    if (fl_select_palette()) InvalidateRect(hWnd, NULL, FALSE);
+    {
+      CreatedWindow* i = CreatedWindow::find(window);
+      if (fl_select_palette(i->dc)) InvalidateRect(hWnd, NULL, FALSE);
+    }
     break;
 
   case WM_PALETTECHANGED:
     if ((HWND)wParam != hWnd) {
-      window->make_current();
-      if (fl_select_palette()) UpdateColors(dc);
+      CreatedWindow* i = CreatedWindow::find(window);
+      if (fl_select_palette(i->dc)) UpdateColors(i->dc);
     }
     break;
 #endif
 
   case WM_CREATE :
     tablet_open(hWnd, 0);
-#if USE_COLORMAP
-#if 0
-    // This seems to be called directly by CreateWindowEx so I can't
-    // have stored the windowid yet and thus cannot find the Window!
-    window->make_current();
-    fl_select_palette();
-#endif
-#endif
     break;
 
   case WM_DISPLAYCHANGE:
@@ -2142,20 +2138,24 @@ void Window::label(const char *name,const char *iname) {
 //
 // ImageDraw creates a temporary DC. See Image.cxx
 
+const Window *Window::drawing_window_;
 HDC fltk::dc;
 
-const Window *Window::current_;
-
-void Window::make_current() const {
-//    if (this == in_wm_paint)
-//      dc = paint.hdc;
-//    else
-  dc = i->dc;
-  current_ = this;
-#if USE_COLORMAP
-  fl_select_palette();
-#endif // USE_COLORMAP
+void Widget::make_current() const {
+  int x = 0;
+  int y = 0;
+  const Widget* widget = this;
+  while (!widget->is_window()) {
+    x += widget->x();
+    y += widget->y();
+    widget = widget->parent();
+  }
+  const Window* window = (const Window*)widget;
+  Window::drawing_window_ = window;
+  dc = CreatedWindow::find( window )->dc;
+  fl_select_palette(dc);
   load_identity();
+  translate(x,y);
 }
 
 HDC fl_bitmap_dc;
@@ -2168,9 +2168,7 @@ void fltk::draw_into(HBITMAP bitmap) {
   }
   SelectObject(fl_bitmap_dc, bitmap);
   dc = fl_bitmap_dc;
-#if USE_COLORMAP
-  fl_select_palette();
-#endif // USE_COLORMAP
+  fl_select_palette(dc);
   load_identity();
 }
 
@@ -2195,6 +2193,9 @@ HDC fltk::getDC() {
 // Window update, double buffering, and overlay:
 
 void Window::flush() {
+
+  drawing_window_ = this;
+
   unsigned char damage = this->damage();
 
   if (this->double_buffer() || i->overlay) {
@@ -2217,15 +2218,11 @@ void Window::flush() {
       SetBkMode(i->bdc, TRANSPARENT);
     }
 
-    current_ = this;
-
     // draw the back buffer if it needs anything:
     if (damage || i->backbuffer_bad) {
       // set the graphics context to draw into back buffer:
       dc = i->bdc;
-#if USE_COLORMAP
-      fl_select_palette();
-#endif // USE_COLORMAP
+      fl_select_palette(dc);
       load_identity();
       if ((damage & DAMAGE_ALL) || i->backbuffer_bad) {
 	set_damage(DAMAGE_ALL);
@@ -2269,7 +2266,9 @@ void Window::flush() {
   }  else {
 
     // Single buffer drawing
-    make_current();
+    dc = i->dc;
+    fl_select_palette(dc);
+    load_identity();
     if (damage & ~DAMAGE_EXPOSE) {
       set_damage(damage & ~DAMAGE_EXPOSE);
       draw();

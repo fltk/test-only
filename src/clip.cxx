@@ -1,10 +1,6 @@
-//
 // "$Id$"
 //
-// The fltk graphics clipping stack.  These routines are always
-// linked into an fltk program.
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -22,7 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #include <config.h>
 
@@ -85,7 +80,8 @@ static inline void pushregion(Region r) {
 
 int fl_clip_state_number = 0; // used by code that needs to update clip regions
 
-/*! Return the current region as a system-specific structure. You must
+/**
+  Return the current region as a system-specific structure. You must
   include <fltk/x.h> to use this. Returns null if there is no clipping.
 */
 Region fltk::clip_region() {
@@ -121,23 +117,24 @@ void fl_restore_clip() {
 #endif
 }
 
-/*! Replace the top of the clip stack. */
-void fltk::clip_region(Region r) {
+/** Replace the top of the clip stack. */
+void fltk::clip_region(Region region) {
   Region oldr = rstack[rstackptr];
 #if USE_X11
   if (oldr) XDestroyRegion(oldr);
 #elif defined(_WIN32)
   if (oldr) DeleteObject(oldr);
 #endif
-  rstack[rstackptr] = r;
+  rstack[rstackptr] = region;
   fl_restore_clip();
 }
 
-/*!
-  Pushes the \e intersection of the current region and this rectangle
-  onto the clip stack. */
-void fltk::push_clip(const Rectangle& r1) {
-  Rectangle r(r1); transform(r);
+/**
+  Pushes the \e intersection of the current region and \a rectangle
+  onto the clip stack.
+*/
+void fltk::push_clip(const Rectangle& rectangle) {
+  Rectangle r(rectangle); transform(r);
   Region region;
   if (r.empty()) {
 #if USE_X11
@@ -168,16 +165,16 @@ void fltk::push_clip(const Rectangle& r1) {
   fl_restore_clip();
 }
 
-/*!
-  Remove the rectangle from the current clip region, thus making it a
+/**
+  Remove \a rectangle from the current clip region, thus making it a
   more complex shape. This does not push the stack, it just replaces
   the top of it.
 
   Some graphics backends (OpenGL and Cairo, at least) do not support
   non-rectangular clip regions. This call does nothing on those.
 */
-void fltk::clipout(const Rectangle& r1) {
-  Rectangle r(r1); transform(r);
+void fltk::clipout(const Rectangle& rectangle) {
+  Rectangle r(rectangle); transform(r);
   if (r.empty()) return;
 #if USE_X11
   Region current = rstack[rstackptr];
@@ -198,7 +195,7 @@ void fltk::clipout(const Rectangle& r1) {
   fl_restore_clip();
 }
 
-/*!
+/**
   Pushes an empty clip region on the stack so nothing will be
   clipped. This lets you draw outside the current clip region. This should
   only be used to temporarily ignore the clip region to draw into
@@ -209,7 +206,7 @@ void fltk::push_no_clip() {
   fl_restore_clip();
 }
 
-/*! 
+/**
   Restore the previous clip region. You must call fltk::pop_clip()
   exactly once for every time you call fltk::push_clip(). If you return to
   FLTK with the clip stack not empty unpredictable results occur.
@@ -229,15 +226,15 @@ void fltk::pop_clip() {
 ////////////////////////////////////////////////////////////////
 // clipping tests:
 
-/*! Returns true if any or all of the Rectangle is inside the
-  clip region.
+/**
+  Returns true if any or all of \a rectangle is inside the clip region.
 */
-bool fltk::not_clipped(const Rectangle& r1) {
-  Rectangle r(r1); transform(r);
+bool fltk::not_clipped(const Rectangle& rectangle) {
+  Rectangle r(rectangle); transform(r);
   // first check against the window so we get rid of coordinates
   // outside the 16-bit range the X/Win32 calls take:
-  if (r.r() <= 0 || r.b() <= 0 || r.x() >= Window::current()->w()
-      || r.y() >= Window::current()->h()) return false;
+  if (r.r() <= 0 || r.b() <= 0 || r.x() >= Window::drawing_window()->w()
+      || r.y() >= Window::drawing_window()->h()) return false;
   Region region = rstack[rstackptr];
   if (!region) return true;
 #if USE_X11
@@ -249,7 +246,7 @@ bool fltk::not_clipped(const Rectangle& r1) {
 #endif
 }
 
-/*!
+/**
   Intersect a \e transform()'d rectangle with the current clip
   region and change it to the smaller rectangle that surrounds (and
   probably equals) this intersection area.
@@ -269,14 +266,14 @@ int fltk::intersect_with_clip(Rectangle& r) {
   // If no clip region, claim it is not clipped. This is wrong because the
   // rectangle may be clipped by the window itself, but this test would
   // break the current draw-image-into-buffer code. This needs to be fixed
-  // by replacing Window::current() below:
+  // by replacing Window::drawing_window() below:
   if (!region) return 1;
   // Test against the window to get 16-bit values:
   int ret = 1;
   if (r.x() < 0) {r.set_x(0); ret = 2;}
-  int t = Window::current()->w(); if (r.r() > t) {r.set_r(t); ret = 2;}
+  int t = Window::drawing_window()->w(); if (r.r() > t) {r.set_r(t); ret = 2;}
   if (r.y() < 0) {r.set_y(0); ret = 2;}
-  t = Window::current()->h(); if (r.b() > t) {r.set_b(t); ret = 2;}
+  t = Window::drawing_window()->h(); if (r.b() > t) {r.set_b(t); ret = 2;}
   // check for total clip (or for empty rectangle):
   if (r.empty()) return 0;
 #if USE_X11

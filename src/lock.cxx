@@ -248,7 +248,7 @@ void fltk::lock() {
     fl_lock_function = lock_function;
     fl_unlock_function = unlock;
 #if _DO_INIT
-    pthread_mutex_init(&fltk_mutex, &attrib);
+    pthread_mutex_init(&fltk_mutex, &Mutex_attrib);
 #endif
   }
   lock_function();

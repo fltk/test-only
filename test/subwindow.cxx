@@ -1,5 +1,5 @@
 //
-// "$Id: subwindow.cxx,v 1.15 2002/12/10 02:01:06 easysw Exp $"
+// "$Id$"
 //
 // Nested window test program for the Fast Light Tool Kit (FLTK).
 //
@@ -30,79 +30,81 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/Fl_Toggle_Button.h>
-#include <fltk/Fl_Menu_Button.h>
-#include <fltk/Fl_Box.h>
-#include <fltk/Fl_Input.h>
-#include <fltk/Fl_Input_Browser.h>
+#include <fltk/run.h>
+#include <fltk/Window.h>
+#include <fltk/ToggleButton.h>
+#include <fltk/PopupMenu.h>
+#include <fltk/Input.h>
+#include <fltk/InputBrowser.h>
+#include <fltk/events.h>
+using namespace fltk;
 
 #define DEBUG 1
 
-class testwindow : public Fl_Window {
+class testwindow : public Window {
   int handle(int);
   void draw();
 public:
-  testwindow(Fl_Boxtype b,int x,int y,const char *l)
-    : Fl_Window(x,y,l) {box(b);}
-  testwindow(Fl_Boxtype b,int x,int y,int w,int h,const char *l)
-    : Fl_Window(x,y,w,h,l) {box(b);}
+  testwindow(Box* b,int x,int y,const char *l)
+    : Window(x,y,l) {box(b);}
+  testwindow(Box* b,int x,int y,int w,int h,const char *l)
+    : Window(x,y,w,h,l) {box(b);}
 };
 
 void testwindow::draw() {
 #ifdef DEBUG
   printf("%s : draw\n",label());
 #endif
-  Fl_Window::draw();
+  Window::draw();
 }
 
-class EnterExit : public Fl_Box {
+class EnterExit : public Widget {
   uchar oldcolor;
   int handle(int);
 public:
-  EnterExit(int x, int y, int w, int h, const char *l) : Fl_Box(FL_BORDER_BOX,x,y,w,h,l) {}
+  EnterExit(int x, int y, int w, int h, const char *l) :
+    Widget(x,y,w,h,l) {box(BORDER_BOX);}
 };
 
 int EnterExit::handle(int e) {
-  if (e == FL_ENTER) {oldcolor = color(); color(FL_RED); redraw(); return 1;}
-  else if (e == FL_LEAVE) {color(oldcolor); redraw(); return 1;}
-  else if (e == FL_MOVE) return 1;
+  if (e == ENTER) {oldcolor = color(); color(RED); redraw(); return 1;}
+  else if (e == LEAVE) {color(oldcolor); redraw(); return 1;}
+  else if (e == MOVE) return 1;
   else return 0;
 }
 
 #ifdef DEBUG
 const char *eventnames[] = {
 "zero",
-"FL_PUSH",
-"FL_RELEASE",
-"FL_ENTER",
-"FL_LEAVE",
-"FL_DRAG",
-"FL_FOCUS",
-"FL_UNFOCUS",
-"FL_KEY",
-"FL_KEYUP",
-"FL_MOVE",
-"FL_SHORTCUT",
-"FL_ACTIVATE",
-"FL_DEACTIVATE",
-"FL_SHOW",
-"FL_HIDE",
-"FL_VIEWCHANGE",
-"FL_PASTE",
-"FL_SELECTIONCLEAR",
+"PUSH",
+"RELEASE",
+"ENTER",
+"LEAVE",
+"DRAG",
+"FOCUS",
+"UNFOCUS",
+"KEY",
+"KEYUP",
+"MOVE",
+"SHORTCUT",
+"ACTIVATE",
+"DEACTIVATE",
+"SHOW",
+"HIDE",
+"VIEWCHANGE",
+"PASTE",
+"SELECTIONCLEAR",
 };
 #endif
 
-Fl_Menu_Button* popup;
+PopupMenu* popup;
 
 int testwindow::handle(int e) {
 #ifdef DEBUG
-  if (e != FL_MOVE) printf("%s : %s\n",label(),eventnames[e]);
+  if (e != MOVE) printf("%s : %s\n",label(),eventnames[e]);
 #endif
-  if (Fl_Window::handle(e)) return 1;
-  //  if (e==FL_PUSH) return popup->handle(e);
+  if (Window::handle(e)) return 1;
+  //  if (e==PUSH) return popup->handle(e);
   return 0;
 }
 
@@ -146,40 +148,51 @@ const char* bigmess =
 
 int main(int, char **) {
   testwindow *window =
-    new testwindow(FL_UP_BOX,400,400,"outer");
-  (void) new Fl_Toggle_Button(310,310,80,80,"&outer");
-  (void) new EnterExit(10,310,80,80,"enterexit");
-  (void) new Fl_Input(150,310,150,25,"input:");
-  { Fl_Input_Browser *o = new Fl_Input_Browser(5,150,80,25,"menu&1");
-    o->type(Fl_Input_Browser::NONEDITABLE_INDENTED);
-    o->add(bigmess);
-    o->value(o->child(0)->label());
-  }
-//  (new Fl_Menu_Button(5,150,80,25,"menu&1"))->add(bigmess);
+    new testwindow(UP_BOX,400,400,"outer");
+  window->begin();
+//  (new Menu_Button(5,150,80,25,"menu&1"))->add_many(bigmess);
   testwindow *subwindow =
-    new testwindow(FL_DOWN_BOX,100,100,200,200,"inner");
-  (void) new Fl_Toggle_Button(110,110,80,80,"&inner");
+    new testwindow(DOWN_BOX,100,100,200,200,"inner");
+  subwindow->color(YELLOW);
+  subwindow->begin();
+  (new PopupMenu(50,50,80,25,"menu&2"))->add_many(bigmess);
+  (void) new Input(45,80,150,25,"input:");
   (void) new EnterExit(10,110,80,80,"enterexit");
-  (new Fl_Menu_Button(50,50,80,25,"menu&2"))->add(bigmess);
-  (void) new Fl_Input(45,80,150,25,"input:");
+  (void) new ToggleButton(110,110,80,80,"&inner");
   subwindow->resizable(subwindow);
   window->resizable(subwindow);
   subwindow->end();
-  (new Fl_Box(FL_NO_BOX,0,0,400,100,
-	     "A child Fl_Window with children of it's own may "
-	     "be useful for imbedding controls into a GL or display "
-	     "that needs a different visual.  There are bugs with the "
-	     "origins being different between drawing and events, "
-	     "which I hope I have solved."
-	     )) -> set_flag(FL_ALIGN_WRAP);
-  popup = new Fl_Menu_Button(0,0,400,400);
-  popup->type(Fl_Menu_Button::POPUP3);
-  popup->add("This|is|a popup|menu");
+  subwindow->tooltip(
+"This is a child fltk::Window. This may be necessary for imbedding "
+"controls that need a different X visual, OpenGL (using fltk::GlWindow), "
+"or to use the system's clipping to the edge of the window. This program "
+"tests for bugs in event handling and redrawing of these windows.\n\n"
+
+"Things to check:\n"
+" Outer border always draws exactly around yellow area.\n"
+" enterexit widgets turn red when pointed to by mouse, even if this "
+"happens when you exit a popup menu or move from an overlapping "
+"window belonging to another application, or raise this window.\n"
+" focus can move between both windows and you can type to both "
+"input widgets.");
+  (void) new EnterExit(10,310,80,80,"enterexit");
+  (void) new Input(150,310,150,25,"input:");
+  (void) new ToggleButton(310,310,80,80,"&outer");
+#if 0
+  { InputBrowser *o = new InputBrowser(5,150,80,25,"menu&1");
+    o->type(InputBrowser::NONEDITABLE_INDENTED);
+    o->add_many(bigmess);
+    o->value(o->child(0)->label());
+  }
+#endif
+  popup = new PopupMenu(0,0,400,400);
+  popup->type(PopupMenu::POPUP3);
+  popup->add_many("This|is|a popup|menu");
   window->end();
   window->show();
-  return Fl::run();
+  return fltk::run();
 }
 
 //
-// End of "$Id: subwindow.cxx,v 1.15 2002/12/10 02:01:06 easysw Exp $".
+// End of "$Id$".
 //

@@ -39,7 +39,7 @@ using namespace fltk;
 // One of these is made for each combination of size + encoding:
 struct FontSize {
   FontSize *next;	// linked list for a single Font
-  char *q_name;
+  const char *q_name;
   int size, minsize, maxsize;
   short ascent, descent, q_width;
   ATSFontRef font;

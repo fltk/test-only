@@ -109,7 +109,6 @@ bool GlWindow::mode(int m) {
 #define NON_LOCAL_CONTEXT 0x80000000
 
 void GlWindow::make_current() {
-  current_ = this;
   if (!context_) {
     mode_ &= ~NON_LOCAL_CONTEXT;
     context_ = create_gl_context(this, gl_choice);
@@ -287,6 +286,9 @@ void GlWindow::flush() {
 void GlWindow::layout() {
   if (layout_damage() & LAYOUT_WH) {
     valid(0);
+#ifdef __APPLE__
+    no_gl_context(); // because the BUFFER_RECT may change
+#endif
 #ifndef _WIN32
     if (!resizable() && overlay && overlay != this)
       ((GlWindow*)overlay)->resize(0,0,w(),h());

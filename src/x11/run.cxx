@@ -2024,27 +2024,44 @@ void Window::label(const char *name, const char *iname) {
 ////////////////////////////////////////////////////////////////
 // Drawing context
 
-const Window *Window::current_;
-
-/*! Sets things up so that the drawing functions in <fltk/draw.h> will
-  go into this window. This is useful for incremental update of
-  windows, such as in an idle callback, which will make your program
-  behave much better if it draws a slow graphic. <i>This call does not
-  work for DoubleBufferWindow!</i> */
-void Window::make_current() const {
-  current_ = this;
-  draw_into(i->frontbuffer ? i->frontbuffer : i->xid);
-}
-
-/*! \fn static Window* Window::current()
-  Returns the last window make_current() was called on. */
-
+/*! \fn const Window* Window::drawing_window()
+  Returns the Window currently being drawn into. To set this use
+  make_current(). It will already be set when draw() is called.
+*/
+const Window *Window::drawing_window_;
 XWindow fltk::xwindow;
 GC fltk::gc;
 #if USE_CAIRO
 cairo_t* fltk::cc;
 #endif
 
+/** Make the fltk drawing functions draw into this widget.
+    The transformation is set so 0,0 is at the upper-left corner of
+    the widget and 1 unit equals one pixel. The transformation stack
+    is empied, and all other graphics state is left in unknown
+    settings.
+
+    The equivalent of this is already done before a Widget::draw()
+    function is called.  The only reason to call this is for
+    incremental updating of widgets without using redraw().
+    This will crash if the widget is not in a currently shown() window.
+    Also this may not work correctly for double-buffered windows.
+*/
+void Widget::make_current() const {
+  int x = 0;
+  int y = 0;
+  const Widget* widget = this;
+  while (!widget->is_window()) {
+    x += widget->x();
+    y += widget->y();
+    widget = widget->parent();
+  }
+  const Window* window = (const Window*)widget;
+  Window::drawing_window_ = window;
+  CreatedWindow* i = CreatedWindow::find(window);
+  draw_into(i->frontbuffer ? i->frontbuffer : i->xid);
+  translate(x,y);
+}
 
 /*! Fltk can draw into any X window or pixmap that uses the fltk::xvisual.
   Calling this will make all drawing functions go there. Before you destroy
@@ -2123,6 +2140,8 @@ static bool can_xdbe() { // figure out use_xdbe.
 #endif
 
 void Window::flush() {
+  drawing_window_ = this;
+
   unsigned char damage = this->damage();
 
   if (this->double_buffer() || i->overlay) {
@@ -2131,7 +2150,6 @@ void Window::flush() {
     bool eraseoverlay = i->overlay || (damage&DAMAGE_OVERLAY);
     if (eraseoverlay) damage &= ~DAMAGE_OVERLAY;
 
-    current_ = this;
     XWindow frontbuffer = i->frontbuffer ? i->frontbuffer : i->xid;
 
     if (!i->backbuffer) { // we need to create back buffer
@@ -2230,7 +2248,7 @@ void Window::flush() {
   }  else {
 
     // Single buffer drawing
-    make_current();
+    draw_into(i->frontbuffer ? i->frontbuffer : i->xid);
     if (damage & ~DAMAGE_EXPOSE) {
       set_damage(damage & ~DAMAGE_EXPOSE);
       draw();

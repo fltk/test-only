@@ -83,26 +83,6 @@ LabelType* const fltk::NO_LABEL = &noLabel;
 ////////////////////////////////////////////////////////////////
 // Drawing methods (designed to be called from a draw() implementation):
 
-/** Change the graphics state so we are ready to draw into the widget.
-    The transformation is set so 0,0 is at the upper-left corner of
-    the widget and 1 unit equals one pixel. The transformation stack
-    is empied, and all other graphics state is left in unknown
-    settings.  This will already be done before draw() is called on a
-    widget.
-*/
-void Widget::make_current() const {
-  int x = 0;
-  int y = 0;
-  const Widget* widget = this;
-  while (!widget->is_window()) {
-    x += widget->x();
-    y += widget->y();
-    widget = widget->parent();
-  }
-  ((const Window*)widget)->make_current();
-  translate(x,y);
-}
-
 /** Draw the widget's box() such that it fills the entire area of the
     widget. If the box is not rectangluar, this also draws the area
     of the parent widget that is exposed. The box drawing routine is

@@ -102,7 +102,7 @@ static const Fl_Menu_Item* add(Group* g, const Fl_Menu_Item* m,void* data) {
 void Fl_Menu_Item::add_to(Menu* menu, void* data) const {
   ::add(menu, this, data);
 }
-    
+
 /* Emulate old popup and test-shortcut methods on Fl_Menu_Item arrays: */
 #include <fltk/PopupMenu.h>
 #include <fltk/events.h>

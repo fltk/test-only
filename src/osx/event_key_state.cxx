@@ -48,11 +48,11 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   { 12, 'Q' }, { 15, 'R'  }, {  1, 'S'  }, { 17, 'T'  }, 
   { 32, 'U' }, {  9, 'V'  }, { 13, 'W'  }, {  7, 'X'  }, 
   { 16, 'Y' }, {  6, 'Z'  }, 
-  { 33, '[' }, { 30, ']' }, { 50, '`' },  { 42, '|' },
-  { 51, BackSpaceKey }, { 48, TabKey }, { 36, ReturnKey }, { 127, PauseKey },
+  { 33, '[' }, { 42, '\\'}, { 30, ']' }, { 50, '`' },  { 42, '|' },
+  { 51, BackSpaceKey }, { 48, TabKey }, { 36, ReturnKey }, { 113, PauseKey },
   { 107, ScrollLockKey }, { 53, EscapeKey }, { 115, HomeKey }, {123, LeftKey},
   { 126, UpKey }, { 124, RightKey }, { 125, DownKey }, { 116, PageUpKey },
-  { 121, PageDownKey },  { 119, EndKey }, { 113, PrintKey}, {127, InsertKey},
+  { 121, PageDownKey },  { 119, EndKey }, { 105, PrintKey}, {114, InsertKey},
   { 127, fltk::MenuKey }, { 114, HelpKey }, { 71, NumLockKey }, 
   { 76, KeypadEnter }, { 67, MultiplyKey }, { 69, AddKey}, { 78, SubtractKey},
   { 65, DecimalKey }, { 75, DivideKey }, 
@@ -66,7 +66,7 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   { 59, LeftCtrlKey }, { 59, RightCtrlKey }, 
   { 57, CapsLockKey },
   { 55, LeftMetaKey }, { 55, RightMetaKey },
-  { 58, LeftAltKey }, { 58, RightAltKey },
+  { 58, LeftAltKey }, { 58, RightAltKey }, {117, DeleteKey }
 };
 
 static unsigned short fltk2mac(unsigned fltk) {

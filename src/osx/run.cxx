@@ -516,11 +516,15 @@ static OSErr QuitAppleEventHandler( const AppleEvent *appleEvt, AppleEvent* repl
   return noErr;
 }
 
-// forward definition of functions in this file
-static void handleUpdateEvent( WindowPtr xid );
+// Damage all the child windows as well as this one...
+//+++ verify port to FLTK2
+static void recursive_expose(CreatedWindow* i) {
+  i->wait_for_expose = false;
+  i->expose(Rectangle(i->window->w(), i->window->h()));
+  for (CreatedWindow* c = i->children; c; c = c->brother) recursive_expose(c);
+}
 
-/**
- * Carbon Window handler
+/* Carbon Window handler
  * This needs to be linked into all new window event handlers
  */
 //+++ verify port to FLTK2
@@ -537,17 +541,17 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
   case kEventWindowBoundsChanging:
     break;
   case kEventWindowDrawContent:
-    handleUpdateEvent( xid( window ) );
-    ret = noErr;
+    recursive_expose(CreatedWindow::find( window ));
+    breakMacEventLoop();
     break;
   case kEventWindowBoundsChanged: {
     Rect currentBounds;
     GetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, NULL, sizeof(Rect), NULL, &currentBounds );
     int X = currentBounds.left, W = currentBounds.right-X;
     int Y = currentBounds.top, H = currentBounds.bottom-Y;
-    if (window->resize(X, Y, W, H)) resize_from_system = window;
-    if (window->layout_damage()&LAYOUT_WH) {
-      handleUpdateEvent( xid( window ) );
+    if (window->resize(X, Y, W, H)) {
+      resize_from_system = window;
+      if (window->layout_damage()&LAYOUT_WH) fltk::flush();
     }
     break; }
   case kEventWindowShown: {
@@ -771,9 +775,9 @@ static unsigned short macKeyLookUp[128] =
     Keypad6, Keypad7, 0, Keypad8, Keypad9, 0, 0, 0,
 
     F5Key, F6Key, F7Key, F3Key, F8Key, F9Key, 0, F11Key,
-    0, 0, PrintKey, ScrollLockKey, 0, F10Key, fltk::MenuKey, F12Key,
+    0, PrintKey, 0, ScrollLockKey, 0, F10Key, fltk::MenuKey, F12Key,
 
-    0, PauseKey, HelpKey, HomeKey, PageUpKey, DeleteKey, F4Key, EndKey,
+    0, PauseKey, InsertKey, HomeKey, PageUpKey, DeleteKey, F4Key, EndKey,
     F2Key, PageDownKey, F1Key, LeftKey, RightKey, DownKey, UpKey, 0,
 };
 
@@ -810,7 +814,7 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
     if (!sym) sym = keyCode|0x8000;
     e_keysym = sym;
     if ( keyCode==0x4c ) key=0x0d;
-    if ( ((e_state & NUMLOCK) && sym >= Keypad0 && sym <= KeypadLast) ||
+    if ( sym >= Keypad0 && sym <= KeypadLast ||
 	 (sym&0xff00) == 0 ||
 	 sym == BackSpaceKey ||
 	 sym == TabKey ||
@@ -977,33 +981,6 @@ void fltk::get_mouse(int &x, int &y)
   LocalToGlobal( &loc );
   x = loc.h;
   y = loc.v;
-}
-
-// Damage all the child windows as well as this one...
-//+++ verify port to FLTK2
-static void recursive_expose(CreatedWindow* i) {
-  i->wait_for_expose = false;
-  i->expose(Rectangle(i->window->w(), i->window->h()));
-  for (CreatedWindow* c = i->children; c; c = c->brother) recursive_expose(c);
-}
-
-/**
- * Handle a request from the system to update the window.
- * Like the windows version this can't be done in any easy way because
- * it interferes with the damage bits so that every widget would need
- * two draw() functions, one for expose events, and one for other
- * drawing. So like Windows I try to fake X behavior by retrieving
- * the damage region (assummed to be the whole window now) and store
- * that region as though an expose() event came in, then get wait()
- * to return so flush() will get called.
- */
-//+++ verify port to FLTK2
-void handleUpdateEvent( WindowPtr xid ) 
-{
-  Window *window = find( xid );
-  CreatedWindow *i = CreatedWindow::find( window );
-  recursive_expose(i);
-  breakMacEventLoop();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1183,6 +1160,11 @@ void Window::borders( fltk::Rectangle *r ) const {
 void Window::layout() {
   if (parent()) {
     // child windows are done entirely by us
+    if (i) for (Widget* p = parent(); ; p = p->parent())
+      if (p->is_window()) {
+	CreatedWindow::find((Window*)p)->need_new_subRegion = true;
+	break;
+      }
   } else if (this == resize_from_system) {
     // Ignore changes that came from the system
     resize_from_system = 0;
@@ -1305,8 +1287,6 @@ void Window::create()
     x->next = CreatedWindow::first;
     CreatedWindow::first = x;
 
-    // if (resizable()) DrawGrowIcon(x->xid); this should be in flush()?
-
     { // Install Carbon Event handlers 
       OSStatus ret;
       EventHandlerUPP mousewheelHandler = NewEventHandlerUPP( carbonMousewheelHandler ); // will not be disposed by Carbon...
@@ -1385,7 +1365,7 @@ void Window::label(const char *name, const char * iname) {
 ////////////////////////////////////////////////////////////////
 // Drawing context
 
-const Window *Window::current_;
+const Window *Window::drawing_window_;
 static CGContextRef prev_gc = 0;
 static WindowPtr prev_window = 0;
 
@@ -1410,35 +1390,49 @@ void fltk::stop_drawing(CGImageRef) {
  * make all drawing go into this window (called by subclass flush() impl.)
  */
 //+++ verify port to FLTK2
-void Window::make_current() const
-{
+
+void Widget::make_current() const {
+  int x = 0;
+  int y = 0;
+  const Widget* widget = this;
+  while (!widget->is_window()) {
+    x += widget->x();
+    y += widget->y();
+    widget = widget->parent();
+  }
+  const Window* window = (const Window*)widget;
   release_quartz_context();
-  current_ = this;
+  Window::drawing_window_ = window;
   // Find the root window and our position in it:
   int X = 0;
   int Y = 0;
-  const Window* root = this;
-  for (const Widget* o = this; ; o = o->parent()) {
+  const Window* root = window;
+  for (const Widget* o = window; ; o = o->parent()) {
     if (!o->parent()) {root = (Window*)o; break;}
     X += o->x();
     Y += o->y();
   }
-  quartz_window = root->i->xid;
+  quartz_window = xid(root);
   SetPort(GetWindowPort(quartz_window));
   SetOrigin(-X, -Y);
   // We force a clip region to handle child windows. To speed things up
   // we only recalculate the clip region when children are shown, hidden,
   // or moved or resized.
+  CreatedWindow* i = CreatedWindow::find(window);
   if (i->need_new_subRegion) {
     i->need_new_subRegion = false;
     if (i->subRegion) DisposeRgn(i->subRegion);
     i->subRegion = NewRgn();
-    SetRectRgn(i->subRegion, 0, 0, w(), h());
+    SetRectRgn(i->subRegion, 0, 0, window->w(), window->h());
     for (CreatedWindow* cx = i->children; cx; cx = cx->brother) {
       RgnHandle r = NewRgn();
       Window* cw = cx->window;
       int x = cw->x();
       int y = cw->y();
+      for (Widget* p = cw->parent(); p != this; p = p->parent()) {
+	x += p->x();
+	y += p->y();
+      }
       SetRectRgn(r, x, y, x+cw->w(), y+cw->h());
       DiffRgn(i->subRegion, r, i->subRegion);
       DisposeRgn(r);
@@ -1446,8 +1440,8 @@ void Window::make_current() const
     for (CreatedWindow* cx = i->brother; cx; cx = cx->brother) {
       RgnHandle r = NewRgn();
       Window* cw = cx->window;
-      int x = X+cw->x()-this->x();
-      int y = Y+cw->y()-this->y();
+      int x = X+cw->x()-window->x();
+      int y = Y+cw->y()-window->y();
       SetRectRgn(r, x, y, x+cw->w(), y+cw->h());
       DiffRgn(i->subRegion, r, i->subRegion);
       DisposeRgn(r);
@@ -1455,9 +1449,12 @@ void Window::make_current() const
   }
   SetPortClipRegion( GetWindowPort(quartz_window), i->subRegion );
   QDBeginCGContext(GetWindowPort(quartz_window), &i->gc);
-  quartz_gc = root->i->gc = i->gc;
+  quartz_gc = CreatedWindow::find(root)->gc = i->gc;
   CGContextSaveGState(quartz_gc);
   fill_quartz_context();
+
+  load_identity();
+  translate(x,y);
 }
 
 // helper function to manage the current CGContext fl_gc
@@ -1529,8 +1526,8 @@ void fltk::end_quartz_image() {
 
 //+++ verify port to FLTK2
 void Window::flush() {
-  unsigned char damage = this->damage();
   make_current();
+  unsigned char damage = this->damage();
   if (damage & ~DAMAGE_EXPOSE) {
     if (damage & DAMAGE_OVERLAY) damage = DAMAGE_ALL;
     set_damage(damage & ~DAMAGE_EXPOSE);
@@ -1542,6 +1539,7 @@ void Window::flush() {
     set_damage(DAMAGE_EXPOSE); draw();
     clip_region(0);
   }
+  if (minw < maxw || minh < maxh) DrawGrowIcon(i->xid);
   if (i->gc) {
     CGContextFlush(i->gc);
   }
@@ -1553,8 +1551,6 @@ void Window::free_backbuffer() {}
 bool fltk::enable_tablet_events() {
   return false;
 }
-
-
 
 ////////////////////////////////////////////////////////////////
 // Cut & paste.

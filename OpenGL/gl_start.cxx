@@ -76,14 +76,14 @@ void fltk::glstart() {
   if (!context) {
 #ifdef _WIN32
     if (!gl_choice) glVisual(0);
-    context = create_gl_context(Window::current(), gl_choice);
+    context = create_gl_context(Window::drawing_window(), gl_choice);
 #elif defined(__APPLE__)
-    context = create_gl_context(Window::current(), gl_choice);
+    context = create_gl_context(Window::drawing_window(), gl_choice);
 #else
     context = create_gl_context(xvisual);
 #endif
   }
-  set_gl_context(Window::current(), context);
+  set_gl_context(Window::drawing_window(), context);
 #ifdef _WIN32
   ;
 #elif defined(__APPLE__)
@@ -91,19 +91,19 @@ void fltk::glstart() {
 #else
   glXWaitX();
 #endif
-  if (pw != Window::current()->w() || ph != Window::current()->h()) {
-    pw = Window::current()->w();
-    ph = Window::current()->h();
+  if (pw != Window::drawing_window()->w() || ph != Window::drawing_window()->h()) {
+    pw = Window::drawing_window()->w();
+    ph = Window::drawing_window()->h();
     glLoadIdentity();
     glViewport(0, 0, pw, ph);
     glOrtho(0, pw, 0, ph, -1, 1);
     glDrawBuffer(GL_FRONT);
   }
   // obey the clipping. Only rectangles work:
-  Rectangle r(Window::current()->w(), Window::current()->h());
+  Rectangle r(Window::drawing_window()->w(), Window::drawing_window()->h());
   // 0 = all clipped, 1 = no change, 2 = partial clip:
   if (intersect_with_clip(r) != 1) {
-    glScissor(r.x(), Window::current()->h()-r.b(), r.w(), r.h());
+    glScissor(r.x(), Window::drawing_window()->h()-r.b(), r.w(), r.h());
     glEnable(GL_SCISSOR_TEST);
   } else {
     glDisable(GL_SCISSOR_TEST);

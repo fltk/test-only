@@ -1,5 +1,7 @@
-# data file for the Fltk User Interface Designer (fluid)
-version 0.99 
+# data file for the FLTK User Interface Designer (FLUID)
+version 2.0002 
+header_name {.h} 
+code_name {.cxx} 
 gridx 10 
 gridy 10 
 snap 3
@@ -12,58 +14,65 @@ class Drawing_Window {open
 } {
   Function {make_window()} {open return_type void
   } {
-    Fl_Window window {open
-      xywh {178 479 450 520} resizable
-      code0 {o->size_range(220,220);} visible
+    {fltk::Window} window {open
+      xywh {142 207 430 510} resizable
+      extra_code {o->size_range(220,220);} visible
     } {
-      Fl_Box d {
-        user_data this user_data_type {void*} selected
-        xywh {20 80 410 430} box DOWN_BOX color 0 selection_color 47 resizable
+      {fltk::InvisibleBox} d {
+        user_data this user_data_type {void*}
+        tooltip {Left-click will zoom out by 2.
+Left-drag will select a region to zoom in to.
+Right-click will create the Julia set viewer and set it to that point.}
+        xywh {10 70 410 430} resizable box DOWN_BOX color 56 selection_color 47
         class Drawing_Area
       }
-      Fl_Input x_input {
-        label {x:}
+      {fltk::Input} x_input {
+        label x
         callback {d->X = atof(o->value());;
 d->new_display();}
-        xywh {30 15 125 30} type Float box THIN_DOWN_BOX color 8 selection_color 7 labelfont 11 labelsize 20 textfont 11 textsize 20
-        code0 {o->when(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE);}
+        tooltip {x coordinate of window center}
+        xywh {10 10 130 25} type Float align 20 labelfont 2 textfont 1 labelsize 10
+        extra_code {o->when(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE);}
       }
-      Fl_Input y_input {
-        label {y:}
+      {fltk::Input} y_input {
+        label y
         callback {d->Y = atof(o->value());
 d->new_display();}
-        xywh {175 15 125 30} type Float box THIN_DOWN_BOX color 8 selection_color 7 labelfont 11 labelsize 20 textfont 11 textsize 20
-        code0 {o->when(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE);}
+        tooltip {y coordinate of window center}
+        xywh {150 10 130 25} type Float align 20 labelfont 2 textfont 1 labelsize 10
+        extra_code {o->when(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE);}
       }
-      Fl_Input w_input {
-        label {w:}
+      {fltk::Input} w_input {
+        label w
         callback {d->scale = atof(o->value());
 d->new_display();}
-        xywh {325 15 105 30} type Float box THIN_DOWN_BOX color 8 selection_color 7 labelfont 11 labelsize 20 textfont 11 textsize 20
-        code0 {o->when(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE);}
+        tooltip {width of the window}
+        xywh {290 10 130 25} type Float align 20 labelfont 2 textfont 1 labelsize 10
+        extra_code {o->when(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE);}
       }
-      Fl_Slider {} {
+      {fltk::Slider} {} {
         label {brightness:}
         callback {d->brightness = int(o->value());
 d->new_display();}
-        xywh {80 50 160 15} type Horizontal box THIN_DOWN_BOX labelsize 10 align 4 step 1 slider_size 0.1
-        code0 {o->bounds(0,d->MAX_BRIGHTNESS);}
-        code2 {o->value(d->DEFAULT_BRIGHTNESS);}
-        code3 {o->slider(FL_UP_BOX);}
+        tooltip {Change mapping from iteration count to gray level so that details are visible.}
+        xywh {70 40 160 15} align 4 box THIN_DOWN_BOX labelsize 10 step 1 slider_size 16
+        extra_code {o->bounds(0,d->MAX_BRIGHTNESS);
+o->value(d->DEFAULT_BRIGHTNESS);
+o->slider(FL_UP_BOX);}
       }
-      Fl_Box {} {
-        label {left: click = zoom out, drag = zoom in
-right click: Julia set}
-        xywh {240 50 190 30} labelsize 10 align 24 deactivate
+      {fltk::InvisibleBox} {} {
+        label {FLTK Mandelbrot Viewer} selected
+        xywh {240 40 180 26} align 24 deactivate box EMBOSSED_BOX labelfont 1 labelsize 10
       }
-      Fl_Slider {} {
+      {fltk::Slider} {} {
         label {iterations:}
         callback {d->iterations = 1<<int(o->value());
 d->new_display();}
-        xywh {80 65 160 15} type Horizontal box THIN_DOWN_BOX labelsize 10 align 4 step 1 slider_size 0.1
-        code0 {o->bounds(1,d->MAX_ITERATIONS);}
-        code2 {o->value(d->DEFAULT_ITERATIONS);}
-        code3 {o->slider(FL_UP_BOX);}
+        tooltip {Set number of iterations before it colors the pixel black. Higher values make it more accurate.}
+        xywh {70 55 160 15} align 4 box THIN_DOWN_BOX labelsize 10 step 1 slider_size 16
+        extra_code {o->bounds(1,d->MAX_ITERATIONS);
+o->value(d->DEFAULT_ITERATIONS);
+o->slider(FL_UP_BOX);}
       }
     }
   }

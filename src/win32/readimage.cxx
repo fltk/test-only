@@ -20,7 +20,7 @@ fltk::readimage(uchar *p,	// I - Pixel buffer or NULL to allocate
   // None of these read alpha yet, so set the alpha to 1 everywhere.
   if (type > 3) {
     for (int y = 0; y < h; y++) {
-      line = p + y * linedelta + 3;
+      uchar *line = p + y * linedelta + 3;
       for (int x = 0; x < w; x++) {*line = 0xff; line += delta;}
     }
   }

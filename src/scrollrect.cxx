@@ -62,7 +62,7 @@ static bool is_visible(int x, int y, int w, int h)
     // Windows 9x operating systems the region is returned in window coordinates,
     // and on Windows XP/2k machines the region is in screen coordinates.. SIGH!
     POINT pt = { 0, 0 };
-    ClientToScreen(fltk::xid(fltk::Window::current()), &pt);
+    ClientToScreen(fltk::xid(fltk::Window::drawing_window()), &pt);
     OffsetRgn(rgn0, -pt.x, -pt.y);
   }
 
