@@ -1,4 +1,4 @@
-// "$Id: Fl_Tabs.cxx,v 1.72 2004/08/25 17:10:37 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.73 2004/08/27 02:10:04 leka Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -99,7 +99,7 @@ int TabGroup::tab_positions(int* p, int* w) {
     return selected;
   }
   int w2[128];
-  for (int i = 0; i < numchildren; i++) w2[i] = w[i];
+  for (i = 0; i < numchildren; i++) w2[i] = w[i];
   i = numchildren-1;
   int j = 0;
   int minsize = TABSLOPE;
@@ -529,4 +529,4 @@ TabGroup::TabGroup(int X,int Y,int W, int H, const char *l)
   focus(0);
 }
 
-// End of "$Id: Fl_Tabs.cxx,v 1.72 2004/08/25 17:10:37 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.73 2004/08/27 02:10:04 leka Exp $".
