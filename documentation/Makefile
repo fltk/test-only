@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.12 2001/01/28 07:07:49 spitzak Exp $"
+# "$Id: Makefile,v 1.13 2001/10/24 17:01:13 easysw Exp $"
 #
 # Documentation makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -116,6 +116,8 @@ HTMLFILES	= \
 
 all:	fltk.ps fltk.pdf
 
+alldocs:	fltk.ps fltk.pdf fltk.d/index.html
+
 clean:
 	rm -f fltk.ps
 	rm -f fltk.pdf
@@ -142,6 +144,14 @@ install:
 	-mkdir -p $(mandir)3
 	cp *.3 $(mandir)3
 
+# Base html files are now the readable ones, so this target is not make by
+# default...
+fltk.d/index.html: $(HTMLFILES)
+	echo "Generating HTML documentation..."
+	-mkdir fltk.d
+	-rm -f fltk.d/*
+	$(HTMLDOC) -d fltk.d -t html --verbose --toclevels 2 --bodycolor white --titleimage FL.gif $(HTMLFILES)
+
 fltk.ps: $(HTMLFILES)
 	@echo "Generating PostScript documentation..."
 	@$(HTMLDOC) -f fltk.ps -t ps2 --duplex --verbose --toclevels 2 --title FL.gif $(HTMLFILES)
@@ -152,5 +162,5 @@ fltk.pdf: $(HTMLFILES)
 	@$(HTMLDOC) -f fltk.pdf --jpeg --compression=9 --duplex --verbose --toclevels 2 --title FL.gif $(HTMLFILES)
 
 #
-# End of "$Id: Makefile,v 1.12 2001/01/28 07:07:49 spitzak Exp $".
+# End of "$Id: Makefile,v 1.13 2001/10/24 17:01:13 easysw Exp $".
 #
