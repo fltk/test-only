@@ -1,5 +1,5 @@
 //
-// "$Id: gl_start.cxx,v 1.15 2004/06/09 05:38:57 spitzak Exp $"
+// "$Id: gl_start.cxx,v 1.16 2005/01/24 08:07:05 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -87,18 +87,15 @@ void fltk::glstart() {
     glOrtho(0, pw, 0, ph, -1, 1);
     glDrawBuffer(GL_FRONT);
   }
-//  if (clip_state_number != clip_state_number) {
-//    clip_state_number = clip_state_number;
-    int x, y, w, h;
-    if (clip_box(0, 0, Window::current()->w(), Window::current()->h(),
-		 x, y, w, h)) {
-      //clip_region(XRectangleRegion(x,y,w,h));
-      glScissor(x, Window::current()->h()-(y+h), w, h);
-      glEnable(GL_SCISSOR_TEST);
-    } else {
-      glDisable(GL_SCISSOR_TEST);
-    }
-//  }
+  // obey the clipping. Only rectangles work:
+  Rectangle r(Window::current()->w(), Window::current()->h());
+  // 0 = all clipped, 1 = no change, 2 = partial clip:
+  if (intersect_with_clip(r) != 1) {
+    glScissor(r.x(), Window::current()->h()-r.b(), r.w(), r.h());
+    glEnable(GL_SCISSOR_TEST);
+  } else {
+    glDisable(GL_SCISSOR_TEST);
+  }
 }
 
 void fltk::glfinish() {
@@ -111,5 +108,5 @@ void fltk::glfinish() {
 #endif
 
 //
-// End of "$Id: gl_start.cxx,v 1.15 2004/06/09 05:38:57 spitzak Exp $".
+// End of "$Id: gl_start.cxx,v 1.16 2005/01/24 08:07:05 spitzak Exp $".
 //

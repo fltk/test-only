@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.49 2004/11/17 17:32:34 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.50 2005/01/24 08:07:20 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -333,40 +333,42 @@ ImageDraw::~ImageDraw() {
 
 void fl_restore_clip(); // in rect.C
 
-// This macro modifies the XYWH and src_x,src_y to a region that is
-// visible and clipped to the size of the image. It will call return
-// if it is invisible.
+// This macro creates rectangle R and modifies src_x,src_y to a region
+// that is visible and clipped to the size of the image. It will call
+// return if it is invisible.
 #define clip_code() \
-  int x,y,w,h; clip_box(X,Y,W,H,x,y,w,h); \
-  src_x += x-X; \
-  if (src_x < 0) {x -= src_x; w += src_x; src_x = 0;} \
+  Rectangle ir(r1); transform(ir); \
+  Rectangle R(ir); if (!intersect_with_clip(R)) return; \
+  src_x += R.x()-ir.x(); \
+  if (src_x < 0) {R.move_x(-src_x); src_x = 0;} \
   if (src_x >= w_) return; \
-  if (src_x+w > w_) w = w_-src_x; \
-  if (w <= 0) return; \
-  src_y += y-Y; \
-  if (src_y < 0) {y -= src_y; h += src_y; src_y = 0;} \
+  if (src_x+R.w() > w_) R.w(w_-src_x); \
+  if (R.w() <= 0) return; \
+  src_y += R.y()-ir.y(); \
+  if (src_y < 0) {R.move_y(-src_y); src_y = 0;} \
   if (src_y >= h_) return; \
-  if (src_y+h > h_) h = h_-src_y; \
-  if (h <= 0) return
+  if (src_y+R.h() > h_) R.h(h_-src_y); \
+  if (R.h() <= 0) return
 
 /*! Copy a rectangle of rgb from the cached image to the current output.
   This is the same as over() except it pretends the alpha is all 1's.
 
   The image is positioned so the pixel at src_x, src_y is placed at
-  x,y (or the equivalent if src_x,src_y are outside the image). The
-  part of the image that then intersects x,y,w,h is then drawn.
+  the top-left of the rectangle \a r (or the equivalent if src_x,src_y
+  are outside the image). The part of the image that then intersects
+  \a r is then drawn.
 */
-void Image::copy(int X, int Y, int W, int H, int src_x, int src_y) const {
-  clip_code();
+void Image::copy(const Rectangle& r1, int src_x, int src_y) const {
   // handle undrawn images like the documentation says, as black:
-  if (!rgb) {setcolor(BLACK); fillrect(x,y,w,h); return;}
-  transform(x,y);
+  if (!rgb) {setcolor(BLACK); fillrect(r1); return;}
+  clip_code();
 #if USE_X11
-  XCopyArea(xdisplay, (Pixmap)rgb, xwindow, gc, src_x, src_y, w, h, x, y);
+  XCopyArea(xdisplay, (Pixmap)rgb, xwindow, gc,
+	    src_x, src_y, R.w(), R.h(), R.x(), R.y());
 #elif defined(_WIN32)
   HDC new_dc = CreateCompatibleDC(dc);
   SelectObject(new_dc, (HBITMAP)rgb);
-  BitBlt(dc, x, y, w, h, new_dc, src_x, src_y, SRCCOPY);
+  BitBlt(dc, R.x(), R.y(), R.w(), R.h(), new_dc, src_x, src_y, SRCCOPY);
   DeleteDC(new_dc);
 #elif defined(__APPLE__)
   // NYI!
@@ -388,20 +390,20 @@ void Image::copy(int X, int Y, int W, int H, int src_x, int src_y) const {
   pixel is A*a+B*(1-a).
 
   The image is positioned so the pixel at src_x, src_y is placed at
-  x,y (or the equivalent if src_x,src_y are outside the image). The
-  part of the image that then intersects x,y,w,h is then drawn.
+  the top-left of the rectangle \a r (or the equivalent if src_x,src_y
+  are outside the image). The part of the image that then intersects
+  \a r is then drawn.
 */
-void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
+void Image::over(const Rectangle& r1, int src_x, int src_y) const {
 
   // Draw bitmaps as documented, the rgb pretends to be black:
-  if (!rgb) { setcolor(BLACK); fill(X,Y,W,H,src_x,src_y); return; }
+  if (!rgb) { setcolor(BLACK); fill(r1, src_x, src_y); return; }
 
   // Don't waste time for solid white alpha:  
-  if (!alpha) { copy(X,Y,W,H,src_x,src_y); return; }
+  if (!alpha) { copy(r1, src_x, src_y); return; }
 
   // okay now we know we have rgb and alpha, draw it:
   clip_code();
-  transform(x,y);
 #if USE_X11
   // I can't figure out how to combine a mask with existing region,
   // so the mask replaces the region instead. This can draw some of
@@ -409,13 +411,14 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
   if (alpha != rgb) XSetClipMask(xdisplay, gc, (Pixmap)alpha);
   // alpha == rgb indicates a real alpha is in the source pixmap. I think
   // the Render extension is needed to draw that...
-  XSetClipOrigin(xdisplay, gc, x-src_x, y-src_y);
-  XCopyArea(xdisplay, (Pixmap)rgb, xwindow, gc, src_x, src_y, w, h, x, y);
+  XSetClipOrigin(xdisplay, gc, R.x()-src_x, R.y()-src_y);
+  XCopyArea(xdisplay, (Pixmap)rgb, xwindow, gc,
+	    src_x, src_y, R.w(), R.h(), R.x(), R.y());
   // put the old clip region back:
   XSetClipOrigin(xdisplay, gc, 0, 0);
   fl_restore_clip();
 #elif defined(_WIN32)
-  if(alpha == rgb) {
+  if (alpha == rgb) {
     HDC new_dc = CreateCompatibleDC(dc);
     SelectObject(new_dc, (HGDIOBJ)rgb);	
     BLENDFUNCTION m_bf;
@@ -423,18 +426,20 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
     m_bf.BlendFlags = 0;
     m_bf.AlphaFormat = 0x1;
     m_bf.SourceConstantAlpha = 0xFF;
-    AlphaBlend(dc, x,y,w,h, new_dc, src_x,src_y,w, h,m_bf);   
+    AlphaBlend(dc, R.x(), R.y(), R.w(), R.h(),
+	       new_dc, src_x, src_y, R.w(), R.h(), m_bf);
     DeleteDC(new_dc);
     return;
   }
+  // Various attempts to get GDI32 to obey 1-bit mask channel. ARRGH!
 # if 1
   HDC new_dc = CreateCompatibleDC(dc);
   // Old version, are we sure this does not work?
   SetTextColor(dc, 0);
   SelectObject(new_dc, (HBITMAP)alpha);
-  BitBlt(dc, x, y, w, h, new_dc, src_x, src_y, NOTSRCAND);
+  BitBlt(dc, R.x(), R.y(), R.w(), R.h(), new_dc, src_x, src_y, NOTSRCAND);
   SelectObject(new_dc, (HBITMAP)rgb);
-  BitBlt(dc, x, y, w, h, new_dc, src_x, src_y, SRCPAINT);
+  BitBlt(dc, R.x(), R.y(), R.w(), R.h(), new_dc, src_x, src_y, SRCPAINT);
   DeleteDC(new_dc);
 # else
 # if 0
@@ -442,7 +447,7 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
   // blinks worse than the more complicated code below. Darn you, Gates!
   HDC new_dc = CreateCompatibleDC(dc);
   SelectObject(new_dc, (HBITMAP)rgb);
-  MaskBlt(dc, x, y, w, h, new_dc, src_x, src_y,
+  MaskBlt(dc, R.x(), R.y(), R.w(), R.h(), new_dc, src_x, src_y,
 	  (HBITMAP)alpha, src_x, src_y,
 	  MAKEROP4(SRCCOPY,0xEE0000));
   DeleteDC(new_dc);
@@ -456,11 +461,11 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
   SetTextColor(dc, 0);
   HDC new_dc = CreateCompatibleDC(dc);
   SelectObject(new_dc, (HBITMAP)alpha);
-  BitBlt(dc, x, y, w, h, new_dc, src_x, src_y, NOTSRCAND);
+  BitBlt(dc, R.x(), R.y(), R.w(), R.h(), new_dc, src_x, src_y, NOTSRCAND);
   HDC new_dc2 = CreateCompatibleDC(dc);
   SelectObject(new_dc2, (HBITMAP)rgb);
   BitBlt(new_dc2, 0, 0, w_, h_, new_dc, 0, 0, SRCAND); // This should be done only once for performance
-  BitBlt(dc, x, y, w, h, new_dc2, src_x, src_y, SRCPAINT);
+  BitBlt(dc, R.x(), R.y(), R.w(), R.h(), new_dc2, src_x, src_y, SRCPAINT);
   DeleteDC(new_dc2);
   DeleteDC(new_dc);
 # endif
@@ -484,23 +489,24 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
   an anti-aliased character in a font, and can be drawn in any color.
   It is also used to draw inactive images.
 */
-void Image::fill(int X, int Y, int W, int H, int src_x, int src_y) const
+void Image::fill(const Rectangle& r1, int src_x, int src_y) const
 {
-  clip_code();
   // If there is no alpha channel then act like it is all white
   // and thus a rectangle should be drawn:
-  if (!alpha) {fillrect(x,y,w,h); return;}	
+  if (!alpha) {fillrect(r1); return;}
 
-  transform(x,y);
+  clip_code();
 #if USE_X11
-  if (alpha != rgb) XSetStipple(xdisplay, gc, (Pixmap)alpha);
   // alpha == rgb indicates a real alpha is in the source pixmap. I think
-  // the Render extension is needed to draw that...
-  int ox = x-src_x; if (ox < 0) ox += w_;
-  int oy = y-src_y; if (oy < 0) oy += h_;
-  XSetTSOrigin(xdisplay, gc, ox, oy);
-  XSetFillStyle(xdisplay, gc, FillStippled);
-  XFillRectangle(xdisplay, xwindow, gc, x, y, w, h);
+  // the Render extension is needed to draw that, this draws a solid rectangle:
+  if (alpha != rgb) {
+    XSetStipple(xdisplay, gc, (Pixmap)alpha);
+    int ox = R.x()-src_x; if (ox < 0) ox += w_;
+    int oy = R.y()-src_y; if (oy < 0) oy += h_;
+    XSetTSOrigin(xdisplay, gc, ox, oy);
+    XSetFillStyle(xdisplay, gc, FillStippled);
+  }
+  XFillRectangle(xdisplay, xwindow, gc, R.x(), R.y(), R.w(), R.h());
   XSetFillStyle(xdisplay, gc, FillSolid);
 #elif defined(_WIN32)
   HDC tempdc = CreateCompatibleDC(dc);
@@ -517,7 +523,8 @@ void Image::fill(int X, int Y, int W, int H, int src_x, int src_y) const
     m_bf.BlendFlags = 0;
     m_bf.AlphaFormat = 0x1;
     m_bf.SourceConstantAlpha = 50;
-    AlphaBlend(dc, x,y,w,h, tempdc, src_x,src_y,w, h,m_bf); 
+    AlphaBlend(dc, R.x(), R.y(), R.w(), R.h(), tempdc,
+	       src_x, src_y, R.w(), R.h(), m_bf);
   } else {
     // 1-bit alpha
     SetTextColor(dc, 0); // VP : seems necessary at least under win95
@@ -525,7 +532,7 @@ void Image::fill(int X, int Y, int W, int H, int src_x, int src_y) const
     SelectObject(tempdc, (HBITMAP)alpha);
     // On my machine this does not draw the right color! But lots of
     // documentation indicates that this should work:
-    BitBlt(dc, x, y, w, h, tempdc, src_x, src_y, MASKPAT);
+    BitBlt(dc, R.x(), R.y(), R.w(), R.h(), tempdc, src_x, src_y, MASKPAT);
   }
   DeleteDC(tempdc);
 #elif defined(__APPLE__)
@@ -540,16 +547,16 @@ void Image::fill(int X, int Y, int W, int H, int src_x, int src_y) const
   If the INACTIVE flag is on, this tries to draw the image inactive
   by calling fill() twice with gray colors. Otherwise it calls over().
 */
-void Image::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
+void Image::_draw(const Rectangle& r, const Style* style, Flags flags) const
 {  
   if (flags & INACTIVE) {
     Color bg, fg; style->boxcolors(flags, bg, fg);
     setcolor(GRAY90);
-    fill(x+1,y+1,w-1,h-1,0,0);
+    fill(r,-1,-1);
     setcolor(fg);
-    fill(x,y,w,h,0,0);
+    fill(r,0,0);
   } else {
-    over(x,y,w,h,0,0);
+    over(r,0,0);
   }
 }
 
@@ -562,7 +569,7 @@ void Image::_draw(int x, int y, int w, int h, const Style* style, Flags flags) c
   method with your own which calculates the values and sets them if
   it has not done so already.
 */
-void Image::_measure(float& W, float& H) const { W=float(w()); H=float(h()); }
+void Image::_measure(int& W, int& H) const { W=w(); H=h(); }
 
 /*! If the image has no alpha, it claims to fill the box. This is
   only true if you draw the size it returned from measure() or
@@ -584,5 +591,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.49 2004/11/17 17:32:34 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.50 2005/01/24 08:07:20 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.202 2005/01/01 20:23:50 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.203 2005/01/24 08:07:51 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -613,47 +613,6 @@ void fltk::close_display() {
   remove_fd(ConnectionNumber(xdisplay));
   XCloseDisplay(xdisplay);
 }
-
-////////////////////////////////////////////////////////////////
-
-/*! \class fltk::Rectangle
-  Class proposed for replacing all the x,y,w,h sets being passed
-  to most fltk functions. This may make a lot of calls easier to
-  read.
-
-  Negative w() or h() is supposed to mean an empty and thus
-  invisible rectangle, but some code will treat the rectangle as
-  reflected about x or y. Set the size to zero to make sure you
-  have an empty one.
-*/
-
-/*! \fn Rectangle::Rectangle()
-  The default constructor does not put anything into the fields!
-  You can either call set() or just modify the x_, y_, w_, and h_
-  variables directly.
-*/
-
-/*! \fn Rectangle::Rectangle(int x, int y, int w, int h)
-  Constructor that initializes all the fields. You can also use
-  the copy constructor to make a new rectangle equal to an old one.
-*/
-
-/*! \fn void Rectangle::set(int x, int y, int w, int h)
-  Set all 4 fields at once.
-*/
-
-/*! \fn int Rectangle::x() const
-  Return the left edge of the rectangle. */
-/*! \fn int Rectangle::y() const
-  Return the top edge of the rectangle. */
-/*! \fn int Rectangle::w() const
-  Return the width of the rectangle. */
-/*! \fn int Rectangle::h() const
-  Return the height of the rectangle. */
-/*! \fn int Rectangle::r() const
-  Return x()+w(), the right edge of the rectangle. */
-/*! \fn int Rectangle::b() const
-  Return y()+h(), the bottom edge of the rectangle. */
 
 ////////////////////////////////////////////////////////////////
 
@@ -1348,10 +1307,9 @@ bool fltk::handle()
 	if (!w) break;
       }
     }
-    CreatedWindow::find(window)->expose(xevent.xexpose.x,
-					xevent.xexpose.y,
-					xevent.xexpose.width,
-					xevent.xexpose.height);
+    // Inside of Xexpose event is exactly the same as Rectangle structure,
+    // so we pass a pointer.
+    CreatedWindow::find(window)->expose(*(Rectangle*)(&xevent.xexpose.x));
     return true;
 
   case ButtonPress: {
@@ -2271,9 +2229,11 @@ void Window::flush() {
   ALREADY_CLIPPED:
     // Must be an implementation problem in the server, but on Irix (at least)
     // it is much faster if I clip the rectangle requested down:
-    int X,Y,W,H; clip_box(0,0,w(),h(),X,Y,W,H);
+    Rectangle r(w(),h());
+    intersect_with_clip(r);
     // Copy the backbuffer to the window:
-    XCopyArea(xdisplay, i->backbuffer, frontbuffer, gc, X, Y, W, H, X, Y);
+    XCopyArea(xdisplay, i->backbuffer, frontbuffer, gc,
+	      r.x(), r.y(), r.w(), r.h(), r.x(), r.y());
     if (i->overlay) draw_overlay();
     clip_region(0);
 
@@ -2353,5 +2313,5 @@ void Window::layout() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.202 2005/01/01 20:23:50 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.203 2005/01/24 08:07:51 spitzak Exp $".
 //

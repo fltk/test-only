@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.75 2004/12/18 19:03:11 spitzak Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.76 2005/01/24 08:07:44 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -80,8 +80,13 @@ int Scrollbar::value(int p, int w, int t, int l) {
   if (p+w > t+l) l = p+w-t;
   if (l <= 0) l = 1;
   int b = l-w+t;
-  int X=0; int Y=0; int W=this->w(); int H=h(); box()->inset(X,Y,W,H);
-  if (vertical()) {int T = W; W = H; H = T; T = b; b = t; t = T;}
+  Rectangle r(this->w(),this->h()); box()->inset(r);
+  int W,H;
+  if (vertical()) {
+    W = r.h(); H = r.w(); int T = b; b = t; t = T;
+  } else {
+    W = r.w(); H = r.h();
+  }
   if (W >= 3*H) W -= 2*H;
   int S = W*w/l; if (S < H) S = H; if (S > W) S = W;
   if (S != slider_size() || t != minimum() || b != maximum()) {
@@ -117,36 +122,36 @@ void Scrollbar::increment_cb() {
 
 int Scrollbar::handle(int event) {
   // area of scrollbar:
-  int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
+  Rectangle r(w(),h()); box()->inset(r);
 
   // adjust slider area to be inside the arrow buttons:
   if (vertical()) {
-    if (H >= 3*W) {Y += W; H -= 2*W;}
+    if (r.h() >= 3*r.w()) {r.move_y(r.w()); r.move_b(-r.w());}
   } else {
-    if (W >= 3*H) {X += H; W -= 2*H;}
+    if (r.w() >= 3*r.h()) {r.move_x(r.h()); r.move_r(-r.h());}
   }
 
   // which widget part is highlighted?
   int mx = event_x();
   int my = event_y();
   int which_part;
-  if (!event_inside(0, 0, w(), h())) which_part = NOTHING;
+  if (!event_inside(Rectangle(w(), h()))) which_part = NOTHING;
   else if (vertical()) {
-    if (my < Y) which_part = UP_ARROW;
-    else if (my >= Y+H) which_part = DOWN_ARROW;
+    if (my < r.y()) which_part = UP_ARROW;
+    else if (my >= r.b()) which_part = DOWN_ARROW;
     else {
-      int slidery = slider_position(value(), H);
-      if (my < Y+slidery) which_part = ABOVE_SLIDER;
-      else if (my >= Y+slidery+slider_size()) which_part = BELOW_SLIDER;
+      int slidery = slider_position(value(), r.h());
+      if (my < r.y()+slidery) which_part = ABOVE_SLIDER;
+      else if (my >= r.y()+slidery+slider_size()) which_part = BELOW_SLIDER;
       else which_part = SLIDER;
     }
   } else { // horizontal
-    if (mx < X) which_part = UP_ARROW;
-    else if (mx >= X+W) which_part = DOWN_ARROW;
+    if (mx < r.x()) which_part = UP_ARROW;
+    else if (mx >= r.r()) which_part = DOWN_ARROW;
     else {
-      int sliderx = slider_position(value(), W);
-      if (mx < X+sliderx) which_part = ABOVE_SLIDER;
-      else if (mx >= X+sliderx+slider_size()) which_part = BELOW_SLIDER;
+      int sliderx = slider_position(value(), r.w());
+      if (mx < r.x()+sliderx) which_part = ABOVE_SLIDER;
+      else if (mx >= r.x()+sliderx+slider_size()) which_part = BELOW_SLIDER;
       else which_part = SLIDER;
     }
   }
@@ -172,7 +177,7 @@ int Scrollbar::handle(int event) {
     if (which_part == SLIDER ||
 	event_button() > 1 && which_part > DOWN_ARROW) {
       which_pushed = SLIDER;
-      return Slider::handle(event, X,Y,W,H);
+      return Slider::handle(event, r);
     }
     handle_push();
     // middle/right click on arrows jumps to that end:
@@ -182,7 +187,7 @@ int Scrollbar::handle(int event) {
     }
     goto J1;
   case DRAG:
-    if (which_pushed==SLIDER) return Slider::handle(event, X,Y,W,H);
+    if (which_pushed==SLIDER) return Slider::handle(event, r);
     if (which_part == SLIDER) which_part = NOTHING;
     // it is okay to switch between arrows and nothing, but no other
     // changes are allowed:
@@ -208,7 +213,7 @@ int Scrollbar::handle(int event) {
     return 1;
   case RELEASE:
     if (which_pushed == SLIDER) {
-      Slider::handle(event, X,Y,W,H);
+      Slider::handle(event, r);
     } else if (which_pushed) {
       remove_timeout();
       handle_release();
@@ -238,8 +243,7 @@ int Scrollbar::handle(int event) {
 void Scrollbar::draw() {
   if (damage()&DAMAGE_ALL) draw_frame();
 
-  int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
-  int ix = X; int iy = Y; int iw = W; int ih = H;
+  Rectangle r(w(),h()); box()->inset(r);
 
   char pushed_ = pushed() ? which_pushed : NOTHING;
   char highlight_ = belowmouse() ? which_highlight : NOTHING;
@@ -257,40 +261,44 @@ void Scrollbar::draw() {
     else if (highlight_ == SLIDER) f5 = HIGHLIGHT;
   }
 
-  if (vertical() && H >= 3*W) {
+  Rectangle ir(r); // interior after removing arrow buttons
+  if (vertical() && r.h() >= 3*r.w()) {
+    Rectangle br(r); br.h(r.w());
     if (damage()&DAMAGE_ALL || last_ == UP_ARROW || highlight_ == UP_ARROW)
-      draw_glyph(GLYPH_UP_BUTTON, X, Y, W, W, f1);
+      draw_glyph(GLYPH_UP_BUTTON, br, f1);
+    br.y(r.b()-r.w());
     if (damage()&DAMAGE_ALL || last_ ==DOWN_ARROW|| highlight_ ==DOWN_ARROW)
-      draw_glyph(GLYPH_DOWN_BUTTON, X, Y+H-W, W, W, f2);
-    iy += W; ih -= 2*W;
+      draw_glyph(GLYPH_DOWN_BUTTON, br, f2);
+    ir.move_y(r.w()); ir.move_b(-r.w());
 
-  } else if (W >= 3*H) { // horizontal:
+  } else if (r.w() >= 3*r.h()) { // horizontal:
+    Rectangle br(r); br.w(r.h());
     if (damage()&DAMAGE_ALL || last_ == UP_ARROW || highlight_ == UP_ARROW)
-      draw_glyph(GLYPH_LEFT_BUTTON, X, Y, H, H, f1);
+      draw_glyph(GLYPH_LEFT_BUTTON, br, f1);
+    br.x(r.r()-r.h());
     if (damage()&DAMAGE_ALL || last_ ==DOWN_ARROW|| highlight_ ==DOWN_ARROW)
-      draw_glyph(GLYPH_RIGHT_BUTTON, X+W-H, Y, H, H, f2);
-    ix += H; iw -= 2*H;
+      draw_glyph(GLYPH_RIGHT_BUTTON, br, f2);
+    ir.move_x(r.h()); ir.move_r(-r.h());
   }
   last_ = highlight_;
 
 #if USE_CLIPOUT
-  if (Slider::draw(ix, iy, iw, ih, f5, false)) {
+  if (Slider::draw(ir, f5, false)) {
     setcolor(color());
-    fillrect(ix, iy, iw, ih);
+    fillrect(ir);
     pop_clip();
   }
 #else
   setcolor(color());
-  fillrect(ix, iy, iw, ih);
-  Slider::draw(ix, iy, iw, ih, f5, false);
+  fillrect(ir);
+  Slider::draw(ir, f5, false);
 #endif
 }
 
-static void glyph(int glyph,
-		  int x,int y,int w,int h, const Style* style, Flags flags)
+static void glyph(int glyph, const Rectangle& r, const Style* style, Flags flags)
 {
   if (glyph<100) flags &= ~VALUE;
-  Widget::default_glyph(glyph, x, y, w, h, style, flags);
+  Widget::default_glyph(glyph, r, style, flags);
 }
 
 static void revert(Style* s) {
@@ -310,5 +318,5 @@ Scrollbar::Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.75 2004/12/18 19:03:11 spitzak Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.76 2005/01/24 08:07:44 spitzak Exp $".
 //

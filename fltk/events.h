@@ -1,5 +1,5 @@
 //
-// "$Id: events.h,v 1.12 2004/12/05 19:28:47 spitzak Exp $"
+// "$Id: events.h,v 1.13 2005/01/24 08:07:07 spitzak Exp $"
 //
 // Event types and data. A Widget::handle() method needs this.
 //
@@ -190,6 +190,7 @@ enum {
 
 /*! \} */
 
+class Rectangle;
 class Widget;
 class Window;
 
@@ -251,7 +252,7 @@ inline float event_y_tilt()     {return e_y_tilt;}
 inline int  event_device()      {return e_device;}
 
 // tests on current event:
-FL_API bool event_inside(int,int,int,int);
+FL_API bool event_inside(const Rectangle&);
 FL_API bool compose(int &del);
 inline void compose_reset()		{compose_state = 0;}
 

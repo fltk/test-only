@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.41 2004/07/29 09:07:54 spitzak Exp $"
+// "$Id: fl_rect.cxx,v 1.42 2005/01/24 08:07:55 spitzak Exp $"
 //
 // Non-path routines from draw.h that are used by the standard boxtypes
 // and thus are always linked into an fltk program.
@@ -45,24 +45,24 @@ using namespace fltk;
   Draw a line \e inside this bounding box (currently correct only for
   0-thickness lines).
 */
-void fltk::strokerect(int x, int y, int w, int h) {
-  if (w <= 0 || h <= 0) return;
-  transform(x,y);
+void fltk::strokerect(const Rectangle& r) {
+  if (r.empty()) return;
+  int x = r.x(); int y = r.y(); transform(x,y);
 #if USE_CAIRO
-  cairo_rectangle(cc,x+.5,y+.5,w-1,h-1);
+  cairo_rectangle(cc,x+.5,y+.5,r.w()-1,r.h()-1);
   cairo_stroke(cc);
 #elif USE_X11
-  XDrawRectangle(xdisplay, xwindow, gc, x, y, w-1, h-1);
+  XDrawRectangle(xdisplay, xwindow, gc, x, y, r.w()-1, r.h()-1);
 #elif defined(_WIN32)
   setpen();
   MoveToEx(dc, x, y, 0L); 
-  LineTo(dc, x+w-1, y);
-  LineTo(dc, x+w-1, y+h-1);
-  LineTo(dc, x, y+h-1);
+  LineTo(dc, x+r.w()-1, y);
+  LineTo(dc, x+r.w()-1, y+r.h()-1);
+  LineTo(dc, x, y+r.h()-1);
   LineTo(dc, x, y);
 #elif defined(__APPLE__)
   Rect rect;
-  SetRect(&rect, x, y, x+w, y+h);
+  SetRect(&rect, x, y, x+r.w(), y+r.h());
   FrameRect(&rect);
 #else
 # error
@@ -70,23 +70,23 @@ void fltk::strokerect(int x, int y, int w, int h) {
 }
 
 /*! Fill the rectangle with the current color. */
-void fltk::fillrect(int x, int y, int w, int h) {
-  if (w <= 0 || h <= 0) return;
-  transform(x,y);
+void fltk::fillrect(const Rectangle& r) {
+  if (r.empty()) return;
+  int x = r.x(); int y = r.y(); transform(x,y);
 #if USE_CAIRO
-  cairo_rectangle(cc,x,y,w,h);
+  cairo_rectangle(cc,x,y,r.w(),r.h());
   cairo_fill(cc);
 #elif USE_X11
-  XFillRectangle(xdisplay, xwindow, gc, x, y, w, h);
+  XFillRectangle(xdisplay, xwindow, gc, x, y, r.w(), r.h());
 #elif defined(_WIN32)
   RECT rect;
   rect.left = x; rect.top = y;  
-  rect.right = x + w; rect.bottom = y + h;
+  rect.right = x+r.w(); rect.bottom = y+r.h();
   SetBkColor(dc, current_xpixel);
   ExtTextOut(dc, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL);
 #elif defined(__APPLE__)
   Rect rect;
-  SetRect(&rect, x, y, x+w, y+h);
+  SetRect(&rect, x, y, x+r.w(), y+r.h());
   PaintRect(&rect);
 #else
 # error
@@ -183,5 +183,5 @@ void fltk::drawpoint(float X, float Y) {
 /** \} */
 
 //
-// End of "$Id: fl_rect.cxx,v 1.41 2004/07/29 09:07:54 spitzak Exp $".
+// End of "$Id: fl_rect.cxx,v 1.42 2005/01/24 08:07:55 spitzak Exp $".
 //

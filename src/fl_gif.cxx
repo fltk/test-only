@@ -1,4 +1,4 @@
-// "$Id: fl_gif.cxx,v 1.21 2004/07/07 05:11:03 spitzak Exp $"
+// "$Id: fl_gif.cxx,v 1.22 2005/01/24 08:07:54 spitzak Exp $"
 
 /*! \class fltk::gifImage
 
@@ -63,11 +63,11 @@ bool gifImage::test(const uchar *datas, unsigned size)
   return !strncmp((char*) datas,"GIF", 3);
 }
 
-void gifImage::_measure(float &W, float &H) const
+void gifImage::_measure(int &W, int &H) const
 {
   if (w() >= 0) { 
-    W = (float)w(); 
-    H = (float)h(); 
+    W = w(); 
+    H = h(); 
     return; 
   }
 
@@ -89,9 +89,9 @@ void gifImage::_measure(float &W, float &H) const
 
   int w,h; GETSHORT(w); GETSHORT(h);
   const_cast<gifImage*>(this)->setsize(w,h);
-  W = (float)w; 
-  H = (float)h;
-  if(!datas) fclose(GifFile);
+  W = w; 
+  H = h;
+  if (!datas) fclose(GifFile);
 }
 
 void gifImage::read()
@@ -403,5 +403,5 @@ void gifImage::read()
 }
 
 //
-// End of "$Id: fl_gif.cxx,v 1.21 2004/07/07 05:11:03 spitzak Exp $"
+// End of "$Id: fl_gif.cxx,v 1.22 2005/01/24 08:07:54 spitzak Exp $"
 //

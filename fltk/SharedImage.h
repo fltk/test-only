@@ -1,4 +1,4 @@
-// "$Id: SharedImage.h,v 1.12 2004/08/25 17:10:35 spitzak Exp $"
+// "$Id: SharedImage.h,v 1.13 2005/01/24 08:07:07 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -108,7 +108,7 @@ public:
   /*! Set the size of the cache (0 = unlimited is the default) */
   static void set_cache_size(unsigned l);
 
-  void _draw(int, int, int, int, const Style*, Flags = 0) const;
+  void _draw(const Rectangle&, const Style*, Flags = 0) const;
 };
 
 ////////////////////////////////////////////////////////////////
@@ -140,7 +140,7 @@ class FL_API gifImage : public SharedImage {
   static SharedImage* create() { return new gifImage; }
 public:
   static bool test(const uchar* datas, unsigned size=0);
-  void _measure(float& W, float& H) const;
+  void _measure(int& W, int& H) const;
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
@@ -152,7 +152,7 @@ class FL_API bmpImage : public SharedImage {
   static SharedImage* create() { return new bmpImage; }
 public:
   static bool test(const uchar* datas, unsigned size=0);
-  void _measure(float& W, float& H) const;
+  void _measure(int& W, int& H) const;
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
@@ -165,7 +165,7 @@ class FL_IMAGES_API xpmFileImage : public SharedImage {
   static SharedImage* create() { return new xpmFileImage; }
 public:
   static bool test(const uchar* datas, unsigned size=0);
-  void _measure(float& W, float& H) const;
+  void _measure(int& W, int& H) const;
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
@@ -181,7 +181,7 @@ class FL_IMAGES_API jpegImage : public SharedImage {
   static SharedImage* create() { return new jpegImage; }
 public:
   static bool test(const uchar* datas, unsigned size=0);
-  void _measure(float& W, float& H) const;
+  void _measure(int& W, int& H) const;
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
@@ -194,7 +194,7 @@ class FL_IMAGES_API pngImage : public SharedImage {
 public:
 // Check the given buffer if it is in PNG format
   static bool test(const uchar* datas, unsigned size=0);
-  void _measure(float& W, float& H) const;
+  void _measure(int& W, int& H) const;
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
@@ -204,4 +204,4 @@ public:
 
 #endif
 
-// End of "$Id: SharedImage.h,v 1.12 2004/08/25 17:10:35 spitzak Exp $"
+// End of "$Id: SharedImage.h,v 1.13 2005/01/24 08:07:07 spitzak Exp $"

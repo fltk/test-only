@@ -1,5 +1,5 @@
 //
-// "$Id: Style.h,v 1.18 2004/11/12 06:50:13 spitzak Exp $"
+// "$Id: Style.h,v 1.19 2005/01/24 08:07:07 spitzak Exp $"
 //
 // Style structure used by Widgets
 //
@@ -31,7 +31,7 @@
 namespace fltk {
 
 class FL_API Widget;
-
+class FL_API Rectangle;
 class FL_API Symbol;
 typedef Symbol Box;
 
@@ -100,7 +100,7 @@ class Style;
 /*! \addtogroup glyphs
   \{ */
 typedef void (*GlyphStyle)(int number,
-			   int,int,int,int, const Style*,
+			   const Rectangle&, const Style*,
 			   Flags);
 /*! Numbers understood by fltk::Widget::default_glyph(). All other numbers
   draw the same as GLYPH_BOX. The numbers
@@ -241,5 +241,5 @@ extern "C" FL_API bool fltk_theme();
 #endif
 
 //
-// End of "$Id: Style.h,v 1.18 2004/11/12 06:50:13 spitzak Exp $".
+// End of "$Id: Style.h,v 1.19 2005/01/24 08:07:07 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Tooltip.h,v 1.5 2003/11/04 08:10:57 spitzak Exp $"
+// "$Id: Tooltip.h,v 1.6 2005/01/24 08:07:07 spitzak Exp $"
 //
 // Code used to control the appearance of tooltips, and to pop them
 // up in response to events other than the mouse entering and exiting
@@ -42,9 +42,8 @@ public:
   static void disable() { enabled_ = false; }
 
   typedef const char* (*Generator)(Widget*, void*);
-  static void enter(Widget* w, int X, int Y, int W, int H, Generator, void* = 0);
-  static void enter(Widget* w, int X, int Y, int W, int H, const char* t)
-    { enter(w, X, Y, W, H, 0, (void*)t); }
+  static void enter(Widget* w, const Rectangle&, Generator, void* = 0);
+  static void enter(Widget* w, const Rectangle& r, const char* t) { enter(w, r, 0, (void*)t); }
   static void enter(Widget* w);
   static void exit();
   static Widget* current()	{ return widget; }
@@ -72,5 +71,5 @@ private:
 #endif
 
 //
-// End of "$Id: Tooltip.h,v 1.5 2003/11/04 08:10:57 spitzak Exp $".
+// End of "$Id: Tooltip.h,v 1.6 2005/01/24 08:07:07 spitzak Exp $".
 //

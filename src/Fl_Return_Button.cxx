@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Return_Button.cxx,v 1.41 2004/11/12 06:50:16 spitzak Exp $"
+// "$Id: Fl_Return_Button.cxx,v 1.42 2005/01/24 08:07:43 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -35,14 +35,14 @@ using namespace fltk;
 */
 
 // this is public so draw_symbol can call it:
-void fl_glyph_return(int, int x,int y,int w,int h, const Style* style, Flags)
+void fl_glyph_return(int, const Rectangle& r, const Style* style, Flags)
 {
-  int size = w; if (h<size) size = h;
+  int size = r.w(); if (r.h()<size) size = r.h();
   int d = (size+2)/4; if (d<3) d = 3;
   int t = (size+9)/12; if (t<1) t = 1;
-  int x0 = x+((w-2*d-2*t-1)>>1);
+  int x0 = r.x()+((r.w()-2*d-2*t-1)>>1);
   int x1 = x0+d;
-  int y0 = y+h/2;
+  int y0 = r.center_y();
 #if 1
   setcolor(WHITE);
   newpath();
@@ -90,5 +90,5 @@ ReturnButton::ReturnButton(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Return_Button.cxx,v 1.41 2004/11/12 06:50:16 spitzak Exp $".
+// End of "$Id: Fl_Return_Button.cxx,v 1.42 2005/01/24 08:07:43 spitzak Exp $".
 //

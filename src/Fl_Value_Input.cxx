@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.44 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.45 2005/01/24 08:07:47 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -89,8 +89,8 @@ static char which_highlight = 0;
 static char which_pushed = 0;
 
 void ValueInput::draw() {
-  int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
-  const int bw = H/2; W -= bw;
+  Rectangle r(w(),h()); box()->inset(r);
+  const int bw = r.h()/2; r.move_r(-bw);
   if (damage() & DAMAGE_ALL) {
     draw_frame();
     input.set_damage(DAMAGE_ALL);
@@ -103,13 +103,16 @@ void ValueInput::draw() {
       f[which_highlight-1] = ff;
     if (which_pushed && pushed())
       f[which_pushed-1] = VALUE | HIGHLIGHT;
-    draw_glyph(GLYPH_UP_BUTTON, X+W, Y, bw, bw, f[0]);
-    draw_glyph(GLYPH_DOWN_BUTTON, X+W, Y+bw, bw, H-bw, f[1]);
+    Rectangle gr(r.r(),r.y(),bw,bw);
+    draw_glyph(GLYPH_UP_BUTTON, gr, f[0]);
+    gr.move_y(bw);
+    gr.h(r.h()-bw);
+    draw_glyph(GLYPH_DOWN_BUTTON, gr, f[1]);
   }
   input.label(label());
   input.align(align());
   input.copy_style(style());
-  input.draw(X, Y, W, H);
+  input.draw(r);
   input.set_damage(0);
 }
 
@@ -124,8 +127,8 @@ void ValueInput::increment_cb() {
 #define REPEAT .1f
 
 int ValueInput::handle(int event) {
-  int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
-  const int bw = H/2; W -= bw;
+  Rectangle r(w(),h()); box()->inset(r);
+  const int bw = r.h()/2; r.move_r(-bw);
   int n;
   switch (event) {
   case FOCUS:
@@ -134,9 +137,12 @@ int ValueInput::handle(int event) {
   case ENTER:
   case MOVE:
     if (!highlight_color()) return 1;
-    if (event_inside(X+W, 0, w()-(X+W), Y+bw)) n = 1;
-    else if (event_inside(X+W, Y+bw, w()-(X+W), h()-(Y+bw))) n = 2;
-    else n = 0;
+    if (event_x() >= r.r()) {
+      if (event_y() >= r.y()+bw) n = 2;
+      else n = 1;
+    } else {
+      n = 0;
+    }
     if (n != which_highlight) {
       which_highlight = n;
       redraw_highlight();
@@ -151,9 +157,10 @@ int ValueInput::handle(int event) {
   case PUSH:
   case DRAG:
     // figure out what button is pushed:
-    if (event_inside(X+W, 0, w()-(X+W), Y+bw)) n = 1;
-    else if (event_inside(X+W, Y+bw, w()-(X+W), h()-(Y+bw))) n = 2;
-    else n = 0;
+    if (event_x() < r.r() || event_x() >= r.r()+bw) n = 0;
+    else if (event_y() < 0 || event_y() >= h()) n = 0;
+    else if (event_y() < r.y()+bw) n = 1;
+    else n = 2;
     if (event == PUSH) {
       if (!n) break; // send mouse event to the input field
       handle_push();
@@ -199,9 +206,9 @@ int ValueInput::handle(int event) {
   }
   input.type(step()>=1.0 ? FloatInput::INT : FloatInput::FLOAT);
   input.when(when());
-  int r = input.send(event);
-  if (!r) r = Valuator::handle(event);
-  return r;
+  int ret = input.send(event);
+  if (!ret) ret = Valuator::handle(event);
+  return ret;
 }
 
 void ValueInput::layout() {
@@ -252,5 +259,5 @@ ValueInput::~ValueInput() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.44 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.45 2005/01/24 08:07:47 spitzak Exp $".
 //

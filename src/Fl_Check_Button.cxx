@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.49 2004/11/15 16:53:26 spitzak Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.50 2005/01/24 08:07:17 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -41,8 +41,7 @@ using namespace fltk;
 */
 
 static void default_glyph(int glyph,
-			  int x,int y,int w,int h,
-			  const Style* style, Flags flags)
+			  const Rectangle& R, const Style* style, Flags flags)
 {
   Box* box = style->box();
   // Use the white rather than the gray color:
@@ -53,22 +52,22 @@ static void default_glyph(int glyph,
   // selected color instead:
   if (!box->fills_rectangle()) {
     if (flags&VALUE) flags |= SELECTED;
-    box->draw(x, y, w, h, style, flags);
+    box->draw(R, style, flags);
     return;
   }
   // Otherwise draw the box with normal colors and then draw checkmark
   // inside it:
-  box->draw(x, y, w, h, style, flags);
+  box->draw(R, style, flags);
   if (flags&VALUE) {
-    box->inset(x, y, w, h);
+    Rectangle r(R); box->inset(r);
     Color bg, fg; style->boxcolors(flags, bg, fg);
     setcolor(fg);
-    if (h < 4) {fillrect(x+w/2-1,y+h/2-1,2,2); return;}
-    x += 1;
-    w = h - 2;
+    if (r.h() < 4) {fillrect(Rectangle(r,2,2)); return;}
+    int x = r.x()+1;
+    int w = r.h()-2;
     int d1 = w/3;
     int d2 = w-d1;
-    y += (h+d2)/2-d1-2;
+    int y = r.y()+(r.h()+d2)/2-d1-2;
     for (int n = 0; n < 3; n++, y++) {
       drawline(x, y, x+d1, y+d1);
       drawline(x+d1, y+d1, x+w-1, y+d1-d2+1);

@@ -26,9 +26,7 @@ using namespace fltk;
   not redraw because they don't think they changed appearance).
   - PUSHED True if user is pushing button (it also
   inverts the VALUE setting, so you may want to swap your images)
-  - FOCUSED True if button has the keyboard focus (you may also
-  want to set focusbox() to NO_BOX to stop it from drawing the
-  dotted rectangle.
+  - FOCUSED True if button has the keyboard focus
 
   Typical example:
 
@@ -42,9 +40,10 @@ using namespace fltk;
 \endcode
 */
 
-/*! It is assummed all the images are the same size. Image0 (the first
+/*! It probably is useless for the images to be different sizes.
+  However if they are, Image0 (the first
   one passed to the constructor) is used to figure out the size. */
-void MultiImage::_measure(float& w, float& h) const {
+void MultiImage::_measure(int& w, int& h) const {
   images[0]->measure(w,h);
 }
 
@@ -55,23 +54,12 @@ const BoxInfo* MultiImage::boxinfo() const {return images[0]->boxinfo();}
   flags specified for it turned on will be drawn. If none of them match
   then Image0 is drawn.
 */
-void MultiImage::_draw(int x, int y, int w, int h, const Style* style, Flags f) const
+void MultiImage::_draw(const Rectangle& r, const Style* style, Flags f) const
 {
   int which = 0;
   //Flags passed_flags = f;
   for (int i = 1; i < MAXIMAGES && images[i]; i++) {
     if ((f & flags[i]) == flags[i]) {which = i; /*passed_flags = f&~flags[i];*/}
   }
-  images[which]->draw(x,y,w,h,style,f);
-}
-
-/*! Exactly the same but with float dimensions. */
-void MultiImage::_draw(float x, float y, float w, float h, const Style* style, Flags f) const
-{
-  int which = 0;
-  Flags passed_flags = f;
-  for (int i = 1; i < MAXIMAGES && images[i]; i++) {
-    if ((f & flags[i]) == flags[i]) {which = i; passed_flags = f&~flags[i];}
-  }
-  images[which]->draw(x,y,w,h,style,passed_flags);
+  images[which]->draw(r, style, f);
 }

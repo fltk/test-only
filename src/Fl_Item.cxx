@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.37 2004/11/12 06:50:16 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.38 2005/01/24 08:07:21 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -94,15 +94,14 @@ void Item::set_style(const Style* style) {
 */
 void Item::draw() {
   //if (buttonbox() != NO_BOX) draw_buttonbox();
-  int x = 0; int y = 0; int w = this->w(); int h = this->h();
-  //box()->inset(x,y,w,h);
-
+  Rectangle r(w(),h());
+  //box()->inset(r);
   if (type()) {
     int gw = int(textsize())+2;
-    draw_glyph(0, x+3, y+((h-gw)>>1), gw, gw, flags());
-    x += gw+3; w -= gw+3;
+    draw_glyph(0, Rectangle(r.x()+3, r.y()+((r.h()-gw)>>1), gw, gw), flags());
+    r.move_x(gw+3);
   }
-  draw_label(x, y, w, h, style(), flags()|OUTPUT);
+  draw_label(r, style(), flags()|OUTPUT);
 }
 
 /** Measure the space the draw() will take and set w() and h().
@@ -116,10 +115,10 @@ void Item::layout() {
   if (w) {w += 6+int(textsize())/2;}
   if (type()) w += 15;
   if (image()) {
-    float W, H;
+    int W,H;
     image()->measure(W, H);
-    if (H > h) h = int(H);
-    w += int(W);
+    if (H > h) h = H;
+    w += W;
   }
   this->w(w);
   this->h(h);
@@ -171,9 +170,9 @@ ItemGroup::ItemGroup(const char* l) : Menu(0,0,0,0,l) {
 void ItemGroup::draw() {
   if (damage()&~DAMAGE_CHILD) {
     //if (box() != NO_BOX) draw_box();
-    int x = 0; int y = 0; int w = this->w(); int h = this->h();
-    //box()->inset(x,y,w,h);
-    draw_label(x, y, w, h, style(), flags()|OUTPUT);
+    Rectangle r(w(),h());
+    //box()->inset(r);
+    draw_label(r, style(), flags()|OUTPUT);
   }
 }
 
@@ -185,10 +184,10 @@ void ItemGroup::layout() {
   measure(label(), w, h, flags());
   if (w) {w += 6+int(textsize())/2;}
   if (image()) {
-    float W, H;
+    int W,H;
     image()->measure(W, H);
-    if (H > h) h = int(H);
-    w += int(W);
+    if (H > h) h = H;
+    w += W;
   }
   this->w(w);
   this->h(h);

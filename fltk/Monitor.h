@@ -1,9 +1,6 @@
+// "$Id: Monitor.h,v 1.2 2005/01/24 08:07:06 spitzak Exp $"
 //
-// "$Id: Monitor.h,v 1.1 2003/10/28 17:45:13 spitzak Exp $"
-//
-// The basic fltk runtime. Every program needs to call this somewhere.
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,28 +18,13 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #ifndef fltk_Monitor_h
 #define fltk_Monitor_h
 
-#include "FL_API.h"
+#include "Rectangle.h"
 
 namespace fltk {
-
-class FL_API Rectangle {
- public:
-  int x_, y_, w_, h_;
-  Rectangle() {} // allows arrays to be constructed quickly
-  Rectangle(int x, int y, int w, int h) : x_(x), y_(y), w_(w), h_(h) {}
-  void set(int x, int y, int w, int h) {x_=x; y_=y; w_=w; h_=h;}
-  int x() const {return x_;}
-  int y() const {return y_;}
-  int w() const {return w_;}
-  int h() const {return h_;}
-  int r() const {return x_+w_;}
-  int b() const {return y_+h_;}
-};
 
 class FL_API Monitor : public Rectangle {
   int depth_;
@@ -62,5 +44,3 @@ class FL_API Monitor : public Rectangle {
 }
 
 #endif
-
-

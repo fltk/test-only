@@ -34,7 +34,7 @@ void test_box::draw() {
     (int)(choice[2]->item()->user_data()),
     (int)(sliders[3]->value()),
     buf);
-  strokerect(10,10,w()-20,h()-20);
+  strokerect(Rectangle(10,10,w()-20,h()-20));
   addvertex(35, 35);
   addvertex(w()-35, h()-35);
   addvertex(w()-40, 35);

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tiled_Image.cxx,v 1.10 2004/08/01 22:28:23 spitzak Exp $"
+// "$Id: Fl_Tiled_Image.cxx,v 1.11 2005/01/24 08:07:47 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -41,10 +41,10 @@ using namespace fltk;
 /*! Returns the maximum of the passed size and the size of the image.
   This makes the alignment code center the tiled image if desired.
 */
-void TiledImage::_measure(float& w, float& h) const {
+void TiledImage::_measure(int& w, int& h) const {
   if (!image_) return;
-  float iw = w;
-  float ih = h;
+  int iw = w;
+  int ih = h;
   image_->measure(iw,ih);
   if (iw > w) w = iw;
   if (ih > h) h = ih;
@@ -54,23 +54,21 @@ void TiledImage::_measure(float& w, float& h) const {
   corner at \a x,y. This checks the current clip region and does
   minimal drawing of only the visible portions of the image.
 */
-void TiledImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
+void TiledImage::_draw(const Rectangle& r, const Style* style, Flags flags) const
 {
   if (!image_) return;
-  float fW = (float)w;
-  float fH = (float)h;
-  image_->measure(fW,fH); if (fW <= 0 || fH <= 0) return;
-  int iw = int(fW);
-  int ih = int(fH);
+  int iw = r.w();
+  int ih = r.h();
+  image_->measure(iw,ih); if (iw <= 0 || ih <= 0) return;
   int cx = 0;
   int cy = 0;
   // Perhaps this should use the Align flags to set cx, cy.
 
   // Figure out the smallest rectangle enclosing this and the clip region:
-  int X,Y,W,H; clip_box(x,y,w,h, X, Y, W, H);
-  if (W <= 0 || H <= 0) return;
-  cx += X-int(x); cy += Y-int(y);
-  push_clip(X, Y, W, H);
+  Rectangle cr(r); intersect_with_clip(cr);
+  if (cr.empty()) return;
+  cx += cr.x()-r.x(); cy += cr.y()-r.y();
+  push_clip(cr);
 
   int temp = -cx % iw;
   cx = (temp>0 ? iw : 0) - temp;
@@ -78,9 +76,13 @@ void TiledImage::_draw(int x, int y, int w, int h, const Style* style, Flags fla
   cy = (temp>0 ? ih : 0) - temp;
 
   int ccx=cx;
-  while (-cy < H) {
-    while (-cx < W) {
-      image_->draw(X-cx, Y-cy, iw, ih, style, flags);
+  Rectangle ir(iw,ih);
+
+  while (-cy < cr.h()) {
+    ir.y(cr.x()-cy);
+    while (-cx < cr.w()) {
+      ir.x(cr.x()-cx);
+      image_->draw(ir, style, flags);
       cx -= iw;
     }
     cy -= ih;
@@ -95,5 +97,5 @@ const BoxInfo* TiledImage::boxinfo() const {
 }
 
 //
-// End of "$Id: Fl_Tiled_Image.cxx,v 1.10 2004/08/01 22:28:23 spitzak Exp $".
+// End of "$Id: Fl_Tiled_Image.cxx,v 1.11 2005/01/24 08:07:47 spitzak Exp $".
 //

@@ -1,4 +1,4 @@
-// "$Id: Fl_Shared_Image.cxx,v 1.35 2004/08/25 17:10:37 spitzak Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.36 2005/01/24 08:07:45 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -203,9 +203,9 @@ int SharedImage::remove(const char* name)
   else return 0;
 }
 
-void SharedImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
+void SharedImage::_draw(const Rectangle& r, const Style* style, Flags flags) const
 {
-  if (this->w() < 0) { float W=(float)w; float H=(float)h; measure(W,H); }
+  if (this->w() < 0) { int W = r.w(); int H = r.h(); measure(W,H); }
   if (this->w() == 0) return;
   const_cast<SharedImage*>(this)->used =
     image_used++; // do this before check_mem_usage
@@ -221,9 +221,9 @@ void SharedImage::_draw(int x, int y, int w, int h, const Style* style, Flags fl
       return; 
     }
   }
-  Image::_draw(x,y,w,h,style,flags);
+  Image::_draw(r, style, flags);
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.35 2004/08/25 17:10:37 spitzak Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.36 2005/01/24 08:07:45 spitzak Exp $"
 //

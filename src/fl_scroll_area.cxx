@@ -1,5 +1,5 @@
 //
-// "$Id: fl_scroll_area.cxx,v 1.19 2004/07/19 23:33:05 laza2000 Exp $"
+// "$Id: fl_scroll_area.cxx,v 1.20 2005/01/24 08:07:56 spitzak Exp $"
 //
 // Scrolling routines for the Fast Light Tool Kit (FLTK).
 //
@@ -92,42 +92,42 @@ static bool is_visible(int x, int y, int w, int h)
 
 
 // scroll a rectangle and redraw the newly exposed portions:
-void fltk::scrollrect(int X, int Y, int W, int H, int dx, int dy,
-		       void (*draw_area)(void*, int,int,int,int), void* data)
+void fltk::scrollrect(const Rectangle& r, int dx, int dy,
+		       void (*draw_area)(void*, const Rectangle&), void* data)
 {
   if (!dx && !dy) return;
-  if (dx <= -W || dx >= W || dy <= -H || dy >= H) {
+  if (dx <= -r.w() || dx >= r.w() || dy <= -r.h() || dy >= r.h()) {
     // no intersection of old an new scroll
-    draw_area(data,X,Y,W,H);
+    draw_area(data, r);
     return;
   }
   int src_x, src_w, dest_x, clip_x, clip_w;
   if (dx > 0) {
-    src_x = X;
-    dest_x = X+dx;
-    src_w = W-dx;
-    clip_x = X;
+    src_x = r.x();
+    dest_x = r.x()+dx;
+    src_w = r.w()-dx;
+    clip_x = r.x();
     clip_w = dx;
   } else {
-    src_x = X-dx;
-    dest_x = X;
-    src_w = W+dx;
-    clip_x = X+src_w;
-    clip_w = W-src_w;
+    src_x = r.x()-dx;
+    dest_x = r.x();
+    src_w = r.w()+dx;
+    clip_x = r.x()+src_w;
+    clip_w = r.w()-src_w;
   }
   int src_y, src_h, dest_y, clip_y, clip_h;
   if (dy > 0) {
-    src_y = Y;
-    dest_y = Y+dy;
-    src_h = H-dy;
-    clip_y = Y;
+    src_y = r.y();
+    dest_y = r.y()+dy;
+    src_h = r.h()-dy;
+    clip_y = r.y();
     clip_h = dy;
   } else {
-    src_y = Y-dy;
-    dest_y = Y;
-    src_h = H+dy;
-    clip_y = Y+src_h;
-    clip_h = H-src_h;
+    src_y = r.y()-dy;
+    dest_y = r.y();
+    src_h = r.h()+dy;
+    clip_y = r.y()+src_h;
+    clip_h = r.h()-src_h;
   }
   int ox = 0; int oy = 0; transform(ox, oy);
 #if USE_X11
@@ -139,18 +139,19 @@ void fltk::scrollrect(int X, int Y, int W, int H, int dx, int dy,
     XEvent e; XWindowEvent(xdisplay, xwindow, ExposureMask, &e);
     if (e.type == NoExpose) break;
     // otherwise assumme it is a GraphicsExpose event:
-    draw_area(data, e.xexpose.x-ox, e.xexpose.y-oy,
-	      e.xexpose.width, e.xexpose.height);
+    draw_area(data,
+	      Rectangle(e.xexpose.x-ox, e.xexpose.y-oy,
+			e.xexpose.width, e.xexpose.height));
     if (!e.xgraphicsexpose.count) break;
   }
 #elif defined(_WIN32)
-  if(is_visible(src_x+ox, src_y+oy, src_w, src_h)) {
+  if (is_visible(src_x+ox, src_y+oy, src_w, src_h)) {
     BitBlt(dc, dest_x+ox, dest_y+oy, src_w, src_h,
 	   dc, src_x+ox, src_y+oy, SRCCOPY);
   } else {
     // Window overlapping scroll area.
     // Best we can do right now, is just redraw whole scroll area.
-    draw_area(data, X, Y, W, H);
+    draw_area(data, r);
     return;
   }
 #elif defined(__APPLE__)
@@ -166,10 +167,10 @@ void fltk::scrollrect(int X, int Y, int W, int H, int dx, int dy,
   // overlapped windows, somehow similar to what X does.
 #else
 #endif
-  if (dx) draw_area(data, clip_x, dest_y, clip_w, src_h);
-  if (dy) draw_area(data, X, clip_y, W, clip_h);
+  if (dx) draw_area(data, Rectangle(clip_x, dest_y, clip_w, src_h));
+  if (dy) draw_area(data, Rectangle(r.x(), clip_y, r.w(), clip_h));
 }
 
 //
-// End of "$Id: fl_scroll_area.cxx,v 1.19 2004/07/19 23:33:05 laza2000 Exp $".
+// End of "$Id: fl_scroll_area.cxx,v 1.20 2005/01/24 08:07:56 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.31 2004/05/18 15:53:41 spitzak Exp $"
+// "$Id: checkers.cxx,v 1.32 2005/01/24 08:07:59 spitzak Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -924,7 +924,7 @@ void make_bitmaps() {
 #define ISIZE black_1_width
 
 void draw_piece(int which, int x, int y) {
-  if (!fltk::not_clipped(x,y,ISIZE,ISIZE)) return;
+  if (!fltk::not_clipped(fltk::Rectangle(x,y,ISIZE,ISIZE))) return;
   switch (which) {
   case BLACK: which = 0; break;
   case WHITE: which = 1; break;
@@ -967,19 +967,19 @@ int squarey(int i) {return (usermoves(i,2)-'1')*BOXSIZE+BMOFFSET;}
 
 void Board::draw() {
   make_bitmaps();
-  fltk::setcolor(color()); fltk::fillrect(0,0,w(),h());
+  fltk::setcolor(color()); fltk::fillrect(fltk::Rectangle(w(),h()));
   fltk::setcolor((fltk::Color)107 /*10*/);
   int x; for (x=0; x<8; x++) for (int y=0; y<8; y++) {
-    if (!((x^y)&1)) fltk::fillrect(BORDER+x*BOXSIZE, BORDER+y*BOXSIZE,
-			     BOXSIZE-BORDER, BOXSIZE-BORDER);
+    if (!((x^y)&1)) fltk::fillrect(fltk::Rectangle(BORDER+x*BOXSIZE, BORDER+y*BOXSIZE,
+			     BOXSIZE-BORDER, BOXSIZE-BORDER));
   }
   fltk::setcolor(fltk::GRAY20);
   for (x=0; x<9; x++) {
-    fltk::fillrect(x*BOXSIZE,0,BORDER,h());
-    fltk::fillrect(0,x*BOXSIZE,w(),BORDER);
+    fltk::fillrect(fltk::Rectangle(x*BOXSIZE,0,BORDER,h()));
+    fltk::fillrect(fltk::Rectangle(0,x*BOXSIZE,w(),BORDER));
   }
   for (int i = 5; i < 40; i++) if (i != erase_this) {
-    draw_piece(b[i], squarex(i), squarey(i));
+    draw_piece(::b[i], squarex(i), squarey(i));
   }
   if (showlegal) {
     fltk::setcolor(fltk::WHITE);
@@ -1021,11 +1021,11 @@ void Board::drag_piece(int i, int dx, int dy) {
   if (!erase_this) { // pick up old piece
     dragx = squarex(i); dragy = squarey(i);
     erase_this = i;
-    dragging = b[i];
+    dragging = ::b[i];
   }
   if (dx != dragx || dy != dragy) {
-    redraw(dragx, dragy, ISIZE, ISIZE);
-    redraw(dx, dy, ISIZE, ISIZE);
+    redraw(Rectangle(dragx, dragy, ISIZE, ISIZE));
+    redraw(Rectangle(dx, dy, ISIZE, ISIZE));
   }
   dragx = dx;
   dragy = dy;
@@ -1039,8 +1039,8 @@ void Board::drop_piece(int i) {
   int x = squarex(i);
   int y = squarey(i);
   if (x != dragx || y != dragy) {
-    redraw(dragx, dragy, ISIZE, ISIZE);
-    redraw(x, y, ISIZE, ISIZE);
+    redraw(Rectangle(dragx, dragy, ISIZE, ISIZE));
+    redraw(Rectangle(x, y, ISIZE, ISIZE));
   }
 }
 
@@ -1143,7 +1143,7 @@ int Board::handle(int e) {
       for (t = root->son; t; t = t->brother) {
 	int x = squarex(t->from);
 	int y = squarey(t->from);
-	if (fltk::event_inside(x,y,BOXSIZE,BOXSIZE)) {
+	if (fltk::event_inside(Rectangle(x,y,BOXSIZE,BOXSIZE))) {
 	  deltax = fltk::event_x()-x;
 	  deltay = fltk::event_y()-y;
 	  drag_piece(t->from,x,y);
@@ -1376,5 +1376,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.31 2004/05/18 15:53:41 spitzak Exp $".
+// End of "$Id: checkers.cxx,v 1.32 2005/01/24 08:07:59 spitzak Exp $".
 //

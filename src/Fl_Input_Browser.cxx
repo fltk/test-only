@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.cxx,v 1.25 2004/08/07 06:19:54 laza2000 Exp $"
+// "$Id: Fl_Input_Browser.cxx,v 1.26 2005/01/24 08:07:21 spitzak Exp $"
 //
 // Input Browser (Combo Box) widget for the Fast Light Tool Kit (FLTK).
 //
@@ -55,7 +55,7 @@ InputBrowser::InputBrowser(int x, int y, int w, int h, const char *l)
 // these are only used when in grabbed state so only one exists at once
 static MenuWindow *mw;
 static InputBrowser *ib;
-static Browser *b;
+static Browser *browser;
 
 class ComboWindow : public MenuWindow {
   public:
@@ -69,7 +69,7 @@ ComboWindow::handle(int event) {
   case MOVE:
   case DRAG:
   case RELEASE:
-    return b->handle(event);
+    return browser->handle(event);
   }
   return MenuWindow::handle(event);
 }
@@ -82,7 +82,7 @@ class ComboBrowser : public Browser {
     ComboBrowser(int x, int y, int w, int h);
 };
 
-extern void browser_glyph(int glyph, int x,int y,int w,int h, const Style* style, Flags f);
+extern void browser_glyph(int glyph, const Rectangle&, const Style* style, Flags f);
 static void revert_combostyle(Style *s) {
   s->box_ = BORDER_BOX;
   s->glyph_ = browser_glyph;
@@ -110,7 +110,7 @@ ComboBrowser::handle(int event) {
     }
     break;
   case PUSH:
-    if (!event_inside(0, 0, w(), h())) {
+    if (!event_inside(Rectangle(0, 0, w(), h()))) {
       exit_modal();
       return 0;
     }
@@ -120,7 +120,7 @@ ComboBrowser::handle(int event) {
   case RELEASE:
   case DRAG:
     // this causes a drag-in to the widget to work:
-    if (event_inside(0, 0, w(), h())) {
+    if (event_inside(Rectangle(0, 0, w(), h()))) {
       fltk::pushed(this);
       // remember the mouse offset so we can send DRAG/RELEASE directly:
       fl_pushed_dx = e_x-e_x_root;
@@ -154,7 +154,7 @@ static void ComboBrowser_cb(Widget*, void*) {
       && event_key() != KeypadEnter
       && event_key() != ' ')
     return;
-  Widget *item = b->item();
+  Widget *item = browser->item();
   if (item->is_group()) return; // can't select a group!
   ib->item(item);
   ib->value(item->label());
@@ -184,7 +184,7 @@ InputBrowser::handle(int e) {
 
   if (e == ENTER || e == LEAVE) redraw_highlight();
 
-  if ((event_inside(input.x(), input.y(), input.w(), input.h()) || e == KEY)
+  if ((event_inside(input) || e == KEY)
     && !(type()&NONEDITABLE) && !pushed())
   {
     if (e == PUSH) fltk::pushed(input);
@@ -203,16 +203,16 @@ InputBrowser::handle(int e) {
                            200,400);
       mw->begin();
       // dummy W,H used -- will be replaced.
-      b = new ComboBrowser(0,0,200,400);
-      b->indented((type()&INDENTED) != 0);
+      browser = new ComboBrowser(0,0,200,400);
+      browser->indented((type()&INDENTED) != 0);
       share_list.other = this;
-      b->list(&share_list);
-      b->when(WHEN_RELEASE_ALWAYS);
-      b->callback(ComboBrowser_cb);
+      browser->list(&share_list);
+      browser->when(WHEN_RELEASE_ALWAYS);
+      browser->callback(ComboBrowser_cb);
       mw->end();
-      b->layout(); // (WAS: it is ok to do this)
-      int W = b->width()+b->scrollbar.w()+b->box()->dw();
-      int H = b->height()+b->box()->dh();
+      browser->layout(); // (WAS: it is ok to do this)
+      int W = browser->width()+browser->scrollbar.w()+browser->box()->dw();
+      int H = browser->height()+browser->box()->dh();
       if (W > maxw_) W = maxw_;
       if (H > maxh_) H = maxh_;
       if (W < minw_) W = minw_;
@@ -235,10 +235,10 @@ InputBrowser::handle(int e) {
         if (X < 0) { X = 0; W = monitor.r(); }
       }
       mw->resize(X, Y, W, H);
-      b->Widget::size(W, H);
+      browser->Widget::resize(W, H);
 
-      b->value(item() ? b->Group::find(item()) : 0);
-      b->make_item_visible();
+      browser->value(item() ? browser->Group::find(item()) : 0);
+      browser->make_item_visible();
 
       mw->exec(0, true);
 
@@ -265,16 +265,16 @@ void
 InputBrowser::draw() {
   minw_ = w();
   if (damage()&DAMAGE_ALL) draw_frame();
-  int X = 0, Y = 0, W = w(), H = h(); box()->inset(X, Y, W, H);
-  int W1 = H*4/5;
+  Rectangle r(w(),h()); box()->inset(r);
+  int W1 = r.h()*4/5;
   if (damage()&(DAMAGE_ALL|DAMAGE_CHILD)) {
-    input.resize(X, Y, W-W1, H);
+    input.resize(r.x(), r.y(), r.w()-W1, r.h());
     input.set_damage(DAMAGE_ALL);
     input.copy_style(style()); // force it to use this style
     input.box(FLAT_BOX);
     // fix for relative coordinates
     push_matrix();
-    translate(X,Y);
+    translate(r.x(),r.y());
     input.draw();
     pop_matrix();
     input.set_damage(0);
@@ -282,12 +282,12 @@ InputBrowser::draw() {
   if (damage()&(DAMAGE_ALL|DAMAGE_VALUE|DAMAGE_HIGHLIGHT)) {
     Flags f = current_flags_highlight();
     if (ib == this) f |= VALUE;
-    X += W-W1; W = W1;
     // draw the little mark at the right:
-    draw_glyph(GLYPH_DOWN_BUTTON, X, Y, W, H, f);
+    r.x(r.w()-W1); r.w(W1);
+    draw_glyph(GLYPH_DOWN_BUTTON, r, f);
   }
 }
 
 //
-// End of "$Id: Fl_Input_Browser.cxx,v 1.25 2004/08/07 06:19:54 laza2000 Exp $".
+// End of "$Id: Fl_Input_Browser.cxx,v 1.26 2005/01/24 08:07:21 spitzak Exp $".
 //

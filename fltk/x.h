@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.32 2004/12/18 19:03:02 spitzak Exp $"
+// "$Id: x.h,v 1.33 2005/01/24 08:07:07 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -157,7 +157,7 @@ public:
   XWindow frontbuffer;
   Window *window;
   Region region;
-  void expose(int x, int y, int w, int h);
+  void expose(const Rectangle&);
   CreatedWindow *next;
   bool wait_for_expose;
   bool backbuffer_bad; // used for XDBE
@@ -186,5 +186,5 @@ Window* find(XWindow xid);
 #endif
 
 //
-// End of "$Id: x.h,v 1.32 2004/12/18 19:03:02 spitzak Exp $".
+// End of "$Id: x.h,v 1.33 2005/01/24 08:07:07 spitzak Exp $".
 //

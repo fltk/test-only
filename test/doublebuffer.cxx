@@ -1,5 +1,5 @@
 //
-// "$Id: doublebuffer.cxx,v 1.15 2004/12/18 19:03:14 spitzak Exp $"
+// "$Id: doublebuffer.cxx,v 1.16 2005/01/24 08:07:59 spitzak Exp $"
 //
 // Test of double_buffer and overlay of Windows.
 // This demo shows how double buffering helps, by drawing the
@@ -47,7 +47,7 @@ class BlinkWindow : public Window {
 
   void draw() {
     setcolor(BLACK);
-    fillrect(0,0,w(),h());
+    fillrect(Rectangle(w(),h()));
     push_matrix();
     translate(w()/2, h()/2);
     scale(w()/2, h()/2);
@@ -69,7 +69,7 @@ class BlinkWindow : public Window {
     sprintf(buffer,"FLTK doublebuffer demo. This image has %d outlined triangles", n*(n-1)/2);
     setfont(HELVETICA_BOLD_ITALIC, 24);
     setcolor(BLACK);
-    drawtext(buffer,10,h()/2,w()-20,h()/2,ALIGN_WRAP|ALIGN_TOP);
+    drawtext(buffer,Rectangle(10,h()/2,w()-20,h()/2),ALIGN_WRAP|ALIGN_TOP);
   }
 
   void draw_overlay() {
@@ -171,5 +171,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: doublebuffer.cxx,v 1.15 2004/12/18 19:03:14 spitzak Exp $".
+// End of "$Id: doublebuffer.cxx,v 1.16 2005/01/24 08:07:59 spitzak Exp $".
 //

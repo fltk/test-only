@@ -65,7 +65,7 @@ public:
     down_button.callback(down_callback,this);
     up_button.callback(up_callback,this);
     slider.callback(slider_callback,this);
-    slider.type(Slider::HORIZONTAL|Slider::TICK_ABOVE);
+    slider.set_horizontal(); slider.type(Slider::TICK_ABOVE);
     slider.range(-10,10);
     slider.step(1);
     slider.value(0);

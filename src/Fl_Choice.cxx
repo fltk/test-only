@@ -1,4 +1,4 @@
-// "$Id: Fl_Choice.cxx,v 1.79 2004/11/12 06:50:14 spitzak Exp $"
+// "$Id: Fl_Choice.cxx,v 1.80 2005/01/24 08:07:17 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -74,21 +74,22 @@ extern bool fl_hide_underscore;
   to your own function that draws whatever you want.
 */
 void Choice::draw() {
-  int X=0; int Y=0; int W=w(); int H=h();
-  box()->inset(X,Y,W,H);
-  int w1 = H*4/5;
   if (damage() & DAMAGE_ALL) draw_frame();
+  Rectangle r(w(),h()); box()->inset(r);
+  int w1 = r.h()*4/5;
+  r.move_r(-w1);
   // draw the little mark at the right:
   if (damage() & (DAMAGE_ALL|DAMAGE_HIGHLIGHT)) {
     Flags flags = current_flags_highlight();
-    draw_glyph(GLYPH_DOWN_BUTTON, X+W-w1, Y, w1, H, flags & ~FOCUSED);
+    Rectangle gr(r.r(), r.y(), w1, r.h());
+    draw_glyph(GLYPH_DOWN_BUTTON, gr, flags & ~FOCUSED);
   }
   if (damage() & (DAMAGE_ALL|DAMAGE_VALUE)) {
     setcolor(color());
-    fillrect(X,Y,W-w1,H);
+    fillrect(r);
     if (focused()) {
       setcolor(selection_color());
-      fillrect(X+2, Y+2, W-w1-4, H-4);
+      Rectangle fr(r); fr.inset(2); fillrect(fr);
     }
     Widget* o = get_item();
     //if (!o && children()) o = child(0);
@@ -98,10 +99,11 @@ void Choice::draw() {
       if (focused()) o->set_flag(SELECTED);
       else o->clear_flag(SELECTED);
       if (!active_r()) o->set_flag(INACTIVE);
-      push_clip(X+2, Y, W-w1-2, H);
+      r.move_x(2);
+      push_clip(r);
       push_matrix();
-      translate(X, Y+((H-o->height())>>1));
-      int save_w = o->w(); o->w(W-w1);
+      translate(r.x(), r.y()+((r.h()-o->height())>>1));
+      int save_w = o->w(); o->w(r.r());
       fl_hide_underscore = true;
       o->draw();
       fl_hide_underscore = false;
@@ -235,5 +237,5 @@ Choice::Choice(int x,int y,int w,int h, const char *l) : Menu(x,y,w,h,l) {
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.79 2004/11/12 06:50:14 spitzak Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.80 2005/01/24 08:07:17 spitzak Exp $".
 //

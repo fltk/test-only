@@ -1,5 +1,5 @@
 //
-// "$Id: draw.h,v 1.12 2004/12/18 19:03:02 spitzak Exp $"
+// "$Id: draw.h,v 1.13 2005/01/24 08:07:07 spitzak Exp $"
 //
 // The fltk drawing library
 //
@@ -28,6 +28,7 @@
 
 #include "Flags.h" // for alignment values
 #include "Color.h"
+#include "Rectangle.h"
 
 namespace fltk {
 
@@ -47,22 +48,20 @@ FL_API void load_identity();
 
 // get and use transformed positions:
 FL_API void transform(float& x, float& y);
-FL_API void transform(int& x, int& y);
 FL_API void transform_distance(float& x, float& y);
-FL_API void transform_distance(int& x, int& y);
+FL_API void transform(int& x, int& y);
+FL_API void transform(Rectangle&);
 
 /*! \} */
 
 /*! \addtogroup clipping
   \{ */
-FL_API void push_clip(int x, int y, int w, int h);
-FL_API void clipout(int x, int y, int w, int h);
-// I got confused about the names. Probably this one will go away:
-inline void clip_out(int x, int y, int w, int h) {fltk::clipout(x,y,w,h);}
+FL_API void push_clip(const Rectangle&);
+FL_API void clipout(const Rectangle&);
 FL_API void pop_clip();
 FL_API void push_no_clip();
-FL_API int not_clipped(int x, int y, int w, int h);
-FL_API int clip_box(int, int, int, int, int& x, int& y, int& w, int& h);
+FL_API bool not_clipped(const Rectangle&);
+FL_API int intersect_with_clip(Rectangle&);
 /*! \} */
 
 /*! \addtogroup color
@@ -112,20 +111,17 @@ FL_API void fillstrokepath(Color);
 
 /*! \addtogroup rectangle
   \{ */
-FL_API void strokerect(int x, int y, int w, int h);
-FL_API void fillrect(int x, int y, int w, int h);
+FL_API void strokerect(const Rectangle&);
+FL_API void fillrect(const Rectangle&);
 FL_API void drawpoint(float x, float y);
 FL_API void drawpoint(int x, int y);
 FL_API void drawline(float x0, float y0, float x1, float y1);
 FL_API void drawline(int x0, int y0, int x1, int y1);
 enum {FILLPIE, FILLARC, STROKEPIE, STROKEARC};
-FL_API void fillpie(int x,int y,int w,int h,float a,float a2,int what=FILLPIE);
-inline void strokepie(int x,int y,int w,int h,float a,float a2) {
-  fillpie(x,y,w,h,a,a2,STROKEPIE);}
-inline void fillarc(int x,int y,int w,int h,float a,float a2) {
-  fillpie(x,y,w,h,a,a2,FILLARC);}
-inline void strokearc(int x,int y,int w,int h,float a,float a2) {
-  fillpie(x,y,w,h,a,a2,STROKEARC);}
+FL_API void fillpie(const Rectangle&,float a,float a2,int what=FILLPIE);
+inline void strokepie(const Rectangle& r,float a,float a2) {fillpie(r,a,a2,STROKEPIE);}
+inline void fillarc(const Rectangle& r,float a,float a2) {fillpie(r,a,a2,FILLARC);}
+inline void strokearc(const Rectangle& r,float a,float a2) {fillpie(r,a,a2,STROKEARC);}
 /*! \} */
 
 /*! \addtogroup font
@@ -147,19 +143,20 @@ inline float getsize() {return current_size_;}
 
 // measure things in the current font:
 FL_API float getwidth(const char*);
-FL_API float getwidth(const char*, int n);
+FL_API float getwidth(const char*, int length);
 FL_API float getascent();
 FL_API float getdescent();
 
 // draw using current font:
 FL_API void drawtext_transformed(const char*, int n, float x, float y);
 FL_API void drawtext(const char*, float x, float y);
-FL_API void drawtext(const char*, int n, float x, float y);
+FL_API void drawtext(const char*, int length, float x, float y);
 
 // the label text formatter:
 FL_API void measure(const char*, int& w, int& h, Flags = 0);
-FL_API void drawtext(const char*, int,int,int,int, Flags);
-FL_API void drawtext(const char*, float,float,float,float, Flags);
+FL_API void measure(const char*, int length, int& w, int& h, Flags);
+FL_API void drawtext(const char*, const Rectangle&, Flags);
+FL_API void drawtext(const char*, int length, const Rectangle&, Flags);
 // set where \t characters go in label text formatter:
 extern FL_API const int* column_widths_;
 inline const int* column_widths() {return column_widths_;}
@@ -171,7 +168,7 @@ inline void column_widths(const int* i) {column_widths_ = i;}
   \{ */
 enum PixelType {
   // Commented out ones are nyi and will only be done as people need them
-  // Low 2 bits indicate number of bytes to use!
+  // Low 3 bits indicate number of bytes to use!
   LUMINANCE= 1, /*!< 1 byte, 0xff = white, 0 = black */
   //LUMA= 2, /*!< 2 bytes: brightness, alpha. Unpremultiplied. */
   RGB	= 3, /*!< 3 bytes: r,g,b */
@@ -181,33 +178,33 @@ enum PixelType {
   //BGR	= 7, /*!< 3 bytes: b,g,r */
   //ABGR= 8  /*!< 4 bytes: a,g,b,r. Unpremultiplied */
 };
-FL_API void drawimage(const uchar*, PixelType, int,int,int,int, int delta, int ldelta);
-FL_API void drawimage(const uchar*, PixelType, int,int,int,int, int delta);
-FL_API void drawimage(const uchar*, PixelType, int,int,int,int);
+FL_API void drawimage(const uchar*, PixelType, const Rectangle&, int delta, int ldelta);
+FL_API void drawimage(const uchar*, PixelType, const Rectangle&, int delta);
+FL_API void drawimage(const uchar*, PixelType, const Rectangle&);
 
 typedef const uchar* (*DrawImageCallback)(void* data, int x, int y, int w, uchar* buffer);
-FL_API void drawimage(DrawImageCallback, void*, PixelType, int,int,int,int, int delta);
-FL_API void drawimage(DrawImageCallback, void*, PixelType, int,int,int,int);
+FL_API void drawimage(DrawImageCallback, void*, PixelType, const Rectangle&, int delta);
+FL_API void drawimage(DrawImageCallback, void*, PixelType, const Rectangle&);
 
-FL_API uchar *readimage(uchar *p, PixelType, int x,int y, int w, int h, int delta, int ldelta);
-FL_API uchar *readimage(uchar *p, PixelType, int x,int y, int w, int h, int delta);
-FL_API uchar *readimage(uchar *p, PixelType, int x,int y, int w, int h);
+FL_API uchar *readimage(uchar *p, PixelType, const Rectangle&, int delta, int ldelta);
+FL_API uchar *readimage(uchar *p, PixelType, const Rectangle&, int delta);
+FL_API uchar *readimage(uchar *p, PixelType, const Rectangle&);
 /*! \} */
 
 // depreciated:
 FL_API int draw_xpm(const char*const* data, int x, int y, Color=GRAY75);
 FL_API int measure_xpm(const char*const* data, int &w, int &h);
 FL_API void set_mask_bitmap(uchar **ppBitmap);
-FL_API void scrollrect(int X, int Y, int W, int H, int dx, int dy,
-		       void (*draw_area)(void*, int,int,int,int), void*);
+FL_API void scrollrect(const Rectangle&, int dx, int dy,
+		       void (*draw_area)(void*, const Rectangle&), void*);
 FL_API void overlay_rect(int,int,int,int);
 FL_API void overlay_clear();
-FL_API int draw_symbol(const char* label, int x,int y,int w,int h, Color);
+//FL_API int draw_symbol(const char* label, int x,int y,int w,int h, Color);
 
 }
 
 #endif
 
 //
-// End of "$Id: draw.h,v 1.12 2004/12/18 19:03:02 spitzak Exp $".
+// End of "$Id: draw.h,v 1.13 2005/01/24 08:07:07 spitzak Exp $".
 //

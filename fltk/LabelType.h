@@ -1,5 +1,5 @@
 //
-// "$Id: LabelType.h,v 1.4 2003/11/04 08:10:56 spitzak Exp $"
+// "$Id: LabelType.h,v 1.5 2005/01/24 08:07:06 spitzak Exp $"
 //
 // A LabelType determines how to draw the text of the label. This
 // is not used very much, it can be used to draw engraved or shadowed
@@ -29,14 +29,16 @@
 #ifndef fltk_LabelType_h
 #define fltk_LabelType_h
 
-#include "Style.h"
 #include "Flags.h"
+#include "Rectangle.h"
 
 namespace fltk {
 
+class Style;
+
 class FL_API LabelType {
 public:
-  virtual void draw(const char*, int,int,int,int, const Style*, Flags) const;
+  virtual void draw(const char*, const Rectangle&, const Style*, Flags) const;
   const char* name;
   LabelType* next;
   static LabelType* first;
@@ -48,7 +50,7 @@ public:
 class FL_API EngravedLabel : public LabelType {
   const int* data;
 public:
-  void draw(const char*, int,int,int,int, const Style*, Flags) const;
+  void draw(const char*, const Rectangle&, const Style*, Flags) const;
   EngravedLabel(const char * n, const int p[][3])
     : LabelType(n), data((const int*)p) {}
 };

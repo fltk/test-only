@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.42 2004/08/01 22:28:23 spitzak Exp $"
+// "$Id: fl_glyph.cxx,v 1.43 2005/01/24 08:07:54 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -40,10 +40,11 @@ using namespace fltk;
 
 /*! This is the glyph() function put into the default_style. See
   \ref glyphs for what it does. */
-void Widget::default_glyph(int glyph, int x,int y,int w,int h, const Style* style, Flags flags)
+void Widget::default_glyph(int glyph, const Rectangle& rr, const Style* style, Flags flags)
 {
   Color bg, fg; style->boxcolors(flags, bg, fg);
   Box* box = 0;
+  Rectangle r(rr);
 
   // handle special glyphs that don't draw the box:
   switch (glyph) {
@@ -55,14 +56,14 @@ void Widget::default_glyph(int glyph, int x,int y,int w,int h, const Style* styl
     break;
   default: {
     box = style->buttonbox();
-    box->draw(x,y,w,h, style, flags);
-    box->inset(x,y,w,h);
+    box->draw(r, style, flags);
+    box->inset(r);
     }
   }
 
-  if (w > h) {
-    x += (w-h)/2;
-    w = h;
+  if (r.w() > r.h()) {
+    r.x(r.x()+(r.w()-r.h())/2);
+    r.w(r.h());
   }
   // to draw the shape inactive, draw it twice to get the engraved look:
   int i = 0;
@@ -74,13 +75,13 @@ void Widget::default_glyph(int glyph, int x,int y,int w,int h, const Style* styl
     Color color = i ? Color(GRAY99) : fg;
     setcolor(color);
 
-    int w1 = (w+2)/3; int x1,y1;
+    int w1 = (r.w()+2)/3; int x1,y1;
     switch(glyph) {
 
     case GLYPH_UP_BUTTON:
     case GLYPH_UP:
-      x1 = x+(w-1)/2-w1+i;
-      y1 = y+(h-w1-1)/2+i;
+      x1 = r.x()+(r.w()-1)/2-w1+i;
+      y1 = r.y()+(r.h()-w1-1)/2+i;
       addvertex(x1, y1+w1);
       addvertex(x1+2*w1, y1+w1);
       addvertex(x1+w1, y1);
@@ -89,8 +90,8 @@ void Widget::default_glyph(int glyph, int x,int y,int w,int h, const Style* styl
 
     case GLYPH_DOWN_BUTTON:
     case GLYPH_DOWN:
-      x1 = x+(w-1)/2-w1+i;
-      y1 = y+(h-w1)/2+i;
+      x1 = r.x()+(r.w()-1)/2-w1+i;
+      y1 = r.y()+(r.h()-w1)/2+i;
       addvertex(x1, y1);
       addvertex(x1+w1, y1+w1);
       addvertex(x1+2*w1, y1);
@@ -99,8 +100,8 @@ void Widget::default_glyph(int glyph, int x,int y,int w,int h, const Style* styl
 
     case GLYPH_LEFT_BUTTON:
     case GLYPH_LEFT:
-      x1 = x+(w-w1-1)/2+i;
-      y1 = y+(h-1)/2-w1+i;
+      x1 = r.x()+(r.w()-w1-1)/2+i;
+      y1 = r.y()+(r.h()-1)/2-w1+i;
       addvertex(x1, y1+w1);
       addvertex(x1+w1, y1+2*w1);
       addvertex(x1+w1, y1);
@@ -109,8 +110,8 @@ void Widget::default_glyph(int glyph, int x,int y,int w,int h, const Style* styl
 
     case GLYPH_RIGHT_BUTTON:
     case GLYPH_RIGHT:
-      x1 = x+(w-w1)/2+i;
-      y1 = y+(h-1)/2-w1+i;
+      x1 = r.x()+(r.w()-w1)/2+i;
+      y1 = r.y()+(r.h()-1)/2-w1+i;
       addvertex(x1, y1);
       addvertex(x1+w1, y1+w1);
       addvertex(x1, y1+2*w1);
@@ -119,9 +120,9 @@ void Widget::default_glyph(int glyph, int x,int y,int w,int h, const Style* styl
 
     }
   }
-  if (box) style->focusbox()->draw(x,y,w,h, style, flags);
+  if (box) style->focusbox()->draw(r, style, flags);
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.42 2004/08/01 22:28:23 spitzak Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.43 2005/01/24 08:07:54 spitzak Exp $".
 //

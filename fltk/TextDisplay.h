@@ -1,5 +1,5 @@
 //
-// "$Id: TextDisplay.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: TextDisplay.h,v 1.2 2005/01/24 08:07:07 spitzak Exp $"
 //
 // Scrolling text display. I am not sure if this can be used by
 // itself, or if this is just a private class used to create TextEditor.
@@ -107,7 +107,7 @@ class FL_API TextDisplay: public Group {
     // Anything with "vline" indicates thats it deals with currently
     // visible lines.
 
-    void drawtext(int X, int Y, int W, int H);
+    void draw_text(const Rectangle&);
     void draw_range(int start, int end);
     void draw_cursor(int, int);
 
@@ -117,7 +117,7 @@ class FL_API TextDisplay: public Group {
     void draw_vline(int visLineNum, int leftClip, int rightClip,
                     int leftCharIndex, int rightCharIndex);
 
-    void clear_rect(int style, int x, int y, int width, int height);
+    void clear_rect(int style, const Rectangle&);
     void display_insert();
 
     void offset_line_starts(int newTopLineNum);
@@ -204,7 +204,7 @@ class FL_API TextDisplay: public Group {
     Scrollbar* mVScrollBar;
     int dragPos, dragType, dragging;
     int display_insert_position_hint;
-    struct { int x, y, w, h; } text_area;
+    Rectangle text_area;
 };
 
 }
@@ -212,5 +212,5 @@ class FL_API TextDisplay: public Group {
 #endif
 
 //
-// End of "$Id: TextDisplay.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: TextDisplay.h,v 1.2 2005/01/24 08:07:07 spitzak Exp $".
 //

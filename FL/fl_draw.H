@@ -35,10 +35,10 @@ enum {
 };
 
 // rectangles tweaked to exactly fill the pixel rectangle:
-inline void fl_rect(int x, int y, int w, int h) {fltk::strokerect(x,y,w,h);}
-inline void fl_rect(int x, int y, int w, int h, fltk::Color c) {fltk::setcolor(c); fltk::strokerect(x,y,w,h);}
-inline void fl_rectf(int x, int y, int w, int h) {fltk::fillrect(x,y,w,h);}
-inline void fl_rectf(int x, int y, int w, int h, fltk::Color c) {fltk::setcolor(c); fltk::fillrect(x,y,w,h);}
+inline void fl_rect(int x, int y, int w, int h) {fltk::strokerect(fltk::Rectangle(x,y,w,h));}
+inline void fl_rect(int x, int y, int w, int h, fltk::Color c) {fltk::setcolor(c); fltk::strokerect(fltk::Rectangle(x,y,w,h));}
+inline void fl_rectf(int x, int y, int w, int h) {fltk::fillrect(fltk::Rectangle(x,y,w,h));}
+inline void fl_rectf(int x, int y, int w, int h, fltk::Color c) {fltk::setcolor(c); fltk::fillrect(fltk::Rectangle(x,y,w,h));}
 
 // line segments:
 inline void fl_line(int x0,int y0, int x1,int y1) {fltk::drawline(x0,y0,x1,y1);}
@@ -120,7 +120,7 @@ inline void fl_yxline(int x, int y, int y1, int x2, int y3) {
 }
 
 // circular lines and pie slices (code in fl_arci.C):
-inline void fl_arc(int x,int y,int w,int h,float a,float a2) {fltk::fillarc(x,y,w,h,a,a2);}
+inline void fl_arc(int x,int y,int w,int h,float a,float a2) {fltk::fillarc(fltk::Rectangle(x,y,w,h),a,a2);}
 #define fl_pie		fltk::fillpie
 #define fl_chord	fltk::fillarc
 
@@ -165,7 +165,7 @@ inline float fl_width(char c) {return fltk::getwidth(&c,1);}
 inline void fl_draw(const char* s, int x, int y) {fltk::drawtext(s,x,y);}
 inline void fl_draw(const char* s, int n, int x, int y) {fltk::drawtext(s,n,x,y);}
 inline void fl_measure(const char* s, int& x, int& y) {fltk::measure(s,x,y);}
-inline void fl_draw(const char* s, int x,int y,int w,int h, fltk::Flags f) {fltk::drawtext(s,x,y,w,h,f);}
+inline void fl_draw(const char* s, int x,int y,int w,int h, fltk::Flags f) {fltk::drawtext(s,fltk::Rectangle(x,y,w,h),f);}
 
 // boxtypes:
 //void fl_frame(const char* s, int x, int y, int w, int h);
@@ -175,19 +175,19 @@ inline void fl_draw(const char* s, int x,int y,int w,int h, fltk::Flags f) {fltk
 //  inline void fl_draw_box(fltk::Box* b, int x, int y, int w, int h, fltk::Color c) {b->draw(x,y,w,h,c);}
 
 // images:
-inline void fl_draw_image(const uchar* p, int x,int y,int w,int h, int delta, int ldelta) {fltk::drawimage(p,fltk::RGB,x,y,w,h,delta,ldelta);}
-inline void fl_draw_image(const uchar* p, int x,int y,int w,int h, int delta) {fltk::drawimage(p,fltk::RGB,x,y,w,h,delta);}
+inline void fl_draw_image(const uchar* p, int x,int y,int w,int h, int delta, int ldelta) {fltk::drawimage(p,fltk::RGB,fltk::Rectangle(x,y,w,h),delta,ldelta);}
+inline void fl_draw_image(const uchar* p, int x,int y,int w,int h, int delta) {fltk::drawimage(p,fltk::RGB,fltk::Rectangle(x,y,w,h),delta);}
 
-inline void fl_draw_image_mono(const uchar* p, int x,int y,int w,int h, int delta, int ldelta) {fltk::drawimage(p,fltk::LUMINANCE,x,y,w,h,delta,ldelta);}
-inline void fl_draw_image_mono(const uchar* p, int x,int y,int w,int h, int delta=1) {fltk::drawimage(p,fltk::LUMINANCE,x,y,w,h,delta);}
+inline void fl_draw_image_mono(const uchar* p, int x,int y,int w,int h, int delta, int ldelta) {fltk::drawimage(p,fltk::LUMINANCE,fltk::Rectangle(x,y,w,h),delta,ldelta);}
+inline void fl_draw_image_mono(const uchar* p, int x,int y,int w,int h, int delta=1) {fltk::drawimage(p,fltk::LUMINANCE,fltk::Rectangle(x,y,w,h),delta);}
 
 typedef fltk::DrawImageCallback Fl_Draw_Image_Cb;
-inline void fl_draw_image(Fl_Draw_Image_Cb cb, void* p, int x,int y,int w,int h, int delta=3) {fltk::drawimage(cb,p,fltk::RGB,x,y,w,h,delta);}
-inline void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* p, int x,int y,int w,int h, int delta=1) {fltk::drawimage(cb,p,fltk::LUMINANCE,x,y,w,h,delta);}
+inline void fl_draw_image(Fl_Draw_Image_Cb cb, void* p, int x,int y,int w,int h, int delta=3) {fltk::drawimage(cb,p,fltk::RGB,fltk::Rectangle(x,y,w,h),delta);}
+inline void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* p, int x,int y,int w,int h, int delta=1) {fltk::drawimage(cb,p,fltk::LUMINANCE,fltk::Rectangle(x,y,w,h),delta);}
 
-inline uchar *fl_read_image(uchar *p, int x,int y, int w, int h, int alpha=0) {return fltk::readimage(p, alpha?fltk::RGBA:fltk::RGB, x,y,w,h, alpha?4:3);}
+inline uchar *fl_read_image(uchar *p, int x,int y, int w, int h, int alpha=0) {return fltk::readimage(p, alpha?fltk::RGBA:fltk::RGB, fltk::Rectangle(x,y,w,h), alpha?4:3);}
 
-inline void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {fltk::setcolor(fltk::color(r,g,b)); fltk::fillrect(x,y,w,h);}
+inline void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {fltk::setcolor(fltk::color(r,g,b)); fltk::fillrect(fltk::Rectangle(x,y,w,h));}
 
 #define fl_draw_pixmap		fltk::draw_xpm
 #define fl_measure_pixmap	fltk::measure_xpm
@@ -201,5 +201,5 @@ inline void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {flt
 #endif
 
 //
-// End of "$Id: fl_draw.H,v 1.36 2004/09/05 21:40:40 spitzak Exp $".
+// End of "$Id: fl_draw.H,v 1.37 2005/01/24 08:06:49 spitzak Exp $".
 //

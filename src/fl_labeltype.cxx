@@ -1,7 +1,6 @@
+// "$Id: fl_labeltype.cxx,v 1.49 2005/01/24 08:07:54 spitzak Exp $"
 //
-// "$Id: fl_labeltype.cxx,v 1.48 2004/08/01 22:28:24 spitzak Exp $"
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -19,7 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 // Originally this contained the definition of LabelType. It now
 // contains all the drawing code used by widgets.
@@ -48,8 +46,8 @@ LabelType* LabelType::first = 0;
 extern bool fl_drawing_shadow;
 
 void LabelType::draw(const char* label,
-		      int X, int Y, int W, int H,
-		      const Style* style, Flags flags) const
+		     const Rectangle& r,
+		     const Style* style, Flags flags) const
 {
   if (flags&OUTPUT)
     setfont(style->textfont(), style->textsize());
@@ -59,11 +57,12 @@ void LabelType::draw(const char* label,
   if (flags & INACTIVE) {
     fl_drawing_shadow = true;
     setcolor(GRAY90);
-    drawtext(label, X+1, Y+1, W, H, flags);
+    Rectangle r1(r); r1.move(1,1);
+    drawtext(label, r1, flags);
     fl_drawing_shadow = false;
   }
   setcolor(fg);
-  drawtext(label, X, Y, W, H, flags);
+  drawtext(label, r, flags);
 }
 
 static LabelType normalLabel("normal");
@@ -74,7 +73,7 @@ LabelType* const fltk::SYMBOL_LABEL = &normalLabel;
 
 class FL_API NoLabel : public LabelType {
 public:
-  void draw(const char*, int,int,int,int, const Style*, Flags) const {}
+  void draw(const char*, const Rectangle&, const Style*, Flags) const {}
   NoLabel(const char * n) : LabelType(n) {}
 };
 static NoLabel noLabel("none");
@@ -106,13 +105,15 @@ void Widget::make_current() const {
 /** Draw the widget's box() such that it fills the entire area of the
     widget. If the box is not rectangluar, this also draws the area
     of the parent widget that is exposed. The box drawing routine is
-    passed the style() and current_flags() of th ewidget.
+    passed the style() and current_flags() of the widget.
 */
 void Widget::draw_box() const {
   Box* box = this->box();
+#if USE_CLIPOUT
   if (damage()&DAMAGE_EXPOSE && !box->fills_rectangle() && parent())
     draw_background();
-  box->draw(0, 0, w(), h(), style(), current_flags()|OUTPUT);
+#endif
+  box->draw(Rectangle(w(),h()), style(), current_flags()|OUTPUT);
   // draw a big x to show where image will be drawn:
 //    setcolor(BLACK);
 //    drawline(0,0,w(),h());
@@ -126,7 +127,7 @@ void Widget::draw_box() const {
     redrawing them anyway (ie anything displaying text).
 */
 void Widget::draw_frame() const {
-  box()->draw(0, 0, w(), h(), style(), current_flags()|INVISIBLE|OUTPUT);
+  box()->draw(Rectangle(w(),h()), style(), current_flags()|INVISIBLE|OUTPUT);
 }
 
 /** Return the flags that should be passed to drawing functions.
@@ -168,9 +169,9 @@ void Widget::draw_label() const {
   if (!image() && (!label() || !*label() ||
 		   (flags&15) && !(flags & ALIGN_INSIDE))) return;
   // figure out the inside of the box():
-  int X=0; int Y=0; int W=w_; int H=h_; box()->inset(X,Y,W,H);
+  Rectangle r(w(),h()); box()->inset(r);
   // and draw it:
-  draw_label(X,Y,W,H,style(),flags);
+  draw_label(r, style(), flags);
 }
 
 /** Draws labels inside the widget. \a XYWH is the bounding box to
@@ -185,87 +186,77 @@ void Widget::draw_label() const {
     box in a nice way. The image() is put against the side that any
     ALIGN flags say, and then the label() is put next to that.
 */
-void Widget::draw_label(int X, int Y, int W, int H, const Style* style, Flags flags) const
+void Widget::draw_label(const Rectangle& ir, const Style* style, Flags flags) const
 {
   // If label is drawn outside, draw the image only:
   if ((flags&15) && !(flags & ALIGN_INSIDE)) {
     if (!image_) return;
-    int fw = W;
-    int fh = H;
+    int fw = ir.w();
+    int fh = ir.h();
     image_->measure(fw, fh);
-    if (flags & ALIGN_CLIP) push_clip(X, Y, W, H);
-    image_->draw(X+((W-fw)>>1), Y+((H-fh)>>1),fw,fh,style,flags);
+    if (flags & ALIGN_CLIP) push_clip(ir);
+    Rectangle cr(ir,fw,fh);
+    image_->draw(cr, style, flags);
     if (flags & ALIGN_CLIP) pop_clip();
     return;
   }
 
+  Rectangle r(ir);
   if (image_) {
 
-    float fw = W;
-    float fh = H;
-    image_->measure(fw, fh);
-    int w = int(fw);
-    int h = int(fh);
+    int w = r.w();
+    int h = r.h();
+    image_->measure(w, h);
 
     // If all flags including ALIGN_INSIDE are off it changes how
     // label and image are printed so they are both centered "nicely"
     // in the button:
     if (label_ && !(flags&0x1f) && !(label_[0]=='@' && label_[1]==';')) {
-      int d = (H-int(h+labelsize()+leading()+.5))>>1;
-      if (d >= 0 || w >= W) {
+      int d = (r.h()-int(h+labelsize()+leading()+.5))>>1;
+      if (d >= 0) {
 	// put the image atop the text
-	Y += d; H -= d; flags |= ALIGN_TOP;
-      } else {
+	r.move_y(d); flags |= ALIGN_TOP;
+      } else if (w < r.w()) {
 	// put image to left
-	int text_w = W; int text_h = H;
 	if (flags&OUTPUT)
 	  setfont(textfont(), textsize());
 	else
 	  setfont(labelfont(), labelsize());
+	int text_w = r.w(); int text_h = r.h();
 	measure(label_, text_w, text_h, flags);
-	int d = (W-(h+text_w))>>1;
-	if (d > 0) {X += d; W -= d;}
-	flags |= ALIGN_LEFT;
+	int d = (r.w()-(w+text_w))>>1;
+	if (d > 0) {
+	  r.move_x(d);
+	  flags |= ALIGN_LEFT;
+	}
       }
     }
 
-    int cx,cy; // point in image to put at X,Y
-    if (flags & ALIGN_RIGHT) {
-      cx = w-W;
-      if (flags & ALIGN_LEFT && cx < 0) cx = 0;
-    }
-    else if (flags & ALIGN_LEFT) cx = 0;
-    else cx = w/2-W/2;
-    if (flags & ALIGN_BOTTOM) {
-      cy = h-H;
-      if (flags & ALIGN_TOP && cy < 0) cy = 0;
-    }
-    else if (flags & ALIGN_TOP) cy = 0;
-    else cy = h/2-H/2;
+    if (flags & ALIGN_CLIP) push_clip(r);
 
-    if (flags & ALIGN_CLIP) push_clip(X, Y, W, H);
-    image_->draw(X-cx, Y-cy, w, h, style, flags);
+    Rectangle ir(r, w, h, flags);
+    image_->draw(ir, style, flags);
 
     // figure out the rectangle that remains for text:
-    if (flags & ALIGN_LEFT) {X += w; W -= w;}
-    else if (flags & ALIGN_RIGHT) W -= w;
-    else if (flags & ALIGN_TOP) {Y += h; H -= h;}
-    else if (flags & ALIGN_BOTTOM) H -= h;
-    else {Y += (h-cy); H -= (h-cy); /*flags |= ALIGN_TOP;*/}
+    if (flags & ALIGN_TOP) r.set_y(ir.b());
+    else if (flags & ALIGN_BOTTOM) r.set_b(ir.y());
+    else if (flags & ALIGN_LEFT) r.set_x(ir.r());
+    else if (flags & ALIGN_RIGHT) r.set_r(ir.x());
+    else {r.set_y(ir.b()); /*flags |= ALIGN_TOP;*/}
   }
 
-  if (W>0 && label_ && *label_) {
+  if (r.w()>0 && label_ && *label_) {
     // add some interior border for the text:
-    if (W > 6 && flags&ALIGN_LEFT) {
-      if (W > 9) {X += 3; W -= 6;}
-      else {X += W-6; W = 6;}
+    if (r.w() > 6 && flags&ALIGN_LEFT) {
+      if (r.w() > 9) {r.move_x(3); r.move_r(-3);}
+      else r.set_x(r.r()-6);
     }
-    if (W > 6 && flags&ALIGN_RIGHT) {
-      if (W > 9) W -= 6;
-      else W = 6;
+    if (r.w() > 6 && flags&ALIGN_RIGHT) {
+      if (r.w() > 9) r.move_r(-6);
+      else r.w(6);
     }
-    if (!image_ && (flags & ALIGN_CLIP)) push_clip(X, Y, W, H);
-    labeltype()->draw(label_, X, Y, W, H, style, flags);
+    if (!image_ && (flags & ALIGN_CLIP)) push_clip(r);
+    labeltype()->draw(label_, r, style, flags);
   } else {
     if (!image_) return; // don't call pop_clip if push_clip was not called
   }
@@ -295,10 +286,7 @@ void Group::draw_outside_label(Widget& w) const {
   if (!w.label() || !*w.label()) return;
   // invent a box that is outside the widget:
   Flags align = w.flags();
-  int X = w.x();
-  int Y = w.y();
-  int W = w.w();
-  int H = w.h();
+  Rectangle r(w);
   if (align & ALIGN_TOP) {
     if (align & ALIGN_BOTTOM) {
       // special cases to align on left or right side at top/bottom
@@ -308,35 +296,35 @@ void Group::draw_outside_label(Widget& w) const {
 	align &= ~ALIGN_BOTTOM;
       }
       if (align & ALIGN_RIGHT) {
-	X = X+W+3;
-	W = this->w()-X;
+	r.x(r.r()+3);
+	r.set_r(this->w());
 	align = align&~ALIGN_RIGHT | ALIGN_LEFT;
       } else {
-	X = 0;
-	W = w.x()-3;
+	r.x(0);
+	r.w(w.x()-3);
 	align = align | ALIGN_RIGHT;
       }
     } else {
       align ^= (ALIGN_BOTTOM|ALIGN_TOP);
-      Y = 0;
-      H = w.y();
+      r.y(0);
+      r.h(w.y());
     }
   } else if (align & ALIGN_BOTTOM) {
     align ^= (ALIGN_BOTTOM|ALIGN_TOP);
-    Y = Y+H;
-    H = h()-Y;
+    r.y(r.b());
+    r.set_b(h());
   } else if (align & ALIGN_LEFT) {
     align ^= (ALIGN_LEFT|ALIGN_RIGHT);
-    X = 0;
-    W = w.x()-3;
+    r.x(0);
+    r.w(w.x()-3);
   } else if (align & ALIGN_RIGHT) {
     align ^= (ALIGN_LEFT|ALIGN_RIGHT);
-    X = X+W+3;
-    W = this->w()-X;
+    r.x(r.r()+3);
+    r.set_r(this->w());
   }
   if (!w.active_r()) align |= INACTIVE;
   //push_clip(X, Y, W, H); // this will break some old fltk programs
-  w.labeltype()->draw(w.label(), X, Y, W, H, w.style(), align);
+  w.labeltype()->draw(w.label(), r, w.style(), align);
   //pop_clip();
 }
 
@@ -356,5 +344,5 @@ void Widget::measure_label(int& w, int& h) const {
 }
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.48 2004/08/01 22:28:24 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.49 2005/01/24 08:07:54 spitzak Exp $".
 //

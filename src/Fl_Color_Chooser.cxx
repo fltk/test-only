@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.40 2004/09/05 21:40:41 spitzak Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.41 2005/01/24 08:07:18 spitzak Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -165,16 +165,17 @@ static void tohs(float x, float y, float& h, float& s) {
 
 int ccHueBox::handle(int e) {
   static float is;
+  static float ih;
   ColorChooser* c = (ColorChooser*)parent();
   switch (e) {
   case PUSH:
     is = c->s();
+    ih = c->h();
   case DRAG: {
     float Xf, Yf, H, S;
-    int ix = 0; int iy = 0; int iw = w(); int ih = h();
-    box()->inset(ix, iy, iw, ih);
-    Xf = (event_x()-ix)/float(iw);
-    Yf = (event_y()-iy)/float(ih);
+    Rectangle r(w(),h()); box()->inset(r);
+    Xf = (event_x()-r.x())/float(r.w());
+    Yf = (event_y()-r.y())/float(r.h());
     tohs(Xf, Yf, H, S);
     if (fabsf(H-ih) < 3*6.0f/w()) H = (float)ih;
     if (fabsf(S-is) < 3*1.0f/h()) S = (float)is;
@@ -188,9 +189,8 @@ int ccHueBox::handle(int e) {
 
 static const uchar* generate_image(void* vv, int X, int Y, int W, uchar* p) {
   ccHueBox* v = (ccHueBox*)vv;
-  int x1 = 0; int y1 = 0; int w1 = v->w(); int h1 = v->h();
-  v->box()->inset(x1,y1,w1,h1);
-  float Yf = float(Y)/h1;
+  Rectangle r(v->w(),v->h()); v->box()->inset(r);
+  float Yf = float(Y)/r.h();
 #ifdef UPDATE_HUE_BOX
   const float V = ((ColorChooser*)(v->parent()))->v();
 #else
@@ -198,7 +198,7 @@ static const uchar* generate_image(void* vv, int X, int Y, int W, uchar* p) {
 #endif
   uchar* buf = p;
   for (int x = X; x < X+W; x++) {
-    float Xf = float(x)/w1;
+    float Xf = float(x)/r.w();
     float H,S; tohs(Xf,Yf,H,S);
     float r,g,b;
     ColorChooser::hsv2rgb(H,S,V,r,g,b);
@@ -211,23 +211,24 @@ static const uchar* generate_image(void* vv, int X, int Y, int W, uchar* p) {
 
 void ccHueBox::draw() {
   if (damage()&DAMAGE_ALL) draw_frame();
-  int x1 = 0; int y1 = 0; int w1 = w(); int h1 = h();
-  box()->inset(x1,y1,w1,h1);
-  if (damage() == DAMAGE_VALUE) push_clip(x1+px,y1+py,6,6);
-  drawimage(generate_image, this, RGB, x1, y1, w1, h1);
+  Rectangle r(w(),h()); box()->inset(r);
+  if (damage() == DAMAGE_VALUE) {
+    push_clip(Rectangle(r.x()+px,r.y()+py,6,6));
+  }
+  drawimage(generate_image, this, RGB, r);
   if (damage() == DAMAGE_VALUE) pop_clip();
   ColorChooser* c = (ColorChooser*)parent();
 #ifdef CIRCLE
-  int X = int(.5f*(cosf(c->h()*float(M_PI/3.0))*c->s()+1) * (w1-6));
-  int Y = int(.5f*(1-sinf(c->h()*float(M_PI/3.0))*c->s()) * (h1-6));
+  int X = int(.5f*(cosf(c->h()*float(M_PI/3.0))*c->s()+1) * (r.w()-6));
+  int Y = int(.5f*(1-sinf(c->h()*float(M_PI/3.0))*c->s()) * (r.h()-6));
 #else
-  int X = int(c->h()/6.0f*(w1-6));
-  int Y = int((1-c->s())*(h1-6));
+  int X = int(c->h()/6.0f*(r.w()-6));
+  int Y = int((1-c->s())*(r.h()-6));
 #endif
-  if (X < 0) X = 0; else if (X > w1-6) X = w1-6;
-  if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
+  if (X < 0) X = 0; else if (X > r.w()-6) X = r.w()-6;
+  if (Y < 0) Y = 0; else if (Y > r.h()-6) Y = r.h()-6;
   //  color(c->v()>.75 ? BLACK : WHITE);
-  buttonbox()->draw(x1+X, y1+Y, 6, 6, style(), 0);
+  buttonbox()->draw(Rectangle(r.x()+X, r.y()+Y, 6, 6), style(), 0);
   px = X; py = Y;
 }
 
@@ -246,9 +247,8 @@ int ccValueBox::handle(int e) {
     iv = is_alpha() ? c->a() : c->v();
   case DRAG: {
     float Yf;
-    int x1 = 0; int y1 = 0; int w1 = w(); int h1 = h();
-    box()->inset(x1,y1,w1,h1);
-    Yf = 1-(event_y()-y1)/float(h1);
+    Rectangle r(w(),h()); box()->inset(r);
+    Yf = 1-(event_y()-r.y())/float(r.h());
     if (fabsf(Yf-iv)<(3*1.0f/h())) Yf = iv;
     if (is_alpha()) {
       if (c->a(Yf)) c->do_callback();
@@ -262,13 +262,13 @@ int ccValueBox::handle(int e) {
 
 struct Idata {
   float r, g, b;
-  int w, h;
+  Rectangle wh;
   bool aimage;
 };
 
 static const uchar* generate_vimage(void* vv, int X, int Y, int W, uchar* p) {
   const Idata& i = *((Idata*)vv);
-  float yy = 255*(float(Y-3)/(i.h-6));
+  float yy = 255*(float(Y-3)/(i.wh.h()-6));
   if (yy<0) yy = 0; else if (yy > 255) yy = 255;
   float Yf = 255-yy;
   uchar r = uchar(i.r*Yf+.5f);
@@ -299,8 +299,7 @@ void ccValueBox::draw() {
   if (damage()&DAMAGE_ALL) draw_frame();
   ColorChooser* c = (ColorChooser*)parent();
   Idata i;
-  int x1 = 0; int y1 = 0; i.w = w(); i.h = h();
-  box()->inset(x1,y1,i.w,i.h);
+  i.wh.set(0,0,w(),h()); box()->inset(i.wh);
   float v;
   if (is_alpha()) {
     i.r = c->r(); i.g = c->g(); i.b = c->b();
@@ -311,12 +310,14 @@ void ccValueBox::draw() {
     v = c->v();
     i.aimage = false;
   }
-  if (damage() == DAMAGE_VALUE) push_clip(x1,y1+py,i.w,6);
-  drawimage(generate_vimage, &i, RGB, x1, y1, i.w, i.h);
+  if (damage() == DAMAGE_VALUE) {
+    push_clip(Rectangle(i.wh.x(),i.wh.y()+py,i.wh.w(),6));
+  }
+  drawimage(generate_vimage, &i, RGB, i.wh);
   if (damage() == DAMAGE_VALUE) pop_clip();
-  int Y = int((1-v) * (i.h-6));
-  if (Y < 0) Y = 0; else if (Y > i.h-6) Y = i.h-6;
-  buttonbox()->draw(x1, y1+Y, i.w, 6, style(), 0);
+  int Y = int((1-v) * (i.wh.h()-6));
+  if (Y < 0) Y = 0; else if (Y > i.wh.h()-6) Y = i.wh.h()-6;
+  buttonbox()->draw(Rectangle(i.wh.x(), i.wh.y()+Y, i.wh.w(), 6), style(), 0);
   py = Y;
 }
 
@@ -335,16 +336,20 @@ FL_API Color fl_color_cells[ROWS*COLS] = {
 32,32,32,37,37,39,39,43,43,47,47,49,49,55,55,55};
 
 void ccCellBox::draw() {
+  int yy = 0;
   for (int Y = 0; Y < ROWS; Y++) {
-    int yy = Y*h()/ROWS;
     int hh = (Y+1)*h()/ROWS - yy;
+    int xx = 0;
     for (int X = 0; X < COLS; X++) {
-      int xx = X*w()/COLS;
       int ww = (X+1)*w()/COLS - xx;
-      THIN_DOWN_BOX->draw(xx,yy,ww,hh,style(),0);
+      Rectangle r(xx,yy,ww,hh);
+      THIN_DOWN_BOX->draw(r, style(), 0);
+      r.inset(1);
       setcolor(fl_color_cells[Y*COLS+X]);
-      fillrect(xx+1,yy+1,ww-2,hh-2);
+      fillrect(r);
+      xx += ww;
     }
+    yy += hh;
   }
 }
 
@@ -672,5 +677,5 @@ bool fltk::color_chooser(const char* name, Color& c) {
 /*! \} */
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.40 2004/09/05 21:40:41 spitzak Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.41 2005/01/24 08:07:18 spitzak Exp $".
 //

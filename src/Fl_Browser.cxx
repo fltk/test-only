@@ -1,7 +1,6 @@
+// "$Id: Fl_Browser.cxx,v 1.103 2005/01/24 08:07:15 spitzak Exp $"
 //
-// "$Id: Fl_Browser.cxx,v 1.102 2004/11/12 06:50:14 spitzak Exp $"
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -19,7 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #include <fltk/Browser.h>
 #include <fltk/Button.h>
@@ -517,46 +515,46 @@ enum {
 #define BOXSIZE 9
 
 void
-browser_glyph(int glyph, int x,int y,int w,int h, const Style* style, Flags f)
+browser_glyph(int glyph, const Rectangle& r, const Style* style, Flags f)
 {
   Color bg, fg; style->boxcolors(f|OUTPUT, bg, fg);
   //if (fg == BLACK) fg = GRAY33;
   setcolor(fg);
-  int lx = x+w/2;
-  int ly = y+(h-1)/2;
+  int lx = r.center_x();
+  int ly = r.y()+(r.h()-1)/2; // slightly higher than center_y() for some reason
   switch (glyph) {
   case NONE:
     break;
   case BAR:
-    drawline(lx, y, lx, y+h-1);
+    drawline(lx, r.y(), lx, r.b()-1);
     break;
   case ELL:
-    drawline(lx, y, lx, ly);
-    drawline(lx, ly, x+w, ly);
+    drawline(lx, r.y(), lx, ly);
+    drawline(lx, ly, r.r(), ly);
     break;
   case TEE:
-    drawline(lx, y, lx, y+h-1);
-    drawline(lx, ly, x+w, ly);
+    drawline(lx, r.y(), lx, r.b()-1);
+    drawline(lx, ly, r.r(), ly);
     break;
 #if TRIANGLE_GLYPH
   case CLOSED_TEE:
   case OPEN_TEE:
-    drawline(lx, y, lx, y+h-1);
+    drawline(lx, r.y(), lx, r.b()-1);
     goto J1;
   case CLOSED_ELL:
   case OPEN_ELL:
-    drawline(lx, y, lx, ly);
+    drawline(lx, r.y(), lx, ly);
   J1:
     Widget::default_glyph(glyph < OPEN_ELL ? GLYPH_RIGHT : GLYPH_DOWN,
-	     x, y, w, h, style, f);
+	     r, style, f);
     break;
 #else
   default: {
     const int boxsize = BOXSIZE/2;
-    drawline(lx, y, lx, ly-boxsize);
-    if (glyph&1) drawline(lx, ly+boxsize, lx, y+h-1);
-    drawline(lx+boxsize, ly, x+w, ly);
-    strokerect(lx-boxsize, ly-boxsize, BOXSIZE, BOXSIZE);
+    drawline(lx, r.y(), lx, ly-boxsize);
+    if (glyph&1) drawline(lx, ly+boxsize, lx, r.b()-1);
+    drawline(lx+boxsize, ly, r.r(), ly);
+    strokerect(Rectangle(lx-boxsize, ly-boxsize, BOXSIZE, BOXSIZE));
     drawline(lx-boxsize+2, ly, lx+boxsize-2, ly);
     if (glyph < OPEN_ELL) drawline(lx, ly-boxsize+2, lx, ly+boxsize-2);
     }
@@ -571,9 +569,8 @@ static char openclose_drag;
 void Browser::draw_item() {
 
   Widget* widget = item();
-
-  int y = Y+item_position[HERE]-yposition_;
-  int h = widget->height();
+  Rectangle r(interior.x(), interior.y()+item_position[HERE]-yposition_,
+	      interior.w(), widget->height());
 
   Flags flags;
 
@@ -581,7 +578,7 @@ void Browser::draw_item() {
 
   if (multi() ? widget->selected() : is_focus) {
     setcolor(selection_color());
-    fillrect(X, y, W, h);
+    fillrect(r);
     widget->set_selected();
     flags = SELECTED;
   } else {
@@ -595,28 +592,27 @@ void Browser::draw_item() {
       // draw odd-numbered items with a dark stripe, plus contrast-enhancing
       // pixel rows on top and bottom:
       setcolor(c1);
-      fillrect(X, y+1, W, h-2);
+      Rectangle ir(r); ir.inset(0,1,0,1); fillrect(ir);
       setcolor(c0 <= GRAY85 ? c1 : GRAY85);
       //setcolor(lerp(c1, c0, 1.9));
-      drawline(X, y, X+W, y);
-      drawline(X, y+h-1, X+W, y+h-1);
+      drawline(r.x(), r.y(), r.r(), r.y());
+      drawline(r.x(), r.b()-1, r.r(), r.b()-1);
     } else {
       setcolor(c0);
-      fillrect(X, y, W, h);
+      fillrect(r);
     }
 #else
     setcolor(color());
-    fillrect(X, y, W, h);
+    fillrect(r);
 #endif
   }
 
-  int col_shift = X;
+  int col_shift = interior.x();
   int arrow_size = int(textsize())|1;
   int preview_open =
     (openclose_drag == 1 && pushed() && at_mark(FOCUS)) ? VALUE : 0;
   widget->invert_flag(preview_open);
 
-  int x = X-xposition_;
   // draw the glyphs, one for each nesting level:
   for (int j = indented() ? 0 : 1; j <= item_level[HERE]; j++) {
     int g = item_index[HERE][j] < children(item_index[HERE],j) - 1;
@@ -629,16 +625,14 @@ void Browser::draw_item() {
       else
 	g += ELL;
     }
-    draw_glyph(g, x, y, arrow_size, h, flags);
-    x += arrow_size;
+    Rectangle gr(r.x()-xposition_, r.y(), arrow_size, r.h());
+    draw_glyph(g, gr, flags);
+    r.move(arrow_size,0);
     col_shift += arrow_size;
   }
 
   if (focused() && is_focus) {
-    if (column_widths_p) 
-      focusbox()->draw(x, y, W-col_shift+xposition_, h, style(), flags|(FOCUSED|OUTPUT));
-    else
-      focusbox()->draw(x, y, widget->width(), h, style(), flags|(FOCUSED|OUTPUT));
+    focusbox()->draw(r, style(), flags|(FOCUSED|OUTPUT));
   }
 
   // Shift image width 
@@ -657,44 +651,43 @@ void Browser::draw_item() {
   }
 
   push_matrix();
-  y += (int(leading())-1)/2;
-  widget->x(x);
-  widget->y(y);
-  translate(x, y);
+  widget->x(r.x()-xposition_);
+  widget->y(r.y()+(int(leading())-1)/2);
+  translate(widget->x(), widget->y());
   widget->set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
   int save_w = widget->w();
-  if (!save_w) widget->w(X+W-x);
+  if (!save_w) widget->w(interior.r()-r.x());
   widget->draw();
   widget->w(save_w);
   widget->set_damage(0);
   pop_matrix();
 
   // Restore column width
-  if(cols) cols[0] = saved_colw;
+  if (cols) cols[0] = saved_colw;
 
   widget->invert_flag(preview_open);
 }
 
-void Browser::draw_clip_cb(void* v,int X, int Y, int W, int H) {
-  ((Browser*)v)->draw_clip(X,Y,W,H);
+void Browser::draw_clip_cb(void* v, const Rectangle& r) {
+  ((Browser*)v)->draw_clip(r);
 }
 
-void Browser::draw_clip(int x, int y, int w, int h) {
-  push_clip(x,y,w,h);
+void Browser::draw_clip(const Rectangle& r) {
+  push_clip(r);
 
   int draw_all = damage() & (DAMAGE_ALL|DAMAGE_CONTENTS);
   if (goto_mark(FIRST_VISIBLE)) for (;;) {
-    int item_y = Y+item_position[HERE]-yposition_;
-    if (item_y >= y+h) break;
+    int item_y = interior.y()+item_position[HERE]-yposition_;
+    if (item_y >= r.b()) break;
     if (draw_all || !at_mark(REDRAW_0) && !at_mark(REDRAW_1)) draw_item();
     if (!next_visible()) break;
   }
 
   // erase the area below the last item:
-  int bottom_y = Y+item_position[HERE]-yposition_;
-  if (bottom_y < y+h) {
+  int bottom_y = interior.y()+item_position[HERE]-yposition_;
+  if (bottom_y < r.b()) {
     setcolor(color());
-    fillrect(x, bottom_y, w, y+h-bottom_y);
+    fillrect(Rectangle(r.x(), bottom_y, r.w(), r.b()-bottom_y));
   }
   pop_clip();
 }
@@ -707,30 +700,30 @@ void Browser::draw() {
   if (d & DAMAGE_ALL) { // full redraw
     //printf("full redraw damage %x\n", d);
     draw_frame();
-    draw_clip(X, Y, W, H);
+    draw_clip(interior);
   } else if (d & DAMAGE_CONTENTS) { // redraw contents
     //printf("contents redraw damage %x\n", d);
-    draw_clip(X, Y, W, H);
+    draw_clip(interior);
   } else { // minimal update
     //printf("minimal redraw damage %x\n", d);
     if (scrolldx || scrolldy) {
-      scrollrect(X, Y, W, H, scrolldx, scrolldy, draw_clip_cb, this);
+      scrollrect(interior, scrolldx, scrolldy, draw_clip_cb, this);
     }
     int clipped = 0;
     for (int n = REDRAW_0; n <= REDRAW_1; n++) {
       if (goto_mark(n)) {
-	    if (!clipped) {push_clip(X,Y,W,H); clipped = 1;}
-	    draw_item();
+	if (!clipped) {push_clip(interior); clipped = 1;}
+	draw_item();
       }
     }
     if (d & DAMAGE_CHILD) {
       if (goto_mark(FIRST_VISIBLE)) for (;;) {
-	int y = Y+item_position[HERE]-yposition_+(int(leading())-1)/2;
-	if (y >= Y+H) break;
+	int y = interior.y()+item_position[HERE]-yposition_+(int(leading())-1)/2;
+	if (y >= interior.b()) break;
 	if (item()->damage()) {
-	  if (!clipped) {push_clip(X,Y,W,H); clipped = 1;}
+	  if (!clipped) {push_clip(interior); clipped = 1;}
 	  int arrow_size = int(textsize())|1;
-	  int x = (item_level[HERE]+indented())*arrow_size+X-xposition_;
+	  int x = interior.x()+(item_level[HERE]+indented())*arrow_size-xposition_;
 	  push_matrix();
 	  translate(x, y);
 	  item()->draw();
@@ -755,7 +748,7 @@ void Browser::draw() {
     if (scrollbar.visible() && hscrollbar.visible()) {
       // fill in the little box in the corner
       setcolor(buttoncolor());
-      fillrect(scrollbar.x(), hscrollbar.y(), scrollbar.w(), hscrollbar.h());
+      fillrect(Rectangle(scrollbar.x(), hscrollbar.y(), scrollbar.w(),hscrollbar.h()));
     }
     if (header_) {
       for (int i=0; i<nHeader; i++) {
@@ -763,24 +756,22 @@ void Browser::draw() {
       }
     }
   }
-
   update_child(scrollbar);
   update_child(hscrollbar);
 
   if (header_) {
-    push_clip(box()->dx(), box()->dy(), w()-box()->dw(), header_[0]->h());
+    Rectangle r(box()->dx(), box()->dy(), w()-box()->dw(), header_[0]->h());
+    push_clip(r);
     for (int i=0; i<nHeader; i++) {
       update_child(*header_[i]);
+      r.set_x(header_[i]->r());
+    }
+    // Update box in upper-right corner, if necessary
+    if (r.w()>0) {
+      setcolor(buttoncolor());
+      fillrect(r);
     }
     pop_clip();
-    
-    // Update box in upper-right corner, if necessary
-    Widget *hi = header_[nHeader-1];
-    int r = hi->x()+hi->w(), rr = X+W+(scrollbar.visible()?scrollbar.w():0);
-    if (r<rr) {
-      setcolor(buttoncolor());
-      fillrect(r, hi->y(), rr-r, hi->h());      
-    }
   }  
   Item::clear_style();
 }
@@ -839,17 +830,16 @@ void Browser::layout() {
 
   // figure out the visible area:
   const int sw = scrollbar_width();
-
-  X = 0; Y = 0; W = w(); H = h();
-  box()->inset(X,Y,W,H);
-  if (scrollbar.visible()) W -= sw;
-  if (hscrollbar.visible()) H -= sw;
+  interior.set(0,0,w(),h());
+  box()->inset(interior);
+  if (scrollbar.visible()) interior.move_r(-sw);
+  if (hscrollbar.visible()) interior.move_b(-sw);
 
   int headerh = 0;
   if (header_) {
     header_[0]->layout();
     headerh = header_[0]->h();
-    H -= headerh; Y += headerh;     
+    interior.move_y(headerh);
   }
 
   // Measure the height of all items and find widest one
@@ -902,46 +892,51 @@ void Browser::layout() {
 
   // turn the scrollbars on and off as necessary:
   for (int z = 0; z<2; z++) {
-    if (height_ > H || yposition_) {
+    if (height_ > interior.h() || yposition_) {
       if (!scrollbar.visible()) {
 	scrollbar.set_visible();
-	W -= sw;
+	interior.move_r(-sw);
 	redraw(DAMAGE_ALL);
       }
     } else {
       if (scrollbar.visible()) {
 	scrollbar.clear_visible();
-	W += sw;
+	interior.move_r(sw);
 	redraw(DAMAGE_ALL);
       }
     }
-    if (width_ > W || xposition_) {
+    if (width_ > interior.w() || xposition_) {
       if (!hscrollbar.visible()) {
 	hscrollbar.set_visible();
-	H -= sw;
+	interior.move_b(-sw);
 	redraw(DAMAGE_ALL);
       }
     } else {
       if (hscrollbar.visible()) {
 	hscrollbar.clear_visible();
-	H += sw;
+	interior.move_b(sw);
 	redraw(DAMAGE_ALL);
       }
     }
   }
 
   // If we have flexible column, set width to W
-  if (has_flex) width_ = W;
+  if (has_flex) width_ = interior.w();
 
-  if (scrollbar.visible() && scrollbar_align()&ALIGN_LEFT) X += sw;
-  if (hscrollbar.visible() && scrollbar_align()&ALIGN_TOP) Y += sw;
+  if (scrollbar.visible() && scrollbar_align()&ALIGN_LEFT) interior.move(sw,0);
+  if (hscrollbar.visible() && scrollbar_align()&ALIGN_TOP) interior.move(0,sw);
 
-  scrollbar.resize(scrollbar_align()&ALIGN_LEFT ? X-sw : X+W, Y, sw, H);
-  scrollbar.value(yposition_, H, 0, height_);
+  scrollbar.resize(scrollbar_align()&ALIGN_LEFT ?
+		   interior.x()-sw : interior.r(),
+		   interior.y(), sw, interior.h());
+  scrollbar.value(yposition_, interior.h(), 0, height_);
   scrollbar.linesize(textsize()+leading());
 
-  hscrollbar.resize(X, scrollbar_align()&ALIGN_TOP ? Y-sw : Y+H, W, sw);
-  hscrollbar.value(xposition_, W, 0, width_);
+  hscrollbar.resize(interior.x(),
+		    scrollbar_align()&ALIGN_TOP ?
+		    interior.y()-sw : interior.b(),
+		    interior.w(), sw);
+  hscrollbar.value(xposition_, interior.w(), 0, width_);
   hscrollbar.linesize(scrollbar.linesize());
 
   if (header_) {
@@ -955,8 +950,8 @@ void Browser::layout() {
       else
         width += itemwidth;
     }
-    int space = W-width; // number of pixels that will fill the flex columns
-    int hx = X;          // current x position for this column
+    int space = interior.w()-width; // number of pixels that will fill the flex columns
+    int hx = interior.x();          // current x position for this column
     // now set the actual column widths
     for (i=0; i<nHeader; i++) {
       Widget *hi = header_[i];
@@ -968,7 +963,7 @@ void Browser::layout() {
       if (ww<0) ww = 0;
       if (column_widths_p)
         column_widths_p[i] = itemwidth;
-      hi->resize(-xposition_+hx, Y-headerh, ww, headerh);	  
+      hi->resize(-xposition_+hx, interior.y()-headerh, ww, headerh);	  
       hi->layout();
       hx += itemwidth;
     }
@@ -1083,17 +1078,17 @@ bool Browser::make_item_visible(linepos where) {
     switch (where) {
     case 0:
       if (p < yposition_) break; // act like TOP
-      if (p+h-yposition_ <= H) return changed;
+      if (p+h-yposition_ <= interior.h()) return changed;
       // fall through:
     case BOTTOM:
-      p += h-H; break;
+      p += h-interior.h(); break;
     case MIDDLE:
-      p += h-H/2; break;
+      p += h-interior.h()/2; break;
     case TOP:
       break;
     }
     // clip scrolling to the useful range:
-    if (p > height_-H) p = height_-H;
+    if (p > height_-interior.h()) p = height_-interior.h();
     if (p < 0) p = 0;
     // go there:
     yposition(p);
@@ -1222,10 +1217,10 @@ int Browser::handle(int event) {
       }
     }
     // find the item we are pointing at:
-    if (!goto_position(event_y()-Y+yposition_) && !item()) return 0;
+    if (!goto_position(event_y()-interior.y()+yposition_) && !item()) return 0;
     // set xx to how far to left of widget they clicked:
     int arrow_size = int(textsize())|1;
-    int xx = (item_level[HERE]+indented())*arrow_size+X-xposition_-event_x();
+    int xx = interior.x()+(item_level[HERE]+indented())*arrow_size-xposition_-event_x();
     // see if they are inside the widget and it takes the event:
     if (xx <= 0 && item()->send(event));
     else fltk::belowmouse(this);
@@ -1262,12 +1257,12 @@ int Browser::handle(int event) {
 
   case DRAG:
     // find the item they are now pointing at:
-    if (!goto_position(event_y()-Y+yposition_) && !item()) break;
+    if (!goto_position(event_y()-interior.y()+yposition_) && !item()) break;
     if (openclose_drag) {
       set_focus();
       // set xx to how far to left of widget they clicked:
       int arrow_size = int(textsize())|1;
-      int xx = (item_level[HERE]+indented())*arrow_size+X-xposition_-event_x();
+      int xx = interior.x()+(item_level[HERE]+indented())*arrow_size-xposition_-event_x();
       if (xx > 0 && xx < arrow_size && item_is_parent()) {
 	if (openclose_drag != 1) {openclose_drag = 1; damage_item(HERE);}
       } else {
@@ -1381,7 +1376,7 @@ int Browser::handle(int event) {
   unexpectedly. */
 Widget* Browser::goto_visible_focus() {
   if (item_position[FOCUS] >= yposition_ &&
-      item_position[FOCUS] <= yposition_+H) {
+      item_position[FOCUS] <= yposition_+interior.h()) {
     if (goto_mark(FOCUS)) return item();
   }
   if (goto_mark(FIRST_VISIBLE)) {
@@ -1823,5 +1818,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.102 2004/11/12 06:50:14 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.103 2005/01/24 08:07:15 spitzak Exp $".
 //

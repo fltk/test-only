@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.44 2004/12/30 11:38:55 spitzak Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.45 2005/01/24 08:07:44 spitzak Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -36,12 +36,12 @@ using namespace fltk;
 extern Widget* fl_did_clipping;
 #endif
 
-void ScrollGroup::draw_clip(void* v,int X, int Y, int W, int H) {
-  push_clip(X,Y,W,H);
+void ScrollGroup::draw_clip(void* v, const Rectangle& r) {
+  push_clip(r);
   ScrollGroup* s = (ScrollGroup*)v;
 #if !USE_CLIPOUT
   // fill the rest of the region with color:
-  setcolor(s->color()); fillrect(X,Y,W,H);
+  setcolor(s->color()); fillrect(r);
 #endif
   // draw all the children, clipping them out of the region:
   int numchildren = s->children(); int i;
@@ -52,14 +52,14 @@ void ScrollGroup::draw_clip(void* v,int X, int Y, int W, int H) {
     // their damage in this case:
     uchar save = 0;
     if (!(s->damage()&DAMAGE_ALL)) {
-      if (w.x() < X || w.y() < Y ||
-	  w.x()+w.w() > X+W || w.y()+w.h() > Y+H)
+      if (w.x() < r.x() || w.y() < r.y() ||
+	  w.r() > r.r() || w.b() > r.b())
 	save = w.damage();
     }
 #if USE_CLIPOUT
     fl_did_clipping = 0;
     s->draw_child(w);
-    if (fl_did_clipping != &w) clipout(w.x(), w.y(), w.w(), w.h());
+    if (fl_did_clipping != &w) clipout(w);
 #else
     s->draw_child(w);
 #endif
@@ -67,7 +67,7 @@ void ScrollGroup::draw_clip(void* v,int X, int Y, int W, int H) {
   }
 #if USE_CLIPOUT
   // fill the rest of the region with color:
-  setcolor(s->color()); fillrect(X,Y,W,H);
+  setcolor(s->color()); fillrect(r);
 #endif
   // draw the outside labels:
   for (i = numchildren; i--;)
@@ -75,31 +75,31 @@ void ScrollGroup::draw_clip(void* v,int X, int Y, int W, int H) {
   pop_clip();
 }
 
-void ScrollGroup::bbox(int& X, int& Y, int& W, int& H) {
-  X = 0; Y = 0; W = w(); H = h(); box()->inset(X,Y,W,H);
+void ScrollGroup::bbox(Rectangle& r) {
+  r.set(0,0,w(),h()); box()->inset(r);
   if (scrollbar.visible()) {
-    W -= scrollbar.w();
-    if (scrollbar_align() & ALIGN_LEFT) X += scrollbar.w();
+    if (scrollbar_align() & ALIGN_LEFT) r.move_x(scrollbar.w());
+    else r.move_r(-scrollbar.w());
   }
   if (hscrollbar.visible()) {
-    H -= hscrollbar.h();
-    if (scrollbar_align() & ALIGN_TOP) Y += hscrollbar.h();
+    if (scrollbar_align() & ALIGN_TOP) r.move_y(hscrollbar.h());
+    else r.move_b(-hscrollbar.h());
   }
 }
 
 void ScrollGroup::draw() {
-  int X,Y,W,H; bbox(X,Y,W,H);
+  Rectangle r; bbox(r);
 
   uchar d = damage();
   if (d & DAMAGE_ALL) { // full redraw
     draw_frame();
-    draw_clip(this, X, Y, W, H);
+    draw_clip(this, r);
   } else {
     if (scrolldx || scrolldy) {
-      scrollrect(X, Y, W, H, scrolldx, scrolldy, draw_clip, this);
+      scrollrect(r, scrolldx, scrolldy, draw_clip, this);
     }
     if (d & DAMAGE_CHILD) { // draw damaged children
-      push_clip(X, Y, W, H);
+      push_clip(r);
       for (int i = children(); i--;) {
 	Widget& w = *child(i);
 	if (w.damage() & DAMAGE_CHILD_LABEL) {
@@ -120,7 +120,7 @@ void ScrollGroup::draw() {
     if (scrollbar.visible() && hscrollbar.visible()) {
       // fill in the little box in the corner
       setcolor(buttoncolor());
-      fillrect(scrollbar.x(),hscrollbar.y(),scrollbar.w(),hscrollbar.h());
+      fillrect(Rectangle(scrollbar.x(),hscrollbar.y(),scrollbar.w(),hscrollbar.h()));
     }
   }
   update_child(scrollbar);
@@ -153,28 +153,28 @@ void ScrollGroup::layout() {
   const int sw = scrollbar_width();
 
   // See if children would fit if we had no scrollbars...
-  int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
+  Rectangle R(w(),h()); box()->inset(R);
   int vneeded = 0;
   int hneeded = 0;
   if (type() & VERTICAL) {
-    if ((type() & ALWAYS_ON) || t < Y || b > Y+H) {
+    if ((type() & ALWAYS_ON) || t < R.y() || b > R.b()) {
       vneeded = 1;
-      W -= sw;
-      if (scrollbar_align() & ALIGN_LEFT) X += sw;
+      if (scrollbar_align() & ALIGN_LEFT) R.move_x(sw);
+      else R.move_r(-sw);
     }
   }
 
   if (type() & HORIZONTAL) {
-    if ((type() & ALWAYS_ON) || l < X || r > X+W) {
+    if ((type() & ALWAYS_ON) || l < R.x() || r > R.r()) {
       hneeded = 1;
-      H -= sw;
-      if (scrollbar_align() & ALIGN_TOP) Y += sw;
+      if (scrollbar_align() & ALIGN_TOP) R.move_y(sw);
+      else R.move_b(-sw);
       // recheck vertical since we added a horizontal scrollbar
       if (!vneeded && (type() & VERTICAL)) {
-	if (t < Y || b > Y+H) {
+	if (t < R.y() || b > R.b()) {
 	  vneeded = 1;
-	  W -= sw;
-	  if (scrollbar_align() & ALIGN_LEFT) X += sw;
+	  if (scrollbar_align() & ALIGN_LEFT) R.move_x(sw);
+	  else R.move_r(-sw);
 	}
       }
     }
@@ -203,10 +203,10 @@ void ScrollGroup::layout() {
     }
   }
 
-  scrollbar.resize(scrollbar_align()&ALIGN_LEFT ? X-sw : X+W, Y, sw, H);
-  scrollbar.value(yposition_ = (Y-t), H, 0, b-t);
-  hscrollbar.resize(X, scrollbar_align()&ALIGN_TOP ? Y-sw : Y+H, W, sw);
-  hscrollbar.value(xposition_ = (X-l), W, 0, r-l);
+  scrollbar.resize(scrollbar_align()&ALIGN_LEFT ? R.x()-sw : R.r(), R.y(), sw, R.h());
+  scrollbar.value(yposition_ = (R.y()-t), R.h(), 0, b-t);
+  hscrollbar.resize(R.x(), scrollbar_align()&ALIGN_TOP ? R.y()-sw : R.b(), R.w(), sw);
+  hscrollbar.value(xposition_ = (R.x()-l), R.w(), 0, r-l);
 
   Widget::layout();
   redraw(DAMAGE_SCROLL);
@@ -267,15 +267,15 @@ int ScrollGroup::handle(int event) {
       x += p->x();
       y += p->y();
     }
-    int X,Y,R,B; bbox(X,Y,R,B); R += X; B += Y;
+    Rectangle R; bbox(R);
     int r = x+w->w();
     int dx = 0;
-    if (x < X) {dx = X-x; if (r+dx > R) {dx = R-r; if (dx < 0) dx = 0;}}
-    else if (r > R) {dx = R-r; if (x+dx < X) {dx = X-x; if (dx > 0) dx = 0;}}
+    if (x < R.x()) {dx = R.x()-x; if (r+dx > R.r()) {dx = R.r()-r; if (dx < 0) dx = 0;}}
+    else if (r > R.r()) {dx = R.r()-r; if (x+dx < R.x()) {dx = R.x()-x; if (dx > 0) dx = 0;}}
     int b = y+w->h();
     int dy = 0;
-    if (y < Y) {dy = Y-y; if (b+dy > B) {dy = B-b; if (dy < 0) dy = 0;}}
-    else if (b > B) {dy = B-b; if (y+dy < Y) {dy = Y-y; if (dy > 0) dy = 0;}}
+    if (y < R.y()) {dy = R.y()-y; if (b+dy > R.b()) {dy = R.b()-b; if (dy < 0) dy = 0;}}
+    else if (b > R.b()) {dy = R.b()-b; if (y+dy < R.y()) {dy = R.y()-y; if (dy > 0) dy = 0;}}
     position(xposition_-dx, yposition_-dy);
     break;}
 
@@ -311,5 +311,5 @@ int ScrollGroup::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.44 2004/12/30 11:38:55 spitzak Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.45 2005/01/24 08:07:44 spitzak Exp $".
 //

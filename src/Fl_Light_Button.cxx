@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.cxx,v 1.39 2004/08/01 22:28:22 spitzak Exp $"
+// "$Id: Fl_Light_Button.cxx,v 1.40 2005/01/24 08:07:25 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -39,10 +39,8 @@ using namespace fltk;
   When off the light is color(), when on the light is selection_color().
 */
 
-static void glyph(int/*t*/,
-		  int x,int y,int w,int h, const Style* style, Flags f)
+static void glyph(int/*t*/, const Rectangle& r, const Style* style, Flags f)
 {
-  int ww = w/2+1;
   if (f & VALUE) {
     f |= SELECTED;
   } else if (style->color_) {
@@ -51,7 +49,8 @@ static void glyph(int/*t*/,
   } else {
     f |= INVISIBLE; // draw frame only
   }
-  THIN_DOWN_BOX->draw(x+((w-ww)>>1), y, ww, h, style, f);
+  int ww = r.w()/2+1; // we will center box of this width in area
+  THIN_DOWN_BOX->draw(Rectangle(r, ww, r.h()), style, f);
 }
 
 static void revert(Style* s) {
@@ -69,5 +68,5 @@ LightButton::LightButton(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Light_Button.cxx,v 1.39 2004/08/01 22:28:22 spitzak Exp $".
+// End of "$Id: Fl_Light_Button.cxx,v 1.40 2005/01/24 08:07:25 spitzak Exp $".
 //

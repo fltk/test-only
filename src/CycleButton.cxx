@@ -1,5 +1,5 @@
 //
-// "$Id: CycleButton.cxx,v 1.6 2004/12/30 11:38:54 spitzak Exp $"
+// "$Id: CycleButton.cxx,v 1.7 2005/01/24 08:07:10 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -73,22 +73,21 @@ void CycleButton::draw() {
   if (!style.textcolor_) style.textcolor_ = labelcolor();
 
   Box* box = style.box();
-
-  int x=0; int y=0; int w=this->w(); int h=this->h();
+  Rectangle r(w(),h());
 
   if (!box->fills_rectangle()) {
     Color bg = highlight_color();
     if ((flags&HIGHLIGHT) && bg) {
       // highlight fills the rectangle, this is for NO_BOX
       setcolor(bg);
-      fillrect(0, 0, w, h);
+      fillrect(r);
     } else if (damage()&DAMAGE_EXPOSE ||
 	       bg && (damage()&DAMAGE_HIGHLIGHT)) {
       draw_background();
     }
   }
-  box->draw(0,0,w,h, &style, flags);
-  box->inset(x,y,w,h);
+  box->draw(r, &style, flags);
+  box->inset(r);
 
   // This portion of the code is copied from Choice:
   Widget* o = get_item();
@@ -96,11 +95,11 @@ void CycleButton::draw() {
     Item::set_style(&style);
     Flags saved = o->flags();
     o->set_flag(flags&(INACTIVE|VALUE|HIGHLIGHT));
-    push_clip(x,y,w,h);
+    push_clip(r);
     push_matrix();
-    translate(x,y);
-    int save_w = o->w(); o->w(w);
-    int save_h = o->h(); o->h(h);
+    translate(r.x(),r.y());
+    int save_w = o->w(); o->w(r.w());
+    int save_h = o->h(); o->h(r.h());
     fl_hide_underscore = true;
     o->draw();
     fl_hide_underscore = false;
@@ -112,7 +111,7 @@ void CycleButton::draw() {
     pop_clip();
   }
 
-  focusbox()->draw(x+1, y+1, w-2, h-2, &style, flags);
+  focusbox()->draw(r, &style, flags);
 }
 
 static bool try_item(CycleButton* choice, int i) {
@@ -144,7 +143,7 @@ int CycleButton::handle(int e) {
 
   case PUSH:
   case DRAG:
-    if (event_inside(0,0,w(),h())) {
+    if (event_inside(Rectangle(w(),h()))) {
       if (held_down != this) {held_down = this; redraw(DAMAGE_VALUE);}
     } else {
       if (held_down) {held_down = 0; redraw(DAMAGE_VALUE);}
@@ -212,5 +211,5 @@ CycleButton::CycleButton(int x,int y,int w,int h, const char *l)
 }
 
 //
-// End of "$Id: CycleButton.cxx,v 1.6 2004/12/30 11:38:54 spitzak Exp $".
+// End of "$Id: CycleButton.cxx,v 1.7 2005/01/24 08:07:10 spitzak Exp $".
 //

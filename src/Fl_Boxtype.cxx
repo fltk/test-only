@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.25 2004/10/19 06:19:02 spitzak Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.26 2005/01/24 08:07:14 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -47,15 +47,15 @@ using namespace fltk;
 
 class FL_API DottedFrame : public Box {
 public:
-  void _draw(int x, int y, int w, int h,const Style* s, Flags flags) const {
-    // ML: Imho FOCUSED test should not be here, it would be impossible 
-    //     to set DottedFrame to ordinal Widget (see test/boxtype)
-    // WAS: The intention was to reuse this same box to draw "overlays"
-    // to make buttons that look like the text is imbedded in transparent
-    // plastic.
+  void _draw(const Rectangle& r1, const Style* s, Flags flags) const {
     if (!(flags & FOCUSED)) return;
-
-    if (w <= 1 || h <= 1) return;
+    Rectangle r(r1);
+    if (r.w() > 4) {r.move_x(1); r.move_r(-1);}
+    else if (r.w() > 3) r.move_r(-1);
+    else return;
+    if (r.h() > 4) {r.move_y(1); r.move_b(-1);}
+    else if (r.h() > 3) r.move_b(-1);
+    else return;
     Color bg, fg; s->boxcolors(flags, bg, fg);
     setcolor(fg);
 
@@ -70,13 +70,13 @@ public:
       evenstipple = XCreateBitmapFromData(xdisplay, root, pattern, 8, 8);
       oddstipple = XCreateBitmapFromData(xdisplay, root, pattern+1, 8, 8);
     }
-    int xx = x; int yy = y; transform(xx,yy);
-    XSetStipple(xdisplay, gc, (xx+yy-x-y)&1 ? oddstipple : evenstipple);
+    transform(r);
+    XSetStipple(xdisplay, gc, (r.x()+r.y()-r1.x()-r1.y())&1 ? oddstipple : evenstipple);
     XSetFillStyle(xdisplay, gc, FillStippled);
     // X documentation claims a nonzero line width is necessary for stipple
     // to work, but on the X servers I tried it does not seem to be needed:
     //XSetLineAttributes(xdisplay, gc, 1, LineSolid, CapButt, JoinMiter);
-    XDrawRectangle(xdisplay, xwindow, gc, xx, yy, w-1, h-1);
+    XDrawRectangle(xdisplay, xwindow, gc, r.x(), r.y(), r.w()-1, r.h()-1);
     XSetFillStyle(xdisplay, gc, FillSolid);
     // put line width back to zero:
     //XSetLineAttributes(xdisplay, gc, 0, LineSolid, CapButt, JoinMiter);
@@ -93,19 +93,9 @@ public:
     // version uses?
   
 /*
-    // Draw using drawpoint  
-    w--; h--;
-    int i = 1;
-    int xx,yy;
-    for (xx = 0; xx < w; xx ++, i ++) if (i & 1) drawpoint(x + xx, y);
-    for (yy = 0; yy < h; yy ++, i ++) if (i & 1) drawpoint(x + w, y + yy);
-    for (xx = w; xx > 0; xx --, i ++) if (i & 1) drawpoint(x + xx, y + h);
-    for (yy = h; yy > 0; yy --, i ++) if (i & 1) drawpoint(x, y + yy);
-*/
-/*
     // Draw using WIN32 API function (since 95)
-    int xx = x; int yy = y; transform(xx,yy);
-    RECT r = {xx,yy,xx+w-1,yy+h-1};
+    transform(r);
+    RECT r = {r.x(), r.y(), r.r()-1, r.b()-1};
     DrawFocusRect(dc, &r);
 */
 
@@ -133,25 +123,25 @@ public:
       DeleteObject(oddstipple);
     }
 
-    int xx = x; int yy = y; transform(xx,yy);
-    HBRUSH brush = (xx+yy-x-y)&1 ? oddbrush : evenbrush;
+    transform(r);
+    HBRUSH brush = (r.x()+r.y()-r1.x()-r1.y())&1 ? oddbrush : evenbrush;
 
     // Select the patterned brush into the DC
     HBRUSH old_brush = (HBRUSH)SelectObject(dc, brush);
 
     // Draw horizontal lines
-    PatBlt(dc, xx, yy, w, 1, PATCOPY);
-    PatBlt(dc, xx, yy+h-1, w, 1, PATCOPY);
+    PatBlt(dc, r.x(), r.y(), r.w(), 1, PATCOPY);
+    PatBlt(dc, r.x(), r.b()-1, r.w(), 1, PATCOPY);
 
     // Draw vertical lines
-    PatBlt(dc, xx, yy, 1, h, PATCOPY);
-    PatBlt(dc, xx+w-1, yy, 1, h, PATCOPY);
+    PatBlt(dc, r.x(), r.y(), 1, r.h(), PATCOPY);
+    PatBlt(dc, r.r()-1, r.y(), 1, r.h(), PATCOPY);
 
     // Clean up
     SelectObject(dc, old_brush);
 #else
     line_style(DOT);
-    strokerect(x, y, w, h);
+    strokerect(r);
     line_style(0);
 #endif
   }
@@ -160,8 +150,9 @@ public:
 static DottedFrame dottedFrame("dotted_frame");
 
 /*! \ingroup boxes
-  Used to draw the dotted focus rectangle around widgets. This only
-  draws something if the FOCUSED flag paseed to draw() is true.
+  Default value for focusbox(). This draws nothing if FOCUSED is
+  not set in the flags. If it is set, this draws a dashed line
+  one pixel inset.
 */
 Box* const fltk::DOTTED_FRAME = &dottedFrame;
 
@@ -169,7 +160,7 @@ Box* const fltk::DOTTED_FRAME = &dottedFrame;
 
 class NoBox : public Box {
 public:
-  void _draw(int x,int y,int w,int h,const Style* s, Flags) const {}
+  void _draw(const Rectangle&, const Style* s, Flags) const {}
   NoBox(const char* name) : Box(name) {}
 };
 static NoBox noBox("none");
@@ -188,13 +179,13 @@ Box* const fltk::NO_BOX = &noBox;
   Draws a rectangle filled with style->color(). This is a useful
   base class for some box types.
 */
-void FlatBox::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
+void FlatBox::_draw(const Rectangle& r, const Style* style, Flags flags) const
 {
-  if (!(flags & INVISIBLE) && h > 0 && w > 0) {
-    Color bg, fg; style->boxcolors(flags, bg, fg);
-    setcolor(bg);
-    fillrect(x, y, w, h);
-  }
+  if (flags & INVISIBLE) return;
+  if (r.empty()) return;
+  Color bg, fg; style->boxcolors(flags, bg, fg);
+  setcolor(bg);
+  fillrect(r);
 }
 const BoxInfo* FlatBox::boxinfo() const {
   static const BoxInfo b = {0,0,0,0,3};
@@ -241,41 +232,41 @@ void fl_to_inactive(const char* s, char* to) {
   while (*s) *to++ = 'M'+(*s++ - 'A')/3;
   *to = 0;
 }
-#include <stdio.h>
-void FrameBox::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
+
+void FrameBox::_draw(const Rectangle& R, const Style* style, Flags flags) const
 {
+  if (R.empty()) return;
+  Rectangle r(R);
   const char* s = data();
   if (flags & VALUE) s = down->data();
   char buf[26]; if (flags&INACTIVE && style->draw_boxes_inactive()) {
     fl_to_inactive(s, buf); s = buf;}
-  if (h > 0 && w > 0) {
-    if (*s == '2') {s++; goto HACK;}
-    for (;;) {
-      // draw bottom line:
-      setcolor(*s++ + (GRAY00-'A'));
-      drawline(x, y+h-1, x+w-1, y+h-1);
-      if (--h <= 0) break;
-      // draw right line:
-      setcolor(*s++ + (GRAY00-'A'));
-      drawline(x+w-1, y, x+w-1, y+h-1);
-      if (--w <= 0) break;
-      if (!*s) break;
-    HACK:
-      // draw top line:
-      setcolor(*s++ + (GRAY00-'A'));
-      drawline(x, y, x+w-1, y);
-      y++; if (--h <= 0) break;
-      // draw left line:
-      setcolor(*s++ + (GRAY00-'A'));
-      drawline(x, y, x, y+h-1);
-      x++; if (--w <= 0) break;
-      if (!*s) break;
-    }
+  if (*s == '2') {s++; goto HACK;}
+  for (;;) {
+    // draw bottom line:
+    setcolor(*s++ + (GRAY00-'A'));
+    drawline(r.x(), r.b()-1, r.r()-1, r.b()-1);
+    r.move_b(-1); if (r.h() <= 0) return;
+    // draw right line:
+    setcolor(*s++ + (GRAY00-'A'));
+    drawline(r.r()-1, r.y(), r.r()-1, r.b()-1);
+    r.move_r(-1); if (r.w() <= 0) return;
+    if (!*s) break;
+  HACK:
+    // draw top line:
+    setcolor(*s++ + (GRAY00-'A'));
+    drawline(r.x(), r.y(), r.r()-1, r.y());
+    r.move_y(1); if (r.h() <= 0) return;
+    // draw left line:
+    setcolor(*s++ + (GRAY00-'A'));
+    drawline(r.x(), r.y(), r.x(), r.b()-1);
+    r.move_x(1); if (r.w() <= 0) return;
+    if (!*s) break;
   }
-  if (w > 0 && h > 0 && !(flags & INVISIBLE)) {
+  if (!(flags & INVISIBLE)) {
     Color bg, fg; style->boxcolors(flags, bg, fg);
     setcolor(bg);
-    fillrect(x, y, w, h);
+    fillrect(r);
   }
 }
 
@@ -342,16 +333,16 @@ Box* const fltk::BORDER_BOX = &borderBox;
 
 class BorderFrame : public Box {
 public:
-  void _draw(int x, int y, int w, int h, const Style* style,Flags flags) const
+  void _draw(const Rectangle& r, const Style* style,Flags flags) const
   {
     setcolor(style->textcolor());
-    strokerect(x, y, w, h);
+    strokerect(r);
   }
-  BorderFrame(const char* n) : Box(n) {}
   const BoxInfo* boxinfo() const {
     static const BoxInfo b = {1,1,2,2,0};
     return &b;
   }
+  BorderFrame(const char* n) : Box(n) {}
 };
 static BorderFrame borderFrame("border_frame");
 /*! \ingroup boxes
@@ -368,13 +359,12 @@ Box* const fltk::BORDER_FRAME = &borderFrame;
   is turned on in the flags. This can be used to make frames appear
   when the mouse points at widgets or when the widget is turned on.
 */
-void HighlightBox::_draw(
-  int x, int y, int w, int h, const Style* style, Flags flags) const
+void HighlightBox::_draw(const Rectangle& r, const Style* style, Flags flags) const
 {
   if (flags & (HIGHLIGHT|SELECTED|VALUE|PUSHED)) {
-    down->draw(x,y,w,h,style,flags);
+    down->draw(r, style, flags);
   } else {
-    FlatBox::_draw(x,y,w,h,style,flags);
+    FlatBox::_draw(r, style, flags);
   }
 }
 const BoxInfo* HighlightBox::boxinfo() const {
@@ -397,5 +387,5 @@ static HighlightBox highlightDownBox("highlight_down", THIN_DOWN_BOX);
 Box* const fltk::HIGHLIGHT_DOWN_BOX = &highlightDownBox;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.25 2004/10/19 06:19:02 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.26 2005/01/24 08:07:14 spitzak Exp $".
 //

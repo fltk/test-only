@@ -1,5 +1,5 @@
 //
-// "$Id: ValueOutput.cxx,v 1.2 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id: ValueOutput.cxx,v 1.3 2005/01/24 08:07:52 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 
@@ -29,24 +29,23 @@ using namespace fltk;
 
 void ValueOutput::draw() {
   if (damage() & DAMAGE_ALL) draw_box();
-  int x = 0, y = 0, w = this->w(), h = this->h(); box()->inset(x,y,w,h);
-  push_clip(x,y,w,h);
+  Rectangle r(w(),h()); box()->inset(r);
+  push_clip(r);
   setfont(textfont(), textsize());
   char buf[40];
   format(buf);
-  int xx = 0;
-//    if (focused()) {
-//      int dy = (h-int(textsize())-1)>>1;
-//      setcolor(focused() ? selection_color() : color());
-//      xx = int(getwidth(buf))+2;
-//      fillrect(x+2, y+dy, xx-2, int(textsize())+2);
-//    }
   if (!(damage() & DAMAGE_ALL)) {
     setcolor(color());
-    fillrect(x+xx, y, w-xx, h);
+    fillrect(r);
   }
-  setcolor(/*focused() ? selection_textcolor() :*/ textcolor());
-  drawtext(buf, x+3, y+(int(h+getascent()-getdescent()) >> 1));
+//    if (focused()) {
+//      setcolor(selection_color());
+//	Rectangle ir(r,r.w()-4,textsize()+2);
+//      fillrect(ir);
+//	setcolor(selection_textcolor());
+//    } else
+  setcolor(textcolor());
+  drawtext(buf, r.x()+3, r.y()+(int(r.h()+getascent()-getdescent()) >> 1));
   pop_clip();
 }
 

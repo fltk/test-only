@@ -40,7 +40,7 @@ Color code_color(unsigned ucs) {
 }
 
 void Drawing::draw() {
-  push_clip(x(),y(),w(),h());
+  push_clip(*this);
   unsigned scroll = unsigned(scrollbar->value());
   unsigned itemh = unsigned(textsize()+8);
   unsigned base = scroll*16;
@@ -50,23 +50,23 @@ void Drawing::draw() {
   for (; y < h(); y+=itemh, base+=16) {
     char buf[20];
     sprintf(buf, "U+%03Xx", base>>4);
-    int x1 = 0; int x2 = w()*2/18;
+    Rectangle r(0, y, w()*2/18, itemh);
     style.color_ = (base&0x100) ? GRAY80 : WHITE;
-    box->draw(x1,y,x2-x1,itemh,&style,OUTPUT);
+    box->draw(r, &style, OUTPUT);
     setcolor(labelcolor());
     setfont(labelfont(),labelsize());
-    drawtext(buf,x1,y,x2-x1,itemh,0);
+    drawtext(buf, r, 0);
     setfont(textfont(),textsize());
     for (int z = 0; z < 16; z++) {
-      x1 = x2; x2 = w()*(3+z)/18;
+      r.x(r.r()); r.set_r(w()*(3+z)/18);
       char* p = buf;
       // if (base < 0x100) *p++ = base+z; else // demonstrate cp1252 emulation
       p += utf8encode(base+z,p);
       *p = 0;
       style.color_ = code_color(base+z);
-      box->draw(x1,y,x2-x1,itemh,&style,OUTPUT);
+      box->draw(r, &style, OUTPUT);
       setcolor(labelcolor());
-      drawtext(buf,x1,y,x2-x1,itemh,0);
+      drawtext(buf, r, 0);
     }
   }
   pop_clip();
@@ -100,7 +100,7 @@ int Drawing::handle(int event) {
   unsigned scroll = unsigned(scrollbar->value());
   unsigned base = scroll*16;
   unsigned ucs = base+y*16+x;
-  Tooltip::enter(this, w()*(2+x)/18, y*itemh, (w()+9)/18, itemh,
+  Tooltip::enter(this, Rectangle(w()*(2+x)/18, y*itemh, (w()+9)/18, itemh),
 		 generator, (void*)ucs);
   return true;
 }

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_diamond_box.cxx,v 1.30 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id: fl_diamond_box.cxx,v 1.31 2005/01/24 08:07:53 spitzak Exp $"
 //
 // Diamond box code for the Fast Light Tool Kit (FLTK).
 //
@@ -39,20 +39,19 @@ using namespace fltk;
 // Diamond with an edge pattern like FrameBox:
 class DiamondBox : public FrameBox {
 public:
-  void _draw(int,int,int,int, const Style*, Flags=0) const;
+  void _draw(const Rectangle& r, const Style*, Flags=0) const;
   DiamondBox(const char* n, const char* s, const FrameBox* d=0)
     : FrameBox(n, s, d) {boxinfo_.fills_rectangle = 0;}
 };
 
 extern void fl_to_inactive(const char* s, char* to);
 
-void DiamondBox::_draw(int x, int y, int w, int h,
-		       const Style* style, Flags flags) const
+void DiamondBox::_draw(const Rectangle& r, const Style* style, Flags flags) const
 {
-  int x1 = x+w/2;
-  if (w&1) w--; else {w -= 2; x++;}
-  int y1 = y+h/2;
-  if (h&1) h--; else {h -= 2; y++;}
+  int x1 = r.center_x();
+  int x = r.x(); int w = r.w(); if (w&1) w--; else {w -= 2; x++;}
+  int y1 = r.center_y();
+  int y = r.y(); int h = r.h(); if (h&1) h--; else {h -= 2; y++;}
   const char* s = (flags & VALUE) ? down->data() : data();
   char buf[26]; if (flags&INACTIVE && style->draw_boxes_inactive()) {
     fl_to_inactive(s, buf); s = buf;}
@@ -101,5 +100,5 @@ static DiamondBox diamondUpBox("diamond_up", "2AAWWMMTT", &diamondDownBox);
 Box* const fltk::DIAMOND_UP_BOX = &diamondUpBox;
 
 //
-// End of "$Id: fl_diamond_box.cxx,v 1.30 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id: fl_diamond_box.cxx,v 1.31 2005/01/24 08:07:53 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: resizealign.cxx,v 1.1 2004/06/04 08:58:05 spitzak Exp $"
+// "$Id: resizealign.cxx,v 1.2 2005/01/24 08:07:59 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -85,11 +85,11 @@ int main(int argc, char **argv) {
 
   window->size_range(W3,W3);
   window->layout();
-  window->size(W3*2,W3*2);
+  window->resize(W3*2,W3*2);
   window->show(argc,argv);
   return run();
 }
 
 //
-// End of "$Id: resizealign.cxx,v 1.1 2004/06/04 08:58:05 spitzak Exp $".
+// End of "$Id: resizealign.cxx,v 1.2 2005/01/24 08:07:59 spitzak Exp $".
 //

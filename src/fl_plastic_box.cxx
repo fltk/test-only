@@ -1,12 +1,7 @@
 //
-// "$Id: fl_plastic_box.cxx,v 1.6 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id: fl_plastic_box.cxx,v 1.7 2005/01/24 08:07:55 spitzak Exp $"
 //
-// "Plastic" drawing routines for the Fast Light Tool Kit (FLTK).
-//
-// These box types provide a cross between Aqua and KDE buttons; kindof
-// like translucent plastic buttons...
-//
-// Copyright 2001-2003 by Michael Sweet.
+// Copyright 2001-2005 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -24,7 +19,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 // Aqua-like boxes. This needs some significant rewrite so they are faster.
 // I also think they should be put into the themes, but it looks like too
@@ -42,36 +36,14 @@ static inline Color shade_color(uchar gc, Color bc) {
   return lerp(gc+(GRAY00-'A'), bc, 0.25f);
 }
 
-#if 0 // this code is not used in fltk 2.0
-static void shade_frame(int x, int y, int w, int h, const char *c, Color bc) {
-  uchar *g = gray_ramp();
-  int b = strlen(c) / 4 + 1;
-
-  for (x += b, y += b, w -= 2 * b + 1, h -= 2 * b + 1; b > 1; b --)
-  {
-    // Draw lines around the perimeter of the button, 4 colors per
-    // circuit.
-    setcolor(shade_color(*c++, bc));
-    drawline(x, y + h + b, x + w - 1, y + h + b, x + w + b - 1, y + h);
-    setcolor(shade_color(*c++, bc));
-    drawline(x + w + b - 1, y + h, x + w + b - 1, y, x + w - 1, y - b);
-    setcolor(shade_color(*c++, bc));
-    drawline(x + w - 1, y - b, x, y - b, x - b, y);
-    setcolor(shade_color(*c++, bc));
-    drawline(x - b, y, x - b, y + h, x, y + h + b);
-  }
-}
-#endif
-
-// Diamond with an edge pattern like FrameBox:
 class PlasticBox : public FrameBox {
 public:
-  void _draw(int,int,int,int, const Style*, Flags=0) const;
+  void _draw(const Rectangle&, const Style*, Flags=0) const;
   PlasticBox(const char* n, const char* s, const FrameBox* d=0)
     : FrameBox(n, s, d) {}
 };
 
-void PlasticBox::_draw(int x, int y, int w, int h, const Style* style, Flags f) const
+void PlasticBox::_draw(const Rectangle& r, const Style* style, Flags f) const
 {
   const char* c = (f & VALUE) ? down->data() : data();
   char buf[26]; if (f&INACTIVE && style->draw_boxes_inactive()) {
@@ -83,6 +55,11 @@ void PlasticBox::_draw(int x, int y, int w, int h, const Style* style, Flags f) 
   int		clen = strlen(c) - 1;
   int		chalf = clen / 2;
   int		cstep = 1;
+
+  const int x = r.x();
+  const int y = r.y();
+  const int w = r.w();
+  const int h = r.h();
 
   if (h < (w * 2)) {
     // Horizontal shading...
@@ -110,7 +87,7 @@ void PlasticBox::_draw(int x, int y, int w, int h, const Style* style, Flags f) 
     i = chalf / cstep;
 
     setcolor(shade_color(c[chalf], bc));
-    fillrect(x + 1, y + i, w - 2, h - 2 * i);
+    fillrect(Rectangle(x + 1, y + i, w - 2, h - 2 * i));
 
     setcolor(shade_color(c[chalf] - 2, bc));
     drawline(x, y + i, x, y + h - i);
@@ -141,7 +118,7 @@ void PlasticBox::_draw(int x, int y, int w, int h, const Style* style, Flags f) 
     i = chalf / cstep;
 
     setcolor(shade_color(c[chalf], bc));
-    fillrect(x + i, y + 1, w - 2 * i, h - 2);
+    fillrect(Rectangle(x + i, y + 1, w - 2 * i, h - 2));
 
     setcolor(shade_color(c[chalf - 2], bc));
     drawline(x + i, y, x + w - i, y);
@@ -164,5 +141,5 @@ Box* const fltk::PLASTIC_UP_BOX = &plasticUpBox;
 // down_frame = "LLRRTTLL"
 
 //
-// End of "$Id: fl_plastic_box.cxx,v 1.6 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id: fl_plastic_box.cxx,v 1.7 2005/01/24 08:07:55 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_win32.cxx,v 1.24 2004/09/05 21:40:41 spitzak Exp $"
+// "$Id: fl_draw_image_win32.cxx,v 1.25 2005/01/24 08:07:54 spitzak Exp $"
 //
 // _WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -119,7 +119,7 @@ static void monodither(uchar* to, const uchar* from, int w, int delta) {
 #endif // USE_COLORMAP
 
 static void innards(const uchar *buf, PixelType type,
-		    int X, int Y, int W, int H,
+		    const Rectangle& r1,
 		    int delta, int linedelta,
 		    DrawImageCallback cb, void* userdata)
 {
@@ -127,14 +127,17 @@ static void innards(const uchar *buf, PixelType type,
   char indexed = (xpalette != 0);
 #endif
 
-  if (!linedelta) linedelta = W*delta;
-
-  int x, y, w, h;
-  clip_box(X,Y,W,H,x,y,w,h);
-  if (w<=0 || h<=0) return;
+  Rectangle r(r1); transform(r);
+  Rectangle cr(r); if (!intersect_with_clip(cr)) return;
+  if (!linedelta) linedelta = r1.w()*delta;
+  int x = cr.x();
+  int y = cr.y();
+  int w = cr.w();
+  int h = cr.h();
+  int X = r.x();
+  int Y = r.y();
+  int W = r1.w();
   if (buf) buf += (x-X)*delta + (y-Y)*linedelta;
-  transform(x,y);
-  transform(X,Y);
 
   static U32 bmibuffer[256+12];
   BITMAPINFO &bmi = *((BITMAPINFO*)bmibuffer);
@@ -163,7 +166,7 @@ static void innards(const uchar *buf, PixelType type,
     }
   } else
 #endif
-    bool mono = (type == Y);
+    bool mono = (type == LUMINANCE);
   if (mono) {
     if(current_cmap != 1) {
       current_cmap = 1;
@@ -312,5 +315,5 @@ static void innards(const uchar *buf, PixelType type,
 #endif
 
 //
-// End of "$Id: fl_draw_image_win32.cxx,v 1.24 2004/09/05 21:40:41 spitzak Exp $".
+// End of "$Id: fl_draw_image_win32.cxx,v 1.25 2005/01/24 08:07:54 spitzak Exp $".
 //

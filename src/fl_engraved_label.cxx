@@ -1,5 +1,5 @@
 //
-// "$Id: fl_engraved_label.cxx,v 1.17 2003/11/04 08:11:03 spitzak Exp $"
+// "$Id: fl_engraved_label.cxx,v 1.18 2005/01/24 08:07:54 spitzak Exp $"
 //
 // Engraved label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -35,7 +35,7 @@ extern bool fl_drawing_shadow;
 // data is dx, dy, color triples
 
 void EngravedLabel::draw(const char* label,
-			 int X, int Y, int W, int H,
+			 const Rectangle& r,
 			 const Style* style, Flags flags) const
 {
   if (flags&OUTPUT)
@@ -43,21 +43,20 @@ void EngravedLabel::draw(const char* label,
   else
     setfont(style->labelfont(), style->labelsize());
   fl_drawing_shadow = true;
+  Rectangle r1(r);
   for (const int *data = this->data; ; data += 3) {
+    r1.x(r.x()+data[0]);
+    r1.y(r.y()+data[1]);
     Color fg = (Color)(data[2]);
     if (!fg) {
       fl_drawing_shadow = false;
       Color bg; style->boxcolors(flags, bg, fg);
       setcolor(fg);
-      drawtext(label,
-	       X+data[0], Y+data[1], W, H,
-	       flags);
+      drawtext(label, r, flags);
       break;
     }
     setcolor(fg);
-    drawtext(label,
-	     X+data[0], Y+data[1], W, H,
-	     flags);
+    drawtext(label, r, flags);
   }
 }
 
@@ -80,5 +79,5 @@ static EngravedLabel embossedLabel("embossed", embossed_data);
 LabelType* const fltk::EMBOSSED_LABEL = &embossedLabel;
 
 //
-// End of "$Id: fl_engraved_label.cxx,v 1.17 2003/11/04 08:11:03 spitzak Exp $".
+// End of "$Id: fl_engraved_label.cxx,v 1.18 2005/01/24 08:07:54 spitzak Exp $".
 //

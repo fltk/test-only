@@ -1,4 +1,4 @@
-// "$Id: Fl_Tabs.cxx,v 1.77 2004/12/30 11:38:55 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.78 2005/01/24 08:07:45 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -60,6 +60,7 @@ to the children.
 #include <fltk/Box.h>
 #include <fltk/draw.h>
 #include <fltk/Tooltip.h>
+#include <stdlib.h>
 using namespace fltk;
 
 #define BORDER 10
@@ -147,12 +148,12 @@ int TabGroup::tab_height() {
     if (o->y()+o->h() > H2) H2 = o->y()+o->h();
   }
   H2 = h()-H2;
-  int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
+  Rectangle r(0,0); box()->inset(r);
   if (H2 > H) {
-    H = H2-dy;
+    H = H2-r.y();
     return (H <= 0) ? 0 : -H-1;
   } else {
-    H = H-dy;
+    H = H-r.y();
     return (H <= 0) ? 0 : H;
   }
 }
@@ -253,7 +254,7 @@ int TabGroup::handle(int event) {
     }
     i = which(event_x(), event_y());
     if (i >= 0)
-      Tooltip::enter(this, 0, H<0?h()+H:0, w(), H<0?-H:H,
+      Tooltip::enter(this, Rectangle(0, H<0?h()+H:0, w(), H<0?-H:H),
 		     child(i)->tooltip());
     return 1;}
 
@@ -490,18 +491,12 @@ void TabGroup::draw_tab(int x1, int x2, int W, int H, Widget* o, int what) {
     drawline(x1, h()+H, x1+TABSLOPE, h()-1);
   }
   if (drawlabel) {
-    int x = (what==LEFT ? x1 : x2-W)+(TABSLOPE+EXTRASPACE/2);
-    int w = W-(TABSLOPE+EXTRASPACE/2);
-    int y,h;
-    if (H<0) {
-      y = this->h()+H-1;
-      h = -H-1;
-    } else {
-      y = 2;
-      h = H-1;
-    }
-    o->draw_label(x, y, w, h, o->style(), ALIGN_CENTER);
-    if (sel && focused()) focusbox()->draw(x, y, w, h, style(), FOCUSED);
+    Rectangle r((what==LEFT ? x1 : x2-W)+(TABSLOPE+EXTRASPACE/2),
+		H<0 ? this->h()+H-1 : 2,
+		W-(TABSLOPE+EXTRASPACE/2),
+		abs(H)-1);
+    o->draw_label(r, o->style(), ALIGN_CENTER);
+    if (sel && focused()) focusbox()->draw(r, style(), FOCUSED);
   }
 }
 
@@ -532,4 +527,4 @@ TabGroup::TabGroup(int X,int Y,int W, int H, const char *l)
   focus_index(0);
 }
 
-// End of "$Id: Fl_Tabs.cxx,v 1.77 2004/12/30 11:38:55 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.78 2005/01/24 08:07:45 spitzak Exp $".

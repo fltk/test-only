@@ -93,12 +93,12 @@ rgbImage rgba_image((rgbadata=make_image(4)), WIDTH, HEIGHT, 4);
 class ImageTest : public Widget {
   void draw() {
     setcolor(RED);
-    fillrect(0,0,w(),h());
+    fillrect(Rectangle(w(),h()));
     setcolor(BLACK);
     addvertex(0,0);
     addvertex(w(),h());
     strokepath();
-    drawimage(rgbadata, RGBA, 0, 0, WIDTH, HEIGHT, 4);
+    drawimage(rgbadata, RGBA, Rectangle(WIDTH, HEIGHT), 4);
   }
 public:
   ImageTest(int x, int y, int w, int h) : Widget(x,y,w,h) {}
@@ -274,5 +274,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: image.cxx,v 1.22 2004/08/30 02:35:14 spitzak Exp $".
+// End of "$Id: image.cxx,v 1.23 2005/01/24 08:07:59 spitzak Exp $".
 //

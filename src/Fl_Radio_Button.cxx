@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Radio_Button.cxx,v 1.10 2004/08/01 22:28:23 spitzak Exp $"
+// "$Id: Fl_Radio_Button.cxx,v 1.11 2005/01/24 08:07:43 spitzak Exp $"
 //
 // Radio button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 #include <fltk/Box.h>
 using namespace fltk;
 
-/*! \class fltk::RadioButton
+/** \class fltk::RadioButton
 
   This button turns the value() on when clicked, and turns all other
   RadioButton widgets in the same group off.  It displays a round dot
@@ -47,28 +47,23 @@ using namespace fltk;
   your interface so it is clear to the user that they are radio buttons.
 */
 
-static void default_glyph(int glyph, int x,int y,int w,int h, const Style* style, Flags flags)
+static void default_glyph(int glyph, const Rectangle& R, const Style* style, Flags flags)
 {
   // Use the white rather than the gray color:
   flags = flags&~(SELECTED|HIGHLIGHT)|OUTPUT;
-  w = h = (h+1)&(~1); // even only
+  int size = (R.h()+1)&(~1); // even only
+  Rectangle r(R,size,size);
   Box* box = style->box();
-  box->draw(x, y, w, h, style, flags);
+  box->draw(r, style, flags);
   if (flags & VALUE) {
-    box->inset(x, y, w, h);
+    box->inset(r);
     // use the selection color only if they directly set it:
     Color c = style->selection_color_;
     if (!c) c = style->textcolor();
     setcolor(inactive(c, flags));
-    if (h < 5) {
-      int d = (h-4-1)>>1;
-      addellipse(x+d, y+d, 4, 4);
-    } else {
-      int d = (h+3)/6-1;
-      w = h-d-d-1;
-      addellipse(x+d, y+d, w, w);
-    }
-    fillpath();
+    int w = (r.h() < 5) ? 4 : r.h()-(r.h()+3)/3;
+    Rectangle r1(r,w,w);
+    fillarc(r1, 0, 360);
   }
 }
 

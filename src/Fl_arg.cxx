@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.49 2004/07/31 10:25:39 laza2000 Exp $"
+// "$Id: Fl_arg.cxx,v 1.50 2005/01/24 08:07:50 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -217,8 +217,8 @@ void Window::show(int argc, char **argv) {
     if (flags & (XValue | YValue))
       x(-1), resize(gx,gy,gw,gh);
     else
-      size(gw,gh);
-    layout();
+      Widget::resize(gw,gh);
+    // layout();// not needed?
     resizable(r);
     geometry = 0;
   }
@@ -420,5 +420,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // if !USE_X11
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.49 2004/07/31 10:25:39 laza2000 Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.50 2005/01/24 08:07:50 spitzak Exp $".
 //

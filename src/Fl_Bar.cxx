@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bar.cxx,v 1.11 2004/06/04 08:58:03 spitzak Exp $"
+// "$Id: Fl_Bar.cxx,v 1.12 2005/01/24 08:07:14 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -50,24 +50,23 @@ BarGroup::BarGroup(int x, int y, int w, int h, const char* title)
   align(ALIGN_INSIDE);
 }
 
-void BarGroup::glyph_box(int& x, int& y, int& w, int& h) {
-  x = y = 0; w = this->w(); h = this->h(); //box()->inset(x,y,w,h);
-  if (horizontal()) {
-    w = open_ ? glyph_size_ : saved_size;
-  } else {
-    h = open_ ? glyph_size_ : saved_size;
-  }
+void BarGroup::glyph_box(Rectangle& r) const {
+  int z = open_ ? glyph_size_ : saved_size;
+  int w = this->w();
+  int h = this->h();
+  if (horizontal()) w = z; else h = z;
+  r.set(0,0,w,h); //box()->inset(r);
 }
 
 int BarGroup::handle(int event)
 {
-  int x,y,w,h;
+  Rectangle r;
   switch (event) {
   case ENTER:
   case MOVE:
     if (highlight_color() && takesevents()) {
-      glyph_box(x,y,w,h);
-      bool hl = event_inside(x,y,w,h);
+      glyph_box(r);
+      bool hl = event_inside(r);
       if (hl != highlighted) {
 	highlighted = hl;
 	redraw(DAMAGE_HIGHLIGHT);
@@ -81,16 +80,16 @@ int BarGroup::handle(int event)
     }
     break;
   case PUSH:
-    glyph_box(x,y,w,h);
-    if (event_inside(x,y,w,h)) {
+    glyph_box(r);
+    if (event_inside(r)) {
       pushed = highlighted = true;
       redraw(DAMAGE_HIGHLIGHT);
       return true;
     }
     break;
   case DRAG:
-    glyph_box(x,y,w,h);
-    if (event_inside(x,y,w,h)) {
+    glyph_box(r);
+    if (event_inside(r)) {
       if (!pushed) {
 	pushed = highlighted = true;
 	redraw(DAMAGE_HIGHLIGHT);
@@ -131,20 +130,23 @@ void BarGroup::draw()
     }
   } else if (damage() & ~(DAMAGE_CHILD|DAMAGE_HIGHLIGHT)) {
     draw_box();
-    int x = 0,y = 0,w = this->w(),h = this->h(); box()->inset(x,y,w,h);
+    Rectangle r(w(),h());
+    box()->inset(r);
     Flags flags = current_flags();
-    if (horizontal())
-      draw_label(saved_size, y, w-saved_size, h, style(), flags|ALIGN_LEFT|ALIGN_INSIDE);
-    else
-      draw_label(x, saved_size, w, h-saved_size, style(), flags);
+    if (horizontal()) {
+      r.x(saved_size); r.w(r.w()-saved_size);
+      flags |= ALIGN_LEFT|ALIGN_INSIDE;
+    } else {
+      r.y(saved_size); r.h(r.h()-saved_size);
+    }
+    draw_label(r, style(), flags);
   }
   if (damage() & (DAMAGE_EXPOSE|DAMAGE_HIGHLIGHT|DAMAGE_ALL)) {
-    Flags f = 0;
-    if (pushed) f |= VALUE;
-    if (highlighted) f |= HIGHLIGHT;
-    int x,y,w,h; glyph_box(x,y,w,h);
-    draw_glyph(horizontal() ? GLYPH_RIGHT_BUTTON : GLYPH_DOWN_BUTTON,
-	       x, y, w, h, f);
+    Flags flags = 0;
+    if (pushed) flags |= VALUE;
+    if (highlighted) flags |= HIGHLIGHT;
+    Rectangle r; glyph_box(r);
+    draw_glyph(horizontal() ? GLYPH_RIGHT_BUTTON : GLYPH_DOWN_BUTTON, r,flags);
   }
 }
 
@@ -155,18 +157,18 @@ bool BarGroup::opened(bool v)
     open_ = false;
     if (horizontal()) { // horizontal
       saved_size = h();
-      resize(x(), y(), w(), glyph_size_);
+      Widget::resize(w(), glyph_size_);
     } else {
       saved_size = w();
-      resize(x(), y(), glyph_size_, h());
+      Widget::resize(glyph_size_, h());
     }
   } else {
     if (!v) return false;
     open_ = true;
     if (horizontal()) // horizontal
-      resize(x(), y(), w(), saved_size);
+      Widget::resize(w(), saved_size);
     else
-      resize(x(), y(), saved_size, h());
+      Widget::resize(saved_size, h());
   }
   relayout();
   redraw();

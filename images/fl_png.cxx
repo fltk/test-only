@@ -1,5 +1,5 @@
 //
-// "$Id: fl_png.cxx,v 1.19 2004/09/05 21:40:40 spitzak Exp $"
+// "$Id: fl_png.cxx,v 1.20 2005/01/24 08:07:10 spitzak Exp $"
 //
 // PNG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -65,7 +65,7 @@ bool fltk::pngImage::test(const uchar* datas, unsigned size)
 #endif
 }
 
-void fltk::pngImage::_measure(float &W, float &H) const
+void fltk::pngImage::_measure(int &W, int &H) const
 {
 #if !HAVE_LIBPNG
   const_cast<pngImage*>(this)->setsize(0,0);
@@ -249,7 +249,7 @@ void fltk::pngImage::read()
   { // We use a block because ImageDraw creates a local
     // and we have 'goto error' before this point
     ImageDraw idraw(this);
-    drawimage(drawimage_cb, png_ptr, PixelType(d), 0, 0, width, height, d);
+    drawimage(drawimage_cb, png_ptr, PixelType(d), Rectangle(width, height), d);
     if(d == 4) {
       alpha = rgb;
     }
@@ -265,5 +265,5 @@ void fltk::pngImage::read()
 }
 
 //
-// End of "$Id: fl_png.cxx,v 1.19 2004/09/05 21:40:40 spitzak Exp $"
+// End of "$Id: fl_png.cxx,v 1.20 2005/01/24 08:07:10 spitzak Exp $"
 //

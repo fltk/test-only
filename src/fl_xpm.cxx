@@ -1,4 +1,4 @@
-// "$Id: fl_xpm.cxx,v 1.25 2004/07/27 07:03:08 spitzak Exp $"
+// "$Id: fl_xpm.cxx,v 1.26 2005/01/24 08:07:56 spitzak Exp $"
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
@@ -132,10 +132,11 @@ bool xpmFileImage::test(const unsigned char *data, unsigned)
   return (strstr((char*) data,"/* XPM") != 0);
 }
 
-void xpmFileImage::_measure(float &W, float &H) const
+void xpmFileImage::_measure(int &W, int &H) const
 {
   if(w()>=0) { 
-    W=w(); H=h(); 
+    W = w();
+    H = h(); 
     return; 
   }
   int loaded=0;
@@ -150,16 +151,13 @@ void xpmFileImage::_measure(float &W, float &H) const
     loaded=1;
   }
 
-  int _W,_H;
-  measure_xpm(ldata,_W,_H);
-  const_cast<xpmFileImage*>(this)->setsize(_W,_H);
+  measure_xpm(ldata, W, H);
+  const_cast<xpmFileImage*>(this)->setsize(W,H);
 
   if (loaded) {
     delete[] ldata[0];
     free((void*)ldata);
   }
-  W=w(); 
-  H=h();
 }
 
 void xpmFileImage::read()
@@ -196,5 +194,5 @@ void xpmFileImage::read()
 }
 
 //
-// End of "$Id: fl_xpm.cxx,v 1.25 2004/07/27 07:03:08 spitzak Exp $"
+// End of "$Id: fl_xpm.cxx,v 1.26 2005/01/24 08:07:56 spitzak Exp $"
 //

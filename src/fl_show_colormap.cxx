@@ -1,5 +1,5 @@
 //
-// "$Id: fl_show_colormap.cxx,v 1.31 2004/07/02 05:40:59 spitzak Exp $"
+// "$Id: fl_show_colormap.cxx,v 1.32 2005/01/24 08:07:56 spitzak Exp $"
 //
 // Colormap color selection dialog for the Fast Light Tool Kit (FLTK).
 //
@@ -58,12 +58,15 @@ ColorMenu::ColorMenu(Color oldcol)
 
 void ColorMenu::drawbox(Color C) {
   Color c = Color(C & 0xFF); // get the color index
-  int x = (c%8)*BOXSIZE+BORDER;
-  int y = (c/8)*BOXSIZE+BORDER;
   setcolor(c);
-  fillrect(x,y,BOXSIZE,BOXSIZE);
-  if (c == which) DOWN_BOX->draw(x+1, y+1, BOXSIZE-1, BOXSIZE-1,
-				 style(), INVISIBLE);
+  Rectangle r((c%8)*BOXSIZE+BORDER,
+	      (c/8)*BOXSIZE+BORDER,
+	      BOXSIZE, BOXSIZE);
+  fillrect(r);
+  if (c == which) {
+    r.move_x(1); r.move_y(1);
+    DOWN_BOX->draw(r, style(), INVISIBLE);
+  }
 }
 
 void ColorMenu::draw() {
@@ -158,5 +161,5 @@ Color fltk::show_colormap(Color oldcol) {
 }
 
 //
-// End of "$Id: fl_show_colormap.cxx,v 1.31 2004/07/02 05:40:59 spitzak Exp $".
+// End of "$Id: fl_show_colormap.cxx,v 1.32 2005/01/24 08:07:56 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_round_box.cxx,v 1.34 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id: fl_round_box.cxx,v 1.35 2005/01/24 08:07:56 spitzak Exp $"
 //
 // Round box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@ using namespace fltk;
 // Circle with an edge pattern like FrameBox:
 class RoundBox : public FrameBox {
 public:
-  void _draw(int,int,int,int, const Style*, Flags) const;
+  void _draw(const Rectangle&, const Style*, Flags) const;
   RoundBox(const char* n, const char* s, const FrameBox* d=0)
     : FrameBox(n, s, d) {boxinfo_.fills_rectangle = 0;}
 };
@@ -54,21 +54,23 @@ static void lozenge(int which, int x,int y,int w,int h, Color color)
   if (d <= 1) return;
   setcolor(color);
   int what = (which==FILL ? FILLPIE : STROKEARC);
+  Rectangle r1(x+w-d, y, d, d);
+  Rectangle r2(x, y+h-d, d, d);
   if (which >= CLOSED) {
-    fillpie(x+w-d, y, d, d, w<=h ? 0 : -90, w<=h ? 180 : 90, what);
-    fillpie(x, y+h-d, d, d, w<=h ? 180 : 90, w<=h ? 360 : 270, what);
+    fillpie(r1, w<=h ? 0 : -90, w<=h ? 180 : 90, what);
+    fillpie(r2, w<=h ? 180 : 90, w<=h ? 360 : 270, what);
   } else if (which == UPPER_LEFT) {
-    fillpie(x+w-d, y, d, d, 45, w<=h ? 180 : 90, what);
-    fillpie(x, y+h-d, d, d, w<=h ? 180 : 90, 225, what);
+    fillpie(r1, 45, w<=h ? 180 : 90, what);
+    fillpie(r2, w<=h ? 180 : 90, 225, what);
   } else { // LOWER_RIGHT
-    fillpie(x, y+h-d, d, d, 225, w<=h ? 360 : 270, what);
-    fillpie(x+w-d, y, d, d, w<=h ? 360 : 270, 360+45, what);
+    fillpie(r1, w<=h ? 360 : 270, 360+45, what);
+    fillpie(r2, 225, w<=h ? 360 : 270, what);
   }
   if (which == FILL) {
     if (w < h)
-      fillrect(x, y+d/2, w, h-(d&-2));
+      fillrect(Rectangle(x, y+d/2, w, h-(d&-2)));
     else if (w > h)
-      fillrect(x+d/2, y, w-(d&-2), h);
+      fillrect(Rectangle(x+d/2, y, w-(d&-2), h));
   } else {
     if (w < h) {
       if (which != UPPER_LEFT) drawline(x+w, y+d/2, x+w, y+h-d/2);
@@ -82,13 +84,16 @@ static void lozenge(int which, int x,int y,int w,int h, Color color)
 
 extern void fl_to_inactive(const char* s, char* to);
 
-void RoundBox::_draw(int x, int y, int w, int h,
-		     const Style* style, Flags f) const
+void RoundBox::_draw(const Rectangle& r, const Style* style, Flags f) const
 {
   const char* s = (f & VALUE) ? down->data() : data();
   char buf[26]; if (f&INACTIVE && style->draw_boxes_inactive()) {
     fl_to_inactive(s, buf); s = buf;}
   Color bg, fg; style->boxcolors(f, bg, fg);
+  int x = r.x();
+  int y = r.y();
+  int w = r.w();
+  int h = r.h();
   if (!(f & INVISIBLE)) {
     // draw the interior, assumming the edges are the same thickness
     // as the normal square box:
@@ -121,5 +126,5 @@ static RoundBox roundUpBox("round_up", "AAWWMMTT", &roundDownBox);
 Box* const fltk::ROUND_UP_BOX = &roundUpBox;
 
 //
-// End of "$Id: fl_round_box.cxx,v 1.34 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id: fl_round_box.cxx,v 1.35 2005/01/24 08:07:56 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.33 2004/11/21 07:44:58 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.34 2005/01/24 08:07:56 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -217,7 +217,10 @@ void fltk::load_identity() {
 
 ////////////////////////////////////////////////////////////////
 
-/*! Replace \a x and \a y with the transformed coordinates. */
+/*! Replace \a x and \a y transformed into device coordinates.
+  Device-specific code can use this to draw things using the
+  fltk transformation matrix.
+*/
 void fltk::transform(float& x, float& y) {
   if (!m.trivial) {
     float t = x*m.a + y*m.c + m.x;
@@ -255,14 +258,38 @@ void fltk::transform(int& x, int& y) {
   }
 }
 
-/*! Replace x and y with the transformed vector, rounded to the
-  nearest integer. */
-void fltk::transform_distance(int& x, int& y) {
-  if (!m.trivial) {
-    int t = int(floorf(x*m.a + y*m.c + .5f));
-    y = int(floorf(x*m.b + y*m.d + .5f));
-    x = t;
+/*! Replace the rectangle with a transformed version. Device-specific
+  code can use this to get a rectangle that matches the current
+  fltk transform. This only works correctly for 90 degree rotations,
+  for other transforms this will produce the bounding box of
+  the transformed rectangle. This is about the best that can be
+  done for device functions that don't handle rotation.
+*/
+void fltk::transform(Rectangle& R) {
+  if (m.trivial) {
+    R.move(m.ix, m.iy);
+    return;
   }
+  // maybe it should do the radius calculation addellipse() does?
+  int x,r,t;
+  t = int(rintf(R.x()*m.a + R.y()*m.c));
+  x = r = t;
+  t = int(rintf(R.r()*m.a + R.y()*m.c));
+  if (t < x) x = t; else r = t;
+  t = int(rintf(R.x()*m.a + R.b()*m.c));
+  if (t < x) x = t; else if (t > r) r = t;
+  t = int(rintf(R.r()*m.a + R.b()*m.c));
+  if (t < x) x = t; else if (t > r) r = t;
+  int y,b;
+  t = int(rintf(R.x()*m.b + R.y()*m.d));
+  y = b = t;
+  t = int(rintf(R.r()*m.b + R.y()*m.d));
+  if (t < y) y = t; else b = t;
+  t = int(rintf(R.x()*m.b + R.b()*m.d));
+  if (t < y) y = t; else if (t > b) b = t;
+  t = int(rintf(R.r()*m.b + R.b()*m.d));
+  if (t < y) y = t; else if (t > b) b = t;
+  R.set(x,y,r-x,b-y);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -809,5 +836,5 @@ void fltk::fillstrokepath(Color color) {
 /** \} */
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.33 2004/11/21 07:44:58 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.34 2005/01/24 08:07:56 spitzak Exp $".
 //

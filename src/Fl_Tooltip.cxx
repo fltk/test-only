@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.64 2004/11/17 17:32:35 spitzak Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.65 2005/01/24 08:07:47 spitzak Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -68,7 +68,7 @@ public:
 static Tooltip::Generator generator;
 static void* argument;
 Widget* Tooltip::widget;
-static int X,Y,W,H;
+static Rectangle rectangle;
 static TooltipBox *window = 0;
 
 void TooltipBox::layout() {
@@ -79,8 +79,8 @@ void TooltipBox::layout() {
 
   // find position on the screen of the widget:
   int ox = event_x_root();
-  //int ox = X+W/2;
-  int oy = Y + H+2;
+  //int ox = rectangle.center_x();
+  int oy = rectangle.center_y();
   for (Widget* p = Tooltip::current(); p; p = p->parent()) {
     //ox += p->x();
     oy += p->y();
@@ -88,11 +88,11 @@ void TooltipBox::layout() {
   const Monitor& monitor = Monitor::find(ox, oy);
   if (ox+ww > monitor.r()) ox = monitor.r() - ww;
   if (ox < monitor.x()) ox = monitor.x();
-  if (H > 30) {
+  if (rectangle.h() > 30) {
     oy = event_y_root()+13;
     if (oy+hh > monitor.h()) oy -= 23+hh;
   } else {
-    if (oy+hh > monitor.h()) oy -= (4+hh+H);
+    if (oy+hh > monitor.h()) oy -= (4+hh+rectangle.h());
   }
   if (oy < monitor.y()) oy = monitor.y();
 
@@ -102,8 +102,8 @@ void TooltipBox::layout() {
 
 void TooltipBox::draw() {
   draw_box();
-  int X=0; int Y=0; int W=w(); int H=h(); //box()->inset(X,Y,W,H);
-  draw_label(X, Y, W, H, style(), flags()|OUTPUT);
+  Rectangle r(w(),h()); //box()->inset(r);
+  draw_label(r, style(), flags()|OUTPUT);
 }
 
 static void recent_timeout(void*) {
@@ -148,7 +148,7 @@ void Tooltip::enter(Widget* w) {
     if (tw->tooltip()) break;
     tw = tw->parent();
   }
-  enter(w, 0, 0, w->w(), w->h(), tw->tooltip());
+  enter(w, Rectangle(w->w(), w->h()), tw->tooltip());
 }
 
 // Acts as though enter(widget) was done but does not pop up a
@@ -185,14 +185,16 @@ void Tooltip::exit() {
   }
 }
 
-// Get ready to display a tooltip. The widget and the xywh box inside
-// it define an area the tooltip is for, this along with the current
-// mouse position places the tooltip (the mouse is assummed to point
-// inside or near the box). The generator function is called with the
-// widget and data to generate the text, this must be a static data
-// buffer, this function allows you to defer the calculation of the
-// tooltip text until it is first needed.
-void Tooltip::enter(Widget* wid, int x,int y,int w,int h,
+/**
+  Get ready to display a tooltip. The widget and the rectangle \a r inside
+  it define an area the tooltip is for, this along with the current
+  mouse position places the tooltip (the mouse is assummed to point
+  inside or near the box). The generator function is called with the
+  widget and data to generate the text, this must be a static data
+  buffer, this function allows you to defer the calculation of the
+  tooltip text until it is first needed.
+*/
+void Tooltip::enter(Widget* wid, const Rectangle& r,
 		       Tooltip::Generator gen, void* data)
 {
   if (recursion) return;
@@ -205,7 +207,7 @@ void Tooltip::enter(Widget* wid, int x,int y,int w,int h,
   remove_timeout(tooltip_timeout);
   remove_timeout(recent_timeout);
   // remember it:
-  widget = wid; X = x; Y = y; W = w; H = h;
+  widget = wid; rectangle = r;
   generator = gen; argument = data;
   // popup the tooltip immediately if it was recently up:
   if (recent_tooltip || Tooltip::delay() < .1) {
@@ -231,5 +233,5 @@ static NamedStyle style("Tooltip", revert, &Tooltip::default_style);
 NamedStyle* Tooltip::default_style = &::style;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.64 2004/11/17 17:32:35 spitzak Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.65 2005/01/24 08:07:47 spitzak Exp $".
 //

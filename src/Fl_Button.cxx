@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.72 2004/11/12 06:50:14 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.73 2005/01/24 08:07:17 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -26,6 +26,7 @@
 #include <fltk/Button.h>
 #include <fltk/Group.h>
 #include <fltk/Box.h>
+#include <stdlib.h>
 using namespace fltk;
 
 /*! \class fltk::Button
@@ -100,7 +101,7 @@ int Button::handle(int event) {
     initial_value = value();
   case DRAG: {
     bool new_value;
-    if (event_inside(0,0,w(),h())) {
+    if (event_inside(Rectangle(0,0,w(),h()))) {
       pushed_button = this;
       // if (type() == RADIO) new_value = true; else
       new_value = !initial_value;
@@ -199,13 +200,13 @@ void Button::draw(int glyph, int glyph_width) const
 
   // only draw "inside" labels:
   bool draw_label = true;
-  int x = 0, y = 0, w = this->w(), h = this->h();
+  Rectangle r(0,0,w(),h());
 
   if (box == NO_BOX) {
     Color bg;
     if (box_flags & HIGHLIGHT && (bg = style->highlight_color())) {
       setcolor(bg);
-      fillrect(0, 0, w, h);
+      fillrect(r);
     } else if ((damage()&(DAMAGE_EXPOSE|DAMAGE_HIGHLIGHT))) {
       // erase the background so we can redraw the label in the new color:
       draw_background();
@@ -225,24 +226,27 @@ void Button::draw(int glyph, int glyph_width) const
       draw_background();
     }
     // Draw the box:
-    box->draw(0, 0, w, h, style, box_flags);
-    box->inset(x,y,w,h);
+    box->draw(r, style, box_flags);
+    box->inset(r);
   }
 
-  int lx = x; int lw = w;
-  if (glyph_width < 0) {
-    int g = -glyph_width;
-    (this->glyph())(glyph, x+w-g-3, y+((h-g)>>1), g, g, style, glyph_flags);
-    lw = w-g-3;
-  } else if (glyph_width > 0) {
-    int g = glyph_width;
-    (this->glyph())(glyph, x+3, y+((h-g)>>1), g, g, style, glyph_flags);
-    lx = x+g+3; lw = w-g-3;
+  if (glyph_width) {
+    Rectangle lr(r);
+    int g = abs(glyph_width);
+    Rectangle gr(lr, g, g);
+    if (glyph_width < 0) {
+      gr.x(lr.r()-g-3);
+      lr.set_r(gr.x());
+    } else {
+      gr.x(lr.x()+3);
+      lr.set_x(gr.r());
+    }
+    (this->glyph())(glyph, gr, style, glyph_flags);
+    if (draw_label) this->draw_label(lr, style, box_flags);
+  } else {
+    if (draw_label) this->draw_label(r, style, box_flags);
   }
-
-  if (draw_label) this->draw_label(lx, y, lw, h, style, box_flags);
-
-  focusbox()->draw(x+1, y+1, w-2, h-2, style, box_flags);
+  focusbox()->draw(r, style, box_flags);
 }
 
 void Button::draw() {
@@ -274,5 +278,5 @@ Button::Button(int x,int y,int w,int h, const char *l) : Widget(x,y,w,h,l) {
 */
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.72 2004/11/12 06:50:14 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.73 2005/01/24 08:07:17 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Input.h,v 1.5 2004/11/12 06:50:13 spitzak Exp $"
+// "$Id: Input.h,v 1.6 2005/01/24 08:07:06 spitzak Exp $"
 //
 // One-line text input field.
 //
@@ -47,9 +47,9 @@ public:
   static NamedStyle* default_style;
 
   void draw();
-  void draw(int, int, int, int);
+  void draw(const Rectangle&);
   int handle(int);
-  int handle(int event, int, int, int, int);
+  int handle(int event, const Rectangle&);
   bool handle_key();
 
   bool value(const char*);
@@ -83,7 +83,7 @@ public:
   int word_end(int i) const;
   int line_start(int i) const;
   int line_end(int i) const;
-  int mouse_position(int, int, int, int) const;
+  int mouse_position(const Rectangle&) const;
   int xscroll() const {return xscroll_;}
   int yscroll() const {return yscroll_;}
 
@@ -118,5 +118,5 @@ private:
 #endif
 
 //
-// End of "$Id: Input.h,v 1.5 2004/11/12 06:50:13 spitzak Exp $".
+// End of "$Id: Input.h,v 1.6 2005/01/24 08:07:06 spitzak Exp $".
 //

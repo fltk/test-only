@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Roller.cxx,v 1.38 2004/08/01 22:28:23 spitzak Exp $"
+// "$Id: Fl_Roller.cxx,v 1.39 2005/01/24 08:07:43 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -79,8 +79,9 @@ int ThumbWheel::handle(int event) {
 
 void ThumbWheel::draw() {
   if (damage()&(DAMAGE_ALL|DAMAGE_HIGHLIGHT)) draw_box();
-  int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
-  if (W<=0 || H<=0) return;
+  Rectangle r(w(),h());
+  box()->inset(r);
+  if (r.empty()) return;
 
   double s = step();
   if (!s) s = (maximum()-minimum())/100;
@@ -90,80 +91,80 @@ void ThumbWheel::draw() {
   const double delta = .2; // radians per knurl
   if (horizontal()) {
     // draw shaded ends of wheel:
-    int h1 = W/4+1; // distance from end that shading starts
-    setcolor(buttoncolor()); fillrect(X+h1,Y,W-2*h1,H);
+    int h1 = r.w()/4+1; // distance from end that shading starts
+    setcolor(buttoncolor()); fillrect(Rectangle(r.x()+h1,r.y(),r.w()-2*h1,r.h()));
     for (int i=0; h1; i++) {
       setcolor((Color)(GRAY75-i-1));
       int h2 = GRAY75-i-1 > GRAY33 ? 2*h1/3+1 : 0;
-      fillrect(X+h2,Y,h1-h2,H);
-      fillrect(X+W-h1,Y,h1-h2,H);
+      fillrect(Rectangle(r.x()+h2,r.y(),h1-h2,r.h()));
+      fillrect(Rectangle(r.r()-h1,r.y(),h1-h2,r.h()));
       h1 = h2;
     }
     if (active_r()) {
       // draw ridges:
       double junk;
-      for (double y = -ARC+modf(offset*sin(ARC)/(W/2)/delta,&junk)*delta;;
+      for (double y = -ARC+modf(offset*sin(ARC)/(r.w()/2)/delta,&junk)*delta;;
 	   y += delta) {
-	int y1 = int((sin(y)/sin(ARC)+1)*W/2);
-	if (y1 <= 0) continue; else if (y1 >= W-1) break;
-	setcolor(GRAY33); drawline(X+y1,Y+1,X+y1,Y+H-1);
+	int y1 = int((sin(y)/sin(ARC)+1)*r.w()/2);
+	if (y1 <= 0) continue; else if (y1 >= r.w()-1) break;
+	setcolor(GRAY33); drawline(r.x()+y1,r.y()+1,r.x()+y1,r.b()-1);
 	if (y < 0) y1--; else y1++;
-	setcolor(GRAY85);drawline(X+y1,Y+1,X+y1,Y+H-1);
+	setcolor(GRAY85);drawline(r.x()+y1,r.y()+1,r.x()+y1,r.b()-1);
       }
       // draw edges:
-      h1 = W/8+1; // distance from end the color inverts
+      h1 = r.w()/8+1; // distance from end the color inverts
       setcolor(GRAY60);
-      drawline(X+h1,Y+H-1,X+W-h1,Y+H-1);
+      drawline(r.x()+h1,r.b()-1,r.r()-h1,r.b()-1);
       setcolor(GRAY33);
-      drawline(X,Y+H,X,Y);
-      drawline(X,Y,X+h1,Y);
-      drawline(X+W-h1,Y,X+W,Y);
+      drawline(r.x(),r.b(),r.x(),r.y());
+      drawline(r.x(),r.y(),r.x()+h1,r.y());
+      drawline(r.b()-h1,r.y(),r.r(),r.y());
       setcolor(GRAY90);
-      drawline(X+h1,Y,X+W-h1,Y);
-      drawline(X+W,Y,X+W,Y+H);
-      drawline(X+W,Y+H,X+W-h1,Y+H);
-      drawline(X+h1,Y+H,X,Y+H);
+      drawline(r.x()+h1,r.y(),r.r()-h1,r.y());
+      drawline(r.r(),r.y(),r.r(),r.b());
+      drawline(r.r(),r.b(),r.r()-h1,r.b());
+      drawline(r.x()+h1,r.b(),r.x(),r.b());
     }
   } else { // vertical one
     offset = (1-offset);
     // draw shaded ends of wheel:
-    int h1 = H/4+1; // distance from end that shading starts
-    setcolor(buttoncolor()); fillrect(X,Y+h1,W,H-2*h1);
+    int h1 = r.h()/4+1; // distance from end that shading starts
+    setcolor(buttoncolor()); fillrect(Rectangle(r.x(),r.y()+h1,r.w(),r.h()-2*h1));
     for (int i=0; h1; i++) {
       setcolor((Color)(GRAY75-i-1));
       int h2 = GRAY75-i-1 > GRAY33 ? 2*h1/3+1 : 0;
-      fillrect(X,Y+h2,W,h1-h2);
-      fillrect(X,Y+H-h1,W,h1-h2);
+      fillrect(Rectangle(r.x(),r.y()+h2,r.w(),h1-h2));
+      fillrect(Rectangle(r.x(),r.b()-h1,r.w(),h1-h2));
       h1 = h2;
     }
     if (active_r()) {
       // draw ridges:
       double junk;
-      for (double y = -ARC+modf(offset*sin(ARC)/(H/2)/delta,&junk)*delta;
+      for (double y = -ARC+modf(offset*sin(ARC)/(r.h()/2)/delta,&junk)*delta;
 	   ; y += delta) {
-	int y1 = int((sin(y)/sin(ARC)+1)*H/2);
-	if (y1 <= 0) continue; else if (y1 >= H-1) break;
-	setcolor(GRAY33); drawline(X+1,Y+y1,X+W-1,Y+y1);
+	int y1 = int((sin(y)/sin(ARC)+1)*r.h()/2);
+	if (y1 <= 0) continue; else if (y1 >= r.h()-1) break;
+	setcolor(GRAY33); drawline(r.x()+1,r.y()+y1,r.r()-1,r.y()+y1);
 	if (y < 0) y1--; else y1++;
-	setcolor(GRAY85);drawline(X+1,Y+y1,X+W-1,Y+y1);
+	setcolor(GRAY85);drawline(r.x()+1,r.y()+y1,r.r()-1,r.y()+y1);
       }
       // draw edges:
-      h1 = H/8+1; // distance from end the color inverts
+      h1 = r.h()/8+1; // distance from end the color inverts
       setcolor(GRAY60);
-      drawline(X+W-1,Y+h1,X+W-1,Y+H-h1);
+      drawline(r.r()-1,r.y()+h1,r.r()-1,r.b()-h1);
       setcolor(GRAY33);
-      drawline(X+W,Y,X,Y);
-      drawline(X,Y,X,Y+h1);
-      drawline(X,Y+H-h1,X,Y+H);
+      drawline(r.r(),r.y(),r.x(),r.y());
+      drawline(r.x(),r.y(),r.x(),r.y()+h1);
+      drawline(r.x(),r.b()-h1,r.x(),r.b());
       setcolor(GRAY90);
-      drawline(X,Y+h1,X,Y+H-h1);
-      drawline(X,Y+H,X+W,Y+H);
-      drawline(X+W,Y+H,X+W,Y+H-h1);
-      drawline(X+W,Y+h1,X+W,Y);
+      drawline(r.x(),r.y()+h1,r.x(),r.b()-h1);
+      drawline(r.x(),r.b(),r.r(),r.b());
+      drawline(r.r(),r.b(),r.r(),r.b()-h1);
+      drawline(r.r(),r.y()+h1,r.r(),r.y());
     }
   }
   if (focused()) {
-    focusbox()->draw(0,0,w(),h(), style(), FOCUSED);
+    focusbox()->draw(r, style(), FOCUSED);
   }
 }
 
@@ -174,5 +175,5 @@ ThumbWheel::ThumbWheel(int X,int Y,int W,int H,const char* L) : Valuator(X,Y,W,H
 }
 
 //
-// End of "$Id: Fl_Roller.cxx,v 1.38 2004/08/01 22:28:23 spitzak Exp $".
+// End of "$Id: Fl_Roller.cxx,v 1.39 2005/01/24 08:07:43 spitzak Exp $".
 //

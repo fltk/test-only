@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.119 2004/12/31 08:19:52 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.120 2005/01/24 08:07:50 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -630,59 +630,59 @@ void Window::show_inside(const Window* frame) {
   completely. Also if your normal drawing causes blinking (due to
   overlapping objects) this can make the display look much better by
   limiting the blinking to the small area that is actually changing.  */
-void Widget::redraw(int X, int Y, int W, int H) {
+void Widget::redraw(const Rectangle& r1) {
   // go up to the window, clipping to each widget's area, quit if empty:
   Widget* window = this;
+  Rectangle r(r1);
   for (;;) {
-    if (X < 0) {W += X; X = 0;}
-    if (Y < 0) {H += Y; Y = 0;}
-    if (W > window->w()-X) W = window->w()-X;
-    if (H > window->h()-Y) H = window->h()-Y;
-    if (W <= 0 || H <= 0) return;
+    if (r.x() < 0) r.set_x(0);
+    if (r.y() < 0) r.set_y(0);
+    if (r.r() > window->w()) r.set_r(window->w());
+    if (r.b() > window->h()) r.set_b(window->h());
+    if (r.empty()) return;
     if (window->is_window()) break;
-    X += window->x();
-    Y += window->y();
+    r.move(window->x(), window->y());
     window = window->parent();
     if (!window) return;
   }
   CreatedWindow* i = CreatedWindow::find((Window*)window);
   if (!i) return; // window not mapped, so ignore it
   window->damage_ |= DAMAGE_EXPOSE;
-  i->expose(X, Y, W, H);
+  i->expose(r);
 }
 
 // Merge a rectangle into a window's expose region. If the entire
 // window is damaged we switch to a DAMAGE_ALL mode which will
 // avoid drawing it twice:
-void CreatedWindow::expose(int X, int Y, int W, int H) {
+void CreatedWindow::expose(const Rectangle& r) {
   // Ignore if window already marked as completely damaged:
   if (window->damage() & DAMAGE_ALL) ;
   // Detect expose events that cover the entire window:
-  else if (X<=0 && Y<=0 && W>=window->w() && H>=window->h()) {
+  else if (r.x()<=0 && r.y()<=0 && r.r()>=window->w() && r.b()>=window->h()) {
     window->set_damage(DAMAGE_ALL);
   } else if (!region) {
     // create a new region:
 #if USE_X11
-    region = XRectangleRegion(X, Y, W, H);
+    region = XRectangleRegion(r.x(), r.y(), r.w(), r.h());
 #elif defined(_WIN32)
-    region = CreateRectRgn(X, Y, X+W, Y+H);
+    region = CreateRectRgn(r.x(), r.y(), r.r(), r.b());
 #elif defined(__APPLE__)
     region = NewRgn();
-    SetRectRgn(region, X, Y, X+W, Y+H);
+    SetRectRgn(region, r.x(), r.y(), r.r(), r.b());
 #endif
   } else {
     // merge with the region:
 #if USE_X11
     XRectangle R;
-    R.x = X; R.y = Y; R.width = W; R.height = H;
+    R.x = r.x(); R.y = r.y(); R.width = r.w(); R.height = r.h();
     XUnionRectWithRegion(&R, region, region);
 #elif defined(_WIN32)
-    HRGN R = CreateRectRgn(X, Y, X+W, Y+H);
+    HRGN R = CreateRectRgn(r.x(), r.y(), r.r(), r.b());
     CombineRgn(region, region, R, RGN_OR);
     DeleteObject(R);
 #elif defined(__APPLE__)
     RgnHandle R = NewRgn(); 
-    SetRectRgn(R, X, Y, X+W, Y+H);
+    SetRectRgn(R, r.x(), r.y(), r.r(), r.b());
     UnionRgn(R, region, region);
     DisposeRgn(R);
 #else
@@ -735,7 +735,7 @@ void CreatedWindow::expose(int X, int Y, int W, int H) {
 */
 void Window::draw_overlay() {
   setcolor(RED);
-  fillrect(0,0,w(),h());
+  fillrect(Rectangle(w(),h()));
 }
 
 /** Indicate that the image made by draw_overlay() has changed and must
@@ -831,5 +831,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.119 2004/12/31 08:19:52 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.120 2005/01/24 08:07:50 spitzak Exp $".
 //

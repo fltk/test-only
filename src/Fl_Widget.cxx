@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.117 2004/12/05 19:28:48 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.118 2005/01/24 08:07:48 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -59,7 +59,9 @@ void Widget::default_callback(Widget* w, void*) {w->set_changed();}
   or Group::current(0), then the parent() is set to null. In this case
   you must add the widget yourself in order to see it.
 */
-Widget::Widget(int X, int Y, int W, int H, const char* L) {
+Widget::Widget(int X, int Y, int W, int H, const char* L) :
+  Rectangle(X,Y,W,H)
+{
   style_	= default_style;
   parent_	= 0;
   callback_	= default_callback;
@@ -72,7 +74,6 @@ Widget::Widget(int X, int Y, int W, int H, const char* L) {
 #else
   flags_	= TAB_TO_FOCUS;
 #endif
-  x_ = X; y_ = Y; w_ = W; h_ = H;
   type_		= 0;
   damage_	= DAMAGE_ALL;
   layout_damage_= LAYOUT_DAMAGE;
@@ -358,30 +359,30 @@ void Widget::layout() {
   before returning the value.  Using these calls allows a widget to
   delay the calculation of size until it is needed. */
 int Widget::height() {
-  if (!h_) layout();
-  return h_;
+  if (!h()) layout();
+  return h();
 }
 
 /*! Returns w() but if the current value is zero it calls layout()
   before returning the value.  Using these calls allows a widget to
   delay the calculation of size until it is needed. */
 int Widget::width() {
-  if (!w_) layout();
-  return w_;
+  if (!w()) layout();
+  return w();
 }
 
 /*! Change the size or position of the widget. Nothing is done if the
   passed size and position are the same as before. If there is a
   change then relayout() is called so that the virtual function
   layout() is called before the next draw().  */
-bool Widget::resize(int X, int Y, int W, int H) {
+bool Widget::resize(int x,int y,int w,int h) {
   uchar flags = 0;
-  if (X != x_) flags = LAYOUT_X;
-  if (Y != y_) flags |= LAYOUT_Y;
-  if (W != w_) flags |= LAYOUT_W;
-  if (H != h_) flags |= LAYOUT_H;
+  if (x != this->x()) flags = LAYOUT_X;
+  if (y != this->y()) flags |= LAYOUT_Y;
+  if (w != this->w()) flags |= LAYOUT_W;
+  if (h != this->h()) flags |= LAYOUT_H;
   if (flags) {
-    x_ = X; y_ = Y; w_ = W; h_ = H;
+    set(x,y,w,h);
     // parent must get LAYOUT_DAMAGE as well as LAYOUT_CHILD:
     if (parent()) {
       layout_damage_ |= flags;
@@ -395,13 +396,15 @@ bool Widget::resize(int X, int Y, int W, int H) {
   }
 }
 
-/*! \fn void Widget::position(int x, int y)
-  Same as resize(x,y,w(),h())
-*/
+/*! Same as resize() to x, y, w(), h() */
+bool Widget::position(int x, int y) {
+  return resize(x, y, w(), h());
+}
 
-/*! \fn void Widget::size(int w, int h)
-  Same as resize(x(),y(),w,h)
-*/
+/*! Same as resize() to x(), y(), w, h */
+bool Widget::resize(int w, int h) {
+  return resize(x(), y(), w, h);
+}
 
 /*! Same as relayout(LAYOUT_DAMAGE), indicates that data inside the
   widget may have changed, but the size did not change. This flag is
@@ -1039,5 +1042,5 @@ bool Widget::focused() const {return this == fltk::focus();}
 bool Widget::belowmouse() const {return this == fltk::belowmouse();}
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.117 2004/12/05 19:28:48 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.118 2005/01/24 08:07:48 spitzak Exp $".
 //

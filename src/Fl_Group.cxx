@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.140 2004/12/30 11:38:54 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.141 2005/01/24 08:07:19 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -619,7 +619,7 @@ void Group::draw() {
 #if USE_CLIPOUT
     // Non-blinky draw, draw the inside widgets first, clip their areas
     // out, and then draw the background:
-    push_clip(0, 0, w(), h());
+    push_clip(Rectangle(w(), h()));
     int n; for (n = numchildren; n--;) {
       Widget& w = *child(n);
       fl_did_clipping = 0;
@@ -660,21 +660,27 @@ void Group::draw() {
 
 // Pieces of draw() that subclasses may want to use:
 
-/*! Draw the background. If DAMAGE_EXPOSE is on, widgets are expected
-  to completely fill their rectangle. To allow non-rectangular widgets
-  to appear to work, a widget can call this to draw the area of it's
-  parent that is visible behind it. If you want to avoid blinking you
-  should draw your contents first, clip them out, then call this. */
+/*! Draw what would be in the area of the widget if the widget was not
+  there. By calling this in draw(), a widgets can redraw as though
+  they are partially transparent, or more complicated shapes than
+  rectangles. Note that only parent widgets are drawn, not
+  underlapping ones.
+
+  If DAMAGE_EXPOSE is on in damage() then the window (or at least some
+  region of it) is being completely redrawn. Normally FLTK will have
+  already drawn the background, so to avoid redundant drawing this
+  will return immediatly without drawing anything. However FLTK may be
+  compiled with USE_CLIPOUT (an option to reduce blinking in
+  single-buffered windows) and in that case the widget must draw any
+  visible background. In this case this function always draws the
+  background.
+*/
 void Widget::draw_background() const {
 #if !USE_CLIPOUT
   if (damage()&DAMAGE_EXPOSE) return;
 #endif
-  if (!parent()) {
-    setcolor(color());
-    fillrect(0, 0, w(), h());
-    return;
-  }
-  push_clip(0, 0, w(), h());
+  if (!parent()) return;
+  push_clip(Rectangle(w(),h()));
   push_matrix();
   translate(-x(), -y());
   if (!parent()->box()->fills_rectangle()) parent()->draw_background();
@@ -690,7 +696,7 @@ void Widget::draw_background() const {
 */
 void Group::draw_child(Widget& w) const {
   if (w.visible() && !w.is_window()) {
-    if (!not_clipped(w.x(), w.y(), w.w(), w.h())) return;
+    if (!not_clipped(w)) return;
     push_matrix();
     translate(w.x(), w.y());
     w.set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
@@ -706,7 +712,7 @@ void Group::draw_child(Widget& w) const {
 */
 void Group::update_child(Widget& w) const {
   if (w.damage() && w.visible() && !w.is_window()) {
-    if (!not_clipped(w.x(), w.y(), w.w(), w.h())) return;
+    if (!not_clipped(w)) return;
     push_matrix();
     translate(w.x(), w.y());
     w.draw();	
@@ -729,5 +735,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.140 2004/12/30 11:38:54 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.141 2005/01/24 08:07:19 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: glut.h,v 1.11 2004/03/25 18:13:17 spitzak Exp $"
+// "$Id: glut.h,v 1.12 2005/01/24 08:07:07 spitzak Exp $"
 //
 // GLUT emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -138,7 +138,7 @@ inline void glutSetIconTitle(const char *t) {glut_window->iconlabel(t);}
 
 inline void glutPositionWindow(int x, int y) {glut_window->position(x,y);}
 
-inline void glutReshapeWindow(int w, int h) {glut_window->size(w,h);}
+inline void glutReshapeWindow(int w, int h) {glut_window->resize(w,h);}
 
 inline void glutPopWindow() {glut_window->show();}
 
@@ -482,5 +482,5 @@ extern void APIENTRY glutSolidIcosahedron();
 #endif                  /* __glut_h__ */
 
 //
-// End of "$Id: glut.h,v 1.11 2004/03/25 18:13:17 spitzak Exp $".
+// End of "$Id: glut.h,v 1.12 2005/01/24 08:07:07 spitzak Exp $".
 //

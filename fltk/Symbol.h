@@ -1,5 +1,5 @@
 //
-// "$Id: Symbol.h,v 1.7 2004/08/01 22:28:20 spitzak Exp $"
+// "$Id: Symbol.h,v 1.8 2005/01/24 08:07:07 spitzak Exp $"
 //
 // The fltk drawing library
 //
@@ -29,6 +29,7 @@
 #include "FL_API.h"
 #include "Flags.h"
 #include "Color.h"
+#include "Rectangle.h"
 
 namespace fltk {
 
@@ -53,18 +54,11 @@ class FL_API Symbol {
   const char* name() const {return name_;}
   void name(const char*);
 
-  virtual void _measure(float& w, float& h) const;
-  void measure(float& w, float& h) const {_measure(w,h);}
-  void measure(int& w, int& h) const;
+  virtual void _measure(int& w, int& h) const;
+  void measure(int& w, int& h) const {_measure(w,h);}
 
-  virtual void _draw(float x,float y,float w,float h,const Style*,Flags) const;
-  void draw(float x,float y,float w,float h,const Style* s,Flags f = 0) const {
-    _draw(x,y,w,h,s,f);}
-
-  virtual void _draw(int x, int y, int w, int h, const Style*,Flags) const;
-  void draw(int x,int y,int w,int h,const Style* s,Flags f = 0) const {
-    _draw(x,y,w,h,s,f);}
-  //void draw(float x,float y,float w,float h,Flags f = 0) const;
+  virtual void _draw(const Rectangle&, const Style*,Flags) const = 0;
+  void draw(const Rectangle& r, const Style* s, Flags f = 0) const {_draw(r,s,f);}
 
   virtual const BoxInfo* boxinfo() const;
   int fills_rectangle() const {return boxinfo()->fills_rectangle;}
@@ -72,8 +66,13 @@ class FL_API Symbol {
   int dy() const {return boxinfo()->dy;}
   int dw() const {return boxinfo()->dw;}
   int dh() const {return boxinfo()->dh;}
-  void inset(int&X,int&Y,int&W,int&H) const {
-    const BoxInfo* b = boxinfo(); X+=b->dx; Y+=b->dy; W-=b->dw; H-=b->dh;}
+  void inset(Rectangle& r) const {
+    const BoxInfo* b = boxinfo();
+    r.x(r.x()+b->dx);
+    r.y(r.y()+b->dy);
+    r.w(r.w()-b->dw);
+    r.h(r.h()-b->dh);
+  }
 
   static const Symbol* find(const char* name);
 

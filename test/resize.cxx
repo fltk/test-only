@@ -24,12 +24,12 @@ static void cb_2(fltk::Button* o, void*) {
 
 static void cb_grow(fltk::Button* o, void*) {
   fltk::Window* w = o->window();
-  w->size(w->w()+20, w->h()+20);
+  w->resize(w->w()+20, w->h()+20);
 }
 
 static void cb_shrink(fltk::Button* o, void*) {
   fltk::Window* w = o->window();
-  w->size(w->w()-20, w->h()-20);
+  w->resize(w->w()-20, w->h()-20);
 }
 
 #include <fltk/run.h>

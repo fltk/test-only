@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.97 2004/11/12 06:50:15 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.98 2005/01/24 08:07:20 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -210,24 +210,52 @@ void Input::setfont() const {
   fltk::setfont(textfont(), textsize());
 }
 
-/*! The default version draws the box and calls draw(x,y,w,h) with
-  the area inside the box.
-*/
-void Input::draw() {
-  if (damage() & DAMAGE_ALL) draw_frame();
-  int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
-  draw(X, Y, W, H);
-}
-
 static int line_spacing(float leading) {
   return int(getsize() + leading + .5);
 }
+
 static float line_ascent(float leading) {
   return (line_spacing(leading) + getascent() - getdescent() - 1) / 2;
 }
 
+/*! The default version draws the box and calls draw(x,y,w,h) with
+  the area inside the box. It also draws any inside labels at the
+  left of the text.
+*/
+void Input::draw() {
+  Rectangle r(w(),h());
+  box()->inset(r);
+  if (damage() & DAMAGE_ALL) {
+    draw_frame();
+    // draw and measure the inside label:
+    if (label() && label()[0] && (!(flags()&15)||(flags()&ALIGN_INSIDE))) {
+      setfont();
+      const float leading = this->leading();
+      int height = line_spacing(leading);
+      float desc = line_ascent(leading);
+      fltk::setfont(labelfont(), labelsize());
+      float width = getwidth(label());
+      label_width = int(width+getwidth(":")+2.5);
+      setcolor(color());
+      Rectangle lr(r); lr.w(label_width);
+      fillrect(lr);
+      Color color = labelcolor();
+      if (!active_r()) color = inactive(color);
+      setcolor(color);
+      float y = r.y()+((r.h()-height)>>1)+desc;
+      drawtext(label(), r.x()+2, y);
+      drawtext(":", r.x()+2+width, y);
+      setfont();
+    } else {
+      label_width = 0;
+    }
+  }
+  r.move_x(label_width);
+  draw(r);
+}
+
 /*!
-  Draw the text, where the passed box is the area the text is to be
+  Draw the text, where the passed rectangle is the area the text is to be
   drawn into. This method is provided so a subclass can place the text
   into a subrectangle.
 
@@ -235,7 +263,7 @@ static float line_ascent(float leading) {
   already been erased to color(). Otherwise it does minimal update and
   erases the area itself.
 */
-void Input::draw(int X, int Y, int W, int H)
+void Input::draw(const Rectangle& r)
 {
   setfont();
   const float leading = this->leading();
@@ -246,27 +274,6 @@ void Input::draw(int X, int Y, int W, int H)
   Flags flags = current_flags()|OUTPUT;
   style()->boxcolors(flags, background,textcolor);
 
-  if (damage() & DAMAGE_ALL) {
-    // draw and measure the inside label:
-    if (label() && label()[0] && (!(flags&15)||(flags&ALIGN_INSIDE))) {
-      fltk::setfont(labelfont(), labelsize());
-      float width = getwidth(label());
-      label_width = int(width+getwidth(":")+2.5);
-      setcolor(background);
-      fillrect(X, Y, label_width, H);
-      Color color = labelcolor();
-      if (!active_r()) color = inactive(color);
-      setcolor(color);
-      float y = Y+((H-height)>>1)+desc;
-      drawtext(label(), X+2, y);
-      drawtext(":", X+2+width, y);
-      setfont();
-    } else {
-      label_width = 0;
-    }
-  }
-  X += label_width; W -= label_width;
-
   bool erase_cursor_only =
     this == ::erase_cursor_only &&
     !(damage() & (DAMAGE_ALL|DAMAGE_EXPOSE));
@@ -274,7 +281,7 @@ void Input::draw(int X, int Y, int W, int H)
   // handle a totally blank one quickly:
   if (!size() && !focused() && this != dnd_target) {
     setcolor(background);
-    fillrect(X, Y, W, H);
+    fillrect(r);
     return;
   }
 
@@ -287,7 +294,7 @@ void Input::draw(int X, int Y, int W, int H)
     selend = position(); selstart = mark();
   }
 
-  int wordwrap = (type() > MULTILINE) ? W-8 : 0;
+  int wordwrap = (type() > MULTILINE) ? r.w()-8 : 0;
 
   const char *p, *e;
   char buf[MAXBUF];
@@ -304,11 +311,11 @@ void Input::draw(int X, int Y, int W, int H)
       if (focused() && !was_up_down) up_down_pos = curx;
       cury = lines*height;
       int newscroll = xscroll_;
-      if (curx > newscroll+W-20) {
+      if (curx > newscroll+r.w()-20) {
 	// figure out scrolling so there is space after the cursor:
-	newscroll = curx+20-W;
+	newscroll = curx+20-r.w();
 	// figure out the furthest left we ever want to scroll:
-	int ex = int(expandpos(p, e, buf, 0))-W+8;
+	int ex = int(expandpos(p, e, buf, 0))-r.w()+8;
 	// use minimum of both amounts:
 	if (ex < newscroll) newscroll = ex;
       } else if (curx < newscroll+20) {
@@ -331,7 +338,7 @@ void Input::draw(int X, int Y, int W, int H)
   if (type() >= MULTILINE) {
     int newy = yscroll_;
     if (cury < newy) newy = cury;
-    if (cury > newy+H-height) newy = cury-H+height;
+    if (cury > newy+r.h()-height) newy = cury-r.h()+height;
     if (newy < -1) newy = -1;
     if (newy != yscroll_) {
       yscroll_ = newy;
@@ -339,30 +346,30 @@ void Input::draw(int X, int Y, int W, int H)
       erase_cursor_only = false;
     }
   } else {
-    yscroll_ = -((H-height)>>1);
+    yscroll_ = -((r.h()-height)>>1);
   }
 
   // if we are not doing minimal update a single erase is done,
   // rather than one per line:
   if (damage() & DAMAGE_ALL) {
     setcolor(background);
-    fillrect(X, Y, W, H);
+    fillrect(r);
   }
 
-  push_clip(X, Y, W, H);
+  push_clip(r);
 
   // I leave a small border on the edge which shrinks as the input field
   // gets smaller than 12:
-  int xpos = W-9; if (xpos > 3) xpos = 3; else if (xpos < 1) xpos = 1;
-  xpos += X-xscroll_;
+  int xpos = r.w()-9; if (xpos > 3) xpos = 3; else if (xpos < 1) xpos = 1;
+  xpos += r.x()-xscroll_;
 
   int ypos = -yscroll_;
 
   // visit each line and draw it:
   p = value();
-  int spot_x = X;
-  int spot_y = Y;
-  for (; ypos < H;) {
+  int spot_x = r.x();
+  int spot_y = r.y();
+  for (; ypos < r.h();) {
 
     // re-expand line unless it is the last one calculated above:
     if (lines>1) e = expand(p, buf, wordwrap);
@@ -374,19 +381,17 @@ void Input::draw(int X, int Y, int W, int H)
       if (e < pp) goto CONTINUE2; // this line is before the changes
       if (erase_cursor_only && p > pp) goto CONTINUE2; // this line is after
       // calculate area to erase:
-      int r = X+W;
-      int x;
+      Rectangle er(r.x(), r.y()+ypos, r.w(), height);
       if (p >= pp) {
-	x = X;
-	if (erase_cursor_only) r = xpos+2;
+	if (erase_cursor_only) er.set_r(xpos+2);
       } else {
-	x = xpos+int(expandpos(p, pp, buf, 0));
-	if (erase_cursor_only) r = x+2;
+	er.set_x(xpos+int(expandpos(p, pp, buf, 0)));
+	if (erase_cursor_only) er.w(2);
       }
       // clip to and erase it:
       setcolor(background);
-      fillrect(x, Y+ypos, r-x, height);
-      push_clip(x, Y+ypos, r-x, height);
+      fillrect(er);
+      push_clip(er);
       // it now draws entire line over it
       // this should not draw letters to left of erased area, but
       // that is nyi.
@@ -401,28 +406,29 @@ void Input::draw(int X, int Y, int W, int H)
       if (pp > p) {
 	setcolor(textcolor);
 	x1 += expandpos(p, pp, buf, &offset1);
-	drawtext(buf, offset1, xpos, Y+ypos+desc);
+	drawtext(buf, offset1, xpos, r.y()+ypos+desc);
       }
       // draw selected text for this line:
       pp = value()+selend;
-      float x2 = X+W;
+      float x2 = r.r();
       int offset2;
       if (pp <= e) x2 = xpos+expandpos(p, pp, buf, &offset2);
       else offset2 = strlen(buf);
       Color bg, fg; style()->boxcolors(flags ^ SELECTED, bg, fg);
       setcolor(bg);
-      int xx = int(x1); fillrect(xx, Y+ypos, int(x2+.5)-xx, height);
+      int xx=int(x1);
+      fillrect(Rectangle(xx, r.y()+ypos, int(x2+.5)-xx, height));
       setcolor(fg);
-      drawtext(buf+offset1, offset2-offset1, x1, Y+ypos+desc);
+      drawtext(buf+offset1, offset2-offset1, x1, r.y()+ypos+desc);
       // draw unselected text after the selection:
       if (pp < e) {
 	setcolor(textcolor);
-	drawtext(buf+offset2, x2, Y+ypos+desc);
+	drawtext(buf+offset2, x2, r.y()+ypos+desc);
       }
     } else {
       // draw unselected text:
       setcolor(textcolor);
-      drawtext(buf, xpos, Y+ypos+desc);
+      drawtext(buf, xpos, r.y()+ypos+desc);
     }
 
     if (!(damage()&DAMAGE_ALL)) pop_clip();
@@ -432,9 +438,9 @@ void Input::draw(int X, int Y, int W, int H)
     if ((this==dnd_target || focused() && selstart == selend) &&
 	cursor_position >= p-value() && cursor_position <= e-value()) {
       setcolor(textcolor);
-      fillrect(xpos+curx, Y+ypos, 2, height);
-	  spot_x = xpos+curx;
-	  spot_y = Y+ypos;
+      fillrect(Rectangle(xpos+curx, r.y()+ypos, 2, height));
+      spot_x = xpos+curx;
+      spot_y = r.y()+ypos;
     }
 
   CONTINUE:
@@ -445,11 +451,12 @@ void Input::draw(int X, int Y, int W, int H)
   }
 
   // for minimal update, erase all lines below last one if necessary:
-  if (!(damage()&DAMAGE_ALL) && type() >= MULTILINE && ypos<H
+  if (!(damage()&DAMAGE_ALL) && type() >= MULTILINE && ypos<r.h()
       && (!erase_cursor_only || p <= value()+mu_p)) {
     if (ypos < 0) ypos = 0;
     setcolor(background);
-    fillrect(X, Y+ypos, W, H-ypos);
+    Rectangle er(r); er.move_y(ypos);
+    fillrect(er);
   }
 
   pop_clip();
@@ -527,7 +534,7 @@ int Input::line_start(int i) const {
   Returns 0 if the mouse is before the first character, and size() if it is
   after the last one.
 */
-int Input::mouse_position(int X, int Y, int W, int /*H*/) const
+int Input::mouse_position(const Rectangle& r) const
 {
   if (!size()) return 0;
 
@@ -536,7 +543,7 @@ int Input::mouse_position(int X, int Y, int W, int /*H*/) const
   // figure out what line we are pointing at:
   int theline = 0;
   if (type() >= MULTILINE) {
-    theline = event_y()-Y+yscroll_;
+    theline = event_y()-r.y()+yscroll_;
     if (theline < 0) return 0;
     // CET - FIXME - this widget should keep track of the line heights
     // internally.  Using the style accessor functions is not guaranteed
@@ -547,7 +554,7 @@ int Input::mouse_position(int X, int Y, int W, int /*H*/) const
     theline /= line_spacing(leading());
   }
 
-  int wordwrap = (type() > MULTILINE) ? W-8 : 0;
+  int wordwrap = (type() > MULTILINE) ? r.w()-8 : 0;
 
   // Step through all the lines until we reach the pointed-to line.
   // Expand the lines to printed representation into the buffer:
@@ -562,22 +569,22 @@ int Input::mouse_position(int X, int Y, int W, int /*H*/) const
   }
 
   // Do a binary search for the character that starts before this position:
-  int xpos = X-xscroll_; if (W > 12) xpos += 3;
-  const char *l, *r, *t; float f0 = event_x()-xpos;
-  for (l = p, r = e; l<r; ) {
-    t = l+(r-l+1)/2;
-    if (t < r) t = utf8fwd(t, l, r);
+  int xpos = r.x()-xscroll_; if (r.w() > 12) xpos += 3;
+  const char *a, *b; float f0 = event_x()-xpos;
+  for (a = p, b = e; a<b; ) {
+    const char* t = a+(b-a+1)/2;
+    if (t < b) t = utf8fwd(t, a, b);
     int f = xpos+int(expandpos(p, t, buf, 0)+.5);
-    if (f <= event_x()) {l = t; f0 = event_x()-f;}
-    else r = utf8back(t-1,l,r);
+    if (f <= event_x()) {a = t; f0 = event_x()-f;}
+    else b = utf8back(t-1,a,b);
   }
   // see if closer to character on the right:
-  if (l < e) {
-    t = utf8fwd(l+1, p, e);
+  if (a < e) {
+    const char* t = utf8fwd(a+1, p, e);
     int f1 = xpos+int(expandpos(p, t, buf, 0)+.5)-event_x();
-    if (f1 < f0) l = t;
+    if (f1 < f0) a = t;
   }
-  return l-value();
+  return a-value();
 }
 
 /*! \fn void Input::position(int n)
@@ -1344,8 +1351,10 @@ bool Input::handle_key() {
 
 /*! Calls handle(x,y,w,h) with the area inside the box(). */
 int Input::handle(int event) {
-  int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
-  return handle(event, X, Y, W, H);
+  Rectangle r(w(),h());
+  box()->inset(r);
+  r.move_x(label_width);
+  return handle(event, r);
 }
 
 // Set this to 1 to get the ability to drag selected text out to other
@@ -1358,7 +1367,7 @@ static int drag_start;
 #endif
 
 /*!
-  Default handler for all event types, where the passed box is the
+  Default handler for all event types, where the passed rectangle is the
   area the text is to be drawn into. This method is provided so
   a subclass can place the text into a subrectangle.
 
@@ -1372,8 +1381,7 @@ static int drag_start;
   - Handles PASTE events caused by accepting the drag&drop or by
     calling fltk::paste() (which handle_key() does for ^V)
 */
-int Input::handle(int event, int X, int Y, int W, int H) {
-  X += label_width; W -= label_width;
+int Input::handle(int event, const Rectangle& r) {
   int newpos, newmark;
 
   switch (event) {
@@ -1456,7 +1464,7 @@ int Input::handle(int event, int X, int Y, int W, int H) {
     return handle_key();
 
   case PUSH:
-    newpos = mouse_position(X, Y, W, H);
+    newpos = mouse_position(r);
 #if DND_OUT
     // See if they clicked in the selected test, if so we start a timeout
     // to see if they hold it long enough to start dragging:
@@ -1499,7 +1507,7 @@ int Input::handle(int event, int X, int Y, int W, int H) {
     } else
 #endif
       newmark = mark();
-    newpos = mouse_position(X, Y, W, H);
+    newpos = mouse_position(r);
   HANDLE_MOUSE:
     // Move the mark & point to word/line ends depending on mouse click count:
     if (event_clicks()) {
@@ -1562,7 +1570,7 @@ int Input::handle(int event, int X, int Y, int W, int H) {
     fltk::belowmouse(this); // send the leave events first
     // fall through:
   case DND_DRAG: {
-    int p = mouse_position(X, Y, W, H);
+    int p = mouse_position(r);
 #if 0 //DND_OUT
     // detect if they are dropping atop the original selection:
     if (focused() &&
@@ -1636,5 +1644,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.97 2004/11/12 06:50:15 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.98 2005/01/24 08:07:20 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image.cxx,v 1.25 2004/09/05 21:40:41 spitzak Exp $"
+// "$Id: fl_draw_image.cxx,v 1.26 2005/01/24 08:07:53 spitzak Exp $"
 //
 // Image drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -84,12 +84,12 @@ using namespace fltk;
 
   - \a pointer points at the first byte of the top-left pixel.
   - \a type describes how to interpret the bytes of each pixel.
-  - \a x,y are where to put the top-left corner.
-  - \a w,h define the width and height to draw of the image
+  - \a the image is put in the top-left corner of the rectangle,
+  possibly clipped by the rectangle's bottom and right edge.
   - \a delta is how much to add to \a pointer to go 1 pixel to the right
   - \a line_delta is how much to add to \a pointer to go 1 pixel down
 
-  By setting \a line_delta to larger than \a delta*w you can crop a
+  By setting \a line_delta to larger than \a delta*r.w() you can crop a
   picture out of a larger buffer. By setting \a delta to larger than
   the size of the pixel data you can skip extra bytes, such as alpha
   information you don't want, or draw one channel of an rgb image as a
@@ -98,13 +98,13 @@ using namespace fltk;
 
 */
 void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
-		     int x, int y, int w, int h,
+		     const Rectangle& r,
 		     int delta, int line_delta) {
-  innards(pointer, type, x,y,w,h, delta, line_delta, 0, 0);
+  innards(pointer, type, r, delta, line_delta, 0, 0);
 }
 
 /*!
-  Same except \a line_delta is set to \a w times \a delta, indicating
+  Same except \a line_delta is set to \a r.w() times \a delta, indicating
   the rows are packed together one after another with no gap.
 
   If you use fltk::RGB make sure your source data really is packed,
@@ -112,14 +112,14 @@ void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
   you pass the line_delta
 */
 void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
-		     int x, int y, int w, int h,
+		     const Rectangle& r,
 		     int delta) {
-  innards(pointer, type, x,y,w,h, delta, delta*w, 0, 0);
+  innards(pointer, type, r, delta, delta*r.w(), 0, 0);
 }
 
 /*!
   Same except \a delta is set to the number of bytes used by \a type,
-  and \a line_delta is set to \a w times \a delta, indicating
+  and \a line_delta is set to \a r.w() times \a delta, indicating
   the rows are packed together one after another with no gap.
 
   If you use fltk::RGB make sure your source data really is packed,
@@ -127,8 +127,8 @@ void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
   you pass the line_delta
 */
 void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
-		     int x, int y, int w, int h) {
-  innards(pointer, type, x,y,w,h, type&3, (type&3)*w, 0, 0);
+		     const Rectangle& r) {
+  innards(pointer, type, r, type&3, (type&3)*r.w(), 0, 0);
 }
 
 /*! \typedef fltk::DrawImageCallback
@@ -185,15 +185,15 @@ void fltk::drawimage(const uchar* pointer, fltk::PixelType type,
 */
 void fltk::drawimage(DrawImageCallback cb,
 		     void* data, fltk::PixelType type,
-		     int x, int y, int w, int h, int delta) {
-  innards(0, type, x,y,w,h, delta, 0, cb, data);
+		     const Rectangle& r, int delta) {
+  innards(0, type, r, delta, 0, cb, data);
 }
 
 /*! Same except the \a delta is figured out from the \a type. */
 void fltk::drawimage(DrawImageCallback cb,
 		     void* data, fltk::PixelType type,
-		     int x, int y, int w, int h) {
-  innards(0, type, x,y,w,h, type&3, 0, cb, data);
+		     const Rectangle& r) {
+  innards(0, type, r, type&3, 0, cb, data);
 }
 
 #if 0
@@ -212,5 +212,5 @@ void fltk::fill_color_rect(int x, int y, int w, int h, Color C) {
 #endif
 
 //
-// End of "$Id: fl_draw_image.cxx,v 1.25 2004/09/05 21:40:41 spitzak Exp $".
+// End of "$Id: fl_draw_image.cxx,v 1.26 2005/01/24 08:07:53 spitzak Exp $".
 //

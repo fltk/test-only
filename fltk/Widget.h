@@ -1,5 +1,5 @@
 //
-// "$Id: Widget.h,v 1.13 2004/11/12 06:50:13 spitzak Exp $"
+// "$Id: Widget.h,v 1.14 2005/01/24 08:07:07 spitzak Exp $"
 //
 // The base class of all widgets.
 //
@@ -27,6 +27,7 @@
 #define fltk_Widget_h
 
 #include "Style.h"
+#include "Rectangle.h"
 
 namespace fltk {
 
@@ -41,7 +42,7 @@ typedef Callback* Callback_p; // needed for BORLAND
 typedef void (Callback0)(Widget*);
 typedef void (Callback1)(Widget*, long);
 
-class FL_API Widget {
+class FL_API Widget : public Rectangle {
   // disable the copy assignment/constructors:
   Widget & operator=(const Widget &);
   Widget(const Widget &);
@@ -61,7 +62,7 @@ public:
   void	style(const Style& s) { style_ = &s; }
   bool	copy_style(const Style* s);
   static NamedStyle* default_style;
-  static void default_glyph(int,int,int,int,int,const Style*,Flags);
+  static void default_glyph(int,const Rectangle&,const Style*,Flags);
 
   Group* parent() const	{ return parent_; }
   void	parent(Group* w)	{ parent_ = w; }
@@ -77,19 +78,11 @@ public:
   bool	is_group() const	{ return type_ >= GROUP_TYPE; }
   bool	is_window() const	{ return type_ >= WINDOW_TYPE; }
 
-  int	x() const		{ return x_; }
-  void	x(int v)		{ x_ = v; }
-  int	y() const		{ return y_; }
-  void	y(int v)		{ y_ = v; }
-  int	w() const		{ return w_; }
-  void	w(int v)		{ w_ = v; }
   int	width()			;
-  int	h() const		{ return h_; }
-  void	h(int v)		{ h_ = v; }
   int	height()		;
-  bool	resize(int,int,int,int)	;
-  bool	position(int X,int Y)	{ return resize(X,Y,w_,h_); }
-  bool	size(int W,int H)	{ return resize(x_,y_,W,H); }
+  bool  resize(int x,int y,int w,int h);
+  bool	position(int x, int y)	;
+  bool	resize(int w, int h)	;
 
   const char* label() const	{ return label_; }
   void	label(const char* a);
@@ -184,7 +177,7 @@ public:
   void	redraw(uchar c)		;
   void	redraw_label()		;
   void	redraw_highlight()	;
-  void	redraw(int,int,int,int)	;
+  void	redraw(const Rectangle&);
   uchar	damage() const		{ return damage_; }
   void	set_damage(uchar c)	{ damage_ = c; } // should be called damage(c)
 
@@ -203,10 +196,9 @@ public:
   void	draw_background() const	;
   void  draw_frame() const	;
   void  draw_box() const	;
-  void  draw_glyph(int t, int x,int y,int w,int h, Flags f) const
-    { glyph()(t,x,y,w,h,style_,f); }
+  void  draw_glyph(int t, const Rectangle& r, Flags f) const {glyph()(t,r,style_,f);}
   void	draw_label() const	;
-  void  draw_label(int x,int y,int w,int h, const Style*, Flags) const ;
+  void  draw_label(const Rectangle&, const Style*, Flags) const ;
   void	cursor(Cursor*) const	;
 
   void	measure_label(int&, int&) const ;
@@ -295,7 +287,6 @@ private:
   void*			user_data_;
   const char*		tooltip_; // make this into another widget?
   Group*		parent_;
-  int			x_,y_,w_,h_;
   uchar			type_;
   uchar			damage_;
   uchar			layout_damage_;
@@ -319,5 +310,5 @@ enum { // Widget::when() values
 #endif
 
 //
-// End of "$Id: Widget.h,v 1.13 2004/11/12 06:50:13 spitzak Exp $".
+// End of "$Id: Widget.h,v 1.14 2005/01/24 08:07:07 spitzak Exp $".
 //

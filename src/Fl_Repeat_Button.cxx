@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Repeat_Button.cxx,v 1.13 2003/12/15 03:03:13 spitzak Exp $"
+// "$Id: Fl_Repeat_Button.cxx,v 1.14 2005/01/24 08:07:43 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -43,7 +43,7 @@ int RepeatButton::handle(int event) {
     newval = false; goto J1;
   case PUSH:
   case DRAG:
-    newval = event_inside(0, 0, w(), h());
+    newval = event_inside(Rectangle(w(), h()));
   J1:
     if (value(newval)) {
       if (newval) {
@@ -64,5 +64,5 @@ int RepeatButton::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Repeat_Button.cxx,v 1.13 2003/12/15 03:03:13 spitzak Exp $".
+// End of "$Id: Fl_Repeat_Button.cxx,v 1.14 2005/01/24 08:07:43 spitzak Exp $".
 //

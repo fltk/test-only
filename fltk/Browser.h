@@ -1,5 +1,5 @@
 //
-// "$Id: Browser.h,v 1.6 2004/08/03 20:30:24 laza2000 Exp $"
+// "$Id: Browser.h,v 1.7 2005/01/24 08:07:06 spitzak Exp $"
 //
 // Copyright 2002 by Bill Spitzak and others.
 //
@@ -47,8 +47,8 @@ public:
 
   int width() const {return width_;}
   int height() const {return height_;}
-  int box_width() const {return W;}
-  int box_height() const {return H;}
+//int box_width() const {return W;}
+//int box_height() const {return H;}
   int xposition() const {return xposition_;}
   void xposition(int);
   int yposition() const {return yposition_;}
@@ -125,9 +125,9 @@ private:
   static void hscrollbar_cb(Widget*, void*);
   static void scrollbar_cb(Widget*, void*);
   void draw_item();
-  void draw_clip(int,int,int,int);
-  static void draw_clip_cb(void*,int,int,int,int);
-  int X,Y,W,H; // bounding box area
+  void draw_clip(const Rectangle&);
+  static void draw_clip_cb(void*,const Rectangle&);
+  Rectangle interior; // inside box edges and scrollbars
   
   Widget **header_;
   int nHeader, nColumn, selected_column_;
@@ -172,5 +172,5 @@ private:
 #endif
 
 //
-// End of "$Id: Browser.h,v 1.6 2004/08/03 20:30:24 laza2000 Exp $".
+// End of "$Id: Browser.h,v 1.7 2005/01/24 08:07:06 spitzak Exp $".
 //

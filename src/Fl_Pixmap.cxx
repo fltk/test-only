@@ -1,4 +1,4 @@
-// "$Id: Fl_Pixmap.cxx,v 1.30 2004/08/03 07:26:35 spitzak Exp $"
+// "$Id: Fl_Pixmap.cxx,v 1.31 2005/01/24 08:07:27 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -47,19 +47,19 @@
 #include <fltk/string.h>
 using namespace fltk;
 
-void xpmImage::_measure(float& W, float& H) const {
-  if (w() < 0) {
-    int w,h;
+void xpmImage::_measure(int& w, int& h) const {
+  if (this->w() < 0) {
     measure_xpm(data,w,h);
     const_cast<xpmImage*>(this)->setsize(w,h);
+  } else {
+    w = this->w();
+    h = this->h();
   }
-  W = w(); 
-  H = h();
 }
 
 extern Color fg_kludge;
 
-void xpmImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
+void xpmImage::_draw(const Rectangle& r, const Style* style, Flags flags) const
 {
   Color bg = NO_COLOR;
   Color fg = NO_COLOR;
@@ -81,9 +81,9 @@ void xpmImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags
   if (!drawn()) {
   REDRAW:
     if (this->w() < 0) {
-      int W,H;
-      measure_xpm(data,W,H);
-      const_cast<xpmImage*>(this)->setsize(W,H);
+      int w,h;
+      measure_xpm(data,w,h);
+      const_cast<xpmImage*>(this)->setsize(w,h);
     }
     if (this->w() <= 0 || this->h() <= 0) return;
     ImageDraw idraw(const_cast<xpmImage*>(this));
@@ -98,9 +98,9 @@ void xpmImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags
       delete[] bitmap;
     }
   }
-  Image::_draw(x, y, w, h, style, flags);
+  Image::_draw(r, style, flags);
 }
 
 //
-// End of "$Id: Fl_Pixmap.cxx,v 1.30 2004/08/03 07:26:35 spitzak Exp $".
+// End of "$Id: Fl_Pixmap.cxx,v 1.31 2005/01/24 08:07:27 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: BarGroup.h,v 1.3 2004/05/15 20:52:43 spitzak Exp $"
+// "$Id: BarGroup.h,v 1.4 2005/01/24 08:07:06 spitzak Exp $"
 //
 // The BarGroup is a closable strip that can be put in the edges of a Pack,
 // usually it contains toolbars or buttons.
@@ -37,7 +37,7 @@ class FL_API BarGroup : public Group {
   bool pushed;
   int glyph_size_;
   int saved_size;
-  void glyph_box(int& x, int& y, int& w, int& h);
+  void glyph_box(Rectangle&) const;
 public:
   BarGroup(int x,int y,int w ,int h,const char *l = 0);
   static NamedStyle* default_style;
@@ -56,5 +56,5 @@ public:
 #endif
 
 //
-// End of "$Id: BarGroup.h,v 1.3 2004/05/15 20:52:43 spitzak Exp $".
+// End of "$Id: BarGroup.h,v 1.4 2005/01/24 08:07:06 spitzak Exp $".
 //

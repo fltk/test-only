@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_x.cxx,v 1.9 2004/09/05 21:40:41 spitzak Exp $"
+// "$Id: fl_draw_image_x.cxx,v 1.10 2005/01/24 08:07:54 spitzak Exp $"
 //
 // Image drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -446,24 +446,24 @@ static void figure_out_visual() {
 
 // Combines both the callback and buffer image drawing functions
 static void innards(const uchar *buf, PixelType type,
-		    int X, int Y, int W, int H,
+		    const Rectangle& r1,
 		    int delta, int linedelta,
 		    DrawImageCallback cb, void* userdata)
 {
-  if (!linedelta) linedelta = W*delta;
-
-  int dx, dy, w, h;
-  clip_box(X,Y,W,H,dx,dy,w,h);
-  if (w<=0 || h<=0) return;
-  dx -= X; dy -= Y;
-  transform(X,Y);
+  Rectangle r(r1); transform(r);
+  Rectangle cr(r); if (!intersect_with_clip(cr)) return;
+  if (!linedelta) linedelta = r1.w()*delta;
+  int dx = cr.x()-r.x();
+  int dy = cr.y()-r.y();
+  int w = cr.w();
+  int h = cr.h();
 
   if (!bytes_per_pixel) figure_out_visual();
   i.width = w;
   i.height = h;
 
   void (*conv)(const uchar *from, uchar *to, int w, int delta) = converter;
-  if (type == Y) conv = mono_converter;
+  if (type == LUMINANCE) conv = mono_converter;
 
   // See if the data is already in the right format.  Unfortunately
   // some 32-bit x servers (XFree86) care about the unknown 8 bits
@@ -513,10 +513,10 @@ static void innards(const uchar *buf, PixelType type,
 	  buf += linedelta;
 	  to += linesize;
 	}
-	XPutImage(xdisplay,xwindow,gc, &i, 0, 0, X+dx, Y+dy+j-k, w, k);
+	XPutImage(xdisplay,xwindow,gc, &i, 0, 0, cr.x(), cr.y()+j-k, w, k);
       }
     } else {
-      STORETYPE* linebuf = new STORETYPE[(W*delta+(sizeof(STORETYPE)-1))/sizeof(STORETYPE)];
+      STORETYPE* linebuf = new STORETYPE[(r1.w()*delta+(sizeof(STORETYPE)-1))/sizeof(STORETYPE)];
       for (int j=0; j<h; ) {
 	STORETYPE *to = buffer;
 	int k;
@@ -525,7 +525,7 @@ static void innards(const uchar *buf, PixelType type,
 	  conv(ret, (uchar*)to, w, delta);
 	  to += linesize;
 	}
-	XPutImage(xdisplay,xwindow,gc, &i, 0, 0, X+dx, Y+dy+j-k, w, k);
+	XPutImage(xdisplay,xwindow,gc, &i, 0, 0, cr.x(), cr.y()+j-k, w, k);
       }
       delete[] linebuf;
     }
@@ -535,5 +535,5 @@ static void innards(const uchar *buf, PixelType type,
 #define DITHER_FILLRECT (xvisual->depth <= 16)
 
 //
-// End of "$Id: fl_draw_image_x.cxx,v 1.9 2004/09/05 21:40:41 spitzak Exp $"
+// End of "$Id: fl_draw_image_x.cxx,v 1.10 2005/01/24 08:07:54 spitzak Exp $"
 //

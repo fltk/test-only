@@ -1,9 +1,6 @@
+// "$Id: Fl_Pack.cxx,v 1.27 2005/01/24 08:07:27 spitzak Exp $"
 //
-// "$Id: Fl_Pack.cxx,v 1.26 2004/06/04 08:58:04 spitzak Exp $"
-//
-// Packing widget for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,28 +18,48 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #include <fltk/PackedGroup.h>
 #include <fltk/layout.h>
 #include <fltk/Box.h>
 using namespace fltk;
 
-// Resizes all the child widgets to be the full width and stacks them
-// vertically. All widgets before the resizable (or all of them if
-// there is no resizable) are pushed against the top of this widget,
-// all widgets after the resizable are pushed against the bottom, and
-// the resizable fills the remaining space.
+/** \class fltk::PackedGroup
 
-// A child widget can change it's height by calling layout() on itself
-// and this will rearrange all other widgets to accomodate the new height.
+  Resizes all the child widgets to be the full width and stacks them.
+  All widgets before the resizable() (or all of them if there is no
+  resizable()) are pushed against the top of this widget, all widgets
+  after the resizable() are pushed against the bottom, and the resizable()
+  fills the remaining space. Child widgets that have vertical() true
+  are pushed against the left/right edge.
 
-// If resizable is not set, the PackedGroup itself resizes to surround the
-// items, allowing it to be imbedded in a surrounding PackedGroup.
+  \image html Fl_Pack.gif
 
-// The code can support widgets that extend vertically, these are put
-// against the left edge (or the right if after the resizable()). This
-// is done by setting VERTICAL_LAYOUT in the type().
+  This is most useful for layout menu/toolbars and work areas in your
+  main window. You can get many layouts with this, except the top
+  widgets always extend to the right edge and the left widgets always
+  extend to the bottom. To change this, put the top or left widgets
+  and resizable in a PackedGroup and nest that inside another one with
+  the bottom and right widgets.
+
+  A child widget can change it's size by calling layout() on itself
+  and this will rearrange all other widgets to accomodate the new
+  height.
+
+  If resizable is not set, the PackedGroup itself resizes to surround
+  the items, allowing it to be imbedded in a surrounding PackedGroup
+  or ScrollGroup. This only works if all objects are horizontal or
+  all are vertical.
+
+  Setting type(PackedGroup::ALL_CHILDREN_VERTICAL) will make it
+  act like all the children have vertical() set.
+*/
+
+/** \fn void PackedGroup::spacing(int);
+    Set a fixed-size gap between all the children. This defaults to
+    zero. If you change this in an already-existing one, call
+    relayout().
+*/
 
 #define is_vertical(widget) (type()&1 || widget->vertical())
 
@@ -66,11 +83,8 @@ void PackedGroup::layout() {
     Widget::layout();
 
     // This is the rectangle to lay out the remaining widgets in:
-    int x = 0;
-    int y = 0;
-    int r = this->w();
-    int b = this->h();
-    box()->inset(x,y,r,b);
+    Rectangle r(w(),h());
+    box()->inset(r);
 
     bool saw_horizontal = false;
     bool saw_vertical = false;
@@ -81,14 +95,14 @@ void PackedGroup::layout() {
       if (widget->contains(resizable())) break;
       if (!widget->visible()) continue;
       if (is_vertical(widget)) {
-	widget->resize(x, y, widget->w(), b-y);
+	widget->resize(r.x(), r.y(), widget->w(), r.h());
 	widget->layout();
-	x = widget->x()+widget->w()+spacing_;
+	r.move_x(widget->w()+spacing_);
 	saw_vertical = true;
       } else { // put along top edge:
-	widget->resize(x, y, r-x, widget->h());
+	widget->resize(r.x(), r.y(), r.w(), widget->h());
 	widget->layout();
-	y = widget->y()+widget->h()+spacing_;
+	r.move_y(widget->h()+spacing_);
 	saw_horizontal = true;
       }
     }
@@ -101,15 +115,15 @@ void PackedGroup::layout() {
       if (!widget->visible()) continue;
       if (is_vertical(widget)) {
 	int W = widget->w();
-	widget->resize(r-W, y, W, b-y);
+	widget->resize(r.r()-W, r.y(), W, r.h());
 	widget->layout();
-	r = widget->x()-spacing_;
+	r.set_r(widget->x()-spacing_);
 	saw_vertical = true;
       } else { // put along top edge:
 	int H = widget->h();
-	widget->resize(x, b-H, r-x, H);
+	widget->resize(r.x(), r.b()-H, r.w(), H);
 	widget->layout();
-	b = widget->y()-spacing_;
+	r.set_b(widget->y()-spacing_);
 	saw_horizontal = true;
       }
     }
@@ -117,19 +131,19 @@ void PackedGroup::layout() {
     // Lay out the resizable widget to fill the remaining space:
     if (resizable_index < children()) {
       Widget* widget = child(resizable_index);
-      widget->resize(x, y, r-x, b-y);
+      widget->resize(r.x(), r.y(), r.w(), r.h());
       widget->layout();
     }
 
     // A non-resizable widget will become the size of it's items:
     int W = w();
-    if (r < x || !resizable() && !saw_horizontal) W -= (r-x);
+    if (r.w()<0 || !resizable() && !saw_horizontal) W -= r.w();
     int H = h();
-    if (b < y || !resizable() && !saw_vertical) H -= (b-y);
-    size(W,H);
+    if (r.h()<0 || !resizable() && !saw_vertical) H -= r.h();
+    Widget::resize(W,H);
   }
 }
 
 //
-// End of "$Id: Fl_Pack.cxx,v 1.26 2004/06/04 08:58:04 spitzak Exp $".
+// End of "$Id: Fl_Pack.cxx,v 1.27 2005/01/24 08:07:27 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.189 2004/12/18 19:03:08 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.190 2005/01/24 08:07:10 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -667,18 +667,80 @@ void fltk::flush() {
 }
 
 ////////////////////////////////////////////////////////////////
+
+/*! \class fltk::Rectangle
+  Describes an integer-sized rectangle. This is the base class of
+  Widget, and also used a lot to pass rectangular areas to drawing
+  functions. Almost all the functions are inline.
+
+  Negative w() or h() is supposed to mean an empty and thus
+  invisible rectangle, but some code will treat the rectangle as
+  reflected about x or y. Set the size to zero to make sure you
+  have an empty one.
+*/
+
+/*! \fn Rectangle::Rectangle()
+  The default constructor does not put anything into the fields!
+  You can either call set() or just modify the x_, y_, w_, and h_
+  variables directly.
+*/
+
+/** Initialize to the size w,h. The rectangle is placed inside the
+    source rectangle \a r either centered or against an edge depending
+    on the ALIGN values in \a flags. For centered alignment if the
+    difference in sizes is odd, it always rounds up and left.
+    Default value for \a flags is to center in both directions.
+ */
+Rectangle::Rectangle(const Rectangle& r, int w, int h, int flags) {
+  if (flags & ALIGN_LEFT) {
+    if (flags & ALIGN_RIGHT &&  w > r.w()) x_ = r.r()-w;
+    else x_ = r.x();
+  } else if (flags & ALIGN_RIGHT) {
+    x_ = r.r()-w;
+  } else {
+    x_ = r.x()+((r.w()-w)>>1);
+  }
+  if (flags & ALIGN_TOP) {
+    if (flags & ALIGN_BOTTOM && h > r.h()) y_ = r.b()-h;
+    else y_ = r.y();
+  } else if (flags & ALIGN_BOTTOM) {
+    y_ = r.b()-h;
+  } else {
+    y_ = r.y()+((r.h()-h)>>1);
+  }
+  w_ = w;
+  h_ = h;
+}
+
+#if 0 // I commented these out because nothing seems to be calling them
+void Rectangle::intersect(const Rectangle& R) {
+  if (R.x() > x()) set_x(R.x());
+  if (R.r() < r()) set_r(R.r());
+  if (R.y() > y()) set_y(R.y());
+  if (R.b() < b()) set_b(R.b());
+}
+
+void Rectangle::merge(const Rectangle& R) {
+  if (R.empty()) return;
+  if (empty()) {*this = R; return;}
+  if (R.x() < x()) set_x(R.x());
+  if (R.r() > r()) set_r(R.r());
+  if (R.y() < y()) set_y(R.y());
+  if (R.b() > b()) set_b(R.b());
+}
+#endif
+
+////////////////////////////////////////////////////////////////
 // Event handling:
 
 /*!
   Returns true if the current fltk::event_x() and fltk::event_y()
-  put it inside the passed box. You should always call this rather
+  put it inside the Rectangle. You should always call this rather
   than doing your own comparison so you are consistent about edge
   effects.
 */
-bool fltk::event_inside(int x,int y,int w,int h) /*const*/ {
-  int mx = e_x - x;
-  int my = e_y - y;
-  return (mx >= 0 && mx < w && my >= 0 && my < h);
+bool fltk::event_inside(const Rectangle& r) {
+  return r.contains(e_x, e_y);
 }
 
 /*! \fn Widget* fltk::focus()
@@ -1144,5 +1206,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.189 2004/12/18 19:03:08 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.190 2005/01/24 08:07:10 spitzak Exp $".
 //

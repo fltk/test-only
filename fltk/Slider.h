@@ -1,5 +1,5 @@
 //
-// "$Id: Slider.h,v 1.5 2004/05/15 20:52:44 spitzak Exp $"
+// "$Id: Slider.h,v 1.6 2005/01/24 08:07:07 spitzak Exp $"
 //
 // Slider value control. By default it moves vertically with the
 // minimum number at the bottom. See HorizontalSlider for one that
@@ -82,9 +82,9 @@ protected:
 
   int slider_position(double value, int w);
   double position_value(int x, int w);
-  int handle(int event, int, int, int, int);
-  void draw_ticks(int,int,int,int, int min_spacing);
-  bool draw(int, int, int, int, Flags flags, bool slot);
+  int handle(int event, const Rectangle&);
+  void draw_ticks(const Rectangle&, int min_spacing);
+  bool draw(const Rectangle&, Flags flags, bool slot);
 };
 
 }
@@ -92,5 +92,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Slider.h,v 1.5 2004/05/15 20:52:44 spitzak Exp $".
+// End of "$Id: Slider.h,v 1.6 2005/01/24 08:07:07 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.cxx,v 1.56 2004/12/18 19:03:12 spitzak Exp $"
+// "$Id: Fl_Value_Slider.cxx,v 1.57 2005/01/24 08:07:48 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -40,35 +40,24 @@ void ValueSlider::draw() {
 
   // figure out the inner size of the box:
   Box* box = this->box();
-  int ix = 0, iy = 0, iw = w(), ih = h();
-  box->inset(ix,iy,iw,ih);
+  Rectangle r(w(),h()); box->inset(r);
+  Rectangle sr(r);
 
   // figure out where to draw the slider, leaving room for tick marks:
-  int sx = ix, sy = iy, sw = iw, sh = ih;
   if (tick_size() && (type()&TICK_BOTH)) {
     if (horizontal()) {
-      sh -= tick_size();
+      sr.move_b(-tick_size());
       switch (type()&TICK_BOTH) {
-      case TICK_BOTH: sy += tick_size()/2; break;
-      case TICK_ABOVE: sy += tick_size(); break;
+      case TICK_BOTH: sr.y(sr.y()+tick_size()/2); break;
+      case TICK_ABOVE: sr.y(sr.y()+tick_size()); break;
       }
     } else {
-      sw -= tick_size();
+      sr.move_r(-tick_size());
       switch (type()&TICK_BOTH) {
-      case TICK_BOTH: sx += tick_size()/2; break;
-      case TICK_ABOVE: sx += tick_size(); break;
+      case TICK_BOTH: sr.x(sr.x()+tick_size()/2); break;
+      case TICK_ABOVE: sr.x(sr.x()+tick_size()); break;
       }
     }
-  }
-
-  // figure out where to draw the text:
-  int tx = sx, ty = sy, tw = sw, th = sh;
-  if (horizontal()) {
-    tw = 35; sx += tw; sw -= tw;
-    if (iy) {ty = iy; th = ih;} // if box has border, center text
-  } else {
-    th = int(textsize()); sh -= th; ty += sh;
-    if (ix) {tx = ix; tw = iw;} // if box has border, center text
   }
 
   Flags flags = current_flags_highlight();
@@ -76,42 +65,49 @@ void ValueSlider::draw() {
   if (pushed()) f2 |= VALUE|PUSHED;
   flags &= ~HIGHLIGHT;
 
+  // figure out where to draw the text:
+  Rectangle tr(sr);
+  if (horizontal()) {
+    tr.w(35); sr.move_x(35);
+    if (r.y()) {tr.y(r.y()); tr.h(r.h());} // if box has border, center text
+  } else {
+    tr.h(int(textsize())); sr.move_b(-tr.h()); tr.y(sr.b());
+    if (r.x()) {tr.x(r.x()); tr.w(r.w());} // if box has border, center text
+  }
+
   // minimal-update the slider, if it indicates the background needs
   // to be drawn, draw that. We draw the slot if the current box type
   // has no border:
+  bool drawslot = r.y() == 0;
 #if USE_CLIPOUT
-  if (Slider::draw(sx, sy, sw, sh, f2, iy==0)) {
+  if (Slider::draw(sr, f2, drawslot)) {
 #endif
 
     // draw the box or the visible parts of the window
     if (!box->fills_rectangle()) draw_background();
-    box->draw(0, 0, w(), h(), style(), flags|OUTPUT);
-
-    // draw the focus indicator inside the box:
-    focusbox()->draw(ix+1, iy+1, iw-2, ih-2, style(), flags|OUTPUT);
+    box->draw(Rectangle(w(), h()), style(), flags|OUTPUT);
 
     if (type() & TICK_BOTH) {
+      Rectangle tr(sr);
       if (horizontal()) {
 	switch (type()&TICK_BOTH) {
-	case TICK_ABOVE: sh = sy+sh/2-iy; sy = iy; break;
-	case TICK_BELOW: sy = sy+sh/2+(iy?0:3); sh = ih-sy; break;
-	case TICK_BOTH: sy = iy; sh = ih; break;
+	case TICK_ABOVE: tr.y(r.y()); tr.set_b(sr.center_y()); break;
+	case TICK_BELOW: tr.y(sr.center_y()+(drawslot?3:0)); tr.set_b(r.b()-1); break;
 	}
       } else {
 	switch (type()&TICK_BOTH) {
-	case TICK_ABOVE: sw = sx+sw/2-ix; sx = ix; break;
-	case TICK_BELOW: sx = sx+sw/2+(iy?0:3); sw = iw-sx; break;
-	case TICK_BOTH: sx = ix; sw = iw; break;
+	case TICK_ABOVE: tr.x(r.x()); tr.set_r(sr.center_x()); break;
+	case TICK_BELOW: tr.x(sr.center_x()+(drawslot?3:0)); tr.set_r(r.r()-1); break;
 	}
       }
       Color color = textcolor();
       if (flags&INACTIVE) color = inactive(color);
       setcolor(color);
-      draw_ticks(sx, sy, sw, sh, (slider_size()+1)/2);
+      draw_ticks(tr, (slider_size()+1)/2);
     }
 
 #if !USE_CLIPOUT
-    Slider::draw(sx, sy, sw, sh, f2, iy==0);
+    Slider::draw(sr, f2, drawslot);
 #else
     pop_clip();
   }
@@ -119,35 +115,35 @@ void ValueSlider::draw() {
 
   // draw the text:
   if (damage() & (DAMAGE_ALL|DAMAGE_VALUE)) {
-    push_clip(tx, ty, tw, th);
+    push_clip(tr);
     // erase the background if not already done:
     if (!(damage()&DAMAGE_ALL)) {
       if (!box->fills_rectangle()) draw_background();
-      box->draw(0, 0, w(), h(), style(), flags|OUTPUT);
-      focusbox()->draw(ix+1, iy+1, iw-2, ih-2, style(), flags|OUTPUT);
+      box->draw(Rectangle(w(), h()), style(), flags|OUTPUT);
+      focusbox()->draw(r, style(), flags|OUTPUT);
     }
     // now draw the text:
     char buf[128];
     format(buf);
     setfont(textfont(), textsize());
     setcolor(inactive(textcolor(),flags));
-    drawtext(buf, tx, ty, tw, th, 0);
+    drawtext(buf, tr, 0);
     pop_clip();
   }
 
+  focusbox()->draw(r, style(), flags|OUTPUT);
 }
 
 int ValueSlider::handle(int event) {
   // figure out the inner size of the slider and text areas:
   Box* box = this->box();
-  int ix = 0, iy = 0, iw = w(), ih = h();
-  box->inset(ix,iy,iw,ih);
+  Rectangle r(w(),h()); box->inset(r);
   if (horizontal()) {
-    int tw = 35; ix += tw; iw -= tw;
+    int tw = 35; r.move_x(tw);
   } else {
-    int th = int(textsize()); ih -= th;
+    int th = int(textsize()); r.move_b(-th);
   }
-  return Slider::handle(event, ix, iy, iw, ih);
+  return Slider::handle(event, r);
 }
 
 static void revert(Style *s) {
@@ -167,5 +163,5 @@ ValueSlider::ValueSlider(int x, int y, int w, int h, const char*l)
 }
 
 //
-// End of "$Id: Fl_Value_Slider.cxx,v 1.56 2004/12/18 19:03:12 spitzak Exp $".
+// End of "$Id: Fl_Value_Slider.cxx,v 1.57 2005/01/24 08:07:48 spitzak Exp $".
 //

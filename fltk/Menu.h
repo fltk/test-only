@@ -1,5 +1,5 @@
 //
-// "$Id: Menu.h,v 1.11 2004/11/12 06:50:13 spitzak Exp $"
+// "$Id: Menu.h,v 1.12 2005/01/24 08:07:06 spitzak Exp $"
 //
 // Base class for MenuBar, Choice, Browser. This manages a set
 // of child Item widgets, and handles a "List" object that can
@@ -81,7 +81,7 @@ public:
   void layout_in(Widget*,const int* indexes, int level) const;
   void draw_in(Widget*,const int* indexes, int level, int, int) const;
   int find_selected(Widget*,const int* indexes, int level, int, int) const;
-  void get_location(Widget*,const int* indexes, int level, int, int&,int&,int&,int&) const;
+  Rectangle get_location(Widget*,const int* indexes, int level, int) const;
 
   int popup(int x,int y,int w=0,int h=0, const char* title=0,bool menubar=false);
   int handle_shortcut();
@@ -153,5 +153,5 @@ private:
 #endif
 
 //
-// End of "$Id: Menu.h,v 1.11 2004/11/12 06:50:13 spitzak Exp $".
+// End of "$Id: Menu.h,v 1.12 2005/01/24 08:07:06 spitzak Exp $".
 //

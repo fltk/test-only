@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.46 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id: Fl_Dial.cxx,v 1.47 2005/01/24 08:07:19 spitzak Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -64,11 +64,9 @@ using namespace fltk;
 */
 
 void Dial::draw() {
-  int X = 0; int Y = 0; int W = w(); int H = h();
-  if (!(type() == FILL && box() == OVAL_BOX)) {
-    if (damage()&DAMAGE_ALL) draw_box();
-    box()->inset(X,Y,W,H);
-  }
+  Rectangle r(w(),h());
+  if ((damage()&DAMAGE_ALL) && !(type()==FILL && box()==OVAL_BOX)) draw_box();
+  box()->inset(r);
   Color fillcolor = selection_color();
   Color linecolor = textcolor();
   if (!active_r()) {
@@ -79,54 +77,52 @@ void Dial::draw() {
   if (type() == FILL) {
     if (damage()&DAMAGE_EXPOSE && box() == OVAL_BOX) draw_background();
     setcolor(color());
-    fillpie(X, Y, W-1, H-1,
-	    270-a1, angle > a1 ? 360+270-angle : 270-360-angle);
+    fillpie(r, 270-a1, angle > a1 ? 360+270-angle : 270-360-angle);
     setcolor(fillcolor);
-    fillpie(X, Y, W-1, H-1, 270-angle, 270-a1);
+    fillpie(r, 270-angle, 270-a1);
     if (box() == OVAL_BOX) {
-      addellipse(X, Y, W-1, H-1);
       setcolor(linecolor);
-      strokepath();
+      strokearc(Rectangle(w()-1,h()-1), 0, 360);
     }
   } else {
     if (!(damage()&DAMAGE_ALL)) {
-      addellipse(X+1, Y+1, W-2, H-2);
+      addellipse(r.x()+1, r.y()+1, r.w()-2, r.h()-2);
       setcolor(color());
       fillpath();
     }
     push_matrix();
-    translate(X+W/2-.5f, Y+H/2-.5f);
-    scale(W-1, H-1);
+    translate(r.center_x()-.5f, r.center_y()-.5f);
+    scale(r.w()-1, r.h()-1);
     rotate(45-angle);
     if (type() == LINE) {
       static float v[4][2] = {{0,0}, {-0.04f,0}, {-0.25f,0.25f}, {0,0.04f}};
       addvertices(4,v);
     } else {
-      addcircle(-0.20f, 0.20f, 0.07f);
+      addcircle(-0.22f, 0.22f, 0.075f);
     }
     setcolor(fillcolor);
     fillstrokepath(linecolor);
     pop_matrix();
   }
   if (focused()) {
-    addellipse(X+2, Y+2, W-5, H-5);
+    r.inset(2);
     setcolor(linecolor);
     line_style(DASH);
-    strokepath();
+    strokearc(r,0,360);
     line_style(0);
   }
 }
 
 
 int Dial::handle(int event) {
-  int X = 0; int Y = 0; int W = w(); int H = h();
-  box()->inset(X,Y,W,H);
   switch (event) {
   case PUSH:
     handle_push();
   case DRAG: {
-    int mx = event_x()-X-W/2;
-    int my = event_y()-Y-H/2;
+    Rectangle r(w(),h());
+    box()->inset(r);
+    int mx = event_x()-r.center_x();
+    int my = event_y()-r.center_y();
     if (!mx && !my) return 1;
     float angle = 270-atan2f((float)-my, (float)mx)*float(180/M_PI);
     float oldangle = (a2-a1)*float((value()-minimum())/(maximum()-minimum())) + a1;
@@ -167,5 +163,5 @@ Dial::Dial(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.46 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.47 2005/01/24 08:07:19 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.48 2004/12/16 18:40:43 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.49 2005/01/24 08:07:56 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -252,7 +252,7 @@ const Symbol* Symbol::find(const char* name, const char* end) {
 */
 const char* Symbol::text_ = "";
 
-/** \fn void Symbol::measure(float& w, float& h) const;
+/** \fn void Symbol::measure(int& w, int& h) const {}
 
     Returns the size a Symbol will draw.
 
@@ -260,54 +260,26 @@ const char* Symbol::text_ = "";
     you \e want to draw the symbol, many Symbols can scale and will
     return without changing these values. Or they may alter the values to
     preserve aspect ratio. Or they may just return constant sizes.
-    This directly calls the _measure virtual function.
 */
 
-/** Returns the size a Symbol will draw.
+/** This is the actual virtual function that measure() calls.
+    It is named _measure so a subclass can implement it
+    without hiding variations of the function that are also
+    called measure() with different arguments.
 
-    The referenced variables w and h should be preset to a size
-    you \e want to draw the symbol, many Symbols can scale and will
-    return without changing these values. Or they may alter the values to
-    preserve aspect ratio. Or they may just return constant sizes.
-    This calls the virtual _measure function and rounds the results
-    to the nearest integer.
+    The default version returns with w and h unchanged.
 */
-void Symbol::measure(int& w, int& h) const {
-  float fw = (float)w;
-  float fh = (float)h;
-  measure(fw,fh);
-  w = int(fw+.5f);
-  h = int(fh+.5f);
-}
+void Symbol::_measure(int& w, int& h) const {}
 
-/** Subclasses must implement this to change what the measure()
-    functions return. The default version return w and h unchanged,
-    indicating an image that can scale to any size.
-*/
-void Symbol::_measure(float& w, float& h) const {}
+/** \fn void Symbol::draw(const Rectangle& r, const Style*, Flags=0) const;
 
-/** \fn void Symbol::draw(float x, float y, float w, float h, const Style*, Flags=0) const;
-    Draw the symbol in a box. See _draw().
-*/
+    Draw the symbol in the Rectangley \a r. Depending on the actual
+    symbol it may scale to fit this rectangle, or just draw in the
+    upper-left corner, in most cases clipping to the rectangle if
+    too big.
 
-/** \fn void Symbol::draw(int x, int y, int w, int h, const Style*, Flags=0) const;
-    Draw the symbol in an integer box. See _draw().
-*/
-
-/** Virtual function to draw the symbol. This is named with an
-    underscore so that subclasses can define various draw() functions
-    with different arguments without breaking subclasses below them.
-    Users of Symbols should call draw(), which is an inline link to
-    this function.
-
-    \a xywh is the bounding box (in the current coordinate system)
-    that the symbol should be fit into. If you can't do anything
-    else you should center your image and use push_clip() and
-    pop_clip() to limit your drawing to this area.
-
-    The \a Style can be used to color in your symbol. The main fields
-    you want from it is color() for blank areas and textcolor() for
-    labels (don't use labelcolor()).
+    The \a Style may be used to color in the symbol. Many symbols
+    will use color() for blank areas and textcolor() for labels.
 
     The \a Flags can be used to control how the symbol is drawn. Useful
     flags are:
@@ -315,7 +287,7 @@ void Symbol::_measure(float& w, float& h) const {}
     - INACTIVE : Draw the image in inactive version of the colors from
     the \a style.
     - OUTPUT: Instead of color() and textcolor(), use boxcolor() and
-    labelcolor() from the \a style.
+    labelcolor() from the style.
     - VALUE: Draw turned on or checked
     - SELECTED: Draw as though selected in a browser or menu.
     - HIGHLIGHT: Draw with highlight colors from \a style.
@@ -323,43 +295,23 @@ void Symbol::_measure(float& w, float& h) const {}
     inverts VALUE.
     - FOCUSED: Indicates that the current object has keyboard focus.
 
+*/
+
+/** \fn void Symbol::_draw(const Rectangle& r, const Style* style, Flags flags) const;
+
+    Virtual function to draw the symbol. This is named with an
+    underscore so that a subclass can define it without hiding
+    alternative functions named draw() that some intermediate
+    classes define.
+
     If your symbol is designed to be imbedded with an @-command into
     drawtext() then:
     - text() points after the '@' sign
     - getfont() is the current font
     - getsize() is the current font size
     - getcolor() is the current color
-    - y+(int(H+getascent()-getdescent()+1)>>1) is where to put the baseline
-    of the text. H is the height returned by your _measure() method.
-
-    The default implementation calls the integer version of _draw()
-    after rounding all coordinates to the nearest integer.
+    - r.baseline_y() is where to put the baseline
 */
-void Symbol::_draw(float x, float y, float w, float h, const Style* style, Flags flags) const
-{
-  static int recursion;
-  if (++recursion > 10)
-    fltk::warning("%s::_draw() not defined", name());
-  else {
-    int X = int(floor(x+.5));
-    int Y = int(floor(y+.5));
-    _draw(X, Y, int(floor(x+w+.5))-X, int(floor(y+h+.5))-Y, style, flags);
-  }
-  --recursion;
-}
-
-/** Your subclass can implement the integer version of _draw() instead
-    of the floating-point version. This is a good idea if your image
-    can't draw anything other than an integer size.
-
-    The default version calls the float version of _draw().  Notice
-    that the default float version of _draw() calls this, so you must
-    implement one or the other or you will get an infinite loop.
-*/
-void Symbol::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
-{
-  _draw(float(x), float(y), float(w), float(h), style, flags);
-}
 
 /** Return widget box-drawing hints.
 
@@ -427,8 +379,7 @@ class SymbolSymbol : public Symbol {
   void (*drawit)(Color);
 public:
   SymbolSymbol(const char* name, void (*f)(Color)) : Symbol(name), drawit(f) {}
-  void _draw(float x, float y, float w, float h, const Style*, Flags) const;
-  void _measure(float& w, float& h) const {} // returns size unchanged
+  void _draw(const Rectangle&, const Style*, Flags) const;
 };
 
 /*! \ingroup symbols
@@ -472,23 +423,26 @@ void fltk::add_symbol(const char *name, void (*drawit)(Color), int scalable)
   new SymbolSymbol(name,drawit);
 }
 
-void SymbolSymbol::_draw(float x, float y, float w, float h, const Style*, Flags) const
+void SymbolSymbol::_draw(const Rectangle& r, const Style*, Flags) const
 {
   const char* p = text();
   if (*p == '#') p++; // ignore equalscale indicator from fltk1.1
   // move x,y to center of square:
-  x += w/2;
-  y += h/2;
+  int x = r.center_x();
+  int y = r.center_y();
   // adjust the scale
+  // Scale is kept to an integer to avoid crooked shapes:
+  int w = (r.w()+1)/2;
+  int h = (r.h()+1)/2;
   if (*p == '-' && isdigit(p[1])) {
     int n = p[1]-'0';
-    w *= 12.0f/(12+n);
-    h *= 12.0f/(12+n);
+    w = (w*12+6+n/2)/(n+12);
+    h = (h*12+6+n/2)/(n+12);
     p += 2;
   } else if (*p == '+' && isdigit(p[1])) {
     int n = p[1]-'0';
-    w *= (12+n)/12.0f;
-    h *= (12+n)/12.0f;
+    w = (w*(12+n)+6)/12;
+    h = (h*(12+n)+6)/12;
     p += 2;
   }
   if (w < 2 || h < 2) {drawpoint(x,y); return;} // too small
@@ -509,9 +463,8 @@ void SymbolSymbol::_draw(float x, float y, float w, float h, const Style*, Flags
   case 9: rotangle =  45; break;
   }
   push_matrix();
-  // use integer translate & scale to avoid crooked shapes:
-  translate(int(floorf(x)), int(floorf(y)));
-  scale(floorf((w+.5)/2), floorf((h+.5)/2)); // note that w,h are integers!
+  translate(x, y);
+  scale(w,h);
   rotate(rotangle);
   drawit(getcolor());
   pop_matrix();
@@ -704,5 +657,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.48 2004/12/16 18:40:43 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.49 2005/01/24 08:07:56 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: ScrollGroup.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: ScrollGroup.h,v 1.3 2005/01/24 08:07:06 spitzak Exp $"
 //
 // Group that adds scrollbars so you can scroll around the area
 // covered by all the child widgets. For most uses you will make
@@ -42,7 +42,7 @@ class FL_API ScrollGroup : public Group {
   int scrolldx, scrolldy;
   static void hscrollbar_cb(Widget*, void*);
   static void scrollbar_cb(Widget*, void*);
-  static void draw_clip(void*,int,int,int,int);
+  static void draw_clip(void*,const Rectangle&);
 
 protected:
 
@@ -51,7 +51,7 @@ protected:
 
 public:
 
-  void bbox(int&,int&,int&,int&);
+  void bbox(Rectangle&);
   Scrollbar scrollbar;
   Scrollbar hscrollbar;
 
@@ -79,5 +79,5 @@ public:
 #endif
 
 //
-// End of "$Id: ScrollGroup.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: ScrollGroup.h,v 1.3 2005/01/24 08:07:06 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.52 2004/11/12 06:50:19 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.53 2005/01/24 08:07:53 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -66,14 +66,14 @@ bool fl_drawing_shadow; // true for engraved labels
 class NormalSymbol : public Symbol {
 public:
   NormalSymbol() : Symbol("n") {}
-  void _draw(float x, float y, float w, float h, const Style*, Flags) const {
+  void _draw(const Rectangle&, const Style*, Flags) const {
     setcolor(normal_color);
     setfont(normal_font, normal_size);
   }
-  void _measure(float& w, float& h) const {
+  void _measure(int& w, int& h) const {
     setfont(normal_font, normal_size);
     nextdy = 0;
-    w = 0; h = normal_size;
+    w = 0; h = int(normal_size);
   }
 };
 static const NormalSymbol normalsymbol;
@@ -83,11 +83,11 @@ static const NormalSymbol normalsymbol;
 class BoldSymbol : public Symbol {
 public:
   BoldSymbol() : Symbol("b") {}
-  void _draw(float x, float y, float w, float h, const Style*, Flags) const {
-    setfont(getfont()->bold(), h);
+  void _draw(const Rectangle&, const Style*, Flags) const {
+    setfont(getfont()->bold(), getsize());
   }
-  void _measure(float& w, float& h) const {
-    _draw(0,0,w,h,0,0);
+  void _measure(int& w, int& h) const {
+    setfont(getfont()->bold(), getsize());
     w = 0;
   }
 };
@@ -98,11 +98,11 @@ static const BoldSymbol boldsymbol;
 class ItalicSymbol : public Symbol {
 public:
   ItalicSymbol() : Symbol("i") {}
-  void _draw(float x, float y, float w, float h, const Style*, Flags) const {
-    setfont(getfont()->italic(), h);
+  void _draw(const Rectangle&, const Style*, Flags) const {
+    setfont(getfont()->italic(), getsize());
   }
-  void _measure(float& w, float& h) const {
-    _draw(0,0,w,h,0,0);
+  void _measure(int& w, int& h) const {
+    setfont(getfont()->italic(), getsize());
     w = 0;
   }
 };
@@ -113,11 +113,11 @@ static const ItalicSymbol italicsymbol;
 class FixedSymbol : public Symbol {
 public:
   FixedSymbol(const char* n) : Symbol(n) {}
-  void _draw(float x, float y, float w, float h, const Style*, Flags) const {
-    setfont(fltk::COURIER, h);
+  void _draw(const Rectangle&, const Style*, Flags) const {
+    setfont(fltk::COURIER, getsize());
   }
-  void _measure(float& w, float& h) const {
-    _draw(0,0,w,h,0,0);
+  void _measure(int& w, int& h) const {
+    setfont(fltk::COURIER, getsize());
     w = 0;
   }
 };
@@ -130,10 +130,10 @@ static const FixedSymbol fixedsymbolt("t");
 class ColorSymbol : public Symbol {
 public:
   ColorSymbol() : Symbol("C") {}
-  void _draw(float x, float y, float w, float h, const Style*, Flags) const {
+  void _draw(const Rectangle&, const Style*, Flags) const {
     if (!fl_drawing_shadow) setcolor((Color)strtoul(text()+1,0,0));
   }
-  void _measure(float& w, float& h) const {
+  void _measure(int& w, int& h) const {
     w = 0;
   }
 };
@@ -153,17 +153,15 @@ static const ColorSymbol colorsymbol;
 class SizeSymbol : public Symbol {
 public:
   SizeSymbol(const char* n) : Symbol(n) {}
-  void _draw(float x, float y, float w, float h, const Style*, Flags) const {
+  void dostuff() const {
     float n = float(strtod(text()+1,0));
-    if (n < 0) n = h*12/(12-n);
-    else if (*(text()+1)=='+') n = h*(12+n)/12;
+    if (n < 0) n = getsize()*12/(12-n);
+    else if (*(text()+1)=='+') n = getsize()*(12+n)/12;
     else if (n <= 0) n = normal_size;
     setfont(getfont(), n);
   }
-  void _measure(float& w, float& h) const {
-    _draw(0,0,w,h,0,0);
-    w = 0;
-  }
+  void _draw(const Rectangle&, const Style*, Flags) const {dostuff();}
+  void _measure(int& w, int& h) const {dostuff(); w = 0;}
 };
 static const SizeSymbol sizesymbols("s");
 static const SizeSymbol sizesymbolS("S");
@@ -176,8 +174,8 @@ static const SizeSymbol sizesymbolS("S");
 class NothingSymbol : public Symbol {
 public:
   NothingSymbol() : Symbol(".") {}
-  void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
-  void _measure(float& w, float& h) const {
+  void _draw(const Rectangle&, const Style*, Flags) const {}
+  void _measure(int& w, int& h) const {
     w = h = 0;
     flags |= RAW_LABEL;
   }
@@ -195,9 +193,9 @@ static const NothingSymbol nothingsymbol;
 class MxSymbol : public Symbol {
 public:
   MxSymbol() : Symbol("mx") {}
-  void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
-  void _measure(float& w, float& h) const {
-    w = (float)strtod(text()+2,0);
+  void _draw(const Rectangle&, const Style*, Flags) const {}
+  void _measure(int& w, int& h) const {
+    w = (int)strtod(text()+2,0);
   }
 };
 static const MxSymbol mxsymbol;
@@ -212,9 +210,9 @@ static const MxSymbol mxsymbol;
 class DxSymbol : public Symbol {
 public:
   DxSymbol() : Symbol("x") {}
-  void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
-  void _measure(float& w, float& h) const {
-    w = (float)(strtod(text()+1,0)*h/12);
+  void _draw(const Rectangle&, const Style*, Flags) const {}
+  void _measure(int& w, int& h) const {
+    w = (int)(strtod(text()+1,0)*h/12);
   }
 };
 static const DxSymbol dxsymbol;
@@ -230,8 +228,8 @@ static const DxSymbol dxsymbol;
 class DySymbol : public Symbol {
 public:
   DySymbol() : Symbol("y") {}
-  void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
-  void _measure(float& w, float& h) const {
+  void _draw(const Rectangle&, const Style*, Flags) const {}
+  void _measure(int& w, int& h) const {
     nextdy -= (float)(strtod(text()+1,0)*h/12);
     w = 0;
   }
@@ -246,8 +244,8 @@ static Color bgboxcolor;
 class BgBox : public Symbol {
 public:
   BgBox() : Symbol("B") {}
-  void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
-  void _measure(float& w, float& h) const {
+  void _draw(const Rectangle&, const Style*, Flags) const {}
+  void _measure(int& w, int& h) const {
     bgboxcolor = (Color)strtoul(text()+1,0,0);
     if (!bgboxcolor) bgboxcolor = BLACK;
     w = h = 0;
@@ -263,8 +261,8 @@ static const BgBox bgbox;
 class LeftSymbol : public Symbol {
 public:
   LeftSymbol() : Symbol("l") {}
-  void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
-  void _measure(float& w, float& h) const {
+  void _draw(const Rectangle&, const Style*, Flags) const {}
+  void _measure(int& w, int& h) const {
     flags = flags&(~ALIGN_RIGHT)|ALIGN_LEFT;
     w = h = 0;
   }
@@ -276,8 +274,8 @@ static const LeftSymbol leftsymbol;
 class CenterSymbol : public Symbol {
 public:
   CenterSymbol() : Symbol("c") {}
-  void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
-  void _measure(float& w, float& h) const {
+  void _draw(const Rectangle&, const Style*, Flags) const {}
+  void _measure(int& w, int& h) const {
     flags &= ~(ALIGN_LEFT|ALIGN_RIGHT);
     w = h = 0;
   }
@@ -289,8 +287,8 @@ static const CenterSymbol centersymbol;
 class RightSymbol : public Symbol {
 public:
   RightSymbol() : Symbol("r") {}
-  void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
-  void _measure(float& w, float& h) const {
+  void _draw(const Rectangle&, const Style*, Flags) const {}
+  void _measure(int& w, int& h) const {
     flags = flags&(~ALIGN_LEFT)|ALIGN_RIGHT;
     w = h = 0;
   }
@@ -398,6 +396,10 @@ static float align(int first_segment,
 
 bool fl_hide_underscore; // set by Choice
 
+int Rectangle::baseline_y() const {
+  return y_+int(h_+getascent()-getdescent()+1)>>1;
+}
+
 static inline void setsa(int& spacing, int& ascent) {
   float H = getsize()+Widget::default_style->leading();
   spacing = int(H+.5);
@@ -458,10 +460,10 @@ static void wrap(
     }
 
     const float text_w = getwidth(word_end, p-word_end);
-    float symbol_w, symbol_h;
+    int symbol_w, symbol_h;
     if (symbol) {
       Symbol::text(p+1);
-      symbol_w = symbol_h = getsize();
+      symbol_w = symbol_h = int(getsize());
       symbol->measure(symbol_w, symbol_h);
       Symbol::text("");
     } else {
@@ -517,7 +519,7 @@ static void wrap(
 	// center the symbol in the vertical size of current font:
 	//int a = ascent-((spacing-int(H+1.5f))>>1);
 	int a = int(getascent()-getdescent()+symbol_h+1)>>1;
-	add(symbol, p+1, q, x, y, symbol_w, symbol_h, a, int(symbol_h+.5));
+	add(symbol, p+1, q, x, y, symbol_w, symbol_h, a, symbol_h);
 	x += symbol_w;
       }
       // skip the terminating space or semicolon:
@@ -588,23 +590,39 @@ static float split(
   }
 }
 
-static void _drawtext(
-    const char* str,	// the (multi-line) string
-    int X, int Y, int W, int H,	// bounding box
-    Flags flags
-) {
-  if (!str || !*str) return;
+/*! \addtogroup font
+  \{ */
+
+/*!
+  This is the fancy string-drawing function that is used to draw all
+  labels in fltk. The string is formatted and aligned inside the
+  passed rectangle. This also:
+  - Breaks the text into lines at \\n characters. Word-wraps (if
+    flags has fltk::ALIGN_WRAP set) so the words fit in the
+    columns.
+  - Looks up "@xyz;" sequeces to see if they are a Symbol, if so it
+    prints that symbol instead. This is skipped if the flags has
+    fltk::RAW_LABEL set.
+  - Parses "&x" combinations to produce Microsoft style underscores,
+    unless RAW_LABEL flag is set.
+  - Splits it at every \\t tab character and uses column_widths() to
+    set each section into a column.
+*/
+void fltk::drawtext(const char* str, const Rectangle& r1, Flags flags)
+{
+  if (!str || !*str) return; // speeds up very common widgets
+  Rectangle r(r1); transform(r);
   bgboxcolor = 0;
   normal_color = getcolor();
-  int h = int(split(str, W, H, flags)+.5);
+  int h = int(split(str, r.w(), r.h(), flags)+.5);
   int dy;
   if (flags & ALIGN_BOTTOM) {
-    dy = Y+H-h;
-    if ((flags & ALIGN_TOP) && dy > Y) dy = Y;
+    dy = r.b()-h;
+    if ((flags & ALIGN_TOP) && dy > r.y()) dy = r.y();
   } else if (flags & ALIGN_TOP) {
-    dy = Y;
+    dy = r.y();
   } else {
-    dy = Y+((H-h)>>1);
+    dy = r.y()+((r.h()-h)>>1);
   }
   setfont(normal_font, normal_size);
   push_matrix();
@@ -614,32 +632,33 @@ static void _drawtext(
     int w = int(max_x+.5);
     int dx = 0;
     if (flags & ALIGN_RIGHT) {
-      dx = W-w;
+      dx = r.w()-w;
       if (flags & ALIGN_LEFT) if (dx > 0) dx = 0;
     } else if (!(flags & ALIGN_LEFT)) {
-      dx = (W-w)>>1;
+      dx = (r.w()-w)>>1;
     }
-    fillrect(X+dx, int(dy), w, h);
+    fillrect(Rectangle(r.x()+dx, int(dy), w, h));
     if (fl_drawing_shadow) goto DONE;
     setcolor(normal_color);
   }
   if (column_widths_) {
     current_column = -1;
-    push_clip(X, Y, W, H);
+    push_clip(r);
     for (h = 0; h < segment_count; h++) {
       Segment& s = segments[h];
       if (s.column != current_column) {
 	current_column = s.column;
-	int i, xx = X;
+	int i, xx = r.x();
 	for (i=0; i<current_column; i++) xx += column_widths_[i];
 	pop_clip();
-	push_clip(xx, Y, column_widths_[current_column], H);
+	push_clip(Rectangle(xx, r.y(), column_widths_[current_column], r.h()));
       }
       if (s.symbol) {
 	Symbol::text(s.start);
-	s.symbol->draw(s.x+X, s.y+dy, s.w, s.h, Widget::default_style, flags);
+	s.symbol->draw(Rectangle(int(s.x)+r.x(), int(s.y+dy), int(s.w), int(s.h)),
+		       Widget::default_style, flags);
       } else {
-	drawtext_transformed(s.start, s.end-s.start, s.x+X, s.y+dy);
+	drawtext_transformed(s.start, s.end-s.start, s.x+r.x(), s.y+dy);
       }
     }
     pop_clip();
@@ -648,9 +667,10 @@ static void _drawtext(
       Segment& s = segments[h];
       if (s.symbol) {
 	Symbol::text(s.start);
-	s.symbol->draw(s.x+X, s.y+dy, s.w, s.h, Widget::default_style, flags);
+	s.symbol->draw(Rectangle(int(s.x)+r.x(), int(s.y+dy), int(s.w), int(s.h)),
+		       Widget::default_style, flags);
       } else {
-	drawtext_transformed(s.start, s.end-s.start, s.x+X, s.y+dy);
+	drawtext_transformed(s.start, s.end-s.start, s.x+r.x(), s.y+dy);
       }
     }
   }
@@ -659,52 +679,6 @@ static void _drawtext(
   pop_matrix();
   setfont(normal_font, normal_size);
   setcolor(normal_color);
-}
-
-/*! \addtogroup font
-  \{ */
-
-/*!
-  This is the fancy string-drawing function that is used to draw all
-  labels in fltk. The string is formatted and aligned inside the
-  passed box. Only X and Y are transformed, W and H are assummed to
-  be in the space used to select the font (the float version of this
-  function transforms all 4 coordinates). This also:
-  - Splits it at every \\t tab character and uses column_widths() to
-    set each section into a column.
-  - Breaks the text into lines at \\n characters. Word-wraps (if
-    flags has fltk::ALIGN_WRAP set) so the words fit in the
-    columns.
-  - Looks up "@xyz;" sequeces to see if they are a Symbol, if so it
-    prints that symbol instead. This is skipped if the flags has
-    fltk::RAW_LABEL set.
-  - Parses "&x" combinations to produce Microsoft style underscores,
-    unless RAW_LABEL flag is set.
-*/
-void fltk::drawtext(
-    const char* str,	// the (multi-line) string
-    int X, int Y, int W, int H,	// bounding box
-    Flags flags
-) {
-  if (!str || !*str) return; // speeds up very common widgets
-  transform(X,Y);
-  _drawtext(str, X,Y,W,H, flags);
-}
-
-/*! Format text into a box in the current coordinate space.
-  Warning: unpredictable effects if the current coordianates are
-  rotated from the ones in use when the font was chosen.
-*/
-void fltk::drawtext(
-    const char* str,
-    float X, float Y, float W, float H,
-    Flags flags
-) {
-  transform(X,Y);
-  transform_distance(W,H);
-  _drawtext(str,
-	    int(floorf(X)+.5), int(floorf(Y)+.5), int(W+.5), int(H+.5),
-	    flags);
 }
 
 /*!
@@ -721,5 +695,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.52 2004/11/12 06:50:19 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.53 2005/01/24 08:07:53 spitzak Exp $".
 //

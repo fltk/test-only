@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.103 2004/10/25 06:30:40 spitzak Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.104 2005/01/24 08:07:07 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -357,7 +357,7 @@ void width_cb(fltk::ValueInput* i, void *v) {
     if (width <= 0) width = 0;
     for_all_selected_widgets() {
       WidgetType* q = (WidgetType*)o;
-      q->o->size(width, q->o->h());
+      q->o->resize(width, q->o->h());
       if (!o->is_menu_item()){
 	if (q->o->w() > q->o->h()) q->o->set_horizontal();
 	else if (q->o->w() < q->o->h()) q->o->set_vertical();
@@ -377,7 +377,7 @@ void height_cb(fltk::ValueInput* i, void *v) {
     if (height <= 0) height = 0;
     for_all_selected_widgets() {
       WidgetType* q = (WidgetType*)o;
-      q->o->size(q->o->w(), height);
+      q->o->resize(q->o->w(), height);
       if (!o->is_menu_item()){
 	if (q->o->w() > q->o->h()) q->o->set_horizontal();
 	else if (q->o->w() < q->o->h()) q->o->set_vertical();
@@ -1431,7 +1431,7 @@ void WidgetType::open() {
       p->panel->position(panel_tabs->child(0)->x(), panel_tabs->child(0)->y());
       p->panel->layout();
       p->panel->resizable(0);
-      p->panel->size(panel_tabs->child(0)->w(), panel_tabs->child(0)->h());
+      p->panel->resize(panel_tabs->child(0)->w(), panel_tabs->child(0)->h());
       p->panel->label(p->name);
     }
   }
@@ -2180,5 +2180,5 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.103 2004/10/25 06:30:40 spitzak Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.104 2005/01/24 08:07:07 spitzak Exp $".
 //

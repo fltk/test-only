@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileBrowser.cxx,v 1.19 2004/07/29 09:07:53 spitzak Exp $"
+// "$Id: Fl_FileBrowser.cxx,v 1.20 2005/01/24 08:07:19 spitzak Exp $"
 //
 // FileBrowser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -232,13 +232,14 @@ FileBrowser::item_draw(void *p,	// I - List item data
   if (FileIcon::first() == NULL)
   {
     // No icons, just draw the text...
-    drawtext(line->txt, x + 1, y, w - 2, h, ALIGN_LEFT);
+    drawtext(line->txt, Rectangle(x + 1, y, w - 2, h), ALIGN_LEFT);
   }
   else
   {
     // Icons; draw the text offset to the right...
-    drawtext(line->txt, x + icon_size_ + 9, y, w - icon_size_ - 10, h,
-	      ALIGN_LEFT);
+    drawtext(line->txt,
+	     Rectangle(x + icon_size_ + 9, y, w - icon_size_ - 10, h),
+	     ALIGN_LEFT);
 
     // And then draw the icon if it is set...
     if (line->data)
@@ -448,5 +449,5 @@ FileBrowser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_FileBrowser.cxx,v 1.19 2004/07/29 09:07:53 spitzak Exp $".
+// End of "$Id: Fl_FileBrowser.cxx,v 1.20 2005/01/24 08:07:19 spitzak Exp $".
 //

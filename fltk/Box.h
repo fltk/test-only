@@ -1,5 +1,5 @@
 //
-// "$Id: Box.h,v 1.4 2003/12/15 03:03:13 spitzak Exp $"
+// "$Id: Box.h,v 1.5 2005/01/24 08:07:06 spitzak Exp $"
 //
 // Define your own values for box() on a widget by making one of these.
 //
@@ -41,14 +41,14 @@ protected:
   BoxInfo boxinfo_;
 public:
   const char* data() const {return data_;}
-  void _draw(int, int, int, int, const Style*, Flags) const;
+  void _draw(const Rectangle&, const Style*, Flags) const;
   const BoxInfo* boxinfo() const;
   FrameBox(const char* n, const char* c, const FrameBox* d=0);
 };
 
 class FL_API FlatBox : public Box {
 public:
-  void _draw(int, int, int, int, const Style*, Flags) const;
+  void _draw(const Rectangle&, const Style*, Flags) const;
   const BoxInfo* boxinfo() const;
   FlatBox(const char* n);
 };
@@ -56,7 +56,7 @@ public:
 class FL_API HighlightBox : public FlatBox {
   const Box* down;
 public:
-  void _draw(int, int, int, int, const Style*, Flags) const;
+  void _draw(const Rectangle&, const Style*, Flags) const;
   const BoxInfo* boxinfo() const;
   HighlightBox(const char* n, const Box* d);
 };
@@ -66,5 +66,5 @@ public:
 #endif
 
 //
-// End of "$Id: Box.h,v 1.4 2003/12/15 03:03:13 spitzak Exp $".
+// End of "$Id: Box.h,v 1.5 2005/01/24 08:07:06 spitzak Exp $".
 //

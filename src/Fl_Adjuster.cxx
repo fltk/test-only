@@ -1,7 +1,6 @@
+// "$Id: Fl_Adjuster.cxx,v 1.53 2005/01/24 08:07:13 spitzak Exp $"
 //
-// "$Id: Fl_Adjuster.cxx,v 1.52 2004/08/01 22:28:21 spitzak Exp $"
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -19,8 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
-
 
 #include <fltk/Adjuster.h>
 #include <fltk/Box.h>
@@ -57,12 +54,11 @@ enum {
   GLYPH_SLOWARROW
 };
 
-static void glyph(int t, int x,int y,int w,int h, const Style* s, Flags flags)
+static void glyph(int t, const Rectangle& r, const Style* s, Flags flags)
 {
-  s->buttonbox()->draw(x,y,w,h,s,flags);
+  s->buttonbox()->draw(r,s,flags);
   xbmImage* b = arrows[t-GLYPH_FASTARROW];
-  b->draw(x+((w-b->width())>>1), y+((h-b->height())>>1),
-	  b->width(), b->height(), s, flags);
+  b->draw(Rectangle(r, b->width(), b->height()), s, flags);
 }
 
 // changing the value does not change the appearance:
@@ -86,12 +82,13 @@ void Adjuster::draw() {
     else if (highlight == i) f[i] |= HIGHLIGHT;
   }
 
-  if (damage()&DAMAGE_ALL || last == 1 || highlight == 1)
-    draw_glyph(GLYPH_FASTARROW, 0, 2*dy, W, H, f[1]);
-  if (damage()&DAMAGE_ALL || last == 2 || highlight == 2)
-    draw_glyph(GLYPH_MEDIUMARROW, dx, dy, W, H, f[2]);
-  if (damage()&DAMAGE_ALL || last == 3 || highlight == 3)
-    draw_glyph(GLYPH_SLOWARROW, 2*dx, 0, W, H, f[3]);
+  Rectangle r(W,H);
+  if (damage()&DAMAGE_ALL || last == 1 || highlight == 1) {
+    r.y(2*dy); draw_glyph(GLYPH_FASTARROW, r, f[1]);}
+  if (damage()&DAMAGE_ALL || last == 2 || highlight == 2) {
+    r.x(dx); r.y(dy); draw_glyph(GLYPH_MEDIUMARROW, r, f[2]);}
+  if (damage()&DAMAGE_ALL || last == 3 || highlight == 3) {
+    r.x(2*dx); r.y(0); draw_glyph(GLYPH_SLOWARROW, r, f[3]);}
 
   last = highlight;
 }
@@ -185,5 +182,5 @@ Adjuster::Adjuster(int x,int y,int w,int h,const char *l) : Valuator(x,y,w,h,l) 
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.52 2004/08/01 22:28:21 spitzak Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.53 2005/01/24 08:07:13 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.48 2004/08/01 22:28:21 spitzak Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.49 2005/01/24 08:07:08 spitzak Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -121,7 +121,7 @@ void Overlay_Window::draw() {
       for (int x = 0; x < w(); x += CHECKSIZE) {
 	fltk::setcolor(((y/(2*CHECKSIZE))&1) != ((x/(2*CHECKSIZE))&1) ?
 		 fltk::WHITE : fltk::BLACK);
-	fltk::fillrect(x,y,CHECKSIZE,CHECKSIZE);
+	fltk::fillrect(Rectangle(x,y,CHECKSIZE,CHECKSIZE));
       }
   }
 #ifdef __sgi
@@ -329,10 +329,10 @@ void WindowType::draw_overlay() {
   if (drag==BOX && (x1 != mx || y1 != my)) {
     int x = x1; int r = mx; if (x > r) {x = mx; r = x1;}
     int y = y1; int b = my; if (y > b) {y = my; b = y1;}
-    fltk::strokerect(x,y,r-x,b-y);
+    fltk::strokerect(fltk::Rectangle(x,y,r-x,b-y));
   }
   if (overlays_invisible && !drag) return;
-  if (selected) fltk::strokerect(0,0,o->w(),o->h());
+  if (selected) fltk::strokerect(fltk::Rectangle(o->w(),o->h()));
   if (!numselected) return;
   int bx,by,br,bt;
   bx = o->w(); by = o->h(); br = 0; bt = 0;
@@ -349,7 +349,7 @@ void WindowType::draw_overlay() {
       }
       int hidden = (!o->visible_r());
       if (hidden) fltk::line_style(fltk::DASH);
-      fltk::strokerect(x,y,r-x,t-y);
+      fltk::strokerect(fltk::Rectangle(x,y,r-x,t-y));
       if (x < bx) bx = x;
       if (y < by) by = y;
       if (r > br) br = r;
@@ -358,11 +358,11 @@ void WindowType::draw_overlay() {
     }
   }
   if (selected) return;
-  if (numselected>1) fltk::strokerect(bx,by,br-bx,bt-by);
-  fltk::fillrect(bx,by,5,5);
-  fltk::fillrect(br-5,by,5,5);
-  fltk::fillrect(br-5,bt-5,5,5);
-  fltk::fillrect(bx,bt-5,5,5);
+  if (numselected>1) fltk::strokerect(fltk::Rectangle(bx,by,br-bx,bt-by));
+  fltk::fillrect(fltk::Rectangle(bx,by,5,5));
+  fltk::fillrect(fltk::Rectangle(br-5,by,5,5));
+  fltk::fillrect(fltk::Rectangle(br-5,bt-5,5,5));
+  fltk::fillrect(fltk::Rectangle(bx,bt-5,5,5));
 }
 
 // Calculate new bounding box of selected widgets:
@@ -444,7 +444,7 @@ WidgetType* WindowType::clicked_widget() {
       if (i->is_widget() && !i->is_menu_item()) {
 	WidgetType* o = (WidgetType*)i;
 	fltk::Widget* w = o->o;
-	if (w->visible_r()&&fltk::event_inside(w->x()+x,w->y()+y,w->w(),w->h()))
+	if (w->visible_r() && fltk::event_inside(*w))
 	  inner_selection = o;
       }
     }
@@ -691,9 +691,9 @@ int WindowType::read_fdesign(const char* name, const char* value) {
   int x;
   o->box(fltk::NO_BOX); // because fdesign always puts an fltk::Box next
   if (!strcmp(name,"Width")) {
-    if (sscanf(value,"%d",&x) == 1) o->size(x,o->h());
+    if (sscanf(value,"%d",&x) == 1) o->resize(x,o->h());
   } else if (!strcmp(name,"Height")) {
-    if (sscanf(value,"%d",&x) == 1) o->size(o->w(),x);
+    if (sscanf(value,"%d",&x) == 1) o->resize(o->w(),x);
   } else if (!strcmp(name,"NumberofWidgets")) {
     return 1; // we can figure out count from file
   } else if (!strcmp(name,"border")) {
@@ -707,5 +707,5 @@ int WindowType::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.48 2004/08/01 22:28:21 spitzak Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.49 2005/01/24 08:07:08 spitzak Exp $".
 //

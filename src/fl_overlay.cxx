@@ -1,5 +1,5 @@
 //
-// "$Id: fl_overlay.cxx,v 1.15 2004/07/31 11:01:41 laza2000 Exp $"
+// "$Id: fl_overlay.cxx,v 1.16 2005/01/24 08:07:55 spitzak Exp $"
 //
 // Overlay support for the Fast Light Tool Kit (FLTK).
 //
@@ -33,40 +33,41 @@
 #include <fltk/draw.h>
 using namespace fltk;
 
-static int px,py,pw,ph;
+static Rectangle pr(0,0,0,0);
 
 static void draw_current_rect() {
+  if (pr.empty()) return;
 #if USE_X11
   XSetFunction(xdisplay, gc, GXxor);
   XSetForeground(xdisplay, gc, 0xffffffff);
-  strokerect(px, py, pw, ph);
+  strokerect(pr);
   XSetFunction(xdisplay, gc, GXcopy);
 #elif defined(_WIN32)
   int old = SetROP2(dc, R2_NOT);
-  strokerect(px, py, pw, ph);
+  strokerect(pr);
   SetROP2(dc, old);
 #elif defined(__APPLE__)
   PenMode( patXor );
-  strokerect(px, py, pw, ph);
+  strokerect(pr);
   PenMode( patCopy );
 #endif
 }
 
 void fltk::overlay_clear() {
-  if (pw > 0) {draw_current_rect(); pw = 0;}
+  if (!pr.empty()) {draw_current_rect(); pr.w(0);}
 }
 
 void fltk::overlay_rect(int x, int y, int w, int h) {
   if (w < 0) {x += w; w = -w;} else if (!w) w = 1;
   if (h < 0) {y += h; h = -h;} else if (!h) h = 1;
-  if (pw > 0) {
-    if (x==px && y==py && w==pw && h==ph) return;
+  if (!pr.empty()) {
+    if (x==pr.x() && y==pr.y() && w==pr.w() && h==pr.h()) return;
     draw_current_rect();
   }
-  px = x; py = y; pw = w; ph = h;
+  pr.set(x,y,w,h);
   draw_current_rect();
 }
 
 //
-// End of "$Id: fl_overlay.cxx,v 1.15 2004/07/31 11:01:41 laza2000 Exp $".
+// End of "$Id: fl_overlay.cxx,v 1.16 2005/01/24 08:07:55 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.77 2004/12/18 19:03:12 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.78 2005/01/24 08:07:45 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -204,16 +204,17 @@ double Slider::position_value(int X, int w) {
 /*! Draw tick marks. These lines cross the passed rectangle perpendicular to
   the slider direction. In the direction parallel to the slider direction
   the box should have the same size as the area the slider moves in. */
-void Slider::draw_ticks(int x, int y, int w, int h, int min_spacing)
+void Slider::draw_ticks(const Rectangle& r, int min_spacing)
 {
-  int x1, y1, x2, y2, dx, dy;
+  int x1, y1, x2, y2, dx, dy, w;
   if (horizontal()) {
-    x1 = x2 = x+(slider_size_-1)/2; dx = 1;
-    y1 = y; y2 = y + h; dy = 0;
+    x1 = x2 = r.x()+(slider_size_-1)/2; dx = 1;
+    y1 = r.y(); y2 = r.b(); dy = 0;
+    w = r.w();
   } else {
-    x1 = x; x2 = x+w; dx = 0;
-    y1 = y2 = y+(slider_size_-1)/2; dy = 1;
-    w = h;
+    x1 = r.x(); x2 = r.r(); dx = 0;
+    y1 = y2 = r.y()+(slider_size_-1)/2; dy = 1;
+    w = r.h();
   }
   if (w <= 0) return;
   double A = minimum();
@@ -291,23 +292,22 @@ void Slider::draw()
 {
   // figure out the inner size of the box:
   Box* box = this->box();
-  int ix = 0, iy = 0, iw = w(), ih = h();
-  box->inset(ix,iy,iw,ih);
+  Rectangle r(w(),h()); box->inset(r);
+  Rectangle sr(r);
 
   // figure out where to draw the slider, leaving room for tick marks:
-  int sx = ix, sy = iy, sw = iw, sh = ih;
   if (tick_size_ && (type()&TICK_BOTH)) {
     if (horizontal()) {
-      sh -= tick_size_;
+      sr.move_b(-tick_size_);
       switch (type()&TICK_BOTH) {
-      case TICK_BOTH: sy += tick_size_/2; break;
-      case TICK_ABOVE: sy += tick_size_; break;
+      case TICK_BOTH: sr.y(sr.y()+tick_size_/2); break;
+      case TICK_ABOVE: sr.y(sr.y()+tick_size_); break;
       }
     } else {
-      sw -= tick_size_;
+      sr.move_r(-tick_size_);
       switch (type()&TICK_BOTH) {
-      case TICK_BOTH: sx += tick_size_/2; break;
-      case TICK_ABOVE: sx += tick_size_; break;
+      case TICK_BOTH: sr.x(sr.x()+tick_size_/2); break;
+      case TICK_ABOVE: sr.x(sr.x()+tick_size_); break;
       }
     }
   }
@@ -320,76 +320,58 @@ void Slider::draw()
   // minimal-update the slider, if it indicates the background needs
   // to be drawn, draw that. We draw the slot if the current box type
   // has no border:
+  bool drawslot = r.y() == 0;
 #if USE_CLIPOUT
-  if (draw(sx, sy, sw, sh, f2, iy==0)) {
+  if (draw(sr, f2, drawslot)) {
 #endif
 
     // draw the box or the visible parts of the window
     if (!box->fills_rectangle()) draw_background();
-    box->draw(0, 0, w(), h(), style(), flags|OUTPUT);
+    box->draw(Rectangle(w(), h()), style(), flags|OUTPUT);
 
     // draw the focus indicator inside the box:
-    focusbox()->draw(ix+1, iy+1, iw-2, ih-2, style(), flags|OUTPUT);
+    focusbox()->draw(r, style(), flags|OUTPUT);
 
     if (type() & TICK_BOTH) {
       if (horizontal()) {
 	switch (type()&TICK_BOTH) {
-	case TICK_ABOVE: ih = sy+sh/2-iy; break;
-	case TICK_BELOW: ih += iy; iy = sy+sh/2+(iy?0:3); ih -= iy; break;
+	case TICK_ABOVE: r.set_b(sr.center_y()); break;
+	case TICK_BELOW: r.set_y(sr.center_y()+(drawslot?3:0)); r.move_b(-1); break;
 	}
       } else {
 	switch (type()&TICK_BOTH) {
-	case TICK_ABOVE: iw = sx+sw/2-ix; break;
-	case TICK_BELOW: iw += ix; ix = sx+sw/2+(iy?0:3); iw -= ix; break;
+	case TICK_ABOVE: r.set_r(sr.center_x()); break;
+	case TICK_BELOW: r.set_x(sr.center_x()+(drawslot?3:0)); r.move_r(-1); break;
 	}
       }
       Color color = textcolor();
       if (flags&INACTIVE) color = inactive(color);
       setcolor(color);
-      draw_ticks(ix, iy, iw, ih, (slider_size_+1)/2);
+      draw_ticks(r, (slider_size()+1)/2);
     }
 
 #if !USE_CLIPOUT
-    draw(sx, sy, sw, sh, f2, iy==0);
+    draw(sr, f2, drawslot);
 #else
     pop_clip();
   }
 #endif
 }
 
-/*! This call is provied so subclasses can draw the moving part inside
-  an arbitrary rectangle and then draw arbitrary backgrounds behind
-  the moving part.
+/*!
+  If fltk was compiled with USE_CLIPOUT this will draw the moving
+  parts of the slider and then remove them from the clip. You then
+  can draw the background and do pop_clip() if this returns true.
+  Don't draw anything if this returns false.
 
-  Do minimal-update redraw of the moving part of the slider and also
-  draw the "slot" if \a slot is true. If this returns true then it has
-  done an fltk::push_clip() and you must fill in the remaining area
-  with the background that goes behind the slider. The clipped area
-  will either be the entire widget or the area the slider used to be
-  in, with the area of the new slider and the slot removed from it.
-
-  Typical usage in a Slider subclass:
-
-  \code
-void MySlider::draw() {
-  // figure out inset box to hold moving part of slider:
-  int ix = 10;
-  int iy = 10;
-  int iw = w()-20;
-  int ih = h()-20;
-  // draw the moving part:
-  if (draw(ix, iy, iw, ih, 0, false)) {
-    // we must draw the background:
-    draw_spiffy_background(0,0,w(),h());
-    // draw the tick marks across whole widget:
-    draw_ticks(ix, 0, iw, h());
-    fltk::pop_clip();
-  }
-}
-  \endcode
+  If fltk was compiled without USE_CLIPOUT (the default) then this
+  draws the moving parts and you should have \e already drawn the
+  background. Do not do pop_clip! Maybe this should be changed so
+  these are two different functions, to surround the draw-background
+  code.
 */
 
-bool Slider::draw(int ix, int iy, int iw, int ih, Flags flags, bool slot)
+bool Slider::draw(const Rectangle& r, Flags flags, bool slot)
 {
   // for back compatability, use type flag to set slider size:
   if (type()&16/*FILL*/) slider_size(0);
@@ -398,46 +380,48 @@ bool Slider::draw(int ix, int iy, int iw, int ih, Flags flags, bool slot)
   if (style()->selection_color_) flags |= SELECTED;
 
   // figure out where the slider should be:
-  int sx = ix, sy = iy, sw = iw, sh = ih;
+  Rectangle s(r);
   int sp;
   int sglyph = 0;
   if (horizontal()) {
-    sx = sp = ix+slider_position(value(),iw);
-    sw = slider_size_;
-    if (!sw) {sw = sx-ix; sx = ix;} // fill slider
+    s.x(sp = r.x()+slider_position(value(),r.w()));
+    s.w(slider_size_);
+    if (!s.w()) {s.w(s.x()-r.x()); s.x(r.x());} // fill slider
     else sglyph=17;
   } else {
-    sy = sp = iy+slider_position(value(),ih);
-    sh = slider_size_;
-    if (!sh) {sh = iy+ih-sy;} // fill slider
+    s.y(sp = r.y()+slider_position(value(),r.h()));
+    s.h(slider_size_);
+    if (!s.h()) {s.h(r.b()-s.y());} // fill slider
     else sglyph=16;
   }
 
 #if USE_CLIPOUT
   if (damage()&DAMAGE_ALL) {
 
-    push_clip(0, 0, w(), h());
-    draw_glyph(sglyph, sx, sy, sw, sh, flags); // draw the slider
-    clipout(sx, sy, sw, sh); // clip out the area of the slider
+    push_clip(Rectangle(w(), h()));
+    draw_glyph(sglyph, s, flags); // draw the slider
+    clipout(s); // clip out the area of the slider
 
   } else if (sp != old_position) {
 
     // update a moving slider:
-    draw_glyph(sglyph, sx, sy, sw, sh, flags); // draw slider in new position
+    draw_glyph(sglyph, s, flags); // draw slider in new position
     // clip to the region the old slider was in:
+    Rectangle os(s);
     if (horizontal()) {
-      if (slider_size_) push_clip(old_position, sy, sw, sh);
-      else push_clip(ix, iy, old_position, ih);
+      if (slider_size_) os.x(old_position);
+      else os.w(old_position);
     } else {
-      if (slider_size_) push_clip(sx, old_position, sw, sh);
-      else push_clip(ix, old_position, iw, iy+ih-old_position);
+      if (slider_size_) os.y(old_position);
+      else os.set_x(old_position);
     }
-    clipout(sx, sy, sw, sh); // don't erase new slider
+    push_clip(os);
+    clipout(s); // don't erase new slider
     
   } else {
 
     // update for the highlight turning on/off
-    if (damage() & DAMAGE_HIGHLIGHT) draw_glyph(sglyph, sx, sy, sw, sh, flags);
+    if (damage() & DAMAGE_HIGHLIGHT) draw_glyph(sglyph, s, flags);
     // otherwise no changes
     return false;
 
@@ -448,37 +432,37 @@ bool Slider::draw(int ix, int iy, int iw, int ih, Flags flags, bool slot)
   // we draw a slot if it seems the box has no border:
   if (slot) {
     const int slot_size_ = 6;
-    int slx, sly, slw, slh;
+    Rectangle sl;
     int dx = (slider_size_-slot_size_)/2; if (dx < 0) dx = 0;
     if (horizontal()) {
-      slx = dx;
-      slw = iw-2*dx;
-      slx += ix;
-      sly = iy+(ih-slot_size_+1)/2;
-      slh = slot_size_;
+      sl.x(dx+r.x());
+      sl.w(r.w()-2*dx);
+      sl.y(r.y()+(r.h()-slot_size_+1)/2);
+      sl.h(slot_size_);
     } else {
-      sly = dx;
-      slh = ih-2*dx;
-      sly += iy;
-      slx = ix+(iw-slot_size_+1)/2;
-      slw = slot_size_;
+      sl.y(dx+r.y());
+      sl.h(r.h()-2*dx);
+      sl.x(r.x()+(r.w()-slot_size_+1)/2);
+      sl.w(slot_size_);
     }
-    THIN_DOWN_BOX->draw(slx, sly, slw, slh, style(), flags&INACTIVE|INVISIBLE);
+    THIN_DOWN_BOX->draw(sl, style(), flags&INACTIVE|INVISIBLE);
+    Rectangle ir(sl); ir.inset(1);
     setcolor(BLACK);
-    fillrect(slx+1,sly+1,slw-2,slh-2);
+    fillrect(ir);
 #if USE_CLIPOUT
-    clipout(slx, sly, slw, slh);
+    sl.inset(-1);
+    clipout(sl);
 #endif
   }
 #if !USE_CLIPOUT
-  draw_glyph(sglyph, sx, sy, sw, sh, flags); // draw slider in new position
+  draw_glyph(sglyph, s, flags); // draw slider in new position
 #endif
   return true;
 }
 
 /*! This call is provied so subclasses can draw the moving part inside
   an arbitrary rectangle. */
-int Slider::handle(int event, int x, int y, int w, int h) {
+int Slider::handle(int event, const Rectangle& r) {
 
   switch (event) {
   case FOCUS:
@@ -490,13 +474,13 @@ int Slider::handle(int event, int x, int y, int w, int h) {
     handle_push();
   case DRAG: {
     // figure out the space the slider moves in and where the event is:
-    int mx;
+    int w,mx;
     if (horizontal()) {
-      w = w-box()->dw();
-      mx = event_x()-x-box()->dx();
+      w = r.w()-box()->dw();
+      mx = event_x()-r.x()-box()->dx();
     } else {
-      w = h-box()->dh();
-      mx = event_y()-y-box()->dy();
+      w = r.h()-box()->dh();
+      mx = event_y()-r.y()-box()->dy();
     }
     if (w <= slider_size_) return 1;
     static int offcenter;
@@ -556,26 +540,26 @@ int Slider::handle(int event, int x, int y, int w, int h) {
   }
 }
 
-int Slider::handle(int event) {return handle(event,0,0,w(),h());}
+int Slider::handle(int event) {return handle(event,Rectangle(w(),h()));}
 
-static void glyph(int glyph, int x,int y,int w,int h, const Style* style, Flags flags)
+static void glyph(int glyph, const Rectangle& r, const Style* style, Flags flags)
 {
   if (glyph<100) flags &= ~VALUE;
-  Widget::default_glyph(glyph, x, y, w, h, style, flags);
+  Widget::default_glyph(glyph, r, style, flags);
   // draw the divider line into slider:
-  if (w < 4 || h < 4) return;
+  if (r.w() < 4 || r.h() < 4) return;
   if (glyph==17) { // horizontal
-    x = x+(w+1)/2;
+    int x = r.x()+(r.w()+1)/2;
     setcolor(GRAY33);
-    drawline(x-1, y+1, x-1, y+h-2);
+    drawline(x-1, r.y()+1, x-1, r.b()-2);
     setcolor(WHITE);
-    drawline(x, y+1, x, y+h-2);
+    drawline(x, r.y()+1, x, r.b()-2);
   } else if (glyph==16) { // vertical
-    y = y+(h+1)/2;
+    int y = r.y()+(r.h()+1)/2;
     setcolor(GRAY33);
-    drawline(x+1, y-1, x+w-2, y-1);
+    drawline(r.x()+1, y-1, r.r()-2, y-1);
     setcolor(WHITE);
-    drawline(x+1, y, x+w-2, y);
+    drawline(r.x()+1, y, r.r()-2, y);
   }
 }
 
@@ -598,5 +582,5 @@ Slider::Slider(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.77 2004/12/18 19:03:12 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.78 2005/01/24 08:07:45 spitzak Exp $".
 //

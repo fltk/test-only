@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.22 2004/07/25 23:22:14 spitzak Exp $"
+// "$Id: fl_arci.cxx,v 1.23 2005/01/24 08:07:52 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -43,10 +43,13 @@ using namespace fltk;
   with the current color. \a what is used to implement the other
   functions and can be one of fltk::FILLPIE, fltk::FILLARC, fltk::STROKEPIE,
   fltk::STROKEARC.
+
+  The result if the transformation is rotated is undefined and will
+  differ depending on the backend.
 */
-void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
-  if (w <= 0 || h <= 0) return;
-  transform(x,y);
+void fltk::fillpie(const Rectangle& r1, float a1, float a2, int what) {
+  Rectangle r(r1); transform(r);
+  if (r.empty()) return;
 #if USE_X11
   int A = int(a1*64);
   int B = int(a2*64)-A;
@@ -57,11 +60,11 @@ void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
   case FILLARC:
     XSetArcMode(xdisplay, gc, ArcChord);
   J1:
-    XFillArc(xdisplay, xwindow, gc, x-1, y-1, w+1, h+1, A, B);
+    XFillArc(xdisplay, xwindow, gc, r.x()-1, r.y()-1, r.w()+1, r.h()+1, A, B);
     break;
   case STROKEPIE: // not correct, should draw lines to center
   case STROKEARC:
-    XDrawArc(xdisplay, xwindow, gc, x, y, w, h, A, B);
+    XDrawArc(xdisplay, xwindow, gc, r.x(), r.y(), r.w(), r.h(), A, B);
     break;
   }
 #elif defined(_WIN32)
@@ -69,38 +72,39 @@ void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
   if (a2 < a1) {float t = a2; a2 = a1; a1 = t;}
   if (a2 >= a1+360) a1 = a2 = 0;
   //w++; h++; // is this needed to match X?
-  int xa = x+w/2+int(w*cosf(a1*float(M_PI/180.0)));
-  int ya = y+h/2-int(h*sinf(a1*float(M_PI/180.0)));
-  int xb = x+w/2+int(w*cosf(a2*float(M_PI/180.0)));
-  int yb = y+h/2-int(h*sinf(a2*float(M_PI/180.0)));
+  int xa = r.center_x()+int(w*cosf(a1*float(M_PI/180.0)));
+  int ya = r.center_y()-int(h*sinf(a1*float(M_PI/180.0)));
+  int xb = r.center_x()+int(w*cosf(a2*float(M_PI/180.0)));
+  int yb = r.center_y()-int(h*sinf(a2*float(M_PI/180.0)));
   switch (what) {
   case FILLPIE:
     setbrush();
     setpen();
-    Pie(dc, x, y, x+w, y+h, xa, ya, xb, yb); 
+    Pie(dc, r.x(), r.y(), r.r(), r.b(), xa, ya, xb, yb); 
     break;
   case FILLARC:
     setbrush();
     setpen();
-    Chord(dc, x, y, x+w, y+h, xa, ya, xb, yb); 
+    Chord(dc, r.x(), r.y(), r.r(), r.b(), xa, ya, xb, yb); 
     break;
   case STROKEPIE: // not correct, should draw lines to center
   case STROKEARC:
     setpen();
-    Arc(dc, x, y, x+w, y+h, xa, ya, xb, yb); 
+    Arc(dc, r.x(), r.y(), r.r(), r.b(), xa, ya, xb, yb); 
     break;
   }
 #elif defined(__APPLE__)
-  Rect r; r.left=x; r.right=x+w; r.top=y; r.bottom=y+h;
+  Rect rect;
+  rect.left=r.x(); rect.right=r.r(); rect.top=r.y(); rect.bottom=r.b();
   a1 = a2-a1; a2 = 450-a2;
   switch (what) {
   case FILLPIE:
   case FILLARC: // not correct, should fill chord
-    PaintArc(&r, (short int)a2, (short int)a1);
+    PaintArc(&rect, (short int)a2, (short int)a1);
     break;
   case STROKEPIE: // not correct, should draw lines to center
   case STROKEARC:
-    FrameArc(&r, (short int)a2, (short int)a1);
+    FrameArc(&rect, (short int)a2, (short int)a1);
     break;
   }
 #else
@@ -108,22 +112,22 @@ void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
 #endif
 }
 
-/*! \fn void fltk::strokepie(int x,int y,int w,int h,float a,float a2);
+/*! \fn void fltk::strokepie(const Rectangle&, float a, float a2);
   Draw a line along a closed path around the pie slice, including two
   straight lines from the ends of the arc to the center. (nyi, right
   now it acts like strokearc().
 */
 
-/*! \fn void fltk::fillarc(int x,int y,int w,int h,float a,float a2);
+/*! \fn void fltk::fillarc(const Rectangle&, float a, float a2);
   Fill a "chord" shape, with an arc and one straight line joining the
   ends.
 */
 
-/*! \fn void fltk::strokearc(int x,int y,int w,int h,float a,float a2);
+/*! \fn void fltk::strokearc(const Rectangle&, float a, float a2);
   Draw a line along the arc. The path is not closed, this just draws
   the curved edge.
 */
 
 //
-// End of "$Id: fl_arci.cxx,v 1.22 2004/07/25 23:22:14 spitzak Exp $".
+// End of "$Id: fl_arci.cxx,v 1.23 2005/01/24 08:07:52 spitzak Exp $".
 //

@@ -1,4 +1,4 @@
-// "$Id: Fl_Menu_Button.cxx,v 1.63 2004/11/12 06:50:16 spitzak Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.64 2005/01/24 08:07:26 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -79,14 +79,14 @@ void PopupMenu::draw() {
     draw_background();
   }
   Flags flags = current_flags_highlight();
-  box->draw(0, 0, this->w(), this->h(), style(), flags);
-  int x,y,w,h;
-  x = y = 0; w = this->w(); h = this->h(); box->inset(x,y,w,h);
-  draw_label(x,y,w,h, style(), flags);
+  Rectangle r(w(),h());
+  box->draw(r, style(), flags);
+  box->inset(r);
+  draw_label(r, style(), flags);
   // draw the little mark at the right:
 //    int w1 = int(textsize());
 //    draw_glyph(GLYPH_DOWN, x+w-w1, y, w1, h, flags);
-  focusbox()->draw(x+1, y+1, w-2, h-2, style(), flags);
+  focusbox()->draw(r, style(), flags);
 }
 
 /*! Wrapper for Menu::popup(). For NORMAL PopupMenu this places the
@@ -170,5 +170,5 @@ PopupMenu::PopupMenu(int X,int Y,int W,int H,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.63 2004/11/12 06:50:16 spitzak Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.64 2005/01/24 08:07:26 spitzak Exp $".
 //
