@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.57 2000/04/14 01:49:13 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.58 2000/04/14 18:53:06 carl Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -332,8 +332,8 @@ Fl_Color Fl_Widget::draw_button() const {
     c1 = highlight_label_color(); if (c1) lc = c1;
   }
   if (f&FL_VALUE) {
-    Fl_Color c1 = style()->selection_color; if (c1) c = c1;
-    c1 = style()->selection_text_color; if (c1) lc = c1;
+    Fl_Color c1 = selection_color(); if (c1) c = c1;
+    c1 = selection_text_color(); if (c1) lc = c1;
   }
   if (focused()) f |= FL_FOCUSED;
   // We need to erase the focus rectangle for FL_NO_BOX buttons, such
@@ -374,5 +374,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.57 2000/04/14 01:49:13 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.58 2000/04/14 18:53:06 carl Exp $".
 //
