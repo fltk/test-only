@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.21 1999/06/15 17:02:27 gustavo Exp $"
+// "$Id: Fl_Widget.H,v 1.22 1999/06/18 14:34:37 carl Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -133,7 +133,7 @@ public:
   int y() const {return y_;}
   int w() const {return w_;}
   int h() const {return h_;}
-  void resize(int,int,int,int);
+  virtual void resize(int,int,int,int);
   int damage_resize(int,int,int,int);
   void position(int X,int Y) {resize(X,Y,w_,h_);}
   void size(int W,int H) {resize(x_,y_,W,H);}
@@ -279,5 +279,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.21 1999/06/15 17:02:27 gustavo Exp $".
+// End of "$Id: Fl_Widget.H,v 1.22 1999/06/18 14:34:37 carl Exp $".
 //

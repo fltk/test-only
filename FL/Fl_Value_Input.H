@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.H,v 1.10 1999/06/15 17:02:26 gustavo Exp $"
+// "$Id: Fl_Value_Input.H,v 1.11 1999/06/18 14:34:37 carl Exp $"
 //
 // Value input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -60,7 +60,7 @@ public:
   void cursor_color(uchar n) {input.cursor_color(n);}
 
 protected:
-  void layout();
+  void resize(int, int, int, int);
 
 private:
   char soft_;
@@ -71,5 +71,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Value_Input.H,v 1.10 1999/06/15 17:02:26 gustavo Exp $".
+// End of "$Id: Fl_Value_Input.H,v 1.11 1999/06/18 14:34:37 carl Exp $".
 //
