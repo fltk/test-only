@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_endtrim.c,v 1.1 2000/01/07 08:50:48 bill Exp $"
+   "$Id: conf_strcasecmp.c,v 1.7 2000/03/02 20:47:18 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -22,33 +22,29 @@
     USA.
 */
 
-#include "conf.h"
+#include <FL/conf.h>
+#include <config.h>
 
 /*
-        char *endtrim(char *s)
+        long conf_strcasecmp(const char *s1, const char *s2)
 
         description:
-                removes just trailing whitespace from a string
-                whitespace is any character in literal string CONF_WHITESPACE
+                this function compares the strings s1 and s2 ignoring case
         arguments:
-                s: string to be modified
+		s1: string 1
+		s2: string 2
         return value:
-                returns s
+                returns 0 if the strings are equal, a negative integer if
+		s1 < s2, or a positive interger if s1 > s2.
 */
-char *
-endtrim(char *s)
+int
+conf_strcasecmp(const char *s1, const char *s2)
 {
-        char    *p;                                                             /* temporary pointers */
-
-        if (!s)                                                                 /* if null pointer passed */
-                return s;
-
-        p = s + strlen(s) - 1;
-        while ((p >= s) && strchr(CONF_WHITESPACE, *p))                         /* kill trailing whitespace */
-                *p-- = '\0';
-        return s;
+	for (; *s1 && *s2 && tolower(*s1) == tolower(*s2); s1++, s2++) ;        /* loop while chars equal & neither string ended */
+	if (!(*s1) && !(*s2)) return 0;                                         /* if both strings ended must be equal */
+	return *s1 - *s2;                                                       /* must be 1st different char, return comparison */
 }
 
 /*
-    End of "$Id: conf_endtrim.c,v 1.1 2000/01/07 08:50:48 bill Exp $".
+    End of "$Id: conf_strcasecmp.c,v 1.7 2000/03/02 20:47:18 carl Exp $".
 */

@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_strcasecmp.c,v 1.1 2000/01/07 08:50:52 bill Exp $"
+   "$Id: conf_level_indent.c,v 1.7 2000/03/02 20:47:17 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -22,29 +22,20 @@
     USA.
 */
 
-#include "conf.h"
-#include <config.h>
+#include <FL/conf.h>
 
-/*
-        long conf_strcasecmp(const char *s1, const char *s2)
-
-        description:
-                this function compares the strings s1 and s2 ignoring case
-        arguments:
-		s1: string 1
-		s2: string 2
-        return value:
-                returns 0 if the strings are equal, a negative integer if
-		s1 < s2, or a positive interger if s1 > s2.
-*/
-int
-conf_strcasecmp(const char *s1, const char *s2)
+/* this function returns the proper amount of leading indentation for a line */
+const char *
+level_indent(int l)
 {
-	for (; *s1 && *s2 && tolower(*s1) == tolower(*s2); s1++, s2++) ;        /* loop while chars equal & neither string ended */
-	if (!(*s1) && !(*s2)) return 0;                                         /* if both strings ended must be equal */
-	return *s1 - *s2;                                                       /* must be 1st different char, return comparison */
+        static char indent[CONF_MAX_LEVEL * CONF_INDENT + 1];
+
+        memset(indent, 0, sizeof(indent));
+        if (l <= CONF_MAX_LEVEL) memset(indent, ' ', l * CONF_INDENT);
+
+        return indent;
 }
 
 /*
-    End of "$Id: conf_strcasecmp.c,v 1.1 2000/01/07 08:50:52 bill Exp $".
+    End of "$Id: conf_level_indent.c,v 1.7 2000/03/02 20:47:17 carl Exp $".
 */

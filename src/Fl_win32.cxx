@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.89 2000/02/16 07:30:05 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.90 2000/03/02 20:47:15 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1007,7 +1007,11 @@ void fl_windows_colors() {
 // Fl_Color slider_background = win_color(GetSysColor(COLOR_SCROLLBAR));
 
   fl_background(background);
+  Fl_Widget::default_style->off_color = background;
+
   Fl_Widget::default_style->label_color = foreground;
+  Fl_Widget::default_style->highlight_label_color = foreground;
+  Fl_Widget::default_style->selection_text_color = foreground;
 
   Fl_Widget::default_style->text_color = window_foreground;
 
@@ -1056,6 +1060,20 @@ void fl_windows_colors() {
     style->selection_text_color = select_foreground;
   }
 
+/* CET - FIXME
+  if ((style = Fl_Style::find("menu title"))) {
+    style->set_box(FL_HIGHLIGHT_BOX);
+    style->set_highlight_color(background);
+    style->set_highlight_label_color(foreground);
+    style->set_selection_color(background);
+    style->set_selection_text_color(foreground);
+  }
+
+  if ((style = Fl_Style::find("menu bar"))) {
+    style->set_highlight_color(background); // for title highlighting
+  }
+
+*/
   if ((style = Fl_Style::find("menu title"))) {
     style->box = FL_HIGHLIGHT_BOX;
     style->highlight_color = FL_GRAY;
@@ -1098,5 +1116,5 @@ void fl_windows_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.89 2000/02/16 07:30:05 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.90 2000/03/02 20:47:15 carl Exp $".
 //

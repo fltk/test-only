@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.41 2000/02/22 00:58:08 bill Exp $"
+// "$Id: Fl.H,v 1.42 2000/03/02 20:47:06 carl Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -209,21 +209,27 @@ public:
   static void* thread_message();
 
   // scheme & theme stuff
-  static const char* theme_;
   static const char* scheme_;
-  static const char* theme() {return theme_;}
+  static const char* theme_;
+  static int theme(const char*);
+  static int scheme(const char*);
   static const char* scheme() {return scheme_;}
+  static const char* theme() {return theme_;}
+  static int getconf(const char *key, char *value, int value_length);
+
+/* CET - FIXME
   static int theme(const char*, const char* scheme = 0);
   static int scheme(const char* s) {return theme(theme_, s);}
   static int loadtheme();
   static int loadtheme(const char*, const char* scheme = 0);
   static int reloadtheme();
   static void add_theme_unloader(void (*)());
+*/
 
 };
 
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.41 2000/02/22 00:58:08 bill Exp $".
+// End of "$Id: Fl.H,v 1.42 2000/03/02 20:47:06 carl Exp $".
 //

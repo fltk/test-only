@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_level_indent.c,v 1.1 2000/01/07 08:50:50 bill Exp $"
+   "$Id: conf_endtrim.c,v 1.7 2000/03/02 20:47:16 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -22,20 +22,33 @@
     USA.
 */
 
-#include "conf.h"
+#include <FL/conf.h>
 
-/* this function returns the proper amount of leading indentation for a line */
-const char *
-level_indent(int l)
+/*
+        char *endtrim(char *s)
+
+        description:
+                removes just trailing whitespace from a string
+                whitespace is any character in literal string CONF_WHITESPACE
+        arguments:
+                s: string to be modified
+        return value:
+                returns s
+*/
+char *
+endtrim(char *s)
 {
-        static char indent[CONF_MAX_LEVEL * CONF_INDENT + 1];
+        char    *p;                                                             /* temporary pointers */
 
-        memset(indent, 0, sizeof(indent));
-        if (l <= CONF_MAX_LEVEL) memset(indent, ' ', l * CONF_INDENT);
+        if (!s)                                                                 /* if null pointer passed */
+                return s;
 
-        return indent;
+        p = s + strlen(s) - 1;
+        while ((p >= s) && strchr(CONF_WHITESPACE, *p))                         /* kill trailing whitespace */
+                *p-- = '\0';
+        return s;
 }
 
 /*
-    End of "$Id: conf_level_indent.c,v 1.1 2000/01/07 08:50:50 bill Exp $".
+    End of "$Id: conf_endtrim.c,v 1.7 2000/03/02 20:47:16 carl Exp $".
 */

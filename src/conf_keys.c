@@ -1,9 +1,9 @@
 /*
-   "$Id: conf_get.c,v 1.1 2000/01/07 08:50:49 bill Exp $"
+   "$Id: conf_keys.c,v 1.8 2000/03/02 20:47:17 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
-    Carl Thompson's config file routines version 0.21
+    Carl Thompson's config file routines version 0.3
     Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
@@ -22,57 +22,56 @@
     USA.
 */
 
-#include "conf.h"
+#include <FL/conf.h>
 #include <config.h>
 
 extern int conf_is_path_rooted(const char *);
 extern const char* conf_dirname(const char *);
 
 /*
-        int getconf(const char *configfile, const char *key, char *svalue,
-                    int slen)
-
+        int getconf_keys(const char *configfile, const char *section,
+                         conf_list *list)
         description:
-                gets the string associated with a key in a config file
+                gets the list of keys that are in the specified section
         arguments:
                 configfile: path of config file
-                key: section/key to look for
-                slen: length of passed string buffer
+                section: section in config file (must be unique in file)
+                list: pointer to a conf_list (same as pointer to pointer
+                      to conf_entry) of keys
         return values:
                 returns 0 for OK or error code defined in conf.h
-                svalue: string associated with key
+                returns a pointer to first in list of entries in "list"
 */
 int
-getconf(const char *configfile, const char *k, char *svalue, int slen)
+getconf_keys(const char *configfile, const char *sec, conf_list *list)
 {
-  FILE    *ifp;                                                                 /* file pointer for config file */
-  char    current_section[CONF_MAX_SECT_LEN + 2] = "";                          /* current section */
-  char    line[CONF_MAX_LINE_LEN];                                              /* line buffer */
-  char    found[CONF_MAX_LINE_LEN] = "";                                        /* the last match found */
-  char    *p, *p2;                                                              /* miscelaneous char pointers */
-  char    key[CONF_MAX_LINE_LEN], section[CONF_MAX_LINE_LEN];                   /* key and section to look for */
-  int     in_correct_section;                                                   /* found the section we want? */
-  int     section_found = 0, key_found = 0;                                     /* did we ever find the right section or key? */
+  FILE       *ifp;                                                              /* file pointer for config file */
+  char       current_section[CONF_MAX_SECT_LEN + 2] = "";                       /* current section */
+  char       section[CONF_MAX_SECT_LEN + 1];                                    /* desired section */
+  char       line[CONF_MAX_LINE_LEN];                                           /* line buffer */
+  char       *p, *p2;                                                           /* miscelaneous char pointers */
+  int        in_correct_section;                                                /* found the section we want? */
+  int        section_found = 0;                                                 /* did we ever find the right section? */
+  conf_entry **current;                                                         /* pointer to pointer to current entry */
   static int depth = 0;                                                         /* don't go too deep */
 
-  if (!configfile || !k || !svalue) return CONF_ERR_ARGUMENT;                   /* NULL pointer was passed */
+  if (!configfile || !list) return CONF_ERR_ARGUMENT;                           /* NULL pointer was passed */
+  if (!sec) sec = "";                                                           /* toplevel section */
 
-  strncpy(section, k, sizeof(section));                                         /* copy key and section to buffer */
-  if ((p = strrchr(section, conf_level_sep))) {                                 /* if a level separator found */
-    strncpy(key,  p + 1, sizeof(key));                                          /* set key */
-    *(p + 1) = (char)0;                                                         /* remove key from section */
-  } else {                                                                      /* no level separator found */
-    strcpy(key, section);                                                       /* set key */
-    *section = (char)0;                                                         /* set toplevel section */
-  }
-
-  trim(section); trim(key);
+  conf_list_free(list);                                                         /* free list passed to us */
+  current = list;                                                               /* pointer to current (first) entry */
 
   ifp = fopen(configfile, "r");
   if (!ifp) return CONF_ERR_FILE;                                               /* could not open config file */
 
-  if (strlen(section) > (CONF_MAX_SECT_LEN - 1))                                /* if section name too long */
+  if (strlen(sec) > (CONF_MAX_SECT_LEN - 1))                                    /* if section name too long */
     return CONF_ERR_ARGUMENT;                                                   /* bail out */
+  strncpy(section, sec, sizeof(section));
+  trim(section);
+  if (*section && *(section + strlen(section) - 1) != conf_level_sep) {                                                               /* add trailing '/' to section name */
+    *(section + strlen(section) + 1) = (char)0;
+    *(section + strlen(section)) = conf_level_sep;
+  }
 
   in_correct_section = (*section) ? 0 : 1;                                      /* found the right section if we want toplevel */
   while (fgets(line, sizeof(line), ifp)) {                                      /* while there are still lines in the section */
@@ -106,48 +105,50 @@ getconf(const char *configfile, const char *k, char *svalue, int slen)
       p = strtok(line, CONF_WHITESPACE);                                        /* get the command */
       if (!strcasecmp(p, "include")) {                                          /* it is include command */
         char fn[CONF_MAXPATHLEN];                                               /* filename of include file */
-        char sk[CONF_MAX_LINE_LEN];                                             /* what to look for in included file */
+        char s[CONF_MAX_SECT_LEN];                                              /* what to look for in included file */
         int r;
 
         p = strtok(0, "");                                                      /* get the name of file to be included */
         trim(p);                                                                /* kill unecessary whitespace */
         if (conf_is_path_rooted(p)) strncpy(fn, p, sizeof(fn));                 /* fully qualified path */
         else snprintf(fn, sizeof(fn), "%s%s", conf_dirname(configfile), p);     /* figure out pathname */
-        snprintf(sk, sizeof(sk), "%s%s", section + strlen(current_section),     /* section/key to look up in included file */
-                 key);
+        strncpy(s, section + strlen(current_section), sizeof(s));               /* section/key to look up in included file */
         if (depth == CONF_MAX_INCLUDE) return CONF_ERR_DEPTH;                   /* went too deep */
         depth++;
-        r = getconf(fn, sk, found, sizeof(found));                              /* look for what we want in included file */
+        r = getconf_keys(fn, s, current);                                       /* look for what we want in included file */
         depth--;
         if (r == CONF_ERR_DEPTH) return CONF_ERR_DEPTH;                         /* went too deep */
-        if (!r) section_found = key_found = 1;                                  /* we found what we wanted in included file */
+        if (r == CONF_ERR_MEMORY) return CONF_ERR_MEMORY;                       /* buy some RAM */
+        if (!r) {
+          section_found = 1;                                                    /* we found what we wanted in included file */
+          while (*current) current = &((*current)->next);
+        }
       }
       continue;                                                                 /* go to next line */
     }
 
-    /* p now points to value, line is now just key */
+    /* line is now just key */
     if (!in_correct_section) continue;                                          /* section not found yet, keep looking for it */
     section_found = 1;                                                          /* must be in right section */
 
-    trim(line); trim(p);                                                        /* kill unnecessary whitespace */
+    trim(line);                                                                 /* kill unnecessary whitespace */
 
-    if (strcasecmp(line, key)) continue;                                        /* this isn't the entry we want- next line */
-    key_found = 1;                                                              /* must be the right entry */
-
-    strncpy(found, p, sizeof(found));                                           /* copy value to found */
+    (*current) = (conf_entry *)malloc(sizeof(conf_entry));                      /* allocate memory for this entry */
+    if (*current) (*current)->data = strdup(line);                              /* duplicate the key for this entry */
+    if ((*current == 0) || ((*current)->data == 0)) {                           /* if we had a memory allocation problem */
+      fclose(ifp);                                                              /* close data file */
+      return CONF_ERR_MEMORY;                                                   /* and bail out */
+    }
+    (*current)->next = 0;                                                       /* set this entry's next pointer to null */
+    current = &((*current)->next);                                              /* point to next entry */
   } /* while (fgets(line, sizeof(line), ifp)) */
 
   fclose(ifp);                                                                  /* close the config file */
 
   if (!section_found) return CONF_ERR_SECTION;                                  /* section was never found */
-  if (!key_found) return CONF_ERR_KEY;                                          /* key was never found */
-
-  strncpy(svalue, found, slen);                                                 /* copy found value to user variable */
-  svalue[slen - 1] = (char)0;                                                   /* make sure string is null terminated */
-
   return CONF_SUCCESS;                                                          /* it worked? */
-} /* getconf() */
+} /* getconf_keys() */
 
 /*
-    End of "$Id: conf_get.c,v 1.1 2000/01/07 08:50:49 bill Exp $".
+    End of "$Id: conf_keys.c,v 1.8 2000/03/02 20:47:17 carl Exp $".
 */

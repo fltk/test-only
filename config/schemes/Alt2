@@ -53,5 +53,5 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
   [widgets/tooltip]
     box = engraved                                # box around tooltips
 
-[colors]
+[aliases]
   light1 = 51

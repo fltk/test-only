@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_sections.c,v 1.1 2000/01/07 08:50:51 bill Exp $"
+   "$Id: conf_sections.c,v 1.7 2000/03/02 20:47:17 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -22,7 +22,7 @@
     USA.
 */
 
-#include "conf.h"
+#include <FL/conf.h>
 #include <config.h>
 
 extern int conf_is_path_rooted(const char *);
@@ -136,5 +136,5 @@ getconf_sections(const char *configfile, const char *sec, conf_list *list)
 } /* getconf_keys() */
 
 /*
-    End of "$Id: conf_sections.c,v 1.1 2000/01/07 08:50:51 bill Exp $".
+    End of "$Id: conf_sections.c,v 1.7 2000/03/02 20:47:17 carl Exp $".
 */

@@ -1,5 +1,5 @@
 /*
-   "$Id: conf.h,v 1.2 2000/01/08 22:29:53 vincent Exp $"
+   "$Id: conf.h,v 1.13 2000/03/02 20:47:07 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -406,5 +406,5 @@ extern "C" {
 #endif /* !CONF_H */
 
 /*
- * End of "$Id: conf.h,v 1.2 2000/01/08 22:29:53 vincent Exp $".
+ * End of "$Id: conf.h,v 1.13 2000/03/02 20:47:07 carl Exp $".
  */

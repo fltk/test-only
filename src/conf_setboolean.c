@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_getlong.c,v 1.1 2000/01/07 08:50:49 bill Exp $"
+   "$Id: conf_setboolean.c,v 1.7 2000/03/02 20:47:18 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -22,38 +22,34 @@
     USA.
 */
 
-#include "conf.h"
-#include <config.h>
+#include <FL/conf.h>
 
 /*
-        int getconf_long(const char *configfile, const char *key,
-                         long *lvalue)
+        int setconf_boolean(const char *configfile, const char *key, int bvalue)
 
         description:
-                gets the long value associated with a key in a config file
+               sets the boolean value associated with a key in a config file
         arguments:
-                configfile: path of config file
-                key: section/key to look for
+               configfile: path of config file
+               key: section/key to set
+               bvalue: boolean value associated with key (on = 1, off = 0)
         return values:
                 returns 0 for OK or error code defined in conf.h
-                lvalue: the long integer associated with key in section
 */
 int
-getconf_long(const char *configfile, const char *key, long *lvalue)
+setconf_boolean(const char *configfile,  const char *key, int bvalue)
 {
-        char    svalue[CONF_MAX_LINE_LEN];                                      /* tempory storage for string value */
         int     result;                                                         /* result of called functions */
 
-        if (!lvalue)                                                            /* NULL pointer was passed */
-                return CONF_ERR_ARGUMENT;
+        if (bvalue)
+                result = setconf(configfile, key, "TRUE");                      /* set string value in config file to ON */
+        else
+                result = setconf(configfile, key, "FALSE");                     /* set string value in config file to OFF */
 
-        if ((result = getconf(configfile, key, svalue, sizeof(svalue))))        /* get string value from config file */
-                return result;
+        return result;
 
-        *lvalue = atol(svalue);                                                 /* convert to long */
-        return CONF_SUCCESS;
-} /* getconf_long() */
+} /* setconf_boolean() */
 
 /*
-    End of "$Id: conf_getlong.c,v 1.1 2000/01/07 08:50:49 bill Exp $".
+    End of "$Id: conf_setboolean.c,v 1.7 2000/03/02 20:47:18 carl Exp $".
 */

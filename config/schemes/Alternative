@@ -13,7 +13,7 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
   themes = Alternative                            # theme plugins to load for this scheme
 
 [global colors]                                   # global color options
-#  background = gray                              # background color
+#  background = grey                              # background color
 #  LIGHT1 = red                                   # color for FL_LIGHT1
 #  LIGHT2 = green                                 # color for FL_LIGHT2
 #  LIGHT3 = blue                                  # color for FL_LIGHT3
@@ -29,7 +29,7 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     label font = helvetica                        # font of widget label
     text font = helvetica                         # font of text (if applicable)
     label type = normal                           # font type of widget label
-    color = gray                                  # color of widget
+    color = grey                                  # color of widget
     label color = black                           # font color of widget label
     selection color = puke green                  # background color of selected text
     selection text color = white                  # color of selected text
@@ -124,17 +124,17 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     color = 215                                   # color of tooltip window
     box = engraved                                # box around tooltips
 
-[fonts]                                           # user defined fonts (offsets into fl_font)
-# these are built in already
+[aliases]                                         # user defined fonts (offsets into fl_font)
+# the standard fonts are built in already
 #  helvetica = 0
 #  helvetica bold = 1
 #  helvetica italic = 2
 #  helvetica bold italic = 3
 #  ...
 
+# colors
 # use "col = #rrggbb" to select a 24 bit color
 # use "col = num" to select a cmap entry
-[colors]                                          # user defined colors
   red = #ff0000
   green = #00ff00
   blue = #0000ff

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.24 2000/01/10 06:31:03 bill Exp $"
+// "$Id: Fl_Style.H,v 1.25 2000/03/02 20:47:07 carl Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -95,10 +95,10 @@ struct FL_API Fl_Named_Style : public Fl_Style {
   Fl_Named_Style(const char* name, void (*revert)(Fl_Style*), Fl_Named_Style**);
 };
 
-FL_API const char* fl_find_config_file(const char* fn, const char* prefix=0, const char* suffix=0);
+FL_API const char* fl_find_config_file(const char*);
 
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.24 2000/01/10 06:31:03 bill Exp $".
+// End of "$Id: Fl_Style.H,v 1.25 2000/03/02 20:47:07 carl Exp $".
 //

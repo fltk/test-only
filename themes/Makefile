@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.14 2000/01/10 06:31:32 bill Exp $"
+# "$Id: Makefile,v 1.15 2000/03/02 20:47:19 carl Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -23,7 +23,7 @@
 # Please report all bugs and problems to "fltk-bugs@easysw.com".
 #
 
-THEMES=essai.fltp motif.fltp classic.fltp windows.fltp Alternative.fltp Carl.fltp KDE1.fltp KDE1_colors.fltp
+THEMES=essai.fltp motif.fltp classic.fltp windows.fltp Alternative.fltp KDE1.fltp KDE1_colors.fltp
 SCHEMES=Alternative KDE1 Classic Motif OldMotif Windows Essai
 
 all : $(THEMES)
@@ -67,13 +67,6 @@ Alternative.fltp : Alternative.o fl_arci.po ../lib/$(LIBNAME).a
 	$(CXX)  $(LD_PLUGIN_FLAGS) $(CXXFLAGS) -o $@ $< fl_arci.po
 	mv $@ ../config/themes
 
-CONF_LIBRARY = conf.o conf_get.o conf_sections.o conf_list_free.o conf_util.o
-
-Carl.fltp : Carl.o $(CONF_LIBRARY) fl_list_fonts.po ../lib/$(LIBNAME).a
-	$(CXX)  $(LD_PLUGIN_FLAGS) $(CXXFLAGS) -o $@ $< $(CONF_LIBRARY) fl_list_fonts.po
-	mv $@ ../config/themes
-	ln -sf $@ ../config/themes/default.fltp
-
 KDE1.fltp : KDE1.o $(CONF_LIBRARY) fl_list_fonts.po ../lib/$(LIBNAME).a
 	$(CXX)  $(LD_PLUGIN_FLAGS) $(CXXFLAGS) -o $@ $< $(CONF_LIBRARY) fl_list_fonts.po
 	mv $@ ../config/themes
@@ -104,5 +97,5 @@ install :
 #include makedepend
 
 #
-# End of "$Id: Makefile,v 1.14 2000/01/10 06:31:32 bill Exp $".
+# End of "$Id: Makefile,v 1.15 2000/03/02 20:47:19 carl Exp $".
 #

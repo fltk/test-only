@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_setboolean.c,v 1.1 2000/01/07 08:50:51 bill Exp $"
+   "$Id: conf_setlong.c,v 1.7 2000/03/02 20:47:18 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -22,34 +22,33 @@
     USA.
 */
 
-#include "conf.h"
+#include <FL/conf.h>
 
 /*
-        int setconf_boolean(const char *configfile, const char *key, int bvalue)
+        int setconf_long(const char *configfile, const char *key, long lvalue)
 
         description:
-               sets the boolean value associated with a key in a config file
+                sets the long value associated with a key in a config file
         arguments:
-               configfile: path of config file
-               key: section/key to set
-               bvalue: boolean value associated with key (on = 1, off = 0)
+                configfile: path of config file
+                key: section/key field to set
+                lvalue: the long integer associated with key in section
         return values:
                 returns 0 for OK or error code defined in conf.h
 */
 int
-setconf_boolean(const char *configfile,  const char *key, int bvalue)
+setconf_long(const char *configfile, const char *key, long lvalue)
 {
+        char    svalue[CONF_MAX_LINE_LEN];                                      /* tempory storage for string value */
         int     result;                                                         /* result of called functions */
 
-        if (bvalue)
-                result = setconf(configfile, key, "TRUE");                      /* set string value in config file to ON */
+        sprintf(svalue, "%ld", lvalue);                                         /* put long in string */
+        if ((result = setconf(configfile, key, svalue)))                        /* set string value in config file */
+                return result;
         else
-                result = setconf(configfile, key, "FALSE");                     /* set string value in config file to OFF */
-
-        return result;
-
-} /* setconf_boolean() */
+                return CONF_SUCCESS;
+} /* setconf_long() */
 
 /*
-    End of "$Id: conf_setboolean.c,v 1.1 2000/01/07 08:50:51 bill Exp $".
+    End of "$Id: conf_setlong.c,v 1.7 2000/03/02 20:47:18 carl Exp $".
 */

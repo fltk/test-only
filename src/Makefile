@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.67 2000/02/22 00:58:11 bill Exp $"
+# "$Id: Makefile,v 1.68 2000/03/02 20:47:15 carl Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -141,45 +141,41 @@ CPPFILES = \
 	fl_symbols.cxx \
 	fl_vertex.cxx \
 	fl_xpm.cxx \
-	Fl_theme.cxx
-
-#	fl_options.cxx
+	fl_options.cxx
 
 CFILES = \
 	scandir.c \
 	numericsort.c \
-	vsnprintf.c
+	vsnprintf.c \
+	conf.c \
+	conf_atol.c \
+	conf_endtrim.c \
+	conf_get.c \
+	conf_keys.c \
+	conf_level_indent.c \
+	conf_strcasecmp.c \
+	conf_strcnt.c \
+	conf_list_free.c \
+	conf_util.c \
+	conf_del.c \
+	conf_error.c \
+	conf_getboolean.c \
+	conf_getlong.c \
+	conf_sections.c \
+	conf_set.c \
+	conf_setboolean.c \
+	conf_setlong.c
 
 # files that were deleted:
 
+#	Fl_theme.cxx \
 #	Fl_Menu_.cxx \
 #	fl_background.cxx \
-
-#	conf.c \
-#	conf_atol.c \
-#	conf_endtrim.c \
-#	conf_get.c \
-#	conf_keys.c \
-#	conf_level_indent.c \
-#	conf_strcasecmp.c \
-#	conf_strcnt.c \
-#	conf_list_free.c \
-#	conf_util.c \
-#	conf_del.c \
-#	conf_error.c \
-#	conf_getboolean.c \
-#	conf_getlong.c \
-#	conf_sections.c \
-#	conf_set.c \
-#	conf_setboolean.c \
-#	conf_setlong.c
-
 #	fl_set_font.cxx \
 #	fl_set_fonts.cxx \
 #	Fl_Threads.cxx \
 #	Fl_Style_Plugins.cxx \
 #	Fl_Style_Util.cxx \
-
 #	Fl_Adjuster_SW.cxx \
 #	Fl_Browser_SW.cxx \
 #	Fl_Button_SW.cxx \
@@ -222,7 +218,7 @@ fltk.2.dll: $(OBJECTS:.o=.dll.o)
 	@$(DSOCOMMAND) -o $@ \
 	    $(OBJECTS:.o=.dll.o) $(CXXFLAGS) $(GLDLIBS)
 
-.SUFFIXES:	.cxx .h .o
+.SUFFIXES:	.cxx .c .h .o
 
 .cxx.o :
 	$(CXX) -I.. $(CXXFLAGS) -c $<
@@ -275,5 +271,5 @@ install: $(LIBRARY).a $(DSONAME)
 	@cp ../fltk-config $(bindir)
 
 #
-# End of "$Id: Makefile,v 1.67 2000/02/22 00:58:11 bill Exp $".
+# End of "$Id: Makefile,v 1.68 2000/03/02 20:47:15 carl Exp $".
 #

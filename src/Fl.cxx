@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.82 2000/02/18 08:39:16 bill Exp $"
+// "$Id: Fl.cxx,v 1.83 2000/03/02 20:47:13 carl Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -420,7 +420,7 @@ int Fl::handle(int event, Fl_Window* window)
   case FL_RELEASE: {
     w = pushed();
     if (!(event_state()&(FL_BUTTON1|FL_BUTTON2|FL_BUTTON3))) pushed_=0;
-    int r = send(event, w, window);
+    int r = w ? send(event, w, window) : 0;
     fl_fix_focus(1);
     return r;}
 
@@ -561,6 +561,8 @@ Fl_Window::~Fl_Window() {
 // not on screen:	!window->shown();
 // not on screen but known by system: does not happen in fltk
 
+extern void fl_startup();
+
 void Fl_Window::show() {
   if (parent()) {
     set_visible();
@@ -569,7 +571,10 @@ void Fl_Window::show() {
     Fl_Group::current(0); // get rid of very common user bug: forgot end()
 
     // this is the secret place where the world is initialized:
-    Fl::loadtheme();
+    fl_open_display();
+    // one-time startup stuff for schemes & config
+    fl_startup();
+// CET - FIXME    Fl::loadtheme();
 
     layout();
 
@@ -741,5 +746,5 @@ void Fl_Window::flush() {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.82 2000/02/18 08:39:16 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.83 2000/03/02 20:47:13 carl Exp $".
 //
