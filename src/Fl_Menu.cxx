@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.139 2003/03/31 07:17:46 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.140 2003/04/27 01:54:52 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -620,7 +620,10 @@ int MWindow::handle(int event) {
     // make the first click pick the item (which might be useful for
     // a Choice style list) by setting event_is_click(false) before
     // doing the popup.
-    if (p.state == INITIAL_STATE && event_is_click()) return 1;
+    if (p.state == INITIAL_STATE && event_is_click()) {
+      // except for buttons in the menubar, they execute on click:
+      if (!p.menubar || p.level || p.nummenus > 1) return 1;
+    }
   EXECUTE: // execute the item pointed to by w and current item
     // If they click outside menu we quit:
     if (p.indexes[p.level]<0) {exit_modal(); return 1;}
@@ -820,5 +823,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.139 2003/03/31 07:17:46 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.140 2003/04/27 01:54:52 spitzak Exp $".
 //

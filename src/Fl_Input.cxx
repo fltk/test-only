@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.79 2003/01/14 06:51:02 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.80 2003/04/27 01:54:52 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -1142,7 +1142,8 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 #if DND_OUT
     // See if they clicked in the selected test, if so we start a timeout
     // to see if they hold it long enough to start dragging:
-    if (focused() && type()!=SECRET &&
+    if (!event_state(ALT|COMMAND|CTRL|SHIFT) &&
+	focused() && type()!=SECRET &&
 	(newpos >= mark() && newpos < position() ||
 	newpos >= position() && newpos < mark())) {
       drag_start = newpos;
@@ -1317,5 +1318,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.79 2003/01/14 06:51:02 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.80 2003/04/27 01:54:52 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.61 2003/03/09 07:51:36 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.62 2003/04/27 01:54:53 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -112,10 +112,10 @@ int MenuBar::handle(int event) {
     if (event_state(COMMAND|ALT)) for (i = 0; i < children; i++) {
       Widget* w = child(i);
       if (w->active() && w->test_label_shortcut()) {
-	/*if (w->is_group())*/ {value(i); goto J1;} // menu title
-//  	execute(w); // button in the menu bar
+	if (w->is_group()) {value(i); goto J1;} // menu title
+  	execute(w); // button in the menu bar
 //  	if (checkmark(w)) redraw();
-//  	return 1;
+  	return 1;
       }
     }
     return 0;
@@ -165,5 +165,5 @@ MenuBar::MenuBar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.61 2003/03/09 07:51:36 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.62 2003/04/27 01:54:53 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.35 2002/12/10 02:00:44 easysw Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.36 2003/04/27 01:54:53 spitzak Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -58,7 +58,6 @@ static Widget* append(
   Widget* o;
   if (flags & SUBMENU) {
     o = new ItemGroup();
-    Group::current(0);
   } else {
     o = new Item();
   }
@@ -249,5 +248,5 @@ Widget* Menu::add(const char *str) {
 }
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.35 2002/12/10 02:00:44 easysw Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.36 2003/04/27 01:54:53 spitzak Exp $".
 //

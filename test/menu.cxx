@@ -38,21 +38,25 @@ StringList thelist(strings, sizeof(strings)/sizeof(*strings));
 
 void build_hierarchy() {
   ItemGroup* g = new ItemGroup("submenu&1");
+  g->begin();
   new Item("Item &1");
   new Item("Item &2");
   new Item("Item &3");
   new Item("Item &4");
   g->end();
   g = new ItemGroup("submenu&2");
+  g->begin();
   (new Item("Item &1"))->labelsize(10);
   (new Item("Item &2"))->labelsize(14);
   (new Item("Item &3"))->labelsize(18);
   (new Item("Item &4"))->labelsize(22);
   //g->deactivate();
   Group* g1 = new ItemGroup("&nested menu");
+  g1->begin();
   new Item("Item &1");
   new Item("Item &2");
   Group* g2 = new ItemGroup("deeper");
+  g2->begin();
   (new Item("Very low level items"))->deactivate();
   (new Item("Are here on this menu"))->deactivate();
   new Item("In this test");
@@ -72,6 +76,7 @@ int main(int argc, char **argv) {
   menubar.begin();
 
   ItemGroup file("&File");
+  file.begin();
   Item* o = new Item("Quit");
   o->shortcut(ALT+'q');
   o->callback(quit_cb);
@@ -80,6 +85,7 @@ int main(int argc, char **argv) {
   build_hierarchy();
   file.end();
   ItemGroup edit("&Edit");
+  edit.begin();
   (new Item("Undo"))->shortcut(ALT+'z');
   (new Item("Cut"))->shortcut(ALT+'x');
   (new Item("Copy"))->shortcut(ALT+'c');
@@ -88,6 +94,7 @@ int main(int argc, char **argv) {
   edit.end();
   //edit.deactivate();
   ItemGroup options("&Options");
+  options.begin();
   o = new Item("Red"); o->type(Item::RADIO);
   o = new Item("Green"); o->type(Item::RADIO);
   o = new Item("Blue"); o->type(Item::RADIO);

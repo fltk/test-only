@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.25 2003/03/09 07:51:36 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.26 2003/04/27 01:54:52 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -125,7 +125,6 @@ int Item::handle(int) {return 0;}
 ItemGroup::ItemGroup(const char* l) : Menu(0,0,0,0,l) {
   style(::style);
   align(ALIGN_LEFT|ALIGN_INSIDE);
-  begin(); // undo the end() in Menu
 }
 
 // implementation of draw & layout should be identical to Item type()==0

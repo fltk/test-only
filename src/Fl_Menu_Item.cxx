@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.cxx,v 1.9 2003/04/20 03:17:51 easysw Exp $"
+// "$Id: Fl_Menu_Item.cxx,v 1.10 2003/04/27 01:54:53 spitzak Exp $"
 //
 // The obsolete MenuItem structure.  This code should not be used
 // in new fltk programs.
@@ -70,7 +70,7 @@ static const Fl_Menu_Item* add(Group* g, const Fl_Menu_Item* m,void* data) {
     Widget* o;
     const Fl_Menu_Item* next = m+1;
     if (m->flags & (FL_SUBMENU | FL_SUBMENU_POINTER)) {
-      ItemGroup* g = new ItemGroup(m->text); g->end(); o = g;
+      ItemGroup* g = new ItemGroup(m->text); o = g;
       if (m->flags & FL_SUBMENU_POINTER) {
 	add(g, (Fl_Menu_Item*)(m->user_data_), data);
       } else {
