@@ -1,5 +1,5 @@
 //
-// "$Id: fl_set_fonts.cxx,v 1.11 1999/09/14 17:52:45 carl Exp $"
+// "$Id: fl_set_fonts.cxx,v 1.12 1999/11/10 19:27:34 carl Exp $"
 //
 // More font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -316,12 +316,13 @@ int Fl_Font_::encodings(const char**& arrayp) const {
     if (!*c++ || !*c) continue;
     // insert-sort the new encoding into list:
     int n;
+    int m;
     for (n = count; n > 0; n--) {
       int cmp = numericsort(array[n-1], c);
       if (cmp < 0) break;
       if (cmp == 0) goto CONTINUE;
     }
-    for (int m = count; m > n; m--) array[m] = array[m-1];
+    for (m = count; m > n; m--) array[m] = array[m-1];
     array[n] = c;
     count++;
     if (count >= 128) break;
@@ -351,13 +352,14 @@ int Fl_Font_::sizes(int*& sizep) const {
     if (!d) continue;
     int s = strtol(d,0,10);
     // insert-sort the new size into list:
+    int m;
     int n;
     for (n = count; n > 0; n--) {
       int cmp = array[n-1]-s;
       if (cmp < 0) break;
       if (cmp == 0) goto CONTINUE;
     }
-    for (int m = count; m > n; m--) array[m] = array[m-1];
+    for (m = count; m > n; m--) array[m] = array[m-1];
     array[n] = s;
     count++;
     if (count >= 128) break;
@@ -370,5 +372,5 @@ int Fl_Font_::sizes(int*& sizep) const {
 #endif
 
 //
-// End of "$Id: fl_set_fonts.cxx,v 1.11 1999/09/14 17:52:45 carl Exp $".
+// End of "$Id: fl_set_fonts.cxx,v 1.12 1999/11/10 19:27:34 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.15 1999/11/02 20:55:39 carl Exp $"
+// "$Id: Fl_arg.cxx,v 1.16 1999/11/10 19:27:32 carl Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -55,7 +55,7 @@ static int match(const char *a, const char *match, int atleast = 1) {
 }
 
 // flags set by previously parsed arguments:
-extern bool fl_show_iconic; // in Fl_x.C
+extern int fl_show_iconic; // in Fl_x.C
 static char arg_called;
 static char return_i;
 static const char* name;
@@ -382,5 +382,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.15 1999/11/02 20:55:39 carl Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.16 1999/11/10 19:27:32 carl Exp $".
 //

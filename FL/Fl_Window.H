@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.27 1999/11/10 18:05:57 carl Exp $"
+// "$Id: Fl_Window.H,v 1.28 1999/11/10 19:27:29 carl Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -47,9 +47,9 @@ public:
   int non_modal() const	{return flags() & (FL_NON_MODAL|FL_MODAL);}
 
   void move(int x, int y);
-  void hotspot(int x, int y, bool offscreen = 0);
-  void hotspot(const Fl_Widget*, bool offscreen = 0);
-  void hotspot(const Fl_Widget& p, bool offscreen = 0) {hotspot(&p,offscreen);}
+  void hotspot(int x, int y, int offscreen = 0);
+  void hotspot(const Fl_Widget*, int offscreen = 0);
+  void hotspot(const Fl_Widget& p, int offscreen = 0) {hotspot(&p,offscreen);}
   void free_position()	{clear_flag(FL_FORCE_POSITION);}
   void size_range(int a, int b, int c=0, int d=0, int e=0, int f=0)
     { minw=a; minh=b; maxw=c; maxh=d; dw=e; dh=f; size_range_(); }
@@ -119,5 +119,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.27 1999/11/10 18:05:57 carl Exp $".
+// End of "$Id: Fl_Window.H,v 1.28 1999/11/10 19:27:29 carl Exp $".
 //

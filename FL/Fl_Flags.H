@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Flags.H,v 1.3 1999/08/23 16:43:05 vincent Exp $"
+// "$Id: Fl_Flags.H,v 1.4 1999/11/10 19:27:28 carl Exp $"
 //
 // Unified flags set for fltk
 //
@@ -36,7 +36,7 @@
 // drawing, want all of this information at once, and providing it
 // as a single word is the easiest way.
 
-typedef unsigned Fl_Flags;
+typedef int Fl_Flags;
 typedef Fl_Flags Fl_Align; // for back compatability
 
 enum {

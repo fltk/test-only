@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.H,v 1.8 1999/10/17 20:40:12 vincent Exp $"
+// "$Id: Fl_Valuator.H,v 1.9 1999/11/10 19:27:28 carl Exp $"
 //
 // Valuator header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,7 +38,7 @@ class FL_API Fl_Valuator : public Fl_Widget {
 public:
 
   double value() const {return value_;}
-  bool value(double);
+  int value(double);
 
   double step() const {return step_;}
   void step(double a) {step_ = a;}
@@ -63,7 +63,7 @@ protected:
 
   Fl_Valuator(int X, int Y, int W, int H, const char* L);
 
-  bool horizontal() const {return type()&1;}
+  int horizontal() const {return type()&1;}
   double previous_value() const {return previous_value_;}
   double softclamp(double value); // clamps if previous value was in range
   void handle_push() {previous_value_ = value_;}
@@ -84,5 +84,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Valuator.H,v 1.8 1999/10/17 20:40:12 vincent Exp $".
+// End of "$Id: Fl_Valuator.H,v 1.9 1999/11/10 19:27:28 carl Exp $".
 //

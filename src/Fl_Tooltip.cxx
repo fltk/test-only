@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.18 1999/11/10 18:06:06 carl Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.19 1999/11/10 19:27:31 carl Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -92,7 +92,7 @@ static void tooltip_timeout(void*) {
   window->show();
 }
 
-static bool cheesy_flag = false;
+static int cheesy_flag = 0;
 
 void
 Fl_Tooltip::enter(Fl_Widget* w) {
@@ -121,9 +121,9 @@ Fl_Tooltip::exit(Fl_Widget *w) {
   if (window) {
     // This flag makes sure that tootip_enter() isn't executed because of
     // this hide() which could cause unwanted recursion in tooltip_enter
-    cheesy_flag = true;
+    cheesy_flag = 1;
     window->hide();
-    cheesy_flag = false;
+    cheesy_flag = 0;
   }
 }
 
@@ -135,5 +135,5 @@ static void revert(Fl_Style* s) {
 Fl_Style Fl_Tooltip::default_style("Tooltip", revert);
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.18 1999/11/10 18:06:06 carl Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.19 1999/11/10 19:27:31 carl Exp $".
 //

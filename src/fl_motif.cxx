@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.5 1999/11/10 15:11:28 carl Exp $"
+// "$Id: fl_motif.cxx,v 1.6 1999/11/10 19:27:33 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -49,43 +49,43 @@ extern void fl_flatx(Fl_Boxtype b, int x, int y, int w, int h,
 
 // some new boxtypes (look familiar?)
 static const Fl_Boxtype_ thick_motif_down_box = {
-  fl_frame, "HHVVHHVVHHVV", &thick_motif_down_box, &thick_motif_down_box, 3,3,6,6, true
+  fl_frame, "HHVVHHVVHHVV", &thick_motif_down_box, &thick_motif_down_box, 3,3,6,6, 1
 };
 
 static const Fl_Boxtype_ thick_motif_up_box = {
-  fl_frame, "VVHHVVHHVVHH", &thick_motif_up_box, &thick_motif_up_box, 3,3,6,6, true
+  fl_frame, "VVHHVVHHVVHH", &thick_motif_up_box, &thick_motif_up_box, 3,3,6,6, 1
 };
 
 static const Fl_Boxtype_ thick_motif_box = {
-  fl_frame, "VVHHVVHHVVHH", &thick_motif_down_box, &thick_motif_box, 3,3,6,6, true
+  fl_frame, "VVHHVVHHVVHH", &thick_motif_down_box, &thick_motif_box, 3,3,6,6, 1
 };
 
 static const Fl_Boxtype_ thin_motif_down_box = {
-  fl_frame, "HHVVHHVV", &thin_motif_down_box, &thin_motif_down_box, 2,2,4,4, true
+  fl_frame, "HHVVHHVV", &thin_motif_down_box, &thin_motif_down_box, 2,2,4,4, 1
 };
 
 static const Fl_Boxtype_ thin_motif_up_box = {
-  fl_frame, "VVHHVVHH", &thin_motif_up_box, &thin_motif_up_box, 2,2,4,4, true
+  fl_frame, "VVHHVVHH", &thin_motif_up_box, &thin_motif_up_box, 2,2,4,4, 1
 };
 
 static const Fl_Boxtype_ thin_motif_box = {
-  fl_frame, "VVHHVVHH", &thin_motif_down_box, &thin_motif_box, 2,2,4,4, true
+  fl_frame, "VVHHVVHH", &thin_motif_down_box, &thin_motif_box, 2,2,4,4, 1
 };
 
 static const Fl_Boxtype_ thick_motif_highlight_box = {
-  fl_flatx, 0, &thick_motif_down_box, &thick_motif_up_box, 3,3,6,6, true
+  fl_flatx, 0, &thick_motif_down_box, &thick_motif_up_box, 3,3,6,6, 1
 };
 
 static const Fl_Boxtype_ thin_motif_highlight_box = {
-  fl_flatx, 0, &thin_motif_down_box, &thin_motif_up_box, 2,2,4,4, true
+  fl_flatx, 0, &thin_motif_down_box, &thin_motif_up_box, 2,2,4,4, 1
 };
 
 static const Fl_Boxtype_ thick_motif_title_box = {
-  fl_flatx, 0, &thick_motif_up_box, &thick_motif_up_box, 3,3,6,6, true
+  fl_flatx, 0, &thick_motif_up_box, &thick_motif_up_box, 3,3,6,6, 1
 };
 
 static const Fl_Boxtype_ thin_motif_title_box = {
-  fl_flatx, 0, &thin_motif_up_box, &thin_motif_up_box, 2,2,4,4, true
+  fl_flatx, 0, &thin_motif_up_box, &thin_motif_up_box, 2,2,4,4, 1
 };
 
 static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
@@ -284,5 +284,5 @@ int fl_motif() {
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.5 1999/11/10 15:11:28 carl Exp $".
+// End of "$Id: fl_motif.cxx,v 1.6 1999/11/10 19:27:33 carl Exp $".
 //

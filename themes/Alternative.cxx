@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.5 1999/11/10 15:11:30 carl Exp $"
+// "$Id: Alternative.cxx,v 1.6 1999/11/10 19:27:36 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -39,19 +39,19 @@ extern void fl_flatx(Fl_Boxtype b, int x, int y, int w, int h,
 
 // a couple of of new boxtypes (look familiar?)
 static const Fl_Boxtype_ alt_down_box = {
-  fl_frame, "NNUUJJXXAAAA", &alt_down_box, &alt_down_box, 3,3,6,6, true
+  fl_frame, "NNUUJJXXAAAA", &alt_down_box, &alt_down_box, 3,3,6,6, 1
 };
 
 static const Fl_Boxtype_ alt_up_box = {
-  fl_frame, "AAAAXXJJUUNN", &alt_down_box, &alt_up_box, 3,3,6,6, true
+  fl_frame, "AAAAXXJJUUNN", &alt_down_box, &alt_up_box, 3,3,6,6, 1
 };
 
 static const Fl_Boxtype_ alt_menu_box = {
-  fl_flatx, 0, FL_THIN_DOWN_BOX, FL_THIN_DOWN_BOX, 1,1,2,2, true
+  fl_flatx, 0, FL_THIN_DOWN_BOX, FL_THIN_DOWN_BOX, 1,1,2,2, 1
 };
 
 static const Fl_Boxtype_ alt_menu_title_box = {
-  fl_flatx, 0, FL_THIN_DOWN_BOX, FL_UP_BOX, 1,1,2,2, true
+  fl_flatx, 0, FL_THIN_DOWN_BOX, FL_UP_BOX, 1,1,2,2, 1
 };
 
 // some old stuff for boxtype drawing
@@ -243,5 +243,5 @@ int fltk_theme(int, char** argv) {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.5 1999/11/10 15:11:30 carl Exp $".
+// End of "$Id: Alternative.cxx,v 1.6 1999/11/10 19:27:36 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.60 1999/11/10 16:39:31 vincent Exp $"
+// "$Id: Fl_win32.cxx,v 1.61 1999/11/10 19:27:32 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -671,7 +671,7 @@ void Fl_Window::layout() {
 // Innards of Fl_Window::create():
 
 #include <FL/Fl_Window.H>
-bool fl_show_iconic;		// true if called from iconize()
+int fl_show_iconic;		// true if called from iconize()
 int fl_disable_transient_for;	// secret method of removing TRANSIENT_FOR
 const Fl_Window* fl_modal_for;	// set by show(parent) or exec()
 const Fl_Window* fl_mdi_window;	// set by show_inside()
@@ -867,5 +867,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.60 1999/11/10 16:39:31 vincent Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.61 1999/11/10 19:27:32 carl Exp $".
 //

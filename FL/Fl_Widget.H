@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.35 1999/11/10 18:05:57 carl Exp $"
+// "$Id: Fl_Widget.H,v 1.36 1999/11/10 19:27:29 carl Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -234,8 +234,8 @@ protected:
   void w(int v) {w_ = v;}
   void h(int v) {h_ = v;}
 
-  void set_flag(unsigned c) {flags_ |= c;}
-  void clear_flag(unsigned c) {flags_ &= ~c;}
+  void set_flag(int c) {flags_ |= c;}
+  void clear_flag(int c) {flags_ &= ~c;}
 
   void draw_box() const; // draws the style's box around widget and fills
   void draw_frame() const; // just draws the edge of the box if possible
@@ -279,5 +279,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.35 1999/11/10 18:05:57 carl Exp $".
+// End of "$Id: Fl_Widget.H,v 1.36 1999/11/10 19:27:29 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.20 1999/11/10 18:06:05 carl Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.21 1999/11/10 19:27:30 carl Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,10 +32,9 @@ void Fl_Menu_Button::draw() {
   draw_button();
   draw_label();
   // draw the little mark at the right:
-  int H = (labelsize()-3)&-2;
+  int H = (labelsize()-3)&(~1);
   int X = x()+w()-H*2;
   int Y = y()+(h()-H)/2;
-// CET - FIXME
   Fl_Color dark = FL_DARK3, light = FL_LIGHT2;
   if (!active_r()) { dark = fl_inactive(dark); light = fl_inactive(light); }
   fl_color(dark); fl_line(X+H/2, Y+H, X, Y, X+H, Y);
@@ -100,5 +99,5 @@ Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l)
 Fl_Style Fl_Menu_Button::default_style("Menu_Button");
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.20 1999/11/10 18:06:05 carl Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.21 1999/11/10 19:27:30 carl Exp $".
 //

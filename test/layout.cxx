@@ -56,12 +56,12 @@ int main(int argc, char ** argv) {
 
   // I had to add this new group so that we can get the desired layout
   // type, since you no longer can change it on a window:
-  Fl_Align_Group main_group(0,0,600,400,0,2,true,0,5,5);
+  Fl_Align_Group main_group(0,0,600,400,0,2,1,0,5,5);
 
-  Fl_Align_Group* o = new Fl_Align_Group(0,0,0,0,0,2,false,FL_ALIGN_TOP_LEFT);
+  Fl_Align_Group* o = new Fl_Align_Group(0,0,0,0,0,2,0,FL_ALIGN_TOP_LEFT);
   {
     Fl_Align_Group* o = new Fl_Align_Group(0,0,0,0,"Tiled Buttons",
-					   3,false,0,10,10);
+					   3,0,0,10,10);
     o->box(FL_DOWN_BOX);
     char *l,labels[18];
     l=labels;
@@ -74,7 +74,7 @@ int main(int argc, char ** argv) {
   }
   {
     Fl_Align_Group* o=new Fl_Align_Group(0,0,0,0,"Fl_Align_Group options",
-					 3,true,0,10,10);
+					 3,1,0,10,10);
     o->box(FL_DOWN_BOX);
     static char* labels[3][3]={{"Vertical","Horizontal",""},
 			       {"Left","Right","Center"},
@@ -90,7 +90,7 @@ int main(int argc, char ** argv) {
     o->end();
   }
   o->end();
-  o = lower_half = new Fl_Align_Group(0,0,0,0,0,4,true,FL_ALIGN_LEFT,10,10);
+  o = lower_half = new Fl_Align_Group(0,0,0,0,0,4,1,FL_ALIGN_LEFT,10,10);
   o->box(FL_DOWN_BOX);
   static char* labels[24]={"Although","these","labels","have",
                            "different","lengths",",","the",

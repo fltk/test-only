@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.H,v 1.11 1999/11/10 18:05:56 carl Exp $"
+// "$Id: Fl_Tooltip.H,v 1.12 1999/11/10 19:27:28 carl Exp $"
 //
 // Tooltip definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -42,7 +42,7 @@ public:
   static void enter(Fl_Widget* w);
 
   // A widget may also pop up tooltips for internal parts by calling this:
-  static void enter(Fl_Widget* w, int x, int y, int w, int h, const char* tip);
+  static void enter(Fl_Widget* w, int X, int Y, int W, int H, const char* tip);
 
   // This is called when a widget is destroyed or hidden:
   static void exit(Fl_Widget *w);
@@ -67,5 +67,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Tooltip.H,v 1.11 1999/11/10 18:05:56 carl Exp $".
+// End of "$Id: Fl_Tooltip.H,v 1.12 1999/11/10 19:27:28 carl Exp $".
 //

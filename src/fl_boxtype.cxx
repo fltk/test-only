@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.19 1999/11/10 14:18:52 carl Exp $"
+// "$Id: fl_boxtype.cxx,v 1.20 1999/11/10 19:27:33 carl Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,7 @@ static void no_draw(Fl_Boxtype, int, int, int, int,
 		    Fl_Color, Fl_Flags)
 {}
 const Fl_Boxtype_ fl_no_box = {
-  no_draw, 0, &fl_no_box, &fl_no_box, 0,0,0,0, false
+  no_draw, 0, &fl_no_box, &fl_no_box, 0,0,0,0, 0
 };
 static Fl_Boxtype_Definer none("none", fl_no_box);
 
@@ -50,7 +50,7 @@ static void flat_draw(Fl_Boxtype, int x, int y, int w, int h,
   }
 }
 const Fl_Boxtype_ fl_flat_box = {
-  flat_draw, 0, &fl_flat_box, &fl_flat_box, 0,0,0,0, true
+  flat_draw, 0, &fl_flat_box, &fl_flat_box, 0,0,0,0, 1
 };
 static Fl_Boxtype_Definer flat("flat", fl_flat_box);
 
@@ -101,32 +101,32 @@ FL_EXPORT void fl_frame(Fl_Boxtype b, int x, int y, int w, int h,
 }
 
 Fl_Boxtype_ fl_up_box = {
-  fl_frame, "2AAXXIIUU", &fl_down_box, &fl_up_box, 2,2,4,4, true
+  fl_frame, "2AAXXIIUU", &fl_down_box, &fl_up_box, 2,2,4,4, 1
 };
 static Fl_Boxtype_Definer up("up", fl_up_box);
 
 Fl_Boxtype_ fl_down_box = {
-  fl_frame, "2XXIIUUAA", &fl_down_box, &fl_down_box, 2,2,4,4, true
+  fl_frame, "2XXIIUUAA", &fl_down_box, &fl_down_box, 2,2,4,4, 1
 };
 static Fl_Boxtype_Definer down("down", fl_down_box);
 
 const Fl_Boxtype_ fl_thin_box = {
-  fl_frame, "2HHVV", &fl_thin_down_box, &fl_thin_box, 1,1,2,2,true
+  fl_frame, "2HHVV", &fl_thin_down_box, &fl_thin_box, 1,1,2,2,1
 };
 static Fl_Boxtype_Definer thin("thin", fl_thin_box);
 
 const Fl_Boxtype_ fl_thin_down_box = {
-  fl_frame, "2VVHH", &fl_thin_down_box, &fl_thin_down_box, 1,1,2,2,true
+  fl_frame, "2VVHH", &fl_thin_down_box, &fl_thin_down_box, 1,1,2,2,1
 };
 static Fl_Boxtype_Definer thindown("thin down", fl_thin_down_box);
 
 const Fl_Boxtype_ fl_engraved_box = {
-  fl_frame, "HHVVVVHH", &fl_engraved_box, &fl_engraved_box, 2,2,4,4,true
+  fl_frame, "HHVVVVHH", &fl_engraved_box, &fl_engraved_box, 2,2,4,4,1
 };
 static Fl_Boxtype_Definer engraved("engraved", fl_engraved_box);
 
 const Fl_Boxtype_ fl_embossed_box = {
-  fl_frame, "VVHHHHVV", &fl_engraved_box, &fl_engraved_box, 2,2,4,4,true
+  fl_frame, "VVHHHHVV", &fl_engraved_box, &fl_engraved_box, 2,2,4,4,1
 };
 static Fl_Boxtype_Definer embossed("embossed", fl_embossed_box);
 
@@ -143,7 +143,7 @@ static void border_draw(Fl_Boxtype, int x, int y, int w, int h,
   }
 }
 const Fl_Boxtype_ fl_border_box = {
-  border_draw, 0, &fl_border_box, &fl_border_box, 1,1,2,2,true
+  border_draw, 0, &fl_border_box, &fl_border_box, 1,1,2,2,1
 };
 static Fl_Boxtype_Definer border("border", fl_border_box);
 
@@ -156,7 +156,7 @@ static void bf_draw(Fl_Boxtype, int x, int y, int w, int h,
   fl_color(c); fl_rect(x, y, w, h);
 }
 const Fl_Boxtype_ fl_border_frame = {
-  bf_draw, 0, &fl_border_frame, &fl_border_frame, 1,1,2,2, false
+  bf_draw, 0, &fl_border_frame, &fl_border_frame, 1,1,2,2, 0
 };
 static Fl_Boxtype_Definer borderframe("border frame", fl_border_frame);
 
@@ -176,23 +176,23 @@ void fl_flatx(Fl_Boxtype b, int x, int y, int w, int h,
 }
 
 const Fl_Boxtype_ fl_flat_up_box = {
-  fl_flatx, 0, FL_UP_BOX, FL_FLAT_BOX, 2,2,4,4, true
+  fl_flatx, 0, FL_UP_BOX, FL_FLAT_BOX, 2,2,4,4, 1
 };
 static Fl_Boxtype_Definer flatup("flat up", fl_flat_up_box);
 
 const Fl_Boxtype_ fl_flat_down_box = {
-  fl_flatx, 0, FL_DOWN_BOX, FL_FLAT_BOX, 2,2,4,4, true
+  fl_flatx, 0, FL_DOWN_BOX, FL_FLAT_BOX, 2,2,4,4, 1
 };
 static Fl_Boxtype_Definer flatdown("flat down", fl_flat_down_box);
 
 const Fl_Boxtype_ fl_highlight_down_box = {
-  fl_flatx, 0, FL_DOWN_BOX, FL_UP_BOX, 2,2,4,4, true
+  fl_flatx, 0, FL_DOWN_BOX, FL_UP_BOX, 2,2,4,4, 1
 };
 static Fl_Boxtype_Definer highlight("highlight", fl_highlight_down_box);
 static Fl_Boxtype_Definer highlightdown("highlight down", fl_highlight_down_box);
 
 const Fl_Boxtype_ fl_highlight_up_box = {
-  fl_flatx, 0, FL_UP_BOX, FL_UP_BOX, 2,2,4,4, true
+  fl_flatx, 0, FL_UP_BOX, FL_UP_BOX, 2,2,4,4, 1
 };
 static Fl_Boxtype_Definer highlightup("highlight up", fl_highlight_up_box);
 
@@ -205,5 +205,5 @@ const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
 Fl_Boxtype_Definer* Fl_Boxtype_Definer::first = 0;
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.19 1999/11/10 14:18:52 carl Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.20 1999/11/10 19:27:33 carl Exp $".
 //
