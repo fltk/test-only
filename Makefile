@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.29 2002/12/13 04:54:04 easysw Exp $"
+# "$Id: Makefile,v 1.30 2002/12/18 20:13:15 easysw Exp $"
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -25,7 +25,7 @@
 
 include makeinclude
 
-DIRS	=	src images OpenGL fluid test documentation
+DIRS	=	src images OpenGL fluid test
 
 all: makeinclude
 	for dir in $(DIRS); do\
@@ -57,7 +57,8 @@ depend: makeinclude
 	done
 
 clean:
-	-$(RM) core *.o
+	$(RM) core
+	$(RM) core.* *.o
 	for dir in $(DIRS); do\
 		echo "=== cleaning $$dir ===";\
 		(cd $$dir; $(MAKE) $(MFLAGS) clean) || break;\
@@ -97,5 +98,5 @@ native-dist:
 
 
 #
-# End of "$Id: Makefile,v 1.29 2002/12/13 04:54:04 easysw Exp $".
+# End of "$Id: Makefile,v 1.30 2002/12/18 20:13:15 easysw Exp $".
 #

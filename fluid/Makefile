@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.45 2002/12/15 10:42:50 spitzak Exp $"
+# "$Id: Makefile,v 1.46 2002/12/18 20:13:15 easysw Exp $"
 #
 # Fluid makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -57,7 +57,7 @@ CPPFILES = \
 CFILES	=
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.cxx=.o)
-TARGETS	= fluid$(EXEEXT)
+TARGETS	= fluid$(EXEEXT) $(FLUID)
 
 
 #
@@ -104,13 +104,30 @@ fluid$(EXEEXT): $(OBJECTS) ../lib/$(LIBPREFIX)fltk$(LIBSUFFIX) \
 
 
 #
+# Build shared FLUID...
+#
+
+fluid-shared$(EXEEXT): $(OBJECTS) ../src/$(DSOPREFIX)fltk$(DSOSUFFIX) \
+		../images/$(DSOPREFIX)fltk_images$(DSOSUFFIX)
+	echo Linking $@...
+	$(CXX) $(CXXFLAGS) -o $@ $(OBJECTS) $(LINKSHARED) $(LIBS)
+
+
+#
 # Install everything...
 #
 
 install:
+	echo "Installing FLUID in $(bindir)..."
+	-$(MKDIR) $(bindir)
+	$(CP) $(FLUID) $(bindir)/fluid$(EXEEXT)
+	$(STRIP) $(bindir)/fluid$(EXEEXT)
+	$(bindir)/fltk-config --post $(bindir)/fluid$(EXEEXT)
+	$(CHMOD) 755 $(bindir)/fluid$(EXEEXT)
 
 
 uninstall:
+	$(RM) $(bindir)/fluid
 
 
 #
@@ -127,5 +144,5 @@ rebuild:
 
 
 #
-# End of "$Id: Makefile,v 1.45 2002/12/15 10:42:50 spitzak Exp $".
+# End of "$Id: Makefile,v 1.46 2002/12/18 20:13:15 easysw Exp $".
 #

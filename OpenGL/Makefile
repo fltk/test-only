@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.16 2002/12/15 10:42:48 spitzak Exp $"
+# "$Id: Makefile,v 1.17 2002/12/18 20:13:15 easysw Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -44,7 +44,7 @@ CPPFILES = \
 CFILES	=
 
 LIBNAME	=	../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
-DSONAME	=	../lib/$(DSOPREFIX)fltk_gl$(DSOSUFFIX)
+DSONAME	=	$(DSOPREFIX)fltk_gl$(DSOSUFFIX)
 OBJECTS =	$(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
 
@@ -96,31 +96,31 @@ $(LIBNAME):	$(OBJECTS)
 	$(LIBCOMMAND) $@ $(OBJECTS)
 	$(RANLIB) $@
 
-../lib/libfltk_gl.so.2.0: $(OBJECTS)
+libfltk_gl.so.2.0: $(OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
-	-$(RM) ../lib/libfltk_gl.so
-	$(LN) libfltk_gl.so.2.0 ../lib/libfltk_gl.so
+	$(RM) libfltk_gl.so
+	$(LN) libfltk_gl.so.2.0 libfltk_gl.so
 
-../lib/libfltk_gl.sl.2.0: $(OBJECTS)
+libfltk_gl.sl.2.0: $(OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
-	-$(RM) ../lib/libfltk_gl.sl
-	$(LN) libfltk_gl.sl.2.0 ../lib/libfltk_gl.sl
+	$(RM) libfltk_gl.sl
+	$(LN) libfltk_gl.sl.2.0 libfltk_gl.sl
 
-../lib/libfltk_gl.2.0.dylib: $(OBJECTS)
+libfltk_gl.2.0.dylib: $(OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
-	-$(RM) ../lib/libfltk_gl.dylib
-	$(LN) libfltk_gl.2.0.dylib ../lib/libfltk_gl.dylib
+	$(RM) libfltk_gl.dylib
+	$(LN) libfltk_gl.2.0.dylib libfltk_gl.dylib
 
-../lib/libfltk_gl_s.a: $(OBJECTS)
-	echo $(DSOCOMMAND) ../lib/libfltk_gl_s.o ...
-	$(DSOCOMMAND) ../lib/libfltk_gl_s.o $(OBJECTS) $(IMAGELIBS)
-	echo $(LIBCOMMAND) ../lib/libfltk_gl_s.a ../lib/libfltk_gl_s.o
-	-$(RM) $@
-	$(LIBCOMMAND) ../lib/libfltk_gl_s.a ../lib/libfltk_gl_s.o
-	$(CHMOD) +x ../lib/libfltk_gl_s.a
+libfltk_gl_s.a: $(OBJECTS)
+	echo $(DSOCOMMAND) libfltk_gl_s.o ...
+	$(DSOCOMMAND) libfltk_gl_s.o $(OBJECTS) $(IMAGELIBS)
+	echo $(LIBCOMMAND) libfltk_gl_s.a libfltk_gl_s.o
+	$(RM) $@
+	$(LIBCOMMAND) libfltk_gl_s.a libfltk_gl_s.o
+	$(CHMOD) +x libfltk_gl_s.a
 
 
 #
@@ -131,5 +131,5 @@ install: $(INSTALLTARGETS)
 
 
 #
-# End of "$Id: Makefile,v 1.16 2002/12/15 10:42:48 spitzak Exp $".
+# End of "$Id: Makefile,v 1.17 2002/12/18 20:13:15 easysw Exp $".
 #

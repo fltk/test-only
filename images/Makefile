@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.19 2002/12/15 10:42:53 spitzak Exp $"
+# "$Id: Makefile,v 1.20 2002/12/18 20:13:15 easysw Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -42,7 +42,7 @@ CPPFILES = \
 CFILES	=
 
 LIBNAME	=	../lib/$(LIBPREFIX)fltk_images$(LIBSUFFIX)
-DSONAME	=	../lib/$(DSOPREFIX)fltk_images$(DSOSUFFIX)
+DSONAME	=	$(DSOPREFIX)fltk_images$(DSOSUFFIX)
 OBJECTS =	$(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
 #
@@ -93,31 +93,31 @@ $(LIBNAME):	$(OBJECTS)
 	$(LIBCOMMAND) $@ $(OBJECTS)
 	$(RANLIB) $@
 
-../lib/libfltk_images.so.2.0: $(OBJECTS)
+libfltk_images.so.2.0: $(OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
-	-$(RM) ../lib/libfltk_images.so
-	$(LN) libfltk_images.so.2.0 ../lib/libfltk_images.so
+	$(RM) libfltk_images.so
+	$(LN) libfltk_images.so.2.0 libfltk_images.so
 
-../lib/libfltk_images.sl.2.0: $(OBJECTS)
+libfltk_images.sl.2.0: $(OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
-	-$(RM) ../lib/libfltk_images.sl
-	$(LN) libfltk_images.sl.2.0 ../lib/libfltk_images.sl
+	$(RM) libfltk_images.sl
+	$(LN) libfltk_images.sl.2.0 libfltk_images.sl
 
-../lib/libfltk_images.2.0.dylib: $(OBJECTS)
+libfltk_images.2.0.dylib: $(OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
-	-$(RM) ../lib/libfltk_images.dylib
-	$(LN) libfltk_images.2.0.dylib ../lib/libfltk_images.dylib
+	$(RM) libfltk_images.dylib
+	$(LN) libfltk_images.2.0.dylib libfltk_images.dylib
 
-../lib/libfltk_images_s.a: $(OBJECTS)
-	echo $(DSOCOMMAND) ../lib/libfltk_images_s.o ...
-	$(DSOCOMMAND) ../lib/libfltk_images_s.o $(OBJECTS) $(IMAGELIBS)
-	echo $(LIBCOMMAND) ../lib/libfltk_images_s.a ../lib/libfltk_images_s.o
-	-$(RM) $@
-	$(LIBCOMMAND) ../lib/libfltk_images_s.a ../lib/libfltk_images_s.o
-	$(CHMOD) +x ../lib/libfltk_images_s.a
+libfltk_images_s.a: $(OBJECTS)
+	echo $(DSOCOMMAND) libfltk_images_s.o ...
+	$(DSOCOMMAND) libfltk_images_s.o $(OBJECTS) $(IMAGELIBS)
+	echo $(LIBCOMMAND) libfltk_images_s.a libfltk_images_s.o
+	$(RM) $@
+	$(LIBCOMMAND) libfltk_images_s.a libfltk_images_s.o
+	$(CHMOD) +x libfltk_images_s.a
 
 
 #
@@ -127,5 +127,5 @@ $(LIBNAME):	$(OBJECTS)
 install:
 
 #
-# End of "$Id: Makefile,v 1.19 2002/12/15 10:42:53 spitzak Exp $".
+# End of "$Id: Makefile,v 1.20 2002/12/18 20:13:15 easysw Exp $".
 #

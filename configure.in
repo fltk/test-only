@@ -1,7 +1,7 @@
 dnl -*- sh -*-
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.102 2002/12/18 08:34:21 spitzak Exp $"
+dnl "$Id: configure.in,v 1.103 2002/12/18 20:13:15 easysw Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -187,14 +187,16 @@ if test x$enable_shared = xyes; then
 	    ;;
     esac
 
-    LINKSHARED="-L../src -lfltk_images$SHAREDSUFFIX -lfltk_forms$SHAREDSUFFIX -lfltk$SHAREDSUFFIX"
+#    LINKSHARED="-L../images -lfltk_images$SHAREDSUFFIX -L../forms -lfltk_forms$SHAREDSUFFIX -L../src -lfltk$SHAREDSUFFIX"
+    LINKSHARED="-L../images -lfltk_images$SHAREDSUFFIX -L../src -lfltk$SHAREDSUFFIX"
 else
     DSOCOMMAND="echo"
     DSOLINK=""
     PICFLAG=0
     SHAREDSUFFIX=""
     FLUID="fluid"
-    LINKSHARED="-L../lib -lfltk_images -lfltk_forms -lfltk"
+#    LINKSHARED="-L../lib -lfltk_images -lfltk_forms -lfltk"
+    LINKSHARED="-L../lib -lfltk_images -lfltk"
 fi
 
 AC_SUBST(DSOCOMMAND)
@@ -613,8 +615,9 @@ fi
 
 dnl Define the command used to update the dependencies (this option
 dnl mainly for FLTK core developers - not necessary for users)
-MAKEDEPEND="\$(CXX) -M"
-AC_SUBST(MAKEDEPEND)
+AC_PATH_PROG(MAKEDEPEND, makedepend)
+#MAKEDEPEND="\$(CXX) -M"
+#AC_SUBST(MAKEDEPEND)
 
 dnl Add warnings to compiler switches:
 dnl do this last so messing with switches does not break tests
@@ -832,5 +835,5 @@ dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.102 2002/12/18 08:34:21 spitzak Exp $".
+dnl End of "$Id: configure.in,v 1.103 2002/12/18 20:13:15 easysw Exp $".
 dnl

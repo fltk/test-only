@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.109 2002/12/15 10:42:54 spitzak Exp $"
+# "$Id: Makefile,v 1.110 2002/12/18 20:13:15 easysw Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -166,7 +166,7 @@ CFILES	= \
 	vsnprintf.c
 
 LIBNAME	=	../lib/$(LIBPREFIX)fltk$(LIBSUFFIX)
-DSONAME	=	../lib/$(DSOPREFIX)fltk$(DSOSUFFIX)
+DSONAME	=	$(DSOPREFIX)fltk$(DSOSUFFIX)
 OBJECTS =	$(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
 
@@ -218,31 +218,31 @@ $(LIBNAME):	$(OBJECTS)
 	$(LIBCOMMAND) $@ $(OBJECTS)
 	$(RANLIB) $@
 
-../lib/libfltk.so.2.0: $(OBJECTS)
+libfltk.so.2.0: $(OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
-	-$(RM) ../lib/libfltk.so
-	$(LN) libfltk.so.2.0 ../lib/libfltk.so
+	$(RM) libfltk.so
+	$(LN) libfltk.so.2.0 libfltk.so
 
-../lib/libfltk.sl.2.0: $(OBJECTS)
+libfltk.sl.2.0: $(OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
-	-$(RM) ../lib/libfltk.sl
-	$(LN) libfltk.sl.2.0 ../lib/libfltk.sl
+	$(RM) libfltk.sl
+	$(LN) libfltk.sl.2.0 libfltk.sl
 
-../lib/libfltk.2.0.dylib: $(OBJECTS)
+libfltk.2.0.dylib: $(OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
-	-$(RM) ../lib/libfltk.dylib
-	$(LN) libfltk.2.0.dylib ../lib/libfltk.dylib
+	$(RM) libfltk.dylib
+	$(LN) libfltk.2.0.dylib libfltk.dylib
 
-../lib/libfltk_s.a: $(OBJECTS)
-	echo $(DSOCOMMAND) ../lib/libfltk_s.o ...
-	$(DSOCOMMAND) ../lib/libfltk_s.o $(OBJECTS) $(IMAGELIBS)
-	echo $(LIBCOMMAND) ../lib/libfltk_s.a ../lib/libfltk_s.o
-	-$(RM) $@
-	$(LIBCOMMAND) ../lib/libfltk_s.a ../lib/libfltk_s.o
-	$(CHMOD) +x ../lib/libfltk_s.a
+libfltk_s.a: $(OBJECTS)
+	echo $(DSOCOMMAND) libfltk_s.o ...
+	$(DSOCOMMAND) libfltk_s.o $(OBJECTS) $(IMAGELIBS)
+	echo $(LIBCOMMAND) libfltk_s.a libfltk_s.o
+	$(RM) $@
+	$(LIBCOMMAND) libfltk_s.a libfltk_s.o
+	$(CHMOD) +x libfltk_s.a
 
 
 #
@@ -287,5 +287,5 @@ install_programs:
 
 
 #
-# End of "$Id: Makefile,v 1.109 2002/12/15 10:42:54 spitzak Exp $".
+# End of "$Id: Makefile,v 1.110 2002/12/18 20:13:15 easysw Exp $".
 #
