@@ -1,9 +1,9 @@
 #
-# "$Id: Makefile.os2x,v 1.7 2000/01/09 01:06:08 bill Exp $"
+# "$Id: Makefile.os2x,v 1.8 2000/08/20 04:31:38 spitzak Exp $"
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
-# Copyright 1998-1999 by Bill Spitzak and others.
+# Copyright 1998-2000 by Bill Spitzak and others.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Library General Public
@@ -20,37 +20,59 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA.
 #
-# Please report all bugs and problems to "fltk-bugs@easysw.com".
+# Please report all bugs and problems to "fltk-bugs@fltk.org".
 #
 
-SHELL=cmd.exe
+# SHELL=cmd.exe
 
-SUBDIRS	=	src images fluid forms OpenGL glut test
-
-# forms OpenGL glut test
 all: makeinclude config.h
-	for %i in ($(SUBDIRS)) do \
-	(cd %i && touch makedepend && $(MAKE) && cd ..)
+	echo "=== making src ==="
+	touch src/makedepend
+	cd src & $(MAKE)
+	echo "=== making fluid ==="
+	touch fluid/makedepend
+	cd fluid & $(MAKE)
+	echo "=== making test ==="
+	touch test/makedepend
+	cd test & $(MAKE)
 
-install:  makeinclude config.h
-	for %i in ($(SUBDIRS)) do \
-	(cd %i && touch makedepend && $(MAKE) install && cd ..)
+install:
+	echo "=== installing src ==="
+	touch src/makedepend
+	cd src & $(MAKE) install
+	echo "=== installing fluid ==="
+	touch fluid/makedepend
+	cd fluid & $(MAKE) install
 
 depend:
-	for %i in ($(SUBDIRS)) do \
-	(cd %i && touch makedepend && $(MAKE) depend && cd ..)
+	echo "=== making src dependencies ==="
+	touch src/makedepend
+	cd src & $(MAKE) depend
+	echo "=== making fluid dependencies ==="
+	touch fluid/makedepend
+	cd fluid & $(MAKE) depend
+	echo "=== making test dependencies ==="
+	touch test/makedepend
+	cd test & $(MAKE) depend
 
 clean:
 	-@ rm -f core config.cache *.o *.bck
-	for %i in ($(SUBDIRS)) do \
-	(cd %i && $(MAKE) clean && cd ..)
+	echo "=== cleaning src ==="
+	touch src/makedepend
+	cd src & $(MAKE) clean
+	echo "=== cleaning fluid ==="
+	touch fluid/makedepend
+	cd fluid & $(MAKE) clean
+	echo "=== cleaning test ==="
+	touch test/makedepend
+	cd test & $(MAKE) clean
 
-config.h: makefiles\config.os2x
-	copy $< $@
+config.h: makefiles/config.os2x
+	cp $< $@
 
-makeinclude: makefiles\makeinclude.os2x
-	copy $< $@
+makeinclude: makefiles/makeinclude.os2x
+	cp $< $@
 
 #
-# End of "$Id: Makefile.os2x,v 1.7 2000/01/09 01:06:08 bill Exp $".
+# End of "$Id: Makefile.os2x,v 1.8 2000/08/20 04:31:38 spitzak Exp $".
 #

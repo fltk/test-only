@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.H,v 1.14 2000/01/10 06:31:04 bill Exp $"
+// "$Id: Fl_Tooltip.H,v 1.15 2000/08/20 04:31:36 spitzak Exp $"
 //
 // Tooltip definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -46,8 +46,8 @@ public:
 
   // This is called when a widget is destroyed or hidden:
   static void exit(Fl_Widget *w);
-  static Fl_Style* style() {return default_style;}
 
+  static Fl_Style* style()	{ return default_style; }
   static Fl_Font font()		{ return style()->label_font; }
   static void font(Fl_Font i)	{ style()->label_font = i; }
   static unsigned size()	{ return style()->label_size; }
@@ -68,5 +68,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Tooltip.H,v 1.14 2000/01/10 06:31:04 bill Exp $".
+// End of "$Id: Fl_Tooltip.H,v 1.15 2000/08/20 04:31:36 spitzak Exp $".
 //

@@ -56,7 +56,7 @@ be "private": a dynamically allocated array managed by the Fl_Menu_.
 </TD><TD align=left valign=top>
 <UL>
 <LI><A href=#Fl_Menu_.size>size</A></LI>
-<LI><A href=#Fl_Menu_.test_shortcut>test_shortcut</A></LI>
+<LI><A href=#Fl_Menu_.handle_shortcut>handle_shortcut</A></LI>
 <LI><A href=#Fl_Menu_.text>text</A></LI>
 <LI><A href=#Fl_Menu_.value>value</A></LI>
 </UL>
@@ -161,23 +161,34 @@ the user.  It is zero initially.  You can set it as an integer, or set
 it with a pointer to a menu item.  The set routines return non-zero if 
 the new value is different than the old one. 
 
-<H4><A name=Fl_Menu_.test_shortcut>const Fl_Menu_Item* 
-Fl_Menu_::test_shortcut()</A></H4>
- Only call this in response to <TT>FL_SHORTCUT events</TT>.  If the 
-event matches an entry in the menu that entry is selected and the 
-callback will be done (or <TT>changed()</TT> will be set).  This allows 
-shortcuts directed at one window to call menus in another. 
+<H4><A name=Fl_Menu_.handle_shortcut>const Fl_Menu_Item* 
+Fl_Menu_::handle_shortcut()</A></H4>
+
+Only call this in response to <TT>FL_SHORTCUT events</TT>. The menu is
+searched for a widget whose shortcut() matches the current event
+('&amp;x' shortcuts in the item labels are <i>not</i> searched). If
+one is found it is executed (causing it's callback to be done) and
+this returns true. If none are found this returns false.
+
+<p>This is useful to direct shortcuts sent to one window to a menu on
+another window.
+
 <H4><A name=Fl_Menu_.global>void Fl_Menu_::global()</A></H4>
- Make the shortcuts for this menu work no matter what window has the 
-focus when you type it.  This is done by using <A href=osissues.html#add_handler>
-<TT>Fl::add_handler()</TT></A>.  This <TT>Fl_Menu_</TT> widget does not 
-have to be visible (ie the window it is in can be hidden, or it does 
-not have to be put in a window at all). 
+
+Make the shortcuts for this menu work no matter what window has the
+focus when you type it.  This is done by using <A
+href=osissues.html#add_handler><TT>Fl::add_handler()</TT></A>. This
+<TT>Fl_Menu_</TT> widget does not have to be visible (ie the window it
+is in can be hidden, or it does not have to be put in a window at
+all).
+
 <P>Currently there can be only one <TT>global()</TT>menu.  Setting a new 
 one will replace the old one.  There is no way to remove the <TT>
 global()</TT> setting (so don't destroy the widget!)</P>
+
 <H4><A name=Fl_Menu_.text>const char* Fl_Menu_::text() const
 <BR> const char* Fl_Menu_::text(int i) const</A></H4>
- Returns the title of the last item chosen, or of item <TT>i</TT>. 
+
+Returns the title of the last item chosen, or of item <TT>i</TT>. 
 
 </BODY></HTML>

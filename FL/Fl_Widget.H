@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.54 2000/08/10 09:24:30 spitzak Exp $"
+// "$Id: Fl_Widget.H,v 1.55 2000/08/20 04:31:36 spitzak Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -117,8 +117,6 @@ public:
   void	do_callback(Fl_Widget* o,void* arg=0) {callback_(o,arg);}
   void	do_callback(Fl_Widget* o,long arg) {callback_(o,(void*)arg);}
   int	test_shortcut() const	;
-  static int test_shortcut(const char*);
-  static int test_shortcut(int);
   int	contains(const Fl_Widget*) const;
   int	inside(const Fl_Widget* o) const {return o ? o->contains(this) : 0;}
   int	pushed() const		;
@@ -167,14 +165,14 @@ public:
 
   void  draw_box(int x,int y,int w,int h, Fl_Flags f) const
     { box()->draw(this,x,y,w,h,f); }
-  void	draw_box() const	;
+  Fl_Flags draw_box() const	;
   Fl_Flags draw_button() const	;
   Fl_Flags draw_button(Fl_Flags) const;
 
-  void	draw_text_frame() const ;
-  void	draw_text_frame(int,int,int,int) const ;
-  void	draw_text_box() const ;
-  void	draw_text_box(int,int,int,int) const ;
+  Fl_Flags draw_text_frame() const ;
+  Fl_Flags draw_text_frame(int,int,int,int) const ;
+  Fl_Flags draw_text_box() const ;
+  Fl_Flags draw_text_box(int,int,int,int) const ;
 
   void	draw_glyph(int t, int x,int y,int w,int h, Fl_Flags f) const
     { glyph()(this,t,x,y,w,h,f); }
@@ -293,5 +291,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.54 2000/08/10 09:24:30 spitzak Exp $".
+// End of "$Id: Fl_Widget.H,v 1.55 2000/08/20 04:31:36 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.23 2000/04/10 06:45:45 bill Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.24 2000/08/20 04:31:38 spitzak Exp $"
 //
 // Value input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -79,7 +79,7 @@ void Fl_Value_Input::value_damage() {
 int Fl_Value_Input::handle(int event) {
   double v;
   int delta;
-  int mx = Fl::event_x();
+  int mx = Fl::event_x()-Fl::event_y();
   static int ix, drag;
   switch (event) {
   case FL_PUSH:
@@ -91,7 +91,7 @@ int Fl_Value_Input::handle(int event) {
     return 1;
   case FL_DRAG:
     if (!step()) goto DEFAULT;
-    delta = Fl::event_x()-ix;
+    delta = mx-ix;
     if (delta > 5) delta -= 5;
     else if (delta < -5) delta += 5;
     else delta = 0;
@@ -124,7 +124,6 @@ int Fl_Value_Input::handle(int event) {
 Fl_Value_Input::Fl_Value_Input(int x, int y, int w, int h, const char* l)
 : Fl_Valuator(x, y, w, h, l), input(x, y, w, h, 0) {
   soft_ = 0;
-  style(Fl_Input::default_style);
   if (input.parent())  // defeat automatic-add
     input.parent()->remove(input);
   input.parent((Fl_Group*)this); // kludge!
@@ -135,10 +134,9 @@ Fl_Value_Input::Fl_Value_Input(int x, int y, int w, int h, const char* l)
 }
 
 Fl_Value_Input::~Fl_Value_Input() {
-  input.parent(0); // kludge!
-  input.style(Fl_Input::default_style); // don't double-delete the style
+  input.parent(0); // keep it from calling Fl_Group::remove(&input) on this
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.23 2000/04/10 06:45:45 bill Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.24 2000/08/20 04:31:38 spitzak Exp $".
 //

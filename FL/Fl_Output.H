@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Output.H,v 1.19 2000/08/06 07:39:43 spitzak Exp $"
+// "$Id: Fl_Output.H,v 1.20 2000/08/20 04:31:36 spitzak Exp $"
 //
 // Output header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,8 +31,6 @@
 class FL_API Fl_Output : public Fl_Input {
   virtual int replace(int, int, const char*, int); // does nothing
 public:
-  // the style is public because some other widgets directly refer to it:
-  static Fl_Named_Style* default_style;
   Fl_Output(int x, int y, int w, int h, const char *l = 0);
 
 #if 0 // back compatability, but perhaps not a good idea as it breaks fluid:
@@ -46,5 +44,5 @@ public:
 #endif 
 
 //
-// End of "$Id: Fl_Output.H,v 1.19 2000/08/06 07:39:43 spitzak Exp $".
+// End of "$Id: Fl_Output.H,v 1.20 2000/08/20 04:31:36 spitzak Exp $".
 //

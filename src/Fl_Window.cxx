@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.54 2000/08/12 07:44:29 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.55 2000/08/20 04:31:38 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -183,6 +183,11 @@ const void* Fl_Window::sys_modal_for() const {
 }
 
 void Fl_Window::show() {
+  // This should not be needed but it is because sometimes outer windows
+  // are created with the visible flag on, which prevents the FL_SHOW
+  // event from going through:
+  if (!shown()) clear_visible();
+
   if (!parent()) {
     if (modal()) {Fl::modal_ = this; fl_fix_focus();}
     // if this is a modal or non modal window, recreate each time to make
@@ -191,11 +196,6 @@ void Fl_Window::show() {
 
     if (!shown()) {
       // Create a new top-level window
-
-      // This should not be needed but it is because sometimes outer windows
-      // are created with the visible flag on, which prevents the FL_SHOW
-      // event from going through:
-      clear_visible();
 
       // this is the secret place where the world is initialized:
       Fl_Group::current(0); // get rid of very common user bug: forgot end()
@@ -328,5 +328,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.54 2000/08/12 07:44:29 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.55 2000/08/20 04:31:38 spitzak Exp $".
 //

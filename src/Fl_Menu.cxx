@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.92 2000/08/10 09:24:31 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.93 2000/08/20 04:31:38 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -185,7 +185,7 @@ MenuWindow::MenuWindow(Fl_Group* m, int X, int Y, int Wp, int Hp,
     if (widget->is_group()) {
       if (16 > hotKeysW) hotKeysW = 16;
     } else if (widget->shortcut()) {
-      int w1 = fl_width(fl_shortcut_label(widget->shortcut())) + 8;
+      int w1 = fl_width(Fl::key_name(widget->shortcut())) + 8;
       if (w1 > hotKeysW) hotKeysW = w1;
     }
     // can't use sgi overlay for images:
@@ -292,8 +292,8 @@ void MenuWindow::draw() {
 	flags = (flags & (~FL_ALIGN_MASK)) | FL_ALIGN_RIGHT;
 	Fl_Color c = (flags&FL_SELECTED) ? widget->selection_text_color() :
 	  widget->text_color();
-	widget->label_type()->draw(fl_shortcut_label(widget->shortcut()),
-			X, Y, W-3, H, c, flags);
+	widget->label_type()->draw(Fl::key_name(widget->shortcut()),
+				   X, Y, W-3, H, c, flags);
       }
     }
     y += ih+real_leading;
@@ -697,5 +697,5 @@ int Fl_Menu_::popup(int X, int Y, const char* title) {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.92 2000/08/10 09:24:31 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.93 2000/08/20 04:31:38 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.H,v 1.22 2000/06/10 04:10:19 carl Exp $"
+// "$Id: Fl_Menu_.H,v 1.23 2000/08/20 04:31:36 spitzak Exp $"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -109,14 +109,11 @@ public:
   const char *text() const {return text(value());}
 
 #endif
-
-protected:
-  int find_shortcut_label() const;
 private:
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Menu_.H,v 1.22 2000/06/10 04:10:19 carl Exp $".
+// End of "$Id: Fl_Menu_.H,v 1.23 2000/08/20 04:31:36 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Plugins.cxx,v 1.17 2000/06/12 09:01:39 carl Exp $"
+// "$Id: Fluid_Plugins.cxx,v 1.18 2000/08/20 04:31:38 spitzak Exp $"
 //
 // Plugins code for the Fast Light Tool Kit (FLTK).
 //
@@ -46,7 +46,7 @@ Fl_Menu_Item Plugins_New_Menu[MAXPLUGINS+1];
 static int nboptions;
 static int nbnew;
 
-static void ReadPlugin(char* s, char* location)
+static void ReadPlugin(char* s, const char* location)
 {
   if(nbplugins >= MAXPLUGINS) return;
 
@@ -96,7 +96,7 @@ static void ReadPlugin(char* s, char* location)
   }
 }
 
-static void ReadPlugins(char* location)
+static void ReadPlugins(const char* location)
 {
   dirent **d = 0;
   int n = filename_list(location, &d);
@@ -144,5 +144,5 @@ void read_plugins() {}
 #endif
 
 //
-// End of "$Id: Fluid_Plugins.cxx,v 1.17 2000/06/12 09:01:39 carl Exp $"
+// End of "$Id: Fluid_Plugins.cxx,v 1.18 2000/08/20 04:31:38 spitzak Exp $"
 //

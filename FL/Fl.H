@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.59 2000/08/10 09:24:30 spitzak Exp $"
+// "$Id: Fl.H,v 1.60 2000/08/20 04:31:36 spitzak Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -137,6 +137,8 @@ public:
   static int event_key()	{return e_keysym;}
   static int event_key(int);
   static int get_key(int);
+  static const char* key_name(int key);
+  static int test_shortcut(int shortcut);
   static const char* event_text() {return e_text;}
   static int event_length() {return e_length;}
   static int compose(int &del);
@@ -234,5 +236,5 @@ FL_API void fl_startup();
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.59 2000/08/10 09:24:30 spitzak Exp $".
+// End of "$Id: Fl.H,v 1.60 2000/08/20 04:31:36 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.86 2000/08/06 07:39:44 spitzak Exp $"
+# "$Id: Makefile,v 1.87 2000/08/20 04:31:39 spitzak Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -51,7 +51,6 @@ CPPFILES = \
 	Fl_Highlight_Button.cxx \
 	Fl_Image.cxx \
 	Fl_Input.cxx \
-	Fl_Input_Style.cxx \
 	Fl_Item.cxx \
 	Fl_Light_Button.cxx \
 	Fl_Menu.cxx \
@@ -99,6 +98,7 @@ CPPFILES = \
 	Fl_compose.cxx \
 	Fl_display.cxx \
 	Fl_get_key.cxx \
+	Fl_key_name.cxx \
 	Fl_lock.cxx \
 	Fl_own_colormap.cxx \
 	Fl_visual.cxx \
@@ -139,7 +139,6 @@ CPPFILES = \
 	fl_scroll_area.cxx \
 	Fl_Shared_Image.cxx \
 	fl_shadow_box.cxx \
-	fl_shortcut.cxx \
 	fl_show_colormap.cxx \
 	fl_symbols.cxx \
 	fl_vertex.cxx \
@@ -289,5 +288,5 @@ install_shared: shared
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.86 2000/08/06 07:39:44 spitzak Exp $".
+# End of "$Id: Makefile,v 1.87 2000/08/20 04:31:39 spitzak Exp $".
 #

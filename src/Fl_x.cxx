@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.92 2000/08/12 07:44:29 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.93 2000/08/20 04:31:39 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -281,6 +281,7 @@ static Atom XdndProxy;
 
 static void fd_callback(int,void *) {do_queued_events();}
 
+extern "C" {
 static int io_error_handler(Display*) {Fl::fatal("X I/O error"); return 0;}
 
 static int xerror_handler(Display* d, XErrorEvent* e) {
@@ -290,6 +291,7 @@ static int xerror_handler(Display* d, XErrorEvent* e) {
   XGetErrorText(d, e->error_code, buf1, 128);
   Fl::warning("%s: %s 0x%lx", buf2, buf1, e->resourceid);
   return 0;
+}
 }
 
 void fl_open_display() {
@@ -888,7 +890,7 @@ int fl_handle(const XEvent& xevent)
 	  FL_F+1, FL_F+2, FL_F+3, FL_F+4,
 	  FL_Home, FL_Left, FL_Up, FL_Right,
 	  FL_Down, FL_Page_Up, FL_Page_Down, FL_End,
-	  0xff0b/*XK_Clear*/, FL_Insert, FL_Delete};
+	  FL_Clear, FL_Insert, FL_Delete};
 	keysym = table[keysym-0xff91];
       }
     }
@@ -1295,5 +1297,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.92 2000/08/12 07:44:29 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.93 2000/08/20 04:31:39 spitzak Exp $".
 //

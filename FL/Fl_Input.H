@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.H,v 1.17 2000/08/06 07:39:43 spitzak Exp $"
+// "$Id: Fl_Input.H,v 1.18 2000/08/20 04:31:36 spitzak Exp $"
 //
 // Input base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -40,9 +40,6 @@ public:
   Fl_Input(int, int, int, int, const char* = 0);
   ~Fl_Input();
 
-  // the style is public because other widgets refer to it for box&color:
-  static Fl_Named_Style* default_style;
-
   int value(const char*);
   int value(const char*, int);
   int static_value(const char*);
@@ -62,13 +59,12 @@ public:
   int position(int p) {return position(p, p);}
   int mark(int m) {return position(position(), m);}
   virtual int replace(int, int, const char*, int);
-  int cut() {return replace(position(), mark(), 0);}
-  int cut(int n) {return replace(position(), position()+n, 0);}
-  int cut(int a, int b) {return replace(a, b, 0);}
+  int cut() {return replace(position(), mark(), 0, 0);}
+  int cut(int n) {return replace(position(), position()+n, 0, 0);}
+  int cut(int a, int b) {return replace(a, b, 0, 0);}
   int insert(const char* t, int l=0){return replace(position_, mark_, t, l);}
   int copy();
   int undo();
-  int copy_cuts();
 
 #if 0 // back compatability, but perhaps not a good idea as it breaks fluid:
   Fl_Boxtype box() const {return text_box();}
@@ -77,7 +73,6 @@ public:
   void color(Fl_Color c) {text_background(c);}
 #endif
 
-  int replace(int, int, const char*);
   void draw();
   int handle(int);
   void layout();
@@ -126,5 +121,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Input.H,v 1.17 2000/08/06 07:39:43 spitzak Exp $".
+// End of "$Id: Fl_Input.H,v 1.18 2000/08/20 04:31:36 spitzak Exp $".
 //

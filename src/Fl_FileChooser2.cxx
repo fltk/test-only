@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.10 2000/07/18 22:18:53 clip Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.11 2000/08/20 04:31:38 spitzak Exp $"
 //
 // More Fl_FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -645,7 +645,7 @@ Fl_FileChooser::fileNameCB()
     else if (max_match > min_match && max_match != 100000)
     {
       // Add the matching portion...
-      fileName->replace(0, min_match, pathname);
+      fileName->replace(0, min_match, pathname, strlen(pathname));
 
       // Highlight it; if the user just pressed the backspace
       // key, position the cursor at the start of the selection.
@@ -670,5 +670,5 @@ Fl_FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.10 2000/07/18 22:18:53 clip Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.11 2000/08/20 04:31:38 spitzak Exp $".
 //

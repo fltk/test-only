@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.H,v 1.21 2000/05/27 01:17:24 carl Exp $"
+// "$Id: fl_draw.H,v 1.22 2000/08/20 04:31:36 spitzak Exp $"
 //
 // Portable drawing function header file for the Fast Light Tool Kit (FLTK).
 //
@@ -168,7 +168,6 @@ FL_API int fl_measure_pixmap(const char*const* data, int &w, int &h);
 // other:
 extern FL_API void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
 	                        void (*draw_area)(void*, int,int,int,int), void* data);
-FL_API const char* fl_shortcut_label(int);
 FL_API void fl_overlay_rect(int,int,int,int);
 FL_API void fl_overlay_clear();
 FL_API void fl_cursor(Fl_Cursor, Fl_Color=FL_BLACK, Fl_Color=FL_WHITE);
@@ -181,9 +180,10 @@ FL_API int fl_add_symbol(const char* name, void (*drawit)(Fl_Color), int scalabl
 //void fl_frame(const char* s, int x, int y, int w, int h);
 //void fl_frame2(const char* s, int x, int y, int w, int h);
 #define fl_draw_box(b,x,y,w,h,c) ((b)->draw(x,y,w,h,c))
+#define fl_shortcut_label(l) Fl::key_name(l)
 
 #endif
 
 //
-// End of "$Id: fl_draw.H,v 1.21 2000/05/27 01:17:24 carl Exp $".
+// End of "$Id: fl_draw.H,v 1.22 2000/08/20 04:31:36 spitzak Exp $".
 //

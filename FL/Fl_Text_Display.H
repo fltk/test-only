@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.H,v 1.3 2000/08/09 04:34:37 clip Exp $"
+// "$Id: Fl_Text_Display.H,v 1.4 2000/08/20 04:31:36 spitzak Exp $"
 //
 // Header file for Fl_Text_Display class.
 //
@@ -161,43 +161,43 @@ class FL_API Fl_Text_Display: public Fl_Group {
     int damage_range2_start, damage_range2_end;
     int mCursorPos;
     int mCursorOn;
-    int mCursorOldY;                            /* Y pos. of cursor for blanking */
-    int mCursorToHint;                          /* Tells the buffer modified callback
-                                                   where to move the cursor, to reduce
-                                                   the number of redraw calls */
-    int mCursorStyle;                           /* One of enum cursorStyles above */
-    int mCursorPreferredCol;                    /* Column for vert. cursor movement */
-    int mNVisibleLines;                         /* # of visible (displayed) lines */
-    int mNBufferLines;                          /* # of newlines in the buffer */
-    Fl_Text_Buffer* mBuffer;                    /* Contains text to be displayed */
-    Fl_Text_Buffer* mStyleBuffer;               /* Optional parallel buffer containing
-                                                   color and font information */
-    int mFirstChar, mLastChar;                  /* Buffer positions of first and last
-                                                   displayed character (lastChar points
-                                                   either to a newline or one character
-                                                   beyond the end of the buffer) */
+    int mCursorOldY;		/* Y pos. of cursor for blanking */
+    int mCursorToHint;		/* Tells the buffer modified callback
+                                   where to move the cursor, to reduce
+                                   the number of redraw calls */
+    int mCursorStyle;           /* One of enum cursorStyles above */
+    int mCursorPreferredCol;    /* Column for vert. cursor movement */
+    int mNVisibleLines;         /* # of visible (displayed) lines */
+    int mNBufferLines;          /* # of newlines in the buffer */
+    Fl_Text_Buffer* mBuffer;    /* Contains text to be displayed */
+    Fl_Text_Buffer* mStyleBuffer; /* Optional parallel buffer containing
+                                     color and font information */
+    int mFirstChar, mLastChar;  /* Buffer positions of first and last
+                                   displayed character (lastChar points
+                                   either to a newline or one character
+                                   beyond the end of the buffer) */
     int* mLineStarts;
-    int mTopLineNum;                            /* Line number of top displayed line
-                                                   of file (first line of file is 1) */
-    int mHorizOffset;                           /* Horizontal scroll pos. in pixels */
-    int mTopLineNumHint;                        /* Line number of top displayed line
-                                                   of file (first line of file is 1) */
-    int mHorizOffsetHint;                       /* Horizontal scroll pos. in pixels */
-    int mVisibility;                            /* Window visibility (see XVisibility
-                                                   event) */
-    int mNStyles;                               /* Number of entries in styleTable */
-    Style_Table_Entry *mStyleTable;             /* Table of fonts and colors for
-                                                   coloring/syntax-highlighting */
-    char mUnfinishedStyle;                      /* Style buffer entry which triggers
-                                                   on-the-fly reparsing of region */
+    int mTopLineNum;            /* Line number of top displayed line
+                                   of file (first line of file is 1) */
+    int mHorizOffset;           /* Horizontal scroll pos. in pixels */
+    int mTopLineNumHint;        /* Line number of top displayed line
+                                   of file (first line of file is 1) */
+    int mHorizOffsetHint;       /* Horizontal scroll pos. in pixels */
+    int mVisibility;            /* Window visibility (see XVisibility
+                                   event) */
+    int mNStyles;               /* Number of entries in styleTable */
+    Style_Table_Entry *mStyleTable; /* Table of fonts and colors for
+                                   coloring/syntax-highlighting */
+    char mUnfinishedStyle;      /* Style buffer entry which triggers
+                                   on-the-fly reparsing of region */
     Unfinished_Style_Cb mUnfinishedHighlightCB; /* Callback to parse "unfinished" */
-                                                /* regions */
-    void* mHighlightCBArg;                      /* Arg to unfinishedHighlightCB */
+                                /* regions */
+    void* mHighlightCBArg;      /* Arg to unfinishedHighlightCB */
 
     int mMaxsize;
 
-    int mFixedFontWidth;                        /* Font width if all current fonts are
-                                                   fixed and match in width, else -1 */
+    int mFixedFontWidth;        /* Font width if all current fonts are
+                                   fixed and match in width, else -1 */
 
     Fl_Color mCursor_color;
 
@@ -213,5 +213,5 @@ class FL_API Fl_Text_Display: public Fl_Group {
 #endif
 
 //
-// End of "$Id: Fl_Text_Display.H,v 1.3 2000/08/09 04:34:37 clip Exp $".
+// End of "$Id: Fl_Text_Display.H,v 1.4 2000/08/20 04:31:36 spitzak Exp $".
 //

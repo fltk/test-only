@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.cxx,v 1.29 2000/08/10 09:24:32 spitzak Exp $"
+// "$Id: Fl_Value_Slider.cxx,v 1.30 2000/08/20 04:31:38 spitzak Exp $"
 //
 // Value slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -29,37 +29,45 @@
 #include <FL/Fl_Output.H>
 
 void Fl_Value_Slider::draw() {
-  int sxx = x(), syy = y(), sww = w(), shh = h();
-  int bxx = x(), byy = y(), bww = w(), bhh = h();
+  int sx = x(), sy = y(), sw = w(), sh = h();
+  int bx = x(), by = y(), bw = w(), bh = h();
   if (horizontal()) {
-    bww = 35; sxx += 35; sww -= 35;
+    bw = 35; sx += 35; sw -= 35;
   } else {
-    syy += 25; bhh = 25; shh -= 25;
+    sy += 25; bh = 25; sh -= 25;
   }
-  if (damage()&(~FL_DAMAGE_HIGHLIGHT))
-    draw_text_frame(sxx, syy, sww, shh);
-  text_box()->inset(sxx, syy, sww, shh);
-  Fl_Slider::draw(sxx, syy, sww, shh, flags());
+  if (damage()&FL_DAMAGE_ALL) {
+    draw_text_frame(sx, sy, sw, sh);
+    default_style->text_box->draw(this, bx, by, bw, bh, FL_FRAME_ONLY);
+  }
+  text_box()->inset(sx, sy, sw, sh);
+  Fl_Slider::draw(sx, sy, sw, sh, flags());
   if (damage()&(~FL_DAMAGE_HIGHLIGHT)) {
-    draw_text_box(bxx, byy, bww, bhh);
+    // copy the box & color from the default style:
+    fl_color(default_style->text_background);
+    default_style->text_box->inset(bx, by, bw, bh);
+    fl_rectf(bx, by, bw, bh);
+    // now draw the text:
     char buf[128];
     format(buf);
+    fl_clip(bx, by, bw, bh);
     fl_font(text_font(), text_size());
     fl_color(glyph_color(flags()));
-    fl_draw(buf, bxx, byy, bww, bhh, FL_ALIGN_CLIP);
+    fl_draw(buf, bx, by, bw, bh, 0);
+    fl_pop_clip();
   }
 }
 
 int Fl_Value_Slider::handle(int event) {
-  int sxx = x(), syy = y(), sww = w(), shh = h();
+  int sx = x(), sy = y(), sw = w(), sh = h();
   if (horizontal()) {
-    sxx += 35; sww -= 35;
+    sx += 35; sw -= 35;
   } else {
-    syy += 25; shh -= 25;
+    sy += 25; sh -= 25;
   }
-  text_box()->inset(sxx, syy, sww, shh);
+  text_box()->inset(sx, sy, sw, sh);
   if (event == FL_PUSH) take_focus();
-  return Fl_Slider::handle(event, sxx, syy, sww, shh);
+  return Fl_Slider::handle(event, sx, sy, sw, sh);
 }
 
 static void revert(Fl_Style* s) {
@@ -76,5 +84,5 @@ Fl_Value_Slider::Fl_Value_Slider(int x, int y, int w, int h, const char*l)
 }
 
 //
-// End of "$Id: Fl_Value_Slider.cxx,v 1.29 2000/08/10 09:24:32 spitzak Exp $".
+// End of "$Id: Fl_Value_Slider.cxx,v 1.30 2000/08/20 04:31:38 spitzak Exp $".
 //

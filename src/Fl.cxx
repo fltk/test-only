@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.107 2000/08/10 09:24:31 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.108 2000/08/20 04:31:38 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -515,6 +515,7 @@ int Fl::handle(int event, Fl_Window* window)
     break;
   }
 
+ TRY_KEY_AGAIN:
   int ret = 0;
   if (to && window) {
     int dx = window->x();
@@ -538,6 +539,23 @@ int Fl::handle(int event, Fl_Window* window)
 	char* c = (char*)event_text(); // cast away const
 	*c = isupper(*c) ? tolower(*c) : toupper(*c);
 	if (handle(FL_SHORTCUT, window)) return 1;
+      } else if (to && event_text()[0]) {
+	// try translating Emacs control keys:
+#define ctrl(x) (x^0x40)
+	int key = 0;
+	switch (event_text()[0]) {
+	case ctrl('A') : key = FL_Home; goto K;
+	case ctrl('B') : key = FL_Left; goto K;
+	case ctrl('D') : key = FL_Delete; goto K;
+	case ctrl('E') : key = FL_End; goto K;
+	case ctrl('F') : key = FL_Right; goto K;
+	case ctrl('H') : key = FL_BackSpace; goto K;
+	case ctrl('K') : key = FL_Clear; goto K;
+	case ctrl('N') : key = FL_Down; goto K;
+	case ctrl('P') : key = FL_Up; goto K;
+	K: e_keysym = key; e_state &= ~FL_CTRL; e_text[0] = 0;
+	goto TRY_KEY_AGAIN;
+	}
       }
       return 0;
 
@@ -565,5 +583,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.107 2000/08/10 09:24:31 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.108 2000/08/20 04:31:38 spitzak Exp $".
 //

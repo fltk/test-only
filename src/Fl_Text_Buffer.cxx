@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Buffer.cxx,v 1.1 2000/08/04 10:22:01 clip Exp $"
+// "$Id: Fl_Text_Buffer.cxx,v 1.2 2000/08/20 04:31:38 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -62,7 +62,7 @@ static char *unexpandTabs( char *text, int startIndent, int tabDist,
 static int max( int i1, int i2 );
 static int min( int i1, int i2 );
 
-static char *ControlCodeTable[ 32 ] = {
+static const char *ControlCodeTable[ 32 ] = {
   "nul", "soh", "stx", "etx", "eot", "enq", "ack", "bel",
   "bs", "ht", "nl", "vt", "np", "cr", "so", "si",
   "dle", "dc1", "dc2", "dc3", "dc4", "nak", "syn", "etb",
@@ -2255,5 +2255,5 @@ static int min( int i1, int i2 ) {
 
 
 //
-// End of "$Id: Fl_Text_Buffer.cxx,v 1.1 2000/08/04 10:22:01 clip Exp $".
+// End of "$Id: Fl_Text_Buffer.cxx,v 1.2 2000/08/20 04:31:38 spitzak Exp $".
 //

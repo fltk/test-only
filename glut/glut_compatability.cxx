@@ -1,5 +1,5 @@
 //
-// "$Id: glut_compatability.cxx,v 1.4 2000/02/14 11:32:45 bill Exp $"
+// "$Id: glut_compatability.cxx,v 1.5 2000/08/20 04:31:38 spitzak Exp $"
 //
 // GLUT emulation routines for the Fast Light Tool Kit (FLTK).
 //
@@ -204,7 +204,7 @@ void glutInitWindowSize(int w, int h) {
   initw = w; inith = h;
 }
 
-int glutCreateWindow(char *title) {
+int glutCreateWindow(const char *title) {
   Fl_Glut_Window *W;
   if (initpos) {
     W = new Fl_Glut_Window(initx,inity,initw,inith,title);
@@ -279,24 +279,24 @@ void glutDestroyMenu(int n) {
   menus[n] = 0;
 }
 
-void glutAddMenuEntry(char *label, int value) {
+void glutAddMenuEntry(const char *label, int value) {
   menus[glut_menu]->begin();
   Fl_Item* m = new Fl_Item(label);
   m->argument(value);
 }
 
-void glutAddSubMenu(char *label, int submenu) {
+void glutAddSubMenu(const char *label, int submenu) {
   menus[submenu]->label(label);
   menus[glut_menu]->add(*menus[submenu]);
 }
 
-void glutChangeToMenuEntry(int item, char *label, int value) {
+void glutChangeToMenuEntry(int item, const char *label, int value) {
   Fl_Widget* m = menus[glut_menu]->child(item-1);
   m->label(label);
   m->argument(value);
 }
 
-void glutChangeToSubMenu(int item, char *label, int submenu) {
+void glutChangeToSubMenu(int item, const char *label, int submenu) {
   glutRemoveMenuItem(item);
   menus[submenu]->label(label);
   menus[glut_menu]->insert(*menus[submenu], item-1);
@@ -363,5 +363,5 @@ int glutLayerGet(GLenum type) {
 #endif
 
 //
-// End of "$Id: glut_compatability.cxx,v 1.4 2000/02/14 11:32:45 bill Exp $".
+// End of "$Id: glut_compatability.cxx,v 1.5 2000/08/20 04:31:38 spitzak Exp $".
 //

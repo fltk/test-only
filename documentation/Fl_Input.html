@@ -243,28 +243,27 @@ inserted.
 <LI><A href=#Fl_Input.textfont>textfont</A></LI>
 <LI><A href=#Fl_Input.textsize>textsize</A></LI>
 <LI><A href=#Fl_Input.copy>copy</A></LI>
-<LI><A href=#Fl_Input.copy_cuts>copy_cuts</A></LI>
 <LI><A href=#Fl_Input.cut>cut</A></LI>
+<LI><A href=#Fl_Input.drawtext>drawtext</A></LI>
 </UL>
 </TD><TD align=left valign=top>
 <UL>
-<LI><A href=#Fl_Input.drawtext>drawtext</A></LI>
 <LI><A href=#Fl_Input.handletext>handletext</A></LI>
 <LI><A href=#Fl_Input.insert>insert</A></LI>
 <LI><A href=#Fl_Input.line_start>line_start</A></LI>
 <LI><A href=#Fl_Input.line_end>line_end</A></LI>
+<LI><A href=#Fl_Input.mark>mark</A></LI>
 </UL>
 </TD><TD align=left valign=top>
 <UL>
-<LI><A href=#Fl_Input.mark>mark</A></LI>
 <LI><A href=#Fl_Input.maybe_do_callback>maybe_do_callback</A></LI>
 <LI><A href=#Fl_Input.position>position</A></LI>
 <LI><A href=#Fl_Input.replace>replace</A></LI>
 <LI><A href=#Fl_Input.size>size</A></LI>
+<LI><A href=#Fl_Input.undo>undo</A></LI>
 </UL>
 </TD><TD align=left valign=top>
 <UL>
-<LI><A href=#Fl_Input.undo>undo</A></LI>
 <LI><A href=#Fl_Input.up_down_position>up_down_position</A></LI>
 <LI><A href=#Fl_Input.value>value</A></LI>
 <LI><A href=#Fl_Input.when>when</A></LI>
@@ -349,53 +348,47 @@ position(position(),n)</TT>. </P>
 as <TT>position(position(),n)</TT>. 
 
 <h4><a name=Fl_Input.replace>virtual int Fl_Input::replace(int a, int b, 
-const char *insert, int length)</a></h4>
+const char* insert, int length)</a></h4>
 
 This call does all editing of the text.  It deletes the region between
 <TT>a</TT> and <TT>b</TT> (either one may be less or equal to the
-other), and then inserts <tt>length</tt> characters from the string
-<TT>insert</TT> at that point and leaves the <TT>mark()</TT> and
-<TT>position()</TT> after the insertion.  Does the callback if
-<TT>when() &gt; FL_WHEN_CHANGED</TT> and there is a change.
-
-<P>Set <TT>start</TT> and <TT>end</TT> equal to not delete anything.
-Set <TT>length</TT> to zero to not insert anything (<tt>insert</tt>
-may be NULL in this case).
-
-<P><TT>a</TT> and <TT>b</TT> are clamped to the 0..<TT>size()</TT>
-range, so it is safe to pass any values.
-
-<P><TT>cut()</TT> and <TT>insert()</TT> are just inline functions that 
-call <TT>replace()</TT>. </P>
+other), and then inserts <tt>length</tt> (which may be zero)
+characters from the string <TT>insert</TT> at that point and leaves
+the <TT>mark()</TT> and <TT>position()</TT> after the insertion.  Does
+the callback if <TT>when()&amp;FL_WHEN_CHANGED</TT> and there is a
+change.
 
 <p>Subclasses of Fl_Input can override this function to control what
 characters can be inserted into the text. A typical implementation
 will check the characters in the insertion for legality and then call
-<tt>Fl_Input::replace</tt> only if they are all ok. The function
-should return false if it does not make any changes.
+<tt>Fl_Input::replace</tt> only if they are all ok.
 
-<H4><A name=Fl_Input.replace>int Fl_Input::replace(int a, int b, 
-const char *insert)</A></H4>
-
-This non-virtual function calls <tt>replace</tt> with the length
-argument set to <tt>strlen(insert)</tt>.
+<p>Subclasses should return true if the keystroke that produced this
+call should be "eaten". If false is returned the keystroke is allowed
+to be tested as a shortcut for other widgets. In our experience it is
+best to return true even if you don't make changes. The base class
+version returns true always.
 
 <H4><A name=Fl_Input.cut>int Fl_Input::cut()
 <BR> int Fl_Input::cut(int n)
 <BR> int Fl_Input::cut(int a, int b);</A></H4>
-<TT>Fl_Input::cut()</TT> deletes the current selection. <TT>cut(n)</TT>
- deletes <TT>n</TT> characters after the <TT>position()</TT>. <TT>
-cut(-n)</TT> deletes <TT>n</TT> characters before the <TT>position()</TT>
-. <TT>cut(a,b)</TT> deletes the characters between offsets <TT>a</TT>
- and <TT>b</TT>. <TT>A</TT>, <TT>b</TT>, and <TT>n</TT> are all clamped 
-to the size of the string.  The mark and point are left where the 
-deleted text was. 
+
+These are wrappers around <a href=#Fl_Input.replace>replace()</a>.
+<TT>Fl_Input::cut()</TT> deletes the area between <tt>mark()</tt> and
+<tt>position()</tt>. <TT>cut(n)</TT> deletes <TT>n</TT> characters
+after the <TT>position()</TT>. <TT> cut(-n)</TT> deletes <TT>n</TT>
+characters before the <TT>position()</TT> . <TT>cut(a,b)</TT> deletes
+the characters between offsets <TT>a</TT> and <TT>b</TT>. <TT>A</TT>,
+<TT>b</TT>, and <TT>n</TT> are all clamped to the size of the string.
+The mark and point are left where the deleted text was.
+
 <P>If you want the data to go into the clipboard, do <TT>
-Fl_Input::copy()</TT> before calling <TT>Fl_Input::cut()</TT>, or do <TT>
-Fl_Input::copy_cuts()</TT> afterwards. </P>
+Fl_Input::copy()</TT> before calling <TT>Fl_Input::cut()</TT>.
+
 <H4><A name=Fl_Input.insert>int Fl_Input::insert(const char *t,int 
 l=0)</A></H4>
- Insert the string <TT>t</TT> at the current position, and leave the 
+
+Insert the string <TT>t</TT> at the current position, and leave the 
 mark and position after it.  If <TT>l</TT> is not zero then it is 
 assummed to be <TT>strlen(t)</TT>. 
 <H4><A name=Fl_Input.copy>int Fl_Input::copy()</A></H4>
@@ -405,9 +398,6 @@ position()</TT> and <TT>mark()</TT> are equal.
 <H4><A name=Fl_Input.undo>int Fl_Input::undo()</A></H4>
  Does undo of several previous calls to <TT>replace()</TT>.  Returns 
 non-zero if any change was made. 
-<H4><A name=Fl_Input.copy_cuts>int Fl_Input::copy_cuts()</A></H4>
- Copy all the previous contiguous cuts from the undo information to the 
-clipboard.  This is used to make ^K work.
 
 <H4><A name=Fl_Input.Fl_Input>Fl_Input::Fl_Input(int x, int y, int w, 
 int h, const char *label = 0)</A></H4>

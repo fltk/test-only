@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.81 2000/08/10 09:24:31 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.82 2000/08/20 04:31:38 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -317,7 +317,7 @@ int Fl_Group::handle(int event) {
     }
   }
 
-  if (event == FL_SHORTCUT && contains(Fl::focus())) {
+  if (event == FL_SHORTCUT && !focused() && contains(Fl::focus())) {
     // Try to do keyboard navigation for unused shortcut keys:
 
     int key = navigation_key(); if (!key) return 0;
@@ -578,5 +578,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.81 2000/08/10 09:24:31 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.82 2000/08/20 04:31:38 spitzak Exp $".
 //

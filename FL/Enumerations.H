@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.49 2000/08/06 07:39:43 spitzak Exp $"
+// "$Id: Enumerations.H,v 1.50 2000/08/20 04:31:30 spitzak Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -95,6 +95,7 @@ enum Fl_When { // Fl_Widget::when():
 #define FL_Button	0xfee8 // use Fl_Button+FL_*_MOUSE
 #define FL_BackSpace	0xff08
 #define FL_Tab		0xff09
+#define FL_Clear	0xff0b // '5' key on windows, ^K
 #define FL_Enter	0xff0d
 #define FL_Pause	0xff13
 #define FL_Scroll_Lock	0xff14
@@ -210,5 +211,5 @@ enum Fl_Damage {
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.49 2000/08/06 07:39:43 spitzak Exp $".
+// End of "$Id: Enumerations.H,v 1.50 2000/08/20 04:31:30 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.66 2000/08/10 09:24:32 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.67 2000/08/20 04:31:38 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -305,13 +305,79 @@ int Fl_Widget::focused() const {return this == Fl::focus();}
 int Fl_Widget::belowmouse() const {return this == Fl::belowmouse();}
 
 ////////////////////////////////////////////////////////////////
+
+// Code to test and parse fltk shortcut numbers.
+//
+// A shortcut is a keysym or'd with shift flags.  In the simplest
+// sense a shortcut is matched if the shift state is exactly as
+// given and the key returning that keysym is pressed.
+//
+// To make it easier to match some things it is more complex:
+//
+// Only FL_META, FL_ALT, FL_SHIFT, and FL_CTRL must be "off".  A
+// zero in the other shift flags indicates "dont care".
+//
+// It also checks against the first character of Fl::event_text(),
+// and zero for FL_SHIFT means "don't care".
+// This allows punctuation shortcuts like "#" to work (rather than
+// calling it "shift+3")
+
+// Test against an arbitrary shortcut:
+int Fl::test_shortcut(int shortcut) {
+  if (!shortcut) return 0;
+
+  int shift = Fl::event_state();
+  // see if any required shift flags are off:
+  if ((shortcut&shift) != (shortcut&0x7fff0000)) return 0;
+  // record shift flags that are wrong:
+  int mismatch = (shortcut^shift)&0x7fff0000;
+  // these three must always be correct:
+  if (mismatch&(FL_META|FL_ALT|FL_CTRL)) return 0;
+
+  int key = shortcut & 0xffff;
+
+  // if shift is also correct, check for exactly equal keysyms:
+  if (!(mismatch&(FL_SHIFT)) && key == Fl::event_key()) return 1;
+
+  // try matching ascii, ignore shift:
+  if (key == Fl::event_text()[0]) return 1;
+
+  // kludge so that Ctrl+'_' works (as opposed to Ctrl+'^_'):
+  if ((shift&FL_CTRL) && key >= 0x3f && key <= 0x5F
+      && Fl::event_text()[0]==(key^0x40)) return 1;
+  return 0;
+}
+
+// Test against shortcut() and possibly against a &x shortcut in the label:
+
+int Fl_Widget::test_shortcut() const {
+
+  if (Fl::test_shortcut(shortcut())) return 1;
+
+  if (flags()&FL_NO_SHORTCUT_LABEL) return 0;
+
+  char c = Fl::event_text()[0];
+  const char* label = this->label();
+  if (!c || !label) return 0;
+  for (;;) {
+    if (!*label) return 0;
+    if (*label++ == '&') {
+      if (*label == '&') label++;
+      else if (*label == c) return 2;
+      else return 0;
+    }
+  }
+}
+
+////////////////////////////////////////////////////////////////
 // Drawing methods (designed to be called from a draw() implementation):
 
 // Draw the surrounding box of a normal widget:
-void Fl_Widget::draw_box() const {
+Fl_Flags Fl_Widget::draw_box() const {
   Fl_Flags f = flags();
   if (!active_r()) f |= FL_INACTIVE;
   box()->draw(this, x(),y(),w(),h(), f);
+  return f;
 }
 
 // Draw the box and label as for an Fl_Button, return flags to pass to
@@ -344,28 +410,28 @@ Fl_Flags Fl_Widget::draw_button(Fl_Flags flags) const {
 }
 
 // Draw the background behind text/recessed area:
-void Fl_Widget::draw_text_box() const {
-  draw_text_box(x(),y(),w(),h());
+Fl_Flags Fl_Widget::draw_text_box() const {
+  return draw_text_box(x(),y(),w(),h());
 }
 
-void Fl_Widget::draw_text_box(int x, int y, int w, int h) const {
-  Fl_Flags f = flags();
-  if (!active_r()) f |= FL_INACTIVE;
-  text_box()->draw(this, x,y,w,h, f);
+Fl_Flags Fl_Widget::draw_text_box(int x, int y, int w, int h) const {
+  Fl_Flags f = draw_text_frame(x,y,w,h);
   text_box()->inset(x,y,w,h); //if (w <= 0 || h <= 0) return;
   fl_color(text_background());
   fl_rectf(x,y,w,h);
+  return f;
 }
 
 // Draw only the edge of the text/recessed area, but no interior:
-void Fl_Widget::draw_text_frame() const {
-  draw_text_frame(x(),y(),w(),h());
+Fl_Flags Fl_Widget::draw_text_frame() const {
+  return draw_text_frame(x(),y(),w(),h());
 }
 
-void Fl_Widget::draw_text_frame(int x, int y, int w, int h) const {
+Fl_Flags Fl_Widget::draw_text_frame(int x, int y, int w, int h) const {
   Fl_Flags f = flags();
   if (!active_r()) f |= FL_INACTIVE;
   text_box()->draw(this, x,y,w,h, f|FL_FRAME_ONLY);
+  return f;
 }
 
 // Return the color to draw images on buttons:
@@ -409,5 +475,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.66 2000/08/10 09:24:32 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.67 2000/08/20 04:31:38 spitzak Exp $".
 //

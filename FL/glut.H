@@ -1,5 +1,5 @@
 //
-// "$Id: glut.H,v 1.15 2000/06/23 07:09:11 bill Exp $"
+// "$Id: glut.H,v 1.16 2000/08/20 04:31:36 spitzak Exp $"
 //
 // GLUT emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -114,7 +114,7 @@ FL_GLUT_API void glutInitWindowSize(int w, int h);
 
 FL_GLUT_API void glutMainLoop();
 
-FL_GLUT_API int glutCreateWindow(char *title);
+FL_GLUT_API int glutCreateWindow(const char *title);
 
 FL_GLUT_API int glutCreateSubWindow(int win, int x, int y, int width, int height);
 
@@ -128,9 +128,9 @@ inline int glutGetWindow() {return glut_window->number;}
 
 FL_GLUT_API void glutSetWindow(int win);
 
-inline void glutSetWindowTitle(char *t) {glut_window->label(t);}
+inline void glutSetWindowTitle(const char *t) {glut_window->label(t);}
 
-inline void glutSetIconTitle(char *t) {glut_window->iconlabel(t);}
+inline void glutSetIconTitle(const char *t) {glut_window->iconlabel(t);}
 
 inline void glutPositionWindow(int x, int y) {glut_window->position(x,y);}
 
@@ -198,13 +198,13 @@ inline int glutGetMenu() {return glut_menu;}
 
 inline void glutSetMenu(int m) {glut_menu = m;}
 
-FL_GLUT_API void glutAddMenuEntry(char *label, int value);
+FL_GLUT_API void glutAddMenuEntry(const char *label, int value);
 
-FL_GLUT_API void glutAddSubMenu(char *label, int submenu);
+FL_GLUT_API void glutAddSubMenu(const char *label, int submenu);
 
-FL_GLUT_API void glutChangeToMenuEntry(int item, char *label, int value);
+FL_GLUT_API void glutChangeToMenuEntry(int item, const char *label, int value);
 
-FL_GLUT_API void glutChangeToSubMenu(int item, char *label, int submenu);
+FL_GLUT_API void glutChangeToSubMenu(int item, const char *label, int submenu);
 
 FL_GLUT_API void glutRemoveMenuItem(int item);
 
@@ -427,7 +427,7 @@ FL_GLUT_API int glutBitmapWidth(void *font, int character);
 
 extern "C" {
 
-extern FL_GLUT_API int glutExtensionSupported(char *name);
+extern FL_GLUT_API int glutExtensionSupported(const char *name);
 
 /* Stroke font opaque addresses (use constants instead in source code). */
 extern FL_GLUT_API void *glutStrokeRoman;
@@ -471,5 +471,5 @@ extern FL_GLUT_API void glutSolidIcosahedron();
 #endif                  /* __glut_h__ */
 
 //
-// End of "$Id: glut.H,v 1.15 2000/06/23 07:09:11 bill Exp $".
+// End of "$Id: glut.H,v 1.16 2000/08/20 04:31:36 spitzak Exp $".
 //

@@ -75,9 +75,9 @@ int main(int argc, char ** argv) {
     Fl_Align_Group* o=new Fl_Align_Group(0,0,0,0,"Fl_Align_Group options",
 					 3,true,0,10,10);
     o->box(FL_DOWN_BOX);
-    static char* labels[3][3]={{"Vertical","Horizontal",""},
-			       {"Center","Left","Right"},
-			       {"Center","Top","Bottom"}};
+    static const char* labels[3][3]={{"Vertical","Horizontal",""},
+				     {"Center","Left","Right"},
+				     {"Center","Top","Bottom"}};
     Fl_Choice* c;
     for (int i=0;i<3;i++) {
       c = new Fl_Choice(0,0,0,0);
@@ -91,12 +91,12 @@ int main(int argc, char ** argv) {
   o->end();
   o = lower_half = new Fl_Align_Group(0,0,0,0,0,4,true,0,10,10);
   o->box(FL_DOWN_BOX);
-  static char* labels[24]={"Although","these","labels","have",
-                           "different","lengths",",","the",
-			   "widgets","they","belong","to",
-			   "are","properly","aligned",".",
-			   "Variable","lenghts\nare","respected\n,","as\nseen",
-			   "h","e","r","e"};
+  static const char* labels[24]={"Although","these","labels","have",
+				 "different","lengths",",","the",
+				 "widgets","they","belong","to",
+				 "are","properly","aligned",".",
+				 "Variable","lenghts\nare","respected\n,",
+				 "as\nseen","h","e","r","e"};
   for (int i=0;i<24;i++) (void) new Fl_Button(0,0,0,0,labels[i]);
   o->end();
 

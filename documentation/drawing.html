@@ -380,13 +380,6 @@ box to draw the text at so it looks centered vertically in that box.
  Measure how wide and tall the string will be when printed by the <TT>
 fl_draw(...align)</TT> function.  If the incoming <TT>w</TT> is 
 non-zero it will wrap to that width. 
-<H4>const char* fl_shortcut_label(ulong)</H4>
- Unparse a shortcut value as used by <A href=Fl_Button.html#Fl_Button.shortcut>
-<TT>Fl_Button</TT></A> or <A href=Fl_Menu_Item.html#Fl_Menu_Item><TT>
-Fl_Menu_Item</TT></A> into a human-readable string like &quot;Alt+N&quot;.  This 
-only works if the shortcut is a character key or a numbered function 
-key.  If the shortcut is zero an empty string is returned.  The return 
-value points at a static buffer that is overwritten with each call. 
 
 <H3><A name=overlay>Overlays</A></H3>
 <H4>void fl_overlay_rect(int x, int y, int w, int h)

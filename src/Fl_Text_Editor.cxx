@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Editor.cxx,v 1.5 2000/08/10 09:24:32 spitzak Exp $"
+// "$Id: Fl_Text_Editor.cxx,v 1.6 2000/08/20 04:31:38 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -94,18 +94,12 @@ static struct {
   { FL_Down,      FL_CTRL|FL_SHIFT,         Fl_Text_Editor::kf_c_s_move   },
   { FL_Page_Up,   FL_CTRL|FL_SHIFT,         Fl_Text_Editor::kf_c_s_move   },
   { FL_Page_Down, FL_CTRL|FL_SHIFT,         Fl_Text_Editor::kf_c_s_move   },
-//  { 'a',          FL_CTRL,                  Fl_Text_Editor::kf_select_all },
-//  { 'a',          FL_CTRL,                  Fl_Text_Editor::kf_home       },
-//  { 'b',          FL_CTRL,                  Fl_Text_Editor::kf_left       },
-  { 'c',          FL_CTRL,                  Fl_Text_Editor::kf_copy       },
-  { 'd',          FL_CTRL,                  Fl_Text_Editor::kf_delete     },
-//  { 'e',          FL_CTRL,                  Fl_Text_Editor::kf_end        },
-//  { 'f',          FL_CTRL,                  Fl_Text_Editor::kf_right      },
-  { 'h',          FL_CTRL,                  Fl_Text_Editor::kf_backspace  },
-//  { 'n',          FL_CTRL,                  Fl_Text_Editor::kf_down       },
-//  { 'p',          FL_CTRL,                  Fl_Text_Editor::kf_up         },
-  { 'v',          FL_CTRL,                  Fl_Text_Editor::kf_paste      },
+//{ FL_Clear,	  0,                        Fl_Text_Editor::delete_to_eol },
+//{ 'z',          FL_CTRL,                  Fl_Text_Editor::undo	  },
+//{ '/',          FL_CTRL,                  Fl_Text_Editor::undo	  },
   { 'x',          FL_CTRL,                  Fl_Text_Editor::kf_cut        },
+  { 'c',          FL_CTRL,                  Fl_Text_Editor::kf_copy       },
+  { 'v',          FL_CTRL,                  Fl_Text_Editor::kf_paste      },
   { 0,            0,                        0                             }
 };
 
@@ -210,9 +204,13 @@ int Fl_Text_Editor::kf_move(int c, Fl_Text_Editor* e) {
     e->dragPos = e->insert_position();
   e->buffer()->unselect();
   switch (c) {
-    case FL_Home:
-      e->insert_position(e->buffer()->line_start(e->insert_position()));
-      break;
+  case FL_Home: {
+      // make two ^A's in a row do select-all:
+      int i = e->buffer()->line_start(e->insert_position());
+      if (i != e->insert_position())
+	e->insert_position(i);
+      else kf_select_all(0, e);
+      break;}
     case FL_End:
       e->insert_position(e->buffer()->line_end(e->insert_position()));
       break;
@@ -368,10 +366,7 @@ int Fl_Text_Editor::handle_key() {
   // bytes to delete and a string to insert:
   int del;
   if (Fl::compose(del)) {
-    if (del) {
-      if (!buffer()->primary_selection()->selected() && move_left())
-	buffer()->select(insert_position(), insert_position()+1);
-    }
+    if (del) buffer()->select(insert_position()-del, insert_position());
     kill_selection(this);
     if (Fl::event_length()) {
       if (insert_mode()) insert(Fl::event_text());
@@ -433,5 +428,5 @@ int Fl_Text_Editor::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Text_Editor.cxx,v 1.5 2000/08/10 09:24:32 spitzak Exp $".
+// End of "$Id: Fl_Text_Editor.cxx,v 1.6 2000/08/20 04:31:38 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.37 2000/08/10 09:24:31 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.38 2000/08/20 04:31:38 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -513,11 +513,6 @@ static void undobuffersize(int n) {
   }
 }
 
-// use strlen(text) as the length:
-int Fl_Input::replace(int b, int e, const char* text) {
-  return replace(b,e,text,text ? strlen(text) : 0);
-}
-
 // all changes go through here, delete characters b-e and insert text:
 int Fl_Input::replace(int b, int e, const char* text, int ilen) {
 
@@ -528,7 +523,6 @@ int Fl_Input::replace(int b, int e, const char* text, int ilen) {
   if (b>size_) b = size_;
   if (e>size_) e = size_;
   if (e<b) {int t=b; b=e; e=t;}
-  if (text && !ilen) ilen = strlen(text);
   if (e<=b && !ilen) return 0; // don't clobber undo for a null operation
   if (size_+ilen-(e-b) > maximum_size_) {
     ilen = maximum_size_-size_+(e-b);
@@ -634,13 +628,6 @@ int Fl_Input::yank() {
 }
 #endif
 
-int Fl_Input::copy_cuts() {
-  // put the yank buffer into the X clipboard
-  if (!yankcut) return 0;
-  Fl::copy(undobuffer, yankcut);
-  return 1;
-}
-
 void Fl_Input::maybe_do_callback() {
   if (changed() || (when()&FL_WHEN_NOT_CHANGED)) {
     clear_changed(); do_callback();}
@@ -665,6 +652,8 @@ void Fl_Input::show_cursor(char v) {
 
 #include <FL/Fl_Input.H>
 
+static Fl_Named_Style* style = new Fl_Named_Style("Input", 0, &style);
+
 Fl_Input::Fl_Input(int x, int y, int w, int h, const char* l)
   : Fl_Widget(x, y, w, h, l)
 {
@@ -677,7 +666,7 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char* l)
   value_ = "";
   xscroll_ = yscroll_ = 0;
   maximum_size_ = 32767;
-  style(default_style);
+  style(::style);
 }
 
 void Fl_Input::put_in_buffer(int len) {
@@ -765,7 +754,7 @@ Fl_Input::~Fl_Input() {
 
 ////////////////////////////////////////////////////////////////
 
-// kludge so shift causes selection to extend:
+// Move the point, move the mark only if shift is not held down:
 int Fl_Input::shift_position(int p) {
   return position(p, Fl::event_state(FL_SHIFT) ? mark() : p);
 }
@@ -775,111 +764,85 @@ int Fl_Input::shift_up_down_position(int p) {
 
 // If you define this symbol as zero you will get the peculiar fltk
 // behavior where moving off the end of an input field will move the
-// cursor into the next field:
-// define it as 1 to prevent cursor movement from going to next field:
+// cursor into the next field.
+// Define it as 1 to prevent cursor movement from going to next field.
 #define NORMAL_INPUT_MOVE 0
 
 #define ctrl(x) (x^0x40)
 
 int Fl_Input::handle_key() {
 
-  int del;
-  if (Fl::compose(del)) {
-    replace(position(), del ? position()-del : mark(),
-	    Fl::event_text(), Fl::event_length());
-    return 1;
-  }
-
-  char ascii = Fl::event_text()[0];
+  int i;
+  if (Fl::compose(i))
+    return replace(position(), i ? position()-i : mark(),
+		   Fl::event_text(), Fl::event_length());
 
   switch (Fl::event_key()) {
   case FL_Left:
-    ascii = ctrl('B'); break;
+    return shift_position(position()-1) + NORMAL_INPUT_MOVE;
   case FL_Right:
-    ascii = ctrl('F'); break;
+    return shift_position(position()+1) + NORMAL_INPUT_MOVE;
   case FL_Up:
-    ascii = ctrl('P'); break;
+    i = line_start(position());
+    if (!i) return NORMAL_INPUT_MOVE;
+    shift_up_down_position(line_start(i-1));
+    return 1;
   case FL_Down:
-    ascii = ctrl('N'); break;
-  case FL_Delete:
-    ascii = ctrl('D'); break;
+    i = line_end(position());
+    if (i >= size()) return NORMAL_INPUT_MOVE;
+    shift_up_down_position(i+1);
+    return 1;
   case FL_Home:
-    ascii = ctrl('A'); break;
+    // if already at start of line, select the entire buffer. This
+    // makes two ^A's do a select-all for both Emacs & Win32 compatability
+    if (!shift_position(line_start(position()))) position(0, size());
+    return 1;
   case FL_End:
-    ascii = ctrl('E'); break;
+    shift_position(line_end(position()));
+    return 1;
+  case FL_Delete:
+    if (mark() != position()) cut(); else cut(1);
+    return 1;
   case FL_BackSpace:
-    ascii = ctrl('H'); break;
+    if (mark() != position()) cut(); else cut(-1);
+    return 1;
+  case FL_Clear:
+    // used for clear-to-end-of line, like ^K in Emacs
+    i = line_end(position());
+    if (i == position() && i < size()) i++;
+    if (cut(position(), i))
+      // Make all the adjacent ^K's go into the clipboard, like Emacs:
+      Fl::copy(undobuffer, yankcut);
+    return 1;
   case FL_Enter:
   case FL_KP_Enter:
     if (when() & FL_WHEN_ENTER_KEY) {
       position(size(), 0);
       maybe_do_callback();
       return 1;
-    } else if (type() >= FL_MULTILINE_INPUT)
+    }
+    if (type() >= FL_MULTILINE_INPUT && !Fl::event_state(FL_CTRL|FL_SHIFT))
       return replace(position(), mark(), "\n", 1);
-    else 
-      return 0;	// reserved for shortcuts
+    break;
   case FL_Tab:
-    if (Fl::event_state(FL_CTRL|FL_SHIFT) || type()<FL_MULTILINE_INPUT) return 0;
-    return replace(position(), mark(), &ascii, 1);
+    if (type() >= FL_MULTILINE_INPUT && !Fl::event_state(FL_CTRL|FL_SHIFT))
+      return replace(position(), mark(), Fl::event_text(), 1);
+    break;
+  case 'z':
+  case '/': // Emacs undo, I doubt any programs want this as a menu item.
+    if (Fl::event_state(FL_CTRL)) return undo();
+    break;
+  case 'x':
+    if (Fl::event_state(FL_CTRL)) {copy(); return cut();}
+    break;
+  case 'c':
+    if (Fl::event_state(FL_CTRL)) return copy();
+    break;
+  case 'v':
+    if (Fl::event_state(FL_CTRL)) {Fl::paste(*this); return 1;}
+    break;
   }
 
-  int i;
-  switch (ascii) {
-  case ctrl('A'):
-    return shift_position(line_start(position())) + NORMAL_INPUT_MOVE;
-  case ctrl('B'):
-    return shift_position(position()-1) + NORMAL_INPUT_MOVE;
-  case ctrl('C'): // copy
-    return copy();
-  case ctrl('D'):
-  case ctrl('?'):
-    if (mark() != position()) return cut();
-    else return cut(1);
-  case ctrl('E'):
-    return shift_position(line_end(position())) + NORMAL_INPUT_MOVE;
-  case ctrl('F'):
-    return shift_position(position()+1) + NORMAL_INPUT_MOVE;
-  case ctrl('H'):
-    if (mark() != position()) cut();
-    else cut(-1);
-    return 1;
-  case ctrl('K'):
-    if (position()>=size()) return 0;
-    i = line_end(position());
-    if (i == position() && i < size()) i++;
-    cut(position(), i);
-    return copy_cuts();
-  case ctrl('N'):
-    i = line_end(position());
-    if (i >= size()) return NORMAL_INPUT_MOVE;
-    shift_up_down_position(i+1);
-    return 1;
-  case ctrl('P'):
-    i = line_start(position());
-    if (!i) return NORMAL_INPUT_MOVE;
-    shift_up_down_position(line_start(i-1));
-    return 1;
-  case ctrl('U'):
-    return cut(0, size());
-  case ctrl('V'):
-  case ctrl('Y'):
-    Fl::paste(*this);
-    return 1;
-  case ctrl('X'):
-  case ctrl('W'):
-    copy();
-    return cut();
-  case ctrl('Z'):
-  case ctrl('_'):
-    return undo();
-  case ctrl('I'):
-  case ctrl('J'):
-  case ctrl('L'):
-  case ctrl('M'):
-    // insert a few selected control characters literally:
-    return replace(position(), mark(), &ascii, 1);
-  }
   return 0;
 }
 
@@ -925,9 +888,11 @@ int Fl_Input::handle(int event) {
     return 1;
 
   case FL_SHORTCUT:
-    // Typing any characters when no text field is selected causes 
-    // navigation to jump to the input field:
+    // If the user types text to a widget that does not want it, it will
+    // call here eventually. Take the focus on the assumption they are
+    // trying to type into this text field:
     if (Fl::event_text()[0]<=' ') return 0;
+    if (Fl::event_state(FL_ALT|FL_META)) return 0;
     position(size());
     take_focus();
   case FL_KEYBOARD:
@@ -1003,5 +968,5 @@ int Fl_Input::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.37 2000/08/10 09:24:31 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.38 2000/08/20 04:31:38 spitzak Exp $".
 //

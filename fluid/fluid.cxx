@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.41 2000/07/21 01:24:35 clip Exp $"
+// "$Id: fluid.cxx,v 1.42 2000/08/20 04:31:38 spitzak Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -455,11 +455,12 @@ static int arg(int argc, char** argv, int& i) {
 #endif
 #endif
 
+extern "C" {
 static void sigint(SIGARG) {
   signal(SIGINT,sigint);
   exit_cb(0,0);
 }
-
+}
 #endif
 
 int main(int argc,char **argv) {
@@ -501,5 +502,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.41 2000/07/21 01:24:35 clip Exp $".
+// End of "$Id: fluid.cxx,v 1.42 2000/08/20 04:31:38 spitzak Exp $".
 //

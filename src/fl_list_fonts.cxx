@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts.cxx,v 1.6 2000/06/18 11:05:39 vincent Exp $"
+// "$Id: fl_list_fonts.cxx,v 1.7 2000/08/20 04:31:39 spitzak Exp $"
 //
 // Less-used font functions
 //
@@ -123,11 +123,13 @@ const char* Fl_Font_::name(int* ap) const {
 
 // Sort X font names in alphabetical order of their "nice" names:
 // This is horrendously slow, but only needs to be done once....
+extern "C" {
 static int sort_function(const void *aa, const void *bb) {
   char aname[128]; int aattrib = to_nice(aname, *(char**)aa);
   char bname[128]; int battrib = to_nice(bname, *(char**)bb);
   int ret = strcasecmp(aname, bname); if (ret) return ret;
   return (aattrib-battrib);
+}
 }
 
 int fl_list_fonts(Fl_Font*& arrayp) {
@@ -314,5 +316,5 @@ Fl_Font fl_font(const char* name) {
 }
 
 //
-// End of "$Id: fl_list_fonts.cxx,v 1.6 2000/06/18 11:05:39 vincent Exp $".
+// End of "$Id: fl_list_fonts.cxx,v 1.7 2000/08/20 04:31:39 spitzak Exp $".
 //
