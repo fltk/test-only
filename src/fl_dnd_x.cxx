@@ -1,5 +1,5 @@
 //
-// "$Id: fl_dnd_x.cxx,v 1.7 2002/04/02 08:33:32 spitzak Exp $"
+// "$Id: fl_dnd_x.cxx,v 1.8 2002/06/18 06:47:32 spitzak Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
@@ -65,9 +65,11 @@ static int dnd_aware(Window& window) {
 }
 
 static bool drop_ok;
+static bool moved;
 
 static bool grabfunc(int event) {
   if (event == FL_RELEASE) Fl::pushed(0);
+  else if (event == FL_MOVE) moved = true;
   else if (!event && fl_xevent.type == ClientMessage
 	   && fl_xevent.xclient.message_type == fl_XdndStatus) {
     drop_ok = fl_xevent.xclient.data.l[1] != 0;
@@ -111,6 +113,7 @@ bool Fl::dnd() {
   XSetSelectionOwner(fl_display, fl_XdndSelection, fl_message_window, fl_event_time);
   Fl_Cursor oldcursor = FL_CURSOR_DEFAULT;
   drop_ok = true;
+  moved = true;
 
   while (Fl::pushed()) {
 
@@ -157,9 +160,10 @@ bool Fl::dnd() {
       fl_dnd_action = fl_XdndActionCopy;
       drop_ok = local_handle(FL_DND_DRAG, local_window);
     } else if (version) {
-      fl_sendClientMessage(target_window, fl_XdndPosition, source_window,
-			0, (e_x_root<<16)|e_y_root, fl_event_time,
-			fl_dnd_source_action);
+      if (moved)
+	fl_sendClientMessage(target_window, fl_XdndPosition, source_window,
+			     0, (e_x_root<<16)|e_y_root, fl_event_time,
+			     fl_dnd_source_action);
     } else {
       // Windows that don't support DnD are reported as ok because
       // we are going to try the middle-mouse click on them:
@@ -170,6 +174,7 @@ bool Fl::dnd() {
       oldcursor = cursor;
       source_fl_window->cursor(cursor);
     }
+    moved = false;
     Fl::wait();
   }
 
@@ -212,5 +217,5 @@ bool Fl::dnd() {
 
 
 //
-// End of "$Id: fl_dnd_x.cxx,v 1.7 2002/04/02 08:33:32 spitzak Exp $".
+// End of "$Id: fl_dnd_x.cxx,v 1.8 2002/06/18 06:47:32 spitzak Exp $".
 //

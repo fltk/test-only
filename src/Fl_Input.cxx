@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.63 2002/06/09 23:20:18 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.64 2002/06/18 06:47:31 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -1010,10 +1010,19 @@ int Fl_Input::handle(int event) {
 // multiline or rich-text type widgets.
 #define DND_OUT 1
 
-int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 #if DND_OUT
-  static int drag_start;
+static int drag_start;
+
+// We wait after mouse press for this timeout to start DnD. This is how
+// OS/X is doing DnD now:
+static void dnd_timeout(void* p) {
+  // drag the data:
+  ((Fl_Input*)p)->copy(false);
+  Fl::dnd();
+}
 #endif
+
+int Fl_Input::handle(int event, int X, int Y, int W, int H) {
   int newpos, newmark;
 
   switch (event) {
@@ -1083,10 +1092,12 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
     newpos = mouse_position(X, Y, W, H);
 #if DND_OUT
     // detect if the user tries to grab the selected text:
-    if (focused() && !Fl::event_state(FL_SHIFT) && type()!=SECRET &&
+    if (focused() && type()!=SECRET &&
 	(newpos >= mark() && newpos < position() ||
 	newpos >= position() && newpos < mark())) {
       drag_start = newpos;
+      // Wait to see if they move the mouse much before dragging:
+      Fl::add_timeout(.25, dnd_timeout, this);
       return 1;
     }
     drag_start = -1;
@@ -1097,16 +1108,16 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 
   case FL_DRAG:
 #if DND_OUT
-    // drag the selected text:
-    if (drag_start >= 0) {
-      if (Fl::event_is_click()) return 1; // debounce the mouse
-      // drag the data:
-      copy(false); Fl::dnd();
-      return 1;
-    }
+    if (drag_start >= 0) { // if they started inside the selection
+      if (Fl::event_is_click()) return 1; // wait until debounce is done
+      // give up on DnD and start the selection:
+      Fl::remove_timeout(dnd_timeout, this);
+      newmark = Fl::event_state(FL_SHIFT) ? mark() : drag_start;
+      drag_start = -1;
+    } else
 #endif
+      newmark = mark();
     newpos = mouse_position(X, Y, W, H);
-    newmark = mark();
   HANDLE_MOUSE:
     if (Fl::event_clicks()) {
       // Multiple clicks, expand the selection to word/line boundaries:
@@ -1149,6 +1160,7 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
     // if they just clicked in the middle of selection, move cursor there:
     if (drag_start >= 0) {
       newpos = newmark = drag_start; drag_start = -1;
+      Fl::remove_timeout(dnd_timeout, this);
       goto HANDLE_MOUSE;
     }
 #endif
@@ -1166,7 +1178,7 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
     // fall through:
   case FL_DND_DRAG: {
     int p = mouse_position(X, Y, W, H);
-#if DND_OUT
+#if 0 //DND_OUT
     // detect if they are dropping atop the original selection:
     if (focused() &&
 	(p >= position() && p < mark() || p >= mark() && p < position())) {
@@ -1198,6 +1210,24 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
   case FL_DND_RELEASE:
 #if DND_OUT
     if (dnd_target != this) return 0;
+    if (focused()) {
+      int p = dnd_target_position;
+      if (p <= position() && p <= mark()) {
+	// we are inserting before the selection
+	if (!Fl::event_state(FL_SHIFT|FL_CTRL|FL_ALT|FL_WIN)) cut();
+      } else if (p >= position() && p >= mark()) {
+	// we are inserting after the selection, cut & adjust offset
+	if (!Fl::event_state(FL_SHIFT|FL_CTRL|FL_ALT|FL_WIN)) {
+	  dnd_target_position -= abs(mark()-position());
+	  cut();
+	}
+      } else {
+	// attempting to insert into the selection does nothing
+	dnd_target = 0;
+	erase_cursor_at(dnd_target_position);
+	return 0;
+      }
+    }
 #endif
     dnd_target = 0;
     position(dnd_target_position);
@@ -1220,5 +1250,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.63 2002/06/09 23:20:18 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.64 2002/06/18 06:47:31 spitzak Exp $".
 //

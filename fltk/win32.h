@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.8 2002/03/26 18:00:34 spitzak Exp $"
+// "$Id: win32.h,v 1.9 2002/06/18 06:47:26 spitzak Exp $"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -94,8 +94,10 @@ extern FL_API void	fl_clip_region(Region);
 extern FL_API Region	fl_clip_region();
 
 ////////////////////////////////////////////////////////////////
-// This class contains the id of a window or offscreen image, and
-// the necessary "context" stuff needed to draw into it. Because
+// This class is an offscreen image that you plan to draw to repeatedly.
+// It contains "context" information that may be expensive or impossible
+// to recreate each time for drawing. On some systems this is a base
+// class for Fl_X, which describes a window. Because
 // of differences in how these things are created & destroyed, and
 // the desire to have the id have a longer lifetime than this object,
 // intelligent constructors and destructors are not implemented.
@@ -126,10 +128,12 @@ class FL_API Fl_Drawable {
 };
 
 ////////////////////////////////////////////////////////////////
-// Offscreen images are identified and stored as only an xid. Drawing
-// into them is surrounded by macros that create a temporary Fl_Drawable.
-// Because the Fl_Drawable is destroyed this is best if drawing is only
-// done once, if you want to draw repeatedly you should use an Fl_Drawable.
+// This is an offscreen image that is designed to be drawn into
+// exactly once and then repeatedly used as a source for copy. The
+// object is expected to fit into a void* space in the Fl_Image
+// structure. Drawing into them is surrounded by macros that save
+// the current graphics state in local variables and create a
+// temporary drawing context.
 
 #define fl_create_offscreen(w, h) CreateCompatibleBitmap(fl_gc, w, h)
 
@@ -189,5 +193,5 @@ extern FL_API HCURSOR fl_default_cursor;
 #endif
 
 //
-// End of "$Id: win32.h,v 1.8 2002/03/26 18:00:34 spitzak Exp $".
+// End of "$Id: win32.h,v 1.9 2002/06/18 06:47:26 spitzak Exp $".
 //

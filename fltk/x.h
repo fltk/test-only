@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.10 2002/06/17 16:03:52 spitzak Exp $"
+// "$Id: x.h,v 1.11 2002/06/18 06:47:28 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -111,8 +111,10 @@ extern FL_API Region	fl_clip_region();
 extern FL_API Region	XRectangleRegion(int x, int y, int w, int h);
 
 ////////////////////////////////////////////////////////////////
-// This class contains the id of a window or offscreen image, and
-// the necessary "context" stuff needed to draw into it. Because
+// This class is an offscreen image that you plan to draw to repeatedly.
+// It contains "context" information that may be expensive or impossible
+// to recreate each time for drawing. On some systems this is a base
+// class for Fl_X, which describes a window. Because
 // of differences in how these things are created & destroyed, and
 // the desire to have the id have a longer lifetime than this object,
 // intelligent constructors and destructors are not implemented.
@@ -137,10 +139,12 @@ class FL_API Fl_Drawable {
 };
 
 ////////////////////////////////////////////////////////////////
-// Offscreen images are identified and stored as only an xid. Drawing
-// into them is surrounded by macros that create a temporary Fl_Drawable.
-// Because the Fl_Drawable is destroyed this is best if drawing is only
-// done once, if you want to draw repeatedly you should use an Fl_Drawable.
+// This is an offscreen image that is designed to be drawn into
+// exactly once and then repeatedly used as a source for copy. The
+// object is expected to fit into a void* space in the Fl_Image
+// structure. Drawing into them is surrounded by macros that save
+// the current graphics state in local variables and create a
+// temporary drawing context.
 
 #define fl_create_offscreen(w,h) \
   XCreatePixmap(fl_display, fl_window, w, h, fl_visual->depth)
@@ -161,7 +165,9 @@ class FL_API Fl_Drawable {
 #define fl_delete_offscreen(id) XFreePixmap(fl_display, id)
 
 ////////////////////////////////////////////////////////////////
-// Binary images, created from in-memory data:
+// This is a binary offscreen image created from in-memory data. This is used
+// as an alpha mask by Fl_Image on systems that don't support alpha
+// blending.
 
 static inline Pixmap fl_create_bitmap(const uchar* data, int w, int h) {
   return XCreateBitmapFromData(fl_display, fl_window, (char*)data,(w+7)&-8, h);
@@ -203,5 +209,5 @@ Fl_Window* fl_find(Window xid);
 #endif	//Fl_X_H
 
 //
-// End of "$Id: x.h,v 1.10 2002/06/17 16:03:52 spitzak Exp $".
+// End of "$Id: x.h,v 1.11 2002/06/18 06:47:28 spitzak Exp $".
 //

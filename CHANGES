@@ -2302,3 +2302,17 @@ widgets that don't want this should turn the flag off).
 
 gl_draw(char*,int) was missing from gl header file. Glut compatability
 fixed to not need gl_width(char).
+
+////////////////////////////////////////////////////////////////
+
+Fl_Input DnD changed to match OS/X: there is a small timeout before it
+starts DnD, if the user moves the mouse quickly it instead starts a
+new selection.
+
+DnD in the same Fl_Input moves the text rather than copying it. Use
+any shift key to force it to copy.
+
+DnD bug when a group responded to FL_DND_DRAG but cursor is pointing
+at an inner widget that responds to FL_DRAG. It would send the
+FL_DND_RELEASE to the inner widget instead of the group.
+

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.147 2002/06/17 16:03:52 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.148 2002/06/18 06:47:31 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -552,6 +552,11 @@ bool Fl::handle(int event, Fl_Window* window)
     break;
 
   case FL_ENTER:
+    // this is a fix for DnD where the parent of a widget accepts the
+    // FL_DND_DRAG but the widget accepts FL_DRAG. When the mouse is
+    // released X generated a drag event which would cause the belowmouse
+    // widget to change before the release event happens.
+    if (to->contains(belowmouse())) return 0;
   case FL_MOVE:
 //case FL_DRAG: // does not happen
     if (pushed()) {to = pushed_; event = FL_DRAG; break;}
@@ -627,5 +632,5 @@ bool Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.147 2002/06/17 16:03:52 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.148 2002/06/18 06:47:31 spitzak Exp $".
 //
