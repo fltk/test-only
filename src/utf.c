@@ -1,5 +1,5 @@
 //
-// "$Id: utf.c,v 1.10 2004/07/27 10:00:05 laza2000 Exp $"
+// "$Id: utf.c,v 1.11 2004/07/27 10:25:59 laza2000 Exp $"
 //
 // Copyright 2004 by Bill Spitzak and others.
 //
@@ -600,12 +600,15 @@ unsigned utf8tomb(const char* src, unsigned srclen,
       buf = (unsigned short*)(malloc((length+1)*sizeof(unsigned short)));
       utf8to16(src, srclen, buf, length+1);
     }
-    ret =
-      WideCharToMultiByte(cp, 0, buf, length, dst, dstlen, 0, 0) - 1;
-    // if it overflows, get the actual length:
-    if (ret >= dstlen-1)
+    if (dstlen) {
       ret =
-	WideCharToMultiByte(cp, 0, buf, length, 0, 0, 0, 0) - 1;
+        WideCharToMultiByte(cp, 0, buf, length, dst, dstlen, 0, 0);
+      dst[ret] = 0;
+    }
+    // if it overflows or measuring length, get the actual length:
+    if (dstlen==0 || ret >= dstlen-1)
+      ret =
+	WideCharToMultiByte(cp, 0, buf, length, 0, 0, 0, 0);
     if (buf != lbuf) free((void*)buf);
     return ret;
   }
