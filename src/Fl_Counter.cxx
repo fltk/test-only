@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.16 1999/11/01 02:21:32 carl Exp $"
+// "$Id: Fl_Counter.cxx,v 1.17 1999/11/04 20:00:57 carl Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -182,12 +182,12 @@ Fl_Style Fl_Counter::default_style = {
   0,		        // label_color
   0,    	        // selection_color / on_color
   0,		        // selection_text_color
-  FL_GRAY,	        // off_color - button color
-  FL_LIGHT2             // highlight color
+  0,	                // off_color - button color
+  0                     // highlight color
 };
 
 static Fl_Style_Definer x("counter", Fl_Counter::default_style);
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.16 1999/11/01 02:21:32 carl Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.17 1999/11/04 20:00:57 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.17 1999/11/01 02:21:30 carl Exp $"
+// "$Id: Fl_Button.cxx,v 1.18 1999/11/04 20:00:57 carl Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -134,11 +134,11 @@ Fl_Style Fl_Button::default_style = {
   0,                    // selection_color / on_color
   0,		        // selection_text_color
   0,                    // off_color
-  FL_LIGHT2             // highlight color
+  0                     // highlight color
 };
 
 static Fl_Style_Definer x("button", Fl_Button::default_style);
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.17 1999/11/01 02:21:30 carl Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.18 1999/11/04 20:00:57 carl Exp $".
 //

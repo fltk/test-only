@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.26 1999/11/01 02:21:36 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.27 1999/11/04 20:00:59 carl Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -382,7 +382,7 @@ void Fl_Widget::draw_glyph(int T, int X,int Y,int W,int H, Fl_Flags f, Fl_Boxtyp
     bc = selection_color();
     fc = selection_text_color();
   }
-  if ((f&FL_HIGHLIGHT) && !(f&FL_INACTIVE)) {
+  if ((f&FL_HIGHLIGHT) && !(f&FL_INACTIVE) && highlight_color()) {
     fc = highlight_label_color();
     bc = highlight_color();
   }
@@ -428,8 +428,8 @@ Fl_Style Fl_Widget::default_style = {
   FL_NO_COLOR,	// label_color
   FL_LIGHT2,	// selection_color / down_color / on_color
   FL_NO_COLOR,	// selection_text_color
-  FL_NO_COLOR,	// off_color
-  FL_NO_COLOR,	// highlight_color
+  FL_GRAY,	// off_color
+  FL_LIGHT2,	// highlight_color
   FL_NO_COLOR,	// highlight_label_color
   FL_NO_COLOR,	// text_color
   FL_NORMAL_SIZE,// label_size
@@ -441,5 +441,5 @@ Fl_Style_Definer* Fl_Style_Definer::first = 0;
 static Fl_Style_Definer x("default", Fl_Widget::default_style);
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.26 1999/11/01 02:21:36 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.27 1999/11/04 20:00:59 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.13 1999/11/01 02:21:29 carl Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.14 1999/11/04 20:00:56 carl Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -150,12 +150,12 @@ Fl_Style Fl_Adjuster::default_style = {
   0,		        // label_color
   0,                    // selection_color / on_color
   0,		        // selection_text_color
-  FL_GRAY,              // off_color - button color
-  FL_LIGHT2             // highlight color
+  0,                    // off_color - button color
+  0                     // highlight color
 };
 
 static Fl_Style_Definer x("adjuster", Fl_Adjuster::default_style);
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.13 1999/11/01 02:21:29 carl Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.14 1999/11/04 20:00:56 carl Exp $".
 //

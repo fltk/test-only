@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.45 1999/11/01 02:21:33 carl Exp $"
+// "$Id: Fl_Menu.cxx,v 1.46 1999/11/04 20:00:58 carl Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -105,10 +105,10 @@ Fl_Style Fl_Menu_Item::title_style = {
   0,		// label_type
   0,		// color
   0,		// label_color
-  FL_BLUE_SELECTION_COLOR,// selection color (used by checkboxes)
-  FL_WHITE,	// selection_text_color
+  FL_BLUE_SELECTION_COLOR,// selection color
+  FL_WHITE,	// selection text color
   FL_WHITE,	// off_color (used by checkboxes)
-  FL_LIGHT2     // highlight color
+  0             // highlight color
   // rest is zero
 };
 
@@ -845,5 +845,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.45 1999/11/01 02:21:33 carl Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.46 1999/11/04 20:00:58 carl Exp $".
 //

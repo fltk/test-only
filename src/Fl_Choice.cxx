@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.19 1999/11/01 02:21:31 carl Exp $"
+// "$Id: Fl_Choice.cxx,v 1.20 1999/11/04 20:00:57 carl Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -101,14 +101,14 @@ Fl_Style Fl_Choice::default_style = {
   0,		        // label_type
   0,		        // color
   0,		        // label_color
-  FL_GRAY,	        // selection_color / on_color
+  0,    	        // selection_color / on_color
   0,		        // selection_text_color
-  FL_GRAY,	        // off_color
-  FL_LIGHT2             // highlight color
+  0,    	        // off_color
+  0                     // highlight color
 };
 
 static Fl_Style_Definer x("choice", Fl_Choice::default_style);
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.19 1999/11/01 02:21:31 carl Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.20 1999/11/04 20:00:57 carl Exp $".
 //

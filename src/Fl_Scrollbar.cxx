@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.21 1999/11/03 09:18:32 bill Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.22 1999/11/04 20:00:58 carl Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -219,25 +219,17 @@ void Fl_Scrollbar::draw() {
   if (horizontal()) {
     if (W < 3*H) {Fl_Slider::draw(X,Y,W,H,f); last_ = highlight_; return; }
     Fl_Slider::draw(X+H,Y,W-2*H,H,f);
-    if (damage()&FL_DAMAGE_ALL || last_ == 1 || highlight_ == 1) {
-      //fl_color(color()); fl_rectf(X, Y, H, H); // in case scroll buttons don't cover background
+    if (damage()&FL_DAMAGE_ALL || last_ == 1 || highlight_ == 1)
       draw_glyph(FL_GLYPH_LEFT, X, Y, H, H, f1);
-    }
-    if (damage()&FL_DAMAGE_ALL || last_ == 2 || highlight_ == 2) {
-      //fl_color(color()); fl_rectf(X+W-H, Y, H, H); // in case scroll buttons don't cover background
+    if (damage()&FL_DAMAGE_ALL || last_ == 2 || highlight_ == 2)
       draw_glyph(FL_GLYPH_RIGHT, X+W-H, Y, H, H, f2);
-    }
   } else { // vertical
     if (H < 3*W) {Fl_Slider::draw(X,Y,W,H,f); last_ = highlight_; return; }
     Fl_Slider::draw(X,Y+W,W,H-2*W,f);
-    if (damage()&FL_DAMAGE_ALL || last_ == 1 || highlight_ == 1) {
-      //fl_color(color()); fl_rectf(X, Y, W, W); // in case scroll buttons don't cover background
+    if (damage()&FL_DAMAGE_ALL || last_ == 1 || highlight_ == 1)
       draw_glyph(FL_GLYPH_UP, X, Y, W, W, f1);
-    }
-    if (damage()&FL_DAMAGE_ALL || last_ == 2 || highlight_ == 2) {
-      //fl_color(color()); fl_rectf(X, Y+H-W, W, W); // in case scroll buttons don't cover background
+    if (damage()&FL_DAMAGE_ALL || last_ == 2 || highlight_ == 2)
       draw_glyph(FL_GLYPH_DOWN, X, Y+H-W, W, W, f2);
-    }
   }
   last_ = highlight_;
 }
@@ -253,7 +245,7 @@ Fl_Style Fl_Scrollbar::default_style = {
   0,		// label_color - glyphs
   0,	        // selection color
   0,	        // selection_text_color
-  FL_GRAY,      // off color - button color
+  0,            // off color - button color
   0             // highlight color
   // rest is zero
 };
@@ -271,5 +263,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.21 1999/11/03 09:18:32 bill Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.22 1999/11/04 20:00:58 carl Exp $".
 //

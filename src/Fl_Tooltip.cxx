@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.14 1999/11/01 02:21:35 carl Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.15 1999/11/04 20:00:59 carl Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -34,9 +34,9 @@ Fl_Style Fl_Tooltip::default_style = {
   FL_BORDER_BOX,// box
   0,            // glyph_box
   0,		// glyphs
-  FL_HELVETICA,	// label_font (this is the one that is used)
+  0,            // label_font (this is the one that is used)
   0,		// text_font
-  FL_NORMAL_LABEL, // label_type
+  0,            // label_type
   Fl_Color(215) // color
   // rest is zero
 };
@@ -137,5 +137,5 @@ Fl_Tooltip::tooltip_exit(Fl_Widget *w) {
 void (*fl_tooltip_exit)(Fl_Widget *) = Fl_Tooltip::tooltip_exit;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.14 1999/11/01 02:21:35 carl Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.15 1999/11/04 20:00:59 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.10 1999/11/01 02:21:31 carl Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.11 1999/11/04 20:00:57 carl Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -69,7 +69,7 @@ Fl_Style Fl_Check_Button::default_style = {
   FL_BLACK,	// selection_color / on_color
   0,		// selection_text_color
   FL_WHITE,	// off_color
-  FL_NO_COLOR   // highlight color
+  0             // highlight color
 
 };
 
