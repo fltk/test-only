@@ -629,11 +629,17 @@ void fltk::closepath() {
   \see addchord()
 */
 void fltk::addpie(const Rectangle& r, float start, float end) {
-#if USE_QUARTZ || USE_CAIRO
+#if USE_CAIRO
   closepath();
   addvertex(r.x()+r.w()*.5f, r.y()+r.h()*.5f);
-  float delta = 1/fabsf(m.a+m.d); // guess at 1/2 line width
-  addarc(r.x()+delta, r.y()+delta, r.w()-2*delta, r.h()-2*delta, start, end);
+  float delta = sqrtf(1/(m.a*m.a+m.d*m.d));
+  addarc(r.x()+delta/2, r.y()+delta/2, r.w()-delta, r.h()-delta, start, end);
+  closepath();
+#elif USE_QUARTZ
+  closepath();
+  float delta = sqrtf(1/(m.a*m.a+m.d*m.d));
+  addvertex(r.x()+(r.w()-delta)*.5f, r.y()+(r.h()-delta)*.5f);
+  addarc(r.x(), r.y(), r.w()-delta, r.h()-delta, start, end);
   closepath();
 #else
   circle = r; transform(circle);
@@ -655,10 +661,14 @@ void fltk::addpie(const Rectangle& r, float start, float end) {
   of a closed version draws the straight edge is indeterminate.
 */
 void fltk::addchord(const Rectangle& r, float start, float end) {
-#if USE_QUARTZ || USE_CAIRO
+#if USE_CAIRO
   closepath();
-  float delta = 1/fabsf(m.a+m.d); // guess at 1/2 line width
-  addarc(r.x()+delta, r.y()+delta, r.w()-2*delta, r.h()-2*delta, start, end);
+  float delta = sqrtf(1/(m.a*m.a+m.d*m.d));
+  addarc(r.x()+delta/2, r.y()+delta/2, r.w()-delta, r.h()-delta, start, end);
+#elif USE_QUARTZ
+  closepath();
+  float delta = sqrtf(1/(m.a*m.a+m.d*m.d));
+  addarc(r.x(), r.y(), r.w()-delta, r.h()-delta, start, end);
 #else
   circle = r; transform(circle);
   circle_start = start;

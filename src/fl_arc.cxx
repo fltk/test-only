@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arc.cxx,v 1.17 2005/01/27 08:50:40 spitzak Exp $"
+// "$Id$"
 //
 // Arc functions for the Fast Light Tool Kit (FLTK).
 //
@@ -116,12 +116,6 @@ void fltk::addarc(float l, float t, float w, float h, float start, float end)
 #endif
 }
 
-#if 0 // portable version.  X-specific one in vertex.C
-void fltk::addcircle(float x,float y,float r) {
-  addarc(x, y, r, r, 0, 360);
-}
-#endif
-
 //
-// End of "$Id: fl_arc.cxx,v 1.17 2005/01/27 08:50:40 spitzak Exp $".
+// End of "$Id$".
 //
