@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.17 2000/03/03 02:45:52 carl Exp $"
+// "$Id: file.cxx,v 1.18 2000/05/17 20:03:04 carl Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -623,14 +623,13 @@ void fl_end_group() {
   Fl_Group* g = Fl_Group::current();
   // set the dimensions of a group to surround contents
   if (g->children() && !g->w()) {
-    Fl_Widget*const* a = g->array();
-    Fl_Widget* o = *a++;
+    Fl_Widget* o = g->child(0);
     int rx = o->x();
     int ry = o->y();
     int rw = rx+o->w();
     int rh = ry+o->h();
-    for (int i=g->children()-1; i--;) {
-      o = *a++;
+    for (int i = 1; i < g->children(); i++) {
+      o = g->child(i);
       if (o->x() < rx) rx = o->x();
       if (o->y() < ry) ry = o->y();
       if (o->x()+o->w() > rw) rw = o->x()+o->w();
@@ -645,9 +644,8 @@ void fl_end_group() {
   //if (fl_flip) {
     Fl_Widget* o = (g->type()>=FL_WINDOW) ? g : g->window();
     int Y = o->h();
-    Fl_Widget*const* a = g->array();
-    for (int i=g->children(); i--;) {
-      Fl_Widget* o = *a++;
+    for (int i = 0; i < g->children(); i++) {
+      Fl_Widget* o = g->child(i);
 //      o->y(Y-o->y()-o->h());
       // I think this is equivalent?
       o->position(o->x(), Y-o->y()-o->h());
@@ -658,5 +656,5 @@ void fl_end_group() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.17 2000/03/03 02:45:52 carl Exp $".
+// End of "$Id: file.cxx,v 1.18 2000/05/17 20:03:04 carl Exp $".
 //

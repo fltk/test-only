@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.64 2000/04/03 17:09:15 bill Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.65 2000/05/17 20:03:03 carl Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -1377,15 +1377,13 @@ void subtype_cb(Fl_Choice* i, void* v) {
 
 void propagate_group(Fl_Group* g, void* v) {
   if (v == LOAD) {
-    Fl_Widget*const* a = g->array();
-    for (int i=g->children(); i--;) {
-      Fl_Widget* o = *a++;
+    for (int i = 0; i < g->children(); i++) {
+      Fl_Widget* o = g->child(i);
       o->do_callback(o,LOAD);
     }
   } else {
-    Fl_Widget*const* a = g->array();
-    for (int i=g->children(); i--;) {
-      Fl_Widget* o = *a++;
+    for (int i = 0; i < g->children(); i++) {
+      Fl_Widget* o = g->child(i);
       if (o->changed() || o->callback()==(Fl_Callback*)propagate_group ||
           o->callback()==(Fl_Callback*)propagate_tabs)
       {
@@ -2202,5 +2200,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.64 2000/04/03 17:09:15 bill Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.65 2000/05/17 20:03:03 carl Exp $".
 //
