@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.53 2002/12/10 02:00:43 easysw Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.54 2003/02/02 10:39:23 spitzak Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -39,33 +39,34 @@ void PopupMenu::draw() {
     fl_did_clipping = this;
     return;
   }
-  Box* box = this->box();
+  Box* box /*= style()->box; if (!box) box*/ = this->buttonbox();
   // We need to erase the focus rectangle on DAMAGE_HIGHTLIGHT for
   // NO_BOX buttons such as checkmarks:
   if (damage()&DAMAGE_EXPOSE && !box->fills_rectangle()
       || box == NO_BOX && damage()&DAMAGE_HIGHLIGHT && !focused()) {
     draw_background();
   }
-  Flags flags;
-  Color color;
+  Flags flags = this->flags();
+  Color color = this->buttoncolor();
+  Color labelcolor = this->labelcolor();
   if (!active_r()) {
-    flags = INACTIVE;
-    color = this->color();
+    flags |= INACTIVE;
   } else if (belowmouse()) {
-    flags = HIGHLIGHT;
-    color = highlight_color();
-    if (!color) color = this->color();
-  } else {
-    flags = 0;
-    color = this->color();
+    flags |= HIGHLIGHT;
+    Color h = highlight_color();
+    if (h) color = h;
+    h = highlight_labelcolor();
+    if (h) labelcolor = h;
   }
   box->draw(0, 0, this->w(), this->h(), color, flags);
   int x,y,w,h;
   x = y = 0; w = this->w(); h = this->h(); box->inset(x,y,w,h);
-  draw_inside_label(x,y,w,h,flags);
-  if (focused()) {
-    focusbox()->draw(x+1, y+1, w-2, h-2, textcolor(), INVISIBLE);
+  if (!(flags&15) || (flags & ALIGN_INSIDE)) {
+    if (w > 11 && (flags&(ALIGN_LEFT|ALIGN_RIGHT))) {x += 3; w -= 6;}
+    draw_label(x,y,w,h, labelcolor, flags);
   }
+  if (focused())
+    focusbox()->draw(x+1, y+1, w-2, h-2, labelcolor, INVISIBLE);
   // draw the little mark at the right:
   int w1 = int(textsize());
   draw_glyph(GLYPH_DOWN, x+w-w1, y, w1, h, flags);
@@ -133,9 +134,9 @@ int PopupMenu::handle(int e) {
 
 static void revert(Style* s) {
   s->color = GRAY75;
-  s->box = UP_BOX;
+//    s->box = UP_BOX;
 }
-static NamedStyle style("Menu_Button", revert, &PopupMenu::default_style);
+static NamedStyle style("PopupMenu", revert, &PopupMenu::default_style);
 NamedStyle* PopupMenu::default_style = &::style;
 
 PopupMenu::PopupMenu(int X,int Y,int W,int H,const char *l)
@@ -147,5 +148,5 @@ PopupMenu::PopupMenu(int X,int Y,int W,int H,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.53 2002/12/10 02:00:43 easysw Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.54 2003/02/02 10:39:23 spitzak Exp $".
 //

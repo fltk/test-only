@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.23 2003/01/21 07:53:39 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.24 2003/02/02 10:39:23 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -40,11 +40,11 @@ using namespace fltk;
 // by the Menu style in PopupMenu.cxx.
 
 static void revert(Style* s) {
-  s->box = NO_BOX;
-  s->color = GRAY75;
-  s->buttonbox = DOWN_BOX;
+  //s->buttonbox = NO_BOX;
+  //s->color = GRAY75;
+  //s->box = DOWN_BOX;
   // s->buttonbox = NO_BOX; // makes it look more like Windows
-  s->buttoncolor = WHITE;
+  //s->buttoncolor = WHITE;
   //s->glyph = CheckButton::default_glyph;
 }
 static NamedStyle style("Item", revert, &Item::default_style);
@@ -59,8 +59,26 @@ Item::Item(const char* l) : Widget(0,0,0,0,l) {
   set_flag(ALIGN_LEFT|ALIGN_INSIDE);
 }
 
+// Undocumented. A "parent" widget can be set here to select the
+// default textcolor for an item:
+const Widget* fl_item_parent;
+
+Color fl_item_labelcolor(const Widget* widget) {
+  if (widget->flags() & SELECTED) {
+    Color color = widget->style()->selection_textcolor;
+    if (color) return color;
+    if (fl_item_parent) return fl_item_parent->selection_textcolor();
+    return widget->selection_textcolor();
+  } else {
+    Color color = widget->style()->labelcolor;
+    if (color) return color;
+    if (fl_item_parent) return fl_item_parent->textcolor();
+    return widget->labelcolor();
+  }
+}
+
 void Item::draw() {
-  //if (box() != NO_BOX) draw_box();
+  //if (buttonbox() != NO_BOX) draw_buttonbox();
   int x = 0; int y = 0; int w = this->w(); int h = this->h();
   //box()->inset(x,y,w,h);
 
@@ -75,7 +93,7 @@ void Item::draw() {
     draw_glyph(0, x+3, y+((h-gw)>>1), gw, gw, lflags);
     x += gw+3; w -= gw+3;
   }
-  draw_label(x+3, y, w-6, h, flags());
+  draw_label(x+3, y, w-6, h, fl_item_labelcolor(this), flags());
 }
 
 // Measure the space the draw() will take:
@@ -116,7 +134,7 @@ void ItemGroup::draw() {
   //if (box() != NO_BOX) draw_box();
   int x = 0; int y = 0; int w = this->w(); int h = this->h();
   //box()->inset(x,y,w,h);
-  draw_label(x+3, y, w-6, h, flags());
+  draw_label(x+3, y, w-6, h, fl_item_labelcolor(this), flags());
 }
 
 void ItemGroup::layout() {

@@ -1,5 +1,5 @@
 //
-// "$Id: XColorMap.h,v 1.2 2002/12/10 02:00:56 easysw Exp $"
+// "$Id: XColorMap.h,v 1.3 2003/02/02 10:39:23 spitzak Exp $"
 //
 // Internal structure used to keep track of the current state of
 // the X colormap. Only useful for 8-bit colormapped X visuals.
@@ -21,7 +21,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
 #include <config.h>
@@ -42,5 +42,5 @@ extern unsigned char fl_redmask, fl_greenmask, fl_bluemask;
 extern int fl_redshift, fl_greenshift, fl_blueshift, fl_extrashift;
 
 //
-// End of "$Id: XColorMap.h,v 1.2 2002/12/10 02:00:56 easysw Exp $".
+// End of "$Id: XColorMap.h,v 1.3 2003/02/02 10:39:23 spitzak Exp $".
 //

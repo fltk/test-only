@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.121 2003/01/15 07:55:20 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.122 2003/02/02 10:39:23 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -546,7 +546,7 @@ void Group::draw_outside_label(Widget& w) const {
   // skip any labels that are inside the widget:
   if (!(w.flags()&15) || (w.flags() & ALIGN_INSIDE)) return;
   // invent a box that is outside the widget:
-  unsigned align = w.flags();
+  Flags align = w.flags();
   int X = w.x();
   int Y = w.y();
   int W = w.w();
@@ -568,7 +568,7 @@ void Group::draw_outside_label(Widget& w) const {
     X = X+W+3;
     W = this->w()-X;
   }
-  w.draw_label(X,Y,W,H,(Flags)align);
+  w.draw_label(X,Y,W,H, w.labelcolor(), align);
 }
 
 void Group::fix_old_positions() {
@@ -581,5 +581,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.121 2003/01/15 07:55:20 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.122 2003/02/02 10:39:23 spitzak Exp $".
 //

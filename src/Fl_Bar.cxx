@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bar.cxx,v 1.5 2002/12/10 02:00:38 easysw Exp $"
+// "$Id: Fl_Bar.cxx,v 1.6 2003/02/02 10:39:22 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -127,9 +127,9 @@ void BarGroup::draw()
     draw_box();
     int x = 0,y = 0,w = this->w(),h = this->h(); box()->inset(x,y,w,h);
     if (type() & 1) // horizontal
-      draw_inside_label(saved_size, y, w-saved_size, h, 0);
+      draw_inside_label(saved_size, y, w-saved_size, h);
     else
-      draw_inside_label(x, saved_size, w, h-saved_size, 0);
+      draw_inside_label(x, saved_size, w, h-saved_size);
   }
   if (damage() & (DAMAGE_EXPOSE|DAMAGE_HIGHLIGHT)) {
     Flags f = 0;

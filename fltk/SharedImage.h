@@ -1,5 +1,5 @@
 //
-// "$Id: SharedImage.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: SharedImage.h,v 1.3 2003/02/02 10:39:22 spitzak Exp $"
 //
 // Images that are all put in a tree by "name" (usually a filename)
 // so that if the same name is used more than once the same instance
@@ -110,8 +110,8 @@ public:
   // Set the size of the cache (0 = unlimited is the default)
   static void set_cache_size(unsigned l);
 
-  void draw(int, int, int, int, Flags = 0);
-  void draw(int x, int y, Flags f = 0) {draw(x,y,w,h,f);}
+  void draw(int, int, int, int, Color=0, Flags = 0);
+  void draw(int x, int y, Flags f = 0) {draw(x,y,w,h,0,f);}
 };
 
 ////////////////////////////////////////////////////////////////
@@ -196,5 +196,5 @@ public:
 #endif
 
 //
-// End of "$Id: SharedImage.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// End of "$Id: SharedImage.h,v 1.3 2003/02/02 10:39:22 spitzak Exp $"
 //

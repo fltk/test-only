@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.58 2002/12/18 08:34:22 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.59 2003/02/02 10:39:23 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -34,6 +34,7 @@
 #define checkmark(item) (item->type()>=Item::TOGGLE && item->type()<=Item::RADIO)
 
 using namespace fltk;
+extern const Widget* fl_item_parent;
 
 void MenuBar::draw() {
   if (damage()&(~DAMAGE_HIGHLIGHT)) draw_box();
@@ -41,6 +42,8 @@ void MenuBar::draw() {
   int x1 = 0; int y1 = 0; int w1 = w(); int h1 = this->h();
   box()->inset(x1,y1,w1,h1);
   int X = 3;
+  const Widget* saved = fl_item_parent;
+  fl_item_parent = this;
   for (int i = 0; i < children(); i++) {
     Widget* widget = child(i);
     if (!widget->visible()) continue;
@@ -54,7 +57,7 @@ void MenuBar::draw() {
       else
 	widget->clear_flag(HIGHLIGHT);
       widget->clear_flag(SELECTED);
-      buttonbox()->draw(X, y1+1, W, h1-2, buttoncolor(), widget->flags()&~VALUE);
+      buttonbox()->draw(X, y1+1, W, h1-2, color(), widget->flags()&~VALUE);
       int save_w = widget->w(); widget->w(W-10);
       int save_h = widget->h(); widget->h(h1-2);
       push_matrix();
@@ -66,6 +69,7 @@ void MenuBar::draw() {
     }
     X += W;
   }
+  fl_item_parent = saved;
   last_ = highlight_;
 }
 
@@ -102,18 +106,28 @@ int MenuBar::handle(int event) {
     popup(0, 0, w(), h(), 0, true);
     return 1;
   case SHORTCUT:
-    // First check against the &x or shortcut() of top-level items:
+    // First check against the shortcut() of top-level items:
+    for (i = 0; i < children; i++) {
+      Widget* w = child(i);
+      if (w->active() && fltk::test_shortcut(w->shortcut())) {
+	    if (w->is_group()) {value(i); goto J1;} // menu title
+	    execute(w); // button in the menu bar
+	    if (checkmark(w)) redraw();
+	    return 1;
+      }
+    }
+    // Secondly, test against the shortcut() of any item in any submenu:
+    if (handle_shortcut()) return 1;
+    // Finally check against the &x of top-level items:
     for (i = 0; i < children; i++) {
       Widget* w = child(i);
       if (w->active() && w->test_shortcut()) {
-	if (w->is_group()) {value(i); goto J1;} // menu title
-	execute(w); // button in the menu bar
-	if (checkmark(w)) redraw();
-	return 1;
+	    if (w->is_group()) {value(i); goto J1;} // menu title
+	    execute(w); // button in the menu bar
+	    if (checkmark(w)) redraw();
+	    return 1;
       }
     }
-    // Now test against the shortcut() of any item in any submenu:
-    if (handle_shortcut()) return 1;
     return 0;
   case KEYUP:
     // In the future maybe any shortcut() will work, but for now
@@ -150,7 +164,7 @@ static void revert(Style* s) {
   s->buttonbox = HIGHLIGHT_UP_BOX;
 #endif
 }
-static NamedStyle style("Menu_Bar", revert, &MenuBar::default_style);
+static NamedStyle style("MenuBar", revert, &MenuBar::default_style);
 NamedStyle* MenuBar::default_style = &::style;
 
 MenuBar::MenuBar(int x,int y,int w,int h,const char *l)
@@ -161,5 +175,5 @@ MenuBar::MenuBar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.58 2002/12/18 08:34:22 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.59 2003/02/02 10:39:23 spitzak Exp $".
 //

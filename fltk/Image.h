@@ -1,5 +1,5 @@
 //
-// "$Id: Image.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: Image.h,v 1.3 2003/02/02 10:39:22 spitzak Exp $"
 //
 // Image object used to label widgets. This caches the image in a
 // server pixmap. Subclasses are used to decide how to change data
@@ -30,6 +30,7 @@
 
 #include "FL_API.h"
 #include "Flags.h"
+#include "Color.h"
 
 namespace fltk {
 
@@ -43,8 +44,8 @@ protected:
 public:
   Image() : id(0), mask(0) {}
   virtual void measure(int& W, int& H);
-  virtual void draw(int x, int y, int w, int h, Flags = 0) = 0;
-  void draw(int x, int y, Flags f = 0) {draw(x,y,w,h,f);}
+  virtual void draw(int x, int y, int w, int h, Color = 0, Flags = 0) = 0;
+  void draw(int x, int y, Flags f = 0) {draw(x,y,w,h,0,f);}
   virtual ~Image();
   // for back compatability only:
   void label(Widget* o);
@@ -55,5 +56,5 @@ public:
 #endif
 
 //
-// End of "$Id: Image.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: Image.h,v 1.3 2003/02/02 10:39:22 spitzak Exp $".
 //

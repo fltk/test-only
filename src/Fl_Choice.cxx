@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.71 2002/12/10 02:00:40 easysw Exp $"
+// "$Id: Fl_Choice.cxx,v 1.72 2003/02/02 10:39:23 spitzak Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -34,6 +34,7 @@ using namespace fltk;
 // the same, so that glyphs may be shared between them.
 
 extern bool fl_hide_shortcut;
+extern const Widget* fl_item_parent;
 
 void Choice::draw() {
   int X=0; int Y=0; int W=w(); int H=h();
@@ -58,6 +59,8 @@ void Choice::draw() {
   Widget* o = get_focus();
   //if (!o && children()) o = child(0);
   if (o) {
+    const Widget* saved_parent = fl_item_parent;
+    fl_item_parent = this;
     if (focused()) o->set_flag(SELECTED);
     else o->clear_flag(SELECTED);
     push_clip(X+2, Y, W-w1-2, H);
@@ -70,6 +73,7 @@ void Choice::draw() {
     o->w(save_w);
     pop_matrix();
     pop_clip();
+    fl_item_parent = saved_parent;
   }
 }
 
@@ -219,5 +223,5 @@ Choice::Choice(int x,int y,int w,int h, const char *l) : Menu(x,y,w,h,l) {
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.71 2002/12/10 02:00:40 easysw Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.72 2003/02/02 10:39:23 spitzak Exp $".
 //

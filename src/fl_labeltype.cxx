@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.34 2003/01/15 07:55:20 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.35 2003/02/02 10:39:23 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -126,44 +126,32 @@ void Widget::make_current() const {
 // The normal call for a draw() method. Draws the label inside the
 // widget's box, if the align is set to draw an inside label.
 void Widget::draw_inside_label() const {
-  if (!(flags()&15) || (flags() & ALIGN_INSIDE)) {
-    int X=0; int Y=0; int W=w_; int H=h_; box()->inset(X,Y,W,H);
-    if (W > 11 && flags()&(ALIGN_LEFT|ALIGN_RIGHT)) {X += 3; W -= 6;}
-    draw_label(X, Y, W, H, flags());
-  }
+  // return immediately if not an inside label:
+  if ((flags()&15) && !(flags() & ALIGN_INSIDE)) return;
+  // figure out the inside of the box():
+  int X=0; int Y=0; int W=w_; int H=h_; box()->inset(X,Y,W,H);
+  // and draw it:
+  draw_inside_label(X,Y,W,H);
 }
 
 // Draws only inside labels, but allows the caller to specify the box.
-// Also allows the caller to turn on some extra flags.
-void Widget::draw_inside_label(int X, int Y, int W, int H, Flags f) const
+// Some widgets use this to move the area the label is drawn.
+void Widget::draw_inside_label(int X, int Y, int W, int H) const
 {
-  if (!(flags()&15) || (flags() & ALIGN_INSIDE)) {
-    if (W > 11 && flags()&(ALIGN_LEFT|ALIGN_RIGHT)) {X += 3; W -= 6;}
-    draw_label(X, Y, W, H, f|flags()&ALIGN_MASK);
-  }
+  // return immediately if not an inside label:
+  if ((flags()&15) && !(flags() & ALIGN_INSIDE)) return;
+  // add some interior border for the text:
+  if (W > 11 && flags()&(ALIGN_LEFT|ALIGN_RIGHT)) {X += 3; W -= 6;}
+  // draw with the normal label color:
+  draw_label(X, Y, W, H, labelcolor(), flags());
 }
 
-// Anybody can call this to force the label to draw anywhere, this is
-// used by Group and TabGroup to draw outside labels:
-void Widget::draw_label(int X, int Y, int W, int H, Flags flags) const
+// Draw the label in any box, and using the passed labelcolor and flags.
+// This is used by Group and TabGroup to draw outside labels, and by
+// buttons to get the label color correct:
+void Widget::draw_label(int X, int Y, int W, int H, Color color, Flags flags) const
 {
-  setfont(labelfont(), labelsize());
-  if (!active_r()) flags |= INACTIVE;
-
-  Color color;
-  // Figure out if alignment puts the label inside the widget:
-  if (!(this->flags()&15) || (this->flags() & ALIGN_INSIDE)) {
-    // yes, inside label is affected by selection or highlight:
-    if (flags&SELECTED)
-      color = selection_textcolor();
-    else if (flags&HIGHLIGHT && (color = highlight_labelcolor()))
-      ;
-    else
-      color = labelcolor();
-    if (focused()) flags |= SELECTED;
-  } else {
-    color = labelcolor();
-  }
+  if (!active_r()) flags |= INACTIVE; // maybe caller should do this?
 
   if (flags & ALIGN_CLIP) push_clip(X, Y, W, H);
 
@@ -184,6 +172,7 @@ void Widget::draw_label(int X, int Y, int W, int H, Flags flags) const
       } else {
 	// put image to left
 	int text_w = W; int text_h = H;
+	setfont(labelfont(), labelsize());
 	measure(label_, text_w, text_h, flags);
 	int d = (W-(h+text_w))>>1;
 	if (d > 0) {X += d; W -= d;}
@@ -205,8 +194,7 @@ void Widget::draw_label(int X, int Y, int W, int H, Flags flags) const
     else if (flags & ALIGN_TOP) cy = 0;
     else cy = h/2-H/2;
 
-    setcolor(inactive(color, flags));
-    image_->draw(X-cx, Y-cy, W, H, flags);
+    image_->draw(X-cx, Y-cy, W, H, color, flags);
 
     // figure out the rectangle that remains for text:
     if (flags & ALIGN_LEFT) {X += w; W -= w;}
@@ -217,6 +205,7 @@ void Widget::draw_label(int X, int Y, int W, int H, Flags flags) const
   }
 
   if (label_ && *label_) {
+    setfont(labelfont(), labelsize());
     labeltype()->draw(label_, X, Y, W, H, color, flags);
   }
 
@@ -230,5 +219,5 @@ void Widget::measure_label(int& w, int& h) const {
 }
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.34 2003/01/15 07:55:20 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.35 2003/02/02 10:39:23 spitzak Exp $".
 //

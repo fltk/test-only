@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.98 2003/01/21 07:53:39 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.99 2003/02/02 10:39:23 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -462,14 +462,15 @@ bool fltk::test_shortcut(int shortcut) {
   return false;
 }
 
-// Test against shortcut() and possibly against a &x shortcut in the label:
 #include <ctype.h>
-
+// Test against shortcut() and possibly against a &x shortcut in the label:
 int Widget::test_shortcut() const {
 
   if (fltk::test_shortcut(shortcut())) return true;
 
   if (flags() & RAW_LABEL) return false;
+
+  //if (!event_state(ALT)) return false;
 
   char c = event_text()[0];
   const char* label = this->label();
@@ -509,5 +510,5 @@ void Widget::draw()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.98 2003/01/21 07:53:39 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.99 2003/02/02 10:39:23 spitzak Exp $".
 //

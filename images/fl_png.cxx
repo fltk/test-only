@@ -1,5 +1,5 @@
 //
-// "$Id: fl_png.cxx,v 1.9 2002/12/18 08:34:21 spitzak Exp $"
+// "$Id: fl_png.cxx,v 1.10 2003/02/02 10:39:22 spitzak Exp $"
 //
 // PNG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 #include <fltk/x.h>
 #include <fltk/SharedImage.h>
 #include <config.h>
-#if HAVE_PNG
+#if HAVE_LIBPNG
 #include <png.h>
 #include <stdlib.h>
 
@@ -48,7 +48,7 @@ static void declare_now(void*) { }
 
 bool fltk::pngImage::test(const uchar* datas, unsigned size)
 {
-#if !HAVE_PNG
+#if !HAVE_LIBPNG
   return 0;
 #else
   return png_check_sig((png_byte*)datas, size);
@@ -57,7 +57,7 @@ bool fltk::pngImage::test(const uchar* datas, unsigned size)
 
 void fltk::pngImage::measure(int &W, int &H)
 {
-#if !HAVE_PNG
+#if !HAVE_LIBPNG
   W = w = 0;
   H = h = 0;
 #else
@@ -133,7 +133,7 @@ void fltk::pngImage::measure(int &W, int &H)
 #endif
 }
 
-#if HAVE_PNG
+#if HAVE_LIBPNG
 static void drawimage_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar* b)
 {
   png_read_row((png_structp)v, b, NULL);
@@ -145,7 +145,7 @@ void fltk::pngImage::read()
 {
   id = mask = 0;
 
-#if HAVE_PNG
+#if HAVE_LIBPNG
   //  printf("reading '%s' ...\n", filename);
   png_structp png_ptr;
   png_infop info_ptr;
@@ -252,5 +252,5 @@ void fltk::pngImage::read()
 }
 
 //
-// End of "$Id: fl_png.cxx,v 1.9 2002/12/18 08:34:21 spitzak Exp $"
+// End of "$Id: fl_png.cxx,v 1.10 2003/02/02 10:39:22 spitzak Exp $"
 //

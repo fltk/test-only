@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg.cxx,v 1.12 2002/12/18 08:34:21 spitzak Exp $"
+// "$Id: fl_jpeg.cxx,v 1.13 2003/02/02 10:39:22 spitzak Exp $"
 //
 // JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 #include <fltk/x.h>
 #include <fltk/SharedImage.h>
 #include <config.h>
-#if HAVE_JPEG
+#if HAVE_LIBJPEG
 #include <stdio.h>
 extern "C" {
 #include <jpeglib.h>
@@ -251,14 +251,14 @@ static void drawimage_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar *b)
 
 #endif
 
-#if HAVE_JPEG
+#if HAVE_LIBJPEG
 // Dummy function to remove gcc's nasty warning about longjmp:
 static void declare_now(void*) { }
 #endif
 
 void fltk::jpegImage::measure(int &W, int &H)
 {
-#if !HAVE_JPEG
+#if !HAVE_LIBJPEG
   w=W=0;
 #else
   if (w>=0) { 
@@ -316,7 +316,7 @@ void fltk::jpegImage::measure(int &W, int &H)
 void fltk::jpegImage::read()
 {
   id = mask = 0;
-#if HAVE_JPEG
+#if HAVE_LIBJPEG
   struct jpeg_decompress_struct cinfo;
   struct my_error_mgr jerr;
   FILE* infile = 0;
@@ -368,7 +368,7 @@ void fltk::jpegImage::read()
 
 bool fltk::jpegImage::test(const uchar* datas, unsigned size)
 {
-#if !HAVE_JPEG
+#if !HAVE_LIBJPEG
   return 0;
 #else
   struct jpeg_decompress_struct cinfo;
@@ -406,5 +406,5 @@ bool fltk::jpegImage::test(const uchar* datas, unsigned size)
 }
 
 //
-// End of "$Id: fl_jpeg.cxx,v 1.12 2002/12/18 08:34:21 spitzak Exp $"
+// End of "$Id: fl_jpeg.cxx,v 1.13 2003/02/02 10:39:22 spitzak Exp $"
 //

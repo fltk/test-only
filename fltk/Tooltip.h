@@ -1,5 +1,5 @@
 //
-// "$Id: Tooltip.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: Tooltip.h,v 1.3 2003/02/02 10:39:22 spitzak Exp $"
 //
 // Code used to control the appearance of tooltips, and to pop them
 // up in response to events other than the mouse entering and exiting
@@ -57,8 +57,8 @@ public:
   static void size(float s)	{ default_style->labelsize = s; }
   static void color(Color c)	{ default_style->color = c; }
   static Color color()		{ return default_style->color; }
-  static void textcolor(Color c){ default_style->labelcolor = c; }
-  static Color textcolor()	{ return default_style->labelcolor; }
+  static void textcolor(Color c){ default_style->textcolor = c; }
+  static Color textcolor()	{ return default_style->textcolor; }
   static void box(Box* b)	{ default_style->box = b; }
   static Box* box()		{ return default_style->box; }
 
@@ -72,5 +72,5 @@ private:
 #endif
 
 //
-// End of "$Id: Tooltip.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: Tooltip.h,v 1.3 2003/02/02 10:39:22 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.34 2002/12/10 02:01:01 easysw Exp $"
+// "$Id: fl_glyph.cxx,v 1.35 2003/02/02 10:39:23 spitzak Exp $"
 //
 // Glyph drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -57,7 +57,7 @@ void Widget::default_glyph(const Widget* widget, int glyph,
   else if (flags&HIGHLIGHT && (color = widget->highlight_labelcolor()))
     ;
   else
-    color = widget->textcolor();
+    color = widget->labelcolor(); // was textcolor();
   // to draw the shape inactive, draw it twice to get the engraved look:
   int i = 0;
   if (flags & INACTIVE) {
@@ -115,5 +115,5 @@ void Widget::default_glyph(const Widget* widget, int glyph,
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.34 2002/12/10 02:01:01 easysw Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.35 2003/02/02 10:39:23 spitzak Exp $".
 //

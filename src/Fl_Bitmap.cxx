@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.cxx,v 1.19 2002/12/10 02:00:38 easysw Exp $"
+// "$Id: Fl_Bitmap.cxx,v 1.20 2003/02/02 10:39:22 spitzak Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -62,12 +62,13 @@ Pixmap fltk::create_bitmap(const uchar* bitmap, int w, int h) {
 }
 #endif
 
-void xbmImage::draw(int x, int y, int, int, Flags flags)
+void xbmImage::draw(int x, int y, int, int, Color color, Flags flags)
 {
   if (!mask) mask = (void*)create_bitmap(array, w, h);
+  fltk::setcolor(inactive(color,flags));
   _draw(x, y, flags);
 }
 
 //
-// End of "$Id: Fl_Bitmap.cxx,v 1.19 2002/12/10 02:00:38 easysw Exp $".
+// End of "$Id: Fl_Bitmap.cxx,v 1.20 2003/02/02 10:39:22 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.183 2002/12/10 02:00:54 easysw Exp $"
+// "$Id: Fl_win32.cxx,v 1.184 2003/02/02 10:39:23 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -933,7 +933,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     // save the keysym until we figure out the characters:
     e_keysym = ms2fltk(wParam,lParam&(1<<24));
     // See if TranslateMessage turned it into a WM_*CHAR message:
-    if (PeekMessage(&msg, hWnd, WM_CHAR, WM_SYSDEADCHAR, 1)) {
+    if (PeekMessage(&msg, hWnd, WM_CHAR, WM_SYSDEADCHAR, PM_REMOVE)) {
       uMsg = msg.message;
       wParam = msg.wParam;
       lParam = msg.lParam;
@@ -1480,11 +1480,19 @@ bool fltk::get_system_colors() {
     style->color = lerp(background, text_background, .5);
   }
 
-  if ((style = Style::find("item"))) {
-    style->color = menuitem_background;
-    style->labelcolor = menuitem_foreground;
-    style->selection_color = select_background;
-    style->selection_textcolor = select_foreground;
+  if (menuitem_background != background || menuitem_foreground != foreground) {
+    if ((style = Style::find("menubar"))) {
+      style->color = menuitem_background;
+      style->textcolor = menuitem_foreground;
+//    style->selection_color = select_background;
+//    style->selection_textcolor = select_foreground;
+    }
+    if ((style = Style::find("popupmenu"))) {
+      style->color = menuitem_background;
+      style->textcolor = menuitem_foreground;
+//    style->selection_color = select_background;
+//    style->selection_textcolor = select_foreground;
+    }
   }
 
 /* This is the same as the defaults:
@@ -1502,7 +1510,7 @@ bool fltk::get_system_colors() {
 
   if ((style = Style::find("tooltip"))) {
     style->color = tooltip_background;
-    style->labelcolor = tooltip_foreground;
+    style->textcolor = tooltip_foreground;
   }
 
   /*
@@ -1592,5 +1600,5 @@ bool fltk::get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.183 2002/12/10 02:00:54 easysw Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.184 2003/02/02 10:39:23 spitzak Exp $".
 //

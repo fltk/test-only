@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Radio_Button.cxx,v 1.4 2002/12/10 02:00:47 easysw Exp $"
+// "$Id: Fl_Radio_Button.cxx,v 1.5 2003/02/02 10:39:23 spitzak Exp $"
 //
 // Radio button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,8 +32,8 @@ static void default_glyph(const Widget* widget, int glyph,
 			  int x,int y,int w,int h, Flags flags)
 {
   // h = (h+1)&(~1); // even only
-  Box* box = widget->buttonbox();
-  box->draw(x, y, w, h, widget->buttoncolor(), flags);
+  Box* box = widget->box();
+  box->draw(x, y, w, h, widget->color(), flags);
   box->inset(x, y, w, h);
   if (flags & VALUE) {
     Color color = (box == NO_BOX && (flags&SELECTED)) ?
@@ -46,10 +46,8 @@ static void default_glyph(const Widget* widget, int glyph,
 }
 
 static void revert(Style* s) {
-  s->box = NO_BOX;
-  s->color = GRAY75;
-  s->buttonbox = ROUND_DOWN_BOX;
-  s->buttoncolor = WHITE;
+  s->buttonbox = NO_BOX;
+  s->box = ROUND_DOWN_BOX;
   s->glyph = ::default_glyph;
 }
 static NamedStyle style("Radio_Button", revert, &RadioButton::default_style);

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.71 2003/01/21 07:53:39 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.72 2003/02/02 10:39:23 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -372,6 +372,8 @@ glyph(const Widget* widget, int glyph, int x,int y,int w,int h, Flags f)
 // this is non-zero if a drag was started in a group open/close box:
 static char openclose_drag;
 
+extern const Widget* fl_item_parent;
+
 // Draws the current item:
 void Browser::draw_item() {
 
@@ -442,17 +444,18 @@ void Browser::draw_item() {
 		      (flags&SELECTED) ? widget->selection_textcolor()
 		      : widget->textcolor(), INVISIBLE);
   }
+  const Widget* saved_parent = fl_item_parent;
+  fl_item_parent = this;
   push_matrix();
   y += (int(leading())-1)/2;
   widget->x(x);
   widget->y(y);
   translate(x, y);
-  //int save_w = widget->w(); widget->w(X+W-x);
   widget->set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
   widget->draw();
   widget->set_damage(0);
-  //widget->w(save_w);
   pop_matrix();
+  fl_item_parent = saved_parent;
 
   widget->invert_flag(preview_open);
 }
@@ -843,7 +846,8 @@ int Browser::handle(int event) {
     int arrow_size = int(textsize())|1;
     int xx = (item_level[HERE]+indented())*arrow_size+X-xposition_-event_x();
     // see if they are inside the widget and it takes the event:
-    if (xx <= 0) item()->send(event);
+    if (xx <= 0 && item()->send(event));
+    else fltk::belowmouse(this);
     // accept enter/move events so the browser's tooltip appears:
     if (event != PUSH) return 1;
     // drag must start & end in open/close box for it to work:
@@ -1133,5 +1137,5 @@ Browser::~Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.71 2003/01/21 07:53:39 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.72 2003/02/02 10:39:23 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.cxx,v 1.35 2002/12/10 02:00:43 easysw Exp $"
+// "$Id: Fl_Light_Button.cxx,v 1.36 2003/02/02 10:39:23 spitzak Exp $"
 //
 // Lighted button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -40,12 +40,12 @@ static void glyph(const Widget* widget, int/*t*/,
   if (f & VALUE) {
     f = f&INACTIVE;
     color = widget->selection_color();
-  } else if ((color = widget->style()->buttoncolor)) {
+  } else if ((color = widget->style()->color)) {
     // if user set the color of the button draw that color
     f = f&INACTIVE;
   } else {
     f = f&INACTIVE | INVISIBLE; // draw frame only
-    color = widget->color();
+    color = widget->buttoncolor();
   }
   THIN_DOWN_BOX->draw(x+((w-ww)>>1), y, ww, h, color, f);
 }
@@ -65,5 +65,5 @@ LightButton::LightButton(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Light_Button.cxx,v 1.35 2002/12/10 02:00:43 easysw Exp $".
+// End of "$Id: Fl_Light_Button.cxx,v 1.36 2003/02/02 10:39:23 spitzak Exp $".
 //

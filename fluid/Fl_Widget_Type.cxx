@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.93 2002/12/15 10:42:50 spitzak Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.94 2003/02/02 10:39:22 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -750,7 +750,7 @@ void color_cb(fltk::LightButton* i, void *v) {
       q->o->color(c); q->redraw();
     }
   }
-  i->buttoncolor(c);
+  i->color(c);
   i->selection_color(c);
   i->labelcolor(NOT_DEFAULT(current_widget, color) ? fltk::RED : fltk::BLACK);
   i->redraw();
@@ -772,7 +772,7 @@ void selection_color_cb(fltk::LightButton* i, void *v) {
       q->o->selection_color(c); q->redraw();
     }
   }
-  i->buttoncolor(c);
+  i->color(c);
   i->selection_color(c);
   i->labelcolor(NOT_DEFAULT(current_widget, selection_color) ? fltk::RED : fltk::BLACK);
   i->redraw();
@@ -790,7 +790,7 @@ void button_color_cb(fltk::LightButton* i, void *v) {
       q->o->buttoncolor(c); q->redraw();
     }
   }
-  i->buttoncolor(c);
+  i->color(c);
   i->selection_color(c);
   i->labelcolor(NOT_DEFAULT(current_widget, buttoncolor) ? fltk::RED : fltk::BLACK);
   i->redraw();
@@ -808,7 +808,7 @@ void label_color_cb(fltk::LightButton* i, void *v) {
   } else {
     i->show();
   }
-  i->buttoncolor(c);
+  i->color(c);
   i->selection_color(c);
   i->labelcolor(NOT_DEFAULT(current_widget, labelcolor) ? fltk::RED : fltk::BLACK);
   i->redraw();
@@ -877,7 +877,7 @@ void text_color_cb(fltk::LightButton* i, void* v) {
       q->redraw();
     }
   }
-  i->buttoncolor(c);
+  i->color(c);
   i->selection_color(c);
   i->labelcolor(NOT_DEFAULT(current_widget, textcolor) ? fltk::RED : fltk::BLACK);
   i->redraw();
@@ -899,7 +899,7 @@ void selected_text_color_cb(fltk::LightButton* i, void* v) {
       q->redraw();
     }
   }
-  i->buttoncolor(c);
+  i->color(c);
   i->selection_color(c);
   i->labelcolor(NOT_DEFAULT(current_widget, selection_textcolor) ? fltk::RED : fltk::BLACK);
   i->redraw();
@@ -909,6 +909,7 @@ void highlight_color_cb(fltk::LightButton* i, void *v) {
   fltk::Color c = fltk::BLACK;
   if (v == LOAD) {
     c = current_widget->o->highlight_color();
+    if (!c) c = current_widget->o->buttoncolor();
     i->show();
   } else {
     c = i->selection_color();
@@ -919,7 +920,7 @@ void highlight_color_cb(fltk::LightButton* i, void *v) {
       q->o->highlight_color(c); q->redraw();
     }
   }
-  i->buttoncolor(c);
+  i->color(c);
   i->selection_color(c);
   i->labelcolor(NOT_DEFAULT(current_widget, highlight_color) ? fltk::RED : fltk::BLACK);
   i->redraw();
@@ -930,6 +931,7 @@ void highlight_label_color_cb(fltk::LightButton* i, void *v) {
   if (v == LOAD) {
     i->label("Highlight Label Color");
     c = current_widget->o->highlight_labelcolor();
+    if (!c) c = current_widget->o->labelcolor();
     i->show();
   } else {
     c = i->selection_color();
@@ -940,7 +942,7 @@ void highlight_label_color_cb(fltk::LightButton* i, void *v) {
       q->o->highlight_labelcolor(c); q->redraw();
     }
   }
-  i->buttoncolor(c);
+  i->color(c);
   i->selection_color(c);
   i->labelcolor(NOT_DEFAULT(current_widget, highlight_labelcolor) ? fltk::RED : fltk::BLACK);
   i->redraw();
@@ -2143,5 +2145,5 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.93 2002/12/15 10:42:50 spitzak Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.94 2003/02/02 10:39:22 spitzak Exp $".
 //

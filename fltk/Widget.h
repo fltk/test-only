@@ -1,5 +1,5 @@
 //
-// "$Id: Widget.h,v 1.4 2003/01/19 07:55:00 spitzak Exp $"
+// "$Id: Widget.h,v 1.5 2003/02/02 10:39:22 spitzak Exp $"
 //
 // The base class of all widgets.
 //
@@ -188,8 +188,8 @@ public:
   void  draw_box() const	;
   void  draw_glyph(int t, int x,int y,int w,int h, Flags f) const
     { glyph()(this,t,x,y,w,h,f); }
-  void  draw_label(int x,int y,int w,int h, Flags) const ;
-  void  draw_inside_label(int x,int y,int w,int h, Flags) const ;
+  void  draw_label(int x,int y,int w,int h, Color, Flags) const ;
+  void  draw_inside_label(int x,int y,int w,int h) const ;
   void	draw_inside_label() const;
   void	draw_background() const	;
   void	cursor(Cursor*) const	;
@@ -301,5 +301,5 @@ enum { // Widget::when() values
 #endif
 
 //
-// End of "$Id: Widget.h,v 1.4 2003/01/19 07:55:00 spitzak Exp $".
+// End of "$Id: Widget.h,v 1.5 2003/02/02 10:39:22 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: KDE.cxx,v 1.9 2002/12/10 02:01:07 easysw Exp $"
+// "$Id: KDE.cxx,v 1.10 2003/02/02 10:39:23 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -265,7 +265,8 @@ extern "C" bool fltk_theme() {
   style->highlight_color = NO_COLOR;
   style->highlight_labelcolor = NO_COLOR;
 
-  if (background) fltk::set_background(background);
+  if (background)
+    fltk::set_background(background);
 
   if (foreground) {
     style->labelcolor = foreground;
@@ -273,11 +274,25 @@ extern "C" bool fltk_theme() {
     style->selection_textcolor = foreground;
   }
 
-  if (window_background) style->color = window_background;
+  if (button_background && button_background != background)
+    style->buttoncolor = button_background;
 
-  if (select_background) style->selection_color = select_background;
+  if (window_background && window_background != background)
+    style->color = window_background;
 
-  if (select_foreground) style->selection_textcolor = select_foreground;
+  if (window_foreground)
+    style->textcolor = style->selection_textcolor = window_foreground;
+
+  if (select_background)
+    style->selection_color = select_background;
+
+  if (select_foreground)
+    style->selection_textcolor = select_foreground;
+
+  if (button_foreground && button_foreground != foreground &&
+      (style = Style::find("button"))) {
+    style->labelcolor = button_foreground;
+  }
 
 // Don't bother.  KDE gets it wrong.
 //  if ((style = Style::find("scrollbar"))) {
@@ -298,49 +313,6 @@ extern "C" bool fltk_theme() {
     if (foreground) style->color = 48;
   }
 */
-  if (window_background) {
-    if ((style = Style::find("check button"))) {
-      style->labelcolor = button_foreground;
-      style->buttoncolor = window_background;
-    }
-    if ((style = Style::find("item"))) {
-      style->labelcolor = button_foreground;
-      style->buttoncolor = window_background;
-    }
-  }
-
-  if (button_background) {
-    if ((style = Style::find("button"))) {
-      style->color = button_background;
-      style->labelcolor = button_foreground;
-    }
-
-    if ((style = Style::find("highlight button"))) {
-      style->color = button_background;
-      style->labelcolor = button_foreground;
-    }
-
-    if ((style = Style::find("return button"))) {
-      style->color = button_background;
-      style->labelcolor = button_foreground;
-    }
-
-    if ((style = Style::find("light button"))) {
-      style->color = button_background;
-      style->labelcolor = button_foreground;
-    }
-
-//    if ((style = Style::find("menu button"))) {
-//      style->color = button_background;
-//      style->labelcolor = button_foreground;
-//    }
-
-    if (motif_style && (style = Style::find("choice"))) {
-      style->buttoncolor = button_background;
-      style->labelcolor = button_foreground;
-    }
-
-  }
 
   if (!colors_only) {
     if (motif_style) {
@@ -372,5 +344,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: KDE.cxx,v 1.9 2002/12/10 02:01:07 easysw Exp $".
+// End of "$Id: KDE.cxx,v 1.10 2003/02/02 10:39:23 spitzak Exp $".
 //

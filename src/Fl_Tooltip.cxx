@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.52 2002/12/10 02:00:51 easysw Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.53 2003/02/02 10:39:23 spitzak Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -39,7 +39,10 @@ bool		Tooltip::enabled_ = true;
 
 class TooltipBox : public MenuWindow {
 public:
-  TooltipBox() : MenuWindow(0, 0) {style(Tooltip::default_style);}
+  TooltipBox() : MenuWindow(0, 0) {
+    style(Tooltip::default_style);
+    flags(ALIGN_LEFT|ALIGN_WRAP|ALIGN_INSIDE);
+  }
   void draw();
   void layout();
 #ifdef _WIN32
@@ -58,7 +61,7 @@ void TooltipBox::layout() {
   setfont(labelfont(), labelsize());
   int ww, hh;
   ww = MAX_WIDTH;
-  measure(label(), ww, hh, ALIGN_LEFT|ALIGN_WRAP|ALIGN_INSIDE);
+  measure(label(), ww, hh, flags());
   ww += 6; hh += 6;
 
   const ScreenInfo& info = screenInfo();
@@ -87,7 +90,7 @@ void TooltipBox::layout() {
 
 void TooltipBox::draw() {
   draw_box();
-  draw_label(3, 3, w()-6, h()-6, ALIGN_LEFT|ALIGN_WRAP|ALIGN_INSIDE);
+  draw_label(3, 3, w()-6, h()-6, textcolor(), flags());
 }
 
 static bool recent_tooltip;
@@ -209,12 +212,12 @@ void Tooltip::enter(Widget* wid, int x,int y,int w,int h,
 static void revert(Style* s) {
   s->box = BORDER_BOX;
   s->color = (Color)215;
-  s->textcolor = GRAY33;
-  s->labelcolor = BLACK;
+  //s->textcolor = GRAY33;
+  //s->labelcolor = BLACK;
 }
 static NamedStyle style("Tooltip", revert, &Tooltip::default_style);
 NamedStyle* Tooltip::default_style = &::style;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.52 2002/12/10 02:00:51 easysw Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.53 2003/02/02 10:39:23 spitzak Exp $".
 //
