@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.108 2000/06/03 00:06:07 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.109 2000/06/03 04:24:09 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -716,7 +716,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     break;
 
   case WM_MOVE:
-    if (window->resize(LOWORD(lParam), HIWORD(lParam), window->w(), window->h()))
+    if (window->resize((signed short)LOWORD(lParam),
+                       (signed short)HIWORD(lParam),
+                       window->w(), window->h()))
       resize_from_system = window;
     break;
 
@@ -1183,5 +1185,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.108 2000/06/03 00:06:07 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.109 2000/06/03 04:24:09 carl Exp $".
 //
