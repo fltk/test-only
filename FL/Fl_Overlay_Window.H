@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Overlay_Window.H,v 1.6 1999/06/15 17:02:26 gustavo Exp $"
+// "$Id: Fl_Overlay_Window.H,v 1.7 1999/08/27 17:09:00 gustavo Exp $"
 //
 // Overlay window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -34,6 +34,7 @@ class Fl_Overlay_Window : public Fl_Double_Window {
   Fl_Window *overlay_;
 
 protected:
+  void resize_from_system(int,int,int,int);
   FL_EXPORT void layout();
 
 public:
@@ -53,5 +54,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Overlay_Window.H,v 1.6 1999/06/15 17:02:26 gustavo Exp $".
+// End of "$Id: Fl_Overlay_Window.H,v 1.7 1999/08/27 17:09:00 gustavo Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.cxx,v 1.14 1999/08/23 16:43:11 vincent Exp $"
+// "$Id: Fl_Double_Window.cxx,v 1.15 1999/08/27 17:09:02 gustavo Exp $"
 //
 // Double-buffered window code for the Fast Light Tool Kit (FLTK).
 //
@@ -162,18 +162,27 @@ void Fl_Double_Window::flush(int eraseoverlay) {
   fl_copy_offscreen(X, Y, W, H, i->other_xid, X, Y);
 }
 
-void Fl_Double_Window::layout() {
+void Fl_Double_Window::maybe_free_backbuffer(int W, int H) {
 #if USE_XDBE
   if (!use_xdbe) {
 #endif
     Fl_X* i = Fl_X::i(this);
-    if (i && i->other_xid && (ow() != w() || oh() != h())) {
+    if (i && i->other_xid && (W != w() || H != h())) {
       fl_delete_offscreen(i->other_xid);
       i->other_xid = 0;
     }
 #if USE_XDBE
   }
 #endif
+}
+
+void Fl_Double_Window::resize_from_system(int X, int Y, int W, int H) {
+  maybe_free_backbuffer(W,H);
+  Fl_Window::resize_from_system(X,Y,W,H);
+}
+
+void Fl_Double_Window::layout() {
+  maybe_free_backbuffer(ow(),oh());
   Fl_Window::layout();
 }
 
@@ -193,5 +202,5 @@ Fl_Double_Window::~Fl_Double_Window() {
 }
 
 //
-// End of "$Id: Fl_Double_Window.cxx,v 1.14 1999/08/23 16:43:11 vincent Exp $".
+// End of "$Id: Fl_Double_Window.cxx,v 1.15 1999/08/27 17:09:02 gustavo Exp $".
 //

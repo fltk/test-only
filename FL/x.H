@@ -1,5 +1,5 @@
 //
-// "$Id: x.H,v 1.12 1999/08/16 07:30:55 bill Exp $"
+// "$Id: x.H,v 1.13 1999/08/27 17:09:01 gustavo Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -114,6 +114,8 @@ public:
   // kludges to get around protection:
   FL_EXPORT void flush() {w->flush();}
   FL_EXPORT void layout() {w->layout();}
+  FL_EXPORT void resize_from_system(int X,int Y,int W,int H) 
+    {w->resize_from_system(X,Y,W,H);}
   static FL_EXPORT void x(Fl_Window* w, int X) {w->x(X);}
   static FL_EXPORT void y(Fl_Window* w, int Y) {w->y(Y);}
 };
@@ -129,5 +131,5 @@ extern FL_EXPORT int fl_background_pixel;  // hack into Fl_X::make_xid()
 #endif
 
 //
-// End of "$Id: x.H,v 1.12 1999/08/16 07:30:55 bill Exp $".
+// End of "$Id: x.H,v 1.13 1999/08/27 17:09:01 gustavo Exp $".
 //
