@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Printer.cxx,v 1.1.2.2 2004/04/02 20:50:27 rokan Exp $"
+// "$Id: Fl_Printer.cxx,v 1.1.2.3 2004/10/03 22:48:38 rokan Exp $"
 //
 // Preferences methods for the Fast Light Tool Kit (FLTK).
 //
@@ -25,6 +25,7 @@
 
 
 #include <FL/Fl_Printer.H>
+#include <FL/Fl.H>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -100,8 +101,17 @@ void Fl_Printer::place(double x, double y, double w, double h, double tx, double
 
 }
 
+void Fl_Printer::alpha_background(Fl_Color c){
+	Fl::get_color(c, bg_r, bg_g, bg_b);
+}
+
+Fl_Printer::Fl_Printer(){
+	Fl::get_color(FL_GRAY, bg_r, bg_g, bg_b);
+}
+
+
 //
-// End of "$Id: Fl_Printer.cxx,v 1.1.2.2 2004/04/02 20:50:27 rokan Exp $"
+// End of "$Id: Fl_Printer.cxx,v 1.1.2.3 2004/10/03 22:48:38 rokan Exp $"
 //
 
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_PS_Printer.cxx,v 1.1.2.4 2004/04/06 22:37:24 rokan Exp $"
+// "$Id: Fl_PS_Printer.cxx,v 1.1.2.5 2004/10/03 22:48:39 rokan Exp $"
 //
 // Postscript device class for the Fast Light Tool Kit (FLTK).
 //
@@ -357,7 +357,7 @@ Fl_PS_Printer::Fl_PS_Printer(FILE *o, int lang_level, int pages):clip_(0),interp
   output=o;
   mask = 0;
  
-  bg_=FL_GRAY;
+
   fprintf(output, "%%!PS-Adobe-3.0\n");
   fprintf(output, "%%%%Creator: %s\n",doc_info());
   if(lang_level_>1)
@@ -412,7 +412,7 @@ Fl_PS_Printer::Fl_PS_Printer(FILE *o, int lang_level, int x, int y, int w, int h
   pages_=0;
   //clip_=0;
   lang_level_=lang_level;
-  bg_=FL_GRAY;
+
   fprintf(output, "%%!PS-Adobe-3.0 EPSF-3.0\n");
   if(lang_level_>1)
     fprintf(output, "%%%%LanguageLevel: %i\n" , lang_level_);
@@ -531,7 +531,7 @@ void Fl_PS_Printer::place(double x, double y, double tx, double ty, double scale
 
 
 //
-// End of "$Id: Fl_PS_Printer.cxx,v 1.1.2.4 2004/04/06 22:37:24 rokan Exp $".
+// End of "$Id: Fl_PS_Printer.cxx,v 1.1.2.5 2004/10/03 22:48:39 rokan Exp $".
 //
 
 

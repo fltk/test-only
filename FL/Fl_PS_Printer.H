@@ -45,7 +45,7 @@ class FL_EXPORT Fl_PS_Printer:public Fl_Printer{
   uchar * mask;
   int mx; // width of mask;
   int my; // mask lines
-  Fl_Color bg_;
+  //Fl_Color bg_;
   int (*close_cmd_)(FILE *);
   int page_policy_;
   int nPages;
@@ -86,7 +86,7 @@ public:
 protected:  // implementation of drawing methods
 
     void color(Fl_Color c);
-    void bg_color(Fl_Color bg);
+    //void bg_color(Fl_Color bg);
     void color(uchar r, uchar g, uchar b);
     Fl_Color color(){return color_;};
 

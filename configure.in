@@ -1,7 +1,7 @@
 dnl -*- sh -*-
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.33.2.31.2.91.2.18 2004/07/23 19:42:50 easysw Exp $"
+dnl "$Id: configure.in,v 1.33.2.31.2.91.2.19 2004/10/03 22:48:37 rokan Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -84,6 +84,14 @@ case $uname in
 	    CPPFLAGS="$CPPFLAGS -mno-cygwin"
 	    CXXFLAGS="$CXXFLAGS -mno-cygwin"
 	    LDFLAGS="$LDFLAGS -mno-cygwin"
+	fi
+	AC_ARG_ENABLE(win9x, [  --enable-win9x         compile for platforms < windows 2000 [default=no]])
+	if test x$enable_win9x != xyes; then
+	    AC_DEFINE(HAVE_ALPHABLEND,1)
+	    AC_DEFINE(HAVE_DCBRUSH,1)
+	else
+	   AC_DEFINE(HAVE_ALPHABLEND,0)
+	   AC_DEFINE(HAVE_DCBRUSH,0)
 	fi
 	;;
 esac
@@ -499,6 +507,11 @@ case $uname in
 	CFLAGS="-mwindows -DWIN32 $CFLAGS"
 	CXXFLAGS="-mwindows -DWIN32 $CXXFLAGS"
 	LDFLAGS="-mwindows $LDFLAGS"
+	
+	if test x$enable_win9x != xyes; then
+	  LIBS="$LIBS -lmsimg32"	
+	fi
+	
 	LIBS="$LIBS -lole32 -luuid -lcomctl32 -lwsock32"
 	OPTIM="$OPTIM"
 
@@ -942,5 +955,5 @@ dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.18 2004/07/23 19:42:50 easysw Exp $".
+dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.19 2004/10/03 22:48:37 rokan Exp $".
 dnl

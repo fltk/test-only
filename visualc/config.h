@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.5.2.5.2.9.2.2 2003/12/02 02:51:49 easysw Exp $"
+ * "$Id: config.h,v 1.5.2.5.2.9.2.3 2004/10/03 22:48:39 rokan Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK) for Visual C++.
  *
@@ -184,5 +184,21 @@
 
 
 /*
- * End of "$Id: config.h,v 1.5.2.5.2.9.2.2 2003/12/02 02:51:49 easysw Exp $".
+ * Do we have the Alphablend? Can be 1 if allpications run only on
+ * Win 9x >= Win98
+ * WinNT  >= Win2k
+ */
+
+#define HAVE_ALPHABLEND    0
+
+
+/*
+ * Do we have direct colors for brushes?  Set this if you complile for platforms >= win2k
+ */
+
+#define HAVE_DCBRUSH    0
+
+
+/*
+ * End of "$Id: config.h,v 1.5.2.5.2.9.2.3 2004/10/03 22:48:39 rokan Exp $".
  */

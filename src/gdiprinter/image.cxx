@@ -1,5 +1,5 @@
 //
-// "$Id: image.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// "$Id: image.cxx,v 1.1.2.2 2004/10/03 22:48:39 rokan Exp $"
 //
 // WIN32 GDI printing device for the Fast Light Tool Kit (FLTK).
 //
@@ -31,47 +31,157 @@
 #include "../win/Fl_Win_Display.H"
 extern Fl_Win_Display fl_disp;
 
+struct _img_data{
+	void * img;
+	int cx;
+	int cy;
+	uchar bg_r, bg_g, bg_b;
+};
+
+
+
+
+void Fl_GDI_Printer::alphamix(void * data,int x, int y, int w, uchar * buf){
+	_img_data * d = (_img_data *) data;
+  Fl_RGB_Image * img = (Fl_RGB_Image *)d->img;
+	int l = img->ld();
+	if(!l) l = img->w() * img->d();
+	const uchar * from  = img->array + (y + d->cy) * l + (x + d->cx) * img->d();
+	w++;
+	for(;w ;w--){
+		int a = from[3];
+		* buf++ = (uchar)((a * (*from) + (0xff - a) * d->bg_r)/0xff);
+		* buf++ = (uchar)((a * from[1] + (0xff - a) * d->bg_g)/0xff);
+		* buf++ = (uchar)((a * from[2] + (0xff - a) * d->bg_b)/0xff);
+		from += img->d();
+	};
+};
+
+void Fl_GDI_Printer::mono_alphamix(void * data,int x, int y, int w, uchar * buf){
+	_img_data * d = (_img_data *) data;
+  Fl_RGB_Image * img = (Fl_RGB_Image *)d->img;
+	int l = img->ld();
+	if(!l) l = img->w() * img->d();
+	const uchar * from  = img->array + (y + d->cy) * l + (x + d->cx) * img->d();
+	w++;
+	for(;w ;w--){
+		int a = from[1];
+		* buf++ = (uchar)((a * (*from) + (0xff - a) * d->bg_r)/0xff);
+		* buf++ = (uchar)((a * (*from) + (0xff - a) * d->bg_g)/0xff);
+		* buf++ = (uchar)((a * (*from) + (0xff - a) * d->bg_b)/0xff);
+		from += img->d();
+	};
+};
+
 
 
 
 
 void Fl_GDI_Printer::draw_image(const uchar* data, int x, int y, int w, int h, int delta, int ldelta){
-  fl_disp.draw_image(data, x, y, w, h, delta, ldelta);
+  Fl_Offscreen id = fl_create_offscreen(w, h);
+  fl_begin_offscreen(id);
+  fl_disp.draw_image(data, 0, 0, w, h, delta, ldelta);
+  fl_end_offscreen();
+  fl_copy_offscreen(x, y, w, h, id, 0, 0);
+  fl_delete_offscreen(id);
 };
 
 void Fl_GDI_Printer::draw_image_mono(const uchar* data, int x, int y, int w,int h, int delta, int ld){
-  fl_disp.draw_image_mono(data, x, y, w, h, delta, ld);
+  Fl_Offscreen id = fl_create_offscreen(w, h);
+  fl_begin_offscreen(id);
+  fl_disp.draw_image_mono(data, 0, 0, w, h, delta, ld);
+  fl_end_offscreen();
+  fl_copy_offscreen(x, y, w, h, id, 0, 0);
+  fl_delete_offscreen(id);
 };
 
 void Fl_GDI_Printer::draw_image(Fl_Draw_Image_Cb cb, void* data, int x, int y, int w, int h, int delta){
-  fl_disp.draw_image(cb,data, x, y, w, h, delta);
+  Fl_Offscreen id = fl_create_offscreen(w, h);
+  fl_begin_offscreen(id);
+  fl_disp.draw_image(cb, data, 0, 0, w, h, delta);
+  fl_end_offscreen();
+  fl_copy_offscreen(x, y, w, h, id, 0, 0);
+  fl_delete_offscreen(id);
 };
 
 void Fl_GDI_Printer::draw_image_mono(Fl_Draw_Image_Cb cb, void* data, int x, int y, int w, int h, int delta){
-  fl_disp.draw_image_mono(cb, data, x, y, w, h, delta);
+  Fl_Offscreen id = fl_create_offscreen(w, h);
+  fl_begin_offscreen(id);
+  fl_disp.draw_image_mono(cb, data, 0, 0, w, h, delta);
+  fl_end_offscreen();
+  fl_copy_offscreen(x, y, w, h, id, 0, 0);
+  fl_delete_offscreen(id);
 };
 
 
 
 void Fl_GDI_Printer::draw(Fl_RGB_Image * rgb,int XP, int YP, int WP, int HP, int cx, int cy){
-  check_image_cache(rgb); // we have to do thet before calling display device
-  fl_disp.draw(rgb, XP, YP, WP, HP, cx, cy);
-  rgb->uncache(); // display has wrong device descriptor;
+
+
+  if(rgb->d() >3){
+    _img_data  d = {rgb, cx, cy, bg_r, bg_g, bg_b};
+    draw_image(&alphamix, &d, XP, YP, WP, HP,3);
+  }else if(rgb->d()==2){ // mono alphablended image
+    _img_data  d = {rgb, cx, cy, bg_r, bg_g, bg_b};
+    draw_image(&alphamix, &d, XP, YP, WP, HP,3);
+  }else{
+    int ld = rgb->ld();
+    if(!ld) ld = rgb->w() * rgb->d();
+    fl_draw_image(rgb->array + cy*ld + cx * rgb->d(), XP, YP, WP, HP, rgb->d(), rgb->ld());
+  }
 }
 
-void Fl_GDI_Printer::draw(Fl_Bitmap * bitmap,int XP, int YP, int WP, int HP, int cx, int cy){
 
-  check_image_cache(bitmap); // we have to do thet before calling display device
-  fl_disp.draw(bitmap, XP, YP, WP, HP, cx, cy);
-  bitmap->uncache(); // display has wrong device descriptor;
+static void bitmap_mix(void * data,int x, int y, int w, uchar * buf){
+  _img_data * d = (_img_data *) data;
+  Fl_Bitmap * img = (Fl_Bitmap *)d->img;
+	int l = (img->w()+7)/8;
+  const uchar * from = img->array + l*(y + d->cy) + (x + d->cx)/8;
+  int si = x % 8;
+  uchar mask = 1 << si;
+  COLORREF  cref = fl_RGB();
+  uchar r = GetRValue(cref);
+  uchar g = GetGValue(cref);
+  uchar b = GetBValue(cref);
+  w++;
+  for(; w; w--){
+    if(*from & mask){
+     * buf++ = r;
+     * buf++ = g;
+     * buf++ = b;
+    }else{
+     * buf++ = d->bg_r;
+     * buf++ = d->bg_g;
+     * buf++ = d->bg_b;
+    };
+    if(mask ==128){
+      from++;
+      mask = 1;
+    }else
+      mask <<=1;
+  };
+};
+
+
+
+void Fl_GDI_Printer::draw(Fl_Bitmap * img,int XP, int YP, int WP, int HP, int cx, int cy){
+    _img_data  d = {img, cx, cy, bg_r, bg_g, bg_b};
+    draw_image(&bitmap_mix, &d, XP, YP, WP, HP,3);
+
 }
 
-void Fl_GDI_Printer::draw(Fl_Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy){
-  check_image_cache(pxm);
-  fl_disp.draw(pxm, XP, YP, WP, HP, cx, cy);
-  pxm->uncache(); // display has wrong device descriptor;
+void Fl_GDI_Printer::draw(Fl_Pixmap * img,int XP, int YP, int WP, int HP, int cx, int cy){
+
+  Fl_Offscreen id = fl_create_offscreen(img->w(), img->h());
+  fl_begin_offscreen(id);
+  fl_draw_pixmap(img->data(),0,0,bg_r_,bg_g_,bg_b_);
+  fl_end_offscreen();
+  fl_copy_offscreen(XP, YP, WP, HP, id, cx, cy);
+  fl_delete_offscreen(id);
+
+
 }
 
 //
-// End of "$Id: image.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// End of "$Id: image.cxx,v 1.1.2.2 2004/10/03 22:48:39 rokan Exp $"
 //

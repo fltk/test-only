@@ -1,5 +1,5 @@
 //
-// "$Id: draw_image.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $"
+// "$Id: draw_image.cxx,v 1.1.2.2 2004/10/03 22:48:39 rokan Exp $"
 //
 // WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -49,6 +49,10 @@
 #include "Fl_Win_Display.H"
 
 #define MAXBUFFER 0x40000 // 256k
+
+#if HAVE_ALPHABLEND
+FL_EXPORT int fl_draw_alpha = 0;
+#endif
 
 #if USE_COLORMAP
 
@@ -110,6 +114,8 @@ static void monodither(uchar* to, const uchar* from, int w, int delta) {
 
 #endif // USE_COLORMAP
 
+extern uchar **fl_mask_bitmap;
+
 static void innards(const uchar *buf, int X, int Y, int W, int H,
 		    int delta, int linedelta, int mono,
 		    Fl_Draw_Image_Cb cb, void* userdata)
@@ -128,7 +134,8 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   static U32 bmibuffer[256+12];
   BITMAPINFO &bmi = *((BITMAPINFO*)bmibuffer);
   if (!bmi.bmiHeader.biSize) {
-    bmi.bmiHeader.biSize = sizeof(bmi)-4; // does it use this to determine type?
+    //bmi.bmiHeader.biSize = sizeof(bmi)-4; // does it use this to determine type?
+	bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
     bmi.bmiHeader.biPlanes = 1;
     bmi.bmiHeader.biCompression = BI_RGB;
     bmi.bmiHeader.biXPelsPerMeter = 0;
@@ -136,31 +143,59 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
     bmi.bmiHeader.biClrUsed = 0;
     bmi.bmiHeader.biClrImportant = 0;
   }
+
+  // -1 == none
+  // 0  == indexed
+  // 1  == mono
+  static int current_cmap = -1;
+
 #if USE_COLORMAP
   if (indexed) {
-    for (short i=0; i<256; i++) {
-      *((short*)(bmi.bmiColors)+i) = i;
-    }
+	if(current_cmap != 0) {
+      current_cmap = 0;
+      for (short i=0; i<256; i++) {
+        *((short*)(bmi.bmiColors)+i) = i;
+	  }
+	}
   } else
 #endif
   if (mono) {
-    for (int i=0; i<256; i++) {
-      bmi.bmiColors[i].rgbBlue = (uchar)i;
-      bmi.bmiColors[i].rgbGreen = (uchar)i;
-      bmi.bmiColors[i].rgbRed = (uchar)i;
-      bmi.bmiColors[i].rgbReserved = (uchar)i;
-    }
+	if(current_cmap != 1) {
+      current_cmap = 1;
+      for (int i=0; i<256; i++) {
+        bmi.bmiColors[i].rgbBlue = (uchar)i;
+        bmi.bmiColors[i].rgbGreen = (uchar)i;
+        bmi.bmiColors[i].rgbRed = (uchar)i;
+        bmi.bmiColors[i].rgbReserved = (uchar)i;
+	  }
+	}
   }
-  bmi.bmiHeader.biWidth = w;
-#if USE_COLORMAP
-  bmi.bmiHeader.biBitCount = mono|indexed ? 8 : 24;
-  int pixelsize = mono|indexed ? 1 : 3;
+
+#if HAVE_ALPHABLEND
+# if USE_COLORMAP
+  int pixelsize = mono|indexed ? 1 : 4;
+# else
+  int pixelsize = mono ? 1 : 4;
+# endif
+  int linesize = pixelsize * w;
+  if ((linesize % 4) != 0) {
+    linesize += 4 - (linesize % 4);
+  }
+
 #else
-  bmi.bmiHeader.biBitCount = mono ? 8 : 24;
+
+# if USE_COLORMAP
+  int pixelsize = mono|indexed ? 1 : 3;
+# else
   int pixelsize = mono ? 1 : 3;
-#endif
+# endif
   int linesize = (pixelsize*w+3)&~3;
-  
+
+#endif
+
+  bmi.bmiHeader.biWidth = w;
+  bmi.bmiHeader.biBitCount = pixelsize*8;
+
   static U32* buffer;
   int blocking = h;
   {int size = linesize*h;
@@ -190,32 +225,40 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
     for (k = 0; j<h && k<blocking; k++, j++) {
       const uchar* from;
       if (!buf) { // run the converter:
-	cb(userdata, x-X, y-Y+j, w, (uchar*)line_buffer);
-	from = (uchar*)line_buffer;
+	    cb(userdata, x-X, y-Y+j, w, (uchar*)line_buffer);
+	    from = (uchar*)line_buffer;
       } else {
-	from = buf;
-	buf += linedelta;
+	    from = buf;
+	    buf += linedelta;
       }
       uchar *to = (uchar*)buffer+(blocking-k-1)*linesize;
 #if USE_COLORMAP
       if (indexed) {
-	if (mono)
-	  monodither(to, from, w, delta);
-	else 
-	  dither(to, from, w, delta);
-	to += w;
+	    if (mono)
+	      monodither(to, from, w, delta);
+	    else 
+	      dither(to, from, w, delta);
+	    to += w;
       } else
 #endif
-      if (mono) {
-	for (int i=w; i--; from += delta) *to++ = *from;
-      } else {
-	for (int i=w; i--; from += delta, to += 3) {
-	  uchar r = from[0];
-	  to[0] = from[2];
-	  to[1] = from[1];
-	  to[2] = r;
+	  
+        if (mono) {
+	        for (int i=w; i--; from += delta) *to++ = *from;
+        } else {
+	        for (int i=w; i--; from += delta, to += pixelsize) {
+	          to[0] = from[2];
+	          to[1] = from[1];
+	          to[2] = from[0];
+#if HAVE_ALPHABLEND
+		        if(fl_draw_alpha){
+			        uchar a = to[3] = from[3];
+			        to[0] = (uchar)(((int)to[0]) * a / 0xff);
+			        to[1] = (uchar)(((int)to[1]) * a / 0xff);
+			        to[2] = (uchar)(((int)to[2]) * a / 0xff);
+            }
+#endif
+          }
         }
-      }
     }
     SetDIBitsToDevice(fl_gc, x, y+j-k, w, k, 0, 0, 0, k,
 		      (LPSTR)((uchar*)buffer+(blocking-k)*linesize),
@@ -259,5 +302,5 @@ void Fl_Win_Display::rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b
 }
 
 //
-// End of "$Id: draw_image.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $".
+// End of "$Id: draw_image.cxx,v 1.1.2.2 2004/10/03 22:48:39 rokan Exp $".
 //

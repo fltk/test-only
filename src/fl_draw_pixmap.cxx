@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_pixmap.cxx,v 1.4.2.8.2.10.2.6 2004/09/11 04:44:43 rokan Exp $"
+// "$Id: fl_draw_pixmap.cxx,v 1.4.2.8.2.10.2.7 2004/10/03 22:48:38 rokan Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -132,10 +132,22 @@ static void cb2(void*v, int x, int y, int w, uchar* buf) {
 uchar **fl_mask_bitmap; // if non-zero, create bitmap and store pointer here
 
 int fl_draw_pixmap(/*const*/ char* const* data, int x,int y,Fl_Color bg) {
+  uchar bg_r, bg_g, bg_b;
+  Fl::get_color(bg, bg_r, bg_g, bg_b);
   return fl_draw_pixmap((const char*const*)data,x,y,bg);
 }
 
-int fl_draw_pixmap(const char*const* di, int x, int y, Fl_Color bg) {
+int fl_draw_pixmap(char* const* data, int x,int y, uchar bg_r, uchar bg_g, uchar bg_b) {
+  return fl_draw_pixmap((const char*const*)data,x,y, bg_r, bg_g, bg_b) ;
+}
+
+int fl_draw_pixmap(const char* const* data, int x,int y, Fl_Color bg) {
+  uchar bg_r, bg_g, bg_b;
+  Fl::get_color(bg, bg_r, bg_g, bg_b);
+  return fl_draw_pixmap(data,x,y,bg_r, bg_g, bg_b) ;
+}
+
+int fl_draw_pixmap(const char*const* di, int x, int y, uchar bg_r, uchar bg_g, uchar bg_b) {
   pixmap_data d;
   if (!fl_measure_pixmap(di, d.w, d.h)) return 0;
   const uchar*const* data = (const uchar*const*)(di+1);
@@ -155,7 +167,11 @@ int fl_draw_pixmap(const char*const* di, int x, int y, Fl_Color bg) {
 #  endif
 #endif
       transparent_index = ' ';
-      Fl::get_color(bg, c[0], c[1], c[2]); c[3] = 0;
+      //Fl::get_color(bg, c[0], c[1], c[2]);
+      c[0] = bg_r;
+      c[1] = bg_g;
+      c[2] = bg_b;
+      c[3] = 0;
       p += 4;
       ncolors--;
     }
@@ -214,7 +230,10 @@ int fl_draw_pixmap(const char*const* di, int x, int y, Fl_Color bg) {
       if (!fl_parse_color((const char*)p, c[0], c[1], c[2])) {
         // assume "None" or "#transparent" for any errors
 	// "bg" should be transparent...
-	Fl::get_color(bg, c[0], c[1], c[2]);
+	//Fl::get_color(bg, c[0], c[1], c[2]);
+  c[0] = bg_r;
+  c[1] = bg_g;
+  c[2] = bg_b;
 	transparent_index = ind;
       }
     }
@@ -229,27 +248,27 @@ int fl_draw_pixmap(const char*const* di, int x, int y, Fl_Color bg) {
     for (int Y = 0; Y < d.h; Y++) {
       const uchar* p = data[Y];
       if (chars_per_pixel <= 1) {
-	for (int X = 0; X < W; X++) {
-	  uchar b = (*p++ != transparent_index);
-	  if (*p++ != transparent_index) b |= 2;
-	  if (*p++ != transparent_index) b |= 4;
-	  if (*p++ != transparent_index) b |= 8;
-	  if (*p++ != transparent_index) b |= 16;
-	  if (*p++ != transparent_index) b |= 32;
-	  if (*p++ != transparent_index) b |= 64;
-	  if (*p++ != transparent_index) b |= 128;
-	  *bitmap++ = b;
-	}
-      } else {
-	for (int X = 0; X < W; X++) {
-	  uchar b = 0;
-	  for (int i = 0; i < 8; i++) {
-	    int ind = *p++;
-	    ind = (ind<<8) | (*p++);
-	    if (ind != transparent_index) b |= (1<<i);
-	  }
-	  *bitmap++ = b;
-	}
+	    for (int X = 0; X < W; X++) {
+	      uchar b = (*p++ != transparent_index);
+	      if (*p++ != transparent_index) b |= 2;
+	      if (*p++ != transparent_index) b |= 4;
+	      if (*p++ != transparent_index) b |= 8;
+	      if (*p++ != transparent_index) b |= 16;
+	      if (*p++ != transparent_index) b |= 32;
+	      if (*p++ != transparent_index) b |= 64;
+	      if (*p++ != transparent_index) b |= 128;
+	      *bitmap++ = b;
+		}
+	  }else {
+	    for (int X = 0; X < W; X++) {
+	      uchar b = 0;
+	      for (int i = 0; i < 8; i++) {
+	        int ind = *p++;
+	        ind = (ind<<8) | (*p++);
+	        if (ind != transparent_index) b |= (1<<i);
+		  }
+	      *bitmap++ = b;
+		}
       }
     }
   }
@@ -260,5 +279,5 @@ int fl_draw_pixmap(const char*const* di, int x, int y, Fl_Color bg) {
 }
 
 //
-// End of "$Id: fl_draw_pixmap.cxx,v 1.4.2.8.2.10.2.6 2004/09/11 04:44:43 rokan Exp $".
+// End of "$Id: fl_draw_pixmap.cxx,v 1.4.2.8.2.10.2.7 2004/10/03 22:48:38 rokan Exp $".
 //

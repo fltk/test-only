@@ -1,5 +1,5 @@
 //
-// "$Id: Pixmap.cxx,v 1.1.2.2 2004/05/12 22:13:42 rokan Exp $"
+// "$Id: Pixmap.cxx,v 1.1.2.3 2004/10/03 22:48:39 rokan Exp $"
 //
 // Gdi Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -54,6 +54,7 @@ public:
 void Fl_Win_Display::draw(Fl_Pixmap * img, int X, int Y, int W, int H, int cx, int cy) {
 
 
+
   Fl_Win_Pixmap_Cache *cache = (Fl_Win_Pixmap_Cache *) check_image_cache(img);
   if (!cache){ // building one
     cache = new Fl_Win_Pixmap_Cache(img,this);
@@ -70,6 +71,7 @@ void Fl_Win_Display::draw(Fl_Pixmap * img, int X, int Y, int W, int H, int cx, i
 
     fl_end_offscreen();
   }
+
   if (cache->mask) {
     HDC new_gc = CreateCompatibleDC(fl_gc);
     SelectObject(new_gc, (void*)(cache->mask));
@@ -78,12 +80,12 @@ void Fl_Win_Display::draw(Fl_Pixmap * img, int X, int Y, int W, int H, int cx, i
     BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCPAINT);
     DeleteDC(new_gc);
   } else {
-    fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)(cache->id), cx, cy);
+      fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)(cache->id), cx, cy);
   }
 }
 
 
 
 //
-// End of "$Id: Pixmap.cxx,v 1.1.2.2 2004/05/12 22:13:42 rokan Exp $".
+// End of "$Id: Pixmap.cxx,v 1.1.2.3 2004/10/03 22:48:39 rokan Exp $".
 //

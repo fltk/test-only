@@ -1,5 +1,5 @@
 //
-// "$Id: image.cxx,v 1.1.2.2 2004/04/02 20:50:28 rokan Exp $"
+// "$Id: image.cxx,v 1.1.2.3 2004/10/03 22:48:39 rokan Exp $"
 //
 // Postscript image drawing implementation for the Fast Light Tool Kit (FLTK).
 //
@@ -233,9 +233,7 @@ void Fl_PS_Printer::draw_scalled_image(const uchar *data, double x, double y, do
 
   if(!LD) LD = iw*D;
   uchar *curmask=mask;
-  uchar bg_r, bg_g, bg_b;
 
-  Fl::get_color(bg_, bg_r,bg_g,bg_b);
   for (j=0; j<ih;j++){
     if(mask){
 
@@ -348,8 +346,7 @@ void Fl_PS_Printer::draw_scalled_image_mono(const uchar *data, double x, double 
 
   if(!LD) LD = iw*D;
 
-  uchar bg_r, bg_g, bg_b;
-  Fl::get_color(bg_, bg_r,bg_g,bg_b);
+
   int bg = (bg_r + bg_g + bg_b)/3;
 
   uchar *curmask=mask;
@@ -446,7 +443,7 @@ void Fl_PS_Printer::draw(Fl_Pixmap * pxm,int XP, int YP, int WP, int HP, int cx,
   mx = WP;
   my = HP;
   push_clip(XP, YP, WP, HP);
-  fl_draw_pixmap(di,XP -cx, YP -cy, bg_); //yes, it is dirty, but fl is dispatched, so it works!
+  fl_draw_pixmap(di,XP -cx, YP -cy, bg_r_, bg_g_, bg_b_); //yes, it is dirty, but fl is dispatched, so it works!
   pop_clip();
   delete[] mask;
   mask=0;
@@ -506,7 +503,7 @@ void Fl_PS_Printer::draw(Fl_Bitmap * bitmap,int XP, int YP, int WP, int HP, int 
 
 
 //
-// End of "$Id: image.cxx,v 1.1.2.2 2004/04/02 20:50:28 rokan Exp $"
+// End of "$Id: image.cxx,v 1.1.2.3 2004/10/03 22:48:39 rokan Exp $"
 //
 
 

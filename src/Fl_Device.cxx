@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Device.cxx,v 1.1.2.3 2004/05/12 22:13:38 rokan Exp $"
+// "$Id: Fl_Device.cxx,v 1.1.2.4 2004/10/03 22:48:38 rokan Exp $"
 //
 // Device class for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,12 @@
 
 #include <FL/Fl_Device.H>
 #include <FL/Fl_Image.H>
+#include <FL/Fl.H>
 
+
+Fl_Device::Fl_Device():image_caches(0){
+	Fl::get_color(FL_GRAY, bg_r_,bg_g_,bg_b_);
+};
 Fl_Device::~Fl_Device(){
   while(image_caches)  delete image_caches;
 };
@@ -91,6 +96,6 @@ Fl_Device * FL_DISPLAY::set_current(){
 
 
 //
-// "$Id: Fl_Device.cxx,v 1.1.2.3 2004/05/12 22:13:38 rokan Exp $"
+// "$Id: Fl_Device.cxx,v 1.1.2.4 2004/10/03 22:48:38 rokan Exp $"
 //
 

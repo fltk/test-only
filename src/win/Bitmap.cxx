@@ -1,5 +1,5 @@
 //
-// "$Id: Bitmap.cxx,v 1.1.2.3 2004/05/12 22:13:42 rokan Exp $"
+// "$Id: Bitmap.cxx,v 1.1.2.4 2004/10/03 22:48:39 rokan Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -136,6 +136,7 @@ void Fl_Win_Display::draw(Fl_Bitmap * img, int X, int Y, int W, int H, int cx, i
     cache = new Fl_Win_Bitmap_Cache(img,this);
     cache->id = fl_create_bitmap(img->w(), img->h(), img->array);
   }
+
   HDC tempdc = CreateCompatibleDC(fl_gc);
   SelectObject(tempdc, (HGDIOBJ)(cache->id));
   SelectObject(fl_gc, fl_brush());
@@ -147,5 +148,5 @@ void Fl_Win_Display::draw(Fl_Bitmap * img, int X, int Y, int W, int H, int cx, i
 
 
 //
-// End of "$Id: Bitmap.cxx,v 1.1.2.3 2004/05/12 22:13:42 rokan Exp $".
+// End of "$Id: Bitmap.cxx,v 1.1.2.4 2004/10/03 22:48:39 rokan Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Device.H,v 1.1.2.9 2004/05/12 22:13:31 rokan Exp $"
+// "$Id: Fl_Device.H,v 1.1.2.10 2004/10/03 22:48:38 rokan Exp $"
 //
 // Fl_Device dispatching class for the Fast Light Tool Kit (FLTK).
 //
@@ -68,6 +68,7 @@ protected:
 
 protected:
  int type_;
+ uchar bg_r_, bg_g_, bg_b_; // color for background and/or mixing if particular device does not support masking and/or alpha
  
  friend class Fl_Image_Cache;
 
@@ -231,6 +232,7 @@ protected:
   virtual   void draw(Fl_Bitmap * bmp,int XP, int YP, int WP, int HP, int cx, int cy)=0;
 
 public:
+  void background (uchar r, uchar g, uchar b){bg_r_=r; bg_g_ = g, bg_b_ = b;};
 
     /** Sets the device as current, all following drawings will be ditected to that device.
     * Returns previously active device. */
@@ -241,7 +243,7 @@ public:
   
     /** Destructor also removes all image cashes (uncaches images) attached to it. */
   virtual   ~Fl_Device();
-  Fl_Device():image_caches(0){};
+  Fl_Device();
 
 };
 
@@ -252,5 +254,5 @@ extern FL_EXPORT Fl_Device * fl_device;
 
 
 //
-// End of "$Id: Fl_Device.H,v 1.1.2.9 2004/05/12 22:13:31 rokan Exp $".
+// End of "$Id: Fl_Device.H,v 1.1.2.10 2004/10/03 22:48:38 rokan Exp $".
 //

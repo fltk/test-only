@@ -1,5 +1,5 @@
 //
-// "$Id: color.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// "$Id: color.cxx,v 1.1.2.2 2004/10/03 22:48:39 rokan Exp $"
 //
 // Postscript color implementation for the Fast Light Tool Kit (FLTK).
 //
@@ -29,9 +29,7 @@
 #include <FL/Fl.H>
  
 
-//////////////////////////////  setting background for alpha /////////////////////////////////
 
-void Fl_PS_Printer::bg_color(Fl_Color bg){bg_=bg;};
 
 //////////////////////////////// Primitives: Colors  ////////////////////////////////////////////
 
@@ -68,5 +66,5 @@ void Fl_PS_Printer::color(unsigned char r, unsigned char g, unsigned char b) {
   }
 }
 //
-// End of "$Id: color.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// End of "$Id: color.cxx,v 1.1.2.2 2004/10/03 22:48:39 rokan Exp $"
 //

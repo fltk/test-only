@@ -69,7 +69,8 @@ class FL_EXPORT Fl_GDI_Printer: public Fl_Printer{
   void set_subpixel();
   void set_normal();
  
-
+  static void alphamix(void * data,int x, int y, int w, uchar * buf);
+  static void mono_alphamix(void * data,int x, int y, int w, uchar * buf);
 
 public:
     Fl_Device * set_current();

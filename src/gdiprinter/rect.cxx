@@ -1,5 +1,5 @@
 //
-// "$Id: rect.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// "$Id: rect.cxx,v 1.1.2.2 2004/10/03 22:48:39 rokan Exp $"
 //
 // WIN32 GDI printing device for the Fast Light Tool Kit (FLTK).
 //
@@ -113,7 +113,11 @@ void Fl_GDI_Printer::line(int x, int y, int x1, int y1, int x2, int y2) {
 ////////  clipping, need to be re-implemented as orig. win32 functions are in device coordinates  ///////////
 
 void Fl_GDI_Printer::push_clip(int x, int y, int w, int h){
-  fl_disp.push_clip(((x - WOx) * VEx - VEx/2) / WEx + VOx,  ((y - WOy) * VEy - VEy/2 ) / WEy + VOy, w * VEx / WEx, h * VEy / WEy);
+  int left = ((x - WOx) * VEx - VEx/2)/ WEx + VOx;
+  int top = ((y - WOy) * VEy -VEy/2)/ WEy + VOy;
+  int right = ((x + w - WOx) * VEx - VEx/2 + WEx -1)/ WEx + VOx;
+  int bottom = ((y + h - WOy) * VEy -VEy/2 + WEx -1)/ WEy + VOy;
+  fl_disp.push_clip(left, top, right - left, bottom-top);
 }
 
 extern Fl_Region * fl_clip_stack;
@@ -123,19 +127,25 @@ int Fl_GDI_Printer::not_clipped(int x, int y, int w, int h){
   Fl_Region r = fl_clip_stack[* fl_clip_stack_pointer];
   if (!r) return 1;
   RECT rect;
-  rect.left = ((x - WOx) * VEx -VEx/2)/ WEx + VOx;
-  rect.top = ((y - WOy) * VEy-VEy/2) / WEy + VOy;
-  rect.right  = ((x + w - WOx) * VEx  - VEx/2)/ WEx + VOx;
-  rect.bottom  = ((y + h - WOy) * VEy-VEy/2) / WEy + VOy;
+  rect.left = ((x - WOx) * VEx - VEx/2)/ WEx + VOx;
+  rect.top = ((y - WOy) * VEy -VEy/2)/ WEy + VOy;
+  rect.right = ((x + w - WOx) * VEx - VEx/2 + WEx -1)/ WEx + VOx;
+  rect.bottom = ((y + h - WOy) * VEy -VEy/2 + WEx -1)/ WEy + VOy;
   return RectInRegion(r,&rect);
 }
 
 int Fl_GDI_Printer::clip_box(int x, int y, int w, int h, int &X, int &Y, int &W, int &H){
-  int ret = fl_disp.clip_box(((x - WOx) * VEx - VEx/2)/ WEx + VOx,  ((y - WOy) * VEy -VEy/2)/ WEy + VOy, w * VEx / WEx, h * VEy / WEy, X, Y, W, H);
+
+  int left = ((x - WOx) * VEx - VEx/2)/ WEx + VOx;
+  int top = ((y - WOy) * VEy -VEy/2)/ WEy + VOy;
+  int right = ((x + w - WOx) * VEx - VEx/2 + WEx -1)/ WEx + VOx;
+  int bottom = ((y + h - WOy) * VEy -VEy/2 + WEx -1)/ WEy + VOy;
+  int ret = fl_disp.clip_box(left, top, right-left, bottom - top, X, Y, W, H);
+
   X = (X - VOx ) * WEx / VEx + WOx;
   Y = (Y - VOy ) * WEy / VEy + WOy;
-  W = W * WEx / VEx;
-  H = H * WEy / VEy;
+  W = (W * WEx +VEx - 1) / VEx;
+  H = (H * WEy +VEy - 1) / VEy;
   return ret;
 }
 
