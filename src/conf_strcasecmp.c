@@ -19,33 +19,24 @@
 */
 
 #include <FL/conf.h>
+#include <config.h>
 
 /*
-        char *trim(char *s)
+        long conf_strcascmp(const char *s1, const char *s2)
 
         description:
-                removes leading and trailing whitespace from a string
-                whitespace is any character in literal string WHITESPACE
+                this function compares the strings s1 and s2 ignoring case
         arguments:
-                s: string to be modified
+		s1: string 1
+		s2: string 2
         return value:
-                returns s
+                returns 0 if the strings are equal, a negative integer if
+		s1 < s2, or a positive interger if s1 > s2.
 */
-char *
-trim(char *s)
+int
+conf_strcasecmp(const char *s1, const char *s2)
 {
-        int     i;                                                              /* temporary int */
-        char    *p;                                                             /* temporary pointer */
-
-        if (!s)                                                                 /* if null pointer passed */
-                return s;
-
-        i = strspn(s, WHITESPACE);
-        memmove(s, s + i, strlen(s + i) + 1);                                   /* kill leading whitespace */
-
-        p = s + strlen(s) - 1;
-        while ((p >= s) && strchr(WHITESPACE, *p))                              /* kill trailing whitespace */
-                *p-- = '\0';
-        return s;
+	for (; *s1 && *s2 && tolower(*s1) == tolower(*s2); s1++, s2++) ;        /* loop while chars equal & neither string ended */
+	if (!(*s1) && !(*s2)) return 0;                                         /* if both strings ended must be equal */
+	return *s1 - *s2;                                                       /* must be 1st different char, return comparison */
 }
-

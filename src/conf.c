@@ -1,6 +1,6 @@
 /*
-    Carl Thompson's config file routines version 0.11
-    Copyright 1995-1998 Carl Everard Thompson (clip@home.net)
+    Carl Thompson's config file routines version 0.20
+    Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -22,7 +22,7 @@
         author:         Carl Thompson (clip@home.net)
         source type:    Ansi C
         start date:     16Dec1995
-        last modified:  19Aug1998
+        last modified:  22Mar1999
 
         Typical config file format:
 
@@ -55,11 +55,6 @@
 
 
 /* global variables */
-#ifdef WIN32
-int         conf_DOS = 1;                                                       /* write files in DOS format? */
-#else
-int         conf_DOS = 0;                                                       /* write files in DOS format? */
-#endif
 char        conf_sep = '=';                                                     /* this seperates keys from values */
 char        conf_level_sep = '/';                                               /* this denotes nested sections */
 char	    conf_comment_sep = '#';						/* this denotes comments */

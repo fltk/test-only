@@ -85,11 +85,7 @@ void Fl::style(const char *s) {
 const char *Fl::style() {
   static char temp[80];
 
-#if defined(WIN32) || defined(__EMX__)
-  if (_style && !stricmp(_style, "default") &&
-#else
   if (_style && !strcasecmp(_style, "default") &&
-#endif /* WIN32 || __EMX__ */
       !find("default style", temp, sizeof(temp)))
     return temp;
 
@@ -98,15 +94,10 @@ const char *Fl::style() {
 
 // load a bunch of attributes
 void Fl::load_attributes(const char *section, uchar array[], Attribute *attrib) {
-  char key[1024];
+  char key[256];
 
   for (; attrib->key; attrib++) {
-#ifdef HAVE_SNPRINTF
     snprintf(key, sizeof(key), "%s/%s", section, attrib->key);
-#else
-    sprintf(key, "%s/%s", section, attrib->key);
-#endif /* HAVE_SNPRINTF */
-
     find(key, array[attrib->which], 1);
   }
 }
@@ -137,9 +128,9 @@ int Fl::find(const char *key, char *value, int value_length, int sf) {
   char windir[PATH_MAX];
   GetWindowsDirectoryA(windir, sizeof(windir));
   if (sf)
-    sprintf(cf, "%s\\fltk\\styles\\%s", windir, Fl::style());
+    snprintf(cf, sizeof(cf), "%s\\fltk\\styles\\%s", windir, Fl::style());
   else
-    sprintf(cf, "%s\\fltk\\config", windir);
+    snprintf(cf, sizeof(cf), "%s\\fltk\\config", windir);
 #endif
   r = getconf(cf, key, value, value_length);
   return r;

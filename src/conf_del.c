@@ -1,6 +1,6 @@
 /*
-    Carl Thompson's config file routines version 0.11
-    Copyright 1995-1998 Carl Everard Thompson (clip@home.net)
+    Carl Thompson's config file routines version 0.20
+    Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -19,6 +19,11 @@
 */
 
 #include <FL/conf.h>
+#include <config.h>
+
+#ifndef F_OK
+#define F_OK 0
+#endif
 
 /*
         int delconf(const char *configfile, const char *key)
@@ -43,7 +48,6 @@ delconf(const char *configfile, const char *k)
         char            line2[CONF_MAX_LINE_LEN];                               /* temporary line buffer */
 	char		lineout[CONF_MAX_LINE_LEN];				/* temporary output buffer */
         char            *p, *p2;                                                /* miscelaneous char pointers */
-        char            endln[3];                                               /* what to output at end of line */
         struct stat     stat_buf;                                               /* buffer for stat info */
         int             new_flag = 0;                                           /* does the config file already exist? */
         int             i;                                                      /* generic integer */
@@ -66,11 +70,6 @@ delconf(const char *configfile, const char *k)
             section = "";                                                       /* set toplevel section */
         }
         
-        if (conf_DOS)                                                           /* if in DOS output mode */
-                strcpy(endln, "\xD\xA");                                        /* carriage return followed ny linefeed */
-        else                                                                    /* not DOS output mode */
-                strcpy(endln, "\xA");                                           /* linefeed only */
-
         sprintf(configfile2, "%s.lock", configfile);                            /* create new file name */
 
         i = open(configfile2, O_CREAT | O_EXCL, 0600);                          /* try to create lock file */
@@ -78,7 +77,7 @@ delconf(const char *configfile, const char *k)
              return (errno == EEXIST) ? CONF_ERR_AGAIN : CONF_ERR_FILE;         /* return appropriate error */
         close(i);
         
-        new_flag = access(configfile, 0);                                    /* is this a new config file? */
+        new_flag = access(configfile, F_OK);                                    /* is this a new config file? */
         if (!new_flag)                                                          /* if already exists */
         {
                 stat(configfile, &stat_buf);                                    /* get original permisson info */
@@ -89,11 +88,7 @@ delconf(const char *configfile, const char *k)
             return CONF_SUCCESS;
         }
 
-#ifdef WIN32
-        ifp2 = fopen(configfile2, "wb");
-#else
         ifp2 = fopen(configfile2, "w");
-#endif
         if (!ifp2)                                                              /* could not open output config file */
         {
                 unlink(configfile2);
@@ -129,7 +124,7 @@ delconf(const char *configfile, const char *k)
 			p2 = line + strspn(line, WHITESPACE);
 			
 			if (*p2 == '[')
-				fprintf(ifp2, "%s", endln);
+				fprintf(ifp2, "\n");
 				
                        if (!strcasecmp(line + strspn(line, WHITESPACE), section2))
                             break;
@@ -161,7 +156,7 @@ delconf(const char *configfile, const char *k)
 					temp, conf_comment_sep, comment);
 			}
 			
-			sprintf(lineout + strlen(lineout), "%s", endln);
+			sprintf(lineout + strlen(lineout), "\n");
 			
 			fprintf(ifp2, "%s", lineout);
                 }
@@ -187,7 +182,7 @@ delconf(const char *configfile, const char *k)
 					temp, conf_comment_sep, comment);
 			}
 			
-			sprintf(lineout + strlen(lineout), "%s", endln);
+			sprintf(lineout + strlen(lineout), "\n");
 			
 			fprintf(ifp2, "%s", lineout);
 		}
@@ -219,7 +214,7 @@ delconf(const char *configfile, const char *k)
 
                 if ((*p == '['))                                                /* if this is a different section */
 		{
-			fprintf(ifp2, "%s", endln);
+			fprintf(ifp2, "\n");
                         done_flag = 1;                                          /* we are done */
 		}
                 strcpy(line2, line);
@@ -251,7 +246,7 @@ delconf(const char *configfile, const char *k)
 					temp, conf_comment_sep, comment);
 			}
 			
-			sprintf(lineout + strlen(lineout), "%s", endln);
+			sprintf(lineout + strlen(lineout), "\n");
 			
 			fprintf(ifp2, "%s", lineout);
 			

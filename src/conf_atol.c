@@ -1,6 +1,6 @@
 /*
-    Carl Thompson's config file routines version 0.11
-    Copyright 1995-1998 Carl Everard Thompson (clip@home.net)
+    Carl Thompson's config file routines version 0.20
+    Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -21,7 +21,7 @@
 #include <FL/conf.h>
 
 /*
-        long a_to_l(const char *decstr)
+        long conf_atol(const char *decstr)
 
         description:
                 this function coverts the given decimal string to a long int
@@ -32,7 +32,7 @@
                 returns the long integer represented by the decimal string
 */
 long
-a_to_l(const char *decstr)
+conf_atol(const char *decstr)
 {
         int     sign = 1;                                                       /* sign multiplyer of this number */
         int     r;                                                              /* intermediate result- val. of rightmost digit */
@@ -62,6 +62,5 @@ a_to_l(const char *decstr)
 
         r = c - '0';                                                            /* r is the value of the last digit in number */
 
-        return (10 * a_to_l(dec) + r) * sign;                                   /* recursive funtion call to compute result */
+        return (10 * conf_atol(dec) + r) * sign;                                /* recursive funtion call to compute result */
 }
-

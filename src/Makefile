@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.19 1999/03/14 06:46:37 carl Exp $"
+# "$Id: Makefile,v 1.20 1999/03/23 05:11:52 carl Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -172,6 +172,7 @@ CFILES = scandir.c \
 	 conf_set.c \
 	 conf_setboolean.c \
 	 conf_setlong.c \
+	 conf_strcasecmp.c \
 	 conf_strcnt.c \
 	 conf_trim.c
 
@@ -237,5 +238,5 @@ install: ../lib/$(LIBNAME)
 	-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.19 1999/03/14 06:46:37 carl Exp $".
+# End of "$Id: Makefile,v 1.20 1999/03/23 05:11:52 carl Exp $".
 #

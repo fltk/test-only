@@ -1,6 +1,6 @@
 /*
-    Carl Thompson's config file routines version 0.11
-    Copyright 1996-1998 Carl Everard Thompson (clip@home.net)
+    Carl Thompson's config file routines version 0.12
+    Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -21,8 +21,8 @@
         file:           conf.h
         author:         Carl Thompson (clip@home.net)
         source type:    Ansi C
-        start date:     16Dec1996
-        last modified:  19Aug1998
+        start date:     16Dec1995
+        last modified:  22Mar1999
 
         Typical config file format:
 
@@ -351,7 +351,7 @@ extern "C" {
 
 
   /*
-        long a_to_l(const char *decstr)
+        long conf_atol(const char *decstr)
 
         description:
                 this function coverts the given decimal string to a long int
@@ -361,7 +361,24 @@ extern "C" {
         return value:
                 returns the long integer represented by the decimal string
   */
-  long a_to_l(const char *decstr);
+  long conf_atol(const char *decstr);
+
+
+
+  /*
+        long conf_strcascmp(const char *s1, const char *s2)
+
+        description:
+                this function compares the strings s1 and s2 ignoring case
+        arguments:
+		s1: string 1
+		s2: string 2
+        return value:
+                returns 0 if the strings are equal, a negative integer if
+		s1 < s2, or a positive interger if s1 > s2.
+  */
+  int conf_strcasecmp(const char *s1, const char *s2);
+  
 
   const char *level_indent(int l);                                       /* returns right amount of leading whitespace */
 
@@ -373,5 +390,5 @@ extern "C" {
 #endif /* !CONF_H */
 
 /*
- * End of "$Id: conf.h,v 1.2 1999/03/21 16:21:08 mike Exp $".
+ * End of "$Id: conf.h,v 1.3 1999/03/23 05:11:51 carl Exp $".
  */

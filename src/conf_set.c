@@ -1,6 +1,6 @@
 /*
-    Carl Thompson's config file routines version 0.11
-    Copyright 1995-1998 Carl Everard Thompson (clip@home.net)
+    Carl Thompson's config file routines version 0.20
+    Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -19,6 +19,11 @@
 */
 
 #include <FL/conf.h>
+#include <config.h>
+
+#ifndef F_OK
+#define F_OK 0
+#endif
 
 /*
         int setconf(const char *configfile, const char *key, const char *svalue)
@@ -54,7 +59,6 @@ setconf(const char *configfile, const char *k, const char *svalue)
         char            base_section2[CONF_MAX_LEVEL][CONF_MAX_SECT_LEN];       /* parent section with [] added */
         int             bsl[CONF_MAX_LEVEL];
         char            *p, *p2;                                                /* miscelaneous char pointer */
-        char            endln[3];                                               /* what do we put at end of lines? */
         struct stat     stat_buf;                                               /* buffer for stat info */
         int             new_flag = 0;                                           /* does the config file already exist? */
         int             section_flag = 1;                                       /* section given */
@@ -79,18 +83,13 @@ setconf(const char *configfile, const char *k, const char *svalue)
             section = "";                                                       /* set toplevel section */
         }
         
-        if (conf_DOS)                                                           /* if in DOS output mode */
-                strcpy(endln, "\r\n");                                        /* carriage return followed ny linefeed */
-        else                                                                    /* not DOS output mode */
-                strcpy(endln, "\n");                                           /* linefeed only */
-
         sprintf(configfile2, "%s.lock", configfile);                            /* create new file name */
         
         i = open(configfile2, O_CREAT | O_EXCL, 0600);                          /* try to create lock file */
         if (i == -1)                                                            /* if an error occurred opening the lock file */
              return (errno == EEXIST) ? CONF_ERR_AGAIN : CONF_ERR_FILE;         /* return appropriate error */
         close(i);        
-        new_flag = access(configfile, 0);                                    /* is this a new config file? */
+        new_flag = access(configfile, F_OK);                                    /* is this a new config file? */
         if (!new_flag)                                                          /* if already exists */
                 stat(configfile, &stat_buf);                                    /* get original permisson info */
 
@@ -131,11 +130,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
                 return CONF_ERR_DEPTH;
         }
 
-#ifdef WIN32
-        ifp2 = fopen(configfile2, "wb");
-#else
         ifp2 = fopen(configfile2, "w");
-#endif
         if (!ifp2)                                                              /* could not open output config file */
         {
                 unlink(configfile2);
@@ -158,20 +153,19 @@ setconf(const char *configfile, const char *k, const char *svalue)
 
                         for (i = last_level; i >= 0; i--)
                         {
-                                fprintf(ifp2, "%s%s%s%s", endln,
-                                        level_indent(bsl[i]), base_section2[i],
-                                        endln);                                 /* add base sections to new config file */
+                                fprintf(ifp2, "\n%s%s\n",
+					level_indent(bsl[i]), base_section2[i]);/* add base sections to new config file */
                         }
                 }
 
                 if (svalue)
-                        sprintf(line2, "%s%s %c %s%s",
+                        sprintf(line2, "%s%s %c %s\n",
                                 level_indent(bsl[0] + indent_kludge),
-                                key, conf_sep, svalue, endln);                  /* create new entry */
+                                key, conf_sep, svalue);                         /* create new entry */
                 else
-                        sprintf(line2, "%s%s%s",
+                        sprintf(line2, "%s%s\n",
                                 level_indent(bsl[0] + indent_kludge),
-                                key, endln);                                    /* create new entry */
+                                key);                                           /* create new entry */
 
                 fputs(line2, ifp2);
                 fclose(ifp2);
@@ -230,9 +224,9 @@ setconf(const char *configfile, const char *k, const char *svalue)
                         if (!strcmp(line, ""))					/* if there is no key on this line */
 			{
 				if (*comment)					/* line with only comment */
-	                                fprintf(ifp2, "%s%c%s%s",
+	                                fprintf(ifp2, "%s%c%s\n",
     	                                	level_indent(current_level),
-						conf_comment_sep, comment, endln);           /* put line in new config file */
+						conf_comment_sep, comment);     /* put line in new config file */
 				continue;
 			}
 
@@ -240,7 +234,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
                         {
                                 indent_kludge = 1;
                                 current_level = strcnt(line, conf_level_sep);
-				fprintf(ifp2, "%s", endln);
+				fprintf(ifp2, "\n");
                                 sprintf(lineout, "%s%s",
                                         level_indent(current_level), line);
 				if (*comment)
@@ -261,7 +255,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
 						temp, conf_comment_sep, comment);
 				}
 				
-                                sprintf(lineout + strlen(lineout), "%s", endln);
+                                sprintf(lineout + strlen(lineout), "\n");
 				
 				fprintf(ifp2, "%s", lineout);
                         }
@@ -289,7 +283,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
 						temp, conf_comment_sep, comment);
 				}
 				
-                                sprintf(lineout + strlen(lineout), "%s", endln);
+                                sprintf(lineout + strlen(lineout), "\n");
 				
 				fprintf(ifp2, "%s", lineout);
                         }
@@ -317,10 +311,9 @@ setconf(const char *configfile, const char *k, const char *svalue)
                         if (!strcmp(line, ""))					/* if there is no key on this line */
 			{
 				if (*comment)					/* line with only comment */
-	                                fprintf(ifp2, "%s%c%s%s",
+	                                fprintf(ifp2, "%s%c%s\n",
     	                                	level_indent(current_level),
-						conf_comment_sep, comment,
-                                                endln);                         /* put line in new config file */
+						conf_comment_sep, comment);     /* put line in new config file */
 				continue;
 			}
 
@@ -328,7 +321,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
                         {
                                 indent_kludge = 1;
                                 current_level = strcnt(line, conf_level_sep);
-				fprintf(ifp2, "%s", endln);
+				fprintf(ifp2, "\n");
                                 sprintf(lineout, "%s%s",
                                         level_indent(current_level), line);
 				if (*comment)
@@ -349,7 +342,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
 						temp, conf_comment_sep, comment);
 				}
 				
-                                sprintf(lineout + strlen(lineout), "%s", endln);
+                                sprintf(lineout + strlen(lineout), "\n");
 				
 				fprintf(ifp2, "%s", lineout);
                         }
@@ -377,7 +370,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
 						temp, conf_comment_sep, comment);
 				}
 				
-                                sprintf(lineout + strlen(lineout), "%s", endln);
+                                sprintf(lineout + strlen(lineout), "\n");
 				
 				fprintf(ifp2, "%s", lineout);
                         }
@@ -403,9 +396,9 @@ setconf(const char *configfile, const char *k, const char *svalue)
                         if (!strcmp(line, ""))					/* if there is no key on this line */
 			{
 				if (*comment)					/* line with only comment */
-	                                fprintf(ifp2, "%s%c%s%s",
+	                                fprintf(ifp2, "%s%c%s\n",
     	                                	level_indent(current_level),
-						conf_comment_sep, comment, endln);           /* put line in new config file */
+						conf_comment_sep, comment);     /* put line in new config file */
 				continue;
 			}
 
@@ -439,7 +432,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
 						temp, conf_comment_sep, comment);
 				}
 				
-                                sprintf(lineout + strlen(lineout), "%s", endln);
+                                sprintf(lineout + strlen(lineout), "\n");
 				
 				fprintf(ifp2, "%s", lineout);
                         }
@@ -448,8 +441,8 @@ setconf(const char *configfile, const char *k, const char *svalue)
 
         for (i = level; i > 0; i--)
         {
-                fprintf(ifp2, "%s%s%s%s", endln, level_indent(bsl[i - 1]),
-                        base_section2[i - 1], endln);
+                fprintf(ifp2, "\n%s%s\n", level_indent(bsl[i - 1]),
+                        base_section2[i - 1]);
         }
 
 	if (level)
@@ -487,9 +480,9 @@ setconf(const char *configfile, const char *k, const char *svalue)
                 if (!strcmp(line, ""))						/* if there is no key on this line */
 		{
 			if (*comment)						/* line with only comment */
-	                        fprintf(ifp2, "%s%c%s%s",
+	                        fprintf(ifp2, "%s%c%s\n",
     	                        	level_indent(current_level),
-					conf_comment_sep, comment, endln);      /* put line in new config file */
+					conf_comment_sep, comment);             /* put line in new config file */
 			continue;
 		}
 
@@ -504,7 +497,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
                                 if (svalue)
                                     fprintf(ifp2, " %c %s", conf_sep, svalue);
 
-                                fprintf(ifp2, "%s", endln);                     /* create new entry */
+                                fprintf(ifp2, "\n");                            /* create new entry */
 
                                 done_flag = 1;                                  /* entry is written */
 			}
@@ -513,7 +506,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
 			
                         current_level = strcnt(line, conf_level_sep);
 			
-			fprintf(ifp2, "%s", endln);
+			fprintf(ifp2, "\n");
                         sprintf(lineout, "%s%s",
                                 level_indent(current_level), line);
 			if (*comment)
@@ -534,7 +527,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
 					temp, conf_comment_sep, comment);
 			}
 				
-                        sprintf(lineout + strlen(lineout), "%s", endln);
+                        sprintf(lineout + strlen(lineout), "\n");
 				
 			fprintf(ifp2, "%s", lineout);
 			
@@ -565,7 +558,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
 					temp, conf_comment_sep, comment);
 			}
 				
-                        sprintf(lineout + strlen(lineout), "%s", endln);
+                        sprintf(lineout + strlen(lineout), "\n");
 				
 			fprintf(ifp2, "%s", lineout);
 			
@@ -600,7 +593,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
 					temp, conf_comment_sep, comment);
 			}
 				
-                        sprintf(lineout + strlen(lineout), "%s", endln);
+                        sprintf(lineout + strlen(lineout), "\n");
 				
 			fprintf(ifp2, "%s", lineout);
 			
@@ -634,7 +627,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
 				temp, conf_comment_sep, comment);
 		}
 		
-                sprintf(lineout + strlen(lineout), "%s", endln);                /* build the new line */
+                sprintf(lineout + strlen(lineout), "\n");                       /* build the new line */
 		fprintf(ifp2, "%s", lineout);
 
                 done_flag = 1;                                                  /* line has been written */
@@ -651,7 +644,7 @@ setconf(const char *configfile, const char *k, const char *svalue)
                 if (svalue)
                         fprintf(ifp2, " %c %s", conf_sep, svalue);
 
-                fprintf(ifp2, "%s", endln);                                     /* build the new line */
+                fprintf(ifp2, "\n");                                            /* build the new line */
         }
 
         fclose(ifp);                                                            /* close files */

@@ -1,6 +1,6 @@
 /*
-    Carl Thompson's config file routines version 0.11
-    Copyright 1995-1998 Carl Everard Thompson (clip@home.net)
+    Carl Thompson's config file routines version 0.20
+    Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -19,6 +19,7 @@
 */
 
 #include <FL/conf.h>
+#include <config.h>
 
 /*
         int getconf_long(const char *configfile, const char *key,

@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.12 1999/03/14 06:46:11 carl Exp $"
+ * "$Id: configh.in,v 1.13 1999/03/23 05:11:50 carl Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -134,6 +134,18 @@
 #define HAVE_SNPRINTF 0
 #define HAVE_VSPRINTF 0
 
+/* possibly missing other functions */
+#define HAVE_ATOL 0
+#define HAVE_STRCASECMP 0
+
+#if ! HAVE_ATOL
+#define atol(a) conf_atol(a)
+#endif
+
+#if ! HAVE_STRCASECMP
+#define strcasecmp(a,b) conf_strcasecmp(a,b)
+#endif
+
 /*
  * HAVE_SYS_SELECT_H:
  *
@@ -151,5 +163,5 @@
 #define HAVE_POLL 0
 
 /*
- * End of "$Id: configh.in,v 1.12 1999/03/14 06:46:11 carl Exp $".
+ * End of "$Id: configh.in,v 1.13 1999/03/23 05:11:50 carl Exp $".
  */
