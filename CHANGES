@@ -2413,3 +2413,12 @@ it should get rid of the biggest problems with fltk's over-exuberance
 for showing tooltips.
 
 The glut emulation pop-up menus have been fixed.
+Fl_Item_Group is now a subclass of Fl_Menu_.
+
+////////////////////////////////////////////////////////////////
+
+Put end() back on the Fl_Menu_ constructor, removing it broke a lot of
+programs.
+
+More fixes so tooltips don't reappear when a menu is dismissed.
+

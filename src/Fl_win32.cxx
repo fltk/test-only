@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.179 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.180 2002/09/24 07:35:19 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -635,6 +635,7 @@ static _TRACKMOUSEEVENT mouseevent = {
 static bool mouse_event(Fl_Window *window, int what, int button,
 			WPARAM wParam, LPARAM lParam)
 {
+  xmousewin = window;
   if (!window) return false;
   static int px, py, pmx, pmy;
   POINT pt;
@@ -643,7 +644,6 @@ static bool mouse_event(Fl_Window *window, int what, int button,
   ClientToScreen(fl_xid(window), &pt);
   Fl::e_x_root = pt.x;
   Fl::e_y_root = pt.y;
-  xmousewin = window;
   while (window->parent()) {
     Fl::e_x += window->x();
     Fl::e_y += window->y();
@@ -1581,5 +1581,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.179 2002/09/16 00:29:06 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.180 2002/09/24 07:35:19 spitzak Exp $".
 //

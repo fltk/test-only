@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.114 2002/09/23 07:15:22 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.115 2002/09/24 07:35:19 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -111,7 +111,7 @@ void Fl_Group::insert(Fl_Widget &o, int index) {
 }
 
 void Fl_Group::add(Fl_Widget &o) {
-	insert(o, children_);
+  insert(o, children_);
 }
 
 void Fl_Group::remove(int index) {
@@ -587,5 +587,5 @@ void Fl_Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.114 2002/09/23 07:15:22 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.115 2002/09/24 07:35:19 spitzak Exp $".
 //

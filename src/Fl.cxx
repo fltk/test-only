@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.152 2002/09/23 07:15:22 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.153 2002/09/24 07:35:19 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -515,10 +515,15 @@ void Fl::modal(Fl_Widget* widget, bool grab) {
   // widget the mouse ends up pointing at. For this to work you should
   // hide any modal windows or widgets before calling this to turn
   // modal state off.
-  if (xmousewin) handle(FL_MOVE, xmousewin);
-  // Don't pop up the tooltip for whatever they are pointing at:
-  Fl_Tooltip::current(belowmouse_);
-
+  if (xmousewin) {
+    handle(FL_MOVE, xmousewin);
+    // Don't pop up the tooltip for whatever they are pointing at:
+    Fl_Tooltip::current(belowmouse_);
+  }
+//    printf("modal %s, xmousewin %s, belowmouse %s\n",
+//  	 modal_ ? modal_->label() : "NULL",
+//  	 xmousewin ? xmousewin->label() : "NULL",
+//  	 belowmouse_ ? belowmouse_->label() : "NULL");
   exit_modal_ = false;
 }
 
@@ -637,5 +642,5 @@ bool Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.152 2002/09/23 07:15:22 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.153 2002/09/24 07:35:19 spitzak Exp $".
 //

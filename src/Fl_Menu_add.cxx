@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.30 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.31 2002/09/24 07:35:19 spitzak Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -108,9 +108,6 @@ Fl_Widget* Fl_Menu_::add(
 ) {
   Fl_Group* group = this;
 
-  const char *p;
-  char *q;
-
   int bufsize = strlen(text)+1;
   ARRAY(char, buf, bufsize);
 
@@ -125,9 +122,11 @@ Fl_Widget* Fl_Menu_::add(
     if (*text == '_') {text++; flags1 = FL_MENU_DIVIDER;}
 
     // copy to buf, changing \x to x:
-    q = buf; item = buf;
+    char* q = buf;
+    const char* p;
     for (p=text; *p && *p != '/'; *q++ = *p++) if (*p=='\\') p++;
     *q = 0;
+    item = buf;
 
     // if not followed by slash it is not a menu title:
     if (*p != '/') break;
@@ -139,7 +138,7 @@ Fl_Widget* Fl_Menu_::add(
     for (int n = group->children();;) {
       if (!n) { // create a new menu
 	if (find_flag) return 0;
-	group = (Fl_Group*)append(group,item,FL_SUBMENU|flags1);
+	group = (Fl_Group*)append(group, item, FL_SUBMENU|flags1);
 	break;
       }
       Fl_Widget* w = group->child(--n);
@@ -238,5 +237,5 @@ Fl_Widget* Fl_Menu_::add(const char *str) {
 }
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.30 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.31 2002/09/24 07:35:19 spitzak Exp $".
 //
