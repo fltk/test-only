@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Float_Input.cxx,v 1.12 2004/01/18 18:35:29 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -52,19 +52,20 @@ using namespace fltk;
   subclass.
 
 */
-
+#include <stdio.h>
 bool FloatInput::replace(int b, int e, const char* text, int ilen) {
+  printf("in '%s'\n", text);
   for (int n = 0; n < ilen; n++) {
     char ascii = text[n];
     compose_reset(); // ignore any foreign letters...
     // This is complex to allow "0xff12" hex to be typed:
     if (b+n==0 && (ascii == '+' || ascii == '-') ||
 	(ascii >= '0' && ascii <= '9') ||
-	(b+n==1 && index(0)=='0' && (ascii=='x' || ascii == 'X')) ||
-	(b+n>1 && index(0)=='0' && (index(1)=='x'||index(1)=='X')
+	(b+n==1 && (index(0)=='0'||text[0]=='0') && (ascii=='x' || ascii == 'X')) ||
+	(b+n>1 && (index(0)=='0'||text[0]=='0') && ((index(1)=='x'||text[1]=='x')||(index(1)=='X'||text[1]=='X'))
 	 && (ascii>='A'&& ascii<='F' || ascii>='a'&& ascii<='f')) ||
 	type()==FLOAT && ascii && strchr(".eE+-", ascii))
-      continue; // it's ok;
+      continue; // it's ok;    
     return false;
   }
   return Input::replace(b,e,text,ilen);
@@ -89,5 +90,5 @@ double FloatInput::fvalue() const {
 }
 
 //
-// End of "$Id: Fl_Float_Input.cxx,v 1.12 2004/01/18 18:35:29 spitzak Exp $"
+// End of "$Id$"
 //
