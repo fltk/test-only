@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.37 1999/08/23 16:43:11 vincent Exp $"
+// "$Id: Fl_Menu.cxx,v 1.38 1999/09/14 07:17:22 bill Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -667,12 +667,10 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
   for (;;) {
 
     // make sure all the menus are shown:
-    {for (int k = menubar; k < p.nummenus; k++)
-      if (!p.menus[k]->shown()) {
-	if (p.menus[k]->title) p.menus[k]->title->show();
-	p.menus[k]->show();
-      }
-    }
+    {for (int k = menubar; k < p.nummenus; k++) {
+      if (p.menus[k]->title) p.menus[k]->title->show();
+      p.menus[k]->show();
+    }}
 
     // get events:
     {const Fl_Menu_Item* oldi = p.item;
@@ -800,5 +798,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.37 1999/08/23 16:43:11 vincent Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.38 1999/09/14 07:17:22 bill Exp $".
 //

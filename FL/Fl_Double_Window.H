@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.H,v 1.10 1999/08/28 17:20:54 bill Exp $"
+// "$Id: Fl_Double_Window.H,v 1.11 1999/09/14 07:17:14 bill Exp $"
 //
 // Double-buffered window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,24 +28,31 @@
 
 #include "Fl_Window.H"
 
-class Fl_Double_Window : public Fl_Window {
-  void maybe_free_backbuffer(int,int);
-protected:
-  FL_EXPORT void flush(int eraseoverlay);
-  FL_EXPORT void layout();
+FL_EXPORT class Fl_Double_Window : public Fl_Window {
+
 public:
-  FL_EXPORT void show();
-  void show(int a, char **b) {Fl_Window::show(a,b);}
-  FL_EXPORT void flush();
-  FL_EXPORT void hide();
-  FL_EXPORT ~Fl_Double_Window();
+
+  virtual void layout();
+  ~Fl_Double_Window();
   Fl_Double_Window(int W, int H, const char *l = 0) : Fl_Window(W,H,l) {}
   Fl_Double_Window(int X, int Y, int W, int H, const char *l = 0)
     : Fl_Window(X,Y,W,H,l) {}
+
+protected:
+
+  virtual void create();
+  virtual void flush();
+  void flush(int eraseoverlay);
+  virtual void destroy();
+
+private:
+
+  void maybe_free_backbuffer(int,int);
+
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Double_Window.H,v 1.10 1999/08/28 17:20:54 bill Exp $".
+// End of "$Id: Fl_Double_Window.H,v 1.11 1999/09/14 07:17:14 bill Exp $".
 //

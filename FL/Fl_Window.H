@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.19 1999/08/28 17:20:55 bill Exp $"
+// "$Id: Fl_Window.H,v 1.20 1999/09/14 07:17:16 bill Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 
 #define FL_WINDOW 0xF0	// all subclasses have type() >= this
 
-class Fl_Window : public Fl_Group {
+FL_EXPORT class Fl_Window : public Fl_Group {
 public:
   static Fl_Style default_style;
 
@@ -44,9 +44,9 @@ public:
   void clear_border()	{set_flag(FL_NOBORDER);}
   int border() const	{return !(flags() & FL_NOBORDER);}
   void set_modal()	{set_flag(FL_MODAL);}
-  uchar modal() const	{return flags() & FL_MODAL;}
+  int modal() const	{return flags() & FL_MODAL;}
   void set_non_modal()	{set_flag(FL_NON_MODAL);}
-  uchar non_modal() const {return flags() & (FL_NON_MODAL|FL_MODAL);}
+  int non_modal() const	{return flags() & (FL_NON_MODAL|FL_MODAL);}
 
   void hotspot(int x, int y, int offscreen = 0);
   void hotspot(const Fl_Widget*, int offscreen = 0);
@@ -65,10 +65,12 @@ public:
   const void* icon() const	{return icon_;}
   void icon(const void * ic)	{icon_ = ic;}
 
-  int shown() {return i != 0;}
-  virtual void show();
-  virtual void hide();
+  bool shown() const {return i != 0;}
+  void show();
   void show(int, char**);
+  void show(const Fl_Window* parent);
+  bool exec(const Fl_Window* parent = 0);
+  void hide();
   void fullscreen();
   void fullscreen_off(int,int,int,int);
   void iconize();
@@ -79,25 +81,27 @@ public:
   static Fl_Window *current() {return current_;}
   void make_current();
 
-  // for back-compatability only:
   void cursor(Fl_Cursor, Fl_Color=FL_BLACK, Fl_Color=FL_WHITE);
   static void default_callback(Fl_Window*, void* v);
 
+  virtual void layout();
+  virtual void flush();
+  virtual void draw();
+
 protected:
 
-  virtual void layout();
-  virtual void draw();
-  virtual void flush();
+  virtual void create();
+  virtual void destroy();
 
 private:
-  friend class Fl_X; Fl_X *i; // points at the system-specific stuff
 
+  friend class Fl_X; Fl_X *i; // points at the system-specific stuff
   const char* iconlabel_;
   const char* xclass_;
   const void* icon_;
   // size_range stuff:
   short minw, minh, maxw, maxh;
-  uchar dw, dh, aspect, size_range_set;
+  unsigned char dw, dh, aspect, size_range_set;
   void size_range_();
   // values for flags():
   enum {
@@ -113,5 +117,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.19 1999/08/28 17:20:55 bill Exp $".
+// End of "$Id: Fl_Window.H,v 1.20 1999/09/14 07:17:16 bill Exp $".
 //

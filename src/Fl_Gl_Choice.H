@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.H,v 1.5 1999/09/09 16:06:19 bill Exp $"
+// "$Id: Fl_Gl_Choice.H,v 1.6 1999/09/14 07:17:21 bill Exp $"
 //
 // OpenGL definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -23,16 +23,14 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// Internal interface to set up OpenGL.
+// An Fl_Gl_Choice structure stores all the system-dependent stuff needed
+// to implement an fltk OpenGL "mode".  For X this is a visual and colormap,
+// for Win32 this is a PixelFormat.
 //
-// A "Fl_Gl_Choice" is used to cache results of calling the
-// OpenGL code for system-specific information needed to
-// implement a "mode".
-// For X this is a visual, and this must be called *before*
-// the X window is created.
-// For win32 this can be delayed to a more convienent time,
-// as it only returns information for modifying a device
-// context.
+// find() returns a new Fl_Gl_Choice, or an old one if it has already
+// been called before with the same mode.  If the system cannot do that
+// choice a null pointer is returned.
+//
 // This is used by Fl_Gl_Window, gl_start(), and gl_visual()
 
 #ifndef Fl_Gl_Choice_H
@@ -54,15 +52,15 @@ class Fl_Gl_Choice {
 public:
 #ifdef WIN32
   PIXELFORMATDESCRIPTOR pfd;
+  int pixelFormat;
 #else
-  XVisualInfo *vis;	// the visual to use
-  Colormap colormap;	// a colormap to use
+  XVisualInfo *vis;
+  Colormap colormap;
 #endif
-  uchar r,d,o;		// rgb mode, double buffered, overlay flags
-  // Return one of these structures for a given gl mode.
-  // The second argument is a glX attribute list, and is used if mode is
-  // zero.  This is not supported on Win32:
-  static Fl_Gl_Choice *find(int mode, const int *);
+  // The optional second argument is a glX attribute list, it is used
+  // by the X implementation if non-zero.  Otherwise the attribute list
+  // is calculated from the mode bits:
+  static Fl_Gl_Choice *find(int mode, const int * = 0);
 };
 
 extern GLXContext fl_first_context; // used to make all contexts share
@@ -72,7 +70,7 @@ class Fl_Window;
 
 #ifdef WIN32
 // This must be called before fl_set_gl_context works:
-HDC fl_private_dc(Fl_Window*, int, Fl_Gl_Choice **gp);
+HDC fl_private_dc(Fl_Window*, Fl_Gl_Choice *g);
 #endif
 
 void fl_set_gl_context(Fl_Window*, GLXContext);
@@ -81,5 +79,5 @@ void fl_no_gl_context();
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.H,v 1.5 1999/09/09 16:06:19 bill Exp $".
+// End of "$Id: Fl_Gl_Choice.H,v 1.6 1999/09/14 07:17:21 bill Exp $".
 //

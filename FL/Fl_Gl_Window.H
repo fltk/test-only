@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.H,v 1.10 1999/08/28 17:20:54 bill Exp $"
+// "$Id: Fl_Gl_Window.H,v 1.11 1999/09/14 07:17:15 bill Exp $"
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
@@ -29,56 +29,55 @@
 
 class Fl_Gl_Choice; // structure to hold result of glXChooseVisual
 
-class Fl_Gl_Window : public Fl_Window {
+FL_EXPORT class Fl_Gl_Window : public Fl_Window {
 
   int mode_;
-  const int *alist;
-  Fl_Gl_Choice *g;
-  void * context; // actually a GLXContext
+  const int* alist;
+  Fl_Gl_Choice* g;
+  void* context; // actually a GLXContext
   char valid_;
   char damage1_; // damage() of back buffer
-  virtual FL_EXPORT void draw_overlay();
-  FL_EXPORT void init();
+  void init();
 
   void *overlay;
-  FL_EXPORT void make_overlay();
+  void make_overlay();
   friend class _Fl_Gl_Overlay;
 
-  static FL_EXPORT int can_do(int, const int *);
-  FL_EXPORT int mode(int, const int *);
+  static int can_do(int, const int *);
+  int mode(int, const int *);
 
 protected:
 
-  FL_EXPORT void layout();
+  virtual void create();
+  virtual void flush();
+  virtual void destroy();
 
 public:
 
-  FL_EXPORT void show();
-  void show(int a, char **b) {Fl_Window::show(a,b);}
-  FL_EXPORT void flush();
-  FL_EXPORT void hide();
+  virtual void draw_overlay();
+  virtual void layout();
 
   char valid() const {return valid_;}
   void valid(char i) {valid_ = i;}
-  FL_EXPORT void invalidate();
+  void invalidate();
 
-  static int can_do(int i) {return can_do(i,0);}
+  static int can_do(int i) {return can_do(i, 0);}
   static int can_do(const int *i) {return can_do(0, i);}
-  int can_do() {return can_do(mode_,alist);}
+  int can_do() {return can_do(mode_, alist);}
   Fl_Mode mode() const {return (Fl_Mode)mode_;}
-  int mode(int a) {return mode(a,0);}
+  int mode(int a) {return mode(a, 0);}
   int mode(const int *a) {return mode(0, a);}
 
-  FL_EXPORT int can_do_overlay();
-  FL_EXPORT void redraw_overlay();
-  FL_EXPORT void hide_overlay();
+  int can_do_overlay();
+  void redraw_overlay();
+  void hide_overlay();
 
-  FL_EXPORT void make_current();
-  FL_EXPORT void make_overlay_current();
-  FL_EXPORT void swap_buffers();
-  FL_EXPORT void ortho();
+  void make_current();
+  void make_overlay_current();
+  void swap_buffers();
+  void ortho();
 
-  FL_EXPORT ~Fl_Gl_Window();
+  ~Fl_Gl_Window();
   Fl_Gl_Window(int W, int H, const char *l=0) : Fl_Window(W,H,l) {init();}
   Fl_Gl_Window(int X, int Y, int W, int H, const char *l=0)
     : Fl_Window(X,Y,W,H,l) {init();}
@@ -87,5 +86,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.H,v 1.10 1999/08/28 17:20:54 bill Exp $".
+// End of "$Id: Fl_Gl_Window.H,v 1.11 1999/09/14 07:17:15 bill Exp $".
 //

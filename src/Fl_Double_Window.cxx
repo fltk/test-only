@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.cxx,v 1.16 1999/08/28 17:20:56 bill Exp $"
+// "$Id: Fl_Double_Window.cxx,v 1.17 1999/09/14 07:17:21 bill Exp $"
 //
 // Double-buffered window code for the Fast Light Tool Kit (FLTK).
 //
@@ -58,15 +58,13 @@ static int can_xdbe() {
 }
 #endif
 
-void Fl_Double_Window::show() {
+void Fl_Double_Window::create() {
 #ifndef WIN32
-  if (!shown()) { // don't set the background pixel
-    fl_open_display();
-    Fl_X::make_xid(this);
-    return;
-  }
+  // don't set the background pixel
+  Fl_X::create(this, fl_visual, fl_colormap, -1);
+#else
+  Fl_Window::create();
 #endif
-  Fl_Window::show();
 }
 
 #ifdef WIN32
@@ -181,7 +179,7 @@ void Fl_Double_Window::layout() {
   Fl_Window::layout();
 }
 
-void Fl_Double_Window::hide() {
+void Fl_Double_Window::destroy() {
   Fl_X* i = Fl_X::i(this);
   if (i && i->other_xid) {
 #if USE_XDBE
@@ -189,13 +187,13 @@ void Fl_Double_Window::hide() {
 #endif
       fl_delete_offscreen(i->other_xid);
   }
-  Fl_Window::hide();
+  Fl_Window::destroy();
 }
 
 Fl_Double_Window::~Fl_Double_Window() {
-  hide();
+  destroy();
 }
 
 //
-// End of "$Id: Fl_Double_Window.cxx,v 1.16 1999/08/28 17:20:56 bill Exp $".
+// End of "$Id: Fl_Double_Window.cxx,v 1.17 1999/09/14 07:17:21 bill Exp $".
 //

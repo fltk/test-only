@@ -1,5 +1,5 @@
 //
-// "$Id: win32.H,v 1.18 1999/08/17 17:07:46 carl Exp $"
+// "$Id: win32.H,v 1.19 1999/09/14 07:17:16 bill Exp $"
 //
 // WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -81,18 +81,13 @@ public:
   static FL_EXPORT Fl_X* i(const Fl_Window* w) {return w->i;}
   static FL_EXPORT int fake_X_wm(const Fl_Window* w,int &X, int &Y,
 		                 int &bt,int &bx,int &by);
-  FL_EXPORT void setwindow(Fl_Window* wi) {w=wi; wi->i=this;}
-  FL_EXPORT void flush() {w->flush();}
-  FL_EXPORT void layout() {w->layout();}
   FL_EXPORT void set_minmax(LPMINMAXINFO minmax);
-  FL_EXPORT void mapraise();
-  static FL_EXPORT Fl_X* make(Fl_Window*);
+  static FL_EXPORT Fl_X* create(Fl_Window*);
 };
 extern FL_EXPORT HCURSOR fl_default_cursor;
 inline Window fl_xid(const Fl_Window*w) {return Fl_X::i(w)->xid;}
 FL_EXPORT Fl_Window* fl_find(Window xid);
 extern FL_EXPORT char fl_override_redirect; // hack into Fl_Window::make_xid()
-extern FL_EXPORT int fl_background_pixel;  // hack into Fl_Window::make_xid()
 
 // most recent fl_color() or fl_rgbcolor() points at one of these:
 extern FL_EXPORT struct Fl_XMap {
@@ -134,5 +129,5 @@ extern ulong fl_create_bitmap(const uchar* bitmap, int w, int h);
 #endif
 
 //
-// End of "$Id: win32.H,v 1.18 1999/08/17 17:07:46 carl Exp $".
+// End of "$Id: win32.H,v 1.19 1999/09/14 07:17:16 bill Exp $".
 //

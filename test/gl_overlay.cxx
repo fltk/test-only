@@ -1,5 +1,5 @@
 //
-// "$Id: gl_overlay.cxx,v 1.4 1999/01/07 19:17:54 mike Exp $"
+// "$Id: gl_overlay.cxx,v 1.5 1999/09/14 07:17:28 bill Exp $"
 //
 // OpenGL overlay test program for the Fast Light Tool Kit (FLTK).
 //
@@ -66,17 +66,17 @@ void shape_window::draw() {
     glLoadIdentity();
     glViewport(0,0,w(),h());
   }
-// draw an amazing but slow graphic:
   glClear(GL_COLOR_BUFFER_BIT);
-  //  for (int j=1; j<=1000; j++) {
-    glBegin(GL_POLYGON);
-    for (int i=0; i<sides; i++) {
-      double ang = i*2*M_PI/sides;
-      glColor3f(float(i)/sides,float(i)/sides,float(i)/sides);
-      glVertex3f(cos(ang),sin(ang),0);
-    }
-    glEnd();
-  // }
+  glBegin(GL_POLYGON);
+  for (int i=0; i<sides; i++) {
+    double ang = i*2*M_PI/sides;
+    glColor3f(float(i)/sides,float(i)/sides,float(i)/sides);
+    glVertex3f(cos(ang),sin(ang),0);
+  }
+  glEnd();
+  gl_color(FL_WHITE);
+  gl_font(FL_HELVETICA, FL_NORMAL_SIZE);
+  gl_draw("text", .1, .5);
 }
 
 void shape_window::draw_overlay() {
@@ -95,6 +95,9 @@ void shape_window::draw_overlay() {
     glVertex3f(cos(ang),sin(ang),0);
   }
   glEnd();
+  glEnd();
+  gl_font(FL_HELVETICA, FL_NORMAL_SIZE);
+  gl_draw("overlay text", .1, .6);
 }
 #endif
 
@@ -151,5 +154,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: gl_overlay.cxx,v 1.4 1999/01/07 19:17:54 mike Exp $".
+// End of "$Id: gl_overlay.cxx,v 1.5 1999/09/14 07:17:28 bill Exp $".
 //

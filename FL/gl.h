@@ -1,5 +1,5 @@
 //
-// "$Id: gl.h,v 1.7 1999/08/16 07:30:54 bill Exp $"
+// "$Id: gl.h,v 1.8 1999/09/14 07:17:16 bill Exp $"
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
@@ -61,9 +61,9 @@ FL_EXPORT double gl_width(uchar);
 FL_EXPORT void gl_draw(const char*);
 FL_EXPORT void gl_draw(const char*, int n);
 FL_EXPORT void gl_draw(const char*, int x, int y);
-FL_EXPORT void gl_draw(const char*, float x, float y);
+FL_EXPORT void gl_draw(const char*, double x, double y);
 FL_EXPORT void gl_draw(const char*, int n, int x, int y);
-FL_EXPORT void gl_draw(const char*, int n, float x, float y);
+FL_EXPORT void gl_draw(const char*, int n, double x, double y);
 FL_EXPORT void gl_draw(const char*, int x, int y, int w, int h, Fl_Flags);
 FL_EXPORT void gl_measure(const char*, int& x, int& y);
 
@@ -72,5 +72,5 @@ FL_EXPORT void gl_draw_image(const uchar *, int x,int y,int w,int h, int d=3, in
 #endif
 
 //
-// End of "$Id: gl.h,v 1.7 1999/08/16 07:30:54 bill Exp $".
+// End of "$Id: gl.h,v 1.8 1999/09/14 07:17:16 bill Exp $".
 //

@@ -75,6 +75,7 @@ exit(0)</TT> if this is the last top-level window. </P>
 <UL>
 <LI><A href=#Fl_Window.set_non_modal>set_non_modal</A></LI>
 <LI><A href=#Fl_Window.show>show</A></LI>
+<LI><A href=#Fl_Window.exec>exec</A></LI>
 <LI><A href=#Fl_Window.shown>shown</A></LI>
 <LI><A href=#Fl_Window.size_range>size_range</A></LI>
 <LI><A href=#Fl_Window.xclass>xclass</A></LI>
@@ -143,25 +144,67 @@ resizeable()</TT> has a minimum size of 100. </LI>
 also the maximum size (so the window cannot resize in  that direction). </LI>
 </UL>
  It is undefined what happens if the current size does not fit in the 
-constraints passed to <TT>size_range()</TT>. 
-<H4><A name=Fl_Window.show>virtual void Fl_Window::show()
-<BR> int Fl_Window::show(int argc, char **argv, int i)
-<BR> void Fl_Window::show(int argc, char **argv)</A></H4>
- Put the window on the screen.  Usually this has the side effect of 
-opening the display. The second two forms are used for top-level 
-windows and allow standard arguments to be parsed from the 
-command-line. 
-<P>If the window is already shown then it is restored and raised to the 
-top.  This is really convenient because your program can call <TT>show()</TT>
- at any time, even if the window is already up.  It also means that <TT>
-show()</TT> serves the purpose of <TT>raise()</TT> in other toolkits. </P>
+constraints passed to <TT>size_range()</TT>.
+
+<h4><A name=Fl_Window.show>void Fl_Window::show()</h4>
+
+Put the window on the screen.  Usually this has the side effect of 
+opening the display.
+
+<P>It is harmless to call show() multiple times.  If the window is
+already shown then it is deiconized and raised to the top.
+
+<h4>int Fl_Window::show(int argc, char **argv, int i);</h4>
+
+This must be called after <a
+href=functions.html#args>Fl::args(argc,argv)</a> to show the "main"
+window, this indicates which window should be affected by any
+<tt>-geometry</tt> switch.  In addition if Fl::args() has not been
+called yet this does so, this is a useful shortcut for the main window
+in a small program.
+
+<h4>int Fl_Window::show(const Fl_Window* parent);</h4>
+
+Puts the window on the screen and makes it a "child" of the passed
+"parent" window (not to be confused with Fl_Widget::parent(), which
+must be zero).  This means this window will not have an icon, it will
+dissappear and reappear when the parent window is iconized or shown,
+and it is forced to always be above the parent window.  (On X this
+requires the window manager to support "TransisentForHint".  Win32 and
+some X window managers have some annoying other effects, like raising
+the parent window, that make this much less useful than it could be).
+
+<h4><a name=Fl_Window.exec>bool Fl_Window::exec(const Fl_Window* parent = 0);</h4>
+
+Puts the window up the same as show(parent), then enters a loop of
+handling events until the window is hidden again by the program
+(usually by the user closing it, or from a callback from some widget
+inside the window, such as an OK button).  During this time events to
+other windows in this application are either thrown away or redirected
+to this window.
+
+<p>The return value is the value() of the window.  This is cleared at
+entry and is is true only if some callback called window->set(), an OK
+button would do this.
+
+<p>If parent is null the window that last received an event is used as
+the parent.  This is convienent for popups that appear in response to
+a mouse or key click.
+
+<p>While the loop is running the function <A
+href=functions.html#modal><TT> Fl::modal()</TT></A> returns true.
+
 <H4><A name=Fl_Window.hide>virtual void Fl_Window::hide()</A></H4>
- Remove the window from the screen.  If the window is already hidden or 
+
+Remove the window from the screen.  If the window is already hidden or 
 has not been shown then this does nothing and is harmless.
+
 <H4><A name=Fl_Window.shown>int Fl_Window::shown() const</A></H4>
- Returns non-zero if <TT>show()</TT> has been called (but not <TT>hide()</TT>
+
+Returns non-zero if <TT>show()</TT> has been called (but not <TT>hide()</TT>
 ). You can tell if a window is iconified with <TT>(w-&gt;shown() 
 &amp;!w-&gt;visible())</TT>. 
+
 <H4><A name=Fl_Window.iconize>void Fl_Window::iconize()</A></H4>
  Iconifies the window.  If you call this when <TT>shown()</TT> is false 
 it will <TT>show()</TT> it as an icon.  If the window is already 
@@ -221,23 +264,19 @@ show()</TT> has been called, although SGI's 4DWM does work.</I>
 <H4><A name=Fl_Window.clear_border>void Fl_Window::clear_border()</A></H4>
 <TT>clear_border()</TT> is a fast inline function to turn the border 
 off. It only works before <TT>show()</TT> is called. 
+
 <H4><A name=Fl_Window.set_modal>void Fl_Window::set_modal()</A></H4>
- A &quot;modal&quot; window, when <TT>shown()</TT>, will prevent any events from 
-being delivered to other windows in the same program, and will also 
-remain on top of the other windows (if the X window manager supports 
-the &quot;transient for&quot; property).  Several modal windows may be shown at 
-once, in which case only the last one shown gets events.  You can see 
-which window (if any) is modal by calling <A href=functions.html#modal><TT>
-Fl::modal()</TT></A>. 
-<H4><A name=Fl_Window.modal>uchar Fl_Window::modal() const</A></H4>
- Returns true if this window is modal. 
+
+Obsolete, use exec() instead.  Marks the window just like <a
+href=Fl_Window.exec>exec()</a> does so that when show(parent) is
+called this window will remain on top and block events to other
+windows in this application.  This can be used if you wish to put up a
+modal window but retain control of the program loop.
+
 <H4><A name=Fl_Window.set_non_modal>void Fl_Window::set_non_modal()</A></H4>
- A &quot;non-modal&quot; window (terminology borrowed from Microsoft Windows) 
-acts like a <TT>modal()</TT> one in that it remains on top, but it has 
-no effect on event delivery.  There are <I>three</I> states for a 
-window: modal, non-modal, and normal. 
-<H4><A name=Fl_Window.non_modal>uchar Fl_Window::non_modal() const</A></H4>
- Returns true if this window is modal or non-modal. 
+
+Obsolete, use <a href=Fl_Window.show>show(parent)</a> instead.
+
 <H4><A name=Fl_Window.label>void Fl_Window::label(const char*)
 <BR> const char* Fl_Window::label() const</A></H4>
  Gets or sets the window title bar label. 

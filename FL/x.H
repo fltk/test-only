@@ -1,5 +1,5 @@
 //
-// "$Id: x.H,v 1.14 1999/08/28 17:20:55 bill Exp $"
+// "$Id: x.H,v 1.15 1999/09/14 07:17:16 bill Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -89,13 +89,12 @@ static inline ulong fl_create_bitmap(const uchar* bitmap, int w, int h) {
 }
 #define fl_delete_bitmap(bitmap) XFreePixmap(fl_display, bitmap)
 
-// Try to fix this so only "class Fl_Window" is needed:
-//class Fl_Window;
-#include "Fl_Window.H"
-
 // this object contains all X-specific stuff about a window:
 // Warning: this object is highly subject to change!  It's definition
 // is only here so that fl_xid can be declared inline:
+
+#include "Fl_Window.H"
+
 class Fl_X {
 public:
   Window xid;
@@ -103,31 +102,23 @@ public:
   Fl_Window *w;
   Region region;
   Fl_X *next;
-  char wait_for_expose;
-  char backbuffer_bad; // used for XDBE
-  static FL_EXPORT Fl_X* first;
-  static FL_EXPORT Fl_X* i(const Fl_Window* w) {return w->i;}
-  FL_EXPORT void setwindow(Fl_Window* wi) {w=wi; wi->i=this;}
-  FL_EXPORT void sendxjunk();
-  static FL_EXPORT void make_xid(Fl_Window*,XVisualInfo* =fl_visual, Colormap=fl_colormap);
-  static FL_EXPORT Fl_X* set_xid(Fl_Window*, Window);
-  // kludges to get around protection:
-  FL_EXPORT void flush() {w->flush();}
-  FL_EXPORT void layout() {w->layout();}
-  static FL_EXPORT void x(Fl_Window* w, int X) {w->x(X);}
-  static FL_EXPORT void y(Fl_Window* w, int Y) {w->y(Y);}
+  bool wait_for_expose;
+  bool backbuffer_bad; // used for XDBE
+  static Fl_X* first;
+  static Fl_X* i(const Fl_Window* w) {return w->i;}
+  void sendxjunk();
+  static void create(Fl_Window*,
+		     XVisualInfo*, Colormap,
+		     int background = -1);
 };
 
 // convert xid <-> Fl_Window:
 inline Window fl_xid(const Fl_Window*w) {return Fl_X::i(w)->xid;}
 FL_EXPORT Fl_Window* fl_find(Window xid);
 
-extern FL_EXPORT char fl_override_redirect; // hack into Fl_X::make_xid()
-extern FL_EXPORT int fl_background_pixel;  // hack into Fl_X::make_xid()
-
 #endif
 #endif
 
 //
-// End of "$Id: x.H,v 1.14 1999/08/28 17:20:55 bill Exp $".
+// End of "$Id: x.H,v 1.15 1999/09/14 07:17:16 bill Exp $".
 //

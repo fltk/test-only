@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.31 1999/08/28 17:20:58 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.32 1999/09/14 07:17:25 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -558,12 +558,12 @@ void Fl_Window::layout() {
   if (ox() != x() || oy() != y()) set_flag(FL_FORCE_POSITION);
   if (ow() == w() && oh() == h()) {
     if (this == resize_from_system) resize_from_system = 0;
-    else if (shown() && (ox() != x() || oy() != y()))
+    else if (i && (ox() != x() || oy() != y()))
       XMoveWindow(fl_display, i->xid, x(), y());
     Fl_Widget::layout(); set_old_size();
   } else {
     if (this == resize_from_system) resize_from_system = 0;
-    else if (shown()) {
+    else if (i) {
       XMoveResizeWindow(fl_display, i->xid, x(), y(),
 			w()>0 ? w() : 1, h()>0 ? h() : 1);
       redraw(); i->wait_for_expose = 1;
@@ -573,33 +573,11 @@ void Fl_Window::layout() {
 }
 
 ////////////////////////////////////////////////////////////////
-
-// A subclass of Fl_Window may call this to associate an X window it
-// creates with the Fl_Window:
-
-void fl_fix_focus(); // in Fl.cxx
-
-Fl_X* Fl_X::set_xid(Fl_Window* w, Window xid) {
-  Fl_X* x = new Fl_X;
-  x->xid = xid;
-  x->other_xid = 0;
-  x->setwindow(w);
-  x->next = Fl_X::first;
-  x->region = 0;
-  x->wait_for_expose = 1;
-  Fl_X::first = x;
-  if (w->modal()) {Fl::modal_ = w; fl_fix_focus();}
-  return x;
-}
-
-// More commonly a subclass calls this, because it hides the really
-// ugly parts of X and sets all the stuff for a window that is set
-// normally.  The global variables like fl_show_iconic are so that
-// subclasses of *that* class may change the behavior...
+// Innards of Fl_Window::create()
 
 char fl_show_iconic;	// hack for iconize()
-int fl_background_pixel = -1; // hack to speed up bg box drawing
 int fl_disable_transient_for; // secret method of removing TRANSIENT_FOR
+extern const Fl_Window* fl_modal_for;
 
 static const int childEventMask = ExposureMask;
 
@@ -610,7 +588,9 @@ ExposureMask|StructureNotifyMask
 |EnterWindowMask|LeaveWindowMask
 |PointerMotionMask;
 
-void Fl_X::make_xid(Fl_Window* w, XVisualInfo *visual, Colormap colormap)
+void Fl_X::create(Fl_Window* w,
+		  XVisualInfo *visual, Colormap colormap,
+		  int background)
 {
   Fl_Group::current(0); // get rid of very common user bug: forgot end()
 
@@ -656,24 +636,28 @@ void Fl_X::make_xid(Fl_Window* w, XVisualInfo *visual, Colormap colormap)
     attr.save_under = 1; mask |= CWSaveUnder;
     if (!w->border()) {attr.override_redirect = 1; mask |= CWOverrideRedirect;}
   }
-  if (fl_background_pixel >= 0) {
-    attr.background_pixel = fl_background_pixel;
-    fl_background_pixel = -1;
+  if (background >= 0) {
+    attr.background_pixel = background;
     mask |= CWBackPixel;
   }
 
-  Fl_X* x =
-    set_xid(w, XCreateWindow(fl_display,
-			     root,
-			     X, Y, W, H,
-			     0, // borderwidth
-			     visual->depth,
-			     InputOutput,
-			     visual->visual,
-			     mask, &attr));
-  w->set_visible();
-  w->handle(FL_SHOW); // get child windows to appear
-  w->redraw();
+  Fl_X* x = new Fl_X;
+  x->xid = XCreateWindow(fl_display,
+			 root,
+			 X, Y, W, H,
+			 0, // borderwidth
+			 visual->depth,
+			 InputOutput,
+			 visual->visual,
+			 mask, &attr);
+  x->other_xid = 0;
+  x->w = w; w->i = x;
+  x->region = 0;
+  x->wait_for_expose = true;
+  x->next = Fl_X::first;
+  Fl_X::first = x;
+
+  w->redraw(); // force draw to happen
 
   if (!w->parent() && !attr.override_redirect) {
     // Communicate all kinds 'o junk to the X Window Manager:
@@ -701,12 +685,8 @@ void Fl_X::make_xid(Fl_Window* w, XVisualInfo *visual, Colormap colormap)
 		      (unsigned char *)buffer, p-buffer-1);
     }
 
-    if (w->non_modal() && x->next && !fl_disable_transient_for) {
-      // find some other window to be "transient for":
-      Fl_Window* w = x->next->w;
-      while (w->parent()) w = w->window();
-      XSetTransientForHint(fl_display, x->xid, fl_xid(w));
-    }
+    if (fl_modal_for && !fl_disable_transient_for && fl_modal_for->i)
+      XSetTransientForHint(fl_display, x->xid, fl_modal_for->i->xid);
 
     XWMHints hints;
     hints.flags = 0;
@@ -802,7 +782,7 @@ void Fl_X::sendxjunk() {
 
 void Fl_Window::size_range_() {
   size_range_set = 1;
-  if (shown()) i->sendxjunk();
+  if (i) i->sendxjunk();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -817,7 +797,7 @@ const char *filename_name(const char *name) {
 void Fl_Window::label(const char *name,const char *iname) {
   Fl_Widget::label(name);
   iconlabel_ = iname;
-  if (shown() && !parent()) {
+  if (i && !parent()) {
     if (!name) name = "";
     XChangeProperty(fl_display, i->xid, XA_WM_NAME,
 		    XA_STRING, 8, 0, (uchar*)name, strlen(name));
@@ -841,15 +821,9 @@ void Fl_Window::label(const char *name,const char *iname) {
 // contents are restored to the area, but this assummes the area is
 // cleared to background color.  So I had to give up on this...
 
-void Fl_Window::show() {
-  if (!shown()) {
-    fl_open_display();
-    if (box() != FL_NO_BOX)
-      fl_background_pixel = int(fl_xpixel(color()));
-    Fl_X::make_xid(this);
-  } else {
-    XMapRaised(fl_display, i->xid);
-  }
+void Fl_Window::create() {
+  Fl_X::create(this, fl_visual, fl_colormap,
+	       box() != FL_NO_BOX ? int(fl_xpixel(color())) : -1);
 }
 
 Window fl_window;
@@ -869,5 +843,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.31 1999/08/28 17:20:58 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.32 1999/09/14 07:17:25 bill Exp $".
 //

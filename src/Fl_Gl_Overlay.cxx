@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Overlay.cxx,v 1.6 1999/09/09 16:06:19 bill Exp $"
+// "$Id: Fl_Gl_Overlay.cxx,v 1.7 1999/09/14 07:17:22 bill Exp $"
 //
 // OpenGL overlay code for the Fast Light Tool Kit (FLTK).
 //
@@ -61,14 +61,12 @@ extern uchar fl_overlay;
 class _Fl_Gl_Overlay : public Fl_Gl_Window {
   void draw();
 public:
-  void show();
+  void create();
   _Fl_Gl_Overlay(int x, int y, int w, int h) :
     Fl_Gl_Window(x,y,w,h) {
     overlay_choice.vis = fl_overlay_visual;
     overlay_choice.colormap = fl_overlay_colormap;
-    overlay_choice.r = 0;
-    overlay_choice.d = 0;
-    overlay_choice.o = 1;
+    overlay_choice.mode = 0;
     g = &overlay_choice;
     deactivate();
   }
@@ -86,11 +84,8 @@ void _Fl_Gl_Overlay::draw() {
   w->valid_ = save_valid;
 }
 
-void _Fl_Gl_Overlay::show() {
-  if (shown()) {Fl_Gl_Window::show(); return;}
-  fl_background_pixel = int(fl_transparent_pixel);
-  Fl_Gl_Window::show();
-  fl_background_pixel = -1;
+void _Fl_Gl_Overlay::create() {
+  Fl_X::create(this, g->vis, g->colormap, int(fl_transparent_pixel));
   // find the outermost window to tell wm about the colormap:
   Fl_Window *w = window();
   for (;;) {Fl_Window *w1 = w->window(); if (!w1) break; w = w1;}
@@ -123,7 +118,7 @@ void Fl_Gl_Window::make_overlay() {
 #if HAVE_GL_OVERLAY
 #ifdef WIN32
     if (!no_overlay_hardware) {
-      HDC hdc = fl_private_dc(this, mode_,&g);
+      HDC hdc = fl_private_dc(this, g);
       GLXContext context = wglCreateLayerContext(hdc, 1);
       if (!context) { // no overlay hardware
 	no_overlay_hardware = 1;
@@ -195,5 +190,5 @@ void Fl_Gl_Window::hide_overlay() {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Overlay.cxx,v 1.6 1999/09/09 16:06:19 bill Exp $".
+// End of "$Id: Fl_Gl_Overlay.cxx,v 1.7 1999/09/14 07:17:22 bill Exp $".
 //

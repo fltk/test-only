@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Overlay_Window.cxx,v 1.10 1999/08/28 17:20:57 bill Exp $"
+// "$Id: Fl_Overlay_Window.cxx,v 1.11 1999/09/14 07:17:23 bill Exp $"
 //
 // Overlay window code for the Fast Light Tool Kit (FLTK).
 //
@@ -33,15 +33,6 @@
 #include <FL/fl_draw.H>
 #include <FL/x.H>
 
-void Fl_Overlay_Window::show() {
-  Fl_Double_Window::show();
-  if (overlay_ && overlay_ != this) overlay_->show();
-}
-
-void Fl_Overlay_Window::hide() {
-  Fl_Double_Window::hide();
-}
-
 void Fl_Overlay_Window::flush() {
   int erase_overlay = (damage()&FL_DAMAGE_OVERLAY);
   clear_damage(damage()&~FL_DAMAGE_OVERLAY);
@@ -53,13 +44,8 @@ void Fl_Overlay_Window::layout() {
   Fl_Double_Window::layout();
   if (overlay_ && overlay_!=this) {
     overlay_->resize(0,0,w(),h());
-    Fl_X::i(overlay_)->layout();
+    overlay_->layout();
   }
-}
-
-Fl_Overlay_Window::~Fl_Overlay_Window() {
-  hide();
-//  delete overlay; this is done by ~Fl_Group
 }
 
 #if !HAVE_OVERLAY
@@ -84,7 +70,7 @@ extern uchar fl_overlay; // changes how fl_color(x) works
 class _Fl_Overlay : public Fl_Window {
   friend class Fl_Overlay_Window;
   void flush();
-  void show();
+  void create();
 public:
   _Fl_Overlay(int x, int y, int w, int h) :
     Fl_Window(x,y,w,h) {deactivate();}
@@ -94,11 +80,8 @@ int Fl_Overlay_Window::can_do_overlay() {
   return fl_find_overlay_visual() != 0;
 }
 
-void _Fl_Overlay::show() {
-  if (shown()) {Fl_Window::show(); return;}
-  fl_background_pixel = int(fl_transparent_pixel);
-  Fl_X::make_xid(this, fl_overlay_visual, fl_overlay_colormap);
-  fl_background_pixel = -1;
+void _Fl_Overlay::create() {
+  Fl_X::create(this, fl_overlay_visual, fl_overlay_colormap, int(fl_transparent_pixel));
   // find the outermost window to tell wm about the colormap:
   Fl_Window *w = window();
   for (;;) {Fl_Window *w1 = w->window(); if (!w1) break; w = w1;}
@@ -122,9 +105,9 @@ void Fl_Overlay_Window::redraw_overlay() {
   if (!fl_display) return; // this prevents fluid -c from opening display
   if (!overlay_) {
     if (can_do_overlay()) {
-      Fl_Group::current(this);
       overlay_ = new _Fl_Overlay(0,0,w(),h());
-      Fl_Group::current(0);
+      add_resizable(overlay_);
+      overlay_->show();
     } else {
       overlay_ = this;	// fake the overlay
     }
@@ -133,15 +116,14 @@ void Fl_Overlay_Window::redraw_overlay() {
     if (overlay_ == this) {
       clear_damage(damage()|FL_DAMAGE_OVERLAY);
       Fl::damage(FL_DAMAGE_CHILD);
-    } else if (!overlay_->shown())
-      overlay_->show();
-    else
+    } else {
       overlay_->redraw();
+    }
   }
 }
 
 #endif
 
 //
-// End of "$Id: Fl_Overlay_Window.cxx,v 1.10 1999/08/28 17:20:57 bill Exp $".
+// End of "$Id: Fl_Overlay_Window.cxx,v 1.11 1999/09/14 07:17:23 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.45 1999/08/28 17:20:57 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.46 1999/09/14 07:17:24 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -633,10 +633,11 @@ void Fl_Window::layout() {
     flags |= SWP_NOSIZE;
   } else {
     Fl_Group::layout();
-    if (shown()) {redraw(); i->wait_for_expose = 1;}
+    if (i()) {redraw(); i->wait_for_expose = true;}
   }
-  if (this == resize_from_system) resize_from_system = 0;
-  else if (shown()) {
+  if (this == resize_from_system) {
+    resize_from_system = 0;
+  } else if (i) {
     int dummy, bt, bx, by;
     //Ignore window managing when resizing, so that windows (and more
     //specifically menus) can be moved offscreen.
@@ -647,15 +648,14 @@ void Fl_Window::layout() {
 }
 
 ////////////////////////////////////////////////////////////////
-
-void fl_fix_focus(); // in Fl.C
+// Innards of Fl_Window::create():
 
 char fl_show_iconic;	// hack for Fl_Window::iconic()
-// int fl_background_pixel = -1; // color to use for background
 HCURSOR fl_default_cursor;
 int fl_disable_transient_for; // secret method of removing TRANSIENT_FOR
+extern const Fl_Window* fl_modal_for;
 
-Fl_X* Fl_X::make(Fl_Window* w) {
+Fl_X* Fl_X::create(Fl_Window* w) {
   Fl_Group::current(0); // get rid of very common user bug: forgot end()
 
   const char* class_name = w->xclass();
@@ -734,18 +734,15 @@ Fl_X* Fl_X::make(Fl_Window* w) {
       yp -= by+bt;
     }
 
-    parent = 0;
-    if (w->non_modal() && Fl_X::first && !fl_disable_transient_for) {
-      // find some other window to be "transient for":
-      Fl_Window* w = Fl_X::first->w;
-      while (w->parent()) w = w->window();
-      parent = fl_xid(w);
-    }
+    if (fl_modal_for && !fl_disable_transient_for && fl_modal_for->i)
+      parent = fl_modal_for->i->xid;
+    else
+      parent = 0;
   }
 
   Fl_X* x = new Fl_X;
   x->other_xid = 0;
-  x->setwindow(w);
+  x->w = w; w->i = x;
   x->region = 0;
   x->private_dc = 0;
   x->cursor = fl_default_cursor;
@@ -758,19 +755,17 @@ Fl_X* Fl_X::make(Fl_Window* w) {
     fl_display,
     NULL // creation parameters
     );
+  x->mapped = true;
+  x->wait_for_expose = true;
   x->next = Fl_X::first;
   Fl_X::first = x;
 
-  x->wait_for_expose = 1;
-  w->set_visible();
-  w->handle(FL_SHOW); // get child windows to appear
   w->redraw(); // force draw to happen
   // If we've captured the mouse, we dont want do activate any
   // other windows from the code, or we loose the capture.
   ShowWindow(x->xid, fl_show_iconic ? SW_SHOWMINNOACTIVE :
              fl_capture? SW_SHOWNOACTIVATE : SW_SHOWNORMAL);
   fl_show_iconic = 0;
-  if (w->modal()) {Fl::modal_ = w; fl_fix_focus();}
   return x;
 }
 
@@ -819,7 +814,7 @@ const char *filename_name(const char *name) {
 void Fl_Window::label(const char *name,const char *iname) {
   Fl_Widget::label(name);
   iconlabel_ = iname;
-  if (shown() && !parent()) {
+  if (i && !parent()) {
     if (!name) name = "";
     SetWindowText(i->xid, name);
     // if (!iname) iname = filename_name(name);
@@ -841,16 +836,8 @@ void Fl_Window::label(const char *name,const char *iname) {
 // Fl_Widget *fl_boxcheat;
 //static inline int can_boxcheat(uchar b) {return (b==1 || (b&2) && b<=15);}
 
-void Fl_Window::show() {
-  if (!shown()) {
-    // if (can_boxcheat(box())) fl_background_pixel = fl_xpixel(color());
-    Fl_X::make(this);
-  } else {
-    // Once again, we would lose the capture if we activated the window.
-    if (IsIconic(i->xid)) OpenIcon(i->xid);
-    if (!fl_capture) BringWindowToTop(i->xid);
-    //ShowWindow(i->xid,fl_capture?SW_SHOWNOACTIVATE:SW_RESTORE);
-  }
+void Fl_Window::create() {
+  Fl_X::make(this);
 }
 
 Fl_Window *Fl_Window::current_;
@@ -892,5 +879,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.45 1999/08/28 17:20:57 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.46 1999/09/14 07:17:24 bill Exp $".
 //

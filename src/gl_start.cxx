@@ -1,5 +1,5 @@
 //
-// "$Id: gl_start.cxx,v 1.7 1999/09/09 16:06:19 bill Exp $"
+// "$Id: gl_start.cxx,v 1.8 1999/09/14 07:17:27 bill Exp $"
 //
 // OpenGL context routines for the Fast Light Tool Kit (FLTK).
 //
@@ -53,14 +53,18 @@ static int clip_state_number=-1;
 static int pw, ph;
 
 #ifdef WIN32
-static int default_mode;
+static Fl_Gl_Choice* gl_choice;
 #endif
 
 Region XRectangleRegion(int x, int y, int w, int h); // in fl_rect.C
 
 void gl_start() {
 #ifdef WIN32
-  HDC hdc = fl_private_dc(Fl_Window::current(), default_mode,0);
+  if (!gl_choice) {
+    gl_choice = Fl_Gl_Choice::find(0);
+    if (!gl_choice) Fl::fatal("Insufficient OpenGL");
+  }
+  HDC hdc = fl_private_dc(Fl_Window::current(), gl_choice);
 #endif
   if (!context) {
 #ifdef WIN32
@@ -122,5 +126,5 @@ int Fl::gl_visual(int mode, int *alist) {
 #endif
 
 //
-// End of "$Id: gl_start.cxx,v 1.7 1999/09/09 16:06:19 bill Exp $".
+// End of "$Id: gl_start.cxx,v 1.8 1999/09/14 07:17:27 bill Exp $".
 //

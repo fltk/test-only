@@ -135,25 +135,27 @@ fl_colormap = make_a_colormap(fl_display, fl_visual-&gt;visual, fl_visual-&gt;de
 window-&gt;show(argc, argv);
 </PRE>
 </UL>
+
 <H3>Using a Subclass of Fl_Window for Special X Stuff</H3>
- FLTK can manage an X window on a different screen, visual and/or 
+
+FLTK can manage an X window on a different screen, visual and/or 
 colormap, you just can't use FLTK's drawing routines to draw into it. 
 But you can write your own <TT>draw()</TT> method that uses Xlib 
 (and/or OpenGL) calls only. 
-<P>FLTK can also manage XID's provided by other libraries or programs, 
-and call those libraries when the window needs to be redrawn. </P>
+
 <P>To do this, you need to make a subclass of <A href=Fl_Window.html#Fl_Window>
 <TT>Fl_Window</TT></A> and override some of these virtual functions: </P>
-<H4>virtual void Fl_Window::show()</H4>
- If the window is already <TT>shown()</TT> this must cause it to be 
-raised, this can usually be done by calling <TT>Fl_Window::show()</TT>. 
- If not <TT>shown()</TT> your implementation must call either <TT>
-Fl_X::set_xid()</TT> or <TT>Fl_X::make_xid()</TT>. 
+
+<H4>virtual void Fl_Window::create()</H4>
+
+Creates the X window, and perhaps other data such as colormaps needed
+by this window.  To create the X window you must call <TT>
+Fl_X::create()</TT>.
+
 <P>An example: </P>
 <UL>
 <PRE>
-void MyWindow::show() {
-  if (shown()) {Fl_Window::show(); return;}  // you must do this!
+void MyWindow::create() {
   fl_open_display();	// necessary if this is first window
   // we only calcualte the necessary visual colormap once:
   static XVisualInfo *visual;
@@ -163,25 +165,29 @@ void MyWindow::show() {
     colormap = XCreateColormap(fl_display, RootWindow(fl_display,fl_screen),
 			        vis-&gt;visual, AllocNone);
   }
-  Fl_X::make_xid(this, visual, colormap);
+  Fl_X::create(this, visual, colormap, -1);
 }
 </PRE>
 </UL>
-<H4>Fl_X *Fl_X::set_xid(Fl_Window *, Window xid)</H4>
- Allocate a hidden structure called an <TT>Fl_X</TT>, put the XID into 
-it, and set a pointer to it from the <TT>Fl_Window</TT>.  This causes <TT>
-Fl_Window::shown()</TT> to return true. 
-<H4>void Fl_X::make_xid(Fl_Window *, XVisualInfo *= fl_visual, Colormap 
-= fl_colormap)</H4>
- This static method does the most onerous parts of creating an X 
-window, including setting the label, resize limitations, etc.  It then 
-does <TT>Fl_X::set_xid()</TT> with this new window and maps the window. 
-<H4>virtual void Fl_Window::flush()</H4>
- This virtual function is called by <TT>Fl::flush()</TT> to update the 
+
+<h4>void Fl_X::create(Fl_Window *, XVisualInfo*, Colormap, int background=NONE)</h4>
+
+This static method does the most onerous parts of creating an X
+window, including setting the label, resize limitations, etc.  You can
+modify the visual and colormap.  The background is a pixel to use for
+X's automatic fill color (if you wish do do something fancier like use
+a fill pixmap you should leave this unspecified and modify
+fl_xid(window) after this returns.  For compatability with Win32 this
+also maps the new window.
+
+<h4>virtual void Fl_Window::flush()</h4>
+
+This virtual function is called by <TT>Fl::flush()</TT> to update the 
 window. For FLTK's own windows it does this by setting the global 
 variables <TT>fl_window</TT> and <TT>fl_gc</TT> and then calling the <TT>
 draw()</TT> method.  For your own windows you might just want to put 
 all the drawing code in here. 
+
 <P>The X region that is a combination of all <TT>damage()</TT> calls 
 done so far is in <TT>Fl_X::i(this)-&gt;region</TT>.  If <TT>NULL</TT>
  then you should redraw the entire window.  The undocumented function <TT>
@@ -189,9 +195,11 @@ fl_clip_region(XRegion)</TT> will initialize the FLTK clip stack with a
 region or <TT>NULL</TT> for no clipping.  You must set region to <TT>
 NULL</TT> afterwards as <TT>fl_clip_region()</TT> now owns it and will 
 delete it when done. </P>
+
 <P>If <TT>damage() FL_DAMAGE_EXPOSE</TT> then only X expose events have 
 happened.  This may be useful if you have an undamaged image (such as a 
 backing buffer) around. </P>
+
 <P>Here is a sample where an undamaged image is kept somewhere: </P>
 <UL>
 <PRE>
@@ -203,31 +211,34 @@ void MyWindow::flush() {
 }
 </PRE>
 </UL>
-<H4>virtual void Fl_Window::hide()</H4>
- Destroy the window server copy of the window.  Usually you will 
+
+<H4>virtual void Fl_Window::destroy()</H4>
+
+Destroy the window server copy of the window.  Usually you will 
 destroy contexts, pixmaps, or other resources used by the window, and 
 then call <TT>Fl_Window::hide()</TT> to get rid of the main window 
 identified by <TT>xid()</TT>.  If you override this, you must also 
 override the destructor as shown: 
+
 <UL>
 <PRE>
-void MyWindow::hide() {
+void MyWindow::destroy() {
   if (mypixmap) {
     XFreePixmap(fl_display,mypixmap);
     mypixmap = 0;
   }
-  Fl_Window::hide(); // you must call this
+  Fl_Window::destroy(); // you must call this
 }
 </PRE>
 </UL>
 <H4>virtual void Fl_Window::~Fl_Window()</H4>
- Because of the way C++ works, if you override <TT>hide()</TT> you <I>
+ Because of the way C++ works, if you override <TT>destroy()</TT> you <I>
 must</I> override the destructor as well (otherwise only the base class <TT>
-hide()</TT> is called): 
+destroy()</TT> is called): 
 <UL>
 <PRE>
 MyWindow::~MyWindow() {
-  hide();
+  destroy();
 }
 </PRE>
 </UL>

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.36 1999/08/29 20:08:02 bill Exp $"
+// "$Id: Fl.cxx,v 1.37 1999/09/14 07:17:20 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -131,15 +131,16 @@ void Fl::flush() {
   if (damage()) {
     damage_ = 0;
     for (Fl_X* x = Fl_X::first; x; x = x->next) {
-      if (x->w->damage() && x->w->visible()) {
+      Fl_Window* w = x->w;
+      if (w->damage() && w->visible()) {
 	if (x->wait_for_expose) {
 	  // leave Fl::damage() set so programs can tell damage still exists
-          damage_ = 1;
-        } else {
-	  while (x->w->damage() & FL_DAMAGE_LAYOUT) x->layout();
-          x->flush();
-          x->w->clear_damage();
-        }
+	  damage_ = 1;
+	} else {
+	  while (w->damage() & FL_DAMAGE_LAYOUT) w->layout();
+	  w->flush();
+	  w->clear_damage();
+	}
       }
     }
   }
@@ -541,14 +542,13 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 ////////////////////////////////////////////////////////////////
-// hide() destroys the X window, it does not do unmap!
 
-void Fl_Window::hide() {
-  clear_visible();
-  if (!shown()) return;
+void Fl_Window::destroy() {
+
+  Fl_X* x = i;
+  if (!x) return;
 
   // remove from the list of windows:
-  Fl_X* x = i;
   Fl_X** pp = &Fl_X::first;
   for (; *pp != x; pp = &(*pp)->next) if (!*pp) return;
   *pp = x->next;
@@ -558,8 +558,7 @@ void Fl_Window::hide() {
   for (Fl_X *w = Fl_X::first; w;) {
     Fl_Window* W = w->w;
     if (W->window() == this) {
-      W->hide();
-      W->set_visible();
+      W->destroy();
       w = Fl_X::first;
     } else w = w->next;
   }
@@ -587,25 +586,89 @@ void Fl_Window::hide() {
 }
 
 Fl_Window::~Fl_Window() {
-  hide();
+  destroy();
 }
 
-// Child windows must respond to FL_SHOW and FL_HIDE by actually
-// doing unmap operations.  Outer windows assumme FL_SHOW & FL_HIDE
-// are messages from X:
+// Outer windows replace the show() and hide() methods, even though
+// they are not virtual.  It may have been better to call them open() and
+// close(), but this is needed for back compatability.  In fltk 2.0 if
+// you call Fl_Widget::show() or hide() on an outer window nothing
+// happens, you must correctly cast to Fl_Window.
+//
+// The purpose is to save server resources, and to avoid the need to
+// have an extra state for a window to distinguish a program hide()
+// from a hide/iconize message from the system.  "shown() &&
+// !visible()" means it is iconized, while !shown() means that the
+// program has hidden the window.
 
+const Fl_Window* fl_modal_for; // used by Fl_Window::create
+
+void Fl_Window::show() {
+  if (parent()) {
+    Fl_Widget::show();
+  } else if (!i) {
+    fl_open_display();
+    if (non_modal() && !fl_modal_for) {
+      // back compatability with older modal() and non_modal() flags:
+      fl_modal_for = Fl::first_window();
+      while (fl_modal_for && fl_modal_for->parent())
+	fl_modal_for = fl_modal_for->window();
+    }
+    create();
+    fl_modal_for = 0;
+    set_visible();
+    handle(FL_SHOW);
+    if (modal()) {Fl::modal_ = this; fl_fix_focus();}
+  } else {
+#ifdef WIN32
+    // Once again, we would lose the capture if we activated the window.
+    if (IsIconic(i->xid)) OpenIcon(i->xid);
+    if (!fl_capture) BringWindowToTop(i->xid);
+#else
+    XMapRaised(fl_display, i->xid);
+#endif
+  }
+}
+
+void Fl_Window::show(const Fl_Window* modal_for) {
+  fl_modal_for = modal_for;
+  show();
+  fl_modal_for = 0;
+}
+
+bool Fl_Window::exec(const Fl_Window* modal_for) {
+  set_modal();
+  clear();
+  fl_modal_for = modal_for;
+  show();
+  while (shown()) Fl::wait();
+  return value();
+}
+
+void Fl_Window::hide() {
+//if (parent()) {
+//  Fl_Widget::show();
+//} else
+  destroy();
+}
+
+// Fl_Widget::show()/hide() call this:
 int Fl_Window::handle(int event) {
   if (parent()) switch (event) {
   case FL_SHOW:
-    if (!shown()) show();
-    else XMapWindow(fl_display, fl_xid(this));
+    if (!i) create();
+    else XMapWindow(fl_display, i->xid);
     break;
   case FL_HIDE:
-    if (shown()) XUnmapWindow(fl_display, fl_xid(this));
+    if (i && !visible()) XUnmapWindow(fl_display, i->xid);
     break;
   }
   return Fl_Group::handle(event);
 }
+
+
+
+
 
 ////////////////////////////////////////////////////////////////
 // ~Fl_Widget() calls this: this function must get rid of any
@@ -707,5 +770,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.36 1999/08/29 20:08:02 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.37 1999/09/14 07:17:20 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Window.cxx,v 1.8 1999/02/03 08:43:33 bill Exp $"
+// "$Id: Fl_Menu_Window.cxx,v 1.9 1999/09/14 07:17:23 bill Exp $"
 //
 // Menu window code for the Fast Light Tool Kit (FLTK).
 //
@@ -48,16 +48,14 @@ extern uchar fl_overlay; // changes how fl_color(x) works
 
 #include <stdio.h>
 
-void Fl_Menu_Window::show() {
+void Fl_Menu_Window::create() {
 #if HAVE_OVERLAY
-  if (!shown() && overlay() && fl_find_overlay_visual()) {
+  if (overlay() && fl_find_overlay_visual()) {
     XInstallColormap(fl_display, fl_overlay_colormap);
-    fl_background_pixel = int(fl_transparent_pixel);
-    Fl_X::make_xid(this, fl_overlay_visual, fl_overlay_colormap);
-    fl_background_pixel = -1;
+    Fl_X::create(this, fl_overlay_visual, fl_overlay_colormap, int(fl_transparent_pixel));
   } else
 #endif
-    Fl_Single_Window::show();
+    Fl_Single_Window::create();
 }
 
 void Fl_Menu_Window::flush() {
@@ -87,15 +85,15 @@ void Fl_Menu_Window::erase() {
 
 // Fix the colormap flashing on Maximum Impact Graphics by erasing the
 // menu before unmapping it:
-void Fl_Menu_Window::hide() {
+void Fl_Menu_Window::destroy() {
   erase();
-  Fl_Single_Window::hide();
+  Fl_Single_Window::destroy();
 }
 
 Fl_Menu_Window::~Fl_Menu_Window() {
-  hide();
+  destroy();
 }
 
 //
-// End of "$Id: Fl_Menu_Window.cxx,v 1.8 1999/02/03 08:43:33 bill Exp $".
+// End of "$Id: Fl_Menu_Window.cxx,v 1.9 1999/09/14 07:17:23 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.19 1999/09/09 16:06:19 bill Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.20 1999/09/14 07:17:22 bill Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -59,45 +59,23 @@
 #define SWAP_TYPE SWAP
 #endif
 
-//
-// Windows may need a different color palette...
-//
-
-#if defined(WIN32) && HAVE_GL
-extern HPALETTE fl_gl_palette;
-#endif
-
 ////////////////////////////////////////////////////////////////
 
 int Fl_Gl_Window::can_do(int a, const int *b) {
-#ifdef WIN32
-  Fl_Gl_Choice *g = Fl_Gl_Choice::find(a,b);
-/*
-  Is this necessary? Don't all windows have the same 
-  support for pixel formats?
-  HWND w = GetDesktopWindow();
-  HDC dc = GetDC(w);
-*/
-  if (!fl_gc) fl_GetDC(0);
-  int r = ChoosePixelFormat(fl_gc, &g->pfd);
-  return r != 0;
-#else
   return Fl_Gl_Choice::find(a,b) != 0;
-#endif
 }
 
-void Fl_Gl_Window::show() {
-#ifndef WIN32
-  if (!shown()) {
-    if (!g) {
-      g = Fl_Gl_Choice::find(mode_,alist);
-      if (!g) {Fl::error("Insufficient GL support"); return;}
-    }
-    Fl_X::make_xid(this, g->vis, g->colormap);
-    if (overlay && overlay != this) ((Fl_Gl_Window*)overlay)->show();
+void Fl_Gl_Window::create() {
+  if (!g) {
+    g = Fl_Gl_Choice::find(mode_, alist);
+    if (!g) {Fl::error("Insufficient OpenGL"); return;}
   }
+#ifndef WIN32
+  Fl_X::create(this, g->vis, g->colormap, -1);
+  //if (overlay && overlay != this) ((Fl_Gl_Window*)overlay)->show();
+#else
+  Fl_Window::create();
 #endif
-  Fl_Window::show();
 }
 
 void Fl_Gl_Window::invalidate() {
@@ -110,26 +88,15 @@ void Fl_Gl_Window::invalidate() {
 int Fl_Gl_Window::mode(int m, const int *a) {
   if (m == mode_ && a == alist) return 0;
   mode_ = m; alist = a;
-#ifdef WIN32
   // destroy context and g:
-  if (shown()) {hide(); show();}
-#else
-  // under X, if the visual changes we must make a new X window (!):
-  if (shown()) {
-    Fl_Gl_Choice *g1 = g;
-    g = Fl_Gl_Choice::find(mode_,alist);
-    if (!g || g->vis->visualid != g1->vis->visualid || g->d != g1->d) {
-      hide(); show();
-    }
-  }
-#endif
+  if (shown()) {destroy(); g = 0; create();}
   return 1;
 }
 
 void Fl_Gl_Window::make_current() {
   if (!context) {
 #ifdef WIN32
-    context = wglCreateContext(fl_private_dc(this, mode_,&g));
+    context = wglCreateContext(fl_private_dc(this, g));
     if (fl_first_context) wglShareLists(fl_first_context, (GLXContext)context);
     else fl_first_context = (GLXContext)context;
 #else
@@ -179,7 +146,7 @@ void Fl_Gl_Window::flush() {
 #endif
 #endif
 
-  if (g->d) {
+  if (mode_ & FL_DOUBLE) {
 
 #if SWAP_TYPE == NODAMAGE
 
@@ -202,18 +169,18 @@ void Fl_Gl_Window::flush() {
       // we use a seperate context for the copy because rasterpos must be 0
       // and depth test needs to be off:
       static GLXContext ortho_context;
-      int init = !ortho_context;
+      if (!ortho_context) {
 #ifdef WIN32
-      if (init) ortho_context = wglCreateContext(Fl_X::i(this)->private_dc);
+	ortho_context = wglCreateContext(Fl_X::i(this)->private_dc);
 #else
-      if (init)
 	ortho_context = glXCreateContext(fl_display,g->vis,fl_first_context,1);
 #endif
-      fl_set_gl_context(this, ortho_context);
-      if (init) {
+	fl_set_gl_context(this, ortho_context);
 	glDisable(GL_DEPTH_TEST);
 	glReadBuffer(GL_BACK);
 	glDrawBuffer(GL_FRONT);
+      } else {
+	fl_set_gl_context(this, ortho_context);
       }
       glCopyPixels(0,0,w(),h(),GL_COLOR);
       make_current(); // set current context back to draw overlay
@@ -274,13 +241,12 @@ void Fl_Gl_Window::layout() {
   Fl_Window::layout();
 }
 
-void Fl_Gl_Window::hide() {
+void Fl_Gl_Window::destroy() {
   if (context) {
     fl_no_gl_context();
 #ifdef WIN32
     if (context && context != fl_first_context)
       wglDeleteContext((GLXContext)context);
-    g = 0;
 #else
     if (context != fl_first_context)
       glXDestroyContext(fl_display, (GLXContext)context);
@@ -290,17 +256,15 @@ void Fl_Gl_Window::hide() {
 #endif
     context = 0;
   }
-  Fl_Window::hide();
+  Fl_Window::destroy();
 }
 
 Fl_Gl_Window::~Fl_Gl_Window() {
-  hide();
-//  delete overlay; this is done by ~Fl_Group
+  destroy();
 }
 
 void Fl_Gl_Window::init() {
   end(); // we probably don't want any children
-  //box(FL_NO_BOX);
   mode_ = FL_RGB | FL_DEPTH | FL_DOUBLE;
   alist = 0;
   context = 0;
@@ -314,5 +278,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.19 1999/09/09 16:06:19 bill Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.20 1999/09/14 07:17:22 bill Exp $".
 //

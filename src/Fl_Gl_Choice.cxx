@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.cxx,v 1.6 1999/09/09 16:06:19 bill Exp $"
+// "$Id: Fl_Gl_Choice.cxx,v 1.7 1999/09/14 07:17:22 bill Exp $"
 //
 // OpenGL visual selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -38,20 +38,46 @@ GLXContext fl_first_context;
 // this assummes one of the two arguments is zero:
 // We keep the list system in Win32 to stay compatible and interpret
 // the list later...
-Fl_Gl_Choice *Fl_Gl_Choice::find(int mode, const int *alist) {
-  Fl_Gl_Choice *g;
-  
+Fl_Gl_Choice* Fl_Gl_Choice::find(int mode, const int* alist) {
+
+  Fl_Gl_Choice* g;
   for (g = first; g; g = g->next)
     if (g->mode == mode && g->alist == alist) 
       return g;
 
-#ifndef WIN32    
-  const int *blist;
+#ifdef WIN32    
+
+  PIXELFORMATDESCRIPTOR pfd = { 
+    sizeof(PIXELFORMATDESCRIPTOR), 1, 
+    PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL,
+    PFD_TYPE_RGBA, 8 };
+
+  if (mode & FL_INDEX) {
+    pfd.iPixelType = PFD_TYPE_COLORINDEX;
+    pfd.cColorBits = 8;
+  } else {
+    if (mode & FL_ALPHA) pfd.cAlphaBits = 8;
+    if (mode & FL_ACCUM) {
+      pfd.cAccumBits = 6;	// Wonko: I didn't find any documentation on those bits
+      pfd.cAccumGreenBits = 1;	// Wonko: They don't seem to get any support yet (4/98)
+      if (mode & FL_ALPHA) pfd.cAccumAlphaBits = 1;
+    }
+  }
+  if (mode & FL_DOUBLE) pfd.dwFlags |= PFD_DOUBLEBUFFER;
+  if (mode & FL_DEPTH) pfd.cDepthBits = 16;
+  if (mode & FL_STENCIL) pfd.cStencilBits = 1;
+  pfd.bReserved = 1; // always ask for overlay
+
+  if (!fl_gc) fl_GetDC(0);
+  int pixelFormat = ChoosePixelFormat(fl_gc, &pfd);
+  if (!pixelFormat) return 0;
+
+#else
+
   int list[32];
-    
-  if (alist)
-    blist = alist;
-  else {
+
+  if (!alist) {
+    alist = list;
     int n = 0;
     if (mode & FL_INDEX) {
       list[n++] = GLX_BUFFER_SIZE;
@@ -89,40 +115,16 @@ Fl_Gl_Choice *Fl_Gl_Choice::find(int mode, const int *alist) {
     }
 #endif
     list[n] = 0;
-    blist = list;
   }
     
   fl_open_display();
-  XVisualInfo *vis = glXChooseVisual(fl_display, fl_screen, (int *)blist);
+  XVisualInfo *vis = glXChooseVisual(fl_display, fl_screen, (int*)alist);
   if (!vis) {
 # if defined(GLX_VERSION_1_1) && defined(GLX_SGIS_multisample)
     if (mode&FL_MULTISAMPLE) return find(mode&~FL_MULTISAMPLE,0);
 # endif
     return 0;
   }
-
-#else
-
-  PIXELFORMATDESCRIPTOR pfd = { 
-    sizeof(PIXELFORMATDESCRIPTOR), 1, 
-    PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL,
-    PFD_TYPE_RGBA, 8 };
-
-  if (mode & FL_INDEX) {
-    pfd.iPixelType = PFD_TYPE_COLORINDEX;
-    pfd.cColorBits = 8;
-  } else {
-    if (mode & FL_ALPHA) pfd.cAlphaBits = 8;
-    if (mode & FL_ACCUM) {
-      pfd.cAccumBits = 6;	// Wonko: I didn't find any documentation on those bits
-      pfd.cAccumGreenBits = 1;	// Wonko: They don't seem to get any support yet (4/98)
-      if (mode & FL_ALPHA) pfd.cAccumAlphaBits = 1;
-    }
-  }
-  if (mode & FL_DOUBLE) pfd.dwFlags |= PFD_DOUBLEBUFFER;
-  if (mode & FL_DEPTH) pfd.cDepthBits = 16;
-  if (mode & FL_STENCIL) pfd.cStencilBits = 1;
-  pfd.bReserved = 1; // always ask for overlay
 
 #endif
 
@@ -133,18 +135,10 @@ Fl_Gl_Choice *Fl_Gl_Choice::find(int mode, const int *alist) {
   first = g;
 
 #ifdef WIN32
-  memcpy(&g->pfd, &pfd, sizeof(PIXELFORMATDESCRIPTOR));
-  g->d = ((mode&FL_DOUBLE) != 0);
-  g->r = (mode & FL_INDEX);
-  g->o = 0; // not an overlay
+  g->pfd = pfd;
+  g->pixelFormat = pixelFormat;
 #else
   g->vis = vis;
-  g->colormap = 0;
-  int i;
-  glXGetConfig(fl_display, vis, GLX_DOUBLEBUFFER, &i); g->d = i;
-  glXGetConfig(fl_display, vis, GLX_RGBA, &i); g->r = i;
-  glXGetConfig(fl_display, vis, GLX_LEVEL, &i); g->o = i;
-
   if (/*MaxCmapsOfScreen(ScreenOfDisplay(fl_display,fl_screen))==1 && */
       vis->visualid == fl_visual->visualid &&
       !getenv("MESA_PRIVATE_CMAP"))
@@ -159,15 +153,11 @@ Fl_Gl_Choice *Fl_Gl_Choice::find(int mode, const int *alist) {
 
 #ifdef WIN32
 
-HDC fl_private_dc(Fl_Window* w, int mode, Fl_Gl_Choice **gp) {
+HDC fl_private_dc(Fl_Window* w, Fl_Gl_Choice *g) {
   Fl_X* i = Fl_X::i(w);
   if (!i->private_dc) {
     i->private_dc = GetDCEx(i->xid, 0, DCX_CACHE);
-    Fl_Gl_Choice *g = Fl_Gl_Choice::find(mode, 0);
-	if (gp) *gp = g;
-    int pixelFormat = ChoosePixelFormat(i->private_dc, &g->pfd);
-    if (!pixelFormat) {Fl::error("Insufficient GL support"); return NULL;}
-    SetPixelFormat(i->private_dc, pixelFormat, &g->pfd);
+    SetPixelFormat(i->private_dc, g->pixelFormat, &g->pfd);
 #if USE_COLORMAP
     if (fl_palette) SelectPalette(i->private_dc, fl_palette, FALSE);
 #endif
@@ -206,5 +196,5 @@ void fl_no_gl_context() {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.cxx,v 1.6 1999/09/09 16:06:19 bill Exp $".
+// End of "$Id: Fl_Gl_Choice.cxx,v 1.7 1999/09/14 07:17:22 bill Exp $".
 //

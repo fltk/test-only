@@ -1,5 +1,5 @@
 //
-// "$Id: fl_cursor.cxx,v 1.8 1999/08/23 16:43:12 vincent Exp $"
+// "$Id: fl_cursor.cxx,v 1.9 1999/09/14 07:17:26 bill Exp $"
 //
 // Mouse cursor support for the Fast Light Tool Kit (FLTK).
 //
@@ -44,7 +44,7 @@ void fl_cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
 #ifdef WIN32
 
 void Fl_Window::cursor(Fl_Cursor c, Fl_Color, Fl_Color) {
-  if (!shown()) return;
+  if (!i) return;
   if (c > FL_CURSOR_NESW) {
     i->cursor = 0;
   } else if (c == FL_CURSOR_DEFAULT) {
@@ -125,7 +125,7 @@ static struct TableEntry {
 };
 
 void Fl_Window::cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
-  if (!shown()) return;
+  if (!i) return;
   Cursor cursor;
   int deleteit = 0;
   if (!c) {
@@ -170,5 +170,5 @@ void Fl_Window::cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
 #endif
 
 //
-// End of "$Id: fl_cursor.cxx,v 1.8 1999/08/23 16:43:12 vincent Exp $".
+// End of "$Id: fl_cursor.cxx,v 1.9 1999/09/14 07:17:26 bill Exp $".
 //
