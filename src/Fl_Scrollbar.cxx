@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.42 2000/05/15 05:52:26 bill Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.43 2000/05/18 22:22:35 carl Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -81,8 +81,7 @@ int Fl_Scrollbar::handle(int event) {
   int mx = Fl::event_x();
   int my = Fl::event_y();
   int which_part;
-  if (pushed()) which_part = highlight_; // don't change highlight
-  else if (event == FL_LEAVE) which_part = 0;
+  if (!Fl::event_inside(this)) which_part = 0;
   else if (horizontal()) {
     if (mx < X) which_part = 1;
     else if (mx >= X+W) which_part = 2;
@@ -106,20 +105,20 @@ int Fl_Scrollbar::handle(int event) {
   case FL_LEAVE:
   case FL_ENTER:
   case FL_MOVE:
-    highlight_ = which_part;
-    if (last_ != which_part) damage(FL_DAMAGE_EXPOSE);
+    if (Fl::pushed() != this) highlight_ = which_part;
+    if (last_ != highlight_) damage(FL_DAMAGE_EXPOSE);
     return 1;
   case FL_RELEASE:
-    if (pushed_) {
-      Fl::remove_timeout(timeout_cb, this);
-      pushed_ = 0;
-      damage(FL_DAMAGE_EXPOSE);
-    }
+    if (pushed_) Fl::remove_timeout(timeout_cb, this);
+    highlight_ = which_part;
+    last_ = pushed_; // so that it will unpush without redrawing everything
+    pushed_ = 0;
+    damage(FL_DAMAGE_EXPOSE);
     handle_release();
     return 1;
   case FL_PUSH:
     if (pushed_) return 1;
-    if (which_part != 5) pushed_ = highlight_ = which_part;
+    if (which_part != 5) pushed_ = which_part;
     if (pushed_) {
       handle_push();
       Fl::add_timeout(INITIALREPEAT, timeout_cb, this);
@@ -202,5 +201,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.42 2000/05/15 05:52:26 bill Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.43 2000/05/18 22:22:35 carl Exp $".
 //
