@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.25 2000/06/06 05:03:21 bill Exp $"
+// "$Id: Fl_Browser.cxx,v 1.26 2000/06/12 15:07:39 vincent Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -608,7 +608,7 @@ int Fl_Browser::set_focus() {
   if (item_position[HERE] < yposition_)
     yposition(item_position[HERE]); // make it first line
   else {
-    int h = widget->height();
+    int h = widget? widget->height() : 0;
     if (item_position[HERE]+h-yposition_ > H)
       yposition(item_position[HERE]+h-H); // make it last line
   }
@@ -909,5 +909,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.25 2000/06/06 05:03:21 bill Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.26 2000/06/12 15:07:39 vincent Exp $".
 //

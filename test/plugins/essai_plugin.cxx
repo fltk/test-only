@@ -9,6 +9,8 @@
 #include "play_buttons256.xpm"
 #include "pause_buttons256.xpm"
 
+#define S2I(a) ( int(a[0])+(int(a[1])<<8)+(int(a[2])<<16)+(int(a[3])<<24) )
+
 // Description of the plugin : declared extern "C" to avoid C++ name encoding
 // (MS Visual C does encode C++ name of variables and not only functions !! Wonder why ...)
 extern "C" FLUID_PLUGIN_API Fluid_Plugin fluid_plugin;
@@ -28,11 +30,13 @@ Fl_Menu_Item options_menu[] = {
 #include <FL/Fl_Button.H>
 
 
-// Description of the new widget for fluid
+//////////////////////////////////////////////////////////////////////
+// Description of a new widget for fluid
 
 // This object contains all the informations about the widgets and all methods
 // to write and read datas from the .fl file
 // (in this example we do not override the write and read methods !)
+// (see below for a more complete example)
 
 static Fl_Menu_Item buttontype_menu[] = {
   {"Normal",0,0,(void*)0},
@@ -62,11 +66,11 @@ static Fl_Pix_Button_Type Fl_Pix_Button_type; // template pixbutton
 
 
 
-
+///////////////////////////////////////////////////////
 // Another widget : the NSlider
 // Here we override the write and read methods
 #include "Fl_NSlider.cxx"
-static Fl_Menu_Item slider_type_menu[] = {
+static Fl_Menu_Item slider_type_menu[] = { // Type menu definition
   {"Vertical",0,0,(void*)FL_VERT_SLIDER},
   {"Horizontal",0,0,(void*)FL_HOR_SLIDER},
   {"Vert Fill",0,0,(void*)FL_VERT_FILL_SLIDER},
@@ -80,7 +84,7 @@ class Fl_NSlider_Type : public Fl_Widget_Type {
   Fl_Menu_Item *subtypes() {return slider_type_menu;}
   // We use this kludge to identify that this is really an NSlider and not any valuator,
   // could there be any better way ?
-  int is_valuator() const {return 'NSLD';}   
+  int is_valuator() const {return S2I("NSLD");}   
 public:
   virtual const char *type_name() {return "Fl_NSlider";}
   Fl_Widget *widget(int x,int y,int w,int h) {
@@ -131,7 +135,7 @@ void major_tick_precision_cb(Fl_Slider* o, void* v)
 {
   Fl_Valuator* i = (Fl_Valuator*) o;
   if (v == LOAD) { // Case LOAD
-    if (current_widget->is_valuator() != 'NSLD') // Is it a NSlider widget ?
+    if (current_widget->is_valuator() != S2I("NSLD")) // Is it a NSlider widget ?
       {i->hide(); return;}                       // no, we hide the controller
     else { 
       fluid_plugin.please_show_panel=1; // yes : tell to fluid that we use the panel
@@ -144,7 +148,7 @@ void major_tick_precision_cb(Fl_Slider* o, void* v)
   } else {         // Case SET
 
     for (Fl_Type *o = Fl_Type::first; o; o = o->next)
-      if (o->selected && o->is_widget() && o->is_valuator() == 'NSLD') { // is it a NSlider
+      if (o->selected && o->is_widget() && o->is_valuator() == S2I("NSLD")) { // is it a NSlider
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
 	((Fl_NSlider*)q->o)->majorTickPrecision(i->value()); // yep : set the widget setting
 	q->o->redraw();
