@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.21 2004/08/01 22:28:21 spitzak Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.22 2004/08/09 18:24:55 laza2000 Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -48,7 +48,10 @@ using namespace fltk;
 class FL_API DottedFrame : public Box {
 public:
   void _draw(int x, int y, int w, int h,const Style* s, Flags flags) const {
-    if (!(flags & FOCUSED)) return;
+    // ML: Imho FOCUSED test should not be here, it would be impossible 
+    //     to set DottedFrame to ordinal Widget (see test/boxtype)
+    //if (!(flags & FOCUSED)) return;
+
     if (w <= 1 || h <= 1) return;
     Color bg, fg; s->boxcolors(flags, bg, fg);
     setcolor(fg);
@@ -85,6 +88,9 @@ public:
     //
     // WAS: Can we do something with a pattern brush here, like the X
     // version uses?
+  
+/*
+    // Draw using drawpoint  
     w--; h--;
     int i = 1;
     int xx,yy;
@@ -92,7 +98,54 @@ public:
     for (yy = 0; yy < h; yy ++, i ++) if (i & 1) drawpoint(x + w, y + yy);
     for (xx = w; xx > 0; xx --, i ++) if (i & 1) drawpoint(x + xx, y + h);
     for (yy = h; yy > 0; yy --, i ++) if (i & 1) drawpoint(x, y + yy);
+*/
+/*
+    // Draw using WIN32 API function (since 95)
+    int xx = x; int yy = y; transform(xx,yy);
+    RECT r = {xx,yy,xx+w-1,yy+h-1};
+    DrawFocusRect(dc, &r);
+*/
 
+    // Draw using bitmap patterns (like X11) and PatBlt
+    static const WORD pattern[] = { 0xAAAA, 0x5555, 0xAAAA, 0x5555, 0xAAAA, 0x5555, 0xAAAA, 0x5555, 0xAAAA };
+    static HBRUSH evenbrush, oddbrush;
+    if(!evenbrush) {
+      // Init stipple brushes
+      BITMAP bm;
+      bm.bmType = 0;
+      bm.bmWidth = 8;
+      bm.bmHeight = 8;
+      bm.bmWidthBytes = 2;
+      bm.bmPlanes = 1;
+      bm.bmBitsPixel = 1;
+      bm.bmBits = (LPVOID)pattern;
+      HBITMAP evenstipple = CreateBitmapIndirect(&bm);
+      bm.bmBits = (LPVOID)(pattern+1);
+      HBITMAP oddstipple  = CreateBitmapIndirect(&bm);
+      // Create the brush from the bitmap bits
+      evenbrush = CreatePatternBrush(evenstipple);
+      oddbrush  = CreatePatternBrush(oddstipple);
+      // Delete the useless bitmaps
+      DeleteObject(evenstipple);
+      DeleteObject(oddstipple);
+    }
+
+    int xx = x; int yy = y; transform(xx,yy);
+    HBRUSH brush = (xx+yy-x-y)&1 ? oddbrush : evenbrush;
+
+    // Select the patterned brush into the DC
+    HBRUSH old_brush = (HBRUSH)SelectObject(dc, brush);
+
+    // Draw horizontal lines
+    PatBlt(dc, xx, yy, w, 1, PATCOPY);
+    PatBlt(dc, xx, yy+h-1, w, 1, PATCOPY);
+
+    // Draw vertical lines
+    PatBlt(dc, xx, yy, 1, h, PATCOPY);
+    PatBlt(dc, xx+w-1, yy, 1, h, PATCOPY);
+
+    // Clean up
+    SelectObject(dc, old_brush);
 #else
     line_style(DOT);
     strokerect(x, y, w, h);
@@ -341,5 +394,5 @@ static HighlightBox highlightDownBox("highlight_down", THIN_DOWN_BOX);
 Box* const fltk::HIGHLIGHT_DOWN_BOX = &highlightDownBox;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.21 2004/08/01 22:28:21 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.22 2004/08/09 18:24:55 laza2000 Exp $".
 //
