@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.113 2003/01/15 02:27:19 easysw Exp $"
+# "$Id: Makefile,v 1.114 2003/01/19 03:27:57 spitzak Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -254,40 +254,40 @@ install: install-lib install-lib$(DSOSUFFIX)
 install-lib:
 	echo "Installing static core library in $(libdir)"
 	$(MKDIR) $(libdir)
-	$(RM) $(libdir)/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
-	$(CP) ../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX) $(libdir)
-	$(RANLIB) $(libdir)/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
+	$(RM) $(libdir)/$(LIBPREFIX)fltk$(LIBSUFFIX)
+	$(CP) ../lib/$(LIBPREFIX)fltk$(LIBSUFFIX) $(libdir)
+	$(RANLIB) $(libdir)/$(LIBPREFIX)fltk$(LIBSUFFIX)
 
 install-lib.so.2:
 	echo "Installing shared core library in $(libdir)"
 	$(MKDIR) $(libdir)
-	$(RM) $(libdir)/libfltk_gl.so.2
-	$(CP) ../lib/libfltk_gl.so.2 $(libdir)
-	$(RM) $(libdir)/libfltk_gl.so
-	$(LN) libfltk_gl.so.2 $(libdir)/libfltk_gl.so
+	$(RM) $(libdir)/libfltk.so.2
+	$(CP) ../lib/libfltk.so.2 $(libdir)
+	$(RM) $(libdir)/libfltk.so
+	$(LN) libfltk.so.2 $(libdir)/libfltk.so
 
 install-lib.sl.2:
 	echo "Installing shared core library in $(libdir)"
 	$(MKDIR) $(libdir)
-	$(RM) $(libdir)/libfltk_gl.sl.2
-	$(CP) ../lib/libfltk_gl.sl.2 $(libdir)
-	$(RM) $(libdir)/libfltk_gl.sl
-	$(LN) libfltk_gl.sl.2 $(libdir)/libfltk_gl.sl
+	$(RM) $(libdir)/libfltk.sl.2
+	$(CP) ../lib/libfltk.sl.2 $(libdir)
+	$(RM) $(libdir)/libfltk.sl
+	$(LN) libfltk.sl.2 $(libdir)/libfltk.sl
 
 install-lib.2.dylib:
 	echo "Installing shared core library in $(libdir)"
 	$(MKDIR) $(libdir)
-	$(RM) $(libdir)/libfltk_gl.2.dylib
-	$(CP) ../lib/libfltk_gl.2.dylib $(libdir)
-	$(RM) $(libdir)/libfltk_gl.dylib
-	$(LN) libfltk_gl.2.dylib $(libdir)/libfltk_gl.dylib
+	$(RM) $(libdir)/libfltk.2.dylib
+	$(CP) ../lib/libfltk.2.dylib $(libdir)
+	$(RM) $(libdir)/libfltk.dylib
+	$(LN) libfltk.2.dylib $(libdir)/libfltk.dylib
 
 install-lib_s.a:
 	echo "Installing shared core library in $(libdir)"
 	$(MKDIR) $(libdir)
-	$(RM) $(libdir)/libfltk_gl_s.a
-	$(CP) ../lib/libfltk_gl_s.a $(libdir)
-	$(CHMOD) 755 $(libdir)/libfltk_gl_s.a
+	$(RM) $(libdir)/libfltk_s.a
+	$(CP) ../lib/libfltk_s.a $(libdir)
+	$(CHMOD) 755 $(libdir)/libfltk_s.a
 
 
 #
@@ -302,28 +302,28 @@ uninstall:	uninstall-lib uninstall-lib$(DSOSUFFIX)
 
 uninstall-lib:
 	echo "Removing static core library from $(libdir)"
-	$(RM) $(libdir)/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
+	$(RM) $(libdir)/$(LIBPREFIX)fltk$(LIBSUFFIX)
 
 uninstall-lib.so.2:
 	echo "Removing shared core library from $(libdir)"
-	$(RM) $(libdir)/libfltk_gl.so.2
-	$(RM) $(libdir)/libfltk_gl.so
+	$(RM) $(libdir)/libfltk.so.2
+	$(RM) $(libdir)/libfltk.so
 
 uninstall-lib.sl.2:
 	echo "Removing shared core library from $(libdir)"
-	$(RM) $(libdir)/libfltk_gl.sl.2
-	$(RM) $(libdir)/libfltk_gl.sl
+	$(RM) $(libdir)/libfltk.sl.2
+	$(RM) $(libdir)/libfltk.sl
 
 uninstall-lib.2.dylib:
 	echo "Removing shared core library from $(libdir)"
-	$(RM) $(libdir)/libfltk_gl.2.dylib
-	$(RM) $(libdir)/libfltk_gl.dylib
+	$(RM) $(libdir)/libfltk.2.dylib
+	$(RM) $(libdir)/libfltk.dylib
 
 uninstall-lib_s.a:
 	echo "Removing shared core library from $(libdir)"
-	$(RM) $(libdir)/libfltk_gl_s.a
+	$(RM) $(libdir)/libfltk_s.a
 
 
 #
-# End of "$Id: Makefile,v 1.113 2003/01/15 02:27:19 easysw Exp $".
+# End of "$Id: Makefile,v 1.114 2003/01/19 03:27:57 spitzak Exp $".
 #
