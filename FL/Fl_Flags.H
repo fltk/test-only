@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Flags.H,v 1.7 2000/05/01 19:39:45 gustavo Exp $"
+// "$Id: Fl_Flags.H,v 1.8 2000/05/15 05:52:19 bill Exp $"
 //
 // Unified flags set for fltk
 //
@@ -74,6 +74,7 @@ enum {
   FL_INVISIBLE		= 0x00001000, // does not get events, does not draw
   FL_OUTPUT		= 0x00002000, // does not get events
   FL_CHANGED		= 0x00004000, // value changed since last callback
+  FL_COPIED_LABEL	= 0x00008000, // copy_label() was called
 
 // Values used to draw boxes:
   FL_FOCUSED		= 0x00010000, // draw with keyboard focus

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.21 2000/04/14 17:15:47 bill Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.22 2000/05/15 05:52:26 bill Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -216,11 +216,12 @@ Fl_Scroll::Fl_Scroll(int X,int Y,int W,int H,const char* L)
 }
 
 int Fl_Scroll::handle(int event) {
-  // Auto-scroll to show the widget with focus when focus changes:
-  if (event == FL_FOCUS) {
+  switch (event) {
+
+  case FL_FOCUS:
     if (contains(Fl::focus())) {
-      // indicates that the focus changed to a different child, scroll
-      // to show it:
+      // The event indicates that the focus changed to a different child,
+      // auto-scroll to show it:
       Fl_Widget* w = Fl::focus();
       int X,Y,R,B; bbox(X,Y,R,B); R += X; B += Y;
       int x = w->x();
@@ -235,13 +236,32 @@ int Fl_Scroll::handle(int event) {
       else if (b > B) {dy = B-b; if (y+dy < Y) {dy = Y-y; if (dy > 0) dy = 0;}}
       position(xposition_-dx+layoutdx, yposition_-dy+layoutdy);
     }
-  } else {
-    if (send(event,scrollbar)) return 1;
-    if (send(event,hscrollbar)) return 1;
+    break;
+
+  case FL_PUSH:
+  case FL_MOVE:
+  case FL_ENTER:
+    if (scrollbar.align()&FL_ALIGN_LEFT ?
+	(Fl::event_x() < scrollbar.x()+scrollbar.w()) :
+	(Fl::event_x() >= scrollbar.x()))
+      if (send(event,scrollbar)) return 1;
+    if (hscrollbar.align()&FL_ALIGN_TOP ?
+	(Fl::event_y() < hscrollbar.y()+hscrollbar.h()) :
+	(Fl::event_y() >= hscrollbar.y()))
+      if (send(event,hscrollbar)) return 1;
+    break;
+
   }
-  return Fl_Group::handle(event);
+
+  if (Fl_Group::handle(event)) return 1;
+
+  if (event == FL_SHORTCUT) {
+    if (send(FL_KEYBOARD, scrollbar)) return 1;
+    if (send(FL_KEYBOARD, hscrollbar)) return 1;
+  }
+  return 0;
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.21 2000/04/14 17:15:47 bill Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.22 2000/05/15 05:52:26 bill Exp $".
 //

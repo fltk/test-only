@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.38 2000/04/10 06:45:45 bill Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.39 2000/05/15 05:52:27 bill Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -145,7 +145,7 @@ int Fl_Tabs::handle(int event) {
       // else fall through...
     case FL_Left:
     case FL_Up:
-      if (selected) return send(event, *selected);
+      if (selected) return selected->take_focus();
       break;
     case FL_Right:
     case FL_Down:
@@ -205,7 +205,7 @@ int Fl_Tabs::handle(int event) {
     switch (navigation_key()) {
     case FL_Right:
     case FL_Down:
-      if (focus() < 0 && selected) return send(FL_FOCUS, *selected);
+      if (focus() < 0 && selected) return selected->take_focus();
       else return 0;
     case FL_Left:
     case FL_Up:
@@ -378,5 +378,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.38 2000/04/10 06:45:45 bill Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.39 2000/05/15 05:52:27 bill Exp $".
 //

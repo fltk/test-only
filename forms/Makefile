@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.5 1999/12/08 10:53:03 vincent Exp $"
+# "$Id: Makefile,v 1.6 2000/05/15 05:52:23 bill Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -31,7 +31,8 @@ CPPFILES = \
 	forms_free.cxx \
 	forms_fselect.cxx \
 	forms_pixmap.cxx \
-	forms_timer.cxx
+	forms_timer.cxx \
+	fl_load_browser.cxx
 
 DEMOS = \
 	forms colbrowser
@@ -94,5 +95,5 @@ install: $(LIBRARY).a
 	fi
 
 #
-# End of "$Id: Makefile,v 1.5 1999/12/08 10:53:03 vincent Exp $".
+# End of "$Id: Makefile,v 1.6 2000/05/15 05:52:23 bill Exp $".
 #

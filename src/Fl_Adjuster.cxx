@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.28 2000/04/15 04:47:22 carl Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.29 2000/05/15 05:52:25 bill Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -89,12 +89,13 @@ int Fl_Adjuster::handle(int event) {
   int delta;
   int mx = Fl::event_x();
 
-  if (Fl::event_inside(this)) {
-    if (w()>=h())
-      highlight = 3*(mx-x())/w() + 1;
-    else
-      highlight = 3-3*(Fl::event_y()-y()-1)/h();
-  } else highlight = 0;
+  int which_button;
+  if (w()>=h())
+    which_button = 3*(mx-x())/w() + 1;
+  else
+    which_button = 3-3*(Fl::event_y()-y()-1)/h();
+  if (which_button > 3) which_button = 3;
+  else if (which_button < 1) which_button = 1;
 
   switch (event) {
 
@@ -102,7 +103,7 @@ int Fl_Adjuster::handle(int event) {
     take_focus();
     handle_push();
     ix = mx;
-    drag = highlight;
+    drag = highlight = which_button;
     redraw();
     return 1;
 
@@ -143,7 +144,11 @@ int Fl_Adjuster::handle(int event) {
     handle_release();
     return 1;
 
+  case FL_LEAVE:
+    which_button = 0;
+  case FL_ENTER:
   case FL_MOVE:
+    highlight = which_button;
     if (last != highlight) redraw();
     return 1;
 
@@ -171,5 +176,5 @@ Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.28 2000/04/15 04:47:22 carl Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.29 2000/05/15 05:52:25 bill Exp $".
 //

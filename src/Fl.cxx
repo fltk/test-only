@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.90 2000/05/11 22:03:27 bill Exp $"
+// "$Id: Fl.cxx,v 1.91 2000/05/15 05:52:24 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -217,14 +217,24 @@ Fl_Window* fl_find(Window xid) {
   return 0;
 }
 
+Fl_Window* Fl::first_window() {
+  Fl_X* x = Fl_X::first;
+  return x ? x->w : 0;
+}
+
+Fl_Window* Fl::next_window(const Fl_Window* w) {
+  Fl_X* x = Fl_X::i(w)->next;
+  return x ? x->w : 0;
+}
+
+void Fl::first_window(Fl_Window* window) {
+  if (!window || !window->shown()) return;
+  fl_find(fl_xid(window));
+}
+
 void Fl::redraw() {
   for (Fl_X* x = Fl_X::first; x; x = x->next) x->w->redraw();
 }
-
-Fl_Window* Fl::first_window() {Fl_X* x = Fl_X::first; return x ? x->w : 0;}
-
-Fl_Window* Fl::next_window(const Fl_Window* w) {
-  Fl_X* x = Fl_X::i(w)->next; return x ? x->w : 0;}
 
 ////////////////////////////////////////////////////////////////
 // Event handling:
@@ -500,5 +510,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.90 2000/05/11 22:03:27 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.91 2000/05/15 05:52:24 bill Exp $".
 //

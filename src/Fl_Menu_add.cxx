@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.19 2000/05/02 06:09:14 carl Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.20 2000/05/15 05:52:26 bill Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -34,20 +34,14 @@
 // Not at all guaranteed to be Forms compatable, especially with any
 // string with a % sign in it!
 
-// Further warning: the strings are no longer copied and thus must be
-// string constants!  Otherwise this would leak memory.  Actually it
-// leaks anyway for strings with / or | in them.
-
 #include <FL/Fl_Menu_.H>
 #include <FL/Fl_Item.H>
 #include <FL/Fl_Item_Group.H>
 #include <FL/Fl_Divider.H>
 #include <FL/Fl_Menu_Item.H>
-#include <string.h>
-#include <stdio.h>
-#include <stdlib.h>
 
 // Return a new menu item:
+static int insert_here;
 
 static Fl_Widget* append(
   Fl_Group* g,
@@ -58,16 +52,18 @@ static Fl_Widget* append(
   Fl_Group::current(0);
   Fl_Widget* o;
   if (flags & FL_SUBMENU) {
-    o = new Fl_Item_Group(text);
+    o = new Fl_Item_Group();
     Fl_Group::current(0);
   } else
-    o = new Fl_Item(text);
+    o = new Fl_Item();
+  o->copy_label(text);
   if (flags & FL_MENU_TOGGLE) o->type(FL_TOGGLE_ITEM);
   if (flags & FL_MENU_RADIO) o->type(FL_RADIO_ITEM);
   // these flags have been cleverly assigned so this shift and mask
   // converts from the old values to the new ones:
   o->set_flag((flags<<8)&(FL_INACTIVE|FL_VALUE|FL_INVISIBLE));
-  g->add(o);
+  if (insert_here) {g->insert(*o, insert_here-1); insert_here = 0;}
+  else g->add(o);
   if (flags & FL_MENU_DIVIDER) g->add(new Fl_Divider());
   Fl_Group::current(saved);
   return o;
@@ -111,7 +107,7 @@ Fl_Widget* Fl_Menu_::add(
     for (int n = group->children();;) {
       if (!n) { // create a new menu
 	if (find_flag) return 0;
-	group = (Fl_Group*)append(group,strdup(item),FL_SUBMENU|flags1);
+	group = (Fl_Group*)append(group,item,FL_SUBMENU|flags1);
 	break;
       }
       Fl_Widget* w = group->child(--n);
@@ -128,7 +124,7 @@ Fl_Widget* Fl_Menu_::add(
   for (int n = group->children();;) {
     if (!n) { // create a new item
       if (find_flag) return 0;
-      o = append(group, item==buf ? strdup(item) : item, flags|flags1);
+      o = append(group, item, flags|flags1);
       break;
     }
     Fl_Widget* w = group->child(--n);
@@ -145,6 +141,17 @@ Fl_Widget* Fl_Menu_::add(
   o->user_data(data);
 
   return o;
+}
+
+// This is a method from the old Fl_Browser:
+Fl_Widget* Fl_Menu_::add(const char* text, void* data) {
+  return add(text, 0, 0, data, 0);
+}
+
+// This is a method from the old Fl_Browser:
+Fl_Widget* Fl_Menu_::insert(int n, const char* text, void* data) {
+  insert_here = n+1;
+  return add(text, 0, 0, data, 0);
 }
 
 // Does the exact same parsing as add() and return a pointer to the item,
@@ -174,7 +181,6 @@ Fl_Widget* Fl_Menu_::add(const char *str) {
     *c = 0;
     if (*str) {
       r = add(buf, shortcut, 0, 0, 0);
-      r->label(strdup(r->label()));
       str++;
     } else {
       r = add(start, shortcut, 0, 0, 0);
@@ -184,5 +190,5 @@ Fl_Widget* Fl_Menu_::add(const char *str) {
 }
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.19 2000/05/02 06:09:14 carl Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.20 2000/05/15 05:52:26 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.34 2000/04/16 08:31:45 bill Exp $"
+// "$Id: Fl_Counter.cxx,v 1.35 2000/05/15 05:52:25 bill Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -125,23 +125,22 @@ void Fl_Counter::repeat_callback(void* v) {
 }
 
 int Fl_Counter::calc_mouseobj() {
+  int mx = Fl::event_x();
   if (type() == FL_NORMAL_COUNTER) {
     int W = w()*15/100;
-    if (Fl::event_inside(x(), y(), W, h())) return 1;
-    if (Fl::event_inside(x()+W, y(), W, h())) return 2;
-    if (Fl::event_inside(x()+w()-2*W, y(), W, h())) return 3;
-    if (Fl::event_inside(x()+w()-W, y(), W, h())) return 4;
+    if (mx < x()+W) return 1;
+    if (mx < x()+2*W) return 2;
+    if (mx >= x()+w()-W) return 4;
+    if (mx >= x()+w()-2*W) return 3;
   } else {
     int W = w()*20/100;
-    if (Fl::event_inside(x(), y(), W, h())) return 2;
-    if (Fl::event_inside(x()+w()-W, y(), W, h())) return 3;
+    if (mx < x()+W) return 2;
+    if (mx >= x()+w()-W) return 3;
   }
   return 0;
 }
 
 int Fl_Counter::handle(int event) {
-  highlight = calc_mouseobj();
-
   switch (event) {
 
   case FL_RELEASE:
@@ -158,6 +157,7 @@ int Fl_Counter::handle(int event) {
     take_focus();
     handle_push();
   case FL_DRAG:
+    highlight = calc_mouseobj();
     if (highlight != mouseobj) {
       Fl::remove_timeout(repeat_callback, this);
       mouseobj = highlight;
@@ -166,7 +166,12 @@ int Fl_Counter::handle(int event) {
     }
     return 1;
 
+  case FL_LEAVE:
+    highlight = 0; goto J1;
+  case FL_ENTER:
   case FL_MOVE:
+    highlight = calc_mouseobj();
+  J1:
     if (last != highlight) redraw();
     return 1;
 
@@ -198,5 +203,5 @@ Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(
 }
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.34 2000/04/16 08:31:45 bill Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.35 2000/05/15 05:52:25 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.41 2000/04/15 04:47:23 carl Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.42 2000/05/15 05:52:26 bill Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -69,7 +69,6 @@ void Fl_Scrollbar::timeout_cb(void* v) {
 int Fl_Scrollbar::handle(int event) {
   // area of scrollbar:
   int X=x(); int Y=y(); int W=w(); int H=h(); window_box()->inset(X,Y,W,H);
-  int SX = X; int SY = Y; int SW = W; int SH = H;
 
   // adjust slider area to be inside the arrow buttons:
   if (horizontal()) {
@@ -81,50 +80,46 @@ int Fl_Scrollbar::handle(int event) {
   // which widget part is highlighted?
   int mx = Fl::event_x();
   int my = Fl::event_y();
-  if (pushed()) ; // don't change highlight
-  else if (!Fl::event_inside(SX, SY, SW, SH)) highlight_ = 0;
+  int which_part;
+  if (pushed()) which_part = highlight_; // don't change highlight
+  else if (event == FL_LEAVE) which_part = 0;
   else if (horizontal()) {
-    if (mx < X) highlight_ = 1;
-    else if (mx >= X+W) highlight_ = 2;
+    if (mx < X) which_part = 1;
+    else if (mx >= X+W) which_part = 2;
     else {
-      // Carl: I did this on purpose so the highlighting will work
-      // when you point at the trough!  I don't understand why you
-      // don't want the highlighting in this case
-
-      // Because commenting this code out breaks the page up/down
-      // functionality of clicking on the trough.  Besides, no other
-      // toolkit highlights when pointing at the trough so it doesn't
-      // look "right" and makes emulation themes less correct.
       int sliderx = slider_position(W, slider_size(W, H));
-      if (mx < X+sliderx) highlight_ = 3;
-      else if (mx >= X+sliderx+slider_size(W, H)) highlight_ = 4;
-      else highlight_ = 5;
+      if (mx < X+sliderx) which_part = 3;
+      else if (mx >= X+sliderx+slider_size(W, H)) which_part = 4;
+      else which_part = 5;
     }
   } else {
-    if (mx < X || mx >= X+W) highlight_ = 0;
-    else if (my < Y) highlight_ = 1;
-    else if (my >= Y+H) highlight_ = 2;
+    if (my < Y) which_part = 1;
+    else if (my >= Y+H) which_part = 2;
     else {
       int slidery = slider_position(H, slider_size(H, W));
-      if (my < Y+slidery) highlight_ = 3;
-      else if (my >= Y+slidery+slider_size(H, W)) highlight_ = 4;
-      else highlight_ = 5;
+      if (my < Y+slidery) which_part = 3;
+      else if (my >= Y+slidery+slider_size(H, W)) which_part = 4;
+      else which_part = 5;
     }
   }
   switch (event) {
+  case FL_LEAVE:
+  case FL_ENTER:
   case FL_MOVE:
-    if (last_ == highlight_) return 1;
+    highlight_ = which_part;
+    if (last_ != which_part) damage(FL_DAMAGE_EXPOSE);
+    return 1;
   case FL_RELEASE:
-      damage(FL_DAMAGE_EXPOSE);
     if (pushed_) {
       Fl::remove_timeout(timeout_cb, this);
       pushed_ = 0;
+      damage(FL_DAMAGE_EXPOSE);
     }
     handle_release();
     return 1;
   case FL_PUSH:
     if (pushed_) return 1;
-    if (highlight_ != 5) pushed_ = highlight_;
+    if (which_part != 5) pushed_ = highlight_ = which_part;
     if (pushed_) {
       handle_push();
       Fl::add_timeout(INITIALREPEAT, timeout_cb, this);
@@ -207,5 +202,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.41 2000/04/15 04:47:23 carl Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.42 2000/05/15 05:52:26 bill Exp $".
 //

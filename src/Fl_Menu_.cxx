@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.19 2000/04/24 08:31:26 bill Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.20 2000/05/15 05:52:25 bill Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -65,11 +65,17 @@ void Fl_Menu_::execute(Fl_Widget* w) {
 }
 
 Fl_Widget* Fl_Menu_::item() const {
-  if (value() < 0) return 0;
-  Fl_Widget* w = child(value());
-  while (w->is_group() && ((Fl_Group*)w)->focus() >= 0)
-    w = ((Fl_Group*)w)->child(((Fl_Group*)w)->focus());
-  return w;
+  const Fl_Group* parent = this;
+  Fl_Widget* widget = 0;
+  for (;;) {
+    int i = parent->focus();
+    if (i < 0) break;
+    if (i >= parent->children()) return 0; // some kind of foul-up
+    widget = parent->child(i);
+    if (!widget->is_group()) break;
+    parent = (Fl_Group*)widget;
+  }
+  return widget;
 }
 
 void Fl_Menu_::item(Fl_Widget* w) {
@@ -104,5 +110,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.19 2000/04/24 08:31:26 bill Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.20 2000/05/15 05:52:25 bill Exp $"
 //

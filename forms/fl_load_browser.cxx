@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_Menu_global.cxx,v 1.6 2000/05/15 05:52:26 bill Exp $"
+// "$Id: fl_load_browser.cxx,v 1.1 2000/05/15 05:52:23 bill Exp $"
 //
-// Global menu shortcut code for the Fast Light Tool Kit (FLTK).
+// File loading routines for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,26 +23,34 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// Make all the shortcuts in this menu global.
-// Currently only one menu at a time and you cannot destruct the menu,
-// is this sufficient?
-
 #include <FL/Fl.H>
-#include <FL/Fl_Menu_.H>
+#include <FL/Fl_Browser.H>
+#include <stdio.h>
 
-static Fl_Menu_* the_widget;
-
-static int handler(int e) {
-  if (e != FL_SHORTCUT || Fl::modal()) return 0;
-  Fl::first_window(the_widget->window());
-  return the_widget->handle(e);
-}
-
-void Fl_Menu_::global() {
-  if (!the_widget) Fl::add_handler(handler);
-  the_widget = this;
+int fl_load_browser(Fl_Widget* o, const char* filename) {
+  Fl_Browser* b = (Fl_Browser*)o;
+#define MAXFL_BLINE 1024
+  char newtext[MAXFL_BLINE];
+  int c;
+  int i;
+  b->clear();
+  if (!filename || !(filename[0])) return 1;
+  FILE *fl = fopen(filename,"r");
+  if (!fl) return 0;
+  i = 0;
+  do {
+    c = getc(fl);
+    if (c == '\n' || c <= 0 || i>=(MAXFL_BLINE-1)) {
+      newtext[i] = 0;
+      b->add(newtext);
+      i = 0;
+    } else
+      newtext[i++] = c;
+  } while (c >= 0);
+  fclose(fl);
+  return 1;
 }
 
 //
-// End of "$Id: Fl_Menu_global.cxx,v 1.6 2000/05/15 05:52:26 bill Exp $".
+// End of "$Id: fl_load_browser.cxx,v 1.1 2000/05/15 05:52:23 bill Exp $"
 //

@@ -1,139 +1,214 @@
-//
-// "$Id: browser.cxx,v 1.9 2000/04/24 08:31:29 bill Exp $"
-//
-// Browser test program for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-1999 by Bill Spitzak and others.
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
-//
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
-//
+// Maarten de Boer's toggle tree demo program rewritten to use the
+// fltk 2.0 browser.  This unfortunately required a bunch of changes.
 
-/*
-This is a test of how the browser draws lines.
-This is a second line.
-This is a third.
-
-That was a blank line above this.
-
-@r@_Right justify
-@c@_Center justify
-@_Left justify
-
-@bBold text
-@iItalic text
-@b@iBold Italic
-@fFixed width
-@f@bBold Fixed
-@f@iItalic Fixed
-@f@i@bBold Italic Fixed
-@lLarge
-@l@bLarge bold
-@sSmall
-@s@bSmall bold
-@s@iSmall italic
-@s@i@bSmall italic bold
-@uunderscore
-@C1RED
-@C2Green
-@C4Blue
-
-*/
-
-#include <FL/Fl.H>
-#include <FL/Fl_NewBrowser.H>
+#include <FL/Fl_Browser.H>
 #include <FL/Fl_Window.H>
-#include <stdio.h>
-#include <string.h>
-#include <errno.h>
-#include <stdlib.h>
+#include <FL/Fl_Button.H>
+#include <FL/Fl_Scroll.H>
+#include <FL/Fl.H>
+#include <FL/Fl_Pixmap.H>
 #include <FL/Fl_Item.H>
 #include <FL/Fl_Item_Group.H>
+#include <FL/Fl_Check_Button.H>
 
-void b_cb(Fl_Widget* o, void*) {
-  printf("callback, selection = %d, event_clicks = %d\n",
-	 ((Fl_Browser*)o)->value(), Fl::event_clicks());
+#include "folder_small.xpm"
+#include "file_small.xpm"
+
+#include <stdio.h>
+#include <stdlib.h>
+
+Fl_Pixmap* folderSmall;
+Fl_Pixmap* fileSmall;
+
+void
+cb_test(Fl_Widget* t, void*) {
+  Fl_Widget* w = ((Fl_Browser*)t)->item();
+  printf("callback for '%s'\n", w && w->label() ? w->label() : "null");
 }
 
-extern int fl_mousewheel_up;
-extern int fl_mousewheel_down;
-
-int main(int argc, char **argv) {
-  int i;
-  if (!Fl::args(argc,argv,i)) Fl::fatal(Fl::help);
-  const char* fname = (i < argc) ? argv[i] : "browser.cxx";
-  Fl_Window window(400,400,fname);
-  window.box(FL_NO_BOX); // because it is filled with browser
-  Fl_Browser browser(0,0,400,400,0);
-  //browser.type(FL_MULTI_BROWSER);
-  //browser.color(42);
-  browser.callback(b_cb);
-  // browser.scrollbar_right();
-  //browser.has_scrollbar(Fl_Browser::BOTH_ALWAYS);
-
-  browser.begin();
-  new Fl_Item("Alpha");
-  new Fl_Item("Beta");
-  new Fl_Item("Ceta");
-  new Fl_Item("Delta");
-  (new Fl_Item("Epsilon and this item is a bit long"))->align(FL_ALIGN_LEFT);
-  Fl_Item_Group* g = new Fl_Item_Group("Closed group");
-  g->begin();
-  for (int j = 0; j < 10; j++) {
-    char buf[100];
-    sprintf(buf, "Child %d\n", j);
-    new Fl_Item(strdup(buf));
+void
+cb_remove(Fl_Widget*, void* ptr) {
+  Fl_Browser* tree = (Fl_Browser*) ptr;
+  if (tree->multi()) {
+    Fl_Widget* w = tree->goto_top();
+    while (w) {
+      if (w->value()) {
+	Fl_Group* g = w->parent();
+	g->remove(w);
+	delete w;
+	g->relayout();
+	w = tree->goto_top();
+      } else {
+	w = tree->forward();
+      }
+    }
+  } else {
+    Fl_Widget* w = tree->item();
+    if (w) {
+      Fl_Group* g = w->parent();
+      g->remove(w);
+      delete w;
+      g->relayout();
+    }
   }
-  g->end();
-  g = new Fl_Item_Group("Open group");
-  g->set_flag(FL_OPEN);
-  g->begin();
-  for (int j = 0; j < 10; j++) {
-    char buf[100];
-    sprintf(buf, "Child %d\n", j);
-    new Fl_Item(strdup(buf));
-  }
-  Fl_Group* k = new Fl_Item_Group("Open group");
-  k->set_flag(FL_OPEN);
-  k->begin();
-  for (int j = 0; j < 10; j++) {
-    char buf[100];
-    sprintf(buf, "Child %d\n", j);
-    new Fl_Item(strdup(buf));
-  }
-  k->end();
-  g->end();
-  for (int j = 0; j < 100; j++) {
-    char buf[100];
-    sprintf(buf, "Item %d\n", j);
-    new Fl_Item(strdup(buf));
-  }
-  new Fl_Item("The last item");
-  browser.end();
-
-  //browser.position(0);
-  window.resizable(&browser);
-  window.show(argc,argv);
-//  fl_mousewheel_up = 2;
-//  fl_mousewheel_down = 3;
-  return Fl::run();
 }
 
-//
-// End of "$Id: browser.cxx,v 1.9 2000/04/24 08:31:29 bill Exp $".
-//
+void
+cb_multi(Fl_Widget* w, void* ptr) {
+  Fl_Browser* tree = (Fl_Browser*) ptr;
+  tree->type(w->value() ? FL_MULTI_BROWSER : FL_NORMAL_BROWSER);
+  tree->relayout();
+}
+
+void
+cb_colors(Fl_Widget* w, void* ptr) {
+  Fl_Browser* tree = (Fl_Browser*) ptr;
+  tree->color(w->value() ? Fl_Color(FL_LIGHT2) : tree->window_color());
+  tree->redraw();
+}
+
+static Fl_Group* current_group(Fl_Browser* tree) {
+  Fl_Widget* w = tree->goto_mark(Fl_Browser::FOCUS);
+  if (!w) return tree;
+  if (w->is_group() && w->flags()&FL_OPEN) return (Fl_Group*)w;
+  return w->parent();
+}
+
+static Fl_Group* add_folder(Fl_Group* parent,
+		       const char* name, int open, Fl_Image* image) {
+  Fl_Item_Group* o = new Fl_Item_Group(name);
+  o->image(image);
+  if (open) o->set_flag(FL_OPEN);
+  parent->add(o);
+  parent->relayout();
+  return o;
+}
+
+static Fl_Widget* add_paper(Fl_Group* parent,
+			   const char* name, int, Fl_Image* image) {
+  Fl_Item* o = new Fl_Item(name);
+  o->image(image);
+  parent->add(o);
+  parent->relayout();
+  return o;
+}
+
+void
+cb_add_folder(Fl_Widget*, void* ptr) {
+  Fl_Browser* tree = (Fl_Browser*) ptr;
+  add_folder(current_group(tree), "Added folder", 1, folderSmall);
+}
+
+void
+cb_add_paper(Fl_Widget*, void* ptr) {
+  Fl_Browser* tree = (Fl_Browser*) ptr;
+  add_paper(current_group(tree), "New paper", 0, fileSmall);
+}
+
+void cb_sort(Fl_Widget*, void* ) {
+}
+
+void cb_sort_reverse(Fl_Widget*, void*) {
+}
+
+void cb_sort_random(Fl_Widget*, void*) {
+}
+
+int main(int argc,char** argv) {
+  Fl_Window win(240, 304, "Browser Example");
+  Fl_Button remove_button(10, 200, 100, 22, "Remove");
+  Fl_Button add_paper_button(10, 224, 100, 22, "Add Paper");
+  Fl_Button add_folder_button(10, 248, 100, 22, "Add Folder");
+  Fl_Button sort_button(10, 272, 100, 22, "Sort");
+  Fl_Check_Button multi_button(130, 200, 100, 22, "MultiBrowser");
+  Fl_Button sort_button_rev(130, 224, 100, 22, "Reverse Sort");
+  Fl_Button sort_button_rnd(130, 248, 100, 22, "Randomize");
+  Fl_Check_Button colors_button(130, 272, 100, 22, "Colors");
+  Fl_Browser tree(10, 10, 220, 180);
+  tree.indented(1);
+  win.resizable(tree);
+  win.end();
+
+  // Add callbacks to the widgets
+
+  remove_button.callback((Fl_Callback*)cb_remove, (void *)&tree);
+  add_paper_button.callback((Fl_Callback*)cb_add_paper, (void *)&tree);
+  add_folder_button.callback((Fl_Callback*)cb_add_folder, (void *)&tree);
+  sort_button.callback((Fl_Callback*)cb_sort, (void *)&tree);
+  sort_button_rnd.callback((Fl_Callback*)cb_sort_random, (void *)&tree);
+  sort_button_rev.callback((Fl_Callback*)cb_sort_reverse, (void *)&tree);
+  multi_button.callback((Fl_Callback*)cb_multi, (void *)&tree);
+  colors_button.callback((Fl_Callback*)cb_colors, (void *)&tree);
+  colors_button.set();
+  tree.callback(cb_test);
+
+  //int w[3] = {150, 200, 0};
+  //tree.column_widths(w);
+
+  folderSmall = new Fl_Pixmap(folder_small);
+  fileSmall = new Fl_Pixmap(file_small);
+
+  // Add some nodes with icons -- some open, some closed.
+  // Fl_ToggleNode::Fl_ToggleNode( LABEL , CAN_OPEN (default=1) , ICON )
+  Fl_Group* g;
+
+  g = add_folder(&tree, "aaa\t123", 1, folderSmall);
+
+  add_folder(g, "bbb TWO\t456", 1, folderSmall);
+
+  g = add_folder(&tree, "bbb", 0, folderSmall);
+
+  add_paper(g, "ccc\t789", 1, folderSmall);
+  add_paper(g, "ddd\t012", 0, fileSmall);
+
+  g = add_folder(&tree, "eee", 1, folderSmall);
+  add_paper(g, "fff", 0, fileSmall);
+
+  g = add_folder(g, "ggg", 1, folderSmall);
+  add_paper(g, "hhh", 1, fileSmall);
+  add_paper(g, "iii", 1, fileSmall);
+
+  g = add_folder(&tree, "jjj", 1, folderSmall);
+  add_paper(g, "kkk", 0, fileSmall);
+
+  add_paper(&tree, "lll", 0, fileSmall);
+  g = add_folder(&tree, "mmm", 0, folderSmall);
+  add_paper(g, "nnn", 1, folderSmall);
+  add_paper(g, "ooo", 0, fileSmall);
+
+  g = add_folder(g, "ppp", 1, folderSmall);
+  add_paper(g, "qqq", 0, fileSmall);
+  g = g->parent();
+
+  g = add_folder(g, "rrr", 1, folderSmall);
+  g = add_folder(g, "sss", 1, folderSmall);
+  g = add_folder(g, "ttt", 1, folderSmall);
+
+  g = add_folder(&tree, "uuu", 1, folderSmall);
+  add_paper(g, "vvv", 0, fileSmall);
+
+  add_paper(&tree, "www", 0, fileSmall);
+  add_paper(&tree, "xxx", 0, fileSmall);
+  add_paper(&tree, "yyy", 0, fileSmall);
+  add_paper(&tree, "zzz", 0, fileSmall);
+
+#if 0
+  // Examples of removing items (successfully, and unsuccessfully)
+  // by label name:
+  if (&tree.remove("xxx"))
+    printf("Successfully deleted \"xxx\"\n");
+  else
+    printf("Could not delete \"xxx\"\n");
+
+  if (&tree.remove("nonexistant"))
+    printf("Successfully deleted \"nonexistant\"\n");
+  else
+    printf("Could not delete \"nonexistant\"\n");
+#endif
+
+  win.show(argc,argv);
+
+  Fl::run();
+}
+
 

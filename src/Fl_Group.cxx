@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.67 2000/04/24 08:31:25 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.68 2000/05/15 05:52:25 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -143,26 +143,14 @@ int Fl_Group::find(const Fl_Widget* o) const {
 ////////////////////////////////////////////////////////////////
 // Handle
 
-// We must adjust the xy of events sent to child windows so they
-// are relative to that window.  All other widgets use absolute
-// coordinates:
-static int send_i(int event, Fl_Widget& to) {
-  if (!to.is_window()) return to.handle(event);
-  int save_x = Fl::e_x; Fl::e_x -= to.x();
-  int save_y = Fl::e_y; Fl::e_y -= to.y();
-  int ret = to.handle(event);
-  Fl::e_y = save_y;
-  Fl::e_x = save_x;
-  return ret;
-}
-
-// send(event,o) will decide if object o needs the event and then will
-// send it, and does some extra stuff if the widget likes the event.
-// Subclasses of Fl_Group can call this for every child.  The return
-// value is true if the child "ate" the event, if false you should
-// continue trying other children.
+// send(event,o) is mostly wrapper stuff that should have been done by
+// the handle() methods of widgets.  This could probably have been done
+// by having handle() check active/visible and having it return a pointer
+// to the widget rather than 1 on success.  Oh well...
 
 int Fl_Group::send(int event, Fl_Widget& to) {
+
+  // First see if the widget really should get the event:
   switch (event) {
 
   case FL_UNFOCUS:
@@ -174,61 +162,57 @@ int Fl_Group::send(int event, Fl_Widget& to) {
     return 1; // return 1 so callers stops calling this.
 
   case FL_FOCUS:
-    if (to.takesevents() && send_i(FL_FOCUS, to)) {
-      // only call Fl::focus if the child widget did not do so:
-      if (!to.contains(Fl::focus())) Fl::focus(&to);
-      return 1;
-    }
-    return 0;
+    // All current group implemetations do this before calling here, but
+    // this is reasonable:
+    return to.take_focus();
 
   case FL_ENTER:
   case FL_MOVE:
-    // visible() rather than takesevents() so tooltips work on inactive:
-    if (to.visible() && Fl::event_inside(to)) {
-      // If the mouse is already in a child, just send the move events
-      // through.  Fltk does not do this directly like it does for
-      // FL_DRAG so that widgets may overlap:
-      if (to.contains(Fl::belowmouse())) {
-	if (&to != Fl::pushed()) send_i(FL_MOVE, to);
-	return 1;
-      }
-      // Mouse is moving into a new child widget, see if it wants it:
-      if (send_i(FL_ENTER, to)) {
-	// only call Fl::belowmouse if the child widget did not do so:
-	if (!to.contains(Fl::belowmouse())) Fl::belowmouse(to);
-	return 1;
-      }
-    }
-    return 0;
-
-  case FL_PUSH:
-    // Mouse events are supposedly sent to the belowmouse() widget, but
-    // handling them here allows overlapping Fl_Menu_Button widgets to
-    // consume some of the buttons:
-    if (to.takesevents() && Fl::event_inside(to)) {
-      if (send_i(FL_PUSH, to)) {
-	// only call Fl::pushed if the child widget did not do so and
-	// if the mouse is still down:
-	if (Fl::pushed() && !to.contains(Fl::pushed())) Fl::pushed(to);
-	return 1;
-      }
-    }
-    return 0;
-
-  case FL_DEACTIVATE:
-  case FL_ACTIVATE:
-    if (to.active()) send_i(event,to);
-    return 0; // return zero so all children are tried
-
+    if (&to == Fl::pushed()) return 1; // don't send both move & drag to widget
+    // figure out correct type of event:
+    event = (to.contains(Fl::belowmouse())) ? FL_MOVE : FL_ENTER;
+    // These two do not require active so that tooltips work on inactive widgets.
+    // Unfortunately this means enter/exit cannot be used alone for highlighting
+    // and the widget must test if it is active when drawing.
   case FL_SHOW:
   case FL_HIDE:
-    if (to.visible()) send_i(event,to);
-    return 0; // return zero so all children are tried
+    if (!to.visible()) return 0;
 
   default:
-    if (to.takesevents()) return send_i(event, to);
-    return 0;
+    if (!to.takesevents()) return 0;
   }
+
+  // Now send the event, and return if the widget does not "eat" it:
+  // We must adjust the xy of events sent to child windows so they
+  // are relative to that window.  All other widgets use absolute
+  // coordinates.
+  if (to.is_window()) {
+    int save_x = Fl::e_x; Fl::e_x -= to.x();
+    int save_y = Fl::e_y; Fl::e_y -= to.y();
+    int ret = to.handle(event);
+    Fl::e_y = save_y;
+    Fl::e_x = save_x;
+    if (!ret) return 0;
+  } else {
+    if (!to.handle(event)) return 0;
+  }
+
+  // Successful completion of some events must set some global values:
+  switch (event) {
+
+  case FL_ENTER:
+    // only call Fl::belowmouse if the child widget did not do so:
+    if (!to.contains(Fl::belowmouse())) Fl::belowmouse(to);
+    break;
+
+  case FL_PUSH:
+    // only call Fl::pushed if the child widget did not do so and
+    // if the mouse is still down:
+    if (Fl::pushed() && !to.contains(Fl::pushed())) Fl::pushed(to);
+    break;
+  }
+
+  return 1;
 }
 
 // Translate the current keystroke into up/down/left/right for navigation,
@@ -276,35 +260,47 @@ int Fl_Group::handle(int event) {
     switch (navigation_key()) {
     default:
       // try to give it to whatever child had focus last:
-      if (focus_ >= 0 && focus_ < children() &&
-	  send(event, *child(focus_))) return 1;
+      if (focus_ >= 0 && focus_ < children())
+	if (child(focus_)->take_focus()) return 1;
       // otherwise fall through to search for first one that wants focus:
     case FL_Right:
     case FL_Down:
-      for (i=0; i < numchildren; ++i) if (send(event, *child(i))) return 1;
-      return 0;
+      for (i=0; i < numchildren; ++i)
+	if (child(i)->take_focus()) return 1;
+      break;
     case FL_Left:
     case FL_Up:
-      break; // default is to try send the focus backwards
+      for (i = numchildren; i--;)
+	if (child(i)->take_focus()) return 1;
+      break;
     }
-    break;
+    return 0;
 
+  case FL_PUSH:
   case FL_ENTER:
   case FL_MOVE:
-    for (i = numchildren; i--;) if (send(event, *child(i))) return 1;
+    for (i = numchildren; i--;)
+      if (Fl::event_inside(child(i)) && send(event, *child(i))) return 1;
+    if (event == FL_PUSH) return 0;
     Fl::belowmouse(this);
     return 1;
+  }
 
-  case FL_SHORTCUT: {
-    // see if any other child widgets want the shortcut, search forward:
-    for (i=0; i < numchildren; ++i) if (send(event, *child(i))) return 1;
+  // For all other events, try to give to each child, starting at focus:
+  if (numchildren) {
+    i = focus_; if (i < 0 || i >= numchildren) i = 0;
+    for (int j = i;;) {
+      if (send(event, *child(j))) return 1;
+      j++;
+      if (j >= children()) j = 0;
+      if (j == i) break;
+    }
+  }
 
-    // If we don't have focus we don't do any keyboard navigation:
-    if (!contains(Fl::focus())) return 0;
+  if (event == FL_SHORTCUT && contains(Fl::focus())) {
+    // Try to do keyboard navigation for unused shortcut keys:
 
     int key = navigation_key(); if (!key) return 0;
-
-    i = focus_;
 
     // loop from the current focus looking for a new focus, quit when
     // we reach the original again:
@@ -341,12 +337,10 @@ int Fl_Group::handle(int event) {
 	o = child(i);
 	if (o->x() >= old_r || o->x()+o->w() <= old_x) continue;
       }
-      if (send(FL_FOCUS, *child(i))) return 1;
+      if (child(i)->take_focus()) return 1;
     }
-    return 0;}
   }
 
-  for (i = numchildren; i--;) if (send(event, *child(i))) return 1;
   return 0;
 }
 
@@ -566,5 +560,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.67 2000/04/24 08:31:25 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.68 2000/05/15 05:52:25 bill Exp $".
 //

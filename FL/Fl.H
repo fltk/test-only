@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.46 2000/04/24 08:31:20 bill Exp $"
+// "$Id: Fl.H,v 1.47 2000/05/15 05:52:19 bill Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -107,6 +107,7 @@ public:
   static void (*error)(const char*, ...);
   static void (*fatal)(const char*, ...);
   static Fl_Window* first_window();
+  static void first_window(Fl_Window*);
   static Fl_Window* next_window(const Fl_Window*);
   static Fl_Window* modal() {return modal_;}
   static int (*grab())(int, void*) {return grab_;}
@@ -229,5 +230,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.46 2000/04/24 08:31:20 bill Exp $".
+// End of "$Id: Fl.H,v 1.47 2000/05/15 05:52:19 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.44 2000/04/16 08:31:45 bill Exp $"
+// "$Id: Fl_Choice.cxx,v 1.45 2000/05/15 05:52:25 bill Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -100,32 +100,36 @@ int Fl_Choice::handle(int e) {
     // the size and usage of the menu, this may be more user-friendly.
 //  Fl::event_is_click(0);
     take_focus();
-  J1:
+  EXECUTE:
     if (pulldown(x(), y(), w(), h(), 0)) redraw();
     return 1;
 
   case FL_SHORTCUT:
-    if (Fl_Widget::test_shortcut()) goto J1;
+    if (Fl_Widget::test_shortcut()) goto EXECUTE;
     if (handle_shortcut()) {redraw(); return 1;}
     return 0;
 
   case FL_KEYBOARD:
-    if (Fl::event_key() == ' ') goto J1;
-    if (Fl::event_key() == FL_Up) {
+    switch (Fl::event_key()) {
+
+    case FL_Enter:
+    case ' ':
+      goto EXECUTE;
+
+    case FL_Up: {
       int i = value(); if (i < 0) i = children();
       while (i > 0) {
 	Fl_Widget* w = child(--i);
 	if (w->takesevents()) {value(i); execute(w); redraw(); break;}
       }
-      return 1;
-    }
-    if (Fl::event_key() == FL_Down) {
+      return 1;}
+    case FL_Down: {
       int i = value();
       while (++i < children()) {
 	Fl_Widget* w = child(i);
 	if (w->takesevents()) {value(i); execute(w); redraw(); break;}
       }
-      return 1;
+      return 1;}
     }
     return 0;
 
@@ -152,5 +156,5 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.44 2000/04/16 08:31:45 bill Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.45 2000/05/15 05:52:25 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.60 2000/04/16 08:31:47 bill Exp $"
+// "$Id: Fl_Widget.cxx,v 1.61 2000/05/15 05:52:27 bill Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,8 @@
 #include <FL/Fl_Window.H>
 #include <FL/fl_draw.H>
 #include <FL/x.H>
+#include <string.h> // for strdup
+#include <stdlib.h> // free
 
 ////////////////////////////////////////////////////////////////
 // Duplicate the Forms queue for all callbacks from widgets.  The
@@ -97,6 +99,18 @@ Fl_Widget::~Fl_Widget() {
   if (style_->dynamic()) {
     // When a widget is destroyed it can destroy unique styles:
     delete (Fl_Style*)style_; // cast away const
+  }
+  if (flags_&FL_COPIED_LABEL) free((void*)label_);
+}
+
+void Fl_Widget::copy_label(const char* s) {
+  if (flags_&FL_COPIED_LABEL) free((void*)label_);
+  if (s) {
+    label_ = strdup(s);
+    flags_ |= FL_COPIED_LABEL;
+  } else {
+    label_ = 0;
+    flags_ &= ~FL_COPIED_LABEL;
   }
 }
 
@@ -208,15 +222,7 @@ int Fl_Widget::handle(int event) {
 
 int Fl_Widget::take_focus() {
   if (focused()) return 1;
-  // if (!takesevents()) return 0; // we can assumme this is true?
-  Fl_Widget* child = this;
-  for (Fl_Group* group = parent(); ; group = group->parent()) {
-    if (!group) break;
-    if (!group->takesevents()) return 0;
-    child = group;
-  }
-  if (!Fl::focus()) return 0;
-  handle(FL_FOCUS);
+  if (!takesevents() || !handle(FL_FOCUS)) return 0;
   if (!contains(Fl::focus())) Fl::focus(this);
   return 1;
 }
@@ -376,5 +382,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.60 2000/04/16 08:31:47 bill Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.61 2000/05/15 05:52:27 bill Exp $".
 //

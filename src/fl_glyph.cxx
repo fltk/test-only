@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.19 2000/04/15 04:47:24 carl Exp $"
+// "$Id: fl_glyph.cxx,v 1.20 2000/05/15 05:52:27 bill Exp $"
 //
 // Glyph drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -70,32 +70,29 @@ void fl_glyph(int t, int x,int y,int w,int h,
   box->inset(x,y,w,h);
   fl_color(fc);
 
+  int w1 = (w+2)/3;
   switch(t) {
     case FL_GLYPH_UP: {
-      int w1 = w/3; if (w1 < 1) w1 = 1;
-      int x1 = x+(w-2*w1-1)/2;
+      int x1 = x+(w-1)/2-w1;
       int y1 = y+(h-w1-1)/2;
       fl_polygon(x1, y1+w1, x1+2*w1, y1+w1, x1+w1, y1);
       break;
     }
     case FL_GLYPH_DOWN: {
-      int w1 = w/3; if (w1 < 1) w1 = 1;
-      int x1 = x+(w-2*w1-1)/2;
-      int y1 = y+(h-w1-1)/2;
+      int x1 = x+(w-1)/2-w1;
+      int y1 = y+(h-w1)/2;
       fl_polygon(x1, y1, x1+w1, y1+w1, x1+2*w1, y1);
       break;
     }
     case FL_GLYPH_LEFT: {
-      int w1 = h/3; if (w1 < 1) w1 = 1;
       int x1 = x+(w-w1-1)/2;
-      int y1 = y+(h-2*w1-1)/2;
+      int y1 = y+(h-1)/2-w1;
       fl_polygon(x1, y1+w1, x1+w1, y1+2*w1, x1+w1, y1);
       break;
     }
     case FL_GLYPH_RIGHT: {
-      int w1 = h/3; if (w1 < 1) w1 = 1;
-      int x1 = x+(w-w1-1)/2;
-      int y1 = y+(h-2*w1-1)/2;
+      int x1 = x+(w-w1)/2;
+      int y1 = y+(h-1)/2-w1;
       fl_polygon(x1, y1, x1, y1+2*w1, x1+w1, y1+w1);
       break;
     }
@@ -119,5 +116,5 @@ void fl_glyph(int t, int x,int y,int w,int h,
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.19 2000/04/15 04:47:24 carl Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.20 2000/05/15 05:52:27 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.29 2000/04/15 04:47:22 carl Exp $"
+// "$Id: Fl_Button.cxx,v 1.30 2000/05/15 05:52:25 bill Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -105,7 +105,7 @@ int Fl_Button::handle(int event) {
     damage(FL_DAMAGE_HIGHLIGHT);
     return 1;
   case FL_KEYBOARD:
-    if (Fl::event_key() == ' ') goto EXECUTE;
+    if (Fl::event_key() == FL_Enter || Fl::event_key() == ' ') goto EXECUTE;
     return 0;
   case FL_SHORTCUT:
     if (!test_shortcut()) return 0;
@@ -136,5 +136,5 @@ Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.29 2000/04/15 04:47:22 carl Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.30 2000/05/15 05:52:25 bill Exp $".
 //

@@ -1,10 +1,14 @@
 <HTML><BODY>
-<H1><A NAME=drawing>5 - Drawing Things in FLTK</A></H1>
+<H1><A NAME=drawing>D - Drawing Things in FLTK</A></H1>
+
  This chapter covers the drawing functions that are provided with FLTK. 
+
 <H2>When Can You Draw Things in FLTK?</H2>
- There are only certain places you can execute drawing code in FLTK. 
+
+There are only certain places you can execute drawing code in FLTK. 
 Calling these functions at other places will result in undefined 
 behavior! 
+
 <UL>
 
 <LI>The most common is inside the virtual method <A href=#draw><TT>
@@ -32,13 +36,15 @@ Fl_Widget::window()</TT></A> to  find the window.</LI>
 </UL>
 
 <H2>FLTK Drawing Functions</H2>
- To use the drawing functions you must first include the <TT>
+
+To use the drawing functions you must first include the <TT>
 &lt;FL/fl_draw.H&gt;</TT> header file.  FLTK provides the following types of 
 drawing functions: 
+
 <UL>
 <LI><A href=#clipping>Clipping</A></LI>
 <LI><A href=#colors>Colors</A></LI>
-<LI><A href=#lines>Line thickness & dashes</A></LI>
+<LI><A href=#lines>Line dashes and thickness</A></LI>
 <LI><A href=#fast>Fast Shapes</A></LI>
 <LI><A href=#complex>Complex Shapes</A></LI>
 <LI><A href=#text>Text</A></LI>
@@ -132,7 +138,7 @@ for state save/restore.
 
 Same as <tt>fl_color(fl_rgb(r,g,b))</tt>.
 
-<h3><A name=lines>Line types and thickness</a></h3>
+<h3><A name=lines>Line dashes and thickness</a></h3>
 
 <h4>void fl_line_style(int style, int width=0, char* dashes=0)</h4>
 
@@ -140,7 +146,7 @@ Set how to draw lines (the "pen").  If you change this it is your
 responsibility to set it back to the default with
 <tt>fl_line_style(0)</tt>.
 
-<p><i>style</i> is a bitmask combinining the following values.  If
+<p><i>style</i> is a bitmask in which you 'or' the following values.  If
 you don't specify a dash type you will get a solid line.  If you don't
 specify a cap or join type you will get a system-defined default of
 whatever value is fastest.
@@ -168,8 +174,8 @@ pixels.  The first location is how long to draw a solid portion, the
 next is how long to draw the gap, then the solid, etc.  It is
 terminated with a zero-length entry.  A null pointer or a zero-length
 array results in a solid line.  Odd array sizes are not supported and
-result in undefined behavior!  You should not set both this and a dash
-type.  This does not work on Windows 95.
+result in undefined behavior.  <i>The dashes array does not work on
+Windows 95/98, use the dash styles instead.</i>
 
 <H3><A name=fast>Fast Shapes</A></H3>
  These are used to draw almost all the FLTK widgets.  They draw on 

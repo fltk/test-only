@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Return_Button.cxx,v 1.22 2000/04/15 04:47:23 carl Exp $"
+// "$Id: Fl_Return_Button.cxx,v 1.23 2000/05/15 05:52:26 bill Exp $"
 //
 // Return button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,8 +28,8 @@
 #include <FL/fl_draw.H>
 
 // this is public so fl_draw_symbol can call it:
-void fl_glyph_return(int, int x,int y,int w,int h, Fl_Color, Fl_Color fc,
-                     Fl_Flags f, Fl_Boxtype)
+void fl_glyph_return(int, int x,int y,int w,int h, Fl_Color, Fl_Color,
+                     Fl_Flags, Fl_Boxtype)
 {
   int size = w; if (h<size) size = h;
   int d = (size+2)/4; if (d<3) d = 3;
@@ -37,11 +37,21 @@ void fl_glyph_return(int, int x,int y,int w,int h, Fl_Color, Fl_Color fc,
   int x0 = x+(w-2*d-2*t-1)/2;
   int x1 = x0+d;
   int y0 = y+h/2;
+#if 1
+  fl_color(FL_LIGHT3);
+  fl_line(x0, y0, x1, y0+d);
+  fl_yxline(x1, y0+d, y0+t, x1+d+2*t, y0-d);
+  fl_yxline(x1, y0-t, y0-d);
+  fl_color(fl_gray_ramp(0));
+  fl_line(x0, y0, x1, y0-d);
+  fl_color(FL_DARK3);
+  fl_xyline(x1+1, y0-t, x1+d, y0-d, x1+d+2*t);
+#else // solid arrow written by Carl
   fl_color(fl_inactive(fc, f));
-
   fl_polygon(x0,y0, x1,y0+d, x1, y0-d);
   fl_polygon(x1,y0+t, x1+d,y0+t, x1+d,y0-t, x1,y0-t);
   fl_polygon(x1+d,y0-d, x1+d+2*t,y0-d, x1+d+2*t,y0+t, x1+d,y0+t);
+#endif
 }
 
 void Fl_Return_Button::draw() {
@@ -71,5 +81,5 @@ Fl_Return_Button::Fl_Return_Button(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Return_Button.cxx,v 1.22 2000/04/15 04:47:23 carl Exp $".
+// End of "$Id: Fl_Return_Button.cxx,v 1.23 2000/05/15 05:52:26 bill Exp $".
 //

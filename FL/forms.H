@@ -1,5 +1,5 @@
 //
-// "$Id: forms.H,v 1.18 2000/04/03 17:09:13 bill Exp $"
+// "$Id: forms.H,v 1.19 2000/05/15 05:52:19 bill Exp $"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -433,8 +433,7 @@ inline void fl_replace_browser_line(Fl_Widget* o, int n, const char* s) {
     ((Fl_Browser*)o)->replace(n,s);}
 inline char* fl_get_browser_line(Fl_Widget* o, int n) {
     return (char*)(((Fl_Browser*)o)->text(n));}
-inline int fl_load_browser(Fl_Widget* o, const char* f) {
-    return ((Fl_Browser*)o)->load(f);}
+FL_API int fl_load_browser(Fl_Widget* o, const char* f);
 inline void fl_select_browser_line(Fl_Widget* o, int n) {
     ((Fl_Browser*)o)->select(n,1);}
 inline void fl_deselect_browser_line(Fl_Widget* o, int n) {
@@ -851,5 +850,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.H,v 1.18 2000/04/03 17:09:13 bill Exp $".
+// End of "$Id: forms.H,v 1.19 2000/05/15 05:52:19 bill Exp $".
 //

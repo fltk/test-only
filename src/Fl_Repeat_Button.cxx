@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Repeat_Button.cxx,v 1.5 1999/09/20 04:33:46 bill Exp $"
+// "$Id: Fl_Repeat_Button.cxx,v 1.6 2000/05/15 05:52:26 bill Exp $"
 //
 // Repeat button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -54,12 +54,12 @@ int Fl_Repeat_Button::handle(int event) {
 	Fl::remove_timeout(repeat_callback,this);
       }
     }
-    return 1;
+    return newval;
   default:
     return Fl_Button::handle(event);
   }
 }
 
 //
-// End of "$Id: Fl_Repeat_Button.cxx,v 1.5 1999/09/20 04:33:46 bill Exp $".
+// End of "$Id: Fl_Repeat_Button.cxx,v 1.6 2000/05/15 05:52:26 bill Exp $".
 //

@@ -43,7 +43,6 @@ main() {
   printf("    sizeof(Fl_Return_Button) = %lu\n", (unsigned long)sizeof(class Fl_Return_Button));
   printf("  sizeof(Fl_Clock) = %lu\n", (unsigned long)sizeof(class Fl_Clock));
   printf("  sizeof(Fl_Group) = %lu\n", (unsigned long)sizeof(class Fl_Group));
-  printf("    sizeof(Fl_Browser_) = %lu\n", (unsigned long)sizeof(class Fl_Browser_));
   printf("      sizeof(Fl_Browser) = %lu\n", (unsigned long)sizeof(class Fl_Browser));
   printf("    sizeof(Fl_Color_Chooser) = %lu\n", (unsigned long)sizeof(class Fl_Color_Chooser));
   printf("      sizeof(Fl_Scroll) = %lu\n", (unsigned long)sizeof(class Fl_Scroll));

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.H,v 1.20 2000/03/17 09:49:56 bill Exp $"
+// "$Id: Fl_Menu_.H,v 1.21 2000/05/15 05:52:19 bill Exp $"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -71,11 +71,14 @@ public:
 
 // add() in fltk 1 returned the index, this returns the new widget:
   Fl_Widget* add(const char*, int shortcut, Fl_Callback*, void* = 0, int = 0);
+  Fl_Widget* add(const char*, void*);
   Fl_Widget* add(const char*);
+  Fl_Widget* insert(int n, const char* s, void* data = 0);
   // necessary for stupid C++ rules:
   void add(Fl_Widget& o) {Fl_Group::add(o);}
   void add(Fl_Widget* o) {add(*o);}
-  
+  void insert(Fl_Widget& o, int n) {Fl_Group::insert(o, n);}
+
   void replace(int n, const char* s) { child(n)->label(s); }
 //void replace(Fl_Menu_Item* m, const char* s) { replace(index(m), s); }
   void replace(const char* l, const char* s) { find(l)->label(s); }
@@ -118,5 +121,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Menu_.H,v 1.20 2000/03/17 09:49:56 bill Exp $".
+// End of "$Id: Fl_Menu_.H,v 1.21 2000/05/15 05:52:19 bill Exp $".
 //

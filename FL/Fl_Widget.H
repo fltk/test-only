@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.47 2000/04/15 04:47:19 carl Exp $"
+// "$Id: Fl_Widget.H,v 1.48 2000/05/15 05:52:19 bill Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -85,8 +85,8 @@ public:
   void	size(int W,int H)	{resize(x_,y_,W,H);}
 
   const char* label() const	{return label_;}
-  void	label(const char* a)	{label_=a;}
-  void	label(const char *a, const char *loc);
+  void	label(const char* a)	{label_ = a;}
+  void	copy_label(const char* a);
 
   Fl_Image* image() const	{return image_;}
   void	image(Fl_Image* a)	{image_ = a;}
@@ -94,7 +94,6 @@ public:
 
   const char *tooltip() const	{return tooltip_; }
   void	tooltip(const char *t)	{tooltip_ = t;}
-  void	tooltip(const char *t, const char *loc);
 
   int shortcut() const		{return shortcut_;}
   void shortcut(int s)		{shortcut_ = s;}
@@ -127,6 +126,7 @@ public:
   Fl_Flags flags() const	{return flags_;}
   void	set_flag(int c)		{flags_ |= c;}
   void	clear_flag(int c)	{flags_ &= ~c;}
+  void	invert_flag(int c)	{flags_ ^= c;}
 
   void	align(unsigned a)	{flags_ = flags_&~FL_ALIGN_MASK|a;}
   int	visible() const		{return !(flags_&FL_INVISIBLE);}
@@ -284,5 +284,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.47 2000/04/15 04:47:19 carl Exp $".
+// End of "$Id: Fl_Widget.H,v 1.48 2000/05/15 05:52:19 bill Exp $".
 //
