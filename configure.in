@@ -1,7 +1,7 @@
 dnl 
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.118 2004/06/29 00:10:16 xpxqx Exp $"
+dnl "$Id: configure.in,v 1.119 2004/07/19 23:19:32 laza2000 Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -507,7 +507,7 @@ case $uname in
 	CFLAGS="-mwindows -DWIN32 $CFLAGS"
 	CXXFLAGS="-mwindows -DWIN32 $CXXFLAGS"
 	LDFLAGS="-mwindows $LDFLAGS"
-	LIBS="$LIBS -lole32 -luuid -lcomctl32 -lwsock32"
+	LIBS="$LIBS -lmsimg32 -lole32 -luuid -lcomctl32 -lwsock32"
 	OPTIM="$OPTIM"
 
 	if test x$enable_gl != xno; then
@@ -962,5 +962,5 @@ dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.118 2004/06/29 00:10:16 xpxqx Exp $".
+dnl End of "$Id: configure.in,v 1.119 2004/07/19 23:19:32 laza2000 Exp $".
 dnl
