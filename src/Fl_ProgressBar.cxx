@@ -37,15 +37,15 @@ void ProgressBar::draw() {
   if(mPresent < mMin)
     mPresent = mMin;
   pct = (mPresent - mMin) / mMax;
-  fillrect(X + bdx, Y + bdy, (int)(((double)w() - 2*bdx) * pct), h() - (2*bdy + 1));
+  fillrect(bdx, bdy, (int)(((double)w() - 2*bdx) * pct), h() - (2*bdy + 1));
   if(mShowPct) {
     char buffer[30];
     sprintf(buffer, "%d%%", (int) (pct * 100));
     setcolor(textcolor());
     setfont(this->labelfont(), this->labelsize());
     drawtext(buffer,
-	      X + (w() - getwidth(buffer))/2,
-	      Y + labelsize() + (((h() - 2*bdy) - labelsize())/2));
+	     (w() - getwidth(buffer))/2,
+	     labelsize() + (((h() - 2*bdy) - labelsize())/2));
   }
 }
 
