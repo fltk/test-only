@@ -13,6 +13,9 @@ fltk::readimage(uchar *p,	// I - Pixel buffer or NULL to allocate
   int   w = r.w();
   int   h = r.h();
   int	x, y;			// Looping vars
+// FIXME Haven't had time to check what is this variable for
+// VC++ 6.0 and GCC reports that this variable is undeclared... (Dejan)
+  uchar* line = 0;
 
   // None of these read alpha yet, so set the alpha to 1 everywhere.
   if (type > 3) {

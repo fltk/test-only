@@ -280,7 +280,7 @@ FrameBox::FrameBox(const char* n, const char* s, const FrameBox* d)
   dx = dy = i;
 }
 
-void FrameBox::inset(Rectangle& r) const {
+void FrameBox::inset(fltk::Rectangle& r) const {
   r.x(r.x()+dx);
   r.y(r.y()+dy);
   r.w(r.w()-dw);
@@ -343,7 +343,7 @@ public:
     setcolor(style->textcolor());
     strokerect(r);
   }
-  void inset(Rectangle& r) const {
+  void inset(fltk::Rectangle& r) const {
     r.x(r.x()+1);
     r.y(r.y()+1);
     r.w(r.w()-2);
@@ -374,7 +374,7 @@ void HighlightBox::_draw(const fltk::Rectangle& r, const Style* style, Flags fla
     FlatBox::_draw(r, style, flags);
   }
 }
-void HighlightBox::inset(Rectangle& r) const {down->inset(r);}
+void HighlightBox::inset(fltk::Rectangle& r) const {down->inset(r);}
 bool HighlightBox::fills_rectangle() const {return true;}
 bool HighlightBox::is_frame() const {return down->is_frame();}
 
