@@ -1,5 +1,5 @@
 //
-// "$Id: navigation.cxx,v 1.5 1999/01/07 19:17:58 mike Exp $"
+// "$Id: navigation.cxx,v 1.6 1999/12/02 18:57:30 vincent Exp $"
 //
 // Navigation test program for the Fast Light Tool Kit (FLTK).
 //
@@ -61,10 +61,11 @@ int main(int argc, char **argv) {
     if (n < window.children()) continue;
     window.insert(*(new Fl_Input(x,y,w,h)),j);
   }
+  window.resizable(window);
   window.show();
   return Fl::run();
 }
 
 //
-// End of "$Id: navigation.cxx,v 1.5 1999/01/07 19:17:58 mike Exp $".
+// End of "$Id: navigation.cxx,v 1.6 1999/12/02 18:57:30 vincent Exp $".
 //

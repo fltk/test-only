@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.29 1999/11/20 04:42:45 vincent Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.30 1999/12/02 18:57:28 vincent Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -256,7 +256,6 @@ void Fl_Tabs::draw_n_clip()
     fl_clip_out(x(), y()+(H>0?H:0), this->w(), h()-(H>=0?H:-H-1));
   }
   clear_damage();
-  // clip out is done in the draw() method ...
 }
 
 void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
@@ -315,5 +314,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.29 1999/11/20 04:42:45 vincent Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.30 1999/12/02 18:57:28 vincent Exp $".
 //

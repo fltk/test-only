@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.56 1999/12/02 09:53:39 bill Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.57 1999/12/02 18:57:25 vincent Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -1513,7 +1513,10 @@ void Fl_Widget_Type::open() {
       p->make_panel();
       // All plugin panels are initially not mapped in the main pannel
       p->panel_is_orphan = 1; 
-      p->panel->position(the_panel->child(0)->x(), the_panel->child(0)->y());
+      p->panel->position(panel_tabs->child(0)->x(), panel_tabs->child(0)->y());
+      p->panel->layout();
+      p->panel->resizable(0);
+      p->panel->size(panel_tabs->child(0)->w(), panel_tabs->child(0)->h());
       p->panel->label(p->name);
     }
   }
@@ -1823,8 +1826,12 @@ void Fl_Widget_Type::write_widget_code() {
     write_c("%so->deactivate();\n", indent());
   if (!is_group() && resizable())
     write_c("%sFl_Group::current()->resizable(o);\n",indent());
-  if (hotspot())
-    write_c("%sw->hotspot(o);\n", indent());
+  if (hotspot()) {
+    write_c("%s((Fl_Window*)(o", indent());
+    Fl_Widget* p = o->parent();
+    while (p) { p = p->parent(); write_c("->parent()"); }
+    write_c("))->hotspot(o);\n");
+  }
   if (tooltip() && *tooltip()) {
     write_c("%so->tooltip(", indent());
     write_cstring(tooltip());
@@ -2180,5 +2187,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.56 1999/12/02 09:53:39 bill Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.57 1999/12/02 18:57:25 vincent Exp $".
 //
