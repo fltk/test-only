@@ -48,6 +48,7 @@ CPPFILES = \
 	adjuster.cxx \
 	arc.cxx \
 	ask.cxx \
+	bitmap.cxx \
 	boxtype.cxx \
 	browser.cxx \
 	button.cxx \
@@ -111,6 +112,7 @@ CFILES	=
 # only some of the demos have been changed to use namespaces:
 TARGETS = \
 	arc$(EXEEXT) \
+	bitmap$(EXEEXT) \
 	boxtype$(EXEEXT) \
 	browser$(EXEEXT) \
 	checkers$(EXEEXT) \

@@ -282,14 +282,13 @@ void Image::set_alpha_bitmap(const uchar* bitmap, int w, int h) {
   alpha = (void*)CreateBitmap(w, h, 1, 1, newarray);
   delete[] newarray;
 #elif defined(__APPLE__)
-#if 0
   // 1 bit mask code:
   static uchar reverse[16] = /* Bit reversal lookup table */
     { 0x00, 0x88, 0x44, 0xcc, 0x22, 0xaa, 0x66, 0xee, 
       0x11, 0x99, 0x55, 0xdd, 0x33, 0xbb, 0x77, 0xff };
   int rowBytes = (w+7)>>3 ;
   uchar *bmask = new uchar[rowBytes*h];
-  *dst = bmask;
+  uchar *dst = bmask;
   const uchar *src = bitmap;
   for ( int i=rowBytes*h; i>0; i--,src++ ) {
     *dst++ = ((reverse[*src & 0x0f] & 0xf0) | (reverse[(*src >> 4) & 0x0f] & 0x0f))^0xff;
@@ -298,7 +297,6 @@ void Image::set_alpha_bitmap(const uchar* bitmap, int w, int h) {
   CGImageRef id = CGImageMaskCreate( w, h, 1, 1, rowBytes, srcp, 0L, false);
   CGDataProviderRelease(srcp);
   alpha = (void*)id;
-#endif
 #else
 #endif
 }
