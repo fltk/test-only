@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.118 2004/12/30 11:38:55 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.119 2004/12/31 08:19:52 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -228,7 +228,7 @@ bool fl_show_iconic; // set by iconize() or by -i arg switch
 // to WndProc to the time programs expect it (inside fltk::wait()).
 
 enum DeferredCallType {
-  SHOW_WINDOW, KEEP_ACTIVE, OPEN_ICON, RAISE_WINDOW, DESTROY_WINDOW
+  NOTHING, SHOW_WINDOW, KEEP_ACTIVE, OPEN_ICON, RAISE_WINDOW, DESTROY_WINDOW
 };
 struct DeferredCall {DeferredCallType what; HWND window; int argument;};
 static DeferredCall* deferred_queue;
@@ -259,15 +259,18 @@ void fl_do_deferred_calls() {
     switch (c.what) {
     case SHOW_WINDOW:
       ShowWindow(c.window, c.argument);
+      keep_active = 0;
       break;
     case KEEP_ACTIVE:
       keep_active = c.window;
       break;
     case OPEN_ICON:
       OpenIcon(c.window);
+      keep_active = 0;
       break;
     case RAISE_WINDOW:
       BringWindowToTop(c.window);
+      keep_active = 0;
       break;
     case DESTROY_WINDOW:
       DestroyWindow(c.window);
@@ -286,14 +289,9 @@ void fl_do_deferred_calls() {
 }
 
 void fl_prune_deferred_calls(HWND window) {
-  int m = 0;
-  for (int n = 0; n < deferred_queue_size; n++) {
-    if (deferred_queue[n].window != window) {
-      if (m < n) deferred_queue[m] = deferred_queue[n];
-      m++;
-    }
-  }
-  deferred_queue_size = m;
+  for (int n = 0; n < deferred_queue_size; n++)
+    if (deferred_queue[n].window == window)
+      deferred_queue[n].what = NOTHING;
 }
 #endif
 
@@ -557,7 +555,7 @@ void Window::show(const Window* parent) {
   other way. During this time events to other windows in this
   application are either thrown away or redirected to this window.
 
-  This does child_of(parent) (using fltk::first_window() if parent is
+  This does child_of(parent) (using first() if parent is
   null). It then does show() to make this window visible and raise
   it. It then uses fltk::modal(this,grab) to make all events go to
   this window, and waits until fltk::exit_modal() is called (typically
@@ -833,5 +831,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.118 2004/12/30 11:38:55 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.119 2004/12/31 08:19:52 spitzak Exp $".
 //
