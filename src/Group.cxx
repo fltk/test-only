@@ -362,6 +362,7 @@ int Group::handle(int event) {
   case MOVE:
   case DND_ENTER:
   case DND_DRAG:
+  case MOUSEWHEEL:
     // search the children in backwards (top to bottom) order:
     for (i = numchildren; i--;) {
       Widget* child = this->child(i);
