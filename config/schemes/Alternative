@@ -119,14 +119,14 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     window box = down                             # boxtype of the scrollbar background area
 
   [widgets/input]                                 # input widget attributes
-    box = down                                    # boxtype of the input area
+    window box = down                             # boxtype of the input area
     selection color = puke green                  # background color of selected text
     selection text color = white                  # font color of selected text
     off color = black                             # cursor color
 
   [widgets/output]                                # output widget attributes
-    color = light2                                # color of output area
-    box = down                                    # boxtype of the output area
+    window color = light2                         # color of output area
+    window box = down                             # boxtype of the output area
     selection color = puke green                  # background color of selected text
     selection text color = white                  # font color of selected text
 
