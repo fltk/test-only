@@ -1,5 +1,5 @@
 //
-// "$Id: FloatInput.h,v 1.3 2003/04/20 03:17:47 easysw Exp $"
+// "$Id: FloatInput.h,v 1.4 2004/01/18 18:35:29 spitzak Exp $"
 //
 // NumericInput modified to only allow floating point to by
 // typed. Currently this is implemented by the base class by checking
@@ -38,11 +38,14 @@ public:
   enum {FLOAT = 0, INT = 1};
   FloatInput(int x,int y,int w,int h,const char *l = 0)
     : NumericInput(x,y,w,h,l) {}
+  long lvalue() const;
+  int ivalue() const {return int(lvalue());}
+  double fvalue() const;
 };
 
 }
 #endif
 
 //
-// End of "$Id: FloatInput.h,v 1.3 2003/04/20 03:17:47 easysw Exp $".
+// End of "$Id: FloatInput.h,v 1.4 2004/01/18 18:35:29 spitzak Exp $".
 //

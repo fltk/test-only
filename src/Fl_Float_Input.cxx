@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Float_Input.cxx,v 1.11 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id: Fl_Float_Input.cxx,v 1.12 2004/01/18 18:35:29 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -25,7 +25,7 @@
 #include <fltk/Widget.h>
 #include <fltk/FloatInput.h>
 #include <string.h>
-
+#include <stdlib.h>
 using namespace fltk;
 
 /*! \class fltk::FloatInput
@@ -75,6 +75,19 @@ bool FloatInput::replace(int b, int e, const char* text, int ilen) {
   if preceeded by "0x") to by typed. Currently this is implemented by
   FloatInput by checking type() but this may change in the future.  */
 
+/*! \int FloatInput::ivalue() const
+  Convert the string to an integer, using int(strtol()) */
+
+/*! Convert the string to a long using strtol() */
+long FloatInput::lvalue() const {
+  return strtol(value(), 0, 0);
+}
+
+/*! Convert the string to a double using strtod() */
+double FloatInput::fvalue() const {
+  return strtod(value(), 0);
+}
+
 //
-// End of "$Id: Fl_Float_Input.cxx,v 1.11 2004/01/06 06:43:02 spitzak Exp $"
+// End of "$Id: Fl_Float_Input.cxx,v 1.12 2004/01/18 18:35:29 spitzak Exp $"
 //
