@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.8 1999/11/14 08:42:50 bill Exp $"
+// "$Id: fl_motif.cxx,v 1.9 1999/11/18 19:32:12 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -176,6 +176,8 @@ static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color
 int fl_motif() {
   Fl_Style::revert(); // revert to FLTK default styles
 
+  Fl_Style::draw_boxes_inactive = 0;
+
   fl_up_box.data = "VVHHVVHH";
   fl_up_box.dx_ = 2;
   fl_up_box.dy_ = 2;
@@ -283,5 +285,5 @@ int fl_motif() {
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.8 1999/11/14 08:42:50 bill Exp $".
+// End of "$Id: fl_motif.cxx,v 1.9 1999/11/18 19:32:12 carl Exp $".
 //

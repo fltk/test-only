@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.23 1999/11/15 09:02:20 bill Exp $"
+// "$Id: fl_boxtype.cxx,v 1.24 1999/11/18 19:32:10 carl Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,7 @@
 // linked in because the default styles use them.
 
 #include <FL/Fl_Boxtype.H>
+#include <FL/Fl_Style.H>
 #include <FL/fl_draw.H>
 #include <string.h>
 #include <config.h>
@@ -69,7 +70,8 @@ FL_EXPORT void fl_frame(Fl_Boxtype b, int x, int y, int w, int h,
     { b->down->draw(x, y, w, h, c, f&~FL_VALUE); return; }
 
   const char* s = (const char*)(b->data);
-  char buf[26]; if (f&FL_INACTIVE) {fl_to_inactive(s, buf); s = buf;}
+  if (!Fl_Style::draw_boxes_inactive) f &= (~FL_INACTIVE);
+  char buf[26]; if (f&FL_INACTIVE) { fl_to_inactive(s, buf); s = buf; }
   if (h > 0 && w > 0) {
     if (*s == '2') {s++; goto HACK;}
     for (;;) {
@@ -135,7 +137,8 @@ static Fl_Boxtype_Definer embossed("embossed", fl_embossed_box);
 static void border_draw(Fl_Boxtype, int x, int y, int w, int h,
 			Fl_Color c, Fl_Flags f)
 {
-  fl_color((f&FL_INACTIVE) ? FL_INACTIVE_COLOR : FL_NO_COLOR);
+  if (!Fl_Style::draw_boxes_inactive) f &= (~FL_INACTIVE);
+  fl_color(fl_inactive(FL_DARK3, f));
   fl_rect(x, y, w, h);
   if (!(f & FL_FRAME_ONLY)) {
     fl_color(c);
@@ -215,5 +218,5 @@ const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
 Fl_Boxtype_Definer* Fl_Boxtype_Definer::first = 0;
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.23 1999/11/15 09:02:20 bill Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.24 1999/11/18 19:32:10 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1.cxx,v 1.7 1999/11/18 14:04:31 carl Exp $"
+// "$Id: fl_kde1.cxx,v 1.8 1999/11/18 19:32:12 carl Exp $"
 //
 // Make FLTK do the KDE thing!
 //
@@ -112,6 +112,8 @@ int fl_kde1() {
       style->set_selection_color(FL_DARK1);
       style->set_off_color(background);
     }
+  } else {
+    Fl_Style::inactive_color_weight = 0.15f;
   }
 
   if ((style = Fl_Style::find("menu window"))) {
@@ -146,5 +148,5 @@ int fl_kde1() {
 }
 
 //
-// End of "$Id: fl_kde1.cxx,v 1.7 1999/11/18 14:04:31 carl Exp $".
+// End of "$Id: fl_kde1.cxx,v 1.8 1999/11/18 19:32:12 carl Exp $".
 //

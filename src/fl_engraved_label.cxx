@@ -1,5 +1,5 @@
 //
-// "$Id: fl_engraved_label.cxx,v 1.6 1999/11/01 02:21:38 carl Exp $"
+// "$Id: fl_engraved_label.cxx,v 1.7 1999/11/18 19:32:11 carl Exp $"
 //
 // Engraved label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -41,7 +41,7 @@ void fl_pattern_label(Fl_Labeltype l, const char* label,
   }
   for (int *data = (int*)(l->data); ; data += 3) {
     Fl_Color c = (Fl_Color)(data[2]);
-    fl_color(c ? c : (f&FL_INACTIVE) ? Fl_Color(FL_GRAY) : fill);
+    fl_color(c ? c : fl_inactive(fill, f));
     fl_draw(label, X+data[0], Y+data[1], W, H, a1);
     if (!c) break;
   }
@@ -67,5 +67,5 @@ const Fl_Labeltype_ fl_embossed_label = {fl_pattern_label, embossed_data};
 static Fl_Labeltype_Definer embossed("embossed", fl_embossed_label);
 
 //
-// End of "$Id: fl_engraved_label.cxx,v 1.6 1999/11/01 02:21:38 carl Exp $".
+// End of "$Id: fl_engraved_label.cxx,v 1.7 1999/11/18 19:32:11 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.61 1999/11/16 07:36:09 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.62 1999/11/18 19:32:09 carl Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -191,24 +191,23 @@ int Fl_Menu_Item::measure(int* hp, const Fl_Menu_*) const {
 void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_*,
  			int selected) const {
   Fl_Boxtype lbox = box();
-  Fl_Flags lflags = FL_ALIGN_LEFT;
+  Fl_Flags lflags = 0;
   Fl_Color lcolor = color();
   Fl_Color llabel_color = label_color();
+
+  if (flags()&FL_MENU_INACTIVE) lflags = FL_INACTIVE;
+
   switch (selected) {
   case 0: // unselected menu item
+    lflags |= FL_ALIGN_LEFT;
     break;
   case 1: // selected menu item
-    lflags = FL_VALUE | FL_ALIGN_LEFT;
-// Why?! (it was so zero can mean "don't change")
-//    if (default_style.selection_color)
-//      lcolor = default_style.selection_color;
-//    if (default_style.selection_text_color)
-//      llabel_color = default_style.selection_text_color;
-      lcolor = selection_color();
-      if (!(flags()&FL_MENU_INACTIVE)) llabel_color = selection_text_color();
+    lflags |= (FL_VALUE|FL_ALIGN_LEFT);
+    lcolor = selection_color();
+    if (!(flags()&FL_MENU_INACTIVE)) llabel_color = selection_text_color();
     break;
   case 2: // title or menubar item when menu popped up
-    lflags = FL_VALUE | FL_ALIGN_CENTER;
+    lflags |= (FL_VALUE|FL_ALIGN_CENTER);
     lbox = title_style.box;
     if (title_style.selection_color) 
       lcolor = title_style.selection_color;
@@ -216,7 +215,7 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_*,
       llabel_color = title_style.selection_text_color;
     break;
   case 3: // highlighted menubar item
-    lflags = FL_HIGHLIGHT | FL_ALIGN_CENTER;
+    lflags |= (FL_HIGHLIGHT|FL_ALIGN_CENTER);
     lbox = title_style.box;
     lcolor = title_style.highlight_color;
     if (!lcolor) lcolor = highlight_color();
@@ -224,17 +223,14 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_*,
     if (!llabel_color) llabel_color = highlight_label_color();
     break;
   case 4: // plain menubar item
-    lflags = FL_ALIGN_CENTER;
+    lflags |= FL_ALIGN_CENTER;
     lbox = title_style.box;
     break;
   case 5: // draw the text in an Fl_Choice
+    lflags |= FL_ALIGN_LEFT;
     lbox = FL_NO_BOX;
     break;
   }
-  if (flags() & FL_MENU_INACTIVE) {
-//    llabel_color = fl_inactive(llabel_color); done in labeltype()->draw()
-    lflags |= FL_INACTIVE;
-  }    
   lbox->draw(x, y, w, h, lcolor, lflags);
 
   if (flags() & (FL_MENU_TOGGLE|FL_MENU_RADIO)) {
@@ -262,6 +258,10 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_*,
   }
   if (!fl_draw_shortcut) fl_draw_shortcut = 1;
   fl_font(label_font(), label_size());
+  // hack so that selected menu items aren't drawn inactive--
+  // just with inactive color
+  if (selected == 1 && lflags&FL_INACTIVE)
+    { llabel_color = fl_inactive(llabel_color); lflags &= (~FL_INACTIVE); }
   label_type()->draw(label(), x+3, y, w>6 ? w-6 : 0, h, llabel_color, lflags);
   fl_draw_shortcut = 0;
 }
@@ -410,7 +410,6 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int /*erase*/) {
       f = FL_VALUE;
     }
   } else {
-    fc = fl_inactive(fc);
     f = FL_INACTIVE;
   }
 
@@ -421,8 +420,11 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int /*erase*/) {
     glyph()(FL_GLYPH_RIGHT, x+w-h+dx, y+dy, h-dh, h-dh, bc, fc,f, FL_NO_BOX);
   } else if (m->shortcut_) {
     fl_font(label_font(), label_size());
-    fl_color(fc);
-    fl_draw(fl_shortcut_label(m->shortcut_), x, y, w-3, h, FL_ALIGN_RIGHT);
+    // hack so that selected menu items aren't drawn inactive--
+    // just with inactive color
+    if (i == selected && !m->active()) { fc = fl_inactive(fc); f = 0; }
+    m->label_type()->draw(fl_shortcut_label(m->shortcut_), x, y, w-3, h,
+                          fc, f|FL_ALIGN_RIGHT);
   }
 
   if (m->flags() & FL_MENU_DIVIDER) {
@@ -851,5 +853,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.61 1999/11/16 07:36:09 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.62 1999/11/18 19:32:09 carl Exp $".
 //

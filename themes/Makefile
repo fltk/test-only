@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.8 1999/11/10 04:49:00 carl Exp $"
+# "$Id: Makefile,v 1.9 1999/11/18 19:32:15 carl Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -51,14 +51,14 @@ motif : motif.o fl_motif.po ../lib/$(LIBNAME)
 classic : classic.o ../lib/$(LIBNAME)
 	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $<
 
-windows : windows.o fl_windows.po ../lib/$(LIBNAME)
-	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $< fl_windows.po
+windows : windows.o fl_windows.po fl_engraved_label.po ../lib/$(LIBNAME)
+	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $< fl_windows.po fl_engraved_label.po
 
 Alternative : Alternative.o ../lib/$(LIBNAME)
 	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $< 
 
-KDE1 : KDE1.o fl_kde1.po fl_kde1_colors.po fl_set_fonts.po fl_motif.po fl_windows.po ../lib/$(LIBNAME)
-	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $< fl_kde1.po fl_kde1_colors.po fl_set_fonts.po fl_motif.po fl_windows.po
+KDE1 : KDE1.o fl_kde1.po fl_kde1_colors.po fl_set_fonts.po fl_motif.po fl_windows.po fl_engraved_label.po ../lib/$(LIBNAME)
+	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $< fl_kde1.po fl_kde1_colors.po fl_set_fonts.po fl_motif.po fl_windows.po fl_engraved_label.po
 
 KDE1_colors : KDE1_colors.o fl_kde1_colors.po fl_set_fonts.po ../lib/$(LIBNAME)
 	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $< fl_kde1_colors.po fl_set_fonts.po
@@ -85,5 +85,5 @@ install :
 #include makedepend
 
 #
-# End of "$Id: Makefile,v 1.8 1999/11/10 04:49:00 carl Exp $".
+# End of "$Id: Makefile,v 1.9 1999/11/18 19:32:15 carl Exp $".
 #

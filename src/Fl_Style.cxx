@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.1 1999/11/14 08:42:48 bill Exp $"
+// "$Id: Fl_Style.cxx,v 1.2 1999/11/18 19:32:10 carl Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -105,6 +105,9 @@ Fl_Style::Fl_Style() {
   memset((void*)this, 0, sizeof(*this));
 }
 
+int Fl_Style::draw_boxes_inactive = 1;
+double Fl_Style::inactive_color_weight = 0.33f;
+
 //
-// End of "$Id: Fl_Style.cxx,v 1.1 1999/11/14 08:42:48 bill Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.2 1999/11/18 19:32:10 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.18 1999/11/18 04:33:17 carl Exp $"
+// "$Id: Fl_Style.H,v 1.19 1999/11/18 19:32:05 carl Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -95,6 +95,9 @@ struct FL_API Fl_Style {
   static Fl_Style* find(const char* name);
 
   static void revert(); // reverts the entire world of styles to defaults
+
+  static int draw_boxes_inactive; // should boxes ever be drawn inactive?
+  static double inactive_color_weight; // how much weight to FL_GRAY for inactive colors
 };
 
 FL_API void fl_theme_handler(Fl_Theme_Handler handler);
@@ -126,5 +129,5 @@ FL_API int fl_windows();
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.18 1999/11/18 04:33:17 carl Exp $".
+// End of "$Id: Fl_Style.H,v 1.19 1999/11/18 19:32:05 carl Exp $".
 //

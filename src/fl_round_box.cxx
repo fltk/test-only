@@ -1,5 +1,5 @@
 //
-// "$Id: fl_round_box.cxx,v 1.14 1999/11/14 08:42:52 bill Exp $"
+// "$Id: fl_round_box.cxx,v 1.15 1999/11/18 19:32:13 carl Exp $"
 //
 // Round box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,7 @@
 // in if not used.
 
 #include <FL/Fl_Boxtype.H>
+#include <FL/Fl_Style.H>
 #include <FL/fl_draw.H>
 
 // A compiler from a certain very large software company will not compile
@@ -86,6 +87,7 @@ static void round_draw(Fl_Boxtype b, int x, int y, int w, int h,
     if (w > 2*d && h > 2*(d-1)) draw(FILL, x+d, y+d-1, w-2*d, h-2*(d-1), c);
   }
   const char* s = (const char*)(b->data);
+  if (!Fl_Style::draw_boxes_inactive) f &= (~FL_INACTIVE);
   char buf[26]; if (f&FL_INACTIVE) {fl_to_inactive(s, buf); s = buf;}
   const char* t;
   if (*s == '2') {t = s+1; s += 3;} else {t = s+2;}
@@ -115,5 +117,5 @@ const Fl_Boxtype_ fl_round_down_box = {
 };
 
 //
-// End of "$Id: fl_round_box.cxx,v 1.14 1999/11/14 08:42:52 bill Exp $".
+// End of "$Id: fl_round_box.cxx,v 1.15 1999/11/18 19:32:13 carl Exp $".
 //

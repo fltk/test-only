@@ -1,5 +1,5 @@
 //
-// "$Id: fl_diamond_box.cxx,v 1.10 1999/11/14 08:42:50 bill Exp $"
+// "$Id: fl_diamond_box.cxx,v 1.11 1999/11/18 19:32:11 carl Exp $"
 //
 // Diamond box code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,7 @@
 // The diamond box draws best if the area is square!
 
 #include <FL/Fl_Boxtype.H>
+#include <FL/Fl_Style.H>
 #include <FL/fl_draw.H>
 
 extern void fl_to_inactive(const char* s, char* to);
@@ -51,6 +52,7 @@ static void diamond_draw(Fl_Boxtype b, int x, int y, int w, int h,
     }
   }
   const char* s = (const char*)(b->data);
+  if (!Fl_Style::draw_boxes_inactive) f &= (~FL_INACTIVE);
   char buf[26]; if (f&FL_INACTIVE) {fl_to_inactive(s, buf); s = buf;}
   const char* t;
   if (*s == '2') {t = s+1; s += 3;} else {t = s+2;}
@@ -88,5 +90,5 @@ const Fl_Boxtype_ fl_diamond_down_box = {
 };
 
 //
-// End of "$Id: fl_diamond_box.cxx,v 1.10 1999/11/14 08:42:50 bill Exp $".
+// End of "$Id: fl_diamond_box.cxx,v 1.11 1999/11/18 19:32:11 carl Exp $".
 //
