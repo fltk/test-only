@@ -1,3 +1,4 @@
 CHANGES IN FLTK 1.2.0a1
 
+	- Starting to move documentation into doxygen format.
 	- Initial integration of Fl_Device and UTF-8 patches.
