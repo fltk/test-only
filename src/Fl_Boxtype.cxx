@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.22 2004/08/09 18:24:55 laza2000 Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.23 2004/08/12 17:32:09 laza2000 Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -50,7 +50,7 @@ public:
   void _draw(int x, int y, int w, int h,const Style* s, Flags flags) const {
     // ML: Imho FOCUSED test should not be here, it would be impossible 
     //     to set DottedFrame to ordinal Widget (see test/boxtype)
-    //if (!(flags & FOCUSED)) return;
+    if (!(flags & FOCUSED)) return;
 
     if (w <= 1 || h <= 1) return;
     Color bg, fg; s->boxcolors(flags, bg, fg);
@@ -394,5 +394,5 @@ static HighlightBox highlightDownBox("highlight_down", THIN_DOWN_BOX);
 Box* const fltk::HIGHLIGHT_DOWN_BOX = &highlightDownBox;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.22 2004/08/09 18:24:55 laza2000 Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.23 2004/08/12 17:32:09 laza2000 Exp $".
 //
