@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileIcon.cxx,v 1.1 1999/10/17 15:20:25 mike Exp $"
+// "$Id: Fl_FileIcon.cxx,v 1.2 1999/10/28 01:02:12 vincent Exp $"
 //
 // Fl_FileIcon routines for the Fast Light Tool Kit (FLTK).
 //
@@ -495,7 +495,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
     {
       if (ch == '(')
         break;
-      else if ((ptr - command) < (sizeof(command) - 1))
+      else if ((ptr - command) < int(sizeof(command) - 1))
         *ptr++ = ch;
     }
 
@@ -512,7 +512,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
     {
       if (ch == ')')
         break;
-      else if ((ptr - params) < (sizeof(params) - 1))
+      else if ((ptr - params) < int(sizeof(params) - 1))
         *ptr++ = ch;
     }
 
@@ -639,9 +639,9 @@ Fl_FileIcon::load_xpm(const char *xpm)	// I - File to read from
   int		bg;			// Background color
   char		line[1024],		// Line from file
 		val[16],		// Color value
-		*ptr;			// Pointer into line
+		*ptr=NULL;		// Pointer into line
   int		x, y;			// X & Y in image
-  int		startx;			// Starting X coord
+  int		startx=0;		// Starting X coord
   int		width, height;		// Width and height of image
   int		ncolors;		// Number of colors
   short		colors[256];		// Colors
@@ -955,5 +955,5 @@ Fl_FileIcon::load_system_icons(void)
 
 
 //
-// End of "$Id: Fl_FileIcon.cxx,v 1.1 1999/10/17 15:20:25 mike Exp $".
+// End of "$Id: Fl_FileIcon.cxx,v 1.2 1999/10/28 01:02:12 vincent Exp $".
 //
