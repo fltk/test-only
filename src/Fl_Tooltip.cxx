@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.61 2004/07/06 05:49:31 spitzak Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.62 2004/07/11 19:54:54 laza2000 Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -39,6 +39,7 @@ bool		Tooltip::enabled_ = true;
 #define MAX_WIDTH 400
 
 static bool recent_tooltip;
+static void tooltip_timeout(void*);
 
 class TooltipBox : public MenuWindow {
 public:
@@ -54,8 +55,11 @@ public:
 #endif
   int handle(int ev) {
     if (ev==ENTER) {
+      // Entered tooltip window, hide tooltip 
+      // and add timeout to pop same tooltip again
       recent_tooltip = 0;
-      Tooltip::exit();
+      hide();
+      fltk::add_timeout(Tooltip::delay(), tooltip_timeout);      
     }
     return MenuWindow::handle(ev);
   }
@@ -228,5 +232,5 @@ static NamedStyle style("Tooltip", revert, &Tooltip::default_style);
 NamedStyle* Tooltip::default_style = &::style;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.61 2004/07/06 05:49:31 spitzak Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.62 2004/07/11 19:54:54 laza2000 Exp $".
 //
