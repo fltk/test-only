@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.54 2002/04/25 16:39:33 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.55 2002/06/09 23:20:19 spitzak Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,6 +32,7 @@
 #include <fltk/Fl.h>
 #include <fltk/Fl_Tabs.h>
 #include <fltk/fl_draw.h>
+#include <fltk/Fl_Tooltip.h>
 
 #define BORDER 10
 #define TABSLOPE 5
@@ -183,6 +184,21 @@ int Fl_Tabs::handle(int event) {
       push(selected);
     }
     return 1;
+
+  // handle pointing at the tabs to bring up tooltip:
+  case FL_ENTER:
+  case FL_MOVE: {
+    int H = tab_height();
+    if (H >= 0) {
+      if (Fl::event_y() > H) break;
+    } else {
+      if (Fl::event_y() < h()+H) break;
+    }
+    Fl_Widget* item = which(Fl::event_x(), Fl::event_y());
+    //Fl::belowmouse(this);
+    if (item) Fl_Tooltip::enter_area(this,0,H<0?h()+H:0,w(),H<0?-H:H,
+				     item->tooltip());
+    return 1;}
 
   case FL_KEY:
     switch (Fl::event_key()) {
@@ -402,5 +418,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.54 2002/04/25 16:39:33 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.55 2002/06/09 23:20:19 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.49 2002/05/31 16:35:55 robertk Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.50 2002/06/09 23:20:18 spitzak Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,6 @@
 #include <fltk/fl_draw.h>
 #include <fltk/Fl_Group.h>
 #include <fltk/Fl_Item.h>
-#include <config.h>
 
 extern Fl_Widget* fl_did_clipping;
 
@@ -111,11 +110,10 @@ int Fl_Menu_Button::handle(int e) {
     if (type()&7) {
       if (!(type() & (1 << (Fl::event_button()-1)))) return 0;
     } else {
-	  if(click_to_focus())
-        take_focus();
+      if (click_to_focus()) take_focus();
     }
   EXECUTE:
-    if (!(type()&7)) value(-1); // make it pull down below the button...
+    //if (!(type()&7)) value(-1); // make it pull down below the button...
     popup();
     return 1;
 
@@ -144,13 +142,9 @@ Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l)
 {
   style(default_style);
   align(FL_ALIGN_CENTER);
-#if CLICK_MOVES_FOCUS
-  set_click_to_focus();
-#else
-  clear_click_to_focus();
-#endif
+  //set_click_to_focus();
 }
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.49 2002/05/31 16:35:55 robertk Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.50 2002/06/09 23:20:18 spitzak Exp $".
 //

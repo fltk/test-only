@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.124 2002/04/25 16:39:33 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.125 2002/06/09 23:20:18 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -313,9 +313,9 @@ void MenuWindow::draw() {
     if (damage() != FL_DAMAGE_CHILD || i==selected || i==drawn_selected) {
 
       Fl_Flags flags = widget->flags();
-      if (i == selected && !(flags & FL_OUTPUT)) {
+      if (i == selected && !(flags & (FL_OUTPUT|FL_INACTIVE))) {
 	flags |= FL_SELECTED;
-	flags &= ~FL_INACTIVE; // damn Windoze compatability...
+	//flags &= ~FL_INACTIVE; // damn Windoze compatability...
 	// this allow a toggle or other widget to preview it's state:
 	if (Fl::event_state(FL_BUTTONS) && widget->takesevents())
 	  Fl::pushed_ = widget;
@@ -765,5 +765,5 @@ int Fl_Menu_::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.124 2002/04/25 16:39:33 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.125 2002/06/09 23:20:18 spitzak Exp $".
 //

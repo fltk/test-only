@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Output.cxx,v 1.31 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Value_Output.cxx,v 1.32 2002/06/09 23:20:19 spitzak Exp $"
 //
 // Value output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -63,7 +63,6 @@ int Fl_Value_Output::handle(int event) {
   static int ix, drag;
   switch (event) {
   case FL_PUSH:
-    take_focus();
     ix = mx;
     drag = Fl::event_button();
     handle_push();
@@ -96,9 +95,10 @@ Fl_Value_Output::Fl_Value_Output(int x,int y,int w,int h,const char *l)
   style(Fl_Output::default_style);
   clear_flag(FL_ALIGN_MASK);
   set_flag(FL_ALIGN_LEFT);
+  set_click_to_focus();
   soft_ = 0;
 }
 
 //
-// End of "$Id: Fl_Value_Output.cxx,v 1.31 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Value_Output.cxx,v 1.32 2002/06/09 23:20:19 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.174 2002/05/16 07:48:11 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.175 2002/06/09 23:20:19 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -485,7 +485,7 @@ public:
     }
     // Fl_Group will change DND_DRAG into DND_ENTER and DND_LEAVE if needed
     if ( Fl::handle( FL_DND_DRAG, fl_dnd_target_window ) )
-      *pdwEffect = DROPEFFECT_MOVE|DROPEFFECT_COPY|DROPEFFECT_LINK;
+      *pdwEffect = DROPEFFECT_MOVE|DROPEFFECT_COPY; //|DROPEFFECT_LINK;
     else 
       *pdwEffect = DROPEFFECT_NONE;
     px = pt.x; py = pt.y;
@@ -1573,5 +1573,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.174 2002/05/16 07:48:11 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.175 2002/06/09 23:20:19 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.63 2002/01/28 08:02:59 spitzak Exp $"
+// "$Id: Fl_Choice.cxx,v 1.64 2002/06/09 23:20:18 spitzak Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -160,7 +160,7 @@ int Fl_Choice::handle(int e) {
     // Depending on the size and usage of the menu this may be more
     // user-friendly.
 //  Fl::event_is_click(0);
-    take_focus();
+    if (click_to_focus()) take_focus();
   EXECUTE:
     if (popup(0, 0, w(), h(), 0)) redraw();
     return 1;
@@ -206,9 +206,10 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
   style(default_style);
   clear_flag(FL_ALIGN_MASK);
   set_flag(FL_ALIGN_LEFT);
+  set_click_to_focus();
   when(FL_WHEN_RELEASE);
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.63 2002/01/28 08:02:59 spitzak Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.64 2002/06/09 23:20:18 spitzak Exp $".
 //

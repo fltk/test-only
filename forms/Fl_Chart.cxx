@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.cxx,v 1.13 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Chart.cxx,v 1.14 2002/06/09 23:20:15 spitzak Exp $"
 //
 // Forms-compatible chart widget for the Fast Light Tool Kit (FLTK).
 //
@@ -238,23 +238,23 @@ static void draw_piechart(int x,int y,int w,int h,
 }
 
 void Fl_Chart::draw() {
-    int xx,yy,ww,hh;
-    int i;
 
-    xx = 9;
-    yy = 9;
-    ww = w()-2*9;
-    hh = h()-2*9;
+    draw_box();
+    int xx = 0; int yy = 0; int ww = w(); int hh = h();
+    box()->inset(xx, yy, ww, hh); // older versions inset by 9 on all sides
+    fl_push_clip(xx, yy, ww, hh);
+
+    ww--; hh--; // adjust for line thickness
 
     if (min >= max) {
 	min = max = 0.0;
-	for (i=0; i<numb; i++) {
+	for (int i=0; i<numb; i++) {
 	    if (entries[i].val < min) min = entries[i].val;
 	    if (entries[i].val > max) max = entries[i].val;
 	}
     }
 
-    draw_box();
+
     fl_font(text_font(),text_size());
 
     switch (type()) {
@@ -278,6 +278,7 @@ void Fl_Chart::draw() {
 	break;
     }
     draw_inside_label();
+    fl_pop_clip();
 }
 
 /*------------------------------*/
@@ -389,5 +390,5 @@ void Fl_Chart::maxsize(int m) {
 }
 
 //
-// End of "$Id: Fl_Chart.cxx,v 1.13 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Chart.cxx,v 1.14 2002/06/09 23:20:15 spitzak Exp $".
 //

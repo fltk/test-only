@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.40 2002/05/31 16:35:55 robertk Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.41 2002/06/09 23:20:16 spitzak Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,6 @@
 #include <fltk/Fl_Adjuster.h>
 #include <fltk/fl_draw.h>
 #include <fltk/Fl_Bitmap.h>
-#include <config.h>
 
 #include "fastarrow.h"
 static Fl_Bitmap fastarrow(fastarrow_bits, fastarrow_width, fastarrow_height);
@@ -114,8 +113,6 @@ int Fl_Adjuster::handle(int event) {
   switch (event) {
 
   case FL_PUSH:
-	if(click_to_focus())
-	  take_focus();
     handle_push();
     ix = mx;
     drag = highlight = which_button;
@@ -189,13 +186,9 @@ Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,
   step(1.0/10000);
   drag = highlight = 0;
   soft_ = 1;
-#if CLICK_MOVES_FOCUS
-  set_click_to_focus();
-#else
-  clear_click_to_focus();
-#endif
+  //  set_click_to_focus();
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.40 2002/05/31 16:35:55 robertk Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.41 2002/06/09 23:20:16 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.90 2002/05/31 16:35:55 robertk Exp $"
+// "$Id: Fl_Widget.cxx,v 1.91 2002/06/09 23:20:19 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,7 @@
 #include <fltk/fl_draw.h>
 #include <string.h> // for strdup
 #include <stdlib.h> // free
+#include <config.h>
 
 void Fl_Widget::default_callback(Fl_Widget*, void*) {}
     
@@ -41,7 +42,11 @@ Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
   image_	= 0;
   tooltip_	= 0;
   shortcut_	= 0;
+#if CLICK_MOVES_FOCUS
   flags_	= FL_CLICK_TO_FOCUS;
+#else
+  flags_	= 0;
+#endif
   x_ = X; y_ = Y; w_ = W; h_ = H;
   type_		= 0;
   damage_	= FL_DAMAGE_ALL;
@@ -278,8 +283,12 @@ int Fl_Widget::send(int event) {
       // If it returns true then this is the pushed() widget. But we
       // only set this if handle() did not pass this on to a child,
       // and if the mouse is still down:
-      if (Fl::event_state(0x0f000000) && !contains(Fl::pushed()))
+      // Widgets with click_to_focus flag on will get the focus if
+      // they accept the mouse push.
+      if (Fl::event_state(0x0f000000) && !contains(Fl::pushed())) {
 	Fl::pushed(this);
+	if (click_to_focus()) take_focus();
+      }
     }
     break;
 
@@ -500,5 +509,5 @@ void Fl_Widget::draw()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.90 2002/05/31 16:35:55 robertk Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.91 2002/06/09 23:20:19 spitzak Exp $".
 //

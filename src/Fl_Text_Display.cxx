@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.21 2002/04/25 16:39:33 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.22 2002/06/09 23:20:19 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -66,6 +66,7 @@ static int countlines( const char *string );
 
 Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H,  const char* l)
     : Fl_Group(X, Y, W, H, l) {
+  set_click_to_focus();
   mMaxsize = 0;
   damage_range1_start = damage_range1_end = -1;
   damage_range2_start = damage_range2_end = -1;
@@ -1887,7 +1888,7 @@ int Fl_Text_Display::handle(int event) {
         // handle clicks in the scrollbars:
         if (!Fl::event_inside(text_area.x,text_area.y,text_area.w,text_area.h))
 	  return Fl_Group::handle(event);
-        take_focus();
+        //take_focus();
         if (Fl::event_state()&FL_SHIFT) return handle(FL_DRAG);
         dragging = 1;
         int pos = xy_to_position(Fl::event_x(), Fl::event_y(), CURSOR_POS);
@@ -1982,5 +1983,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.21 2002/04/25 16:39:33 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.22 2002/06/09 23:20:19 spitzak Exp $".
 //

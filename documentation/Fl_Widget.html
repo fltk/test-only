@@ -48,17 +48,19 @@ after changing any visible properties.
 <li><a href=#button_box>button_box</a></li>
 <li><a href=#callback>callback</a></li>
 <li><a href=#changed>changed</a></li>
-<li><a href=#clear_flag>clear_flag</a></li>
 <li><a href=#clear_changed>clear_changed</a></li>
+<li><a href=#clear_click_to_focus>clear_click_to_focus</a>
+<li><a href=#clear_flag>clear_flag</a></li>
 <li><a href=#clear_selected>clear_selected</a></li>
 <li><a href=#clear_value>clear_value</a></li>
 <li><a href=#clear_visible>clear_visible</a>
-</ul>
-</td><td align=left valign=top>
-<ul>
+<li><a href=#click_to_focus>click_to_focus</a>
 <li><a href=#color>color</a></li>
 <li><a href=#contains>contains</a></li>
 <li><a href=#copy_label>copy_label</a></li>
+</ul>
+</td><td align=left valign=top>
+<ul>
 <li><a href=#damage>damage</a></li>
 <li><a href=#deactivate>deactivate</a></li>
 <li><a href=#default_callback>default_callback</a></li>
@@ -73,9 +75,6 @@ after changing any visible properties.
 <li><a href=#focused>focused</a></li>
 <li><a href=#handle>handle</a></li>
 <li><a href=#height>height</a></li>
-</ul>
-</td><td align=left valign=top>
-<ul>
 <li><a href=#h>h</a></li>
 <li><a href=#hide>hide</a></li>
 <li><a href=#inside>inside</a></li>
@@ -84,6 +83,9 @@ after changing any visible properties.
 <li><a href=#is_window>is_window</a></li>
 <li><a href=#label>label</a></li>
 <li><a href=#label_color>label_color</a></li>
+</ul>
+</td><td align=left valign=top>
+<ul>
 <li><a href=#label_font>label_font</a></li>
 <li><a href=#label_size>label_size</a></li>
 <li><a href=#label_type>label_type</a></li>
@@ -93,9 +95,6 @@ after changing any visible properties.
 <li><a href=#measure_label>measure_label</a>
 <li><a href=#output>output</a></li>
 <li><a href=#parent>parent</a></li>
-</ul>
-</td><td align=left valign=top>
-<ul>
 <li><a href=#position>position</a></li>
 <li><a href=#pushed>pushed</a></li>
 <li><a href=#redraw>redraw</a></li>
@@ -106,16 +105,17 @@ after changing any visible properties.
 <li><a href=#selection_color>selection_color</a></li>
 <li><a href=#send>send</a></li>
 <li><a href=#set_changed>set_changed</a></li>
+<li><a href=#set_click_to_focus>set_click_to_focus</a>
 <li><a href=#set_damage>set_damage</a></li>
 <li><a href=#set_flag>set_flag</a></li>
+</ul>
+</td><td align=left valign=top>
+<ul>
 <li><a href=#set_selected>set_selected</a></li>
 <li><a href=#set_value>set_value</a></li>
 <li><a href=#set_visible>set_visible</a></li>
 <li><a href=#shortcut>shortcut</a></li>
 <li><a href=#show>show</a></li>
-</ul>
-</td><td align=left valign=top>
-<ul>
 <li><a href=#size>size</a></li>
 <li><a href=#style>style</a></li>
 <li><a href=#take_focus>take_focus</a></li>
@@ -579,7 +579,9 @@ things. The following flags are defined:
 <li><tt>FL_COPIED_LABEL</tt> - indicates <a href="#copy_label">copy_label()</a> was called
 <li><tt>FL_RAW_LABEL</tt> - prevents interpretation of '&amp;' and '@' in labels
 <li><tt>FL_ALIGN_*</tt> - label alignment, see below.
-<li><tt>FL_PACK_VERTICAL</tt> - <a href="Fl_Pack.html">Fl_Pack</a> puts this widget vertical
+<li><tt>FL_PACK_VERTICAL</tt> - <a href="Fl_Pack.html">Fl_Pack</a>
+puts this widget vertical
+<li><tt>FL_CLICK_TO_FOCUS</tt> - <a href="#click_to_focus">click_to_focus()</a>
 </ul>
 
 <a name=align><h4>void Fl_Widget::align(Fl_Flags);</h4></a>
@@ -659,6 +661,18 @@ displays rather than input devices.
 
 This is the same as <tt>(active() &amp;&amp; visible() &amp;&amp;
 !output())</tt> but is faster.
+
+<h4><a name=click_to_focus>int Fl_Widget::click_to_focus() const</a>
+<br><a name=set_click_to_focus>void Fl_Widget::set_click_to_focus()</a>
+<br><a name=clear_click_to_focus>void Fl_Widget::clear_click_to_focus()</a></h4>
+
+If this flag is set then if this widget returns true for an
+<tt>FL_PUSH</tt> event then fltk will attempt to give it the focus (by
+calling <a href=#take_focus>take_focus()</a>, so it will work if this
+widget also returns true for <tt>FL_FOCUS</tt> events). By default
+fltk only turns this on on certain widgets such as <a
+href=Fl_Input.html>Fl_Input</a>. Turning this on on <i>all</i> widgets
+will make the user interface match Windows more closely.
 
 <h4><a name=changed>int Fl_Widget::changed() const</a>
 <br><a name=set_changed>void Fl_Widget::set_changed()</a>

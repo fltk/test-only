@@ -2266,3 +2266,35 @@ Restored size and color of text for Fl_Value_Slider (note that this
 also controls the size of the numbers next to the tick marks).
 
 ////////////////////////////////////////////////////////////////
+
+Clicking on sliders moves the center of the sliding part to the
+cursor, rather than the edge. Clicking with the center or right mouse
+button moves the edge of the slider, like before. Fl_Scrollbar changed
+so clicking the middle or right mouse button moves the slider using
+this, rather than doing page up/down. This matches how Motif and GTK
+work.
+
+////////////////////////////////////////////////////////////////
+
+The gl_draw font functions rewritten for Xft where the font used for
+OpenGL may not be the same one used for other text. The strings are
+now measured correctly. Also changed gl_draw() functions to take an
+optional z coordinate and made them take floating-point only.
+
+Fl_Return_Button accepts the keypad Enter key as a shortcut (or any
+other key that produces a ^M.
+
+Fl_Input will not handle enter keys if some other widget in the window
+uses the enter key as a shortcut. With these changes you can make the
+keypad Enter key dismiss a control panel but the normal enter key
+confirm an input field, by setting the shortcut for the panel OK
+button to FL_KP_Enter.
+
+Fl_Chart changed to clip the drawing to the interior of the box.
+
+Made Fl_Widget::send() handle the click_to_focus stuff. This allows a
+lot more widgets (such as the browser) to turn on/off whether mouse
+movements set the focus. It also appears that Windows emulation can be
+enabled by turning this flag on on *all* widgets (if not then the
+widgets that don't want this should turn the flag off).
+

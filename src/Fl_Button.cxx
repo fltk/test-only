@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.53 2002/05/31 16:35:55 robertk Exp $"
+// "$Id: Fl_Button.cxx,v 1.54 2002/06/09 23:20:18 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,6 @@
 #include <fltk/Fl.h>
 #include <fltk/Fl_Button.h>
 #include <fltk/Fl_Group.h>
-#include <config.h>
 
 int Fl_Button::set() {
   clear_changed();
@@ -66,8 +65,6 @@ int Fl_Button::handle(int event) {
   case FL_MOVE:
     return 1;
   case FL_PUSH:
-	if(click_to_focus())
-      take_focus();
     oldval = value();
   case FL_DRAG:
     if (Fl::event_inside(0,0,w(),h())) {
@@ -98,9 +95,9 @@ int Fl_Button::handle(int event) {
   case FL_UNFOCUS:
     redraw(FL_DAMAGE_HIGHLIGHT);
     // grab initial focus if we are an Fl_Return_Button:
-    return shortcut()==FL_Enter ? 2 : 1;
+    return shortcut()=='\r' ? 2 : 1;
   case FL_KEY:
-    if (Fl::event_key() == FL_Enter || Fl::event_key() == ' ') goto EXECUTE;
+    if (Fl::event_key() == ' ') goto EXECUTE;
     return 0;
   case FL_SHORTCUT:
     if (!test_shortcut()) return 0;
@@ -166,10 +163,10 @@ void Fl_Button::draw(int glyph, int glyph_width) const
     // If the box is FL_NO_BOX we need to avoid drawing the label so
     // that it does not blink and does not draw multiple times (which
     // will make it look bold if antialiasing is on).
-    if (!label()) {
+    /* if (!label()) {
       // don't do anything if no label, so buttons that are an image
       // only will redraw correctly and with minimum blinking.
-    } else if ((damage()&FL_DAMAGE_EXPOSE) ||
+      } else */ if ((damage()&FL_DAMAGE_EXPOSE) ||
 	(damage()&FL_DAMAGE_HIGHLIGHT) && !focused()) {
       // erase the background behind where the label will draw:
       fl_push_clip(0, 0, w, h);
@@ -230,13 +227,9 @@ Fl_Named_Style* Fl_Button::default_style = &::style;
 
 Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h,l) {
   style(default_style);
-#if CLICK_MOVES_FOCUS
-  set_click_to_focus();
-#else
-  clear_click_to_focus();
-#endif
+  //set_click_to_focus();
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.53 2002/05/31 16:35:55 robertk Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.54 2002/06/09 23:20:18 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.62 2002/04/25 16:39:33 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.63 2002/06/09 23:20:18 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -788,7 +788,7 @@ int Fl_Browser::handle(int event) {
 	 (Fl::event_y() >= hscrollbar.y())))
       return hscrollbar.send(event);
     if (event != FL_PUSH) return 1; // return true for enter/move
-    take_focus();
+    //take_focus();
     openclose_drag = 0;
   case FL_DRAG: {
     if (!goto_position(Fl::event_y()-Y+yposition_) && !item()) break;
@@ -1033,6 +1033,7 @@ Fl_Browser::Fl_Browser(int X,int Y,int W,int H,const char* L)
   : Fl_Menu_(X,Y,W,H,L), endgroup(0),
     scrollbar(X+W-SLIDER_WIDTH,Y,SLIDER_WIDTH,H-SLIDER_WIDTH),
     hscrollbar(X,Y+H-SLIDER_WIDTH,W-SLIDER_WIDTH,SLIDER_WIDTH) {
+  set_click_to_focus();
   style(default_style);
   xposition_ = 0;
   yposition_ = 0;
@@ -1062,5 +1063,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.62 2002/04/25 16:39:33 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.63 2002/06/09 23:20:18 spitzak Exp $".
 //

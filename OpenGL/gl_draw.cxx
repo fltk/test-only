@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.20 2002/05/06 06:31:26 spitzak Exp $"
+// "$Id: gl_draw.cxx,v 1.21 2002/06/09 23:20:06 spitzak Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -34,18 +34,15 @@
 #include "Fl_Gl_Choice.h"
 #include <string.h>
 
-int gl_height() {return fl_height();}
-int gl_descent() {return fl_descent();}
-int gl_width(const char* s) {return fl_width(s);}
-int gl_width(const char* s, int n) {return fl_width(s,n);}
-int gl_width(uchar c) {return fl_width(c);}
-
 // binary tree of all the fonts+sizes we have made so far:
 struct FontSize {
   Fl_Font font;
   int size;
   FontSize* left, *right;
   int listbase;
+#if USE_XFT
+  XFontStruct* xfont;
+#endif
 };
 static FontSize* root, *current;
 
@@ -73,10 +70,13 @@ void gl_font(Fl_Font font, int size) {
     wglUseFontBitmaps(hdc, base, size, current->listbase+base); 
     SelectObject(hdc, oldFid);
 #else
-    XFontStruct* font = fl_xfont();
-    int base = font->min_char_or_byte2;
-    int size = font->max_char_or_byte2-base+1;
-    glXUseXFont(font->fid, base, size, current->listbase+base);
+    XFontStruct* xfont = fl_xfont();
+#if USE_XFT
+    current->xfont = xfont;
+#endif
+    int base = xfont->min_char_or_byte2;
+    int size = xfont->max_char_or_byte2-base+1;
+    glXUseXFont(xfont->fid, base, size, current->listbase+base);
 #endif
   }
  GOTIT:
@@ -91,13 +91,8 @@ void gl_draw(const char* str, int n) {
   glCallLists(n, GL_UNSIGNED_BYTE, str);
 }
 
-void gl_draw(const char* str, int n, int x, int y) {
-  glRasterPos2i(x, y);
-  gl_draw(str, n);
-}
-
-void gl_draw(const char* str, int n, double x, double y) {
-  glRasterPos2f((float)x, (float)y);
+void gl_draw(const char* str, int n, double x, double y, double z) {
+  glRasterPos3d(x, y, z);
   gl_draw(str, n);
 }
 
@@ -105,32 +100,36 @@ void gl_draw(const char* str) {
   gl_draw(str, strlen(str));
 }
 
-void gl_draw(const char* str, int x, int y) {
-  gl_draw(str, strlen(str), x, y);
+void gl_draw(const char* str, double x, double y, double z) {
+  gl_draw(str, strlen(str), x, y, z);
 }
 
-void gl_draw(const char* str, double x, double y) {
-  gl_draw(str, strlen(str), x, y);
+#if USE_XFT
+// We must use the X font, the normal functions will use the Xft font:
+
+int gl_height() {
+  return current->xfont->ascent+current->xfont->descent;
 }
 
-#if 0
-static void gl_draw_invert(const char* str, int n, int x, int y) {
-  glRasterPos2i(x, -y);
-  gl_draw(str, n);
+int gl_descent() { return current->xfont->descent; }
+
+int gl_width(const char* s, int n) {
+  return XTextWidth(current->xfont, s, n);
 }
 
-// This is unimplemented because the fl_draw that takes a function to
-// call has been eliminated. The plan is to use Fl_Renderer and make
-// an OpenGL one.
-void gl_draw(
-  const char* str, 	// the (multi-line) string
-  int x, int y, int w, int h, 	// bounding box
-  Fl_Align align) {
-  fl_draw(str, x, -y-h, w, h, align, gl_draw_invert);
-}
+int gl_width(const char* s) {return gl_width(s, strlen(s));}
+
+#else
+// The old X and Windows versions use exactly the same fonts for OpenGL
+// and for normal drawing, so we can share the functions:
+
+int gl_height() {return fl_height();}
+int gl_descent() {return fl_descent();}
+int gl_width(const char* s) {return fl_width(s);}
+int gl_width(const char* s, int n) {return fl_width(s,n);}
+int gl_width(uchar c) {return fl_width(c);}
+
 #endif
-
-void gl_measure(const char* str, int& x, int& y) {fl_measure(str,x,y,0);}
 
 void gl_rect(int x, int y, int w, int h) {
   if (w < 0) {w = -w; x = x-w;}
@@ -179,12 +178,12 @@ void gl_color(Fl_Color i) {
 void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
   if (!ld) ld = w*d;
   glPixelStorei(GL_UNPACK_ROW_LENGTH, ld/d);
-  glRasterPos2i(x,y);
-  glDrawPixels(w,h,d<4?GL_RGB:GL_RGBA,GL_UNSIGNED_BYTE,(const ulong*)b);
+  glRasterPos2i(x, y);
+  glDrawPixels(w, h, d<4?GL_RGB:GL_RGBA, GL_UNSIGNED_BYTE, (const ulong*)b);
 }
 
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.20 2002/05/06 06:31:26 spitzak Exp $".
+// End of "$Id: gl_draw.cxx,v 1.21 2002/06/09 23:20:06 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.59 2002/05/06 06:31:26 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.60 2002/06/09 23:20:19 spitzak Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -314,9 +314,17 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
     int X = slider_position(value(), w);
     if (event == FL_PUSH) {
       offcenter = mx-X;
-      if (offcenter < (slider_size() ? 0 : -8)) offcenter = 0;
-      else if (offcenter > slider_size_) offcenter = slider_size_;
-      else return 1;
+      // we are done if they clicked on the slider:
+      if (offcenter >= (slider_size() ? 0 : -8) && offcenter <= slider_size_)
+	return 1;
+      if (Fl::event_button() > 1) {
+	// Move the near end of the slider to the cursor. This is good
+	// for scrollbars.
+	offcenter = (offcenter < 0) ? 0 : slider_size_;
+      } else {
+	// Center the slider under the cursor, what most toolkits do
+	offcenter = slider_size_/2;
+      }
     }
     double v;
   RETRY:
@@ -402,5 +410,5 @@ Fl_Slider::Fl_Slider(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.59 2002/05/06 06:31:26 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.60 2002/06/09 23:20:19 spitzak Exp $".
 //

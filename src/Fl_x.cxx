@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.129 2002/05/16 07:48:11 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.130 2002/06/09 23:20:19 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1005,8 +1005,8 @@ void Fl_X::create(Fl_Window* window,
     }
     attr.event_mask = ExposureMask;
   } else {
-    if (X == FL_USEDEFAULT) X = (Fl::w()-W)/2;
-    if (Y == FL_USEDEFAULT) Y = (Fl::h()-H)/2;
+    if (X == FL_USEDEFAULT) X = (DisplayWidth(fl_display,fl_screen)-W)/2;
+    if (Y == FL_USEDEFAULT) Y = (DisplayHeight(fl_display,fl_screen)-H)/2;
     root = RootWindow(fl_display, fl_screen);
     attr.event_mask =
       ExposureMask | StructureNotifyMask
@@ -1116,8 +1116,10 @@ void Fl_X::sendxjunk() {
       // unfortunately we can't set just one maximum size.  Guess a
       // value for the other one.  Some window managers will make the
       // window fit on screen when maximized, others will put it off screen:
-      if (hints.max_width < hints.min_width) hints.max_width = Fl::w();
-      if (hints.max_height < hints.min_height) hints.max_height = Fl::h();
+      if (hints.max_width < hints.min_width)
+	hints.max_width = DisplayWidth(fl_display,fl_screen);
+      if (hints.max_height < hints.min_height)
+	hints.max_height = DisplayHeight(fl_display,fl_screen);
     }
     if (hints.width_inc && hints.height_inc) hints.flags |= PResizeInc;
 //     if (window->aspect) {
@@ -1126,7 +1128,7 @@ void Fl_X::sendxjunk() {
 //       hints.flags |= PAspect;
 //     }
   } else { // not resizable:
-    hints.flags = PMinSize|PMaxSize;
+    hints.flags = PMinSize|PMaxSize|PWinGravity;
     prop[0] = 1; // MWM_HINTS_FUNCTIONS
     prop[1] = 1|2|16; // MWM_FUNC_ALL | MWM_FUNC_RESIZE | MWM_FUNC_MAXIMIZE
   }
@@ -1364,5 +1366,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.129 2002/05/16 07:48:11 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.130 2002/06/09 23:20:19 spitzak Exp $".
 //

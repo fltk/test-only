@@ -1,5 +1,5 @@
 //
-// "$Id: filename_match.cxx,v 1.10 2002/03/26 18:00:35 spitzak Exp $"
+// "$Id: filename_match.cxx,v 1.11 2002/06/09 23:20:19 spitzak Exp $"
 //
 // Pattern matching routines for the Fast Light Tool Kit (FLTK).
 //
@@ -97,7 +97,7 @@ bool filename_match(const char *s, const char *p) {
       if (*s++ != *(p-1)) return false;
       break;
     default:
-      if (tolower(*s) != tolower(*(p-1))) return false;
+      if (*s != *(p-1) && tolower(*s) != *(p-1)) return false;
       s++;
 #else
     case '\\':	// quote next character
@@ -111,5 +111,5 @@ bool filename_match(const char *s, const char *p) {
 }
 
 //
-// End of "$Id: filename_match.cxx,v 1.10 2002/03/26 18:00:35 spitzak Exp $".
+// End of "$Id: filename_match.cxx,v 1.11 2002/06/09 23:20:19 spitzak Exp $".
 //

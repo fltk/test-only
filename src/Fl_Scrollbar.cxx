@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.57 2002/02/25 09:00:22 spitzak Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.58 2002/06/09 23:20:19 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -116,7 +116,10 @@ int Fl_Scrollbar::handle(int event) {
     return 1;
   case FL_PUSH:
     if (pushed_) return 1;
-      pushed_ = which_part;
+    pushed_ = which_part;
+    // clicking the middle or right mouse button on the trough gives
+    // us normal slider behavior:
+    if (Fl::event_button() > 1 && pushed_ > 2) pushed_ = 5;
     if (pushed_ && pushed_ != 5) {
       handle_push();
       Fl::add_timeout(INITIALREPEAT, (Fl_Timeout_Handler)timeout_cb, this);
@@ -217,5 +220,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.57 2002/02/25 09:00:22 spitzak Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.58 2002/06/09 23:20:19 spitzak Exp $".
 //

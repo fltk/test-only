@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.46 2002/05/31 16:35:55 robertk Exp $"
+// "$Id: Fl_Counter.cxx,v 1.47 2002/06/09 23:20:18 spitzak Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,7 +27,6 @@
 #include <fltk/Fl_Counter.h>
 #include <fltk/Fl_Output.h>
 #include <fltk/fl_draw.h>
-#include <config.h>
 
 enum {
   FL_GLYPH_LEFTARROW,
@@ -161,8 +160,6 @@ int Fl_Counter::handle(int event) {
     return 1;
 
   case FL_PUSH:
-	if(click_to_focus())
-      take_focus();
     handle_push();
   case FL_DRAG:
     highlight = calc_mouseobj();
@@ -204,17 +201,13 @@ Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(
   style(default_style);
   clear_flag(FL_ALIGN_MASK);
   set_flag(FL_ALIGN_BOTTOM);
+  //set_click_to_focus();
   range(-1000000.0, 1000000.0);
   Fl_Valuator::step(.1);
   linesize(10);
   mouseobj = highlight = last = 0;
-#if CLICK_MOVES_FOCUS
-  set_click_to_focus();
-#else
-  clear_click_to_focus();
-#endif
 }
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.46 2002/05/31 16:35:55 robertk Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.47 2002/06/09 23:20:18 spitzak Exp $".
 //
