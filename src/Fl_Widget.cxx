@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.5.2.4.2.20.2.5 2004/11/25 03:21:23 rokan Exp $"
+// "$Id: Fl_Widget.cxx,v 1.5.2.4.2.20.2.6 2005/01/27 21:24:41 rokan Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,7 @@
 #include <FL/fl_draw.H>
 #include <stdlib.h>
 #include "flstring.h"
+#include <FL/Fl_Style.H>
 
 
 ////////////////////////////////////////////////////////////////
@@ -70,7 +71,7 @@ Fl_Widget *Fl::readqueue() {
     
 ////////////////////////////////////////////////////////////////
 
-int Fl_Widget::handle(int) {
+int Fl_Widget::handle(int event) {
   return 0;
 }
 
@@ -86,13 +87,13 @@ Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
   label_.type	 = FL_NORMAL_LABEL;
   label_.font	 = FL_HELVETICA;
   label_.size	 = (uchar)FL_NORMAL_SIZE;
-  label_.color	 = FL_BLACK;
+  label_.color	 = FL_FOREGROUND_COLOR; //was:FL_BLACK
   tooltip_       = 0;
   callback_	 = default_callback;
   user_data_ 	 = 0;
   type_		 = 0;
   flags_	 = VISIBLE_FOCUS;
-  damage_	 = 0;
+  damage_	 = FL_DAMAGE_STYLE; //this is faster, further adding widget to a group does not need to make recursive damage
   box_		 = FL_NO_BOX;
   color_	 = FL_GRAY;
   color2_	 = FL_GRAY;
@@ -101,7 +102,22 @@ Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
 
   parent_ = 0;
   if (Fl_Group::current()) Fl_Group::current()->add(this);
+  style_flags_=0;
 }
+
+
+void Fl_Widget::revert_style(){
+
+  char try_color(FL_GRAY);
+  char try_selection_color(FL_GRAY);
+  char try_box(FL_NO_BOX);
+  char try_labeltype(FL_NORMAL_LABEL);
+  char try_labelcolor(FL_FOREGROUND_COLOR); //was:FL_BLACK
+  char try_labelfont(FL_HELVETICA);
+  char try_labelsize(FL_NORMAL_SIZE);
+}
+
+
 
 void Fl_Widget::resize(int X, int Y, int W, int H) {
   x_ = X; y_ = Y; w_ = W; h_ = H;
@@ -268,6 +284,31 @@ Fl_Widget::copy_label(const char *a) {
 }
 
 
+
+
+void Fl_Widget::redraw_style(){
+  damage(FL_DAMAGE_ALL | FL_DAMAGE_STYLE);
+  int i = children();
+  if (i<=0) return;
+  Fl_Widget*const* a = array();
+  for (; i--;){
+    Fl_Widget * o = *a++;
+    if(FL_DAMAGE_STYLE & damage())
+      o->redraw_style();
+  }
+};
+
+#include "Fl_Scheme.cxx"
+
+Fl_Scheme_ * Fl_Scheme_::current_=0;
+int Fl_Scheme_::index_=0;
+Fl_Scheme_::~Fl_Scheme_(){
+  if(current_ == this){
+    Fl::redraw_scheme();
+    current_ = 0;
+  };
+}
+
 //
-// End of "$Id: Fl_Widget.cxx,v 1.5.2.4.2.20.2.5 2004/11/25 03:21:23 rokan Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.5.2.4.2.20.2.6 2005/01/27 21:24:41 rokan Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.8.2.3.2.3.2.9 2004/11/09 01:52:34 rokan Exp $"
+// "$Id: fl_symbols.cxx,v 1.8.2.3.2.3.2.10 2005/01/27 21:24:41 rokan Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -34,14 +34,21 @@
 
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
+#include <FL/Fl_Symbol.H>
 #include "flstring.h"
+
+typedef void (* Fl_Draw_Symbol)(Fl_Color);
+typedef int (* Fl_Draw_Symbol_)(int, int, int, int);
+
 
 typedef struct {
   const char *name;
-  void (*drawit)(Fl_Color);
+  void *  drawit;
   char scalable;
   char notempty;
 } SYMBOL;
+
+
 
 #define MAXSYMBOL       211
    /* Maximal number of symbols in table. Only half of them are
@@ -49,6 +56,9 @@ typedef struct {
 
 static SYMBOL symbols[MAXSYMBOL];      /* The symbols */
 static int symbnumb = -1;              /* Their number */
+
+static int symbol_index[MAXSYMBOL/2];
+
 
 static int find(const char *name) {
 // returns hash entry if it exists, or first empty slot:
@@ -74,22 +84,32 @@ static void fl_init_symbols(void);
 
 /**************** The routines seen by the user *************************/
 
-int fl_add_symbol(const char *name, void (*drawit)(Fl_Color), int scalable)
+
+
+static int fl_set_symbol(const char *name, void *drawit, int type)
 /* Adds a symbol to the system. Returns whether correct. */
 {
   fl_init_symbols();
-  int pos;
-  if (symbnumb > MAXSYMBOL / 2) return 0;	// table is full
-  pos = find(name);
+  int pos = find(name);
+  if(! symbols[pos].notempty){
+    if (symbnumb > MAXSYMBOL / 2) return -1;	// table is full
+    symbnumb++;
+  }
   symbols[pos].name = name;
   symbols[pos].drawit = drawit;
   symbols[pos].notempty = 1;
-  symbols[pos].scalable = scalable;
-  symbnumb++;
-  return 1;
+  symbols[pos].scalable = type;
+  return pos;
 }
 
+
+int fl_add_symbol(const char *name, void (*drawit)(Fl_Color), int scalable){
+  return fl_set_symbol(name, (void *)drawit, scalable);
+}
+
+
 int fl_return_arrow(int x,int y,int w,int h);
+
 
 // provided for back compatability:
 int fl_draw_symbol(const char *label,int x,int y,int w,int h,Fl_Color col) {  
@@ -130,7 +150,8 @@ int fl_draw_symbol(const char *label,int x,int y,int w,int h,Fl_Color col) {
   int pos = find(p);
   if (!symbols[pos].notempty) return 0;
   if (symbols[pos].scalable == 3) { // kludge to detect return arrow
-    fl_return_arrow(x,y,w,h);
+    fl_color(col);
+    ((Fl_Draw_Symbol_)symbols[pos].drawit)(x,y,w,h);
     return 1;
   }
   fl_push_matrix();
@@ -140,10 +161,11 @@ int fl_draw_symbol(const char *label,int x,int y,int w,int h,Fl_Color col) {
     fl_scale(0.5*w, 0.5*h);
     fl_rotate(rotangle/10.0);
   }
-  (symbols[pos].drawit)(col);
+  ((Fl_Draw_Symbol)symbols[pos].drawit)(col);
   fl_pop_matrix();
   return 1;
 }
+
 
 /******************** THE DEFAULT SYMBOLS ****************************/
 
@@ -372,43 +394,157 @@ static void draw_menu(Fl_Color col)
   rectangle(-0.65, -0.6, 0.65, -1.0, col);
 }
 
+
+
 static void fl_init_symbols(void) {
   static char beenhere;
   if (beenhere) return;
   beenhere = 1;
   symbnumb = 0;
 
-  fl_add_symbol("",		draw_arrow1,		1);
-  fl_add_symbol("->",		draw_arrow1,		1);
-  fl_add_symbol(">",		draw_arrow2,		1);
-  fl_add_symbol(">>",		draw_arrow3,		1);
-  fl_add_symbol(">|",		draw_arrowbar,		1);
-  fl_add_symbol(">[]",		draw_arrowbox,		1);
-  fl_add_symbol("|>",		draw_bararrow,		1);
-  fl_add_symbol("<-",		draw_arrow01,		1);
-  fl_add_symbol("<",		draw_arrow02,		1);
-  fl_add_symbol("<<",		draw_arrow03,		1);
-  fl_add_symbol("|<",		draw_0arrowbar,		1);
-  fl_add_symbol("[]<",		draw_0arrowbox,		1);
-  fl_add_symbol("<|",		draw_0bararrow,		1);
-  fl_add_symbol("<->",		draw_doublearrow,	1);
-  fl_add_symbol("-->",		draw_arrow,		1);
-  fl_add_symbol("+",		draw_plus,		1);
-  fl_add_symbol("->|",		draw_arrow1bar,		1);
-  fl_add_symbol("arrow",	draw_arrow,		1);
-  fl_add_symbol("returnarrow",	0,			3);
-  fl_add_symbol("square",	draw_square,		1);
-  fl_add_symbol("circle",	draw_circle,		1);
-  fl_add_symbol("line",		draw_line,		1);
-  fl_add_symbol("plus",		draw_plus,		1);
-  fl_add_symbol("menu",		draw_menu,		1);
-  fl_add_symbol("UpArrow",	draw_uparrow,		1);
-  fl_add_symbol("DnArrow",	draw_downarrow,		1);
-  fl_add_symbol("||",		draw_doublebar,		1);
-  fl_add_symbol("search",       draw_search,            1);
-  fl_add_symbol("FLTK",         draw_fltk,              1);
+  fl_set_symbol("",		(void *)draw_arrow1,		1);
+  fl_set_symbol("->",		(void *)draw_arrow1,		1);
+  fl_set_symbol(">",		(void *)draw_arrow2,		1);
+  fl_set_symbol(">>",		(void *)draw_arrow3,		1);
+  fl_set_symbol(">|",		(void *)draw_arrowbar,		1);
+  fl_set_symbol(">[]",		(void *)draw_arrowbox,		1);
+  fl_set_symbol("|>",		(void *)draw_bararrow,		1);
+  fl_set_symbol("<-",		(void *)draw_arrow01,		1);
+  fl_set_symbol("<",		(void *)draw_arrow02,		1);
+  fl_set_symbol("<<",		(void *)draw_arrow03,		1);
+  fl_set_symbol("|<",		(void *)draw_0arrowbar,		1);
+  fl_set_symbol("[]<",		(void *)draw_0arrowbox,		1);
+  fl_set_symbol("<|",		(void *)draw_0bararrow,		1);
+  fl_set_symbol("<->",		(void *)draw_doublearrow,	1);
+  fl_set_symbol("-->",		(void *)draw_arrow,		1);
+  fl_set_symbol("+",		(void *)draw_plus,		1);
+  fl_set_symbol("->|",		(void *)draw_arrow1bar,		1);
+  fl_set_symbol("arrow",	(void *)draw_arrow,		1);
+  fl_set_symbol("returnarrow",	(void *)fl_return_arrow,			3);
+  fl_set_symbol("square",	(void *)draw_square,		1);
+  fl_set_symbol("circle",	(void *)draw_circle,		1);
+  fl_set_symbol("line",		(void *)draw_line,		1);
+  fl_set_symbol("plus",		(void *)draw_plus,		1);
+  fl_set_symbol("menu",		(void *)draw_menu,		1);
+  fl_set_symbol("UpArrow",	(void *)draw_uparrow,		1);
+  fl_set_symbol("DnArrow",	(void *)draw_downarrow,		1);
+  fl_set_symbol("||",		(void *)draw_doublebar,		1);
+  fl_set_symbol("search",       (void *)draw_search,            1);
+  fl_set_symbol("FLTK",         (void *)draw_fltk,              1);
 }
 
+
+
+
+
+Fl_Symbol::Fl_Symbol(void (* draw)(Fl_Color c), char  size, bool square, uchar rot): scale_(size), draw_((void *)draw){
+  if(rot >4)
+    if(rot >6)
+      rot -=2;
+    else 
+      rot=0;
+  type_ = 1 | (rot << 5);
+  if(square) type_ |= 0x10;
+
+};
+
+  // draw functions for these constructors draw dirrectly within x,y,w,h area. If square is set
+  // the dwawimg is resized so that w==h whichever is smaller.and centered in the area
+  // 4 least significant bits of type_ must be unique for particular function. Type nost be even ( |1) it it is scalable
+  // and secind bit (|2) must be set if it is tatat-able. 
+  // Fifth least significant bit ( | 0x10) is used to indicate that the drawing should be square-sized,
+  // three most significant bites of type_ describe rotation angle (if any)
+
+
+ 
+
+
+Fl_Symbol::Fl_Symbol(void (* draw)(int x, int y, int w, int h, Fl_Color c), char size, bool square ):type_(3), scale_(size), draw_((void *)draw){
+  if(square) type_ |= 0x10;
+};
+
+  // Following draw functions are not scalled. x, y coordinates describe center of the symbol and when symbol is drawn
+  // it is placed in the centre of x,y,w,h drawing area.
+Fl_Symbol::Fl_Symbol(void (* draw)(int x, int y, Fl_Color c)):type_(5), scale_(0),  draw_((void *)draw){};
+
+  // Label symbol strings can be used too!. use trailling @ as well, eg Fl_Symbol("@+92->")
+Fl_Symbol::Fl_Symbol(const char * s):type_(6), scale_(0), draw_((void *)s){};
+
+  // Even box-types can be used as symbols!
+Fl_Symbol::Fl_Symbol(Fl_Boxtype box,  char size, bool square): type_(7),  scale_(size), draw_((void *)((long)box)){
+  if(square) type_ |= 0x10;
+};
+
+
+
+typedef void (* Fl_Draw_Symbol_0)();
+typedef void (* Fl_Draw_Symbol_1)(int);
+typedef void (* Fl_Draw_Symbol_2)(int, int, int, int);
+typedef void (* Fl_Draw_Symbol_3)(int, int, int, int, int);
+typedef void (* Fl_Draw_Symbol_4)(int, int);
+typedef void (* Fl_Draw_Symbol_5)(int, int, int);
+
+
+
+
+
+void Fl_Symbol::draw(int x, int y, int w, int h, Fl_Color color){
+  if(!draw_) return;
+  if(type_ & 0x10)
+    if(w>h){
+      x += (w-h)/2;
+      w=h;
+    }else{
+      y += (h-w)/2;
+      h = w;
+    }
+  if(scale_){
+    w += 2 * scale_;
+    h += 2 * scale_;
+    x -= scale_;
+    y -= scale_;
+  };
+  double angle = 0;
+  if(type_ & 0xA0){ // rotation!
+    switch ((type_ & 0xA0) >> 5){
+      case 1: angle = 225; break;
+      case 2: angle = 270; break;
+      case 3: angle = 315; break;
+      case 4: angle = 180; break;
+      case 5: angle = 135; break;
+      case 6: angle = 90; break;
+      case 7: angle = 45;
+    }
+  };
+
+  switch(type_ & 0x0F){
+  case 1:
+    fl_push_matrix();
+    fl_translate(x+w/2,y+h/2);
+    fl_scale(0.5*w, 0.5*h);
+    fl_rotate(angle);
+    ((Fl_Draw_Symbol_1)draw_)(color);
+    fl_pop_matrix();
+    break;
+  case 3:
+    ((Fl_Draw_Symbol_3)draw_)(x, y, w, h, color);
+    break;
+  case 5:
+    ((Fl_Draw_Symbol_5)draw_)(x+w/2, y+h/2, color);
+    break;
+  case 6:
+    fl_draw_symbol((const char *)draw_, x, y, w, h, color);
+    break;
+  case 8:
+    fl_draw_box((Fl_Boxtype) ((long)draw_), x, y, w, h, color);
+  }
+};
+
+
+
+
+
+
 //
-// End of "$Id: fl_symbols.cxx,v 1.8.2.3.2.3.2.9 2004/11/09 01:52:34 rokan Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.8.2.3.2.3.2.10 2005/01/27 21:24:41 rokan Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.8.2.8.2.18.2.7 2004/11/09 01:52:31 rokan Exp $"
+// "$Id: Fl_Group.cxx,v 1.8.2.8.2.18.2.8 2005/01/27 21:24:38 rokan Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -348,16 +348,22 @@ Fl_Group::~Fl_Group() {
   clear();
 }
 
+
 void Fl_Group::insert(Fl_Widget &o, int index) {
   if (o.parent()) {
+
     Fl_Group* g = (Fl_Group*)(o.parent());
     int n = g->find(o);
     if (g == this) {
       if (index > n) index--;
       if (index == n) return;
     }
+    if(! (window()->shown())) //widgets within not shown windows are not style sensitive, need to make damage
+      if(!(FL_DAMAGE_STYLE & o.damage()))  o.redraw_style();
     g->remove(o);
-  }
+  }else //need to do recursive style damage because unattached widgets (which are not in the tree) are not style-sensitive 
+    if(!(FL_DAMAGE_STYLE & o.damage()))  o.redraw_style();
+  
   o.parent_ = this;
   if (children_ == 0) { // use array pointer to point at single child
     array_ = (Fl_Widget**)&o;
@@ -522,11 +528,16 @@ void Fl_Group::draw_children() {
   if (damage() & ~FL_DAMAGE_CHILD) { // redraw the entire thing:
     for (int i=children_; i--;) {
       Fl_Widget& o = **a++;
+      if(FL_DAMAGE_STYLE & o.damage()) o.apply_style();
       draw_child(o);
       draw_outside_label(o);
     }
   } else {	// only redraw the children that need it:
-    for (int i=children_; i--;) update_child(**a++);
+    for (int i=children_; i--;){
+      Fl_Widget& o = **a++;
+      if(FL_DAMAGE_STYLE & o.damage()) o.apply_style();
+      update_child(o);
+    }
   }
 }
 
@@ -591,5 +602,5 @@ void Fl_Group::draw_outside_label(const Fl_Widget& widget) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.8.2.8.2.18.2.7 2004/11/09 01:52:31 rokan Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.8.2.8.2.18.2.8 2005/01/27 21:24:38 rokan Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_GDI_Printer.cxx,v 1.1.2.3 2004/11/24 16:38:15 rokan Exp $"
+// "$Id: Fl_GDI_Printer.cxx,v 1.1.2.4 2005/01/27 21:24:43 rokan Exp $"
 //
 // WIN32 GDI printing device for the Fast Light Tool Kit (FLTK).
 //
@@ -182,7 +182,6 @@ Fl_GDI_Printer::Fl_GDI_Printer(HDC gc, DEVMODE * mode ):Fl_Printer(),/*delete_mo
   }
 
   ResetDC(gc_,mode_);
-  //GlobalUnlock(mode_);
   SetMapMode(gc_, MM_ANISOTROPIC);
   SetTextAlign(gc_, TA_BASELINE|TA_LEFT);
   SetBkMode(gc_, TRANSPARENT);
@@ -252,9 +251,6 @@ void Fl_GDI_Printer::page(double pw, double ph, int media){
   nPages++;
   pw_=pw;
   ph_=ph;
-//  if(pw>ph)
-//    orientation_ = 1;
-  //DEVMODE * mode = (DEVMODE *)GlobalLock(mode_);
   if(ph>pw)
     mode_->dmOrientation = DMORIENT_PORTRAIT;
   else
@@ -265,16 +261,13 @@ void Fl_GDI_Printer::page(double pw, double ph, int media){
     mode_->dmFields |= DM_PAPERLENGTH | DM_PAPERWIDTH;
     mode_->dmFields &= ~DM_PAPERSIZE;
   }
-  //GlobalUnlock(mode_);
   set_page(1);
 };
 
 
 void Fl_GDI_Printer::page(int format){
- // DEVMODE * mode = (DEVMODE *)GlobalLock(mode_);
   if(nPages)
     EndPage(gc_);
-  //DEVMODE * mode = (DEVMODE *)GlobalLock(mode_);
   if(format & LANDSCAPE){
     mode_->dmOrientation = DMORIENT_LANDSCAPE;
     pw_ = page_formats[format & 0xFF][1];
@@ -301,8 +294,6 @@ void Fl_GDI_Printer::page(int format){
     mode_->dmOrientation = DMORIENT_PORTRAIT;
 
   }
- 
-  //GlobalUnlock(mode_);
   set_page(1);
 };
 
@@ -331,7 +322,7 @@ void Fl_GDI_Printer::set_normal(){
 };
 
 //
-// End of "$Id: Fl_GDI_Printer.cxx,v 1.1.2.3 2004/11/24 16:38:15 rokan Exp $"
+// End of "$Id: Fl_GDI_Printer.cxx,v 1.1.2.4 2005/01/27 21:24:43 rokan Exp $"
 //
 
 

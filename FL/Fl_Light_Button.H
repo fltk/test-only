@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.H,v 1.5.2.3.2.2.2.4 2004/03/18 08:00:34 matthiaswm Exp $"
+// "$Id: Fl_Light_Button.H,v 1.5.2.3.2.2.2.5 2005/01/27 21:24:33 rokan Exp $"
 //
 // Lighted button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,17 +38,24 @@
  * when on is controlled with selection_color(), which defaults 
  * to \c FL_YELLOW. */
 class FL_EXPORT Fl_Light_Button : public Fl_Button {
+  FL_STYLE;
+
+
 protected:
     virtual void draw();
+
+
+
+
 public:
-    virtual int handle(int event);
+   virtual int handle(int event);
       /** Creates a new Fl_Light_Button widget using the given \a position, 
        * \a size, and \a label string. */
-    Fl_Light_Button(int x,int y,int width,int height,const char *label = 0);
+  Fl_Light_Button(int x,int y,int width,int height,const char *label = 0);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Light_Button.H,v 1.5.2.3.2.2.2.4 2004/03/18 08:00:34 matthiaswm Exp $".
+// End of "$Id: Fl_Light_Button.H,v 1.5.2.3.2.2.2.5 2005/01/27 21:24:33 rokan Exp $".
 //

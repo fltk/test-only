@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.8.2.11.2.21.2.6 2004/11/25 03:21:18 rokan Exp $"
+// "$Id: Fl.H,v 1.8.2.11.2.21.2.7 2005/01/27 21:24:32 rokan Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -337,6 +337,9 @@ public:
   static Fl_Box_Draw_F *get_boxtype(Fl_Boxtype);
   static void set_boxtype(Fl_Boxtype, Fl_Box_Draw_F*,uchar,uchar,uchar,uchar);
   static void set_boxtype(Fl_Boxtype, Fl_Boxtype from);
+  static Fl_Boxtype add_boxtype(Fl_Box_Draw_F*,uchar,uchar,uchar,uchar);
+  static Fl_Boxtype add_boxtype(Fl_Box_Draw_F* f, uchar a, uchar b, uchar c, uchar d, Fl_Boxtype down_box);
+
   static int box_dx(Fl_Boxtype);
   static int box_dy(Fl_Boxtype);
   static int box_dw(Fl_Boxtype);
@@ -376,10 +379,13 @@ public:
   // Widget deletion:
   static void delete_widget(Fl_Widget *w);
   static void do_widget_deletion();
+
+
+  static void redraw_scheme();
 };
 
 #endif // !Fl_H
 
 //
-// End of "$Id: Fl.H,v 1.8.2.11.2.21.2.6 2004/11/25 03:21:18 rokan Exp $".
+// End of "$Id: Fl.H,v 1.8.2.11.2.21.2.7 2005/01/27 21:24:32 rokan Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.cxx,v 1.4.2.3.2.21.2.3 2004/03/18 08:01:00 matthiaswm Exp $"
+// "$Id: Fl_Light_Button.cxx,v 1.4.2.3.2.21.2.4 2005/01/27 21:24:38 rokan Exp $"
 //
 // Lighted button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -34,6 +34,42 @@
 #include <FL/Fl_Light_Button.H>
 #include <FL/fl_draw.H>
 
+
+void fl_draw_check(int x, int y, int w,int h){
+      int tx = x + 3;
+      int tw = w - 6;
+      int d1 = tw/3;
+      int d2 = tw-d1;
+      int ty = y + (w+d2)/2-d1-2;
+      for (int n = 0; n < 3; n++, ty++) {
+        fl_line(tx, ty, tx+d1, ty+d1);
+        fl_line(tx+d1, ty+d1, tx+tw-1, ty+d1-d2+1);
+      }
+}
+
+/*
+
+void Fl_Light_Button::draw() {
+
+  if (box()) draw_box(this==Fl::pushed() ? fl_down(box()) : box(), color());
+
+  int W  = labelsize();
+  int dy = (h() - W) / 2;
+  int dx = Fl::box_dx(box()) + 2;
+
+  // if (dy < 0) dy = 0;         // neg. offset o.k. for vertical centering
+
+  draw_box(down_box(), x()+dx, y()+dy, W, W, background());
+	if (value()) {
+	   fl_color(value() ? (active_r() ? selection_color() : fl_inactive(selection_color())) : color());
+     symbol_.draw(x()+ dx + Fl::box_dx(down_box()), y()+ dy + Fl::box_dy(down_box()), W - Fl::box_dw(down_box()), W - Fl::box_dh(down_box()));
+	}
+  draw_label(x()+W+2*dx, y(), w()-W-2*dx, h());
+  if (Fl::focus() == this) draw_focus();
+}
+
+*/
+
 void Fl_Light_Button::draw() {
   if (box()) draw_box(this==Fl::pushed() ? fl_down(box()) : box(), color());
   Fl_Color col = value() ? (active_r() ? selection_color() :
@@ -46,6 +82,7 @@ void Fl_Light_Button::draw() {
   dy = (h() - W) / 2;
   // if (dy < 0) dy = 0;         // neg. offset o.k. for vertical centering
 
+
   if (down_box()) {
     // draw other down_box() styles:
     switch (down_box()) {
@@ -55,59 +92,62 @@ void Fl_Light_Button::draw() {
       case _FL_PLASTIC_UP_BOX :
         // Check box...
         draw_box(down_box(), x()+dx, y()+dy, W, W, FL_BACKGROUND2_COLOR);
-	if (value()) {
-	  fl_color(col);
-	  int tx = x() + dx + 3;
-	  int tw = W - 6;
-	  int d1 = tw/3;
-	  int d2 = tw-d1;
-	  int ty = y() + dy + (W+d2)/2-d1-2;
-	  for (int n = 0; n < 3; n++, ty++) {
-	    fl_line(tx, ty, tx+d1, ty+d1);
-	    fl_line(tx+d1, ty+d1, tx+tw-1, ty+d1-d2+1);
-	  }
-	}
+	      if (value()) {
+	        fl_color(col);
+	        int tx = x() + dx + 3;
+	        int tw = W - 6;
+	        int d1 = tw/3;
+	        int d2 = tw-d1;
+	        int ty = y() + dy + (W+d2)/2-d1-2;
+	        for (int n = 0; n < 3; n++, ty++) {
+	          fl_line(tx, ty, tx+d1, ty+d1);
+	          fl_line(tx+d1, ty+d1, tx+tw-1, ty+d1-d2+1);
+	        }
+	      }
         break;
       case _FL_ROUND_DOWN_BOX :
       case _FL_ROUND_UP_BOX :
         // Radio button...
         draw_box(down_box(), x()+dx, y()+dy, W, W, FL_BACKGROUND2_COLOR);
-	if (value()) {
-	  fl_color(col);
-	  int tW = (W - Fl::box_dw(down_box())) / 2 + 1;
-	  if ((W - tW) & 1) tW++; // Make sure difference is even to center
-	  int tdx = dx + (W - tW) / 2;
-	  int tdy = dy + (W - tW) / 2;
+	      if (value()) {
+	        fl_color(col);
+	        int tW = (W - Fl::box_dw(down_box())) / 2 + 1;
+	        if ((W - tW) & 1) tW++; // Make sure difference is even to center
+	        int tdx = dx + (W - tW) / 2;
+	        int tdy = dy + (W - tW) / 2;
 
-	  switch (tW) {
-	    // Larger circles draw fine...
-	    default :
+	        switch (tW) {
+	        // Larger circles draw fine...
+	          default :
               fl_pie(x() + tdx, y() + tdy, tW, tW, 0.0, 360.0);
-	      break;
+	            break;
 
             // Small circles don't draw well on many systems...
-	    case 6 :
-	      fl_rectf(x() + tdx + 2, y() + tdy, tW - 4, tW);
-	      fl_rectf(x() + tdx + 1, y() + tdy + 1, tW - 2, tW - 2);
-	      fl_rectf(x() + tdx, y() + tdy + 2, tW, tW - 4);
-	      break;
+	          case 6 :
+	            fl_rectf(x() + tdx + 2, y() + tdy, tW - 4, tW);
+	            fl_rectf(x() + tdx + 1, y() + tdy + 1, tW - 2, tW - 2);
+	            fl_rectf(x() + tdx, y() + tdy + 2, tW, tW - 4);
+	            break;
 
-	    case 5 :
-	    case 4 :
-	    case 3 :
-	      fl_rectf(x() + tdx + 1, y() + tdy, tW - 2, tW);
-	      fl_rectf(x() + tdx, y() + tdy + 1, tW, tW - 2);
-	      break;
+	          case 5 :
+	          case 4 :
+	          case 3 :
+	            fl_rectf(x() + tdx + 1, y() + tdy, tW - 2, tW);
+	            fl_rectf(x() + tdx, y() + tdy + 1, tW, tW - 2);
+	            break;
 
-	    case 2 :
-	    case 1 :
-	      fl_rectf(x() + tdx, y() + tdy, tW, tW);
-	      break;
-	  }
-	}
+      	    case 2 :
+	          case 1 :
+	            fl_rectf(x() + tdx, y() + tdy, tW, tW);
+	            break;
+	        }
+	      }
         break;
       default :
-        draw_box(down_box(), x()+dx, y()+dy, W, W, col);
+        if(value()) // new code: it allows define the glyph by a pair of boxtypes
+          draw_box(fl_down(down_box()), x()+dx, y()+dy, W, W, col);
+        else
+          draw_box(down_box(), x()+dx, y()+dy, W, W, col);
         break;
     }
   } else {
@@ -129,6 +169,7 @@ void Fl_Light_Button::draw() {
   if (Fl::focus() == this) draw_focus();
 }
 
+
 int Fl_Light_Button::handle(int event) {
   switch (event) {
   case FL_RELEASE:
@@ -138,13 +179,24 @@ int Fl_Light_Button::handle(int event) {
   }
 }
 
+static void rectf(int x, int y, int w, int h){fl_rectf(x,y,w,h);};
+
 Fl_Light_Button::Fl_Light_Button(int X, int Y, int W, int H, const char* l)
-: Fl_Button(X, Y, W, H, l) {
+: Fl_Button(X, Y, W, H, l){
   type(FL_TOGGLE_BUTTON);
-  selection_color(FL_YELLOW);
+  try_selection_color(FL_YELLOW); // we use try_* functions not to set style_flags_
   align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
 }
 
+void Fl_Light_Button::revert_style(){
+  Fl_Button::revert_style();
+  try_selection_color(FL_YELLOW);
+}
+
+#include <FL/Fl_Style.H>
+
+FL_IMPLEMENT_STYLE(Fl_Light_Button);
+
 //
-// End of "$Id: Fl_Light_Button.cxx,v 1.4.2.3.2.21.2.3 2004/03/18 08:01:00 matthiaswm Exp $".
+// End of "$Id: Fl_Light_Button.cxx,v 1.4.2.3.2.21.2.4 2005/01/27 21:24:38 rokan Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.18.2.12.2.19.2.12 2004/11/25 03:21:22 rokan Exp $"
+// "$Id: Fl_Menu.cxx,v 1.18.2.12.2.19.2.13 2005/01/27 21:24:39 rokan Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -116,7 +116,7 @@ int Fl_Menu_Item::measure(int* hp, const Fl_Menu_* m) const {
   l.type    = labeltype_;
   l.font    = labelsize_ || labelfont_ ? labelfont_ : uchar(m ? m->textfont() : FL_HELVETICA);
   l.size    = labelsize_ ? labelsize_ : m ? m->textsize() : (uchar)FL_NORMAL_SIZE;
-  l.color   = FL_BLACK; // this makes no difference?
+  l.color   = FL_FOREGROUND_COLOR; // was:FL_BLACK // this makes no difference? - only with FL_BLACK!
   fl_draw_shortcut = 1;
   int w = 0; int h = 0; l.measure(w, hp ? *hp : h);
   fl_draw_shortcut = 0;
@@ -133,7 +133,7 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
   l.type    = labeltype_;
   l.font    = labelsize_ || labelfont_ ? labelfont_ : uchar(m ? m->textfont() : FL_HELVETICA);
   l.size    = labelsize_ ? labelsize_ : m ? m->textsize() : (uchar)FL_NORMAL_SIZE;
-  l.color   = labelcolor_ ? labelcolor_ : m ? m->textcolor() : int(FL_BLACK);
+  l.color   = labelcolor_ ? labelcolor_ : m ? m->textcolor() : int(FL_FOREGROUND_COLOR); //was:FL_BLACK
   if (!active()) l.color = fl_inactive((Fl_Color)l.color);
   Fl_Color color = m ? m->color() : FL_GRAY;
   if (selected) {
@@ -828,5 +828,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.18.2.12.2.19.2.12 2004/11/25 03:21:22 rokan Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.18.2.12.2.19.2.13 2005/01/27 21:24:39 rokan Exp $".
 //

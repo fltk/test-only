@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 fltkjpeg.lib fltkpng.lib fltkz.lib opengl32.lib wsock32.lib comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll.pdb" /machine:I386 /out:"fltkdll.dll"
+# ADD LINK32 fltkjpeg.lib fltkpng.lib fltkz.lib opengl32.lib wsock32.lib comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll.pdb" /machine:I386 /out:"fltkdll.dll" /libpath:"../lib"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
@@ -80,7 +80,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 fltkjpegd.lib fltkpngd.lib fltkzd.lib opengl32.lib wsock32.lib comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdlld.pdb" /debug /machine:I386 /out:"fltkdlld.dll" /pdbtype:sept
+# ADD LINK32 fltkjpegd.lib fltkpngd.lib fltkzd.lib opengl32.lib wsock32.lib comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdlld.pdb" /debug /machine:I386 /out:"fltkdlld.dll" /pdbtype:sept /libpath:"../lib"
 # SUBTRACT LINK32 /pdb:none /incremental:no
 
 !ENDIF 
@@ -424,6 +424,7 @@ DEP_CPP_FL_BRO=\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
 	
@@ -453,6 +454,7 @@ DEP_CPP_FL_BU=\
 	"..\fl\fl_button.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_style.h"\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	
@@ -2297,12 +2299,22 @@ SOURCE=..\src\Fl_Widget.cxx
 DEP_CPP_FL_WI=\
 	"..\fl\enumerations.h"\
 	"..\fl\fl.h"\
+	"..\fl\fl_browser_.h"\
+	"..\fl\fl_button.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_scheme.h"\
+	"..\fl\fl_scrollbar.h"\
+	"..\fl\fl_slider.h"\
+	"..\fl\fl_style.h"\
 	"..\fl\fl_tooltip.h"\
+	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
+	"..\src\fl_scheme.cxx"\
+	"..\src\flstring.h"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File

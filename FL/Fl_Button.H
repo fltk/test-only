@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.H,v 1.5.2.3.2.4.2.4 2004/03/18 08:00:30 matthiaswm Exp $"
+// "$Id: Fl_Button.H,v 1.5.2.3.2.4.2.5 2005/01/27 21:24:33 rokan Exp $"
 //
 // Button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -51,17 +51,22 @@ extern FL_EXPORT int fl_old_shortcut(const char*);
  * \c FL_KEYBOARD event.
  */
 class FL_EXPORT Fl_Button : public Fl_Widget {
+  FL_STYLE;
 
   int shortcut_;
   char value_;
   char oldval;
   uchar down_box_;
 
+
 protected:
+  uchar style_flags2_;
 
   virtual void draw();
 
+  enum {DOWN_BOX=1};
 public:
+
 
   virtual int handle(int event);
     /** The constructor creates the button using the \a position, \a size, 
@@ -99,7 +104,7 @@ public:
   Fl_Boxtype down_box() const {return (Fl_Boxtype)down_box_;}
     /** Sets the down box type. The default value of 0 causes FLTK to figure out 
      * the correct matching down version of box(). */
-  void down_box(Fl_Boxtype b) {down_box_ = b;}
+  void down_box(Fl_Boxtype b) {down_box_ = b; style_flags2_ |= DOWN_BOX;}
 
     /** \deprecated old way to set shortcut */
   void shortcut(const char *s) {shortcut(fl_old_shortcut(s));}
@@ -107,10 +112,14 @@ public:
   Fl_Color down_color() const {return selection_color();}
     /** \deprecated same as selection_color() */
   void down_color(unsigned c) {selection_color(c);}
+
+  char try_down_box(uchar b){if ((style_flags2_ & DOWN_BOX) || (b == down_box_)) return 0; down_box_ = b; return 1;}
+
+
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Button.H,v 1.5.2.3.2.4.2.4 2004/03/18 08:00:30 matthiaswm Exp $".
+// End of "$Id: Fl_Button.H,v 1.5.2.3.2.4.2.5 2005/01/27 21:24:33 rokan Exp $".
 //

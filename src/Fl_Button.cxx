@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.4.2.6.2.18.2.6 2004/07/27 16:04:25 easysw Exp $"
+// "$Id: Fl_Button.cxx,v 1.4.2.6.2.18.2.7 2005/01/27 21:24:37 rokan Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -24,9 +24,11 @@
 //
 
 #include <FL/Fl.H>
-#include <FL/Fl_Button.H>
+#include <FL/Fl_Tool_Button.H>
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Window.H>
+
+#include <FL/Fl_Style.H>
 
 // There are a lot of subclasses, named Fl_*_Button.  Some of
 // them are implemented by setting the type() value and testing it
@@ -65,6 +67,9 @@ void Fl_Button::draw() {
 }
 
 int Fl_Button::handle(int event) {
+
+  fl_handle_style(event);  // in most cases does highlighting
+
   int newval;
   switch (event) {
   case FL_ENTER:
@@ -149,14 +154,36 @@ int Fl_Button::handle(int event) {
 }
 
 Fl_Button::Fl_Button(int X, int Y, int W, int H, const char *l)
-: Fl_Widget(X,Y,W,H,l) {
-  box(FL_UP_BOX);
-  down_box(FL_NO_BOX);
+: Fl_Widget(X,Y,W,H,l), style_flags2_(0) {
+  try_box(FL_UP_BOX);
+  down_box_ = FL_NO_BOX;
   value_ = oldval = 0;
   shortcut_ = 0;
   set_flag(SHORTCUT_LABEL);
 }
 
+void Fl_Button::revert_style(){
+  Fl_Widget::revert_style();
+  try_box(FL_UP_BOX);
+  try_down_box(FL_NO_BOX);
+}
+
+
+Fl_Tool_Button::Fl_Tool_Button(int x,int y,int w,int h,const char *label):
+  Fl_Button(x,y,w,h,label)
+{
+  try_box(FL_NO_BOX);
+}
+
+void Fl_Tool_Button::revert_style(){
+  Fl_Button::revert_style();
+  try_box(FL_NO_BOX);
+}
+
+
+FL_IMPLEMENT_STYLE(Fl_Button);
+FL_IMPLEMENT_STYLE(Fl_Tool_Button);
+
 //
-// End of "$Id: Fl_Button.cxx,v 1.4.2.6.2.18.2.6 2004/07/27 16:04:25 easysw Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.4.2.6.2.18.2.7 2005/01/27 21:24:37 rokan Exp $".
 //

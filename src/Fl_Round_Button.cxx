@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Round_Button.cxx,v 1.4.2.3.2.4.2.3 2004/03/18 08:01:01 matthiaswm Exp $"
+// "$Id: Fl_Round_Button.cxx,v 1.4.2.3.2.4.2.4 2005/01/27 21:24:40 rokan Exp $"
 //
 // Round button for the Fast Light Tool Kit (FLTK).
 //
@@ -34,9 +34,9 @@ Fl_Round_Button::Fl_Round_Button(int X,int Y,int W,int H, const char *l)
 : Fl_Light_Button(X,Y,W,H,l) {
   box(FL_NO_BOX);
   down_box(FL_ROUND_DOWN_BOX);
-  selection_color(FL_BLACK);
+  selection_color(FL_FOREGROUND_COLOR); //was:FL_BLACK
 }
 
 //
-// End of "$Id: Fl_Round_Button.cxx,v 1.4.2.3.2.4.2.3 2004/03/18 08:01:01 matthiaswm Exp $".
+// End of "$Id: Fl_Round_Button.cxx,v 1.4.2.3.2.4.2.4 2005/01/27 21:24:40 rokan Exp $".
 //

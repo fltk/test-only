@@ -1,5 +1,5 @@
 //
-// "$Id: rect.cxx,v 1.1.2.3 2004/11/25 23:02:26 rokan Exp $"
+// "$Id: rect.cxx,v 1.1.2.4 2005/01/27 21:24:44 rokan Exp $"
 //
 // Rectangle drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -38,6 +38,7 @@ void Fl_Win_Display::rect(int x, int y, int w, int h) {
   fl_pen();
 
 /*
+
   MoveToEx(fl_gc, x, y, 0L); 
   LineTo(fl_gc, x+w-1, y);
   LineTo(fl_gc, x+w-1, y+h-1);
@@ -381,5 +382,5 @@ int Fl_Win_Display::clip_box(int x, int y, int w, int h, int& X, int& Y, int& W,
 }
 
 //
-// End of "$Id: rect.cxx,v 1.1.2.3 2004/11/25 23:02:26 rokan Exp $".
+// End of "$Id: rect.cxx,v 1.1.2.4 2005/01/27 21:24:44 rokan Exp $".
 //

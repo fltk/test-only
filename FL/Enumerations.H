@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.18.2.14.2.28.2.8 2004/03/28 10:30:29 rokan Exp $"
+// "$Id: Enumerations.H,v 1.18.2.14.2.28.2.9 2005/01/27 21:24:32 rokan Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -207,7 +207,7 @@ extern FL_EXPORT Fl_Boxtype fl_define_FL_PLASTIC_UP_BOX();
 #define FL_PLASTIC_THIN_DOWN_BOX (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+5)
 
 // conversions of box types to other boxtypes:
-inline Fl_Boxtype fl_down(Fl_Boxtype b) {return (Fl_Boxtype)(b|1);}
+extern FL_EXPORT Fl_Boxtype fl_down(Fl_Boxtype b);
 inline Fl_Boxtype fl_frame(Fl_Boxtype b) {return (Fl_Boxtype)(b|2);}
 
 // back-compatability box types:
@@ -284,10 +284,14 @@ enum Fl_Font {	// standard fonts
 extern FL_EXPORT int FL_NORMAL_SIZE;
 
 enum Fl_Color {	// standard colors
+  
+  // Features of transparent color should not be normaly plotted
+  FL_TRANSPARENT_COLOR = 0,
+
   // These are used as default colors in widgets and altered as necessary
-  FL_FOREGROUND_COLOR   = 0,
   FL_BACKGROUND2_COLOR  = 7,
   FL_INACTIVE_COLOR	= 8,
+  FL_FOREGROUND_COLOR   = 14,
   FL_SELECTION_COLOR	= 15,
 
   // boxtypes generally limit themselves to these colors so
@@ -375,6 +379,7 @@ enum Fl_Cursor {	// standard cursors
   //FL_CURSOR_WE	= 55,
 };
 
+
 enum { // values for "when" passed to Fl::add_fd()
   FL_READ = 1,
   FL_WRITE = 4,
@@ -405,6 +410,7 @@ enum Fl_Damage {
   FL_DAMAGE_OVERLAY  = 0x08,
   FL_DAMAGE_USER1    = 0x10,
   FL_DAMAGE_USER2    = 0x20,
+  FL_DAMAGE_STYLE    = 0x40,
   FL_DAMAGE_ALL      = 0x80
 };
 
@@ -428,5 +434,5 @@ enum Fl_Device_Type{
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.18.2.14.2.28.2.8 2004/03/28 10:30:29 rokan Exp $".
+// End of "$Id: Enumerations.H,v 1.18.2.14.2.28.2.9 2005/01/27 21:24:32 rokan Exp $".
 //

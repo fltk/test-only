@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.10.2.16.2.16.2.5 2004/07/27 16:04:25 easysw Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.10.2.16.2.16.2.6 2005/01/27 21:24:37 rokan Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -712,7 +712,7 @@ Fl_Browser_::Fl_Browser_(int X, int Y, int W, int H, const char* l)
     scrollbar(0, 0, 0, 0, 0), // they will be resized by draw()
     hscrollbar(0, 0, 0, 0, 0)
 {
-  box(FL_NO_BOX);
+  try_box(FL_NO_BOX);
   align(FL_ALIGN_BOTTOM);
   position_ = real_position_ = 0;
   hposition_ = real_hposition_ = 0;
@@ -720,7 +720,8 @@ Fl_Browser_::Fl_Browser_(int X, int Y, int W, int H, const char* l)
   top_ = 0;
   when(FL_WHEN_RELEASE_ALWAYS);
   selection_ = 0;
-  color(FL_BACKGROUND2_COLOR, FL_SELECTION_COLOR);
+  try_color(FL_BACKGROUND2_COLOR);
+  try_selection_color(FL_SELECTION_COLOR);
   scrollbar.callback(scrollbar_callback);
 //scrollbar.align(FL_ALIGN_LEFT|FL_ALIGN_BOTTOM); // back compatability?
   hscrollbar.callback(hscrollbar_callback);
@@ -734,6 +735,15 @@ Fl_Browser_::Fl_Browser_(int X, int Y, int W, int H, const char* l)
   redraw1 = redraw2 = 0;
   end();
 }
+
+void Fl_Browser_::revert_style(){
+  Fl_Widget::revert_style();
+  try_color(FL_BACKGROUND2_COLOR);
+  try_selection_color(FL_SELECTION_COLOR);
+  try_textcolor(FL_FOREGROUND_COLOR);
+  try_textfont(FL_HELVETICA); 
+  try_textsize(FL_NORMAL_SIZE);
+};
 
 // Default versions of some of the virtual functions:
 
@@ -760,6 +770,10 @@ void Fl_Browser_::item_select(void*, int) {}
 
 int Fl_Browser_::item_selected(void* l) const {return l==selection_;}
 
+#include <FL/Fl_Style.H>
+
+FL_IMPLEMENT_STYLE(Fl_Browser_);
+
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.10.2.16.2.16.2.5 2004/07/27 16:04:25 easysw Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.10.2.16.2.16.2.6 2005/01/27 21:24:37 rokan Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.cxx,v 1.5.2.6.2.11.2.3 2004/03/18 08:00:57 matthiaswm Exp $"
+// "$Id: Fl_Chart.cxx,v 1.5.2.6.2.11.2.4 2005/01/27 21:24:37 rokan Exp $"
 //
 // Forms-compatible chart widget for the Fast Light Tool Kit (FLTK).
 //
@@ -294,7 +294,7 @@ Fl_Widget(X,Y,W,H,l) {
   min = max  = 0;
   textfont_  = FL_HELVETICA;
   textsize_  = 10;
-  textcolor_ = FL_BLACK;
+  textcolor_ = FL_FOREGROUND_COLOR;
   entries    = (FL_CHART_ENTRY *)calloc(sizeof(FL_CHART_ENTRY), FL_CHART_MAX + 1);
 }
 
@@ -384,5 +384,5 @@ void Fl_Chart::maxsize(int m) {
 }
 
 //
-// End of "$Id: Fl_Chart.cxx,v 1.5.2.6.2.11.2.3 2004/03/18 08:00:57 matthiaswm Exp $".
+// End of "$Id: Fl_Chart.cxx,v 1.5.2.6.2.11.2.4 2005/01/27 21:24:37 rokan Exp $".
 //

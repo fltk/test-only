@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.24.2.41.2.55.2.9 2004/11/25 03:21:21 rokan Exp $"
+// "$Id: Fl.cxx,v 1.24.2.41.2.55.2.10 2005/01/27 21:24:35 rokan Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,7 @@
 #include <FL/Fl_Window.H>
 #include <FL/x.H>
 #include <FL/Fl_Tooltip.H>
+#include <FL/Fl_Style.H>
 #include <ctype.h>
 #include <stdlib.h>
 #include "flstring.h"
@@ -355,6 +356,16 @@ void Fl::first_window(Fl_Window* window) {
 void Fl::redraw() {
   for (Fl_X* i = Fl_X::first; i; i = i->next) i->w->redraw();
 }
+
+
+void Fl::redraw_scheme() {
+  for (Fl_X* i = Fl_X::first; i; i = i->next)
+    if(!(FL_DAMAGE_STYLE & i->w->damage())){
+      i->w->redraw_style();
+      i->w->redraw();
+    };
+}
+
 
 void Fl::flush() {
   if (damage()) {
@@ -1040,5 +1051,5 @@ Fl::do_widget_deletion() {
 
 
 //
-// End of "$Id: Fl.cxx,v 1.24.2.41.2.55.2.9 2004/11/25 03:21:21 rokan Exp $".
+// End of "$Id: Fl.cxx,v 1.24.2.41.2.55.2.10 2005/01/27 21:24:35 rokan Exp $".
 //

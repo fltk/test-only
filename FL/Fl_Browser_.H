@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.H,v 1.6.2.4.2.3.2.6 2004/03/18 08:00:28 matthiaswm Exp $"
+// "$Id: Fl_Browser_.H,v 1.6.2.4.2.3.2.7 2005/01/27 21:24:33 rokan Exp $"
 //
 // Common browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -57,6 +57,12 @@
  * operation. 
  */
 class FL_EXPORT Fl_Browser_ : public Fl_Group {
+  FL_STYLE;
+  uchar style_flags2_;
+protected:
+  enum {TEXTCOLOR = 1, TEXTFONT = 2, TEXTSIZE = 3};
+
+private:
   int position_;	// where user wants it scrolled to
   int real_position_;	// the current vertical scrolling position
   int hposition_;	// where user wants it panned to
@@ -221,15 +227,15 @@ public:
     /** Gets the default text font for the lines in the browser. */
   Fl_Font textfont() const {return (Fl_Font)textfont_;}
     /** Sets the default text font to \a font */
-  void textfont(uchar font) {textfont_ = font;}
+  void textfont(uchar font) {textfont_ = font; style_flags2_ |= TEXTFONT;}
     /** Gets the default text size for the lines in the browser. */
   uchar textsize() const {return textsize_;}
     /** Sets the default text size to \a size */
-  void textsize(uchar size) {textsize_ = size;}
+  void textsize(uchar size) {textsize_ = size; style_flags2_ |= TEXTSIZE;}
     /** Gets the default text color for the lines in the browser. */
   Fl_Color textcolor() const {return (Fl_Color)textcolor_;}
     /** Sets the default text color to \c color */
-  void textcolor(unsigned color) {textcolor_ = color;}
+  void textcolor(unsigned color) {textcolor_ = color; style_flags2_ |= TEXTCOLOR;}
 
   static void scrollbar_width(int b) {scrollbar_width_ = b;}
   static int scrollbar_width() {return scrollbar_width_;}
@@ -239,10 +245,15 @@ public:
     /** \deprecated This method moves the vertical scrollbar to the lefthand side of the list. */
   void scrollbar_left() {scrollbar.align(FL_ALIGN_LEFT);}
 
+
+  char try_textcolor(unsigned c){if ((style_flags2_ & TEXTCOLOR) ||(c == textcolor_)) return 0;  textcolor_ = c; return 1;}
+  char try_textfont(uchar f){if ((style_flags2_ & TEXTFONT) || (f == textfont_)) return 0; textfont_ = f; return 1;}
+  char try_textsize(uchar s){if ((style_flags2_ & TEXTSIZE) || (textsize_ == s)) return 0; textsize_ = s; return 1;}
+
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Browser_.H,v 1.6.2.4.2.3.2.6 2004/03/18 08:00:28 matthiaswm Exp $".
+// End of "$Id: Fl_Browser_.H,v 1.6.2.4.2.3.2.7 2005/01/27 21:24:33 rokan Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.8.2.4.2.10.2.3 2004/03/18 08:01:05 matthiaswm Exp $"
+// "$Id: fl_boxtype.cxx,v 1.8.2.4.2.10.2.4 2005/01/27 21:24:41 rokan Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -106,6 +106,7 @@ void fl_thin_down_frame(int x, int y, int w, int h, Fl_Color) {
 
 void fl_thin_down_box(int x, int y, int w, int h, Fl_Color c) {
   fl_thin_down_frame(x,y,w,h,c);
+  if(!c) return;
   fl_color(c); fl_rectf(x+1, y+1, w-2, h-2);
 }
 
@@ -115,6 +116,7 @@ void fl_thin_up_frame(int x, int y, int w, int h, Fl_Color) {
 
 void fl_thin_up_box(int x, int y, int w, int h, Fl_Color c) {
   fl_thin_up_frame(x,y,w,h,c);
+  if(!c) return;
   fl_color(c); fl_rectf(x+1, y+1, w-2, h-2);
 }
 
@@ -135,6 +137,7 @@ void fl_up_frame(int x, int y, int w, int h, Fl_Color) {
 
 void fl_up_box(int x, int y, int w, int h, Fl_Color c) {
   fl_up_frame(x,y,w,h,c);
+  if(!c) return;
   fl_color(c); fl_rectf(x+D1, y+D1, w-D2, h-D2);
 }
 
@@ -152,6 +155,7 @@ void fl_down_frame(int x, int y, int w, int h, Fl_Color) {
 
 void fl_down_box(int x, int y, int w, int h, Fl_Color c) {
   fl_down_frame(x,y,w,h,c);
+  if(!c) return;
   fl_color(c); fl_rectf(x+D1, y+D1, w-D2, h-D2);
 }
 
@@ -161,6 +165,7 @@ void fl_engraved_frame(int x, int y, int w, int h, Fl_Color) {
 
 void fl_engraved_box(int x, int y, int w, int h, Fl_Color c) {
   fl_engraved_frame(x,y,w,h,c);
+  if(!c) return;
   fl_color(c); fl_rectf(x+2, y+2, w-4, h-4);
 }
 
@@ -170,11 +175,13 @@ void fl_embossed_frame(int x, int y, int w, int h, Fl_Color) {
 
 void fl_embossed_box(int x, int y, int w, int h, Fl_Color c) {
   fl_embossed_frame(x,y,w,h,c);
+  if(!c) return;
   fl_color(c); fl_rectf(x+2, y+2, w-4, h-4);
 }
 
 void fl_rectbound(int x, int y, int w, int h, Fl_Color bgcolor) {
   fl_color(FL_BLACK); fl_rect(x, y, w, h);
+  if(!bgcolor) return;
   fl_color(bgcolor); fl_rectf(x+1, y+1, w-2, h-2);
 }
 #define fl_border_box fl_rectbound
@@ -189,7 +196,7 @@ void fl_border_frame(int x, int y, int w, int h, Fl_Color c) {
 static struct {
   Fl_Box_Draw_F *f;
   uchar dx, dy, dw, dh;
-  int set;
+  int set; //set is now used also to describe down_box
 } fl_box_table[256] = {
 // must match list in Enumerations.H!!!
   {fl_no_box,		0,0,0,0,1},		
@@ -254,6 +261,17 @@ Fl_Box_Draw_F *Fl::get_boxtype(Fl_Boxtype t) {
   return fl_box_table[t].f;
 }
 
+Fl_Boxtype fl_down(Fl_Boxtype b) {
+  if (b <FL_FREE_BOXTYPE) return (Fl_Boxtype)(b|1);
+  if (fl_box_table[b].set > 1)
+    return (Fl_Boxtype) fl_box_table[b].set;
+  else
+    return b;
+}
+
+static Fl_Boxtype last_free_boxtype = (Fl_Boxtype)0xFF; //first possible free place, it speeds up searching
+static Fl_Boxtype last_free_double_boxtype = (Fl_Boxtype)0xFE;  
+
 void Fl::set_boxtype(Fl_Boxtype t, Fl_Box_Draw_F* f,
 		      uchar a, uchar b, uchar c, uchar d) {
   fl_box_table[t].f   = f;
@@ -262,7 +280,41 @@ void Fl::set_boxtype(Fl_Boxtype t, Fl_Box_Draw_F* f,
   fl_box_table[t].dy  = b;
   fl_box_table[t].dw  = c;
   fl_box_table[t].dh  = d;
+  if(!f && (t>=FL_FREE_BOXTYPE)){
+      fl_box_table[t].set = 0;
+      if(t>last_free_boxtype)
+        last_free_boxtype = t;
+  };
 }
+
+
+
+Fl_Boxtype Fl::add_boxtype(Fl_Box_Draw_F* f, uchar a, uchar b, uchar c, uchar d, Fl_Boxtype down_box ) {
+  Fl_Boxtype t = last_free_boxtype;
+  while(t>=FL_FREE_BOXTYPE){
+    if(!fl_box_table[t].set){
+      fl_box_table[t].f   = f;
+      if(down_box > 0)
+        fl_box_table[t].set = down_box;
+      else 
+        fl_box_table[t].set = t;
+      fl_box_table[t].dx  = a;
+      fl_box_table[t].dy  = b;
+      fl_box_table[t].dw  = c;
+      fl_box_table[t].dh  = d;
+      last_free_boxtype = (Fl_Boxtype)(t-1);
+    }
+    t = (Fl_Boxtype)(t-1);
+  }
+  return FL_NO_BOX; // signalises no free place!
+}
+
+
+Fl_Boxtype Fl::add_boxtype(Fl_Box_Draw_F* f, uchar a, uchar b, uchar c, uchar d){
+  return add_boxtype(f, a, b, c, d, (Fl_Boxtype)(-1));
+};
+
+
 
 void Fl::set_boxtype(Fl_Boxtype t, Fl_Boxtype f) {
   fl_box_table[t] = fl_box_table[f];
@@ -297,5 +349,5 @@ const {
 }
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.8.2.4.2.10.2.3 2004/03/18 08:01:05 matthiaswm Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.8.2.4.2.10.2.4 2005/01/27 21:24:41 rokan Exp $".
 //

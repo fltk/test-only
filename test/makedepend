@@ -82,16 +82,15 @@ cube.o: ../config.h ../FL/Fl.H ../FL/Enumerations.H ../FL/Fl_Export.H
 cube.o: ../FL/Fl_Window.H ../FL/Fl_Group.H ../FL/Fl_Widget.H ../FL/Fl_Box.H
 cube.o: ../FL/Fl_Button.H ../FL/Fl_Radio_Light_Button.H
 cube.o: ../FL/Fl_Light_Button.H ../FL/Fl_Button.H ../FL/Fl_Slider.H
-cube.o: ../FL/Fl_Valuator.H ../FL/Fl_Gl_Window.H ../FL/Fl_Window.H ../FL/gl.h
+cube.o: ../FL/Fl_Valuator.H
 CubeMain.o: ../config.h ../FL/Fl.H ../FL/Enumerations.H ../FL/Fl_Export.H
 CubeMain.o: CubeViewUI.h ../FL/Fl_Double_Window.H ../FL/Fl_Window.H
 CubeMain.o: ../FL/Fl_Group.H ../FL/Fl_Widget.H ../FL/Fl_Group.H
 CubeMain.o: ../FL/Fl_Roller.H ../FL/Fl_Valuator.H ../FL/Fl_Slider.H
-CubeMain.o: ../FL/Fl_Box.H CubeView.h ../FL/Fl_Gl_Window.H ../FL/gl.h
-CubeMain.o: ../FL/Fl_Value_Slider.H ../FL/Fl_Slider.H
+CubeMain.o: ../FL/Fl_Box.H CubeView.h ../FL/Fl_Value_Slider.H
+CubeMain.o: ../FL/Fl_Slider.H
 CubeView.o: CubeView.h ../config.h ../FL/Fl.H ../FL/Enumerations.H
-CubeView.o: ../FL/Fl_Export.H ../FL/Fl_Gl_Window.H ../FL/Fl_Window.H
-CubeView.o: ../FL/Fl_Group.H ../FL/Fl_Widget.H ../FL/gl.h
+CubeView.o: ../FL/Fl_Export.H ../FL/Fl_Box.H
 cursor.o: ../FL/Fl.H ../FL/Enumerations.H ../FL/Fl_Export.H ../FL/Fl_Window.H
 cursor.o: ../FL/Fl_Group.H ../FL/Fl_Widget.H ../FL/Fl_Hor_Value_Slider.H
 cursor.o: ../FL/Fl_Value_Slider.H ../FL/Fl_Slider.H ../FL/Fl_Valuator.H
@@ -123,7 +122,7 @@ device.o: ../FL/Fl_Browser_.H ../FL/Fl_Scrollbar.H ../FL/Fl_Slider.H
 device.o: ../FL/Fl_Valuator.H ../FL/Fl_File_Icon.H ../FL/Fl.H
 device.o: ../FL/filename.H ../FL/Fl_Box.H ../FL/Fl_Check_Button.H
 device.o: ../FL/Fl_File_Input.H ../FL/Fl_Input.H ../FL/Fl_Input_.H
-device.o: ../FL/Fl_Return_Button.H
+device.o: ../FL/Fl_Return_Button.H ../FL/Fl_Scheme.H ../FL/Fl_Style.H
 doublebuffer.o: ../FL/Fl.H ../FL/Enumerations.H ../FL/Fl_Export.H
 doublebuffer.o: ../FL/Fl_Single_Window.H ../FL/Fl_Window.H ../FL/Fl_Group.H
 doublebuffer.o: ../FL/Fl_Widget.H ../FL/Fl_Double_Window.H ../FL/Fl_Box.H
@@ -190,25 +189,22 @@ forms.o: ../FL/Fl_File_Input.H ../FL/Fl_Input.H ../FL/Fl_Input_.H
 forms.o: ../FL/Fl_Return_Button.H ../FL/fl_ask.H ../FL/Fl_Input.H
 forms.o: ../FL/Fl_Menu_Button.H ../FL/Fl_Positioner.H ../FL/Fl_Value_Slider.H
 forms.o: ../FL/Fl_Timer.H srs.xbm
-fractals.o: ../config.h ../FL/glut.H ../FL/gl.h ../FL/Enumerations.H
-fractals.o: ../FL/Fl_Export.H ../FL/Fl.H ../FL/Fl_Gl_Window.H
-fractals.o: ../FL/Fl_Window.H ../FL/Fl_Group.H ../FL/Fl_Widget.H fracviewer.h
-fractals.o: ../FL/Fl_Button.H ../FL/Fl_Group.H ../FL/Fl_Window.H
+fractals.o: ../config.h ../FL/Fl.H ../FL/Enumerations.H ../FL/Fl_Export.H
+fractals.o: ../FL/fl_message.H ../FL/fl_ask.H
 fullscreen.o: ../config.h ../FL/Fl.H ../FL/Enumerations.H ../FL/Fl_Export.H
 fullscreen.o: ../FL/Fl_Single_Window.H ../FL/Fl_Window.H ../FL/Fl_Group.H
 fullscreen.o: ../FL/Fl_Widget.H ../FL/Fl_Hor_Slider.H ../FL/Fl_Slider.H
 fullscreen.o: ../FL/Fl_Valuator.H ../FL/Fl_Toggle_Light_Button.H
 fullscreen.o: ../FL/Fl_Light_Button.H ../FL/Fl_Button.H ../FL/math.h
-fullscreen.o: ../FL/gl.h ../FL/Fl_Gl_Window.H
+fullscreen.o: ../FL/fl_draw.H ../FL/Fl_Device.H ../FL/Enumerations.H
+fullscreen.o: ../FL/Fl_Widget.H
 gl_overlay.o: ../config.h ../FL/Fl.H ../FL/Enumerations.H ../FL/Fl_Export.H
 gl_overlay.o: ../FL/Fl_Window.H ../FL/Fl_Group.H ../FL/Fl_Widget.H
 gl_overlay.o: ../FL/Fl_Hor_Slider.H ../FL/Fl_Slider.H ../FL/Fl_Valuator.H
 gl_overlay.o: ../FL/Fl_Toggle_Button.H ../FL/Fl_Button.H ../FL/math.h
-gl_overlay.o: ../FL/gl.h ../FL/Fl_Gl_Window.H ../FL/Fl_Window.H
-glpuzzle.o: ../config.h ../FL/glut.H ../FL/gl.h ../FL/Enumerations.H
-glpuzzle.o: ../FL/Fl_Export.H ../FL/Fl.H ../FL/Fl_Gl_Window.H
-glpuzzle.o: ../FL/Fl_Window.H ../FL/Fl_Group.H ../FL/Fl_Widget.H trackball.c
-glpuzzle.o: trackball.h
+gl_overlay.o: ../FL/Fl_Box.H
+glpuzzle.o: ../config.h ../FL/Fl.H ../FL/Enumerations.H ../FL/Fl_Export.H
+glpuzzle.o: ../FL/fl_message.H ../FL/fl_ask.H
 hello.o: ../FL/Fl.H ../FL/Enumerations.H ../FL/Fl_Export.H ../FL/Fl_Window.H
 hello.o: ../FL/Fl_Group.H ../FL/Fl_Widget.H ../FL/Fl_Box.H
 help.o: ../FL/Fl_Help_Dialog.H ../FL/Fl.H ../FL/Enumerations.H
@@ -350,7 +346,7 @@ scroll.o: ../FL/Enumerations.H ../FL/Fl_Widget.H ../FL/math.h
 shape.o: ../config.h ../FL/Fl.H ../FL/Enumerations.H ../FL/Fl_Export.H
 shape.o: ../FL/Fl_Window.H ../FL/Fl_Group.H ../FL/Fl_Widget.H
 shape.o: ../FL/Fl_Hor_Slider.H ../FL/Fl_Slider.H ../FL/Fl_Valuator.H
-shape.o: ../FL/math.h ../FL/gl.h ../FL/Fl_Gl_Window.H ../FL/Fl_Window.H
+shape.o: ../FL/math.h ../FL/Fl_Box.H
 subwindow.o: ../FL/Fl.H ../FL/Enumerations.H ../FL/Fl_Export.H
 subwindow.o: ../FL/Fl_Window.H ../FL/Fl_Group.H ../FL/Fl_Widget.H
 subwindow.o: ../FL/Fl_Toggle_Button.H ../FL/Fl_Button.H

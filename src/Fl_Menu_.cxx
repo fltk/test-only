@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.7.2.8.2.4.2.9 2004/10/25 20:08:34 rokan Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.7.2.8.2.4.2.10 2005/01/27 21:24:40 rokan Exp $"
 //
 // Common menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -173,7 +173,7 @@ Fl_Menu_::Fl_Menu_(int X,int Y,int W,int H,const char* l)
   selection_color(FL_SELECTION_COLOR);
   textfont(FL_HELVETICA);
   textsize((uchar)FL_NORMAL_SIZE);
-  textcolor(FL_BLACK);
+  textcolor(FL_FOREGROUND_COLOR); //was: FL_BLACK
   down_box(FL_NO_BOX);
 }
 
@@ -225,5 +225,5 @@ void Fl_Menu_::clear() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.7.2.8.2.4.2.9 2004/10/25 20:08:34 rokan Exp $".
+// End of "$Id: Fl_Menu_.cxx,v 1.7.2.8.2.4.2.10 2005/01/27 21:24:40 rokan Exp $".
 //

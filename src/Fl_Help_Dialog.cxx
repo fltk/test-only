@@ -129,7 +129,7 @@ Fl_Help_Dialog::Fl_Help_Dialog() {
       o->labeltype(FL_NORMAL_LABEL);
       o->labelfont(0);
       o->labelsize(14);
-      o->labelcolor(FL_BLACK);
+      o->labelcolor(FL_FOREGROUND_COLOR); //was:FL_BLACK
       o->callback((Fl_Callback*)cb_view_);
       o->align(FL_ALIGN_TOP);
       o->when(FL_WHEN_RELEASE);

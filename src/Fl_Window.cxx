@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.6.2.3.2.10.2.4 2004/03/18 08:01:03 matthiaswm Exp $"
+// "$Id: Fl_Window.cxx,v 1.6.2.3.2.10.2.5 2005/01/27 21:24:41 rokan Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -96,6 +96,7 @@ void Fl_Window::draw() {
   int savey = y(); y(0);
   // Make sure we don't draw the window title in the window background...
   Fl_Widget::label(0);
+  if(FL_DAMAGE_STYLE & damage()) apply_style();
   Fl_Group::draw();
   // Restore the label...
   Fl_Widget::label(savelabel);
@@ -127,5 +128,5 @@ Fl_Window *Fl_Window::current() {
 
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.6.2.3.2.10.2.4 2004/03/18 08:01:03 matthiaswm Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.6.2.3.2.10.2.5 2005/01/27 21:24:41 rokan Exp $".
 //

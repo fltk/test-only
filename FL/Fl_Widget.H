@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.9 2004/11/25 03:21:18 rokan Exp $"
+// "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.10 2005/01/27 21:24:34 rokan Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,10 +28,36 @@
 
 #include "Enumerations.H"
 
+
+
 class Fl_Widget;
 class Fl_Window;
 class Fl_Group;
 class Fl_Image;
+class Fl_Style;
+
+
+// FL_STYLE macro is simplified declaration of widget class style. 
+// The best way is to include FL_STYLE at the beginning or at the end of the class declaration.
+
+
+
+
+
+
+#define FL_STYLE \
+private: \
+  static Fl_Style * style_; \
+protected: \
+  void apply_style(); \
+  void revert_style(); \
+public: \
+  static Fl_Style * style(); \
+  static void style(Fl_Style *); \
+private: 
+
+
+
 
 typedef void (Fl_Callback )(Fl_Widget*, void*);
 typedef Fl_Callback* Fl_Callback_p; // needed for BORLAND
@@ -39,6 +65,8 @@ typedef void (Fl_Callback0)(Fl_Widget*);
 typedef void (Fl_Callback1)(Fl_Widget*, long);
 
 struct FL_EXPORT Fl_Label {
+  
+
   const char* value;
   Fl_Image* image;
   Fl_Image* deimage;
@@ -61,7 +89,9 @@ struct FL_EXPORT Fl_Label {
  * redraw() after these. 
  */
 class FL_EXPORT Fl_Widget {
-  friend class Fl_Group;
+ friend class Fl_Group;
+
+
 
   Fl_Group* parent_;
   Fl_Callback* callback_;
@@ -76,6 +106,8 @@ class FL_EXPORT Fl_Widget {
   uchar box_;
   uchar align_;
   uchar when_;
+  uchar style_flags_;
+  
 
   const char *tooltip_;
 
@@ -87,6 +119,10 @@ class FL_EXPORT Fl_Widget {
   Fl_Widget(const Fl_Widget &) {}
 #  endif // !WIN32 || !FL_DLL
 
+protected: 
+  // Following ate bits of user_flags_ which are set when user sets the particular value.
+  // Set bit indicates that the style, when applied, can NOT override previous value.
+  enum {COLOR=1, SELECTION_COLOR=2, BOX=4, LABELTYPE=8, LABELCOLOR=16, LABELFONT=32, LABELSIZE=64, ALIGN=128};
 protected:
 
     /** Creates a widget at the given position and size. The Fl_Widget is a 
@@ -179,13 +215,13 @@ public:
      * \arg \c FL_ALIGN_TEXT_OVER_IMAGE
      * \arg \c FL_ALIGN_TOP
      * \arg \c FL_ALIGN_WRAP \see labeltype(), image(), label() */
-  void align(uchar a) {align_ = a;}
+  void align(uchar a) {align_ = a; style_flags_ |= ALIGN;}
     /** Gets the box type for the widget. \see Fl_Boxtype, color() */
   Fl_Boxtype box() const {return (Fl_Boxtype)box_;}
     /** Sets the box type for the widget, which identifies a routine that draws 
      * the background of the widget. See Box Types for the available types. 
      * The default depends on the widget, but is usually \c FL_NO_BOX or \c FL_UP_BOX. */
-  void box(Fl_Boxtype a) {box_ = a;}
+  void box(Fl_Boxtype a) {box_ = a; style_flags_ |= BOX;}
     /** Gets the background color of the widget. \see selection_color(), box() */
   Fl_Color color() const {return (Fl_Color)color_;}
     /** Sets the background color of the widget. The color is passed to the box routine. 
@@ -193,16 +229,16 @@ public:
      * value generated using fl_rgb_color(). The default for most widgets is \c FL_GRAY. 
      * See the enumeration list for predefined colors. 
      * Use Fl::set_color() to redefine colors. \see selection_color(), box(). label() */
-  void color(unsigned a) {color_ = a;}
+  void color(unsigned a) {color_ = a; style_flags_ |= COLOR;}
     /** Gets the selection color. */
   Fl_Color selection_color() const {return (Fl_Color)color2_;}
     /** Sets the selection color, which is defined for Forms compatibility and is 
      * usually used to color the widget when it is selected, although some widgets use 
      * this color for other purposes. You can set both colors at once with <i>color(a,b)</i>. */
-  void selection_color(unsigned a) {color2_ = a;}
+  void selection_color(unsigned a) {color2_ = a; style_flags_ |= SELECTION_COLOR;}
     /** The two color form sets both the background and selection colors. 
      * See the description of the selection_color() method for more information. \see color() */
-  void color(unsigned a, unsigned b) {color_=a; color2_=b;}
+  void color(unsigned a, unsigned b) {color_=a; color2_=b; style_flags_ |= COLOR | SELECTION_COLOR;}
     /** Get the current label pointer. \see color(), image(), align() */
   const char* label() const {return label_.value;}
     /** Set the current label pointer. The label is shown somewhere on or next 
@@ -213,29 +249,29 @@ public:
     /** Set the current label type and label pointer. \see align(), image() */
   void copy_label(const char* a);
       /** Copies given label to internal buffer. This buffer is fried when label is changed or widget is destroyed. */
-  void label(Fl_Labeltype a,const char* b) {label_.type = a; label_.value = b;}
+  void label(Fl_Labeltype a,const char* b) {label_.type = a; label_.value = b; style_flags_ |= LABELTYPE;}
     /** Gets the labeltype which identifies the function that draws the label of the widget. */
   Fl_Labeltype labeltype() const {return (Fl_Labeltype)label_.type;}
     /** Sets the labeltype which identifies the function that draws the label of
      * the widget. This is generally used for special effects such as embossing 
      * or for using the label() pointer as another form of data such as an icon. 
      * The value \c FL_NORMAL_LABEL prints the label as plain text. \see label(), align() */
-  void labeltype(Fl_Labeltype a) {label_.type = a;}
+  void labeltype(Fl_Labeltype a) {label_.type = a; style_flags_ |= LABELTYPE;}
     /** Gets the label color. \see label(), selectioncolor() */
   Fl_Color labelcolor() const {return (Fl_Color)label_.color;}
     /** Sets the label color. The default color is \c FL_BLACK. \see color() */
-  void labelcolor(unsigned a) {label_.color=a;}
+  void labelcolor(unsigned a) {label_.color=a; style_flags_ |= LABELCOLOR;}
     /** Gets the font to use. \see Fl::set_font() */
   Fl_Font labelfont() const {return (Fl_Font)label_.font;}
     /** Sets the font to use. Fonts are identified by small 8-bit indexes
      * into a table. See the enumeration list for predefined typefaces. 
      * The default value uses a Helvetica typeface (Arial for Microsoft¨ Windows¨). 
      * The function Fl::set_font() can define new typefaces. \see Fl::set_font() */
-  void labelfont(uchar a) {label_.font=a;}
+  void labelfont(uchar a) {label_.font=a;style_flags_ |= LABELFONT;}
     /** Gets the font size in pixels. \see Fl_FontDesc, Fl_FontSize */
   uchar labelsize() const {return label_.size;}
     /** Sets the font size in pixels. The default size is 14 pixels. \see Fl_FontSize*/
-  void labelsize(uchar a) {label_.size=a;}
+  void labelsize(uchar a) {label_.size=a; style_flags_ |= LABELSIZE;}
     /** Gets the image to use as part of the widget label. \see Fl_Image */
   Fl_Image* image() {return label_.image;}
     /** Sets the image to use as part of the widget label. This image is used 
@@ -405,7 +441,34 @@ public:
     /** \deprecated for fltk 1.0 back compatibility */
   Fl_Color color2() const {return (Fl_Color)color2_;}
     /** \deprecated for fltk 1.0 back compatibility */
-  void color2(unsigned new_color) {color2_ = new_color;}
+  void color2(unsigned new_color) {color2_ = new_color; style_flags_ |= SELECTION_COLOR;};
+
+
+    /** Rerturns number of child widgets for group, -1 if it is not a subclass of Fl_Group
+     * and can not have childrens. */
+  virtual int children() const {return -1;}
+  virtual Fl_Widget* const* array() const {return 0;};
+
+  
+  // styled updade subclassess of widget value
+
+protected:
+  virtual void apply_style(){};
+  virtual void revert_style();
+public:
+
+
+  void redraw_style(); // causes to reload style, including all children (id any). Not explicitly used by user
+  bool try_color(unsigned c){if ((style_flags_ & COLOR) || (color_ == c)) return 0; color_ = c; return 1;}
+  bool try_selection_color(unsigned c){if ((style_flags_ & SELECTION_COLOR) || (color2_ == c)) return 0; color2_ = c; return 1;}
+  bool try_box(uchar b){if ((style_flags_ & BOX) || (box_ ==b)) return 0; box_ = b; return 1;}
+  bool try_labeltype(Fl_Labeltype t){if((style_flags_ & LABELTYPE)||(t == label_.type)) return 0; label_.type = t; return 1;}
+  bool try_labelcolor(unsigned c){if ((style_flags_ & LABELCOLOR) ||(c == label_.color)) return 0;  label_.color = c; return 1;}
+  bool try_labelfont(uchar f){if ((style_flags_ & LABELFONT) || (f == label_.font)) return 0; label_.font = f; return 1;}
+  bool try_labelsize(uchar s){if ((style_flags_ & LABELSIZE) || (label_.size == s)) return 0; label_.size = s; return 1;}
+
+
+
 };
 
 // reserved type numbers (necessary for my cheapo RTTI) start here.
@@ -416,5 +479,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.9 2004/11/25 03:21:18 rokan Exp $".
+// End of "$Id: Fl_Widget.H,v 1.6.2.4.2.19.2.10 2005/01/27 21:24:34 rokan Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.15.2.16.2.19.2.4 2004/03/18 08:00:39 matthiaswm Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.15.2.16.2.19.2.5 2005/01/27 21:24:34 rokan Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -1541,6 +1541,7 @@ void Fl_Widget_Type::write_code1() {
 void Fl_Widget_Type::write_color(const char* field, Fl_Color color) {
   const char* color_name = 0;
   switch (color) {
+  case FL_TRANSPARENT_COLOR:	color_name = "FL_TRANSPARENT_COLOR";	break;
   case FL_FOREGROUND_COLOR:	color_name = "FL_FOREGROUND_COLOR";	break;
   case FL_BACKGROUND2_COLOR:	color_name = "FL_BACKGROUND2_COLOR";	break;
   case FL_INACTIVE_COLOR:	color_name = "FL_INACTIVE_COLOR";	break;
@@ -2019,5 +2020,5 @@ int Fl_Widget_Type::read_fdesign(const char* propname, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.15.2.16.2.19.2.4 2004/03/18 08:00:39 matthiaswm Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.15.2.16.2.19.2.5 2005/01/27 21:24:34 rokan Exp $".
 //

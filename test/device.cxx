@@ -645,12 +645,20 @@ public:
   My_Button(int x, int y, int w, int h, const char * label = 0):Fl_Button(x,y,w,h,label){}
 };
 
+
+
+#include <FL/Fl_Scheme.H>
+
 int main(int argc, char ** argv) {
 
+  //Fl::scheme("plastic");
+
+  //Fl_Scheme scheme;
 
 
-    Fl::visual(FL_RGB);
- 
+  //scheme.button->highlighted_color(FL_BLUE);
+  //scheme.button->highlighted_selection_color(FL_RED);
+  //scheme.current();
 
   Fl_Window * w2 = new Fl_Window(500,560,"Graphics test");
 
@@ -665,7 +673,7 @@ int main(int argc, char ** argv) {
 
   make_image();
   Fl_RGB_Image *rgb = new Fl_RGB_Image(image, width, height, 4);
-  My_Button b_rgb(10,245,100,100,"Image w/Alpha");
+  My_Button b_rgb(10,245,100,100,"RGB with alpha");
   b_rgb.image(rgb);
 
   My_Button b_pixmap(10,345,100,100,"Pixmap");
@@ -689,8 +697,9 @@ int main(int argc, char ** argv) {
   but5.labelfont(FL_BOLD|FL_ITALIC);
   but5.labeltype(FL_SHADOW_LABEL);
   but5.box(FL_ROUND_UP_BOX);
+//  but5.selection_color(FL_WHITE);
 
-  Fl_Button but6(360, 460, 120, 30, "Plastic ");
+  Fl_Button but6(360, 460, 120, 30, "Plastic");
   but6.box(FL_PLASTIC_UP_BOX);
 
   //Fl_Button but7(, 480, 120, 30, "Engraved box");
@@ -720,6 +729,7 @@ int main(int argc, char ** argv) {
   Fl_Button *b4 = new Fl_Button(10,5, 150, 25, "Print to PostScript file");
   b4->callback(print,c2);
   Fl_Button *b5 = new Fl_Button(165,5, 90, 25, "Print");
+  b5->tooltip("This is a tooltip");
   b5->callback(print2,c2);
 
   w2->end();

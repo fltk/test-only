@@ -12,7 +12,7 @@
 	0x8e8e3800,
 	0x7171c600,
 	0x8e388e00,
-	0x388e8e00,
+	0x00000000, // was 0x388e8e00, now it is a new enumeration for foreground
 	0x00008000,
 	0xa8a89800,
 	0xe8e8d800,
