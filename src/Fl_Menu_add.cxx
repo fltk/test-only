@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.14 1999/06/20 15:24:30 mike Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.15 1999/07/21 17:28:23 carl Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -35,6 +35,7 @@
 
 #include <FL/Fl_Menu_.H>
 #include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
 
 // If the array is this, we will double-reallocate as necessary:
@@ -61,6 +62,7 @@ static Fl_Menu_Item* insert(
     local_array_alloc = 2*size;
     Fl_Menu_Item* newarray = new Fl_Menu_Item[local_array_alloc];
     memmove(newarray, array, size*sizeof(Fl_Menu_Item));
+    delete[] local_array;
     local_array = array = newarray;
   }
   // move all the later items:
@@ -225,5 +227,5 @@ void Fl_Menu_::remove(int i) {
 }
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.14 1999/06/20 15:24:30 mike Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.15 1999/07/21 17:28:23 carl Exp $".
 //

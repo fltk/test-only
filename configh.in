@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.17 1999/04/12 15:40:22 mike Exp $"
+ * "$Id: configh.in,v 1.18 1999/07/21 17:28:18 carl Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -40,6 +40,9 @@
  *    FL_MOTIF_STYLE    - A style that looks like standard CDE/Motif
  *    FL_SGI_STYLE      - A style that looks like the SGI "Indigo Magic"
  *                        version of Motif.
+ *
+ * This really doesn't do anything yet except change sliders - CET
+ *
  */
 
 #define FL_DEFAULT_STYLE FL_WINDOWS_STYLE
@@ -202,5 +205,5 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define HAVE_POLL 0
 
 /*
- * End of "$Id: configh.in,v 1.17 1999/04/12 15:40:22 mike Exp $".
+ * End of "$Id: configh.in,v 1.18 1999/07/21 17:28:18 carl Exp $".
  */

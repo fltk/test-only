@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.10 1999/04/11 15:34:23 mike Exp $"
+// "$Id: fl_font.cxx,v 1.11 1999/07/21 17:28:24 carl Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -278,6 +278,7 @@ double fl_width(uchar c) {
 }
 
 void fl_draw(const char* str, int n, int x, int y) {
+  if (!fl_xfont) fl_font(0, 14); // Perhaps this should be configured somewhere?
   if (font_gc != fl_gc) {
     font_gc = fl_gc;
     XSetFont(fl_display, fl_gc, fl_xfont->fid);
@@ -292,5 +293,5 @@ void fl_draw(const char* str, int x, int y) {
 #endif
 
 //
-// End of "$Id: fl_font.cxx,v 1.10 1999/04/11 15:34:23 mike Exp $".
+// End of "$Id: fl_font.cxx,v 1.11 1999/07/21 17:28:24 carl Exp $".
 //

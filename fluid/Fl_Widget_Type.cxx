@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.29 1999/04/13 20:18:36 carl Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.30 1999/07/21 17:28:21 carl Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -609,6 +609,15 @@ Fl_Menu_Item whenmenu[] = {
   //{"Release or Enter",0,0,(void*)(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE)},
   {0}};
 
+static Fl_Menu_Item whensymbolmenu[] = {
+  {"FL_WHEN_NEVER",0,0,(void*)(FL_WHEN_NEVER)},
+  {"FL_WHEN_CHANGED",0,0,(void*)(FL_WHEN_CHANGED)},
+  {"FL_WHEN_RELEASE",0,0,(void*)(FL_WHEN_RELEASE)},
+  {"FL_WHEN_RELEASE_ALWAYS",0,0,(void*)(FL_WHEN_RELEASE_ALWAYS)},
+  {"FL_WHEN_ENTER_KEY",0,0,(void*)(FL_WHEN_ENTER_KEY)},
+  {"FL_WHEN_ENTER_KEY_ALWAYS",0,0,(void*)(FL_WHEN_ENTER_KEY_ALWAYS)},
+  {0}};
+
 void when_cb(Fl_Choice* i, void *v) {
   if (v == LOAD) {
     if (current_widget->is_menu_item()) {i->hide(); return;}
@@ -1208,6 +1217,25 @@ static Fl_Button* relative(Fl_Widget* o, int i) {
   return (Fl_Button*)(g->child(g->find(*o)+i));
 }
 
+static Fl_Menu_Item alignmenu[] = {
+  {"FL_ALIGN_CENTER",0,0,(void*)(FL_ALIGN_CENTER)},
+  {"FL_ALIGN_TOP",0,0,(void*)(FL_ALIGN_TOP)},
+  {"FL_ALIGN_BOTTOM",0,0,(void*)(FL_ALIGN_BOTTOM)},
+  {"FL_ALIGN_LEFT",0,0,(void*)(FL_ALIGN_LEFT)},
+  {"FL_ALIGN_RIGHT",0,0,(void*)(FL_ALIGN_RIGHT)},
+  {"FL_ALIGN_INSIDE",0,0,(void*)(FL_ALIGN_INSIDE)},
+  {"FL_ALIGN_CLIP",0,0,(void*)(FL_ALIGN_CLIP)},
+  {"FL_ALIGN_WRAP",0,0,(void*)(FL_ALIGN_WRAP)},
+  {"FL_ALIGN_TOP_LEFT",0,0,(void*)(FL_ALIGN_TOP_LEFT)},
+  {"FL_ALIGN_TOP_RIGHT",0,0,(void*)(FL_ALIGN_TOP_RIGHT)},
+  {"FL_ALIGN_BOTTOM_LEFT",0,0,(void*)(FL_ALIGN_BOTTOM_LEFT)},
+  {"FL_ALIGN_BOTTOM_RIGHT",0,0,(void*)(FL_ALIGN_BOTTOM_RIGHT)},
+  {"FL_ALIGN_LEFT_TOP",0,0,(void*)(FL_ALIGN_LEFT_TOP)},
+  {"FL_ALIGN_RIGHT_TOP",0,0,(void*)(FL_ALIGN_RIGHT_TOP)},
+  {"FL_ALIGN_LEFT_BOTTOM",0,0,(void*)(FL_ALIGN_LEFT_BOTTOM)},
+  {"FL_ALIGN_RIGHT_BOTTOM",0,0,(void*)(FL_ALIGN_RIGHT_BOTTOM)},
+{0}};
+
 void align_cb(Fl_Button* i, void *v) {
   int b = int(long(i->user_data()));
   if (v == LOAD) {
@@ -1793,7 +1821,12 @@ void Fl_Widget_Type::write_code1() {
   if (varused) write_c("{ %s* o = ", t);
   if (name()) write_c("%s = ", name());
   if (is_window()) {
-    write_c("new %s(%d, %d", t, o->w(), o->h());
+    // Handle special case of Fl_Group class type within a window -
+    // output constructor using x, y, w, h...
+    if (strcmp(t, "Fl_Group") == 0)
+      write_c("new %s(0, 0, %d, %d", t, o->w(), o->h());
+    else
+      write_c("new %s(%d, %d", t, o->w(), o->h());
     // prevent type() code from being emitted:
     ((Fl_Widget_Type*)factory)->o->type(o->type());
   } else {
@@ -1978,10 +2011,15 @@ void Fl_Widget_Type::write_widget_code() {
   } else if (ud) {
     write_c("%so->user_data((void*)(%s));\n", indent(), ud);
   }
-  if (o->align() != tp->align())
-    write_c("%so->align(%d);\n", indent(), o->align());
+  if (o->align() != tp->align()) {
+    int i = o->align();
+    write_c("%so->align(%s", indent(),
+            item_name(alignmenu, i & ~FL_ALIGN_INSIDE));
+    if (i & FL_ALIGN_INSIDE) write_c("|FL_ALIGN_INSIDE");
+    write_c(");\n");
+  }
   if (o->when() != tp->when())
-    write_c("%so->when(%d);\n", indent(), o->when());
+    write_c("%so->when(%s);\n", indent(),item_name(whensymbolmenu, o->when()));
   if (!o->visible() && o->parent())
     write_c("%so->hide();\n", indent());
   if (!o->active())
@@ -1994,13 +2032,20 @@ void Fl_Widget_Type::write_widget_code() {
     write_c("%so->tooltip(\"%s\");\n", indent(), tooltip());
 }
 
-void Fl_Widget_Type::write_code2() {
-  indentation -= 2;
-  if (!is_parent() && !varused) return;
+void Fl_Widget_Type::write_extra_code() {
   for (int n=0; n < NUM_EXTRA_CODE; n++)
     if (extra_code(n) && !isdeclare(extra_code(n)))
-      write_c("%s  %s\n", indent(), extra_code(n));
-  write_c("%s}\n", indent());
+      write_c("%s%s\n", indent(), extra_code(n));
+}
+
+void Fl_Widget_Type::write_block_close() {
+  indentation -= 2;
+  if (is_parent() || varused) write_c("%s}\n", indent());
+}
+
+void Fl_Widget_Type::write_code2() {
+  write_extra_code();
+  write_block_close();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -2498,5 +2543,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.29 1999/04/13 20:18:36 carl Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.30 1999/07/21 17:28:21 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Function_Type.cxx,v 1.17 1999/03/31 19:14:19 carl Exp $"
+// "$Id: Fl_Function_Type.cxx,v 1.18 1999/07/21 17:28:20 carl Exp $"
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
 //
@@ -203,9 +203,13 @@ void Fl_Function_Type::write_code1() {
       if (!strcmp(t,"virtual")) {is_virtual = 1; t = 0;}
       else if (!strncmp(t,"virtual ",8)) {is_virtual = 1; t += 8;}
     }
+    char buf[32];
     if (!t) {
-      if (havewidgets) t = "Fl_Window*";
-      else t = "void";
+      if (havewidgets) {
+	strcpy(buf,subclassname(child));
+	strcat(buf,"*");
+	t=buf;
+      } else t = "void";
     }
 
     const char* k = class_name();
@@ -229,7 +233,14 @@ void Fl_Function_Type::write_code1() {
       char s[1024], *sptr = s;
       char *nptr = (char *)name();
 
-      while (*nptr && *nptr != ':') *sptr++ = *nptr++;
+      while (*nptr) {
+        if (*nptr == ':') {
+	  if (nptr[1] != ':') break;
+	  // Copy extra ":" for "class::member"...
+          *sptr++ = *nptr++;
+        }	  
+        *sptr++ = *nptr++;
+      }
       *sptr = '\0';
 
       write_h("%s;\n", s);
@@ -240,7 +251,7 @@ void Fl_Function_Type::write_code1() {
       write_c("%s %s {\n", t, name());
     }
   }
-  if (havewidgets) write_c("  Fl_Window* w;\n");
+  if (havewidgets) write_c("  %s* w;\n",subclassname(child));
   indentation += 2;
 }
 
@@ -439,7 +450,7 @@ void Fl_Decl_Type::write_code1() {
   const char* c = name();
   if (!c) return;
   // handle putting #include or extern into decl:
-  if (!isalpha(*c) || !strncmp(c,"extern",6)) {
+  if ((!isalpha(*c) || !strncmp(c,"extern",6)) && *c != '~') {
     if (public_)
       write_h("%s\n", c);
     else
@@ -539,7 +550,22 @@ void Fl_DeclBlock_Type::write_code2() {
 
 const char* Fl_Type::class_name() const {
   Fl_Type* p = parent;
-  while (p) {if (p->is_class()) return p->name(); p = p->parent;}
+  while (p) {
+    if (p->is_class()) {
+      // see if we are nested in another class, we must fully-qualify name:
+      // this is lame but works...
+      const char* q = p->class_name();
+      if (q) {
+	static char buffer[256];
+	if (q != buffer) strcpy(buffer, q);
+	strcat(buffer, "::");
+	strcat(buffer, p->name());
+	return buffer;
+      }
+      return p->name();
+    }
+    p = p->parent;
+  }
   return 0;
 }
 
@@ -634,5 +660,5 @@ void Fl_Class_Type::write_code2() {
 }
 
 //
-// End of "$Id: Fl_Function_Type.cxx,v 1.17 1999/03/31 19:14:19 carl Exp $".
+// End of "$Id: Fl_Function_Type.cxx,v 1.18 1999/07/21 17:28:20 carl Exp $".
 //
