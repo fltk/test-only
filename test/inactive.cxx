@@ -66,9 +66,15 @@ int main (int argc, char **argv) {
       }
        {fltk::InputBrowser* o = new fltk::InputBrowser(255, 59, 110, 21, "input browser");
         o->begin();
-        new fltk::Item("Moe");
-        new fltk::Item("Larry");
-        new fltk::Item("Curly");
+         {fltk::Item* o = new fltk::Item("Moe");
+          o->set_vertical();
+        }
+         {fltk::Item* o = new fltk::Item("Larry");
+          o->set_vertical();
+        }
+         {fltk::Item* o = new fltk::Item("Curly");
+          o->set_vertical();
+        }
         o->end();
         o->value("Shemp");
       }

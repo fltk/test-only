@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_mac.cxx,v 1.9 2004/12/05 19:28:50 spitzak Exp $"
+// "$Id: fl_draw_image_mac.cxx,v 1.10 2005/01/24 12:03:30 matthiaswm Exp $"
 //
 // MacOS image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -50,10 +50,11 @@ using namespace fltk;
  */
 static void innards(const uchar *buf,
 		    fltk::PixelType pixeltype,
-		    int X, int Y, int W, int H,
+		    const fltk::Rectangle &rect,
 		    int delta, int linedelta,
 		    DrawImageCallback cb, void* userdata)
 {
+  int X = rect.x(), Y = rect.y(), W = rect.w(), H = rect.h();
   if (!linedelta) linedelta = W*delta;
 
   // theoretically, if the current GPort permits, we could write
@@ -256,5 +257,5 @@ static void innards(const uchar *buf,
 }
 
 //
-// End of "$Id: fl_draw_image_mac.cxx,v 1.9 2004/12/05 19:28:50 spitzak Exp $".
+// End of "$Id: fl_draw_image_mac.cxx,v 1.10 2005/01/24 12:03:30 matthiaswm Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.19 2004/12/05 19:28:49 spitzak Exp $"
+// "$Id: Fl_mac.cxx,v 1.20 2005/01/24 12:03:28 matthiaswm Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -908,12 +908,15 @@ const Monitor& Monitor::all() {
     reload_info = false;
     BitMap r;
     GetQDGlobalsScreenBits(&r);
-    monitor.x_ = monitor.work.x_ = r.bounds.left;
-    monitor.y_ = r.bounds.top; monitor.work.y_ = monitor.y_ + 20;
-    monitor.w_ = r.bounds.right - monitor.x_;
-    monitor.h_ = r.bounds.bottom - monitor.y_;
-    monitor.work = monitor;
-    // I don't know if this scale info is available...
+    monitor.set(r.bounds.left, r.bounds.top, 
+                r.bounds.right - r.bounds.left, 
+                r.bounds.bottom - r.bounds.top);
+    //++ there is a wonderful call in Carbon that will return exactly 
+    //++ this information...
+    monitor.work.set(r.bounds.left, r.bounds.top+20, 
+                     r.bounds.right - r.bounds.left, 
+                     r.bounds.bottom - r.bounds.top - 20);
+    //++ I don't know if this scale info is available...
     monitor.depth_ = 32;
     monitor.dpi_x_ = 100;
     monitor.dpi_y_ = 100;
@@ -984,7 +987,7 @@ void fltk::get_mouse(int &x, int &y)
 // Damage all the child windows as well as this one...
 static void recursive_expose(CreatedWindow* i) {
   i->wait_for_expose = false;
-  i->expose(0, 0, i->window->w(), i->window->h());
+  i->expose(Rectangle(0, 0, i->window->w(), i->window->h()));
   for (CreatedWindow* c = i->children; c; c = c->brother) recursive_expose(c);
 }
 
@@ -1606,6 +1609,6 @@ bool fltk::dnd()
 }
 
 //
-// End of "$Id: Fl_mac.cxx,v 1.19 2004/12/05 19:28:49 spitzak Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.20 2005/01/24 12:03:28 matthiaswm Exp $".
 //
 

@@ -34,7 +34,7 @@
 #include <stdlib.h>
 #include <fltk/draw.h>
 
-#ifndef _WIN32
+#if USE_X11
 #include "list_visuals.cxx"
 #include <fltk/visual.h>
 #endif
@@ -158,7 +158,7 @@ void choice_cb(Widget* item, void* data) {
   w->redraw();
 }
 
-#ifndef _WIN32
+#if USE_X11
 int visid = -1;
 int arg(int argc, char **argv, int &i) {
   if (argv[i][1] == 'v') {
@@ -173,7 +173,7 @@ int arg(int argc, char **argv, int &i) {
 
 int main(int argc, char **argv) {
 
-#ifndef _WIN32
+#if USE_X11
   int i = 1;
   if (args(argc,argv,i,::arg) < argc) {
     fprintf(stderr," -v # : use visual\n%s\n",help);
@@ -274,5 +274,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: image.cxx,v 1.23 2005/01/24 08:07:59 spitzak Exp $".
+// End of "$Id: image.cxx,v 1.24 2005/01/24 12:03:30 matthiaswm Exp $".
 //

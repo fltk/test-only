@@ -1,5 +1,5 @@
 //
-// "$Id: fullscreen.cxx,v 1.14 2004/07/24 12:24:10 laza2000 Exp $"
+// "$Id: fullscreen.cxx,v 1.15 2005/01/24 12:03:30 matthiaswm Exp $"
 //
 // Fullscreen test program for the Fast Light Tool Kit (FLTK).
 //
@@ -125,7 +125,7 @@ shape_window::shape_window(int x,int y,int w,int h,const char *l)
 void shape_window::draw() {
   printf("drawing size %d %d\n",w(),h());
   fltk::setcolor(fltk::BLACK);
-  fltk::fillrect(0,0,w(),h());
+  fltk::fillrect(fltk::Rectangle(0,0,w(),h()));
 
   fltk::setcolor(fltk::BLUE);
   fltk::push_matrix();
@@ -281,5 +281,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fullscreen.cxx,v 1.14 2004/07/24 12:24:10 laza2000 Exp $".
+// End of "$Id: fullscreen.cxx,v 1.15 2005/01/24 12:03:30 matthiaswm Exp $".
 //

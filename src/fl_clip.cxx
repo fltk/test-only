@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.27 2005/01/24 08:07:53 spitzak Exp $"
+// "$Id: fl_clip.cxx,v 1.28 2005/01/24 12:03:29 matthiaswm Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -213,7 +213,7 @@ void fltk::clipout(const Rectangle& r1) {
   DeleteObject(region);
 #elif defined(__APPLE__)
   Region current = rstack[rstackptr];
-  if (!current) {current = NewRgb(); SetRectRgn(current, 0,0,16383,16383);}
+  if (!current) {current = NewRgn(); SetRectRgn(current, 0,0,16383,16383);}
   Region region = NewRgn();
   SetRectRgn(region, r.x(), r.y(), r.r(), r.b());
   DiffRgn(current, region, current);
@@ -272,9 +272,9 @@ bool fltk::not_clipped(const Rectangle& rect) {
   rect.left = r.x(); rect.top = r.y(); rect.right = r.r(); rect.bottom = r.b();
   return RectInRegion(r,&rect);
 #elif defined(__APPLE__)
-  Rect rect;
-  rect.left = r.x(); rect.top = r.y(); rect.right = r.r(); rect.bottom = r.b();
-  return RectInRgn(&rect, r);
+  Rect r2;
+  r2.left = r.x(); r2.top = r.y(); r2.right = r.r(); r2.bottom = r.b();
+  return RectInRgn(&r2, region);
 #endif
 }
 
@@ -363,5 +363,5 @@ int fltk::intersect_with_clip(Rectangle& r) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.27 2005/01/24 08:07:53 spitzak Exp $"
+// End of "$Id: fl_clip.cxx,v 1.28 2005/01/24 12:03:29 matthiaswm Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: color_chooser.cxx,v 1.15 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: color_chooser.cxx,v 1.16 2005/01/24 12:03:30 matthiaswm Exp $"
 //
 // Color chooser test program for the Fast Light Tool Kit (fltk).
 //
@@ -119,7 +119,7 @@ int main(int argc, char ** argv) {
 	   " - : default visual\n"
 	   " r : call fltk::visual(fltk::RGB)\n"
 	   " c : call fltk::own_colormap()\n",argv[0]);
-#ifndef _WIN32
+#if USE_X11
     printf(" # : use this visual with an empty colormap:\n");
     list_visuals();
 #endif
@@ -131,7 +131,7 @@ int main(int argc, char ** argv) {
   } else if (argv[i][0] == 'c') {
     fltk::own_colormap();
   } else if (argv[i][0] != '-') {
-#ifndef _WIN32
+#if USE_X11
     int visid = atoi(argv[i]);
     fltk::open_display();
     XVisualInfo templt; int num;
@@ -142,7 +142,7 @@ int main(int argc, char ** argv) {
 				  fltk::xvisual->visual, AllocNone);
     fltk::xpixel(fltk::BLACK); // make sure black is allocated
 #else
-    fltk::fatal("Visual id's not supported on MSWindows");
+    fltk::fatal("Visual id's not supported on this platform");
 #endif
   }
   window.show(argc,argv);
@@ -150,5 +150,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: color_chooser.cxx,v 1.15 2004/03/25 18:13:18 spitzak Exp $".
+// End of "$Id: color_chooser.cxx,v 1.16 2005/01/24 12:03:30 matthiaswm Exp $".
 //

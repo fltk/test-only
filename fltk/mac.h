@@ -1,5 +1,5 @@
 //
-// "$Id: mac.h,v 1.11 2004/06/09 05:38:57 spitzak Exp $"
+// "$Id: mac.h,v 1.12 2005/01/24 12:03:28 matthiaswm Exp $"
 //
 // Mac header file for the Fast Light Tool Kit (FLTK).
 //
@@ -77,7 +77,7 @@ public:
   WindowPtr xid; // used by main windows
   Window* window;
   RgnHandle region; // damage region
-  void expose(int x, int y, int w, int h);
+  void expose(const Rectangle&);
   CreatedWindow* next;
   RgnHandle subRegion; // region which clips out children
   CreatedWindow *children, *brother;
@@ -106,6 +106,6 @@ extern const Widget* cursor_for;
 #endif
 
 //
-// End of "$Id: mac.h,v 1.11 2004/06/09 05:38:57 spitzak Exp $".
+// End of "$Id: mac.h,v 1.12 2005/01/24 12:03:28 matthiaswm Exp $".
 //
 

@@ -254,6 +254,7 @@ fltk::Window* make_window() {
       o->callback((fltk::Callback*)key_cb, (void*)(fltk::Keypad+'9'));
     }
      {fltk::Button* o = new fltk::Button(460, 100, 20, 40, "+");
+      o->set_vertical();
       o->labelsize(10);
       o->callback((fltk::Callback*)key_cb, (void*)(fltk::Keypad+'+'));
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_INSIDE);
@@ -391,6 +392,7 @@ fltk::Window* make_window() {
       o->callback((fltk::Callback*)key_cb, (void*)(fltk::Keypad+'3'));
     }
      {fltk::Button* o = new fltk::Button(460, 140, 20, 40);
+      o->set_vertical();
       o->callback((fltk::Callback*)key_cb, (void*)(fltk::KeypadEnter));
     }
      {fltk::Button* o = new fltk::Button(15, 160, 30, 20, "Ctrl");
@@ -455,97 +457,81 @@ fltk::Window* make_window() {
     }
      {fltk::Button* o = new fltk::Button(400, 15, 20, 10, "shift ");
       o->selection_color((fltk::Color)3);
-      o->selection_textcolor((fltk::Color)56);
       o->labelsize(8);
       o->callback((fltk::Callback*)shift_cb, (void*)(fltk::SHIFT));
     }
      {fltk::Button* o = new fltk::Button(420, 15, 20, 10, "lock ");
       o->selection_color((fltk::Color)3);
-      o->selection_textcolor((fltk::Color)56);
       o->labelsize(8);
       o->callback((fltk::Callback*)shift_cb, (void*)(fltk::CAPSLOCK));
     }
      {fltk::Button* o = new fltk::Button(440, 15, 20, 10, "ctrl");
       o->selection_color((fltk::Color)3);
-      o->selection_textcolor((fltk::Color)56);
       o->labelsize(8);
       o->callback((fltk::Callback*)shift_cb, (void*)(fltk::CTRL));
     }
      {fltk::Button* o = new fltk::Button(460, 15, 20, 10, "alt");
       o->selection_color((fltk::Color)3);
-      o->selection_textcolor((fltk::Color)56);
       o->labelsize(8);
       o->callback((fltk::Callback*)shift_cb, (void*)(fltk::ALT));
     }
      {fltk::Button* o = new fltk::Button(400, 25, 20, 10, "num");
       o->selection_color((fltk::Color)3);
-      o->selection_textcolor((fltk::Color)56);
       o->labelsize(8);
       o->callback((fltk::Callback*)shift_cb, (void*)(fltk::NUMLOCK));
     }
      {fltk::Button* o = new fltk::Button(420, 25, 20, 10, "?");
       o->selection_color((fltk::Color)3);
-      o->selection_textcolor((fltk::Color)56);
       o->labelsize(8);
       o->callback((fltk::Callback*)shift_cb, (void*)(0x20));
     }
      {fltk::Button* o = new fltk::Button(440, 25, 20, 10, "meta");
       o->selection_color((fltk::Color)3);
-      o->selection_textcolor((fltk::Color)56);
       o->labelsize(8);
       o->callback((fltk::Callback*)shift_cb, (void*)(fltk::META));
     }
      {fltk::Button* o = new fltk::Button(460, 25, 20, 10, "sclk");
       o->selection_color((fltk::Color)3);
-      o->selection_textcolor((fltk::Color)56);
       o->labelsize(8);
       o->callback((fltk::Callback*)shift_cb, (void*)(fltk::SCROLLLOCK));
     }
      {fltk::Button* o = new fltk::Button(400, 35, 20, 10, "b1");
       o->selection_color((fltk::Color)3);
-      o->selection_textcolor((fltk::Color)56);
       o->labelsize(8);
       o->callback((fltk::Callback*)shift_cb, (void*)(fltk::BUTTON1));
     }
      {fltk::Button* o = new fltk::Button(420, 35, 20, 10, "b2");
       o->selection_color((fltk::Color)3);
-      o->selection_textcolor((fltk::Color)56);
       o->labelsize(8);
       o->callback((fltk::Callback*)shift_cb, (void*)(fltk::BUTTON2));
     }
      {fltk::Button* o = new fltk::Button(440, 35, 20, 10, "b3");
       o->selection_color((fltk::Color)3);
-      o->selection_textcolor((fltk::Color)56);
       o->labelsize(8);
       o->callback((fltk::Callback*)shift_cb, (void*)(fltk::BUTTON3));
     }
      {fltk::Button* o = new fltk::Button(460, 35, 20, 10, "?");
       o->selection_color((fltk::Color)3);
-      o->selection_textcolor((fltk::Color)56);
       o->labelsize(8);
       o->callback((fltk::Callback*)shift_cb, (void*)(0x800));
     }
      {fltk::Button* o = new fltk::Button(400, 45, 20, 10, "?");
       o->selection_color((fltk::Color)3);
-      o->selection_textcolor((fltk::Color)56);
       o->labelsize(8);
       o->callback((fltk::Callback*)shift_cb, (void*)(0x1000));
     }
      {fltk::Button* o = new fltk::Button(420, 45, 20, 10, "?");
       o->selection_color((fltk::Color)3);
-      o->selection_textcolor((fltk::Color)56);
       o->labelsize(8);
       o->callback((fltk::Callback*)shift_cb, (void*)(0x2000));
     }
      {fltk::Button* o = new fltk::Button(440, 45, 20, 10, "?");
       o->selection_color((fltk::Color)3);
-      o->selection_textcolor((fltk::Color)56);
       o->labelsize(8);
       o->callback((fltk::Callback*)shift_cb, (void*)(0x4000));
     }
      {fltk::Button* o = new fltk::Button(460, 45, 20, 10, "?");
       o->selection_color((fltk::Color)3);
-      o->selection_textcolor((fltk::Color)56);
       o->labelsize(8);
       o->callback((fltk::Callback*)shift_cb, (void*)(0x8000));
     }

@@ -1,5 +1,5 @@
 //
-// "$Id: math.h,v 1.10 2003/07/02 07:28:13 spitzak Exp $"
+// "$Id: math.h,v 1.11 2005/01/24 12:03:28 matthiaswm Exp $"
 //
 // The purpose of this header file is to make math.h look the same as
 // Unix on other operating systems.
@@ -59,34 +59,34 @@
 # define rintf(v)	floorf((v)+.5f)
 #endif
 #if defined(__APPLE__) || defined(__sun__)
-# define floorf(a)	floor(a)
-# define ceilf(a)	ceil(a)
-# define fmodf(a,b)	fmod(a,b)
+# define floorf(a)	((float)floor(a))
+# define ceilf(a)	((float)ceil(a))
+# define fmodf(a,b)	((float)fmod(a,b))
 # undef fabsf
-# define fabsf(a)	fabs(a)
-# define sinf(a)	sin(a)
-# define cosf(a)	cos(a)
-# define tanf(a)	tan(a)
-# define asinf(a)	asin(a)
-# define acosf(a)	acos(a)
-# define atanf(a)	atan(a)
-# define atan2f(a,b)	atan2(a,b)
-# define expf(a)	exp(a)
-# define logf(a)	log(a)
-# define log10f(a)	log10(a)
+# define fabsf(a)	((float)fabs(a))
+# define sinf(a)	((float)sin(a))
+# define cosf(a)	((float)cos(a))
+# define tanf(a)	((float)tan(a))
+# define asinf(a)	((float)asin(a))
+# define acosf(a)	((float)acos(a))
+# define atanf(a)	((float)atan(a))
+# define atan2f(a,b)	((float)atan2(a,b))
+# define expf(a)	((float)exp(a))
+# define logf(a)	((float)log(a))
+# define log10f(a)	((float)log10(a))
 # undef sqrtf
-# define sqrtf(a)	sqrt(a)
+# define sqrtf(a)	((float)sqrt(a))
 #endif
 #ifdef __alpha // powf is broken on alphas, at least in gcc
-# define powf(a,b)	pow(a,b)
+# define powf(a,b)	((float)pow(a,b))
 #endif
 #ifdef _WIN32
-# define expm1f(a)	expm1(a)
-# define log1pf(a)	log1p(a)
+# define expm1f(a)	((float)expm1(a))
+# define log1pf(a)	((float)log1p(a))
 #endif
 
 #endif
 
 //
-// End of "$Id: math.h,v 1.10 2003/07/02 07:28:13 spitzak Exp $".
+// End of "$Id: math.h,v 1.11 2005/01/24 12:03:28 matthiaswm Exp $".
 //
