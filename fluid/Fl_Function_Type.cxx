@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Function_Type.cxx,v 1.33 2001/03/28 19:46:07 robertk Exp $"
+// "$Id: Fl_Function_Type.cxx,v 1.34 2001/04/10 16:35:23 robertk Exp $"
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
 //
@@ -38,6 +38,8 @@
 static char buffer[128]; // for error messages
 
 const char *strip_default_args(const char *name) {
+	if(!strchr(name, '='))
+		return name;
 	static char *buffer = NULL;
 	static size_t bufsize = 0;
 	if(!bufsize || bufsize < strlen(name) + 1) {
@@ -47,6 +49,7 @@ const char *strip_default_args(const char *name) {
 		if(buffer) bufsize = allocsize;
 	}
 	if(buffer) {
+		memset(buffer, 0, bufsize);
 		char *pbuff = buffer;
 		const char *pname = name;
 		int skipping = 0;
@@ -802,5 +805,5 @@ void Fl_Class_Type::write_code() {
 }
 
 //
-// End of "$Id: Fl_Function_Type.cxx,v 1.33 2001/03/28 19:46:07 robertk Exp $".
+// End of "$Id: Fl_Function_Type.cxx,v 1.34 2001/04/10 16:35:23 robertk Exp $".
 //
