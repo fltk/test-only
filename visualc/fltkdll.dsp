@@ -2356,6 +2356,7 @@ DEP_CPP_FL_LI=\
 	"..\FL\Fl.H"\
 	"..\FL\Fl_Boxtype.H"\
 	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Check_Button.H"\
 	"..\FL\Fl_Color.H"\
 	"..\fl\fl_export.h"\
 	"..\FL\Fl_Flags.H"\
@@ -2376,6 +2377,34 @@ SOURCE=..\FL\Fl_Light_Button.H
 # Begin Source File
 
 SOURCE=..\Fl\Fl_Line_Dial.H
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_line_style.cxx
+
+!IF  "$(CFG)" == "fltkdll - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
+
+DEP_CPP_FL_LIN=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 

@@ -509,6 +509,10 @@ SOURCE=..\Fl\Fl_Line_Dial.H
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\fl_line_style.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\fl_load_plugin.cxx
 # End Source File
 # Begin Source File

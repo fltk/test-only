@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.81 1999/12/15 08:31:01 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.82 1999/12/16 20:47:01 vincent Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -59,6 +59,7 @@
 
 #ifndef WM_MOUSEWHEEL
 #  define WM_MOUSEWHEEL 0x020a
+#  define TRACKMOUSEEVENTUNDEFINED
 #endif
 
 #ifdef _MSVC_VER
@@ -80,7 +81,11 @@ typedef struct tagTRACKMOUSEEVENT {
 
 
 bool have_TrackMouseEvent = 1;
+#if defined(__MINGW32__) || defined(__CYGWIN32__)
+BOOL WINAPI (*ptTrackMouseEvent)(LPTRACKMOUSEEVENT);
+#else
 BOOL (*ptTrackMouseEvent)(LPTRACKMOUSEEVENT);
+#endif
 void check_TrackMouseEvent() {
   HINSTANCE lib;
   lib = LoadLibrary("User32");
@@ -914,5 +919,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.81 1999/12/15 08:31:01 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.82 1999/12/16 20:47:01 vincent Exp $".
 //
