@@ -1,5 +1,5 @@
 //
-// "$Id: shortcuts.cxx,v 1.2 2004/11/21 05:41:48 spitzak Exp $"
+// "$Id: shortcuts.cxx,v 1.3 2004/11/21 07:44:58 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -279,13 +279,12 @@ fltk::list_shortcuts(unsigned key, unsigned& count) {
     SCROLL_LOCK to be on, but one without it does not require it to
     be off. If there are several matches the numerically-highest
     one is chosen.
-  - If the key does not match fltk::event_key(), then the first letter
-    of fltk::event_text() is tried instead, converted to lower-case
-    if it is a capital letter.  In this case SHIFT can be
-    held down even if not indicated. This means that '#' or SHIFT+'#'
-    can be used instead of Shift+'3'. It means '3' will match both the
-    main keyboard and the keypad. Key combinations that produce letters
-    will match even if the keysym does not match.
+  - If no shortcut matches fltk::event_key(), then the first letter
+    of fltk::event_text() is converted to upper-case and tried instead,
+    and SHIFT can be held down even if the shortcut does not indicate
+    it. This means that a shortcut that is a capital 'A' will match
+    the 'a' key, and '3' will match both the main and keypad 3, and
+    a shortcut of '#' or SHIFT+'#' will work.
 */
 const ShortcutAssignment*
 fltk::list_matching_shortcuts(unsigned& count) {
@@ -448,6 +447,6 @@ bool Widget::test_shortcut(bool test_label) const {
   return false;
 }
 
-// End of $Id: shortcuts.cxx,v 1.2 2004/11/21 05:41:48 spitzak Exp $
+// End of $Id: shortcuts.cxx,v 1.3 2004/11/21 07:44:58 spitzak Exp $
 
 

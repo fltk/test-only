@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.32 2004/11/20 17:08:03 leka Exp $"
+// "$Id: fl_vertex.cxx,v 1.33 2004/11/21 07:44:58 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -131,11 +131,10 @@ x 0 0
 0 0 1
 \endcode
 */
-void fltk::scale(float x, float y) {
-  if (x != 1.0 || y != 1.0) 
+void fltk::scale(float x,float y) {
+  if (x != 1.0 || y != 1.0)
     concat(x, 0, 0, y, 0, 0);
 }
-
 
 /*! Scale the current transformation by multiplying it by
 \code
@@ -810,5 +809,5 @@ void fltk::fillstrokepath(Color color) {
 /** \} */
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.32 2004/11/20 17:08:03 leka Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.33 2004/11/21 07:44:58 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_key_name.cxx,v 1.15 2004/11/21 05:41:48 spitzak Exp $"
+// "$Id: Fl_key_name.cxx,v 1.16 2004/11/21 07:44:58 spitzak Exp $"
 //
 // Turn a fltk (X) keysym + fltk shift flags into a human-readable string.
 //
@@ -81,10 +81,9 @@ static Keyname table[] = {
 FL_API int fl_key_name_uppercase = 1;
 
 /*!
-  Unparse a key such as a value returned by fltk::event_key(), or a
-  key or'd with shift flags (such as returned by fltk::event_state())
-  used as the value of fltk::Widget::hotkey(). Returns a pointer to a
-  human-readable string like "Alt+N". If the hotkey is zero an empty
+  Unparse a fltk::Widget::shortcut() or fltk::event_key() value into
+  human-readable text. Returns a pointer to a
+  human-readable string like "Alt+N". If \a hotkey is zero an empty
   string is returned. The return value points at a static buffer that
   is overwritten with each call.
 
@@ -195,5 +194,5 @@ unsigned fltk::key(const char* name) {
 }
 
 //
-// End of "$Id: Fl_key_name.cxx,v 1.15 2004/11/21 05:41:48 spitzak Exp $"
+// End of "$Id: Fl_key_name.cxx,v 1.16 2004/11/21 07:44:58 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: events.doc,v 1.1 2004/02/05 07:18:28 spitzak Exp $"
+// "$Id: events.doc,v 1.2 2004/11/21 07:44:57 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -351,7 +351,7 @@ using namespace fltk;
   click. Only false works, attempts to set this true are ignored.
 */
 
-/*! \fn int  fltk::event_state()
+/*! \fn unsigned fltk::event_state()
 
   This is a bitfield of what shift states were on and what mouse
   buttons were held down during the most recent event. The flags
@@ -368,15 +368,15 @@ using namespace fltk;
   fltk only fixes this bug for the mouse buttons.
 */
 
-/*! \fn bool fltk::event_state(int i)
-  Same as event_state()&i, returns true if any of the passed bits were
+/*! \fn bool fltk::event_state(unsigned mask)
+  Same as event_state()&mask, returns true if any of the passed bits were
   turned on during the last event. So doing event_state(SHIFT) will
   return true if the shift keys are held down. This is provided to
   make the calling code easier to read.  The flags to pass are
   described under fltk::SHIFT.
 */
 
-/*! \fn int  fltk::event_key()
+/*! \fn unsigned fltk::event_key()
   Returns which key on the keyboard was last pushed. Most non-keyboard
   events set this to values that do not correspond to any keys, so you
   can test this in callbacks without having to test first if the event
@@ -384,7 +384,7 @@ using namespace fltk;
   fltk::SpaceKey.
 */
 
-/*! \fn int  fltk::event_button()
+/*! \fn unsigned fltk::event_button()
   Returns which mouse button was pressed or released by a PUSH or
   RELEASE event. Returns garbage for other events, so be careful (this
   actually is the same as event_key(), the buttons have been assigned
@@ -401,7 +401,7 @@ using namespace fltk;
   Under X this is the result of calling XLookupString().
 */
 
-/*! \fn int  fltk::event_length()
+/*! \fn unsigned fltk::event_length()
   Returns the length of the text in fltk::event_text(). There will
   always be a nul at this position in the text. However there may be a
   nul before that if the keystroke translates to a nul character or

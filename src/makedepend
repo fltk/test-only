@@ -63,6 +63,12 @@ Fl_Color_Chooser.o: ../fltk/Valuator.h ../fltk/FloatInput.h
 Fl_Color_Chooser.o: ../fltk/NumericInput.h ../fltk/Input.h ../fltk/layout.h
 Fl_Color_Chooser.o: ../fltk/Window.h ../fltk/ReturnButton.h ../fltk/Button.h
 Fl_Color_Chooser.o: ../fltk/ask.h
+Fl_Combo_Box.o: ../fltk/ComboBox.h ../fltk/Choice.h ../fltk/Menu.h
+Fl_Combo_Box.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h
+Fl_Combo_Box.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
+Fl_Combo_Box.o: ../fltk/Input.h ../fltk/events.h ../fltk/damage.h
+Fl_Combo_Box.o: ../fltk/Box.h ../fltk/Symbol.h ../fltk/draw.h
+Fl_Combo_Box.o: ../fltk/string.h
 CycleButton.o: ../fltk/CycleButton.h ../fltk/Menu.h ../fltk/Group.h
 CycleButton.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
 CycleButton.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Button.h
@@ -329,8 +335,8 @@ fl_arc.o: ../config.h ../fltk/x.h ../fltk/draw.h ../fltk/Flags.h
 fl_arc.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/draw.h ../fltk/math.h
 fl_arci.o: ../config.h ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h
 fl_arci.o: ../fltk/FL_API.h ../fltk/math.h ../fltk/x.h ../fltk/draw.h
-fl_ask.o: ../fltk/events.h ../fltk/FL_API.h ../fltk/draw.h ../fltk/Flags.h
-fl_ask.o: ../fltk/Color.h ../fltk/ask.h ../fltk/Style.h ../fltk/Button.h
+fl_ask.o: ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h ../fltk/FL_API.h
+fl_ask.o: ../fltk/ask.h ../fltk/Style.h ../fltk/Button.h
 fl_ask.o: ../fltk/ReturnButton.h ../fltk/Button.h ../fltk/Widget.h
 fl_ask.o: ../fltk/Window.h ../fltk/Group.h ../fltk/Input.h
 fl_ask.o: ../fltk/SecretInput.h ../fltk/Input.h ../fltk/string.h
@@ -416,6 +422,8 @@ Fl_Shared_Image.o: ../fltk/xbmImage.h ../fltk/x.h ../fltk/draw.h
 fl_shadow_box.o: ../fltk/Box.h ../fltk/Color.h ../fltk/FL_API.h
 fl_shadow_box.o: ../fltk/Flags.h ../fltk/Symbol.h ../fltk/Style.h
 fl_shadow_box.o: ../fltk/draw.h
+shortcuts.o: ../config.h ../fltk/events.h ../fltk/FL_API.h ../fltk/Widget.h
+shortcuts.o: ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h ../fltk/string.h
 fl_show_colormap.o: ../fltk/show_colormap.h ../fltk/FL_API.h ../fltk/Color.h
 fl_show_colormap.o: ../fltk/Flags.h ../fltk/MenuWindow.h ../fltk/Window.h
 fl_show_colormap.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h
