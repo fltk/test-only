@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.H,v 1.12 1999/05/06 05:52:07 carl Exp $"
+// "$Id: Fl_Browser_.H,v 1.13 1999/06/15 17:02:24 gustavo Exp $"
 //
 // Common browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -75,7 +75,6 @@ public:
     { mstyle(&_style); *((Style*)_style) = *((Style*)o->style()); }
 
   virtual void loadstyle() const;
-  void resize(int,int,int,int);
 
   int select(void *,int=1,int docallbacks=0);
   int select_only(void *,int docallbacks=0);
@@ -155,6 +154,7 @@ protected:
   void draw(int,int,int,int);
   int handle(int,int,int,int,int);
 
+  void layout();
   void draw();
   int handle(int);
   Fl_Browser_(int,int,int,int,const char * = 0);
@@ -182,5 +182,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser_.H,v 1.12 1999/05/06 05:52:07 carl Exp $".
+// End of "$Id: Fl_Browser_.H,v 1.13 1999/06/15 17:02:24 gustavo Exp $".
 //

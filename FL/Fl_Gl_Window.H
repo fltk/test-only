@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.H,v 1.7 1999/02/16 21:59:38 mike Exp $"
+// "$Id: Fl_Gl_Window.H,v 1.8 1999/06/15 17:02:25 gustavo Exp $"
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
@@ -47,13 +47,16 @@ class Fl_Gl_Window : public Fl_Window {
   static FL_EXPORT int can_do(int, const int *);
   FL_EXPORT int mode(int, const int *);
 
+protected:
+
+  FL_EXPORT void layout();
+
 public:
 
   FL_EXPORT void show();
   void show(int a, char **b) {Fl_Window::show(a,b);}
   FL_EXPORT void flush();
   FL_EXPORT void hide();
-  FL_EXPORT void resize(int,int,int,int);
 
   char valid() const {return valid_;}
   void valid(char i) {valid_ = i;}
@@ -84,5 +87,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.H,v 1.7 1999/02/16 21:59:38 mike Exp $".
+// End of "$Id: Fl_Gl_Window.H,v 1.8 1999/06/15 17:02:25 gustavo Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.20 1999/05/06 05:52:09 carl Exp $"
+// "$Id: Fl_Widget.H,v 1.21 1999/06/15 17:02:27 gustavo Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -52,6 +52,7 @@ struct Fl_Label {
 
 class Fl_Widget {
   friend class Fl_Group;
+  friend class Fl_Tile;// must call layout() too...
 
 public:
   enum Attribute {
@@ -132,7 +133,7 @@ public:
   int y() const {return y_;}
   int w() const {return w_;}
   int h() const {return h_;}
-  virtual void resize(int,int,int,int);
+  void resize(int,int,int,int);
   int damage_resize(int,int,int,int);
   void position(int X,int Y) {resize(X,Y,w_,h_);}
   void size(int W,int H) {resize(x_,y_,W,H);}
@@ -236,6 +237,7 @@ protected:
   void y(int v) {y_ = v;}
   void w(int v) {w_ = v;}
   void h(int v) {h_ = v;}
+  virtual void layout();
 
   void set_flag(unsigned short c) {flags_ |= c;}
   void clear_flag(unsigned c) {flags_ &= ~c;}
@@ -277,5 +279,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.20 1999/05/06 05:52:09 carl Exp $".
+// End of "$Id: Fl_Widget.H,v 1.21 1999/06/15 17:02:27 gustavo Exp $".
 //

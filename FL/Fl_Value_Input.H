@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.H,v 1.9 1999/03/18 22:58:57 carl Exp $"
+// "$Id: Fl_Value_Input.H,v 1.10 1999/06/15 17:02:26 gustavo Exp $"
 //
 // Value input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,6 @@ public:
   virtual void loadstyle() const { input.loadstyle(); }
   int handle(int);
   void draw();
-  void resize(int,int,int,int);
   Fl_Value_Input(int x,int y,int w,int h,const char *l=0);
   ~Fl_Value_Input() { _style = 0; } // so that it doesn't get free()ed twice!
 
@@ -60,6 +59,9 @@ public:
   Fl_Color cursor_color() const {return input.cursor_color();}
   void cursor_color(uchar n) {input.cursor_color(n);}
 
+protected:
+  void layout();
+
 private:
   char soft_;
   static void input_cb(Fl_Widget*,void*);
@@ -69,5 +71,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Value_Input.H,v 1.9 1999/03/18 22:58:57 carl Exp $".
+// End of "$Id: Fl_Value_Input.H,v 1.10 1999/06/15 17:02:26 gustavo Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.H,v 1.7 1999/02/16 21:59:37 mike Exp $"
+// "$Id: Fl_Double_Window.H,v 1.8 1999/06/15 17:02:25 gustavo Exp $"
 //
 // Double-buffered window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,11 +31,11 @@
 class Fl_Double_Window : public Fl_Window {
 protected:
   FL_EXPORT void flush(int eraseoverlay);
+  FL_EXPORT void layout();
 public:
   FL_EXPORT void show();
   void show(int a, char **b) {Fl_Window::show(a,b);}
   FL_EXPORT void flush();
-  FL_EXPORT void resize(int,int,int,int);
   FL_EXPORT void hide();
   FL_EXPORT ~Fl_Double_Window();
   Fl_Double_Window(int W, int H, const char *l = 0) : Fl_Window(W,H,l) {}
@@ -46,5 +46,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Double_Window.H,v 1.7 1999/02/16 21:59:37 mike Exp $".
+// End of "$Id: Fl_Double_Window.H,v 1.8 1999/06/15 17:02:25 gustavo Exp $".
 //

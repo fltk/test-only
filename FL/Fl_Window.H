@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.15 1999/03/18 22:58:58 carl Exp $"
+// "$Id: Fl_Window.H,v 1.16 1999/06/15 17:02:27 gustavo Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -43,7 +43,6 @@ public:
   virtual void loadstyle() const;
   virtual int handle(int);
 
-  virtual void resize(int,int,int,int);
   void border(int b);
   void clear_border()	{set_flag(FL_NOBORDER);}
   int border() const	{return !(flags() & FL_NOBORDER);}
@@ -93,6 +92,7 @@ protected:
   virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
   virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
 
+  virtual void layout();
   virtual void draw();
   virtual void flush();
 
@@ -120,5 +120,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.15 1999/03/18 22:58:58 carl Exp $".
+// End of "$Id: Fl_Window.H,v 1.16 1999/06/15 17:02:27 gustavo Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tile.cxx,v 1.6 1999/05/04 22:54:22 carl Exp $"
+// "$Id: Fl_Tile.cxx,v 1.7 1999/06/15 17:02:31 gustavo Exp $"
 //
 // Tile widget for the Fast Light Tool Kit (FLTK).
 //
@@ -63,21 +63,21 @@ void Fl_Tile::position(int oix, int oiy, int newx, int newy) {
   }
 }
 
-// move the lower-right corner (sort of):
-void Fl_Tile::resize(int X,int Y,int W,int H) {
+// resizing is equivalent to moving  the lower-right corner (sort of):
+void Fl_Tile::layout() {
+  //clear layout flag, skip Fl_Group::layout()
+  Fl_Widget::layout();
   // remember how much to move the child widgets:
-  int dx = X-x();
-  int dy = Y-y();
-  int dw = W-w();
-  int dh = H-h();
+  int dx = x() - ox();
+  int dw = w() - ow();
+  int dy = y() - oy();
+  int dh = h() - oh();
+  // find bottom-right of resizable:
   short* p = sizes();
-  // resize this (skip the Fl_Group resize):
-  Fl_Widget::resize(X,Y,W,H);
-  // find bottom-right of resiable:
   int OR = p[5];
-  int NR = X+W-(p[1]-OR);
+  int NR = x()+w()-(p[1]-OR);
   int OB = p[7];
-  int NB = Y+H-(p[3]-OB);
+  int NB = y()+h()-(p[3]-OB);
   // move everything to be on correct side of new resizable:
   Fl_Widget*const* a = array();
   p += 8;
@@ -91,8 +91,9 @@ void Fl_Tile::resize(int X,int Y,int W,int H) {
     int B = Y+o->h();
     if (*p++ >= OB) Y += dh; else if (Y > NB) Y = NB;
     if (*p++ >= OB) B += dh; else if (B > NB) B = NB;
-    o->resize(X,Y,R-X,B-Y); o->redraw();
+    o->resize(X,Y,R-X,B-Y); layout(o); o->redraw();
   }
+  set_old_size();
 }
 
 static void set_cursor(Fl_Tile*t, Fl_Cursor c) {
@@ -197,5 +198,5 @@ int Fl_Tile::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Tile.cxx,v 1.6 1999/05/04 22:54:22 carl Exp $".
+// End of "$Id: Fl_Tile.cxx,v 1.7 1999/06/15 17:02:31 gustavo Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.cxx,v 1.26 1999/05/06 05:52:16 carl Exp $"
+// "$Id: Fl_Input_.cxx,v 1.27 1999/06/15 17:02:30 gustavo Exp $"
 //
 // Common input widget routines for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,7 @@
 // to the input field.
 
 #include <FL/Fl.H>
+#include <FL/Fl_Group.H>
 #include <FL/Fl_Input_.H>
 #include <FL/fl_draw.H>
 #include <math.h>
@@ -766,10 +767,12 @@ int Fl_Input_::value(const char* str) {
   return value(str, str ? strlen(str) : 0);
 }
 
-void Fl_Input_::resize(int X, int Y, int W, int H) {
-  if (W != w()) xscroll_ = 0;
-  if (H != h()) yscroll_ = 0;
-  Fl_Widget::resize(X, Y, W, H);
+void Fl_Input_::layout() {
+  int o[4];
+  ((Fl_Group*)parent())->old_size(this,o);
+  if (o[2] != w()) xscroll_ = 0;
+  if (o[3] != h()) yscroll_ = 0;
+  Fl_Widget::layout();
 }
 
 Fl_Input_::~Fl_Input_() {
@@ -791,5 +794,5 @@ Fl_Color Fl_Input_::cursor_color() const { return (Fl_Color)attr(CURSOR_COLOR); 
 Fl_Color Fl_Input_::selected_textcolor() const { return (Fl_Color)attr(SELECTED_TEXTCOLOR); }
 
 //
-// End of "$Id: Fl_Input_.cxx,v 1.26 1999/05/06 05:52:16 carl Exp $".
+// End of "$Id: Fl_Input_.cxx,v 1.27 1999/06/15 17:02:30 gustavo Exp $".
 //

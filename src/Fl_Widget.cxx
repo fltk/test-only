@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.13 1999/06/14 16:55:46 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.14 1999/06/15 17:02:32 gustavo Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -126,8 +126,12 @@ Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
   if (Fl_Group::current()) Fl_Group::current()->add(this);
 }
 
+void Fl_Widget::layout() {
+  clear_damage(damage()&~FL_DAMAGE_LAYOUT);
+}
+
 void Fl_Widget::resize(int X, int Y, int W, int H) {
-  x_ = X; y_ = Y; w_ = W; h_ = H;
+  x_ = X; y_ = Y; w_ = W; h_ = H; damage(FL_DAMAGE_LAYOUT);
 }
 
 // this is useful for parent widgets to call to resize children:
@@ -274,5 +278,5 @@ uchar Fl_Widget::labelsize() const { return attr(LABELSIZE); }
 Fl_Color Fl_Widget::color2() const {return selection_color();}
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.13 1999/06/14 16:55:46 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.14 1999/06/15 17:02:32 gustavo Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: subwindow.cxx,v 1.6 1999/03/14 06:46:48 carl Exp $"
+// "$Id: subwindow.cxx,v 1.7 1999/06/15 17:02:34 gustavo Exp $"
 //
 // Nested window test program for the Fast Light Tool Kit (FLTK).
 //
@@ -166,10 +166,11 @@ int main(int, char **) {
   popup = new Fl_Menu_Button(0,0,400,400);
   popup->type(Fl_Menu_Button::POPUP3);
   popup->add("This|is|a popup|menu");
+  window->end();
   window->show();
   return Fl::run();
 }
 
 //
-// End of "$Id: subwindow.cxx,v 1.6 1999/03/14 06:46:48 carl Exp $".
+// End of "$Id: subwindow.cxx,v 1.7 1999/06/15 17:02:34 gustavo Exp $".
 //

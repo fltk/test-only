@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.15 1999/05/06 05:52:12 carl Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.16 1999/06/15 17:02:29 gustavo Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -117,9 +117,9 @@ int Fl_Browser_::leftedge() const {
 
 // the scrollbars are resized & placed by draw(), since each one's size
 // depends on whether the other is visible or not.  This skips over
-// Fl_Group::resize since it moves the scrollbars uselessly.
-void Fl_Browser_::resize(int X, int Y, int W, int H) {
-  Fl_Widget::resize(X, Y, W, H);
+// Fl_Group::layout since it moves the scrollbars uselessly.
+void Fl_Browser_::layout() {
+  Fl_Widget::layout();
 }
 
 // Cause minimal update to redraw the given item:
@@ -685,5 +685,5 @@ Fl_Color Fl_Browser_::textcolor() const { return (Fl_Color)attr(TEXTCOLOR); }
 Fl_Color Fl_Browser_::selected_textcolor() const { return (Fl_Color)attr(SELECTED_TEXTCOLOR); }
 
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.15 1999/05/06 05:52:12 carl Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.16 1999/06/15 17:02:29 gustavo Exp $".
 //

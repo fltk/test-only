@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.36 1999/04/11 02:17:32 gustavo Exp $"
+// "$Id: Fl_win32.cxx,v 1.37 1999/06/15 17:02:32 gustavo Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -479,6 +479,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	Fl::handle(FL_SHOW, window);
 	resize_bug_fix = window;
 	window->size(LOWORD(lParam), HIWORD(lParam));
+        Fl_X::i(window)->layout();
       }
     }
     break;
@@ -486,6 +487,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_MOVE:
     resize_bug_fix = window;
     window->position(LOWORD(lParam), HIWORD(lParam));
+    Fl_X::i(window)->layout();
     break;
 
   case WM_SETCURSOR:
@@ -581,18 +583,18 @@ int Fl_X::fake_X_wm(const Fl_Window* w,int &X,int &Y, int &bt,int &bx, int &by) 
 
 ////////////////////////////////////////////////////////////////
 
-void Fl_Window::resize(int X,int Y,int W,int H) {
+void Fl_Window::layout() {
   UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER;
   int is_a_resize = (W != w() || H != h());
   int resize_from_program = (this != resize_bug_fix);
   if (!resize_from_program) resize_bug_fix = 0;
   if (X != x() || Y != y()) set_flag(FL_FORCE_POSITION);
-    else {if (!is_a_resize) return; flags |= SWP_NOMOVE;}
+    else {if (!is_a_resize) {Fl_Widget::layout();return;} flags |= SWP_NOMOVE;}
   if (is_a_resize) {
-    Fl_Group::resize(X,Y,W,H);
+    Fl_Group::layout();
     if (shown()) {redraw(); i->wait_for_expose = 1;}
   } else {
-    x(X); y(Y);
+    Fl_Widget::layout(); set_old_size();
     flags |= SWP_NOSIZE;
   }
   if (resize_from_program && shown()) {
@@ -905,5 +907,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.36 1999/04/11 02:17:32 gustavo Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.37 1999/06/15 17:02:32 gustavo Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.19 1999/06/14 16:25:46 carl Exp $"
+// "$Id: Fl_Group.cxx,v 1.20 1999/06/15 17:02:30 gustavo Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -245,16 +245,20 @@ int Fl_Group::navigation(int key) {
 ////////////////////////////////////////////////////////////////
 
 Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
-: Fl_Widget(X,Y,W,H,l) {
-  align(FL_ALIGN_TOP);
-  children_ = 0;
-  array_ = 0;
-  savedfocus_ = 0;
-  resizable_ = this;
-  sizes_ = 0; // this is allocated when first resize() is done
+: Fl_Widget(X,Y,W,H,l),
+  children_(0),
+  array_(0),
+  savedfocus_(0),
+  resizable_(this),
+  sizes_(0), // this is allocated when the group is end()ed.
   // Subclasses may want to construct child objects as part of their
   // constructor, so make sure they are add()'d to this object.
   // But you must end() the object!
+  ox_(X),
+  oy_(Y),
+  ow_(W),
+  oh_(H) {
+  align(FL_ALIGN_TOP);
   begin();
 }
 
@@ -398,32 +402,70 @@ short* Fl_Group::sizes() {
   return sizes_;
 }
 
-void Fl_Group::resize(int X, int Y, int W, int H) {
+void Fl_Group::old_size(const Fl_Widget* o,int* r) {
+  // get changes in size from the initial size:
+  int dx = x()-ox();
+  int dy = y()-oy();
+  if (type() >= FL_WINDOW) dx = dy = 0;
+  short *p = sizes();
+  int dw = w()-(p[1]-p[0]);
+  int dh = h()-(p[3]-p[2]);
+  p+=4;
+ 
+  // get initial size of resizable():
+  int IX = *p++;
+  int IR = *p++;
+  int IY = *p++;
+  int IB = *p++;
 
-  if (!resizable() || W==w() && H==h()) {
+  // find the widget's current size:
+  Fl_Widget*const* a=array();
+  for (int i=children_; i--;) {
+    if (o == *a++) break;
+    p+=4;
+  }
+  int X = *p++;
+  if (X >= IR) X += dw;
+  else if (X > IX) X = IX+((X-IX)*(IR+dw-IX)+(IR-IX)/2)/(IR-IX);
+  int R = *p++;
+  if (R >= IR) R += dw;
+  else if (R > IX) R = IX+((R-IX)*(IR+dw-IX)+(IR-IX)/2)/(IR-IX);
 
+  int Y = *p++;
+  if (Y >= IB) Y += dh;
+  else if (Y > IY) Y = IY+((Y-IY)*(IB+dh-IY)+(IB-IY)/2)/(IB-IY);
+  int B = *p++;
+  if (B >= IB) B += dh;
+  else if (B > IY) B = IY+((B-IY)*(IB+dh-IY)+(IB-IY)/2)/(IB-IY);
+
+  r[0]=X;r[1]=R-X;r[2]=Y;r[3]=B-Y;
+}
+
+void Fl_Group::layout() {
+
+  Fl_Widget::layout();
+  // get changes from previous position:
+  if (!resizable() || ow()==w() && oh()==h()) {
     if (type() < FL_WINDOW) {
-      int dx = X-x();
-      int dy = Y-y();
+      int dx = x()-ox();
+      int dy = y()-oy();
       Fl_Widget*const* a = array();
       for (int i=children_; i--;) {
 	Fl_Widget* o = *a++;
 	o->resize(o->x()+dx, o->y()+dy, o->w(), o->h());
+        o->layout();
       }
     }
-
   } else if (children_) {
-
-    short* p = sizes();
-
-    // get changes in size/position from the initial size:
-    int dx = X - p[0];
-    int dw = W - (p[1]-p[0]);
-    int dy = Y - p[2];
-    int dh = H - (p[3]-p[2]);
+    // get changes in size from the initial size:
+    short *p = sizes();
+    int dx = x()-p[0];
+    int dy = y()-p[2];
     if (type() >= FL_WINDOW) dx = dy = 0;
-    p += 4;
-
+    int dw = w()-(p[1]-p[0]);
+    int dh = h()-(p[3]-p[2]);
+    p+=4;
+ 
     // get initial size of resizable():
     int IX = *p++;
     int IR = *p++;
@@ -449,10 +491,10 @@ void Fl_Group::resize(int X, int Y, int W, int H) {
       else if (B > IY) B = IY+((B-IY)*(IB+dh-IY)+(IB-IY)/2)/(IB-IY);
 
       o->resize(X+dx, Y+dy, R-X, B-Y);
+      while (o->damage()&FL_DAMAGE_LAYOUT) layout(o);
     }
   }
-
-  Fl_Widget::resize(X,Y,W,H);
+  set_old_size();
 }
 
 void Fl_Group::draw() {
@@ -527,5 +569,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.19 1999/06/14 16:25:46 carl Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.20 1999/06/15 17:02:30 gustavo Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.26 1999/04/11 02:17:31 gustavo Exp $"
+// "$Id: Fl_x.cxx,v 1.27 1999/06/15 17:02:32 gustavo Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -316,9 +316,8 @@ static inline void checkdouble() {
   ptime = fl_event_time;
 }
 
-static Fl_Window* resize_bug_fix;
-
 ////////////////////////////////////////////////////////////////
+static Fl_Window* resize_bug_fix;
 
 int fl_handle(const XEvent& xevent)
 {
@@ -499,6 +498,7 @@ int fl_handle(const XEvent& xevent)
     resize_bug_fix = window;
     window->resize(X-wX, Y-wY,
 		   xevent.xconfigure.width, xevent.xconfigure.height);
+    Fl_X::i(window)->layout();
     return 1;}
   }
 
@@ -507,23 +507,24 @@ int fl_handle(const XEvent& xevent)
 
 ////////////////////////////////////////////////////////////////
 
-void Fl_Window::resize(int X,int Y,int W,int H) {
-  int is_a_resize = (W != w() || H != h());
+void Fl_Window::layout() {
+  int is_a_resize = (ow() != w() || oh() != h());
   int resize_from_program = (this != resize_bug_fix);
   if (!resize_from_program) resize_bug_fix = 0;
-  if (X != x() || Y != y()) set_flag(FL_FORCE_POSITION);
-  else if (!is_a_resize) return;
+  if (ox() != x() || oy() != y()) set_flag(FL_FORCE_POSITION);
+  else if (!is_a_resize) {Fl_Widget::layout();return;}
   if (is_a_resize) {
-    Fl_Group::resize(X,Y,W,H);
+    Fl_Group::layout();
     if (shown()) {redraw(); i->wait_for_expose = 1;}
   } else {
-    x(X); y(Y);
+    Fl_Widget::layout(); set_old_size();
   }
   if (resize_from_program && shown()) {
     if (is_a_resize)
-      XMoveResizeWindow(fl_display, i->xid, X, Y, W>0 ? W : 1, H>0 ? H : 1);
+      XMoveResizeWindow(fl_display, i->xid, x(), y(),
+                        w()>0 ? w() : 1, h()>0 ? h() : 1);
     else
-      XMoveWindow(fl_display, i->xid, X, Y);
+      XMoveWindow(fl_display, i->xid, x(), y());
   }
 }
 
@@ -801,6 +802,7 @@ void Fl_Window::show() {
     fl_open_display();
     if (can_boxcheat(box())) fl_background_pixel = int(fl_xpixel(color()));
     Fl_X::make_xid(this);
+    sizes();//kludge to allocate the array if the window was not end()ed...
   } else {
     XMapRaised(fl_display, i->xid);
   }
@@ -823,5 +825,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.26 1999/04/11 02:17:31 gustavo Exp $".
+// End of "$Id: Fl_x.cxx,v 1.27 1999/06/15 17:02:32 gustavo Exp $".
 //
