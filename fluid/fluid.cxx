@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.46 2001/02/28 21:19:49 clip Exp $"
+// "$Id: fluid.cxx,v 1.47 2001/03/07 23:07:39 robertk Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -75,6 +75,7 @@ const char *copyright =
 
 #include "Fluid_Plugins.h"
 #include "Fl_Type.h"
+#include "coding_style.h"
 
 ////////////////////////////////////////////////////////////////
 
@@ -386,6 +387,7 @@ Fl_Menu_Item Main_Menu[] = {
 //{"Activate", 0, nyi, 0, FL_MENU_DIVIDER},
   {"Show Overlays",FL_ALT+'O',toggle_overlays, 0, FL_MENU_TOGGLE|FL_MENU_VALUE},
   {"Preferences",FL_ALT+'p',show_alignment_cb},
+  {"Coding Style", 0, show_coding_style_cb},
   {"Scheme", 0, scheme_cb},
   {"Set images root directory", FL_ALT+'d', set_images_dir_cb},
   {0},
@@ -471,7 +473,7 @@ static void sigint(SIGARG) {
 }
 #endif
 
-int main(int argc,char **argv) {
+int main(int argc,char **argv) {  
   Fl_Style::start("fluid_style");
   int i = 1;
   if (!Fl::args(argc,argv,i,arg) || i < argc-1) {
@@ -486,6 +488,7 @@ int main(int argc,char **argv) {
 
   read_plugins();
   make_main_window();
+  load_coding_style();
   if (c) set_filename(c);
   if (!compile_only) {
     Fl::visual(FL_DOUBLE|FL_INDEX);
@@ -510,5 +513,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.46 2001/02/28 21:19:49 clip Exp $".
+// End of "$Id: fluid.cxx,v 1.47 2001/03/07 23:07:39 robertk Exp $".
 //

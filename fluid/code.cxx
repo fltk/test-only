@@ -1,5 +1,5 @@
 //
-// "$Id: code.cxx,v 1.15 2000/09/30 23:41:59 vincentp Exp $"
+// "$Id: code.cxx,v 1.16 2001/03/07 23:07:39 robertk Exp $"
 //
 // Code output routines for the Fast Light Tool Kit (FLTK).
 //
@@ -32,6 +32,7 @@
 #include <FL/Fl.H>
 #include "Fl_Type.h"
 #include "alignment_panel.h"
+#include "coding_style.h"
 
 static FILE *code_file;
 static FILE *header_file;
@@ -95,11 +96,9 @@ const char* unique_id(void* o, const char* type, const char* name, const char* l
 ////////////////////////////////////////////////////////////////
 // return current indentation:
 
-static const char* spaces = "                ";
 int indentation;
 const char* indent() {
-  int i = indentation; if (i>16) i = 16;
-  return spaces+16-i;
+	return get_indent_string(indentation / 2);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -328,5 +327,5 @@ void Fl_Type::write_code() {
 }
 
 //
-// End of "$Id: code.cxx,v 1.15 2000/09/30 23:41:59 vincentp Exp $".
+// End of "$Id: code.cxx,v 1.16 2001/03/07 23:07:39 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.73 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.74 2001/03/07 23:07:39 robertk Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "coding_style.h"
 
 // Make an Fl_Widget_Type subclass instance.
 // It figures out the automatic size and parent of the new widget,
@@ -1604,14 +1605,17 @@ void Fl_Widget_Type::write_static() {
     const char* ut = user_data_type() ? user_data_type() : "void*";
     write_c(", %s", ut);
     if (use_v) write_c(" v");
-    write_c(") {\n  %s", callback());
+    write_c(")%s", get_opening_brace(1));
+	indentation += 2;
+	write_code_block((char *)callback());
+	indentation -= 2;
     if (*(d-1) != ';') write_c(";");
     write_c("\n}\n");
     if (k) {
-      write_c("void %s::%s(%s* o, %s v) {\n", k, cn, t, ut);
-      write_c("  ((%s*)(o->", k);
+      write_c("void %s::%s(%s* o, %s v)%s", k, cn, t, ut, get_opening_brace(1));
+      write_c("%s((%s*)(o->", get_indent_string(1), k);
       for (Fl_Type* p = parent; p->is_widget(); p = p->parent)
-	write_c("parent()->");
+	     write_c("parent()->");
       write_c("user_data()))->%s_i(o,v);\n}\n", cn);
     }
   }
@@ -1637,17 +1641,17 @@ void Fl_Widget_Type::write_code1() {
   if (c) {
     if (class_name(1)) {
       write_public(public_);
-      write_h("  %s *%s;\n", t, c);
+      write_h("%s%s *%s;\n", indent(), t, c);
     }
   }
   if (class_name(1) && callback() && !is_name(callback())) {
     const char* cn = callback_name();
     const char* ut = user_data_type() ? user_data_type() : "void*";
     write_public(0);
-    write_h("  inline void %s_i(%s*, %s);\n", cn, t, ut);
-    write_h("  static void %s(%s*, %s);\n", cn, t, ut);
+    write_h("%sinline void %s_i(%s*, %s);\n", indent(), cn, t, ut);
+    write_h("%sstatic void %s(%s*, %s);\n", indent(), cn, t, ut);
   }
-  // figure out if local varaible will be used (prevent compiler warnings):
+  // figure out if local variable will be used (prevent compiler warnings):
   if (is_parent())
     varused = 1;
   else {
@@ -1658,7 +1662,8 @@ void Fl_Widget_Type::write_code1() {
       if (extra_code(n) && !isdeclare(extra_code(n))) varused = 1;
   }
   write_c(indent());
-  if (varused) write_c("{ %s* o = ", t);
+  if (varused) write_c("%s%s%s* o = ", get_opening_brace(0), 
+					   indent(), t);
   if (name()) write_c("%s = ", name());
   if (is_window()) {
     if (set_xy && strcmp(t,"Fl_Group")!=0)
@@ -2159,5 +2164,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.73 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.74 2001/03/07 23:07:39 robertk Exp $".
 //

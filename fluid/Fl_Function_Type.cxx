@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Function_Type.cxx,v 1.31 2001/02/16 14:14:12 robertk Exp $"
+// "$Id: Fl_Function_Type.cxx,v 1.32 2001/03/07 23:07:39 robertk Exp $"
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,7 @@
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
+#include "coding_style.h"
 
 ////////////////////////////////////////////////////////////////
 // quick check of any C code for legality, returns an error message
@@ -237,7 +238,9 @@ void Fl_Function_Type::write_code() {
     }
   write_c("\n");
   if (ismain()) {
-    write_c("int main(int argc, char **argv) {\n");
+	write_c("int main%s(int argc, char **argv)%s\n",
+			gno_space_parens ? "" : " ", get_opening_brace(1));
+    // write_c("int main(int argc, char **argv) {\n");
     if (havewidgets)
       rtype = subclassname(last_group);
     else 
@@ -270,7 +273,7 @@ void Fl_Function_Type::write_code() {
 	size_t n = strlen(k);
 	if (!strncmp(name(), k, n) && name()[n] == '(') constructor = 1;
       }
-      write_h("  ");
+	  write_h(get_indent_string(1));
       if (is_static) write_h("static ");
       if (is_virtual) write_h("virtual ");
       if (!constructor) {
@@ -293,7 +296,7 @@ void Fl_Function_Type::write_code() {
       *sptr = '\0';
 
       write_h("%s%s;\n", attr, s);
-      write_c("%s::%s {\n", k, name());
+      write_c("%s::%s%s", k, name(), get_opening_brace(1));
     } else {
       if (public_) {
 	if (cdecl_)
@@ -302,24 +305,29 @@ void Fl_Function_Type::write_code() {
 	  write_h("%s%s%s %s;\n", attr, rtype, star, name());
       }
       else write_c("static ");
-      write_c("%s%s %s {\n", rtype, star, name());
+      write_c("%s%s %s%s", rtype, star, name(), get_opening_brace(1));
     }
   }
-  //if (havewidgets) write_c("  %s* w;\n", rtype);
-  if(havewidgets)
-	  write_c("  %s* w;\n", strcmp(rtype, subclassname(last_group)) == 0 ? 
-						rtype : subclassname(last_group));
   indentation += 2;
+  if(havewidgets) 
+	  write_c("%s%s* w;\n", indent(), 
+			  strcmp(rtype, subclassname(last_group)) == 0 ? 
+			  rtype : subclassname(last_group));
 
   for (Fl_Type* q = first_child; q; q = q->next_brother) q->write_code();
 
   if (ismain()) {
-    if (havewidgets) write_c("  w->show(argc, argv);\n");
-    write_c("  return Fl::run();\n");
+    if (havewidgets) write_c("%sw->show(argc, argv);\n", get_indent_string(1));
+    write_c("%sreturn%s%sFl::run()%s;\n", get_indent_string(1),
+			gno_space_parens ? "" : " ",
+			galways_return_parens ? "(" : "", galways_return_parens ? ")" : "");
   } else if (havewidgets && !constructor && !return_type)
-    write_c("  return w;\n");
+    write_c("%sreturn%s%sw%s;\n", get_indent_string(1), 
+			gno_space_parens ? "" : " ",
+			galways_return_parens ? "(" : "", galways_return_parens ? ")" : "");
   write_c("}\n");
-  indentation = 0;
+  indentation -= 2;
+  if (indentation < 0) indentation = 0;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -371,7 +379,8 @@ Fl_Code_Type Fl_Code_type;
 void Fl_Code_Type::write_code() {
   const char* c = name();
   if (!c) return;
-  write_c("%s%s\n", indent(), c);
+  //write_c("%s%s\n", indent(), c);
+  write_code_block((char *)c);
   for (Fl_Type* q = first_child; q; q = q->next_brother) q->write_code();
 }
 
@@ -448,7 +457,7 @@ Fl_CodeBlock_Type Fl_CodeBlock_type;
 
 void Fl_CodeBlock_Type::write_code() {
   const char* c = name();
-  write_c("%s%s {\n", indent(), c ? c : "");
+  write_c("%s%s%s", indent(), c ? c : "", get_opening_brace(0));
   indentation += 2;
   for (Fl_Type* q = first_child; q; q = q->next_brother) q->write_code();
   indentation -= 2;
@@ -539,7 +548,7 @@ void Fl_Decl_Type::write_code() {
   while (e>c && e[-1]==';') e--;
   if (class_name(1)) {
     write_public(public_);
-    write_h("  %.*s;\n", e-c, c);
+    write_h("%s%.*s;\n", get_indent_string(1), e-c, c);
   } else {
     if (public_) {
       write_h("extern %.*s;\n", e-c, c);
@@ -748,12 +757,12 @@ void Fl_Class_Type::write_code() {
   write_public_state = 0;
   write_h("\nclass %s ", name());
   if (subclass_of) write_h(": %s ", subclass_of);
-  write_h("{\n");
+  write_h("%s", get_opening_brace(1));
   for (Fl_Type* q = first_child; q; q = q->next_brother) q->write_code();
   write_h("};\n");
   current_class = parent_class;
 }
 
 //
-// End of "$Id: Fl_Function_Type.cxx,v 1.31 2001/02/16 14:14:12 robertk Exp $".
+// End of "$Id: Fl_Function_Type.cxx,v 1.32 2001/03/07 23:07:39 robertk Exp $".
 //

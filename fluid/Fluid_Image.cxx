@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Image.cxx,v 1.18 2000/09/30 23:41:59 vincentp Exp $"
+// "$Id: Fluid_Image.cxx,v 1.19 2001/03/07 23:07:39 robertk Exp $"
 //
 // Pixmap label support for the Fast Light Tool Kit (FLTK).
 //
@@ -97,7 +97,7 @@ void generic_image::write_static() {
   if (!p) return;
   if(image_file_header_written != write_number)
   {
-    write_c("#include <FL/Fl_Shared_Image.H>\n");
+    write_c("\n#include <FL/Fl_Shared_Image.H>\n");
     image_file_header_written = write_number;
   }
   if (inlined) {
@@ -107,14 +107,17 @@ void generic_image::write_static() {
       write_c("static char *%s[] = {\n", unique_id(this, "datas", filename_name(name()), 0));
       FILE* fp = fopen(name(), "rb");
       if(fp) {
+	indentation += 2;
 	char s[MAX_CLINESIZE+1];
 	do {
 	  fgets(s, MAX_CLINESIZE+1, fp);
 	} while (!feof(fp) && !strchr(s, '{'));
 	while (!feof(fp) && fgets(s, MAX_CLINESIZE+1, fp)) {
-	  write_craw(s);
+		write_c(indent());
+	    write_craw(s);
 	  //	  write_c(s);
 	}
+	indentation -= 2;
 	fclose(fp);
       }
     } else {
@@ -385,5 +388,5 @@ void set_images_dir_cb(Fl_Widget *, void *) {
 }
  
 //
-// End of "$Id: Fluid_Image.cxx,v 1.18 2000/09/30 23:41:59 vincentp Exp $".
+// End of "$Id: Fluid_Image.cxx,v 1.19 2001/03/07 23:07:39 robertk Exp $".
 //
