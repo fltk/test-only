@@ -9,7 +9,7 @@ snap 2
 Function {make_widget_panel()} {open
 } {
   Fl_Window {} {open
-    xywh {606 413 380 375} resizable hotspot visible
+    xywh {504 263 380 375} resizable hotspot visible
   } {
     Fl_Tabs panel_tabs {
       callback propagate_tabs open
@@ -84,7 +84,7 @@ label.  This is slower so it should be left off if label will fit}
           label {Image name}
           callback image_cb
           tooltip {Select an image to label the widget}
-          xywh {90 70 185 20} align 524308 box THIN_DOWN_BOX color 55
+          xywh {90 70 180 20} align 524308 box THIN_DOWN_BOX color 55
         }
         Fl_Group {} {
           label {Attributes:}
@@ -182,7 +182,7 @@ label.  This is slower so it should be left off if label will fit}
           callback image_inlined_cb
           tooltip {Include the datas of the image inlined in 
 the code or keep it in an external file}
-          xywh {280 70 80 20} align 524436 labelsize 10
+          xywh {270 70 90 20} align 524436 labelsize 10
         }
         Fl_Box {} {
           label {Alignment:}
@@ -210,8 +210,8 @@ application and will prevent events from going to other windows.}
       }
       Fl_Group {} {
         label Style
-        callback propagate_group open
-        xywh {10 35 360 295}
+        callback propagate_group
+        xywh {10 35 360 295} hide
       } {
         Fl_Choice {} {
           label {Label Type:}
@@ -298,7 +298,7 @@ application and will prevent events from going to other windows.}
           code0 {o->type(0);}
         }
         Fl_Light_Button {} {
-          label {Off color}
+          label {Off Color}
           callback color3_cb
           tooltip {Color to draw checkmarks when off}
           xywh {95 255 130 25} labelsize 10
@@ -327,7 +327,7 @@ application and will prevent events from going to other windows.}
         }
         Fl_Choice {} {
           label {Glyph Box:}
-          callback glyph_box_cb selected
+          callback glyph_box_cb
           tooltip {Type of box to draw around the glyph on the widget}
           xywh {95 70 260 25}
           code0 {extern Fl_Menu_Item boxmenu[];}
@@ -336,8 +336,8 @@ application and will prevent events from going to other windows.}
       }
       Fl_Group {} {
         label {C++}
-        callback propagate_group
-        xywh {10 35 360 295} hide
+        callback propagate_group open
+        xywh {10 35 360 295}
       } {
         Fl_Input {} {
           label {Name:}
@@ -347,7 +347,7 @@ application and will prevent events from going to other windows.}
         }
         Fl_Light_Button {} {
           label public
-          callback name_public_cb
+          callback name_public_cb selected
           tooltip {Make the variable public}
           xywh {307 70 53 20} when 1 labelsize 10
         }

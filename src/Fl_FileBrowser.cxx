@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileBrowser.cxx,v 1.4 1999/11/16 07:36:09 bill Exp $"
+// "$Id: Fl_FileBrowser.cxx,v 1.5 2000/01/07 22:58:52 mike Exp $"
 //
 // Fl_FileBrowser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -41,6 +41,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <config.h>
 
 #if defined(WIN32) || defined(__EMX__)
 #  include <windows.h>
@@ -205,6 +206,7 @@ Fl_FileBrowser::item_draw(void *p,	// I - List item data
 		          int  w,	// I - Width of item
 		          int  h) const	// I - Height of item
 {
+  Fl_Color	c;			// Color of text
   FL_BLINE	*line;			// Pointer to line
 
 
@@ -214,9 +216,14 @@ Fl_FileBrowser::item_draw(void *p,	// I - List item data
   fl_font(textfont(), textsize());
 
   if (line->flags & SELECTED)
-    fl_color(fl_contrast(textcolor(), selection_color()));
+    c = fl_contrast(textcolor(), selection_color());
   else
-    fl_color(textcolor());
+    c = textcolor();
+
+  if (active_r())
+    fl_color(c);
+  else
+    fl_color(fl_inactive(c));
 
   if (Fl_FileIcon::first() == NULL)
   {
@@ -233,7 +240,8 @@ Fl_FileBrowser::item_draw(void *p,	// I - List item data
     if (line->data)
       ((Fl_FileIcon *)line->data)->draw(x, y, iconsize_, iconsize_,
                                         (line->flags & SELECTED) ? FL_YELLOW :
-				                                   FL_LIGHT2);
+				                                   FL_LIGHT2,
+					active_r());
   }
 }
 
@@ -280,7 +288,10 @@ Fl_FileBrowser::load(const char *directory)// I - Directory to load
     //
 
     num_files = 0;
-    icon      = Fl_FileIcon::find("any", Fl_FileIcon::DIR);
+    icon      = Fl_FileIcon::find("any", Fl_FileIcon::DEVICE);
+
+    if (icon == (Fl_FileIcon *)0)
+      icon = Fl_FileIcon::find("any", Fl_FileIcon::DIR);
 
 #if defined(WIN32) || defined(__EMX__)
     DWORD	drives;		// Drive available bits
@@ -344,7 +355,9 @@ Fl_FileBrowser::load(const char *directory)// I - Directory to load
     //
 
 #if defined(WIN32) || defined(__EMX__)
-    strcpy(filename, directory_);
+    strncpy(filename, directory_, sizeof(filename) - 1);
+    filename[sizeof(filename) - 1] = '\0';
+
     i = strlen(filename) - 1;
 
     if (i == 2 && filename[1] == ':' &&
@@ -358,17 +371,20 @@ Fl_FileBrowser::load(const char *directory)// I - Directory to load
     num_files = filename_list(directory_, &files);
 #endif /* WIN32 || __EMX__ */
 
+    if (num_files <= 0)
+      return (0);
+
     for (i = 0; i < num_files; i ++)
     {
-      if (strcmp(files[i]->d_name, ".") == 0 ||
-          strcmp(files[i]->d_name, "..") == 0)
-	continue;
+      if (strcmp(files[i]->d_name, ".") != 0 &&
+          strcmp(files[i]->d_name, "..") != 0)
+      {
+	snprintf(filename, sizeof(filename), "%s/%s", directory_, files[i]->d_name);
 
-      sprintf(filename, "%s/%s", directory_, files[i]->d_name);
-
-      if (filename_isdir(filename) ||
-          filename_match(files[i]->d_name, pattern_))
-        add(files[i]->d_name, Fl_FileIcon::find(filename));
+	if (filename_isdir(filename) ||
+            filename_match(files[i]->d_name, pattern_))
+          add(files[i]->d_name, Fl_FileIcon::find(filename));
+      }
 
       free(files[i]);
     }
@@ -399,5 +415,5 @@ Fl_FileBrowser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_FileBrowser.cxx,v 1.4 1999/11/16 07:36:09 bill Exp $".
+// End of "$Id: Fl_FileBrowser.cxx,v 1.5 2000/01/07 22:58:52 mike Exp $".
 //

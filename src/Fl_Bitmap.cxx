@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.cxx,v 1.9 1999/12/15 08:30:55 bill Exp $"
+// "$Id: Fl_Bitmap.cxx,v 1.10 2000/01/07 22:58:51 mike Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -31,6 +31,8 @@
 #ifdef WIN32
 // replicate XCreateBitmapFromData:
 // Written by Matt
+// Updated by Mike to just make a simple 1-bit deep bitmap; I don't think it
+// needs to do the other stuff since 1-bit bitmaps are used for text, too...
 ulong fl_create_bitmap(const uchar* bitmap, int w, int h) {
   // this won't work ehen the user changes display mode during run or
   // has two screens with differnet depths
@@ -40,44 +42,20 @@ ulong fl_create_bitmap(const uchar* bitmap, int w, int h) {
   static uchar loNibble[16] =
   { 0x00, 0x08, 0x04, 0x0c, 0x02, 0x0a, 0x06, 0x0e,
     0x01, 0x09, 0x05, 0x0d, 0x03, 0x0b, 0x07, 0x0f };
-  int np  = GetDeviceCaps(fl_gc, PLANES);//: was always one on sample machines
-  int bpp = GetDeviceCaps(fl_gc, BITSPIXEL);//: 1,4,8,16,24,32 and more?
-  int Bpr = (bpp*w+7)/8;			//: bytes per row
+  int Bpr = (w+7)/8;			//: bytes per row
   int pad = Bpr&1, w1 = (w+7)/8, shr = ((w-1)&7)+1;
-  if (bpp==4) shr = (shr+1)/2;
   uchar *newarray = new uchar[(Bpr+pad)*h], *dst = newarray;
   const uchar* src = bitmap;
   for (int i=0; i<h; i++) {
     //: this is slooow, but we do it only once per pixmap
     for (int j=w1; j>0; j--) {
       uchar b = *src++;
-      if (bpp==1) {
-	*dst++ = ( hiNibble[b&15] ) | ( loNibble[(b>>4)&15] );
-      } else if (bpp==4) {
-	for (int k=(j==1)?shr:4; k>0; k--) {
-	  *dst++ = "\377\360\017\000"[b&3];
-	  b = b >> 2;
-	}
-      } else {
-	for (int k=(j==1)?shr:8; k>0; k--) {
-	  if (b&1) {
-	    *dst++=0;
-	    if (bpp>8) *dst++=0;
-	    if (bpp>16) *dst++=0;
-	    if (bpp>24) *dst++=0;
-	  } else {
-	    *dst++=0xff;
-	    if (bpp>8) *dst++=0xff;
-	    if (bpp>16) *dst++=0xff;
-	    if (bpp>24) *dst++=0xff;
-	  }
-	  b = b >> 1;
-	}
-      }
+      *dst++ = ( hiNibble[b&15] ) | ( loNibble[(b>>4)&15] );
     }
-    dst += pad;
+    if (pad)
+      *dst++ = 0;
   }
-  ulong r = (ulong)CreateBitmap(w, h, np, bpp, newarray);
+  ulong r = (ulong)CreateBitmap(w, h, 1, 1, newarray);
   delete[] newarray;
   return r;
 }
@@ -90,5 +68,5 @@ void Fl_Bitmap::draw(int X, int Y, int W, int H, int cx, int cy)
 }
 
 //
-// End of "$Id: Fl_Bitmap.cxx,v 1.9 1999/12/15 08:30:55 bill Exp $".
+// End of "$Id: Fl_Bitmap.cxx,v 1.10 2000/01/07 22:58:51 mike Exp $".
 //

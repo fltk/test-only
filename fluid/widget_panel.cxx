@@ -18,7 +18,7 @@ Fl_Window* make_widget_panel() {
   Fl_Window* w;
   { Fl_Window* o = new Fl_Window(380, 375);
     w = o;
-    w->hotspot(o);
+    ((Fl_Window*)(o))->hotspot(o);
     { Fl_Tabs* o = panel_tabs = new Fl_Tabs(10, 10, 360, 320);
       o->callback((Fl_Callback*)propagate_tabs);
       { Fl_Group* o = new Fl_Group(10, 35, 360, 295, "GUI");
@@ -73,7 +73,7 @@ o it should be left off if label will fit");
         { Fl_Box* o = image_label = new Fl_Box(19, 70, 71, 20, "Image:");
           o->align(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
         }
-        { Fl_Button* o = new Fl_Button(90, 70, 185, 20, "Image name");
+        { Fl_Button* o = new Fl_Button(90, 70, 180, 20, "Image name");
           o->box(FL_THIN_DOWN_BOX);
           o->color((Fl_Color)55);
           o->callback((Fl_Callback*)image_cb);
@@ -178,7 +178,7 @@ hoose icons.");
           o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_TILED));
           o->tooltip("Draw the image tiled");
         }
-        { Fl_Light_Button* o = include_image_button = new Fl_Light_Button(280, 70, 80, 20, "image inlined");
+        { Fl_Light_Button* o = include_image_button = new Fl_Light_Button(270, 70, 90, 20, "image inlined");
           o->label_size(10);
           o->callback((Fl_Callback*)image_inlined_cb);
           o->align(132|FL_ALIGN_INSIDE);
@@ -209,6 +209,7 @@ vents from going to other windows.");
       }
       { Fl_Group* o = new Fl_Group(10, 35, 360, 295, "Style");
         o->callback((Fl_Callback*)propagate_group);
+        o->hide();
         { Fl_Choice* o = new Fl_Choice(95, 95, 260, 25, "Label Type:");
           o->callback((Fl_Callback*)labeltype_cb);
           o->tooltip("How to draw the label");
@@ -280,7 +281,7 @@ ft of the color chooser disables highlighting");
           o->tooltip("Color to draw selected text inside the widget");
           o->type(0);
         }
-        { Fl_Light_Button* o = new Fl_Light_Button(95, 255, 130, 25, "Off color");
+        { Fl_Light_Button* o = new Fl_Light_Button(95, 255, 130, 25, "Off Color");
           o->label_size(10);
           o->callback((Fl_Callback*)color3_cb);
           o->tooltip("Color to draw checkmarks when off");
@@ -313,7 +314,6 @@ ft of the color chooser disables highlighting");
       }
       { Fl_Group* o = new Fl_Group(10, 35, 360, 295, "C++");
         o->callback((Fl_Callback*)propagate_group);
-        o->hide();
         { Fl_Input* o = new Fl_Input(90, 70, 217, 20, "Name:");
           o->callback((Fl_Callback*)name_cb);
           o->when(FL_WHEN_CHANGED);

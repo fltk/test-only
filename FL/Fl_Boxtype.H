@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.H,v 1.19 1999/12/02 09:53:36 bill Exp $"
+// "$Id: Fl_Boxtype.H,v 1.20 2000/01/07 22:58:47 mike Exp $"
 //
 // Boxes used by FLTK styles.
 //
@@ -28,6 +28,10 @@
 
 #include "Fl_Color.H"
 #include "Fl_Flags.H"
+
+#ifdef _MSC_VER
+//#  pragma disable warning 4355
+#endif // _MSC_VER
 
 // the abstract base class:
 class FL_API Fl_Boxtype_ {
@@ -248,5 +252,5 @@ extern FL_API const Fl_Border_Frame fl_border_frame;
 #endif
 
 //
-// End of "$Id: Fl_Boxtype.H,v 1.19 1999/12/02 09:53:36 bill Exp $".
+// End of "$Id: Fl_Boxtype.H,v 1.20 2000/01/07 22:58:47 mike Exp $".
 //

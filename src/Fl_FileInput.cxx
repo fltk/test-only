@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileInput.cxx,v 1.1 1999/10/17 15:20:26 mike Exp $"
+// "$Id: Fl_FileInput.cxx,v 1.2 2000/01/07 22:58:53 mike Exp $"
 //
 // Fl_FileInput routines for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,7 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_FileInput.h>
+
 
 //
 // Note: This has got to be a runner for the world's shortest class.
@@ -70,5 +71,5 @@ Fl_FileInput::handle(int event)	// I - Event to handle
 
 
 //
-// End of "$Id: Fl_FileInput.cxx,v 1.1 1999/10/17 15:20:26 mike Exp $".
+// End of "$Id: Fl_FileInput.cxx,v 1.2 2000/01/07 22:58:53 mike Exp $".
 //

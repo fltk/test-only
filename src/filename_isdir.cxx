@@ -1,5 +1,5 @@
 //
-// "$Id: filename_isdir.cxx,v 1.4 1999/01/07 19:17:35 mike Exp $"
+// "$Id: filename_isdir.cxx,v 1.5 2000/01/07 22:58:54 mike Exp $"
 //
 // Directory detection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -28,12 +28,24 @@
 #include <config.h>
 #include <FL/filename.H>
 #include <sys/stat.h>
+#include <string.h>
+#include <stdio.h>
 
 int filename_isdir(const char* n) {
   struct stat s;
+#if defined(WIN32) || defined(__EMX__)
+  // Append a slash to the pathname if we have L:, since WIN32 is horribly
+  // stupid about that...
+  char pathname[1024];
+  if (strlen(n) == 2 && n[1] == ':') {
+    snprintf(pathname, sizeof(pathname), "%s/", n);
+    n = pathname;
+  }
+#endif // WIN32 || __EMX__
+
   return !stat(n, &s) && (s.st_mode&0170000)==0040000;
 }
 
 //
-// End of "$Id: filename_isdir.cxx,v 1.4 1999/01/07 19:17:35 mike Exp $".
+// End of "$Id: filename_isdir.cxx,v 1.5 2000/01/07 22:58:54 mike Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileIcon.h,v 1.2 1999/11/01 22:51:31 carl Exp $"
+// "$Id: Fl_FileIcon.h,v 1.3 2000/01/07 22:58:48 mike Exp $"
 //
 // Fl_FileIcon definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,7 @@
 // Fl_FileIcon class...
 //
 
-class Fl_FileIcon		//// Icon data
+class FL_API Fl_FileIcon	//// Icon data
 {
   static Fl_FileIcon *first_;	// Pointer to first icon/filetype
   Fl_FileIcon	*next_;		// Pointer to next icon/filetype
@@ -82,7 +82,7 @@ class Fl_FileIcon		//// Icon data
 		{ short *d = add(VERTEX); add((int)(x * 10000.0));
 		  add((int)(y * 10000.0)); return (d); }
   void		clear() { num_data_ = 0; }
-  void		draw(int x, int y, int w, int h, Fl_Color ic);
+  void		draw(int x, int y, int w, int h, Fl_Color ic, int active = 1);
   void		label(Fl_Widget *w);
 //  static void	labeltype(const Fl_Label *o, int x, int y, int w, int h, Fl_Align a);
   void		load(const char *f);
@@ -103,5 +103,5 @@ class Fl_FileIcon		//// Icon data
 #endif // !_FL_FILEICON_H_
 
 //
-// End of "$Id: Fl_FileIcon.h,v 1.2 1999/11/01 22:51:31 carl Exp $".
+// End of "$Id: Fl_FileIcon.h,v 1.3 2000/01/07 22:58:48 mike Exp $".
 //

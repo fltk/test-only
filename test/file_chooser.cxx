@@ -1,5 +1,5 @@
 //
-// "$Id: file_chooser.cxx,v 1.4 1999/01/07 19:17:53 mike Exp $"
+// "$Id: file_chooser.cxx,v 1.5 2000/01/07 22:58:56 mike Exp $"
 //
 // File chooser test program for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,8 @@
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Input.H>
 #include <FL/fl_file_chooser.H>
+#include <FL/Fl_FileIcon.H>
+
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
@@ -46,18 +48,19 @@ void thecb(const char *name) {
 }
 
 int main(int argc, char **argv) {
-  Fl_Window window(400,200);
-  pattern = new Fl_Input(100,50,280,30,"Pattern:");
+  Fl_Window window(200,115);
+  pattern = new Fl_Input(60,10,130,25,"Pattern: ");
   pattern->static_value("*");
-  current = new Fl_Input(100,90,280,30,"Current:");
-  Fl_Button button(100,120,100,30,"&Choose file");
+  current = new Fl_Input(60,45,130,25,"Current: ");
+  Fl_Button button(110,80,80,25,"&Choose file");
   button.callback(pickfile);
   window.end();
   window.show(argc, argv);
+  Fl_FileIcon::load_system_icons();
   fl_file_chooser_callback(thecb);
   return Fl::run();
 }
 
 //
-// End of "$Id: file_chooser.cxx,v 1.4 1999/01/07 19:17:53 mike Exp $".
+// End of "$Id: file_chooser.cxx,v 1.5 2000/01/07 22:58:56 mike Exp $".
 //

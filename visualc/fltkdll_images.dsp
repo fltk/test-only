@@ -1,5 +1,5 @@
 # Microsoft Developer Studio Project File - Name="fltkdll_images" - Package Owner=<4>
-# Microsoft Developer Studio Generated Build File, Format Version 5.00
+# Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
@@ -17,13 +17,12 @@ CFG=fltkdll_images - Win32 Debug
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "fltkdll_images - Win32 Release" (based on\
- "Win32 (x86) Dynamic-Link Library")
-!MESSAGE "fltkdll_images - Win32 Debug" (based on\
- "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "fltkdll_images - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "fltkdll_images - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
+# PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
 CPP=cl.exe
@@ -71,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /GX /Od /I "." /I ".." /I "../visualc" /D "_DEBUG" /D "FL_DLL" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /ZI /c
+# ADD CPP /nologo /MTd /GX /ZI /Od /I "." /I ".." /I "../visualc" /D "_DEBUG" /D "FL_DLL" /D "FL_IMAGES_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -93,109 +92,14 @@ LINK32=link.exe
 # Begin Source File
 
 SOURCE=..\images\Fl_Guess_Image.cxx
-
-!IF  "$(CFG)" == "fltkdll_images - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll_images - Win32 Debug"
-
-DEP_CPP_FL_GU=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Bitmap.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Color.H"\
-	"..\FL\fl_draw.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
-	"..\FL\Fl_Image.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Shared_Image.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
-	"..\FL\win32.H"\
-	"..\FL\x.H"\
-	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
-	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\images\fl_jpeg.cxx
-
-!IF  "$(CFG)" == "fltkdll_images - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll_images - Win32 Debug"
-
-DEP_CPP_FL_JP=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Color.H"\
-	"..\FL\fl_draw.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
-	"..\FL\Fl_Image.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Shared_Image.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
-	"..\FL\win32.H"\
-	"..\FL\x.H"\
-	".\config.h"\
-	{$(INCLUDE)}"jconfig.h"\
-	{$(INCLUDE)}"jmorecfg.h"\
-	{$(INCLUDE)}"jpeglib.h"\
-	{$(INCLUDE)}"sys\types.h"\
-	
-NODEP_CPP_FL_JP=\
-	"..\..\..\..\Program Files\DevStudio\VC\INCLUDE\jerror.h"\
-	"..\..\..\..\Program Files\DevStudio\VC\INCLUDE\jpegint.h"\
-	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\images\fl_png.cxx
-
-!IF  "$(CFG)" == "fltkdll_images - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll_images - Win32 Debug"
-
-DEP_CPP_FL_PN=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Color.H"\
-	"..\FL\fl_draw.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Group.H"\
-	"..\FL\Fl_Image.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Shared_Image.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\Fl_Widget.H"\
-	"..\FL\Fl_Window.H"\
-	"..\FL\win32.H"\
-	"..\FL\x.H"\
-	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
-	
-
-!ENDIF 
-
 # End Source File
 # End Target
 # End Project

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.83 2000/01/07 08:50:28 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.84 2000/01/07 22:58:53 mike Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -46,6 +46,12 @@
 
 
 //
+// USE_ASYNC_SELECT - define it if you have WSAAsyncSelect()...
+//
+
+#define USE_ASYNC_SELECT
+
+//
 // WM_SYNCPAINT is an "undocumented" message, which is finally defined in
 // VC++ 6.0.
 //
@@ -61,6 +67,13 @@
 #  define WM_MOUSEWHEEL 0x020a
 #  define TRACKMOUSEEVENTUNDEFINED
 #endif
+
+//
+// WM_FLSELECT is the user-defined message that we get when one of
+// the sockets has pending data, etc.
+//
+
+#define WM_FLSELECT	(WM_USER+0x0400)
 
 #ifdef _MSVC_VER
 # if _MSVC_VER <= 11
@@ -106,11 +119,16 @@ void check_TrackMouseEvent() {
 
 // fd's are only implemented for sockets.  Microsoft Windows does not
 // have a unified IO system, so it doesn't support select() on files,
-// devices, or pipes...  Also, unlike UNIX the Windows select() call
-// doesn't use the nfds parameter, so we don't need to keep track of
-// the maximum FD number...
+// devices, or pipes...
+//
+// Microsoft provides the Berkeley select() call and an asynchronous
+// select function that sends a WIN32 message when the select condition
+// exists...
 
+#ifndef USE_ASYNC_SELECT
 static fd_set fdsets[3];
+#endif // !USE_ASYNC_SELECT
+
 #define POLLIN 1
 #define POLLOUT 4
 #define POLLERR 8
@@ -135,9 +153,18 @@ void Fl::add_fd(int n, int events, void (*cb)(int, void*), void *v) {
   fd[i].events = events;
   fd[i].cb = cb;
   fd[i].arg = v;
+
+#ifdef USE_ASYNC_SELECT
+  int mask = 0;
+  if (events & POLLIN) mask |= FD_READ;
+  if (events & POLLOUT) mask |= FD_WRITE;
+  if (events & POLLERR) mask |= FD_CLOSE;
+  WSAAsyncSelect(n, fl_window, WM_FLSELECT, mask);
+#else
   if (events & POLLIN) FD_SET(n, &fdsets[0]);
   if (events & POLLOUT) FD_SET(n, &fdsets[1]);
   if (events & POLLERR) FD_SET(n, &fdsets[2]);
+#endif // USE_ASYNC_SELECT
 }
 
 void Fl::add_fd(int fd, void (*cb)(int, void*), void* v) {
@@ -159,9 +186,14 @@ void Fl::remove_fd(int n, int events) {
     j++;
   }
   nfds = j;
+
+#ifdef USE_ASYNC_SELECT
+  WSAAsyncSelect(n, 0, 0, 0);
+#else
   if (events & POLLIN) FD_CLR(unsigned(n), &fdsets[0]);
   if (events & POLLOUT) FD_CLR(unsigned(n), &fdsets[1]);
   if (events & POLLERR) FD_CLR(unsigned(n), &fdsets[2]);
+#endif // USE_ASYNC_SELECT
 }
 
 void Fl::remove_fd(int n) {
@@ -173,6 +205,9 @@ MSG fl_msg;
 int fl_ready() {
   if (PeekMessage(&fl_msg, NULL, 0, 0, PM_NOREMOVE)) return 1;
 
+#ifdef USE_ASYNC_SELECT
+  return (0);
+#else
   timeval t;
   t.tv_sec = 0;
   t.tv_usec = 0;
@@ -181,6 +216,7 @@ int fl_ready() {
   fdt[1] = fdsets[1];
   fdt[2] = fdsets[2];
   return ::select(0,&fdt[0],&fdt[1],&fdt[2],&t);
+#endif // USE_ASYNC_SELECT
 }
 
 // these pointers are set by the Fl::lock() function:
@@ -202,6 +238,7 @@ double fl_wait(int timeout_flag, double time) {
 
   fl_unlock_function();
 
+#ifndef USE_ASYNC_SELECT
   if (nfds) {
     // For WIN32 we need to poll for socket input FIRST, since
     // the event queue is not something we can select() on...
@@ -226,9 +263,14 @@ double fl_wait(int timeout_flag, double time) {
       }
     }
   }
+#endif // !USE_ASYNC_SELECT
 
   // get the first message by waiting the correct amount of time:
   if (!timeout_flag) {
+#ifdef USE_ASYNC_SELECT
+    // Wait for a message...
+    have_message = GetMessage(&fl_msg, NULL, 0, 0);
+#else
     // If we are monitoring sockets we need to check them periodically,
     // so set a timer in this case...
     if (nfds) {
@@ -244,8 +286,8 @@ double fl_wait(int timeout_flag, double time) {
       // Wait for a message...
       have_message = GetMessage(&fl_msg, NULL, 0, 0) >= 0;
     }
+#endif // USE_ASYNC_SELECT
   } else {
-    TranslateMessage(&fl_msg);
     // Perform the requested timeout...
     have_message = PeekMessage(&fl_msg, NULL, 0, 0, PM_REMOVE);
     if (!have_message && time > 0.0) {
@@ -260,10 +302,22 @@ double fl_wait(int timeout_flag, double time) {
 
   // execute it, them execute any other messages that become ready during it:
   while (have_message) {
+#ifdef USE_ASYNC_SELECT
+    if (fl_msg.message == WM_FLSELECT) {
+      // Got notification for socket
+      for (int i = 0; i < nfds; i ++)
+        if (fd[i].fd == fl_msg.wParam) {
+	  (fd[i].cb)(fd[i].fd, fd[i].arg);
+	  break;
+	}
+    } else
+#endif // USE_ASYNC_SELECT
     if (fl_msg.message == WM_USER)  // Used for awaking wait() from another thread
       message = (void*)fl_msg.wParam;
-    else
+    else {
+      TranslateMessage(&fl_msg);
       DispatchMessage(&fl_msg);
+    }
     have_message = PeekMessage(&fl_msg, NULL, 0, 0, PM_REMOVE);
   }
 
@@ -1039,5 +1093,5 @@ int fl_windows_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.83 2000/01/07 08:50:28 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.84 2000/01/07 22:58:53 mike Exp $".
 //

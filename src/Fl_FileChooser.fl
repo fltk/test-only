@@ -1,5 +1,5 @@
-# data file for the Fltk User Interface Designer (fluid)
-version 2.00 
+# data file for the FLTK User Interface Designer (FLUID)
+version 2.0000 
 images_dir ./ 
 do_not_include_H_from_C 
 header_name {.h} 
@@ -19,7 +19,7 @@ class Fl_FileChooser {open
       label {Pick a File}
       callback {fileList->deselect();
 fileName->value("");
-window->hide();} open selected
+window->hide();} open
       xywh {391 243 375 315} resizable hotspot
       code0 {if (title) window->label(title);}
       code1 {\#include <stdio.h>}
@@ -39,10 +39,10 @@ fileName->value("");
 window->hide();}
         private xywh {300 280 65 25}
       }
-      Fl_Return_Button okButton {
+      Fl_Button okButton {
         label OK
-        callback {window->hide();}
-        private xywh {240 280 55 25}
+        callback {window->hide();} selected
+        private xywh {250 280 45 25}
       }
       Fl_Input fileName {
         label {Filename:}
@@ -69,7 +69,7 @@ pathname[0] = '\\0';
 for (i = 1; i <= dirMenu->value(); i ++)
   strcat(pathname, dirMenu->text(i));
 directory(pathname);} open
-        private xywh {75 10 200 25}
+        private xywh {65 10 210 25}
       } {}
       Fl_Button {} {
         callback {fileList->filter("*");;

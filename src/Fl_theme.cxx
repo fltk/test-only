@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_theme.cxx,v 1.1 2000/01/07 08:50:28 bill Exp $"
+// "$Id: Fl_theme.cxx,v 1.2 2000/01/07 22:58:53 mike Exp $"
 //
 // Theme loading code for the Fast Light Tool Kit (FLTK).
 //
@@ -115,7 +115,7 @@ static void unloadtheme();
 #ifndef WIN32
 extern void fl_open_display();
 #else
-extern void fl_windows_colors();
+extern int fl_windows_colors();
 #endif
 int Fl::loadtheme() {
   if (theme_loaded) return 0;
@@ -189,6 +189,6 @@ static void unloadtheme() {
 }
 
 //
-// End of "$Id: Fl_theme.cxx,v 1.1 2000/01/07 08:50:28 bill Exp $".
+// End of "$Id: Fl_theme.cxx,v 1.2 2000/01/07 22:58:53 mike Exp $".
 //
 

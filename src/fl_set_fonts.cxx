@@ -1,5 +1,5 @@
 //
-// "$Id: fl_set_fonts.cxx,v 1.13 2000/01/07 08:50:40 bill Exp $"
+// "$Id: fl_set_fonts.cxx,v 1.14 2000/01/07 22:58:54 mike Exp $"
 //
 // More font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -371,6 +371,12 @@ int Fl_Font_::sizes(int*& sizep) const {
 
 #endif
 
+#if defined(WIN32) || defined(__EMX__)
+#  define strcasecmp stricmp
+#  define strncasecmp strnicmp
+#endif // WIN32 || __EMX__
+
+
 ////////////////////////////////////////////////////////////////
 // Rather poor implementation of fl_font(name), it just searches
 // all the known fonts for a match:
@@ -408,5 +414,5 @@ Fl_Font fl_font(const char* name) {
 }
 
 //
-// End of "$Id: fl_set_fonts.cxx,v 1.13 2000/01/07 08:50:40 bill Exp $".
+// End of "$Id: fl_set_fonts.cxx,v 1.14 2000/01/07 22:58:54 mike Exp $".
 //
