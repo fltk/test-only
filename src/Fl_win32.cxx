@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.223 2004/07/27 12:29:15 laza2000 Exp $"
+// "$Id: Fl_win32.cxx,v 1.224 2004/07/27 12:34:03 laza2000 Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1335,7 +1335,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
      	  dbcsbuf[0] = (unsigned char) wParam;
 	}
 	dbcsbuf[2] = 0;
-	e_length = utf8frommb(buffer, 31, dbcsbuf, 2);
+	e_length = utf8frommb(buffer, 31, dbcsbuf, dbcsl);
 	dbcsbuf[0] = 0;
       }
     } else {
@@ -2121,5 +2121,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.223 2004/07/27 12:29:15 laza2000 Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.224 2004/07/27 12:34:03 laza2000 Exp $".
 //
