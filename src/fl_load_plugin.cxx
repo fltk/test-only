@@ -44,14 +44,21 @@ void* fl_load_plugin(const char* n, const char* function) {
   // open plugin, any errors will be printed
   DLhandle handle = dlopen(name, RTLD_NOW);
   if (!handle) {
-    fprintf(stderr, "fl_load_plugin(): could not open file \"%s\".\n", name);
+#ifndef WIN32
+    fprintf(stderr, "%s\n", dlerror());
+#else
+    fprintf(stderr, "%s: error loading plugin\n", name);
+#endif
     return 0;
   }
 
   void* f = (void*)dlsym(handle, function);
   if (!f) {
-    fprintf(stderr, "fl_load_plugin(): could not find function \"%s\"\n"
-                    "fl_load_plugin(): in file \"%s\".\n", function, name);
+#ifndef WIN32
+    fprintf(stderr, "%s\n", dlerror());
+#else
+    fprintf(stderr, "%s: function %s missing\n", name, function);
+#endif
     return 0;
   }
   return f;

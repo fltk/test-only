@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.27 2000/07/20 05:28:33 clip Exp $"
+// "$Id: essai.cxx,v 1.28 2000/07/30 03:46:04 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -78,6 +78,8 @@ void Fl_Image_Box::draw(int x, int y, int w, int h,
   }
 }
 
+extern FL_API const char* fl_find_config_file(const char* fn);
+
 Fl_Image_Box::Fl_Image_Box(const char* normal_b, const char* down_b, const char* highlight_b, Fl_Flags m) :
 Fl_Boxtype_(0), mask(m) {
   normal_img = Fl_JPEG_Image::get(fl_find_config_file(normal_b));
@@ -154,5 +156,5 @@ int fltk_theme() {
 }
 
 //
-// End of "$Id: essai.cxx,v 1.27 2000/07/20 05:28:33 clip Exp $".
+// End of "$Id: essai.cxx,v 1.28 2000/07/30 03:46:04 spitzak Exp $".
 //
