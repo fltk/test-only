@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.48 2001/03/12 08:17:05 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.49 2001/03/20 18:21:53 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -470,14 +470,13 @@ int Fl_Input::up_down_position(int i, int keepmark) {
   return j;
 }
 
-int Fl_Input::copy() {
-  if (mark() != position()) {
-    int b, e; if (position() < mark()) {
-      b = position(); e = mark();
-    } else {
-      e = position(); b = mark();
-    }
-    Fl::copy(value()+b, (type()!=FL_SECRET_INPUT) ? e-b : 0);
+int Fl_Input::copy(bool clipboard) {
+  int b = position();
+  int e = mark();
+  if (b != e) {
+    if (b > e) {b = mark(); e = position();}
+    if (type() == FL_SECRET_INPUT) e = b;
+    Fl::copy(value()+b, e-b, clipboard);
     return 1;
   }
   return 0;
@@ -824,7 +823,7 @@ int Fl_Input::handle_key() {
     return 1;
   case FL_Insert:
     if (Fl::event_state(FL_CTRL)) return copy();
-    else if (Fl::event_state(FL_SHIFT)) {Fl::paste(*this); return 1;}
+    else if (Fl::event_state(FL_SHIFT)) {Fl::paste(*this,true); return 1;}
     return 0; // CUA toggles insert mode on/off, we don't support that!
   case FL_Delete:
     // what does CUA do with Ctrl+Delete?
@@ -840,7 +839,7 @@ int Fl_Input::handle_key() {
     if (i == position() && i < size()) i++;
     if (cut(position(), i))
       // Make all the adjacent ^K's go into the clipboard, like Emacs:
-      Fl::copy(undobuffer, yankcut);
+      Fl::copy(undobuffer, yankcut, true);
     return 1;
   case FL_Enter:
   case FL_KP_Enter:
@@ -867,7 +866,7 @@ int Fl_Input::handle_key() {
     if (Fl::event_state(FL_CTRL)) return copy();
     break;
   case 'v':
-    if (Fl::event_state(FL_CTRL)) {Fl::paste(*this); return 1;}
+    if (Fl::event_state(FL_CTRL)) {Fl::paste(*this,true); return 1;}
     break;
   }
 
@@ -952,7 +951,7 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
       dnd_save_position = position();
       dnd_save_mark = mark();
       // drag the data:
-      copy(); Fl::dnd();
+      copy(false); Fl::dnd();
       return 1;
     }
     newpos = mouse_position(X, Y, W, H);
@@ -1002,10 +1001,10 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
     }
     if (Fl::event_button() == 2) {
       Fl::event_is_click(0); // stop double click from picking a word
-      Fl::paste(*this);
+      Fl::paste(*this,false);
     } else if (!Fl::event_is_click()) {
-      // copy drag-selected text to the clipboard.
-      copy();
+      // copy drag-selected text for middle-mouse click:
+      copy(false);
     }
     return 1;
 
@@ -1041,5 +1040,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.48 2001/03/12 08:17:05 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.49 2001/03/20 18:21:53 spitzak Exp $".
 //

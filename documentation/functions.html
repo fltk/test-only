@@ -561,15 +561,26 @@ However the colors may flash as you move the cursor between windows.
 
 <p>This does nothing if the current visual is not colormapped.</p>
 
-<h3><A name=paste>void Fl::paste(Fl_Widget *receiver)</A></h3>
+<h3><A name=paste>void Fl::paste(Fl_Widget *receiver, bool clipboard =
+false)</A></h3>
 
-Set things up so the receiver widget will be called with an <A href=#FL_PASTE>
-<tt>FL_PASTE</tt></A> event some time in the future. The reciever 
-should be prepared to be called <I>directly</I> by this, or for it to 
-happen <I>later</I>, or possibly <I>not at all</I>.  This allows the 
-window system to take as long as necessary to retrieve the paste buffer 
-(or even to screw up completely) without complex and error-prone 
-synchronization code in FLTK. 
+Cause an <a href=events.html#FL_PASTE><tt>FL_PASTE</tt></a> event to be
+sent to the <i>receiver</i> with the contents of the current selection
+in the <a href=#event_text><tt>Fl::event_text()</tt></a>. The
+selection can be set by <a href=#copy><tt>Fl::copy()</tt></a>.
+
+<p>There are actually two buffers. If <i>clipboard</i> is true then
+the text is from the user-visible selection that is moved around
+with cut/copy/paste commands (on X this is the CLIPBOARD
+selection). If <i>clipboard</i> is false then the text goes into a
+less-visible buffer used for temporarily selecting text with the mouse
+and for drag & drop (on X this is the XA_PRIMARY selection).
+
+<p>The reciever should be prepared to be called <I>directly</I> by
+this, or for it to happen <I>later</I>, or possibly <I>not at all</I>.
+This allows the window system to take as long as necessary to retrieve
+the paste buffer (or even to screw up completely) without complex and
+error-prone synchronization code most toolkits require.
 
 <h3><A name=pushed>Fl_Widget *Fl::pushed() const
 <BR>void Fl::pushed(Fl_Widget *)</A></h3>
@@ -639,23 +650,28 @@ way out is for a callback to call <tt>exit()</tt> or <tt>abort()</tt>.
 A normal program will end <tt>main()</tt> with <tt>return
 Fl::run();</tt>.
 
-<h3><A name=copy>void Fl::copy(const char *stuff, int len)
-<br>const char* Fl::selection()
-<br>int Fl::selection_length()</a></h3>
+<h3><A name=copy>void Fl::copy(const char *stuff, int len, bool clipboard=false)</a></h3>
 
-The first form changes the current selection.  The block of text is 
+Change the current selection.  The block of text is 
 copied to an internal buffer by FLTK (be careful if doing this in 
 response to an <tt>FL_PASTE</tt> as this <I>may</I> be the same buffer 
-returned by <tt>event_text()</tt>). The second form looks 
-at the buffer containing the current selection.  The contents of this 
-buffer are undefined if this program does not own the current 
-selection. 
+returned by <tt>event_text()</tt>).
+
+<p>The block of text may be retrieved (from this program or whatever
+program last set it) with <a href=#paste><tt>Fl::paste()</tt></a>.
+
+<p>There are actually two buffers. If <i>clipboard</i> is true then
+the text goes into the user-visible selection that is moved around
+with cut/copy/paste commands (on X this is the CLIPBOARD
+selection). If <i>clipboard</i> is false then the text goes into a
+less-visible buffer used for temporarily selecting text with the mouse
+and for drag & drop (on X this is the XA_PRIMARY selection).
 
 <p><I>Copying the buffer every time the selection is changed is 
 obviously wasteful, especially for large selections.  An interface will 
 probably be added in a future version to allow the selection to be made 
 by a callback function.  The current interface will be emulated on top 
-of this.</I></p>
+of this.</I>
 
 <h3><A name=test_shortcut>int Fl::test_shortcut(int shortcut)</A></h3>
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.70 2001/03/12 00:49:01 spitzak Exp $"
+// "$Id: Fl.H,v 1.71 2001/03/20 18:21:52 spitzak Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -159,8 +159,8 @@ public:
   static void focus(Fl_Widget& w) {focus(&w);}
 
   // cut/paste:
-  static void copy(const char* stuff, int len);
-  static void paste(Fl_Widget &receiver);
+  static void copy(const char* stuff, int len, bool clipboard = false);
+  static void paste(Fl_Widget &receiver, bool clipboard = false);
   static int dnd();
 
   // screen size:
@@ -246,5 +246,5 @@ struct FL_API fl_sysinfo {
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.70 2001/03/12 00:49:01 spitzak Exp $".
+// End of "$Id: Fl.H,v 1.71 2001/03/20 18:21:52 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_dnd_x.cxx,v 1.3 2001/03/12 00:49:03 spitzak Exp $"
+// "$Id: fl_dnd_x.cxx,v 1.4 2001/03/20 18:21:54 spitzak Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
@@ -134,7 +134,7 @@ int Fl::dnd() {
 
   if (local_window) {
     fl_i_own_selection = 1;
-    if (local_handle(FL_DND_RELEASE, local_window)) paste(*belowmouse());
+    if (local_handle(FL_DND_RELEASE, local_window)) paste(*belowmouse(),false);
   } else if (version) {
     fl_sendClientMessage(target_window, fl_XdndDrop, source_window,
 		      0, fl_event_time);
@@ -166,5 +166,5 @@ int Fl::dnd() {
 
 
 //
-// End of "$Id: fl_dnd_x.cxx,v 1.3 2001/03/12 00:49:03 spitzak Exp $".
+// End of "$Id: fl_dnd_x.cxx,v 1.4 2001/03/20 18:21:54 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.108 2001/03/12 00:49:03 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.109 2001/03/20 18:21:53 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -243,6 +243,7 @@ static Atom WM_PROTOCOLS;
        Atom fl_MOTIF_WM_HINTS;
 static Atom FLTKChangeScheme;
 static Atom TARGETS;
+static Atom CLIPBOARD;
 Atom fl_XdndAware;
 Atom fl_XdndSelection;
 Atom fl_XdndEnter;
@@ -291,6 +292,7 @@ void fl_open_display(Display* d) {
   fl_MOTIF_WM_HINTS     = XInternAtom(d, "_MOTIF_WM_HINTS",	0);
   FLTKChangeScheme      = XInternAtom(d, "FLTKChangeScheme",	0);
   TARGETS               = XInternAtom(d, "TARGETS",		0);
+  CLIPBOARD		= XInternAtom(d, "CLIPBOARD",		0);
   fl_XdndAware          = XInternAtom(d, "XdndAware",		0);
   fl_XdndSelection      = XInternAtom(d, "XdndSelection",	0);
   fl_XdndEnter          = XInternAtom(d, "XdndEnter",		0);
@@ -381,25 +383,26 @@ void Fl::get_mouse(int &x, int &y) {
 // Code used for paste and DnD into the program:
 
 static Fl_Widget *fl_selection_requestor;
-static char *selection_buffer;
-static int selection_length;
-static int selection_buffer_length;
-char fl_i_own_selection;
+static char *selection_buffer[2];
+static int selection_length[2];
+static int selection_buffer_length[2];
+bool fl_i_own_selection[2];
 
 // Call this when a "paste" operation happens:
-void Fl::paste(Fl_Widget &receiver) {
-  if (fl_i_own_selection) {
+void Fl::paste(Fl_Widget &receiver, bool clipboard) {
+  if (fl_i_own_selection[clipboard]) {
     // We already have it, do it quickly without window server.
     // Notice that the text is clobbered if set_selection is
     // called in response to FL_PASTE!
-    Fl::e_text = selection_buffer;
-    Fl::e_length = selection_length;
+    Fl::e_text = selection_buffer[clipboard];
+    Fl::e_length = selection_length[clipboard];
     receiver.handle(FL_PASTE);
     return;
   }
   // otherwise get the window server to return it:
   fl_selection_requestor = &receiver;
-  XConvertSelection(fl_display, XA_PRIMARY, XA_STRING, XA_PRIMARY,
+  Atom property = clipboard ? CLIPBOARD : XA_PRIMARY;
+  XConvertSelection(fl_display, property, XA_STRING, property,
 		    fl_xid(Fl::first_window()), fl_event_time);
 }
 
@@ -435,18 +438,19 @@ void fl_sendClientMessage(Window window, Atom message,
 ////////////////////////////////////////////////////////////////
 // Code for copying to clipboard and DnD out of the program:
 
-void Fl::copy(const char *stuff, int len) {
+void Fl::copy(const char *stuff, int len, bool clipboard) {
   if (!stuff || len<0) return;
-  if (len+1 > selection_buffer_length) {
-    delete[] selection_buffer;
-    selection_buffer = new char[len+100];
-    selection_buffer_length = len+100;
+  if (len+1 > selection_buffer_length[clipboard]) {
+    delete[] selection_buffer[clipboard];
+    selection_buffer[clipboard] = new char[len+100];
+    selection_buffer_length[clipboard] = len+100;
   }
-  memcpy(selection_buffer, stuff, len);
-  selection_buffer[len] = 0; // needed for direct paste
-  selection_length = len;
-  fl_i_own_selection = 1;
-  XSetSelectionOwner(fl_display, XA_PRIMARY, fl_message_window, fl_event_time);
+  memcpy(selection_buffer[clipboard], stuff, len);
+  selection_buffer[clipboard][len] = 0; // needed for direct paste
+  selection_length[clipboard] = len;
+  fl_i_own_selection[clipboard] = true;
+  Atom property = clipboard ? CLIPBOARD : XA_PRIMARY;
+  XSetSelectionOwner(fl_display, property, fl_message_window, fl_event_time);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -829,9 +833,10 @@ int fl_handle(const XEvent& xevent)
     }
     return 1;}
 
-  case SelectionClear:
-    fl_i_own_selection = 0;
-    return 1;
+  case SelectionClear: {
+    bool clipboard = fl_xevent->xselectionclear.selection == CLIPBOARD;
+    fl_i_own_selection[clipboard] = false;
+    return 1;}
 
   case SelectionRequest: {
     XSelectionEvent e;
@@ -839,6 +844,7 @@ int fl_handle(const XEvent& xevent)
     e.display = fl_display;
     e.requestor = fl_xevent->xselectionrequest.requestor;
     e.selection = fl_xevent->xselectionrequest.selection;
+    bool clipboard = e.selection == CLIPBOARD;
     e.target = fl_xevent->xselectionrequest.target;
     e.time = fl_xevent->xselectionrequest.time;
     e.property = fl_xevent->xselectionrequest.property;
@@ -847,10 +853,11 @@ int fl_handle(const XEvent& xevent)
       XChangeProperty(fl_display, e.requestor, e.property,
 		      XA_ATOM, sizeof(Atom)*8, 0, (unsigned char*)&a,
 		      sizeof(Atom));
-    } else if (/*e.target == XA_STRING &&*/ selection_length) {
+    } else if (/*e.target == XA_STRING &&*/ selection_length[clipboard]) {
       XChangeProperty(fl_display, e.requestor, e.property,
-		      e.target, 8, 0, (unsigned char *)selection_buffer,
-		      selection_length);
+		      e.target, 8, 0,
+		      (unsigned char *)selection_buffer[clipboard],
+		      selection_length[clipboard]);
     } else {
 //    char* x = XGetAtomName(fl_display,e.target);
 //    fprintf(stderr,"selection request of %s\n",x);
@@ -1116,13 +1123,98 @@ void Fl_Window::make_current() const {
 ////////////////////////////////////////////////////////////////
 // Get the KDE colors that it writes to the xrdb database:
 
-static const char* get_default(const char* a, const char* b) {
+// Set this to 1 to get my attempt to improve XGetDefault:
+#define MY_GET_DEFAULT 0
+
+#if MY_GET_DEFAULT
+
+// Simplified resource search that understands periods in the names.
+// Matches class.a:, class*a:, *.a:, *a:, and a:
+// Ignores case on everything.
+// Strips whitespace from both sides of the value
+// An empty value returns null.
+// Also understands = instead of :
+// Comments start with ! or ;
+// No quoting of any kind on the values!
+
+// case independent compare, r advanced to point after match:
+static int match(char* & rr, const char* a) {
+  for (char* r = rr; ; a++, r++) {
+    if (!*a) {rr = r; return 1;}
+    if (tolower(*r) != tolower(*a)) return 0;
+  }
+}
+
+// return true if this character is the end of line:
+static int iseol(char c) {return !c || c=='\n' || c=='!' ||c==';';}
+
+// like strtok, this mangles the string temporarily using these:
+static char* resourcestring;
+static char* clobbered;
+static char clobbered_value;
+
+static const char* get_default(const char* a) {
+  if (clobbered) {*clobbered = clobbered_value; clobbered = 0;}
+  if (!resourcestring) resourcestring = XResourceManagerString(fl_display);
+  char* r = resourcestring;
+  char* found = 0;
+  for (;;) { // for each line in r
+    // skip leading whitespace (and also all blank lines):
+    while (isspace(*r)) r++;
+    if (!*r) break;
+    // exact is true if the program name is matched:
+    int exact = 0;
+    if (*r == '*') {
+      // checked for * or *.:
+      r++;
+      if (*r == '.') r++;
+    } else if (match(r, Fl_Window::xclass()) && (*r == '.' || *r == '*')) {
+      // matched the program name:
+      r++;
+      exact = 1;
+    } // otherwise try just 'a':
+    if (match(r, a)) {
+      while (*r != '\n' && isspace(*r)) r++;
+      if (*r == ':' || *r == '=') {
+	r++;
+	while (*r != '\n' && isspace(*r)) r++;
+	if (iseol(*r)) { // blank attribute
+	  if (exact) return 0;
+	  goto SKIP;
+	}
+	// find the end of the word (point to first whitespace at eol or \n):
+	char* e = r; while (!iseol(*e)) e++;
+	while (e > r && isspace(*(e-1))) e--;
+	// remove anything for previous find
+	if (clobbered) *clobbered = clobbered_value;
+	// replace the end with a null, which we will put back later:
+	clobbered = e;
+	clobbered_value = *e;
+	*e = 0;
+	if (exact || !clobbered_value) return r;
+	found = r; r = e+1;
+      } else {
+	// check for blank attribute name with no : or = sign:
+	if (exact && iseol(*r)) return 0;
+      }
+    }
+  SKIP:
+    while (*r && *r++ != '\n'); // go to next line
+  }
+  return found;
+}
+
+#else
+
+static inline const char* get_default(const char* a) {
+  return XGetDefault(fl_display, Fl_Window::xclass(), a);
+}
+
+static inline const char* get_default(const char* a, const char* b) {
   return XGetDefault(fl_display, a, b);
 }
 
-static const char* get_default(const char* a) {
-  return XGetDefault(fl_display, Fl_Window::xclass(), a);
-}
+#endif
 
 static Fl_Color to_color(const char* p) {
   return p ? fl_rgb(p) : 0;
@@ -1140,6 +1232,19 @@ void fl_get_system_colors() {
     Fl_Widget::default_style->highlight_label_color = color;
   }
 
+#if MY_GET_DEFAULT
+  color = to_color(get_default("Text.background"));
+  if (color) Fl_Widget::default_style->text_background = color;
+
+  color = to_color(get_default("Text.foreground"));
+  if (color) Fl_Widget::default_style->text_color = color;
+
+  color = to_color(get_default("Text.selectBackground"));
+  if (color) Fl_Widget::default_style->selection_color = color;
+
+  color = to_color(get_default("Text.selectForeground"));
+  if (color) Fl_Widget::default_style->selection_text_color = color;
+#else
   color = to_color(get_default("Text","background"));
   if (color) Fl_Widget::default_style->text_background = color;
 
@@ -1151,6 +1256,7 @@ void fl_get_system_colors() {
 
   color = to_color(get_default("Text","selectForeground"));
   if (color) Fl_Widget::default_style->selection_text_color = color;
+#endif
 
   // also Scrollbar,width
   // does not appear to be anything there for setting the tooltips...
@@ -1168,8 +1274,14 @@ void fl_get_system_colors() {
 
   w = get_default("wheel_down_button");
   if (w) wheel_down_button = atoi(w);
+
+#if MY_GET_DEFAULT
+  // undo my mangling of the x resource string:
+  if (clobbered) {*clobbered = clobbered_value; clobbered = 0;}
+#endif
+
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.108 2001/03/12 00:49:03 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.109 2001/03/20 18:21:53 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_show_colormap.cxx,v 1.17 2001/03/08 07:39:06 clip Exp $"
+// "$Id: fl_show_colormap.cxx,v 1.18 2001/03/20 18:21:54 spitzak Exp $"
 //
 // Colormap color selection dialog for the Fast Light Tool Kit (FLTK).
 //
@@ -126,7 +126,7 @@ int ColorMenu::handle(int e) {
 #endif
 Fl_Color ColorMenu::run() {
   if (which > 255) {
-    move(FL_USEDEFAULT, FL_USEDEFAULT);
+    position(Fl::event_x_root()+5, Fl::event_y_root()-h()/2);
   } else {
     position(Fl::event_x_root()-(initial%8)*BOXSIZE-BOXSIZE/2-BORDER,
 	     Fl::event_y_root()-(initial/8)*BOXSIZE-BOXSIZE/2-BORDER);
@@ -145,5 +145,5 @@ Fl_Color fl_show_colormap(Fl_Color oldcol) {
 }
 
 //
-// End of "$Id: fl_show_colormap.cxx,v 1.17 2001/03/08 07:39:06 clip Exp $".
+// End of "$Id: fl_show_colormap.cxx,v 1.18 2001/03/20 18:21:54 spitzak Exp $".
 //

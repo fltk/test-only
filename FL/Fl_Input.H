@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.H,v 1.19 2000/09/07 08:52:35 spitzak Exp $"
+// "$Id: Fl_Input.H,v 1.20 2001/03/20 18:21:53 spitzak Exp $"
 //
 // Input base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -69,7 +69,7 @@ public:
   int cut(int a, int b) {return replace(a, b, 0, 0);}
   int insert(const char* t, int l=0){return replace(position_, mark_, t, l);}
   int replace(int a, int b, char c) {return replace(a,b,&c,1);}
-  int copy();
+  int copy(bool clipboard = true);
   int undo();
   int word_start(int i) const;
   int word_end(int i) const;
@@ -120,5 +120,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Input.H,v 1.19 2000/09/07 08:52:35 spitzak Exp $".
+// End of "$Id: Fl_Input.H,v 1.20 2001/03/20 18:21:53 spitzak Exp $".
 //

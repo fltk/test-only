@@ -24,9 +24,10 @@ own WIN32 window classes.  The easiest way is to call
 <TT>Fl::wait()</TT>, it will call <TT>DispatchMessage</TT> for all
 messages to the other windows.  If necessary you can let the other
 library take over (as long as it calls <TT>DispatchMessage()</TT>),
-but you will have to arrange for the function <TT>Fl::flush()</TT> to
-be called regularily so that widgets are updated, timeouts are
-handled, and the idle functions are called.
+but you will have to arrange for the function <a
+href=functions.html#flush><TT>Fl::flush()</TT></a> to be called
+regularily so that widgets are updated. Timeouts, the idle function,
+and file descriptor callbacks will not work in this case.
 
 <h4><A name=add_handler>void Fl::add_handler(int (*f)(int))</A></h4>
 

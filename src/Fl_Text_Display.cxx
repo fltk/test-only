@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.10 2001/03/12 00:49:03 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.11 2001/03/20 18:21:53 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -1922,7 +1922,7 @@ int Fl_Text_Display::handle(int event) {
         dragType = DRAG_CHAR;
 
         const char* copy = buffer()->selection_text();
-        if (*copy) Fl::copy(copy, strlen(copy));
+        if (*copy) Fl::copy(copy, strlen(copy), false);
         free((void*)copy);
         return 1;
       }
@@ -1948,5 +1948,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.10 2001/03/12 00:49:03 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.11 2001/03/20 18:21:53 spitzak Exp $".
 //
