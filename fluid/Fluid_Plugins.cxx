@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Plugins.cxx,v 1.20 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fluid_Plugins.cxx,v 1.21 2001/07/29 21:40:34 spitzak Exp $"
 //
 // Plugins code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,22 +29,20 @@
 #include <fltk/Fl.h>
 #include "Fluid_Plugins.h"
 #include <fltk/Fl_Menu_Item.h>
-#include "Fl_Type.h"
+#include <fltk/fl_load_plugin.h>
 
 Fluid_Plugin* plugins[MAXPLUGINS];
 int nbplugins;
 Fl_Menu_Item Plugins_Options_Menu[MAXPLUGINS+1];
 Fl_Menu_Item Plugins_New_Menu[MAXPLUGINS+1];
 
-
-#if defined(WIN32) && defined(_MSC_VER)
-#	include "../visualc/config.h"
+#if defined(_WIN32) && defined(_MSC_VER)
+# include "../visualc/config.h"
 #else
-#include <config.h> // for strcasecmp
+# include <config.h> // for strcasecmp
 #endif
-#include <fltk/Fl_Plugins.h>
 
-#if defined(FLDLopen) && (!defined(WIN32) || defined(FL_SHARED))
+#if USE_PLUGINS
 
 #include <fltk/dirent.h>
 static int nboptions;
@@ -54,48 +52,37 @@ static void ReadPlugin(char* s, const char* location)
 {
   if(nbplugins >= MAXPLUGINS) return;
 
-  FLDLhandle handle;
   if(!strcmp(s+strlen(s)-sizeof(PLUGINS_EXTENSION)+1, PLUGINS_EXTENSION)) {
     char s2[256];
 
     sprintf(s2, "%s%s", location, s);
-    handle = FLDLopen(s2 );
 
-    if(handle) {
+    Fluid_Plugin* d = (Fluid_Plugin*)fl_load_plugin(s2, "fluid_plugin");
 
-      int used = 0;
+    if (d) {
       s[strlen(s)-sizeof(PLUGINS_EXTENSION)+1] = 0;
 
-      Fluid_Plugin *d = (Fluid_Plugin*) FLDLsym( handle, "fluid_plugin");
-      if(d) {
-	int i;
-	for(i=0; i<nbplugins; i++) if(!strcmp(d->name, plugins[i]->name)) break;
-	if(i<nbplugins) 
-	  fprintf(stderr, "Duplicate FLUID plugin, only the first one will be loaded ...\n");
-	else {
-	  fprintf(stderr, "Found FLUID plugin '%s' ...\n", s);
-	  used = 1;
-	  if(d->options_menu) {
-	    Plugins_Options_Menu[nboptions].text = d->name;
-	    Plugins_Options_Menu[nboptions].user_data_ = d->options_menu;
-	    Plugins_Options_Menu[nboptions].flags = FL_SUBMENU_POINTER;
-	    nboptions++;
-	  }
-	  if(d->new_menu) {
-	    Plugins_New_Menu[nbnew].text = d->name;
-	    Plugins_New_Menu[nbnew].user_data_ = d->new_menu;
-	    Plugins_New_Menu[nbnew].flags = FL_SUBMENU_POINTER;
-	    fill_in_New_Menu(d->new_menu);
-	    nbnew++;
-	  }
-	  plugins[nbplugins++] = d;
+      int i;
+      for(i=0; i<nbplugins; i++) if(!strcmp(d->name, plugins[i]->name)) break;
+      if(i<nbplugins) 
+	fprintf(stderr, "Duplicate FLUID plugin, only the first one will be loaded ...\n");
+      else {
+	fprintf(stderr, "Found FLUID plugin '%s' ...\n", s);
+	if(d->options_menu) {
+	  Plugins_Options_Menu[nboptions].text = d->name;
+	  Plugins_Options_Menu[nboptions].user_data_ = d->options_menu;
+	  Plugins_Options_Menu[nboptions].flags = FL_SUBMENU_POINTER;
+	  nboptions++;
 	}
+	if(d->new_menu) {
+	  Plugins_New_Menu[nbnew].text = d->name;
+	  Plugins_New_Menu[nbnew].user_data_ = d->new_menu;
+	  Plugins_New_Menu[nbnew].flags = FL_SUBMENU_POINTER;
+	  fill_in_New_Menu(d->new_menu);
+	  nbnew++;
+	}
+	plugins[nbplugins++] = d;
       }
-
-      if(!used) FLDLclose(handle);
-
-    } else {
-      fprintf(stderr, "FLUID plugin error : %s\n", FLDLerror());
     }
   }
 }
@@ -133,7 +120,7 @@ void read_plugins()
   // Priority order in case of duplicate plugin name is from the most local to the most global
   ReadPlugins("plugins/");
   ReadPlugins("./");
-#ifndef WIN32
+#ifndef _WIN32
   char s[256];
   sprintf(s, "%s/.fluid/plugins/", getenv("HOME"));
   ReadPlugins(s);
@@ -148,5 +135,5 @@ void read_plugins() {}
 #endif
 
 //
-// End of "$Id: Fluid_Plugins.cxx,v 1.20 2001/07/23 09:50:04 spitzak Exp $"
+// End of "$Id: Fluid_Plugins.cxx,v 1.21 2001/07/29 21:40:34 spitzak Exp $"
 //
