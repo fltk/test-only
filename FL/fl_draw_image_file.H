@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_file.H,v 1.4 1999/08/26 19:30:03 vincent Exp $"
+// "$Id: fl_draw_image_file.H,v 1.5 1999/08/26 20:35:05 carl Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,7 @@
 
 #include "x.H"
 #include <FL/Fl_Image.H>
+#include <stddef.h>
 
 // image file:
 typedef int (Fl_Image_File_Measure_F)(char* filename, unsigned char* datas, 
@@ -106,5 +107,5 @@ Fl_Offscreen fl_read_bmp(char *file, uchar* datas, Fl_Offscreen &mask);
 #endif
 
 //
-// End of "$Id: fl_draw_image_file.H,v 1.4 1999/08/26 19:30:03 vincent Exp $"
+// End of "$Id: fl_draw_image_file.H,v 1.5 1999/08/26 20:35:05 carl Exp $"
 //
