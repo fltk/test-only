@@ -1,5 +1,5 @@
 //
-// "$Id: fl_overlay_visual.cxx,v 1.4 1999/01/07 19:17:40 mike Exp $"
+// "$Id: fl_overlay_visual.cxx,v 1.5 2001/07/23 09:50:05 spitzak Exp $"
 //
 // X overlay support for the Fast Light Tool Kit (FLTK).
 //
@@ -30,8 +30,8 @@
 
 #include <config.h>
 #if HAVE_OVERLAY
-#include <FL/Fl.H>
-#include <FL/x.H>
+#include <fltk/Fl.h>
+#include <fltk/x.h>
 
 // SERVER_OVERLAY_VISUALS property element:
 struct OverlayInfo {
@@ -46,9 +46,9 @@ extern XVisualInfo* fl_overlay_visual;
 extern ulong fl_transparent_pixel;
 
 XVisualInfo *fl_find_overlay_visual() {
-  static char beenhere;
+  static bool beenhere;
   if (beenhere) return fl_overlay_visual;
-  beenhere = 1;
+  beenhere = true;
 
   fl_open_display();
   Atom overlayVisualsAtom =
@@ -75,8 +75,8 @@ XVisualInfo *fl_find_overlay_visual() {
       templt.visualid = overlayInfo[i].overlay_visual;
       int num;
       XVisualInfo *v1=XGetVisualInfo(fl_display, VisualIDMask, &templt, &num);
-      if (v1->screen == fl_screen && 
-	  !v1->red_mask && (!v || v1->depth >= v->depth && v1->depth <= 8)) {
+      if (v1->screen == fl_screen && v1->c_class == PseudoColor
+	  && (!v || v1->depth > v->depth && v1->depth <= 8)) {
 	if (v) XFree((char*)v);
 	v = v1;
 	fl_transparent_pixel = overlayInfo[i].value;
@@ -92,12 +92,12 @@ XVisualInfo *fl_find_overlay_visual() {
     }
   }
   XFree((char*)overlayInfo);
-  //  printf("overlay visual %d selected\n", fl_overlay_visual->visualid);
+  //printf("overlay visual %d selected\n", fl_overlay_visual->visualid);
   return fl_overlay_visual;
 }
 
 #endif
 
 //
-// End of "$Id: fl_overlay_visual.cxx,v 1.4 1999/01/07 19:17:40 mike Exp $".
+// End of "$Id: fl_overlay_visual.cxx,v 1.5 2001/07/23 09:50:05 spitzak Exp $".
 //

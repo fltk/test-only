@@ -68,12 +68,12 @@ int main (int argc, char **argv) {
         o->end();
       }
        {      Fl_Box* o = new Fl_Box(215, 180, 145, 50, "Fl_Box");
-        o->label_font(fl_fonts()+3);
+        o->label_font(fl_fonts+3);
         o->label_type(FL_SHADOW_LABEL);
         o->label_size(38);
       }
        {      Fl_Value_Output* o = new Fl_Value_Output(230, 140, 135, 30, "value:");
-        o->text_font(fl_fonts()+5);
+        o->text_font(fl_fonts+5);
         o->text_color((Fl_Color)4);
         o->text_size(24);
         o->maximum(10000);

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.cxx,v 1.33 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: Fl_Value_Slider.cxx,v 1.34 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Value slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,10 +23,10 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Value_Slider.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Output.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Value_Slider.h>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Output.h>
 
 void Fl_Value_Slider::draw() {
   int sx = 0, sy = 0, sw = w(), sh = h();
@@ -36,9 +36,11 @@ void Fl_Value_Slider::draw() {
   } else {
     sy += 25; bh = 25; sh -= 25;
   }
+  Fl_Boxtype valuebox = Fl_Output::default_style->text_box;
+  if (!valuebox) valuebox = Fl_Widget::default_style->text_box;
   if (damage()&FL_DAMAGE_ALL) {
     draw_text_frame(sx, sy, sw, sh);
-    default_style->text_box->draw(this, bx, by, bw, bh, FL_FRAME_ONLY);
+    valuebox->draw(bx, by, bw, bh, 0, FL_FRAME_ONLY);
   }
   text_box()->inset(sx, sy, sw, sh);
   Fl_Flags f = 0;
@@ -50,8 +52,10 @@ void Fl_Value_Slider::draw() {
   Fl_Slider::draw(sx, sy, sw, sh, f);
   if (damage()&(~FL_DAMAGE_HIGHLIGHT)) {
     // copy the box & color from the default style:
-    fl_color(default_style->text_background);
-    default_style->text_box->inset(bx, by, bw, bh);
+    Fl_Color bg = Fl_Output::default_style->text_background;
+    if (!bg) bg = Fl_Widget::default_style->text_background;
+    fl_color(bg);
+    valuebox->inset(bx, by, bw, bh);
     fl_rectf(bx, by, bw, bh);
     // now draw the text:
     char buf[128];
@@ -72,7 +76,9 @@ int Fl_Value_Slider::handle(int event) {
     sy += 25; sh -= 25;
   }
   text_box()->inset(sx, sy, sw, sh);
+#ifdef WINDOWS_COMPATABILITY
   if (event == FL_PUSH) take_focus();
+#endif
   return Fl_Slider::handle(event, sx, sy, sw, sh);
 }
 
@@ -90,5 +96,5 @@ Fl_Value_Slider::Fl_Value_Slider(int x, int y, int w, int h, const char*l)
 }
 
 //
-// End of "$Id: Fl_Value_Slider.cxx,v 1.33 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: Fl_Value_Slider.cxx,v 1.34 2001/07/23 09:50:05 spitzak Exp $".
 //

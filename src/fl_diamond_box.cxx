@@ -1,5 +1,5 @@
 //
-// "$Id: fl_diamond_box.cxx,v 1.20 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_diamond_box.cxx,v 1.21 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Diamond box code for the Fast Light Tool Kit (FLTK).
 //
@@ -28,10 +28,10 @@
 
 // The diamond box draws best if the area is square!
 
-#include <FL/Fl_Boxtype.H>
-#include <FL/Fl_Style.H>
-#include <FL/Fl_Widget.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl_Boxtype.h>
+#include <fltk/Fl_Style.h>
+#include <fltk/Fl_Widget.h>
+#include <fltk/fl_draw.h>
 #include <string.h>
 
 extern void fl_to_inactive(const char* s, char* to);
@@ -39,26 +39,13 @@ extern void fl_to_inactive(const char* s, char* to);
 void Fl_Diamond_Box::draw(int x, int y, int w, int h,
 			  Fl_Color c, Fl_Flags f) const
 {
-  w &= -2;
-  h &= -2;
   int x1 = x+w/2;
+  if (w&1) w--; else {w -= 2; x++;}
   int y1 = y+h/2;
+  if (h&1) h--; else {h -= 2; y++;}
   const char* s = (f & FL_VALUE) ? down->data() : data();
   char buf[26]; if (f&FL_INACTIVE && Fl_Style::draw_boxes_inactive) {
     fl_to_inactive(s, buf); s = buf;}
-  if (!(f & FL_FRAME_ONLY)) {
-    // draw the interior, assumming the edges are the same thickness
-    // as the normal square box:
-    int d = strlen(s)/4;
-    if (w > 2*d && h > 2*d) {
-      fl_newpath();
-      fl_vertex(x+d, y1);
-      fl_vertex(x1, y+d);
-      fl_vertex(x+w-d,y1);
-      fl_vertex(x1,y+h-d);
-      fl_color(c); fl_fill();
-    }
-  }
   const char* t;
   if (*s == '2') {t = s+1; s += 3;} else {t = s+2;}
   while (*s && *t && w > 0 && h > 0) {
@@ -78,11 +65,17 @@ void Fl_Diamond_Box::draw(int x, int y, int w, int h,
     t += 2;
     x++; y++; w -= 2; h -= 2;
   }
-}
-
-void Fl_Diamond_Box::draw(const Fl_Widget* widget,
-			int x, int y, int w, int h, Fl_Flags f) const {
-  draw(x,y,w,h, widget->get_box_color(f), f);
+  if (w > 0 && h > 0 && !(f & FL_FRAME_ONLY)) {
+    // draw the interior, assumming the edges are the same thickness
+    // as the normal square box:
+    fl_newpath();
+    fl_vertex(x, y1);
+    fl_vertex(x1, y);
+    fl_vertex(x+w,y1);
+    fl_vertex(x1,y+h);
+    fl_color(c);
+    fl_fill_stroke(c);
+  }
 }
 
 Fl_Diamond_Box::Fl_Diamond_Box(const char* n, const char* s, const Fl_Frame_Box* d)
@@ -95,5 +88,5 @@ const Fl_Diamond_Box fl_diamond_up_box(0, "2WWMMPPAA", &fl_diamond_down_box);
 const Fl_Diamond_Box fl_diamond_down_box(0, "2AAWWMMTT", &fl_diamond_up_box);
 
 //
-// End of "$Id: fl_diamond_box.cxx,v 1.20 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fl_diamond_box.cxx,v 1.21 2001/07/23 09:50:05 spitzak Exp $".
 //

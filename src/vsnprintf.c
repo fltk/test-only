@@ -1,5 +1,5 @@
 /*
- * "$Id: vsnprintf.c,v 1.8 2001/02/16 22:55:45 robertk Exp $"
+ * "$Id: vsnprintf.c,v 1.9 2001/07/23 09:50:05 spitzak Exp $"
  *
  * vsnprintf() function for the Fast Light Tool Kit (FLTK).
  *
@@ -38,10 +38,15 @@
  */
 
 #include <config.h>
-#include <FL/vsnprintf.h>
+#include <fltk/vsnprintf.h>
 
-#if ! HAVE_VSNPRINTF
-FL_API int fl_vsnprintf(char* str, size_t size, const char* fmt, va_list ap) {
+#ifdef need_fl_vsnprintf
+
+int fl_vsnprintf(char* str, size_t size, const char* fmt, va_list ap) {
+#if HAVE_VSNPRINTF
+#undef vsnprintf
+  return vsnprintf(str, size, fmt, ap);
+#else
   const char* e = str+size-1;
   char* p = str;
   char copy[20];
@@ -103,11 +108,10 @@ FL_API int fl_vsnprintf(char* str, size_t size, const char* fmt, va_list ap) {
   *p = 0;
   if (*fmt) return -1;
   return p-str;
-}
 #endif
+}
 
-#if ! HAVE_SNPRINTF
-FL_API int fl_snprintf(char* str, size_t size, const char* fmt, ...) {
+int fl_snprintf(char* str, size_t size, const char* fmt, ...) {
   int ret;
   va_list ap;
   va_start(ap, fmt);
@@ -115,9 +119,10 @@ FL_API int fl_snprintf(char* str, size_t size, const char* fmt, ...) {
   va_end(ap);
   return ret;
 }
+
 #endif
 
 /*
- * End of "$Id: vsnprintf.c,v 1.8 2001/02/16 22:55:45 robertk Exp $".
+ * End of "$Id: vsnprintf.c,v 1.9 2001/07/23 09:50:05 spitzak Exp $".
  */
 

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_gif.cxx,v 1.10 2001/07/16 19:38:18 robertk Exp $"
+// "$Id: fl_gif.cxx,v 1.11 2001/07/23 09:50:05 spitzak Exp $"
 //
 // fl_gif.cxx
 //
@@ -46,10 +46,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
-#include <FL/Fl_Shared_Image.H>
+#include <fltk/Fl.h>
+#include <fltk/fl_draw.h>
+#include <fltk/x.h>
+#include <fltk/Fl_Shared_Image.h>
 
 typedef unsigned char uchar;
 
@@ -419,5 +419,5 @@ void Fl_GIF_Image::read()
 }
 
 //
-// End of "$Id: fl_gif.cxx,v 1.10 2001/07/16 19:38:18 robertk Exp $"
+// End of "$Id: fl_gif.cxx,v 1.11 2001/07/23 09:50:05 spitzak Exp $"
 //

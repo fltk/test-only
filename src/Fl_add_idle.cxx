@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_add_idle.cxx,v 1.8 2001/04/22 16:50:21 spitzak Exp $"
+// "$Id: Fl_add_idle.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Idle routine support for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 // Allows you to manage an arbitrary set of idle() callbacks.
 // Replaces the older set_idle() call (which is used to implement this)
 
-#include <FL/Fl.H>
+#include <fltk/Fl.h>
 
 struct idle_cb {
   void (*cb)(void*);
@@ -64,13 +64,10 @@ void Fl::add_idle(void (*cb)(void*), void* data) {
   }
 }
 
-int Fl::has_idle(void (*cb)(void*), void* data) {
-  idle_cb* p = first;
-  if (!p) return false;
-  for (;; p = p->next) {
+bool Fl::has_idle(void (*cb)(void*), void* data) {
+  for (idle_cb* p = first; p != last; p = p->next)
     if (p->cb == cb && p->data == data) return true;
-    if (p==last) return false;
-  }
+  return false;
 }
 
 void Fl::remove_idle(void (*cb)(void*), void* data) {
@@ -94,5 +91,5 @@ void Fl::remove_idle(void (*cb)(void*), void* data) {
 }
 
 //
-// End of "$Id: Fl_add_idle.cxx,v 1.8 2001/04/22 16:50:21 spitzak Exp $".
+// End of "$Id: Fl_add_idle.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $".
 //

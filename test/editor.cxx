@@ -1,5 +1,5 @@
 //
-// "$Id: editor.cxx,v 1.9 2001/02/23 05:14:18 clip Exp $"
+// "$Id: editor.cxx,v 1.10 2001/07/23 09:50:05 spitzak Exp $"
 //
 // A simple text editor program for the Fast Light Tool Kit (FLTK).
 //
@@ -34,17 +34,17 @@
 #include <string.h>
 #include <errno.h>
 
-#include <FL/Fl.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/fl_ask.H>
-#include <FL/fl_file_chooser.H>
-#include <FL/Fl_Menu_Bar.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Return_Button.H>
-#include <FL/Fl_Text_Buffer.H>
-#include <FL/Fl_Text_Editor.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Group.h>
+#include <fltk/Fl_Double_Window.h>
+#include <fltk/fl_ask.h>
+#include <fltk/fl_file_chooser.h>
+#include <fltk/Fl_Menu_Bar.h>
+#include <fltk/Fl_Input.h>
+#include <fltk/Fl_Button.h>
+#include <fltk/Fl_Return_Button.h>
+#include <fltk/Fl_Text_Buffer.h>
+#include <fltk/Fl_Text_Editor.h>
 
 
 int                changed = 0;
@@ -432,5 +432,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: editor.cxx,v 1.9 2001/02/23 05:14:18 clip Exp $".
+// End of "$Id: editor.cxx,v 1.10 2001/07/23 09:50:05 spitzak Exp $".
 //

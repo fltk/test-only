@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.33 2001/07/16 19:38:18 robertk Exp $"
+// "$Id: fl_font_win32.cxx,v 1.34 2001/07/23 09:50:05 spitzak Exp $"
 //
 // WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -23,7 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/x.H>
+#include <fltk/x.h>
 #include "Fl_FontSize.h"
 
 #include <ctype.h>
@@ -62,13 +62,12 @@ win_font_load(const char *name, const char *encoding, int size) {
     name		// pointer to typeface name string
   );
 
-  HDC screen =	GetDC(0);
-  SelectObject(screen, font);
-  GetTextMetrics(screen, &fl_fontsize->metr);
-  //BOOL ret = GetCharWidthFloat(screen, metr.tmFirstChar, metr.tmLastChar, font->width+metr.tmFirstChar);
+  if (!fl_gc) fl_gc = GetDC(0);
+  SelectObject(fl_gc, font);
+  GetTextMetrics(fl_gc, &fl_fontsize->metr);
+  //BOOL ret = GetCharWidthFloat(fl_gc, metr.tmFirstChar, metr.tmLastChar, font->width+metr.tmFirstChar);
   //...would be the right call, but is not implemented into Window95! (WinNT?)
-  GetCharWidth(screen, 0, 255, fl_fontsize->width);
-  ReleaseDC(0, screen);
+  //GetCharWidth(fl_gc, 0, 255, fl_fontsize->width);
 
   return (void *)font;
 }
@@ -105,24 +104,24 @@ Fl_FontSize::~Fl_FontSize() {
 
 ////////////////////////////////////////////////////////////////
 
-// The predefined fonts that fltk has:	bold:	    italic:
-static Fl_Font_ win_fonts[] = {
-{" Arial",				win_fonts+1, win_fonts+2},
-{"BArial",				win_fonts+1, win_fonts+3},
-{"IArial",				win_fonts+3, win_fonts+2},
-{"PArial",				win_fonts+3, win_fonts+3},
-{" Courier New",			win_fonts+5, win_fonts+6},
-{"BCourier New",			win_fonts+5, win_fonts+7},
-{"ICourier New",			win_fonts+7, win_fonts+6},
-{"PCourier New",			win_fonts+7, win_fonts+7},
-{" Times New Roman",			win_fonts+9, win_fonts+10},
-{"BTimes New Roman",			win_fonts+9, win_fonts+11},
-{"ITimes New Roman",			win_fonts+11,win_fonts+10},
-{"PTimes New Roman",			win_fonts+11,win_fonts+11},
-{" Symbol",				win_fonts+12,win_fonts+12},
-{" Terminal",				win_fonts+14,win_fonts+14},
-{"BTerminal",				win_fonts+14,win_fonts+14},
-{" Wingdings",				win_fonts+15,win_fonts+15},
+// The predefined fonts that fltk has:  bold:       italic:
+Fl_Font_ fl_fonts[] = {
+{" Arial",				fl_fonts+1, fl_fonts+2},
+{"BArial", 				fl_fonts+1, fl_fonts+3},
+{"IArial",				fl_fonts+3, fl_fonts+2},
+{"PArial",				fl_fonts+3, fl_fonts+3},
+{" Courier New",			fl_fonts+5, fl_fonts+6},
+{"BCourier New",			fl_fonts+5, fl_fonts+7},
+{"ICourier New",			fl_fonts+7, fl_fonts+6},
+{"PCourier New",			fl_fonts+7, fl_fonts+7},
+{" Times New Roman",			fl_fonts+9, fl_fonts+10},
+{"BTimes New Roman",			fl_fonts+9, fl_fonts+11},
+{"ITimes New Roman",			fl_fonts+11,fl_fonts+10},
+{"PTimes New Roman",			fl_fonts+11,fl_fonts+11},
+{" Symbol",				fl_fonts+12,fl_fonts+12},
+{" Terminal",				fl_fonts+14,fl_fonts+14},
+{"BTerminal",				fl_fonts+14,fl_fonts+14},
+{" Wingdings",				fl_fonts+15,fl_fonts+15},
 };
 
 ////////////////////////////////////////////////////////////////
@@ -174,17 +173,11 @@ void fl_encoding(const char* f) {
 
 static int
 win_font_width(const char* c, int n) {
-  int w = 0;
-  // Just adding the characters won't work on all Windows versions
-  // since some of them (NT/2000/?) do kerning.
-  //while (n--) w += fl_fontsize->width[uchar(*c++)];
-  HDC screen =  GetDC(0);
-  SelectObject(screen, (HFONT)fl_fontsize->font);
   SIZE size;
-  if(GetTextExtentPoint32(screen, c, n, &size))
-	  w = size.cx;
-  ReleaseDC(0, screen);
-  return w;
+  if (!fl_gc) fl_gc = GetDC(0);
+  SelectObject(fl_gc, (HFONT)fl_fontsize->font);
+  GetTextExtentPoint(fl_gc, c, n, &size);
+  return size.cx;
 }
 
 static void
@@ -200,13 +193,11 @@ win_font_clip(Region) {} // handled by regular windows clipping
 static Fl_Font_Renderer
 win_renderer = {
   win_font, win_font_load, win_font_unload, win_font_height, win_font_descent,
-  win_font_width, win_font_draw, win_font_clip, 0, win_fonts
+  win_font_width, win_font_draw, win_font_clip, 0, 0
 };
 
 Fl_Font_Renderer *fl_font_renderer = &win_renderer;
 
-
-
 //
-// End of "$Id: fl_font_win32.cxx,v 1.33 2001/07/16 19:38:18 robertk Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.34 2001/07/23 09:50:05 spitzak Exp $".
 //

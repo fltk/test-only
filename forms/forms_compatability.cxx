@@ -1,5 +1,5 @@
 //
-// "$Id: forms_compatability.cxx,v 1.13 2001/07/10 08:14:38 clip Exp $"
+// "$Id: forms_compatability.cxx,v 1.14 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Forms compatibility functions for the Fast Light Tool Kit (FLTK).
 //
@@ -26,11 +26,11 @@
 // Functions needed to emulate XForms/Forms using fltk.
 // Many more functions are defined as inlines in forms.h!
 
-#include <FL/forms.H>
+#include <fltk/forms.h>
 #include <stdlib.h>
 
 void fl_set_object_lstyle(Fl_Widget* o,int a) {
-  o->label_font(fl_fonts()+(a&15));
+  o->label_font(fl_fonts+(a&15));
   switch (a >> 8) {
   case 0:
     o->label_type(FL_NORMAL_LABEL);
@@ -157,7 +157,7 @@ void fl_show_form(Fl_Window *f,int place,int b,const char *n) {
 
 Fl_Widget *fl_do_forms(void) {
   Fl::wait();	
-  return Fl::first_window();
+  return 0;
 }
 
 Fl_Widget *fl_check_forms() {
@@ -176,8 +176,8 @@ void Fl_FormsText::draw() {
 
 // Create an XForms button by selecting correct fltk subclass:
 
-#include <FL/Fl_Return_Button.H>
-#include <FL/Fl_Repeat_Button.H>
+#include <fltk/Fl_Return_Button.h>
+#include <fltk/Fl_Repeat_Button.h>
 
 Fl_Button *fl_add_button(uchar t,int x,int y,int w,int h,const char *l) {
   Fl_Button *b;
@@ -255,5 +255,5 @@ char *fl_show_simple_input(const char *str1, const char *defstr) {
 }
 
 //
-// End of "$Id: forms_compatability.cxx,v 1.13 2001/07/10 08:14:38 clip Exp $".
+// End of "$Id: forms_compatability.cxx,v 1.14 2001/07/23 09:50:04 spitzak Exp $".
 //

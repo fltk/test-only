@@ -1,5 +1,5 @@
 // Function to turn a string into a color.  Used by themes and switches.
-// (the function fl_rgb(r,g,b) is an inline function in Fl_Color.H)
+// (the function fl_rgb(r,g,b) is an inline function in Fl_Color.h)
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -21,8 +21,8 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/x.H>
-#include <FL/Fl_Color.H>
+#include <fltk/x.h>
+#include <fltk/Fl_Color.h>
 #include <stdio.h>
 
 Fl_Color fl_rgb(const char* name) {
@@ -66,5 +66,5 @@ Fl_Color fl_rgb(const char* name) {
 }
 
 //
-// End of "$Id: fl_rgb.cxx,v 1.2 2000/04/21 05:28:31 carl Exp $".
+// End of "$Id: fl_rgb.cxx,v 1.3 2001/07/23 09:50:05 spitzak Exp $".
 //

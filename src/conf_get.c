@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_get.c,v 1.14 2001/01/02 00:20:28 clip Exp $"
+   "$Id: conf_get.c,v 1.15 2001/07/23 09:50:05 spitzak Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -22,7 +22,7 @@
     USA.
 */
 
-#include <FL/conf.h>
+#include <fltk/conf.h>
 #include <config.h>
 
 #ifndef CONF_CACHED
@@ -268,5 +268,5 @@ conf_clear_cache() {
 #endif
 
 /*
-    End of "$Id: conf_get.c,v 1.14 2001/01/02 00:20:28 clip Exp $".
+    End of "$Id: conf_get.c,v 1.15 2001/07/23 09:50:05 spitzak Exp $".
 */

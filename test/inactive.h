@@ -2,17 +2,17 @@
 
 #ifndef inactive_h
 #define inactive_h
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Group.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Group.h>
 extern Fl_Group *the_group;
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Check_Button.H>
-#include <FL/Fl_Slider.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Input_Browser.H>
-#include <FL/Fl_Item.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Value_Output.H>
-#include <FL/Fl_Scrollbar.H>
+#include <fltk/Fl_Button.h>
+#include <fltk/Fl_Check_Button.h>
+#include <fltk/Fl_Slider.h>
+#include <fltk/Fl_Input.h>
+#include <fltk/Fl_Input_Browser.h>
+#include <fltk/Fl_Item.h>
+#include <fltk/Fl_Box.h>
+#include <fltk/Fl_Value_Output.h>
+#include <fltk/Fl_Scrollbar.h>
 #endif

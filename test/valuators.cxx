@@ -15,7 +15,7 @@ int main (int argc, char **argv) {
     o->label_size(10);
      {    Fl_Box* o = new Fl_Box(10, 10, 280, 210, "Fl_Slider");
       o->box(FL_ENGRAVED_BOX);
-      o->label_font(fl_fonts()+1);
+      o->label_font(fl_fonts+1);
       o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
     }
      {    Fl_Slider* o = new Fl_Slider(30, 45, 20, 145, "0");
@@ -67,7 +67,7 @@ int main (int argc, char **argv) {
     }
      {    Fl_Box* o = new Fl_Box(10, 230, 280, 205, "Fl_Value_Slider");
       o->box(FL_ENGRAVED_BOX);
-      o->label_font(fl_fonts()+1);
+      o->label_font(fl_fonts+1);
       o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
     }
      {    Fl_Value_Slider* o = new Fl_Value_Slider(30, 260, 30, 145, "0");
@@ -119,7 +119,7 @@ int main (int argc, char **argv) {
     }
      {    Fl_Box* o = new Fl_Box(10, 445, 140, 50, "Fl_Value_Input");
       o->box(FL_ENGRAVED_BOX);
-      o->label_font(fl_fonts()+1);
+      o->label_font(fl_fonts+1);
       o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
     }
      {    Fl_Value_Input* o = new Fl_Value_Input(30, 460, 110, 30, "0");
@@ -130,7 +130,7 @@ int main (int argc, char **argv) {
     }
      {    Fl_Box* o = new Fl_Box(155, 445, 135, 50, "Fl_Value_Output");
       o->box(FL_ENGRAVED_BOX);
-      o->label_font(fl_fonts()+1);
+      o->label_font(fl_fonts+1);
       o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
     }
      {    Fl_Value_Output* o = new Fl_Value_Output(170, 460, 110, 30, "0");
@@ -141,7 +141,7 @@ int main (int argc, char **argv) {
     }
      {    Fl_Box* o = new Fl_Box(295, 10, 130, 120, "   Fl_Scrollbar");
       o->box(FL_ENGRAVED_BOX);
-      o->label_font(fl_fonts()+1);
+      o->label_font(fl_fonts+1);
       o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
     }
      {    Fl_Scrollbar* o = new Fl_Scrollbar(395, 20, 20, 105, "0");
@@ -159,7 +159,7 @@ int main (int argc, char **argv) {
     }
      {    Fl_Box* o = new Fl_Box(430, 10, 125, 120, "Fl_Adjuster");
       o->box(FL_ENGRAVED_BOX);
-      o->label_font(fl_fonts()+1);
+      o->label_font(fl_fonts+1);
       o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
     }
      {    Fl_Adjuster* o = new Fl_Adjuster(440, 60, 75, 25, "w()>h()");
@@ -172,7 +172,7 @@ int main (int argc, char **argv) {
     }
      {    Fl_Box* o = new Fl_Box(345, 135, 210, 115, "Fl_Counter");
       o->box(FL_ENGRAVED_BOX);
-      o->label_font(fl_fonts()+1);
+      o->label_font(fl_fonts+1);
       o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
     }
      {    Fl_Counter* o = new Fl_Counter(360, 160, 180, 30, "0");
@@ -219,7 +219,7 @@ int main (int argc, char **argv) {
     }
      {    Fl_Box* o = new Fl_Box(300, 375, 145, 120, "Fl_Roller");
       o->box(FL_ENGRAVED_BOX);
-      o->label_font(fl_fonts()+1);
+      o->label_font(fl_fonts+1);
       o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
     }
      {    Fl_Roller* o = new Fl_Roller(315, 390, 20, 95, "0");

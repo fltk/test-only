@@ -1,5 +1,5 @@
 //
-// "$Id: fl_cursor.cxx,v 1.10 2000/02/14 11:32:58 bill Exp $"
+// "$Id: fl_cursor.cxx,v 1.11 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Mouse cursor support for the Fast Light Tool Kit (FLTK).
 //
@@ -29,13 +29,10 @@
 // This avoids a field in the Fl_Window, and I suspect is more
 // portable to other systems.
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/x.H>
-#ifndef WIN32
-#include <X11/cursorfont.h>
-#endif
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/x.h>
+#include <fltk/fl_draw.h>
 
 void fl_cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
   if (Fl::first_window()) Fl::first_window()->cursor(c,fg,bg);
@@ -57,7 +54,11 @@ void Fl_Window::cursor(Fl_Cursor c, Fl_Color, Fl_Color) {
     case FL_CURSOR_WAIT:	n = IDC_WAIT; break;
     case FL_CURSOR_INSERT:	n = IDC_IBEAM; break;
     case FL_CURSOR_HELP:	n = IDC_HELP; break;
+#ifdef IDC_HAND
+    case FL_CURSOR_HAND:	n = IDC_HAND; break;
+#else
     case FL_CURSOR_HAND:	n = IDC_UPARROW; break;
+#endif
     case FL_CURSOR_MOVE:	n = IDC_SIZEALL; break;
     case FL_CURSOR_N:
     case FL_CURSOR_S:
@@ -78,7 +79,9 @@ void Fl_Window::cursor(Fl_Cursor c, Fl_Color, Fl_Color) {
   SetCursor(i->cursor);
 }
 
-#else
+#else // X11 version
+
+#include <X11/cursorfont.h>
 
 // I like the MSWindows resize cursors, so I duplicate them here:
 
@@ -170,5 +173,5 @@ void Fl_Window::cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
 #endif
 
 //
-// End of "$Id: fl_cursor.cxx,v 1.10 2000/02/14 11:32:58 bill Exp $".
+// End of "$Id: fl_cursor.cxx,v 1.11 2001/07/23 09:50:05 spitzak Exp $".
 //

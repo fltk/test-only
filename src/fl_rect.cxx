@@ -1,7 +1,7 @@
 //
-// "$Id: fl_rect.cxx,v 1.24 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_rect.cxx,v 1.25 2001/07/23 09:50:05 spitzak Exp $"
 //
-// Non-path routines from fl_draw.H that are used by the standard boxtypes
+// Non-path routines from fl_draw.h that are used by the standard boxtypes
 // and thus are always linked into an fltk program.
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
@@ -24,8 +24,8 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/fl_draw.H>
-#include <FL/x.H>
+#include <fltk/fl_draw.h>
+#include <fltk/x.h>
 
 void fl_rect(int x, int y, int w, int h) {
   if (w<=0 || h<=0) return;
@@ -75,5 +75,5 @@ void fl_point(int x, int y) {
 }
 
 //
-// End of "$Id: fl_rect.cxx,v 1.24 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fl_rect.cxx,v 1.25 2001/07/23 09:50:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.7 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_arci.cxx,v 1.8 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Arc (integer) drawing functions for the Fast Light Tool Kit (FLTK).
 //
@@ -33,10 +33,10 @@
 // This is merged into a single function to make writing a dispatch
 // table easier.
 
-#include <FL/fl_draw.H>
-#include <FL/x.H>
+#include <fltk/fl_draw.h>
+#include <fltk/x.h>
 #ifdef WIN32
-#include <FL/math.h>
+#include <fltk/math.h>
 #endif
 
 void fl_pie(int x,int y,int w,int h,double a1,double a2, int what) {
@@ -80,5 +80,5 @@ void fl_pie(int x,int y,int w,int h,double a1,double a2, int what) {
 }
 
 //
-// End of "$Id: fl_arci.cxx,v 1.7 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fl_arci.cxx,v 1.8 2001/07/23 09:50:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.20 2001/07/16 19:38:18 robertk Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.21 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,11 +27,11 @@
 // Keep uncompressed images in memory for later use. 
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Shared_Image.H>
-#include <FL/Fl_Bitmap.H>
-#include <FL/x.H>
+#include <fltk/Fl.h>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Shared_Image.h>
+#include <fltk/Fl_Bitmap.h>
+#include <fltk/x.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -148,11 +148,7 @@ const char* Fl_Shared_Image::get_filename() {
 
 const char* Fl_Shared_Image::get_filename(const char* name)
 {
-  if (name[0] == '/'
-#ifdef WIN32
-      || name[0] == '\\' || name[1] == ':'
-#endif
-      || !fl_shared_image_root || !*fl_shared_image_root)
+  if (name[0] == '/' || !fl_shared_image_root || !*fl_shared_image_root)
     return name;
   int m = strlen(fl_shared_image_root);
   int n = strlen(name) + m + 2;
@@ -262,5 +258,5 @@ void Fl_Shared_Image::draw(int X, int Y, int W, int H,
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.20 2001/07/16 19:38:18 robertk Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.21 2001/07/23 09:50:05 spitzak Exp $"
 //

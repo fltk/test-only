@@ -1,5 +1,5 @@
 //
-// "$Id: overlay.cxx,v 1.6 2000/05/30 07:42:19 bill Exp $"
+// "$Id: overlay.cxx,v 1.7 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Overlay window test program for the Fast Light Tool Kit (FLTK).
 //
@@ -25,11 +25,11 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Overlay_Window.H>
-#include <FL/Fl_Button.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Overlay_Window.h>
+#include <fltk/Fl_Button.h>
+#include <fltk/fl_draw.h>
 
 int width=10, height=10;
 
@@ -80,5 +80,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: overlay.cxx,v 1.6 2000/05/30 07:42:19 bill Exp $".
+// End of "$Id: overlay.cxx,v 1.7 2001/07/23 09:50:06 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: filename_absolute.cxx,v 1.7 2000/07/20 05:28:32 clip Exp $"
+// "$Id: filename_absolute.cxx,v 1.8 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Filename expansion routines for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
    Returns true if any changes were made.
 */
 
-#include <FL/filename.H>
+#include <fltk/filename.h>
 #include <stdlib.h>
 #include <string.h>
 #if defined(WIN32) && !defined(__CYGWIN__)
@@ -92,5 +92,5 @@ int filename_absolute(char *to,const char *from) {
 }
 
 //
-// End of "$Id: filename_absolute.cxx,v 1.7 2000/07/20 05:28:32 clip Exp $".
+// End of "$Id: filename_absolute.cxx,v 1.8 2001/07/23 09:50:05 spitzak Exp $".
 //

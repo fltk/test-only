@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.10 2000/07/20 05:28:32 clip Exp $"
+ * "$Id: config.h,v 1.11 2001/07/23 09:50:03 spitzak Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -123,10 +123,6 @@
 #define HAVE_SNPRINTF 0
 #define HAVE_VSPRINTF 1
 
-#include <FL/vsnprintf.h>
-#define snprintf fl_snprintf
-#define vsnprintf fl_vsnprintf
-
 /*
  * HAVE_SYS_SELECT_H:
  *
@@ -167,7 +163,7 @@
  * HAVE_DLOPEN
  *
  * Do we have ELF shared objects support?
- * (used in FL/Fl_Plugin.H)
+ * (used in fltk/Fl_Plugin.h)
  */
 
 #define HAVE_DLOPEN 0
@@ -195,5 +191,5 @@
 #define CONF_CACHED
 
 /*
- * End of "$Id: config.h,v 1.10 2000/07/20 05:28:32 clip Exp $".
+ * End of "$Id: config.h,v 1.11 2001/07/23 09:50:03 spitzak Exp $".
  */

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.26 2001/02/21 06:15:45 clip Exp $"
+# "$Id: Makefile,v 1.27 2001/07/23 09:50:06 spitzak Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -28,7 +28,7 @@
 # * xft.plugin is not in default list because it requires XFree86 4,
 #   the "render" extension, the Xft library, and the freetype2 library.
 THEMES = motif.theme classic.theme windows.theme Alternative.theme \
-	KDE.theme KDE_colors.theme syscolors.theme
+	KDE.theme KDE_colors.theme
 SCHEMES = Alternative KDE Classic Motif OldMotif Windows
 
 ################################################################
@@ -51,7 +51,7 @@ CPPFILES = \
 
 OBJECTS = $(CPPFILES:.cxx=.shared.o) $(CFILES:.c=.shared.o)
 
-all : static shared programs
+all : $(BUILDTARGETS)
 
 static: $(LIBRARY)$(LIBEXT)
 
@@ -77,11 +77,6 @@ essai.theme : $(ESSAI_OBJ)
 	$(THEMECOMMAND) $@ $(ESSAI_OBJ) -ljpeg -L../lib -lfltk_images $(DSOLIBS)
 	cp $@ ../config/themes
 	cp bg*.jpeg ../config/themes
-
-SYSCOLORS_OBJ = syscolors.shared.o
-syscolors.theme : $(SYSCOLORS_OBJ)
-	$(THEMECOMMAND) $@ $(SYSCOLORS_OBJ) $(DSOLIBS) $(THEMELIBS)
-	cp $@ ../config/themes
 
 MOTIF_OBJ = motif.shared.o fl_motif.shared.o
 motif.theme : $(MOTIF_OBJ)
@@ -117,7 +112,7 @@ clean :
 	-@ rm -f *.shared.o $(LIBRARY)$(LIBEXT) *.theme *.plugin ../config/themes/*.theme ../config/plugins/*.plugin core *~ makedepend
 	@touch makedepend
 
-install : install_static install_shared install_programs
+install : $(INSTALLTARGETS)
 
 install_static:
 	@echo "Installing static library..."
@@ -142,5 +137,5 @@ depend:
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.26 2001/02/21 06:15:45 clip Exp $".
+# End of "$Id: Makefile,v 1.27 2001/07/23 09:50:06 spitzak Exp $".
 #

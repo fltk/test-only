@@ -93,7 +93,7 @@ Function {} {open
       callback {Fl_Tooltip::enable(ttlb->value());}
       tooltip {This button enables or disables tooltips}
       xywh {120 230 130 30} value 1
-      code0 {\#include <FL/Fl_Tooltip.H>}
+      code0 {\#include <fltk/Fl_Tooltip.h>}
     }
   }
 } 

@@ -1,8 +1,8 @@
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Value_Slider.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Choice.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Value_Slider.h>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Choice.h>
 
 Fl_Window *form;
 Fl_Slider *sliders[8];

@@ -1,5 +1,5 @@
 //
-// "$Id: boxtype.cxx,v 1.8 2000/01/16 07:44:39 robertk Exp $"
+// "$Id: boxtype.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Boxtype test program for the Fast Light Tool Kit (FLTK).
 //
@@ -25,9 +25,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Single_Window.H>
-#include <FL/Fl_Box.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Single_Window.h>
+#include <fltk/Fl_Box.h>
 
 int N = 0;
 #define W 150
@@ -92,5 +92,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: boxtype.cxx,v 1.8 2000/01/16 07:44:39 robertk Exp $".
+// End of "$Id: boxtype.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $".
 //

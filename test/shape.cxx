@@ -1,5 +1,5 @@
 //
-// "$Id: shape.cxx,v 1.6 2000/01/16 07:44:44 robertk Exp $"
+// "$Id: shape.cxx,v 1.7 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Tiny OpenGL demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -24,15 +24,15 @@
 //
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Hor_Slider.H>
-#include <FL/math.h>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Hor_Slider.h>
+#include <fltk/math.h>
 
 #if HAVE_GL
 
-#include <FL/gl.h>
-#include <FL/Fl_Gl_Window.H>
+#include <fltk/gl.h>
+#include <fltk/Fl_Gl_Window.h>
 
 class shape_window : public Fl_Gl_Window {
   void draw();
@@ -67,7 +67,7 @@ void shape_window::draw() {
 
 #else
 
-#include <FL/Fl_Box.H>
+#include <fltk/Fl_Box.h>
 class shape_window : public Fl_Box {
 public:	
   int sides;
@@ -112,5 +112,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: shape.cxx,v 1.6 2000/01/16 07:44:44 robertk Exp $".
+// End of "$Id: shape.cxx,v 1.7 2001/07/23 09:50:06 spitzak Exp $".
 //

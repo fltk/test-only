@@ -1,12 +1,12 @@
 //
-// "$Id: checkers.cxx,v 1.18 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: checkers.cxx,v 1.19 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
 // Hours of fun: the FLTK checkers game!
 // Based on a very old algorithim, but it still works!
 //
-// Copyright 1998-2000 by Bill Spitzak and others.
+// Copyright 1998-2001 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -28,7 +28,7 @@
 
 const char* copyright = 
 "Checkers game\n"
-"\xa9""2000 Bill Spitzak    spitzak@d2.com\n"
+"\xa9""2001 Bill Spitzak    spitzak@d2.com\n"
 "Original Pascal code:\n"
 "\xa9""1978, Oregon Minicomputer Software, Inc.\n"
 "2340 SW Canyon Road, Portland, Oregon 97201\n"
@@ -857,12 +857,12 @@ int VT100main() {
 // fltk interface:
 #ifdef FLTK
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Bitmap.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Menu_Item.H>
-#include <FL/fl_ask.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Double_Window.h>
+#include <fltk/Fl_Bitmap.h>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Menu_Item.h>
+#include <fltk/fl_ask.h>
 
 //----------------------------------------------------------------
 // old 4-level NeXT images have been seperated into bitmaps so they
@@ -961,7 +961,7 @@ int squarey(int i) {return (usermoves(i,2)-'1')*BOXSIZE+BMOFFSET;}
 
 void Board::draw() {
   make_bitmaps();
-  box()->draw(this,0,0,w(),h(),0);
+  fl_color(color()); fl_rectf(0,0,w(),h());
   fl_color((Fl_Color)10 /*107*/);
   int x; for (x=0; x<8; x++) for (int y=0; y<8; y++) {
     if (!((x^y)&1)) fl_rectf(BORDER+x*BOXSIZE, BORDER+y*BOXSIZE,
@@ -1098,15 +1098,17 @@ void Board::computer_move(int help) {
 
 extern Fl_Menu_Item menu[];
 extern Fl_Menu_Item busymenu[];
+static Board* board;
 
 int Board::handle(int e) {
+  board = this;
   if (busy) {
     switch(e) {
     case FL_PUSH:
-      busymenu->popup(Fl::event_x(), Fl::event_y(), 0, this);
+      busymenu->popup(Fl::event_x(), Fl::event_y());
       return 1;
     case FL_SHORTCUT:
-      return busymenu->test_shortcut(this);
+      return busymenu->test_shortcut() != 0;
     default:
       return Fl_Window::handle(e);
     }
@@ -1117,7 +1119,7 @@ int Board::handle(int e) {
   switch (e) {
   case FL_PUSH:
     if (Fl::event_button() > 1) {
-      menu->popup(Fl::event_x(), Fl::event_y(), 0, this);
+      menu->popup(Fl::event_x(), Fl::event_y());
       return 1;
     }
     if (playing) {
@@ -1135,7 +1137,7 @@ int Board::handle(int e) {
     }
     return 0;
   case FL_SHORTCUT:
-    return menu->test_shortcut(this);
+    return menu->test_shortcut() != 0;
   case FL_DRAG:
     drag_piece(erase_this, Fl::event_x()-deltax, Fl::event_y()-deltay);
     return 1;
@@ -1171,15 +1173,14 @@ int FLTKmain(int argc, char** argv) {
   return Fl::run();
 } 
 
-void autoplay_cb(Fl_Widget*, void*bp) {
+void autoplay_cb(Fl_Widget*, void*) {
   if (autoplay) {autoplay = 0; return;}
   if (!playing) return;
-  Board* b = (Board*)bp;
   autoplay = 1;
-  while (autoplay) {b->computer_move(0); b->computer_move(0);}
+  while (autoplay) {board->computer_move(0); board->computer_move(0);}
 }
 
-#include <FL/Fl_Box.H>
+#include <fltk/Fl_Box.h>
 Fl_Window *copyright_window;
 void copyright_cb(Fl_Widget*, void*) {
   if (!copyright_window) {
@@ -1200,52 +1201,50 @@ void debug_cb(Fl_Widget*v, void*) {
   debug = v->value();
 }
 
-void forced_cb(Fl_Widget*v, void*b) {
+void forced_cb(Fl_Widget*v, void*) {
   forcejumps = v->value();
   killnode(root->son); root->son = 0;
-  if (showlegal) {expandnode(root); ((Board*)b)->redraw();}
+  if (showlegal) {expandnode(root); board->redraw();}
 }
 
-void move_cb(Fl_Widget*, void*pb) {
-  Board* b = (Board*)pb;
-  if (playing) b->computer_move(1);
-  if (playing) b->computer_move(0);
+void move_cb(Fl_Widget*, void*) {
+  if (playing) board->computer_move(1);
+  if (playing) board->computer_move(0);
 }
 
-void newgame_cb(Fl_Widget*, void* b) {
+void newgame_cb(Fl_Widget*, void*) {
   showlegal = 0;
   newgame();
-  ((Board*)b)->redraw();
+  board->redraw();
 }
 
-void legal_cb(Fl_Widget*, void* pb) {
-  if (showlegal == 1) {showlegal = 0; ((Board*)pb)->redraw(); return;}
+void legal_cb(Fl_Widget*, void*) {
+  if (showlegal == 1) {showlegal = 0; board->redraw(); return;}
   if (!playing) return;
   expandnode(root);
-  showlegal = 1; ((Board*)pb)->redraw();
+  showlegal = 1; board->redraw();
 }
 
-void predict_cb(Fl_Widget*, void* pb) {
-  if (showlegal == 2) {showlegal = 0; ((Board*)pb)->redraw(); return;}
+void predict_cb(Fl_Widget*, void*) {
+  if (showlegal == 2) {showlegal = 0; board->redraw(); return;}
   if (playing) expandnode(root);
-  showlegal = 2; ((Board*)pb)->redraw();
+  showlegal = 2; board->redraw();
 }
 
 void switch_cb(Fl_Widget*, void* pb) {
   user = !user;
-  ((Board*)pb)->computer_move(0);
+  board->computer_move(0);
 }
 
 void undo_cb(Fl_Widget*, void* pb) {
-  Board* b = (Board*)pb;
-  b->animate(undomove(),1);
-  b->animate(undomove(),1);
+  board->animate(undomove(),1);
+  board->animate(undomove(),1);
 }
 
 //--------------------------
 
-#include <FL/Fl_Slider.H>
-#include <FL/Fl_Value_Output.H>
+#include <fltk/Fl_Slider.h>
+#include <fltk/Fl_Value_Output.h>
 
 Fl_Window *intel_window;
 Fl_Value_Output *intel_output;
@@ -1359,5 +1358,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.18 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: checkers.cxx,v 1.19 2001/07/23 09:50:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: cursor.cxx,v 1.7 2000/01/16 07:44:40 robertk Exp $"
+// "$Id: cursor.cxx,v 1.8 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Cursor test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,12 +23,12 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Hor_Value_Slider.H>
-#include <FL/Fl_Choice.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Box.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Hor_Value_Slider.h>
+#include <fltk/Fl_Choice.h>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Box.h>
 
 Fl_Color fg = FL_BLACK;
 Fl_Color bg = 255;
@@ -171,5 +171,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: cursor.cxx,v 1.7 2000/01/16 07:44:40 robertk Exp $".
+// End of "$Id: cursor.cxx,v 1.8 2001/07/23 09:50:05 spitzak Exp $".
 //

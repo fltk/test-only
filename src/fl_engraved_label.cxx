@@ -1,5 +1,5 @@
 //
-// "$Id: fl_engraved_label.cxx,v 1.10 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_engraved_label.cxx,v 1.11 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Engraved label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -25,9 +25,9 @@
 
 // Drawing code for XForms style engraved & embossed labels
 
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Labeltype.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl_Widget.h>
+#include <fltk/Fl_Labeltype.h>
+#include <fltk/fl_draw.h>
 
 // data is dx, dy, color triples
 
@@ -65,5 +65,5 @@ static const int embossed_data[7][3] = {
 const Fl_Engraved_Label fl_embossed_label("embossed", embossed_data);
 
 //
-// End of "$Id: fl_engraved_label.cxx,v 1.10 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fl_engraved_label.cxx,v 1.11 2001/07/23 09:50:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_strcnt.c,v 1.9 2000/07/20 05:28:32 clip Exp $"
+   "$Id: conf_strcnt.c,v 1.10 2001/07/23 09:50:05 spitzak Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -22,7 +22,7 @@
     USA.
 */
 
-#include <FL/conf.h>
+#include <fltk/conf.h>
 
 /*
         int *conf_strcnt(const char *s, char c)
@@ -48,5 +48,5 @@ conf_strcnt(const char *s, char c)
 }
 
 /*
-    End of "$Id: conf_strcnt.c,v 1.9 2000/07/20 05:28:32 clip Exp $".
+    End of "$Id: conf_strcnt.c,v 1.10 2001/07/23 09:50:05 spitzak Exp $".
 */

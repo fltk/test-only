@@ -1,5 +1,5 @@
 //
-// "$Id: jpeg_image.cxx,v 1.6 2000/07/07 08:40:31 spitzak Exp $"
+// "$Id: jpeg_image.cxx,v 1.7 2001/07/23 09:50:06 spitzak Exp $"
 //
 // fl_draw_image test program for the Fast Light Tool Kit (FLTK).
 //
@@ -40,8 +40,8 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/fl_draw.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -54,7 +54,7 @@ uchar *ibuffer;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Window.H>
+#include <fltk/Fl_Window.h>
 int mono;
 
 class image_window : public Fl_Window {
@@ -72,7 +72,7 @@ void image_window::draw() {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/x.H>
+#include <fltk/x.h>
 #include "list_visuals.cxx"
 
 ////////////////////////////////////////////////////////////////
@@ -164,9 +164,9 @@ void readtheimage(const char *name) {
 ////////////////////////////////////////////////////////////////
 #else // Digital Domain in-house library
 
-#include "DDNewImage/DDImageOp.H"
-#include "DDNewImage/DDImgRead.H"
-#include "DDNewImage/DDImgToBuffer.H"
+#include "DDNewImage/DDImageOp.h"
+#include "DDNewImage/DDImgRead.h"
+#include "DDNewImage/DDImgToBuffer.h"
 
 void readtheimage(const char *name) {
   DDImgRead reader(name);
@@ -198,5 +198,5 @@ void readtheimage(const char *name) {
 #endif
 
 //
-// End of "$Id: jpeg_image.cxx,v 1.6 2000/07/07 08:40:31 spitzak Exp $".
+// End of "$Id: jpeg_image.cxx,v 1.7 2001/07/23 09:50:06 spitzak Exp $".
 //

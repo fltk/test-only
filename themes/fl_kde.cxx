@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde.cxx,v 1.13 2001/02/20 16:12:07 robertk Exp $"
+// "$Id: fl_kde.cxx,v 1.14 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -28,11 +28,11 @@
 // over the windows/motif switching, which allows this to be loaded atop
 // another theme easily.
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/fl_draw.H>
-#include <FL/fl_config.H>
-#include <FL/fl_theme.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Widget.h>
+#include <fltk/fl_draw.h>
+#include <fltk/fl_config.h>
+#include <fltk/fl_theme.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -51,7 +51,7 @@ static int colors_only = 0;
 ////////////////////////////////////////////////////////////////
 #ifndef WIN32
 #include <unistd.h>
-#include <FL/x.H>
+#include <fltk/x.h>
 
 // KIPC is what KDE2 uses
 static Atom General, Style, Palette, KIPC;
@@ -131,7 +131,7 @@ int fl_kde(int co) {
   if (!kderc.get("KDE/widgetStyle", s, sizeof(s)) && !strcasecmp(s, "Motif"))
     motif_style = 1;
   if (!colors_only) {
-    Fl::theme(motif_style ? "motif" : "windows");
+    Fl::plugin(motif_style ? "motif" : "windows");
     // see below for modifications to the motif/windows themes
   }
 
@@ -367,5 +367,5 @@ int fl_kde(int co) {
 }
 
 //
-// End of "$Id: fl_kde.cxx,v 1.13 2001/02/20 16:12:07 robertk Exp $".
+// End of "$Id: fl_kde.cxx,v 1.14 2001/07/23 09:50:06 spitzak Exp $".
 //

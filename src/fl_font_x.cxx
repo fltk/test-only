@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_x.cxx,v 1.3 2001/07/10 08:14:39 clip Exp $"
+// "$Id: fl_font_x.cxx,v 1.4 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,9 +23,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/x.H>
-#include "Fl_FontSize.H"
+#include <fltk/Fl.h>
+#include <fltk/x.h>
+#include "Fl_FontSize.h"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -246,35 +246,39 @@ void fl_encoding(const char* f) {
 
 ////////////////////////////////////////////////////////////////
 
+// Carl: please just add any fields you need to this table for the
+// XRender extension, rather than try to make a function to return
+// different tables.
+
 // The predefined fonts that fltk has:  bold:       italic:
-static Fl_Font_
-x11_fonts[] = {
-{"-*-helvetica-medium-r-normal--*",	x11_fonts+1, x11_fonts+2},
-{"-*-helvetica-bold-r-normal--*", 	x11_fonts+1, x11_fonts+3},
-{"-*-helvetica-medium-o-normal--*",	x11_fonts+3, x11_fonts+2},
-{"-*-helvetica-bold-o-normal--*",	x11_fonts+3, x11_fonts+3},
-{"-*-courier-medium-r-normal--*",	x11_fonts+5, x11_fonts+6},
-{"-*-courier-bold-r-normal--*",		x11_fonts+5, x11_fonts+7},
-{"-*-courier-medium-o-normal--*",	x11_fonts+7, x11_fonts+6},
-{"-*-courier-bold-o-normal--*",		x11_fonts+7, x11_fonts+7},
-{"-*-times-medium-r-normal--*",		x11_fonts+9, x11_fonts+10},
-{"-*-times-bold-r-normal--*",		x11_fonts+9, x11_fonts+11},
-{"-*-times-medium-i-normal--*",		x11_fonts+11,x11_fonts+10},
-{"-*-times-bold-i-normal--*",		x11_fonts+11,x11_fonts+11},
-{"-*-symbol-*",				x11_fonts+12,x11_fonts+12},
-{"-*-lucidatypewriter-medium-r-normal-sans-*", x11_fonts+14,x11_fonts+14},
-{"-*-lucidatypewriter-bold-r-normal-sans-*", x11_fonts+14,x11_fonts+14},
-{"-*-*zapf dingbats-*",			x11_fonts+15,x11_fonts+15},
+Fl_Font_
+fl_fonts[] = {
+{"-*-helvetica-medium-r-normal--*",	fl_fonts+1, fl_fonts+2},
+{"-*-helvetica-bold-r-normal--*", 	fl_fonts+1, fl_fonts+3},
+{"-*-helvetica-medium-o-normal--*",	fl_fonts+3, fl_fonts+2},
+{"-*-helvetica-bold-o-normal--*",	fl_fonts+3, fl_fonts+3},
+{"-*-courier-medium-r-normal--*",	fl_fonts+5, fl_fonts+6},
+{"-*-courier-bold-r-normal--*",		fl_fonts+5, fl_fonts+7},
+{"-*-courier-medium-o-normal--*",	fl_fonts+7, fl_fonts+6},
+{"-*-courier-bold-o-normal--*",		fl_fonts+7, fl_fonts+7},
+{"-*-times-medium-r-normal--*",		fl_fonts+9, fl_fonts+10},
+{"-*-times-bold-r-normal--*",		fl_fonts+9, fl_fonts+11},
+{"-*-times-medium-i-normal--*",		fl_fonts+11,fl_fonts+10},
+{"-*-times-bold-i-normal--*",		fl_fonts+11,fl_fonts+11},
+{"-*-symbol-*",				fl_fonts+12,fl_fonts+12},
+{"-*-lucidatypewriter-medium-r-normal-sans-*", fl_fonts+14,fl_fonts+14},
+{"-*-lucidatypewriter-bold-r-normal-sans-*", fl_fonts+14,fl_fonts+14},
+{"-*-*zapf dingbats-*",			fl_fonts+15,fl_fonts+15},
 };
 
 static Fl_Font_Renderer
 x11_renderer = {
   x11_font, x11_font_load, x11_font_unload, x11_font_height, x11_font_descent,
-  x11_font_width, x11_font_draw, x11_font_clip, 0, x11_fonts
+  x11_font_width, x11_font_draw, x11_font_clip, 0, 0
 };
 
 Fl_Font_Renderer *fl_font_renderer = &x11_renderer;
 
 //
-// End of "$Id: fl_font_x.cxx,v 1.3 2001/07/10 08:14:39 clip Exp $"
+// End of "$Id: fl_font_x.cxx,v 1.4 2001/07/23 09:50:05 spitzak Exp $"
 //

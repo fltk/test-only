@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.8 2000/09/27 16:25:48 spitzak Exp $"
+# "$Id: Makefile,v 1.9 2001/07/23 09:50:03 spitzak Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -59,7 +59,7 @@ DSONAME = $(DSOLIBglNAME)$(DSOEXT)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
-all:	static programs
+all:	$(BUILDTARGETS)
 
 static:	$(LIBRARY)$(LIBEXT)
 
@@ -104,7 +104,7 @@ include makedepend
 
 ################################################################
 
-install: install_static install_shared install_programs
+install: $(INSTALLTARGETS)
 
 install_static: static
 	@echo "Installing static libraries..."
@@ -127,5 +127,5 @@ install_shared: shared
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.8 2000/09/27 16:25:48 spitzak Exp $".
+# End of "$Id: Makefile,v 1.9 2001/07/23 09:50:03 spitzak Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Repeat_Button.cxx,v 1.7 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: Fl_Repeat_Button.cxx,v 1.8 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Repeat button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,8 +23,8 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Repeat_Button.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Repeat_Button.h>
 
 #define INITIALREPEAT .5
 #define REPEAT .1
@@ -61,5 +61,5 @@ int Fl_Repeat_Button::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Repeat_Button.cxx,v 1.7 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: Fl_Repeat_Button.cxx,v 1.8 2001/07/23 09:50:05 spitzak Exp $".
 //

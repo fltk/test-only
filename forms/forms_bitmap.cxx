@@ -1,5 +1,5 @@
 //
-// "$Id: forms_bitmap.cxx,v 1.6 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: forms_bitmap.cxx,v 1.7 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Forms compatible bitmap function for the Fast Light Tool Kit (FLTK).
 //
@@ -23,7 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/forms.H>
+#include <fltk/forms.h>
 
 Fl_FormsBitmap::Fl_FormsBitmap(
   Fl_Boxtype t, int x, int y, int w, int h, const char* l)
@@ -41,7 +41,7 @@ void Fl_FormsBitmap::set(int W, int H, const uchar *bits) {
 }
 
 void Fl_FormsBitmap::draw() {
-  draw_box(0, 0, w(), h(), FL_SELECTED);
+  box()->draw(0, 0, w(), h(), selection_color());
   if (b) {
     fl_color(color());
     b->draw(0, 0, w(), h(), (b->w-w())/2, (b->h-h())/2);
@@ -50,5 +50,5 @@ void Fl_FormsBitmap::draw() {
 }
 
 //
-// End of "$Id: forms_bitmap.cxx,v 1.6 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: forms_bitmap.cxx,v 1.7 2001/07/23 09:50:04 spitzak Exp $".
 //

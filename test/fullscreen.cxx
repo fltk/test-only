@@ -1,5 +1,5 @@
 //
-// "$Id: fullscreen.cxx,v 1.8 2001/04/22 16:50:21 spitzak Exp $"
+// "$Id: fullscreen.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Fullscreen test program for the Fast Light Tool Kit (FLTK).
 //
@@ -52,16 +52,16 @@
 //
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Single_Window.H>
-#include <FL/Fl_Hor_Slider.H>
-#include <FL/Fl_Toggle_Light_Button.H>
-#include <FL/math.h>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Single_Window.h>
+#include <fltk/Fl_Hor_Slider.h>
+#include <fltk/Fl_Toggle_Light_Button.h>
+#include <fltk/math.h>
 #include <stdio.h>
 
 #if HAVE_GL
-#include <FL/gl.h>
-#include <FL/Fl_Gl_Window.H>
+#include <fltk/gl.h>
+#include <fltk/Fl_Gl_Window.h>
 
 class shape_window : public Fl_Gl_Window {
   void draw();
@@ -95,7 +95,7 @@ void shape_window::draw() {
 
 #else
 
-#include <FL/fl_draw.H>
+#include <fltk/fl_draw.h>
 
 class shape_window : public Fl_Window {
   void draw();
@@ -112,7 +112,7 @@ Fl_Window(x,y,w,h,l) {
 void shape_window::draw() {
   fl_color(0);
   fl_rectf(0,0,w(),h());
-  fl_font(FL_HELVETICA, 20);
+  fl_font(0,20);
   fl_color(7);
   fl_draw("This requires GL",0,0,w(),h(),FL_ALIGN_CENTER);
 }
@@ -226,5 +226,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fullscreen.cxx,v 1.8 2001/04/22 16:50:21 spitzak Exp $".
+// End of "$Id: fullscreen.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $".
 //

@@ -66,13 +66,13 @@ er should not go into fits echoing resizes back and forth!");
       o->callback((Fl_Callback*)cb_2);
     }
      {    Fl_Button* o = new Fl_Button(30, 130, 110, 40, "grow");
-      o->label_font(fl_fonts()+1);
+      o->label_font(fl_fonts+1);
       o->label_type(FL_SYMBOL_LABEL);
       o->label_size(18);
       o->callback((Fl_Callback*)cb_grow);
     }
      {    Fl_Button* o = new Fl_Button(30, 190, 110, 40, "shrink");
-      o->label_font(fl_fonts()+1);
+      o->label_font(fl_fonts+1);
       o->label_type(FL_SYMBOL_LABEL);
       o->label_size(18);
       o->callback((Fl_Callback*)cb_shrink);

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_overlay.cxx,v 1.5 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: fl_overlay.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Overlay support for the Fast Light Tool Kit (FLTK).
 //
@@ -28,8 +28,8 @@
 // to erase the overlay before drawing anything that might intersect
 // it.
 
-#include <FL/x.H>
-#include <FL/fl_draw.H>
+#include <fltk/x.h>
+#include <fltk/fl_draw.h>
 
 static int px,py,pw,ph;
 
@@ -64,5 +64,5 @@ void fl_overlay_rect(int x, int y, int w, int h) {
 }
 
 //
-// End of "$Id: fl_overlay.cxx,v 1.5 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: fl_overlay.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $".
 //

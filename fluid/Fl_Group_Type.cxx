@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group_Type.cxx,v 1.13 2001/02/21 23:26:55 robertk Exp $"
+// "$Id: Fl_Group_Type.cxx,v 1.14 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Fl_Group object code for the Fast Light Tool Kit (FLTK).
 //
@@ -28,9 +28,9 @@
 //
 
 
-#include <FL/Fl.H>
-#include <FL/Fl_Group.H>
-#include <FL/fl_message.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Group.h>
+#include <fltk/fl_message.h>
 #include "Fl_Type.h"
 
 class igroup : public Fl_Group {
@@ -164,7 +164,7 @@ void Fl_Group_Type::write_code() {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Pack.H>
+#include <fltk/Fl_Pack.h>
 
 static Fl_Menu_Item pack_type_menu[] = {
   {"HORIZONTAL", 0, 0, (void*)Fl_Pack::HORIZONTAL},
@@ -182,7 +182,7 @@ Fl_Pack_Type Fl_Pack_type;	// the "factory"
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Tabs.H>
+#include <fltk/Fl_Tabs.h>
 
 class itabs : public Fl_Tabs {
 public:
@@ -263,7 +263,7 @@ void Fl_Group_Type::move_child(Fl_Type* cc, Fl_Type* before) {
 ////////////////////////////////////////////////////////////////
 // some other group subclasses that fluid does not treat specially:
 
-#include <FL/Fl_Scroll.H>
+#include <fltk/Fl_Scroll.h>
 
 static Fl_Menu_Item scroll_type_menu[] = {
   {"BOTH", 0, 0, 0/*(void*)Fl_Scroll::BOTH*/},
@@ -294,5 +294,5 @@ public:
 Fl_Tile_Type Fl_Tile_type;	// the "factory"
 
 //
-// End of "$Id: Fl_Group_Type.cxx,v 1.13 2001/02/21 23:26:55 robertk Exp $".
+// End of "$Id: Fl_Group_Type.cxx,v 1.14 2001/07/23 09:50:04 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: forms_timer.cxx,v 1.6 2001/02/22 21:00:49 clip Exp $"
+// "$Id: forms_timer.cxx,v 1.7 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Forms timer object for the Fast Light Tool Kit (FLTK).
 //
@@ -27,9 +27,9 @@
 // You don't want to use this if you just want a timeout, call
 // Fl::add_timeout directly!
 
-#include <FL/Fl.H>
-#include <FL/Fl_Timer.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Timer.h>
+#include <fltk/fl_draw.h>
 #ifdef WIN32
 # include <sys/types.h> 
 # include <sys/timeb.h>
@@ -58,10 +58,12 @@ void fl_gettime(long* sec, long* usec) {
 void Fl_Timer::draw() {
   int tt;
   char str[32];
-  Fl_Flags flags = this->flags();
+  Fl_Color color;
   if (on && delay<=0.0 && ((int) (delay / FL_TIMER_BLINKRATE) % 2))
-    flags |= FL_SELECTED;
-  draw_box(0, 0, w(), h(), flags);
+    color = selection_color();
+  else
+    color = this->color();
+  box()->draw(0, 0, w(), h(), color);
   if (type() == FL_VALUE_TIMER && delay>0.0) {
     double d = direction_ ? total-delay : delay;
     if (d < 60.0)
@@ -149,5 +151,5 @@ void Fl_Timer::suspended(char d) {
 }
 
 //
-// End of "$Id: forms_timer.cxx,v 1.6 2001/02/22 21:00:49 clip Exp $".
+// End of "$Id: forms_timer.cxx,v 1.7 2001/07/23 09:50:04 spitzak Exp $".
 //

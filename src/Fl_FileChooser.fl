@@ -7,7 +7,7 @@ code_name {.cxx}
 gridx 5 
 gridy 5 
 snap 3
-decl {\#include <FL/Fl_FileChooser.H>} {} 
+decl {\#include <fltk/Fl_FileChooser.h>} {} 
 
 decl {\#include <config.h>} {} 
 
@@ -60,7 +60,7 @@ rescan();}
         tooltip {Double-click to change directories.}
         private xywh {10 45 355 180} resizable
         code0 {\#include "filename.H"}
-        code1 {\#include <FL/Fl_FileBrowser.H>}
+        code1 {\#include <fltk/Fl_FileBrowser.h>}
         class Fl_FileBrowser
       }
       Fl_Input fileName {
@@ -69,7 +69,7 @@ rescan();}
         tooltip {Type a filename or directory name here.}
         private xywh {10 245 355 25} align 5 when 8
         code0 {fileName->when(FL_WHEN_CHANGED | FL_WHEN_ENTER_KEY_ALWAYS);}
-        code1 {\#include <FL/Fl_FileInput.H>}
+        code1 {\#include <fltk/Fl_FileInput.h>}
         class Fl_FileInput
       }
       Fl_Return_Button okButton {

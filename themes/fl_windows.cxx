@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.8 2001/01/02 00:20:29 clip Exp $"
+// "$Id: fl_windows.cxx,v 1.9 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -27,14 +27,14 @@
 // than the fltk default does.  Due to popular demand (ugh) some of this
 // may be moved to the default...
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Check_Button.H>
-#include <FL/Fl_Scrollbar.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Output.H>
-#include <FL/Fl_Style.H>
-#include <FL/fl_theme.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Widget.h>
+#include <fltk/Fl_Check_Button.h>
+#include <fltk/Fl_Scrollbar.h>
+#include <fltk/Fl_Input.h>
+#include <fltk/Fl_Output.h>
+#include <fltk/Fl_Style.h>
+#include <fltk/fl_theme.h>
 
 ////////////////////////////////////////////////////////////////
 // Different box type used by win98 sometimes:
@@ -89,5 +89,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.8 2001/01/02 00:20:29 clip Exp $"
+// End of "$Id: fl_windows.cxx,v 1.9 2001/07/23 09:50:06 spitzak Exp $"
 //

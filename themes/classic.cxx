@@ -1,5 +1,5 @@
 //
-// "$Id: classic.cxx,v 1.27 2001/02/21 06:15:45 clip Exp $"
+// "$Id: classic.cxx,v 1.28 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -25,13 +25,13 @@
 
 // fltk classic appearance
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Check_Button.H>
-#include <FL/Fl_Scrollbar.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Output.H>
-#include <FL/Fl_Style.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Widget.h>
+#include <fltk/Fl_Check_Button.h>
+#include <fltk/Fl_Scrollbar.h>
+#include <fltk/Fl_Input.h>
+#include <fltk/Fl_Output.h>
+#include <fltk/Fl_Style.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -71,8 +71,8 @@ extern "C" int fltk_plugin() {
   Fl_Widget::default_style->box = &classic_up_box;
   Fl_Widget::default_style->text_box = &classic_down_box;
   Fl_Widget::default_style->highlight_color = 0;
-  Fl_Widget::default_style->label_size = 15;
-  Fl_Widget::default_style->text_size = 15;
+  Fl_Widget::default_style->label_size = 14;
+  Fl_Widget::default_style->text_size = 14;
   Fl_Widget::default_style->text_box = FL_DOWN_BOX;
   Fl_Widget::default_style->selection_color = FL_DARK2;
   Fl_Widget::default_style->selection_text_color = 0;
@@ -104,5 +104,5 @@ extern "C" int fltk_plugin() {
 }
 
 //
-// End of "$Id: classic.cxx,v 1.27 2001/02/21 06:15:45 clip Exp $".
+// End of "$Id: classic.cxx,v 1.28 2001/07/23 09:50:06 spitzak Exp $".
 //

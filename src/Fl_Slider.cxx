@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.48 2001/02/21 06:15:44 clip Exp $"
+// "$Id: Fl_Slider.cxx,v 1.49 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,9 +23,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Slider.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Slider.h>
+#include <fltk/fl_draw.h>
 #include <math.h>
 
 // Draw the background behind the slider, draw() calls this more than
@@ -209,26 +209,27 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
 
 int Fl_Slider::handle(int event) {
   int X=0; int Y=0; int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
+#ifdef WINDOWS_COMPATABILITY
   if (event == FL_PUSH) take_focus();
-
+#endif
   return handle(event,X,Y,W,H);
 }
 
 static void revert(Fl_Style *s) {
   s->text_background = FL_DARK2;
 }
-
-static Fl_Named_Style* style = new Fl_Named_Style("Slider", revert, &style);
+static Fl_Named_Style style("Slider", revert, &Fl_Slider::default_style);
+Fl_Named_Style* Fl_Slider::default_style = &::style;
 
 Fl_Slider::Fl_Slider(int x, int y, int w, int h, const char* l)
 : Fl_Valuator(x, y, w, h, l) {
-  style(::style);
+  style(default_style);
   slider_size_ = 0;
 }
 
 Fl_Slider::Fl_Slider(uchar t, int x, int y, int w, int h, const char* l)
   : Fl_Valuator(x, y, w, h, l) {
-  style(::style);
+  style(default_style);
   slider_size_ = 0;
   type(t);
 // fltk 1.0 (and XForms) set the box to FL_FLAT_BOX if the type was
@@ -236,5 +237,5 @@ Fl_Slider::Fl_Slider(uchar t, int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.48 2001/02/21 06:15:44 clip Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.49 2001/07/23 09:50:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_own_colormap.cxx,v 1.4 1999/01/07 19:17:32 mike Exp $"
+// "$Id: Fl_own_colormap.cxx,v 1.5 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Private colormap support for the Fast Light Tool Kit (FLTK).
 //
@@ -32,8 +32,8 @@
 // get huge color changes when switching windows.
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/x.H>
+#include <fltk/Fl.h>
+#include <fltk/x.h>
 
 #ifdef WIN32
 // There is probably something relevant to do on MSWindows 8-bit displays
@@ -73,5 +73,5 @@ void Fl::own_colormap() {
 #endif
 
 //
-// End of "$Id: Fl_own_colormap.cxx,v 1.4 1999/01/07 19:17:32 mike Exp $".
+// End of "$Id: Fl_own_colormap.cxx,v 1.5 2001/07/23 09:50:05 spitzak Exp $".
 //

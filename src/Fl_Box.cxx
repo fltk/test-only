@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Box.cxx,v 1.21 2000/08/10 09:24:31 spitzak Exp $"
+// "$Id: Fl_Box.cxx,v 1.22 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Box widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,8 +23,8 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Box.H>
+#include <fltk/Fl_Widget.h>
+#include <fltk/Fl_Box.h>
 
 void Fl_Box::draw() {
   draw_box();
@@ -41,16 +41,16 @@ void Fl_Box::draw_n_clip() {
 static void revert(Fl_Style* s) {
   s->box = FL_NO_BOX;
 }
-
 // this is unnamed as there is no need for themes to alter this:
-static Fl_Named_Style *style = new Fl_Named_Style(0, revert, &style);
+static Fl_Named_Style style(0, revert, &Fl_Box::default_style);
+Fl_Named_Style* Fl_Box::default_style = &::style;
 
 Fl_Box::Fl_Box(int x, int y, int w, int h, const char *l)
   : Fl_Widget(x,y,w,h,l)
 {
-  style(::style);
+  style(default_style);
 }
 
 //
-// End of "$Id: Fl_Box.cxx,v 1.21 2000/08/10 09:24:31 spitzak Exp $".
+// End of "$Id: Fl_Box.cxx,v 1.22 2001/07/23 09:50:04 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pixmap.cxx,v 1.13 2001/07/16 19:38:18 robertk Exp $"
+// "$Id: Fl_Pixmap.cxx,v 1.14 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,10 +30,10 @@
 // Implemented without using the xpm library (which I can't use because
 // it interferes with the color cube used by fl_draw_image).
 
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
-#include <FL/Fl_Pixmap.H>
+#include <fltk/Fl.h>
+#include <fltk/fl_draw.h>
+#include <fltk/x.h>
+#include <fltk/Fl_Pixmap.h>
 
 void Fl_Pixmap::measure(int& W,int& H) {
   if (w < 0) fl_measure_pixmap(data, w, h);
@@ -62,5 +62,5 @@ void Fl_Pixmap::draw(int X, int Y, int W, int H, int cx, int cy)
 }
 
 //
-// End of "$Id: Fl_Pixmap.cxx,v 1.13 2001/07/16 19:38:18 robertk Exp $".
+// End of "$Id: Fl_Pixmap.cxx,v 1.14 2001/07/23 09:50:05 spitzak Exp $".
 //

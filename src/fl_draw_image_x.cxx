@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_x.cxx,v 1.2 2001/03/10 20:38:22 clip Exp $"
+// "$Id: fl_draw_image_x.cxx,v 1.3 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Image drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -25,7 +25,7 @@
 
 // This file is not independently compiled, it is included by fl_draw_image.cxx
 
-#include "Fl_XColor.H"
+#include "Fl_XColor.h"
 
 // A list of assumptions made about the X display:
 
@@ -79,7 +79,7 @@ static void color8_converter(const uchar *from, uchar *to, int w, int delta) {
     g += from[1]; if (g < 0) g = 0; else if (g>255) g = 255;
     b += from[2]; if (b < 0) b = 0; else if (b>255) b = 255;
     Fl_Color i = fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
-    Fl_XColor& xmap = fl_xmap[0][i];
+    Fl_XColor& xmap = fl_xmap[i];
     if (!xmap.mapped) fl_allocate_xpixel(xmap,r,g,b);
     r -= xmap.r;
     g -= xmap.g;
@@ -109,7 +109,7 @@ static void mono8_converter(const uchar *from, uchar *to, int w, int delta) {
     g += from[0]; if (g < 0) g = 0; else if (g>255) g = 255;
     b += from[0]; if (b < 0) b = 0; else if (b>255) b = 255;
     Fl_Color i = fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
-    Fl_XColor& xmap = fl_xmap[0][i];
+    Fl_XColor& xmap = fl_xmap[i];
     if (!xmap.mapped) fl_allocate_xpixel(xmap,r,g,b);
     r -= xmap.r;
     g -= xmap.g;
@@ -535,5 +535,5 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 #define DITHER_RECTF (fl_visual->depth > 16)
 
 //
-// End of "$Id: fl_draw_image_x.cxx,v 1.2 2001/03/10 20:38:22 clip Exp $"
+// End of "$Id: fl_draw_image_x.cxx,v 1.3 2001/07/23 09:50:05 spitzak Exp $"
 //

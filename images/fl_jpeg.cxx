@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg.cxx,v 1.6 2000/09/05 17:36:20 spitzak Exp $"
+// "$Id: fl_jpeg.cxx,v 1.7 2001/07/23 09:50:04 spitzak Exp $"
 //
 // JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -25,10 +25,10 @@
 
 // JPEG image decompression. From example code in libjpeg distribution.
 
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
-#include <FL/Fl_Shared_Image.H>
+#include <fltk/Fl.h>
+#include <fltk/fl_draw.h>
+#include <fltk/x.h>
+#include <fltk/Fl_Shared_Image.h>
 #include <config.h>
 #if HAVE_JPEG
 #include <stdio.h>
@@ -406,5 +406,5 @@ int Fl_JPEG_Image::test(const uchar* datas, size_t size)
 }
 
 //
-// End of "$Id: fl_jpeg.cxx,v 1.6 2000/09/05 17:36:20 spitzak Exp $"
+// End of "$Id: fl_jpeg.cxx,v 1.7 2001/07/23 09:50:04 spitzak Exp $"
 //

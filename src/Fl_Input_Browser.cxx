@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.cxx,v 1.8 2001/07/10 08:14:38 clip Exp $"
+// "$Id: Fl_Input_Browser.cxx,v 1.9 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Input Browser (Combo Box) widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,19 +23,20 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Input_Browser.H>
-#include <FL/Fl_Menu_Window.H>
-#include <FL/Fl_Browser.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Input_Browser.h>
+#include <fltk/Fl_Menu_Window.h>
+#include <fltk/Fl_Browser.h>
+#include <fltk/fl_draw.h>
 
-static Fl_Named_Style* cb_style = new Fl_Named_Style("Input Browser", 0, &cb_style);
+static Fl_Named_Style style("Input_Browser", 0, &Fl_Input_Browser::default_style);
+Fl_Named_Style* Fl_Input_Browser::default_style = &::style;
 
 Fl_Input_Browser::Fl_Input_Browser(int x, int y, int w, int h, const char *l)
   : Fl_Menu_(x, y, w, h, l)
 {
   align(FL_ALIGN_LEFT);
-  style(cb_style);
+  style(default_style);
   input = new Fl_Input(x, y, w, h);
   if (input->parent()) input->parent()->remove(input);
   input->parent(this);
@@ -56,14 +57,11 @@ class ComboWindow : public Fl_Menu_Window {
     ComboWindow(int x, int y, int w, int h) : Fl_Menu_Window(x, y, w, h) {}
 };
 
-static int button_abort;
-
 int
 ComboWindow::handle(int e) {
   if ((!Fl::event_inside(0, 0, w(), h()) && e == FL_PUSH) ||
       (e == FL_SHORTCUT && Fl::event_key() == FL_Escape))
   {
-    button_abort = (e == FL_PUSH);
     hide();
     return 1;
   }
@@ -99,15 +97,12 @@ ComboBrowser::handle(int e) {
   return Fl_Browser::handle(e);
 }
 
-static void ComboBrowser_cb(Fl_Widget *w, void *v) {
+static void ComboBrowser_cb(Fl_Widget* w, void*) {
   // we get callbacks for all keys?
   if (Fl::event() == FL_KEY && Fl::event_key() != FL_Enter) return;
-  Fl_Widget *item = (Fl_Widget *)v;
-  if (item->is_group()) return; // can't select a group!
-  ib->item(item);
-  ib->value(item->label());
+  Fl_Browser* browser = (Fl_Browser*)w;
+  ib->goto_item(browser->indexes(), browser->level());
   ib->damage(FL_DAMAGE_CHILD);
-  button_abort = 0;
   mw->hide();
 }
 
@@ -125,8 +120,6 @@ public:
     other->list()->flags_changed(other,widget);
   }
 } share_list; // only one instance of this.
-
-extern FL_API void fl_bounce_button_press();
 
 int
 Fl_Input_Browser::handle(int e) {
@@ -181,7 +174,7 @@ Fl_Input_Browser::handle(int e) {
       if (H < minh_) H = minh_;
       int X = mw->x();
       int Y = mw->y();
-      int down = fl_sysinfo::screen_height - Y;
+      int down = Fl::info().height - Y;
       int up = Fl::event_y_root() - Fl::event_y();
       if (H > down) {
         if (up > down) {
@@ -191,21 +184,20 @@ Fl_Input_Browser::handle(int e) {
           H = down;
         }
       }
-      if (X + W > fl_sysinfo::screen_width) {
-        X = fl_sysinfo::screen_width - W;
-        if (X < 0) { X = 0; W = fl_sysinfo::screen_width; }
+      if (X + W > Fl::info().width) {
+        X = Fl::info().width - W;
+        if (X < 0) { X = 0; W = Fl::info().width; }
       }
       mw->resize(X, Y, W, H);
       b->Fl_Widget::size(W, H);
 
       b->layout();// shouldn't call this directly
-      b->goto_number(item() ? b->Fl_Group::find(item()) : 0);
+      b->value(focus()); // should copy the indexes!
       b->item_select();
       b->set_middle();
       Fl::focus(b);
       mw->exec();
       Fl::release();
-      if (button_abort) fl_bounce_button_press();
       delete mw;
       if (type()&FL_NONEDITABLE_INPUT_BROWSER) throw_focus();
       else Fl::focus(input);
@@ -229,8 +221,7 @@ Fl_Input_Browser::draw() {
   Fl_Flags f = flags();
   if (!active_r()) f |= FL_INACTIVE;
   minw_ = w();
-  if (damage()&FL_DAMAGE_ALL)
-    text_box()->draw(this, 0, 0, w(), h(), f);
+  if (damage()&FL_DAMAGE_ALL) draw_text_frame();
   int X = 0, Y = 0, W = w(), H = h();
   text_box()->inset(X, Y, W, H);
   int W1 = H*4/5;
@@ -249,7 +240,7 @@ Fl_Input_Browser::draw() {
     if  (Fl::pushed() == this) f |= (FL_VALUE/*|FL_SELECTED*/);
     if (over_now) f |= FL_HIGHLIGHT;
     X += W-W1; W = W1;
-    box()->draw(this, X, Y, W, H, f);
+    box()->draw(X, Y, W, H, get_box_color(f), f);
     box()->inset(X, Y, W, H);
     draw_glyph(FL_GLYPH_DOWN, X, Y, W, H, f);
     over_last = over_now;
@@ -257,5 +248,5 @@ Fl_Input_Browser::draw() {
 }
 
 //
-// End of "$Id: Fl_Input_Browser.cxx,v 1.8 2001/07/10 08:14:38 clip Exp $".
+// End of "$Id: Fl_Input_Browser.cxx,v 1.9 2001/07/23 09:50:04 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fractals.cxx,v 1.6 2001/03/14 18:02:49 spitzak Exp $"
+// "$Id: fractals.cxx,v 1.7 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Fractal drawing demo for the Fast Light Tool Kit (FLTK).
 //
@@ -52,7 +52,7 @@
  *
  */
 
-#include <FL/glut.H> // changed for fltk
+#include <fltk/glut.h> // changed for fltk
 #include <GL/glu.h> // added for fltk
 
 #include <stdio.h>
@@ -733,9 +733,9 @@ void choosefract(Fl_Widget*, void *value) {choosefract(long(value));}
 
 void handlemenu(Fl_Widget*, void *value) {handlemenu(long(value));}
 
-#include <FL/Fl_Radio_Button.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Window.H>
+#include <fltk/Fl_Radio_Button.h>
+#include <fltk/Fl_Group.h>
+#include <fltk/Fl_Window.h>
 
 int main(int argc, char** argv)
 {
@@ -799,5 +799,5 @@ int main(int argc, char** argv)
 }
 
 //
-// End of "$Id: fractals.cxx,v 1.6 2001/03/14 18:02:49 spitzak Exp $".
+// End of "$Id: fractals.cxx,v 1.7 2001/07/23 09:50:04 spitzak Exp $".
 //

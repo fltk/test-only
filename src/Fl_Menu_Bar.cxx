@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.43 2001/03/09 03:45:36 clip Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.44 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,9 +23,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Menu_Bar.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Menu_Bar.h>
+#include <fltk/fl_draw.h>
 
 void Fl_Menu_Bar::draw() {
   if (damage()&(~FL_DAMAGE_HIGHLIGHT)) draw_box();
@@ -45,7 +45,7 @@ void Fl_Menu_Bar::draw() {
 	widget->clear_flag(FL_HIGHLIGHT);
       int x1 = X; int y1 = 0; int w1 = W; int h1 = this->h();
       box()->inset(x1,y1,w1,h1);
-      text_box()->draw(this, X, y1+1, W, h1-2, widget->flags()&~FL_VALUE);
+      text_box()->draw(X, y1+1, W, h1-2, text_background(), widget->flags()&~FL_VALUE);
       int save_x = fl_x_; fl_x_ += X+5;
       int save_y = fl_y_; fl_y_ += (h()-widget->h())/2;
       int save_w = widget->w(); widget->w(W-10);
@@ -87,7 +87,7 @@ int Fl_Menu_Bar::handle(int event) {
     value(-1);
   J1:
     highlight_ = -1; damage(FL_DAMAGE_HIGHLIGHT);
-    pulldown(0, 0, w(), h(), 0, 1);
+    popup(0, 0, w(), h(), 0, true);
     return 1;
   case FL_SHORTCUT:
     for (i = 0; i < children(); i++) {
@@ -130,15 +130,15 @@ static void revert(Fl_Style* s) {
 #endif
   s->leading = 4;
 }
-
-static Fl_Named_Style* style = new Fl_Named_Style("Menu Bar", revert, &style);
+static Fl_Named_Style style("Menu_Bar", revert, &Fl_Menu_Bar::default_style);
+Fl_Named_Style* Fl_Menu_Bar::default_style = &::style;
 
 Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l)
   : Fl_Menu_(x,y,w,h,l)
 {
-  style(::style);
+  style(default_style);
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.43 2001/03/09 03:45:36 clip Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.44 2001/07/23 09:50:05 spitzak Exp $".
 //

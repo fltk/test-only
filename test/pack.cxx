@@ -1,5 +1,5 @@
 //
-// "$Id: pack.cxx,v 1.7 2000/01/16 07:44:44 robertk Exp $"
+// "$Id: pack.cxx,v 1.8 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Fl_Pack test program for the Fast Light Tool Kit (FLTK).
 //
@@ -27,13 +27,13 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Light_Button.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Scroll.H>
-#include <FL/Fl_Value_Slider.H>
-#include <FL/Fl_Pack.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Button.h>
+#include <fltk/Fl_Light_Button.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Scroll.h>
+#include <fltk/Fl_Value_Slider.h>
+#include <fltk/Fl_Pack.h>
 
 Fl_Pack *pack;
 Fl_Scroll *scroll;
@@ -115,5 +115,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: pack.cxx,v 1.7 2000/01/16 07:44:44 robertk Exp $".
+// End of "$Id: pack.cxx,v 1.8 2001/07/23 09:50:06 spitzak Exp $".
 //

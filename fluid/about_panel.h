@@ -2,14 +2,14 @@
 
 #ifndef about_panel_h
 #define about_panel_h
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
 extern Fl_Window *about_panel;
-#include <FL/Fl_Group.H>
+#include <fltk/Fl_Group.h>
 extern Fl_Group *display_group;
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Button.H>
+#include <fltk/Fl_Box.h>
+#include <fltk/Fl_Button.h>
 extern Fl_Box *copyright_box;
-#include <FL/Fl_Return_Button.H>
+#include <fltk/Fl_Return_Button.h>
 Fl_Window* make_about_panel(const char *copyright);
 #endif

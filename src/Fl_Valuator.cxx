@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.15 2001/03/12 00:49:03 spitzak Exp $"
+// "$Id: Fl_Valuator.cxx,v 1.16 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Valuator widget for the Fast Light Tool Kit (FLTK).
 //
@@ -25,9 +25,9 @@
 
 // Base class for sliders and all other one-value "knobs"
 
-#include <FL/Fl.H>
-#include <FL/Fl_Valuator.H>
-#include <FL/math.h>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Valuator.h>
+#include <fltk/math.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -176,5 +176,5 @@ int Fl_Valuator::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.15 2001/03/12 00:49:03 spitzak Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.16 2001/07/23 09:50:05 spitzak Exp $".
 //

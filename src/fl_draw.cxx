@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.14 2000/09/05 17:36:21 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.15 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -25,160 +25,223 @@
 
 // Implementation of fl_draw(const char*,int,int,int,int,Fl_Align)
 // Used to draw all the labels and text, this routine:
-// Word wraps the labels to fit into their bounding box.
-// Breaks them into lines at the newlines.
-// Expands all unprintable characters to ^X or \nnn notation
-// Aligns them against the inside of the box.
 
-#include <FL/fl_draw.H>
+// Breaks them into lines at \n characters.
+
+// Splits it at every \t tab character and uses fl_column_widths() to
+// set each section into a column.
+
+// Parses '&x' combinations to produce MicroSoft style underscores,
+// unless FL_RAW_LABEL flag is set.
+
+// Word wraps the labels to fit into their column (if FL_ALIGN_WRAP
+// flag is on) and aligns them agains the inside of their boxes.
+
+#include <fltk/fl_draw.h>
 #include <string.h>
 
 #define MAXBUF 1024
 
-char fl_draw_shortcut;	// set by fl_labeltypes.C
-static char* underline_at;
+const int* fl_column_widths_ = 0;
 
-// Copy p to buf, replacing unprintable characters with ^X
-// Stop at a newline of if MAXBUF characters written to buffer.
-// Also word-wrap if width exceeds maxw.
-// Returns a pointer to the start of the next line of caharcters.
-// Sets n to the number of characters put into the buffer.
-// Sets width to the width of the string in the current font.
+// The implementation splits the text up into individual calls to fl_draw.
+// Each has an x/y position and a segment of text. Probably should be
+// expanded to have a font & size, This will allow
+// much more complex drawing than we currently support, such as imbedded
+// words in different fonts.
+struct Segment {
+  const char* start;
+  const char* end; // points after last character
+  int x,y;
+};
 
-static const char*
-expand(const char* from, char* buf, int maxw, int& n, int &width, int wrap) {
+static int max_x;
 
-  char* o = buf;
-  char* e = buf+(MAXBUF-4);
-  underline_at = 0;
-  char* word_end = o;
-  const char* word_start = from;
-  int w = 0;
+// Create a new segment:
+static /*inline*/ void set(Segment* s,
+		  const char* start,
+		  const char* end,
+		  int width,
+		  int x, int y, int w,
+		  Fl_Flags flags
+		  )
+{
+  s->start = start;
+  s->end = end;
+  if (x+width > max_x) max_x = x+width;
+  if (flags & FL_ALIGN_RIGHT) {
+    s->x = x+w-width;
+    if (flags & FL_ALIGN_LEFT && s->x > x) s->x = x;
+  }
+  else if (flags & FL_ALIGN_LEFT) s->x = x;
+  else s->x = x+w/2-width/2;
+  s->y = y+fl_height()-fl_descent();
+}
 
-  const char* p = from;
-  for (;; p++) {
+// word-wrap a section of text into one segment per line:
+// Returns the y of the last line
+static int wrap(
+  const char* start,
+  const char* end,
+  int x, int y, int w,
+  Fl_Flags flags,
+  Segment*& segment,
+  Segment* last_segment // prevent array overflow
+  )
+{
+  int width = 0;
+  if (flags & FL_ALIGN_WRAP) {
+    const char* word_start = start;
+    const char* word_end = start;
+    for (const char* p = start; ; p++) {
+      if (p >= end || *p == ' ') {
+	// test for word-wrap:
+	if (word_start < p) {
+	  int newwidth = width + fl_width(word_end, p-word_end);
+	  if (word_end > start && newwidth > w) { // break before this word
+	    set(segment++, start, word_end, width, x, y, w, flags);
+	    y += fl_height();
+	    if (segment >= last_segment) return y; // quit on array overflow
+	    start = word_end = p = word_start;
+	    width = 0;
+	    continue;
+	  } else {
+	    width = newwidth;
+	    word_end = p;
+	  }
+	}
+	word_start = p+1;
+	if (p >= end) break;
+      }
+    }
+  } else {
+    width = fl_width(start, end-start);
+  }
+  if (start < end) set(segment++, start, end, width, x, y, w, flags);
+  return y;
+}
 
-    int c = *p;
+bool fl_hide_shortcut; // set by Fl_Choice
 
-    if (!c || c == ' ' || c == '\n') {
-      // test for word-wrap:
-      if (word_start < p && wrap) {
-	int newwidth = w + fl_width(word_end, o-word_end);
-	if (word_end > buf && newwidth > maxw) { // break before this word
-	  o = word_end;
-	  p = word_start;
+// Parses and lays out the text into segments. Return value is the
+// y height of the text. The width is stored in max_x.
+static int split(
+    const char* str,
+    int W, int /*H*/,
+    Fl_Flags flags,
+    Segment*& segment,
+    Segment* last_segment,
+    char* tempbuf // for the underscore stuff...
+    )
+{
+  const int* column = fl_column_widths_;
+
+  bool look_for_underscore = !(flags & FL_RAW_LABEL);
+  bool saw_underscore = false;
+
+  int x = 0;
+  max_x = 0;
+  int y = 0;
+  int max_y = 0;
+  const char* p = str;
+  for (;;) {
+    // find the next newline or tab:
+    int w; // width to format this segment into
+    if (!*p || *p == '\n') {
+      w = W-x;
+    } else if (*p == '\t') {
+      if (column && *column) w = *column++;
+      else w = ((p-str+8)&-8)*fl_width('2');
+    } else {
+      if (*p == '&' && look_for_underscore) saw_underscore = true;
+      p++;
+      continue;
+    }
+    int newy;
+    // Edit out any '&' sign if this is reasonably short label and use
+    // it's position later to underscore a letter. This is done by
+    // copying the text to the tempbuf and then reusing that buffer
+    // as the source for this text:
+    if (saw_underscore && p-str < 128) {
+      look_for_underscore = false;
+      char* a = tempbuf;
+      const char* b = str;
+      const char* underscore_at = 0;
+      while (b < p) {
+	if (*b == '&' && b+1 < p) {
+	  b++;
+	  if (*b != '&' && !fl_hide_shortcut && !underscore_at)
+	    underscore_at = a;
+	}
+	*a++ = *b++;
+      }
+      Segment* s = segment;
+      newy = wrap(tempbuf, a, x, y, w, flags, segment, last_segment);
+      // add something to print the underscore:
+      if (underscore_at) for (; s < segment; s++) {
+	if (underscore_at >= s->start && underscore_at < s->end) {
+	  Segment* t = segment++;
+	  t->start = "_"; t->end = t->start+1;
+	  t->x = s->x+fl_width(s->start,underscore_at-s->start);
+	  t->y = s->y;
 	  break;
 	}
-	word_end = o;
-	w = newwidth;
       }
-      if (!c) break;
-      else if (c == '\n') {p++; break;}
-      word_start = p+1;
+    } else {
+      newy = wrap(str, p, x, y, w, flags, segment, last_segment);
     }
-
-    if (o > e) break; // don't overflow buffer
-
-    if (c == '&' && fl_draw_shortcut && *(p+1)) {
-      if (*(p+1) == '&') {p++; *o++ = '&';}
-      else if (fl_draw_shortcut != 2) underline_at = o;
-
-    } else *o++ = c;
+    if (newy > max_y) max_y = newy;
+    if (!*p) {
+      return max_y+fl_height();
+    } else if (*p == '\n') {
+      x = 0; y = max_y+fl_height(); max_y = y; column = fl_column_widths_;
+    } else { // tab
+      x += w;
+    }
+    str = ++p;
   }
-
-  width = w + fl_width(word_end, o-word_end);
-  *o = 0;
-  n = o-buf;
-  return p;
 }
+
+#define MAXSEGMENTS 50
 
 void fl_draw(
     const char* str,	// the (multi-line) string
-    int x, int y, int w, int h,	// bounding box
-    Fl_Align align,
-    void (*callthis)(const char*,int,int,int)
+    int X, int Y, int W, int H,	// bounding box
+    Fl_Flags flags
 ) {
-  const char* p;
-  const char* e;
-  char buf[MAXBUF];
-  int buflen;
-
-  // count how many lines and put the last one into the buffer:
-  int lines;
-  int width;
-  for (p=str,lines=0; ;) {
-    e = expand(p, buf, w, buflen, width, align&FL_ALIGN_WRAP);
-    lines++;
-    if (!*e) break;
-    p = e;
-  }
-
-  // figure out vertical position of the first line:
-  int ypos;
-  int height = fl_height();
-  if (align & FL_ALIGN_BOTTOM) {
-    ypos = y+h-lines*height;
-    if (align & FL_ALIGN_TOP && ypos > y) ypos = y;
-  }
-  else if (align & FL_ALIGN_TOP) ypos = y;
-  else ypos = y+(h-lines*height)/2;
-  ypos += height;
-
-  // now draw all the lines:
-  int desc = fl_descent();
-  for (p=str; ; ypos += height) {
-    if (lines>1) e = expand(p, buf, w, buflen, width, align&FL_ALIGN_WRAP);
-
-    int xpos;
-    if (align & FL_ALIGN_RIGHT) {
-      xpos = x+w-width;
-      if (align & FL_ALIGN_LEFT && xpos > x) xpos = x;
-    }
-    else if (align & FL_ALIGN_LEFT) xpos = x;
-    else xpos = x+w/2-width/2;
-
-    callthis(buf,buflen,xpos,ypos-desc);
-
-    if (underline_at)
-      callthis("_",1,xpos+fl_width(buf,underline_at-buf),ypos-desc);
-
-    if (!*e) break;
-    p = e;
-  }
-
-}
-
-void fl_draw(
-  const char* str,	// the (multi-line) string
-  int x, int y, int w, int h,	// bounding box
-  Fl_Align align)
-{
   if (!str || !*str) return;
-  if (w && h && !fl_not_clipped(x, y, w, h)) return;
-  fl_draw(str, x, y, w, h, align, fl_draw);
+  Segment segments[MAXSEGMENTS];
+  Segment* segment = segments;
+  char tempbuf[128];
+  int h = split(str, W, H, flags, segment, segments+MAXSEGMENTS-1, tempbuf);
+  int dy;
+  if (flags & FL_ALIGN_BOTTOM) {
+    dy = Y+H-h;
+    if ((flags & FL_ALIGN_TOP) && dy > Y) dy = Y;
+  } else if (flags & FL_ALIGN_TOP) {
+    dy = Y;
+  } else {
+    dy = Y+(H-h)/2;
+  }
+  for (Segment* s = segments; s < segment; s++) {
+    fl_draw(s->start, s->end-s->start, s->x+X, s->y+dy);
+  }
 }
 
-void fl_measure(const char* str, int& w, int& h) {
-  h = fl_height();
-  if (!str || !*str) {w = 0; return;}
-  const char* p;
-  const char* e;
-  char buf[MAXBUF];
-  int buflen;
-  int lines;
-  int width;
-  int W = 0;
-  for (p=str,lines=0; ;) {
-    e = expand(p, buf, w, buflen, width, w!=0);
-    if (width > W) W = width;
-    lines++;
-    if (!*e) break;
-    p = e;
-  }
-  w = W;
-  h = lines*h;
+void fl_measure(const char* str, int& w, int& h, Fl_Flags flags) {
+  if (!str || !*str) {w = 0; h = fl_height(); return;}
+  Segment segments[MAXSEGMENTS];
+  Segment* segment = segments;
+  char tempbuf[128];
+  h = split(str, w, h, flags, segment, segments+MAXSEGMENTS-1, tempbuf);
+  w = max_x;
 }
+
+// back-compatable one:
+//  void fl_measure(const char* str, int& w, int& h) {
+//    fl_measure(str, w, h, w ? FL_ALIGN_WRAP : 0);
+//  }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.14 2000/09/05 17:36:21 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.15 2001/07/23 09:50:05 spitzak Exp $".
 //

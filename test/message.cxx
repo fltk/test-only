@@ -1,5 +1,5 @@
 //
-// "$Id: message.cxx,v 1.7 2000/02/14 11:33:01 bill Exp $"
+// "$Id: message.cxx,v 1.8 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Message test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,9 +23,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/fl_ask.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/fl_ask.h>
 #include <stdio.h>
 
 int main(int argc, char **argv) {
@@ -56,5 +56,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: message.cxx,v 1.7 2000/02/14 11:33:01 bill Exp $".
+// End of "$Id: message.cxx,v 1.8 2001/07/23 09:50:06 spitzak Exp $".
 //

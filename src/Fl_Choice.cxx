@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.55 2001/03/08 07:39:05 clip Exp $"
+// "$Id: Fl_Choice.cxx,v 1.56 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,17 +23,17 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Choice.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Choice.h>
+#include <fltk/fl_draw.h>
 
 // Set this to 1 for "classic fltk" rather than Windows style:
-#define MOTIF_STYLE 1
+#define MOTIF_STYLE 0
 
 // The dimensions for the glyph in this and the Fl_Menu_Button are exactly
 // the same, so that glyphs may be shared between them.
 
-extern char fl_draw_shortcut;
+extern bool fl_hide_shortcut;
 
 void Fl_Choice::draw() {
   int X=0; int Y=0; int W=w(); int H=h();
@@ -53,7 +53,7 @@ void Fl_Choice::draw() {
   }
 #endif
   Fl_Widget* o = item();
-  if (!o) item(o = child(0));
+  if (!o) o = child(0);
   if (o) {
 #if MOTIF_STYLE
     o->clear_flag(FL_SELECTED);
@@ -65,9 +65,9 @@ void Fl_Choice::draw() {
     int save_x = fl_x_; fl_x_ += X;
     int save_y = fl_y_; fl_y_ += Y+(H-o->height())/2;
     int save_w = o->w(); o->w(W-w1);
-    if (!(flags() & FL_NO_SHORTCUT_LABEL)) fl_draw_shortcut = 2;
+    fl_hide_shortcut = true;
     o->draw();
-    fl_draw_shortcut = 0;
+    fl_hide_shortcut = false;
     o->w(save_w);
     fl_y_ = save_y;
     fl_x_ = save_x;
@@ -99,8 +99,14 @@ void Fl_Choice::draw() {
 #endif
 }
 
-int Fl_Choice::value(int v) {return goto_item(&v, 0);}
+int Fl_Choice::value(int v) {
+  if (goto_item(&v, 0)) {
+    redraw(); return true;
+  }
+  return false;
+}
 
+#if 0
 int Fl_Choice::goto_item(const int* indexes, int level) {
   // rather annoying kludge to try to detect if the item from an Fl_List
   // has changed by looking for the label and user data to change:
@@ -120,6 +126,16 @@ int Fl_Choice::goto_item(const int* indexes, int level) {
   redraw();
   return 1;
 }
+#endif
+
+static bool try_item(Fl_Choice* choice, int i) {
+  Fl_Widget* w = choice->child(i);
+  if (!w->takesevents()) return false;
+  choice->focus(i);
+  choice->execute(w);
+  choice->redraw();
+  return true;
+}  
 
 int Fl_Choice::handle(int e) {
   int children = this->children(0,0);
@@ -146,7 +162,7 @@ int Fl_Choice::handle(int e) {
 //  Fl::event_is_click(0);
     take_focus();
   EXECUTE:
-    if (pulldown(0, 0, w(), h(), 0)) redraw();
+    if (popup(0, 0, w(), h(), 0)) redraw();
     return 1;
 
   case FL_SHORTCUT:
@@ -163,19 +179,12 @@ int Fl_Choice::handle(int e) {
 
     case FL_Up: {
       int i = value(); if (i < 0) i = children;
-      while (i > 0) {
-	--i;
-	Fl_Widget* w = child(i);
-	if (w->takesevents()) {goto_item(&i,0); execute(); return 1;}
-      }
-      return 0;}
+      while (i > 0) {--i; if (try_item(this, i)) return 1;}
+      return 1;}
     case FL_Down: {
       int i = value();
-      while (++i < children) {
-	Fl_Widget* w = child(i);
-	if (w->takesevents()) {goto_item(&i,0); execute(); return 1;}
-      }
-      return 0;}
+      while (++i < children) if (try_item(this,i)) return 1;
+      return 1;}
     }
     return 0;
 
@@ -190,17 +199,17 @@ static void revert(Fl_Style* s) {
   s->text_background = FL_GRAY;
 #endif
 }
-
-static Fl_Named_Style* style = new Fl_Named_Style("Choice", revert, &style);
+static Fl_Named_Style style("Choice", revert, &Fl_Choice::default_style);
+Fl_Named_Style* Fl_Choice::default_style = &::style;
 
 Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,l) {
   value(0);
-  style(::style);
+  style(default_style);
   clear_flag(FL_ALIGN_MASK);
   set_flag(FL_ALIGN_LEFT);
   when(FL_WHEN_RELEASE);
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.55 2001/03/08 07:39:05 clip Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.56 2001/07/23 09:50:04 spitzak Exp $".
 //

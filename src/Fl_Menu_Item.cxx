@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.cxx,v 1.2 2000/09/11 07:29:33 spitzak Exp $"
+// "$Id: Fl_Menu_Item.cxx,v 1.3 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,11 +26,11 @@
 // The obsolete Fl_Menu_Item structure.  This code should not be used
 // in new fltk programs.
 
-#include <FL/Fl_Menu_Item.H>
-#include <FL/Fl_Menu_.H>
-#include <FL/Fl_Item.H>
-#include <FL/Fl_Item_Group.H>
-#include <FL/Fl_Divider.H>
+#include <fltk/Fl_Menu_Item.h>
+#include <fltk/Fl_Menu_.h>
+#include <fltk/Fl_Item.h>
+#include <fltk/Fl_Item_Group.h>
+#include <fltk/Fl_Divider.h>
 
 int Fl_Menu_Item::size() const {
   const Fl_Menu_Item* m = this;
@@ -105,28 +105,32 @@ void Fl_Menu_::add(const Fl_Menu_Item* m, void* data) {
 }
     
 // Emulate old popup and test-shortcut methods on Fl_Menu_Item arrays:
-#include <FL/Fl_Menu_Button.H>
+#include <fltk/Fl_Menu_Button.h>
+#include <fltk/Fl.h>
 
-static Fl_Menu_* get_menu(const Fl_Menu_Item* m, void* data) {
-  static const Fl_Menu_Item* cached_item;
-  static Fl_Menu_Button* cached_menu;
-  if (m != cached_item) {
-    if (!cached_menu) {
-      Fl_Group::current(0); // fix missing end()
-      cached_menu = new Fl_Menu_Button(0,0,0,0);
-    }
-    cached_menu->menu(m);
-    cached_item = m;
-  }
-  cached_menu->user_data(data);
-  return cached_menu;
+const Fl_Menu_Item*
+Fl_Menu_Item::pulldown(int X, int Y, int W, int H,
+		       const Fl_Menu_Item* picked,
+		       const char* title) const
+{
+  Fl_Group::current(0);
+  Fl_Item dummy(title);
+  Fl_Menu_Button menu(0,0,0,0);
+  menu.menu(this);
+  //menu.user_data(data);
+  if (picked) menu.value(picked-this);
+  if (menu.Fl_Menu_::popup(X, Y, W, H, title ? &dummy : 0))
+    return this + menu.value();
+  return 0;
 }
 
-int Fl_Menu_Item::popup(int X, int Y, const char *title, void* data) const {
-  return get_menu(this,data)->popup(X,Y,title);
+const Fl_Menu_Item*
+Fl_Menu_Item::test_shortcut() const
+{
+  Fl_Group::current(0);
+  Fl_Menu_ menu(0,0,0,0);
+  menu.menu(this);
+  //menu.user_data(data);
+  if (menu.handle_shortcut()) return this + menu.value();
+  return 0;
 }
-
-int Fl_Menu_Item::test_shortcut(void* data) const {
-  return get_menu(this,data)->handle_shortcut();
-}
-

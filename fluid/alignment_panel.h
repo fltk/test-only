@@ -2,23 +2,23 @@
 
 #ifndef alignment_panel_h
 #define alignment_panel_h
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
 extern Fl_Window *alignment_window;
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Input.H>
+#include <fltk/Fl_Group.h>
+#include <fltk/Fl_Input.h>
 extern void alignment_cb(Fl_Input*, long);
 extern Fl_Input *horizontal_input;
 extern Fl_Input *vertical_input;
 extern Fl_Input *snap_input;
-#include <FL/Fl_Box.H>
+#include <fltk/Fl_Box.h>
 extern void header_input_cb(Fl_Input*, void*);
 extern Fl_Input *header_file_input;
 extern void code_input_cb(Fl_Input*, void*);
 extern Fl_Input *code_file_input;
-#include <FL/Fl_Light_Button.H>
+#include <fltk/Fl_Light_Button.h>
 extern void include_H_from_C_button_cb(Fl_Light_Button*, void*);
 extern Fl_Light_Button *include_H_from_C_button;
-#include <FL/Fl_Button.H>
+#include <fltk/Fl_Button.h>
 Fl_Window* make_alignment_window();
 #endif

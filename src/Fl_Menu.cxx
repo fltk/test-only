@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.111 2001/07/16 19:38:18 robertk Exp $"
+// "$Id: Fl_Menu.cxx,v 1.112 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -27,11 +27,11 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Menu_Window.H>
-#include <FL/Fl_Menu_.H>
-#include <FL/Fl_Item.H> // for FL_TOGGLE_ITEM, FL_RADIO_ITEM
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Menu_Window.h>
+#include <fltk/Fl_Menu_.h>
+#include <fltk/Fl_Item.h> // for FL_TOGGLE_ITEM, FL_RADIO_ITEM
+#include <fltk/fl_draw.h>
 
 // class MenuTitle is a small window for the title, it will look like
 // it is being drawn in the menu bar, but is actually a window
@@ -66,7 +66,7 @@ struct MenuState {
   int indexes[MAX_LEVELS]; // index in each level of selected item
   MenuWindow* menus[MAX_LEVELS]; // windows that have been created
   int nummenus; // number of windows (may be level+1 or level+2)
-  int menubar; // if true menus[0] is a menubar
+  bool menubar; // if true menus[0] is a menubar
   int state; // one of the enumeration below
   Fl_Menu_* widget; // widget that is making this menu
   // return the widget being pointed at:
@@ -81,19 +81,6 @@ struct MenuState {
     return widget->children(indexes, level+1);
   }
 };
-
-////////////////////////////////////////////////////////////////
-
-// The box, color, and selection color of all menus is taken from
-// this. The color is rather clumsily replaced with the text_background
-// of the calling widget to allow compatability with fltk 1.0 and
-// to allow popup menus to have different colors.
-
-static void revert(Fl_Style *s) {
-  s->text_box = FL_NO_BOX;
-}
-
-static Fl_Named_Style* style = new Fl_Named_Style("Menu", revert, &style);
 
 ////////////////////////////////////////////////////////////////
 
@@ -142,7 +129,7 @@ void MenuTitle::draw() {
 
   if (!widget->active_r()) flags &= ~(FL_VALUE|FL_SELECTED|FL_HIGHLIGHT);
 
-  box->draw(style_widget, 0, 0, w(), h(), flags);
+  box->draw(0, 0, w(), h(), style_widget->get_box_color(flags), flags);
 
   // this allow a toggle or other widget to preview it's state:
   if (Fl::event_pushed()) Fl::pushed_ = widget;
@@ -164,7 +151,7 @@ public:
   MenuState* menustate;
   int level;
   MenuTitle* title;
-  int is_menubar;
+  bool is_menubar;
   int drawn_selected;	// last redraw has this selected
   MenuWindow(MenuState*, int level, int X,int Y,int W,int H, Fl_Widget* title);
   ~MenuWindow();
@@ -176,7 +163,20 @@ public:
   Fl_Widget* get_widget(int i);
   int is_parent(int i);
   int handle(int);
+  static Fl_Named_Style* default_style;
 };
+
+// The box, color, and selection color of all menus is taken from
+// this. The text_box is drawn around each item in the menu. The
+// color is rather clumsily replaced with the text_background
+// of the calling widget to allow compatability with fltk 1.0 and
+// to allow popup menus to have different colors.
+
+static void revert(Fl_Style *s) {
+  s->text_box = FL_NO_BOX;
+}
+static Fl_Named_Style style("Menu", revert, &MenuWindow::default_style);
+Fl_Named_Style* MenuWindow::default_style = &::style;
 
 // return any widget at a given level:
 Fl_Widget* MenuWindow::get_widget(int index) {
@@ -202,7 +202,7 @@ MenuWindow::MenuWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp, Fl_Wid
   end();
   set_modal();
   set_override();
-  style(::style);
+  style(default_style);
 
   int selected = l <= menustate->level ? menustate->indexes[l] : -1;
 
@@ -309,7 +309,7 @@ int MenuWindow::ypos(int index) {
 }
 
 void MenuWindow::draw() {
-  if (damage() != FL_DAMAGE_CHILD) box()->draw(this,0,0,w(),h(),0);
+  if (damage() != FL_DAMAGE_CHILD) box()->draw(0, 0, w(), h(), color(), 0);
   int x=0; int y=0; int w=this->w(); int h=0; box()->inset(x,y,w,h);
   int selected = level <= menustate->level ? menustate->indexes[level] : -1;
   int leading = menustate->widget->leading(); // +2 ?
@@ -334,7 +334,7 @@ void MenuWindow::draw() {
 	// clipping so background pixmaps will work:
 	if (damage() == FL_DAMAGE_CHILD) {
 	  fl_push_clip(x,y,w,ih);
-	  box()->draw(this,0,0,this->w(),this->h(),0);
+	  box()->draw(0, 0, this->w(), this->h(), color(), 0);
 	  fl_pop_clip();
 	}
       }
@@ -454,8 +454,8 @@ int MenuWindow::handle(int event) {
     switch (Fl::event_key()) {
     case FL_Up:
       if (p.menubar && p.level == 0) ;
-      else if (backward(p, p.level))
-		  ;  // do nothing
+      else if (backward(p, p.level));
+      else if (p.menubar) setitem(p, 0, p.indexes[0]);
       return 1;
     case FL_Down:
       if (p.level || !p.menubar) forward(p, p.level);
@@ -555,7 +555,7 @@ int MenuWindow::handle(int event) {
     if (!widget->takesevents()) return 1;
     if ((widget->flags() & FL_MENU_STAYS_UP) && (!p.menubar || p.level)) {
       p.widget->goto_item(p.indexes, p.level);
-      p.widget->execute();
+      p.widget->execute(widget);
       Fl_Window* mw = p.menus[p.level];
       if (widget->type() == FL_RADIO_ITEM) mw->redraw();
       else if (widget->type() == FL_TOGGLE_ITEM) mw->damage(FL_DAMAGE_CHILD);
@@ -575,33 +575,25 @@ static void autoscroll_timeout(void* data) {
     ((MenuState*)data)->menus[0]->handle(FL_MOVE);
 }
 
-int Fl_Menu_::popup(int X, int Y, const char* title) {
-  Fl_Group::current(0);
-  Fl_Item dummy(title);
-  return pulldown(X, Y, 0, 0, title ? &dummy : 0);
-}
-
-extern FL_API void fl_bounce_button_press();
-
-int Fl_Menu_::pulldown(
+int Fl_Menu_::popup(
     int X, int Y, int W, int H,
-    Fl_Widget* t,
-    int menubar)
+    Fl_Widget* title,
+    bool menubar)
 {
   Fl_Group::current(0); // fix possible programmer error...
 
-  ::style->color = text_background();
+  MenuWindow::default_style->color = text_background();
 
   // figure out where to pop up in screen coordinates:
-#if 0
-  if (W) for (Fl_Widget* w = this; w; w = w->parent()) {
-    X += w->x();
-    Y += w->y();
+  if (parent()) {
+    for (Fl_Widget* w = this; w; w = w->parent()) {
+      X += w->x();
+      Y += w->y();
+    }
   } else {
-#endif
     X += Fl::event_x_root()-Fl::event_x();
     Y += Fl::event_y_root()-Fl::event_y();
-    //  }
+  }
 
   MenuState p;
   p.nummenus = 1;
@@ -611,10 +603,9 @@ int Fl_Menu_::pulldown(
   p.level = 0;
   p.indexes[0] = focus();
   p.indexes[1] = -1;
-  MenuWindow mw(&p, 0, X, Y, W, H, t);
+  MenuWindow mw(&p, 0, X, Y, W, H, title);
   p.menus[0] = &mw;
   //Fl::local_grab(&mw); // use this if testing!
-  //Fl::grab(::handle, &p);
   Fl::grab(&mw);
 
   if (menubar) {
@@ -679,7 +670,7 @@ int Fl_Menu_::pulldown(
 
     Fl_Widget* widget = p.current_widget();
 
-    if (widget->takesevents() && p.current_children()>=0) {
+    if (widget && widget->takesevents() && p.current_children()>=0) {
       // a submenu title has been selected
       if (p.nummenus > p.level+1) {
 	// there are already submenus up:
@@ -738,22 +729,17 @@ int Fl_Menu_::pulldown(
   Fl::release();
   // If the menu was aborted by the user clicking outside of the menuwindow
   // find the appropriate window to send a replacement button press event
-#ifndef WIN32
-  if (p.state == ABORT_STATE && Fl::e_type == FL_PUSH)
-    fl_bounce_button_press();
-#endif
-
   if (p.state == DONE_STATE) {
     goto_item(p.indexes, p.level);
     if (menubar && !p.level &&
-	(item()->type() == FL_RADIO_ITEM || item()->type() == FL_TOGGLE_ITEM))
+	(item()->type()==FL_RADIO_ITEM || item()->type()==FL_TOGGLE_ITEM))
       redraw();
-    execute();
+    execute(item());
     return 1;
   }
   return 0;
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.111 2001/07/16 19:38:18 robertk Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.112 2001/07/23 09:50:04 spitzak Exp $".
 //

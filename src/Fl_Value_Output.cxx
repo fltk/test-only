@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Output.cxx,v 1.29 2001/02/21 06:15:45 clip Exp $"
+// "$Id: Fl_Value_Output.cxx,v 1.30 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Value output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,9 +27,9 @@
 // This is much lighter than Fl_Value_Input because it has no text editor
 // If step() is zero then it can be used to display a floating-point value
 
-#include <FL/Fl.H>
-#include <FL/Fl_Value_Output.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Value_Output.h>
+#include <fltk/fl_draw.h>
 
 void Fl_Value_Output::draw() {
   int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
@@ -87,7 +87,7 @@ int Fl_Value_Output::handle(int event) {
   }
 }
 
-#include <FL/Fl_Output.H>
+#include <fltk/Fl_Output.h>
 
 Fl_Value_Output::Fl_Value_Output(int x,int y,int w,int h,const char *l)
 : Fl_Valuator(x,y,w,h,l) {
@@ -98,5 +98,5 @@ Fl_Value_Output::Fl_Value_Output(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Value_Output.cxx,v 1.29 2001/02/21 06:15:45 clip Exp $".
+// End of "$Id: Fl_Value_Output.cxx,v 1.30 2001/07/23 09:50:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.22 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: file.cxx,v 1.23 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -35,7 +35,7 @@
 #include <stdarg.h>
 #include "alignment_panel.h"
 #include "Fluid_Image.h"
-#include <FL/Fl.H>
+#include <fltk/Fl.h>
 #include "Fl_Type.h"
 
 
@@ -154,7 +154,7 @@ int close_read() {
   return 1;
 }
 
-#include <FL/fl_message.H>
+#include <fltk/fl_message.h>
 
 void read_error(const char *format, ...) {
   va_list args;
@@ -527,7 +527,7 @@ int read_fdesign_line(const char*& name, const char*& value) {
 
 int fdesign_flip;
 int fdesign_magic;
-#include <FL/Fl_Group.H>
+#include <fltk/Fl_Group.h>
 
 static const char *class_matcher[] = {
 "FL_CHECKBUTTON", "Fl_Check_Button",
@@ -656,5 +656,5 @@ void fl_end_group() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.22 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: file.cxx,v 1.23 2001/07/23 09:50:04 spitzak Exp $".
 //

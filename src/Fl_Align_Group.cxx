@@ -26,10 +26,10 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Flags.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Align_Group.H>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Flags.h>
+#include <fltk/Fl_Group.h>
+#include <fltk/Fl_Align_Group.h>
 
 void Fl_Align_Group::layout() {
   Fl_Widget::layout();
@@ -51,9 +51,9 @@ void Fl_Align_Group::layout() {
   if (align()) {
     for (i = 0; i < numchildren; i++) {
       Fl_Widget* o = child(i);
-      int w=0,h;
       fl_font(o->label_font(),o->label_size());
-      fl_measure(o->label(),w,h);
+      int w = this->w()-o->w(),h = this->h()-o->h();
+      fl_measure(o->label(),w,h,o->flags());
       if (variable_is_y) w = h;
       int which = (variable_is_y == vertical()) ? u : v; 
       if (label_space[which] < w) label_space[which] = w;

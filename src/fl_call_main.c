@@ -1,5 +1,5 @@
 /*
- * "$Id: fl_call_main.c,v 1.10 2001/03/14 18:02:50 spitzak Exp $"
+ * "$Id: fl_call_main.c,v 1.11 2001/07/23 09:50:05 spitzak Exp $"
  *
  * Copyright 1998-1999 by Bill Spitzak and others.
  *
@@ -88,6 +88,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif /* WIN32 && !FL_LIBRARY && !__GNUC__ */
 
 /*
- * End of "$Id: fl_call_main.c,v 1.10 2001/03/14 18:02:50 spitzak Exp $".
+ * End of "$Id: fl_call_main.c,v 1.11 2001/07/23 09:50:05 spitzak Exp $".
  */
 

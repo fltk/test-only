@@ -1,4 +1,4 @@
-#include <FL/Fl_ProgressBar.H>
+#include <fltk/Fl_ProgressBar.h>
 #include <stdio.h>
 
 FL_API Fl_ProgressBar::Fl_ProgressBar(int x, int y, int w, int h, const char *lbl)

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Positioner.cxx,v 1.12 2001/02/21 06:15:44 clip Exp $"
+// "$Id: Fl_Positioner.cxx,v 1.13 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Positioner widget for the Fast Light Tool Kit (FLTK).
 //
@@ -26,9 +26,9 @@
 // The positioner widget from Forms, gives 2D input
 // Written by: Mark Overmars
 
-#include <FL/Fl.H>
-#include <FL/Fl_Positioner.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Positioner.h>
+#include <fltk/fl_draw.h>
 
 static double flinear(double val, double smin, double smax, double gmin, double gmax)
 {
@@ -98,7 +98,7 @@ int Fl_Positioner::handle(int e) {
   return handle(e,X,Y,W,H);
 }
 
-#include <FL/Fl_Input.H>
+#include <fltk/Fl_Input.h>
 
 void Fl_Positioner::xbounds(double a, double b) {
   if (a != xmin || b != xmax) {
@@ -135,5 +135,5 @@ Fl_Positioner::Fl_Positioner(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Positioner.cxx,v 1.12 2001/02/21 06:15:44 clip Exp $".
+// End of "$Id: Fl_Positioner.cxx,v 1.13 2001/07/23 09:50:04 spitzak Exp $".
 //

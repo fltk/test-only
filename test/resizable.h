@@ -2,12 +2,12 @@
 
 #ifndef resizable_h
 #define resizable_h
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Menu_Bar.H>
-#include <FL/Fl_Item_Group.H>
-#include <FL/Fl_Item.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Group.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Menu_Bar.h>
+#include <fltk/Fl_Item_Group.h>
+#include <fltk/Fl_Item.h>
+#include <fltk/Fl_Box.h>
+#include <fltk/Fl_Button.h>
+#include <fltk/Fl_Group.h>
 #endif

@@ -1,5 +1,5 @@
 //
-// "$Id: glpuzzle.cxx,v 1.3 2001/03/14 18:02:49 spitzak Exp $"
+// "$Id: glpuzzle.cxx,v 1.4 2001/07/23 09:50:04 spitzak Exp $"
 //
 // OpenGL puzzle demo for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,7 @@
 #include <sys/types.h>
 #include <time.h>
 #include <math.h>
-#include <FL/glut.H>	// changed for fltk
+#include <fltk/glut.h>	// changed for fltk
 #include <GL/glu.h> // added for fltk
 #include "trackball.c"	// changed from trackball.h for fltk
 
@@ -1466,5 +1466,5 @@ main(int argc, char **argv)
 }
 
 //
-// End of "$Id: glpuzzle.cxx,v 1.3 2001/03/14 18:02:49 spitzak Exp $".
+// End of "$Id: glpuzzle.cxx,v 1.4 2001/07/23 09:50:04 spitzak Exp $".
 //

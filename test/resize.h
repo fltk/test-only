@@ -2,8 +2,8 @@
 
 #ifndef resize_h
 #define resize_h
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Box.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Button.h>
+#include <fltk/Fl_Box.h>
 #endif

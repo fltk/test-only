@@ -1,5 +1,5 @@
 //
-// "$Id: hello.cxx,v 1.7 2001/02/25 01:41:19 clip Exp $"
+// "$Id: hello.cxx,v 1.8 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Demo program from the fltk documentation.
 //
@@ -23,9 +23,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Box.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Box.h>
 
 int main(int argc, char **argv) {
   Fl_Window *window = new Fl_Window(300,180);
@@ -39,5 +39,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: hello.cxx,v 1.7 2001/02/25 01:41:19 clip Exp $".
+// End of "$Id: hello.cxx,v 1.8 2001/07/23 09:50:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_pixmap.cxx,v 1.11 2001/07/16 19:38:18 robertk Exp $"
+// "$Id: fl_draw_pixmap.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -34,8 +34,8 @@
 // All data needed by a program ui should be compiled in!!!
 
 #include <config.h>
-#include <FL/Fl_Color.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl_Color.h>
+#include <fltk/fl_draw.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
@@ -126,7 +126,7 @@ static void cb2(void*v, int x, int y, int w, uchar* buf) {
 
 #endif
 
-uchar **fl_mask_bitmap; // if non-zero, create bitmap and store pointer here
+static uchar **fl_mask_bitmap;
 
 void fl_set_mask_bitmap(uchar **ppBitmap)
 {
@@ -267,5 +267,5 @@ int fl_draw_pixmap(const char*const* di, int x, int y, Fl_Color bg) {
 }
 
 //
-// End of "$Id: fl_draw_pixmap.cxx,v 1.11 2001/07/16 19:38:18 robertk Exp $".
+// End of "$Id: fl_draw_pixmap.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $".
 //

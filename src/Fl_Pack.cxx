@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pack.cxx,v 1.18 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: Fl_Pack.cxx,v 1.19 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Packing widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,9 +28,9 @@
 // them on each redraw (only if box() is zero)
 // Bugs: ?
 
-#include <FL/Fl.H>
-#include <FL/Fl_Pack.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Pack.h>
+#include <fltk/fl_draw.h>
 
 Fl_Pack::Fl_Pack(int x,int y,int w ,int h,const char *l)
 : Fl_Group(x, y, w, h, l) {
@@ -111,5 +111,5 @@ void Fl_Pack::draw() {
 }
 
 //
-// End of "$Id: Fl_Pack.cxx,v 1.18 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: Fl_Pack.cxx,v 1.19 2001/07/23 09:50:05 spitzak Exp $".
 //

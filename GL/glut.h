@@ -1,5 +1,5 @@
 //
-// "$Id: glut.h,v 1.4 1999/01/07 19:17:09 mike Exp $"
+// "$Id: glut.h,v 1.5 2001/07/23 09:50:03 spitzak Exp $"
 //
 // GLUT compatibility header for the Fast Light Tool Kit (FLTK).
 //
@@ -23,8 +23,8 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/glut.H>
+#include <fltk/glut.h>
 
 //
-// End of "$Id: glut.h,v 1.4 1999/01/07 19:17:09 mike Exp $".
+// End of "$Id: glut.h,v 1.5 2001/07/23 09:50:03 spitzak Exp $".
 //

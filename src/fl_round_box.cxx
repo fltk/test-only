@@ -1,5 +1,5 @@
 //
-// "$Id: fl_round_box.cxx,v 1.25 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_round_box.cxx,v 1.26 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Round box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -27,10 +27,9 @@
 // These box types are in seperate files so they are not linked
 // in if not used.
 
-#include <FL/Fl_Boxtype.H>
-#include <FL/Fl_Style.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Widget.H>
+#include <fltk/Fl_Boxtype.h>
+#include <fltk/Fl_Style.h>
+#include <fltk/fl_draw.h>
 #include <string.h>
 
 enum {UPPER_LEFT, LOWER_RIGHT, CLOSED, FILL};
@@ -84,12 +83,8 @@ void Fl_Round_Box::draw(int x, int y, int w, int h,
     // draw the interior, assumming the edges are the same thickness
     // as the normal square box:
     int d = strlen(s)/4;
-    if (w > 2*d && h > 2*(d-1)) {
+    if (w > 2*d && h > 2*(d-1))
       lozenge(FILL, x+d, y+d-1, w-2*d, h-2*(d-1), c);
-      if ((f & FL_FOCUSED) && w > 2*d+4 && h > 2*d+4) {
-	lozenge(CLOSED, x+d+2, y+d+1, w-2*d-4, h-2*(d-1)-4, FL_INACTIVE_COLOR);
-      }
-    }
   }
   const char* t;
   if (*s == '2') {t = s+1; s += 3;} else {t = s+2;}
@@ -104,11 +99,6 @@ void Fl_Round_Box::draw(int x, int y, int w, int h,
   }
 }
 
-void Fl_Round_Box::draw(const Fl_Widget* widget,
-			int x, int y, int w, int h, Fl_Flags f) const {
-  draw(x,y,w,h, widget->get_box_color(f), f);
-}
-
 Fl_Round_Box::Fl_Round_Box(const char* n, const char* s, const Fl_Frame_Box* d)
   : Fl_Frame_Box(n, s, d)
 {
@@ -119,5 +109,5 @@ const Fl_Round_Box fl_round_up_box(0, "2AAWWMMTT", &fl_round_down_box);
 const Fl_Round_Box fl_round_down_box(0, "2WWMMPPAA", &fl_round_up_box);
 
 //
-// End of "$Id: fl_round_box.cxx,v 1.25 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fl_round_box.cxx,v 1.26 2001/07/23 09:50:05 spitzak Exp $".
 //

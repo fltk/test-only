@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.92 2001/02/22 15:50:57 robertk Exp $"
+// "$Id: Fl_Group.cxx,v 1.93 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,12 +28,12 @@
 // Fl_Window itself is a subclass of this, and most of the event
 // handling is designed so windows themselves work correctly.
 
-#include <FL/Fl.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Window.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Group.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/fl_draw.h>
 #include <stdlib.h>
-#include <FL/Fl_Tooltip.H>
+#include <fltk/Fl_Tooltip.h>
 
 ////////////////////////////////////////////////////////////////
 
@@ -44,7 +44,11 @@ static void revert(Fl_Style* s) {
 }
 
 // This style is unnamed since there is no reason for themes to change it:
-static Fl_Named_Style* style = new Fl_Named_Style(0, revert, &style);
+extern Fl_Named_Style* group_style;
+
+static Fl_Named_Style the_style(0, revert, &group_style);
+
+Fl_Named_Style* group_style = &the_style;
 
 Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
 : Fl_Widget(X,Y,W,H,l),
@@ -56,9 +60,10 @@ Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
   ox_(X),
   oy_(Y),
   ow_(W),
-  oh_(H) {
+  oh_(H)
+{
   type(FL_GROUP);
-  style(::style);
+  style(::group_style);
   align(FL_ALIGN_TOP);
   // Subclasses may want to construct child objects as part of their
   // constructor, so make sure they are add()'d to this object.
@@ -156,17 +161,6 @@ int Fl_Group::send(int event, Fl_Widget& to) {
 
   // First see if the widget really should get the event:
   switch (event) {
-
-  case FL_UNFOCUS:
-  case FL_DRAG:
-  case FL_RELEASE:
-  case FL_LEAVE:
-  case FL_DND_RELEASE:
-  case FL_DND_LEAVE:
-  case FL_KEYBOARD:
-    // These events are sent directly by Fl.cxx to the widgets.  Trying
-    // to redirect them is a mistake.  It appears best to ignore attempts.
-    return 1; // return 1 so callers stops calling this.
 
   case FL_FOCUS:
     // All current group implemetations do this before calling here, but
@@ -291,8 +285,7 @@ int Fl_Group::handle(int event) {
 
   if (event == FL_SHORTCUT && !focused() && contains(Fl::focus())) {
     // Try to do keyboard navigation for unused shortcut keys:
-
-    int key = navigation_key(); if (!key) return 0;
+    int key = navigation_key();
 
     // loop from the current focus looking for a new focus, quit when
     // we reach the original again:
@@ -339,15 +332,33 @@ int Fl_Group::handle(int event) {
 ////////////////////////////////////////////////////////////////
 // Layout
 
-// sizes() array stores the initial positions of widgets as
+// The effect of "init_sizes()" is that layout() is prevented from
+// changing the current positions of anything and thus the resizing
+// starts up from the state it is in when layout() is called (which
+// is hopefully the same state that it was in when init_sizes() was
+// called). This is useful when
+// a program assembles a resizable group and wants to fix up it's
+// size to surround the children or fit into a surrounding group,
+// without the automatic resize messing things up. This is much 
+// easier than the old fltk kludge of removing the resizable(),
+// fixing things, and restoring it.
+//
+// The implementation is such that init_sizes() is inexpensive and
+// can thus be called many times during the construction of a group.
+//
+// The sizes() array stores the initial positions of widgets as
 // left,right,top,bottom quads.  The first quad is the group, the
 // second is the resizable (clipped to the group), and the
 // rest are the children.  This is a convienent order for the
 // algorithim.  If you change this be sure to fix Fl_Tile which
 // also uses this array!
+//
 // Calling init_sizes() "resets" the sizes array to the current group
 // and children positions.  Actually it just deletes the sizes array,
-// and it is not recreated until the next time layout is called.
+// and it is not recreated until the next time layout is called. This
+// allows arbitrary layout changes to be made by the program until the
+// moment that the group is displayed to the user. This appears to be
+// the desired behavior.
 
 void Fl_Group::init_sizes() {
   delete[] sizes_; sizes_ = 0;
@@ -359,19 +370,21 @@ int* Fl_Group::sizes() {
   if (!sizes_) {
     int* p = sizes_ = new int[4*(children_+2)];
     // first thing in sizes array is the group's size:
-    p[0] = p[2] = 0;
-    p[1] = p[0]+ow(); p[3] = p[2]+oh();
+    p[0] = x();
+    p[1] = w();
+    p[2] = y();
+    p[3] = h();
     // next is the resizable's size:
-    p[4] = p[0]; // init to the group's size
+    p[4] = 0; // init to the group's size
     p[5] = p[1];
-    p[6] = p[2];
+    p[6] = 0;
     p[7] = p[3];
     Fl_Widget* r = resizable();
     if (r && r != this) { // then clip the resizable to it
       int t;
-      t = r->x(); if (t > p[0]) p[4] = t;
+      t = r->x(); if (t > 0) p[4] = t;
       t +=r->w(); if (t < p[1]) p[5] = t;
-      t = r->y(); if (t > p[2]) p[6] = t;
+      t = r->y(); if (t > 0) p[6] = t;
       t +=r->h(); if (t < p[3]) p[7] = t;
     }
     // next is all the children's sizes:
@@ -390,36 +403,16 @@ int* Fl_Group::sizes() {
 }
 
 void Fl_Group::layout() {
-	bool bSameSize = ( ow()==w() && oh()==h() );
-	bool bNoChange;
-#ifdef WIN32
-	bool bSamePosition = ( ox()==x() && oy()==y() );
-    bNoChange = (bSamePosition && bSameSize);
-#else
-    bNoChange = bSameSize;
-#endif
-	if (!resizable() || bNoChange) {
-    // If the size did not change or there is no resizable, everything
-    // stays the same distance from the upper-left corner. If this is an
-    // Fl_Window, the system (both X and Win32) will have moved all the
-    // child windows itself, but this is not a window or (perhaps on the
-    // Mac?) the system does not do that, we must call layout() so the
-    // movement is sent.
-    Fl_Widget*const* a = array_;
-    Fl_Widget*const* e = a+children_;
-    while (a < e) {
-      Fl_Widget* o = *a++;
-      if (o->damage()&FL_DAMAGE_LAYOUT || !is_window()) o->layout();
-    }
-  } else if (children_) {
-    // Calculate a new size & position for every child widget:
+  if (resizable() && children_) {
 
     // get changes in size from the initial size:
+    // If this is the first call assumme this is the initial size.
     int* p = sizes();
-    int dw = w()-(p[1]-p[0]);
-    int dh = h()-(p[3]-p[2]);
+    int dw = w()-p[1];
+    int dh = h()-p[3];
     p+=4;
 
+    // Calculate a new size & position for every child widget:
     // get initial size of resizable():
     int IX = *p++;
     int IR = *p++;
@@ -446,6 +439,20 @@ void Fl_Group::layout() {
 
       o->resize(X, Y, R-X, B-Y);
       o->layout();
+    }
+
+  } else {
+
+    // propagate layout() calls to all the children. The main purpose of
+    // this is so that moving a widget will move any Fl_Windows that
+    // are inside of it. This is not necessary for Fl_Windows themselves
+    // on X and Win32 as the system has already done the work but we
+    // still need to call inner things that need layout:
+    Fl_Widget*const* a = array_;
+    Fl_Widget*const* e = a+children_;
+    while (a < e) {
+      Fl_Widget* widget = *a++;
+      if (widget->damage()&FL_DAMAGE_LAYOUT || !is_window()) widget->layout();
     }
   }
   Fl_Widget::layout();
@@ -596,5 +603,5 @@ void Fl_Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.92 2001/02/22 15:50:57 robertk Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.93 2001/07/23 09:50:04 spitzak Exp $".
 //

@@ -107,7 +107,7 @@ CubeViewUI::CubeViewUI() {
       }
        {      Fl_Value_Slider* o = zoom = new Fl_Value_Slider(101, 0, 227, 19, "Zoom");
         o->type(5);
-        o->label_font(fl_fonts()+1);
+        o->label_font(fl_fonts+1);
         o->label_color((Fl_Color)136);
         o->minimum(1);
         o->maximum(50);

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.14 2001/02/21 06:15:45 clip Exp $"
+// "$Id: fl_motif.cxx,v 1.15 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -26,15 +26,15 @@
 // Motif L&F theme plugin for fltk.  A good example of the capabilities
 // of theme plugins.
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Check_Button.H>
-#include <FL/Fl_Scrollbar.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Output.H>
-#include <FL/Fl_Style.H>
-#include <FL/fl_draw.H>
-#include <FL/fl_theme.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Widget.h>
+#include <fltk/Fl_Check_Button.h>
+#include <fltk/Fl_Scrollbar.h>
+#include <fltk/Fl_Input.h>
+#include <fltk/Fl_Output.h>
+#include <fltk/Fl_Style.h>
+#include <fltk/fl_draw.h>
+#include <fltk/fl_theme.h>
 
 // some new boxtypes (look familiar?)
 static const Fl_Frame_Box
@@ -95,8 +95,7 @@ static void motif_glyph(const Fl_Widget* widget, int t,
     case FL_GLYPH_CHECK:
       x += 2; y += 2; w -= 4; h -= 4; // fudge factor
       thin_motif_up_box.draw(x, y, w, h,
-			     (f & FL_VALUE) ? fc : bc,
-			     f & ~FL_FOCUSED); // hack! for color
+			     (f & FL_VALUE) ? fc : bc, f);
       break;
     case FL_GLYPH_RIGHT_BUTTON:
     case FL_GLYPH_LEFT_BUTTON:
@@ -185,12 +184,13 @@ static void motif_glyph(const Fl_Widget* widget, int t,
 static void choice_glyph(const Fl_Widget* widget, int,
 			 int x,int y,int w,int h, Fl_Flags f)
 {
-  fl_color(widget->color());
+  Fl_Color color = widget->color();
+  fl_color(color);
   fl_rectf(x,y,w,h);
   int H = h/3;
   y += (h-H)/2;
   h = H;
-  widget->box()->draw(widget,x,y,w,h,f);
+  widget->box()->draw(x,y,w,h,color,f);
 }
 
 // Disable the engraving of inactive labels:
@@ -272,5 +272,5 @@ int fl_motif()
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.14 2001/02/21 06:15:45 clip Exp $"
+// End of "$Id: fl_motif.cxx,v 1.15 2001/07/23 09:50:06 spitzak Exp $"
 //

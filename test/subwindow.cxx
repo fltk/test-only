@@ -1,5 +1,5 @@
 //
-// "$Id: subwindow.cxx,v 1.10 2001/02/28 21:19:50 clip Exp $"
+// "$Id: subwindow.cxx,v 1.11 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Nested window test program for the Fast Light Tool Kit (FLTK).
 //
@@ -30,13 +30,13 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Toggle_Button.H>
-#include <FL/Fl_Menu_Button.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Input_Browser.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Toggle_Button.h>
+#include <fltk/Fl_Menu_Button.h>
+#include <fltk/Fl_Box.h>
+#include <fltk/Fl_Input.h>
+#include <fltk/Fl_Input_Browser.h>
 
 class testwindow : public Fl_Window {
   int handle(int);
@@ -179,5 +179,5 @@ int main(int, char **) {
 }
 
 //
-// End of "$Id: subwindow.cxx,v 1.10 2001/02/28 21:19:50 clip Exp $".
+// End of "$Id: subwindow.cxx,v 1.11 2001/07/23 09:50:06 spitzak Exp $".
 //

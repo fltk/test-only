@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.cxx,v 1.27 2000/08/10 09:24:31 spitzak Exp $"
+// "$Id: Fl_Light_Button.cxx,v 1.28 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Lighted button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,8 +27,8 @@
 // style of Flame.  This is done by replacing the glyph drawing function
 // in the default style.
 
-#include <FL/Fl.H>
-#include <FL/Fl_Light_Button.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Light_Button.h>
 
 static void glyph(const Fl_Widget* widget, int/*t*/,
 		  int x,int y,int w,int h, Fl_Flags f)
@@ -44,15 +44,15 @@ static void revert(Fl_Style* s) {
   s->text_background = FL_GRAY;
   s->glyph = glyph;
 }
-
-static Fl_Named_Style* style = new Fl_Named_Style("Light Button", revert, &style);
+static Fl_Named_Style style("Light_Button", revert, &Fl_Light_Button::default_style);
+Fl_Named_Style* Fl_Light_Button::default_style = &::style;
 
 Fl_Light_Button::Fl_Light_Button(int x, int y, int w, int h, const char *l)
   : Fl_Check_Button(x, y, w, h, l)
 {
-  style(::style);
+  style(default_style);
 }
 
 //
-// End of "$Id: Fl_Light_Button.cxx,v 1.27 2000/08/10 09:24:31 spitzak Exp $".
+// End of "$Id: Fl_Light_Button.cxx,v 1.28 2001/07/23 09:50:04 spitzak Exp $".
 //

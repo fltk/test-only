@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_global.cxx,v 1.6 2000/05/15 05:52:26 bill Exp $"
+// "$Id: Fl_Menu_global.cxx,v 1.7 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Global menu shortcut code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,8 +27,8 @@
 // Currently only one menu at a time and you cannot destruct the menu,
 // is this sufficient?
 
-#include <FL/Fl.H>
-#include <FL/Fl_Menu_.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Menu_.h>
 
 static Fl_Menu_* the_widget;
 
@@ -44,5 +44,5 @@ void Fl_Menu_::global() {
 }
 
 //
-// End of "$Id: Fl_Menu_global.cxx,v 1.6 2000/05/15 05:52:26 bill Exp $".
+// End of "$Id: Fl_Menu_global.cxx,v 1.7 2001/07/23 09:50:05 spitzak Exp $".
 //

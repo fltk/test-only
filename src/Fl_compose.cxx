@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_compose.cxx,v 1.8 2001/03/11 16:14:30 spitzak Exp $"
+// "$Id: Fl_compose.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Character compose processing for the Fast Light Tool Kit (FLTK).
 //
@@ -23,7 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
+#include <fltk/Fl.h>
 
 // Before searching anything the following conversions are made:
 // '"', ';' -> ":"     "/" -> "|"    "=",'_' -> "-"
@@ -164,7 +164,7 @@ static const char dead_keys[] = {
 
 int Fl::compose_state;
 
-int Fl::compose(int& del) {
+bool Fl::compose(int& del) {
 
   del = 0;
   char ascii = e_text[0];
@@ -175,7 +175,7 @@ int Fl::compose(int& del) {
   // Alt+letters are reserved for shortcuts.  But alt+foreign letters
   // has to be allowed, because some key layouts require alt to be held
   // down in order to type them...
-  if (e_state & (FL_ALT|FL_META) && !(ascii & 128)) return 0;
+  if (e_state & (FL_ALT|FL_META) && !(ascii & 128)) return false;
 
   if (compose_state == 1) { // after the compose key
     
@@ -184,13 +184,13 @@ int Fl::compose(int& del) {
       if (p[0] == ascii || p[1] == ascii) {
 	compose_state = ascii;
 	// prefer the single-character versions:
-	if (p[1] == ' ') {e_text[0] = (p-compose_pairs)/2+0xA0; return 1;}
+	if (p[1] == ' ') {e_text[0] = (p-compose_pairs)/2+0xA0; return true;}
       }
-    if (compose_state != 1) return 1;
+    if (compose_state != 1) return true;
 
     if (e_length) { // compose key also "quotes" control characters
       compose_state = 0;
-      return 1;
+      return true;
     }
 
   } else if (compose_state) { // second character of compose
@@ -202,7 +202,7 @@ int Fl::compose(int& del) {
 	e_text[0] = (p-compose_pairs)/2+0xA0;
 	del = 1; // delete the old character and insert new one
 	compose_state = 0;
-	return 1;
+	return true;
       }
     }
 
@@ -213,7 +213,7 @@ int Fl::compose(int& del) {
   // See if they type the compose prefix key:
   if (i == FL_Control_R || i == 0xff20/* Multi-Key */) {
     compose_state = 1;
-    return 1;
+    return true;
   }
 
 #ifndef WIN32 // X only
@@ -224,16 +224,19 @@ int Fl::compose(int& del) {
     for (const char *p = compose_pairs; *p; p += 2)
       if (p[0] == ascii) {
       compose_state = ascii;
-      return 1;
+      return true;
     }
     compose_state = 0;
-    return 1;
+    return true;
   }
 #endif
 
   // Only insert non-control characters:
-  if (e_length && (ascii & ~31 && ascii != 127)) {compose_state = 0; return 1;}
+  if (e_length && (ascii & ~31 && ascii != 127)) {
+    compose_state = 0;
+    return true;
+  }
 
-  return 0;
+  return false;
 }
 

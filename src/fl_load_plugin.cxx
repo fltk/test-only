@@ -1,8 +1,10 @@
 // fl_plugin.cxx
 
-#include <FL/Fl.H>
-#include <FL/fl_load_plugin.H>
-#include <FL/conf.h>
+#include <fltk/Fl.h>
+#include <fltk/fl_load_plugin.h>
+//#include <fltk/conf.h>
+#include <fltk/vsnprintf.h>
+#include <errno.h>
 #include <config.h>
 
 #ifndef WIN32
@@ -23,24 +25,20 @@ typedef HINSTANCE DLhandle;
 
 #endif
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <errno.h>
-
 #ifndef PATH_MAX
 #define PATH_MAX 128
 #endif
 
 // returns address of function() (can be used as handle)
-void* fl_load_plugin(const char* n, const char* function) {
+void* fl_load_plugin(const char* name, const char* function) {
 #ifndef WIN32
   // do not allow plugins if this executable is setuid
   if (getuid() != geteuid()) return 0;
 #endif
-  if (!n || !function) return 0;
-  char name[PATH_MAX];
-  if (!conf_is_path_rooted(n)) snprintf(name, sizeof(name), "./%s", n);
-  else strncpy(name, n, sizeof(name));
+  if (!name || !function) return 0;
+//   char name[PATH_MAX];
+//   if (!conf_is_path_rooted(n)) snprintf(name, sizeof(name), "./%s", n);
+//   else strncpy(name, n, sizeof(name));
   // open plugin, any errors will be printed
   DLhandle handle = dlopen(name, RTLD_NOW);
   if (!handle) {

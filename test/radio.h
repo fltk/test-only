@@ -2,14 +2,14 @@
 
 #ifndef radio_h
 #define radio_h
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Return_Button.H>
-#include <FL/Fl_Light_Button.H>
-#include <FL/Fl_Check_Button.H>
-#include <FL/Fl_Round_Button.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Tooltip.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Button.h>
+#include <fltk/Fl_Return_Button.h>
+#include <fltk/Fl_Light_Button.h>
+#include <fltk/Fl_Check_Button.h>
+#include <fltk/Fl_Round_Button.h>
+#include <fltk/Fl_Group.h>
+#include <fltk/Fl_Tooltip.h>
 extern Fl_Light_Button *ttlb;
 #endif

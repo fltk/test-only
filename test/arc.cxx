@@ -1,5 +1,5 @@
 //
-// "$Id: arc.cxx,v 1.8 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: arc.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Arc drawing test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,10 +23,10 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Hor_Value_Slider.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Double_Window.h>
+#include <fltk/Fl_Hor_Value_Slider.h>
+#include <fltk/fl_draw.h>
 
 double args[7] = {90, 90, 100, 100, 0, 360, 0};
 const char* name[7] = {"X", "Y", "W", "H", "start", "end", "rotate"};
@@ -88,6 +88,6 @@ int main(int argc, char** argv) {
 
 
 //
-// End of "$Id: arc.cxx,v 1.8 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: arc.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $".
 //
 

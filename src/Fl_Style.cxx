@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.28 2001/03/12 00:49:03 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.29 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -23,9 +23,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/fl_theme.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Widget.h>
+#include <fltk/fl_theme.h>
 #include <string.h>
 
 Fl_Named_Style* Fl_Named_Style::first;
@@ -53,20 +53,21 @@ static void revert(Fl_Style* s) {
   s->parent                = 0;	// this is the topmost style always
 }
 
-Fl_Named_Style* Fl_Widget::default_style;
+static Fl_Named_Style default_named_style("default", ::revert, &Fl_Widget::default_style);
+Fl_Named_Style* Fl_Widget::default_style = &default_named_style;
 
 // Copying a style pointer from another widget is not safe if that
 // style is dynamic() because it may change or be deleted.  This makes
 // another dynamic() copy if necessary.
 
-int Fl_Widget::copy_style(const Fl_Style* t) {
-  if (style_ == t) return 0;
+bool Fl_Widget::copy_style(const Fl_Style* t) {
+  if (style_ == t) return false;
   if (style_ && style_->dynamic()) delete (Fl_Style*)style_;
-  if (!t->dynamic()) {style_ = t; return 0;}
+  if (!t->dynamic()) {style_ = t; return false;}
   Fl_Style* newstyle = new Fl_Style;
   newstyle->parent = (Fl_Style*)t;
   style_ = newstyle;
-  return 1;
+  return true;
 }
 
 // Widgets set their own attributes by (possibly) creating a unique copy
@@ -121,12 +122,7 @@ style_functions(unsigned,leading)
 static void plainrevert(Fl_Style*) {}
 
 Fl_Named_Style::Fl_Named_Style(const char* n, void (*revert)(Fl_Style*), Fl_Named_Style** pds) {
-  static bool init = 0;
   memset((void*)this, 0, sizeof(*this));
-  if (!init) {
-    init = 1;
-    Fl_Widget::default_style = new Fl_Named_Style("default", ::revert, &Fl_Widget::default_style);
-  }
   parent = Fl_Widget::default_style; // revert may want to change this
   if (revert) { revertfunc = revert; revert(this); }
   else revertfunc = plainrevert;
@@ -168,7 +164,6 @@ Fl_Flags Fl_Style::scrollbar_align = FL_ALIGN_RIGHT|FL_ALIGN_BOTTOM;
 int Fl_Style::wheel_scroll_lines = 3;
 
 void Fl_Style::revert() {
-  fl_theme_handler(0);
   fl_background((Fl_Color)0xc0c0c000);
   draw_boxes_inactive = 1;
   draw_sliders_pushed = 0;
@@ -187,7 +182,7 @@ void Fl_Style::revert() {
 }
 ////////////////////////////////////////////////////////////////
 
-#include <FL/math.h>
+#include <fltk/math.h>
 
 void fl_background(Fl_Color c) {
   // replace the gray ramp so that FL_GRAY is this color
@@ -210,5 +205,5 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.28 2001/03/12 00:49:03 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.29 2001/07/23 09:50:05 spitzak Exp $".
 //

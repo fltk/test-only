@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_display.cxx,v 1.5 1999/03/21 16:21:10 mike Exp $"
+// "$Id: Fl_display.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Display function for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 // Startup method to set what display to use.
 // Using setenv makes programs that are exec'd use the same display.
 
-#include <FL/Fl.H>
+#include <fltk/Fl.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -41,5 +41,5 @@ void Fl::display(const char *d) {
 }
 
 //
-// End of "$Id: Fl_display.cxx,v 1.5 1999/03/21 16:21:10 mike Exp $".
+// End of "$Id: Fl_display.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.26 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.27 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Value input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,9 +27,9 @@
 // Warning: this works by making a child Fl_Input object, even
 // though this object is *not* an Fl_Group.  May be a kludge?
 
-#include <FL/Fl.H>
-#include <FL/Fl_Value_Input.H>
-#include <FL/Fl_Group.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Value_Input.h>
+#include <fltk/Fl_Group.h>
 #include <stdlib.h>
 
 void Fl_Value_Input::input_cb(Fl_Widget*, void* v) {
@@ -133,5 +133,5 @@ Fl_Value_Input::~Fl_Value_Input() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.26 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.27 2001/07/23 09:50:05 spitzak Exp $".
 //

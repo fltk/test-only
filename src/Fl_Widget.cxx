@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.72 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.73 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -23,15 +23,15 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Window.H>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Widget.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/fl_draw.h>
+#include <fltk/x.h>
 #include <string.h> // for strdup
 #include <stdlib.h> // free
 
-void Fl_Widget::default_callback(Fl_Widget* w, void*) {}
+void Fl_Widget::default_callback(Fl_Widget*, void*) {}
     
 Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
   style_	= default_style;
@@ -88,11 +88,11 @@ int Fl_Widget::width() {
   return w_;
 }
 
-int Fl_Widget::resize(int X, int Y, int W, int H) {
-  if (x_ == X && y_ == Y && w_ == W && h_ == H) return 0;
+bool Fl_Widget::resize(int X, int Y, int W, int H) {
+  if (x_ == X && y_ == Y && w_ == W && h_ == H) return false;
   x_ = X; y_ = Y; w_ = W; h_ = H;
   relayout();
-  return 1;
+  return true;
 }
 
 void Fl_Widget::relayout() {
@@ -195,11 +195,11 @@ int Fl_Widget::handle(int event) {
   }
 }
 
-int Fl_Widget::take_focus() {
-  if (focused()) return 1;
-  if (!takesevents() || !handle(FL_FOCUS)) return 0;
+bool Fl_Widget::take_focus() {
+  if (focused()) return true;
+  if (!takesevents() || !handle(FL_FOCUS)) return false;
   if (!contains(Fl::focus())) Fl::focus(this);
-  return 1;
+  return true;
 }
 
 void Fl_Widget::activate() {
@@ -224,10 +224,10 @@ void Fl_Widget::deactivate() {
   }
 }
 
-int Fl_Widget::active_r() const {
+bool Fl_Widget::active_r() const {
   for (const Fl_Widget* o = this; o; o = o->parent())
-    if (!o->active()) return 0;
-  return 1;
+    if (!o->active()) return false;
+  return true;
 }
 
 void Fl_Widget::show() {
@@ -253,24 +253,24 @@ void Fl_Widget::hide() {
   }
 }
 
-int Fl_Widget::visible_r() const {
+bool Fl_Widget::visible_r() const {
   for (const Fl_Widget* o = this; o; o = o->parent())
-    if (!o->visible()) return 0;
-  return 1;
+    if (!o->visible()) return false;
+  return true;
 }
 
 // return true if widget is inside (or equal to) this:
 // Returns false for null widgets.
-int Fl_Widget::contains(const Fl_Widget *o) const {
-  for (; o; o = o->parent_) if (o == this) return 1;
-  return 0;
+bool Fl_Widget::contains(const Fl_Widget *o) const {
+  for (; o; o = o->parent_) if (o == this) return true;
+  return false;
 }
 
-int Fl_Widget::pushed() const {return this == Fl::pushed();}
+bool Fl_Widget::pushed() const {return this == Fl::pushed();}
 
-int Fl_Widget::focused() const {return this == Fl::focus();}
+bool Fl_Widget::focused() const {return this == Fl::focus();}
 
-int Fl_Widget::belowmouse() const {return this == Fl::belowmouse();}
+bool Fl_Widget::belowmouse() const {return this == Fl::belowmouse();}
 
 ////////////////////////////////////////////////////////////////
 
@@ -291,48 +291,48 @@ int Fl_Widget::belowmouse() const {return this == Fl::belowmouse();}
 // calling it "shift+3")
 
 // Test against an arbitrary shortcut:
-int Fl::test_shortcut(int shortcut) {
-  if (!shortcut) return 0;
+bool Fl::test_shortcut(int shortcut) {
+  if (!shortcut) return false;
 
   int shift = Fl::event_state();
   // see if any required shift flags are off:
-  if ((shortcut&shift) != (shortcut&0x7fff0000)) return 0;
+  if ((shortcut&shift) != (shortcut&0x7fff0000)) return false;
   // record shift flags that are wrong:
   int mismatch = (shortcut^shift)&0x7fff0000;
   // these three must always be correct:
-  if (mismatch&(FL_META|FL_ALT|FL_CTRL)) return 0;
+  if (mismatch&(FL_META|FL_ALT|FL_CTRL)) return false;
 
   int key = shortcut & 0xffff;
 
   // if shift is also correct, check for exactly equal keysyms:
-  if (!(mismatch&(FL_SHIFT)) && key == Fl::event_key()) return 1;
+  if (!(mismatch&(FL_SHIFT)) && key == Fl::event_key()) return true;
 
   // try matching ascii, ignore shift:
-  if (key == Fl::event_text()[0]) return 1;
+  if (key == Fl::event_text()[0]) return true;
 
   // kludge so that Ctrl+'_' works (as opposed to Ctrl+'^_'):
   if ((shift&FL_CTRL) && key >= 0x3f && key <= 0x5F
-      && Fl::event_text()[0]==(key^0x40)) return 1;
-  return 0;
+      && Fl::event_text()[0]==(key^0x40)) return true;
+  return false;
 }
 
 // Test against shortcut() and possibly against a &x shortcut in the label:
 
 int Fl_Widget::test_shortcut() const {
 
-  if (Fl::test_shortcut(shortcut())) return 1;
+  if (Fl::test_shortcut(shortcut())) return true;
 
-  if (flags()&FL_NO_SHORTCUT_LABEL) return 0;
+  if (flags() & FL_RAW_LABEL) return false;
 
   char c = Fl::event_text()[0];
   const char* label = this->label();
-  if (!c || !label) return 0;
+  if (!c || !label) return false;
   for (;;) {
-    if (!*label) return 0;
+    if (!*label) return false;
     if (*label++ == '&') {
       if (*label == '&') label++;
-      else if (*label == c) return 2;
-      else return 0;
+      else if (*label == c) return 2; // signal for Fl_Menu code
+      else return false;
     }
   }
 }
@@ -344,7 +344,7 @@ int Fl_Widget::test_shortcut() const {
 Fl_Flags Fl_Widget::draw_box() const {
   Fl_Flags f = flags();
   if (!active_r()) f |= FL_INACTIVE;
-  box()->draw(this, 0, 0, w(), h(), f);
+  box()->draw(0, 0, w(), h(), get_box_color(f), f);
   return f;
 }
 
@@ -353,6 +353,8 @@ Fl_Flags Fl_Widget::draw_box() const {
 Fl_Flags Fl_Widget::draw_button() const {
   return draw_button(flags());
 }
+
+extern void fl_dotted_box(int,int,int,int);
 
 // This version is used to override the setting of FL_VALUE:
 Fl_Flags Fl_Widget::draw_button(Fl_Flags flags) const {
@@ -364,16 +366,18 @@ Fl_Flags Fl_Widget::draw_button(Fl_Flags flags) const {
     flags |= FL_INACTIVE;
   else if (belowmouse() && !(flags&FL_SELECTED)) // don't highlight selected buttons
     flags |= FL_HIGHLIGHT;
-  if (focused())
-    flags |= FL_FOCUSED;
-  // We need to erase the focus rectangle for FL_NO_BOX buttons, such
-  // as checkmarks:
-  else if (box()==FL_NO_BOX && (damage()&FL_DAMAGE_HIGHLIGHT)) {
+  Fl_Boxtype box = this->box();
+  box->draw(0, 0, w(), h(), get_box_color(flags), flags);
+  if (focused()) {
+    fl_color(get_glyph_color());
+    fl_dotted_box(box->dx()+1, box->dy()+1, w()-box->dw()-2, h()-box->dh()-2);
+  } else if (box==FL_NO_BOX && (damage()&FL_DAMAGE_HIGHLIGHT)) {
+    // We need to erase the focus rectangle for FL_NO_BOX buttons, such
+    // as checkmarks:
     fl_push_clip(0, 0, w(), h());
     parent()->draw_group_box();
     fl_pop_clip();
   }
-  draw_box(0, 0, w(), h(), flags);
   return flags;
 }
 
@@ -385,7 +389,7 @@ Fl_Flags Fl_Widget::draw_text_box() const {
 Fl_Flags Fl_Widget::draw_text_box(int x, int y, int w, int h) const {
   Fl_Flags f = flags();
   if (!active_r()) f |= FL_INACTIVE;
-  text_box()->draw(this, x,y,w,h, f|FL_TEXT_BOX);
+  text_box()->draw(x,y,w,h, text_background(), f);
   return f;
 }
 
@@ -397,7 +401,7 @@ Fl_Flags Fl_Widget::draw_text_frame() const {
 Fl_Flags Fl_Widget::draw_text_frame(int x, int y, int w, int h) const {
   Fl_Flags f = flags();
   if (!active_r()) f |= FL_INACTIVE;
-  text_box()->draw(this, x,y,w,h, f|FL_FRAME_ONLY);
+  text_box()->draw(x,y,w,h, text_background(), f|FL_FRAME_ONLY);
   return f;
 }
 
@@ -428,8 +432,8 @@ Fl_Color Fl_Widget::get_box_color(Fl_Flags flags) const
 {
   if (flags & FL_SELECTED)
     return selection_color();
-  else if (flags & FL_TEXT_BOX)
-    return text_background();
+//   else if (flags & FL_TEXT_BOX)
+//     return text_background();
   else if (flags & FL_HIGHLIGHT) {
     Fl_Color c = highlight_color();
     if (c) return c;
@@ -480,5 +484,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.72 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.73 2001/07/23 09:50:05 spitzak Exp $".
 //

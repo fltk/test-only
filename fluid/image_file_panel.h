@@ -2,13 +2,13 @@
 
 #ifndef image_file_panel_h
 #define image_file_panel_h
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
 extern Fl_Window *images_dir_window;
-#include <FL/Fl_Input.H>
+#include <fltk/Fl_Input.h>
 extern Fl_Input *images_dir_input;
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Return_Button.H>
+#include <fltk/Fl_Button.h>
+#include <fltk/Fl_Box.h>
+#include <fltk/Fl_Return_Button.h>
 Fl_Window* make_images_dir_window();
 #endif

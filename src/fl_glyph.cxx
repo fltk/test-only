@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.26 2001/03/11 16:14:30 spitzak Exp $"
+// "$Id: fl_glyph.cxx,v 1.27 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Glyph drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,9 +23,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Style.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl_Widget.h>
+#include <fltk/Fl_Style.h>
+#include <fltk/fl_draw.h>
 
 void fl_glyph(const Fl_Widget* widget, int t,
 	      int x,int y,int w,int h, Fl_Flags f)
@@ -39,7 +39,7 @@ void fl_glyph(const Fl_Widget* widget, int t,
   case FL_GLYPH_CHECK:
     box = widget->text_box();
     if (box != FL_NO_BOX) {
-      box->draw(widget, x,y,w,h, f&FL_INACTIVE|FL_FRAME_ONLY);
+      box->draw(x,y,w,h, widget->color(), f&FL_INACTIVE|FL_FRAME_ONLY);
       box->inset(x,y,w,h);
       fl_color(widget->text_background());
       fl_rectf(x,y,w,h);
@@ -88,7 +88,7 @@ void fl_glyph(const Fl_Widget* widget, int t,
   } // and fall through to default case to draw the box:
   default: {
     Fl_Boxtype box = widget->box();
-    box->draw(widget,x,y,w,h,f);
+    box->draw(x,y,w,h, widget->get_box_color(f), f);
     box->inset(x,y,w,h);
     }
   }
@@ -157,5 +157,5 @@ void fl_glyph(const Fl_Widget* widget, int t,
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.26 2001/03/11 16:14:30 spitzak Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.27 2001/07/23 09:50:05 spitzak Exp $".
 //

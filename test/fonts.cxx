@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.22 2001/02/21 06:15:45 clip Exp $"
+// "$Id: fonts.cxx,v 1.23 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,12 +23,12 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Hold_Browser.H>
-#include <FL/Fl_Check_Button.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Box.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Double_Window.h>
+#include <fltk/Fl_Hold_Browser.h>
+#include <fltk/Fl_Check_Button.h>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Box.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -194,7 +194,7 @@ void create_the_forms() {
   form->end();
 }
 
-#include <FL/fl_ask.H>
+#include <fltk/fl_ask.h>
 
 int main(int argc, char **argv) {
   create_the_forms();
@@ -208,5 +208,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.22 2001/02/21 06:15:45 clip Exp $".
+// End of "$Id: fonts.cxx,v 1.23 2001/07/23 09:50:05 spitzak Exp $".
 //

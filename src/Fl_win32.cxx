@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.151 2001/07/16 19:38:18 robertk Exp $"
+// "$Id: Fl_win32.cxx,v 1.152 2001/07/23 09:50:05 spitzak Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -29,14 +29,14 @@
 // for other system-specific code.
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Style.H>
-#include <FL/win32.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Style.h>
+#include <fltk/win32.h>
 #include <string.h>
 #include <stdlib.h>
 #include <sys/types.h>
-#include <limits.H>
+#include <limits.h>
 #include <time.h>
 #include <winsock.h>
 #include <ctype.h>
@@ -273,36 +273,34 @@ static int fl_ready() {
 
 ////////////////////////////////////////////////////////////////
 
-int Fl::x()
-{
-  RECT r;
+static bool reload_info = true;
+#include <stdio.h>
 
-  SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
-  return r.left;
-}
+const Fl_Screen_Info& Fl::info() {
+  static Fl_Screen_Info info;
+  if (reload_info) {
+    reload_info = false;
 
-int Fl::y()
-{
-  RECT r;
+    RECT r;
+    SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
+    info.x = r.left;
+    info.y = r.top;
+    info.w = r.right - r.left;
+    info.h = r.bottom - r.top;
 
-  SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
-  return r.top;
-}
+    DEVMODE mode;
+    EnumDisplaySettings(0, ENUM_CURRENT_SETTINGS, &mode);
+    info.width = mode.dmPelsWidth;
+    info.height = mode.dmPelsHeight;
+    info.depth = mode.dmBitsPerPel;
 
-int Fl::w()
-{
-  RECT r;
-
-  SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
-  return r.right - r.left;
-}
-
-int Fl::h()
-{
-  RECT r;
-
-  SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
-  return r.bottom - r.top;
+    HDC screen = GetDC(0);
+    info.width_mm = GetDeviceCaps(screen, HORZSIZE);
+    info.height_mm = GetDeviceCaps(screen, VERTSIZE);
+    //info.dpi_x = GetDeviceCaps(screen, LOGPIXELSX);
+    //info.dpi_y = GetDeviceCaps(screen, LOGPIXELSY);
+  }
+  return info;
 }
 
 void Fl::get_mouse(int &x, int &y) {
@@ -318,7 +316,6 @@ void Fl::get_mouse(int &x, int &y) {
 static char *selection_buffer[2];
 static int selection_length[2];
 static int selection_buffer_length[2];
-static bool ignore_destroy;
 static bool i_own_selection;
 
 // call this when you create a selection:
@@ -333,13 +330,11 @@ void Fl::copy(const char *stuff, int len, bool clipboard) {
   selection_buffer[clipboard][len] = 0; // needed for direct paste
   selection_length[clipboard] = len;
   if (clipboard) {
-    ignore_destroy = true;
     if (OpenClipboard(fl_xid(Fl::first_window()))) {
       EmptyClipboard();
       SetClipboardData(CF_TEXT, NULL);
       CloseClipboard();
     }
-    ignore_destroy = false;
     i_own_selection = true;
   }
 }
@@ -432,9 +427,10 @@ static _TRACKMOUSEEVENT mouseevent = {
 
 ////////////////////////////////////////////////////////////////
 
-static int mouse_event(Fl_Window *window, int what, int button,
+static bool mouse_event(Fl_Window *window, int what, int button,
 			WPARAM wParam, LPARAM lParam)
 {
+  if (!window) return false;
   static int px, py, pmx, pmy;
   POINT pt;
   Fl::e_x = pt.x = (signed short)LOWORD(lParam);
@@ -481,7 +477,7 @@ static int mouse_event(Fl_Window *window, int what, int button,
   case 3: // move:
   default: // avoid compiler warning
     // MSWindows produces extra events even if mouse does not move, ignore em:
-    if (Fl::e_x_root == pmx && Fl::e_y_root == pmy) return 1;
+    if (Fl::e_x_root == pmx && Fl::e_y_root == pmy) return true;
     pmx = Fl::e_x_root; pmy = Fl::e_y_root;
     if (abs(Fl::e_x_root-px)>5 || abs(Fl::e_y_root-py)>5) Fl::e_is_click = 0;
 
@@ -575,28 +571,21 @@ static Fl_Window* resize_from_system;
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
 
-#if 1
-  // Matt: When dragging a full window, MSWindows on 'slow'
-  // machines can lose track of the window refresh area. It sends some kind
-  // of panic message to the desktop that in turn sends this message on to
-  // all applications.
-  static int cnt = 0;
+  // Damage somehow is lost and this fixes it. Apparently two WM_SYNCPAINT
+  // events in a row are a signal to redraw the entire window.
+  static int cnt=0;
   if (uMsg == WM_SYNCPAINT) {
-    MSG msg;
-    if ( PeekMessage( &msg, hWnd, WM_PAINT, WM_PAINT, false )==0 )
-      InvalidateRect(hWnd,0,FALSE);
-    if (cnt) {
+    if(cnt) {
       InvalidateRect(fl_window,0,FALSE);
       cnt = 0;
     } else cnt = 1;
   } else if (uMsg == WM_PAINT) cnt = 0;
-#endif
 
   fl_msg.message = uMsg;
 
   Fl_Window *window = fl_find(hWnd);
 
-  if (window) switch (uMsg) {
+  switch (uMsg) {
 
   case WM_QUIT: // this should not happen?
     Fl::fatal("WM_QUIT message");
@@ -604,13 +593,13 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_CLOSE: // user clicked close box
     if ((Fl::grab() || Fl::modal()) && window != Fl::modal())
       return 0;
-    window->do_callback();
-    return 1;
+    if (window) {window->do_callback(); return 1;}
+    break;
 
   case WM_PAINT: {
-
+    if (!window) break;
     Fl_X *i = Fl_X::i(window);
-    i->wait_for_expose = 0;
+    i->wait_for_expose = false;
     // We need to merge this damage into fltk's damage.  I do this in
     // reverse, telling Win32 about fltk's damage and then reading back
     // the new accumulated region.
@@ -629,7 +618,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     // is deferred until Fl::flush() is called during idle.  However Win32
     // apparently is very unhappy if we don't obey it and draw right now.
     // Very annoying!
-    i->flush();
+    window->flush();
     window->clear_damage();
     // This convinces MSWindows we have painted whatever they wanted
     // us to paint, and stops it from sending WM_PAINT messages:
@@ -716,7 +705,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     }
     Fl::e_text = buffer;
     // for (int i = lParam&0xff; i--;)
-    while (window->parent()) window = window->window();
+    if (window) while (window->parent()) window = window->window();
     if (Fl::handle(FL_KEYBOARD,window)) return 0;
     break;}
 
@@ -730,56 +719,51 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   }
 
   case WM_GETMINMAXINFO:
-    Fl_X::i(window)->set_minmax((LPMINMAXINFO)lParam);
+    if (window) Fl_X::i(window)->set_minmax((LPMINMAXINFO)lParam);
     break;
 
   case WM_SHOWWINDOW:
-    if (!window->parent()) {
-      if (wParam) {
-	// figure out where OS really put window
-	RECT wr;
-	GetClientRect(fl_xid(window), &wr);
-	POINT wul = { 0, 0 };
-	ClientToScreen(fl_xid(window), &wul);
-	// tell Fl_Window about it
-	if (window->resize(wul.x, wul.y, wr.right, wr.bottom))
-	  resize_from_system = window;
-	// supposedly a Paint event will come in turn off iconize indicator
-      } else
-	Fl_X::i(window)->wait_for_expose = 1;
+    if (!window) break;
+    if (wParam) { // Map event
+      if (window->parent()) break; // ignore child windows
+
+      // figure out where OS really put window
+      RECT wr; GetClientRect(fl_xid(window), &wr);
+      POINT wul = { 0, 0 }; ClientToScreen(fl_xid(window), &wul);
+
+      // tell Fl_Window about it
+      if (window->resize(wul.x, wul.y, wr.right, wr.bottom))
+	resize_from_system = window;
+
+    } else { // Unmap event
+      Fl_X::i(window)->wait_for_expose = true;
     }
     break;
 
   case WM_SIZE:
-    if (!window->parent()) {
-      if (wParam == SIZE_MINIMIZED || wParam == SIZE_MAXHIDE) {
-	Fl_X::i(window)->wait_for_expose = 1;
-      } else {
-	; // supposedly a Paint event will come in turn off iconize indicator
-	if (window->resize(window->x(),window->y(),LOWORD(lParam),HIWORD(lParam)))
-	  resize_from_system = window;
-	window->layout(); // This works, but is it the right way?
-      }
+    if (!window || window->parent()) break; // ignore child windows
+    if (wParam == SIZE_MINIMIZED || wParam == SIZE_MAXHIDE) { // iconize
+      Fl_X::i(window)->wait_for_expose = true;
+    } else { // resize, deiconize
+      // supposedly a Paint event will come in turn off iconize indicator
+      if (window->resize(window->x(), window->y(),
+			 LOWORD(lParam), HIWORD(lParam)))
+	resize_from_system = window;
+      //window->layout(); // This works, but is it the right way?
     }
     break;
 
   case WM_MOVE:
-	{
-	int rx = (signed short)LOWORD(lParam);
-	int ry = (signed short)HIWORD(lParam);
-	Fl_Widget*o=window->parent();
-	if(o)	{rx-=o->x(); ry-=o->y();}
-	if (window->resize(rx,ry,window->w(), window->h()))
-	  resize_from_system = window;
-//    if (window->resize((signed short)LOWORD(lParam),
-//			 (signed short)HIWORD(lParam),
-//			 window->w(), window->h()))
-//	resize_from_system = window;
-    }
+    if (!window || window->parent()) break; // ignore child windows
+    if (window->resize((signed short)LOWORD(lParam),
+		       (signed short)HIWORD(lParam),
+		       window->w(),
+		       window->h()))
+      resize_from_system = window;
     break;
 
   case WM_SETCURSOR:
-    if (LOWORD(lParam) == HTCLIENT) {
+    if (window && LOWORD(lParam) == HTCLIENT) {
       while (window->parent()) window = window->window();
       SetCursor(Fl_X::i(window)->cursor);
       return 0;
@@ -805,16 +789,13 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
   case WM_DISPLAYCHANGE:
   case WM_SETTINGCHANGE:
-    fl_sysinfo::update();
+    reload_info = true;
   case WM_SYSCOLORCHANGE:
     Fl::reload_scheme();
     break;
 
   case WM_DESTROYCLIPBOARD:
-    if (!ignore_destroy) {
-      i_own_selection = true;
-      Fl::flush(); // get the redraw to happen
-    }
+    i_own_selection = false;
     return 1;
 
   case WM_RENDERALLFORMATS:
@@ -848,11 +829,11 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 // placing the contents at an absolute position.  The return value
 // is also the value to put in the window style.
 
-int Fl_X::borders(const Fl_Window* w, int& dx, int& dy, int& dw, int& dh) {
-  if (!w->border() || w->parent()) {
+int Fl_X::borders(const Fl_Window* window, int& dx,int& dy,int& dw,int& dh) {
+  if (!window->border() || window->override() || window->parent()) {
     dx = dy = dw = dh = 0;
     return WS_POPUP;
-  } else if (w->maxw != w->minw || w->maxh != w->minh) { // resizable
+  } else if (window->maxw != window->minw || window->maxh != window->minh) { // resizable
     dx = GetSystemMetrics(SM_CXSIZEFRAME);
     dw = 2*dx;
     int bt = GetSystemMetrics(SM_CYCAPTION);
@@ -886,10 +867,9 @@ void Fl_Window::layout() {
      for (Fl_Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
        real_x += p->x(); real_y += p->y();
      }
-
-	 int dx, dy, dw, dh; Fl_X::borders(this, dx, dy, dw, dh);
+     int dx, dy, dw, dh; Fl_X::borders(this, dx, dy, dw, dh);
      SetWindowPos(i->xid, 0, real_x-dx, real_y-dy, w()+dw, h()+dh, flags);
-     if (!(flags & SWP_NOSIZE)) {redraw(); /*i->wait_for_expose = 1;*/}
+     if (!(flags & SWP_NOSIZE)) {redraw(); /*i->wait_for_expose = true;*/}
   }
 //  } else if (i) {
 //    int x = this->x(); int y = this->y();
@@ -898,7 +878,7 @@ void Fl_Window::layout() {
 //    }
 //    int dx, dy, dw, dh; Fl_X::borders(this, dx, dy, dw, dh);
 //    SetWindowPos(i->xid, 0, x-dx, y-dy, w()+dw, h()+dh, flags);
-//    if (!(flags & SWP_NOSIZE)) {redraw(); /*i->wait_for_expose = 1;*/}
+//    if (!(flags & SWP_NOSIZE)) {redraw(); /*i->wait_for_expose = true;*/}
 //  }
 }
 
@@ -909,26 +889,22 @@ void Fl_Window::create() {
   Fl_X::create(this);
 }
 
-extern char fl_show_iconic; // set by iconize() or Fl_arg -i switch
-const Fl_Window* fl_mdi_window; // set by show_inside()
+const Fl_Window* fl_mdi_window = 0; // set by show_inside()
 HCURSOR fl_default_cursor;
 
-Fl_X* Fl_X::create(Fl_Window* w) {
+Fl_X* Fl_X::create(Fl_Window* window) {
+
   const char* class_name = "FLTK"; // create a "FLTK" WNDCLASS
-  static int registered = 0;
+  static bool registered = false;
   if (!registered) {
+    registered = true;
     static WNDCLASSEX wc;
-    // Documentation states a device context consumes about 800 bytes
-    // of memory... so who cares? If 800 bytes per window is what it
-    // takes to speed things up, I'm game.
-    //wc.style = CS_HREDRAW | CS_VREDRAW | CS_CLASSDC | CS_DBLCLKS;
     wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_DBLCLKS;
     wc.lpfnWndProc = (WNDPROC)WndProc;
     wc.cbClsExtra = wc.cbWndExtra = 0;
     wc.hInstance = fl_display;
-    if (!w->icon())
-      w->icon((void *)LoadIcon(NULL, IDI_APPLICATION));
-    wc.hIcon = wc.hIconSm = (HICON)w->icon();
+    if (!window->icon()) window->icon((void *)LoadIcon(NULL, IDI_APPLICATION));
+    wc.hIcon = wc.hIconSm = (HICON)window->icon();
     if (!fl_default_cursor) fl_default_cursor = LoadCursor(NULL, IDC_ARROW);
     wc.hCursor = fl_default_cursor;
     //uchar r,g,b; Fl::get_color(FL_GRAY,r,g,b);
@@ -938,38 +914,37 @@ Fl_X* Fl_X::create(Fl_Window* w) {
     wc.lpszClassName = class_name;
     wc.cbSize = sizeof(WNDCLASSEX);
     RegisterClassEx(&wc);
-
-    registered = 1;
   }
 
   HWND parent;
   DWORD style;
   DWORD styleEx;
 
-  int xp = w->x();
-  int yp = w->y();
+  int xp = window->x();
+  int yp = window->y();
 
-  for (Fl_Widget* p = w->parent(); p && !p->is_window(); p = p->parent()) {
-	xp += p->x(); yp += p->y();
-  }
   int dx, dy, dw, dh;
 
-  if (w->parent()) {
+  if (window->parent()) {
+    for (Fl_Widget* p=window->parent(); p && !p->is_window(); p=p->parent()) {
+      xp += p->x(); yp += p->y();
+    }
     style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_CHILD;
-    styleEx = WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
-    parent = fl_xid(w->window());
+    styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
+    parent = fl_xid(window->window());
     dx=dy=dw=dh=0;
   } else {
-    style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | borders(w, dx, dy, dw, dh);
+    style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | borders(window, dx, dy, dw, dh);
     styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
     // we don't want an entry in the task list for menuwindows or tooltips!
-    if (style&WS_POPUP && w->override()) styleEx |= WS_EX_TOOLWINDOW;
-    xp = w->x(); if (xp != FL_USEDEFAULT) xp -= dx;
-    yp = w->y(); if (yp != FL_USEDEFAULT) yp -= dy;
+    // This seems to have no effect on NT, maybe for Win2K?
+    //if (style&WS_POPUP && window->override()) styleEx |= WS_EX_TOOLWINDOW;
+    xp = window->x(); if (xp != FL_USEDEFAULT) xp -= dx;
+    yp = window->y(); if (yp != FL_USEDEFAULT) yp -= dy;
 
     // Send child window information:
-    if (w->modal_for()) {
-      const Fl_Window* modal_for = w->modal_for();
+    if (window->modal_for()) {
+      const Fl_Window* modal_for = window->modal_for();
       while (modal_for && modal_for->parent()) modal_for = modal_for->window();
       if (modal_for && modal_for->shown())
 	parent = modal_for->i->xid;
@@ -981,33 +956,34 @@ Fl_X* Fl_X::create(Fl_Window* w) {
       parent = 0;
     }
 
-    if (!w->modal()) style |= WS_SYSMENU | WS_MINIMIZEBOX;
+    if (!window->modal()) style |= WS_SYSMENU | WS_MINIMIZEBOX;
   }
 
   Fl_X* x = new Fl_X;
   x->other_xid = 0;
-  x->w = w; w->i = x;
+  x->window = window; window->i = x;
   x->region = 0;
   x->private_dc = 0;
   x->cursor = fl_default_cursor;
   x->xid = CreateWindowEx(
     styleEx,
-    class_name, w->label(), style,
-    xp, yp, w->w()+dw, w->h()+dh,
+    class_name, window->label(), style,
+    xp, yp, window->w()+dw, window->h()+dh,
     parent,
     NULL, // menu
     fl_display,
     NULL // creation parameters
     );
-  if (w->override()) {
-	UINT posflags = SWP_NOMOVE|SWP_NOSIZE|SWP_NOSENDCHANGING;
-	if(style & WS_POPUP)
-		posflags |= SWP_NOACTIVATE;
+#if 0 // WAS: Doing this completely breaks NT, the title bar loses highlight:
+  if (window->override()) {
+    UINT posflags = SWP_NOMOVE|SWP_NOSIZE|SWP_NOSENDCHANGING;
+    if(style & WS_POPUP)
+      posflags |= SWP_NOACTIVATE;
     SetWindowPos(x->xid, HWND_TOPMOST, 0, 0, 0, 0, posflags);
   }
-//  x->mapped = 1;
+#endif
 
-  x->wait_for_expose = 1;
+  x->wait_for_expose = true;
   x->next = Fl_X::first;
   Fl_X::first = x;
 
@@ -1024,17 +1000,17 @@ void Fl_Window::size_range_() {
 
 void Fl_X::set_minmax(LPMINMAXINFO minmax)
 {
-  int dx, dy, dw, dh; borders(w, dx, dy, dw, dh);
+  int dx, dy, dw, dh; borders(window, dx, dy, dw, dh);
 
-  minmax->ptMinTrackSize.x = w->minw + dw;
-  minmax->ptMinTrackSize.y = w->minh + dh;
-  if (w->maxw) {
-    minmax->ptMaxTrackSize.x = w->maxw + dw;
-    minmax->ptMaxSize.x = w->maxw + dw;
+  minmax->ptMinTrackSize.x = window->minw + dw;
+  minmax->ptMinTrackSize.y = window->minh + dh;
+  if (window->maxw) {
+    minmax->ptMaxTrackSize.x = window->maxw + dw;
+    minmax->ptMaxSize.x = window->maxw + dw;
   }
-  if (w->maxh) {
-    minmax->ptMaxTrackSize.y = w->maxh + dw;
-    minmax->ptMaxSize.y = w->maxh + dw;
+  if (window->maxh) {
+    minmax->ptMaxTrackSize.y = window->maxh + dw;
+    minmax->ptMaxSize.y = window->maxh + dw;
   }
 }
 
@@ -1044,7 +1020,7 @@ int Fl_Window::iconic() const {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/filename.H> // need so FL_API filename_name works
+#include <fltk/filename.h> // need so FL_API filename_name works
 
 // returns pointer to the filename, or null if name ends with '/'
 const char *filename_name(const char *name) {
@@ -1098,7 +1074,7 @@ static struct Cleanup { ~Cleanup(); } cleanup;
 
 Cleanup::~Cleanup() {
   // nasty but works (I think) - deallocates GDI resources in windows
-  while (Fl_X* x = Fl_X::first) x->w->destroy();
+  while (Fl_X* x = Fl_X::first) x->window->destroy();
 
   // get rid of allocated font resources
   fl_font_rid();
@@ -1294,11 +1270,6 @@ void swap_fl_coordinates(int newx, int newy, int *savex, int *savey) {
 	fl_x_ = newx;
 }
 
-// CET - FIXME - need to add code here to resend button events to our
-// own window only
-void fl_bounce_button_press() {
-}
-
 //
-// End of "$Id: Fl_win32.cxx,v 1.151 2001/07/16 19:38:18 robertk Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.152 2001/07/23 09:50:05 spitzak Exp $".
 //

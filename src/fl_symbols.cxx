@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.21 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.22 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -32,9 +32,13 @@
 // Version 2.1 a
 // Date: Oct  2, 1992
 
-#include <FL/Fl_Style.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl_Style.h>
+#include <fltk/fl_draw.h>
 #include <string.h>
+
+// define this to get all the symbols that existed in fltk 1.0. I commented
+// some of them out to reduce the code size:
+//#define OLD_FLTK
 
 typedef struct {
   const char *name;
@@ -98,8 +102,15 @@ int fl_draw_symbol(const char *label,int x,int y,int w,int h,Fl_Color col) {
   const char *p = label;
   if (*p++ != '@') return 0;
   fl_init_symbols();
-  int equalscale = 0;
-  if (*p == '#') {equalscale = 1; p++;}
+  bool equalscale = false;
+  if (*p == '#') {
+    equalscale = true;
+    p++;
+  } else {
+    // if it is nearly square, make it square:
+    if (w < h) {if (w*3 > h*2) equalscale = true;}
+    else {if (h*3 > w*2) equalscale = true;}
+  }
   if (*p == '-' && p[1]>='1' && p[1]<='9') {
     int n = p[1]-'0';
     x += n; y += n; w -= 2*n; h -= 2*n;
@@ -111,7 +122,7 @@ int fl_draw_symbol(const char *label,int x,int y,int w,int h,Fl_Color col) {
   }
   if (w < 10) {x -= (10-w)/2; w = 10;}
   if (h < 10) {y -= (10-h)/2; h = 10;}
-  w = (w-1)|1; h = (h-1)|1;
+  //w = (w-1)|1; h = (h-1)|1; // even sizes only so triangle points are centered
   int rotangle;
   switch (*p++) {
   case '0':
@@ -156,8 +167,8 @@ int fl_draw_symbol(const char *label,int x,int y,int w,int h,Fl_Color col) {
 #define BL
 #define EL fl_stroke()
 #define BC
-#define EC fl_closepath();fl_stroke()
-#define EF(c) fl_fill_stroke(c)
+#define EC fl_closepath(); fl_color(FL_BLACK); fl_stroke()
+#define EF(c) fl_fill_stroke(FL_BLACK)
 #define vv(x,y) fl_vertex(x,y)
 
 static void rectangle(double x,double y,double x2,double y2,Fl_Color col) {
@@ -174,12 +185,6 @@ static void draw_arrow1(Fl_Color col)
   BP; vv(0.0,0.8); vv(0.8,0.0); vv(0.0,-0.8); vv(0.0,-0.4); vv(0.0,0.4); EP;
   BC; vv(-0.8,-0.4); vv(-0.8,0.4); vv(0.0,0.4); vv(0.0,0.8); vv(0.8,0.0);
       vv(0.0,-0.8); vv(0.0,-0.4); EC;
-}
-
-static void draw_arrow1bar(Fl_Color col)
-{
-  draw_arrow1(col);
-  rectangle(.6,-.8,.9,.8,col);
 }
 
 static void draw_arrow2(Fl_Color col)
@@ -206,7 +211,7 @@ static void draw_arrowbox(Fl_Color col)
 {
   fl_color(col);
   BP; vv(-0.6,0.8); vv(0.2,0.0); vv(-0.6,-0.8); EF(col);
-  BC; vv(0.2,0.8); vv(0.6,0.8); vv(0.6,-0.8); vv(0.2,-0.8); EF(col);
+  BC; vv(0.2,0.8); vv(0.6,0.8); vv(0.6,-0.8); vv(0.2,-0.8); EC;
 }
 
 static void draw_bararrow(Fl_Color col)
@@ -239,6 +244,31 @@ static void draw_0arrowbox(Fl_Color col)
 static void draw_0bararrow(Fl_Color col)
   { fl_rotate(180); draw_bararrow(col); }
 
+static void draw_square(Fl_Color col)
+  { rectangle(-1,-1,1,1,col); }
+
+static void draw_uparrow(Fl_Color) {
+  fl_color(FL_LIGHT3);
+  BL; vv(-.8,.8); vv(-.8,-.8); vv(.8,0.0); EL;
+  fl_color(FL_DARK3);
+  BL; vv(-.8,.8); vv(.8, 0.0); EL;
+}
+
+static void draw_downarrow(Fl_Color) {
+  fl_color(FL_DARK3);
+  BL; vv(-.8,.8); vv(-.8,-.8); vv(.8,0.0); EL;
+  fl_color(FL_LIGHT3);
+  BL; vv(-.8,.8); vv(.8, 0.0); EL;
+}
+
+#ifdef OLD_FLTK
+
+static void draw_arrow1bar(Fl_Color col)
+{
+  draw_arrow1(col);
+  rectangle(.6,-.8,.9,.8,col);
+}
+
 static void draw_doublearrow(Fl_Color col)
 {
   fl_color(col);
@@ -258,11 +288,8 @@ static void draw_arrow(Fl_Color col)
   BL; vv(-1.0,0.0); vv(0.65,0.0); EL;
 }
 
-static void draw_square(Fl_Color col)
-  { rectangle(-1,-1,1,1,col); }
-
 static void draw_circle(Fl_Color col) {
-  fl_color(col); BP; fl_circle(0,0,1); EF(col);
+  fl_color(col); BP; fl_ellipse(-1,-1,2,2); EF(col);
 }
 
 static void draw_line(Fl_Color col)
@@ -281,25 +308,19 @@ static void draw_plus(Fl_Color col)
   EC;
 }
 
-static void draw_uparrow(Fl_Color) {
-  fl_color(FL_LIGHT3);
-  BL; vv(-.8,.8); vv(-.8,-.8); vv(.8,0.0); EL;
-  fl_color(FL_DARK3);
-  BL; vv(-.8,.8); vv(.8, 0.0); EL;
-}
-
-static void draw_downarrow(Fl_Color) {
-  fl_color(FL_DARK3);
-  BL; vv(-.8,.8); vv(-.8,-.8); vv(.8,0.0); EL;
-  fl_color(FL_LIGHT3);
-  BL; vv(-.8,.8); vv(.8, 0.0); EL;
-}
-
 static void draw_menu(Fl_Color col)
 {
   rectangle(-0.65, 0.85, 0.65, -0.25, col);
   rectangle(-0.65, -0.6, 0.65, -1.0, col);
 }
+
+#define old_symbol(a,b,c) fl_add_symbol(a,b,c)
+
+#else // OLD_FLTK not defined:
+
+#define old_symbol(a,b,c)
+
+#endif
 
 static void fl_init_symbols(void) {
   static char beenhere;
@@ -320,17 +341,17 @@ static void fl_init_symbols(void) {
   fl_add_symbol("|<",		draw_0arrowbar,		1);
   fl_add_symbol("[]<",		draw_0arrowbox,		1);
   fl_add_symbol("<|",		draw_0bararrow,		1);
-  fl_add_symbol("<->",		draw_doublearrow,	1);
-  fl_add_symbol("-->",		draw_arrow,		1);
-  fl_add_symbol("+",		draw_plus,		1);
-  fl_add_symbol("->|",		draw_arrow1bar,		1);
-  fl_add_symbol("arrow",	draw_arrow,		1);
-  fl_add_symbol("returnarrow",	0,			3);
+     old_symbol("<->",		draw_doublearrow,	1);
+     old_symbol("-->",		draw_arrow,		1);
+     old_symbol("+",		draw_plus,		1);
+     old_symbol("->|",		draw_arrow1bar,		1);
+     old_symbol("arrow",	draw_arrow,		1);
+     old_symbol("returnarrow",	0,			3);
   fl_add_symbol("square",	draw_square,		1);
-  fl_add_symbol("circle",	draw_circle,		1);
-  fl_add_symbol("line",		draw_line,		1);
-  fl_add_symbol("plus",		draw_plus,		1);
-  fl_add_symbol("menu",		draw_menu,		1);
+     old_symbol("circle",	draw_circle,		1);
+     old_symbol("line",		draw_line,		1);
+     old_symbol("plus",		draw_plus,		1);
+     old_symbol("menu",		draw_menu,		1);
   fl_add_symbol("UpArrow",	draw_uparrow,		1);
   fl_add_symbol("DnArrow",	draw_downarrow,		1);
   fl_add_symbol("||",		draw_doublebar,		1);
@@ -338,7 +359,7 @@ static void fl_init_symbols(void) {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Labeltype.H>
+#include <fltk/Fl_Labeltype.h>
 
 void Fl_Symbol_Label::draw(const char* label,
 			   int X, int Y, int W, int H,
@@ -366,8 +387,8 @@ void Fl_Symbol_Label::draw(const char* label,
 
 const Fl_Symbol_Label fl_symbol_label("symbol");
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Widget.h>
 
 #ifndef FLTK_2
 void Fl::enable_symbols() {
@@ -376,5 +397,5 @@ void Fl::enable_symbols() {
 #endif
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.21 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.22 2001/07/23 09:50:05 spitzak Exp $".
 //

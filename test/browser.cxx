@@ -1,15 +1,15 @@
 // Maarten de Boer's toggle tree demo program rewritten to use the
 // fltk 2.0 browser.  This unfortunately required a bunch of changes.
 
-#include <FL/Fl_Browser.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Scroll.H>
-#include <FL/Fl.H>
-#include <FL/Fl_Pixmap.H>
-#include <FL/Fl_Item.H>
-#include <FL/Fl_Item_Group.H>
-#include <FL/Fl_Check_Button.H>
+#include <fltk/Fl_Browser.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Button.h>
+#include <fltk/Fl_Scroll.h>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Pixmap.h>
+#include <fltk/Fl_Item.h>
+#include <fltk/Fl_Item_Group.h>
+#include <fltk/Fl_Check_Button.h>
 
 #include "folder_small.xpm"
 #include "file_small.xpm"
@@ -21,9 +21,9 @@ Fl_Pixmap* folderSmall;
 Fl_Pixmap* fileSmall;
 
 void
-cb_test(Fl_Widget*, void* u) {
+cb_test(Fl_Widget* browser, void*) {
   if (Fl::event_clicks()) printf("Double ");
-  Fl_Widget* w = (Fl_Widget*)u;
+  Fl_Widget* w = ((Fl_Browser*)browser)->item();
   printf("callback for '%s'\n", w && w->label() ? w->label() : "null");
 }
 
@@ -117,7 +117,7 @@ void cb_sort_random(Fl_Widget*, void*) {
 
 #define USE_STRING_LIST 0
 #if USE_STRING_LIST
-#include <FL/Fl_String_List.H>
+#include <fltk/Fl_String_List.h>
 
 const char* const strings[] = {
   "foo", "bar", "number 2", "number 3", "another item", "blah", "zoo"
@@ -222,10 +222,9 @@ int main(int argc,char** argv) {
 #endif
 #endif
 
+  //Fl::visual(FL_RGB);
   win.show(argc,argv);
 
   Fl::run();
   return 0;
 }
-
-

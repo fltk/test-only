@@ -26,7 +26,6 @@ To compile:
 
 To compile Forms/XForms source code:
 
-   Modify it so that <forms.h> is replaced with <FL/forms.H>
+   Modify it so that <forms.h> is replaced with <fltk/forms.h>
 
    Compile and link with -lfltk_forms -lfltk
-

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_oval_box.cxx,v 1.17 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_oval_box.cxx,v 1.18 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Oval box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,15 +27,14 @@
 // Less-used box types are in seperate files so they are not linked
 // in if not used.
 
-#include <FL/Fl_Boxtype.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Widget.H>
+#include <fltk/Fl_Boxtype.h>
+#include <fltk/fl_draw.h>
 
-void Fl_Oval_Flat_Box::draw(const Fl_Widget* widget,
-			    int x, int y, int w, int h, Fl_Flags f) const
+void Fl_Oval_Flat_Box::draw(
+	int x, int y, int w, int h, Fl_Color color, Fl_Flags) const
 {
   fl_ellipse(x, y, w, h);
-  fl_color(widget->get_box_color(f));
+  fl_color(color);
   fl_fill();
 }
 Fl_Oval_Flat_Box::Fl_Oval_Flat_Box(const char* n) : Fl_Boxtype_(n) {
@@ -44,12 +43,12 @@ Fl_Oval_Flat_Box::Fl_Oval_Flat_Box(const char* n) : Fl_Boxtype_(n) {
 }
 const Fl_Oval_Flat_Box fl_oval_flat_box(0);
 
-void Fl_Oval_Box::draw(const Fl_Widget* widget,
-		       int x, int y, int w, int h, Fl_Flags f) const
+void Fl_Oval_Box::draw(
+	int x, int y, int w, int h, Fl_Color color, Fl_Flags) const
 {
   fl_ellipse(x, y, w-1, h-1);
-  fl_color(widget->get_box_color(f));
-  fl_fill_stroke(widget->get_glyph_color(f));
+  fl_color(color);
+  fl_fill_stroke(FL_BLACK); //widget->get_glyph_color(f)
 }
 Fl_Oval_Box::Fl_Oval_Box(const char* n) : Fl_Boxtype_(n) {
   dx_ = dy_ = 1; dw_ = dh_ = 2;
@@ -57,13 +56,14 @@ Fl_Oval_Box::Fl_Oval_Box(const char* n) : Fl_Boxtype_(n) {
 }
 const Fl_Oval_Box fl_oval_box(0);
 
-void Fl_Oval_Shadow_Box::draw(const Fl_Widget* widget,
-			      int x, int y, int w, int h, Fl_Flags f) const
+void Fl_Oval_Shadow_Box::draw(
+	int x, int y, int w, int h, Fl_Color color, Fl_Flags f) const
 {
   w-=3; h-=3;
   fl_ellipse(x+3, y+3, w, h);
   fl_color(FL_DARK3);
-  fl_oval_box.draw(widget, x, y, w, h, f);
+  fl_fill();
+  fl_oval_box.draw(x, y, w, h, color, f);
 }
 Fl_Oval_Shadow_Box::Fl_Oval_Shadow_Box(const char* n) : Fl_Boxtype_(n) {
   dx_ = dy_ = 1; dw_ = dh_ = 5;
@@ -72,5 +72,5 @@ Fl_Oval_Shadow_Box::Fl_Oval_Shadow_Box(const char* n) : Fl_Boxtype_(n) {
 const Fl_Oval_Shadow_Box fl_oval_shadow_box(0);
 
 //
-// End of "$Id: fl_oval_box.cxx,v 1.17 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fl_oval_box.cxx,v 1.18 2001/07/23 09:50:05 spitzak Exp $".
 //

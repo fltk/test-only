@@ -1,5 +1,5 @@
 //
-// "$Id: fl_scroll_area.cxx,v 1.6 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: fl_scroll_area.cxx,v 1.7 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Scrolling routines for the Fast Light Tool Kit (FLTK).
 //
@@ -29,8 +29,8 @@
 
 // This is not yet fixed to use the origin in fl_x_ and fl_y_!
 
-#include <FL/x.H>
-#include <FL/fl_draw.H>
+#include <fltk/x.h>
+#include <fltk/fl_draw.h>
 
 // scroll a rectangle and redraw the newly exposed portions:
 void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
@@ -94,5 +94,5 @@ void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
 }
 
 //
-// End of "$Id: fl_scroll_area.cxx,v 1.6 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: fl_scroll_area.cxx,v 1.7 2001/07/23 09:50:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: image.cxx,v 1.9 2000/03/19 01:38:32 bill Exp $"
+// "$Id: image.cxx,v 1.10 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Fl_Image test program for the Fast Light Tool Kit (FLTK).
 //
@@ -27,10 +27,10 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_RGB_Image.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Button.h>
+#include <fltk/Fl_RGB_Image.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -52,7 +52,7 @@ void make_image() {
   }
 }
 
-#include <FL/Fl_Toggle_Button.H>
+#include <fltk/Fl_Toggle_Button.h>
 
 Fl_Toggle_Button *leftb,*rightb,*topb,*bottomb,*insideb;
 Fl_Toggle_Button *tleftb,*trightb,*ttopb,*tbottomb;
@@ -77,7 +77,7 @@ void button_cb(Fl_Widget *,void *) {
   w->redraw();
 }
 
-#include <FL/x.H>
+#include <fltk/x.h>
 #ifndef WIN32
 #include "list_visuals.cxx"
 #endif
@@ -150,5 +150,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: image.cxx,v 1.9 2000/03/19 01:38:32 bill Exp $".
+// End of "$Id: image.cxx,v 1.10 2001/07/23 09:50:05 spitzak Exp $".
 //

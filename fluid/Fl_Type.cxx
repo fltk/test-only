@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.25 2001/02/22 16:50:37 robertk Exp $"
+// "$Id: Fl_Type.cxx,v 1.26 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -35,10 +35,10 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Browser.H>
-#include <FL/Fl_Item.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Browser.h>
+#include <fltk/Fl_Item.h>
+#include <fltk/fl_draw.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
@@ -519,5 +519,5 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.25 2001/02/22 16:50:37 robertk Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.26 2001/07/23 09:50:04 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Window.cxx,v 1.10 2000/06/03 08:49:15 bill Exp $"
+// "$Id: Fl_Menu_Window.cxx,v 1.11 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Menu window code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,11 +30,11 @@
 // which are used so that clicks outside the program's windows
 // can be used to dismiss the menus.
 
+#include <fltk/Fl.h>
+#include <fltk/Fl_Menu_Window.h>
+#include <fltk/x.h>
+#include <fltk/fl_draw.h>
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/x.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Menu_Window.H>
 
 // WIN32 note: HAVE_OVERLAY is false
 #if HAVE_OVERLAY
@@ -45,8 +45,6 @@ extern unsigned long fl_transparent_pixel;
 static GC gc;	// the GC used by all X windows
 extern uchar fl_overlay; // changes how fl_color(x) works
 #endif
-
-#include <stdio.h>
 
 void Fl_Menu_Window::create() {
 #if HAVE_OVERLAY
@@ -95,5 +93,5 @@ Fl_Menu_Window::~Fl_Menu_Window() {
 }
 
 //
-// End of "$Id: Fl_Menu_Window.cxx,v 1.10 2000/06/03 08:49:15 bill Exp $".
+// End of "$Id: Fl_Menu_Window.cxx,v 1.11 2001/07/23 09:50:05 spitzak Exp $".
 //

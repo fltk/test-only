@@ -1,5 +1,5 @@
 //
-// "$Id: fl_load_browser.cxx,v 1.1 2000/05/15 05:52:23 bill Exp $"
+// "$Id: fl_load_browser.cxx,v 1.2 2001/07/23 09:50:04 spitzak Exp $"
 //
 // File loading routines for the Fast Light Tool Kit (FLTK).
 //
@@ -23,8 +23,8 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Browser.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Browser.h>
 #include <stdio.h>
 
 int fl_load_browser(Fl_Widget* o, const char* filename) {
@@ -52,5 +52,5 @@ int fl_load_browser(Fl_Widget* o, const char* filename) {
 }
 
 //
-// End of "$Id: fl_load_browser.cxx,v 1.1 2000/05/15 05:52:23 bill Exp $"
+// End of "$Id: fl_load_browser.cxx,v 1.2 2001/07/23 09:50:04 spitzak Exp $"
 //

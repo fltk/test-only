@@ -1,5 +1,5 @@
 //
-// "$Id: fl_show_colormap.cxx,v 1.18 2001/03/20 18:21:54 spitzak Exp $"
+// "$Id: fl_show_colormap.cxx,v 1.19 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Colormap color selection dialog for the Fast Light Tool Kit (FLTK).
 //
@@ -26,10 +26,10 @@
 // Select a color from the colormap.
 // Pretty much unchanged from Forms.
 
-#include <FL/Fl.H>
-#include <FL/Fl_Single_Window.H>
-#include <FL/fl_draw.H>
-#include <FL/fl_show_colormap.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Single_Window.h>
+#include <fltk/fl_draw.h>
+#include <fltk/fl_show_colormap.h>
 #include <config.h>
 
 #define BOXSIZE 14
@@ -65,7 +65,7 @@ void ColorMenu::drawbox(Fl_Color C) {
 
 void ColorMenu::draw() {
   if (damage() != FL_DAMAGE_CHILD) {
-    draw_box(0,0,w(),h(),0);
+    draw_box();
     for (int c = 0; c < 256; c++) drawbox((Fl_Color)c);
   } else {
     drawbox(previous);
@@ -145,5 +145,5 @@ Fl_Color fl_show_colormap(Fl_Color oldcol) {
 }
 
 //
-// End of "$Id: fl_show_colormap.cxx,v 1.18 2001/03/20 18:21:54 spitzak Exp $".
+// End of "$Id: fl_show_colormap.cxx,v 1.19 2001/07/23 09:50:05 spitzak Exp $".
 //

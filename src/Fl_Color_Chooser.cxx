@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.27 2001/02/20 06:59:49 spitzak Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.28 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -23,11 +23,11 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Color_Chooser.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Item.H>
-#include <FL/math.h>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Color_Chooser.h>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Item.h>
+#include <fltk/math.h>
 #include <stdio.h>
 
 // Besides being a useful object on it's own, the Fl_Color_Chooser was
@@ -178,7 +178,7 @@ int Flcc_HueBox::handle(int e) {
   case FL_DRAG: {
     double Xf, Yf, H, S;
     int ix = 0; int iy = 0; int iw = w(); int ih = h();
-    box()->inset(ix, iy, iw, ih);
+    text_box()->inset(ix, iy, iw, ih);
     Xf = (Fl::event_x()-ix)/double(iw);
     Yf = (Fl::event_y()-iy)/double(ih);
     tohs(Xf, Yf, H, S);
@@ -195,7 +195,7 @@ int Flcc_HueBox::handle(int e) {
 static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
   Flcc_HueBox* v = (Flcc_HueBox*)vv;
   int x1 = 0; int y1 = 0; int w1 = v->w(); int h1 = v->h();
-  v->box()->inset(x1,y1,w1,h1);
+  v->text_box()->inset(x1,y1,w1,h1);
   double Yf = double(Y)/h1;
 #ifdef UPDATE_HUE_BOX
   const double V = ((Fl_Color_Chooser*)(v->parent()))->v();
@@ -216,7 +216,7 @@ static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
 void Flcc_HueBox::draw() {
   if (damage()&FL_DAMAGE_ALL) draw_text_frame();
   int x1 = 0; int y1 = 0; int w1 = w(); int h1 = h();
-  box()->inset(x1,y1,w1,h1);
+  text_box()->inset(x1,y1,w1,h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_push_clip(x1+px,y1+py,6,6);
   fl_draw_image(generate_image, this, x1, y1, w1, h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
@@ -231,7 +231,7 @@ void Flcc_HueBox::draw() {
   if (X < 0) X = 0; else if (X > w1-6) X = w1-6;
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
   //  fl_color(c->v()>.75 ? FL_BLACK : FL_WHITE);
-  draw_box(x1+X, y1+Y, 6, 6, 0);
+  box()->draw(x1+X, y1+Y, 6, 6, color(), 0);
   px = X; py = Y;
 }
 
@@ -246,7 +246,7 @@ int Flcc_ValueBox::handle(int e) {
   case FL_DRAG: {
     double Yf;
     int x1 = 0; int y1 = 0; int w1 = w(); int h1 = h();
-    box()->inset(x1,y1,w1,h1);
+    text_box()->inset(x1,y1,w1,h1);
     Yf = 1-(Fl::event_y()-y1)/double(h1);
     if (fabs(Yf-iv)<(3*1.0/h())) Yf = iv;
     if (c->hsv(c->h(),c->s(),Yf)) c->do_callback();
@@ -260,7 +260,7 @@ static double tr, tg, tb;
 static void generate_vimage(void* vv, int X, int Y, int W, uchar* buf) {
   Flcc_ValueBox* v = (Flcc_ValueBox*)vv;
   int x1 = 0; int y1 = 0; int w1 = v->w(); int h1 = v->h();
-  v->box()->inset(x1,y1,w1,h1);
+  v->text_box()->inset(x1,y1,w1,h1);
   double Yf = 255*(1.0-double(Y)/h1);
   uchar r = uchar(tr*Yf+.5);
   uchar g = uchar(tg*Yf+.5);
@@ -275,13 +275,13 @@ void Flcc_ValueBox::draw() {
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
   c->hsv2rgb(c->h(),c->s(),1.0,tr,tg,tb);
   int x1 = 0; int y1 = 0; int w1 = w(); int h1 = h();
-  box()->inset(x1,y1,w1,h1);
+  text_box()->inset(x1,y1,w1,h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_push_clip(x1,y1+py,w1,6);
   fl_draw_image(generate_vimage, this, x1, y1, w1, h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
   int Y = int((1-c->v()) * (h1-6));
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
-  draw_box(x1, y1+Y, w1, 6, 0);
+  box()->draw(x1, y1+Y, w1, 6, color(), 0);
   py = Y;
 }
 
@@ -320,10 +320,10 @@ Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
     huebox(0,0,100,100),
     valuebox(100,0,20,100),
     nrgroup(120,0, 60, 100),
-    choice(0,0,60,25),
-    rvalue(0,25,60,25),
-    gvalue(0,50,60,25),
-    bvalue(0,75,60,25)
+    choice(0,0,60,21),
+    rvalue(0,22,60,21),
+    gvalue(0,44,60,21),
+    bvalue(0,66,60,21)
 {
   nrgroup.end();
   choice.begin();
@@ -334,8 +334,8 @@ Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
   choice.end();
   end();
   resizable(huebox);
+  sizes();
   resize(X,Y,W,H);
-  layout();
   r_ = g_ = b_ = 0;
   hue_ = 0.0;
   saturation_ = 0.0;
@@ -348,7 +348,9 @@ Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
 }
 
 Fl_Color Fl_Color_Chooser::value() const {
-  return fl_rgb(uchar(255*r()+.5), uchar(255*g()+.5), uchar(255*b()+.5));
+  Fl_Color ret =
+    fl_rgb(uchar(255*r()+.5), uchar(255*g()+.5), uchar(255*b()+.5));
+  return ret ? ret : FL_BLACK;
 }
 
 void Fl_Color_Chooser::value(Fl_Color c) {
@@ -359,8 +361,8 @@ void Fl_Color_Chooser::value(Fl_Color c) {
 ////////////////////////////////////////////////////////////////
 // fl_color_chooser():
 
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Return_Button.H>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Return_Button.h>
 
 extern const char* fl_ok;
 extern const char* fl_cancel;
@@ -406,7 +408,7 @@ void CellBox::draw() {
     for (int X = 0; X < COLS; X++) {
       int xx = X*w()/COLS;
       int ww = (X+1)*w()/COLS - xx;
-      FL_DOWN_BOX->draw(xx,yy,ww,hh,fl_color_cells[Y*COLS+X]);
+      FL_THIN_DOWN_BOX->draw(xx,yy,ww,hh,fl_color_cells[Y*COLS+X]);
     }
   }
 }
@@ -445,17 +447,17 @@ static void cancel_cb(Fl_Widget* w, void*) {
 
 static void make_it() {
   if (window) return;
-  window = new Fl_Window(210,240);
+  window = new Fl_Window(210,212);
   chooser = new Fl_Color_Chooser(5, 5, 200, 100);
   chooser->callback(chooser_cb);
-  new CellBox(5,110,200,60);
-  ok_color = new Fl_Box(5, 175, 95, 30);
+  new CellBox(5,110,200,52);
+  ok_color = new Fl_Box(5, 165, 95, 21);
   ok_color->box(FL_ENGRAVED_BOX);
-  ok_button = new Fl_Return_Button(5, 210, 95, 25, fl_ok);
+  ok_button = new Fl_Return_Button(5, 186, 95, 21, fl_ok);
   ok_button->callback(ok_cb);
-  cancel_color = new Fl_Box(110, 175, 95, 30);
+  cancel_color = new Fl_Box(110, 165, 95, 21);
   cancel_color->box(FL_ENGRAVED_BOX);
-  cancel_button = new Fl_Button(110, 210, 95, 25, fl_cancel);
+  cancel_button = new Fl_Button(110, 186, 95, 21, fl_cancel);
   cancel_button->callback(cancel_cb);
   // window->size_range(210, 240); // minimum usable size?
   window->resizable(chooser);
@@ -500,5 +502,5 @@ int fl_color_chooser(const char* name, Fl_Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.27 2001/02/20 06:59:49 spitzak Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.28 2001/07/23 09:50:04 spitzak Exp $".
 //

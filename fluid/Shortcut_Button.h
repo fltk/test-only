@@ -1,5 +1,5 @@
 //
-// "$Id: Shortcut_Button.h,v 1.4 1999/03/18 05:33:24 carl Exp $"
+// "$Id: Shortcut_Button.h,v 1.5 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Shortcut header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 #ifndef Shortcut_Button_H
 #define Shortcut_Button_H
 
-#include <FL/Fl_Button.H>
+#include <fltk/Fl_Button.h>
 
 class Shortcut_Button : public Fl_Button {
 public:
@@ -38,6 +38,6 @@ public:
 };
 
 //
-// End of "$Id: Shortcut_Button.h,v 1.4 1999/03/18 05:33:24 carl Exp $".
+// End of "$Id: Shortcut_Button.h,v 1.5 2001/07/23 09:50:04 spitzak Exp $".
 //
 #endif

@@ -2,27 +2,27 @@
 
 #ifndef valuators_h
 #define valuators_h
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
 #include <stdio.h>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Slider.H>
+#include <fltk/Fl_Box.h>
+#include <fltk/Fl_Slider.h>
 extern void callback(Fl_Slider*, void*);
-#include <FL/Fl_Value_Slider.H>
+#include <fltk/Fl_Value_Slider.h>
 extern void callback(Fl_Value_Slider*, void*);
-#include <FL/Fl_Value_Input.H>
+#include <fltk/Fl_Value_Input.h>
 extern void callback(Fl_Value_Input*, void*);
-#include <FL/Fl_Value_Output.H>
+#include <fltk/Fl_Value_Output.h>
 extern void callback(Fl_Value_Output*, void*);
-#include <FL/Fl_Scrollbar.H>
+#include <fltk/Fl_Scrollbar.h>
 extern void callback(Fl_Scrollbar*, void*);
-#include <FL/Fl_Adjuster.H>
+#include <fltk/Fl_Adjuster.h>
 extern void callback(Fl_Adjuster*, void*);
-#include <FL/Fl_Counter.H>
+#include <fltk/Fl_Counter.h>
 extern void callback(Fl_Counter*, void*);
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Dial.H>
+#include <fltk/Fl_Group.h>
+#include <fltk/Fl_Dial.h>
 extern void callback(Fl_Dial*, void*);
-#include <FL/Fl_Roller.H>
+#include <fltk/Fl_Roller.h>
 extern void callback(Fl_Roller*, void*);
 #endif

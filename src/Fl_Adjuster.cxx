@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.32 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.33 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -24,10 +24,10 @@
 //
 
 
-#include <FL/Fl.H>
-#include <FL/Fl_Adjuster.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Bitmap.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Adjuster.h>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Bitmap.h>
 
 #include "fastarrow.h"
 static Fl_Bitmap fastarrow(fastarrow_bits, fastarrow_width, fastarrow_height);
@@ -47,7 +47,7 @@ enum {
 static void glyph(const Fl_Widget* widget, int t,
 		  int x,int y,int w,int h, Fl_Flags f)
 {
-  widget->draw_box(x,y,w,h,f);
+  widget->box()->draw(x,y,w,h,widget->get_box_color(f),f);
   fl_color(widget->get_glyph_color(f));
   Fl_Bitmap* b = arrows[t-FL_GLYPH_FASTARROW];
   b->draw(x,y,w,h, (b->w-w)/2, (b->h-h)/2);
@@ -55,6 +55,8 @@ static void glyph(const Fl_Widget* widget, int t,
 
 // changing the value does not change the appearance:
 void Fl_Adjuster::value_damage() {}
+
+extern void fl_dotted_box(int,int,int,int);
 
 void Fl_Adjuster::draw() {
   int dx, dy, W, H;
@@ -71,7 +73,6 @@ void Fl_Adjuster::draw() {
     f[i] = flags();
     if (drag == i) f[i] |= FL_VALUE|FL_SELECTED;
     else if (highlight == i) f[i] |= FL_HIGHLIGHT;
-    if (focused()) f[i] |= FL_FOCUSED;
   }
 
   if (damage()&FL_DAMAGE_ALL || last == 1 || highlight == 1)
@@ -80,6 +81,12 @@ void Fl_Adjuster::draw() {
     draw_glyph(FL_GLYPH_MEDIUMARROW, dx, dy, W, H, f[2]);
   if (damage()&FL_DAMAGE_ALL || last == 3 || highlight == 3)
     draw_glyph(FL_GLYPH_SLOWARROW, 2*dx, 0, W, H, f[3]);
+
+  if (focused()) {
+    Fl_Boxtype box = this->box();
+    fl_color(get_glyph_color());
+    fl_dotted_box(box->dx()+1, box->dy()+1, w()-box->dw()-2, h()-box->dh()-2);
+  }
 
   last = highlight;
 }
@@ -100,7 +107,9 @@ int Fl_Adjuster::handle(int event) {
   switch (event) {
 
   case FL_PUSH:
+#ifdef WINDOWS_COMPATABILITY
     take_focus();
+#endif
     handle_push();
     ix = mx;
     drag = highlight = which_button;
@@ -166,16 +175,16 @@ static void revert(Fl_Style* s) {
   s->text_box = FL_NO_BOX;
   s->glyph = glyph;
 }
-
-static Fl_Named_Style* style = new Fl_Named_Style("Adjuster", revert, &style);
+static Fl_Named_Style style("Adjuster", revert, &Fl_Adjuster::default_style);
+Fl_Named_Style* Fl_Adjuster::default_style = &::style;
 
 Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,y,w,h,l) {
-  style(::style);
+  style(default_style);
   step(1/10000);
   drag = highlight = 0;
   soft_ = 1;
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.32 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.33 2001/07/23 09:50:04 spitzak Exp $".
 //

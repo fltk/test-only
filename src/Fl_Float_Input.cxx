@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Float_Input.cxx,v 1.2 2000/08/20 04:31:38 spitzak Exp $"
+// "$Id: Fl_Float_Input.cxx,v 1.3 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,9 +23,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Float_Input.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Widget.h>
+#include <fltk/Fl_Float_Input.h>
 #include <string.h>
 
 int Fl_Float_Input::replace(int b, int e, const char* text, int ilen) {
@@ -46,5 +46,5 @@ int Fl_Float_Input::replace(int b, int e, const char* text, int ilen) {
 }
 
 //
-// End of "$Id: Fl_Float_Input.cxx,v 1.2 2000/08/20 04:31:38 spitzak Exp $"
+// End of "$Id: Fl_Float_Input.cxx,v 1.3 2001/07/23 09:50:04 spitzak Exp $"
 //

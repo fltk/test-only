@@ -1,7 +1,7 @@
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Browser.H>
-#include <FL/Fl_Threads.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Browser.h>
+#include <fltk/Fl_Threads.h>
 #include <stdio.h>
 
 Fl_Thread prime_thread;

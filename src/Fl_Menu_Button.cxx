@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.41 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.42 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,10 +23,11 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Menu_Button.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Group.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Menu_Button.h>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Group.h>
+#include <fltk/Fl_Item.h>
 
 void Fl_Menu_Button::draw() {
   Fl_Flags flags = draw_button(0);
@@ -44,10 +45,16 @@ void Fl_Menu_Button::draw_n_clip() {
 
 int Fl_Menu_Button::popup() {
   if (box() == FL_NO_BOX) type(POPUP3); // back compatibility hack
-  if (type()&7)
-    return Fl_Menu_::popup(Fl::event_x(), Fl::event_y(), label());
-  else
-    return pulldown(0, 0, w(), h());
+  if (type()&7) {
+    if (label()) {
+      Fl_Item title(label());
+      return Fl_Menu_::popup(Fl::event_x(), Fl::event_y(), 0,0, &title);
+    } else {
+      return Fl_Menu_::popup(Fl::event_x(), Fl::event_y());
+    }
+  } else {
+    return Fl_Menu_::popup(0, 0, w(), h());
+  }
 }
 
 int Fl_Menu_Button::handle(int e) {
@@ -76,7 +83,9 @@ int Fl_Menu_Button::handle(int e) {
     if (type()&7) {
       if (!(type() & (1 << (Fl::event_button()-1)))) return 0;
     } else {
+#ifdef WINDOWS_COMPATABILITY
       take_focus();
+#endif
     }
   EXECUTE:
     if (!(type()&7)) value(-1); // make it pull down below the button...
@@ -101,16 +110,16 @@ static void revert(Fl_Style* s) {
   s->text_background = FL_GRAY; // controls color of the menu
   s->leading = 4;
 }
-
-static Fl_Named_Style* style = new Fl_Named_Style("Menu Button", revert, &style);
+static Fl_Named_Style style("Menu_Button", revert, &Fl_Menu_Button::default_style);
+Fl_Named_Style* Fl_Menu_Button::default_style = &::style;
 
 Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l)
   : Fl_Menu_(X,Y,W,H,l)
 {
-  style(::style);
+  style(default_style);
   align(FL_ALIGN_CENTER);
 }
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.41 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.42 2001/07/23 09:50:05 spitzak Exp $".
 //

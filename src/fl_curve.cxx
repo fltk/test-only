@@ -1,5 +1,5 @@
 //
-// "$Id: fl_curve.cxx,v 1.5 2001/01/28 07:07:49 spitzak Exp $"
+// "$Id: fl_curve.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Bezier curve functions for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 // I very much doubt this is optimal!  From Foley/vanDam page 511.
 // If anybody has a better algorithim, please send it!
 
-#include <FL/fl_draw.H>
+#include <fltk/fl_draw.h>
 #include <math.h>
 
 void fl_curve(double X0, double Y0,
@@ -100,5 +100,5 @@ void fl_curve(double X0, double Y0,
 }
 
 //
-// End of "$Id: fl_curve.cxx,v 1.5 2001/01/28 07:07:49 spitzak Exp $".
+// End of "$Id: fl_curve.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $".
 //

@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <FL/Fl_Window.H>
+#include <fltk/Fl_Window.h>
 #include "Fl_Type.h"	// for indent() prototype
 #if defined(WIN32) && !defined (__GNUC__)
 #	define strcasecmp  stricmp

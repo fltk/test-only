@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.32 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.33 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,11 +27,11 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Overlay_Window.H>
-#include <FL/fl_message.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Menu_Item.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Overlay_Window.h>
+#include <fltk/fl_message.h>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Menu_Item.h>
 #include "Fl_Type.h"
 #include <math.h>
 #include <stdlib.h>
@@ -366,7 +366,7 @@ void redraw_overlays() {
     if (o->is_window()) ((Fl_Window_Type*)o)->fix_overlay();
 }
 
-#include <FL/Fl_Menu_Bar.H>
+#include <fltk/Fl_Menu_Bar.h>
 extern Fl_Menu_Bar* menubar;
 
 void toggle_overlays(Fl_Widget *,void *) {
@@ -607,9 +607,9 @@ int Fl_Window_Type::handle(int event) {
 
   case FL_SHORTCUT: {
     in_this_only = this; // modifies how some menu items work.
-    int r = Main_Menu->test_shortcut();
+    const Fl_Menu_Item* r = Main_Menu->test_shortcut();
     in_this_only = 0;
-    return r;}
+    return r != 0;}
 
   default:
     return ((Overlay_Window *)o)->Fl_Overlay_Window::handle(event);
@@ -682,5 +682,5 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.32 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.33 2001/07/23 09:50:04 spitzak Exp $".
 //

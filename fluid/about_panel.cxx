@@ -61,7 +61,7 @@ Fl_Window* make_about_panel(const char *copyright) {
       }
       { Fl_Group* o = new Fl_Group(10, 130, 150, 105, "fluid");
         o->box(FL_ROUND_UP_BOX);
-        o->label_font(fl_fonts()+1);
+        o->label_font(fl_fonts+1);
         o->label_type(FL_SHADOW_LABEL);
         o->color((Fl_Color)14);
         o->label_color((Fl_Color)6);
@@ -94,14 +94,14 @@ Fl_Window* make_about_panel(const char *copyright) {
       }
       { Fl_Group* o = new Fl_Group(145, 18, 149, 122);
         o->box(FL_OFLAT_BOX);
-        o->label_font(fl_fonts()+1);
+        o->label_font(fl_fonts+1);
         o->color((Fl_Color)14);
         o->label_color((Fl_Color)7);
         o->selection_color((Fl_Color)47);
         o->label_size(18);
         { Fl_Box* o = new Fl_Box(5, 4, 140, 113, "FLTK User\nInterface\nDesigner\nVersion 2.0");
           o->box(FL_OVAL_BOX);
-          o->label_font(fl_fonts()+1);
+          o->label_font(fl_fonts+1);
           o->label_type(FL_SHADOW_LABEL);
           o->color((Fl_Color)12);
           o->label_color((Fl_Color)7);

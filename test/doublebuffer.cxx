@@ -1,5 +1,5 @@
 //
-// "$Id: doublebuffer.cxx,v 1.6 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: doublebuffer.cxx,v 1.7 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Double-buffering test program for the Fast Light Tool Kit (FLTK).
 //
@@ -33,14 +33,14 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Single_Window.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Hor_Slider.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Single_Window.h>
+#include <fltk/Fl_Double_Window.h>
+#include <fltk/Fl_Box.h>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Hor_Slider.h>
 #include <stdlib.h>
-#include <FL/math.h>
+#include <fltk/math.h>
 #include <stdio.h>
 
 // this purposely draws each line 10 times to be slow:
@@ -129,5 +129,5 @@ int main() {
 }
 
 //
-// End of "$Id: doublebuffer.cxx,v 1.6 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: doublebuffer.cxx,v 1.7 2001/07/23 09:50:05 spitzak Exp $".
 //

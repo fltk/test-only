@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Overlay_Window.cxx,v 1.13 2000/04/10 06:45:44 bill Exp $"
+// "$Id: Fl_Overlay_Window.cxx,v 1.14 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Overlay window code for the Fast Light Tool Kit (FLTK).
 //
@@ -28,12 +28,21 @@
 // possible, otherwise it just draws in the front buffer.
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Overlay_Window.H>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Overlay_Window.h>
+#include <fltk/fl_draw.h>
+#include <fltk/x.h>
 
 void Fl_Overlay_Window::flush() {
+#ifdef BOXX_BUGS
+  if (overlay_ && overlay_ != this && overlay_->shown()) {
+    // all drawing to windows hidden by overlay windows is ignored, fix this
+    XUnmapWindow(fl_display, fl_xid(overlay_));
+    Fl_Double_Window::flush(0);
+    XMapWindow(fl_display, fl_xid(overlay_));
+    return;
+  }
+#endif
   int erase_overlay = (damage()&FL_DAMAGE_OVERLAY);
   set_damage(damage()&~FL_DAMAGE_OVERLAY);
   Fl_Double_Window::flush(erase_overlay);
@@ -106,7 +115,7 @@ void Fl_Overlay_Window::redraw_overlay() {
   if (!overlay_) {
     if (can_do_overlay()) {
       overlay_ = new _Fl_Overlay(0,0,w(),h());
-      add_resizable(overlay_);
+      add_resizable(*overlay_);
       overlay_->show();
     } else {
       overlay_ = this;	// fake the overlay
@@ -125,5 +134,5 @@ void Fl_Overlay_Window::redraw_overlay() {
 #endif
 
 //
-// End of "$Id: Fl_Overlay_Window.cxx,v 1.13 2000/04/10 06:45:44 bill Exp $".
+// End of "$Id: Fl_Overlay_Window.cxx,v 1.14 2001/07/23 09:50:05 spitzak Exp $".
 //

@@ -2,15 +2,15 @@
 
 #ifndef CubeViewUI_h
 #define CubeViewUI_h
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Roller.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Group.h>
+#include <fltk/Fl_Roller.h>
 #include <stdio.h>
-#include <FL/Fl_Slider.H>
-#include <FL/Fl_Box.H>
+#include <fltk/Fl_Slider.h>
+#include <fltk/Fl_Box.h>
 #include "CubeView.h"
-#include <FL/Fl_Value_Slider.H>
+#include <fltk/Fl_Value_Slider.h>
 
 class CubeViewUI  {
 public:

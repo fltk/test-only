@@ -1,5 +1,5 @@
 //
-// "$Id: buttons.cxx,v 1.14 2001/01/02 00:20:28 clip Exp $"
+// "$Id: buttons.cxx,v 1.15 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Another button test program for the Fast Light Tool Kit (FLTK).
 //
@@ -25,16 +25,16 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Return_Button.H>
-#include <FL/Fl_Repeat_Button.H>
-#include <FL/Fl_Check_Button.H>
-#include <FL/Fl_Radio_Button.H>
-#include <FL/Fl_Light_Button.H>
-#include <FL/Fl_Highlight_Button.H>
-#include <FL/Fl_Style.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Button.h>
+#include <fltk/Fl_Return_Button.h>
+#include <fltk/Fl_Repeat_Button.h>
+#include <fltk/Fl_Check_Button.h>
+#include <fltk/Fl_Radio_Button.h>
+#include <fltk/Fl_Light_Button.h>
+#include <fltk/Fl_Highlight_Button.h>
+#include <fltk/Fl_Style.h>
 
 void rb_cb(Fl_Widget*, void*) {
 //  Fl::theme("essai");
@@ -60,5 +60,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: buttons.cxx,v 1.14 2001/01/02 00:20:28 clip Exp $".
+// End of "$Id: buttons.cxx,v 1.15 2001/07/23 09:50:05 spitzak Exp $".
 //

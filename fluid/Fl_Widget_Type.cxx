@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.76 2001/07/10 08:14:38 clip Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.77 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,13 +23,13 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Group.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Group.h>
 #include "Fluid_Plugins.h"
 #include "Fl_Type.h"
-#include <FL/fl_message.H>
-#include <FL/Fl_Slider.H>
-#include <FL/Fl_Window.H>
+#include <fltk/fl_message.h>
+#include <fltk/Fl_Slider.h>
+#include <fltk/Fl_Window.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -205,7 +205,7 @@ void sort(Fl_Type *parent) {
 // The control panels!
 
 #include "widget_panel.h"
-#include <FL/Fl_Color_Chooser.H>
+#include <fltk/Fl_Color_Chooser.h>
 
 // All the callbacks use the argument to indicate whether to load or store.
 // This avoids the need for pointers to all the widgets, and keeps the
@@ -701,7 +701,7 @@ Fl_Menu_Item fontmenu[] = {
 
 void labelfont_cb(Fl_Choice* i, void *v) {
   if (v == LOAD) {
-    int n = current_widget->o->label_font() - fl_fonts();
+    int n = current_widget->o->label_font() - fl_fonts;
     if (n > 15 || n < 0) n = 0;
     i->value(n);
   } else {
@@ -709,7 +709,7 @@ void labelfont_cb(Fl_Choice* i, void *v) {
     for_all_selected_widgets() {
       modflag = 1;
       Fl_Widget_Type* q = (Fl_Widget_Type*)o;
-      q->o->label_font(fl_fonts() + n);
+      q->o->label_font(fl_fonts + n);
       q->redraw();
     }
   }
@@ -887,11 +887,11 @@ void textfont_cb(Fl_Choice* i, void* v) {
     if (current_widget->is_menu_item()) i->label("Shortcut Font:");
     else i->label("Text Font:");
     i->show();
-    int m = current_widget->o->text_font()-fl_fonts();
+    int m = current_widget->o->text_font()-fl_fonts;
     if (m < 0 || m > 15) m = 0;
     i->value(m);
   } else {
-    n = i->value()+fl_fonts();
+    n = i->value()+fl_fonts;
     for_all_selected_widgets() {
       modflag = 1;
       Fl_Widget_Type* q = (Fl_Widget_Type*)o;
@@ -1567,7 +1567,7 @@ int isdeclare(const char *c) {
 
 void Fl_Widget_Type::write_static() {
   const char* t = subclassname(this);
-  if (!subclass()) ::write_declare("#include <FL/%s.H>", t);
+  if (!subclass()) ::write_declare("#include <fltk/%s.h>", t);
   for (int n=0; n < NUM_EXTRA_CODE; n++) {
     if (extra_code(n) && isdeclare(extra_code(n)))
       ::write_declare("%s", extra_code(n));
@@ -1701,9 +1701,9 @@ void Fl_Widget_Type::write_widget_code() {
 //   if (o->glyph() != tplate->glyph())
 //     write_c("%so->box(FL_%s);\n", indent(), boxname(o->glyph()));
   if (o->label_font() != tplate->label_font())
-    write_c("%so->label_font(fl_fonts()+%d);\n", indent(), o->label_font()-fl_fonts());
+    write_c("%so->label_font(fl_fonts+%d);\n", indent(), o->label_font()-fl_fonts);
   if (o->text_font() != tplate->text_font())
-    write_c("%so->text_font(fl_fonts()+%d);\n", indent(), o->text_font()-fl_fonts());
+    write_c("%so->text_font(fl_fonts+%d);\n", indent(), o->text_font()-fl_fonts);
   if (o->label_type() != tplate->label_type())
     write_c("%so->label_type(FL_%s);\n", indent(),
 	    labeltypename(o->label_type()));
@@ -1843,9 +1843,9 @@ void Fl_Widget_Type::write_properties() {
     write_string("text_box"); write_word(boxname(o->text_box()));}
   // if (o->glyph() != tplate->glyph())...
   if (o->label_font() != tplate->label_font())
-    write_string("labelfont %d", o->label_font()-fl_fonts());
+    write_string("labelfont %d", o->label_font()-fl_fonts);
   if (o->text_font() != tplate->text_font())
-    write_string("textfont %d", o->text_font()-fl_fonts());
+    write_string("textfont %d", o->text_font()-fl_fonts);
   if (o->label_type() != tplate->label_type()) {
     write_string("labeltype");
     write_word(labeltypename(o->label_type()));
@@ -1966,9 +1966,9 @@ void Fl_Widget_Type::read_property(const char *c) {
   } else if (!strcmp(c, "down_box")) { // ignore this fltk 1.0 item
     read_word();
   } else if (!strcmp(c,"labelfont")) {
-    if (sscanf(read_word(),"%d",&x) == 1) o->label_font(fl_fonts()+x);
+    if (sscanf(read_word(),"%d",&x) == 1) o->label_font(fl_fonts+x);
   } else if (!strcmp(c,"textfont")) {
-    if (sscanf(read_word(),"%d",&x) == 1) o->text_font(fl_fonts()+x);
+    if (sscanf(read_word(),"%d",&x) == 1) o->text_font(fl_fonts+x);
   } else if (!strcmp(c,"labeltype")) {
     c = read_word();
     // back compatability with 1.0 and Vincent's original graphical patch
@@ -2103,7 +2103,7 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
   } else if (!strcmp(name,"style")) {
     if (!strncmp(value,"FL_NORMAL",9)) return 1;
     if (!lookup_symbol(value,v,1)) return 0;
-    o->label_font(fl_fonts() + v); o->label_type((Fl_Labeltype)(v>>8));
+    o->label_font(fl_fonts + v); o->label_type((Fl_Labeltype)(v>>8));
   } else if (!strcmp(name,"size")) {
     if (!lookup_symbol(value,v,1)) return 0;
     o->label_size(v);
@@ -2164,5 +2164,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.76 2001/07/10 08:14:38 clip Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.77 2001/07/23 09:50:04 spitzak Exp $".
 //

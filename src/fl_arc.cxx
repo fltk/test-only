@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arc.cxx,v 1.5 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_arc.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Arc functions for the Fast Light Tool Kit (FLTK).
 //
@@ -27,8 +27,8 @@
 // the current fl_begin/fl_vertex/fl_end path.
 // Incremental math implementation:
 
-#include <FL/fl_draw.H>
-#include <FL/math.h>
+#include <fltk/fl_draw.h>
+#include <fltk/math.h>
 
 void fl_arc(double l, double b, double w, double h, double start, double end) {
 
@@ -67,5 +67,5 @@ void fl_arc(double l, double b, double w, double h, double start, double end) {
 }
 
 //
-// End of "$Id: fl_arc.cxx,v 1.5 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fl_arc.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.11 2001/02/20 20:43:34 robertk Exp $"
+// "$Id: fl_vertex.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -25,9 +25,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/fl_draw.H>
-#include <FL/x.H>
-#include <FL/math.h>
+#include <fltk/fl_draw.h>
+#include <fltk/x.h>
+#include <fltk/math.h>
 #include <stdlib.h>
 
 ////////////////////////////////////////////////////////////////
@@ -122,8 +122,8 @@ static inline void inline_newpath() {
 void fl_newpath() {inline_newpath();}
 
 void fl_vertex(double x,double y) {
-  fl_vertex(int(x*m.a + y*m.c + m.x + .5),
-	    int(x*m.b + y*m.d + m.y + .5));
+  fl_vertex(int(rint(x*m.a + y*m.c + m.x)),
+	    int(rint(x*m.b + y*m.d + m.y)));
 }
 
 void fl_vertex(int X, int Y) {
@@ -142,7 +142,7 @@ void fl_vertex(int X, int Y) {
 }
 
 void fl_transformed_vertex(double xf, double yf) {
-  fl_vertex(int(xf+.5), int(yf+.5));
+  fl_vertex(int(rint(xf)), int(rint(yf)));
 }
 
 void fl_closepath() {
@@ -171,10 +171,10 @@ void fl_circle(double x, double y, double r) {
   double xt = fl_transform_x(x,y);
   double yt = fl_transform_y(x,y);
   double rt = r * sqrt(fabs(m.a*m.d-m.b*m.c));
-  circle_x = int(xt-rt+.5)+fl_x_;
-  circle_w = int(xt+rt+.5)+fl_x_-circle_x;
-  circle_y = int(yt-rt+.5)+fl_y_;
-  circle_h = int(yt+rt+.5)+fl_y_-circle_y;
+  circle_x = int(rint(xt-rt))+fl_x_;
+  circle_w = int(rint(xt+rt))+fl_x_-circle_x;
+  circle_y = int(rint(yt-rt))+fl_y_;
+  circle_h = int(rint(yt+rt))+fl_y_-circle_y;
 }
 
 // Add an ellipse to the path. Very lame, only works right for orthogonal
@@ -190,10 +190,10 @@ void fl_ellipse(double x, double y, double w, double h) {
   d1 = fl_transform_dy(w,0);
   d2 = fl_transform_dy(0,h);
   double ry = sqrt(d1*d1+d2*d2)/2;
-  circle_x = int(cx-rx+.5)+fl_x_;
-  circle_w = int(cx+rx+.5)+fl_x_-circle_x;
-  circle_y = int(cy-ry+.5)+fl_y_;
-  circle_h = int(cy+ry+.5)+fl_y_-circle_y;
+  circle_x = int(rint(cx-rx))+fl_x_;
+  circle_w = int(rint(cx+rx))+fl_x_-circle_x;
+  circle_y = int(rint(cy-ry))+fl_y_;
+  circle_h = int(rint(cy+ry))+fl_y_-circle_y;
 // this would work if fl_arc drew nicely:
 // fl_closepath();
 // fl_arc(x, y, w, h, 0, 360);
@@ -274,7 +274,10 @@ void fl_fill() {
 // PostScript/PDF style systems.
 void fl_fill_stroke(Fl_Color color) {
 #ifdef WIN32
+  COLORREF saved = fl_colorref;
+  fl_colorref = fl_wincolor(color);
   HPEN newpen = fl_create_pen();
+  fl_colorref = saved;
   HPEN oldpen = (HPEN)SelectObject(fl_gc, newpen);
   if (circle_w > 0)
     Chord(fl_gc, circle_x, circle_y, circle_x+circle_w, circle_y+circle_h,
@@ -292,7 +295,7 @@ void fl_fill_stroke(Fl_Color color) {
   if (circle_w > 0)
     XFillArc(fl_display, fl_window, fl_gc,
 	     circle_x, circle_y, circle_w, circle_h, 0, 64*360);
-  if (loops) fl_closepath();
+  fl_closepath();
   if (points > 2)
     XFillPolygon(fl_display, fl_window, fl_gc, point, points, 0, 0);
   Fl_Color saved = fl_color();
@@ -302,5 +305,5 @@ void fl_fill_stroke(Fl_Color color) {
 }
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.11 2001/02/20 20:43:34 robertk Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.69 2001/06/26 16:10:57 robertk Exp $"
+// "$Id: Fl_Window.cxx,v 1.70 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -28,9 +28,9 @@
 // crap you need to do to communicate with X is in Fl_x.C, the
 // equivalent (but totally different) crap for MSWindows is in Fl_win32.C
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/x.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/x.h>
 //#include <stdlib.h>
 #include <config.h>
 
@@ -66,7 +66,7 @@ void Fl_Window::label(const char *name) {label(name, iconlabel());}
 
 void Fl_Window::iconlabel(const char *iname) {label(label(), iname);}
 
-void Fl_Window::default_callback(Fl_Window* window, void* v) {
+void Fl_Window::default_callback(Fl_Window* window, void*) {
   window->hide();
   // if there are no visible windows we exit:
   // Not anymore, it has been restored to fltk 1.0 behavior. Instead
@@ -77,11 +77,11 @@ void Fl_Window::default_callback(Fl_Window* window, void* v) {
 static void revert(Fl_Style* s) {
   s->box = FL_FLAT_BOX;
 }
-
-static Fl_Named_Style* style = new Fl_Named_Style("Window", revert, &style);
+static Fl_Named_Style style("Window", revert, &Fl_Window::default_style);
+Fl_Named_Style* Fl_Window::default_style = &::style;
 
 void Fl_Window::_Fl_Window() {
-  style(::style);
+  style(default_style);
   type(FL_WINDOW);
   i = 0;
   icon_ = 0;
@@ -116,10 +116,9 @@ Fl_Window::Fl_Window(int W, int H, const char *l)
 // It is used by X to look up stuff in the X resource database:
 const char* Fl_Window::xclass_ = "fltk";
 
-extern void fl_startup();
 extern void fl_fix_focus();
 
-char fl_show_iconic; // set by iconize() or by -i Fl::arg switch
+bool fl_show_iconic; // set by iconize() or by -i Fl::arg switch
 
 int Fl_Window::handle(int event) {
   switch (event) {
@@ -129,35 +128,20 @@ int Fl_Window::handle(int event) {
       if (!parent() && modal()) {Fl::modal_ = this; fl_fix_focus();}
 
       if (!shown()) {
-	if (!parent()) {
-	  // We are creating a new top-level window
-	  // this is the secret place where the world is initialized:
-	  static char started = 0;
-	  if (!started) {
-	    started = 1;
-#ifndef WIN32
-	    fl_open_display();
-#endif
-	    fl_startup(); // checks flconfig options and loads themes / schemes
-	  }
-	  layout();
-	  // back-compatability automatic size_range() based on resizable():
-	  if (!size_range_set) {
-	    if (resizable()) {
-	      Fl_Widget *o = resizable();
-	      int minw = o->w(); if (minw > 100) minw = 100;
-	      int minh = o->h(); if (minh > 100) minh = 100;
-	      size_range(w() - o->w() + minw, h() - o->h() + minh, 0, 0);
-	    } else {
-	      size_range(w(), h(), w(), h());
-	    }
+	Fl::startup();
+	layout();
+	// back-compatability automatic size_range() based on resizable():
+	if (!parent() && !size_range_set) {
+	  if (resizable()) {
+	    Fl_Widget *o = resizable();
+	    int minw = o->w(); if (minw > 100) minw = 100;
+	    int minh = o->h(); if (minh > 100) minh = 100;
+	    size_range(w() - o->w() + minw, h() - o->h() + minh, 0, 0);
+	  } else {
+	    size_range(w(), h(), w(), h());
 	  }
 	}
 	create();
-	// if this window is embedded in another widget, the layout 
-	// doesn't position things right until after create() is called.
-	if(parent()) 
-		layout();	
       }
 
       Fl_Group::handle(event); // make the child windows map first
@@ -171,8 +155,11 @@ int Fl_Window::handle(int event) {
       // Also, we don't want to activate the window for tooltips.
       else if (Fl::grab() || override())
         showtype = SW_SHOWNOACTIVATE;
+      else if (fl_show_iconic)
+	showtype = SW_SHOWMINNOACTIVE,fl_show_iconic = false;
       else
         showtype = SW_SHOWNORMAL;
+
       ShowWindow(i->xid, showtype);
 #else
       XMapWindow(fl_display, i->xid);
@@ -311,18 +298,19 @@ void Fl_Window::destroy() {
   *pp = x->next;
 
   // recursively remove any subwindows:
-  for (Fl_X *w = Fl_X::first; w;) {
-    Fl_Window* W = w->w;
-    if (W->window() == this) {
-      W->destroy();
-      w = Fl_X::first;
-    } else w = w->next;
+  for (Fl_X *x1 = Fl_X::first; x1;) {
+    Fl_Window* subwindow = x1->window;
+    if (subwindow->window() == this) {
+      subwindow->destroy();
+      x1 = Fl_X::first;
+    } else x1 = x1->next;
   }
 
   if (this == Fl::modal_) { // we are closing the modal window, find next one:
-    Fl_Window* w;
-    for (w=Fl::first_window(); w; w=Fl::next_window(w)) if (w->modal()) break;
-    Fl::modal_ = w;
+    Fl_Window* window;
+    for (window=Fl::first_window(); window; window=Fl::next_window(window))
+      if (window->modal()) break;
+    Fl::modal_ = window;
   }
 
   // Make sure no events are sent to this window:
@@ -360,5 +348,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.69 2001/06/26 16:10:57 robertk Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.70 2001/07/23 09:50:05 spitzak Exp $".
 //

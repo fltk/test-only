@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Image.cxx,v 1.25 2001/07/10 08:14:38 clip Exp $"
+// "$Id: Fluid_Image.cxx,v 1.26 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Pixmap label support for the Fast Light Tool Kit (FLTK).
 //
@@ -23,8 +23,8 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Widget.h>
 #include "Fl_Type.h"
 #include "Fluid_Image.h"
 #include <string.h>
@@ -32,7 +32,7 @@
 #include <errno.h>
 #include <ctype.h>
 #include <stdlib.h>
-#include <FL/filename.H>
+#include <fltk/filename.h>
 #include <config.h>
 
 extern void goto_source_dir(); // in fluid.C
@@ -98,7 +98,7 @@ void generic_image::write_static() {
   if (!p) return;
   if(image_file_header_written != write_number)
   {
-    write_c("\n#include <FL/Fl_Shared_Image.H>\n");
+    write_c("\n#include <fltk/Fl_Shared_Image.h>\n");
     image_file_header_written = write_number;
   }
   if (inlined) {
@@ -160,7 +160,7 @@ generic_image::~generic_image() {
 }
 
 ////////////////////////////////////////////////////////////////
-#include <FL/Fl_Bitmap.H>
+#include <fltk/Fl_Bitmap.h>
 
 class bitmap_image : public Fluid_Image {
   Fl_Bitmap *p;
@@ -188,7 +188,7 @@ void bitmap_image::write_static() {
   if (!p) return;
   write_c("\n");
   if (bitmap_header_written != write_number) {
-    write_c("#include <FL/Fl_Bitmap.H>\n");
+    write_c("#include <fltk/Fl_Bitmap.h>\n");
     bitmap_header_written = write_number;
   }
   int w, h;
@@ -350,7 +350,7 @@ Fluid_Image::~Fluid_Image() {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/fl_file_chooser.H>
+#include <fltk/fl_file_chooser.h>
 
 Fluid_Image *ui_find_image(Fluid_Image *old) {
   goto_images_dir();
@@ -389,5 +389,5 @@ void set_images_dir_cb(Fl_Widget *, void *) {
 }
  
 //
-// End of "$Id: Fluid_Image.cxx,v 1.25 2001/07/10 08:14:38 clip Exp $".
+// End of "$Id: Fluid_Image.cxx,v 1.26 2001/07/23 09:50:04 spitzak Exp $".
 //

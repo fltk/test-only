@@ -1,5 +1,5 @@
-#include <FL/fl_config.H>
-#include <FL/x.H>
+#include <fltk/fl_config.h>
+#include <fltk/x.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <limits.h>

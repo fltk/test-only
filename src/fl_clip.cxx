@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.5 2001/02/21 06:15:45 clip Exp $"
+// "$Id: fl_clip.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -24,8 +24,8 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/fl_draw.H>
-#include <FL/x.H>
+#include <fltk/fl_draw.h>
+#include <fltk/x.h>
 
 #define STACK_SIZE 11
 #define STACK_MAX (STACK_SIZE - 2)
@@ -34,7 +34,7 @@ static int rstackptr=0;
 
 #ifndef WIN32
 // Missing X call: (is this the fastest way to init a 1-rectangle region?)
-// MSWindows equivalent exists, implemented inline in win32.H
+// MSWindows equivalent exists, implemented inline in win32.h
 Region XRectangleRegion(int x, int y, int w, int h) {
   XRectangle R;
   R.x = x; R.y = y; R.width = w; R.height = h;
@@ -134,7 +134,7 @@ void fl_pop_clip() {
 ////////////////////////////////////////////////////////////////
 // clipping tests:
 
-#include <FL/Fl_Window.H>
+#include <fltk/Fl_Window.h>
 
 // does this rectangle intersect current clip?
 int fl_not_clipped(int x, int y, int w, int h) {
@@ -235,5 +235,5 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.5 2001/02/21 06:15:45 clip Exp $"
+// End of "$Id: fl_clip.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $"
 //

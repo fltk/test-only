@@ -1,5 +1,5 @@
 //
-// "$Id: navigation.cxx,v 1.6 1999/12/02 18:57:30 vincent Exp $"
+// "$Id: navigation.cxx,v 1.7 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Navigation test program for the Fast Light Tool Kit (FLTK).
 //
@@ -28,9 +28,9 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Input.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Input.h>
 
 #define WIDTH 600
 #define HEIGHT 300
@@ -67,5 +67,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: navigation.cxx,v 1.6 1999/12/02 18:57:30 vincent Exp $".
+// End of "$Id: navigation.cxx,v 1.7 2001/07/23 09:50:06 spitzak Exp $".
 //

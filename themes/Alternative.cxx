@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.34 2001/02/28 21:19:50 clip Exp $"
+// "$Id: Alternative.cxx,v 1.35 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -23,11 +23,11 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Boxtype.H>
-#include <FL/Fl_Style.H>
-#include <FL/Fl_Widget.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Boxtype.h>
+#include <fltk/Fl_Style.h>
+#include <fltk/Fl_Widget.h>
+#include <fltk/fl_draw.h>
 
 // a couple of of new boxtypes (look familiar?)
 static const Fl_Frame_Box
@@ -140,7 +140,7 @@ alt_glyph(const Fl_Widget* widget, int t,
       break;
     }
     case FL_GLYPH_HSLIDER: {
-      widget->box()->draw(widget, x,y,w,h, f);
+      widget->box()->draw(x,y,w,h, fc, f);
       widget->box()->inset(x,y,w,h);
       if (w>10) FL_THIN_UP_BOX->draw(x+w/2-1, y+1, 2, h-2, fc, f);
       if (w>18) {
@@ -150,7 +150,7 @@ alt_glyph(const Fl_Widget* widget, int t,
       break;
     }
     case FL_GLYPH_VSLIDER: {
-      widget->box()->draw(widget, x,y,w,h, f);
+      widget->box()->draw(x,y,w,h, fc, f);
       widget->box()->inset(x,y,w,h);
       if (h>10) FL_THIN_UP_BOX->draw(x+1, y+h/2-1, w-2, 2, fc, f);
       if (h>18) {
@@ -227,19 +227,19 @@ alt_glyph(const Fl_Widget* widget, int t,
       break;
     }
     case FL_GLYPH_VNSLIDER: {
-      widget->box()->draw(widget, x,y,w,h, f);
+      widget->box()->draw(x,y,w,h, fc, f);
       int d = (h-4)/2;
       FL_THIN_UP_BOX->draw(x+2, y+d, w-4, h-2*d, fc);
       break;
     }
     case FL_GLYPH_HNSLIDER: {
-      widget->box()->draw(widget, x,y,w,h, f);
+      widget->box()->draw(x,y,w,h, fc, f);
       int d = (w-4)/2;
       FL_THIN_UP_BOX->draw(x+d, y+2, w-2*d, h-4, fc);
       break;
     }
     default:
-      widget->box()->draw(widget, x,y,w,h, f);
+      widget->box()->draw(x,y,w,h, fc, f);
   }
 }
 
@@ -255,10 +255,10 @@ static void choice_glyph(const Fl_Widget* widget, int,
                          int x,int y,int w, int h,
                          Fl_Flags f)
 {
-//  FL_FLAT_BOX->draw(widget,x,y,w,h,f);
+//  FL_FLAT_BOX->draw(x,y,w,h,widget->color(),f);
   int H = h/3;
   int Y = y + (h-H)/2;
-  widget->box()->draw(widget,x,Y,w,H,f);
+  widget->box()->draw(x,Y,w,H,widget->color(),f);
 }
 
 static void light_glyph(const Fl_Widget* widget, int,
@@ -354,5 +354,5 @@ int fltk_plugin() {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.34 2001/02/28 21:19:50 clip Exp $".
+// End of "$Id: Alternative.cxx,v 1.35 2001/07/23 09:50:06 spitzak Exp $".
 //

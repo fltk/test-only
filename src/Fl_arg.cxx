@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.33 2001/03/12 16:15:32 robertk Exp $"
+// "$Id: Fl_arg.cxx,v 1.34 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,11 +26,11 @@
 // OPTIONAL initialization code for a program using fltk.
 // You do not need to call this!  Feel free to make up your own switches.
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/filename.H>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/filename.h>
+#include <fltk/fl_draw.h>
+#include <fltk/x.h>
 #include <ctype.h>
 #include <string.h>
 #include <stdio.h>
@@ -55,9 +55,9 @@ static int match(const char *a, const char *match, int atleast = 1) {
 }
 
 // flags set by previously parsed arguments:
-extern char fl_show_iconic; // in Fl_x.C/Fl_win32.C
-static char arg_called;
-static char return_i;
+extern bool fl_show_iconic; // in Fl_x.C/Fl_win32.C
+static bool arg_called;
+static bool return_i;
 static const char* name;
 static const char* geometry;
 extern Fl_Color fl_bg_switch;	// in fl_options.cxx
@@ -66,7 +66,7 @@ extern const char* fl_startup_theme;
 
 // consume a switch from argv.  Returns number of words eaten, 0 on error:
 int Fl::arg(int argc, char **argv, int &i) {
-  arg_called = 1;
+  arg_called = true;
 
   const char *s = argv[i];
 
@@ -77,11 +77,11 @@ int Fl::arg(int argc, char **argv, int &i) {
   // a program.  Return 0 to indicate that we don't understand the
   // word, but set a flag (return_i) so that args() will return at
   // that point:
-  if (s[0] != '-' || s[1] == '-' || !s[1]) {return_i = 1; return 0;}
+  if (s[0] != '-' || s[1] == '-' || !s[1]) {return_i = true; return 0;}
   s++; // point after the dash
 
   if (match(s, "iconic")) {
-    fl_show_iconic = 1;
+    fl_show_iconic = true;
     i++;
     return 1;
   }
@@ -128,7 +128,7 @@ int Fl::arg(int argc, char **argv, int &i) {
 // report an error if i < argc.
 
 int Fl::args(int argc, char** argv, int& i, int (*cb)(int,char**,int&)) {
-  arg_called = 1;
+  arg_called = true;
   i = 1; // skip argv[0]
   while (i < argc) {
     if (cb && cb(argc,argv,i)) continue;
@@ -341,5 +341,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.33 2001/03/12 16:15:32 robertk Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.34 2001/07/23 09:50:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: CubeMain.cxx,v 1.3 1999/11/07 08:11:51 bill Exp $"
+// "$Id: CubeMain.cxx,v 1.4 2001/07/23 09:50:05 spitzak Exp $"
 //
 // CubeView class definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -24,7 +24,7 @@
 //
 
 #include <config.h>
-#include <FL/Fl.H>
+#include <fltk/Fl.h>
 #include "CubeViewUI.h"
 
 int
@@ -43,5 +43,5 @@ main(int argc, char **argv) {
 
 
 //
-// End of "$Id: CubeMain.cxx,v 1.3 1999/11/07 08:11:51 bill Exp $".
+// End of "$Id: CubeMain.cxx,v 1.4 2001/07/23 09:50:05 spitzak Exp $".
 //

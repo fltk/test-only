@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.19 2001/02/28 21:19:49 clip Exp $"
+// "$Id: factory.cxx,v 1.20 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -31,9 +31,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Menu_Item.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Group.h>
+#include <fltk/Fl_Menu_Item.h>
 #include <string.h>
 #include <stdio.h>
 #if defined(WIN32) && defined(_MSC_VER)
@@ -47,7 +47,7 @@
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Box.H>
+#include <fltk/Fl_Box.h>
 class Fl_Box_Type : public Fl_Widget_Type {
 public:
   virtual const char *type_name() {return "Fl_Box";}
@@ -59,7 +59,7 @@ static Fl_Box_Type Fl_Box_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Button.H>
+#include <fltk/Fl_Button.h>
 static Fl_Menu_Item buttontype_menu[] = {
   {"Normal",0,0,(void*)0},
   {"Toggle",0,0,(void*)FL_TOGGLE_BUTTON},
@@ -78,7 +78,7 @@ static Fl_Button_Type Fl_Button_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Return_Button.H>
+#include <fltk/Fl_Return_Button.h>
 class Fl_Return_Button_Type : public Fl_Button_Type {
 public:
   virtual const char *type_name() {return "Fl_Return_Button";}
@@ -90,7 +90,7 @@ static Fl_Return_Button_Type Fl_Return_Button_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Repeat_Button.H>
+#include <fltk/Fl_Repeat_Button.h>
 class Fl_Repeat_Button_Type : public Fl_Widget_Type {
 public:
   virtual const char *type_name() {return "Fl_Repeat_Button";}
@@ -102,7 +102,7 @@ static Fl_Repeat_Button_Type Fl_Repeat_Button_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Light_Button.H>
+#include <fltk/Fl_Light_Button.h>
 class Fl_Light_Button_Type : public Fl_Button_Type {
 public:
   int is_light_button() const {return 1;}
@@ -115,7 +115,7 @@ static Fl_Light_Button_Type Fl_Light_Button_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Check_Button.H>
+#include <fltk/Fl_Check_Button.h>
 class Fl_Check_Button_Type : public Fl_Button_Type {
 public:
   int is_light_button() const {return 1;}
@@ -128,7 +128,7 @@ static Fl_Check_Button_Type Fl_Check_Button_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Round_Button.H>
+#include <fltk/Fl_Round_Button.h>
 class Fl_Round_Button_Type : public Fl_Button_Type {
 public:
   int is_light_button() const {return 1;}
@@ -144,7 +144,7 @@ static Fl_Round_Button_Type Fl_Round_Button_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Counter.H>
+#include <fltk/Fl_Counter.h>
 static Fl_Menu_Item counter_type_menu[] = {
   {"Normal",0,0,(void*)FL_NORMAL_COUNTER},
   {"Simple",0,0,(void*)FL_SIMPLE_COUNTER},
@@ -163,7 +163,7 @@ static Fl_Counter_Type Fl_Counter_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Input.H>
+#include <fltk/Fl_Input.h>
 static Fl_Menu_Item input_type_menu[] = {
   {"Normal",0,0,(void*)FL_NORMAL_INPUT},
   {"Multiline",0,0,(void*)FL_MULTILINE_INPUT},
@@ -189,7 +189,7 @@ static Fl_Input_Type Fl_Input_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Clock.H>
+#include <fltk/Fl_Clock.h>
 class Fl_Clock_Type : public Fl_Widget_Type {
 public:
   virtual const char *type_name() {return "Fl_Clock";}
@@ -201,7 +201,7 @@ static Fl_Clock_Type Fl_Clock_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Adjuster.H>
+#include <fltk/Fl_Adjuster.h>
 class Fl_Adjuster_Type : public Fl_Widget_Type {
   int is_valuator() const {return 1;}
   int is_adjuster() const {return 1;}
@@ -215,7 +215,7 @@ static Fl_Adjuster_Type Fl_Adjuster_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Dial.H>
+#include <fltk/Fl_Dial.h>
 static Fl_Menu_Item dial_type_menu[] = {
   {"Dot",0,0,(void*)0},
   {"Line",0,0,(void*)FL_LINE_DIAL},
@@ -234,7 +234,7 @@ static Fl_Dial_Type Fl_Dial_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Roller.H>
+#include <fltk/Fl_Roller.h>
 static Fl_Menu_Item roller_type_menu[] = {
   {"Vertical",0,0,(void*)0},
   {"Horizontal",0,0,(void*)FL_HORIZONTAL},
@@ -252,7 +252,7 @@ static Fl_Roller_Type Fl_Roller_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Scrollbar.H>
+#include <fltk/Fl_Scrollbar.h>
 static Fl_Menu_Item slider_type_menu[] = {
   {"Vertical",0,0,(void*)FL_VERT_SLIDER},
   {"Horizontal",0,0,(void*)FL_HOR_SLIDER},
@@ -290,7 +290,7 @@ static Fl_Scrollbar_Type Fl_Scrollbar_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Output.H>
+#include <fltk/Fl_Output.h>
 static Fl_Menu_Item output_type_menu[] = {
   {"Normal",0,0,(void*)FL_NORMAL_INPUT},
   {"Multiline",0,0,(void*)FL_MULTILINE_INPUT},
@@ -310,7 +310,7 @@ static Fl_Output_Type Fl_Output_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Value_Input.H>
+#include <fltk/Fl_Value_Input.h>
 class Fl_Value_Input_Type : public Fl_Widget_Type {
 public:
   int is_value_input() const {return 1;}
@@ -326,7 +326,7 @@ static Fl_Value_Input_Type Fl_Value_Input_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Value_Output.H>
+#include <fltk/Fl_Value_Output.h>
 class Fl_Value_Output_Type : public Fl_Widget_Type {
 public:
   int is_value_output() const {return 1;}
@@ -342,7 +342,7 @@ static Fl_Value_Output_Type Fl_Value_Output_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Value_Slider.H>
+#include <fltk/Fl_Value_Slider.h>
 class Fl_Value_Slider_Type : public Fl_Slider_Type {
 public:
   int is_value_slider() const {return 1;}
@@ -488,11 +488,11 @@ Fl_Type *Fl_Type_make(const char *tn) {
   return Fl_Type_make(tn, New_Menu);
 }
 
-#include <FL/Fl_Browser.H>
-#include <FL/Fl_Input_Browser.H>
+#include <fltk/Fl_Browser.h>
+#include <fltk/Fl_Input_Browser.h>
 ////////////////////////////////////////////////////////////////
 
-// Since I have included all the .H files, do this table here:
+// Since I have included all the .h files, do this table here:
 // This table is only used to read fdesign files:
 
 struct symbol {const char *name; int value;};
@@ -634,5 +634,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.19 2001/02/28 21:19:49 clip Exp $".
+// End of "$Id: factory.cxx,v 1.20 2001/07/23 09:50:04 spitzak Exp $".
 //

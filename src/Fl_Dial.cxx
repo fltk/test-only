@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.33 2001/02/20 06:59:49 spitzak Exp $"
+// "$Id: Fl_Dial.cxx,v 1.34 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,11 +23,11 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Dial.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Dial.h>
+#include <fltk/fl_draw.h>
 #include <stdlib.h>
-#include <FL/math.h>
+#include <fltk/math.h>
 
 // All angles are measured with 0 to the right and counter-clockwise
 
@@ -87,7 +87,9 @@ int Fl_Dial::handle(int event) {
   box()->inset(X,Y,W,H);
   switch (event) {
   case FL_PUSH:
+#ifdef WINDOWS_COMPATABILITY
     take_focus();
+#endif
     handle_push();
   case FL_DRAG: {
     int mx = Fl::event_x()-X-W/2;
@@ -120,16 +122,16 @@ static void revert(Fl_Style* s) {
   s->selection_color = FL_DARK2;
   s->highlight_color = FL_BLACK;
 }
-
-static Fl_Named_Style* style = new Fl_Named_Style("Dial", revert, &style);
+static Fl_Named_Style style("Dial", revert, &Fl_Dial::default_style);
+Fl_Named_Style* Fl_Dial::default_style = &::style;
 
 Fl_Dial::Fl_Dial(int x, int y, int w, int h, const char* l)
   : Fl_Valuator(x, y, w, h, l) {
-  style(::style);
+  style(default_style);
   a1 = 45;
   a2 = 315;
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.33 2001/02/20 06:59:49 spitzak Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.34 2001/07/23 09:50:04 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.26 2001/02/20 19:58:49 robertk Exp $"
+// "$Id: fl_color_win32.cxx,v 1.27 2001/07/23 09:50:05 spitzak Exp $"
 //
 // WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 // This file does not compile independently, it is included by fl_color.cxx
 
 #include <config.h>
-#include <FL/win32.H>
+#include <fltk/win32.h>
 #include <stdio.h>
 
 // The current color:
@@ -175,5 +175,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.26 2001/02/20 19:58:49 robertk Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.27 2001/07/23 09:50:05 spitzak Exp $".
 //

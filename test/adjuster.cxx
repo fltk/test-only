@@ -1,5 +1,5 @@
 //
-// "$Id: adjuster.cxx,v 1.4 1999/01/07 19:17:48 mike Exp $"
+// "$Id: adjuster.cxx,v 1.5 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Adjuster test program for the Fast Light Tool Kit (FLTK).
 //
@@ -24,10 +24,10 @@
 //
 
 #include <stdlib.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Adjuster.H>
-#include <FL/Fl_Box.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Adjuster.h>
+#include <fltk/Fl_Box.h>
 
 void adjcb(Fl_Widget *o, void *v) {
   Fl_Adjuster *a = (Fl_Adjuster*)o;
@@ -60,5 +60,5 @@ int main(int, char ** argv) {
 }
 
 //
-// End of "$Id: adjuster.cxx,v 1.4 1999/01/07 19:17:48 mike Exp $".
+// End of "$Id: adjuster.cxx,v 1.5 2001/07/23 09:50:05 spitzak Exp $".
 //

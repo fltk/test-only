@@ -1,5 +1,5 @@
 //
-// "$Id: scroll.cxx,v 1.15 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: scroll.cxx,v 1.16 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Fl_Scroll test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,16 +23,16 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Scroll.H>
-#include <FL/Fl_Toggle_Button.H>
-#include <FL/Fl_Choice.H>
-#include <FL/Fl_Box.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Double_Window.h>
+#include <fltk/Fl_Scroll.h>
+#include <fltk/Fl_Toggle_Button.h>
+#include <fltk/Fl_Choice.h>
+#include <fltk/Fl_Box.h>
 #include <string.h>
 #include <stdio.h>
-#include <FL/fl_draw.H>
-#include <FL/math.h>
+#include <fltk/fl_draw.h>
+#include <fltk/math.h>
 
 class Drawing : public Fl_Widget {
   void draw();
@@ -147,5 +147,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: scroll.cxx,v 1.15 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: scroll.cxx,v 1.16 2001/07/23 09:50:06 spitzak Exp $".
 //

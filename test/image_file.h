@@ -2,16 +2,16 @@
 
 #ifndef image_file_h
 #define image_file_h
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
 extern Fl_Window *window;
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Value_Slider.H>
+#include <fltk/Fl_Box.h>
+#include <fltk/Fl_Value_Slider.h>
 extern Fl_Value_Slider *slider;
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Bitmap.H>
+#include <fltk/Fl_Button.h>
+#include <fltk/Fl_Bitmap.h>
 extern Fl_Window *browser_window;
-#include <FL/Fl_Browser.H>
+#include <fltk/Fl_Browser.h>
 extern Fl_Browser *browser;
 extern Fl_Window *image_window;
 extern Fl_Box *image_box;

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.93 2001/04/06 19:46:13 robertk Exp $"
+# "$Id: Makefile,v 1.94 2001/07/23 09:50:05 spitzak Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -31,6 +31,7 @@ CPPFILES = \
 	fl_bmp.cxx \
 	Fl_Browser.cxx \
 	Fl_Box.cxx \
+	Fl_Boxtype.cxx \
 	Fl_Button.cxx \
 	Fl_Check_Button.cxx \
 	Fl_Choice.cxx \
@@ -103,6 +104,7 @@ CPPFILES = \
 	Fl_key_name.cxx \
 	Fl_lock.cxx \
 	Fl_own_colormap.cxx \
+	Fl_startup.cxx \
 	Fl_visual.cxx \
 	filename_absolute.cxx \
 	filename_expand.cxx \
@@ -114,7 +116,6 @@ CPPFILES = \
 	fl_arc.cxx \
 	fl_arci.cxx \
 	fl_ask.cxx \
-	fl_boxtype.cxx \
 	fl_clip.cxx \
 	fl_color.cxx \
 	fl_cursor.cxx \
@@ -143,10 +144,8 @@ CPPFILES = \
 	fl_shadow_box.cxx \
 	fl_show_colormap.cxx \
 	fl_symbols.cxx \
-	fl_sysinfo.cxx \
 	fl_vertex.cxx \
-	fl_xpm.cxx \
-	fl_options.cxx
+	fl_xpm.cxx
 
 CFILES = \
 	scandir.c \
@@ -156,7 +155,6 @@ CFILES = \
 	conf_endtrim.c \
 	conf_get.c \
 	conf_keys.c \
-	conf_strcasecmp.c \
 	conf_strcnt.c \
 	conf_list_free.c \
 	conf_util.c \
@@ -214,7 +212,7 @@ DSONAME = $(DSOLIBNAME)$(DSOEXT)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
-all: static programs
+all: $(BUILDTARGETS)
 
 static: $(LIBRARY)$(LIBEXT)
 
@@ -224,18 +222,21 @@ programs:
 
 $(LIBRARY).a: $(OBJECTS) fl_call_main.o
 	@rm -f $@
-	$(LIBCOMMAND) $@ $(OBJECTS) fl_call_main.o
-	$(RANLIB) $@
+	@echo $(LIBCOMMAND) $@ ...
+	@$(LIBCOMMAND) $@ $(OBJECTS) fl_call_main.o
+	@$(RANLIB) $@
 
 $(DSO).so.2 $(DSO).sl.2: $(OBJECTS:.o=.shared.o)
-	rm -f $@
-	$(DSOCOMMAND) $(DSONAME) $(OBJECTS:.o=.shared.o) $(DSOLIBS)
+	@rm -f $@
+	@echo $(DSOCOMMAND) $(DSONAME) ...
+	@$(DSOCOMMAND) $(DSONAME) $(OBJECTS:.o=.shared.o) $(DSOLIBS)
 	@mv $(DSONAME) $@
 
 DLLIMPORTNAME = $(LIBNAME).2.dll$(LIBEXT)
 $(DSO).2.dll: $(OBJECTS:.o=.shared.o)
 	@-rm -f $@
-	$(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o) $(DSOLIBS)
+	@echo $(DSOCOMMAND) $@ ...
+	@$(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o) $(DSOLIBS)
 	-mv $@.import ../lib/$(DLLIMPORTNAME)
 
 clean :
@@ -249,21 +250,16 @@ include makedepend
 
 ################################################################
 
-install: install_static install_shared
+install: $(INSTALLTARGETS)
 
 install_headers:
 	@echo "Installing include files..."
 	@mkdir -p $(includedir)
-	@rm -rf $(includedir)/FL $(includedir)/Fl
-	@mkdir -p $(includedir)/FL
-	@cp ../FL/*.[Hh]  $(includedir)/FL
-	@-chmod 755 $(includedir)/FL
-	@-chmod 644 $(includedir)/FL/*
-	@if [ ! "$(SYSTYPE)" = "WIN32" ]; then for file in $(includedir)/FL/*.H; do\
-		newfile="`basename $$file H`h";\
-		ln -s $$file $(includedir)/FL/$$newfile;\
-	done; fi
-	@if [ ! "$(SYSTYPE)" = "WIN32" ]; then ln -sf FL $(includedir)/Fl; fi
+	@rm -rf $(includedir)/fltk $(includedir)/fltk
+	@mkdir -p $(includedir)/fltk
+	@cp ../fltk/*.h  $(includedir)/fltk
+	@-chmod 755 $(includedir)/fltk
+	@-chmod 644 $(includedir)/fltk/*
 
 install_fltk_config:
 	@echo "Installing fltk-config..."
@@ -291,5 +287,5 @@ install_shared: shared
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.93 2001/04/06 19:46:13 robertk Exp $".
+# End of "$Id: Makefile,v 1.94 2001/07/23 09:50:05 spitzak Exp $".
 #

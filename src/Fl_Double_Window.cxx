@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.cxx,v 1.19 2000/05/02 06:09:14 carl Exp $"
+// "$Id: Fl_Double_Window.cxx,v 1.20 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Double-buffered window code for the Fast Light Tool Kit (FLTK).
 //
@@ -24,10 +24,10 @@
 //
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/x.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Double_Window.h>
+#include <fltk/x.h>
+#include <fltk/fl_draw.h>
 
 // On systems that support double buffering "naturally" the base
 // Fl_Window class will probably do double-buffer and this subclass
@@ -37,12 +37,12 @@
 
 #include <X11/extensions/Xdbe.h>
 
-static int use_xdbe;
+static bool use_xdbe;
 
-static int can_xdbe() {
-  static int tried;
+static bool can_xdbe() {
+  static bool tried;
   if (!tried) {
-    tried = 1;
+    tried = true;
     int event_base, error_base;
     if (!XdbeQueryExtension(fl_display, &event_base, &error_base)) return 0;
     Drawable root = RootWindow(fl_display,fl_screen);
@@ -51,7 +51,7 @@ static int can_xdbe() {
     if (!a) return 0;
     for (int j = 0; j < a->count; j++)
       if (a->visinfo[j].visual == fl_visual->visualid
-	  /*&& a->visinfo[j].perflevel > 0*/) {use_xdbe = 1; break;}
+	  /*&& a->visinfo[j].perflevel > 0*/) {use_xdbe = true; break;}
     XdbeFreeVisualInfo(a);
   }
   return use_xdbe;
@@ -70,7 +70,7 @@ void Fl_Double_Window::create() {
 #ifdef WIN32
 
 // Code used to switch output to an off-screen window.  See macros in
-// win32.H which save the old state in local variables.
+// win32.h which save the old state in local variables.
 
 HDC fl_makeDC(HBITMAP bitmap) {
   HDC new_gc = CreateCompatibleDC(fl_gc);
@@ -205,5 +205,5 @@ Fl_Double_Window::~Fl_Double_Window() {
 }
 
 //
-// End of "$Id: Fl_Double_Window.cxx,v 1.19 2000/05/02 06:09:14 carl Exp $".
+// End of "$Id: Fl_Double_Window.cxx,v 1.20 2001/07/23 09:50:04 spitzak Exp $".
 //

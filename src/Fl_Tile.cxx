@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tile.cxx,v 1.16 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: Fl_Tile.cxx,v 1.17 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Tile widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,9 +27,9 @@
 // The size of the first child determines where the resize border is.
 // The resizebox is used to limit where the border can be dragged to.
 
-#include <FL/Fl.H>
-#include <FL/Fl_Tile.H>
-#include <FL/Fl_Window.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Tile.h>
+#include <fltk/Fl_Window.h>
 #include <stdlib.h>
 
 // Drag the edges that were initially at oldx,oldy to newx,newy:
@@ -195,5 +195,5 @@ int Fl_Tile::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Tile.cxx,v 1.16 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: Fl_Tile.cxx,v 1.17 2001/07/23 09:50:05 spitzak Exp $".
 //

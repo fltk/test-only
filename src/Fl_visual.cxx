@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_visual.cxx,v 1.11 2000/05/02 06:09:14 carl Exp $"
+// "$Id: Fl_visual.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Visual support for the Fast Light Tool Kit (FLTK).
 //
@@ -26,8 +26,8 @@
 // Set the default visual according to passed switches:
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/x.H>
+#include <fltk/Fl.h>
+#include <fltk/x.h>
 
 #ifdef WIN32
 int Fl::visual(int flags) {
@@ -108,5 +108,5 @@ int Fl::visual(int flags) {
 #endif
 
 //
-// End of "$Id: Fl_visual.cxx,v 1.11 2000/05/02 06:09:14 carl Exp $".
+// End of "$Id: Fl_visual.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $".
 //

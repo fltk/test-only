@@ -2,11 +2,11 @@
 
 #ifndef fast_slow_h
 #define fast_slow_h
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Slider.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Slider.h>
 extern Fl_Slider *control;
 extern Fl_Slider *fast;
 extern Fl_Slider *slow;
-#include <FL/Fl_Box.H>
+#include <fltk/Fl_Box.h>
 #endif

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileBrowser.cxx,v 1.11 2001/02/21 06:15:44 clip Exp $"
+// "$Id: Fl_FileBrowser.cxx,v 1.12 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Fl_FileBrowser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -35,13 +35,13 @@
 // Include necessary header files...
 //
 
-#include <FL/Fl_FileBrowser.H>
-#include <FL/fl_draw.H>
-#include <FL/filename.H>
-#include <stdio.h>
+#include <fltk/Fl_FileBrowser.h>
+#include <fltk/fl_draw.h>
+#include <fltk/filename.h>
+#include <fltk/vsnprintf.h>
 #include <stdlib.h>
-#include <string.h>
 #include <config.h>
+#include <string.h>
 
 #if defined(WIN32)
 #  include <windows.h>
@@ -53,7 +53,6 @@
 #define  INCL_DOSMISC
 #include <os2.h>
 #endif /* __EMX__ */
-
 
 //
 // FL_BLINE definition from "Fl_Browser.cxx"...
@@ -443,5 +442,5 @@ Fl_FileBrowser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_FileBrowser.cxx,v 1.11 2001/02/21 06:15:44 clip Exp $".
+// End of "$Id: Fl_FileBrowser.cxx,v 1.12 2001/07/23 09:50:04 spitzak Exp $".
 //

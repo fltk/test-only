@@ -1,5 +1,5 @@
 //
-// "$Id: fl_shadow_box.cxx,v 1.12 2001/01/02 00:20:28 clip Exp $"
+// "$Id: fl_shadow_box.cxx,v 1.13 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Shadow box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -23,24 +23,23 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl_Boxtype.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Widget.H>
+#include <fltk/Fl_Boxtype.h>
+#include <fltk/fl_draw.h>
 
 #define BW 3
 
-void Fl_Shadow_Box::draw(const Fl_Widget* widget,
-			 int x, int y, int w, int h, Fl_Flags f) const
+void Fl_Shadow_Box::draw(
+	int x, int y, int w, int h, Fl_Color color, Fl_Flags f) const
 {
   w-=BW; h-=BW;
   if (!(f & FL_FRAME_ONLY)) {
-    fl_color(widget->get_box_color(f));
+    fl_color(color);
     fl_rectf(x+1,y+1,w-2,h-2);
   }
   fl_color(FL_DARK3);
   fl_rectf(x+BW, y+h,  w, BW);
   fl_rectf(x+w,  y+BW, BW,  h);
-  fl_color(widget->get_glyph_color(f));
+  fl_color(FL_BLACK); //widget->get_glyph_color(f)
   fl_rect(x,y,w,h);
 }
 Fl_Shadow_Box::Fl_Shadow_Box(const char* n) : Fl_Boxtype_(n) {
@@ -50,5 +49,5 @@ Fl_Shadow_Box::Fl_Shadow_Box(const char* n) : Fl_Boxtype_(n) {
 const Fl_Shadow_Box fl_shadow_box(0);
 
 //
-// End of "$Id: fl_shadow_box.cxx,v 1.12 2001/01/02 00:20:28 clip Exp $".
+// End of "$Id: fl_shadow_box.cxx,v 1.13 2001/07/23 09:50:05 spitzak Exp $".
 //

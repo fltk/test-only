@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_key_name.cxx,v 1.1 2000/08/20 04:31:38 spitzak Exp $"
+// "$Id: Fl_key_name.cxx,v 1.2 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Turn a fltk (X) keysym + fltk shift flags into a human-readable string.
 //
@@ -23,13 +23,13 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Widget.h>
+#include <fltk/fl_draw.h>
 #include <ctype.h>
 #include <string.h>
 #ifndef WIN32
-#include <FL/x.H>
+#include <fltk/x.h>
 #endif
 
 #ifdef WIN32 // if not X
@@ -118,5 +118,5 @@ const char* Fl::key_name(int shortcut) {
 }
 
 //
-// End of "$Id: Fl_key_name.cxx,v 1.1 2000/08/20 04:31:38 spitzak Exp $"
+// End of "$Id: Fl_key_name.cxx,v 1.2 2001/07/23 09:50:05 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.33 2001/03/22 20:18:27 robertk Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.34 2001/07/23 09:50:05 spitzak Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -26,12 +26,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Menu_.H>
-#include <FL/Fl_Item.H> // for FL_TOGGLE_ITEM, FL_RADIO_ITEM
-
-static const int _default_column[1] = { 0 };
-const int *Fl_Menu_::one_column_ = _default_column;
+#include <fltk/Fl.h>
+#include <fltk/Fl_Menu_.h>
+#include <fltk/Fl_Item.h> // for FL_TOGGLE_ITEM, FL_RADIO_ITEM
 
 ////////////////////////////////////////////////////////////////
 
@@ -67,16 +64,13 @@ Fl_Widget* Fl_List::child(const Fl_Menu_* menu, const int* indexes,int level) {
   }
 }
 
-void Fl_List::flags_changed(const Fl_Menu_*, Fl_Widget* w) {}
+void Fl_List::flags_changed(const Fl_Menu_*, Fl_Widget*) {}
 
-static Fl_List default_list; // this should be local!
+static Fl_List default_list;
 
 Fl_Menu_::Fl_Menu_(int x,int y,int w, int h,const char* l)
-  : Fl_Group(x,y,w,h,l), list_(&default_list) {
-  item_ = 0;
+  : Fl_Group(x,y,w,h,l), list_(&default_list), item_(0) {
   end();
-  mcolumns = one_column_;
-  column_char_ = '|';
 }
 
 int Fl_Menu_::children(const int* indexes, int level) const {
@@ -100,16 +94,16 @@ Fl_Widget* Fl_Menu_::child(int n) const {
 FL_API int fl_dont_execute = 0; // hack for fluid
 
 // Do the callback for the current item:
-void Fl_Menu_::execute() {
+void Fl_Menu_::execute(Fl_Widget* widget) {
+  item(widget);
   if (fl_dont_execute) return;
-  Fl_Widget* w = item();
-  if (!w) {do_callback(); return;}
-  if (w->type() == FL_TOGGLE_ITEM) {
-    if (w->value()) w->clear_value(); else w->set_value();
-  } else if (w->type() == FL_RADIO_ITEM) {
-    w->set_value();
-    Fl_Group* g = w->parent();
-    int i = g->find(w);
+  if (!widget) {do_callback(); return;}
+  if (widget->type() == FL_TOGGLE_ITEM) {
+    if (widget->value()) widget->clear_value(); else widget->set_value();
+  } else if (widget->type() == FL_RADIO_ITEM) {
+    widget->set_value();
+    Fl_Group* g = widget->parent();
+    int i = g->find(widget);
     int j;
     for (j = i-1; j >= 0; j--) {
       Fl_Widget* o = g->child(j);
@@ -122,81 +116,106 @@ void Fl_Menu_::execute() {
       o->clear_value();
     }
   }
-  // If the item's data is zero, use the menus data:
-  void* data = w->user_data(); if (!data) data = user_data();
-  // If the item's callback is not set, use the menu's callback:
-  if (w->callback() == Fl_Widget::default_callback) {
-    if (!data) data = w;
-    w = this;
-  }
-  w->do_callback(w, data);
-}
 
-int Fl_Menu_::goto_item(const int* indexes, int level) {
-  // The current item is remembered in the focus index from the Fl_Group
-  // at each level.  This is used by popup menus to pop up at the same
-  // item next time.
-  // If an Fl_List is used and it does not return Fl_Groups then the
-  // position is not remembered. For this reason Fl_Browser uses it's
-  // own storage of the indexes and replaces this function.
-  focus(indexes[0]);
-  for (int l = 0; l <= level; l++) {
-    item(child(indexes, l));
-    if (!item() || !item()->is_group()) continue;
-    Fl_Group* group = (Fl_Group*)item();
-    group->focus(l < level ? indexes[l+1] : -1);
-  }
-  // The return value is for subclasses that check to see if the current
-  // item has changed.
-  return 1;
+  Fl_Callback* callback = widget->callback();
+
+  // If the item's callback is not set, use the menu's callback:
+  if (callback == Fl_Widget::default_callback) callback = this->callback();
+
+  // Notice that "this" is passed as the widget. This appears to
+  // be necessary for back compatability. You can use item() to
+  // get the actual widget.
+  callback(this, widget->user_data());
 }
 
 ////////////////////////////////////////////////////////////////
+//
+// The current item is remembered in the focus index from the Fl_Group
+// at each level.  This is used by popup menus to pop up at the same
+// item next time.
+//
+// Storing it this way allows widgets to be inserted and deleted and
+// the currently selected item does not change (because Fl_Group updates
+// the focus index). But if an Fl_List is used and it does not return
+// a different Fl_Group for each level in the hierarchy, the focus
+// indexes will write over each other. Fl_Browser currently uses it's
+// own code (with the insert/delete broken) to get around this.
+//
+// item() is set to the located widget.
 
-// recursive innards of handle_shortcut:
-static Fl_Widget* shortcut_search(Fl_Group* g) {
-  Fl_Widget* ret = 0;
-  for (int i = 0; i < g->children(); i++) {
-    Fl_Widget* w = g->child(i);
-    if (!w->takesevents()) continue;
-    if (Fl::test_shortcut(w->shortcut())) {g->focus(i); return w;}
-    if (!ret && w->is_group() /*&& IS_OPEN*/) {
-      ret = shortcut_search((Fl_Group*)w);
-      if (ret) g->focus(i);
-    }
+int Fl_Menu_::goto_item(const int* indexes, int level) {
+  int i = indexes[0];
+  bool ret = false;
+  if (focus() != i) {focus(i); ret = true;}
+  item(child(i));
+  int j = 1;
+  while (item() && item()->is_group()) {
+    Fl_Group* group = (Fl_Group*)item();
+    int i = (j > level) ? -1 : indexes[j++];
+    if (group->focus() != i) {group->focus(i); ret = true;}
+    if (i < 0 || i >= group->children()) break;
+    item(group->child(i));
   }
   return ret;
 }
 
+#if 0
+// Before I restored the item_ field, I used this method to go to the
+// current item by using the focus_ pointers to track down to it.
+Fl_Widget* Fl_Menu_::get_item() const {
+  int i = focus();
+  Fl_Widget* item = child(i);
+  while (item && item->is_group()) {
+    Fl_Group* group = (Fl_Group*)item;
+    int i = group->focus();
+    if (i < 0 || i >= group->children()) break;
+    item = group->child(i);
+  }
+  return item;
+}
+#endif
+
+////////////////////////////////////////////////////////////////
+
+// If an Fl_List is used, the search for shortcut keys will only search
+// the top level items, and children where a real Fl_Group with children
+// widgets is returned. That is, shortcuts on nested items will not be
+// found from Fl_List (except for ones that return real Fl_Groups, such
+// as by copying another Fl_Menu_).
+//
+// For most uses of Fl_List I think this is ok. It also avoids enumerating
+// all the items that an Fl_List can return.
+
+// recursive innards of handle_shortcut:
+static Fl_Widget* shortcut_search(Fl_Group* g) {
+  Fl_Widget* widget = 0;
+  for (int i = 0; i < g->children(); i++) {
+    Fl_Widget* item = g->child(i);
+    if (!item->takesevents()) continue;
+    if (Fl::test_shortcut(item->shortcut())) {g->focus(i); return item;}
+    if (!widget && item->is_group() /*&& IS_OPEN*/) {
+      widget = shortcut_search((Fl_Group*)item);
+      if (widget) g->focus(i);
+    }
+  }
+  return widget;
+}
+
 int Fl_Menu_::handle_shortcut() {
-  Fl_Widget* widget = shortcut_search(this);
-  if (widget) {item(widget); execute(); return 1;}
+  Fl_Widget* widget = 0;
+  for (int i = 0; i < children(); i++) {
+    Fl_Widget* item = child(i);
+    if (!item->takesevents()) continue;
+    if (Fl::test_shortcut(item->shortcut())) {focus(i); widget=item; break;}
+    if (!widget && item->is_group() /*&& IS_OPEN*/) {
+      widget = shortcut_search((Fl_Group*)item);
+      if (widget) focus(i);
+    }
+  }
+  if (widget) {execute(widget); return 1;}
   return 0;
 }
 
-void Fl_Menu_::column_widths(const int *w)
-{
-	mcolumns = w;
-  	for(int i = 0; i < children(); i++) {
-	  Fl_Item *pItem = dynamic_cast<Fl_Item *>(child(i));
-	  if(pItem) {
-	    pItem->column_widths(w);		  
-	  }
-	}
-}
-
-void Fl_Menu_::column_char(char c)
-{
-	column_char_ = c;
-  	for(int i = 0; i < children(); i++) {
-	  Fl_Item *pItem = dynamic_cast<Fl_Item *>(child(i));
-	  if(pItem) {
-	    pItem->column_char(c);		  
-	  }
-	}
-}
-
-
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.33 2001/03/22 20:18:27 robertk Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.34 2001/07/23 09:50:05 spitzak Exp $"
 //

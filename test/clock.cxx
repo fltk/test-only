@@ -1,5 +1,5 @@
 //
-// "$Id: clock.cxx,v 1.9 2001/03/08 07:39:06 clip Exp $"
+// "$Id: clock.cxx,v 1.10 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Clock test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,12 +23,12 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Shaped_Window.H>
-#include <FL/Fl_Round_Clock.H>
-#include <FL/Fl_Menu_Button.H>
-#include <FL/Fl_Item.H>
-#include <FL/fl_ask.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Shaped_Window.h>
+#include <fltk/Fl_Round_Clock.h>
+#include <fltk/Fl_Menu_Button.h>
+#include <fltk/Fl_Item.h>
+#include <fltk/fl_ask.h>
 #include <stdlib.h>
 
 #include "circle.xbm" // bitmap mask for window shape
@@ -85,5 +85,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: clock.cxx,v 1.9 2001/03/08 07:39:06 clip Exp $".
+// End of "$Id: clock.cxx,v 1.10 2001/07/23 09:50:05 spitzak Exp $".
 //

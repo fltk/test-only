@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.cxx,v 1.11 2001/03/14 18:02:49 spitzak Exp $"
+// "$Id: Fl_Gl_Choice.cxx,v 1.12 2001/07/23 09:50:03 spitzak Exp $"
 //
 // OpenGL visual selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,11 +26,10 @@
 #include <config.h>
 #if HAVE_GL
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/x.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include "Fl_Gl_Choice.h"
 #include <stdlib.h>
-#include "Fl_Gl_Choice.H"
 
 static Fl_Gl_Choice* first;
 
@@ -119,7 +118,7 @@ Fl_Gl_Choice* Fl_Gl_Choice::find(int mode) {
   XVisualInfo* vis = glXChooseVisual(fl_display, fl_screen, list);
   if (!vis) {
 # if defined(GLX_VERSION_1_1) && defined(GLX_SGIS_multisample)
-    if (mode&FL_MULTISAMPLE) return find(mode&~FL_MULTISAMPLE,0);
+    if (mode&FL_MULTISAMPLE) return find(mode&~FL_MULTISAMPLE);
 # endif
     return 0;
   }
@@ -153,7 +152,7 @@ static GLContext first_context;
 
 #ifdef WIN32
 
-GLContext fl_create_gl_context(Fl_Window* window, const Fl_Gl_Choice* g, int layer) {
+GLContext fl_create_gl_context(const Fl_Window* window, const Fl_Gl_Choice* g, int layer) {
   Fl_X* i = Fl_X::i(window);
   HDC hdc = i->private_dc;
   if (!hdc) {
@@ -225,5 +224,5 @@ void fl_delete_gl_context(GLContext context) {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.cxx,v 1.11 2001/03/14 18:02:49 spitzak Exp $".
+// End of "$Id: Fl_Gl_Choice.cxx,v 1.12 2001/07/23 09:50:03 spitzak Exp $".
 //

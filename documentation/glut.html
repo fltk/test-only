@@ -5,10 +5,10 @@
 with FLTK. 
 <H2>Using the GLUT Compatibility Header File</H2>
  You should be able to compile existing GLUT source code by including <TT>
-&lt;FL/glut.H&gt;</TT> instead of <TT>&lt;GL/glut.h&gt;</TT>.  This can be done by 
+&lt;fltk/glut.h&gt;</TT> instead of <TT>&lt;GL/glut.h&gt;</TT>.  This can be done by 
 editing the source, by changing the <TT>-I</TT> switches to the 
 compiler, or by providing a symbolic link from <TT>GL/glut.h</TT> to <TT>
-FL/glut.H</TT>. 
+fltk/glut.h</TT>. 
 <P><I>All files calling GLUT procedures must be compiled with C++</I>. 
  You may have to alter them slightly to get them to compile without 
 warnings, and you may have to rename them to get make to use the C++ 
@@ -18,7 +18,7 @@ functions that FLTK does not emulate (<TT>glutExtensionsSupported()</TT>
 , <TT>glutWire*()</TT>, <TT>glutSolid*()</TT>, and <TT>glutStroke*()</TT>
 ), you will also have to link with the GLUT library (<I>after</I> the 
 FLTK library!) </P>
-<P>Most of <TT>FL/glut.H</TT> is inline functions.  You should take a 
+<P>Most of <TT>fltk/glut.h</TT> is inline functions.  You should take a 
 look at it (and maybe at <TT>test/glpuzzle.cxx</TT> in the FLTK source) if 
 you are having trouble porting your GLUT program. </P>
 <P>This has been tested with most of the demo programs that come with 
@@ -107,7 +107,7 @@ loop calling <TT>Fl::wait()</TT> to run  the program. </LI>
 <H3>Include Files</H3>
 <UL>
 <PRE>
-#include &lt;FL/glut.H&gt;
+#include &lt;fltk/glut.h&gt;
 </PRE>
 </UL>
 <H3>Description</H3>

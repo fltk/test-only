@@ -2,24 +2,24 @@
 
 #ifndef widget_panel_h
 #define widget_panel_h
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Tabs.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Tabs.h>
 extern void propagate_tabs(Fl_Tabs*, void*);
 extern Fl_Tabs *panel_tabs;
-#include <FL/Fl_Group.H>
+#include <fltk/Fl_Group.h>
 extern void propagate_group(Fl_Group*, void*);
-#include <FL/Fl_Input.H>
+#include <fltk/Fl_Input.h>
 extern void label_cb(Fl_Input*, void*);
-#include <FL/Fl_Box.H>
+#include <fltk/Fl_Box.h>
 extern Fl_Box *image_label;
-#include <FL/Fl_Button.H>
+#include <fltk/Fl_Button.h>
 extern void image_cb(Fl_Button*, void*);
-#include <FL/Fl_Light_Button.H>
+#include <fltk/Fl_Light_Button.h>
 extern void image_inlined_cb(Fl_Light_Button*, void*);
 extern Fl_Light_Button *include_image_button;
 extern void align_cb(Fl_Button*, void*);
-#include <FL/Fl_Value_Input.H>
+#include <fltk/Fl_Value_Input.h>
 extern void x_cb(Fl_Value_Input*, void*);
 extern Fl_Value_Input *widget_x;
 extern void y_cb(Fl_Value_Input*, void*);
@@ -46,7 +46,7 @@ extern void hotspot_cb(Fl_Light_Button*, void*);
 #include "Shortcut_Button.h"
 extern void shortcut_in_cb(Shortcut_Button*, void*);
 extern void tooltip_cb(Fl_Input*, void*);
-#include <FL/Fl_Choice.H>
+#include <fltk/Fl_Choice.h>
 extern Fl_Menu_Item boxmenu[];
 extern void box_cb(Fl_Choice*, void*);
 extern void text_box_cb(Fl_Choice*, void*);
@@ -82,7 +82,7 @@ extern void when_button_cb(Fl_Light_Button*, void*);
 extern int overlays_invisible;
 extern void overlay_cb(Fl_Light_Button*, void*);
 extern Fl_Light_Button *overlaybutton;
-#include <FL/Fl_Return_Button.H>
+#include <fltk/Fl_Return_Button.h>
 extern void ok_cb(Fl_Return_Button*, void*);
 extern void cancel_cb(Fl_Button*, void*);
 Fl_Window* make_widget_panel();

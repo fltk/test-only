@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Output.cxx,v 1.28 2000/08/20 04:31:38 spitzak Exp $"
+// "$Id: Fl_Output.cxx,v 1.29 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -25,23 +25,32 @@
 
 // This subclass of Fl_Input_ does not allow user to edit the output.
 // This is done by making the replace() function refuse all changes.
+// Also handle() has been changed so the user must click or tab to
+// it to get the focus.
 
-#include <FL/Fl.H>
-#include <FL/Fl_Output.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Output.h>
+#include <fltk/fl_draw.h>
 
 int Fl_Output::replace(int, int, const char*, int) {
   return 0;
 }
 
-static Fl_Named_Style* style = new Fl_Named_Style("Output", 0, &style);
+int Fl_Output::handle(int event) {
+  // The Fl_Input will grab the focus if sent a shortcut, prevent this:
+  if (event == FL_SHORTCUT) return 0;
+  return Fl_Input::handle(event);
+}
+
+static Fl_Named_Style style("Output", 0, &Fl_Output::default_style);
+Fl_Named_Style* Fl_Output::default_style = &::style;
 
 Fl_Output::Fl_Output(int x, int y, int w, int h, const char *l)
   : Fl_Input(x, y, w, h, l)
 {
-  style(::style);
+  style(default_style);
 }
 
 //
-// End of "$Id: Fl_Output.cxx,v 1.28 2000/08/20 04:31:38 spitzak Exp $".
+// End of "$Id: Fl_Output.cxx,v 1.29 2001/07/23 09:50:05 spitzak Exp $".
 //

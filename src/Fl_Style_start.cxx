@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_start.cxx,v 1.7 2000/05/17 07:08:09 bill Exp $"
+// "$Id: Fl_Style_start.cxx,v 1.8 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Code for switching between named classes of style
 //
@@ -23,9 +23,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Style.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Widget.h>
+#include <fltk/Fl_Style.h>
 #include <string.h>
 
 
@@ -33,7 +33,7 @@ struct Fl_Style_Class {
   const char* name;
   Fl_Named_Style* first_style;
   Fl_Style_Class* next;
-  int draw_boxes_inactive; // should boxes ever be drawn inactive?
+  bool draw_boxes_inactive; // should boxes ever be drawn inactive?
   
   static Fl_Style_Class *first;
   static Fl_Style_Class *current;
@@ -114,5 +114,5 @@ void Fl_Style::start(const char* name)
 }
 
 //
-// End of "$Id: Fl_Style_start.cxx,v 1.7 2000/05/17 07:08:09 bill Exp $".
+// End of "$Id: Fl_Style_start.cxx,v 1.8 2001/07/23 09:50:05 spitzak Exp $".
 //

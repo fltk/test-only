@@ -1,5 +1,5 @@
 //
-// "$Id: motif.cxx,v 1.15 2001/02/21 06:15:45 clip Exp $"
+// "$Id: motif.cxx,v 1.16 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -23,13 +23,13 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/fl_theme.H>
+#include <fltk/Fl.h>
+#include <fltk/fl_theme.h>
 
 extern "C" int fltk_plugin() {
   return fl_motif();
 }
 
 //
-// End of "$Id: motif.cxx,v 1.15 2001/02/21 06:15:45 clip Exp $".
+// End of "$Id: motif.cxx,v 1.16 2001/07/23 09:50:06 spitzak Exp $".
 //

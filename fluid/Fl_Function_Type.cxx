@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Function_Type.cxx,v 1.36 2001/06/19 22:00:05 robertk Exp $"
+// "$Id: Fl_Function_Type.cxx,v 1.37 2001/07/23 09:50:04 spitzak Exp $"
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,10 +23,10 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
+#include <fltk/Fl.h>
 #include "Fl_Type.h"
 #include "Fluid_Image.h"
-#include <FL/fl_show_input.H>
+#include <fltk/fl_show_input.h>
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
@@ -38,45 +38,45 @@
 static char buffer[128]; // for error messages
 
 const char *strip_default_args(const char *name) {
-	if(!strchr(name, '='))
-		return name;
-	static char *buffer = NULL;
-	static size_t bufsize = 0;
-	if(!bufsize || bufsize < strlen(name) + 1) {
-		if(buffer) delete[] buffer;
-		size_t allocsize = strlen(name) * 2;	// the *2 is just arbitrary pad
-		buffer = new char[allocsize]; 
-		if(buffer) bufsize = allocsize;
+  if(!strchr(name, '='))
+    return name;
+  static char *buffer = NULL;
+  static size_t bufsize = 0;
+  if(!bufsize || bufsize < strlen(name) + 1) {
+    if(buffer) delete[] buffer;
+    size_t allocsize = strlen(name) * 2;	// the *2 is just arbitrary pad
+    buffer = new char[allocsize]; 
+    if(buffer) bufsize = allocsize;
+  }
+  if(buffer) {
+    memset(buffer, 0, bufsize);
+    char *pbuff = buffer;
+    const char *pname = name;
+    int skipping = 0;
+    int inargs = 0;
+    while(*pname) {
+      if(!inargs) {
+	if(*pname == '(')
+	  inargs = 1;
+      }
+      else if(!skipping) {
+	if(*pname == '=') {
+	  skipping = 1;
+	  ++pname;
+	  continue;
 	}
-	if(buffer) {
-		memset(buffer, 0, bufsize);
-		char *pbuff = buffer;
-		const char *pname = name;
-		int skipping = 0;
-		int inargs = 0;
-		while(*pname) {
-			if(!inargs) {
-				if(*pname == '(')
-					inargs = 1;
-			}
-			else if(!skipping) {
-				if(*pname == '=') {
-					skipping = 1;
-					++pname;
-					continue;
-				}
-			} else if(*pname == ',' || *pname == ')') {
-				skipping = 0;
-			}
-			else if (skipping) {
-				++pname;
-				continue;
-			}
-			*pbuff++ = *pname++;
-		}
-		*pbuff = '\0';
-	}
-	return buffer;
+      } else if(*pname == ',' || *pname == ')') {
+	skipping = 0;
+      }
+      else if (skipping) {
+	++pname;
+	continue;
+      }
+      *pbuff++ = *pname++;
+    }
+    *pbuff = '\0';
+  }
+  return buffer;
 }
 
 // check a quoted string ending in either " or ' or >:
@@ -212,7 +212,7 @@ void Fl_Function_Type::read_property(const char *c) {
 }
 
 #include "function_panel.h"
-#include <FL/fl_ask.H>
+#include <fltk/fl_ask.h>
 
 static void ok_callback(Fl_Widget* w, void*) {
   w->window()->set_value();
@@ -338,8 +338,8 @@ void Fl_Function_Type::write_code() {
       *sptr = '\0';
 
       if(constructor)	// already wrote this for constructors.
-		  write_h("%s", attr);
-	  write_h("%s;\n", s);
+	write_h("%s", attr);
+      write_h("%s;\n", s);
       write_c("%s::%s%s", k, strip_default_args(name()), get_opening_brace(1));
     } else {
       if (public_) {
@@ -349,7 +349,7 @@ void Fl_Function_Type::write_code() {
 	  write_h("%s%s%s %s;\n", attr, rtype, star, name());
       }
       else write_c("static ");
-      write_c("%s%s %s%s", rtype, star, strip_default_args(name()), get_opening_brace(1));
+      write_c("%s%s %s%s", rtype, star, name(), get_opening_brace(1));
     }
   }
   indentation += 2;
@@ -808,5 +808,5 @@ void Fl_Class_Type::write_code() {
 }
 
 //
-// End of "$Id: Fl_Function_Type.cxx,v 1.36 2001/06/19 22:00:05 robertk Exp $".
+// End of "$Id: Fl_Function_Type.cxx,v 1.37 2001/07/23 09:50:04 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.126 2001/07/16 19:38:18 robertk Exp $"
+// "$Id: Fl.cxx,v 1.127 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,11 +23,12 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/x.H>
-#include <FL/Fl_Style.H>
-#include <FL/Fl_Tooltip.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/x.h>
+#include <fltk/Fl_Style.h>
+#include <fltk/Fl_Tooltip.h>
+#include <fltk/Fl_Shared_Image.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
@@ -145,10 +146,10 @@ void Fl::repeat_timeout(double time, Fl_Timeout_Handler cb, void *arg) {
   *p = t;
 }
 
-int Fl::has_timeout(Fl_Timeout_Handler cb, void *arg) {
+bool Fl::has_timeout(Fl_Timeout_Handler cb, void *arg) {
   for (Timeout* t = first_timeout; t; t = t->next)
-    if (t->cb == cb && t->arg == arg) return 1;
-  return 0;
+    if (t->cb == cb && t->arg == arg) return true;
+  return false;
 }
 
 void Fl::remove_timeout(Fl_Timeout_Handler cb, void *arg) {
@@ -300,17 +301,17 @@ int Fl::ready() {
 Fl_X* Fl_X::first;
 
 Fl_Window* fl_find(Window xid) {
-  Fl_X *window;
-  for (Fl_X **pp = &Fl_X::first; (window = *pp); pp = &window->next)
-    if (window->xid == xid) {
-      if (window != Fl_X::first && !Fl::modal()) {
+  Fl_X *x;
+  for (Fl_X **pp = &Fl_X::first; (x = *pp); pp = &x->next)
+    if (x->xid == xid) {
+      if (x != Fl_X::first && !Fl::modal()) {
 	// make this window be first to speed up searches
 	// this is not done if modal is true to avoid messing up modal stack
-	*pp = window->next;
-	window->next = Fl_X::first;
-	Fl_X::first = window;
+	*pp = x->next;
+	x->next = Fl_X::first;
+	Fl_X::first = x;
       }
-      return window->w;
+      return x->window;
     }
   return 0;
 }
@@ -318,16 +319,16 @@ Fl_Window* fl_find(Window xid) {
 Fl_Window* Fl::first_window() {
   for (Fl_X* x = Fl_X::first;; x = x->next) {
     if (!x) return 0;
-    Fl_Window* w = x->w;
-    if (w->visible() && !w->parent()) return w;
+    Fl_Window* window = x->window;
+    if (window->visible() && !window->parent()) return window;
   }
 }
 
 Fl_Window* Fl::next_window(const Fl_Window* w) {
   for (Fl_X* x = Fl_X::i(w)->next;; x = x->next) {
     if (!x) return 0;
-    Fl_Window* w = x->w;
-    if (w->visible() && !w->parent()) return w;
+    Fl_Window* window = x->window;
+    if (window->visible() && !window->parent()) return window;
   }
 }
 
@@ -337,7 +338,7 @@ void Fl::first_window(Fl_Window* window) {
 }
 
 void Fl::redraw() {
-  for (Fl_X* x = Fl_X::first; x; x = x->next) x->w->redraw();
+  for (Fl_X* x = Fl_X::first; x; x = x->next) x->window->redraw();
 }
 
 void Fl::flush() {
@@ -345,10 +346,10 @@ void Fl::flush() {
     damage_ = 0;
     for (Fl_X* x = Fl_X::first; x; x = x->next) {
       if (x->wait_for_expose) {damage_ = 1; continue;}
-      Fl_Window* w = x->w;
-      if (!w->visible_r()) continue;
-      if (w->damage() & FL_DAMAGE_LAYOUT) w->layout();
-      if (w->damage()) {w->flush(); w->clear_damage();}
+      Fl_Window* window = x->window;
+      if (!window->visible_r()) continue;
+      if (window->damage() & FL_DAMAGE_LAYOUT) window->layout();
+      if (window->damage()) {window->flush(); window->clear_damage();}
       // destroy damage regions for windows that don't use them:
       if (x->region) {XDestroyRegion(x->region); x->region = 0;}
     }
@@ -363,7 +364,7 @@ void Fl::flush() {
 ////////////////////////////////////////////////////////////////
 // Event handling:
 
-int Fl::event_inside(int x,int y,int w,int h) /*const*/ {
+bool Fl::event_inside(int x,int y,int w,int h) /*const*/ {
   int mx = e_x - x;
   int my = e_y - y;
   return (mx >= 0 && mx < w && my >= 0 && my < h);
@@ -553,9 +554,9 @@ static bool alternate_key() {
   return false;
 }
 
-int (*fl_local_grab)(int); // used by fl_dnd_x.cxx
+bool (*fl_local_grab)(int); // used by fl_dnd_x.cxx
 
-int Fl::handle(int event, Fl_Window* window)
+bool Fl::handle(int event, Fl_Window* window)
 {
   e_type = event;
   if (fl_local_grab) return fl_local_grab(event);
@@ -621,14 +622,14 @@ int Fl::handle(int event, Fl_Window* window)
     if (!modal_->contains(to)) to = modal_;
   }
 
-  int ret = false;
+  bool ret = false;
   if (to && window) {
     int wx = 0, wy = 0;
     for (Fl_Widget *w = to; w; w = w->parent())
       { wx += w->x(); wy += w->y(); }
     int save_x = Fl::e_x; int save_y = Fl::e_y;
     Fl::e_x = Fl::e_x_root-wx;Fl::e_y = Fl::e_y_root-wy;
-    ret = to->handle(event);
+    ret = to->handle(event) != 0;
     Fl::e_x = save_x; Fl::e_y = save_y;
   }
 
@@ -637,8 +638,9 @@ int Fl::handle(int event, Fl_Window* window)
     case FL_KEY:
       // if keyboard is ignored, try shortcut events:
       if (handle(FL_SHORTCUT, window)) return true;
-      if (alternate_key())
-	return handle(e_text[0] ? FL_SHORTCUT : FL_KEY, window);
+      if (alternate_key()) {
+	if (handle(e_text[0] ? FL_SHORTCUT : FL_KEY, window)) return true;
+      }
       return false;
 
       // rejected mouse events produce FL_LEAVE events:
@@ -665,5 +667,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.126 2001/07/16 19:38:18 robertk Exp $".
+// End of "$Id: Fl.cxx,v 1.127 2001/07/23 09:50:04 spitzak Exp $".
 //

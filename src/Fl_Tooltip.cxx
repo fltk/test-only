@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.37 2001/07/16 19:38:18 robertk Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.38 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,9 +23,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl_Tooltip.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Menu_Window.H>
+#include <fltk/Fl_Tooltip.h>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Menu_Window.h>
 
 float Fl_Tooltip::delay_ = 0.5f;
 int Fl_Tooltip::enabled_ = 1;
@@ -35,7 +35,7 @@ int Fl_Tooltip::enabled_ = 1;
 class Fl_TooltipBox : public Fl_Menu_Window {
 public:
   Fl_TooltipBox() : Fl_Menu_Window(0, 0, 0, 0) {
-    style(Fl_Tooltip::style());}
+    style(Fl_Tooltip::default_style);}
   void draw();
   void layout();
 };
@@ -49,7 +49,7 @@ void Fl_TooltipBox::layout() {
   fl_font(label_font(), label_size());
   int ww, hh;
   ww = MAX_WIDTH;
-  fl_measure(tip, ww, hh);
+  fl_measure(tip, ww, hh, FL_ALIGN_LEFT|FL_ALIGN_WRAP|FL_ALIGN_INSIDE);
   ww += 6; hh += 6;
 
   // find position on the screen of the widget:
@@ -75,9 +75,8 @@ void Fl_TooltipBox::layout() {
 }
 
 void Fl_TooltipBox::draw() {
-  draw_box(0,0,w(),h(),0);
-  draw_label(3, 3, w()-6, h()-6,
-             Fl_Flags(FL_ALIGN_LEFT|FL_ALIGN_WRAP|FL_ALIGN_INSIDE));
+  draw_box();
+  draw_label(3, 3, w()-6, h()-6, FL_ALIGN_LEFT|FL_ALIGN_WRAP|FL_ALIGN_INSIDE);
 }
 
 
@@ -123,7 +122,7 @@ tt_enter_area(Fl_Widget* w, int X, int Y, int W, int H, const char* t) {
   widget = w; ::X = X; ::Y = Y; ::W = W; ::H = H; tip = t;
   if (!t || !Fl_Tooltip::enabled()) return;
   float d = Fl_Tooltip::delay();
-  if (d < (float).01) d = (float).01;
+  if (d < .01f) d = .01f;
   Fl::add_timeout(d, (Fl_Timeout_Handler)tooltip_timeout);
 }
 
@@ -150,10 +149,9 @@ static void revert(Fl_Style* s) {
   s->color = (Fl_Color)215;
   s->label_color = FL_BLACK;
 }
-
-Fl_Named_Style* Fl_Tooltip::default_style =
-  new Fl_Named_Style("Tooltip", revert, &Fl_Tooltip::default_style);
+static Fl_Named_Style style("Tooltip", revert, &Fl_Tooltip::default_style);
+Fl_Named_Style* Fl_Tooltip::default_style = &::style;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.37 2001/07/16 19:38:18 robertk Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.38 2001/07/23 09:50:05 spitzak Exp $".
 //

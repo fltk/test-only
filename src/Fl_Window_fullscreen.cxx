@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_fullscreen.cxx,v 1.10 2000/07/31 05:52:46 spitzak Exp $"
+// "$Id: Fl_Window_fullscreen.cxx,v 1.11 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Fullscreen window support for the Fast Light Tool Kit (FLTK).
 //
@@ -23,11 +23,11 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
 
 #ifndef WIN32
-#include <FL/x.H>
+#include <fltk/x.h>
 extern Atom fl_MOTIF_WM_HINTS; // in Fl_x.cxx
 #endif
 
@@ -60,5 +60,5 @@ void Fl_Window::fullscreen_off(int X,int Y,int W,int H) {
 }
 
 //
-// End of "$Id: Fl_Window_fullscreen.cxx,v 1.10 2000/07/31 05:52:46 spitzak Exp $".
+// End of "$Id: Fl_Window_fullscreen.cxx,v 1.11 2001/07/23 09:50:05 spitzak Exp $".
 //

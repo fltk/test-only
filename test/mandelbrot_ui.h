@@ -2,12 +2,12 @@
 
 #ifndef mandelbrot_ui_h
 #define mandelbrot_ui_h
-#include <FL/Fl.H>
+#include <fltk/Fl.h>
 #include "mandelbrot.h"
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Slider.H>
-#include <FL/Fl_Box.H>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Input.h>
+#include <fltk/Fl_Slider.h>
+#include <fltk/Fl_Box.h>
 
 class Drawing_Window  {
 public:

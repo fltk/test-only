@@ -2,14 +2,14 @@
 
 #ifndef keyboard_ui_h
 #define keyboard_ui_h
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Output.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Output.h>
 extern Fl_Output *key_output;
 extern Fl_Output *text_output;
-#include <FL/Fl_Button.H>
+#include <fltk/Fl_Button.h>
 extern void key_cb(Fl_Button*, void*);
-#include <FL/Fl_Box.H>
+#include <fltk/Fl_Box.h>
 extern void shift_cb(Fl_Button*, void*);
 Fl_Window* make_window();
 #endif

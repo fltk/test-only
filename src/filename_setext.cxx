@@ -1,5 +1,5 @@
 //
-// "$Id: filename_setext.cxx,v 1.4 1999/01/07 19:17:35 mike Exp $"
+// "$Id: filename_setext.cxx,v 1.5 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Filename extension routines for the Fast Light Tool Kit (FLTK).
 //
@@ -27,7 +27,7 @@
 // If no . in name, append new extension
 // If new extension is null, act like it is ""
 
-#include <FL/filename.H>
+#include <fltk/filename.h>
 #include <string.h>
 
 char *filename_setext(char *buf, const char *ext) {
@@ -37,5 +37,5 @@ char *filename_setext(char *buf, const char *ext) {
 }
 
 //
-// End of "$Id: filename_setext.cxx,v 1.4 1999/01/07 19:17:35 mike Exp $".
+// End of "$Id: filename_setext.cxx,v 1.5 2001/07/23 09:50:05 spitzak Exp $".
 //

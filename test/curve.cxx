@@ -1,5 +1,5 @@
 //
-// "$Id: curve.cxx,v 1.8 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: curve.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Curve test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,11 +23,11 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Hor_Value_Slider.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Toggle_Button.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Double_Window.h>
+#include <fltk/Fl_Hor_Value_Slider.h>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Toggle_Button.h>
 
 double args[9] = {
   20,20, 50,200, 100,20, 200,200, 0};
@@ -110,5 +110,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: curve.cxx,v 1.8 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: curve.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.30 2001/02/21 06:15:45 clip Exp $"
+// "$Id: essai.cxx,v 1.31 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -28,21 +28,21 @@
 // Demonstration of a plugin that replaces the boxes such that a pixmap
 // is used to draw everything.
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Check_Button.H>
-#include <FL/Fl_Scrollbar.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Output.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Style.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Widget.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Check_Button.h>
+#include <fltk/Fl_Scrollbar.h>
+#include <fltk/Fl_Input.h>
+#include <fltk/Fl_Output.h>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Style.h>
 #include <stdio.h>
 #include <string.h>
 #include <unistd.h>
 
-#include <FL/Fl_Boxtype.H>
-#include <FL/Fl_Shared_Image.H>
+#include <fltk/Fl_Boxtype.h>
+#include <fltk/Fl_Shared_Image.h>
 
 class Fl_Image_Box : public Fl_Boxtype_ {
   Fl_Flags mask;
@@ -154,5 +154,5 @@ int fltk_plugin() {
 }
 
 //
-// End of "$Id: essai.cxx,v 1.30 2001/02/21 06:15:45 clip Exp $".
+// End of "$Id: essai.cxx,v 1.31 2001/07/23 09:50:06 spitzak Exp $".
 //

@@ -2,11 +2,11 @@
 
 #include "image_file.h"
 #include <stdio.h>
-#include <FL/fl_file_chooser.H>
+#include <fltk/fl_file_chooser.h>
 
 Fl_Window *window=(Fl_Window *)0;
 
-#include <FL/Fl_Shared_Image.H>
+#include <fltk/Fl_Shared_Image.h>
 static const unsigned char datas_coucou[4328] = {
 137,80,78,71,13,10,26,10,0,0,0,13,73,72,68,82,0,0,0,64,0,0,0,64,8,6,0,0,0,
 170,105,113,222,0,0,0,4,103,65,77,65,0,1,134,160,49,232,150,95,0,0,16,159,73,
@@ -519,28 +519,28 @@ int main (int argc, char **argv) {
     o->align(FL_ALIGN_TILED);
      {    Fl_Box* o = new Fl_Box(23, 158, 352, 197, "tiled GIF image loaded from disk");
       o->image(Fl_GIF_Image::get("coucou.gif"));
-      o->label_font(fl_fonts()+1);
+      o->label_font(fl_fonts+1);
       o->label_type(FL_SHADOW_LABEL);
       o->label_color((Fl_Color)3);
       o->align(FL_ALIGN_TILED);
     }
      {    Fl_Box* o = new Fl_Box(100, 23, 170, 102, "PNG image with datas included in code");
       o->image(Fl_PNG_Image::get("coucou.png", datas_coucou));
-      o->label_font(fl_fonts()+1);
+      o->label_font(fl_fonts+1);
       o->label_type(FL_SHADOW_LABEL);
       o->label_color((Fl_Color)3);
       o->align(FL_ALIGN_TILED);
     }
      {    Fl_Box* o = new Fl_Box(408, 16, 134, 109, "XPM image loaded from disk");
       o->image(Fl_XPM_Image::get("../porsche.xpm"));
-      o->label_font(fl_fonts()+1);
+      o->label_font(fl_fonts+1);
       o->label_type(FL_SHADOW_LABEL);
       o->label_color((Fl_Color)3);
       o->deactivate();
     }
      {    Fl_Value_Slider* o = slider = new Fl_Value_Slider(40, 368, 288, 22, "Size of the image cache in kilo pixels (0 for unlimited)");
       o->type(5);
-      o->label_font(fl_fonts()+1);
+      o->label_font(fl_fonts+1);
       o->label_type(FL_SHADOW_LABEL);
       o->label_color((Fl_Color)3);
       o->maximum(100);
@@ -549,7 +549,7 @@ int main (int argc, char **argv) {
     }
      {    Fl_Box* o = new Fl_Box(395, 195, 230, 150, "JPEG image stored in the executable");
       o->image(Fl_JPEG_Image::get("testimg.jpg", datas_testimg));
-      o->label_font(fl_fonts()+1);
+      o->label_font(fl_fonts+1);
       o->label_type(FL_SHADOW_LABEL);
       o->label_color((Fl_Color)3);
       o->align(FL_ALIGN_TILED);

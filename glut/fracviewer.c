@@ -12,7 +12,7 @@
  * http://www.cs.hmc.edu/people/pwinston
  */
 
-#include <FL/glut.H> // changed for fltk
+#include <fltk/glut.h> // changed for fltk
 #include <stdio.h>
 #include <stdlib.h>
 #include <math.h>

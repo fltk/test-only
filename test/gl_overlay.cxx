@@ -1,5 +1,5 @@
 //
-// "$Id: gl_overlay.cxx,v 1.6 2000/01/16 07:44:42 robertk Exp $"
+// "$Id: gl_overlay.cxx,v 1.7 2001/07/23 09:50:05 spitzak Exp $"
 //
 // OpenGL overlay test program for the Fast Light Tool Kit (FLTK).
 //
@@ -24,14 +24,14 @@
 //
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Hor_Slider.H>
-#include <FL/Fl_Toggle_Button.H>
-#include <FL/math.h>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Hor_Slider.h>
+#include <fltk/Fl_Toggle_Button.h>
+#include <fltk/math.h>
 
 #if !HAVE_GL
-#include <FL/Fl_Box.H>
+#include <fltk/Fl_Box.h>
 class shape_window : public Fl_Box {
 public:	
   int sides;
@@ -41,8 +41,8 @@ public:
   }
 };
 #else
-#include <FL/gl.h>
-#include <FL/Fl_Gl_Window.H>
+#include <fltk/gl.h>
+#include <fltk/Fl_Gl_Window.h>
 
 class shape_window : public Fl_Gl_Window {
   void draw();
@@ -156,5 +156,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: gl_overlay.cxx,v 1.6 2000/01/16 07:44:42 robertk Exp $".
+// End of "$Id: gl_overlay.cxx,v 1.7 2001/07/23 09:50:05 spitzak Exp $".
 //

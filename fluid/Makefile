@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.38 2001/03/07 23:07:39 robertk Exp $"
+# "$Id: Makefile,v 1.39 2001/07/23 09:50:04 spitzak Exp $"
 #
 # Fluid makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -58,7 +58,7 @@ include ../makeinclude
 .cxx.o:
 	$(CXX) -I.. $(EXEFLAGS) $(XTRAFLAGS) $(CXXFLAGS) $< -c
 
-all: static programs
+all: $(BUILDTARGETS)
 
 static:
 
@@ -77,7 +77,7 @@ depend:
 	$(MAKEDEPEND) -I.. $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
 include makedepend
 
-install: install_static install_shared install_programs
+install: $(INSTALLTARGETS)
 
 install_static:
 
@@ -111,5 +111,5 @@ rebuild:
 	./fluid -c coding_style.fl
 
 #
-# End of "$Id: Makefile,v 1.38 2001/03/07 23:07:39 robertk Exp $".
+# End of "$Id: Makefile,v 1.39 2001/07/23 09:50:04 spitzak Exp $".
 #

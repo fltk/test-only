@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.110 2001/07/10 08:14:39 clip Exp $"
+// "$Id: Fl_x.cxx,v 1.111 2001/07/23 09:50:05 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -27,10 +27,10 @@
 #define CONSOLIDATE_MOTION 0 // this was 1 in fltk 1.0
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/x.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Style.H>
+#include <fltk/Fl.h>
+#include <fltk/x.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Style.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -356,18 +356,32 @@ void fl_close_display() {
   XCloseDisplay(fl_display);
 }
 
-int Fl::x() {return 0;}
+static bool reload_info = true;
 
-int Fl::y() {return 0;}
+const Fl_Screen_Info& Fl::info() {
+  static Fl_Screen_Info info;
+  if (reload_info) {
+    reload_info = false;
+    fl_open_display();
 
-int Fl::w() {
-  fl_open_display();
-  return DisplayWidth(fl_display,fl_screen);
-}
+    // WAS: this should do something on multihead systems to match Windoze!
+    // I don't have multihead versions of either X or Windows to test...
+    info.x = 0;
+    info.y = 0;
+    info.width = DisplayWidth(fl_display,fl_screen);
+    info.height = DisplayHeight(fl_display,fl_screen);
+    info.w = info.width;
+    info.h = info.height;
 
-int Fl::h() {
-  fl_open_display();
-  return DisplayHeight(fl_display,fl_screen);
+    // do any screens really return 0 for MM?
+    info.width_mm = DisplayWidthMM(fl_display, fl_screen);
+    if (!info.width_mm) info.width_mm = int(info.width*25.4/75);
+    //info.dpi_x = info.width*25.4/info.width_mm;
+    info.height_mm = DisplayHeightMM(fl_display, fl_screen);
+    if (!info.height_mm) info.height_mm = int(info.height*25.4/75);
+    // info.dpi_y = info.height*25.4/info.height_mm;
+  }
+  return info;
 }
 
 void Fl::get_mouse(int &x, int &y) {
@@ -639,13 +653,13 @@ int fl_handle(const XEvent& xevent)
 
   case UnmapNotify:
     window = fl_find(xevent.xmapping.window);
-    if (window) {Fl_X::i(window)->wait_for_expose = 1; return 1;}
+    if (window) {Fl_X::i(window)->wait_for_expose = true; return 1;}
     break;
 
   case Expose:
   case GraphicsExpose:
     if (!window) break;
-    Fl_X::i(window)->wait_for_expose = 0;
+    Fl_X::i(window)->wait_for_expose = false;
     window->damage(FL_DAMAGE_EXPOSE, xevent.xexpose.x, xevent.xexpose.y,
 		   xevent.xexpose.width, xevent.xexpose.height);
     return 1;
@@ -794,7 +808,7 @@ int fl_handle(const XEvent& xevent)
   case SelectionNotify: {
     if (!fl_selection_requestor) return 0;
     static unsigned char* buffer;
-    if (buffer) XFree(buffer);
+    if (buffer) {XFree(buffer); buffer = 0;}
     long read = 0;
     if (fl_xevent->xselection.property) for (;;) {
       // The Xdnd code pastes 64K chunks together, possibly to avoid
@@ -890,7 +904,7 @@ void Fl_Window::layout() {
       //if (!resizable()) size_range(w(), h(), w(), h());
       XMoveResizeWindow(fl_display, i->xid, x, y,
 			w()>0 ? w() : 1, h()>0 ? h() : 1);
-      i->wait_for_expose = 1;
+      i->wait_for_expose = true;
     }
   }
   Fl_Group::layout();
@@ -899,13 +913,13 @@ void Fl_Window::layout() {
 ////////////////////////////////////////////////////////////////
 // Innards of Fl_Window::create()
 
-extern char fl_show_iconic; // set by iconize() or Fl_arg -i switch
+extern bool fl_show_iconic; // In Fl_Window.cxx, set by iconize() or -i switch
 
 void Fl_Window::create() {
   Fl_X::create(this, fl_visual, fl_colormap, -1);
 }
 
-void Fl_X::create(Fl_Window* w,
+void Fl_X::create(Fl_Window* window,
 		  XVisualInfo *visual, Colormap colormap,
 		  int background)
 {
@@ -913,8 +927,8 @@ void Fl_X::create(Fl_Window* w,
   XSetWindowAttributes attr;
   int mask = CWBorderPixel|CWColormap|CWEventMask|CWBitGravity;
 
-  if (w->parent()) {
-    root = w->window()->i->xid;
+  if (window->parent()) {
+    root = window->window()->i->xid;
     attr.event_mask = ExposureMask;
   } else {
     root = RootWindow(fl_display, fl_screen);
@@ -924,7 +938,7 @@ void Fl_X::create(Fl_Window* w,
       | ButtonPressMask | ButtonReleaseMask
       | EnterWindowMask | LeaveWindowMask
       | PointerMotionMask;
-    if (w->override()) {
+    if (window->override()) {
       attr.override_redirect = 1;
       attr.save_under = 1;
       mask |= CWOverrideRedirect | CWSaveUnder;
@@ -939,12 +953,12 @@ void Fl_X::create(Fl_Window* w,
     mask |= CWBackPixel;
   }
 
-  int W = w->w();
+  int W = window->w();
   if (W <= 0) W = 1; // X don't like zero...
-  int H = w->h();
+  int H = window->h();
   if (H <= 0) H = 1; // X don't like zero...
-  int X = w->x(); if (X == FL_USEDEFAULT) X = (Fl::w()-W)/2;
-  int Y = w->y(); if (Y == FL_USEDEFAULT) Y = (Fl::h()-H)/2;
+  int X = window->x(); if (X == FL_USEDEFAULT) X = (Fl::w()-W)/2;
+  int Y = window->y(); if (Y == FL_USEDEFAULT) Y = (Fl::h()-H)/2;
 
   Fl_X* x = new Fl_X;
   x->xid = XCreateWindow(fl_display,
@@ -957,21 +971,21 @@ void Fl_X::create(Fl_Window* w,
 			 mask, &attr);
 
   x->other_xid = 0;
-  x->w = w; w->i = x;
+  x->window = window; window->i = x;
   x->region = 0;
-  x->wait_for_expose = 1;
+  x->wait_for_expose = true;
   x->next = Fl_X::first;
   Fl_X::first = x;
 
-  if (!w->parent() && !w->override()) { // send junk to X window manager:
+  if (!window->parent() && !window->override()) { // send junk to X window manager:
 
     // Setting this allows the window manager to use the window's class
     // to look up things like border colors and icons in the xrdb database:
     XChangeProperty(fl_display, x->xid, XA_WM_CLASS, XA_STRING, 8, 0,
-		    (unsigned char *)w->xclass(), strlen(w->xclass()));
+		    (unsigned char *)window->xclass(), strlen(window->xclass()));
 
     // Set the label:
-    w->label(w->label(), w->iconlabel());
+    window->label(window->label(), window->iconlabel());
     // Makes the close button produce an event:
     XChangeProperty(fl_display, x->xid, WM_PROTOCOLS,
  		    XA_ATOM, 32, 0, (uchar*)&WM_DELETE_WINDOW, 1);
@@ -982,8 +996,8 @@ void Fl_X::create(Fl_Window* w,
 		    XA_ATOM, sizeof(int)*8, 0, (unsigned char*)&version, 1);
 
     // Send child window information:
-    if (w->modal_for()) {
-      const Fl_Window* modal_for = w->modal_for();
+    if (window->modal_for()) {
+      const Fl_Window* modal_for = window->modal_for();
       while (modal_for && modal_for->parent()) modal_for = modal_for->window();
       if (modal_for && modal_for->shown())
 	XSetTransientForHint(fl_display, x->xid, modal_for->i->xid);
@@ -996,9 +1010,10 @@ void Fl_X::create(Fl_Window* w,
     if (fl_show_iconic) {
       hints.flags |= StateHint;
       hints.initial_state = IconicState;
+      fl_show_iconic = false;
     }
-    if (w->icon()) {
-      hints.icon_pixmap = (Pixmap)w->icon();
+    if (window->icon()) {
+      hints.icon_pixmap = (Pixmap)window->icon();
       hints.flags       |= IconPixmapHint;
     }
     XSetWMHints(fl_display, x->xid, &hints);
@@ -1012,16 +1027,16 @@ void Fl_X::create(Fl_Window* w,
 // Send X window stuff that can be changed over time:
 
 void Fl_X::sendxjunk() {
-  if (w->parent() || w->override()) return; // it's not a window manager window!
+  if (window->parent() || window->override()) return; // it's not a window manager window!
 
   XSizeHints hints;
   // memset(&hints, 0, sizeof(hints)); jreiser suggestion to fix purify?
-  hints.min_width = w->minw;
-  hints.min_height = w->minh;
-  hints.max_width = w->maxw;
-  hints.max_height = w->maxh;
-  hints.width_inc = w->dw;
-  hints.height_inc = w->dh;
+  hints.min_width = window->minw;
+  hints.min_height = window->minh;
+  hints.max_width = window->maxw;
+  hints.max_height = window->maxh;
+  hints.width_inc = window->dw;
+  hints.height_inc = window->dh;
   hints.win_gravity = StaticGravity;
 
   // see the file /usr/include/X11/Xm/MwmUtil.h:
@@ -1042,7 +1057,7 @@ void Fl_X::sendxjunk() {
       if (hints.max_height < hints.min_height) hints.max_height = Fl::h();
     }
     if (hints.width_inc && hints.height_inc) hints.flags |= PResizeInc;
-//     if (w->aspect) {
+//     if (window->aspect) {
 //       hints.min_aspect.x = hints.max_aspect.x = hints.min_width;
 //       hints.min_aspect.y = hints.max_aspect.y = hints.min_height;
 //       hints.flags |= PAspect;
@@ -1053,13 +1068,13 @@ void Fl_X::sendxjunk() {
     prop[1] = 1|2|16; // MWM_FUNC_ALL | MWM_FUNC_RESIZE | MWM_FUNC_MAXIMIZE
   }
 
-  if (w->x() != FL_USEDEFAULT || w->y() != FL_USEDEFAULT) {
+  if (window->x() != FL_USEDEFAULT || window->y() != FL_USEDEFAULT) {
     hints.flags |= USPosition;
-    hints.x = w->x();
-    hints.y = w->y();
+    hints.x = window->x();
+    hints.y = window->y();
   }
 
- if (!w->border()) {
+ if (!window->border()) {
    prop[0] |= 2; // MWM_HINTS_DECORATIONS
    prop[2] = 0; // no decorations
  }
@@ -1221,6 +1236,8 @@ static Fl_Color to_color(const char* p) {
 }
 
 void fl_get_system_colors() {
+  fl_open_display();
+
   Fl_Color color;
 
   color = to_color(get_default("background"));
@@ -1282,6 +1299,10 @@ void fl_get_system_colors() {
 
 }
 
+#if 0
+// WAS: I turned this off, we should do this when grab() is released,
+// rather than in the menu code. The proper thing to do is XAllowEvents.
+
 // Bounce an X button press event back to a (possibly) different application
 // window.  This is used when the pointer is grabbed but the user clicks
 // outside of the grabbed window to abort.  This function sends a click
@@ -1311,7 +1332,8 @@ FL_API void fl_bounce_button_press() {
   // Send replacement button press event to new destination window
   XSendEvent(fl_display, current, False, NoEventMask, &xe);
 }
+#endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.110 2001/07/10 08:14:39 clip Exp $".
+// End of "$Id: Fl_x.cxx,v 1.111 2001/07/23 09:50:05 spitzak Exp $".
 //

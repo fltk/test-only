@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.91 2001/07/20 21:16:59 easysw Exp $"
+dnl# "$Id: configure.in,v 1.92 2001/07/23 09:50:03 spitzak Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -251,7 +251,7 @@ LIBS="$LIBS$X_LIBS"
 CFLAGS="$CFLAGS$X_CFLAGS"
 CXXFLAGS="$CXXFLAGS$X_CFLAGS"
 
-dnl# My test to see if OpenGL is on this machine:
+dnl# Test for libGL or libMesaGL
 GLLIB=
 if test x$enable_opengl != xno; then
     if test "$uname" = "WIN32"
@@ -259,8 +259,10 @@ if test x$enable_opengl != xno; then
 	GLLIB="-lopengl32 -lglu32"
 	AC_DEFINE(HAVE_GL)
     else
-	AC_CHECK_LIB(GL, glXMakeCurrent, AC_DEFINE(HAVE_GL) GLLIB=" -lGLU -lGL", \
-	    AC_CHECK_LIB(MesaGL,glXMakeCurrent, AC_DEFINE(HAVE_GL) GLLIB=" -lMesaGLU -lMesaGL",,\
+	AC_CHECK_LIB(GL, glXMakeCurrent, \
+	    AC_DEFINE(HAVE_GL) GLLIB=" -lGLU -lGL", \
+	    AC_CHECK_LIB(MesaGL, glXMakeCurrent, \
+		AC_DEFINE(HAVE_GL) GLLIB=" -lMesaGLU -lMesaGL",,\
 		-lX11 -lXext $X_EXTRA_LIBS -lm), \
 	    -lX11 -lXext $X_EXTRA_LIBS -lm)
     fi
@@ -283,10 +285,7 @@ AC_CHECK_HEADER(jpeglib.h, AC_CHECK_LIB(jpeg, jpeg_stdio_src, \
         ,,))
 AC_SUBST(LIBJPEG)
  
-AC_CHECK_HEADER(X11/extensions/Xdbe.h, \
-    if test "$uname" != "SunOS"; then
-        AC_DEFINE(HAVE_XDBE)
-    fi)
+AC_CHECK_HEADER(X11/extensions/Xdbe.h, AC_DEFINE(HAVE_XDBE))
 
 ac_cv_have_overlay=no
 if test "$uname" != "WIN32"; then
@@ -452,10 +451,10 @@ AC_SUBST(LIBCOMMAND)
 AC_SUBST(MAKEDEPEND)
 AC_SUBST(SYSTYPE)
 AC_CONFIG_HEADER(config.h:configh.in)
-AC_OUTPUT(makeinclude fltk-config Makefile)
+AC_OUTPUT(makeinclude fltk-config)
 
 chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.91 2001/07/20 21:16:59 easysw Exp $".
+dnl# End of "$Id: configure.in,v 1.92 2001/07/23 09:50:03 spitzak Exp $".
 dnl#

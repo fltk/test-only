@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Guess_Image.cxx,v 1.6 2001/07/16 19:38:18 robertk Exp $"
+// "$Id: Fl_Guess_Image.cxx,v 1.7 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Guessing image type code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,11 +27,11 @@
 // Keep uncompressed images in memory for later use. 
 
 #include <config.h>
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Shared_Image.H>
-#include <FL/Fl_Bitmap.H>
-#include <FL/x.H>
+#include <fltk/Fl.h>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Shared_Image.h>
+#include <fltk/Fl_Bitmap.h>
+#include <fltk/x.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -78,5 +78,5 @@ FL_IMAGES_API Fl_Image_Type* Fl_Shared_Image::guess(const char* name, const ucha
 }
 
 //
-// End of "$Id: Fl_Guess_Image.cxx,v 1.6 2001/07/16 19:38:18 robertk Exp $"
+// End of "$Id: Fl_Guess_Image.cxx,v 1.7 2001/07/23 09:50:04 spitzak Exp $"
 //

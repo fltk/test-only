@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_x.cxx,v 1.3 2001/03/11 16:14:30 spitzak Exp $"
+// "$Id: fl_color_x.cxx,v 1.4 2001/07/23 09:50:05 spitzak Exp $"
 //
 // X color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 // This file does not compile independently, it is included by fl_color.cxx
 
 #include <config.h>
-#include <FL/x.H>
+#include <fltk/x.h>
 #include <string.h>
 
 ////////////////////////////////////////////////////////////////
@@ -94,17 +94,16 @@ static void figure_out_visual() {
 // and then requested from X.  If this fails the current X colormap
 // is searched for the nearest match.
 
-#include "Fl_XColor.H"
+#include "Fl_XColor.h"
 
 #if USE_COLORMAP
+Fl_XColor fl_xmap[256];
 #if HAVE_OVERLAY
-Fl_XColor fl_xmap[2][256];
-uchar fl_overlay;
+bool fl_overlay = false;
+Fl_XColor fl_overlay_xmap[256];
 Colormap fl_overlay_colormap;
 XVisualInfo* fl_overlay_visual;
 ulong fl_transparent_pixel;
-#else
-Fl_XColor fl_xmap[1][256];
 #endif
 #endif
 
@@ -137,9 +136,9 @@ ulong fl_xpixel(Fl_Color i) {
 
   // see if we have already allocated it:
 #if HAVE_OVERLAY
-  Fl_XColor &xmap = fl_xmap[fl_overlay][index];
+  Fl_XColor &xmap = fl_overlay ? fl_overlay_xmap[index] : fl_xmap[index];
 #else
-  Fl_XColor &xmap = fl_xmap[0][index];
+  Fl_XColor &xmap = fl_xmap[index];
 #endif
   if (!xmap.mapped) {
     // figure out the rgb to ask for.  Use the specified one unless this
@@ -246,16 +245,16 @@ void fl_color(Fl_Color i) {
 
 void fl_free_color(Fl_Color i) {
 #if USE_COLORMAP
-  if (fl_xmap[0][i].mapped) {
-    if (fl_xmap[0][i].mapped == 1)
-      XFreeColors(fl_display, fl_colormap, &(fl_xmap[0][i].pixel), 1, 0);
-    fl_xmap[0][i].mapped = 0;
+  if (fl_xmap[i].mapped) {
+    if (fl_xmap[i].mapped == 1)
+      XFreeColors(fl_display, fl_colormap, &(fl_xmap[i].pixel), 1, 0);
+    fl_xmap[i].mapped = 0;
   }
 #if HAVE_OVERLAY
-  if (fl_xmap[1][i].mapped) {
-    if (fl_xmap[1][i].mapped == 1)
-      XFreeColors(fl_display, fl_overlay_colormap, &(fl_xmap[1][i].pixel),1,0);
-    fl_xmap[overlay][i].mapped = 0;
+  if (fl_overlay_xmap[i].mapped) {
+    if (fl_overlay_xmap[i].mapped == 1)
+      XFreeColors(fl_display, fl_overlay_colormap, &(fl_overlay_xmap[i].pixel),1,0);
+    fl_overlay_xmap[i].mapped = 0;
   }
 #endif
 #endif
@@ -313,5 +312,5 @@ void fl_line_style(int style, int width, char* dashes) {
 }
 
 //
-// End of "$Id: fl_color_x.cxx,v 1.3 2001/03/11 16:14:30 spitzak Exp $"
+// End of "$Id: fl_color_x.cxx,v 1.4 2001/07/23 09:50:05 spitzak Exp $"
 //

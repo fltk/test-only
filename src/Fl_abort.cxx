@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_abort.cxx,v 1.9 2001/07/18 19:39:24 clip Exp $"
+// "$Id: Fl_abort.cxx,v 1.10 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Warning/error message code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,11 +27,10 @@
 // do not need to be included in Fl.C:
 // You can also override this by redefining all of these.
 
-#include <FL/Fl.H>
-#include <stdarg.h>
-#include <stdio.h>
+#include <fltk/Fl.h>
+
+#include <fltk/vsnprintf.h>
 #include <stdlib.h>
-#include <config.h>
 
 #ifndef WIN32
 
@@ -57,11 +56,6 @@ static void error(const char *format, ...) {
 #else
 
 #include <windows.h>
-#  if !HAVE_VSNPRINTF || defined(__hpux)
-extern "C" {
-int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
-}
-#  endif /* !HAVE_VSNPRINTF */
 
 static void warning(const char *format, ...) {
   va_list args;
@@ -89,5 +83,5 @@ void (*Fl::error)(const char* format, ...) = ::error;
 void (*Fl::fatal)(const char* format, ...) = ::error;
 
 //
-// End of "$Id: Fl_abort.cxx,v 1.9 2001/07/18 19:39:24 clip Exp $".
+// End of "$Id: Fl_abort.cxx,v 1.10 2001/07/23 09:50:05 spitzak Exp $".
 //

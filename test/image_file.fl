@@ -8,7 +8,7 @@ gridy 5
 snap 3
 decl {\#include <stdio.h>} {} 
 
-decl {\#include <FL/fl_file_chooser.H>} {} 
+decl {\#include <fltk/fl_file_chooser.h>} {} 
 
 Function {} {open private
 } {
@@ -53,7 +53,7 @@ im->measure(w, h);
 image_window->size(w, h);
 image_window->show();}
       xywh {510 15 135 30}
-      code0 {\#include <FL/Fl_Bitmap.H>}
+      code0 {\#include <fltk/Fl_Bitmap.h>}
     }
   }
   Fl_Window browser_window {

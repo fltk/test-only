@@ -1,5 +1,5 @@
 //
-// "$Id: keyboard.cxx,v 1.8 2000/06/18 07:57:34 bill Exp $"
+// "$Id: keyboard.cxx,v 1.9 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Keyboard/event test program for the Fast Light Tool Kit (FLTK).
 //
@@ -131,5 +131,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: keyboard.cxx,v 1.8 2000/06/18 07:57:34 bill Exp $".
+// End of "$Id: keyboard.cxx,v 1.9 2001/07/23 09:50:06 spitzak Exp $".
 //

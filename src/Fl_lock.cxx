@@ -20,11 +20,11 @@
    or returns null if none.  Warning: the current implementation only
    has a one-entry queue and only returns the most recent value!
 
-   See also the Fl_Threads.H header file, which provides convienence
+   See also the Fl_Threads.h header file, which provides convienence
    functions so you can create your own threads and mutexes.
 */
 
-#include <FL/Fl.H>
+#include <fltk/Fl.h>
 #include <config.h>
 
 ////////////////////////////////////////////////////////////////

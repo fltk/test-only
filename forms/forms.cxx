@@ -1,5 +1,5 @@
 //
-// "$Id: forms.cxx,v 1.4 2000/05/17 07:08:05 bill Exp $"
+// "$Id: forms.cxx,v 1.5 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Another forms demo for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/forms.H> // changed for fltk
+#include <fltk/forms.h> // changed for fltk
 
 static int border = 1; // changed from FL_TRANSIENT for fltk
 // (this is so the close box and Esc work to close the window)
@@ -230,5 +230,5 @@ main (int argc, char *argv[])
 }
 
 //
-// End of "$Id: forms.cxx,v 1.4 2000/05/17 07:08:05 bill Exp $".
+// End of "$Id: forms.cxx,v 1.5 2001/07/23 09:50:04 spitzak Exp $".
 //

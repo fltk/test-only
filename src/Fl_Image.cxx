@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.18 2001/02/25 01:41:19 clip Exp $"
+// "$Id: Fl_Image.cxx,v 1.19 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,11 +23,11 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
-#include <FL/Fl_Image.H>
-#include <FL/Fl_Widget.H>
+#include <fltk/Fl.h>
+#include <fltk/fl_draw.h>
+#include <fltk/x.h>
+#include <fltk/Fl_Image.h>
+#include <fltk/Fl_Widget.h>
 
 extern FL_API void (*fl_image_draw)(Fl_Image *, int, int, int, int, int, int);
 extern FL_API void (*fl_image_draw_tiled)(Fl_Image *, int, int, int, int, int, int);
@@ -183,9 +183,9 @@ Fl_Image::~Fl_Image() {
   if (id) fl_delete_offscreen(id);
 }
 
-#include <FL/Fl_Widget.H>
+#include <fltk/Fl_Widget.h>
 // this could probably be inline but they cause the above header
-// files to be included by Fl_Image.H:
+// files to be included by Fl_Image.h:
 
 void Fl_Image::label(Fl_Widget* o) {
   o->image(this);
@@ -193,5 +193,5 @@ void Fl_Image::label(Fl_Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.18 2001/02/25 01:41:19 clip Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.19 2001/07/23 09:50:04 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.25 2001/03/22 20:18:27 robertk Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.26 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -34,11 +34,11 @@
 
 // Compatability with fltk 1.0 and with XForms is only partial!
 
-#include <FL/Fl_Menu_.H>
-#include <FL/Fl_Item.H>
-#include <FL/Fl_Item_Group.H>
-#include <FL/Fl_Divider.H>
-#include <FL/Fl_Menu_Item.H>
+#include <fltk/Fl_Menu_.h>
+#include <fltk/Fl_Item.h>
+#include <fltk/Fl_Item_Group.h>
+#include <fltk/Fl_Divider.h>
+#include <fltk/Fl_Menu_Item.h>
 #include <string.h>
 
 // Return a new menu item:
@@ -55,8 +55,9 @@ static Fl_Widget* append(
   if (flags & FL_SUBMENU) {
     o = new Fl_Item_Group();
     Fl_Group::current(0);
-  } else 
-	  o = new Fl_Item();
+  } else {
+    o = new Fl_Item();
+  }
   o->copy_label(text);
   if (flags & FL_MENU_TOGGLE) o->type(FL_TOGGLE_ITEM);
   if (flags & FL_MENU_RADIO) o->type(FL_RADIO_ITEM);
@@ -88,6 +89,7 @@ static int compare(const char* a, const char* b) {
 
 static bool find_flag; // lame-o attempt to reuse the code
 static bool replace_flag;
+FL_API bool fl_menu_replaced; // hack so program can tell what replace() does
 
 // Add an item.  The text is split at '/' characters to automatically
 // produce submenus (actually a totally unnecessary feature as you can
@@ -110,20 +112,25 @@ Fl_Widget* Fl_Menu_::add(
   int flags1 = 0;
   const char* item;
   for (;;) {    /* do all the supermenus: */
-    item = text;
 
-    /* fill in the buf with name, changing \x to x: */
-    q = buf;
+    // leading slash makes us assumme it is a filename:
+    if (*text == '/') {item = text; break;}
+
+    // leading underscore causes divider line:
     if (*text == '_') {text++; flags1 = FL_MENU_DIVIDER;}
-    for (p=text; *p && *p != '/' && q < buf+1023; *q++ = *p++)
-      if (*p=='\\') {p++; item = buf;}
+
+    // copy to buf, changing \x to x:
+    q = buf; item = buf;
+    for (p=text; *p && *p != '/' && q<buf+1023; *q++ = *p++) if (*p=='\\') p++;
     *q = 0;
 
-    if (*p != '/') break; /* not a menu title */
-    item = buf;
-    text = p+1;	/* point at item title */
+    // if not followed by slash it is not a menu title:
+    if (*p != '/') break;
 
-    /* find a matching menu title: */
+    // point at the next text:
+    text = p+1;
+
+    // find a matching menu title:
     for (int n = group->children();;) {
       if (!n) { // create a new menu
 	if (find_flag) return 0;
@@ -139,23 +146,20 @@ Fl_Widget* Fl_Menu_::add(
     flags1 = 0;
   }
 
-  /* find a matching menu item: */
+  // find a matching menu item:
   Fl_Widget* o = 0;
   if (replace_flag | find_flag) for (int n = group->children(); n--;) {
     Fl_Widget* w = group->child(n);
-    if (w->label() && !compare(w->label(), item)) {
+    if (w->label() && !compare(w->label(), item) && !w->is_group()) {
       if (find_flag) return w;
       o = w;
+      fl_menu_replaced = true;
       goto REPLACED;
     }
   }
   if (find_flag) return 0;
   o = append(group, item, flags|flags1);
-  if(!((flags|flags1) & FL_SUBMENU)) {
-	  Fl_Item *p = dynamic_cast<Fl_Item *>(o);
-	  p->column_widths(mcolumns);
-	  p->column_char(column_char_);
-  }
+  fl_menu_replaced = false;
 
  REPLACED:
   /* fill it in */
@@ -228,5 +232,5 @@ Fl_Widget* Fl_Menu_::add(const char *str) {
 }
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.25 2001/03/22 20:18:27 robertk Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.26 2001/07/23 09:50:05 spitzak Exp $".
 //

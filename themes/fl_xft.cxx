@@ -1,5 +1,5 @@
 //
-// "$Id: fl_xft.cxx,v 1.2 2001/07/10 08:14:39 clip Exp $"
+// "$Id: fl_xft.cxx,v 1.3 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Plugin file for FLTK
 //
@@ -40,12 +40,11 @@
 #include <X11/Xlib.h>
 #include <X11/Xft/Xft.h>
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Font.H>
-#include <FL/x.H>
-#include <config.h>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Font.h>
+#include <fltk/x.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -295,5 +294,5 @@ fl_xft() {
 
 
 //
-// End of "$Id: fl_xft.cxx,v 1.2 2001/07/10 08:14:39 clip Exp $"
+// End of "$Id: fl_xft.cxx,v 1.3 2001/07/23 09:50:06 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.11 2001/03/10 20:38:22 clip Exp $"
+// "$Id: fl_bmp.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
 //
@@ -30,10 +30,10 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
-#include <FL/Fl_Shared_Image.H>
+#include <fltk/Fl.h>
+#include <fltk/fl_draw.h>
+#include <fltk/x.h>
+#include <fltk/Fl_Shared_Image.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -176,7 +176,7 @@ void Fl_BMP_Image::measure(int &W, int &H)
   bmpDatas = (uchar*)datas;
 
   BITMAP_FILE_HEADER fileHeader;
-  BITMAP_INFO_HEADER infoHeader;
+  //BITMAP_INFO_HEADER infoHeader;
 
   if (!datas)
     if ((bmpFile = fopen(get_filename(), "rb")) == NULL)
@@ -206,9 +206,9 @@ void Fl_BMP_Image::measure(int &W, int &H)
     fileHeader.dataOffSet = ReadLittleEndianDWORD();
 
     // Read BMP info header structure
-    infoHeader.headerSize = ReadLittleEndianDWORD();
-    w = infoHeader.pixelWidth = ReadLittleEndianDWORD();
-    h = infoHeader.pixelHeight = ReadLittleEndianDWORD();
+    /*infoHeader.headerSize =*/ ReadLittleEndianDWORD();
+    w = /*infoHeader.pixelWidth =*/ ReadLittleEndianDWORD();
+    h = /*infoHeader.pixelHeight =*/ ReadLittleEndianDWORD();
   }
 
   if (!datas) fclose(bmpFile);
@@ -823,5 +823,5 @@ error:
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.11 2001/03/10 20:38:22 clip Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $"
 //

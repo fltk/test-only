@@ -1,5 +1,5 @@
 //
-// "$Id: button.cxx,v 1.5 1999/06/20 15:24:34 mike Exp $"
+// "$Id: button.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Button/callback test program for the Fast Light Tool Kit (FLTK).
 //
@@ -25,9 +25,9 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Button.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Button.h>
 
 void beepcb(Fl_Widget *, void *) {
   printf("\007"); fflush(stdout);
@@ -62,5 +62,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: button.cxx,v 1.5 1999/06/20 15:24:34 mike Exp $".
+// End of "$Id: button.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $".
 //

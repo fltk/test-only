@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.49 2001/06/19 22:00:05 robertk Exp $"
+// "$Id: fluid.cxx,v 1.50 2001/07/23 09:50:04 spitzak Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -44,20 +44,20 @@ const char *copyright =
 "\n"
 "Please report bugs to fltk-bugs@easysw.com.";
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Hold_Browser.H>
-#include <FL/Fl_Menu_Bar.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Tooltip.H>
-#include <FL/fl_ask.H>
-#include <FL/fl_draw.H>
-#include <FL/fl_file_chooser.H>
-#include <FL/fl_message.H>
-#include <FL/filename.H>
-#include <FL/Fl_FileIcon.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Box.h>
+#include <fltk/Fl_Button.h>
+#include <fltk/Fl_Hold_Browser.h>
+#include <fltk/Fl_Menu_Bar.h>
+#include <fltk/Fl_Input.h>
+#include <fltk/Fl_Tooltip.h>
+#include <fltk/fl_ask.h>
+#include <fltk/fl_draw.h>
+#include <fltk/fl_file_chooser.h>
+#include <fltk/fl_message.h>
+#include <fltk/filename.h>
+#include <fltk/Fl_FileIcon.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -348,7 +348,7 @@ void tt_cb(Fl_Widget *w, void *) {
 }
 
 #include <string.h>
-#include <FL/fl_ask.H>
+#include <fltk/fl_ask.h>
 char* scheme;
 void scheme_cb(Fl_Widget *, void *) {
   const char* s = fl_input("Enter the name of a scheme:", scheme);
@@ -521,5 +521,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.49 2001/06/19 22:00:05 robertk Exp $".
+// End of "$Id: fluid.cxx,v 1.50 2001/07/23 09:50:04 spitzak Exp $".
 //

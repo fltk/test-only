@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.49 2001/03/20 18:21:53 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.50 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,9 +27,9 @@
 // subclass and replacing the replace(...) function, to make a version
 // that rejects changes you don't want to allow.
 
-#include <FL/Fl.H>
-#include <FL/Fl_Input.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Input.h>
+#include <fltk/fl_draw.h>
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
@@ -143,6 +143,10 @@ void Fl_Input::draw() {
   draw(X,Y,W,H);
 }
 
+//#define line_height() (fl_height(text_font(), text_size())+leading())
+#define line_height() (text_size()+leading())
+#define line_descent() (text_size()+leading()-fl_descent())
+
 void Fl_Input::draw(int X, int Y, int W, int H)
 {
 
@@ -172,7 +176,8 @@ void Fl_Input::draw(int X, int Y, int W, int H)
 
   // count how many lines and put the last one into the buffer:
   // And figure out where the cursor is:
-  int height = fl_height(text_font(), text_size())+leading();
+  int height = line_height();
+  int desc = line_descent();
   int lines;
   int curx, cury;
   for (p=value(), curx=cury=lines=0; ;) {
@@ -229,7 +234,6 @@ void Fl_Input::draw(int X, int Y, int W, int H)
 
   // visit each line and draw it:
   p = value();
-  int desc = height-fl_descent();
   int xpos = X-xscroll_; if (W > 12) xpos += 3;
   int ypos = -yscroll_;
   for (; ypos < H;) {
@@ -395,7 +399,7 @@ int Fl_Input::mouse_position(int X, int Y, int W, int /*H*/) const
     // should _only_ be used in layout() and draw().
     // WAS: I think this is ok. Calls in response to user events can
     // assumme layout() has been called recently.
-    theline /= (fl_height(text_font(), text_size())+leading());
+    theline /= line_height();
   }
 
   setfont();
@@ -654,8 +658,8 @@ void Fl_Input::show_cursor(char v) {
 static void revert(Fl_Style *s) {
   s->leading = 2;
 }
-
-static Fl_Named_Style* style = new Fl_Named_Style("Input", revert, &style);
+static Fl_Named_Style style("Input", revert, &Fl_Input::default_style);
+Fl_Named_Style* Fl_Input::default_style = &::style;
 
 Fl_Input::Fl_Input(int x, int y, int w, int h, const char* l)
   : Fl_Widget(x, y, w, h, l)
@@ -669,7 +673,7 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char* l)
   value_ = "";
   xscroll_ = yscroll_ = 0;
   maximum_size_ = 32767;
-  style(::style);
+  style(default_style);
 }
 
 void Fl_Input::put_in_buffer(int len) {
@@ -796,7 +800,7 @@ int Fl_Input::handle_key() {
     // internally.  Using the style accessor functions is not guaranteed
     // to give correct results for what is actually displayed!  They
     // should _only_ be used in layout() and draw().
-    for (int n = h()/(fl_height(text_font(), text_size())+leading()); n--;)
+    for (int n = h()/line_height(); n--;)
       i = line_start(i-1);
     shift_position(i);
     return 1;}
@@ -807,7 +811,7 @@ int Fl_Input::handle_key() {
     // internally.  Using the style accessor functions is not guaranteed
     // to give correct results for what is actually displayed!  They
     // should _only_ be used in layout() and draw().
-    for (int n = h()/(fl_height(text_font(), text_size())+leading()); n--;)
+    for (int n = h()/line_height(); n--;)
       i = line_end(i)+1;
     shift_position(i+1);
     return 1;}
@@ -878,9 +882,16 @@ int Fl_Input::handle(int event) {
   return handle(event, X, Y, W, H);
 }
 
+// set this to 1 to get the ability to drag selected text out to other
+// widgets, like some IDEs do. This appears to mostly be a pain because
+// you cannot select a region inside the current region.
+#define DND_OUT 0
+
 int Fl_Input::handle(int event, int X, int Y, int W, int H) {
   static int dnd_save_position, dnd_save_mark;
+#if DND_OUT
   static int drag_start;
+#endif
   int newpos, newmark;
 
   switch (event) {
@@ -932,19 +943,23 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
     return handle_key();
 
   case FL_PUSH:
-    drag_start = newpos = mouse_position(X, Y, W, H);
+    newpos = mouse_position(X, Y, W, H);
+#if DND_OUT
     if (focused() && !Fl::event_state(FL_SHIFT) && type()!=FL_SECRET_INPUT &&
-	(drag_start >= mark() && drag_start < position() ||
-	drag_start >= position() && drag_start < mark())) {
+	(newpos >= mark() && newpos < position() ||
+	newpos >= position() && newpos < mark())) {
       // user clicked int the selection, may be trying to drag
+      drag_start = newpos;
       return 1;
     }
     drag_start = -1;
+#endif
     take_focus();
     newmark = Fl::event_state(FL_SHIFT) ? mark() : newpos;
     goto HANDLE_MOUSE;
 
   case FL_DRAG:
+#if DND_OUT
     if (drag_start >= 0) {
       if (Fl::event_is_click()) return 1; // debounce the mouse
       // save the position because sometimes we don't get DND_ENTER:
@@ -954,6 +969,7 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
       copy(false); Fl::dnd();
       return 1;
     }
+#endif
     newpos = mouse_position(X, Y, W, H);
     newmark = mark();
   HANDLE_MOUSE:
@@ -994,11 +1010,13 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
     return 1;
 
   case FL_RELEASE:
+#if DND_OUT
     // if they just clicked in the middle of selection, move cursor there:
     if (drag_start >= 0) {
       newpos = newmark = drag_start; drag_start = -1;
       goto HANDLE_MOUSE;
     }
+#endif
     if (Fl::event_button() == 2) {
       Fl::event_is_click(0); // stop double click from picking a word
       Fl::paste(*this,false);
@@ -1014,13 +1032,24 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
     dnd_save_mark = mark();
     show_cursor(1);
     // fall through:
-  case FL_DND_DRAG:
-    position(mouse_position(X, Y, W, H));
+  case FL_DND_DRAG: {
+    int p = mouse_position(X, Y, W, H);
+#if DND_OUT
+    if (focused() && (p>=dnd_save_position && p<=dnd_save_mark ||
+		      p>=dnd_save_mark && p<=dnd_save_position)) {
+      position(dnd_save_position, dnd_save_mark);
+      return 0;
+    }
+#endif
+    position(p);}
     return 1;
 
   case FL_DND_LEAVE:
     position(dnd_save_position, dnd_save_mark);
-    if (!focused()) show_cursor(0);
+#if DND_OUT
+    if (!focused())
+#endif
+      show_cursor(0);
     return 1;
 
   case FL_DND_RELEASE:
@@ -1040,5 +1069,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.49 2001/03/20 18:21:53 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.50 2001/07/23 09:50:04 spitzak Exp $".
 //

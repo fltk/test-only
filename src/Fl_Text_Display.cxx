@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.11 2001/03/20 18:21:53 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -22,10 +22,10 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Text_Buffer.H>
-#include <FL/Fl_Text_Display.H>
-#include <FL/Fl_Style.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Text_Buffer.h>
+#include <fltk/Fl_Text_Display.h>
+#include <fltk/Fl_Style.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -64,13 +64,8 @@ static int countlines( const char *string );
 // CET - FIXME
 #define TMPFONTWIDTH 6
 
-static void revert(Fl_Style*) {}
-
-static Fl_Named_Style *style = new Fl_Named_Style("text display", revert, &style);
-
 Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H,  const char* l)
     : Fl_Group(X, Y, W, H, l) {
-  style(::style);
   mMaxsize = 0;
   damage_range1_start = damage_range1_end = -1;
   damage_range2_start = damage_range2_end = -1;
@@ -202,8 +197,8 @@ void Fl_Text_Display::layout() {
     mMaxsize = max(mMaxsize, fl_height(mStyleTable[i].font, mStyleTable[i].size)+leading());
 
   // did we have scrollbars initially?
-  int hscrollbarvisible = mHScrollBar->visible();
-  int vscrollbarvisible = mVScrollBar->visible();
+  bool hscrollbarvisible = mHScrollBar->visible();
+  bool vscrollbarvisible = mVScrollBar->visible();
 
   // try without scrollbars first
   mVScrollBar->clear_visible();
@@ -1948,5 +1943,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.11 2001/03/20 18:21:53 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $".
 //

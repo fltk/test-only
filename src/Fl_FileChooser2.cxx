@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.13 2001/07/16 19:38:18 robertk Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.14 2001/07/23 09:50:04 spitzak Exp $"
 //
 // More Fl_FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -39,15 +39,12 @@
 // Include necessary headers.
 //
 
-#include <FL/Fl_FileChooser.H>
-#include <FL/filename.H>
-#include <FL/fl_ask.H>
-#include <FL/x.H>
-
+#include <fltk/Fl_FileChooser.h>
+#include <fltk/filename.h>
+#include <fltk/fl_ask.h>
+#include <fltk/vsnprintf.h>
+#include <fltk/x.h>
 #include <config.h>
-
-#include <stdio.h>
-#include <stdlib.h>
 #include <errno.h>
 #include <ctype.h>
 #include <sys/types.h>
@@ -56,14 +53,10 @@
 #if defined(WIN32)
 #  include <direct.h>
 #  include <io.h>
-#ifndef _MSC_VER
-extern "C" int access(const char *, int);
-#endif
 #else
 #  include <unistd.h>
 #  include <pwd.h>
 #endif /* WIN32 */
-
 
 //
 // 'Fl_FileChooser::directory()' - Set the directory in the file chooser.
@@ -401,8 +394,6 @@ Fl_FileChooser::rescan()
 
   // Build the file list...
   fileList->load(directory_);
-  fileList->value(0);
-  fileList->display(0);
   fileList->redraw();
 }
 
@@ -674,5 +665,5 @@ Fl_FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.13 2001/07/16 19:38:18 robertk Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.14 2001/07/23 09:50:04 spitzak Exp $".
 //

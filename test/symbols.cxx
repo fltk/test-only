@@ -1,5 +1,5 @@
 //
-// "$Id: symbols.cxx,v 1.5 2000/01/16 07:44:45 robertk Exp $"
+// "$Id: symbols.cxx,v 1.6 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Symbol test program for the Fast Light Tool Kit (FLTK).
 //
@@ -25,10 +25,10 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Single_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Single_Window.h>
+#include <fltk/Fl_Box.h>
+#include <fltk/fl_draw.h>
 
 int N = 0;
 #define W 60
@@ -86,5 +86,5 @@ bt("@DnArrow");
 }
 
 //
-// End of "$Id: symbols.cxx,v 1.5 2000/01/16 07:44:45 robertk Exp $".
+// End of "$Id: symbols.cxx,v 1.6 2001/07/23 09:50:06 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts.cxx,v 1.11 2001/07/18 19:39:24 clip Exp $"
+// "$Id: fl_list_fonts.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -21,7 +21,7 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/fl_draw.H>
+#include <fltk/fl_draw.h>
 
 #ifdef WIN32
 #include "fl_list_fonts_win32.cxx"
@@ -42,7 +42,7 @@ Fl_Font fl_find_font(const char* name, int attributes /* = 0 */) {
   Fl_Font font = 0;
   // always try the built-in fonts first, becasue fl_list_fonts is *slow*...
   int i; for (i = 0; i < 16; i += (i < 12 ? 4 : 1)) {
-    font = fl_fonts()+i;
+    font = fl_fonts+i;
     const char* fontname = font->name();
     if (!strncasecmp(name, fontname, length) && !fontname[length]) goto GOTIT;
   }
@@ -70,5 +70,5 @@ Fl_Font fl_find_font(const char* name, int attributes /* = 0 */) {
 }
 
 //
-// End of "$Id: fl_list_fonts.cxx,v 1.11 2001/07/18 19:39:24 clip Exp $".
+// End of "$Id: fl_list_fonts.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: demo.cxx,v 1.14 2000/05/17 07:08:12 bill Exp $"
+// "$Id: demo.cxx,v 1.15 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Main demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -31,12 +31,12 @@
 #else
 #  include <unistd.h>
 #endif
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Button.H>
-#include <FL/filename.H>
-#include <FL/x.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Box.h>
+#include <fltk/Fl_Button.h>
+#include <fltk/filename.h>
+#include <fltk/x.h>
 
 /* The form description */
 
@@ -331,6 +331,6 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: demo.cxx,v 1.14 2000/05/17 07:08:12 bill Exp $".
+// End of "$Id: demo.cxx,v 1.15 2001/07/23 09:50:05 spitzak Exp $".
 //
 

@@ -1,5 +1,5 @@
 //
-// "$Id: filename_ext.cxx,v 1.4 1999/01/07 19:17:34 mike Exp $"
+// "$Id: filename_ext.cxx,v 1.5 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Filename extension routines for the Fast Light Tool Kit (FLTK).
 //
@@ -25,7 +25,7 @@
 
 // returns pointer to the last '.' or to the null if none:
 
-#include <FL/filename.H>
+#include <fltk/filename.h>
 
 const char *filename_ext(const char *buf) {
   const char *q = 0;
@@ -41,5 +41,5 @@ const char *filename_ext(const char *buf) {
 }
 
 //
-// End of "$Id: filename_ext.cxx,v 1.4 1999/01/07 19:17:34 mike Exp $".
+// End of "$Id: filename_ext.cxx,v 1.5 2001/07/23 09:50:05 spitzak Exp $".
 //

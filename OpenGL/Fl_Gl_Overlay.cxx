@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Overlay.cxx,v 1.13 2001/03/20 18:21:53 spitzak Exp $"
+// "$Id: Fl_Gl_Overlay.cxx,v 1.14 2001/07/23 09:50:03 spitzak Exp $"
 //
 // OpenGL overlay code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,15 +26,14 @@
 #include <config.h>
 #if HAVE_GL
 
-#include <FL/Fl.H>
-#include <FL/x.H>
-#include "Fl_Gl_Choice.H"
-#include <FL/Fl_Gl_Window.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Gl_Window.h>
+#include "Fl_Gl_Choice.h"
 #include <stdlib.h>
 
 #if !HAVE_GL_OVERLAY
 
-int Fl_Gl_Window::can_do_overlay() {return 0;}
+bool Fl_Gl_Window::can_do_overlay() {return 0;}
 
 void Fl_Gl_Window::make_overlay() {overlay = this;}
 
@@ -59,38 +58,55 @@ void Fl_Gl_Window::make_overlay() {overlay = this;}
 ////////////////////////////////////////////////////////////////
 // X version
 
+extern bool fl_overlay;
 extern XVisualInfo *fl_find_overlay_visual();
 extern XVisualInfo *fl_overlay_visual;
 extern Colormap fl_overlay_colormap;
 extern unsigned long fl_transparent_pixel;
-extern uchar fl_overlay;
 
 class _Fl_Gl_Overlay : public Fl_Gl_Window {
+  void flush();
   void draw();
 public:
   void create();
   _Fl_Gl_Overlay(int x, int y, int w, int h) :
     Fl_Gl_Window(x,y,w,h) {
-    set_flag(INACTIVE);
+    set_flag(FL_INACTIVE);
   }
 };
 
+void _Fl_Gl_Overlay::flush() {
+  make_current();
+#ifdef BOXX_BUGS
+  // The BoXX overlay is broken and you must not call swap-buffers. This
+  // code will make it work, but we lose because machines that do support
+  // double-buffered overlays will blink when they don't have to
+  glDrawBuffer(GL_FRONT);
+  draw();
+#else
+  draw();
+  swap_buffers();
+#endif
+  glFlush();
+  valid(1);
+}
+
 void _Fl_Gl_Overlay::draw() {
   if (!valid_) glClearIndex((GLfloat)fl_transparent_pixel);
+  Fl_Gl_Window *w = (Fl_Gl_Window *)parent();
   if (damage() != FL_DAMAGE_EXPOSE && !(w->mode() & FL_NO_ERASE_OVERLAY))
     glClear(GL_COLOR_BUFFER_BIT);
-  Fl_Gl_Window *w = (Fl_Gl_Window *)parent();
   uchar save_valid = w->valid_;
   w->valid_ = valid_;
-  fl_overlay = 1;
+  fl_overlay = true;
   w->draw_overlay();
-  fl_overlay = 0;
+  fl_overlay = false;
   valid_ = w->valid_;
   w->valid_ = save_valid;
 }
 
 void _Fl_Gl_Overlay::create() {
-  Fl_X::create(this, fl_overlay_visual, fl_overlay_colormap, fl_transparent_pixel);
+  Fl_X::create(this, fl_overlay_visual, fl_overlay_colormap, int(fl_transparent_pixel));
   // find the outermost window to tell wm about the colormap:
   Fl_Window *w = window();
   for (;;) {Fl_Window *w1 = w->window(); if (!w1) break; w = w1;}
@@ -99,8 +115,16 @@ void _Fl_Gl_Overlay::create() {
   valid(0);
 }
 
-int Fl_Gl_Window::can_do_overlay() {
-  return fl_find_overlay_visual() != 0;
+bool Fl_Gl_Window::can_do_overlay() {
+  if (fl_find_overlay_visual()) return true;
+#if 0
+// This may work if SERVER_OVERLAY_VISUALS is not set in X server, but glX
+// is still able to locate an overlay. This should be in fl_overlay_visual.cxx
+  static int list[] = {GLX_LEVEL, 1, 0};
+  fl_overlay_visual = glXChooseVisual(fl_display, fl_screen, list);
+  if (fl_overlay_visual) return true;
+#endif
+  return false;
 }
 
 void Fl_Gl_Window::make_overlay() {
@@ -131,7 +155,7 @@ void Fl_Gl_Window::make_overlay() {
   HDC hdc = Fl_X::i(this)->private_dc;
   overlay = context;
   LAYERPLANEDESCRIPTOR pfd;
-  wglDescribeLayerPlane(hdc, gl_choice->pixelformat, 1, sizeof(pfd), &pfd);
+  wglDescribeLayerPlane(hdc, gl_choice->pixelFormat, 1, sizeof(pfd), &pfd);
   if (!pfd.iPixelType) {
     ; // full-color overlay
   } else {
@@ -157,12 +181,12 @@ void Fl_Gl_Window::make_overlay() {
   return;
 }
 
-int Fl_Gl_Window::can_do_overlay() {
-  if (!g) {
-    g = Fl_Gl_Choice::find(mode_,alist);
-    if (!g) return 0;
+bool Fl_Gl_Window::can_do_overlay() {
+  if (!gl_choice) {
+    gl_choice = Fl_Gl_Choice::find(mode_);
+    if (!gl_choice) return false;
   }
-  return (g->pfd.bReserved & 15) != 0;
+  return (gl_choice->pfd.bReserved & 15) != 0;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -208,5 +232,5 @@ void Fl_Gl_Window::hide_overlay() {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Overlay.cxx,v 1.13 2001/03/20 18:21:53 spitzak Exp $".
+// End of "$Id: Fl_Gl_Overlay.cxx,v 1.14 2001/07/23 09:50:03 spitzak Exp $".
 //

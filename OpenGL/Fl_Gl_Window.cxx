@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.24 2001/03/22 21:28:05 robertk Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.25 2001/07/23 09:50:03 spitzak Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,10 +26,10 @@
 #include <config.h>
 #if HAVE_GL
 
-#include <FL/Fl.H>
-#include "Fl_Gl_Choice.H"
-#include <FL/Fl_Gl_Window.H>
-#include <FL/x.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include "Fl_Gl_Choice.h"
+#include <fltk/Fl_Gl_Window.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -58,7 +58,7 @@ static char SWAP_TYPE; // 0 = determine it from environment variable
 
 ////////////////////////////////////////////////////////////////
 
-int Fl_Gl_Window::can_do(int a) {
+bool Fl_Gl_Window::can_do(int a) {
   return Fl_Gl_Choice::find(a) != 0;
 }
 
@@ -82,12 +82,17 @@ void Fl_Gl_Window::invalidate() {
 #endif
 }
 
-int Fl_Gl_Window::mode(int m) {
-  if (m == mode_) return 0;
+bool Fl_Gl_Window::mode(int m) {
+  if (m == mode_) return false;
   mode_ = m;
   // destroy context and g:
-  if (shown()) {destroy(); gl_choice = 0; create();}
-  return 1;
+  if (shown()) {
+    bool reshow = visible_r();
+    destroy();
+    gl_choice = 0;
+    if (reshow) {create(); show();}
+  }
+  return true;
 }
 
 #define NON_LOCAL_CONTEXT 0x80000000
@@ -143,35 +148,46 @@ void Fl_Gl_Window::draw_swap() {
 }
 
 #if HAVE_GL_OVERLAY && defined(WIN32)
-uchar fl_overlay; // changes how fl_color() works
 int fl_overlay_depth = 0;
+bool fl_overlay;
 #endif
+
+#define SGI320_BUG 1
 
 void Fl_Gl_Window::flush() {
   uchar save_valid = valid_;
 
 #if HAVE_GL_OVERLAY && defined(WIN32)
 
-  // SGI 320 messes up overlay with user-defined cursors:
-  bool fixcursor =
-    Fl_X::i(this)->cursor && Fl_X::i(this)->cursor != fl_default_cursor;
-  if (fixcursor) SetCursor(0);
+#if SGI320_BUG
+  bool fixcursor = false; // for fixing the SGI 320 bug
+#endif
 
-  // Draw into hardware overlay planes:
+  // Draw into hardware overlay planes if they are damaged:
   if (overlay && overlay != this
       && (damage()&(FL_DAMAGE_OVERLAY|FL_DAMAGE_EXPOSE) || !save_valid)) {
+#if SGI320_BUG
+    // SGI 320 messes up overlay with user-defined cursors:
+    if (Fl_X::i(this)->cursor && Fl_X::i(this)->cursor != fl_default_cursor) {
+      fixcursor = true; // make it restore cursor later
+      SetCursor(0);
+    }
+#endif
     fl_set_gl_context(this, (GLContext)overlay);
     if (fl_overlay_depth)
       wglRealizeLayerPalette(Fl_X::i(this)->private_dc, 1, TRUE);
     glDisable(GL_SCISSOR_TEST);
     if (!(mode_ & FL_NO_ERASE_OVERLAY)) glClear(GL_COLOR_BUFFER_BIT);
-    fl_overlay = 1;
+    fl_overlay = true;
     draw_overlay();
-    fl_overlay = 0;
+    fl_overlay = false;
     valid(save_valid);
     wglSwapLayerBuffers(Fl_X::i(this)->private_dc, WGL_SWAP_OVERLAY1);
-    if (damage() == FL_DAMAGE_OVERLAY) { // main layer is undamaged
+    // if only the overlay was damaged we are done, leave main layer alone:
+    if (damage() == FL_DAMAGE_OVERLAY) {
+#if SGI320_BUG
       if (fixcursor) SetCursor(Fl_X::i(this)->cursor);
+#endif
       return;
     }
   }
@@ -261,24 +277,22 @@ void Fl_Gl_Window::flush() {
     glFlush();
   }
 
-#if HAVE_GL_OVERLAY && defined(WIN32)
+#if HAVE_GL_OVERLAY && defined(WIN32) && SGI320_BUG
   if (fixcursor) SetCursor(Fl_X::i(this)->cursor);
 #endif
   valid(1);
 }
 
 void Fl_Gl_Window::layout() {
-  if (ow() != w() || oh() != h()) {
-    valid(0);
+  valid(0);
 #ifndef WIN32
-    if (!resizable() && overlay && overlay != this)
-      ((Fl_Gl_Window*)overlay)->resize(0,0,w(),h());
+  if (!resizable() && overlay && overlay != this)
+    ((Fl_Gl_Window*)overlay)->resize(0,0,w(),h());
 #endif
-  }
   Fl_Window::layout();
 }
 
-void Fl_Gl_Window::context(void* v, int destroy_flag) {
+void Fl_Gl_Window::context(void* v, bool destroy_flag) {
   if (context_ && !(mode_&NON_LOCAL_CONTEXT)) fl_delete_gl_context(context_);
   context_ = (GLContext)v;
   if (destroy_flag) mode_ &= ~NON_LOCAL_CONTEXT;
@@ -287,9 +301,11 @@ void Fl_Gl_Window::context(void* v, int destroy_flag) {
 
 void Fl_Gl_Window::destroy() {
   context(0);
-#if HAVE_GL_OVERLAY && defined(WIN32)
+#if HAVE_GL_OVERLAY
   if (overlay && overlay != this) {
+#ifdef WIN32
     fl_delete_gl_context((GLContext)overlay);
+#endif
     overlay = 0;
   }
 #endif
@@ -314,5 +330,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.24 2001/03/22 21:28:05 robertk Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.25 2001/07/23 09:50:03 spitzak Exp $".
 //

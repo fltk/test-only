@@ -1,5 +1,5 @@
 //
-// "$Id: label.cxx,v 1.11 2001/07/10 08:14:39 clip Exp $"
+// "$Id: label.cxx,v 1.12 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Label test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,14 +23,14 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Hor_Value_Slider.H>
-#include <FL/Fl_Toggle_Button.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Choice.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Double_Window.h>
+#include <fltk/Fl_Box.h>
+#include <fltk/Fl_Hor_Value_Slider.h>
+#include <fltk/Fl_Toggle_Button.h>
+#include <fltk/Fl_Input.h>
+#include <fltk/Fl_Choice.h>
+#include <fltk/fl_draw.h>
 
 Fl_Toggle_Button *leftb,*rightb,*topb,*bottomb,*insideb,*clipb,*wrapb;
 Fl_Box *text;
@@ -53,7 +53,7 @@ void button_cb(Fl_Widget *,void *) {
 }
 
 void font_cb(Fl_Widget *,void *) {
-  text->label_font(fl_fonts() +  int(fonts->value()));
+  text->label_font(fl_fonts +  int(fonts->value()));
   window->redraw();
 }
 
@@ -159,5 +159,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: label.cxx,v 1.11 2001/07/10 08:14:39 clip Exp $".
+// End of "$Id: label.cxx,v 1.12 2001/07/23 09:50:06 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.45 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.46 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -29,9 +29,9 @@
 // Each child widget is a card, and it's label() is printed on the card tab.
 // Clicking the tab makes that card visible.
 
-#include <FL/Fl.H>
-#include <FL/Fl_Tabs.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Tabs.h>
+#include <fltk/fl_draw.h>
 
 #define BORDER 10
 #define TABSLOPE 5
@@ -351,7 +351,7 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
     fl_vertex(x2, h());
     fl_vertex(x2+TABSLOPE, h()+H-sel);
     fl_fill();
-    fl_color(!sel && o==push_ ? FL_DARK3 : FL_LIGHT3);
+    fl_color(!sel && o==push_ ? FL_LIGHT3 : FL_DARK3);
     fl_newpath();
     fl_vertex(x1+TABSLOPE, h()-1);
     fl_vertex(x2, h()-1);
@@ -361,38 +361,45 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
       if (x1>0) fl_line(0, h()+H, x1, h()+H);
       if (x2+TABSLOPE < w()-1) fl_line(x2+TABSLOPE, h()+H, w()-1, h()+H);
     }
-    fl_color(!sel && o==push_ ? FL_LIGHT3 : FL_DARK3);
+    fl_color(!sel && o==push_ ? FL_DARK3 : FL_LIGHT3);
     fl_line(x1, h()+H, x1+TABSLOPE, h()-1);
   }
   if (W > TABSLOPE+EXTRASPACE/2) {
+    int x = (what==LEFT ? x1 : x2-W)+(TABSLOPE+EXTRASPACE/2);
+    int w = W-(TABSLOPE+EXTRASPACE/2);
+    int y,h;
+    if (H<0) {
+      y = this->h()+H;
+      h = -H-1;
+    } else {
+      y = 2;
+      h = H-1;
+    }
+    o->draw_label(x, y, w, h, FL_ALIGN_CENTER);
     if (sel && focused()) {
       fl_color(FL_BLACK);
       fl_line_style(FL_DOT);
-      fl_rect(x2-W+TABSLOPE,
-	      (H<0?h()+H-3:0)+1, W-TABSLOPE,
-	      (H<0?-H:H)+1);
+      if (H<0) y--;
+      fl_rect(x, y, w, h);
       fl_line_style(0);
     }
-    o->draw_label((what==LEFT ? x1 : x2-W)+(TABSLOPE+EXTRASPACE/2),
-		  (H<0?h()+H-2:0), W-(TABSLOPE+EXTRASPACE/2),
-		  (H<0?-H:H)+3, FL_ALIGN_CENTER);
   }
 }
 
 static void revert(Fl_Style* s) {
   s->box = FL_THIN_UP_BOX;
 }
-
-static Fl_Named_Style* style = new Fl_Named_Style("Tabs", revert, &style);
+static Fl_Named_Style style("Tabs", revert, &Fl_Tabs::default_style);
+Fl_Named_Style* Fl_Tabs::default_style = &::style;
 
 Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
   : Fl_Group(X,Y,W,H,l)
 {
-  style(::style);
+  style(default_style);
   type(FL_TABS);
   push_ = 0;
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.45 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.46 2001/07/23 09:50:05 spitzak Exp $".
 //

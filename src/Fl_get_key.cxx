@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key.cxx,v 1.5 1999/01/07 19:17:32 mike Exp $"
+// "$Id: Fl_get_key.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
@@ -31,14 +31,14 @@
 // keys (mostly) by the X keysym.  So this turns the keysym into a keycode
 // and looks it up in the X key bit vector, which Fl_x.C keeps track of.
 
-#include <FL/Fl.H>
-#include <FL/x.H>
+#include <fltk/Fl.h>
+#include <fltk/x.h>
 
 extern char fl_key_vector[32]; // in Fl_x.C
 
-int Fl::event_key(int k) {
+bool Fl::event_key(int k) {
   if (k > FL_Button && k <= FL_Button+8)
-    return Fl::event_state(8<<(k-FL_Button));
+    return Fl::event_state(8<<(k-FL_Button)) != 0;
   int i;
 #ifdef __sgi
   // get some missing PC keyboard keys:
@@ -48,10 +48,10 @@ int Fl::event_key(int k) {
   else
 #endif
     i = XKeysymToKeycode(fl_display, k);
-  return fl_key_vector[i/8] & (1 << (i%8));
+  return (fl_key_vector[i/8] & (1 << (i%8))) != 0;
 }
 
-int Fl::get_key(int k) {
+bool Fl::get_key(int k) {
   fl_open_display();
   XQueryKeymap(fl_display, fl_key_vector);
   return event_key(k);
@@ -60,5 +60,5 @@ int Fl::get_key(int k) {
 #endif
 
 //
-// End of "$Id: Fl_get_key.cxx,v 1.5 1999/01/07 19:17:32 mike Exp $".
+// End of "$Id: Fl_get_key.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $".
 //

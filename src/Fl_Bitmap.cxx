@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.cxx,v 1.11 2000/07/14 08:35:01 clip Exp $"
+// "$Id: Fl_Bitmap.cxx,v 1.12 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -23,10 +23,10 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/x.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Bitmap.H>
+#include <fltk/Fl.h>
+#include <fltk/x.h>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Bitmap.h>
 
 #ifdef WIN32
 // replicate XCreateBitmapFromData:
@@ -68,5 +68,5 @@ void Fl_Bitmap::draw(int X, int Y, int W, int H, int cx, int cy)
 }
 
 //
-// End of "$Id: Fl_Bitmap.cxx,v 1.11 2000/07/14 08:35:01 clip Exp $".
+// End of "$Id: Fl_Bitmap.cxx,v 1.12 2001/07/23 09:50:04 spitzak Exp $".
 //

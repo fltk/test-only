@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.25 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_color.cxx,v 1.26 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -23,8 +23,8 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl_Color.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl_Color.h>
+#include <fltk/fl_draw.h>
 
 // The fltk "colormap". In fltk 1.0 this allowed the gui colors to be
 // stored in 8-bit locations. In fltk 2.0 this is preserved for back
@@ -107,5 +107,5 @@ Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg) {
 #endif
 
 //
-// End of "$Id: fl_color.cxx,v 1.25 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fl_color.cxx,v 1.26 2001/07/23 09:50:05 spitzak Exp $".
 //

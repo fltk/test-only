@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_x.cxx,v 1.3 2001/07/18 19:39:24 clip Exp $"
+// "$Id: fl_list_fonts_x.cxx,v 1.4 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -38,7 +38,7 @@
 // no guarantee that all nice names are unique, and there is no reverse
 // translation other than to list all the fonts and find a match.
 
-#include "Fl_FontSize.H"
+#include "Fl_FontSize.h"
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
@@ -126,7 +126,6 @@ static int sort_function(const void *aa, const void *bb) {
 }
 }
 
-#include <stdio.h>
 static int
 x11_list_fonts(Fl_Font*& arrayp) {
   static Fl_Font* font_array = 0;
@@ -167,8 +166,8 @@ x11_list_fonts(Fl_Font*& arrayp) {
       }
       // see if it is one of our built-in fonts:
       // if so, set the list of x fonts, since we have it anyway
-      if (!strncmp(skip_foundry, (fl_fonts()+j)->name_+2, length)) {
-	newfont = fl_fonts()+j;
+      if (!strncmp(skip_foundry, fl_fonts[j].name_+2, length)) {
+	newfont = fl_fonts+j;
 	if (!newfont->xlist) {
 	  newfont->xlist = xlist+first_xlist;
 	  newfont->n = -(i-first_xlist);
@@ -280,5 +279,5 @@ int Fl_Font_::sizes(int*& sizep) const {
 }
 
 //
-// End of "$Id: fl_list_fonts_x.cxx,v 1.3 2001/07/18 19:39:24 clip Exp $"
+// End of "$Id: fl_list_fonts_x.cxx,v 1.4 2001/07/23 09:50:05 spitzak Exp $"
 //

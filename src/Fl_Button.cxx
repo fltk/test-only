@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.37 2001/02/26 15:08:05 robertk Exp $"
+// "$Id: Fl_Button.cxx,v 1.38 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,9 +23,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Group.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Button.h>
+#include <fltk/Fl_Group.h>
 
 int Fl_Button::set() {
   clear_changed();
@@ -62,9 +62,7 @@ void Fl_Button::draw() {
 // Call the draw method, handle the clip out
 void Fl_Button::draw_n_clip()
 {
-  if (type() != FL_HIDDEN_BUTTON && 
-      (box() != FL_NO_BOX || label() || image()))
-    Fl_Widget::draw_n_clip();
+  if (type() != FL_HIDDEN_BUTTON) Fl_Widget::draw_n_clip();
 }
 
 int Fl_Button::handle(int event) {
@@ -77,7 +75,9 @@ int Fl_Button::handle(int event) {
   case FL_MOVE:
     return 1;
   case FL_PUSH:
+#ifdef WINDOWS_COMPATABILITY
     take_focus();
+#endif
     oldval = value();
   case FL_DRAG:
     if (Fl::event_inside(0,0,w(),h())) {
@@ -127,19 +127,20 @@ int Fl_Button::handle(int event) {
 
 static void revert(Fl_Style*) {}
 
-static Fl_Named_Style* style = new Fl_Named_Style("Button", revert, &style);
+static Fl_Named_Style style("Button", revert, &Fl_Button::default_style);
+Fl_Named_Style* Fl_Button::default_style = &::style;
 
 Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h,l) {
-  style(::style);
+  style(default_style);
 }
 
 
-#include <FL/Fl_Round_Button.H>
+#include <fltk/Fl_Round_Button.h>
 Fl_Round_Button::Fl_Round_Button(int x,int y,int w,int h,const char *l)
 	: Fl_Check_Button(x,y,w,h,l) { 
 	shape = FL_GLYPH_ROUND; 
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.37 2001/02/26 15:08:05 robertk Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.38 2001/07/23 09:50:04 spitzak Exp $".
 //

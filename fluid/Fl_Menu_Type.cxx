@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Type.cxx,v 1.41 2001/02/28 21:19:49 clip Exp $"
+// "$Id: Fl_Menu_Type.cxx,v 1.42 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,14 +26,14 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
+#include <fltk/Fl.h>
 #include "Fl_Type.h"
-#include <FL/fl_message.H>
-#include <FL/Fl_Menu_.H>
-#include <FL/Fl_Item.H>
-#include <FL/Fl_Item_Group.H>
-#include <FL/Fl_Divider.H>
-#include <FL/Fl_Button.H>
+#include <fltk/fl_message.h>
+#include <fltk/Fl_Menu_.h>
+#include <fltk/Fl_Item.h>
+#include <fltk/Fl_Item_Group.h>
+#include <fltk/Fl_Divider.h>
+#include <fltk/Fl_Button.h>
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -121,7 +121,7 @@ Fl_Type* Fl_Menu_Type::click_test(int, int) {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Menu_Button.H>
+#include <fltk/Fl_Menu_Button.h>
 static Fl_Menu_Item button_type_menu[] = {
   {"normal",0,0,(void*)0},
   {"popup1",0,0,(void*)Fl_Menu_Button::POPUP1},
@@ -146,7 +146,7 @@ Fl_Menu_Button_Type Fl_Menu_Button_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Choice.H>
+#include <fltk/Fl_Choice.h>
 
 class Fl_Choice_Type : public Fl_Menu_Type {
 public:
@@ -163,7 +163,7 @@ Fl_Choice_Type Fl_Choice_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Menu_Bar.H>
+#include <fltk/Fl_Menu_Bar.h>
 
 class FLUID_API Fl_Menu_Bar_Type : public Fl_Menu_Type {
 public:
@@ -175,7 +175,7 @@ public:
 
 Fl_Menu_Bar_Type Fl_Menu_Bar_type;
 
-#include <FL/Fl_Input_Browser.H>
+#include <fltk/Fl_Input_Browser.h>
 static Fl_Menu_Item input_browser_type_menu[] = {
   {"Normal",0,0,(void*)FL_NORMAL_INPUT_BROWSER},
   {"Non-Editable",0,0,(void*)FL_NONEDITABLE_INPUT_BROWSER},
@@ -194,7 +194,7 @@ public:
 };
 Fl_Input_Browser_Type Fl_Input_Browser_type;
 
-#include <FL/Fl_Browser.H>
+#include <fltk/Fl_Browser.h>
 static Fl_Menu_Item browser_type_menu[] = {
   {"No Select",0,0,(void*)FL_NORMAL_BROWSER},
   {"Select",0,0,(void*)FL_SELECT_BROWSER},
@@ -216,12 +216,13 @@ Fl_Browser_Type Fl_Browser_type;
 ////////////////////////////////////////////////////////////////
 // Shortcut entry item in panel:
 
-#include <FL/Fl_Output.H>
+#include <fltk/Fl_Output.h>
 #include "Shortcut_Button.h"
-#include <FL/fl_draw.H>
+#include <fltk/fl_draw.h>
 
 void Shortcut_Button::draw() {
-  text_box()->draw(this, 0, 0, w(), h(), flags()|(value()?FL_SELECTED:0));
+  text_box()->draw(0, 0, w(), h(),
+		   value() ? selection_color() : color());
   fl_font(text_font(), text_size());
   fl_color(value() ? selection_text_color() : text_color());
   fl_draw(Fl::key_name(svalue), 6, 0, w(), h(), FL_ALIGN_LEFT);
@@ -276,5 +277,5 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
 }
 
 //
-// End of "$Id: Fl_Menu_Type.cxx,v 1.41 2001/02/28 21:19:49 clip Exp $".
+// End of "$Id: Fl_Menu_Type.cxx,v 1.42 2001/07/23 09:50:04 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Buffer.cxx,v 1.8 2001/03/10 20:38:22 clip Exp $"
+// "$Id: Fl_Text_Buffer.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -26,7 +26,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <FL/Fl_Text_Buffer.H>
+#include <fltk/Fl_Text_Buffer.h>
 
 
 #define PREFERRED_GAP_SIZE 80
@@ -363,7 +363,6 @@ void Fl_Text_Buffer::replace_rectangular( int start, int end, int rectStart,
   char *insPtr;
   const char *deletedText;
   char *insText = "";
-  const char *constInsText;
   int i, nInsertedLines, nDeletedLines, insLen, hint;
   int insertDeleted, insertInserted, deleteInserted;
   int linesPadded = 0;
@@ -389,14 +388,11 @@ void Fl_Text_Buffer::replace_rectangular( int start, int end, int rectStart,
     for ( i = 0; i < nDeletedLines - nInsertedLines; i++ )
       *insPtr++ = '\n';
     *insPtr = '\0';
-    constInsText = insText;
   } else if ( nDeletedLines < nInsertedLines ) {
     linesPadded = nInsertedLines - nDeletedLines;
     for ( i = 0; i < linesPadded; i++ )
       insert_( end, "\n" );
-    constInsText = text;
-  } else /* nDeletedLines == nInsertedLines */
-    constInsText = text;
+  } /* else nDeletedLines == nInsertedLines; */
 
   /* Save a copy of the text which will be modified for the modify CBs */
   deletedText = text_range( start, end );
@@ -1263,7 +1259,7 @@ void Fl_Text_Buffer::insert_column_( int column, int startPos, const char *insTe
   outPtr = outStr;
   lineStart = start;
   insPtr = insText;
-  while ( 1 ) {
+  for (;;) {
     lineEnd = line_end( lineStart );
     line = text_range( lineStart, lineEnd );
     insLine = copyLine( insPtr, &len );
@@ -1389,7 +1385,7 @@ void Fl_Text_Buffer::overlay_rectangular_(int startPos, int rectStart,
   outPtr = outStr;
   lineStart = start;
   insPtr = insText;
-  while ( 1 ) {
+  for (;;) {
     lineEnd = line_end( lineStart );
     line = text_range( lineStart, lineEnd );
     insLine = copyLine( insPtr, &len );
@@ -2287,5 +2283,5 @@ Fl_Text_Buffer::outputfile(const char *file, int start, int end, int buflen) {
 
 
 //
-// End of "$Id: Fl_Text_Buffer.cxx,v 1.8 2001/03/10 20:38:22 clip Exp $".
+// End of "$Id: Fl_Text_Buffer.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $".
 //

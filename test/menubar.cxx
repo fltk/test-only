@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.32 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: menubar.cxx,v 1.33 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,16 +23,16 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Output.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Menu_Bar.H>
-#include <FL/Fl_Toggle_Button.H>
-#include <FL/Fl_Menu_Button.H>
-#include <FL/Fl_Choice.H>
-#include <FL/Fl_Tooltip.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Output.h>
+#include <fltk/Fl_Box.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Menu_Bar.h>
+#include <fltk/Fl_Toggle_Button.h>
+#include <fltk/Fl_Menu_Button.h>
+#include <fltk/Fl_Choice.h>
+#include <fltk/Fl_Tooltip.h>
+#include <fltk/fl_draw.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -233,5 +233,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.32 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: menubar.cxx,v 1.33 2001/07/23 09:50:06 spitzak Exp $".
 //

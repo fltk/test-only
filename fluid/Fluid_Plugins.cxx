@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Plugins.cxx,v 1.19 2001/02/16 22:55:45 robertk Exp $"
+// "$Id: Fluid_Plugins.cxx,v 1.20 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Plugins code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,9 +26,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <FL/Fl.H>
+#include <fltk/Fl.h>
 #include "Fluid_Plugins.h"
-#include <FL/Fl_Menu_Item.H>
+#include <fltk/Fl_Menu_Item.h>
 #include "Fl_Type.h"
 
 Fluid_Plugin* plugins[MAXPLUGINS];
@@ -42,11 +42,11 @@ Fl_Menu_Item Plugins_New_Menu[MAXPLUGINS+1];
 #else
 #include <config.h> // for strcasecmp
 #endif
-#include <FL/Fl_Plugins.H>
+#include <fltk/Fl_Plugins.h>
 
 #if defined(FLDLopen) && (!defined(WIN32) || defined(FL_SHARED))
 
-#include <FL/dirent.h>
+#include <fltk/dirent.h>
 static int nboptions;
 static int nbnew;
 
@@ -121,7 +121,7 @@ static void ReadPlugins(const char* location)
 // Here, we create some useless object just to be sure that the whole 
 // FLTK library will be linked in fluid.
 // This function even do not need to be called ...
-#include <FL/Fl_Pixmap.H>
+#include <fltk/Fl_Pixmap.h>
 void link_whole_fltk()
 {
   new Fl_Pixmap((char**)0);
@@ -148,5 +148,5 @@ void read_plugins() {}
 #endif
 
 //
-// End of "$Id: Fluid_Plugins.cxx,v 1.19 2001/02/16 22:55:45 robertk Exp $"
+// End of "$Id: Fluid_Plugins.cxx,v 1.20 2001/07/23 09:50:04 spitzak Exp $"
 //

@@ -24,7 +24,7 @@ To compile:
 
 To compile Glut source code:
 
-   Modify it so that <glut.h> is replaced with <FL/glut.H>
+   Modify it so that <glut.h> is replaced with <fltk/glut.h>
 
    Compile and link with -lfltk_glut -lfltk
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.33 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.34 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,10 +23,10 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Check_Button.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Group.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Check_Button.h>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Group.h>
 
 void Fl_Check_Button::draw() {
   // Draw the outer box as though it were a button:
@@ -50,13 +50,13 @@ int Fl_Check_Button::handle(int event) {
 static void revert(Fl_Style* s) {
   s->box = FL_NO_BOX;
 }
-
-static Fl_Named_Style* style = new Fl_Named_Style("Check Button", revert, &style);
+static Fl_Named_Style style("Check_Button", revert, &Fl_Check_Button::default_style);
+Fl_Named_Style* Fl_Check_Button::default_style = &::style;
 
 Fl_Check_Button::Fl_Check_Button(int x, int y, int w, int h, const char *l)
   : Fl_Button(x, y, w, h, l)
 {
-  style(::style);
+  style(default_style);
   type(FL_TOGGLE_BUTTON);
   shape = FL_GLYPH_CHECK;
   clear_flag(FL_ALIGN_MASK);

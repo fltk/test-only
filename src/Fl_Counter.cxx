@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.40 2001/02/21 06:15:44 clip Exp $"
+// "$Id: Fl_Counter.cxx,v 1.41 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,10 +23,10 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Counter.H>
-#include <FL/Fl_Output.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Counter.h>
+#include <fltk/Fl_Output.h>
+#include <fltk/fl_draw.h>
 
 enum {
   FL_GLYPH_LEFTARROW,
@@ -48,7 +48,7 @@ static Fl_Color counter_glyph_color(const Fl_Widget *w, Fl_Flags f) {
 static void glyph(const Fl_Widget* widget, int t,
 		  int x,int y,int w,int h, Fl_Flags f)
 {
-  widget->draw_box(x,y,w,h,f);
+  widget->box()->draw(x,y,w,h,widget->get_box_color(f),f);
   // can't use this 'cause glyph box is shared with text box
   // Fl_Color fc = widget->get_glyph_color(f);
   Fl_Color fc = counter_glyph_color(widget, f);
@@ -165,7 +165,9 @@ int Fl_Counter::handle(int event) {
     return 1;
 
   case FL_PUSH:
+#ifdef WINDOWS_COMPATABILITY
     take_focus();
+#endif
     handle_push();
   case FL_DRAG:
     highlight = calc_mouseobj();
@@ -200,11 +202,11 @@ static void revert(Fl_Style* s) {
   s->selection_text_color = FL_BLACK;
   s->glyph = glyph;
 }
-
-static Fl_Named_Style* style = new Fl_Named_Style("counter", revert, &style);
+static Fl_Named_Style style("Counter", revert, &Fl_Counter::default_style);
+Fl_Named_Style* Fl_Counter::default_style = &::style;
 
 Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(x, y, w, h, l) {
-  style(::style);
+  style(default_style);
   clear_flag(FL_ALIGN_MASK);
   set_flag(FL_ALIGN_BOTTOM);
   range(-1000000.0, 1000000.0);
@@ -214,5 +216,5 @@ Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(
 }
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.40 2001/02/21 06:15:44 clip Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.41 2001/07/23 09:50:04 spitzak Exp $".
 //

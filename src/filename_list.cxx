@@ -1,5 +1,5 @@
 //
-// "$Id: filename_list.cxx,v 1.13 2000/07/20 05:28:32 clip Exp $"
+// "$Id: filename_list.cxx,v 1.14 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Filename list routines for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 // Wrapper for scandir with const-correct function prototypes.
 
 #include <config.h>
-#include <FL/filename.H>
+#include <fltk/filename.h>
 
 extern "C" {
   int numericsort(dirent **, dirent **);
@@ -58,5 +58,5 @@ int filename_list(const char *d, dirent ***list) {
 }
 
 //
-// End of "$Id: filename_list.cxx,v 1.13 2000/07/20 05:28:32 clip Exp $".
+// End of "$Id: filename_list.cxx,v 1.14 2001/07/23 09:50:05 spitzak Exp $".
 //

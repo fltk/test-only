@@ -1,5 +1,5 @@
 //
-// "$Id: bitmap.cxx,v 1.6 2000/01/16 07:44:38 robertk Exp $"
+// "$Id: bitmap.cxx,v 1.7 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Bitmap label test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,10 +23,10 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Button.H>
-#include <FL/Fl_Bitmap.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Button.h>
+#include <fltk/Fl_Bitmap.h>
 #include <stdio.h>
 
 #define sorceress_width 75
@@ -98,7 +98,7 @@ static uchar sorceress_bits[] = {
 
 Fl_Bitmap fl_bitmap(sorceress_bits, sorceress_width, sorceress_height);
 
-#include <FL/Fl_Toggle_Button.H>
+#include <fltk/Fl_Toggle_Button.h>
 
 Fl_Toggle_Button *leftb,*rightb,*topb,*bottomb,*insideb;
 Fl_Button *b;
@@ -138,5 +138,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: bitmap.cxx,v 1.6 2000/01/16 07:44:38 robertk Exp $".
+// End of "$Id: bitmap.cxx,v 1.7 2001/07/23 09:50:05 spitzak Exp $".
 //

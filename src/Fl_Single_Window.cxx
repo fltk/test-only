@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Single_Window.cxx,v 1.5 1999/09/14 07:17:23 bill Exp $"
+// "$Id: Fl_Single_Window.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Single-buffered window for the Fast Light Tool Kit (FLTK).
 //
@@ -29,8 +29,8 @@
 //	buffered.  You can turn it off using this subclass in case
 //	your display looks better without it.
 
-#include <FL/Fl_Single_Window.H>
+#include <fltk/Fl_Single_Window.h>
 
 //
-// End of "$Id: Fl_Single_Window.cxx,v 1.5 1999/09/14 07:17:23 bill Exp $".
+// End of "$Id: Fl_Single_Window.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $".
 //

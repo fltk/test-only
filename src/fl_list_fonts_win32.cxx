@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.12 2001/07/10 08:14:39 clip Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.13 2001/07/23 09:50:05 spitzak Exp $"
 //
 // WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -23,8 +23,8 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/win32.H>
+#include <fltk/Fl.h>
+#include <fltk/win32.h>
 #include "Fl_FontSize.h"
 #include <ctype.h>
 #include <string.h>
@@ -67,8 +67,8 @@ int Fl_Font_::sizes(int*& sizep) const {
 static Fl_Font_* make_a_font(char attrib, const char* name) {
   // see if it is one of our built-in fonts and return it:
   for (int j = 0; j < 16; j++) {
-    if ((fl_fonts()+j)->name_[0] == attrib &&
-	  !strcasecmp((fl_fonts()+j)->name_+1, name)) return fl_fonts()+j;
+    if (fl_fonts[j].name_[0] == attrib &&
+	  !strcasecmp(fl_fonts[j].name_+1, name)) return fl_fonts+j;
   }
   // no, lets create a font:
   Fl_Font_* newfont = new Fl_Font_;
@@ -94,8 +94,7 @@ static int CALLBACK enumcb(ENUMLOGFONT FAR *lpelf, NEWTEXTMETRIC FAR *,
   // returned sepeartely or not.  This is what fltk 1.0 did:
   if (lpelf->elfLogFont.lfCharSet != ANSI_CHARSET) return 1;
 
-//const char *name = (const char*) (lpelf->elfFullName);
-  const char *name = (const char*) (lpelf->elfLogFont.lfFaceName);
+  const char *name = (const char*)(lpelf->elfFullName);
 
   Fl_Font_* base = make_a_font(' ', name);
   base->italic_ = make_a_font('I', name);
@@ -142,12 +141,12 @@ fl_list_fonts(Fl_Font*& arrayp) {
 // deallocate Win32 fonts
 void fl_font_rid() {
   for (int i = 0; i < 16; i++) {
-    for (Fl_FontSize* fs = (Fl_FontSize *)(fl_fonts()+i)->first; fs;) {
+    for (Fl_FontSize* fs = (Fl_FontSize *)(fl_fonts+i)->first; fs;) {
       Fl_FontSize* next = fs->next;
       delete fs;
       fs = next;
     }
-    (fl_fonts()+i)->first = 0;
+    fl_fonts[i].first = 0;
   }
   for (int j = 0; j < num_fonts; j++) {
     for (Fl_FontSize* fs = (Fl_FontSize *)font_array[j]->first; fs;) {
@@ -160,5 +159,5 @@ void fl_font_rid() {
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.12 2001/07/10 08:14:39 clip Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.13 2001/07/23 09:50:05 spitzak Exp $"
 //

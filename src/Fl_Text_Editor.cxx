@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Editor.cxx,v 1.8 2001/03/20 18:21:53 spitzak Exp $"
+// "$Id: Fl_Text_Editor.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -23,20 +23,20 @@
 //
 
 
-#include <FL/Fl.H>
-#include <FL/Fl_Text_Editor.H>
-#include <FL/Fl_Style.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Text_Editor.h>
+#include <fltk/Fl_Style.h>
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
 
 static void revert(Fl_Style*) {}
-
-static Fl_Named_Style *style = new Fl_Named_Style("text editor", revert, &style);
+static Fl_Named_Style style("Text_Editor", revert, &Fl_Text_Editor::default_style);
+Fl_Named_Style* Fl_Text_Editor::default_style = &::style;
 
 Fl_Text_Editor::Fl_Text_Editor(int X, int Y, int W, int H,  const char* l)
     : Fl_Text_Display(X, Y, W, H, l) {
-  style(::style);
+  style(default_style);
   mCursorOn = 1;
   insert_mode_ = 1;
   key_bindings = 0;
@@ -442,5 +442,5 @@ int Fl_Text_Editor::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Text_Editor.cxx,v 1.8 2001/03/20 18:21:53 spitzak Exp $".
+// End of "$Id: Fl_Text_Editor.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: list_visuals.cxx,v 1.6 2000/10/18 07:18:24 spitzak Exp $"
+// "$Id: list_visuals.cxx,v 1.7 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Visual list utility for the Fast Light Tool Kit (FLTK).
 //
@@ -9,7 +9,7 @@
 // Does not use fltk.
 //
 // This file may be #included in another program to make a function to
-// call to list the visuals.  Fl.H must be included first to indicate this.
+// call to list the visuals.  Fl.h must be included first to indicate this.
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -32,8 +32,8 @@
 //
 
 #ifdef WIN32
-#include <FL/Fl.H>
-#include <FL/fl_message.H>
+#include <fltk/Fl.h>
+#include <fltk/fl_message.h>
 
 int main(int, char**) {
   fl_alert("Currently, this program works only under X.");
@@ -46,7 +46,7 @@ int main(int, char**) {
 
 #ifndef Fl_H
 
-#include <FL/x.H>
+#include <fltk/x.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -233,5 +233,5 @@ int main(int argc, char **argv) {
 #endif
 
 //
-// End of "$Id: list_visuals.cxx,v 1.6 2000/10/18 07:18:24 spitzak Exp $".
+// End of "$Id: list_visuals.cxx,v 1.7 2001/07/23 09:50:06 spitzak Exp $".
 //

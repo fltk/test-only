@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.30 2001/03/12 00:49:03 spitzak Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.31 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,9 +23,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Scroll.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Scroll.h>
+#include <fltk/fl_draw.h>
 
 void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
   fl_push_clip(X,Y,W,H);
@@ -287,5 +287,5 @@ int Fl_Scroll::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.30 2001/03/12 00:49:03 spitzak Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.31 2001/07/23 09:50:05 spitzak Exp $".
 //

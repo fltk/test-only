@@ -1,5 +1,5 @@
 //
-// "$Id: glpuzzle.cxx,v 1.12 2000/02/14 11:33:00 bill Exp $"
+// "$Id: glpuzzle.cxx,v 1.13 2001/07/23 09:50:05 spitzak Exp $"
 //
 // OpenGL puzzle demo for the Fast Light Tool Kit (FLTK).
 // This is rewritten to remove use of the Glut emulation so it can
@@ -31,9 +31,9 @@
 #include <sys/types.h>
 #include <time.h>
 #include <math.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Gl_Window.H>
-#include <FL/gl.h>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Gl_Window.h>
+#include <fltk/gl.h>
 #include <GL/glu.h>
 
 ////////////////////////////////////////////////////////////////
@@ -1498,7 +1498,7 @@ static int spinning;
 static float lastquat[4];
 static int sel_piece;
 
-#include <FL/Fl_Menu_.H>
+#include <fltk/Fl_Menu_.h>
 
 void set_solving(int);
 
@@ -1697,5 +1697,5 @@ main(int argc, char **argv)
 }
 
 //
-// End of "$Id: glpuzzle.cxx,v 1.12 2000/02/14 11:33:00 bill Exp $".
+// End of "$Id: glpuzzle.cxx,v 1.13 2001/07/23 09:50:05 spitzak Exp $".
 //

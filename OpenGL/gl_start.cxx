@@ -1,5 +1,5 @@
 //
-// "$Id: gl_start.cxx,v 1.9 2001/03/22 21:28:05 robertk Exp $"
+// "$Id: gl_start.cxx,v 1.10 2001/07/23 09:50:03 spitzak Exp $"
 //
 // OpenGL context routines for the Fast Light Tool Kit (FLTK).
 //
@@ -38,11 +38,10 @@
 #include <config.h>
 #if HAVE_GL
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/x.H>
-#include <FL/fl_draw.H>
-#include "Fl_Gl_Choice.H"
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include "Fl_Gl_Choice.h"
+#include <fltk/fl_draw.h>
 
 #ifdef WIN32
 static Fl_Gl_Choice* gl_choice;
@@ -72,7 +71,7 @@ void gl_start() {
   if (!context) {
 #ifdef WIN32
     if (!gl_choice) fl_gl_visual(0);
-    context = fl_create_gl_context((Fl_Window *)Fl_Window::current(), gl_choice);
+    context = fl_create_gl_context(Fl_Window::current(), gl_choice);
 #else
     context = fl_create_gl_context(fl_visual);
 #endif
@@ -113,5 +112,5 @@ void gl_finish() {
 #endif
 
 //
-// End of "$Id: gl_start.cxx,v 1.9 2001/03/22 21:28:05 robertk Exp $".
+// End of "$Id: gl_start.cxx,v 1.10 2001/07/23 09:50:03 spitzak Exp $".
 //

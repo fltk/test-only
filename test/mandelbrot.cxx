@@ -1,5 +1,5 @@
 //
-// "$Id: mandelbrot.cxx,v 1.10 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: mandelbrot.cxx,v 1.11 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Mandelbrot set demo for the Fast Light Tool Kit (FLTK).
 //
@@ -24,7 +24,7 @@
 //
 
 #include "mandelbrot_ui.cxx"
-#include <FL/fl_draw.H>
+#include <fltk/fl_draw.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -200,5 +200,5 @@ void Drawing_Area::layout() {
 }
 
 //
-// End of "$Id: mandelbrot.cxx,v 1.10 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: mandelbrot.cxx,v 1.11 2001/07/23 09:50:06 spitzak Exp $".
 //

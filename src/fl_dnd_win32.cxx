@@ -1,5 +1,5 @@
 //
-// "$Id: fl_dnd_win32.cxx,v 1.2 2001/03/12 16:15:32 robertk Exp $"
+// "$Id: fl_dnd_win32.cxx,v 1.3 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
@@ -31,17 +31,17 @@
 // or it should cause the DRAG+RELEASE events to not be passed to the
 // program somehow. I'm pretty sure this is a simple call in WIN32:
 
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
 
-static int grabfunc(int event) {
+static bool grabfunc(int event) {
   if (event == FL_RELEASE) Fl::pushed(0);
-  return 0;
+  return false;
 }
 
-extern int (*fl_local_grab)(int); // in Fl.cxx
+extern bool (*fl_local_grab)(int); // in Fl.cxx
 
-int Fl::dnd() {
+bool Fl::dnd() {
   Fl::first_window()->cursor(FL_CURSOR_HAND);
   //Fl::local_grab(grabfunc);
   fl_local_grab = grabfunc;
@@ -49,10 +49,10 @@ int Fl::dnd() {
   Fl::first_window()->cursor(FL_CURSOR_DEFAULT);
   Fl::release();
   fl_local_grab = 0;
-  return 1;
+  return true;
 }
 
 
 //
-// End of "$Id: fl_dnd_win32.cxx,v 1.2 2001/03/12 16:15:32 robertk Exp $".
+// End of "$Id: fl_dnd_win32.cxx,v 1.3 2001/07/23 09:50:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
-#include <FL/Fl_String_List.H>
-#include <FL/Fl_Item.H>
+#include <fltk/Fl_String_List.h>
+#include <fltk/Fl_Item.h>
 
 int Fl_String_List::children(const Fl_Menu_* group, const int* indexes, int level) {
   int n = Fl_List::children(group, 0,0);

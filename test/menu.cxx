@@ -1,21 +1,21 @@
 
-#include <FL/Fl.H>
-#include <FL/Fl_Item.H>
-#include <FL/Fl_Item_Group.H>
-#include <FL/Fl_Divider.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Menu_Bar.H>
-#include <FL/Fl_Menu_Button.H>
-#include <FL/Fl_Input_Browser.H>
-#include <FL/Fl_Choice.H>
-#include <FL/Fl_Tooltip.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Item.h>
+#include <fltk/Fl_Item_Group.h>
+#include <fltk/Fl_Divider.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Box.h>
+#include <fltk/Fl_Menu_Bar.h>
+#include <fltk/Fl_Menu_Button.h>
+#include <fltk/Fl_Input_Browser.h>
+#include <fltk/Fl_Choice.h>
+#include <fltk/Fl_Tooltip.h>
+#include <fltk/fl_draw.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <FL/Fl_Hor_Slider.H>
-#include <FL/Fl_String_List.H>
+#include <fltk/Fl_Hor_Slider.h>
+#include <fltk/Fl_String_List.h>
 
 #define WIDTH 600
 #define HEIGHT 23
@@ -131,5 +131,12 @@ int main(int argc, char **argv) {
   window.size_range(300,20);
   window.end();
   window.show(argc, argv);
+
+  const Fl_Screen_Info& info = Fl::info();
+  printf("info x,y,w,h = %d, %d, %d, %d\n", info.x, info.y, info.w, info.h);
+  printf("info width, height, depth = %d, %d, %d\n", info.width, info.height, info.depth);
+  printf("info mm %d %d\n", info.width_mm, info.height_mm);
+  //printf("info dpi %g %g\n", info.dpi_x, info.dpi_y);
+
   return Fl::run();
 }

@@ -34,9 +34,9 @@ settings).
 <UL><I>Listing 1 - "hello.cxx"</I>
 
 <PRE>
-#include &lt;FL/Fl.H&gt;
-#include &lt;FL/Fl_Window.H&gt;
-#include &lt;FL/Fl_Box.H&gt;
+#include &lt;fltk/Fl.h&gt;
+#include &lt;fltk/Fl_Window.h&gt;
+#include &lt;fltk/Fl_Box.h&gt;
 
 int main(int argc, char **argv) {
   Fl_Window *window = new Fl_Window(300,180);
@@ -61,19 +61,19 @@ program by closing the window or pressing the ESCape key.
 The proper way to include FLTK header files is: 
 
 <UL><PRE>
-#include &lt;FL/Fl_xyz.H&gt;
+#include &lt;fltk/Fl_xyz.h&gt;
 </PRE></UL>
 
 Notice that the leading "FL" and the ".H" are capitalized. (perhaps
 this will be changed for 2.0?)
 
-<p>All programs must include the file <TT>&lt;FL/Fl.H&gt;</TT>. In
+<p>All programs must include the file <TT>&lt;fltk/Fl.h&gt;</TT>. In
 addition the program must include a header file for each FLTK class it
 uses. This sample program uses <a href=Fl_Window.html>Fl_Window</a>
 and <a href=Fl_Box.html>Fl_Box</a>.
 
 <p>Programs that call FLTK <a href=drawing.html>drawing functions</a>
-must include <tt>&lt;FL/fl_draw.H&gt;</tt>
+must include <tt>&lt;fltk/fl_draw.h&gt;</tt>
 
 <h3>Creating the Widgets</h3>
 

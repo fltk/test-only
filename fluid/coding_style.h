@@ -2,7 +2,7 @@
 
 #ifndef coding_style_h
 #define coding_style_h
-#include <FL/Fl.H>
+#include <fltk/Fl.h>
 extern int gbrace_style;
 extern int gno_space_parens;
 extern int gbrace_functions;
@@ -16,14 +16,14 @@ extern void load_coding_style();
 extern const char *get_opening_brace(int is_function);
 extern const char *get_indent_string(int level);
 extern void show_coding_style_cb(Fl_Widget *, void *);
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Tabs.H>
-#include <FL/Fl_Group.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Round_Button.H>
-#include <FL/Fl_Check_Button.H>
-#include <FL/Fl_Value_Input.H>
-#include <FL/Fl_Button.H>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Tabs.h>
+#include <fltk/Fl_Group.h>
+#include <fltk/Fl_Box.h>
+#include <fltk/Fl_Round_Button.h>
+#include <fltk/Fl_Check_Button.h>
+#include <fltk/Fl_Value_Input.h>
+#include <fltk/Fl_Button.h>
 Fl_Window* make_codingstyle_window();
 void load_codingstyle_window();
 #endif

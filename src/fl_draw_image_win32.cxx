@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_win32.cxx,v 1.8 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_draw_image_win32.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $"
 //
 // WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -234,5 +234,5 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 #endif
 
 //
-// End of "$Id: fl_draw_image_win32.cxx,v 1.8 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fl_draw_image_win32.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $".
 //

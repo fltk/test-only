@@ -1,5 +1,5 @@
 //
-// "$Id: output.cxx,v 1.8 2001/07/10 08:14:39 clip Exp $"
+// "$Id: output.cxx,v 1.9 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Output test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,16 +23,16 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Value_Input.H> // necessary for bug in mingw32?
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Hor_Value_Slider.H>
-#include <FL/Fl_Toggle_Button.H>
-#include <FL/Fl_Input.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Output.H>
-#include <FL/Fl_Multiline_Output.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Value_Input.h> // necessary for bug in mingw32?
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_Box.h>
+#include <fltk/Fl_Hor_Value_Slider.h>
+#include <fltk/Fl_Toggle_Button.h>
+#include <fltk/Fl_Input.h>
+#include <fltk/fl_draw.h>
+#include <fltk/Fl_Output.h>
+#include <fltk/Fl_Multiline_Output.h>
 
 Fl_Output *text;
 Fl_Multiline_Output *text2;
@@ -42,9 +42,9 @@ Fl_Value_Slider *sizes;
 Fl_Window *window;
 
 void font_cb(Fl_Widget *,void *) {
-  text->text_font(fl_fonts() + int(fonts->value()));
+  text->text_font(fl_fonts + int(fonts->value()));
   text->redraw();
-  text2->text_font(fl_fonts() + int(fonts->value()));
+  text2->text_font(fl_fonts + int(fonts->value()));
   text2->redraw();
 }
 
@@ -104,5 +104,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: output.cxx,v 1.8 2001/07/10 08:14:39 clip Exp $".
+// End of "$Id: output.cxx,v 1.9 2001/07/23 09:50:06 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.25 2001/02/21 06:15:44 clip Exp $"
+// "$Id: Fl_Clock.cxx,v 1.26 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,9 +23,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Clock.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Clock.h>
+#include <fltk/fl_draw.h>
 #include <math.h>
 #include <time.h>
 #ifndef WIN32
@@ -157,12 +157,12 @@ static void revert(Fl_Style* s) {
   s->text_background = FL_DARK3;
   s->text_color = FL_BLACK;
 }
-
-static Fl_Named_Style* style = new Fl_Named_Style("clock", revert, &style);
+static Fl_Named_Style style("Clock", revert, &Fl_Clock::default_style);
+Fl_Named_Style* Fl_Clock::default_style = &::style;
 
 Fl_Clock_Output::Fl_Clock_Output(int x, int y, int w, int h, const char *l)
 : Fl_Widget(x, y, w, h, l) {
-  style(::style);
+  style(Fl_Clock::default_style);
   clear_flag(FL_ALIGN_MASK);
   set_flag(FL_ALIGN_BOTTOM);
   hour_ = 0;
@@ -172,5 +172,5 @@ Fl_Clock_Output::Fl_Clock_Output(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Clock.cxx,v 1.25 2001/02/21 06:15:44 clip Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.26 2001/07/23 09:50:04 spitzak Exp $".
 //

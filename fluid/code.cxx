@@ -1,5 +1,5 @@
 //
-// "$Id: code.cxx,v 1.16 2001/03/07 23:07:39 robertk Exp $"
+// "$Id: code.cxx,v 1.17 2001/07/23 09:50:04 spitzak Exp $"
 //
 // Code output routines for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include <FL/Fl.H>
+#include <fltk/Fl.h>
 #include "Fl_Type.h"
 #include "alignment_panel.h"
 #include "coding_style.h"
@@ -259,7 +259,7 @@ void write_h(const char* format,...) {
   va_end(args);
 }
 
-#include <FL/filename.H>
+#include <fltk/filename.h>
 int write_number;
 
 int write_code(const char *s, const char *t) {
@@ -293,7 +293,7 @@ int write_code(const char *s, const char *t) {
   fprintf(header_file, "#define %s\n", define_name);
   }  
 
-  write_declare("#include <FL/Fl.H>");
+  write_declare("#include <fltk/Fl.h>");
 
   if (t && include_H_from_C)
     write_c("#include \"%s\"\n", filename_name(t));
@@ -327,5 +327,5 @@ void Fl_Type::write_code() {
 }
 
 //
-// End of "$Id: code.cxx,v 1.16 2001/03/07 23:07:39 robertk Exp $".
+// End of "$Id: code.cxx,v 1.17 2001/07/23 09:50:04 spitzak Exp $".
 //

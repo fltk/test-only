@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rounded_box.cxx,v 1.15 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_rounded_box.cxx,v 1.16 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Rounded box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -23,9 +23,8 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl_Boxtype.H>
-#include <FL/fl_draw.H>
-#include <FL/Fl_Widget.H>
+#include <fltk/Fl_Boxtype.h>
+#include <fltk/fl_draw.h>
 
 static void rbox(int x, int y, int w, int h, Fl_Color fill, Fl_Color line) {
   // figure out diameter of circles for corners:
@@ -43,11 +42,10 @@ static void rbox(int x, int y, int w, int h, Fl_Color fill, Fl_Color line) {
   fl_color(fill); fl_fill_stroke(line);
 }
 
-void Fl_RFlat_Box::draw(const Fl_Widget* widget,
-			int x, int y, int w, int h, Fl_Flags f) const
+void Fl_RFlat_Box::draw(
+	int x, int y, int w, int h, Fl_Color color, Fl_Flags) const
 {
-  Fl_Color c = widget->get_box_color(f);
-  rbox(x, y, w, h, c, c);
+  rbox(x, y, w, h, color, color);
 }
 Fl_RFlat_Box::Fl_RFlat_Box(const char* n) : Fl_Boxtype_(n) {
   dx_ = dy_ = 7; dw_ = dh_ = 14;
@@ -55,10 +53,10 @@ Fl_RFlat_Box::Fl_RFlat_Box(const char* n) : Fl_Boxtype_(n) {
 }
 const Fl_RFlat_Box fl_rflat_box(0);
 
-void Fl_Rounded_Box::draw(const Fl_Widget* widget,
-			  int x, int y, int w, int h, Fl_Flags f) const
+void Fl_Rounded_Box::draw(
+	int x, int y, int w, int h, Fl_Color color, Fl_Flags) const
 {
-  rbox(x, y, w, h, widget->get_box_color(f), widget->get_glyph_color(f));
+  rbox(x, y, w, h, color, FL_BLACK); //widget->get_glyph_color(f);
 }
 Fl_Rounded_Box::Fl_Rounded_Box(const char* n) : Fl_Boxtype_(n) {
   dx_ = dy_ = 1; dw_ = dh_ = 2;
@@ -66,14 +64,14 @@ Fl_Rounded_Box::Fl_Rounded_Box(const char* n) : Fl_Boxtype_(n) {
 }
 const Fl_Rounded_Box fl_rounded_box(0);
 
-void Fl_RShadow_Box::draw(const Fl_Widget* widget,
-			  int x, int y, int w, int h, Fl_Flags f) const
+void Fl_RShadow_Box::draw(
+	int x, int y, int w, int h, Fl_Color color, Fl_Flags f) const
 {
   w -= 3; h -= 3;
   // draw shadow:
   rbox(x+3, y+3, w, h, FL_DARK3, FL_DARK3);
   // draw the box:
-  fl_rounded_box.draw(widget, x, y, w, h, f);
+  fl_rounded_box.draw(x, y, w, h, color, f);
 }
 Fl_RShadow_Box::Fl_RShadow_Box(const char* n) : Fl_Boxtype_(n) {
   dx_ = dy_ = 1; dw_ = dh_ = 5;
@@ -82,5 +80,5 @@ Fl_RShadow_Box::Fl_RShadow_Box(const char* n) : Fl_Boxtype_(n) {
 const Fl_RShadow_Box fl_rshadow_box(0);
 
 //
-// End of "$Id: fl_rounded_box.cxx,v 1.15 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fl_rounded_box.cxx,v 1.16 2001/07/23 09:50:05 spitzak Exp $".
 //

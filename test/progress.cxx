@@ -1,6 +1,6 @@
-#include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_ProgressBar.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Window.h>
+#include <fltk/Fl_ProgressBar.h>
 
   Fl_Window* w;
 

@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_getboolean.c,v 1.8 2000/07/20 05:28:32 clip Exp $"
+   "$Id: conf_getboolean.c,v 1.9 2001/07/23 09:50:05 spitzak Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -22,7 +22,7 @@
     USA.
 */
 
-#include <FL/conf.h>
+#include <fltk/conf.h>
 #include <config.h>
 
 /*
@@ -76,5 +76,5 @@ getconf_boolean(const char *configfile, const char *key, int *bvalue)
 } /* getconf_boolean() */
 
 /*
-    End of "$Id: conf_getboolean.c,v 1.8 2000/07/20 05:28:32 clip Exp $".
+    End of "$Id: conf_getboolean.c,v 1.9 2001/07/23 09:50:05 spitzak Exp $".
 */

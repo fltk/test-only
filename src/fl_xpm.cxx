@@ -1,5 +1,5 @@
 //
-// "$Id: fl_xpm.cxx,v 1.17 2001/07/16 19:38:18 robertk Exp $"
+// "$Id: fl_xpm.cxx,v 1.18 2001/07/23 09:50:05 spitzak Exp $"
 //
 // XPM reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,10 +27,10 @@
 // files is to imbed them in the source code with #include, in that
 // case you want to use an Fl_Pixmap object.
 
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
-#include <FL/Fl_Shared_Image.H>
+#include <fltk/Fl.h>
+#include <fltk/fl_draw.h>
+#include <fltk/x.h>
+#include <fltk/Fl_Shared_Image.h>
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
@@ -180,5 +180,5 @@ void Fl_XPM_Image::read()
 }
 
 //
-// End of "$Id: fl_xpm.cxx,v 1.17 2001/07/16 19:38:18 robertk Exp $"
+// End of "$Id: fl_xpm.cxx,v 1.18 2001/07/23 09:50:05 spitzak Exp $"
 //

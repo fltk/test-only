@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.52 2001/03/12 00:49:03 spitzak Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.53 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,9 +23,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Scrollbar.H>
-#include <FL/fl_draw.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Scrollbar.h>
+#include <fltk/fl_draw.h>
 #include <math.h>
 #include <stdlib.h>
 
@@ -200,17 +200,17 @@ static void revert(Fl_Style* s) {
   s->text_box = FL_FLAT_BOX;
   s->text_background = FL_DARK2;
 }
-
-static Fl_Named_Style* style = new Fl_Named_Style("Scrollbar", revert, &style);
+static Fl_Named_Style style("Scrollbar", revert, &Fl_Scrollbar::default_style);
+Fl_Named_Style* Fl_Scrollbar::default_style = &::style;
 
 Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
   : Fl_Slider(X, Y, W, H, L)
 {
-  style(::style);
+  style(default_style);
   pushed_ = highlight_ = 0;
   step(1);
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.52 2001/03/12 00:49:03 spitzak Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.53 2001/07/23 09:50:05 spitzak Exp $".
 //

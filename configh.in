@@ -1,27 +1,11 @@
 /*
- * "$Id: configh.in,v 1.42 2001/02/21 06:15:44 clip Exp $"
+ * "$Id: configh.in,v 1.43 2001/07/23 09:50:03 spitzak Exp $"
  *
- * Configuration file for the Fast Light Tool Kit (FLTK).
- * @configure_input@
+ * If this file is "config.h", it has been copied from "configh.in" by
+ * the ./configure program, which has replaced some of the symbols
+ * with the correct values for your system.
  *
- * Copyright 1998-1999 by Bill Spitzak and others.
- *
- * This library is free software; you can redistribute it and/or
- * modify it under the terms of the GNU Library General Public
- * License as published by the Free Software Foundation; either
- * version 2 of the License, or (at your option) any later version.
- *
- * This library is distributed in the hope that it will be useful,
- * but WITHOUT ANY WARRANTY; without even the implied warranty of
- * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
- * Library General Public License for more details.
- *
- * You should have received a copy of the GNU Library General Public
- * License along with this library; if not, write to the Free Software
- * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
- * USA.
- *
- * Please report all bugs and problems to "FLTK-bugs@easysw.com".
+ * If this file is "configh.in" it is the input to ./configure.
  */
 
 /*
@@ -101,41 +85,27 @@
 #undef U32
 #undef U64
 
-/*
- * HAVE_DIRENT_H, HAVE_SYS_NDIR_H, HAVE_SYS_DIR_H, HAVE_NDIR_H, HAVE_SCANDIR:
- *
- * Where is <dirent.h> (used only by fl_file_chooser and scandir).
- */
+/* Various Unix header files that differ between systems: */
 
 #define HAVE_DIRENT_H 1
 #define HAVE_SYS_NDIR_H 0
 #define HAVE_SYS_DIR_H 0
 #define HAVE_NDIR_H 0
 #define HAVE_SCANDIR 0
+#define HAVE_SYS_SELECT_H 0
 
-/* Possibly missing functions, and replacements: */
+/* See fltk/vsnprintf.h for replacement functions if these are undefined: */
 
 #define HAVE_SNPRINTF 0
-
-#if ! HAVE_SNPRINTF
-#  include <FL/vsnprintf.h>
-#  define snprintf fl_snprintf
-#endif /* !HAVE_SNPRINTF */
-
 #define HAVE_VSNPRINTF 0
 
-#if ! HAVE_VSNPRINTF
-#  include <FL/vsnprintf.h>
-#  define vsnprintf fl_vsnprintf
-#endif /* !HAVE_VSNPRINTF */
+/* Possibly missing functions and inline replacements: */
 
 #define HAVE_STRCASECMP 0
 
 #if ! HAVE_STRCASECMP
-/* Please fix: most machines have stricmp instead, AIX has this in a
-   different header file. We don't need our own version... */
-FL_API int conf_strcasecmp(const char *s1, const char *s2);
-#  define strcasecmp(a,b) conf_strcasecmp(a,b)
+# define strcasecmp(a,b) stricmp(a,b)
+# define strncasecmp(a,b,c) strnicmp(a,b,c)
 #endif
 
 #define HAVE_STRTOK_R 0
@@ -145,17 +115,9 @@ FL_API int conf_strcasecmp(const char *s1, const char *s2);
 #endif
 
 /*
- * HAVE_SYS_SELECT_H:
- *
- * Whether or not select() call has its own header file.
- */
-
-#define HAVE_SYS_SELECT_H 0
-
-/*
  * USE_POLL:
  *
- * Use the Linux/Irix poll() call instead of select()
+ * Use the Posix poll() call instead of select() ?
  */
 
 #define USE_POLL 0
@@ -168,7 +130,6 @@ FL_API int conf_strcasecmp(const char *s1, const char *s2);
   
 #define HAVE_PNG 0
 
-
 /*
  * HAVE_JPEG
  *
@@ -180,8 +141,7 @@ FL_API int conf_strcasecmp(const char *s1, const char *s2);
 /*
  * HAVE_DLOPEN
  *
- * Do we have ELF shared objects support?
- * (used in FL/Fl_Plugin.H)
+ * Enables plugin support on Unix
  */
   
 #define HAVE_DLOPEN 0
@@ -189,9 +149,7 @@ FL_API int conf_strcasecmp(const char *s1, const char *s2);
 /*
  * HAVE_PTHREAD
  *
- * Do we have MIT pthread
- *
- * Do we have POSIX threads?
+ * Makes Fl::lock() and Fl::unlock() work on Unix
  */
   
 #define HAVE_PTHREAD 0
@@ -215,5 +173,5 @@ FL_API int conf_strcasecmp(const char *s1, const char *s2);
 #define CONF_CACHED
 
 /*
- * End of "$Id: configh.in,v 1.42 2001/02/21 06:15:44 clip Exp $".
+ * End of "$Id: configh.in,v 1.43 2001/07/23 09:50:03 spitzak Exp $".
  */

@@ -1,5 +1,5 @@
 //
-// "$Id: tile.cxx,v 1.7 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: tile.cxx,v 1.8 2001/07/23 09:50:06 spitzak Exp $"
 //
 // Tile test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,11 +23,11 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Tile.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Button.H>
+#include <fltk/Fl.h>
+#include <fltk/Fl_Double_Window.h>
+#include <fltk/Fl_Tile.h>
+#include <fltk/Fl_Box.h>
+#include <fltk/Fl_Button.h>
 
 int main(int argc, char** argv) {
   Fl_Window window(320,320);
@@ -91,5 +91,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: tile.cxx,v 1.7 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: tile.cxx,v 1.8 2001/07/23 09:50:06 spitzak Exp $".
 //

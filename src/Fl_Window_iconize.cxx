@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_iconize.cxx,v 1.12 2000/06/11 21:17:28 bill Exp $"
+// "$Id: Fl_Window_iconize.cxx,v 1.13 2001/07/23 09:50:05 spitzak Exp $"
 //
 // Window minification code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,26 +23,26 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl_Window.H>
-#include <FL/x.H>
+#include <fltk/Fl_Window.h>
+#include <fltk/x.h>
 
-extern char fl_show_iconic; // in Fl_x.C/Fl_win32.C
+extern bool fl_show_iconic; // in Fl_x.C/Fl_win32.C
 
 void Fl_Window::iconize() {
   if (!i) {
-    fl_show_iconic = 1;
+    fl_show_iconic = true;
     show();
   } else {
 #ifdef WIN32
     ShowWindow(i->xid, SW_SHOWMINNOACTIVE);
 #else
     XIconifyWindow(fl_display, i->xid, fl_screen);
-    i->wait_for_expose = 1;
+    i->wait_for_expose = true;
 #endif
     set_visible();
   }
 }
 
 //
-// End of "$Id: Fl_Window_iconize.cxx,v 1.12 2000/06/11 21:17:28 bill Exp $".
+// End of "$Id: Fl_Window_iconize.cxx,v 1.13 2001/07/23 09:50:05 spitzak Exp $".
 //

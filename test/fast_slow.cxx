@@ -35,7 +35,7 @@ CHANGED) so it produces a callback on both drag and release mouse events.\nThe\
 ouse movement.\nThe right slider (representing a widget with high overhead) is\
  only updated when the mouse is released, by checking if Fl::pushed() is zero.");
       o->box(FL_DOWN_BOX);
-      o->label_font(fl_fonts()+4);
+      o->label_font(fl_fonts+4);
       o->color((Fl_Color)53);
       o->selection_color((Fl_Color)47);
       o->align(132|FL_ALIGN_INSIDE);
