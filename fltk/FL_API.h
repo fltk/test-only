@@ -1,11 +1,10 @@
+// "$Id: FL_API.h,v 1.5 2004/10/01 07:07:52 spitzak Exp $"
 //
-// "$Id: FL_API.h,v 1.4 2004/09/30 06:08:28 spitzak Exp $"
+// Stuff needed to compile DLL's on Windows. These symbols pollute all
+// the header files. Make sure you put them on anything you want to go
+// into a DLL!
 //
-// Fractal drawing demo for the Fast Light Tool Kit (FLTK).
-//
-// This is a GLUT demo program, with modifications to
-// demonstrate how to add fltk controls to a glut program.   The glut
-// code is unchanged except for the end (search for fltk to find changes).
+// I also put here some typedefs that fltk uses everywhere.
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -25,14 +24,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
-
-/* Stuff needed to compile DLL's on Windows. These symbols pollute all
-   the header files. Make sure you put them on anything you want to go
-   into a DLL!
-
-   I also put here some typedefs that fltk uses everywhere.
-*/
 
 #ifndef FL_API
 
@@ -75,5 +66,5 @@ typedef unsigned char uchar;
 #endif
 
 //
-// End of "$Id: FL_API.h,v 1.4 2004/09/30 06:08:28 spitzak Exp $".
+// End of "$Id: FL_API.h,v 1.5 2004/10/01 07:07:52 spitzak Exp $".
 //

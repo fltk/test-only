@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.50 2004/09/05 21:40:41 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.51 2004/10/01 07:07:53 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -56,7 +56,7 @@ using namespace fltk;
 static Font* normal_font;
 static float normal_size;
 static Color normal_color;
-static float dx, dy;
+static float dy, nextdy;
 static Flags flags;
 bool fl_drawing_shadow; // true for engraved labels
 
@@ -72,7 +72,7 @@ public:
   }
   void _measure(float& w, float& h) const {
     setfont(normal_font, normal_size);
-    ::dx = ::dy = 0;
+    nextdy = 0;
     w = 0; h = normal_size;
   }
 };
@@ -187,13 +187,10 @@ static const NothingSymbol nothingsymbol;
 
 /*! \addtogroup symbols
 
-  "@mxnumber" will move the x origin to the right by exactly n pixels.
-
-  This is included in width calculations, unlike "@xnumber" symbol.
-  This symbol is good for example moving text right in menu items,
-  which don't have image, so they are lined up same as items with image.
-  You should start positive numbers with '+' for compatability with possible
-  future versions of fltk.
+  "@mxnumber" draws a blank exactly n pixels wide. N may be negative.
+  This is useful for kerning or overprinting characters. For positive
+  N please use a '+' sign, so that unsigned values can be reserved
+  for future use.
 */
 class MxSymbol : public Symbol {
 public:
@@ -207,29 +204,26 @@ static const MxSymbol mxsymbol;
 
 /*! \addtogroup symbols
 
-  "@xnumber" will move the x origin to the right by n*(fontsize/12) pixels.
-
-  This is ignored in width calculations, but can be used to adjust
-  the position of a label to line up exactly. You should start
-  positive numbers with '+' for compatability with possible
-  future versions of fltk.
+  "@xnumber" draws a blank exactly n*(fontsize/12) wide. N may be negative.
+  This is useful for kerning or overprinting characters. For positive
+  N please use a '+' sign, so that unsigned values can be reserved
+  for future use.
 */
 class DxSymbol : public Symbol {
 public:
   DxSymbol() : Symbol("x") {}
   void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
   void _measure(float& w, float& h) const {
-    ::dx += (float)(strtod(text()+1,0)*h/12);
-    w = 0;
+    w = (float)(strtod(text()+1,0)*h/12);
   }
 };
 static const DxSymbol dxsymbol;
 
 /*! \addtogroup symbols
   "@ynumber" will move the y origin \e up (not down) by n*(fontsize/12) pixels.
+  The "@n" command will restore the y origin to the baseline.
 
-  This is ignored in width calculations, but can be used to adjust
-  the position of a label to line up exactly. You should start
+  This can be used to produce super/subscripts. You should start
   positive numbers with '+' for compatability with possible
   future versions of fltk.
 */
@@ -238,7 +232,7 @@ public:
   DySymbol() : Symbol("y") {}
   void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
   void _measure(float& w, float& h) const {
-    ::dy -= (float)(strtod(text()+1,0)*h/12);
+    nextdy -= (float)(strtod(text()+1,0)*h/12);
     w = 0;
   }
 };
@@ -357,7 +351,7 @@ static /*inline*/ void add(const Symbol* symbol,
   s.symbol = symbol;
   s.start = start;
   s.end = end;
-  s.x = x+dx;
+  s.x = x;
   s.y = y+dy;
   s.w = w;
   s.h = h;
@@ -429,7 +423,7 @@ static void wrap(
   int first_segment = segment_count;
 
   int spacing, ascent; setsa(spacing,ascent);
-  dx = dy = 0;
+  dy = nextdy = 0;
 
   for (const char* p = start; ;) {
     // figure out what we have next:
@@ -518,6 +512,7 @@ static void wrap(
 	setsa(spacing, ascent);
 	//if (dy > 0) spacing += dy; else ascent -= dy;
 	add(symbol, p+1, q, x, y+ascent, symbol_w, symbol_h, 0, 0);
+	dy = nextdy;
       } else {
 	// center the symbol in the vertical size of current font:
 	//int a = ascent-((spacing-int(H+1.5f))>>1);
@@ -726,5 +721,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.50 2004/09/05 21:40:41 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.51 2004/10/01 07:07:53 spitzak Exp $".
 //
