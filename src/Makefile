@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.120 2004/07/06 13:22:51 laza2000 Exp $"
+# "$Id: Makefile,v 1.121 2004/08/04 18:02:46 laza2000 Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -242,31 +242,37 @@ libfltk_s.a: $(OBJECTS)
 
 install:
 	echo "Installing include files in $(includedir)/fltk..."
-	$(RM) -r $(includedir)/fltk
+	$(RMDIR) $(includedir)/fltk
 	$(MKDIR) $(includedir)/fltk
 	$(CP) ../fltk/*.h  $(includedir)/fltk
 	$(CHMOD) 755 $(includedir)/fltk
 	$(CHMOD) 644 $(includedir)/fltk/*
 	echo "Installing FLTK1.1 emulation include files in $(includedir)/FL..."
-	$(RM) -r $(includedir)/FL
+	$(RMDIR) $(includedir)/FL
 	$(MKDIR) $(includedir)/FL
 	$(CP) ../FL/*.H ../FL/*.h  $(includedir)/FL
 	$(CHMOD) 755 $(includedir)/FL
 	$(CHMOD) 644 $(includedir)/FL/*
+        ifneq (,$(wildcard ../fltk-config))
 	echo "Installing fltk-config in $(bindir)..."
 	$(MKDIR) $(bindir)
 	$(CP) ../fltk-config $(bindir)
 	$(CHMOD) 755 $(bindir)/fltk-config
+        endif
+        ifneq (,$(wildcard ../lib/$(LIBNAME)))
 	echo "Installing static core library in $(libdir)"
 	$(MKDIR) $(libdir)
 	$(RM) $(libdir)/$(LIBNAME)
 	$(CP) ../lib/$(LIBNAME) $(libdir)
+        endif
+        ifneq (,$(wildcard ../lib/$(DSONAME)))
 	echo "Installing shared core library in $(libdir)"
 	$(MKDIR) $(libdir)
 	$(RM) $(libdir)/$(DSONAME)
 	$(RM) $(libdir)/$(DSOLINK)
 	$(CP) ../lib/$(DSONAME) $(libdir)
-	$(LN) -s $(DSONAME) $(libdir)/$(DSOLINK)
+	$(LN) $(DSONAME) $(libdir)/$(DSOLINK)
+        endif
 
 #
 # Uninstall the libraries...
@@ -274,9 +280,9 @@ install:
 
 uninstall:
 	echo "Removing FLTK1.1 emulation include files from $(includedir)/FL..."
-	$(RM) -r $(includedir)/FL
+	$(RMDIR) $(includedir)/FL
 	echo "Removing include files from $(includedir)/fltk..."
-	$(RM) -r $(includedir)/fltk
+	$(RMDIR) $(includedir)/fltk
 	echo "Removing fltk-config from $(bindir)..."
 	$(RM) $(bindir)/fltk-config
 	echo "Removing static core library from $(libdir)"
@@ -286,5 +292,5 @@ uninstall:
 	$(RM) $(libdir)/$(DSOLINK)
 
 #
-# End of "$Id: Makefile,v 1.120 2004/07/06 13:22:51 laza2000 Exp $".
+# End of "$Id: Makefile,v 1.121 2004/08/04 18:02:46 laza2000 Exp $".
 #
