@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.27 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_font.cxx,v 1.28 2001/07/10 08:14:39 clip Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,14 +23,44 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <config.h>
+#include <string.h>
 #include <FL/Fl_Font.H>
 #include <FL/fl_draw.H>
+#include <config.h>
 
 // Static variables containing the currently selected font & size:
 Fl_Font fl_font_;
 unsigned fl_size_;
-FL_API Fl_FontSize* fl_fontsize;
+
+void
+fl_font(Fl_Font f, unsigned s) { fl_font_renderer->font(f, s); }
+
+void
+fl_draw(const char* str, int n, int x, int y) {
+  fl_font_renderer->draw(str, n, x, y);
+}
+
+void
+fl_draw(const char* str, int x, int y) { fl_draw(str, strlen(str), x, y); }
+
+int
+fl_height() { return fl_font_renderer->height(); }
+
+int
+fl_descent() { return fl_font_renderer->descent(); }
+
+int
+fl_width(const char* c, int n) { return fl_font_renderer->width(c, n); }
+
+int
+fl_width(const char* c) { return fl_width(c, strlen(c)); }
+
+int
+fl_width(uchar c) { return fl_width((char *)&c, 1); }
+
+Fl_Font_ *
+fl_fonts() { return fl_font_renderer->fonts; }
+
 
 #ifdef WIN32
 #include "fl_font_win32.cxx"
@@ -39,5 +69,5 @@ FL_API Fl_FontSize* fl_fontsize;
 #endif
 
 //
-// End of "$Id: fl_font.cxx,v 1.27 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fl_font.cxx,v 1.28 2001/07/10 08:14:39 clip Exp $".
 //

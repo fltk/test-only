@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.11 2001/04/22 16:50:21 spitzak Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.12 2001/07/10 08:14:39 clip Exp $"
 //
 // WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -67,8 +67,8 @@ int Fl_Font_::sizes(int*& sizep) const {
 static Fl_Font_* make_a_font(char attrib, const char* name) {
   // see if it is one of our built-in fonts and return it:
   for (int j = 0; j < 16; j++) {
-    if (fl_fonts[j].name_[0] == attrib &&
-	  !strcasecmp(fl_fonts[j].name_+1, name)) return fl_fonts+j;
+    if ((fl_fonts()+j)->name_[0] == attrib &&
+	  !strcasecmp((fl_fonts()+j)->name_+1, name)) return fl_fonts()+j;
   }
   // no, lets create a font:
   Fl_Font_* newfont = new Fl_Font_;
@@ -87,7 +87,7 @@ static int num_fonts = 0;
 static int array_size = 0;
 
 static int CALLBACK enumcb(ENUMLOGFONT FAR *lpelf, NEWTEXTMETRIC FAR *,
-                           int, LPARAM)
+			   int, LPARAM)
 {
   // we need to do something about different encodings of the same font
   // in order to match X!  I can't tell if each different encoding is
@@ -122,7 +122,8 @@ static int sort_function(const void *aa, const void *bb) {
   return name_a[0]-name_b[0]; // sort by attribute
 }
 
-int fl_list_fonts(Fl_Font*& arrayp) {
+static int
+win_list_fonts(Fl_Font*& arrayp) {
   if (font_array) {arrayp = font_array; return num_fonts;}
   HDC dc = GetDC(0);
   EnumFontFamilies(dc, NULL, (FONTENUMPROC)enumcb, 0);
@@ -132,18 +133,24 @@ int fl_list_fonts(Fl_Font*& arrayp) {
   return num_fonts;
 }
 
+int
+fl_list_fonts(Fl_Font*& arrayp) {
+  if (!fl_font_renderer->list) fl_font_renderer->list = win_list_fonts;
+  return fl_font_renderer->list(arrayp);
+}
+
 // deallocate Win32 fonts
 void fl_font_rid() {
   for (int i = 0; i < 16; i++) {
-    for (Fl_FontSize* fs = fl_fonts[i].first; fs;) {
+    for (Fl_FontSize* fs = (Fl_FontSize *)(fl_fonts()+i)->first; fs;) {
       Fl_FontSize* next = fs->next;
       delete fs;
       fs = next;
     }
-    fl_fonts[i].first = 0;
+    (fl_fonts()+i)->first = 0;
   }
   for (int j = 0; j < num_fonts; j++) {
-    for (Fl_FontSize* fs = font_array[j]->first; fs;) {
+    for (Fl_FontSize* fs = (Fl_FontSize *)font_array[j]->first; fs;) {
       Fl_FontSize* next = fs->next;
       delete fs;
       fs = next;
@@ -153,5 +160,5 @@ void fl_font_rid() {
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.11 2001/04/22 16:50:21 spitzak Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.12 2001/07/10 08:14:39 clip Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.76 2001/03/08 07:39:06 clip Exp $"
+// "$Id: fl_options.cxx,v 1.77 2001/07/10 08:14:39 clip Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -131,7 +131,7 @@ static Fl_Font grok_font(const char* cf, const char* fontstr) {
 
   char* q;
   long l = strtoul(p, &q, 0);
-  if (!*q) return fl_fonts+l;
+  if (!*q) return fl_fonts()+l;
 
   return fl_find_font(p);
 }
@@ -416,7 +416,7 @@ int fl_getconf(const char *key, char *value, int value_length) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.76 2001/03/08 07:39:06 clip Exp $".
+// End of "$Id: fl_options.cxx,v 1.77 2001/07/10 08:14:39 clip Exp $".
 //
 
 

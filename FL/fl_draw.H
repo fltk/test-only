@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.H,v 1.26 2001/02/21 06:15:44 clip Exp $"
+// "$Id: fl_draw.H,v 1.27 2001/07/10 08:14:38 clip Exp $"
 //
 // The fltk drawing library
 //
@@ -123,6 +123,7 @@ inline unsigned fl_size() {return fl_size_;}
 FL_API const char *fl_fontname(Fl_Font, int * = 0);
 
 // Ideal case for an abstract base class, but this is faster
+typedef void (*Fl_FontFunc)(Fl_Font, unsigned);
 typedef void * (*Fl_Font_LoadFunc)(const char *, const char *, int);
 typedef void (*Fl_Font_UnloadFunc)(void *);
 typedef int (*Fl_Font_HeightFunc)();
@@ -130,10 +131,12 @@ typedef int (*Fl_Font_DescentFunc)();
 typedef int (*Fl_Font_WidthFunc)(const char *, int);
 typedef void (*Fl_Font_DrawFunc)(const char *, int, int, int);
 typedef void (*Fl_Font_ClipFunc)(Region);
-//typedef void * (*Fl_Font_ListFunc)();
+typedef int (*Fl_Font_ListFunc)(Fl_Font *&);
 //typedef void * (*Fl_Font_FindFunc)(const char *, const char *);
 //typedef int (*Fl_Font_StrlenFunc)(const char *);
+
 struct FL_API Fl_Font_Renderer {
+  Fl_FontFunc         font;     // set the FLTK font
   Fl_Font_LoadFunc    load;     // load a font
   Fl_Font_UnloadFunc  unload;   // unload a font
   Fl_Font_HeightFunc  height;   // get height of font.  May not equal size!
@@ -141,9 +144,10 @@ struct FL_API Fl_Font_Renderer {
   Fl_Font_WidthFunc   width;    // get pixel width of string
   Fl_Font_DrawFunc    draw;     // draw a string
   Fl_Font_ClipFunc    clip;     // set clipping region for font drawing
-//Fl_Font_ListFunc    list;     // list fonts renderer knows about
+  Fl_Font_ListFunc    list;     // list fonts renderer knows about
 //Fl_Font_FindFunc    find;     // find the font that matches
 //Fl_Font_StrlenFunc  strlen;   // calculate char length of properly terminated string
+  Fl_Font_            *fonts;   // pointer to fonts array
 };
 extern FL_API Fl_Font_Renderer* fl_font_renderer;
 
@@ -230,5 +234,5 @@ FL_API void fl_yxline(int x, int y, int y1, int x2, int y3);
 #endif
 
 //
-// End of "$Id: fl_draw.H,v 1.26 2001/02/21 06:15:44 clip Exp $".
+// End of "$Id: fl_draw.H,v 1.27 2001/07/10 08:14:38 clip Exp $".
 //

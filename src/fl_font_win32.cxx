@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.31 2001/02/21 06:15:45 clip Exp $"
+// "$Id: fl_font_win32.cxx,v 1.32 2001/07/10 08:14:39 clip Exp $"
 //
 // WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+Fl_FontSize *fl_fontsize;
+
 static void *
 win_font_load(const char *name, const char *encoding, int size) {
   int weight = FW_NORMAL;
@@ -44,23 +46,23 @@ win_font_load(const char *name, const char *encoding, int size) {
   }
 
   HFONT font = CreateFont(
-    -size,          // use "char size"
-    0,	            // logical average character width
-    0,	            // angle of escapement
-    0,	            // base-line orientation angle
+    -size,	    // use "char size"
+    0,		    // logical average character width
+    0,		    // angle of escapement
+    0,		    // base-line orientation angle
     weight,
     italic,
-    FALSE,	        // underline attribute flag
-    FALSE,	        // strikeout attribute flag
+    FALSE,		// underline attribute flag
+    FALSE,		// strikeout attribute flag
     (int)encoding,	// character set identifier
-    OUT_DEFAULT_PRECIS,	// output precision
+    OUT_DEFAULT_PRECIS, // output precision
     CLIP_DEFAULT_PRECIS,// clipping precision
     DEFAULT_QUALITY,	// output quality
     DEFAULT_PITCH,	// pitch and family
-    name	        // pointer to typeface name string
+    name		// pointer to typeface name string
   );
 
-  HDC screen =  GetDC(0);
+  HDC screen =	GetDC(0);
   SelectObject(screen, font);
   GetTextMetrics(screen, &fl_fontsize->metr);
   //BOOL ret = GetCharWidthFloat(screen, metr.tmFirstChar, metr.tmLastChar, font->width+metr.tmFirstChar);
@@ -103,24 +105,24 @@ Fl_FontSize::~Fl_FontSize() {
 
 ////////////////////////////////////////////////////////////////
 
-// The predefined fonts that fltk has:  bold:       italic:
-Fl_Font_ fl_fonts[] = {
-{" Arial",				fl_fonts+1, fl_fonts+2},
-{"BArial", 				fl_fonts+1, fl_fonts+3},
-{"IArial",				fl_fonts+3, fl_fonts+2},
-{"PArial",				fl_fonts+3, fl_fonts+3},
-{" Courier New",			fl_fonts+5, fl_fonts+6},
-{"BCourier New",			fl_fonts+5, fl_fonts+7},
-{"ICourier New",			fl_fonts+7, fl_fonts+6},
-{"PCourier New",			fl_fonts+7, fl_fonts+7},
-{" Times New Roman",			fl_fonts+9, fl_fonts+10},
-{"BTimes New Roman",			fl_fonts+9, fl_fonts+11},
-{"ITimes New Roman",			fl_fonts+11,fl_fonts+10},
-{"PTimes New Roman",			fl_fonts+11,fl_fonts+11},
-{" Symbol",				fl_fonts+12,fl_fonts+12},
-{" Terminal",				fl_fonts+14,fl_fonts+14},
-{"BTerminal",				fl_fonts+14,fl_fonts+14},
-{" Wingdings",				fl_fonts+15,fl_fonts+15},
+// The predefined fonts that fltk has:	bold:	    italic:
+static Fl_Font_ win_fonts[] = {
+{" Arial",				win_fonts+1, win_fonts+2},
+{"BArial",				win_fonts+1, win_fonts+3},
+{"IArial",				win_fonts+3, win_fonts+2},
+{"PArial",				win_fonts+3, win_fonts+3},
+{" Courier New",			win_fonts+5, win_fonts+6},
+{"BCourier New",			win_fonts+5, win_fonts+7},
+{"ICourier New",			win_fonts+7, win_fonts+6},
+{"PCourier New",			win_fonts+7, win_fonts+7},
+{" Times New Roman",			win_fonts+9, win_fonts+10},
+{"BTimes New Roman",			win_fonts+9, win_fonts+11},
+{"ITimes New Roman",			win_fonts+11,win_fonts+10},
+{"PTimes New Roman",			win_fonts+11,win_fonts+11},
+{" Symbol",				win_fonts+12,win_fonts+12},
+{" Terminal",				win_fonts+14,win_fonts+14},
+{"BTerminal",				win_fonts+14,win_fonts+14},
+{" Wingdings",				win_fonts+15,win_fonts+15},
 };
 
 ////////////////////////////////////////////////////////////////
@@ -131,19 +133,20 @@ void *fl_xfont;
 // Static variable for the default encoding:
 const char *fl_encoding_ = (const char*)DEFAULT_CHARSET;
 
-void fl_font(Fl_Font font, unsigned size) {
+static void
+win_font(Fl_Font font, unsigned size) {
   if (font == fl_font_ && size == fl_size_ &&
       fl_fontsize->encoding == (int)fl_encoding_) return;
   fl_font_ = font; fl_size_ = size;
 
   Fl_FontSize* f;
   // search the fontsizes we have generated already:
-  for (f = font->first; f; f = f->next)
+  for (f = (Fl_FontSize *)font->first; f; f = f->next)
     if (f->minsize <= size && f->maxsize >= size &&
 	f->encoding == (int)fl_encoding_) break;
   if (!f) {
     f = new Fl_FontSize(font->name_, size, (int)fl_encoding_);
-    f->next = font->first;
+    f->next = (Fl_FontSize *)font->first;
     ((Fl_Font_*)font)->first = f;
   }
   if (f != fl_fontsize) {
@@ -157,9 +160,6 @@ win_font_height() {
   return (fl_fontsize->metr.tmAscent + fl_fontsize->metr.tmDescent);
 }
 
-int
-fl_height() { return fl_font_renderer->height(); }
-
 static int
 win_font_descent() { return fl_fontsize->metr.tmDescent; }
 
@@ -172,24 +172,12 @@ void fl_encoding(const char* f) {
   }
 }
 
-int
-fl_descent() { return fl_font_renderer->descent(); }
-
-int
-fl_width(const char* c) { return fl_width(c, strlen(c)); }
-
 static int
 win_font_width(const char* c, int n) {
   int w = 0;
   while (n--) w += fl_fontsize->width[uchar(*c++)];
   return w;
 }
-
-int
-fl_width(const char* c, int n) { return fl_font_renderer->width(c, n); }
-
-int
-fl_width(uchar c) { return fl_width((char *)&c, 1); }
 
 static void
 win_font_draw(const char *str, int n, int x, int y) {
@@ -198,23 +186,13 @@ win_font_draw(const char *str, int n, int x, int y) {
   TextOut(fl_gc, x+fl_x_, y+fl_y_, str, n);
 }
 
-void
-fl_draw(const char* str, int n, int x, int y) {
-  fl_font_renderer->draw(str, n, x, y);
-}
-
 static void
 win_font_clip(Region) {} // handled by regular windows clipping
 
-void fl_draw(const char* str, int x, int y) {
-  fl_draw(str, strlen(str), x, y);
-}
-
 static Fl_Font_Renderer
 win_renderer = {
-  win_font_load, win_font_unload, win_font_height,
-  win_font_descent, win_font_width, win_font_draw,
-  win_font_clip
+  win_font, win_font_load, win_font_unload, win_font_height, win_font_descent,
+  win_font_width, win_font_draw, win_font_clip, 0, win_fonts
 };
 
 Fl_Font_Renderer *fl_font_renderer = &win_renderer;
@@ -222,5 +200,5 @@ Fl_Font_Renderer *fl_font_renderer = &win_renderer;
 
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.31 2001/02/21 06:15:45 clip Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.32 2001/07/10 08:14:39 clip Exp $".
 //

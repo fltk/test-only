@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.75 2001/06/25 15:43:21 robertk Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.76 2001/07/10 08:14:38 clip Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -657,7 +657,7 @@ void visible_cb(Fl_Light_Button* i, void* v) {
     }
   }
   if (!i->value()) i->label_color(FL_RED);
-  else i->label_color(FL_BLACK);  
+  else i->label_color(FL_BLACK);
   i->redraw();
 }
 
@@ -701,7 +701,7 @@ Fl_Menu_Item fontmenu[] = {
 
 void labelfont_cb(Fl_Choice* i, void *v) {
   if (v == LOAD) {
-    int n = current_widget->o->label_font() - fl_fonts;
+    int n = current_widget->o->label_font() - fl_fonts();
     if (n > 15 || n < 0) n = 0;
     i->value(n);
   } else {
@@ -709,7 +709,7 @@ void labelfont_cb(Fl_Choice* i, void *v) {
     for_all_selected_widgets() {
       modflag = 1;
       Fl_Widget_Type* q = (Fl_Widget_Type*)o;
-      q->o->label_font(fl_fonts + n);
+      q->o->label_font(fl_fonts() + n);
       q->redraw();
     }
   }
@@ -887,11 +887,11 @@ void textfont_cb(Fl_Choice* i, void* v) {
     if (current_widget->is_menu_item()) i->label("Shortcut Font:");
     else i->label("Text Font:");
     i->show();
-    int m = current_widget->o->text_font()-fl_fonts;
+    int m = current_widget->o->text_font()-fl_fonts();
     if (m < 0 || m > 15) m = 0;
     i->value(m);
   } else {
-    n = i->value()+fl_fonts;
+    n = i->value()+fl_fonts();
     for_all_selected_widgets() {
       modflag = 1;
       Fl_Widget_Type* q = (Fl_Widget_Type*)o;
@@ -1701,9 +1701,9 @@ void Fl_Widget_Type::write_widget_code() {
 //   if (o->glyph() != tplate->glyph())
 //     write_c("%so->box(FL_%s);\n", indent(), boxname(o->glyph()));
   if (o->label_font() != tplate->label_font())
-    write_c("%so->label_font(fl_fonts+%d);\n", indent(), o->label_font()-fl_fonts);
+    write_c("%so->label_font(fl_fonts()+%d);\n", indent(), o->label_font()-fl_fonts());
   if (o->text_font() != tplate->text_font())
-    write_c("%so->text_font(fl_fonts+%d);\n", indent(), o->text_font()-fl_fonts);
+    write_c("%so->text_font(fl_fonts()+%d);\n", indent(), o->text_font()-fl_fonts());
   if (o->label_type() != tplate->label_type())
     write_c("%so->label_type(FL_%s);\n", indent(),
 	    labeltypename(o->label_type()));
@@ -1843,9 +1843,9 @@ void Fl_Widget_Type::write_properties() {
     write_string("text_box"); write_word(boxname(o->text_box()));}
   // if (o->glyph() != tplate->glyph())...
   if (o->label_font() != tplate->label_font())
-    write_string("labelfont %d", o->label_font()-fl_fonts);
+    write_string("labelfont %d", o->label_font()-fl_fonts());
   if (o->text_font() != tplate->text_font())
-    write_string("textfont %d", o->text_font()-fl_fonts);
+    write_string("textfont %d", o->text_font()-fl_fonts());
   if (o->label_type() != tplate->label_type()) {
     write_string("labeltype");
     write_word(labeltypename(o->label_type()));
@@ -1966,9 +1966,9 @@ void Fl_Widget_Type::read_property(const char *c) {
   } else if (!strcmp(c, "down_box")) { // ignore this fltk 1.0 item
     read_word();
   } else if (!strcmp(c,"labelfont")) {
-    if (sscanf(read_word(),"%d",&x) == 1) o->label_font(fl_fonts+x);
+    if (sscanf(read_word(),"%d",&x) == 1) o->label_font(fl_fonts()+x);
   } else if (!strcmp(c,"textfont")) {
-    if (sscanf(read_word(),"%d",&x) == 1) o->text_font(fl_fonts+x);
+    if (sscanf(read_word(),"%d",&x) == 1) o->text_font(fl_fonts()+x);
   } else if (!strcmp(c,"labeltype")) {
     c = read_word();
     // back compatability with 1.0 and Vincent's original graphical patch
@@ -2103,7 +2103,7 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
   } else if (!strcmp(name,"style")) {
     if (!strncmp(value,"FL_NORMAL",9)) return 1;
     if (!lookup_symbol(value,v,1)) return 0;
-    o->label_font(fl_fonts + v); o->label_type((Fl_Labeltype)(v>>8));
+    o->label_font(fl_fonts() + v); o->label_type((Fl_Labeltype)(v>>8));
   } else if (!strcmp(name,"size")) {
     if (!lookup_symbol(value,v,1)) return 0;
     o->label_size(v);
@@ -2164,5 +2164,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.75 2001/06/25 15:43:21 robertk Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.76 2001/07/10 08:14:38 clip Exp $".
 //

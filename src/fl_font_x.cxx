@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_x.cxx,v 1.2 2001/02/21 06:15:45 clip Exp $"
+// "$Id: fl_font_x.cxx,v 1.3 2001/07/10 08:14:39 clip Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,7 @@
 
 void* fl_xfont;
 static GC font_gc;
+Fl_FontSize *fl_fontsize;
 
 static void
 set_current_fontsize(Fl_FontSize* f) {
@@ -57,60 +58,18 @@ x11_font_draw(const char *str, int n, int x, int y) {
   XDrawString(fl_display, fl_window, fl_gc, x+fl_x_, y+fl_y_, str, n);
 }
 
-void
-fl_draw(const char* str, int n, int x, int y) {
-  fl_font_renderer->draw(str, n, x, y);
-}
-
-void
-fl_draw(const char* str, int x, int y) { fl_draw(str, strlen(str), x, y); }
-
 static int
 x11_font_height() {
   return (((XFontStruct*)fl_xfont)->ascent + ((XFontStruct*)fl_xfont)->descent);
 }
 
-int
-fl_height() { return fl_font_renderer->height(); }
-
 static int
 x11_font_descent() { return ((XFontStruct*)fl_xfont)->descent; }
-
-int
-fl_descent() { return fl_font_renderer->descent(); }
 
 static int
 x11_font_width(const char *c, int n) {
   return XTextWidth((XFontStruct*)fl_xfont, c, n);
 }
-
-int
-fl_width(const char* c, int n) { return fl_font_renderer->width(c, n); }
-
-int
-fl_width(const char* c) { return fl_width(c, strlen(c)); }
-
-#if 0
-// CET - why do it this way?
-static int
-x11_font_cwidth(uchar c) {
-#if 1
-  XCharStruct* p = ((XFontStruct*)fl_xfont)->per_char;
-  if (p) {
-    int a = ((XFontStruct*)fl_xfont)->min_char_or_byte2;
-    int b = ((XFontStruct*)fl_xfont)->max_char_or_byte2 - a;
-    int x = c-a;
-    if (x >= 0 && x <= b) return p[x].width;
-  }
-  return ((XFontStruct*)fl_xfont)->min_bounds.width;
-#else
-  return XTextWidth((XFontStruct*)fl_xfont, &c, 1);
-#endif
-}
-#endif
-
-int
-fl_width(uchar c) { return fl_width((char *)&c, 1); }
 
 static void
 x11_font_clip(Region) {} // handled by X clipping region
@@ -179,8 +138,8 @@ Fl_FontSize::~Fl_FontSize() {
 // Static variable for the default encoding:
 const char *fl_encoding_ = "iso8859-1";
 
-void
-fl_font(Fl_Font font, unsigned size) {
+static void
+x11_font(Fl_Font font, unsigned size) {
   if (font == fl_font_ && size == fl_size_ &&
       (!fl_fontsize->encoding || !strcmp(fl_fontsize->encoding, fl_encoding_)))
     return;
@@ -188,7 +147,7 @@ fl_font(Fl_Font font, unsigned size) {
 
   Fl_FontSize* f;
   // search the FontSize we have generated already:
-  for (f = font->first; f; f = f->next)
+  for (f = (Fl_FontSize *)font->first; f; f = f->next)
     if (f->minsize <= size && f->maxsize >= size
         && (!f->encoding || !strcmp(f->encoding, fl_encoding_))) {
       set_current_fontsize(f); return;
@@ -256,7 +215,7 @@ fl_font(Fl_Font font, unsigned size) {
   }
 
   if (ptsize != size) { // see if we already found this unscalable font:
-    for (f = font->first; f; f = f->next) {
+    for (f = (Fl_FontSize *)font->first; f; f = f->next) {
       if (f->minsize <= ptsize && f->maxsize >= ptsize) {
 	if (f->minsize > size) f->minsize = size;
 	if (f->maxsize < size) f->maxsize = size;
@@ -270,7 +229,7 @@ fl_font(Fl_Font font, unsigned size) {
   f->encoding = found_encoding;
   if (ptsize < size) {f->minsize = ptsize; f->maxsize = size;}
   else {f->minsize = size; f->maxsize = ptsize;}
-  f->next = font->first;
+  f->next = (Fl_FontSize *)font->first;
   ((Fl_Font_*)font)->first = f;
   set_current_fontsize(f);
 
@@ -288,35 +247,34 @@ void fl_encoding(const char* f) {
 ////////////////////////////////////////////////////////////////
 
 // The predefined fonts that fltk has:  bold:       italic:
-Fl_Font_
-fl_fonts[] = {
-{"-*-helvetica-medium-r-normal--*",	fl_fonts+1, fl_fonts+2},
-{"-*-helvetica-bold-r-normal--*", 	fl_fonts+1, fl_fonts+3},
-{"-*-helvetica-medium-o-normal--*",	fl_fonts+3, fl_fonts+2},
-{"-*-helvetica-bold-o-normal--*",	fl_fonts+3, fl_fonts+3},
-{"-*-courier-medium-r-normal--*",	fl_fonts+5, fl_fonts+6},
-{"-*-courier-bold-r-normal--*",		fl_fonts+5, fl_fonts+7},
-{"-*-courier-medium-o-normal--*",	fl_fonts+7, fl_fonts+6},
-{"-*-courier-bold-o-normal--*",		fl_fonts+7, fl_fonts+7},
-{"-*-times-medium-r-normal--*",		fl_fonts+9, fl_fonts+10},
-{"-*-times-bold-r-normal--*",		fl_fonts+9, fl_fonts+11},
-{"-*-times-medium-i-normal--*",		fl_fonts+11,fl_fonts+10},
-{"-*-times-bold-i-normal--*",		fl_fonts+11,fl_fonts+11},
-{"-*-symbol-*",				fl_fonts+12,fl_fonts+12},
-{"-*-lucidatypewriter-medium-r-normal-sans-*", fl_fonts+14,fl_fonts+14},
-{"-*-lucidatypewriter-bold-r-normal-sans-*", fl_fonts+14,fl_fonts+14},
-{"-*-*zapf dingbats-*",			fl_fonts+15,fl_fonts+15},
+static Fl_Font_
+x11_fonts[] = {
+{"-*-helvetica-medium-r-normal--*",	x11_fonts+1, x11_fonts+2},
+{"-*-helvetica-bold-r-normal--*", 	x11_fonts+1, x11_fonts+3},
+{"-*-helvetica-medium-o-normal--*",	x11_fonts+3, x11_fonts+2},
+{"-*-helvetica-bold-o-normal--*",	x11_fonts+3, x11_fonts+3},
+{"-*-courier-medium-r-normal--*",	x11_fonts+5, x11_fonts+6},
+{"-*-courier-bold-r-normal--*",		x11_fonts+5, x11_fonts+7},
+{"-*-courier-medium-o-normal--*",	x11_fonts+7, x11_fonts+6},
+{"-*-courier-bold-o-normal--*",		x11_fonts+7, x11_fonts+7},
+{"-*-times-medium-r-normal--*",		x11_fonts+9, x11_fonts+10},
+{"-*-times-bold-r-normal--*",		x11_fonts+9, x11_fonts+11},
+{"-*-times-medium-i-normal--*",		x11_fonts+11,x11_fonts+10},
+{"-*-times-bold-i-normal--*",		x11_fonts+11,x11_fonts+11},
+{"-*-symbol-*",				x11_fonts+12,x11_fonts+12},
+{"-*-lucidatypewriter-medium-r-normal-sans-*", x11_fonts+14,x11_fonts+14},
+{"-*-lucidatypewriter-bold-r-normal-sans-*", x11_fonts+14,x11_fonts+14},
+{"-*-*zapf dingbats-*",			x11_fonts+15,x11_fonts+15},
 };
 
 static Fl_Font_Renderer
 x11_renderer = {
-  x11_font_load, x11_font_unload, x11_font_height,
-  x11_font_descent, x11_font_width, x11_font_draw,
-  x11_font_clip
+  x11_font, x11_font_load, x11_font_unload, x11_font_height, x11_font_descent,
+  x11_font_width, x11_font_draw, x11_font_clip, 0, x11_fonts
 };
 
 Fl_Font_Renderer *fl_font_renderer = &x11_renderer;
 
 //
-// End of "$Id: fl_font_x.cxx,v 1.2 2001/02/21 06:15:45 clip Exp $"
+// End of "$Id: fl_font_x.cxx,v 1.3 2001/07/10 08:14:39 clip Exp $"
 //

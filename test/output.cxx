@@ -1,5 +1,5 @@
 //
-// "$Id: output.cxx,v 1.7 2000/01/16 07:44:43 robertk Exp $"
+// "$Id: output.cxx,v 1.8 2001/07/10 08:14:39 clip Exp $"
 //
 // Output test program for the Fast Light Tool Kit (FLTK).
 //
@@ -42,9 +42,9 @@ Fl_Value_Slider *sizes;
 Fl_Window *window;
 
 void font_cb(Fl_Widget *,void *) {
-  text->text_font(fl_fonts + int(fonts->value()));
+  text->text_font(fl_fonts() + int(fonts->value()));
   text->redraw();
-  text2->text_font(fl_fonts + int(fonts->value()));
+  text2->text_font(fl_fonts() + int(fonts->value()));
   text2->redraw();
 }
 
@@ -104,5 +104,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: output.cxx,v 1.7 2000/01/16 07:44:43 robertk Exp $".
+// End of "$Id: output.cxx,v 1.8 2001/07/10 08:14:39 clip Exp $".
 //

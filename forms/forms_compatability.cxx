@@ -1,5 +1,5 @@
 //
-// "$Id: forms_compatability.cxx,v 1.12 2001/04/26 07:29:17 spitzak Exp $"
+// "$Id: forms_compatability.cxx,v 1.13 2001/07/10 08:14:38 clip Exp $"
 //
 // Forms compatibility functions for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 #include <stdlib.h>
 
 void fl_set_object_lstyle(Fl_Widget* o,int a) {
-  o->label_font(fl_fonts+(a&15));
+  o->label_font(fl_fonts()+(a&15));
   switch (a >> 8) {
   case 0:
     o->label_type(FL_NORMAL_LABEL);
@@ -255,5 +255,5 @@ char *fl_show_simple_input(const char *str1, const char *defstr) {
 }
 
 //
-// End of "$Id: forms_compatability.cxx,v 1.12 2001/04/26 07:29:17 spitzak Exp $".
+// End of "$Id: forms_compatability.cxx,v 1.13 2001/07/10 08:14:38 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.109 2001/06/07 13:44:27 robertk Exp $"
+// "$Id: Fl_Menu.cxx,v 1.110 2001/07/10 08:14:38 clip Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -509,7 +509,14 @@ int MenuWindow::handle(int event) {
     for (menu = p.nummenus-1; ; menu--) {
       item = p.menus[menu]->find_selected(mx, my);
       if (item >= 0) break;
-      if (menu <= 0) {menu = p.nummenus-1; item = -1; break;}
+      if (menu <= 0) {
+        if (event == FL_PUSH) {
+          Fl::pushed_ = 0;
+          p.state = ABORT_STATE;
+          return 1;
+        }
+        menu = p.nummenus-1; item = -1; break;
+      }
     }
     if (event == FL_PUSH) {
       p.state = PUSH_STATE;
@@ -572,6 +579,8 @@ int Fl_Menu_::popup(int X, int Y, const char* title) {
   Fl_Item dummy(title);
   return pulldown(X, Y, 0, 0, title ? &dummy : 0);
 }
+
+extern FL_API void fl_bounce_button_press();
 
 int Fl_Menu_::pulldown(
     int X, int Y, int W, int H,
@@ -680,7 +689,7 @@ int Fl_Menu_::pulldown(
 	// otherwise delete the previous submenu:
 	delete oldmenu;
 	p.nummenus--;
-      }	
+      }
       // figure out where new menu goes:
       int nX, nY;
       Fl_Widget* title;
@@ -726,6 +735,12 @@ int Fl_Menu_::pulldown(
   while (--p.nummenus) delete p.menus[p.nummenus];
   mw.hide();
   Fl::release();
+  // If the menu was aborted by the user clicking outside of the menuwindow
+  // find the appropriate window to send a replacement button press event
+#ifndef WIN32
+  if (p.state == ABORT_STATE && Fl::e_type == FL_PUSH)
+    fl_bounce_button_press();
+#endif
 
   if (p.state == DONE_STATE) {
     goto_item(p.indexes, p.level);
@@ -739,5 +754,5 @@ int Fl_Menu_::pulldown(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.109 2001/06/07 13:44:27 robertk Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.110 2001/07/10 08:14:38 clip Exp $".
 //

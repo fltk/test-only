@@ -1,5 +1,5 @@
 //
-// "$Id: forms.H,v 1.24 2001/02/22 21:00:48 clip Exp $"
+// "$Id: forms.H,v 1.25 2001/07/10 08:14:38 clip Exp $"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -456,7 +456,7 @@ inline void fl_set_browser_topline(Fl_Widget* o, int n) {
 inline void fl_set_browser_fontsize(Fl_Widget* o, int s) {
     ((Fl_Browser*)o)->text_size(s);}
 inline void fl_set_browser_fontstyle(Fl_Widget* o, int s) {
-    ((Fl_Browser*)o)->text_font(fl_fonts+s);}
+    ((Fl_Browser*)o)->text_font(fl_fonts()+s);}
 inline void fl_set_browser_specialkey(Fl_Widget* o, char c) {
     ((Fl_Browser*)o)->format_char(c);}
 //inline void fl_set_browser_vscrollbar(Fl_Widget*, int);
@@ -670,7 +670,7 @@ int fl_show_choice(
     const char *b2);
 
 inline void fl_set_goodies_font(int a, unsigned b) {
-  fl_message_style->label_font = fl_fonts+a;
+  fl_message_style->label_font = fl_fonts()+a;
   fl_message_style->label_size = b;
 }
 #define fl_show_messages fl_message
@@ -852,5 +852,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.H,v 1.24 2001/02/22 21:00:48 clip Exp $".
+// End of "$Id: forms.H,v 1.25 2001/07/10 08:14:38 clip Exp $".
 //

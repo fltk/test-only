@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.149 2001/06/25 15:01:15 robertk Exp $"
+// "$Id: Fl_win32.cxx,v 1.150 2001/07/10 08:14:39 clip Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -25,7 +25,7 @@
 //
 
 // This file contains win32-specific code for fltk which is always linked
-// in.  Search other files for "WIN32" or filenames ending in _win32.C
+// in.	Search other files for "WIN32" or filenames ending in _win32.C
 // for other system-specific code.
 
 #include <config.h>
@@ -177,7 +177,7 @@ MSG fl_msg;
 
 // This is never called with time_to_wait < 0.0.
 // It *should* return negative on error, 0 if nothing happens before
-// timeout, and >0 if any callbacks were done.  This version only
+// timeout, and >0 if any callbacks were done.	This version only
 // returns zero if nothing happens during a 0.0 timeout, otherwise
 // it returns 1.
 static int fl_wait(double time_to_wait) {
@@ -236,7 +236,7 @@ static int fl_wait(double time_to_wait) {
     if (fl_msg.message == WM_FLSELECT) {
       // Got notification for socket
       for (int i = 0; i < nfds; i ++)
-        if (fd[i].fd == (int)fl_msg.wParam) {
+	if (fd[i].fd == (int)fl_msg.wParam) {
 	  (fd[i].cb)(fd[i].fd, fd[i].arg);
 	  break;
 	}
@@ -382,7 +382,7 @@ void Fl::paste(Fl_Widget &receiver, bool clipboard) {
 typedef struct _tagTRACKMOUSEEVENT {
   DWORD cbSize;
   DWORD dwFlags;
-  HWND  hwndTrack;
+  HWND	hwndTrack;
   DWORD dwHoverTime;
 } _TRACKMOUSEEVENT, *_LPTRACKMOUSEEVENT;
 
@@ -410,7 +410,7 @@ TrackMouseTimerProc(HWND hWnd, UINT, UINT idEvent, DWORD) {
   GetCursorPos(&pt);
   if (!PtInRect(&rect, pt) || (WindowFromPoint(pt) != hWnd)) {
     if ( !KillTimer(hWnd, idEvent) ) {
-                        /* Error killing the timer! */
+			/* Error killing the timer! */
     }
     PostMessage(hWnd, WM_MOUSELEAVE, 0, 0);
   }
@@ -421,7 +421,7 @@ WIN_TrackMouseEvent(_TRACKMOUSEEVENT *ptme)
 {
   if (ptme->dwFlags == TME_LEAVE)
     return SetTimer(ptme->hwndTrack, ptme->dwFlags, 100,
-                    (TIMERPROC)TrackMouseTimerProc);
+		    (TIMERPROC)TrackMouseTimerProc);
   return FALSE;
 }
 
@@ -490,7 +490,7 @@ static int mouse_event(Fl_Window *window, int what, int button,
       /* Get the version of TrackMouseEvent() we use */
       HMODULE handle = GetModuleHandle("USER32.DLL");
       if (handle) _TrackMouseEvent =
-        (BOOL(WINAPI*)(_TRACKMOUSEEVENT*))GetProcAddress(handle, "TrackMouseEvent");
+	(BOOL(WINAPI*)(_TRACKMOUSEEVENT*))GetProcAddress(handle, "TrackMouseEvent");
       if (!_TrackMouseEvent) _TrackMouseEvent = WIN_TrackMouseEvent;
     }
     mouseevent.hwndTrack = fl_xid(window);
@@ -524,15 +524,15 @@ static const struct {unsigned short vk, fltk, extended;} vktab[] = {
   {VK_UP,	FL_KP+'8',	FL_Up},
   {VK_RIGHT,	FL_KP+'6',	FL_Right},
   {VK_DOWN,	FL_KP+'2',	FL_Down},
-  {VK_SNAPSHOT,	FL_Print},	// does not work on NT
+  {VK_SNAPSHOT, FL_Print},	// does not work on NT
   {VK_INSERT,	FL_KP+'0',	FL_Insert},
   {VK_DELETE,	FL_KP+'.',	FL_Delete},
   {VK_LWIN,	FL_Meta_L},
   {VK_RWIN,	FL_Meta_R},
   {VK_APPS,	FL_Menu},
-  {VK_MULTIPLY,	FL_KP+'*'},
+  {VK_MULTIPLY, FL_KP+'*'},
   {VK_ADD,	FL_KP+'+'},
-  {VK_SUBTRACT,	FL_KP+'-'},
+  {VK_SUBTRACT, FL_KP+'-'},
   {VK_DECIMAL,	FL_KP+'.'},
   {VK_DIVIDE,	FL_KP+'/'},
   {VK_NUMLOCK,	FL_Num_Lock},
@@ -636,16 +636,16 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     ValidateRgn(hWnd,NULL);
     } break;
 
-  case WM_LBUTTONDOWN:  mouse_event(window, 0, 1, wParam, lParam); return 0;
+  case WM_LBUTTONDOWN:	mouse_event(window, 0, 1, wParam, lParam); return 0;
   case WM_LBUTTONDBLCLK:mouse_event(window, 1, 1, wParam, lParam); return 0;
-  case WM_LBUTTONUP:    mouse_event(window, 2, 1, wParam, lParam); return 0;
-  case WM_MBUTTONDOWN:  mouse_event(window, 0, 2, wParam, lParam); return 0;
+  case WM_LBUTTONUP:	mouse_event(window, 2, 1, wParam, lParam); return 0;
+  case WM_MBUTTONDOWN:	mouse_event(window, 0, 2, wParam, lParam); return 0;
   case WM_MBUTTONDBLCLK:mouse_event(window, 1, 2, wParam, lParam); return 0;
-  case WM_MBUTTONUP:    mouse_event(window, 2, 2, wParam, lParam); return 0;
-  case WM_RBUTTONDOWN:  mouse_event(window, 0, 3, wParam, lParam); return 0;
+  case WM_MBUTTONUP:	mouse_event(window, 2, 2, wParam, lParam); return 0;
+  case WM_RBUTTONDOWN:	mouse_event(window, 0, 3, wParam, lParam); return 0;
   case WM_RBUTTONDBLCLK:mouse_event(window, 1, 3, wParam, lParam); return 0;
-  case WM_RBUTTONUP:    mouse_event(window, 2, 3, wParam, lParam); return 0;
-  case WM_MOUSEMOVE:    mouse_event(window, 3, 0, wParam, lParam); return 0;
+  case WM_RBUTTONUP:	mouse_event(window, 2, 3, wParam, lParam); return 0;
+  case WM_MOUSEMOVE:	mouse_event(window, 3, 0, wParam, lParam); return 0;
 
   case WM_MOUSELEAVE:
     if (window == xmousewin) xmousewin = 0;
@@ -736,13 +736,13 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_SHOWWINDOW:
     if (!window->parent()) {
       if (wParam) {
-        // figure out where OS really put window
-        RECT wr;
-        GetClientRect(fl_xid(window), &wr);
-        POINT wul = { 0, 0 };
-        ClientToScreen(fl_xid(window), &wul);
-        // tell Fl_Window about it
-        if (window->resize(wul.x, wul.y, wr.right, wr.bottom))
+	// figure out where OS really put window
+	RECT wr;
+	GetClientRect(fl_xid(window), &wr);
+	POINT wul = { 0, 0 };
+	ClientToScreen(fl_xid(window), &wul);
+	// tell Fl_Window about it
+	if (window->resize(wul.x, wul.y, wr.right, wr.bottom))
 	  resize_from_system = window;
 	// supposedly a Paint event will come in turn off iconize indicator
       } else
@@ -765,16 +765,16 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
   case WM_MOVE:
 	{
- 	int rx = (signed short)LOWORD(lParam);
- 	int ry = (signed short)HIWORD(lParam);
- 	Fl_Widget*o=window->parent();
- 	if(o)	{rx-=o->x(); ry-=o->y();}
- 	if (window->resize(rx,ry,window->w(), window->h()))
- 	  resize_from_system = window;
+	int rx = (signed short)LOWORD(lParam);
+	int ry = (signed short)HIWORD(lParam);
+	Fl_Widget*o=window->parent();
+	if(o)	{rx-=o->x(); ry-=o->y();}
+	if (window->resize(rx,ry,window->w(), window->h()))
+	  resize_from_system = window;
 //    if (window->resize((signed short)LOWORD(lParam),
-//                       (signed short)HIWORD(lParam),
-//                       window->w(), window->h()))
-//      resize_from_system = window;
+//			 (signed short)HIWORD(lParam),
+//			 window->w(), window->h()))
+//	resize_from_system = window;
     }
     break;
 
@@ -894,7 +894,7 @@ void Fl_Window::layout() {
 //  } else if (i) {
 //    int x = this->x(); int y = this->y();
 //    for (Fl_Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
-//      x += p->x(); y += p->y();
+//	x += p->x(); y += p->y();
 //    }
 //    int dx, dy, dw, dh; Fl_X::borders(this, dx, dy, dw, dh);
 //    SetWindowPos(i->xid, 0, x-dx, y-dy, w()+dw, h()+dh, flags);
@@ -910,7 +910,7 @@ void Fl_Window::create() {
 }
 
 extern char fl_show_iconic; // set by iconize() or Fl_arg -i switch
-const Fl_Window* fl_mdi_window;	// set by show_inside()
+const Fl_Window* fl_mdi_window; // set by show_inside()
 HCURSOR fl_default_cursor;
 
 Fl_X* Fl_X::create(Fl_Window* w) {
@@ -950,7 +950,7 @@ Fl_X* Fl_X::create(Fl_Window* w) {
   int yp = w->y();
 
   for (Fl_Widget* p = w->parent(); p && !p->is_window(); p = p->parent()) {
-   	xp += p->x(); yp += p->y();
+	xp += p->x(); yp += p->y();
   }
   int dx, dy, dw, dh;
 
@@ -1129,7 +1129,7 @@ void Fl_Window::make_current() const {
 #endif
 
 #ifndef WHEEL_PAGESCROLL
-#define WHEEL_PAGESCROLL        (UINT_MAX) /* Scroll one page */
+#define WHEEL_PAGESCROLL	(UINT_MAX) /* Scroll one page */
 #endif
 
 static Fl_Color win_color(int wincol) {
@@ -1287,6 +1287,11 @@ void fl_get_system_colors() {
   // CET - FIXME - do encoding stuff
 }
 
+// CET - FIXME - need to add code here to resend button events to our
+// own window only
+void fl_bounce_button_press() {
+}
+
 //
-// End of "$Id: Fl_win32.cxx,v 1.149 2001/06/25 15:01:15 robertk Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.150 2001/07/10 08:14:39 clip Exp $".
 //

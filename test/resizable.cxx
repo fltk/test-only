@@ -2,21 +2,22 @@
 
 #include "resizable.h"
 
-int main(int argc, char **argv) {
+int main (int argc, char **argv) {
+
   Fl_Window* w;
-  { Fl_Window* o = new Fl_Window(560, 470);
+   {  Fl_Window* o = new Fl_Window(560, 470);
     w = o;
-    { Fl_Menu_Bar* o = new Fl_Menu_Bar(515, 0, 45, 25); o->begin();
+     {    Fl_Menu_Bar* o = new Fl_Menu_Bar(515, 0, 45, 25); o->begin();
       o->tooltip("A right-justified help item can be made by making a second menubar and puttin\
 g it to the right of the resizable().");
-      { Fl_Item_Group* o = new Fl_Item_Group("Help");
+       {      Fl_Item_Group* o = new Fl_Item_Group("Help");
         new Fl_Item("About...");
         new Fl_Item("Chapter 1");
         o->end();
       }
       o->end();
     }
-    { Fl_Menu_Bar* o = new Fl_Menu_Bar(0, 0, 515, 25); o->begin();
+     {    Fl_Menu_Bar* o = new Fl_Menu_Bar(0, 0, 515, 25); o->begin();
       new Fl_Item("This");
       new Fl_Item("is");
       new Fl_Item("a");
@@ -24,79 +25,79 @@ g it to the right of the resizable().");
       new Fl_Item("Bar");
       o->end();
     }
-    { Fl_Box* o = new Fl_Box(95, 25, 465, 419, "\nThis program demonstrates how you set the resizable() of a window to get th\
+     {    Fl_Box* o = new Fl_Box(95, 25, 465, 419, "\nThis program demonstrates how you set the resizable() of a window to get th\
 ings to resize the way you want.");
       o->box(FL_FLAT_BOX);
       o->color((Fl_Color)19);
       o->label_color((Fl_Color)7);
       o->align(193|FL_ALIGN_INSIDE);
     }
-    { Fl_Button* o = new Fl_Button(0, 25, 95, 25, "These");
+     {    Fl_Button* o = new Fl_Button(0, 25, 95, 25, "These");
       o->color((Fl_Color)47);
     }
-    { Fl_Button* o = new Fl_Button(0, 50, 95, 25, "are some");
+     {    Fl_Button* o = new Fl_Button(0, 50, 95, 25, "are some");
       o->color((Fl_Color)47);
     }
-    { Fl_Button* o = new Fl_Button(0, 75, 95, 25, "buttons");
+     {    Fl_Button* o = new Fl_Button(0, 75, 95, 25, "buttons");
       o->color((Fl_Color)47);
     }
-    { Fl_Button* o = new Fl_Button(0, 100, 95, 25, "we don\'t want");
+     {    Fl_Button* o = new Fl_Button(0, 100, 95, 25, "we don\'t want");
       o->color((Fl_Color)47);
     }
-    { Fl_Button* o = new Fl_Button(0, 125, 95, 25, "to resize.");
+     {    Fl_Button* o = new Fl_Button(0, 125, 95, 25, "to resize.");
       o->color((Fl_Color)47);
     }
-    { Fl_Button* o = new Fl_Button(0, 150, 95, 25, "Things that");
+     {    Fl_Button* o = new Fl_Button(0, 150, 95, 25, "Things that");
       o->color((Fl_Color)-1905292288);
     }
-    { Fl_Button* o = new Fl_Button(0, 175, 95, 25, "overlap the box");
+     {    Fl_Button* o = new Fl_Button(0, 175, 95, 25, "overlap the box");
       o->color((Fl_Color)-1905292288);
     }
-    { Fl_Button* o = new Fl_Button(0, 200, 95, 25, "will scale.");
+     {    Fl_Button* o = new Fl_Button(0, 200, 95, 25, "will scale.");
       o->color((Fl_Color)-1905292288);
     }
-    { Fl_Group* o = new Fl_Group(0, 225, 95, 190, "A group");
+     {    Fl_Group* o = new Fl_Group(0, 225, 95, 190, "A group");
       o->box(FL_ENGRAVED_BOX);
       o->label_type(FL_ENGRAVED_LABEL);
       o->label_color((Fl_Color)49);
       o->align(FL_ALIGN_BOTTOM|FL_ALIGN_INSIDE);
       o->tooltip("This group has resizable(0) (this is the default).  But you can set a group\'\
 s resizable to nest different resize behavior.");
-      { Fl_Button* o = new Fl_Button(5, 5, 85, 25, "You can put");
+       {      Fl_Button* o = new Fl_Button(5, 5, 85, 25, "You can put");
         o->color((Fl_Color)47);
       }
-      { Fl_Button* o = new Fl_Button(5, 30, 85, 25, "them inside");
+       {      Fl_Button* o = new Fl_Button(5, 30, 85, 25, "them inside");
         o->color((Fl_Color)47);
       }
-      { Fl_Button* o = new Fl_Button(5, 55, 85, 25, "a group to");
+       {      Fl_Button* o = new Fl_Button(5, 55, 85, 25, "a group to");
         o->color((Fl_Color)47);
       }
-      { Fl_Button* o = new Fl_Button(5, 80, 85, 25, "stop scaling.");
+       {      Fl_Button* o = new Fl_Button(5, 80, 85, 25, "stop scaling.");
         o->color((Fl_Color)47);
       }
       o->end();
     }
-    { Fl_Button* o = new Fl_Button(0, 419, 95, 25, "nonscaling");
+     {    Fl_Button* o = new Fl_Button(0, 419, 95, 25, "nonscaling");
       o->color((Fl_Color)47);
     }
-    { Fl_Box* o = new Fl_Box(0, 444, 460, 25, "This status message will resize horizontally only.");
+     {    Fl_Box* o = new Fl_Box(0, 444, 460, 25, "This status message will resize horizontally only.");
       o->box(FL_BORDER_BOX);
       o->color((Fl_Color)55);
       o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
     }
-    { Fl_Button* o = new Fl_Button(460, 445, 25, 25, "@<<");
+     {    Fl_Button* o = new Fl_Button(460, 445, 25, 25, "@<<");
       o->label_type(FL_SYMBOL_LABEL);
     }
-    { Fl_Button* o = new Fl_Button(485, 445, 25, 25, "@<");
+     {    Fl_Button* o = new Fl_Button(485, 445, 25, 25, "@<");
       o->label_type(FL_SYMBOL_LABEL);
     }
-    { Fl_Button* o = new Fl_Button(510, 445, 25, 25, "@>");
+     {    Fl_Button* o = new Fl_Button(510, 445, 25, 25, "@>");
       o->label_type(FL_SYMBOL_LABEL);
     }
-    { Fl_Button* o = new Fl_Button(535, 445, 25, 25, "@>>");
+     {    Fl_Button* o = new Fl_Button(535, 445, 25, 25, "@>>");
       o->label_type(FL_SYMBOL_LABEL);
     }
-    { Fl_Box* o = new Fl_Box(95, 150, 365, 270, "This is the resizable() of the window.\nIt is normally invisible.");
+     {    Fl_Box* o = new Fl_Box(95, 150, 365, 270, "This is the resizable() of the window.\nIt is normally invisible.");
       o->box(FL_BORDER_BOX);
       o->color((Fl_Color)37);
       o->label_color((Fl_Color)1);

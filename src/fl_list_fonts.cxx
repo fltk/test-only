@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts.cxx,v 1.9 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_list_fonts.cxx,v 1.10 2001/07/10 08:14:39 clip Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -21,13 +21,18 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
+#include <FL/fl_draw.H>
+
 #ifdef WIN32
 #include "fl_list_fonts_win32.cxx"
 #else
 #include "fl_list_fonts_x.cxx"
 #endif
 
+#include <stdio.h>
 Fl_Font fl_find_font(const char* name, int attributes /* = 0 */) {
+printf("fl_find_font(const char *name = %s, int attributes = %d)\n",
+       name, attributes);
   if (!name || !*name) return 0;
   // find out if the " bold" or " italic" are on the end:
   int length = strlen(name);
@@ -40,7 +45,7 @@ Fl_Font fl_find_font(const char* name, int attributes /* = 0 */) {
   Fl_Font font = 0;
   // always try the built-in fonts first, becasue fl_list_fonts is *slow*...
   int i; for (i = 0; i < 16; i += (i < 12 ? 4 : 1)) {
-    font = fl_fonts+i;
+    font = fl_fonts()+i;
     const char* fontname = font->name();
     if (!strncasecmp(name, fontname, length) && !fontname[length]) goto GOTIT;
   }
@@ -68,5 +73,5 @@ Fl_Font fl_find_font(const char* name, int attributes /* = 0 */) {
 }
 
 //
-// End of "$Id: fl_list_fonts.cxx,v 1.9 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fl_list_fonts.cxx,v 1.10 2001/07/10 08:14:39 clip Exp $".
 //

@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.89 2001/02/23 05:14:17 clip Exp $"
+dnl# "$Id: configure.in,v 1.90 2001/07/10 08:14:38 clip Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -97,12 +97,12 @@ case $uname in
           uname="WIN32"
 	  CFLAGS="$CFLAGS -DWIN32"
 	  CXXFLAGS="$CXXFLAGS -DWIN32"
-	  LDLIBS="-lgdi32 -luser32 -lmsvcrt -lwsock32 -lws2_32 -mwindows"
+	  LDLIBS="-lgdi32 -luser32 -lmsvcrt -lwsock32 -lws2_32 -lcomdlg32"
 	  SYSTYPE="WIN32"
           DSOCFLAGS="-DFL_SHARED"
           DSOCOMMAND="\${CXX} -Wl,--out-implib,\$@.import -shared $DEBUGFLAG -o"
           THEMECOMMAND="\${CXX} -shared $DEBUGFLAG -o"
-	  DSOLIBS="-lgdi32 -luser32 -lmsvcrt -lwsock32 -lws2_32 -lopengl32 -lglu32"
+	  DSOLIBS="-lgdi32 -luser32 -lmsvcrt -lwsock32 -lws2_32 -lopengl32 -lglu32 -lcomdlg32"
 	  THEMELIBS="-L ../lib -lfltk.2.dll"
           DSOLIBNAME="fltk"
           DSOLIBimagesNAME="fltk_images"
@@ -427,5 +427,5 @@ AC_OUTPUT(makeinclude fltk-config Makefile)
 chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.89 2001/02/23 05:14:17 clip Exp $".
+dnl# End of "$Id: configure.in,v 1.90 2001/07/10 08:14:38 clip Exp $".
 dnl#

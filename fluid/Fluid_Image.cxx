@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Image.cxx,v 1.24 2001/06/28 16:15:35 robertk Exp $"
+// "$Id: Fluid_Image.cxx,v 1.25 2001/07/10 08:14:38 clip Exp $"
 //
 // Pixmap label support for the Fast Light Tool Kit (FLTK).
 //
@@ -33,7 +33,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <FL/filename.H>
-#include <FL/conf.h>
+#include <config.h>
 
 extern void goto_source_dir(); // in fluid.C
 extern void goto_images_dir(); // in fluid.cxx
@@ -389,5 +389,5 @@ void set_images_dir_cb(Fl_Widget *, void *) {
 }
  
 //
-// End of "$Id: Fluid_Image.cxx,v 1.24 2001/06/28 16:15:35 robertk Exp $".
+// End of "$Id: Fluid_Image.cxx,v 1.25 2001/07/10 08:14:38 clip Exp $".
 //

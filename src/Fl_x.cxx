@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.109 2001/03/20 18:21:53 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.110 2001/07/10 08:14:39 clip Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1282,6 +1282,36 @@ void fl_get_system_colors() {
 
 }
 
+// Bounce an X button press event back to a (possibly) different application
+// window.  This is used when the pointer is grabbed but the user clicks
+// outside of the grabbed window to abort.  This function sends a click
+// event to the window that would have gotten it if the pointer had not
+// been grabbed.  There's got to be an easier way, but I don't know it.
+// WARNING - the last event received from X must have been a button press
+// event or strange and not so wonderful things will happen to you.
+FL_API void fl_bounce_button_press() {
+  // CET - FIXME - There has got to be an easier way to figure out which
+  // window the mouse pointer is in...
+  XEvent xe = *fl_xevent;
+  Window root = RootWindow(fl_display, fl_screen), child, current;
+  int root_x, root_y, win_x, win_y;
+  unsigned int mask;
+  // Start at root window and walk down the children containing pointer
+  for (current = root; ; current = child) {
+    XQueryPointer(fl_display, current, &root,
+                  &child, &root_x, &root_y, &win_x, &win_y, &mask);
+    if (!child) break;
+  }
+  xe.xbutton.window = current; // Substitute the new destination window
+  xe.xbutton.subwindow = None; // No subwindow
+  // Translate event's window coordinates to new destination window
+  XTranslateCoordinates(fl_display, root, current,
+                        xe.xbutton.x_root, xe.xbutton.y_root,
+                        &xe.xbutton.x, &xe.xbutton.y, &child);
+  // Send replacement button press event to new destination window
+  XSendEvent(fl_display, current, False, NoEventMask, &xe);
+}
+
 //
-// End of "$Id: Fl_x.cxx,v 1.109 2001/03/20 18:21:53 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.110 2001/07/10 08:14:39 clip Exp $".
 //

@@ -28,8 +28,8 @@
   # You can put a list of other plugins here.  These plugins are loaded
   # before main() is started!
   # These are filenames, and are thus case-sensitive under Linux/Unix
-  #plugins = xft
+  plugins = xft
 
   [default/xft plugin]
-    minimum antialias size = 14
-    #minimum antialias size = 0
+    #minimum antialias size = 14
+    minimum antialias size = 0

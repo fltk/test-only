@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Font.H,v 1.16 2001/03/11 16:14:28 spitzak Exp $"
+// "$Id: Fl_Font.H,v 1.17 2001/07/10 08:14:38 clip Exp $"
 //
 // Fonts used by FLTK styles and drawing code
 //
@@ -28,8 +28,6 @@
 
 #include <FL/Enumerations.H> // for FL_API
 
-class FL_API Fl_FontSize;
-
 //class FL_API Fl_Font_;
 struct FL_API Fl_Font_;
 typedef const Fl_Font_* Fl_Font;
@@ -40,7 +38,7 @@ struct FL_API Fl_Font_ {
   Fl_Font_* bold_;
   Fl_Font_* italic_;
 // list of sizes (used by X and Win32 GDI):
-  Fl_FontSize* first;
+  void *first;
 // crap needed by X:
   char **xlist;
   int n;
@@ -67,23 +65,24 @@ enum {
 };
 
 // Built-in fonts:
-extern FL_API Fl_Font_ fl_fonts[16];
-#define FL_HELVETICA		(fl_fonts+0)
-#define FL_HELVETICA_BOLD	(fl_fonts+1)
-#define FL_HELVETICA_ITALIC	(fl_fonts+2)
-#define FL_HELVETICA_BOLD_ITALIC (fl_fonts+3)
-#define FL_COURIER		(fl_fonts+4)
-#define FL_COURIER_BOLD		(fl_fonts+5)
-#define FL_COURIER_ITALIC	(fl_fonts+6)
-#define FL_COURIER_BOLD_ITALIC	(fl_fonts+7)
-#define FL_TIMES		(fl_fonts+8)
-#define FL_TIMES_BOLD		(fl_fonts+9)
-#define FL_TIMES_ITALIC		(fl_fonts+10)
-#define FL_TIMES_BOLD_ITALIC	(fl_fonts+11)
-#define FL_SYMBOL		(fl_fonts+12)
-#define FL_SCREEN		(fl_fonts+13)
-#define FL_SCREEN_BOLD		(fl_fonts+14)
-#define FL_ZAPF_DINGBATS	(fl_fonts+15)
+extern FL_API Fl_Font_ *fl_fonts();
+
+#define FL_HELVETICA                    (fl_fonts()+0)
+#define FL_HELVETICA_BOLD               (fl_fonts()+1)
+#define FL_HELVETICA_ITALIC             (fl_fonts()+2)
+#define FL_HELVETICA_BOLD_ITALIC        (fl_fonts()+3)
+#define FL_COURIER                      (fl_fonts()+4)
+#define FL_COURIER_BOLD                 (fl_fonts()+5)
+#define FL_COURIER_ITALIC               (fl_fonts()+6)
+#define FL_COURIER_BOLD_ITALIC          (fl_fonts()+7)
+#define FL_TIMES                        (fl_fonts()+8)
+#define FL_TIMES_BOLD                   (fl_fonts()+9)
+#define FL_TIMES_ITALIC                 (fl_fonts()+10)
+#define FL_TIMES_BOLD_ITALIC            (fl_fonts()+11)
+#define FL_SYMBOL                       (fl_fonts()+12)
+#define FL_SCREEN                       (fl_fonts()+13)
+#define FL_SCREEN_BOLD                  (fl_fonts()+14)
+#define FL_ZAPF_DINGBATS                (fl_fonts()+15)
 
 // Find a font by name + attributes:
 FL_API Fl_Font fl_find_font(const char* name, int attrib = 0);
