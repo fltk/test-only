@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.26 2004/05/04 07:30:42 spitzak Exp $"
+// "$Id: x.h,v 1.27 2004/05/05 07:11:23 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -42,7 +42,6 @@
 # include "win32.h"
 
 #elif defined(__APPLE__) && !USE_X11
-# error config.h not included!
 # include "mac.h"
 
 #else
@@ -177,5 +176,5 @@ Window* find(XWindow xid);
 #endif
 
 //
-// End of "$Id: x.h,v 1.26 2004/05/04 07:30:42 spitzak Exp $".
+// End of "$Id: x.h,v 1.27 2004/05/05 07:11:23 spitzak Exp $".
 //
