@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.15 2000/04/24 08:31:28 bill Exp $"
+// "$Id: fl_rect.cxx,v 1.16 2000/04/24 09:21:12 bill Exp $"
 //
 // Rectangle drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -335,6 +335,7 @@ void fl_clip_out(int x, int y, int w, int h) {
   rstack[rstackptr] = temp;
 #else
   CombineRgn(current,current,r,RGN_DIFF);
+  DeleteObject(r);
 #endif
   fl_restore_clip();
 }
@@ -450,5 +451,5 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H) {
 }
 
 //
-// End of "$Id: fl_rect.cxx,v 1.15 2000/04/24 08:31:28 bill Exp $".
+// End of "$Id: fl_rect.cxx,v 1.16 2000/04/24 09:21:12 bill Exp $".
 //
