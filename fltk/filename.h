@@ -1,5 +1,5 @@
 //
-// "$Id: filename.h,v 1.13 2004/01/07 06:57:06 spitzak Exp $"
+// "$Id: filename.h,v 1.14 2004/10/15 06:00:20 spitzak Exp $"
 //
 // Filename header file for the Fast Light Tool Kit (FLTK).
 //
@@ -48,7 +48,12 @@ FL_API long int filename_mtime(const char *); // return modification time
 ////////////////////////////////////////////////////////////////
 // dirent (what a pain)...
 
-#if defined(_WIN32) && !defined(__CYGWIN__)
+#if defined(__WATCOMC__)
+
+# include <sys/types.h>
+# include "direct.h"
+
+#elif defined(_WIN32) && !defined(__CYGWIN__)
 // Dummy version used on win32 that just holds a name:
 
 struct dirent {char d_name[1];};
@@ -59,14 +64,14 @@ struct dirent {char d_name[1];};
 // though we are not going to look at anything other than the name. This
 // code seems to force the 64-bit version to be used:
 
-#ifndef _GNU_SOURCE
-# define _GNU_SOURCE
-#endif
-#include <features.h>
-#include <sys/types.h>
-#include <dirent.h>
-#define dirent dirent64
-#define scandir scandir64
+# ifndef _GNU_SOURCE
+#  define _GNU_SOURCE
+# endif
+# include <features.h>
+# include <sys/types.h>
+# include <dirent.h>
+# define dirent dirent64
+# define scandir scandir64
 
 #else
 // warning: on some systems (very few nowadays?) <dirent.h> may not exist.
@@ -78,8 +83,8 @@ struct dirent {char d_name[1];};
 //  #define dirent direct
 // I recommend you create a /usr/include/dirent.h containing the correct info
 
-#include <sys/types.h>
-#include <dirent.h>
+# include <sys/types.h>
+# include <dirent.h>
 
 #endif
 
@@ -89,5 +94,5 @@ FL_API int filename_list(const char *d, struct dirent ***);
 #endif
 
 //
-// End of "$Id: filename.h,v 1.13 2004/01/07 06:57:06 spitzak Exp $".
+// End of "$Id: filename.h,v 1.14 2004/10/15 06:00:20 spitzak Exp $".
 //
