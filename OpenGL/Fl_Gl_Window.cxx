@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.6 2000/03/24 08:43:45 bill Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.7 2000/04/07 17:10:05 bill Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -70,7 +70,7 @@ void Fl_Gl_Window::create() {
     g = Fl_Gl_Choice::find(mode_, alist);
     if (!g) {Fl::error("Insufficient OpenGL"); return;}
   }
-#ifndef WIN32
+#ifndef _WIN32
   Fl_X::create(this, g->vis, g->colormap, -1);
   //if (overlay && overlay != this) ((Fl_Gl_Window*)overlay)->show();
 #else
@@ -80,7 +80,7 @@ void Fl_Gl_Window::create() {
 
 void Fl_Gl_Window::invalidate() {
   valid(0);
-#ifndef WIN32
+#ifndef _WIN32
   if (overlay) ((Fl_Gl_Window*)overlay)->valid(0);
 #endif
 }
@@ -95,7 +95,7 @@ int Fl_Gl_Window::mode(int m, const int *a) {
 
 void Fl_Gl_Window::make_current() {
   if (!context) {
-#ifdef WIN32
+#ifdef _WIN32
     context = wglCreateContext(fl_private_dc(this, g));
     if (fl_first_context) wglShareLists(fl_first_context, (GLXContext)context);
     else fl_first_context = (GLXContext)context;
@@ -106,7 +106,7 @@ void Fl_Gl_Window::make_current() {
     valid(0);
   }
   fl_set_gl_context(this, (GLXContext)context);
-#if defined(WIN32) && USE_COLORMAP
+#if defined(_WIN32) && USE_COLORMAP
   if (fl_palette) {
     fl_GetDC(fl_xid(this));
     SelectPalette(fl_gc, fl_palette, FALSE);
@@ -132,27 +132,33 @@ void Fl_Gl_Window::ortho() {
 }
 
 void Fl_Gl_Window::swap_buffers() {
-#ifdef WIN32
+#ifdef _WIN32
   SwapBuffers(Fl_X::i(this)->private_dc);
 #else
   glXSwapBuffers(fl_display, fl_xid(this));
 #endif
 }
 
-#if defined(_WIN32) && HAVE_GL_OVERLAY
+#if HAVE_GL_OVERLAY && defined(_WIN32)
 uchar fl_overlay; // changes how fl_color() works
+int fl_overlay_depth = 0;
 #endif
 
 void Fl_Gl_Window::flush() {
   uchar save_valid = valid_;
 
-#if defined(_WIN32) && HAVE_GL_OVERLAY
+#if HAVE_GL_OVERLAY && defined(_WIN32)
+  bool fixcursor = false;
   if (overlay && overlay != this &&
       ((damage()&(FL_DAMAGE_OVERLAY|FL_DAMAGE_ALL|FL_DAMAGE_EXPOSE))
        || !save_valid)) {
+    // SGI system messes up overlay over singlebuffer
+    fixcursor = !(mode_ & FL_DOUBLE);
+    if (fixcursor) SetCursor(0);
     // Draw into hardware overlay planes
-    if (!g->d) SetCursor(0); // SGI 320 messes up overlay over singlebuffer
     fl_set_gl_context(this, (GLXContext)overlay);
+    if (fl_overlay_depth)
+      wglRealizeLayerPalette(Fl_X::i(this)->private_dc, 1, TRUE);
     glDisable(GL_SCISSOR_TEST);
     glClear(GL_COLOR_BUFFER_BIT);
     fl_overlay = 1;
@@ -161,10 +167,9 @@ void Fl_Gl_Window::flush() {
     valid(save_valid);
     if (damage() == FL_DAMAGE_OVERLAY) {
       wglSwapLayerBuffers(Fl_X::i(this)->private_dc,WGL_SWAP_OVERLAY1);
-      if (!g->d) SetCursor(Fl_X::i(this)->cursor);
+      if (fixcursor) SetCursor(Fl_X::i(this)->cursor);
       return;
     }
-    if (!g->d) SetCursor(Fl_X::i(this)->cursor);
   }
 #endif
 
@@ -195,7 +200,7 @@ void Fl_Gl_Window::flush() {
       static GLXContext ortho_context = 0;
       static Fl_Gl_Window* ortho_window = 0;
       if (!ortho_context) {
-#ifdef WIN32
+#ifdef _WIN32
 	ortho_context = wglCreateContext(Fl_X::i(this)->private_dc);
 #else
 	ortho_context = glXCreateContext(fl_display,g->vis,fl_first_context,1);
@@ -245,7 +250,9 @@ void Fl_Gl_Window::flush() {
     draw();
     if (overlay == this) draw_overlay();
     glFlush();
-
+#if HAVE_GL_OVERLAY && defined(_WIN32)
+    if (fixcursor) SetCursor(Fl_X::i(this)->cursor);
+#endif
   }
 
   valid(1);
@@ -259,18 +266,24 @@ void Fl_Gl_Window::layout() {
 void Fl_Gl_Window::destroy() {
   if (context) {
     fl_no_gl_context();
-#ifdef WIN32
-    if (context && context != fl_first_context)
+    if (context != fl_first_context) {
+#ifdef _WIN32
       wglDeleteContext((GLXContext)context);
 #else
-    if (context != fl_first_context)
       glXDestroyContext(fl_display, (GLXContext)context);
-// #if GLX_MESA_release_buffers
-//    glXReleaseBuffersMESA(fl_display, fl_xid(this));
-// #endif
 #endif
+    }
+// #ifdef GLX_MESA_release_buffers
+//     glXReleaseBuffersMESA(fl_display, fl_xid(this));
+// #endif
     context = 0;
   }
+#if HAVE_GL_OVERLAY && defined(_WIN32)
+  if (overlay && overlay != this && (GLXContext)overlay != fl_first_context) {
+    wglDeleteContext((GLXContext)overlay);
+    overlay = 0;
+  }
+#endif
   Fl_Window::destroy();
 }
 
@@ -293,5 +306,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.6 2000/03/24 08:43:45 bill Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.7 2000/04/07 17:10:05 bill Exp $".
 //
