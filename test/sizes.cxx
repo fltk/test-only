@@ -33,7 +33,7 @@
 
 int main() {
   printf("sizeof(fltk::Style) = %lu\n", (unsigned long)sizeof(struct fltk::Style));
-  printf("  sizeof(fltk::Box) = %lu\n", (unsigned long)sizeof(class fltk::Box));
+  //printf("  sizeof(fltk::Box) = %lu\n", (unsigned long)sizeof(class fltk::Box));
   printf("sizeof(fltk::Widget) = %lu\n", (unsigned long)sizeof(class fltk::Widget));
   printf("  sizeof(fltk::Button) = %lu\n", (unsigned long)sizeof(class fltk::Button));
   printf("    sizeof(fltk::LightButton) = %lu\n", (unsigned long)sizeof(class fltk::LightButton));
