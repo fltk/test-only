@@ -28,7 +28,49 @@
 #include <config.h>
 
 ////////////////////////////////////////////////////////////////
-#if HAVE_PTHREAD
+#if defined(WIN32)
+
+#include <windows.h>
+#include <process.h>
+
+// these pointers are in Fl_win32.cxx:
+extern void (*fl_lock_function)();
+extern void (*fl_unlock_function)();
+
+static DWORD main_thread;
+
+CRITICAL_SECTION cs;
+
+static void unlock_function() {
+  LeaveCriticalSection(&cs);
+}
+
+static void lock_function() {
+  EnterCriticalSection(&cs);
+}
+
+void Fl::lock() {
+  if (!main_thread)
+    InitializeCriticalSection(&cs);
+  lock_function();
+  if (!main_thread) {
+    fl_lock_function = lock_function;
+    fl_unlock_function = unlock_function;
+    main_thread = GetCurrentThreadId();
+  }
+}
+
+void Fl::unlock() {
+  unlock_function();
+}
+
+// when called from a thread, it causes FLTK to awake from Fl::wait()
+void Fl::awake(void* msg) {
+  PostThreadMessage( main_thread, WM_USER, (WPARAM)msg, 0);
+}
+
+////////////////////////////////////////////////////////////////
+#elif HAVE_PTHREAD
 #include <unistd.h>
 #include <pthread.h>
 
@@ -98,48 +140,6 @@ void Fl::lock() {
 
 void Fl::awake(void* msg) {
   write(thread_filedes[1], &msg, sizeof(void*));
-}
-
-////////////////////////////////////////////////////////////////
-#elif defined(WIN32)
-
-#include <windows.h>
-#include <process.h>
-
-// these pointers are in Fl_win32.cxx:
-extern void (*fl_lock_function)();
-extern void (*fl_unlock_function)();
-
-static DWORD main_thread;
-
-CRITICAL_SECTION cs;
-
-static void unlock_function() {
-  LeaveCriticalSection(&cs);
-}
-
-static void lock_function() {
-  EnterCriticalSection(&cs);
-}
-
-void Fl::lock() {
-  if (!main_thread)
-    InitializeCriticalSection(&cs);
-  lock_function();
-  if (!main_thread) {
-    fl_lock_function = lock_function;
-    fl_unlock_function = unlock_function;
-    main_thread = GetCurrentThreadId();
-  }
-}
-
-void Fl::unlock() {
-  unlock_function();
-}
-
-// when called from a thread, it causes FLTK to awake from Fl::wait()
-void Fl::awake(void* msg) {
-  PostThreadMessage( main_thread, WM_USER, (WPARAM)msg, 0);
 }
 
 #endif

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.77 2000/06/03 14:23:43 mike Exp $"
+# "$Id: Makefile,v 1.78 2000/06/06 13:44:38 carl Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -195,37 +195,30 @@ CLEAN =
 include ../makeinclude
 
 LIBRARY = ../lib/$(LIBNAME)
-DSONAME = $(DSOLIBNAME)$(DSOEXT)
+DSONAME = ../lib/$(DSOLIBNAME)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
-all:	$(LIBRARY).a $(DSONAME)
+all:	$(LIBRARY).$(LIBEXT) $(DSONAME).$(DSOEXT)
 
 $(LIBRARY).a: $(OBJECTS) fl_call_main.o
-	@echo $(LIBCOMMAND) $@ ...
+	@echo $(LIBCOMMAND) $@ $(OBJECTS) fl_call_main.o
 	@rm -f $@
 	@$(LIBCOMMAND) $@ $(OBJECTS) fl_call_main.o
 	@$(RANLIB) $@
 
-libfltk.so.2 libfltk.sl.2: $(OBJECTS)
-	@echo $(DSOCOMMAND) $@ ...
-	@$(DSOCOMMAND) $@ $(OBJECTS)
+$(DSONAME).so.2 $(DSONAME).sl.2: $(OBJECTS:.o=.shared.o)
+	@echo $(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o)
+	@$(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o)
 
-fltk.2.dll: $(OBJECTS:.o=.dll.o)
-	@echo $(DSOCOMMAND) $@ ...
+$(DSONAME).2.dll: $(OBJECTS:.o=.dll.o)
+	@echo $(DSOCOMMAND) $@ $(OBJECTS:.o=.dll.o) $(CXXFLAGS) $(GLDLIBS)
 	@rm -f $@
-	@$(DSOCOMMAND) -o $@ \
-	    $(OBJECTS:.o=.dll.o) $(CXXFLAGS) $(GLDLIBS)
-
-%.dll.o : %.cxx
-	echo Compiling $@...
-	$(CXX) -I.. $(CXXFLAGS) $(DLLCFLAGS) -c $< -o $@
-%.dll.o : %.x
-	echo Compiling $@...
-	$(CC) -I.. $(CFLAGS) $(DLLCFLAGS) -c $< -o $@
+	@$(DSOCOMMAND) -o $@ $(OBJECTS:.o=.dll.o) $(CXXFLAGS) $(GLDLIBS)
 
 clean :
-	-@ rm -f *.o *.do $(DSONAME) $(LIBRARY).a $(CLEAN) core *~ ../include/*~ makedepend cmap
+	-@ rm -f *.o $(LIBRARY).$(LIBEXT) $(CLEAN) core *~ ../include/*~ makedepend cmap
+	-@test -n "$(DSOEXT)" && rm -f $(DSONAME).$(DSOEXT)
 	@touch makedepend
 
 depend:
@@ -234,19 +227,19 @@ include makedepend
 
 ################################################################
 
-install: $(LIBRARY).a $(DSONAME)
+install: $(LIBRARY).$(LIBEXT) $(DSONAME).$(DSOEXT)
 	@echo "Installing libraries..."
 	@-mkdir -p $(libdir)
-	@rm -f $(libdir)/$(LIBNAME)
-	@-cp $(LIBRARY).a $(libdir)
-	@-chmod 644 $(libdir)/$(LIBNAME).a
+	@-rm -f $(libdir)/$(LIBNAME).$(LIBEXT)
+	@-test -n "$(DSOEXT)" && rm -f $(libdir)/$(DSOLIBNAME).$(DSOEXT)
+	@-test -n "$(DSOSHORTEXT)" && rm -f $(libdir)/$(DSOLIBNAME).$(DSOSHORTEXT)
+	@-cp $(LIBRARY).$(LIBEXT) $(libdir)
+	@-chmod 644 $(libdir)/$(LIBNAME).$(LIBEXT)
 	@if test -n "$(DSOEXT)"; then \
-		if test $(DSONAME) = $(LIBNAME).so.2; then ext=.so; else ext=.s1; fi; \
-		rm -f $(libdir)/$(LIBNAME)$$ext.2;\
-		rm -f $(libdir)/$(LIBNAME)$$ext;\
-		cp $(LIBNAME)$$ext.2 $(libdir); \
-		chmod 755 $(libdir)/$(LIBNAME)$$ext.2; \
-		ln -s $(libdir)/$(LIBNAME)$$ext.2 $(libdir)/$(LIBNAME)$$ext;\
+		cp $(DSONAME).$(DSOEXT) $(libdir); \
+		chmod 755 $(libdir)/$(DSOLIBNAME).$(DSOEXT) ; \
+		test -n $(DSOSHORTEXT) && \
+			ln -s $(DSOLIBNAME).$(DSOEXT) $(libdir)/$(DSOLIBNAME).$(DSOSHORTEXT); \
 	fi
 	@echo "Installing include files..."
 	@-mkdir -p $(includedir)
@@ -265,5 +258,5 @@ install: $(LIBRARY).a $(DSONAME)
 	@cp ../fltk-config $(bindir)
 
 #
-# End of "$Id: Makefile,v 1.77 2000/06/03 14:23:43 mike Exp $".
+# End of "$Id: Makefile,v 1.78 2000/06/06 13:44:38 carl Exp $".
 #

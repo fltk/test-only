@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.7 2000/06/03 14:23:41 mike Exp $"
+# "$Id: Makefile,v 1.8 2000/06/06 13:44:34 carl Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -27,6 +27,7 @@ CPPFILES = \
 	glut_compatability.cxx \
 	glut_font.cxx
 
+
 DEMOS = \
 	glpuzzle fractals
 
@@ -34,26 +35,42 @@ DEMOS = \
 
 include ../makeinclude
 
+.cxx:
+	echo $(CXX) -I.. $(CXXFLAGS) $< $(GLUTLIBS) -o $@
+	$(CXX) -I.. $(CXXFLAGS) $< $(GLUTLIBS) -o $@
+
 LIBRARY = ../lib/$(LIBNAME)_glut
-DSONAME = $(DSOLIBglutNAME)$(DSOEXT)
+DSONAME = ../lib/$(DSOLIBglutNAME)
+LIBRARIES = $(LIBRARY).$(LIBEXT) $(DSONAME).$(DSOEXT)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
-all:	$(LIBRARY).a $(DSONAME) $(DEMOS)
+all:	$(LIBRARY).$(LIBEXT) $(DSONAME).$(DSOEXT) $(DEMOS)
 
 $(LIBRARY).a: $(OBJECTS)
-	@echo $(LIBCOMMAND) $@ ...
+	@echo $(LIBCOMMAND) $@ $(OBJECTS) 
 	@rm -f $@
 	@$(LIBCOMMAND) $@ $(OBJECTS)
 	@$(RANLIB) $@
 
-$(LIBRARY).so.2 $(LIBRARY).sl.2: $(OBJECTS)
-	@echo $(DSOCOMMAND) $@ ...
-	@$(DSOCOMMAND) $@ $(OBJECTS)
-	@touch $(DSOEXT)
+$(DSONAME).so.2 $(DSONAME).sl.2: $(OBJECTS:.o=.shared.o)
+	@echo $(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o)
+	@$(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o)
+
+$(DSONAME).2.dll: $(OBJECTS:.o=.dll.o)
+	@echo $(DSOCOMMAND) $@ $(OBJECTS:.o=.dll.o) $(CXXFLAGS) $(GLDLIBS)
+	@rm -f $@
+	@$(DSOCOMMAND) -o $@ $(OBJECTS:.o=.dll.o) $(CXXFLAGS) $(GLDLIBS)
+
+$(DEMOS): $(LIBRARIES)
+
+#.fl.cxx .fl.h:
+#	echo Generating $@...
+#	../fluid/fluid -c $<
 
 clean :
-	-@ rm -f *.o *.do $(LIBRARY).a $(DEMOS) core *~ makedepend
+	@ rm -f *.o $(DEMOS) $(LIBRARY).$(LIBEXT) core *~ makedepend
+	-@test -n "$(DSOEXT)" && rm -f $(DSONAME).$(DSOEXT)
 	@touch makedepend
 
 depend:
@@ -62,21 +79,21 @@ include makedepend
 
 ################################################################
 
-install: $(LIBRARY).a
+install: $(LIBRARIES)
 	@echo "Installing libraries..."
 	@-mkdir -p $(libdir)
-	@rm -f $(libdir)/$(LIBRARY).a
-	@-cp $(LIBRARY).a $(libdir)
-	@-chmod 644 $(libdir)/$(LIBRARY).a
+	@-rm -f $(libdir)/$(LIBNAME)_glut.$(LIBEXT)
+	@-test -n "$(DSOEXT)" && rm -f $(libdir)/$(DSOLIBglutNAME).$(DSOEXT)
+	@-test -n "$(DSOSHORTEXT)" && rm -f $(libdir)/$(DSOLIBglutNAME).$(DSOSHORTEXT)
+	@-cp $(LIBRARY).$(LIBEXT) $(libdir)
+	@-chmod 644 $(libdir)/$(LIBNAME)_glut.$(LIBEXT)
 	@if test -n "$(DSOEXT)"; then \
-		if test "$(DSONAME)" = $(LIBRARY).so.2; then ext=.so; else ext=.s1; fi; \
-		rm -f $(libdir)/$(LIBRARY)$$ext.2;\
-		rm -f $(libdir)/$(LIBRARY)$$ext;\
-		cp $(DSONAME) $(libdir)/$(LIBRARY)$$ext.2; \
-		chmod 755 $(libdir)/$(LIBRARY)$$ext.2; \
-		ln -s $(libdir)/$(LIBRARY)$$ext.2 $(libdir)/$(LIBRARY)$$ext;\
+		cp $(DSONAME).$(DSOEXT) $(libdir); \
+		chmod 755 $(libdir)/$(DSOLIBglutNAME).$(DSOEXT); \
+		test -n "$(DSOSHORTEXT)" && \
+			ln -s $(DSOLIBglutNAME).$(DSOEXT) $(libdir)/$(DSOLIBglutNAME).$(DSOSHORTEXT); \
 	fi
 
 #
-# End of "$Id: Makefile,v 1.7 2000/06/03 14:23:41 mike Exp $".
+# End of "$Id: Makefile,v 1.8 2000/06/06 13:44:34 carl Exp $".
 #

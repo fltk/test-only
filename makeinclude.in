@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.24 2000/06/03 14:23:37 mike Exp $"
+# "$Id: makeinclude.in,v 1.25 2000/06/06 13:44:28 carl Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -38,9 +38,10 @@ CC		=@CC@
 MAKEDEPEND	=@MAKEDEPEND@
 
 # flags for C++ compiler:
-CFLAGS		=-I@srcdir@ @CFLAGS@
-CXXFLAGS	=-I@srcdir@ @CXXFLAGS@ @X_CFLAGS@
+CFLAGS		=-I@srcdir@ @COPTS@ @CFLAGS@
+CXXFLAGS	=-I@srcdir@ @CXXOPTS@ @CXXFLAGS@ @X_CFLAGS@
 DLLCFLAGS	=@DLLCFLAGS@	# used for WIN32 dlls only
+DSOCFLAGS	=@DSOCFLAGS@
 DEBUGFLAGS	=@DEBUGFLAG@
 
 # flags for the linker
@@ -48,6 +49,7 @@ LD_PLUGIN_FLAGS	=@LD_PLUGIN_FLAGS@	# to build some plugin
 
 # program to make the archive:
 LIBNAME		=@LIBNAME@
+LIBEXT		=@LIBEXT@
 DSOLIBNAME	=@DSOLIBNAME@
 DSOLIBformsNAME	=@DSOLIBformsNAME@
 DSOLIBimagesNAME=@DSOLIBimagesNAME@
@@ -56,13 +58,16 @@ DSOLIBglutNAME	=@DSOLIBglutNAME@
 LIBCOMMAND	=@LIBCOMMAND@
 RANLIB		=@RANLIB@
 DSOEXT		=@DSOEXT@
+DSOSHORTEXT	=@DSOSHORTEXT@
 DSOCOMMAND	=@DSOCOMMAND@
 EXPORTCOMMAND	=@EXPORTCOMMAND@
 
 # libraries to link with:
-LDLIBS		=@LDFLAGS@ @LIBS@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
-LDDLLLIBS	=@LDFLAGS@ @LIBS@ @LDDLLLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
-GLDLIBS		=@LDFLAGS@ -lfltk_gl @LIBS@ @GLLIB@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
+LDLIBS		=@LDFLAGS@ -L../lib -lfltk @LIBS@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
+LDDLLLIBS	=@LDFLAGS@ -L../lib -lfltk @LIBS@ @LDDLLLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
+GLDLIBS		=@LDFLAGS@ -L../lib -lfltk_gl -lfltk @LIBS@ @GLLIB@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
+GLUTLIBS	=@LDFLAGS@ -L../lib -lfltk_glut -lfltk_gl -lfltk @LIBS@ @GLLIB@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
+FORMSLIBS	=@LDFLAGS@ -L../lib -lfltk_forms -lfltk @LIBS@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
 IMAGELIBS	=@LIBPNG@ @LIBJPEG@
 THREADSLIBS	=@THREADSLIBS@
 
@@ -72,18 +77,28 @@ THREADSLIBS	=@THREADSLIBS@
 # Build commands and filename extensions...
 .SUFFIXES:	.c .cxx .h .fl .o
 
-.cxx:
-	echo Compiling and linking $@...
-	$(CXX) -I.. $(CXXFLAGS) $< -L../lib -lfltk $(LDLIBS) -o $@
-
 .c.o:
-	echo Compiling $@...
-	$(CC) -I.. $(CXXFLAGS) $< -c
+	echo $(CC) -I.. $(CFLAGS) $(COPTS) $< -c
+	$(CC) -I.. $(CFLAGS) $(COPTS) $< -c
 
 .cxx.o:
+	echo $(CXX) -I.. $(CXXFLAGS) $(CXXOPTS) $< -c
+	$(CXX) -I.. $(CXXFLAGS) $(CXXOPTS) $< -c
+
+%.shared.o : %.cxx
+	echo $(CXX) -I.. $(DSOCFLAGS) $(CXXFLAGS) $(CXXOPTS) $(DLLCFLAGS) -c $< -o $@
+	$(CXX) -I.. $(DSOCFLAGS) $(CXXFLAGS) $(CXXOPTS) $(DLLCFLAGS) -c $< -o $@
+%.shared.o : %.c
+	echo $(CC) -I.. $(DSOCFLAGS) $(CFLAGS) $(COPTS) $(DLLCFLAGS) -c $< -o $@
+	$(CC) -I.. $(DSOCFLAGS) $(CFLAGS) $(COPTS) $(DLLCFLAGS) -c $< -o $@
+
+%.dll.o : %.cxx
 	echo Compiling $@...
-	$(CXX) -I.. $(CXXFLAGS) $< -c
+	$(CXX) -I.. $(CXXFLAGS) $(CXXOPTS) $(DLLCFLAGS) -c $< -o $@
+%.dll.o : %.c
+	echo Compiling $@...
+	$(CC) -I.. $(CFLAGS) $(COPTS) $(DLLCFLAGS) -c $< -o $@
 
 #
-# End of "$Id: makeinclude.in,v 1.24 2000/06/03 14:23:37 mike Exp $".
+# End of "$Id: makeinclude.in,v 1.25 2000/06/06 13:44:28 carl Exp $".
 #
