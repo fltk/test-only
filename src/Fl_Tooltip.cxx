@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.39 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.40 2001/11/08 08:13:49 spitzak Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -79,17 +79,14 @@ void Fl_TooltipBox::draw() {
   draw_label(3, 3, w()-6, h()-6, FL_ALIGN_LEFT|FL_ALIGN_WRAP|FL_ALIGN_INSIDE);
 }
 
-
 static void tooltip_timeout(void*) {
   //if (Fl::grab()) return;
 
   if (window) delete window;
-  Fl_Group* saveCurrent = Fl_Group::current();
   Fl_Group::current(0);
   window = new Fl_TooltipBox;
   window->set_override();
   window->end();
-  Fl_Group::current(saveCurrent);
 
   // this cast bypasses the normal Fl_Window label() code:
   ((Fl_Widget*)window)->label(tip);
@@ -97,19 +94,19 @@ static void tooltip_timeout(void*) {
   window->show();
 }
 
-static int cheesy_flag = 0;
+static bool cheesy_flag;
 
 static void
 tt_exit(Fl_Widget *w) {
   if (!w || w != widget) return;
   widget = 0;
-  Fl::remove_timeout((Fl_Timeout_Handler)tooltip_timeout);
+  Fl::remove_timeout(tooltip_timeout);
   if (window) {
     // This flag makes sure that tootip_enter() isn't executed because of
     // this destroy() which could cause unwanted recursion in tooltip_enter()
-    cheesy_flag = 1;
+    cheesy_flag = true;
     window->destroy();
-    cheesy_flag = 0;
+    cheesy_flag = false;
   }
 }
 
@@ -119,24 +116,27 @@ tt_enter_area(Fl_Widget* w, int X, int Y, int W, int H, const char* t) {
   if (w == widget && X == ::X && Y == ::Y && W == ::W && H == ::H && t == tip)
     return;
   tt_exit(widget);
+  Fl::remove_timeout(tooltip_timeout);
   widget = w; ::X = X; ::Y = Y; ::W = W; ::H = H; tip = t;
   if (!t || !Fl_Tooltip::enabled()) return;
   float d = Fl_Tooltip::delay();
-  if (d < .01f) d = .01f;
-  Fl::add_timeout(d, (Fl_Timeout_Handler)tooltip_timeout);
+  Fl::add_timeout(d, tooltip_timeout);
 }
 
 static void
 tt_enter(Fl_Widget* w) {
-  if (cheesy_flag  || w == widget) return;
-  if (!w || w == window) { tt_exit(widget); widget = 0; return; }
-  tt_enter_area(w, 0, 0, w->w(), w->h(), w->tooltip());
+  if (cheesy_flag) return;
+  // find the enclosing group with a tooltip:
+  while (w && !w->tooltip()) w = w->parent();
+  if (w == widget || w == window) return;
+  if (!w || !*(w->tooltip())) tt_exit(widget);
+  else tt_enter_area(w, 0, 0, w->w(), w->h(), w->tooltip());
 }
 
 void Fl_Widget::tooltip(const char *tt) {
-  static int do_once = 0;
-  if (!do_once) {
-    do_once = 1;
+  static bool beenhere = false;
+  if (!beenhere) {
+    beenhere = true;
     Fl_Tooltip::enter = tt_enter;
     Fl_Tooltip::enter_area = tt_enter_area;
     Fl_Tooltip::exit = tt_exit;
@@ -147,11 +147,12 @@ void Fl_Widget::tooltip(const char *tt) {
 static void revert(Fl_Style* s) {
   s->box = FL_BORDER_BOX;
   s->color = (Fl_Color)215;
+  s->text_color = FL_DARK3;
   s->label_color = FL_BLACK;
 }
 static Fl_Named_Style style("Tooltip", revert, &Fl_Tooltip::default_style);
 Fl_Named_Style* Fl_Tooltip::default_style = &::style;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.39 2001/09/10 01:16:17 spitzak Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.40 2001/11/08 08:13:49 spitzak Exp $".
 //

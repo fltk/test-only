@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.46 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.47 2001/11/08 08:13:49 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -62,12 +62,13 @@ void Fl_Menu_Bar::draw() {
 }
 
 int Fl_Menu_Bar::handle(int event) {
-  if (!children()) return 0;
+  int children = this->children();
+  if (!children) return 0;
   int X = 3;
   int i;
   highlight_ = -1;
   // FL_LEAVE events don't get the right coordinates
-  if (event != FL_LEAVE) for (i = 0; i < children(); ++i) {
+  if (event != FL_LEAVE) for (i = 0; i < children; ++i) {
     Fl_Widget* widget = child(i);
     if (!widget->visible()) continue;
     int W = widget->width() + 10;
@@ -92,7 +93,7 @@ int Fl_Menu_Bar::handle(int event) {
     popup(0, 0, w(), h(), 0, true);
     return 1;
   case FL_SHORTCUT:
-    for (i = 0; i < children(); i++) {
+    for (i = 0; i < children; i++) {
       Fl_Widget* w = child(i);
       if (w->is_group() && w->active() && w->test_shortcut()) {
 	value(i); goto J1;
@@ -108,7 +109,7 @@ int Fl_Menu_Bar::handle(int event) {
       // keydown that preceeded it, so Alt was pressed & released without
       // any intermediate values.  On X it is false if Alt is held down
       // for a long time, too.
-      for (i = 0; i < children(); i++) {
+      for (i = 0; i < children; i++) {
 	Fl_Widget* w = child(i);
 	if (w->active()) {value(i); goto J1;}
       }
@@ -145,5 +146,5 @@ Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.46 2001/09/10 01:16:17 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.47 2001/11/08 08:13:49 spitzak Exp $".
 //

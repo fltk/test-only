@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.38 2001/08/07 07:06:17 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.39 2001/11/08 08:13:49 spitzak Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -204,8 +204,10 @@ static Fl_Widget* shortcut_search(Fl_Group* g) {
 }
 
 int Fl_Menu_::handle_shortcut() {
+  if (Fl::event_clicks()) return 0; // ignore repeating keys
   Fl_Widget* widget = 0;
-  for (int i = 0; i < children(); i++) {
+  int children = this->children();
+  for (int i = 0; i < children; i++) {
     Fl_Widget* item = child(i);
     if (!item->takesevents()) continue;
     if (Fl::test_shortcut(item->shortcut())) {focus(i); widget=item; break;}
@@ -219,5 +221,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.38 2001/08/07 07:06:17 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.39 2001/11/08 08:13:49 spitzak Exp $"
 //

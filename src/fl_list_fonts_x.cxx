@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_x.cxx,v 1.4 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_list_fonts_x.cxx,v 1.5 2001/11/08 08:13:49 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -126,8 +126,7 @@ static int sort_function(const void *aa, const void *bb) {
 }
 }
 
-static int
-x11_list_fonts(Fl_Font*& arrayp) {
+int fl_list_fonts(Fl_Font*& arrayp) {
   static Fl_Font* font_array = 0;
   static int num_fonts = 0;
   if (font_array) {arrayp = font_array; return num_fonts;}
@@ -197,12 +196,6 @@ x11_list_fonts(Fl_Font*& arrayp) {
   }
   arrayp = font_array;
   return num_fonts;
-}
-
-int
-fl_list_fonts(Fl_Font*& arrayp) {
-  if (!fl_font_renderer->list) fl_font_renderer->list = x11_list_fonts;
-  return fl_font_renderer->list(arrayp);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -279,5 +272,5 @@ int Fl_Font_::sizes(int*& sizep) const {
 }
 
 //
-// End of "$Id: fl_list_fonts_x.cxx,v 1.4 2001/07/23 09:50:05 spitzak Exp $"
+// End of "$Id: fl_list_fonts_x.cxx,v 1.5 2001/11/08 08:13:49 spitzak Exp $"
 //

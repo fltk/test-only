@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.3 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: x.h,v 1.4 2001/11/08 08:13:48 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -63,9 +63,11 @@ extern FL_API Colormap fl_colormap;
 // drawing functions:
 extern FL_API GC fl_gc;
 extern FL_API Window fl_window;
-extern FL_API void *fl_xfont;
+extern FL_API XFontStruct* fl_xfont();
+extern FL_API ulong fl_pixel; // ==fl_xpixel(fl_color())
 ulong fl_xpixel(Fl_Color i);
 void fl_clip_region(Region);
+Region fl_region();
 Region XRectangleRegion(int x, int y, int w, int h); // in fl_rect.cxx
 
 // feed events into fltk by setting fl_xevent and calling fl_handle:
@@ -131,5 +133,5 @@ Fl_Window* fl_find(Window xid);
 #endif	//Fl_X_H
 
 //
-// End of "$Id: x.h,v 1.3 2001/09/10 01:16:17 spitzak Exp $".
+// End of "$Id: x.h,v 1.4 2001/11/08 08:13:48 spitzak Exp $".
 //

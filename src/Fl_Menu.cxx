@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.113 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.114 2001/11/08 08:13:48 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -133,7 +133,7 @@ void MenuTitle::draw() {
   box->draw(0, 0, w(), h(), style_widget->get_box_color(flags), flags);
 
   // this allow a toggle or other widget to preview it's state:
-  if (Fl::event_pushed()) Fl::pushed_ = widget;
+  if (Fl::event_state(FL_BUTTONS)) Fl::pushed_ = widget;
   fl_x_ = 5;
   fl_y_ = (h()-widget->height())/2;
   int save_w = widget->w(); widget->w(w()-10);
@@ -308,7 +308,8 @@ void MenuWindow::draw() {
       if (i == selected && !(flags & FL_OUTPUT)) {
 	flags = FL_SELECTED; widget->set_flag(FL_SELECTED);
 	// this allow a toggle or other widget to preview it's state:
-	if (Fl::event_pushed() && widget->takesevents()) Fl::pushed_ = widget;
+	if (Fl::event_state(FL_BUTTONS) && widget->takesevents())
+	  Fl::pushed_ = widget;
 	fl_color(menustate->widget->selection_color());
 	fl_rectf(x,y,w,ih);
       } else {
@@ -741,5 +742,5 @@ int Fl_Menu_::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.113 2001/09/10 01:16:17 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.114 2001/11/08 08:13:48 spitzak Exp $".
 //

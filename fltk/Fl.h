@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.h,v 1.6 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: Fl.h,v 1.7 2001/11/08 08:13:48 spitzak Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -155,10 +155,9 @@ public:
   static void event_clicks(int i) {e_clicks = i;}
   static bool event_is_click()	{return e_is_click != 0;}
   static void event_is_click(bool) {e_is_click = 0;} // only false works!
-  static int event_button()	{return e_keysym-FL_Button;}
+  static int event_button()	{return e_keysym-FL_Button(0);}
   static int event_state()	{return e_state;}
   static bool event_state(int i) {return (e_state&i) != 0;}
-  static bool event_pushed()	{return (e_state&0x7f000000) != 0;}
   static int event_key()	{return e_keysym;}
   static bool event_key(int);
   static bool get_key(int);
@@ -229,7 +228,7 @@ public:
   static bool event_shift() {return (e_state&FL_SHIFT)!=0;}
   static bool event_ctrl() {return (e_state&FL_CTRL)!=0;}
   static bool event_alt() {return (e_state&FL_ALT)!=0;}
-  static bool event_buttons() {return event_pushed();}
+  static bool event_buttons() {return (e_state&FL_BUTTONS)!=0;}
   static bool event_button1() {return (e_state&FL_BUTTON1)!=0;}
   static bool event_button2() {return (e_state&FL_BUTTON2)!=0;}
   static bool event_button3() {return (e_state&FL_BUTTON3)!=0;}
@@ -251,5 +250,5 @@ FL_API int fl_getconf(const char *key, char *value, int value_length);
 #endif
 
 //
-// End of "$Id: Fl.h,v 1.6 2001/09/10 01:16:17 spitzak Exp $".
+// End of "$Id: Fl.h,v 1.7 2001/11/08 08:13:48 spitzak Exp $".
 //

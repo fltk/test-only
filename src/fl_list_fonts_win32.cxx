@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.15 2001/08/01 14:08:49 robertk Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.16 2001/11/08 08:13:49 spitzak Exp $"
 //
 // _WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -31,11 +31,6 @@
 #include <stdlib.h>
 #include <config.h>
 
-int Fl_Font_::encodings(const char**& /* arrayp */) const {
-  // CET - FIXME - What about this encoding stuff?
-  return 0;
-}
-
 // turn a stored font name into a pretty name:
 const char* Fl_Font_::name(int* ap) const {
   int type;
@@ -52,6 +47,16 @@ const char* Fl_Font_::name(int* ap) const {
   if (type & FL_BOLD) strcat(buffer, " bold");
   if (type & FL_ITALIC) strcat(buffer, " italic");
   return buffer;
+}
+
+int Fl_Font_::encodings(const char**& arrayp) const {
+  // CET - FIXME - What about this encoding stuff?
+  // WAS: we need some way to find out what charsets are supported
+  // and turn these into ISO encoding names, and return this list.
+  // This is a poor simulation:
+  static const char* simulation[] = {"iso8859-1", 0};
+  arrayp = simulation;
+  return 1;
 }
 
 int Fl_Font_::sizes(int*& sizep) const {
@@ -134,8 +139,7 @@ static int sort_function(const void *aa, const void *bb) {
   return name_a[0]-name_b[0]; // sort by attribute
 }
 
-static int
-win_list_fonts(Fl_Font*& arrayp) {
+int fl_list_fonts(Fl_Font*& arrayp) {
   if (font_array) {arrayp = font_array; return num_fonts;}
   HDC dc = GetDC(0);
   LOGFONT lf;
@@ -147,12 +151,6 @@ win_list_fonts(Fl_Font*& arrayp) {
   qsort(font_array, num_fonts, sizeof(Fl_Font), sort_function);
   arrayp = font_array;
   return num_fonts;
-}
-
-int
-fl_list_fonts(Fl_Font*& arrayp) {
-  if (!fl_font_renderer->list) fl_font_renderer->list = win_list_fonts;
-  return fl_font_renderer->list(arrayp);
 }
 
 // deallocate Win32 fonts
@@ -176,5 +174,5 @@ void fl_font_rid() {
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.15 2001/08/01 14:08:49 robertk Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.16 2001/11/08 08:13:49 spitzak Exp $"
 //

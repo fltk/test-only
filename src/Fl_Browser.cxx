@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.46 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.47 2001/11/08 08:13:48 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -249,7 +249,9 @@ Fl_Widget* Fl_Browser::goto_position(int Y) {
 }
 
 // set item referenced by this mark as being damaged:
+static bool nodamage;
 void Fl_Browser::damage_item(int mark) {
+  if (nodamage) return;
   if (!compare_marks(REDRAW_0, mark) || !compare_marks(REDRAW_1, mark))
     return;
   int m = REDRAW_0;
@@ -653,10 +655,16 @@ bool Fl_Browser::item_select_only(int do_callback) {
   if (multi()) {
     set_focus();
     bool ret = false;
-    // Turn off all other items:
+    // Turn off all other items and set damage:
+    if (goto_top()) do {
+      if (item_select(at_mark(FOCUS), do_callback)) ret = true;
+    } while (next_visible());
+    // turn off any invisible ones:
+    nodamage = true;
     if (goto_top()) do {
       if (item_select(at_mark(FOCUS), do_callback)) ret = true;
     } while (next());
+    nodamage = false;
     goto_mark(FOCUS);
     return ret;
   } else {
@@ -753,7 +761,7 @@ int Fl_Browser::handle(int event) {
       // otherwise they dragged off the glyph so do nothing...
       return 1;
     } else if (Fl::event_clicks()) {
-      if (item_is_parent()) goto TOGGLE_OPEN;
+      // if (item_is_parent()) goto TOGGLE_OPEN;
       // double clicks always cause the callback unless when() is zero
       if (when()) {
 	clear_changed();
@@ -961,5 +969,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.46 2001/09/10 01:16:17 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.47 2001/11/08 08:13:48 spitzak Exp $".
 //

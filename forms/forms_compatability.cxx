@@ -1,5 +1,5 @@
 //
-// "$Id: forms_compatability.cxx,v 1.14 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: forms_compatability.cxx,v 1.15 2001/11/08 08:13:48 spitzak Exp $"
 //
 // Forms compatibility functions for the Fast Light Tool Kit (FLTK).
 //
@@ -150,19 +150,23 @@ void fl_show_form(Fl_Window *f,int place,int b,const char *n) {
   else f->show();
 }
 
-// Emulate the event-getting routines.  XForms does not return until
-// a widget without a callback is activated.  All widgets in fltk have
-// callbacks so this never returns. It appears to be better to have
-// this return after every event.
+// Emulate the event-getting routines.
+// XForms returns any widget without a callback that is activated, or
+// returns zero if the last window is closed.
+// Since all widgets in fltk have a callback, this would never return.
+// However most programs use this like Fl::wait(), they rely on this
+// returning quite often. So I copy that behavior. To allow programs
+// that exit when this returns zero to work, I return the first window
+// each time, this is zero only when all windows are closed.
 
 Fl_Widget *fl_do_forms(void) {
   Fl::wait();	
-  return 0;
+  return Fl::first_window();
 }
 
 Fl_Widget *fl_check_forms() {
   Fl::check();
-  return 0;
+  return Fl::first_window();
 }
 
 // Subclass to simulate the XForms text object.  This is the same as
@@ -255,5 +259,5 @@ char *fl_show_simple_input(const char *str1, const char *defstr) {
 }
 
 //
-// End of "$Id: forms_compatability.cxx,v 1.14 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: forms_compatability.cxx,v 1.15 2001/11/08 08:13:48 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.3 2001/07/29 21:52:43 spitzak Exp $"
+// "$Id: win32.h,v 1.4 2001/11/08 08:13:48 spitzak Exp $"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -53,6 +53,7 @@ typedef HBITMAP Pixmap;
 FL_API COLORREF fl_wincolor(Fl_Color i);
 
 FL_API void fl_clip_region(Region);
+FL_API Region fl_region();
 
 inline Region XRectangleRegion(int x, int y, int w, int h) {
     return CreateRectRgn(x,y,x+w,y+h);
@@ -72,7 +73,7 @@ inline void XClipBox(Region r,XRectangle* rect) {
 extern FL_API HINSTANCE	fl_display;
 extern FL_API HDC	fl_gc;
 extern FL_API Window	fl_window;
-extern FL_API void	*fl_xfont;
+extern FL_API HFONT	fl_xfont();
 extern FL_API HPALETTE	fl_palette; // non-zero only on 8-bit displays!
 extern FL_API COLORREF	fl_colorref;
 extern FL_API HPEN	fl_pen;
@@ -138,5 +139,5 @@ FL_API Fl_Window* fl_find(Window xid);
 #endif
 
 //
-// End of "$Id: win32.h,v 1.3 2001/07/29 21:52:43 spitzak Exp $".
+// End of "$Id: win32.h,v 1.4 2001/11/08 08:13:48 spitzak Exp $".
 //

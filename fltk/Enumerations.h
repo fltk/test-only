@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.h,v 1.1 2001/07/23 09:50:03 spitzak Exp $"
+// "$Id: Enumerations.h,v 1.2 2001/11/08 08:13:48 spitzak Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -92,7 +92,7 @@ enum { // Fl_Widget::when():
 };
 
 // Fl::event_key() and Fl::get_key(n) (use ascii letters for all other keys):
-#define FL_Button	0xfee8 // use Fl_Button+FL_*_MOUSE
+#define FL_Button(n)	(0xfee8+(n))
 #define FL_BackSpace	0xff08
 #define FL_Tab		0xff09
 #define FL_Clear	0xff0b // '5' key on windows, ^K
@@ -110,22 +110,22 @@ enum { // Fl_Widget::when():
 #define FL_End		0xff57
 #define FL_Print	0xff61
 #define FL_Insert	0xff63
-#define FL_Menu		0xff67 // the "menu/apps" key on XFree86
+#define FL_Menu		0xff67
 #define FL_Num_Lock	0xff7f
-#define FL_KP		0xff80 // use FL_KP+'x' for 'x' on numeric keypad
-#define FL_KP_Enter	0xff8d // same as Fl_KP+'\r'
+#define FL_KP(c)	(0xff80+(c)) // FL_KP('x') is 'x' on numeric keypad
+#define FL_KP_Enter	0xff8d // same as Fl_KP('\r')
 #define FL_KP_Last	0xffbd // use to range-check keypad
-#define FL_F		0xffbd // use FL_F+n for function key n
+#define FL_F(n)		(0xffbd+(n))
 #define FL_F_Last	0xffe0 // use to range-check function keys
 #define FL_Shift_L	0xffe1
 #define FL_Shift_R	0xffe2
 #define FL_Control_L	0xffe3
 #define FL_Control_R	0xffe4
 #define FL_Caps_Lock	0xffe5
-#define FL_Meta_L	0xffe7 // the left MSWindows key on XFree86
-#define FL_Meta_R	0xffe8 // the right MSWindows key on XFree86
 #define FL_Alt_L	0xffe9
 #define FL_Alt_R	0xffea
+#define FL_Super_L	0xffeb // the left MSWindows key on XFree86
+#define FL_Super_R	0xffec // the right MSWindows key on XFree86
 #define FL_Delete	0xffff
 
 // Fl::event_button():
@@ -139,11 +139,14 @@ enum { // Fl_Widget::when():
 #define FL_CTRL		0x00040000
 #define FL_ALT		0x00080000
 #define FL_NUM_LOCK	0x00100000 // most X servers do this?
-#define FL_META		0x00400000 // correct for XFree86
+#define FL_SUPER	0x00400000 // correct for XFree86
+#define FL_META		FL_SUPER // for back compatability only
 #define FL_SCROLL_LOCK	0x00800000 // correct for XFree86
 #define FL_BUTTON1	0x01000000
 #define FL_BUTTON2	0x02000000
 #define FL_BUTTON3	0x04000000
+#define FL_BUTTONS	0x7f000000
+#define FL_BUTTON(n)	(0x00800000<<(n))
 
 enum Fl_Cursor {	// standard cursors
   FL_CURSOR_DEFAULT	= 0,
@@ -211,5 +214,5 @@ enum {
 #endif
 
 //
-// End of "$Id: Enumerations.h,v 1.1 2001/07/23 09:50:03 spitzak Exp $".
+// End of "$Id: Enumerations.h,v 1.2 2001/11/08 08:13:48 spitzak Exp $".
 //

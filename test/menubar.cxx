@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.34 2001/08/05 10:48:38 spitzak Exp $"
+// "$Id: menubar.cxx,v 1.35 2001/11/08 08:13:49 spitzak Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -78,14 +78,14 @@ Fl_Menu_Item menutable[] = {
     {"shortcut",FL_ALT+FL_SHIFT+FL_CTRL+'a', 0,0, FL_MENU_DIVIDER},
   {"shortcut",'\r'/*FL_Enter*/},
     {"shortcut",FL_CTRL+FL_Enter, 0,0, FL_MENU_DIVIDER},
-    {"shortcut",FL_F+1},
-    {"shortcut",FL_SHIFT+FL_F+1},
-    {"shortcut",FL_CTRL+FL_F+1},
-    {"shortcut",FL_SHIFT+FL_CTRL+FL_F+1},
-    {"shortcut",FL_ALT+FL_F+1},
-    {"shortcut",FL_ALT+FL_SHIFT+FL_F+1},
-    {"shortcut",FL_ALT+FL_CTRL+FL_F+1},
-    {"shortcut",FL_ALT+FL_SHIFT+FL_CTRL+FL_F+1, 0,0, FL_MENU_DIVIDER},
+    {"shortcut",FL_F(1)},
+    {"shortcut",FL_SHIFT+FL_F(1)},
+    {"shortcut",FL_CTRL+FL_F(1)},
+    {"shortcut",FL_SHIFT+FL_CTRL+FL_F(1)},
+    {"shortcut",FL_ALT+FL_F(1)},
+    {"shortcut",FL_ALT+FL_SHIFT+FL_F(1)},
+    {"shortcut",FL_ALT+FL_CTRL+FL_F(1)},
+    {"shortcut",FL_ALT+FL_SHIFT+FL_CTRL+FL_F(1), 0,0, FL_MENU_DIVIDER},
     {"&Submenus", FL_ALT+'S',	0, (void*)"Submenu1", FL_SUBMENU},
       {"A very long menu item"},
       {"&submenu",FL_CTRL+'S',	0, (void*)"submenu2", FL_SUBMENU},
@@ -234,5 +234,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.34 2001/08/05 10:48:38 spitzak Exp $".
+// End of "$Id: menubar.cxx,v 1.35 2001/11/08 08:13:49 spitzak Exp $".
 //

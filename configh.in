@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.45 2001/08/05 10:48:38 spitzak Exp $"
+ * "$Id: configh.in,v 1.46 2001/11/08 08:13:48 spitzak Exp $"
  *
  * This file is used to compile fltk. It should not be necessary for
  * programs that use fltk to refer to this file, and this file is not
@@ -19,6 +19,19 @@
    fl_draw_image), but fltk will only work on TrueColor visuals.
 */
 #define USE_COLORMAP 1
+
+/* Use the new Xft library to draw fonts. If you have a new XServer
+   with the XRender extension and you have FreeType and some Type1
+   or TrueType fonts, you will get anti-aliased text. However,
+   contrary to popular belief, Xft is useful without these. It
+   replaces a huge amount of cruft used to figure out fonts with
+   a standardized system. I see no reason Xft cannot be improved
+   to work at least as well as fltk does at selecting fonts, at
+   that point there is no reason not to use it.
+*/
+#ifndef USE_XFT
+#define USE_XFT 0
+#endif
 
 /* Do we have the X double-buffer extension?  Turning this on will
    make the list_visuals program produce more information.
@@ -153,5 +166,5 @@
 #define ALT_GOES_TO_MENUBAR 0
 
 /*
- * End of "$Id: configh.in,v 1.45 2001/08/05 10:48:38 spitzak Exp $".
+ * End of "$Id: configh.in,v 1.46 2001/11/08 08:13:48 spitzak Exp $".
  */

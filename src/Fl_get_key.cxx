@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key.cxx,v 1.7 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: Fl_get_key.cxx,v 1.8 2001/11/08 08:13:49 spitzak Exp $"
 //
 // Keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
@@ -36,19 +36,21 @@
 
 extern char fl_key_vector[32]; // in Fl_x.C
 
-bool Fl::event_key(int k) {
-  if (k > FL_Button && k <= FL_Button+8)
-    return Fl::event_state(8<<(k-FL_Button)) != 0;
-  int i;
+bool Fl::event_key(int keysym) {
+  if (keysym > FL_Button(0) && keysym <= FL_Button(8))
+    return Fl::event_state(FL_BUTTON(keysym-FL_Button(0))) != 0;
+  int keycode = XKeysymToKeycode(fl_display, keysym);
+  if (!keycode) {
 #ifdef __sgi
   // get some missing PC keyboard keys:
-  if (k == FL_Meta_L) i = 147;
-  else if (k == FL_Meta_R) i = 148;
-  else if (k == FL_Menu) i = 149;
+    if (keysym == FL_Super_L) keycode = 147;
+    else if (keysym == FL_Super_R) keycode = 148;
+    else if (keysym == FL_Menu) keycode = 149;
   else
 #endif
-    i = XKeysymToKeycode(fl_display, k);
-  return (fl_key_vector[i/8] & (1 << (i%8))) != 0;
+      keycode = keysym & 0xff; // undo the |0x8000 done to unknown keycodes
+  }
+  return (fl_key_vector[keycode/8] & (1 << (keycode%8))) != 0;
 }
 
 bool Fl::get_key(int k) {
@@ -60,5 +62,5 @@ bool Fl::get_key(int k) {
 #endif
 
 //
-// End of "$Id: Fl_get_key.cxx,v 1.7 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: Fl_get_key.cxx,v 1.8 2001/11/08 08:13:49 spitzak Exp $".
 //

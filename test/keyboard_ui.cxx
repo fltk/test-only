@@ -24,51 +24,51 @@ Fl_Window* make_window() {
     }
      {    Fl_Button* o = new Fl_Button(50, 50, 20, 20, "F1");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_F+1));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_F(1)));
     }
      {    Fl_Button* o = new Fl_Button(70, 50, 20, 20, "F2");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_F+2));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_F(2)));
     }
      {    Fl_Button* o = new Fl_Button(90, 50, 20, 20, "F3");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_F+3));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_F(3)));
     }
      {    Fl_Button* o = new Fl_Button(110, 50, 20, 20, "F4");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_F+4));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_F(4)));
     }
      {    Fl_Button* o = new Fl_Button(140, 50, 20, 20, "F5");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_F+5));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_F(5)));
     }
      {    Fl_Button* o = new Fl_Button(160, 50, 20, 20, "F6");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_F+6));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_F(6)));
     }
      {    Fl_Button* o = new Fl_Button(180, 50, 20, 20, "F7");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_F+7));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_F(7)));
     }
      {    Fl_Button* o = new Fl_Button(200, 50, 20, 20, "F8");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_F+8));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_F(8)));
     }
      {    Fl_Button* o = new Fl_Button(230, 50, 20, 20, "F9");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_F+9));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_F(9)));
     }
      {    Fl_Button* o = new Fl_Button(250, 50, 20, 20, "F10");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_F+10));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_F(10)));
     }
      {    Fl_Button* o = new Fl_Button(270, 50, 20, 20, "F11");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_F+11));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_F(11)));
     }
      {    Fl_Button* o = new Fl_Button(290, 50, 20, 20, "F12");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_F+12));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_F(12)));
     }
      {    Fl_Button* o = new Fl_Button(325, 50, 20, 20, "Print ");
       o->label_size(8);
@@ -158,15 +158,15 @@ Fl_Window* make_window() {
     }
      {    Fl_Button* o = new Fl_Button(420, 80, 20, 20, "/");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP+'/'));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP('/')));
     }
      {    Fl_Button* o = new Fl_Button(440, 80, 20, 20, "*");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP+'*'));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP('*')));
     }
      {    Fl_Button* o = new Fl_Button(460, 80, 20, 20, "-");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP+'-'));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP('-')));
     }
      {    Fl_Button* o = new Fl_Button(15, 100, 27, 20, "Tab");
       o->label_size(8);
@@ -240,19 +240,19 @@ Fl_Window* make_window() {
     }
      {    Fl_Button* o = new Fl_Button(400, 100, 20, 20, "7");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP+'7'));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP('7')));
     }
      {    Fl_Button* o = new Fl_Button(420, 100, 20, 20, "8");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP+'8'));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP('8')));
     }
      {    Fl_Button* o = new Fl_Button(440, 100, 20, 20, "9");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP+'9'));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP('9')));
     }
      {    Fl_Button* o = new Fl_Button(460, 100, 20, 40, "+");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP+'+'));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP('+')));
       o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
     }
      {    Fl_Button* o = new Fl_Button(15, 120, 36, 20, "Lock");
@@ -311,15 +311,15 @@ Fl_Window* make_window() {
     }
      {    Fl_Button* o = new Fl_Button(400, 120, 20, 20, "4");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP+'4'));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP('4')));
     }
      {    Fl_Button* o = new Fl_Button(420, 120, 20, 20, "5");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP+'5'));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP('5')));
     }
      {    Fl_Button* o = new Fl_Button(440, 120, 20, 20, "6");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP+'6'));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP('6')));
     }
      {    Fl_Button* o = new Fl_Button(15, 140, 45, 20, "Shift");
       o->label_size(8);
@@ -378,15 +378,15 @@ Fl_Window* make_window() {
     }
      {    Fl_Button* o = new Fl_Button(400, 140, 20, 20, "1");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP+'1'));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP('1')));
     }
      {    Fl_Button* o = new Fl_Button(420, 140, 20, 20, "2");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP+'2'));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP('2')));
     }
      {    Fl_Button* o = new Fl_Button(440, 140, 20, 20, "3");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP+'3'));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP('3')));
     }
      {    Fl_Button* o = new Fl_Button(460, 140, 20, 40);
       o->callback((Fl_Callback*)key_cb, (void*)(FL_KP_Enter));
@@ -396,9 +396,9 @@ Fl_Window* make_window() {
       o->callback((Fl_Callback*)key_cb, (void*)(FL_Control_L));
       o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
     }
-     {    Fl_Button* o = new Fl_Button(45, 160, 30, 20, "Meta ");
+     {    Fl_Button* o = new Fl_Button(45, 160, 30, 20, "Super");
       o->label_size(8);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_Meta_L));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_Super_L));
     }
      {    Fl_Button* o = new Fl_Button(75, 160, 30, 20, "Alt ");
       o->label_size(8);
@@ -412,9 +412,9 @@ Fl_Window* make_window() {
       o->label_size(8);
       o->callback((Fl_Callback*)key_cb, (void*)(FL_Alt_R));
     }
-     {    Fl_Button* o = new Fl_Button(220, 160, 30, 20, "Meta ");
+     {    Fl_Button* o = new Fl_Button(220, 160, 30, 20, "Super");
       o->label_size(8);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_Meta_R));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_Super_R));
     }
      {    Fl_Button* o = new Fl_Button(250, 160, 30, 20, "Menu ");
       o->label_size(8);
@@ -442,12 +442,12 @@ Fl_Window* make_window() {
     }
      {    Fl_Button* o = new Fl_Button(400, 160, 40, 20, "0");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP+'0'));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP('0')));
       o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
     }
      {    Fl_Button* o = new Fl_Button(440, 160, 20, 20, ".");
       o->label_size(10);
-      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP+'.'));
+      o->callback((Fl_Callback*)key_cb, (void*)(FL_KP('.')));
     }
      {    Fl_Box* o = new Fl_Box(395, 15, 85, 40, "Fl::event_state():");
       o->label_size(8);
@@ -483,10 +483,10 @@ Fl_Window* make_window() {
       o->label_size(8);
       o->callback((Fl_Callback*)shift_cb, (void*)(0x20));
     }
-     {    Fl_Button* o = new Fl_Button(440, 25, 20, 10, "meta ");
+     {    Fl_Button* o = new Fl_Button(440, 25, 20, 10, "super");
       o->selection_color((Fl_Color)3);
       o->label_size(8);
-      o->callback((Fl_Callback*)shift_cb, (void*)(FL_META));
+      o->callback((Fl_Callback*)shift_cb, (void*)(FL_SUPER));
     }
      {    Fl_Button* o = new Fl_Button(460, 25, 20, 10, "sclk");
       o->selection_color((Fl_Color)3);

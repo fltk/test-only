@@ -27,73 +27,73 @@ Function {make_window()} {open
     }
     Fl_Button {} {
       label F1
-      user_data {FL_F+1} user_data_type {void*}
+      user_data {FL_F(1)} user_data_type {void*}
       callback key_cb
       xywh {50 50 20 20} labelsize 10
     }
     Fl_Button {} {
       label F2
-      user_data {FL_F+2} user_data_type {void*}
+      user_data {FL_F(2)} user_data_type {void*}
       callback key_cb
       xywh {70 50 20 20} labelsize 10
     }
     Fl_Button {} {
       label F3
-      user_data {FL_F+3} user_data_type {void*}
+      user_data {FL_F(3)} user_data_type {void*}
       callback key_cb
       xywh {90 50 20 20} labelsize 10
     }
     Fl_Button {} {
       label F4
-      user_data {FL_F+4} user_data_type {void*}
+      user_data {FL_F(4)} user_data_type {void*}
       callback key_cb
       xywh {110 50 20 20} labelsize 10
     }
     Fl_Button {} {
       label F5
-      user_data {FL_F+5} user_data_type {void*}
+      user_data {FL_F(5)} user_data_type {void*}
       callback key_cb
       xywh {140 50 20 20} labelsize 10
     }
     Fl_Button {} {
       label F6
-      user_data {FL_F+6} user_data_type {void*}
+      user_data {FL_F(6)} user_data_type {void*}
       callback key_cb
       xywh {160 50 20 20} labelsize 10
     }
     Fl_Button {} {
       label F7
-      user_data {FL_F+7} user_data_type {void*}
+      user_data {FL_F(7)} user_data_type {void*}
       callback key_cb
       xywh {180 50 20 20} labelsize 10
     }
     Fl_Button {} {
       label F8
-      user_data {FL_F+8} user_data_type {void*}
+      user_data {FL_F(8)} user_data_type {void*}
       callback key_cb
       xywh {200 50 20 20} labelsize 10
     }
     Fl_Button {} {
       label F9
-      user_data {FL_F+9} user_data_type {void*}
+      user_data {FL_F(9)} user_data_type {void*}
       callback key_cb
       xywh {230 50 20 20} labelsize 10
     }
     Fl_Button {} {
       label F10
-      user_data {FL_F+10} user_data_type {void*}
+      user_data {FL_F(10)} user_data_type {void*}
       callback key_cb
       xywh {250 50 20 20} labelsize 10
     }
     Fl_Button {} {
       label F11
-      user_data {FL_F+11} user_data_type {void*}
+      user_data {FL_F(11)} user_data_type {void*}
       callback key_cb
       xywh {270 50 20 20} labelsize 10
     }
     Fl_Button {} {
       label F12
-      user_data {FL_F+12} user_data_type {void*}
+      user_data {FL_F(12)} user_data_type {void*}
       callback key_cb
       xywh {290 50 20 20} labelsize 10
     }
@@ -212,19 +212,19 @@ Function {make_window()} {open
     }
     Fl_Button {} {
       label {/}
-      user_data {FL_KP+'/'} user_data_type {void*}
+      user_data {FL_KP('/')} user_data_type {void*}
       callback key_cb
       xywh {420 80 20 20} labelsize 10
     }
     Fl_Button {} {
       label {*}
-      user_data {FL_KP+'*'} user_data_type {void*}
+      user_data {FL_KP('*')} user_data_type {void*}
       callback key_cb
       xywh {440 80 20 20} labelsize 10
     }
     Fl_Button {} {
       label {-}
-      user_data {FL_KP+'-'} user_data_type {void*}
+      user_data {FL_KP('-')} user_data_type {void*}
       callback key_cb
       xywh {460 80 20 20} labelsize 10
     }
@@ -319,25 +319,25 @@ Function {make_window()} {open
     }
     Fl_Button {} {
       label 7
-      user_data {FL_KP+'7'} user_data_type {void*}
+      user_data {FL_KP('7')} user_data_type {void*}
       callback key_cb
       xywh {400 100 20 20} labelsize 10
     }
     Fl_Button {} {
       label 8
-      user_data {FL_KP+'8'} user_data_type {void*}
+      user_data {FL_KP('8')} user_data_type {void*}
       callback key_cb
       xywh {420 100 20 20} labelsize 10
     }
     Fl_Button {} {
       label 9
-      user_data {FL_KP+'9'} user_data_type {void*}
+      user_data {FL_KP('9')} user_data_type {void*}
       callback key_cb
       xywh {440 100 20 20} labelsize 10
     }
     Fl_Button {} {
       label {+}
-      user_data {FL_KP+'+'} user_data_type {void*}
+      user_data {FL_KP('+')} user_data_type {void*}
       callback key_cb
       xywh {460 100 20 40} align 524305 labelsize 10
     }
@@ -410,19 +410,19 @@ Function {make_window()} {open
     }
     Fl_Button {} {
       label 4
-      user_data {FL_KP+'4'} user_data_type {void*}
+      user_data {FL_KP('4')} user_data_type {void*}
       callback key_cb
       xywh {400 120 20 20} labelsize 10
     }
     Fl_Button {} {
       label 5
-      user_data {FL_KP+'5'} user_data_type {void*}
+      user_data {FL_KP('5')} user_data_type {void*}
       callback key_cb
       xywh {420 120 20 20} labelsize 10
     }
     Fl_Button {} {
       label 6
-      user_data {FL_KP+'6'} user_data_type {void*}
+      user_data {FL_KP('6')} user_data_type {void*}
       callback key_cb
       xywh {440 120 20 20} labelsize 10
     }
@@ -496,19 +496,19 @@ Function {make_window()} {open
     }
     Fl_Button {} {
       label 1
-      user_data {FL_KP+'1'} user_data_type {void*}
+      user_data {FL_KP('1')} user_data_type {void*}
       callback key_cb
       xywh {400 140 20 20} labelsize 10
     }
     Fl_Button {} {
       label 2
-      user_data {FL_KP+'2'} user_data_type {void*}
+      user_data {FL_KP('2')} user_data_type {void*}
       callback key_cb
       xywh {420 140 20 20} labelsize 10
     }
     Fl_Button {} {
       label 3
-      user_data {FL_KP+'3'} user_data_type {void*}
+      user_data {FL_KP('3')} user_data_type {void*}
       callback key_cb
       xywh {440 140 20 20} labelsize 10
     }
@@ -524,8 +524,8 @@ Function {make_window()} {open
       xywh {15 160 30 20} align 524308 labelsize 8
     }
     Fl_Button {} {
-      label {Meta }
-      user_data FL_Meta_L user_data_type {void*}
+      label {Super}
+      user_data FL_Super_L user_data_type {void*}
       callback key_cb
       xywh {45 160 30 20} labelsize 8
     }
@@ -547,8 +547,8 @@ Function {make_window()} {open
       xywh {190 160 30 20} labelsize 8
     }
     Fl_Button {} {
-      label {Meta }
-      user_data FL_Meta_R user_data_type {void*}
+      label {Super}
+      user_data FL_Super_R user_data_type {void*}
       callback key_cb
       xywh {220 160 30 20} labelsize 8
     }
@@ -584,13 +584,13 @@ Function {make_window()} {open
     }
     Fl_Button {} {
       label 0
-      user_data {FL_KP+'0'} user_data_type {void*}
+      user_data {FL_KP('0')} user_data_type {void*}
       callback key_cb
       xywh {400 160 40 20} align 524308 labelsize 10
     }
     Fl_Button {} {
       label {.}
-      user_data {FL_KP+'.'} user_data_type {void*}
+      user_data {FL_KP('.')} user_data_type {void*}
       callback key_cb
       xywh {440 160 20 20} labelsize 10
     }
@@ -635,8 +635,8 @@ Function {make_window()} {open
       xywh {420 25 20 10} selection_color 3 labelsize 8
     }
     Fl_Button {} {
-      label {meta }
-      user_data FL_META user_data_type {void*}
+      label {super}
+      user_data FL_SUPER user_data_type {void*}
       callback shift_cb
       xywh {440 25 20 10} selection_color 3 labelsize 8
     }

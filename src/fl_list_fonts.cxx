@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts.cxx,v 1.13 2001/07/29 22:04:44 spitzak Exp $"
+// "$Id: fl_list_fonts.cxx,v 1.14 2001/11/08 08:13:49 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -21,13 +21,25 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
+#include <config.h>
 #include <fltk/fl_draw.h>
+#include <string.h>
 
 #ifdef _WIN32
 #include "fl_list_fonts_win32.cxx"
 #else
-#include "fl_list_fonts_x.cxx"
+# if USE_XFT
+// the code is included by fl_font.cxx
+# else
+#  include "fl_list_fonts_x.cxx"
+# endif
 #endif
+
+// For Xlib the only way to reliably get a font is to enumerate them all
+// and then search. For Xft and Win32 we should be able to program a more
+// direct call, as long as we accumulate all the names we searched for
+// into an array and fl_list_fonts can add all the missing ones to the
+// array. This is sufficiently painful that I have not done this yet.
 
 Fl_Font fl_find_font(const char* name, int attributes /* = 0 */) {
   if (!name || !*name) return 0;
@@ -70,5 +82,5 @@ Fl_Font fl_find_font(const char* name, int attributes /* = 0 */) {
 }
 
 //
-// End of "$Id: fl_list_fonts.cxx,v 1.13 2001/07/29 22:04:44 spitzak Exp $".
+// End of "$Id: fl_list_fonts.cxx,v 1.14 2001/11/08 08:13:49 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_x.cxx,v 1.5 2001/07/29 22:04:44 spitzak Exp $"
+// "$Id: fl_color_x.cxx,v 1.6 2001/11/08 08:13:49 spitzak Exp $"
 //
 // X color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -237,10 +237,12 @@ void fl_allocate_xpixel(Fl_XColor& xmap, uchar r, uchar g, uchar b)
 }
 
 Fl_Color fl_color_;
+ulong fl_pixel;
 
 void fl_color(Fl_Color i) {
   fl_color_ = i;
-  XSetForeground(fl_display, fl_gc, fl_xpixel(i));
+  fl_pixel = fl_xpixel(i);
+  XSetForeground(fl_display, fl_gc, fl_pixel);
 }
 
 void fl_free_color(Fl_Color i) {
@@ -312,5 +314,5 @@ void fl_line_style(int style, int width, char* dashes) {
 }
 
 //
-// End of "$Id: fl_color_x.cxx,v 1.5 2001/07/29 22:04:44 spitzak Exp $"
+// End of "$Id: fl_color_x.cxx,v 1.6 2001/11/08 08:13:49 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_key_name.cxx,v 1.3 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: Fl_key_name.cxx,v 1.4 2001/11/08 08:13:49 spitzak Exp $"
 //
 // Turn a fltk (X) keysym + fltk shift flags into a human-readable string.
 //
@@ -61,10 +61,10 @@ static Keyname table[] = {
   {FL_Control_L,"Control_L"},
   {FL_Control_R,"Control_R"},
   {FL_Caps_Lock,"Caps_Lock"},
-  {FL_Meta_L,	"Meta_L"},
-  {FL_Meta_R,	"Meta_R"},
   {FL_Alt_L,	"Alt_L"},
   {FL_Alt_R,	"Alt_R"},
+  {FL_Super_L,	"Super_L"},
+  {FL_Super_R,	"Super_R"},
   {FL_Delete,	"Delete"}
 };
 #endif
@@ -73,16 +73,16 @@ const char* Fl::key_name(int shortcut) {
   static char buf[20];
   char *p = buf;
   if (!shortcut) {*p = 0; return buf;}
-  if (shortcut & FL_META) {strcpy(p,"Meta+"); p += 5;}
+  if (shortcut & FL_SUPER) {strcpy(p,"Super+"); p += 5;}
   if (shortcut & FL_ALT) {strcpy(p,"Alt+"); p += 4;}
   if (shortcut & FL_SHIFT) {strcpy(p,"Shift+"); p += 6;}
   if (shortcut & FL_CTRL) {strcpy(p,"Ctrl+"); p += 5;}
   int key = shortcut & 0xFFFF;
 #ifdef _WIN32 // if not X
-  if (key >= FL_F && key <= FL_F_Last) {
+  if (key >= FL_F(0) && key <= FL_F_Last) {
     *p++ = 'F';
-    if (key > FL_F+9) *p++ = (key-FL_F)/10+'0';
-    *p++ = (key-FL_F)%10 + '0';
+    if (key > FL_F(9)) *p++ = (key-FL_F(0))/10+'0';
+    *p++ = (key-FL_F(0))%10 + '0';
   } else {
     // binary search the table for a match:
     int a = 0;
@@ -96,7 +96,7 @@ const char* Fl::key_name(int shortcut) {
       if (table[c].key < key) a = c+1;
       else b = c;
     }
-    if (key >= FL_KP && key <= FL_KP_Last) {
+    if (key >= FL_KP(0) && key <= FL_KP_Last) {
       // mark keypad keys with KP_ prefix
       strcpy(p,"KP_"); p += 3;
       *p++ = uchar(key & 127);
@@ -118,5 +118,5 @@ const char* Fl::key_name(int shortcut) {
 }
 
 //
-// End of "$Id: Fl_key_name.cxx,v 1.3 2001/07/29 22:04:43 spitzak Exp $"
+// End of "$Id: Fl_key_name.cxx,v 1.4 2001/11/08 08:13:49 spitzak Exp $"
 //

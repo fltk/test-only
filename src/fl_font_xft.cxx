@@ -1,9 +1,7 @@
 //
-// "$Id: fl_xft.cxx,v 1.4 2001/11/08 08:13:49 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.1 2001/11/08 08:13:49 spitzak Exp $"
 //
-// Plugin file for FLTK
-//
-// Copyright 1999 Bill Spitzak and others.
+// Copyright 2001 Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,40 +21,51 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// Plugin for fltk to use the Xft library for font rendering.  This enables
-// your fonts to display anti-aliased and slow just like Windows!
+// Draw fonts using Keith Packard's Xft and Xrender extension. Yow!
+// Many thanks to Carl for making the original version of this.
 //
-// This plugin only works if
+// This code is included in fltk if it is compiled with -DUSE_XFT=1
+// It should also be possible to compile this file as a seperate
+// shared library, and by using LD_PRELOAD you can insert it between
+// any fltk program and the fltk shared library.
+//
+// This plugin only requires libXft to work. Contrary to popular
+// belief there is no need to have freetype, or the Xrender extension
+// available to use this code. You will just get normal Xlib fonts
+// (Xft calls them "core" fonts) The Xft algorithims for choosing
+// these is about as good as the fltk ones (I hope to fix it so it is
+// exactly as good...), plus it can cache it's results and share them
+// between programs, so using this should be a win in all cases. Also
+// it should be obvious by comparing this file and fl_font_x.cxx that
+// it is a lot easier to program to Xft than to Xlib.
+//
+// To actually get antialiasing you need the following:
+//
 // 1. You have XFree86 4
-// 2. You have the render extension
+// 2. You have the XRender extension
 // 3. Your X device driver supports the render extension
 // 4. You have libXft
 // 5. Your libXft has freetype2 support compiled in
 // 6. You have the freetype2 library
 //
 // Distributions that have XFree86 4.0.3 or later should have all of this...
-
-
-#include <X11/Xlib.h>
-#include <X11/Xft/Xft.h>
+//
+// Unlike some other Xft packages, I tried to keep this simple and not
+// to work around the current problems in Xft by making the "patterns"
+// complicated. I belive doing this defeats our ability to improve Xft
+// itself. You should edit the ~/.xftconfig file to "fix" things, there
+// are several web pages of information on how to do this.
 
 #include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
 #include <fltk/fl_draw.h>
-#include <fltk/Fl_Font.h>
+#include "Fl_FontSize.h"
 #include <fltk/x.h>
-
-#include <stdio.h>
-#include <stdlib.h>
+#include <X11/Xft/Xft.h>
 #include <string.h>
-
-static int min_antialias_size = 16;
+#include <stdlib.h>
 
 Fl_FontSize *fl_fontsize;
 #define current_font ((XftFont*)(fl_fontsize->font))
-
-// Static variable for the default encoding:
-const char *fl_encoding_ = "iso8859-1";
 
 // Change the encoding in use now. This runs the font search again with
 // the new encoding.
@@ -67,41 +76,26 @@ void fl_encoding(const char* f) {
   }
 }
 
-static void
-xft_font(Fl_Font font, unsigned size) {
+void fl_font(Fl_Font font, unsigned size) {
   if (font == fl_font_ && size == fl_size_ &&
       !strcasecmp(fl_fontsize->encoding, fl_encoding_))
     return;
-
   fl_font_ = font; fl_size_ = size;
-
   Fl_FontSize* f;
   // search the fontsizes we have generated already
   for (f = font->first; f; f = f->next) {
     if (f->minsize == size && !strcasecmp(f->encoding, fl_encoding_))
       break;
   }
-
   if (!f) {
     f = new Fl_FontSize(font->name_);
     f->next = (Fl_FontSize *)(font->first);
     ((Fl_Font_*)font)->first = f;
   }
-
   fl_fontsize = f;
 }
 
-Fl_FontSize::Fl_FontSize(const char* name) {
-  font = fl_font_renderer->load(name, fl_encoding_, fl_size_);
-  encoding = fl_encoding_;
-  minsize = maxsize = fl_size_;
-#if HAVE_GL
-  listbase = 0;
-#endif
-}
-
-static void *
-xft_font_load(const char *name, const char *encoding, int size) {
+static XftFont* fontopen(const char* name, bool core) {
   int slant = XFT_SLANT_ROMAN;
   int weight = XFT_WEIGHT_MEDIUM;
   // may be efficient, but this is non-obvious
@@ -112,42 +106,69 @@ xft_font_load(const char *name, const char *encoding, int size) {
   case ' ': break;
   default: name--;
   }
-
   // this call is extremely slow...
-  XftFont *font = XftFontOpen(fl_display, fl_screen,
-                              XFT_FAMILY, XftTypeString, name,
-                              XFT_WEIGHT, XftTypeInteger, weight,
-                              XFT_SLANT, XftTypeInteger, slant,
-//                              XFT_ENCODING, XftTypeString, encoding,
-                              XFT_PIXEL_SIZE, XftTypeDouble, (double)size,
-//                               XFT_ANTIALIAS, XftTypeBool, antialias,
-                              0);
-
-  return font;
+  return XftFontOpen(fl_display, fl_screen,
+		     XFT_FAMILY, XftTypeString, name,
+		     XFT_WEIGHT, XftTypeInteger, weight,
+		     XFT_SLANT, XftTypeInteger, slant,
+		     XFT_ENCODING, XftTypeString, fl_encoding_,
+		     XFT_PIXEL_SIZE, XftTypeDouble, (double)fl_size_,
+		     core ? XFT_CORE : 0, XftTypeBool, true,
+		     XFT_RENDER, XftTypeBool, false,
+		     0);
 }
 
-static void
-xft_font_unload(void *font) {
-//printf("xft_font_unload(void *font = %p)\n", font);
+Fl_FontSize::Fl_FontSize(const char* name) {
+  encoding = fl_encoding_;
+  minsize = maxsize = fl_size_;
+#if HAVE_GL
+  listbase = 0;
+#endif
+  font = (void*)fontopen(name, false);
+}
+
+// This call is used by opengl to get a bitmapped font. Xft actually does
+// a pretty good job of selecting X fonts...
+XFontStruct* fl_xfont() {
+  if (current_font->core) return current_font->u.core.font;
+  static XftFont* xftfont;
+  if (xftfont) XftFontClose (fl_display, xftfont);
+  xftfont = fontopen(fl_font_->name_, true);
+  return xftfont->u.core.font;
+}
+
+#if 0 // this is never called!
+Fl_FontSize::~Fl_FontSize() {
+// Delete list created by gl_draw().  This is not done by this code
+// as it will link in GL unnecessarily.  There should be some kind
+// of "free" routine pointer, or a subclass?
+// if (listbase) {
+//  int base = font->min_char_or_byte2;
+//  int size = font->max_char_or_byte2-base+1;
+//  int base = 0; int size = 256;
+//  glDeleteLists(listbase+base,size);
+// }
+  if (this == fl_fontsize) fl_fontsize = 0;
   XftFontClose(fl_display, (XftFont *)font);
 }
+#endif
 
-static int
-xft_font_height() { return current_font->height; }
+#if 1
+// Some of the line spacings these return are insanely big!
+int fl_height() { return current_font->height; }
+int fl_descent() { return current_font->descent; }
+#else
+int fl_height() { return fl_size_;}
+int fl_descent() { return fl_size_/4;}
+#endif
 
-static int
-xft_font_descent() { return current_font->descent; }
-
-static int
-xft_font_width(const char *str, int n) {
-//printf("xft_font_width(const char *, int)\n");
+int fl_width(const char *str, int n) {
   XGlyphInfo i;
   XftTextExtents8(fl_display, current_font, (XftChar8 *)str, n, &i);
   return i.xOff;
 }
 
-static void
-xft_font_draw(const char *str, int n, int x, int y) {
+void fl_draw(const char *str, int n, int x, int y) {
   static XftDraw *draw = 0;
   if (!draw)
     draw = XftDrawCreate(fl_display, fl_window, fl_visual->visual, fl_colormap);
@@ -173,6 +194,50 @@ xft_font_draw(const char *str, int n, int x, int y) {
                     (XftChar8 *)str, n);
 }
 
+////////////////////////////////////////////////////////////////
+
+// The predefined fonts that fltk has:  bold:       italic:
+Fl_Font_
+fl_fonts[] = {
+{" sans",		fl_fonts+1, fl_fonts+2},
+{"Bsans",		fl_fonts+1, fl_fonts+3},
+{"Isans",		fl_fonts+3, fl_fonts+2},
+{"Psans",		fl_fonts+3, fl_fonts+3},
+{" mono",		fl_fonts+5, fl_fonts+6},
+{"Bmono",		fl_fonts+5, fl_fonts+7},
+{"Imono",		fl_fonts+7, fl_fonts+6},
+{"Pmono",		fl_fonts+7, fl_fonts+7},
+{" serif",		fl_fonts+9, fl_fonts+10},
+{"Bserif",		fl_fonts+9, fl_fonts+11},
+{"Iserif",		fl_fonts+11,fl_fonts+10},
+{"Pserif",		fl_fonts+11,fl_fonts+11},
+{" symbol",		fl_fonts+12,fl_fonts+12},
+{" screen",		fl_fonts+14,fl_fonts+14},
+{"Bscreen",		fl_fonts+14,fl_fonts+14},
+{" dingbats",		fl_fonts+15,fl_fonts+15},
+};
+
+////////////////////////////////////////////////////////////////
+// The rest of this is for listing fonts:
+
+// turn a stored font name into a pretty name:
+const char* Fl_Font_::name(int* ap) const {
+  int type;
+  switch (name_[0]) {
+  case 'B': type = FL_BOLD; break;
+  case 'I': type = FL_ITALIC; break;
+  case 'P': type = FL_BOLD | FL_ITALIC; break;
+  default:  type = 0; break;
+  }
+  if (ap) {*ap = type; return name_+1;}
+  if (!type) {return name_+1;}
+  static char *buffer = new char[128];
+  strcpy(buffer, name_+1);
+  if (type & FL_BOLD) strcat(buffer, " bold");
+  if (type & FL_ITALIC) strcat(buffer, " italic");
+  return buffer;
+}
+
 extern "C" {
 static int sort_function(const void *aa, const void *bb) {
   const char* name_a = (*(Fl_Font_**)aa)->name_;
@@ -194,8 +259,7 @@ static Fl_Font_* make_a_font(char attrib, const char* name) {
   return newfont;
 }
 
-int
-xft_font_list(Fl_Font*& arrayp) {
+int fl_font_list(Fl_Font*& arrayp) {
   static Fl_Font *font_array = 0;
   static int num_fonts = 0;
 
@@ -232,6 +296,11 @@ static int int_sort(const void *aa, const void *bb) {
 }
 }
 
+////////////////////////////////////////////////////////////////
+
+// Return all the point sizes supported by this font:
+// Suprisingly enough Xft works exactly like fltk does and returns
+// the same list. Except there is no way to tell if the font is scalable.
 int Fl_Font_::sizes(int*& sizep) const {
   fl_open_display();
   XftFontSet* fs = XftListFonts(fl_display, fl_screen,
@@ -242,9 +311,8 @@ int Fl_Font_::sizes(int*& sizep) const {
   if (fs->nfont >= array_size) {
     delete[] array;
     array = new int[array_size = fs->nfont+1];
-    array[0] = 0; // claim all fonts can scale
   }
-  int j = 1;
+  array[0] = 0; int j = 1; // claim all fonts are scalable
   for (int i = 0; i < fs->nfont; i++) {
     double v;
     if (XftPatternGetDouble(fs->fonts[i], XFT_PIXEL_SIZE, 0, &v) == XftResultMatch) {
@@ -256,6 +324,9 @@ int Fl_Font_::sizes(int*& sizep) const {
   sizep = array;
   return j;
 }
+
+////////////////////////////////////////////////////////////////
+// Return all the encodings for this font:
 
 int Fl_Font_::encodings(const char**& arrayp) const {
   fl_open_display();
@@ -283,76 +354,6 @@ int Fl_Font_::encodings(const char**& arrayp) const {
   return j;
 }
 
-int
-fl_list_fonts(Fl_Font*& arrayp) {
-  return fl_font_renderer->list(arrayp);
-}
-
-// The predefined fonts that fltk has:  bold:       italic:
-Fl_Font_
-fl_fonts[] = {
-{" sans",		fl_fonts+1, fl_fonts+2},
-{"Bsans",		fl_fonts+1, fl_fonts+3},
-{"Isans",		fl_fonts+3, fl_fonts+2},
-{"Psans",		fl_fonts+3, fl_fonts+3},
-{" mono",		fl_fonts+5, fl_fonts+6},
-{"Bmono",		fl_fonts+5, fl_fonts+7},
-{"Imono",		fl_fonts+7, fl_fonts+6},
-{"Pmono",		fl_fonts+7, fl_fonts+7},
-{" serif",		fl_fonts+9, fl_fonts+10},
-{"Bserif",		fl_fonts+9, fl_fonts+11},
-{"Iserif",		fl_fonts+11,fl_fonts+10},
-{"Pserif",		fl_fonts+11,fl_fonts+11},
-{" symbol",		fl_fonts+12,fl_fonts+12},
-{" screen",		fl_fonts+14,fl_fonts+14},
-{"Bscreen",		fl_fonts+14,fl_fonts+14},
-{" dingbats",		fl_fonts+15,fl_fonts+15},
-};
-
-// turn a stored font name into a pretty name:
-const char* Fl_Font_::name(int* ap) const {
-  int type;
-  switch (name_[0]) {
-  case 'B': type = FL_BOLD; break;
-  case 'I': type = FL_ITALIC; break;
-  case 'P': type = FL_BOLD | FL_ITALIC; break;
-  default:  type = 0; break;
-  }
-  if (ap) {*ap = type; return name_+1;}
-  if (!type) {return name_+1;}
-  static char *buffer = new char[128];
-  strcpy(buffer, name_+1);
-  if (type & FL_BOLD) strcat(buffer, " bold");
-  if (type & FL_ITALIC) strcat(buffer, " italic");
-  return buffer;
-}
-
-static Fl_Font_Renderer
-xft_renderer = {
-  xft_font, xft_font_load, xft_font_unload, xft_font_height, xft_font_descent,
-  xft_font_width, xft_font_draw, xft_font_clip, xft_font_list, fl_fonts
-};
-
-#if 0
-int
-fl_xft() {
-
-  fl_open_display();
-  if (!XftDefaultHasRender(fl_display)) {
-    fprintf(stderr, "Cannot start Xft plugin: Display does not "
-                    "have render capability.\n");
-    return 3;
-  }
-  fl_font_renderer = &xft_renderer;
-  char temp[4];
-  if (!fl_getconf("xft plugin/minimum antialias size", temp, sizeof(temp)))
-    min_antialias_size = atol(temp);
-
-  return 0;
-}
-#endif
-
-
 //
-// End of "$Id: fl_xft.cxx,v 1.4 2001/11/08 08:13:49 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.1 2001/11/08 08:13:49 spitzak Exp $"
 //

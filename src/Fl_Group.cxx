@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.96 2001/09/10 07:38:06 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.97 2001/11/08 08:13:48 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -209,9 +209,10 @@ int Fl_Group::send(int event, Fl_Widget& to) {
 
   case FL_PUSH:
     // Successful completion of FL_PUSH means the widget is now the
-    // pushed widget, but only call Fl::belowmouse if the child
+    // pushed widget, but only set Fl::pushed() if the child
     // widget did not do so and the mouse is still down:
-    if (Fl::pushed() && !to.contains(Fl::pushed())) Fl::pushed(to);
+    if (Fl::event_state(0x0f000000) && !to.contains(Fl::pushed()))
+      Fl::pushed(to);
     break;
 
   case FL_SHOW:
@@ -628,5 +629,5 @@ void Fl_Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.96 2001/09/10 07:38:06 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.97 2001/11/08 08:13:48 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.h,v 1.2 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: fl_draw.h,v 1.3 2001/11/08 08:13:48 spitzak Exp $"
 //
 // The fltk drawing library
 //
@@ -110,9 +110,9 @@ FL_API void fl_font(const char*, unsigned size);
 FL_API void fl_font(const char*, int attributes, unsigned size);
 
 // change the encoding used to draw bytes (depreciated)
-FL_API void fl_encoding(const char*);
 extern FL_API const char* fl_encoding_;
 inline const char* fl_encoding() {return fl_encoding_;}
+FL_API void fl_encoding(const char*);
 
 // information you can get about the current font+size+encoding:
 extern FL_API Fl_Font fl_font_;
@@ -121,37 +121,8 @@ inline Fl_Font fl_font() {return fl_font_;}
 inline unsigned fl_size() {return fl_size_;}
 FL_API const char *fl_fontname(Fl_Font, int * = 0);
 
-// Ideal case for an abstract base class, but this is faster
-typedef void (*Fl_FontFunc)(Fl_Font, unsigned);
-typedef void * (*Fl_Font_LoadFunc)(const char *, const char *, int);
-typedef void (*Fl_Font_UnloadFunc)(void *);
-typedef int (*Fl_Font_HeightFunc)();
-typedef int (*Fl_Font_DescentFunc)();
-typedef int (*Fl_Font_WidthFunc)(const char *, int);
-typedef void (*Fl_Font_DrawFunc)(const char *, int, int, int);
-typedef void (*Fl_Font_ClipFunc)(void* /*Region*/);
-typedef int (*Fl_Font_ListFunc)(Fl_Font *&);
-//typedef void * (*Fl_Font_FindFunc)(const char *, const char *);
-//typedef int (*Fl_Font_StrlenFunc)(const char *);
-
-struct FL_API Fl_Font_Renderer {
-  Fl_FontFunc         font;     // set the FLTK font
-  Fl_Font_LoadFunc    load;     // load a font
-  Fl_Font_UnloadFunc  unload;   // unload a font
-  Fl_Font_HeightFunc  height;   // get height of font.  May not equal size!
-  Fl_Font_DescentFunc descent;  // get descent of font
-  Fl_Font_WidthFunc   width;    // get pixel width of string
-  Fl_Font_DrawFunc    draw;     // draw a string
-  Fl_Font_ClipFunc    clip;     // set clipping region for font drawing
-  Fl_Font_ListFunc    list;     // list fonts renderer knows about
-//Fl_Font_FindFunc    find;     // find the font that matches
-//Fl_Font_StrlenFunc  strlen;   // calculate char length of properly terminated string
-  Fl_Font_            *fonts;   // pointer to fonts array
-};
-extern FL_API Fl_Font_Renderer* fl_font_renderer;
-
 // information you can get about the current font+size+encoding:
-FL_API int fl_height();	// using fl_size() does not work!
+FL_API int fl_height();
 FL_API int fl_descent();
 
 // measure things in the current font:
@@ -237,5 +208,5 @@ FL_API void fl_yxline(int x, int y, int y1, int x2, int y3);
 #endif
 
 //
-// End of "$Id: fl_draw.h,v 1.2 2001/09/10 01:16:17 spitzak Exp $".
+// End of "$Id: fl_draw.h,v 1.3 2001/11/08 08:13:48 spitzak Exp $".
 //

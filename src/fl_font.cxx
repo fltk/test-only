@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.32 2001/07/29 22:04:44 spitzak Exp $"
+// "$Id: fl_font.cxx,v 1.33 2001/11/08 08:13:49 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,31 +26,24 @@
 #include <config.h>
 #include <fltk/Fl_Font.h>
 #include <fltk/fl_draw.h>
-#include <string.h>
 
-// Static variables containing the currently selected font & size:
+// Static variables containing the currently selected font, size, encoding:
 Fl_Font fl_font_;
 unsigned fl_size_;
-
-void
-fl_font(Fl_Font f, unsigned s) { fl_font_renderer->font(f, s); }
-
-void
-fl_draw(const char* str, int n, int x, int y) {
-  fl_font_renderer->draw(str, n, x, y);
-}
+const char *fl_encoding_ = "iso8859-1";
+  
+#ifdef _WIN32
+# include "fl_font_win32.cxx"
+#else
+# if USE_XFT
+#  include "fl_font_xft.cxx"
+# else
+#  include "fl_font_x.cxx"
+# endif
+#endif
 
 void
 fl_draw(const char* str, int x, int y) { fl_draw(str, strlen(str), x, y); }
-
-int
-fl_height() { return fl_font_renderer->height(); }
-
-int
-fl_descent() { return fl_font_renderer->descent(); }
-
-int
-fl_width(const char* c, int n) { return fl_font_renderer->width(c, n); }
 
 int
 fl_width(const char* c) { return fl_width(c, strlen(c)); }
@@ -58,12 +51,6 @@ fl_width(const char* c) { return fl_width(c, strlen(c)); }
 int
 fl_width(uchar c) { return fl_width((char *)&c, 1); }
 
-#ifdef _WIN32
-#include "fl_font_win32.cxx"
-#else
-#include "fl_font_x.cxx"
-#endif
-
 //
-// End of "$Id: fl_font.cxx,v 1.32 2001/07/29 22:04:44 spitzak Exp $".
+// End of "$Id: fl_font.cxx,v 1.33 2001/11/08 08:13:49 spitzak Exp $".
 //

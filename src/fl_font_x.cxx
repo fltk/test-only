@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_x.cxx,v 1.6 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: fl_font_x.cxx,v 1.7 2001/11/08 08:13:49 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -25,20 +25,21 @@
 
 #include <fltk/Fl.h>
 #include <fltk/x.h>
+#include <fltk/fl_draw.h>
 #include "Fl_FontSize.h"
-
 #include <ctype.h>
 #include <stdlib.h>
+#include <string.h>
 
-void* fl_xfont;
 static GC font_gc;
 Fl_FontSize *fl_fontsize;
+#define current_font ((XFontStruct*)(fl_fontsize->font))
+XFontStruct* fl_xfont() {return current_font;}
 
 static void
 set_current_fontsize(Fl_FontSize* f) {
   if (f != fl_fontsize) {
     fl_fontsize = f;
-    fl_xfont = f->font;
     font_gc = 0;
   }
 }
@@ -46,55 +47,32 @@ set_current_fontsize(Fl_FontSize* f) {
 ////////////////////////////////////////////////////////////////
 // Things you can do once the font+size has been selected:
 
-static void
-x11_font_draw(const char *str, int n, int x, int y) {
+void fl_draw(const char *str, int n, int x, int y) {
   if (font_gc != fl_gc) {
     // I removed this, the user MUST set the font before drawing: (was)
-    // if (!fl_xfont) fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
+    // if (!fl_fontsize) fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
     font_gc = fl_gc;
-    XSetFont(fl_display, fl_gc, ((XFontStruct*)fl_xfont)->fid);
+    XSetFont(fl_display, fl_gc, current_font->fid);
   }
   XDrawString(fl_display, fl_window, fl_gc, x+fl_x_, y+fl_y_, str, n);
 }
 
-static int
-x11_font_height() {
-  return (((XFontStruct*)fl_xfont)->ascent + ((XFontStruct*)fl_xfont)->descent);
+int fl_height() {
+  return (current_font->ascent + current_font->descent);
 }
 
-static int
-x11_font_descent() { return ((XFontStruct*)fl_xfont)->descent; }
+int fl_descent() { return current_font->descent; }
 
-static int
-x11_font_width(const char *c, int n) {
-  return XTextWidth((XFontStruct*)fl_xfont, c, n);
+int fl_width(const char *c, int n) {
+  return XTextWidth(current_font, c, n);
 }
 
-static void
-x11_font_clip(void*) {} // handled by X clipping region
-
-// return dash number N, or pointer to ending null if none:
-static const char *
-font_word(const char* p, int n) {
-  while (*p) {if (*p=='-') {if (!--n) break;} p++;}
-  return p;
-}
-
-static void *
-x11_font_load(const char *name, const char */*encoding*/, int /*size*/) {
-  void* font = XLoadQueryFont(fl_display, name);
+Fl_FontSize::Fl_FontSize(const char* name) {
+  font = (void*)XLoadQueryFont(fl_display, name);
   if (!font) {
     Fl::warning("bad font: %s", name);
     font = XLoadQueryFont(fl_display, "fixed"); // if fixed fails we crash
   }
-  return font;
-}
-
-static void
-x11_font_unload(void *font) { XFreeFont(fl_display, (XFontStruct*)font); }
-
-Fl_FontSize::Fl_FontSize(const char* name) {
-  font = fl_font_renderer->load(name, fl_encoding_, fl_size_);
   encoding = 0;
 #if HAVE_GL
   listbase = 0;
@@ -102,7 +80,6 @@ Fl_FontSize::Fl_FontSize(const char* name) {
 }
 
 #if 0 // this is never called!
-
 Fl_FontSize::~Fl_FontSize() {
 // Delete list created by gl_draw().  This is not done by this code
 // as it will link in GL unnecessarily.  There should be some kind
@@ -114,7 +91,7 @@ Fl_FontSize::~Fl_FontSize() {
 //  glDeleteLists(listbase+base,size);
 // }
   if (this == fl_fontsize) fl_fontsize = 0;
-  fl_font_renderer->unload(font);
+  XFreeFont(fl_display, (XFontStruct*)font);
 }
 #endif
 
@@ -134,11 +111,14 @@ Fl_FontSize::~Fl_FontSize() {
 // correctly.  What a pita!
 // Fltk uses pixelsize, not "pointsize".  This is what everybody wants!
 
-// Static variable for the default encoding:
-const char *fl_encoding_ = "iso8859-1";
+// return dash number N, or pointer to ending null if none:
+static const char *
+font_word(const char* p, int n) {
+  while (*p) {if (*p=='-') {if (!--n) break;} p++;}
+  return p;
+}
 
-static void
-x11_font(Fl_Font font, unsigned size) {
+void fl_font(Fl_Font font, unsigned size) {
   if (font == fl_font_ && size == fl_size_ &&
       (!fl_fontsize->encoding || !strcmp(fl_fontsize->encoding, fl_encoding_)))
     return;
@@ -157,7 +137,7 @@ x11_font(Fl_Font font, unsigned size) {
   if (!font->xlist) {
     Fl_Font_* t = (Fl_Font_*)font; // cast away const
     t->xlist = XListFonts(fl_display, t->name_, 100, &(t->n));
-    if (!t->xlist) {	// use variable if no matching font...
+    if (!t->xlist || t->n<=0) {	// use variable if no matching font...
       t->first = f = new Fl_FontSize("variable");
       f->minsize = 0;
       f->maxsize = 32767;
@@ -176,18 +156,18 @@ x11_font(Fl_Font font, unsigned size) {
 
     char* thisname = font->xlist[n];
     // check for matching encoding
-    const char* c = font_word(thisname, 13);
-    if (*c++ && !strcmp(c, fl_encoding_)) {
+    const char* this_encoding = font_word(thisname, 13);
+    if (*this_encoding++ && !strcmp(this_encoding, fl_encoding_)) {
       // yes, encoding matches
       if (!found_encoding) ptsize = 0; // force it to choose this
-      found_encoding = c;
+      found_encoding = this_encoding;
     } else {
       if (found_encoding) continue;
     }
-    c = font_word(thisname,7);
+    const char* c = font_word(thisname,7);
     unsigned thissize = *c ? atoi(++c) : 32767;
     unsigned thislength = strlen(thisname);
-    if (thissize == size && thislength < matchedlength) {
+    if (thissize == size && thislength <= matchedlength) {
       // exact match, use it:
       name = thisname;
       ptsize = size;
@@ -215,7 +195,9 @@ x11_font(Fl_Font font, unsigned size) {
 
   if (ptsize != size) { // see if we already found this unscalable font:
     for (f = (Fl_FontSize *)font->first; f; f = f->next) {
-      if (f->minsize <= ptsize && f->maxsize >= ptsize) {
+      if (f->minsize <= ptsize && f->maxsize >= ptsize &&
+	  (!f->encoding || !found_encoding ||
+	   !strcmp(f->encoding, found_encoding))) {
 	if (f->minsize > size) f->minsize = size;
 	if (f->maxsize < size) f->maxsize = size;
 	set_current_fontsize(f); return;
@@ -245,10 +227,6 @@ void fl_encoding(const char* f) {
 
 ////////////////////////////////////////////////////////////////
 
-// Carl: please just add any fields you need to this table for the
-// XRender extension, rather than try to make a function to return
-// different tables.
-
 // The predefined fonts that fltk has:  bold:       italic:
 Fl_Font_
 fl_fonts[] = {
@@ -270,14 +248,6 @@ fl_fonts[] = {
 {"-*-*zapf dingbats-*",			fl_fonts+15,fl_fonts+15},
 };
 
-static Fl_Font_Renderer
-x11_renderer = {
-  x11_font, x11_font_load, x11_font_unload, x11_font_height, x11_font_descent,
-  x11_font_width, x11_font_draw, x11_font_clip, 0, 0
-};
-
-Fl_Font_Renderer *fl_font_renderer = &x11_renderer;
-
 //
-// End of "$Id: fl_font_x.cxx,v 1.6 2001/09/10 01:16:17 spitzak Exp $"
+// End of "$Id: fl_font_x.cxx,v 1.7 2001/11/08 08:13:49 spitzak Exp $"
 //

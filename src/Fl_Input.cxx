@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.51 2001/09/10 07:38:06 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.52 2001/11/08 08:13:48 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -939,7 +939,7 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
     // This is removed as it prevents single-key shortcuts from being
     // accepted by other widgets.
     if (Fl::event_text()[0]<=' ') return 0;
-    if (Fl::event_state(FL_ALT|FL_META)) return 0;
+    if (Fl::event_state(FL_ALT|FL_SUPER)) return 0;
     position(size());
     take_focus();
 #endif
@@ -1073,5 +1073,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.51 2001/09/10 07:38:06 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.52 2001/11/08 08:13:48 spitzak Exp $".
 //

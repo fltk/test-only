@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.41 2001/09/10 07:38:06 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.42 2001/11/08 08:13:48 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -115,7 +115,8 @@ int Fl_Button::handle(int event) {
   case FL_FOCUS:
   case FL_UNFOCUS:
     damage(FL_DAMAGE_HIGHLIGHT);
-    return 1;
+    // grab initial focus if we are an Fl_Return_Button:
+    return shortcut()==FL_Enter ? 2 : 1;
   case FL_KEYBOARD:
     if (Fl::event_key() == FL_Enter || Fl::event_key() == ' ') goto EXECUTE;
     return 0;
@@ -153,5 +154,5 @@ Fl_Round_Button::Fl_Round_Button(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.41 2001/09/10 07:38:06 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.42 2001/11/08 08:13:48 spitzak Exp $".
 //

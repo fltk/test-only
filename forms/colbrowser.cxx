@@ -1,5 +1,5 @@
 //
-// "$Id: colbrowser.cxx,v 1.7 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: colbrowser.cxx,v 1.8 2001/11/08 08:13:48 spitzak Exp $"
 //
 // Forms test program for the Fast Light Tool Kit (FLTK).
 //
@@ -82,7 +82,6 @@ main(int argc, char *argv[])
     // This is so Esc & the close box will close the window.
     // (on transient windows attempting to close it just calls the callback)
     fl_show_form(cl, FL_PLACE_FREE, 1/*FL_TRANSIENT*/, "RGB Browser");
-
 
     while (fl_do_forms())
 	;
@@ -340,5 +339,5 @@ create_form_cl(void)
 }
 
 //
-// End of "$Id: colbrowser.cxx,v 1.7 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: colbrowser.cxx,v 1.8 2001/11/08 08:13:48 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: keyboard.cxx,v 1.9 2001/07/23 09:50:06 spitzak Exp $"
+// "$Id: keyboard.cxx,v 1.10 2001/11/08 08:13:49 spitzak Exp $"
 //
 // Keyboard/event test program for the Fast Light Tool Kit (FLTK).
 //
@@ -11,13 +11,14 @@
 // pressed, rather than after, on shift key events.  I fixed this for
 // the mouse buttons, but it did not seem worth it for shift.
 //
-// X servers do not agree about any shift flags after except shift, ctrl,
+// X servers do not agree about any shift flags except shift, ctrl,
 // lock, and alt.  They may also not agree about the symbols for the extra
 // keys Micro$oft put on the keyboard.
 //
-// On IRIX the backslash key does not work.  A bug in XKeysymToKeycode?
+// Windows has a number of keys that do not report that they are held down.
+// On IRIX the backslash key does not report it is held down.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 2001 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -75,8 +76,8 @@ struct {int n; const char* text;} table[] = {
   {FL_Caps_Lock, "FL_Caps_Lock"},
   {FL_Alt_L, "FL_Alt_L"},
   {FL_Alt_R, "FL_Alt_R"},
-  {FL_Meta_L, "FL_Meta_L"},
-  {FL_Meta_R, "FL_Meta_R"},
+  {FL_Super_L, "FL_Super_L"},
+  {FL_Super_R, "FL_Super_R"},
   {FL_Menu, "FL_Menu"},
   {FL_Num_Lock, "FL_Num_Lock"},
   {FL_KP_Enter, "FL_KP_Enter"}
@@ -112,12 +113,12 @@ int main(int argc, char** argv) {
       keyname = "0";
     else if (k < 256) {
       sprintf(buffer, "'%c'", k);
-    } else if (k >= FL_F && k <= FL_F_Last) {
-      sprintf(buffer, "FL_F+%d", k - FL_F);
-    } else if (k >= FL_KP && k <= FL_KP_Last) {
-      sprintf(buffer, "FL_KP+'%c'", k-FL_KP);
-    } else if (k >= FL_Button && k <= FL_Button+7) {
-      sprintf(buffer, "FL_Button+%d", k-FL_Button);
+    } else if (k >= FL_F(0) && k <= FL_F_Last) {
+      sprintf(buffer, "FL_F(%d)", k - FL_F(0));
+    } else if (k >= FL_KP(0) && k <= FL_KP_Last) {
+      sprintf(buffer, "FL_KP('%c')", k-FL_KP(0));
+    } else if (k >= FL_Button(0) && k <= FL_Button(7)) {
+      sprintf(buffer, "FL_Button(%d)", k-FL_Button(0));
     } else {
       sprintf(buffer, "0x%04x", k);
       for (int i = 0; i < int(sizeof(table)/sizeof(*table)); i++)
@@ -131,5 +132,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: keyboard.cxx,v 1.9 2001/07/23 09:50:06 spitzak Exp $".
+// End of "$Id: keyboard.cxx,v 1.10 2001/11/08 08:13:49 spitzak Exp $".
 //

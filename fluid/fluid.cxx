@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.52 2001/09/10 07:38:05 spitzak Exp $"
+// "$Id: fluid.cxx,v 1.53 2001/11/08 08:13:48 spitzak Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -383,14 +383,14 @@ Fl_Menu_Item Main_Menu[] = {
   {"Copy", FL_CTRL+'c', copy_cb},
   {"Paste", FL_CTRL+'v', paste_cb},
   {"Select All", FL_CTRL+'a', select_all_cb, 0, FL_MENU_DIVIDER},
-  {"Open...", FL_F+1, openwidget_cb},
+  {"Open...", FL_F(1), openwidget_cb},
   {"Sort",0,sort_cb},
-  {"Earlier", FL_F+2, earlier_cb},
-  {"Later", FL_F+3, later_cb},
-//{"Show", FL_F+5, show_cb},
-//{"Hide", FL_F+6, hide_cb},
-  {"Group", FL_F+7, group_cb},
-  {"Ungroup", FL_F+8, ungroup_cb,0, FL_MENU_DIVIDER},
+  {"Earlier", FL_F(2), earlier_cb},
+  {"Later", FL_F(3), later_cb},
+//{"Show", FL_F(5), show_cb},
+//{"Hide", FL_F(6), hide_cb},
+  {"Group", FL_F(7), group_cb},
+  {"Ungroup", FL_F(8), ungroup_cb,0, FL_MENU_DIVIDER},
 //{"Deactivate", 0, nyi},
 //{"Activate", 0, nyi, 0, FL_MENU_DIVIDER},
   {"Show Overlays",FL_CTRL+'O',toggle_overlays, 0, FL_MENU_TOGGLE|FL_MENU_VALUE},
@@ -521,5 +521,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.52 2001/09/10 07:38:05 spitzak Exp $".
+// End of "$Id: fluid.cxx,v 1.53 2001/11/08 08:13:48 spitzak Exp $".
 //

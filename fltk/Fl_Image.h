@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.h,v 1.3 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: Fl_Image.h,v 1.4 2001/11/08 08:13:48 spitzak Exp $"
 //
 // Image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,6 +26,7 @@
 #ifndef Fl_Image_H
 #define Fl_Image_H
 
+#include "Fl_Export.h"
 #include "Fl_Flags.h"
 
 class FL_API Fl_Widget;
@@ -50,5 +51,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Image.h,v 1.3 2001/09/10 01:16:17 spitzak Exp $".
+// End of "$Id: Fl_Image.h,v 1.4 2001/11/08 08:13:48 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.2 2001/11/08 08:13:48 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -135,7 +135,7 @@ const Fl_Frame_Box fl_thin_up_box("thin up", "2HHWW", &fl_thin_down_box);
 const Fl_Frame_Box fl_engraved_box("engraved", "HHWWWWHH");
 const Fl_Frame_Box fl_embossed_box("embossed", "WWHHHHWW");
 
-const Fl_Frame_Box fl_border_box("border", "AAAA");
+const Fl_Frame_Box fl_border_box("border", "HHHH");
 
 ////////////////////////////////////////////////////////////////
 // Deprecated "frame" box, appaently needed for fltk 1.0 compatability?
@@ -186,5 +186,5 @@ const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
 const Fl_Boxtype_* Fl_Boxtype_::first = 0;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.2 2001/11/08 08:13:48 spitzak Exp $".
 //

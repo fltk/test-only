@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.156 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.157 2001/11/08 08:13:49 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -462,7 +462,7 @@ static bool mouse_event(Fl_Window *window, int what, int button,
     Fl::e_clicks = 0;
   J1:
     if (!Fl::grab_) SetCapture(fl_xid(window));
-    Fl::e_keysym = FL_Button + button;
+    Fl::e_keysym = FL_Button(button);
     Fl::e_is_click = 1;
     px = pmx = Fl::e_x_root; py = pmy = Fl::e_y_root;
     if (Fl::handle(FL_PUSH, window)) return true;
@@ -475,7 +475,7 @@ static bool mouse_event(Fl_Window *window, int what, int button,
     // WAS: this should turn off Fl::e_is_click if more than .2 second passed
     // since the push event!
     if (!Fl::grab_) ReleaseCapture();
-    Fl::e_keysym = FL_Button + button;
+    Fl::e_keysym = FL_Button(button);
     return Fl::handle(FL_RELEASE,window);
 
   case 3: // move:
@@ -507,7 +507,7 @@ static bool mouse_event(Fl_Window *window, int what, int button,
 static const struct {unsigned short vk, fltk, extended;} vktab[] = {
   {VK_BACK,	FL_BackSpace},
   {VK_TAB,	FL_Tab},
-  {VK_CLEAR,	FL_KP+'5',	FL_Clear},
+  {VK_CLEAR,	FL_KP('5'),	FL_Clear},
   {VK_RETURN,	FL_Enter,	FL_KP_Enter},
   {VK_SHIFT,	FL_Shift_L,	FL_Shift_R},
   {VK_CONTROL,	FL_Control_L,	FL_Control_R},
@@ -516,25 +516,25 @@ static const struct {unsigned short vk, fltk, extended;} vktab[] = {
   {VK_CAPITAL,	FL_Caps_Lock},
   {VK_ESCAPE,	FL_Escape},
   {VK_SPACE,	' '},
-  {VK_PRIOR,	FL_KP+'9',	FL_Page_Up},
-  {VK_NEXT,	FL_KP+'3',	FL_Page_Down},
-  {VK_END,	FL_KP+'1',	FL_End},
-  {VK_HOME,	FL_KP+'7',	FL_Home},
-  {VK_LEFT,	FL_KP+'4',	FL_Left},
-  {VK_UP,	FL_KP+'8',	FL_Up},
-  {VK_RIGHT,	FL_KP+'6',	FL_Right},
-  {VK_DOWN,	FL_KP+'2',	FL_Down},
+  {VK_PRIOR,	FL_KP('9'),	FL_Page_Up},
+  {VK_NEXT,	FL_KP('3'),	FL_Page_Down},
+  {VK_END,	FL_KP('1'),	FL_End},
+  {VK_HOME,	FL_KP('7'),	FL_Home},
+  {VK_LEFT,	FL_KP('4'),	FL_Left},
+  {VK_UP,	FL_KP('8'),	FL_Up},
+  {VK_RIGHT,	FL_KP('6'),	FL_Right},
+  {VK_DOWN,	FL_KP('2'),	FL_Down},
   {VK_SNAPSHOT, FL_Print},	// does not work on NT
-  {VK_INSERT,	FL_KP+'0',	FL_Insert},
-  {VK_DELETE,	FL_KP+'.',	FL_Delete},
+  {VK_INSERT,	FL_KP('0'),	FL_Insert},
+  {VK_DELETE,	FL_KP('.'),	FL_Delete},
   {VK_LWIN,	FL_Meta_L},
   {VK_RWIN,	FL_Meta_R},
   {VK_APPS,	FL_Menu},
-  {VK_MULTIPLY, FL_KP+'*'},
-  {VK_ADD,	FL_KP+'+'},
-  {VK_SUBTRACT, FL_KP+'-'},
-  {VK_DECIMAL,	FL_KP+'.'},
-  {VK_DIVIDE,	FL_KP+'/'},
+  {VK_MULTIPLY, FL_KP('*')},
+  {VK_ADD,	FL_KP('+')},
+  {VK_SUBTRACT, FL_KP('-')},
+  {VK_DECIMAL,	FL_KP('.')},
+  {VK_DIVIDE,	FL_KP('/')},
   {VK_NUMLOCK,	FL_Num_Lock},
   {VK_SCROLL,	FL_Scroll_Lock},
   {0xba,	';'},
@@ -555,8 +555,8 @@ static int ms2fltk(int vk, int extended) {
   if (!vklut[1]) { // init the table
     unsigned int i;
     for (i = 0; i < 256; i++) vklut[i] = tolower(i);
-    for (i=VK_F1; i<=VK_F16; i++) vklut[i] = i+(FL_F-(VK_F1-1));
-    for (i=VK_NUMPAD0; i<=VK_NUMPAD9; i++) vklut[i] = i+(FL_KP+'0'-VK_NUMPAD0);
+    for (i=VK_F1; i<=VK_F16; i++) vklut[i] = i+(FL_F(0)-(VK_F1-1));
+    for (i=VK_NUMPAD0; i<=VK_NUMPAD9; i++) vklut[i] = i+(FL_KP('0')-VK_NUMPAD0);
     for (i = 0; i < sizeof(vktab)/sizeof(*vktab); i++) {
       vklut[vktab[i].vk] = vktab[i].fltk;
       extendedlut[vktab[i].vk] = vktab[i].extended;
@@ -682,9 +682,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_KEYUP:
   case WM_SYSKEYUP:
     // save the keysym until we figure out the characters:
-    {int k = ms2fltk(wParam,lParam&(1<<24));
-    if (k == Fl::e_keysym) Fl::e_clicks++; else Fl::e_clicks = 0;
-    Fl::e_keysym = k;}
+    Fl::e_keysym = ms2fltk(wParam,lParam&(1<<24));
+    if (lParam & (1<<30)) Fl::e_clicks++; else Fl::e_clicks = 0;
     // See if TranslateMessage turned it into a WM_*CHAR message:
     if (PeekMessage(&fl_msg, hWnd, WM_CHAR, WM_SYSDEADCHAR, 1)) {
       uMsg = fl_msg.message;
@@ -708,9 +707,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     if (GetKeyState(VK_NUMLOCK)) state |= FL_NUM_LOCK;
     if (GetKeyState(VK_LWIN)&~1 || GetKeyState(VK_RWIN)&~1) {
       // _WIN32 bug?  GetKeyState returns garbage if the user hit the
-      // meta key to pop up start menu.  Sigh.
+      // WIndows key to pop up start menu.  Sigh.
       if ((GetAsyncKeyState(VK_LWIN)|GetAsyncKeyState(VK_RWIN))&~1)
-	state |= FL_META;
+	state |= FL_SUPER;
     }
     if (GetKeyState(VK_SCROLL)) state |= FL_SCROLL_LOCK;
     Fl::e_state = state;
@@ -722,8 +721,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     if (uMsg == WM_CHAR || uMsg == WM_SYSCHAR) {
       buffer[0] = char(wParam);
       Fl::e_length = 1;
-    } else if (Fl::e_keysym >= FL_KP && Fl::e_keysym <= FL_KP_Last) {
-      buffer[0] = Fl::e_keysym-FL_KP;
+    } else if (Fl::e_keysym >= FL_KP(0) && Fl::e_keysym <= FL_KP_Last) {
+      buffer[0] = Fl::e_keysym-FL_KP(0);
       Fl::e_length = 1;
     } else {
       buffer[0] = 0;
@@ -1295,5 +1294,5 @@ void swap_fl_coordinates(int newx, int newy, int *savex, int *savey) {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.156 2001/09/10 01:16:17 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.157 2001/11/08 08:13:49 spitzak Exp $".
 //

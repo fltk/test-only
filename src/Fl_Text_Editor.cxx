@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Editor.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Text_Editor.cxx,v 1.10 2001/11/08 08:13:49 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -391,7 +391,7 @@ int Fl_Text_Editor::handle_key() {
   }
 
   int key = Fl::event_key(), state = Fl::event_state(), c = Fl::event_text()[0];
-  state &= FL_SHIFT|FL_CTRL|FL_ALT|FL_META; // only care about these states
+  state &= FL_SHIFT|FL_CTRL|FL_ALT|FL_SUPER; // only care about these states
   Key_Func f;
   f = bound_key_function(key, state, global_key_bindings);
   if (!f) f = bound_key_function(key, state, key_bindings);
@@ -442,5 +442,5 @@ int Fl_Text_Editor::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Text_Editor.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_Text_Editor.cxx,v 1.10 2001/11/08 08:13:49 spitzak Exp $".
 //

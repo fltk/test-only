@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key_win32.cxx,v 1.10 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: Fl_get_key_win32.cxx,v 1.11 2001/11/08 08:13:49 spitzak Exp $"
 //
 // _WIN32 keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
@@ -89,20 +89,20 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   {VK_APPS,	FL_Menu},
   {VK_NUMLOCK,	FL_Num_Lock},
 //{VK_???,	FL_KP_Enter},
-  {VK_MULTIPLY,	FL_KP+'*'},
-  {VK_ADD,	FL_KP+'+'},
-  {VK_SUBTRACT,	FL_KP+'-'},
-  {VK_DECIMAL,	FL_KP+'.'},
-  {VK_DIVIDE,	FL_KP+'/'},
+  {VK_MULTIPLY,	FL_KP('*')},
+  {VK_ADD,	FL_KP('+')},
+  {VK_SUBTRACT,	FL_KP('-')},
+  {VK_DECIMAL,	FL_KP('.')},
+  {VK_DIVIDE,	FL_KP('/')},
   {VK_LSHIFT,	FL_Shift_L},
   {VK_RSHIFT,	FL_Shift_R},
   {VK_LCONTROL,	FL_Control_L},
   {VK_RCONTROL,	FL_Control_R},
   {VK_CAPITAL,	FL_Caps_Lock},
-  {VK_LWIN,	FL_Meta_L},
-  {VK_RWIN,	FL_Meta_R},
   {VK_LMENU,	FL_Alt_L},
   {VK_RMENU,	FL_Alt_R},
+  {VK_LWIN,	FL_Super_L},
+  {VK_RWIN,	FL_Super_R},
   {VK_DELETE,	FL_Delete}
 };
 
@@ -110,8 +110,8 @@ static int fltk2ms(int fltk) {
   if (fltk >= '0' && fltk <= '9') return fltk;
   if (fltk >= 'A' && fltk <= 'Z') return fltk;
   if (fltk >= 'a' && fltk <= 'z') return fltk-('a'-'A');
-  if (fltk > FL_F && fltk <= FL_F+16) return fltk-(FL_F-(VK_F1-1));
-  if (fltk >= FL_KP+'0' && fltk<=FL_KP+'9') return fltk-(FL_KP+'0'-VK_NUMPAD0);
+  if (fltk > FL_F(0) && fltk <= FL_F(16)) return fltk-FL_F(0)+VK_F1-1;
+  if (fltk >= FL_KP('0') && fltk<=FL_KP('9')) return fltk-FL_KP('0')+VK_NUMPAD0;
   int a = 0;
   int b = sizeof(vktab)/sizeof(*vktab);
   while (a < b) {
@@ -133,5 +133,5 @@ bool Fl::get_key(int k) {
 }
 
 //
-// End of "$Id: Fl_get_key_win32.cxx,v 1.10 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: Fl_get_key_win32.cxx,v 1.11 2001/11/08 08:13:49 spitzak Exp $".
 //

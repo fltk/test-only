@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.114 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.115 2001/11/08 08:13:49 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -487,26 +487,13 @@ static void set_event_xy() {
   Fl::e_state = fl_xevent.xbutton.state << 16;
   fl_event_time = fl_xevent.xbutton.time;
 #ifdef __sgi
-  // get the meta key off PC keyboards:
-  if (fl_key_vector[18]&0x18) Fl::e_state |= FL_META;
+  // get the Super key off PC keyboards:
+  if (fl_key_vector[18]&0x18) Fl::e_state |= FL_SUPER;
 #endif
   // turn off is_click if enough time or mouse movement has passed:
   if (abs(Fl::e_x_root-px)+abs(Fl::e_y_root-py) > 3 
       || fl_event_time >= ptime+(Fl::pushed()?200:1000))
     Fl::e_is_click = 0;
-}
-
-// if this is same event as last && is_click, increment click count:
-static inline void checkdouble() {
-  if (Fl::e_is_click == Fl::e_keysym)
-    Fl::e_clicks++;
-  else {
-    Fl::e_clicks = 0;
-    Fl::e_is_click = Fl::e_keysym;
-  }
-  px = Fl::e_x_root;
-  py = Fl::e_y_root;
-  ptime = fl_event_time;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -662,8 +649,18 @@ bool fl_handle()
 
   case ButtonPress: {
     unsigned n = fl_xevent.xbutton.button;
-    Fl::e_keysym = FL_Button + n;
-    set_event_xy(); checkdouble();
+    Fl::e_keysym = FL_Button(n);
+    set_event_xy();
+    // turn off is_click if enough time or mouse movement has passed:
+    if (Fl::e_is_click == Fl::e_keysym) {
+      Fl::e_clicks++;
+    } else {
+      Fl::e_clicks = 0;
+      Fl::e_is_click = Fl::e_keysym;
+    }
+    px = Fl::e_x_root;
+    py = Fl::e_y_root;
+    ptime = fl_event_time;
     if (n == wheel_up_button) {
       Fl::e_dy = +1;
       event = FL_MOUSEWHEEL;
@@ -688,7 +685,7 @@ bool fl_handle()
 
   case ButtonRelease: {
     unsigned n = fl_xevent.xbutton.button;
-    Fl::e_keysym = FL_Button + n;
+    Fl::e_keysym = FL_Button(n);
     set_event_xy();
     //if (n == wheel_up_button || n == wheel_down_button) break;
     Fl::e_state &= ~(FL_BUTTON1 << (n-1));
@@ -735,19 +732,27 @@ bool fl_handle()
   case KeyRelease: {
     //if (Fl::grab_) XAllowEvents(fl_display, SyncKeyboard, CurrentTime);
     int keycode = fl_xevent.xkey.keycode;
-    KeySym keysym;
+    static int lastkeycode;
+    // Use the unshifted keysym! This matches the symbols that the Win32
+    // version produces. However this will defeat older keyboard layouts
+    // that use shifted values for function keys.
+    KeySym keysym = XKeycodeToKeysym(fl_display, keycode, 0);
     if (fl_xevent.type == KeyPress) {
       event = FL_KEYBOARD;
       fl_key_vector[keycode/8] |= (1 << (keycode%8));
-      static char buffer[21];
-      int len = XLookupString((XKeyEvent*)&(fl_xevent.xkey), buffer, 20, &keysym, 0);
-      if (keysym && keysym < 0x400) { // a character in latin-1,2,3,4 sets
-	// force it to type a character (not sure if this ever is needed):
-	if (!len) {buffer[0] = char(keysym); len = 1;}
-	// ignore all effects of shift on the keysyms, which makes it a lot
-	// easier to program shortcuts and is Windows-compatable:
-	keysym = XKeycodeToKeysym(fl_display, keycode, 0);
+      // Make repeating keys increment the click counter:
+      // Unfortunately some (all?) x servers seem to send fake key-up
+      // codes but these can be detected by having the same event time:
+      if (keycode == lastkeycode
+	  || !lastkeycode && fl_event_time == fl_xevent.xkey.time) {
+	Fl::e_clicks++;
+      } else {
+	Fl::e_clicks = 0;
+	lastkeycode = keycode;
       }
+      static char buffer[21];
+      int len = XLookupString(&(fl_xevent.xkey), buffer, 20, 0/*keysym*/, 0);
+      // Make ctrl+dash work like it used to:
       if (fl_xevent.xbutton.state&4 && keysym == '-') buffer[0] = 0x1f; // ^_
       buffer[len] = 0;
       Fl::e_text = buffer;
@@ -756,60 +761,37 @@ bool fl_handle()
       event = FL_KEYUP;
       fl_key_vector[keycode/8] &= ~(1 << (keycode%8));
       // keyup events just get the unshifted keysym:
-      keysym = XKeycodeToKeysym(fl_display, keycode, 0);
+      lastkeycode = 0;
     }
-#if 0
-    // Attempt to fix keyboards that send "delete" for the key in the
-    // upper-right corner of the main keyboard.  But it appears that
-    // very few of these remain?  A better test would be to look at the
-    // keymap and see if any key turns into FL_BackSpace.
-    static int got_backspace;
-    if (!got_backspace) {
-      if (keysym == FL_Delete) keysym = FL_BackSpace;
-      else if (keysym == FL_BackSpace) got_backspace = 1;
-    }
-#endif
+    Fl::e_is_click = 0;
+    if (keysym >= 0xff95 && keysym <= 0xff9f) { // XK_KP_*
+      // Make all keypad keys act like NumLock is on all the time. This
+      // is nicer (imho), but more importantly this gets rid of a range of
+      // keysyms that the Win32 version cannot produce. This strange
+      // table translates XK_KP_Home to '7', etc:
+      keysym = FL_KP("7486293150."[keysym-0xff95]);
+      Fl::e_text[0] = char(keysym) & 0x7F;
+      Fl::e_text[1] = 0;
+      Fl::e_length = 1;
+    } else if (keysym == 0xffe7) { // XK_Meta_L
+      // old versions of XFree86 used XK_Meta for the "windows" key
+      keysym = FL_Super_L;
+    } else if (keysym == 0xffe8) { // XK_Meta_R
+      keysym = FL_Super_R;
+    } else if (!keysym) { // X did not map this key
+      keysym = keycode|0x8000;
 #ifdef __sgi
     // You can plug a microsoft keyboard into an sgi but the extra shift
     // keys are not translated.  Make them translate like XFree86 does:
-    if (!keysym) switch(keycode) {
-    case 147: keysym = FL_Meta_L; break;
-    case 148: keysym = FL_Meta_R; break;
+      switch(keycode) {
+      case 147: keysym = FL_Super_L; break;
+      case 148: keysym = FL_Super_R; break;
     case 149: keysym = FL_Menu; break;
     }
 #endif
-    // We have to get rid of the XK_KP_function keys, because they are
-    // not produced on Windows and thus case statements tend not to check
-    // for them:
-    if (keysym >= 0xff91 && keysym <= 0xff9f) {
-      // Try to make them turn into FL_KP+'c' so that NumLock is
-      // irrelevant, by looking at the shifted code:
-      unsigned long keysym1 = XKeycodeToKeysym(fl_display, keycode, 1);
-      if (keysym1 <= 0x7f || keysym1 > 0xff9f && keysym1 <= FL_KP_Last) {
-	keysym = keysym1 | FL_KP;
-	if (fl_xevent.type == KeyPress) {
-	  Fl::e_text[0] = char(keysym1) & 0x7F;
-	  Fl::e_text[1] = 0;
-	  Fl::e_length = 1;
-	}
-      } else {
-	// If that failed to work, translate assumming PC keyboard layout:
-	static const unsigned short table[15] = {
-	  FL_F+1, FL_F+2, FL_F+3, FL_F+4,
-	  FL_Home, FL_Left, FL_Up, FL_Right,
-	  FL_Down, FL_Page_Up, FL_Page_Down, FL_End,
-	  FL_Clear, FL_Insert, FL_Delete};
-	keysym = table[keysym-0xff91];
-      }
-    }
-    // We also need to get rid of Left_Tab, again to match Win32 and to
-    // make each key on the keyboard send a single keysym:
-    else if (keysym == 0xfe20) {
-      keysym = FL_Tab;
-      Fl::e_state |= FL_SHIFT;
     }
     Fl::e_keysym = int(keysym);
-    set_event_xy(); checkdouble();
+    set_event_xy();
     break;}
 
   case SelectionNotify: {
@@ -931,14 +913,33 @@ void Fl_X::create(Fl_Window* window,
 		  XVisualInfo *visual, Colormap colormap,
 		  int background)
 {
-  ulong root;
   XSetWindowAttributes attr;
+  attr.border_pixel = 0;
+  attr.colormap = colormap;
+  attr.bit_gravity = 0; // StaticGravity;
   int mask = CWBorderPixel|CWColormap|CWEventMask|CWBitGravity;
 
+  int W = window->w();
+  if (W <= 0) W = 1; // X don't like zero...
+  int H = window->h();
+  if (H <= 0) H = 1; // X don't like zero...
+  int X = window->x();
+  int Y = window->y();
+
+  ulong root;
+
   if (window->parent()) {
-    root = window->window()->i->xid;
+    // locate the surrounding window and adjust window position for
+    // any intermediate group widgets:
+    for (Fl_Widget *o = window->parent(); ; o = o->parent()) {
+      if (o->is_window()) {root = ((Fl_Window*)o)->i->xid; break;}
+      X += o->x();
+      Y += o->y();
+    }
     attr.event_mask = ExposureMask;
   } else {
+    if (X == FL_USEDEFAULT) X = (Fl::w()-W)/2;
+    if (Y == FL_USEDEFAULT) Y = (Fl::h()-H)/2;
     root = RootWindow(fl_display, fl_screen);
     attr.event_mask =
       ExposureMask | StructureNotifyMask
@@ -953,21 +954,11 @@ void Fl_X::create(Fl_Window* window,
       mask |= CWOverrideRedirect | CWSaveUnder;
     }
   }
-  attr.border_pixel = 0;
-  attr.colormap = colormap;
-  attr.bit_gravity = 0; // StaticGravity;
 
   if (background >= 0) {
     attr.background_pixel = background;
     mask |= CWBackPixel;
   }
-
-  int W = window->w();
-  if (W <= 0) W = 1; // X don't like zero...
-  int H = window->h();
-  if (H <= 0) H = 1; // X don't like zero...
-  int X = window->x(); if (X == FL_USEDEFAULT) X = (Fl::w()-W)/2;
-  int Y = window->y(); if (Y == FL_USEDEFAULT) Y = (Fl::h()-H)/2;
 
   Fl_X* x = new Fl_X;
   x->xid = XCreateWindow(fl_display,
@@ -1305,5 +1296,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.114 2001/09/10 01:16:17 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.115 2001/11/08 08:13:49 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.38 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.39 2001/11/08 08:13:49 spitzak Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -31,8 +31,9 @@
 
 Fl_FontSize *fl_fontsize;
 
-static void *
-win_font_load(const char *name, const char *encoding, int size) {
+Fl_FontSize::Fl_FontSize(const char* name, int size, int charset) {
+  fl_fontsize = this;
+
   int weight = FW_NORMAL;
   int italic = 0;
   // may be efficient, but this is non-obvious
@@ -53,7 +54,7 @@ win_font_load(const char *name, const char *encoding, int size) {
     italic,
     FALSE,		// underline attribute flag
     FALSE,		// strikeout attribute flag
-    (int)encoding,	// character set identifier
+    charset,		// character set identifier
     OUT_DEFAULT_PRECIS, // output precision
     CLIP_DEFAULT_PRECIS,// clipping precision
     DEFAULT_QUALITY,	// output quality
@@ -67,22 +68,14 @@ win_font_load(const char *name, const char *encoding, int size) {
   //BOOL ret = GetCharWidthFloat(fl_gc, metr.tmFirstChar, metr.tmLastChar, font->width+metr.tmFirstChar);
   //...would be the right call, but is not implemented into Window95! (WinNT?)
   //GetCharWidth(fl_gc, 0, 255, fl_fontsize->width);
-  return (void *)font;
-}
 
-
-Fl_FontSize::Fl_FontSize(const char* name, int size, int charset) {
-  fl_fontsize = this;
-  font = fl_font_renderer->load(name, (char *)charset, size);
+  this->font = (void*)font;
 #if HAVE_GL
   listbase = 0;
 #endif
   minsize = maxsize = size;
-  encoding = charset;
+  this->charset = charset;
 }
-
-static void
-win_font_unload(void *font) { DeleteObject((HFONT)font); }
 
 #if HAVE_GL
 Fl_FontSize::~Fl_FontSize() {
@@ -96,7 +89,7 @@ Fl_FontSize::~Fl_FontSize() {
 //  glDeleteLists(listbase+base,size);
 // }
   if (this == fl_fontsize) fl_fontsize = 0;
-  fl_font_renderer->unload(font);
+  DeleteObject((HFONT)font);
 }
 #endif
 
@@ -125,78 +118,61 @@ Fl_Font_ fl_fonts[] = {
 ////////////////////////////////////////////////////////////////
 // Public interface:
 
-void *fl_xfont;
+#define current_font ((HFONT)(fl_fontsize->font))
+HFONT fl_xfont() {return current_font;}
 
-// Static variable for the default encoding:
-const char *fl_encoding_ = (const char*)DEFAULT_CHARSET;
+// we need to decode the encoding somehow!
+static int charset = DEFAULT_CHARSET;
 
-static void
-win_font(Fl_Font font, unsigned size) {
+void fl_font(Fl_Font font, unsigned size) {
   if (font == fl_font_ && size == fl_size_ &&
-      fl_fontsize->encoding == (int)fl_encoding_) return;
+      fl_fontsize->charset == charset) return;
   fl_font_ = font; fl_size_ = size;
 
   Fl_FontSize* f;
   // search the fontsizes we have generated already:
   for (f = (Fl_FontSize *)font->first; f; f = f->next)
     if (f->minsize <= size && f->maxsize >= size &&
-	f->encoding == (int)fl_encoding_) break;
+	f->charset == charset) break;
   if (!f) {
-    f = new Fl_FontSize(font->name_, size, (int)fl_encoding_);
+    f = new Fl_FontSize(font->name_, size, charset);
     f->next = (Fl_FontSize *)font->first;
     ((Fl_Font_*)font)->first = f;
   }
-  if (f != fl_fontsize) {
-    fl_fontsize = f;
-    fl_xfont = f->font;
-  }
+  fl_fontsize = f;
 }
 
-static int
-win_font_height() {
+int fl_height() {
   return (fl_fontsize->metr.tmAscent + fl_fontsize->metr.tmDescent);
 }
 
-static int
-win_font_descent() { return fl_fontsize->metr.tmDescent; }
-
-// Change the encoding in use now. This runs the font search again with
-// the new encoding.
-void fl_encoding(const char* f) {
-  if (f != fl_encoding_) {
-    fl_encoding_ = f;
-    if (fl_font_) fl_font(fl_font_, fl_size_);
-  }
-}
-
-static int
-win_font_width(const char* c, int n) {
+int fl_descent() { return fl_fontsize->metr.tmDescent; }
+  
+int fl_width(const char* c, int n) {
   SIZE size;
   if (!fl_gc) fl_gc = GetDC(0);
-  SelectObject(fl_gc, (HFONT)fl_fontsize->font);
+  SelectObject(fl_gc, current_font);
   GetTextExtentPoint(fl_gc, c, n, &size);
   return size.cx;
 }
 
-static void
-win_font_draw(const char *str, int n, int x, int y) {
+void fl_draw(const char *str, int n, int x, int y) {
   SetTextColor(fl_gc, fl_colorref);
-  HGDIOBJ oldfont = SelectObject(fl_gc, (HFONT)fl_fontsize->font);
+  HGDIOBJ oldfont = SelectObject(fl_gc, current_font);
   TextOut(fl_gc, x+fl_x_, y+fl_y_, str, n);
   SelectObject(fl_gc, oldfont);
 }
 
-static void
-win_font_clip(void*) {} // handled by regular windows clipping
-
-static Fl_Font_Renderer
-win_renderer = {
-  win_font, win_font_load, win_font_unload, win_font_height, win_font_descent,
-  win_font_width, win_font_draw, win_font_clip, 0, 0
-};
-
-Fl_Font_Renderer *fl_font_renderer = &win_renderer;
+// Encodings is NYI. We need a way to translate the ISO encoding names
+// to Win32 encoding enumerations.
+void fl_encoding(const char* f) {
+  if (f != fl_encoding_) {
+    fl_encoding_ = f;
+    // charset = decode_the_encoding(f);
+    //if (fl_font_) fl_font(fl_font_, fl_size_);
+  }
+}
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.38 2001/09/10 01:16:17 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.39 2001/11/08 08:13:49 spitzak Exp $".
 //
