@@ -45,7 +45,7 @@ RSC=rc.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MT /GR /GX /Os /Ob2 /I "." /I "..\.." /D "NDEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
+# ADD CPP /nologo /MT /GR /GX /Os /Ob2 /I "." /I "..\.." /I "..\..\.." /D "NDEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -72,7 +72,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /GR /GX /ZI /Od /I "." /I "..\.." /I "../visualc" /D "_DEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
+# ADD CPP /nologo /MTd /GR /GX /ZI /Od /I "../visualc" /I "." /I "..\.." /I "..\..\.." /D "_DEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -100,7 +100,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /GX /ZI /Od /I "." /I "..\.." /I "../visualc" /D "_DEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /YX /c
-# ADD CPP /nologo /MDd /GR /GX /ZI /Od /I "." /I "..\.." /I "../visualc" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "_DEBUG" /D "_MSC_DLL" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
+# ADD CPP /nologo /MDd /GR /GX /ZI /Od /I "../visualc" /I "." /I "..\.." /I "..\..\.." /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "_DEBUG" /D "_MSC_DLL" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -129,7 +129,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /Os /Ob2 /I "." /I "..\.." /D "NDEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /YX /c
-# ADD CPP /MT /W3 /GR /GX /Os /Ob2 /Gf /Gy /I "." /I "..\.." /I "..\..\.." /D "NDEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /YX /c
+# ADD CPP /MT /W3 /GR /GX /Os /Ob2 /Gf /Gy /I "..\..\.." /I "." /I "..\.." /D "NDEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /YX /c
 # SUBTRACT CPP /nologo /Fr
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
@@ -170,6 +170,7 @@ DEP_CPP_ADDAR=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\math.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
@@ -186,6 +187,7 @@ DEP_CPP_ADDCU=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\math.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
@@ -205,6 +207,7 @@ DEP_CPP_ADJUS=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\image.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -226,6 +229,7 @@ DEP_CPP_ALIGN=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\group.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
@@ -244,6 +248,7 @@ DEP_CPP_ARGS_=\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\Monitor.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\style.h"\
@@ -270,6 +275,7 @@ DEP_CPP_BARGR=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\group.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -288,6 +294,7 @@ DEP_CPP_BMPIM=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\image.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\sharedimage.h"\
 	"..\..\fltk\symbol.h"\
@@ -316,6 +323,7 @@ DEP_CPP_BROWS=\
 	"..\..\fltk\item.h"\
 	"..\..\fltk\layout.h"\
 	"..\..\fltk\menu.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\scrollbar.h"\
 	"..\..\fltk\slider.h"\
@@ -338,6 +346,7 @@ DEP_CPP_BUTTO=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\group.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -356,6 +365,7 @@ DEP_CPP_CHECK=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\group.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -377,6 +387,7 @@ DEP_CPP_CHOIC=\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\item.h"\
 	"..\..\fltk\menu.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -393,6 +404,7 @@ DEP_CPP_CLIP_=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
@@ -415,6 +427,7 @@ DEP_CPP_CLOCK=\
 	"..\..\fltk\events.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
@@ -429,6 +442,7 @@ DEP_CPP_COLOR=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
@@ -457,6 +471,7 @@ DEP_CPP_COLOR_=\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\menu.h"\
 	"..\..\fltk\numericinput.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\popupmenu.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\returnbutton.h"\
@@ -488,6 +503,7 @@ DEP_CPP_COMBO=\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\input.h"\
 	"..\..\fltk\menu.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -515,6 +531,7 @@ DEP_CPP_CURSO=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
@@ -540,6 +557,7 @@ DEP_CPP_CYCLE=\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\item.h"\
 	"..\..\fltk\menu.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -555,6 +573,7 @@ DEP_CPP_DEFAU=\
 	"..\..\fltk\draw.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -574,6 +593,7 @@ DEP_CPP_DIAL_=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\math.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -590,6 +610,7 @@ DEP_CPP_DIAMO=\
 	"..\..\fltk\draw.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -608,6 +629,7 @@ DEP_CPP_DND_C=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\style.h"\
@@ -630,6 +652,7 @@ DEP_CPP_DRAW_=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
@@ -648,6 +671,7 @@ DEP_CPP_DRAWI=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\font.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\win32.h"\
@@ -669,6 +693,7 @@ DEP_CPP_DRAWT=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\font.h"\
 	"..\..\fltk\math.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -688,6 +713,7 @@ DEP_CPP_ENGRA=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\labeltype.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
@@ -703,6 +729,7 @@ DEP_CPP_ERROR=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\utf.h"\
 	"..\..\fltk\win32.h"\
@@ -720,6 +747,7 @@ DEP_CPP_EVENT=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
@@ -777,6 +805,7 @@ DEP_CPP_FILEB=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\menu.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\scrollbar.h"\
 	"..\..\fltk\slider.h"\
@@ -807,6 +836,7 @@ DEP_CPP_FILEC=\
 	"..\..\fltk\image.h"\
 	"..\..\fltk\input.h"\
 	"..\..\fltk\menu.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\returnbutton.h"\
 	"..\..\fltk\scrollbar.h"\
@@ -863,6 +893,7 @@ DEP_CPP_FILEI=\
 	"..\..\fltk\filename.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
@@ -878,6 +909,7 @@ DEP_CPP_FILEIC=\
 	"..\..\fltk\filename.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	".\config.h"\
 	".\fltk\string.h"\
@@ -916,6 +948,7 @@ DEP_CPP_FILENA=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\utf.h"\
 	"..\..\fltk\win32.h"\
@@ -974,6 +1007,7 @@ DEP_CPP_FILLA=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\math.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
@@ -990,6 +1024,7 @@ DEP_CPP_FILLR=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\math.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
@@ -1043,6 +1078,7 @@ DEP_CPP_FLTK_=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\Monitor.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\utf.h"\
@@ -1069,6 +1105,7 @@ DEP_CPP_FONT_=\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\math.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\utf.h"\
@@ -1096,6 +1133,7 @@ DEP_CPP_GIFIM=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\image.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\sharedimage.h"\
 	"..\..\fltk\symbol.h"\
@@ -1117,6 +1155,7 @@ DEP_CPP_GROUP=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\layout.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -1150,6 +1189,7 @@ DEP_CPP_IMAGE=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\image.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -1172,6 +1212,7 @@ DEP_CPP_INPUT=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\input.h"\
 	"..\..\fltk\math.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -1197,6 +1238,7 @@ DEP_CPP_INPUTB=\
 	"..\..\fltk\menu.h"\
 	"..\..\fltk\menuwindow.h"\
 	"..\..\fltk\Monitor.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\scrollbar.h"\
 	"..\..\fltk\slider.h"\
@@ -1236,6 +1278,7 @@ DEP_CPP_ITEM_=\
 	"..\..\fltk\item.h"\
 	"..\..\fltk\itemgroup.h"\
 	"..\..\fltk\menu.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -1252,6 +1295,7 @@ DEP_CPP_KEY_N=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
@@ -1272,6 +1316,7 @@ DEP_CPP_LIGHT=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\lightbutton.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -1289,6 +1334,7 @@ DEP_CPP_LIST_=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\font.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\utf.h"\
@@ -1313,6 +1359,7 @@ DEP_CPP_LOAD_=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\load_plugin.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\utf.h"\
 	"..\..\fltk\win32.h"\
@@ -1402,6 +1449,7 @@ DEP_CPP_MENU_P=\
 	"..\..\fltk\menu.h"\
 	"..\..\fltk\menuwindow.h"\
 	"..\..\fltk\Monitor.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\style.h"\
@@ -1426,6 +1474,7 @@ DEP_CPP_MENUB=\
 	"..\..\fltk\menu.h"\
 	"..\..\fltk\menubar.h"\
 	"..\..\fltk\menuwindow.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -1447,6 +1496,7 @@ DEP_CPP_MENUW=\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\menuwindow.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
@@ -1468,6 +1518,7 @@ DEP_CPP_MESSA=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\input.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\returnbutton.h"\
 	"..\..\fltk\secretinput.h"\
@@ -1485,6 +1536,7 @@ DEP_CPP_MULTI=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\multiimage.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\symbol.h"\
 	
@@ -1517,6 +1569,7 @@ DEP_CPP_OUTPU=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\input.h"\
 	"..\..\fltk\output.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
@@ -1531,6 +1584,7 @@ DEP_CPP_OVALB=\
 	"..\..\fltk\draw.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -1545,6 +1599,7 @@ DEP_CPP_OVERL=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
@@ -1560,6 +1615,7 @@ DEP_CPP_OWN_C=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\visual.h"\
 	"..\..\fltk\win32.h"\
@@ -1578,6 +1634,7 @@ DEP_CPP_PACKE=\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\layout.h"\
 	"..\..\fltk\packedgroup.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -1594,6 +1651,7 @@ DEP_CPP_PATH_=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\math.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
@@ -1610,6 +1668,7 @@ DEP_CPP_PLAST=\
 	"..\..\fltk\draw.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -1629,6 +1688,7 @@ DEP_CPP_POPUP=\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\item.h"\
 	"..\..\fltk\menu.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\popupmenu.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
@@ -1646,6 +1706,7 @@ DEP_CPP_PROGR=\
 	"..\..\fltk\draw.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\progressbar.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
@@ -1664,6 +1725,7 @@ DEP_CPP_RADIO=\
 	"..\..\fltk\draw.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\radiobutton.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
@@ -1680,6 +1742,7 @@ DEP_CPP_READI=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
@@ -1715,6 +1778,7 @@ DEP_CPP_RETUR=\
 	"..\..\fltk\events.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\returnbutton.h"\
 	"..\..\fltk\style.h"\
@@ -1732,6 +1796,7 @@ DEP_CPP_RGBIM=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\image.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\rgbimage.h"\
 	"..\..\fltk\symbol.h"\
@@ -1749,6 +1814,7 @@ DEP_CPP_ROUND=\
 	"..\..\fltk\draw.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -1763,6 +1829,7 @@ DEP_CPP_ROUNDE=\
 	"..\..\fltk\draw.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -1790,6 +1857,7 @@ DEP_CPP_RUN_C=\
 	"..\..\fltk\menu.h"\
 	"..\..\fltk\menuwindow.h"\
 	"..\..\fltk\Monitor.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\scrollbar.h"\
@@ -1833,6 +1901,7 @@ DEP_CPP_SCROL=\
 	"..\..\fltk\events.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\scrollbar.h"\
 	"..\..\fltk\slider.h"\
@@ -1856,6 +1925,7 @@ DEP_CPP_SCROLL=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\layout.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\scrollbar.h"\
 	"..\..\fltk\scrollgroup.h"\
@@ -1877,6 +1947,7 @@ DEP_CPP_SCROLLR=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
@@ -1895,6 +1966,7 @@ DEP_CPP_SETCO=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
@@ -1923,6 +1995,7 @@ DEP_CPP_SETVI=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\visual.h"\
 	"..\..\fltk\win32.h"\
@@ -1939,6 +2012,7 @@ DEP_CPP_SHADO=\
 	"..\..\fltk\draw.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -1955,6 +2029,7 @@ DEP_CPP_SHAPE=\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\image.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\shapedwindow.h"\
 	"..\..\fltk\style.h"\
@@ -1977,6 +2052,7 @@ DEP_CPP_SHARE=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\image.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\sharedimage.h"\
 	"..\..\fltk\symbol.h"\
@@ -2014,6 +2090,7 @@ DEP_CPP_SHOW_=\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\menuwindow.h"\
 	"..\..\fltk\Monitor.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\show_colormap.h"\
 	"..\..\fltk\style.h"\
@@ -2034,6 +2111,7 @@ DEP_CPP_SLIDE=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\math.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\slider.h"\
 	"..\..\fltk\style.h"\
@@ -2111,6 +2189,7 @@ DEP_CPP_SYMBO=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\math.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\symbol.h"\
 	
@@ -2129,6 +2208,7 @@ DEP_CPP_TABGR=\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\layout.h"\
 	"..\..\fltk\menuwindow.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -2160,6 +2240,7 @@ DEP_CPP_TEXTD=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\group.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\scrollbar.h"\
 	"..\..\fltk\slider.h"\
@@ -2204,6 +2285,7 @@ DEP_CPP_THUMB=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\math.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -2238,6 +2320,7 @@ DEP_CPP_TILEDI=\
 	"..\..\fltk\draw.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\symbol.h"\
 	"..\..\fltk\tiledimage.h"\
@@ -2256,6 +2339,7 @@ DEP_CPP_TOOLT=\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\menuwindow.h"\
 	"..\..\fltk\Monitor.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\style.h"\
@@ -2277,6 +2361,7 @@ DEP_CPP_UPBOX=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\math.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -2326,6 +2411,7 @@ DEP_CPP_VALUE=\
 	"..\..\fltk\input.h"\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\numericinput.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -2345,6 +2431,7 @@ DEP_CPP_VALUEO=\
 	"..\..\fltk\events.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\style.h"\
@@ -2364,6 +2451,7 @@ DEP_CPP_VALUES=\
 	"..\..\fltk\draw.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\slider.h"\
 	"..\..\fltk\style.h"\
@@ -2415,6 +2503,7 @@ DEP_CPP_WIDGET=\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\image.h"\
 	"..\..\fltk\labeltype.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
@@ -2437,6 +2526,7 @@ DEP_CPP_WINDO=\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\layout.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\run.h"\
 	"..\..\fltk\style.h"\
@@ -2459,6 +2549,7 @@ DEP_CPP_WINDOW=\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\Monitor.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
@@ -2480,6 +2571,7 @@ DEP_CPP_WINDOW_=\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\Monitor.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
@@ -2498,6 +2590,7 @@ DEP_CPP_WINDOW_I=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
@@ -2522,6 +2615,7 @@ DEP_CPP_XBMIM=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\image.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\symbol.h"\
 	"..\..\fltk\win32.h"\
@@ -2540,6 +2634,7 @@ DEP_CPP_XPMIM=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\image.h"\
 	"..\..\fltk\mac.h"\
+	"..\..\fltk\PixelType.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
