@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.60 2002/12/10 02:01:03 easysw Exp $"
+# "$Id: Makefile,v 1.61 2002/12/13 04:54:08 easysw Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -104,9 +104,10 @@ thread_test: thread_test.cxx $(FLLIB)
 jpeg_image: jpeg_image.cxx
 	$(CXX) -I.. $(CXXFLAGS) -I../../../local/jpeg-6b -L../../../local/jpeg-6b jpeg_image.cxx -L../lib -lfltk $(LDLIBS) $(IMAGELIBS) -lXext -o $@
 
-depend:
-	$(MAKEDEPEND) -I.. $(CXXFLAGS) $(CPPFILES) > makedepend
+depend:	$(CPPFILES)
+	makedepend -Y -I.. -f makedepend $(CPPFILES)
 
+# Automatically generated dependencies...
 include makedepend
 
 clean:
@@ -125,5 +126,5 @@ install_shared:
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.60 2002/12/10 02:01:03 easysw Exp $".
+# End of "$Id: Makefile,v 1.61 2002/12/13 04:54:08 easysw Exp $".
 #

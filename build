@@ -1,5 +1,0 @@
-#!/bin/sh
-
-# Assuming GCC
-
-./build.gcc

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.42 2002/12/10 02:00:31 easysw Exp $"
+# "$Id: Makefile,v 1.43 2002/12/13 04:54:06 easysw Exp $"
 #
 # Fluid makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -48,7 +48,6 @@ CPPFILES = \
 ################################################################
 
 OBJECTS = $(CPPFILES:.cxx=.o)
-OBJECTSDLL = $(CPPFILES:.cxx=.dll.o)
 
 include ../makeinclude
 
@@ -64,11 +63,12 @@ $(PROGRAM) : $(OBJECTS) $(FLLIB) $(FLIMAGESLIB)
 	$(CXX) -o $(PROGRAM) $(OBJECTS) $(IMAGELIBS) $(LDLIBS) $(JPEGLIBS) $(PNGLIBS)
 
 clean :
-	-@ rm -f *.o $(PROGRAM) $(PROGRAM).exe $(CLEAN) core *~ makedepend
-	@touch makedepend
+	-@ rm -f *.o $(PROGRAM) $(PROGRAM).exe $(CLEAN) core *~
 
-depend:
-	$(MAKEDEPEND) -I.. $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
+depend:	$(CPPFILES)
+	makedepend -Y -I.. -f makedepend $(CPPFILES)
+
+# Automatically generated dependencies...
 include makedepend
 
 install: $(INSTALLTARGETS)
@@ -105,5 +105,5 @@ rebuild:
 	./fluid -c coding_style.fl
 
 #
-# End of "$Id: Makefile,v 1.42 2002/12/10 02:00:31 easysw Exp $".
+# End of "$Id: Makefile,v 1.43 2002/12/13 04:54:06 easysw Exp $".
 #

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.16 2002/12/10 02:00:37 easysw Exp $"
+# "$Id: Makefile,v 1.17 2002/12/13 04:54:07 easysw Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -61,16 +61,16 @@ $(LIBRARY).a: $(OBJECTS)
 	$(LIBCOMMAND) $@ $(OBJECTS)
 	$(RANLIB) $@
 
-$(DSO).so.2 $(DSO).sl.2: $(OBJECTS:.o=.shared.o)
+$(DSO).so.2 $(DSO).sl.2: $(OBJECTS)
 	@rm -f $@
-	$(DSOCOMMAND) $(DSONAME) $(OBJECTS:.o=.shared.o) $(DSOLIBS)
+	$(DSOCOMMAND) $(DSONAME) $(OBJECTS) $(DSOLIBS)
 	mv $(DSONAME) $@
 
 DLLIMPORTLIBS = ../lib/$(LIBNAME).2.dll$(LIBEXT)
 DLLIMPORTNAME = $(LIBNAME)_images.2.dll$(LIBEXT)
-$(DSO).2.dll: $(OBJECTS:.o=.shared.o)
+$(DSO).2.dll: $(OBJECTS)
 	@rm -f $@
-	$(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o) $(DSOLIBS) $(DLLIMPORTLIBS)
+	$(DSOCOMMAND) $@ $(OBJECTS) $(DSOLIBS) $(DLLIMPORTLIBS)
 	mv $@.import ../lib/$(DLLIMPORTNAME)
 
 
@@ -80,15 +80,12 @@ $(DSO).2.dll: $(OBJECTS:.o=.shared.o)
 
 clean :
 	@rm -f *.o $(DEMOS) $(LIBRARY)$(LIBEXT) $(DSO)$(DSOEXT) \
-	       ../lib/$(DLLIMPORTNAME) core *~ makedepend
-	@touch makedepend
+	       ../lib/$(DLLIMPORTNAME) core *~
 
-depend:
-	$(MAKEDEPEND) -I.. $(CXXFLAGS) $(CPPFILES) > makedepend
-	sed -e "s'\.o'\.shared\.o'" makedepend > foo
-	cat foo >> makedepend
-	rm foo
+depend:	$(CPPFILES)
+	makedepend -Y -I.. -f makedepend $(CPPFILES)
 
+# Automatically generated dependencies...
 include makedepend
 
 ################################################################
@@ -116,5 +113,5 @@ install_shared: shared
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.16 2002/12/10 02:00:37 easysw Exp $".
+# End of "$Id: Makefile,v 1.17 2002/12/13 04:54:07 easysw Exp $".
 #

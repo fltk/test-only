@@ -1,4 +1,5 @@
-# "$Id: Makefile,v 1.28 2002/12/10 01:46:14 easysw Exp $"
+#
+# "$Id: Makefile,v 1.29 2002/12/13 04:54:04 easysw Exp $"
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -19,91 +20,71 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA.
 #
-# Please report all bugs and problems to "fltk-bugs@easysw.com".
+# Please report all bugs and problems to "fltk-bugs@fltk.org".
 #
 
-SHELL=/bin/sh
+include makeinclude
 
-DIRS	= src images fluid OpenGL themes test
-# forms and glut are removed for now
+DIRS	=	src images OpenGL fluid test documentation
 
-GENERATED = makeinclude fltk-config
-
-all: $(GENERATED)
-	@for dir in $(DIRS); do\
-		if test ! -f $$dir/makedepend; then\
-			touch $$dir/makedepend;\
-		fi;\
+all: makeinclude
+	for dir in $(DIRS); do\
+		echo "=== making $$dir ===";\
 		(cd $$dir; $(MAKE) $(MFLAGS)) || break;\
 	done
 
-static: $(GENERATED)
-	@for dir in $(DIRS); do\
-		if test ! -f $$dir/makedepend; then\
-			touch $$dir/makedepend;\
-		fi;\
-		(cd $$dir; $(MAKE) $(MFLAGS) static) || break;\
-	done
-
-shared: $(GENERATED)
-	@for dir in $(DIRS); do\
-		if test ! -f $$dir/makedepend; then\
-			touch $$dir/makedepend;\
-		fi;\
-		(cd $$dir; $(MAKE) $(MFLAGS) shared) || break;\
-	done
-
-install: $(GENERATED)
-	@for dir in $(DIRS); do\
-		if test ! -f $$dir/makedepend; then\
-			touch $$dir/makedepend;\
-		fi;\
+install: makeinclude
+	-mkdir -p $(bindir)
+	$(RM) $(bindir)/fltk-config
+	-cp fltk-config $(bindir)
+	-chmod 755 $(bindir)/fltk-config
+	for dir in FL $(DIRS); do\
+		echo "=== installing $$dir ===";\
 		(cd $$dir; $(MAKE) $(MFLAGS) install) || break;\
 	done
 
-install_static: $(GENERATED)
-	@for dir in $(DIRS); do\
-		if test ! -f $$dir/makedepend; then\
-			touch $$dir/makedepend;\
-		fi;\
-		(cd $$dir; $(MAKE) $(MFLAGS) install_static) || break;\
+uninstall: makeinclude
+	$(RM) $(bindir)/fltk-config
+	for dir in FL $(DIRS); do\
+		echo "=== uninstalling $$dir ===";\
+		(cd $$dir; $(MAKE) $(MFLAGS) uninstall) || break;\
 	done
 
-install_shared: $(GENERATED)
-	@for dir in $(DIRS); do\
-		if test ! -f $$dir/makedepend; then\
-			touch $$dir/makedepend;\
-		fi;\
-		(cd $$dir; $(MAKE) $(MFLAGS) install_shared) || break;\
-	done
-
-install_programs: $(GENERATED)
-	@for dir in $(DIRS); do\
-		if test ! -f $$dir/makedepend; then\
-			touch $$dir/makedepend;\
-		fi;\
-		(cd $$dir; $(MAKE) $(MFLAGS) install_programs) || break;\
-	done
-
-depend: $(GENERATED)
-	@for dir in $(DIRS); do\
-		if test ! -f $$dir/makedepend; then\
-			touch $$dir/makedepend;\
-		fi;\
-		(cd $$dir;$(MAKE) $(MFLAGS) depend) || break;\
+depend: makeinclude
+	for dir in $(DIRS); do\
+		echo "=== making dependencies in $$dir ===";\
+		(cd $$dir; $(MAKE) $(MFLAGS) depend) || break;\
 	done
 
 clean:
-	-@ rm -f core *~ *.o *.bck
-	@for dir in $(DIRS); do\
-		(cd $$dir;$(MAKE) $(MFLAGS) clean) || break;\
+	-$(RM) core *.o
+	for dir in $(DIRS); do\
+		echo "=== cleaning $$dir ===";\
+		(cd $$dir; $(MAKE) $(MFLAGS) clean) || break;\
 	done
 
 distclean: clean
-	rm -f config.* makeinclude fltk-config
+	$(RM) config.*
+	$(RM) fltk-config fltk.list makeinclude
+	$(RM) FL/Makefile
+	$(RM) documentation/*.$(CAT1EXT)
+	$(RM) documentation/*.$(CAT3EXT)
+	$(RM) documentation/fltk.pdf
+	$(RM) documentation/fltk.ps
+	$(RM) -r documentation/fltk.d
+	for file in test/*.fl; do\
+		$(RM) test/`basename $file .fl`.cxx; \
+		$(RM) test/`basename $file .fl`.h; \
+	done
 
-$(GENERATED) : configure configh.in makeinclude.in fltk-config.in
-	./configure
+makeinclude: configure configh.in makeinclude.in
+	if test -f config.status; then \
+		./config.status --recheck; \
+		./config.status; \
+	else \
+		./configure; \
+	fi
+	touch config.h
 
 configure: configure.in
 	autoconf
@@ -114,6 +95,7 @@ portable-dist:
 native-dist:
 	epm -v -f native fltk
 
+
 #
-# End of "$Id: Makefile,v 1.28 2002/12/10 01:46:14 easysw Exp $".
+# End of "$Id: Makefile,v 1.29 2002/12/13 04:54:04 easysw Exp $".
 #

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.106 2002/12/10 02:00:54 easysw Exp $"
+# "$Id: Makefile,v 1.107 2002/12/13 04:54:07 easysw Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -21,6 +21,17 @@
 # USA.
 #
 # Please report all bugs and problems to "fltk-bugs@fltk.org".
+#
+
+#
+# Include common definitions...
+#
+
+include ../makeinclude
+
+
+#
+# Files for this directory...
 #
 
 CPPFILES = \
@@ -148,63 +159,92 @@ CPPFILES = \
 	fl_vertex.cxx \
 	fltk_theme.cxx
 
-CFILES = \
+CFILES	= \
 	scandir.c \
 	vsnprintf.c
 
-################################################################
+LIBNAME	=	../lib/$(LIBPREFIX)fltk$(LIBSUFFIX)
+DSONAME	=	../lib/$(DSOPREFIX)fltk$(DSOSUFFIX)
+OBJECTS =	$(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
-include ../makeinclude
-DSOCFLAGS += -DFL_LIBRARY
-DSOCXXFLAGS += -DFL_LIBRARY
 
-LIBRARY = ../lib/$(LIBNAME)
-DSO = ../lib/$(DSOLIBNAME)
-DSONAME = $(DSOLIBNAME)$(DSOEXT)
+#
+# Make everything...
+#
 
-OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
+all:		$(LIBTARGET) $(DSOTARGET)
 
-all: $(BUILDTARGETS)
+static:		$(LIBNAME)
 
-static: $(LIBRARY)$(LIBEXT)
+shared:		$(DSONAME)
 
-shared: $(DSO)$(DSOEXT)
 
-programs:
+#
+# Clean old files...
+#
 
-$(LIBRARY).a: $(OBJECTS) fl_call_main.o
-	@rm -f $@
-	@echo $(LIBCOMMAND) $@ ...
-	@$(LIBCOMMAND) $@ $(OBJECTS) fl_call_main.o
-	@$(RANLIB) $@
+clean:
+	$(RM) *.bck
+	$(RM) *.o
+	$(RM) core*
+	$(RM) $(LIBNAME)
+	$(RM) $(DSONAME)
 
-$(DSO).so.2 $(DSO).sl.2: $(OBJECTS:.o=.shared.o)
-	@rm -f $@
-	@echo $(DSOCOMMAND) $(DSONAME) ...
-	@$(DSOCOMMAND) $(DSONAME) $(OBJECTS:.o=.shared.o) $(DSOLIBS)
-	@mv $(DSONAME) $@
-
-DLLIMPORTNAME = $(LIBNAME).2.dll$(LIBEXT)
-$(DSO).2.dll: $(OBJECTS:.o=.shared.o)
-	@-rm -f $@
-	@echo $(DSOCOMMAND) $@ ...
-	@$(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o) $(DSOLIBS)
-	-mv $@.import ../lib/$(DLLIMPORTNAME)
-
-clean :
-	@rm -f *.o $(LIBRARY)$(LIBEXT) $(DSO)$(DSOEXT) ../lib/$(DLLIMPORTNAME) \
-	       core *~ ../include/*~ makedepend cmap
-	@touch makedepend
+#
+# Make dependencies, excluding standard include directories...
+#
 
 depend:
-	$(MAKEDEPEND) -I.. $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
-	sed -e "s'\.o'\.shared\.o'" makedepend > foo
-	cat foo >> makedepend
-	rm foo
+	makedepend -Y -I.. -f makedepend $(CPPFILES) $(CFILES)
+
+
+#
+# Include automatically generated dependencies...
+#
 
 include makedepend
 
-################################################################
+
+#
+# Make static libraries...
+#
+
+$(LIBNAME):	$(OBJECTS)
+	$(RM) $@
+	echo $(LIBCOMMAND) $@ ...
+	$(LIBCOMMAND) $@ $(OBJECTS)
+	$(RANLIB) $@
+
+../lib/libfltk.so.2.0: $(OBJECTS)
+	echo $(DSOCOMMAND) $@ ...
+	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
+	-$(RM) ../lib/libfltk.so
+	$(LN) libfltk.so.2.0 ../lib/libfltk.so
+
+../lib/libfltk.sl.2.0: $(OBJECTS)
+	echo $(DSOCOMMAND) $@ ...
+	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
+	-$(RM) ../lib/libfltk.sl
+	$(LN) libfltk.sl.2.0 ../lib/libfltk.sl
+
+../lib/libfltk.2.0.dylib: $(OBJECTS)
+	echo $(DSOCOMMAND) $@ ...
+	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
+	-$(RM) ../lib/libfltk.dylib
+	$(LN) libfltk.2.0.dylib ../lib/libfltk.dylib
+
+../lib/libfltk_s.a: $(OBJECTS)
+	echo $(DSOCOMMAND) ../lib/libfltk_s.o ...
+	$(DSOCOMMAND) ../lib/libfltk_s.o $(OBJECTS) $(IMAGELIBS)
+	echo $(LIBCOMMAND) ../lib/libfltk_s.a ../lib/libfltk_s.o
+	-$(RM) $@
+	$(LIBCOMMAND) ../lib/libfltk_s.a ../lib/libfltk_s.o
+	$(CHMOD) +x ../lib/libfltk_s.a
+
+
+#
+# Install everything...
+#
 
 install: $(INSTALLTARGETS)
 
@@ -242,6 +282,7 @@ install_shared: shared
 
 install_programs:
 
+
 #
-# End of "$Id: Makefile,v 1.106 2002/12/10 02:00:54 easysw Exp $".
+# End of "$Id: Makefile,v 1.107 2002/12/13 04:54:07 easysw Exp $".
 #

@@ -51,10 +51,10 @@ INTERNET RESOURCES
 
 	- CVS:	 http://fltk.sourceforge.net
 
-	- FTP:   ftp://ftp.easysw.com/pub/fltk
-                 ftp://ftp2.easysw.com/pub/fltk
+	- FTP:   ftp://ftp.fltk.org/pub/fltk
+                 ftp://ftp2.fltk.org/pub/fltk
                  ftp://ftp.northamerica.net/pub/ESP/fltk
-        	 ftp://ftp.funet.fi/mirrors/ftp.easysw.com/pub/fltk
+        	 ftp://ftp.funet.fi/mirrors/ftp.fltk.org/pub/fltk
 
 	- EMail: fltk@fltk.org [see instructions below]
         	 fltk-bugs@fltk.org [for reporting bugs]
@@ -97,7 +97,7 @@ COPYRIGHT
 	Robert Kesterson <robertk@robertk.com>
 	Matthias Melcher <matthias@mediaone.net>
 	Vincent Penne <vincent.penne@wanadoo.fr>
-        Michael Sweet <mike@easysw.com>
+        Michael Sweet <mike@fltk.org>
 	Carl Thompson <cet@carlthompson.net>
 
     This library is free software; you can redistribute it and/or

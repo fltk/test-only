@@ -1,0 +1,453 @@
+Alternative.o: Alternative.cxx ../fltk/Box.h ../fltk/Color.h \
+  ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Style.h ../fltk/Widget.h \
+  ../fltk/Button.h ../fltk/draw.h
+classic.o: classic.cxx ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
+  ../fltk/FL_API.h ../fltk/Flags.h ../fltk/CheckButton.h ../fltk/Button.h \
+  ../fltk/Scrollbar.h ../fltk/Slider.h ../fltk/Valuator.h ../fltk/Input.h \
+  ../fltk/Output.h ../fltk/Box.h /usr/include/string.h \
+  /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/gnu/stubs.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stddef.h \
+  ../fltk/LabelType.h
+essai.o: essai.cxx ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
+  ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Window.h ../fltk/Group.h \
+  ../fltk/draw.h /usr/include/stdio.h /usr/include/features.h \
+  /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stddef.h \
+  /usr/include/bits/types.h /usr/include/bits/pthreadtypes.h \
+  /usr/include/bits/sched.h /usr/include/libio.h /usr/include/_G_config.h \
+  /usr/include/wchar.h /usr/include/bits/wchar.h /usr/include/gconv.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+  /usr/include/string.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/confname.h \
+  /usr/include/getopt.h ../fltk/Box.h ../fltk/SharedImage.h \
+  ../fltk/Image.h ../fltk/TiledImage.h
+KDE.o: KDE.cxx ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
+  ../fltk/FL_API.h ../fltk/Flags.h ../fltk/draw.h ../fltk/ScreenInfo.h \
+  ../fltk/events.h /usr/include/stdio.h /usr/include/features.h \
+  /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stddef.h \
+  /usr/include/bits/types.h /usr/include/bits/pthreadtypes.h \
+  /usr/include/bits/sched.h /usr/include/libio.h /usr/include/_G_config.h \
+  /usr/include/wchar.h /usr/include/bits/wchar.h /usr/include/gconv.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+  /usr/include/string.h /usr/include/stdlib.h /usr/include/sys/types.h \
+  /usr/include/time.h /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/alloca.h conf.h \
+  /usr/include/sys/stat.h /usr/include/bits/stat.h /usr/include/fcntl.h \
+  /usr/include/bits/fcntl.h /usr/include/ctype.h /usr/include/errno.h \
+  /usr/include/bits/errno.h /usr/include/linux/errno.h \
+  /usr/include/asm/errno.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/limits.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/confname.h \
+  /usr/include/getopt.h ../fltk/x.h /usr/X11R6/include/X11/Xlib.h \
+  /usr/X11R6/include/X11/X.h /usr/X11R6/include/X11/Xfuncproto.h \
+  /usr/X11R6/include/X11/Xosdefs.h /usr/X11R6/include/X11/Xutil.h \
+  /usr/X11R6/include/X11/Xatom.h
+motif.o: motif.cxx ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
+  ../fltk/FL_API.h ../fltk/Flags.h ../fltk/CheckButton.h ../fltk/Button.h \
+  ../fltk/Scrollbar.h ../fltk/Slider.h ../fltk/Valuator.h ../fltk/Input.h \
+  ../fltk/Output.h ../fltk/Box.h ../fltk/draw.h ../fltk/LabelType.h
+none.o: none.cxx
+scheme.o: scheme.cxx /usr/include/stdio.h /usr/include/features.h \
+  /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stddef.h \
+  /usr/include/bits/types.h /usr/include/bits/pthreadtypes.h \
+  /usr/include/bits/sched.h /usr/include/libio.h /usr/include/_G_config.h \
+  /usr/include/wchar.h /usr/include/bits/wchar.h /usr/include/gconv.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+  /usr/include/string.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/limits.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/stdlib.h \
+  /usr/include/sys/types.h /usr/include/time.h /usr/include/endian.h \
+  /usr/include/bits/endian.h /usr/include/sys/select.h \
+  /usr/include/bits/select.h /usr/include/bits/sigset.h \
+  /usr/include/bits/time.h /usr/include/sys/sysmacros.h \
+  /usr/include/alloca.h ../fltk/load_plugin.h ../fltk/FL_API.h \
+  ../fltk/Color.h ../fltk/Flags.h ../fltk/Font.h ../fltk/Style.h \
+  ../fltk/LabelType.h ../fltk/Widget.h ../fltk/Box.h conf.h \
+  /usr/include/sys/stat.h /usr/include/bits/stat.h /usr/include/fcntl.h \
+  /usr/include/bits/fcntl.h /usr/include/ctype.h /usr/include/errno.h \
+  /usr/include/bits/errno.h /usr/include/linux/errno.h \
+  /usr/include/asm/errno.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/confname.h \
+  /usr/include/getopt.h
+windows.o: windows.cxx ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h \
+  ../fltk/FL_API.h ../fltk/Flags.h
+conf.o: conf.c
+conf_del.o: conf_del.c conf.h /usr/include/sys/types.h \
+  /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/gnu/stubs.h /usr/include/bits/types.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stddef.h \
+  /usr/include/bits/pthreadtypes.h /usr/include/bits/sched.h \
+  /usr/include/time.h /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/stdlib.h \
+  /usr/include/alloca.h /usr/include/stdio.h /usr/include/libio.h \
+  /usr/include/_G_config.h /usr/include/wchar.h /usr/include/bits/wchar.h \
+  /usr/include/gconv.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+  /usr/include/string.h /usr/include/bits/string.h \
+  /usr/include/bits/string2.h /usr/include/sys/stat.h \
+  /usr/include/bits/stat.h /usr/include/fcntl.h /usr/include/bits/fcntl.h \
+  /usr/include/ctype.h /usr/include/errno.h /usr/include/bits/errno.h \
+  /usr/include/linux/errno.h /usr/include/asm/errno.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/limits.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/confname.h \
+  /usr/include/getopt.h ../config.h
+conf_endtrim.o: conf_endtrim.c conf.h /usr/include/sys/types.h \
+  /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/gnu/stubs.h /usr/include/bits/types.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stddef.h \
+  /usr/include/bits/pthreadtypes.h /usr/include/bits/sched.h \
+  /usr/include/time.h /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/stdlib.h \
+  /usr/include/alloca.h /usr/include/stdio.h /usr/include/libio.h \
+  /usr/include/_G_config.h /usr/include/wchar.h /usr/include/bits/wchar.h \
+  /usr/include/gconv.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+  /usr/include/string.h /usr/include/bits/string.h \
+  /usr/include/bits/string2.h /usr/include/sys/stat.h \
+  /usr/include/bits/stat.h /usr/include/fcntl.h /usr/include/bits/fcntl.h \
+  /usr/include/ctype.h /usr/include/errno.h /usr/include/bits/errno.h \
+  /usr/include/linux/errno.h /usr/include/asm/errno.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/limits.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/confname.h \
+  /usr/include/getopt.h
+conf_error.o: conf_error.c conf.h /usr/include/sys/types.h \
+  /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/gnu/stubs.h /usr/include/bits/types.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stddef.h \
+  /usr/include/bits/pthreadtypes.h /usr/include/bits/sched.h \
+  /usr/include/time.h /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/stdlib.h \
+  /usr/include/alloca.h /usr/include/stdio.h /usr/include/libio.h \
+  /usr/include/_G_config.h /usr/include/wchar.h /usr/include/bits/wchar.h \
+  /usr/include/gconv.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+  /usr/include/string.h /usr/include/bits/string.h \
+  /usr/include/bits/string2.h /usr/include/sys/stat.h \
+  /usr/include/bits/stat.h /usr/include/fcntl.h /usr/include/bits/fcntl.h \
+  /usr/include/ctype.h /usr/include/errno.h /usr/include/bits/errno.h \
+  /usr/include/linux/errno.h /usr/include/asm/errno.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/limits.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/confname.h \
+  /usr/include/getopt.h
+conf_getboolean.o: conf_getboolean.c conf.h /usr/include/sys/types.h \
+  /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/gnu/stubs.h /usr/include/bits/types.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stddef.h \
+  /usr/include/bits/pthreadtypes.h /usr/include/bits/sched.h \
+  /usr/include/time.h /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/stdlib.h \
+  /usr/include/alloca.h /usr/include/stdio.h /usr/include/libio.h \
+  /usr/include/_G_config.h /usr/include/wchar.h /usr/include/bits/wchar.h \
+  /usr/include/gconv.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+  /usr/include/string.h /usr/include/bits/string.h \
+  /usr/include/bits/string2.h /usr/include/sys/stat.h \
+  /usr/include/bits/stat.h /usr/include/fcntl.h /usr/include/bits/fcntl.h \
+  /usr/include/ctype.h /usr/include/errno.h /usr/include/bits/errno.h \
+  /usr/include/linux/errno.h /usr/include/asm/errno.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/limits.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/confname.h \
+  /usr/include/getopt.h ../config.h
+conf_get.o: conf_get.c conf.h /usr/include/sys/types.h \
+  /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/gnu/stubs.h /usr/include/bits/types.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stddef.h \
+  /usr/include/bits/pthreadtypes.h /usr/include/bits/sched.h \
+  /usr/include/time.h /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/stdlib.h \
+  /usr/include/alloca.h /usr/include/stdio.h /usr/include/libio.h \
+  /usr/include/_G_config.h /usr/include/wchar.h /usr/include/bits/wchar.h \
+  /usr/include/gconv.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+  /usr/include/string.h /usr/include/bits/string.h \
+  /usr/include/bits/string2.h /usr/include/sys/stat.h \
+  /usr/include/bits/stat.h /usr/include/fcntl.h /usr/include/bits/fcntl.h \
+  /usr/include/ctype.h /usr/include/errno.h /usr/include/bits/errno.h \
+  /usr/include/linux/errno.h /usr/include/asm/errno.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/limits.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/confname.h \
+  /usr/include/getopt.h ../fltk/vsnprintf.h ../config.h
+conf_getlong.o: conf_getlong.c conf.h /usr/include/sys/types.h \
+  /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/gnu/stubs.h /usr/include/bits/types.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stddef.h \
+  /usr/include/bits/pthreadtypes.h /usr/include/bits/sched.h \
+  /usr/include/time.h /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/stdlib.h \
+  /usr/include/alloca.h /usr/include/stdio.h /usr/include/libio.h \
+  /usr/include/_G_config.h /usr/include/wchar.h /usr/include/bits/wchar.h \
+  /usr/include/gconv.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+  /usr/include/string.h /usr/include/bits/string.h \
+  /usr/include/bits/string2.h /usr/include/sys/stat.h \
+  /usr/include/bits/stat.h /usr/include/fcntl.h /usr/include/bits/fcntl.h \
+  /usr/include/ctype.h /usr/include/errno.h /usr/include/bits/errno.h \
+  /usr/include/linux/errno.h /usr/include/asm/errno.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/limits.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/confname.h \
+  /usr/include/getopt.h ../config.h
+conf_keys.o: conf_keys.c conf.h /usr/include/sys/types.h \
+  /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/gnu/stubs.h /usr/include/bits/types.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stddef.h \
+  /usr/include/bits/pthreadtypes.h /usr/include/bits/sched.h \
+  /usr/include/time.h /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/stdlib.h \
+  /usr/include/alloca.h /usr/include/stdio.h /usr/include/libio.h \
+  /usr/include/_G_config.h /usr/include/wchar.h /usr/include/bits/wchar.h \
+  /usr/include/gconv.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+  /usr/include/string.h /usr/include/bits/string.h \
+  /usr/include/bits/string2.h /usr/include/sys/stat.h \
+  /usr/include/bits/stat.h /usr/include/fcntl.h /usr/include/bits/fcntl.h \
+  /usr/include/ctype.h /usr/include/errno.h /usr/include/bits/errno.h \
+  /usr/include/linux/errno.h /usr/include/asm/errno.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/limits.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/confname.h \
+  /usr/include/getopt.h ../fltk/vsnprintf.h ../config.h
+conf_list_free.o: conf_list_free.c conf.h /usr/include/sys/types.h \
+  /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/gnu/stubs.h /usr/include/bits/types.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stddef.h \
+  /usr/include/bits/pthreadtypes.h /usr/include/bits/sched.h \
+  /usr/include/time.h /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/stdlib.h \
+  /usr/include/alloca.h /usr/include/stdio.h /usr/include/libio.h \
+  /usr/include/_G_config.h /usr/include/wchar.h /usr/include/bits/wchar.h \
+  /usr/include/gconv.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+  /usr/include/string.h /usr/include/bits/string.h \
+  /usr/include/bits/string2.h /usr/include/sys/stat.h \
+  /usr/include/bits/stat.h /usr/include/fcntl.h /usr/include/bits/fcntl.h \
+  /usr/include/ctype.h /usr/include/errno.h /usr/include/bits/errno.h \
+  /usr/include/linux/errno.h /usr/include/asm/errno.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/limits.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/confname.h \
+  /usr/include/getopt.h
+conf_sections.o: conf_sections.c conf.h /usr/include/sys/types.h \
+  /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/gnu/stubs.h /usr/include/bits/types.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stddef.h \
+  /usr/include/bits/pthreadtypes.h /usr/include/bits/sched.h \
+  /usr/include/time.h /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/stdlib.h \
+  /usr/include/alloca.h /usr/include/stdio.h /usr/include/libio.h \
+  /usr/include/_G_config.h /usr/include/wchar.h /usr/include/bits/wchar.h \
+  /usr/include/gconv.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+  /usr/include/string.h /usr/include/bits/string.h \
+  /usr/include/bits/string2.h /usr/include/sys/stat.h \
+  /usr/include/bits/stat.h /usr/include/fcntl.h /usr/include/bits/fcntl.h \
+  /usr/include/ctype.h /usr/include/errno.h /usr/include/bits/errno.h \
+  /usr/include/linux/errno.h /usr/include/asm/errno.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/limits.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/confname.h \
+  /usr/include/getopt.h ../fltk/vsnprintf.h ../config.h
+conf_setboolean.o: conf_setboolean.c conf.h /usr/include/sys/types.h \
+  /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/gnu/stubs.h /usr/include/bits/types.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stddef.h \
+  /usr/include/bits/pthreadtypes.h /usr/include/bits/sched.h \
+  /usr/include/time.h /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/stdlib.h \
+  /usr/include/alloca.h /usr/include/stdio.h /usr/include/libio.h \
+  /usr/include/_G_config.h /usr/include/wchar.h /usr/include/bits/wchar.h \
+  /usr/include/gconv.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+  /usr/include/string.h /usr/include/bits/string.h \
+  /usr/include/bits/string2.h /usr/include/sys/stat.h \
+  /usr/include/bits/stat.h /usr/include/fcntl.h /usr/include/bits/fcntl.h \
+  /usr/include/ctype.h /usr/include/errno.h /usr/include/bits/errno.h \
+  /usr/include/linux/errno.h /usr/include/asm/errno.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/limits.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/confname.h \
+  /usr/include/getopt.h
+conf_set.o: conf_set.c conf.h /usr/include/sys/types.h \
+  /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/gnu/stubs.h /usr/include/bits/types.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stddef.h \
+  /usr/include/bits/pthreadtypes.h /usr/include/bits/sched.h \
+  /usr/include/time.h /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/stdlib.h \
+  /usr/include/alloca.h /usr/include/stdio.h /usr/include/libio.h \
+  /usr/include/_G_config.h /usr/include/wchar.h /usr/include/bits/wchar.h \
+  /usr/include/gconv.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+  /usr/include/string.h /usr/include/bits/string.h \
+  /usr/include/bits/string2.h /usr/include/sys/stat.h \
+  /usr/include/bits/stat.h /usr/include/fcntl.h /usr/include/bits/fcntl.h \
+  /usr/include/ctype.h /usr/include/errno.h /usr/include/bits/errno.h \
+  /usr/include/linux/errno.h /usr/include/asm/errno.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/limits.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/confname.h \
+  /usr/include/getopt.h ../config.h
+conf_setlong.o: conf_setlong.c conf.h /usr/include/sys/types.h \
+  /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/gnu/stubs.h /usr/include/bits/types.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stddef.h \
+  /usr/include/bits/pthreadtypes.h /usr/include/bits/sched.h \
+  /usr/include/time.h /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/stdlib.h \
+  /usr/include/alloca.h /usr/include/stdio.h /usr/include/libio.h \
+  /usr/include/_G_config.h /usr/include/wchar.h /usr/include/bits/wchar.h \
+  /usr/include/gconv.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+  /usr/include/string.h /usr/include/bits/string.h \
+  /usr/include/bits/string2.h /usr/include/sys/stat.h \
+  /usr/include/bits/stat.h /usr/include/fcntl.h /usr/include/bits/fcntl.h \
+  /usr/include/ctype.h /usr/include/errno.h /usr/include/bits/errno.h \
+  /usr/include/linux/errno.h /usr/include/asm/errno.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/limits.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/confname.h \
+  /usr/include/getopt.h
+conf_strcnt.o: conf_strcnt.c conf.h /usr/include/sys/types.h \
+  /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/gnu/stubs.h /usr/include/bits/types.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stddef.h \
+  /usr/include/bits/pthreadtypes.h /usr/include/bits/sched.h \
+  /usr/include/time.h /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/stdlib.h \
+  /usr/include/alloca.h /usr/include/stdio.h /usr/include/libio.h \
+  /usr/include/_G_config.h /usr/include/wchar.h /usr/include/bits/wchar.h \
+  /usr/include/gconv.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+  /usr/include/string.h /usr/include/bits/string.h \
+  /usr/include/bits/string2.h /usr/include/sys/stat.h \
+  /usr/include/bits/stat.h /usr/include/fcntl.h /usr/include/bits/fcntl.h \
+  /usr/include/ctype.h /usr/include/errno.h /usr/include/bits/errno.h \
+  /usr/include/linux/errno.h /usr/include/asm/errno.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/limits.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/confname.h \
+  /usr/include/getopt.h
+conf_util.o: conf_util.c conf.h /usr/include/sys/types.h \
+  /usr/include/features.h /usr/include/sys/cdefs.h \
+  /usr/include/gnu/stubs.h /usr/include/bits/types.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stddef.h \
+  /usr/include/bits/pthreadtypes.h /usr/include/bits/sched.h \
+  /usr/include/time.h /usr/include/endian.h /usr/include/bits/endian.h \
+  /usr/include/sys/select.h /usr/include/bits/select.h \
+  /usr/include/bits/sigset.h /usr/include/bits/time.h \
+  /usr/include/sys/sysmacros.h /usr/include/stdlib.h \
+  /usr/include/alloca.h /usr/include/stdio.h /usr/include/libio.h \
+  /usr/include/_G_config.h /usr/include/wchar.h /usr/include/bits/wchar.h \
+  /usr/include/gconv.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/stdarg.h \
+  /usr/include/bits/stdio_lim.h /usr/include/bits/stdio.h \
+  /usr/include/string.h /usr/include/bits/string.h \
+  /usr/include/bits/string2.h /usr/include/sys/stat.h \
+  /usr/include/bits/stat.h /usr/include/fcntl.h /usr/include/bits/fcntl.h \
+  /usr/include/ctype.h /usr/include/errno.h /usr/include/bits/errno.h \
+  /usr/include/linux/errno.h /usr/include/asm/errno.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/limits.h \
+  /usr/lib/gcc-lib/i386-redhat-linux/2.96/include/syslimits.h \
+  /usr/include/limits.h /usr/include/bits/posix1_lim.h \
+  /usr/include/bits/local_lim.h /usr/include/linux/limits.h \
+  /usr/include/bits/posix2_lim.h /usr/include/unistd.h \
+  /usr/include/bits/posix_opt.h /usr/include/bits/confname.h \
+  /usr/include/getopt.h

@@ -14,5 +14,5 @@ FLTK 2.0 TODO
 	- FLUID widget panel has random widgets in red?
 	- Need to fix labels/etc. of widget panel.
 	- Don't move checkers so slow.
-
+	- strlcat/strlcpy/etc.
 
