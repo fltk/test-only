@@ -678,7 +678,9 @@ void WindowType::read_property(const char *c) {
   } else if (!strcmp(c,"noborder")) {
     border = 0;
   } else if (!strcmp(c,"xclass")) {
-    ; // obsolete string, ignore it
+    // This old data is ignored, mostly because it only does anything on X.
+    // It may be a good idea to turn this into w->xclass(xyz) in the "extra code"
+    // so that compatability is kept
   } else if (!strcmp(c,"xywh")) {
     WidgetType::read_property(c);
     pasteoffset = 0; // make it not apply to contents

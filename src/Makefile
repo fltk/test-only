@@ -68,6 +68,7 @@ CPPFILES = \
 	HighlightButton.cxx \
 	Image.cxx \
 	Input.cxx \
+	InputBrowser.cxx \
 	InvisibleWidget.cxx \
 	Item.cxx \
 	LightButton.cxx \
@@ -154,6 +155,7 @@ CPPFILES = \
 	overlay_rect.cxx \
 	own_colormap.cxx \
 	path.cxx \
+	readimage.cxx \
 	rgbImage.cxx \
 	run.cxx \
 	scrollrect.cxx \

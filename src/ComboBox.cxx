@@ -1,9 +1,6 @@
+// "$Id: ComboBox.cxx,v 1.2 2005/02/04 22:45:05 spitzak Exp $"
 //
-// "$Id$"
-//
-// Input Browser (Combo Box) widget for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2001 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,273 +18,242 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
-#include <fltk/InputBrowser.h>
-#include <fltk/MenuWindow.h>
-#include <fltk/Browser.h>
-#include <fltk/Monitor.h>
+// single line input field with predefined choices via popup menu
+
+#include <fltk/ComboBox.h>
 #include <fltk/events.h>
 #include <fltk/damage.h>
 #include <fltk/Box.h>
 #include <fltk/draw.h>
-
-#include <stdio.h>
-
+#include <fltk/string.h>
 using namespace fltk;
 
-static NamedStyle style("InputBrowser", 0, &InputBrowser::default_style);
-NamedStyle* InputBrowser::default_style = &::style;
+//extern bool fl_hide_shortcut;
 
-InputBrowser::InputBrowser(int x, int y, int w, int h, const char *l)
-  : Menu(x, y, w, h, l),
-    input(x, y, w, h)
-{
-  align(ALIGN_LEFT);
-  style(default_style);
-  if (input.parent()) input.parent()->remove(input);
-  input.parent(this);
-  minh_ = 10;
-  maxw_ = 600;
-  maxh_ = 400;
-}
-
-// these are only used when in grabbed state so only one exists at once
-static MenuWindow *mw;
-static InputBrowser *ib;
-static Browser *browser;
-
-class ComboWindow : public MenuWindow {
-  public:
-    int handle(int);
-    ComboWindow(int x, int y, int w, int h) : MenuWindow(x, y, w, h) { box(NO_BOX); }
-};
-
-int
-ComboWindow::handle(int event) {
-  switch (event) {
-  case MOVE:
-  case DRAG:
-  case RELEASE:
-    return browser->handle(event);
-  }
-  return MenuWindow::handle(event);
-}
-
-class ComboBrowser : public Browser {
-  public:
-    static NamedStyle *default_style;
-
-    int handle(int);
-    ComboBrowser(int x, int y, int w, int h);
-};
-
-extern void browser_glyph(int glyph, const Rectangle&, const Style* style, Flags f);
-static void revert_combostyle(Style *s) {
-  s->box_ = BORDER_BOX;
-  s->glyph_ = browser_glyph;
-}
-
-static NamedStyle combostyle("InputBrowserPopup", revert_combostyle, &Browser::default_style);
-NamedStyle* ComboBrowser::default_style = &::combostyle;
-
-ComboBrowser::ComboBrowser(int x, int y, int w, int h)
-: Browser(x, y, w, h, 0) 
-{
-  style(default_style);
-}
-
-extern int fl_pushed_dx;
-extern int fl_pushed_dy;
-
-int
-ComboBrowser::handle(int event) {
-  switch (event) {
-  case KEY:
-    if (event_key() == EscapeKey) {
-      exit_modal();
-      return 1;
-    }
-    break;
-  case PUSH:
-    if (!event_inside(Rectangle(0, 0, w(), h()))) {
-      exit_modal();
-      return 0;
-    }
-    break;
-  case MOVE:
-    event = DRAG;
-  case RELEASE:
-  case DRAG:
-    // this causes a drag-in to the widget to work:
-    if (event_inside(Rectangle(0, 0, w(), h()))) {
-      fltk::pushed(this);
-      // remember the mouse offset so we can send DRAG/RELEASE directly:
-      fl_pushed_dx = e_x-e_x_root;
-      fl_pushed_dy = e_y-e_y_root;
-    }
-    else return 0;
-  }
-#if 0
-  // vertical scrollbar event
-  int vse = scrollbar.visible() && event_inside(scrollbar.x(),
-            scrollbar.y(), scrollbar.w(), h());
-
-  // horizontal scrollbar event
-  int hse = hscrollbar.visible() && event_inside(hscrollbar.x(),
-            hscrollbar.y(), w(), hscrollbar.h());
-
-//  int X = x(), Y = y(), W = w(), H = h(); box()->inset(X, Y, W, H);
-//  if (!event_inside(X, Y, W, H)) return 0;
-  if (!event_inside(0, 0, w(), h())) return 0;
-
-  if (event == MOVE && !vse && !hse) event = DRAG;
+static void revert(Style* s) {
+#if MOTIF_STYLE
+  s->color = GRAY75;
+  s->box = s->buttonbox = Widget::default_style->buttonbox;
+  s->glyph = ::glyph;
 #endif
-  return Browser::handle(event);
+#if MAC_STYLE
+  s->glyph = ::glyph;
+#endif
+}
+static NamedStyle style("ComboBox", revert, &ComboBox::default_style);
+NamedStyle* ComboBox::default_style = &::style;
+
+ComboBox::ComboBox(int x,int y,int w,int h, const char *l) : 
+  Choice(x,y,w,h,l) 
+{
+  style(default_style);
+  int w1 = h*4/5;
+  Group *g = current();
+  current(0);
+  input_ = new ComboInput(x, y, w-w1, h, this);
+  input_->parent(this);
+  current(g);
 }
 
-static void ComboBrowser_cb(Widget*, void*) {
-  // we get callbacks for all keys?
-  if (event() != KEY && event() != RELEASE) return;
-  if (event() == KEY
-      && event_key() != ReturnKey
-      && event_key() != KeypadEnter
-      && event_key() != ' ')
-    return;
-  Widget *item = browser->item();
-  if (item->is_group()) return; // can't select a group!
-  ib->item(item);
-  ib->value(item->label());
-  ib->redraw(DAMAGE_VALUE);
-  mw->hide();
+ComboBox::~ComboBox() {
+  delete input_;
 }
 
-// CET - FIXME - this doesn't seem to be working
-// Use this to copy all the items out of one group into another:
-class Share_List : public List {
-public:
-  Menu* other;
-  int children(const Menu*, const int* indexes, int level) {
-    return other->children(indexes, level);
+void ComboBox::draw() {
+  if (damage() & DAMAGE_ALL) {
+    draw_frame();
+    Rectangle r(w(),h());
+    r.set_x(w()-h()*4/5);
+    box()->inset(r);
+    draw_glyph(GLYPH_DOWN_BUTTON, r, current_flags_highlight());
   }
-  Widget* child(const Menu*, const int* indexes, int level) {
-    return other->child(indexes, level);
+  input_->set_damage(damage()|input_->damage());
+  if (input_->damage()) {
+    input_->draw();
+    input_->set_damage(0);
   }
-  void flags_changed(const Menu*, Widget* widget) {
-    other->list()->flags_changed(other,widget);
+}
+
+void ComboBox::layout() {
+  Choice::layout();
+  int w1 = h()*4/5;
+  input_->resize(x(), y(), w()-w1, h());
+}
+
+int ComboBox::handle(int event) {
+  static bool mouse_on_input = false;
+  static bool want_mouse_drag = false;
+  int ret = 0;
+  switch (event) {
+  case PUSH: 
+	if (event_x()<w()-h()*4/5) {
+	  mouse_on_input = true;
+	  ret = input_->handle(event);
+	} else {
+	  mouse_on_input = false;
+	  if (click_to_focus()) take_focus();
+	EXECUTE:
+	  if (popup(0, 0, w(), h(), 0)) redraw(DAMAGE_VALUE);
+	}
+	want_mouse_drag = ret!=0;
+	ret = 1;
+	break;
+  case DRAG:
+	if (want_mouse_drag) {
+	  if (mouse_on_input)
+		ret = input_->handle(event);
+	  else
+		ret = Choice::handle(event);
+	}
+	ret = 1;
+	break;
+  case RELEASE:
+	if (want_mouse_drag) {
+	  if (mouse_on_input)
+		ret = input_->handle(event);
+	  else
+		ret = Choice::handle(event);
+	}
+	mouse_on_input = false;
+	ret = 1;
+	break;
+  case SHORTCUT:
+	if (test_shortcut()) goto EXECUTE;
+	if (handle_shortcut()) {
+	  redraw(DAMAGE_VALUE);
+	  return 1;
+	} else {
+	  input_->handle(event);
+	}
+	break;
+  case KEY:
+	if (event_key()==DownKey||event_key()==UpKey) {
+	  if (event_key()==DownKey) Choice::value(0); else Choice::value(Choice::size()-1);
+	  e_keysym = ReturnKey;
+	  ret = Choice::handle(event);
+	  break;
+	}
+  case KEYUP:
+	// handle arrow up/down to select items from the menu
+	ret = input_->handle(event);
+	break;
+  // events for input alone
+  case PASTE:
+  case TIMEOUT:
+  case DND_ENTER:
+  case DND_DRAG:
+  case DND_LEAVE:
+  case DND_RELEASE:
+  case FOCUS_CHANGE:
+	ret = input_->handle(event);
+	break;
+  // events that both widgets should receive
+  case FOCUS: 
+	input_->take_focus(); 
+  case ACTIVATE:
+  case ENTER:
+  case SHOW:
+	ret = Choice::handle(event);
+    ret |= input_->handle(event);
+	break;
+  case UNFOCUS: 
+  case DEACTIVATE:
+  case HIDE:
+  case LEAVE:
+    ret = input_->handle(event);
+	ret |= Choice::handle(event);
+	break;
+  // events for choice alone
+  default: // MOVE, MOUSWHEEL, TOOLTIP
+	ret = Choice::handle(event);
   }
-} share_list; // only one instance of this.
+  if (input_->damage())
+	redraw();
+  return ret;
+}
 
-int
-InputBrowser::handle(int e) {
-  if (e == FOCUS) fltk::focus(input);
+int ComboBox::choice(int v) {
+  int ret = Choice::value(v);
+  Widget *f = get_item();
+  if (f) input_->value(f->label());
+  text_changed_();
+  return ret;
+}
 
-  if (e == ENTER || e == LEAVE) redraw_highlight();
+int ComboBox::choice() const { 
+  ComboBox *This = (ComboBox*)this;
+  Widget *f = This->get_item();
+  if (!f) return -1;
+  if (strcmp(input_->value(), f->label())==0)
+	return Choice::value(); 
+  return -1;
+}
 
-  if ((event_inside(input) || e == KEY)
-    && !(type()&NONEDITABLE) && !pushed())
-  {
-    if (e == PUSH) fltk::pushed(input);
-    return input.handle(e);
-  }
-
-  switch (e) {
-    case PUSH: {
-      redraw(DAMAGE_VALUE);
-      if (!children()) return 1;
-      ib = this;
-      // dummy W,H used -- will be replaced.
-      Group::current(0);
-      mw = new ComboWindow(event_x_root()-event_x(),
-                           event_y_root()-event_y()+h(),
-                           200,400);
-      mw->begin();
-      // dummy W,H used -- will be replaced.
-      browser = new ComboBrowser(0,0,200,400);
-      browser->indented((type()&INDENTED) != 0);
-      share_list.other = this;
-      browser->list(&share_list);
-      browser->when(WHEN_RELEASE_ALWAYS);
-      browser->callback(ComboBrowser_cb);
-      mw->end();
-      browser->layout(); // (WAS: it is ok to do this)
-      int W = browser->width()+browser->scrollbar.w()+browser->box()->dw();
-      int H = browser->height()+browser->box()->dh();
-      if (W > maxw_) W = maxw_;
-      if (H > maxh_) H = maxh_;
-      if (W < minw_) W = minw_;
-      if (H < minh_) H = minh_;
-      int X = mw->x();
-      int Y = mw->y();
-      const Monitor& monitor = Monitor::find(event_x_root(), event_y_root());
-      int down = monitor.h() - Y;
-      int up = event_y_root() - event_y();
-      if (H > down) {
-        if (up > down) {
-          Y = event_y_root() - event_y() - H;
-          if (Y < 0) { Y = 0; H = up; }
-        } else {
-          H = down;
-        }
-      }
-      if (X + W > monitor.r()) {
-        X = monitor.r() - W;
-        if (X < 0) { X = 0; W = monitor.r(); }
-      }
-      mw->resize(X, Y, W, H);
-      browser->Widget::resize(W, H);
-
-      browser->value(item() ? browser->Group::find(item()) : 0);
-      browser->make_item_visible();
-
-      mw->exec(0, true);
-
-      delete mw;
-      if (type()&NONEDITABLE) throw_focus();
-      else fltk::focus(input);
-
-      ib = 0;
-      redraw(DAMAGE_VALUE);
-      return 1;
+int ComboBox::find_choice() const {
+  const char *t = input_->value();
+  int n = children();
+  for (int i=0;i<n;i++) {
+    const char *m = child(i)->label();
+    if (m && strcmp(m, t)==0) {
+      return i;
     }
+  }
+  return -1;
+}
 
-    case FOCUS:
-    case UNFOCUS:
-      if (type()&NONEDITABLE) break;
-      return input.handle(e);
+bool ComboBox::text_changed_(bool ret) {
+  if (input_->damage()) {	
+    redraw(input_->damage());
+  }
+  // we should also update the current choice
+  return ret;
+}
 
-    case ENTER: case MOVE: return 1;
+void ComboBox::input_callback_(Widget *w,void *d) {
+  ComboBox *This = (ComboBox*)d;
+  This->text_changed_();
+  This->do_callback();
+}
+
+int ComboBox::popup(
+    int X, int Y, int W, int H,
+    const char* title,
+    bool menubar)
+{
+  Widget *selected = try_popup(X, Y, W, H, title, menubar);
+  if (selected) {
+    if (selected->label())
+      input_->value(selected->label());
+    else
+      input_->value("");
+    execute(selected);
+    return 1;
   }
   return 0;
 }
 
-void
-InputBrowser::draw() {
-  minw_ = w();
-  if (damage()&DAMAGE_ALL) draw_frame();
-  Rectangle r(w(),h()); box()->inset(r);
-  int W1 = r.h()*4/5;
-  if (damage()&(DAMAGE_ALL|DAMAGE_CHILD)) {
-    input.resize(r.x(), r.y(), r.w()-W1, r.h());
-    input.set_damage(DAMAGE_ALL);
-    input.copy_style(style()); // force it to use this style
-    input.box(FLAT_BOX);
-    // fix for relative coordinates
-    push_matrix();
-    translate(r.x(),r.y());
-    input.draw();
-    pop_matrix();
-    input.set_damage(0);
-  }
-  if (damage()&(DAMAGE_ALL|DAMAGE_VALUE|DAMAGE_HIGHLIGHT)) {
-    Flags f = current_flags_highlight();
-    if (ib == this) f |= VALUE;
-    // draw the little mark at the right:
-    r.x(r.w()-W1); r.w(W1);
-    draw_glyph(GLYPH_DOWN_BUTTON, r, f);
-  }
+//---- Combo Input ---------------------------------------------
+
+ComboBox::ComboInput::ComboInput(int x, int y, int w, int h, ComboBox *c) :
+  Input(x, y, w, h)
+{
+  combo_ = c;
+  callback(input_callback_, combo_);
 }
 
-//
-// End of "$Id$".
-//
+int ComboBox::ComboInput::handle(int event) {
+  int ret;
+  switch (event) {
+  case FOCUS:
+	break;
+  case UNFOCUS:
+	break;
+  }
+  ret = Input::handle(event);
+  if (damage())
+	combo_->redraw();
+  return ret;
+}
+
+// End of $Id: ComboBox.cxx,v 1.2 2005/02/04 22:45:05 spitzak Exp $
