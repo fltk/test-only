@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.28 2004/06/24 07:05:22 spitzak Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.29 2004/07/19 23:33:05 laza2000 Exp $"
 //
 // _WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,8 @@
 
 using namespace fltk;
 
+extern int has_unicode();
+
 int Font::encodings(const char**& arrayp) {
   // CET - FIXME - What about this encoding stuff?
   // WAS: we need some way to find out what charsets are supported
@@ -51,8 +53,8 @@ static int nbSize;
 #define MAX_SIZES 16
 static int sizes[MAX_SIZES];
 
-static int CALLBACK EnumSizeCb(CONST LOGFONT* lpelf,
-			       CONST TEXTMETRIC* lpntm,
+static int CALLBACK EnumSizeCb(CONST LOGFONTW* lpelf,
+			       CONST TEXTMETRICW* lpntm,
 			       DWORD fontType,
 			       LPARAM p)
 {
@@ -85,7 +87,14 @@ int Font::sizes(int*& sizep) {
   HDC dc = getDC();
   //cyPerInch = GetDeviceCaps(dc, LOGPIXELSY);
   //if (cyPerInch < 1) cyPerInch = 1;
-  EnumFontFamilies(dc, name_, EnumSizeCb, 0);
+  if(has_unicode()) {
+    unsigned short ucs[1024+1];
+    int ucslen = win_8to16(name_, strlen(name_), ucs, 1024);;
+    ucs[ucslen] = 0;
+    EnumFontFamiliesW(dc, (LPCWSTR)ucs, EnumSizeCb, 0);
+  } else {
+    EnumFontFamiliesA(dc, name_, (FONTENUMPROCA)EnumSizeCb, 0);
+  }
   sizep = ::sizes;
   return nbSize;
 }
@@ -107,7 +116,7 @@ static Font** font_array = 0;
 static int num_fonts = 0;
 static int array_size = 0;
 
-static int CALLBACK enumcb(CONST LOGFONTW* lplf,
+static int CALLBACK enumcbW(CONST LOGFONTW* lplf,
                            CONST TEXTMETRICW* lpntm,
                            DWORD fontType,
                            LPARAM p)
@@ -126,23 +135,46 @@ static int CALLBACK enumcb(CONST LOGFONTW* lplf,
   int attrib = 0;
 //    if (lplf->lfWeight > 400 || strstr(name, " Bold") == name+strlen(name)-5)
 //      attrib = BOLD;
-  int n = wcslen(name), count;
+  int n = wcslen((LPCWSTR)name), count;
   char *buffer;
-  buffer = utf8from16(name, wcslen(name), &count);
+  buffer = utf8from16(name, wcslen((LPCWSTR)name), &count);
   buffer[count] = 0;
   font_array[num_fonts++] = fl_make_font(buffer, attrib);
   free(buffer);
   return 1;
 }
 
+static int CALLBACK enumcbA(CONST LOGFONT* lplf,
+                           CONST TEXTMETRIC* lpntm,
+                           DWORD fontType,
+                           LPARAM p)
+{
+  // we need to do something about different encodings of the same font
+  // in order to match X!  I can't tell if each different encoding is
+  // returned sepeartely or not.  This is what fltk 1.0 did:
+  if (lplf->lfCharSet != ANSI_CHARSET) return 1;
+  const char *name = lplf->lfFaceName;
+  if (num_fonts >= array_size) {
+    array_size = array_size ? 2*array_size : 128;
+    font_array = (Font**)realloc(font_array, array_size*sizeof(Font*));
+  }
+  int attrib = 0;
+  font_array[num_fonts++] = fl_make_font(name, attrib);
+  return 1;
+}
+
+
 int fltk::list_fonts(Font**& arrayp) {
   if (font_array) {arrayp = font_array; return num_fonts;}
   HDC dc = getDC();
-  //LOGFONT lf;
-  //memset(&lf, 0, sizeof(lf));
-  //lf.lfCharSet = ANSI_CHARSET;
-  //EnumFontFamiliesEx(dc, &lf, (FONTENUMPROC)enumcb, 0, 0);
-  EnumFontFamiliesExW(dc, NULL, (FONTENUMPROCW)enumcb, 0, 0);
+
+  if (has_unicode()) {
+    EnumFontFamiliesExW(dc, NULL, (FONTENUMPROCW)enumcbW, 0, 0);
+  } else {
+    LOGFONT lf;
+    memset(&lf, 0, sizeof(lf));
+    EnumFontFamiliesExA(dc, &lf, (FONTENUMPROCA)enumcbA, 0, 0);
+  }
   ReleaseDC(0, dc);
   qsort(font_array, num_fonts, sizeof(*font_array), sort_function);
   arrayp = font_array;
@@ -150,5 +182,5 @@ int fltk::list_fonts(Font**& arrayp) {
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.28 2004/06/24 07:05:22 spitzak Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.29 2004/07/19 23:33:05 laza2000 Exp $"
 //

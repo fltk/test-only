@@ -1,5 +1,5 @@
 //
-// "$Id: fltk_theme_win32.cxx,v 1.3 2004/06/24 07:05:22 spitzak Exp $"
+// "$Id: fltk_theme_win32.cxx,v 1.4 2004/07/19 23:33:05 laza2000 Exp $"
 //
 // Copyright 2004 Bill Spitzak and others.
 //
@@ -35,6 +35,8 @@
 #include <limits.h>
 
 using namespace fltk;
+
+extern int has_unicode();
 
 ////////////////////////////////////////////////////////////////
 
@@ -147,66 +149,117 @@ extern "C" bool fltk_theme() {
 
      CET
   */
+#ifndef _WIN32_WCE
 
-  NONCLIENTMETRICSW ncm;
-  int sncm = sizeof(ncm);
-  ncm.cbSize = sncm;
-  SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, sncm, &ncm, SPIF_SENDCHANGE);
+  if (has_unicode()) {
+    NONCLIENTMETRICSW ncm;
+    int sncm = sizeof(ncm);
+    ncm.cbSize = sncm;
+    SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, sncm, &ncm, SPIF_SENDCHANGE);
 
-  Font* font; float size;
+    Font* font; float size;
+    unsigned short *name;
+    char *buffer;
+    int count;
 
-  unsigned short *name;
-  char *buffer;
-  int count;
-
-  // get font info for regular widgets from LOGFONT structure
-  name = ncm.lfMessageFont.lfFaceName;
-  buffer = utf8from16(name, wcslen(name), &count);
-  buffer[count] = 0;
-  font = fltk::font(buffer,
-		    (ncm.lfMessageFont.lfWeight >= 600 ? BOLD : 0) +
-		    (ncm.lfMessageFont.lfItalic ? ITALIC : 0));
-  free(buffer);
-  size = float(win_fontsize(ncm.lfMessageFont.lfHeight));
-
-  Widget::default_style->labelfont_ = font;
-  Widget::default_style->textfont_ = font;
-  Widget::default_style->labelsize_ = size;
-  Widget::default_style->textsize_ = size;
-
-  // get font info for menu items from LOGFONT structure
-  name = ncm.lfMenuFont.lfFaceName;
-  buffer = utf8from16(name, wcslen(name), &count);
-  buffer[count] = 0;
-  font = fltk::font(buffer,
-		    (ncm.lfMenuFont.lfWeight >= 600 ? BOLD : 0) +
-		    (ncm.lfMenuFont.lfItalic ? ITALIC : 0));
-  free(buffer);
-  size = float(win_fontsize(ncm.lfMenuFont.lfHeight));
-  if ((style = Style::find("MenuBar"))) {
-    style->textfont_ = font;
-    style->textsize_ = size;
-  }
-  if ((style = Style::find("PopupMenu"))) {
-    style->textfont_ = font;
-    style->textsize_ = size;
-  }
-
-  if ((style = Style::find("Tooltip"))) {
-    name = ncm.lfStatusFont.lfFaceName;
-    buffer = utf8from16(name, wcslen(name), &count);
+    // get font info for regular widgets from LOGFONT structure
+    name = (unsigned short *)ncm.lfMessageFont.lfFaceName;
+    buffer = utf8from16(name, wcslen(US2WC(name)), &count);
     buffer[count] = 0;
-    // get font info for tooltips from LOGFONT structure
     font = fltk::font(buffer,
-		      (ncm.lfStatusFont.lfWeight >= 600 ? BOLD : 0) +
-		      (ncm.lfStatusFont.lfItalic ? ITALIC : 0));
-	free(buffer);
-    size = float(win_fontsize(ncm.lfStatusFont.lfHeight));
+                     (ncm.lfMessageFont.lfWeight >= 600 ? BOLD : 0) +
+                     (ncm.lfMessageFont.lfItalic ? ITALIC : 0));
+    free(buffer);
+    size = float(win_fontsize(ncm.lfMessageFont.lfHeight));
 
-    style->textfont_ = font;
-    style->textsize_ = size;
+    Widget::default_style->labelfont_ = font;
+    Widget::default_style->textfont_ = font;
+    Widget::default_style->labelsize_ = size;
+    Widget::default_style->textsize_ = size;
+
+    // get font info for menu items from LOGFONT structure
+    name = (unsigned short *)ncm.lfMenuFont.lfFaceName;
+    buffer = utf8from16(name, wcslen(US2WC(name)), &count);
+    buffer[count] = 0;
+    font = fltk::font(buffer,
+                     (ncm.lfMenuFont.lfWeight >= 600 ? BOLD : 0) +
+                     (ncm.lfMenuFont.lfItalic ? ITALIC : 0));
+    free(buffer);
+    size = float(win_fontsize(ncm.lfMenuFont.lfHeight));
+    if ((style = Style::find("MenuBar"))) {
+      style->textfont_ = font;
+      style->textsize_ = size;
+    }
+    if ((style = Style::find("PopupMenu"))) {
+      style->textfont_ = font;
+      style->textsize_ = size;
+    }
+
+    if ((style = Style::find("Tooltip"))) {
+      name = (unsigned short *)ncm.lfStatusFont.lfFaceName;
+      buffer = utf8from16(name, wcslen(US2WC(name)), &count);
+      buffer[count] = 0;
+      // get font info for tooltips from LOGFONT structure
+      font = fltk::font(buffer,
+                       (ncm.lfStatusFont.lfWeight >= 600 ? BOLD : 0) +
+                       (ncm.lfStatusFont.lfItalic ? ITALIC : 0));
+      free(buffer);
+      size = float(win_fontsize(ncm.lfStatusFont.lfHeight));
+
+      style->textfont_ = font;
+      style->textsize_ = size;
+    }
+	
+  } else {
+
+    NONCLIENTMETRICSA ncm;
+    int sncm = sizeof(ncm);
+    ncm.cbSize = sncm;
+    SystemParametersInfoA(SPI_GETNONCLIENTMETRICS, sncm, &ncm, SPIF_SENDCHANGE);
+
+    Font* font; float size;
+    char *name;
+
+    // get font info for regular widgets from LOGFONT structure
+    name = ncm.lfMessageFont.lfFaceName;
+    font = fltk::font(name,
+                     (ncm.lfMessageFont.lfWeight >= 600 ? BOLD : 0) +
+                     (ncm.lfMessageFont.lfItalic ? ITALIC : 0));		
+    size = float(win_fontsize(ncm.lfMessageFont.lfHeight));
+
+    Widget::default_style->labelfont_ = font;
+    Widget::default_style->textfont_ = font;
+    Widget::default_style->labelsize_ = size;
+    Widget::default_style->textsize_ = size;
+
+    // get font info for menu items from LOGFONT structure
+    name = ncm.lfMenuFont.lfFaceName;
+    font = fltk::font(name,
+                     (ncm.lfMenuFont.lfWeight >= 600 ? BOLD : 0) +
+                     (ncm.lfMenuFont.lfItalic ? ITALIC : 0));
+    size = float(win_fontsize(ncm.lfMenuFont.lfHeight));
+    if ((style = Style::find("MenuBar"))) {
+      style->textfont_ = font;
+      style->textsize_ = size;
+    }
+    if ((style = Style::find("PopupMenu"))) {
+      style->textfont_ = font;
+      style->textsize_ = size;
+    }
+
+    if ((style = Style::find("Tooltip"))) {
+      name = ncm.lfStatusFont.lfFaceName;
+      // get font info for tooltips from LOGFONT structure
+      font = fltk::font(name,
+                       (ncm.lfStatusFont.lfWeight >= 600 ? BOLD : 0) +
+                       (ncm.lfStatusFont.lfItalic ? ITALIC : 0));
+      size = float(win_fontsize(ncm.lfStatusFont.lfHeight));
+
+      style->textfont_ = font;
+      style->textsize_ = size;
+    }
   }
-
+#endif
   // grab mousewheel stuff from Windows
   UINT delta;
   SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, (PVOID)&delta, 0);
@@ -218,5 +271,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: fltk_theme_win32.cxx,v 1.3 2004/06/24 07:05:22 spitzak Exp $".
+// End of "$Id: fltk_theme_win32.cxx,v 1.4 2004/07/19 23:33:05 laza2000 Exp $".
 //

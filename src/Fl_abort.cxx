@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_abort.cxx,v 1.18 2004/01/21 09:18:10 spitzak Exp $"
+// "$Id: Fl_abort.cxx,v 1.19 2004/07/19 23:33:05 laza2000 Exp $"
 //
 // Warning/error message code for the Fast Light Tool Kit (FLTK).
 //
@@ -55,23 +55,32 @@ static void error(const char *format, ...) {
 #else
 
 #include <windows.h>
+#include <fltk/x.h>
 
 static void warning(const char *format, ...) {
   va_list args;
   char buf[1024];
+  unsigned short ucsbuf[1024+1];
   va_start(args, format);
-  vsnprintf(buf, 1024, format, args);
+  int buflen = vsnprintf(buf, 1024, format, args);
   va_end(args);
-  MessageBox(0,buf,"Warning",MB_ICONEXCLAMATION|MB_OK);
+	
+	int ucslen = win_8to16(buf, buflen, ucsbuf, 1024);
+	ucsbuf[ucslen] = 0;
+	__MessageBoxW(0, (LPCWSTR)ucsbuf, L"Warning", MB_ICONEXCLAMATION|MB_OK);
 }
 
 static void error(const char *format, ...) {
   va_list args;
   char buf[1024];
+  unsigned short ucsbuf[1024+1];
   va_start(args, format);
-  vsnprintf(buf, 1024, format, args);
+  int buflen = vsnprintf(buf, 1024, format, args);
   va_end(args);
-  MessageBox(0,buf,"Error",MB_ICONSTOP|MB_SYSTEMMODAL);
+	
+	int ucslen = win_8to16(buf, buflen, ucsbuf, 1024);
+	ucsbuf[ucslen] = 0;
+	__MessageBoxW(0, (LPCWSTR)ucsbuf, L"Error", MB_ICONSTOP|MB_SYSTEMMODAL);
   exit(1);
 }
 
@@ -109,5 +118,5 @@ void (*fltk::error)(const char* format, ...) = ::error;
 void (*fltk::fatal)(const char* format, ...) = ::error;
 
 //
-// End of "$Id: Fl_abort.cxx,v 1.18 2004/01/21 09:18:10 spitzak Exp $".
+// End of "$Id: Fl_abort.cxx,v 1.19 2004/07/19 23:33:05 laza2000 Exp $".
 //

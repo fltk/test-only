@@ -1,5 +1,5 @@
 //
-// "$Id: fl_dnd_win32.cxx,v 1.11 2004/06/22 08:28:57 spitzak Exp $"
+// "$Id: fl_dnd_win32.cxx,v 1.12 2004/07/19 23:33:05 laza2000 Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 // This is code for dragging *out* of the application. Code for dragging
@@ -37,6 +37,7 @@
 #include <shellapi.h>
 
 HANDLE fl_global_selection(int clipboard);
+HANDLE fl_global_selection_ansi(int clipboard);
 
 // this class is needed to allow FLTK apps to be a DnD source
 class FLDropSource : public IDropSource
@@ -110,13 +111,22 @@ public:
       pmedium->pUnkForRelease = NULL;
       return S_OK;
     }
+    if ((pformatetcIn->dwAspect & DVASPECT_CONTENT) &&
+        (pformatetcIn->tymed & TYMED_HGLOBAL) &&
+        (pformatetcIn->cfFormat == CF_TEXT))
+    {
+      pmedium->tymed	      = TYMED_HGLOBAL;
+      pmedium->hGlobal	      = fl_global_selection_ansi(0);
+      pmedium->pUnkForRelease = NULL;
+      return S_OK;
+    }
     return DV_E_FORMATETC;
   }
   HRESULT STDMETHODCALLTYPE QueryGetData( FORMATETC *pformatetc )
   {
     if ((pformatetc->dwAspect & DVASPECT_CONTENT) &&
         (pformatetc->tymed & TYMED_HGLOBAL) &&
-        (pformatetc->cfFormat == CF_UNICODETEXT))
+        ((pformatetc->cfFormat == CF_UNICODETEXT) || (pformatetc->cfFormat == CF_TEXT)) )
       return S_OK;
     return DV_E_FORMATETC;	
   }  
@@ -168,5 +178,5 @@ bool fltk::dnd()
 
 
 //
-// End of "$Id: fl_dnd_win32.cxx,v 1.11 2004/06/22 08:28:57 spitzak Exp $".
+// End of "$Id: fl_dnd_win32.cxx,v 1.12 2004/07/19 23:33:05 laza2000 Exp $".
 //

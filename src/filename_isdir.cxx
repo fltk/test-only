@@ -1,5 +1,5 @@
 //
-// "$Id: filename_isdir.cxx,v 1.18 2004/07/18 03:23:27 spitzak Exp $"
+// "$Id: filename_isdir.cxx,v 1.19 2004/07/19 23:33:05 laza2000 Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -29,6 +29,7 @@
 #ifdef _WIN32
 #include <windows.h>
 #include <fltk/utf.h>
+#include <fltk/x.h>
 #endif
 
 static struct stat last_stat;
@@ -49,7 +50,7 @@ static bool fill_stat(const char *name, int new_op) {
   unsigned short* ucs = utf8to16(name, strlen(name), &n);
   if (ucs) {
     ZeroMemory(namebuf, sizeof(namebuf));
-    WideCharToMultiByte(GetACP(), 0, (wchar_t*)ucs, n,
+    WideCharToMultiByte(GetACP(), 0, US2WC(ucs), n,
 			namebuf, sizeof(namebuf), NULL, 0);
     name = namebuf;
     utf8free(ucs);
@@ -91,5 +92,5 @@ long int filename_mtime(const char *name) {
 }
 
 //
-// End of "$Id: filename_isdir.cxx,v 1.18 2004/07/18 03:23:27 spitzak Exp $".
+// End of "$Id: filename_isdir.cxx,v 1.19 2004/07/19 23:33:05 laza2000 Exp $".
 //

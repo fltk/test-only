@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Buffer.cxx,v 1.15 2004/07/15 16:21:16 spitzak Exp $"
+// "$Id: Fl_Text_Buffer.cxx,v 1.16 2004/07/19 23:33:05 laza2000 Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -2262,6 +2262,8 @@ static int min( int i1, int i2 ) {
   return i1 <= i2 ? i1 : i2;
 }
 
+#include <fltk/x.h> // For US2WC
+
 int
 TextBuffer::insertfile(const char *name, int pos, int buflen) {
   FILE *fp;  int r;
@@ -2269,7 +2271,7 @@ TextBuffer::insertfile(const char *name, int pos, int buflen) {
   int ucslen;
   unsigned short* ucs = utf8to16(name, strlen(name), &ucslen);
   if (ucs) {
-    fp = _wfopen((const wchar_t*)ucs, L"r");
+    fp = _wfopen(US2WC(ucs), L"r");
     utf8free(ucs);
   } else
 #endif
@@ -2295,7 +2297,7 @@ TextBuffer::outputfile(const char *name, int start, int end, int buflen) {
   int ucslen;
   unsigned short* ucs = utf8to16(name, strlen(name), &ucslen);
   if (ucs) {
-    fp = _wfopen((const wchar_t*)ucs, L"w");
+    fp = _wfopen(US2WC(ucs), L"w");
     utf8free(ucs);
   } else
 #endif
@@ -2315,5 +2317,5 @@ TextBuffer::outputfile(const char *name, int start, int end, int buflen) {
 
 
 //
-// End of "$Id: Fl_Text_Buffer.cxx,v 1.15 2004/07/15 16:21:16 spitzak Exp $".
+// End of "$Id: Fl_Text_Buffer.cxx,v 1.16 2004/07/19 23:33:05 laza2000 Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.218 2004/07/15 16:27:26 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.219 2004/07/19 23:33:05 laza2000 Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -88,7 +88,8 @@ using namespace fltk;
 // like GUI programs on more sensible operating systems
 #define WM_MAKEWAITRETURN (WM_USER+0x401)
 
-#define IMM_DYNAMIC_LOADING
+#define IMM_DYNAMIC_LOADING 1
+
 #ifdef IMM_DYNAMIC_LOADING
 # ifdef NOIME
 typedef struct tagCOMPOSITIONFORM {
@@ -118,9 +119,9 @@ bool fl_use_imm32 = false;
 bool fl_load_imm32()
 {
 #ifdef IMM_DYNAMIC_LOADING
-  hLibImm = LoadLibrary("imm32.dll");
+  hLibImm = __LoadLibraryW(L"imm32.dll");
   if (hLibImm == NULL)
-	return false;
+    return false;
 
   *(FARPROC*)&pfnImmGetContext
     = GetProcAddress(hLibImm, "ImmGetContext");
@@ -134,12 +135,12 @@ bool fl_load_imm32()
     = GetProcAddress(hLibImm, "ImmAssociateContext");
   
   if (!pfnImmGetContext ||
-	  !pfnImmReleaseContext ||
-	  !pfnImmSetCompositionFontW ||
-	  !pfnImmSetCompositionWindow ||
-	  !pfnImmAssociateContext) {
-	FreeLibrary(hLibImm);
-	return false;
+      !pfnImmReleaseContext ||
+      !pfnImmSetCompositionFontW ||
+      !pfnImmSetCompositionWindow ||
+      !pfnImmAssociateContext) {
+    FreeLibrary(hLibImm);
+    return false;
   }
 #endif
   return true;
@@ -148,26 +149,27 @@ bool fl_load_imm32()
 void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
 {
   int change = 0;
-  const char *fnt = NULL;
+  //const char *fnt = NULL;
   static fltk::Font *spotf = NULL;
   static Widget *spotw = NULL;
-  static RECT spot, spot_set;
+  //static RECT spot_set;
+  static RECT spot;
 
   if (!fl_use_imm32)
-	  return;
+    return;
 
   if (w != spotw) {
-	spotw = w;
-	change = 1;
+    spotw = w;
+    change = 1;
   }
   if (x != spot.left || y != spot.top) {
-	spot.left = x;
-	spot.top = y;
-	change = 1;
+    spot.left = x;
+    spot.top = y;
+    change = 1;
   }
   if (f != spotf) {
-	spotf = f;
-	change = 1;
+    spotf = f;
+    change = 1;
   }
 
   if (!change) return;
@@ -175,10 +177,10 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
   static HIMC himcold = 0;
   if (f != NULL) {
     HIMC himc = pfnImmGetContext(xid(w->window()));
-	if (himc == NULL) {
-	  himc = himcold;
+    if (himc == 0) {
+      himc = himcold;
       pfnImmAssociateContext(xid(w->window()), himc);
-	}
+    }
     if (himc) {
       COMPOSITIONFORM	cfs;
       LOGFONTW lf;
@@ -194,7 +196,7 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
   } else {
     if (!himcold) {
       HIMC himc = pfnImmGetContext(xid(w->window()));
-      pfnImmAssociateContext(xid(w->window()), NULL);
+      pfnImmAssociateContext(xid(w->window()), 0);//NULL); MinGW has problems with NULL
       himcold = himc;
       pfnImmReleaseContext(xid(w->window()), himc);
     }
@@ -354,16 +356,16 @@ static inline int fl_wait(double time_to_wait) {
 
   fl_unlock_function();
   if (time_to_wait < 2147483.648) {
-    have_message = PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
+    have_message = __PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
     if (!have_message) {
       int t = (int)(time_to_wait * 1000.0 + .5);
       if (t <= 0) {fl_lock_function(); return 0;} // too short to measure
       timerid = SetTimer(NULL, 0, t, NULL);
-      have_message = GetMessage(&msg, NULL, 0, 0);
+      have_message = __GetMessage(&msg, NULL, 0, 0);
       KillTimer(NULL, timerid);
     }
   } else {
-    have_message = GetMessage(&msg, NULL, 0, 0);
+    have_message = __GetMessage(&msg, NULL, 0, 0);
   }
   fl_lock_function();
 
@@ -396,9 +398,9 @@ static inline int fl_wait(double time_to_wait) {
     // and at that point I give up and call flush().
     if (msg.message != WM_MAKEWAITRETURN) {
       TranslateMessage(&msg);
-      DispatchMessage(&msg);
+      __DispatchMessage(&msg);
     }
-    have_message = PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
+    have_message = __PeekMessage(&msg, NULL, 0, 0, PM_REMOVE);
   }
 
   // This should return 0 if only timer events were handled:
@@ -638,11 +640,11 @@ void fltk::paste(Widget &receiver, bool clipboard) {
     if (!OpenClipboard(NULL)) return;
     HANDLE h = GetClipboardData(CF_UNICODETEXT);
     if (h) {
-      unsigned short *ucs = (LPWSTR)GlobalLock(h);
+      unsigned short *ucs = (unsigned short*)GlobalLock(h);
       static char* previous_buffer = 0;
       if (previous_buffer) utf8free(previous_buffer);
       int len;
-      e_text = previous_buffer = utf8from16(ucs,wcslen(ucs),&len);
+      e_text = previous_buffer = utf8from16(ucs, wcslen(US2WC(ucs)), &len);
       // strip the CRLF pairs: ($%$#@^)
       char* a = e_text;
       char* b = a;
@@ -681,6 +683,30 @@ HANDLE fl_global_selection(int clipboard) {
   }
   GlobalUnlock(h);
   return h;
+}
+
+// Same as fl_global_selection(), but for ASCII text.
+// Clipboard format: CF_TEXT
+HANDLE fl_global_selection_ansi(int clipboard) {
+  HANDLE h = GlobalAlloc(GHND, selection_length[clipboard]+1);
+  LPSTR p = (LPSTR)GlobalLock(h);
+	memcpy(p, selection_buffer[clipboard], selection_length[clipboard]);
+	p[selection_length[clipboard]] = 0;
+  GlobalUnlock(h);
+  return h;
+}
+
+// Determite if windows has unicode capability
+int has_unicode() 
+{
+  static int has_unicode = -1;
+  if (has_unicode == -1) {
+    OSVERSIONINFOA os;
+    os.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
+    GetVersionExA(&os);
+    has_unicode = (os.dwPlatformId==VER_PLATFORM_WIN32_NT);		
+  }
+  return has_unicode;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -752,8 +778,8 @@ public:
     flush(); // get the display to update for local drags
     return S_OK;
   }
-  HRESULT STDMETHODCALLTYPE DragOver( DWORD grfKeyState, POINTL pt, DWORD *pdwEffect) {
-    if ( px==pt.x && py==pt.y ) 
+  HRESULT STDMETHODCALLTYPE DragOver( DWORD grfKeyState, POINTL pt, DWORD *pdwEffect) {    
+		if ( px==pt.x && py==pt.y ) 
     {
       *pdwEffect = lastEffect;
       return S_OK;
@@ -812,7 +838,27 @@ public:
 
     FORMATETC fmt = { 0 };
     STGMEDIUM medium = { 0 };
+
     fmt.tymed = TYMED_HGLOBAL;
+    fmt.dwAspect = DVASPECT_CONTENT;
+    fmt.lindex = -1;
+    fmt.cfFormat = CF_UNICODETEXT;
+    // if it is ASCII text, send an PASTE with that text
+    if ( data->GetData( &fmt, &medium )==S_OK )
+    {
+      unsigned short *stuff = (unsigned short*)GlobalLock( medium.hGlobal );
+      int stuff_len = wcslen(US2WC(stuff));
+      e_text = utf8from16(stuff, stuff_len, &e_length);
+      e_text[e_length] = 0;
+      target->handle(PASTE); // e_text will be invalid after this call
+      free(e_text); e_length = 0;
+      GlobalUnlock( medium.hGlobal );
+      ReleaseStgMedium( &medium );
+      SetForegroundWindow( hwnd );
+      return S_OK;
+    }
+    
+		fmt.tymed = TYMED_HGLOBAL;
     fmt.dwAspect = DVASPECT_CONTENT;
     fmt.lindex = -1;
     fmt.cfFormat = CF_TEXT;
@@ -820,7 +866,6 @@ public:
     if ( data->GetData( &fmt, &medium )==S_OK )
     {
       void *stuff = GlobalLock( medium.hGlobal );
-      //long len = GlobalSize( medium.hGlobal );
       e_length = strlen( (char*)stuff ); // min(strlen, len)
       e_text = (char*)stuff;
       target->handle(PASTE); // e_text will be invalid after this call
@@ -829,6 +874,7 @@ public:
       SetForegroundWindow( hwnd );
       return S_OK;
     }
+
     fmt.tymed = TYMED_HGLOBAL;
     fmt.dwAspect = DVASPECT_CONTENT;
     fmt.lindex = -1;
@@ -837,20 +883,36 @@ public:
     if ( data->GetData( &fmt, &medium )==S_OK )
     {
       HDROP hdrop = (HDROP)medium.hGlobal;
-      int i, n, nn = 0, nf = DragQueryFile( hdrop, (UINT)-1, 0, 0 );
-      for ( i=0; i<nf; i++ ) nn += DragQueryFile( hdrop, i, 0, 0 );
+      int i, n, nn = 0, nf = DragQueryFileA( hdrop, (UINT)-1, 0, 0 );
+      for ( i=0; i<nf; i++ ) nn += DragQueryFileA( hdrop, i, 0, 0 );
       nn += nf;
-      e_length = nn-1;
-      char* buffer = (char*)malloc(nn+1);
-      char *dst = e_text = buffer;
-      for ( i=0; i<nf; i++ ) {
-	n = DragQueryFile( hdrop, i, dst, nn );
-	dst += n;
-	if ( i<nf-1 ) *dst++ = '\n';
+      if (has_unicode()) {
+        unsigned short *buffer = (unsigned short*)malloc( (nn+1) * sizeof(unsigned short) );
+	unsigned short *dst = buffer;
+	for ( i=0; i<nf; i++ ) {
+	  n = DragQueryFileW( hdrop, i, US2WC(dst), nn );
+	  dst += n;
+	  if ( i<nf-1 ) *dst++ = '\n';
+	}
+	*dst = 0;				
+	e_text = utf8from16(buffer, nn, &e_length);
+	target->handle(PASTE);
+	free(buffer);
+	free(e_text);
+      } else {
+        char* buffer = (char*)malloc(nn+1);
+        e_length = nn;
+	char *dst = e_text = buffer;
+	for ( i=0; i<nf; i++ ) {
+	  n = DragQueryFileA( hdrop, i, dst, nn );
+	  dst += n;
+	  if ( i<nf-1 ) *dst++ = '\n';
+	}
+	*dst = 0;
+	target->handle(PASTE);
+	free(buffer);
       }
-      *dst = 0;
-      target->handle(PASTE);
-      free(buffer);
+      e_length = 0;
       ReleaseStgMedium( &medium );
       SetForegroundWindow( hwnd );
       return S_OK;
@@ -864,31 +926,33 @@ public:
 ////////////////////////////////////////////////////////////////
 
 //
-// USE_TRACK_MOUSE - define it if you have TrackMouseEvent()...
+// NO_TRACK_MOUSE - define it if you dont have TrackMouseEvent()
 //
-// Apparently, at least some versions of Cygwin/MingW don't provide
-// the TrackMouseEvent() function.  You can define this by hand
-// if you have it - this is only needed to support subwindow
+// Fortunately, most of user have this.
+// the TrackMouseEvent() function is included since windows 98 and NT4
+// if you dont have it (win95) - this is only needed to support subwindow
 // enter/leave notification under Windows.
 //
 
-#if !defined(__GNUC__)
-# if (_WIN32_WINNT >= 0x0400)
-#  define USE_TRACK_MOUSE
-# endif
-#endif // !__GNUC__
+//#define NO_TRACK_MOUSE 1
+
+#ifndef NO_TRACK_MOUSE
+extern "C" {
+  BOOL WINAPI TrackMouseEvent(LPTRACKMOUSEEVENT lpEventTrack);
+};
+#endif
 
 static bool mouse_event(Window *window, int what, int button,
 			WPARAM wParam, LPARAM lParam)
 {
   xmousewin = window;
   if (!window) return false;
-#ifdef USE_TRACK_MOUSE
+#ifndef NO_TRACK_MOUSE
   TRACKMOUSEEVENT tme;
   tme.cbSize    = sizeof(TRACKMOUSEEVENT);
   tme.dwFlags   = TME_LEAVE;
   tme.hwndTrack = xid(window);
-  _TrackMouseEvent(&tme);
+  TrackMouseEvent(&tme);
 #endif
   static int px, py, pmx, pmy;
   POINT pt;
@@ -1028,7 +1092,7 @@ static Window* resize_from_system;
 //  static Window* in_wm_paint;
 //  static PAINTSTRUCT paint;
 
-#define MakeWaitReturn() PostMessage(hWnd, WM_MAKEWAITRETURN, 0, 0)
+#define MakeWaitReturn() __PostMessage(hWnd, WM_MAKEWAITRETURN, 0, 0)
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
@@ -1168,7 +1232,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     // save the keysym until we figure out the characters:
     e_keysym = ms2fltk(wParam,lParam);
     // See if TranslateMessage turned it into a WM_*CHAR message:
-    if (PeekMessage(&msg, hWnd, WM_CHAR, WM_SYSDEADCHAR, PM_REMOVE)) {
+    if (__PeekMessage(&msg, hWnd, WM_CHAR, WM_SYSDEADCHAR, PM_REMOVE)) {
       uMsg = msg.message;
       wParam = msg.wParam;
       lParam = msg.lParam;
@@ -1210,44 +1274,55 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       e_clicks = 0;
     }
     lastkeysym = e_keysym;
+    
     // translate to text:
-    static char buffer[31]; // must be big enough for fltk::compose() output
+    static char buffer[31]; // must be big enough for fltk::compose() output    
     static char dbcsbuf[3];
     if (uMsg == WM_CHAR || uMsg == WM_SYSCHAR) {
-      if (!dbcsbuf[0] && IsDBCSLeadByte((unsigned char)wParam)) {
-	dbcsbuf[0] = (char)wParam;
-	break;
-      }
-      if (dbcsbuf[0] && wParam) {
-	dbcsbuf[1] = (char)wParam;
+      if (e_keysym==ReturnKey || e_keysym==KeypadEnter) {
+	buffer[0] = '\r';
+	e_length = 1;
+      } else if (has_unicode()) 			
+      {
+	// If we have registered UNICODE window under NT4, 2000, XP
+	// We get WCHAR as wParam
+	e_length = utf8encode((unsigned short)wParam, &buffer[0]);								
+      } else {
+        if (!dbcsbuf[0] && IsDBCSLeadByte((unsigned char)wParam)) {
+          dbcsbuf[0] = (char)wParam;
+	  break;
+	}
+	int dbcsl = 1;
+	if(dbcsbuf[0]) {
+	  dbcsbuf[1] = (unsigned char) wParam;
+	  dbcsl = 2;
+      	} else {
+     	  dbcsbuf[0] = (unsigned char) wParam;
+	}
 	dbcsbuf[2] = 0;
 	unsigned short ucs[11];
 	int ucslen, len = 0;
 	ucslen = MultiByteToWideChar(GetACP(), MB_PRECOMPOSED,
-				     (char*)dbcsbuf, 2, (wchar_t*)ucs, 10);
-	// This is not doing the "surrogate characters"!!!
+                                    (char*)dbcsbuf, dbcsl, US2WC(ucs), 10);
+        // This is not doing the "surrogate characters"!!!
      	for (int i = 0; i < ucslen; i++)
-          len += utf8encode(ucs[i], buffer + len);
-      	buffer[len] = 0;
-	e_length = len;
+	  len += utf8encode(ucs[i], buffer + len);      		
+	e_length = len;				
 	dbcsbuf[0] = 0;
-      } else {
-	buffer[0] = char(wParam);
-	if (e_keysym==ReturnKey || e_keysym==KeypadEnter) buffer[0] = '\r';
-	e_length = 1;
       }
     } else {
       dbcsbuf[0] = 0;
       e_length = 0;
     }
-
+    buffer[e_length] = 0;
     e_text = buffer;
+		
     // for (int i = lParam&0xff; i--;)
     if (window) while (window->parent()) window = window->window();
     int r = handle(KEY,window);
-	buffer[0] = 0;
-	if (r)
-	  return 0;
+    buffer[0] = 0;
+    if (r)
+      return 0;
     break;}
 
   case WM_MOUSEWHEEL: {
@@ -1396,7 +1471,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     break;
   }
 
-  return DefWindowProc(hWnd, uMsg, wParam, lParam);
+  return __DefWindowProc(hWnd, uMsg, wParam, lParam);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1470,41 +1545,77 @@ void Window::create() {
 const Window* fl_mdi_window = 0; // set by show_inside()
 HCURSOR fltk::default_cursor;
 
+static void register_unicode(HICON icon)
+{
+  static WNDCLASSEXW wc;
+  wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_DBLCLKS;
+  wc.lpfnWndProc = (WNDPROC)WndProc;
+  wc.cbClsExtra = wc.cbWndExtra = 0;
+  wc.hInstance = xdisplay;  
+  wc.hIcon = wc.hIconSm = icon;
+  if (!default_cursor) default_cursor = LoadCursor(NULL, IDC_ARROW);
+  wc.hCursor = default_cursor;
+  //uchar r,g,b; get_color(GRAY,r,g,b);
+  //wc.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(r,g,b));
+  wc.hbrBackground = NULL;
+  wc.lpszMenuName = NULL;
+  wc.lpszClassName = L"fltk";
+  wc.cbSize = sizeof(wc);
+  RegisterClassExW(&wc);
+  // This is needed or multiple DLL's get confused (?):
+  // No, doing this makes none of the windows appear:
+  //UnregisterClass(wc.lpszClassName, xdisplay);
+
+  fl_wake_msg = RegisterWindowMessageW(L"fltk::ThreadWakeup");
+}
+
+static void register_ansi(HICON icon)
+{
+  static WNDCLASSEXA wc;
+  wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_DBLCLKS;
+  wc.lpfnWndProc = (WNDPROC)WndProc;
+  wc.cbClsExtra = wc.cbWndExtra = 0;
+  wc.hInstance = xdisplay;
+  wc.hIcon = wc.hIconSm = icon;
+  if (!default_cursor) default_cursor = LoadCursor(NULL, IDC_ARROW);
+  wc.hCursor = default_cursor;
+  //uchar r,g,b; get_color(GRAY,r,g,b);
+  //wc.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(r,g,b));
+  wc.hbrBackground = NULL;
+  wc.lpszMenuName = NULL;
+  wc.lpszClassName = "fltk";
+  wc.cbSize = sizeof(wc);
+  RegisterClassExA(&wc);	
+  // This is needed or multiple DLL's get confused (?):
+  // No, doing this makes none of the windows appear:
+  //UnregisterClass(wc.lpszClassName, xdisplay);
+
+  fl_wake_msg = RegisterWindowMessageA("fltk::ThreadWakeup");
+}
+
 void CreatedWindow::create(Window* window) {
 
   static bool registered = false;
-  if (!registered) {
+  if (!registered) {		
     registered = true;
-    static WNDCLASSEX wc;
-    wc.style = CS_HREDRAW | CS_VREDRAW | CS_OWNDC | CS_DBLCLKS;
-    wc.lpfnWndProc = (WNDPROC)WndProc;
-    wc.cbClsExtra = wc.cbWndExtra = 0;
-    wc.hInstance = xdisplay;
+		
     HICON icon = (HICON)window->icon();
     if (!icon) {
       icon = (HICON)LoadImage(GetModuleHandle(NULL), MAKEINTRESOURCE(101),
-			      IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR|LR_SHARED);
+                              IMAGE_ICON, 16, 16, LR_DEFAULTCOLOR|LR_SHARED);
       if (!icon) icon = LoadIcon(NULL, IDI_APPLICATION);
     }
-    wc.hIcon = wc.hIconSm = icon;
-    if (!default_cursor) default_cursor = LoadCursor(NULL, IDC_ARROW);
-    wc.hCursor = default_cursor;
-    //uchar r,g,b; get_color(GRAY,r,g,b);
-    //wc.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(r,g,b));
-    wc.hbrBackground = NULL;
-    wc.lpszMenuName = NULL;
-    wc.lpszClassName = "fltk";
-    wc.cbSize = sizeof(WNDCLASSEX);
-    RegisterClassEx(&wc);
-    fl_wake_msg = RegisterWindowMessage("fltk::ThreadWakeup");
-    // This is needed or multiple DLL's get confused (?):
-    // No, doing this makes none of the windows appear:
-    //UnregisterClass(wc.lpszClassName, xdisplay);
+    if(has_unicode()) {
+      register_unicode(icon);
+    } else {
+      register_ansi(icon);
+    }	  
+
 #if USE_DRAGDROP
     OleInitialize(0L);
 #endif
 
-	fl_use_imm32 = fl_load_imm32();
+    fl_use_imm32 = fl_load_imm32();
   }
 
   HWND parent;
@@ -1555,31 +1666,23 @@ void CreatedWindow::create(Window* window) {
   x->cursor = default_cursor;
   x->cursor_for = 0;
   const char *name = window->label();
-  int ucslen;
-  unsigned short* ucs =
-    name && *name ? utf8to16(name, strlen(name), &ucslen) : 0;
-  if (ucs) {
-    x->xid = CreateWindowExW(
-	styleEx,
-	L"fltk", ucs, style,
-	xp, yp, window->w()+dw, window->h()+dh,
-	parent,
-	NULL, // menu
-	xdisplay,
-	NULL // creation parameters
-	);
-    utf8free(ucs);
-  } else {
-    x->xid = CreateWindowEx(
-	styleEx,
-	"fltk", name, style,
-	xp, yp, window->w()+dw, window->h()+dh,
-	parent,
-	NULL, // menu
-	xdisplay,
-	NULL // creation parameters
-	);
+
+  int ucslen = 0;
+  static unsigned short ucs_name[1024+1];
+  if(name && *name) {
+    ucslen = win_8to16(name, strlen(name), ucs_name, 1024);		
   }
+  ucs_name[ucslen] = 0;
+	
+  x->xid = __CreateWindowExW(styleEx,
+                             L"fltk", (LPCWSTR)ucs_name, style,
+			     xp, yp, window->w()+dw, window->h()+dh,
+			     parent,
+			     NULL, // menu
+			     xdisplay,
+			     NULL // creation parameters
+			     );
+
   x->dc = GetDC(x->xid);
   SetTextAlign(x->dc, TA_BASELINE|TA_LEFT);
   SetBkMode(x->dc, TRANSPARENT);
@@ -1600,9 +1703,65 @@ void CreatedWindow::create(Window* window) {
 
 ////////////////////////////////////////////////////////////////
 
-HINSTANCE fltk::xdisplay = GetModuleHandle(NULL);
+HINSTANCE fltk::xdisplay = NULL;
 
-void fltk::open_display() {}
+extern "C" {
+  // Forward declaration of emulation functions
+  HWND WINAPI ansi_CreateWindowExW(DWORD dwExStyle, LPCWSTR lpClassName, LPCWSTR lpWindowName, DWORD dwStyle, int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam);
+  HMODULE WINAPI ansi_LoadLibraryW(LPCWSTR lpFileName);
+  BOOL WINAPI ansi_SetWindowTextW(HWND hWnd, LPCWSTR lpString);
+  int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT uType);
+  HFONT WINAPI ansi_CreateFontIndirectW(CONST LOGFONTW *);
+  BOOL WINAPI ansi_GetTextMetricsW(HDC, LPTEXTMETRICW);
+};
+
+pfCreateWindowExW       __CreateWindowExW;
+pfLoadLibraryW		__LoadLibraryW;
+pfSetWindowTextW	__SetWindowTextW;
+pfPeekMessage		__PeekMessage;
+pfGetMessage		__GetMessage;
+pfDispatchMessage       __DispatchMessage;
+pfPostMessage		__PostMessage;
+pfDefWindowProc		__DefWindowProc;
+pfMessageBoxW		__MessageBoxW;
+pfCreateFontIndirectW	__CreateFontIndirectW;
+pfGetTextMetricsW	__GetTextMetricsW;
+
+void fltk::open_display() {
+  static int been_here=0;
+  if(been_here) return;
+  been_here = 1;
+
+  if(has_unicode()) {
+    // Setup our function pointers to "W" functions
+    fltk::xdisplay              = GetModuleHandleW(NULL);
+    __CreateWindowExW           = CreateWindowExW;
+    __LoadLibraryW		= LoadLibraryW;
+    __SetWindowTextW	        = SetWindowTextW;
+    __PeekMessage		= PeekMessageW;
+    __GetMessage		= GetMessageW;
+    __DispatchMessage	        = DispatchMessageW;
+    __PostMessage		= PostMessageW;
+    __DefWindowProc		= DefWindowProcW;
+    __MessageBoxW		= MessageBoxW;
+    __CreateFontIndirectW       = CreateFontIndirectW;
+    __GetTextMetricsW           = GetTextMetricsW;
+  } else {
+    // Setup our function pointers to "A" and emulation functions
+    fltk::xdisplay              = GetModuleHandleA(NULL);
+    __CreateWindowExW           = ansi_CreateWindowExW;
+    __LoadLibraryW		= ansi_LoadLibraryW;
+    __SetWindowTextW	        = ansi_SetWindowTextW;
+    __PeekMessage		= PeekMessageA;
+    __GetMessage		= GetMessageA;
+    __DispatchMessage	        = DispatchMessageA;
+    __PostMessage		= PostMessageA;
+    __DefWindowProc		= DefWindowProcA;
+    __MessageBoxW		= ansi_MessageBoxW;
+    __CreateFontIndirectW       = ansi_CreateFontIndirectW;
+    __GetTextMetricsW           = ansi_GetTextMetricsW;
+  }
+}
 void fltk::close_display() {}
 
 void Window::size_range_() {
@@ -1640,13 +1799,10 @@ void Window::label(const char *name,const char *iname) {
   if (i && !parent()) {
     if (!name) name = "";
     int ucslen;
-    unsigned short* ucs = utf8to16(name, strlen(name), &ucslen);
-    if (ucs) {
-      SetWindowTextW(i->xid, ucs);
-      utf8free(ucs);
-    } else {
-      SetWindowText(i->xid, name);
-    }
+    static unsigned short ucs[1024+1];
+		ucslen = win_8to16(name, strlen(name), ucs, 1024);
+    ucs[ucslen] = 0;
+    __SetWindowTextW(i->xid, (LPCWSTR)ucs);
     // if (!iname) iname = filename_name(name);
     // should do something with iname here, it should label the taskbar icon
   }
@@ -1830,6 +1986,155 @@ Cleanup::~Cleanup() {
   if (screen_dc) ReleaseDC(0,screen_dc);
 }
 
+extern "C" {
+
+// Convert UTF-8 to UTF-16 (widechar)
+// - src		source buffer
+// - sn			source buffer length
+// - dst		destination buffer
+// - dn			destination buffer length
+// Return number of characters stored in dest buffer.
+// If source length is longer than dest length, only dest length is converted.
 //
-// End of "$Id: Fl_win32.cxx,v 1.218 2004/07/15 16:27:26 spitzak Exp $".
+// I would *really* like to have similar public function in utf.c
+// ie. the one that takes dest. buffer and length as params
+int win_8to16(const char *src, int sn, unsigned short *dst, int dn) 
+{
+  const char* p = src;
+  const char* e = src+sn;
+  int count = 0;
+
+  while (p < e) {
+    unsigned char c = *(unsigned char*)p;
+    if (c < 0xC2) { // ascii letter or bad code
+      dst[count] = c;
+      p++;
+    } else {
+      int len;
+      unsigned ucs = utf8decode(p,e,&len);
+      p += len;
+      if (ucs < 0x10000U) {
+	dst[count] = (unsigned short)ucs;
+      } else if (ucs > 0x10ffffU) {
+	// error!
+	dst[count] = 0xFFFD;
+      } else {
+	// write a surrogate pair:
+	dst[count++] = (((ucs-0x10000u)>>10)&0x3ff) | 0xd800;
+	dst[count] = (ucs&0x3ff) | 0xdc00;
+      }
+    }
+    count++;
+    if(count>=dn) {
+      break;
+    }
+  }
+  return count;
+}
+
+// Convert widechar to multibyte
+// src length is determited with wcslen
+static inline void CVT2ANSI(LPCWSTR src, char dst[], int dstlen) {
+  int len = 0;
+  if(src && *src) { 
+    len = WideCharToMultiByte(CP_ACP, 0, src, wcslen(src), dst, dstlen-1, NULL, NULL); 
+  }
+  dst[len] = 0;
+}
+
+HWND WINAPI ansi_CreateWindowExW(DWORD dwExStyle,
+				LPCWSTR lpClassName,
+				LPCWSTR lpWindowName,
+				DWORD dwStyle,
+				int x,
+				int y,
+				int nWidth,
+				int nHeight,
+				HWND hWndParent,
+				HMENU hMenu,
+				HINSTANCE hInstance,
+				LPVOID lpParam
+				)
+{
+  char ansi_windowname[1024], ansi_classname[1024];
+  CVT2ANSI(lpWindowName, ansi_windowname, 1024);
+  CVT2ANSI(lpClassName,	 ansi_classname,  1024);
+  return CreateWindowExA(dwExStyle, ansi_classname, ansi_windowname, dwStyle, x,y,nWidth,nHeight,hWndParent,hMenu,hInstance,lpParam);
+}
+
+HMODULE WINAPI ansi_LoadLibraryW(LPCWSTR lpFileName)
+{
+  char ansi_filename[MAX_PATH];
+  CVT2ANSI(lpFileName, ansi_filename, MAX_PATH);
+  return LoadLibraryA(ansi_filename);
+}
+
+BOOL WINAPI ansi_SetWindowTextW(HWND hWnd, LPCWSTR lpString)
+{
+  char ansi_windowname[1024];
+  CVT2ANSI(lpString, ansi_windowname, 1024);
+  return SetWindowTextA(hWnd, ansi_windowname);
+}
+
+HFONT WINAPI ansi_CreateFontIndirectW(CONST LOGFONTW *lFont)
+{
+  LOGFONTA lFontA;
+  lFontA.lfCharSet      = lFont->lfCharSet;
+  lFontA.lfClipPrecision= lFont->lfClipPrecision;
+  lFontA.lfEscapement   = lFont->lfEscapement;
+  lFontA.lfHeight       = lFont->lfHeight;
+  lFontA.lfItalic       = lFont->lfItalic;
+  lFontA.lfOrientation  = lFont->lfOrientation;
+  lFontA.lfOutPrecision = lFont->lfOutPrecision;
+  lFontA.lfPitchAndFamily = lFont->lfPitchAndFamily;
+  lFontA.lfQuality      = lFont->lfQuality;
+  lFontA.lfStrikeOut    = lFont->lfStrikeOut;
+  lFontA.lfUnderline    = lFont->lfUnderline;
+  lFontA.lfWeight       = lFont->lfWeight;
+  lFontA.lfWidth        = lFont->lfWidth;
+  CVT2ANSI(lFont->lfFaceName, lFontA.lfFaceName, LF_FACESIZE);
+  return CreateFontIndirectA(&lFontA);
+}
+
+BOOL WINAPI ansi_GetTextMetricsW(HDC dc, LPTEXTMETRICW metr)
+{
+  TEXTMETRICA metrA;
+  BOOL ret = GetTextMetricsA(dc, &metrA);
+#define COPY(x) metr->x = metrA.x
+  COPY(tmHeight);
+  COPY(tmAscent);
+  COPY(tmDescent);
+  COPY(tmInternalLeading);
+  COPY(tmExternalLeading);
+  COPY(tmAveCharWidth);
+  COPY(tmMaxCharWidth);
+  COPY(tmWeight);
+  COPY(tmOverhang);
+  COPY(tmDigitizedAspectX);
+  COPY(tmDigitizedAspectY);
+  COPY(tmFirstChar);
+  COPY(tmLastChar);
+  COPY(tmDefaultChar);
+  COPY(tmBreakChar);
+  COPY(tmItalic);
+  COPY(tmUnderlined);
+  COPY(tmStruckOut);
+  COPY(tmPitchAndFamily);
+  COPY(tmCharSet);
+  return ret;
+}
+
+int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT uType)
+{
+  char ansi_text[4096];
+  char ansi_caption[1024];
+  CVT2ANSI(lpText, ansi_text, 4096);
+  CVT2ANSI(lpCaption, ansi_caption, 1024);
+  return MessageBoxA(hWnd, ansi_text, ansi_caption, uType);
+}
+
+}; /* extern "C" */
+
+//
+// End of "$Id: Fl_win32.cxx,v 1.219 2004/07/19 23:33:05 laza2000 Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.44 2004/07/15 16:27:27 spitzak Exp $"
+// "$Id: fl_color_win32.cxx,v 1.45 2004/07/19 23:33:05 laza2000 Exp $"
 //
 // _WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -117,8 +117,7 @@ static bool dc_funcs_init = false;
 static void load_dc_funcs()
 {
   dc_funcs_init = true;
-  //HINSTANCE hmod = __LoadLibraryW(L"Gdi32.dll");
-  HINSTANCE hmod = LoadLibraryA("Gdi32.dll");
+  HINSTANCE hmod = __LoadLibraryW(L"Gdi32.dll");  
   if(hmod) {
     __SetDCPenColor = (pfSetDCPenColor)GetProcAddress(hmod, "SetDCPenColor");
     __SetDCBrushColor = (pfSetDCBrushColor)GetProcAddress(hmod, "SetDCBrushColor");
@@ -252,5 +251,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.44 2004/07/15 16:27:27 spitzak Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.45 2004/07/19 23:33:05 laza2000 Exp $".
 //

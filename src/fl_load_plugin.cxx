@@ -1,5 +1,5 @@
 /*
- * "$Id: fl_load_plugin.cxx,v 1.19 2002/12/09 04:52:30 spitzak Exp $"
+ * "$Id: fl_load_plugin.cxx,v 1.20 2004/07/19 23:33:05 laza2000 Exp $"
  *
  * This is a wrapper to make it simple to load plugins on various
  * systems. load_plugin(file, symbol) will load the file as a
@@ -20,11 +20,15 @@
 
 #if defined(_WIN32)
 
+# include <fltk/x.h>
 # include <windows.h>
 # include <winbase.h>
 
 void* load_plugin(const char* name, const char* symbol) {
-  HINSTANCE handle = LoadLibrary(name);
+	unsigned short ucs[1024+1];
+	int ucslen = win_8to16(name, strlen(name), ucs, 1024);
+	ucs[ucslen] = 0;
+  HINSTANCE handle = __LoadLibraryW((LPCWSTR)ucs);
   if (handle) {
     if (!symbol) return (void*)handle;
     void* f = (void*)GetProcAddress(handle, symbol);
@@ -83,5 +87,5 @@ void* load_plugin(const char* name, const char*) {
 #endif
 
 //
-// End of "$Id: fl_load_plugin.cxx,v 1.19 2002/12/09 04:52:30 spitzak Exp $"
+// End of "$Id: fl_load_plugin.cxx,v 1.20 2004/07/19 23:33:05 laza2000 Exp $"
 //

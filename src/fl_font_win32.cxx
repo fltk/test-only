@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.56 2004/07/15 16:27:27 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.57 2004/07/19 23:33:05 laza2000 Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -80,50 +80,38 @@ static FontSize* all_fonts;
 FontSize::FontSize(const char* name, int attr, int size, int charset) {
   current = this;
 
+  HDC dc = getDC();
+
   int weight = (attr&BOLD) ? FW_BOLD : FW_NORMAL;
   int italic = (attr&ITALIC) ? 1 : 0;
+  //int height = -MulDiv(size, GetDeviceCaps(dc, LOGPIXELSY), 72);
+  int height = -size;
+
+  LOGFONTW lf;
+  lf.lfHeight         = height; // use "char size"
+  lf.lfWidth          = 0L;
+  lf.lfEscapement     = 0L;
+  lf.lfOrientation    = 0L;
+  lf.lfWeight         = weight;
+  lf.lfItalic         = italic;
+  lf.lfUnderline      = FALSE;
+  lf.lfStrikeOut      = FALSE;
+  lf.lfCharSet        = charset;
+  lf.lfClipPrecision  = CLIP_DEFAULT_PRECIS;
+  lf.lfPitchAndFamily = DEFAULT_PITCH | FF_DONTCARE;
+  lf.lfOutPrecision   = OUT_DEFAULT_PRECIS;
+  lf.lfQuality        = DEFAULT_QUALITY;
 
   int ucslen;
-  unsigned short* ucs = utf8to16(name, strlen(name), &ucslen);
-  if (ucs) {
-    font = CreateFontW(
-	-size,		// use "char size"
-	0,		// logical average character width
-	0,		// angle of escapement
-	0,		// base-line orientation angle
-	weight,
-	italic,
-	FALSE,		// underline attribute flag
-	FALSE,		// strikeout attribute flag
-	charset,	// character set identifier
-	OUT_DEFAULT_PRECIS, // output precision
-	CLIP_DEFAULT_PRECIS,// clipping precision
-	DEFAULT_QUALITY,// output quality
-	DEFAULT_PITCH,	// pitch and family
-	ucs		// pointer to typeface name string
-	);
-    utf8free(ucs);
-  } else {
-    font = CreateFont(
-	-size,		// use "char size"
-	0,		// logical average character width
-	0,		// angle of escapement
-	0,		// base-line orientation angle
-	weight,
-	italic,
-	FALSE,		// underline attribute flag
-	FALSE,		// strikeout attribute flag
-	charset,	// character set identifier
-	OUT_DEFAULT_PRECIS, // output precision
-	CLIP_DEFAULT_PRECIS,// clipping precision
-	DEFAULT_QUALITY,// output quality
-	DEFAULT_PITCH,	// pitch and family
-	name		// pointer to typeface name string
-	);
-  }
-  HDC dc = getDC();
+  ucslen = win_8to16(name, strlen(name), (unsigned short*)lf.lfFaceName, LF_FACESIZE);
+  lf.lfFaceName[ucslen] = 0;
+
+  // This one does exactly same thing as CreateFont,
+  // But we use CreateFontIndirect, since Windows CE does not have CreateFont
+  font = __CreateFontIndirectW(&lf);
+
   SelectObject(dc, font);
-  GetTextMetricsW(dc, &current->metr);
+  __GetTextMetricsW(dc, &current->metr);
 //    printf("FontSize '%s' %d %d %d -> %d %d\n",
 //  	 name, attr, size, charset,
 //  	 current->metr.tmAscent,
@@ -256,34 +244,47 @@ void fltk::setfont(Font* font, float psize) {
 float fltk::getascent()  { return current->metr.tmAscent; }
 float fltk::getdescent() { return current->metr.tmDescent; }
   
-float fltk::getwidth(const char* text, int n) {
+#define UCS_BUFSIZE 512
+
+float fltk::getwidth(const char* text, int n) {	
   SIZE size;
+	int ret = 0;
   HDC dc = getDC();
   SelectObject(dc, current->font);
   // I think win32 has a fractional version of this:
-  int count; unsigned short* buffer = utf8to16(text,n,&count);
-  if (buffer) {
-    GetTextExtentPointW(dc, buffer, count, &size);
-    utf8free(buffer);
-  } else {
-    GetTextExtentPoint(dc, text, n, &size);
+  int ucslen; 
+  static unsigned short ucs[UCS_BUFSIZE+1];
+  while(n > 0) {
+    ucslen = win_8to16(text, n, ucs, UCS_BUFSIZE);
+    GetTextExtentPoint32W(dc, (LPCWSTR)ucs, ucslen, &size);		
+    ret += size.cx;
+    n -= UCS_BUFSIZE;
+    text += UCS_BUFSIZE;
   }
-  return size.cx;
+  return (float)ret;
 }
 
 void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
   SetTextColor(dc, current_xpixel);
   HGDIOBJ oldfont = SelectObject(dc, current->font);
-  int count; unsigned short* buffer = utf8to16(text,n,&count);
-  if (buffer) {
-    TextOutW(dc, int(floorf(x+.5f)), int(floorf(y+.5f)), buffer, count);
-    utf8free(buffer);
-  } else {
-    TextOut(dc, int(floorf(x+.5f)), int(floorf(y+.5f)), text, n);
+
+  int ucslen; 
+  static unsigned short ucs[UCS_BUFSIZE+1];
+  while(n > 0) {
+    ucslen = win_8to16(text, n, ucs, UCS_BUFSIZE);
+    TextOutW(dc, int(floorf(x+.5f)), int(floorf(y+.5f)), (LPCWSTR)ucs, ucslen);		
+    n -= UCS_BUFSIZE;
+    text += UCS_BUFSIZE;
+    if(n > 0) {
+      SIZE size;
+      GetTextExtentPoint32W(dc, (LPCWSTR)ucs, ucslen, &size);
+      x += size.cx;
+    }
   }
+
   SelectObject(dc, oldfont);
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.56 2004/07/15 16:27:27 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.57 2004/07/19 23:33:05 laza2000 Exp $".
 //

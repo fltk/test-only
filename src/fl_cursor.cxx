@@ -1,5 +1,5 @@
 //
-// "$Id: fl_cursor.cxx,v 1.23 2004/06/04 08:58:05 spitzak Exp $"
+// "$Id: fl_cursor.cxx,v 1.24 2004/07/19 23:33:05 laza2000 Exp $"
 //
 // Mouse cursor support for the Fast Light Tool Kit (FLTK).
 //
@@ -223,7 +223,7 @@ void Widget::cursor(fltk::Cursor* c) const {
 #elif defined(_WIN32)
 
 struct fltk::Cursor {
-  LPSTR resource;
+  LPTSTR resource;
   HCURSOR cursor;
 };
 
@@ -234,21 +234,21 @@ fltk::Cursor *fltk::cursor(void *raw) {
   return c;
 }
 
-static fltk::Cursor arrow = {IDC_ARROW};
-static fltk::Cursor cross = {IDC_CROSS};
-static fltk::Cursor wait = {IDC_WAIT};
-static fltk::Cursor insert = {IDC_IBEAM};
+static fltk::Cursor arrow = {TEXT(IDC_ARROW)};
+static fltk::Cursor cross = {TEXT(IDC_CROSS)};
+static fltk::Cursor wait = {TEXT(IDC_WAIT)};
+static fltk::Cursor insert = {TEXT(IDC_IBEAM)};
 #ifndef IDC_HAND
 # define IDC_HAND IDC_UPARROW
 #endif
-static fltk::Cursor hand = {IDC_HAND};
-static fltk::Cursor help = {IDC_HELP};
-static fltk::Cursor move = {IDC_SIZEALL};
-static fltk::Cursor ns = {IDC_SIZENS};
-static fltk::Cursor we = {IDC_SIZEWE};
-static fltk::Cursor nwse = {IDC_SIZENWSE};
-static fltk::Cursor nesw = {IDC_SIZENESW};
-static fltk::Cursor no = {IDC_NO};
+static fltk::Cursor hand = {TEXT(IDC_HAND)};
+static fltk::Cursor help = {TEXT(IDC_HELP)};
+static fltk::Cursor move = {TEXT(IDC_SIZEALL)};
+static fltk::Cursor ns = {TEXT(IDC_SIZENS)};
+static fltk::Cursor we = {TEXT(IDC_SIZEWE)};
+static fltk::Cursor nwse = {TEXT(IDC_SIZENWSE)};
+static fltk::Cursor nesw = {TEXT(IDC_SIZENESW)};
+static fltk::Cursor no = {TEXT(IDC_NO)};
 static fltk::Cursor none = {0};
 
 void Widget::cursor(fltk::Cursor* c) const {
@@ -427,5 +427,5 @@ fltk::Cursor* const fltk::CURSOR_NO	= &no;
 fltk::Cursor* const fltk::CURSOR_NONE	= &none;
 
 //
-// End of "$Id: fl_cursor.cxx,v 1.23 2004/06/04 08:58:05 spitzak Exp $".
+// End of "$Id: fl_cursor.cxx,v 1.24 2004/07/19 23:33:05 laza2000 Exp $".
 //
