@@ -911,7 +911,7 @@ int Xutf8LookupString(XIC ic, XKeyPressedEvent* event,
     len = outbuf - buffer;
   } else
 
-#endif /* !HAVE_ICONV */
+#endif /* HAVE_ICONV */
   {
     // else use the keysym-translator:
 

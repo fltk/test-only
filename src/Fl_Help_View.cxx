@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Help_View.cxx,v 1.9 2004/08/01 22:28:22 spitzak Exp $"
+// "$Id: Fl_Help_View.cxx,v 1.10 2004/12/30 11:38:55 spitzak Exp $"
 //
 // Copyright 1997-2004 by Easy Software Products.
 // Image support donated by Matthias Melcher, Copyright 2000.
@@ -337,12 +337,12 @@ void
   i = 0;
 
   if (hscrollbar_->visible ()) {
-    draw_child (*hscrollbar_);
+    update_child (*hscrollbar_);
     hh -= 17;
     i++;
   }
   if (scrollbar_->visible ()) {
-    draw_child (*scrollbar_);
+    update_child (*scrollbar_);
     ww -= 17;
     i++;
   }
@@ -2590,5 +2590,5 @@ static void hscrollbar_callback (Widget * s, void *)
 
 
 //
-// End of "$Id: Fl_Help_View.cxx,v 1.9 2004/08/01 22:28:22 spitzak Exp $".
+// End of "$Id: Fl_Help_View.cxx,v 1.10 2004/12/30 11:38:55 spitzak Exp $".
 //

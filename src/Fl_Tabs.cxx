@@ -1,4 +1,4 @@
-// "$Id: Fl_Tabs.cxx,v 1.76 2004/12/18 19:03:12 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.77 2004/12/30 11:38:55 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -380,7 +380,9 @@ bool TabGroup::selected_child(Widget *newvalue) {
 
 enum {LEFT, RIGHT, SELECTED};
 
+#if USE_CLIPOUT
 extern Widget* fl_did_clipping;
+#endif
 
 static int H;
 static int p[128];
@@ -391,7 +393,11 @@ void TabGroup::draw() {
   if (damage() & DAMAGE_ALL) { // redraw the entire thing:
 #if USE_CLIPOUT
     push_clip(0, 0, w(), h());
-    if (v) draw_child(*v);
+    if (v) {
+      fl_did_clipping = 0;
+      draw_child(*v);
+      if (fl_did_clipping != v) clipout(v->x(), v->y(), v->w(), v->h());
+    }
     draw_background();
     pop_clip();
 #else
@@ -526,4 +532,4 @@ TabGroup::TabGroup(int X,int Y,int W, int H, const char *l)
   focus_index(0);
 }
 
-// End of "$Id: Fl_Tabs.cxx,v 1.76 2004/12/18 19:03:12 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.77 2004/12/30 11:38:55 spitzak Exp $".

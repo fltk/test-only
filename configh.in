@@ -1,9 +1,8 @@
-/*
- * "$Id: configh.in,v 1.65 2004/12/18 19:02:59 spitzak Exp $"
+/* "$Id: configh.in,v 1.66 2004/12/30 11:38:52 spitzak Exp $"
  *
- * Configuration file for the Fast Light Tool Kit (FLTK).
+ * Configuration file for compiling the Fast Light Tool Kit (FLTK).
  *
- * Copyright 1998-2003 by Bill Spitzak and others.
+ * Copyright 1998-2005 by Bill Spitzak and others.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,233 +22,142 @@
  * Please report all bugs and problems to "fltk-bugs@fltk.org".
  */
 
-/*
- * Where to find files...
- */
-
+/* Where to find files. Currently not used, and if they are they will
+   be overridden by environment variables with the same name. */
 #define FLTK_DATADIR		""
 #define FLTK_DOCDIR		""
 
-
-/*
- * Byte order of your machine: 1 = big-endian, 0 = little-endian.
- */
-
+/* Byte order of your machine: 1 = big-endian, 0 = little-endian. */
 #define WORDS_BIGENDIAN		0
 
-
-/*
- * Types used by fl_draw_image.  One of U32 or U64 must be defined.
- * U16 is optional but FLTK will work better with it!
- */
-
+/* Types used by fl_draw_image.  One of U32 or U64 must be defined.
+   U16 is optional but FLTK will work better with it! */
 #undef U16
 #undef U32
 #undef U64
 
-
-/*
- * Setting this to zero will delete code to handle X and WIN32
- * colormaps, this will save a good deal of code (especially for
- * fl_draw_image), but FLTK will only work on TrueColor visuals.
- */
-
-#define USE_COLORMAP		1
-
-
-/*
- * Set this to 1 to compile for X11 on Windows or OS/X.
- */
-
+/* Set this to 1 to compile for X11 on Windows or OS/X. */
 #undef USE_X11
 #if !defined(USE_X11) && !defined(_WIN32) && !defined(__APPLE__)
 # define USE_X11 1
 #endif
 
-/*
- * Use the new Xft library to draw fonts. (ignored if !USE_X11)
- */
+/* Setting this to zero will delete code to handle X and WIN32
+   colormaps, this will save a good deal of code (especially for
+   fl_draw_image), but FLTK will only work on TrueColor visuals. */
+#define USE_COLORMAP		1
 
+/* Use the new Xft library to draw fonts, which is how you get
+   anti-aliasing. (ignored if !USE_X11) */
 #define USE_XFT			0
 
-/*
- * Use the Cairo library to draw everything. Ignored if !USE_X11
- * Currently this just provides a cairo_t in fltk::cc, it still
- * draws everything with X11/Xft.
- */
-
+/* Use the Cairo library to draw everything. Ignored if !USE_X11
+   Currently only partly implemented, though line drawing looks
+   nice. For more info on Cairo see http://www.cairographics.org */
 #define USE_CAIRO		0
 
-/*
- * If this is true then assumme fltk::clip_out() either does not work
- * or it is really slow. This is for graphic systems that don't support
- * non-rectangular clipping regions. Notice that this makes fltk skip
- * a lot of tricks it uses to avoid blinking. However this may not
- * matter if your graphics are double-buffered anyway.
- */
-#define NO_CLIP_OUT USE_CAIRO
+/* Use the fltk::clipout() method to make redrawing blink less, by
+   drawing the widgets first, and then the background of the
+   window. This is unnecessary in double-buffered windows, and
+   tests have shown it to be slower, and it is more complicated.
+   Also Cairo and OpenGL do not support clipout() so it does not
+   work in them. */
+#define USE_CLIPOUT 0
 
-/*
- * Do we have the X double-buffer extension?  Turning this on will
- * make the list_visuals program produce more information.
- * (ignored if !USE_X11)
- */
-
+/* Do we have the X double-buffer extension header file
+   <X11/extensions/Xdbe.h>? Turning this on will make the list_visuals
+   program produce info about it. (ignored if !USE_X11) */
 #define HAVE_XDBE		0
 
-
-/*
- * Actually try to use the double-buffer extension? Fl_Double_Window
- * and Fl_Overlay_Window will use this. The new version limits itself
- * to doing swap without clipping turned on and should work on more
- * X servers than the fltk1 version.
- * (ignored if !USE_X11)
- */
-
+/* Actually try to use the double-buffer extension to make
+   double-buffered windows? If this is false then Pixmaps will
+   be used for the double buffers. Pixmaps will also be used if
+   at runtime fltk detects that double-buffering does not work.
+   Some older X servers may claim that double buffering works
+   when it does not and you will have to turn this off.
+   (ignored if !USE_X11)*/
 #define USE_XDBE		HAVE_XDBE
 
-
-/*
- * Did we detect the X overlay extension? This enables code to locate
- * the overlay visual for use by Fl_Overlay_Window and Fl_Gl_Window.
- * (ignored if !USE_X11)
- */
-
+/* Did we detect the X overlay extension on the X server? This
+   is currently not used anywhere. */
 #define HAVE_OVERLAY		0
 
+/* Use the X overlay extension for MenuWindow and Tooltips. Pretty
+   much depreciated, this will add a substantial amount of code
+   to manage more than one visual, and has only worked on Irix.
+   (ignored if !USE_X11) */
+#define USE_OVERLAY		0
 
-/*
- * Use the X overlay extension?  FLTK will try to use an overlay
- * visual for Fl_Overlay_Window and for Fl_Menu_Window (i.e. the menus
- * and tooltips).  This also adds a substantial amount of code to FLTK
- * so that it can manage an extra visual.  Tested on IRIX and
- * XFree86.  Does not work with current versions of Xft because Xft
- * cannot handle the colormapped visuals that overlays normally use.
- * (ignored if !USE_X11)
- */
-
-#if USE_XFT
-#  define USE_OVERLAY		0
-#else
-#  define USE_OVERLAY		HAVE_OVERLAY
-#endif
-
-
-/*
- * Use the Xinerama extension? This allows an X server to describe
- * multiple monitors. If not used FLTK will assumme the entire X
- * display area is one monitor, unless it is very wide, in which
- * case FLTK will guess that it is two monitors next to each other.
- * (ignored if !USE_X11)
- */
-
+/* Use the Xinerama extension? This allows an X server to describe
+   multiple monitors. If not used FLTK will assumme the entire X
+   display area is one monitor, unless it is very wide, in which
+   case FLTK will guess that it is two monitors next to each other.
+   (ignored if !USE_X11) */
 #define USE_XINERAMA		0
- 
 
-/*
- * Use the Windows NT5.0/Win98 multi-monitor calls? If ths is false it
- * will guess 1 or 2 monitors, similar to the X version.
- * (ignored if !_WIN32)
- */
-
+/* Use the Windows NT5.0/Win98 multi-monitor calls? If ths is false it
+   will guess 1 or 2 monitors, similar to the X version.
+   (ignored if !_WIN32) */
 #define USE_MULTIMONITOR	1
 
-
-/*
- * Use the Windows NT4.0/Win95 "stock brushes" calls. These calls
- * modernize the Win32 GDI into a "set current color" type of
- * interface and make drawing substantially faster. Without them
- * fltk must create/destroy "pens" and "brushes" whenever it wants
- * to change the color it is drawing with.
- * (ignored if !_WIN32)
- */
-
+/* Use the Windows NT4.0/Win95 "stock brushes" calls. These calls
+   modernize the Win32 GDI into a "set current color" type of
+   interface and make drawing substantially faster. Without them
+   fltk must create/destroy "pens" and "brushes" whenever it wants
+   to change the color it is drawing with.
+   (ignored if !_WIN32) */
 #define USE_STOCK_BRUSH		1
 
-/*
- * Use "X Input Method" for i18n text input. Most familiar as the
- * "dead key prefix" code. But Japanese users use this to run far more
- * complex programs for selecting glyphs. You can turn it off on the
- * (rare) systems that produce an "encoding" that fltk does not
- * understand, you will still be able to type many Latin characters
- * with fltk's right-Ctrl+letters input method.
- * (this value may also disable Windows Input method in the future)
- */
+/* Use "X Input Method" for i18n text input. Most familiar as the
+   "dead key prefix" code. But Japanese users use this to run far more
+   complex programs for selecting glyphs. You can turn it off on the
+   (rare) systems that produce an "encoding" that fltk does not
+   understand, you will still be able to type many Latin characters
+   with fltk's right-Ctrl+letters input method. Turning this off
+   should also disable such input methods on other systems, nyi. */
 #define USE_XIM			1
 
-/*
- * Do we have a working iconv program?
- * (only used with X11 with USE_XIM when the XFree86 Xutf8LookupString
- * function is not available). If this is not available than XIM will
- * probably not work.
- */
+/* Do we have a working iconv program?
+   (only used with X11 with USE_XIM when the XFree86 Xutf8LookupString
+   function is not available). If this is not available than XIM will
+   probably not work. */
+#define HAVE_ICONV		0
 
-#undef HAVE_ICONV_H
-#undef HAVE_ICONV
-
-
-/*
- * Set this to 0 if your system does not have OpenGL. This will
- * disable all the code in libfltk_gl and disable the demo programs
- * that use OpenGL.
- */
-
+/* Set this to 0 if your system does not have OpenGL. This will
+   disable all the code in libfltk_gl and disable the demo programs
+   that use OpenGL. */
 #define HAVE_GL			0
 
+/* Do you have the OpenGL Utility Library header file?
+   (many broken Mesa RPMs do not...). This is only used by demo
+   programs. */
+#define HAVE_GL_GLU_H		1
 
-/*
- * Do you have the OpenGL Utility Library header file?
- * (many broken Mesa RPMs do not...)
- */
-
-#undef HAVE_GL_GLU_H
-
-
-/*
- * Does OpenGL have the ability to draw into the overlay? Currently
- * this uses the same code as X for finding the overlay visual,
- * however it is possible that future versions of GLX will use
- * other methods.
- */
-
+/* Does OpenGL have the ability to draw into the overlay? Currently
+   this uses the same code as X for finding the overlay visual,
+   however it is possible that future versions of GLX will use
+   other methods. */
 #define HAVE_GL_OVERLAY		HAVE_OVERLAY
 
+/* Use the OpenGL overlay for Gl_Window::draw_overlay(). Tested only
+   on Irix. Overlay is usually colormapped, limiting what OpenGL
+   you can draw, and requiring fltk to compile in a lot of colormap
+   and visual management code. */
+#define USE_GL_OVERLAY	 	0
 
-/*
- * Use the OpenGL overlay for Gl_Window::draw_overlay(). There is
- * probably no reason to turn this off if overlays are possible.
- * Fonts work even if Xft is used because OpenGL bypasses the Xft
- * font mechanism.
- */
-
-#if HAVE_GL
-#  define USE_GL_OVERLAY	HAVE_GL_OVERLAY
-#else
-#  define USE_GL_OVERLAY	0
-#endif
-
-
-/*
- * What header file(s) do we use for directory access
- * (ignored for _WIN32)
- */
-
+/* Standard autoconf stuff to figure out readdir() header files.
+   (ignored for _WIN32) */
 #undef HAVE_DIRENT_H
 #undef HAVE_SYS_NDIR_H
 #undef HAVE_SYS_DIR_H
 #undef HAVE_NDIR_H
 #undef HAVE_SCANDIR
 
-
-/*
- * If these are false, fltk will define it's own replacement functions
- * which will have an fl_ prefix. Use the fltk/string.h header file
- * instead of <string.h> to call these.
- */
-
+/* If not set fltk will define it's own versions of these string
+   functions. By including the fltk/string.h header file you will
+   be able to call these from user programs on any platform. */
 #undef HAVE_STRING_H
 #undef HAVE_STRINGS_H
-
 #undef HAVE_VSNPRINTF
 #undef HAVE_SNPRINTF
 #undef HAVE_STRCASECMP
@@ -258,132 +166,68 @@
 #undef HAVE_STRLCPY
 #undef HAVE_STRNCASECMP
 
-
-/*
- * Whether or not select() call has its own header file.
- */
-
+/* Whether or not select() call has its own header file. */
 #undef HAVE_SYS_SELECT_H
 
-
-/*
- * Whether or not we have the <sys/stdtypes.h> header file.
- */
-
+/* Whether or not we have the <sys/stdtypes.h> header file. */
 #undef HAVE_SYS_STDTYPES_H
 
-
-/*
- * Use the poll() call provided on Linux and IRIX instead of select()
- */
-
+/* Use the poll() call provided on Linux and IRIX instead of select() */
 #define USE_POLL		0
 
-
-/*
- * Do we have various image libraries?
- */
-
+/* Do we have various image libraries? */
 #undef HAVE_LIBPNG
 #undef HAVE_LIBZ
 #undef HAVE_LIBJPEG
 
-
-/*
- * Which header file do we include for libpng?
- */
-
+/* Which header file do we include for libpng? */
 #undef HAVE_LOCAL_PNG_H
 #undef HAVE_PNG_H
 #undef HAVE_LIBPNG_PNG_H
 
-
-/*
- * Which header file do we include for libjpeg?
- */
-
+/* Which header file do we include for libjpeg? */
 #undef HAVE_LOCAL_JPEG_H
 
-
-/*
- * Do we have the png_xyz() functions?
- */
-
+/* Do we have the png_xyz() functions? */
 #undef HAVE_PNG_GET_VALID
 #undef HAVE_PNG_SET_TRNS_TO_ALPHA
 
-
-/*
- * Do we have POSIX threading?
- */
-
+/* Do we have POSIX thread library? fltk::lock() will not work unless
+   this exists or WIN32 exists. */
 #undef HAVE_PTHREAD
 #undef HAVE_PTHREAD_H
 
-/*
- * Do we use exceptions?
- */
+/* Do we have exceptions in the compiler? Only used by test programs. */
 #undef HAVE_EXCEPTIONS
 
 /**** MRS: THESE TWO ARE GOING AWAY! ****/
 /* Enables fl_load_plugin() on Unix */
-#define HAVE_DLOPEN 0
-
-/* Where, after ~/.fltk, to look for plugin files */
-#define CONFIGDIR "/usr/local/lib/fltk"
+#define HAVE_DLOPEN		0
 
 /**** MRS: These should be run-time checks!!!! ****/
 /* The BoXX machines (and possibly other Linux machines) have bugs in
    the X/OpenGL driver for FireGL for handling hardware overlays. Turn
    this on to work around these, but it will cause the overlay to
-   blink unnecessarily.
-*/
-/*#define BOXX_OVERLAY_BUGS 0*/
+   blink unnecessarily. Ignored if !USE_GL_OVERLAY. */
+#define BOXX_OVERLAY_BUGS	0
 
 /* The SGI 320 NT machines have a bug where the cursor interferes with
    the hardware overlay. Turn this on to work around this. I have been
    told this slows down display quite a bit on some NT machines.
-*/
-/*#define SGI320_BUG 0*/
+   Ignored if !USE_GL_OVERLAY. */
+#define SGI320_BUG		0
 
 /**** MRS: This may go away! ****/
-
 /* Enables Windows GUI emulation: clicking on most widgets (such as
    buttons) moves the focus to them. This makes some useful GUI designs
-   impossible.
-*/
-/*#define CLICK_MOVES_FOCUS 0*/
+   impossible. */
+#define CLICK_MOVES_FOCUS	0
 
-/* Enables Windows GUI emulation: hitting the Alt key navigates the
-   focus to the menubar. This makes using Alt as a modifier very
-   difficult because the user can't press it and then change their
-   mind and release it.
-*/
-/*#define ALT_GOES_TO_MENUBAR 0*/
+/* If false or not defined, then if NumLock is off keypad events are
+   translated to fltk::LEFT_KEY, etc.  If on, keypad keys are always
+   reported as fltk::KEYPAD0, fltk::KEYPAD1, ..., ignoring the setting
+   of the NumLock key. This is incredibly useful if you want your
+   program to actually use the keypad, and is recommended. */
+#define IGNORE_NUMLOCK		1
 
-/* If set, keyboard events are reported so that the keypad
-   is always fltk::KEYPAD0..fltk::KEYPAD9, ignoring the setting of
-   the NumLock key. This is incredibly useful if you want your program
-   to actually use the keypad, and is recommended.
-
-   If this is not defined or defined to 0, then if NumLock is off
-   keypad events are translated to fltk::LEFT_KEY, etc.
-*/
-#define IGNORE_NUMLOCK 1
-
-/* Use the fltk::clipout() method to make redrawing blink less, by
-   drawing the widgets first, and then the background of the
-   window. FLTK now defaults to double buffered windows so this
-   produces no visible difference unless you do clear_double_buffer to
-   the window.
-
-   Timing tests show this somewhat slower than drawing overlapping
-   rectangles. This also prevents non-rectangular and overlapping
-   widgets from drawing correctly. Furthermore, OpenGL and Cairo do
-   not support clipout().
-*/
-#define USE_CLIPOUT 0
-
-/*
- * End of "$Id: configh.in,v 1.65 2004/12/18 19:02:59 spitzak Exp $".
- */
+/* End of "$Id: configh.in,v 1.66 2004/12/30 11:38:52 spitzak Exp $". */

@@ -1,5 +1,5 @@
 //
-// "$Id: scroll.cxx,v 1.21 2002/12/10 02:01:06 easysw Exp $"
+// "$Id: scroll.cxx,v 1.22 2004/12/30 11:39:21 spitzak Exp $"
 //
 // Fl_Scroll test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,23 +23,22 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Double_Window.h>
-#include <fltk/Fl_Scroll.h>
-#include <fltk/Fl_Toggle_Button.h>
-#include <fltk/Fl_Choice.h>
-#include <fltk/Fl_Box.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Double_Window.H>
+#include <FL/Fl_Scroll.H>
+#include <FL/Fl_Light_Button.H>
+#include <FL/Fl_Choice.H>
+#include <FL/Fl_Box.H>
 #include <string.h>
 #include <stdio.h>
-#include <fltk/fl_draw.h>
-#include <fltk/math.h>
+#include <FL/fl_draw.H>
+#include <FL/math.h>
 
 class Drawing : public Fl_Widget {
   void draw();
 public:
   Drawing(int X,int Y,int W,int H,const char* L) : Fl_Widget(X,Y,W,H,L) {
-	clear_flag(FL_ALIGN_MASK);
-    set_flag(FL_ALIGN_TOP);
+    align(FL_ALIGN_TOP);
     box(FL_FLAT_BOX);
     color(FL_WHITE);
   }
@@ -48,14 +47,17 @@ public:
 void Drawing::draw() {
   draw_box();
   fl_push_matrix();
+  // Change from fltk1 to 2: removed translation by x(),y():
   fl_translate(w()/2, h()/2);
   fl_scale(w()/2, h()/2);
   fl_color(FL_BLACK);
   for (int i = 0; i < 20; i++) {
     for (int j = i+1; j < 20; j++) {
+      fl_begin_line();
+      // Change from fltk1 to 2: added 'f' to make arguments float:
       fl_vertex(cosf(M_PI*i/10+.1), sinf(M_PI*i/10+.1));
       fl_vertex(cosf(M_PI*j/10+.1), sinf(M_PI*j/10+.1));
-      fl_stroke();
+      fl_end_line();
     }
   }
   fl_pop_matrix();
@@ -64,14 +66,12 @@ void Drawing::draw() {
 Fl_Scroll* thescroll;
 
 void box_cb(Fl_Widget* o, void*) {
-  thescroll->box(o->value() ? (Fl_Boxtype)FL_DOWN_BOX : FL_NO_BOX);
-  thescroll->relayout();
+  thescroll->box(((Fl_Button*)o)->value() ? FL_DOWN_FRAME : FL_NO_BOX);
   thescroll->redraw();
 }
 
 void type_cb(Fl_Widget*, void* v) {
-  thescroll->type((long)v);
-  thescroll->relayout();
+  thescroll->type(int(v));
   thescroll->redraw();
 }
 
@@ -87,8 +87,7 @@ Fl_Menu_Item choices[] = {
 };
 
 void align_cb(Fl_Widget*, void* v) {
-  Fl_Style::scrollbar_align = (Fl_Flags)v;
-  thescroll->relayout();
+  thescroll->scrollbar.align(int(v));
   thescroll->redraw();
 }
 
@@ -105,18 +104,13 @@ int main(int argc, char** argv) {
   window.box(FL_NO_BOX);
   Fl_Scroll scroll(0,0,5*75,300);
 
-  Fl_Group g(0, 0, 5*75, 8*25);
   int n = 0;
   for (int y=0; y<16; y++) for (int x=0; x<5; x++) {
     char buf[20]; sprintf(buf,"%d",n++);
-    if (y==8 && x==0) g.end();
     Fl_Button* b = new Fl_Button(x*75,y*25+(y>=8?5*75:0),75,25,strdup(buf));
     b->color(n);
-    b->selection_color(n);
-    b->label_color(FL_WHITE);
-    b->selection_text_color(FL_WHITE);
+    b->labelcolor(FL_WHITE);
   }
-  g.end();
   Drawing drawing(0,8*25,5*75,5*75,0);
   scroll.end();
   window.resizable(scroll);
@@ -124,15 +118,14 @@ int main(int argc, char** argv) {
   Fl_Box box(0,300,5*75,window.h()-300); // gray area below the scroll
   box.box(FL_FLAT_BOX);
 
-  Fl_Toggle_Button but1(150, 310, 200, 25, "box");
-  but1.set();
+  Fl_Light_Button but1(150, 310, 200, 25, "box");
   but1.callback(box_cb);
   
   Fl_Choice choice(150, 335, 200, 25, "type():");
   choice.menu(choices);
   choice.value(3);
 
-  Fl_Choice achoice(150, 360, 200, 25, "scrollbar_align():");
+  Fl_Choice achoice(150, 360, 200, 25, "scrollbar.align():");
   achoice.menu(align_choices);
   achoice.value(3);
 
@@ -146,5 +139,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: scroll.cxx,v 1.21 2002/12/10 02:01:06 easysw Exp $".
+// End of "$Id: scroll.cxx,v 1.22 2004/12/30 11:39:21 spitzak Exp $".
 //

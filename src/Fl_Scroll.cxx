@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.43 2004/05/15 20:52:45 spitzak Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.44 2004/12/30 11:38:55 spitzak Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -29,11 +29,20 @@
 #include <fltk/damage.h>
 #include <fltk/Box.h>
 #include <fltk/draw.h>
+#include <config.h>
 using namespace fltk;
+
+#if USE_CLIPOUT
+extern Widget* fl_did_clipping;
+#endif
 
 void ScrollGroup::draw_clip(void* v,int X, int Y, int W, int H) {
   push_clip(X,Y,W,H);
   ScrollGroup* s = (ScrollGroup*)v;
+#if !USE_CLIPOUT
+  // fill the rest of the region with color:
+  setcolor(s->color()); fillrect(X,Y,W,H);
+#endif
   // draw all the children, clipping them out of the region:
   int numchildren = s->children(); int i;
   for (i = numchildren; i--;) {
@@ -47,11 +56,19 @@ void ScrollGroup::draw_clip(void* v,int X, int Y, int W, int H) {
 	  w.x()+w.w() > X+W || w.y()+w.h() > Y+H)
 	save = w.damage();
     }
+#if USE_CLIPOUT
+    fl_did_clipping = 0;
     s->draw_child(w);
+    if (fl_did_clipping != &w) clipout(w.x(), w.y(), w.w(), w.h());
+#else
+    s->draw_child(w);
+#endif
     w.set_damage(save);
   }
+#if USE_CLIPOUT
   // fill the rest of the region with color:
   setcolor(s->color()); fillrect(X,Y,W,H);
+#endif
   // draw the outside labels:
   for (i = numchildren; i--;)
     s->draw_outside_label(*s->child(i));
@@ -294,5 +311,5 @@ int ScrollGroup::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.43 2004/05/15 20:52:45 spitzak Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.44 2004/12/30 11:38:55 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: CycleButton.cxx,v 1.5 2004/11/12 06:50:14 spitzak Exp $"
+// "$Id: CycleButton.cxx,v 1.6 2004/12/30 11:38:54 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -78,7 +78,7 @@ void CycleButton::draw() {
 
   if (!box->fills_rectangle()) {
     Color bg = highlight_color();
-    if (flags&HIGHLIGHT && bg) {
+    if ((flags&HIGHLIGHT) && bg) {
       // highlight fills the rectangle, this is for NO_BOX
       setcolor(bg);
       fillrect(0, 0, w, h);
@@ -212,5 +212,5 @@ CycleButton::CycleButton(int x,int y,int w,int h, const char *l)
 }
 
 //
-// End of "$Id: CycleButton.cxx,v 1.5 2004/11/12 06:50:14 spitzak Exp $".
+// End of "$Id: CycleButton.cxx,v 1.6 2004/12/30 11:38:54 spitzak Exp $".
 //

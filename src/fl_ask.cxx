@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.39 2004/11/17 17:32:53 spitzak Exp $"
+// "$Id: fl_ask.cxx,v 1.40 2004/12/30 11:39:21 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -124,6 +124,7 @@ static int innards(
       textfield = new Input(2*BORDER_W+ICON_W, 0, INPUT_W, 0);
     textfield->h(int(textfield->textsize())+10);
     textfield->y(BORDER_H+ICON_H-textfield->h());
+    textfield->w(INPUT_W);
     message.h(textfield->y());
     textfield->type(itype);
     textfield->value(istr);
@@ -306,5 +307,5 @@ const char *fltk::password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.39 2004/11/17 17:32:53 spitzak Exp $".
+// End of "$Id: fl_ask.cxx,v 1.40 2004/12/30 11:39:21 spitzak Exp $".
 //

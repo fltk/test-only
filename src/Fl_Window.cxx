@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.117 2004/12/18 19:03:12 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.118 2004/12/30 11:38:55 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -125,7 +125,7 @@ void Window::_Window() {
   child_of_ = 0;
   shortcut(EscapeKey);
   callback((Callback*)default_callback);
-  flags(DOUBLE);
+  set_flag(DOUBLE);
 }
 
 /*! This constructor is for \e child windows. You should use the
@@ -833,5 +833,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.117 2004/12/18 19:03:12 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.118 2004/12/30 11:38:55 spitzak Exp $".
 //

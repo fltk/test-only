@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key_win32.cxx,v 1.20 2004/12/16 18:40:41 spitzak Exp $"
+// "$Id: Fl_get_key_win32.cxx,v 1.21 2004/12/30 11:39:04 spitzak Exp $"
 //
 // _WIN32 keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
@@ -89,7 +89,7 @@ static const struct {unsigned short vk, fltk, ext;} vktab[] = {
   {VK_INSERT,	InsertKey},
   {VK_APPS,	MenuKey},
   {VK_NUMLOCK,	NumLockKey},
-//    {VK_RETURN,	KeypadEnter},
+//{VK_RETURN,	KeypadEnter},
   {VK_MULTIPLY,	MultiplyKey},
   {VK_ADD,	AddKey},
   {VK_SUBTRACT,	SubtractKey},
@@ -152,5 +152,5 @@ bool fltk::get_key_state(unsigned k) {
 }
 
 //
-// End of "$Id: Fl_get_key_win32.cxx,v 1.20 2004/12/16 18:40:41 spitzak Exp $".
+// End of "$Id: Fl_get_key_win32.cxx,v 1.21 2004/12/30 11:39:04 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.139 2004/12/18 19:03:09 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.140 2004/12/30 11:38:54 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -605,6 +605,14 @@ void Group::layout() {
 ////////////////////////////////////////////////////////////////
 // Draw
 
+// Widgets that want to outwit the clip-out can set this when they are
+// drawn to indicate that they did the clip-out. Only TabGroup really uses
+// this (and I'm not certain it has to), plus a bunch of back-compatability
+// widgets that want to be "invisible" (they turn this on but don't draw
+// anything). This is a pointer so if it is left on by a child widget
+// it does not fool this into thinking the clipping is done.
+Widget* fl_did_clipping;
+
 void Group::draw() {
   int numchildren = children();
   if (damage() & ~DAMAGE_CHILD) {
@@ -612,23 +620,28 @@ void Group::draw() {
     // Non-blinky draw, draw the inside widgets first, clip their areas
     // out, and then draw the background:
     push_clip(0, 0, w(), h());
-    int n; for (n = numchildren; n--;) draw_child(*child(n));
+    int n; for (n = numchildren; n--;) {
+      Widget& w = *child(n);
+      fl_did_clipping = 0;
+      draw_child(w);
+      if (fl_did_clipping != &w) clipout(w.x(), w.y(), w.w(), w.h());
+    }
     draw_box();
     draw_label();
     pop_clip();
+    // labels are drawn without the clip for back compatability so they
+    // can draw atop sibling widgets:
+    for (n = 0; n < numchildren; n++) draw_outside_label(*child(n));
 #else
     // blinky-draw:
     draw_box();
     draw_label();
-    int n; for (n = 0; n < numchildren; n++) {
+    for (int n = 0; n < numchildren; n++) {
       Widget& w = *child(n);
-      w.set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
-      update_child(w);
+      draw_child(w);
+      draw_outside_label(w);
     }
 #endif
-    // labels are drawn without the clip for back compatability so they
-    // can draw atop sibling widgets:
-    for (n = 0; n < numchildren; n++) draw_outside_label(*child(n));
   } else {
     // only some child widget has been damaged, draw them without
     // doing any clipping.  This is for maximum speed, even though
@@ -653,6 +666,9 @@ void Group::draw() {
   parent that is visible behind it. If you want to avoid blinking you
   should draw your contents first, clip them out, then call this. */
 void Widget::draw_background() const {
+#if !USE_CLIPOUT
+  if (damage()&DAMAGE_EXPOSE) return;
+#endif
   if (!parent()) {
     setcolor(color());
     fillrect(0, 0, w(), h());
@@ -668,33 +684,26 @@ void Widget::draw_background() const {
   pop_clip();
 }
 
-// Widgets that want to outwit the clip-out can set this when they are
-// drawn to indicate that they did the clip-out. Only TabGroup really uses
-// this (and I'm not certain it has to), plus a bunch of back-compatability
-// widgets that want to be "invisible" (they turn this on but don't draw
-// anything). This is a pointer so if it is left on by a child widget
-// it does not fool this into thinking the clipping is done.
-Widget* fl_did_clipping;
-
-/*! Force a child to redraw and remove the rectangle it used from the clip
-  region. */
+/*! Force a child to draw, by turning on DAMAGE_ALL and DAMAGE_EXPOSE,
+  and calling it's draw() after temporarily translating so 0,0 in
+  drawing coordinates is the upper-left corner. It's damage is then set to 0.
+*/
 void Group::draw_child(Widget& w) const {
   if (w.visible() && !w.is_window()) {
     if (!not_clipped(w.x(), w.y(), w.w(), w.h())) return;
     push_matrix();
     translate(w.x(), w.y());
-    fl_did_clipping = 0;
     w.set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
     w.draw();
     w.set_damage(0);
-#if USE_CLIPOUT
-    if (fl_did_clipping != &w) clipout(0,0,w.w(),w.h());
-#endif
     pop_matrix();
   }
 }
 
-/*! Redraw a single child in response to it's damage. */
+/*! If the child's damage() is not zero, force it to update calling
+  it's draw() after temporarily translating so 0,0 in drawing
+  coordinates is the upper-left corner. It's damage is then set to 0.
+*/
 void Group::update_child(Widget& w) const {
   if (w.damage() && w.visible() && !w.is_window()) {
     if (!not_clipped(w.x(), w.y(), w.w(), w.h())) return;
@@ -720,5 +729,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.139 2004/12/18 19:03:09 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.140 2004/12/30 11:38:54 spitzak Exp $".
 //
