@@ -87,6 +87,13 @@ using namespace fltk;
 extern "C" {
   typedef int (*compare_func_t) (const void *, const void *);
 }
+
+// FIXME This fixes linkage problem in VC++ 6.0
+// Dejan : If there is some better way, please inform me.
+#if defined(_MSC_VER) && defined(__cplusplus)
+  extern "C" const char* newstring(const char *from);
+#endif
+
 //// Local functions...// static int quote_char (const char *);
 static void scrollbar_callback (Widget * s, void *);
 static void hscrollbar_callback (Widget * s, void *);
@@ -2248,7 +2255,7 @@ HelpView::~HelpView ()
     free (links_);
   if (ntargets_)
     free (targets_);
-  delete[] value_;
+  delete[] const_cast<char*>( value_ );
   delete scrollbar_;
   delete hscrollbar_;
 }
@@ -2292,7 +2299,7 @@ HelpView::load (const char *f)  // I - Filename to load (may also have target)
   else if (slash > directory_ && slash[-1] != '/')
     *slash = '\0';
 
-  delete[] value_;
+  delete[] const_cast<char*>( value_ );
   value_ = NULL;
 
   if (strncmp (localname, "ftp:", 4) == 0 ||
@@ -2455,7 +2462,7 @@ void HelpView::value (const char *v)    // I - Text to view
   if (!v)
     return;
 
-  delete[] value_;
+  delete[] const_cast<char*>( value_ );
   value_ = newstring(v);
 
   format ();
