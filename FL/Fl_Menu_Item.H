@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.21 1999/08/16 07:30:51 bill Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.22 1999/08/20 19:07:36 carl Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -56,8 +56,18 @@ struct Fl_Menu_Item {
   unsigned flags_;
   // Fltk 1.0 had 4 extra fields here: labeltype, labelfont,
   // labelsize, labelcolor.  These are no longer supported with the
-  // style code and must be deleted from your initializers.  If they
-  // are all zero it still compiles :-)
+  // style code and must eventually be deleted from your initializers.
+
+#ifndef FLTK_2
+  // Dummy variables to handle static initializers (see above).  These are
+  // not used-- you can't initialize style information with the initializers
+  // anymore.
+  uchar clobberMe1;
+  uchar clobberMe2;
+  uchar clobberMe3;
+  uchar clobberMe4;
+#endif
+
   Fl_Image* image_;
   const Fl_Style* style_;
   char junk1;
@@ -235,5 +245,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.21 1999/08/16 07:30:51 bill Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.22 1999/08/20 19:07:36 carl Exp $".
 //
