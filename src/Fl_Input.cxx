@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.50 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.51 2001/09/10 07:38:06 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -923,7 +923,7 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
       break;
     }
     show_cursor(1);
-    return 1;
+    return 2; // returns 2 to make Fl_Group think it really important
 
   case FL_UNFOCUS:
     show_cursor(0);
@@ -931,14 +931,18 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
     if (when() & FL_WHEN_RELEASE) maybe_do_callback();
     return 1;
 
+#if 0
   case FL_SHORTCUT:
     // If the user types text to a widget that does not want it, it will
     // call here eventually. Take the focus on the assumption they are
     // trying to type into this text field:
+    // This is removed as it prevents single-key shortcuts from being
+    // accepted by other widgets.
     if (Fl::event_text()[0]<=' ') return 0;
     if (Fl::event_state(FL_ALT|FL_META)) return 0;
     position(size());
     take_focus();
+#endif
   case FL_KEYBOARD:
     return handle_key();
 
@@ -1069,5 +1073,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.50 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.51 2001/09/10 07:38:06 spitzak Exp $".
 //

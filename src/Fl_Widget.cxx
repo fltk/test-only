@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.76 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.77 2001/09/10 07:38:06 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -362,10 +362,6 @@ extern void fl_dotted_box(int,int,int,int);
 // the given flags. The return value is the setting of flags that should
 // be passed to draw_label() or draw_inside_label().
 Fl_Flags Fl_Widget::draw_button(Fl_Flags flags) const {
-  // only use the pushed-in color if the user has explicitly set it
-  // on this widget:
-  if ((flags&FL_VALUE) && style_->selection_color)
-    flags |= FL_SELECTED;
   if (!active_r())
     flags |= FL_INACTIVE;
   else if (belowmouse() && !(flags&FL_SELECTED))
@@ -488,5 +484,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.76 2001/09/10 01:16:17 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.77 2001/09/10 07:38:06 spitzak Exp $".
 //

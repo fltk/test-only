@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.46 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.47 2001/09/10 07:38:06 spitzak Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -142,11 +142,18 @@ int Fl_Tabs::handle(int event) {
     // otherwise this indicates that somebody is trying to give focus to this
     switch (navigation_key()) {
     default:
-      if (focus() < 0) break;
+      //if (focus() < 0) break; // stay on the tab
       // else fall through...
     case FL_Left:
     case FL_Up:
-      if (selected) return selected->take_focus();
+      // return 2 if the group contains and Fl_Input, return 1 otherwise:
+      if (selected && selected->takesevents()) {
+	int n = selected->handle(FL_FOCUS);
+	if (n) {
+	  if (!selected->contains(Fl::focus())) Fl::focus(selected);
+	  return n;
+	}
+      }
       break;
     case FL_Right:
     case FL_Down:
@@ -401,5 +408,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.46 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.47 2001/09/10 07:38:06 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.51 2001/08/05 10:48:38 spitzak Exp $"
+// "$Id: fluid.cxx,v 1.52 2001/09/10 07:38:05 spitzak Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -370,19 +370,19 @@ extern Fl_Menu_Item New_Menu[];
 Fl_Menu_Item Main_Menu[] = {
 {"&File",0,0,0,FL_SUBMENU},
   {"New", 0, new_cb, 0},
-  {"Open...", FL_ALT+'o', open_cb, 0},
-  {"Save", FL_ALT+'s', save_cb, 0},
-  {"Save As...", FL_ALT+'S', save_cb, (void*)1},
-  {"Merge...", FL_ALT+'i', open_cb, (void*)1, FL_MENU_DIVIDER},
-  {"Write code", FL_ALT+'C', write_cb, 0},
-  {"Quit", FL_ALT+'q', exit_cb},
+  {"Open...", FL_CTRL+'o', open_cb, 0},
+  {"Save", FL_CTRL+'s', save_cb, 0},
+  {"Save As...", FL_CTRL+'S', save_cb, (void*)1},
+  {"Merge...", FL_CTRL+'i', open_cb, (void*)1, FL_MENU_DIVIDER},
+  {"Write code", FL_CTRL+'w', write_cb, 0},
+  {"Quit", FL_CTRL+'q', exit_cb},
   {0},
 {"&Edit",0,0,0,FL_SUBMENU},
 //  {"Undo", FL_ALT+'z', nyi},
-  {"Cut", FL_ALT+'x', cut_cb},
-  {"Copy", FL_ALT+'c', copy_cb},
-  {"Paste", FL_ALT+'v', paste_cb},
-  {"Select All", FL_ALT+'a', select_all_cb, 0, FL_MENU_DIVIDER},
+  {"Cut", FL_CTRL+'x', cut_cb},
+  {"Copy", FL_CTRL+'c', copy_cb},
+  {"Paste", FL_CTRL+'v', paste_cb},
+  {"Select All", FL_CTRL+'a', select_all_cb, 0, FL_MENU_DIVIDER},
   {"Open...", FL_F+1, openwidget_cb},
   {"Sort",0,sort_cb},
   {"Earlier", FL_F+2, earlier_cb},
@@ -393,11 +393,11 @@ Fl_Menu_Item Main_Menu[] = {
   {"Ungroup", FL_F+8, ungroup_cb,0, FL_MENU_DIVIDER},
 //{"Deactivate", 0, nyi},
 //{"Activate", 0, nyi, 0, FL_MENU_DIVIDER},
-  {"Show Overlays",FL_ALT+'O',toggle_overlays, 0, FL_MENU_TOGGLE|FL_MENU_VALUE},
-  {"Preferences",FL_ALT+'p',show_alignment_cb},
+  {"Show Overlays",FL_CTRL+'O',toggle_overlays, 0, FL_MENU_TOGGLE|FL_MENU_VALUE},
+  {"Preferences",FL_CTRL+'p',show_alignment_cb},
   {"Coding Style", 0, show_coding_style_cb},
   {"Scheme", 0, scheme_cb},
-  {"Set images root directory", FL_ALT+'d', set_images_dir_cb},
+  {"Set images root directory", FL_CTRL+'d', set_images_dir_cb},
   {0},
 {"&New", 0, 0, (void *)New_Menu, FL_SUBMENU_POINTER},
 {"&Plugins", 0, 0, (void *)Plugins_Options_Menu, FL_SUBMENU_POINTER},
@@ -521,5 +521,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.51 2001/08/05 10:48:38 spitzak Exp $".
+// End of "$Id: fluid.cxx,v 1.52 2001/09/10 07:38:05 spitzak Exp $".
 //

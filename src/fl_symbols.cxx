@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.23 2001/07/26 13:49:25 robertk Exp $"
+// "$Id: fl_symbols.cxx,v 1.24 2001/09/10 07:38:06 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -118,7 +118,7 @@ int fl_draw_symbol(const char *label,int x,int y,int w,int h,Fl_Color col) {
   }
   if (w < 10) {x -= (10-w)/2; w = 10;}
   if (h < 10) {y -= (10-h)/2; h = 10;}
-  //w = (w-1)|1; h = (h-1)|1; // even sizes only so triangle points are centered
+  w = (w-1)|1; h = (h-1)|1; // odd sizes so arrow points are centered
   int rotangle;
   switch (*p++) {
   case '0':
@@ -383,5 +383,5 @@ void Fl::enable_symbols() {
 #endif
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.23 2001/07/26 13:49:25 robertk Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.24 2001/09/10 07:38:06 spitzak Exp $".
 //

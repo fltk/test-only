@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.95 2001/08/05 10:48:38 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.96 2001/09/10 07:38:06 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -53,7 +53,7 @@ Fl_Named_Style* group_style = &the_style;
 Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
 : Fl_Widget(X,Y,W,H,l),
   children_(0),
-  focus_(0),
+  focus_(-1),
   array_(0),
   resizable_(0), // fltk 1.0 used (this)
   sizes_(0), // this is allocated when the group is end()ed.
@@ -244,11 +244,23 @@ int Fl_Group::handle(int event) {
     }
     // otherwise it indicates an attempt to give this widget focus:
     switch (navigation_key()) {
-    default:
+    default: {
       // try to give it to whatever child had focus last:
       if (focus_ >= 0 && focus_ < numchildren)
 	if (child(focus_)->take_focus()) return 1;
-      // otherwise fall through to search for first one that wants focus:
+      // otherwise search for the widget that needs the focus, but
+      // prefer a widget that returns 2:
+      Fl_Widget* f1 = 0; int ret = 0;
+      for (i = 0; i < numchildren; ++i) {
+	Fl_Widget* w = child(i);
+	if (w->takesevents()) {
+	  int n = w->handle(FL_FOCUS);
+	  if (n == 2) {f1 = w; ret = 2; break;}
+	  else if (n) {f1 = w; ret = 1;}
+	}
+      }
+      if (f1 && !f1->contains(Fl::focus())) Fl::focus(f1);
+      return ret;}
     case FL_Right:
     case FL_Down:
       for (i=0; i < numchildren; ++i)
@@ -616,5 +628,5 @@ void Fl_Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.95 2001/08/05 10:48:38 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.96 2001/09/10 07:38:06 spitzak Exp $".
 //
