@@ -1,0 +1,1504 @@
+; dlltool --base-file C:\WINDOWS\TEMP/cca02604.base --output-exp fltkdll.exp --dllname fltkdll.dll --output-def libfltkdll.def --exclude-symbol=DllMainCRTStartup@12 --def C:\WINDOWS\TEMP/cca02604.def --output-lib ../lib/fltkdll.lib
+EXPORTS
+	_Z11load_pluginPKcS0_ @ 1 ; load_plugin(char const*, char const*)
+	_Z12filename_extPKc @ 2 ; filename_ext(char const*)
+	_Z13filename_listPKcPPP6dirent @ 3 ; filename_list(char const*, dirent***)
+	_Z13filename_namePKc @ 4 ; filename_name(char const*)
+	_Z14filename_isdirPKc @ 5 ; filename_isdir(char const*)
+	_Z14filename_matchPKcS0_ @ 6 ; filename_match(char const*, char const*)
+	_Z15filename_expandPcPKc @ 7 ; filename_expand(char*, char const*)
+	_Z15filename_setextPcPKc @ 8 ; filename_setext(char*, char const*)
+	_Z17filename_absolutePcPKcS1_ @ 9 ; filename_absolute(char*, char const*, char const*)
+	_ZN11DottedFrameC1EPKc @ 10 ; DottedFrame::DottedFrame(char const*)
+	_ZN4fltk10AlignGroup6layoutEv @ 11 ; fltk::AlignGroup::layout()
+	_ZN4fltk10AlignGroupD0Ev @ 12 ; fltk::AlignGroup::~AlignGroup()
+	_ZN4fltk10AlignGroupD1Ev @ 13 ; fltk::AlignGroup::~AlignGroup()
+	_ZN4fltk10BORDER_BOXE @ 14 DATA ; fltk::BORDER_BOX
+	_ZN4fltk10FloatInput7replaceEiiPKci @ 15 ; fltk::FloatInput::replace(int, int, char const*, int)
+	_ZN4fltk10FloatInputC1EiiiiPKc @ 16 ; fltk::FloatInput::FloatInput(int, int, int, int, char const*)
+	_ZN4fltk10FloatInputD0Ev @ 17 ; fltk::FloatInput::~FloatInput()
+	_ZN4fltk10FloatInputD1Ev @ 18 ; fltk::FloatInput::~FloatInput()
+	_ZN4fltk10MenuWindow13clear_overlayEv @ 19 ; fltk::MenuWindow::clear_overlay()
+	_ZN4fltk10MenuWindow5flushEv @ 20 ; fltk::MenuWindow::flush()
+	_ZN4fltk10MenuWindow6createEv @ 21 ; fltk::MenuWindow::create()
+	_ZN4fltk10MenuWindow7destroyEv @ 22 ; fltk::MenuWindow::destroy()
+	_ZN4fltk10MenuWindowC2EiiPKc @ 23 ; fltk::MenuWindow::MenuWindow(int, int, char const*)
+	_ZN4fltk10MenuWindowC2EiiiiPKc @ 24 ; fltk::MenuWindow::MenuWindow(int, int, int, int, char const*)
+	_ZN4fltk10MenuWindowD0Ev @ 25 ; fltk::MenuWindow::~MenuWindow()
+	_ZN4fltk10MenuWindowD1Ev @ 26 ; fltk::MenuWindow::~MenuWindow()
+	_ZN4fltk10MenuWindowD2Ev @ 27 ; fltk::MenuWindow::~MenuWindow()
+	_ZN4fltk10NamedStyle5firstE @ 28 DATA ; fltk::NamedStyle::first
+	_ZN4fltk10NamedStyleC1EPKcPFvPNS_5StyleEEPPS0_ @ 29 ; fltk::NamedStyle::NamedStyle(char const*, void (*)(fltk::Style*), fltk::NamedStyle**)
+	_ZN4fltk10NamedStyleC2EPKcPFvPNS_5StyleEEPPS0_ @ 30 ; fltk::NamedStyle::NamedStyle(char const*, void (*)(fltk::Style*), fltk::NamedStyle**)
+	_ZN4fltk10SHADOW_BOXE @ 31 DATA ; fltk::SHADOW_BOX
+	_ZN4fltk10StringList5childEPKNS_4MenuEPKii @ 32 ; fltk::StringList::child(fltk::Menu const*, int const*, int)
+	_ZN4fltk10StringList8childrenEPKNS_4MenuEPKii @ 33 ; fltk::StringList::children(fltk::Menu const*, int const*, int)
+	_ZN4fltk10StringListC1EPKPKc @ 34 ; fltk::StringList::StringList(char const* const*)
+	_ZN4fltk10StringListC1EPKc @ 35 ; fltk::StringList::StringList(char const*)
+	_ZN4fltk10StringListC2EPKPKc @ 36 ; fltk::StringList::StringList(char const* const*)
+	_ZN4fltk10StringListC2EPKc @ 37 ; fltk::StringList::StringList(char const*)
+	_ZN4fltk10TIMES_BOLDE @ 38 DATA ; fltk::TIMES_BOLD
+	_ZN4fltk10TextBuffer10insertfileEPKcii @ 39 ; fltk::TextBuffer::insertfile(char const*, int, int)
+	_ZN4fltk10TextBuffer10line_startEi @ 40 ; fltk::TextBuffer::line_start(int)
+	_ZN4fltk10TextBuffer10outputfileEPKciii @ 41 ; fltk::TextBuffer::outputfile(char const*, int, int, int)
+	_ZN4fltk10TextBuffer10skip_linesEii @ 42 ; fltk::TextBuffer::skip_lines(int, int)
+	_ZN4fltk10TextBuffer10text_rangeEii @ 43 ; fltk::TextBuffer::text_range(int, int)
+	_ZN4fltk10TextBuffer10word_startEi @ 44 ; fltk::TextBuffer::word_start(int)
+	_ZN4fltk10TextBuffer11count_linesEii @ 45 ; fltk::TextBuffer::count_lines(int, int)
+	_ZN4fltk10TextBuffer11unhighlightEv @ 46 ; fltk::TextBuffer::unhighlight()
+	_ZN4fltk10TextBuffer12rewind_linesEii @ 47 ; fltk::TextBuffer::rewind_lines(int, int)
+	_ZN4fltk10TextBuffer12tab_distanceEi @ 48 ; fltk::TextBuffer::tab_distance(int)
+	_ZN4fltk10TextBuffer12tab_distanceEv @ 49 ; fltk::TextBuffer::tab_distance()
+	_ZN4fltk10TextBuffer13insert_columnEiiPKcPiS3_ @ 50 ; fltk::TextBuffer::insert_column(int, int, char const*, int*, int*)
+	_ZN4fltk10TextBuffer14highlight_textEv @ 51 ; fltk::TextBuffer::highlight_text()
+	_ZN4fltk10TextBuffer14insert_column_EiiPKcPiS3_S3_ @ 52 ; fltk::TextBuffer::insert_column_(int, int, char const*, int*, int*, int*)
+	_ZN4fltk10TextBuffer14search_forwardEiPKcPii @ 53 ; fltk::TextBuffer::search_forward(int, char const*, int*, int)
+	_ZN4fltk10TextBuffer14selection_textEPNS_13TextSelectionE @ 54 ; fltk::TextBuffer::selection_text(fltk::TextSelection*)
+	_ZN4fltk10TextBuffer14selection_textEv @ 55 ; fltk::TextBuffer::selection_text()
+	_ZN4fltk10TextBuffer15character_widthEciic @ 56 ; fltk::TextBuffer::character_width(char, int, int, char)
+	_ZN4fltk10TextBuffer15search_backwardEiPKcPii @ 57 ; fltk::TextBuffer::search_backward(int, char const*, int*, int)
+	_ZN4fltk10TextBuffer16expand_characterEciPcic @ 58 ; fltk::TextBuffer::expand_character(char, int, char*, int, char)
+	_ZN4fltk10TextBuffer16expand_characterEiiPc @ 59 ; fltk::TextBuffer::expand_character(int, int, char*)
+	_ZN4fltk10TextBuffer16findchar_forwardEicPi @ 60 ; fltk::TextBuffer::findchar_forward(int, char, int*)
+	_ZN4fltk10TextBuffer16remove_selectionEv @ 61 ; fltk::TextBuffer::remove_selection()
+	_ZN4fltk10TextBuffer16secondary_selectEii @ 62 ; fltk::TextBuffer::secondary_select(int, int)
+	_ZN4fltk10TextBuffer17clear_rectangularEiiii @ 63 ; fltk::TextBuffer::clear_rectangular(int, int, int, int)
+	_ZN4fltk10TextBuffer17findchar_backwardEicPi @ 64 ; fltk::TextBuffer::findchar_backward(int, char, int*)
+	_ZN4fltk10TextBuffer17findchars_forwardEiPKcPi @ 65 ; fltk::TextBuffer::findchars_forward(int, char const*, int*)
+	_ZN4fltk10TextBuffer17primary_selectionEv @ 66 ; fltk::TextBuffer::primary_selection()
+	_ZN4fltk10TextBuffer17remove_selection_EPNS_13TextSelectionE @ 67 ; fltk::TextBuffer::remove_selection_(fltk::TextSelection*)
+	_ZN4fltk10TextBuffer17replace_selectionEPKc @ 68 ; fltk::TextBuffer::replace_selection(char const*)
+	_ZN4fltk10TextBuffer17text_in_rectangleEiiii @ 69 ; fltk::TextBuffer::text_in_rectangle(int, int, int, int)
+	_ZN4fltk10TextBuffer17update_selectionsEiii @ 70 ; fltk::TextBuffer::update_selections(int, int, int)
+	_ZN4fltk10TextBuffer18findchars_backwardEiPKcPi @ 71 ; fltk::TextBuffer::findchars_backward(int, char const*, int*)
+	_ZN4fltk10TextBuffer18highlight_positionEPiS1_S1_S1_S1_ @ 72 ; fltk::TextBuffer::highlight_position(int*, int*, int*, int*, int*)
+	_ZN4fltk10TextBuffer18remove_rectangularEiiii @ 73 ; fltk::TextBuffer::remove_rectangular(int, int, int, int)
+	_ZN4fltk10TextBuffer18replace_selection_EPNS_13TextSelectionEPKc @ 74 ; fltk::TextBuffer::replace_selection_(fltk::TextSelection*, char const*)
+	_ZN4fltk10TextBuffer18secondary_unselectEv @ 75 ; fltk::TextBuffer::secondary_unselect()
+	_ZN4fltk10TextBuffer18select_rectangularEiiii @ 76 ; fltk::TextBuffer::select_rectangular(int, int, int, int)
+	_ZN4fltk10TextBuffer18selection_positionEPiS1_ @ 77 ; fltk::TextBuffer::selection_position(int*, int*)
+	_ZN4fltk10TextBuffer18selection_positionEPiS1_S1_S1_S1_ @ 78 ; fltk::TextBuffer::selection_position(int*, int*, int*, int*, int*)
+	_ZN4fltk10TextBuffer19add_modify_callbackEPFviiiiPKcPvES3_ @ 79 ; fltk::TextBuffer::add_modify_callback(void (*)(int, int, int, int, char const*, void*), void*)
+	_ZN4fltk10TextBuffer19highlight_selectionEv @ 80 ; fltk::TextBuffer::highlight_selection()
+	_ZN4fltk10TextBuffer19overlay_rectangularEiiiPKcPiS3_ @ 81 ; fltk::TextBuffer::overlay_rectangular(int, int, int, char const*, int*, int*)
+	_ZN4fltk10TextBuffer19reallocate_with_gapEii @ 82 ; fltk::TextBuffer::reallocate_with_gap(int, int)
+	_ZN4fltk10TextBuffer19redisplay_selectionEPNS_13TextSelectionES2_ @ 83 ; fltk::TextBuffer::redisplay_selection(fltk::TextSelection*, fltk::TextSelection*)
+	_ZN4fltk10TextBuffer19remove_rectangular_EiiiiPiS1_ @ 84 ; fltk::TextBuffer::remove_rectangular_(int, int, int, int, int*, int*)
+	_ZN4fltk10TextBuffer19replace_rectangularEiiiiPKc @ 85 ; fltk::TextBuffer::replace_rectangular(int, int, int, int, char const*)
+	_ZN4fltk10TextBuffer19secondary_selectionEv @ 86 ; fltk::TextBuffer::secondary_selection()
+	_ZN4fltk10TextBuffer20overlay_rectangular_EiiiPKcPiS3_S3_ @ 87 ; fltk::TextBuffer::overlay_rectangular_(int, int, int, char const*, int*, int*, int*)
+	_ZN4fltk10TextBuffer21call_modify_callbacksEiiiiPKc @ 88 ; fltk::TextBuffer::call_modify_callbacks(int, int, int, int, char const*)
+	_ZN4fltk10TextBuffer21highlight_rectangularEiiii @ 89 ; fltk::TextBuffer::highlight_rectangular(int, int, int, int)
+	_ZN4fltk10TextBuffer22remove_modify_callbackEPFviiiiPKcPvES3_ @ 90 ; fltk::TextBuffer::remove_modify_callback(void (*)(int, int, int, int, char const*, void*), void*)
+	_ZN4fltk10TextBuffer24secondary_selection_textEv @ 91 ; fltk::TextBuffer::secondary_selection_text()
+	_ZN4fltk10TextBuffer25skip_displayed_charactersEii @ 92 ; fltk::TextBuffer::skip_displayed_characters(int, int)
+	_ZN4fltk10TextBuffer26count_displayed_charactersEii @ 93 ; fltk::TextBuffer::count_displayed_characters(int, int)
+	_ZN4fltk10TextBuffer26remove_secondary_selectionEv @ 94 ; fltk::TextBuffer::remove_secondary_selection()
+	_ZN4fltk10TextBuffer26substitute_null_charactersEPci @ 95 ; fltk::TextBuffer::substitute_null_characters(char*, int)
+	_ZN4fltk10TextBuffer27null_substitution_characterEv @ 96 ; fltk::TextBuffer::null_substitution_character()
+	_ZN4fltk10TextBuffer27replace_secondary_selectionEPKc @ 97 ; fltk::TextBuffer::replace_secondary_selection(char const*)
+	_ZN4fltk10TextBuffer28secondary_select_rectangularEiiii @ 98 ; fltk::TextBuffer::secondary_select_rectangular(int, int, int, int)
+	_ZN4fltk10TextBuffer28secondary_selection_positionEPiS1_S1_S1_S1_ @ 99 ; fltk::TextBuffer::secondary_selection_position(int*, int*, int*, int*, int*)
+	_ZN4fltk10TextBuffer28unsubstitute_null_charactersEPc @ 100 ; fltk::TextBuffer::unsubstitute_null_characters(char*)
+	_ZN4fltk10TextBuffer32rectangular_selection_boundariesEiiiPiS1_ @ 101 ; fltk::TextBuffer::rectangular_selection_boundaries(int, int, int, int*, int*)
+	_ZN4fltk10TextBuffer4copyEPS0_iii @ 102 ; fltk::TextBuffer::copy(fltk::TextBuffer*, int, int, int)
+	_ZN4fltk10TextBuffer4textEPKc @ 103 ; fltk::TextBuffer::text(char const*)
+	_ZN4fltk10TextBuffer4textEv @ 104 ; fltk::TextBuffer::text()
+	_ZN4fltk10TextBuffer6insertEiPKc @ 105 ; fltk::TextBuffer::insert(int, char const*)
+	_ZN4fltk10TextBuffer6lengthEv @ 106 ; fltk::TextBuffer::length()
+	_ZN4fltk10TextBuffer6removeEii @ 107 ; fltk::TextBuffer::remove(int, int)
+	_ZN4fltk10TextBuffer6selectEii @ 108 ; fltk::TextBuffer::select(int, int)
+	_ZN4fltk10TextBuffer7insert_EiPKc @ 109 ; fltk::TextBuffer::insert_(int, char const*)
+	_ZN4fltk10TextBuffer7remove_Eii @ 110 ; fltk::TextBuffer::remove_(int, int)
+	_ZN4fltk10TextBuffer7replaceEiiPKc @ 111 ; fltk::TextBuffer::replace(int, int, char const*)
+	_ZN4fltk10TextBuffer8line_endEi @ 112 ; fltk::TextBuffer::line_end(int)
+	_ZN4fltk10TextBuffer8move_gapEi @ 113 ; fltk::TextBuffer::move_gap(int)
+	_ZN4fltk10TextBuffer8selectedEv @ 114 ; fltk::TextBuffer::selected()
+	_ZN4fltk10TextBuffer8unselectEv @ 115 ; fltk::TextBuffer::unselect()
+	_ZN4fltk10TextBuffer8word_endEi @ 116 ; fltk::TextBuffer::word_end(int)
+	_ZN4fltk10TextBuffer9characterEi @ 117 ; fltk::TextBuffer::character(int)
+	_ZN4fltk10TextBuffer9highlightEii @ 118 ; fltk::TextBuffer::highlight(int, int)
+	_ZN4fltk10TextBuffer9line_textEi @ 119 ; fltk::TextBuffer::line_text(int)
+	_ZN4fltk10TextBufferC1Ei @ 120 ; fltk::TextBuffer::TextBuffer(int)
+	_ZN4fltk10TextBufferC2Ei @ 121 ; fltk::TextBuffer::TextBuffer(int)
+	_ZN4fltk10TextBufferD1Ev @ 122 ; fltk::TextBuffer::~TextBuffer()
+	_ZN4fltk10TextBufferD2Ev @ 123 ; fltk::TextBuffer::~TextBuffer()
+	_ZN4fltk10TextEditor10handle_keyEv @ 124 ; fltk::TextEditor::handle_key()
+	_ZN4fltk10TextEditor10kf_defaultEiPS0_ @ 125 ; fltk::TextEditor::kf_default(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor10kf_page_upEiPS0_ @ 126 ; fltk::TextEditor::kf_page_up(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor11insert_modeEi @ 127 ; fltk::TextEditor::insert_mode(int)
+	_ZN4fltk10TextEditor11insert_modeEv @ 128 ; fltk::TextEditor::insert_mode()
+	_ZN4fltk10TextEditor11kf_c_s_moveEiPS0_ @ 129 ; fltk::TextEditor::kf_c_s_move(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor12kf_backspaceEiPS0_ @ 130 ; fltk::TextEditor::kf_backspace(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor12kf_ctrl_moveEiPS0_ @ 131 ; fltk::TextEditor::kf_ctrl_move(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor12kf_page_downEiPS0_ @ 132 ; fltk::TextEditor::kf_page_down(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor13default_styleE @ 133 DATA ; fltk::TextEditor::default_style
+	_ZN4fltk10TextEditor13kf_select_allEiPS0_ @ 134 ; fltk::TextEditor::kf_select_all(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor13kf_shift_moveEiPS0_ @ 135 ; fltk::TextEditor::kf_shift_move(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor15add_key_bindingEiiPFiiPS0_EPPNS0_10KeyBindingE @ 136 ; fltk::TextEditor::add_key_binding(int, int, int (*)(int, fltk::TextEditor*), fltk::TextEditor::KeyBinding**)
+	_ZN4fltk10TextEditor18bound_key_functionEiiPNS0_10KeyBindingE @ 137 ; fltk::TextEditor::bound_key_function(int, int, fltk::TextEditor::KeyBinding*)
+	_ZN4fltk10TextEditor18remove_key_bindingEiiPPNS0_10KeyBindingE @ 138 ; fltk::TextEditor::remove_key_binding(int, int, fltk::TextEditor::KeyBinding**)
+	_ZN4fltk10TextEditor19global_key_bindingsE @ 139 DATA ; fltk::TextEditor::global_key_bindings
+	_ZN4fltk10TextEditor20default_key_functionEPFiiPS0_E @ 140 ; fltk::TextEditor::default_key_function(int (*)(int, fltk::TextEditor*))
+	_ZN4fltk10TextEditor23remove_all_key_bindingsEPPNS0_10KeyBindingE @ 141 ; fltk::TextEditor::remove_all_key_bindings(fltk::TextEditor::KeyBinding**)
+	_ZN4fltk10TextEditor23remove_all_key_bindingsEv @ 142 ; fltk::TextEditor::remove_all_key_bindings()
+	_ZN4fltk10TextEditor24add_default_key_bindingsEPPNS0_10KeyBindingE @ 143 ; fltk::TextEditor::add_default_key_bindings(fltk::TextEditor::KeyBinding**)
+	_ZN4fltk10TextEditor5kf_upEiPS0_ @ 144 ; fltk::TextEditor::kf_up(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor6handleEi @ 145 ; fltk::TextEditor::handle(int)
+	_ZN4fltk10TextEditor6kf_cutEiPS0_ @ 146 ; fltk::TextEditor::kf_cut(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor6kf_endEiPS0_ @ 147 ; fltk::TextEditor::kf_end(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor7kf_copyEiPS0_ @ 148 ; fltk::TextEditor::kf_copy(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor7kf_downEiPS0_ @ 149 ; fltk::TextEditor::kf_down(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor7kf_homeEiPS0_ @ 150 ; fltk::TextEditor::kf_home(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor7kf_leftEiPS0_ @ 151 ; fltk::TextEditor::kf_left(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor7kf_moveEiPS0_ @ 152 ; fltk::TextEditor::kf_move(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor8kf_enterEiPS0_ @ 153 ; fltk::TextEditor::kf_enter(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor8kf_pasteEiPS0_ @ 154 ; fltk::TextEditor::kf_paste(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor8kf_rightEiPS0_ @ 155 ; fltk::TextEditor::kf_right(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor9kf_deleteEiPS0_ @ 156 ; fltk::TextEditor::kf_delete(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor9kf_ignoreEiPS0_ @ 157 ; fltk::TextEditor::kf_ignore(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditor9kf_insertEiPS0_ @ 158 ; fltk::TextEditor::kf_insert(int, fltk::TextEditor*)
+	_ZN4fltk10TextEditorC1EiiiiPKc @ 159 ; fltk::TextEditor::TextEditor(int, int, int, int, char const*)
+	_ZN4fltk10TextEditorC2EiiiiPKc @ 160 ; fltk::TextEditor::TextEditor(int, int, int, int, char const*)
+	_ZN4fltk10TextEditorD0Ev @ 161 ; fltk::TextEditor::~TextEditor()
+	_ZN4fltk10TextEditorD1Ev @ 162 ; fltk::TextEditor::~TextEditor()
+	_ZN4fltk10ThumbWheel4drawEv @ 163 ; fltk::ThumbWheel::draw()
+	_ZN4fltk10ThumbWheel6handleEi @ 164 ; fltk::ThumbWheel::handle(int)
+	_ZN4fltk10ThumbWheelC1EiiiiPKc @ 165 ; fltk::ThumbWheel::ThumbWheel(int, int, int, int, char const*)
+	_ZN4fltk10ThumbWheelC2EiiiiPKc @ 166 ; fltk::ThumbWheel::ThumbWheel(int, int, int, int, char const*)
+	_ZN4fltk10ThumbWheelD0Ev @ 167 ; fltk::ThumbWheel::~ThumbWheel()
+	_ZN4fltk10ThumbWheelD1Ev @ 168 ; fltk::ThumbWheel::~ThumbWheel()
+	_ZN4fltk10TiledGroup6handleEi @ 169 ; fltk::TiledGroup::handle(int)
+	_ZN4fltk10TiledGroup6layoutEv @ 170 ; fltk::TiledGroup::layout()
+	_ZN4fltk10TiledGroup8positionEiiii @ 171 ; fltk::TiledGroup::position(int, int, int, int)
+	_ZN4fltk10TiledGroupD0Ev @ 172 ; fltk::TiledGroup::~TiledGroup()
+	_ZN4fltk10TiledGroupD1Ev @ 173 ; fltk::TiledGroup::~TiledGroup()
+	_ZN4fltk10ValueInput12increment_cbEv @ 174 ; fltk::ValueInput::increment_cb()
+	_ZN4fltk10ValueInput12value_damageEv @ 175 ; fltk::ValueInput::value_damage()
+	_ZN4fltk10ValueInput4drawEv @ 176 ; fltk::ValueInput::draw()
+	_ZN4fltk10ValueInput6handleEi @ 177 ; fltk::ValueInput::handle(int)
+	_ZN4fltk10ValueInput6layoutEv @ 178 ; fltk::ValueInput::layout()
+	_ZN4fltk10ValueInput8input_cbEPNS_6WidgetEPv @ 179 ; fltk::ValueInput::input_cb(fltk::Widget*, void*)
+	_ZN4fltk10ValueInputC1EiiiiPKc @ 180 ; fltk::ValueInput::ValueInput(int, int, int, int, char const*)
+	_ZN4fltk10ValueInputC2EiiiiPKc @ 181 ; fltk::ValueInput::ValueInput(int, int, int, int, char const*)
+	_ZN4fltk10ValueInputD0Ev @ 182 ; fltk::ValueInput::~ValueInput()
+	_ZN4fltk10ValueInputD1Ev @ 183 ; fltk::ValueInput::~ValueInput()
+	_ZN4fltk10ValueInputD2Ev @ 184 ; fltk::ValueInput::~ValueInput()
+	_ZN4fltk10add_symbolEPKcPFvjEi @ 185 ; fltk::add_symbol(char const*, void (*)(unsigned), int)
+	_ZN4fltk10addellipseEffff @ 186 ; fltk::addellipse(float, float, float, float)
+	_ZN4fltk10belowmouseEPNS_6WidgetE @ 187 ; fltk::belowmouse(fltk::Widget*)
+	_ZN4fltk10ccValueBox4drawEv @ 188 ; fltk::ccValueBox::draw()
+	_ZN4fltk10ccValueBox6handleEi @ 189 ; fltk::ccValueBox::handle(int)
+	_ZN4fltk10ccValueBoxC1Eiiii @ 190 ; fltk::ccValueBox::ccValueBox(int, int, int, int)
+	_ZN4fltk10ccValueBoxD0Ev @ 191 ; fltk::ccValueBox::~ccValueBox()
+	_ZN4fltk10ccValueBoxD1Ev @ 192 ; fltk::ccValueBox::~ccValueBox()
+	_ZN4fltk10drawpointsEv @ 193 ; fltk::drawpoints()
+	_ZN4fltk10e_is_clickE @ 194 DATA ; fltk::e_is_click
+	_ZN4fltk10getdescentEv @ 195 ; fltk::getdescent()
+	_ZN4fltk10gldrawtextEPKc @ 196 ; fltk::gldrawtext(char const*)
+	_ZN4fltk10gldrawtextEPKcfff @ 197 ; fltk::gldrawtext(char const*, float, float, float)
+	_ZN4fltk10gldrawtextEPKci @ 198 ; fltk::gldrawtext(char const*, int)
+	_ZN4fltk10gldrawtextEPKcifff @ 199 ; fltk::gldrawtext(char const*, int, float, float, float)
+	_ZN4fltk10glgetwidthEPKc @ 200 ; fltk::glgetwidth(char const*)
+	_ZN4fltk10glgetwidthEPKci @ 201 ; fltk::glgetwidth(char const*, int)
+	_ZN4fltk10glsetcolorEj @ 202 ; fltk::glsetcolor(unsigned)
+	_ZN4fltk10icon_styleE @ 203 DATA ; fltk::icon_style
+	_ZN4fltk10line_styleEiiPc @ 204 ; fltk::line_style(int, int, char*)
+	_ZN4fltk10list_fontsERPPNS_4FontE @ 205 ; fltk::list_fonts(fltk::Font**&)
+	_ZN4fltk10load_themeEv @ 206 ; fltk::load_theme()
+	_ZN4fltk10pop_matrixEv @ 207 ; fltk::pop_matrix()
+	_ZN4fltk10scrollrectEiiiiiiPFvPviiiiES0_ @ 208 ; fltk::scrollrect(int, int, int, int, int, int, void (*)(void*, int, int, int, int), void*)
+	_ZN4fltk10strokepathEv @ 209 ; fltk::strokepath()
+	_ZN4fltk10strokerectEiiii @ 210 ; fltk::strokerect(int, int, int, int)
+	_ZN4fltk10textmetricEv @ 211 ; fltk::textmetric()
+	_ZN4fltk11CURSOR_HANDE @ 212 DATA ; fltk::CURSOR_HAND
+	_ZN4fltk11CURSOR_HELPE @ 213 DATA ; fltk::CURSOR_HELP
+	_ZN4fltk11CURSOR_MOVEE @ 214 DATA ; fltk::CURSOR_MOVE
+	_ZN4fltk11CURSOR_NESWE @ 215 DATA ; fltk::CURSOR_NESW
+	_ZN4fltk11CURSOR_NONEE @ 216 DATA ; fltk::CURSOR_NONE
+	_ZN4fltk11CURSOR_NWSEE @ 217 DATA ; fltk::CURSOR_NWSE
+	_ZN4fltk11CURSOR_WAITE @ 218 DATA ; fltk::CURSOR_WAIT
+	_ZN4fltk11CheckButton13default_styleE @ 219 DATA ; fltk::CheckButton::default_style
+	_ZN4fltk11CheckButton4drawEv @ 220 ; fltk::CheckButton::draw()
+	_ZN4fltk11CheckButtonC1EiiiiPKc @ 221 ; fltk::CheckButton::CheckButton(int, int, int, int, char const*)
+	_ZN4fltk11CheckButtonC2EiiiiPKc @ 222 ; fltk::CheckButton::CheckButton(int, int, int, int, char const*)
+	_ZN4fltk11CheckButtonD0Ev @ 223 ; fltk::CheckButton::~CheckButton()
+	_ZN4fltk11CheckButtonD1Ev @ 224 ; fltk::CheckButton::~CheckButton()
+	_ZN4fltk11CheckButtonD2Ev @ 225 ; fltk::CheckButton::~CheckButton()
+	_ZN4fltk11ClockOutput4drawEiiii @ 226 ; fltk::ClockOutput::draw(int, int, int, int)
+	_ZN4fltk11ClockOutput4drawEv @ 227 ; fltk::ClockOutput::draw()
+	_ZN4fltk11ClockOutput5valueEiii @ 228 ; fltk::ClockOutput::value(int, int, int)
+	_ZN4fltk11ClockOutput5valueEm @ 229 ; fltk::ClockOutput::value(unsigned long)
+	_ZN4fltk11ClockOutput9drawhandsEjj @ 230 ; fltk::ClockOutput::drawhands(unsigned, unsigned)
+	_ZN4fltk11ClockOutputC1EiiiiPKc @ 231 ; fltk::ClockOutput::ClockOutput(int, int, int, int, char const*)
+	_ZN4fltk11ClockOutputC2EiiiiPKc @ 232 ; fltk::ClockOutput::ClockOutput(int, int, int, int, char const*)
+	_ZN4fltk11ClockOutputD0Ev @ 233 ; fltk::ClockOutput::~ClockOutput()
+	_ZN4fltk11ClockOutputD1Ev @ 234 ; fltk::ClockOutput::~ClockOutput()
+	_ZN4fltk11ClockOutputD2Ev @ 235 ; fltk::ClockOutput::~ClockOutput()
+	_ZN4fltk11FileBrowser4loadEPKc @ 236 ; fltk::FileBrowser::load(char const*)
+	_ZN4fltk11FileBrowser6filterEPKc @ 237 ; fltk::FileBrowser::filter(char const*)
+	_ZN4fltk11FileBrowser9icon_sizeEh @ 238 ; fltk::FileBrowser::icon_size(unsigned char)
+	_ZN4fltk11FileBrowserC1EiiiiPKc @ 239 ; fltk::FileBrowser::FileBrowser(int, int, int, int, char const*)
+	_ZN4fltk11FileBrowserC2EiiiiPKc @ 240 ; fltk::FileBrowser::FileBrowser(int, int, int, int, char const*)
+	_ZN4fltk11FileBrowserD0Ev @ 241 ; fltk::FileBrowser::~FileBrowser()
+	_ZN4fltk11FileBrowserD1Ev @ 242 ; fltk::FileBrowser::~FileBrowser()
+	_ZN4fltk11FileChooser10cb_dirMenuEPNS_6ChoiceEPv @ 243 ; fltk::FileChooser::cb_dirMenu(fltk::Choice*, void*)
+	_ZN4fltk11FileChooser10fileListCBEv @ 244 ; fltk::FileChooser::fileListCB()
+	_ZN4fltk11FileChooser10fileNameCBEv @ 245 ; fltk::FileChooser::fileNameCB()
+	_ZN4fltk11FileChooser11cb_Cancel_iEPNS_6ButtonEPv @ 246 ; fltk::FileChooser::cb_Cancel_i(fltk::Button*, void*)
+	_ZN4fltk11FileChooser11cb_fileListEPNS_11FileBrowserEPv @ 247 ; fltk::FileChooser::cb_fileList(fltk::FileBrowser*, void*)
+	_ZN4fltk11FileChooser11cb_fileNameEPNS_9FileInputEPv @ 248 ; fltk::FileChooser::cb_fileName(fltk::FileInput*, void*)
+	_ZN4fltk11FileChooser11cb_okButtonEPNS_12ReturnButtonEPv @ 249 ; fltk::FileChooser::cb_okButton(fltk::ReturnButton*, void*)
+	_ZN4fltk11FileChooser11cb_upButtonEPNS_6ButtonEPv @ 250 ; fltk::FileChooser::cb_upButton(fltk::Button*, void*)
+	_ZN4fltk11FileChooser11cb_window_iEPNS_6WindowEPv @ 251 ; fltk::FileChooser::cb_window_i(fltk::Window*, void*)
+	_ZN4fltk11FileChooser12cb_dirMenu_iEPNS_6ChoiceEPv @ 252 ; fltk::FileChooser::cb_dirMenu_i(fltk::Choice*, void*)
+	_ZN4fltk11FileChooser12cb_newButtonEPNS_6ButtonEPv @ 253 ; fltk::FileChooser::cb_newButton(fltk::Button*, void*)
+	_ZN4fltk11FileChooser13cb_fileList_iEPNS_11FileBrowserEPv @ 254 ; fltk::FileChooser::cb_fileList_i(fltk::FileBrowser*, void*)
+	_ZN4fltk11FileChooser13cb_fileName_iEPNS_9FileInputEPv @ 255 ; fltk::FileChooser::cb_fileName_i(fltk::FileInput*, void*)
+	_ZN4fltk11FileChooser13cb_okButton_iEPNS_12ReturnButtonEPv @ 256 ; fltk::FileChooser::cb_okButton_i(fltk::ReturnButton*, void*)
+	_ZN4fltk11FileChooser13cb_upButton_iEPNS_6ButtonEPv @ 257 ; fltk::FileChooser::cb_upButton_i(fltk::Button*, void*)
+	_ZN4fltk11FileChooser14cb_newButton_iEPNS_6ButtonEPv @ 258 ; fltk::FileChooser::cb_newButton_i(fltk::Button*, void*)
+	_ZN4fltk11FileChooser2upEv @ 259 ; fltk::FileChooser::up()
+	_ZN4fltk11FileChooser3cb_EPNS_6ButtonEPv @ 260 ; fltk::FileChooser::cb_(fltk::Button*, void*)
+	_ZN4fltk11FileChooser4execEv @ 261 ; fltk::FileChooser::exec()
+	_ZN4fltk11FileChooser4hideEv @ 262 ; fltk::FileChooser::hide()
+	_ZN4fltk11FileChooser4typeEi @ 263 ; fltk::FileChooser::type(int)
+	_ZN4fltk11FileChooser4typeEv @ 264 ; fltk::FileChooser::type()
+	_ZN4fltk11FileChooser5cb__iEPNS_6ButtonEPv @ 265 ; fltk::FileChooser::cb__i(fltk::Button*, void*)
+	_ZN4fltk11FileChooser5colorEj @ 266 ; fltk::FileChooser::color(unsigned)
+	_ZN4fltk11FileChooser5colorEv @ 267 ; fltk::FileChooser::color()
+	_ZN4fltk11FileChooser5countEv @ 268 ; fltk::FileChooser::count()
+	_ZN4fltk11FileChooser5labelEPKc @ 269 ; fltk::FileChooser::label(char const*)
+	_ZN4fltk11FileChooser5labelEv @ 270 ; fltk::FileChooser::label()
+	_ZN4fltk11FileChooser5valueEPKc @ 271 ; fltk::FileChooser::value(char const*)
+	_ZN4fltk11FileChooser5valueEi @ 272 ; fltk::FileChooser::value(int)
+	_ZN4fltk11FileChooser6filterEPKc @ 273 ; fltk::FileChooser::filter(char const*)
+	_ZN4fltk11FileChooser6filterEv @ 274 ; fltk::FileChooser::filter()
+	_ZN4fltk11FileChooser6newdirEv @ 275 ; fltk::FileChooser::newdir()
+	_ZN4fltk11FileChooser6rescanEv @ 276 ; fltk::FileChooser::rescan()
+	_ZN4fltk11FileChooser7visibleEv @ 277 ; fltk::FileChooser::visible()
+	_ZN4fltk11FileChooser8textfontEPNS_4FontE @ 278 ; fltk::FileChooser::textfont(fltk::Font*)
+	_ZN4fltk11FileChooser8textfontEv @ 279 ; fltk::FileChooser::textfont()
+	_ZN4fltk11FileChooser8textsizeEh @ 280 ; fltk::FileChooser::textsize(unsigned char)
+	_ZN4fltk11FileChooser9cb_CancelEPNS_6ButtonEPv @ 281 ; fltk::FileChooser::cb_Cancel(fltk::Button*, void*)
+	_ZN4fltk11FileChooser9cb_windowEPNS_6WindowEPv @ 282 ; fltk::FileChooser::cb_window(fltk::Window*, void*)
+	_ZN4fltk11FileChooser9directoryEPKc @ 283 ; fltk::FileChooser::directory(char const*)
+	_ZN4fltk11FileChooser9directoryEv @ 284 ; fltk::FileChooser::directory()
+	_ZN4fltk11FileChooser9icon_sizeEh @ 285 ; fltk::FileChooser::icon_size(unsigned char)
+	_ZN4fltk11FileChooser9icon_sizeEv @ 286 ; fltk::FileChooser::icon_size()
+	_ZN4fltk11FileChooser9textcolorEj @ 287 ; fltk::FileChooser::textcolor(unsigned)
+	_ZN4fltk11FileChooser9textcolorEv @ 288 ; fltk::FileChooser::textcolor()
+	_ZN4fltk11FileChooserC1EPKcS2_iS2_ @ 289 ; fltk::FileChooser::FileChooser(char const*, char const*, int, char const*)
+	_ZN4fltk11FileChooserC2EPKcS2_iS2_ @ 290 ; fltk::FileChooser::FileChooser(char const*, char const*, int, char const*)
+	_ZN4fltk11LightButton13default_styleE @ 291 DATA ; fltk::LightButton::default_style
+	_ZN4fltk11LightButtonC1EiiiiPKc @ 292 ; fltk::LightButton::LightButton(int, int, int, int, char const*)
+	_ZN4fltk11LightButtonC2EiiiiPKc @ 293 ; fltk::LightButton::LightButton(int, int, int, int, char const*)
+	_ZN4fltk11LightButtonD0Ev @ 294 ; fltk::LightButton::~LightButton()
+	_ZN4fltk11LightButtonD1Ev @ 295 ; fltk::LightButton::~LightButton()
+	_ZN4fltk11OSHADOW_BOXE @ 296 DATA ; fltk::OSHADOW_BOX
+	_ZN4fltk11PackedGroup6layoutEv @ 297 ; fltk::PackedGroup::layout()
+	_ZN4fltk11PackedGroupC1EiiiiPKc @ 298 ; fltk::PackedGroup::PackedGroup(int, int, int, int, char const*)
+	_ZN4fltk11PackedGroupC2EiiiiPKc @ 299 ; fltk::PackedGroup::PackedGroup(int, int, int, int, char const*)
+	_ZN4fltk11PackedGroupD0Ev @ 300 ; fltk::PackedGroup::~PackedGroup()
+	_ZN4fltk11PackedGroupD1Ev @ 301 ; fltk::PackedGroup::~PackedGroup()
+	_ZN4fltk11ProgressBar4drawEv @ 302 ; fltk::ProgressBar::draw()
+	_ZN4fltk11ProgressBarC1EiiiiPKc @ 303 ; fltk::ProgressBar::ProgressBar(int, int, int, int, char const*)
+	_ZN4fltk11ProgressBarC2EiiiiPKc @ 304 ; fltk::ProgressBar::ProgressBar(int, int, int, int, char const*)
+	_ZN4fltk11ProgressBarD0Ev @ 305 ; fltk::ProgressBar::~ProgressBar()
+	_ZN4fltk11ProgressBarD1Ev @ 306 ; fltk::ProgressBar::~ProgressBar()
+	_ZN4fltk11ROUNDED_BOXE @ 307 DATA ; fltk::ROUNDED_BOX
+	_ZN4fltk11RSHADOW_BOXE @ 308 DATA ; fltk::RSHADOW_BOX
+	_ZN4fltk11RadioButton13default_styleE @ 309 DATA ; fltk::RadioButton::default_style
+	_ZN4fltk11RadioButtonC1EiiiiPKc @ 310 ; fltk::RadioButton::RadioButton(int, int, int, int, char const*)
+	_ZN4fltk11RadioButtonC2EiiiiPKc @ 311 ; fltk::RadioButton::RadioButton(int, int, int, int, char const*)
+	_ZN4fltk11RadioButtonD0Ev @ 312 ; fltk::RadioButton::~RadioButton()
+	_ZN4fltk11RadioButtonD1Ev @ 313 ; fltk::RadioButton::~RadioButton()
+	_ZN4fltk11SCREEN_FONTE @ 314 DATA ; fltk::SCREEN_FONT
+	_ZN4fltk11SYMBOL_FONTE @ 315 DATA ; fltk::SYMBOL_FONT
+	_ZN4fltk11ScrollGroup12scrollbar_cbEPNS_6WidgetEPv @ 316 ; fltk::ScrollGroup::scrollbar_cb(fltk::Widget*, void*)
+	_ZN4fltk11ScrollGroup13hscrollbar_cbEPNS_6WidgetEPv @ 317 ; fltk::ScrollGroup::hscrollbar_cb(fltk::Widget*, void*)
+	_ZN4fltk11ScrollGroup4bboxERiS1_S1_S1_ @ 318 ; fltk::ScrollGroup::bbox(int&, int&, int&, int&)
+	_ZN4fltk11ScrollGroup4drawEv @ 319 ; fltk::ScrollGroup::draw()
+	_ZN4fltk11ScrollGroup6handleEi @ 320 ; fltk::ScrollGroup::handle(int)
+	_ZN4fltk11ScrollGroup6layoutEv @ 321 ; fltk::ScrollGroup::layout()
+	_ZN4fltk11ScrollGroup8positionEii @ 322 ; fltk::ScrollGroup::position(int, int)
+	_ZN4fltk11ScrollGroup9draw_clipEPviiii @ 323 ; fltk::ScrollGroup::draw_clip(void*, int, int, int, int)
+	_ZN4fltk11ScrollGroupC1EiiiiPKc @ 324 ; fltk::ScrollGroup::ScrollGroup(int, int, int, int, char const*)
+	_ZN4fltk11ScrollGroupC2EiiiiPKc @ 325 ; fltk::ScrollGroup::ScrollGroup(int, int, int, int, char const*)
+	_ZN4fltk11ScrollGroupD0Ev @ 326 ; fltk::ScrollGroup::~ScrollGroup()
+	_ZN4fltk11ScrollGroupD1Ev @ 327 ; fltk::ScrollGroup::~ScrollGroup()
+	_ZN4fltk11THIN_UP_BOXE @ 328 DATA ; fltk::THIN_UP_BOX
+	_ZN4fltk11TextDisplay10clear_rectEiiiii @ 329 ; fltk::TextDisplay::clear_rect(int, int, int, int, int)
+	_ZN4fltk11TextDisplay10draw_rangeEii @ 330 ; fltk::TextDisplay::draw_range(int, int)
+	_ZN4fltk11TextDisplay10draw_vlineEiiiii @ 331 ; fltk::TextDisplay::draw_vline(int, int, int, int, int)
+	_ZN4fltk11TextDisplay10move_rightEv @ 332 ; fltk::TextDisplay::move_right()
+	_ZN4fltk11TextDisplay10overstrikeEPKc @ 333 ; fltk::TextDisplay::overstrike(char const*)
+	_ZN4fltk11TextDisplay10word_startEi @ 334 ; fltk::TextDisplay::word_start(int)
+	_ZN4fltk11TextDisplay11draw_cursorEii @ 335 ; fltk::TextDisplay::draw_cursor(int, int)
+	_ZN4fltk11TextDisplay11draw_stringEiiiiPKci @ 336 ; fltk::TextDisplay::draw_string(int, int, int, int, char const*, int)
+	_ZN4fltk11TextDisplay11show_cursorEi @ 337 ; fltk::TextDisplay::show_cursor(int)
+	_ZN4fltk11TextDisplay12cursor_styleEi @ 338 ; fltk::TextDisplay::cursor_style(int)
+	_ZN4fltk11TextDisplay12empty_vlinesEv @ 339 ; fltk::TextDisplay::empty_vlines()
+	_ZN4fltk11TextDisplay12in_selectionEii @ 340 ; fltk::TextDisplay::in_selection(int, int)
+	_ZN4fltk11TextDisplay12string_widthEPKcii @ 341 ; fltk::TextDisplay::string_width(char const*, int, int)
+	_ZN4fltk11TextDisplay12vline_lengthEi @ 342 ; fltk::TextDisplay::vline_length(int)
+	_ZN4fltk11TextDisplay12xy_to_rowcolEiiPiS1_i @ 343 ; fltk::TextDisplay::xy_to_rowcol(int, int, int*, int*, int)
+	_ZN4fltk11TextDisplay13longest_vlineEv @ 344 ; fltk::TextDisplay::longest_vline()
+	_ZN4fltk11TextDisplay13measure_vlineEi @ 345 ; fltk::TextDisplay::measure_vline(int)
+	_ZN4fltk11TextDisplay13previous_wordEv @ 346 ; fltk::TextDisplay::previous_word()
+	_ZN4fltk11TextDisplay14calc_last_charEv @ 347 ; fltk::TextDisplay::calc_last_char()
+	_ZN4fltk11TextDisplay14display_insertEv @ 348 ; fltk::TextDisplay::display_insert()
+	_ZN4fltk11TextDisplay14h_scrollbar_cbEPNS_9ScrollbarEPS0_ @ 349 ; fltk::TextDisplay::h_scrollbar_cb(fltk::Scrollbar*, fltk::TextDisplay*)
+	_ZN4fltk11TextDisplay14highlight_dataEPNS_10TextBufferEPNS0_15StyleTableEntryEicPFvvEPv @ 350 ; fltk::TextDisplay::highlight_data(fltk::TextBuffer*, fltk::TextDisplay::StyleTableEntry*, int, char, void (*)(), void*)
+	_ZN4fltk11TextDisplay14position_styleEiiii @ 351 ; fltk::TextDisplay::position_style(int, int, int, int)
+	_ZN4fltk11TextDisplay14position_to_xyEiPiS1_ @ 352 ; fltk::TextDisplay::position_to_xy(int, int*, int*)
+	_ZN4fltk11TextDisplay14v_scrollbar_cbEPNS_9ScrollbarEPS0_ @ 353 ; fltk::TextDisplay::v_scrollbar_cb(fltk::Scrollbar*, fltk::TextDisplay*)
+	_ZN4fltk11TextDisplay14xy_to_positionEiii @ 354 ; fltk::TextDisplay::xy_to_position(int, int, int)
+	_ZN4fltk11TextDisplay15insert_positionEi @ 355 ; fltk::TextDisplay::insert_position(int)
+	_ZN4fltk11TextDisplay15insert_positionEv @ 356 ; fltk::TextDisplay::insert_position()
+	_ZN4fltk11TextDisplay15redisplay_rangeEii @ 357 ; fltk::TextDisplay::redisplay_range(int, int)
+	_ZN4fltk11TextDisplay16calc_line_startsEii @ 358 ; fltk::TextDisplay::calc_line_starts(int, int)
+	_ZN4fltk11TextDisplay16position_to_lineEiPi @ 359 ; fltk::TextDisplay::position_to_line(int, int*)
+	_ZN4fltk11TextDisplay18buffer_modified_cbEiiiiPKcPv @ 360 ; fltk::TextDisplay::buffer_modified_cb(int, int, int, int, char const*, void*)
+	_ZN4fltk11TextDisplay18offset_line_startsEi @ 361 ; fltk::TextDisplay::offset_line_starts(int)
+	_ZN4fltk11TextDisplay18update_h_scrollbarEv @ 362 ; fltk::TextDisplay::update_h_scrollbar()
+	_ZN4fltk11TextDisplay18update_line_startsEiiiiiPi @ 363 ; fltk::TextDisplay::update_line_starts(int, int, int, int, int, int*)
+	_ZN4fltk11TextDisplay18update_v_scrollbarEv @ 364 ; fltk::TextDisplay::update_v_scrollbar()
+	_ZN4fltk11TextDisplay19position_to_linecolEiPiS1_ @ 365 ; fltk::TextDisplay::position_to_linecol(int, int*, int*)
+	_ZN4fltk11TextDisplay20show_insert_positionEv @ 366 ; fltk::TextDisplay::show_insert_position()
+	_ZN4fltk11TextDisplay23extend_range_for_stylesEPiS1_ @ 367 ; fltk::TextDisplay::extend_range_for_styles(int*, int*)
+	_ZN4fltk11TextDisplay4drawEv @ 368 ; fltk::TextDisplay::draw()
+	_ZN4fltk11TextDisplay6bufferEPNS_10TextBufferE @ 369 ; fltk::TextDisplay::buffer(fltk::TextBuffer*)
+	_ZN4fltk11TextDisplay6bufferEv @ 370 ; fltk::TextDisplay::buffer()
+	_ZN4fltk11TextDisplay6handleEi @ 371 ; fltk::TextDisplay::handle(int)
+	_ZN4fltk11TextDisplay6insertEPKc @ 372 ; fltk::TextDisplay::insert(char const*)
+	_ZN4fltk11TextDisplay6layoutEv @ 373 ; fltk::TextDisplay::layout()
+	_ZN4fltk11TextDisplay6scrollEii @ 374 ; fltk::TextDisplay::scroll(int, int)
+	_ZN4fltk11TextDisplay7drag_meEi @ 375 ; fltk::TextDisplay::drag_me(int)
+	_ZN4fltk11TextDisplay7move_upEv @ 376 ; fltk::TextDisplay::move_up()
+	_ZN4fltk11TextDisplay7scroll_Eii @ 377 ; fltk::TextDisplay::scroll_(int, int)
+	_ZN4fltk11TextDisplay8drawtextEiiii @ 378 ; fltk::TextDisplay::drawtext(int, int, int, int)
+	_ZN4fltk11TextDisplay8word_endEi @ 379 ; fltk::TextDisplay::word_end(int)
+	_ZN4fltk11TextDisplay9move_downEv @ 380 ; fltk::TextDisplay::move_down()
+	_ZN4fltk11TextDisplay9move_leftEv @ 381 ; fltk::TextDisplay::move_left()
+	_ZN4fltk11TextDisplay9next_wordEv @ 382 ; fltk::TextDisplay::next_word()
+	_ZN4fltk11TextDisplayC1EiiiiPKc @ 383 ; fltk::TextDisplay::TextDisplay(int, int, int, int, char const*)
+	_ZN4fltk11TextDisplayC2EiiiiPKc @ 384 ; fltk::TextDisplay::TextDisplay(int, int, int, int, char const*)
+	_ZN4fltk11TextDisplayD0Ev @ 385 ; fltk::TextDisplay::~TextDisplay()
+	_ZN4fltk11TextDisplayD1Ev @ 386 ; fltk::TextDisplay::~TextDisplay()
+	_ZN4fltk11TextDisplayD2Ev @ 387 ; fltk::TextDisplay::~TextDisplay()
+	_ZN4fltk11ValueOutput4drawEv @ 388 ; fltk::ValueOutput::draw()
+	_ZN4fltk11ValueOutput6handleEi @ 389 ; fltk::ValueOutput::handle(int)
+	_ZN4fltk11ValueOutputD0Ev @ 390 ; fltk::ValueOutput::~ValueOutput()
+	_ZN4fltk11ValueOutputD1Ev @ 391 ; fltk::ValueOutput::~ValueOutput()
+	_ZN4fltk11ValueSlider13default_styleE @ 392 DATA ; fltk::ValueSlider::default_style
+	_ZN4fltk11ValueSlider4drawEv @ 393 ; fltk::ValueSlider::draw()
+	_ZN4fltk11ValueSlider6handleEi @ 394 ; fltk::ValueSlider::handle(int)
+	_ZN4fltk11ValueSliderC1EiiiiPKc @ 395 ; fltk::ValueSlider::ValueSlider(int, int, int, int, char const*)
+	_ZN4fltk11ValueSliderC2EiiiiPKc @ 396 ; fltk::ValueSlider::ValueSlider(int, int, int, int, char const*)
+	_ZN4fltk11ValueSliderD0Ev @ 397 ; fltk::ValueSlider::~ValueSlider()
+	_ZN4fltk11ValueSliderD1Ev @ 398 ; fltk::ValueSlider::~ValueSlider()
+	_ZN4fltk11add_timeoutEfPFvPvES0_ @ 399 ; fltk::add_timeout(float, void (*)(void*), void*)
+	_ZN4fltk11addverticesEiPA2_Kf @ 400 ; fltk::addvertices(int, float const (*) [2])
+	_ZN4fltk11addverticesEiPA2_Ki @ 401 ; fltk::addvertices(int, int const (*) [2])
+	_ZN4fltk11belowmouse_E @ 402 DATA ; fltk::belowmouse_
+	_ZN4fltk11clip_regionEP6HRGN__ @ 403 ; fltk::clip_region(HRGN__*)
+	_ZN4fltk11clip_regionEv @ 404 ; fltk::clip_region()
+	_ZN4fltk11exit_modal_E @ 405 DATA ; fltk::exit_modal_
+	_ZN4fltk11gldrawimageEPKhiiiiii @ 406 ; fltk::gldrawimage(unsigned char const*, int, int, int, int, int, int)
+	_ZN4fltk11glgetascentEv @ 407 ; fltk::glgetascent()
+	_ZN4fltk11has_timeoutEPFvPvES0_ @ 408 ; fltk::has_timeout(void (*)(void*), void*)
+	_ZN4fltk11measure_xpmEPKPKcRiS4_ @ 409 ; fltk::measure_xpm(char const* const*, int&, int&)
+	_ZN4fltk11not_clippedEiiii @ 410 ; fltk::not_clipped(int, int, int, int)
+	_ZN4fltk11push_matrixEv @ 411 ; fltk::push_matrix()
+	_ZN4fltk11remove_idleEPFvPvES0_ @ 412 ; fltk::remove_idle(void (*)(void*), void*)
+	_ZN4fltk11reset_themeEv @ 413 ; fltk::reset_theme()
+	_ZN4fltk11split_colorEjRhS0_S0_ @ 414 ; fltk::split_color(unsigned, unsigned char&, unsigned char&, unsigned char&)
+	_ZN4fltk12BORDER_FRAMEE @ 415 DATA ; fltk::BORDER_FRAME
+	_ZN4fltk12COURIER_BOLDE @ 416 DATA ; fltk::COURIER_BOLD
+	_ZN4fltk12CURSOR_ARROWE @ 417 DATA ; fltk::CURSOR_ARROW
+	_ZN4fltk12CURSOR_CROSSE @ 418 DATA ; fltk::CURSOR_CROSS
+	_ZN4fltk12ColorChooser13set_valuatorsEv @ 419 ; fltk::ColorChooser::set_valuators()
+	_ZN4fltk12ColorChooser3hsvEfff @ 420 ; fltk::ColorChooser::hsv(float, float, float)
+	_ZN4fltk12ColorChooser3rgbEfff @ 421 ; fltk::ColorChooser::rgb(float, float, float)
+	_ZN4fltk12ColorChooser4modeEv @ 422 ; fltk::ColorChooser::mode()
+	_ZN4fltk12ColorChooser5valueEj @ 423 ; fltk::ColorChooser::value(unsigned)
+	_ZN4fltk12ColorChooser6rgb_cbEPNS_6WidgetEPv @ 424 ; fltk::ColorChooser::rgb_cb(fltk::Widget*, void*)
+	_ZN4fltk12ColorChooser7hsv2rgbEfffRfS1_S1_ @ 425 ; fltk::ColorChooser::hsv2rgb(float, float, float, float&, float&, float&)
+	_ZN4fltk12ColorChooser7mode_cbEPNS_6WidgetEPv @ 426 ; fltk::ColorChooser::mode_cb(fltk::Widget*, void*)
+	_ZN4fltk12ColorChooser7rgb2hsvEfffRfS1_S1_ @ 427 ; fltk::ColorChooser::rgb2hsv(float, float, float, float&, float&, float&)
+	_ZN4fltk12ColorChooserC1EiiiiPKc @ 428 ; fltk::ColorChooser::ColorChooser(int, int, int, int, char const*)
+	_ZN4fltk12ColorChooserC2EiiiiPKc @ 429 ; fltk::ColorChooser::ColorChooser(int, int, int, int, char const*)
+	_ZN4fltk12ColorChooserD0Ev @ 430 ; fltk::ColorChooser::~ColorChooser()
+	_ZN4fltk12ColorChooserD1Ev @ 431 ; fltk::ColorChooser::~ColorChooser()
+	_ZN4fltk12DOTTED_FRAMEE @ 432 DATA ; fltk::DOTTED_FRAME
+	_ZN4fltk12EMBOSSED_BOXE @ 433 DATA ; fltk::EMBOSSED_BOX
+	_ZN4fltk12ENGRAVED_BOXE @ 434 DATA ; fltk::ENGRAVED_BOX
+	_ZN4fltk12HighlightBoxC1EPKcPKNS_6SymbolE @ 435 ; fltk::HighlightBox::HighlightBox(char const*, fltk::Symbol const*)
+	_ZN4fltk12HighlightBoxC2EPKcPKNS_6SymbolE @ 436 ; fltk::HighlightBox::HighlightBox(char const*, fltk::Symbol const*)
+	_ZN4fltk12InputBrowser13default_styleE @ 437 DATA ; fltk::InputBrowser::default_style
+	_ZN4fltk12InputBrowser4drawEv @ 438 ; fltk::InputBrowser::draw()
+	_ZN4fltk12InputBrowser5valueEPKc @ 439 ; fltk::InputBrowser::value(char const*)
+	_ZN4fltk12InputBrowser6handleEi @ 440 ; fltk::InputBrowser::handle(int)
+	_ZN4fltk12InputBrowserC1EiiiiPKc @ 441 ; fltk::InputBrowser::InputBrowser(int, int, int, int, char const*)
+	_ZN4fltk12InputBrowserC2EiiiiPKc @ 442 ; fltk::InputBrowser::InputBrowser(int, int, int, int, char const*)
+	_ZN4fltk12InputBrowserD0Ev @ 443 ; fltk::InputBrowser::~InputBrowser()
+	_ZN4fltk12InputBrowserD1Ev @ 444 ; fltk::InputBrowser::~InputBrowser()
+	_ZN4fltk12InvisibleBox13default_styleE @ 445 DATA ; fltk::InvisibleBox::default_style
+	_ZN4fltk12InvisibleBox4drawEv @ 446 ; fltk::InvisibleBox::draw()
+	_ZN4fltk12InvisibleBoxC1EPNS_6SymbolEiiiiPKc @ 447 ; fltk::InvisibleBox::InvisibleBox(fltk::Symbol*, int, int, int, int, char const*)
+	_ZN4fltk12InvisibleBoxC1EiiiiPKc @ 448 ; fltk::InvisibleBox::InvisibleBox(int, int, int, int, char const*)
+	_ZN4fltk12InvisibleBoxC2EPNS_6SymbolEiiiiPKc @ 449 ; fltk::InvisibleBox::InvisibleBox(fltk::Symbol*, int, int, int, int, char const*)
+	_ZN4fltk12InvisibleBoxC2EiiiiPKc @ 450 ; fltk::InvisibleBox::InvisibleBox(int, int, int, int, char const*)
+	_ZN4fltk12InvisibleBoxD0Ev @ 451 ; fltk::InvisibleBox::~InvisibleBox()
+	_ZN4fltk12InvisibleBoxD1Ev @ 452 ; fltk::InvisibleBox::~InvisibleBox()
+	_ZN4fltk12NORMAL_LABELE @ 453 DATA ; fltk::NORMAL_LABEL
+	_ZN4fltk12NumericInput12handle_arrowEi @ 454 ; fltk::NumericInput::handle_arrow(int)
+	_ZN4fltk12NumericInput5valueEPKc @ 455 ; fltk::NumericInput::value(char const*)
+	_ZN4fltk12NumericInput5valueEd @ 456 ; fltk::NumericInput::value(double)
+	_ZN4fltk12NumericInput5valueEi @ 457 ; fltk::NumericInput::value(int)
+	_ZN4fltk12NumericInput6handleEi @ 458 ; fltk::NumericInput::handle(int)
+	_ZN4fltk12NumericInputC2EiiiiPKc @ 459 ; fltk::NumericInput::NumericInput(int, int, int, int, char const*)
+	_ZN4fltk12NumericInputD0Ev @ 460 ; fltk::NumericInput::~NumericInput()
+	_ZN4fltk12NumericInputD1Ev @ 461 ; fltk::NumericInput::~NumericInput()
+	_ZN4fltk12NumericInputD2Ev @ 462 ; fltk::NumericInput::~NumericInput()
+	_ZN4fltk12ROUND_UP_BOXE @ 463 DATA ; fltk::ROUND_UP_BOX
+	_ZN4fltk12RepeatButton6handleEi @ 464 ; fltk::RepeatButton::handle(int)
+	_ZN4fltk12RepeatButtonD0Ev @ 465 ; fltk::RepeatButton::~RepeatButton()
+	_ZN4fltk12RepeatButtonD1Ev @ 466 ; fltk::RepeatButton::~RepeatButton()
+	_ZN4fltk12ReturnButton13default_styleE @ 467 DATA ; fltk::ReturnButton::default_style
+	_ZN4fltk12ReturnButton4drawEv @ 468 ; fltk::ReturnButton::draw()
+	_ZN4fltk12ReturnButtonC1EiiiiPKc @ 469 ; fltk::ReturnButton::ReturnButton(int, int, int, int, char const*)
+	_ZN4fltk12ReturnButtonC2EiiiiPKc @ 470 ; fltk::ReturnButton::ReturnButton(int, int, int, int, char const*)
+	_ZN4fltk12ReturnButtonD0Ev @ 471 ; fltk::ReturnButton::~ReturnButton()
+	_ZN4fltk12ReturnButtonD1Ev @ 472 ; fltk::ReturnButton::~ReturnButton()
+	_ZN4fltk12SHADOW_LABELE @ 473 DATA ; fltk::SHADOW_LABEL
+	_ZN4fltk12SYMBOL_LABELE @ 474 DATA ; fltk::SYMBOL_LABEL
+	_ZN4fltk12ShapedWindow4drawEv @ 475 ; fltk::ShapedWindow::draw()
+	_ZN4fltk12ShapedWindowD0Ev @ 476 ; fltk::ShapedWindow::~ShapedWindow()
+	_ZN4fltk12ShapedWindowD1Ev @ 477 ; fltk::ShapedWindow::~ShapedWindow()
+	_ZN4fltk12TIMES_ITALICE @ 478 DATA ; fltk::TIMES_ITALIC
+	_ZN4fltk12ccValueInput6formatEPc @ 479 ; fltk::ccValueInput::format(char*)
+	_ZN4fltk12ccValueInputC1Eiiii @ 480 ; fltk::ccValueInput::ccValueInput(int, int, int, int)
+	_ZN4fltk12ccValueInputD0Ev @ 481 ; fltk::ccValueInput::~ccValueInput()
+	_ZN4fltk12ccValueInputD1Ev @ 482 ; fltk::ccValueInput::~ccValueInput()
+	_ZN4fltk12event_insideEiiii @ 483 ; fltk::event_inside(int, int, int, int)
+	_ZN4fltk12file_chooserEPKcS1_S1_b @ 484 ; fltk::file_chooser(char const*, char const*, char const*, bool)
+	_ZN4fltk12glgetdescentEv @ 485 ; fltk::glgetdescent()
+	_ZN4fltk12glstrokerectEiiii @ 486 ; fltk::glstrokerect(int, int, int, int)
+	_ZN4fltk12open_displayEv @ 487 ; fltk::open_display()
+	_ZN4fltk12overlay_rectEiiii @ 488 ; fltk::overlay_rect(int, int, int, int)
+	_ZN4fltk12own_colormapEv @ 489 ; fltk::own_colormap()
+	_ZN4fltk12push_no_clipEv @ 490 ; fltk::push_no_clip()
+	_ZN4fltk12reload_themeEv @ 491 ; fltk::reload_theme()
+	_ZN4fltk12remove_checkEPFvPvES0_ @ 492 ; fltk::remove_check(void (*)(void*), void*)
+	_ZN4fltk12set_encodingEPKc @ 493 ; fltk::set_encoding(char const*)
+	_ZN4fltk12system_themeEv @ 494 ; fltk::system_theme()
+	_ZN4fltk13CURSOR_INSERTE @ 495 DATA ; fltk::CURSOR_INSERT
+	_ZN4fltk13CreatedWindow10set_minmaxEP13tagMINMAXINFO @ 496 ; fltk::CreatedWindow::set_minmax(tagMINMAXINFO*)
+	_ZN4fltk13CreatedWindow4findEPKNS_6WindowE @ 497 ; fltk::CreatedWindow::find(fltk::Window const*)
+	_ZN4fltk13CreatedWindow5firstE @ 498 DATA ; fltk::CreatedWindow::first
+	_ZN4fltk13CreatedWindow6createEPNS_6WindowE @ 499 ; fltk::CreatedWindow::create(fltk::Window*)
+	_ZN4fltk13CreatedWindow6exposeEiiii @ 500 ; fltk::CreatedWindow::expose(int, int, int, int)
+	_ZN4fltk13CreatedWindow7bordersEPKNS_6WindowERiS4_S4_S4_ @ 501 ; fltk::CreatedWindow::borders(fltk::Window const*, int&, int&, int&, int&)
+	_ZN4fltk13CreatedWindowC1Ev @ 502 ; fltk::CreatedWindow::CreatedWindow()
+	_ZN4fltk13EngravedLabelC1EPKcPA3_Ki @ 503 ; fltk::EngravedLabel::EngravedLabel(char const*, int const (*) [3])
+	_ZN4fltk13OverlayWindow14can_do_overlayEv @ 504 ; fltk::OverlayWindow::can_do_overlay()
+	_ZN4fltk13OverlayWindow14redraw_overlayEv @ 505 ; fltk::OverlayWindow::redraw_overlay()
+	_ZN4fltk13OverlayWindow5flushEv @ 506 ; fltk::OverlayWindow::flush()
+	_ZN4fltk13OverlayWindow6layoutEv @ 507 ; fltk::OverlayWindow::layout()
+	_ZN4fltk13OverlayWindowD0Ev @ 508 ; fltk::OverlayWindow::~OverlayWindow()
+	_ZN4fltk13OverlayWindowD1Ev @ 509 ; fltk::OverlayWindow::~OverlayWindow()
+	_ZN4fltk13THIN_DOWN_BOXE @ 510 DATA ; fltk::THIN_DOWN_BOX
+	_ZN4fltk13TextSelection10rect_startEv @ 511 ; fltk::TextSelection::rect_start()
+	_ZN4fltk13TextSelection11rectangularEv @ 512 ; fltk::TextSelection::rectangular()
+	_ZN4fltk13TextSelection15set_rectangularEiiii @ 513 ; fltk::TextSelection::set_rectangular(int, int, int, int)
+	_ZN4fltk13TextSelection3endEv @ 514 ; fltk::TextSelection::end()
+	_ZN4fltk13TextSelection3setEii @ 515 ; fltk::TextSelection::set(int, int)
+	_ZN4fltk13TextSelection5startEv @ 516 ; fltk::TextSelection::start()
+	_ZN4fltk13TextSelection6updateEiii @ 517 ; fltk::TextSelection::update(int, int, int)
+	_ZN4fltk13TextSelection8includesEiii @ 518 ; fltk::TextSelection::includes(int, int, int)
+	_ZN4fltk13TextSelection8positionEPiS1_ @ 519 ; fltk::TextSelection::position(int*, int*)
+	_ZN4fltk13TextSelection8positionEPiS1_S1_S1_S1_ @ 520 ; fltk::TextSelection::position(int*, int*, int*, int*, int*)
+	_ZN4fltk13TextSelection8rect_endEv @ 521 ; fltk::TextSelection::rect_end()
+	_ZN4fltk13TextSelection8selectedEc @ 522 ; fltk::TextSelection::selected(char)
+	_ZN4fltk13TextSelection8selectedEv @ 523 ; fltk::TextSelection::selected()
+	_ZN4fltk13ZAPF_DINGBATSE @ 524 DATA ; fltk::ZAPF_DINGBATS
+	_ZN4fltk13close_displayEv @ 525 ; fltk::close_display()
+	_ZN4fltk13color_chooserEPKcRfS2_S2_ @ 526 ; fltk::color_chooser(char const*, float&, float&, float&)
+	_ZN4fltk13color_chooserEPKcRhS2_S2_ @ 527 ; fltk::color_chooser(char const*, unsigned char&, unsigned char&, unsigned char&)
+	_ZN4fltk13color_chooserEPKcRj @ 528 ; fltk::color_chooser(char const*, unsigned&)
+	_ZN4fltk13compose_stateE @ 529 DATA ; fltk::compose_state
+	_ZN4fltk13current_font_E @ 530 DATA ; fltk::current_font_
+	_ZN4fltk13current_size_E @ 531 DATA ; fltk::current_size_
+	_ZN4fltk13drawimagemonoEPFvPviiiPhES0_iiiii @ 532 ; fltk::drawimagemono(void (*)(void*, int, int, int, unsigned char*), void*, int, int, int, int, int)
+	_ZN4fltk13drawimagemonoEPKhiiiiii @ 533 ; fltk::drawimagemono(unsigned char const*, int, int, int, int, int, int)
+	_ZN4fltk13get_key_stateEi @ 534 ; fltk::get_key_state(int)
+	_ZN4fltk13load_identityEv @ 535 ; fltk::load_identity()
+	_ZN4fltk13message_styleE @ 536 DATA ; fltk::message_style
+	_ZN4fltk13nearest_indexEj @ 537 ; fltk::nearest_index(unsigned)
+	_ZN4fltk13overlay_clearEv @ 538 ; fltk::overlay_clear()
+	_ZN4fltk13show_colormapEj @ 539 ; fltk::show_colormap(unsigned)
+	_ZN4fltk13test_shortcutEi @ 540 ; fltk::test_shortcut(int)
+	_ZN4fltk14COURIER_ITALICE @ 541 DATA ; fltk::COURIER_ITALIC
+	_ZN4fltk14CURSOR_DEFAULTE @ 542 DATA ; fltk::CURSOR_DEFAULT
+	_ZN4fltk14DIAMOND_UP_BOXE @ 543 DATA ; fltk::DIAMOND_UP_BOX
+	_ZN4fltk14EMBOSSED_LABELE @ 544 DATA ; fltk::EMBOSSED_LABEL
+	_ZN4fltk14ENGRAVED_LABELE @ 545 DATA ; fltk::ENGRAVED_LABEL
+	_ZN4fltk14HELVETICA_BOLDE @ 546 DATA ; fltk::HELVETICA_BOLD
+	_ZN4fltk14PLASTIC_UP_BOXE @ 547 DATA ; fltk::PLASTIC_UP_BOX
+	_ZN4fltk14ROUND_DOWN_BOXE @ 548 DATA ; fltk::ROUND_DOWN_BOX
+	_ZN4fltk14column_widths_E @ 549 DATA ; fltk::column_widths_
+	_ZN4fltk14copy_offscreenEiiiiP9HBITMAP__ii @ 550 ; fltk::copy_offscreen(int, int, int, int, HBITMAP__*, int, int)
+	_ZN4fltk14current_color_E @ 551 DATA ; fltk::current_color_
+	_ZN4fltk14current_xpixelE @ 552 DATA ; fltk::current_xpixel
+	_ZN4fltk14default_cursorE @ 553 DATA ; fltk::default_cursor
+	_ZN4fltk14fillstrokepathEj @ 554 ; fltk::fillstrokepath(unsigned)
+	_ZN4fltk14remove_timeoutEPFvPvES0_ @ 555 ; fltk::remove_timeout(void (*)(void*), void*)
+	_ZN4fltk14repeat_timeoutEfPFvPvES0_ @ 556 ; fltk::repeat_timeout(float, void (*)(void*), void*)
+	_ZN4fltk14set_backgroundEj @ 557 ; fltk::set_background(unsigned)
+	_ZN4fltk14thread_messageEv @ 558 ; fltk::thread_message()
+	_ZN4fltk15HighlightButton13default_styleE @ 559 DATA ; fltk::HighlightButton::default_style
+	_ZN4fltk15HighlightButtonC1EiiiiPKc @ 560 ; fltk::HighlightButton::HighlightButton(int, int, int, int, char const*)
+	_ZN4fltk15HighlightButtonC2EiiiiPKc @ 561 ; fltk::HighlightButton::HighlightButton(int, int, int, int, char const*)
+	_ZN4fltk15HighlightButtonD0Ev @ 562 ; fltk::HighlightButton::~HighlightButton()
+	_ZN4fltk15HighlightButtonD1Ev @ 563 ; fltk::HighlightButton::~HighlightButton()
+	_ZN4fltk15event_key_stateEi @ 564 ; fltk::event_key_state(int)
+	_ZN4fltk15get_color_indexEj @ 565 ; fltk::get_color_index(unsigned)
+	_ZN4fltk15set_color_indexEjj @ 566 ; fltk::set_color_index(unsigned, unsigned)
+	_ZN4fltk15set_mask_bitmapEPPh @ 567 ; fltk::set_mask_bitmap(unsigned char**)
+	_ZN4fltk16DIAMOND_DOWN_BOXE @ 568 DATA ; fltk::DIAMOND_DOWN_BOX
+	_ZN4fltk16HELVETICA_ITALICE @ 569 DATA ; fltk::HELVETICA_ITALIC
+	_ZN4fltk16HIGHLIGHT_UP_BOXE @ 570 DATA ; fltk::HIGHLIGHT_UP_BOX
+	_ZN4fltk16PLASTIC_DOWN_BOXE @ 571 DATA ; fltk::PLASTIC_DOWN_BOX
+	_ZN4fltk16SCREEN_BOLD_FONTE @ 572 DATA ; fltk::SCREEN_BOLD_FONT
+	_ZN4fltk17TIMES_BOLD_ITALICE @ 573 DATA ; fltk::TIMES_BOLD_ITALIC
+	_ZN4fltk17add_event_handlerEPFiiPNS_6WindowEE @ 574 ; fltk::add_event_handler(int (*)(int, fltk::Window*))
+	_ZN4fltk18DoubleBufferWindow15free_backbufferEv @ 575 ; fltk::DoubleBufferWindow::free_backbuffer()
+	_ZN4fltk18DoubleBufferWindow5flushEb @ 576 ; fltk::DoubleBufferWindow::flush(bool)
+	_ZN4fltk18DoubleBufferWindow5flushEv @ 577 ; fltk::DoubleBufferWindow::flush()
+	_ZN4fltk18DoubleBufferWindow6createEv @ 578 ; fltk::DoubleBufferWindow::create()
+	_ZN4fltk18DoubleBufferWindow6layoutEv @ 579 ; fltk::DoubleBufferWindow::layout()
+	_ZN4fltk18DoubleBufferWindow7destroyEv @ 580 ; fltk::DoubleBufferWindow::destroy()
+	_ZN4fltk18DoubleBufferWindowD0Ev @ 581 ; fltk::DoubleBufferWindow::~DoubleBufferWindow()
+	_ZN4fltk18DoubleBufferWindowD1Ev @ 582 ; fltk::DoubleBufferWindow::~DoubleBufferWindow()
+	_ZN4fltk18DoubleBufferWindowD2Ev @ 583 ; fltk::DoubleBufferWindow::~DoubleBufferWindow()
+	_ZN4fltk18HIGHLIGHT_DOWN_BOXE @ 584 DATA ; fltk::HIGHLIGHT_DOWN_BOX
+	_ZN4fltk18transform_distanceERfS0_ @ 585 ; fltk::transform_distance(float&, float&)
+	_ZN4fltk18transform_distanceERiS0_ @ 586 ; fltk::transform_distance(int&, int&)
+	_ZN4fltk19COURIER_BOLD_ITALICE @ 587 DATA ; fltk::COURIER_BOLD_ITALIC
+	_ZN4fltk20drawtext_transformedEPKciff @ 588 ; fltk::drawtext_transformed(char const*, int, float, float)
+	_ZN4fltk21HELVETICA_BOLD_ITALICE @ 589 DATA ; fltk::HELVETICA_BOLD_ITALIC
+	_ZN4fltk21file_chooser_callbackEPFvPKcE @ 590 ; fltk::file_chooser_callback(void (*)(char const*))
+	_ZN4fltk23addvertices_transformedEiPA2_Kf @ 591 ; fltk::addvertices_transformed(int, float const (*) [2])
+	_ZN4fltk2gcE @ 592 DATA ; fltk::gc
+	_ZN4fltk2noE @ 593 DATA ; fltk::no
+	_ZN4fltk2okE @ 594 DATA ; fltk::ok
+	_ZN4fltk3argEiPPcRi @ 595 ; fltk::arg(int, char**, int&)
+	_ZN4fltk3askEPKcz @ 596 ; fltk::ask(char const*, ...)
+	_ZN4fltk3dndEv @ 597 ; fltk::dnd()
+	_ZN4fltk3e_xE @ 598 DATA ; fltk::e_x
+	_ZN4fltk3e_yE @ 599 DATA ; fltk::e_y
+	_ZN4fltk3msgE @ 600 DATA ; fltk::msg
+	_ZN4fltk3runEv @ 601 ; fltk::run()
+	_ZN4fltk3yesE @ 602 DATA ; fltk::yes
+	_ZN4fltk4Dial13default_styleE @ 603 DATA ; fltk::Dial::default_style
+	_ZN4fltk4Dial4drawEv @ 604 ; fltk::Dial::draw()
+	_ZN4fltk4Dial6handleEi @ 605 ; fltk::Dial::handle(int)
+	_ZN4fltk4DialC1EiiiiPKc @ 606 ; fltk::Dial::Dial(int, int, int, int, char const*)
+	_ZN4fltk4DialC2EiiiiPKc @ 607 ; fltk::Dial::Dial(int, int, int, int, char const*)
+	_ZN4fltk4DialD0Ev @ 608 ; fltk::Dial::~Dial()
+	_ZN4fltk4DialD1Ev @ 609 ; fltk::Dial::~Dial()
+	_ZN4fltk4Font4boldEv @ 610 ; fltk::Font::bold()
+	_ZN4fltk4Font4plusEi @ 611 ; fltk::Font::plus(int)
+	_ZN4fltk4Font6italicEv @ 612 ; fltk::Font::italic()
+	_ZN4fltk4Item11clear_styleEv @ 613 ; fltk::Item::clear_style()
+	_ZN4fltk4Item13default_styleE @ 614 DATA ; fltk::Item::default_style
+	_ZN4fltk4Item4drawEv @ 615 ; fltk::Item::draw()
+	_ZN4fltk4Item6handleEi @ 616 ; fltk::Item::handle(int)
+	_ZN4fltk4Item6layoutEv @ 617 ; fltk::Item::layout()
+	_ZN4fltk4Item9set_styleEPKNS_5StyleE @ 618 ; fltk::Item::set_style(fltk::Style const*)
+	_ZN4fltk4Item9set_styleEPKNS_6WidgetE @ 619 ; fltk::Item::set_style(fltk::Widget const*)
+	_ZN4fltk4ItemC1EPKc @ 620 ; fltk::Item::Item(char const*)
+	_ZN4fltk4ItemC2EPKc @ 621 ; fltk::Item::Item(char const*)
+	_ZN4fltk4ItemD0Ev @ 622 ; fltk::Item::~Item()
+	_ZN4fltk4ItemD1Ev @ 623 ; fltk::Item::~Item()
+	_ZN4fltk4List13flags_changedEPKNS_4MenuEPNS_6WidgetE @ 624 ; fltk::List::flags_changed(fltk::Menu const*, fltk::Widget*)
+	_ZN4fltk4List5childEPKNS_4MenuEPKii @ 625 ; fltk::List::child(fltk::Menu const*, int const*, int)
+	_ZN4fltk4List8childrenEPKNS_4MenuEPKii @ 626 ; fltk::List::children(fltk::Menu const*, int const*, int)
+	_ZN4fltk4ListC1Ev @ 627 ; fltk::List::List()
+	_ZN4fltk4ListC2Ev @ 628 ; fltk::List::List()
+	_ZN4fltk4Menu15handle_shortcutEv @ 629 ; fltk::Menu::handle_shortcut()
+	_ZN4fltk4Menu16default_callbackEPNS_6WidgetEPv @ 630 ; fltk::Menu::default_callback(fltk::Widget*, void*)
+	_ZN4fltk4Menu3addEPKcPv @ 631 ; fltk::Menu::add(char const*, void*)
+	_ZN4fltk4Menu3addEPKciPFvPNS_6WidgetEPvES5_i @ 632 ; fltk::Menu::add(char const*, int, void (*)(fltk::Widget*, void*), void*, int)
+	_ZN4fltk4Menu4itemEPNS_6WidgetE @ 633 ; fltk::Menu::item(fltk::Widget*)
+	_ZN4fltk4Menu4listEPNS_4ListE @ 634 ; fltk::Menu::list(fltk::List*)
+	_ZN4fltk4Menu5focusEPKii @ 635 ; fltk::Menu::focus(int const*, int)
+	_ZN4fltk4Menu5popupEiiiiPNS_6WidgetEb @ 636 ; fltk::Menu::popup(int, int, int, int, fltk::Widget*, bool)
+	_ZN4fltk4Menu5valueEi @ 637 ; fltk::Menu::value(int)
+	_ZN4fltk4Menu6globalEv @ 638 ; fltk::Menu::global()
+	_ZN4fltk4Menu6insertEiPKcPv @ 639 ; fltk::Menu::insert(int, char const*, void*)
+	_ZN4fltk4Menu6insertEiPKciPFvPNS_6WidgetEPvES5_i @ 640 ; fltk::Menu::insert(int, char const*, int, void (*)(fltk::Widget*, void*), void*, int)
+	_ZN4fltk4Menu6layoutEv @ 641 ; fltk::Menu::layout()
+	_ZN4fltk4Menu7executeEPNS_6WidgetE @ 642 ; fltk::Menu::execute(fltk::Widget*)
+	_ZN4fltk4Menu7replaceEPKcPv @ 643 ; fltk::Menu::replace(char const*, void*)
+	_ZN4fltk4Menu7replaceEPKciPFvPNS_6WidgetEPvES5_i @ 644 ; fltk::Menu::replace(char const*, int, void (*)(fltk::Widget*, void*), void*, int)
+	_ZN4fltk4Menu9get_focusEv @ 645 ; fltk::Menu::get_focus()
+	_ZN4fltk4Menu9try_popupEiiiiPNS_6WidgetEb @ 646 ; fltk::Menu::try_popup(int, int, int, int, fltk::Widget*, bool)
+	_ZN4fltk4MenuC1EiiiiPKc @ 647 ; fltk::Menu::Menu(int, int, int, int, char const*)
+	_ZN4fltk4MenuC2EiiiiPKc @ 648 ; fltk::Menu::Menu(int, int, int, int, char const*)
+	_ZN4fltk4MenuD0Ev @ 649 ; fltk::Menu::~Menu()
+	_ZN4fltk4MenuD1Ev @ 650 ; fltk::Menu::~Menu()
+	_ZN4fltk4MenuD2Ev @ 651 ; fltk::Menu::~Menu()
+	_ZN4fltk4argsEiPPc @ 652 ; fltk::args(int, char**)
+	_ZN4fltk4argsEiPPcRiPFiiS1_S2_E @ 653 ; fltk::args(int, char**, int&, int (*)(int, char**, int&))
+	_ZN4fltk4copyEPKcib @ 654 ; fltk::copy(char const*, int, bool)
+	_ZN4fltk4e_dxE @ 655 DATA ; fltk::e_dx
+	_ZN4fltk4e_dyE @ 656 DATA ; fltk::e_dy
+	_ZN4fltk4fontEPKci @ 657 ; fltk::font(char const*, int)
+	_ZN4fltk4fontEi @ 658 ; fltk::font(int)
+	_ZN4fltk4helpE @ 659 DATA ; fltk::help
+	_ZN4fltk4idleE @ 660 DATA ; fltk::idle
+	_ZN4fltk4lerpEjjf @ 661 ; fltk::lerp(unsigned, unsigned, float)
+	_ZN4fltk4lockEv @ 662 ; fltk::lock()
+	_ZN4fltk4waitEf @ 663 ; fltk::wait(float)
+	_ZN4fltk4waitEv @ 664 ; fltk::wait()
+	_ZN4fltk5Clock13default_styleE @ 665 DATA ; fltk::Clock::default_style
+	_ZN4fltk5Clock6handleEi @ 666 ; fltk::Clock::handle(int)
+	_ZN4fltk5ClockC1EiiiiPKc @ 667 ; fltk::Clock::Clock(int, int, int, int, char const*)
+	_ZN4fltk5ClockC2EiiiiPKc @ 668 ; fltk::Clock::Clock(int, int, int, int, char const*)
+	_ZN4fltk5ClockD0Ev @ 669 ; fltk::Clock::~Clock()
+	_ZN4fltk5ClockD1Ev @ 670 ; fltk::Clock::~Clock()
+	_ZN4fltk5Group10init_sizesEv @ 671 ; fltk::Group::init_sizes()
+	_ZN4fltk5Group14navigation_keyEv @ 672 ; fltk::Group::navigation_key()
+	_ZN4fltk5Group17fix_old_positionsEv @ 673 ; fltk::Group::fix_old_positions()
+	_ZN4fltk5Group3addEPNS_6WidgetE @ 674 ; fltk::Group::add(fltk::Widget*)
+	_ZN4fltk5Group3addERNS_6WidgetE @ 675 ; fltk::Group::add(fltk::Widget&)
+	_ZN4fltk5Group3endEv @ 676 ; fltk::Group::end()
+	_ZN4fltk5Group4drawEv @ 677 ; fltk::Group::draw()
+	_ZN4fltk5Group4swapEii @ 678 ; fltk::Group::swap(int, int)
+	_ZN4fltk5Group5beginEv @ 679 ; fltk::Group::begin()
+	_ZN4fltk5Group5clearEv @ 680 ; fltk::Group::clear()
+	_ZN4fltk5Group5focusEPNS_6WidgetE @ 681 ; fltk::Group::focus(fltk::Widget*)
+	_ZN4fltk5Group5focusEi @ 682 ; fltk::Group::focus(int)
+	_ZN4fltk5Group5sizesEv @ 683 ; fltk::Group::sizes()
+	_ZN4fltk5Group6handleEi @ 684 ; fltk::Group::handle(int)
+	_ZN4fltk5Group6insertERNS_6WidgetEi @ 685 ; fltk::Group::insert(fltk::Widget&, int)
+	_ZN4fltk5Group6layoutEv @ 686 ; fltk::Group::layout()
+	_ZN4fltk5Group6removeEPNS_6WidgetE @ 687 ; fltk::Group::remove(fltk::Widget*)
+	_ZN4fltk5Group6removeERNS_6WidgetE @ 688 ; fltk::Group::remove(fltk::Widget&)
+	_ZN4fltk5Group6removeEi @ 689 ; fltk::Group::remove(int)
+	_ZN4fltk5Group7currentEPS0_ @ 690 ; fltk::Group::current(fltk::Group*)
+	_ZN4fltk5Group7currentEv @ 691 ; fltk::Group::current()
+	_ZN4fltk5Group7replaceEiRNS_6WidgetE @ 692 ; fltk::Group::replace(int, fltk::Widget&)
+	_ZN4fltk5Group8current_E @ 693 DATA ; fltk::Group::current_
+	_ZN4fltk5Group9resizableEPNS_6WidgetE @ 694 ; fltk::Group::resizable(fltk::Widget*)
+	_ZN4fltk5Group9resizableERNS_6WidgetE @ 695 ; fltk::Group::resizable(fltk::Widget&)
+	_ZN4fltk5GroupC1EiiiiPKcb @ 696 ; fltk::Group::Group(int, int, int, int, char const*, bool)
+	_ZN4fltk5GroupC2EiiiiPKcb @ 697 ; fltk::Group::Group(int, int, int, int, char const*, bool)
+	_ZN4fltk5GroupD0Ev @ 698 ; fltk::Group::~Group()
+	_ZN4fltk5GroupD1Ev @ 699 ; fltk::Group::~Group()
+	_ZN4fltk5GroupD2Ev @ 700 ; fltk::Group::~Group()
+	_ZN4fltk5Image13destroy_cacheEv @ 701 ; fltk::Image::destroy_cache()
+	_ZN4fltk5Image18create_bitmap_maskEPKhii @ 702 ; fltk::Image::create_bitmap_mask(unsigned char const*, int, int)
+	_ZN4fltk5Image5labelEPNS_6WidgetE @ 703 ; fltk::Image::label(fltk::Widget*)
+	_ZN4fltk5ImageC2Ev @ 704 ; fltk::Image::Image()
+	_ZN4fltk5ImageD0Ev @ 705 ; fltk::Image::~Image()
+	_ZN4fltk5ImageD1Ev @ 706 ; fltk::Image::~Image()
+	_ZN4fltk5ImageD2Ev @ 707 ; fltk::Image::~Image()
+	_ZN4fltk5Input10handle_keyEv @ 708 ; fltk::Input::handle_key()
+	_ZN4fltk5Input12static_valueEPKc @ 709 ; fltk::Input::static_value(char const*)
+	_ZN4fltk5Input12static_valueEPKci @ 710 ; fltk::Input::static_value(char const*, int)
+	_ZN4fltk5Input13default_styleE @ 711 DATA ; fltk::Input::default_style
+	_ZN4fltk5Input13put_in_bufferEi @ 712 ; fltk::Input::put_in_buffer(int)
+	_ZN4fltk5Input14minimal_updateEi @ 713 ; fltk::Input::minimal_update(int)
+	_ZN4fltk5Input14minimal_updateEii @ 714 ; fltk::Input::minimal_update(int, int)
+	_ZN4fltk5Input14shift_positionEi @ 715 ; fltk::Input::shift_position(int)
+	_ZN4fltk5Input15erase_cursor_atEi @ 716 ; fltk::Input::erase_cursor_at(int)
+	_ZN4fltk5Input15key_is_shortcutEv @ 717 ; fltk::Input::key_is_shortcut()
+	_ZN4fltk5Input16up_down_positionEib @ 718 ; fltk::Input::up_down_position(int, bool)
+	_ZN4fltk5Input17maybe_do_callbackEv @ 719 ; fltk::Input::maybe_do_callback()
+	_ZN4fltk5Input22shift_up_down_positionEi @ 720 ; fltk::Input::shift_up_down_position(int)
+	_ZN4fltk5Input3cutEi @ 721 ; fltk::Input::cut(int)
+	_ZN4fltk5Input3cutEii @ 722 ; fltk::Input::cut(int, int)
+	_ZN4fltk5Input3cutEv @ 723 ; fltk::Input::cut()
+	_ZN4fltk5Input4copyEb @ 724 ; fltk::Input::copy(bool)
+	_ZN4fltk5Input4drawEiiii @ 725 ; fltk::Input::draw(int, int, int, int)
+	_ZN4fltk5Input4drawEv @ 726 ; fltk::Input::draw()
+	_ZN4fltk5Input4undoEv @ 727 ; fltk::Input::undo()
+	_ZN4fltk5Input5valueEPKc @ 728 ; fltk::Input::value(char const*)
+	_ZN4fltk5Input5valueEPKci @ 729 ; fltk::Input::value(char const*, int)
+	_ZN4fltk5Input6handleEi @ 730 ; fltk::Input::handle(int)
+	_ZN4fltk5Input6handleEiiiii @ 731 ; fltk::Input::handle(int, int, int, int, int)
+	_ZN4fltk5Input7replaceEiiPKci @ 732 ; fltk::Input::replace(int, int, char const*, int)
+	_ZN4fltk5Input7replaceEiic @ 733 ; fltk::Input::replace(int, int, char)
+	_ZN4fltk5Input8positionEi @ 734 ; fltk::Input::position(int)
+	_ZN4fltk5Input8positionEii @ 735 ; fltk::Input::position(int, int)
+	_ZN4fltk5InputC1EiiiiPKc @ 736 ; fltk::Input::Input(int, int, int, int, char const*)
+	_ZN4fltk5InputC2EiiiiPKc @ 737 ; fltk::Input::Input(int, int, int, int, char const*)
+	_ZN4fltk5InputD0Ev @ 738 ; fltk::Input::~Input()
+	_ZN4fltk5InputD1Ev @ 739 ; fltk::Input::~Input()
+	_ZN4fltk5InputD2Ev @ 740 ; fltk::Input::~Input()
+	_ZN4fltk5Style14hide_shortcut_E @ 741 DATA ; fltk::Style::hide_shortcut_
+	_ZN4fltk5Style19wheel_scroll_lines_E @ 742 DATA ; fltk::Style::wheel_scroll_lines_
+	_ZN4fltk5Style20draw_boxes_inactive_E @ 743 DATA ; fltk::Style::draw_boxes_inactive_
+	_ZN4fltk5Style4findEPKc @ 744 ; fltk::Style::find(char const*)
+	_ZN4fltk5StyleC1Ev @ 745 ; fltk::Style::Style()
+	_ZN4fltk5StyleC2Ev @ 746 ; fltk::Style::Style()
+	_ZN4fltk5TIMESE @ 747 DATA ; fltk::TIMES
+	_ZN4fltk5alertEPKcz @ 748 ; fltk::alert(char const*, ...)
+	_ZN4fltk5awakeEPv @ 749 ; fltk::awake(void*)
+	_ZN4fltk5checkEv @ 750 ; fltk::check()
+	_ZN4fltk5colorEPKc @ 751 ; fltk::color(char const*)
+	_ZN4fltk5errorE @ 752 DATA ; fltk::error
+	_ZN4fltk5fatalE @ 753 DATA ; fltk::fatal
+	_ZN4fltk5flushEv @ 754 ; fltk::flush()
+	_ZN4fltk5focusEPNS_6WidgetE @ 755 ; fltk::focus(fltk::Widget*)
+	_ZN4fltk5getDCEv @ 756 ; fltk::getDC()
+	_ZN4fltk5grab_E @ 757 DATA ; fltk::grab_
+	_ZN4fltk5inputEPKcS1_z @ 758 ; fltk::input(char const*, char const*, ...)
+	_ZN4fltk5modalEPNS_6WidgetEb @ 759 ; fltk::modal(fltk::Widget*, bool)
+	_ZN4fltk5pasteERNS_6WidgetEb @ 760 ; fltk::paste(fltk::Widget&, bool)
+	_ZN4fltk5readyEv @ 761 ; fltk::ready()
+	_ZN4fltk5scaleEf @ 762 ; fltk::scale(float)
+	_ZN4fltk5scaleEff @ 763 ; fltk::scale(float, float)
+	_ZN4fltk5xfontEv @ 764 ; fltk::xfont()
+	_ZN4fltk6Button13default_styleE @ 765 DATA ; fltk::Button::default_style
+	_ZN4fltk6Button3setEv @ 766 ; fltk::Button::set()
+	_ZN4fltk6Button4drawEv @ 767 ; fltk::Button::draw()
+	_ZN4fltk6Button5clearEv @ 768 ; fltk::Button::clear()
+	_ZN4fltk6Button5valueEb @ 769 ; fltk::Button::value(bool)
+	_ZN4fltk6Button6handleEi @ 770 ; fltk::Button::handle(int)
+	_ZN4fltk6Button7setonlyEv @ 771 ; fltk::Button::setonly()
+	_ZN4fltk6ButtonC1EiiiiPKc @ 772 ; fltk::Button::Button(int, int, int, int, char const*)
+	_ZN4fltk6ButtonC2EiiiiPKc @ 773 ; fltk::Button::Button(int, int, int, int, char const*)
+	_ZN4fltk6ButtonD0Ev @ 774 ; fltk::Button::~Button()
+	_ZN4fltk6ButtonD1Ev @ 775 ; fltk::Button::~Button()
+	_ZN4fltk6ButtonD2Ev @ 776 ; fltk::Button::~Button()
+	_ZN4fltk6Choice13default_styleE @ 777 DATA ; fltk::Choice::default_style
+	_ZN4fltk6Choice4drawEv @ 778 ; fltk::Choice::draw()
+	_ZN4fltk6Choice5valueEi @ 779 ; fltk::Choice::value(int)
+	_ZN4fltk6Choice6handleEi @ 780 ; fltk::Choice::handle(int)
+	_ZN4fltk6ChoiceC1EiiiiPKc @ 781 ; fltk::Choice::Choice(int, int, int, int, char const*)
+	_ZN4fltk6ChoiceC2EiiiiPKc @ 782 ; fltk::Choice::Choice(int, int, int, int, char const*)
+	_ZN4fltk6ChoiceD0Ev @ 783 ; fltk::Choice::~Choice()
+	_ZN4fltk6ChoiceD1Ev @ 784 ; fltk::Choice::~Choice()
+	_ZN4fltk6NO_BOXE @ 785 DATA ; fltk::NO_BOX
+	_ZN4fltk6Output13default_styleE @ 786 DATA ; fltk::Output::default_style
+	_ZN4fltk6Output6handleEi @ 787 ; fltk::Output::handle(int)
+	_ZN4fltk6Output7replaceEiiPKci @ 788 ; fltk::Output::replace(int, int, char const*, int)
+	_ZN4fltk6OutputC1EiiiiPKc @ 789 ; fltk::Output::Output(int, int, int, int, char const*)
+	_ZN4fltk6OutputC2EiiiiPKc @ 790 ; fltk::Output::Output(int, int, int, int, char const*)
+	_ZN4fltk6OutputD0Ev @ 791 ; fltk::Output::~Output()
+	_ZN4fltk6OutputD1Ev @ 792 ; fltk::Output::~Output()
+	_ZN4fltk6Slider10draw_ticksEiiiii @ 793 ; fltk::Slider::draw_ticks(int, int, int, int, int)
+	_ZN4fltk6Slider11slider_sizeEi @ 794 ; fltk::Slider::slider_size(int)
+	_ZN4fltk6Slider13default_styleE @ 795 DATA ; fltk::Slider::default_style
+	_ZN4fltk6Slider14position_valueEii @ 796 ; fltk::Slider::position_value(int, int)
+	_ZN4fltk6Slider15slider_positionEdi @ 797 ; fltk::Slider::slider_position(double, int)
+	_ZN4fltk6Slider4drawEiiiiib @ 798 ; fltk::Slider::draw(int, int, int, int, int, bool)
+	_ZN4fltk6Slider4drawEv @ 799 ; fltk::Slider::draw()
+	_ZN4fltk6Slider6handleEi @ 800 ; fltk::Slider::handle(int)
+	_ZN4fltk6Slider6handleEiiiii @ 801 ; fltk::Slider::handle(int, int, int, int, int)
+	_ZN4fltk6SliderC1EiiiiPKc @ 802 ; fltk::Slider::Slider(int, int, int, int, char const*)
+	_ZN4fltk6SliderC2EiiiiPKc @ 803 ; fltk::Slider::Slider(int, int, int, int, char const*)
+	_ZN4fltk6SliderD0Ev @ 804 ; fltk::Slider::~Slider()
+	_ZN4fltk6SliderD1Ev @ 805 ; fltk::Slider::~Slider()
+	_ZN4fltk6SliderD2Ev @ 806 ; fltk::Slider::~Slider()
+	_ZN4fltk6Symbol4findEPKc @ 807 ; fltk::Symbol::find(char const*)
+	_ZN4fltk6Symbol4findEPKcS2_ @ 808 ; fltk::Symbol::find(char const*, char const*)
+	_ZN4fltk6Symbol4nameEPKc @ 809 ; fltk::Symbol::name(char const*)
+	_ZN4fltk6Symbol4textEPKc @ 810 ; fltk::Symbol::text(char const*)
+	_ZN4fltk6Symbol4textEv @ 811 ; fltk::Symbol::text()
+	_ZN4fltk6Symbol5text_E @ 812 DATA ; fltk::Symbol::text_
+	_ZN4fltk6SymbolC1EPKc @ 813 ; fltk::Symbol::Symbol(char const*)
+	_ZN4fltk6SymbolC2EPKc @ 814 ; fltk::Symbol::Symbol(char const*)
+	_ZN4fltk6UP_BOXE @ 815 DATA ; fltk::UP_BOX
+	_ZN4fltk6Widget10clear_flagEi @ 816 ; fltk::Widget::clear_flag(int)
+	_ZN4fltk6Widget10copy_styleEPKNS_5StyleE @ 817 ; fltk::Widget::copy_style(fltk::Style const*)
+	_ZN4fltk6Widget10deactivateEv @ 818 ; fltk::Widget::deactivate()
+	_ZN4fltk6Widget10labelcolorEj @ 819 ; fltk::Widget::labelcolor(unsigned)
+	_ZN4fltk6Widget10set_damageEh @ 820 ; fltk::Widget::set_damage(unsigned char)
+	_ZN4fltk6Widget11buttoncolorEj @ 821 ; fltk::Widget::buttoncolor(unsigned)
+	_ZN4fltk6Widget11clear_valueEv @ 822 ; fltk::Widget::clear_value()
+	_ZN4fltk6Widget11do_callbackEv @ 823 ; fltk::Widget::do_callback()
+	_ZN4fltk6Widget11invert_flagEi @ 824 ; fltk::Widget::invert_flag(int)
+	_ZN4fltk6Widget11set_changedEv @ 825 ; fltk::Widget::set_changed()
+	_ZN4fltk6Widget11set_visibleEv @ 826 ; fltk::Widget::set_visible()
+	_ZN4fltk6Widget11throw_focusEv @ 827 ; fltk::Widget::throw_focus()
+	_ZN4fltk6Widget12set_selectedEv @ 828 ; fltk::Widget::set_selected()
+	_ZN4fltk6Widget13clear_changedEv @ 829 ; fltk::Widget::clear_changed()
+	_ZN4fltk6Widget13clear_visibleEv @ 830 ; fltk::Widget::clear_visible()
+	_ZN4fltk6Widget13default_glyphEiiiiiPKNS_5StyleEi @ 831 ; fltk::Widget::default_glyph(int, int, int, int, int, fltk::Style const*, int)
+	_ZN4fltk6Widget13default_styleE @ 832 DATA ; fltk::Widget::default_style
+	_ZN4fltk6Widget13layout_damageEh @ 833 ; fltk::Widget::layout_damage(unsigned char)
+	_ZN4fltk6Widget14clear_selectedEv @ 834 ; fltk::Widget::clear_selected()
+	_ZN4fltk6Widget15highlight_colorEj @ 835 ; fltk::Widget::highlight_color(unsigned)
+	_ZN4fltk6Widget15scrollbar_alignEh @ 836 ; fltk::Widget::scrollbar_align(unsigned char)
+	_ZN4fltk6Widget15scrollbar_widthEh @ 837 ; fltk::Widget::scrollbar_width(unsigned char)
+	_ZN4fltk6Widget15selection_colorEj @ 838 ; fltk::Widget::selection_color(unsigned)
+	_ZN4fltk6Widget18set_click_to_focusEv @ 839 ; fltk::Widget::set_click_to_focus()
+	_ZN4fltk6Widget19highlight_textcolorEj @ 840 ; fltk::Widget::highlight_textcolor(unsigned)
+	_ZN4fltk6Widget19selection_textcolorEj @ 841 ; fltk::Widget::selection_textcolor(unsigned)
+	_ZN4fltk6Widget1hEi @ 842 ; fltk::Widget::h(int)
+	_ZN4fltk6Widget1wEi @ 843 ; fltk::Widget::w(int)
+	_ZN4fltk6Widget1xEi @ 844 ; fltk::Widget::x(int)
+	_ZN4fltk6Widget1yEi @ 845 ; fltk::Widget::y(int)
+	_ZN4fltk6Widget3boxEPNS_6SymbolE @ 846 ; fltk::Widget::box(fltk::Symbol*)
+	_ZN4fltk6Widget4sizeEii @ 847 ; fltk::Widget::size(int, int)
+	_ZN4fltk6Widget4typeEh @ 848 ; fltk::Widget::type(unsigned char)
+	_ZN4fltk6Widget4whenEh @ 849 ; fltk::Widget::when(unsigned char)
+	_ZN4fltk6Widget5alignEj @ 850 ; fltk::Widget::align(unsigned)
+	_ZN4fltk6Widget5colorEj @ 851 ; fltk::Widget::color(unsigned)
+	_ZN4fltk6Widget5glyphEPFviiiiiPKNS_5StyleEiE @ 852 ; fltk::Widget::glyph(void (*)(int, int, int, int, int, fltk::Style const*, int))
+	_ZN4fltk6Widget5imageERKNS_6SymbolE @ 853 ; fltk::Widget::image(fltk::Symbol const&)
+	_ZN4fltk6Widget5styleEPKNS_5StyleE @ 854 ; fltk::Widget::style(fltk::Style const*)
+	_ZN4fltk6Widget5styleERKNS_5StyleE @ 855 ; fltk::Widget::style(fltk::Style const&)
+	_ZN4fltk6Widget6parentEPNS_5GroupE @ 856 ; fltk::Widget::parent(fltk::Group*)
+	_ZN4fltk6Widget6resizeEiiii @ 857 ; fltk::Widget::resize(int, int, int, int)
+	_ZN4fltk6Widget7leadingEf @ 858 ; fltk::Widget::leading(float)
+	_ZN4fltk6Widget7tooltipEPKc @ 859 ; fltk::Widget::tooltip(char const*)
+	_ZN4fltk6Widget8activateEv @ 860 ; fltk::Widget::activate()
+	_ZN4fltk6Widget8callbackEPFvPS0_PvE @ 861 ; fltk::Widget::callback(void (*)(fltk::Widget*, void*))
+	_ZN4fltk6Widget8callbackEPFvPS0_PvES2_ @ 862 ; fltk::Widget::callback(void (*)(fltk::Widget*, void*), void*)
+	_ZN4fltk6Widget8callbackEPFvPS0_lEl @ 863 ; fltk::Widget::callback(void (*)(fltk::Widget*, long), long)
+	_ZN4fltk6Widget8focusboxEPNS_6SymbolE @ 864 ; fltk::Widget::focusbox(fltk::Symbol*)
+	_ZN4fltk6Widget8positionEii @ 865 ; fltk::Widget::position(int, int)
+	_ZN4fltk6Widget8set_flagEi @ 866 ; fltk::Widget::set_flag(int)
+	_ZN4fltk6Widget8shortcutEi @ 867 ; fltk::Widget::shortcut(int)
+	_ZN4fltk6Widget8textfontEPNS_4FontE @ 868 ; fltk::Widget::textfont(fltk::Font*)
+	_ZN4fltk6Widget8textsizeEf @ 869 ; fltk::Widget::textsize(float)
+	_ZN4fltk6Widget9buttonboxEPNS_6SymbolE @ 870 ; fltk::Widget::buttonbox(fltk::Symbol*)
+	_ZN4fltk6Widget9labelfontEPNS_4FontE @ 871 ; fltk::Widget::labelfont(fltk::Font*)
+	_ZN4fltk6Widget9labelsizeEf @ 872 ; fltk::Widget::labelsize(float)
+	_ZN4fltk6Widget9labeltypeEPNS_9LabelTypeE @ 873 ; fltk::Widget::labeltype(fltk::LabelType*)
+	_ZN4fltk6Widget9set_valueEv @ 874 ; fltk::Widget::set_value()
+	_ZN4fltk6Widget9textcolorEj @ 875 ; fltk::Widget::textcolor(unsigned)
+	_ZN4fltk6Widget9user_dataEPv @ 876 ; fltk::Widget::user_data(void*)
+	_ZN4fltk6Window10size_rangeEiiiiii @ 877 ; fltk::Window::size_range(int, int, int, int, int, int)
+	_ZN4fltk6Window11size_range_Ev @ 878 ; fltk::Window::size_range_()
+	_ZN4fltk6Window12set_overrideEv @ 879 ; fltk::Window::set_override()
+	_ZN4fltk6Window4nextEv @ 880 ; fltk::Window::next()
+	_ZN4fltk6Window4showEiPPc @ 881 ; fltk::Window::show(int, char**)
+	_ZN4fltk6Window5firstEPS0_ @ 882 ; fltk::Window::first(fltk::Window*)
+	_ZN4fltk6Window5firstEv @ 883 ; fltk::Window::first()
+	_ZN4fltk6Window5labelEPKc @ 884 ; fltk::Window::label(char const*)
+	_ZN4fltk6Window5labelEPKcS2_ @ 885 ; fltk::Window::label(char const*, char const*)
+	_ZN4fltk6Window6createEv @ 886 ; fltk::Window::create()
+	_ZN4fltk6Window6layoutEv @ 887 ; fltk::Window::layout()
+	_ZN4fltk6Window6xclassEPKc @ 888 ; fltk::Window::xclass(char const*)
+	_ZN4fltk6Window7currentEv @ 889 ; fltk::Window::current()
+	_ZN4fltk6Window7hotspotEPKNS_6WidgetEb @ 890 ; fltk::Window::hotspot(fltk::Widget const*, bool)
+	_ZN4fltk6Window7hotspotEiib @ 891 ; fltk::Window::hotspot(int, int, bool)
+	_ZN4fltk6Window7iconizeEv @ 892 ; fltk::Window::iconize()
+	_ZN4fltk6Window7xclass_E @ 893 DATA ; fltk::Window::xclass_
+	_ZN4fltk6Window8current_E @ 894 DATA ; fltk::Window::current_
+	_ZN4fltk6add_fdEiPFviPvES0_ @ 895 ; fltk::add_fd(int, void (*)(int, void*), void*)
+	_ZN4fltk6add_fdEiiPFviPvES0_ @ 896 ; fltk::add_fd(int, int, void (*)(int, void*), void*)
+	_ZN4fltk6addarcEffffff @ 897 ; fltk::addarc(float, float, float, float, float, float)
+	_ZN4fltk6cancelE @ 898 DATA ; fltk::cancel
+	_ZN4fltk6choiceEPKcS1_S1_S1_z @ 899 ; fltk::choice(char const*, char const*, char const*, char const*, ...)
+	_ZN4fltk6concatEffffff @ 900 ; fltk::concat(float, float, float, float, float, float)
+	_ZN4fltk6e_textE @ 901 DATA ; fltk::e_text
+	_ZN4fltk6e_typeE @ 902 DATA ; fltk::e_type
+	_ZN4fltk6focus_E @ 903 DATA ; fltk::focus_
+	_ZN4fltk6handleEiPNS_6WindowE @ 904 ; fltk::handle(int, fltk::Window*)
+	_ZN4fltk6makeDCEP9HBITMAP__ @ 905 ; fltk::makeDC(HBITMAP__*)
+	_ZN4fltk6modal_E @ 906 DATA ; fltk::modal_
+	_ZN4fltk6pushedEPNS_6WidgetE @ 907 ; fltk::pushed(fltk::Widget*)
+	_ZN4fltk6redrawEv @ 908 ; fltk::redraw()
+	_ZN4fltk6rotateEf @ 909 ; fltk::rotate(float)
+	_ZN4fltk6setpenEv @ 910 ; fltk::setpen()
+	_ZN4fltk6theme_E @ 911 DATA ; fltk::theme_
+	_ZN4fltk6unlockEv @ 912 ; fltk::unlock()
+	_ZN4fltk6visualEi @ 913 ; fltk::visual(int)
+	_ZN4fltk6xpixelEj @ 914 ; fltk::xpixel(unsigned)
+	_ZN4fltk7Browser10goto_indexEPKii @ 915 ; fltk::Browser::goto_index(int const*, int)
+	_ZN4fltk7Browser10goto_indexEi @ 916 ; fltk::Browser::goto_index(int)
+	_ZN4fltk7Browser10goto_indexEiiiii @ 917 ; fltk::Browser::goto_index(int, int, int, int, int)
+	_ZN4fltk7Browser10unset_markEi @ 918 ; fltk::Browser::unset_mark(int)
+	_ZN4fltk7Browser11damage_itemEi @ 919 ; fltk::Browser::damage_item(int)
+	_ZN4fltk7Browser12draw_clip_cbEPviiii @ 920 ; fltk::Browser::draw_clip_cb(void*, int, int, int, int)
+	_ZN4fltk7Browser12next_visibleEv @ 921 ; fltk::Browser::next_visible()
+	_ZN4fltk7Browser12scrollbar_cbEPNS_6WidgetEPv @ 922 ; fltk::Browser::scrollbar_cb(fltk::Widget*, void*)
+	_ZN4fltk7Browser13column_widthsEPKi @ 923 ; fltk::Browser::column_widths(int const*)
+	_ZN4fltk7Browser13compare_marksEii @ 924 ; fltk::Browser::compare_marks(int, int)
+	_ZN4fltk7Browser13default_styleE @ 925 DATA ; fltk::Browser::default_style
+	_ZN4fltk7Browser13goto_positionEi @ 926 ; fltk::Browser::goto_position(int)
+	_ZN4fltk7Browser13hscrollbar_cbEPNS_6WidgetEPv @ 927 ; fltk::Browser::hscrollbar_cb(fltk::Widget*, void*)
+	_ZN4fltk7Browser15set_item_openedEb @ 928 ; fltk::Browser::set_item_opened(bool)
+	_ZN4fltk7Browser16previous_visibleEv @ 929 ; fltk::Browser::previous_visible()
+	_ZN4fltk7Browser16select_only_thisEi @ 930 ; fltk::Browser::select_only_this(int)
+	_ZN4fltk7Browser16set_item_visibleEb @ 931 ; fltk::Browser::set_item_visible(bool)
+	_ZN4fltk7Browser17make_item_visibleENS0_7lineposE @ 932 ; fltk::Browser::make_item_visible(fltk::Browser::linepos)
+	_ZN4fltk7Browser17set_item_selectedEbi @ 933 ; fltk::Browser::set_item_selected(bool, int)
+	_ZN4fltk7Browser18goto_visible_focusEv @ 934 ; fltk::Browser::goto_visible_focus()
+	_ZN4fltk7Browser4drawEv @ 935 ; fltk::Browser::draw()
+	_ZN4fltk7Browser4nextEv @ 936 ; fltk::Browser::next()
+	_ZN4fltk7Browser5valueEi @ 937 ; fltk::Browser::value(int)
+	_ZN4fltk7Browser6handleEi @ 938 ; fltk::Browser::handle(int)
+	_ZN4fltk7Browser6is_setEi @ 939 ; fltk::Browser::is_set(int)
+	_ZN4fltk7Browser6layoutEv @ 940 ; fltk::Browser::layout()
+	_ZN4fltk7Browser6selectEib @ 941 ; fltk::Browser::select(int, bool)
+	_ZN4fltk7Browser7at_markEi @ 942 ; fltk::Browser::at_mark(int)
+	_ZN4fltk7Browser7displayEib @ 943 ; fltk::Browser::display(int, bool)
+	_ZN4fltk7Browser7toplineEi @ 944 ; fltk::Browser::topline(int)
+	_ZN4fltk7Browser8deselectEi @ 945 ; fltk::Browser::deselect(int)
+	_ZN4fltk7Browser8goto_topEv @ 946 ; fltk::Browser::goto_top()
+	_ZN4fltk7Browser8indentedEb @ 947 ; fltk::Browser::indented(bool)
+	_ZN4fltk7Browser8selectedEi @ 948 ; fltk::Browser::selected(int)
+	_ZN4fltk7Browser8set_markEii @ 949 ; fltk::Browser::set_mark(int, int)
+	_ZN4fltk7Browser9displayedEi @ 950 ; fltk::Browser::displayed(int)
+	_ZN4fltk7Browser9draw_clipEiiii @ 951 ; fltk::Browser::draw_clip(int, int, int, int)
+	_ZN4fltk7Browser9draw_itemEv @ 952 ; fltk::Browser::draw_item()
+	_ZN4fltk7Browser9goto_markEi @ 953 ; fltk::Browser::goto_mark(int)
+	_ZN4fltk7Browser9set_focusEv @ 954 ; fltk::Browser::set_focus()
+	_ZN4fltk7Browser9set_levelEi @ 955 ; fltk::Browser::set_level(int)
+	_ZN4fltk7Browser9xpositionEi @ 956 ; fltk::Browser::xposition(int)
+	_ZN4fltk7Browser9ypositionEi @ 957 ; fltk::Browser::yposition(int)
+	_ZN4fltk7BrowserC1EiiiiPKc @ 958 ; fltk::Browser::Browser(int, int, int, int, char const*)
+	_ZN4fltk7BrowserC2EiiiiPKc @ 959 ; fltk::Browser::Browser(int, int, int, int, char const*)
+	_ZN4fltk7BrowserD0Ev @ 960 ; fltk::Browser::~Browser()
+	_ZN4fltk7BrowserD1Ev @ 961 ; fltk::Browser::~Browser()
+	_ZN4fltk7BrowserD2Ev @ 962 ; fltk::Browser::~Browser()
+	_ZN4fltk7COURIERE @ 963 DATA ; fltk::COURIER
+	_ZN4fltk7Divider4drawEv @ 964 ; fltk::Divider::draw()
+	_ZN4fltk7Divider6handleEi @ 965 ; fltk::Divider::handle(int)
+	_ZN4fltk7Divider6layoutEv @ 966 ; fltk::Divider::layout()
+	_ZN4fltk7DividerC1Ev @ 967 ; fltk::Divider::Divider()
+	_ZN4fltk7DividerC2Ev @ 968 ; fltk::Divider::Divider()
+	_ZN4fltk7DividerD0Ev @ 969 ; fltk::Divider::~Divider()
+	_ZN4fltk7DividerD1Ev @ 970 ; fltk::Divider::~Divider()
+	_ZN4fltk7FlatBoxC1EPKc @ 971 ; fltk::FlatBox::FlatBox(char const*)
+	_ZN4fltk7FlatBoxC2EPKc @ 972 ; fltk::FlatBox::FlatBox(char const*)
+	_ZN4fltk7MenuBar13default_styleE @ 973 DATA ; fltk::MenuBar::default_style
+	_ZN4fltk7MenuBar4drawEv @ 974 ; fltk::MenuBar::draw()
+	_ZN4fltk7MenuBar6handleEi @ 975 ; fltk::MenuBar::handle(int)
+	_ZN4fltk7MenuBarC1EiiiiPKc @ 976 ; fltk::MenuBar::MenuBar(int, int, int, int, char const*)
+	_ZN4fltk7MenuBarC2EiiiiPKc @ 977 ; fltk::MenuBar::MenuBar(int, int, int, int, char const*)
+	_ZN4fltk7MenuBarD0Ev @ 978 ; fltk::MenuBar::~MenuBar()
+	_ZN4fltk7MenuBarD1Ev @ 979 ; fltk::MenuBar::~MenuBar()
+	_ZN4fltk7Monitor3allEv @ 980 ; fltk::Monitor::all()
+	_ZN4fltk7Monitor4findEii @ 981 ; fltk::Monitor::find(int, int)
+	_ZN4fltk7Monitor4listEPPKS0_ @ 982 ; fltk::Monitor::list(fltk::Monitor const**)
+	_ZN4fltk7MonitorC1Ev @ 983 ; fltk::Monitor::Monitor()
+	_ZN4fltk7Tooltip13default_styleE @ 984 DATA ; fltk::Tooltip::default_style
+	_ZN4fltk7Tooltip4exitEv @ 985 ; fltk::Tooltip::exit()
+	_ZN4fltk7Tooltip5delayEv @ 986 ; fltk::Tooltip::delay()
+	_ZN4fltk7Tooltip5enterEPNS_6WidgetE @ 987 ; fltk::Tooltip::enter(fltk::Widget*)
+	_ZN4fltk7Tooltip5enterEPNS_6WidgetEiiiiPFPKcS2_PvES5_ @ 988 ; fltk::Tooltip::enter(fltk::Widget*, int, int, int, int, char const* (*)(fltk::Widget*, void*), void*)
+	_ZN4fltk7Tooltip5enterEPNS_6WidgetEiiiiPKc @ 989 ; fltk::Tooltip::enter(fltk::Widget*, int, int, int, int, char const*)
+	_ZN4fltk7Tooltip6delay_E @ 990 DATA ; fltk::Tooltip::delay_
+	_ZN4fltk7Tooltip6widgetE @ 991 DATA ; fltk::Tooltip::widget
+	_ZN4fltk7Tooltip7currentEPNS_6WidgetE @ 992 ; fltk::Tooltip::current(fltk::Widget*)
+	_ZN4fltk7Tooltip7currentEv @ 993 ; fltk::Tooltip::current()
+	_ZN4fltk7Tooltip7enabledEv @ 994 ; fltk::Tooltip::enabled()
+	_ZN4fltk7Tooltip8enabled_E @ 995 DATA ; fltk::Tooltip::enabled_
+	_ZN4fltk7composeERi @ 996 ; fltk::compose(int&)
+	_ZN4fltk7damage_E @ 997 DATA ; fltk::damage_
+	_ZN4fltk7displayEPKc @ 998 ; fltk::display(char const*)
+	_ZN4fltk7e_stateE @ 999 DATA ; fltk::e_state
+	_ZN4fltk7fillpieEiiiiffi @ 1000 ; fltk::fillpie(int, int, int, int, float, float, int)
+	_ZN4fltk7glstartEv @ 1001 ; fltk::glstart()
+	_ZN4fltk7measureEPKcRiS2_i @ 1002 ; fltk::measure(char const*, int&, int&, int)
+	_ZN4fltk7messageEPKcz @ 1003 ; fltk::message(char const*, ...)
+	_ZN4fltk7newpathEv @ 1004 ; fltk::newpath()
+	_ZN4fltk7pushed_E @ 1005 DATA ; fltk::pushed_
+	_ZN4fltk7setfontEPNS_4FontEf @ 1006 ; fltk::setfont(fltk::Font*, float)
+	_ZN4fltk7versionEv @ 1007 ; fltk::version()
+	_ZN4fltk7warningE @ 1008 DATA ; fltk::warning
+	_ZN4fltk8Adjuster12value_damageEv @ 1009 ; fltk::Adjuster::value_damage()
+	_ZN4fltk8Adjuster13default_styleE @ 1010 DATA ; fltk::Adjuster::default_style
+	_ZN4fltk8Adjuster4drawEv @ 1011 ; fltk::Adjuster::draw()
+	_ZN4fltk8Adjuster6handleEi @ 1012 ; fltk::Adjuster::handle(int)
+	_ZN4fltk8AdjusterC1EiiiiPKc @ 1013 ; fltk::Adjuster::Adjuster(int, int, int, int, char const*)
+	_ZN4fltk8AdjusterC2EiiiiPKc @ 1014 ; fltk::Adjuster::Adjuster(int, int, int, int, char const*)
+	_ZN4fltk8AdjusterD0Ev @ 1015 ; fltk::Adjuster::~Adjuster()
+	_ZN4fltk8AdjusterD1Ev @ 1016 ; fltk::Adjuster::~Adjuster()
+	_ZN4fltk8BarGroup13default_styleE @ 1017 DATA ; fltk::BarGroup::default_style
+	_ZN4fltk8BarGroup4drawEv @ 1018 ; fltk::BarGroup::draw()
+	_ZN4fltk8BarGroup6handleEi @ 1019 ; fltk::BarGroup::handle(int)
+	_ZN4fltk8BarGroup6layoutEv @ 1020 ; fltk::BarGroup::layout()
+	_ZN4fltk8BarGroup6openedEb @ 1021 ; fltk::BarGroup::opened(bool)
+	_ZN4fltk8BarGroup9glyph_boxERiS1_S1_S1_ @ 1022 ; fltk::BarGroup::glyph_box(int&, int&, int&, int&)
+	_ZN4fltk8BarGroupC1EiiiiPKc @ 1023 ; fltk::BarGroup::BarGroup(int, int, int, int, char const*)
+	_ZN4fltk8BarGroupC2EiiiiPKc @ 1024 ; fltk::BarGroup::BarGroup(int, int, int, int, char const*)
+	_ZN4fltk8BarGroupD0Ev @ 1025 ; fltk::BarGroup::~BarGroup()
+	_ZN4fltk8BarGroupD1Ev @ 1026 ; fltk::BarGroup::~BarGroup()
+	_ZN4fltk8DOWN_BOXE @ 1027 DATA ; fltk::DOWN_BOX
+	_ZN4fltk8Drawable12make_currentEv @ 1028 ; fltk::Drawable::make_current()
+	_ZN4fltk8Drawable4copyEiiiiii @ 1029 ; fltk::Drawable::copy(int, int, int, int, int, int)
+	_ZN4fltk8Drawable6createEii @ 1030 ; fltk::Drawable::create(int, int)
+	_ZN4fltk8Drawable7destroyEv @ 1031 ; fltk::Drawable::destroy()
+	_ZN4fltk8Drawable7free_gcEv @ 1032 ; fltk::Drawable::free_gc()
+	_ZN4fltk8DrawableC1EP9HBITMAP__ @ 1033 ; fltk::Drawable::Drawable(HBITMAP__*)
+	_ZN4fltk8DrawableC1Ev @ 1034 ; fltk::Drawable::Drawable()
+	_ZN4fltk8DrawableC2Ev @ 1035 ; fltk::Drawable::Drawable()
+	_ZN4fltk8FLAT_BOXE @ 1036 DATA ; fltk::FLAT_BOX
+	_ZN4fltk8FileIcon17load_system_iconsEv @ 1037 ; fltk::FileIcon::load_system_icons()
+	_ZN4fltk8FileIcon3addEs @ 1038 ; fltk::FileIcon::add(short)
+	_ZN4fltk8FileIcon4drawEiiiiji @ 1039 ; fltk::FileIcon::draw(int, int, int, int, unsigned, int)
+	_ZN4fltk8FileIcon4findEPKci @ 1040 ; fltk::FileIcon::find(char const*, int)
+	_ZN4fltk8FileIcon4loadEPKc @ 1041 ; fltk::FileIcon::load(char const*)
+	_ZN4fltk8FileIcon5firstEv @ 1042 ; fltk::FileIcon::first()
+	_ZN4fltk8FileIcon6first_E @ 1043 DATA ; fltk::FileIcon::first_
+	_ZN4fltk8FileIcon8load_ftiEPKc @ 1044 ; fltk::FileIcon::load_fti(char const*)
+	_ZN4fltk8FileIcon8load_xpmEPKc @ 1045 ; fltk::FileIcon::load_xpm(char const*)
+	_ZN4fltk8FileIcon9add_colorEs @ 1046 ; fltk::FileIcon::add_color(short)
+	_ZN4fltk8FileIconC1EPKciiPs @ 1047 ; fltk::FileIcon::FileIcon(char const*, int, int, short*)
+	_ZN4fltk8FileIconC2EPKciiPs @ 1048 ; fltk::FileIcon::FileIcon(char const*, int, int, short*)
+	_ZN4fltk8FileIconD1Ev @ 1049 ; fltk::FileIcon::~FileIcon()
+	_ZN4fltk8FileIconD2Ev @ 1050 ; fltk::FileIcon::~FileIcon()
+	_ZN4fltk8FrameBoxC1EPKcS2_PKS0_ @ 1051 ; fltk::FrameBox::FrameBox(char const*, char const*, fltk::FrameBox const*)
+	_ZN4fltk8FrameBoxC2EPKcS2_PKS0_ @ 1052 ; fltk::FrameBox::FrameBox(char const*, char const*, fltk::FrameBox const*)
+	_ZN4fltk8GlWindow10invalidateEv @ 1053 ; fltk::GlWindow::invalidate()
+	_ZN4fltk8GlWindow12draw_overlayEv @ 1054 ; fltk::GlWindow::draw_overlay()
+	_ZN4fltk8GlWindow12hide_overlayEv @ 1055 ; fltk::GlWindow::hide_overlay()
+	_ZN4fltk8GlWindow12make_currentEv @ 1056 ; fltk::GlWindow::make_current()
+	_ZN4fltk8GlWindow12make_overlayEv @ 1057 ; fltk::GlWindow::make_overlay()
+	_ZN4fltk8GlWindow12swap_buffersEv @ 1058 ; fltk::GlWindow::swap_buffers()
+	_ZN4fltk8GlWindow14can_do_overlayEv @ 1059 ; fltk::GlWindow::can_do_overlay()
+	_ZN4fltk8GlWindow14redraw_overlayEv @ 1060 ; fltk::GlWindow::redraw_overlay()
+	_ZN4fltk8GlWindow20make_overlay_currentEv @ 1061 ; fltk::GlWindow::make_overlay_current()
+	_ZN4fltk8GlWindow4initEv @ 1062 ; fltk::GlWindow::init()
+	_ZN4fltk8GlWindow4modeEi @ 1063 ; fltk::GlWindow::mode(int)
+	_ZN4fltk8GlWindow5flushEv @ 1064 ; fltk::GlWindow::flush()
+	_ZN4fltk8GlWindow5orthoEv @ 1065 ; fltk::GlWindow::ortho()
+	_ZN4fltk8GlWindow5validEc @ 1066 ; fltk::GlWindow::valid(char)
+	_ZN4fltk8GlWindow6can_doEi @ 1067 ; fltk::GlWindow::can_do(int)
+	_ZN4fltk8GlWindow6createEv @ 1068 ; fltk::GlWindow::create()
+	_ZN4fltk8GlWindow6layoutEv @ 1069 ; fltk::GlWindow::layout()
+	_ZN4fltk8GlWindow7contextEPvb @ 1070 ; fltk::GlWindow::context(void*, bool)
+	_ZN4fltk8GlWindow7destroyEv @ 1071 ; fltk::GlWindow::destroy()
+	_ZN4fltk8GlWindow9draw_swapEv @ 1072 ; fltk::GlWindow::draw_swap()
+	_ZN4fltk8GlWindowD0Ev @ 1073 ; fltk::GlWindow::~GlWindow()
+	_ZN4fltk8GlWindowD1Ev @ 1074 ; fltk::GlWindow::~GlWindow()
+	_ZN4fltk8GlWindowD2Ev @ 1075 ; fltk::GlWindow::~GlWindow()
+	_ZN4fltk8NO_LABELE @ 1076 DATA ; fltk::NO_LABEL
+	_ZN4fltk8OVAL_BOXE @ 1077 DATA ; fltk::OVAL_BOX
+	_ZN4fltk8StyleSet12make_currentEv @ 1078 ; fltk::StyleSet::make_current()
+	_ZN4fltk8StyleSetC1Ev @ 1079 ; fltk::StyleSet::StyleSet()
+	_ZN4fltk8StyleSetC2Ev @ 1080 ; fltk::StyleSet::StyleSet()
+	_ZN4fltk8StyleSetD1Ev @ 1081 ; fltk::StyleSet::~StyleSet()
+	_ZN4fltk8StyleSetD2Ev @ 1082 ; fltk::StyleSet::~StyleSet()
+	_ZN4fltk8TabGroup10tab_heightEv @ 1083 ; fltk::TabGroup::tab_height()
+	_ZN4fltk8TabGroup13default_styleE @ 1084 DATA ; fltk::TabGroup::default_style
+	_ZN4fltk8TabGroup13tab_positionsEPiS1_ @ 1085 ; fltk::TabGroup::tab_positions(int*, int*)
+	_ZN4fltk8TabGroup4drawEv @ 1086 ; fltk::TabGroup::draw()
+	_ZN4fltk8TabGroup4pushEPNS_6WidgetE @ 1087 ; fltk::TabGroup::push(fltk::Widget*)
+	_ZN4fltk8TabGroup5valueEPNS_6WidgetE @ 1088 ; fltk::TabGroup::value(fltk::Widget*)
+	_ZN4fltk8TabGroup5valueEv @ 1089 ; fltk::TabGroup::value()
+	_ZN4fltk8TabGroup5whichEii @ 1090 ; fltk::TabGroup::which(int, int)
+	_ZN4fltk8TabGroup6handleEi @ 1091 ; fltk::TabGroup::handle(int)
+	_ZN4fltk8TabGroup8draw_tabEiiiiPNS_6WidgetEi @ 1092 ; fltk::TabGroup::draw_tab(int, int, int, int, fltk::Widget*, int)
+	_ZN4fltk8TabGroupC1EiiiiPKc @ 1093 ; fltk::TabGroup::TabGroup(int, int, int, int, char const*)
+	_ZN4fltk8TabGroupC2EiiiiPKc @ 1094 ; fltk::TabGroup::TabGroup(int, int, int, int, char const*)
+	_ZN4fltk8TabGroupD0Ev @ 1095 ; fltk::TabGroup::~TabGroup()
+	_ZN4fltk8TabGroupD1Ev @ 1096 ; fltk::TabGroup::~TabGroup()
+	_ZN4fltk8Valuator11handle_dragEd @ 1097 ; fltk::Valuator::handle_drag(double)
+	_ZN4fltk8Valuator11handle_pushEv @ 1098 ; fltk::Valuator::handle_push()
+	_ZN4fltk8Valuator12value_damageEv @ 1099 ; fltk::Valuator::value_damage()
+	_ZN4fltk8Valuator14handle_releaseEv @ 1100 ; fltk::Valuator::handle_release()
+	_ZN4fltk8Valuator15previous_value_E @ 1101 DATA ; fltk::Valuator::previous_value_
+	_ZN4fltk8Valuator4stepEd @ 1102 ; fltk::Valuator::step(double)
+	_ZN4fltk8Valuator5rangeEdd @ 1103 ; fltk::Valuator::range(double, double)
+	_ZN4fltk8Valuator5valueEd @ 1104 ; fltk::Valuator::value(double)
+	_ZN4fltk8Valuator6formatEPc @ 1105 ; fltk::Valuator::format(char*)
+	_ZN4fltk8Valuator6handleEi @ 1106 ; fltk::Valuator::handle(int)
+	_ZN4fltk8Valuator7maximumEd @ 1107 ; fltk::Valuator::maximum(double)
+	_ZN4fltk8Valuator7minimumEd @ 1108 ; fltk::Valuator::minimum(double)
+	_ZN4fltk8Valuator8linesizeEd @ 1109 ; fltk::Valuator::linesize(double)
+	_ZN4fltk8Valuator9set_valueEd @ 1110 ; fltk::Valuator::set_value(double)
+	_ZN4fltk8ValuatorC1EiiiiPKc @ 1111 ; fltk::Valuator::Valuator(int, int, int, int, char const*)
+	_ZN4fltk8ValuatorC2EiiiiPKc @ 1112 ; fltk::Valuator::Valuator(int, int, int, int, char const*)
+	_ZN4fltk8ValuatorD0Ev @ 1113 ; fltk::Valuator::~Valuator()
+	_ZN4fltk8ValuatorD1Ev @ 1114 ; fltk::Valuator::~Valuator()
+	_ZN4fltk8ValuatorD2Ev @ 1115 ; fltk::Valuator::~Valuator()
+	_ZN4fltk8add_idleEPFvPvES0_ @ 1116 ; fltk::add_idle(void (*)(void*), void*)
+	_ZN4fltk8addcurveEffffffff @ 1117 ; fltk::addcurve(float, float, float, float, float, float, float, float)
+	_ZN4fltk8ccHueBox4drawEv @ 1118 ; fltk::ccHueBox::draw()
+	_ZN4fltk8ccHueBox6handleEi @ 1119 ; fltk::ccHueBox::handle(int)
+	_ZN4fltk8ccHueBoxC1Eiiii @ 1120 ; fltk::ccHueBox::ccHueBox(int, int, int, int)
+	_ZN4fltk8ccHueBoxD0Ev @ 1121 ; fltk::ccHueBox::~ccHueBox()
+	_ZN4fltk8ccHueBoxD1Ev @ 1122 ; fltk::ccHueBox::~ccHueBox()
+	_ZN4fltk8clip_boxEiiiiRiS0_S0_S0_ @ 1123 ; fltk::clip_box(int, int, int, int, int&, int&, int&, int&)
+	_ZN4fltk8clip_outEiiii @ 1124 ; fltk::clip_out(int, int, int, int)
+	_ZN4fltk8contrastEjj @ 1125 ; fltk::contrast(unsigned, unsigned)
+	_ZN4fltk8draw_xpmEPKPKciij @ 1126 ; fltk::draw_xpm(char const* const*, int, int, unsigned)
+	_ZN4fltk8drawlineEffff @ 1127 ; fltk::drawline(float, float, float, float)
+	_ZN4fltk8drawlineEiiii @ 1128 ; fltk::drawline(int, int, int, int)
+	_ZN4fltk8drawtextEPKcff @ 1129 ; fltk::drawtext(char const*, float, float)
+	_ZN4fltk8drawtextEPKciff @ 1130 ; fltk::drawtext(char const*, int, float, float)
+	_ZN4fltk8drawtextEPKciiiii @ 1131 ; fltk::drawtext(char const*, int, int, int, int, int)
+	_ZN4fltk8e_clicksE @ 1132 DATA ; fltk::e_clicks
+	_ZN4fltk8e_keysymE @ 1133 DATA ; fltk::e_keysym
+	_ZN4fltk8e_lengthE @ 1134 DATA ; fltk::e_length
+	_ZN4fltk8e_x_rootE @ 1135 DATA ; fltk::e_x_root
+	_ZN4fltk8e_y_rootE @ 1136 DATA ; fltk::e_y_root
+	_ZN4fltk8fillpathEv @ 1137 ; fltk::fillpath()
+	_ZN4fltk8fillrectEiiii @ 1138 ; fltk::fillrect(int, int, int, int)
+	_ZN4fltk8getwidthEPKc @ 1139 ; fltk::getwidth(char const*)
+	_ZN4fltk8getwidthEPKci @ 1140 ; fltk::getwidth(char const*, int)
+	_ZN4fltk8glVisualEi @ 1141 ; fltk::glVisual(int)
+	_ZN4fltk8glfinishEv @ 1142 ; fltk::glfinish()
+	_ZN4fltk8has_idleEPFvPvES0_ @ 1143 ; fltk::has_idle(void (*)(void*), void*)
+	_ZN4fltk8inactiveEj @ 1144 ; fltk::inactive(unsigned)
+	_ZN4fltk8inactiveEji @ 1145 ; fltk::inactive(unsigned, int)
+	_ZN4fltk8key_nameEi @ 1146 ; fltk::key_name(int)
+	_ZN4fltk8passwordEPKcS1_z @ 1147 ; fltk::password(char const*, char const*, ...)
+	_ZN4fltk8pop_clipEv @ 1148 ; fltk::pop_clip()
+	_ZN4fltk8rgbImageD0Ev @ 1149 ; fltk::rgbImage::~rgbImage()
+	_ZN4fltk8rgbImageD1Ev @ 1150 ; fltk::rgbImage::~rgbImage()
+	_ZN4fltk8setbrushEv @ 1151 ; fltk::setbrush()
+	_ZN4fltk8setcolorEj @ 1152 ; fltk::setcolor(unsigned)
+	_ZN4fltk8xbmImageC1EPKhii @ 1153 ; fltk::xbmImage::xbmImage(unsigned char const*, int, int)
+	_ZN4fltk8xbmImageD0Ev @ 1154 ; fltk::xbmImage::~xbmImage()
+	_ZN4fltk8xbmImageD1Ev @ 1155 ; fltk::xbmImage::~xbmImage()
+	_ZN4fltk8xdisplayE @ 1156 DATA ; fltk::xdisplay
+	_ZN4fltk8xpaletteE @ 1157 DATA ; fltk::xpalette
+	_ZN4fltk8xpmImageD0Ev @ 1158 ; fltk::xpmImage::~xpmImage()
+	_ZN4fltk8xpmImageD1Ev @ 1159 ; fltk::xpmImage::~xpmImage()
+	_ZN4fltk9CURSOR_NOE @ 1160 DATA ; fltk::CURSOR_NO
+	_ZN4fltk9CURSOR_NSE @ 1161 DATA ; fltk::CURSOR_NS
+	_ZN4fltk9CURSOR_WEE @ 1162 DATA ; fltk::CURSOR_WE
+	_ZN4fltk9FileInput6handleEi @ 1163 ; fltk::FileInput::handle(int)
+	_ZN4fltk9FileInputC1EiiiiPKc @ 1164 ; fltk::FileInput::FileInput(int, int, int, int, char const*)
+	_ZN4fltk9FileInputD0Ev @ 1165 ; fltk::FileInput::~FileInput()
+	_ZN4fltk9FileInputD1Ev @ 1166 ; fltk::FileInput::~FileInput()
+	_ZN4fltk9HELVETICAE @ 1167 DATA ; fltk::HELVETICA
+	_ZN4fltk9ItemGroup4drawEv @ 1168 ; fltk::ItemGroup::draw()
+	_ZN4fltk9ItemGroup6handleEi @ 1169 ; fltk::ItemGroup::handle(int)
+	_ZN4fltk9ItemGroup6layoutEv @ 1170 ; fltk::ItemGroup::layout()
+	_ZN4fltk9ItemGroupC1EPKc @ 1171 ; fltk::ItemGroup::ItemGroup(char const*)
+	_ZN4fltk9ItemGroupC2EPKc @ 1172 ; fltk::ItemGroup::ItemGroup(char const*)
+	_ZN4fltk9ItemGroupD0Ev @ 1173 ; fltk::ItemGroup::~ItemGroup()
+	_ZN4fltk9ItemGroupD1Ev @ 1174 ; fltk::ItemGroup::~ItemGroup()
+	_ZN4fltk9LabelType4findEPKc @ 1175 ; fltk::LabelType::find(char const*)
+	_ZN4fltk9LabelType5firstE @ 1176 DATA ; fltk::LabelType::first
+	_ZN4fltk9LabelTypeC1EPKc @ 1177 ; fltk::LabelType::LabelType(char const*)
+	_ZN4fltk9LabelTypeC2EPKc @ 1178 ; fltk::LabelType::LabelType(char const*)
+	_ZN4fltk9OFLAT_BOXE @ 1179 DATA ; fltk::OFLAT_BOX
+	_ZN4fltk9PopupMenu13default_styleE @ 1180 DATA ; fltk::PopupMenu::default_style
+	_ZN4fltk9PopupMenu4drawEv @ 1181 ; fltk::PopupMenu::draw()
+	_ZN4fltk9PopupMenu5popupEv @ 1182 ; fltk::PopupMenu::popup()
+	_ZN4fltk9PopupMenu6handleEi @ 1183 ; fltk::PopupMenu::handle(int)
+	_ZN4fltk9PopupMenuC1EiiiiPKc @ 1184 ; fltk::PopupMenu::PopupMenu(int, int, int, int, char const*)
+	_ZN4fltk9PopupMenuC2EiiiiPKc @ 1185 ; fltk::PopupMenu::PopupMenu(int, int, int, int, char const*)
+	_ZN4fltk9PopupMenuD0Ev @ 1186 ; fltk::PopupMenu::~PopupMenu()
+	_ZN4fltk9PopupMenuD1Ev @ 1187 ; fltk::PopupMenu::~PopupMenu()
+	_ZN4fltk9RFLAT_BOXE @ 1188 DATA ; fltk::RFLAT_BOX
+	_ZN4fltk9Rectangle3setEiiii @ 1189 ; fltk::Rectangle::set(int, int, int, int)
+	_ZN4fltk9RectangleC1Ev @ 1190 ; fltk::Rectangle::Rectangle()
+	_ZN4fltk9RectangleC2Ev @ 1191 ; fltk::Rectangle::Rectangle()
+	_ZN4fltk9Scrollbar12increment_cbEv @ 1192 ; fltk::Scrollbar::increment_cb()
+	_ZN4fltk9Scrollbar13default_styleE @ 1193 DATA ; fltk::Scrollbar::default_style
+	_ZN4fltk9Scrollbar4drawEv @ 1194 ; fltk::Scrollbar::draw()
+	_ZN4fltk9Scrollbar5valueEiiii @ 1195 ; fltk::Scrollbar::value(int, int, int, int)
+	_ZN4fltk9Scrollbar5valueEv @ 1196 ; fltk::Scrollbar::value()
+	_ZN4fltk9Scrollbar6handleEi @ 1197 ; fltk::Scrollbar::handle(int)
+	_ZN4fltk9Scrollbar8pagesizeEi @ 1198 ; fltk::Scrollbar::pagesize(int)
+	_ZN4fltk9ScrollbarC1EiiiiPKc @ 1199 ; fltk::Scrollbar::Scrollbar(int, int, int, int, char const*)
+	_ZN4fltk9ScrollbarC2EiiiiPKc @ 1200 ; fltk::Scrollbar::Scrollbar(int, int, int, int, char const*)
+	_ZN4fltk9ScrollbarD0Ev @ 1201 ; fltk::Scrollbar::~Scrollbar()
+	_ZN4fltk9ScrollbarD1Ev @ 1202 ; fltk::Scrollbar::~Scrollbar()
+	_ZN4fltk9add_checkEPFvPvES0_ @ 1203 ; fltk::add_check(void (*)(void*), void*)
+	_ZN4fltk9addcircleEfff @ 1204 ; fltk::addcircle(float, float, float)
+	_ZN4fltk9addvertexEff @ 1205 ; fltk::addvertex(float, float)
+	_ZN4fltk9addvertexEii @ 1206 ; fltk::addvertex(int, int)
+	_ZN4fltk9closepathEv @ 1207 ; fltk::closepath()
+	_ZN4fltk9drawimageEPFvPviiiPhES0_iiiii @ 1208 ; fltk::drawimage(void (*)(void*, int, int, int, unsigned char*), void*, int, int, int, int, int)
+	_ZN4fltk9drawimageEPKhiiiiii @ 1209 ; fltk::drawimage(unsigned char const*, int, int, int, int, int, int)
+	_ZN4fltk9drawpointEff @ 1210 ; fltk::drawpoint(float, float)
+	_ZN4fltk9drawpointEii @ 1211 ; fltk::drawpoint(int, int)
+	_ZN4fltk9encoding_E @ 1212 DATA ; fltk::encoding_
+	_ZN4fltk9get_mouseERiS0_ @ 1213 ; fltk::get_mouse(int&, int&)
+	_ZN4fltk9getascentEv @ 1214 ; fltk::getascent()
+	_ZN4fltk9glsetfontEPNS_4FontEf @ 1215 ; fltk::glsetfont(fltk::Font*, float)
+	_ZN4fltk9push_clipEiiii @ 1216 ; fltk::push_clip(int, int, int, int)
+	_ZN4fltk9remove_fdEii @ 1217 ; fltk::remove_fd(int, int)
+	_ZN4fltk9transformERfS0_ @ 1218 ; fltk::transform(float&, float&)
+	_ZN4fltk9transformERiS0_ @ 1219 ; fltk::transform(int&, int&)
+	_ZN4fltk9translateEff @ 1220 ; fltk::translate(float, float)
+	_ZN4fltk9translateEii @ 1221 ; fltk::translate(int, int)
+	_ZN7NoLabelC1EPKc @ 1222 ; NoLabel::NoLabel(char const*)
+	_ZNK11DottedFrame5_drawEiiiiPKN4fltk5StyleEi @ 1223 ; DottedFrame::_draw(int, int, int, int, fltk::Style const*, int) const
+	_ZNK12Fl_Menu_Item13test_shortcutEv @ 1224 ; Fl_Menu_Item::test_shortcut() const
+	_ZNK12Fl_Menu_Item4nextEi @ 1225 ; Fl_Menu_Item::next(int) const
+	_ZNK12Fl_Menu_Item4sizeEv @ 1226 ; Fl_Menu_Item::size() const
+	_ZNK12Fl_Menu_Item6add_toEPN4fltk4MenuEPv @ 1227 ; Fl_Menu_Item::add_to(fltk::Menu*, void*) const
+	_ZNK12Fl_Menu_Item8pulldownEiiiiPKS_PKc @ 1228 ; Fl_Menu_Item::pulldown(int, int, int, int, Fl_Menu_Item const*, char const*) const
+	_ZNK4fltk10AlignGroup10n_to_breakEv @ 1229 ; fltk::AlignGroup::n_to_break() const
+	_ZNK4fltk10AlignGroup2dhEv @ 1230 ; fltk::AlignGroup::dh() const
+	_ZNK4fltk10AlignGroup2dwEv @ 1231 ; fltk::AlignGroup::dw() const
+	_ZNK4fltk10AlignGroup5alignEv @ 1232 ; fltk::AlignGroup::align() const
+	_ZNK4fltk10AlignGroup8verticalEv @ 1233 ; fltk::AlignGroup::vertical() const
+	_ZNK4fltk10TiledImage4drawEffffi @ 1234 ; fltk::TiledImage::draw(float, float, float, float, int) const
+	_ZNK4fltk10TiledImage7measureERfS1_ @ 1235 ; fltk::TiledImage::measure(float&, float&) const
+	_ZNK4fltk11ClockOutput4hourEv @ 1236 ; fltk::ClockOutput::hour() const
+	_ZNK4fltk11ClockOutput6minuteEv @ 1237 ; fltk::ClockOutput::minute() const
+	_ZNK4fltk11ClockOutput6secondEv @ 1238 ; fltk::ClockOutput::second() const
+	_ZNK4fltk11FileBrowser10item_widthEPv @ 1239 ; fltk::FileBrowser::item_width(void*) const
+	_ZNK4fltk11FileBrowser11item_heightEPv @ 1240 ; fltk::FileBrowser::item_height(void*) const
+	_ZNK4fltk11FileBrowser6filterEv @ 1241 ; fltk::FileBrowser::filter() const
+	_ZNK4fltk11FileBrowser9directoryEv @ 1242 ; fltk::FileBrowser::directory() const
+	_ZNK4fltk11FileBrowser9icon_sizeEv @ 1243 ; fltk::FileBrowser::icon_size() const
+	_ZNK4fltk11FileBrowser9item_drawEPviiii @ 1244 ; fltk::FileBrowser::item_draw(void*, int, int, int, int) const
+	_ZNK4fltk11ScrollGroup9xpositionEv @ 1245 ; fltk::ScrollGroup::xposition() const
+	_ZNK4fltk11ScrollGroup9ypositionEv @ 1246 ; fltk::ScrollGroup::yposition() const
+	_ZNK4fltk12ColorChooser1bEv @ 1247 ; fltk::ColorChooser::b() const
+	_ZNK4fltk12ColorChooser1gEv @ 1248 ; fltk::ColorChooser::g() const
+	_ZNK4fltk12ColorChooser1hEv @ 1249 ; fltk::ColorChooser::h() const
+	_ZNK4fltk12ColorChooser1rEv @ 1250 ; fltk::ColorChooser::r() const
+	_ZNK4fltk12ColorChooser1sEv @ 1251 ; fltk::ColorChooser::s() const
+	_ZNK4fltk12ColorChooser1vEv @ 1252 ; fltk::ColorChooser::v() const
+	_ZNK4fltk12ColorChooser5valueEv @ 1253 ; fltk::ColorChooser::value() const
+	_ZNK4fltk12HighlightBox5_drawEiiiiPKNS_5StyleEi @ 1254 ; fltk::HighlightBox::_draw(int, int, int, int, fltk::Style const*, int) const
+	_ZNK4fltk12HighlightBox7boxinfoEv @ 1255 ; fltk::HighlightBox::boxinfo() const
+	_ZNK4fltk12NumericInput5valueEv @ 1256 ; fltk::NumericInput::value() const
+	_ZNK4fltk13EngravedLabel4drawEPKciiiiPKNS_5StyleEi @ 1257 ; fltk::EngravedLabel::draw(char const*, int, int, int, int, fltk::Style const*, int) const
+	_ZNK4fltk4Font4nameEv @ 1258 ; fltk::Font::name() const
+	_ZNK4fltk4Menu4findEPKc @ 1259 ; fltk::Menu::find(char const*) const
+	_ZNK4fltk4Menu4itemEv @ 1260 ; fltk::Menu::item() const
+	_ZNK4fltk4Menu4listEv @ 1261 ; fltk::Menu::list() const
+	_ZNK4fltk4Menu4sizeEv @ 1262 ; fltk::Menu::size() const
+	_ZNK4fltk4Menu5childEPKii @ 1263 ; fltk::Menu::child(int const*, int) const
+	_ZNK4fltk4Menu5childEi @ 1264 ; fltk::Menu::child(int) const
+	_ZNK4fltk4Menu5valueEv @ 1265 ; fltk::Menu::value() const
+	_ZNK4fltk4Menu8childrenEPKii @ 1266 ; fltk::Menu::children(int const*, int) const
+	_ZNK4fltk4Menu8childrenEv @ 1267 ; fltk::Menu::children() const
+	_ZNK4fltk5Group10draw_childERNS_6WidgetE @ 1268 ; fltk::Group::draw_child(fltk::Widget&) const
+	_ZNK4fltk5Group12update_childERNS_6WidgetE @ 1269 ; fltk::Group::update_child(fltk::Widget&) const
+	_ZNK4fltk5Group18draw_outside_labelERNS_6WidgetE @ 1270 ; fltk::Group::draw_outside_label(fltk::Widget&) const
+	_ZNK4fltk5Group4findEPKNS_6WidgetE @ 1271 ; fltk::Group::find(fltk::Widget const*) const
+	_ZNK4fltk5Group4findERKNS_6WidgetE @ 1272 ; fltk::Group::find(fltk::Widget const&) const
+	_ZNK4fltk5Group5childEi @ 1273 ; fltk::Group::child(int) const
+	_ZNK4fltk5Group5focusEv @ 1274 ; fltk::Group::focus() const
+	_ZNK4fltk5Group8childrenEv @ 1275 ; fltk::Group::children() const
+	_ZNK4fltk5Group9resizableEv @ 1276 ; fltk::Group::resizable() const
+	_ZNK4fltk5Image10draw_cacheEiiiiPKNS_5StyleEi @ 1277 ; fltk::Image::draw_cache(int, int, int, int, fltk::Style const*, int) const
+	_ZNK4fltk5Image1hEv @ 1278 ; fltk::Image::h() const
+	_ZNK4fltk5Image1wEv @ 1279 ; fltk::Image::w() const
+	_ZNK4fltk5Image4fillEiiiiii @ 1280 ; fltk::Image::fill(int, int, int, int, int, int) const
+	_ZNK4fltk5Image5widthEv @ 1281 ; fltk::Image::width() const
+	_ZNK4fltk5Image6heightEv @ 1282 ; fltk::Image::height() const
+	_ZNK4fltk5Image8_measureERfS1_ @ 1283 ; fltk::Image::_measure(float&, float&) const
+	_ZNK4fltk5Input10line_startEi @ 1284 ; fltk::Input::line_start(int) const
+	_ZNK4fltk5Input10word_startEi @ 1285 ; fltk::Input::word_start(int) const
+	_ZNK4fltk5Input14mouse_positionEiiii @ 1286 ; fltk::Input::mouse_position(int, int, int, int) const
+	_ZNK4fltk5Input4markEv @ 1287 ; fltk::Input::mark() const
+	_ZNK4fltk5Input4sizeEv @ 1288 ; fltk::Input::size() const
+	_ZNK4fltk5Input5indexEi @ 1289 ; fltk::Input::index(int) const
+	_ZNK4fltk5Input5valueEv @ 1290 ; fltk::Input::value() const
+	_ZNK4fltk5Input6expandEPKcPci @ 1291 ; fltk::Input::expand(char const*, char*, int) const
+	_ZNK4fltk5Input7setfontEv @ 1292 ; fltk::Input::setfont() const
+	_ZNK4fltk5Input8line_endEi @ 1293 ; fltk::Input::line_end(int) const
+	_ZNK4fltk5Input8positionEv @ 1294 ; fltk::Input::position() const
+	_ZNK4fltk5Input8word_endEi @ 1295 ; fltk::Input::word_end(int) const
+	_ZNK4fltk5Input9expandposEPKcS2_S2_Pi @ 1296 ; fltk::Input::expandpos(char const*, char const*, char const*, int*) const
+	_ZNK4fltk5Style19draw_boxes_inactiveEv @ 1297 ; fltk::Style::draw_boxes_inactive() const
+	_ZNK4fltk6Button4drawEii @ 1298 ; fltk::Button::draw(int, int) const
+	_ZNK4fltk6Button5valueEv @ 1299 ; fltk::Button::value() const
+	_ZNK4fltk6Choice5valueEv @ 1300 ; fltk::Choice::value() const
+	_ZNK4fltk6Slider10horizontalEv @ 1301 ; fltk::Slider::horizontal() const
+	_ZNK4fltk6Slider11slider_sizeEv @ 1302 ; fltk::Slider::slider_size() const
+	_ZNK4fltk6Slider3logEv @ 1303 ; fltk::Slider::log() const
+	_ZNK4fltk6Slider9tick_sizeEv @ 1304 ; fltk::Slider::tick_size() const
+	_ZNK4fltk6Symbol15fills_rectangleEv @ 1305 ; fltk::Symbol::fills_rectangle() const
+	_ZNK4fltk6Symbol2dhEv @ 1306 ; fltk::Symbol::dh() const
+	_ZNK4fltk6Symbol2dwEv @ 1307 ; fltk::Symbol::dw() const
+	_ZNK4fltk6Symbol2dxEv @ 1308 ; fltk::Symbol::dx() const
+	_ZNK4fltk6Symbol2dyEv @ 1309 ; fltk::Symbol::dy() const
+	_ZNK4fltk6Symbol4drawEffffPKNS_5StyleEi @ 1310 ; fltk::Symbol::draw(float, float, float, float, fltk::Style const*, int) const
+	_ZNK4fltk6Symbol4drawEiiiiPKNS_5StyleEi @ 1311 ; fltk::Symbol::draw(int, int, int, int, fltk::Style const*, int) const
+	_ZNK4fltk6Symbol4nameEv @ 1312 ; fltk::Symbol::name() const
+	_ZNK4fltk6Symbol5_drawEffffPKNS_5StyleEi @ 1313 ; fltk::Symbol::_draw(float, float, float, float, fltk::Style const*, int) const
+	_ZNK4fltk6Symbol5_drawEiiiiPKNS_5StyleEi @ 1314 ; fltk::Symbol::_draw(int, int, int, int, fltk::Style const*, int) const
+	_ZNK4fltk6Symbol5insetERiS1_S1_S1_ @ 1315 ; fltk::Symbol::inset(int&, int&, int&, int&) const
+	_ZNK4fltk6Symbol7boxinfoEv @ 1316 ; fltk::Symbol::boxinfo() const
+	_ZNK4fltk6Symbol7measureERfS1_ @ 1317 ; fltk::Symbol::measure(float&, float&) const
+	_ZNK4fltk6Symbol7measureERiS1_ @ 1318 ; fltk::Symbol::measure(int&, int&) const
+	_ZNK4fltk6Symbol8_measureERfS1_ @ 1319 ; fltk::Symbol::_measure(float&, float&) const
+	_ZNK4fltk6Widget10belowmouseEv @ 1320 ; fltk::Widget::belowmouse() const
+	_ZNK4fltk6Widget10draw_frameEv @ 1321 ; fltk::Widget::draw_frame() const
+	_ZNK4fltk6Widget10draw_glyphEiiiiii @ 1322 ; fltk::Widget::draw_glyph(int, int, int, int, int, int) const
+	_ZNK4fltk6Widget10draw_labelEiiiiPKNS_5StyleEi @ 1323 ; fltk::Widget::draw_label(int, int, int, int, fltk::Style const*, int) const
+	_ZNK4fltk6Widget10draw_labelEv @ 1324 ; fltk::Widget::draw_label() const
+	_ZNK4fltk6Widget10labelcolorEv @ 1325 ; fltk::Widget::labelcolor() const
+	_ZNK4fltk6Widget11buttoncolorEv @ 1326 ; fltk::Widget::buttoncolor() const
+	_ZNK4fltk6Widget11takeseventsEv @ 1327 ; fltk::Widget::takesevents() const
+	_ZNK4fltk6Widget12make_currentEv @ 1328 ; fltk::Widget::make_current() const
+	_ZNK4fltk6Widget13current_flagsEv @ 1329 ; fltk::Widget::current_flags() const
+	_ZNK4fltk6Widget13layout_damageEv @ 1330 ; fltk::Widget::layout_damage() const
+	_ZNK4fltk6Widget13measure_labelERiS1_ @ 1331 ; fltk::Widget::measure_label(int&, int&) const
+	_ZNK4fltk6Widget13test_shortcutEv @ 1332 ; fltk::Widget::test_shortcut() const
+	_ZNK4fltk6Widget15draw_backgroundEv @ 1333 ; fltk::Widget::draw_background() const
+	_ZNK4fltk6Widget15highlight_colorEv @ 1334 ; fltk::Widget::highlight_color() const
+	_ZNK4fltk6Widget15scrollbar_alignEv @ 1335 ; fltk::Widget::scrollbar_align() const
+	_ZNK4fltk6Widget15scrollbar_widthEv @ 1336 ; fltk::Widget::scrollbar_width() const
+	_ZNK4fltk6Widget15selection_colorEv @ 1337 ; fltk::Widget::selection_color() const
+	_ZNK4fltk6Widget19highlight_textcolorEv @ 1338 ; fltk::Widget::highlight_textcolor() const
+	_ZNK4fltk6Widget19selection_textcolorEv @ 1339 ; fltk::Widget::selection_textcolor() const
+	_ZNK4fltk6Widget19test_label_shortcutEv @ 1340 ; fltk::Widget::test_label_shortcut() const
+	_ZNK4fltk6Widget1hEv @ 1341 ; fltk::Widget::h() const
+	_ZNK4fltk6Widget1wEv @ 1342 ; fltk::Widget::w() const
+	_ZNK4fltk6Widget1xEv @ 1343 ; fltk::Widget::x() const
+	_ZNK4fltk6Widget1yEv @ 1344 ; fltk::Widget::y() const
+	_ZNK4fltk6Widget23current_flags_highlightEv @ 1345 ; fltk::Widget::current_flags_highlight() const
+	_ZNK4fltk6Widget3boxEv @ 1346 ; fltk::Widget::box() const
+	_ZNK4fltk6Widget4typeEv @ 1347 ; fltk::Widget::type() const
+	_ZNK4fltk6Widget4whenEv @ 1348 ; fltk::Widget::when() const
+	_ZNK4fltk6Widget5alignEv @ 1349 ; fltk::Widget::align() const
+	_ZNK4fltk6Widget5colorEv @ 1350 ; fltk::Widget::color() const
+	_ZNK4fltk6Widget5flagsEv @ 1351 ; fltk::Widget::flags() const
+	_ZNK4fltk6Widget5glyphEv @ 1352 ; fltk::Widget::glyph() const
+	_ZNK4fltk6Widget5imageEv @ 1353 ; fltk::Widget::image() const
+	_ZNK4fltk6Widget5labelEv @ 1354 ; fltk::Widget::label() const
+	_ZNK4fltk6Widget5styleEv @ 1355 ; fltk::Widget::style() const
+	_ZNK4fltk6Widget5valueEv @ 1356 ; fltk::Widget::value() const
+	_ZNK4fltk6Widget6activeEv @ 1357 ; fltk::Widget::active() const
+	_ZNK4fltk6Widget6cursorEPNS_6CursorE @ 1358 ; fltk::Widget::cursor(fltk::Cursor*) const
+	_ZNK4fltk6Widget6damageEv @ 1359 ; fltk::Widget::damage() const
+	_ZNK4fltk6Widget6insideEPKS0_ @ 1360 ; fltk::Widget::inside(fltk::Widget const*) const
+	_ZNK4fltk6Widget6parentEv @ 1361 ; fltk::Widget::parent() const
+	_ZNK4fltk6Widget6pushedEv @ 1362 ; fltk::Widget::pushed() const
+	_ZNK4fltk6Widget6windowEv @ 1363 ; fltk::Widget::window() const
+	_ZNK4fltk6Widget7changedEv @ 1364 ; fltk::Widget::changed() const
+	_ZNK4fltk6Widget7focusedEv @ 1365 ; fltk::Widget::focused() const
+	_ZNK4fltk6Widget7leadingEv @ 1366 ; fltk::Widget::leading() const
+	_ZNK4fltk6Widget7tooltipEv @ 1367 ; fltk::Widget::tooltip() const
+	_ZNK4fltk6Widget7visibleEv @ 1368 ; fltk::Widget::visible() const
+	_ZNK4fltk6Widget8active_rEv @ 1369 ; fltk::Widget::active_r() const
+	_ZNK4fltk6Widget8containsEPKS0_ @ 1370 ; fltk::Widget::contains(fltk::Widget const*) const
+	_ZNK4fltk6Widget8draw_boxEv @ 1371 ; fltk::Widget::draw_box() const
+	_ZNK4fltk6Widget8focusboxEv @ 1372 ; fltk::Widget::focusbox() const
+	_ZNK4fltk6Widget8is_groupEv @ 1373 ; fltk::Widget::is_group() const
+	_ZNK4fltk6Widget8selectedEv @ 1374 ; fltk::Widget::selected() const
+	_ZNK4fltk6Widget8shortcutEv @ 1375 ; fltk::Widget::shortcut() const
+	_ZNK4fltk6Widget8textfontEv @ 1376 ; fltk::Widget::textfont() const
+	_ZNK4fltk6Widget8textsizeEv @ 1377 ; fltk::Widget::textsize() const
+	_ZNK4fltk6Widget9buttonboxEv @ 1378 ; fltk::Widget::buttonbox() const
+	_ZNK4fltk6Widget9is_windowEv @ 1379 ; fltk::Widget::is_window() const
+	_ZNK4fltk6Widget9labelfontEv @ 1380 ; fltk::Widget::labelfont() const
+	_ZNK4fltk6Widget9labelsizeEv @ 1381 ; fltk::Widget::labelsize() const
+	_ZNK4fltk6Widget9labeltypeEv @ 1382 ; fltk::Widget::labeltype() const
+	_ZNK4fltk6Widget9textcolorEv @ 1383 ; fltk::Widget::textcolor() const
+	_ZNK4fltk6Widget9user_dataEv @ 1384 ; fltk::Widget::user_data() const
+	_ZNK4fltk6Widget9visible_rEv @ 1385 ; fltk::Widget::visible_r() const
+	_ZNK4fltk6Window12make_currentEv @ 1386 ; fltk::Window::make_current() const
+	_ZNK4fltk6Window4iconEv @ 1387 ; fltk::Window::icon() const
+	_ZNK4fltk6Window5labelEv @ 1388 ; fltk::Window::label() const
+	_ZNK4fltk6Window5shownEv @ 1389 ; fltk::Window::shown() const
+	_ZNK4fltk6Window6borderEv @ 1390 ; fltk::Window::border() const
+	_ZNK4fltk6Window6iconicEv @ 1391 ; fltk::Window::iconic() const
+	_ZNK4fltk6Window8child_ofEv @ 1392 ; fltk::Window::child_of() const
+	_ZNK4fltk6Window8overrideEv @ 1393 ; fltk::Window::override() const
+	_ZNK4fltk6Window9iconlabelEv @ 1394 ; fltk::Window::iconlabel() const
+	_ZNK4fltk7Browser13column_widthsEv @ 1395 ; fltk::Browser::column_widths() const
+	_ZNK4fltk7Browser14item_is_parentEv @ 1396 ; fltk::Browser::item_is_parent() const
+	_ZNK4fltk7Browser15item_is_visibleEv @ 1397 ; fltk::Browser::item_is_visible() const
+	_ZNK4fltk7Browser5multiEv @ 1398 ; fltk::Browser::multi() const
+	_ZNK4fltk7Browser5widthEv @ 1399 ; fltk::Browser::width() const
+	_ZNK4fltk7Browser6heightEv @ 1400 ; fltk::Browser::height() const
+	_ZNK4fltk7Browser8indentedEv @ 1401 ; fltk::Browser::indented() const
+	_ZNK4fltk7FlatBox5_drawEiiiiPKNS_5StyleEi @ 1402 ; fltk::FlatBox::_draw(int, int, int, int, fltk::Style const*, int) const
+	_ZNK4fltk7FlatBox7boxinfoEv @ 1403 ; fltk::FlatBox::boxinfo() const
+	_ZNK4fltk8FrameBox4dataEv @ 1404 ; fltk::FrameBox::data() const
+	_ZNK4fltk8FrameBox5_drawEiiiiPKNS_5StyleEi @ 1405 ; fltk::FrameBox::_draw(int, int, int, int, fltk::Style const*, int) const
+	_ZNK4fltk8FrameBox7boxinfoEv @ 1406 ; fltk::FrameBox::boxinfo() const
+	_ZNK4fltk8Valuator14previous_valueEv @ 1407 ; fltk::Valuator::previous_value() const
+	_ZNK4fltk8Valuator4stepEv @ 1408 ; fltk::Valuator::step() const
+	_ZNK4fltk8Valuator5valueEv @ 1409 ; fltk::Valuator::value() const
+	_ZNK4fltk8Valuator7maximumEv @ 1410 ; fltk::Valuator::maximum() const
+	_ZNK4fltk8Valuator7minimumEv @ 1411 ; fltk::Valuator::minimum() const
+	_ZNK4fltk8Valuator8linesizeEv @ 1412 ; fltk::Valuator::linesize() const
+	_ZNK4fltk8rgbImage5_drawEiiiiPKNS_5StyleEi @ 1413 ; fltk::rgbImage::_draw(int, int, int, int, fltk::Style const*, int) const
+	_ZNK4fltk8xbmImage4drawEii @ 1414 ; fltk::xbmImage::draw(int, int) const
+	_ZNK4fltk8xbmImage4drawEiiiiPKNS_5StyleEi @ 1415 ; fltk::xbmImage::draw(int, int, int, int, fltk::Style const*, int) const
+	_ZNK4fltk8xbmImage5_drawEiiiiPKNS_5StyleEi @ 1416 ; fltk::xbmImage::_draw(int, int, int, int, fltk::Style const*, int) const
+	_ZNK4fltk8xpmImage5_drawEiiiiPKNS_5StyleEi @ 1417 ; fltk::xpmImage::_draw(int, int, int, int, fltk::Style const*, int) const
+	_ZNK4fltk8xpmImage8_measureERfS1_ @ 1418 ; fltk::xpmImage::_measure(float&, float&) const
+	_ZNK4fltk9LabelType4drawEPKciiiiPKNS_5StyleEi @ 1419 ; fltk::LabelType::draw(char const*, int, int, int, int, fltk::Style const*, int) const
+	_ZNK4fltk9Rectangle1bEv @ 1420 ; fltk::Rectangle::b() const
+	_ZNK4fltk9Rectangle1hEv @ 1421 ; fltk::Rectangle::h() const
+	_ZNK4fltk9Rectangle1rEv @ 1422 ; fltk::Rectangle::r() const
+	_ZNK4fltk9Rectangle1wEv @ 1423 ; fltk::Rectangle::w() const
+	_ZNK4fltk9Rectangle1xEv @ 1424 ; fltk::Rectangle::x() const
+	_ZNK4fltk9Rectangle1yEv @ 1425 ; fltk::Rectangle::y() const
+	_ZNK4fltk9Scrollbar8pagesizeEv @ 1426 ; fltk::Scrollbar::pagesize() const
+	_ZNK7NoLabel4drawEPKciiiiPKN4fltk5StyleEi @ 1427 ; NoLabel::draw(char const*, int, int, int, int, fltk::Style const*, int) const
+	_ZTV11DottedFrame @ 1428 DATA ; vtable for DottedFrame
+	_ZTV7NoLabel @ 1429 DATA ; vtable for NoLabel
+	_ZTVN4fltk10AlignGroupE @ 1430 DATA ; vtable for fltk::AlignGroup
+	_ZTVN4fltk10FloatInputE @ 1431 DATA ; vtable for fltk::FloatInput
+	_ZTVN4fltk10MenuWindowE @ 1432 DATA ; vtable for fltk::MenuWindow
+	_ZTVN4fltk10StringListE @ 1433 DATA ; vtable for fltk::StringList
+	_ZTVN4fltk10TextEditorE @ 1434 DATA ; vtable for fltk::TextEditor
+	_ZTVN4fltk10ThumbWheelE @ 1435 DATA ; vtable for fltk::ThumbWheel
+	_ZTVN4fltk10TiledGroupE @ 1436 DATA ; vtable for fltk::TiledGroup
+	_ZTVN4fltk10ValueInputE @ 1437 DATA ; vtable for fltk::ValueInput
+	_ZTVN4fltk10ccValueBoxE @ 1438 DATA ; vtable for fltk::ccValueBox
+	_ZTVN4fltk11CheckButtonE @ 1439 DATA ; vtable for fltk::CheckButton
+	_ZTVN4fltk11ClockOutputE @ 1440 DATA ; vtable for fltk::ClockOutput
+	_ZTVN4fltk11FileBrowserE @ 1441 DATA ; vtable for fltk::FileBrowser
+	_ZTVN4fltk11LightButtonE @ 1442 DATA ; vtable for fltk::LightButton
+	_ZTVN4fltk11PackedGroupE @ 1443 DATA ; vtable for fltk::PackedGroup
+	_ZTVN4fltk11ProgressBarE @ 1444 DATA ; vtable for fltk::ProgressBar
+	_ZTVN4fltk11RadioButtonE @ 1445 DATA ; vtable for fltk::RadioButton
+	_ZTVN4fltk11ScrollGroupE @ 1446 DATA ; vtable for fltk::ScrollGroup
+	_ZTVN4fltk11TextDisplayE @ 1447 DATA ; vtable for fltk::TextDisplay
+	_ZTVN4fltk11ValueOutputE @ 1448 DATA ; vtable for fltk::ValueOutput
+	_ZTVN4fltk11ValueSliderE @ 1449 DATA ; vtable for fltk::ValueSlider
+	_ZTVN4fltk12ColorChooserE @ 1450 DATA ; vtable for fltk::ColorChooser
+	_ZTVN4fltk12HighlightBoxE @ 1451 DATA ; vtable for fltk::HighlightBox
+	_ZTVN4fltk12InputBrowserE @ 1452 DATA ; vtable for fltk::InputBrowser
+	_ZTVN4fltk12InvisibleBoxE @ 1453 DATA ; vtable for fltk::InvisibleBox
+	_ZTVN4fltk12NumericInputE @ 1454 DATA ; vtable for fltk::NumericInput
+	_ZTVN4fltk12RepeatButtonE @ 1455 DATA ; vtable for fltk::RepeatButton
+	_ZTVN4fltk12ReturnButtonE @ 1456 DATA ; vtable for fltk::ReturnButton
+	_ZTVN4fltk12ShapedWindowE @ 1457 DATA ; vtable for fltk::ShapedWindow
+	_ZTVN4fltk12ccValueInputE @ 1458 DATA ; vtable for fltk::ccValueInput
+	_ZTVN4fltk13EngravedLabelE @ 1459 DATA ; vtable for fltk::EngravedLabel
+	_ZTVN4fltk13OverlayWindowE @ 1460 DATA ; vtable for fltk::OverlayWindow
+	_ZTVN4fltk15HighlightButtonE @ 1461 DATA ; vtable for fltk::HighlightButton
+	_ZTVN4fltk18DoubleBufferWindowE @ 1462 DATA ; vtable for fltk::DoubleBufferWindow
+	_ZTVN4fltk4DialE @ 1463 DATA ; vtable for fltk::Dial
+	_ZTVN4fltk4ItemE @ 1464 DATA ; vtable for fltk::Item
+	_ZTVN4fltk4ListE @ 1465 DATA ; vtable for fltk::List
+	_ZTVN4fltk4MenuE @ 1466 DATA ; vtable for fltk::Menu
+	_ZTVN4fltk5ClockE @ 1467 DATA ; vtable for fltk::Clock
+	_ZTVN4fltk5GroupE @ 1468 DATA ; vtable for fltk::Group
+	_ZTVN4fltk5ImageE @ 1469 DATA ; vtable for fltk::Image
+	_ZTVN4fltk5InputE @ 1470 DATA ; vtable for fltk::Input
+	_ZTVN4fltk6ButtonE @ 1471 DATA ; vtable for fltk::Button
+	_ZTVN4fltk6ChoiceE @ 1472 DATA ; vtable for fltk::Choice
+	_ZTVN4fltk6OutputE @ 1473 DATA ; vtable for fltk::Output
+	_ZTVN4fltk6SliderE @ 1474 DATA ; vtable for fltk::Slider
+	_ZTVN4fltk6SymbolE @ 1475 DATA ; vtable for fltk::Symbol
+	_ZTVN4fltk6WidgetE @ 1476 DATA ; vtable for fltk::Widget
+	_ZTVN4fltk6WindowE @ 1477 DATA ; vtable for fltk::Window
+	_ZTVN4fltk7BrowserE @ 1478 DATA ; vtable for fltk::Browser
+	_ZTVN4fltk7DividerE @ 1479 DATA ; vtable for fltk::Divider
+	_ZTVN4fltk7FlatBoxE @ 1480 DATA ; vtable for fltk::FlatBox
+	_ZTVN4fltk7MenuBarE @ 1481 DATA ; vtable for fltk::MenuBar
+	_ZTVN4fltk8AdjusterE @ 1482 DATA ; vtable for fltk::Adjuster
+	_ZTVN4fltk8BarGroupE @ 1483 DATA ; vtable for fltk::BarGroup
+	_ZTVN4fltk8FrameBoxE @ 1484 DATA ; vtable for fltk::FrameBox
+	_ZTVN4fltk8GlWindowE @ 1485 DATA ; vtable for fltk::GlWindow
+	_ZTVN4fltk8TabGroupE @ 1486 DATA ; vtable for fltk::TabGroup
+	_ZTVN4fltk8ValuatorE @ 1487 DATA ; vtable for fltk::Valuator
+	_ZTVN4fltk8ccHueBoxE @ 1488 DATA ; vtable for fltk::ccHueBox
+	_ZTVN4fltk8rgbImageE @ 1489 DATA ; vtable for fltk::rgbImage
+	_ZTVN4fltk8xbmImageE @ 1490 DATA ; vtable for fltk::xbmImage
+	_ZTVN4fltk8xpmImageE @ 1491 DATA ; vtable for fltk::xpmImage
+	_ZTVN4fltk9FileInputE @ 1492 DATA ; vtable for fltk::FileInput
+	_ZTVN4fltk9ItemGroupE @ 1493 DATA ; vtable for fltk::ItemGroup
+	_ZTVN4fltk9LabelTypeE @ 1494 DATA ; vtable for fltk::LabelType
+	_ZTVN4fltk9PopupMenuE @ 1495 DATA ; vtable for fltk::PopupMenu
+	_ZTVN4fltk9ScrollbarE @ 1496 DATA ; vtable for fltk::Scrollbar
+	fl_color_cells @ 1497 DATA ; 
+	fl_cursor_bg @ 1498 DATA ; 
+	fl_cursor_fg @ 1499 DATA ; 
+	fl_dont_execute @ 1500 DATA ; 
+	fl_menu_replaced @ 1501 DATA ; 
+	fltk_theme @ 1502 ; 
