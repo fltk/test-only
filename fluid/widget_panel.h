@@ -50,6 +50,8 @@ extern void selected_textcolor_cb(Fl_Light_Button*, void*);
 extern void shortcut_in_cb(Shortcut_Button*, void*);
 extern void slider_size_cb(Fl_Value_Input*, void*);
 extern void step_cb(Fl_Value_Input*, void*);
+extern void style_cb(Fl_Button*, void*);
+extern void style_ok_cb(Fl_Return_Button*, void*);
 extern void subclass_cb(Fl_Input*, void*);
 extern void subtype_cb(Fl_Choice*, void*);
 extern void textcolor_cb(Fl_Light_Button*, void*);
@@ -68,4 +70,5 @@ extern Fl_Box *callback_label;
 Fl_Window* make_widget_panel();
 extern Fl_Input *v_input[4];
 extern Fl_Box *callback_label;
+Fl_Window* make_style_panel();
 #endif

@@ -4,11 +4,11 @@ header_name {.h}
 code_name {.cxx} 
 gridx 10 
 gridy 5 
-snap 3
+snap 2
 Function {make_widget_panel()} {open
 } {
   Fl_Window {} {open
-    xywh {154 172 380 585} resizable hotspot visible
+    xywh {85 49 387 448} resizable hotspot visible
   } {
     Fl_Input {} {
       label {name:}
@@ -35,13 +35,6 @@ Function {make_widget_panel()} {open
       callback label_cb
       xywh {90 60 280 20} when 1 box THIN_DOWN_BOX
     }
-    Fl_Choice {} {
-      label {label type:}
-      callback labeltype_cb
-      xywh {90 80 180 20} box THIN_UP_BOX fly_box THIN_UP_BOX textsize 12
-      code0 {extern Fl_Menu_Item labeltypemenu[];}
-      code1 {o->menu(labeltypemenu);}
-    } {}
     Fl_Button {} {
       label {@-1<-}
       user_data FL_ALIGN_LEFT
@@ -76,204 +69,119 @@ Function {make_widget_panel()} {open
       label wrap
       user_data FL_ALIGN_WRAP
       callback align_cb
-      xywh {310 100 30 20} type Toggle labelsize 10 box THIN_UP_BOX down_box THIN_DOWN_BOX fly_box THIN_UP_BOX down_labelcolor 1
+      xywh {140 80 50 20} type Toggle labelsize 12 box THIN_UP_BOX down_box THIN_DOWN_BOX fly_box THIN_UP_BOX down_labelcolor 1
     }
     Fl_Button {} {
       label clip
       user_data FL_ALIGN_CLIP
       callback align_cb
-      xywh {340 100 30 20} type Toggle labelsize 11 box THIN_UP_BOX down_box THIN_DOWN_BOX fly_box THIN_UP_BOX down_labelcolor 1
-    }
-    Fl_Choice {} {
-      label {label font:}
-      callback labelfont_cb open
-      xywh {90 100 180 20} box THIN_UP_BOX fly_box THIN_UP_BOX
-      code0 {extern Fl_Menu_Item fontmenu[];}
-      code1 {o->menu(fontmenu);}
-    } {}
-    Fl_Value_Input {} {
-      callback labelsize_cb
-      xywh {270 100 40 20} box THIN_DOWN_BOX maximum 100 step 1 value 14
-    }
-    Fl_Choice {} {
-      label {text font:}
-      callback textfont_cb
-      xywh {90 120 180 20} box THIN_UP_BOX fly_box THIN_UP_BOX
-      code0 {extern Fl_Menu_Item fontmenu[];}
-      code1 {o->menu(fontmenu);}
-    } {}
-    Fl_Value_Input {} {
-      callback textsize_cb
-      xywh {270 120 40 20} box THIN_DOWN_BOX maximum 100 step 1 value 14
-    }
-    Fl_Choice {} {
-      label {box:}
-      callback box_cb
-      xywh {90 150 280 20} box THIN_UP_BOX fly_box THIN_UP_BOX
-      code0 {extern Fl_Menu_Item boxmenu[];}
-      code1 {o->menu(boxmenu);}
-    } {}
-    Fl_Choice {} {
-      label {down box:}
-      callback down_box_cb
-      xywh {90 170 280 20} box THIN_UP_BOX fly_box THIN_UP_BOX
-      code0 {extern Fl_Menu_Item boxmenu[];}
-      code1 {o->menu(boxmenu);}
-    } {}
-    Fl_Choice {} {
-      label {highlight box:}
-      callback highlight_box_cb open
-      xywh {90 190 280 20} box THIN_UP_BOX fly_box THIN_UP_BOX
-      code0 {extern Fl_Menu_Item boxmenu[];}
-      code1 {o->menu(boxmenu);}
-    } {}
-    Fl_Light_Button {} {
-      label color
-      callback color_cb
-      xywh {90 240 90 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
-      code0 {o->type(0);}
-    }
-    Fl_Light_Button {} {
-      label {label color}
-      callback labelcolor_cb
-      xywh {180 240 100 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
-      code0 {o->type(0);}
-    }
-    Fl_Light_Button {} {
-      label {selection color}
-      callback color2_cb
-      xywh {280 240 90 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
-      code0 {o->type(0);}
-    }
-    Fl_Light_Button {} {
-      label {text color}
-      callback textcolor_cb
-      xywh {90 260 90 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
-      code0 {o->type(0);}
-    }
-    Fl_Light_Button {} {
-      label {selected text col.}
-      callback selected_textcolor_cb
-      xywh {180 260 100 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
-      code0 {o->type(0);}
-    }
-    Fl_Light_Button {} {
-      label {down label color}
-      callback down_labelcolor_cb
-      xywh {180 260 100 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
-      code0 {o->type(0);}
-    }
-    Fl_Light_Button {} {
-      label {highlight color}
-      callback highlightcolor_cb
-      xywh {280 260 90 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
-      code0 {o->type(0);}
+      xywh {90 80 50 20} type Toggle labelsize 12 box THIN_UP_BOX down_box THIN_DOWN_BOX fly_box THIN_UP_BOX down_labelcolor 1
     }
     Fl_Input {} {
       label {xclass:}
       callback xclass_cb
-      xywh {90 215 190 20} when 1 box THIN_UP_BOX
+      xywh {90 105 280 20} when 1 box THIN_DOWN_BOX
     }
     Fl_Button {} {
       label {shortcut:}
-      callback shortcut_in_cb selected
-      xywh {90 215 280 20} align 4 color 7 selection_color 7 box THIN_DOWN_BOX down_box THIN_DOWN_BOX fly_box THIN_DOWN_BOX
+      callback shortcut_in_cb
+      xywh {90 105 280 20} align 4 color 7 selection_color 7 box THIN_DOWN_BOX down_box THIN_DOWN_BOX fly_box THIN_DOWN_BOX
       code0 {\#include "Shortcut_Button.h"}
       class Shortcut_Button
     }
     Fl_Value_Input {} {
       label {size:}
       callback slider_size_cb
-      xywh {20 295 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
+      xywh {20 140 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
     }
     Fl_Value_Input {} {
       label {minimum:}
       callback min_cb
-      xywh {90 295 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
+      xywh {90 140 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
     }
     Fl_Value_Input {} {
       label {maximum:}
       callback max_cb
-      xywh {160 295 70 20} align 5 labelsize 10 box THIN_DOWN_BOX value 1
+      xywh {160 140 70 20} align 5 labelsize 10 box THIN_DOWN_BOX value 1
     }
     Fl_Value_Input {} {
       label {step:}
       callback step_cb
-      xywh {230 295 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
+      xywh {230 140 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
     }
     Fl_Value_Input {} {
       label {value:}
       callback value_cb
-      xywh {300 295 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
+      xywh {300 140 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
     }
     Fl_Group {} {
       callback propagate_load open
-      xywh {20 295 350 45} align 5
+      xywh {20 165 350 25} align 5
     } {
       Fl_Light_Button {} {
         label {non modal}
         callback non_modal_cb
-        xywh {20 320 70 20} align 148 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {20 165 70 20} align 148 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
       Fl_Light_Button {} {
         label visible
         callback visible_cb
-        xywh {90 320 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {90 165 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
       Fl_Light_Button {} {
         label modal
         callback modal_cb
-        xywh {90 320 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {90 165 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
       Fl_Light_Button {} {
         label active
         callback active_cb
-        xywh {160 320 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {160 165 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
       Fl_Light_Button {} {
         label border
         callback border_cb
-        xywh {160 320 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {160 165 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
       Fl_Light_Button {} {
         label resizable
         callback resizable_cb
-        xywh {230 320 70 20} when 1 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {230 165 70 20} when 1 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
       Fl_Light_Button {} {
         label hotspot
         callback hotspot_cb
-        xywh {300 320 70 20} when 1 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {300 165 70 20} when 1 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
     }
     Fl_Input {v_input[0]} {
       label {extra code:}
       user_data 0
       callback v_input_cb
-      xywh {90 345 280 20} when 1 box THIN_DOWN_BOX
+      xywh {90 195 280 20} box THIN_DOWN_BOX
     }
     Fl_Input {v_input[1]} {
       user_data 1
       callback v_input_cb
-      xywh {90 365 280 20} when 1 box THIN_DOWN_BOX
+      xywh {90 215 280 20} box THIN_DOWN_BOX
     }
     Fl_Input {v_input[2]} {
       user_data 2
       callback v_input_cb
-      xywh {90 385 280 20} when 1 box THIN_DOWN_BOX
+      xywh {90 235 280 20} box THIN_DOWN_BOX
     }
     Fl_Input {v_input[3]} {
       user_data 3
       callback v_input_cb
-      xywh {90 405 280 20} when 1 box THIN_DOWN_BOX
+      xywh {90 255 280 20} box THIN_DOWN_BOX
     }
     Fl_Box callback_label {
       label {callback:}
-      xywh {0 430 90 20} align 24
+      xywh {0 285 90 20} align 24
     }
     Fl_Input {} {
       callback callback_cb
-      xywh {90 430 280 50} type Multiline when 1 box THIN_DOWN_BOX
+      xywh {90 285 280 50} type Multiline box THIN_DOWN_BOX
     }
     Fl_Box {} {
       label label
@@ -282,47 +190,161 @@ Function {make_widget_panel()} {open
     Fl_Input {} {
       label {user data:}
       callback user_data_cb
-      xywh {90 495 170 20} when 1 box THIN_DOWN_BOX
+      xywh {90 345 170 20} box THIN_DOWN_BOX
     }
     Fl_Input {} {
       label {type:}
       callback user_data_type_cb
-      xywh {90 515 170 20} box THIN_DOWN_BOX
+      xywh {90 365 170 20} box THIN_DOWN_BOX
     }
     Fl_Choice {} {
       label {when:}
       callback when_cb
-      xywh {270 495 100 20} align 5 when 0 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {270 345 100 20} align 5 when 0 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       code0 {extern Fl_Menu_Item whenmenu[];}
       code1 {o->menu(whenmenu);}
     } {}
     Fl_Light_Button {} {
       label {no change}
       callback when_button_cb
-      xywh {270 515 100 20} when 0 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {270 365 100 20} when 0 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
     }
     Fl_Group {} {open
-      xywh {10 545 360 30}
+      xywh {20 400 350 35}
     } {
       Fl_Button {} {
         label {No &Overlay}
         callback overlay_cb
-        xywh {10 545 90 30} labelcolor 1
-      }
-      Fl_Button {} {
-        label {Default Style}
-        callback default_cb
-        xywh {100 545 90 30}
+        xywh {20 400 90 35} labelcolor 1
       }
       Fl_Button {} {
         label Cancel
         callback cancel_cb
-        xywh {190 545 90 30} hide
+        xywh {190 430 90 5} hide
       }
       Fl_Return_Button {} {
         label Close
         callback ok_cb
-        xywh {280 545 90 30}
+        xywh {280 400 90 35}
+      }
+      Fl_Button {} {
+        label Style
+        callback style_cb
+        xywh {120 400 90 35}
+      }
+    }
+  }
+} 
+
+Function {make_style_panel()} {open
+} {
+  Fl_Window {} {open selected
+    xywh {508 216 325 262} visible
+  } {
+    Fl_Choice {} {
+      label {label type:}
+      callback labeltype_cb
+      xywh {90 15 220 20} box THIN_UP_BOX fly_box THIN_UP_BOX textsize 12
+      code0 {extern Fl_Menu_Item labeltypemenu[];}
+      code1 {o->menu(labeltypemenu);}
+    } {}
+    Fl_Choice {} {
+      label {label font:}
+      callback labelfont_cb open
+      xywh {90 35 180 20} box THIN_UP_BOX fly_box THIN_UP_BOX
+      code0 {extern Fl_Menu_Item fontmenu[];}
+      code1 {o->menu(fontmenu);}
+    } {}
+    Fl_Value_Input {} {
+      callback labelsize_cb
+      xywh {270 35 40 20} box THIN_DOWN_BOX maximum 100 step 1 value 14
+    }
+    Fl_Value_Input {} {
+      callback textsize_cb
+      xywh {270 55 40 20} box THIN_DOWN_BOX maximum 100 step 1 value 14
+    }
+    Fl_Choice {} {
+      label {box:}
+      callback box_cb
+      xywh {90 85 220 20} box THIN_UP_BOX fly_box THIN_UP_BOX
+      code0 {extern Fl_Menu_Item boxmenu[];}
+      code1 {o->menu(boxmenu);}
+    } {}
+    Fl_Choice {} {
+      label {down box:}
+      callback down_box_cb
+      xywh {90 105 220 20} box THIN_UP_BOX fly_box THIN_UP_BOX
+      code0 {extern Fl_Menu_Item boxmenu[];}
+      code1 {o->menu(boxmenu);}
+    } {}
+    Fl_Choice {} {
+      label {highlight box:}
+      callback highlight_box_cb open
+      xywh {90 125 220 20} box THIN_UP_BOX fly_box THIN_UP_BOX
+      code0 {extern Fl_Menu_Item boxmenu[];}
+      code1 {o->menu(boxmenu);}
+    } {}
+    Fl_Light_Button {} {
+      label color
+      callback color_cb
+      xywh {20 160 90 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
+      code0 {o->type(0);}
+    }
+    Fl_Light_Button {} {
+      label {label color}
+      callback labelcolor_cb
+      xywh {110 160 110 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
+      code0 {o->type(0);}
+    }
+    Fl_Light_Button {} {
+      label {selection color}
+      callback color2_cb
+      xywh {220 160 90 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
+      code0 {o->type(0);}
+    }
+    Fl_Light_Button {} {
+      label {text color}
+      callback textcolor_cb
+      xywh {20 180 90 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
+      code0 {o->type(0);}
+    }
+    Fl_Light_Button {} {
+      label {down label color}
+      callback down_labelcolor_cb
+      xywh {110 180 110 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
+      code0 {o->type(0);}
+    }
+    Fl_Light_Button {} {
+      label {highlight color}
+      callback highlightcolor_cb
+      xywh {220 180 90 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
+      code0 {o->type(0);}
+    }
+    Fl_Choice {} {
+      label {text font:}
+      callback textfont_cb
+      xywh {90 55 180 20} box THIN_UP_BOX fly_box THIN_UP_BOX
+      code0 {extern Fl_Menu_Item fontmenu[];}
+      code1 {o->menu(fontmenu);}
+    } {}
+    Fl_Light_Button {} {
+      label {selected text color}
+      callback selected_textcolor_cb
+      xywh {110 180 110 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
+      code0 {o->type(0);}
+    }
+    Fl_Group {} {open
+      xywh {20 215 290 35}
+    } {
+      Fl_Button {} {
+        label {Default Style}
+        callback default_cb
+        xywh {20 215 90 35}
+      }
+      Fl_Return_Button {} {
+        label Close
+        callback style_ok_cb
+        xywh {220 215 90 35}
       }
     }
   }

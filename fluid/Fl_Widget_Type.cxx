@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.18 1999/03/18 22:58:59 carl Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.19 1999/03/24 18:40:27 carl Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -237,10 +237,9 @@ Fl_Type *sort(Fl_Type *parent) {
 Fl_Widget_Type *current_widget; // one of the selected ones
 static int numselected; // number selected
 static int haderror;
-static Fl_Window *the_panel;
+static Fl_Window *the_panel, *style_panel;
 
 void xclass_cb(Fl_Input* i, void* v) {
-  Fl_Color tc;
   if (v == LOAD) {
     if (!current_widget->is_window()) {i->hide(); return;}
     i->show();
@@ -255,14 +254,13 @@ void xclass_cb(Fl_Input* i, void* v) {
 	else if (w->is_menu_item()) w->redraw();
       }
   }
+  Fl_Color tc = FL_BLACK;
   if (i->value() && *i->value()) tc = FL_RED;
-  else tc = FL_BLACK;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); the_panel->redraw(); }
+    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
 }
 
 void shortcut_in_cb(Shortcut_Button* i, void* v) {
-  Fl_Color tc = i->labelcolor();
   if (v == LOAD) {
     if (!current_widget->is_button()) {i->hide(); return;}
     i->show();
@@ -276,10 +274,10 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
 	if (o->is_menu_item()) ((Fl_Widget_Type*)o)->redraw();
       }
   }
+  Fl_Color tc = FL_BLACK;
   if (i->svalue) tc = FL_RED;
-  else tc = FL_BLACK;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); the_panel->redraw(); }
+    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
 }
 
 void name_cb(Fl_Input* o, void *v) {
@@ -303,13 +301,10 @@ void name_cb(Fl_Input* o, void *v) {
       // ((Fl_Window*)(o->parent()))->label(current_widget->title());
     }
   }
-  Fl_Color tc;
-  if (current_widget->name() && *(current_widget->name()))
-    tc = FL_RED;
-  else
-    tc = FL_BLACK;
+  Fl_Color tc = FL_BLACK;
+  if (current_widget->name() && *(current_widget->name())) tc = FL_RED;
   if (o->labelcolor() != tc)
-    { o->labelcolor(tc); the_panel->redraw(); }
+    { o->labelcolor(tc); o->damage(FL_DAMAGE_CHILD_LABEL); }
 }
 
 void name_public_cb(Fl_Light_Button* i, void* v) {
@@ -344,13 +339,10 @@ void label_cb(Fl_Input* i, void *v) {
     for (Fl_Type *o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget()) o->label(i->value());
   }
-  Fl_Color tc;
-  if (current_widget->label() && *(current_widget->label()))
-    tc = FL_RED;
-  else
-    tc = FL_BLACK;
+  Fl_Color tc = FL_BLACK;
+  if (current_widget->label() && *(current_widget->label())) tc = FL_RED;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); the_panel->redraw(); }
+    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -450,9 +442,7 @@ int boxnumber(const char *i) {
 }
 
 void box_cb(Fl_Choice* i, void *v) {
-  Fl_Color tc = i->labelcolor();
   if (v == LOAD) {
-    if (current_widget->o->is_using_default_style()) tc = FL_BLACK;
     if (current_widget->is_menu_item()) {i->hide(); return;}
     i->show();
     int n = current_widget->o->box(); if (!n) n = ZERO_ENTRY;
@@ -469,16 +459,17 @@ void box_cb(Fl_Choice* i, void *v) {
         q->o->box((Fl_Boxtype)n);
         q->redraw();
       }
-    tc = FL_RED;
   }
-  if (i->labelcolor() != tc)
-    { i->labelcolor(tc); the_panel->redraw(); }
+  Fl_Color tc = FL_BLACK;
+  if (current_widget->o->is_style_forced(Fl_Widget::BOX)) tc = FL_RED;
+  if (i->labelcolor() != tc) {
+    i->labelcolor(tc);
+    i->damage(FL_DAMAGE_CHILD_LABEL);
+  }
 }
 
 void down_box_cb(Fl_Choice* i, void *v) {
-  Fl_Color tc = i->labelcolor();
   if (v == LOAD) {
-    if (current_widget->o->is_using_default_style()) tc = FL_BLACK;
     int n;
     if (current_widget->is_button() || current_widget->is_menu_item())
       n = ((Fl_Button*)(current_widget->o))->down_box();
@@ -506,21 +497,31 @@ void down_box_cb(Fl_Choice* i, void *v) {
         ((Fl_Menu_*)(q->o))->down_box((Fl_Boxtype)n);
       }
     }
-    tc = FL_RED;
   }
+  Fl_Color tc = FL_BLACK;
+  if ((current_widget->is_button() || current_widget->is_menu_item()) &&
+      ((Fl_Button*)(current_widget->o))->is_style_forced(Fl_Button::DOWN_BOX))
+    tc = FL_RED;
+  if (current_widget->is_menu() &&
+      ((Fl_Menu_*)(current_widget->o))->is_style_forced(Fl_Menu_::DOWN_BOX))
+    tc = FL_RED;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); the_panel->redraw(); }
+    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
 }
 
 void highlight_box_cb(Fl_Choice* i, void *v) {
-  Fl_Color tc = i->labelcolor();
   if (v == LOAD) {
-    if (current_widget->o->is_using_default_style()) tc = FL_BLACK;
     int n;
     if (current_widget->is_button() && !current_widget->is_menu_item())
       n = ((Fl_Button*)(current_widget->o))->fly_box();
     else if (current_widget->is_menu_button())
       n = ((Fl_Menu_Button*)(current_widget->o))->fly_box();
+    else if (current_widget->is_adjuster())
+      n = ((Fl_Adjuster*)(current_widget->o))->fly_box();
+    else if (current_widget->is_counter())
+      n = ((Fl_Counter*)(current_widget->o))->fly_box();
+    else if (current_widget->is_choice())
+      n = ((Fl_Choice*)(current_widget->o))->fly_box();
     else {
       i->hide(); return;
     }
@@ -543,10 +544,25 @@ void highlight_box_cb(Fl_Choice* i, void *v) {
         ((Fl_Menu_Button*)(q->o))->fly_box((Fl_Boxtype)n);
       }
     }
-    tc = FL_RED;
   }
+  Fl_Color tc = FL_BLACK;
+  if (current_widget->is_button() &&
+      ((Fl_Button*)(current_widget->o))->is_style_forced(Fl_Button::FLY_BOX))
+    tc = FL_RED;
+  if (current_widget->is_adjuster() &&
+      ((Fl_Adjuster*)(current_widget->o))->is_style_forced(Fl_Adjuster::FLY_BOX))
+    tc = FL_RED;
+  if (current_widget->is_choice() &&
+      ((Fl_Choice*)(current_widget->o))->is_style_forced(Fl_Choice::FLY_BOX))
+    tc = FL_RED;
+  if (current_widget->is_counter() &&
+      ((Fl_Counter*)(current_widget->o))->is_style_forced(Fl_Counter::FLY_BOX))
+    tc = FL_RED;
+  if (current_widget->is_menu_button() &&
+      ((Fl_Menu_Button*)(current_widget->o))->is_style_forced(Fl_Menu_Button::FLY_BOX))
+    tc = FL_RED;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); the_panel->redraw(); }
+    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -720,9 +736,7 @@ Fl_Menu_Item fontmenu[] = {
 {0}};
 
 void labelfont_cb(Fl_Choice* i, void *v) {
-  Fl_Color tc = i->labelcolor();
   if (v == LOAD) {
-    if (current_widget->o->is_using_default_style()) tc = FL_BLACK;
     int n = current_widget->o->labelfont();
     if (n > 15) n = 0;
     i->value(n);
@@ -734,17 +748,16 @@ void labelfont_cb(Fl_Choice* i, void *v) {
 	q->o->labelfont(n);
 	q->redraw();
       }
-    tc = FL_RED;
   }
+  Fl_Color tc = FL_BLACK;
+  if (current_widget->o->is_style_forced(Fl_Widget::LABELFONT)) tc = FL_RED;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); the_panel->redraw(); }
+    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
 }
 
 void labelsize_cb(Fl_Value_Input* i, void *v) {
-  Fl_Color tc = i->textcolor();
   int n;
   if (v == LOAD) {
-    if (current_widget->o->is_using_default_style()) tc = FL_BLACK;
     n = current_widget->o->labelsize();
   } else {
     n = int(i->value());
@@ -755,11 +768,12 @@ void labelsize_cb(Fl_Value_Input* i, void *v) {
 	q->o->labelsize(n);
 	q->redraw();
       }
-    tc = FL_RED;
   }
   i->value(n);
+  Fl_Color tc = FL_BLACK;
+  if (current_widget->o->is_style_forced(Fl_Widget::LABELSIZE)) tc = FL_RED;
   if (i->textcolor() != tc)
-    { i->textcolor(tc); the_panel->redraw(); }
+    { i->textcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
 }
 
 extern const char *ui_find_image_name;
@@ -797,9 +811,7 @@ const char *labeltypename(int i) {
 }
 
 void labeltype_cb(Fl_Choice* i, void *v) {
-  Fl_Color tc = i->labelcolor();
   if (v == LOAD) {
-    if (current_widget->o->is_using_default_style()) tc = FL_BLACK;
     int n;
     if (current_widget->image) {
       n = -1;
@@ -825,10 +837,11 @@ void labeltype_cb(Fl_Choice* i, void *v) {
       p->o->labeltype((Fl_Labeltype)n);
       p->redraw();
     }
-    tc = FL_RED;
   }
+  Fl_Color tc = FL_BLACK;
+  if (current_widget->o->is_style_forced(Fl_Widget::LABELTYPE)) tc = FL_RED;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); the_panel->redraw(); }
+    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -836,7 +849,6 @@ void labeltype_cb(Fl_Choice* i, void *v) {
 void color_cb(Fl_Light_Button* i, void *v) {
   Fl_Color c = current_widget->o->color();
   if (v == LOAD) {
-    if (current_widget->o->is_using_default_style()) i->labelcolor(FL_BLACK);
     if (current_widget->is_menu_item()) {i->hide(); return;}
     i->show();
   } else {
@@ -848,15 +860,17 @@ void color_cb(Fl_Light_Button* i, void *v) {
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
 	q->o->color(c); q->o->redraw();
     }
-    i->labelcolor(FL_RED);
   }
-  i->selection_color(c); i->redraw();
+  Fl_Color tc = FL_BLACK;
+  if (current_widget->o->is_style_forced(Fl_Widget::COLOR)) tc = FL_RED;
+  if (i->labelcolor() != tc) i->labelcolor(tc);
+  i->selection_color(c);
+  i->redraw();
 }
 
 void color2_cb(Fl_Light_Button* i, void *v) {
   Fl_Color c = current_widget->o->selection_color();
   if (v == LOAD) {
-    if (current_widget->o->is_using_default_style()) i->labelcolor(FL_BLACK);
     i->show();
   } else {
     Fl_Color d = fl_show_colormap(c);
@@ -867,9 +881,12 @@ void color2_cb(Fl_Light_Button* i, void *v) {
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
 	q->o->selection_color(c); q->o->redraw();
     }
-    i->labelcolor(FL_RED);
   }
-  i->selection_color(c); i->redraw();
+  Fl_Color tc = FL_BLACK;
+  if (current_widget->o->is_style_forced(Fl_Widget::COLOR2)) tc = FL_RED;
+  if (i->labelcolor() != tc) i->labelcolor(tc);
+  i->selection_color(c);
+  i->redraw();
 }
 
 void labelcolor_cb(Fl_Light_Button* i, void *v) {
@@ -883,18 +900,19 @@ void labelcolor_cb(Fl_Light_Button* i, void *v) {
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
 	q->o->labelcolor(c); q->redraw();
     }
-    i->labelcolor(FL_RED);
   } else {
-    if (current_widget->o->is_using_default_style()) i->labelcolor(FL_BLACK);
+    i->show();
   }
-  i->selection_color(c); i->redraw();
+  Fl_Color tc = FL_BLACK;
+  if (current_widget->o->is_style_forced(Fl_Widget::LABELCOLOR)) tc = FL_RED;
+  if (i->labelcolor() != tc) i->labelcolor(tc);
+  i->selection_color(c);
+  i->redraw();
 }
 
 void textfont_cb(Fl_Choice* i, void* v) {
-  Fl_Color tempc = i->labelcolor();
   Fl_Font n; int s; Fl_Color tc, stc;
   if (v == LOAD) {
-    if (current_widget->o->is_using_default_style()) tempc = FL_BLACK;
     if (!current_widget->textstuff(0,n,s,tc,stc)) {i->hide(); return;}
     i->show();
     if (n > 15) n = FL_HELVETICA;
@@ -907,17 +925,27 @@ void textfont_cb(Fl_Choice* i, void* v) {
 	q->textstuff(1,n,s,tc,stc);
 	q->o->redraw();
       }
-    tempc = FL_RED;
   }
+  Fl_Color tempc = FL_BLACK;
+  if (current_widget->is_browser() &&
+      ((Fl_Browser_*)(current_widget->o))->is_style_forced(Fl_Browser_::TEXTFONT))
+    tempc = FL_RED;
+  if (current_widget->is_input() &&
+      ((Fl_Input_*)(current_widget->o))->is_style_forced(Fl_Input_::TEXTFONT))
+    tempc = FL_RED;
+  if (current_widget->is_menu() &&
+      ((Fl_Menu_*)(current_widget->o))->is_style_forced(Fl_Menu_::TEXTFONT))
+    tempc = FL_RED;
+  if (current_widget->is_counter() &&
+      ((Fl_Counter*)(current_widget->o))->is_style_forced(Fl_Counter::TEXTFONT))
+    tempc = FL_RED;
   if (i->labelcolor() != tempc)
-    { i->labelcolor(tempc); the_panel->redraw(); }
+    { i->labelcolor(tempc); i->damage(FL_DAMAGE_CHILD_LABEL); }
 }
 
 void textsize_cb(Fl_Value_Input* i, void* v) {
-  Fl_Color tempc = i->textcolor();
   Fl_Font n; int s; Fl_Color tc, stc;
   if (v == LOAD) {
-    if (current_widget->o->is_using_default_style()) tempc = FL_BLACK;
     if (!current_widget->textstuff(0,n,s,tc,stc)) {i->hide(); return;}
     i->show();
   } else {
@@ -929,17 +957,28 @@ void textsize_cb(Fl_Value_Input* i, void* v) {
 	q->textstuff(2,n,s,tc,stc);
 	q->o->redraw();
       }
-    tempc = FL_RED;
   }
   i->value(s);
+  Fl_Color tempc = FL_BLACK;
+  if (current_widget->is_browser() &&
+      ((Fl_Browser_*)(current_widget->o))->is_style_forced(Fl_Browser_::TEXTSIZE))
+    tempc = FL_RED;
+  if (current_widget->is_input() &&
+      ((Fl_Input_*)(current_widget->o))->is_style_forced(Fl_Input_::TEXTSIZE))
+    tempc = FL_RED;
+  if (current_widget->is_menu() &&
+      ((Fl_Menu_*)(current_widget->o))->is_style_forced(Fl_Menu_::TEXTSIZE))
+    tempc = FL_RED;
+  if (current_widget->is_counter() &&
+      ((Fl_Counter*)(current_widget->o))->is_style_forced(Fl_Counter::TEXTSIZE))
+    tempc = FL_RED;
   if (i->textcolor() != tempc)
-    { i->textcolor(tempc); the_panel->redraw(); }
+    { i->textcolor(tempc); i->redraw(); }
 }
 
 void textcolor_cb(Fl_Light_Button* i, void* v) {
   Fl_Font n; int s; Fl_Color tc, stc;
   if (v == LOAD) {
-    if (current_widget->o->is_using_default_style()) i->labelcolor(FL_BLACK);
     if (!current_widget->textstuff(0,n,s,tc,stc)) {i->hide(); return;}
     i->show();
   } else {
@@ -952,15 +991,27 @@ void textcolor_cb(Fl_Light_Button* i, void* v) {
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
 	q->textstuff(3,n,s,tc,stc); q->o->redraw();
       }
-    i->labelcolor(FL_RED);
   }
+  Fl_Color tempc = FL_BLACK;
+  if (current_widget->is_browser() &&
+      ((Fl_Browser_*)(current_widget->o))->is_style_forced(Fl_Browser_::TEXTCOLOR))
+    tempc = FL_RED;
+  if (current_widget->is_input() &&
+      ((Fl_Input_*)(current_widget->o))->is_style_forced(Fl_Input_::TEXTCOLOR))
+    tempc = FL_RED;
+  if (current_widget->is_menu() &&
+      ((Fl_Menu_*)(current_widget->o))->is_style_forced(Fl_Menu_::TEXTCOLOR))
+    tempc = FL_RED;
+  if (current_widget->is_counter() &&
+      ((Fl_Counter*)(current_widget->o))->is_style_forced(Fl_Counter::TEXTCOLOR))
+    tempc = FL_RED;
+  if (i->labelcolor() != tempc) i->labelcolor(tempc);
   i->selection_color(tc); i->redraw();
 }
 
 void selected_textcolor_cb(Fl_Light_Button* i, void* v) {
   Fl_Font n; int s; Fl_Color tc, stc;
   if (v == LOAD) {
-    if (current_widget->o->is_using_default_style()) i->labelcolor(FL_BLACK);
     if (!current_widget->textstuff(0,n,s,tc,stc)) {i->hide(); return;}
     if (!current_widget->is_input() && !current_widget->is_browser())
       { i->hide(); return; }
@@ -975,15 +1026,21 @@ void selected_textcolor_cb(Fl_Light_Button* i, void* v) {
 	Fl_Widget_Type* q = (Fl_Widget_Type*)o;
 	q->textstuff(4,n,s,tc,stc); q->o->redraw();
       }
-    i->labelcolor(FL_RED);
   }
+  Fl_Color tempc = FL_BLACK;
+  if (current_widget->is_browser() &&
+      ((Fl_Browser_*)(current_widget->o))->is_style_forced(Fl_Browser_::SELECTED_TEXTCOLOR))
+    tempc = FL_RED;
+  if (current_widget->is_input() &&
+      ((Fl_Input_*)(current_widget->o))->is_style_forced(Fl_Input_::SELECTED_TEXTCOLOR))
+    tempc = FL_RED;
+  if (i->labelcolor() != tempc) i->labelcolor(tempc);
   i->selection_color(stc); i->redraw();
 }
 
 void down_labelcolor_cb(Fl_Light_Button* i, void *v) {
-  Fl_Color c = FL_BLACK;
+  Fl_Color c;
   if (v == LOAD) {
-    if (current_widget->o->is_using_default_style()) i->labelcolor(FL_BLACK);
     if (current_widget->is_button() || current_widget->is_menu_item())
       c = ((Fl_Button*)(current_widget->o))->down_labelcolor();
     else
@@ -1002,15 +1059,18 @@ void down_labelcolor_cb(Fl_Light_Button* i, void *v) {
 	}
       }
     }
-    i->labelcolor(FL_RED);
   }
+  Fl_Color tc = FL_BLACK;
+  if ((current_widget->is_button() || current_widget->is_menu_item()) &&
+      ((Fl_Button*)(current_widget->o))->is_style_forced(Fl_Button::DOWN_LABELCOLOR))
+    tc = FL_RED;
+  if (i->labelcolor() != tc) i->labelcolor(tc);
   i->selection_color(c); i->redraw();
 }
 
 void highlightcolor_cb(Fl_Light_Button* i, void *v) {
   Fl_Color c = FL_BLACK;
   if (v == LOAD) {
-    if (current_widget->o->is_using_default_style()) i->labelcolor(FL_BLACK);
     if (current_widget->is_menu_item()) { i->hide(); return; }
     if (!current_widget->is_button() && !current_widget->is_menu_button() &&
         !current_widget->is_choice() && !current_widget->is_slider() &&
@@ -1042,8 +1102,27 @@ void highlightcolor_cb(Fl_Light_Button* i, void *v) {
 	}
       }
     }
-    i->labelcolor(FL_RED);
   }
+  Fl_Color tc = FL_BLACK;
+  if (current_widget->is_button() &&
+      ((Fl_Button*)(current_widget->o))->is_style_forced(Fl_Button::FLY_COLOR))
+    tc = FL_RED;
+  if (current_widget->is_adjuster() &&
+      ((Fl_Adjuster*)(current_widget->o))->is_style_forced(Fl_Adjuster::FLY_COLOR))
+    tc = FL_RED;
+  if (current_widget->is_choice() &&
+      ((Fl_Choice*)(current_widget->o))->is_style_forced(Fl_Choice::FLY_COLOR))
+    tc = FL_RED;
+  if (current_widget->is_counter() &&
+      ((Fl_Counter*)(current_widget->o))->is_style_forced(Fl_Counter::FLY_COLOR))
+    tc = FL_RED;
+  if (current_widget->is_slider() &&
+      ((Fl_Slider*)(current_widget->o))->is_style_forced(Fl_Slider::FLY_COLOR))
+    tc = FL_RED;
+  if (current_widget->is_menu_button() &&
+      ((Fl_Menu_Button*)(current_widget->o))->is_style_forced(Fl_Menu_Button::FLY_COLOR))
+    tc = FL_RED;
+  i->labelcolor(tc);
   i->selection_color(c); i->redraw();
 }
 
@@ -1087,7 +1166,6 @@ void align_cb(Fl_Button* i, void *v) {
 ////////////////////////////////////////////////////////////////
 
 void callback_cb(Fl_Input* i, void *v) {
-  Fl_Color tc = callback_label->labelcolor();
   if (v == LOAD) {
     i->static_value(current_widget->callback());
   } else {
@@ -1098,14 +1176,15 @@ void callback_cb(Fl_Input* i, void *v) {
       o->callback(c);
     }
   }
+  Fl_Color tc = FL_BLACK;
   if (current_widget->callback()) tc = FL_RED;
-  else tc = FL_BLACK;  
-  if (callback_label->labelcolor() != tc)
-    { callback_label->labelcolor(tc); the_panel->redraw(); }
+  if (callback_label->labelcolor() != tc) {
+    callback_label->labelcolor(tc);
+    callback_label->damage(FL_DAMAGE_CHILD_LABEL);
+  }
 }
 
 void user_data_cb(Fl_Input *i, void *v) {
-  Fl_Color tc = i->labelcolor();
   if (v == LOAD) {
     i->static_value(current_widget->user_data());
   } else {
@@ -1116,14 +1195,13 @@ void user_data_cb(Fl_Input *i, void *v) {
       o->user_data(c);
     }
   }
+  Fl_Color tc = FL_BLACK;
   if (current_widget->user_data()) tc = FL_RED;
-  else tc = FL_BLACK;  
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); the_panel->redraw(); }
+    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
 }
 
 void user_data_type_cb(Fl_Input *i, void *v) {
-  Fl_Color tc = i->labelcolor();
   static const char *dflt = "void*";
   if (v == LOAD) {
     const char *c = current_widget->user_data_type();
@@ -1143,16 +1221,15 @@ void user_data_type_cb(Fl_Input *i, void *v) {
       o->user_data_type(c);
     }
   }
+  Fl_Color tc = FL_BLACK;
   if (strcmp(i->value(), "void*")) tc = FL_RED;
-  else tc = FL_BLACK;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); the_panel->redraw(); }
+    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
 }
 
 // "v_attributes" let user type in random code for attribute settings:
 
 void v_input_cb(Fl_Input* i, void* v) {
-  Fl_Color tc = i->labelcolor();
   int n = int(long(i->user_data()));
   if (v == LOAD) {
     i->static_value(current_widget->extra_code(n));
@@ -1166,10 +1243,10 @@ void v_input_cb(Fl_Input* i, void* v) {
 	t->extra_code(n,c);
       }
   }
+  Fl_Color tc = FL_BLACK;
   if (i->value() && *i->value()) tc = FL_RED;
-  else tc = FL_BLACK;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); the_panel->redraw(); }
+    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
 }
 
 void subclass_cb(Fl_Input* i, void* v) {
@@ -1185,13 +1262,10 @@ void subclass_cb(Fl_Input* i, void* v) {
 	t->subclass(c);
       }
   }
-  Fl_Color tc;
-  if (current_widget->subclass() && *(current_widget->subclass()))
-    tc = FL_RED;
-  else
-    tc = FL_BLACK;
+  Fl_Color tc = FL_BLACK;
+  if (current_widget->subclass() && *(current_widget->subclass())) tc = FL_RED;
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); the_panel->redraw(); }
+    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1221,7 +1295,6 @@ void slider_size_cb(Fl_Value_Input* i, void* v) {
 }
 
 void min_cb(Fl_Value_Input* i, void* v) {
-  Fl_Color tc = i->labelcolor();
   if (v == LOAD) {
     if (!current_widget->is_valuator()) {i->hide(); return;}
     i->show();
@@ -1237,14 +1310,13 @@ void min_cb(Fl_Value_Input* i, void* v) {
 	}
       }
   }
+  Fl_Color tc = FL_BLACK;
   if (i->value() != 0.0) tc = FL_RED;
-  else tc = FL_BLACK;  
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); the_panel->redraw(); }
+    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
 }
 
 void max_cb(Fl_Value_Input* i, void* v) {
-  Fl_Color tc = i->labelcolor();
   if (v == LOAD) {
     if (!current_widget->is_valuator()) {i->hide(); return;}
     i->show();
@@ -1260,14 +1332,13 @@ void max_cb(Fl_Value_Input* i, void* v) {
 	}
       }
   }
+  Fl_Color tc = FL_BLACK;
   if (i->value() != 1.0) tc = FL_RED;
-  else tc = FL_BLACK;  
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); the_panel->redraw(); }
+    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
 }
 
 void step_cb(Fl_Value_Input* i, void* v) {
-  Fl_Color tc = i->labelcolor();
   if (v == LOAD) {
     if (!current_widget->is_valuator()) {i->hide(); return;}
     i->show();
@@ -1283,14 +1354,13 @@ void step_cb(Fl_Value_Input* i, void* v) {
 	}
       }
   }
+  Fl_Color tc = FL_BLACK;
   if (i->value() != 0.0) tc = FL_RED;
-  else tc = FL_BLACK;  
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); the_panel->redraw(); }
+    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
 }
 
 void value_cb(Fl_Value_Input* i, void* v) {
-  Fl_Color tc = i->labelcolor();
   if (v == LOAD) {
     if (current_widget->is_valuator()) {
       i->show();
@@ -1313,10 +1383,10 @@ void value_cb(Fl_Value_Input* i, void* v) {
 	}
       }
   }
+  Fl_Color tc = FL_BLACK;
   if (i->value() != 0.0) tc = FL_RED;
-  else tc = FL_BLACK;  
   if (i->labelcolor() != tc)
-    { i->labelcolor(tc); the_panel->redraw(); }
+    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1375,6 +1445,16 @@ void set_cb(Fl_Button*, void*) {
       o->clear_changed();
     }
   }
+  if (!style_panel) return;
+  a = style_panel->array();
+  for (int i=style_panel->children(); i--;) {
+    Fl_Widget* o = *a++;
+    if (o->changed()) {
+      o->do_callback();
+      if (haderror) return;
+      o->clear_changed();
+    }
+  }
 }
 
 void ok_cb(Fl_Return_Button* o, void* v) {
@@ -1383,6 +1463,16 @@ void ok_cb(Fl_Return_Button* o, void* v) {
 }
 
 static void load_panel();
+
+void style_cb(Fl_Button*, void*) {
+  if (!style_panel) style_panel = make_style_panel();
+  load_panel();
+  style_panel->show();
+}
+
+void style_ok_cb(Fl_Return_Button*, void*) {
+  style_panel->hide();
+}
 
 void default_cb(Fl_Button*, void*) {
   current_widget->o->use_default_style();
@@ -1415,10 +1505,13 @@ static void load_panel() {
       }
     }
   }
-  if (numselected)
+  if (numselected) {
     propagate_load(the_panel, LOAD);
-  else
+  if (style_panel) propagate_load(style_panel, LOAD);
+  } else {
     the_panel->hide();
+    if (style_panel) style_panel->hide();
+  }
 }
 
 // This is called when user double-clicks an item, open or update the panel:
@@ -2320,5 +2413,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.18 1999/03/18 22:58:59 carl Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.19 1999/03/24 18:40:27 carl Exp $".
 //

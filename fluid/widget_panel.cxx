@@ -8,7 +8,7 @@ Fl_Box *callback_label=(Fl_Box *)0;
 
 Fl_Window* make_widget_panel() {
   Fl_Window* w;
-  { Fl_Window* o = new Fl_Window(380, 585);
+  { Fl_Window* o = new Fl_Window(387, 448);
     w = o;
     w->hotspot(o);
     { Fl_Input* o = new Fl_Input(90, 10, 220, 20, "name:");
@@ -37,13 +37,6 @@ Fl_Window* make_widget_panel() {
       o->box(FL_THIN_DOWN_BOX);
       o->callback((Fl_Callback*)label_cb);
       o->when(1);
-    }
-    { Fl_Choice* o = new Fl_Choice(90, 80, 180, 20, "label type:");
-      o->box(FL_THIN_UP_BOX);
-      o->fly_box(FL_THIN_UP_BOX);
-      o->textsize(12);
-      o->callback((Fl_Callback*)labeltype_cb);
-      o->menu(labeltypemenu);
     }
     { Fl_Button* o = new Fl_Button(270, 80, 20, 20, "@-1<-");
       o->type(1);
@@ -95,130 +88,30 @@ Fl_Window* make_widget_panel() {
       o->labelcolor(8);
       o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_INSIDE));
     }
-    { Fl_Button* o = new Fl_Button(310, 100, 30, 20, "wrap");
+    { Fl_Button* o = new Fl_Button(140, 80, 50, 20, "wrap");
       o->type(1);
       o->box(FL_THIN_UP_BOX);
       o->down_box(FL_THIN_DOWN_BOX);
       o->fly_box(FL_THIN_UP_BOX);
       o->down_labelcolor((Fl_Color)1);
-      o->labelsize(10);
+      o->labelsize(12);
       o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_WRAP));
     }
-    { Fl_Button* o = new Fl_Button(340, 100, 30, 20, "clip");
+    { Fl_Button* o = new Fl_Button(90, 80, 50, 20, "clip");
       o->type(1);
       o->box(FL_THIN_UP_BOX);
       o->down_box(FL_THIN_DOWN_BOX);
       o->fly_box(FL_THIN_UP_BOX);
       o->down_labelcolor((Fl_Color)1);
-      o->labelsize(11);
+      o->labelsize(12);
       o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_CLIP));
     }
-    { Fl_Choice* o = new Fl_Choice(90, 100, 180, 20, "label font:");
-      o->box(FL_THIN_UP_BOX);
-      o->fly_box(FL_THIN_UP_BOX);
-      o->callback((Fl_Callback*)labelfont_cb);
-      o->menu(fontmenu);
-    }
-    { Fl_Value_Input* o = new Fl_Value_Input(270, 100, 40, 20);
+    { Fl_Input* o = new Fl_Input(90, 105, 280, 20, "xclass:");
       o->box(FL_THIN_DOWN_BOX);
-      o->maximum(100);
-      o->step(1);
-      o->value(14);
-      o->callback((Fl_Callback*)labelsize_cb);
-    }
-    { Fl_Choice* o = new Fl_Choice(90, 120, 180, 20, "text font:");
-      o->box(FL_THIN_UP_BOX);
-      o->fly_box(FL_THIN_UP_BOX);
-      o->callback((Fl_Callback*)textfont_cb);
-      o->menu(fontmenu);
-    }
-    { Fl_Value_Input* o = new Fl_Value_Input(270, 120, 40, 20);
-      o->box(FL_THIN_DOWN_BOX);
-      o->maximum(100);
-      o->step(1);
-      o->value(14);
-      o->callback((Fl_Callback*)textsize_cb);
-    }
-    { Fl_Choice* o = new Fl_Choice(90, 150, 280, 20, "box:");
-      o->box(FL_THIN_UP_BOX);
-      o->fly_box(FL_THIN_UP_BOX);
-      o->callback((Fl_Callback*)box_cb);
-      o->menu(boxmenu);
-    }
-    { Fl_Choice* o = new Fl_Choice(90, 170, 280, 20, "down box:");
-      o->box(FL_THIN_UP_BOX);
-      o->fly_box(FL_THIN_UP_BOX);
-      o->callback((Fl_Callback*)down_box_cb);
-      o->menu(boxmenu);
-    }
-    { Fl_Choice* o = new Fl_Choice(90, 190, 280, 20, "highlight box:");
-      o->box(FL_THIN_UP_BOX);
-      o->fly_box(FL_THIN_UP_BOX);
-      o->callback((Fl_Callback*)highlight_box_cb);
-      o->menu(boxmenu);
-    }
-    { Fl_Light_Button* o = new Fl_Light_Button(90, 240, 90, 20, "color");
-      o->box(FL_THIN_UP_BOX);
-      o->down_box(FL_THIN_UP_BOX);
-      o->fly_box(FL_THIN_UP_BOX);
-      o->labelsize(10);
-      o->callback((Fl_Callback*)color_cb);
-      o->type(0);
-    }
-    { Fl_Light_Button* o = new Fl_Light_Button(180, 240, 100, 20, "label color");
-      o->box(FL_THIN_UP_BOX);
-      o->down_box(FL_THIN_UP_BOX);
-      o->fly_box(FL_THIN_UP_BOX);
-      o->labelsize(10);
-      o->callback((Fl_Callback*)labelcolor_cb);
-      o->type(0);
-    }
-    { Fl_Light_Button* o = new Fl_Light_Button(280, 240, 90, 20, "selection color");
-      o->box(FL_THIN_UP_BOX);
-      o->down_box(FL_THIN_UP_BOX);
-      o->fly_box(FL_THIN_UP_BOX);
-      o->labelsize(10);
-      o->callback((Fl_Callback*)color2_cb);
-      o->type(0);
-    }
-    { Fl_Light_Button* o = new Fl_Light_Button(90, 260, 90, 20, "text color");
-      o->box(FL_THIN_UP_BOX);
-      o->down_box(FL_THIN_UP_BOX);
-      o->fly_box(FL_THIN_UP_BOX);
-      o->labelsize(10);
-      o->callback((Fl_Callback*)textcolor_cb);
-      o->type(0);
-    }
-    { Fl_Light_Button* o = new Fl_Light_Button(180, 260, 100, 20, "selected text col.");
-      o->box(FL_THIN_UP_BOX);
-      o->down_box(FL_THIN_UP_BOX);
-      o->fly_box(FL_THIN_UP_BOX);
-      o->labelsize(10);
-      o->callback((Fl_Callback*)selected_textcolor_cb);
-      o->type(0);
-    }
-    { Fl_Light_Button* o = new Fl_Light_Button(180, 260, 100, 20, "down label color");
-      o->box(FL_THIN_UP_BOX);
-      o->down_box(FL_THIN_UP_BOX);
-      o->fly_box(FL_THIN_UP_BOX);
-      o->labelsize(10);
-      o->callback((Fl_Callback*)down_labelcolor_cb);
-      o->type(0);
-    }
-    { Fl_Light_Button* o = new Fl_Light_Button(280, 260, 90, 20, "highlight color");
-      o->box(FL_THIN_UP_BOX);
-      o->down_box(FL_THIN_UP_BOX);
-      o->fly_box(FL_THIN_UP_BOX);
-      o->labelsize(10);
-      o->callback((Fl_Callback*)highlightcolor_cb);
-      o->type(0);
-    }
-    { Fl_Input* o = new Fl_Input(90, 215, 190, 20, "xclass:");
-      o->box(FL_THIN_UP_BOX);
       o->callback((Fl_Callback*)xclass_cb);
       o->when(1);
     }
-    { Shortcut_Button* o = new Shortcut_Button(90, 215, 280, 20, "shortcut:");
+    { Shortcut_Button* o = new Shortcut_Button(90, 105, 280, 20, "shortcut:");
       o->box(FL_THIN_DOWN_BOX);
       o->down_box(FL_THIN_DOWN_BOX);
       o->fly_box(FL_THIN_DOWN_BOX);
@@ -227,79 +120,79 @@ Fl_Window* make_widget_panel() {
       o->callback((Fl_Callback*)shortcut_in_cb);
       o->align(4);
     }
-    { Fl_Value_Input* o = new Fl_Value_Input(20, 295, 70, 20, "size:");
+    { Fl_Value_Input* o = new Fl_Value_Input(20, 140, 70, 20, "size:");
       o->box(FL_THIN_DOWN_BOX);
       o->labelsize(10);
       o->callback((Fl_Callback*)slider_size_cb);
       o->align(5);
     }
-    { Fl_Value_Input* o = new Fl_Value_Input(90, 295, 70, 20, "minimum:");
+    { Fl_Value_Input* o = new Fl_Value_Input(90, 140, 70, 20, "minimum:");
       o->box(FL_THIN_DOWN_BOX);
       o->labelsize(10);
       o->callback((Fl_Callback*)min_cb);
       o->align(5);
     }
-    { Fl_Value_Input* o = new Fl_Value_Input(160, 295, 70, 20, "maximum:");
+    { Fl_Value_Input* o = new Fl_Value_Input(160, 140, 70, 20, "maximum:");
       o->box(FL_THIN_DOWN_BOX);
       o->labelsize(10);
       o->value(1);
       o->callback((Fl_Callback*)max_cb);
       o->align(5);
     }
-    { Fl_Value_Input* o = new Fl_Value_Input(230, 295, 70, 20, "step:");
+    { Fl_Value_Input* o = new Fl_Value_Input(230, 140, 70, 20, "step:");
       o->box(FL_THIN_DOWN_BOX);
       o->labelsize(10);
       o->callback((Fl_Callback*)step_cb);
       o->align(5);
     }
-    { Fl_Value_Input* o = new Fl_Value_Input(300, 295, 70, 20, "value:");
+    { Fl_Value_Input* o = new Fl_Value_Input(300, 140, 70, 20, "value:");
       o->box(FL_THIN_DOWN_BOX);
       o->labelsize(10);
       o->callback((Fl_Callback*)value_cb);
       o->align(5);
     }
-    { Fl_Group* o = new Fl_Group(20, 295, 350, 45);
+    { Fl_Group* o = new Fl_Group(20, 165, 350, 25);
       o->callback((Fl_Callback*)propagate_load);
       o->align(5);
-      { Fl_Light_Button* o = new Fl_Light_Button(20, 320, 70, 20, "non modal");
+      { Fl_Light_Button* o = new Fl_Light_Button(20, 165, 70, 20, "non modal");
         o->box(FL_THIN_UP_BOX);
         o->fly_box(FL_THIN_UP_BOX);
         o->labelsize(10);
         o->callback((Fl_Callback*)non_modal_cb);
         o->align(148);
       }
-      { Fl_Light_Button* o = new Fl_Light_Button(90, 320, 70, 20, "visible");
+      { Fl_Light_Button* o = new Fl_Light_Button(90, 165, 70, 20, "visible");
         o->box(FL_THIN_UP_BOX);
         o->fly_box(FL_THIN_UP_BOX);
         o->labelsize(10);
         o->callback((Fl_Callback*)visible_cb);
       }
-      { Fl_Light_Button* o = new Fl_Light_Button(90, 320, 70, 20, "modal");
+      { Fl_Light_Button* o = new Fl_Light_Button(90, 165, 70, 20, "modal");
         o->box(FL_THIN_UP_BOX);
         o->fly_box(FL_THIN_UP_BOX);
         o->labelsize(10);
         o->callback((Fl_Callback*)modal_cb);
       }
-      { Fl_Light_Button* o = new Fl_Light_Button(160, 320, 70, 20, "active");
+      { Fl_Light_Button* o = new Fl_Light_Button(160, 165, 70, 20, "active");
         o->box(FL_THIN_UP_BOX);
         o->fly_box(FL_THIN_UP_BOX);
         o->labelsize(10);
         o->callback((Fl_Callback*)active_cb);
       }
-      { Fl_Light_Button* o = new Fl_Light_Button(160, 320, 70, 20, "border");
+      { Fl_Light_Button* o = new Fl_Light_Button(160, 165, 70, 20, "border");
         o->box(FL_THIN_UP_BOX);
         o->fly_box(FL_THIN_UP_BOX);
         o->labelsize(10);
         o->callback((Fl_Callback*)border_cb);
       }
-      { Fl_Light_Button* o = new Fl_Light_Button(230, 320, 70, 20, "resizable");
+      { Fl_Light_Button* o = new Fl_Light_Button(230, 165, 70, 20, "resizable");
         o->box(FL_THIN_UP_BOX);
         o->fly_box(FL_THIN_UP_BOX);
         o->labelsize(10);
         o->callback((Fl_Callback*)resizable_cb);
         o->when(1);
       }
-      { Fl_Light_Button* o = new Fl_Light_Button(300, 320, 70, 20, "hotspot");
+      { Fl_Light_Button* o = new Fl_Light_Button(300, 165, 70, 20, "hotspot");
         o->box(FL_THIN_UP_BOX);
         o->fly_box(FL_THIN_UP_BOX);
         o->labelsize(10);
@@ -308,50 +201,44 @@ Fl_Window* make_widget_panel() {
       }
       o->end();
     }
-    { Fl_Input* o = v_input[0] = new Fl_Input(90, 345, 280, 20, "extra code:");
+    { Fl_Input* o = v_input[0] = new Fl_Input(90, 195, 280, 20, "extra code:");
       o->box(FL_THIN_DOWN_BOX);
       o->callback((Fl_Callback*)v_input_cb, (void*)(0));
-      o->when(1);
     }
-    { Fl_Input* o = v_input[1] = new Fl_Input(90, 365, 280, 20);
+    { Fl_Input* o = v_input[1] = new Fl_Input(90, 215, 280, 20);
       o->box(FL_THIN_DOWN_BOX);
       o->callback((Fl_Callback*)v_input_cb, (void*)(1));
-      o->when(1);
     }
-    { Fl_Input* o = v_input[2] = new Fl_Input(90, 385, 280, 20);
+    { Fl_Input* o = v_input[2] = new Fl_Input(90, 235, 280, 20);
       o->box(FL_THIN_DOWN_BOX);
       o->callback((Fl_Callback*)v_input_cb, (void*)(2));
-      o->when(1);
     }
-    { Fl_Input* o = v_input[3] = new Fl_Input(90, 405, 280, 20);
+    { Fl_Input* o = v_input[3] = new Fl_Input(90, 255, 280, 20);
       o->box(FL_THIN_DOWN_BOX);
       o->callback((Fl_Callback*)v_input_cb, (void*)(3));
-      o->when(1);
     }
-    { Fl_Box* o = callback_label = new Fl_Box(0, 430, 90, 20, "callback:");
+    { Fl_Box* o = callback_label = new Fl_Box(0, 285, 90, 20, "callback:");
       o->align(24);
     }
-    { Fl_Input* o = new Fl_Input(90, 430, 280, 50);
+    { Fl_Input* o = new Fl_Input(90, 285, 280, 50);
       o->type(4);
       o->box(FL_THIN_DOWN_BOX);
       o->callback((Fl_Callback*)callback_cb);
-      o->when(1);
     }
     { Fl_Box* o = new Fl_Box(90, 370, 100, 30, "label");
       o->hide();
       o->deactivate();
       Fl_Group::current()->resizable(o);
     }
-    { Fl_Input* o = new Fl_Input(90, 495, 170, 20, "user data:");
+    { Fl_Input* o = new Fl_Input(90, 345, 170, 20, "user data:");
       o->box(FL_THIN_DOWN_BOX);
       o->callback((Fl_Callback*)user_data_cb);
-      o->when(1);
     }
-    { Fl_Input* o = new Fl_Input(90, 515, 170, 20, "type:");
+    { Fl_Input* o = new Fl_Input(90, 365, 170, 20, "type:");
       o->box(FL_THIN_DOWN_BOX);
       o->callback((Fl_Callback*)user_data_type_cb);
     }
-    { Fl_Choice* o = new Fl_Choice(270, 495, 100, 20, "when:");
+    { Fl_Choice* o = new Fl_Choice(270, 345, 100, 20, "when:");
       o->box(FL_THIN_UP_BOX);
       o->fly_box(FL_THIN_UP_BOX);
       o->labelsize(10);
@@ -360,27 +247,152 @@ Fl_Window* make_widget_panel() {
       o->when(0);
       o->menu(whenmenu);
     }
-    { Fl_Light_Button* o = new Fl_Light_Button(270, 515, 100, 20, "no change");
+    { Fl_Light_Button* o = new Fl_Light_Button(270, 365, 100, 20, "no change");
       o->box(FL_THIN_UP_BOX);
       o->fly_box(FL_THIN_UP_BOX);
       o->labelsize(10);
       o->callback((Fl_Callback*)when_button_cb);
       o->when(0);
     }
-    { Fl_Group* o = new Fl_Group(10, 545, 360, 30);
-      { Fl_Button* o = new Fl_Button(10, 545, 90, 30, "No &Overlay");
+    { Fl_Group* o = new Fl_Group(20, 400, 350, 35);
+      { Fl_Button* o = new Fl_Button(20, 400, 90, 35, "No &Overlay");
         o->labelcolor(1);
         o->callback((Fl_Callback*)overlay_cb);
       }
-      { Fl_Button* o = new Fl_Button(100, 545, 90, 30, "Default Style");
-        o->callback((Fl_Callback*)default_cb);
-      }
-      { Fl_Button* o = new Fl_Button(190, 545, 90, 30, "Cancel");
+      { Fl_Button* o = new Fl_Button(190, 430, 90, 5, "Cancel");
         o->callback((Fl_Callback*)cancel_cb);
         o->hide();
       }
-      { Fl_Return_Button* o = new Fl_Return_Button(280, 545, 90, 30, "Close");
+      { Fl_Return_Button* o = new Fl_Return_Button(280, 400, 90, 35, "Close");
         o->callback((Fl_Callback*)ok_cb);
+      }
+      { Fl_Button* o = new Fl_Button(120, 400, 90, 35, "Style");
+        o->callback((Fl_Callback*)style_cb);
+      }
+      o->end();
+    }
+    o->end();
+  }
+  return w;
+}
+
+Fl_Window* make_style_panel() {
+  Fl_Window* w;
+  { Fl_Window* o = new Fl_Window(325, 262);
+    w = o;
+    { Fl_Choice* o = new Fl_Choice(90, 15, 220, 20, "label type:");
+      o->box(FL_THIN_UP_BOX);
+      o->fly_box(FL_THIN_UP_BOX);
+      o->textsize(12);
+      o->callback((Fl_Callback*)labeltype_cb);
+      o->menu(labeltypemenu);
+    }
+    { Fl_Choice* o = new Fl_Choice(90, 35, 180, 20, "label font:");
+      o->box(FL_THIN_UP_BOX);
+      o->fly_box(FL_THIN_UP_BOX);
+      o->callback((Fl_Callback*)labelfont_cb);
+      o->menu(fontmenu);
+    }
+    { Fl_Value_Input* o = new Fl_Value_Input(270, 35, 40, 20);
+      o->box(FL_THIN_DOWN_BOX);
+      o->maximum(100);
+      o->step(1);
+      o->value(14);
+      o->callback((Fl_Callback*)labelsize_cb);
+    }
+    { Fl_Value_Input* o = new Fl_Value_Input(270, 55, 40, 20);
+      o->box(FL_THIN_DOWN_BOX);
+      o->maximum(100);
+      o->step(1);
+      o->value(14);
+      o->callback((Fl_Callback*)textsize_cb);
+    }
+    { Fl_Choice* o = new Fl_Choice(90, 85, 220, 20, "box:");
+      o->box(FL_THIN_UP_BOX);
+      o->fly_box(FL_THIN_UP_BOX);
+      o->callback((Fl_Callback*)box_cb);
+      o->menu(boxmenu);
+    }
+    { Fl_Choice* o = new Fl_Choice(90, 105, 220, 20, "down box:");
+      o->box(FL_THIN_UP_BOX);
+      o->fly_box(FL_THIN_UP_BOX);
+      o->callback((Fl_Callback*)down_box_cb);
+      o->menu(boxmenu);
+    }
+    { Fl_Choice* o = new Fl_Choice(90, 125, 220, 20, "highlight box:");
+      o->box(FL_THIN_UP_BOX);
+      o->fly_box(FL_THIN_UP_BOX);
+      o->callback((Fl_Callback*)highlight_box_cb);
+      o->menu(boxmenu);
+    }
+    { Fl_Light_Button* o = new Fl_Light_Button(20, 160, 90, 20, "color");
+      o->box(FL_THIN_UP_BOX);
+      o->down_box(FL_THIN_UP_BOX);
+      o->fly_box(FL_THIN_UP_BOX);
+      o->labelsize(10);
+      o->callback((Fl_Callback*)color_cb);
+      o->type(0);
+    }
+    { Fl_Light_Button* o = new Fl_Light_Button(110, 160, 110, 20, "label color");
+      o->box(FL_THIN_UP_BOX);
+      o->down_box(FL_THIN_UP_BOX);
+      o->fly_box(FL_THIN_UP_BOX);
+      o->labelsize(10);
+      o->callback((Fl_Callback*)labelcolor_cb);
+      o->type(0);
+    }
+    { Fl_Light_Button* o = new Fl_Light_Button(220, 160, 90, 20, "selection color");
+      o->box(FL_THIN_UP_BOX);
+      o->down_box(FL_THIN_UP_BOX);
+      o->fly_box(FL_THIN_UP_BOX);
+      o->labelsize(10);
+      o->callback((Fl_Callback*)color2_cb);
+      o->type(0);
+    }
+    { Fl_Light_Button* o = new Fl_Light_Button(20, 180, 90, 20, "text color");
+      o->box(FL_THIN_UP_BOX);
+      o->down_box(FL_THIN_UP_BOX);
+      o->fly_box(FL_THIN_UP_BOX);
+      o->labelsize(10);
+      o->callback((Fl_Callback*)textcolor_cb);
+      o->type(0);
+    }
+    { Fl_Light_Button* o = new Fl_Light_Button(110, 180, 110, 20, "down label color");
+      o->box(FL_THIN_UP_BOX);
+      o->down_box(FL_THIN_UP_BOX);
+      o->fly_box(FL_THIN_UP_BOX);
+      o->labelsize(10);
+      o->callback((Fl_Callback*)down_labelcolor_cb);
+      o->type(0);
+    }
+    { Fl_Light_Button* o = new Fl_Light_Button(220, 180, 90, 20, "highlight color");
+      o->box(FL_THIN_UP_BOX);
+      o->down_box(FL_THIN_UP_BOX);
+      o->fly_box(FL_THIN_UP_BOX);
+      o->labelsize(10);
+      o->callback((Fl_Callback*)highlightcolor_cb);
+      o->type(0);
+    }
+    { Fl_Choice* o = new Fl_Choice(90, 55, 180, 20, "text font:");
+      o->box(FL_THIN_UP_BOX);
+      o->fly_box(FL_THIN_UP_BOX);
+      o->callback((Fl_Callback*)textfont_cb);
+      o->menu(fontmenu);
+    }
+    { Fl_Light_Button* o = new Fl_Light_Button(110, 180, 110, 20, "selected text color");
+      o->box(FL_THIN_UP_BOX);
+      o->down_box(FL_THIN_UP_BOX);
+      o->fly_box(FL_THIN_UP_BOX);
+      o->labelsize(10);
+      o->callback((Fl_Callback*)selected_textcolor_cb);
+      o->type(0);
+    }
+    { Fl_Group* o = new Fl_Group(20, 215, 290, 35);
+      { Fl_Button* o = new Fl_Button(20, 215, 90, 35, "Default Style");
+        o->callback((Fl_Callback*)default_cb);
+      }
+      { Fl_Return_Button* o = new Fl_Return_Button(220, 215, 90, 35, "Close");
+        o->callback((Fl_Callback*)style_ok_cb);
       }
       o->end();
     }
