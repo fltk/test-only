@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.16 1999/09/20 16:36:47 vincent Exp $"
+// "$Id: Fl_Input.cxx,v 1.17 1999/09/23 17:08:33 vincent Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -345,7 +345,7 @@ Fl_Style Fl_Input::default_style = {
   FL_NO_COLOR,	// off_color
   FL_NO_COLOR,	// highlight_color
   FL_NO_COLOR,	// highlight_label_color
-  FL_WHITE,	// text_color
+  FL_NO_COLOR,	// text_color
   FL_NORMAL_SIZE,// label_size
   FL_NORMAL_SIZE,// text_size
 };
@@ -357,5 +357,5 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.16 1999/09/20 16:36:47 vincent Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.17 1999/09/23 17:08:33 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.5 1999/09/20 01:51:20 vincent Exp $"
+# "$Id: Makefile,v 1.6 1999/09/23 17:08:34 vincent Exp $"
 #
 # Fluid makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -42,7 +42,7 @@ include ../../makeinclude
 	$(CXX) -DFL_DLL -DFLUID_PLUGIN $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $<
 
 $(PROGRAM) : $(OBJECTS) ../../lib/$(LIBNAME)
-	if test -n $(EXPORTCOMMAND) ; then \
+	if 0 && test -n $(EXPORTCOMMAND) ; then \
 		dllwrap $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS) -L../../lib -lfltkdll.2 -lfluid $(GLDLIBS) --output-def essai_plugin.def ; \
 	else \
 		$(CXX) $(LD_DLL_FLAGS) $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS) ; \
@@ -57,5 +57,5 @@ depend:
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.5 1999/09/20 01:51:20 vincent Exp $".
+# End of "$Id: Makefile,v 1.6 1999/09/23 17:08:34 vincent Exp $".
 #
