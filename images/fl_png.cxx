@@ -1,5 +1,5 @@
 //
-// "$Id: fl_png.cxx,v 1.14 2004/05/04 07:30:42 spitzak Exp $"
+// "$Id: fl_png.cxx,v 1.15 2004/07/04 17:34:29 laza2000 Exp $"
 //
 // PNG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,7 +27,9 @@
 // provides functions to measure and decompress PNG files
 
 #include <config.h>
+
 #if HAVE_LIBPNG
+
 # include <png.h>
 # include <stdlib.h>
 
@@ -252,5 +254,5 @@ void fltk::pngImage::read()
 }
 
 //
-// End of "$Id: fl_png.cxx,v 1.14 2004/05/04 07:30:42 spitzak Exp $"
+// End of "$Id: fl_png.cxx,v 1.15 2004/07/04 17:34:29 laza2000 Exp $"
 //

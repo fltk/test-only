@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Guess_Image.cxx,v 1.13 2003/03/26 22:05:19 easysw Exp $"
+// "$Id: Fl_Guess_Image.cxx,v 1.14 2004/07/04 17:34:29 laza2000 Exp $"
 //
 // Guessing image type code for the Fast Light Tool Kit (FLTK).
 //
@@ -52,7 +52,7 @@ public:
 };
 
 ImageType fltk::image_filetypes[] = {
-  //  { "xpm", xpmImage::test, xpmImage::get},
+  { "xpm", xpmFileImage::test, xpmFileImage::get},
   { "gif", gifImage::test, gifImage::get},
   { "png", pngImage::test, pngImage::get},
   { "bmp", bmpImage::test, bmpImage::get},
@@ -60,7 +60,7 @@ ImageType fltk::image_filetypes[] = {
   { 0, UnknownImage::test, UnknownImage::get }
 };
 
-ImageType* SharedImage::guess(const char* name, const uchar* datas)
+FL_IMAGES_API ImageType* fltk::guess_image(const char* name, const uchar* datas)
 {
   uchar* read_data = 0;
   const uchar* test_data = datas;
@@ -68,8 +68,8 @@ ImageType* SharedImage::guess(const char* name, const uchar* datas)
   if (!datas) {
     FILE* fp = fopen(name, "rb");
     if (!fp)
-      return image_filetypes + 
-	sizeof(image_filetypes)/sizeof(image_filetypes[0]) - 1;
+      return	image_filetypes + 
+				sizeof(image_filetypes)/sizeof(image_filetypes[0]) - 1;
     test_data = read_data = new uchar[1025];
     read_data[1024] = 0; // null-terminate so strstr() works
     size = fread(read_data, 1, size, fp);
@@ -83,5 +83,5 @@ ImageType* SharedImage::guess(const char* name, const uchar* datas)
 }
 
 //
-// End of "$Id: Fl_Guess_Image.cxx,v 1.13 2003/03/26 22:05:19 easysw Exp $"
+// End of "$Id: Fl_Guess_Image.cxx,v 1.14 2004/07/04 17:34:29 laza2000 Exp $"
 //
