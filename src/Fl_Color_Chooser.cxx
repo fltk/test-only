@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.35 2003/11/04 08:10:59 spitzak Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.36 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -476,6 +476,31 @@ static int run_it(const char* name) {
   return window->exec();
 }
 
+/*! \addtogroup dialogs
+  \{
+*/
+
+/*!
+  \image html fl_color_chooser.jpg
+
+  fltk::color_chooser() pops up a window to let the user pick an
+  arbitrary RGB color. They can pick the hue and saturation in the
+  "hue box" on the left (hold down CTRL to just change the
+  saturation), and the brighness using the vertical slider. Or they
+  can type the 8-bit numbers into the RGB fltk::ValueInput fields, or
+  drag the mouse across them to adjust them. The pull-down menu lets
+  the user set the input fields to show RGB, HSV, or 8-bit RGB (0 to
+  255).
+
+  This returns non-zero if the user picks ok, and updates the RGB
+  values. If the user picks cancel or closes the window this returns
+  zero and leaves RGB unchanged.
+
+  This version takes and returns numbers in the 0-1 range.
+
+  There is also a class fltk::ColorChooser which you can use to imbed
+  a color chooser into another control panel.
+*/
 int fltk::color_chooser(const char* name, float& r, float& g, float& b) {
   make_it();
   chooser->rgb(r,g,b);
@@ -486,6 +511,7 @@ int fltk::color_chooser(const char* name, float& r, float& g, float& b) {
   return 1;
 }
 
+/*! Same but it takes and returns 8-bit numbers for the rgb arguments. */
 int fltk::color_chooser(const char* name, uchar& r, uchar& g, uchar& b) {
   make_it();
   chooser->rgb(r/255.0f, g/255.0f, b/255.0f);
@@ -496,6 +522,7 @@ int fltk::color_chooser(const char* name, uchar& r, uchar& g, uchar& b) {
   return 1;
 }
 
+/*! Same but it takes and returns an fltk::Color number. */
 int fltk::color_chooser(const char* name, Color& c) {
   make_it();
   chooser->value(c);
@@ -505,6 +532,8 @@ int fltk::color_chooser(const char* name, Color& c) {
   return 1;
 }
 
+/*! \} */
+
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.35 2003/11/04 08:10:59 spitzak Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.36 2004/01/20 07:27:28 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_x.cxx,v 1.9 2002/12/10 02:01:02 easysw Exp $"
+// "$Id: fl_list_fonts_x.cxx,v 1.10 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -116,6 +116,16 @@ static int sort_function(const void *aa, const void *bb) {
 }
 }
 
+/*! Genearte an array containing every font on the server. \a arrayp
+  is set to a pointer to this array, and the length of the array is
+  the return value. Each entry is a "base" font, there may be bold,
+  italic, and bold+italic version of each font pointed to by bold() or
+  italic().
+
+  Subsequent calls to this function returns the same array
+  again. Currently there is no way to update the list from any changes
+  to the set of fonts on the server.
+*/
 int fltk::list_fonts(fltk::Font**& arrayp) {
   static fltk::Font** font_array = 0;
   static int num_fonts = 0;
@@ -198,8 +208,14 @@ int fltk::list_fonts(fltk::Font**& arrayp) {
 }
 
 ////////////////////////////////////////////////////////////////
-// Return all the encodings for this font:
 
+/*! Return all the encodings for this font. These strings may be
+  sent to fltk::set_encoding() before using the font.
+
+  The return value is the length of the list. The argument \a arrayp
+  is set to point at the array, which is in static memory reused
+  each time this call is done.
+*/
 int fltk::Font::encodings(const char**& arrayp) {
   IFont* t = (IFont*)this;
   if (!t->xlist) {
@@ -235,7 +251,21 @@ int fltk::Font::encodings(const char**& arrayp) {
 
 ////////////////////////////////////////////////////////////////
 
-// Return all the point sizes supported by this font:
+/*!
+  Sets array to point at a list of sizes. The return value is the
+  length of this array. The sizes are sorted from smallest to largest
+  and indicate what sizes can be given to fltk::setfont() that will be
+  matched exactly (fltk::setfont() will pick the closest size for
+  other sizes). A zero in the first location of the array indicates a
+  scalable font, where any size works, although the array may still
+  list sizes that work "better" than others. The returned array points
+  at a static buffer that is overwritten each call, so you want to
+  copy it if you plan to keep it.
+
+  The return value is the length of the list. The argument \a arrayp
+  is set to point at the array, which is in static memory reused
+  each time this call is done.
+*/
 int fltk::Font::sizes(int*& sizep) {
   IFont* t = (IFont*)this;
   if (!t->xlist) {
@@ -271,5 +301,5 @@ int fltk::Font::sizes(int*& sizep) {
 }
 
 //
-// End of "$Id: fl_list_fonts_x.cxx,v 1.9 2002/12/10 02:01:02 easysw Exp $"
+// End of "$Id: fl_list_fonts_x.cxx,v 1.10 2004/01/20 07:27:28 spitzak Exp $"
 //

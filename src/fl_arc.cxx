@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arc.cxx,v 1.13 2002/12/10 02:00:56 easysw Exp $"
+// "$Id: fl_arc.cxx,v 1.14 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Arc functions for the Fast Light Tool Kit (FLTK).
 //
@@ -32,10 +32,18 @@
 #include <fltk/math.h>
 using namespace fltk;
 
-void fltk::addarc(float l, float b, float w, float h, float start, float end)
+/*!
+  Add a series of points to the current path on the arc of an
+  ellipse. The ellipse in inscribed in the l,t,w,h rectangle, and the
+  start and end angles are measured in degrees counter-clockwise from
+  3 o'clock, 45 points at the upper-right corner of the rectangle. If
+  end is less than start then it draws the arc in a clockwise
+  direction.
+*/
+void fltk::addarc(float l, float t, float w, float h, float start, float end)
 {
   const float x = l+w/2;
-  const float y = b+h/2;
+  const float y = t+h/2;
   float angle = start*float(M_PI/180);
 
   // draw start point accurately:
@@ -93,5 +101,5 @@ void fltk::addcircle(float x,float y,float r) {
 #endif
 
 //
-// End of "$Id: fl_arc.cxx,v 1.13 2002/12/10 02:00:56 easysw Exp $".
+// End of "$Id: fl_arc.cxx,v 1.14 2004/01/20 07:27:28 spitzak Exp $".
 //

@@ -1,7 +1,5 @@
 //
-// "$Id: filename_absolute.cxx,v 1.14 2003/04/14 05:13:58 spitzak Exp $"
-//
-// Filename expansion routines for the Fast Light Tool Kit (FLTK).
+// "$Id: filename_absolute.cxx,v 1.15 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -23,12 +21,6 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-/* expand a file name by prepending current directory, deleting . and
-   .. (not really correct for symbolic links) between the prepended
-   current directory.  Use $PWD if it exists.
-   Returns true if any changes were made.
-*/
-
 #include <fltk/filename.h>
 #include <stdlib.h>
 #include <string.h>
@@ -48,6 +40,12 @@ static inline bool isdirsep(char c) {return c=='/' || c=='\\';}
 #define isdirsep(c) ((c)=='/')
 #endif
 
+/*!
+  If \a from does not start with a slash, this prepends the current working
+  directory to it and then deletes any occurances of "." and "x/.." from
+  the result. The result is put into \a to, which must have space for
+  1024 characters. \a to and \a from may be the same buffer.
+*/
 bool filename_absolute(char *to, const char *from, const char* pwd) {
 
   if (isdirsep(from[0]) /*|| from[0] == '|' // for tcl pipes? */
@@ -98,5 +96,5 @@ bool filename_absolute(char *to, const char *from, const char* pwd) {
 }
 
 //
-// End of "$Id: filename_absolute.cxx,v 1.14 2003/04/14 05:13:58 spitzak Exp $".
+// End of "$Id: filename_absolute.cxx,v 1.15 2004/01/20 07:27:28 spitzak Exp $".
 //

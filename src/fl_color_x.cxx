@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_x.cxx,v 1.11 2003/06/24 07:10:48 spitzak Exp $"
+// "$Id: fl_color_x.cxx,v 1.12 2004/01/20 07:27:28 spitzak Exp $"
 //
 // X color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -243,11 +243,26 @@ XColorMap& fl_xmap(uchar index, uchar r, uchar g, uchar b)
 Color fltk::current_color_;
 ulong fltk::current_xpixel;
 
+/*!
+  Set the color for all subsequent drawing operations.
+
+  On colormapped X displays fltk converts the color to one of it's own
+  indexes using nearest_index() and then uses the internal colormap to
+  assign colors. This prevents it from using the whole colormap up
+  with slight variations ina color. On Windows colormapped displays
+  the system dithering is used for all colors, which looks lousy, but
+  Windows does not have the defective X behavior and thus you usually
+  are not forced to set the screen to 8-bit mode)
+*/
 void fltk::setcolor(Color i) {
   current_color_ = i;
   current_xpixel = xpixel(i);
   XSetForeground(xdisplay, gc, current_xpixel);
 }
+
+/*! \fn Color fltk::getcolor()
+  Returns the last Color passed to setcolor().
+*/
 
 // This is used by setcolor_index()
 static inline void free_color(Color i) {
@@ -271,6 +286,39 @@ static inline void free_color(Color i) {
 // This is here because Win32 makes it impossible to seperately set
 // the color and line style:
 
+/*!
+  Set how to draw lines (the "pen"). If you change this it is your
+  responsibility to set it back to the default with
+  fltk::line_style(0).
+
+  \a style is a bitmask in which you 'or' the following values. If you
+  don't specify a dash type you will get a solid line. If you don't
+  specify a cap or join type you will get a system-defined default of
+  whatever value is fastest.
+  - fltk::SOLID      ------- 
+  - fltk::DASH       - - - - 
+  - fltk::DOT        ········· 
+  - fltk::DASHDOT    - · - · 
+  - fltk::DASHDOTDOT - ·· - ·· 
+  - fltk::CAP_FLAT 
+  - fltk::CAP_ROUND 
+  - fltk::CAP_SQUARE (extends past end point 1/2 line width) 
+  - fltk::JOIN_MITER (pointed) 
+  - fltk::JOIN_ROUND 
+  - fltk::JOIN_BEVEL (flat) 
+
+  \a width is the number of pixels thick to draw the lines. Zero
+  results in the system-defined default, which on both X and Windows
+  is somewhat different and nicer than 1.
+
+  \a dashes is a pointer to an array of dash lengths, measured in
+  pixels. The first location is how long to draw a solid portion, the
+  next is how long to draw the gap, then the solid, etc. It is
+  terminated with a zero-length entry. A null pointer or a zero-length
+  array results in a solid line. Odd array sizes are not supported and
+  result in undefined behavior. <i>The dashes array is ignored on
+  Windows 95/98.</i>
+*/
 void fltk::line_style(int style, int width, char* dashes) {
   char buf[7];
   int ndashes = dashes ? strlen(dashes) : 0;
@@ -319,5 +367,5 @@ void fltk::line_style(int style, int width, char* dashes) {
 }
 
 //
-// End of "$Id: fl_color_x.cxx,v 1.11 2003/06/24 07:10:48 spitzak Exp $"
+// End of "$Id: fl_color_x.cxx,v 1.12 2004/01/20 07:27:28 spitzak Exp $"
 //

@@ -1,7 +1,5 @@
 //
-// "$Id: filename_match.cxx,v 1.14 2002/12/10 02:00:56 easysw Exp $"
-//
-// Pattern matching routines for the Fast Light Tool Kit (FLTK).
+// "$Id: filename_match.cxx,v 1.15 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -29,6 +27,24 @@
 
 #define CASE_INSENSITIVE 1
 
+/*!
+
+  Returns true if filename \a s matches pattern \a p. The following
+  glob syntax is used by pattern:
+
+  - "\x" quotes the character x so it must be matched exactly
+  - "*" matches any sequence of 0 or more characters.
+  - "?" matches any single character.
+  - "[set]" matches any character in the set. Set can contain any single
+    characters, or a-z to represent a range. To match ] or - they must
+    be the first characters. To match ^ or ! they must not be the
+    first characters.
+  - "[^set]" or "[!set]" matches any character not in the set.
+  - "{X|Y|Z}" or "{X,Y,Z}" matches any one of the subexpressions literally.
+  - lowercase letters match both upper and lowercase
+  - all other characters must match exactly
+ 
+*/
 bool filename_match(const char *s, const char *p) {
   int nesting;
 
@@ -111,5 +127,5 @@ bool filename_match(const char *s, const char *p) {
 }
 
 //
-// End of "$Id: filename_match.cxx,v 1.14 2002/12/10 02:00:56 easysw Exp $".
+// End of "$Id: filename_match.cxx,v 1.15 2004/01/20 07:27:28 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.17 2003/07/23 00:05:59 spitzak Exp $"
+// "$Id: fl_arci.cxx,v 1.18 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Arc (integer) drawing functions for the Fast Light Tool Kit (FLTK).
 //
@@ -23,21 +23,28 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// Draw pie slices, chord shapes, and curved lines, using the facilities
-// of X or Windows instead of the line segment drawing that arc(...)
-// uses.  These draw the limited
-// circle types provided by X and NT graphics.  The advantage of
-// these is that small ones draw quite nicely (probably due to stored
-// hand-drawn bitmaps of small circles!) and may be implemented by
-// hardware and thus are fast.
-// This is merged into a single function to make writing a dispatch
-// table easier.
-
 #include <fltk/draw.h>
 #include <fltk/math.h>
 #include <fltk/x.h>
 using namespace fltk;
 
+/*!
+  These functions match the rather limited circle drawing code
+  provided by X and WIN32. The advantage over using addarc() is that
+  they are faster because they often use the hardware, and that small
+  ones draw quite nicely (probably due to stored hand-drawn bitmaps of
+  small circles!).
+
+  This is merged into a single function to make writing a dispatch
+  table easier. The arc is inscribed in the x,y,w,h rectangle, and
+  goes from angle \a a1 to \a a2, measured in degrees counter-clockwise
+  from 3'oclock.
+
+  The default if \a what is not specified is to fill a pie-slice shape
+  with the current color. \a what is used to implement the other
+  functions and can be one of fltk::FILLPIE, fltk::FILLARC, fltk::STROKEPIE,
+  fltk::STROKEARC.
+*/
 void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
   if (w <= 0 || h <= 0) return;
   transform(x,y);
@@ -100,6 +107,22 @@ void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
 #endif
 }
 
+/*! \fn void fltk::strokepie(int x,int y,int w,int h,float a,float a2);
+  Draw a line along a closed path around the pie slice, including two
+  straight lines from the ends of the arc to the center. (nyi, right
+  now it acts like strokearc().
+*/
+
+/*! \fn void fltk::fillarc(int x,int y,int w,int h,float a,float a2);
+  Fill a "chord" shape, with an arc and one straight line joining the
+  ends.
+*/
+
+/*! \fn void fltk::strokearc(int x,int y,int w,int h,float a,float a2);
+  Draw a line along the arc. The path is not closed, this just draws
+  the curved edge.
+*/
+
 //
-// End of "$Id: fl_arci.cxx,v 1.17 2003/07/23 00:05:59 spitzak Exp $".
+// End of "$Id: fl_arci.cxx,v 1.18 2004/01/20 07:27:28 spitzak Exp $".
 //

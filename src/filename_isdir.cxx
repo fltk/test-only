@@ -1,7 +1,5 @@
 //
-// "$Id: filename_isdir.cxx,v 1.12 2003/12/13 11:06:53 spitzak Exp $"
-//
-// Directory detection routines for the Fast Light Tool Kit (FLTK).
+// "$Id: filename_isdir.cxx,v 1.13 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -22,8 +20,6 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
-
-// Used by file_chooser
 
 #include <config.h>
 #include <fltk/filename.h>
@@ -61,16 +57,21 @@ static bool fill_stat(const char *name, int new_op) {
   return last_result;
 }
 
+/*! Returns non-zero if the file exists and is a directory. */
 bool filename_isdir(const char* name) {
   if (fill_stat(name, 1)==false) return false;
   return (last_stat.st_mode&0170000)==0040000;
 }
 
+/*! Returns the size of the file in bytes. Returns zero if it does not exist.*/
 double filename_size(const char* name) {
   if (fill_stat(name, 2)==false) return 0.0;
   return (double)last_stat.st_size;
 }
 
+/*! Returns the modification time of the file as a Unix timestamp.
+  (number of seconds since the start of 1970 in GMT)
+*/
 long int filename_mtime(const char *name) {
   if (fill_stat(name, 3)==false) return 0;
   if (!last_stat.st_mtime) return last_stat.st_ctime;
@@ -78,5 +79,5 @@ long int filename_mtime(const char *name) {
 }
 
 //
-// End of "$Id: filename_isdir.cxx,v 1.12 2003/12/13 11:06:53 spitzak Exp $".
+// End of "$Id: filename_isdir.cxx,v 1.13 2004/01/20 07:27:28 spitzak Exp $".
 //

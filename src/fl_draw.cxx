@@ -1,7 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.33 2004/01/06 06:43:02 spitzak Exp $"
-//
-// Label drawing code for the Fast Light Tool Kit (FLTK).
+// "$Id: fl_draw.cxx,v 1.34 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -22,20 +20,6 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
-
-// Implementation of draw(const char*,int,int,int,int,Align)
-// Used to draw all the labels and text, this routine:
-
-// Breaks them into lines at \n characters.
-
-// Splits it at every \t tab character and uses column_widths() to
-// set each section into a column.
-
-// Parses '&x' combinations to produce MicroSoft style underscores,
-// unless RAW_LABEL flag is set.
-
-// Word wraps the labels to fit into their column (if ALIGN_WRAP
-// flag is on) and aligns them agains the inside of their boxes.
 
 #include <fltk/draw.h>
 #include <fltk/math.h>
@@ -461,6 +445,25 @@ static float split(
   }
 }
 
+/*! \addtogroup font
+  \{ */
+
+/*!
+  This is the fancy string-drawing function that is used to draw all
+  labels in fltk. The string is formatted and aligned inside the
+  passed box (only the x/y are transformed, the width and height are
+  in device units). This also:
+  - Splits it at every \t tab character and uses column_widths() to
+    set each section into a column.
+  - Breaks the text into lines at \n characters. Word-wraps (if
+    flags has fltk::ALIGN_WRAP set) so the words fit in the
+    columns.
+  - Looks up "@xyz;" sequeces to see if they are a Symbol, if so it
+    prints that symbol instead. This is skipped if the flags has
+    fltk::RAW_LABEL set.
+  - Parses "&x" combinations to produce Microsoft style underscores,
+    unless RAW_LABEL flag is set.
+*/
 void fltk::drawtext(
     const char* str,	// the (multi-line) string
     int X, int Y, int W, int H,	// bounding box
@@ -514,6 +517,12 @@ void fltk::drawtext(
   setcolor(normal_color);
 }
 
+/*!
+  Measure the size of box necessary for drawtext() to draw the
+  given string inside of it. \a w must be preset to the width
+  you want to wrap at if fltk::ALIGN_WRAP is on in the flags!
+  \a w and \a h are changed to the size of the resulting box.
+*/
 void fltk::measure(const char* str, int& w, int& h, Flags flags) {
   if (!str || !*str) {w = 0; h = int(getsize()+.5); return;}
   h = int(split(str, w, h, flags)+.5);
@@ -522,5 +531,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.33 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.34 2004/01/20 07:27:28 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_x.cxx,v 1.16 2002/12/10 02:01:01 easysw Exp $"
+// "$Id: fl_font_x.cxx,v 1.17 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -53,6 +53,11 @@ fltk::Font* fltk::Font::plus(int x) {
   return &(font->f);
 }
 
+/*! Returns the string actually passed to the operating system, which
+  may be different than name().
+
+  For Xlib this is a pattern sent to XListFonts to find all the sizes.
+*/
 const char* fltk::Font::system_name() {
   return ((IFont*)this)->system_name;
 }
@@ -60,8 +65,12 @@ const char* fltk::Font::system_name() {
 static FontSize *current;
 static GC font_gc; // which gc the font was set in last time
 
+/*! Returns the operating-system dependent structure defining the
+  current font. You must include <fltk/x.h> to use this. */
 XFontStruct* fltk::xfont() {return current->font;}
 
+/*! Return the string name used by the operating system to identify
+  this font. Mostly useful for debugging the ugly Xlib implementation. */
 const char* fltk::Font::current_name() {return current->name;}
 
 FontSize::FontSize(const char* name, const char* nname) {
@@ -87,7 +96,11 @@ FontSize::~FontSize() {
 // Placeholder function, Xft version needs to free something:
 void fltk::Drawable::free_gc() {draw = 0;}
 
-void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
+/*! Draw text starting at a point returned by fltk::transform(). This
+  is needed for complex text layout when the current transform may
+  not match the transform being used by the font.
+*/
+void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
   if (font_gc != gc) {
     // I removed this, the user MUST set the font before drawing: (was)
     // if (!current) setfont(HELVETICA, NORMAL_SIZE);
@@ -96,14 +109,21 @@ void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
   }
   XDrawString(xdisplay, xwindow, gc,
 	      int(floorf(x+.5f)),
-	      int(floorf(y+.5f)), str, n);
+	      int(floorf(y+.5f)), text, n);
 }
 
+/*! Return the distance from the baseline to the top of letters in
+  the current font. */
 float fltk::getascent()  { return current->font->ascent; }
+
+/*! Return the distance from the baseline to the bottom of letters in
+  the current font. */
 float fltk::getdescent() { return current->font->descent; }
 
-float fltk::getwidth(const char *c, int n) {
-  return XTextWidth(current->font, c, n);
+/*! Return the width of the first \a n \e bytes (not characters if
+  utf8 is used!) of the text. */
+float fltk::getwidth(const char *text, int n) {
+  return XTextWidth(current->font, text, n);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -135,6 +155,22 @@ font_word(const char* p, int n) {
   return p;
 }
 
+/*!
+  Set the current font and font scaling so the size is size
+  pixels. The size is unaffected by the current transformation matrix
+  (you may be able to use fltk::transform() to get the size to get a
+  properly scaled font).
+
+  The size is given in pixels. Many pieces of software express sizes
+  in "points" (for mysterious reasons, since everything else is
+  measured in pixels!). To convert these point sizes to pixel sizes
+  use the following code:
+\code
+const fltk::Monitor& monitor = fltk::Monitor::all();
+float pixels_per_point = monitor.dpi_y()/72.0;
+float font_pixel_size = font_point_size*pixels_per_point;
+\endcode
+*/
 void fltk::setfont(Font* font, float psize) {
   FontSize* f = current;
   IFont* t = (IFont*)font;
@@ -251,10 +287,32 @@ void fltk::setfont(Font* font, float psize) {
   }
 }
 
-// Change the encoding to use for the next font selection.
+/*!
+  The encoding determines how the bytes sent to fltk::draw are turned
+  into glyphs. If the current font cannot do the encoding, some
+  default encoding will be used (for instance the Symbol font always
+  works without having to set the encoding).
+
+  In current implementations you must call fltk::font(...) after this
+  for the change in encoding to take effect.
+
+  The only way to find out what encodings are going to work is to call
+  fltk::Font::encodings().
+
+  In general you should set this on startup to your locale, and leave
+  it alone. We hope to support UTF-8 encoding by default in fltk in
+  the future. It is likely that when this happens support for
+  fltk::encoding() will be removed.
+
+  The default is "iso8859-1"
+*/
 void fltk::set_encoding(const char* f) {
   encoding_ = f;
 }
+
+/*! \fn const char* fltk::get_encoding()
+  Returns the string sent to the most recent set_encoding().
+*/
 
 ////////////////////////////////////////////////////////////////
 
@@ -299,5 +357,5 @@ fltk::Font* const fltk::ZAPF_DINGBATS		= &(fonts[15].f);
 fltk::Font* fltk::font(int i) {return &(fonts[i%16].f);}
 
 //
-// End of "$Id: fl_font_x.cxx,v 1.16 2002/12/10 02:01:01 easysw Exp $"
+// End of "$Id: fl_font_x.cxx,v 1.17 2004/01/20 07:27:28 spitzak Exp $"
 //

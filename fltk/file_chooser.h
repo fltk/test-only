@@ -1,5 +1,5 @@
 //
-// "$Id: file_chooser.h,v 1.4 2003/06/25 06:11:43 spitzak Exp $"
+// "$Id: file_chooser.h,v 1.5 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Popup file chooser.
 // Copyright 1998-2002 by Bill Spitzak and others.
@@ -28,6 +28,8 @@
 #include "FL_API.h"
 
 namespace fltk {
+/*! \addtogroup dialogs
+  \{ */
 
 FL_API void use_system_file_chooser(bool = true);
 
@@ -37,10 +39,11 @@ FL_API char *file_chooser(const char *message,
 			  bool save = true);
 FL_API void file_chooser_callback(void (*cb)(const char *));
 
+/* \} */
 }
 
 #endif
 
 //
-// End of "$Id: file_chooser.h,v 1.4 2003/06/25 06:11:43 spitzak Exp $".
+// End of "$Id: file_chooser.h,v 1.5 2004/01/20 07:27:28 spitzak Exp $".
 //

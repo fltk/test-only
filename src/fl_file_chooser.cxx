@@ -1,5 +1,5 @@
 //
-// "$Id: fl_file_chooser.cxx,v 1.32 2003/01/26 06:33:10 spitzak Exp $"
+// "$Id: fl_file_chooser.cxx,v 1.33 2004/01/20 07:27:28 spitzak Exp $"
 //
 // File chooser widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,10 @@
 #include <fltk/FileChooser.h>
 
 static bool use_system_fc = false;
+/*! On Windows this makes file_chooser() call the Win32 file chooser
+  API instead of using the one constructed in fltk. Ignored on other
+  systems.
+*/
 void use_system_file_chooser(bool useit) {use_system_fc = useit;}
 
 #ifdef _WIN32
@@ -43,12 +47,40 @@ void use_system_file_chooser(bool useit) {use_system_fc = useit;}
 
 static void default_callback(const char*) {}
 static void (*current_callback)(const char*) = default_callback;
+/*! This function is called every time the user navigates to a new file
+  or directory in the file chooser. It can be used to preview the result
+  in the main window. */
 void fltk::file_chooser_callback(void (*cb)(const char*)) {
   current_callback = cb ? cb : default_callback;
 }
 
+/*!
+  \image html filechooser.gif
+
+  pops up the file chooser, waits for the user to pick a file or
+  Cancel, and then returns a pointer to that filename or NULL if
+  Cancel is chosen.
+
+  \a message is a string used to title the window.
+
+  \a pattern is used to limit the files listed in a directory to those
+  matching the pattern. This matching is done by filename_match(). Use
+  NULL to show all files.
+
+  \a fname is a default folder/filename to fill in the chooser
+  with. If this ends with a '/' then this is a default folder and
+  no file is preselected.
+
+  If \a fname is NULL then the last filename that was choosen is used,
+  unless the \a pattern changes, in which case only the last directory
+  is used. The first time the file chooser is called this defaults to
+  a blank string.
+
+  The returned value points at a static buffer that is only good until
+  the next time the file_chooser() is called.
+*/
 char* fltk::file_chooser(const char* message,
-			 const char* pat,
+			 const char* pattern,
 			 const char* fname,
 			 bool save)
 {
@@ -58,8 +90,8 @@ char* fltk::file_chooser(const char* message,
     static OPENFILENAME wreq;
     memset(&wreq, 0, sizeof(wreq));
     wreq.lStructSize = OPENFILENAME_SIZE_VERSION_400; // needed for Win < Win2k
-    wreq.lpstrFilter = pat;
-    wreq.nFilterIndex = (pat) ? 1 : 0;	
+    wreq.lpstrFilter = pattern;
+    wreq.nFilterIndex = (pattern) ? 1 : 0;	
     wreq.lpstrFile = filenamebuffer;
     wreq.nMaxFile = MAX_PATH;
     wreq.lpstrTitle = message ? message : "Select the filename";
@@ -78,9 +110,9 @@ char* fltk::file_chooser(const char* message,
 #endif
   static FileChooser *fc;
   if (!fc)
-    fc = new FileChooser(fname, pat, FileChooser::CREATE, message);
+    fc = new FileChooser(fname, pattern, FileChooser::CREATE, message);
   else {
-    fc->filter(pat);
+    fc->filter(pattern);
     fc->value(fname);
     fc->label(message);
   }
@@ -89,5 +121,5 @@ char* fltk::file_chooser(const char* message,
 }
 
 //
-// End of "$Id: fl_file_chooser.cxx,v 1.32 2003/01/26 06:33:10 spitzak Exp $".
+// End of "$Id: fl_file_chooser.cxx,v 1.33 2004/01/20 07:27:28 spitzak Exp $".
 //

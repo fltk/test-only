@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.159 2004/01/19 21:38:41 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.160 2004/01/20 07:27:28 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1496,15 +1496,17 @@ bool Window::iconic() const {
 
 ////////////////////////////////////////////////////////////////
 
-/**
- * returns pointer to the filename, or "" if name ends with '/'
- */
+/*!
+  Returns a pointer to after the last slash. If there is no slash
+  this returns a pointer to the start of the name.
+*/
 const char *filename_name(const char *name) {
   const char *p,*q;
   for (p=q=name; *p;) if (*p++ == '/') q = p;
   return q;
 }
 
+/*! Sets both the label() and the iconlabel() */
 void Window::label(const char *name, const char *iname) {
   Widget::label(name);
   iconlabel_ = iname;
@@ -1728,5 +1730,5 @@ bool fltk::system_theme() {return true;}
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.159 2004/01/19 21:38:41 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.160 2004/01/20 07:27:28 spitzak Exp $".
 //

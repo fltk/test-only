@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.44 2003/11/11 07:36:31 spitzak Exp $"
-//
-// Optional argument initialization code for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_arg.cxx,v 1.45 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -25,6 +23,8 @@
 
 // OPTIONAL initialization code for a program using fltk.
 // You do not need to call this!  Feel free to make up your own switches.
+// Optional argument initialization code for the Fast Light Tool Kit (FLTK).
+//
 
 #include <fltk/run.h>
 #include <fltk/Window.h>
@@ -37,7 +37,7 @@
 #include <limits.h>
 
 #include <fltk/x.h>
-#if defined(_WIN32) || (defined(__APPLE__) && !USE_X11)
+#if !USE_X11
 int XParseGeometry(const char*, int*, int*, unsigned int*, unsigned int*);
 #define NoValue		0x0000
 #define XValue  	0x0001
@@ -50,6 +50,21 @@ int XParseGeometry(const char*, int*, int*, unsigned int*, unsigned int*);
 #endif
 
 using namespace fltk;
+
+/*! \defgroup startup Functions to Call Before Showing a Window
+
+  Warning: most of these functions will not work (and may crash) after
+  Window::show() has been called the first time. Calling
+  Window::show() will call any necessary setup that you have not
+  called yourself.
+
+  The args() argument parser is <i>entirely optional</i>. It was written
+  to make demo programs easy to write, although some minor work was done
+  to make it usable by more complex programs. But there is no requirement
+  that you call it or even acknoledge it's existence, if you prefer to
+  use your own code to parse switches.
+
+*/
 
 static int match(const char *a, const char *match, int atleast = 1) {
   const char *b = match;
@@ -65,7 +80,13 @@ static const char* name;
 static const char* geometry;
 extern Color fl_bg_switch;	// in Style.cxx
 
-// consume a switch from argv.  Returns number of words eaten, 0 on error:
+/*!
+  Consume a single switch from \a argv, starting at word \a i. Returns the
+  number of words eaten (1 or 2, or 0 if it is not recognized) and
+  adds the same value to \a i. You can use this function if you prefer to
+  control the incrementing through the arguments yourself. The arguments
+  recognized are listed under args().
+*/
 int fltk::arg(int argc, char **argv, int &i) {
   arg_called = true;
 
@@ -114,11 +135,48 @@ int fltk::arg(int argc, char **argv, int &i) {
   return 2;
 }
 
-/*! consume all switches from argv.  Returns number of words eaten.
-  Returns zero on error.  'i' will either point at first word that
-  does not start with '-', at the error word, or after a '--', or at
-  argc.  If your program does not take any word arguments you can
-  report an error if i < argc.
+/*! Consume all switches from argv.
+
+  To use the switch parser, call fltk::args(argc,argv) near the start of
+  your program. This does not open the display, instead switches that
+  need the display open are stashed into static variables. Then you
+  must display your first window by calling window->show(argc,argv),
+  which will do anything stored in the static variables.
+
+  \a callback lets you define your own switches. It is called with the
+  same argc and argv, and with i the index of each word. The callback
+  should return zero if the switch is unrecognized, and not change
+  i. It should return non-zero if the switch is recognized, and add at
+  least 1 to i (it can add more to consume words after the
+  switch). This function is called before any other tests, so you can
+  override any FLTK switch (this is why fltk can use very short
+  switches instead of the long ones all other toolkits force you to
+  use).
+
+  On return \a i is set to the index of the first non-switch. This is either:
+  - The first word that does not start with '-'.
+  - The word "-" (used by many programs to name stdin as a file)
+  - The first word after "--" (GNU standard end-of-switches switch)
+  - The first unrecognized switch (return value is 0).
+  - \a argc
+ 
+  The return value is i unless an unrecognized switch is found, in
+  which case it is zero. If your program takes no arguments other than
+  switches you should produce an error if the return value is less
+  than argc.
+
+  All switches may be abbreviated one letter and case is ignored: 
+  - -iconic Window::iconize() will be done to the window.
+  - -geometry WxH Window is resized to this width & height
+  - -geometry +X+Y Initial window position
+  - -geometry WxH+X+Y Window is resized and positioned.
+  - -display host or -display host:n.n The X display to use (ignored under WIN32).
+  - -name string will set the Window::label()
+  - -bg color XParseColor is used to lookup the passed color and then
+     fltk::background() is done. Under WIN32 only color names of the
+     form "#xxxxxx" are understood.
+  - -background color is the same as -bg color
+
 */
 int fltk::args(int argc, char** argv, int& i, int (*cb)(int,char**,int&)) {
   arg_called = true;
@@ -130,11 +188,15 @@ int fltk::args(int argc, char** argv, int& i, int (*cb)(int,char**,int&)) {
   return i;
 }
 
-/*! This must be called after fltk::args(argc,argv) to show the "main"
+/*! \addtogroup startup
+  \{ */
+/*!
+  This must be called after fltk::args(argc,argv) to show the "main"
   window, this indicates which window should be affected by any
   -geometry switch. In addition if fltk::args() has not been called
   yet this does so, this is a useful shortcut for the main window in a
-  small program. */
+  small program.
+*/
 void Window::show(int argc, char **argv) {
   if (argc < 1) {show(); return;}
   if (!arg_called) args(argc,argv);
@@ -186,7 +248,7 @@ void Window::show(int argc, char **argv) {
 
 static const char * const helpmsg =
 "options are:\n"
-#if !defined(_WIN32) && !(defined(__APPLE__) && !USE_X11)
+#if USE_X11
 " -d[isplay] host:n.n\n"
 #endif
 " -g[eometry] WxH+X+Y\n"
@@ -194,13 +256,31 @@ static const char * const helpmsg =
 " -i[conic]\n"
 " -bg color";
 
+/*!
+  This is a portion of the string printed by fltk::args() detects
+  an invalid argument on the command-line. You can add this to your
+  own error or help message to show the fltk switches. It's value is
+  (no newline at start or the end):
+\code
+ -d[isplay] host:n.n
+ -g[eometry] WxH+X+Y
+ -n[ame] windowname
+ -i[conic]
+ -bg color
+\endcode
+*/
 const char * const fltk::help = helpmsg+13;
 
+/*!
+  The second form of fltk::args() is useful if your program does not
+  have command line switches of its own. It parses all the switches,
+  and if any are not recognized it calls fltk::fatal(fltk::help).
+*/
 void fltk::args(int argc, char **argv) {
   int i; if (args(argc,argv,i) < argc) error(helpmsg);
 }
 
-#if defined(_WIN32) || (defined(__APPLE__) && !USE_X11)
+#if !USE_X11
 
 /* the following function was stolen from the X sources as indicated. */
 
@@ -336,8 +416,8 @@ int XParseGeometry(const char* string, int* x, int* y,
   return (mask);
 }
 
-#endif // ifdef _WIN32
+#endif // if !USE_X11
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.44 2003/11/11 07:36:31 spitzak Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.45 2004/01/20 07:27:28 spitzak Exp $".
 //

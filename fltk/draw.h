@@ -1,5 +1,5 @@
 //
-// "$Id: draw.h,v 1.7 2004/01/07 06:57:06 spitzak Exp $"
+// "$Id: draw.h,v 1.8 2004/01/20 07:27:28 spitzak Exp $"
 //
 // The fltk drawing library
 //
@@ -101,10 +101,7 @@ FL_API void addarc(float x,float y,float w,float h, float a1, float a2);
 FL_API void addcircle(float x, float y, float r);
 FL_API void addellipse(float x, float y, float w, float h);
 FL_API void closepath();
-/*! \} */
 
-/*! \addtogroup stroke
-  \{ */
 FL_API void drawpoints();
 FL_API void strokepath();
 FL_API void fillpath();
@@ -192,5 +189,5 @@ FL_API int draw_symbol(const char* label, int x,int y,int w,int h, Color);
 #endif
 
 //
-// End of "$Id: draw.h,v 1.7 2004/01/07 06:57:06 spitzak Exp $".
+// End of "$Id: draw.h,v 1.8 2004/01/20 07:27:28 spitzak Exp $".
 //

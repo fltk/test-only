@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.34 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id: fl_color.cxx,v 1.35 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,25 @@
 #include <fltk/x.h>
 
 using namespace fltk;
+
+/*! \defgroup color Color and Line Style
+    \ingroup drawing
+
+*/
+
+/*! \typedef fltk::Color
+
+  fltk::Color is a typedef for a 32-bit integer containing r,g,b bytes
+  and an "index" in the lowest byte. If rgb is non-zero, the index is
+  not used (it might be used by some code as an "alpha"). If rgb is
+  zero the "index" is used to look up a 256-entry color table maintained
+  by fltk, this is primarily for back-compatability, but is also used
+  to change the gray background and beveled edges of most widgets.
+
+  For instance 0xFF008000 is 255 red, zero green, and 128 blue. 0x20 is
+  index 20 into the fltk colormap.
+*/
+
 
 // The fltk "colormap". In fltk 1.0 this allowed the gui colors to be
 // stored in 8-bit locations. In fltk 2.0 this is preserved for back
@@ -123,5 +142,5 @@ Color fltk::get_color_index(Color i) {
 }
 
 //
-// End of "$Id: fl_color.cxx,v 1.34 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id: fl_color.cxx,v 1.35 2004/01/20 07:27:28 spitzak Exp $".
 //

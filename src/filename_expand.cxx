@@ -1,7 +1,5 @@
 //
-// "$Id: filename_expand.cxx,v 1.11 2002/12/10 02:00:56 easysw Exp $"
-//
-// Filename expansion routines for the Fast Light Tool Kit (FLTK).
+// "$Id: filename_expand.cxx,v 1.12 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -23,11 +21,6 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-/* expand a file name by substuting environment variables and
-   home directories.  Returns true if any changes were made.
-   to & from may be the same buffer.
-*/
-
 #include <fltk/filename.h>
 #include <stdlib.h>
 #include <string.h>
@@ -43,6 +36,21 @@ static inline bool isdirsep(char c) {return c=='/' || c=='\\';}
 #define isdirsep(c) ((c)=='/')
 #endif
 
+/*!
+  Expand a file name by substuting environment variables and
+  home directories.  Returns true if any changes were made.
+
+  - The text is split into "words" at each slash.
+  - Replaces words of the form $X with getenv(X) (leaving it as $X if
+    the variable does not exist)
+  - Replaces ~X with users X's home directory, if user X exists (Unix only)
+  - Replaces just ~ with $HOME
+  - If a replacement is made and it starts with a slash, it deletes
+    everything before it.
+
+  The result is put into \a to, which must have space for 1024
+  characters. \a to and \a from may be the same buffer.
+*/
 bool filename_expand(char *to, const char *from) {
 
   char temp[FL_PATH_MAX];
@@ -104,5 +112,5 @@ bool filename_expand(char *to, const char *from) {
 }
 
 //
-// End of "$Id: filename_expand.cxx,v 1.11 2002/12/10 02:00:56 easysw Exp $".
+// End of "$Id: filename_expand.cxx,v 1.12 2004/01/20 07:27:28 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: events.cxx,v 1.1 2004/01/19 21:38:41 spitzak Exp $"
+// "$Id: events.cxx,v 1.2 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -27,7 +27,7 @@
 
 using namespace fltk;
 
-/*! \defgroup events
+/*! \defgroup events Event Types and Event Handling
 
   FLTK Events are identified by the integer argument passed to the
   fltk::Widget::handle() virtual method. Often a widget will modify

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.35 2003/11/11 07:36:31 spitzak Exp $"
+// "$Id: fl_rect.cxx,v 1.36 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Non-path routines from draw.h that are used by the standard boxtypes
 // and thus are always linked into an fltk program.
@@ -24,25 +24,25 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-/** \defgroup drawing FLTK Drawing Functions
-    Description of drawing goes here...
-    All functions are defined by including <fltk/draw.h>
-*/
-
-/** \defgroup rectangle Simple Drawing
-    \ingroup drawing
-    These functions bypass the path construction mechanism to draw
-    some common shapes more quickly.
-    \{
-*/
-
 #include <fltk/draw.h>
 #include <fltk/x.h>
 #include <fltk/math.h>
 using namespace fltk;
 
-/*! Outline the passed rectangle. If the line thickness is the default
-  value then the line is \e inside the rectangle boundaries.
+/** \defgroup rectangle Simple Drawing
+    \ingroup drawing
+
+    These functions bypass the path construction mechanism to draw
+    some common shapes more quickly with calls to Xlib or GDI32.  Only
+    the x,y coordinates are transformed and in most cases they are
+    rounded to the nearest integer.
+
+  \{
+*/
+
+/*! 
+  Draw a line \e inside this bounding box (currently correct only for
+  0-thickness lines).
 */
 void fltk::strokerect(int x, int y, int w, int h) {
   if (w <= 0 || h <= 0) return;
@@ -86,6 +86,7 @@ void fltk::fillrect(int x, int y, int w, int h) {
 #endif
 }
 
+/*! Draw a straight line between the two points. */
 void fltk::drawline(int x, int y, int x1, int y1) {
   transform(x,y);
   transform(x1,y1);
@@ -107,6 +108,7 @@ void fltk::drawline(int x, int y, int x1, int y1) {
 #endif
 }
 
+/*! Draw a straight line between the two points. */
 void fltk::drawline(float X, float Y, float X1, float Y1) {
   transform(X,Y); int x = int(floorf(X)+.5); int y = int(floorf(Y)+.5);
   transform(X1,Y1);int x1 = int(floorf(X1)+.5); int y1 = int(floorf(Y1)+.5);
@@ -127,6 +129,7 @@ void fltk::drawline(float X, float Y, float X1, float Y1) {
 #endif
 }
 
+/*! Draw a dot at the given point. */
 void fltk::drawpoint(int x, int y) {
   transform(x,y);
 #if USE_X11
@@ -140,6 +143,7 @@ void fltk::drawpoint(int x, int y) {
 #endif
 }
 
+/*! Draw a dot at the given point. */
 void fltk::drawpoint(float X, float Y) {
   transform(X,Y); int x = int(floorf(X)); int y = int(floorf(Y));
 #if USE_X11
@@ -156,5 +160,5 @@ void fltk::drawpoint(float X, float Y) {
 /** \} */
 
 //
-// End of "$Id: fl_rect.cxx,v 1.35 2003/11/11 07:36:31 spitzak Exp $".
+// End of "$Id: fl_rect.cxx,v 1.36 2004/01/20 07:27:28 spitzak Exp $".
 //

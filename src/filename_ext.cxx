@@ -1,7 +1,5 @@
 //
-// "$Id: filename_ext.cxx,v 1.9 2002/12/10 02:00:56 easysw Exp $"
-//
-// Filename extension routines for the Fast Light Tool Kit (FLTK).
+// "$Id: filename_ext.cxx,v 1.10 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -23,10 +21,13 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// returns pointer to the last '.' or to the null if none:
-
 #include <fltk/filename.h>
 
+/*!
+  Returns a pointer to the last period in filename_name(f), or a
+  pointer to the trailing nul if none. Notice that this points at
+  the period, not after it as some people expect.
+*/
 const char *filename_ext(const char *buf) {
   const char *q = 0;
   const char *p = buf;
@@ -41,5 +42,5 @@ const char *filename_ext(const char *buf) {
 }
 
 //
-// End of "$Id: filename_ext.cxx,v 1.9 2002/12/10 02:00:56 easysw Exp $".
+// End of "$Id: filename_ext.cxx,v 1.10 2004/01/20 07:27:28 spitzak Exp $".
 //

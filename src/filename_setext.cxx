@@ -1,7 +1,5 @@
 //
-// "$Id: filename_setext.cxx,v 1.8 2002/12/10 02:00:56 easysw Exp $"
-//
-// Filename extension routines for the Fast Light Tool Kit (FLTK).
+// "$Id: filename_setext.cxx,v 1.9 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -23,13 +21,28 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// Replace .ext with new extension
-// If no . in name, append new extension
-// If new extension is null, act like it is ""
-
 #include <fltk/filename.h>
 #include <string.h>
 
+/*! \defgroup utilities Non-fltk Utility Functions
+
+  FLTK provides some functions that it uses internally that are
+  necessary for portablity, or convienent for writing code.  These are
+  \e not in the fltk:: namespace and do not have "fl_" in their names,
+  because in theory they should not be part of fltk, but instead
+  provided by the system.
+*/
+
+/*! Does strcpy(filename_ext(buf), ext ? ext : ""). Returns \a buf.
+
+  \a ext is usually a desired extension, starting with period, such
+  as ".jpg". If it is null it acts like "".
+
+  If there is no period in \a buf, \a ext is concatenated.
+
+  Otherwise the last period is replaced with the first character of
+  \a ext and the rest copied there.
+*/
 char *filename_setext(char *buf, const char *ext) {
   char *q = (char *)filename_ext(buf);
   if (ext) strcpy(q,ext); else *q = 0;
@@ -37,5 +50,5 @@ char *filename_setext(char *buf, const char *ext) {
 }
 
 //
-// End of "$Id: filename_setext.cxx,v 1.8 2002/12/10 02:00:56 easysw Exp $".
+// End of "$Id: filename_setext.cxx,v 1.9 2004/01/20 07:27:28 spitzak Exp $".
 //

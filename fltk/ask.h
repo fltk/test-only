@@ -1,5 +1,5 @@
 //
-// "$Id: ask.h,v 1.3 2004/01/07 06:57:06 spitzak Exp $"
+// "$Id: ask.h,v 1.4 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Utility pop-up windows for fltk
 //
@@ -32,7 +32,7 @@ namespace fltk {
 
 class Widget;
 
-/*! \addtogroup environment
+/*! \addtogroup dialogs
   \{ */
 FL_API void message(const char *, ...);
 FL_API void alert(const char *, ...);
@@ -58,5 +58,5 @@ extern FL_API const char* cancel;
 #endif
 
 //
-// End of "$Id: ask.h,v 1.3 2004/01/07 06:57:06 spitzak Exp $".
+// End of "$Id: ask.h,v 1.4 2004/01/20 07:27:28 spitzak Exp $".
 //

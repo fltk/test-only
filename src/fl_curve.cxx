@@ -1,7 +1,5 @@
 //
-// "$Id: fl_curve.cxx,v 1.11 2002/12/10 02:00:58 easysw Exp $"
-//
-// Bezier curve functions for the Fast Light Tool Kit (FLTK).
+// "$Id: fl_curve.cxx,v 1.12 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -33,6 +31,11 @@
 #include <fltk/math.h>
 using namespace fltk;
 
+/*!
+  Add a series of points on a Bezier spline to the path. The curve
+  ends (and two of the points) are at \a x,y and \a x3,y3. The "handles"
+  are at \a x1,y1 and \a x2,y2.
+*/
 void fltk::addcurve(float x0, float y0,
 		    float x1, float y1,
 		    float x2, float y2,
@@ -103,5 +106,5 @@ void fltk::addcurve(float x0, float y0,
 }
 
 //
-// End of "$Id: fl_curve.cxx,v 1.11 2002/12/10 02:00:58 easysw Exp $".
+// End of "$Id: fl_curve.cxx,v 1.12 2004/01/20 07:27:28 spitzak Exp $".
 //

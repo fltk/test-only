@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts.cxx,v 1.19 2003/01/15 07:55:20 spitzak Exp $"
+// "$Id: fl_list_fonts.cxx,v 1.20 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -25,26 +25,35 @@
 #include <fltk/Font.h>
 #include <fltk/string.h>
 
-#ifdef _WIN32
-# include "fl_list_fonts_win32.cxx"
-#elif (defined(__APPLE__) && !USE_X11)
-# include "fl_list_fonts_mac.cxx"
-#else
+#if USE_X11
 # if USE_XFT
 // the code is included by font.cxx
 # else
 #  include "fl_list_fonts_x.cxx"
 # endif
+#elif defined(_WIN32)
+# include "fl_list_fonts_win32.cxx"
+#elif defined(__APPLE__)
+# include "fl_list_fonts_mac.cxx"
 #endif
 
 using namespace fltk;
 
-// For Xlib the only way to reliably get a font is to enumerate them all
-// and then search. For Xft and Win32 we should be able to program a more
-// direct call, as long as we accumulate all the names we searched for
-// into an array and list_fonts can add all the missing ones to the
-// array. This is sufficiently painful that I have not done this yet.
+/*!
 
+  Find a font with the given "nice" name. You can get bold and italic
+  by adding a space and "bold" or "italic" (or both) to the name, or
+  by passing them as the attributes. Case is ignored and fltk will
+  accept some variations in the font name.
+
+  The current implementation calls fltk::list_fonts() and then does a
+  binary search for the font in it. This can make the first call
+  pretty slow, especially on X. With Xft and Win32 we should be able
+  to program a more direct call, as long as we accumulate all the
+  names we searched for into an array and list_fonts can add all the
+  missing ones to the array. This is sufficiently painful that I have
+  not done this yet.
+*/
 fltk::Font* fltk::font(const char* name, int attributes /* = 0 */) {
   if (!name || !*name) return 0;
   // find out if the " bold" or " italic" are on the end:
@@ -84,5 +93,5 @@ fltk::Font* fltk::font(const char* name, int attributes /* = 0 */) {
 }
 
 //
-// End of "$Id: fl_list_fonts.cxx,v 1.19 2003/01/15 07:55:20 spitzak Exp $".
+// End of "$Id: fl_list_fonts.cxx,v 1.20 2004/01/20 07:27:28 spitzak Exp $".
 //

@@ -1,7 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.32 2004/01/18 07:34:37 spitzak Exp $"
-//
-// Standard dialog functions for the Fast Light Tool Kit (FLTK).
+// "$Id: fl_ask.cxx,v 1.33 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -40,10 +38,28 @@
 
 using namespace fltk;
 
+/*! \defgroup dialogs Popup Dialog Services
+
+  FLTK provides a number of functions that create a popup window and
+  Window::exec() it. These functions return when the user OK's or
+  Cancels the window, returning the value the user chose.
+
+  Currently these are all built using normal fltk widgets. In theory
+  these should be services provided by the operating system or desktop
+  environment, but so far no non-ugly scheme has been developed for
+  that. Unfortunatly the space for these dialogs can often end up being
+  the majority of an FLTK program's size.
+
+*/
+
 static void m_revert(Style* s) {
   s->box_ = NO_BOX;
 }
 static NamedStyle m_style("Message", m_revert, &message_style);
+/*! This Style is used for the label area for all the popup windows.
+  You can change the textfont() or textsize() to make them print
+  differently.
+*/
 NamedStyle* fltk::message_style = &m_style;
 
 static void i_revert(Style* s) {
@@ -54,6 +70,9 @@ static void i_revert(Style* s) {
   s->textcolor_ = s->labelcolor_ = BLUE;
 }
 static NamedStyle i_style("Icon", i_revert, &fltk::icon_style);
+/*! This Style is used for the 50x50 icon area on the left of all
+  the popup windows. You can change the colors or font used here.
+*/
 NamedStyle* fltk::icon_style = &i_style;
 
 static int button_number;
@@ -174,12 +193,22 @@ static int innards(
   return button_number;
 }
 
-// pointers you can use to change fltk to a foreign language:
+/*! You can change this string to convert fltk to a foreign language. */
 const char* fltk::no = "No";
+/*! You can change this string to convert fltk to a foreign language. */
 const char* fltk::yes= "Yes";
+/*! You can change this string to convert fltk to a foreign language. */
 const char* fltk::ok = "OK";
+/*! You can change this string to convert fltk to a foreign language. */
 const char* fltk::cancel= "Cancel";
 
+/*!
+  \image html fl_message.gif
+  Displays a printf-style message in a pop-up box with an "OK" button,
+  waits for the user to hit the button. The message will wrap to fit
+  the window, or may be many lines by putting '\\n' characters into
+  it. The enter key is a shortcut for the OK button.
+*/
 void fltk::message(const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
@@ -187,6 +216,10 @@ void fltk::message(const char *fmt, ...) {
   va_end(ap);
 }
 
+/*!
+  \image html fl_alert.gif
+  Same as fltk::message() except for the "!" symbol. 
+*/
 void fltk::alert(const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
@@ -194,6 +227,13 @@ void fltk::alert(const char *fmt, ...) {
   va_end(ap);
 }
 
+/*!
+  \image html fl_ask.gif
+  Displays a printf-style message in a pop-up box with an "Yes" and
+  "No" button and waits for the user to hit a button. The return value
+  is 1 if the user hits Yes, 0 if they pick No. The enter key is a
+  shortcut for Yes and ESC is a shortcut for No.
+*/
 int fltk::ask(const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
@@ -202,6 +242,16 @@ int fltk::ask(const char *fmt, ...) {
   return r;
 }
 
+/*!
+  \image html fl_choice.gif
+  Shows the message with three buttons below it marked with the
+  strings b0, b1, and b2. Returns 0, 1, or 2 depending on which button
+  is hit. If one of the strings begins with the special character '*'
+  then the associated button will be the default which is selected
+  when the enter key is pressed. ESC is a shortcut for button
+  0. Notice the buttons are positioned "backwards" You can hide
+  buttons by passing NULL as their labels.
+*/
 int fltk::choice(const char*fmt,const char *b0,const char *b1,const char *b2,...){
   va_list ap;
   va_start(ap, b2);
@@ -217,6 +267,14 @@ static const char* input_innards(const char* fmt, va_list ap,
   return r ? textfield->value() : 0;
 }
 
+/*!
+  \image html fl_input.gif
+  Pops up a window displaying a string, lets the user edit it, and
+  return the new value. The cancel button returns NULL. The returned
+  pointer is only valid until the next time fltk::input() is
+  called. Due to back-compatability, the arguments to any printf
+  commands in the label are after the default value.
+*/
 const char* fltk::input(const char *fmt, const char *defstr, ...) {
   va_list ap;
   va_start(ap, defstr);
@@ -225,6 +283,10 @@ const char* fltk::input(const char *fmt, const char *defstr, ...) {
   return r;
 }
 
+/*!
+  \image html fl_password.gif
+  Same as fltk::input() except an fltk::SecretInput field is used. 
+*/
 const char *fltk::password(const char *fmt, const char *defstr, ...) {
   va_list ap;
   va_start(ap, defstr);
@@ -234,5 +296,5 @@ const char *fltk::password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.32 2004/01/18 07:34:37 spitzak Exp $".
+// End of "$Id: fl_ask.cxx,v 1.33 2004/01/20 07:27:28 spitzak Exp $".
 //

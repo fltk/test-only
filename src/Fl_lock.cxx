@@ -1,4 +1,4 @@
-/*! \defgroup multithreading
+/*! \defgroup multithreading Multithreaded FLTK Applications
 
    I would prefer that fltk contain the minimal amount of extra stuff
    for doing threads.  There are other portable thread wrapper libraries

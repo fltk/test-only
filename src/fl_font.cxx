@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.41 2002/12/10 02:01:00 easysw Exp $"
+// "$Id: fl_font.cxx,v 1.42 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,39 +26,69 @@
 #include <config.h>
 #include <fltk/Font.h>
 #include <fltk/draw.h>
+#include <fltk/x.h>
+
+/*! \defgroup font Text Drawing
+    \ingroup drawing
+
+   See the fltk::Font class for a description of what can be passed as
+   a font. For most uses one of the built-in constant fonts like
+   fltk::HELVETICA can be used.
+*/
 
 // Static variables containing the currently selected font, size, encoding:
 fltk::Font* fltk::current_font_;
 float fltk::current_size_;
 const char *fltk::encoding_ = "iso8859-1";
-  
-#ifdef _WIN32
-# include "fl_font_win32.cxx"
-#elif (defined(__APPLE__) && !USE_X11)
-# include "fl_font_mac.cxx"
-#else
+
+#if USE_X11
 # if USE_XFT
 #  include "fl_font_xft.cxx"
 # else
 #  include "fl_font_x.cxx"
 # endif
+#elif defined(_WIN32)
+# include "fl_font_win32.cxx"
+#elif defined(__APPLE__)
+# include "fl_font_mac.cxx"
+#else
+#error
 #endif
 
+/*! \fn Font* fltk::getfont()
+  Return the Font sent to the last setfont().
+*/
+/*! \fn float fltk::getsize()
+  Return the size sent to the last setfont(). You should use this as a
+  minimum line spacing (using ascent()+descent() will produce oddly
+  spaced lines for many fonts).
+*/
+
+/*! Draw a nul-terminated string. */
 void
-fltk::drawtext(const char* str, float x, float y) {
-  drawtext(str, strlen(str), x, y);
+fltk::drawtext(const char* text, float x, float y) {
+  drawtext(text, strlen(text), x, y);
 }
 
+/*!
+  Draw the first n \e bytes (not characters if utf8 is used) starting
+  at the given position. */
 void
-fltk::drawtext(const char* str, int n, float x, float y) {
+fltk::drawtext(const char* text, int n, float x, float y) {
   transform(x,y);
-  drawtext_transformed(str, n, x, y);
+  drawtext_transformed(text, n, x, y);
 }
 
+/*! Return the width of a nul-terminated string. */
 float
-fltk::getwidth(const char* c) { return getwidth(c, strlen(c)); }
+fltk::getwidth(const char* text) { return getwidth(text, strlen(text)); }
 
-// turn a stored font name into a pretty name:
+/*! Return a single string that names this font. If the attributes
+  are zero this is easy. If they are not it prints the string into
+  a static buffer and adds " bold" and/or " italic" to the end.
+  A string of this form can be sent to find() to get a font with
+  attributes.
+*/
 const char* fltk::Font::name() const {
   if (!attributes_) return name_;
   static char *buffer; if (!buffer) buffer = new char[128];
@@ -69,5 +99,5 @@ const char* fltk::Font::name() const {
 }
 
 //
-// End of "$Id: fl_font.cxx,v 1.41 2002/12/10 02:01:00 easysw Exp $".
+// End of "$Id: fl_font.cxx,v 1.42 2004/01/20 07:27:28 spitzak Exp $".
 //

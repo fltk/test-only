@@ -1,5 +1,5 @@
 //
-// "$Id: fl_show_colormap.cxx,v 1.29 2003/11/09 02:48:21 spitzak Exp $"
+// "$Id: fl_show_colormap.cxx,v 1.30 2004/01/20 07:27:28 spitzak Exp $"
 //
 // Colormap color selection dialog for the Fast Light Tool Kit (FLTK).
 //
@@ -128,6 +128,19 @@ int ColorMenu::handle(int e) {
   return 1;
 }
 
+/*! \addtogroup dialogs
+  \{ */
+/*!
+  Older style of color chooser that only chooses the "indexed" fltk
+  colors. This pops up a panel of the 256 colors you can access with
+  "indexed" fltk::Color values and lets the user pick one of them.
+
+  If the user clicks on one of them, the new index is returned.
+
+  If they type Esc or click outside the window, the old index is returned.
+
+  \image html fl_show_colormap.gif
+*/
 Color fltk::show_colormap(Color oldcol) {
   ColorMenu m(oldcol);
   if (m.which > 255) {
@@ -141,5 +154,5 @@ Color fltk::show_colormap(Color oldcol) {
 }
 
 //
-// End of "$Id: fl_show_colormap.cxx,v 1.29 2003/11/09 02:48:21 spitzak Exp $".
+// End of "$Id: fl_show_colormap.cxx,v 1.30 2004/01/20 07:27:28 spitzak Exp $".
 //
