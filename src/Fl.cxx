@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.26 1999/03/31 14:52:44 mike Exp $"
+// "$Id: Fl.cxx,v 1.27 1999/04/04 03:39:29 gustavo Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -406,9 +406,11 @@ int Fl::handle(int event, Fl_Window* window)
     return 1;
 
   case FL_PUSH:
+    if (pushed_) w = pushed_; 
+    else {pushed_ = w; mouse_dx = mouse_dy = 0;}
+    
     if (grab()) w = grab();
     else if (modal() && w != modal()) return 0;
-    pushed_ = w; mouse_dx = mouse_dy = 0;
     if (w->handle(event)) return 1;
     // raise windows that are clicked on:
     window->show();
@@ -433,9 +435,9 @@ int Fl::handle(int event, Fl_Window* window)
   case FL_RELEASE: {
     if (pushed()) {
       w = pushed();
-      pushed_ = 0; // must be zero before callback is done!
       e_x += mouse_dx;
       e_y += mouse_dy;
+      if (!(event_state()&(FL_BUTTON1|FL_BUTTON2|FL_BUTTON3))) pushed_=0;
     }
     if (grab()) w = grab();
     int r = w->handle(event);
@@ -687,5 +689,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.26 1999/03/31 14:52:44 mike Exp $".
+// End of "$Id: Fl.cxx,v 1.27 1999/04/04 03:39:29 gustavo Exp $".
 //
