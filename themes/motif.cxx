@@ -1,5 +1,5 @@
 //
-// "$Id: motif.cxx,v 1.12 2000/03/03 18:59:13 carl Exp $"
+// "$Id: motif.cxx,v 1.13 2000/05/15 21:33:31 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -27,9 +27,9 @@
 #include <FL/fl_theme.H>
 
 extern "C" int fltk_theme(int, char**) {
-  fl_motif();
+  return fl_motif();
 }
 
 //
-// End of "$Id: motif.cxx,v 1.12 2000/03/03 18:59:13 carl Exp $".
+// End of "$Id: motif.cxx,v 1.13 2000/05/15 21:33:31 carl Exp $".
 //
