@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_x.cxx,v 1.1 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_draw_image_x.cxx,v 1.2 2001/03/10 20:38:22 clip Exp $"
 //
 // Image drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -516,11 +516,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 	XPutImage(fl_display,fl_window,fl_gc, &i, 0, 0, X+dx, Y+dy+j-k, w, k);
       }
     } else {
-#ifdef __GNUC__
-      STORETYPE linebuf[(W*delta+(sizeof(STORETYPE)-1))/sizeof(STORETYPE)];
-#else
       STORETYPE* linebuf = new STORETYPE[(W*delta+(sizeof(STORETYPE)-1))/sizeof(STORETYPE)];
-#endif
       for (int j=0; j<h; ) {
 	STORETYPE *to = buffer;
 	int k;
@@ -531,9 +527,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 	}
 	XPutImage(fl_display,fl_window,fl_gc, &i, 0, 0, X+dx, Y+dy+j-k, w, k);
       }
-#ifndef __GNUC__
       delete[] linebuf;
-#endif
     }
   }
 }
@@ -541,5 +535,5 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 #define DITHER_RECTF (fl_visual->depth > 16)
 
 //
-// End of "$Id: fl_draw_image_x.cxx,v 1.1 2001/02/20 06:59:50 spitzak Exp $"
+// End of "$Id: fl_draw_image_x.cxx,v 1.2 2001/03/10 20:38:22 clip Exp $"
 //

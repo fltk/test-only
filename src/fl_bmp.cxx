@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.10 2000/09/05 17:36:21 spitzak Exp $"
+// "$Id: fl_bmp.cxx,v 1.11 2001/03/10 20:38:22 clip Exp $"
 //
 // Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
 //
@@ -323,7 +323,7 @@ void Fl_BMP_Image::read()
     #endif
 
     // Allocate memory for color map
-    palette = (RGB_QUAD *)malloc(infoHeader.colorsUsed * sizeof(RGB_QUAD));
+    palette = new RGB_QUAD[infoHeader.colorsUsed];
     if (!palette)
     {
       SetError("Error reading BMP texture file, out of memory error.");
@@ -372,7 +372,7 @@ void Fl_BMP_Image::read()
 	    {
 	      mask = 1 << bit;
 	      bitIndex = (index & mask) ? 1 : 0;
-	      
+
 	      *pRgbBuf = palette[bitIndex].r;
 	      pRgbBuf++;
 	      *pRgbBuf = palette[bitIndex].g;
@@ -393,7 +393,7 @@ void Fl_BMP_Image::read()
 	      {
 		mask = 1 << bit;
 		bitIndex = (index & mask) ? 1 : 0;
-		
+
 		*pRgbBuf = palette[bitIndex].r;
 		pRgbBuf++;
 		*pRgbBuf = palette[bitIndex].g;
@@ -413,7 +413,7 @@ void Fl_BMP_Image::read()
 	  pRgbBuf += scanLinePad;
 	}
 	break;
-	
+
 
       case 4:
 	int upperIndex, lowerIndex;
@@ -436,7 +436,7 @@ void Fl_BMP_Image::read()
 	      index = GETC();
 	      // Upper four bits
 	      upperIndex = (index >> 4) & 15;
-	      
+
 	      *pRgbBuf = palette[upperIndex].r;
 	      pRgbBuf++;
 	      *pRgbBuf = palette[upperIndex].g;
@@ -445,10 +445,10 @@ void Fl_BMP_Image::read()
 	      pRgbBuf++;
 	      *pRgbBuf = IMG_NON_TRANSPARENT; // alpha
 	      pRgbBuf++;
-	      
+
 	      // Lower four bits
 	      lowerIndex = index & 15;
-	    
+
 	      *pRgbBuf = palette[lowerIndex].r;
 	      pRgbBuf++;
 	      *pRgbBuf = palette[lowerIndex].g;
@@ -458,7 +458,7 @@ void Fl_BMP_Image::read()
 	      *pRgbBuf = IMG_NON_TRANSPARENT; // alpha
 	      pRgbBuf++;
 	    }
-	    
+
 	    // Handle odd number of pixels on a line
 	    if (oddPixels)
 	    {
@@ -811,17 +811,17 @@ void Fl_BMP_Image::read()
     fl_end_offscreen();
 
     delete []palette;
-    delete rgbBuf;
+    delete []rgbBuf;
     return;
   }
 
 error:
   if(palette)
     delete []palette;
-  delete rgbBuf;
+  delete []rgbBuf;
   return;
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.10 2000/09/05 17:36:21 spitzak Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.11 2001/03/10 20:38:22 clip Exp $"
 //

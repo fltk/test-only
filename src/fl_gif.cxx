@@ -1,5 +1,5 @@
 //
-// "$Id: fl_gif.cxx,v 1.8 2000/09/05 17:36:21 spitzak Exp $"
+// "$Id: fl_gif.cxx,v 1.9 2001/03/10 20:38:22 clip Exp $"
 //
 // fl_gif.cxx
 //
@@ -191,10 +191,10 @@ void Fl_GIF_Image::read()
 	    comment[l]=NEXTBYTE;
 	  comment[l]=0;
 	  //fprintf(stderr,"%s: Gif Comment: '%s'\n", infname, comment);
-	  delete comment;
+	  delete[] comment;
 	  NEXTBYTE; //End marker
 	}
-#endif 
+#endif
       } else {
 	//fprintf(stderr,"%s: unknown gif extension 0x%02x\n", infname, ch);
 
@@ -208,10 +208,10 @@ void Fl_GIF_Image::read()
       GETSHORT(Height);
       ch = NEXTBYTE;
       Interlace = ((ch & 0x40) != 0);
-      if (ch&0x80) { 
+      if (ch&0x80) {
 	// read local color map
 	int n = 1<<((ch&7)+1); // does this replace ColorMapSize ??
-	for (i=0; i < n; i++) {	
+	for (i=0; i < n; i++) {
 	  Red[i] = NEXTBYTE;
 	  Green[i] = NEXTBYTE;
 	  Blue[i] = NEXTBYTE;
@@ -221,7 +221,7 @@ void Fl_GIF_Image::read()
 
       if (!inumber--) break; // okay, this is the image we want
       blocklen = NEXTBYTE;
-      
+
     } else {
       //fprintf(stderr,"%s: unknown gif code 0x%02x\n", infname, i);
       blocklen = 0;
@@ -412,14 +412,14 @@ extern uchar **fl_mask_bitmap; // used by fl_draw_pixmap.cxx to store mask
   }
   fl_end_offscreen();
 
-  delete Image;
-  delete data[0];
-  delete data[1];
-  delete data;
-  delete length;
+  delete[] Image;
+  delete[] data[0];
+  delete[] data[1];
+  delete[] data;
+  delete[] length;
   if(!datas) fclose(GifFile);
 }
 
 //
-// End of "$Id: fl_gif.cxx,v 1.8 2000/09/05 17:36:21 spitzak Exp $"
+// End of "$Id: fl_gif.cxx,v 1.9 2001/03/10 20:38:22 clip Exp $"
 //

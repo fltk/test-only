@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.9 2001/02/20 19:58:49 robertk Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.10 2001/03/10 20:38:22 clip Exp $"
 //
 // WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -47,7 +47,7 @@ const char* Fl_Font_::name(int* ap) const {
   }
   if (ap) {*ap = type; return name_+1;}
   if (!type) {return name_+1;}
-  static char *buffer; if (!buffer) buffer = new char[128];
+  static char *buffer = new char[128];
   strcpy(buffer, name_+1);
   if (type & FL_BOLD) strcat(buffer, " bold");
   if (type & FL_ITALIC) strcat(buffer, " italic");
@@ -101,7 +101,7 @@ static int CALLBACK enumcb(ENUMLOGFONT FAR *lpelf, NEWTEXTMETRIC FAR *,
   if (lpelf->elfLogFont.lfWeight <= 400) {
     base->bold_ = make_a_font('B', name);
     base->italic_->bold_ = base->bold_->italic_ = make_a_font('P', name);
-  }    
+  }
 
   if (num_fonts >= array_size) {
     array_size = 2*array_size+128;
@@ -152,5 +152,5 @@ void fl_font_rid() {
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.9 2001/02/20 19:58:49 robertk Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.10 2001/03/10 20:38:22 clip Exp $"
 //

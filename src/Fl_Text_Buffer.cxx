@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Buffer.cxx,v 1.7 2001/02/25 01:41:19 clip Exp $"
+// "$Id: Fl_Text_Buffer.cxx,v 1.8 2001/03/10 20:38:22 clip Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -670,9 +670,9 @@ void Fl_Text_Buffer::remove_modify_callback( Fl_Text_Modify_Cb bufModifiedCB,
   mNModifyProcs--;
   if ( mNModifyProcs == 0 ) {
     mNModifyProcs = 0;
-    free( (void *) ( char * ) mNodifyProcs );
+    delete[] mNodifyProcs;
     mNodifyProcs = NULL;
-    free( (void *) ( char * ) mCbArgs );
+    delete[] mCbArgs;
     mCbArgs = NULL;
     return;
   }
@@ -688,8 +688,8 @@ void Fl_Text_Buffer::remove_modify_callback( Fl_Text_Modify_Cb bufModifiedCB,
     newModifyProcs[ i ] = mNodifyProcs[ i + 1 ];
     newCBArgs[ i ] = mCbArgs[ i + 1 ];
   }
-  free( (void *) ( char * ) mNodifyProcs );
-  free( (void *) ( char * ) mCbArgs );
+  delete[] mNodifyProcs;
+  delete[] mCbArgs;
   mNodifyProcs = newModifyProcs;
   mCbArgs = newCBArgs;
 }
@@ -2265,7 +2265,7 @@ Fl_Text_Buffer::insertfile(const char *file, int pos, int buflen) {
 
   int e = ferror(fp) ? 2 : 0;
   fclose(fp);
-  delete buffer;
+  delete[] buffer;
   return e;
 }
 
@@ -2287,5 +2287,5 @@ Fl_Text_Buffer::outputfile(const char *file, int start, int end, int buflen) {
 
 
 //
-// End of "$Id: Fl_Text_Buffer.cxx,v 1.7 2001/02/25 01:41:19 clip Exp $".
+// End of "$Id: Fl_Text_Buffer.cxx,v 1.8 2001/03/10 20:38:22 clip Exp $".
 //
