@@ -1,5 +1,5 @@
 //
-// "$Id: fl_png.cxx,v 1.7 1999/08/29 20:08:04 bill Exp $"
+// "$Id: fl_png.cxx,v 1.8 1999/08/29 21:01:04 vincent Exp $"
 //
 // PNG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -130,6 +130,14 @@ void Fl_PNG_Image::measure(int &W, int &H)
 #endif
 }
 
+#if HAVE_PNG
+static void fl_draw_image_cb(void *v, int x, int y, int w, uchar *b)
+{
+  png_read_row((png_structp)v, b, NULL);
+}
+#endif
+
+
 void Fl_PNG_Image::read()
 {
   id = mask = 0;
@@ -163,8 +171,6 @@ void Fl_PNG_Image::read()
   }
 
   unsigned char *buffer=0;
-  png_bytep *row_pointers=0;
-  int  rowbytes;
   int d=3;
 
   if(datas)
@@ -222,32 +228,23 @@ void Fl_PNG_Image::read()
     d=4; //    png_set_strip_alpha(png_ptr); 
   // png_set_strip_alpha doesn't seem to work ... too bad
  
-  rowbytes = png_get_rowbytes(png_ptr, info_ptr);
-  buffer=(unsigned char *) malloc(rowbytes*height);
-
-  row_pointers = new png_bytep[height];
-  for (png_uint_32 i=0; i<height; i++)
-    row_pointers[i]=buffer+rowbytes*i;
-  png_read_image(png_ptr, row_pointers);
-
-  png_read_end(png_ptr, NULL);
-
   { // We use a block because fl_begin_offscreen creates a local
     // and we have 'goto error' before this point
     id = fl_create_offscreen(width, height);
     fl_begin_offscreen(id);
-    fl_draw_image(buffer, 0, 0, width, height, d);
+    fl_draw_image(fl_draw_image_cb, png_ptr, 0, 0, width, height, d);
     fl_end_offscreen();
   }
 
+  png_read_end(png_ptr, NULL);
+
  error:
   png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
-  if (row_pointers) delete row_pointers;
   if (fp) fclose(fp);
   if (buffer) free(buffer);
 #endif
 }
 
 //
-// End of "$Id: fl_png.cxx,v 1.7 1999/08/29 20:08:04 bill Exp $"
+// End of "$Id: fl_png.cxx,v 1.8 1999/08/29 21:01:04 vincent Exp $"
 //
