@@ -42,7 +42,7 @@
 #ifndef PATH_MAX
 # define PATH_MAX 1024
 #endif
-#include <cstdlib>            // atoi()
+#include <stdlib.h>           // atoi()
 #include <ctype.h>            // isspace()
 
 using namespace fltk;
