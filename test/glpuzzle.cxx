@@ -1,5 +1,5 @@
 //
-// "$Id: glpuzzle.cxx,v 1.10 1999/11/11 10:02:16 bill Exp $"
+// "$Id: glpuzzle.cxx,v 1.11 1999/11/13 23:01:18 carl Exp $"
 //
 // OpenGL puzzle demo for the Fast Light Tool Kit (FLTK).
 // This is rewritten to remove use of the Glut emulation so it can
@@ -33,7 +33,7 @@
 #include <math.h>
 #include <FL/Fl.H>
 #include <FL/Fl_Gl_Window.H>
-#include <GL/gl.h>
+#include <FL/gl.h>
 #include <GL/glu.h>
 
 ////////////////////////////////////////////////////////////////
@@ -1695,5 +1695,5 @@ main(int argc, char **argv)
 }
 
 //
-// End of "$Id: glpuzzle.cxx,v 1.10 1999/11/11 10:02:16 bill Exp $".
+// End of "$Id: glpuzzle.cxx,v 1.11 1999/11/13 23:01:18 carl Exp $".
 //
