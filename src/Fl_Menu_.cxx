@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.11 1999/03/19 16:23:53 carl Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.12 1999/03/19 19:41:08 carl Exp $"
 //
 // Common menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -85,7 +85,8 @@ static Fl_Menu_Item* _find(const char *label, Fl_Menu_Item *menu) {
   return m;
 }
 
-Fl_Menu_Item* Fl_Menu_::find(const char *label) { return _find(label, menu()); }
+Fl_Menu_Item* Fl_Menu_::find(const char *label) const
+{ return _find(label, menu()); }
 
 int Fl_Menu_::value(const Fl_Menu_Item* m) {
   clear_changed();
@@ -169,6 +170,20 @@ void Fl_Menu_::menu(const Fl_Menu_Item* m) {
   value_ = menu_ = (Fl_Menu_Item*)m;
 }
 
+Fl_Menu_::~Fl_Menu_() {
+  clear();
+}
+
+void Fl_Menu_::clear() {
+  if (alloc) {
+    if (alloc>1) for (int i = size(); i--;)
+      if (menu_[i].text) free((void*)menu_[i].text);
+    delete[] menu_;
+    menu_ = 0;
+    alloc = 0;
+  }
+}
+
 Fl_Font Fl_Menu_::textfont() const {
   if (!_style || !(MENU_STYLE->sbf & bf(TEXTFONT)))
     return (Fl_Font)DEFAULT_STYLE->menu(TEXTFONT);
@@ -208,20 +223,6 @@ void Fl_Menu_::copy(const Fl_Menu_Item* m, void* user_data) {
   }
 }
 
-Fl_Menu_::~Fl_Menu_() {
-  clear();
-}
-
-void Fl_Menu_::clear() {
-  if (alloc) {
-    if (alloc>1) for (int i = size(); i--;)
-      if (menu_[i].text) free((void*)menu_[i].text);
-    delete[] menu_;
-    menu_ = 0;
-    alloc = 0;
-  }
-}
-
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.11 1999/03/19 16:23:53 carl Exp $".
+// End of "$Id: Fl_Menu_.cxx,v 1.12 1999/03/19 19:41:08 carl Exp $".
 //

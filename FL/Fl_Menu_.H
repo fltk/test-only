@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.H,v 1.12 1999/03/18 22:58:54 carl Exp $"
+// "$Id: Fl_Menu_.H,v 1.13 1999/03/19 19:41:07 carl Exp $"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -68,20 +68,31 @@ public:
 
   Fl_Menu_Item* menu() const {return menu_;}
   void menu(const Fl_Menu_Item* m);
-  Fl_Menu_Item* find(const char* label);
+  Fl_Menu_Item* find(const char* label) const;
+  int index(Fl_Menu_Item* m) const { return m - menu_; }
+  int index(const char* label) const { return index(find(label)); }
   void copy(const Fl_Menu_Item *m, void* user_data = 0);
   int  add(const char*, int shortcut, Fl_Callback*, void* = 0, int = 0);
   int  add(const char* a, const char* b, Fl_Callback* c,
 	  void* d = 0, int e = 0) {return add(a,fl_old_shortcut(b),c,d,e);}
   int  size() const ;
   void clear();
-  int  add(const char *);
-  void replace(int,const char *);
+  int  add(const char*);
+  void replace(int,const char*);
+  void replace(Fl_Menu_Item* m, const char* s) { replace(index(m), s); }
+  void replace(const char* l, const char* s) { replace(index(l), s); }
   void remove(int);
+  void remove(Fl_Menu_Item* m) { remove(index(m)); }
+  void remove(const char* l) { remove(index(l)); }
   void shortcut(int i, int s) {menu_[i].shortcut(s);}
+  void shortcut(Fl_Menu_Item* m, int s) { shortcut(index(m), s); }
+  void shortcut(const char* l, int s) { shortcut(index(l), s); }
   void mode(int i,int x) {menu_[i].flags = x;}
+  void mode(Fl_Menu_Item* m, int x) { mode(index(m), x); }
+  void mode(const char* l, int x) { mode(index(l), x); }
   int  mode(int i) const {return menu_[i].flags;}
-
+  int  mode(Fl_Menu_Item* m) const { return mode(index(m)); }
+  int  mode(const char* l) const { return mode(index(l)); }
   const Fl_Menu_Item *mvalue() const {return value_;}
   int value() const {return value_-menu_;}
   int value(const Fl_Menu_Item*);
@@ -122,5 +133,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Menu_.H,v 1.12 1999/03/18 22:58:54 carl Exp $".
+// End of "$Id: Fl_Menu_.H,v 1.13 1999/03/19 19:41:07 carl Exp $".
 //
