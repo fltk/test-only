@@ -1,5 +1,5 @@
 //
-// "$Id: fl_scroll_area.cxx,v 1.8 2001/07/29 22:04:44 spitzak Exp $"
+// "$Id: fl_scroll_area.cxx,v 1.9 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Scrolling routines for the Fast Light Tool Kit (FLTK).
 //
@@ -26,8 +26,6 @@
 // Drawing function to move the contents of a rectangle.  This is passed
 // a "callback" which is called to draw rectangular areas that are moved
 // into the drawing area.
-
-// This is not yet fixed to use the origin in fl_x_ and fl_y_!
 
 #include <fltk/x.h>
 #include <fltk/fl_draw.h>
@@ -70,21 +68,22 @@ void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
     clip_y = Y+src_h;
     clip_h = H-src_h;
   }
+  int ox = 0; int oy = 0; fl_transform(ox, oy);
 #ifdef _WIN32
-  BitBlt(fl_gc, dest_x+fl_x_, dest_y+fl_y_, src_w, src_h,
-	 fl_gc, src_x+fl_x_, src_y+fl_y_, SRCCOPY);
+  BitBlt(fl_gc, dest_x+ox, dest_y+oy, src_w, src_h,
+	 fl_gc, src_x+ox, src_y+oy, SRCCOPY);
   // NYI: need to redraw areas that the source of BitBlt was bad due to
   // overlapped windows, somehow similar to what X does.
 #else
   XCopyArea(fl_display, fl_window, fl_window, fl_gc,
-	    src_x+fl_x_, src_y+fl_y_, src_w, src_h,
-	    dest_x+fl_x_, dest_y+fl_y_);
+	    src_x+ox, src_y+oy, src_w, src_h,
+	    dest_x+ox, dest_y+oy);
 // Synchronous update by waiting for graphics expose events:
   for (;;) {
     XEvent e; XWindowEvent(fl_display, fl_window, ExposureMask, &e);
     if (e.type == NoExpose) break;
     // otherwise assumme it is a GraphicsExpose event:
-    draw_area(data, e.xexpose.x-fl_x_, e.xexpose.y-fl_y_,
+    draw_area(data, e.xexpose.x-ox, e.xexpose.y-oy,
 	      e.xexpose.width, e.xexpose.height);
     if (!e.xgraphicsexpose.count) break;
   }
@@ -94,5 +93,5 @@ void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
 }
 
 //
-// End of "$Id: fl_scroll_area.cxx,v 1.8 2001/07/29 22:04:44 spitzak Exp $".
+// End of "$Id: fl_scroll_area.cxx,v 1.9 2002/07/01 15:28:19 spitzak Exp $".
 //

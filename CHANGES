@@ -2325,3 +2325,19 @@ commands to Fl_Input.
 
 Fl_Value_Input rewritten to look like a MS "Spin Box". Deleted
 Fl_Counter and Fl_Value_Output and emulate them using Fl_Value_Input.
+
+////////////////////////////////////////////////////////////////
+
+New fl_draw.h functions to take arrays of points to draw shapes, and
+to use double for all arguments. Not compete yet, I want to allow
+fonts to be chosen with floating point sizes.
+
+Made the documentation use css. Nothing too complicated and it should
+still go through htmldoc. Somebody with more design sense than me
+should try to improve fltk.css.
+
+Clean up of Fl_Valuator to get rid of a lot of confusing functions and
+make linesize & pagesize be the actual increments.  Fl_Slider draws
+tick marks at intelligent distances (I hope), and if step() is
+non-zero it does a lot of work to select "nice" values (powers of 10
+times 1,2, or 5) depending on the slider scale.

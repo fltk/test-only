@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.cxx,v 1.45 2002/06/09 23:20:19 spitzak Exp $"
+// "$Id: Fl_Value_Slider.cxx,v 1.46 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Value slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -100,7 +100,7 @@ void Fl_Value_Slider::draw() {
 	case TICK_BOTH: sx = ix; sw = iw; break;
 	}
       }
-      draw_ticks(sx, sy, sw, sh);
+      draw_ticks(sx, sy, sw, sh, slider_size());
     }
 
     fl_pop_clip();
@@ -158,5 +158,5 @@ Fl_Value_Slider::Fl_Value_Slider(int x, int y, int w, int h, const char*l)
 }
 
 //
-// End of "$Id: Fl_Value_Slider.cxx,v 1.45 2002/06/09 23:20:19 spitzak Exp $".
+// End of "$Id: Fl_Value_Slider.cxx,v 1.46 2002/07/01 15:28:19 spitzak Exp $".
 //

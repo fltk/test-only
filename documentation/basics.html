@@ -1,4 +1,5 @@
-<html><head><title>FLTK Basics</title></head><body bgcolor=white>
+<html><head><link href="fltk.css" rel="stylesheet" type="text/css">
+<title>FLTK Basics</title></head><body>
 
 <a name=basics><h1>FLTK Basics</h1>
 
@@ -7,9 +8,7 @@ program.
 
 <a name=sample><h2>A sample FLTK program</h2>
 
-<UL><I>Listing 1 - "hello.cxx"</I>
-
-<PRE>
+<pre>
 #include &lt;fltk/Fl.h&gt;
 #include &lt;fltk/Fl_Window.h&gt;
 #include &lt;fltk/Fl_Box.h&gt;
@@ -25,7 +24,7 @@ int main(int argc, char **argv) {
   window->show(argc, argv);
   return Fl::run();
 }
-</PRE></UL>
+</pre>
 
 The resulting program will display the window below. You can quit the 
 program by closing the window or pressing the ESCape key. 
@@ -36,9 +35,9 @@ program by closing the window or pressing the ESCape key.
 
 The proper way to include FLTK header files is: 
 
-<UL><PRE>
+<pre>
 #include &lt;fltk/Fl_xyz.h&gt;
-</PRE></UL>
+</pre>
 
 <p>All programs must include the file <TT>&lt;fltk/Fl.h&gt;</TT>. In
 addition the program must include a header file for each FLTK class it
@@ -53,22 +52,22 @@ must include <tt>&lt;fltk/fl_draw.h&gt;</tt>
 <p>After including the required header files, the program then creates a 
 window: 
 
-<UL><PRE>
+<pre>
 Fl_Window *window = new <A href=Fl_Window.html#Fl_Window>Fl_Window</A>(300,180);
-</PRE></UL>
+</pre>
 
 It then creates a box with the "Hello, World!" string in it, this new
 widget is made a "child" of the window we just created:
 
-<UL><PRE>
+<pre>
 Fl_Box *box = new <A href=Fl_Box.html#Fl_Box>Fl_Box</A>(20,40,260,100,"Hello, World!");
-</PRE></UL>
+</pre>
 
 <p>For most widgets the arguments to the constructor are:
 
-<UL><PRE>
+<pre>
 Fl_Widget(x, y, width, height, label)
-</PRE></UL>
+</pre>
 
 <P><i>x</i> and <i>y</i> are the location of the upper-left corner of
 the widget, measured in pixels. For windows this is measured from the
@@ -89,12 +88,12 @@ method that has more traditional behavior).
 
 Next we set several "attributes" of the box:
 
-<UL><PRE>
+<pre>
 box-&gt;box(FL_UP_BOX);
 box-&gt;<A href=Fl_Widget.html#label_font>label_font</A>(FL_HELVETICA_BOLD_ITALIC);
 box-&gt;<A href=Fl_Widget.html#label_size>label_size</A>(36);
 box-&gt;<A href=Fl_Widget.html#label_type>label_type</A>(FL_SHADOW_LABEL);
-</PRE></UL>
+</pre>
 
 <tt>box-&gt;box(FL_UP_BOX)</tt> sets the type of box the Fl_Box draws,
 changing it from the default of <tt>FL_NO_BOX</tt>, which means that
@@ -119,9 +118,9 @@ reduces code size and execution time.  The only common exception is
 
 Then we indicate we are done adding widgets to the window:
 
-<UL><PRE>
+<pre>
 window-&gt;<A href=Fl_Group.html#end>end</A>();
-</PRE></UL>
+</pre>
 
 <p>To simplify the code you have to write, the constructor for all
 widgets automatically adds them as children of the most recent <a
@@ -138,9 +137,9 @@ to turn this off completely.
 
 Then we cause the window to appear on the screen:
 
-<UL><PRE>
+<pre>
 window-&gt;<A href=Fl_Window.html#show>show</A>(argc, argv);
-</PRE></UL>
+</pre>
 
 <p>For the first Fl_Window you can provide the command-line arguments,
 this runs a rather simple default argument parser that lets the user
@@ -154,9 +153,9 @@ the window server).
 
 <h3>The Main Event Loop</h3>
 
-<UL><PRE>
+<pre>
 return <A href=Fl.html#run>Fl::run</A>();
-</PRE></UL>
+</pre>
 
 This will repeatedly wait for and then process events from the user.
 <TT>Fl::run()</TT> does not return until all of the windows under FLTK 
@@ -181,10 +180,10 @@ calculations. You can do this if there are no windows displayed
 (useful if you used <a href=Fl.html#add_fd><TT>Fl::add_fd()</tt></a>).
 The <tt>Fl::run()</tt> method is equivalent to:
 
-<UL><PRE>
+<pre>
 while (Fl::first_window()) Fl::wait();
 return 0;
-</PRE></UL>
+</pre>
 
 <a name=compiling><h2>Compiling your program</h2>
 
@@ -192,9 +191,9 @@ You will probably need to tell the compiler where to find the
 directory "fltk" with all the header files. This is usually done using
 the <TT>-I</TT> option added to the compiler line:
 
-<UL><PRE>
+<pre>
 c++ -I/usr/local/include ...
-</PRE></UL>
+</pre>
 
 (In Visual C++ this can be done by selecting "Settings" from the
 "Project" menu and then changing the "Preprocessor" settings under the
@@ -203,9 +202,9 @@ c++ -I/usr/local/include ...
 <p>Similarly, when linking your application you will need to tell the 
 compiler to use the FLTK library and where to find it:
 
-<UL><PRE>
+<pre>
 c++ ... -L/usr/local/lib -lfltk -lXext -lX11 -lm
-</PRE></UL>
+</pre>
 
 (In Visual C++ you need to add the FLTK library to the "Link"
 settings).

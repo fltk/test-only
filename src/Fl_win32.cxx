@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.176 2002/06/21 06:17:09 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.177 2002/07/01 15:28:19 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1355,7 +1355,6 @@ void Fl_Window::label(const char *name,const char *iname) {
 
 const Fl_Window *Fl_Window::current_;
 HDC fl_gc; // the current context
-int FL_API fl_x_, fl_y_; // the current drawing origin
 
 extern void fl_font_rid();
 
@@ -1383,7 +1382,6 @@ void Fl_Window::make_current() const {
   // code does any drawing...
   fl_select_palette();
 #endif // USE_COLORMAP
-  fl_x_ = fl_y_ = 0;
   current_ = this;
 }
 
@@ -1575,5 +1573,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.176 2002/06/21 06:17:09 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.177 2002/07/01 15:28:19 spitzak Exp $".
 //

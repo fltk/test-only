@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.63 2002/06/09 23:20:18 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.64 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -398,7 +398,7 @@ void Fl_Browser::draw_item() {
 #endif
   }
 
-  int arrow_size = fl_height(text_font(), text_size())|1;
+  int arrow_size = text_size()|1;
   int preview_open =
     (openclose_drag == 1 && pushed() && at_mark(FOCUS)) ? FL_VALUE : 0;
   widget->invert_flag(preview_open);
@@ -423,13 +423,12 @@ void Fl_Browser::draw_item() {
 		      (flags&FL_SELECTED) ? widget->selection_text_color()
 		      : widget->text_color(), FL_INVISIBLE);
   }
-  int save_x = fl_x_; fl_x_ += x;
-  int save_y = fl_y_; fl_y_ += y+(leading()+1)/2-1;
+  fl_push_matrix();
+  fl_translate(x, y+(leading()+1)/2-1);
   int save_w = widget->w(); widget->w(X+W-x);
   widget->draw();
   widget->w(save_w);
-  fl_y_ = save_y;
-  fl_x_ = save_x;
+  fl_pop_matrix();
 
   widget->invert_flag(preview_open);
 }
@@ -548,7 +547,7 @@ void Fl_Browser::layout() {
   width_ = 0;
 
   // count all the items scrolled off the top:
-  int arrow_size = fl_height(text_font(), text_size())|1;
+  int arrow_size = text_size()|1;
   if (!goto_top()) yposition_ = 0;
   else for (;;) {
     if (item_position[HERE]+item()->height() > yposition_) break;
@@ -606,11 +605,11 @@ void Fl_Browser::layout() {
 
   scrollbar.resize(scrollbar_align()&FL_ALIGN_LEFT ? X-sw : X+W, Y, sw, H);
   scrollbar.value(yposition_, H, 0, height_);
-  scrollbar.linesize(fl_height(text_font(), text_size())+leading());
+  scrollbar.linesize(text_size()+leading());
 
   hscrollbar.resize(X, scrollbar_align()&FL_ALIGN_TOP ? Y-sw : Y+H, W, sw);
   hscrollbar.value(xposition_, W, 0, width_);
-  hscrollbar.linesize(fl_height(text_font(), text_size()));
+  hscrollbar.linesize(scrollbar.linesize());
 
   Fl_Widget::layout();
   redraw(FL_DAMAGE_CONTENTS); // assumme we need to redraw
@@ -794,7 +793,7 @@ int Fl_Browser::handle(int event) {
     if (!goto_position(Fl::event_y()-Y+yposition_) && !item()) break;
 
     // see if they clicked the open/close box
-    int arrow_size = fl_height(text_font(), text_size())|1;
+    int arrow_size = text_size()|1;
     int xx = (item_level[HERE]+indented())*arrow_size+X-xposition_-Fl::event_x();
     if ((event==FL_PUSH || openclose_drag) && xx > 0 && xx < arrow_size &&
 	item_is_parent()) {
@@ -1063,5 +1062,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.63 2002/06/09 23:20:18 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.64 2002/07/01 15:28:19 spitzak Exp $".
 //

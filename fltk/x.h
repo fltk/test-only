@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.11 2002/06/18 06:47:28 spitzak Exp $"
+// "$Id: x.h,v 1.12 2002/07/01 15:28:19 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -119,6 +119,8 @@ extern FL_API Region	XRectangleRegion(int x, int y, int w, int h);
 // the desire to have the id have a longer lifetime than this object,
 // intelligent constructors and destructors are not implemented.
 
+FL_API void fl_load_identity();
+
 class FL_API Fl_Drawable {
  public:
   Window xid;
@@ -135,7 +137,7 @@ class FL_API Fl_Drawable {
   void destroy() {
     if (xid) {free_gc(); XFreePixmap(fl_display, xid); xid = 0;}
   }
-  void make_current() {fl_drawable = this; fl_window = xid;}
+  void make_current() {fl_drawable = this; fl_window=xid; fl_load_identity();}
 };
 
 ////////////////////////////////////////////////////////////////
@@ -150,14 +152,14 @@ class FL_API Fl_Drawable {
   XCreatePixmap(fl_display, fl_window, w, h, fl_visual->depth)
 
 #define fl_begin_offscreen(id) \
-  {Fl_Drawable* _sd = fl_drawable; \
+  {fl_push_matrix(); \
+  Fl_Drawable* _sd = fl_drawable; \
   Fl_Drawable _nd(id); \
   _nd.make_current(); \
-  int _sx = fl_x_; int _sy = fl_y_; fl_x_ = fl_y_ = 0; \
   fl_push_no_clip()
 
 #define fl_end_offscreen() \
-  _nd.free_gc(); _sd->make_current(); fl_pop_clip(); fl_y_ = _sy; fl_x_ = _sx;}
+  _nd.free_gc(); _sd->make_current(); fl_pop_clip(); fl_pop_matrix();}
 
 #define fl_copy_offscreen(x,y,w,h,id,srcx,srcy) \
   XCopyArea(fl_display, id, fl_window, fl_gc, srcx, srcy, w, h, x, y)
@@ -209,5 +211,5 @@ Fl_Window* fl_find(Window xid);
 #endif	//Fl_X_H
 
 //
-// End of "$Id: x.h,v 1.11 2002/06/18 06:47:28 spitzak Exp $".
+// End of "$Id: x.h,v 1.12 2002/07/01 15:28:19 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arc.cxx,v 1.8 2002/02/10 22:57:49 spitzak Exp $"
+// "$Id: fl_arc.cxx,v 1.9 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Arc functions for the Fast Light Tool Kit (FLTK).
 //
@@ -40,14 +40,19 @@ void fl_arc(double l, double b, double w, double h, double start, double end) {
   // draw start point accurately:
   double X = w/2*cos(angle);
   double Y = -h/2*sin(angle);
-  fl_vertex(x+X,y+Y);
+
+#define MAXPOINTS 100
+  float points[MAXPOINTS][2];
+  float* p = points[0];
+  *p++ = float(x+X); *p++ = float(y+Y);
 
   // Maximum arc length to approximate with chord with error <= 0.125
   
   double epsilon; {
-    // calculate area of parraleogram defined by diameters
-    double r = fabs(fl_transform_dx(w,0)*fl_transform_dy(0,h) -
-		    fl_transform_dx(0,h)*fl_transform_dy(w,0));
+    // calculate area of parallelogram defined by diameters
+    double dx1,dy1; dx1=w; dy1=0; fl_transform_distance(dx1,dy1);
+    double dx2,dy2; dx2=0; dy2=h; fl_transform_distance(dx2,dy2);
+    double r = fabs(dx1*dy2 - dx2*dy1);
     r = .5*sqrt(r);     // approximate radius
     // I don't understand this part:
     r = 1.0 - 0.125/r;		// r2 = cos(epsilon/2)
@@ -56,7 +61,8 @@ void fl_arc(double l, double b, double w, double h, double start, double end) {
   }
   angle = end*(M_PI/180) - angle;	// Displacement angle (radians)
   int i = int(ceil(fabs(angle)/epsilon));// Segments in approximation
-  
+  if (i > MAXPOINTS-1) i = MAXPOINTS-1;
+
   if (i) {
     epsilon = angle/i;		// Arc length for equal-size steps
     // calculate transformation matrix that does rotation by epsilon in
@@ -69,11 +75,14 @@ void fl_arc(double l, double b, double w, double h, double start, double end) {
     const double m01 = sin_e*w/h;
     const double m10 = -sin_e*h/w;
     do {
-      double Xnew =  m00*X + m01*Y;
-                Y =  m10*X + m11*Y;
-      fl_vertex(x + (X=Xnew), y + Y);
+      double Xnew = m00*X + m01*Y;
+                Y = m10*X + m11*Y;
+		X = Xnew;
+      *p++ = float(x + X);
+      *p++ = float(y + Y);
     } while (--i);
   }
+  fl_vertices((p-points[0])/2, points);
 }
 
 #if 0 // portable version.  X-specific one in fl_vertex.C
@@ -83,5 +92,5 @@ void fl_circle(double x,double y,double r) {
 #endif
 
 //
-// End of "$Id: fl_arc.cxx,v 1.8 2002/02/10 22:57:49 spitzak Exp $".
+// End of "$Id: fl_arc.cxx,v 1.9 2002/07/01 15:28:19 spitzak Exp $".
 //

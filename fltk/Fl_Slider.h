@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.h,v 1.4 2002/03/06 08:50:45 spitzak Exp $"
+// "$Id: Fl_Slider.h,v 1.5 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -75,7 +75,7 @@ protected:
   int slider_position(double value, int w);
   double position_value(int x, int w);
   int handle(int event, int, int, int, int);
-  void draw_ticks(int,int,int,int);
+  void draw_ticks(int,int,int,int, int min_spacing);
   bool draw(int, int, int, int, Fl_Flags flags, bool slot);
 };
 
@@ -95,5 +95,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Fl_Slider.h,v 1.4 2002/03/06 08:50:45 spitzak Exp $".
+// End of "$Id: Fl_Slider.h,v 1.5 2002/07/01 15:28:19 spitzak Exp $".
 //

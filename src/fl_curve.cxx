@@ -1,5 +1,5 @@
 //
-// "$Id: fl_curve.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_curve.cxx,v 1.7 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Bezier curve functions for the Fast Light Tool Kit (FLTK).
 //
@@ -32,23 +32,21 @@
 #include <fltk/fl_draw.h>
 #include <math.h>
 
-void fl_curve(double X0, double Y0,
-	      double X1, double Y1,
-	      double X2, double Y2,
-	      double X3, double Y3) {
+void fl_curve(double x0, double y0,
+	      double x1, double y1,
+	      double x2, double y2,
+	      double x3, double y3) {
 
-  double x = fl_transform_x(X0,Y0);
-  double y = fl_transform_y(X0,Y0);
+  fl_transform(x0,y0);
+  fl_transform(x1,y1);
+  fl_transform(x2,y2);
+  fl_transform(x3,y3);
+  double x = x0; double y = y0;
 
-  // draw point 0:
-  fl_transformed_vertex(x,y);
-
-  double x1 = fl_transform_x(X1,Y1);
-  double y1 = fl_transform_y(X1,Y1);
-  double x2 = fl_transform_x(X2,Y2);
-  double y2 = fl_transform_y(X2,Y2);
-  double x3 = fl_transform_x(X3,Y3);
-  double y3 = fl_transform_y(X3,Y3);
+#define MAXPOINTS 100
+  float points[MAXPOINTS][2];
+  float* p = points[0];
+  *p++ = float(x); *p++ = float(y);
 
   // find the area:
   double a = fabs((x-x2)*(y3-y1)-(y-y2)*(x3-x1));
@@ -58,7 +56,7 @@ void fl_curve(double X0, double Y0,
   // use that to guess at the number of segments:
   int n = int(sqrt(a)/4);
   if (n > 1) {
-    if (n > 100) n = 100; // make huge curves not hang forever
+    if (n > MAXPOINTS-1) n = MAXPOINTS-1;
 
     double e = 1.0/n;
 
@@ -83,22 +81,26 @@ void fl_curve(double X0, double Y0,
     // draw points 1 .. n-2:
     for (int m=2; m<n; m++) {
       x += dx1;
+      *p++ = float(x);
       dx1 += dx2;
       dx2 += dx3;
       y += dy1;
+      *p++ = float(y);
       dy1 += dy2;
       dy2 += dy3;
-      fl_transformed_vertex(x,y);
     }
 
     // draw point n-1:
-    fl_transformed_vertex(x+dx1, y+dy1);
+    *p++ = float(x+dx1);
+    *p++ = float(y+dy1);
   }
 
   // draw point n:
-  fl_transformed_vertex(x3,y3);
+  *p++ = float(x3);
+  *p++ = float(y3);
+  fl_transformed_vertices((p-points[0])/2, points);
 }
 
 //
-// End of "$Id: fl_curve.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_curve.cxx,v 1.7 2002/07/01 15:28:19 spitzak Exp $".
 //

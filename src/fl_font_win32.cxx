@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.41 2002/03/26 18:00:35 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.42 2002/07/01 15:28:19 spitzak Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,7 @@
 #include <fltk/Fl_Font.h>
 #include <ctype.h>
 #include <stdlib.h>
+#include <fltk/math.h>
 
 class Fl_FontSize {
 public:
@@ -136,10 +137,16 @@ TEXTMETRIC* fl_textmetric() {return &(fl_fontsize->metr);}
 // we need to decode the encoding somehow!
 static int charset = DEFAULT_CHARSET;
 
-void fl_font(Fl_Font font, unsigned size) {
-  if (font == fl_font_ && size == fl_size_ &&
+void fl_font(Fl_Font font, double psize) {
+
+  // only integers supported right now, I think there is a newer
+  // interface that takes arbitrary sizes, though...
+  psize = rint(psize);
+  unsigned size = unsigned(psize);
+
+  if (font == fl_font_ && psize == fl_size_ &&
       fl_fontsize->charset == charset) return;
-  fl_font_ = font; fl_size_ = size;
+  fl_font_ = font; fl_size_ = psize;
 
   Fl_FontSize* f;
   // search the fontsizes we have generated already:
@@ -153,24 +160,25 @@ void fl_font(Fl_Font font, unsigned size) {
   fl_fontsize = f;
 }
 
-int fl_height() {
+double fl_height() {
   return (fl_fontsize->metr.tmAscent + fl_fontsize->metr.tmDescent);
 }
 
-int fl_descent() { return fl_fontsize->metr.tmDescent; }
+double fl_descent() { return fl_fontsize->metr.tmDescent; }
   
-int fl_width(const char* c, int n) {
+double fl_width(const char* c, int n) {
   SIZE size;
   HDC dc = fl_getDC();
   SelectObject(dc, current_font);
+  // I think win32 has a fractional version of this:
   GetTextExtentPoint(dc, c, n, &size);
   return size.cx;
 }
 
-void fl_draw(const char *str, int n, int x, int y) {
+void fl_transformed_draw(const char *str, int n, double x, double y) {
   SetTextColor(fl_gc, fl_colorref);
   HGDIOBJ oldfont = SelectObject(fl_gc, current_font);
-  TextOut(fl_gc, x+fl_x_, y+fl_y_, str, n);
+  TextOut(fl_gc, int(rint(x)), int(rint(y)), str, n);
   SelectObject(fl_gc, oldfont);
 }
 
@@ -186,5 +194,5 @@ void fl_encoding(const char* f) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.41 2002/03/26 18:00:35 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.42 2002/07/01 15:28:19 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.130 2002/06/09 23:20:19 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.131 2002/07/01 15:28:19 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1188,8 +1188,6 @@ Fl_Drawable* fl_drawable;
 Window fl_window;
 const Fl_Window *Fl_Window::current_;
 GC fl_gc;
-// the current drawing origin
-int fl_x_, fl_y_;
 
 void Fl_Window::make_current() const {
   current_ = this;
@@ -1197,7 +1195,6 @@ void Fl_Window::make_current() const {
   static GC gc;	// the GC used by all X windows with fl_visual
   if (!gc) gc = XCreateGC(fl_display, i->xid, 0, 0);
   fl_gc = gc;
-  fl_x_ = fl_y_ = 0;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1366,5 +1363,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.130 2002/06/09 23:20:19 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.131 2002/07/01 15:28:19 spitzak Exp $".
 //

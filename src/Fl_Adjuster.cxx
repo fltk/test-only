@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.41 2002/06/09 23:20:16 spitzak Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.42 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -98,7 +98,6 @@ void Fl_Adjuster::draw() {
 }
 
 int Fl_Adjuster::handle(int event) {
-  double v;
   int delta;
   int mx = Fl::event_x();
 
@@ -137,8 +136,7 @@ int Fl_Adjuster::handle(int event) {
 	delta = 0;
     }
     if (drag == 1) delta *= 100; else if (drag == 2) delta *= 10;
-    v = increment(previous_value(), delta);
-    handle_drag(soft() ? softclamp(v) : clamp(v));
+    handle_drag(previous_value() + (step() ? step() : .01f) * delta);
     return 1;
 
   case FL_RELEASE:
@@ -148,8 +146,7 @@ int Fl_Adjuster::handle(int event) {
       else delta = 10;
       if (Fl::event_state()& (FL_SHIFT|FL_CAPS_LOCK|FL_CTRL|FL_ALT)) 
 	delta = -delta;
-      v = increment(value(), delta);
-      handle_drag(soft() ? softclamp(v) : clamp(v));
+      handle_drag(previous_value() + (step() ? step() : .01f) * delta);
     }
     drag = 0;
     redraw();
@@ -190,5 +187,5 @@ Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.41 2002/06/09 23:20:16 spitzak Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.42 2002/07/01 15:28:19 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.45 2002/05/15 16:38:01 spitzak Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.46 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,7 +27,7 @@
 #include <fltk/fl_draw.h>
 #include <fltk/Fl_Menu_Window.h>
 
-float		Fl_Tooltip::delay_ = 1.0f;
+double		Fl_Tooltip::delay_ = 1.0f;
 bool		Fl_Tooltip::enabled_ = true;
 
 #define MAX_WIDTH 400
@@ -190,5 +190,5 @@ static Fl_Named_Style style("Tooltip", revert, &Fl_Tooltip::default_style);
 Fl_Named_Style* Fl_Tooltip::default_style = &::style;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.45 2002/05/15 16:38:01 spitzak Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.46 2002/07/01 15:28:19 spitzak Exp $".
 //

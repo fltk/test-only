@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.58 2002/06/09 23:20:19 spitzak Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.59 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -54,14 +54,14 @@ int Fl_Scrollbar::value(int p, int w, int t, int l) {
 #define REPEAT .05
 
 void Fl_Scrollbar::increment_cb() {
-  int i;
+  double i;
   switch (pushed_) {
   case 1: i = -linesize(); break;
   default:i =  linesize(); break;
   case 3: i = -pagesize(); break;
   case 4: i =  pagesize(); break;
   }
-  handle_drag(clamp(value()+i));
+  handle_drag(value()+i);
 }
 
 void Fl_Scrollbar::timeout_cb(void* v) {
@@ -140,12 +140,10 @@ int Fl_Scrollbar::handle(int event) {
     handle_release();
     return 1;
   case FL_MOUSEWHEEL: {
-    int n = (vertical() ? Fl::event_dy() : Fl::event_dx())
-      * Fl_Style::wheel_scroll_lines;
-    int sign = 1; if (n < 0) {n = -n; sign = -1;}
-    n *= linesize();
-    if (n > pagesize()) n = pagesize();
-    handle_drag(clamp(increment(value(), n * sign)));
+    float n = (vertical() ? Fl::event_dy() : Fl::event_dx())
+      * Fl_Style::wheel_scroll_lines * linesize();
+    if (fabsf(n) > pagesize()) n = (n<0)?-pagesize():pagesize();
+    handle_drag(value()+n);
     return 1;
   }
   case FL_KEY:
@@ -220,5 +218,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.58 2002/06/09 23:20:19 spitzak Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.59 2002/07/01 15:28:19 spitzak Exp $".
 //

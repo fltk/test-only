@@ -1,4 +1,5 @@
-<html><head><title>Using OpenGL in FLTK</title></head><body bgcolor=white>
+<html><head><link href="fltk.css" rel="stylesheet" type="text/css">
+<title>Using OpenGL in FLTK</title></head><body>
 
 <h1>Using OpenGL</h1>
 
@@ -35,7 +36,7 @@ redrawn whenever the <tt>FL_DAMAGE_ALL</tt> bit is set in the value
 returned by <tt>damage()</tt>.  For double-buffered windows you will
 need to surround the drawing code with the following code to make sure
 that both buffers are redrawn:
-<ul><pre>
+<pre>
 #ifndef MESA
 glDrawBuffer(GL_FRONT_AND_BACK);
 #endif // !MESA
@@ -43,14 +44,13 @@ glDrawBuffer(GL_FRONT_AND_BACK);
 #ifndef MESA
 glDrawBuffer(GL_BACK);
 #endif // !MESA
-</pre></ul>
+</pre>
 <B>Note:</B> If you are using the Mesa graphics library, the call to
 <tt>glDrawBuffer()</tt> is not required and will slow down drawing
 considerably. The preprocessor instructions shown above will optimize
 your code based upon the graphics library used.
 <H3>Defining the Subclass</H3>
 To define the subclass you just subclass the <TT>Fl_Gl_Window</TT> class: 
-<UL>
 <PRE>
 class MyWindow : public Fl_Gl_Window {
   void draw();
@@ -61,14 +61,12 @@ public:
     : Fl_Gl_Window(X, Y, W, H, L) {}
 };
 </PRE>
-</UL>
  The <TT>draw()</TT> and <TT>handle()</TT> methods are described below. 
  Like any widget, you can include additional private and public data in 
 your class (such as scene graph information, etc.) 
 <H3>The draw() Method</H3>
  The <TT>draw()</TT> method is where you actually do your OpenGL 
 drawing: 
-<UL>
 <PRE>
 void MyWindow::draw() {
   if (!valid()) {
@@ -79,11 +77,9 @@ void MyWindow::draw() {
   ... draw ...
 }
 </PRE>
-</UL>
 <H3>The handle() Method</H3>
  The <TT>handle()</TT> method handles mouse and keyboard events for the 
 window: 
-<UL>
 <PRE>
 int MyWindow::handle(int event) {
   switch(event) {
@@ -110,19 +106,17 @@ int MyWindow::handle(int event) {
     ... Return 1 if you understand/use the shortcut event, 0 otherwise...
     return 1;
   default:
-    // tell FLTK that I don't understand other events
-    return 0;
+    // let the base class handle all other events:
+    return Fl_Gl_Window::handle(event);
   }
 }
 </PRE>
-</UL>
 When <TT>handle()</TT> is called, the OpenGL context is not set up! 
 If your display changes, you should call <TT>redraw()</TT> and let <TT>
 draw()</TT> do the work. Don't call any OpenGL drawing functions from 
 inside <TT>handle()</TT>! 
 <P>You can call <I>some</I> OpenGL stuff like hit detection and texture 
 loading functions by doing: </P>
-<UL>
 <PRE>
   case FL_PUSH:
     make_current(); // make OpenGL context current
@@ -133,7 +127,6 @@ loading functions by doing: </P>
     ... ok to call NON-DRAWING OpenGL code here, such as hit
     detection, loading textures, etc...
 </PRE>
-</UL>
 Your main program can now create one of your windows by doing <TT>new 
 MyWindow(...)</TT>.  You can also use <A href=fluid.html>FLUID</A>
 by: 
@@ -158,20 +151,16 @@ that don't have OpenGL drawing) you <B>must</B> initialize FLTK so that it
 knows it is going to use OpenGL.  You may use any of the symbols 
 described for <A href=Fl_Gl_Window.html#mode><TT>
 Fl_Gl_Window::mode()</TT></A> to describe how you intend to use OpenGL: </P>
-<UL>
 <PRE>
 Fl::gl_visual(FL_RGB);
 </PRE>
-</UL>
 You can then put OpenGL drawing code anywhere you can draw normally by 
 surrounding it with: 
-<UL>
 <PRE>
 gl_start();
 ... put your OpenGL code here ...
 gl_finish();
 </PRE>
-</UL>
 <A name=gl_start><TT>gl_start()</TT></A> and <A name=gl_finish><TT>
 gl_finish()</TT></A> set up an OpenGL context with an orthographic 
 projection so that 0,0 is the lower-left corner of the window and each 
@@ -284,7 +273,6 @@ OpenGL code.
 <H4>OptimizerWindow Class Definition</H4>
  To use OpenGL Optimizer with FLTK you'll need to create a subclass of <TT>
 Fl_Gl_Widget</TT> that includes several state variables: 
-<UL>
 <PRE>
 class OptimizerWindow : public Fl_Gl_Window {
   csContext *context_; // Initialized to 0 and set by draw()...
@@ -315,7 +303,6 @@ public:
   }
 };
 </PRE>
-</UL>
 <PRE>
 
 </PRE>
@@ -326,7 +313,6 @@ this call.
 <H4>The draw() Method</H4>
  The <TT>draw()</TT> method performs the needed initialization and does 
 the actual drawing: 
-<UL>
 <PRE>
 void OptimizerWindow::draw() {
   if (!context_) {
@@ -379,7 +365,6 @@ void OptimizerWindow::draw() {
     draw_action_-&gt;apply(scene_);
 }
 </PRE>
-</UL>
 <H4>The scene() Method</H4>
  The <TT>scene()</TT> method sets the scene to be drawn.  The scene is 
 a collection of 3D objects in a <TT>csGroup</TT>.  The scene is redrawn 

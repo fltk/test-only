@@ -1,5 +1,5 @@
 //
-// "$Id: fl_overlay.cxx,v 1.7 2001/07/29 22:04:44 spitzak Exp $"
+// "$Id: fl_overlay.cxx,v 1.8 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Overlay support for the Fast Light Tool Kit (FLTK).
 //
@@ -51,8 +51,7 @@ void fl_overlay_clear() {
 }
 
 void fl_overlay_rect(int x, int y, int w, int h) {
-  x += fl_x_;
-  y += fl_y_;
+  fl_transform(x,y);
   if (w < 0) {x += w; w = -w;} else if (!w) w = 1;
   if (h < 0) {y += h; h = -h;} else if (!h) h = 1;
   if (pw > 0) {
@@ -64,5 +63,5 @@ void fl_overlay_rect(int x, int y, int w, int h) {
 }
 
 //
-// End of "$Id: fl_overlay.cxx,v 1.7 2001/07/29 22:04:44 spitzak Exp $".
+// End of "$Id: fl_overlay.cxx,v 1.8 2002/07/01 15:28:19 spitzak Exp $".
 //

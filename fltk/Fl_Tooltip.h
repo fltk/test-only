@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.h,v 1.2 2002/03/26 18:00:34 spitzak Exp $"
+// "$Id: Fl_Tooltip.h,v 1.3 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Tooltip definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -31,8 +31,8 @@
 
 class FL_API Fl_Tooltip {
 public:
-  static float delay() { return delay_; }
-  static void delay(float f) { delay_ = f; }
+  static double delay() { return delay_; }
+  static void delay(double f) { delay_ = f; }
   static bool enabled() { return enabled_; }
   static void enable(bool b = true) { enabled_ = b; }
   static void disable() { enabled_ = false; }
@@ -60,12 +60,12 @@ public:
   static Fl_Boxtype boxtype()	{ return default_style->box; }
 
 private:
-  static float delay_;
+  static double delay_;
   static bool enabled_;
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Tooltip.h,v 1.2 2002/03/26 18:00:34 spitzak Exp $".
+// End of "$Id: Fl_Tooltip.h,v 1.3 2002/07/01 15:28:19 spitzak Exp $".
 //

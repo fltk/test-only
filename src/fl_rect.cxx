@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.26 2001/07/29 22:04:44 spitzak Exp $"
+// "$Id: fl_rect.cxx,v 1.27 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Non-path routines from fl_draw.h that are used by the standard boxtypes
 // and thus are always linked into an fltk program.
@@ -29,51 +29,54 @@
 
 void fl_rect(int x, int y, int w, int h) {
   if (w<=0 || h<=0) return;
+  fl_transform(x,y);
 #ifdef _WIN32
-  x += fl_x_; y += fl_y_;
   MoveToEx(fl_gc, x, y, 0L); 
   LineTo(fl_gc, x+w-1, y);
   LineTo(fl_gc, x+w-1, y+h-1);
   LineTo(fl_gc, x, y+h-1);
   LineTo(fl_gc, x, y);
 #else
-  XDrawRectangle(fl_display, fl_window, fl_gc, fl_x_+x, fl_y_+y, w-1, h-1);
+  XDrawRectangle(fl_display, fl_window, fl_gc, x, y, w-1, h-1);
 #endif
 }
 
 void fl_rectf(int x, int y, int w, int h) {
   if (w<=0 || h<=0) return;
+  fl_transform(x,y);
 #ifdef _WIN32
   RECT rect;
-  x += fl_x_; y += fl_y_;
   rect.left = x; rect.top = y;  
   rect.right = x + w; rect.bottom = y + h;
   FillRect(fl_gc, &rect, fl_brush);
 #else
-  XFillRectangle(fl_display, fl_window, fl_gc, fl_x_+x, fl_y_+y, w, h);
+  XFillRectangle(fl_display, fl_window, fl_gc, x, y, w, h);
 #endif
 }
 
 void fl_line(int x, int y, int x1, int y1) {
+  fl_transform(x,y);
+  fl_transform(x1,y1);
 #ifdef _WIN32
-  MoveToEx(fl_gc, fl_x_+x, fl_y_+y, 0L); 
-  LineTo(fl_gc, fl_x_+x1, fl_y_+y1);
+  MoveToEx(fl_gc, x, y, 0L); 
+  LineTo(fl_gc, x1, y1);
   // Draw the last point *again* because the GDI line drawing
   // functions will not draw the last point ("it's a feature!"...)
-  SetPixel(fl_gc, fl_x_+x1, fl_y_+y1, fl_colorref);
+  SetPixel(fl_gc, x1, y1, fl_colorref);
 #else
-  XDrawLine(fl_display, fl_window, fl_gc, fl_x_+x, fl_y_+y, fl_x_+x1,fl_y_+y1);
+  XDrawLine(fl_display, fl_window, fl_gc, x, y, x1, y1);
 #endif
 }
 
 void fl_point(int x, int y) {
+  fl_transform(x,y);
 #ifdef _WIN32
-  SetPixel(fl_gc, fl_x_+x, fl_y_+y, fl_colorref);
+  SetPixel(fl_gc, x, y, fl_colorref);
 #else
-  XDrawPoint(fl_display, fl_window, fl_gc, fl_x_+x, fl_y_+y);
+  XDrawPoint(fl_display, fl_window, fl_gc, x, y);
 #endif
 }
 
 //
-// End of "$Id: fl_rect.cxx,v 1.26 2001/07/29 22:04:44 spitzak Exp $".
+// End of "$Id: fl_rect.cxx,v 1.27 2002/07/01 15:28:19 spitzak Exp $".
 //

@@ -1,20 +1,21 @@
-<html><head><title>class Fl_Gl_Window</title></head><body bgcolor=white>
+<html><head><link href="fltk.css" rel="stylesheet" type="text/css">
+<title>class Fl_Gl_Window</title></head><body>
 <!-- NEW PAGE -->
 <h2>class Fl_Gl_Window</h2>
 <hr>
 
 <H3>Class Hierarchy</H3>
-<UL><PRE>
+<PRE>
 <A href=Fl_Widget.html#Fl_Widget>Fl_Widget</A>
    |
    +----<A href=Fl_Window.html#Fl_Window>Fl_Window</A>
            |
            +----<B>Fl_Gl_Window</B>
-</PRE></UL>
+</PRE>
 
 <h3>Include Files</h3>
 
-<UL><PRE>#include &lt;fltk/Fl_Gl_Window.h&gt;</PRE></UL>
+<PRE>#include &lt;fltk/Fl_Gl_Window.h&gt;</PRE>
 
 <h3>Description</h3>
 
@@ -171,7 +172,7 @@ context for this window or when the window resizes, and is turned on
 <TT>draw()</TT> method to avoid unneccessarily initializing the OpenGL
 context.  Just do this:
 
-<UL><PRE>
+<PRE>
 void mywindow::draw() {
   if (!valid()) {
     glViewport(0,0,w(),h());
@@ -181,7 +182,7 @@ void mywindow::draw() {
   }
   ... draw your geometry here ...
 }
-</PRE></UL>
+</PRE>
 
 You can turn <TT>valid()</TT> on by calling <TT>valid(1)</TT>.  You
 should only do this after fixing the transformation inside a

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.111 2002/05/06 06:31:26 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.112 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -483,17 +483,18 @@ void Fl_Group::draw() {
 void Fl_Group::draw_group_box() const {
 // So that this may be called from any child's draw context, I need to
 // figure out the correct origin:
-  int save_x = fl_x_;
-  int save_y = fl_y_;
+  fl_push_matrix();
 #if 1
-  fl_x_ = 0;
-  fl_y_ = 0;
+  fl_load_identity();
+  int x = 0;
+  int y = 0;
   const Fl_Group* group = this;
   while (!group->is_window()) {
-    fl_x_ += group->x();
-    fl_y_ += group->y();
+    x += group->x();
+    y += group->y();
     group = group->parent();
   }
+  fl_translate(x,y);
 #else
   // this does not work because it resets the clip region:
   make_current();
@@ -508,8 +509,7 @@ void Fl_Group::draw_group_box() const {
   }
   draw_box();
   draw_inside_label();
-  fl_y_ = save_y;
-  fl_x_ = save_x;
+  fl_pop_matrix();
 }
 
 // Widgets that want to outwit the clip-out can set this when they are
@@ -525,15 +525,14 @@ Fl_Widget* fl_did_clipping;
 void Fl_Group::draw_child(Fl_Widget& w) const {
   if (w.visible() && !w.is_window()) {
     if (!fl_not_clipped(w.x(), w.y(), w.w(), w.h())) return;
-    int save_x = fl_x_; fl_x_ += w.x();
-    int save_y = fl_y_; fl_y_ += w.y();
+    fl_push_matrix();
+    fl_translate(w.x(), w.y());
     fl_did_clipping = 0;
     w.set_damage(FL_DAMAGE_ALL|FL_DAMAGE_EXPOSE);
     w.draw();
     w.set_damage(0);
     if (fl_did_clipping != &w) fl_clip_out(0,0,w.w(),w.h());
-    fl_y_ = save_y;
-    fl_x_ = save_x;
+    fl_pop_matrix();
   }
 }
 
@@ -541,12 +540,11 @@ void Fl_Group::draw_child(Fl_Widget& w) const {
 void Fl_Group::update_child(Fl_Widget& w) const {
   if (w.damage() && w.visible() && !w.is_window()) {
     if (!fl_not_clipped(w.x(), w.y(), w.w(), w.h())) return;
-    int save_x = fl_x_; fl_x_ += w.x();
-    int save_y = fl_y_; fl_y_ += w.y();
+    fl_push_matrix();
+    fl_translate(w.x(), w.y());
     w.draw();	
     w.set_damage(0);
-    fl_y_ = save_y;
-    fl_x_ = save_x;
+    fl_pop_matrix();
   }
 }
 
@@ -591,5 +589,5 @@ void Fl_Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.111 2002/05/06 06:31:26 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.112 2002/07/01 15:28:19 spitzak Exp $".
 //

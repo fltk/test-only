@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.37 2002/05/06 06:31:26 spitzak Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.38 2002/07/01 15:28:18 spitzak Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -160,7 +160,7 @@ void Fl_Gl_Window::flush() {
     glDrawBuffer(GL_BACK);
 
     if (!SWAP_TYPE) {
-      SWAP_TYPE = USE_COPY;
+      SWAP_TYPE = SWAP; //USE_COPY;
       const char* c = getenv("GL_SWAP_TYPE");
       if (c) switch (c[0]) {
       case 'U' : SWAP_TYPE = USE_COPY; break;
@@ -317,5 +317,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.37 2002/05/06 06:31:26 spitzak Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.38 2002/07/01 15:28:18 spitzak Exp $".
 //

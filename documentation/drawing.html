@@ -1,6 +1,5 @@
-<html>
-<head><title>Drawing Things in FLTK</title></head>
-<body bgcolor=white>
+<html><head><link href="fltk.css" rel="stylesheet" type="text/css">
+<title>Drawing Things in FLTK</title></head><body>
 
 <h1>Drawing Things in FLTK</h1>
 
@@ -383,11 +382,11 @@ in "points" (for mysterious reasons, since everything else is measured
 in pixels!). To convert these point sizes to pixel sizes use the
 following code:
 
-<ul><pre>
+<pre>
 const Fl_Screen_Info& info = <a href="Fl.html#info">Fl::info()</a>;
 double pixels_per_point = info.height/(info.height_mm*(72/25.4));
 int font_pixel_size = int(font_point_size*pixels_per_point + .5)
-</pre></ul>
+</pre>
 
 <A name=fl_font_named><h4>void fl_font(const char* name, unsigned size);<br>
 void fl_font(const char* name, int attributes, unsigned size);</h4></a>
@@ -510,7 +509,7 @@ lines (if 0 is passed it uses <tt>W * D</tt>), and may be larger than
 first <tt>show()</tt> of <I>any</I> window in your program to get rid 
 of the dithering if possible:
 
-<ul><pre><a name=Fl.html#visual>Fl::visual(FL_RGB);</a></pre></ul>
+<pre><a name=Fl.html#visual>Fl::visual(FL_RGB);</a></pre>
 
 Gray scale (1-channel) images may be drawn.  This is done if <tt>abs(D)</tt>
 is less than 3, or by calling <tt>fl_draw_image_mono()</tt>.  Only one 

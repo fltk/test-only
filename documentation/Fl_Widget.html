@@ -1,20 +1,21 @@
-<html><head><title>class Fl_Widget</title></head><body bgcolor=white>
+<html><head><link href="fltk.css" rel="stylesheet" type="text/css">
+<title>class Fl_Widget</title></head><body>
 <!-- NEW PAGE -->
 <h2>class Fl_Widget</h2>
-<hr>
 
 <h3>Class Hierarchy</h3>
 
-<ul><pre><B>Fl_Widget</B>
+<pre>
+<B>Fl_Widget</B>
    |
    +----<a href=Fl_Box.html>Fl_Box</a>, <a href=Fl_Button.html>Fl_Button</a>, <a href=Fl_Chart.html>Fl_Chart</a>, <a href=Fl_Clock.html>Fl_Clock</a>,
         <a href=Fl_Group.html>Fl_Group</a>, <a href=Fl_Input.html>Fl_Input</a>, <a href=Fl_Positioner.html>Fl_Positioner</a>,
         <a href=Fl_Valuator.html>Fl_Valuator</a>
-</pre></ul>
+</pre>
 
 <h3>Include Files</h3>
 
-<ul><pre>#include &lt;fltk/Fl_Widget.h&gt;</pre></ul>
+<pre>#include &lt;fltk/Fl_Widget.h&gt;</pre>
 
 <h3>Description</h3>
 
@@ -138,7 +139,8 @@ after changing any visible properties.
 
 </table></center>
 
-<hr>
+<h3>Virtual methods</h3>
+
 The constructor and these 5 virtual functions are usually rewritten by
 any subclass. This is described in more detail under <a
 href=subclassing.html>subclassing</a>.
@@ -183,7 +185,7 @@ The destructor is virtual. The base class removes itself from the
 parent widget (if any), and destroys any label made with <a
 href=#copy_label>copy_label()</a>.
 
-<hr>
+<h3>Static methods</h3>
 
 <a name=send><h4>int Fl_Widget::send(int event)</h4></a>
 
@@ -411,7 +413,7 @@ and symbols in there with the symbol drawing code.
 <a name=shortcut><h4>ulong Fl_Widget::shortcut() const
 <br>void Fl_Widget::shortcut(ulong key)</h4></a>
 
-<p>Buttons and menu items use the shortcut to identify a keystroke
+Buttons and menu items use the shortcut to identify a keystroke
 that will activate them. The value is a bitwise OR of a key and a set
 of shift flags, for example <CODE>FL_ALT | 'a'</CODE> , <CODE>FL_ALT |
 (FL_F + 10)</CODE>, or just <CODE>'a'</CODE>.  A value of 0 disables
@@ -775,7 +777,7 @@ see what parts of your widget need redrawing.</I> The <tt>handle()</tt>
 method can then set individual damage bits to limit the amount of drawing
 that needs to be done:
 
-<ul><pre>
+<pre>
 MyClass::handle(int event) {
   ...
   if (change_to_part1) damage(1);
@@ -791,9 +793,9 @@ MyClass::draw() {
   if (damage() & (FL_DAMAGE_ALL | 2)) draw_part2();
   if (damage() & (FL_DAMAGE_ALL | 4)) draw_part3();
 }
-</pre></ul>
+</pre>
 
-Fltk assigns meaning to the following bits in the damage:
+<p>Fltk assigns meaning to the following bits in the damage:
 
 <ul>
 <li><tt>FL_DAMAGE_CHILD</tt> - A child of this group widget needs to
@@ -848,13 +850,13 @@ or <a href=#resize><tt>resize()</tt></a> done since the last time
 <p>A typical layout function does not care about the widget moving, an
 easy way to skip it is as follows:
 
-<ul><pre>
+<pre>
 MyClass::layout() {
   if (!(layout_damage() & ~FL_LAYOUT_XY)) return;
   do_expensive_layout();
   redraw();
 }
-</pre></ul>
+</pre>
 
 The following bit values are defined:
 

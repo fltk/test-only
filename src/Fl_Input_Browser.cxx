@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.cxx,v 1.16 2002/01/25 10:10:00 spitzak Exp $"
+// "$Id: Fl_Input_Browser.cxx,v 1.17 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Input Browser (Combo Box) widget for the Fast Light Tool Kit (FLTK).
 //
@@ -253,9 +253,10 @@ Fl_Input_Browser::draw() {
     input->copy_style(style()); // force it to use this style
     input->box(FL_FLAT_BOX);
     // fix for relative coordinates
-    fl_x_ += X; fl_y_ += Y;
+    fl_push_matrix();
+    fl_translate(X,Y);
     input->draw();
-    fl_x_ -= X; fl_y_ -= Y;
+    fl_pop_matrix();
     input->set_damage(0);
   }
   if (damage()&(FL_DAMAGE_ALL|FL_DAMAGE_VALUE|FL_DAMAGE_HIGHLIGHT)) {
@@ -269,5 +270,5 @@ Fl_Input_Browser::draw() {
 }
 
 //
-// End of "$Id: Fl_Input_Browser.cxx,v 1.16 2002/01/25 10:10:00 spitzak Exp $".
+// End of "$Id: Fl_Input_Browser.cxx,v 1.17 2002/07/01 15:28:19 spitzak Exp $".
 //

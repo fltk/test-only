@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_win32.cxx,v 1.10 2001/07/29 22:04:44 spitzak Exp $"
+// "$Id: fl_draw_image_win32.cxx,v 1.11 2002/07/01 15:28:19 spitzak Exp $"
 //
 // _WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -120,8 +120,8 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   fl_clip_box(X,Y,W,H,x,y,w,h);
   if (w<=0 || h<=0) return;
   if (buf) buf += (x-X)*delta + (y-Y)*linedelta;
-  X += fl_x_; x += fl_x_;
-  Y += fl_y_; y += fl_y_;
+  fl_transform(x,y);
+  fl_transform(X,Y);
 
   static U32 bmibuffer[256+12] = {0};
   BITMAPINFO &bmi = *((BITMAPINFO*)bmibuffer);
@@ -234,5 +234,5 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 #endif
 
 //
-// End of "$Id: fl_draw_image_win32.cxx,v 1.10 2001/07/29 22:04:44 spitzak Exp $".
+// End of "$Id: fl_draw_image_win32.cxx,v 1.11 2002/07/01 15:28:19 spitzak Exp $".
 //

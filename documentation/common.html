@@ -1,31 +1,27 @@
-<html><head><title>FLTK Widgets & Attributes</title></head><body bgcolor = white>
+<html><head><link href="fltk.css" rel="stylesheet" type="text/css">
+<title>FLTK Widgets & Attributes</title></head><body>
 
 <h2><a name=callbacks>Callbacks</a></h2>
 
 Callbacks are functions that are called when the value of a widget 
 changes. A callback function is sent a <TT>Fl_Widget</TT> pointer of 
 the widget that changed and optionally a pointer to data of some sort: 
-<UL>
 <PRE>
 void xyz_callback(Fl_Widget *w, void *data) {
 ...
 }
 </PRE>
-</UL>
  The <TT>callback()</TT> method sets the callback function for a 
 widget.  You can optionally pass a pointer to some data needed for the 
 callback: 
-<UL>
 <PRE>
 int xyz_data;
 
 button-&gt;callback(xyz_callback, data);
 </PRE>
-</UL>
  Normally callbacks are performed only when the value of the widget 
 changes. You can change this using the <A
 href=Fl_Widget.html#when><TT>when()</TT></A> method:
-<UL>
 <PRE>
 button-&gt;when(FL_WHEN_NEVER);
 button-&gt;when(FL_WHEN_CHANGED);
@@ -35,7 +31,6 @@ button-&gt;when(FL_WHEN_ENTER_KEY);
 button-&gt;when(FL_WHEN_ENTER_KEY_ALWAYS);
 button-&gt;when(FL_WHEN_CHANGED | FL_WHEN_NOT_CHANGED);
 </PRE>
-</UL>
 
 <h2><a name=buttons>Buttons</a></h2>
 
@@ -53,24 +48,20 @@ Enter key. </LI>
 <P>For all of these buttons you just need to include the corresponding <TT>
 &lt;fltk/Fl_xyz_Button.h&gt;</TT> header file.  The constructor takes the 
 bounding box of the button and optionally a label string: 
-<UL>
 <PRE>
 Fl_Button *button = new Fl_Button(x, y, width, height, &quot;label&quot;);
 Fl_Light_Button *lbutton = new Fl_Light_Button(x, y, width, height);
 Fl_Round_Button *rbutton = new Fl_Round_Button(x, y, width, height, &quot;label&quot;);
 </PRE>
-</UL>
 Each button has an associated <A
 href=Fl_Button.html#type><TT>type()</TT></A> which allows it to behave
 as a push button, toggle button, or radio button. This type is
 defaulted for each button type but you can change it.
-<UL>
 <PRE>
 button-&gt;type(0); // default for all other buttons
 button-&gt;type(FL_TOGGLE_BUTTON); // default for Fl_Check_Button & Fl_Light_Button
 button-&gt;type(FL_RADIO_BUTTON); // default for Fl_Radio_Button
 </PRE>
-</UL>
 
 The <a
 href=Fl_Button.html#value><tt>value()</tt></a> method
@@ -98,12 +89,10 @@ field. </LI>
 the user to copy text from the output field but not change it. 
 <P>The <A href=Fl_Input.html#value><TT>value()</TT></A> method 
 is used to get or set the string that is displayed: </P>
-<UL>
 <PRE>
 Fl_Input *input = new Fl_Input(x, y, width, height, &quot;label&quot;);
 input-&gt;value(&quot;Now is the time for all good men...&quot;);
 </PRE>
-</UL>
 <p>The string is copied to the widget's own storage when you set the
 <tt>value()</tt> of the widget.
 
@@ -150,13 +139,11 @@ You can access them with the <tt>x()</tt>, <tt>y()</tt>, <tt>w()</tt>,
 and <tt>h()</tt> methods.
 <p>You can change the size and position by using the <TT>position()</TT>, <TT>
 resize()</TT>, and <TT>size()</TT> methods: 
-<UL>
 <PRE>
 button-&gt;position(x, y);
 group-&gt;resize(x, y, width, height);
 window-&gt;size(width, height);
 </PRE>
-</UL>
 If you change a widget's size or position after it is displayed you
 will have to call <tt>redraw()</tt> on the widget's parent.
 
@@ -187,19 +174,15 @@ href=Fl_Color.html#fl_rgb>fl_rgb(r,g,b)</a>.  However this does not
 work that well on 8-bit screens.
 
  The widget color can be set using the <TT>color()</TT> method: 
-<UL>
 <PRE>
 button-&gt;color(FL_RED);
 button->color(fl_rgb(128,200,210));
 </PRE>
-</UL>
  Similarly, the label color can be set using the <TT>labelcolor()</TT>
  method: 
-<UL>
 <PRE>
 button-&gt;labelcolor(FL_WHITE);
 </PRE>
-</UL>
 
 <h2><a name=boxtypes>Box Types</a></h2>
 
@@ -309,7 +292,6 @@ the others point in the direction of that key on a  numeric keypad. </LI>
  Shortcuts are key sequences that activate widgets (usually buttons or 
 menu items).  The <TT>shortcut()</TT> method sets the shortcut for a 
 widget: 
-<UL>
 <PRE>
 button-&gt;shortcut(FL_Enter);
 button-&gt;shortcut(FL_SHIFT + 'b');
@@ -318,7 +300,6 @@ button-&gt;shortcut(FL_ALT + 'b');
 button-&gt;shortcut(FL_CTRL + FL_ALT + 'b');
 button-&gt;shortcut(0); // no shortcut
 </PRE>
-</UL>
 The shortcut value is the key event value (the ASCII value or one of
 the special keys like <a
 href="Fl.html#event_key"><TT>FL_Enter</TT></a>) combined

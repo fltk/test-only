@@ -1,9 +1,10 @@
 //
-// "$Id: math.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $"
+// "$Id: math.h,v 1.3 2002/07/01 15:28:19 spitzak Exp $"
 //
-// Math header file for the Fast Light Tool Kit (FLTK).
+// The purpose of this header file is to make math.h look the same as
+// Unix on other operating systems.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -30,41 +31,57 @@
 
 #ifdef _WIN32
 // things missing from <math.h>:
+# include <float.h>
 
-// stop redefinition warnings
-#undef M_PI
-#undef M_PI_2
-#undef M_PI_4
-#undef M_1_PI
-#undef M_2_PI
-#undef M_SQRT2
-#undef M_SQRT1_2
+# ifndef M_PI
+#  define M_PI		3.14159265358979323846
+#  define M_PI_2		1.57079632679489661923
+#  define M_PI_4		0.78539816339744830962
+#  define M_1_PI		0.31830988618379067154
+#  define M_2_PI		0.63661977236758134308
+#  define M_SQRT2	1.41421356237309504880
+#  define M_SQRT1_2	0.70710678118654752440
+# endif
 
-#define M_PI            3.14159265358979323846
-#define M_PI_2          1.57079632679489661923
-#define M_PI_4          0.78539816339744830962
-#define M_1_PI          0.31830988618379067154
-#define M_2_PI          0.63661977236758134308
-#define M_SQRT2         1.41421356237309504880
-#define M_SQRT1_2       0.70710678118654752440
+# define rint(v)			floor((v)+.5)
+# define copysign		_copysign
+# define drand48()		((double)rand()/RAND_MAX)
+# define srand48(n)		srand((n));
 
-#else
+#endif
 
 #ifdef __EMX__
-#include <float.h>
+# include <float.h>
 #endif
 
+#define rintf(v)	floorf((v)+.5f)
+#if 0 // on some systems it may be necessary to define these:
+# define floorf(a)	floor(a)
+# define ceilf(a)	ceil(a)
+# define fmodf(a,b)	fmod(a,b)
+# define fabsf(a)	fabs(a)
+# define sinf(a)	sin(a)
+# define cosf(a)	cos(a)
+# define tanf(a)	tan(a)
+# define asinf(a)	asin(a)
+# define acosf(a)	acos(a)
+# define atanf(a)	atan(a)
+# define atan2f(a,b)	atan2(a,b)
+# define expf(a)	exp(a)
+# define logf(a)	log(a)
+# define log10f(a)	log10(a)
+# define sqrtf(a)	sqrt(a)
 #endif
-
-#if defined(_WIN32) || defined(CRAY)
-
-inline double rint(double v) {return floor(v+.5);}
-inline double copysign(double a, double b) {return b<0 ? -a : a;}
-
+#ifdef __alpha // powf is broken on alphas, at least in gcc
+# define powf(a,b)	pow(a,b)
+#endif
+#ifdef _WIN32
+# define expm1f(a)	expm1(a)
+# define log1pf(a)	log1p(a)
 #endif
 
 #endif
 
 //
-// End of "$Id: math.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $".
+// End of "$Id: math.h,v 1.3 2002/07/01 15:28:19 spitzak Exp $".
 //

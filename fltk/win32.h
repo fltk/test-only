@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.9 2002/06/18 06:47:26 spitzak Exp $"
+// "$Id: win32.h,v 1.10 2002/07/01 15:28:19 spitzak Exp $"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -102,7 +102,8 @@ extern FL_API Region	fl_clip_region();
 // the desire to have the id have a longer lifetime than this object,
 // intelligent constructors and destructors are not implemented.
 
-extern FL_API HDC fl_makeDC(HBITMAP);
+FL_API HDC fl_makeDC(HBITMAP);
+FL_API void fl_load_identity();
 
 class FL_API Fl_Drawable {
  public:
@@ -124,7 +125,7 @@ class FL_API Fl_Drawable {
   void destroy() {
     if (xid) {free_gc(); DeleteObject((HBITMAP)xid); xid = 0;}
   }
-  void make_current() {fl_gc = dc;}
+  void make_current() {fl_gc = dc; fl_load_identity();}
 };
 
 ////////////////////////////////////////////////////////////////
@@ -138,14 +139,14 @@ class FL_API Fl_Drawable {
 #define fl_create_offscreen(w, h) CreateCompatibleBitmap(fl_gc, w, h)
 
 #define fl_begin_offscreen(id) \
-  {HDC _sdc = fl_gc; \
+  {fl_push_matrix(); \
+  HDC _sdc = fl_gc; \
   Fl_Drawable _nd(id); \
   _nd.make_current(); \
-  int _sx = fl_x_; int _sy = fl_y_; fl_x_ = fl_y_ = 0; \
   fl_push_no_clip()
 
 #define fl_end_offscreen() \
-  _nd.free_gc(); fl_gc = _sdc; fl_pop_clip(); fl_y_ = _sy; fl_x_ = _sx;}
+  _nd.free_gc(); fl_gc = _sdc; fl_pop_clip(); fl_pop_matrix();}
 
 FL_API void fl_copy_offscreen(int x,int y,int w,int h,HBITMAP id,int srcx,int srcy);
 
@@ -193,5 +194,5 @@ extern FL_API HCURSOR fl_default_cursor;
 #endif
 
 //
-// End of "$Id: win32.h,v 1.9 2002/06/18 06:47:26 spitzak Exp $".
+// End of "$Id: win32.h,v 1.10 2002/07/01 15:28:19 spitzak Exp $".
 //

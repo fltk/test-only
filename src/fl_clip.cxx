@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.10 2002/03/26 18:00:35 spitzak Exp $"
+// "$Id: fl_clip.cxx,v 1.11 2002/07/01 15:28:19 spitzak Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -79,7 +79,8 @@ void fl_clip_region(Region r) {
 void fl_push_clip(int x, int y, int w, int h) {
   Region r;
   if (w > 0 && h > 0) {
-    r = XRectangleRegion(x+fl_x_, y+fl_y_, w, h);
+    fl_transform(x,y);
+    r = XRectangleRegion(x, y, w, h);
     Region current = rstack[rstackptr];
     if (current) {
 #ifndef _WIN32
@@ -109,7 +110,8 @@ void fl_clip_out(int x, int y, int w, int h) {
   // current must not be zero, you must push a rectangle first.  I
   // return without doing anything because that makes some old fltk code work:
   if (!current) return;
-  Region r = XRectangleRegion(x+fl_x_, y+fl_y_, w, h);
+  fl_transform(x,y);
+  Region r = XRectangleRegion(x, y, w, h);
 #ifndef _WIN32
   Region temp = XCreateRegion();
   XSubtractRegion(current, r, temp);
@@ -147,8 +149,7 @@ void fl_pop_clip() {
 
 // does this rectangle intersect current clip?
 int fl_not_clipped(int x, int y, int w, int h) {
-  x += fl_x_;
-  y += fl_y_;
+  fl_transform(x,y);
   // first check against the window so we get rid of coordinates
   // outside the 16-bit range the X/Win32 calls take:
   if (x+w <= 0 || y+h <= 0 || x >= Fl_Window::current()->w()
@@ -186,10 +187,9 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H) {
   // Test against the window to get 16-bit values (this is only done if
   // a clip region exists as otherwise it breaks fl_push_no_clip()):
   int ret = 1;
-  x += fl_x_;
+  int dx = x; int dy = y; fl_transform(x,y); dx = x-dx; dy = y-dy;
   if (x < 0) {w += x; x = 0; ret = 2;}
   int t = Fl_Window::current()->w(); if (x+w > t) {w = t-x; ret = 2;}
-  y += fl_y_;
   if (y < 0) {h += y; y = 0; ret = 2;}
   t = Fl_Window::current()->h(); if (y+h > t) {h = t-y; ret = 2;}
   // check for total clip (or for empty rectangle):
@@ -200,8 +200,8 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H) {
     W = H = 0;
     return 0;
   case 1: // completely inside:
-    X = x-fl_x_;
-    Y = y-fl_y_;
+    X = x-dx;
+    Y = y-dy;
     W = w; H = h;
     return ret;
   default: { // partial:
@@ -210,7 +210,7 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H) {
     XIntersectRegion(r, rr, temp);
     XRectangle rect;
     XClipBox(temp, &rect);
-    X = rect.x-fl_x_; Y = rect.y-fl_y_; W = rect.width; H = rect.height;
+    X = rect.x-dx; Y = rect.y-dy; W = rect.width; H = rect.height;
     XDestroyRegion(temp);
     XDestroyRegion(rr);
     return 2;}
@@ -226,14 +226,14 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H) {
     W = H = 0;
     ret = 0;
   } else if (EqualRgn(temp, rr)) { // complete
-    X = x-fl_x_;
-    Y = y-fl_y_;
+    X = x-dx;
+    Y = y-dy;
     W = w; H = h;
     // ret = ret
   } else {	// parital intersection
     RECT rect;
     GetRgnBox(temp, &rect);
-    X = rect.left-fl_x_; Y = rect.top-fl_y_;
+    X = rect.left-dx; Y = rect.top-dy;
     W = rect.right - rect.left; H = rect.bottom - rect.top;
     ret = 2;
   }
@@ -244,5 +244,5 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.10 2002/03/26 18:00:35 spitzak Exp $"
+// End of "$Id: fl_clip.cxx,v 1.11 2002/07/01 15:28:19 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.24 2002/06/21 06:17:09 spitzak Exp $"
+// "$Id: Fl_Valuator.cxx,v 1.25 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Valuator widget for the Fast Light Tool Kit (FLTK).
 //
@@ -38,8 +38,8 @@ Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
   when(FL_WHEN_CHANGED);
   value_ = 0.0;
   step_ = 0;
-  minimum_ = 0.0;
-  maximum_ = 1.0;
+  minimum_ = 0;
+  maximum_ = 1;
   linesize_ = 1;
   pagesize_ = 10;
 }
@@ -69,6 +69,18 @@ double Fl_Valuator::previous_value_;
 // inline void Fl_Valuator::handle_push() {previous_value_ = value_;}
 
 void Fl_Valuator::handle_drag(double v) {
+  // round to nearest multiple of step:
+  if (step_ >= 1) {
+    double is = rint(step_); v = rint(v/is)*is;
+  } else if (step_ > 0) {
+    double is = rint(1/step_); v = rint(v*is)/is;
+  }
+  // If original value was in-range, clamp the new value:
+  double A = minimum_; double B = maximum_;
+  if (A > B) {A = B; B = minimum_;}
+  if (v < A && previous_value_ >= A) v = A;
+  else if (v > B && previous_value_ <= B) v = B;
+  // store the value, redraw the widget, and do callback:
   if (v != value_) {
     value_ = v;
     value_damage();
@@ -89,33 +101,7 @@ void Fl_Valuator::handle_release() {
   }
 }
 
-double Fl_Valuator::round(double v) const {
-  if (step_ >= 1) {
-    double is = rint(step_); return rint(v/is)*is;
-  } else if (step_ > 0) {
-    double is = rint(1/step_); return rint(v*is)/is;
-  } else {
-    return v;
-  }
-}
-
-double Fl_Valuator::clamp(double v) const {
-  if ((v<minimum_) == (minimum_<=maximum_)) return minimum_;
-  else if ((v>maximum_) == (minimum_<=maximum_)) return maximum_;
-  else return v;
-}
-
-double Fl_Valuator::softclamp(double v) const {
-  int which = (minimum_ <= maximum_);
-  double p = previous_value_;
-  if ((v<minimum_)==which && (p<minimum_)!=which)
-    return minimum_;
-  else if ((v>maximum_)==which && (p>maximum_)!=which)
-    return maximum_;
-  else
-    return v;
-}
-
+#if 0
 double Fl_Valuator::increment(double v, int n) const {
   if (minimum_ > maximum_) n = -n;
   if (step_ >= 1) {
@@ -130,6 +116,7 @@ double Fl_Valuator::increment(double v, int n) const {
     return rint(v*is+n)/is;
   }
 }
+#endif
 
 int Fl_Valuator::format(char* buffer) {
   double v = value();
@@ -154,7 +141,7 @@ int Fl_Valuator::handle(int event) {
       redraw(FL_DAMAGE_HIGHLIGHT);
       return 1;
     case FL_KEY: {
-      int i = linesize();
+      float i = linesize();
       if (Fl::event_state()&(FL_SHIFT|FL_CTRL|FL_ALT)) i = pagesize();
       switch (Fl::event_key()) {
         case FL_Page_Up: i = pagesize(); goto MOVE_BY_i;
@@ -165,7 +152,8 @@ int Fl_Valuator::handle(int event) {
         case FL_Up:
         case FL_Right:
           MOVE_BY_i:
-          handle_drag(clamp(increment(value(), i)));
+	  if (maximum() < minimum()) i = -i;
+          handle_drag(value()+i);
           return 1;
         case FL_Home:
           handle_drag(minimum());
@@ -177,9 +165,9 @@ int Fl_Valuator::handle(int event) {
       return 0;
     }
     case FL_MOUSEWHEEL: {
-      // For normal valuators, each click is 1 unit, wheel_scroll_lines
+      // For normal valuators, each click is linesize(), wheel_scroll_lines
       // is ignored. However Fl_Scrollbar does use wheel_scroll_lines.
-      handle_drag(clamp(increment(value(), Fl::event_dy()*linesize())));
+      handle_drag(value()+Fl::event_dy()*linesize());
       return 1;
     }
   }
@@ -187,5 +175,5 @@ int Fl_Valuator::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.24 2002/06/21 06:17:09 spitzak Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.25 2002/07/01 15:28:19 spitzak Exp $".
 //

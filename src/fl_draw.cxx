@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.18 2001/07/29 21:38:00 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.19 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -53,7 +53,7 @@ const int* fl_column_widths_ = 0;
 struct Segment {
   const char* start;
   const char* end; // points after last character
-  int x,y;
+  double x,y;
 };
 
 // The results are put into this array of segments. This may increase
@@ -61,14 +61,14 @@ struct Segment {
 static Segment* segments;
 static int num_segments;
 
-static int max_x;
+static double max_x;
 
 // Create a new segment:
 static /*inline*/ void set(int index,
 		  const char* start,
 		  const char* end,
-		  int width,
-		  int x, int y, int w,
+		  double width,
+		  double x, double y, double w,
 		  Fl_Flags flags
 		  )
 {
@@ -95,15 +95,15 @@ static /*inline*/ void set(int index,
 
 // word-wrap a section of text into one segment per line:
 // Returns the y of the last line
-static int wrap(
+static double wrap(
   const char* start,
   const char* end,
-  int x, int y, int w,
+  double x, double y, double w,
   Fl_Flags flags,
   int& index
   )
 {
-  int width = 0;
+  double width = 0;
   if (flags & FL_ALIGN_WRAP) {
     const char* word_start = start;
     const char* word_end = start;
@@ -111,7 +111,7 @@ static int wrap(
       if (p >= end || *p == ' ') {
 	// test for word-wrap:
 	if (word_start < p) {
-	  int newwidth = width + fl_width(word_end, p-word_end);
+	  double newwidth = width + fl_width(word_end, p-word_end);
 	  if (word_end > start && newwidth > w) { // break before this word
 	    set(index++, start, word_end, width, x, y, w, flags);
 	    y += fl_height();
@@ -152,25 +152,25 @@ static int split(
   bool look_for_underscore = !(flags & FL_RAW_LABEL);
   bool saw_underscore = false;
 
-  int x = 0;
+  double x = 0;
   max_x = 0;
-  int y = 0;
-  int max_y = 0;
+  double y = 0;
+  double max_y = 0;
   const char* p = str;
   for (;;) {
     // find the next newline or tab:
-    int w; // width to format this segment into
+    double w; // width to format this segment into
     if (!*p || *p == '\n') {
       w = W-x;
     } else if (*p == '\t') {
       if (column && *column) w = *column++;
-      else w = ((p-str+8)&-8)*fl_width('2');
+      else w = ((p-str+8)&-8)*fl_width("2",1);
     } else {
       if (*p == '&' && look_for_underscore) saw_underscore = true;
       p++;
       continue;
     }
-    int newy;
+    double newy;
     // Edit out any '&' sign if this is reasonably short label and use
     // it's position later to underscore a letter. This is done by
     // copying the text to the tempbuf and then reusing that buffer
@@ -196,7 +196,7 @@ static int split(
 	Segment& s = segments[i];
 	if (underscore_at >= s.start && underscore_at < s.end) {
 	  const char* text = "_";
-	  int save_y = s.y;
+	  double save_y = s.y;
 	  set(index, text, text+1, 0,
 	      s.x+fl_width(s.start, underscore_at-s.start), y, 0,
 	      FL_ALIGN_LEFT);
@@ -210,7 +210,7 @@ static int split(
     }
     if (newy > max_y) max_y = newy;
     if (!*p) {
-      return max_y+fl_height();
+      return int(max_y+fl_height());
     } else if (*p == '\n') {
       x = 0; y = max_y+fl_height(); max_y = y; column = fl_column_widths_;
     } else { // tab
@@ -229,6 +229,7 @@ void fl_draw(
   char tempbuf[MAX_LENGTH_FOR_UNDERSCORE];
   int index = 0;
   int h = split(str, W, H, flags, index, tempbuf);
+  fl_transform(X,Y);
   int dy;
   if (flags & FL_ALIGN_BOTTOM) {
     dy = Y+H-h;
@@ -240,16 +241,16 @@ void fl_draw(
   }
   for (int i = 0; i < index; i++) {
     Segment& s = segments[i];
-    fl_draw(s.start, s.end-s.start, s.x+X, s.y+dy);
+    fl_transformed_draw(s.start, s.end-s.start, s.x+X, s.y+dy);
   }
 }
 
 void fl_measure(const char* str, int& w, int& h, Fl_Flags flags) {
-  if (!str || !*str) {w = 0; h = fl_height(); return;}
+  if (!str || !*str) {w = 0; h = int(fl_height()); return;}
   char tempbuf[MAX_LENGTH_FOR_UNDERSCORE];
   int index = 0;
   h = split(str, w, h, flags, index, tempbuf);
-  w = max_x;
+  w = int(max_x+.5);
 }
 
 // back-compatable one:
@@ -258,5 +259,5 @@ void fl_measure(const char* str, int& w, int& h, Fl_Flags flags) {
 //  }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.18 2001/07/29 21:38:00 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.19 2002/07/01 15:28:19 spitzak Exp $".
 //

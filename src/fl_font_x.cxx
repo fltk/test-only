@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_x.cxx,v 1.11 2002/03/26 18:00:35 spitzak Exp $"
+// "$Id: fl_font_x.cxx,v 1.12 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,7 @@
 #include <fltk/Fl_Font.h>
 #include <fltk/x.h>
 #include <fltk/fl_draw.h>
+#include <fltk/math.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
@@ -79,23 +80,23 @@ Fl_FontSize::~Fl_FontSize() {
 // Placeholder function, Xft version needs to free something:
 void Fl_Drawable::free_gc() {draw = 0;}
 
-void fl_draw(const char *str, int n, int x, int y) {
+void fl_transformed_draw(const char *str, int n, double x, double y) {
   if (font_gc != fl_gc) {
     // I removed this, the user MUST set the font before drawing: (was)
     // if (!fl_fontsize) fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
     font_gc = fl_gc;
     XSetFont(fl_display, fl_gc, current_font->fid);
   }
-  XDrawString(fl_display, fl_window, fl_gc, x+fl_x_, y+fl_y_, str, n);
+  XDrawString(fl_display, fl_window, fl_gc, int(rint(x)),int(rint(y)), str, n);
 }
 
-int fl_height() {
+double fl_height() {
   return (current_font->ascent + current_font->descent);
 }
 
-int fl_descent() { return current_font->descent; }
+double fl_descent() { return current_font->descent; }
 
-int fl_width(const char *c, int n) {
+double fl_width(const char *c, int n) {
   return XTextWidth(current_font, c, n);
 }
 
@@ -128,14 +129,18 @@ font_word(const char* p, int n) {
   return p;
 }
 
-void fl_font(Fl_Font font, unsigned size) {
+void fl_font(Fl_Font font, double psize) {
   Fl_FontSize* f = fl_fontsize;
 
+  // only integers supported right now (this can be improved):
+  psize = rint(psize);
+  unsigned size = unsigned(psize);
+
   // See if the current font is correct:
-  if (font == fl_font_ && size == fl_size_ &&
+  if (font == fl_font_ && psize == fl_size_ &&
       (f->encoding==fl_encoding_ || !strcmp(f->encoding, fl_encoding_)))
     return;
-  fl_font_ = font; fl_size_ = size;
+  fl_font_ = font; fl_size_ = psize;
 
   // search the FontSize we have generated already:
   for (f = font->first; f; f = f->next)
@@ -263,5 +268,5 @@ fl_fonts[] = {
 };
 
 //
-// End of "$Id: fl_font_x.cxx,v 1.11 2002/03/26 18:00:35 spitzak Exp $"
+// End of "$Id: fl_font_x.cxx,v 1.12 2002/07/01 15:28:19 spitzak Exp $"
 //

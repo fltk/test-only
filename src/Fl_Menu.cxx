@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.125 2002/06/09 23:20:18 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.126 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -140,14 +140,14 @@ void MenuTitle::draw() {
 
   // this allow a toggle or other widget to preview it's state:
   if (Fl::event_state(FL_BUTTONS)) Fl::pushed_ = widget;
-  fl_x_ = 5;
-  fl_y_ = (h()-widget->height())/2;
+  fl_push_matrix();
+  fl_translate(5, (h()-widget->height())/2);
   int save_w = widget->w(); widget->w(w()-10);
   widget->draw();
   widget->w(save_w);
   widget->clear_flag(FL_SELECTED);
   Fl::pushed_ = 0;
-  fl_x_ = fl_y_ = 0;
+  fl_pop_matrix();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -247,7 +247,7 @@ MenuWindow::MenuWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp, Fl_Wid
     if (is_parent(i)) {
       if (16 > hotKeysW) hotKeysW = 16;
     } else if (widget->shortcut()) {
-      int w1 = fl_width(Fl::key_name(widget->shortcut())) + 8;
+      int w1 = int(fl_width(Fl::key_name(widget->shortcut())) + 8.5);
       if (w1 > hotKeysW) hotKeysW = w1;
     }
     // can't use sgi overlay for images:
@@ -331,8 +331,8 @@ void MenuWindow::draw() {
 	  fl_pop_clip();
 	}
       }
-      fl_x_ = x;
-      fl_y_ = y+leading/2;
+      fl_push_matrix();
+      fl_translate(x, y+leading/2);
       int save_w = widget->w(); widget->w(w);
       int save_flags = widget->flags();
       widget->flags(flags);
@@ -340,12 +340,12 @@ void MenuWindow::draw() {
       widget->flags(save_flags);
       widget->w(save_w);
       Fl::pushed_ = 0;
-      fl_x_ = fl_y_ = 0;
+      fl_pop_matrix();
       flags &= ~(FL_VALUE|FL_ALIGN_MASK);
 
       if (is_parent(i)) {
 	// Use the item's fontsize for the size of the arrow, rather than h:
-	int nh = fl_height(widget->text_font(), widget->text_size());
+	int nh = widget->text_size();
 	draw_glyph(FL_GLYPH_RIGHT, x+w-nh, y+(ih-nh)/2, nh, nh, flags);
       } else if (widget->shortcut()) {
 	fl_font(widget->text_font(), widget->text_size());
@@ -765,5 +765,5 @@ int Fl_Menu_::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.125 2002/06/09 23:20:18 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.126 2002/07/01 15:28:19 spitzak Exp $".
 //

@@ -1,4 +1,5 @@
-<html><head><title>FLTK Utility Functions</title></head><body bgcolor=white>
+<html><head><link href="fltk.css" rel="stylesheet" type="text/css">
+<title>FLTK Utility Functions</title></head><body>
 
 <h1>Utility Function Reference</h1>
 
@@ -179,8 +180,8 @@ an attempt is made to put unpadded numbers in consecutive order.
 
 <p>You can free the returned list of files with the following code:</p>
 
-<UL><PRE>for (int i = return_value; i &gt; 0;) free((void*)(list[--i]));
-free((void*)list);</PRE></UL>
+<PRE>for (int i = return_value; i &gt; 0;) free((void*)(list[--i]));
+free((void*)list);</PRE>
 
 <H4><A name=filename_isdir>int filename_isdir(const char *f)</A></H4>
 

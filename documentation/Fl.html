@@ -1,7 +1,7 @@
-<html><head><title>class Fl</title></head><body bgcolor=white>
+<html><head><link href="fltk.css" rel="stylesheet" type="text/css">
+<title>class Fl</title></head><body>
 
 <h1>class Fl</h1>
-<hr>
 
 This appendix describes all of the <b><tt>Fl::foo()</tt></b>
 functions.  These functions mostly are concerned with event handling
@@ -347,11 +347,11 @@ any events or fd's came in.
 Same as <a href="#wait"><tt>Fl::wait(0)</tt></a>.  Calling this during a big calculation
 will keep the screen up to date and the interface responsive:
 
-<ul><pre>while (!calculation_done()) {
+<pre>while (!calculation_done()) {
  calculate();
  Fl::check();
  if (user_hit_abort_button()) break;
-}</pre></ul>
+}</pre>
 
 <a name="ready"><h4>int Fl::ready()</h4></a>
 
@@ -366,14 +366,14 @@ continue to return true until you call <a href="#check"><tt>Fl::check()</tt></a>
 are illegal, or because the expense of redrawing the screen is much
 greater than the expense of your calculation.
 
-<ul><pre>while (!calculation_done()) {
+<pre>while (!calculation_done()) {
  calculate();
  if (Fl::ready()) {
    do_expensive_cleanup();
    Fl::check();
    if (user_hit_abort_button()) break;
  }
-}</pre></ul>
+}</pre>
 
 <a name="run"><h4>int Fl::run()</h4></a>
 
@@ -457,7 +457,7 @@ callback.
 <P>This code will print &quot;TICK&quot; each second on stdout, with a
 fair degree of accuracy:
 
-<ul><PRE>void callback(void*) {
+<pre>void callback(void*) {
   printf(&quot;TICK\n&quot;);
   Fl::repeat_timeout(1.0,callback);
 }
@@ -465,7 +465,7 @@ fair degree of accuracy:
 main() {
   Fl::add_timeout(1.0,callback);
   for (;;) Fl::wait();
-}</PRE></ul>
+}</pre>
 
 <a name="has_timeout"><h4>int Fl::has_timeout(void (*cb)(void*), void* = 0)</h4></a>
 
@@ -492,7 +492,7 @@ significant time and avoid the application falling behind the events.
 
 <p>Sample code:
 
-<ul><pre>bool state_changed; // anything that changes the display turns this on
+<pre>bool state_changed; // anything that changes the display turns this on
 
 void callback(void*) {
   if (!state_changed) return;
@@ -504,7 +504,7 @@ void callback(void*) {
 main() {
   Fl::add_check(1.0,callback);
   return Fl::run();
-}</pre></ul>
+}</pre>
 
 <a name="has_check"><h4>int Fl::has_check(void (*cb)(void*), void* = 0)</h4></a>
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.66 2002/06/21 06:17:09 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.67 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -84,7 +84,7 @@ const char* Fl_Input::expand(const char* p, char* buf,int wordwrap) const {
 }
 
 // After filling in such a buffer, find the width to e:
-int Fl_Input::expandpos(
+double Fl_Input::expandpos(
   const char* p,	// real string
   const char* e,	// pointer into real string
   const char* buf,	// conversion of real string by expand()
@@ -163,11 +163,11 @@ void Fl_Input::draw() {
 }
 
 #if 1
-#define line_height() fl_height()
-#define line_descent() (line_height()-fl_descent())
+#define line_height() int(fl_height()+leading())
+#define line_descent() int(fl_height()+leading()-fl_descent())
 #else
 #define line_height() (text_size()+leading())
-#define line_descent() (line_height()-fl_descent())
+#define line_descent() (line_height()-int(fl_descent()))
 #endif
 
 void Fl_Input::draw(int X, int Y, int W, int H)
@@ -176,8 +176,8 @@ void Fl_Input::draw(int X, int Y, int W, int H)
     // draw and measure the inside label:
     if (label() && label()[0] && (!(flags()&15)||(flags()&FL_ALIGN_INSIDE))) {
       fl_font(label_font(), label_size());
-      int width = fl_width(label());
-      label_width = width+fl_width(":")+2;
+      double width = fl_width(label());
+      label_width = int(width+fl_width(":")+2.5);
       fl_color(color());
       fl_rectf(X, Y, label_width, H);
       Fl_Color color = label_color();
@@ -228,7 +228,7 @@ void Fl_Input::draw(int X, int Y, int W, int H)
   for (p=value(), curx=cury=lines=0; ;) {
     e = expand(p, buf, wordwrap);
     if (cursor_position >= p-value() && cursor_position <= e-value()) {
-      curx = expandpos(p, value()+cursor_position, buf, 0);
+      curx = int(expandpos(p, value()+cursor_position, buf, 0)+.5);
       if (focused() && !was_up_down) up_down_pos = curx;
       cury = lines*height;
       int newscroll = xscroll_;
@@ -304,7 +304,7 @@ void Fl_Input::draw(int X, int Y, int W, int H)
 	x = X;
 	if (erase_cursor_only) r = xpos+2;
       } else {
-	x = xpos+expandpos(p, pp, buf, 0);
+	x = xpos+int(expandpos(p, pp, buf, 0));
 	if (erase_cursor_only) r = x+2;
       }
       // clip to and erase it:
@@ -320,7 +320,7 @@ void Fl_Input::draw(int X, int Y, int W, int H)
     if (selstart < selend && selstart <= e-value() && selend > p-value()) {
       const char* pp = value()+selstart;
       // draw unselected text before the selection:
-      int x1 = xpos;
+      double x1 = xpos;
       int offset1 = 0;
       if (pp > p) {
 	fl_color(textcolor);
@@ -329,12 +329,12 @@ void Fl_Input::draw(int X, int Y, int W, int H)
       }
       // draw selected text for this line:
       pp = value()+selend;
-      int x2 = X+W;
+      double x2 = X+W;
       int offset2;
       if (pp <= e) x2 = xpos+expandpos(p, pp, buf, &offset2);
       else offset2 = strlen(buf);
       fl_color(selection_color());
-      fl_rectf(x1, Y+ypos, x2-x1, height);
+      int xx = int(x1); fl_rectf(xx, Y+ypos, int(x2+.5)-xx, height);
       fl_color(selection_text_color());
       fl_draw(buf+offset1, offset2-offset1, x1, Y+ypos+desc);
       // draw unselected text after the selection:
@@ -467,19 +467,19 @@ int Fl_Input::mouse_position(int X, int Y, int W, int /*H*/) const
     p = e;
     if (e >= value_+size_) break;
   }
-  // Do a binary search for the horizontal character position:
 
+  // Do a binary search for the character that starts before this position:
   int xpos = X-xscroll_; if (W > 12) xpos += 3;
-
   const char *l, *r, *t; double f0 = Fl::event_x()-xpos;
   for (l = p, r = e; l<r; ) {
     t = l+(r-l+1)/2;
-    int f = xpos+expandpos(p, t, buf, 0);
+    int f = xpos+int(expandpos(p, t, buf, 0)+.5);
     if (f <= Fl::event_x()) {l = t; f0 = Fl::event_x()-f;}
     else r = t-1;
   }
-  if (l < e) { // see if closer to character on right:
-    int f1 = xpos+expandpos(p, l+1, buf, 0)-Fl::event_x();
+  // see if closer to character on the right:
+  if (l < e) {
+    int f1 = xpos+int(expandpos(p, l+1, buf, 0)+.5)-Fl::event_x();
     if (f1 < f0) l = l+1;
   }
   return l-value();
@@ -1275,5 +1275,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.66 2002/06/21 06:17:09 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.67 2002/07/01 15:28:19 spitzak Exp $".
 //

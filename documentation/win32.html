@@ -1,4 +1,5 @@
-<html><head><title>FLTK Win32-Specific Interface</title></head><body bgcolor=white>
+<html><head><link href="fltk.css" rel="stylesheet" type="text/css">
+<title>FLTK Win32-Specific Interface</title></head><body>
 
 <h2>WIN32</h2>
 
@@ -112,9 +113,9 @@ cast the <tt>HICON</tt> handle to a <tt>char*</tt> when calling this
 method. To set the icon using an icon resource compiled with your 
 application use: 
 
-<UL><PRE>
+<PRE>
 window-&gt;icon((char*)LoadIcon(fl_display, MAKEINTRESOURCE(IDI_ICON)));
-</PRE></UL>
+</PRE>
 
 <p>This only works if called <i>before</i> it is shown using the
 <tt>Fl_Window::show()</tt> method.

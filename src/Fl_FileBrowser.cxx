@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileBrowser.cxx,v 1.13 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: Fl_FileBrowser.cxx,v 1.14 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Fl_FileBrowser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -86,7 +86,7 @@ Fl_FileBrowser::item_height(void *p) const	// I - List item data
 
 
   // Figure out the standard text height...
-  textheight = fl_height(textfont(), textsize())+leading();
+  textheight = textsize()+leading();
 
   // We always have at least 1 line...
   height = textheight;
@@ -122,7 +122,7 @@ Fl_FileBrowser::item_width(void *p) const	// I - List item data
   char		*text,			// Pointer into text
 		*ptr,			// Pointer into fragment
 		fragment[10240];	// Fragment of text
-  int		width,			// Width of line
+  double	width,			// Width of line
 		tempwidth;		// Width of fragment
   int		column;			// Current column
 
@@ -193,11 +193,8 @@ Fl_FileBrowser::item_width(void *p) const	// I - List item data
   if (Fl_FileIcon::first() != NULL)
     width += iconsize_ + 8;
 
-  // Add space for the selection border..
-  width += 2;
-
-  // Return the width
-  return (width);
+  // Return the width, including space for the selection border:
+  return int(width+2.5);
 }
 
 
@@ -442,5 +439,5 @@ Fl_FileBrowser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_FileBrowser.cxx,v 1.13 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: Fl_FileBrowser.cxx,v 1.14 2002/07/01 15:28:19 spitzak Exp $".
 //

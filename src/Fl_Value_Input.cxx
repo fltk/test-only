@@ -1,9 +1,7 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.32 2002/06/21 06:17:09 spitzak Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.33 2002/07/01 15:28:19 spitzak Exp $"
 //
-// Value input widget for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +21,13 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// Fltk widget for drag-adjusting a floating point value.
-// Warning: this works by making a child Fl_Input object, even
-// though this object is *not* an Fl_Group.  May be a kludge?
+// Fltk widget for input of a floating-point value. Contains an inner
+// Fl_Input widget and two buttons to increment/decrement the value.
+//
+// This is *not* an Fl_Group even though it has a "child"
+// widget, this appears to be a good idea and fltk should support it.
+// However Fl_Widget::parent() returns an Fl_Group, not an Fl_Widget
+// like it did in fltk 1.1 so this may not be proper C++.
 
 #include <fltk/Fl.h>
 #include <fltk/Fl_Value_Input.h>
@@ -76,10 +78,10 @@ void Fl_Value_Input::draw() {
 }
 
 void Fl_Value_Input::increment_cb() {
-  int i = linesize();
+  double i = linesize();
   if (Fl::event_state()&(FL_SHIFT|FL_CTRL|FL_ALT)) i = pagesize();
   if (which_pushed == 2) i = -i;
-  handle_drag(softclamp(increment(value(), i)));
+  handle_drag(value()+i);
 }
 
 #define INITIALREPEAT .5
@@ -209,5 +211,5 @@ Fl_Value_Input::~Fl_Value_Input() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.32 2002/06/21 06:17:09 spitzak Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.33 2002/07/01 15:28:19 spitzak Exp $".
 //

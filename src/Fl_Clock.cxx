@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.30 2002/02/25 09:00:21 spitzak Exp $"
+// "$Id: Fl_Clock.cxx,v 1.31 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -37,14 +37,14 @@
 // Further changes by Bill Spitzak for fltk
 
 const float hourhand[4][2] = {{-0.5f, 0}, {0, 1.5f}, {0.5f, 0}, {0, -7.0f}};
-const float  minhand[4][2] = {{-0.5f, 0}, {0, 1.5f}, {0.5f, 0}, {0, -11.5f}};
-const float  sechand[4][2] = {{-0.1f, 0}, {0, 2.0f}, {0.1f, 0}, {0, -11.5f}};
+const float minhand[4][2] = {{-0.5f, 0}, {0, 1.5f}, {0.5f, 0}, {0, -11.5f}};
+const float sechand[4][2] = {{-0.1f, 0}, {0, 2.0f}, {0.1f, 0}, {0, -11.5f}};
 
 static void drawhand(double ang,const float v[][2],Fl_Color fill,Fl_Color line)
 {
   fl_push_matrix();
   fl_rotate(ang);
-  int i; for (i=0; i<4; i++) fl_vertex(v[i][0],v[i][1]);
+  fl_vertices(4, v);
   fl_color(fill); fl_fill_stroke(line);
   fl_pop_matrix();
 }
@@ -56,12 +56,12 @@ void Fl_Clock_Output::drawhands(Fl_Color fill, Fl_Color line) {
 }
 
 static void rect(double x, double y, double w, double h) {
-  double r = x+w;
-  double t = y+h;
-  fl_vertex(x, y);
-  fl_vertex(r, y);
-  fl_vertex(r, t);
-  fl_vertex(x, t);
+  float v[4][2];
+  v[0][0] = v[3][0] = float(x);
+  v[1][0] = v[2][0] = float(x+w);
+  v[0][1] = v[1][1] = float(y);
+  v[2][1] = v[3][1] = float(y+h);
+  fl_vertices(4,v);
   fl_fill();
 }
 
@@ -167,5 +167,5 @@ Fl_Clock_Output::Fl_Clock_Output(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Clock.cxx,v 1.30 2002/02/25 09:00:21 spitzak Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.31 2002/07/01 15:28:19 spitzak Exp $".
 //

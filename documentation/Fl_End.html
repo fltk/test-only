@@ -1,19 +1,20 @@
-<html><head><title>class Fl_End</title></head><body bgcolor=white>
+<html><head><link href="fltk.css" rel="stylesheet" type="text/css">
+<title>class Fl_End</title></head><body>
 <!-- NEW PAGE -->
 <h2>class Fl_End</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
 
-<ul><pre>
+<pre>
 <b>Fl_End</b>
-</pre></ul>
+</pre>
 
 <h3>Include Files</h3>
 
-<ul><pre>
+<pre>
 #include &lt;fltk/Fl_Group.h&gt;
-</pre></ul>
+</pre>
 
 <h3>Description</h3>
 
@@ -22,7 +23,7 @@ adds the new widget as a child of the "current" <a
 href=Fl_Group.html#current>Fl_Group</a>, this dummy class allows you
 to stop this in the constructor list of a class:
 
-<ul><pre>
+<pre>
 class MyClass {
   Fl_Group group;
   Fl_Button button_in_group;
@@ -36,7 +37,7 @@ MyClass::MyClass() :
   button_in_group(20,20,60,30), // constructor puts this in group
   end(),
   button_outside_group(10,120,60,30) // constructor puts this in group's parent
-{}</pre></ul>
+{}</pre>
 
 <h3>Methods</h3>
 

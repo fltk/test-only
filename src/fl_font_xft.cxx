@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.7 2002/05/06 06:31:27 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.8 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Copyright 2001 Bill Spitzak and others.
 //
@@ -60,6 +60,7 @@
 #include <fltk/Fl_Font.h>
 #include <fltk/fl_draw.h>
 #include <fltk/x.h>
+#include <fltk/math.h>
 #include <X11/Xft/Xft.h>
 // define some symbols missing from some Xft header files:
 #ifndef XFT_MINSPACE
@@ -80,7 +81,7 @@ public:
   XftFont* font;
   const char* encoding;
   Fl_FontSize(const char* xfontname);
-  unsigned size;
+  double size;
   //~Fl_FontSize();
 };
 
@@ -92,7 +93,9 @@ void fl_encoding(const char* f) {
   fl_encoding_ = f;
 }
 
-void fl_font(Fl_Font font, unsigned size) {
+void fl_font(Fl_Font font, double size) {
+  // Reduce the number of sizes by rounding to various multiples:
+  size = rint(10*size)/10;
   if (font == fl_font_ && size == fl_size_ &&
       !strcasecmp(fl_fontsize->encoding, fl_encoding_))
     return;
@@ -160,14 +163,14 @@ Fl_FontSize::~Fl_FontSize() {
 #if 1
 // Some of the line spacings these return are insanely big!
 //int fl_height() { return current_font->height; }
-int fl_height() { return current_font->ascent + current_font->descent; }
-int fl_descent() { return current_font->descent; }
+double fl_height() { return current_font->ascent + current_font->descent; }
+double fl_descent() { return current_font->descent; }
 #else
-int fl_height() { return fl_size_;}
-int fl_descent() { return fl_size_/4;}
+double fl_height() { return fl_size_;}
+double fl_descent() { return fl_size_/4;}
 #endif
 
-int fl_width(const char *str, int n) {
+double fl_width(const char *str, int n) {
   XGlyphInfo i;
   XftTextExtents8(fl_display, current_font, (XftChar8 *)str, n, &i);
   return i.xOff;
@@ -195,7 +198,7 @@ void Fl_Drawable::free_gc() {
   }
 };
 
-void fl_draw(const char *str, int n, int x, int y) {
+void fl_transformed_draw(const char *str, int n, double x, double y) {
   XftDraw* draw = fl_drawable->draw;
 
   if (!draw) {
@@ -229,8 +232,8 @@ void fl_draw(const char *str, int n, int x, int y) {
   color.color.blue  = b*0x101;
   color.color.alpha = 0xffff;
 
-  XftDrawString8(draw, &color, current_font, x+fl_x_, y+fl_y_,
-		 (XftChar8 *)str, n);
+  XftDrawString8(draw, &color, current_font,
+		 int(rint(x)), int(rint(y)), (XftChar8 *)str, n);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -394,5 +397,5 @@ int Fl_Font_::encodings(const char**& arrayp) const {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.7 2002/05/06 06:31:27 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.8 2002/07/01 15:28:19 spitzak Exp $"
 //

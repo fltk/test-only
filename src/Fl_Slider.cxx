@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.60 2002/06/09 23:20:19 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.61 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,7 +27,7 @@
 #include <fltk/Fl_Slider.h>
 #include <fltk/Fl_Group.h>
 #include <fltk/fl_draw.h>
-#include <math.h>
+#include <fltk/math.h>
 #include <config.h>
 
 // Return the location of the left/top edge of a box of slider_size() would
@@ -80,30 +80,46 @@ double Fl_Slider::position_value(int X, int w) {
   flip = (B <= 0);
   if (flip) {double t = A; A = -B; B = -t; fraction = 1-fraction;}
   double value;
+  double derivative;
   if (!log()) {
     // linear slider
     value = fraction*(B-A)+A;
+    derivative = (B-A)/w;
   } else if (A > 0) {
     // log slider
-    value = exp(fraction*(::log(B)-::log(A))+::log(A));
+    double d = (::log(B)-::log(A));
+    value = exp(fraction*d+::log(A));
+    derivative = value*d/w;
   } else if (A == 0) {
     // squared slider
     value = fraction*fraction*B;
+    derivative = 2*fraction*B/w;
   } else {
     // squared signed slider
     fraction = 2*fraction - 1;
-    if (fraction < 0) value = fraction*fraction*A;
-    else value = fraction*fraction*B;
+    if (fraction < 0) B = A;
+    value = fraction*fraction*B;
+    derivative = 4*fraction*B/w;
   }
-  // we round 10x finer when we are below the lowest 10 steps:
-  if (fabs(value)<=9*step()) return round(value*10)/10;
-  else return round(value);
+  // find nicest multiple of 10,5, or 2 of step() that is close to 1 pixel:
+  if (step() && derivative > step()) {
+    double w = log10(derivative);
+    double l = ceil(w);
+    int num = 1;
+    int i; for (i = 0; i < l; i++) num *= 10;
+    int denom = 1;
+    for (i = -1; i >= l; i--) denom *= 10;
+    if (l-w > 0.69897) denom *= 5;
+    else if (l-w > 0.30103) denom *= 2;
+    return rint(value*denom/num)*num/denom;
+  }
+  return value;
 }
 
 // Draw tick marks. These lines cross the passed rectangle perpendicular to
 // the slider direction. In the direction parallel to the slider direction
 // the box should have the same size as the area the slider moves in.
-void Fl_Slider::draw_ticks(int x, int y, int w, int h)
+void Fl_Slider::draw_ticks(int x, int y, int w, int h, int min_spacing)
 {
   int x1, y1, x2, y2, dx, dy;
   if (horizontal()) {
@@ -121,11 +137,33 @@ void Fl_Slider::draw_ticks(int x, int y, int w, int h)
   double A = minimum();
   double B = maximum();
   if (A > B) {A = B; B = minimum();}
-  int incr = pagesize();
-  int n = 0;
-  for (double v1 = 0; ;v1 = increment(v1,incr)) {
-    if (log() && ++n > 10) {n = 2; incr *= 10;}
-    double v = fabs(v1);
+
+  // Figure out approximate size of min_spacing at zero:
+  double derivative;
+  if (!log()) {
+    derivative = (B-A)/w;
+  } else if (A > 0) {
+    // log slider
+    derivative = A/w*20;
+  } else {
+    // squared slider, derivative at edge is zero, use value at 1 pixel
+    derivative = B/(w*w)*30;
+    if (A < 0) derivative *= 4;
+  }
+  derivative *= min_spacing;
+  if (derivative < step()) derivative = step();
+
+  // Find closest multiple of 10 larger than spacing:
+  int num = 1;
+  while (num < derivative) num *= 10;
+  int denom = 10;
+  while (num >= derivative*denom) denom *= 10;
+  denom /= 10;
+
+  for (int n = 0; ; n++) {
+    // every ten they get further apart for log slider:
+    if (log() && n > 10) {n = 2; num *= 10;}
+    double v = double(num*n)/denom;
     if (v > fabs(A) && v > fabs(B)) break;
     if (v >= A && v <= B) {
       int t = slider_position(v, w);
@@ -201,7 +239,7 @@ void Fl_Slider::draw()
 	case TICK_BELOW: iw += ix; ix = sx+sw/2+(iy?0:3); iw -= ix; break;
 	}
       }
-      draw_ticks(ix, iy, iw, ih);
+      draw_ticks(ix, iy, iw, ih, slider_size_);
     }
 
     fl_pop_clip();
@@ -336,14 +374,14 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
       X = w-slider_size_;
       offcenter = mx-X; if (offcenter > slider_size_) offcenter = slider_size_;
     }
-    v = round(position_value(X, w));
+    v = position_value(X, w);
+    handle_drag(v);
     // make sure a click outside the sliderbar moves it:
-    if (event == FL_PUSH && v == value()) {
+    if (event == FL_PUSH && value() == previous_value()) {
       offcenter = slider_size_/2;
       event = FL_DRAG;
       goto RETRY;
     }
-    handle_drag(clamp(v));
     return 1;}
   case FL_RELEASE:
     handle_release();
@@ -410,5 +448,5 @@ Fl_Slider::Fl_Slider(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.60 2002/06/09 23:20:19 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.61 2002/07/01 15:28:19 spitzak Exp $".
 //

@@ -1,4 +1,5 @@
-<html><head><title>FLTK X-Specific Interface</title></head><body bgcolor=white>
+<html><head><link href="fltk.css" rel="stylesheet" type="text/css">
+<title>FLTK X-Specific Interface</title></head><body>
 
 <h1>System-Specific Interfaces</h1>
 
@@ -104,13 +105,13 @@ set by <tt>fl_open_display()</tt> to the default visual and colormap.
 You can change them before calling <tt>show()</tt> on the first 
 window.  Typical code for changing the default visual is: 
 
-<UL><PRE>Fl::args(argc, argv); // do this first so $DISPLAY is set
+<PRE>Fl::args(argc, argv); // do this first so $DISPLAY is set
 fl_open_display();
 fl_visual = find_a_good_visual(fl_display, fl_screen);
 if (!fl_visual) Fl::abort(&quot;No good visual&quot;);
 fl_colormap = make_a_colormap(fl_display, fl_visual-&gt;visual, fl_visual-&gt;depth);
 // it is now ok to show() windows:
-window-&gt;show(argc, argv);</PRE></UL>
+window-&gt;show(argc, argv);</PRE>
 
 You may also want to call <a
 href=Fl.html#visual>Fl::visual()</a>, which is a portable
@@ -134,7 +135,7 @@ is called, or by <a href=Fl_Window.html#make_current><tt>
 Fl_Window::make_current()</tt></a>.  They are needed by most Xlib
 drawing calls, a typical call is like this:
 
-<ul><pre>XDrawSomething(fl_display, fl_window, fl_gc, ...);</pre></ul>
+<pre>XDrawSomething(fl_display, fl_window, fl_gc, ...);</pre>
 
 <p>Notice that <tt>fl_window</tt> is the X window id number.  Other
 information such as the position or size of the X window can be found
@@ -193,12 +194,12 @@ cast the icon <tt>Pixmap</tt> to a <tt>char*</tt> when calling this
 method. To set the icon using a bitmap compiled with your application 
 use:
 
-<UL><PRE>#include &quot;icon.xbm&quot;
+<PRE>#include &quot;icon.xbm&quot;
 
 Pixmap p = XCreateBitmapFromData(fl_display, DefaultRootWindow(fl_display),
                                  icon_bits, icon_width, icon_height);
 
-window-&gt;icon((char*)p);</PRE></UL>
+window-&gt;icon((char*)p);</PRE>
 
 <p>This only works if called <i>before</i> it is shown using the
 <tt>Fl_Window::show()</tt> method.
@@ -226,9 +227,9 @@ may change each time.
 
 <p>To print the string value of the <tt>Atom</tt> use this code:
 
-<ul><pre>char* x = XGetAtomName(fl_display, fl_dnd_source_action);
+<pre>char* x = XGetAtomName(fl_display, fl_dnd_source_action);
 puts(x);
-XFree(x);</pre></ul>
+XFree(x);</pre>
 
 <p>You can set this before calling <a
 href="Fl.html#dnd"><tt>Fl::dnd()</tt></a> to communicate a different
@@ -251,11 +252,11 @@ href="events.html#FL_DND_ENTER"><tt>FL_DND_ENTER</tt></a> event.  The
 following code will print them all as text, a typical value is
 <tt>"text/plain;charset=UTF-8"</tt> (gag).
 
-<ul><pre>for (int i = 0; fl_dnd_source_types[i]; i++) {
+<pre>for (int i = 0; fl_dnd_source_types[i]; i++) {
   char* x = XGetAtomName(fl_display, fl_dnd_source_types[i]);
   puts(x);
   XFree(x);
-}</pre></ul>
+}</pre>
 
 <p>You can set this and <a
 href=#fl_dnd_source_action><tt>fl_dnd_source_action</tt></a> before calling <a
@@ -295,7 +296,7 @@ by this window.  To create the X window you must call
 
 <p>An example:
 
-<UL><PRE>void MyWindow::create() {
+<PRE>void MyWindow::create() {
   fl_open_display();	// necessary if this is first window
   // we only calcualte the necessary visual & colormap once:
   static XVisualInfo* visual;
@@ -310,7 +311,7 @@ by this window.  To create the X window you must call
     background = xcol.pixel;
   }
   Fl_X::create(this, visual, colormap, background);
-}</PRE></UL>
+}</PRE>
 
 <h4>void Fl_X::create(Fl_Window*, XVisualInfo*, Colormap, int background=-1)</h4>
 
@@ -350,7 +351,7 @@ image (such as a backing buffer) around.
 
 <p>Here is a sample where an undamaged image is kept somewhere: </P>
 
-<ul><pre>void MyWindow::flush() {
+<pre>void MyWindow::flush() {
   if (damage() == FL_DAMAGE_EXPOSE) {
     fl_clip_region(Fl_X::i(this)-&gt;region);
     Fl_X::i(this)-&gt;region = 0;
@@ -361,7 +362,7 @@ image (such as a backing buffer) around.
     this->draw();
     copy_image(backing_store_pixmap, fl_xid(this));
   }
-}</pre></ul>
+}</pre>
 
 <h4>virtual void Fl_Window::destroy()</h4>
 
@@ -370,13 +371,13 @@ destroy contexts, pixmaps, or other resources used by the window, and
 then call <tt>Fl_Window::hide()</tt> to get rid of the main window 
 identified by <tt>xid()</tt>.
 
-<ul><pre>void MyWindow::destroy() {
+<pre>void MyWindow::destroy() {
   if (backing_store_pixmap) {
     XFreePixmap(fl_display, backing_store_pixmap);
     backing_store_pixmap = 0;
   }
   Fl_Window::destroy(); // you must call this
-}</pre></ul>
+}</pre>
 
 <h4>virtual void Fl_Window::~Fl_Window()</h4>
 
@@ -384,8 +385,8 @@ Because of the way C++ works, if you override <tt>destroy()</tt> you
 <I>must</I> override the destructor as well (otherwise only the base
 class <tt>destroy()</tt> is called):
 
-<ul><pre>MyWindow::~MyWindow() {
+<pre>MyWindow::~MyWindow() {
   destroy();
-}</pre></ul>
+}</pre>
 
 </body></html>

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_x.cxx,v 1.3 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_draw_image_x.cxx,v 1.4 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Image drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -453,10 +453,8 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   int dx, dy, w, h;
   fl_clip_box(X,Y,W,H,dx,dy,w,h);
   if (w<=0 || h<=0) return;
-  dx -= X;
-  X += fl_x_;
-  dy -= Y;
-  Y += fl_y_;
+  dx -= X; dy -= Y;
+  fl_transform(X,Y);
 
   if (!bytes_per_pixel) figure_out_visual();
   i.width = w;
@@ -535,5 +533,5 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 #define DITHER_RECTF (fl_visual->depth > 16)
 
 //
-// End of "$Id: fl_draw_image_x.cxx,v 1.3 2001/07/23 09:50:05 spitzak Exp $"
+// End of "$Id: fl_draw_image_x.cxx,v 1.4 2002/07/01 15:28:19 spitzak Exp $"
 //

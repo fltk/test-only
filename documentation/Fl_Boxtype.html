@@ -1,4 +1,5 @@
-<html><head><title>typedef Fl_Boxtype</title></head><body bgcolor=white>
+<html><head><link href="fltk.css" rel="stylesheet" type="text/css">
+<title>typedef Fl_Boxtype</title></head><body>
 <!-- NEW PAGE -->
 <h2>typedef Fl_Boxtype</h2>
 <hr>
@@ -48,7 +49,6 @@ things will still draw ok, but they may flicker more than necessary.
 <p>A simple drawing function might fill a rectangle with the given color 
 and then draw a black outline: 
 
-<UL>
 <PRE>
 void MyBoxtype::draw(int x, int y, int w, int h, Fl_Color c, Fl_Flags f) const
 {
@@ -61,8 +61,7 @@ void MyBoxtype::draw(int x, int y, int w, int h, Fl_Color c, Fl_Flags f) const
   fl_color(FL_BLACK);
   fl_rect(x, y, w, h);
 }
-</PRE>
-</ul>
+</pre>
 
 <a name=fills_rectangle><h4>int Fl_Boxtype_::fills_rectangle() const;</h4></a>
 

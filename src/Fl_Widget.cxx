@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.91 2002/06/09 23:20:19 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.92 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -495,8 +495,7 @@ void Fl_Widget::make_current() const {
     widget = widget->parent();
   }
   ((const Fl_Window*)widget)->make_current();
-  fl_x_ = x;
-  fl_y_ = y;
+  fl_translate(x,y);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -509,5 +508,5 @@ void Fl_Widget::draw()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.91 2002/06/09 23:20:19 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.92 2002/07/01 15:28:19 spitzak Exp $".
 //

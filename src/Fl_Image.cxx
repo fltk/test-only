@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.23 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.24 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -56,7 +56,7 @@ void Fl_Image::_draw(int XP, int YP, Fl_Flags)
   if (cy+H > h) H = h-cy;
   if (H <= 0) return;
   // convert to Xlib coordinates:
-  X += fl_x_; Y += fl_y_;
+  fl_transform(X,Y);
 
   if (mask) {
     if (id) {
@@ -142,5 +142,5 @@ void Fl_Image::label(Fl_Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.23 2001/12/10 06:25:42 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.24 2002/07/01 15:28:19 spitzak Exp $".
 //

@@ -1,4 +1,5 @@
-<html><head><title>Introduction to FLTK</title></head><body bgcolor=white>
+<html><head><link href="fltk.css" rel="stylesheet" type="text/css">
+<title>Introduction to FLTK</title></head><body>
 
 <h1>Introduction to FLTK</h1>
 
@@ -138,29 +139,29 @@ found in the standard include/library locations you'll need to define the
 <tt>CFLAGS</tt>, <tt>CXXFLAGS</tt>, and <tt>LDFLAGS</tt> environment
 variables. For the Bourne and Korn shells you'd use:</P>
 
-<UL><PRE>
+<PRE>
 CFLAGS=-I<I>includedir</I>; export CFLAGS
 CXXFLAGS=-I<I>includedir</I>; export CXXFLAGS
 LDFLAGS=-L<I>libdir</I>; export LDFLAGS
-</PRE></UL>
+</PRE>
 
 For C shell and tcsh, use:
 
-<UL><PRE>
+<PRE>
 setenv CFLAGS "-I<I>includedir</I>"
 setenv CXXFLAGS "-I<I>includedir</I>"
 setenv LDFLAGS "-L<I>libdir</I>"
-</PRE></UL>
+</PRE>
 
 By default configure will look for a C++ compiler named <tt>CC</tt>, <tt>c++</tt>,
 <tt>g++</tt>, or <tt>gcc</tt> in that order. To use another compiler you need
 to set the <tt>CXX</tt> environment variable:
 
-<UL><PRE>
+<PRE>
 CXX=xlC; export CXX
 or
 setenv CXX "xlC"
-</PRE></UL>
+</PRE>
 
 The <tt>CC</tt> environment variable can also be used to override the
 default C compiler (<tt>cc</tt> or <tt>gcc</tt>), which is used for a
@@ -202,10 +203,10 @@ files in the &quot;makefiles&quot; directory.  To build using one of
 these tools simply copy the appropriate makeinclude and config files
 to the main directory and do a make: </P>
 
-<UL><PRE>
+<PRE>
 copy makefiles\Makefile.&lt;env&gt; Makefile
 make
-</PRE></UL>
+</PRE>
 
 <H3>Using the Visual C++ DLL Library</H3>
 
@@ -232,10 +233,10 @@ installed.
 <P>To build the XFree86 version of FLTK for OS/2, copy the appropriate 
 makeinclude and config files to the main directory and do a make: </P>
 
-<UL><PRE>
+<PRE>
 copy makefiles\Makefile.os2x Makefile
 make
-</PRE></UL>
+</PRE>
 
 <a name=www><H2>Internet Resources</H2></a>
 

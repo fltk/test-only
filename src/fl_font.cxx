@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.34 2002/06/17 16:03:54 spitzak Exp $"
+// "$Id: fl_font.cxx,v 1.35 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 
 // Static variables containing the currently selected font, size, encoding:
 Fl_Font fl_font_;
-unsigned fl_size_;
+double fl_size_;
 const char *fl_encoding_ = "iso8859-1";
   
 #ifdef _WIN32
@@ -45,14 +45,19 @@ const char *fl_encoding_ = "iso8859-1";
 #endif
 
 void
-fl_draw(const char* str, int x, int y) { fl_draw(str, strlen(str), x, y); }
+fl_draw(const char* str, double x, double y) {
+  fl_draw(str, strlen(str), x, y);
+}
 
-int
+void
+fl_draw(const char* str, int n, double x, double y) {
+  fl_transform(x,y);
+  fl_transformed_draw(str, strlen(str), x, y);
+}
+
+double
 fl_width(const char* c) { return fl_width(c, strlen(c)); }
 
-int
-fl_width(uchar c) { return fl_width((char *)&c, 1); }
-
 //
-// End of "$Id: fl_font.cxx,v 1.34 2002/06/17 16:03:54 spitzak Exp $".
+// End of "$Id: fl_font.cxx,v 1.35 2002/07/01 15:28:19 spitzak Exp $".
 //

@@ -1,4 +1,5 @@
-<html><head><title>Making Your Own Widgets</title></head><body bgcolor=white>
+<html><head><link href="fltk.css" rel="stylesheet" type="text/css">
+<title>Making Your Own Widgets</title></head><body>
 
 <h1>Making Your Own Widgets</h1>
 
@@ -25,30 +26,29 @@ some or all of these may be necessary.
 
 <h3>The Constructor</h3>
 
- The constructor should have the following arguments: 
+<p>The constructor should have the following arguments:</p>
 
-<ul><pre>
+<pre>
 MyClass(int x, int y, int w, int h, const char *label = 0);
-</pre></ul>
+</pre>
 
-This will allow the class to be used in <A href=fluid.html>FLUID</A>
-without problems. 
+<p>This will allow the class to be used in <A href=fluid.html>FLUID</A>
+without problems.</p>
 
 <p>The constructor must call the constructor for the base class and 
 pass the same arguments:</p>
 
-<ul><pre>
+<pre>
 MyClass::MyClass(int x, int y, int w, int h, const char *label)
 : Fl_Widget(x, y, w, h, label) {
 // do initialization stuff...
 }
-</pre></ul>
+</pre>
 
-<TT>Fl_Widget</TT>'s protected constructor sets <TT>x()</TT>, <TT>y()</TT>,
+<p><TT>Fl_Widget</TT>'s protected constructor sets <TT>x()</TT>, <TT>y()</TT>,
 <TT>w()</TT>, <TT>h()</TT>, and <TT>label()</TT> to the passed values 
-and initializes the other instance variables to: 
+and initializes the other instance variables to:</p>
 
-<UL>
 <PRE>
 style(default_style);
 callback(default_callback,0);
@@ -61,12 +61,11 @@ set_damage(FL_DAMAGE_ALL);
 layout_damage(FL_LAYOUT_DAMAGE);
 when(FL_WHEN_RELEASE);
 </PRE>
-</UL>
 
 <a name=handle><h3>Handling Events</h3>
 
-The virtual method <TT>int Fl_Widget::handle(int event)</TT> is called 
-to handle each event passed to the widget. It can: 
+<p>The virtual method <TT>int Fl_Widget::handle(int event)</TT> is called 
+to handle each event passed to the widget. It can:</p>
 
 <UL>
 
@@ -95,7 +94,6 @@ handled.
 
 <P>Here is a sample <TT>handle()</TT> method for a widget that acts as 
 a pushbutton and also accepts the keystroke 'x' to cause the callback: </P>
-<UL>
 
 <PRE>
 int MyClass::handle(int event) {
@@ -132,8 +130,8 @@ int MyClass::handle(int event) {
   }
 }
 </PRE>
-</UL>
- You must return non-zero if your <TT>handle()</TT> method uses the 
+
+<p>You must return non-zero if your <TT>handle()</TT> method uses the 
 event. If you return zero it indicates to the parent widget that it can 
 try sending the event to another widget. 
 
@@ -201,20 +199,20 @@ href=Fl_Window.html>Fl_Window</a>) are subclasses of it.
 <p>For most uses the set of child widgets is fixed by the composite
 widget. Instances of the child widgets may be included in the parent:
 
-<ul><pre>
+<pre>
 class MyClass : public Fl_Group {
   Fl_Button the_button;
   Fl_Slider the_slider;
   ...
 };
-</pre></ul>
+</pre>
 
 The constructor has to initialize these instances.  They are 
 automatically <TT>add()</TT>ed to the group, since the <TT>Fl_Group</TT>
 constructor does <TT>begin()</TT>. <I>Don't forget to call <TT>end()</TT>
 or use the <A href=Fl_End.html#Fl_End><TT>Fl_End</TT></A> pseudo-class:</I>
 
-<ul><pre>
+<pre>
 MyClass::MyClass(int x, int y, int w, int h) :
   Fl_Group(x, y, w, h),
   the_button(x + 5, y + 5, 100, 20),
@@ -223,33 +221,33 @@ MyClass::MyClass(int x, int y, int w, int h) :
   ...(you could add dynamically created child widgets here)...
   end(); // don't forget to do this!
 }
-</pre></ul>
+</pre>
 
 The child widgets need callbacks.  These will be called with a pointer
 to the children, but the widget itself may be found in the
 <TT>parent()</TT> pointer of the child.  Usually these callbacks can
 be static private methods, with a matching private method:
 
-<ul><pre>
+<pre>
 void MyClass::slider_cb(Fl_Widget* v, void *) { // static method
   ((MyClass*)(v-&gt;parent())-&gt;slider_cb();
 }
 void MyClass::slider_cb() { // normal method
   use(the_slider-&gt;value());
 }
-</pre></ul>
+</pre>
 
 If you make the <TT>handle()</TT> method, you can quickly pass all the 
 events to the children using the <TT>Fl_Group::handle()</TT> method. 
 You don't need to override <TT>handle()</TT> if your composite widget
 does nothing other than pass events to the children: 
 
-<ul><pre>
+<pre>
 int MyClass::handle(int event) {
   if (Fl_Group::handle(event)) return 1;
   ... handle events that children don't want ...
 }
-</pre></ul>
+</pre>
 
  If you override <TT>draw()</TT> you need to draw all the children.  If <TT>
 redraw()</TT> or <TT>damage()</TT> is called on a child, <TT>
@@ -257,7 +255,7 @@ damage(FL_DAMAGE_CHILD)</TT> is done to the group, so this bit of <TT>
 damage()</TT> can be used to indicate that a child needs to be drawn. 
 It is fastest if you avoid drawing anything else in this case: 
 
-<ul><pre>
+<pre>
 int MyClass::draw() {
   Fl_Widget *const*a = array();
   if (damage() == FL_DAMAGE_CHILD) { // only redraw some children
@@ -271,7 +269,7 @@ int MyClass::draw() {
     }
   }
 }
-</pre></ul>
+</pre>
 
 <TT>Fl_Group</TT> provides some protected methods to make drawing 
 easier: 

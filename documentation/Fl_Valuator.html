@@ -1,24 +1,25 @@
-<html><head><title>class Fl_Valuator</title></head><body bgcolor=white>
+<html><head><link href="fltk.css" rel="stylesheet" type="text/css">
+<title>class Fl_Valuator</title></head><body>
 <!-- NEW PAGE -->
 <h2>class Fl_Valuator</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
 
-<ul><pre>
+<pre>
 <A href=Fl_Widget.html>Fl_Widget</A>
    |
    +----<B>Fl_Valuator</B>
            |
            +----<A href=Fl_Dial.html>Fl_Dial</A>, <A href=Fl_Roller.html>Fl_Roller</A>,
                 <A href=Fl_Slider.html>Fl_Slider</A>, <A href=Fl_Value_Input.html>Fl_Value_Input</A>
-</pre></ul>
+</pre>
 
 <h3>Include Files</h3>
 
-<ul><pre>
+<pre>
 #include &lt;fltk/Fl_Valuator.h&gt;
-</pre></ul>
+</pre>
 
 <h3>Description</h3>
 
@@ -47,24 +48,18 @@ defined as zero.</P>
 <ul>
 <li><a href=#Fl_Valuator>Fl_Valuator</a></li>
 <li><a href=#~Fl_Valuator>~Fl_Valuator</a></li>
-<li><a href=#clamp>clamp</a></li>
-</ul>
-</TD><TD align=left valign=top>
-<ul>
 <li><a href=#format>format</a></li>
-<li><a href=#increment>increment</a></li>
-<li><a href=#linesize>linesize</a></li>
 </ul>
 </TD><TD align=left valign=top>
 <ul>
+<li><a href=#linesize>linesize</a></li>
 <li><a href=#maximum>maximum</a></li>
 <li><a href=#minimum>minimum</a></li>
-<li><a href=#pagesize>pagesize</a></li>
 </ul>
 </TD><TD align=left valign=top>
 <ul>
+<li><a href=#pagesize>pagesize</a></li>
 <li><a href=#range>range</a></li>
-<li><a href=#round>round</a></li>
 <li><a href=#set_changed>set_changed</a></li>
 </ul>
 </TD><TD align=left valign=top>
@@ -90,104 +85,73 @@ Destroys the valuator.
 <h4><a name=value>double Fl_Valuator::value() const
 <BR> int Fl_Valuator::value(double)</a></h4>
 
-Get or set the current value.  The new value is <I>not</I> clamped or 
-otherwise changed before storing it. Use <TT>clamp()</TT> or <TT>round()</TT>
-to modify the value before calling this if you want.  If the new value 
-is different than the current one the object is redrawn.  The initial 
-value is zero. 
+Get or set the current value.  The new value is stored
+<i>unchanged</i>, even if it is outside the range or not a multiple of
+step().
 
-<h4><a name=minimum>double Fl_Valuator::minimum() const
-<BR> void Fl_Valuator::minimum(double)</a></h4>
+<h4><a name=minimum>float Fl_Valuator::minimum() const
+<BR> void Fl_Valuator::minimum(double)</a>
+<br><a name=maximum>double Fl_Valuator::maximum() const
+<BR> void Fl_Valuator::maximum(double)</a>
+<br><a name=range>void Fl_Valuator::range(double min, double max);</a></h4>
 
-Gets or sets the minimum value for the valuator. 
+Sets the minimum and maximum values for the valuator. For most
+subclasses the user cannot move the value outside this range if it
+starts inside this range.</p>
 
-<h4><a name=maximum>double Fl_Valuator::maximum() const
-<BR> void Fl_Valuator::maximum(double)</a></h4>
+<p>These values should be multiples of the <a href=#step>step()</a> to
+avoid ambiguity and possible implementation changes.</p>
 
-Gets or sets the maximum value for the valuator. 
+<p>For most subclasses, the minimum may be greater than the maximum.
+This has the effect of &quot;reversing&quot; the object so the larger
+values are in the opposite direction.  This also switches which end of
+the filled sliders is filled.</p>
 
-<h4><a name=range>void Fl_Valuator::range(double min, 
-double max);</a></h4>
+<P>You probably need to <tt>redraw()</tt> the widget after changing
+the range.</p>
 
-Sets the minimum and maximum values for the valuator. When the user 
-manipulates the widget, the value is limited to this range.  This 
-clamping is done <I>after</I> rounding to the <a href=#step>step</a> value (this makes a 
-difference if the range is not a multiple of the step). 
+<h4><a name=step>float Fl_Valuator::step() const
+<BR>void Fl_Valuator::step(double)</a></h4>
 
-<P>The minimum may be greater than the maximum.  This has the effect of 
-&quot;reversing&quot; the object so the larger values are in the opposite 
-direction.  This also switches which end of the filled sliders is 
-filled. </P>
+Get or set the step value. As the user moves the mouse the value is
+rounded to a multiple of this. Fl_Slider is very intelligent and tries
+to round to a power of 10 times 1, 2, or 5 times this, so you may want
+to try setting a very small step like .0001.
 
-<P>Some widgets consider this a &quot;soft&quot; range.  This means they will 
-stop at the range, but if the user releases and grabs the control again 
-and tries to move it further, it is allowed. </P>
+<p>If this is zero (the default) then all rounding is disabled. This
+results in the smoothest controller movement but this is not
+recommended if you want to present the resulting numbers to the user
+as text, because they will have useless extra digits of precision.
 
-<P>The range may affect the display. You must <TT>redraw()</TT> the 
-widget after changing the range. </P>
+<p>For some widgets like Fl_Roller this is also the distance the value
+moves when the user drags the mouse 1 pixel. In these cases if step()
+is zero then it acts like it is .01.
 
-<h4><a name=step>double Fl_Valuator::step() const
-<BR> void Fl_Valuator::step(double)</a></h4>
+<p>Negative values produce undocumented results.
 
-Get or set the step value.  As the user moves the mouse the value is
-rounded to the nearest multiple of the step value.  This is done <I>
-before</I> clamping it to the range.  For some widgets like the roller
-this is also the amount the widget changes when the user drags the
-mouse 1 pixel.
+<h4><a name=linesize>float Fl_Valuator::linesize() const
+<BR>void Fl_Valuator::linesize(double)</a></h4>
 
-<p>The default of zero means that any floating point value is
-allowed. If the widget needs a non-zero value (for instance to
-calculate the linesize() or how far the mouse dragged the value) it
-acts as though step() is 1/100 the distance between the minimum and
-maximum.
+The linesize is the amount the valuator moves in response to an arrow
+key, or the user clicking an up/down button.  The default value is 1.
+Negative values and values that are not a multiple of step() produce
+undocumented results.
 
-<p>To avoid floating point rounding errors this is stored as an
-integer. Because of this only values of <i>n</i> or 1/<i>n</i> (where
-<i>n</i> is a positive integer) work, all others are rounded to the
-nearest value. If you want other step sizes you may be able to get
-them by setting both this and <href=#linesize>linesize()</a>.
+<h4><a name=pagesize>float Fl_Valuator::pagesize() const
+<BR>void Fl_Valuator::pagesize(double)</a></h4>
 
-<h4><a name=linesize>int Fl_Valuator::linesize() const
-<BR>void Fl_Valuator::linesize(int)</a></h4>
-
-The linesize is the number of <a href=#step>step()</a> that the
-valuator moves in response to an arrow key, or the user clicking an
-up/down button.  The default value is 1.
-
-<h4><a name=pagesize>int Fl_Valuator::pagesize() const
-<BR>void Fl_Valuator::pagesize(int)</a></h4>
-
-The pagesize is the number of <a href=#step>step()</a> that the
-valuator moves in response to a page up/down key, or shift-arrow key,
-or shift+clicking an up/down button. The default value is 10.
+The pagesize is the amount the valuator moves in response to a page
+up/down key, or shift-arrow key, or shift+clicking an up/down
+button. The default value is 10.  Negative values and values that are
+not a multiple of linesize() produce undocumented results.
 
 <h4><a name=format>int Fl_Valuator::format(char*)</a></h4>
 
-Format the passed value to show enough digits so that for the current
-<a href=#step>step</a> value.  If the step has been set to
-zero then it does a <TT>%g</TT> format.  The characters are written
-into the passed buffer (which must be long enough, 40 characters is
-safe).
-
-<h4><a name=round>double Fl_Valuator::round(double)</a></h4>
-
-Round the passed value to the nearest <a href=#step>step</a>
-increment. Does nothing if step is zero.
-
-<h4><a name=clamp>double Fl_Valuator::clamp(double)</a></h4>
-
-Clamp the passed value to the valuator range and returns it.
-
-<h4><a name=softclamp>double Fl_Valuator::softclamp(double)</a></h4>
-
-Clamp the passed value to the valuator range only if the previous
-value (the one that it had when the user started to drag) was in
-range.
-
-<h4><a name=increment>double Fl_Valuator::increment(double,int n)</a></h4>
-
-Adds <TT>n</TT> times the <a href=#step>step</a> value to
-the passed value and returns it.
+Format the passed value to show enough digits for the current <a
+href="#step">step</a> value.  If the step has been set to zero then it
+does a <TT>%g</TT> format. If step is greater or equal to 1 it does
+<tt>%d</tt> format. The characters are written into the passed buffer
+(which must be long enough, 40 characters is safe).
 
 <h4><a name=handle>int Fl_Valuator::handle(int event)</a></h4>
 
@@ -206,8 +170,11 @@ Subclasses should call this when the user starts to change the value.
 
 <a name=handle_drag><h4>void Fl_Valuator::handle_drag(double newvalue); (protected)</h4></a>
 
-Subclasses should call this as the user moves the value. It may call
-the callback.
+Subclasses should call this as the user moves the value. The passed
+value is clamped to the range if previous_value() is inside the range,
+and then it is rounded to the nearest multiple of step(), and then
+stored. This may call the callback if the new value is different than
+the old one.
 
 <a name=handle_release><h4>void Fl_Valuator::handle_release(); (protected)</h4></a>
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.h,v 1.6 2002/05/07 04:58:19 spitzak Exp $"
+// "$Id: Fl_Valuator.h,v 1.7 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Valuator header file for the Fast Light Tool Kit (FLTK).
 //
@@ -37,35 +37,30 @@ public:
   double value() const {return value_;}
   int value(double);
 
+  float minimum() const {return minimum_;}
+  void minimum(double a) {minimum_ = float(a);}
+
+  float maximum() const {return maximum_;}
+  void maximum(double a) {maximum_ = float(a);}
+
+  void range(double a, double b) {minimum_ = float(a); maximum_ = float(b);}
+
   float step() const {return step_;}
   void step(double a) {step_ = float(a);}
 
-  double minimum() const {return minimum_;}
-  void minimum(double a) {minimum_ = a;}
+  float linesize() const {return linesize_;}
+  void linesize(double a) {linesize_ = float(a);}
 
-  double maximum() const {return maximum_;}
-  void maximum(double a) {maximum_ = a;}
-
-  void range(double a, double b) {minimum_ = a; maximum_ = b;}
-
-  short unsigned linesize() const {return linesize_;}
-  void linesize(short unsigned i) {linesize_ = i;}
-
-  short unsigned pagesize() const {return pagesize_;}
-  void pagesize(short unsigned i) {pagesize_ = i;}
+  float pagesize() const {return pagesize_;}
+  void pagesize(double a) {pagesize_ = float(a);}
 
   virtual int format(char*);
 
   int handle(int);
 
-  double increment(double v, int steps) const;
-  double clamp(double) const;
-  double round(double) const;
-  double softclamp(double) const;
-
 #ifndef FLTK_2
   void step(double a, int b) {step(a/b);}
-  void bounds(double a, double b) {minimum_=a; maximum_=b;}
+  void bounds(double a, double b) {minimum_=float(a); maximum_=float(b);}
   void precision(int);
 #endif
 
@@ -84,16 +79,16 @@ private:
 
   double value_;
   static double previous_value_;
-  double minimum_;
-  double maximum_;
+  float minimum_;
+  float maximum_;
   float step_;
-  short unsigned linesize_;
-  short unsigned pagesize_;
+  float linesize_;
+  float pagesize_;
 
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Valuator.h,v 1.6 2002/05/07 04:58:19 spitzak Exp $".
+// End of "$Id: Fl_Valuator.h,v 1.7 2002/07/01 15:28:19 spitzak Exp $".
 //

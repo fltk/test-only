@@ -1,13 +1,14 @@
-<html><head><title>class Fl_List</title></head><body bgcolor=white>
+<html><head><link href="fltk.css" rel="stylesheet" type="text/css">
+<title>class Fl_List</title></head><body>
 <!-- NEW PAGE -->
 <h2>class Fl_List</h2>
 <hr>
 
 <h3>Include Files</h3>
 
-<ul><pre>
+<pre>
 #include &lt;fltk/Fl_Menu_.h&gt;
-</pre></ul>
+</pre>
 
 <h3>Description</h3>
 
@@ -67,7 +68,7 @@ can return 1 for any closed parent.
 <p>Here is a sample implementation, where <tt>Node</tt> is a data type
 that you have defined:
 
-<ul><pre>
+<pre>
 int My_Fl_List::children(const Fl_Menu_*, const int* indexes, int level) {
   Node* node = root;
   for (int l = 0; l &lt; level; l++) {
@@ -90,7 +91,7 @@ This should return NULL if there is anything illegal about the indexes.
 <p>Here is a sample implementation, where <tt>Node</tt> is a data type
 that you have defined:
 
-<ul><pre>
+<pre>
 Fl_Widget* My_Fl_List::child(const Fl_Menu_*, const int* indexes, int level) {
   Node* node = root;
   for (int l = 0; l &lt;= level; l++) {
@@ -112,7 +113,7 @@ Fl_Widget* My_Fl_List::child(const Fl_Menu_*, const int* indexes, int level) {
   else widget->clear_flag(FL_VALUE);
   return widget;
 }
-</pre></ul>
+</pre>
 
 <a name=flags_changed><h4>virtual void flags_changed(const Fl_Menu_* group, Fl_Widget* widget);</h4></a>
 
@@ -125,12 +126,12 @@ displays of the selection.
 <p>Here is a sample implementation, where <tt>Node</tt> is a data type
 that you have defined:
 
-<ul><pre>
+<pre>
 void My_Fl_List::flags_changed(const Fl_Menu_*, Fl_Widget* widget) {
   Node* node = (Node*)(widget->user_data());
   node->open = (widget->flags() &amp; FL_VALUE) !=0;
   node->selected = (widget->flags() &amp; FL_SELECTED) != 0;
 }
-</pre></ul>
+</pre>
 
 </BODY></HTML>

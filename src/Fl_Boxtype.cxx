@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.6 2002/03/10 23:10:23 spitzak Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.7 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -51,13 +51,13 @@ void Fl_Dotted_Frame::draw(int x,int y,int w,int h, Fl_Color c, Fl_Flags) const
     evenstipple = XCreateBitmapFromData(fl_display, root, pattern, 8, 8);
     oddstipple = XCreateBitmapFromData(fl_display, root, pattern+1, 8, 8);
   }
-  XSetStipple(fl_display, fl_gc,
-	      (fl_x_ + fl_y_)&1 ? oddstipple : evenstipple);
+  int xx = x; int yy = y; fl_transform(xx,yy);
+  XSetStipple(fl_display, fl_gc, (xx+yy-x-y)&1 ? oddstipple : evenstipple);
   XSetFillStyle(fl_display, fl_gc, FillStippled);
   // X documentation claims a nonzero line width is necessary for stipple
   // to work, but on the X servers I tried it does not seem to be needed:
   //XSetLineAttributes(fl_display, fl_gc, 1, LineSolid, CapButt, JoinMiter);
-  fl_rect(x, y, w, h);
+  XDrawRectangle(fl_display, fl_window, fl_gc, xx, yy, w-1, h-1);
   XSetFillStyle(fl_display, fl_gc, FillSolid);
   // put line width back to zero:
   //XSetLineAttributes(fl_display, fl_gc, 0, LineSolid, CapButt, JoinMiter);
@@ -219,5 +219,5 @@ const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
 const Fl_Boxtype_* Fl_Boxtype_::first = 0;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.6 2002/03/10 23:10:23 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.7 2002/07/01 15:28:19 spitzak Exp $".
 //

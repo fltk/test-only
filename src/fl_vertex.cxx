@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.14 2002/01/23 08:46:02 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.15 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -33,47 +33,65 @@
 ////////////////////////////////////////////////////////////////
 // Transformation:
 
-struct Matrix {double a, b, c, d, x, y;};
+struct Matrix {
+  double a, b, c, d, x, y;
+  int ix, iy; // x & y rounded to nearest integer
+  bool trivial; // true if no rotation or scale
+};
 
-static Matrix m = {1, 0, 0, 1, 0, 0};
-
-struct Matrixi {Matrix m; int x, y;};
-
-static Matrixi stack[10];
+static Matrix m = {1, 0, 0, 1, 0, 0, 0, 0, true};
+static Matrix stack[10];
 static int sptr = 0;
 
-void fl_push_matrix() {
-  stack[sptr].m = m;
-  stack[sptr].x = fl_x_;
-  stack[sptr].y = fl_y_;
-  sptr++;
-}
+void fl_push_matrix() {stack[sptr++] = m;}
 
-void fl_pop_matrix() {
-  sptr--;
-  m = stack[sptr].m;
-  fl_x_ = stack[sptr].x;
-  fl_y_ = stack[sptr].y;
-}
+void fl_pop_matrix() {m = stack[--sptr];}
 
 void fl_mult_matrix(double a, double b, double c, double d, double x, double y) {
-  Matrix o;
-  o.a = a*m.a + b*m.c;
-  o.b = a*m.b + b*m.d;
-  o.c = c*m.a + d*m.c;
-  o.d = c*m.b + d*m.d;
-  o.x = x*m.a + y*m.c + m.x;
-  {double t = rint(o.x); o.x = o.x-t; fl_x_ += int(t);}
-  o.y = x*m.b + y*m.d + m.y;
-  {double t = rint(o.y); o.y = o.y-t; fl_y_ += int(t);}
-  m = o;
+  if (m.trivial) {
+    m.a = a; m.b = b; m.c = c; m.d = d;
+    m.x += x; m.ix = int(rint(m.x));
+    m.y += y; m.iy = int(rint(m.y));
+    m.trivial = false;
+  } else {
+    Matrix o;
+    o.a = a*m.a + b*m.c;
+    o.b = a*m.b + b*m.d;
+    o.c = c*m.a + d*m.c;
+    o.d = c*m.b + d*m.d;
+    o.x = x*m.a + y*m.c + m.x; o.ix = int(rint(o.x));
+    o.y = x*m.b + y*m.d + m.y; o.iy = int(rint(o.y));
+    o.trivial = false;
+    m = o;
+  }
 }
 
-void fl_scale(double x,double y) {fl_mult_matrix(x,0,0,y,0,0);}
+void fl_scale(double x,double y) {
+  if (x != 1.0 && y != 1.0) fl_mult_matrix(x,0,0,y,0,0);
+}
 
-void fl_scale(double x) {fl_mult_matrix(x,0,0,x,0,0);}
+void fl_scale(double x) {
+  if (x != 1.0) fl_mult_matrix(x,0,0,x,0,0);
+}
 
-void fl_translate(double x,double y) {fl_mult_matrix(1,0,0,1,x,y);}
+void fl_translate(double x,double y) {
+  if (m.trivial) {
+    m.x += x; m.ix = int(rint(m.x));
+    m.y += y; m.iy = int(rint(m.y));
+    m.trivial = m.ix==m.x && m.iy==m.y;
+  } else {
+    fl_mult_matrix(1,0,0,1,x,y);
+  }
+}
+
+void fl_translate(int x, int y) {
+  if (m.trivial) {
+    m.ix += x; m.x = m.ix;
+    m.iy += y; m.y = m.iy;
+  } else {
+    fl_mult_matrix(1,0,0,1,x,y);
+  }
+}
 
 void fl_rotate(double d) {
   if (d) {
@@ -87,13 +105,45 @@ void fl_rotate(double d) {
   }
 }
 
-double fl_transform_x(double x, double y) {return x*m.a + y*m.c + m.x;}
+void fl_load_identity() {
+  m.a = 1; m.b = 0; m.c = 0; m.d = 1;
+  m.x = 0; m.y = 0;
+  m.ix = 0; m.iy = 0;
+  m.trivial = true;
+}
 
-double fl_transform_y(double x, double y) {return x*m.b + y*m.d + m.y;}
+////////////////////////////////////////////////////////////////
+// Return the transformation of points:
 
-double fl_transform_dx(double x, double y) {return x*m.a + y*m.c;}
+void fl_transform(double& x, double& y) {
+  if (!m.trivial) {
+    double t = x*m.a + y*m.c + m.x;
+    y = x*m.b + y*m.d + m.y;
+    x = t;
+  } else {
+    x += m.x;
+    y += m.y;
+  }
+}
 
-double fl_transform_dy(double x, double y) {return x*m.b + y*m.d;}
+void fl_transform_distance(double& x, double& y) {
+  if (!m.trivial) {
+    double t = x*m.a + y*m.c;
+    y = x*m.b + y*m.d;
+    x = t;
+  }
+}
+
+void fl_transform(int& x, int& y) {
+  if (!m.trivial) {
+    int t = int(rint(x*m.a + y*m.c + m.x));
+    y = int(rint(x*m.b + y*m.d + m.y));
+    x = t;
+  } else {
+    x += m.ix;
+    y += m.iy;
+  }
+}
 
 ////////////////////////////////////////////////////////////////
 // Path construction:
@@ -113,36 +163,114 @@ static int loop_start; // point at start of current loop
 static int* loop; // number of points in each loop
 static int loops; // number of loops
 static int loop_array_size;
-// We also keep track of one circle:
-static int circle_x, circle_y, circle_w, circle_h;
 
-static inline void inline_newpath() {
-  points = loop_start = loops = circle_w = 0;
-}
-void fl_newpath() {inline_newpath();}
-
-void fl_vertex(double x,double y) {
-  fl_vertex(int(rint(x*m.a + y*m.c + m.x)),
-	    int(rint(x*m.b + y*m.d + m.y)));
+static void add_n_points(int n) {
+  point_array_size = point_array_size ? 2*point_array_size : 16;
+  if (points+n >= point_array_size) point_array_size = n;
+  point = (XPoint*)realloc((void*)point, (point_array_size+1)*sizeof(XPoint));
 }
 
-void fl_vertex(int X, int Y) {
-  COORD_T x = COORD_T(X+fl_x_);
-  COORD_T y = COORD_T(Y+fl_y_);
+void fl_vertex(double X, double Y) {
+  COORD_T x = COORD_T(int(rint(X*m.a + Y*m.c + m.x)));
+  COORD_T y = COORD_T(int(rint(X*m.b + Y*m.d + m.y)));
   if (!points || x != point[points-1].x || y != point[points-1].y) {
-    if (points >= point_array_size) {
-      point_array_size = point_array_size ? 2*point_array_size : 16;
-      point = (XPoint*)realloc((void*)point,
-			       (point_array_size+1)*sizeof(XPoint));
-    }
+    if (points+1 >= point_array_size) add_n_points(1);
     point[points].x = x;
     point[points].y = y;
     points++;
   }
 }
 
-void fl_transformed_vertex(double xf, double yf) {
-  fl_vertex(int(rint(xf)), int(rint(yf)));
+void fl_vertex(int X, int Y) {
+  COORD_T x,y;
+  if (m.trivial) {
+    x = COORD_T(X+m.ix);
+    y = COORD_T(Y+m.iy);
+  } else {
+    x = COORD_T(int(rint(X*m.a + Y*m.c + m.x)));
+    y = COORD_T(int(rint(X*m.b + Y*m.d + m.y)));
+  }
+  if (!points || x != point[points-1].x || y != point[points-1].y) {
+    if (points+1 >= point_array_size) add_n_points(1);
+    point[points].x = x;
+    point[points].y = y;
+    points++;
+  }
+}
+
+void fl_vertices(int n, const float array[][2]) {
+  if (points+n >= point_array_size) add_n_points(n);
+  const float* a = array[0];
+  const float* e = a+2*n;
+  int pn = points;
+  if (m.trivial) {
+    for (; a < e; a += 2) {
+      COORD_T x = COORD_T(int(rint(a[0]+m.x)));
+      COORD_T y = COORD_T(int(rint(a[1]+m.y)));
+      if (!pn || x != point[pn-1].x || y != point[pn-1].y) {
+	point[pn].x = x;
+	point[pn].y = y;
+	pn++;
+      }
+    }
+  } else {
+    for (; a < e; a += 2) {
+      COORD_T x = COORD_T(int(rint(a[0]*m.a + a[1]*m.c + m.x)));
+      COORD_T y = COORD_T(int(rint(a[0]*m.b + a[1]*m.d + m.y)));
+      if (!pn || x != point[pn-1].x || y != point[pn-1].y) {
+	point[pn].x = x;
+	point[pn].y = y;
+	pn++;
+      }
+    }
+  }
+  points = pn;
+}
+
+void fl_vertices(int n, const int array[][2]) {
+  if (points+n >= point_array_size) add_n_points(n);
+  const int* a = array[0];
+  const int* e = a+2*n;
+  int pn = points;
+  if (m.trivial) {
+    for (; a < e; a += 2) {
+      COORD_T x = COORD_T(a[0]+m.ix);
+      COORD_T y = COORD_T(a[1]+m.iy);
+      if (!pn || x != point[pn-1].x || y != point[pn-1].y) {
+	point[pn].x = x;
+	point[pn].y = y;
+	pn++;
+      }
+    }
+  } else {
+    for (; a < e; a += 2) {
+      COORD_T x = COORD_T(int(rint(a[0]*m.a + a[1]*m.c + m.x)));
+      COORD_T y = COORD_T(int(rint(a[0]*m.b + a[1]*m.d + m.y)));
+      if (!pn || x != point[pn-1].x || y != point[pn-1].y) {
+	point[pn].x = x;
+	point[pn].y = y;
+	pn++;
+      }
+    }
+  }
+  points = pn;
+}
+
+void fl_transformed_vertices(int n, const float array[][2]) {
+  if (points+n >= point_array_size) add_n_points(n);
+  const float* a = array[0];
+  const float* e = a+2*n;
+  int pn = points;
+  for (; a < e; a += 2) {
+    COORD_T x = COORD_T(int(rintf(a[0])));
+    COORD_T y = COORD_T(int(rintf(a[1])));
+    if (!pn || x != point[pn-1].x || y != point[pn-1].y) {
+      point[pn].x = x;
+      point[pn].y = y;
+      pn++;
+    }
+  }
+  points = pn;
 }
 
 void fl_closepath() {
@@ -164,17 +292,25 @@ void fl_closepath() {
   }
 }
 
+////////////////////////////////////////////////////////////////
+// Enormous kludge to add arcs to a path but try to take advantage
+// of primitive arc-drawing functions provided by the OS. This mess
+// should not be needed on newer systems...
+//
+// We keep track of exactly one "nice" circle:
+
+static int circle_x, circle_y, circle_w, circle_h;
+
 // Add a circle to the path. It is always a circle, irregardless of
 // the transform. Currently only one per path is supported, this uses
 // commands on the server to draw a nicer circle than the path mechanism
 // can make.
 void fl_circle(double x, double y, double r) {
-  double xt = fl_transform_x(x,y);
-  double yt = fl_transform_y(x,y);
+  fl_transform(x,y);
   double rt = r * sqrt(fabs(m.a*m.d-m.b*m.c));
   circle_w = circle_h = int(rint(rt*2));
-  circle_x = int(rint(xt-circle_w*.5))+fl_x_;
-  circle_y = int(rint(yt-circle_h*.5))+fl_y_;
+  circle_x = int(rint(x-circle_w*.5));
+  circle_y = int(rint(y-circle_h*.5));
 }
 
 // Add an ellipse to the path. On X/Win32 this only works for 90 degree
@@ -185,18 +321,15 @@ void fl_ellipse(double x, double y, double w, double h) {
   // degree rotations:
   x += w/2;
   y += h/2;
-  double cx = fl_transform_x(x,y);
-  double cy = fl_transform_y(x,y);
-  double d1 = fl_transform_dx(w,0);
-  double d2 = fl_transform_dx(0,h);
-  double rx = sqrt(d1*d1+d2*d2)/2;
-  d1 = fl_transform_dy(w,0);
-  d2 = fl_transform_dy(0,h);
-  double ry = sqrt(d1*d1+d2*d2)/2;
+  fl_transform(x,y);
+  double d1x,d1y; d1x = w; d1y = 0; fl_transform_distance(d1x, d1y);
+  double d2x,d2y; d2x = 0; d2y = h; fl_transform_distance(d2x, d2y);
+  double rx = sqrt(d1x*d1x+d2x*d2x)/2;
+  double ry = sqrt(d1y*d1y+d2y*d2y)/2;
   circle_w = int(rint(rx*2));
-  circle_x = int(rint(cx-circle_w*.5))+fl_x_;
+  circle_x = int(rint(x-circle_w*.5));
   circle_h = int(rint(ry*2));
-  circle_y = int(rint(cy-circle_h*.5))+fl_y_;
+  circle_y = int(rint(y-circle_h*.5));
 #else
   // This produces the correct image, but not as nice as using circles
   // produced by the server:
@@ -208,6 +341,11 @@ void fl_ellipse(double x, double y, double w, double h) {
 
 ////////////////////////////////////////////////////////////////
 // Draw the path:
+
+static inline void inline_newpath() {
+  points = loop_start = loops = circle_w = 0;
+}
+void fl_newpath() {inline_newpath();}
 
 void fl_points() {
 #ifdef _WIN32
@@ -270,14 +408,16 @@ void fl_fill() {
 	     circle_x, circle_y, circle_w, circle_h, 0, 64*360);
   if (loops) fl_closepath();
   if (points > 2) {
-    // back-trace the lines between each "disconnected" part so they
-    // are actually connected:
-    int n = points-1;
-    for (int i = loops; --i > 1;) {
-      n -= loop[i];
-      XPoint& q = point[n];
-      fl_vertex(q.x-fl_x_, q.y-fl_y_);
-    }      
+    if (loops > 2) {
+      // back-trace the lines between each "disconnected" part so they
+      // are actually connected:
+      if (points+loops-2 >= point_array_size) add_n_points(loops-2);
+      int n = points-1;
+      for (int i = loops; --i > 1;) {
+	n -= loop[i];
+	point[points++] = point[n];
+      }
+    }
     XFillPolygon(fl_display, fl_window, fl_gc, point, points, 0, 0);
   }
 #endif
@@ -313,14 +453,16 @@ void fl_fill_stroke(Fl_Color color) {
   fl_closepath();
   if (points > 2) {
     int saved_points = points;
-    // back-trace the lines between each "disconnected" part so they
-    // are actually connected:
-    int n = saved_points-1;
-    for (int i = loops; --i > 1;) {
-      n -= loop[i];
-      XPoint& q = point[n];
-      fl_vertex(q.x-fl_x_, q.y-fl_y_);
-    }      
+    if (loops > 2) {
+      // back-trace the lines between each "disconnected" part so they
+      // are actually connected:
+      if (points+loops-2 >= point_array_size) add_n_points(loops-2);
+      int n = saved_points-1;
+      for (int i = loops; --i > 1;) {
+	n -= loop[i];
+	point[points++] = point[n];
+      }
+    }
     XFillPolygon(fl_display, fl_window, fl_gc, point, points, 0, 0);
     points = saved_points; // throw away the extra points
   }
@@ -331,5 +473,5 @@ void fl_fill_stroke(Fl_Color color) {
 }
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.14 2002/01/23 08:46:02 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.15 2002/07/01 15:28:19 spitzak Exp $".
 //

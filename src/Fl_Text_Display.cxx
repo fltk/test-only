@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.22 2002/06/09 23:20:19 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.23 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -197,8 +197,12 @@ void Fl_Text_Display::layout() {
   int i;
 
   /* Find the new maximum font height for this text display */
-  for (i = 0, mMaxsize = fl_height(text_font(), text_size())+leading(); i < mNStyles; i++)
-    mMaxsize = max(mMaxsize, fl_height(mStyleTable[i].font, mStyleTable[i].size)+leading());
+  fl_font(text_font(), text_size());
+  mMaxsize = int(fl_height()+leading());
+  for (i = 0; i < mNStyles; i++) {
+    fl_font(mStyleTable[i].font, mStyleTable[i].size);
+    mMaxsize = max(mMaxsize, int(fl_height()+leading()));
+  }
 
   // did we have scrollbars initially?
   bool hscrollbarvisible = mHScrollBar->visible();
@@ -1983,5 +1987,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.22 2002/06/09 23:20:19 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.23 2002/07/01 15:28:19 spitzak Exp $".
 //

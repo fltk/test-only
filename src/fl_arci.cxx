@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.9 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: fl_arci.cxx,v 1.10 2002/07/01 15:28:19 spitzak Exp $"
 //
 // Arc (integer) drawing functions for the Fast Light Tool Kit (FLTK).
 //
@@ -41,7 +41,7 @@
 
 void fl_pie(int x,int y,int w,int h,double a1,double a2, int what) {
   if (w <= 0 || h <= 0) return;
-  x += fl_x_; y += fl_y_;
+  fl_transform(x,y);
 #ifdef _WIN32
   if (a1 == a2) return;
   w++; h++; // is this needed to match X?
@@ -80,5 +80,5 @@ void fl_pie(int x,int y,int w,int h,double a1,double a2, int what) {
 }
 
 //
-// End of "$Id: fl_arci.cxx,v 1.9 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: fl_arci.cxx,v 1.10 2002/07/01 15:28:19 spitzak Exp $".
 //
