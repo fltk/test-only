@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.49 2003/01/18 21:40:11 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.50 2003/08/25 15:28:47 spitzak Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -45,7 +45,8 @@ struct FontSize {
   ~FontSize();
 };
 
-// The xft font implementation adds the xft name and the above list:
+// The public-visible fltk::Font structures are actually imbedded in
+// this larger structure which points at the the above list
 struct IFont {
   fltk::Font f;
   int attribute_mask; // all attributes that can be turned on
@@ -247,5 +248,5 @@ void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.49 2003/01/18 21:40:11 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.50 2003/08/25 15:28:47 spitzak Exp $".
 //

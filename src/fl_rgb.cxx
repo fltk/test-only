@@ -33,7 +33,7 @@ fltk::Color fltk::color(const char* name) {
   if (sscanf(name, "%d,%d,%d", &R,&G,&B) == 3) {
     c = color(R,G,B);
   } else {
-#ifdef _WIN32
+#if defined(_WIN32) || (defined(__APPLE__) && !USE_X11)
     // simulation of XParseColor:
     if (*name == '#') name++;
     if (name[0]=='0' && name[1]=='x') name += 2;
@@ -66,5 +66,5 @@ fltk::Color fltk::color(const char* name) {
 }
 
 //
-// End of "$Id: fl_rgb.cxx,v 1.6 2002/12/10 02:01:02 easysw Exp $".
+// End of "$Id: fl_rgb.cxx,v 1.7 2003/08/25 15:28:47 spitzak Exp $".
 //

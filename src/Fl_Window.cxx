@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.100 2003/06/24 07:10:48 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.101 2003/08/25 15:28:47 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -174,12 +174,35 @@ int Window::handle(int event) {
   return 0;
 }
 
-// Window::show() is different than Window::handle(SHOW) in that it
-// creates windows, and it raises top-level windows. As show() is not
-// a virtual function, this will not be called if a Widget pointer
-// is used to call show(). In that case nothing is done if visible()
-// is true, the window is mapped but not raised if it has been created,
-// and this is called if it has not been created yet.
+/** Cause the window to become visible.
+
+    For inner windows (with a parent()) this just causes the window
+    to appear. Currently no guarantee about stacking order is made.
+
+    For a outer window (one with no parent()) this causes the window
+    to appear on the screen, be de-iconized, and be raised to the top.
+    Depending on child_of() settings of this window and of windows
+    pointing to it, and on system and window manager settings, this
+    may cause other windows to also be deiconized and raised, or this
+    window may remain iconized.
+
+    Window::show() is not a virtual override of Widget::show(), and
+    you can call either one. The \e only difference is that outer windows
+    are raised and deiconized by Window::show(), while Widget::show()
+    only "maps" the window, which on most systems causes it to appear
+    in the same stacking order it was in when hidden.
+
+    On current systems the first time this is called is when the
+    actual "system window" is created. Before that an fltk window is
+    simply an internal data structure and is not visible by any
+    outside code. Calling hide() will unmap this system window, but to
+    actually go back to the non-window state you must call destroy()
+    or ~Window(). The first time show() is called on any window is
+    when fltk will call open_display() and load_theme(), this allows
+    these expensive operations to be deferred as long as possible, and
+    allows fltk programs to be written that need no display (as long
+    as they never show a window).
+*/
 void Window::show() {
   // get rid of very common user bug: forgot end():
   Group::current(0);
@@ -189,8 +212,17 @@ void Window::show() {
     if (flags()&MODAL) modal(this, false);
   }
 
-  // If the window does not exist yet, create it:
+#if (defined(__APPLE__) && !USE_X11)
+  if (!parent()) {
+    // bring the application to the front
+    ProcessSerialNumber psn;
+    OSErr err = GetCurrentProcess( &psn );
+    if ( err==noErr ) SetFrontProcess( &psn );
+  }
+#endif
+
   if (!shown()) {
+    // Create an all-new system window.
 
     // If the window was created with the xywh constructor, the visible()
     // flag was left on, turn it off:
@@ -232,7 +264,7 @@ void Window::show() {
     // the WinProc directly it is already on:
     set_visible();
 
-    // map the window:
+    // map the window, making it iconized if fl_show_iconic is on:
 #ifdef _WIN32
     int showtype;
     if (parent())
@@ -248,51 +280,43 @@ void Window::show() {
       showtype = SW_SHOWNORMAL;
     ShowWindow(i->xid, showtype);
 #elif (defined(__APPLE__) && !USE_X11)
-    if (parent()) return 1; // needs to update clip and redraw...
     if (!modal() && fl_show_iconic) {
       fl_show_iconic = 0;
       CollapseWindow( i->xid, true ); // \todo Mac ; untested
-      //ShowWindow(i->xid); // ???
     } else {
-      // need way to de-iconize?
       ShowWindow(i->xid);
     }
 #else
-    // iconic stuff was done by create()
+    // for X, iconic stuff was done by create()
     XMapRaised(xdisplay, i->xid);
 #endif
 
-    return;
-  }
+  } else {
 
-  // raise+map+deiconize windows already-visible windows:
-  if (!parent()) {
-    // Raise any parent windows, to get around stupid window managers
-    // that think "child of" means "next to" rather than "above":
-    //if (child_of() && !override()) ((Window*)child_of())->show();
+    // Raise+deiconize an already-made top-level window:
+    if (!parent()) {
+      // Raise any parent windows, to get around stupid window managers
+      // that think "child of" means "next to" rather than "above":
+      //if (child_of() && !override()) ((Window*)child_of())->show();
 #ifdef _WIN32
-    if (IsIconic(i->xid)) OpenIcon(i->xid);
-    if (!grab() && !override()) BringWindowToTop(i->xid);
+      if (IsIconic(i->xid)) OpenIcon(i->xid);
+      if (!grab() && !override()) BringWindowToTop(i->xid);
 #elif (defined(__APPLE__) && !USE_X11)
-    // is some call needed to deiconize?
-    ShowWindow(i->xid); // does this de-iconize?
-    if (!grab() && !override()) {
-      BringToFront(i->xid);
-      SelectWindow(i->xid);
-      // bring the application to the front
-      ProcessSerialNumber psn;
-      OSErr err = GetCurrentProcess( &psn );
-      if ( err==noErr ) SetFrontProcess( &psn );
-    }
+      ShowWindow(i->xid); // does this de-iconize?
+      if (!grab() && !override()) {
+	BringToFront(i->xid);
+	SelectWindow(i->xid);
+      }
 #else
-    XMapRaised(xdisplay, i->xid);
+      XMapRaised(xdisplay, i->xid);
 #endif
-  }
+    }
 
-  // This will call handle(SHOW) if visible is false, which will
-  // cause the window to be mapped. Does nothing if visible is
-  // already true:
-  Widget::show();
+    // This will call handle(SHOW) if visible is false, which will
+    // cause the window to be mapped. Does nothing if visible is
+    // already true:
+    Widget::show();
+  }
 }
 
 void Window::show(const Window* w) {
@@ -355,8 +379,6 @@ void Widget::redraw(int X, int Y, int W, int H) {
   i->expose(X, Y, W, H);
 }
 
-extern bool fl_windows_damaged;
-
 // Merge a rectangle into a window's expose region. If the entire
 // window is damaged we switch to a DAMAGE_ALL mode which will
 // avoid drawing it twice:
@@ -387,7 +409,7 @@ void CreatedWindow::expose(int X, int Y, int W, int H) {
 #endif
   }
   // make flush() search for this window:
-  fl_windows_damaged = true; // make flush() do something
+  fltk::damage(1); // make flush() do something
 }
 
 void Window::flush() {
@@ -444,5 +466,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.100 2003/06/24 07:10:48 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.101 2003/08/25 15:28:47 spitzak Exp $".
 //

@@ -4,7 +4,7 @@ Fl.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/events.h ../fltk/error.h
 Fl.o: ../fltk/damage.h ../fltk/layout.h ../fltk/Window.h ../fltk/Group.h
 Fl.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h
 Fl.o: ../fltk/Style.h ../fltk/Tooltip.h ../fltk/x.h ../fltk/draw.h
-Fl.o: ../config.h ../fltk/FL_VERSION.h ../fltk/ScreenInfo.h Fl_x.cxx
+Fl.o: ../config.h ../fltk/FL_VERSION.h ../fltk/ScreenInfo.h Fl_mac.cxx
 Fl_Adjuster.o: ../fltk/Adjuster.h ../fltk/Valuator.h ../fltk/Widget.h
 Fl_Adjuster.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h
 Fl_Adjuster.o: ../fltk/Flags.h ../fltk/Box.h ../fltk/events.h
@@ -331,7 +331,7 @@ fl_clip.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h ../fltk/x.h
 fl_clip.o: ../fltk/draw.h ../fltk/draw.h
 fl_color.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h ../fltk/draw.h
 fl_color.o: ../fltk/Color.h ../config.h ../fltk/x.h ../fltk/draw.h fl_cmap.h
-fl_color.o: fl_color_x.cxx XColorMap.h
+fl_color.o: fl_color_mac.cxx XColorMap.h
 fl_cursor.o: ../fltk/Cursor.h ../fltk/FL_API.h ../fltk/Window.h
 fl_cursor.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
 fl_cursor.o: ../fltk/Flags.h ../fltk/x.h ../fltk/draw.h ../fltk/draw.h
@@ -341,7 +341,7 @@ fl_curve.o: ../fltk/math.h
 fl_diamond_box.o: ../fltk/Box.h ../fltk/Color.h ../fltk/FL_API.h
 fl_diamond_box.o: ../fltk/Flags.h ../fltk/Style.h ../fltk/Widget.h
 fl_diamond_box.o: ../fltk/Style.h ../fltk/draw.h
-fl_dnd.o: fl_dnd_x.cxx ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h
+fl_dnd.o: fl_dnd_mac.cxx ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h
 fl_dnd.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 fl_dnd.o: ../fltk/run.h ../fltk/events.h ../fltk/Cursor.h ../fltk/x.h
 fl_dnd.o: ../fltk/draw.h
@@ -350,7 +350,7 @@ fl_draw.o: ../fltk/math.h ../fltk/Font.h ../fltk/Style.h ../fltk/Widget.h
 fl_draw.o: ../fltk/Style.h ../fltk/Symbol.h
 fl_draw_image.o: ../config.h ../fltk/events.h ../fltk/FL_API.h ../fltk/draw.h
 fl_draw_image.o: ../fltk/Flags.h ../fltk/Color.h ../fltk/x.h ../fltk/draw.h
-fl_draw_image.o: fl_draw_image_x.cxx ../fltk/error.h XColorMap.h
+fl_draw_image.o: fl_draw_image_mac.cxx ../fltk/error.h XColorMap.h
 fl_draw_pixmap.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 fl_draw_pixmap.o: ../fltk/draw.h ../fltk/Color.h ../config.h
 fl_engraved_label.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
@@ -365,7 +365,7 @@ fl_file_chooser.o: ../fltk/Browser.h ../fltk/Scrollbar.h ../fltk/Slider.h
 fl_file_chooser.o: ../fltk/Valuator.h ../fltk/FileIcon.h ../fltk/FileInput.h
 fl_file_chooser.o: ../fltk/Input.h ../fltk/ReturnButton.h ../fltk/Button.h
 fl_font.o: ../config.h ../fltk/Font.h ../fltk/Style.h ../fltk/Color.h
-fl_font.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/draw.h fl_font_x.cxx
+fl_font.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/draw.h fl_font_mac.cxx
 fl_font.o: ../fltk/error.h ../fltk/x.h ../fltk/draw.h ../fltk/math.h IFont.h
 fl_glyph.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h
 fl_glyph.o: ../fltk/Flags.h ../fltk/Box.h ../fltk/draw.h
@@ -376,7 +376,7 @@ fl_labeltype.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/damage.h
 fl_labeltype.o: ../fltk/draw.h ../fltk/string.h ../config.h
 fl_list_fonts.o: ../config.h ../fltk/Font.h ../fltk/Style.h ../fltk/Color.h
 fl_list_fonts.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/string.h
-fl_list_fonts.o: fl_list_fonts_x.cxx ../fltk/x.h ../fltk/draw.h IFont.h
+fl_list_fonts.o: fl_list_fonts_mac.cxx ../fltk/x.h ../fltk/draw.h IFont.h
 fl_load_plugin.o: ../fltk/load_plugin.h ../fltk/FL_API.h ../config.h
 fl_oval_box.o: ../fltk/Box.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 fl_oval_box.o: ../fltk/Style.h ../fltk/draw.h

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.16 2003/03/09 07:51:36 spitzak Exp $"
+// "$Id: fl_clip.cxx,v 1.17 2003/08/25 15:28:47 spitzak Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -41,9 +41,7 @@ Region fltk::clip_region() {
   return rstack[rstackptr];
 }
 
-// Had to comment this out as it wouldn't link on OSX10.2.4:
-//#if !defined(_WIN32) && !defined(__APPLE__) && !USE_X11
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(__APPLE__) || USE_X11
 // Missing X call: (is this the fastest way to init a 1-rectangle region?)
 // MSWindows equivalent exists, implemented inline in win32.h
 Region XRectangleRegion(int x, int y, int w, int h) {
@@ -284,5 +282,5 @@ int fltk::clip_box(int x,int y,int w,int h, int& X,int& Y,int& W,int& H) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.16 2003/03/09 07:51:36 spitzak Exp $"
+// End of "$Id: fl_clip.cxx,v 1.17 2003/08/25 15:28:47 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_cursor.cxx,v 1.19 2003/02/21 18:16:55 spitzak Exp $"
+// "$Id: fl_cursor.cxx,v 1.20 2003/08/25 15:28:47 spitzak Exp $"
 //
 // Mouse cursor support for the Fast Light Tool Kit (FLTK).
 //
@@ -191,26 +191,34 @@ static ::Cursor crsrARROW =
 static fltk::Cursor arrow = {&crsrARROW};
 
 static fltk::Cursor cross = {0, crossCursor};
-static fltk::Cursor wait = {0,watchCursor};
-static fltk::Cursor insert = {0, iBeamCursor};
-static fltk::Cursor no = {0, crossCursor}; // not right!
+static fltk::Cursor wait  = {0, watchCursor};
+static fltk::Cursor insert= {0, iBeamCursor};
 
+static ::Cursor crsrNO =
+{
+  { 0x0000, 0x03c0, 0x0ff0, 0x1c38, 0x303c, 0x307c, 0x60e6, 0x61c6,
+    0x6386, 0x6706, 0x3e0c, 0x3c0c, 0x1c38, 0x0ff0, 0x03c0, 0x0000 },
+  { 0x03c0, 0x0ff0, 0x1ff8, 0x3ffc, 0x7c7e, 0x78fe, 0xf1ff, 0xf3ef,
+    0xf7cf, 0xff8f, 0x7f1e, 0x7e3e, 0x3ffc, 0x1ff8, 0x0ff0, 0x03c0 },
+  { 8, 8 }
+};
+static fltk::Cursor no = {&crsrNO};
+
+/*  Setting the cursor on the Macintosh is very easy, as there is a
+    single cursor rather than one per window. The main loop checks to
+    see if we are still pointing at the cursor widget and puts the
+    cursor back to the default if not. */
 void Widget::cursor(fltk::Cursor* c) const {
-  Window* window = is_window() ? (Window*)this : this->window();
-  if (!window) return;
-  while (window->parent()) window = window->window();
-  CreatedWindow* i = CreatedWindow::find(window);
-  if (!i) return;
   CursHandle xcursor;
   if (!c) {
-    xcursor = default_cursor;
+    xcursor = fltk::default_cursor;
   } else {
     if (!c->cursor) c->cursor = *GetCursor(c->resource);
     xcursor = &c->cursor;
   }
-  i->cursor_for = this;
-  if (xcursor != i->cursor) {
-    i->cursor = xcursor;
+  fltk::cursor_for = this;
+  if (fltk::current_cursor != xcursor) {
+    fltk::current_cursor = xcursor;
     SetCursor(*xcursor);
   }
 }
@@ -357,5 +365,5 @@ fltk::Cursor* const fltk::CURSOR_NO	= &no;
 fltk::Cursor* const fltk::CURSOR_NONE	= &none;
 
 //
-// End of "$Id: fl_cursor.cxx,v 1.19 2003/02/21 18:16:55 spitzak Exp $".
+// End of "$Id: fl_cursor.cxx,v 1.20 2003/08/25 15:28:47 spitzak Exp $".
 //

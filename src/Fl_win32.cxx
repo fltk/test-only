@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.191 2003/08/03 16:55:13 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.192 2003/08/25 15:28:47 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -754,8 +754,6 @@ static Window* resize_from_system;
 
 #define MakeWaitReturn() PostMessage(hWnd, WM_MAKEWAITRETURN, 0, 0)
 
-extern bool fl_windows_damaged;
-
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
   //printf("Window %x msg %x\n", hWnd, uMsg);
@@ -822,8 +820,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     // This convinces MSWindows we have painted whatever they wanted
     // us to paint, and stops it from sending WM_PAINT messages:
     ValidateRgn(hWnd, i->region);
-    // This makes flush() do something:
-    fl_windows_damaged = true;
+    fltk::damage(1); // make flush() do something
     // Originally it called flush() directly here, but it appears to
     // be better to get wait() to return by posting a message. This
     // merges the damage together and waits for idle. Windows appears to
@@ -1543,5 +1540,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.191 2003/08/03 16:55:13 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.192 2003/08/25 15:28:47 spitzak Exp $".
 //

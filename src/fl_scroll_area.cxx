@@ -1,5 +1,5 @@
 //
-// "$Id: fl_scroll_area.cxx,v 1.12 2002/12/10 02:01:02 easysw Exp $"
+// "$Id: fl_scroll_area.cxx,v 1.13 2003/08/25 15:28:47 spitzak Exp $"
 //
 // Scrolling routines for the Fast Light Tool Kit (FLTK).
 //
@@ -74,6 +74,17 @@ void fltk::scrollrect(int X, int Y, int W, int H, int dx, int dy,
 	 gc, src_x+ox, src_y+oy, SRCCOPY);
   // NYI: need to redraw areas that the source of BitBlt was bad due to
   // overlapped windows, somehow similar to what X does.
+#elif (defined(__APPLE__) && !USE_X11)
+  Rect src = { src_y, src_x, src_y+src_h, src_x+src_w };
+  Rect dst = { dest_y, dest_x, dest_y+src_h, dest_x+src_w };
+  static RGBColor bg = { 0xffff, 0xffff, 0xffff }; RGBBackColor( &bg );
+  static RGBColor fg = { 0x0000, 0x0000, 0x0000 }; RGBForeColor( &fg );
+  GrafPtr port; GetPort( &port );
+  CopyBits( GetPortBitMapForCopyBits(port),
+            GetPortBitMapForCopyBits(port),
+	    &src, &dst, srcCopy, 0L);
+  // NYI: need to redraw areas that the source of BitBlt was bad due to
+  // overlapped windows, somehow similar to what X does.
 #else
   XCopyArea(xdisplay, xwindow, xwindow, gc,
 	    src_x+ox, src_y+oy, src_w, src_h,
@@ -93,5 +104,5 @@ void fltk::scrollrect(int X, int Y, int W, int H, int dx, int dy,
 }
 
 //
-// End of "$Id: fl_scroll_area.cxx,v 1.12 2002/12/10 02:01:02 easysw Exp $".
+// End of "$Id: fl_scroll_area.cxx,v 1.13 2003/08/25 15:28:47 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: mac.h,v 1.6 2003/07/01 07:03:14 spitzak Exp $"
+// "$Id: mac.h,v 1.7 2003/08/25 15:28:47 spitzak Exp $"
 //
 // Mac header file for the Fast Light Tool Kit (FLTK).
 //
@@ -155,8 +155,7 @@ public:
   Region subRegion; // region which clips out children
   CreatedWindow *children, *brother;
   bool wait_for_expose;
-  CursHandle cursor;
-  const Widget* cursor_for;
+  bool need_new_subRegion;
   static CreatedWindow* first;
   static CreatedWindow* find(const Window* window) {return window->i;}
   static int borders(const Window* w, int& dx, int& dy, int& dw, int& dh);
@@ -168,6 +167,8 @@ inline XWindow xid(const Window*w) {return CreatedWindow::find(w)->xid;}
 Window* find(XWindow xid);
 
 extern CursHandle default_cursor;
+extern CursHandle current_cursor;
+extern const Widget* cursor_for;
 
 #endif //Fl_Window_H
 ////////////////////////////////////////////////////////////////
@@ -177,6 +178,6 @@ extern CursHandle default_cursor;
 #endif
 
 //
-// End of "$Id: mac.h,v 1.6 2003/07/01 07:03:14 spitzak Exp $".
+// End of "$Id: mac.h,v 1.7 2003/08/25 15:28:47 spitzak Exp $".
 //
 

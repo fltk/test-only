@@ -1,5 +1,5 @@
 //
-// "$Id: ask.cxx,v 1.11 2002/12/10 02:01:04 easysw Exp $"
+// "$Id: ask.cxx,v 1.12 2003/08/25 15:28:48 spitzak Exp $"
 //
 // Standard dialog test program for the Fast Light Tool Kit (FLTK).
 //
@@ -10,7 +10,7 @@
 // This also demonstrates how to trap attempts by the user to
 // close the last window by overriding Fl::exit
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -32,67 +32,32 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/Fl_Input.h>
-#include <fltk/Fl_Button.h>
-#include <fltk/Fl_Return_Button.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Window.H>
+#include <FL/Fl_Input.H>
+#include <FL/Fl_Button.H>
+#include <FL/Fl_Return_Button.H>
 
-static void ok_callback(Fl_Widget* w, void*) {
-  printf("ok\n");
-  w->window()->set_value();
-  w->window()->hide();
-}
-
-static void cancel_callback(Fl_Widget* w, void*) {
-  printf("cancel\n");
-  w->window()->hide();
-}
-
-int get_string(char*buffer) {
-  Fl_Window window(320,75);
-  Fl_Input input(60, 10, 250, 25, "Input:");
-  input.value(buffer);
-  input.when(0);
-  Fl_Button cancel(60, 40, 80, 25, "cancel");
-  cancel.callback(cancel_callback);
-  Fl_Return_Button ok(150, 40, 80, 25, "OK");
-  ok.callback(ok_callback);
-  window.hotspot(&cancel); // you must position modal windows
-  window.end();
-  //window.clear_border();
-  if (window.exec()) {
-    strcpy(buffer,input.value());
-    return 1;
-  } else {
-    return 0;
-  }
-}
-
-void rename_me(Fl_Widget*o) {
-  if (get_string((char*)(o->label()))) o->redraw();
-}
-
-#if 1
-#include <fltk/fl_ask.h>
+#include <FL/fl_ask.H>
 #include <stdlib.h>
 
-//  int recurse;
+void rename_me(Fl_Widget*o) {
+  const char *input = fl_input("Input:", o->label());
+
+  if (input) {
+    o->label(input);
+    o->redraw();
+  }
+}
 
 void window_callback(Fl_Widget*, void*) {
-//    printf("window_callback entered, level %d\n", recurse++);
-  if (!fl_ask("Are you sure you want to quit?")) {
-//      printf("window_callback exited, level %d\n", --recurse);
-    return;
-  }
+  if (!fl_ask("Are you sure you want to quit?")) return;
   exit(0);
 }
-#endif
 
 int main(int argc, char **argv) {
   char buffer[128] = "test text";
 
-#if 1
 // this is a test to make sure automatic destructors work.  Pop up
 // the question dialog several times and make sure it don't crash.
 
@@ -106,22 +71,8 @@ int main(int argc, char **argv) {
   window.callback(window_callback);
 
   return Fl::run();
-
-#else
-// This is the demo as written in the documentation, it only creates
-// the popup window once:
-
-  if (get_string(buffer)) {
-    puts(buffer);
-  } else {
-    puts("cancel");
-  }
-  return 0;
-
-#endif
-
 }
     
 //
-// End of "$Id: ask.cxx,v 1.11 2002/12/10 02:01:04 easysw Exp $".
+// End of "$Id: ask.cxx,v 1.12 2003/08/25 15:28:48 spitzak Exp $".
 //

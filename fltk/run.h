@@ -1,5 +1,5 @@
 //
-// "$Id: run.h,v 1.5 2003/06/24 07:10:47 spitzak Exp $"
+// "$Id: run.h,v 1.6 2003/08/25 15:28:47 spitzak Exp $"
 //
 // The basic fltk runtime. Every program needs to call this somewhere.
 //
@@ -52,6 +52,9 @@ FL_API int ready();
 FL_API int run();
 FL_API void flush();
 FL_API void redraw();
+extern FL_API int damage_;
+inline void damage(int d) {damage_ = d;}
+inline int damage() {return damage_;}
 
 typedef void (*TimeoutHandler)(void*);
 

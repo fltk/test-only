@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.cxx,v 1.28 2003/01/05 07:40:29 spitzak Exp $"
+// "$Id: Fl_Double_Window.cxx,v 1.29 2003/08/25 15:28:47 spitzak Exp $"
 //
 // Double-buffered window code for the Fast Light Tool Kit (FLTK).
 //
@@ -34,6 +34,12 @@
 // On systems that support double buffering "naturally" the base
 // Window class will probably do double-buffer and this subclass
 // does nothing.
+
+void fltk::DoubleBufferWindow::layout() {Window::layout();}
+fltk::DoubleBufferWindow::~DoubleBufferWindow() {}
+void fltk::DoubleBufferWindow::create() {Window::create();}
+void fltk::DoubleBufferWindow::flush() {Window::flush();}
+void fltk::DoubleBufferWindow::destroy() {Window::destroy();}
 
 #else
 ////////////////////////////////////////////////////////////////
@@ -192,5 +198,5 @@ DoubleBufferWindow::~DoubleBufferWindow() {
 #endif
 
 //
-// End of "$Id: Fl_Double_Window.cxx,v 1.28 2003/01/05 07:40:29 spitzak Exp $".
+// End of "$Id: Fl_Double_Window.cxx,v 1.29 2003/08/25 15:28:47 spitzak Exp $".
 //

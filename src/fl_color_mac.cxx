@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_mac.cxx,v 1.6 2003/04/20 03:17:51 easysw Exp $"
+// "$Id: fl_color_mac.cxx,v 1.7 2003/08/25 15:28:47 spitzak Exp $"
 //
 // MacOS color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -46,6 +46,25 @@ void fltk::setcolor(Color i) {
 // Used by setcolor_index
 static void free_color(Color) {}
 
+// This is here because stoopid Windows requires you to set the color
+// and dash pattern in the same code, so they cannot be seperated.
+// QuickDraw supports pen size and pattern, but no dash patterns, so
+// dashes are faked with stippling patterns.
+void fltk::line_style(int style, int width, char* dashes) {
+  static Pattern	styles[] = {
+    { { 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff, 0xff } },	// FL_SOLID
+    { { 0xf0, 0xf0, 0xf0, 0xf0, 0x0f, 0x0f, 0x0f, 0x0f } },	// FL_DASH
+    { { 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55, 0xaa, 0x55 } }	// FL_DOT
+  };
+
+  if (!width) width = 1;
+  PenSize(width, width);
+
+  style &= 0xff;
+  if (style > 2) style = 2;
+  PenPat(styles + style);
+}
+
 //
-// End of "$Id: fl_color_mac.cxx,v 1.6 2003/04/20 03:17:51 easysw Exp $".
+// End of "$Id: fl_color_mac.cxx,v 1.7 2003/08/25 15:28:47 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.6 2003/04/20 03:17:51 easysw Exp $"
+// "$Id: Fl_mac.cxx,v 1.7 2003/08/25 15:28:47 spitzak Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -236,6 +236,8 @@ static Window* resize_from_system;
 static CursPtr default_cursor_ptr;
 static ::Cursor _default_cursor;
 CursHandle fltk::default_cursor;
+CursHandle fltk::current_cursor;
+const Widget* fltk::cursor_for;
 
 /**
  * handle Apple Menu items (can be created using the Sys_Menu_Bar
@@ -380,18 +382,6 @@ static void breakMacEventLoop()
  */
 static inline int fl_wait(double time) 
 {
-  static bool been_here = 0;
-  static RgnHandle rgn;
-  
-  // initialize events and a region that enables mouse move events
-  if (!been_here) {
-    rgn = NewRgn();
-    Point mp;
-    GetMouse(&mp);
-    SetRectRgn(rgn, mp.h, mp.v, mp.h, mp.v);
-    SetEventMask(everyEvent);
-    been_here = 1;
-  }
   OSStatus ret;
   static EventTargetRef target = 0;
   static EventLoopTimerRef timer = 0;
@@ -448,38 +438,35 @@ static inline int fl_wait(double time)
 
   fl_unlock_function();
 
-  if ( time > 0.0 ) {
+  if ( time > 0.0 )
     SetEventLoopTimerNextFireTime( timer, time );
-    RunApplicationEventLoop(); // will return after the previously set time
-    if ( dataready_tid != 0 ) {
-      DEBUGMSG("*** CANCEL THREAD: ");
-      pthread_cancel(dataready_tid);		// cancel first
-      write(G_pipe[1], "x", 1);		// then wakeup thread from select
-      pthread_join(dataready_tid, NULL);	// wait for thread to finish
-      if ( G_pipe[0] ) { close(G_pipe[0]); G_pipe[0] = 0; }
-      if ( G_pipe[1] ) { close(G_pipe[1]); G_pipe[1] = 0; }
-      dataready_tid = 0;
-      DEBUGMSG("OK\n");
-    }
-  } else {
+  else
     breakMacEventLoop();
-    RunApplicationEventLoop();
-    if ( dataready_tid != 0 ) {
-      DEBUGMSG("*** CANCEL THREAD: ");
-      pthread_cancel(dataready_tid);		// cancel first
-      write(G_pipe[1], "x", 1);		// then wakeup thread from select
-      pthread_join(dataready_tid, NULL);	// wait for thread to finish
-      if ( G_pipe[0] ) { close(G_pipe[0]); G_pipe[0] = 0; }
-      if ( G_pipe[1] ) { close(G_pipe[1]); G_pipe[1] = 0; }
-      dataready_tid = 0;
-      DEBUGMSG("OK\n");
-    }
+
+  RunApplicationEventLoop(); // will return after the previously set time
+  if ( dataready_tid != 0 ) {
+    DEBUGMSG("*** CANCEL THREAD: ");
+    pthread_cancel(dataready_tid);		// cancel first
+    write(G_pipe[1], "x", 1);		// then wakeup thread from select
+    pthread_join(dataready_tid, NULL);	// wait for thread to finish
+    if ( G_pipe[0] ) { close(G_pipe[0]); G_pipe[0] = 0; }
+    if ( G_pipe[1] ) { close(G_pipe[1]); G_pipe[1] = 0; }
+    dataready_tid = 0;
+    DEBUGMSG("OK\n");
   }
 
   fl_lock_function();
   // we send LEAVE only if the mouse did not enter some other window:
   // I'm not sure if this is needed or if it works...
   //if (!xmousewin) handle(LEAVE, 0);
+
+  // fix the cursor
+  if (cursor_for && !cursor_for->contains(belowmouse_)) {
+    cursor_for = 0;
+    current_cursor = default_cursor;
+    SetCursor(*default_cursor);
+  }
+
   return got_events;
 }
 
@@ -524,8 +511,6 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
   OSStatus ret = eventNotHandledErr;
   Window *window = (Window*)userData;
 
-  Rect currentBounds, originalBounds;
-  WindowClass winClass;
   static Window *activeWindow = 0;
   
   fl_lock_function();
@@ -537,43 +522,36 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
     ret = noErr;
     break;
   case kEventWindowBoundsChanged: {
+    Rect currentBounds;
     GetEventParameter( event, kEventParamCurrentBounds, typeQDRectangle, NULL, sizeof(Rect), NULL, &currentBounds );
-    GetEventParameter( event, kEventParamOriginalBounds, typeQDRectangle, NULL, sizeof(Rect), NULL, &originalBounds );
     int X = currentBounds.left, W = currentBounds.right-X;
     int Y = currentBounds.top, H = currentBounds.bottom-Y;
-    resize_from_system = window;
-    window->resize( X, Y, W, H );
-    if ( ( originalBounds.right - originalBounds.left != W ) 
-      || ( originalBounds.bottom - originalBounds.top != H ) )
-    {
-      if ( window->shown() ) 
-        handleUpdateEvent( xid( window ) );
-    } 
+    if (window->resize(X, Y, W, H)) resize_from_system = window;
+    if (window->layout_damage()&LAYOUT_WH) {
+      handleUpdateEvent( xid( window ) );
+    }
     break; }
-  case kEventWindowShown:
-    if ( !window->parent() )
-    {
-      GetWindowClass( xid( window ), &winClass );
-      if ( winClass != kHelpWindowClass ) {	// help windows can't get the focus!
-        handle( FOCUS, window);
-        activeWindow = window;
-      }
-      handle( SHOW, window);
-    }
-    break;
+  case kEventWindowShown: {
+//     GetWindowClass( xid( window ), &winClass );
+//     if ( winClass != kHelpWindowClass ) {	// help windows can't get the focus!
+//       handle( FOCUS, window);
+//       activeWindow = window;
+//     }
+    handle( SHOW, window);
+    break; }
   case kEventWindowHidden:
-    if ( !window->parent() ) handle( HIDE, window);
+    handle( HIDE, window);
     break;
-  case kEventWindowActivated:
-    if ( window!=activeWindow ) 
-    {
+  case kEventWindowActivated: {
+    WindowClass winClass;
+    if ( window!=activeWindow ) {
       GetWindowClass( xid( window ), &winClass );
       if ( winClass != kHelpWindowClass ) {	// help windows can't get the focus!
         handle( FOCUS, window);
         activeWindow = window;
       }
     }
-    break;
+    break; }
   case kEventWindowDeactivated:
     if ( window==activeWindow ) 
     {
@@ -701,16 +679,24 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
         e_is_click = 0;
     }
     chord_to_e_state( chord );
+    e_x_root = pos.h;
+    e_y_root = pos.v;
+#if 0
     GrafPtr oldPort;
     GetPort( &oldPort );
     SetPort( GetWindowPort(xid) ); // \todo replace this! There must be some GlobalToLocal call that has a port as an argument
+    // WAS: we could also use window->x(),y() and do it ourselves
     SetOrigin(0, 0);
-    e_x_root = pos.h;
-    e_y_root = pos.v;
     GlobalToLocal( &pos );
+    SetPort( oldPort );
+#else
+    for (Group* w = window; w; w = w->parent()) {
+      pos.h -= w->x();
+      pos.v -= w->y();
+    }
+#endif
     e_x = pos.h;
     e_y = pos.v;
-    SetPort( oldPort );
     handle( sendEvent, window );
     break;
   }
@@ -741,18 +727,18 @@ static void mods_to_e_state( UInt32 mods )
 /**
  * convert the current mouse chord into the FLTK keysym
  */
-static void mods_to_e_keysym( UInt32 mods )
+static unsigned mods_to_e_keysym( UInt32 mods )
 {
-  if ( mods & cmdKey ) e_keysym = LeftCommandKey;
-  else if ( mods & kEventKeyModifierNumLockMask ) e_keysym = NumLockKey;
-  else if ( mods & optionKey ) e_keysym = LeftAltKey;
-  else if ( mods & rightOptionKey ) e_keysym = RightAltKey;
-  else if ( mods & controlKey ) e_keysym = LeftControlKey;
-  else if ( mods & rightControlKey ) e_keysym = RightControlKey;
-  else if ( mods & shiftKey ) e_keysym = LeftShiftKey;
-  else if ( mods & rightShiftKey ) e_keysym = RightShiftKey;
-  else if ( mods & alphaLock ) e_keysym = CapsLockKey;
-  else e_keysym = 0;
+  if ( mods & cmdKey ) return LeftCommandKey;
+  else if ( mods & kEventKeyModifierNumLockMask ) return NumLockKey;
+  else if ( mods & optionKey ) return LeftAltKey;
+  else if ( mods & rightOptionKey ) return RightAltKey;
+  else if ( mods & controlKey ) return LeftControlKey;
+  else if ( mods & rightControlKey ) return RightControlKey;
+  else if ( mods & shiftKey ) return LeftShiftKey;
+  else if ( mods & rightShiftKey ) return RightShiftKey;
+  else if ( mods & alphaLock ) return CapsLockKey;
+  else return 0;
 }
 
 
@@ -791,13 +777,9 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
   static char buffer[5];
   int sendEvent = 0;
   Window *window = (Window*)userData;
-  UInt32 mods;
-  static UInt32 prevMods = 0xffffffff;
 
   fl_lock_function();
   
-  GetEventParameter( event, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &mods );
-  if ( prevMods == 0xffffffff ) prevMods = mods;
   UInt32 keyCode;
   GetEventParameter( event, kEventParamKeyCode, typeUInt32, NULL, sizeof(UInt32), NULL, &keyCode );
   unsigned char key;
@@ -807,12 +789,18 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
   switch ( GetEventKind( event ) )
   {
   case kEventRawKeyDown:
+    e_clicks = 0;
+    sendEvent = KEY;
+    goto GET_KEYSYM;
   case kEventRawKeyRepeat:
     sendEvent = KEY;
-    // fall through
+    e_clicks++;
+    goto GET_KEYSYM;
   case kEventRawKeyUp:
-    if ( !sendEvent ) sendEvent = KEYUP;
+    sendEvent = KEYUP;
+  GET_KEYSYM:
     sym = macKeyLookUp[ keyCode & 0x7f ];
+    if (!sym) sym = keyCode|0x8000;
     e_keysym = sym;
     if ( keyCode==0x4c ) key=0x0d;
     if ( ( (sym>=Keypad0) && (sym<=KeypadLast) ) || ((sym&0xff00)==0) || (sym==TabKey) ) {
@@ -826,14 +814,18 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
     // insert UnicodeHandling here!
     break;
   case kEventRawKeyModifiersChanged: {
+    UInt32 mods;
+    static UInt32 prevMods = 0;
+    GetEventParameter( event, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &mods );
     UInt32 tMods = prevMods ^ mods;
-    if ( tMods )
-    {
-      mods_to_e_keysym( tMods );
-      if ( e_keysym ) 
+    if ( tMods ) {
+      sym = mods_to_e_keysym( tMods );
+      if (sym) {
+	e_keysym = sym;
         sendEvent = ( prevMods<mods ) ? KEY : KEYUP;
-      e_length = 0;
-      buffer[0] = 0;
+	e_length = 0;
+	buffer[0] = 0;
+      }
       prevMods = mods;
     }
     mods_to_e_state( mods );
@@ -855,7 +847,7 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
 /**
  * initialize the Mac toolboxes and set the default menubar
  */
-void open_display() {
+void fltk::open_display() {
   static char beenHereDoneThat = 0;
   if ( !beenHereDoneThat )  {
     beenHereDoneThat = 1;
@@ -871,12 +863,19 @@ void open_display() {
     GetQDGlobalsArrow(&_default_cursor);
     default_cursor_ptr = &_default_cursor;
     default_cursor  = &default_cursor_ptr;
-    
+    current_cursor = default_cursor;
+
     ClearMenuBar();
     AppendResMenu( GetMenuHandle( 1 ), 'DRVR' );
     DrawMenuBar();
 
-    // Probably should do the initialization that is in wait() here...
+    // initialize events and a region that enables mouse move events
+    static RgnHandle rgn;
+    rgn = NewRgn();
+    Point mp;
+    GetMouse(&mp);
+    SetRectRgn(rgn, mp.h, mp.v, mp.h, mp.v);
+    SetEventMask(everyEvent);
   }
 }
 
@@ -1134,18 +1133,14 @@ void Window::layout() {
     // Ignore changes that came from the system
     resize_from_system = 0;
   } else if ((layout_damage()&LAYOUT_XYWH) && i) { // only for shown windows
-    // figure out where the window should be in it's parent:
-    int x = this->x(); int y = this->y();
-    for (Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
-      x += p->x(); y += p->y();
-    }
-    MoveWindow(i->xid, x, y, 0);
+    MoveWindow(i->xid, x(), y(), 0);
     if (layout_damage() & LAYOUT_WH) {
       SizeWindow(i->xid, w()>0 ? w() : 1, h()>0 ? h() : 1, 0);
       Rect all; all.top=-32000; all.bottom=32000; all.left=-32000; all.right=32000;
       InvalWindowRect( i->xid, &all );    
     }
   }
+  if (i) i->need_new_subRegion = true;
   Group::layout();
 }
 
@@ -1164,8 +1159,8 @@ void Window::create()
   x->window = this; i = x;
   x->region = 0;
   x->subRegion = 0;
+  x->need_new_subRegion = true;
   x->children = x->brother = 0;
-  x->cursor = default_cursor;
 
   if (parent()) {
     // Apparently Mac does not have child windows, this shows that there
@@ -1179,14 +1174,15 @@ void Window::create()
       if (o->is_window()) {root = (Window*)o; break;}
     }
     CreatedWindow *rootx = CreatedWindow::find(root);
-    x->xid = rootx->xid; // Not sure if this is a good idea
+    x->xid = 0;
     // we need to add it to very end, so overlapping brothers are easy
     // to find:
     CreatedWindow** p = &(rootx->children);
     while (*p) p = &((*p)->brother);
     *p = x;
-    x->wait_for_expose = false;
+    x->wait_for_expose = rootx->wait_for_expose;
     x->next = CreatedWindow::first;
+    x->need_new_subRegion = true;
     CreatedWindow::first = x;
   } else {
     // create a desktop window
@@ -1219,7 +1215,7 @@ void Window::create()
 	  kWindowCloseBoxAttribute | kWindowCollapseBoxAttribute;
 	where = kWindowCascadeOnParentWindowScreen;
       }
-      if (minw < maxw || minh < maxh)
+      if (minw != maxw || minh != maxh)
 	winattr |= kWindowFullZoomAttribute |
 	  kWindowResizableAttribute | kWindowLiveResizeAttribute;
     }
@@ -1232,6 +1228,7 @@ void Window::create()
       // this is a kludge in case system autoplace does not work
       static int xyPos = 50;
       wRect.top = wRect.left = xyPos;
+      this->x(xyPos); this->y(xyPos);
       xyPos += 25;
       if (xyPos >= 200) xyPos -= 170;
     }
@@ -1290,6 +1287,8 @@ void Window::create()
     }
   }
 }
+
+void fltk::close_display() {}
 
 /**
  * Turn on flag to indicate that user set the min and max size.
@@ -1359,19 +1358,23 @@ void fltk::make_current(GWorldPtr gWorld) {
 void Window::make_current() const
 {
   current_ = this;
-  SetPort(GetWindowPort(i->xid));
-  // move origin to match where we are in the window:
+  // Find the root window and our position in it:
   int X = 0;
   int Y = 0;
-  for (const Widget* o = this; o->parent(); o = o->parent()) {
+  const Window* root = this;
+  for (const Widget* o = this; ; o = o->parent()) {
+    if (!o->parent()) {root = (Window*)o; break;}
     X += o->x();
     Y += o->y();
   }
-  SetOrigin(X, Y);
+  SetPort(GetWindowPort(root->i->xid));
+  SetOrigin(-X, -Y);
   // We force a clip region to handle child windows. To speed things up
   // we only recalculate the clip region when children are shown, hidden,
   // or moved or resized.
-  if (!i->subRegion) {
+  if (i->need_new_subRegion) {
+    i->need_new_subRegion = false;
+    if (i->subRegion) DisposeRgn(i->subRegion);
     i->subRegion = NewRgn();
     SetRectRgn(i->subRegion, 0, 0, w(), h());
     for (CreatedWindow* cx = i->children; cx; cx = cx->brother) {
@@ -1386,14 +1389,14 @@ void Window::make_current() const
     for (CreatedWindow* cx = i->brother; cx; cx = cx->brother) {
       Region r = NewRgn();
       Window* cw = cx->window;
-      int x = cw->x()-this->x();
-      int y = cw->y()-this->y();
+      int x = X+cw->x()-this->x();
+      int y = Y+cw->y()-this->y();
       SetRectRgn(r, x, y, x+cw->w(), y+cw->h());
       DiffRgn(i->subRegion, r, i->subRegion);
       DisposeRgn(r);
     }
   }
-  SetPortClipRegion( GetWindowPort(i->xid), i->subRegion );
+  SetPortClipRegion( GetWindowPort(root->i->xid), i->subRegion );
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1463,7 +1466,59 @@ void fltk::paste(Widget &receiver, bool clipboard) {
   return;
 }
 
+////////////////////////////////////////////////////////////////
+
+/**
+ * drag and drop whatever is in the cut-copy-paste buffer
+ * - create a selection first using: 
+ *     copy(const char *stuff, int len, 0)
+ */
+bool fltk::dnd()
+{
+  OSErr result;
+  DragReference dragRef;
+  result = NewDrag( &dragRef );
+  if ( result != noErr ) return false;
+  
+  result = AddDragItemFlavor( dragRef, 1, 'TEXT', selection_buffer[0], selection_length[0], 0 );
+  if ( result != noErr ) { DisposeDrag( dragRef ); return false; }
+  
+  Point mp;
+  GetMouse(&mp);
+  LocalToGlobal( &mp );
+  RgnHandle region = NewRgn();
+  SetRectRgn( region, mp.h-10, mp.v-10, mp.h+10, mp.v+10 );
+  RgnHandle r2 = NewRgn();
+  SetRectRgn( r2, mp.h-8, mp.v-8, mp.h+8, mp.v+8 );
+  DiffRgn( region, r2, region );
+  DisposeRgn( r2 );
+
+  EventRecord event;
+  ConvertEventRefToEventRecord( os_event, &event );
+  result = TrackDrag( dragRef, &event, region );
+
+  Widget *w = pushed();
+  if ( w )
+  {
+    w->handle( RELEASE );
+    pushed( 0 );
+  }
+
+  if ( result != noErr ) { DisposeRgn( region ); DisposeDrag( dragRef ); return false; }
+  
+  DisposeRgn( region );
+  DisposeDrag( dragRef );
+  return true;
+}
+
+////////////////////////////////////////////////////////////////
+
+bool fltk::system_theme() {
+  // maybe this should get whether it is set to gray or blue theme?
+  return true;
+}
+
 //
-// End of "$Id: Fl_mac.cxx,v 1.6 2003/04/20 03:17:51 easysw Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.7 2003/08/25 15:28:47 spitzak Exp $".
 //
 

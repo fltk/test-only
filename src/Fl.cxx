@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.164 2003/06/24 07:10:48 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.165 2003/08/25 15:28:47 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -370,13 +370,27 @@ void fltk::redraw() {
     x->window->redraw();
 }
 
-bool fl_windows_damaged;
+int fltk::damage_;
+
+/** \fn int fltk::damage()
+    If non-zero this indicates there is damage to some window and that
+    fltk must call flush() on all windows. This is done when fltk::flush()
+    is called. If this is zero then it does not have to call flush() on
+    all windows, which is slightly faster.
+
+    Currently the meaning of any bits are undefined.
+
+    Window flush() routines can set this to indicate that flush() should
+    be called again after waiting for more events. This is useful in
+    some instances such as X windows that are waiting for a mapping
+    event before being drawn.
+*/
 
 void fltk::flush() {
-  if (fl_windows_damaged) {
-    fl_windows_damaged = false;
+  if (damage_) {
+    damage_ = false; // turn it off so Window::flush() can turn it back on
     for (CreatedWindow* x = CreatedWindow::first; x; x = x->next) {
-      if (x->wait_for_expose) {fl_windows_damaged = true; continue;}
+      if (x->wait_for_expose) {damage_ = true; continue;}
       Window* window = x->window;
       if (window->visible_r() && window->w()>0 && window->h()>0) {
 	if (window->layout_damage()) window->layout();
@@ -700,5 +714,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.164 2003/06/24 07:10:48 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.165 2003/08/25 15:28:47 spitzak Exp $".
 //

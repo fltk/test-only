@@ -22,63 +22,7 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org
 
-// This file contains win32-specific code for fltk which is always linked
-// in.  Search other files for "WIN32" or filenames ending in _win32.cxx
-// for other system-specific code.
-
-#include <config.h>
-#include <fltk/events.h>
-#include <fltk/x.h>
-#include <fltk/Window.h>
-using namespace fltk;
-
-extern EventRef fl_os_event;
-extern char *fl_selection_buffer;
-extern int fl_selection_length;
-
-/**
- * drag and drop whatever is in the cut-copy-paste buffer
- * - create a selection first using: 
- *     copy(const char *stuff, int len, 0)
- */
-int dnd()
-{
-  OSErr result;
-  DragReference dragRef;
-  result = NewDrag( &dragRef );
-  if ( result != noErr ) return false;
-  
-  result = AddDragItemFlavor( dragRef, 1, 'TEXT', fl_selection_buffer, fl_selection_length, 0 );
-  if ( result != noErr ) { DisposeDrag( dragRef ); return false; }
-  
-  Point mp;
-  GetMouse(&mp);
-  LocalToGlobal( &mp );
-  RgnHandle region = NewRgn();
-  SetRectRgn( region, mp.h-10, mp.v-10, mp.h+10, mp.v+10 );
-  RgnHandle r2 = NewRgn();
-  SetRectRgn( r2, mp.h-8, mp.v-8, mp.h+8, mp.v+8 );
-  DiffRgn( region, r2, region );
-  DisposeRgn( r2 );
-
-  EventRecord event;
-  ConvertEventRefToEventRecord( fl_os_event, &event );
-  result = TrackDrag( dragRef, &event, region );
-
-  Widget *w = pushed();
-  if ( w )
-  {
-    w->handle( RELEASE );
-    pushed( 0 );
-  }
-
-  if ( result != noErr ) { DisposeRgn( region ); DisposeDrag( dragRef ); return false; }
-  
-  DisposeRgn( region );
-  DisposeDrag( dragRef );
-  return true;
-}
-  
+// The Mac version of fltk::dnd() is in Fl_mac.cxx
 
 //
 //

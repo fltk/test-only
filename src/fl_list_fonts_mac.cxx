@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_mac.cxx,v 1.2 2003/04/20 03:17:51 easysw Exp $"
+// "$Id: fl_list_fonts_mac.cxx,v 1.3 2003/08/25 15:28:47 spitzak Exp $"
 //
 // MacOS font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -23,84 +23,35 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// This function fills in the fltk font table with all the fonts that
-// are found on the X server.  It tries to place the fonts into families
-// and to sort them so the first 4 in a family are normal, bold, italic,
-// and bold italic.
+#include <fltk/x.h>
+#include <ctype.h>
+#include <string.h>
+#include <stdlib.h>
+#include <fltk/string.h>
 
-// turn a stored font name into a pretty name:
-const char* Fl::get_font_name(Fl_Font fnum, int* ap) {
-  const char* p = fl_fonts[fnum].name;
-  if (!p || !*p) {if (ap) *ap = 0; return "";}
-  int type;
-  switch (*p) {
-  case 'B': type = FL_BOLD; break;
-  case 'I': type = FL_ITALIC; break;
-  case 'P': type = FL_BOLD | FL_ITALIC; break;
-  default:  type = 0; break;
-  }
-  if (ap) *ap = type;
-  if (!type) return p+1;
-  static char *buffer; if (!buffer) buffer = new char[128];
-  strcpy(buffer, p+1);
-  if (type & FL_BOLD) strcat(buffer, " bold");
-  if (type & FL_ITALIC) strcat(buffer, " italic");
-  return buffer;
+using namespace fltk;
+
+int Font::encodings(const char**& arrayp) {
+  // CET - FIXME - What about this encoding stuff?
+  // WAS: we need some way to find out what charsets are supported
+  // and turn these into ISO encoding names, and return this list.
+  // This is a poor simulation:
+  static const char* simulation[] = {"iso8859-1", 0};
+  arrayp = simulation;
+  return 1;
 }
 
-static int fl_free_font = FL_FREE_FONT;
+////////////////////////////////////////////////////////////////
+// List sizes:
 
-Fl_Font Fl::set_fonts(const char* xstarname) {
-#pragma unused ( xstarname )
-  if (fl_free_font != FL_FREE_FONT) 
-    return (Fl_Font)fl_free_font;
-  static char styleLU[] = " BIP";
-  FMFontFamilyInstanceIterator ffiIterator;
-  FMFontFamilyIterator ffIterator;
-  FMFontFamily family;
-  FMFont font;
-  FMFontStyle style; // bits 0..6: bold, italic underline, outline, shadow, condens, extended (FLTK supports 0 and 1 )
-  FMFontSize size;
-  //FMFilter filter; // do we need to set a specific (or multiple) filter(s) to get ALL fonts?
-  
-  Str255 buf;
-  //filter.format = kFMCurrentFilterFormat;
-  //filter.selector = kFMGenerationFilterSelector;
-  //filter.filter.generationFilter = 
-  FMCreateFontFamilyIterator( NULL, NULL, kFMUseGlobalScopeOption, &ffIterator );
-  OSStatus listFamilies, listInstances;
-  for (;;)
-  {
-    listFamilies = FMGetNextFontFamily( &ffIterator, &family );
-    if ( listFamilies != 0 ) break;
-    FMGetFontFamilyName( family, buf );
-    buf[ buf[0]+1 ] = 0;
-    //printf( "Font Family: %s\n", buf+1 );
-    int i;
-    for (i=0; i<FL_FREE_FONT; i++) // skip if one of our built-in fonts
-      if (!strcmp(Fl::get_font_name((Fl_Font)i),(char*)buf+1)) break;
-    if ( i < FL_FREE_FONT ) continue;
-    FMCreateFontFamilyInstanceIterator( family, &ffiIterator );
-    char pStyle = 0, nStyle;
-    for (;;)
-    {
-      listInstances = FMGetNextFontFamilyInstance( &ffiIterator, &font, &style, &size );
-      if ( listInstances != 0 ) break;
-      // printf(" %d %d %d\n", font, style, size );
-      nStyle = styleLU[style&0x03];
-      if ( ( pStyle & ( 1<<(style&0x03) ) ) == 0 )
-      {
-        buf[0] = nStyle;
-        Fl::set_font((Fl_Font)(fl_free_font++), strdup((char*)buf));
-        pStyle |= ( 1<<(style&0x03) );
-      }
-    }
-    FMDisposeFontFamilyInstanceIterator( &ffiIterator );
-  }
-  FMDisposeFontFamilyIterator( &ffIterator );
-  return (Fl_Font)fl_free_font;
+int Font::sizes(int*& sizep) {
+  static int simulation[1] = {0};
+  sizep = simulation;
+  return 1;
 }
 
+#if 0
+// Code used by fltk1.1:
 static int array[128];
 int Fl::get_font_sizes(Fl_Font fnum, int*& sizep) {
   Fl_Fontdesc *s = fl_fonts+fnum;
@@ -150,7 +101,63 @@ int Fl::get_font_sizes(Fl_Font fnum, int*& sizep) {
 
   return cnt;
 }
+#endif
+
+////////////////////////////////////////////////////////////////
+// list fonts:
+
+extern "C" {
+static int sort_function(const void *aa, const void *bb) {
+  fltk::Font* a = *(fltk::Font**)aa;
+  fltk::Font* b = *(fltk::Font**)bb;
+  int ret = strcasecmp(a->name_, b->name_); if (ret) return ret;
+  return a->attributes_ - b->attributes_;
+}}
+
+extern Font* fl_make_font(const char* name, int attrib);
+
+static Font** font_array = 0;
+static int num_fonts = 0;
+static int array_size = 0;
+
+int fltk::list_fonts(Font**& arrayp) {
+  if (font_array) {arrayp = font_array; return num_fonts;}
+  //FMFontFamilyInstanceIterator ffiIterator;
+  FMFontFamilyIterator ffIterator;
+  FMFontFamily family;
+  //FMFont font;
+  //FMFontStyle style; // bits 0..6: bold, italic, underline, outline, shadow, condens, extended (FLTK supports 0 and 1 )
+  //FMFontSize size;
+  //FMFilter filter; // do we need to set a specific (or multiple) filter(s) to get ALL fonts?
+  
+  Str255 buf;
+  //filter.format = kFMCurrentFilterFormat;
+  //filter.selector = kFMGenerationFilterSelector;
+  //filter.filter.generationFilter = 
+  FMCreateFontFamilyIterator( NULL, NULL, kFMUseGlobalScopeOption, &ffIterator );
+  OSStatus listFamilies;
+  for (;;)
+  {
+    listFamilies = FMGetNextFontFamily( &ffIterator, &family );
+    if ( listFamilies != 0 ) break;
+    FMGetFontFamilyName( family, buf );
+    buf[ buf[0]+1 ] = 0;
+    //printf( "Font Family: %s\n", buf+1 );
+    if (num_fonts >= array_size) {
+      array_size = array_size ? 2*array_size : 128;
+      font_array = (Font**)realloc(font_array, array_size*sizeof(Font*));
+    }
+    // Style enumeration could be used here to figure out if there is
+    // a bold or italic version, if not fl_make_font can be altered to
+    // not create them:
+    font_array[num_fonts++] = fl_make_font((char*)buf+1, 0);
+  }
+  FMDisposeFontFamilyIterator( &ffIterator );
+  qsort(font_array, num_fonts, sizeof(*font_array), sort_function);
+  arrayp = font_array;
+  return num_fonts;
+}
 
 //
-// End of "$Id: fl_list_fonts_mac.cxx,v 1.2 2003/04/20 03:17:51 easysw Exp $".
+// End of "$Id: fl_list_fonts_mac.cxx,v 1.3 2003/08/25 15:28:47 spitzak Exp $".
 //

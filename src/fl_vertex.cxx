@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.22 2003/07/01 07:03:15 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.23 2003/08/25 15:28:48 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -366,6 +366,10 @@ void fltk::drawpoints() {
 #ifdef _WIN32
   for (int i=0; i<numpoints; i++)
     SetPixel(gc, xpoint[i].x, xpoint[i].y, current_xpixel);
+#elif (defined(__APPLE__) && !USE_X11)
+  for (int i=0; i<numpoints; i++) {
+    MoveTo(xpoint[i].x, xpoint[i].y); Line(0, 0);
+  } 
 #else
   if (numpoints > 0) XDrawPoints(xdisplay, xwindow, gc, xpoint, numpoints, 0);
 #endif
@@ -387,6 +391,21 @@ void fltk::strokepath() {
   int loop_size = numpoints-loop_start;
   if (loop_size > 1)
     Polyline(gc, xpoint+loop_start, loop_size);
+#elif (defined(__APPLE__) && !USE_X11)
+  if (circle_w > 0) {
+    Rect r; r.left=circle_x; r.right=circle_x+circle_w+1;
+    r.top=circle_y; r.bottom=circle_y+circle_h+1;
+    FrameArc(&r, 0, 360);
+  }
+  int i = 0;
+  for (int n = 0; ; n++) {
+    int loop_end;
+    if (n < loops) loop_end = i+loop[n];
+    else if (n == loops && numpoints > i+1) loop_end = numpoints;
+    else break;
+    MoveTo(xpoint[i].x, xpoint[i].y);
+    while (++i < loop_end) LineTo(xpoint[i].x, xpoint[i].y);
+  }
 #else
   if (circle_w > 0)
     XDrawArc(xdisplay, xwindow, gc,
@@ -420,6 +439,25 @@ void fltk::fillpath() {
   } else if (numpoints > 2) {
     Polygon(gc, xpoint, numpoints);
   }
+#elif (defined(__APPLE__) && !USE_X11)
+  if (circle_w > 0) {
+    Rect r; r.left=circle_x; r.right=circle_x+circle_w+1;
+    r.top=circle_y; r.bottom=circle_y+circle_h+1;
+    PaintArc(&r, 0, 360);
+  }
+  PolyHandle ph = OpenPoly();
+  int i = 0;
+  for (int n = 0; ; n++) {
+    int loop_end;
+    if (n < loops) loop_end = i+loop[n];
+    else if (n == loops && numpoints > i+1) loop_end = numpoints;
+    else break;
+    MoveTo(xpoint[i].x, xpoint[i].y);
+    while (++i < loop_end) LineTo(xpoint[i].x, xpoint[i].y);
+    ClosePoly();
+  }
+  PaintPoly(ph);
+  KillPoly(ph);
 #else
   if (circle_w > 0)
     XFillArc(xdisplay, xwindow, gc,
@@ -460,6 +498,27 @@ void fltk::fillstrokepath(Color color) {
     Polygon(gc, xpoint, numpoints);
   }
   inline_newpath();
+#elif (defined(__APPLE__) && !USE_X11)
+  if (circle_w > 0) {
+    Rect r; r.left=circle_x; r.right=circle_x+circle_w+1;
+    r.top=circle_y; r.bottom=circle_y+circle_h+1;
+    PaintArc(&r, 0, 360);
+  }
+  PolyHandle ph = OpenPoly();
+  int i = 0;
+  for (int n = 0; ; n++) {
+    int loop_end;
+    if (n < loops) loop_end = i+loop[n];
+    else if (n == loops && numpoints > i+1) loop_end = numpoints;
+    else break;
+    MoveTo(xpoint[i].x, xpoint[i].y);
+    while (++i < loop_end) LineTo(xpoint[i].x, xpoint[i].y);
+    ClosePoly();
+  }
+  PaintPoly(ph);
+  KillPoly(ph);
+  setcolor(color);
+  strokepath();
 #else
   if (circle_w > 0)
     XFillArc(xdisplay, xwindow, gc,
@@ -486,5 +545,5 @@ void fltk::fillstrokepath(Color color) {
 }
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.22 2003/07/01 07:03:15 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.23 2003/08/25 15:28:48 spitzak Exp $".
 //
