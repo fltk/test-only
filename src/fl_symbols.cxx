@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.22 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.23 2001/07/26 13:49:25 robertk Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -35,10 +35,6 @@
 #include <fltk/Fl_Style.h>
 #include <fltk/fl_draw.h>
 #include <string.h>
-
-// define this to get all the symbols that existed in fltk 1.0. I commented
-// some of them out to reduce the code size:
-//#define OLD_FLTK
 
 typedef struct {
   const char *name;
@@ -261,8 +257,6 @@ static void draw_downarrow(Fl_Color) {
   BL; vv(-.8,.8); vv(.8, 0.0); EL;
 }
 
-#ifdef OLD_FLTK
-
 static void draw_arrow1bar(Fl_Color col)
 {
   draw_arrow1(col);
@@ -314,14 +308,6 @@ static void draw_menu(Fl_Color col)
   rectangle(-0.65, -0.6, 0.65, -1.0, col);
 }
 
-#define old_symbol(a,b,c) fl_add_symbol(a,b,c)
-
-#else // OLD_FLTK not defined:
-
-#define old_symbol(a,b,c)
-
-#endif
-
 static void fl_init_symbols(void) {
   static char beenhere;
   if (beenhere) return;
@@ -341,17 +327,17 @@ static void fl_init_symbols(void) {
   fl_add_symbol("|<",		draw_0arrowbar,		1);
   fl_add_symbol("[]<",		draw_0arrowbox,		1);
   fl_add_symbol("<|",		draw_0bararrow,		1);
-     old_symbol("<->",		draw_doublearrow,	1);
-     old_symbol("-->",		draw_arrow,		1);
-     old_symbol("+",		draw_plus,		1);
-     old_symbol("->|",		draw_arrow1bar,		1);
-     old_symbol("arrow",	draw_arrow,		1);
-     old_symbol("returnarrow",	0,			3);
+  fl_add_symbol("<->",		draw_doublearrow,	1);
+  fl_add_symbol("-->",		draw_arrow,		1);
+  fl_add_symbol("+",		draw_plus,		1);
+  fl_add_symbol("->|",		draw_arrow1bar,		1);
+  fl_add_symbol("arrow",	draw_arrow,		1);
+  fl_add_symbol("returnarrow",	0,			3);
   fl_add_symbol("square",	draw_square,		1);
-     old_symbol("circle",	draw_circle,		1);
-     old_symbol("line",		draw_line,		1);
-     old_symbol("plus",		draw_plus,		1);
-     old_symbol("menu",		draw_menu,		1);
+  fl_add_symbol("circle",	draw_circle,		1);
+  fl_add_symbol("line",		draw_line,		1);
+  fl_add_symbol("plus",		draw_plus,		1);
+  fl_add_symbol("menu",		draw_menu,		1);
   fl_add_symbol("UpArrow",	draw_uparrow,		1);
   fl_add_symbol("DnArrow",	draw_downarrow,		1);
   fl_add_symbol("||",		draw_doublebar,		1);
@@ -397,5 +383,5 @@ void Fl::enable_symbols() {
 #endif
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.22 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.23 2001/07/26 13:49:25 robertk Exp $".
 //
