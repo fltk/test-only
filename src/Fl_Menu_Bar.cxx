@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.75 2004/07/11 17:49:36 laza2000 Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.76 2004/07/11 19:58:06 laza2000 Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -63,7 +63,10 @@ int MenuBar::handle(int event) {
         int x,y,w,h; Menu::get_location(this,0,0,highlight_,x,y,w,h);
         Tooltip::enter(this, x,y,w,h, c);
       } else {
-        Tooltip::exit();
+        // If last item had tolltip, exit from it
+        if (last_>-1 && child(last_)->tooltip()) Tooltip::exit();
+        // If MenuBar has tooltip, enter it
+        if (tooltip()) Tooltip::enter(this);        
       }
     } else {
       Tooltip::exit();
@@ -73,7 +76,7 @@ int MenuBar::handle(int event) {
     redraw(DAMAGE_CHILD);
     return 1;
   
-	case PUSH:
+  case PUSH:
     if (highlight_ < 0) return 0;
     value(-1);
   J1:
@@ -187,5 +190,5 @@ MenuBar::MenuBar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.75 2004/07/11 17:49:36 laza2000 Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.76 2004/07/11 19:58:06 laza2000 Exp $".
 //
