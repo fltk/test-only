@@ -1,4 +1,4 @@
-<head><title>Fl_Style</title></head><body>
+<head><title>Fl_Style</title></head><body bgcolor=white>
 
 <h1>struct Fl_Style</h1>
 
@@ -150,20 +150,36 @@ default is <code>FL_WHITE</code>.
 
 <h2>Fl_Named_Style</h2>
 
-<h4><code>Fl_Named_Style(const char* name, void (*revertfunc)(Fl_Style*)=0, Fl_Style** pdefault_style = 0);</code></h4>
+<h4><code>Fl_Named_Style(const char* name, void (*revert)(Fl_Style*), Fl_Style** pointer);</code></h4>
 
-If you define your own widget class you may want it to have a default
-style that is different than the parent class.  To do this you should
-declare a static style structure with a string name so that the theme
-code can locate (and possibly modify) it.  You must also provide a
-"revert" function which is used to initialize the style and to reset
-it if the user changes the theme (it is cleared to zero before revert
-is called).
+If you define your own widget class you may want to allow text-based
+theme systems (such as fltk's built-in "conf" file reader) to modify
+your widget's style. To do this it must be provided with a name and a
+method to restore the style to it's default.
+
+<p><i>name</i> is the name you want themes to use to look up the
+style. If you don't care if the themes can see your widget class you
+can just use null for the name (you must still provide the <i>pointer</i>, as
+multiple themes have to be able make duplicates of your style with
+different "parent" pointers).
+
+<p><i>revert</i> is a function that initializes the style to it's
+default value. The style is cleared to zero (meaning inherit from the
+default style) before revert is called. If revert is NULL then
+all-zeros is the default.
+
+<p><i>pointer</i> is a pointer to the pointer to the
+style. This allows multiple themes to exist at once, because instead
+of the theme changing any already-used styles, it replaces the pointer
+with a new style. This can be used by programs that let the user
+design or test themes. If you don't plan to use your widget in such a
+program you can make a static instance of your style (rather than
+using new) and pass null as this pointer.
 
 <p>Here is an example of a class that wants the box to default to
 FL_ROUND_BOX:
 
-<p><pre><code>static void revert(Fl_Style* s) {
+<ul><pre><code>static void revert(Fl_Style* s) {
   s->box = FL_ROUND_BOX;
 }
 static Fl_Named_Style* style = new Fl_Named_Style("MyWidget", revert, &style);
@@ -172,13 +188,7 @@ MyWidget::MyWidget(int x, int y, int w, int h, const char *l)
   : Fl_Widget(x,y,w,h,l)
 {
   style(::style);
-}
-</pre></code>
-
-<p>If you don't care if the themes can see you widget, you can pass a
-null pointer as the style name.  You can pass null as the revert
-function if the revert function does not change anything from the
-default.
+}</code></pre></ul>
 
 <h2>Setting a Theme</h2>
 
@@ -260,17 +270,5 @@ that the color <code>FL_GRAY</code> is set the the rgb values of the
 passed color.  This is the best way to change the overall color of
 your application, because it sets all the shaded borders.
 
-<h4>fl_normal_box.data
-<br>fl_down_box.data</h4>
+</body></html>
 
-These are pointers to string constants.  Changing these pointers can
-globally modify how the edges of all the thick boxes are drawn.  They
-are used not only for the normal box, but also by the
-<code>FL_DIAMOND_BOX</code> and <code>FL_ROUND_BOX</code>, and also by
-the glyphs.
-
-<p>The string contains one letter for each edge of the box, drawn
-counter-clockwise from the outside in in a spiral.  The letter 'A' is
-black, the letter 'X' is white, and the letter 'R' is
-<code>FL_GRAY</code>.  It starts in the lower-left corner, or if you
-put a leading '2' it starts in the upper-right corner.

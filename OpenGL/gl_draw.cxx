@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.10 2001/03/12 14:54:19 robertk Exp $"
+// "$Id: gl_draw.cxx,v 1.11 2001/03/14 18:02:49 spitzak Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -57,6 +57,8 @@ void  gl_font(Fl_Font pFont, int size) {
 #else
     // CET - FIXME - this won't work if not using the normal X font renderer--
     // CET - FIXME - that is, if using the Xft library renderer plugin!
+    // WAS: probably the fix is to have the above fl_font call call the
+    // non-Xft (ie older) implementation directly.
     int base = ((XFontStruct*)fl_xfont)->min_char_or_byte2;
     int size = ((XFontStruct*)fl_xfont)->max_char_or_byte2-base+1;
     fl_fontsize->listbase = glGenLists(256);
@@ -67,10 +69,9 @@ void  gl_font(Fl_Font pFont, int size) {
 }
 
 void  gl_font(int fontid, int size) {
-	Fl_Font pFont = fl_fonts + (fontid % 16);
-	gl_font(pFont,size);
+  Fl_Font pFont = fl_fonts + (fontid % 16);
+  gl_font(pFont,size);
 }
-
 
 void gl_draw(const char* str, int n) {
   glCallLists(n, GL_UNSIGNED_BYTE, str);
@@ -164,5 +165,5 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.10 2001/03/12 14:54:19 robertk Exp $".
+// End of "$Id: gl_draw.cxx,v 1.11 2001/03/14 18:02:49 spitzak Exp $".
 //

@@ -1,11 +1,20 @@
-<head><title>Fl_Font</title></head><body>
+<head><title>Fl_Font</title></head><body bgcolor=white>
 
-<h1>typedef Fl_Font</h1>
+<h1>Fl_Font</h1>
 
-The font used by <a
-href=Fl_Widget.html#labelfont>Fl_Widget::label_font()</a> and other
-parts of fltk is a typedef for a ponter to the structure
-<tt>Fl_Font_</tt>.
+The type passed to <a
+href=Fl_Widget.html#label_font>Fl_Widget::label_font()</a> and other
+parts of fltk is a typedef defined like this, pointing at a structure
+<tt>Fl_Font_</tt>:
+
+<ul><pre><tt>typedef Fl_Font_* Fl_Font;</tt></pre></ul>
+
+<p>To draw text in a font you use <a
+href=drawing.html#fl_font><tt>fl_font(Fl_Font,size)</tt></a> to select
+a font and scale, and then <a
+href=drawing.html#fl_draw><tt>fl_draw(const char*)</tt></a> to draw
+letters. See the documentaion on <a href=drawing.html>drawing
+functions</a>.
 
 <p>The following Fl_Font values are predefined:</p>
 
@@ -30,15 +39,20 @@ parts of fltk is a typedef for a ponter to the structure
 
 <h2>Methods</h2>
 
-<h4>Fl_Font_* Fl_Font_::bold();
-<br>Fl_Font_* Fl_Font_::italic();</h4>
+<h4><a name=bold>Fl_Font_* Fl_Font_::bold();
+<br><a name=italic>Fl_Font_* Fl_Font_::italic();</h4>
 
-Pointers to the bold and italic versions of this font.  If this font
-has no bold or italic version (usually because it aready is bold or
-italic, but possibly because the other font is missing from the
-server), then these are circular pointers to this.
+Pointers to the bold and italic versions of this font.
+<tt>FL_HELVETICA->bold()</tt> is the same as
+<tt>FL_HELVETICA_BOLD</tt>, <tt>FL_TIMES->bold()->italic()</tt> is the
+same as <tt>FL_TIMES_BOLD_ITALIC</tt>.
 
-<h4>const char* Fl_Font_::system_name()</h4>
+<p>These are never null. If this font has no bold or italic version
+then these are circular pointers.  Thus <tt>FL_TIMES_BOLD->bold()</tt>
+is the same as <tt>FL_TIMES_BOLD</tt> and <tt>FL_SYMBOL->bold()</tt>
+is the same as <tt>FL_SYMBOL</tt>.
+
+<h4><a name=system_name>const char* Fl_Font_::system_name()</h4>
 
 Returns a string that identifies the font in a system-specific
 manner.  About all that can be said about it is that it is different
@@ -46,7 +60,7 @@ for every font (two different fonts may return the same name()).  This
 string is not portable, even between different machines running the
 same operating system.
 
-<h4>const char* Fl_Font_::name(int* attributes = 0)</h4>
+<h4><a name=name>const char* Fl_Font_::name(int* attributes = 0)</h4>
 
 Returns the name of the font.  The return value points to a static
 buffer that is overwritten each call (so copy the string if you want
@@ -55,37 +69,37 @@ to keep it).
 <P>The integer pointed to by <tt>attributes</tt> is set to zero,
 <tt>FL_BOLD</tt> or <tt>FL_ITALIC</tt> or <tt>FL_BOLD|FL_ITALIC</tt>.
 If this pointer is null then the attributes are indicated by adding
-"bold" or "italic" to the name.
+a space and "bold" or "italic" to the name.
 
-<h4>int Fl_Font_::encodings(const char** &amp;array) const;</h4>
+<h4><a name=encodings>int Fl_Font_::encodings(const char** &amp;array) const;</h4>
 
 Sets <i>array</i> to point at a list of encoding names.  The return
 value is the length of this array.  Each string identifies an
 "encoding" that is supported by this font.  These strings may be
-passed to the <a href=drawing.html#fl_font><TT>fl_font()</TT></a> to
-select what characters the first 256 codes print.  If fltk cannot
-figure out the encodings it returns a zero-length array and setting
-the encoding will have no effect on what is drawn with this font.
+passed to the <a href=drawing.html#fl_encoding><TT>fl_encoding()</TT></a> to
+select what characters the first 256 codes print. A zero length array
+may be returned, this indicates that the font will print the same no
+matter what encoding is set.
 
-<h4>int Fl_Font_::sizes(int *&amp;array) const;</h4>
+<h4><a name=sizes>int Fl_Font_::sizes(int *&amp;array) const;</h4>
 
-Sets <i>array</i> to point at a list of sizes.  The return value is the
-length of this array.  The sizes are sorted from smallest to largest
-and indicate what sizes can be given to <a
+Sets <i>array</i> to point at a list of sizes.  The return value is
+the length of this array.  The sizes are sorted from smallest to
+largest and indicate what sizes can be given to <a
 href=drawing.html#fl_font><TT>fl_font()</TT></a> that will be matched
 exactly (<TT>fl_font()</TT> will pick the closest size for other
 sizes).  A zero in the first location of the array indicates a
 scalable font, where any size works, although the array may list sizes
-that work &quot;better&quot; than others.  The returned array points
-at a static buffer that is overwritten each call, so you want to copy
-it if you plan to keep it.
+that work "better" than others.  The returned array points at a static
+buffer that is overwritten each call, so you want to copy it if you
+plan to keep it.
 
 <h4><a name=fl_find_font>Fl_Font fl_find_font(const char* name, int attributes = 0);</h4>
 
 Find a font with the given "nice" name.  You can get bold and italic
-by either putting "Bold" or "Italic" in the name, or by passing them
-as the attributes.  Case is ignored and fltk will accept some
-variations in the font name.
+by adding a space and "bold" or "italic" (or both) to the name, or by
+passing them as the attributes.  Case is ignored and fltk will accept
+some variations in the font name.
 
 <p>The current implementation calls <tt>fl_list_fonts()</tt> and then
 does a binary search for the font in it.  This can make the first call
@@ -97,8 +111,8 @@ This allocates and fills in an array containing every font on the
 server.  The location <i>arrayp</i> is set to a pointer to this array,
 and the length of the array is the return value.  Each entry is a
 "base" font, there may be bold, italic, and bold+italic version of
-each font pointed to by the <code>bold</code> or <code>italic</code>
-pointers in them.
+each font pointed to by <a href=#bold><tt>bold()</tt></a> or <a
+href=#italic><tt>italic()</tt></a>.
 
 <p>Subsequent calls to this function returns the same array again.
 Currently there is no way to update the list from any changes to the

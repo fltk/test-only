@@ -1,9 +1,9 @@
 //
-// "$Id: gl_start.cxx,v 1.7 2001/02/21 06:15:44 clip Exp $"
+// "$Id: gl_start.cxx,v 1.8 2001/03/14 18:02:49 spitzak Exp $"
 //
 // OpenGL context routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2000 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -44,36 +44,37 @@
 #include <FL/fl_draw.H>
 #include "Fl_Gl_Choice.H"
 
-extern GLXContext fl_first_context; // in Fl_Gl_Choice.C
-//extern FL_API int fl_clip_state_number; // in fl_rect.C
-
-static GLXContext context;
-//static int clip_state_number=-1;
-static int pw, ph;
-
 #ifdef WIN32
 static Fl_Gl_Choice* gl_choice;
 #endif
 
+int fl_gl_visual(int mode) {
+  Fl_Gl_Choice *c = Fl_Gl_Choice::find(mode);
+  if (!c) return 0;
+#ifdef WIN32
+  gl_choice = c;
+#else
+  fl_visual = c->vis;
+  fl_colormap = c->colormap;
+#endif
+  return 1;
+}
+
+//extern FL_API int fl_clip_state_number; // in fl_rect.C
+
+static GLContext context;
+//static int clip_state_number=-1;
+static int pw, ph;
+
 Region XRectangleRegion(int x, int y, int w, int h); // in fl_rect.C
 
 void gl_start() {
-#ifdef WIN32
-  if (!gl_choice) {
-    gl_choice = Fl_Gl_Choice::find(0);
-    if (!gl_choice) Fl::fatal("Insufficient OpenGL");
-  }
-  HDC hdc = fl_private_dc(Fl_Window::current(), gl_choice);
-#endif
   if (!context) {
 #ifdef WIN32
-    context = wglCreateContext(hdc);
-    if (!fl_first_context) fl_first_context = context;
-    else wglShareLists(fl_first_context, context);
+    if (!gl_choice) fl_gl_visual(0);
+    context = fl_create_gl_context(Fl_Window::current(), gl_choice);
 #else
-    context = glXCreateContext(fl_display, fl_visual, fl_first_context, 1);
-    if (!context) Fl::fatal("OpenGL does not support this visual");
-    if (!fl_first_context) fl_first_context = context;
+    context = fl_create_gl_context(fl_visual);
 #endif
   }
   fl_set_gl_context(Fl_Window::current(), context);
@@ -103,27 +104,14 @@ void gl_start() {
 }
 
 void gl_finish() {
-#ifdef WIN32
   glFlush();
-#else
+#ifndef WIN32
   glXWaitGL();
 #endif
-}
-
-int fl_gl_visual(int mode, int *alist) {
-#ifdef WIN32
-//  default_mode = mode;
-#else
-  Fl_Gl_Choice *c = Fl_Gl_Choice::find(mode,alist);
-  if (!c) return 0;
-  fl_visual = c->vis;
-  fl_colormap = c->colormap;
-#endif
-  return 1;
 }
 
 #endif
 
 //
-// End of "$Id: gl_start.cxx,v 1.7 2001/02/21 06:15:44 clip Exp $".
+// End of "$Id: gl_start.cxx,v 1.8 2001/03/14 18:02:49 spitzak Exp $".
 //

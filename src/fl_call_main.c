@@ -1,5 +1,5 @@
 /*
- * "$Id: fl_call_main.c,v 1.9 2001/03/08 23:49:29 robertk Exp $"
+ * "$Id: fl_call_main.c,v 1.10 2001/03/14 18:02:50 spitzak Exp $"
  *
  * Copyright 1998-1999 by Bill Spitzak and others.
  *
@@ -34,7 +34,8 @@
  * Because of problems with the Microsoft Visual C++ header files
  * and/or compiler, you cannot have a WinMain function in a DLL.
  * I don't know why.  Thus, this nifty feature is only available
- * if you link to the static library.
+ * if you link to the static library. You may want to compile this
+ * source file to a .obj and link it with your program.
  *
  * Currently the debug version of this library will create a
  * console window for your application so you can put printf()
@@ -87,6 +88,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif /* WIN32 && !FL_LIBRARY && !__GNUC__ */
 
 /*
- * End of "$Id: fl_call_main.c,v 1.9 2001/03/08 23:49:29 robertk Exp $".
+ * End of "$Id: fl_call_main.c,v 1.10 2001/03/14 18:02:50 spitzak Exp $".
  */
 

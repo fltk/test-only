@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Gl_Window.H,v 1.15 2001/02/20 06:59:48 spitzak Exp $"
+// "$Id: Fl_Gl_Window.H,v 1.16 2001/03/14 18:02:49 spitzak Exp $"
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2000 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -27,73 +27,70 @@
 
 #include "Fl_Window.H"
 
-enum { // extra values for mode():
-  FL_NO_AUTO_SWAP = 0x4000,
-  FL_NO_ERASE_OVERLAY = 0x8000
+#ifndef GLContext
+typedef void* GLContext; // actually a GLXContext or HGLDC
+#endif
+
+class Fl_Gl_Choice; // structure to hold result of glXChooseVisual
+
+enum {
+  FL_NO_AUTO_SWAP = 1024,
+  FL_NO_ERASE_OVERLAY = 2048
 };
 
-class FL_GL_API Fl_Gl_Choice; // structure to hold result of glXChooseVisual
-
-class FL_GL_API Fl_Gl_Window : public Fl_Window {
-
-  int mode_;
-  const int* alist;
-  Fl_Gl_Choice* g;
-  void* context; // actually a GLXContext
-  char valid_;
-  char damage1_; // damage() of back buffer
-  void init();
-  void draw_swap();
-
-  void *overlay;
-  void make_overlay();
-  friend class _Fl_Gl_Overlay;
-
-  static int can_do(int, const int *);
-  int mode(int, const int *);
-
-protected:
-
-  virtual void create();
-  virtual void flush();
-  virtual void destroy();
+class FL_API Fl_Gl_Window : public Fl_Window {
 
 public:
 
-  virtual void draw_overlay();
-  virtual void layout();
+  void create();
+  void flush();
+  void destroy();
+  void layout();
 
   char valid() const {return valid_;}
   void valid(char i) {valid_ = i;}
   void invalidate();
 
-  static int can_do(int i) {return can_do(i, 0);}
-  static int can_do(const int *i) {return can_do(0, i);}
-  int can_do() {return can_do(mode_, alist);}
   int mode() const {return mode_;}
-  int mode(int a) {return mode(a, 0);}
-  int mode(const int *a) {return mode(0, a);}
+  int mode(int a);
+  static int can_do(int);
+  int can_do() {return can_do(mode_);}
+
+  void* context() const {return context_;}
+  void context(void*, int destroy_flag = false);
+  void make_current();
+  void swap_buffers();
+  void ortho();
 
   int can_do_overlay();
   void redraw_overlay();
   void hide_overlay();
-
-  void make_current();
   void make_overlay_current();
-  void swap_buffers();
-  void erase_overlay();
-  void ortho();
 
   ~Fl_Gl_Window();
   Fl_Gl_Window(int W, int H, const char *l=0) : Fl_Window(W,H,l) {init();}
   Fl_Gl_Window(int X, int Y, int W, int H, const char *l=0)
     : Fl_Window(X,Y,W,H,l) {init();}
-};
 
-FL_GL_API int fl_gl_visual(int, int *alist=0);
+private:
+
+  int mode_;
+  Fl_Gl_Choice *gl_choice;
+  GLContext context_;
+  char valid_;
+  char damage1_; // damage() of back buffer
+  virtual void draw_overlay();
+  void init();
+
+  void *overlay;
+  void make_overlay();
+  friend class _Fl_Gl_Overlay;
+
+  void draw_swap();
+};
 
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.H,v 1.15 2001/02/20 06:59:48 spitzak Exp $".
+// End of "$Id: Fl_Gl_Window.H,v 1.16 2001/03/14 18:02:49 spitzak Exp $".
 //
