@@ -1,5 +1,5 @@
 //
-// "$Id: CheckButton.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: CheckButton.h,v 1.3 2004/12/28 19:06:03 laza2000 Exp $"
 //
 // Button with a checkmark to the left of it.
 //
@@ -33,7 +33,7 @@ class FL_API CheckButton : public Button {
 public:
   CheckButton(int x,int y,int w,int h,const char *l = 0);
   static NamedStyle* default_style;
-protected:
+
   virtual void draw();
 };
 
@@ -42,5 +42,5 @@ protected:
 #endif
 
 //
-// End of "$Id: CheckButton.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: CheckButton.h,v 1.3 2004/12/28 19:06:03 laza2000 Exp $".
 //
