@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.193 2004/09/30 06:08:30 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.194 2004/10/11 06:36:20 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1884,25 +1884,15 @@ void CreatedWindow::create(Window* window,
     mask |= CWBackPixel;
   }
 
-  CreatedWindow* x = new CreatedWindow;
-  x->xid = XCreateWindow(xdisplay,
-			 root,
-			 X, Y, W, H,
-			 0, // borderwidth
-			 visual->depth,
-			 InputOutput,
-			 visual->visual,
-			 mask, &attr);
-
-  x->backbuffer = 0;
-  x->overlay = false;
-  x->window = window; window->i = x;
-  x->region = 0;
-  x->wait_for_expose = true;
-  x->cursor = None;
-  x->cursor_for = 0;
-  x->next = CreatedWindow::first;
-  CreatedWindow::first = x;
+  CreatedWindow* x = CreatedWindow::set_xid(window,
+    XCreateWindow(xdisplay,
+		  root,
+		  X, Y, W, H,
+		  0, // borderwidth
+		  visual->depth,
+		  InputOutput,
+		  visual->visual,
+		  mask, &attr));
 
   if (!window->parent() && !window->override()) {
     // send all kinds 'o junk to X Window Manager:
@@ -1978,6 +1968,7 @@ CreatedWindow* CreatedWindow::set_xid(Window* window, XWindow winxid) {
   CreatedWindow* x = new CreatedWindow;
   x->xid = winxid;
   x->backbuffer = 0;
+  x->overlay = false;
   x->window = window; window->i = x;
   x->region = 0;
   x->wait_for_expose = true;
@@ -2333,5 +2324,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.193 2004/09/30 06:08:30 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.194 2004/10/11 06:36:20 spitzak Exp $".
 //
