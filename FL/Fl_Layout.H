@@ -61,15 +61,18 @@ public:
   void damage(uchar d) const {group()->damage(d);}
 };
 
-class Fl_Tile_Layout:public Fl_Layout
+class Fl_Align_Layout:public Fl_Layout
 {
   bool vertical_;
   uchar n_to_break_,dw_,dh_;
+  Fl_Align align_;
 public:
 
-  Fl_Tile_Layout(uchar n_to_break = 0,bool vertical = true, 
-                 uchar dw = 0,uchar dh = 0)
-    :vertical_(vertical),n_to_break_(n_to_break),dw_(dw),dh_(dh){}
+  Fl_Align_Layout(uchar n_to_break = 0,uchar vertical = true,
+                  Fl_Align align = FL_ALIGN_LEFT,
+                  uchar dw = 0,uchar dh = 0)
+    :vertical_(vertical),n_to_break_(n_to_break),dw_(dw),dh_(dh),
+     align_(align){}
   void perform();
 
   bool vertical() const {return vertical_;}
@@ -82,20 +85,6 @@ public:
   void dw(uchar d) {dw_ = d;}
   uchar dh() const {return dh_;}
   void dh(uchar d) {dh_ = d;}
-
-};
-
-class Fl_Align_Layout:public Fl_Tile_Layout
-{
-  Fl_Align align_;
-public:
-
-  Fl_Align_Layout(uchar n_to_break = 0,uchar vertical = true,
-                  Fl_Align align = FL_ALIGN_LEFT,
-                  uchar dw = 0,uchar dh = 0)
-    :Fl_Tile_Layout(n_to_break,vertical,dw,dh),
-     align_(align){}
-  void perform();
 
   Fl_Align align() const {return align_;}
   void align(Fl_Align a) {align_ = a;}

@@ -34,15 +34,6 @@
 void Fl_Align_Layout::perform() {
 
   int i;
-  Fl_Widget*const* a = array();
-  if (!align()) {
-    Fl_Tile_Layout::perform();
-    for (i = children(); i--;) {
-      Fl_Widget* o = *a++;
-      o->align(0);
-    }
-    return;
-  }
 
   int n_lines = n_to_break() ? 
                 (children() / n_to_break() + (children() % n_to_break()?1:0)):
@@ -54,21 +45,23 @@ void Fl_Align_Layout::perform() {
   uchar label_space[256];
   memset(label_space,0,n_variable*sizeof(uchar));
 
-  a = array();
+  Fl_Widget*const* a = array();
   int u=0, v=0;
-  for (i = children(); i--;) {
-    Fl_Widget* o = *a++;
-    int w=0,h;
-    fl_font(o->labelfont(),o->labelsize());
-    fl_measure(o->label(),w,h);
-    if (variable_is_y) w = h;
-    int which = (variable_is_y == vertical()) ? u : v; 
-    if (label_space[which] < w) label_space[which] = w;
-    if (++u == n_to_break()) {u = 0; v++;}
+  int total_label_space=0;
+  if (align()) {
+    for (i = children(); i--;) {
+      Fl_Widget* o = *a++;
+      int w=0,h;
+      fl_font(o->labelfont(),o->labelsize());
+      fl_measure(o->label(),w,h);
+      if (variable_is_y) w = h;
+      int which = (variable_is_y == vertical()) ? u : v; 
+      if (label_space[which] < w) label_space[which] = w;
+      if (++u == n_to_break()) {u = 0; v++;}
+    }
+    for (i = 0; i<n_variable; i++) total_label_space+=label_space[i];
   }
 
-  int total_label_space=0;
-  for (i = 0; i<n_variable; i++) total_label_space+=label_space[i];
   int W = (w() - (variable_is_y ? 0:total_label_space) - (nx + 1)*dw()) / nx;
   int H = (h() - (variable_is_y ? total_label_space:0) - (ny + 1)*dh()) / ny; 
   int cx = dw(), cy = dh();

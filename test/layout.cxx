@@ -54,7 +54,7 @@ void align_cb(Fl_Choice* c,long w) {
 
 int main(int argc, char ** argv) {
   Fl_Window *window = new Fl_Window(600,400);
-  Fl_Layout *pak_layout = new Fl_Tile_Layout(2,true,5,5);
+  Fl_Layout *pak_layout = new Fl_Align_Layout(2,true,0,5,5);
   window->change_layout(pak_layout);
   Fl_Layout::release(pak_layout);
 
@@ -63,7 +63,7 @@ int main(int argc, char ** argv) {
   o->change_layout(top_layout);
   Fl_Layout::release(top_layout);
   {
-    Fl_Layout* digits_layout = new Fl_Tile_Layout(3,false,10,10);
+    Fl_Layout* digits_layout = new Fl_Align_Layout(3,false,0,10,10);
     Fl_Group* o=new Fl_Group(0,0,0,0,"Tiled Buttons");
     o->change_layout(digits_layout);
     o->box(FL_DOWN_BOX);
@@ -78,7 +78,7 @@ int main(int argc, char ** argv) {
     o->end();
   }
   {
-    Fl_Layout* ver_layout = new Fl_Tile_Layout(3,true,10,10);
+    Fl_Layout* ver_layout = new Fl_Align_Layout(3,true,0,10,10);
     Fl_Group* o=new Fl_Group(0,0,0,0,"Fl_Align_Layout options");
     o->change_layout(ver_layout);
     o->box(FL_DOWN_BOX);
