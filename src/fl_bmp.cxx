@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.13 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: fl_bmp.cxx,v 1.14 2001/12/10 06:25:42 spitzak Exp $"
 //
 // Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
 //
@@ -88,9 +88,9 @@ int Fl_BMP_Image::test(const uchar* buffer, size_t size)
   return !strncmp((char*)buffer, "BM", size<2? size:2);
 }
 
-inline void SetError(const char* /*s*/)
+inline void SetError(const char* s)
 {
-  //  fprintf(stderr, s);
+  Fl::warning(s);
 }
 
 static uchar GETC()
@@ -168,6 +168,7 @@ static short ReadLittleEndianUINT()
 
 void Fl_BMP_Image::measure(int &W, int &H)
 {
+
   if (w>=0) { 
     W=w; H=h; 
     return; 
@@ -824,5 +825,5 @@ error:
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.13 2001/09/10 01:16:17 spitzak Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.14 2001/12/10 06:25:42 spitzak Exp $"
 //

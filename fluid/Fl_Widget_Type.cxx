@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.78 2001/11/29 17:39:28 spitzak Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.79 2001/12/10 06:25:42 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -1033,7 +1033,6 @@ static Fl_Menu_Item alignmenu[] = {
   {"FL_ALIGN_LEFT | FL_ALIGN_BOTTOM",0,0,(void*)(FL_ALIGN_LEFT | FL_ALIGN_BOTTOM)},
   {"FL_ALIGN_RIGHT | FL_ALIGN_BOTTOM",0,0,(void*)(FL_ALIGN_RIGHT | FL_ALIGN_BOTTOM)},
 
-  {"FL_ALIGN_TILED",0,0,(void*)(FL_ALIGN_TILED)},
 {0}};
 
 void align_cb(Fl_Button* i, void *v) {
@@ -1979,7 +1978,7 @@ void Fl_Widget_Type::read_property(const char *c) {
       if (!strcmp(c,"image_file")) {
 	c = read_word();
 	if (i && c[0]=='d') i->inlined = 0;
-	if (c[1]=='t') o->set_flag(FL_ALIGN_TILED);
+	// if (c[1]=='t') do something here to make it Fl_Tiled_Image
       }
     } else {
       o->label_type((Fl_Labeltype)item_pointer(labeltypemenu,c));
@@ -2164,5 +2163,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.78 2001/11/29 17:39:28 spitzak Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.79 2001/12/10 06:25:42 spitzak Exp $".
 //

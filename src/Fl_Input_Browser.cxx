@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.cxx,v 1.11 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: Fl_Input_Browser.cxx,v 1.12 2001/12/10 06:25:42 spitzak Exp $"
 //
 // Input Browser (Combo Box) widget for the Fast Light Tool Kit (FLTK).
 //
@@ -187,9 +187,9 @@ Fl_Input_Browser::handle(int e) {
       b->when(FL_WHEN_RELEASE_ALWAYS);
       b->callback(ComboBrowser_cb);
       mw->end();
-      b->layout();// shouldn't call this directly
-      int W = b->last_max_width+b->scrollbar.w()+b->text_box()->dw();
-      int H = b->last_height+b->text_box()->dh();
+      b->layout(); // (WAS: it is ok to do this)
+      int W = b->width()+b->scrollbar.w()+b->text_box()->dw();
+      int H = b->height()+b->text_box()->dh();
       if (W > maxw_) W = maxw_;
       if (H > maxh_) H = maxh_;
       if (W < minw_) W = minw_;
@@ -214,8 +214,7 @@ Fl_Input_Browser::handle(int e) {
       b->Fl_Widget::size(W, H);
 
       b->layout();// shouldn't call this directly
-      b->goto_number(item() ? b->Fl_Group::find(item()) : 0);
-      b->item_select();
+      b->value(item() ? b->Fl_Group::find(item()) : 0);
       b->set_middle();
 
       mw->exec(0, true);
@@ -271,5 +270,5 @@ Fl_Input_Browser::draw() {
 }
 
 //
-// End of "$Id: Fl_Input_Browser.cxx,v 1.11 2001/09/10 01:16:17 spitzak Exp $".
+// End of "$Id: Fl_Input_Browser.cxx,v 1.12 2001/12/10 06:25:42 spitzak Exp $".
 //

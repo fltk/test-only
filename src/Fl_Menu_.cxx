@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.39 2001/11/08 08:13:49 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.40 2001/12/10 06:25:42 spitzak Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -142,10 +142,10 @@ void Fl_Menu_::default_callback(Fl_Widget* widget, void*) {
 // item() is set to the located widget.
 // True is returned if the indexes differ from last time.
 
-bool Fl_Menu_::goto_item(const int* indexes, int level) {
+bool Fl_Menu_::focus(const int* indexes, int level) {
   int i = indexes[0];
   bool ret = false;
-  if (focus() != i) {focus(i); ret = true;}
+  if (value() != i) {value(i); ret = true;}
   item(child(i));
   int j = 1;
   while (item() && item()->is_group()) {
@@ -161,8 +161,8 @@ bool Fl_Menu_::goto_item(const int* indexes, int level) {
 // Set item() according to the focus fields. item() may have been altered
 // by the widget drawing or because an Fl_List is being used. The new
 // value for item() is returned.
-Fl_Widget* Fl_Menu_::get_item() {
-  int i = focus();
+Fl_Widget* Fl_Menu_::get_focus() {
+  int i = value();
   item(child(i));
   while (item() && item()->is_group()) {
     Fl_Group* group = (Fl_Group*)item();
@@ -210,10 +210,10 @@ int Fl_Menu_::handle_shortcut() {
   for (int i = 0; i < children; i++) {
     Fl_Widget* item = child(i);
     if (!item->takesevents()) continue;
-    if (Fl::test_shortcut(item->shortcut())) {focus(i); widget=item; break;}
+    if (Fl::test_shortcut(item->shortcut())) {value(i); widget=item; break;}
     if (!widget && item->is_group() /*&& IS_OPEN*/) {
       widget = shortcut_search((Fl_Group*)item);
-      if (widget) focus(i);
+      if (widget) value(i);
     }
   }
   if (widget) {execute(widget); return 1;}
@@ -221,5 +221,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.39 2001/11/08 08:13:49 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.40 2001/12/10 06:25:42 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.h,v 1.3 2001/08/05 21:12:15 spitzak Exp $"
+// "$Id: Fl_Shared_Image.h,v 1.4 2001/12/10 06:25:42 spitzak Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -104,7 +104,8 @@ public:
   // Set the size of the cache (0 = unlimited is the default)
   static void set_cache_size(size_t l);
 
-  virtual void draw(int X, int Y, Fl_Flags);
+  void draw(int, int, int, int, Fl_Flags = 0);
+  void draw(int x, int y, Fl_Flags f = 0) {draw(x,y,w,h,f);}
 };
 
 
@@ -199,5 +200,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Shared_Image.h,v 1.3 2001/08/05 21:12:15 spitzak Exp $"
+// End of "$Id: Fl_Shared_Image.h,v 1.4 2001/12/10 06:25:42 spitzak Exp $"
 //

@@ -58,11 +58,6 @@ l file");
         { Fl_Box* o = new Fl_Box(10, 65, 70, 20, "Alignment:");
           o->align(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
         }
-        { Fl_Button* o = new Fl_Button(80, 65, 44, 20, "tiled");
-          o->type(101);
-          o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_TILED));
-          o->tooltip("Draw the image tiled");
-        }
         { Fl_Button* o = new Fl_Button(124, 65, 43, 20, "clip");
           o->type(101);
           o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_CLIP));

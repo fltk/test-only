@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.80 2001/12/06 18:23:43 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.81 2001/12/10 06:25:42 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -473,9 +473,7 @@ void Fl_Widget::make_current() const {
 // Call the draw method, handle the clip out
 void Fl_Widget::draw_n_clip()
 {
-  if (!(box()->fills_rectangle() ||
-	image() && (flags()&FL_ALIGN_TILED) &&
-	(!(flags()&15) || (flags() & FL_ALIGN_INSIDE)))) {
+  if (!box()->fills_rectangle()) {
     fl_push_clip(0, 0, w(), h());
     parent()->draw_group_box();
     fl_pop_clip();
@@ -485,5 +483,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.80 2001/12/06 18:23:43 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.81 2001/12/10 06:25:42 spitzak Exp $".
 //

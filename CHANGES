@@ -1853,3 +1853,18 @@ Added a lot of text to CHANGES (I was mistakenly updating a file
 called changes).
 
 Checked in 12/6/01
+////////////////////////////////////////////////////////////////
+
+Edited documentation for Fl_Browser, Fl_Menu_, and Fl_Group to
+match implementation. Deleted documentation for the useless classes
+Fl_Hold_Browser and Fl_Select_Browser. Moved Fl_Free and Fl_Timer
+documentation to the forms-specific stuff.
+
+Fl_Browser changed to make some methods private and rename some stuff
+to hopefully make it easier to use.
+
+Restored w,h arguments to Fl_Image::draw() to allow image types that
+resize to fill an area. Removed FL_ALIGN_TILED in favor of the fltk.1.1
+Fl_Tiled_Image, which I added.
+
+Checked in 12/9/01

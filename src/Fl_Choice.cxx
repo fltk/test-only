@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.58 2001/08/05 21:12:15 spitzak Exp $"
+// "$Id: Fl_Choice.cxx,v 1.59 2001/12/10 06:25:42 spitzak Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -52,7 +52,7 @@ void Fl_Choice::draw() {
     fl_rectf(X+2, Y+2, W-w1-4, H-4);
   }
 #endif
-  Fl_Widget* o = get_item();
+  Fl_Widget* o = get_focus();
   if (!o) o = child(0);
   if (o) {
 #if MOTIF_STYLE
@@ -100,14 +100,14 @@ void Fl_Choice::draw() {
 }
 
 int Fl_Choice::value(int v) {
-  if (goto_item(&v, 0)) {
+  if (focus(&v, 0)) {
     redraw(); return true;
   }
   return false;
 }
 
 #if 0
-int Fl_Choice::goto_item(const int* indexes, int level) {
+int Fl_Choice::focus(const int* indexes, int level) {
   // rather annoying kludge to try to detect if the item from an Fl_List
   // has changed by looking for the label and user data to change:
   Fl_Widget* save_item = item();
@@ -117,7 +117,7 @@ int Fl_Choice::goto_item(const int* indexes, int level) {
     save_label = save_item->label();
     save_data = save_item->user_data();
   }
-  Fl_Menu_::goto_item(indexes, level);
+  Fl_Menu_::focus(indexes, level);
   if (item() == save_item) {
     if (!save_item) return 0;
     if (save_label == save_item->label() && save_data==save_item->user_data())
@@ -131,7 +131,7 @@ int Fl_Choice::goto_item(const int* indexes, int level) {
 static bool try_item(Fl_Choice* choice, int i) {
   Fl_Widget* w = choice->child(i);
   if (!w->takesevents()) return false;
-  choice->focus(i);
+  choice->value(i);
   choice->execute(w);
   choice->redraw();
   return true;
@@ -211,5 +211,5 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.58 2001/08/05 21:12:15 spitzak Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.59 2001/12/10 06:25:42 spitzak Exp $".
 //

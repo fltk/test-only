@@ -3,6 +3,7 @@
 #include "image_file.h"
 #include <stdio.h>
 #include <fltk/fl_file_chooser.h>
+#include <fltk/Fl_Tiled_Image.h>
 
 Fl_Window *window=(Fl_Window *)0;
 
@@ -514,22 +515,20 @@ int main (int argc, char **argv) {
   Fl_Window* w;
   Fl_Shared_Image::set_root_directory("images");
    {  Fl_Window* o = window = new Fl_Window(660, 405, "The background is a BMP file");
-    o->image(Fl_BMP_Image::get("ulon.bmp"));
+    o->image(new Fl_Tiled_Image(Fl_BMP_Image::get("ulon.bmp")));
     o->box(FL_NO_BOX);
-    o->align(FL_ALIGN_TILED);
+    o->align(FL_ALIGN_INSIDE); // need to fix it so this is not necessary!
      {    Fl_Box* o = new Fl_Box(23, 158, 352, 197, "tiled GIF image loaded from disk");
-      o->image(Fl_GIF_Image::get("coucou.gif"));
+      o->image(new Fl_Tiled_Image(Fl_GIF_Image::get("coucou.gif")));
       o->label_font(fl_fonts+1);
       o->label_type(FL_SHADOW_LABEL);
       o->label_color((Fl_Color)3);
-      o->align(FL_ALIGN_TILED);
     }
      {    Fl_Box* o = new Fl_Box(100, 23, 170, 102, "PNG image with datas included in code");
-      o->image(Fl_PNG_Image::get("coucou.png", datas_coucou));
+      o->image(new Fl_Tiled_Image(Fl_PNG_Image::get("coucou.png", datas_coucou)));
       o->label_font(fl_fonts+1);
       o->label_type(FL_SHADOW_LABEL);
       o->label_color((Fl_Color)3);
-      o->align(FL_ALIGN_TILED);
     }
      {    Fl_Box* o = new Fl_Box(408, 16, 134, 109, "XPM image loaded from disk");
       o->image(Fl_XPM_Image::get("../porsche.xpm"));
@@ -552,7 +551,6 @@ int main (int argc, char **argv) {
       o->label_font(fl_fonts+1);
       o->label_type(FL_SHADOW_LABEL);
       o->label_color((Fl_Color)3);
-      o->align(FL_ALIGN_TILED);
     }
      {    Fl_Button* o = new Fl_Button(510, 15, 135, 30, "Load an image ...");
       o->callback((Fl_Callback*)cb_Load);

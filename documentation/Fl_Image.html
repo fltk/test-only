@@ -10,47 +10,45 @@ graphics, can be defined.
 
 <h2>Methods</h2>
 
-<h4>ulong id, mask;<br>
-void _draw(int X, int Y, int W, int H, int cx, int cy);</h4>
+<h4>void* id, mask;
+<br>int w,h;
+<br>void _draw(int x, int y, Fl_Flags flags)</h4>
 
-Subclasses may use these <i>protected</i> members of the base class to
-draw a cached pixel array.  They must first set <tt>id</tt> and
-<tt>mask</tt> to the color and transparency offscreen windows, using
-system-specific code.  Then they can call <tt>_draw()</tt> to draw
-them.
+Subclasses that draw a fixed-size and unchanging image can use these
+protected methods that use system-specific code to cache images in a
+form that is ready to be drawn on the screen quickly. In the first
+call to <tt>draw()</tt> they can set <tt>w</tt> and <tt>h</tt> to the
+size of the image, <tt>id</tt> and <tt>mask</tt> to the color and
+transparency offscreen windows, using system-specific code.  Then they
+can call <tt>_draw()</tt> to draw them, and all subsequent calls they
+can just call <tt>_draw()</tt>. To test if this is the first call to
+<tt>draw()</tt> a subclass can check if <tt>id</tt> is zero.
 
-<h4>int w,h</h4>
+<h4>virtual void Fl_Image::measure(int& w, int& h);</h4>
 
-These members hold the width and height of the image.  They are not
-correct until <tt>measure()</tt> is called.  These are public instance
-variables for back comptability, but you should never set them.
+The two parameters are set to the size the image will occupy when
+drawn. For image types that can scale these are also input parameters:
+they must be preset to the rectangle the caller intends to pass to
+<tt>draw()</tt>. This is for scaling and tiling image types. To find
+the "natural" size of a scaling image, preset w and h to zero before
+calling this.
 
-<h4>virtual void Fl_Image::measure(int W, int H);</h4>
+<h4>virtual void Fl_Image::draw(int x,int y,int w,int h, Fl_Flags);</h4>
 
-Measure how big the image will be if it is drawn inside a W,H
-rectangle and put the result into w,h.  For most image types this does
-nothing and w,h are set by the constructor.  This may be used to
-initialize the scaling for variable-sized images.
-
-<h4>virtual void Fl_Image::draw(int x,int y,int w,int h, int cx,int
-cy);</h4>
-
-Draw the image so the point <i>cx,cy</i> of the image is at
-<i>x,y</i>.  The image may be scaled or clipped to fit in the <i>w,h</i>
-rectangle, but this is not necessary (although obeying the current
-fl_clip value is!).
-
-<h4>void Fl_Image::draw(int x,int y,int w,int h, Fl_Flags align);</h4>
-
-This <i>non-virtual</i> function uses <tt>measure()</tt> and the
-<i>align</i> flags to figure out <i>cx,cy</i> and call the normal draw
-function.  This allows you to center or align any edge of the image
-with a bounding box.
+Draw the image with the upper-left corner at <i>x,y</i>. If the image
+can scale or tile or otherwise uses a size, the <i>w,h</i> describe
+the size of the box it is wanted to fill. The <i>flags</i> can be used
+by subclasses to draw differently if <tt>FL_INACTIVE</tt> or any other
+flags are set.
 
 <h4>virtual Fl_Image::~Fl_Image();</h4>
 
-The destructor throws away any server-cached information, but in most
-cases does not destroy the local data passed to a constructor.
+The destructor throws away temporary data created to draw the image,
+but in most cases does not destroy the local data passed to a
+constructor.
+
+<p>The base class destructor will destroy anything created for <tt>id</tt> or
+<tt>mask</tt>.
 
 <H2><A name=Fl_Bitmap>class Fl_Bitmap : public Fl_Image</A></H2>
  This object encapsulates the width, height, and bits of an X bitmap 

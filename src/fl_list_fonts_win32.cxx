@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.20 2001/12/03 16:58:09 robertk Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.21 2001/12/10 06:25:42 spitzak Exp $"
 //
 // _WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -150,7 +150,7 @@ static int CALLBACK enumcb(CONST LOGFONT* lplf,
   // in order to match X!  I can't tell if each different encoding is
   // returned sepeartely or not.  This is what fltk 1.0 did:
   if (!p && lplf->lfCharSet != ANSI_CHARSET) return 1;
-  //const char *name = (const char*)(lplf->lfFullName);
+  //const char *name = (const char*)(lplf->lfFaceName);
   const char *name = (const char*)(((ENUMLOGFONT *)lplf)->elfFullName);
 
   bool bNeedBold = (lplf->lfWeight <= 400);
@@ -196,5 +196,5 @@ int fl_list_fonts(Fl_Font*& arrayp) {
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.20 2001/12/03 16:58:09 robertk Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.21 2001/12/10 06:25:42 spitzak Exp $"
 //

@@ -32,7 +32,7 @@ cb_test(Fl_Widget* browser, void*) {
 void
 cb_remove(Fl_Widget*, void* ptr) {
   Fl_Browser* tree = (Fl_Browser*) ptr;
-  if (tree->multi()) {
+  if (tree->type() & Fl_Browser::MULTI_BROWSER) {
     Fl_Widget* w = tree->goto_top();
     while (w) {
       if (w->value()) {
@@ -46,7 +46,7 @@ cb_remove(Fl_Widget*, void* ptr) {
       }
     }
   } else {
-    Fl_Widget* w = tree->goto_mark(Fl_Browser::FOCUS);
+    Fl_Widget* w = tree->goto_focus();
     if (w) {
       Fl_Group* g = w->parent();
       g->remove(w);
@@ -64,7 +64,7 @@ cb_multi(Fl_Widget* w, void* ptr) {
 }
 
 static Fl_Group* current_group(Fl_Browser* tree) {
-  Fl_Widget* w = tree->goto_mark(Fl_Browser::FOCUS);
+  Fl_Widget* w = tree->goto_focus();
   if (!w) return tree;
   if (w->is_group() && w->flags()&FL_OPEN) return (Fl_Group*)w;
   return w->parent() ? w->parent() : tree;

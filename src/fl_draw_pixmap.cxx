@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_pixmap.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_draw_pixmap.cxx,v 1.13 2001/12/10 06:25:42 spitzak Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -230,6 +230,24 @@ int fl_draw_pixmap(const char*const* di, int x, int y, Fl_Color bg) {
 
   // build the mask bitmap used by Fl_Pixmap:
   if (fl_mask_bitmap && transparent_index >= 0) {
+    // search for usage of the transparent index, if none we act like
+    // the image is opaque (which avoids some buggy code on X/Win32):
+    int y;
+    for (y = 0; y < d.h; y++) {
+      const uchar* p = data[y];
+      if (chars_per_pixel <= 1) {
+	for (int x = 0; x < d.w; x++)
+	  if (*p++ == transparent_index) goto GOTIT;
+      } else {
+	for (int x = 0; x < d.w; x++) {
+	  int index = *p++;
+	  index = (index<<8) | (*p++);
+	  if (index == transparent_index) goto GOTIT;
+	}
+      }
+    }
+    goto NO_MASK;
+  GOTIT:
     int W = (d.w+7)/8;
     uchar* bitmap = new uchar[W * d.h];
     *fl_mask_bitmap = bitmap;
@@ -260,6 +278,7 @@ int fl_draw_pixmap(const char*const* di, int x, int y, Fl_Color bg) {
       }
     }
   }
+ NO_MASK:
 
   fl_draw_image(chars_per_pixel==1 ? cb1 : cb2, &d, x, y, d.w, d.h, 4);
   if (chars_per_pixel > 1) for (int i = 0; i < 256; i++) delete[] d.byte1[i];
@@ -267,5 +286,5 @@ int fl_draw_pixmap(const char*const* di, int x, int y, Fl_Color bg) {
 }
 
 //
-// End of "$Id: fl_draw_pixmap.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_draw_pixmap.cxx,v 1.13 2001/12/10 06:25:42 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.h,v 1.4 2001/11/08 08:13:48 spitzak Exp $"
+// "$Id: Fl_Image.h,v 1.5 2001/12/10 06:25:42 spitzak Exp $"
 //
 // Image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -39,17 +39,15 @@ protected:
 public:
   Fl_Image() : id(0), mask(0) {}
   virtual void measure(int& W, int& H);
-  virtual void draw(int x, int y, Fl_Flags) = 0;
+  virtual void draw(int x, int y, int w, int h, Fl_Flags = 0) = 0;
+  void draw(int x, int y, Fl_Flags f = 0) {draw(x,y,w,h,f);}
   virtual ~Fl_Image();
-
-  void draw_tiled(int X, int Y, int W, int H, int cx=0, int cy=0);
-
-  // back compatability:
+  // for back compatability only:
   void label(Fl_Widget* o);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Image.h,v 1.4 2001/11/08 08:13:48 spitzak Exp $".
+// End of "$Id: Fl_Image.h,v 1.5 2001/12/10 06:25:42 spitzak Exp $".
 //

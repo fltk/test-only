@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.h,v 1.3 2001/07/29 21:52:43 spitzak Exp $"
+// "$Id: Fl_Browser.h,v 1.4 2001/12/10 06:25:42 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -21,9 +21,6 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// This file is temporary, it will completely replace the current
-// Fl_Browser.h and Fl_Browser_.h
-
 #ifndef Fl_Browser_H
 #define Fl_Browser_H
 
@@ -34,6 +31,10 @@ class FL_API Fl_Browser : public Fl_Menu_ {
   Fl_End endgroup;
 
 public:
+
+  int handle(int);
+  void layout();
+  void draw();
 
   Fl_Browser(int X,int Y,int W,int H,const char*l=0);
   static Fl_Named_Style* default_style;
@@ -50,93 +51,103 @@ public:
     MULTI_BROWSER = 8
   };
 
+  int width() const {return width_;}
+  int height() const {return height_;}
+  int box_width() const {return W;}
+  int box_height() const {return H;}
   int xposition() const {return xposition_;}
   void xposition(int);
   int yposition() const {return yposition_;}
   void yposition(int);
-  char indented() const {return indented_;}
-  void indented(char v) {indented_ = v;}
-  int multi() const {return type()&MULTI_BROWSER;}
+  bool indented() const {return indented_;}
+  void indented(bool v) {indented_ = v;}
 
   Fl_Scrollbar scrollbar;
   Fl_Scrollbar hscrollbar;
 
-  int handle(int);
-  void layout();
-  void draw();
-
-  // marks keep track of various items in the browser?
-  enum { // predefined marks - (there are no non-predefined marks, right? yes)
-    HERE = 0, // current item, the one moved by all the calls
-    FOCUS,
-    FIRST_VISIBLE,
-    REDRAW_0,
-    REDRAW_1,
-    USER_0,
-    USER_1,
-    NUMMARKS
-  };
-
-  Fl_Widget* goto_top(); // set HERE to top of browser
-  Fl_Widget* goto_mark(int mark); // set HERE to mark
-  Fl_Widget* goto_position(int y); // set HERE to item y pixels from top
-  Fl_Widget* goto_visible_focus(); // set HERE to focus if visible
+  Fl_Widget* goto_top();
+  Fl_Widget* goto_focus() {return goto_mark(FOCUS);}
+  Fl_Widget* goto_position(int y);
   Fl_Widget* goto_index(const int* indexes, int level);
-  Fl_Widget* goto_number(int n) {return goto_index(&n, 0);}
-  Fl_Widget* next(); // set HERE to next widget
-  Fl_Widget* next_visible(); // set HERE to next visible item
-  Fl_Widget* previous_visible(); // set HERE to previous visible item
-  void set_mark(int dest, int mark); // set dest to mark
-  int compare_marks(int mark1, int mark2); // returns >0 if mark1 after mark2
-  bool at_mark(int mark) { return !compare_marks(HERE,mark); }
-  void unset_mark(int mark);  // makes mark have illegal value
-  bool is_set(int mark);  // false if unset_mark was called
-  void damage_item(int mark); // make this item redraw
+  Fl_Widget* goto_index(int);
+  Fl_Widget* goto_index(int,int,int=-1,int=-1,int=-1);
+  Fl_Widget* next();
+  Fl_Widget* next_visible();
+  Fl_Widget* previous_visible();
+
   bool set_focus();
-  enum linepos { TOP, MIDDLE, BOTTOM };
-  void set_position(linepos);
   void set_top() { set_position(TOP); }
   void set_bottom() { set_position(BOTTOM); }
   void set_middle() { set_position(MIDDLE); }
-  bool item_select(bool value = true, int do_callback = 0);
-  bool item_select_only(int do_callback = 0);
-  const int* indexes() const {return item_index[FOCUS];}
-  int level() const {return item_level[FOCUS];}
-
-  // fltk 1.0 Fl_Browser emulation: (see also Fl_Menu_.h)
+  bool set_selected(bool value = true, int do_callback = 0);
+  bool select_only_this(int do_callback = 0);
   bool deselect(int do_callback = 0);
-  bool select(int line, bool value = true);
-  bool selected(int line);
-  void topline(int line) {goto_number(line); set_top();}
-  void bottomline(int line) {goto_number(line); set_bottom();}
-  void middleline(int line) {goto_number(line); set_middle();}
+
+  int current_level() const {return item_level[HERE];}
+  const int* current_index() const {return item_index[HERE];}
+  int current_position() const {return item_position[HERE];}
+
+  int focus_level() const {return item_level[FOCUS];}
+  const int* focus_index() const {return item_index[FOCUS];}
+  int focus_position() const {return item_position[FOCUS];}
+  void value(int v) {goto_index(v); set_focus();}
+  int value() const {return focus_index()[0];}
+
+  // Maybe these should be moved to base Fl_Menu_ class:
   char format_char() const {return format_char_;}
   void format_char(char c) {format_char_ = c;}
-  char column_char() const {return column_char_;}
-  void column_char(char c) {column_char_ = c;}
-  const int *column_widths() { return column_widths_; }
+  const int *column_widths() const { return column_widths_; }
   void column_widths(const int *pWidths)  { column_widths_ = pWidths; }
+
+  // fltk 1.0 Fl_Browser emulation: (see also Fl_Menu_.h)
+  bool select(int line, bool value = true);
+  bool selected(int line);
+  void topline(int line) {goto_index(line); set_top();}
+  void bottomline(int line) {goto_index(line); set_bottom();}
+  void middleline(int line) {goto_index(line); set_middle();}
   bool displayed(int line);
   void display(int line, bool value = true);
   int topline() const {return item_index[FIRST_VISIBLE][0];}
-  void value(int v) {goto_number(v); set_focus();}
-  int value() const {return item_index[FOCUS][0];}
 
 private:
-  friend class Fl_Input_Browser;
-  char indented_;
+
+  bool indented_;
   char format_char_;
-  char column_char_;
   const int *column_widths_;
   int xposition_, yposition_;
+  int width_, height_;
   int scrolldx, scrolldy;
-  int last_height, last_max_width, last_num_lines;
   static void hscrollbar_cb(Fl_Widget*, void*);
   static void scrollbar_cb(Fl_Widget*, void*);
   void draw_item();
   void draw_clip(int,int,int,int);
   static void draw_clip_cb(void*,int,int,int,int);
   int X,Y,W,H; // bounding box area
+
+  int multi() const {return type()&MULTI_BROWSER;}
+
+  // Marks serve as "indexes" into the hierarchial browser. We probably
+  // need to make some sort of public interface but I have not figured
+  // it out completely.
+  enum { // predefined marks
+    HERE = 0, // current item, the one moved by all the calls
+    FOCUS,
+    FIRST_VISIBLE,
+    REDRAW_0,
+    REDRAW_1,
+    TEMP,
+    NUMMARKS
+  };
+  Fl_Widget* goto_mark(int mark); // set HERE to mark
+  Fl_Widget* goto_visible_focus(); // set HERE to focus if visible
+  void set_mark(int dest, int mark); // set dest to mark
+  int compare_marks(int mark1, int mark2); // returns >0 if mark1 after mark2
+  bool at_mark(int mark) { return !compare_marks(HERE,mark); }
+  void unset_mark(int mark);  // makes mark have illegal value
+  bool is_set(int mark);  // false if unset_mark was called
+  void damage_item(int mark); // make this item redraw
+  enum linepos { TOP, MIDDLE, BOTTOM };
+  void set_position(linepos);
 
   // For each mark:
   int item_level[NUMMARKS]; // depth in hierarchy of the item
@@ -147,10 +158,9 @@ private:
 
 };
 
+#ifndef FLTK_2
 #define FL_NORMAL_BROWSER Fl_Browser::BOTH
 #define FL_MULTI_BROWSER (Fl_Browser::BOTH|Fl_Browser::MULTI_BROWSER)
-
-#ifndef FLTK_2
 #define FL_SELECT_BROWSER Fl_Browser::BOTH
 #define FL_HOLD_BROWSER Fl_Browser::BOTH
 #endif
@@ -158,5 +168,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser.h,v 1.3 2001/07/29 21:52:43 spitzak Exp $".
+// End of "$Id: Fl_Browser.h,v 1.4 2001/12/10 06:25:42 spitzak Exp $".
 //

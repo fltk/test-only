@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.25 2001/08/05 21:12:15 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.26 2001/12/10 06:25:42 spitzak Exp $"
 //
 // Label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -87,12 +87,14 @@ void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Flags flags) const
 
   if (image_) {
 
-    int w, h; image_->measure(w, h);
+    int w = W;
+    int h = H;
+    image_->measure(w, h);
 
     // If all the flags are off, draw the image and label centered "nicely"
     // by measuring their total size and centering that rectangle:
     if (!(flags & (FL_ALIGN_LEFT|FL_ALIGN_RIGHT|FL_ALIGN_TOP|FL_ALIGN_BOTTOM|
-		   FL_ALIGN_TILED|FL_ALIGN_INSIDE)) && label_) {
+		   FL_ALIGN_INSIDE)) && label_) {
       if ((int)(h + fl_height()) <= H) {
 	// put the image atop the text
 	int d = (H-(h+fl_height()))/2;
@@ -122,10 +124,7 @@ void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Flags flags) const
     else cy = h/2-H/2;
 
     fl_color((flags&FL_INACTIVE) ? fl_inactive(color) : color);
-    if (flags & FL_ALIGN_TILED)
-      image_->draw_tiled(X, Y, W, H, cx, cy);
-    else
-      image_->draw(X-cx, Y-cy, flags);
+    image_->draw(X-cx, Y-cy, W, H, flags);
 
     // figure out the rectangle that remains for text:
     if (flags & FL_ALIGN_LEFT) {X += w; W -= w;}
@@ -157,5 +156,5 @@ const Fl_Labeltype_* Fl_Labeltype_::find(const char* name) {
 const Fl_Labeltype_* Fl_Labeltype_::first = 0;
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.25 2001/08/05 21:12:15 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.26 2001/12/10 06:25:42 spitzak Exp $".
 //

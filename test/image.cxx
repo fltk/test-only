@@ -90,7 +90,6 @@ void button_cb(Fl_Widget *,void *) {
   if (topb->value()) i |= FL_ALIGN_TOP;
   if (bottomb->value()) i |= FL_ALIGN_BOTTOM;
   if (insideb->value()) i |= FL_ALIGN_INSIDE;
-  if (tileb->value()) i |= FL_ALIGN_TILED;
   if (clipb->value()) i |= FL_ALIGN_CLIP;
   if (wrapb->value()) i |= FL_ALIGN_WRAP;
   b->clear_flag(FL_ALIGN_MASK);
@@ -193,9 +192,6 @@ int main(int argc, char **argv) {
   insideb= new Fl_Check_Button(x, y, BWIDTH, BHEIGHT, "inside");x += BWIDTH;
   insideb->callback(button_cb);
   insideb->tooltip("FL_ALIGN_INSIDE");
-  tileb= new Fl_Check_Button(x, y, BWIDTH, BHEIGHT, "tiled"); x += BWIDTH;
-  tileb->callback(button_cb);
-  tileb->tooltip("FL_ALIGN_TILED");
   clipb= new Fl_Check_Button(x, y, BWIDTH, BHEIGHT, "clip"); x += BWIDTH;
   clipb->callback(button_cb);
   clipb->tooltip("FL_ALIGN_CLIP");
@@ -214,5 +210,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: image.cxx,v 1.14 2001/08/08 06:28:11 spitzak Exp $".
+// End of "$Id: image.cxx,v 1.15 2001/12/10 06:25:43 spitzak Exp $".
 //

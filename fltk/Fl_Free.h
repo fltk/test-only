@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Free.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Free.h,v 1.2 2001/12/10 06:25:42 spitzak Exp $"
 //
 // Forms free header file for the Fast Light Tool Kit (FLTK).
 //
@@ -54,11 +54,11 @@ public:
 #define FL_DRAW			0
 #define FL_STEP			9
 #define FL_FREEMEM		12
-#define FL_FREEZE		FL_UNMAP
-#define FL_THAW			FL_MAP
+#define FL_FREEZE		FL_HIDE
+#define FL_THAW			FL_SHOW
 
 #endif
 
 //
-// End of "$Id: Fl_Free.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Free.h,v 1.2 2001/12/10 06:25:42 spitzak Exp $".
 //

@@ -966,25 +966,29 @@ added to in the future):
 
 <h3><a name="lock">void Fl::lock();</a></h3>
 
-A single recursive lock for multithreading applications. FLTK does
-<i>nothing</i> with this lock <i>except</i> unlock it while <a
-href="#wait"><tt>Fl::wait()</tt></a> is waiting for events, and then
-lock it again before processing events. In particular no FLTK call
-tries to aquire the lock, it is up to your program to use this for
-synchronization.
+Blocks the current thread until it can safely access FLTK widgets and
+data. Child threads should call this method prior to updating any
+widgets or accessing data. The main thread must call
+<tt>Fl::lock()</tt> to initialize the threading support in FLTK before
+calling <a href="#wait"><tt>Fl::wait()</tt></a> or <a
+href="#run"><tt>Fl::run()</tt></a>.
 
-<p>If you have multiple threads, it is your responsibility to aquire
-this lock before doing <i>any</i> FLTK calls. Normally a "main" thread
-will call <tt>Fl::lock()</tt> before calling <a
-href="#wait"><tt>Fl::wait()</tt></a> or <a
-href="#run"><tt>Fl::run()</tt></a>, and leave it locked (it will be
-unlocked while fltk is waiting for events). All other threads should
-surround a set of FLTK calls (such as changes to widgets, the creation
-of them, show/hide of windows, etc) with <tt>Fl::lock()</tt> and <a
-href="#unlock"><tt>Fl::unlock()</tt></a>. Notice that the main thread
-will do all drawing and handle all callbacks. If you have expensive
-drawing that you want to multithread you currently cannot use FLTK
-drawing functions to draw that window.
+<p>Child threads must call <a href="#unlock"><tt>Fl::unlock()</tt></a>
+when they are done accessing FLTK. They may want to call <a
+href="#awake"><tt>Fl::awake()</tt></a> first if the display needs to
+change.
+
+<p>This is a "recursive lock". If you call <tt>Fl::lock()</tt> more
+than once, the subsequent calls return immediately. But you must call
+<tt>Fl::unlock()</tt> the same number of times as you called
+<tt>Fl::lock()</tt> before the lock is released.
+
+<p>When the <a href="#wait"><tt>wait()</tt></a> method is waiting for
+input or timeouts, child threads are given access to FLTK. Similarly,
+when the main thread receives events and needs to do processing, it
+will wait until all child threads have called <a
+href=#unlock><tt>unlock()</tt></a> before processing the events and
+doing callbacks.
 
 <p>See the file <tt>&lt;fltk/Fl_Threads.h&gt;</tt> for a simple
 portable recursive lock object you can use in your own code for
@@ -994,10 +998,11 @@ with your system.
 
 <h3><a name="unlock">void Fl::unlock();</a></h3>
 
-Unlock the recursive lock. If you call this the same number of times
-as you called <a href="#lock"><tt>Fl::lock()</tt></a> the lock will be
-unlocked and another thread's call to <a
-href="#lock"><tt>Fl::lock()</tt></a> can return.
+Releases the lock that was set using the <a
+href="#lock"><tt>Fl::lock()</tt></a> method. Child threads should call
+this method as soon as they are finished accessing FLTK. If some other
+thread is waiting for <tt>Fl::lock()</tt> to return, it will get
+control.
 
 <h3><a name="awake">void Fl::awake(void* message = 0);</a></h3>
 

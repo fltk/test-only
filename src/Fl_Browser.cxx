@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.50 2001/11/29 17:39:29 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.51 2001/12/10 06:25:42 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -489,6 +489,9 @@ void Fl_Browser::draw() {
 ////////////////////////////////////////////////////////////////
 // Scrolling and layout:
 
+#define item_is_parent() \
+(item()->flags()&FL_OPEN || children(item_index[HERE],item_level[HERE]+1)>=0)
+
 void Fl_Browser::layout() {
   // figure out the visible area:
 
@@ -504,36 +507,35 @@ void Fl_Browser::layout() {
   }
 
   // Measure the height of all items and find widest one
-  last_max_width = 0;
+  width_ = 0;
 
   // count all the items scrolled off the top:
   int arrow_size = fl_height(text_font(), text_size())|1;
   if (!goto_top()) yposition_ = 0;
   else for (;;) {
     if (item_position[HERE]+item()->height() > yposition_) break;
+    if (!indented_ && item_is_parent()) indented_ = true;
     if (at_mark(FOCUS)) set_mark(FOCUS, HERE);
     int w = item()->width()+arrow_size*item_level[HERE];
-    if (w > last_max_width) last_max_width = w;
+    if (w > width_) width_ = w;
     if (!next_visible()) {goto_top(); yposition_ = 0; break;}
   }
   set_mark(FIRST_VISIBLE, HERE);
   // count all the rest of the items:
-  last_num_lines = 0;
   if (item()) for (;;) {
     if (at_mark(FOCUS)) set_mark(FOCUS, HERE);
     int w = item()->width()+arrow_size*item_level[HERE];
-    if (w > last_max_width) last_max_width = w;
-    if (item_position[HERE] < H) last_num_lines++;
+    if (w > width_) width_ = w;
+    if (!indented_ && item_is_parent()) indented_ = true;
     if (!next_visible()) break;
   }
-  if (indented()) last_max_width += arrow_size; // optional if no groups!
-
-  last_height = item_position[HERE];
+  if (indented()) width_ += arrow_size;
+  height_ = item_position[HERE];
 
   // turn the scrollbars on and off as necessary:
 
   for (int z = 0; z<2; z++) {
-    if ((type()&VERTICAL) && (type()&ALWAYS_ON || last_height > H || yposition_)) {
+    if ((type()&VERTICAL) && (type()&ALWAYS_ON || height_ > H || yposition_)) {
       if (!scrollbar.visible()) {
 	scrollbar.set_visible();
 	W -= scrollbar.w();
@@ -546,7 +548,7 @@ void Fl_Browser::layout() {
 	damage(FL_DAMAGE_ALL);
       }
     }
-    if ((type()&HORIZONTAL) && (type()&ALWAYS_ON || last_max_width > W || xposition_)) {
+    if ((type()&HORIZONTAL) && (type()&ALWAYS_ON || width_ > W || xposition_)) {
       if (!hscrollbar.visible()) {
 	hscrollbar.set_visible();
 	H -= hscrollbar.h();
@@ -563,16 +565,15 @@ void Fl_Browser::layout() {
 
   scrollbar.resize(scrollbar.flags()&FL_ALIGN_LEFT ? X-scrollbar.w() : X+W,
 		   Y, scrollbar.w(), H);
-  scrollbar.value(yposition_, H, 0, last_height);
+  scrollbar.value(yposition_, H, 0, height_);
   scrollbar.linesize(fl_height(text_font(), text_size())+leading());
   hscrollbar.resize(X,
 		    scrollbar.flags()&FL_ALIGN_TOP ? Y-hscrollbar.h() : Y+H,
 		    W, hscrollbar.h());
-  hscrollbar.value(xposition_, W, 0, last_max_width);
+  hscrollbar.value(xposition_, W, 0, width_);
   hscrollbar.linesize(fl_height(text_font(), text_size()));
   Fl_Widget::layout();
   damage(FL_DAMAGE_EXPOSE); // assumme we need to redraw
-  focus(item_index[FOCUS][0]); // make value() work for top level
 }
 
 void Fl_Browser::hscrollbar_cb(Fl_Widget* o, void*) {
@@ -625,9 +626,9 @@ bool Fl_Browser::set_focus() {
 }
 
 // force current item to a state and do callback for multibrowser:
-bool Fl_Browser::item_select(bool value, int do_callback) {
+bool Fl_Browser::set_selected(bool value, int do_callback) {
   if (!multi()) {
-    if (value) return (item_select_only(do_callback));
+    if (value) return (select_only_this(do_callback));
     else return deselect(do_callback);
   }
   Fl_Flags f = item()->flags();
@@ -652,22 +653,22 @@ bool Fl_Browser::item_select(bool value, int do_callback) {
 // Turn off all lines in the browser:
 bool Fl_Browser::deselect(int do_callback) {
   unset_mark(HERE);
-  return item_select_only(do_callback);
+  return select_only_this(do_callback);
 }
 
 // Set both the single and multi-browser to only this item:
-bool Fl_Browser::item_select_only(int do_callback) {
+bool Fl_Browser::select_only_this(int do_callback) {
   if (multi()) {
     set_focus();
     bool ret = false;
     // Turn off all other items and set damage:
     if (goto_top()) do {
-      if (item_select(at_mark(FOCUS), do_callback)) ret = true;
+      if (set_selected(at_mark(FOCUS), do_callback)) ret = true;
     } while (next_visible());
     // turn off any invisible ones:
     nodamage = true;
     if (goto_top()) do {
-      if (item_select(at_mark(FOCUS), do_callback)) ret = true;
+      if (set_selected(at_mark(FOCUS), do_callback)) ret = true;
     } while (next());
     nodamage = false;
     goto_mark(FOCUS);
@@ -683,9 +684,6 @@ bool Fl_Browser::item_select_only(int do_callback) {
     return true;
   }
 }
-
-#define item_is_parent() \
-(item()->flags()&FL_OPEN || children(item_index[HERE],item_level[HERE]+1)>=0)
 
 int Fl_Browser::handle(int event) {
   static bool drag_type; // for multibrowser
@@ -732,14 +730,14 @@ int Fl_Browser::handle(int event) {
 	  // start a new selection block without changing state
 	  drag_type = !item()->value();
 	  if (openclose_drag) drag_type = !drag_type; // don't change it
-	  item_select(drag_type, FL_WHEN_CHANGED);
+	  set_selected(drag_type, FL_WHEN_CHANGED);
 	  set_focus();
 	  return 1;
 	} else if (Fl::event_state(FL_SHIFT)) {
 	  // extend the current focus
 	  drag_type = !item()->value();
 	} else {
-	  item_select_only(FL_WHEN_CHANGED);
+	  select_only_this(FL_WHEN_CHANGED);
 	  drag_type = true;
 	  return 1;
 	}
@@ -747,15 +745,15 @@ int Fl_Browser::handle(int event) {
       }
       // set everything from old focus to current to drag_type:
       int direction = compare_marks(HERE,FOCUS);
-      set_mark(USER_0,FOCUS);
+      set_mark(TEMP, FOCUS);
       set_focus();
       for (;;) {
-	item_select(drag_type, FL_WHEN_CHANGED);
-	if (at_mark(USER_0)) break;
+	set_selected(drag_type, FL_WHEN_CHANGED);
+	if (at_mark(TEMP)) break;
 	if (!(direction<0 ? next_visible() : previous_visible())) break;
       }
     } else {
-      item_select_only(FL_WHEN_CHANGED);
+      select_only_this(FL_WHEN_CHANGED);
     }
     return 1;}
 
@@ -792,10 +790,10 @@ int Fl_Browser::handle(int event) {
 	}
       }
       if (multi() && Fl::event_state(FL_SHIFT|FL_CTRL)) {
-	if (Fl::event_state(FL_SHIFT)) item_select(1,FL_WHEN_CHANGED);
+	if (Fl::event_state(FL_SHIFT)) set_selected(1,FL_WHEN_CHANGED);
 	set_focus();
       } else {
-	item_select_only(FL_WHEN_CHANGED);
+	select_only_this(FL_WHEN_CHANGED);
       }
       goto RELEASE;
     case FL_Enter:
@@ -817,7 +815,7 @@ int Fl_Browser::handle(int event) {
       }
     case ' ':
       if (!goto_visible_focus()) break;
-      if (multi()) item_select(!item()->value(), FL_WHEN_CHANGED);
+      if (multi()) set_selected(!item()->value(), FL_WHEN_CHANGED);
     RELEASE:
       if ((when()&FL_WHEN_RELEASE) &&
 	  (changed() || (when()&FL_WHEN_NOT_CHANGED))) {
@@ -881,6 +879,29 @@ Fl_Widget* Fl_Browser::goto_index(const int* indexes, int level) {
   return item();
 }
 
+Fl_Widget* Fl_Browser::goto_index(int i) {
+  return goto_index(i,0);
+}
+
+Fl_Widget* Fl_Browser::goto_index(int a, int b, int c, int d, int e) {
+  int indexes[6];
+  int i = 0;
+  indexes[0] = a;
+  if (b>=0) {
+    indexes[++i] = b;
+    if (c>=0) {
+      indexes[++i] = b;
+      if (d>=0) {
+	indexes[++i] = d;
+	if (e>=0) {
+	  indexes[++i] = e;
+	}
+      }
+    }
+  }
+  return goto_index(indexes,i);
+}
+
 ////////////////////////////////////////////////////////////////
 // Fltk 1.0 emulation
 // Items are numbered and children of top-level items are ignored.
@@ -888,12 +909,12 @@ Fl_Widget* Fl_Browser::goto_index(const int* indexes, int level) {
 // this matches Fl_Menu.
 
 bool Fl_Browser::select(int line, bool value) {
-  if (!goto_number(line)) return false;
-  return item_select(value, false);
+  if (!goto_index(line)) return false;
+  return set_selected(value, false);
 }
 
 bool Fl_Browser::selected(int line) {
-  if (!goto_number(line)) return false;
+  if (!goto_index(line)) return false;
   return item()->value();
 }
 
@@ -912,18 +933,18 @@ void Fl_Browser::set_position(linepos lpos) {
     case MIDDLE: p += h-H/2; break;
   }
 
-  if (p > last_height-H) p = last_height-H;
+  if (p > height_-H) p = height_-H;
   if (p < 0) p = 0;
   yposition(p);
 }
 
 bool Fl_Browser::displayed(int line) {
-  if (!goto_number(line)) return false;
+  if (!goto_index(line)) return false;
   return item()->visible();
 }
 
 void Fl_Browser::display(int line, bool value) {
-  if (!goto_number(line)) return;
+  if (!goto_index(line)) return;
   value ? item()->show() : item()->hide();
   relayout();
 }
@@ -956,7 +977,6 @@ Fl_Browser::Fl_Browser(int X,int Y,int W,int H,const char* L)
   scrollbar.callback(scrollbar_cb);
   indented_ = 0;
   format_char_ = '@';
-  column_char_ = '\t';
   column_widths_ = 0;
   // set all the marks to the top:
   levels = 0;
@@ -975,5 +995,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.50 2001/11/29 17:39:29 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.51 2001/12/10 06:25:42 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.h,v 1.3 2001/08/05 10:48:38 spitzak Exp $"
+// "$Id: Fl_Menu_.h,v 1.4 2001/12/10 06:25:42 spitzak Exp $"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -54,8 +54,12 @@ public:
   Fl_Widget* child(int index) const ;
   Fl_Widget* item() const {return item_;}
   Fl_Widget* item(Fl_Widget* v) {return item_ = v;}
-  bool goto_item(const int* indexes, int level);
-  Fl_Widget* get_item();
+  bool focus(const int* indexes, int level);
+  Fl_Widget* get_focus();
+
+  int value() const {return Fl_Group::focus();}
+  void value(int v) {Fl_Group::focus(v);}
+  int  size() const {return children();}
 
   int popup(int x,int y,int w=0,int h=0,Fl_Widget* title=0,bool menubar=false);
   int handle_shortcut();
@@ -63,55 +67,41 @@ public:
   void execute(Fl_Widget*);
   void global();
 
-#ifndef FLTK_2
-  // Commented-out methods cannot be emulated.
-
-  int value() const {return focus();}
-  void value(int v) {focus(v);}
-  int  size() const {return children();}
-
-//const Fl_Menu_Item* test_shortcut();
-
-//Fl_Menu_Item* menu() const;
-  void add(const Fl_Menu_Item* m, void* data = 0);
-  void copy(const Fl_Menu_Item* m, void* data = 0) {clear(); add(m,data);}
-  void menu(const Fl_Menu_Item* m) {copy(m,0);}
-
-// in fltk1.0 this returned an Fl_Menu_Item*:
   Fl_Widget* find(const char* label) const;
-
-//int index(Fl_Menu_Item* m) const { return m - menu_; }
-//int index(const char* label) const;
-
-// add() in fltk 1 returned the index, this returns the new widget:
   Fl_Widget* add(const char*, int shortcut, Fl_Callback*, void* = 0, int = 0);
   Fl_Widget* replace(const char*, int scut, Fl_Callback*, void* = 0, int = 0);
   Fl_Widget* add(const char*, void*);
   Fl_Widget* add(const char*);
   Fl_Widget* insert(int n, const char* s, void* data = 0);
-  // necessary for stupid C++ rules:
+  void remove(const char* l) { delete find(l); }
+
+  // Undo the overrides of stuff from Fl_Group:
   void add(Fl_Widget& o) {Fl_Group::add(o);}
   void add(Fl_Widget* o) {add(*o);}
   void insert(Fl_Widget& o, int n) {Fl_Group::insert(o, n);}
-
-  void replace(int n, const char* s) { child(n)->label(s); }
-//void replace(Fl_Menu_Item* m, const char* s) { replace(index(m), s); }
-  void replace(const char* l, const char* s) { find(l)->label(s); }
-  // necessary for stupid C++ rules:
   void replace(int index, Fl_Widget& o) {Fl_Group::replace(index, o);}
   void replace(Fl_Widget& old, Fl_Widget& o) {Fl_Group::replace(old,o);}
-
-//void remove(Fl_Menu_Item* m) { remove(index(m)); }
-  void remove(const char* l) { delete find(l); }
-  // necessary for stupid C++ rules:
   void remove(int index) {Fl_Group::remove(index);}
   void remove(Fl_Widget& o) {Fl_Group::remove(o);}
   void remove(Fl_Widget* o) {Fl_Group::remove(o);}
 
-  void shortcut(int i, int s) { child(i)->shortcut(s); }
-//void shortcut(Fl_Menu_Item* m, int s) {shortcut(index(m), s);}
-  void shortcut(const char* l, int s) { find(l)->shortcut(s); }
+#ifndef FLTK_2
+  // Commented-out methods cannot be emulated.
 
+//const Fl_Menu_Item* test_shortcut();
+//Fl_Menu_Item* menu() const;
+  void add(const Fl_Menu_Item* m, void* data = 0);
+  void copy(const Fl_Menu_Item* m, void* data = 0) {clear(); add(m,data);}
+  void menu(const Fl_Menu_Item* m) {copy(m,0);}
+  void replace(int n, const char* s) { child(n)->label(s); }
+  void replace(const char* l, const char* s) { find(l)->label(s); }
+  void shortcut(const char* l, int s) { find(l)->shortcut(s); }
+  void shortcut(int i, int s) { child(i)->shortcut(s); }
+//int index(Fl_Menu_Item* m) const { return m - menu_; }
+//int index(const char* label) const;
+//void replace(Fl_Menu_Item* m, const char* s) { replace(index(m), s); }
+//void remove(Fl_Menu_Item* m) { remove(index(m)); }
+//void shortcut(Fl_Menu_Item* m, int s) {shortcut(index(m), s);}
 //void mode(int i,int x);
 //void mode(Fl_Menu_Item* m, int x) {mode(index(m), x);}
 //void mode(const char* l, int x) {mode(index(l), x);}
@@ -121,11 +111,10 @@ public:
 
   // in fltk 1.0 these returned/took an Fl_Menu_Item*:
   Fl_Widget* mvalue() {return item();}
-  //void value(Fl_Widget* o) {set_item(o);}
+//void value(Fl_Widget* o) {set_item(o);}
 
   const char *text(int i) const {return i >= 0 ? child(i)->label() : 0;}
   const char *text() const {Fl_Widget* w = item(); return w ? w->label() : 0;}
-
 #endif
 
 private:
@@ -136,5 +125,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Menu_.h,v 1.3 2001/08/05 10:48:38 spitzak Exp $".
+// End of "$Id: Fl_Menu_.h,v 1.4 2001/12/10 06:25:42 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.22 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.23 2001/12/10 06:25:42 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -34,33 +34,6 @@
 // make the _draw() function able to print a pixmap+bitmap onto another
 // device, or we need each Fl_Image subclass to be able to print onto
 // a device.
-
-// tiled image with minimal redraw
-void Fl_Image::draw_tiled(int x, int y, int pw, int ph, int cx, int cy) {
-  if (w < 0) measure(w, h);
-  if (w == 0) return;
-
-  int X,Y,W,H; fl_clip_box(x, y, pw, ph, X, Y, W, H);
-  if (W <= 0 || H <= 0) return;
-  cx += X-x; cy += Y-y;
-  fl_push_clip(X, Y, W, H);
-
-  int temp = -cx % w;
-  cx = (temp>0 ? w : 0) - temp;
-  temp = -cy % h;
-  cy = (temp>0 ? h : 0) - temp;
-
-  int ccx=cx;
-  while (-cy < H) {
-    while (-cx < W) {
-      draw(X-cx, Y-cy, 0);
-      cx -= w;
-    }
-    cy -= h;
-    cx = ccx;
-  }
-  fl_pop_clip();
-}
 
 void fl_restore_clip(); // in fl_rect.C
 
@@ -169,5 +142,5 @@ void Fl_Image::label(Fl_Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.22 2001/09/10 01:16:17 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.23 2001/12/10 06:25:42 spitzak Exp $".
 //

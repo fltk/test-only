@@ -22,12 +22,15 @@
 
 <h3>Description</h3>
 
-The <tt>Fl_Group</tt> class is the FLTK container widget. It maintains 
-an array of child widgets. These children can themselves be any widget 
-including <tt>Fl_Group</tt>. The most important subclass of <tt>Fl_Group</tt>
-is <a href=Fl_Window.html#Fl_Window><tt>Fl_Window</tt></a>, however 
-groups can also be used to control radio buttons or to enforce resize 
-behavior. 
+The <tt>Fl_Group</tt> class is the FLTK container widget. It maintains
+an array of child widgets. These children can themselves be any widget
+including <tt>Fl_Group</tt>. The most-used subclass of
+<tt>Fl_Group</tt> is <a
+href=Fl_Window.html#Fl_Window><tt>Fl_Window</tt></a>, however nested
+groups can also be used to control radio buttons or to enforce resize
+behavior. Also <a href=#Fl_Menu_.html>Fl_Menu_</a> is a subclass and
+thus all menus and browsers are groups and the items in them are
+widgets.
 
 <h3>Methods</h3>
 
@@ -38,29 +41,31 @@ behavior.
 <li><a href=#Fl_Group>Fl_Group</a></li>
 <li><a href=#~Fl_Group>~Fl_Group</a></li>
 <li><a href=#add>add</a></li>
+<li><a href=#add_resizable>add_resizable</a></li>
 </ul>
 </td><td align=left valign=top>
 <UL>
-<li><a href=#add_resizable>add_resizable</a></li>
 <li><a href=#begin>begin</a></li>
 <li><a href=#child>child</a></li>
+<li><a href=#clear>clear</a></li>
+<li><a href=#children>children</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
-<li><a href=#children>children</a></li>
 <li><a href=#current>current</a></li>
 <li><a href=#end>end</a></li>
+<li><a href=#focus>focus</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
 <li><a href=#find>find</a></li>
-<li><a href=#fix_old_positions>fix_old_positions</a></li>
 <li><a href=#init_sizes>init_sizes</a></li>
+<li><a href=#insert>insert</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
-<li><a href=#insert>insert</a></li>
 <li><a href=#remove>remove</a></li>
+<li><a href=#replace>replace</a></li>
 <li><a href=#resizeable>resizable</a></li>
 </ul>
 </td></tr>
@@ -100,9 +105,28 @@ the windgets inside a group.
 This does <tt>insert(w, find(beforethis))</tt>.  This will append the
 widget if <tt>beforethis</tt> is not in the group.
 
-<h4><a name=remove>void Fl_Group::remove(Fl_Widget &amp;w)</a></h4>
+<h4><a name=remove>void Fl_Group::remove(int index)</a></h4>
+
+Remove the indexed widget from the group.
+
+<h4>void Fl_Group::remove(Fl_Widget &amp;w)</a></h4>
+
 Removes a widget from the group. This does nothing if the widget is 
 not currently a child of this group. 
+
+<h4><a name=replace>void Fl_Group::replace(int index, Fl_Widget&amp;)</a></h4>
+
+Remove the indexed widget and insert the passed widget in it's place.
+
+<h4>void Fl_Group::replace(Fl_Widget& old, Fl_Widget&amp;)</a></h4>
+
+Find the old widget and remove it and insert the new one. If the
+widget is not a child, the new widget is appended to the end of the
+list.
+
+<h4><a name=clear>void clear();</a></h4>
+
+<i>Deletes</i> all children from the group and makes it empty.
 
 <h4><a name=current>static Fl_Group *Fl_Group::current()
 <BR>static void Fl_Group::current(Fl_Group *w)</a></h4>
@@ -128,19 +152,21 @@ Fl_Window as well). <tt>begin()</tt> <i>is exactly the same as</i>
 <tt>current(this-&gt;parent())</tt>. Any new widgets added to the
 widget tree will be added to the parent of the group.
 
-<h4><a name=fix_old_positions>void Fl_Group::fix_old_positions()</a></h4>
-
-Subtract <tt>x()</tt> and <tt>y()</tt> from the position of each
-child. This changes the absolute positions used by fltk 1.0 to the
-relative ones used by fltk 2.0. Insert this just before <tt>end()</tt>
-in older code to fix it.
-
 <h4><a name=init_sizes>void Fl_Group::init_sizes() const</a></h4>
 
 If you call this immediately after a resize() it disables any
 automatic repositioning or resizing of the children (it acts as though
 resizable() is null). This is useful when the program wants to resize
 things.
+
+<h4><a name=focus>void Fl_Group::focus(int i);
+<br>void Fl_Group::focus(Fl_Widget*);
+<br>int Fl_Group::focus() const;</a></h4>
+
+The index of the widget that contains the focus. You can initialize
+this before the group is displayed. Changing it while it is displayed
+does not work, use <a
+href=Fl_Widget.html#take_focus>widget->take_focus()</a> instead.
 
 <h4><a name=child>Fl_Widget *Fl_Group::child(int n) const</a></h4>
 

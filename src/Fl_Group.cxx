@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.99 2001/12/03 16:58:09 robertk Exp $"
+// "$Id: Fl_Group.cxx,v 1.100 2001/12/10 06:25:42 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -547,14 +547,13 @@ void Fl_Group::draw_group_box() const {
   // this does not work because it resets the clip region:
   make_current();
 #endif
-  if (!(box()->fills_rectangle() ||
-	image() && (flags()&FL_ALIGN_TILED) &&
-	(!(flags()&15) || (flags() & FL_ALIGN_INSIDE)))) {
+  if (!box()->fills_rectangle()) {
     if (parent()) {
       parent()->draw_group_box();
-    } else {
-      fl_color(color());	
-      fl_rectf(0, 0, w(), h());
+// WAS: leave this out, so that FL_NO_BOX can be used to stop blinking:
+//      } else {
+//        fl_color(color());	
+//        fl_rectf(0, 0, w(), h());
     }
   }
   draw_box();
@@ -631,5 +630,5 @@ void Fl_Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.99 2001/12/03 16:58:09 robertk Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.100 2001/12/10 06:25:42 spitzak Exp $".
 //

@@ -1,196 +1,434 @@
-<HTML><BODY>
-<HR break>
-<H2><A name=Fl_Browser>class Fl_Browser</A></H2>
-<HR>
-<H3>Class Hierarchy</H3>
-<UL>
-<PRE>
-<A href=Fl_Browser_.html#Fl_Browser_>Fl_Browser_</A>
+<html><head><title>Fl_Browser</title></head><body bgcolor = white>
+
+<hr break>
+<h2><a name=Fl_Browser>class Fl_Browser</a></h2>
+<hr>
+
+<h3>Class Hierarchy</h3>
+
+<ul><pre>
+
+<A href=Fl_Widget.html>Fl_Widget</A>
    |
-   +----<B>Fl_Browser</B>
+   +----<a href=Fl_Group.html>Fl_Group</a>
            |
-           +----<A href=Fl_Hold_Browser.html#Fl_Hold_Browser>Fl_Hold_Browser</A>, <A href=Fl_Multi_Browser.html#Fl_Multi_Browser>Fl_Multi_Browser</A>, <A href=Fl_Select_Browser.html#Fl_Select_Browser>Fl_Select_Browser</A>
-</PRE>
-</UL>
-<H3>Include Files</H3>
-<UL>
-<PRE>
+           +----<a href=Fl_Menu_.html>Fl_Menu_</A>
+                   |
+                   +----<B>Fl_Browser</B>
+                           |
+                           +----<A href=Fl_Multi_Browser.html>Fl_Multi_Browser</A>
+</pre></ul>
+
+<h3>Include Files</h3>
+
+<ul><pre>
 #include &lt;fltk/Fl_Browser.h&gt;
-</PRE>
-</UL>
-<H3>Description</H3>
- The <TT>Fl_Browser</TT> widget displays a scrolling list of text 
-lines, and manages all the storage for the text.  This is not a text 
-editor or spreadsheet!  But it is useful for showing a vertical list of 
-named objects to the user. 
-<P>Each line in the browser is identified by number. <I>The numbers 
-start at one</I> (this is so that zero can be reserved for &quot;no line&quot; in 
-the selective browsers). <I>Unless otherwise noted, the methods do not 
-check to see if the passed line number is in range and legal.  It must 
-always be greater than zero and &lt;= <TT>size()</TT>.</I></P>
-<P>Each line contains a null-terminated string of text and a <TT>void *</TT>
- data pointer.  The text string is displayed, the <TT>void *</TT>
- pointer can be used by the callbacks to reference the object the text 
-describes. </P>
-<P>The base class does nothing when the user clicks on it.  The 
-subclasses <A href=Fl_Select_Browser.html#Fl_Select_Browser><TT>
-Fl_Select_Browser</TT></A>, <A href=Fl_Hold_Browser.html#Fl_Hold_Browser>
-<TT>Fl_Hold_Browser</TT></A>, and <A href=Fl_Multi_Browser.html#Fl_Multi_Browser>
-<TT>Fl_Multi_Browser</TT></A> react to user clicks to select lines in 
-the browser and do callbacks. </P>
-<P>The base class called <A href=Fl_Browser_.html#Fl_Browser_><TT>
-Fl_Browser_</TT></A> provides the scrolling and selection mechanisms of 
-this and all the subclasses, but the dimensions and appearance of each 
-item are determined by the subclass. You can use <TT>Fl_Browser_</TT>
- to display information other than text, or text that is dynamically 
-produced from your own data structures. If you find that loading the 
-browser is a lot of work or is inefficient, you may want to make a 
-subclass of <TT>Fl_Browser_</TT>. </P>
-<H3>Methods</H3>
-<CENTER>
-<TABLE width=90%>
-<TR><TD align=left valign=top>
-<LI><A href=#Fl_Browser.Fl_Browser>Fl_Browser</A></LI>
-<LI><A href=#Fl_Browser.~Fl_Browser>~Fl_Browser</A></LI>
-<LI><A href=#Fl_Browser.add>add</A></LI>
-<LI><A href=#Fl_Browser.bottomline>bottomline</A></LI>
-<LI><A href=#Fl_Browser.clear>clear</A></LI>
+</pre></ul>
+
+<h3>Description</h3>
+
+The <tt>Fl_Browser</tt> widget displays a scrolling vertical list of text
+widgets, possibly with a hierachial arrangement.
+
+<p>The items may be created as child widgets (usually the same widgets
+as are used to create menus: <a href=Fl_Item.html>Fl_Item</a> widgets,
+or <a href=Fl_Item_Group.html>Fl_Item_Group</a> widgets to make a
+hierarchy). Alternatively you can build simple text lists by using the
+<a href=Fl_Menu_.html#add>add()</a> method, which will create the
+child widgets for you (and even create a hierarchy if you put slashes
+in the text). You can also us an <a href=Fl_List.html>Fl_List</a>
+which allows you to control the storage by dynamically creating a
+"fake" widget for the browser to use to draw each item.
+
+<p>All the functions used to add, remove, or modify items in the list
+are defined by the base class <a href=Fl_Menu_.html>Fl_Menu_</a>. See
+that for much more information.
+
+<p>For a simple constant list you can populate the list by calling
+<tt>browser-><a href=Fl_Menu_.html#add>add</a>("text of item")</tt>
+once for each item.  If you give the browser a callback you can find
+out what item was selected with <tt>browser-><a
+href=#value>value()</a>;</tt>, the first item is zero (this is
+different from older versions of fltk that started at 1!), and will be
+negative if no item is selected. You can
+change the selected item with <tt>browser-><a
+href=#value>value(n)</a></tt>.
+
+<p>The subclass <a href=Fl_Multi_Browser.html>Fl_Multi_Browser</a>
+lets the user select more than one item at the same time.
+
+<h3>Methods</h3>
+
+<center>
+<table width=90%>
+<tr><td align=left valign=top>
+
+<li><a href="#Fl_Browser">Fl_Browser</a></li>
+<li><a href="#~Fl_Browser">~Fl_Browser</a></li>
+<li><a href="#type">type</a></li>
+<li><a href="#width">width</a></li>
+<li><a href="#height">height</a></li>
+<li><a href="#box_width">box_width</a></li>
+<li><a href="#box_height">box_height</a></li>
+<li><a href="#xposition">xposition</a></li>
+<li><a href="#xposition">xposition</a></li>
+<li><a href="#yposition">yposition</a></li>
 </TD><TD align=left valign=top>
-<LI><A href=#Fl_Browser.column_char>column_char</A></LI>
-<LI><A href=#Fl_Browser.column_widths>column_widths</A></LI>
-<LI><A href=#Fl_Browser.data>data</A></LI>
-<LI><A href=#Fl_Browser.format_char>format_char</A></LI>
+<li><a href="#yposition">yposition</a></li>
+<li><a href="#indented">indented</a></li>
+<li><a href="#scrollbar">scrollbar</a></li>
+<li><a href="#hscrollbar">hscrollbar</a></li>
+<li><a href="#goto_top">goto_top</a></li>
+<li><a href="#goto_focus">goto_focus</a></li>
+<li><a href="#goto_position">goto_position</a></li>
+<li><a href="#goto_index">goto_index</a></li>
+<li><a href="#next">next</a></li>
+<li><a href="#next_visible">next_visible</a></li>
 </TD><TD align=left valign=top>
-<LI><A href=#Fl_Browser.hide>hide</A></LI>
-<LI><A href=#Fl_Browser.insert>insert</A></LI>
-<LI><A href=#Fl_Browser.load>load</A></LI>
-<LI><A href=#Fl_Browser.middleline>middleline</A></LI>
+<li><a href="#previous_visible">previous_visible</a></li>
+<li><a href="#set_focus">set_focus</a></li>
+<li><a href="#set_top">set_top</a></li>
+<li><a href="#set_bottom">set_bottom</a></li>
+<li><a href="#set_middle">set_middle</a></li>
+<li><a href="#current_level">current_level</a></li>
+<li><a href="#current_index">current_index</a></li>
+<li><a href="#current_position">current_position</a></li>
+<li><a href="#focus_level">focus_level</a></li>
+<li><a href="#focus_index">focus_index</a></li>
 </TD><TD align=left valign=top>
-<LI><A href=#Fl_Browser.move>move</A></LI>
-<LI><A href=#Fl_Browser.position>position</A></LI>
-<LI><A href=#Fl_Browser.remove>remove</A></LI>
-<LI><A href=#Fl_Browser.show>show</A></LI>
-</TD><TD align=left valign=top>
-<LI><A href=#Fl_Browser.size>size</A></LI>
-<LI><A href=#Fl_Browser.text>text</A></LI>
-<LI><A href=#Fl_Browser.topline>topline</A></LI>
-<LI><A href=#Fl_Browser.visible>visible</A></LI>
-</TD></TR>
-</TABLE>
-</CENTER>
-<H4><A name=Fl_Browser.Fl_Browser>Fl_Browser::Fl_Browser(int, int, int, 
-int, const char * = 0)</A></H4>
- The constructor makes an empty browser. 
-<H4><A name=Fl_Browser.~Fl_Browser>Fl_Browser::~Fl_Browser(void)</A></H4>
- The destructor deletes all list items and destroys the browser. 
-<H4><A name=Fl_Browser.add>void Fl_Browser::add(const char *, void * = 
-0)</A></H4>
- Add a new line to the end of the browser.  The text is copied using 
-the <TT>strdup()</TT> function.  It may also be <TT>NULL</TT> to make a 
-blank line.  The <TT>void *</TT> argument is returned as the <TT>data()</TT>
- of the new item. 
-<H4><A name=Fl_Browser.bottomline>void Fl_Browser::bottomline(int n)</A></H4>
-Scrolls the browser so the bottom line in the browser is <TT>n</TT>.
-<H4><A name=Fl_Browser.clear>void Fl_Browser::clear()</A></H4>
- Remove all the lines in the browser. 
-<H4><A name=Fl_Browser.column_char>uchar Fl_Browser::column_char() const
-<BR> void Fl_Browser::column_char(char c)</A></H4>
- The first form gets the current column separator character. By default 
-this is <TT>'\t'</TT> (tab). 
-<P>The second form sets the column separator to <TT>c</TT>. This will 
-only have an effect if you also set <TT>column_widths()</TT>. </P>
-<H4><A name=Fl_Browser.column_widths>const int 
-*Fl_Browser::column_widths() const
-<BR> void Fl_Browser::column_widths(const int *w)</A></H4>
- The first form gets the current column width array.  This array is 
-zero-terminated and specifies the widths in pixels of each column. The 
-text is split at each <TT>column_char()</TT> and each part is formatted 
-into it's own column.  After the last column any remaining text is 
-formatted into the space between the last column and the right edge of 
-the browser, even if the text contains instances of <TT>column_char()</TT>
-.  The default value is a one-element array of just a zero, which makes 
-there are no columns. 
-<P>The second form sets the current array to <TT>w</TT>.  Make sure the 
-last entry is zero. </P>
-<H4><A name=Fl_Browser.data>void *Fl_Browser::data(int n) const
-<BR> void Fl_Browser::data(int n, void *)</A></H4>
- The first form returns the data for line <TT>n</TT>.  If <TT>n</TT> is 
-out of range this returns <TT>NULL</TT>. 
-<P>The second form sets the data for line <TT>n</TT>. </P>
-<H4><A name=Fl_Browser.format_char>uchar Fl_Browser::format_char() const
-<BR> void Fl_Browser::format_char(char c)</A></H4>
- The first form gets the current format code prefix character, which by 
-default is <TT>@</TT>. A string of formatting codes at the start of 
+<li><a href="#focus_position">focus_position</a></li>
+<li><a href="#value">value</a></li>
+<li><a href="#value">value</a></li>
+<li><a href="#format_char">format_char</a></li>
+<li><a href="#column_widths">column_widths</a></li>
+<li><a href="#topline">topline</a></li>
+<li><a href="#bottomline">bottomline</a></li>
+<li><a href="#middleline">middleline</a></li>
+<li><a href="#displayed">displayed</a></li>
+<li><a href="#topline">topline</a></li>
+
+</td></tr>
+</table>
+</center>
+
+<h4><a name=Fl_Browser>Fl_Browser::Fl_Browser(int, int, int, int, const char * = 0)</A></h4>
+
+The constructor makes an empty browser. 
+
+<h4><a name=~Fl_Browser>Fl_Browser::~Fl_Browser(void)</A></h4>
+
+The destructor deletes all the list items (because they are child
+Fl_Widgets of an Fl_Group) and destroys the browser. 
+
+<h4><a name=type>void Fl_Browser::type(char);</a></h4>
+
+The bits of the type() are used to control what scrollbars are allowed
+to be visible and is also used by subclasses to change
+functionality. The default value is
+<tt>Fl_Browser::BOTH</tt>. Disabling the scrollbar does not stop the
+browser from scrolling, the user can still move it by moving the focus
+with the arrow keys or by dragging the mouse.
+
+<ul>
+<li><tt>Fl_Browser::HORIZONTAL</tt> Allow a horizontal scrollbar but
+it turns off if the data will fit.
+
+<li><tt>Fl_Browser::VERTICAL</tt> Allow a vertical scrollbar but it
+turns off if the data will fit.
+
+<li><tt>Fl_Browser::BOTH</tt> Same as <tt>Fl_Browser::HORIZONTAL |
+Fl_Browser::VERTICAL</tt>
+
+<li><tt>Fl_Browser::ALWAYS_ON</tt> Force the scrollbars to stay on
+even if the data does fit.
+
+<li><tt>Fl_Browser::HORIZONTAL_ALWAYS</tt> Same as
+<tt>Fl_Browser::ALWAYS_ON | Fl_Browser::HORIZONTAL</tt>
+
+<li><tt>Fl_Browser::VERTICAL_ALWAYS</tt> Same as <tt>Fl_Browser::ALWAYS_ON |
+Fl_Browser::VERTICAL</tt>
+
+<li><tt>Fl_Browser::BOTH_ALWAYS</tt> Same as <tt>
+Fl_Browser::ALWAYS_ON | Fl_Browser::HORIZONTAL |
+Fl_Browser::VERTICAL</tt>
+
+<li><tt>Fl_Browser::MULTI</tt> This bit is turned on by the <a
+href=Fl_Multi_Browser.html>Fl_Multi_Browser</a> and must be left on
+for it to work correctly.
+
+</ul>
+
+<h4><a name=width>int width() const</a></h4>
+
+The width of the longest item in the browser, measured in pixels. If
+this is changed (by adding or deleting items or opening or closing a
+parent item) then <a href=Fl_Widget.html#layout>layout()</a> must be
+called before this is correct.
+
+<h4><a name=height>int height() const</a></h4>
+
+The height of all the visible items in the browser, measured in
+pixels. If this is changed (by adding or deleting items or opening or
+closing a parent item) then <a
+href=Fl_Widget.html#layout><tt>layout()</tt></a> must be called before
+this is correct.
+
+<h4><a name=box_width>int box_width() const</a></h4>
+
+The width of the display area of the browser in pixels, this is <a
+href=Fl_Widget.html#w><tt>w()</tt></a> minus the edges of the <a
+href=Fl_Widget.html#text_box><tt>text_box()</tt></a> minus the width
+of the vertical scrollbar, if visible. If this is changed (by resizing
+the widget, adding or deleting items or opening or closing a parent
+item such that the scrollbar visibility changes) then <a
+href=Fl_Widget.html#layout>layout()</a> must be called before this is
+correct.
+
+<h4><a name=box_height>int box_height() const</a></h4>
+
+The height of the display area of the browser in pixels, this is <a
+href=Fl_Widget.html#h><tt>h()</tt></a> minus the edges of the <a
+href=Fl_Widget.html#text_box><tt>text_box()</tt></a> minus the height
+of the horizontal scrollbar, if visible. If this is changed (by resizing
+the widget, adding or deleting items or opening or closing a parent
+item such that the scrollbar visibility changes) then <a
+href=Fl_Widget.html#layout>layout()</a> must be called before this is
+correct.
+
+<h4><a name=xposition>int xposition() const</a></h4>
+
+Current horizontal scrolling pozition. Normally zero.
+
+<h4><a name=xposition>void xposition(int);</a></h4>
+
+Set the horizontal scrolling to a certain value.
+
+<h4><a name=yposition>int yposition() const</a></h4>
+
+Current vertical scrolling position. This is the location, in pixels,
+of the top of the visible display, relative to the pixel position of
+the top of the first item.
+
+<h4><a name=yposition>void yposition(int);</a></h4>
+
+Set the vertical scrolling to a certain value.
+
+<h4><a name=indented>bool indented() const
+<br>void indented(bool v)</a></h4>
+
+This is turned on by <tt>layout()</tt> if there are any parent items
+in the browser, to indicate that space must be reserved on the left
+for the + and - boxes. You can turn this on manually to reserve the
+space even if there are no parent items.
+
+<h4><a name=scrollbar>Fl_Scrollbar scrollbar;</a>
+<br><a name=hscrollbar>Fl_Scrollbar hscrollbar;</a></h4>
+
+The scrollbars are accessable as instance variables. You can alter
+their width or other attributes to customize the browser to your liking.
+
+<h4><a name=goto_top>Fl_Widget* goto_top();</a></h4>
+
+Because of the hierarchial structure it is difficult to identify an
+item in the browser. Instead of passing an identifier to all the calls
+that can modify an item, the browser provides several calls to set the
+"current" item and then calls to modify the current item.
+
+<p>This call sets the current item to the very first item in the
+browser. It returns the widget for that item, or null if the browser
+is empty.
+
+<h4><a name=goto_focus>Fl_Widget* goto_focus()</a></h4>
+
+<p>Set the current item to the "focus" (the item with the dotted square
+in an <tt>Fl_Multi_Browser</tt>, and the selected item in a normal
+<tt>Fl_Browser</tt>.
+
+<h4><a name=goto_position>Fl_Widget* goto_position(int y);</a></h4>
+
+<p>Set the current item to one at or before <i>y</i> pixels from top
+of the first item.
+
+<h4><a name=goto_index>Fl_Widget* goto_index(const int* indexes, int level);</a></h4>
+
+<p>Go to a nested item. <i>indexes</i> must contain <i>level</i>+1
+index numbers. The first number indicates the top-level item number,
+the second indicates the child number of that parent, and so on. This
+sets the current item to the given item or the nearest closed parent
+(check <a href=#current_index><tt>current_index()</tt></a> to find
+out where it stopped).
+
+<h4>Fl_Widget* goto_index(int);
+<br>Fl_Widget* goto_index(int,int);
+<br>Fl_Widget* goto_index(int,int,int);
+<br>Fl_Widget* goto_index(int,int,int,int);
+<br>Fl_Widget* goto_index(int,int,int,int,int);</a></h4>
+
+These are the same as passing the number of arguments minus one as the
+<i>level</i> and the arguments as the index array to <a
+href=goto_index><tt>goto_index()</tt></a>. Passing a negative number
+as the first argument will set it to a special "no item" state where
+<tt>select_only_this()</tt> will do <tt>deselect()</tt>
+
+<h4><a name=next>Fl_Widget* next();</a></h4>
+
+Move the current item to the next item. If if is a parent it moves to
+the first child. If not a parent, it moves to the next child of it's
+parent. If it is the last child it moves to the parent's
+brother. Repeatedly calling this will visit every child of the browser.
+This returns the widget. If the current widget is the last one this
+returns null, but the current widget remains on the last one.
+
+<h4><a name=next_visible>Fl_Widget* next_visible();</a></h4>
+
+Move the current item to the next visible item. Invisible items are
+either hidden because their parent is closed or because they had <a
+href=Fl_Widget.html#hide><tt>hide()</tt></a> called on them.
+
+<h4><a name=previous_visible>Fl_Widget* previous_visible();</a></h4>
+
+Move the current item to the previous visible item. Invisible items are
+either hidden because their parent is closed or because they had <a
+href=Fl_Widget.html#hide><tt>hide()</tt></a> called on them.
+
+<h4><a name=set_focus>bool set_focus();</a></h4>
+
+Change the focus (the selected item, or in an <a
+href=Fl_Multi_Browser.html>Fl_Multi_Browser</a> the item that has a
+dotted box around it, and the current item selected with <a
+href=#goto_index><tt>goto_index()</tt></a>.
+
+<h4><a name=set_top>void set_top()</a></h4>
+
+Set the <a href=yposition><tt>yposition()</tt></a> so the top of the
+current item is at the top of the browser.
+
+<h4><a name=set_bottom>void set_bottom()</a></h4>
+
+Set the <a href=yposition><tt>yposition()</tt></a> so the bottom of
+the current item is at the bottom of the browser, if possible (it
+cannot scroll backwards past the top item).
+
+<h4><a name=set_middle>void set_middle() { set_position(MIDDLE);
+}</a></h4>
+
+Set the <a href=yposition><tt>yposition()</tt></a> so the middle of
+the current item is in the bottom of the browser, if possible (it
+cannot scroll backwards past the top item).
+
+<h4><a name=current_level>int current_level() const;</a></h4>
+
+Return the nesting level of the current item (how many parents it has).
+
+<h4><a name=current_index>const int& current_index() const;</a></h4>
+
+Return an array of <tt><a
+href=current_level>current_level()</a>+1</tt> indexes saying which
+child at each level includes the current item.
+
+<h4><a name=current_position>int current_position() const</a></h4>
+
+Return the y position, in pixels, of the top edge of the current
+item. You may also want the height, which is in <tt>item()->height()</tt>.
+
+<h4><a name=focus_level>int focus_level() const</a></h4>
+
+Return the nesting level of the focus (how many parents it has). The
+focus is the selected item the user sees.
+
+<h4><a name=focus_index>const int& focus_index() const</a></h4>
+
+Return an array of <tt><a
+href=focus_level>focus_level()</a>+1</tt> indexes saying which
+child at each level includes the focus.
+
+<h4><a name=focus_position>int focus_position() const</a></h4>
+
+Return the y position, in pixels, of the top edge of the focus item.
+
+<h4><a name=value>void value(int v)</a></h4>
+
+Same as <tt><a href=#goto_index>goto_index(v)</a>;<a
+href=#set_focus>set_focus()</a>;</tt>, to change the current item in a
+non-hierarchial browser.
+
+<h4><a name=value>int value() const {return focus_index(0);}</a></h4>
+
+Returns <tt><a href=#focus_index>focus_index(v)</a>[0]</tt>, to
+get the current item in a non-hierarchial browser.
+
+<h4><a name=format_char>char format_char() const;
+<br>void format_char(char c);</a></h4>
+
+Sent to the <a href=drawing.html><tt>fl_draw()</tt></a> function to
+control the interpretation of leading symbol characters. This defaults
+to <tt>'@'</tt>.
+
+<h4><a name=column_widths>const int *column_widths() const;
+<br>void column_widths(const int *pWidths)</a></h4>
+
+Sets the horizontal locations that each <tt>'\t'</tt> character in an
+item should start printing text at. These are measured from the left
+edge of the browser, including any area for the open/close + glyphs.
+
+<h4><a name=topline>void topline(int line)</a></h4>
+
+Same as <tt><a href=#goto_index>goto_index(line)</a>; <a
+href=#set_top>set_top()</a>;</tt>.
+
+<h4><a name=bottomline>void bottomline(int line) {goto_index(line);
+set_bottom();}</a></h4>
+
+Same as <tt><a href=#goto_index>goto_index(line)</a>; <a
+href=#set_bottom>set_bottom()</a>;</tt>.
+
+<h4><a name=middleline>void middleline(int line) {goto_index(line);
+set_middle();}</a></h4>
+
+Same as <tt><a href=#goto_index>goto_index(line)</a>; <a
+href=#set_middle>set_middle()</a>;</tt>.
+
+<h4><a name=displayed>bool displayed(int line);
+<br>void display(int line, bool value = true);</a></h4>
+
+Set/clear the <tt>FL_VISIBLE</tt> attribute of the nth item in a
+signle-level browser.
+
+<h4><a name=topline>int topline() const</a></h4>
+
+Return the index of the top-level item that is at the top of the browser.
+
+<p>This is the description of '@' commands, it should be moved to the
+fl_draw() documentation:
+
+<p>A string of formatting codes at the start of 
 each column are stripped off and used to modify how the rest of the 
 line is printed: 
-<UL>
-<LI><CODE>@.</CODE> Print rest of line, don't look for more '@' signs </LI>
-<LI><CODE>@@</CODE> Print rest of line starting with '@' </LI>
-<LI><CODE>@l</CODE> Use a <BIG>large</BIG> (24 point) font </LI>
-<LI><CODE>@m</CODE> Use a <BIG>medium large</BIG> (18 point) font </LI>
-<LI><CODE>@s</CODE> Use a <SMALL>small</SMALL> (11 point) font </LI>
-<LI><CODE>@b</CODE> Use a <B>bold</B> font (adds FL_BOLD to font) </LI>
-<LI><CODE>@i</CODE> Use an <I>italic</I> font (adds FL_ITALIC to font) </LI>
-<LI><CODE>@f</CODE> or <CODE>@t</CODE> Use a <CODE>fixed-pitch</CODE>
- font (sets font to FL_COURIER) </LI>
-<LI><CODE>@c</CODE> Center the line horizontally </LI>
-<LI><CODE>@r</CODE> Right-justify the text </LI>
-<LI><CODE>@B0, @B1, ... @B255</CODE> Fill the backgound with 
-fl_color(n) </LI>
-<LI><CODE>@C0, @C1, ... @C255</CODE> Use fl_color(n) to draw the text </LI>
-<LI><CODE>@F0, @F1, ... </CODE> Use fl_font(n) to draw the text </LI>
-<LI><CODE>@S1, @S2, ... </CODE> Use point size n to draw the text </LI>
-<LI><CODE>@u</CODE> or <CODE>@_</CODE> Underline the text. </LI>
-<LI><CODE>@-</CODE> draw an engraved line through the middle. </LI>
+
+<ul>
+<li><code>@.</code> Print rest of line, don't look for more '@' signs </li>
+<li><code>@@</code> Print rest of line starting with '@' </li>
+<li><code>@l</code> Use a <BIG>large</BIG> (24 point) font </li>
+<li><code>@m</code> Use a <BIG>medium large</BIG> (18 point) font </li>
+<li><code>@s</code> Use a <SMALL>small</SMALL> (11 point) font </li>
+<li><code>@b</code> Use a <B>bold</B> font (adds FL_BOLD to font) </li>
+<li><code>@i</code> Use an <I>italic</I> font (adds FL_ITALIC to font) </li>
+<li><code>@f</code> or <code>@t</code> Use a <code>fixed-pitch</code>
+ font (sets font to FL_COURIER) </li>
+<li><code>@c</code> Center the line horizontally </li>
+<li><code>@r</code> Right-justify the text </li>
+<li><code>@B0, @B1, ... @B255</code> Fill the backgound with 
+fl_color(n) </li>
+<li><code>@C0, @C1, ... @C255</code> Use fl_color(n) to draw the text </li>
+<li><code>@F0, @F1, ... </code> Use fl_font(n) to draw the text </li>
+<li><code>@S1, @S2, ... </code> Use point size n to draw the text </li>
+<li><code>@u</code> or <code>@_</code> Underline the text. </li>
+<li><code>@-</code> draw an engraved line through the middle. </li>
 </UL>
- Notice that the <CODE>@.</CODE> command can be used to reliably 
+
+Notice that the <code>@.</code> command can be used to reliably 
 terminate the parsing.  To print a random string in a random color, use <TT>
 sprintf(&quot;@C%d@.%s&quot;, color, string)</TT> and it will work even if the 
 string starts with a digit or has the format character in it. 
-<P>The second form sets the current prefix to <TT>c</TT>.  Set the 
-prefix to 0 to disable formatting. </P>
-<H4><A name=Fl_Browser.hide>void Fl_Browser::hide(int n)</A></H4>
- Makes line <TT>n</TT> invisible, preventing selection by the user. 
- The line can still be selected under program control. 
-<H4><A name=Fl_Browser.insert>void Fl_Browser::insert(int n, const char 
-*, void * = 0)</A></H4>
- Insert a new line <I>before</I> line <TT>n</TT>.  If <TT>n</TT> &gt; <TT>
-size()</TT> then the line is added to the end. 
-<H4><A name=Fl_Browser.load>int Fl_Browser::load(const char *filename)</A>
-</H4>
- Clears the browser and reads the file, adding each line from the file 
-to the browser.  If the filename is <TT>NULL</TT> or a zero-length 
-string then this just clears the browser.  This returns zero if there 
-was any error in opening or reading the file, in which case <TT>errno</TT>
- is set to the system error.  The <TT>data()</TT> of each line is set 
-to <TT>NULL</TT>. 
-<H4><A name=Fl_Browser.middleline>void Fl_Browser::middleline(int n)</A></H4>
-Scrolls the browser so the middle line in the browser is <TT>n</TT>.
-<H4><A name=Fl_Browser.move>void Fl_Browser::move(int to, int from)</A></H4>
- Line <TT>from</TT> is removed and reinserted at <TT>to</TT>; <TT>to</TT>
- is calculated after the line is removed. 
-<H4><A name=Fl_Browser.position>int Fl_Browser::position() const
-<BR> void Fl_Browser::position(int p)</A></H4>
- The first form returns the current vertical scrollbar position, where 
-0 corresponds to the top.  If there is not vertical scrollbar then this 
-will always return 0. 
-<P>The second form sets the vertical scrollbar position to <TT>p</TT>. </P>
-<H4><A name=Fl_Browser.remove>void Fl_Browser::remove(int n)</A></H4>
- Remove line <TT>n</TT> and make the browser one line shorter. 
-<H4><A name=Fl_Browser.show>void Fl_Browser::show(int n)</A></H4>
- Makes line <TT>n</TT> visible for selection. 
-<H4><A name=Fl_Browser.size>int Fl_Browser::size() const</A></H4>
- Returns how many lines are in the browser.  The last line number is 
-equal to this. 
-<H4><A name=Fl_Browser.text>const char *Fl_Browser::text(int n) const
-<BR> void Fl_Browser::text(int n, const char *)</A></H4>
- The first form returns the text for line <TT>n</TT>.  If <TT>n</TT> is 
-out of range it returns <TT>NULL</TT>. 
-<P>The second form sets the text for line <TT>n</TT>. </P>
-<H4><A name=Fl_Browser.topline>int Fl_Browser::topline() const
-<BR> void Fl_Browser::topline(int n)</A></H4>
-The first form returns the current top line in the browser. If there 
-is no vertical scrollbar then this will always return 1. 
-<P>The second form scrolls the browser so the top line in the browser is <TT>n</TT>.</P>
-<H4><A name=Fl_Browser.visible>int Fl_Browser::visible(int n) const</A></H4>
- Returns a non-zero value if line <TT>n</TT> is visible. </BODY></HTML>
+
+</body></html>

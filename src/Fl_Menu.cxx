@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.114 2001/11/08 08:13:48 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.115 2001/12/10 06:25:42 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -573,7 +573,7 @@ int MenuWindow::handle(int event) {
     // ignore clicks on inactive items:
     if (!widget->takesevents()) return 1;
     if ((widget->flags() & FL_MENU_STAYS_UP) && (!p.menubar || p.level)) {
-      p.widget->goto_item(p.indexes, p.level);
+      p.widget->focus(p.indexes, p.level);
       p.widget->execute(widget);
       Fl_Window* mw = p.menus[p.level];
       if (widget->type() == FL_RADIO_ITEM) mw->redraw();
@@ -616,7 +616,7 @@ int Fl_Menu_::popup(
   p.widget = this;
   p.state = INITIAL_STATE;
   p.level = 0;
-  p.indexes[0] = focus();
+  p.indexes[0] = value();
   p.indexes[1] = -1;
   MenuWindow toplevel(&p, 0, X, Y, W, H, title);
   toplevel.child_of(Fl::first_window());
@@ -624,7 +624,7 @@ int Fl_Menu_::popup(
   p.fakemenu = 0;
 
   if (menubar) {
-    if (focus() < 0)
+    if (value() < 0)
       toplevel.handle(FL_PUSH); // get menu mouse points at to appear
     p.changed = true; // make it create the pulldown menu
   } else {
@@ -733,7 +733,7 @@ int Fl_Menu_::popup(
   if (p.state != DONE_STATE) return 0; // user did not pick anything
 
   // Execute whatever item the user picked:
-  goto_item(p.indexes, p.level);
+  focus(p.indexes, p.level);
   if (menubar && !p.level &&
       (item()->type()==FL_RADIO_ITEM || item()->type()==FL_TOGGLE_ITEM))
     redraw();
@@ -742,5 +742,5 @@ int Fl_Menu_::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.114 2001/11/08 08:13:48 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.115 2001/12/10 06:25:42 spitzak Exp $".
 //
