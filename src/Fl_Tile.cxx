@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tile.cxx,v 1.26 2004/06/04 08:58:04 spitzak Exp $"
+// "$Id$"
 //
 // Tile widget for the Fast Light Tool Kit (FLTK).
 //
@@ -142,19 +142,18 @@ int TiledGroup::handle(int event) {
     // if (damage()) return 1; // don't fall behind
   case RELEASE: {
     if (!sdrag) return 0; // should not happen
-    Widget* r = resizable(); if (!r) r = this;
     int newx;
     if (sdrag&DRAGH) {
       newx = event_x()-sdx;
-      if (newx < r->x()) newx = r->x();
-      else if (newx > r->x()+r->w()) newx = r->x()+r->w();
+      if (newx < 0) newx = 0;
+      else if (newx > w()) newx = w();
     } else
       newx = sx;
     int newy;
     if (sdrag&DRAGV) {
       newy = event_y()-sdy;
-      if (newy < r->y()) newy = r->y();
-      else if (newy > r->y()+r->h()) newy = r->y()+r->h();
+      if (newy < 0) newy = 0;
+      else if (newy > h()) newy = h();
     } else
       newy = sy;
     position(sx,sy,newx,newy);
@@ -166,5 +165,5 @@ int TiledGroup::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Tile.cxx,v 1.26 2004/06/04 08:58:04 spitzak Exp $".
+// End of "$Id$".
 //

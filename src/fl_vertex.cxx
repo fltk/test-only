@@ -629,14 +629,12 @@ void fltk::closepath() {
   \see addchord()
 */
 void fltk::addpie(const Rectangle& r, float start, float end) {
-#if USE_CAIRO && !USE_X11
+#if USE_QUARTZ || USE_CAIRO
   closepath();
   addvertex(r.x()+r.w()*.5f, r.y()+r.h()*.5f);
-  addarc(r.x()+.5f, r.y()+.5f, r.w()-1, r.h()-1, start, end);
+  float delta = 1/fabsf(m.a+m.d); // guess at 1/2 line width
+  addarc(r.x()+delta, r.y()+delta, r.w()-2*delta, r.h()-2*delta, start, end);
   closepath();
-#elif USE_QUARTZ
-  //+++ addvertex(r.x()+r.w()*.5f, r.y()+r.h()*.5f);
-  addarc(r.x()+.5f, r.y()+.5f, r.w()-1, r.h()-1, start, end);
 #else
   circle = r; transform(circle);
   circle_start = start;
@@ -657,13 +655,10 @@ void fltk::addpie(const Rectangle& r, float start, float end) {
   of a closed version draws the straight edge is indeterminate.
 */
 void fltk::addchord(const Rectangle& r, float start, float end) {
-#if USE_CAIRO && !USE_X11
-  // This produces the correct image, but not as nice as using circles
-  // produced by the server:
+#if USE_QUARTZ || USE_CAIRO
   closepath();
-  addarc(r.x()+.5f, r.y()+.5f, r.w()-1, r.h()-1, start, end);
-#elif USE_QUARTZ
-  addarc(r.x()+.5f, r.y()+.5f, r.w()-1, r.h()-1, start, end);
+  float delta = 1/fabsf(m.a+m.d); // guess at 1/2 line width
+  addarc(r.x()+delta, r.y()+delta, r.w()-2*delta, r.h()-2*delta, start, end);
 #else
   circle = r; transform(circle);
   circle_start = start;
