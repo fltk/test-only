@@ -1,5 +1,5 @@
 echo EXPORTS > fltk.def
-nm fltkd.lib | sed 's/?/_?/' > tmp
+nm ../lib/fltkd.lib | sed 's/?/_?/' > tmp
 sed 's/_WinMain//' < tmp > tmp2
 sed 's/_\$E//' < tmp2 > tmp
 sed 's/_??_G//' < tmp > tmp2
