@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tiled_Image.cxx,v 1.4 2003/02/02 10:39:23 spitzak Exp $"
+// "$Id: Fl_Tiled_Image.cxx,v 1.5 2003/02/07 08:21:24 spitzak Exp $"
 //
 // Tiled image code for the Fast Light Tool Kit (FLTK).
 //
@@ -43,7 +43,7 @@ void TiledImage::measure(int& w, int& h) {
 }
 
 // Tiled image with minimal redraw
-void TiledImage::draw(int x, int y, int w, int h, Color color, Flags flags)
+void TiledImage::draw(int x, int y, int w, int h, Flags flags)
 {
   int iw = w;
   int ih = h;
@@ -66,7 +66,7 @@ void TiledImage::draw(int x, int y, int w, int h, Color color, Flags flags)
   int ccx=cx;
   while (-cy < H) {
     while (-cx < W) {
-      image_->draw(X-cx, Y-cy, iw, ih, color, 0);
+      image_->draw(X-cx, Y-cy, iw, ih, 0);
       cx -= iw;
     }
     cy -= ih;
@@ -76,5 +76,5 @@ void TiledImage::draw(int x, int y, int w, int h, Color color, Flags flags)
 }
 
 //
-// End of "$Id: Fl_Tiled_Image.cxx,v 1.4 2003/02/02 10:39:23 spitzak Exp $".
+// End of "$Id: Fl_Tiled_Image.cxx,v 1.5 2003/02/07 08:21:24 spitzak Exp $".
 //

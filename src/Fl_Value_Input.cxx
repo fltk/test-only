@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.38 2003/02/03 02:33:57 spitzak Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.39 2003/02/07 08:21:25 spitzak Exp $"
 //
 // Copyright 1998-2002 by Bill Spitzak and others.
 //
@@ -34,6 +34,7 @@
 #include <fltk/events.h>
 #include <fltk/damage.h>
 #include <fltk/Box.h>
+#include <fltk/math.h>
 #include <stdlib.h>
 using namespace fltk;
 
@@ -185,10 +186,17 @@ void ValueInput::layout() {
 void ValueInput::value_damage() {
   // Only redraw the text if the numeric value is different..
   if (input.value()[0]) {
-    double nv;
-    if (step()>=1.0) nv = strtol(input.value(), 0, 0);
-    else nv = strtod(input.value(), 0);
-    if (nv == value()) return;
+    if (step() >= 1) {
+      if (strtol(input.value(), 0, 0) == long(value())) return;
+    } else {
+      // parse the existing text:
+      double oldv = strtod(input.value(), 0);
+      if (!oldv) {
+	if (!value()) return;
+      } else {
+	if (fabs(fabs(value()/oldv)-1) < .000001) return;
+      }
+    }
   }
   char buf[128];
   format(buf);
@@ -213,5 +221,5 @@ ValueInput::~ValueInput() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.38 2003/02/03 02:33:57 spitzak Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.39 2003/02/07 08:21:25 spitzak Exp $".
 //

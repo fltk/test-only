@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pixmap.cxx,v 1.21 2003/02/02 10:39:23 spitzak Exp $"
+// "$Id: Fl_Pixmap.cxx,v 1.22 2003/02/07 08:21:21 spitzak Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -40,7 +40,7 @@ void xpmImage::measure(int& W,int& H) {
   H=h;
 }
 
-void xpmImage::draw(int X, int Y, int, int, Color, Flags flags)
+void xpmImage::draw(int X, int Y, int, int, Flags flags)
 {
   if (w < 0) measure_xpm(data, w, h);
   if (!w) return; // ignore empty or bad pixmap data
@@ -62,5 +62,5 @@ void xpmImage::draw(int X, int Y, int, int, Color, Flags flags)
 }
 
 //
-// End of "$Id: Fl_Pixmap.cxx,v 1.21 2003/02/02 10:39:23 spitzak Exp $".
+// End of "$Id: Fl_Pixmap.cxx,v 1.22 2003/02/07 08:21:21 spitzak Exp $".
 //

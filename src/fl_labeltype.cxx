@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.35 2003/02/02 10:39:23 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.36 2003/02/07 08:21:26 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -194,7 +194,8 @@ void Widget::draw_label(int X, int Y, int W, int H, Color color, Flags flags) co
     else if (flags & ALIGN_TOP) cy = 0;
     else cy = h/2-H/2;
 
-    image_->draw(X-cx, Y-cy, W, H, color, flags);
+    setcolor(color); // set the color for bitmap images
+    image_->draw(X-cx, Y-cy, W, H, flags);
 
     // figure out the rectangle that remains for text:
     if (flags & ALIGN_LEFT) {X += w; W -= w;}
@@ -219,5 +220,5 @@ void Widget::measure_label(int& w, int& h) const {
 }
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.35 2003/02/02 10:39:23 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.36 2003/02/07 08:21:26 spitzak Exp $".
 //

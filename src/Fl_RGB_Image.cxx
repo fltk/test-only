@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_RGB_Image.cxx,v 1.10 2003/02/02 10:39:23 spitzak Exp $"
+// "$Id: Fl_RGB_Image.cxx,v 1.11 2003/02/07 08:21:22 spitzak Exp $"
 //
 // RGB_Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 #include <fltk/x.h>
 using namespace fltk;
 
-void rgbImage::draw(int x, int y, int, int, Color, Flags flags)
+void rgbImage::draw(int x, int y, int, int, Flags flags)
 {
   if (!id) {
     Pixmap pixmap = fl_create_offscreen(w, h);
@@ -42,5 +42,5 @@ void rgbImage::draw(int x, int y, int, int, Color, Flags flags)
 }
 
 //
-// End of "$Id: Fl_RGB_Image.cxx,v 1.10 2003/02/02 10:39:23 spitzak Exp $".
+// End of "$Id: Fl_RGB_Image.cxx,v 1.11 2003/02/07 08:21:22 spitzak Exp $".
 //

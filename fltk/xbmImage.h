@@ -1,5 +1,5 @@
 //
-// "$Id: xbmImage.h,v 1.3 2003/02/02 10:39:22 spitzak Exp $"
+// "$Id: xbmImage.h,v 1.4 2003/02/07 08:21:16 spitzak Exp $"
 //
 // Image subclass for in-memory xbm data (you #include the .xbm file
 // and then construct this).
@@ -37,8 +37,8 @@ public:
   xbmImage(const unsigned char *bits, int W, int H) : array(bits) {w = W; h = H;}
   xbmImage(const char *bits, int W, int H) :
     array((const unsigned char *)bits) {w = W; h = H;}
-  void draw(int, int, int, int, Color=0, Flags = 0);
-  void draw(int x, int y, Flags f = 0) {draw(x,y,w,h,0,f);}
+  void draw(int, int, int, int, Flags = 0);
+  void draw(int x, int y, Flags f = 0) {draw(x,y,w,h,f);}
   int width() const {return w;}
   int height() const {return h;}
 };
@@ -48,5 +48,5 @@ public:
 #endif
 
 //
-// End of "$Id: xbmImage.h,v 1.3 2003/02/02 10:39:22 spitzak Exp $".
+// End of "$Id: xbmImage.h,v 1.4 2003/02/07 08:21:16 spitzak Exp $".
 //
