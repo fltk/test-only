@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.86 2000/09/27 16:25:47 spitzak Exp $"
+dnl# "$Id: configure.in,v 1.87 2001/01/28 07:07:49 spitzak Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -112,6 +112,13 @@ case $uname in
 	  DSOEXT=".2.dll"
 	  DSOSHORTEXT=""
 	  ;;
+
+    OSF1)
+          echo Using OSF
+          DSOCOMMAND="\${CXX} $DEBUGFLAG -o"
+          THEMECOMMAND="\${CXX} $DEBUGFLAG -o"
+          DSOCFLAGS="-DFL_SHARED"
+	  ;;
     *)
           echo Using GNU GCC style shared libraries
           DSOCOMMAND="\${CXX} -Wl,-soname,\${DSONAME} -shared $DEBUGFLAG -o"
@@ -161,6 +168,8 @@ AC_PROG_CC
 AC_PROG_CXX
 dnl# AC_PROG_INSTALL
 
+AC_LANG_CPLUSPLUS
+
 AC_C_BIGENDIAN
 
 AC_CHECK_SIZEOF(short, 2)
@@ -200,7 +209,12 @@ AC_CHECK_FUNCS(snprintf,
     fi)
 AC_CHECK_FUNCS(strcasecmp)
 AC_CHECK_FUNCS(vsprintf)
-AC_CHECK_FUNCS(strtok_r)
+
+dnl# AC_CHECK_FUNCS(strtok_r)
+dnl# this test is needed for Digital Unix, where C++ must be used?
+AC_MSG_CHECKING([for strtok_r])
+AC_TRY_LINK([#include <string.h>],[char *ptr; ptr=strtok_r("  ", ".", &ptr);],
+[AC_DEFINE(HAVE_STRTOK_R) AC_MSG_RESULT(yes)], [AC_MSG_RESULT(no)])]
 
 AC_PATH_XTRA
 dnl# echo "Ignoring libraries \"$X_PRE_LIBS\" requested by configure."
@@ -415,5 +429,5 @@ AC_OUTPUT(makeinclude fltk-config Makefile)
 chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.86 2000/09/27 16:25:47 spitzak Exp $".
+dnl# End of "$Id: configure.in,v 1.87 2001/01/28 07:07:49 spitzak Exp $".
 dnl#

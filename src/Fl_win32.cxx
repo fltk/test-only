@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.133 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.134 2001/01/28 07:07:49 spitzak Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -216,7 +216,7 @@ static int fl_wait(double time_to_wait) {
     have_message = PeekMessage(&fl_msg, NULL, 0, 0, PM_REMOVE);
     if (!have_message) {
       int t = (int)(time_to_wait * 1000.0 + .5);
-      if (t <= 0) return 0; // too short to measure
+      if (t <= 0) {fl_lock_function(); return 0;} // too short to measure
       timerid = SetTimer(NULL, 0, t, NULL);
       have_message = GetMessage(&fl_msg, NULL, 0, 0);
       KillTimer(NULL, timerid);
@@ -1260,5 +1260,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.133 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.134 2001/01/28 07:07:49 spitzak Exp $".
 //
