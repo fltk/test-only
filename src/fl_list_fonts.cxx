@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts.cxx,v 1.10 2001/07/10 08:14:39 clip Exp $"
+// "$Id: fl_list_fonts.cxx,v 1.11 2001/07/18 19:39:24 clip Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -29,10 +29,7 @@
 #include "fl_list_fonts_x.cxx"
 #endif
 
-#include <stdio.h>
 Fl_Font fl_find_font(const char* name, int attributes /* = 0 */) {
-printf("fl_find_font(const char *name = %s, int attributes = %d)\n",
-       name, attributes);
   if (!name || !*name) return 0;
   // find out if the " bold" or " italic" are on the end:
   int length = strlen(name);
@@ -73,5 +70,5 @@ printf("fl_find_font(const char *name = %s, int attributes = %d)\n",
 }
 
 //
-// End of "$Id: fl_list_fonts.cxx,v 1.10 2001/07/10 08:14:39 clip Exp $".
+// End of "$Id: fl_list_fonts.cxx,v 1.11 2001/07/18 19:39:24 clip Exp $".
 //

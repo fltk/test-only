@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.78 2001/07/16 19:38:18 robertk Exp $"
+// "$Id: fl_options.cxx,v 1.79 2001/07/18 19:39:24 clip Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -285,6 +285,9 @@ static int load_scheme(const char *s) {
   return 0;
 }
 
+static int schemes_enabled = 1;
+void Fl::enable_schemes(int b) { schemes_enabled = b; }
+
 // When we change the scheme we automatically call load_scheme if needed:
 int Fl::scheme(const char* s) {
   if (s) {
@@ -293,26 +296,21 @@ int Fl::scheme(const char* s) {
   }
   if (scheme_) free((void*)scheme_);
   scheme_ = s;
-  if (beenhere) return load_scheme(s);
+  if (beenhere) return load_scheme(schemes_enabled ? s : 0);
   return 1;
 }
 
-void Fl::reload_scheme() {
+int Fl::reload_scheme() {
   char s[80];
   const char* scheme = Fl::scheme();
   conf_clear_cache(); // Force rereading of config files.
   if (!fl_getconf("scheme", s, sizeof(s))) scheme = s;
-  Fl::scheme(scheme);
+  return Fl::scheme(scheme);
 }
 
-static int load_theme(const char *t) {
+static int load_plugin(const char *t) {
 // don't try to load themes if not linked to shared libraries
 #ifdef FL_SHARED
-//#if 1
-// WAS - I temporarily enabled this for testing.
-// CET - OK, but we should let people know that all themes will  not
-// necessarily work when not linked dynamically to to save ourselves
-// a support headache.
   char temp[PATH_MAX];
   strncpy(temp, t, sizeof(temp));
   if (strlen(temp)<7 || strcasecmp(temp+strlen(temp)-7, ".plugin"))
@@ -367,11 +365,19 @@ int Fl::plugin(const char* t) {
   p = strtok_r(temp, CONF_WHITESPACE, &s);
   while (p) {
     int r;
-    if ( (r = load_theme(p)) ) return r;
+    if ( (r = load_plugin(p)) ) return r;
     p = strtok_r(0, CONF_WHITESPACE, &s);
   }
 
   return 0;
+}
+
+static int themes_enabled = 1;
+void Fl::enable_themes(int b) { themes_enabled = b; }
+
+int Fl::theme(const char* t) {
+  if (!themes_enabled) return -99;
+  return Fl::plugin(t);
 }
 
 #ifndef CONFIGDIR
@@ -418,7 +424,5 @@ int fl_getconf(const char *key, char *value, int value_length) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.78 2001/07/16 19:38:18 robertk Exp $".
+// End of "$Id: fl_options.cxx,v 1.79 2001/07/18 19:39:24 clip Exp $".
 //
-
-

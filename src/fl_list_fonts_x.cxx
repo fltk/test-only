@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_x.cxx,v 1.2 2001/07/10 08:14:39 clip Exp $"
+// "$Id: fl_list_fonts_x.cxx,v 1.3 2001/07/18 19:39:24 clip Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -129,7 +129,6 @@ static int sort_function(const void *aa, const void *bb) {
 #include <stdio.h>
 static int
 x11_list_fonts(Fl_Font*& arrayp) {
-printf("fl_list_fonts(Fl_Font*& arrayp = %p)", arrayp);
   static Fl_Font* font_array = 0;
   static int num_fonts = 0;
   if (font_array) {arrayp = font_array; return num_fonts;}
@@ -281,5 +280,5 @@ int Fl_Font_::sizes(int*& sizep) const {
 }
 
 //
-// End of "$Id: fl_list_fonts_x.cxx,v 1.2 2001/07/10 08:14:39 clip Exp $"
+// End of "$Id: fl_list_fonts_x.cxx,v 1.3 2001/07/18 19:39:24 clip Exp $"
 //
