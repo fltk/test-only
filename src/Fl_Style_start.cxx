@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_start.cxx,v 1.3 2000/01/07 08:50:27 bill Exp $"
+// "$Id: Fl_Style_start.cxx,v 1.4 2000/01/08 22:14:16 vincent Exp $"
 //
 // Code for switching between named classes of style
 //
@@ -96,7 +96,7 @@ void Fl_Style::start(char* name)
       l = l->next;
     }
   } else {
-    // The new style class is a new one, need to copy all style structures
+    // The style class is a new one, need to copy all style structures
     Fl_Style_Class::current = new Fl_Style_Class;
 
     Fl_Named_Style *l = Fl_Named_Style::first, *f = 0;
@@ -123,5 +123,5 @@ void Fl_Style::start(char* name)
 }
 
 //
-// End of "$Id: Fl_Style_start.cxx,v 1.3 2000/01/07 08:50:27 bill Exp $".
+// End of "$Id: Fl_Style_start.cxx,v 1.4 2000/01/08 22:14:16 vincent Exp $".
 //

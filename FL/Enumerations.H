@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.41 1999/11/29 08:46:57 bill Exp $"
+// "$Id: Enumerations.H,v 1.42 2000/01/08 22:14:12 vincent Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 #ifndef Fl_Enumerations_H
 #define Fl_Enumerations_H
 
-#include <FL/Fl_Export.h>
+#include <FL/Fl_Export.H>
 
 #define FL_EXPORT // Not used anymore, but there are still some in sources
 
@@ -208,5 +208,5 @@ enum Fl_Thread_Policy {
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.41 1999/11/29 08:46:57 bill Exp $".
+// End of "$Id: Enumerations.H,v 1.42 2000/01/08 22:14:12 vincent Exp $".
 //

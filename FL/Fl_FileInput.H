@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileInput.h,v 1.2 2000/01/07 22:58:48 mike Exp $"
+// "$Id: Fl_FileInput.H,v 1.1 2000/01/08 22:14:13 vincent Exp $"
 //
 // Fl_FileInput definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -49,5 +49,5 @@ class FL_API Fl_FileInput : public Fl_Input	//// File input widget
 #endif // !_FL_FILEINPUT_H_
 
 //
-// End of "$Id: Fl_FileInput.h,v 1.2 2000/01/07 22:58:48 mike Exp $".
+// End of "$Id: Fl_FileInput.H,v 1.1 2000/01/08 22:14:13 vincent Exp $".
 //

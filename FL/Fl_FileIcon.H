@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileIcon.h,v 1.3 2000/01/07 22:58:48 mike Exp $"
+// "$Id: Fl_FileIcon.H,v 1.1 2000/01/08 22:14:13 vincent Exp $"
 //
 // Fl_FileIcon definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -103,5 +103,5 @@ class FL_API Fl_FileIcon	//// Icon data
 #endif // !_FL_FILEICON_H_
 
 //
-// End of "$Id: Fl_FileIcon.h,v 1.3 2000/01/07 22:58:48 mike Exp $".
+// End of "$Id: Fl_FileIcon.H,v 1.1 2000/01/08 22:14:13 vincent Exp $".
 //
