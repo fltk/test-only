@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.19 2004/01/13 06:51:48 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.20 2004/03/17 06:43:27 spitzak Exp $"
 //
 // Copyright 2001 Bill Spitzak and others.
 //
@@ -137,6 +137,10 @@ static XftFont* fontopen(const char* name, int attributes, bool core) {
 void fltk::setfont(fltk::Font* font, float size) {
   // Reduce the number of sizes by rounding to various multiples:
   size = rint(10*size)/10;
+#ifndef XFT_MAJOR
+  // Older Xft craps out with tiny sizes and returns null for the font
+  if (size < 2) size = 2;
+#endif
   if (font == current_font_ && size == current_size_ &&
       !strcasecmp(current->encoding, encoding_))
     return;
@@ -447,5 +451,5 @@ int fltk::Font::encodings(const char**& arrayp) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.19 2004/01/13 06:51:48 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.20 2004/03/17 06:43:27 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.165 2004/03/12 08:35:56 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.166 2004/03/17 06:43:27 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1012,7 +1012,8 @@ bool fltk::handle()
   case MotionNotify:
     set_event_xy(false);
 #if CONSOLIDATE_MOTION
-    send_motion = window;
+    send_motion = xmousewin = window;
+    in_a_window = true;
     return false;
 #else
     event = MOVE;
@@ -1610,5 +1611,5 @@ void Window::make_current() const {
   Returns the last window make_current() was called on. */
 
 //
-// End of "$Id: Fl_x.cxx,v 1.165 2004/03/12 08:35:56 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.166 2004/03/17 06:43:27 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.82 2004/01/25 06:55:04 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.83 2004/03/17 06:43:27 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -32,6 +32,7 @@
 #include <fltk/error.h>
 #include <stdlib.h>
 #include <string.h>
+#include <stdio.h>
 using namespace fltk;
 
 /*! \class fltk::Browser
@@ -629,7 +630,10 @@ void Browser::draw_item() {
   widget->y(y);
   translate(x, y);
   widget->set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
+  int save_w = widget->w();
+  widget->w(X+W);
   widget->draw();
+  widget->w(save_w);
   widget->set_damage(0);
   pop_matrix();
 
@@ -867,25 +871,30 @@ void Browser::layout() {
   hscrollbar.linesize(scrollbar.linesize());
 
   if (header) {
-	int hx = X, hw = 0, flex = -1;
+    // first, calculate the combined column width    
+    int width = 0, nflex = 0, i;
+    for (i=0; i<nHeader; i++) {
+      int itemwidth = (i<nColumn)?column_widths_[i]:0;
+      if (itemwidth==0) itemwidth = -1;
+      if (itemwidth<0)
+        nflex -= itemwidth;
+      else
+        width += itemwidth;
+    }
+    int space = W-width; // number of pixels that will fill the flex columns
+	int hx = X;          // current x position for this column
+    // now set the actual column widths
 	for (int i=0; i<nHeader; i++) {
 	  Widget *hi = header[i];
-	  hw = (i<nColumn)?column_widths_[i]:0;
-	  if (hw==0) hw = 100;
-	  if (hw==-1) { hw = 0; flex = i; }
-	  hi->resize(hx, Y-sw, hw, sw);
-	  hx += hw;
-	}
-	if (flex>=0) {
-	  int delta = W-hx-X;
-	  Widget *hi = header[flex];
-	  hi->size(delta, hi->h());
-	  if (column_widths_p && flex<nColumn)
-		column_widths_p[flex] = delta;
-	  for (int i=flex+1; i<nHeader; i++) {
-		hi = header[i];
-		hi->position(hi->x()+delta, hi->y());
-	  }
+      int itemwidth = (i<nColumn)?column_widths_[i]:0;
+      if (itemwidth==0) itemwidth = -1;
+      if (itemwidth<0)
+        itemwidth = -itemwidth*space/nflex;
+	  if (column_widths_p)
+		column_widths_p[i] = itemwidth;
+      hi->resize(hx, Y-sw, itemwidth, sw);
+      hi->layout();
+	  hx += itemwidth;
 	}
   }
   
@@ -1569,5 +1578,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.82 2004/01/25 06:55:04 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.83 2004/03/17 06:43:27 spitzak Exp $".
 //

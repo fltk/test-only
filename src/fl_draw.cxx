@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.38 2004/02/17 07:46:02 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.39 2004/03/17 06:43:27 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -41,9 +41,8 @@ using namespace fltk;
 static Font* normal_font;
 static float normal_size;
 static Color normal_color;
-static int line_spacing;
-static float line_ascent;
 static float dx, dy;
+static Flags flags;
 bool fl_drawing_shadow; // true for engraved labels
 
 /*! \addtogroup symbols
@@ -224,13 +223,53 @@ public:
 };
 static const BgBox bgbox;
 
+/*! \addtogroup symbols
+  "@l" makes the rest of the label be left-justified.
+  Note that this is incompatable with fltk1, which used this to set the
+  size to 24 points.
+*/
+class LeftSymbol : public Symbol {
+public:
+  LeftSymbol() : Symbol("l") {}
+  void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
+  void _measure(float& w, float& h) const {
+    flags = flags&(~ALIGN_RIGHT)|ALIGN_LEFT;
+    w = h = 0;
+  }
+};
+static const LeftSymbol leftsymbol;
+
+/*! \addtogroup symbols
+  "@c" makes the rest of the label be centered. */
+class CenterSymbol : public Symbol {
+public:
+  CenterSymbol() : Symbol("c") {}
+  void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
+  void _measure(float& w, float& h) const {
+    flags &= ~(ALIGN_LEFT|ALIGN_RIGHT);
+    w = h = 0;
+  }
+};
+static const CenterSymbol centersymbol;
+
+/*! \addtogroup symbols
+  "@r" makes the rest of the label be right-justified. */
+class RightSymbol : public Symbol {
+public:
+  RightSymbol() : Symbol("r") {}
+  void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
+  void _measure(float& w, float& h) const {
+    flags = flags&(~ALIGN_LEFT)|ALIGN_RIGHT;
+    w = h = 0;
+  }
+};
+static const RightSymbol rightsymbol;
+
 /* Other symbols supported in fltk1.1:
 
    @l = set size to 24
    @m = set size to 18
    @s = set size to 11 // could be emulated when no number
-   @c = center
-   @r = right-justify
    @Fnumber = set to fltk font n
    @N = set to grayed-out color
    @- = draw an inset divider line
@@ -249,7 +288,8 @@ struct Segment {
   const Symbol* symbol;
   const char* start;
   const char* end; // points after last character
-  float x,y,w,h; // Postion of left end of baseline
+  float x,y,w,h; // Arguments to symbol command
+  int ascent, height; // used to calculate vertical alignment
 };
 
 // The current set of segments. Call add() to add a new one:
@@ -261,7 +301,8 @@ static int segment_array_size;
 static /*inline*/ void add(const Symbol* symbol,
 			   const char* start,
 			   const char* end,
-			   float x, float y, float w, float h
+			   float x, float y, float w, float h,
+			   int ascent, int height
 			   )
 {
   // enlarge the array if necessary:
@@ -280,39 +321,63 @@ static /*inline*/ void add(const Symbol* symbol,
   s.y = y+dy;
   s.w = w;
   s.h = h;
+  s.ascent = ascent;
+  s.height = height;
 }
 
-// As we build the segments we keep track of the furthest-right edge:
+// As we build the segments we keep track of the bottom-right corner:
 static float max_x;
+static float max_y;
 
 // Move a line horizontally for alignment:
-static void align(int first_segment, float x, float w, float r, Flags flags) {
+static float align(int first_segment,
+		   float x, float y, float w, float r) {
   if (r > max_x) max_x = r;
   float dx; 
   if (flags & ALIGN_RIGHT) {
     dx = w-(r-x);
-    if ((flags & ALIGN_LEFT) && dx > 0) return;
+    if ((flags & ALIGN_LEFT) && dx > 0) dx = 0;
+    if (x && dx < 0) dx = 0;
   } else if (flags & ALIGN_LEFT) {
-    return;
+    dx = 0;
   } else {
     dx = (w-(r-x))/2;
+    if (x && dx < 0) dx = 0;
   }
-  for (int i = first_segment; i < segment_count; i++)
+  int max_a = segments[first_segment].ascent;
+  int i;
+  for (i = first_segment+1; i < segment_count; i++) {
+    int a = segments[i].ascent; if (a > max_a) max_a = a;
+  }
+  float my = y;
+  for (int i = first_segment; i < segment_count; i++) {
     segments[i].x += dx;
+    float dy = max_a-segments[i].ascent;
+    segments[i].y += dy;
+    float yy = y+segments[i].height+dy;
+    if (yy > my) my = yy;
+  }
+  if (my > max_y) max_y = my;
+  return my;
 }
 
 bool fl_hide_shortcut; // set by Choice
+
+static inline void setsa(int& spacing, int& ascent) {
+  float H = getsize()+Widget::default_style->leading();
+  spacing = int(H+.5);
+  ascent = int(H + getascent() - getdescent() + 1) >> 1;
+}
 
 // Find all the segments in a section of raw text and arrange them as
 // though they are aligned with the top-left corner at x,y and wrap at
 // w.  This is complex because a stream of letters may turn into 1 or
 // 2 segments due to word wrapping.  Returns the y of the last
-// line. Sets max_x to the rightmost edge
-static float wrap(
+// line. Sets max_x to the rightmost edge, max_y to bottom edge
+static void wrap(
   const char* start,
   const char* end,
-  float ix, float y, float w,
-  Flags flags
+  float ix, float y, float w
   )
 {
   float x = ix; // accumulated position if we don't wrap
@@ -321,6 +386,8 @@ static float wrap(
   float width = 0; 		// width of current text
   // start..p indicates current text segment being built
   int first_segment = segment_count;
+
+  int spacing, ascent; setsa(spacing,ascent);
 
   for (const char* p = start; ;) {
     // figure out what we have next:
@@ -359,12 +426,11 @@ static float wrap(
       if (x+newwidth+(symbol?getsize():0) > ix+w && word_start > start) {
 	// break before this word
 	if (word_end > start) {
-	  add(0, start, word_end, x, y+line_ascent,
-	      width, getsize());
+	  add(0, start, word_end, x, y+ascent, width, getsize(),
+	      ascent, spacing);
 	  x += width;
 	}
-	align(first_segment, ix, w, x, flags);
-	y += line_spacing;
+	y = align(first_segment, ix, y, w, x);
 	x = ix;
 	width = 0;
 	start = word_end = word_start;
@@ -382,7 +448,7 @@ static float wrap(
     // add text before this next object:
     if (start < p) {
       width += getwidth(word_end, p-word_end);
-      add(0, start, p, x, y+line_ascent, width, getsize());
+      add(0, start, p, x, y+ascent, width, getsize(), ascent, spacing);
       x += width;
     }
     if (p >= end) break;
@@ -390,17 +456,25 @@ static float wrap(
     if (underscore) {
       if (!fl_hide_shortcut) {
 	const char* us = "_";
-	add(0, us, us+1, x, y+line_ascent, getsize(),getsize());
+	add(0, us, us+1, x, y+ascent, getsize(),getsize(), ascent, spacing);
       }
       p = q;
     } else if (symbol) {
       Symbol::text(p+1);
       float W,H; W = H = getsize(); symbol->measure(W,H);
       Symbol::text("");
-      add(symbol, p+1, q, x,
-	  // center it's height vertically about the font center:
-	  y+line_ascent-(getascent()-getdescent()+H+1)/2, W, H);
-      x += W;
+      if (!W) {
+	// it may have changed the font or dx,dy:
+	setsa(spacing, ascent);
+	//if (dy > 0) spacing += dy; else ascent -= dy;
+	add(symbol, p+1, q, x, y+ascent, W, H, 0, 0);
+      } else {
+	// center the symbol in the vertical size of current font:
+	//int a = ascent-((spacing-int(H+1.5f))>>1);
+	int a = int(getascent()-getdescent()+H+1)>>1;
+	add(symbol, p+1, q, x, y, W, H, a, int(H+.5));
+	x += W;
+      }
       // skip the terminating space or semicolon:
       if (q < end && *q==';') q++;
       p = q;
@@ -411,8 +485,9 @@ static float wrap(
     // start the next block of text:
     word_start = word_end = start = p; p = q;
   }
-  align(first_segment, ix, w, x, flags);
-  return y;
+  if (segment_count>first_segment) align(first_segment, ix, y, w, x);
+  // handle blank line:
+  else {float yy = y+spacing; if (yy > max_y) max_y = yy;}
 }
 
 // Split at newlines and tabs into sections and then call wrap on them
@@ -426,16 +501,14 @@ static float split(
 {
   normal_font = getfont();
   normal_size = getsize();
-  line_spacing = int(getsize() + Widget::default_style->leading() + .5);
-  line_ascent = (line_spacing + getascent() - getdescent() - 1) / 2;
+  ::flags = flags;
   dx = dy = 0;
   const int* column = column_widths_;
 
   segment_count = 0;
   float x = 0;
-  max_x = 0;
   float y = 0;
-  float max_y = 0;
+  max_x = max_y = 0;
   const char* p = str;
   for (;;) {
     // find the next newline or tab:
@@ -449,13 +522,12 @@ static float split(
       p++;
       continue;
     }
-    float newy;
-    newy = wrap(str, p, x, y, w, flags);
-    if (newy > max_y) max_y = newy;
+    wrap(str, p, x, y, w);
     if (!*p) {
-      return max_y+line_spacing;
+      return max_y;
     } else if (*p == '\n') {
-      x = 0; y = max_y+line_spacing; max_y = y; column = column_widths_;
+      x = 0; y = max_y; column = column_widths_;
+      ::flags = flags;
     } else { // tab
       x += w;
     }
@@ -482,7 +554,7 @@ static void _drawtext(
   } else if (flags & ALIGN_TOP) {
     dy = Y;
   } else {
-    dy = Y+((H-h)>>1);
+    dy = Y+(H>>1)-(h>>1);
   }
   setfont(normal_font, normal_size);
   push_matrix();
@@ -577,5 +649,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.38 2004/02/17 07:46:02 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.39 2004/03/17 06:43:27 spitzak Exp $".
 //
