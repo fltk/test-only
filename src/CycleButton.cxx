@@ -1,5 +1,5 @@
 //
-// "$Id: CycleButton.cxx,v 1.1 2004/03/28 17:33:14 spitzak Exp $"
+// "$Id: CycleButton.cxx,v 1.2 2004/06/04 08:32:00 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -67,7 +67,12 @@ void CycleButton::draw() {
   Flags flags = current_flags_highlight();
   if (this == held_down) flags |= VALUE;
 
-  Box* box = buttonbox();
+  Style style = *(this->style());
+  if (!style.color_) style.color_ = buttoncolor();
+  if (!style.box_) style.box_ = buttonbox();
+  if (!style.textcolor_) style.textcolor_ = labelcolor();
+
+  Box* box = style.box();
 
   int x=0; int y=0; int w=this->w(); int h=this->h();
 
@@ -82,15 +87,15 @@ void CycleButton::draw() {
       draw_background();
     }
   }
-  box->draw(0,0,w,h, style(), flags);
+  box->draw(0,0,w,h, &style, flags);
   box->inset(x,y,w,h);
 
   // This portion of the code is copied from Choice:
   Widget* o = get_focus();
   if (o) {
-    Item::set_style(this);
+    Item::set_style(&style);
     Flags saved = o->flags();
-    o->set_flag(flags&(INACTIVE|VALUE));
+    o->set_flag(flags&(INACTIVE|VALUE|HIGHLIGHT));
     push_clip(x,y,w,h);
     push_matrix();
     translate(x,y);
@@ -108,7 +113,7 @@ void CycleButton::draw() {
   }
 
   if (focused())
-    focusbox()->draw(x+1, y+1, w-2, h-2, style(), flags|INVISIBLE);
+    focusbox()->draw(x+1, y+1, w-2, h-2, &style, flags|INVISIBLE);
 }
 
 /*! \fn int CycleButton::value() const
@@ -206,16 +211,18 @@ int CycleButton::handle(int e) {
   }
 }
 
+static NamedStyle style("CycleButton", 0, 0);
+
 CycleButton::CycleButton(int x,int y,int w,int h, const char *l)
   : Menu(x,y,w,h,l)
 {
   value(0);
-  style(Button::default_style);
+  style(::style);
   clear_flag(ALIGN_MASK);
   set_flag(ALIGN_LEFT);
   //set_click_to_focus();
 }
 
 //
-// End of "$Id: CycleButton.cxx,v 1.1 2004/03/28 17:33:14 spitzak Exp $".
+// End of "$Id: CycleButton.cxx,v 1.2 2004/06/04 08:32:00 spitzak Exp $".
 //
