@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.148 2001/04/22 16:53:48 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.149 2001/06/25 15:01:15 robertk Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -999,9 +999,12 @@ Fl_X* Fl_X::create(Fl_Window* w) {
     fl_display,
     NULL // creation parameters
     );
-  if (w->override())
-    SetWindowPos(x->xid, HWND_TOPMOST, 0, 0, 0, 0,
-                 SWP_NOMOVE|SWP_NOSIZE|SWP_NOSENDCHANGING);
+  if (w->override()) {
+	UINT posflags = SWP_NOMOVE|SWP_NOSIZE|SWP_NOSENDCHANGING;
+	if(style & WS_POPUP)
+		posflags |= SWP_NOACTIVATE;
+    SetWindowPos(x->xid, HWND_TOPMOST, 0, 0, 0, 0, posflags);
+  }
 //  x->mapped = 1;
 
   x->wait_for_expose = 1;
@@ -1285,5 +1288,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.148 2001/04/22 16:53:48 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.149 2001/06/25 15:01:15 robertk Exp $".
 //
