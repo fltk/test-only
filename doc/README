@@ -1,0 +1,16 @@
+This directory contains files used by the Doxygen documentation
+generator to make fltk's documentation from comments in the source
+code.
+
+You need at least version 1.3.4 of Doxygen, available from
+
+    http://www.doxygen.org/
+
+To make the documentation, cd to this directory and type:
+
+   doxygen doxygen.cfg
+
+The resulting documentation will be in the html subdirectory. You
+should also copy tiny.gif to that directory to put the fltk logo into
+it.
+
