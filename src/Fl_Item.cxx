@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.24 2003/02/02 10:39:23 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.25 2003/03/09 07:51:36 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -100,7 +100,7 @@ void Item::draw() {
 // maybe this should be the default layout() function for Widget?
 void Item::layout() {
   if (w() && h()) return; // already at the correct size
-  int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
+  //int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
   setfont(labelfont(), labelsize());
   int w = 250, h = 250; measure(label(), w, h, flags());
   if (type()) w += 15;
@@ -110,8 +110,8 @@ void Item::layout() {
     if (H > h) h = H;
     w += W;
   }
-  this->w(w-dw+6);
-  this->h(h-dh);
+  this->w(w/*-dw*/+6);
+  this->h(h/*-dh*/);
   Widget::layout();
 }
 
@@ -139,7 +139,7 @@ void ItemGroup::draw() {
 
 void ItemGroup::layout() {
   if (w() && h()) return; // already at the correct size
-  int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
+  //int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
   setfont(labelfont(), labelsize());
   int h; int w = 0; 
   measure(label(), w, h, flags());
@@ -149,8 +149,8 @@ void ItemGroup::layout() {
     if (H > h) h = H;
     w += W;
   }
-  this->w(w-dw+6);
-  this->h(h-dh);
+  this->w(w/*-dw*/+6);
+  this->h(h/*-dh*/);
   Widget::layout();
 }
 

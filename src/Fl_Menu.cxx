@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.137 2003/02/02 10:39:23 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.138 2003/03/09 07:51:36 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -230,8 +230,7 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp, Widget* t)
     return;
   }
 
-  int leading = int(this->leading()); // +2 ?
-
+  int leading = int(this->leading());
   int Wtitle = 0;
   int Htitle = 0;
   if (t) {
@@ -299,7 +298,7 @@ void MWindow::position(int X, int Y) {
 // return the top edge of item:
 int MWindow::ypos(int index) {
   int x=0; int y=0; int w=0; int h=0; box()->inset(x,y,w,h);
-  int leading = int(this->leading()); // +2 ?
+  int leading = int(this->leading());
   for (int i = 0; i < index; i++) {
     Widget* widget = get_widget(i);
     if (!widget->visible()) continue;
@@ -314,7 +313,7 @@ void MWindow::draw() {
   if (damage() != DAMAGE_CHILD) box()->draw(0, 0, w(), h(), color(), 0);
   int x=0; int y=0; int w=this->w(); int h=0; box()->inset(x,y,w,h);
   int selected = level <= menustate->level ? menustate->indexes[level] : -1;
-  int leading = int(this->leading()); // +2 ?
+  int leading = int(this->leading());
   for (int i = 0; i < children; i++) {
     Widget* widget = get_widget(i);
     if (!widget->visible()) continue;
@@ -387,7 +386,7 @@ int MWindow::find_selected(int mx, int my) {
     }
     return -1;
   } else {
-    int leading = int(this->leading()); // +2 ?
+    int leading = int(this->leading());
     int x=0; int y=0; int w=this->w(); int h=this->h(); box()->inset(x,y,w,h);
     if (mx < x || mx >= w) return -1;
     int lasti = -1; // last visible one
@@ -542,17 +541,17 @@ int MWindow::handle(int event) {
       int nextitem = -1;
       for (int item = 0; item < mw.children; item++) {
 	widget = mw.get_widget(item);
-	if (widget->takesevents()) {
-	  if (widget->test_shortcut()) {
-	    setitem(p, menu, item);
-	    goto EXECUTE;
-	  }
+	if (!widget->takesevents()) continue;
+	if (fltk::test_shortcut(widget->shortcut())) {
+	  setitem(p, menu, item);
+	  goto EXECUTE;
+	}
+	if (widget->test_label_shortcut()) {
+	  nextitem = item;
+	} else {
 	  const char* l = widget->label();
-	  if (l) {
-	    if (*l == '&') l++;
-	    if (tolower(*l) == event_text()[0]) {
-	      if (nextitem < 0 || nextitem <= p.indexes[menu] && item > p.indexes[menu]) nextitem = item;
-	    }
+	  if (l && tolower(*l) == event_text()[0]) {
+	    if (nextitem < 0 || nextitem <= p.indexes[menu] && item > p.indexes[menu]) nextitem = item;
 	  }
 	}
       }
@@ -607,10 +606,11 @@ int MWindow::handle(int event) {
 
   case RELEASE:
     pushed_ = 0;
+    // The initial click just b
     // If they clicked a menu title then make the menu stay up, rather
     // than selecting that menu title:
-    if (p.state == INITIAL_STATE && event_is_click()
-	&& (p.indexes[p.level] < 0 || p.current_children() >= 0)) return 1;
+    if (p.state == INITIAL_STATE && event_is_click()) return 1;
+    //&& (p.indexes[p.level] < 0 || p.current_children() >= 0)) return 1;
   EXECUTE: // execute the item pointed to by w and current item
     // If they click outside menu we quit:
     if (p.indexes[p.level]<0) {exit_modal(); return 1;}
@@ -724,7 +724,7 @@ int Menu::popup(
       if (mw->title) mw->title->show(mw->child_of());
       mw->show();
     }
-    p.changed = false;
+    p.changed = true;
   }
 
   Widget* saved_modal = modal(); bool saved_grab = grab();
@@ -810,5 +810,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.137 2003/02/02 10:39:23 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.138 2003/03/09 07:51:36 spitzak Exp $".
 //

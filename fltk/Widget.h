@@ -1,5 +1,5 @@
 //
-// "$Id: Widget.h,v 1.6 2003/02/03 02:33:56 spitzak Exp $"
+// "$Id: Widget.h,v 1.7 2003/03/09 07:51:36 spitzak Exp $"
 //
 // The base class of all widgets.
 //
@@ -121,7 +121,8 @@ public:
   void	do_callback()		{ callback_(this,user_data_); }
   void	do_callback(Widget* o,void* arg=0) { callback_(o,arg); }
   void	do_callback(Widget* o,long arg) { callback_(o,(void*)arg); }
-  int	test_shortcut() const	;
+  bool	test_label_shortcut() const;
+  bool	test_shortcut() const	;
   bool	contains(const Widget*) const;
   bool	inside(const Widget* o) const { return o && o->contains(this); }
   bool	pushed() const		;
@@ -301,5 +302,5 @@ enum { // Widget::when() values
 #endif
 
 //
-// End of "$Id: Widget.h,v 1.6 2003/02/03 02:33:56 spitzak Exp $".
+// End of "$Id: Widget.h,v 1.7 2003/03/09 07:51:36 spitzak Exp $".
 //

@@ -52,11 +52,7 @@ class SignalMutex : public Mutex {
 public:
   SignalMutex() : Mutex() {pthread_cond_init(&cond, 0);}
   void signal() {pthread_cond_broadcast(&cond);}
-  void wait() {
-    int save_counter = mutex.m_count; mutex.m_count = 1;
-    pthread_cond_wait(&cond, &mutex);
-    mutex.m_count = save_counter;
-  }
+  void wait() {pthread_cond_wait(&cond, &mutex);}
 };
 
 #else // standard pthread mutexes need a bit of work to be recursive:

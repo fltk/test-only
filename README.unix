@@ -1,16 +1,8 @@
 BUILDING AND INSTALLING FLTK UNDER LINUX AND UNIX
 
-    In most cases where the GCC compilers are available you can just
-    type
-
-       ./build.gcc
-
-    This will run configure with the default (no) options and then
-    compile everything.  The build scripts call autoconf, configure,
-    and make.  You can specify arguments to be sent to the configure
-    script on the command line to the build script, for example:
-
-       ./build.gcc --enable-shared --prefix=/usr/local2
+    In most cases you can just type "make".  This will run configure
+    with the default (no) options and then compile everything.  You
+    then need to run "make install", see below.
 
     FLTK uses GNU autoconf to configure itself for your UNIX or Cygwin
     platform.  The main things that the configure script will look for
@@ -21,14 +13,15 @@ BUILDING AND INSTALLING FLTK UNDER LINUX AND UNIX
 
     If you aren't using the GNU compilers or a compiler / platform
     supported by one of the build scripts, you will need to run
-    autoconf, configure and make manually.  (Or better yet write and
+    ./configure manually, then run make.  (Or better yet write and
     send us a build script for your platform.)  You will need to set
     the "CC" and "CXX" environment variables to your C and C++
     compilers respectively before running the configure script.
 
     You can get the exact setup you need. Options that you can pass to
-    the build scripts or configure include:
+    ./configure include:
 
+	--enable-xft            - Enable the Xft library (anti-aliased fonts)
 	--enable-debug          - Enable debugging code & symbols
 	--enable-shared         - Enable generation of shared libraries
 
@@ -41,13 +34,9 @@ BUILDING AND INSTALLING FLTK UNDER LINUX AND UNIX
 	--includedir=/path      - Set the location for include files.
                         	  [default = /usr/local/include]
 
-    Building using one of the build scripts or manually by calling make
-    yourself will build the library, FLUID tool, and all of the test
-    programs.
-
     To install the library, become root and type "make install".  This
     will copy the "fluid" executable to "bindir", the header files to
-    "includedir", and the library files to "libdir".
+    "includedir"/fltk, and the library files to "libdir".
 
 
 MESA

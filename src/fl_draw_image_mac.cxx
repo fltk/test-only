@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_mac.cxx,v 1.4 2003/02/21 18:16:56 spitzak Exp $"
+// "$Id: fl_draw_image_mac.cxx,v 1.5 2003/03/09 07:51:36 spitzak Exp $"
 //
 // MacOS image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -253,8 +253,6 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 #endif
 }
 
-#define DITHER_FILLRECT false
-
 //
-// End of "$Id: fl_draw_image_mac.cxx,v 1.4 2003/02/21 18:16:56 spitzak Exp $".
+// End of "$Id: fl_draw_image_mac.cxx,v 1.5 2003/03/09 07:51:36 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.60 2003/02/07 08:21:17 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.61 2003/03/09 07:51:36 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -106,26 +106,16 @@ int MenuBar::handle(int event) {
     popup(0, 0, w(), h(), 0, true);
     return 1;
   case SHORTCUT:
-    // First check against the shortcut() of top-level items:
-    for (i = 0; i < children; i++) {
-      Widget* w = child(i);
-      if (w->active() && fltk::test_shortcut(w->shortcut())) {
-	    if (w->is_group()) {value(i); goto J1;} // menu title
-	    execute(w); // button in the menu bar
-	    if (checkmark(w)) redraw();
-	    return 1;
-      }
-    }
-    // Secondly, test against the shortcut() of any item in any submenu:
+    // Test against the shortcut() of any item in any submenu:
     if (handle_shortcut()) return 1;
-    // Finally check against the &x of top-level items:
+    // Check against the &x of top-level items:
     if (event_state(COMMAND|ALT)) for (i = 0; i < children; i++) {
       Widget* w = child(i);
-      if (w->active() && w->test_shortcut()) {
-	    if (w->is_group()) {value(i); goto J1;} // menu title
-	    execute(w); // button in the menu bar
-	    if (checkmark(w)) redraw();
-	    return 1;
+      if (w->active() && w->test_label_shortcut()) {
+	/*if (w->is_group())*/ {value(i); goto J1;} // menu title
+//  	execute(w); // button in the menu bar
+//  	if (checkmark(w)) redraw();
+//  	return 1;
       }
     }
     return 0;
@@ -175,5 +165,5 @@ MenuBar::MenuBar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.60 2003/02/07 08:21:17 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.61 2003/03/09 07:51:36 spitzak Exp $".
 //

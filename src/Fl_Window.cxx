@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.94 2003/02/21 18:16:38 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.95 2003/03/09 07:51:36 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -71,6 +71,7 @@ void Window::_Window() {
   icon_ = 0;
   iconlabel_ = 0;
   //resizable(0); // new default for group
+  minw = minh = maxw = maxh = 0;
   size_range_set = 0;
   child_of_ = 0;
   shortcut(EscapeKey);
@@ -403,5 +404,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.94 2003/02/21 18:16:38 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.95 2003/03/09 07:51:36 spitzak Exp $".
 //

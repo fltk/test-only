@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.141 2003/02/21 18:16:51 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.142 2003/03/09 07:51:36 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -783,9 +783,9 @@ bool fltk::handle()
 //      printf("LeaveNotify window %s, xmousewin %s\n",
 //  	   window ? window->label() : "NULL",
 //  	   xmousewin ? xmousewin->label() : "NULL");
-    in_a_window = false;
     xmousewin = 0;
-    break;
+    in_a_window = false; // make do_queued_events produce LEAVE event
+    return false;
 
   case FocusIn:
     xfocus = window;
@@ -1110,19 +1110,20 @@ void CreatedWindow::create(Window* window,
 		    XA_ATOM, sizeof(int)*8, 0, (unsigned char*)&version, 1);
 
     // Set up the icon and initial icon state:
-    XWMHints hints;
-    hints.input = True; // some window managers require this to be sent?
-    hints.flags = InputHint;
+    XWMHints *hints = XAllocWMHints();
+    hints->input = True; // some window managers require this to be sent?
+    hints->flags = InputHint;
     if (fl_show_iconic) {
-      hints.flags |= StateHint;
-      hints.initial_state = IconicState;
+      hints->flags |= StateHint;
+      hints->initial_state = IconicState;
       fl_show_iconic = false;
     }
     if (window->icon()) {
-      hints.icon_pixmap = (Pixmap)window->icon();
-      hints.flags       |= IconPixmapHint;
+      hints->icon_pixmap = (Pixmap)window->icon();
+      hints->flags       |= IconPixmapHint;
     }
-    XSetWMHints(xdisplay, x->xid, &hints);
+    XSetWMHints(xdisplay, x->xid, hints);
+    XFree(hints);
 
   }
 }
@@ -1412,5 +1413,5 @@ bool fltk::get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.141 2003/02/21 18:16:51 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.142 2003/03/09 07:51:36 spitzak Exp $".
 //

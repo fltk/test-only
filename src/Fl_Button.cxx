@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.61 2003/02/02 10:39:23 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.62 2003/03/09 07:51:36 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -99,7 +99,8 @@ int Button::handle(int event) {
     // grab initial focus if we are an ReturnButton:
     return shortcut()=='\r' ? 2 : 1;
   case KEY:
-    if (event_key() == ' ') goto EXECUTE;
+    if (event_key() == ' ' || event_key() == ReturnKey
+	|| event_key() == KeypadEnter) goto EXECUTE;
     return 0;
   case SHORTCUT:
     if (!test_shortcut()) return 0;
@@ -245,5 +246,5 @@ Button::Button(int x,int y,int w,int h, const char *l) : Widget(x,y,w,h,l) {
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.61 2003/02/02 10:39:23 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.62 2003/03/09 07:51:36 spitzak Exp $".
 //

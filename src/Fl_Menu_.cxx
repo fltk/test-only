@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.47 2003/01/21 07:53:39 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.48 2003/03/09 07:51:36 spitzak Exp $"
 //
 // The Menu base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Group
@@ -198,6 +198,9 @@ Widget* Menu::get_focus() {
 // by putting multiple copies of the item in, where only the first is
 // visible.
 
+// &x shortcuts are ignored, on the assumption that the menu is not
+// visible...
+
 // recursive innards of handle_shortcut:
 static Widget* shortcut_search(Group* g) {
   Widget* widget = 0;
@@ -231,5 +234,5 @@ int Menu::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.47 2003/01/21 07:53:39 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.48 2003/03/09 07:51:36 spitzak Exp $"
 //
