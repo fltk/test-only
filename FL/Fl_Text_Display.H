@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.H,v 1.1 2000/08/04 10:21:59 clip Exp $"
+// "$Id: Fl_Text_Display.H,v 1.2 2000/08/08 06:29:18 clip Exp $"
 //
 // Header file for Fl_Text_Display class.
 //
@@ -91,9 +91,6 @@ class FL_API Fl_Text_Display: public Fl_Group {
     int word_start(int pos) { return buffer()->word_start(pos); }
     int word_end(int pos) { return buffer()->word_end(pos); }
 
-    void line_end(int startPos, int *lineEnd, int *nextLineStart,
-                  int startPosIsLineStart = 0);
-
     void highlight_data(Fl_Text_Buffer *styleBuffer,
                         Style_Table_Entry *styleTable,
                         int nStyles, char unfinishedStyle,
@@ -125,6 +122,7 @@ class FL_API Fl_Text_Display: public Fl_Group {
     void display_insert();
 
     void offset_line_starts(int newTopLineNum);
+
     void calc_line_starts(int startLine, int endLine);
 
     void update_line_starts(int pos, int charsInserted, int charsDeleted,
@@ -196,7 +194,6 @@ class FL_API Fl_Text_Display: public Fl_Group {
                                                 /* regions */
     void* mHighlightCBArg;                      /* Arg to unfinishedHighlightCB */
 
-    int oldWidth;
     int mMaxsize;
 
     int mFixedFontWidth;                        /* Font width if all current fonts are
@@ -216,5 +213,5 @@ class FL_API Fl_Text_Display: public Fl_Group {
 #endif
 
 //
-// End of "$Id: Fl_Text_Display.H,v 1.1 2000/08/04 10:21:59 clip Exp $".
+// End of "$Id: Fl_Text_Display.H,v 1.2 2000/08/08 06:29:18 clip Exp $".
 //

@@ -19,7 +19,6 @@
 #include <FL/Fl_Value_Input.H>
 #include <FL/Fl_Value_Output.H>
 #include <FL/Fl_Window.H>
-#include <FL/Fl_Input_.H>
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Output.H>
 #include <FL/Fl_Double_Window.H>
@@ -29,6 +28,10 @@
 #include <FL/Fl_Scrollbar.H>
 #include <FL/Fl_Tabs.H>
 #include <FL/Fl_Style.H>
+#include <FL/Fl_Text_Buffer.H>
+#include <FL/Fl_Text_Display.H>
+#include <FL/Fl_Text_Editor.H>
+
 
 #include <stdio.h>
 
@@ -43,20 +46,22 @@ int main() {
   printf("    sizeof(Fl_Return_Button) = %lu\n", (unsigned long)sizeof(class Fl_Return_Button));
   printf("  sizeof(Fl_Clock) = %lu\n", (unsigned long)sizeof(class Fl_Clock));
   printf("  sizeof(Fl_Group) = %lu\n", (unsigned long)sizeof(class Fl_Group));
-  printf("      sizeof(Fl_Browser) = %lu\n", (unsigned long)sizeof(class Fl_Browser));
+  printf("    sizeof(Fl_Browser) = %lu\n", (unsigned long)sizeof(class Fl_Browser));
   printf("    sizeof(Fl_Color_Chooser) = %lu\n", (unsigned long)sizeof(class Fl_Color_Chooser));
-  printf("      sizeof(Fl_Scroll) = %lu\n", (unsigned long)sizeof(class Fl_Scroll));
-  printf("      sizeof(Fl_Tabs) = %lu\n", (unsigned long)sizeof(class Fl_Tabs));
+  printf("    sizeof(Fl_Scroll) = %lu\n", (unsigned long)sizeof(class Fl_Scroll));
+  printf("    sizeof(Fl_Tabs) = %lu\n", (unsigned long)sizeof(class Fl_Tabs));
+  printf("    sizeof(Fl_Text_Display) = %lu\n", (unsigned long)sizeof(class Fl_Text_Display));
+  printf("      sizeof(Fl_Text_Editor) = %lu\n", (unsigned long)sizeof(class Fl_Text_Editor));
   printf("    sizeof(Fl_Window) = %lu\n", (unsigned long)sizeof(class Fl_Window));
   printf("      sizeof(Fl_Double_Window) = %lu\n", (unsigned long)sizeof(class Fl_Double_Window));
-  printf("  sizeof(Fl_Input_) = %lu\n", (unsigned long)sizeof(class Fl_Input_));
-  printf("    sizeof(Fl_Input) = %lu\n", (unsigned long)sizeof(class Fl_Input));
-  printf("    sizeof(Fl_Output) = %lu\n", (unsigned long)sizeof(class Fl_Output));
+  printf("  sizeof(Fl_Input) = %lu\n", (unsigned long)sizeof(class Fl_Input));
+  printf("  sizeof(Fl_Output) = %lu\n", (unsigned long)sizeof(class Fl_Output));
   printf("  sizeof(Fl_Menu_) = %lu\n", (unsigned long)sizeof(class Fl_Menu_));
   printf("    sizeof(Fl_Choice) = %lu\n", (unsigned long)sizeof(class Fl_Choice));
   printf("    sizeof(Fl_Menu_Bar) = %lu\n", (unsigned long)sizeof(class Fl_Menu_Bar));
   printf("    sizeof(Fl_Menu_Button) = %lu\n", (unsigned long)sizeof(class Fl_Menu_Button));
   printf("  sizeof(Fl_Roller) = %lu\n", (unsigned long)sizeof(class Fl_Roller));
+  printf("  sizeof(Fl_Text_Buffer) = %lu\n", (unsigned long)sizeof(class Fl_Text_Buffer));
   printf("  sizeof(Fl_Valuator) = %lu\n", (unsigned long)sizeof(class Fl_Valuator));
   printf("    sizeof(Fl_Adjuster) = %lu\n", (unsigned long)sizeof(class Fl_Adjuster));
   printf("    sizeof(Fl_Counter) = %lu\n", (unsigned long)sizeof(class Fl_Counter));

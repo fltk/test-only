@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Editor.cxx,v 1.2 2000/08/06 07:39:44 spitzak Exp $"
+// "$Id: Fl_Text_Editor.cxx,v 1.3 2000/08/08 06:29:18 clip Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -394,6 +394,7 @@ int Fl_Text_Editor::handle_key() {
 }
 
 int Fl_Text_Editor::handle(int event) {
+  if (!buffer()) return 0;
 
   if (event == FL_PUSH && Fl::event_button() == 2) {
     dragType = -1;
@@ -433,5 +434,5 @@ int Fl_Text_Editor::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Text_Editor.cxx,v 1.2 2000/08/06 07:39:44 spitzak Exp $".
+// End of "$Id: Fl_Text_Editor.cxx,v 1.3 2000/08/08 06:29:18 clip Exp $".
 //

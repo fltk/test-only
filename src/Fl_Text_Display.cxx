@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.2 2000/08/06 07:39:44 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.3 2000/08/08 06:29:18 clip Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -57,7 +57,6 @@
 static int max( int i1, int i2 );
 static int min( int i1, int i2 );
 static int countlines( const char *string );
-static int rangeTouchesRectSel( Fl_Text_Selection *sel, int rangeStart, int rangeEnd );
 
 // CET - FIXME
 #define TMPFONTWIDTH 6
@@ -91,7 +90,6 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H,  const char* l)
   scrollbar_width(Fl_Style::scrollbar_width);
   scrollbar_align(Fl_Style::scrollbar_align);
 
-  oldWidth = 0;
   mCursorOn = 0;
   mCursorPos = 0;
   mCursorOldY = -100;
@@ -196,7 +194,7 @@ void Fl_Text_Display::layout() {
   text_area.y = Y+BOTTOM_MARGIN;
   text_area.w = W-LEFT_MARGIN-RIGHT_MARGIN;
   text_area.h = H-TOP_MARGIN-BOTTOM_MARGIN;
-  int i, modified;
+  int i;
 
   /* Find the new maximum font height for this text display */
   for (i = 0, mMaxsize = text_size(); i < mNStyles; i++)
@@ -210,26 +208,13 @@ void Fl_Text_Display::layout() {
   mVScrollBar->clear_visible();
   mHScrollBar->clear_visible();
 
-  static int oldVisibleLines = 0;
-  /* if the window became taller or empty lines become visible, there
-     may be an opportunity to display more text by scrolling down */
-  if ((oldVisibleLines < mNVisibleLines &&
-      mTopLineNum + mNVisibleLines > mNBufferLines + 1) ||
-      empty_vlines())
-  {
-    scroll_(max(1, mNBufferLines-mNVisibleLines+3), mHorizOffset);
-  }
-
-  // save old number of visible lines
-  oldVisibleLines = mNVisibleLines;
-  do {
-    modified = 0;
-
+  for (int again = 1; again;) {
+     again = 0;
     /* reallocate and update the line starts array, which may have changed
-       size and/or contents.  */
-    int nvlines = mNVisibleLines;
-    mNVisibleLines = (text_area.h + mMaxsize - 1) / mMaxsize;
+       size and / or contents.  */
+    int nvlines = (text_area.h + mMaxsize - 1) / mMaxsize;
     if (mNVisibleLines != nvlines) {
+      mNVisibleLines = nvlines;
       delete[] mLineStarts;
       mLineStarts = new int [mNVisibleLines];
       calc_line_starts(0, mNVisibleLines);
@@ -238,12 +223,10 @@ void Fl_Text_Display::layout() {
 
     if (scrollbar_width()) {
       /* Decide if the vertical scroll bar needs to be visible */
-      if ((mNVisibleLines <= mNBufferLines + 1 || mTopLineNum != 1) &&
-          (scrollbar_align()&(FL_ALIGN_LEFT|FL_ALIGN_RIGHT))) {
-        if (!mVScrollBar->visible()) {
-          mVScrollBar->set_visible();
-          modified = 1;
-        }
+      if (scrollbar_align() & (FL_ALIGN_LEFT|FL_ALIGN_RIGHT) &&
+          mNBufferLines >= mNVisibleLines - 1)
+      {
+        mVScrollBar->set_visible();
         if (scrollbar_align() & FL_ALIGN_LEFT) {
           text_area.x = X+scrollbar_width()+LEFT_MARGIN;
           text_area.w = W-scrollbar_width()-LEFT_MARGIN-RIGHT_MARGIN;
@@ -276,10 +259,11 @@ void Fl_Text_Display::layout() {
             can be found, this might be a way to go.
       */
       if (scrollbar_align() & (FL_ALIGN_TOP|FL_ALIGN_BOTTOM) &&
-          (mVScrollBar->visible() || longest_vline() > text_area.w)) {
+          (mVScrollBar->visible() || longest_vline() > text_area.w))
+      {
         if (!mHScrollBar->visible()) {
           mHScrollBar->set_visible();
-          modified = 1;
+          again = 1; // loop again to see if we now need vert. & recalc sizes
         }
         if (scrollbar_align() & FL_ALIGN_TOP) {
           text_area.y = Y + scrollbar_width()+TOP_MARGIN;
@@ -294,19 +278,28 @@ void Fl_Text_Display::layout() {
         }
       }
     }
-    oldWidth = text_area.w;
-
-  } while (modified);
-
-  if (hscrollbarvisible != mHScrollBar->visible() ||
-      vscrollbarvisible != mVScrollBar->visible())
-    redraw();
+  }
 
   if (mTopLineNumHint != mTopLineNum || mHorizOffsetHint != mHorizOffset)
     scroll_(mTopLineNumHint, mHorizOffsetHint);
 
+  if (mNBufferLines < mNVisibleLines)
+    scroll_(1, mHorizOffset);
+  /* if empty lines become visible, there may be an opportunity to
+     display more text by scrolling down */
+  else while (mLineStarts[mNVisibleLines-2] == -1)
+    scroll_(mTopLineNum-1, mHorizOffset);
+
   if (display_insert_position_hint)
     display_insert();
+
+  mTopLineNumHint = mTopLineNum;
+  mHorizOffsetHint = mHorizOffset;
+  display_insert_position_hint = 0;
+
+  if (hscrollbarvisible != mHScrollBar->visible() ||
+      vscrollbarvisible != mVScrollBar->visible())
+    redraw();
 
   update_v_scrollbar();
   update_h_scrollbar();
@@ -594,9 +587,7 @@ int Fl_Text_Display::in_selection( int X, int Y ) {
   Fl_Text_Buffer *buf = mBuffer;
 
   xy_to_rowcol( X, Y, &row, &column, CHARACTER_POS );
-  if ( rangeTouchesRectSel( buf->primary_selection(), mFirstChar, mLastChar ) )
-    return buf->primary_selection()->includes(pos, buf->line_start( pos ), column);
-  return 0; // WAS: I added this, is this correct?
+  return buf->primary_selection()->includes(pos, buf->line_start( pos ), column);
 }
 
 /*
@@ -608,8 +599,6 @@ int Fl_Text_Display::in_selection( int X, int Y ) {
 ** the overall performance of the text display.
 */
 void Fl_Text_Display::display_insert() {
-  display_insert_position_hint = 0;
-
   int hOffset, topLine, X, Y;
   hOffset = mHorizOffset;
   topLine = mTopLineNum;
@@ -621,7 +610,6 @@ void Fl_Text_Display::display_insert() {
     if (insert_position() > lastChar)
       topLine += buffer()->count_lines(lastChar, insert_position());
   }
-
   /* Find the new setting for horizontal offset (this is a bit ungraceful).
      If the line is visible, just use PositionToXY to get the position
      to scroll to, otherwise, do the vertical scrolling first, then the
@@ -885,7 +873,6 @@ void Fl_Text_Display::draw_vline(int visLineNum, int leftClip, int rightClip,
   /* If line is not displayed, skip it */
   if ( visLineNum < 0 || visLineNum > mNVisibleLines )
     return;
-  // printf("redisplaying line: %d  numvis: %d\n", visLineNum, mNVisibleLines);
 
   /* Calculate Y coordinate of the string to draw */
   fontHeight = mMaxsize;
@@ -1353,39 +1340,21 @@ void Fl_Text_Display::offset_line_starts( int newTopLineNum ) {
   if ( lineDelta == 0 )
     return;
 
-  /*
-{
-    int i;
-    printf("Scroll, lineDelta %d\n", lineDelta);
-    printf("lineStarts Before: ");
-    for(i=0; i<nVisLines; i++) printf("%d ", lineStarts[i]);
-    printf("\n");
-}
-  */
-
   /* Find the new value for firstChar by counting lines from the nearest
      known line start (start or end of buffer, or the closest value in the
      lineStarts array) */
   lastLineNum = oldTopLineNum + nVisLines - 1;
   if ( newTopLineNum < oldTopLineNum && newTopLineNum < -lineDelta ) {
     mFirstChar = buffer()->skip_lines( 0, newTopLineNum - 1 );
-    /* printf("counting forward %d lines from start\n", newTopLineNum-1);*/
   } else if ( newTopLineNum < oldTopLineNum ) {
     mFirstChar = buffer()->rewind_lines( mFirstChar, -lineDelta );
-    /* printf("counting backward %d lines from firstChar\n", -lineDelta);*/
   } else if ( newTopLineNum < lastLineNum ) {
     mFirstChar = lineStarts[ newTopLineNum - oldTopLineNum ];
-    /* printf("taking new start from lineStarts[%d]\n",
-      newTopLineNum - oldTopLineNum); */
   } else if ( newTopLineNum - lastLineNum < mNBufferLines - newTopLineNum ) {
     mFirstChar = buffer()->skip_lines( lineStarts[ nVisLines - 1 ],
                                        newTopLineNum - lastLineNum );
-    /* printf("counting forward %d lines from start of last line\n",
-      newTopLineNum - lastLineNum); */
   } else {
     mFirstChar = buffer()->rewind_lines( buf->length(), mNBufferLines - newTopLineNum + 1 );
-    /* printf("counting backward %d lines from end\n",
-                mNBufferLines - newTopLineNum + 1); */
   }
 
   /* Fill in the line starts array */
@@ -1403,12 +1372,6 @@ void Fl_Text_Display::offset_line_starts( int newTopLineNum ) {
   /* Set lastChar and topLineNum */
   calc_last_char();
   mTopLineNum = newTopLineNum;
-
-  /* {   int i;
-    printf("lineStarts After: ");
-    for(i=0; i<nVisLines; i++) printf("%d ", lineStarts[i]);
-    printf("\n");
-} */
 }
 
 /*
@@ -1545,7 +1508,8 @@ void Fl_Text_Display::calc_line_starts( int startLine, int endLine ) {
   /* Loop searching for ends of lines and storing the positions of the
      start of the next line in lineStarts */
   for ( line = startLine; line <= endLine; line++ ) {
-    line_end( startPos, &lineEnd, &nextLineStart, 1 );
+    lineEnd = buffer()->line_end(startPos);
+    nextLineStart = min(buffer()->length(), lineEnd + 1);
     startPos = nextLineStart;
     if ( startPos >= bufLen ) {
       /* If the buffer ends with a newline or line break, put
@@ -1610,10 +1574,6 @@ void Fl_Text_Display::scroll_(int topLineNum, int horizOffset) {
 
   /* Just setting mHorizOffset is enough information for redisplay */
   mHorizOffset = horizOffset;
-
-  // clear hint to rescroll
-  mTopLineNumHint = mTopLineNum;
-  mHorizOffsetHint = mHorizOffset;
 
   /* Redisplay everything if the window is partially obscured (since
      it's too hard to tell what displayed areas are salvageable) or
@@ -1788,25 +1748,6 @@ int Fl_Text_Display::vline_length( int visLineNum ) {
   if ( nextLineStart == -1 )
     return mLastChar - lineStartPos;
   return nextLineStart - 1 - lineStartPos;
-}
-
-/*
-** Finds both the end of the current line and the start of the next line.
-*/
-void Fl_Text_Display::line_end(int startPos, int *lineEnd, int *nextLineStart,
-                               int /*startPosIsLineStart*/) {
-  *lineEnd = mBuffer->line_end( startPos );
-  *nextLineStart = min( mBuffer->length(), *lineEnd + 1 );
-  return;
-}
-
-/*
-** Return true if the Fl_Text_Selection "sel" is rectangular, and touches a
-** buffer position withing "rangeStart" to "rangeEnd"
-*/
-static int rangeTouchesRectSel( Fl_Text_Selection *sel, int rangeStart, int rangeEnd ) {
-  return sel->selected() && sel->rectangular() && sel->end() >= rangeStart &&
-         sel->start() <= rangeEnd;
 }
 
 /*
@@ -2046,5 +1987,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.2 2000/08/06 07:39:44 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.3 2000/08/08 06:29:18 clip Exp $".
 //
