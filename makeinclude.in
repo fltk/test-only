@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.41 2002/12/13 19:42:55 easysw Exp $"
+# "$Id: makeinclude.in,v 1.42 2002/12/16 02:54:05 easysw Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -49,7 +49,7 @@ STRIP		= strip
 # compiler names:
 CC		= @CC@
 CXX		= @CXX@
-MAKEDEPEND	= @MAKEDEPEND@
+MAKEDEPEND	= @MAKEDEPEND@ -Y
 
 # flags for C++ compiler:
 OPTIM		= @OPTIM@
@@ -132,5 +132,5 @@ CAT3EXT		= @CAT3EXT@
 	mv t.z $@
 
 #
-# End of "$Id: makeinclude.in,v 1.41 2002/12/13 19:42:55 easysw Exp $".
+# End of "$Id: makeinclude.in,v 1.42 2002/12/16 02:54:05 easysw Exp $".
 #
