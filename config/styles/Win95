@@ -11,7 +11,7 @@ version = 7
 [menu item]
   label type = 0
   label font = 0
-  label size = 14
+  label size = 12
   label color = 0
   down label color = 7
   down color = 136
@@ -25,20 +25,20 @@ version = 7
 
 [browser]
   label color = 0
-  label size = 14
+  label size = 12
   label type = 0
   label font = 0
   color = 7
   selected color = 136
   box = 14
   text font = 0
-  text size = 14
+  text size = 12
   text color = 0
   selected text color = 7
 
 [chart]
   label color = 0
-  label size = 14
+  label size = 12
   label type = 0
   label font = 0
   color = 7
@@ -50,7 +50,7 @@ version = 7
 
 [button]
   label color = 0
-  label size = 14
+  label size = 12
   label type = 0
   label font = 0
   color = 49
@@ -63,7 +63,7 @@ version = 7
 
 [check button]
   label color = 0
-  label size = 14
+  label size = 12
   label type = 0
   label font = 0
   color = 49
@@ -76,7 +76,7 @@ version = 7
 
 [round button]
   label color = 0
-  label size = 14
+  label size = 12
   label type = 0
   label font = 0
   color = 49
@@ -89,11 +89,11 @@ version = 7
 
 [light button]
   label color = 0
-  label size = 14
+  label size = 12
   label type = 0
   label font = 0
   color = 49
-  unselected light color = 49
+  unselected light color = 0
   selected light color = 1
   highlight color = 49
   box = 30
@@ -103,7 +103,7 @@ version = 7
 
 [return button]
   label color = 0
-  label size = 14
+  label size = 12
   label type = 0
   label font = 0
   color = 49
@@ -116,7 +116,7 @@ version = 7
 
 [highlight button]
   label color = 0
-  label size = 14
+  label size = 12
   label type = 0
   label font = 0
   color = 49
@@ -128,7 +128,7 @@ version = 7
 
 [choice]
   label color = 0
-  label size = 14
+  label size = 12
   label type = 0
   label font = 0
   color = 49
@@ -138,12 +138,12 @@ version = 7
   highlight box = 0
   down box = 42
   text font = 0
-  text size = 14
+  text size = 12
   text color = 0
 
 [menu bar]
   label color = 0
-  label size = 14
+  label size = 12
   label type = 0
   label font = 0
   color = 49
@@ -151,12 +151,12 @@ version = 7
   box = 30
   down box = 42
   text font = 0
-  text size = 14
+  text size = 12
   text color = 0
 
 [menu button]
   label color = 0
-  label size = 14
+  label size = 12
   label type = 0
   label font = 0
   color = 49
@@ -166,18 +166,18 @@ version = 7
   highlight box = 0
   down box = 42
   text font = 0
-  text size = 14
+  text size = 12
   text color = 0
 
 [popup menu]
   box = 42
   color = 49
   shortcut font = 0
-  shortcut size = 14
+  shortcut size = 12
 
 [widget]
   label color = 0
-  label size = 14
+  label size = 12
   label type = 0
   label font = 0
   color = 49
@@ -187,7 +187,7 @@ version = 7
 
 [window]
   label color = 0
-  label size = 14
+  label size = 12
   label type = 0
   label font = 0
   color = 49
@@ -195,7 +195,7 @@ version = 7
 
 [slider]
   label color = 0
-  label size = 14
+  label size = 12
   label type = 0
   label font = 0
   color = 49
@@ -207,7 +207,7 @@ version = 7
 
 [scroll bar]
   label color = 0
-  label size = 14
+  label size = 12
   label type = 0
   label font = 0
   color = 52
@@ -222,19 +222,19 @@ version = 7
   color = 7
   output color = 49
   text font = 0
-  text size = 14
+  text size = 12
   text color = 0
   selected color = 136
   selected text color = 7
   cursor color = 0
   label font = 0
-  label size = 14
+  label size = 12
   label color = 0
   label type = 0
 
 [adjuster]
   label color = 0
-  label size = 14
+  label size = 12
   label type = 0
   label font = 0
   color = 49
@@ -245,7 +245,7 @@ version = 7
 
 [counter]
   label color = 0
-  label size = 14
+  label size = 12
   label type = 0
   label font = 0
   color = 49
@@ -256,12 +256,12 @@ version = 7
   highlight box = 0
   box2 = 1
   text font = 0
-  text size = 14
+  text size = 12
   text color = 0
 
 [roller]
   label color = 0
-  label size = 14
+  label size = 12
   label type = 0
   label font = 0
   color = 49
