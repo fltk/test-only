@@ -132,9 +132,16 @@ void ClockOutput::draw() {
 /*! \fn int ClockOutput::second() const
   Return the second sent to the last call to value(). */
 
+/*! \fn unsigned long ClockOutput::value() const
+  Return the last Unix timestamp the clock was set to.
+*/
+
 /*! Set the hour, minute, and second to display. The hour is effectively
   taken modulus 12 and the minute and second modulus 60 to figure out
   where to place the hands. Redraw happens only if different.
+
+  This does not set the unsigned long value() member, as it can't
+  because it does not know the date.
 */
 void ClockOutput::value(int h, int m, int s) {
   if (h!=hour_ || m!=minute_ || s!=second_) {
@@ -147,6 +154,7 @@ void ClockOutput::value(int h, int m, int s) {
   the localtime() library function and used to get the hour, minute,
   and second */
 void ClockOutput::value(unsigned long v) {
+  value_ = v;
   struct tm *timeofday;
   timeofday = localtime((const time_t *)&v);
   value(timeofday->tm_hour, timeofday->tm_min, timeofday->tm_sec);
