@@ -100,7 +100,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /GX /ZI /Od /I "." /I ".." /I "../visualc" /D "_DEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /YX /c
-# ADD CPP /nologo /MDd /GR /GX /ZI /Od /I "." /I ".." /I "../visualc" /D "_DEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "_MSC_DLL" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
+# ADD CPP /nologo /MDd /GR /GX /ZI /Od /I "." /I ".." /I "../visualc" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "_DEBUG" /D "_MSC_DLL" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -162,6 +162,7 @@ DEP_CPP_FILEN=\
 	"..\fltk\Enumerations.h"\
 	"..\fltk\filename.h"\
 	"..\fltk\Fl_Export.h"\
+	{$(INCLUDE)}"dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -171,6 +172,7 @@ DEP_CPP_FILENA=\
 	"..\fltk\Enumerations.h"\
 	"..\fltk\filename.h"\
 	"..\fltk\Fl_Export.h"\
+	{$(INCLUDE)}"dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -180,6 +182,7 @@ DEP_CPP_FILENAM=\
 	"..\fltk\Enumerations.h"\
 	"..\fltk\filename.h"\
 	"..\fltk\Fl_Export.h"\
+	{$(INCLUDE)}"dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -190,6 +193,7 @@ DEP_CPP_FILENAME=\
 	"..\fltk\filename.h"\
 	"..\fltk\Fl_Export.h"\
 	".\config.h"\
+	{$(INCLUDE)}"dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -200,6 +204,7 @@ DEP_CPP_FILENAME_=\
 	"..\fltk\filename.h"\
 	"..\fltk\Fl_Export.h"\
 	".\config.h"\
+	{$(INCLUDE)}"dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -209,6 +214,7 @@ DEP_CPP_FILENAME_M=\
 	"..\fltk\Enumerations.h"\
 	"..\fltk\filename.h"\
 	"..\fltk\Fl_Export.h"\
+	{$(INCLUDE)}"dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -218,6 +224,7 @@ DEP_CPP_FILENAME_S=\
 	"..\fltk\Enumerations.h"\
 	"..\fltk\filename.h"\
 	"..\fltk\Fl_Export.h"\
+	{$(INCLUDE)}"dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -243,6 +250,10 @@ DEP_CPP_FL_CX=\
 	"..\src\fl_win32.cxx"\
 	"..\src\Fl_x.cxx"\
 	".\config.h"\
+	{$(INCLUDE)}"dirent.h"\
+	
+NODEP_CPP_FL_CX=\
+	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
@@ -340,6 +351,9 @@ DEP_CPP_FL_ARC=\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	
+NODEP_CPP_FL_ARC=\
+	"..\fltk\mac.H"\
+	
 # End Source File
 # Begin Source File
 
@@ -361,6 +375,10 @@ DEP_CPP_FL_ARG=\
 	"..\fltk\Fl_Window.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	{$(INCLUDE)}"dirent.h"\
+	
+NODEP_CPP_FL_ARG=\
+	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
@@ -424,6 +442,9 @@ DEP_CPP_FL_BI=\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	
+NODEP_CPP_FL_BI=\
+	"..\fltk\mac.H"\
+	
 # End Source File
 # Begin Source File
 
@@ -458,6 +479,9 @@ DEP_CPP_FL_BOX=\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
+	
+NODEP_CPP_FL_BOX=\
+	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
@@ -572,6 +596,9 @@ DEP_CPP_FL_CL=\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	
+NODEP_CPP_FL_CL=\
+	"..\fltk\mac.H"\
+	
 # End Source File
 # Begin Source File
 
@@ -612,6 +639,9 @@ DEP_CPP_FL_CO=\
 	"..\src\fl_color_x.cxx"\
 	"..\src\Fl_XColor.H"\
 	".\config.h"\
+	
+NODEP_CPP_FL_CO=\
+	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
@@ -701,6 +731,9 @@ DEP_CPP_FL_CU=\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	
+NODEP_CPP_FL_CU=\
+	"..\fltk\mac.H"\
+	
 # End Source File
 # Begin Source File
 
@@ -785,6 +818,9 @@ DEP_CPP_FL_DN=\
 	"..\src\fl_dnd_win32.cxx"\
 	"..\src\fl_dnd_x.cxx"\
 	
+NODEP_CPP_FL_DN=\
+	"..\fltk\mac.H"\
+	
 # End Source File
 # Begin Source File
 
@@ -807,6 +843,9 @@ DEP_CPP_FL_DO=\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
+	
+NODEP_CPP_FL_DO=\
+	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
@@ -839,6 +878,9 @@ DEP_CPP_FL_DRA=\
 	"..\src\fl_draw_image_x.cxx"\
 	"..\src\Fl_XColor.H"\
 	".\config.h"\
+	
+NODEP_CPP_FL_DRA=\
+	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
@@ -903,6 +945,7 @@ DEP_CPP_FL_FI=\
 	"..\fltk\Fl_Widget.h"\
 	"..\fltk\Fl_Window.h"\
 	".\config.h"\
+	{$(INCLUDE)}"dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -932,6 +975,7 @@ DEP_CPP_FL_FIL=\
 	"..\fltk\Fl_Widget.h"\
 	"..\fltk\vsnprintf.h"\
 	".\config.h"\
+	{$(INCLUDE)}"dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -968,6 +1012,7 @@ DEP_CPP_FL_FILE=\
 	"..\fltk\Fl_Widget.h"\
 	"..\fltk\Fl_Window.h"\
 	"..\fltk\vsnprintf.h"\
+	{$(INCLUDE)}"dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -1004,6 +1049,7 @@ DEP_CPP_FL_FILEC=\
 	"..\fltk\Fl_Window.h"\
 	"..\fltk\vsnprintf.h"\
 	".\config.h"\
+	{$(INCLUDE)}"dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -1023,6 +1069,7 @@ DEP_CPP_FL_FILEI=\
 	"..\fltk\Fl_Labeltype.h"\
 	"..\fltk\Fl_Style.h"\
 	"..\fltk\Fl_Widget.h"\
+	{$(INCLUDE)}"dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -1038,6 +1085,7 @@ DEP_CPP_FL_FILEIC=\
 	"..\fltk\Fl_FileIcon.h"\
 	"..\fltk\Fl_Flags.h"\
 	".\config.h"\
+	{$(INCLUDE)}"dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -1096,6 +1144,9 @@ DEP_CPP_FL_FO=\
 	"..\src\fl_font_xft.cxx"\
 	".\config.h"\
 	
+NODEP_CPP_FL_FO=\
+	"..\fltk\mac.H"\
+	
 # End Source File
 # Begin Source File
 
@@ -1114,6 +1165,9 @@ DEP_CPP_FL_GE=\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	"..\src\fl_get_key_win32.cxx"\
+	
+NODEP_CPP_FL_GE=\
+	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
@@ -1137,6 +1191,9 @@ DEP_CPP_FL_GL=\
 	"..\fltk\x.h"\
 	"..\OpenGL\Fl_Gl_Choice.H"\
 	".\config.h"\
+	
+NODEP_CPP_FL_GL=\
+	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
@@ -1166,6 +1223,9 @@ DEP_CPP_FL_GL_=\
 	"..\OpenGL\Fl_Gl_Choice.H"\
 	".\config.h"\
 	
+NODEP_CPP_FL_GL_=\
+	"..\fltk\mac.H"\
+	
 # End Source File
 # Begin Source File
 
@@ -1189,6 +1249,9 @@ DEP_CPP_FL_GL_W=\
 	"..\fltk\x.h"\
 	"..\OpenGL\Fl_Gl_Choice.H"\
 	".\config.h"\
+	
+NODEP_CPP_FL_GL_W=\
+	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
@@ -1263,6 +1326,9 @@ DEP_CPP_FL_IM=\
 	"..\fltk\Fl_Widget.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	
+NODEP_CPP_FL_IM=\
+	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
@@ -1353,6 +1419,9 @@ DEP_CPP_FL_KE=\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	
+NODEP_CPP_FL_KE=\
+	"..\fltk\mac.H"\
+	
 # End Source File
 # Begin Source File
 
@@ -1409,6 +1478,9 @@ DEP_CPP_FL_LIS=\
 	"..\src\fl_list_fonts_x.cxx"\
 	".\config.h"\
 	
+NODEP_CPP_FL_LIS=\
+	"..\fltk\mac.H"\
+	
 # End Source File
 # Begin Source File
 
@@ -1454,6 +1526,48 @@ DEP_CPP_FL_LOC=\
 	"..\fltk\Fl_Export.h"\
 	"..\fltk\Fl_Flags.h"\
 	".\config.h"\
+	{$(INCLUDE)}"config\_epilog.h"\
+	{$(INCLUDE)}"config\_msvc_warnings_off.h"\
+	{$(INCLUDE)}"config\_prolog.h"\
+	{$(INCLUDE)}"config\stl_apcc.h"\
+	{$(INCLUDE)}"config\stl_apple.h"\
+	{$(INCLUDE)}"config\stl_as400.h"\
+	{$(INCLUDE)}"config\stl_bc.h"\
+	{$(INCLUDE)}"config\stl_como.h"\
+	{$(INCLUDE)}"config\stl_confix.h"\
+	{$(INCLUDE)}"config\stl_dec.h"\
+	{$(INCLUDE)}"config\stl_dec_vms.h"\
+	{$(INCLUDE)}"config\stl_fujitsu.h"\
+	{$(INCLUDE)}"config\stl_gcc.h"\
+	{$(INCLUDE)}"config\stl_hpacc.h"\
+	{$(INCLUDE)}"config\stl_ibm.h"\
+	{$(INCLUDE)}"config\stl_intel.h"\
+	{$(INCLUDE)}"config\stl_kai.h"\
+	{$(INCLUDE)}"config\stl_msvc.h"\
+	{$(INCLUDE)}"config\stl_mwerks.h"\
+	{$(INCLUDE)}"config\stl_mycomp.h"\
+	{$(INCLUDE)}"config\stl_sco.h"\
+	{$(INCLUDE)}"config\stl_select_lib.h"\
+	{$(INCLUDE)}"config\stl_sgi.h"\
+	{$(INCLUDE)}"config\stl_solaris.h"\
+	{$(INCLUDE)}"config\stl_sunpro.h"\
+	{$(INCLUDE)}"config\stl_symantec.h"\
+	{$(INCLUDE)}"config\stl_watcom.h"\
+	{$(INCLUDE)}"config\stl_wince.h"\
+	{$(INCLUDE)}"config\stlcomp.h"\
+	{$(INCLUDE)}"config\vc_select_lib.h"\
+	{$(INCLUDE)}"pthread.h"\
+	{$(INCLUDE)}"stl\_abbrevs.h"\
+	{$(INCLUDE)}"stl\_config.h"\
+	{$(INCLUDE)}"stl\_config_compat.h"\
+	{$(INCLUDE)}"stl\_config_compat_post.h"\
+	{$(INCLUDE)}"stl\_epilog.h"\
+	{$(INCLUDE)}"stl\_prolog.h"\
+	{$(INCLUDE)}"stl\_site_config.h"\
+	{$(INCLUDE)}"stl_user_config.h"\
+	
+NODEP_CPP_FL_LOC=\
+	"..\..\usr\include\pthread.h"\
 	
 # End Source File
 # Begin Source File
@@ -1632,6 +1746,9 @@ DEP_CPP_FL_MENU_W=\
 	"..\fltk\x.h"\
 	".\config.h"\
 	
+NODEP_CPP_FL_MENU_W=\
+	"..\fltk\mac.H"\
+	
 # End Source File
 # Begin Source File
 
@@ -1696,6 +1813,9 @@ DEP_CPP_FL_OVE=\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	
+NODEP_CPP_FL_OVE=\
+	"..\fltk\mac.H"\
+	
 # End Source File
 # Begin Source File
 
@@ -1710,6 +1830,9 @@ DEP_CPP_FL_OVER=\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
+	
+NODEP_CPP_FL_OVER=\
+	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
@@ -1735,6 +1858,9 @@ DEP_CPP_FL_OVERL=\
 	"..\fltk\x.h"\
 	".\config.h"\
 	
+NODEP_CPP_FL_OVERL=\
+	"..\fltk\mac.H"\
+	
 # End Source File
 # Begin Source File
 
@@ -1749,6 +1875,9 @@ DEP_CPP_FL_OW=\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
+	
+NODEP_CPP_FL_OW=\
+	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
@@ -1784,6 +1913,9 @@ DEP_CPP_FL_PI=\
 	"..\fltk\Fl_Pixmap.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	
+NODEP_CPP_FL_PI=\
+	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
@@ -1854,6 +1986,9 @@ DEP_CPP_FL_RE=\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	
+NODEP_CPP_FL_RE=\
+	"..\fltk\mac.H"\
+	
 # End Source File
 # Begin Source File
 
@@ -1903,6 +2038,9 @@ DEP_CPP_FL_RG=\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	
+NODEP_CPP_FL_RG=\
+	"..\fltk\mac.H"\
+	
 # End Source File
 # Begin Source File
 
@@ -1920,6 +2058,9 @@ DEP_CPP_FL_RGB=\
 	"..\fltk\Fl_RGB_Image.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	
+NODEP_CPP_FL_RGB=\
+	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
@@ -2005,6 +2146,9 @@ DEP_CPP_FL_SCR=\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	
+NODEP_CPP_FL_SCR=\
+	"..\fltk\mac.H"\
+	
 # End Source File
 # Begin Source File
 
@@ -2060,6 +2204,9 @@ DEP_CPP_FL_SHA=\
 	"..\fltk\Fl_Window.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	
+NODEP_CPP_FL_SHA=\
+	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
@@ -2424,6 +2571,9 @@ DEP_CPP_FL_VE=\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	
+NODEP_CPP_FL_VE=\
+	"..\fltk\mac.H"\
+	
 # End Source File
 # Begin Source File
 
@@ -2438,6 +2588,9 @@ DEP_CPP_FL_VI=\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
+	
+NODEP_CPP_FL_VI=\
+	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
@@ -2479,6 +2632,9 @@ DEP_CPP_FL_WIN=\
 	"..\fltk\x.h"\
 	".\config.h"\
 	
+NODEP_CPP_FL_WIN=\
+	"..\fltk\mac.H"\
+	
 # End Source File
 # Begin Source File
 
@@ -2498,6 +2654,9 @@ DEP_CPP_FL_WIND=\
 	"..\fltk\Fl_Window.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	
+NODEP_CPP_FL_WIND=\
+	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
@@ -2536,6 +2695,9 @@ DEP_CPP_FL_WINDOW=\
 	"..\fltk\Fl_Window.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	
+NODEP_CPP_FL_WINDOW=\
+	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
@@ -2578,6 +2740,9 @@ DEP_CPP_GL_DR=\
 	"..\OpenGL\Fl_Gl_Choice.H"\
 	".\config.h"\
 	
+NODEP_CPP_GL_DR=\
+	"..\fltk\mac.H"\
+	
 # End Source File
 # Begin Source File
 
@@ -2601,6 +2766,9 @@ DEP_CPP_GL_ST=\
 	"..\fltk\x.h"\
 	"..\OpenGL\Fl_Gl_Choice.H"\
 	".\config.h"\
+	
+NODEP_CPP_GL_ST=\
+	"..\fltk\mac.H"\
 	
 # End Source File
 # Begin Source File
@@ -2660,6 +2828,7 @@ SOURCE=..\src\scandir.c
 DEP_CPP_SCAND=\
 	"..\src\scandir_win32.c"\
 	".\config.h"\
+	{$(INCLUDE)}"dirent.h"\
 	
 # End Source File
 # Begin Source File

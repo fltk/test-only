@@ -48,21 +48,6 @@ Package=<4>
 
 ###############################################################################
 
-Project: "bitmap"=.\bitmap.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
 Project: "boxtype"=.\boxtype.dsp - Package Owner=<4>
 
 Package=<5>
@@ -219,9 +204,6 @@ Package=<4>
     Project_Dep_Name ask
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name bitmap
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name boxtype
     End Project Dependency
     Begin Project Dependency
@@ -285,9 +267,6 @@ Package=<4>
     Project_Dep_Name overlay
     End Project Dependency
     Begin Project Dependency
-    Project_Dep_Name pixmap
-    End Project Dependency
-    Begin Project Dependency
     Project_Dep_Name pixmap_browser
     End Project Dependency
     Begin Project Dependency
@@ -310,6 +289,9 @@ Package=<4>
     End Project Dependency
     Begin Project Dependency
     Project_Dep_Name fltkdll
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name image
     End Project Dependency
 }}}
 
@@ -474,6 +456,24 @@ Package=<4>
 
 ###############################################################################
 
+Project: "image"=.\image.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltk_images
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "input"=.\input.dsp - Package Owner=<4>
 
 Package=<5>
@@ -580,21 +580,6 @@ Package=<4>
 ###############################################################################
 
 Project: "pack"=.\pack.dsp - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltk
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "pixmap"=.\pixmap.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
