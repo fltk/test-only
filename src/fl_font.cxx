@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.17 1999/11/03 09:18:33 bill Exp $"
+// "$Id: fl_font.cxx,v 1.18 1999/11/16 07:36:11 bill Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -231,7 +231,7 @@ int fl_descent() {
   return fl_xfont->descent;
 }
 
-double fl_width(const char* c) {
+int fl_width(const char* c) {
 #if 0
   XCharStruct* p = fl_xfont->per_char;
   if (!p) return strlen(c)*fl_xfont->min_bounds.width;
@@ -249,7 +249,7 @@ double fl_width(const char* c) {
 #endif
 }
 
-double fl_width(const char* c, int n) {
+int fl_width(const char* c, int n) {
 #if 0
   XCharStruct* p = fl_xfont->per_char;
   if (!p) return n*fl_xfont->min_bounds.width;
@@ -267,7 +267,7 @@ double fl_width(const char* c, int n) {
 #endif
 }
 
-double fl_width(uchar c) {
+int fl_width(uchar c) {
 #if 1
   XCharStruct* p = fl_xfont->per_char;
   if (p) {
@@ -283,8 +283,8 @@ double fl_width(uchar c) {
 }
 
 void fl_draw(const char* str, int n, int x, int y) {
-  if (!fl_xfont) fl_font(0, 14); // Perhaps this should be configured somewhere?
   if (font_gc != fl_gc) {
+    if (!fl_xfont) fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
     font_gc = fl_gc;
     XSetFont(fl_display, fl_gc, fl_xfont->fid);
   }
@@ -320,5 +320,5 @@ Fl_Font_ fl_fonts[] = {
 #endif
 
 //
-// End of "$Id: fl_font.cxx,v 1.17 1999/11/03 09:18:33 bill Exp $".
+// End of "$Id: fl_font.cxx,v 1.18 1999/11/16 07:36:11 bill Exp $".
 //

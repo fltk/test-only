@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileBrowser.cxx,v 1.3 1999/11/01 22:51:38 carl Exp $"
+// "$Id: Fl_FileBrowser.cxx,v 1.4 1999/11/16 07:36:09 bill Exp $"
 //
 // Fl_FileBrowser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -78,10 +78,8 @@ Fl_FileBrowser::item_height(void *p) const	// I - List item data
   int		height;			// Width of line
   int		textheight;		// Height of text
 
-
   // Figure out the standard text height...
-  fl_font(textfont(), textsize());
-  textheight = fl_height();
+  textheight = textsize()+leading();
 
   // We always have at least 1 line...
   height = textheight;
@@ -132,7 +130,7 @@ Fl_FileBrowser::item_width(void *p) const	// I - List item data
       strchr(line->txt, '\t') == NULL)
   {
     // Do a fast width calculation...
-    width = (int)fl_width(line->txt);
+    width = fl_width(line->txt);
   }
   else
   {
@@ -147,7 +145,7 @@ Fl_FileBrowser::item_width(void *p) const	// I - List item data
         // Newline - nul terminate this fragment and get the width...
         *ptr = '\0';
 
-	tempwidth += (int)fl_width(fragment);
+	tempwidth += fl_width(fragment);
 
         // Update the max width as needed...
 	if (tempwidth > width)
@@ -161,7 +159,7 @@ Fl_FileBrowser::item_width(void *p) const	// I - List item data
       {
         // Advance to the next column...
         column ++;
-        tempwidth = column * (int)fl_width("        ");
+        tempwidth = column * fl_width("        ");
 
         if (tempwidth > width)
 	  width = tempwidth;
@@ -176,7 +174,7 @@ Fl_FileBrowser::item_width(void *p) const	// I - List item data
       // Nul terminate this fragment and get the width...
       *ptr = '\0';
 
-      tempwidth += (int)fl_width(fragment);
+      tempwidth += fl_width(fragment);
 
       // Update the max width as needed...
       if (tempwidth > width)
@@ -401,5 +399,5 @@ Fl_FileBrowser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_FileBrowser.cxx,v 1.3 1999/11/01 22:51:38 carl Exp $".
+// End of "$Id: Fl_FileBrowser.cxx,v 1.4 1999/11/16 07:36:09 bill Exp $".
 //

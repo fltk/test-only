@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.cxx,v 1.33 1999/11/14 08:42:45 bill Exp $"
+// "$Id: Fl_Input_.cxx,v 1.34 1999/11/16 07:36:09 bill Exp $"
 //
 // Common input widget routines for the Fast Light Tool Kit (FLTK).
 //
@@ -95,7 +95,7 @@ const char* Fl_Input_::expand(const char* p, char* buf) const {
 }
 
 // After filling in such a buffer, find the width to e
-double Fl_Input_::expandpos(
+int Fl_Input_::expandpos(
   const char* p,	// real string
   const char* e,	// pointer into real string
   const char* buf,	// conversion of real string by expand()
@@ -185,17 +185,17 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
 
   // count how many lines and put the last one into the buffer:
   // And figure out where the cursor is:
-  int height = fl_height()+leading();
+  int height = textsize()+leading();
   int lines;
   int curx, cury;
   for (p=value(), curx=cury=lines=0; ;) {
     e = expand(p, buf);
     if (position() >= p-value() && position() <= e-value()) {
-      curx = int(expandpos(p, value()+position(), buf, 0)+.5);
+      curx = expandpos(p, value()+position(), buf, 0);
       if (Fl::focus()==this && !was_up_down) up_down_pos = curx;
       cury = lines*height;
       if (Fl::focus()==this) {
-	int fullw = int(expandpos(p, e, buf, 0));
+	int fullw = expandpos(p, e, buf, 0);
 	if (curx > xscroll_+W-20) {
 	  xscroll_ = curx+20-W;
 	  if (xscroll_ > fullw-W+2) xscroll_ = fullw-W+2;
@@ -231,7 +231,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
 
   p = value();
   // visit each line and draw it:
-  int desc = height-(fl_descent()-leading()/2);
+  int desc = height-fl_descent();
   int ypos = -yscroll_;
   for (; ypos < H;) {
 
@@ -245,7 +245,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
       if (e >= pp && (!erase_cursor_only || p <= pp)) { // we must erase this
       // calculate area to erase:
       int x1 = -xscroll_;
-      if (p < pp) x1 += int(expandpos(p, pp, buf, 0));
+      if (p < pp) x1 += expandpos(p, pp, buf, 0);
       // erase it:
       fl_color(fl_inactive(color(), fl));
       fl_rectf(X+x1, Y+ypos, erase_cursor_only?2:W-x1, height);
@@ -262,13 +262,13 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
       int offset1 = 0;
       if (pp > p) {
 	fl_color(textcolor);
-	x1 += int(expandpos(p, pp, buf, &offset1));
+	x1 += expandpos(p, pp, buf, &offset1);
 	fl_draw(buf, offset1, X-xscroll_, Y+ypos+desc);
       }
       pp = value()+selend;
       int x2 = W;
       int offset2;
-      if (pp <= e) x2 = int(expandpos(p, pp, buf, &offset2))-xscroll_;
+      if (pp <= e) x2 = expandpos(p, pp, buf, &offset2)-xscroll_;
       else offset2 = strlen(buf);
       fl_color(selection_color());
       fl_rectf(X+int(x1+.5), Y+ypos, int(x2-x1), height);
@@ -334,7 +334,7 @@ void Fl_Input_::handle_mouse(int X, int Y,
   char buf[MAXBUF];
 
   int theline = (type()==FL_MULTILINE_INPUT) ?
-    (Fl::event_y()-Y+yscroll_)/(fl_height()+leading()) : 0;
+    (Fl::event_y()-Y+yscroll_)/(textsize()+leading()) : 0;
 
   if (W > 12) {X += 3; W -= 6;} // add a left/right border
 
@@ -351,14 +351,13 @@ void Fl_Input_::handle_mouse(int X, int Y,
   }
   const char *l, *r, *t; double f0 = Fl::event_x()-X+xscroll_;
   for (l = p, r = e; l<r; ) {
-    double f;
     t = l+(r-l+1)/2;
-    f = X-xscroll_+expandpos(p, t, buf, 0);
+    int f = X-xscroll_+expandpos(p, t, buf, 0);
     if (f <= Fl::event_x()) {l = t; f0 = Fl::event_x()-f;}
     else r = t-1;
   }
   if (l < e) { // see if closer to character on right:
-    double f1 = X-xscroll_+expandpos(p, l+1, buf, 0)-Fl::event_x();
+    int f1 = X-xscroll_+expandpos(p, l+1, buf, 0)-Fl::event_x();
     if (f1 < f0) l = l+1;
   }
   newpos = l-value();
@@ -425,10 +424,10 @@ int Fl_Input_::position(int p, int m) {
 
 int Fl_Input_::up_down_position(int i, int keepmark) {
   while (i > 0 && index(i-1) != '\n') i--;	// go to start of line
-  double oldwid = 0.0;
+  int oldwid = 0;
   setfont();
   while (index(i) && index(i)!='\n') {
-    double tt = oldwid + fl_width(index(i));
+    int tt = oldwid + fl_width(index(i));
     if ((oldwid+tt)/2 >= up_down_pos) break;
     oldwid = tt;
     i++;
@@ -742,5 +741,5 @@ Fl_Input_::~Fl_Input_() {
 }
 
 //
-// End of "$Id: Fl_Input_.cxx,v 1.33 1999/11/14 08:42:45 bill Exp $".
+// End of "$Id: Fl_Input_.cxx,v 1.34 1999/11/16 07:36:09 bill Exp $".
 //

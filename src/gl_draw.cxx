@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.10 1999/09/14 07:17:27 bill Exp $"
+// "$Id: gl_draw.cxx,v 1.11 1999/11/16 07:36:11 bill Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -36,12 +36,12 @@
 #include "Fl_FontSize.H"
 #include <string.h>
 
-void  gl_font(Fl_Font f, int size) {fl_font(f, size);}
-int   gl_height() {return fl_height();}
-int   gl_descent() {return fl_descent();}
-double gl_width(const char* s) {return fl_width(s);}
-double gl_width(const char* s, int n) {return fl_width(s,n);}
-double gl_width(uchar c) {return fl_width(c);}
+void gl_font(Fl_Font f, int size) {fl_font(f, size);}
+int gl_height() {return fl_height();}
+int gl_descent() {return fl_descent();}
+int gl_width(const char* s) {return fl_width(s);}
+int gl_width(const char* s, int n) {return fl_width(s,n);}
+int gl_width(uchar c) {return fl_width(c);}
 
 void gl_draw(const char* str, int n) {
   if (!fl_font_->listbase) {
@@ -140,5 +140,5 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.10 1999/09/14 07:17:27 bill Exp $".
+// End of "$Id: gl_draw.cxx,v 1.11 1999/11/16 07:36:11 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.15 1999/11/01 22:51:40 carl Exp $"
+// "$Id: fl_font_win32.cxx,v 1.16 1999/11/16 07:36:11 bill Exp $"
 //
 // WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -174,19 +174,19 @@ int fl_descent() {
   return fl_font_->metr.tmDescent;
 }
 
-double fl_width(const char* c) {
-  double w = 0.0;
+int fl_width(const char* c) {
+  int w = 0;
   while (*c) w += fl_font_->width[uchar(*c++)];
   return w;
 }
 
-double fl_width(const char* c, int n) {
-  double w = 0.0;
+int fl_width(const char* c, int n) {
+  int w = 0;
   while (n--) w += fl_font_->width[uchar(*c++)];
   return w;
 }
 
-double fl_width(uchar c) {
+int fl_width(uchar c) {
   return fl_font_->width[c];
 }
 
@@ -201,5 +201,5 @@ void fl_draw(const char* str, int x, int y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.15 1999/11/01 22:51:40 carl Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.16 1999/11/16 07:36:11 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.25 1999/11/10 18:06:06 carl Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.26 1999/11/16 07:36:10 bill Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -138,8 +138,12 @@ int Fl_Tabs::handle(int event) {
   case FL_DRAG:
   case FL_RELEASE:
     o = which(Fl::event_x(), Fl::event_y());
-    if (event == FL_RELEASE && !Fl::pushed()) {push(0); if (o) value(o);}
-    else push(o);
+    if (event == FL_RELEASE && !Fl::pushed()) {
+      push(0);
+      if (o && value(o)) do_callback();
+    } else {
+      push(o);
+    }
     return 1;
 
   default:
@@ -308,5 +312,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.25 1999/11/10 18:06:06 carl Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.26 1999/11/16 07:36:10 bill Exp $".
 //

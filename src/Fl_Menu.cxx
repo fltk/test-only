@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.60 1999/11/15 09:02:19 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.61 1999/11/16 07:36:09 bill Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -321,7 +321,7 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
     if (m->flags() & (FL_SUBMENU|FL_SUBMENU_POINTER)) w1 += 16;
     if (w1 > W) W = w1;
     if (m->shortcut_) {
-      w1 = int(fl_width(fl_shortcut_label(m->shortcut_))) + 8;
+      w1 = fl_width(fl_shortcut_label(m->shortcut_)) + 8;
       if (w1 > hotKeysw) hotKeysw = w1;
     }
     // can't use sgi overlay for images:
@@ -851,5 +851,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.60 1999/11/15 09:02:19 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.61 1999/11/16 07:36:09 bill Exp $".
 //

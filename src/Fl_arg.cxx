@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.17 1999/11/15 15:40:41 carl Exp $"
+// "$Id: Fl_arg.cxx,v 1.18 1999/11/16 07:36:10 bill Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -64,14 +64,8 @@ static const char* fg = 0;
 static const char* bg = 0;
 static const char* bg2 = 0;
 
-#ifndef WIN32
-#define COLOR_WINDOW 0
-#define COLOR_WINDOWTEXT 1
-#define COLOR_BTNFACE 2
-#endif
-
 static void
-getsyscolor(int what, const char *arg, void (*func)(Fl_Color)) {
+colorswitch(const char *arg, void (*func)(Fl_Color)) {
   if (!arg) return;
   Fl_Color c = fl_rgb(arg);
   if (!c) Fl::error("Unknown color: %s", arg);
@@ -158,41 +152,40 @@ int Fl::args(int argc, char** argv, int& i, int (*cb)(int,char**,int&)) {
 
 // show a main window, use any parsed arguments
 void Fl_Window::show(int argc, char **argv) {
-  sizes();//to allocate the array if this window was not end()ed...
   if (!arg_called) Fl::args(argc,argv);
 
-  // set colors first, so background_pixel is correct:
-  static char beenhere;
-  if (!beenhere) {
-    beenhere = 1;
-    getsyscolor(COLOR_BTNFACE,	  bg, fl_background);
-    getsyscolor(COLOR_WINDOW,	  bg2,fl_text_background);
-    getsyscolor(COLOR_WINDOWTEXT, fg, fl_foreground);
-    // load the theme here?
-    if (geometry) {
-      int flags = 0, gx = x(), gy = y(); unsigned int gw = w(), gh = h();
-      flags = XParseGeometry(geometry, &gx, &gy, &gw, &gh);
-      if (flags & XNegative) gx = Fl::w()-w()+gx;
-      if (flags & YNegative) gy = Fl::h()-h()+gy;
-      //  int mw,mh; minsize(mw,mh);
-      //  if (mw > gw) gw = mw;
-      //  if (mh > gh) gh = mh;
-      Fl_Widget *r = resizable();
-      if (!r) resizable(this);
-      // for WIN32 we assume window is not mapped yet:
-      if (flags & (XValue | YValue))
-	x(-1), resize(gx,gy,gw,gh);
-      else
-	size(gw,gh);
-      layout();
-      resizable(r);
-    }
+  if (geometry) {
+    sizes();//to allocate the array if this window was not end()ed...
+    int flags = 0, gx = x(), gy = y(); unsigned int gw = w(), gh = h();
+    flags = XParseGeometry(geometry, &gx, &gy, &gw, &gh);
+    if (flags & XNegative) gx = Fl::w()-w()+gx;
+    if (flags & YNegative) gy = Fl::h()-h()+gy;
+    //  int mw,mh; minsize(mw,mh);
+    //  if (mw > gw) gw = mw;
+    //  if (mh > gh) gh = mh;
+    Fl_Widget *r = resizable();
+    if (!r) resizable(this);
+    // for WIN32 we assume window is not mapped yet:
+    if (flags & (XValue | YValue))
+      x(-1), resize(gx,gy,gw,gh);
+    else
+      size(gw,gh);
+    layout();
+    resizable(r);
+    geometry = 0;
   }
 
   if (!xclass()) xclass(filename_name(argv[0]));
   if (name) {label(name); name = 0;}
   else if (!label()) label(xclass());
+
   show();
+
+  // wait until the display is open (and WIN32 reads system colors) to
+  // interpret the color switches:
+  colorswitch(bg, fl_background);
+  colorswitch(bg2,fl_text_background);
+  colorswitch(fg, fl_foreground);
 
 #ifndef WIN32
   // set the command string, used by state-saving window managers:
@@ -211,7 +204,6 @@ void Fl_Window::show(int argc, char **argv) {
   delete[] buffer;
 #endif
 #endif
-
 }
 
 // Calls useful for simple demo programs, with automatic help message:
@@ -375,5 +367,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.17 1999/11/15 15:40:41 carl Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.18 1999/11/16 07:36:10 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.9 1999/11/03 09:18:33 bill Exp $"
+// "$Id: fl_draw.cxx,v 1.10 1999/11/16 07:36:10 bill Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -46,14 +46,14 @@ static char* underline_at;
 // Sets width to the width of the string in the current font.
 
 static const char*
-expand(const char* from, char* buf, double maxw, int& n, double &width, int wrap) {
+expand(const char* from, char* buf, int maxw, int& n, int &width, int wrap) {
 
   char* o = buf;
   char* e = buf+(MAXBUF-4);
   underline_at = 0;
   char* word_end = o;
   const char* word_start = from;
-  double w = 0;
+  int w = 0;
 
   const char* p = from;
   for (;; p++) {
@@ -63,7 +63,7 @@ expand(const char* from, char* buf, double maxw, int& n, double &width, int wrap
     if (!c || c == ' ' || c == '\n') {
       // test for word-wrap:
       if (word_start < p && wrap) {
-	double newwidth = w + fl_width(word_end, o-word_end);
+	int newwidth = w + fl_width(word_end, o-word_end);
 	if (word_end > buf && newwidth > maxw) { // break before this word
 	  o = word_end;
 	  p = word_start;
@@ -117,7 +117,7 @@ void fl_draw(
 
   // count how many lines and put the last one into the buffer:
   int lines;
-  double width;
+  int width;
   for (p=str,lines=0; ;) {
     e = expand(p, buf, w, buflen, width, align&FL_ALIGN_WRAP);
     lines++;
@@ -145,7 +145,7 @@ void fl_draw(
     callthis(buf,buflen,xpos,ypos-desc);
 
     if (underline_at)
-      callthis("_",1,xpos+int(fl_width(buf,underline_at-buf)),ypos-desc);
+      callthis("_",1,xpos+fl_width(buf,underline_at-buf),ypos-desc);
 
     if (!*e) break;
     p = e;
@@ -172,7 +172,7 @@ void fl_measure(const char* str, int& w, int& h) {
   char buf[MAXBUF];
   int buflen;
   int lines;
-  double width;
+  int width;
   int W = 0;
   for (p=str,lines=0; ;) {
     e = expand(p, buf, w, buflen, width, w!=0);
@@ -186,5 +186,5 @@ void fl_measure(const char* str, int& w, int& h) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.9 1999/11/03 09:18:33 bill Exp $".
+// End of "$Id: fl_draw.cxx,v 1.10 1999/11/16 07:36:10 bill Exp $".
 //

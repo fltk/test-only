@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.14 1999/11/14 08:42:44 bill Exp $"
+// "$Id: Fl_Browser.cxx,v 1.15 1999/11/16 07:36:08 bill Exp $"
 //
 // Browser widget for the Fast Light Tool Kit (FLTK).
 //
@@ -212,8 +212,7 @@ int Fl_Browser::item_height(void* lv) const {
 
   if (!l->txt[0]) {
     // For blank lines set the height to exactly 1 line!
-    fl_font(textfont(), textsize());
-    int h = fl_height();
+    int h = textsize();
     if (h > hmax) hmax = h;
   }
   else {
@@ -240,8 +239,7 @@ int Fl_Browser::item_height(void* lv) const {
       char* ptr = str;
       for(;*str && (*str!=column_char()); str++) ;
       if (ptr < str) {
-	fl_font(font, size); int h = fl_height();
-	if (h > hmax) hmax = h;
+	if (size > hmax) hmax = size;
       }
       if (!*str) str --;
     }
@@ -293,7 +291,7 @@ int Fl_Browser::item_width(void* v) const {
   }
 
   fl_font(font, size);
-  return w + int(fl_width(str)) + 6;
+  return w + fl_width(str) + 6;
 }
 
 int Fl_Browser::full_height() const {
@@ -487,5 +485,5 @@ int Fl_Browser::value() const {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.14 1999/11/14 08:42:44 bill Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.15 1999/11/16 07:36:08 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.26 1999/11/10 18:06:02 carl Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.27 1999/11/16 07:36:08 bill Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -471,7 +471,8 @@ int Fl_Browser_::select_only(void* l, int docallbacks) {
 int Fl_Browser_::handle(int event) {
 
   // must do shortcuts first or the scrollbar will get them...
-  if (event == FL_SHORTCUT && type() >= FL_HOLD_BROWSER) {
+  if ((event == FL_SHORTCUT || event == FL_KEYBOARD)
+      && type() >= FL_HOLD_BROWSER) {
     void* l1 = selection_;
     void* l = l1; if (!l) l = top_; if (!l) l = item_first();
     if (l) {
@@ -660,5 +661,5 @@ static void revert(Fl_Style* s) {
 Fl_Style Fl_Browser_::default_style("Browser", revert);
 
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.26 1999/11/10 18:06:02 carl Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.27 1999/11/16 07:36:08 bill Exp $".
 //

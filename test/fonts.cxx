@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.13 1999/11/15 09:02:21 bill Exp $"
+// "$Id: fonts.cxx,v 1.14 1999/11/16 07:36:13 bill Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -50,7 +50,7 @@ void FontDisplay::draw() {
   char buffer[32];
   for (int Y = 1; Y < 8; Y++) {
     for (int X = 0; X < 32; X++) buffer[X] = (32*Y+X);
-    fl_draw(buffer, 32, x()+3, y()+3+fl_height()*Y);
+    fl_draw(buffer, 32, x()+3, y()+3+size*Y);
   }
   fl_font(FL_HELVETICA,10);
   fl_pop_clip();
@@ -99,7 +99,9 @@ void font_cb(Fl_Widget *, long) {
   sizeobj->clear();
   int *s; int n = f->sizes(s);
   if (!n) {
-    // no sizes
+    // no sizes (this only happens on X)
+    fl_font(f, pickedsize);
+    textobj->size = fl_height();
   } else if (s[0] == 0) {
     // many sizes;
     int j = 1;
@@ -110,6 +112,7 @@ void font_cb(Fl_Widget *, long) {
       sizeobj->add(buf);
     }
     sizeobj->value(pickedsize);
+    textobj->size = pickedsize;
   } else {
     // some sizes
     int w = 0;
@@ -120,6 +123,7 @@ void font_cb(Fl_Widget *, long) {
       sizeobj->add(buf);
     }
     sizeobj->value(w+1);
+    textobj->size = s[w];
   }
 
   textobj->redraw();
@@ -182,5 +186,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.13 1999/11/15 09:02:21 bill Exp $".
+// End of "$Id: fonts.cxx,v 1.14 1999/11/16 07:36:13 bill Exp $".
 //
