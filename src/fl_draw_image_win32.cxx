@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_win32.cxx,v 1.21 2004/07/19 23:43:08 laza2000 Exp $"
+// "$Id: fl_draw_image_win32.cxx,v 1.22 2004/07/20 11:58:21 laza2000 Exp $"
 //
 // _WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -135,6 +135,45 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   transform(x,y);
   transform(X,Y);
 
+  static U32 bmibuffer[256+12];
+  BITMAPINFO &bmi = *((BITMAPINFO*)bmibuffer);
+  if (!bmi.bmiHeader.biSize) {
+    bmi.bmiHeader.biSize = sizeof(BITMAPINFOHEADER);
+    bmi.bmiHeader.biPlanes = 1;
+    bmi.bmiHeader.biCompression = BI_RGB;
+    bmi.bmiHeader.biXPelsPerMeter = 0;
+    bmi.bmiHeader.biYPelsPerMeter = 0;
+    bmi.bmiHeader.biClrUsed = 0;
+    bmi.bmiHeader.biClrImportant = 0;
+  }
+
+  // -1 == none
+  // 0  == indexed
+  // 1  == mono
+  static int current_cmap = -1;
+
+#if USE_COLORMAP
+  if (indexed) {
+    if(current_cmap != 0) {
+      current_cmap = 0;
+      for (short i=0; i<256; i++) {
+        *((short*)(bmi.bmiColors)+i) = i;
+      }
+    }
+  } else
+#endif
+  if (mono) {
+    if(current_cmap != 1) {
+      current_cmap = 1;
+      for (int i=0; i<256; i++) {
+        bmi.bmiColors[i].rgbBlue = (uchar)i;
+        bmi.bmiColors[i].rgbGreen = (uchar)i;
+        bmi.bmiColors[i].rgbRed = (uchar)i;
+        bmi.bmiColors[i].rgbReserved = (uchar)i;
+      }
+    }
+  }
+  
 #if USE_COLORMAP
   int pixelsize = mono|indexed ? 1 : 4;
 #else
@@ -146,15 +185,8 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
     linesize += 4 - (linesize % 4);
   }
 
-  BITMAPINFOHEADER head;
-
-  head.biSize = sizeof(BITMAPINFOHEADER);
-  head.biWidth = w;
-  head.biPlanes = 1;
-  head.biBitCount = pixelsize*8;
-  head.biCompression = BI_RGB;
-  head.biClrUsed = 0;
-  head.biClrImportant = 0;
+  bmi.bmiHeader.biWidth = w;
+  bmi.bmiHeader.biBitCount = pixelsize*8;
 
   static U32* buffer;
   int blocking = h;
@@ -211,9 +243,9 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
               // Premultiply for AlphaBlend
               int a = from[3];
               float afactor = (float)a / (float)0xff;
-              to[0] = (from[2] * afactor);
-	      to[1] = (from[1] * afactor);
-	      to[2] = (from[0] * afactor);
+              to[0] = (uchar)(float(from[2]) * afactor);
+	      to[1] = (uchar)(float(from[1]) * afactor);
+	      to[2] = (uchar)(float(from[0]) * afactor);
 	      to[3] = a;
             } else {
 	      to[0] = from[2];
@@ -224,12 +256,12 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
           }
         }
     }
-    head.biHeight = -k;
-    head.biSizeImage = k*linesize;
+    bmi.bmiHeader.biHeight = -k;
+    bmi.bmiHeader.biSizeImage = k*linesize;
 #if 1
     SetDIBitsToDevice(dc, x, ypos, w, k, 0, 0, 0, k,
 		      (LPSTR)buffer,
-		      (BITMAPINFO*)&head,
+		      &bmi,
 # if USE_COLORMAP
 		      indexed ? DIB_PAL_COLORS : DIB_RGB_COLORS
 # else
@@ -279,5 +311,5 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 #endif
 
 //
-// End of "$Id: fl_draw_image_win32.cxx,v 1.21 2004/07/19 23:43:08 laza2000 Exp $".
+// End of "$Id: fl_draw_image_win32.cxx,v 1.22 2004/07/20 11:58:21 laza2000 Exp $".
 //
