@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_Plugins.cxx,v 1.4 1999/10/09 15:32:16 vincent Exp $"
+// "$Id: Fl_Style_Plugins.cxx,v 1.5 1999/10/11 20:56:24 vincent Exp $"
 //
 // Style definition and plugin support
 //
@@ -45,6 +45,8 @@ static void ReadPlugin(char* s, const char* location, char* ext, char* func)
 {
   FLDLhandle handle;
   loaded = 0;
+  printf("Trying %s\n", s);
+
   if(!strcmp(s+strlen(s)-strlen(ext), ext)) {
     char s2[256];
 
@@ -53,10 +55,15 @@ static void ReadPlugin(char* s, const char* location, char* ext, char* func)
 
     if(handle) {
 
+      printf("1 ...");
+
       int used = 0;
 
       Fl_Style_Plugin_Entry* e = (Fl_Style_Plugin_Entry*) FLDLsym( handle, func);
       if(e) {
+
+        printf("2 ...\n", s);
+
 	used = 1;
 	loaded = 1;
 	e();
@@ -203,8 +210,8 @@ Fl_Color fl_parse_color(char*&s)
 // with images works (but they still need to provide fl_draw_image and the
 // decompression routine ...)
 #include <FL/Fl_Shared_Image.H>
-fl_use_image_in_style() { Fl_Shared_Image::get(0,0); }
+void fl_use_image_in_style() { Fl_Shared_Image::get(0,0); }
 
 //
-// End of "$Id: Fl_Style_Plugins.cxx,v 1.4 1999/10/09 15:32:16 vincent Exp $".
+// End of "$Id: Fl_Style_Plugins.cxx,v 1.5 1999/10/11 20:56:24 vincent Exp $".
 //

@@ -10,9 +10,8 @@
 #else
 # include <unistd.h>
 #endif
-#include <string.h>
 
-extern "C" void theme_plugin();
+extern "C" FLDLE void theme_plugin();
 
 
 static Fl_Style* style = &Fl_Widget::default_style;
@@ -58,7 +57,7 @@ FLDLE void theme_plugin()
       read_conf(FLTK_LIBDIR"/lib/fltk/fltkrc");
 #else
       chdir(getenv("WINDIR"));
-      ReadPlugins("fltk/fltkrc");
+      read_conf("fltk/fltkrc");
 #endif
     }
     chdir(s);

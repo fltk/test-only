@@ -15,7 +15,7 @@
 #endif
 #include <string.h>
 
-extern "C" void style_plugin();
+extern "C" FLDLE void style_plugin();
 
 static bool parse_color(Fl_Style& style, char* s) { 
   style.set_color(fl_parse_color(s)); return 1; }
@@ -38,33 +38,33 @@ static bool parse_text_color(Fl_Style& style, char* s) {
 #include <FL/Fl_Boxtype.H>
 struct fl_box {
   char* name;
-  Fl_Boxtype_ bt;
+  Fl_Boxtype bt;
 };
 
-static fl_box  boxtypes[] = {
-{"no_box", fl_no_box},
-{"flat_box", fl_flat_box},
-{"flat_up_box", fl_flat_up_box},
-{"flat_down_box", fl_flat_down_box},
-{"normal_box", fl_normal_box},
-{"down_box", fl_down_box},
-{"thin_box", fl_thin_box},
-{"thin_down_box", fl_thin_down_box},
-{"engraved_box", fl_engraved_box},
-{"embossed_box", fl_embossed_box},
-{"border_box", fl_border_box},
-{"shadow_box", fl_shadow_box},
-{"rounded_box", fl_rounded_box},
-{"rshadow_box", fl_rshadow_box},
-{"rflat_box", fl_rflat_box},
-{"round_box", fl_round_box},
-{"round_down_box", fl_round_down_box},
-{"diamond_box", fl_diamond_box},
-{"diamond_down_box", fl_diamond_down_box},
-{"oval_box", fl_oval_box},
-{"oval_shadow_box", fl_oval_shadow_box},
-{"oval_flat_box", fl_oval_flat_box},
-{"border_frame", fl_border_frame },
+static fl_box boxtypes[] = {
+{"no_box", &fl_no_box},
+{"flat_box", &fl_flat_box},
+{"flat_up_box", &fl_flat_up_box},
+{"flat_down_box", &fl_flat_down_box},
+{"normal_box", &fl_normal_box},
+{"down_box", &fl_down_box},
+{"thin_box", &fl_thin_box},
+{"thin_down_box", &fl_thin_down_box},
+{"engraved_box", &fl_engraved_box},
+{"embossed_box", &fl_embossed_box},
+{"border_box", &fl_border_box},
+{"shadow_box", &fl_shadow_box},
+{"rounded_box", &fl_rounded_box},
+{"rshadow_box", &fl_rshadow_box},
+{"rflat_box", &fl_rflat_box},
+{"round_box", &fl_round_box},
+{"round_down_box", &fl_round_down_box},
+{"diamond_box", &fl_diamond_box},
+{"diamond_down_box", &fl_diamond_down_box},
+{"oval_box", &fl_oval_box},
+{"oval_shadow_box", &fl_oval_shadow_box},
+{"oval_flat_box", &fl_oval_flat_box},
+{"border_frame", &fl_border_frame },
 {0,0}
 };
 
@@ -73,7 +73,7 @@ static bool parse_boxtype(Fl_Style& style, char* s)
   char* w = fl_parse_word(s);
   for (fl_box* b = boxtypes; b->name; b++)
     if (!strcmp(w, b->name)) {
-      style.set_box(&b->bt);
+      style.set_box(b->bt);
       return 1;
     }
   return 0;

@@ -108,6 +108,21 @@ Package=<4>
 
 ###############################################################################
 
+Project: "buildin_style_plugin"=".\buildin_style_plugin.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltkdll
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "button"=".\button.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -951,6 +966,21 @@ Package=<4>
 
 ###############################################################################
 
+Project: "style_plugin"=".\style_plugin.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltkdll
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "subwindow"=".\subwindow.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -991,6 +1021,21 @@ Package=<4>
 {{{
     Begin Project Dependency
     Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "theme_plugin"=".\theme_plugin.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltkdll
     End Project Dependency
 }}}
 

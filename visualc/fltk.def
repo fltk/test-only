@@ -628,7 +628,7 @@ numericsort
 ?fl_parse_word@@YAPADAAPAD@Z
 ?fl_read_style_plugins@@YAXPBD@Z
 ?fl_rgb@@YAIEEE@Z
-?fl_use_image_in_style@@YAHXZ
+?fl_use_image_in_style@@YAXXZ
 ?is@@YA_NPADD@Z
 ??0Fl_Slider@@QAE@EHHHHPBD@Z
 ??0Fl_Slider@@QAE@HHHHPBD@Z

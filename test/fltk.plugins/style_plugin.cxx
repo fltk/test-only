@@ -9,7 +9,7 @@
 #endif
 #include <string.h>
 
-extern "C" void style_plugin();
+extern "C" FLDLE void style_plugin();
 
 #include <FL/Fl_Boxtype.H>
 #include <FL/Fl_Shared_Image.H>
@@ -76,7 +76,7 @@ static bool parse_imagebox(Fl_Style& style, char* s)
     return 0; // Give the hand to another parser
   if (*fl_parse_word(s) != '(') return 0;
   w = fl_parse_word(s);
-  style.set_box(flat? new Fl_Image_NoBorderBox(w) : new Fl_Image_Box(w));
+  style.set_box(flat ? (Fl_Image_Box*)new Fl_Image_NoBorderBox(w) : new Fl_Image_Box(w));
   return 1;
 }
 
