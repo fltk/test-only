@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.64 2002/06/18 06:47:31 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.65 2002/06/19 08:27:16 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -831,14 +831,16 @@ bool Fl_Input::handle_key() {
     if (key_is_shortcut()) return true;
     ctrl = alt;
   case FL_Left:
-    shift_position(ctrl ? word_start(position()-1) : position()-1);
+    i = position_; if (!shift && mark_<i) i = mark_;
+    shift_position(ctrl ? word_start(i-1) : i-1);
     return true;
 
   case 'f':
     if (key_is_shortcut()) return true;
     ctrl = alt;
   case FL_Right:
-    shift_position(ctrl ? word_end(position()+1) : position()+1);
+    i = position_; if (!shift && mark_>i) i = mark_;
+    shift_position(ctrl ? word_end(i+1) : i+1);
     return true;
 
   case 'p':
@@ -846,7 +848,8 @@ bool Fl_Input::handle_key() {
     ctrl = alt;
   case FL_Up:
     if (type() < MULTILINE) return false;
-    i = line_start(position());
+    i = position_; if (!shift && mark_<i) i = mark_;
+    i = line_start(i);
     if (!i) shift_position(0);
     else up_down_position(line_start(i-1), shift);
     return true;
@@ -856,7 +859,8 @@ bool Fl_Input::handle_key() {
     ctrl = alt;
   case FL_Down:
     if (type() < MULTILINE) return false;
-    i = line_end(position());
+    i = position_; if (!shift && mark_>i) i = mark_;
+    i = line_end(i);
     if (i >= size()) shift_position(i);
     else up_down_position(i+1, shift);
     return true;
@@ -953,6 +957,25 @@ bool Fl_Input::handle_key() {
     if (!ctrl && key_is_shortcut()) return true;
     return copy();
 
+  case 'o': // Emacs insert newline after cursor
+    if (key_is_shortcut()) return true;
+    if (replace(position(),mark(),"\n",1)) {
+      position(position()-1);
+      return 1;
+    }
+    return 0;
+
+  case 't': // Emacs swap characters
+    if (key_is_shortcut()) return true;
+    if (size()<2) return 1;
+    i = position();
+    if (i <= 0 || value_[i-1]=='\n') i++;
+    if (i >= size() || value_[i]=='\n') i--;
+    {char t[2]; t[0] = value_[i]; t[1] = value_[i-1];
+    if (!replace(i-1,i+1,t,2)) break;}
+    position(i+1);
+    return 1;
+
   case 'v':
     if (!ctrl && key_is_shortcut()) return true;
     Fl::paste(*this,true);
@@ -982,11 +1005,9 @@ bool Fl_Input::handle_key() {
     return undo();
 
     // Other interesting Emacs characters:
-    // 'o' inserts newline and moves before it
     // 'q' quotes next character
     // 'r' backward incremental search
     // 's' incremental search
-    // 't' swaps 2 characters around cursor and moves right 1
     // 'u' repeat count prefix
 
   }
@@ -1250,5 +1271,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.64 2002/06/18 06:47:31 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.65 2002/06/19 08:27:16 spitzak Exp $".
 //

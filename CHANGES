@@ -2316,3 +2316,7 @@ DnD bug when a group responded to FL_DND_DRAG but cursor is pointing
 at an inner widget that responds to FL_DRAG. It would send the
 FL_DND_RELEASE to the inner widget instead of the group.
 
+////////////////////////////////////////////////////////////////
+
+Added ^o (insert newline after cursor) and ^t (swap characters) Emacs
+commands to Fl_Input.
