@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.87 2000/08/08 21:32:59 clip Exp $"
+// "$Id: Fl_x.cxx,v 1.88 2000/08/08 23:17:42 clip Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -745,8 +745,13 @@ int fl_handle(const XEvent& xevent)
     // figure out where OS really put window
     XWindowAttributes actual;
     XGetWindowAttributes(fl_display, fl_xid(window), &actual);
+    int X, Y, W = actual.width, H = actual.height;
+    Window cr;
+    XTranslateCoordinates(fl_display, fl_xid(window), actual.root,
+                          0, 0, &X, &Y, &cr);
+
     // tell Fl_Window about it
-    window->resize(actual.x, actual.y, actual.width, actual.height);
+    window->resize(X, Y, W, H);
     break;
   }
 
@@ -1287,5 +1292,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.87 2000/08/08 21:32:59 clip Exp $".
+// End of "$Id: Fl_x.cxx,v 1.88 2000/08/08 23:17:42 clip Exp $".
 //
