@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shaped_Window.cxx,v 1.2 2001/02/16 22:55:45 robertk Exp $"
+// "$Id: Fl_Shaped_Window.cxx,v 1.3 2001/03/08 07:39:06 clip Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,19 +38,22 @@ static HRGN bitmap2region(Fl_Bitmap*);
 static Fl_Bitmap* resize_bitmap(Fl_Bitmap*, int, int);
 
 void Fl_Shaped_Window::draw() {
-  if ((lw != w() || lh != h()) && shape_) { // size of window has change since last time
+  if ((lw != w() || lh != h() || changed) && shape_) { // size of window has change since last time
     lw = w(); lh = h();
     Fl_Bitmap* mask = resize_bitmap(shape_, w(), h());
 #ifndef WIN32
     Pixmap pmask = XCreateBitmapFromData(fl_display, fl_xid(this),
                   (const char*)mask->array, mask->w, mask->h);
+    hide();
     XShapeCombineMask(fl_display, fl_xid(this), ShapeBounding, 0, 0,
                       pmask, ShapeSet);
+    show();
     if (pmask != None) XFreePixmap(fl_display, pmask);
 #else
     HRGN region = bitmap2region(mask);
     SetWindowRgn(fl_xid(this), region, TRUE);
 #endif
+    changed = 0;
   }
   Fl_Double_Window::draw();
 }
@@ -162,5 +165,5 @@ static HRGN bitmap2region(Fl_Bitmap* bitmap) {
 #endif
 
 //
-// End of "$Id: Fl_Shaped_Window.cxx,v 1.2 2001/02/16 22:55:45 robertk Exp $"
+// End of "$Id: Fl_Shaped_Window.cxx,v 1.3 2001/03/08 07:39:06 clip Exp $"
 //

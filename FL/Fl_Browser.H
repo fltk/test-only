@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.H,v 1.23 2001/02/28 21:19:49 clip Exp $"
+// "$Id: Fl_Browser.H,v 1.24 2001/03/08 07:39:05 clip Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -124,7 +124,7 @@ private:
   char column_char_;
   int xposition_, yposition_;
   int scrolldx, scrolldy;
-  int last_height, last_max_width;
+  int last_height, last_max_width, last_num_lines;
   static void hscrollbar_cb(Fl_Widget*, void*);
   static void scrollbar_cb(Fl_Widget*, void*);
   void draw_item();
@@ -153,5 +153,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser.H,v 1.23 2001/02/28 21:19:49 clip Exp $".
+// End of "$Id: Fl_Browser.H,v 1.24 2001/03/08 07:39:05 clip Exp $".
 //

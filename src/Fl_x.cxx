@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.105 2001/03/01 02:00:53 clip Exp $"
+// "$Id: Fl_x.cxx,v 1.106 2001/03/08 07:39:06 clip Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -647,11 +647,15 @@ int fl_handle(const XEvent& xevent)
   case ButtonPress:
     Fl::e_keysym = FL_Button + xevent.xbutton.button;
     set_event_xy(); checkdouble();
-    if (xevent.xbutton.button == fl_mousewheel_up) {
-      Fl::e_dy = -14*3;
+    if (xevent.xbutton.button == fl_mousewheel_up &&
+        Fl_Style::mousewheel_delta != 0)
+    {
+      Fl::e_dy = -Fl_Style::mousewheel_delta;
       event = FL_VIEWCHANGE;
-    } else if (xevent.xbutton.button == fl_mousewheel_down) {
-      Fl::e_dy = +14*3;
+    } else if (xevent.xbutton.button == fl_mousewheel_down &&
+               Fl_Style::mousewheel_delta != 0)
+    {
+      Fl::e_dy = +Fl_Style::mousewheel_delta;
       event = FL_VIEWCHANGE;
     } else {
       Fl::e_state |= (FL_BUTTON1 << (xevent.xbutton.button-1));
@@ -914,7 +918,7 @@ void Fl_X::create(Fl_Window* w,
       | ButtonPressMask | ButtonReleaseMask
       | EnterWindowMask | LeaveWindowMask
       | PointerMotionMask;
-    if (!w->border()) {
+    if (w->override()) {
       attr.override_redirect = 1;
       attr.save_under = 1;
       mask |= CWOverrideRedirect | CWSaveUnder;
@@ -953,16 +957,17 @@ void Fl_X::create(Fl_Window* w,
   x->next = Fl_X::first;
   Fl_X::first = x;
 
-  if (!w->parent() && w->border()) { // send junk to X window manager:
+  if (!w->parent() && !w->override()) { // send junk to X window manager:
 
     // Setting this allows the window manager to use the window's class
     // to look up things like border colors and icons in the xrdb database:
     XChangeProperty(fl_display, x->xid, XA_WM_CLASS, XA_STRING, 8, 0,
 		    (unsigned char *)w->xclass(), strlen(w->xclass()));
 
+    XSetTransientForHint(fl_display, x->xid, RootWindow(fl_display, fl_screen));
+
     // Set the label:
     w->label(w->label(), w->iconlabel());
-
     // Makes the close button produce an event:
     XChangeProperty(fl_display, x->xid, WM_PROTOCOLS,
  		    XA_ATOM, 32, 0, (uchar*)&WM_DELETE_WINDOW, 1);
@@ -1003,7 +1008,7 @@ void Fl_X::create(Fl_Window* w,
 // Send X window stuff that can be changed over time:
 
 void Fl_X::sendxjunk() {
-  if (w->parent() || !w->border()) return; // it's not a window manager window!
+  if (w->parent() || w->override()) return; // it's not a window manager window!
 
   XSizeHints hints;
   // memset(&hints, 0, sizeof(hints)); jreiser suggestion to fix purify?
@@ -1050,10 +1055,10 @@ void Fl_X::sendxjunk() {
     hints.y = w->y();
   }
 
-//   if (!w->border()) {
-//     prop[0] |= 2; // MWM_HINTS_DECORATIONS
-//     prop[2] = 0; // no decorations
-//   }
+ if (!w->border()) {
+   prop[0] |= 2; // MWM_HINTS_DECORATIONS
+   prop[2] = 0; // no decorations
+ }
 
   XSetWMNormalHints(fl_display, xid, &hints);
   XChangeProperty(fl_display, xid,
@@ -1157,5 +1162,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.105 2001/03/01 02:00:53 clip Exp $".
+// End of "$Id: Fl_x.cxx,v 1.106 2001/03/08 07:39:06 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.39 2001/02/28 21:19:49 clip Exp $"
+// "$Id: Fl_Browser.cxx,v 1.40 2001/03/08 07:39:05 clip Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -487,6 +487,19 @@ void Fl_Browser::draw() {
 // Scrolling and layout:
 
 void Fl_Browser::layout() {
+  // figure out the visible area:
+
+  X = 0; Y = 0; W = w(); H = h();
+  text_box()->inset(X,Y,W,H);
+  if (scrollbar.visible()) {
+    W -= scrollbar.w();
+    if (scrollbar.flags() & FL_ALIGN_LEFT) X += scrollbar.w();
+  }
+  if (hscrollbar.visible()) {
+    H -= hscrollbar.h();
+    if (scrollbar.flags() & FL_ALIGN_TOP) Y += hscrollbar.h();
+  }
+
   // Measure the height of all items and find widest one
   last_max_width = 0;
 
@@ -501,28 +514,17 @@ void Fl_Browser::layout() {
   }
   set_mark(FIRST_VISIBLE, HERE);
   // count all the rest of the items:
+  last_num_lines = 0;
   if (item()) for (;;) {
     if (at_mark(FOCUS)) set_mark(FOCUS, HERE);
     int w = item()->width()+arrow_size*item_level[HERE];
     if (w > last_max_width) last_max_width = w;
+    if (item_position[HERE] < H) last_num_lines++;
     if (!next_visible()) break;
   }
   if (indented()) last_max_width += arrow_size; // optional if no groups!
 
   last_height = item_position[HERE];
-
-  // figure out the visible area:
-
-  X = 0; Y = 0; W = w(); H = h();
-  text_box()->inset(X,Y,W,H);
-  if (scrollbar.visible()) {
-    W -= scrollbar.w();
-    if (scrollbar.flags() & FL_ALIGN_LEFT) X += scrollbar.w();
-  }
-  if (hscrollbar.visible()) {
-    H -= hscrollbar.h();
-    if (scrollbar.flags() & FL_ALIGN_TOP) Y += hscrollbar.h();
-  }
 
   // turn the scrollbars on and off as necessary:
 
@@ -798,6 +800,18 @@ int Fl_Browser::handle(int event) {
     if (send(event,hscrollbar)) return 1;
     break;
 
+  case FL_VIEWCHANGE: {
+    int lines, forward = (Fl::event_dy() > 0) ? 1 : 0;
+    if (abs(Fl::event_dy()) > last_num_lines-2) lines = last_num_lines-2;
+    else lines = abs(Fl::event_dy());
+    goto_mark(FIRST_VISIBLE);
+    for (int i = 0; i < lines; i++) {
+      if (forward) next_visible();
+      else previous_visible();
+    }
+    set_top();
+    return 1;
+  }
   }
   return 0;
 }
@@ -945,5 +959,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.39 2001/02/28 21:19:49 clip Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.40 2001/03/08 07:39:05 clip Exp $".
 //

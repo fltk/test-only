@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.36 2001/01/02 00:20:28 clip Exp $"
+// "$Id: Fl_Style.H,v 1.37 2001/03/08 07:39:05 clip Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -59,10 +59,12 @@ struct FL_API Fl_Style {
   unsigned      text_size;
   unsigned      leading;
 
+  // various user preferences
   static int    draw_boxes_inactive;
   static int    draw_sliders_pushed;
   static int    scrollbar_width;
   static int    scrollbar_align;
+  static int    mousewheel_delta;
 
   const Fl_Style* parent;
 
@@ -115,5 +117,5 @@ FL_API void fl_get_system_colors();
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.36 2001/01/02 00:20:28 clip Exp $".
+// End of "$Id: Fl_Style.H,v 1.37 2001/03/08 07:39:05 clip Exp $".
 //

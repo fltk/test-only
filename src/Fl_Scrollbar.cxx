@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.50 2001/02/21 06:15:44 clip Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.51 2001/03/08 07:39:05 clip Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,7 @@
 #include <FL/Fl_Scrollbar.H>
 #include <FL/fl_draw.H>
 #include <math.h>
+#include <stdlib.h>
 
 int Fl_Scrollbar::value(int p, int w, int t, int l) {
 //	p = position, first line displayed
@@ -136,6 +137,15 @@ int Fl_Scrollbar::handle(int event) {
     case FL_Home: handle_drag(maximum()); return 1;
     case FL_End:  handle_drag(minimum()); return 1;
     } // else fall through...
+  case FL_VIEWCHANGE: {
+    int delta, sign = (Fl::event_dy() < 0) ? 1 : -1;
+    if (abs(Fl::event_dy()*linesize()) > pagesize() - 2*linesize())
+      delta = pagesize() - 2*linesize();
+    else
+      delta = abs(Fl::event_dy()*linesize());
+    handle_drag(clamp(increment(value(), delta*sign)));
+  }
+
   default:
     return Fl_Slider::handle(event);
   }
@@ -202,5 +212,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.50 2001/02/21 06:15:44 clip Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.51 2001/03/08 07:39:05 clip Exp $".
 //

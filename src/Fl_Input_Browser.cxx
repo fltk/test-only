@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.cxx,v 1.3 2001/03/01 09:20:08 clip Exp $"
+// "$Id: Fl_Input_Browser.cxx,v 1.4 2001/03/08 07:39:05 clip Exp $"
 //
 // Input Browser (Combo Box) widget for the Fast Light Tool Kit (FLTK).
 //
@@ -130,7 +130,7 @@ Fl_Input_Browser::handle(int e) {
       if (mw->parent()) mw->parent()->remove(mw);
       mw->parent(0);
       mw->set_modal();
-      mw->clear_border();
+      mw->set_override();
       // dummy W,H used -- will be replaced.
       b = new ComboBrowser(0,0,200,400);
       if (type()&FL_INDENTED_INPUT_BROWSER) b->indented(1);
@@ -147,8 +147,25 @@ Fl_Input_Browser::handle(int e) {
       if (H > maxh_) H = maxh_;
       if (W < minw_) W = minw_;
       if (H < minh_) H = minh_;
-      mw->size(W, H);
+      int X = mw->x();
+      int Y = mw->y();
+      int down = fl_sysinfo::screen_height - Y;
+      int up = Fl::event_y_root() - Fl::event_y();
+      if (H > down) {
+        if (up > down) {
+          Y = Fl::event_y_root() - Fl::event_y() - H;
+          if (Y < 0) { Y = 0; H = up; }
+        } else {
+          H = down;
+        }
+      }
+      if (X + W > fl_sysinfo::screen_width) {
+        X = fl_sysinfo::screen_width - W;
+        if (X < 0) { X = 0; W = fl_sysinfo::screen_width; }
+      }
+      mw->resize(X, Y, W, H);
       b->Fl_Widget::size(W, H);
+
       b->layout();// shouldn't call this directly
       b->goto_number(item() ? b->Fl_Group::find(item()) : 0);
       b->item_select();
@@ -220,5 +237,5 @@ Fl_Input_Browser::draw() {
 }
 
 //
-// End of "$Id: Fl_Input_Browser.cxx,v 1.3 2001/03/01 09:20:08 clip Exp $".
+// End of "$Id: Fl_Input_Browser.cxx,v 1.4 2001/03/08 07:39:05 clip Exp $".
 //

@@ -81,11 +81,13 @@ last top-level window.
 <LI><A href=#modal>modal</A></LI>
 <LI><A href=#modal_for>modal_for</A></LI>
 <LI><A href=#next_window>next_window</A></LI>
+<LI><A href=#override>override</A></LI>
 <LI><A href=#resize>resize</A></LI>
-<LI><A href=#set_modal>set_modal</A></LI>
 </UL>
 </TD><TD align=left valign=top>
 <UL>
+<LI><A href=#set_modal>set_modal</A></LI>
+<LI><A href=#set_override>set_override</A></LI>
 <LI><A href=#show>show</A></LI>
 <LI><A href=#show_inside>show_inside</A></LI>
 <LI><A href=#shown>shown</A></LI>
@@ -105,8 +107,8 @@ place to show the window or allow the user to pick a location.  If you want to
 force a position you should call <tt>position(x,y)</tt> or <tt>hotspot()</tt>
 before calling <tt>show()</tt>.
 
-<P><TT>Fl_Widget::box()</TT> is set to <TT>FL_FLAT_BOX</TT>.  If you 
-plan to completely fill the window with children widgets you should 
+<P><TT>Fl_Widget::box()</TT> is set to <TT>FL_FLAT_BOX</TT>.  If you
+plan to completely fill the window with children widgets you should
 change this to <TT>FL_NO_BOX</TT>. If you turn the window border off 
 you may want to change this to <TT>FL_UP_BOX</TT>.
 
@@ -135,7 +137,7 @@ works for top-level windows.
 <LI><TT>minw</TT> and <TT>minh</TT> are the smallest the window  can 
 be. </LI>
 
-<LI><TT>maxw</TT> and <TT>maxh</TT> are the largest the window  can be. 
+<LI><TT>maxw</TT> and <TT>maxh</TT> are the largest the window  can be.
  If either is <I>equal</I> to the minimum then you  cannot resize in 
 that direction.  If either is zero  then FLTK picks a maximum size in 
 that direction such that the  window will fill the screen. </LI>
@@ -359,35 +361,48 @@ resize(x,y,w,h)</TT>.
 
 You may turn off the window manager border before calling show() on
 the window the first time.  This will also mean the user cannot move,
-iconize, or resize the window (unless your program does it).  This is
-used by the fltk menus and tooltips.
-
-<p>On X this causes "override redirect".  This is only good for
-short-lived windows as it can confuse X window managers, however this
-is the only reliable and fast way to do it.  This also turns on "save
-under" which on many X servers (like XFree86) can make the window
-pop-down much faster.
+iconize, or resize the window (unless your program or the window
+manager does it).
 
 <A name=border><h4>bool Fl_Window::border() const</h4>
 
 Returns false if clear_border() has been called.
 
+<A name=set_override><h4>bool Fl_Window::set_override()</h4>
+Windows with this property set will use the exact position and size set
+by the programmer (will not be handled by the window manager) and will
+not have an entry in the task list.  This will also clear the window's
+border like clear_border() above.  This should probably only be used
+for windows that will be used in conjunction with Fl::grab().
+
+This is used by the fltk menus and tooltips.
+
+<p>On X this causes "override redirect".  This is only good for
+short-lived windows as it can confuse X window managers, however this
+is the only reliable and fast way to do it.  This also turns on "save
+under" which on many X servers (like XFree86) can make the window
+disappear much faster.
+
+<A name=override><h4>bool Fl_Window::override() const</h4>
+
+Returns true if set_override() has been called.
+
 <A name=label><h4>void Fl_Window::label(const char*)
 <BR>const char* Fl_Window::label() const</H4>
 
-Gets or sets the window title bar label. 
+Gets or sets the window title bar label.
 
 <A name=iconlabel><h4>void Fl_Window::iconlabel(const char*)
 <BR>const char* Fl_Window::iconlabel() const</H4>
 
-Gets or sets the icon label. 
+Gets or sets the icon label.
 
 <A name=make_current><h4>void Fl_Window::make_current()</H4>
 
 <TT>make_current()</TT> sets things up so that the drawing functions in <A
-href=drawing.html><TT>&lt;FL/fl_draw.H&gt;</TT></A> will go into this 
-window. This is useful for incremental update of windows, such as in an 
-idle callback, which will make your program behave much better if it 
+href=drawing.html><TT>&lt;FL/fl_draw.H&gt;</TT></A> will go into this
+window. This is useful for incremental update of windows, such as in an
+idle callback, which will make your program behave much better if it
 draws a slow graphic.  <i>This call does not work for Fl_Double_Window!</i>.
 
 <A name=current><h4>static Fl_Window* Fl_Window::current()</h4>

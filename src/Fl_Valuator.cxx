@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.13 2000/05/30 07:42:16 bill Exp $"
+// "$Id: Fl_Valuator.cxx,v 1.14 2001/03/08 07:39:06 clip Exp $"
 //
 // Valuator widget for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,7 @@
 #include <FL/Fl_Valuator.H>
 #include <FL/math.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
   : Fl_Widget(X,Y,W,H,L) {
@@ -129,42 +130,61 @@ int Fl_Valuator::format(char* buffer) {
 
 int Fl_Valuator::handle(int event) {
   switch(event) {
-  case FL_ENTER:
-  case FL_LEAVE:
-    if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
-  case FL_MOVE:
-    return 1;
-  case FL_FOCUS:
-  case FL_UNFOCUS:
-    damage(FL_DAMAGE_HIGHLIGHT);
-    return 1;
-  case FL_KEYBOARD: {
-    int i = linesize();
-    if (Fl::event_state()&(FL_SHIFT|FL_CTRL|FL_ALT)) i = pagesize();
-    switch (Fl::event_key()) {
-    case FL_Page_Up: i = pagesize(); goto MOVE_BY_i;
-    case FL_Page_Down: i = -pagesize(); goto MOVE_BY_i;
-    case FL_Down:
-    case FL_Left:
-    case FL_BackSpace:
-      i = -i;
-    case FL_Up:
-    case FL_Right:
-    case ' ':
-    MOVE_BY_i:
-      handle_drag(clamp(increment(value(), i)));
+    case FL_ENTER:
+    case FL_LEAVE:
+      if (highlight_color() && takesevents()) damage(FL_DAMAGE_HIGHLIGHT);
+    case FL_MOVE:
       return 1;
-    case FL_Home:
-      handle_drag(minimum());
+    case FL_FOCUS:
+    case FL_UNFOCUS:
+      damage(FL_DAMAGE_HIGHLIGHT);
       return 1;
-    case FL_End:
-      handle_drag(maximum());
+    case FL_KEYBOARD: {
+      int i = linesize();
+      if (Fl::event_state()&(FL_SHIFT|FL_CTRL|FL_ALT)) i = pagesize();
+      switch (Fl::event_key()) {
+        case FL_Page_Up: i = pagesize(); goto MOVE_BY_i;
+        case FL_Page_Down: i = -pagesize(); goto MOVE_BY_i;
+        case FL_Down:
+        case FL_Left:
+        case FL_BackSpace:
+          i = -i;
+        case FL_Up:
+        case FL_Right:
+        case ' ':
+          MOVE_BY_i:
+          handle_drag(clamp(increment(value(), i)));
+          return 1;
+        case FL_Home:
+          handle_drag(minimum());
+          return 1;
+        case FL_End:
+          handle_drag(maximum());
+          return 1;
+      }
+      return 0;
+    }
+    case FL_VIEWCHANGE: {
+      /*
+      // This will do things the "correct" way
+      int delta, sign = (Fl::event_dy() < 0) ? 1 : -1;
+      if (abs(Fl::event_dy()*linesize()) > pagesize() - 2*linesize())
+        delta = pagesize() - 2*linesize();
+      else
+        delta = abs(Fl::event_dy()*linesize());
+      handle_drag(clamp(increment(value(), delta*sign)));
+      */
+
+      // This always scrolls one line at a time.  Maybe best for Fl_Valuator?
+      int sign = (Fl::event_dy() < 0) ? 1 : -1;
+      handle_drag(clamp(increment(value(), sign*linesize())));
+
       return 1;
-    }}
+    }
   }
   return 0;
 }
 
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.13 2000/05/30 07:42:16 bill Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.14 2001/03/08 07:39:06 clip Exp $".
 //

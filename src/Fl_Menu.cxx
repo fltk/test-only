@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.104 2001/02/28 21:19:50 clip Exp $"
+// "$Id: Fl_Menu.cxx,v 1.105 2001/03/08 07:39:05 clip Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -110,7 +110,7 @@ MenuTitle::MenuTitle(MenuState* m, int X, int Y, int W, int H, Fl_Widget* L)
 {
   end();
   set_modal();
-  clear_border();
+  set_override();
   widget = L;
   // can't use sgi overlay for images:
   if (L->image()) clear_overlay();
@@ -198,7 +198,7 @@ MenuWindow::MenuWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp, Fl_Wid
 {
   end();
   set_modal();
-  clear_border();
+  set_override();
   style(::style);
 
   int selected = l <= menustate->level ? menustate->indexes[l] : -1;
@@ -732,5 +732,5 @@ int Fl_Menu_::pulldown(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.104 2001/02/28 21:19:50 clip Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.105 2001/03/08 07:39:05 clip Exp $".
 //

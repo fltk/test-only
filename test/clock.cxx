@@ -1,5 +1,5 @@
 //
-// "$Id: clock.cxx,v 1.8 2000/07/21 00:31:52 clip Exp $"
+// "$Id: clock.cxx,v 1.9 2001/03/08 07:39:06 clip Exp $"
 //
 // Clock test program for the Fast Light Tool Kit (FLTK).
 //
@@ -63,7 +63,9 @@ void callback(Fl_Widget*, void* d) {
 int main(int argc, char **argv) {
   ClockWindow window(220, 220, "Fl_Round_Clock");
   window.color(FL_BLACK);
-  window.clear_border(); // some window managers do this for you!
+  // don't show window manager border-- some window managers do this for you
+  // if an arbitrary shape is assigned to the window.
+  window.clear_border();
   Fl_Round_Clock clock(2,2,216,216);
   Fl_Menu_Button popup(0, 0, 220, 220);
   popup.type(Fl_Menu_Button::POPUP3);
@@ -83,5 +85,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: clock.cxx,v 1.8 2000/07/21 00:31:52 clip Exp $".
+// End of "$Id: clock.cxx,v 1.9 2001/03/08 07:39:06 clip Exp $".
 //

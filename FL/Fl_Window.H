@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.44 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Window.H,v 1.45 2001/03/08 07:39:05 clip Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -42,6 +42,8 @@ public:
 
   void clear_border()	{set_flag(FL_NOBORDER);}
   int border() const	{return !(flags() & FL_NOBORDER);}
+  void set_override()	{set_flag(FL_NOBORDER|FL_OVERRIDE);}
+  int override() const  { return flags()&FL_OVERRIDE; }
   void set_modal()	{set_flag(FL_MODAL);}
   int modal() const	{return flags() & FL_MODAL;}
   void set_non_modal()	{set_flag(FL_NON_MODAL);} // back compatability only!
@@ -111,6 +113,7 @@ private:
   enum {
     FL_MODAL		= 0x80000000,
     FL_NOBORDER 	= 0x40000000,
+    FL_OVERRIDE         = 0x20000000,
     FL_NON_MODAL 	= 0x10000000
   };
   static const char* xclass_;
@@ -120,5 +123,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.44 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: Fl_Window.H,v 1.45 2001/03/08 07:39:05 clip Exp $".
 //

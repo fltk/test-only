@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.26 2001/02/21 06:15:45 clip Exp $"
+// "$Id: Fl_Style.cxx,v 1.27 2001/03/08 07:39:06 clip Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -165,6 +165,7 @@ int Fl_Style::draw_boxes_inactive = 1;
 int Fl_Style::draw_sliders_pushed = 0;
 int Fl_Style::scrollbar_width = 15;
 int Fl_Style::scrollbar_align = FL_ALIGN_RIGHT|FL_ALIGN_BOTTOM;
+int Fl_Style::mousewheel_delta = 3;
 
 void Fl_Style::revert() {
   fl_theme_handler(0);
@@ -209,5 +210,5 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.26 2001/02/21 06:15:45 clip Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.27 2001/03/08 07:39:06 clip Exp $".
 //

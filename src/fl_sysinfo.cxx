@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_Shaped_Window.H,v 1.3 2001/03/08 07:39:05 clip Exp $"
+// "$Id: fl_sysinfo.cxx,v 1.1 2001/03/08 07:39:06 clip Exp $"
 //
-// Image file header file for the Fast Light Tool Kit (FLTK).
+// Code to get windowing system specific info for FLTK.
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,31 +23,18 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#ifndef Fl_Shaped_Window_H
-#define Fl_Shaped_Window_H
+#include <FL/Fl.H>
 
-#include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Bitmap.H>
+int fl_sysinfo::screen_width = 0;
+int fl_sysinfo::screen_height = 0;
+int fl_sysinfo::screen_depth = 0;
 
-class FL_API Fl_Shaped_Window : public Fl_Double_Window {
-  public:
-    Fl_Shaped_Window(int W, int H, const char *l = 0)
-      : Fl_Double_Window(W,H,l) { shape_ = 0; lw = lh = 0; changed = 0; }
-    Fl_Shaped_Window(int X, int Y, int W, int H, const char *l = 0)
-      : Fl_Double_Window(X,Y,W,H,l) { shape_ = 0; lw = lh = 0; }
-    void shape(Fl_Bitmap* b) { shape_ = b; changed = 1; }
-    void shape(Fl_Bitmap& b) { shape(&b); }
-
-  protected:
-    virtual void draw();
-    Fl_Bitmap* shape_;
-    int lw, lh;
-    int changed;
-};
-
-
+#ifdef WIN32
+#include "fl_sysinfo_win32.cxx"
+#else
+#include "fl_sysinfo_x.cxx"
 #endif
 
 //
-// End of "$Id: Fl_Shaped_Window.H,v 1.3 2001/03/08 07:39:05 clip Exp $"
+// End of "$Id: fl_sysinfo.cxx,v 1.1 2001/03/08 07:39:06 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.141 2001/03/01 02:00:53 clip Exp $"
+// "$Id: Fl_win32.cxx,v 1.142 2001/03/08 07:39:06 clip Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -711,11 +711,13 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     break;}
 
   case WM_MOUSEWHEEL: {
-    // Carl says this moves 3 lines per click.  MicroSoft reports 120 per
-    // click.  Divide this out to pixels (for normal size + leading):
-    Fl::e_dy = -(SHORT)(HIWORD(wParam))*14*3/120;
-    if (Fl::handle(FL_VIEWCHANGE, window)) return 0;
-    break;
+    static int delta = 0;
+    delta += (SHORT)(HIWORD(wParam));
+    int sign = (delta < 0) ? 1 : -1; // Windows is backwards
+    Fl::e_dy = Fl_Style::mousewheel_delta*sign;
+    for (; abs(delta) >= WHEEL_DELTA; delta += WHEEL_DELTA*sign)
+      Fl::handle(FL_VIEWCHANGE, window);
+    return 0;
   }
 
   case WM_GETMINMAXINFO:
@@ -792,8 +794,10 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     break;
 #endif
 
-  case WM_SYSCOLORCHANGE:
+  case WM_DISPLAYCHANGE:
   case WM_SETTINGCHANGE:
+    fl_sysinfo::update();
+  case WM_SYSCOLORCHANGE:
     Fl::reload_scheme();
     break;
 
@@ -861,8 +865,9 @@ int Fl_X::borders(const Fl_Window* w, int& dx, int& dy, int& dw, int& dh) {
 ////////////////////////////////////////////////////////////////
 
 void Fl_Window::layout() {
-  UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER;
+  UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER | SWP_NOACTIVATE;
   if (ow() == w() && oh() == h()) flags |= SWP_NOSIZE;
+//  if (ox() == x() && oy() == y()) flags |= SWP_NOMOVE;
   Fl_Group::layout();
   if (this == resize_from_system) {
     resize_from_system = 0;
@@ -949,7 +954,7 @@ Fl_X* Fl_X::create(Fl_Window* w) {
     style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | borders(w, dx, dy, dw, dh);
     styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
     // we don't want an entry in the task list for menuwindows or tooltips!
-    if (style&WS_POPUP) styleEx |= WS_EX_TOOLWINDOW;
+    if (style&WS_POPUP && w->override()) styleEx |= WS_EX_TOOLWINDOW;
     xp = w->x(); if (xp != FL_USEDEFAULT) xp -= dx;
     yp = w->y(); if (yp != FL_USEDEFAULT) yp -= dy;
 
@@ -985,6 +990,9 @@ Fl_X* Fl_X::create(Fl_Window* w) {
     fl_display,
     NULL // creation parameters
     );
+  if (w->override())
+    SetWindowPos(x->xid, HWND_TOPMOST, 0, 0, 0, 0,
+                 SWP_NOMOVE|SWP_NOSIZE|SWP_NOSENDCHANGING);
 //  x->mapped = 1;
 
   x->wait_for_expose = 1;
@@ -1254,5 +1262,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.141 2001/03/01 02:00:53 clip Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.142 2001/03/08 07:39:06 clip Exp $".
 //
