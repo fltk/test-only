@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.30 2002/12/18 20:13:15 easysw Exp $"
+# "$Id: Makefile,v 1.31 2003/01/15 02:27:18 easysw Exp $"
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -34,18 +34,13 @@ all: makeinclude
 	done
 
 install: makeinclude
-	-mkdir -p $(bindir)
-	$(RM) $(bindir)/fltk-config
-	-cp fltk-config $(bindir)
-	-chmod 755 $(bindir)/fltk-config
-	for dir in FL $(DIRS); do\
+	for dir in $(DIRS) documentation; do\
 		echo "=== installing $$dir ===";\
 		(cd $$dir; $(MAKE) $(MFLAGS) install) || break;\
 	done
 
 uninstall: makeinclude
-	$(RM) $(bindir)/fltk-config
-	for dir in FL $(DIRS); do\
+	for dir in $(DIRS) documentation; do\
 		echo "=== uninstalling $$dir ===";\
 		(cd $$dir; $(MAKE) $(MFLAGS) uninstall) || break;\
 	done
@@ -98,5 +93,5 @@ native-dist:
 
 
 #
-# End of "$Id: Makefile,v 1.30 2002/12/18 20:13:15 easysw Exp $".
+# End of "$Id: Makefile,v 1.31 2003/01/15 02:27:18 easysw Exp $".
 #

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.18 2002/12/22 05:30:22 easysw Exp $"
+# "$Id: Makefile,v 1.19 2003/01/15 02:27:19 easysw Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -76,7 +76,7 @@ clean:
 #
 
 depend:
-	$(MAKEDEPEND) -I.. $(CPPFILES) $(CFILES) > makedepend
+	$(MAKEDEPEND) -fmakedepend -I.. $(CPPFILES) $(CFILES)
 
 
 #
@@ -127,30 +127,77 @@ libfltk_gl_s.a: $(OBJECTS)
 # Install everything...
 #
 
-install: $(INSTALLTARGETS)
+install: install-lib install-lib$(DSOSUFFIX)
+
+install-lib:
+	echo "Installing static OpenGL library in $(libdir)"
+	$(MKDIR) $(libdir)
+	$(RM) $(libdir)/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
+	$(CP) ../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX) $(libdir)
+	$(RANLIB) $(libdir)/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
+
+install-lib.so.2:
+	echo "Installing shared OpenGL library in $(libdir)"
+	$(MKDIR) $(libdir)
+	$(RM) $(libdir)/libfltk_gl.so.2
+	$(CP) ../lib/libfltk_gl.so.2 $(libdir)
+	$(RM) $(libdir)/libfltk_gl.so
+	$(LN) libfltk_gl.so.2 $(libdir)/libfltk_gl.so
+
+install-lib.sl.2:
+	echo "Installing shared OpenGL library in $(libdir)"
+	$(MKDIR) $(libdir)
+	$(RM) $(libdir)/libfltk_gl.sl.2
+	$(CP) ../lib/libfltk_gl.sl.2 $(libdir)
+	$(RM) $(libdir)/libfltk_gl.sl
+	$(LN) libfltk_gl.sl.2 $(libdir)/libfltk_gl.sl
+
+install-lib.2.dylib:
+	echo "Installing shared OpenGL library in $(libdir)"
+	$(MKDIR) $(libdir)
+	$(RM) $(libdir)/libfltk_gl.2.dylib
+	$(CP) ../lib/libfltk_gl.2.dylib $(libdir)
+	$(RM) $(libdir)/libfltk_gl.dylib
+	$(LN) libfltk_gl.2.dylib $(libdir)/libfltk_gl.dylib
+
+install-lib_s.a:
+	echo "Installing shared OpenGL library in $(libdir)"
+	$(MKDIR) $(libdir)
+	$(RM) $(libdir)/libfltk_gl_s.a
+	$(CP) ../lib/libfltk_gl_s.a $(libdir)
+	$(CHMOD) 755 $(libdir)/libfltk_gl_s.a
 
 
 #
-# End of "$Id: Makefile,v 1.18 2002/12/22 05:30:22 easysw Exp $".
+# Uninstall the libraries...
 #
-# DO NOT DELETE
 
-Fl_Gl_Choice.o: ../config.h GlChoice.h ../fltk/Window.h ../fltk/Group.h
-Fl_Gl_Choice.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
-Fl_Gl_Choice.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/x.h ../fltk/visual.h
-Fl_Gl_Overlay.o: ../config.h GlChoice.h ../fltk/Window.h ../fltk/Group.h
-Fl_Gl_Overlay.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
-Fl_Gl_Overlay.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/x.h
-Fl_Gl_Overlay.o: ../fltk/GlWindow.h ../fltk/Window.h ../fltk/damage.h
-Fl_Gl_Window.o: ../config.h GlChoice.h ../fltk/Window.h ../fltk/Group.h
-Fl_Gl_Window.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
-Fl_Gl_Window.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/x.h
-Fl_Gl_Window.o: ../fltk/GlWindow.h ../fltk/Window.h ../fltk/damage.h
-Fl_Gl_Window.o: ../fltk/error.h ../fltk/visual.h
-gl_draw.o: ../config.h ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h
-gl_draw.o: ../fltk/FL_API.h ../fltk/gl.h GlChoice.h ../fltk/Window.h
-gl_draw.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/x.h
-gl_start.o: ../config.h ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h
-gl_start.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
-gl_start.o: GlChoice.h ../fltk/x.h ../fltk/draw.h ../fltk/visual.h
-gl_start.o: ../fltk/gl.h
+uninstall:	uninstall-lib uninstall-lib$(DSOSUFFIX)
+
+uninstall-lib:
+	echo "Removing static OpenGL library from $(libdir)"
+	$(RM) $(libdir)/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
+
+uninstall-lib.so.2:
+	echo "Removing shared OpenGL library from $(libdir)"
+	$(RM) $(libdir)/libfltk_gl.so.2
+	$(RM) $(libdir)/libfltk_gl.so
+
+uninstall-lib.sl.2:
+	echo "Removing shared OpenGL library from $(libdir)"
+	$(RM) $(libdir)/libfltk_gl.sl.2
+	$(RM) $(libdir)/libfltk_gl.sl
+
+uninstall-lib.2.dylib:
+	echo "Removing shared OpenGL library from $(libdir)"
+	$(RM) $(libdir)/libfltk_gl.2.dylib
+	$(RM) $(libdir)/libfltk_gl.dylib
+
+uninstall-lib_s.a:
+	echo "Removing shared OpenGL library from $(libdir)"
+	$(RM) $(libdir)/libfltk_gl_s.a
+
+
+#
+# End of "$Id: Makefile,v 1.19 2003/01/15 02:27:19 easysw Exp $".
+#

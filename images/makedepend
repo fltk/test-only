@@ -1,0 +1,9 @@
+# DO NOT DELETE
+
+Fl_Guess_Image.o: ../config.h ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h
+Fl_Guess_Image.o: ../fltk/FL_API.h ../fltk/SharedImage.h ../fltk/Image.h
+Fl_Guess_Image.o: ../fltk/xbmImage.h ../fltk/x.h
+fl_jpeg.o: ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h ../fltk/FL_API.h
+fl_jpeg.o: ../fltk/x.h ../fltk/SharedImage.h ../fltk/Image.h ../config.h
+fl_png.o: ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h ../fltk/FL_API.h
+fl_png.o: ../fltk/x.h ../fltk/SharedImage.h ../fltk/Image.h ../config.h

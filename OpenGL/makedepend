@@ -1,0 +1,21 @@
+# DO NOT DELETE
+
+Fl_Gl_Choice.o: ../config.h GlChoice.h ../fltk/Window.h ../fltk/Group.h
+Fl_Gl_Choice.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
+Fl_Gl_Choice.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/x.h ../fltk/visual.h
+Fl_Gl_Overlay.o: ../config.h GlChoice.h ../fltk/Window.h ../fltk/Group.h
+Fl_Gl_Overlay.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
+Fl_Gl_Overlay.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/x.h
+Fl_Gl_Overlay.o: ../fltk/GlWindow.h ../fltk/Window.h ../fltk/damage.h
+Fl_Gl_Window.o: ../config.h GlChoice.h ../fltk/Window.h ../fltk/Group.h
+Fl_Gl_Window.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
+Fl_Gl_Window.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/x.h
+Fl_Gl_Window.o: ../fltk/GlWindow.h ../fltk/Window.h ../fltk/damage.h
+Fl_Gl_Window.o: ../fltk/error.h ../fltk/visual.h
+gl_draw.o: ../config.h ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h
+gl_draw.o: ../fltk/FL_API.h ../fltk/gl.h GlChoice.h ../fltk/Window.h
+gl_draw.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/x.h
+gl_start.o: ../config.h ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h
+gl_start.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
+gl_start.o: GlChoice.h ../fltk/x.h ../fltk/draw.h ../fltk/visual.h
+gl_start.o: ../fltk/gl.h

@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.45 2003/01/14 06:51:01 spitzak Exp $"
+# "$Id: makeinclude.in,v 1.46 2003/01/15 02:27:19 easysw Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -28,6 +28,7 @@ prefix		= @prefix@
 exec_prefix	= @exec_prefix@
 bindir		= @bindir@
 datadir		= @datadir@
+docdir		= @datadir@/doc/fltk
 includedir	= @includedir@
 libdir		= @libdir@
 mandir		= @mandir@
@@ -133,5 +134,5 @@ CAT3EXT		= @CAT3EXT@
 	mv t.z $@
 
 #
-# End of "$Id: makeinclude.in,v 1.45 2003/01/14 06:51:01 spitzak Exp $".
+# End of "$Id: makeinclude.in,v 1.46 2003/01/15 02:27:19 easysw Exp $".
 #
