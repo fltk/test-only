@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Output.cxx,v 1.12 1999/04/04 03:45:27 gustavo Exp $"
+// "$Id: Fl_Value_Output.cxx,v 1.13 1999/04/11 02:39:17 carl Exp $"
 //
 // Value output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -70,6 +70,7 @@ int Fl_Value_Output::handle(int event) {
   int mx = Fl::event_x();
   static int ix, drag;
   switch (event) {
+  case FL_ENTER: return 1; // For tooltips
   case FL_PUSH:
   if (!step()) goto DEFAULT;
     ix = mx;
@@ -124,5 +125,5 @@ Fl_Value_Output::Fl_Value_Output(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Value_Output.cxx,v 1.12 1999/04/04 03:45:27 gustavo Exp $".
+// End of "$Id: Fl_Value_Output.cxx,v 1.13 1999/04/11 02:39:17 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.10 1999/04/10 14:13:50 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.11 1999/04/11 02:39:17 carl Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -68,7 +68,7 @@ Fl_Widget *Fl::readqueue() {
     
 ////////////////////////////////////////////////////////////////
 
-int Fl_Widget::handle(int) {return 0;}
+int Fl_Widget::handle(int e) { return (e == FL_ENTER) ? 1 : 0; }
 
 Fl_Widget::Style* Fl_Widget::_default_style;
 
@@ -301,5 +301,5 @@ uchar Fl_Widget::labelsize() const {
 Fl_Color Fl_Widget::color2() const {return selection_color();}
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.10 1999/04/10 14:13:50 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.11 1999/04/11 02:39:17 carl Exp $".
 //
