@@ -1,7 +1,7 @@
 dnl -*- sh -*-
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.33.2.31.2.91.2.14 2004/06/09 12:10:47 easysw Exp $"
+dnl "$Id: configure.in,v 1.33.2.31.2.91.2.15 2004/07/05 13:21:00 easysw Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -83,6 +83,7 @@ case $uname in
 	    CFLAGS="$CFLAGS -mno-cygwin"
 	    CPPFLAGS="$CPPFLAGS -mno-cygwin"
 	    CXXFLAGS="$CXXFLAGS -mno-cygwin"
+	    LDFLAGS="$LDFLAGS -mno-cygwin"
 	fi
 	;;
 esac
@@ -934,5 +935,5 @@ dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.14 2004/06/09 12:10:47 easysw Exp $".
+dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.15 2004/07/05 13:21:00 easysw Exp $".
 dnl
