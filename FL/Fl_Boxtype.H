@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.H,v 1.21 2000/08/10 09:24:30 spitzak Exp $"
+// "$Id: Fl_Boxtype.H,v 1.22 2000/08/11 02:14:54 clip Exp $"
 //
 // Boxes used by FLTK styles.
 //
@@ -33,7 +33,7 @@
 //#  pragma disable warning 4355
 #endif // _MSC_VER
 
-class Fl_Widget;
+class FL_API Fl_Widget;
 
 // the abstract base class:
 class FL_API Fl_Boxtype_ {
@@ -227,5 +227,5 @@ extern FL_API const Fl_Border_Frame fl_border_frame;
 #endif
 
 //
-// End of "$Id: Fl_Boxtype.H,v 1.21 2000/08/10 09:24:30 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.H,v 1.22 2000/08/11 02:14:54 clip Exp $".
 //

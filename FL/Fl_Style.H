@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.34 2000/08/10 09:24:30 spitzak Exp $"
+// "$Id: Fl_Style.H,v 1.35 2000/08/11 02:14:54 clip Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -32,7 +32,7 @@
 #include "Fl_Labeltype.H"
 #include "Fl_Font.H"
 
-class Fl_Widget;
+class FL_API Fl_Widget;
 
 typedef void (*Fl_Glyph)(const Fl_Widget*, int type,
 			 int,int,int,int,
@@ -114,5 +114,5 @@ FL_API void fl_get_system_colors();
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.34 2000/08/10 09:24:30 spitzak Exp $".
+// End of "$Id: Fl_Style.H,v 1.35 2000/08/11 02:14:54 clip Exp $".
 //
