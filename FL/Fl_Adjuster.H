@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.H,v 1.14 1999/11/01 02:21:11 carl Exp $"
+// "$Id: Fl_Adjuster.H,v 1.15 1999/11/10 12:21:39 bill Exp $"
 //
 // Adjuster widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,6 @@ public:
   Fl_Adjuster(int x,int y,int w,int h,const char *l=0);
   void soft(int x) {soft_ = x;}
   int soft() const {return soft_;}
-  static Fl_Style default_style;
 
 protected:
   void draw();
@@ -45,6 +44,7 @@ protected:
   void value_damage();
 
 private:
+  static Fl_Named_Style default_style;
   int drag, highlight, last;
   int ix;
   int soft_;
@@ -53,5 +53,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Adjuster.H,v 1.14 1999/11/01 02:21:11 carl Exp $".
+// End of "$Id: Fl_Adjuster.H,v 1.15 1999/11/10 12:21:39 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.H,v 1.11 1999/11/05 21:43:39 carl Exp $"
+// "$Id: Fl_Tabs.H,v 1.12 1999/11/10 12:21:44 bill Exp $"
 //
 // Tab header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,15 +31,7 @@
 #define FL_TABS (FL_GROUP+1)
 
 class FL_API Fl_Tabs : public Fl_Group {
-  friend class Fl_Group;
-  Fl_Widget *push_;
-  void draw();
-  void draw_n_clip();
-  int tab_positions(int*, int*);
-  int tab_height();
-  void draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int sel=0);
 public:
-  static Fl_Style default_style;
   int handle(int);
   Fl_Widget *value();
   int value(Fl_Widget *);
@@ -47,10 +39,19 @@ public:
   int push(Fl_Widget *);
   Fl_Tabs(int,int,int,int,const char * = 0);
   Fl_Widget *which(int event_x, int event_y);
+private:
+  static Fl_Named_Style default_style;
+  friend class Fl_Group;
+  Fl_Widget *push_;
+  void draw();
+  void draw_n_clip();
+  int tab_positions(int*, int*);
+  int tab_height();
+  void draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int sel=0);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Tabs.H,v 1.11 1999/11/05 21:43:39 carl Exp $".
+// End of "$Id: Fl_Tabs.H,v 1.12 1999/11/10 12:21:44 bill Exp $".
 //

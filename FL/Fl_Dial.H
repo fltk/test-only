@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.H,v 1.10 1999/10/17 20:40:02 vincent Exp $"
+// "$Id: Fl_Dial.H,v 1.11 1999/11/10 12:21:41 bill Exp $"
 //
 // Dial header file for the Fast Light Tool Kit (FLTK).
 //
@@ -37,18 +37,8 @@
 
 class FL_API Fl_Dial : public Fl_Valuator {
 
-  short a1,a2;
-
-protected:
-
-  // these allow subclasses to put the dial in a smaller area:
-  void draw(int, int, int, int);
-  int handle(int, int, int, int, int);
-  void draw();
-
 public:
 
-  static Fl_Style default_style;
   int handle(int);
   Fl_Dial(int x,int y,int w,int h, const char *l = 0);
   short angle1() const {return a1;}
@@ -57,10 +47,22 @@ public:
   void angle2(short a) {a2 = a;}
   void angles(short a, short b) {a1 = a; a2 = b;}
 
+protected:
+
+  // these allow subclasses to put the dial in a smaller area:
+  void draw(int, int, int, int);
+  int handle(int, int, int, int, int);
+  void draw();
+
+private:
+
+  static Fl_Named_Style default_style;
+  short a1,a2;
+
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Dial.H,v 1.10 1999/10/17 20:40:02 vincent Exp $".
+// End of "$Id: Fl_Dial.H,v 1.11 1999/11/10 12:21:41 bill Exp $".
 //

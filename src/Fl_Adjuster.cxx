@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.15 1999/11/05 21:43:46 carl Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.16 1999/11/10 12:21:48 bill Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -139,9 +139,8 @@ Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,
   soft_ = 1;
 }
 
-Fl_Style Fl_Adjuster::default_style;
-static Fl_Style_Definer x("adjuster", Fl_Adjuster::default_style);
+Fl_Named_Style Fl_Adjuster::default_style("Adjuster");
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.15 1999/11/05 21:43:46 carl Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.16 1999/11/10 12:21:48 bill Exp $".
 //

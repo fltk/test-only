@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.25 1999/10/17 20:40:13 vincent Exp $"
+// "$Id: Fl_Window.H,v 1.26 1999/11/10 12:21:44 bill Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,6 @@
 
 class FL_API Fl_Window : public Fl_Group {
 public:
-  static Fl_Style default_style;
 
   Fl_Window(int,int,int,int, const char* = 0);
   Fl_Window(int,int, const char* = 0);
@@ -52,8 +51,8 @@ public:
   void hotspot(const Fl_Widget*, bool offscreen = 0);
   void hotspot(const Fl_Widget& p, bool offscreen = 0) {hotspot(&p,offscreen);}
   void free_position()	{clear_flag(FL_FORCE_POSITION);}
-  void size_range(int a, int b, int c=0, int d=0, int e=0, int f=0, int g=0)
-    { minw=a; minh=b; maxw=c; maxh=d; dw=e; dh=f; aspect=g; size_range_(); }
+  void size_range(int a, int b, int c=0, int d=0, int e=0, int f=0)
+    { minw=a; minh=b; maxw=c; maxh=d; dw=e; dh=f; size_range_(); }
 
   const char* label() const	{return Fl_Widget::label();}
   const char* iconlabel() const	{return iconlabel_;}
@@ -97,13 +96,14 @@ protected:
 
 private:
 
+  static Fl_Named_Style default_style;
   friend class Fl_X; Fl_X *i; // points at the system-specific stuff
   const char* iconlabel_;
   const char* xclass_;
   const void* icon_;
   // size_range stuff:
   short minw, minh, maxw, maxh;
-  unsigned char dw, dh, aspect, size_range_set;
+  unsigned char dw, dh, size_range_set;
   void size_range_();
   // values for flags():
   enum {
@@ -119,5 +119,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.25 1999/10/17 20:40:13 vincent Exp $".
+// End of "$Id: Fl_Window.H,v 1.26 1999/11/10 12:21:44 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.55 1999/11/10 04:48:48 carl Exp $"
+// "$Id: Fl.cxx,v 1.56 1999/11/10 12:21:47 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -447,6 +447,7 @@ int Fl::handle(int event, Fl_Window* window)
     return 1;
 
   case FL_PUSH:
+    Fl_Tooltip::enter((Fl_Widget*)0);
     if (grab()) w = grab();
     else if (modal() && w != modal()) return 0;
     pushed_ = w;
@@ -496,6 +497,7 @@ int Fl::handle(int event, Fl_Window* window)
 
   case FL_KEYBOARD:
 
+    Fl_Tooltip::enter((Fl_Widget*)0);
     fl_xfocus = window; // this should already be set, but just in case.
 
     // Try it as keystroke, sending it to focus and all parents:
@@ -621,12 +623,6 @@ extern const Fl_Window* fl_modal_for; // used by Fl_Window::create
 extern int fl_scheme_loaded;
 
 void Fl_Window::show() {
-  if (!fl_scheme_loaded) {
-    fl_scheme_loaded = 1;
-    if (Fl::use_themes) Fl::loadtheme();
-    if (Fl::use_schemes) Fl::loadscheme();
-  }
-
   if (parent()) {
     set_visible();
     handle(FL_SHOW);
@@ -635,6 +631,11 @@ void Fl_Window::show() {
 #ifndef WIN32
     fl_open_display();
 #endif
+    if (!fl_scheme_loaded) {
+      fl_scheme_loaded = 1;
+      if (Fl::use_themes) Fl::loadtheme();
+      if (Fl::use_schemes) Fl::loadscheme();
+    }
     // back compatability with older modal() and non_modal() flags:
     if (non_modal() && !fl_modal_for) {
       fl_modal_for = Fl::first_window();
@@ -816,5 +817,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.55 1999/11/10 04:48:48 carl Exp $".
+// End of "$Id: Fl.cxx,v 1.56 1999/11/10 12:21:47 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.50 1999/11/10 04:48:50 carl Exp $"
+// "$Id: Fl_Menu.cxx,v 1.51 1999/11/10 12:21:52 bill Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -77,45 +77,34 @@ const Fl_Menu_Item* Fl_Menu_Item::next(int n) const {
 }
 
 // this style structure is only used for the frames of menuwindows
-static Fl_Style menuwindow_default_style;
-
 static void mw_revert(Fl_Style* s) {
-  s->box = FL_NORMAL_BOX;
+  s->box = FL_UP_BOX;
 }
 
-static Fl_Style_Definer x("menu window", menuwindow_default_style, mw_revert);
-
-
-Fl_Style Fl_Menu_Item::default_style;
+static Fl_Named_Style menuwindow_default_style("Menu_Window", mw_revert);
 
 static void mi_revert(Fl_Style* s) {
   s->box = FL_FLAT_BOX;
-  s->glyph_box = FL_NO_BOX;
+  s->glyph_box = FL_DOWN_BOX;
   s->selection_color = FL_BLACK;
   s->off_color = FL_WHITE;
   s->highlight_color = FL_BLUE_SELECTION_COLOR;
   s->highlight_label_color = FL_WHITE;
-
   s->parent = &Fl_Widget::default_style;
 }
 
-static Fl_Style_Definer y("menu item", Fl_Menu_Item::default_style, mi_revert);
-
-
-Fl_Style Fl_Menu_Item::title_style;
+Fl_Named_Style Fl_Menu_Item::default_style("Menu_Item", mi_revert);
 
 static void mt_revert(Fl_Style* s) {
   s->box = FL_HIGHLIGHT_UP_BOX;
-  s->glyph_box = FL_NO_BOX;
+  //s->glyph_box = FL_NO_BOX;
   s->selection_color = FL_BLUE_SELECTION_COLOR;
   s->selection_text_color = FL_WHITE;
   s->off_color = FL_WHITE;
-
   s->parent = &Fl_Widget::default_style;
 }
 
-
-static Fl_Style_Definer z("menu title", Fl_Menu_Item::title_style, mt_revert);
+Fl_Named_Style Fl_Menu_Item::title_style("Menu_Title", mt_revert);
 
 extern Fl_Style* fl_unique_style(const Fl_Style* & pointer); // in Fl_Widget.c
 
@@ -253,7 +242,8 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_*,
     }
     if (f&FL_MENU_VALUE) c = selection_color();
     Fl_Glyphtype g = (flags()&FL_MENU_RADIO) ? FL_GLYPH_RADIO : FL_GLYPH_CHECK;
-    glyph()(g, x+3, y+(h-13)/2, 13, 13, c, lc, f<<8, glyph_box());
+    Fl_Color cc = (glyph_box()==FL_NO_BOX) ? lc : label_color();
+    glyph()(g, x+3, y+(h-13)/2, 13, 13, off_color(), cc, f<<8, glyph_box());
     x += 15; w -= 15;
   }
 
@@ -423,10 +413,10 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int /*erase*/) {
   }
 
   if (m->submenu()) {
-    int dx = m->box()->highlight->dx() + 2 + fl_extra_menu_spacing/2;
-    int dy = m->box()->highlight->dy() + 2 + fl_extra_menu_spacing/2;
-    int dh = m->box()->highlight->dh() + 4 + fl_extra_menu_spacing;
-    glyph()(FL_GLYPH_RIGHT, x+w-h+dx, y+dy, h-dh, h-dh, bc, fc,f, m->glyph_box());
+    int dx = m->box()->highlight->dx() + fl_extra_menu_spacing/2;
+    int dy = m->box()->highlight->dy() + fl_extra_menu_spacing/2;
+    int dh = m->box()->highlight->dh() + fl_extra_menu_spacing;
+    glyph()(FL_GLYPH_RIGHT, x+w-h+dx, y+dy, h-dh, h-dh, bc, fc,f, FL_NO_BOX);
   } else if (m->shortcut_) {
     fl_font(label_font(), label_size());
     fl_color(fc);
@@ -859,5 +849,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.50 1999/11/10 04:48:50 carl Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.51 1999/11/10 12:21:52 bill Exp $".
 //

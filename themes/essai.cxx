@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.7 1999/11/10 04:49:00 carl Exp $"
+// "$Id: essai.cxx,v 1.8 1999/11/10 12:21:57 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -64,7 +64,7 @@ static void image_box_draw(const Fl_Boxtype_* bt, int x, int y, int w, int h,
 
   if (!(flags&FL_FRAME_ONLY))
     img->draw_tiled(x+bt->dx_, y+bt->dy_, w-bt->dw_, h-bt->dh_, -w/2, -h/2);
-  FL_NORMAL_BOX->draw(x,y,w,h,fill,flags|FL_FRAME_ONLY);
+  FL_UP_BOX->draw(x,y,w,h,fill,flags|FL_FRAME_ONLY);
 }
 
 Fl_Image_Box::Fl_Image_Box(char* normal_b, char* down_b, char* highlight_b) {
@@ -94,7 +94,7 @@ static void image_noborderbox_draw(const Fl_Boxtype_* bt, int x, int y, int w, i
   if (!(flags&FL_FRAME_ONLY))
     img->draw_tiled(x, y, w, h, -w/2, -h/2);
   if (flags&(FL_HIGHLIGHT|FL_VALUE))
-    FL_NORMAL_BOX->draw(x,y,w,h,fill,(flags|FL_FRAME_ONLY)&(~FL_VALUE));
+    FL_UP_BOX->draw(x,y,w,h,fill,(flags|FL_FRAME_ONLY)&(~FL_VALUE));
   else
     FL_FLAT_BOX->draw(x,y,w,h,fill,flags|FL_FRAME_ONLY);
 }
@@ -109,7 +109,6 @@ Fl_Image_NoBorderBox::Fl_Image_NoBorderBox(char* normal_b, char* down_b,
 extern "C" int fltk_theme(int, char**);
 
 int fltk_theme(int, char** argv) {
-  Fl_Style::revert(); // revert to FLTK default styles
   fl_background(0xD0D0E000); // it would be nice to figure out color from image
   Fl_Boxtype flat1 = new Fl_Image_NoBorderBox("themes/bg.jpeg", "themes/bg2.jpeg", "themes/bg3.jpeg");
   Fl_Boxtype flat2 = new Fl_Image_NoBorderBox("themes/bg2.jpeg", "themes/bg3.jpeg", "themes/bg3.jpeg");
@@ -117,8 +116,10 @@ int fltk_theme(int, char** argv) {
   Fl_Boxtype box2 = new Fl_Image_Box("themes/bg.jpeg", "themes/bg.jpeg", "themes/bg.jpeg");
   Fl_Widget::default_style.set_box(box1);
   Fl_Widget::default_style.set_glyph_box(box1);
-  Fl_Window::default_style.set_box(flat1);
   Fl_Style* s;
+  if ((s = Fl_Style::find("window"))) {
+    s->set_box(flat1);
+  }
   if ((s = Fl_Style::find("menu item"))) {
     s->set_highlight_label_color(FL_BLACK);
     s->set_box(flat2);
@@ -146,5 +147,5 @@ int fltk_theme(int, char** argv) {
 }
 
 //
-// End of "$Id: essai.cxx,v 1.7 1999/11/10 04:49:00 carl Exp $".
+// End of "$Id: essai.cxx,v 1.8 1999/11/10 12:21:57 bill Exp $".
 //

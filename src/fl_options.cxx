@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.17 1999/11/10 04:48:55 carl Exp $"
+// "$Id: fl_options.cxx,v 1.18 1999/11/10 12:21:55 bill Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -131,7 +131,7 @@ int Fl::loadscheme(int b) {
     return -1;
   }
 
-  Fl_Style::revert();
+  //Fl_Style::revert();
 
   char sfile[PATH_MAX];
   strcpy(sfile, p);
@@ -367,8 +367,19 @@ int Fl::getconf(const char *key, char *value, int value_length)
 { return ::getconf(fl_find_config_file("flconfig"), key, value, value_length); }
 
 Fl_Style* Fl_Style::find(const char* name) {
-  for (Fl_Style_Definer* p = Fl_Style_Definer::first; p; p = p->next)
-    if (!strcasecmp(name, p->name)) return p->style;
+  for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
+    const char* a = p->name;
+    const char* b = name;
+    for (;;) {
+      if (*a == '_') {
+	if (*b == ' ' || *b == '_');
+	else {a++; continue;}
+      } else if (tolower(*a) != tolower(*b)) break;
+      if (!*a && !*b) return p;
+      a++;
+      b++;
+    }
+  }
   return 0;
 }
 
@@ -385,11 +396,6 @@ void Fl_Style::revert() {
 
   fl_extra_menu_spacing = 0;
 
-  fl_normal_box.data = "2AAXXIIUU";
-  fl_normal_box.dx_ = 2;
-  fl_normal_box.dy_ = 2;
-  fl_normal_box.dw_ = 4;
-  fl_normal_box.dh_ = 4;
   fl_up_box.data = "2AAXXIIUU";
   fl_up_box.dx_ = 2;
   fl_up_box.dy_ = 2;
@@ -401,22 +407,15 @@ void Fl_Style::revert() {
   fl_down_box.dw_ = 4;
   fl_down_box.dh_ = 4;
 
-  for (Fl_Style_Definer* p = Fl_Style_Definer::first; p; p = p->next) {
-    style_clear(p->style);
-    if (p->revert) p->revert(p->style);
+  for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
+    style_clear(p);
+    if (p->revert) p->revert(p);
   }
   Fl::redraw();
 }
 
-Fl_Style_Definer::Fl_Style_Definer(char* n, Fl_Style& s, Fl_Style_Reverter rf)
-  : name(n), style(&s), revert(rf), next(first)
-{
-  if (revert) revert(style);
-  first = this;
-}
-
 //
-// End of "$Id: fl_options.cxx,v 1.17 1999/11/10 04:48:55 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.18 1999/11/10 12:21:55 bill Exp $".
 //
 
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Fly_Button.cxx,v 1.6 1999/11/08 22:21:54 carl Exp $"
+// "$Id: Fl_Fly_Button.cxx,v 1.7 1999/11/10 12:21:51 bill Exp $"
 //
 // Fly button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -33,15 +33,13 @@ Fl_Fly_Button::Fl_Fly_Button(int x,int y,int w,int h,const char *l)
   style(default_style);
 }
 
-Fl_Style Fl_Fly_Button::default_style;
-
 static void revert(Fl_Style* s) {
   s->box = FL_HIGHLIGHT_DOWN_BOX;
   s->highlight_color = FL_LIGHT1;
 }
 
-static Fl_Style_Definer x("highlight button", Fl_Fly_Button::default_style, revert);
+Fl_Named_Style Fl_Fly_Button::default_style("Fly_Button", revert);
 
 //
-// End of "$Id: Fl_Fly_Button.cxx,v 1.6 1999/11/08 22:21:54 carl Exp $".
+// End of "$Id: Fl_Fly_Button.cxx,v 1.7 1999/11/10 12:21:51 bill Exp $".
 //

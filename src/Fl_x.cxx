@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.44 1999/11/07 08:11:45 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.45 1999/11/10 12:21:54 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -706,6 +706,7 @@ void Fl_X::sendxjunk() {
   hints.max_height = w->maxh;
   hints.width_inc = w->dw;
   hints.height_inc = w->dh;
+  hints.win_gravity = StaticGravity;
 
   // see the file /usr/include/X11/Xm/MwmUtil.h:
   // fill all fields to avoid bugs in kwm and perhaps other window managers:
@@ -714,10 +715,10 @@ void Fl_X::sendxjunk() {
 
   if (hints.min_width != hints.max_width ||
       hints.min_height != hints.max_height) { // resizable
-    hints.flags = PMinSize;
+    hints.flags = PMinSize|PWinGravity;
     if (hints.max_width >= hints.min_width ||
 	hints.max_height >= hints.min_height) {
-      hints.flags = PMinSize|PMaxSize;
+      hints.flags = PMinSize|PMaxSize|PWinGravity;
       // unfortunately we can't set just one maximum size.  Guess a
       // value for the other one.  Some window managers will make the
       // window fit on screen when maximized, others will put it off screen:
@@ -725,13 +726,11 @@ void Fl_X::sendxjunk() {
       if (hints.max_height < hints.min_height) hints.max_height = Fl::h();
     }
     if (hints.width_inc && hints.height_inc) hints.flags |= PResizeInc;
-    if (w->aspect) {
-      // stupid X!  It could insist that the corner go on the
-      // straight line between min and max...
-      hints.min_aspect.x = hints.max_aspect.x = hints.min_width;
-      hints.min_aspect.y = hints.max_aspect.y = hints.min_height;
-      hints.flags |= PAspect;
-    }
+//     if (w->aspect) {
+//       hints.min_aspect.x = hints.max_aspect.x = hints.min_width;
+//       hints.min_aspect.y = hints.max_aspect.y = hints.min_height;
+//       hints.flags |= PAspect;
+//     }
   } else { // not resizable:
     hints.flags = PMinSize|PMaxSize;
     prop[0] = 1; // MWM_HINTS_FUNCTIONS
@@ -817,5 +816,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.44 1999/11/07 08:11:45 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.45 1999/11/10 12:21:54 bill Exp $".
 //

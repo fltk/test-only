@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.H,v 1.9 1999/10/17 20:40:12 vincent Exp $"
+// "$Id: Fl_Tooltip.H,v 1.10 1999/11/10 12:21:44 bill Exp $"
 //
 // Tooltip definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -29,30 +29,24 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
 
-extern FL_API void (*fl_tooltip_enter)(Fl_Widget *);
-extern FL_API void (*fl_tooltip_exit)(Fl_Widget *);
-
 class FL_API Fl_Tooltip {
 public:
   static float delay() { return delay_; }
-  static void delay(float f) { delay_ = (f < 0.1) ? 0.1 : f; }
+  static void delay(float f) { delay_ = f; }
   static int enabled() { return enabled_; }
   static void enable(int b = 1) { enabled_ = b; }
   static void disable() { enable(0); }
 
-  // This function is called by widgets
-  // when the pointer enters them
-  static void enter(Fl_Widget *w) {fl_tooltip_enter(w);}
+  // This is called when the pointer enters a widget,
+  // Also enter(0) gets rid of any displayed or pending tooltip:
+  static void enter(Fl_Widget* w);
 
-  // This function must be called when
-  // an event != FL_MOVE has occured in
-  // the widget
-  static inline void exit(Fl_Widget *w) {fl_tooltip_exit(w);}
+  // A widget may also pop up tooltips for internal parts by calling this:
+  static void enter(Fl_Widget* w, int x, int y, int w, int h, const char* tip);
 
-  static void tooltip_enter(Fl_Widget *);
-  static void tooltip_exit(Fl_Widget *);
+  // This is called when a widget is destroyed or hidden:
+  static void exit(Fl_Widget *w);
 
-  static Fl_Style default_style;
   static Fl_Font font() { return default_style.label_font; }
   static unsigned size() { return default_style.label_size; }
   static void font(Fl_Font i) { default_style.label_font = i; }
@@ -64,6 +58,7 @@ public:
   static void boxtype(Fl_Boxtype b) { default_style.box = b; }
   static Fl_Boxtype boxtype() { return default_style.box; }
 
+  static Fl_Named_Style default_style;
 private:
   static float delay_;
   static int enabled_;
@@ -72,5 +67,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Tooltip.H,v 1.9 1999/10/17 20:40:12 vincent Exp $".
+// End of "$Id: Fl_Tooltip.H,v 1.10 1999/11/10 12:21:44 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Return_Button.cxx,v 1.13 1999/11/10 04:48:51 carl Exp $"
+// "$Id: Fl_Return_Button.cxx,v 1.14 1999/11/10 12:21:53 bill Exp $"
 //
 // Return button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -73,9 +73,8 @@ int Fl_Return_Button::handle(int event) {
     return Fl_Button::handle(event);
 }
 
-Fl_Style Fl_Return_Button::default_style;
-static Fl_Style_Definer x("return button", Fl_Return_Button::default_style);
+Fl_Named_Style Fl_Return_Button::default_style("Return_Button");
 
 //
-// End of "$Id: Fl_Return_Button.cxx,v 1.13 1999/11/10 04:48:51 carl Exp $".
+// End of "$Id: Fl_Return_Button.cxx,v 1.14 1999/11/10 12:21:53 bill Exp $".
 //

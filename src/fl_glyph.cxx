@@ -18,7 +18,6 @@ void fl_glyph(int t, int x,int y,int w,int h,
 
   switch (t) {
   case FL_GLYPH_CHECK:
-    if (box != FL_NO_BOX) { x += 2; y += 2; w -= 4; h -= 4; } // non-menu fudge factor
     box->draw(x,y,w,h, bc, f);
     if (f & FL_VALUE) {
       fl_color(fc);
@@ -46,12 +45,11 @@ void fl_glyph(int t, int x,int y,int w,int h,
     }
     break;
   case FL_GLYPH_RADIO:
-    if (box != FL_NO_BOX) { x += 2; y += 2; w -= 4; h -= 4; } // non-menu fudge factor
     //h = (h+1)&-2; // even only
     if (box != FL_NO_BOX) FL_ROUND_DOWN_BOX->draw(x,y,h,h, bc, f);
     if (f & FL_VALUE) {
       fl_color(fc);
-      int d = box != FL_NO_BOX ? h/4 : h/5; // menu vs. button fudge factor
+      int d = h/4; // box != FL_NO_BOX ? h/4 : 0; //h/5;
       fl_pie(x+d,y+d,h-d-d-1,h-d-d-1,0,360);
     }
     break;

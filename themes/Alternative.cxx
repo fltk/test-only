@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.3 1999/11/10 04:48:58 carl Exp $"
+// "$Id: Alternative.cxx,v 1.4 1999/11/10 12:21:56 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -51,7 +51,7 @@ static const Fl_Boxtype_ alt_menu_box = {
 };
 
 static const Fl_Boxtype_ alt_menu_title_box = {
-  fl_flatx, 0, FL_THIN_DOWN_BOX, FL_NORMAL_BOX, 1,1,2,2, true
+  fl_flatx, 0, FL_THIN_DOWN_BOX, FL_UP_BOX, 1,1,2,2, true
 };
 
 // some old stuff for boxtype drawing
@@ -234,5 +234,5 @@ int fltk_theme(int, char** argv) {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.3 1999/11/10 04:48:58 carl Exp $".
+// End of "$Id: Alternative.cxx,v 1.4 1999/11/10 12:21:56 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Style.cxx,v 1.5 1999/11/05 21:43:51 carl Exp $"
+// "$Id: Fl_Input_Style.cxx,v 1.6 1999/11/10 12:21:51 bill Exp $"
 //
 // Style of Fl_Input for the Fast Light Tool Kit (FLTK).
 //
@@ -25,12 +25,13 @@
 
 // The style is defined in a separate file so that the rest of Fl_Input
 // does not get always linked in ...
+// Fl_Output is also defined here, output widgets use it as a reference
+// so that themes that set input and output to different colors work.
+// To avoid problems with inheritance (so that a theme can just change
+// input) I need to default to identical appearance, which matches
+// how Windoze works anyway...
 
 #include <FL/Fl_Input.H>
-
-// Fl_Input, the box, color, and selection color are different:
-
-Fl_Style Fl_Input::default_style;
 
 static void revert(Fl_Style* s) {
   s->box = FL_THIN_DOWN_BOX;
@@ -40,8 +41,12 @@ static void revert(Fl_Style* s) {
   s->off_color = FL_BLACK;
 }
 
-static Fl_Style_Definer x("input", Fl_Input::default_style, revert);
+Fl_Named_Style Fl_Input::default_style("Input", revert);
+
+#include <FL/Fl_Output.H>
+
+Fl_Named_Style Fl_Output::default_style("Output", revert);
 
 //
-// End of "$Id: Fl_Input_Style.cxx,v 1.5 1999/11/05 21:43:51 carl Exp $".
+// End of "$Id: Fl_Input_Style.cxx,v 1.6 1999/11/10 12:21:51 bill Exp $".
 //

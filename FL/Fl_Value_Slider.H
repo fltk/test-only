@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.H,v 1.8 1999/10/17 20:40:13 vincent Exp $"
+// "$Id: Fl_Value_Slider.H,v 1.9 1999/11/10 12:21:44 bill Exp $"
 //
 // Value slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,14 +30,15 @@
 
 class FL_API Fl_Value_Slider : public Fl_Slider {
 public:
-  static Fl_Style default_style;
   void draw();
   int handle(int);
   Fl_Value_Slider(int x,int y,int w,int h, const char *l = 0);
+private:
+  static Fl_Named_Style default_style;
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Value_Slider.H,v 1.8 1999/10/17 20:40:13 vincent Exp $".
+// End of "$Id: Fl_Value_Slider.H,v 1.9 1999/11/10 12:21:44 bill Exp $".
 //

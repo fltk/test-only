@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.19 1999/11/05 21:43:48 carl Exp $"
+// "$Id: Fl_Button.cxx,v 1.20 1999/11/10 12:21:49 bill Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -122,9 +122,8 @@ Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h
   set_flag(FL_SHORTCUT_LABEL);
 }
 
-Fl_Style Fl_Button::default_style;
-static Fl_Style_Definer x("button", Fl_Button::default_style);
+Fl_Named_Style Fl_Button::default_style("Button");
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.19 1999/11/05 21:43:48 carl Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.20 1999/11/10 12:21:49 bill Exp $".
 //

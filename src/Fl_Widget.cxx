@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.34 1999/11/08 22:21:55 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.35 1999/11/10 12:21:54 bill Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -192,6 +192,7 @@ Fl_Style* fl_unique_style(const Fl_Style* & pointer) {
 
 // this should only be used in constructors to set the default for a class.
 // for general use, use copy_style()
+
 void Fl_Widget::style(Fl_Style* s) {
   s->parent = &Fl_Widget::default_style;
 
@@ -245,6 +246,20 @@ void Fl_Widget::seti(const unsigned * p, unsigned v) {
   int d = p-(unsigned*)&style_->color;
   Fl_Style* s = fl_unique_style(style_);
   *((unsigned*)&s->color + d) = v;
+}
+
+// Named styles provide a list that can be searched by theme plugins.
+// The "revert" function is mostly provided to get around C++ problems
+// with constructors.  It may be able to be used to undo any theme
+// changes.
+
+Fl_Named_Style* Fl_Named_Style::first = 0;
+
+Fl_Named_Style::Fl_Named_Style(const char* n, void (*r)(Fl_Style*)) :
+  name(n), revert(r), next(first)
+{
+  first = this;
+  if (r) r(this);
 }
 
 // When a widget is destroyed it can destroy unique styles:
@@ -335,20 +350,10 @@ void Fl_Widget::draw_n_clip()
     fl_clip_out(x(), y(), w(), h());
 }
 
-////////////////////////////////////////////////////////////////
-// Some widgets have imbedded text fields (such as Fl_Value_Slider).
-// This is to be discouraged because composite widgets (widgets with
-// child widgets) is a better design.  But for back compatability
-// they cross reference the Fl_Input/Fl_Output widget styles.  This
-// caused problems if Fl_Input/Fl_Output were not intantiated, so I fix
-// this by declaring their styles here, already set up as though the
-// inheritance tree was built:
-
-Fl_Style Fl_Widget::default_style;
 static void revert(Fl_Style* s) {
-  Fl_Style default_style = {
-    FL_NORMAL_BOX,    // box
-    FL_NORMAL_BOX,    // glyph_box - for light buttons & sliders
+  static Fl_Style default_style = {
+    FL_UP_BOX,	      // box
+    FL_UP_BOX,        // glyph_box - for light buttons & sliders
     fl_glyph,         // glyphs
     FL_HELVETICA,     // label_font
     FL_HELVETICA,     // text_font
@@ -363,16 +368,14 @@ static void revert(Fl_Style* s) {
     FL_BLACK,         // text_color
     FL_NORMAL_SIZE,   // label_size
     FL_NORMAL_SIZE,   // text_size
-
     0,                // parent
     0                 // dynamic
   };
   *s = default_style;
 }
 
-Fl_Style_Definer* Fl_Style_Definer::first = 0;
-static Fl_Style_Definer x("default", Fl_Widget::default_style, revert);
+Fl_Named_Style Fl_Widget::default_style("default", revert);
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.34 1999/11/08 22:21:55 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.35 1999/11/10 12:21:54 bill Exp $".
 //

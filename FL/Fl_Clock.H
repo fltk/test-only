@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.H,v 1.9 1999/11/07 08:11:18 bill Exp $"
+// "$Id: Fl_Clock.H,v 1.10 1999/11/10 12:21:41 bill Exp $"
 //
 // Clock header file for the Fast Light Tool Kit (FLTK).
 //
@@ -37,14 +37,7 @@
 // a Fl_Clock_Output can be used to display a program-supplied time:
 
 class FL_API Fl_Clock_Output : public Fl_Widget {
-  int hour_, minute_, second_;
-  ulong value_;
-  void drawhands(Fl_Color,Fl_Color); // part of draw
-protected:
-  void draw(int, int, int, int);
-  void draw();
 public:
-  static Fl_Style default_style;
   Fl_Clock_Output(int x,int y,int w,int h, const char *l = 0);
   void value(ulong v);	// set to this Unix time
   void value(int,int,int);	// set hour, minute, second
@@ -52,6 +45,14 @@ public:
   int hour() const {return hour_;}
   int minute() const {return minute_;}
   int second() const {return second_;}
+protected:
+  void draw(int, int, int, int);
+  void draw();
+private:
+  static Fl_Named_Style default_style;
+  int hour_, minute_, second_;
+  ulong value_;
+  void drawhands(Fl_Color,Fl_Color); // part of draw
 };
 
 // a Fl_Clock displays the current time always by using a timeout:
@@ -68,5 +69,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Clock.H,v 1.9 1999/11/07 08:11:18 bill Exp $".
+// End of "$Id: Fl_Clock.H,v 1.10 1999/11/10 12:21:41 bill Exp $".
 //

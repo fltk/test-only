@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.H,v 1.15 1999/11/01 02:21:14 carl Exp $"
+// "$Id: Fl_Menu_Button.H,v 1.16 1999/11/10 12:21:42 bill Exp $"
 //
 // Menu button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -35,17 +35,17 @@ public:
   int handle(int);
   const Fl_Menu_Item* popup();
   Fl_Menu_Button(int,int,int,int,const char * =0);
-  static Fl_Style default_style;
 
 protected:
   void draw();
   void draw_n_clip();
 
 private:
+  static Fl_Named_Style default_style;
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Menu_Button.H,v 1.15 1999/11/01 02:21:14 carl Exp $".
+// End of "$Id: Fl_Menu_Button.H,v 1.16 1999/11/10 12:21:42 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.11 1999/11/10 04:48:43 carl Exp $"
+// "$Id: Fl_Style.H,v 1.12 1999/11/10 12:21:43 bill Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -32,7 +32,7 @@
 #include "Fl_Labeltype.H"
 #include "Fl_Font.H"
 
-typedef void (*Fl_Glyph)(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype = FL_NORMAL_BOX);
+typedef void (*Fl_Glyph)(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype = FL_UP_BOX);
 
 struct FL_API Fl_Style {
 
@@ -56,7 +56,6 @@ struct FL_API Fl_Style {
   unsigned	label_size;
   unsigned	text_size;
 
-  // if you add more non-attributes, be sure to fix style_clear() in fl_options.cxx
   Fl_Style*     parent;
   uchar         dynamic; // is this a modifiable style?
 
@@ -87,27 +86,19 @@ struct FL_API Fl_Style {
   // find a default style by its string ID
   static Fl_Style* find(const char* name);
 
-  // set the FLTK default style
-  static void revert();
+  static void revert(); // reverts the entire world of styles to defaults
 };
 
-typedef void (*Fl_Style_Reverter)(Fl_Style*);
-
-// Create a global object of this type with correct parameter to define
-// a new style class.  Plugins can search this to find the styles used by
-// a program:
-class FL_API Fl_Style_Definer {
+class FL_API Fl_Named_Style : public Fl_Style {
 public:
   const char* name;
-  Fl_Style* style;
-  Fl_Style_Reverter revert;
-  Fl_Style_Definer* next;
-  static Fl_Style_Definer* first;
-
-  Fl_Style_Definer(char*, Fl_Style&, Fl_Style_Reverter = 0);
+  void (*revert)(Fl_Style*);
+  Fl_Named_Style* next;
+  static Fl_Named_Style* first;
+  Fl_Named_Style(const char* n, void (*)(Fl_Style*) = 0);
 };
 
-FL_API void fl_glyph(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype = FL_NORMAL_BOX);
+FL_API void fl_glyph(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype = FL_UP_BOX);
 
 enum Fl_Glyphtype {	// glyph types
   // zero is reserved to draw an empty box
@@ -135,5 +126,5 @@ FL_API int fl_windows();
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.11 1999/11/10 04:48:43 carl Exp $".
+// End of "$Id: Fl_Style.H,v 1.12 1999/11/10 12:21:43 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.16 1999/11/05 21:43:54 carl Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.17 1999/11/10 12:21:53 bill Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,14 +30,12 @@
 float Fl_Tooltip::delay_ = 0.5f;
 int Fl_Tooltip::enabled_ = 1;
 
-Fl_Style Fl_Tooltip::default_style;
-
 static void revert(Fl_Style* s) {
   s->box = FL_BORDER_BOX;
   s->color = (Fl_Color)215;
 }
 
-static Fl_Style_Definer x("tooltip", Fl_Tooltip::default_style, revert);
+Fl_Named_Style Fl_Tooltip::default_style("Tooltip", revert);
 
 #define MAX_WIDTH 400
 
@@ -53,9 +51,12 @@ public:
 };
 
 static Fl_TooltipBox *window = 0;
+static Fl_Widget* widget;
+static int x,y,w,h;
+static const char* tip;
 
-static void tooltip_timeout(Fl_Widget *v) {
-  if (!v || !v->tooltip() || Fl::grab()) return;
+static void tooltip_timeout(void*) {
+  if (Fl::grab()) return;
 
   if (!window) { // create the reusable X window
     Fl_Group* saveCurrent = Fl_Group::current();
@@ -67,29 +68,29 @@ static void tooltip_timeout(Fl_Widget *v) {
   }
 
   // this cast bypasses the normal Fl_Window label() code:
-  ((Fl_Widget*)window)->label(v->tooltip());
+  ((Fl_Widget*)window)->label(tip);
 
   fl_font(window->label_font(), window->label_size());
   int ww, hh;
   ww = MAX_WIDTH;
-  fl_measure(v->tooltip(), ww, hh);
+  fl_measure(tip, ww, hh);
   ww += 6; hh += 6;
 
   // find position on the screen of the widget:
   int ox = Fl::event_x_root()+5;
-  //int ox = v->x()+v->w()/2;
-  int oy = v->y()+v->h()+2;
-  for (Fl_Window* p = v->window(); p; p = p->window()) {
+  //int ox = x+w/2;
+  int oy = y + h+2;
+  for (Fl_Window* p = widget->window(); p; p = p->window()) {
     //ox += p->x();
     oy += p->y();
   }
   if (ox+ww > Fl::w()) ox = Fl::w() - ww;
   if (ox < 0) ox = 0;
-  if (v->h() > 30) {
+  if (h > 30) {
     oy = Fl::event_y_root()+13;
     if (oy+hh > Fl::h()) oy -= 23+hh;
   } else {
-    if (oy+hh > Fl::h()) oy -= (4+hh+v->h());
+    if (oy+hh > Fl::h()) oy -= (4+hh+h);
   }
   if (oy < 0) oy = 0;
 
@@ -98,39 +99,41 @@ static void tooltip_timeout(Fl_Widget *v) {
   window->show();
 }
 
-static int cheesy_flag = 0;
-
-static Fl_Widget* widget = 0;
+static bool cheesy_flag = false;
 
 void
-Fl_Tooltip::tooltip_enter(Fl_Widget* w) {
-  if (cheesy_flag) return;
-  if (w == widget || w == window) return;
-  tooltip_exit(widget);
-  widget = w;
-  if (!w || !w->tooltip() || !enabled_) return;
-  Fl::add_timeout(Fl_Tooltip::delay(),
-		  (void (*)(void *))tooltip_timeout, w);
+Fl_Tooltip::enter(Fl_Widget* w) {
+  if (cheesy_flag || w == window || w == widget) return;
+  if (!w) {exit(widget); widget = 0; return;}
+  enter(w, w->x(), w->y(), w->w(), w->h(), w->tooltip());
 }
 
-void (*fl_tooltip_enter)(Fl_Widget *) = Fl_Tooltip::tooltip_enter;
+void
+Fl_Tooltip::enter(Fl_Widget* w, int X, int Y, int W, int H, const char* t) {
+  if (cheesy_flag) return;
+  if (w == widget && X == x && Y == y && W ==::w && H == h && t == tip) return;
+  exit(widget);
+  widget = w; x = X; y = Y; ::w = W; h = H; tip = t;
+  if (!t || !enabled_) return;
+  float d = Fl_Tooltip::delay();
+  if (d < .01) d = .01;
+  Fl::add_timeout(d, tooltip_timeout);
+}
 
 void
-Fl_Tooltip::tooltip_exit(Fl_Widget *w) {
+Fl_Tooltip::exit(Fl_Widget *w) {
   if (!w || w != widget) return;
   widget = 0;
-  Fl::remove_timeout((void (*)(void *))tooltip_timeout, w);
+  Fl::remove_timeout(tooltip_timeout);
   if (window) {
     // This flag makes sure that tootip_enter() isn't executed because of
     // this hide() which could cause unwanted recursion in tooltip_enter
-    cheesy_flag = 1;
+    cheesy_flag = true;
     window->hide();
-    cheesy_flag = 0;
+    cheesy_flag = false;
   }
 }
 
-void (*fl_tooltip_exit)(Fl_Widget *) = Fl_Tooltip::tooltip_exit;
-
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.16 1999/11/05 21:43:54 carl Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.17 1999/11/10 12:21:53 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.13 1999/11/08 22:21:48 carl Exp $"
+// "$Id: file.cxx,v 1.14 1999/11/10 12:21:46 bill Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -599,6 +599,46 @@ void read_fdesign() {
   }
 }
 
+// This is copied from forms_compatability.cxx:
+
+void fl_end_group() {
+  Fl_Group* g = Fl_Group::current();
+  // set the dimensions of a group to surround contents
+  if (g->children() && !g->w()) {
+    Fl_Widget*const* a = g->array();
+    Fl_Widget* o = *a++;
+    int rx = o->x();
+    int ry = o->y();
+    int rw = rx+o->w();
+    int rh = ry+o->h();
+    for (int i=g->children()-1; i--;) {
+      o = *a++;
+      if (o->x() < rx) rx = o->x();
+      if (o->y() < ry) ry = o->y();
+      if (o->x()+o->w() > rw) rw = o->x()+o->w();
+      if (o->y()+o->h() > rh) rh = o->y()+o->h();
+    }
+    g->x(g->ox_ = rx);
+    g->y(g->oy_ = ry);
+    g->w(g->ow_ = rw-rx);
+    g->h(g->oh_ = rh-ry);
+  }
+  // flip all the children's coordinate systems:
+  //if (fl_flip) {
+    Fl_Widget* o = (g->type()>=FL_WINDOW) ? g : g->window();
+    int Y = o->h();
+    Fl_Widget*const* a = g->array();
+    for (int i=g->children(); i--;) {
+      Fl_Widget* o = *a++;
+//      o->y(Y-o->y()-o->h());
+      // I think this is equivalent?
+      o->position(o->x(), Y-o->y()-o->h());
+    }
+    g->oy_ = Y-g->oy_-g->h();
+    //}
+  g->end();
+}
+
 //
-// End of "$Id: file.cxx,v 1.13 1999/11/08 22:21:48 carl Exp $".
+// End of "$Id: file.cxx,v 1.14 1999/11/10 12:21:46 bill Exp $".
 //
