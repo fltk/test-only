@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.97 2004/08/07 06:19:54 laza2000 Exp $"
+// "$Id: Fl_Browser.cxx,v 1.98 2004/08/23 14:36:54 laza2000 Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -1627,10 +1627,10 @@ public:
 void Browser::column_labels(const char **t) {
   column_labels_ = t;
   int i;
-  for (i=0; i<nHeader; i++) {
-	delete header_[i];
+  if (header_) {
+    for (i=0; i<nHeader; i++) delete header_[i];  
+    delete[] header_;
   }
-  delete[] header_;
   nHeader = 0; header_ = 0;
   if (t) { // create new header_ widgets
     Group *g = Group::current();
@@ -1776,6 +1776,10 @@ Browser::~Browser() {
   for (int i = 0; i < NUMMARKS; i++) free(item_index[i]);
   if (column_widths_p) free(column_widths_p);
   if (column_widths_i) free(column_widths_i);
+  if (header_) {
+    for (i=0; i<nHeader; i++) delete header_[i];  
+    delete[] header_;
+  }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1805,5 +1809,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.97 2004/08/07 06:19:54 laza2000 Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.98 2004/08/23 14:36:54 laza2000 Exp $".
 //
