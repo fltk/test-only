@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_Util.H,v 1.2 1999/09/25 22:27:05 vincent Exp $"
+// "$Id: Fl_Style_Util.H,v 1.3 1999/09/27 12:20:01 vincent Exp $"
 //
 // Style definition and plugin support
 //
@@ -46,16 +46,19 @@ typedef void (Fl_Style_Plugin_Entry)();
 // Call this at any moment to make fltk read all styles and themes plugins
 void fl_read_style_plugins();
 
+void fl_default_style_def();
+
 // Function for plugins
 bool fl_add_style_def(char* name, Fl_Style* style);
 Fl_Style* fl_search_style(char* name);
 void fl_add_style_entry_def(char* name, Fl_Style_Entry_Parser parser);
 bool fl_parse_style_entry(char* name, Fl_Style& style, char* s);
 char* fl_parse_word(char*&s);
-Fl_Color fl_parse_color(char*&s);
+/*#include <FL/Fl_Color.H>
+Fl_Color fl_parse_color(char*&s);*/
 
 #endif
 
 //
-// End of "$Id: Fl_Style_Util.H,v 1.2 1999/09/25 22:27:05 vincent Exp $".
+// End of "$Id: Fl_Style_Util.H,v 1.3 1999/09/27 12:20:01 vincent Exp $".
 //
