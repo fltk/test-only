@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.176 2004/06/09 05:38:57 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.177 2004/06/29 00:19:29 xpxqx Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -124,6 +124,9 @@ static void fix_focus() {
 }
 
 #if USE_X11
+# if !defined(X_HAVE_UTF8_STRING)
+#  include "xutf8.cxx"
+# endif
 # include "Fl_x.cxx"
 #elif defined(_WIN32)
 # include "Fl_win32.cxx"
@@ -1100,5 +1103,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.176 2004/06/09 05:38:57 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.177 2004/06/29 00:19:29 xpxqx Exp $".
 //

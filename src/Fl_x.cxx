@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.181 2004/06/28 15:45:49 xpxqx Exp $"
+// "$Id: Fl_x.cxx,v 1.182 2004/06/29 00:19:30 xpxqx Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -44,71 +44,6 @@
 #include <fltk/Font.h>
 #include <fltk/Browser.h>
 #include <fltk/utf.h>
-
-#if !defined(X_HAVE_UTF8_STRING) && defined(HAVE_ICONV_H)
-#  include <errno.h>
-#  include <iconv.h>
-
-// Emulate Xutf8LookupString from XFree86 using locale-dependent
-// multibyte to UTF-8 trancoding using iconv (Yuck!).
-int Xutf8LookupString(XIC ic, XKeyPressedEvent* event,
-		      char* buffer, int buffer_len,
-		      KeySym *keysym, Status* status)
-{
-  static iconv_t cd_to = 0;
-
-  // WAS: "char" did not work for me. I tried "ISO_8859-1" and it worked,
-  // but there must be some way to determine the correct string for the
-  // locale...
-  if (!cd_to) cd_to = iconv_open("UTF-8", "char");
-
-  // If iconv is not going to work, report no conversion, which makes
-  // my code call XLookupString (this is probably not exact emulation
-  // of Xutf8LookupString):
-  if (cd_to == (iconv_t)(-1)) {
-    *status = XLookupNone;
-    return 0;
-  }
-
-  static char* mb_buffer = 0;
-  static int mb_buffer_len;
-  if (!mb_buffer) mb_buffer = (char*)malloc(mb_buffer_len = buffer_len);
-  else if (buffer_len > mb_buffer_len)
-    mb_buffer = (char*)realloc(mb_buffer, mb_buffer_len = buffer_len);
-  int len = XmbLookupString(ic, event, mb_buffer, mb_buffer_len, keysym, status);
-
-  switch (*status) { 
-  case XLookupChars:
-  case XLookupKeySym:
-  case XLookupBoth:
-    break;
-  default:
-    return len; // return the error back to the caller
-  }
-
-//   printf("mb:");
-//   for (int i = 0; i < len; i++) printf(" %02x", mb_buffer[i]&0xFF);
-
-  const char* inbuf = mb_buffer;
-  size_t inbytesleft = mb_buffer_len;
-  char* outbuf = buffer;
-  size_t outbytesleft = buffer_len;
-  if (iconv(cd_to, &inbuf, &inbytesleft, &outbuf, &outbytesleft) < 0) {
-    if (errno==E2BIG) {
-      *status = XBufferOverflow;
-      // guess that the remaining characters are the number of bytes needed:
-      return buffer_len + inbytesleft;
-    }
-  }
-
-//   printf(" utf8:");
-//   for (int i = 0; buffer+i < outbuf; i++) printf(" %02x", buffer[i]&0xff);
-//   printf("\n");
-
-  // otherwise, even on conversion errors, we return the result length:
-  return outbuf-buffer;
-}
-#endif
 
 using namespace fltk;
 
@@ -2191,5 +2126,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.181 2004/06/28 15:45:49 xpxqx Exp $".
+// End of "$Id: Fl_x.cxx,v 1.182 2004/06/29 00:19:30 xpxqx Exp $".
 //
