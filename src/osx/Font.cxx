@@ -42,6 +42,7 @@ struct FontSize {
   char *q_name;
   int size, minsize, maxsize;
   short ascent, descent, q_width;
+  ATSFontRef font;
   FontSize(const char* xfontname, int size);
   ~FontSize();
 };
@@ -67,6 +68,8 @@ const char* fltk::Font::system_name() {
 
 static FontSize* current;
 
+ATSFontRef fltk::xfont() { return current->font; }
+
 // face = italic, bold, 0, italic|bold
 
 FontSize::FontSize(const char* name, int Size) {
@@ -80,7 +83,7 @@ FontSize::FontSize(const char* name, int Size) {
   minsize = maxsize = Size;
   // Using ATS to get the genral Glyph size information
   CFStringRef cfname = CFStringCreateWithCString(0L, q_name, kCFStringEncodingASCII);
-  ATSFontRef font = ATSFontFindFromName(cfname, kATSOptionFlagsDefault);
+  font = ATSFontFindFromName(cfname, kATSOptionFlagsDefault);
   if (font) {
     ATSFontMetrics m = { 0 };
     ATSFontGetHorizontalMetrics(font, kATSOptionFlagsDefault, &m);

@@ -66,6 +66,7 @@ extern FL_API void	clip_region(RgnHandle);
 extern FL_API RgnHandle	clip_region();
 extern FL_API void	draw_into(CGImageRef xid);
 extern FL_API void	stop_drawing(CGImageRef xid);
+extern FL_API ATSFontRef xfont();
 
 ////////////////////////////////////////////////////////////////
 #ifdef fltk_Window_h // only include this if <fltk/Window.h> was included

@@ -42,7 +42,7 @@ extern GLContext fl_current_glcontext;
 #undef HFONT
 #define HFONT XFontStruct*
 #elif defined(__APPLE__)
-#define HFONT void*
+#define HFONT ATSFontRef
 #endif
 
 // Binary tree of all the glListBase assignments we have made so far:
@@ -55,7 +55,6 @@ static FontSize* root, *current;
 static HFONT current_xfont;
 
 void fltk::glsetfont(fltk::Font* font, float size) {
-#ifndef __APPLE__
   setfont(font, size); // necessary so measure() works
   current_xfont = fltk::xfont();
   if (!fl_current_glcontext) return;
@@ -85,19 +84,25 @@ void fltk::glsetfont(fltk::Font* font, float size) {
     HFONT oldFid = (HFONT)SelectObject(hdc, current_xfont);
     wglUseFontBitmaps(hdc, base, size, current->listbase+base); 
     SelectObject(hdc, oldFid);
+#elif defined(__APPLE__)
+   CFStringRef aname;
+   ATSFontGetName(current_xfont, kATSOptionFlagsDefault, &aname);
+   unsigned char pname[256];
+   CFStringGetPascalString(aname, pname, 256, kCFStringEncodingMacRoman);
+   short cfont;
+   GetFNum(pname, &cfont);
+   aglUseFont(aglGetCurrentContext(), cfont, 0, (int)size, 0, 256, current->listbase);
 #else
 #error
 #endif
   }
  GOTIT:
   glListBase(current->listbase);
-#endif
 }
 
 #define WCBUFLEN 256
 
 void fltk::gldrawtext(const char* text, int n) {
-#ifndef __APPLE__
   char localbuffer[WCBUFLEN];
   char* buffer = localbuffer;
   char* mallocbuffer = 0;
@@ -113,7 +118,6 @@ void fltk::gldrawtext(const char* text, int n) {
   }
   glCallLists(count, GL_UNSIGNED_BYTE, buffer);
   delete[] mallocbuffer;
-#endif
 }
 
 void fltk::gldrawtext(const char* str, int n, float x, float y, float z) {
