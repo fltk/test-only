@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Overlay_Window.H,v 1.9 1999/09/14 07:17:15 bill Exp $"
+// "$Id: Fl_Overlay_Window.H,v 1.10 1999/09/14 12:57:00 carl Exp $"
 //
 // Overlay window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -34,7 +34,6 @@ public:
 
   virtual void draw_overlay() = 0;
   virtual void layout();
-  ~Fl_Overlay_Window();
   int can_do_overlay();
   void redraw_overlay();
   Fl_Overlay_Window(int W, int H, const char *l=0)
@@ -56,5 +55,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Overlay_Window.H,v 1.9 1999/09/14 07:17:15 bill Exp $".
+// End of "$Id: Fl_Overlay_Window.H,v 1.10 1999/09/14 12:57:00 carl Exp $".
 //
