@@ -1408,19 +1408,24 @@ void Window::label(const char *name, const char * iname) {
 // Drawing context
 
 const Window *Window::current_;
+static CGContextRef prev_gc = 0;
+static Window prev_window = 0;
 
-//+++ verify port to FLTK2
+// this call relates to fltk1 fl_begin_offscreen
 void fltk::draw_into(CGContextRef gc) {
-  release_quartz_context();
+  prev_gc = quartz_gc;
+  prev_window = quartz_window;
   quartz_window = 0;
   quartz_gc = gc;
   CGContextSaveGState(quartz_gc);
   fill_quartz_context();
 }
 
-//+++ verify port to FLTK2
+// this call relates to fltk1 fl_end_offscreen
 void fltk::stop_drawing(CGImageRef) {
   release_quartz_context();
+  quartz_gc = prev_gc;
+  quartz_window = prev_window;
 }
 
 /**

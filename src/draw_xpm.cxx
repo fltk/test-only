@@ -39,6 +39,11 @@
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
+
+#ifdef __APPLE__
+#include <fltk/x.H>
+#endif
+
 using namespace fltk;
 
 static int ncolors, chars_per_pixel;
@@ -241,6 +246,7 @@ int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
   }
   d.data = data;
 
+#ifndef __APPLE__
   // build the mask bitmap used by xpmImage:
   if (mask_bitmap && transparent_index >= 0) {
     // search for usage of the transparent index, if none we act like
@@ -294,6 +300,38 @@ int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
  NO_MASK:
 
   drawimage(chars_per_pixel==1 ? cb1 : cb2, &d, RGB, Rectangle(x, y, d.w, d.h), 4);
+#else
+  bool transparent = (transparent_index>=0);
+  transparent = true;
+  U32 *array = new U32[d.w * d.h], *q = array;
+  for (int Y = 0; Y < d.h; Y++) {
+    const uchar* p = data[Y];
+    if (chars_per_pixel <= 1) {
+      for (int X = 0; X < d.w; X++) {
+        *q++ = d.colors[*p++];
+      }
+    } else {
+      for (int X = 0; X < d.w; X++) {
+        U32* colors = d.byte1[*p++];
+        *q++ = colors[*p++];
+      }
+    }
+  }
+  CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
+  CGDataProviderRef src = CGDataProviderCreateWithData( 0L, array, d.w * d.h * 4, 0L);
+  CGImageRef img = CGImageCreate(d.w, d.h, 8, 4*8, 4*d.w,
+        lut, transparent?kCGImageAlphaLast:kCGImageAlphaNoneSkipLast,
+        src, 0L, false, kCGRenderingIntentDefault);
+  CGColorSpaceRelease(lut);
+  CGDataProviderRelease(src);
+  CGRect rect = { x, y, d.w, d.h };
+  //Fl_X::q_begin_image(rect, x, y, d.w, d.h);
+  CGContextDrawImage(quartz_gc, rect, img);
+  //Fl_X::q_end_image();
+  CGContextFlush(quartz_gc);
+  CGImageRelease(img);
+  delete array;
+#endif
   if (chars_per_pixel > 1) for (int i = 0; i < 256; i++) delete[] d.byte1[i];
   return 1;
 }

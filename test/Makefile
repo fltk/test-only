@@ -83,6 +83,7 @@ CPPFILES = \
 	navigation.cxx \
 	output.cxx \
 	overlay.cxx \
+	pixmap.cxx \
 	pixmap_browser.cxx \
 	radio.cxx \
 	resizable.cxx \
@@ -139,6 +140,7 @@ TARGETS = \
 	logslider$(EXEEXT) \
 	menu$(EXEEXT) \
 	pack$(EXEEXT) \
+	pixmap$(EXEEXT) \
 	progress$(EXEEXT) \
 	resizable$(EXEEXT) \
 	resizealign$(EXEEXT) \

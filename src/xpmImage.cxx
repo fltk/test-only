@@ -93,10 +93,12 @@ void xpmImage::_draw(const fltk::Rectangle& r, const Style* style, Flags flags) 
     draw_xpm(data, 0, 0, bg);
     fg_kludge = 0;
     set_mask_bitmap(0);
+#ifndef __APPLE__
     if (bitmap) {
       (const_cast<xpmImage*>(this))->set_alpha_bitmap(bitmap, this->w(), this->h());
       delete[] bitmap;
     }
+#endif
   }
   Image::_draw(r, style, flags);
 }

@@ -198,20 +198,10 @@ void Image::make_current() {
 
     rgb = (void*)CreateDIBSection(getDC(), &bmi, DIB_RGB_COLORS, NULL, NULL, 0x0);    
 #elif USE_QUARTZ
-#if 1
     void *data = new char[w_*h_*4];
     CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
     rgb = CGBitmapContextCreate(data, w_, h_, 8, 4*w_, lut, kCGImageAlphaNoneSkipLast);
     CGColorSpaceRelease(lut);
-#else
-    CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
-    CGDataProviderRef src = CGDataProviderCreateWithData( 0L, 0, 0, 0L);
-    rgb = CGImageCreate( w_, h_, 8, 32, 4*w_,
-        lut, kCGImageAlphaNone,
-        src, 0L, false, kCGRenderingIntentDefault);
-    CGColorSpaceRelease(lut);
-    CGDataProviderRelease(src);
-#endif
 #endif
   }
 #if USE_X11
@@ -346,13 +336,12 @@ ImageDraw::~ImageDraw() {
   dc = (HDC)(data[0]);
   DeleteDC(fl_bitmap_dc);
   fl_bitmap_dc = (HDC)(data[1]);
+#elif defined(__APPLE__)
+  quartz_window = data[0];
+  quartz_gc = data[1];
 #endif
   pop_clip();
   pop_matrix();
-#ifdef __APPLE___
-  Window *win = (Window*)data[0];
-  win->make_current();
-#endif
 }
 
 void fl_restore_clip(); // in rect.C
@@ -395,7 +384,14 @@ void Image::copy(const fltk::Rectangle& r1, int src_x, int src_y) const {
   BitBlt(dc, R.x(), R.y(), R.w(), R.h(), new_dc, src_x, src_y, SRCCOPY);
   DeleteDC(new_dc);
 #elif defined(__APPLE__)
-  // NYI!
+  CGRect rect = { R.x(), R.y(), R.w(), R.h() };
+  fltk::begin_quartz_image(rect, Rectangle(src_x, src_y, w(), h()));
+  if (rgb) {
+    CGContextDrawImage(fltk::quartz_gc, rect, (CGImageRef)rgb);
+  } else {
+    CGContextDrawImage(fltk::quartz_gc, rect, (CGImageRef)alpha);
+  }
+  fltk::end_quartz_image();
 #else
 #error
 #endif
@@ -570,14 +566,6 @@ void Image::fill(const fltk::Rectangle& r1, int src_x, int src_y) const
     CGContextDrawImage(fltk::quartz_gc, rect, (CGImageRef)alpha);
   }
   fltk::end_quartz_image();
-/*
-  if (!alpha) create_alpha_bitmask(w(), h(), array);
-  if (alpha && fl_gc) {
-    CGRect rect = { X, Y, W, H };
-    fltk::begin_quartz_image(rect, cx, cy, w(), h());
-    CGContextDrawImage(fl_gc, rect, (CGImageRef)id);
-    fltk::end_quartz_image();
-  }*/
 #else
 # error
 #endif
