@@ -1,4 +1,4 @@
-/* "$Id: string.h,v 1.1 2004/12/14 10:52:27 spitzak Exp $"
+/* "$Id: string.h,v 1.2 2004/12/14 11:01:59 spitzak Exp $"
  *
  * Copyright 1998-2004 by Bill Spitzak and others.
  *
@@ -76,8 +76,8 @@
 /* Windows has equivalent functions, but being Microsoft they added
    gratuitoius changes to the names to stop code from being portable: */
 #if (defined(_WIN32) && !defined(__CYGWIN__)) || defined(__EMX__)
-# define strcasecmp(s,t)	stricmp((s), (t))
-# define strncasecmp(s,t,n)	strnicmp((s), (t), (n))
+# define strcasecmp(s,t)	stricmp(s, t)
+# define strncasecmp(s,t,n)	strnicmp(s, t, n)
 # define vsnprintf		_vsnprintf
 # define snprintf		_snprintf
 #endif
@@ -126,5 +126,5 @@ FL_API extern size_t strlcpy(char *, const char *, size_t);
 #endif
 
 /*
- * End of "$Id: string.h,v 1.1 2004/12/14 10:52:27 spitzak Exp $".
+ * End of "$Id: string.h,v 1.2 2004/12/14 11:01:59 spitzak Exp $".
  */

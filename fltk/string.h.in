@@ -1,4 +1,4 @@
-/* "$Id: string.h.in,v 1.7 2004/12/12 22:23:23 spitzak Exp $"
+/* "$Id: string.h.in,v 1.8 2004/12/14 11:01:59 spitzak Exp $"
  *
  * Copyright 1998-2004 by Bill Spitzak and others.
  *
@@ -20,13 +20,10 @@
  * Please report all bugs and problems to "fltk-bugs@fltk.org".
  */
 
-/* This file is designed to work on Windows, Linux, and BSD systems.
-   It may need to be edited to work on other systems. Please try
-   to do this by adding #if statements so this file remains portable.
-
-   Some versions of fltk wrote this file using autoconf. I never liked
-   this because I could not share the header file between systems, so
-   I have reverted to a constant version.
+/* This file was produced by the fltk configure script, and is thus
+   platform-specific. You may be able to use the unmodified string.h
+   included in the fltk source instead, it has different #if statements
+   to make it portable to the most popular platforms.
 */
 
 #ifndef fltk_string_h
@@ -85,8 +82,8 @@
 /* Windows has equivalent functions, but being Microsoft they added
    gratuitoius changes to the names to stop code from being portable: */
 #if (defined(_WIN32) && !defined(__CYGWIN__)) || defined(__EMX__)
-# define strcasecmp(s,t)	stricmp((s), (t))
-# define strncasecmp(s,t,n)	strnicmp((s), (t), (n))
+# define strcasecmp(s,t)	stricmp(s, t)
+# define strncasecmp(s,t,n)	strnicmp(s, t, n)
 # define vsnprintf		_vsnprintf
 # define snprintf		_snprintf
 #endif
@@ -135,5 +132,5 @@ FL_API extern size_t strlcpy(char *, const char *, size_t);
 #endif
 
 /*
- * End of "$Id: string.h.in,v 1.7 2004/12/12 22:23:23 spitzak Exp $".
+ * End of "$Id: string.h.in,v 1.8 2004/12/14 11:01:59 spitzak Exp $".
  */
