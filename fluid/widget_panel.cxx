@@ -225,7 +225,7 @@ Fl_Window* make_widget_panel() {
         o->labelsize(10);
         o->callback((Fl_Callback*)hotspot_cb);
         o->when(1);
-        o->tooltip("???");
+        o->tooltip("Positions the window under this widget when shown.");
       }
       o->end();
     }

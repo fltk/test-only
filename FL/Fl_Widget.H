@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.16 1999/04/01 05:15:14 carl Exp $"
+// "$Id: Fl_Widget.H,v 1.17 1999/04/11 15:34:21 mike Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,8 @@
 #define Fl_Widget_H
 
 #include "Enumerations.H"
+#include <string.h>
+#include <locale.h>
 
 #define WIDGET_STYLE ((Fl_Widget::Style*)_style)
 
@@ -113,6 +115,9 @@ public:
 
   const char *tooltip() const { return tooltip_; }
   void tooltip(const char *t);
+  void tooltip(const char *t, const char *loc)
+    { if (strncmp(loc, setlocale(LC_ALL, NULL), 2) == 0) tooltip(t); }
+
   uchar bf(uchar a) const {return (uchar)1 << a;}
   unsigned short flags() const {return flags_;}
   virtual void draw() = 0;
@@ -157,7 +162,11 @@ public:
 
   const char* label() const {return label_;}
   void label(const char* a) {label_=a;}
+  void label(const char *a, const char *loc)
+    { if (strncmp(loc, setlocale(LC_ALL, NULL), 2) == 0) label_=a; }
   void label(Fl_Labeltype a,const char* b);
+  void label(Fl_Labeltype a, const char *b, const char *loc)
+    { if (strncmp(loc, setlocale(LC_ALL, NULL), 2) == 0) label(a,b); }
 
   Fl_Callback_p callback() const {return callback_;}
   void callback(Fl_Callback* c, void* p) {callback_=c; user_data_=p;}
@@ -263,5 +272,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.16 1999/04/01 05:15:14 carl Exp $".
+// End of "$Id: Fl_Widget.H,v 1.17 1999/04/11 15:34:21 mike Exp $".
 //

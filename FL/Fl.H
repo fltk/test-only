@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.10 1999/03/31 02:53:00 carl Exp $"
+// "$Id: Fl.H,v 1.11 1999/04/11 15:34:20 mike Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,7 @@
 
 #include <stdlib.h>
 #include <string.h>
+#include <locale.h>
 
 #include "Enumerations.H"
 #ifndef Fl_Object
@@ -55,6 +56,7 @@ public: // should be private!
   static FL_EXPORT int e_keysym;
   static FL_EXPORT char* e_text;
   static FL_EXPORT int e_length;
+  static FL_EXPORT const char *encoding;
   static FL_EXPORT Fl_Widget* belowmouse_;
   static FL_EXPORT Fl_Widget* pushed_;
   static FL_EXPORT Fl_Widget* focus_;
@@ -174,6 +176,8 @@ public:
   static FL_EXPORT void set_font(Fl_Font, const char*);
   static FL_EXPORT void set_font(Fl_Font, Fl_Font);
   static FL_EXPORT Fl_Font set_fonts(const char* = 0);
+  static FL_EXPORT const char *set_encoding(const char *e, const char *loc)
+    { if (strncmp(loc, setlocale(LC_ALL, NULL), 2) == 0) encoding=e;}
 
   // labeltypes:
   static FL_EXPORT void set_labeltype(Fl_Labeltype,Fl_Label_Draw_F*,Fl_Label_Measure_F*);
@@ -275,5 +279,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.10 1999/03/31 02:53:00 carl Exp $".
+// End of "$Id: Fl.H,v 1.11 1999/04/11 15:34:20 mike Exp $".
 //

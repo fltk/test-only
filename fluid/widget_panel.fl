@@ -8,7 +8,7 @@ snap 2
 Function {make_widget_panel()} {open
 } {
   Fl_Window {} {open
-    xywh {537 326 387 470} resizable hotspot visible
+    xywh {376 98 387 470} resizable hotspot visible
   } {
     Fl_Input {} {
       label {name:}
@@ -85,7 +85,7 @@ Function {make_widget_panel()} {open
     Fl_Button {} {
       label clip
       user_data FL_ALIGN_CLIP
-      callback align_cb selected
+      callback align_cb
       tooltip {Determines whether the widget's label is \\"clipped\\" so that no part of it displays outside of the widget's borders}
       xywh {90 80 50 20} type Toggle labelsize 12 box THIN_UP_BOX down_box THIN_DOWN_BOX fly_box THIN_UP_BOX down_labelcolor 1
     }
@@ -163,7 +163,7 @@ Function {make_widget_panel()} {open
       }
       Fl_Light_Button {} {
         label border
-        callback border_cb
+        callback border_cb selected
         tooltip {Determines whether the window has a border}
         xywh {160 190 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
@@ -176,7 +176,7 @@ Function {make_widget_panel()} {open
       Fl_Light_Button {} {
         label hotspot
         callback hotspot_cb
-        tooltip {???}
+        tooltip {Positions the window under this widget when shown.}
         xywh {300 190 70 20} when 1 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
     }
@@ -285,7 +285,7 @@ Function {make_widget_panel()} {open
 Function {make_style_panel()} {open
 } {
   Fl_Window {} {open
-    xywh {35 287 330 279} visible
+    xywh {35 287 330 279} hide
   } {
     Fl_Choice {} {
       label {label type:}

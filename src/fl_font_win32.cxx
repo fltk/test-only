@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.9 1999/01/07 19:17:39 mike Exp $"
+// "$Id: fl_font_win32.cxx,v 1.10 1999/04/11 15:34:23 mike Exp $"
 //
 // WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -32,6 +32,9 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
+
+
+const char *Fl::encoding = "iso8859-1";
 
 Fl_FontSize::Fl_FontSize(const char* name, int size) {
   int weight = FW_NORMAL;
@@ -174,5 +177,5 @@ void fl_draw(const char* str, int x, int y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.9 1999/01/07 19:17:39 mike Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.10 1999/04/11 15:34:23 mike Exp $".
 //
