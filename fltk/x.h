@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.29 2004/06/09 05:38:57 spitzak Exp $"
+// "$Id: x.h,v 1.30 2004/07/11 12:07:41 laza2000 Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -79,7 +79,7 @@
 
 # undef Window
 
-# if defined(__FreeBSD__) || defined(__APPLE__)
+# if defined(__FreeBSD__) || defined(__APPLE__) || defined(__CYGWIN__)
 typedef unsigned long	ulong;
 typedef unsigned int	uint;
 typedef unsigned char	uchar;
@@ -182,5 +182,5 @@ Window* find(XWindow xid);
 #endif
 
 //
-// End of "$Id: x.h,v 1.29 2004/06/09 05:38:57 spitzak Exp $".
+// End of "$Id: x.h,v 1.30 2004/07/11 12:07:41 laza2000 Exp $".
 //
