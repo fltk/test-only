@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.H,v 1.8 1999/11/01 02:21:13 carl Exp $"
+// "$Id: Fl_Clock.H,v 1.9 1999/11/07 08:11:18 bill Exp $"
 //
 // Clock header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,9 +26,7 @@
 #ifndef Fl_Clock_H
 #define Fl_Clock_H
 
-#ifndef Fl_Widget_H
-#include "Fl_Widget.H"
-#endif
+#include <FL/Fl_Widget.H>
 
 // values for type:
 #define FL_SQUARE_CLOCK		0
@@ -70,5 +68,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Clock.H,v 1.8 1999/11/01 02:21:13 carl Exp $".
+// End of "$Id: Fl_Clock.H,v 1.9 1999/11/07 08:11:18 bill Exp $".
 //

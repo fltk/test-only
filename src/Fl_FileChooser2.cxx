@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.3 1999/10/24 19:47:41 vincent Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.4 1999/11/07 08:11:40 bill Exp $"
 //
 // More Fl_FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -51,13 +51,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#if defined(WIN32) || defined(__EMX__)
+#if defined(WIN32)
 #  include <direct.h>
 #  include <io.h>
 extern "C" int access(const char *, int);
 #else
 #  include <unistd.h>
-#endif /* WIN32 || __EMX__ */
+#endif /* WIN32 */
 
 
 //
@@ -343,7 +343,7 @@ Fl_FileChooser::newdir()
     strcpy(pathname, dir);
 
   // Create the directory; ignore EEXIST errors...
-#if defined(WIN32) || defined(__EMX__)
+#if defined(WIN32)
   if (mkdir(pathname))
 #else
   if (mkdir(pathname, 0777))
@@ -613,5 +613,5 @@ Fl_FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.3 1999/10/24 19:47:41 vincent Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.4 1999/11/07 08:11:40 bill Exp $".
 //

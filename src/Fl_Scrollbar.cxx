@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.24 1999/11/05 21:43:54 carl Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.25 1999/11/07 08:11:42 bill Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -91,20 +91,23 @@ int Fl_Scrollbar::handle(int event) {
     if (mx < X) highlight_ = 1;
     else if (mx >= X+W) highlight_ = 2;
     else {
-      int sliderx = slider_position(W, slider_size(W, H));
+      // Carl: I did this on purpose so the highlighting will work
+      // when you point at the trough!  I don't understand why you
+      // don't want the highlighting in this case
+      /* int sliderx = slider_position(W, slider_size(W, H));
       if (mx < X+sliderx) highlight_ = 3;
       else if (mx >= X+sliderx+slider_size(W, H)) highlight_ = 4;
-      else highlight_ = 5;
+      else */ highlight_ = 5;
     }
   } else {
     if (mx < X || mx >= X+W) highlight_ = 0;
     else if (my < Y) highlight_ = 1;
     else if (my >= Y+H) highlight_ = 2;
     else {
-      int slidery = slider_position(H, slider_size(H, W));
+      /* int slidery = slider_position(H, slider_size(H, W));
       if (my < Y+slidery) highlight_ = 3;
       else if (my >= Y+slidery+slider_size(H, W)) highlight_ = 4;
-      else highlight_ = 5;
+      else */ highlight_ = 5;
     }
   }
   switch (event) {
@@ -254,5 +257,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.24 1999/11/05 21:43:54 carl Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.25 1999/11/07 08:11:42 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.H,v 1.18 1999/10/17 20:40:04 vincent Exp $"
+// "$Id: Fl_Group.H,v 1.19 1999/11/07 08:11:21 bill Exp $"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
@@ -94,7 +94,7 @@ public:
   // back compatability function:
   void focus(Fl_Widget* o) {o->take_focus();}
   Fl_Widget* & _ddfdesign_kludge() {return resizable_;}
-  void forms_end();
+  friend void fl_end_group(); // forms emulation function
 };
 
 // dummy class used to end child groups in constructors for complex
@@ -107,5 +107,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Group.H,v 1.18 1999/10/17 20:40:04 vincent Exp $".
+// End of "$Id: Fl_Group.H,v 1.19 1999/11/07 08:11:21 bill Exp $".
 //

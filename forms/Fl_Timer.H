@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Timer.H,v 1.7 1999/10/17 20:40:12 vincent Exp $"
+// "$Id: Fl_Timer.H,v 1.1 1999/11/07 08:11:27 bill Exp $"
 //
 // Timer header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,7 +27,7 @@
 #define Fl_Timer_H
 
 #ifndef Fl_Widget_H
-#include "Fl_Widget.H"
+#include <FL/Fl_Widget.H>
 #endif
 
 // values for type():
@@ -58,6 +58,6 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Timer.H,v 1.7 1999/10/17 20:40:12 vincent Exp $".
+// End of "$Id: Fl_Timer.H,v 1.1 1999/11/07 08:11:27 bill Exp $".
 //
 

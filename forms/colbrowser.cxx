@@ -1,5 +1,5 @@
 //
-// "$Id: colbrowser.cxx,v 1.7 1999/08/16 07:31:33 bill Exp $"
+// "$Id: colbrowser.cxx,v 1.1 1999/11/07 08:11:28 bill Exp $"
 //
 // Forms test program for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,8 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/forms.H>	// changed for fltk
+#include "forms.H"	// changed for fltk
+// If "make install" had been done you would inclide <FL/forms.H>
 #include <stdlib.h>
 #include <stdio.h>	// added for fltk
 #include <string.h>	// added for fltk
@@ -340,5 +341,5 @@ create_form_cl(void)
 }
 
 //
-// End of "$Id: colbrowser.cxx,v 1.7 1999/08/16 07:31:33 bill Exp $".
+// End of "$Id: colbrowser.cxx,v 1.1 1999/11/07 08:11:28 bill Exp $".
 //

@@ -84,7 +84,7 @@ void fl_glyph(int t, int x,int y,int w,int h,
     fl_polygon(X1-W1, Y1, X1, Y1-W1, X1, Y1+W1);
     break;}
   case FL_GLYPH_RIGHT: {
-    box->draw(x,y,w,h, bc, f);
+    if (box) box->draw(x,y,w,h, bc, f); // menu passes zero! (sigh)
     int w1 = (h-1)|1; // use odd sizes only
     int Y1 = y+w1/2;
     int W1 = w1/3;

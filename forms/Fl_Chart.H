@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.H,v 1.15 1999/11/01 02:21:12 carl Exp $"
+// "$Id: Fl_Chart.H,v 1.1 1999/11/07 08:11:26 bill Exp $"
 //
 // Forms chart header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,9 +26,7 @@
 #ifndef Fl_Chart_H
 #define Fl_Chart_H
 
-#ifndef Fl_Widget_H
-#include "Fl_Widget.H"
-#endif
+#include <FL/Fl_Widget.H>
 
 // values for type()
 #define FL_BAR_CHART		0
@@ -83,5 +81,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Chart.H,v 1.15 1999/11/01 02:21:12 carl Exp $".
+// End of "$Id: Fl_Chart.H,v 1.1 1999/11/07 08:11:26 bill Exp $".
 //

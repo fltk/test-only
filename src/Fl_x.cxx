@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.43 1999/11/02 20:55:41 carl Exp $"
+// "$Id: Fl_x.cxx,v 1.44 1999/11/07 08:11:45 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -616,10 +616,22 @@ void Fl_X::create(Fl_Window* w,
     mask |= CWBackPixel;
   }
 
+  int W = w->w();
+  if (W <= 0) W = 1; // X don't like zero...
+  int H = w->h();
+  if (H <= 0) H = 1; // X don't like zero...
+  // center windows in case window manager does not do anything:
+  if (!(w->flags() & Fl_Window::FL_FORCE_POSITION) && !w->parent()) {
+    w->x((Fl::w()-W)/2);
+    w->y((Fl::h()-H)/2);
+  }
+  int X = w->x();
+  int Y = w->y();
+
   Fl_X* x = new Fl_X;
   x->xid = XCreateWindow(fl_display,
 			 root,
-			 w->x(), w->y(), w->w()>0?w->w():1, w->h()>0?w->h():1,
+			 X, Y, W, H,
 			 0, // borderwidth
 			 visual->depth,
 			 InputOutput,
@@ -805,5 +817,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.43 1999/11/02 20:55:41 carl Exp $".
+// End of "$Id: Fl_x.cxx,v 1.44 1999/11/07 08:11:45 bill Exp $".
 //

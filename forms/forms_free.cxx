@@ -1,5 +1,5 @@
 //
-// "$Id: forms_free.cxx,v 1.5 1999/10/27 08:41:03 bill Exp $"
+// "$Id: forms_free.cxx,v 1.1 1999/11/07 08:11:30 bill Exp $"
 //
 // Forms free widget routines for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 // complete.
 
 #include <FL/Fl.H>
-#include <FL/Fl_Free.H>
+#include "Fl_Free.H"
 
 void Fl_Free::step(void *v) {
   Fl_Free *f = (Fl_Free *)v;
@@ -73,5 +73,5 @@ int Fl_Free::handle(int e) {
 }
 
 //
-// End of "$Id: forms_free.cxx,v 1.5 1999/10/27 08:41:03 bill Exp $".
+// End of "$Id: forms_free.cxx,v 1.1 1999/11/07 08:11:30 bill Exp $".
 //

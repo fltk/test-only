@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.14 1999/11/05 21:43:56 carl Exp $"
+// "$Id: fl_options.cxx,v 1.15 1999/11/07 08:11:47 bill Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -370,42 +370,30 @@ Fl_Style* Fl_Style::find(const char* name) {
   return 0;
 }
 
-static void style_clear(Fl_Style *s) {
-  Fl_Style *p = s->parent;
-  memset(s, 0, sizeof(*s));
-  s->parent = p;
-}
+// static void style_clear(Fl_Style *s) {
+//   Fl_Style *p = s->parent;
+//   memset(s, 0, sizeof(*s));
+//   s->parent = p;
+// }
 
 void Fl_Style::revert() {
   fl_background((Fl_Color)0xc0c0c000);
-  for (Fl_Style_Definer* p = Fl_Style_Definer::first; p; p = p->next) {
-    style_clear(p->style);
-    if (p->revert) p->revert(p->style);
-  }
+//   for (Fl_Style_Definer* p = Fl_Style_Definer::first; p; p = p->next) {
+//     style_clear(p->style);
+//     if (p->revert) p->revert(p->style);
+//   }
   Fl::redraw();
 }
 
-unsigned Fl_Style::geti(unsigned i) const {
-  if (*((unsigned*)(&color+i))) return *((unsigned*)(&color+i));
-  if (parent) return parent->geti(i);
-  return *((unsigned*)&Fl_Widget::default_style.color+i);
-}
-
-void* Fl_Style::getp(unsigned i) const {
-  if (*((void**)(&box+i))) return *((void**)(&box+i));
-  if (parent) return parent->getp(i);
-  return *((void**)&Fl_Widget::default_style.box+i);
-}
-
-Fl_Style_Definer::Fl_Style_Definer(char* n, Fl_Style& s, Fl_Style_Reverter rf)
-  : name(n), style(&s), revert(rf), next(first)
-{
-  if (revert) revert(style);
-  first = this;
-}
+// Fl_Style_Definer::Fl_Style_Definer(char* n, Fl_Style& s, Fl_Style_Reverter rf)
+//   : name(n), style(&s), revert(rf), next(first)
+// {
+//   if (revert) revert(style);
+//   first = this;
+// }
 
 //
-// End of "$Id: fl_options.cxx,v 1.14 1999/11/05 21:43:56 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.15 1999/11/07 08:11:47 bill Exp $".
 //
 
 

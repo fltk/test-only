@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.58 1999/11/05 00:35:49 vincent Exp $"
+// "$Id: Fl_win32.cxx,v 1.59 1999/11/07 08:11:44 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -149,12 +149,18 @@ static void nothing() {}
 void (*fl_lock_function)() = nothing;
 void (*fl_unlock_function)() = nothing;
 
+static void* message;
+
+void* Fl::thread_message() {
+  void* r = message;
+  message = 0;
+  return r;
+}
+
 double fl_wait(int timeout_flag, double time) {
   int have_message = 0;
   int timerid;
 
-  // clear the thread message
-  Fl::thread_message = 0;
   fl_unlock_function();
 
   if (nfds) {
@@ -215,7 +221,7 @@ double fl_wait(int timeout_flag, double time) {
   // execute it, them execute any other messages that become ready during it:
   while (have_message) {
     if (fl_msg.message == WM_USER)  // Used for awaking wait() from another thread
-      Fl::thread_message = (void*)fl_msg.wParam;
+      message = (void*)fl_msg.wParam;
     else
       DispatchMessage(&fl_msg);
     have_message = PeekMessage(&fl_msg, NULL, 0, 0, PM_REMOVE);
@@ -242,20 +248,20 @@ int Fl::y()
   return r.top;
 }
 
-int Fl::h()
-{
-  RECT r;
-
-  SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
-  return r.bottom - r.top;
-}
-
 int Fl::w()
 {
   RECT r;
 
   SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
   return r.right - r.left;
+}
+
+int Fl::h()
+{
+  RECT r;
+
+  SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
+  return r.bottom - r.top;
 }
 
 void Fl::get_mouse(int &x, int &y) {
@@ -854,5 +860,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.58 1999/11/05 00:35:49 vincent Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.59 1999/11/07 08:11:44 bill Exp $".
 //

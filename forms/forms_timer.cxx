@@ -1,5 +1,5 @@
 //
-// "$Id: forms_timer.cxx,v 1.5 1999/08/16 07:31:31 bill Exp $"
+// "$Id: forms_timer.cxx,v 1.1 1999/11/07 08:11:31 bill Exp $"
 //
 // Forms timer object for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 // Fl::add_timeout directly!
 
 #include <FL/Fl.H>
-#include <FL/Fl_Timer.H>
+#include "Fl_Timer.H"
 #include <FL/fl_draw.H>
 #ifdef WIN32
 # include <sys/types.h> 
@@ -150,5 +150,5 @@ void Fl_Timer::suspended(char d) {
 }
 
 //
-// End of "$Id: forms_timer.cxx,v 1.5 1999/08/16 07:31:31 bill Exp $".
+// End of "$Id: forms_timer.cxx,v 1.1 1999/11/07 08:11:31 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fractals.cxx,v 1.8 1999/10/03 06:31:44 bill Exp $"
+// "$Id: fractals.cxx,v 1.1 1999/11/07 08:11:33 bill Exp $"
 //
 // Fractal drawing demo for the Fast Light Tool Kit (FLTK).
 //
@@ -27,15 +27,6 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <config.h>
-#if !HAVE_GL
-#include <FL/Fl.H>
-#include <FL/fl_message.H>
-int main(int, char**) {
-  fl_alert("This demo does not work without GL");
-  return 1;
-}
-#else
 /*
  * To compile: cc -o fractals fractals.c -lGL -lGLU -lX11 -lglut -lXmu -lm
  *
@@ -61,7 +52,7 @@ int main(int, char**) {
  *
  */
 
-#include <FL/glut.H>
+#include "glut.H" // changed for fltk
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -802,8 +793,7 @@ int main(int argc, char** argv)
 
   return 0;
 }
-#endif
 
 //
-// End of "$Id: fractals.cxx,v 1.8 1999/10/03 06:31:44 bill Exp $".
+// End of "$Id: fractals.cxx,v 1.1 1999/11/07 08:11:33 bill Exp $".
 //

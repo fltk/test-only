@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Positioner.cxx,v 1.12 1999/11/05 21:43:53 carl Exp $"
+// "$Id: Fl_Positioner.cxx,v 1.1 1999/11/07 08:11:27 bill Exp $"
 //
 // Positioner widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,7 +27,7 @@
 // Written by: Mark Overmars
 
 #include <FL/Fl.H>
-#include <FL/Fl_Positioner.H>
+#include "Fl_Positioner.H"
 #include <FL/fl_draw.H>
 
 static double flinear(double val, double smin, double smax, double gmin, double gmax)
@@ -141,5 +141,5 @@ void Fl_Positioner::ybounds(double a, double b) {
 }
 
 //
-// End of "$Id: Fl_Positioner.cxx,v 1.12 1999/11/05 21:43:53 carl Exp $".
+// End of "$Id: Fl_Positioner.cxx,v 1.1 1999/11/07 08:11:27 bill Exp $".
 //

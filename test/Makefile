@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.31 1999/11/01 22:51:42 carl Exp $"
+# "$Id: Makefile,v 1.32 1999/11/07 08:11:52 bill Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -26,10 +26,10 @@
 CPPFILES =\
 	CubeMain.cxx CubeView.cxx \
 	adjuster.cxx arc.cxx ask.cxx bitmap.cxx boxtype.cxx browser.cxx button.cxx \
-	buttons.cxx checkers.cxx clock.cxx colbrowser.cxx color_chooser.cxx \
+	buttons.cxx checkers.cxx clock.cxx color_chooser.cxx \
 	cube.cxx cursor.cxx curve.cxx demo.cxx doublebuffer.cxx editor.cxx \
-	file_chooser.cxx fonts.cxx forms.cxx fractals.cxx fullscreen.cxx \
-	gl_overlay.cxx glpuzzle.cxx hello.cxx iconize.cxx image.cxx input.cxx \
+	file_chooser.cxx fonts.cxx fullscreen.cxx \
+	gl_overlay.cxx hello.cxx iconize.cxx image.cxx input.cxx \
 	keyboard.cxx label.cxx list_visuals.cxx mandelbrot.cxx menubar.cxx \
 	message.cxx navigation.cxx output.cxx overlay.cxx pixmap.cxx \
 	pixmap_browser.cxx radio.cxx resizebox.cxx scroll.cxx shape.cxx \
@@ -38,9 +38,9 @@ CPPFILES =\
 	layout.cxx threads.cxx
 
 ALL =	CubeView adjuster arc ask bitmap boxtype browser button buttons checkers \
-	clock colbrowser color_chooser cube cursor curve demo doublebuffer \
-	editor file_chooser fonts forms fractals fullscreen gl_overlay \
-	glpuzzle hello iconize image input keyboard label list_visuals \
+	clock color_chooser cube cursor curve demo doublebuffer \
+	editor file_chooser fonts fullscreen gl_overlay \
+	hello iconize image input keyboard label list_visuals \
 	mandelbrot menubar message navigation output overlay pixmap \
 	pixmap_browser radio resizebox scroll shape subwindow \
 	symbols tabs tile valuators fast_slow resize pack inactive sizes \
@@ -76,12 +76,8 @@ CubeView.o: CubeView.h
 
 cube: cube.cxx
 	$(CXX) -I.. $(CXXFLAGS) cube.cxx -L../lib -lfltk $(GLDLIBS) -o $@
-fractals: fractals.cxx
-	$(CXX) -I.. $(CXXFLAGS) fractals.cxx -L../lib -lfltk $(GLDLIBS) -o $@
 fullscreen: fullscreen.cxx
 	$(CXX) -I.. $(CXXFLAGS) fullscreen.cxx -L../lib -lfltk $(GLDLIBS) -o $@
-glpuzzle: glpuzzle.cxx
-	$(CXX) -I.. $(CXXFLAGS) glpuzzle.cxx -L../lib -lfltk $(GLDLIBS) -o $@
 gl_overlay: gl_overlay.cxx
 	$(CXX) -I.. $(CXXFLAGS) gl_overlay.cxx -L../lib -lfltk $(GLDLIBS) -o $@
 keyboard: keyboard.cxx keyboard_ui.cxx
@@ -108,5 +104,5 @@ install:
 	@echo Nothing to install in test directory.
 
 #
-# End of "$Id: Makefile,v 1.31 1999/11/01 22:51:42 carl Exp $".
+# End of "$Id: Makefile,v 1.32 1999/11/07 08:11:52 bill Exp $".
 #

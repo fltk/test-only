@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_FormsBitmap.H,v 1.6 1999/10/17 20:40:03 vincent Exp $"
+// "$Id: forms_bitmap.cxx,v 1.1 1999/11/07 08:11:29 bill Exp $"
 //
-// Forms bitmap header file for the Fast Light Tool Kit (FLTK).
+// Forms compatible bitmap function for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,24 +23,28 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#ifndef Fl_FormsBitmap_H
-#define Fl_FormsBitmap_H
+#include "forms.H"
 
-#include "Fl_Bitmap.H"
+Fl_FormsBitmap::Fl_FormsBitmap(
+  Fl_Boxtype t, int x, int y, int w, int h, const char* l)
+: Fl_Widget(x, y, w, h, l) {
+  box(t);
+  b = 0;
+  color(FL_BLACK);
+  align(FL_ALIGN_BOTTOM);
+}
 
-class FL_API Fl_FormsBitmap : public Fl_Widget {
-    Fl_Bitmap *b;
-protected:
-    void draw();
-public:
-    Fl_FormsBitmap(Fl_Boxtype, int, int, int, int, const char * = 0);
-    void set(int W, int H, const uchar *bits);
-    void bitmap(Fl_Bitmap *B) {b = B;}
-    Fl_Bitmap *bitmap() const {return b;}
-};
+void Fl_FormsBitmap::set(int W, int H, const uchar *bits) {
+  delete b;
+  bitmap(new Fl_Bitmap(bits, W, H));
+}
 
-#endif
+void Fl_FormsBitmap::draw() {
+  box()->draw(x(), y(), w(), h(), selection_color());
+  if (b) {fl_color(color()); b->draw(x(), y(), w(), h());}
+  draw_label();
+}
 
 //
-// End of "$Id: Fl_FormsBitmap.H,v 1.6 1999/10/17 20:40:03 vincent Exp $".
+// End of "$Id: forms_bitmap.cxx,v 1.1 1999/11/07 08:11:29 bill Exp $".
 //

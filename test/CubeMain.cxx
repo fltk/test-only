@@ -1,5 +1,5 @@
 //
-// "$Id: CubeMain.cxx,v 1.2 1999/03/04 13:39:41 mike Exp $"
+// "$Id: CubeMain.cxx,v 1.3 1999/11/07 08:11:51 bill Exp $"
 //
 // CubeView class definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -33,7 +33,7 @@ main(int argc, char **argv) {
     CubeViewUI *cvui=new CubeViewUI;
     
 //Initial global objects.
-    
+    Fl::args(argc, argv);
     Fl::visual(FL_DOUBLE|FL_INDEX);
 
     cvui->show();
@@ -43,5 +43,5 @@ main(int argc, char **argv) {
 
 
 //
-// End of "$Id: CubeMain.cxx,v 1.2 1999/03/04 13:39:41 mike Exp $".
+// End of "$Id: CubeMain.cxx,v 1.3 1999/11/07 08:11:51 bill Exp $".
 //

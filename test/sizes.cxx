@@ -10,7 +10,6 @@
 #include <FL/Fl_Menu_Button.H>
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Adjuster.H>
-#include <FL/Fl_Chart.H>
 #include <FL/Fl_Clock.H>
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Color_Chooser.H>
@@ -24,7 +23,6 @@
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Output.H>
 #include <FL/Fl_Double_Window.H>
-#include <FL/Fl_Positioner.H>
 #include <FL/Fl_Roller.H>
 #include <FL/Fl_Scroll.H>
 #include <FL/Fl_Slider.H>
@@ -43,7 +41,6 @@ main() {
   printf("    sizeof(Fl_Light_Button) = %lu\n", (unsigned long)sizeof(class Fl_Light_Button));
   printf("      sizeof(Fl_Check_Button) = %lu\n", (unsigned long)sizeof(class Fl_Check_Button));
   printf("    sizeof(Fl_Return_Button) = %lu\n", (unsigned long)sizeof(class Fl_Return_Button));
-  printf("  sizeof(Fl_Chart) = %lu\n", (unsigned long)sizeof(class Fl_Chart));
   printf("  sizeof(Fl_Clock) = %lu\n", (unsigned long)sizeof(class Fl_Clock));
   printf("  sizeof(Fl_Group) = %lu\n", (unsigned long)sizeof(class Fl_Group));
   printf("    sizeof(Fl_Browser_) = %lu\n", (unsigned long)sizeof(class Fl_Browser_));
@@ -60,7 +57,6 @@ main() {
   printf("    sizeof(Fl_Choice) = %lu\n", (unsigned long)sizeof(class Fl_Choice));
   printf("    sizeof(Fl_Menu_Bar) = %lu\n", (unsigned long)sizeof(class Fl_Menu_Bar));
   printf("    sizeof(Fl_Menu_Button) = %lu\n", (unsigned long)sizeof(class Fl_Menu_Button));
-  printf("  sizeof(Fl_Positioner) = %lu\n", (unsigned long)sizeof(class Fl_Positioner));
   printf("  sizeof(Fl_Roller) = %lu\n", (unsigned long)sizeof(class Fl_Roller));
   printf("  sizeof(Fl_Valuator) = %lu\n", (unsigned long)sizeof(class Fl_Valuator));
   printf("    sizeof(Fl_Adjuster) = %lu\n", (unsigned long)sizeof(class Fl_Adjuster));

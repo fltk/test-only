@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.H,v 1.15 1999/11/01 02:21:13 carl Exp $"
+// "$Id: Fl_Counter.H,v 1.16 1999/11/07 08:11:19 bill Exp $"
 //
 // Counter header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,9 +28,7 @@
 #ifndef Fl_Counter_H
 #define Fl_Counter_H
 
-#ifndef Fl_Valuator_H
-#include "Fl_Valuator.H"
-#endif
+#include <FL/Fl_Valuator.H>
 
 // values for type():
 #define FL_NORMAL_COUNTER	0
@@ -62,5 +60,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Counter.H,v 1.15 1999/11/01 02:21:13 carl Exp $".
+// End of "$Id: Fl_Counter.H,v 1.16 1999/11/07 08:11:19 bill Exp $".
 //

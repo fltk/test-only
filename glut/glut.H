@@ -1,5 +1,5 @@
 //
-// "$Id: glut.H,v 1.11 1999/10/26 16:26:23 mike Exp $"
+// "$Id: glut.H,v 1.1 1999/11/07 08:11:34 bill Exp $"
 //
 // GLUT emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -51,8 +51,8 @@
 // Glut is emulated using this window class and these static variables
 // (plus several more static variables hidden in glut.C):
 
-#include "Fl.H"
-#include "Fl_Gl_Window.H"
+#include <FL/Fl.H>
+#include <FL/Fl_Gl_Window.H>
 
 class FL_API Fl_Glut_Window : public Fl_Gl_Window {
   void _init();
@@ -467,5 +467,5 @@ extern FL_API void glutSolidIcosahedron();
 #endif                  /* __glut_h__ */
 
 //
-// End of "$Id: glut.H,v 1.11 1999/10/26 16:26:23 mike Exp $".
+// End of "$Id: glut.H,v 1.1 1999/11/07 08:11:34 bill Exp $".
 //

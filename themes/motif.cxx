@@ -24,9 +24,10 @@ extern "C" fltk_theme(int, char**);
 int fltk_theme(int, char**) {
   Fl_Style::revert(); // revert to FLTK default styles
 
-#warning Please do not modify the default boxtypes directly like this.
-#warning It will screw up other themes loaded later.  better to create
-#warning a new boxtype.  Please fix.
+// #warning Please do not modify the default boxtypes directly like this.
+// #warning It will screw up other themes loaded later.  better to create
+// #warning a new boxtype.  Please fix.
+// No, it is ok if "revert" puts it back!
   fl_background(0xB0C0D800);
   fl_normal_box.data = "UUJJUUJJUUJJ";
   fl_normal_box.dx_ = 3;

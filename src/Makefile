@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.42 1999/11/01 02:21:37 carl Exp $"
+# "$Id: Makefile,v 1.43 1999/11/07 08:11:46 bill Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -34,7 +34,6 @@ CPPFILES = \
 	Fl_Browser_load.cxx \
 	Fl_Box.cxx \
 	Fl_Button.cxx \
-	Fl_Chart.cxx \
 	Fl_Check_Button.cxx \
 	Fl_Choice.cxx \
 	Fl_Clock.cxx \
@@ -66,7 +65,6 @@ CPPFILES = \
 	Fl_Overlay_Window.cxx \
 	Fl_Pack.cxx \
 	Fl_Pixmap.cxx \
-	Fl_Positioner.cxx \
 	Fl_Repeat_Button.cxx \
 	Fl_Return_Button.cxx \
 	Fl_RGB_Image.cxx \
@@ -139,12 +137,6 @@ CPPFILES = \
 	fl_symbols.cxx \
 	fl_vertex.cxx \
 	fl_xpm.cxx \
-	forms_compatability.cxx \
-	forms_bitmap.cxx \
-	forms_free.cxx \
-	forms_fselect.cxx \
-	forms_pixmap.cxx \
-	forms_timer.cxx \
 	fl_options.cxx
 
 CPPglFILES = \
@@ -152,9 +144,7 @@ CPPglFILES = \
 	Fl_Gl_Overlay.cxx \
 	Fl_Gl_Window.cxx \
 	gl_draw.cxx \
-	gl_start.cxx \
-	glut_compatability.cxx \
-	glut_font.cxx
+	gl_start.cxx
 
 CPPimagesFILES = \
 	Fl_Guess_Image.cxx \
@@ -290,5 +280,5 @@ install: $(LIBRARY) $(DSONAME)
 	@-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.42 1999/11/01 02:21:37 carl Exp $".
+# End of "$Id: Makefile,v 1.43 1999/11/07 08:11:46 bill Exp $".
 #

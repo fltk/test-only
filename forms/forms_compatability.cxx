@@ -1,5 +1,5 @@
 //
-// "$Id: forms_compatability.cxx,v 1.7 1999/10/31 02:54:42 bill Exp $"
+// "$Id: forms_compatability.cxx,v 1.1 1999/11/07 08:11:30 bill Exp $"
 //
 // Forms compatibility functions for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 // Forms library compatability functions.
 // Many more functions are defined as inlines in forms.h!
 
-#include <FL/forms.H>
+#include "forms.H"
 #include <stdlib.h>
 
 void fl_set_object_lstyle(Fl_Widget* o,int a) {
@@ -48,43 +48,45 @@ void fl_set_object_lstyle(Fl_Widget* o,int a) {
 }
 
 char fl_flip = 2;
+
 void fl_end_form() {
-  while (Fl_Group::current()) Fl_Group::current()->forms_end();
+  while (Fl_Group::current()) fl_end_group();
 }
 
-void Fl_Group::forms_end() {
+void fl_end_group() {
+  Fl_Group* g = Fl_Group::current();
   // set the dimensions of a group to surround contents
-  if (children() && !w()) {
-    Fl_Widget*const* a = array();
+  if (g->children() && !g->w()) {
+    Fl_Widget*const* a = g->array();
     Fl_Widget* o = *a++;
     int rx = o->x();
     int ry = o->y();
     int rw = rx+o->w();
     int rh = ry+o->h();
-    for (int i=children_-1; i--;) {
+    for (int i=g->children()-1; i--;) {
       o = *a++;
       if (o->x() < rx) rx = o->x();
       if (o->y() < ry) ry = o->y();
       if (o->x()+o->w() > rw) rw = o->x()+o->w();
       if (o->y()+o->h() > rh) rh = o->y()+o->h();
     }
-    x(ox_ = rx);
-    y(oy_ = ry);
-    w(ow_ = rw-rx);
-    h(oh_ = rh-ry);
+    g->x(g->ox_ = rx);
+    g->y(g->oy_ = ry);
+    g->w(g->ow_ = rw-rx);
+    g->h(g->oh_ = rh-ry);
   }
   // flip all the children's coordinate systems:
   if (fl_flip) {
-    Fl_Widget* o = (type()>=FL_WINDOW) ? this : window();
+    Fl_Widget* o = (g->type()>=FL_WINDOW) ? g : g->window();
     int Y = o->h();
-    Fl_Widget*const* a = array();
-    for (int i=children(); i--;) {
+    Fl_Widget*const* a = g->array();
+    for (int i=g->children(); i--;) {
       Fl_Widget* o = *a++;
       o->y(Y-o->y()-o->h());
     }
-    oy_ = Y-oy_-h();
+    g->oy_ = Y-g->oy_-g->h();
   }
-  end();
+  g->end();
 }
 
 static int initargc;
@@ -225,5 +227,5 @@ char *fl_show_simple_input(const char *str1, const char *defstr) {
 }
 
 //
-// End of "$Id: forms_compatability.cxx,v 1.7 1999/10/31 02:54:42 bill Exp $".
+// End of "$Id: forms_compatability.cxx,v 1.1 1999/11/07 08:11:30 bill Exp $".
 //

@@ -13,29 +13,18 @@
 
    Fl::unlock() - release the recursive lock.
 
-   Fl::awake() - Causes Fl::wait() to return (with the lock locked) even
-   if there are no events ready.
+   Fl::awake(void*) - Causes Fl::wait() to return (with the lock locked)
+   even if there are no events ready.  Upon return Fl::thread_message()
+   will return the void* argument.
 
+   See also the Fl_Thread header file, which provides convienence
+   functions
 */
 
 #include <FL/Fl.H>
-#include <FL/Fl_Threads.H>
 #include "config.h"
 
-#if HAVE_PTHREAD || defined(WIN32)
-static Fl_Mutex main_lock(true);
-
-void* Fl::thread_message;
-
-void Fl::lock() {
-  main_lock.lock();
-}
-
-void Fl::unlock() {
-  main_lock.unlock();
-}
-#endif
-
+////////////////////////////////////////////////////////////////
 #if HAVE_PTHREAD
 #include <unistd.h>
 #include <pthread.h>
@@ -43,30 +32,35 @@ void Fl::unlock() {
 #ifdef PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP
 // Linux supports recursive locks, use them directly:
 
-#define INITIALISER PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP
+static pthread_mutex_t fltk_mutex = PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP;
 
-void Fl_Mutex::lock() {
-  pthread_mutex_lock((pthread_mutex_t*)m);
+static void lock_function() {
+  pthread_mutex_lock(&fltk_mutex);
 }
 
-void Fl_Mutex::unlock() {
-  pthread_mutex_unlock((pthread_mutex_t*)m);
+void Fl::unlock() {
+  pthread_mutex_unlock(&fltk_mutex);
 }
+
+// this is needed for the Fl_Mutex constructor:
+pthread_mutexattr_t Fl_Mutex_attrib = {PTHREAD_MUTEX_RECURSIVE_NP};
 
 #else
 // Make a recursive lock out of the pthread mutex:
 
-#define INITIALISER PTHREAD_MUTEX_INITIALIZER
+static pthread_mutex_t fltk_mutex = PTHREAD_MUTEX_INITIALIZER;
+static pthread_t owner;
+static int counter;
 
-void Fl_Mutex::lock() {
-  if (!counter || (pthread_t)owner != (pthread_t)pthread_self()) {
-    pthread_mutex_lock((pthread_mutex_t*)m); owner = pthread_self();
+static void lock_function() {
+  if (!counter || owner != pthread_self()) {
+    pthread_mutex_lock(&fltk_mutex); owner = pthread_self();
   }
   counter++;
 }
 
-void Fl_Mutex::unlock() {
-  if (!--counter) pthread_mutex_unlock((pthread_mutex_t*)m);
+void Fl::unlock() {
+  if (!--counter) pthread_mutex_unlock(&fltk_mutex);
 }
 
 #endif
@@ -77,39 +71,31 @@ static int thread_filedes[2];
 extern void (*fl_lock_function)();
 extern void (*fl_unlock_function)();
 
-static void thread_awake_cb(int fd, void*) {
-  read(fd, &Fl::thread_message, sizeof(void*));
+static void* message;
+
+void* Fl::thread_message() {
+  void* r = message;
+  message = 0;
+  return r;
 }
 
-Fl_Mutex::Fl_Mutex(bool inistate) {
+static void thread_awake_cb(int fd, void*) {
+  read(fd, &message, sizeof(void*));
+}
+
+void Fl::lock() {
+  lock_function();
   if (!thread_filedes[1]) { // initialize the mt support
     // Init threads communication pipe to let threads awake FLTK from wait
     pipe(thread_filedes);
     Fl::add_fd(thread_filedes[0], FL_READ, thread_awake_cb);
-    fl_lock_function = Fl::lock;
+    fl_lock_function = lock_function;
     fl_unlock_function = Fl::unlock;
   }
-#ifndef PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP
-  counter = 0;
-#endif
-  pthread_mutex_t tmp = INITIALISER;
-  m = (pthread_mutex_t*) new pthread_mutex_t(tmp);
-  if (inistate) lock();
 }
 
-Fl_Mutex::~Fl_Mutex()
-{
-  delete (pthread_mutex_t*) m;
-}
-
-void Fl::awake(void* msg)
-{
+void Fl::awake(void* msg) {
   write(thread_filedes[1], &msg, sizeof(void*));
-}
-
-int fl_create_thread(Fl_Thread& t, void *(*f) (void *), void* p)
-{
-  return pthread_create((pthread_t*)&t, 0, f, p);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -122,45 +108,28 @@ int fl_create_thread(Fl_Thread& t, void *(*f) (void *), void* p)
 extern void (*fl_lock_function)();
 extern void (*fl_unlock_function)();
 
-Fl_Mutex::Fl_Mutex(bool inistate)
-{
-  if (!fl_lock_function) {
-    fl_lock_function = lock;
-    fl_unlock_function = unlock;
-  }
-  m = (void*) new CRITICAL_SECTION;
-  if (inistate) lock();
+static CRITICAL_SECTION cs;
+
+static unsigned long main_thread;
+
+static void unlock_function() {
+  main_thread = ???;
+  LeaveCriticalSection(&cs);
 }
 
-Fl_Mutex::~Fl_Mutex()
-{
-  delete (CRITICAL_SECTION*) m;
+void Fl::lock() {
+  EnterCriticalSection(&cs);
+  fl_lock_function = lock;
+  fl_unlock_function = unlock_function;
 }
 
-void Fl_Mutex::lock() {
-  EnterCriticalSection((CRITICAL_SECTION*)m);
+void Fl::unlock() {
+  LeaveCriticalSection(&cs);
 }
 
-void Fl_Mutex::unlock() {
-  LeaveCriticalSection((CRITICAL_SECTION*)m);
-}
-
-/*void Fl::awake() {
-  // sndMessage?  I dunno...
-}*/
 // when called from a thread, it causes FLTK to awake from Fl::wait()
-int Fl::awake(void* msg)
-{
-  return PostThreadMessage( main_thread, WM_USER, (WPARAM)msg, 0)? 0 : -1;
-}
-
-int fl_create_thread(Fl_Thread& t, void *(*f) (void *), void* p)
-{
-  return t = (Fl_Thread)_beginthread((void( __cdecl * )( void * ))f, 0, p);
+void Fl::awake(void* msg) {
+  PostThreadMessage( main_thread, WM_USER, (WPARAM)msg, 0);
 }
 
 #endif
-
-
-// If threads are not supported the functions are undefined, thus
-// linking of programs that call them is impossible.

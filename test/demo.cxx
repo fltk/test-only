@@ -1,5 +1,5 @@
 //
-// "$Id: demo.cxx,v 1.8 1999/02/22 21:09:13 mike Exp $"
+// "$Id: demo.cxx,v 1.9 1999/11/07 08:11:53 bill Exp $"
 //
 // Main demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -50,31 +50,31 @@ Fl_Button *but[9];
 void create_the_forms() {
   Fl_Widget *obj;
   form = new Fl_Window(370, 450);
-  obj = new Fl_Box(FL_FRAME_BOX,20,390,330,40,"FLTK Demonstration");
+  obj = new Fl_Box(FL_FRAME_BOX,20,20,330,40,"FLTK Demonstration");
   obj->color(FL_GRAY-4);
   obj->labelsize(24);
   obj->labelfont(FL_BOLD);
   obj->labeltype(FL_ENGRAVED_LABEL);
-  obj = new Fl_Box(FL_FRAME_BOX,20,50,330,330,0);
+  obj = new Fl_Box(FL_FRAME_BOX,20,70,330,330,0);
   obj->color(FL_GRAY-8);
-  obj = new Fl_Button(130,10,110,30,"Exit");
+  obj = new Fl_Button(130,410,110,30,"Exit");
   obj->callback(doexit);
-  obj = new Fl_Button(20,50,330,380); obj->type(FL_HIDDEN_BUTTON);
+  obj = new Fl_Button(20,20,330,380); obj->type(FL_HIDDEN_BUTTON);
   obj->callback(doback);
-  obj = but[0] = new Fl_Button(40,270,90,90);
-  obj = but[1] = new Fl_Button(140,270,90,90);
-  obj = but[2] = new Fl_Button(240,270,90,90);
-  obj = but[5] = new Fl_Button(240,170,90,90);
-  obj = but[4] = new Fl_Button(140,170,90,90);
-  obj = but[3] = new Fl_Button(40,170,90,90);
-  obj = but[6] = new Fl_Button(40,70,90,90);
-  obj = but[7] = new Fl_Button(140,70,90,90);
-  obj = but[8] = new Fl_Button(240,70,90,90);
+  obj = but[0] = new Fl_Button(40,90,90,90);
+  obj = but[1] = new Fl_Button(140,90,90,90);
+  obj = but[2] = new Fl_Button(240,90,90,90);
+  obj = but[5] = new Fl_Button(240,190,90,90);
+  obj = but[4] = new Fl_Button(140,190,90,90);
+  obj = but[3] = new Fl_Button(40,190,90,90);
+  obj = but[6] = new Fl_Button(40,290,90,90);
+  obj = but[7] = new Fl_Button(140,290,90,90);
+  obj = but[8] = new Fl_Button(240,290,90,90);
   for (int i=0; i<9; i++) {
     but[i]->align(FL_ALIGN_WRAP);
     but[i]->callback(dobut, i);
   }
-  form->forms_end();
+  form->end();
 }
 
 /* Maintaining and building up the menus. */
@@ -331,6 +331,6 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: demo.cxx,v 1.8 1999/02/22 21:09:13 mike Exp $".
+// End of "$Id: demo.cxx,v 1.9 1999/11/07 08:11:53 bill Exp $".
 //
 

@@ -1,7 +1,7 @@
 //
-// "$Id: forms_bitmap.cxx,v 1.5 1999/08/16 07:31:30 bill Exp $"
+// "$Id: forms_pixmap.cxx,v 1.1 1999/11/07 08:11:31 bill Exp $"
 //
-// Forms compatible bitmap function for the Fast Light Tool Kit (FLTK).
+// Forms pixmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,9 +23,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/forms.H>
+#include "forms.H"
 
-Fl_FormsBitmap::Fl_FormsBitmap(
+Fl_FormsPixmap::Fl_FormsPixmap(
   Fl_Boxtype t, int x, int y, int w, int h, const char* l)
 : Fl_Widget(x, y, w, h, l) {
   box(t);
@@ -34,17 +34,17 @@ Fl_FormsBitmap::Fl_FormsBitmap(
   align(FL_ALIGN_BOTTOM);
 }
 
-void Fl_FormsBitmap::set(int W, int H, const uchar *bits) {
+void Fl_FormsPixmap::set(const char* const* bits) {
   delete b;
-  bitmap(new Fl_Bitmap(bits, W, H));
+  b = new Fl_Pixmap(bits);
 }
 
-void Fl_FormsBitmap::draw() {
+void Fl_FormsPixmap::draw() {
   box()->draw(x(), y(), w(), h(), selection_color());
   if (b) {fl_color(color()); b->draw(x(), y(), w(), h());}
   draw_label();
 }
 
 //
-// End of "$Id: forms_bitmap.cxx,v 1.5 1999/08/16 07:31:30 bill Exp $".
+// End of "$Id: forms_pixmap.cxx,v 1.1 1999/11/07 08:11:31 bill Exp $".
 //

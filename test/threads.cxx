@@ -42,6 +42,8 @@ int main()
   browser1->add("Prime numbers :");
   browser2->add("Prime numbers :");
 
+  Fl::lock(); // you must do this before creating any threads!
+
   // One thread displaying in one browser
   fl_create_thread(prime_thread, prime_func, browser1);
   // Several threads displaying in another browser
@@ -54,7 +56,8 @@ int main()
 
   //  Fl::run();
   while (Fl::wait()) {
-    if (Fl::thread_message) printf("Recieved message : %d\n", int(Fl::thread_message));
+    void* m = Fl::thread_message();
+    if (m) printf("Recieved message: %d\n", int(m));
   }
 
   return 0;

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.47 1999/11/05 21:43:52 carl Exp $"
+// "$Id: Fl_Menu.cxx,v 1.48 1999/11/07 08:11:41 bill Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -94,8 +94,8 @@ Fl_Style Fl_Menu_Item::title_style;
 
 static void title_revert(Fl_Style* s) {
   s->box = FL_HIGHLIGHT_UP_BOX;
-  s->selection_color = FL_BLUE_SELECTION_COLOR;
-  s->selection_text_color = FL_WHITE;
+  //s->selection_color = FL_BLUE_SELECTION_COLOR;
+  //s->selection_text_color = FL_WHITE;
   s->off_color = FL_WHITE;
 }
 
@@ -107,21 +107,9 @@ extern Fl_Style* fl_unique_style(const Fl_Style* & pointer); // in Fl_Widget.c
 // one has been referenced.
 const Fl_Style* Fl_Menu_Item::style() const {
   if (style_) return style_;
-  return flags()&FL_MENU_TITLE ? &title_style : &default_style;
-}
-
-unsigned Fl_Menu_Item::geti(const unsigned* a) const {
-  if (style_ && *a) return *a;
-  int i = a-(const unsigned*)&style_->color;
-  if (flags()&FL_MENU_TITLE) return title_style.geti(i);
-  return default_style.geti(i);
-}
-
-void* Fl_Menu_Item::getp(const void* const* a) const {
-  if (style_ && *a) return (void*)*a;
-  int i = a-(const void* const*)&style_->box;
-  if (flags()&FL_MENU_TITLE) return title_style.getp(i);
-  return default_style.getp(i);
+  Fl_Style* s = flags()&FL_MENU_TITLE ? &title_style : &default_style;
+  Fl_Widget::default_style.add_child(s);
+  return s;
 }
 
 void Fl_Menu_Item::setp(const void* const * p, const void* v) {
@@ -404,7 +392,7 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int /*erase*/) {
   }
 
   if (m->submenu()) {
-    glyph()(FL_GLYPH_RIGHT, x+w-h+4, y+4, h-8, h-8, color(), c,f, m->glyph_box());
+    glyph()(FL_GLYPH_RIGHT, x+w-h, y, h, h, color(), c,f, 0);
   } else if (m->shortcut_) {
     fl_font(label_font(), label_size());
     fl_color(c);
@@ -837,5 +825,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.47 1999/11/05 21:43:52 carl Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.48 1999/11/07 08:11:41 bill Exp $".
 //

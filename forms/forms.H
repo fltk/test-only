@@ -1,5 +1,5 @@
 //
-// "$Id: forms.H,v 1.12 1999/11/01 22:51:32 carl Exp $"
+// "$Id: forms.H,v 1.1 1999/11/07 08:11:28 bill Exp $"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,10 +26,10 @@
 #ifndef __FORMS_H__
 #define __FORMS_H__
 
-#include "Fl.H"
-#include "Fl_Group.H"
-#include "Fl_Window.H"
-#include "fl_draw.H"
+#include <FL/Fl.H>
+#include <FL/Fl_Group.H>
+#include <FL/Fl_Window.H>
+#include <FL/fl_draw.H>
 
 typedef Fl_Widget FL_OBJECT;
 typedef Fl_Window FL_FORM;
@@ -267,11 +267,11 @@ inline Fl_Window* fl_bgn_form(Fl_Boxtype b,int w,int h) {
   g->box(b);
   return g;
 }
-void fl_end_form();
 inline void fl_addto_form(Fl_Window* f) {f->begin();}
 inline Fl_Group* fl_bgn_group() {return new Fl_Group(0,0,0,0,0);}
-inline void fl_end_group() {Fl_Group::current()->forms_end();}
 inline void fl_addto_group(Fl_Widget* o) {((Fl_Group* )o)->begin();}
+void fl_end_group();
+void fl_end_form();
 #define resizebox _ddfdesign_kludge()
 
 inline void fl_scale_form(Fl_Window* f, double x, double y) {
@@ -410,10 +410,10 @@ inline void fl_set_pixmap_data(Fl_Widget* o, char*const* b) {
 inline void fl_set_pixmap_align(Fl_Widget* o,Fl_Align a,int,int) {o->align(a);}
 //inline void fl_set_pixmap_colorcloseness(int, int, int);
 
-#include "Fl_Box.H"
+#include <FL/Fl_Box.H>
 forms_constructorb(Fl_Box, fl_add_box)
 
-#include "Fl_Browser.H"
+#include <FL/Fl_Browser.H>
 forms_constructor(Fl_Browser, fl_add_browser)
 
 inline void fl_clear_browser(Fl_Widget* o) {
@@ -471,7 +471,7 @@ inline void fl_setdisplayed_browser_line(Fl_Widget* o, int n, int i) {
 inline int fl_isdisplayed_browser_line(Fl_Widget* o, int n) {
     return ((Fl_Browser*)o)->displayed(n);}
 
-#include "Fl_Button.H"
+#include <FL/Fl_Button.H>
 
 #define FL_NORMAL_BUTTON	0
 //#define FL_HIDDEN_BUTTON
@@ -490,14 +490,14 @@ inline void fl_set_button_shortcut(Fl_Widget* b, const char* s,int=0) {
     ((Fl_Button*)b)->shortcut(s);}
 //#define fl_set_object_shortcut(b,s) fl_set_button_shortcut(b,s)
 
-#include "Fl_Light_Button.H"
+#include <FL/Fl_Light_Button.H>
 forms_constructor(Fl_Light_Button, fl_add_lightbutton)
 
-#include "Fl_Round_Button.H"
+#include <FL/Fl_Round_Button.H>
 forms_constructor(Fl_Round_Button, fl_add_roundbutton)
 forms_constructor(Fl_Round_Button, fl_add_round3dbutton)
 
-#include "Fl_Check_Button.H"
+#include <FL/Fl_Check_Button.H>
 forms_constructor(Fl_Check_Button, fl_add_checkbutton)
 
 inline Fl_Widget* fl_add_bitmapbutton(int t,int x,int y,int w,int h,const char* l) {Fl_Widget* o = fl_add_button(t,x,y,w,h,l); return o;}
@@ -535,7 +535,7 @@ inline void fl_set_chart_lcolor(Fl_Widget* o, unsigned v) {
   ((Fl_Chart*)o)->textcolor((Fl_Color)v);}
 #define fl_set_chart_lcol   fl_set_chart_lcolor
 
-#include "Fl_Choice.H"
+#include <FL/Fl_Choice.H>
 
 #define FL_NORMAL_CHOICE	0
 #define FL_NORMAL_CHOICE2	0
@@ -566,7 +566,7 @@ inline void fl_set_choice_fontstyle(Fl_Widget* o, Fl_Font x) {
 // inline void fl_set_choice_item_mode(Fl_Widget*, int, unsigned);
 // inline void fl_set_choice_item_shortcut(Fl_Widget*, int, const char*);
 
-#include "Fl_Clock.H"
+#include <FL/Fl_Clock.H>
 forms_constructort(Fl_Clock, fl_add_clock)
 inline void fl_get_clock(Fl_Widget* o, int* h, int* m, int* s) {
     *h = ((Fl_Clock*)o)->hour();
@@ -574,7 +574,7 @@ inline void fl_get_clock(Fl_Widget* o, int* h, int* m, int* s) {
     *s = ((Fl_Clock*)o)->second();
 }
 
-#include "Fl_Counter.H"
+#include <FL/Fl_Counter.H>
 forms_constructor(Fl_Counter, fl_add_counter)
 inline void fl_set_counter_value(Fl_Widget* o, double v) {
     ((Fl_Counter*)o)->value(v);}
@@ -599,7 +599,7 @@ inline void fl_set_cursor(Fl_Window* w, Fl_Cursor c) {w->cursor(c);}
 #define FL_INVISIBLE_CURSOR FL_CURSOR_NONE
 #define FL_DEFAULT_CURSOR FL_CURSOR_DEFAULT
 
-#include "Fl_Dial.H"
+#include <FL/Fl_Dial.H>
 
 #define FL_DIAL_COL1 FL_GRAY
 #define FL_DIAL_COL2 37
@@ -645,8 +645,8 @@ fl_add_free(int t,double x,double y,double w,double h,const char* l,
    new Fl_Free(t,int(x),int(y),int(w),int(h),l,hdl)));
 }
 
-#include "fl_ask.H"
-#include "fl_show_colormap.H"
+#include <FL/fl_ask.H>
+#include <FL/fl_show_colormap.H>
 
 inline int fl_show_question(const char* c, int = 0) {return fl_ask(c);}
 void fl_show_message(const char *,const char *,const char *);
@@ -670,8 +670,8 @@ inline int fl_show_choices(const char* c,int n,const char* b1,const char* b2,
   return fl_show_choice(0,c,0,n,b1,b2,b3);
 }
 
-#include "filename.H"
-#include "fl_file_chooser.H"
+#include <FL/filename.H>
+#include <FL/fl_file_chooser.H>
 inline int do_matching(char* a, const char* b) {return filename_match(a,b);}
 
 // Forms-compatable file chooser (implementation in fselect.C):
@@ -681,7 +681,7 @@ char*	fl_get_directory();
 char*	fl_get_pattern();
 char*	fl_get_filename();
 
-#include "Fl_Input.H"
+#include <FL/Fl_Input.H>
 forms_constructor(Fl_Input, fl_add_input)
 inline void fl_set_input(Fl_Widget* o, const char* v) {
     ((Fl_Input*)o)->value(v);}
@@ -711,7 +711,7 @@ inline int fl_get_input_cursorpos(Fl_Widget* o, int*x, int*y) {
 // inline void fl_get_input_format(Fl_Widget*, int*, int*);
 inline const char* fl_get_input(Fl_Widget* o) {return ((Fl_Input*)o)->value();}
 
-#include "Fl_Menu_Button.H"
+#include <FL/Fl_Menu_Button.H>
 
 // types are not implemented, they all act like FL_PUSH_MENU:
 #define FL_TOUCH_MENU		0
@@ -777,7 +777,7 @@ inline void fl_set_positioner_ystep(Fl_Widget* o, double v) {
 inline void fl_set_positioner_return(Fl_Widget* o, int v) {
     ((Fl_Positioner*)o)->when((Fl_When)(v|FL_WHEN_RELEASE));}
 
-#include "Fl_Slider.H"
+#include <FL/Fl_Slider.H>
 
 #define FL_HOR_BROWSER_SLIDER FL_HOR_SLIDER
 #define FL_VERT_BROWSER_SLIDER FL_VERT_SLIDER
@@ -802,7 +802,7 @@ inline void fl_set_slider_step(Fl_Widget* o, double v) {
 inline void fl_set_slider_size(Fl_Widget* o, double v) {
     ((Fl_Slider*)o)->slider_size(v);}
 
-#include "Fl_Value_Slider.H"
+#include <FL/Fl_Value_Slider.H>
 forms_constructor(Fl_Value_Slider, fl_add_valslider)
 
 inline void fl_set_slider_precision(Fl_Widget* o, int i) {
@@ -841,5 +841,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.H,v 1.12 1999/11/01 22:51:32 carl Exp $".
+// End of "$Id: forms.H,v 1.1 1999/11/07 08:11:28 bill Exp $".
 //

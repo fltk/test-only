@@ -1,5 +1,5 @@
 //
-// "$Id: output.cxx,v 1.5 1999/03/14 06:46:46 carl Exp $"
+// "$Id: output.cxx,v 1.6 1999/11/07 08:11:55 bill Exp $"
 //
 // Output test program for the Fast Light Tool Kit (FLTK).
 //
@@ -60,41 +60,45 @@ void input_cb(Fl_Widget *,void *) {
   text2->value(input->value());
 }
 
+static const char* const initial_value =
+"The quick brown fox\njumps over\nthe lazy dog.";
+
 int main(int argc, char **argv) {
   window = new Fl_Window(400,400);
 
-  input = new Fl_Input(50,0,350,25);
-  input->static_value("The quick brown fox\njumps over\nthe lazy dog.");
-  input->when(FL_WHEN_CHANGED);
-  input->callback(input_cb);
+  text = new Fl_Output(100,90,200,30,"Fl_Output");
+  text->value(initial_value);
+  text->align(FL_ALIGN_BOTTOM);
 
-  sizes = new Fl_Hor_Value_Slider(50,25,350,25,"Size");
-  sizes->align(FL_ALIGN_LEFT);
-  sizes->bounds(1,64);
-  sizes->step(1);
-  sizes->value(14);
-  sizes->callback(size_cb);
+  text2 = new Fl_Multiline_Output(100,150,200,100,"Fl_Multiline_Output");
+  text2->value(initial_value);
+  text2->align(FL_ALIGN_BOTTOM);
+  window->resizable(text2);
 
-  fonts = new Fl_Hor_Value_Slider(50,50,350,25,"Font");
+  fonts = new Fl_Hor_Value_Slider(50,325,350,25,"Font");
   fonts->align(FL_ALIGN_LEFT);
   fonts->bounds(0,15);
   fonts->step(1);
   fonts->value(0);
   fonts->callback(font_cb);
 
-  text2 = new Fl_Multiline_Output(100,150,200,100,"Fl_Multiline_Output");
-  text2->value(input->value());
-  text2->align(FL_ALIGN_BOTTOM);
-  window->resizable(text2);
+  sizes = new Fl_Hor_Value_Slider(50,350,350,25,"Size");
+  sizes->align(FL_ALIGN_LEFT);
+  sizes->bounds(1,64);
+  sizes->step(1);
+  sizes->value(14);
+  sizes->callback(size_cb);
 
-  text = new Fl_Output(100,280,200,30,"Fl_Output");
-  text->value(input->value());
-  text->align(FL_ALIGN_BOTTOM);
-  window->forms_end();
+  input = new Fl_Input(50,375,350,25);
+  input->static_value(initial_value);
+  input->when(FL_WHEN_CHANGED);
+  input->callback(input_cb);
+
+  window->end();
   window->show(argc,argv);
   return Fl::run();
 }
 
 //
-// End of "$Id: output.cxx,v 1.5 1999/03/14 06:46:46 carl Exp $".
+// End of "$Id: output.cxx,v 1.6 1999/11/07 08:11:55 bill Exp $".
 //

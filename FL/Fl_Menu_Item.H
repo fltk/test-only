@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.31 1999/11/05 21:43:38 carl Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.32 1999/11/07 08:11:21 bill Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -153,28 +153,25 @@ struct FL_API Fl_Menu_Item {
   // that adds a destructor that causes C++ to produce exit code for static
   // menu item arrays.  Plan is to replace the whole Fl_Menu_Item design...
 
-  Fl_Boxtype box()		const {return (Fl_Boxtype)getp((const void* const*)&style_->box);}
-  Fl_Boxtype glyph_box()	const {return (Fl_Boxtype)getp((const void* const*)&style_->glyph_box);}
-  Fl_Boxtype box2()	        const {return (Fl_Boxtype)getp((const void* const*)&style_->glyph_box);}
-  Fl_Glyph glyph()		const {return (Fl_Glyph)getp((const void* const*)&style_->glyph);}
-  Fl_Font label_font()		const {return (Fl_Font)getp((const void* const*)&style_->label_font);}
-  Fl_Font text_font()		const {return (Fl_Font)getp((const void* const*)&style_->text_font);}
-  Fl_Labeltype label_type()	const {return (Fl_Labeltype)getp((const void* const*)&style_->label_type);}
-  Fl_Color color()		const {return (Fl_Color)geti((const unsigned*)&style_->color);}
-  Fl_Color up_color()		const {return (Fl_Color)geti((const unsigned*)&style_->color);}
-  Fl_Color label_color()	const {return (Fl_Color)geti((const unsigned*)&style_->label_color);}
-  Fl_Color selection_color()	const {return (Fl_Color)geti((const unsigned*)&style_->selection_color);}
-  Fl_Color selection_text_color() const {return (Fl_Color)geti((const unsigned*)&style_->selection_text_color);}
-  Fl_Color on_color()		const {return (Fl_Color)geti((const unsigned*)&style_->selection_color);}
-  Fl_Color off_color()		const {return (Fl_Color)geti((const unsigned*)&style_->off_color);}
-  Fl_Color highlight_color()	const {return (Fl_Color)geti((const unsigned*)&style_->highlight_color);}
-  Fl_Color highlight_label_color() const {return (Fl_Color)geti((const unsigned*)&style_->highlight_label_color);}
-  Fl_Color text_color()		const {return (Fl_Color)geti((const unsigned*)&style_->text_color);}
-  unsigned label_size()		const {return geti((const unsigned*)&style_->label_size);}
-  unsigned text_size()		const {return geti((const unsigned*)&style_->text_size);}
+  Fl_Boxtype box()		const {return style()->box;}
+  Fl_Boxtype glyph_box()	const {return style()->glyph_box;}
+  Fl_Glyph glyph()		const {return style()->glyph;}
+  Fl_Font label_font()		const {return style()->label_font;}
+  Fl_Font text_font()		const {return style()->text_font;}
+  Fl_Labeltype label_type()	const {return style()->label_type;}
+  Fl_Color color()		const {return style()->color;}
+  Fl_Color up_color()		const {return style()->color;}
+  Fl_Color label_color()	const {return style()->label_color;}
+  Fl_Color selection_color()	const {return style()->selection_color;}
+  Fl_Color selection_text_color()const{return style()->selection_text_color;}
+  Fl_Color on_color()		const {return style()->selection_color;}
+  Fl_Color off_color()		const {return style()->off_color;}
+  Fl_Color highlight_color()	const {return style()->highlight_color;}
+  Fl_Color highlight_label_color()const{return style()->highlight_label_color;}
+  Fl_Color text_color()		const {return style()->text_color;}
+  unsigned label_size()		const {return style()->label_size;}
+  unsigned text_size()		const {return style()->text_size;}
 
-  unsigned geti(const unsigned* a) const;
-  void* getp(const void* const* a) const;
   void setp(const void* const *, const void*);
   void seti(const unsigned*, unsigned);
 
@@ -260,5 +257,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.31 1999/11/05 21:43:38 carl Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.32 1999/11/07 08:11:21 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: glut_font.cxx,v 1.4 1999/01/07 19:17:46 mike Exp $"
+// "$Id: glut_font.cxx,v 1.1 1999/11/07 08:11:36 bill Exp $"
 //
 // GLUT bitmap font routines for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 #include <config.h>
 #if HAVE_GL
 
-#include <FL/glut.H>
+#include "glut.H"
 #include <FL/gl.h>
 
 Glut_Bitmap_Font glutBitmap9By15 = {FL_SCREEN, 15};
@@ -54,5 +54,5 @@ int glutBitmapWidth(int font, int character) {
 #endif
 
 //
-// End of "$Id: glut_font.cxx,v 1.4 1999/01/07 19:17:46 mike Exp $".
+// End of "$Id: glut_font.cxx,v 1.1 1999/11/07 08:11:36 bill Exp $".
 //

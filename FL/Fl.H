@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.27 1999/11/05 00:35:44 vincent Exp $"
+// "$Id: Fl.H,v 1.28 1999/11/07 08:11:17 bill Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -196,52 +196,11 @@ public:
 
 #endif
 
-  // Mutltithreading support
-#if 1 // Bill Spitzak's simpler version in Fl_lock.cxx
-  static void* thread_message;
+  // Mutltithreading support:
   static void lock();
   static void unlock();
   static void awake(void* message = 0);
-#else
-  static int thread_filedes[2];
-  static void* thread_message;
-  static Fl_Mutex main_lock;
-  
-  // initialise FLTK thread support (mainly, initialise Fl::main_mutex)
-  // called automatically in Fl::create_thread too ...
-  // if no thread support on this platform, return -1
-  static int init_threads_support();
-
-  // create a new thread 
-  // 'a': where to put the handler of the new thread
-  // 'b': starting execution address
-  // 'c': one parameter to the function
-  static int create_thread(Fl_Thread&, void *(*__start_routine) (void *), void*);
-
-  // set the priority of a thread. default value 0.5 for normal priority, 
-  // 1 for highest, 0 for lowest.
-  static int set_thread_priority(Fl_Thread, float prio = 0.5, Fl_Thread_Policy p = FL_NORMAL);
-
-  // sleep for 'a' seconds
-  static void sleep(double a);
-
-  // create a mutex
-  static int mutex_init(Fl_Mutex&);
-
-  // destroy a mutex
-  static int mutex_destroy(Fl_Mutex);
-
-  // lock/unlock a mutex
-  // default is locking the whole fltk so that threads can update some widgets
-  static int lock(Fl_Mutex m = main_lock);
-  static int unlock(Fl_Mutex m = main_lock);
-
-  // make FLTK return from wait(), put message in Fl::thread_message
-  // This should be safe, i.e. if several threads called awake at the same
-  // time, then several call to wait() in the the main thread should
-  // let the user read each message ...
-  static int awake(void* message = 0);	
-#endif
+  static void* thread_message();
 
   // scheme & theme stuff
   static int use_schemes;
@@ -266,5 +225,5 @@ const char* fl_find_config_file(const  char* fn);
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.27 1999/11/05 00:35:44 vincent Exp $".
+// End of "$Id: Fl.H,v 1.28 1999/11/07 08:11:17 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: glpuzzle.cxx,v 1.8 1999/02/25 20:05:30 bill Exp $"
+// "$Id: glpuzzle.cxx,v 1.1 1999/11/07 08:11:33 bill Exp $"
 //
 // OpenGL puzzle demo for the Fast Light Tool Kit (FLTK).
 //
@@ -26,25 +26,13 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this block added for fltk's distribtion so it will compile w/o OpenGL:
-#include <config.h>
-#if !HAVE_GL
-#include <FL/Fl.H>
-#include <FL/fl_message.H>
-int main(int, char**) {
-  fl_alert("This demo does not work without GL");
-  return 1;
-}
-#else
-// end of added block
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <sys/types.h>
 #include <time.h>
 #include <math.h>
-#include <FL/glut.H>	// changed for fltk
+#include "glut.H"	// changed for fltk
 #include "trackball.c"	// changed from trackball.h for fltk
 
 #define WIDTH 4
@@ -1476,8 +1464,6 @@ main(int argc, char **argv)
   return 0;             /* ANSI C requires main to return int. */
 }
 
-#endif // added for fltk's distribution
-
 //
-// End of "$Id: glpuzzle.cxx,v 1.8 1999/02/25 20:05:30 bill Exp $".
+// End of "$Id: glpuzzle.cxx,v 1.1 1999/11/07 08:11:33 bill Exp $".
 //
