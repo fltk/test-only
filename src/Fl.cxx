@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.72 1999/12/15 08:30:54 bill Exp $"
+// "$Id: Fl.cxx,v 1.73 1999/12/15 18:58:41 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -439,10 +439,12 @@ int Fl::handle(int event, Fl_Window* window)
 
   case FL_PUSH:
     Fl_Tooltip::enter((Fl_Widget*)0);
-    if (grab()) w = grab();
+    if (pushed()) w = pushed();
+    else if (grab()) w = grab();
     else if (modal() && w != modal()) return 0;
     pushed_ = w;
     if (send(event, w, window)) return 1;
+    pushed_ = 0; // stops drag+release from being sent
     // raise windows that are clicked on:
     window->show();
     return 1;
@@ -451,7 +453,6 @@ int Fl::handle(int event, Fl_Window* window)
   case FL_DRAG:
     fl_xmousewin = window; // this should already be set, but just in case.
     if (pushed()) {
-
       // CET - FIXME - Experimental - Does this break anything?
       // This sends move events to other windows even when the mouse
       // button is held down.
@@ -462,18 +463,17 @@ int Fl::handle(int event, Fl_Window* window)
 
       w = pushed();
       event = FL_DRAG;
-    } else if (modal() && w != modal() && !grab()) {
+    } else if (grab()) {
+      w = grab();
+    } else if (modal() && w != modal()) {
       return 0;
     }
-    if (grab()) w = grab();
     return send(event, w, window);
 
   case FL_RELEASE: {
-    if (pushed()) {
-      w = pushed();
-      if (!(event_state()&(FL_BUTTON1|FL_BUTTON2|FL_BUTTON3))) pushed_=0;
-    }
-    if (grab()) w = grab();
+    if (!pushed()) return 0;
+    w = pushed();
+    if (!(event_state()&(FL_BUTTON1|FL_BUTTON2|FL_BUTTON3))) pushed_=0;
     int r = send(event, w, window);
     fl_fix_focus();
     return r;}
@@ -812,5 +812,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.72 1999/12/15 08:30:54 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.73 1999/12/15 18:58:41 bill Exp $".
 //

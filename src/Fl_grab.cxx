@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_grab.cxx,v 1.3 1999/10/03 06:31:41 bill Exp $"
+// "$Id: Fl_grab.cxx,v 1.4 1999/12/15 18:58:42 bill Exp $"
 //
 // Grab/release code for the Fast Light Tool Kit (FLTK).
 //
@@ -63,6 +63,7 @@ void Fl::grab(Fl_Window* w) {
 		    fl_event_time);
 #endif
     }
+    if (pushed_) pushed_ = w;
     grab_ = w;
   } else {
     if (grab_) {
@@ -76,11 +77,12 @@ void Fl::grab(Fl_Window* w) {
       XFlush(fl_display);
 #endif
       grab_ = 0;
+      pushed_ = 0;
       fl_fix_focus();
     }
   }
 }
 
 //
-// End of "$Id: Fl_grab.cxx,v 1.3 1999/10/03 06:31:41 bill Exp $".
+// End of "$Id: Fl_grab.cxx,v 1.4 1999/12/15 18:58:42 bill Exp $".
 //
