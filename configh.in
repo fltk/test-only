@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.30 1999/11/10 16:39:27 vincent Exp $"
+ * "$Id: configh.in,v 1.31 1999/11/17 01:39:42 vincent Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -145,7 +145,6 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
  */
 
 #define HAVE_ATOL 0
-#define HAVE_USLEEP 0
 
 #if !HAVE_ATOL
 #  define atol(a) conf_atol(a)
@@ -217,5 +216,5 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define FLTK_LIBDIR ""
 
 /*
- * End of "$Id: configh.in,v 1.30 1999/11/10 16:39:27 vincent Exp $".
+ * End of "$Id: configh.in,v 1.31 1999/11/17 01:39:42 vincent Exp $".
  */

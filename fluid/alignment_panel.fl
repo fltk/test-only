@@ -1,5 +1,6 @@
-# data file for the Fltk User Interface Designer (fluid)
-version 2.00 
+# data file for the FLTK User Interface Designer (FLUID)
+version 2.0000 
+images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
 gridx 10 
@@ -9,62 +10,64 @@ Function {make_alignment_window()} {open
 } {
   Fl_Window alignment_window {
     label {fluid Preferences} open
-    xywh {263 248 210 310} modal visible
+    xywh {265 250 210 310} modal visible
   } {
-    Fl_Box {} {
+    Fl_Group {} {
       label {Alignment:}
-      xywh {10 20 190 100} align 5 box ENGRAVED_BOX labelsize 12
-    }
-    Fl_Input horizontal_input {
-      label {Horizontal:}
-      user_data 1 user_data_type long
-      callback alignment_cb
-      xywh {90 30 100 20} type Int
-      code0 {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
-    }
-    Fl_Input vertical_input {
-      label {Vertical:}
-      user_data 2 user_data_type long
-      callback alignment_cb
-      xywh {90 60 100 20} type Int
-      code0 {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
-    }
-    Fl_Input snap_input {
-      label {Snap:}
-      user_data 3 user_data_type long
-      callback alignment_cb
-      xywh {90 90 100 20} type Int
-      code0 {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
+      xywh {10 20 190 100} align 5 box ENGRAVED_BOX
+    } {
+      Fl_Input horizontal_input {
+        label {Horizontal:}
+        user_data 1 user_data_type long
+        callback alignment_cb
+        xywh {90 30 100 20} type Int
+        code0 {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
+      }
+      Fl_Input vertical_input {
+        label {Vertical:}
+        user_data 2 user_data_type long
+        callback alignment_cb
+        xywh {90 60 100 20} type Int
+        code0 {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
+      }
+      Fl_Input snap_input {
+        label {Snap:}
+        user_data 3 user_data_type long
+        callback alignment_cb
+        xywh {90 90 100 20} type Int
+        code0 {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
+      }
     }
     Fl_Button {} {
       label Close
       callback {alignment_window->hide();}
       xywh {140 280 60 20}
     }
-    Fl_Box {} {
+    Fl_Group {} {
       label {Output File Names:} selected
-      xywh {10 140 190 130} align 5 box ENGRAVED_BOX labelsize 12
-    }
-    Fl_Box {} {
-      label {Use "name.ext" to set name or just ".ext" to set only extension.}
-      xywh {20 150 170 30} align 148 labelsize 10
-    }
-    Fl_Input header_file_input {
-      label {Header File:}
-      user_data 1 user_data_type {void*}
-      callback header_input_cb
-      xywh {100 180 90 20} when 1
-    }
-    Fl_Input code_file_input {
-      label {Code File:}
-      user_data 1 user_data_type {void*}
-      callback code_input_cb
-      xywh {100 210 90 20} when 1
-    }
-    Fl_Light_Button include_H_from_C_button {
-      label {Include Header from Code}
-      callback include_H_from_C_button_cb
-      xywh {20 240 170 20} labelsize 12 value 1
+      xywh {10 140 190 130} align 5 box ENGRAVED_BOX
+    } {
+      Fl_Box {} {
+        label {Use "name.ext" to set name or just ".ext" to set only extension.}
+        xywh {20 150 170 30} align 148 labelsize 10
+      }
+      Fl_Input header_file_input {
+        label {Header File:}
+        user_data 1 user_data_type {void*}
+        callback header_input_cb
+        xywh {100 180 90 20} when 1
+      }
+      Fl_Input code_file_input {
+        label {Code File:}
+        user_data 1 user_data_type {void*}
+        callback code_input_cb
+        xywh {100 210 90 20} when 1
+      }
+      Fl_Light_Button include_H_from_C_button {
+        label {Include Header from Code}
+        callback include_H_from_C_button_cb
+        xywh {20 240 170 20} value 1
+      }
     }
   }
 } 

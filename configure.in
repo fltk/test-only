@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.63 1999/11/12 20:34:55 vincent Exp $"
+dnl# "$Id: configure.in,v 1.64 1999/11/17 01:39:42 vincent Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -163,7 +163,6 @@ AC_CHECK_FUNCS(snprintf,
 AC_CHECK_FUNCS(atol)
 AC_CHECK_FUNCS(strcasecmp)
 AC_CHECK_FUNCS(vsprintf)
-AC_CHECK_FUNCS(usleep)
 
 AC_PATH_XTRA
 echo "Ignoring libraries \"$X_PRE_LIBS\" requested by configure."
@@ -263,7 +262,7 @@ if test -n "$GXX"; then
     CXXFLAGS="-Wall -Wno-return-type $CXXFLAGS"
     if test -z "$DEBUGFLAG"; then
         CFLAGS="-O2 -fomit-frame-pointer $CFLAGS"
-        CXXFLAGS="-O2 -fno-rtti -fno-exceptions -fomit-frame-pointer $CXXFLAGS"
+        CXXFLAGS="-O2 -fno-exceptions -fomit-frame-pointer $CXXFLAGS"
     fi
     if test $PICFLAG = 1; then
     	CFLAGS="-fPIC $CFLAGS"
@@ -350,5 +349,5 @@ AC_OUTPUT(makeinclude)
 cp config.h FL/
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.63 1999/11/12 20:34:55 vincent Exp $".
+dnl# End of "$Id: configure.in,v 1.64 1999/11/17 01:39:42 vincent Exp $".
 dnl#
