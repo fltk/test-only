@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.40 2002/12/10 02:00:51 easysw Exp $"
+// "$Id: Fl_Style.cxx,v 1.41 2002/12/10 11:37:34 spitzak Exp $"
 //
 // Code for managing Style structures.
 //
@@ -230,7 +230,7 @@ const char* Style::scheme_;
 ////////////////////////////////////////////////////////////////
 // Theme plugin finder & loader
 
-#ifndef SHARED
+#ifndef FL_SHARED
 
 Theme Style::load_theme(const char* name) {
   // no name leaves the built-in default:
@@ -273,7 +273,7 @@ Theme Style::load_theme(const char* name) {
   return (Theme)load_plugin(path, "fltk_theme");
 }
 
-const char* find_config_file(char* path, int size, const char* name)
+const char* fltk::find_config_file(char* path, int size, const char* name)
 {
   // See if the user typed in an "absolute" path name
   if (name[0] == '/' || name[0] == '.'
@@ -340,5 +340,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.40 2002/12/10 02:00:51 easysw Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.41 2002/12/10 11:37:34 spitzak Exp $".
 //
