@@ -1,0 +1,49 @@
+##
+## This is a FLTK scheme configuration file.
+##
+## See end of file for font and color definitions
+##
+
+description = A sample scheme                     # description of scheme
+author = Carl Thompson (clip@home.net)            # author of scheme
+version = 1                                       # version number of scheme
+FLTK version = 2.0.0                              # minimum FLTK version needed
+
+[general]
+  themes =  Alternative KDE1_colors               # theme plugins to load for this scheme
+
+[widgets]
+
+  [widgets/menu item]                             # menu item attributes
+    box = alternative menu                        # boxtype of menu items
+
+  [widgets/menu title]
+    box = alternative menu title                  # boxtype of menu titles
+
+  [widgets/browser]                               # browser attributes
+    box = up                                      # boxtype of browser
+
+  [widgets/chart]                                 # chart attributes
+    box = border                                  # boxtype for chart
+
+  [widgets/return button]                         # return button attributes
+    box = alternative up                          # boxtype of button
+
+  [widgets/slider]                                # slider attributes
+    box = down                                    # boxtype of the slider background area
+
+  [widgets/scrollbar]                             # scroll bar attributes
+    box = down                                    # boxtype of the scroll bar background area
+
+  [widgets/input]                                 # input and output widget attributes
+    box = down                                    # boxtype of the input / output area
+
+  [widgets/output]                                # input and output widget attributes
+    box = down                                    # boxtype of the input / output area
+
+  [widgets/counter]                               # counter attributes
+    box = border                                  # boxtype of the counter's text area
+
+  [widgets/tooltip]
+    box = engraved                                # box around tooltips
+
