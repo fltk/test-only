@@ -30,7 +30,7 @@
 */
 extern "C" bool fltk_theme();
 
-#ifdef USE_X11
+#if USE_X11
 
 // Maybe _WIN32 should use the Windows version anyway? It would work!
 # include "fltk_theme_x.cxx"
@@ -43,6 +43,6 @@ extern "C" bool fltk_theme();
 
 #else
 
-extern "C" bool fltk_theme() {}
+extern "C" bool fltk_theme() {return false; /* true? */}
 
 #endif

@@ -1,5 +1,5 @@
 //
-// "$Id: fltk_theme_win32.cxx,v 1.1 2004/03/07 20:40:31 spitzak Exp $"
+// "$Id: fltk_theme_win32.cxx,v 1.2 2004/03/09 08:28:43 spitzak Exp $"
 //
 // Copyright 2004 Bill Spitzak and others.
 //
@@ -31,6 +31,9 @@
 #include <stdio.h>
 #include <fltk/string.h>
 #include <fltk/x.h>
+#include <limits.h>
+
+using namespace fltk;
 
 ////////////////////////////////////////////////////////////////
 
@@ -198,5 +201,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: fltk_theme_win32.cxx,v 1.1 2004/03/07 20:40:31 spitzak Exp $".
+// End of "$Id: fltk_theme_win32.cxx,v 1.2 2004/03/09 08:28:43 spitzak Exp $".
 //
