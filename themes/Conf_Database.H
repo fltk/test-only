@@ -1,13 +1,11 @@
 //
-//  "$Id: fl_config.H,v 1.5 1999/11/18 04:33:17 carl Exp $"
+//  "$Id: Conf_Database.H,v 1.1 2000/01/07 08:50:45 bill Exp $"
 //
 //  Configuration file routines for the Fast Light Tool Kit (FLTK).
 //
 //  Carl Everard Thompson (clip@home.net)
 //
-//  fl_conf.H
-//
-//  FLTK C++ wrapper for config file C routines.
+//  C++ wrapper for config file C routines.  All inline.
 //  Please see conf.h for information on how the C routines work.
 //
 //  Last modified:	22Mar1999
@@ -26,15 +24,14 @@
 //  Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 //  USA.
 
-#ifndef fl_config_H
-#define fl_config_H
+#ifndef Conf_Database_H
+#define Conf_Database_H
 
 #include <stdlib.h>
 #include <string.h>
-#include <FL/Enumerations.H>
-#include <FL/conf.h>
+#include "conf.h"
 
-class Fl_Config
+class Conf_Database
 {
   protected:
     char      *_configFile;
@@ -43,11 +40,11 @@ class Fl_Config
         
   public:
     // constructor
-    Fl_Config(const char *configFile = 0)
+    Conf_Database(const char *configFile = 0)
         { config_file(configFile); _list = 0; _error = 0; }
 
     // destructor
-    virtual ~Fl_Config()
+    virtual ~Conf_Database()
         { if (_configFile) free(_configFile); conf_list_free(&_list); }
     
     // get the list returned by get_sections() or get_keys()
@@ -133,5 +130,5 @@ class Fl_Config
 #endif
 
 //
-// End of "$Id: fl_config.H,v 1.5 1999/11/18 04:33:17 carl Exp $".
+// End of "$Id: Conf_Database.H,v 1.1 2000/01/07 08:50:45 bill Exp $"
 //

@@ -1,14 +1,13 @@
-These are demonstrations of "themes" plugins for fltk.  To make them
-work, type "make" and copy or link the binaries in this directory to
-~/.fltk/themes.
+This directory contains source code for fltk theme plugins.
 
-To make one of these themes the default, add the line
+"make" compiles these and places them in ../config/themes.  For fltk
+programs to see these the contents of ../config must be copied to
+~/.fltk (or /usr/local/lib/fltk), "make install" does this.
 
-  default theme = <theme>
-
-to ~/.fltk/flconfig or link the theme to ~/.fltk/themes/default.
+The files starting with "conf" are a INI/KDE resource file parser written
+by Carl Everard Thompson, and are used by the KDE1 theme to read the
+Kde resource files, and by Carl's own theme that allows text files to
+control most aspects of all the styles in fltk.
 
 We really need some "themes" written that parse GTK, Enlightenment,
 X resources, and other sources of theme information.
-
-Makefile is probably Linux-specific.

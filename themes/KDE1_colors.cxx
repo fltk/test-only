@@ -1,5 +1,5 @@
 //
-// "$Id: KDE1_colors.cxx,v 1.2 1999/11/18 14:04:33 carl Exp $"
+// "$Id: KDE1_colors.cxx,v 1.3 2000/01/07 08:50:46 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -24,22 +24,15 @@
 //
 
 // Just colors and fonts for KDE1 -- no boxtypes
-
-// fltk plugin for Motif appearance
+// This is done by passing an argument to the KDE1 plugin that causes
+// it to skip that stuff.
 
 #include <FL/Fl.H>
-#include <FL/Fl_Style.H>
 
-extern "C" int fltk_theme(int, char**);
-
-int fltk_theme(int, char**) {
-  int r = fl_kde1_colors();
-
-  Fl::use_schemes = 1; // turn schemes back on
-
-  return r;
+extern "C" int fltk_theme(int, char**) {
+  return Fl::loadtheme("KDE1", "colors");
 }
 
 //
-// End of "$Id: KDE1_colors.cxx,v 1.2 1999/11/18 14:04:33 carl Exp $".
+// End of "$Id: KDE1_colors.cxx,v 1.3 2000/01/07 08:50:46 bill Exp $".
 //

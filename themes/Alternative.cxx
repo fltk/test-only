@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.17 1999/11/29 08:47:09 bill Exp $"
+// "$Id: Alternative.cxx,v 1.18 2000/01/07 08:50:44 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -256,7 +256,6 @@ static void return_glyph(int/*t*/, int x,int y,int w,int h, Fl_Color, Fl_Color,
 
 extern "C"
 int fltk_theme(int, char**) {
-  Fl_Style::revert();
 
   Fl_Style* s;
   if ((s = Fl_Style::find("menu title"))) {
@@ -306,5 +305,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.17 1999/11/29 08:47:09 bill Exp $".
+// End of "$Id: Alternative.cxx,v 1.18 2000/01/07 08:50:44 bill Exp $".
 //

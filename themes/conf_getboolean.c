@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_getlong.c,v 1.5 1999/11/27 00:58:24 carl Exp $"
+   "$Id: conf_getboolean.c,v 1.1 2000/01/07 08:50:49 bill Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -22,38 +22,59 @@
     USA.
 */
 
-#include <FL/conf.h>
+#include "conf.h"
 #include <config.h>
 
 /*
-        int getconf_long(const char *configfile, const char *key,
-                         long *lvalue)
+        int getconf_boolean(const char *configfile, const char *key,
+                            int *bvalue)
 
         description:
-                gets the long value associated with a key in a config file
+                gets the boolean value associated with a key in a config file
         arguments:
                 configfile: path of config file
                 key: section/key to look for
         return values:
                 returns 0 for OK or error code defined in conf.h
-                lvalue: the long integer associated with key in section
+                bvalue: boolean value associated with key (ON = 1, OFF = 0)
 */
 int
-getconf_long(const char *configfile, const char *key, long *lvalue)
+getconf_boolean(const char *configfile, const char *key, int *bvalue)
 {
-        char    svalue[CONF_MAX_LINE_LEN];                                      /* tempory storage for string value */
+        char    svalue[CONF_MAX_LINE_LEN];                                      /* temporary storage for string value */
         int     result;                                                         /* result of called functions */
 
-        if (!lvalue)                                                            /* NULL pointer was passed */
+        if (!bvalue)                                                            /* NULL pointer was passed */
                 return CONF_ERR_ARGUMENT;
 
         if ((result = getconf(configfile, key, svalue, sizeof(svalue))))        /* get string value from config file */
                 return result;
+        if (!strcasecmp(svalue, "ON") ||
+	    !strcasecmp(svalue, "YES") ||
+	    !strcasecmp(svalue, "Y") ||
+	    !strcmp(svalue, "1") ||
+	    !strcasecmp(svalue, "TRUE") ||
+	    !strcasecmp(svalue, "T"))
+	{
+                *bvalue = 1;                                                    /* yes */
+	}
+        else if (!strcasecmp(svalue, "OFF") ||
+	    !strcasecmp(svalue, "NO") ||
+	    !strcasecmp(svalue, "N") ||
+	    !strcmp(svalue, "0") ||
+	    !strcasecmp(svalue, "FALSE") ||
+	    !strcasecmp(svalue, "F"))
+	{
+                *bvalue = 0;                                                    /* no */
+	}
+	else
+	{
+		return CONF_ERR_NOVALUE;
+	}
 
-        *lvalue = atol(svalue);                                                 /* convert to long */
         return CONF_SUCCESS;
-} /* getconf_long() */
+} /* getconf_boolean() */
 
 /*
-    End of "$Id: conf_getlong.c,v 1.5 1999/11/27 00:58:24 carl Exp $".
+    End of "$Id: conf_getboolean.c,v 1.1 2000/01/07 08:50:49 bill Exp $".
 */

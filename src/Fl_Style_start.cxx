@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_start.cxx,v 1.2 2000/01/04 22:20:09 mike Exp $"
+// "$Id: Fl_Style_start.cxx,v 1.3 2000/01/07 08:50:27 bill Exp $"
 //
 // Code for switching between named classes of style
 //
@@ -117,10 +117,11 @@ void Fl_Style::start(char* name)
 	f->parent = Fl_Widget::default_style;
       f = f->next;
     }
-    Fl_Style::revert();
+    // It used to revert the style here but I don't think that is
+    // necessary?
   }
 }
 
 //
-// End of "$Id: Fl_Style_start.cxx,v 1.2 2000/01/04 22:20:09 mike Exp $".
+// End of "$Id: Fl_Style_start.cxx,v 1.3 2000/01/07 08:50:27 bill Exp $".
 //

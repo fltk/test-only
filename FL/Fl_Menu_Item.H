@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.38 1999/11/20 04:42:30 vincent Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.39 2000/01/07 08:50:13 bill Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -120,19 +120,19 @@ struct FL_API Fl_Menu_Item {
   Fl_Flags flags() const {return Fl_Flags(flags_);}
 
   // used by menubar:
-  int measure(int* h, const Fl_Menu_*) const;
-  void draw(int x, int y, int w, int h, const Fl_Menu_*, int selected=0) const;
+  int measure(int* h) const;
+  void draw(int x, int y, int w, int h, int selected=0) const;
 
   // popup menus without using an Fl_Menu_ widget: (highly depreciated!)
   const Fl_Menu_Item* popup(
     int X, int Y,
     const char *title = 0,
     const Fl_Menu_Item* picked=0,
-    const Fl_Menu_* = 0) const;
+    Fl_Menu_* = 0) const;
   const Fl_Menu_Item* pulldown(
     int X, int Y, int W, int H,
     const Fl_Menu_Item* picked = 0,
-    const Fl_Menu_* = 0,
+    Fl_Menu_* = 0,
     const Fl_Menu_Item* title = 0,
     int menubar=0) const;
   const Fl_Menu_Item* test_shortcut() const;
@@ -259,5 +259,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.38 1999/11/20 04:42:30 vincent Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.39 2000/01/07 08:50:13 bill Exp $".
 //

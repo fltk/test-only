@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.32 1999/12/22 01:12:30 vincent Exp $"
+// "$Id: fluid.cxx,v 1.33 2000/01/07 08:50:21 bill Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -335,11 +335,15 @@ void tt_cb(Fl_Widget *w, void *) {
 char* scheme;
 void scheme_cb(Fl_Widget *, void *) {
   const char* t = fl_input("Enter the name of a scheme :", scheme);
-  if (scheme) free(scheme);
-  scheme = strdup(t);
+  if (!t) return;
+  // I copy this first so it is not in the same memory as old value so
+  // that fltk's comparison works:
+  char* newscheme = *t ? strdup(t) : 0;
   Fl_Style::start("style1");
-  Fl::scheme(scheme);
+  if (Fl::theme(newscheme)) Fl::theme("default", newscheme);
   Fl_Style::start("fluid_style");
+  if (scheme) free(scheme);
+  scheme = newscheme;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -495,5 +499,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.32 1999/12/22 01:12:30 vincent Exp $".
+// End of "$Id: fluid.cxx,v 1.33 2000/01/07 08:50:21 bill Exp $".
 //

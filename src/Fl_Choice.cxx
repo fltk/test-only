@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.33 1999/12/20 08:33:11 bill Exp $"
+// "$Id: Fl_Choice.cxx,v 1.34 2000/01/07 08:50:26 bill Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -49,7 +49,7 @@ void Fl_Choice::draw() {
     if (active_r()) m.activate(); else m.deactivate();
     fl_clip(X, Y, W-H-2, H);
     fl_draw_shortcut = 2; // hack value to make '&' disappear
-    m.draw(X, Y, W-H-2, H, this, 5);
+    m.draw(X, Y, W-H-2, H, 5);
     fl_draw_shortcut = 0;
     fl_pop_clip();
   }
@@ -122,5 +122,5 @@ static void revert(Fl_Style* s) {
 Fl_Style* Fl_Choice::default_style = new Fl_Named_Style("Choice", revert, &Fl_Choice::default_style);
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.33 1999/12/20 08:33:11 bill Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.34 2000/01/07 08:50:26 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_set_fonts.cxx,v 1.12 1999/11/10 19:27:34 carl Exp $"
+// "$Id: fl_set_fonts.cxx,v 1.13 2000/01/07 08:50:40 bill Exp $"
 //
 // More font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -130,7 +130,7 @@ static int to_nice(char* o, const char* p) {
 // public function that calls the converter.  If ap is null it will also
 // add bold/italic words to the end of the nice name.
 const char* Fl_Font_::name(int* ap) const {
-  static char *buffer; if (!buffer) buffer = new char[128];
+  static char buffer[128];
   int type = to_nice(buffer, name_);
   if (ap) *ap = type;
   else {
@@ -371,6 +371,42 @@ int Fl_Font_::sizes(int*& sizep) const {
 
 #endif
 
+////////////////////////////////////////////////////////////////
+// Rather poor implementation of fl_font(name), it just searches
+// all the known fonts for a match:
+
+Fl_Font fl_font(const char* name) {
+  if (!name || !*name) return 0;
+  // find out if the " bold" or " italic" are on the end:
+  int attrib = 0;
+  int length = strlen(name);
+  if (length > 7 && !strncasecmp(name+length-7, " italic", 7)) {
+    length -= 7; attrib = FL_ITALIC;
+  }
+  if (length > 5 && !strncasecmp(name+length-5, " bold", 5)) {
+    length -= 5; attrib = FL_BOLD;
+  }
+  Fl_Font font = 0;
+  // always try the built-in fonts first, becasue fl_list_fonts is *slow*...
+  int i; for (i = 0; i < 16; i += (i < 12 ? 4 : 1)) {
+    font = fl_fonts+i;
+    const char* fontname = font->name();
+    if (!strncasecmp(name, fontname, length) && !fontname[length]) goto GOTIT;
+  }
+  // now try all the fonts on the server:
+  {Fl_Font* list; int number = fl_list_fonts(list);
+  for (i = 0; i < number; i++) {
+    font = list[i];
+    const char* fontname = font->name();
+    if (!strncasecmp(name, fontname, length) && !fontname[length]) goto GOTIT;
+  }}
+  return 0;
+ GOTIT:
+  if (attrib & FL_BOLD) font = font->bold;
+  if (attrib & FL_ITALIC) font = font->italic;
+  return font;
+}
+
 //
-// End of "$Id: fl_set_fonts.cxx,v 1.12 1999/11/10 19:27:34 carl Exp $".
+// End of "$Id: fl_set_fonts.cxx,v 1.13 2000/01/07 08:50:40 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.19 1999/12/16 03:14:05 vincent Exp $"
+// "$Id: essai.cxx,v 1.20 2000/01/07 08:50:53 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -114,7 +114,6 @@ void Fl_Image_NoBorderBox::draw(int x, int y, int w, int h,
 
 extern "C"
 int fltk_theme(int, char**) {
-  Fl_Style::revert();
 
   //  fl_background(0xD0D0E000); // it would be nice to figure out color from image
   Fl_Boxtype flat1 = new Fl_Image_NoBorderBox("themes/bg.jpeg", "themes/bg2.jpeg", "themes/bg3.jpeg");
@@ -159,5 +158,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: essai.cxx,v 1.19 1999/12/16 03:14:05 vincent Exp $".
+// End of "$Id: essai.cxx,v 1.20 2000/01/07 08:50:53 bill Exp $".
 //

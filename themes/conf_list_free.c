@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_list_free.c,v 1.5 1999/11/27 00:58:24 carl Exp $"
+   "$Id: conf_list_free.c,v 1.1 2000/01/07 08:50:50 bill Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -22,7 +22,7 @@
     USA.
 */
 
-#include <FL/conf.h>
+#include "conf.h"
 
 /*
         int conf_list_free(conf_list* list)
@@ -53,5 +53,5 @@ conf_list_free(conf_list *list)
 } /* conf_list_free() */
 
 /*
-    End of "$Id: conf_list_free.c,v 1.5 1999/11/27 00:58:24 carl Exp $".
+    End of "$Id: conf_list_free.c,v 1.1 2000/01/07 08:50:50 bill Exp $".
 */

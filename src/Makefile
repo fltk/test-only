@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.60 1999/12/19 15:21:55 vincent Exp $"
+# "$Id: Makefile,v 1.61 2000/01/07 08:50:30 bill Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -140,34 +140,33 @@ CPPFILES = \
 	fl_symbols.cxx \
 	fl_vertex.cxx \
 	fl_xpm.cxx \
-	fl_options.cxx \
-	fl_kde1.cxx \
-	fl_kde1_colors.cxx \
-	fl_motif.cxx \
-	fl_windows.cxx
+	Fl_theme.cxx
+
+#	fl_options.cxx
 
 CFILES = \
 	scandir.c \
 	numericsort.c \
-	vsnprintf.c \
-	conf.c \
-	conf_atol.c \
-	conf_endtrim.c \
-	conf_get.c \
-	conf_keys.c \
-	conf_level_indent.c \
-	conf_strcasecmp.c \
-	conf_strcnt.c \
-	conf_list_free.c \
-	conf_util.c \
-	conf_del.c \
-	conf_error.c \
-	conf_getboolean.c \
-	conf_getlong.c \
-	conf_sections.c \
-	conf_set.c \
-	conf_setboolean.c \
-	conf_setlong.c
+	vsnprintf.c
+
+#	conf.c \
+#	conf_atol.c \
+#	conf_endtrim.c \
+#	conf_get.c \
+#	conf_keys.c \
+#	conf_level_indent.c \
+#	conf_strcasecmp.c \
+#	conf_strcnt.c \
+#	conf_list_free.c \
+#	conf_util.c \
+#	conf_del.c \
+#	conf_error.c \
+#	conf_getboolean.c \
+#	conf_getlong.c \
+#	conf_sections.c \
+#	conf_set.c \
+#	conf_setboolean.c \
+#	conf_setlong.c
 
 # files that were deleted:
 #	fl_set_font.cxx \
@@ -270,5 +269,5 @@ install: $(LIBRARY).a $(DSONAME)
 	@cp ../fltk-config $(bindir)
 
 #
-# End of "$Id: Makefile,v 1.60 1999/12/19 15:21:55 vincent Exp $".
+# End of "$Id: Makefile,v 1.61 2000/01/07 08:50:30 bill Exp $".
 #

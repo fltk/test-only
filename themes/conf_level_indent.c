@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_strcnt.c,v 1.5 1999/11/27 00:58:25 carl Exp $"
+   "$Id: conf_level_indent.c,v 1.1 2000/01/07 08:50:50 bill Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -22,31 +22,20 @@
     USA.
 */
 
-#include <FL/conf.h>
+#include "conf.h"
 
-/*
-        int *strcnt(const char *s, char c)
-
-        description:
-                counts the number of instances of char c in string s
-        arguments:
-                s: string in which to look for c
-                c: character to look for in s
-        return value:
-                returns the number of instances of c in s
-*/
-int
-strcnt(const char *s, char c)
+/* this function returns the proper amount of leading indentation for a line */
+const char *
+level_indent(int l)
 {
-        int count;
-        const char *p;
+        static char indent[CONF_MAX_LEVEL * CONF_INDENT + 1];
 
-        for (count = 0, p = s; *p != (char)0; p++)
-                if (*p == c) count++;
+        memset(indent, 0, sizeof(indent));
+        if (l <= CONF_MAX_LEVEL) memset(indent, ' ', l * CONF_INDENT);
 
-        return count;
+        return indent;
 }
 
 /*
-    End of "$Id: conf_strcnt.c,v 1.5 1999/11/27 00:58:25 carl Exp $".
+    End of "$Id: conf_level_indent.c,v 1.1 2000/01/07 08:50:50 bill Exp $".
 */

@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.71 1999/12/16 03:13:59 vincent Exp $"
+dnl# "$Id: configure.in,v 1.72 2000/01/07 08:50:10 bill Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -328,9 +328,9 @@ PREFIX=${prefix}
 AC_SUBST(DEBUGFLAG)
 
 if test "$PREFIX" = "NONE"; then
-    AC_DEFINE_UNQUOTED(FLTK_LIBDIR, "${ac_default_prefix}")
+    AC_DEFINE_UNQUOTED(CONFIGDIR, "${ac_default_prefix}/lib/fltk")
 else
-    AC_DEFINE_UNQUOTED(FLTK_LIBDIR, "${prefix}")
+    AC_DEFINE_UNQUOTED(CONFIGDIR, "${prefix}/lib/fltk")
 fi
 
 AC_SUBST(DSOEXT)
@@ -351,5 +351,5 @@ AC_OUTPUT(makeinclude fltk-config)
 chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.71 1999/12/16 03:13:59 vincent Exp $".
+dnl# End of "$Id: configure.in,v 1.72 2000/01/07 08:50:10 bill Exp $".
 dnl#

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.36 1999/11/29 08:46:57 bill Exp $"
+// "$Id: Fl.H,v 1.37 2000/01/07 08:50:13 bill Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -201,35 +201,28 @@ public:
 
 #endif
 
-  // Mutltithreading support:
+  // Multithreading support:
   static void lock();
   static void unlock();
   static void awake(void* message = 0);
   static void* thread_message();
 
   // scheme & theme stuff
-  static int use_schemes;
-  static int use_themes;
-  static const char* scheme_;
   static const char* theme_;
+  static const char* scheme_;
+  static const char* theme() {return theme_;}
+  static const char* scheme() {return scheme_;}
+  static int theme(const char*, const char* scheme = 0);
+  static int scheme(const char* s) {return theme(theme_, s);}
+  static int loadtheme();
+  static int loadtheme(const char*, const char* scheme = 0);
+  static int reloadtheme();
+  static void add_theme_unloader(void (*)());
 
-  static int scheme(const char*);
-  static const char* scheme();
-  static int loadscheme(int = 1);
-
-  static int theme(const char*);
-  static const char* theme();
-  static int loadtheme(int = 1);
-
-  // get the string value of a key from the global config file
-  static int getconf(const char *key, char *value, int value_length);
 };
-
-const char* fl_find_config_file(const  char* fn);
-
 
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.36 1999/11/29 08:46:57 bill Exp $".
+// End of "$Id: Fl.H,v 1.37 2000/01/07 08:50:13 bill Exp $".
 //

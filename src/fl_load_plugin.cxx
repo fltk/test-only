@@ -34,10 +34,10 @@ typedef int (*Function)(int, const char * const *);
 
 // returns -1 if plugin file not found
 // returns -2 if plugin file couldn't be opened
-// returns -3 if couldn't find plugin_main()
+// returns -3 if couldn't find func()
 // returns -4 if uid != euid (setuid program?)
 // otherwise, returns result of func() (should be 0)
-int fl_load_plugin(const char* name, const char* func) {
+int fl_load_plugin(const char* name, const char* func, const char* arg) {
 #ifndef WIN32
   if (getuid() != geteuid()) {
     fprintf(stderr, "fl_load_plugin(): Plugin loading disabled for setuid programs.\n");
@@ -49,8 +49,8 @@ int fl_load_plugin(const char* name, const char* func) {
   if (handle) {
     Function f = (Function)dlsym(handle, func);
     if (f) {
-      const char* argv[2] = { name, 0 };
-      return f(1, argv);
+      const char* argv[3] = { name, arg, 0 };
+      return f(arg ? 2 : 1, argv);
     }
   }
   fprintf(stderr, "fl_load_plugin(): %s\n", dlerror());

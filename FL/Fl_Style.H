@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.22 1999/11/22 09:00:12 bill Exp $"
+// "$Id: Fl_Style.H,v 1.23 2000/01/07 08:50:14 bill Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -33,7 +33,6 @@
 #include "Fl_Font.H"
 
 typedef void (*Fl_Glyph)(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype = FL_UP_BOX);
-typedef int (*Fl_Theme_Handler)(int);
 
 struct Fl_Named_Style;
 
@@ -90,8 +89,6 @@ struct FL_API Fl_Style {
   void set_text_size(unsigned v)	{seti(&text_size, v);}
   void set_leading(unsigned v)		{seti(&leading, v);}
 
-  static void revert(); // reverts the entire world of styles to defaults
-
   static int draw_boxes_inactive; // should boxes ever be drawn inactive?
   static int inactive_menu_hack; // Microsoft sucks
   static double inactive_color_weight; // how much weight to FL_GRAY for inactive colors
@@ -101,9 +98,6 @@ struct FL_API Fl_Style {
   // find a default style by its string ID
   static Fl_Named_Style* find(const char* name);
 };
-
-FL_API void fl_theme_handler(Fl_Theme_Handler handler);
-FL_API Fl_Theme_Handler fl_theme_handler();
 
 FL_API void fl_glyph(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
 
@@ -121,12 +115,6 @@ enum Fl_Glyphtype {	// glyph types understood by fl_glyph()
   FL_GLYPH_HNSLIDER
 };
 
-FL_API int fl_kde1();
-FL_API int fl_kde1_colors();
-FL_API int fl_motif();
-FL_API int fl_windows();
-FL_API int fl_windows_colors();
-
 struct FL_API Fl_Named_Style : public Fl_Style {
   const char* name;
   Fl_Style** pdefault_style;
@@ -137,8 +125,10 @@ struct FL_API Fl_Named_Style : public Fl_Style {
   Fl_Named_Style() { }	// Empty constructor used by Fl_Style::start only
 };
 
+FL_API const char* fl_find_config_file(const char* fn, const char* prefix=0, const char* suffix=0);
+
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.22 1999/11/22 09:00:12 bill Exp $".
+// End of "$Id: Fl_Style.H,v 1.23 2000/01/07 08:50:14 bill Exp $".
 //

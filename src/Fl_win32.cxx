@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.82 1999/12/16 20:47:01 vincent Exp $"
+// "$Id: Fl_win32.cxx,v 1.83 2000/01/07 08:50:28 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -645,7 +645,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 #endif
 
   case WM_SYSCOLORCHANGE:
-    Fl::loadscheme();
+    Fl::reloadtheme();
     break;
 
   default:
@@ -918,6 +918,126 @@ void Fl_Window::make_current() {
   fl_clip_region(0);
 }
 
+////////////////////////////////////////////////////////////////
+
+static Fl_Color win_color(int wincol) {
+  int R = wincol&0xff;
+  int G = (wincol >> 8)&0xff;
+  int B = (wincol >> 16)&0xff;
+  Fl_Color col = fl_rgb(R, G, B);
+  if (col) return col;
+  return FL_BLACK;
+}
+
+int fl_windows_colors() {
+  Fl_Color background = win_color(GetSysColor(COLOR_BTNFACE));
+  Fl_Color foreground = win_color(GetSysColor(COLOR_BTNTEXT));
+  Fl_Color select_background = win_color(GetSysColor(COLOR_HIGHLIGHT));
+  Fl_Color select_foreground = win_color(GetSysColor(COLOR_HIGHLIGHTTEXT));
+  Fl_Color window_background = win_color(GetSysColor(COLOR_WINDOW));
+  Fl_Color window_foreground = win_color(GetSysColor(COLOR_WINDOWTEXT));
+  Fl_Color menuitem_background = win_color(GetSysColor(COLOR_MENU));
+  Fl_Color menuitem_foreground = win_color(GetSysColor(COLOR_MENUTEXT));
+  Fl_Color tooltip_background = win_color(GetSysColor(COLOR_INFOBK));
+  Fl_Color tooltip_foreground = win_color(GetSysColor(COLOR_INFOTEXT));
+// Windows doesn't seem to honor this one
+// Fl_Color slider_background = win_color(GetSysColor(COLOR_SCROLLBAR));
+
+  fl_background(background);
+  Fl_Widget::default_style->set_off_color(FL_GRAY);
+
+  Fl_Widget::default_style->set_label_color(foreground);
+  Fl_Widget::default_style->set_highlight_label_color(foreground);
+  Fl_Widget::default_style->set_selection_text_color(foreground);
+
+  Fl_Widget::default_style->set_text_color(window_foreground);
+
+  Fl_Style* style;
+  if ((style = Fl_Style::find("input"))) {
+    style->set_off_color(foreground); // cursor
+    style->set_color(window_background);
+    style->set_text_color(window_foreground);
+    style->set_selection_color(select_background);
+    style->set_selection_text_color(select_foreground);
+  }
+
+  if ((style = Fl_Style::find("output"))) {
+    style->set_color(window_background);
+    style->set_text_color(window_foreground);
+    style->set_selection_color(select_background);
+    style->set_selection_text_color(select_foreground);
+  }
+
+  if ((style = Fl_Style::find("counter"))) {
+    style->set_color(window_background);
+    style->set_text_color(window_foreground);
+  }
+
+  if ((style = Fl_Style::find("browser"))) {
+    style->set_color(window_background);
+    style->set_text_color(window_foreground);
+    style->set_selection_color(select_background);
+    style->set_selection_text_color(select_foreground);
+  }
+
+  if ((style = Fl_Style::find("check button"))) {
+    style->set_selection_color(window_foreground);
+    style->set_off_color(window_background);
+  }
+
+  if ((style = Fl_Style::find("scrollbar"))) {
+//    style->set_color(fl_color_average(slider_background, window_background, .5));
+    style->set_color(fl_color_average(background, window_background, .5));
+  }
+
+  if ((style = Fl_Style::find("menu item"))) {
+    style->set_color(menuitem_background);
+    style->set_label_color(menuitem_foreground);
+    style->set_selection_color(select_background);
+    style->set_selection_text_color(select_foreground);
+  }
+
+  if ((style = Fl_Style::find("menu title"))) {
+    style->set_box(FL_HIGHLIGHT_BOX);
+    style->set_highlight_color(FL_GRAY);
+    style->set_highlight_label_color(foreground);
+    style->set_selection_color(FL_GRAY);
+    style->set_selection_text_color(foreground);
+  }
+
+  if ((style = Fl_Style::find("menu bar"))) {
+    style->set_highlight_color(FL_GRAY); // enable title highlighting
+  }
+
+  if ((style = Fl_Style::find("tooltip"))) {
+    style->set_color(tooltip_background);
+    style->set_label_color(tooltip_foreground);
+  }
+
+/* CET - FIXME - Font stuff not yet implemented
+
+   This needs either a working
+
+      Fl_Font fl_font(const char* fontname)
+
+   or
+
+      int fl_list_fonts(Fl_Font* fontlist)
+
+   Currently, the Windows code has neither.  :-(
+
+
+  if (font) {
+    if (*fontencoding) fl_encoding = fontencoding;
+    Fl_Widget::default_style.set_label_font(font);
+    Fl_Widget::default_style.set_text_font(font);
+    Fl_Widget::default_style.set_label_size(fontsize);
+    Fl_Widget::default_style.set_text_size(fontsize);
+  }
+*/
+  return 0;
+}
+
 //
-// End of "$Id: Fl_win32.cxx,v 1.82 1999/12/16 20:47:01 vincent Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.83 2000/01/07 08:50:28 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.30 1999/11/20 04:42:46 vincent Exp $"
+// "$Id: Fl_Window.cxx,v 1.31 2000/01/07 08:50:28 bill Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,6 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
-#include <FL/conf.h>
 #include <config.h>
 
 void Fl_Window::_Fl_Window() {
@@ -102,5 +101,5 @@ static void revert(Fl_Style* s) {
 Fl_Style* Fl_Window::default_style = new Fl_Named_Style("Window", revert, &Fl_Window::default_style);
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.30 1999/11/20 04:42:46 vincent Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.31 2000/01/07 08:50:28 bill Exp $".
 //

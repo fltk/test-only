@@ -1,5 +1,5 @@
 //
-// "$Id: KDE1.cxx,v 1.3 1999/11/18 14:04:33 carl Exp $"
+// "$Id: KDE1.cxx,v 1.4 2000/01/07 08:50:45 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -23,21 +23,274 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// KDE theme
+// KDE version 1 theme.  This reads the KDE .kderc file to get all the
+// style information.  If the argument "colors" is passed then this skips
+// over the windows/motif switching, which allows this to be loaded atop
+// another theme easily.
 
 #include <FL/Fl.H>
-#include <FL/Fl_Style.H>
+#include <FL/Fl_Widget.H>
+#include <FL/fl_draw.H>
+#include <string.h>
+#include <stdlib.h>
+#include <limits.h>
+#include "Conf_Database.H"
 
-extern "C" int fltk_theme(int, char**);
+#ifndef PATH_MAX
+#define PATH_MAX 128
+#endif
 
-int fltk_theme(int, char**) {
-  int r = fl_kde1();
+static int colors_only;
 
-  Fl::use_themes = 1; Fl::use_schemes = 1; // turn themes and schemes back on
+static const Fl_Frame_Box kdewin_menu_window_box(
+  "kde windows menu window", "2AAUUIIXX", FL_DOWN_BOX);
 
-  return r;
+////////////////////////////////////////////////////////////////
+#ifndef WIN32
+#include <FL/x.H>
+
+static Atom General, Style, Palette;
+
+// this function handles KDE style change messages
+static int x_event_handler(int) {
+  if (fl_xevent->type != ClientMessage) return 0; // not a Client message
+  XClientMessageEvent* cm = (XClientMessageEvent*)fl_xevent;
+  if (cm->message_type != General && cm->message_type != Palette
+      && (cm->message_type != Style || colors_only))
+    return 0; // not the message we want
+  Fl::reloadtheme();
+  return 1;
+}
+
+static void add_event_handler() {
+  // create an X window to catch KDE style change messages
+  static int do_once = 0;
+  if (do_once) return;
+  do_once = 1;
+  Atom kde_atom = XInternAtom(fl_display, "KDE_DESKTOP_WINDOW", False);
+  Window root = RootWindow(fl_display, fl_screen);
+  Window kde_message_win = XCreateSimpleWindow(fl_display, root, 0,0,1,1,0, 0, 0);
+  long data = 1;
+  XChangeProperty(fl_display, kde_message_win, kde_atom, kde_atom, 32,
+		  PropModeReplace, (unsigned char *)&data, 1);
+  General = XInternAtom(fl_display, "KDEChangeGeneral", False);
+  Style = XInternAtom(fl_display, "KDEChangeStyle", False);
+  Palette = XInternAtom(fl_display, "KDEChangePalette", False);
+  Fl::add_handler(x_event_handler);
+}
+  
+#endif
+////////////////////////////////////////////////////////////////
+
+extern "C" int fltk_theme(int argc, char**)
+{
+  colors_only = argc > 1;
+
+  char kderc_path[PATH_MAX], home[PATH_MAX] = "", s[80];
+  const char* p = getenv("HOME");
+  if (p) strncpy(home, p, sizeof(home));
+  snprintf(kderc_path, sizeof(kderc_path), "%s/.kderc", home);
+  Conf_Database kderc(kderc_path);
+
+  if (kderc.get("KDE/widgetStyle", s, sizeof(s))) return 1;
+  int motif_style = !strcasecmp(s, "Motif") ? 1 : 0;
+  if (!colors_only) {
+    Fl::loadtheme(motif_style ? "motif" : "windows");
+    // see below for modifications to the motif/windows themes
+  }
+
+  Fl_Color foreground = FL_NO_COLOR;
+  if (!kderc.get("General/foreground", s, sizeof(s)))
+    foreground = fl_rgb(s);
+
+  Fl_Color background = FL_NO_COLOR;
+  if (!kderc.get("General/background", s, sizeof(s)))
+    background = fl_rgb(s);
+
+  Fl_Color select_foreground = FL_NO_COLOR;
+  if (!kderc.get("General/selectForeground", s, sizeof(s)))
+    select_foreground = fl_rgb(s);
+
+  Fl_Color select_background = FL_NO_COLOR;
+  if (!kderc.get("General/selectBackground", s, sizeof(s)))
+    select_background = fl_rgb(s);
+
+  // this one seems to do absolutely nothing
+  Fl_Color window_foreground = FL_NO_COLOR;
+  if (!kderc.get("General/windowForeground", s, sizeof(s)))
+    window_foreground = fl_rgb(s);
+
+  Fl_Color window_background = FL_NO_COLOR;
+  if (!kderc.get("General/windowBackground", s, sizeof(s)))
+    window_background = fl_rgb(s);
+
+  Fl_Font font = 0;
+  int fontsize = 0;
+  static char fontencoding[32] = "";
+  if (!kderc.get("General/font", s, sizeof(s))) {
+    char fontname[64] = "";
+    int fontbold = 0, fontitalic = 0;
+
+    if ( (p = strtok(s, ",")) ) strncpy(fontname, p, sizeof(fontname));
+    if ( (p = strtok(NULL, ",")) ) fontsize = atoi(p);
+    strtok(NULL, ","); // I have no idea what this is
+    if ( (p = strtok(NULL, ",")) ) {
+      strncpy(fontencoding, p, sizeof(fontencoding));
+      if (!strncasecmp(fontencoding, "iso-", 4))
+        memmove(fontencoding+3,fontencoding+4, strlen(fontencoding+4)+1); // hack!
+    }
+    if ( (p = strtok(NULL, ",")) && !strcmp(p, "75") ) fontbold = 1;
+    if ( (p = strtok(NULL, ",")) && !strcmp(p, "1") ) fontitalic = 1;
+    font = fl_font(fontname);
+
+#if 0
+    // when this method exists this will be a lot easier!
+#else
+    // doing these three manually saves startup time-- fl_list_fonts()
+    // is _very_ slow
+    if (!strcasecmp(fontname, "helvetica")) {
+      font = FL_HELVETICA;
+    } else if (!strcasecmp(fontname, "times")) {
+      font = FL_TIMES;
+    } else if (!strcasecmp(fontname, "courier")) {
+      font = FL_COURIER;
+    } else {
+      Fl_Font* fontlist;
+      int i, numfonts;
+      for (i = 0, numfonts = fl_list_fonts(fontlist); i < numfonts; i++)
+        if (!strcasecmp(fontlist[i]->name(), fontname)) break;
+      if (i != numfonts) font = fontlist[i];
+    }
+#endif
+    if (font && fontbold) font = font->bold;
+    if (font && fontitalic) font = font->italic;
+  }
+
+  Fl_Widget::default_style->set_highlight_color(0); // turn off widget highlighting
+
+  Fl_Style* style;
+  if (background) {
+    fl_background(background);
+    Fl_Widget::default_style->set_off_color(background);
+  }
+
+  if (foreground) {
+    Fl_Widget::default_style->set_label_color(foreground);
+    Fl_Widget::default_style->set_highlight_label_color(foreground);
+    Fl_Widget::default_style->set_text_color(foreground);
+    Fl_Widget::default_style->set_selection_text_color(foreground);
+  }
+
+  if ((style = Fl_Style::find("input"))) {
+    if (foreground) style->set_off_color(foreground);
+    if (window_background) style->set_color(window_background);
+    if (select_background) style->set_selection_color(select_background);
+    if (select_foreground) style->set_selection_text_color(select_foreground);
+  }
+
+  if ((style = Fl_Style::find("output"))) {
+    if (window_background) style->set_color(window_background);
+    if (select_background) style->set_selection_color(select_background);
+    if (select_foreground) style->set_selection_text_color(select_foreground);
+  }
+
+  if ((style = Fl_Style::find("counter"))) {
+    if (window_background) style->set_color(window_background);
+  }
+
+  if ((style = Fl_Style::find("browser"))) {
+    if (window_background) style->set_color(window_background);
+    if (select_background) style->set_selection_color(select_background);
+    if (select_foreground) style->set_selection_text_color(select_foreground);
+  }
+
+  if ((style = Fl_Style::find("check button"))) {
+    // this should be only on round and not check...
+    if (foreground) style->set_selection_color(foreground);
+    if (window_background) style->set_off_color(window_background);
+  }
+
+  if ((style = Fl_Style::find("menu item"))) {
+    if (select_background) style->set_selection_color(select_background);
+    if (select_foreground) style->set_selection_text_color(select_foreground);
+  }
+
+  if ((style = Fl_Style::find("menu title"))) {
+    if (select_background) style->set_highlight_color(background);
+    if (select_foreground) style->set_highlight_label_color(foreground);
+    if (select_background) style->set_selection_color(background);
+    if (select_foreground) style->set_selection_text_color(foreground);
+  }
+
+// Don't bother.  KDE gets it wrong.
+//  if ((style = Fl_Style::find("scrollbar"))) {
+//    if (background && window_background)
+//      style->set_color(fl_color_average(background, window_background, 0.5));
+//  }
+
+/* looks better for dark backgrounds
+  if ((style = Fl_Style::find("scrollbar"))) {
+    if (foreground) style->set_color(48);
+  }
+
+  if ((style = Fl_Style::find("slider"))) {
+    if (foreground) style->set_color(48);
+  }
+
+  if ((style = Fl_Style::find("value slider"))) {
+    if (foreground) style->set_color(48);
+  }
+*/
+  if (font) {
+    if (*fontencoding) fl_encoding = fontencoding;
+    Fl_Widget::default_style->set_label_font(font);
+    Fl_Widget::default_style->set_text_font(font);
+    Fl_Widget::default_style->set_label_size(fontsize);
+    Fl_Widget::default_style->set_text_size(fontsize);
+  }
+
+  if (!colors_only) {
+
+    // for title highlighting
+    if ((style = Fl_Style::find("menu bar"))) {
+      if (motif_style) style->set_highlight_color(0);
+      else style->set_highlight_label_color(foreground);
+    }
+
+    if (motif_style) {
+//    fl_set_color(FL_LIGHT2, FL_LIGHT1); // looks better for dark backgrounds
+      if ((style = Fl_Style::find("menu item"))) {
+	style->set_selection_color(background);
+	style->set_selection_text_color(foreground);
+      }
+      if ((style = Fl_Style::find("check button"))) {
+	style->set_selection_color(FL_DARK1);
+	style->set_off_color(background);
+      }
+    } else {
+      Fl_Style::inactive_color_weight = 0.15f;
+
+      if ((style = Fl_Style::find("menu window"))) {
+	style->set_box(&kdewin_menu_window_box);
+      }
+
+      if ((style = Fl_Style::find("scrollbar"))) {
+	style->set_glyph_box(&kdewin_menu_window_box);
+      }
+    }
+
+    if ((style = Fl_Style::find("menu window"))) {
+      style->set_leading(motif_style ? 4 : 8);
+    }
+  }
+
+#ifndef WIN32
+  add_event_handler();
+#endif
+
+  return 0;
 }
 
 //
-// End of "$Id: KDE1.cxx,v 1.3 1999/11/18 14:04:33 carl Exp $".
+// End of "$Id: KDE1.cxx,v 1.4 2000/01/07 08:50:45 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.56 1999/12/15 08:31:02 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.57 2000/01/07 08:50:29 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -249,18 +249,6 @@ static int xerror_handler(Display* d, XErrorEvent* e) {
   return 0;
 }
 
-// this function handles FLTK style change messages
-static int style_event_handler(int) {
-  if (fl_xevent->type != ClientMessage) return 0; // not a Client message
-
-  Atom Scheme = XInternAtom(fl_display, "FLTKChangeScheme", False);
-  Atom Theme = XInternAtom(fl_display, "FLTKChangeTheme", False);
-  XClientMessageEvent* cm = (XClientMessageEvent*)fl_xevent;
-  if (cm->message_type == Scheme && Fl::use_schemes) { Fl::loadscheme(); return 1; }
-  if (cm->message_type == Theme && Fl::use_themes) { Fl::loadtheme(); return 1; }
-  return 0;
-}
-
 void fl_open_display() {
   if (fl_display) return;
 
@@ -284,16 +272,11 @@ void fl_open_display() {
   fl_visual = XGetVisualInfo(fl_display, VisualIDMask, &templt, &num);
   fl_colormap = DefaultColormap(fl_display,fl_screen);
 
-
-  Atom style_atom = XInternAtom(fl_display, "FLTK_STYLE_WINDOW", False);
-  Window root = RootWindow(fl_display, fl_screen);
-  Window style_win = XCreateSimpleWindow(fl_display, root, 0,0,1,1,0, 0, 0);
-  long data = 1;
-  XChangeProperty(fl_display, style_win, style_atom, style_atom, 32,
-                  PropModeReplace, (unsigned char *)&data, 1);
-
-  // add handler to process style change X events
-  Fl::add_handler(style_event_handler);
+  // Carl inserted something much like the KDE plugin does to register
+  // a style client message.  I would prefer to either leave this up
+  // to the plugin, or use the SAME atoms as KDE (to avoid even more
+  // namespace pollution).  It can respond by unload/load of the theme.
+  // See the kde plugin for sample code.
 }
 
 void fl_close_display() {
@@ -861,5 +844,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.56 1999/12/15 08:31:02 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.57 2000/01/07 08:50:29 bill Exp $".
 //
