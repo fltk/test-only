@@ -966,7 +966,7 @@ HANDLE fl_global_selection_ansi(int clipboard) {
 // I believe this was written by Matthias Melcher, correct?
 
 #include <ole2.h>
-#include <ShellApi.h>
+#include <shellapi.h>
 
 static Window *dnd_target_window = 0;
 
