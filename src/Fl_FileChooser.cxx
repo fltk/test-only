@@ -130,6 +130,7 @@ FileChooser::FileChooser(const char *d, const char *p, int t, const char *title)
     }
     { FileBrowser* o = fileList = new FileBrowser(10, 45, 355, 180);
       o->callback((Callback*)cb_fileList);
+      o->when(o->when() | fltk::WHEN_ENTER_KEY);
       Group::current()->resizable(o);
       o->tooltip("Double-click to change directories.");
     }
