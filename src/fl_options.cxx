@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.19 1999/11/10 18:06:08 carl Exp $"
+// "$Id: fl_options.cxx,v 1.20 1999/11/10 20:52:39 carl Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -385,14 +385,12 @@ Fl_Style* Fl_Style::find(const char* name) {
 
 static void style_clear(Fl_Style *s) {
   Fl_Style temp = *s;
-printf("f1: %p\n", s->first);
   memset((void*)s, 0, sizeof(*s));
 
   s->parent = temp.parent;
   s->name = temp.name;
   s->revertfunc = temp.revertfunc;
   s->next = temp.next;
-printf("f2: %p\n", s->first);
 }
 
 extern int fl_extra_menu_spacing;
@@ -421,7 +419,7 @@ void Fl_Style::revert() {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.19 1999/11/10 18:06:08 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.20 1999/11/10 20:52:39 carl Exp $".
 //
 
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.6 1999/11/10 19:27:36 carl Exp $"
+// "$Id: Alternative.cxx,v 1.7 1999/11/10 20:52:41 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -176,43 +176,44 @@ static void alt_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color f
     case FL_GLYPH_LEFT:
     case FL_GLYPH_UP:
     case FL_GLYPH_DOWN: {
-        Fl_Color d1, d2, l1, l2;
-        if (f&FL_VALUE) {
-          d1 = FL_WHITE; d2 = FL_LIGHT2; l1 = FL_BLACK; l2 = FL_DARK2;
-        } else{
-          l1 = FL_WHITE; l2 = FL_LIGHT2; d1 = FL_BLACK; d2 = FL_DARK2;
-        }
+      if (box == FL_NO_BOX) { x += 4; y += 4; w -= 8; h -= 8; } // menu fudge factor
+      Fl_Color d1, d2, l1, l2;
+      if (f&FL_VALUE) {
+        d1 = FL_WHITE; d2 = FL_LIGHT2; l1 = FL_BLACK; l2 = FL_DARK2;
+      } else{
+        l1 = FL_WHITE; l2 = FL_LIGHT2; d1 = FL_BLACK; d2 = FL_DARK2;
+      }
 
-        if (f&FL_INACTIVE) {
-          l1 = fl_inactive(l1); l2 = fl_inactive(l2);
-          d1 = fl_inactive(d1); d2 = fl_inactive(d2);
-        }
+      if (f&FL_INACTIVE) {
+        l1 = fl_inactive(l1); l2 = fl_inactive(l2);
+        d1 = fl_inactive(d1); d2 = fl_inactive(d2);
+      }
 
-        if (t == FL_GLYPH_RIGHT) {
-          fl_color(bc); fl_polygon(x,y, x+w-1,y+h/2, x,y+h-1);
-          fl_color(l2); fl_line(x+1,y+h-2, x+1,y+1, x+w-2,y+h/2);
-          fl_color(d2); fl_line(x+1,y+h-2, x+w-2,y+h/2);
-          fl_color(l1); fl_line(x,y+h-1, x,y, x+w-1,y+h/2);
-          fl_color(d1); fl_line(x,y+h-1, x+w-1,y+h/2);
-        } else if (t == FL_GLYPH_LEFT) {
-          fl_color(bc); fl_polygon(x+w-1,y, x+w-1,y+h-1, x,y+h/2);
-          fl_color(d2); fl_line(x+w-2,y+1, x+w-2,y+h-2, x+1,y+h/2);
-          fl_color(l2); fl_line(x+w-2,y+1, x+1,y+h/2);
-          fl_color(d1); fl_line(x+w-1,y, x+w-1,y+h-1, x,y+h/2);
-          fl_color(l1); fl_line(x+w-1,y, x,y+h/2);
-        } else if (t == FL_GLYPH_DOWN) {
-          fl_color(bc); fl_polygon(x,y, x+w/2,y+h-1, x+w-1,y);
-          fl_color(l2); fl_line(x+w-2,y+1, x+1,y+1, x+w/2,y+h-2);
-          fl_color(d2); fl_line(x+w-2,y+1, x+w/2,y+h-2);
-          fl_color(l1); fl_line(x+w-1,y, x,y, x+w/2,y+h-1);
-          fl_color(d1); fl_line(x+w-1,y, x+w/2,y+h-1);
-        } else { // UP
-          fl_color(bc); fl_polygon(x,y+h-1, x+w-1,y+h-1, x+w/2,y);
-          fl_color(d2); fl_line(x+1,y+h-2, x+w-2,y+h-2, x+w/2,y+1);
-          fl_color(l2); fl_line(x+1,y+h-2, x+w/2,y+1);
-          fl_color(d1); fl_line(x,y+h-1, x+w-1,y+h-1, x+w/2,y);
-          fl_color(l1); fl_line(x,y+h-1, x+w/2,y);
-        }
+      if (t == FL_GLYPH_RIGHT) {
+        fl_color(bc); fl_polygon(x,y, x+w-1,y+h/2, x,y+h-1);
+        fl_color(l2); fl_line(x+1,y+h-2, x+1,y+1, x+w-2,y+h/2);
+        fl_color(d2); fl_line(x+1,y+h-2, x+w-2,y+h/2);
+        fl_color(l1); fl_line(x,y+h-1, x,y, x+w-1,y+h/2);
+        fl_color(d1); fl_line(x,y+h-1, x+w-1,y+h/2);
+      } else if (t == FL_GLYPH_LEFT) {
+        fl_color(bc); fl_polygon(x+w-1,y, x+w-1,y+h-1, x,y+h/2);
+        fl_color(d2); fl_line(x+w-2,y+1, x+w-2,y+h-2, x+1,y+h/2);
+        fl_color(l2); fl_line(x+w-2,y+1, x+1,y+h/2);
+        fl_color(d1); fl_line(x+w-1,y, x+w-1,y+h-1, x,y+h/2);
+        fl_color(l1); fl_line(x+w-1,y, x,y+h/2);
+      } else if (t == FL_GLYPH_DOWN) {
+        fl_color(bc); fl_polygon(x,y, x+w/2,y+h-1, x+w-1,y);
+        fl_color(l2); fl_line(x+w-2,y+1, x+1,y+1, x+w/2,y+h-2);
+        fl_color(d2); fl_line(x+w-2,y+1, x+w/2,y+h-2);
+        fl_color(l1); fl_line(x+w-1,y, x,y, x+w/2,y+h-1);
+        fl_color(d1); fl_line(x+w-1,y, x+w/2,y+h-1);
+      } else { // UP
+        fl_color(bc); fl_polygon(x,y+h-1, x+w-1,y+h-1, x+w/2,y);
+        fl_color(d2); fl_line(x+1,y+h-2, x+w-2,y+h-2, x+w/2,y+1);
+        fl_color(l2); fl_line(x+1,y+h-2, x+w/2,y+1);
+        fl_color(d1); fl_line(x,y+h-1, x+w-1,y+h-1, x+w/2,y);
+        fl_color(l1); fl_line(x,y+h-1, x+w/2,y);
+      }
       break;
     }
     default:
@@ -243,5 +244,5 @@ int fltk_theme(int, char** argv) {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.6 1999/11/10 19:27:36 carl Exp $".
+// End of "$Id: Alternative.cxx,v 1.7 1999/11/10 20:52:41 carl Exp $".
 //

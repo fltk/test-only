@@ -2,8 +2,8 @@
 
 # Which scheme should we use?
 
- default scheme = Alternative
-# default scheme = Alt2
+#default scheme = Alternative
+default scheme = Alt2
 # default scheme = Classic
 # default scheme = Essai
 # default scheme = KDE1

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.6 1999/11/10 19:27:33 carl Exp $"
+// "$Id: fl_motif.cxx,v 1.7 1999/11/10 20:52:39 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -124,7 +124,7 @@ static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color
     case FL_GLYPH_LEFT:
     case FL_GLYPH_UP:
     case FL_GLYPH_DOWN: {
-      if (box == FL_NO_BOX) { x += 3; y += 3; w -= 6; h -= 6; } // menu fudge factor
+      if (box == FL_NO_BOX) { x += 4; y += 4; w -= 8; h -= 8; } // menu fudge factor
       Fl_Color d1, d2, l1, l2;
       if (f&FL_VALUE) {
         d1 = FL_LIGHT2; d2 = FL_LIGHT2; l1 = FL_DARK3; l2 = FL_DARK3;
@@ -284,5 +284,5 @@ int fl_motif() {
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.6 1999/11/10 19:27:33 carl Exp $".
+// End of "$Id: fl_motif.cxx,v 1.7 1999/11/10 20:52:39 carl Exp $".
 //

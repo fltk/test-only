@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1.cxx,v 1.2 1999/11/10 04:48:55 carl Exp $"
+// "$Id: fl_kde1.cxx,v 1.3 1999/11/10 20:52:38 carl Exp $"
 //
 // Make FLTK do the KDE thing!
 //
@@ -81,15 +81,25 @@ int fl_kde1() {
   fl_kde1_colors(); // figure out the colors and fonts for KDE1
 
   Fl_Style* style;
+  if ((style = Fl_Style::find("menu title"))) {
+    style->set_selection_color(background);
+    style->set_selection_text_color(foreground);
+    if (motif_style)
+      style->set_highlight_color(0);
+    else {
+      style->set_highlight_color(background);
+      style->set_highlight_label_color(foreground);
+    }
+  }
   if (motif_style) {
 //    fl_set_color(FL_LIGHT2, FL_LIGHT1); // looks better for dar backgrounds
     if ((style = Fl_Style::find("menu item"))) {
-      if (background) style->set_highlight_color(background);
+      style->set_highlight_color(background);
       style->set_highlight_label_color(foreground);
     }
     if ((style = Fl_Style::find("check button"))) {
       style->set_selection_color(FL_DARK1);
-      if (background) style->set_off_color(background);
+      style->set_off_color(background);
     }
     fl_extra_menu_spacing = 2; // seemed like this was much more under KDE yesterday...
   } else {
@@ -102,5 +112,5 @@ int fl_kde1() {
 }
 
 //
-// End of "$Id: fl_kde1.cxx,v 1.2 1999/11/10 04:48:55 carl Exp $".
+// End of "$Id: fl_kde1.cxx,v 1.3 1999/11/10 20:52:38 carl Exp $".
 //

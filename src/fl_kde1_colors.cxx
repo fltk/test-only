@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1_colors.cxx,v 1.2 1999/11/10 14:21:00 carl Exp $"
+// "$Id: fl_kde1_colors.cxx,v 1.3 1999/11/10 20:52:38 carl Exp $"
 //
 // Make FLTK do the KDE thing!
 //
@@ -175,7 +175,10 @@ int fl_kde1_colors() {
   }
 
   if ((style = Fl_Style::find("menu title"))) {
-    if (foreground) style->set_selection_text_color(foreground);
+    if (select_background) style->set_highlight_color(select_background);
+    if (select_foreground) style->set_highlight_label_color(select_foreground);
+    if (select_background) style->set_selection_color(select_background);
+    if (select_foreground) style->set_selection_text_color(select_foreground);
   }
 
 /* looks better for dark backgrounds
@@ -205,5 +208,5 @@ int fl_kde1_colors() {
 }
 
 //
-// End of "$Id: fl_kde1_colors.cxx,v 1.2 1999/11/10 14:21:00 carl Exp $".
+// End of "$Id: fl_kde1_colors.cxx,v 1.3 1999/11/10 20:52:38 carl Exp $".
 //
