@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde.cxx,v 1.11 2000/08/11 00:53:48 clip Exp $"
+// "$Id: fl_kde.cxx,v 1.12 2001/01/02 00:20:29 clip Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -45,8 +45,8 @@
 
 static int colors_only = 0;
 
-static const Fl_Frame_Box kdewin_menu_text_box(
-  "kde windows menu window", "2AAUUIIXX", FL_DOWN_BOX);
+//static const Fl_Frame_Box
+//kdewin_menu_text_box("kde windows menu window", "2AAUUIIXX", FL_DOWN_BOX);
 
 ////////////////////////////////////////////////////////////////
 #ifndef WIN32
@@ -125,6 +125,7 @@ int fl_kde(int co) {
     kde1 = 1;
   }
   Fl_Config kderc(kderc_path);
+  Fl_Config::clear_cache();
 
   int motif_style = 0;
   if (!kderc.get("KDE/widgetStyle", s, sizeof(s)) && !strcasecmp(s, "Motif"))
@@ -213,8 +214,8 @@ int fl_kde(int co) {
   }
 
   // turn off highlighting:
-  Fl_Widget::default_style->highlight_color = 0;
-  Fl_Widget::default_style->highlight_label_color = 0;
+  Fl_Widget::default_style->highlight_color = FL_NO_COLOR;
+  Fl_Widget::default_style->highlight_label_color = FL_NO_COLOR;
 
   Fl_Style* style = Fl_Widget::default_style;
   if (background) fl_background(background);
@@ -345,14 +346,14 @@ int fl_kde(int co) {
       }
     } else {
 
-      if ((style = Fl_Style::find("menu"))) {
-	style->leading = 8;
-	style->box = &kdewin_menu_text_box;
-      }
+//      if ((style = Fl_Style::find("menu"))) {
+//        style->leading = 8;
+//        style->box = &kdewin_menu_text_box;
+//      }
 
-      if ((style = Fl_Style::find("scrollbar"))) {
-	style->box = &kdewin_menu_text_box;
-      }
+//      if ((style = Fl_Style::find("scrollbar"))) {
+//        style->box = &kdewin_menu_text_box;
+//      }
     }
   }
 
@@ -366,5 +367,5 @@ int fl_kde(int co) {
 }
 
 //
-// End of "$Id: fl_kde.cxx,v 1.11 2000/08/11 00:53:48 clip Exp $".
+// End of "$Id: fl_kde.cxx,v 1.12 2001/01/02 00:20:29 clip Exp $".
 //

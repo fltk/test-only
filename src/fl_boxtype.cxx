@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.41 2000/10/19 05:54:37 spitzak Exp $"
+// "$Id: fl_boxtype.cxx,v 1.42 2001/01/02 00:20:28 clip Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -59,7 +59,7 @@ void Fl_Flat_Box::draw(const Fl_Widget* widget,
 		       int x, int y, int w, int h, Fl_Flags f) const
 {
   if (!(f & FL_FRAME_ONLY) && h > 0 && w > 0) {
-    Fl_Color color = widget->box_color(f);
+    Fl_Color color = widget->get_box_color(f);
     fl_color(color);
     fl_rectf(x,y,w,h);
     if (f & FL_FOCUSED) focus_rectangle(x, y, w, h, color);
@@ -121,7 +121,7 @@ void Fl_Frame_Box::draw(int x, int y, int w, int h,
 
 void Fl_Frame_Box::draw(const Fl_Widget* widget,
 			int x, int y, int w, int h, Fl_Flags f) const {
-  draw(x,y,w,h, widget->box_color(f), f);
+  draw(x,y,w,h, widget->get_box_color(f), f);
 }
 Fl_Frame_Box::Fl_Frame_Box(const char* n, const char* s, const Fl_Frame_Box* d)
   : Fl_Boxtype_(n), data_(s), down(d ? d : this)
@@ -194,5 +194,5 @@ const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
 const Fl_Boxtype_* Fl_Boxtype_::first = 0;
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.41 2000/10/19 05:54:37 spitzak Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.42 2001/01/02 00:20:28 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.35 2000/08/11 02:14:54 clip Exp $"
+// "$Id: Fl_Style.H,v 1.36 2001/01/02 00:20:28 clip Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -41,27 +41,28 @@ typedef void (*Fl_Glyph)(const Fl_Widget*, int type,
 struct FL_API Fl_Named_Style;
 
 struct FL_API Fl_Style {
-  Fl_Boxtype	box;
-  Fl_Boxtype	text_box;
-  Fl_Glyph	glyph;
-  Fl_Font	label_font;
-  Fl_Font	text_font;
-  Fl_Labeltype	label_type;
-  Fl_Color	color;
-  Fl_Color	text_background;
-  Fl_Color	label_color;
-  Fl_Color	selection_color;
-  Fl_Color	selection_text_color;
-  Fl_Color	highlight_color;
-  Fl_Color	highlight_label_color;
-  Fl_Color	text_color;
-  unsigned	label_size;
-  unsigned	text_size;
-  unsigned	leading;
+  Fl_Boxtype    box;
+  Fl_Boxtype    text_box;
+  Fl_Glyph      glyph;
+  Fl_Font       label_font;
+  Fl_Font       text_font;
+  Fl_Labeltype  label_type;
+  Fl_Color      color;
+  Fl_Color      text_background;
+  Fl_Color      label_color;
+  Fl_Color      selection_color;
+  Fl_Color      selection_text_color;
+  Fl_Color      highlight_color;
+  Fl_Color      highlight_label_color;
+  Fl_Color      text_color;
+  unsigned      label_size;
+  unsigned      text_size;
+  unsigned      leading;
 
-  static int	draw_boxes_inactive;
-  static int	scrollbar_width;
-  static int	scrollbar_align;
+  static int    draw_boxes_inactive;
+  static int    draw_sliders_pushed;
+  static int    scrollbar_width;
+  static int    scrollbar_align;
 
   const Fl_Style* parent;
 
@@ -114,5 +115,5 @@ FL_API void fl_get_system_colors();
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.35 2000/08/11 02:14:54 clip Exp $".
+// End of "$Id: Fl_Style.H,v 1.36 2001/01/02 00:20:28 clip Exp $".
 //

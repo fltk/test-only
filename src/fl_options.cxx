@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.71 2000/08/04 10:22:01 clip Exp $"
+// "$Id: fl_options.cxx,v 1.72 2001/01/02 00:20:28 clip Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -91,7 +91,7 @@ void fl_startup() {
     Fl::add_handler(theme_handler);
   }
   beenhere = 1;
-  conf_clear_cached(); // Force rereading of config files.
+  conf_clear_cache(); // Force rereading of config files.
   char temp[PATH_MAX];
   const char* s = Fl::scheme();
   if (!s && !fl_getconf("scheme", temp, sizeof(temp))) s = temp;
@@ -195,63 +195,66 @@ static int load_scheme(const char *s) {
       snprintf(temp, sizeof(temp), "widgets/%s", cent->key);
       getconf_keys(sfile, temp, &key_list);
 
-      // box type
+      // box around widget
       if (!getconf_list(key_list, "box", valstr, sizeof(valstr)))
         if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->box = boxtype;
 
-      // glyph box type
+      // box around text/glyph within widget
       if (!getconf_list(key_list, "text box", valstr, sizeof(valstr)))
         if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->text_box = boxtype;
 
-      // color
+      // color of widget background
       if (!getconf_list(key_list, "color", valstr, sizeof(valstr)))
         style->color = grok_color(sfile, valstr);
 
-      // label color
+      // color of widget's label
       if (!getconf_list(key_list, "label color", valstr, sizeof(valstr)))
         style->label_color = grok_color(sfile, valstr);
 
-      // selection color
+      // color of widget's background when widget is selected
       if (!getconf_list(key_list, "selection color", valstr, sizeof(valstr)))
         style->selection_color = grok_color(sfile, valstr);
 
-      // selection text color
+      // color of widget's text when text selected
+      // color of widget's label when widget selected
+      // color of widget's glyph when widget selected and no glyph box
       if (!getconf_list(key_list, "selection text color", valstr, sizeof(valstr)))
         style->selection_text_color = grok_color(sfile, valstr);
 
-      // off color
+      // background of text/glyph within widget
       if (!getconf_list(key_list, "text background", valstr, sizeof(valstr)))
         style->text_background = grok_color(sfile, valstr);
 
-      // highlight color
+      // color of widget's background when widget is highlighted
       if (!getconf_list(key_list, "highlight color", valstr, sizeof(valstr)))
         style->highlight_color = grok_color(sfile, valstr);
 
-      // highlight label color
+      // color of widget's label when widget highlighted
+      // color of widget's glyph/text when widget highlighted and no text/glyph box
       if (!getconf_list(key_list, "highlight label color", valstr, sizeof(valstr)))
         style->highlight_label_color = grok_color(sfile, valstr);
 
-      // color
+      // color of text/glyph within widget
       if (!getconf_list(key_list, "text color", valstr, sizeof(valstr)))
         style->text_color = grok_color(sfile, valstr);
 
-      // label font
+      // font used for widget's label
       if (!getconf_list(key_list, "label font", valstr, sizeof(valstr)))
         if ( (font = grok_font(sfile, valstr)) ) style->label_font = font;
 
-      // text font
+      // font used for text within widget
       if (!getconf_list(key_list, "text font", valstr, sizeof(valstr)))
         if ( (font = grok_font(sfile, valstr)) ) style->text_font = font;
 
-      // label type
+      // type of widget's label
       if (!getconf_list(key_list, "label type", valstr, sizeof(valstr)))
         if ( (labeltype = Fl_Labeltype_::find(valstr)) ) style->label_type = labeltype;
 
-      // label size
+      // font size of widget's label
       if (!getconf_list(key_list, "label size", valstr, sizeof(valstr)))
         style->label_size = (int)strtol(valstr,0,0);
 
-      // text size
+      // font size of text within widget
       if (!getconf_list(key_list, "text size", valstr, sizeof(valstr)))
         style->text_size = (int)strtol(valstr,0,0);
 
@@ -279,7 +282,7 @@ int Fl::scheme(const char* s) {
 void Fl::reload_scheme() {
   char s[80];
   const char* scheme = Fl::scheme();
-  conf_clear_cached(); // Force rereading of config files.
+  conf_clear_cache(); // Force rereading of config files.
   if (!fl_getconf("scheme", s, sizeof(s))) scheme = s;
   Fl::scheme(scheme);
 }
@@ -383,7 +386,7 @@ int fl_getconf(const char *key, char *value, int value_length) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.71 2000/08/04 10:22:01 clip Exp $".
+// End of "$Id: fl_options.cxx,v 1.72 2001/01/02 00:20:28 clip Exp $".
 //
 
 

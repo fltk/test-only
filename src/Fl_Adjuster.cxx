@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.30 2000/08/10 09:24:31 spitzak Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.31 2001/01/02 00:20:28 clip Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -48,7 +48,7 @@ static void glyph(const Fl_Widget* widget, int t,
 		  int x,int y,int w,int h, Fl_Flags f)
 {
   widget->draw_box(x,y,w,h,f);
-  fl_color(widget->glyph_color(f));
+  fl_color(widget->get_glyph_color(f));
   Fl_Bitmap* b = arrows[t-FL_GLYPH_FASTARROW];
   b->draw(x,y,w,h, (b->w-w)/2, (b->h-h)/2);
 }
@@ -69,7 +69,7 @@ void Fl_Adjuster::draw() {
   Fl_Flags f[4];
   for (int i = 1; i < 4; i++) {
     f[i] = flags();
-    if (drag == i) f[i] |= FL_VALUE;
+    if (drag == i) f[i] |= FL_VALUE|FL_SELECTED;
     else if (highlight == i) f[i] |= FL_HIGHLIGHT;
     if (focused()) f[i] |= FL_FOCUSED;
   }
@@ -163,6 +163,7 @@ int Fl_Adjuster::handle(int event) {
 static void revert(Fl_Style* s) {
   s->selection_color = FL_GRAY;
   s->selection_text_color = FL_BLACK;
+  s->text_box = FL_NO_BOX;
   s->glyph = glyph;
 }
 
@@ -176,5 +177,5 @@ Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.30 2000/08/10 09:24:31 spitzak Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.31 2001/01/02 00:20:28 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.18 2000/08/10 09:24:32 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.19 2001/01/02 00:20:28 clip Exp $"
 //
 // Label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -46,7 +46,6 @@ void Fl_Labeltype_::draw(const char* label,
       fl_color(FL_LIGHT3);
       fl_draw(label, X+1, Y+1, W, H, f);
     }
-    c = fl_inactive(c);
   }
   fl_color(c);
   fl_draw(label, X, Y, W, H, f);
@@ -95,15 +94,7 @@ void Fl_Widget::draw_inside_label(int X, int Y, int W, int H, Fl_Flags f) const
 void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Flags flags) const
 {
   if (!active_r()) flags |= FL_INACTIVE;
-
-  Fl_Color color = (flags & FL_SELECTED) ?
-    selection_text_color() : label_color();
-  if (!active_r()) {
-    flags |= FL_INACTIVE;
-  } else if (flags & FL_HIGHLIGHT) {
-    Fl_Color c = highlight_label_color();
-    if (c) color = c;
-  }
+  Fl_Color color = get_label_color(flags);
 
   if (image_) {
 
@@ -181,5 +172,5 @@ const Fl_Labeltype_* Fl_Labeltype_::find(const char* name) {
 const Fl_Labeltype_* Fl_Labeltype_::first = 0;
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.18 2000/08/10 09:24:32 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.19 2001/01/02 00:20:28 clip Exp $".
 //

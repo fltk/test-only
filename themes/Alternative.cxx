@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.29 2000/08/10 09:24:33 spitzak Exp $"
+// "$Id: Alternative.cxx,v 1.30 2001/01/02 00:20:29 clip Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -91,17 +91,18 @@ static Fl_Style* scrollbarstyle;
 // a new glyph function
 static void
 alt_glyph(const Fl_Widget* widget, int t,
-	  int x, int y, int w, int h, Fl_Flags f)
+          int x, int y, int w, int h,
+          Fl_Flags f)
 {
-  Fl_Color bc = widget->box_color(f);
-  Fl_Color fc = widget->glyph_color(f);
+  Fl_Color bc = widget->get_glyph_background(f);
+  Fl_Color fc = widget->get_glyph_color(f&(~FL_SELECTED));
   switch (t) {
     case FL_GLYPH_CHECK: {
-      if (widget->text_box() == FL_NO_BOX) {
-	// detect Win32-style menu checkboxes in Fl_Item and draw normally
-        fl_glyph(widget, t, x, y, w, h, f);
-	break;
-      }
+//      if (widget->glyph_box() == FL_NO_BOX) {
+//        // detect Win32-style menu checkboxes in Fl_Item and draw normally
+//        fl_glyph(widget, t, x, y, w, h, f);
+//        break;
+//      }
       w = (w-1)|1; h = (h-1)|1;
       int x1 = x+w/2;
       int y1 = y+h/2;
@@ -129,16 +130,16 @@ alt_glyph(const Fl_Widget* widget, int t,
       break;
     }
     case FL_GLYPH_ROUND: {
-      if (widget->text_box() == FL_NO_BOX) {
-	// detect Win32-style menu checkboxes in Fl_Item and draw normally
-        fl_glyph(widget, t, x, y, w, h, f);
-	break;
-      }
+//      if (widget->glyph_box() == FL_NO_BOX) {
+//        // detect Win32-style menu checkboxes in Fl_Item and draw normally
+//        fl_glyph(widget, t, x, y, w, h, f);
+//        break;
+//      }
       Fl_Color light = 54, dark = 32;
 
       if (f&FL_INACTIVE) {
-	/*fc = fl_inactive(fc);*/
-	light = fl_inactive(light); dark = fl_inactive(dark);
+        /*fc = fl_inactive(fc);*/
+        light = fl_inactive(light); dark = fl_inactive(dark);
       }
       draw(FILL, x+2, y+2, w-4, h-4, 0, (f&FL_VALUE) ? fc : bc);
 
@@ -179,7 +180,7 @@ alt_glyph(const Fl_Widget* widget, int t,
     case FL_GLYPH_UP_BUTTON:
     case FL_GLYPH_DOWN_BUTTON:
       // erase area behind scrollbars arrows
-      fl_color(widget->text_background());
+      fl_color(widget->get_glyph_background());
       fl_rectf(x,y,w,h);
       t -= (FL_GLYPH_RIGHT_BUTTON-FL_GLYPH_RIGHT);
       goto JUMP1;
@@ -189,8 +190,8 @@ alt_glyph(const Fl_Widget* widget, int t,
     case FL_GLYPH_DOWN:
       // menu fudge factor
       if (w > 10) {x += (w-10)/2; y += (w-10)/2; w = h = 10;}
-//	x += 2; y += 2; w -= 4; h -= 4;
-//	x += 4; y += 4; w -= 8; h -= 8;
+//      x += 2; y += 2; w -= 4; h -= 4;
+//      x += 4; y += 4; w -= 8; h -= 8;
     JUMP1:
       {Fl_Color d1, d2, l1, l2;
       if (f&FL_VALUE) {
@@ -204,6 +205,7 @@ alt_glyph(const Fl_Widget* widget, int t,
         d1 = fl_inactive(d1); d2 = fl_inactive(d2);
       }
 
+      bc = widget->get_box_color(f);
       if (t == FL_GLYPH_RIGHT) {
         fl_color(bc); fl_polygon(x,y, x+w-1,y+h/2, x,y+h-1);
         fl_color(l2); fl_line(x+1,y+h-2, x+1,y+1, x+w-2,y+h/2);
@@ -249,7 +251,8 @@ alt_glyph(const Fl_Widget* widget, int t,
 }
 
 static void choice_glyph(const Fl_Widget* widget, int,
-			 int x,int y,int w,int h, Fl_Flags f)
+                         int x,int y,int w, int h,
+                         Fl_Flags f)
 {
   int H = h/3;
   int Y = y + (h-H)/2;
@@ -257,18 +260,18 @@ static void choice_glyph(const Fl_Widget* widget, int,
 }
 
 static void light_glyph(const Fl_Widget* widget, int,
-			 int x,int y,int w,int h, Fl_Flags f)
+                        int x,int y,int w, int h,
+                        Fl_Flags f)
 {
-  int on = f&FL_VALUE;
-  f &= ~FL_VALUE;
-  Fl_Color bc = widget->box_color(f);
-  FL_DOWN_BOX->draw(x+2, y, w-4, h, bc, f);
-  Fl_Color fc = on ? widget->glyph_color(f) : bc;
-  FL_THIN_UP_BOX->draw(x+4, y+2, w-8, h-4, fc, f);
+  Fl_Color fc = widget->get_glyph_color(f&(~FL_SELECTED));
+  Fl_Color bc = widget->get_glyph_background(f);
+  FL_DOWN_BOX->draw(x+2, y, w-4, h, bc, f&(~FL_VALUE));
+  FL_THIN_UP_BOX->draw(x+4, y+2, w-8, h-4, f&FL_VALUE ? fc : bc, f&(~FL_VALUE));
 }
 
 static void return_glyph(const Fl_Widget*, int,
-			 int x,int y,int w,int h, Fl_Flags f)
+                         int x,int y,int w,int h,
+                         Fl_Flags f)
 {
   int size = w; if (h<size) size = h;
   int d = (size+2)/4; if (d<3) d = 3;
@@ -287,6 +290,7 @@ static void return_glyph(const Fl_Widget*, int,
 
 extern "C"
 int fltk_theme() {
+  Fl_Style::draw_sliders_pushed = 1;
 
   Fl_Style* s;
   if ((s = Fl_Style::find("menu bar"))) {
@@ -335,5 +339,5 @@ int fltk_theme() {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.29 2000/08/10 09:24:33 spitzak Exp $".
+// End of "$Id: Alternative.cxx,v 1.30 2001/01/02 00:20:29 clip Exp $".
 //

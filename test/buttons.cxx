@@ -1,5 +1,5 @@
 //
-// "$Id: buttons.cxx,v 1.13 2000/09/27 16:25:52 spitzak Exp $"
+// "$Id: buttons.cxx,v 1.14 2001/01/02 00:20:28 clip Exp $"
 //
 // Another button test program for the Fast Light Tool Kit (FLTK).
 //
@@ -43,15 +43,15 @@ void rb_cb(Fl_Widget*, void*) {
 
 int main(int argc, char ** argv) {
   Fl_Window *window = new Fl_Window(320,130);
-  (void) new Fl_Button(10, 10, 130, 21, "Fl_Button");
-  Fl_Return_Button* rb = new Fl_Return_Button(150, 10, 130, 21, "Fl_Return_Button");
+  (void) new Fl_Button(10, 10, 130, 24, "Fl_Button");
+  Fl_Return_Button* rb = new Fl_Return_Button(150, 10, 130, 24, "Fl_Return_Button");
   rb->callback(rb_cb);
-  (void) new Fl_Repeat_Button(10,40,130,21,"Fl_Repeat_Button");
-  (void) new Fl_Radio_Button(150,40,130,21,"Fl_Radio_Button");
-  (void) new Fl_Radio_Button(150,70,130,21,"Fl_Radio_Button");
-  (void) new Fl_Light_Button(10,70,130,21,"Fl_Light_Button");
-  (void) new Fl_Check_Button(150,100,130,21,"Fl_Check_Button");
-  (void) new Fl_Highlight_Button(10,100,130,21,"Fl_Highlight_Button");
+  (void) new Fl_Repeat_Button(10,40,130,24,"Fl_Repeat_Button");
+  (void) new Fl_Radio_Button(150,40,130,24,"Fl_Radio_Button");
+  (void) new Fl_Radio_Button(150,70,130,24,"Fl_Radio_Button");
+  (void) new Fl_Light_Button(10,70,130,24,"Fl_Light_Button");
+  (void) new Fl_Check_Button(150,100,130,24,"Fl_Check_Button");
+  (void) new Fl_Highlight_Button(10,100,130,24,"Fl_Highlight_Button");
   
   window->resizable(window);
   window->end();
@@ -60,5 +60,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: buttons.cxx,v 1.13 2000/09/27 16:25:52 spitzak Exp $".
+// End of "$Id: buttons.cxx,v 1.14 2001/01/02 00:20:28 clip Exp $".
 //

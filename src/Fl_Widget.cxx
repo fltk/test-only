@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.69 2000/11/15 18:20:24 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.70 2001/01/02 00:20:28 clip Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -360,7 +360,7 @@ Fl_Flags Fl_Widget::draw_button(Fl_Flags flags) const {
     flags |= FL_SELECTED;
   if (!active_r())
     flags |= FL_INACTIVE;
-  else if (belowmouse())
+  else if (belowmouse() && !(flags&FL_SELECTED)) // don't highlight selected buttons
     flags |= FL_HIGHLIGHT;
   if (focused())
     flags |= FL_FOCUSED;
@@ -399,22 +399,27 @@ Fl_Flags Fl_Widget::draw_text_frame(int x, int y, int w, int h) const {
   return f;
 }
 
-// Return the color to draw images on buttons:
-Fl_Color Fl_Widget::glyph_color(Fl_Flags flags) const
+// Return the color to draw glyphs on buttons:
+Fl_Color Fl_Widget::get_glyph_color(Fl_Flags flags) const
 {
-  if (flags & FL_INACTIVE)
-    return fl_inactive(text_color());
-  else if (flags & FL_SELECTED)
-    return selection_text_color();
-  else if (flags & FL_HIGHLIGHT) {
-    Fl_Color c = highlight_label_color();
-    if (c) return c;
+  Fl_Color c = text_color();
+  if (glyph_box() == FL_NO_BOX) {
+    if (flags&FL_SELECTED)
+      c = selection_text_color();
+    else if (flags&FL_HIGHLIGHT && highlight_label_color())
+      c = highlight_label_color();
   }
-  return text_color();
+  return fl_inactive(c, flags);
+}
+
+// Return the color to draw the background of glyphs:
+Fl_Color Fl_Widget::get_glyph_background(Fl_Flags flags) const
+{
+  return glyph_box() == FL_NO_BOX ? get_box_color(flags) : text_background();
 }
 
 // Return the color to draw buttons:
-Fl_Color Fl_Widget::box_color(Fl_Flags flags) const
+Fl_Color Fl_Widget::get_box_color(Fl_Flags flags) const
 {
   if (flags & FL_SELECTED)
     return selection_color();
@@ -425,6 +430,19 @@ Fl_Color Fl_Widget::box_color(Fl_Flags flags) const
     if (c) return c;
   }
   return color();
+}
+
+// Return the color to draw labels:
+Fl_Color Fl_Widget::get_label_color(Fl_Flags flags) const
+{
+  Fl_Color c = label_color();
+  if (align() == FL_ALIGN_CENTER || align()&FL_ALIGN_INSIDE) {
+    if (flags&FL_SELECTED)
+      c = selection_text_color();
+    else if (flags&FL_HIGHLIGHT && highlight_label_color())
+      c = highlight_label_color();
+  }
+  return fl_inactive(c, flags);
 }
 
 // Call the draw method, handle the clip out
@@ -442,5 +460,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.69 2000/11/15 18:20:24 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.70 2001/01/02 00:20:28 clip Exp $".
 //

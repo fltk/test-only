@@ -20,26 +20,34 @@ int main(int argc, char **argv) {
       o->box(FL_ENGRAVED_BOX);
       o->align(FL_ALIGN_TOP|FL_ALIGN_INSIDE);
       new Fl_Button(50, 50, 105, 25, "button");
-      { Fl_Group* o = new Fl_Group(50, 100, 105, 85, "Child group");
+      { Fl_Group* o = new Fl_Group(50, 100, 105, 105, "Child group");
         { Fl_Check_Button* o = new Fl_Check_Button(50, 100, 105, 25, "red");
           o->type(102);
           o->label_color((Fl_Color)1);
           o->selection_color((Fl_Color)1);
+          o->selection_text_color((Fl_Color)1);
+          o->highlight_label_color((Fl_Color)1);
         }
-        { Fl_Check_Button* o = new Fl_Check_Button(50, 120, 105, 25, "green");
+        { Fl_Check_Button* o = new Fl_Check_Button(50, 125, 105, 25, "green");
           o->type(102);
           o->label_color((Fl_Color)2);
           o->selection_color((Fl_Color)2);
+          o->selection_text_color((Fl_Color)2);
+          o->highlight_label_color((Fl_Color)2);
         }
-        { Fl_Check_Button* o = new Fl_Check_Button(50, 140, 105, 25, "blue");
+        { Fl_Check_Button* o = new Fl_Check_Button(50, 150, 105, 25, "blue");
           o->type(102);
           o->label_color((Fl_Color)4);
           o->selection_color((Fl_Color)4);
+          o->selection_text_color((Fl_Color)4);
+          o->highlight_label_color((Fl_Color)4);
         }
-        { Fl_Check_Button* o = new Fl_Check_Button(50, 160, 105, 25, "white");
+        { Fl_Check_Button* o = new Fl_Check_Button(50, 175, 105, 25, "white");
           o->type(102);
           o->label_color((Fl_Color)7);
           o->selection_color((Fl_Color)7);
+          o->selection_text_color((Fl_Color)55);
+          o->highlight_label_color((Fl_Color)55);
         }
         o->end();
       }

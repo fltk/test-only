@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.30 2000/10/19 05:48:26 spitzak Exp $"
+// "$Id: menubar.cxx,v 1.31 2001/01/02 00:20:28 clip Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -196,14 +196,18 @@ int main(int argc, char **argv) {
   menubar.find("&Font/Engrave")->label_type(FL_ENGRAVED_LABEL);
   menubar.find("&Font/Shadow")->label_type(FL_SHADOW_LABEL);
   menubar.find("&Font/@->")->label_type(FL_SYMBOL_LABEL);
-  menubar.find("&Checkbox/Red")->label_color(FL_RED);
-  menubar.find("&Checkbox/Red")->selection_text_color(FL_RED);
+  menubar.find("&Checkbox/Red")->label_color(FL_RED); // label text red
+  menubar.find("&Checkbox/Red")->selection_text_color(FL_RED); // label text red when selected
+  menubar.find("&Checkbox/Red")->text_color(FL_RED); // check mark red
   menubar.find("&Checkbox/Black")->label_color(FL_BLACK);
   menubar.find("&Checkbox/Black")->selection_text_color(FL_BLACK);
+  menubar.find("&Checkbox/Black")->text_color(FL_BLACK);
   menubar.find("&Radio/Red")->label_color(FL_RED);
   menubar.find("&Radio/Red")->selection_text_color(FL_RED);
+  menubar.find("&Radio/Red")->text_color(FL_RED);
   menubar.find("&Radio/Black")->label_color(FL_BLACK);
   menubar.find("&Radio/Black")->selection_text_color(FL_BLACK);
+  menubar.find("&Radio/Black")->text_color(FL_BLACK);
   menubar.find("&Huge/item 69")->deactivate();
   menubar.callback(test_cb);
   menubar.tooltip("This is a menu bar");
@@ -229,5 +233,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.30 2000/10/19 05:48:26 spitzak Exp $".
+// End of "$Id: menubar.cxx,v 1.31 2001/01/02 00:20:28 clip Exp $".
 //

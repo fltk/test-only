@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.21 2000/08/10 09:24:32 spitzak Exp $"
+// "$Id: fl_glyph.cxx,v 1.22 2001/01/02 00:20:28 clip Exp $"
 //
 // Glyph drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,11 +27,12 @@
 #include <FL/Fl_Style.H>
 #include <FL/fl_draw.H>
 
+#include <stdio.h>//CET-FIXME
 void fl_glyph(const Fl_Widget* widget, int t,
 	      int x,int y,int w,int h, Fl_Flags f)
 {
   Fl_Boxtype box;
-  Fl_Color color = widget->glyph_color(f);
+  Fl_Color color = widget->get_glyph_color(f);
 
   // handle special glyphs that don't draw the box:
   switch (t) {
@@ -143,5 +144,5 @@ void fl_glyph(const Fl_Widget* widget, int t,
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.21 2000/08/10 09:24:32 spitzak Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.22 2001/01/02 00:20:28 clip Exp $".
 //

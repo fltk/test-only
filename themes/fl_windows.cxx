@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.7 2000/08/10 09:24:33 spitzak Exp $"
+// "$Id: fl_windows.cxx,v 1.8 2001/01/02 00:20:29 clip Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -39,28 +39,28 @@
 ////////////////////////////////////////////////////////////////
 // Different box type used by win98 sometimes:
 
-static const Fl_Frame_Box
-win98_menu_window_box(0, "2AARRMMUU", FL_DOWN_BOX);
-
 // More accurate copy of the colors on the edges of boxes, from Win98
 // Fltk by default uses colors picked by Bill for aesthetic reasons:
-extern const Fl_Frame_Box win98_down_box;
-static const Fl_Frame_Box win98_up_box(0, "2AAXXIIUU", &win98_down_box);
-       const Fl_Frame_Box win98_down_box(0, "2XXIIUUAA", &win98_up_box);
+// newer versions of Windows & KDE look closer to FLTK default
+//static const Fl_Frame_Box win98_menu_window_box(0, "2AARRMMUU", FL_DOWN_BOX);
+//extern const Fl_Frame_Box win98_down_box;
+//static const Fl_Frame_Box win98_up_box(0, "2AAXXIIUU", &win98_down_box);
+//       const Fl_Frame_Box win98_down_box(0, "2XXIIUUAA", &win98_up_box);
 
 ////////////////////////////////////////////////////////////////
 
 int fl_windows() {
   Fl_Style::draw_boxes_inactive = 0;
 
-  Fl_Widget::default_style->box = &win98_up_box;
-  // this may be needed if fltk's default is the thin box:
-  Fl_Widget::default_style->text_box = &win98_down_box;
+// newer versions of Windows & KDE look closer to FLTK default
+//  Fl_Widget::default_style->box = &win98_up_box;
+// this may be needed if fltk's default is the thin box:
+//  Fl_Widget::default_style->text_box = &win98_down_box;
 
   Fl_Style* s;
 
   if ((s = Fl_Style::find("menu"))) {
-    s->box = &win98_menu_window_box;
+//    s->box = &win98_menu_window_box;
     s->leading = 6;
   }
 
@@ -77,7 +77,7 @@ int fl_windows() {
   //Fl_Widget::default_style->window_color = FL_WHITE;
 
   if ((s = Fl_Style::find("scrollbar"))) {
-    s->box = &win98_menu_window_box;
+//    s->box = &win98_menu_window_box;
     s->text_background = 52;
   }
 
@@ -89,5 +89,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.7 2000/08/10 09:24:33 spitzak Exp $"
+// End of "$Id: fl_windows.cxx,v 1.8 2001/01/02 00:20:29 clip Exp $"
 //

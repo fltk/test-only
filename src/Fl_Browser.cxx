@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.34 2000/11/29 21:43:21 vincentp Exp $"
+// "$Id: Fl_Browser.cxx,v 1.35 2001/01/02 00:20:28 clip Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -280,7 +280,7 @@ static void
 glyph(const Fl_Widget* widget, int glyph, int x,int y,int w,int h, Fl_Flags f)
 {
   // fl_color((Fl_Color)9); fl_rect(x,y,w,h); // draw boundary for testing
-  fl_color(widget->glyph_color(f));
+  fl_color(widget->get_glyph_color(f));
   int lx = x+w/2;
   int ly = y+(h-1)/2;
   switch (glyph) {
@@ -391,7 +391,7 @@ void Fl_Browser::draw_item() {
   }
 
   if (focused() && is_focus) {
-    fl_color(glyph_color(flags));
+    fl_color(get_glyph_color(flags));
     fl_line_style(FL_DASH);
     int w = widget->width();
     if (x + w > X+W) {
@@ -928,5 +928,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.34 2000/11/29 21:43:21 vincentp Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.35 2001/01/02 00:20:28 clip Exp $".
 //

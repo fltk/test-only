@@ -1,7 +1,7 @@
 /* CET - FIXME - This function is currently semi-broken :-( */
 
 /*
-   "$Id: conf_set.c,v 1.15 2000/08/22 16:38:11 spitzak Exp $"
+   "$Id: conf_set.c,v 1.16 2001/01/02 00:20:28 clip Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -81,7 +81,7 @@ int setconf(const char *configfile, const char *k, const char *svalue) {
         char            keysect[CONF_MAX_SECT_LEN], *key;
 	const char* section;             /* key, section, and both */
 
-        conf_clear_cached();
+        conf_clear_cache();
 
         if (!configfile || !k)
                 return CONF_ERR_ARGUMENT;                                       /* NULL pointer was passed */
@@ -692,5 +692,5 @@ printf("4c: %s\n", comment);
 
 
 /*
-    End of "$Id: conf_set.c,v 1.15 2000/08/22 16:38:11 spitzak Exp $".
+    End of "$Id: conf_set.c,v 1.16 2001/01/02 00:20:28 clip Exp $".
 */

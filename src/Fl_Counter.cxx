@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.37 2000/08/10 09:24:31 spitzak Exp $"
+// "$Id: Fl_Counter.cxx,v 1.38 2001/01/02 00:20:28 clip Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -35,11 +35,23 @@ enum {
   FL_GLYPH_2RIGHTARROW
 };
 
+// just like Fl_Widget::get_glyph_color() except assumes no box around glyph
+static Fl_Color counter_glyph_color(const Fl_Widget *w, Fl_Flags f) {
+  Fl_Color c = w->text_color();
+  if (f&FL_SELECTED)
+    c = w->selection_text_color();
+  else if (f&FL_HIGHLIGHT && w->highlight_label_color())
+    c = w->highlight_label_color();
+  return fl_inactive(c, f);
+}
+
 static void glyph(const Fl_Widget* widget, int t,
 		  int x,int y,int w,int h, Fl_Flags f)
 {
   widget->draw_box(x,y,w,h,f);
-  Fl_Color fc = widget->glyph_color(f);
+  // can't use this 'cause glyph box is shared with text box
+  // Fl_Color fc = widget->get_glyph_color(f);
+  Fl_Color fc = counter_glyph_color(widget, f);
   switch (t) {
     case FL_GLYPH_LEFTARROW: fl_draw_symbol("@-4<",  x, y, w, h, fc); break;
     case FL_GLYPH_2LEFTARROW: fl_draw_symbol("@-4<<", x, y, w, h, fc); break;
@@ -53,7 +65,7 @@ void Fl_Counter::draw() {
   for (int i = 1; i < 5; i++) {
     fl[i] = flags();
     if (!active_r()) fl[i] |= FL_INACTIVE;
-    else if (mouseobj == i) fl[i] |= FL_VALUE;
+    else if (mouseobj == i) fl[i] |= FL_VALUE|FL_SELECTED;
     else if (highlight == i) fl[i] |= FL_HIGHLIGHT;
   }
 
@@ -83,7 +95,7 @@ void Fl_Counter::draw() {
     fl_rectf(xx[0]+(ww[0]-w)/2,y()+(this->h()-h)/2,w,h);
     fl_color(selection_text_color());
   } else {
-    fl_color(glyph_color(flags()));
+    fl_color(get_glyph_color());
   }
   fl_draw(str, xx[0], y(), ww[0], h(), FL_ALIGN_CENTER);
 
@@ -202,5 +214,5 @@ Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(
 }
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.37 2000/08/10 09:24:31 spitzak Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.38 2001/01/02 00:20:28 clip Exp $".
 //

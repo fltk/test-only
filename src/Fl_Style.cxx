@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.24 2000/10/18 07:18:24 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.25 2001/01/02 00:20:28 clip Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -162,6 +162,7 @@ Fl_Named_Style* Fl_Style::find(const char* name) {
 }
 
 int Fl_Style::draw_boxes_inactive = 1;
+int Fl_Style::draw_sliders_pushed = 0;
 int Fl_Style::scrollbar_width = 15;
 int Fl_Style::scrollbar_align = FL_ALIGN_RIGHT|FL_ALIGN_BOTTOM;
 
@@ -169,6 +170,7 @@ void Fl_Style::revert() {
   fl_theme_handler(0);
   fl_background((Fl_Color)0xc0c0c000);
   draw_boxes_inactive = 1;
+  draw_sliders_pushed = 0;
   scrollbar_width = 15;
   scrollbar_align = FL_ALIGN_RIGHT|FL_ALIGN_BOTTOM;
   for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
@@ -207,5 +209,5 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.24 2000/10/18 07:18:24 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.25 2001/01/02 00:20:28 clip Exp $".
 //

@@ -5,12 +5,12 @@
 ##
 
 description = A sample scheme                     # description of scheme
-author = Carl Thompson (clip@home.net)            # author of scheme
+author = Carl Thompson (cet@carlthompson.net)     # author of scheme
 version = 1                                       # version number of scheme
 FLTK version = 2.0.0                              # minimum FLTK version needed
 
 [general]
-#  themes = Alternative                            # theme plugins to load for this scheme
+  themes = Alternative                            # theme plugins to load for this scheme
 
 [global colors]                                   # global color options
 #  background = gray                              # background color
@@ -33,26 +33,27 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     label color = black                           # font color of widget label
     selection color = puke green                  # background color of selected text
     selection text color = white                  # color of selected text
-    off color = gray                              # may do something depending on the widget
+    text background = white                       # may do something depending on the widget
     highlight color = light1                      # color of widget when highlighted
     highlight label color = black                 # color of widget label when highlighted
     text color = black                            # color of text
     label size = 12                               # font size of widget label
     text size = 12                                # color of text
 
-  [widgets/menu]				  # menu attributes
+  [widgets/menu]                                  # menu attributes
     selection color = puke green                  # color of picked item
     selection text color = white                  # color of picked item text
-    glyph box = highlight			  # boxtype of menu items
+    glyph box = highlight                         # boxtype of menu items
 
-  [widgets/item]				  # items in menus
-    off color = gray                              # color of light when not selected
+  [widgets/item]                                  # items in menus
+    text background = gray                        # color of light when not selected
+    text color = red                              # color of menu check & radio glyphs
 
   [widgets/menu bar]
     highlight color = light1                      # color of menu title box when it's highlighted
     selection color = puke green                  # color of menu title box when its submenu selected
     selection text color = white                  # color of menu title label when its submenu selected
-    text box = highlight			  # boxtype of menu titles
+    text box = highlight                          # boxtype of menu titles
 
   [widgets/menu button]                           # menu button attributes
 
@@ -81,16 +82,16 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     box = alternative thick                       # boxtype of button
 
   [widgets/check button]                          # check button attributes
-    off color = gray                              # color of light when not selected
     text color = red                              # color of light when selected
-    text background = white                          # color of light when not selected
+    text background = white                       # color of light when not selected
     box = none                                    # boxtype of button
+    text box = none                               # glyph background color uses box color
 
   [widgets/light button]                          # light button attributes
     selection color = puke green                  # color of button when selected
     selection text color = white                  # color of button label when selected
     text color = red                              # color of light when selected
-    text background = black                          # color of light when not selected
+    text background = black                       # color of light when not selected
 
   [widgets/slider]                                # slider attributes
     color = gray                                  # color of the slider thumb
@@ -116,7 +117,6 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     text box = down                               # boxtype of the input area
     selection color = puke green                  # background color of selected text
     selection text color = white                  # font color of selected text
-    off color = black                             # cursor color
 
   [widgets/output]                                # output widget attributes
     text background = light2                      # color of output area
@@ -135,7 +135,6 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     selection text color = white                  # color of button symbols when selected
 
   [widgets/adjuster]                              # adjuster attributes
-    text background = light2                      # color of text area
     selection color = puke green                  # color of buttons when selected
     selection text color = white                  # color of button symbols when selected
 

@@ -1,5 +1,5 @@
 //
-//  "$Id: fl_config.H,v 1.13 2000/08/04 10:21:59 clip Exp $"
+//  "$Id: fl_config.H,v 1.14 2001/01/02 00:20:28 clip Exp $"
 //
 //  Configuration file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -41,7 +41,7 @@ class FL_API Fl_Config
     char      *_configFile;
     conf_list _list;
     int       _error;
-        
+
   public:
     // constructor
     Fl_Config(const char *configFile = 0)
@@ -50,15 +50,15 @@ class FL_API Fl_Config
     // destructor
     virtual ~Fl_Config()
         { if (_configFile) free(_configFile); conf_list_free(&_list); }
-    
+
     // get the list returned by get_sections() or get_keys()
     conf_list list() { return _list; }
-    
+
     // get/set the name of the config file
     const char *config_file() { return _configFile; }
     void config_file(const char *configFile)
         { _configFile = configFile ? strdup(fl_find_config_file(configFile, 1)) : 0; }
-    
+
     // get sections in configuration file
     int sections(const char *section)
         { return _error = getconf_sections(_configFile, section, &_list); }
@@ -102,37 +102,39 @@ class FL_API Fl_Config
     // set the string value of a key in the config file
     int set(const char *key, const char *value = "")
         { return _error = setconf(_configFile, key, value); }
-        
+
     // clear the string value of a key in the config file
     int clear(const char *key)
         { return _error = setconf(_configFile, key, ""); }
-        
+
     // set the long value of a key in the config file
     int set(const char *key, long lvalue)
         { return _error = setconf_long(_configFile, key, lvalue); }
-        
+
     // set the int value of a key in the config file
     int set(const char *key, int ivalue)
         { return _error = setconf_long(_configFile, key, (long)ivalue); }
-        
+
     // set the boolean value of a key in the config file
     int set_boolean(const char *key, int bvalue)
         { return _error = setconf_boolean(_configFile, key, bvalue); }
-        
+
     // delete a key/value from the config file
     int del(const char *key)
         { return _error = delconf(_configFile, key); }
 
-   // return error string associated with conf result code
-   const char *strerror()
-       { return getconf_error(_error); }
+    // return error string associated with conf result code
+    const char *strerror()
+        { return getconf_error(_error); }
 
-   const char *strerror(int errnum)
-       { return getconf_error(errnum); }
+    const char *strerror(int errnum)
+        { return getconf_error(errnum); }
+
+    static void clear_cache() { conf_clear_cache(); }
 };
 
 #endif
 
 //
-// End of "$Id: fl_config.H,v 1.13 2000/08/04 10:21:59 clip Exp $".
+// End of "$Id: fl_config.H,v 1.14 2001/01/02 00:20:28 clip Exp $".
 //

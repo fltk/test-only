@@ -5,7 +5,7 @@
 ##
 
 description = Another sample scheme               # description of scheme
-author = Carl Thompson (clip@home.net)            # author of scheme
+author = Carl Thompson (cet@carlthompson.net)     # author of scheme
 version = 1                                       # version number of scheme
 FLTK version = 2.0.0                              # minimum FLTK version needed
 
@@ -55,6 +55,9 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
 
   [widgets/tooltip]
     box = engraved                                # box around tooltips
+
+  [widgets/item]                                  # menu items
+    text color = red                              # color of check marks
 
 [aliases]
   light1 = 51

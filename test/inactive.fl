@@ -21,23 +21,23 @@ Function {} {open
       }
       Fl_Group {} {
         label {Child group} open
-        xywh {50 100 105 85}
+        xywh {50 100 105 105}
       } {
         Fl_Check_Button {} {
-          label red
-          xywh {50 100 105 25} type Radio labelcolor 1 selection_color 1
+          label red selected
+          xywh {50 100 105 25} type Radio labelcolor 1 selection_color 1 selected_textcolor 1 highlight_label_color 1
         }
         Fl_Check_Button {} {
           label green
-          xywh {50 120 105 25} type Radio labelcolor 2 selection_color 2
+          xywh {50 125 105 25} type Radio labelcolor 2 selection_color 2 selected_textcolor 2 highlight_label_color 2
         }
         Fl_Check_Button {} {
           label blue
-          xywh {50 140 105 25} type Radio labelcolor 4 selection_color 4
+          xywh {50 150 105 25} type Radio labelcolor 4 selection_color 4 selected_textcolor 4 highlight_label_color 4
         }
         Fl_Check_Button {} {
           label white
-          xywh {50 160 105 25} type Radio labelcolor 7 selection_color 7
+          xywh {50 175 105 25} type Radio labelcolor 7 selection_color 7 selected_textcolor 55 highlight_label_color 55
         }
       }
       Fl_Slider {} {
@@ -52,26 +52,21 @@ Function {} {open
         label menu open
         xywh {235 105 110 30}
       } {
-        menuitem {} {
+        Fl_Item {} {
           label item
-          xywh {0 0 100 20}
-        }
-        menuitem {} {
+          }
+        Fl_Item {} {
           label item
-          xywh {10 10 100 20}
-        }
-        menuitem {} {
+          }
+        Fl_Item {} {
           label item
-          xywh {20 20 100 20}
-        }
-        menuitem {} {
+          }
+        Fl_Item {} {
           label item
-          xywh {30 30 100 20}
-        }
-        menuitem {} {
-          label item selected
-          xywh {40 40 100 20}
-        }
+          }
+        Fl_Item {} {
+          label item
+          }
       }
       Fl_Box {} {
         label Fl_Box

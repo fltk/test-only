@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.45 2000/10/18 07:18:24 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.46 2001/01/02 00:20:28 clip Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -81,6 +81,7 @@ int Fl_Slider::slider_position(int W, int S) {
 
 // Draw a normal rectangular slider in the passed region:
 void Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags f) {
+  if (!Fl_Style::draw_sliders_pushed) f &= ~(FL_VALUE|FL_SELECTED);
   if (w <= 0 || h <= 0) return;
   int W = (horizontal() ? w : h);
   int X,S;
@@ -93,7 +94,6 @@ void Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags f) {
     X = slider_position(W, S);
   }
 
-  if (!active_r()) f |= FL_INACTIVE;
   if (X > 0) {
     if (horizontal()) draw_bg(x, y, X, h, f);
     else draw_bg(x, y, w, X, f);
@@ -125,7 +125,12 @@ void Fl_Slider::draw() {
   if (damage()&(~FL_DAMAGE_HIGHLIGHT)) draw_text_frame();
   int X=x(); int Y=y(); int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
   Fl_Flags f = 0;
-  if (belowmouse()) f = FL_HIGHLIGHT;
+  if (!active_r()) {
+    f |= FL_INACTIVE;
+  } else {
+    if (Fl::pushed() == this) f |= (FL_SELECTED|FL_VALUE);
+    else if (belowmouse()) f |= FL_HIGHLIGHT;
+  }
   draw(X,Y,W,H, f);
 }
 
@@ -133,6 +138,7 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
   switch (event) {
   case FL_PUSH:
     handle_push();
+    damage(FL_DAMAGE_HIGHLIGHT);
   case FL_DRAG: {
     int W = (horizontal() ? w : h);
     int H = (horizontal() ? h : w);
@@ -230,5 +236,5 @@ Fl_Slider::Fl_Slider(uchar t, int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.45 2000/10/18 07:18:24 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.46 2001/01/02 00:20:28 clip Exp $".
 //

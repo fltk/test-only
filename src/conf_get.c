@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_get.c,v 1.13 2000/07/21 00:31:52 clip Exp $"
+   "$Id: conf_get.c,v 1.14 2001/01/02 00:20:28 clip Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -160,7 +160,7 @@ getconf(const char *configfile, const char *k, char *svalue, int slen)
                 from disk
 */
 
-void conf_clear_cached() {}
+void conf_clear_cache() {}
 
 #else
 
@@ -246,7 +246,7 @@ getconf(const char *configfile, const char *k, char *svalue, int slen)
 }
 
 /*
-        void conf_clear_cached()
+        void conf_clear_cache()
 
         description:
                 clears all cached config file data so it will be reread
@@ -254,7 +254,7 @@ getconf(const char *configfile, const char *k, char *svalue, int slen)
 */
 
 void
-conf_clear_cached() {
+conf_clear_cache() {
   int i;                                                                        /* counter */
 
   for (i = 0; i < NUM_CACHED; i++) {                                            /* loop through all cached sections */
@@ -268,5 +268,5 @@ conf_clear_cached() {
 #endif
 
 /*
-    End of "$Id: conf_get.c,v 1.13 2000/07/21 00:31:52 clip Exp $".
+    End of "$Id: conf_get.c,v 1.14 2001/01/02 00:20:28 clip Exp $".
 */

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.47 2000/08/10 09:24:32 spitzak Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.48 2001/01/02 00:20:28 clip Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -119,8 +119,8 @@ int Fl_Scrollbar::handle(int event) {
     return 1;
   case FL_PUSH:
     if (pushed_) return 1;
-    if (which_part != 5) pushed_ = which_part;
-    if (pushed_) {
+      pushed_ = which_part;
+    if (pushed_ && pushed_ != 5) {
       handle_push();
       Fl::add_timeout(INITIALREPEAT, timeout_cb, this);
       increment_cb();
@@ -129,7 +129,7 @@ int Fl_Scrollbar::handle(int event) {
     }
     return Fl_Slider::handle(event, X,Y,W,H);
   case FL_DRAG:
-    if (pushed_) return 1;
+    if (pushed_ != 5) return 1;
     return Fl_Slider::handle(event, X,Y,W,H);
   case FL_KEYBOARD:
     if (!horizontal()) switch(Fl::event_key()) {
@@ -154,29 +154,28 @@ void Fl_Scrollbar::draw() {
 
   int X=x(); int Y=y(); int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
 
-  Fl_Flags f1 = 0;
-  if (pushed_ == 1)
-    f1 = FL_VALUE;
-  else if (highlight_ == 1)
-    f1 = FL_HIGHLIGHT;
-  Fl_Flags f2 = 0;
-  if (pushed_ == 2)
-    f2 = FL_VALUE;
-  else if (highlight_ == 2)
-    f2 = FL_HIGHLIGHT;
-  Fl_Flags f = (highlight_ == 5) ? FL_HIGHLIGHT : 0;
-  if (!active_r()) {f1 |= FL_INACTIVE; f2 |= FL_INACTIVE;}
-
+  // 1 = left/top   2 = right/bottom   5 = slider button
+  Fl_Flags f1 = 0, f2 = 0, f5 = 0;
+  if (!active_r()) {
+    f1 |= FL_INACTIVE; f2 |= FL_INACTIVE; f5 |= FL_INACTIVE;
+  } else {
+    if (pushed_ == 1) f1 = FL_VALUE|FL_SELECTED;
+    else if (highlight_ == 1) f1 = FL_HIGHLIGHT;
+    if (pushed_ == 2) f2 = FL_VALUE|FL_SELECTED;
+    else if (highlight_ == 2) f2 = FL_HIGHLIGHT;
+    if (pushed_ == 5) f5 = FL_VALUE|FL_SELECTED;
+    else if (highlight_ == 5) f5 = FL_HIGHLIGHT;
+  }
   if (horizontal()) {
-    if (W < 3*H) {Fl_Slider::draw(X,Y,W,H,f); last_ = highlight_; return; }
-    Fl_Slider::draw(X+H,Y,W-2*H,H,f);
+    if (W < 3*H) {Fl_Slider::draw(X,Y,W,H,f5); last_ = highlight_; return; }
+    Fl_Slider::draw(X+H,Y,W-2*H,H,f5);
     if (damage()&FL_DAMAGE_ALL || last_ == 1 || highlight_ == 1)
       draw_glyph(FL_GLYPH_LEFT_BUTTON, X, Y, H, H, f1);
     if (damage()&FL_DAMAGE_ALL || last_ == 2 || highlight_ == 2)
       draw_glyph(FL_GLYPH_RIGHT_BUTTON, X+W-H, Y, H, H, f2);
   } else { // vertical
-    if (H < 3*W) {Fl_Slider::draw(X,Y,W,H,f); last_ = highlight_; return; }
-    Fl_Slider::draw(X,Y+W,W,H-2*W,f);
+    if (H < 3*W) {Fl_Slider::draw(X,Y,W,H,f5); last_ = highlight_; return; }
+    Fl_Slider::draw(X,Y+W,W,H-2*W,f5);
     if (damage()&FL_DAMAGE_ALL || last_ == 1 || highlight_ == 1)
       draw_glyph(FL_GLYPH_UP_BUTTON, X, Y, W, W, f1);
     if (damage()&FL_DAMAGE_ALL || last_ == 2 || highlight_ == 2)
@@ -203,5 +202,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.47 2000/08/10 09:24:32 spitzak Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.48 2001/01/02 00:20:28 clip Exp $".
 //

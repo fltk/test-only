@@ -1,5 +1,5 @@
 //
-// "$Id: classic.cxx,v 1.25 2000/08/10 09:24:33 spitzak Exp $"
+// "$Id: classic.cxx,v 1.26 2001/01/02 00:20:29 clip Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -39,7 +39,7 @@ static void choice_glyph(const Fl_Widget* widget, int,
 			 int x,int y,int w,int h, Fl_Flags f)
 {
   int H = 7;
-  FL_THIN_UP_BOX->draw(x, y+(h-H)/2, w-4, H, widget->box_color(f), f);
+  FL_THIN_UP_BOX->draw(x, y+(h-H)/2, w-4, H, widget->get_box_color(f), f);
 }
 
 // Disable the engraving of inactive labels:
@@ -104,5 +104,5 @@ extern "C" int fltk_theme() {
 }
 
 //
-// End of "$Id: classic.cxx,v 1.25 2000/08/10 09:24:33 spitzak Exp $".
+// End of "$Id: classic.cxx,v 1.26 2001/01/02 00:20:29 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.58 2000/11/15 18:20:22 spitzak Exp $"
+// "$Id: Fl_Widget.H,v 1.59 2001/01/02 00:20:28 clip Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -185,9 +185,6 @@ public:
 
   void	measure_label(int&, int&) const ;
 
-  Fl_Color glyph_color(Fl_Flags f) const ;
-  Fl_Color box_color(Fl_Flags f) const ;
-
   Fl_Boxtype	box()			const;
   Fl_Boxtype	text_box()		const;
   Fl_Glyph	glyph()			const;
@@ -206,27 +203,43 @@ public:
   unsigned	text_size()		const;
   unsigned	leading()		const;
 
-  void	box(Fl_Boxtype)		;
-  void	text_box(Fl_Boxtype)	;
-  void	glyph(Fl_Glyph)		;
-  void	label_font(Fl_Font)	;
-  void	text_font(Fl_Font)	;
-  void	label_type(Fl_Labeltype);
-  void	color(Fl_Color)		;
-  void	label_color(Fl_Color)	;
-  void	selection_color(Fl_Color);
-  void	selection_text_color(Fl_Color);
-  void	text_background(Fl_Color)	;
-  void	highlight_color(Fl_Color);
-  void	highlight_label_color(Fl_Color);
-  void	text_color(Fl_Color a)	;
-  void	label_size(unsigned a)	;
-  void	text_size(unsigned a)	;
-  void	leading(unsigned a)	;
+  Fl_Boxtype glyph_box() const { return text_box(); }
+
+  // These methods calculate colors based on selected / highlighted etc.
+  Fl_Color get_box_color(Fl_Flags f) const ;
+  Fl_Color get_box_color() const { return get_box_color(flags_); }
+  Fl_Color get_label_color(Fl_Flags f) const;
+  Fl_Color get_label_color() const { return get_label_color(flags_); }
+  Fl_Color get_glyph_color(Fl_Flags f) const;
+  Fl_Color get_glyph_color() const { return get_glyph_color(flags_); }
+  Fl_Color get_glyph_background(Fl_Flags f) const;
+  Fl_Color get_glyph_background() const { return get_glyph_background(flags_); }
+
+  void box(Fl_Boxtype)		;
+  void text_box(Fl_Boxtype)	;
+  void glyph(Fl_Glyph)		;
+  void label_font(Fl_Font)	;
+  void text_font(Fl_Font)	;
+  void label_type(Fl_Labeltype);
+  void color(Fl_Color)		;
+  void label_color(Fl_Color)	;
+  void selection_color(Fl_Color);
+  void selection_text_color(Fl_Color);
+  void text_background(Fl_Color)	;
+  void highlight_color(Fl_Color);
+  void highlight_label_color(Fl_Color);
+  void text_color(Fl_Color a)	;
+  void label_size(unsigned a)	;
+  void text_size(unsigned a)	;
+  void leading(unsigned a)	;
+
+//  void glyph_box(Fl_Boxtype b) { text_box(b); }
+//  void glyph_color(Fl_Color c) { text_color(c); }
+//  void glyph_background(Fl_Color c) { text_background(c); }
 
 #ifndef FLTK_2  // back-compatability section:
 
-  Fl_Flags align() const	{return flags_;}
+  Fl_Flags align() const	{return flags_&FL_ALIGN_MASK;}
 
   Fl_Boxtype	down_box()		const {return text_box();}
   Fl_Boxtype	slider()		const {return box();}
@@ -296,5 +309,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.58 2000/11/15 18:20:22 spitzak Exp $".
+// End of "$Id: Fl_Widget.H,v 1.59 2001/01/02 00:20:28 clip Exp $".
 //

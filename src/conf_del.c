@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_del.c,v 1.15 2000/08/20 04:31:39 spitzak Exp $"
+   "$Id: conf_del.c,v 1.16 2001/01/02 00:20:28 clip Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -59,7 +59,7 @@ delconf(const char *configfile, const char *k)
         char            keysect[CONF_MAX_SECT_LEN], *key;
 	const char *section;             /* key, section, and both */
 
-        conf_clear_cached();
+        conf_clear_cache();
 
         if (!configfile || !k)
                 return CONF_ERR_ARGUMENT;                                       /* NULL pointer was passed */
@@ -293,5 +293,5 @@ delconf(const char *configfile, const char *k)
 } /* delconf() */
 
 /*
-    End of "$Id: conf_del.c,v 1.15 2000/08/20 04:31:39 spitzak Exp $".
+    End of "$Id: conf_del.c,v 1.16 2001/01/02 00:20:28 clip Exp $".
 */

@@ -9,5 +9,11 @@
   # FLTK comes with:
   #   Alternative, Alt2, Classic, Essai, KDE, Motif, OldMotif, Windows
 
+#  scheme = Alt2
   scheme = Alternative
-  # themes = KDE_colors
+#  scheme = Windows
+#  scheme = KDE
+
+# You can put a list of theme plugins here, but it's best to just use
+# the schemes to load the themes
+#  themes = KDE_colors
