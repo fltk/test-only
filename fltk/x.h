@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.12 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: x.h,v 1.13 2002/09/18 05:51:45 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -40,7 +40,7 @@
 
 #ifdef _WIN32
 # include "win32.h"
-#elif defined(__APPLE__)
+#elif (defined(__APPLE__) && !USE_X11)
 # include "mac.h"
 #else
 
@@ -211,5 +211,5 @@ Fl_Window* fl_find(Window xid);
 #endif	//Fl_X_H
 
 //
-// End of "$Id: x.h,v 1.12 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: x.h,v 1.13 2002/09/18 05:51:45 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shaped_Window.cxx,v 1.8 2002/06/17 16:03:53 spitzak Exp $"
+// "$Id: Fl_Shaped_Window.cxx,v 1.9 2002/09/18 05:51:46 spitzak Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 
 #ifdef _WIN32
 static HRGN bitmap2region(Fl_Bitmap*);
-#elif defined(__APPLE__)
+#elif (defined(__APPLE__) && !USE_X11)
 // Not yet implemented for Apple
 #else
 #include <X11/extensions/shape.h>
@@ -46,7 +46,7 @@ void Fl_Shaped_Window::draw() {
 #ifdef _WIN32
     HRGN region = bitmap2region(mask);
     SetWindowRgn(fl_xid(this), region, TRUE);
-#elif defined(__APPLE__)
+#elif (defined(__APPLE__) && !USE_X11)
     // not yet implemented for Apple
 #else
     Pixmap pmask = XCreateBitmapFromData(fl_display, fl_xid(this),
@@ -170,5 +170,5 @@ static HRGN bitmap2region(Fl_Bitmap* bitmap) {
 #endif
 
 //
-// End of "$Id: Fl_Shaped_Window.cxx,v 1.8 2002/06/17 16:03:53 spitzak Exp $"
+// End of "$Id: Fl_Shaped_Window.cxx,v 1.9 2002/09/18 05:51:46 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: math.h,v 1.4 2002/07/15 05:55:37 spitzak Exp $"
+// "$Id: math.h,v 1.5 2002/09/18 05:51:45 spitzak Exp $"
 //
 // The purpose of this header file is to make math.h look the same as
 // Unix on other operating systems.
@@ -55,7 +55,8 @@
 #endif
 
 #define rintf(v)	floorf((v)+.5f)
-#if 0 // on some systems it may be necessary to define these:
+// on some systems it may be necessary to define these:
+#if defined(__APPLE__)
 # define floorf(a)	floor(a)
 # define ceilf(a)	ceil(a)
 # define fmodf(a,b)	fmod(a,b)
@@ -83,5 +84,5 @@
 #endif
 
 //
-// End of "$Id: math.h,v 1.4 2002/07/15 05:55:37 spitzak Exp $".
+// End of "$Id: math.h,v 1.5 2002/09/18 05:51:45 spitzak Exp $".
 //

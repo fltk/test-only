@@ -1,5 +1,5 @@
 //
-// "$Id: fl_cursor.cxx,v 1.13 2002/06/17 16:03:53 spitzak Exp $"
+// "$Id: fl_cursor.cxx,v 1.14 2002/09/18 05:51:46 spitzak Exp $"
 //
 // Mouse cursor support for the Fast Light Tool Kit (FLTK).
 //
@@ -79,7 +79,7 @@ void Fl_Window::cursor(Fl_Cursor c, Fl_Color, Fl_Color) {
   SetCursor(i->cursor);
 }
 
-#elif defined(__APPLE__)
+#elif (defined(__APPLE__) && !USE_X11)
 
 static Cursor crsrHAND =
 {
@@ -279,5 +279,5 @@ void Fl_Window::cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
 #endif
 
 //
-// End of "$Id: fl_cursor.cxx,v 1.13 2002/06/17 16:03:53 spitzak Exp $".
+// End of "$Id: fl_cursor.cxx,v 1.14 2002/09/18 05:51:46 spitzak Exp $".
 //

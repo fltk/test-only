@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.28 2002/06/17 16:03:53 spitzak Exp $"
+// "$Id: fl_color.cxx,v 1.29 2002/09/18 05:51:46 spitzak Exp $"
 //
 // Color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -102,12 +102,12 @@ Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg) {
 
 #ifdef _WIN32
 # include "fl_color_win32.cxx"
-#elif defined(__APPLE__)
+#elif (defined(__APPLE__) && !USE_X11)
 # include "fl_color_mac.cxx"
 #else
 # include "fl_color_x.cxx"
 #endif
 
 //
-// End of "$Id: fl_color.cxx,v 1.28 2002/06/17 16:03:53 spitzak Exp $".
+// End of "$Id: fl_color.cxx,v 1.29 2002/09/18 05:51:46 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.150 2002/09/16 00:29:05 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.151 2002/09/18 05:51:45 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -71,7 +71,7 @@ FL_API void (*Fl_Tooltip::exit)(Fl_Widget *) = nothing;
 
 #ifdef _WIN32
 # include "Fl_win32.cxx"
-#elif defined(__APPLE__)
+#elif (defined(__APPLE__) && !USE_X11)
 # include "Fl_mac.cxx"
 #else
 # include "Fl_x.cxx"
@@ -360,7 +360,7 @@ void Fl::flush() {
   }
 #ifdef _WIN32
   GdiFlush();
-#elif defined(__APPLE__)
+#elif (defined(__APPLE__) && !USE_X11)
   //QDFlushPortBuffer( GetWindowPort(xid), 0 ); // \todo do we need this?
 #else
   if (fl_display) XFlush(fl_display);
@@ -428,7 +428,7 @@ void fl_fix_focus() {
 
 void Fl_Widget::throw_focus() {
   if (contains(Fl::pushed())) Fl::pushed_ = 0;
-#if !defined(_WIN32) && !defined(__APPLE__)
+#if !defined(_WIN32) && !(defined(__APPLE__) && !USE_X11)
   if (contains(selection_requestor)) selection_requestor = 0;
 #endif
   if (contains(Fl::belowmouse())) {Fl::belowmouse_ = 0; Fl::e_is_click = 0;}
@@ -449,7 +449,7 @@ void Fl::modal(Fl_Widget* widget, bool grab) {
 #ifdef _WIN32
     ReleaseCapture();
     // if (event() == FL_PUSH) repost_the_push_event(); NYI
-#elif defined(__APPLE__)
+#elif (defined(__APPLE__) && !USE_X11)
     // dunno what to do here
 #else
     XUngrabKeyboard(fl_display, fl_event_time);
@@ -475,7 +475,7 @@ void Fl::modal(Fl_Widget* widget, bool grab) {
       SetCapture(fl_xid(window));
       grab_ = true;
     }
-#elif defined(__APPLE__)
+#elif (defined(__APPLE__) && !USE_X11)
     // dunno what to do here
 #else
     Fl_Window* window = first_window();
@@ -638,5 +638,5 @@ bool Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.150 2002/09/16 00:29:05 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.151 2002/09/18 05:51:45 spitzak Exp $".
 //

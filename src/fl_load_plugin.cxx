@@ -1,6 +1,6 @@
 /* fl_plugin.cxx
  *
- * "$Id: fl_load_plugin.cxx,v 1.17 2002/02/10 22:57:49 spitzak Exp $"
+ * "$Id: fl_load_plugin.cxx,v 1.18 2002/09/18 05:51:46 spitzak Exp $"
  *
  * This is a wrapper to make it simple to load plugins on various
  * systems. fl_load_plugin(file, symbol) will load the file as a
@@ -30,20 +30,31 @@ void* fl_load_plugin(const char* name, const char* symbol) {
     if (!symbol) return (void*)handle;
     void* f = (void*)GetProcAddress(handle, symbol);
     if (f) return f;
-    fprintf(stderr, "%s: function %s missing\n", name, symbol);
-    return 0;
   }
-  // anybody know where more informative error information is stored?
-  fprintf(stderr, "%s: error loading plugin\n", name);
+  char* msgbuf = 0;
+  FormatMessage(FORMAT_MESSAGE_ALLOCATE_BUFFER | 
+		FORMAT_MESSAGE_FROM_SYSTEM | 
+		FORMAT_MESSAGE_IGNORE_INSERTS,
+		NULL,
+		GetLastError(),
+		MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+		(LPTSTR)&msgbuf,
+		0,
+		NULL);
+  fprintf(stderr, "%s\n", msgbuf);
+  LocalFree(msgbuf);
   return 0;
 }
 
 #else
 #if HAVE_DLOPEN
 
-#include <errno.h>
-# include <unistd.h>
-# include <dlfcn.h>
+# ifdef __APPLE__
+#  include "dlload_osx.cxx"
+# else
+#  include <unistd.h>
+#  include <dlfcn.h>
+# endif
 
 void* fl_load_plugin(const char* name, const char* symbol) {
   // do not allow plugins if this executable is setuid
@@ -72,5 +83,5 @@ void* fl_load_plugin(const char* name, const char*) {
 #endif
 
 //
-// End of "$Id: fl_load_plugin.cxx,v 1.17 2002/02/10 22:57:49 spitzak Exp $"
+// End of "$Id: fl_load_plugin.cxx,v 1.18 2002/09/18 05:51:46 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.87 2002/09/02 06:33:47 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.88 2002/09/18 05:51:46 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -150,7 +150,7 @@ int Fl_Window::handle(int event) {
       showtype = SW_SHOWNORMAL;
 
     ShowWindow(i->xid, showtype);
-#elif defined(__APPLE__)
+#elif (defined(__APPLE__) && !USE_X11)
     if (parent()) return 1; // needs to update clip and redraw...
     if (fl_show_iconic) {
       fl_show_iconic = 0;
@@ -193,7 +193,7 @@ int Fl_Window::handle(int event) {
       do_callback();
       return 1;
     }
-#if !defined(_WIN32) && !defined(__APPLE__)
+#if !defined(_WIN32) && !(defined(__APPLE__) && !USE_X11)
     // Unused clicks raise windows:
     if (event == FL_PUSH) XMapRaised(fl_display, i->xid);
 #endif
@@ -217,7 +217,7 @@ void Fl_Window::show() {
 #ifdef _WIN32
     if (IsIconic(i->xid)) OpenIcon(i->xid);
     if (!Fl::grab() && !override()) BringWindowToTop(i->xid);
-#elif defined(__APPLE__)
+#elif (defined(__APPLE__) && !USE_X11)
     // is some call needed to deiconize?
     BringToFront(i->xid);
     if (!Fl::grab() && !override()) SelectWindow(i->xid);
@@ -367,5 +367,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.87 2002/09/02 06:33:47 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.88 2002/09/18 05:51:46 spitzak Exp $".
 //
