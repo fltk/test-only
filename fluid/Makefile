@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.10.2.6.2.23.2.4 2004/11/09 01:52:31 rokan Exp $"
+# "$Id: Makefile,v 1.10.2.6.2.23.2.5 2004/11/10 00:38:25 rokan Exp $"
 #
 # FLUID makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -83,7 +83,7 @@ install: all
 	$(CHMOD) 755 $(DESTDIR)$(bindir)/fluid$(EXEEXT)
 
 uninstall:
-	$(RM) $(DESTDIR)$(bindir)/fluid
+	$(RM) $(DESTDIR)$(bindir)/fluid$(EXEEXT)
 
 #
 # Note: The rebuild target can only be used if you have the original .fl
@@ -97,5 +97,5 @@ rebuild:
 	./fluid -c widget_panel.fl
 
 #
-# End of "$Id: Makefile,v 1.10.2.6.2.23.2.4 2004/11/09 01:52:31 rokan Exp $".
+# End of "$Id: Makefile,v 1.10.2.6.2.23.2.5 2004/11/10 00:38:25 rokan Exp $".
 #

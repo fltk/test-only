@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.1.4.3 2004/07/23 19:42:50 easysw Exp $"
+# "$Id: Makefile,v 1.1.4.4 2004/11/10 00:38:26 rokan Exp $"
 #
 # PNG library makefile for the Fast Light Toolkit (FLTK).
 #
@@ -33,7 +33,7 @@ OBJS	=	png.o pngset.o pngget.o pngrutil.o pngtrans.o pngwutil.o \
 		pngread.o pngrio.o pngwio.o pngwrite.o pngrtran.o \
 		pngwtran.o pngmem.o pngerror.o pngpread.o
 
-LIBPNG	=	../lib/libpng$(LIBEXT)
+LIBPNG	=	../lib/libfltk_png$(LIBEXT)
 
 
 #
@@ -57,11 +57,14 @@ clean:
 #
 
 install: $(LIBPNG)
-	echo "Installing libpng$(LIBEXT) in $(libdir)..."
+	echo "Installing libfltk_png$(LIBEXT) in $(libdir)..."
 	-$(MKDIR) $(libdir)
-	$(RM) $(libdir)/libpng$(LIBEXT)
+	$(RM) $(libdir)/libfltk_png$(LIBEXT)
 	$(CP) $(LIBPNG) $(libdir)
-	$(RANLIB) $(libdir)/libpng$(LIBEXT)
+	$(RANLIB) $(libdir)/libfltk_png$(LIBEXT)
+	echo "Installing png headers in $(includedir)/FL/images..."
+	-$(MKDIR) $(includedir)/FL/images
+	$(CP) png.h pngconf.h $(includedir)/FL/images
 
 
 #
@@ -69,12 +72,15 @@ install: $(LIBPNG)
 #
 
 uninstall:
-	echo "Uninstalling libpng$(LIBEXT) in $(libdir)..."
-	$(RM) $(libdir)/libpng$(LIBEXT)
+	echo "Uninstalling libfltk_png$(LIBEXT) in $(libdir)..."
+	$(RM) $(libdir)/libfltk_png$(LIBEXT)
+	echo "Uninstalling png headers in $(includedir)/FL/images..."
+	$(RM) $(includedir)/FL/images/png.h
+	$(RM) $(includedir)/FL/images/pngconf.h
 
 
 #
-# libpng.a
+# libfltk_png.a
 #
 
 $(LIBPNG):	$(OBJS)
@@ -97,5 +103,5 @@ $(OBJS):	../makeinclude
 
 
 #
-# End of "$Id: Makefile,v 1.1.4.3 2004/07/23 19:42:50 easysw Exp $".
+# End of "$Id: Makefile,v 1.1.4.4 2004/11/10 00:38:26 rokan Exp $".
 #

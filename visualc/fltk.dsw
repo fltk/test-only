@@ -846,6 +846,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "jpeg"=".\jpeg.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "keyboard"=".\keyboard.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -878,6 +890,18 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name fltkforms
     End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "libpng"=".\libpng.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################
@@ -1262,6 +1286,18 @@ Package=<4>
     Begin Project Dependency
     Project_Dep_Name fluid
     End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "zlib"=".\zlib.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
 }}}
 
 ###############################################################################

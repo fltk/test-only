@@ -50,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"z.lib"
+# ADD LIB32 /nologo /out:"..\lib\fltkz.lib"
 
 !ELSEIF  "$(CFG)" == "zlib - Win32 Debug"
 
@@ -73,7 +73,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"zd.lib"
+# ADD LIB32 /nologo /out:"..\lib\fltkzd.lib"
 
 !ENDIF 
 
@@ -103,14 +103,6 @@ SOURCE=..\zlib\gzio.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\zlib\infblock.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\zlib\infcodes.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\zlib\inffast.c
 # End Source File
 # Begin Source File
@@ -120,10 +112,6 @@ SOURCE=..\zlib\inflate.c
 # Begin Source File
 
 SOURCE=..\zlib\inftrees.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\zlib\infutil.c
 # End Source File
 # Begin Source File
 

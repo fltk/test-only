@@ -50,7 +50,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"png.lib"
+# ADD LIB32 /nologo /out:"..\fltkpng.lib"
 
 !ELSEIF  "$(CFG)" == "libpng - Win32 Debug"
 
@@ -73,7 +73,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LIB32=link.exe -lib
 # ADD BASE LIB32 /nologo
-# ADD LIB32 /nologo /out:"pngd.lib"
+# ADD LIB32 /nologo /out:"..\lib\fltkpngd.lib"
 
 !ENDIF 
 
@@ -120,10 +120,6 @@ SOURCE=..\png\pngrutil.c
 # Begin Source File
 
 SOURCE=..\png\pngset.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\png\pngtest.c
 # End Source File
 # Begin Source File
 

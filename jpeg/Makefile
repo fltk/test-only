@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.1.4.3 2004/07/23 19:42:50 easysw Exp $"
+# "$Id: Makefile,v 1.1.4.4 2004/11/10 00:38:25 rokan Exp $"
 #
 # JPEG library makefile for the Fast Light Toolkit (FLTK).
 #
@@ -41,7 +41,7 @@ OBJS	=	jmemnobs.o \
 		jidctflt.o jidctfst.o jidctint.o jidctred.o jquant1.o \
 		jquant2.o jutils.o jmemmgr.o
 
-LIBJPEG	=	../lib/libjpeg$(LIBEXT)
+LIBJPEG	=	../lib/libfltk_jpeg$(LIBEXT)
 
 
 #
@@ -65,10 +65,13 @@ clean:
 #
 
 install:
-	echo "Installing libjpeg$(LIBEXT) in $(libdir)..."
+	echo "Installing libfltk_jpeg$(LIBEXT) in $(libdir)..."
 	-$(MKDIR) $(libdir)
-	$(RM) $(libdir)/libjpeg$(LIBEXT)
+	$(RM) $(libdir)/libfltk_jpeg$(LIBEXT)
 	$(CP) $(LIBJPEG) $(libdir)
+	echo "Installing jpeg headers in $(includedir)/FL/images..."
+	-$(MKDIR) $(includedir)/FL/images
+	$(CP) jconfig.h jerror.h jmorecfg.h jpeglib.h $(includedir)/FL/images
 
 
 #
@@ -76,12 +79,17 @@ install:
 #
 
 uninstall:
-	echo "Uninstalling libjpeg$(LIBEXT) in $(libdir)..."
-	$(RM) $(libdir)/libjpeg$(LIBEXT)
+	echo "Uninstalling libfltk_jpeg$(LIBEXT) in $(libdir)..."
+	$(RM) $(libdir)/libfltk_jpeg$(LIBEXT)
+	echo "Uninstalling jpeg headers in $(includedir)/FL/images..."
+	$(RM) $(includedir)/FL/images/jconfig.h
+	$(RM) $(includedir)/FL/images/jerror.h
+	$(RM) $(includedir)/FL/images/jmorecfg.h
+	$(RM) $(includedir)/FL/images/jpeglib.h
 
 
 #
-# libjpeg.a
+# libfltk_jpeg.a
 #
 
 $(LIBJPEG):	$(OBJS)
@@ -103,5 +111,5 @@ include makedepend
 $(OBJS):	../makeinclude
 
 #
-# End of "$Id: Makefile,v 1.1.4.3 2004/07/23 19:42:50 easysw Exp $".
+# End of "$Id: Makefile,v 1.1.4.4 2004/11/10 00:38:25 rokan Exp $".
 #

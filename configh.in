@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.11.2.11.2.15.2.7 2004/10/03 22:48:37 rokan Exp $"
+ * "$Id: configh.in,v 1.11.2.11.2.15.2.8 2004/11/10 00:38:25 rokan Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -198,7 +198,7 @@
 #undef HAVE_LIBJPEG
 
 /*
- * Which header file do we include for libpng?
+ * Which header file do we include for libfltk_png?
  */
 
 #undef HAVE_PNG_H
@@ -234,5 +234,5 @@
 #define HAVE_DCBRUSH        1
 
 /*
- * End of "$Id: configh.in,v 1.11.2.11.2.15.2.7 2004/10/03 22:48:37 rokan Exp $".
+ * End of "$Id: configh.in,v 1.11.2.11.2.15.2.8 2004/11/10 00:38:25 rokan Exp $".
  */
