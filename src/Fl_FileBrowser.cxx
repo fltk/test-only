@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileBrowser.cxx,v 1.17 2002/12/22 05:30:22 easysw Exp $"
+// "$Id: Fl_FileBrowser.cxx,v 1.18 2003/01/26 06:33:10 spitzak Exp $"
 //
 // FileBrowser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -44,7 +44,9 @@
 
 #if defined(_WIN32)
 #  include <windows.h>
-#  include <direct.h>
+#  ifndef __CYGWIN__
+#    include <direct.h>
+#  endif
 #endif /* _WIN32 */
 
 #if defined(__EMX__)
@@ -437,5 +439,5 @@ FileBrowser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_FileBrowser.cxx,v 1.17 2002/12/22 05:30:22 easysw Exp $".
+// End of "$Id: Fl_FileBrowser.cxx,v 1.18 2003/01/26 06:33:10 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: math.h,v 1.7 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: math.h,v 1.8 2003/01/26 06:33:10 spitzak Exp $"
 //
 // The purpose of this header file is to make math.h look the same as
 // Unix on other operating systems.
@@ -29,7 +29,7 @@
 
 #include <math.h>
 
-#ifdef _WIN32
+#if defined(_WIN32) && !defined(__CYGWIN__)
 // things missing from <math.h>:
 # include <float.h>
 
@@ -85,5 +85,5 @@
 #endif
 
 //
-// End of "$Id: math.h,v 1.7 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: math.h,v 1.8 2003/01/26 06:33:10 spitzak Exp $".
 //

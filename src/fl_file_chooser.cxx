@@ -1,5 +1,5 @@
 //
-// "$Id: fl_file_chooser.cxx,v 1.31 2002/12/10 02:00:59 easysw Exp $"
+// "$Id: fl_file_chooser.cxx,v 1.32 2003/01/26 06:33:10 spitzak Exp $"
 //
 // File chooser widget for the Fast Light Tool Kit (FLTK).
 //
@@ -33,9 +33,11 @@ void use_system_file_chooser(bool useit) {use_system_fc = useit;}
 #ifdef _WIN32
 # include <windows.h>
 # include <commdlg.h>
-# include <direct.h>
-# ifndef OPENFILENAME_SIZE_VERSION_400
-#  define OPENFILENAME_SIZE_VERSION_400 sizeof(OPENFILENAME)
+# ifndef __CYGWIN__
+#  include <direct.h>
+#  ifndef OPENFILENAME_SIZE_VERSION_400
+#   define OPENFILENAME_SIZE_VERSION_400 sizeof(OPENFILENAME)
+#  endif
 # endif
 #endif
 
@@ -50,7 +52,7 @@ char* fltk::file_chooser(const char* message,
 			 const char* fname,
 			 bool save)
 {
-#ifdef _WIN32
+#if defined( _WIN32 ) && !defined( __CYGWIN__ )
   if (use_system_fc) {
     static char filenamebuffer[MAX_PATH];
     static OPENFILENAME wreq;
@@ -87,5 +89,5 @@ char* fltk::file_chooser(const char* message,
 }
 
 //
-// End of "$Id: fl_file_chooser.cxx,v 1.31 2002/12/10 02:00:59 easysw Exp $".
+// End of "$Id: fl_file_chooser.cxx,v 1.32 2003/01/26 06:33:10 spitzak Exp $".
 //

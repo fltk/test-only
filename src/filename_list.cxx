@@ -1,5 +1,5 @@
 //
-// "$Id: filename_list.cxx,v 1.20 2002/12/10 02:00:56 easysw Exp $"
+// "$Id: filename_list.cxx,v 1.21 2003/01/26 06:33:10 spitzak Exp $"
 //
 // Filename list routines for the Fast Light Tool Kit (FLTK).
 //
@@ -79,7 +79,7 @@ int filename_list(const char *d, dirent ***list) {
   // do this even for our own internal version because some compilers
   // will not cast it to the non-const version! Egad. So we have to
   // use if's to go to what the various systems use:
-#if defined(__hpux)
+#if defined(__hpux) || defined(__CYGWIN__)
   // HP-UX seems to be partially const-correct:
   return scandir(d, list, 0, (int(*)(const dirent **, const dirent **))numericsort);
 #elif !HAVE_SCANDIR || defined(__sgi) || defined(__osf__)
@@ -95,5 +95,5 @@ int filename_list(const char *d, dirent ***list) {
 }
 
 //
-// End of "$Id: filename_list.cxx,v 1.20 2002/12/10 02:00:56 easysw Exp $".
+// End of "$Id: filename_list.cxx,v 1.21 2003/01/26 06:33:10 spitzak Exp $".
 //
