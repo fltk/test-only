@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.43 2002/04/25 16:39:33 spitzak Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.44 2002/05/14 15:56:15 spitzak Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,8 +27,8 @@
 #include <fltk/fl_draw.h>
 #include <fltk/Fl_Menu_Window.h>
 
-float Fl_Tooltip::delay_ = 1.0f;
-bool Fl_Tooltip::enabled_ = true;
+float		Fl_Tooltip::delay_ = 1.0f;
+bool		Fl_Tooltip::enabled_ = true;
 
 #define MAX_WIDTH 400
 
@@ -130,31 +130,43 @@ tt_enter(Fl_Widget* widget) {
     Fl_Tooltip::enter_area(widget,0,0,widget->w(), widget->h(), w->tooltip());
   }
 }
-#include <stdio.h>
 
 void
 Fl_Tooltip::enter_area(Fl_Widget* wid, int x,int y,int w,int h, const char* t)
 {
   if (recursion) return;
-  Fl::remove_timeout(tooltip_timeout);
-  Fl::remove_timeout(recent_timeout);
   if (t && *t && enabled()) { // there is a tooltip
     // do nothing if it is the same:
     if (wid==widget && x==X && y==Y && w==W && h==H && t==tip) return;
+    Fl::remove_timeout(tooltip_timeout);
+    Fl::remove_timeout(recent_timeout);
     // remember it:
     widget = wid; X = x; Y = y; W = w; H = h; tip = t;
     if (recent_tooltip || Fl_Tooltip::delay() < .1) {
       // switch directly from a previous tooltip to the new one:
+#ifdef WIN32
+      // possible fix for the Windows titlebar, it seems to want the
+      // window to be destroyed, moving it messes up the parenting:
+      if (window) window->hide();
+#endif
       tooltip_timeout(0);
     } else {
       if (window) window->hide();
       Fl::add_timeout(Fl_Tooltip::delay(), tooltip_timeout);
     }
   } else { // no tooltip
+    if (!tip) return;
+    Fl::remove_timeout(tooltip_timeout);
+    Fl::remove_timeout(recent_timeout);
     tip = 0;
     widget = 0;
     if (window) window->hide();
-    if (recent_tooltip) Fl::add_timeout(.2, recent_timeout);
+    if (recent_tooltip) {
+      if (Fl::event_state() & FL_BUTTONS)
+	recent_tooltip = 0;
+      else
+	Fl::add_timeout(.2, recent_timeout);
+    }
   }
 }
 
@@ -178,5 +190,5 @@ static Fl_Named_Style style("Tooltip", revert, &Fl_Tooltip::default_style);
 Fl_Named_Style* Fl_Tooltip::default_style = &::style;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.43 2002/04/25 16:39:33 spitzak Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.44 2002/05/14 15:56:15 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.144 2002/05/07 04:58:19 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.145 2002/05/14 15:56:14 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -388,7 +388,6 @@ void Fl::belowmouse(Fl_Widget *o) {
   Fl_Widget *p = belowmouse_;
   if (o != p) {
     belowmouse_ = o;
-    if (!dnd_flag) Fl_Tooltip::enter(o);
     for (; p && !p->contains(o); p = p->parent())
       p->handle(dnd_flag ? FL_DND_LEAVE : FL_LEAVE);
   }
@@ -557,7 +556,7 @@ bool Fl::handle(int event, Fl_Window* window)
     break;
 
   case FL_LEAVE:
-    if (!pushed_) belowmouse(0);
+    if (!pushed_) {belowmouse(0); Fl_Tooltip::enter(0);}
     return true;
 
   case FL_RELEASE:
@@ -616,11 +615,13 @@ bool Fl::handle(int event, Fl_Window* window)
     // send a dummy move event when the user releases the mouse:
     if (xmousewin) handle(FL_MOVE, xmousewin);
     else belowmouse(0);
+  } else if (event == FL_MOVE) {
+    Fl_Tooltip::enter(belowmouse());
   }
 
   return ret;
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.144 2002/05/07 04:58:19 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.145 2002/05/14 15:56:14 spitzak Exp $".
 //
