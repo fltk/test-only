@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.68 2003/04/19 21:45:29 spitzak Exp $"
+# "$Id: Makefile,v 1.69 2003/05/20 16:41:50 spitzak Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -106,9 +106,9 @@ CFILES	=
 # only some of the demos have been changed to use namespaces:
 TARGETS = \
 	arc$(EXEEXT) \
+	boxtype$(EXEEXT) \
 	browser$(EXEEXT) \
 	checkers$(EXEEXT) \
-	boxtype$(EXEEXT) \
 	color_chooser$(EXEEXT) \
 	cursor$(EXEEXT) \
 	demo$(EXEEXT) \
@@ -117,18 +117,19 @@ TARGETS = \
 	gl_overlay$(EXEEXT) \
 	hello$(EXEEXT) \
 	image$(EXEEXT) \
+	inactive$(EXEEXT) \
 	input$(EXEEXT) \
 	keyboard$(EXEEXT) \
 	label$(EXEEXT) \
-	list_visuals$(EXEEXT) \
 	line_style$(EXEEXT) \
+	list_visuals$(EXEEXT) \
 	menu$(EXEEXT) \
-	shape$(EXEEXT) \
-	tile$(EXEEXT) \
-	inactive$(EXEEXT) \
-	sizes$(EXEEXT) \
 	pack$(EXEEXT) \
+	resizable$(EXEEXT) \
+	shape$(EXEEXT) \
+	sizes$(EXEEXT) \
 	threads$(EXEEXT) \
+	tile$(EXEEXT) \
 	valuators$(EXEEXT)
 
 #
@@ -232,5 +233,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.68 2003/04/19 21:45:29 spitzak Exp $".
+# End of "$Id: Makefile,v 1.69 2003/05/20 16:41:50 spitzak Exp $".
 #
