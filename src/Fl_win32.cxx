@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.38 1999/06/17 22:41:05 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.39 1999/06/18 00:32:51 gustavo Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -583,7 +583,6 @@ int Fl_X::fake_X_wm(const Fl_Window* w,int &X,int &Y, int &bt,int &bx, int &by) 
 
 ////////////////////////////////////////////////////////////////
 
-// CET - FIXME - Gustavo, please fix this!
 void Fl_Window::layout() {
   UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER;
   int is_a_resize = (ow() != w() || oh() != h());
@@ -599,18 +598,12 @@ void Fl_Window::layout() {
     flags |= SWP_NOSIZE;
   }
   if (resize_from_program && shown()) {
-/* CET - FIXME - Gustavo, please fix this!
     int dummy, bt, bx, by;
     //Ignore window managing when resizing, so that windows (and more
     //specifically menus) can be moved offscreen.
-    if (Fl_X::fake_X_wm(this, dummy, dummy, bt, bx, by)) {
-      X -= bx;
-      Y -= by+bt;
-      W += 2*bx;
-      H += 2*by+bt;
-    }
-*/
-    SetWindowPos(i->xid, 0, ox(), oy(), ow(), oh(), flags);
+    if (!Fl_X::fake_X_wm(this, dummy, dummy, bt, bx, by))  bx = by = bt = 0; 
+    SetWindowPos(i->xid, 0, ox()-bx, oy()-by-bt, 
+                 ow()-2*bx, oh()-2*by+bt, flags);
   }
 }
 
@@ -910,5 +903,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.38 1999/06/17 22:41:05 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.39 1999/06/18 00:32:51 gustavo Exp $".
 //
