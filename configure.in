@@ -1,7 +1,7 @@
 dnl 
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.125 2004/12/19 19:39:23 laza2000 Exp $"
+dnl "$Id$"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -29,7 +29,7 @@ dnl We need at least autoconf 2.50...
 dnl AC_PREREQ(2.50)
 
 dnl Required file in package...
-AC_INIT(src/Fl.cxx)
+AC_INIT(src/Widget.cxx)
 
 dnl FLTK library versions...
 FL_MAJOR_VERSION=2
@@ -989,5 +989,5 @@ echo Build targets: $LIBTARGET $DSOTARGET
 echo
 
 dnl
-dnl End of "$Id: configure.in,v 1.125 2004/12/19 19:39:23 laza2000 Exp $".
+dnl End of "$Id$".
 dnl
