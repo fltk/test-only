@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.12 1999/08/16 07:31:27 bill Exp $"
+// "$Id: fl_font.cxx,v 1.13 1999/08/16 14:05:52 carl Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -125,7 +125,7 @@ int fl_correct_encoding(const char* name) {
 
 // locate or create an Fl_FontSize for a given Fl_Font_ and size:
 static Fl_FontSize* find(Fl_Font s, unsigned size) {
-  if (!s || !s->name) s = fl_fonts; // use font 0 if still undefined
+  if (!s || !s->name_) s = fl_fonts; // use font 0 if still undefined
   Fl_FontSize* f;
   for (f = s->first; f; f = f->next)
     if (f->minsize <= size && f->maxsize >= size) return f;
@@ -291,5 +291,5 @@ void fl_draw(const char* str, int x, int y) {
 #endif
 
 //
-// End of "$Id: fl_font.cxx,v 1.12 1999/08/16 07:31:27 bill Exp $".
+// End of "$Id: fl_font.cxx,v 1.13 1999/08/16 14:05:52 carl Exp $".
 //
