@@ -6,6 +6,7 @@
 #ifdef WIN32
 #include <windows.h>
 #endif
+#include <config.h>
 
 #ifndef PATH_MAX
 #define PATH_MAX 128
