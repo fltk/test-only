@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.1 1999/08/16 07:30:53 bill Exp $"
+// "$Id: Fl_Style.H,v 1.2 1999/09/18 22:55:31 vincent Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -57,9 +57,12 @@ FL_EXPORT struct Fl_Style {
   Fl_Style*	child;
   Fl_Style*	next;
   Fl_Style**	previous;
+  int		mbf;		// Which entries are different from the parent's ones
 
   void setp(const void**, const void*);
+  void setp(const void**, const void*, int mask);
   void seti(unsigned*, unsigned);
+  void seti(unsigned*, unsigned, int mask);
   void set_box(Fl_Boxtype v)		{setp((const void**)&box, v);}
   void set_glyph(Fl_Glyph v)	{setp((const void**)&glyph, (const void*)v);}
   void set_label_font(Fl_Font v)	{setp((const void**)&label_font, v);}

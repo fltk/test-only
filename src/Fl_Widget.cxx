@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.17 1999/09/14 17:52:40 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.18 1999/09/18 22:55:33 vincent Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -191,6 +191,7 @@ Fl_Style* Fl_Widget::wstyle() {
   Fl_Style* newstyle = new Fl_Style;
   *newstyle = *oldstyle;
   make_unique(newstyle);
+  newstyle->mbf = 0;
   // insert it as first child into list:
   newstyle->next = oldstyle->child;
   if (newstyle->next) newstyle->next->previous = &(newstyle->next);
@@ -206,6 +207,8 @@ Fl_Style* Fl_Widget::wstyle() {
 // current style.  This returns true if this is the first time this
 // style has been inserted, this can be used to test to initialize
 // the style.
+// Set mbf according to the entries that have been kept from the original 
+// structure.
 
 // This is also called by Fl_Menu.cxx to set Fl_Menu_Item styles:
 void Fl_Style::add_child(Fl_Style* s) const {
@@ -215,16 +218,26 @@ void Fl_Style::add_child(Fl_Style* s) const {
   s->previous = &(((Fl_Style*)this)->child);
   s->child = 0;
   ((Fl_Style*)this)->child = s;
-  // copy all the pointer-sized things:
-  void** p = (void**)&s->box;
-  void*const* q = (void**)&box;
-  void** e = (void**)&s->label_type;
-  for (; p <= e; p++,q++) if (!*p) *p = *q;
+
+  int bf = 0;
   // copy all the integer-sized things:
-  unsigned *p1 = &s->color;
-  const unsigned *q1 = &color;
-  unsigned *e1 = &s->text_size;
-  for (; p1 <= e1; p1++,q1++) if (!*p1) *p1 = *q1;
+  unsigned *e1 = &s->color;
+  const unsigned *q1 = &text_size;
+  unsigned *p1 = &s->text_size;
+  for (; p1 >= e1; p1--,q1--) {
+    bf <<= 1;
+    if (!*p1) *p1 = *q1; else bf |= 1;
+  }
+  // copy all the pointer-sized things:
+  void** e = (void**)&s->box;
+  void*const* q = (void**)&label_type;
+  void** p = (void**)&s->label_type;
+  for (; p >= e; p--,q--) {
+    bf <<= 1;
+    if (!*p) *p = *q; else bf |= 1;
+  }
+  // We do this only if the mbf has not been set manually ...
+  if (!s->mbf) s->mbf = bf;
 }
 
 int Fl_Widget::style(Fl_Style* s) {
@@ -245,6 +258,7 @@ int Fl_Widget::copy_style(const Fl_Style* t) {
   Fl_Style* s = new Fl_Style;
   *s = *t;
   make_unique(s);
+  s->mbf = 0;
   s->next = parent->child;
   if (s->next) s->next->previous = &(s->next);
   s->previous = &(parent->child);
@@ -256,24 +270,33 @@ int Fl_Widget::copy_style(const Fl_Style* t) {
 // Inherit a pointer-sized thing:
 
 void Fl_Style::setp(const void** p, const void* v) {
-  if (*p == v) return;
-  const void* old_v = *p;
+  const int mask = 1 << (p-(const void**)&box);
+  mbf |= mask;
+  setp(p, v, mask);
+}
+
+void Fl_Style::setp(const void** p, const void* v, int mask) {
   *p = v;
   if (!unique(this)) for (Fl_Style* s = child; s; s = s->next) {
     const void** p1 = (const void**)((char*)s + ((char*)p - (char*)this));
-    if (*p1 == old_v) s->setp(p1, v);
+    if (!(s->mbf&mask)) s->setp(p1, v, mask);
   }
 }
   
 // Inherit a integer-sized thing:
 
 void Fl_Style::seti(unsigned* p, unsigned v) {
-  if (*p == v) return;
-  unsigned old_v = *p;
+  const int mask = 1 << (p-(unsigned*)&color) + 
+                        ((const void**)&color-(const void**)&box);
+  mbf |= mask;
+  seti(p, v, mask);
+}
+
+void Fl_Style::seti(unsigned* p, unsigned v, int mask) {
   *p = v;
   if (!unique(this)) for (Fl_Style* s = child; s; s = s->next) {
     unsigned* p1 = (unsigned*)((char*)s + ((char*)p - (char*)this));
-    if (*p1 == old_v) s->seti(p1, v);
+    if (!(s->mbf&mask)) s->seti(p1, v, mask);
   }
 }
 
@@ -427,5 +450,5 @@ Fl_Style Fl_Output::default_style = {
 };
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.17 1999/09/14 17:52:40 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.18 1999/09/18 22:55:33 vincent Exp $".
 //
