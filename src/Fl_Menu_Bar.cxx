@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.13 1999/04/28 01:50:08 carl Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.14 1999/04/29 04:32:51 carl Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -34,6 +34,7 @@ class TitleBox : public Fl_Widget {
 public:
   Fl_Menu_Item* mi;
   Fl_Menu_Bar* bar;
+  uchar dirty;
   int active() { return (mi->active() && bar->active_r()); }
   TitleBox() : Fl_Widget(0,0,0,0) { hide(); }
   void draw();
@@ -43,7 +44,7 @@ extern char fl_draw_shortcut;
 
 void TitleBox::draw() {
   fl_clip(bar->x()+2, bar->y()+3, bar->w()-4, bar->h()-6);
-
+  dirty = 0;
   Fl_Boxtype bt;
   Fl_Color col, lc;
   if (mi->default_style()->menu_item(Fl_Menu_Item::TITLE_FLY_BOX) &&
@@ -77,11 +78,12 @@ void TitleBox::draw() {
 void Fl_Menu_Bar::draw() {
   loadstyle();
 
+  int i;
+  Fl_Menu_Item* m;
+
   if (damage() & FL_DAMAGE_ALL) {
     draw_box();
     int tx = x() + 3;
-    int i;
-    Fl_Menu_Item* m;
     for (i = 0; i < FL_MAX_MENU_TITLES; i++) ((TitleBox*)titles[i])->mi = 0;
     for (i = 0, m = menu(); m && m->text; m = m->next(), i++) {
       int tw = m->measure(0, this) + 16;
@@ -93,8 +95,8 @@ void Fl_Menu_Bar::draw() {
       tx += tw;
     }
   } else {
-    if (current_tb) ((TitleBox*)current_tb)->draw();
-    if (last_tb) ((TitleBox*)last_tb)->draw();
+    for (i = 0, m = menu(); m && m->text; m = m->next(), i++)
+      if (((TitleBox*)titles[i])->dirty) ((TitleBox*)titles[i])->draw();
   }
 }
 
@@ -105,7 +107,8 @@ int Fl_Menu_Bar::handle(int event) {
   case FL_PUSH:
     v = 0;
 J1:
-    last_tb = current_tb; current_tb = 0; damage(FL_DAMAGE_CHILD);
+    last_tb = current_tb; current_tb = 0;
+    ((TitleBox*)last_tb)->dirty = 1; damage(FL_DAMAGE_CHILD);
     v = menu()->pulldown(x(), y(), w(), h(), v, this, 0, 1);
     picked(v);
     return 1;
@@ -126,7 +129,11 @@ J1:
         if (Fl::event_inside(t->x(), t->y(), t->w(), t->h())) {current_tb = t; break;}
       }
     }
-    if (current_tb != last_tb) damage(FL_DAMAGE_CHILD);
+    if (current_tb != last_tb) {
+      if (current_tb) ((TitleBox*)current_tb)->dirty = 1;
+      if (last_tb) ((TitleBox*)last_tb)->dirty = 1;
+      damage(FL_DAMAGE_CHILD);
+    }
     return 1;
   }
 
@@ -178,5 +185,5 @@ Fl_Menu_Bar::~Fl_Menu_Bar() {
   }
 }
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.13 1999/04/28 01:50:08 carl Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.14 1999/04/29 04:32:51 carl Exp $".
 //
