@@ -29,7 +29,7 @@
 #include <fltk/layout.h>
 #include <fltk/Group.h>
 #include <fltk/run.h>
-#include <string.h> // for strdup
+#include <fltk/string.h> // for newstring
 #include <stdlib.h> // for free
 #include <config.h>
 using namespace fltk;
@@ -93,7 +93,7 @@ Widget::~Widget() {
     // When a widget is destroyed it can destroy unique styles:
     delete (Style*)style_; // cast away const
   }
-  if (flags_&COPIED_LABEL) free((void*)label_);
+  if (flags_&COPIED_LABEL) delete[] label_;
 }
 
 /*! \fn Group* Widget::parent() const
@@ -121,7 +121,7 @@ bool Widget::contains(const Widget* b) const {
 void Widget::label(const char* s) {
   if (label_ == s) return; // Avoid problems if label(label()) is called
   if (flags_&COPIED_LABEL) {
-    free((void*)label_);
+    delete[] label_;
     flags_ &= ~COPIED_LABEL;
   }
   label_ = s;
@@ -136,14 +136,9 @@ void Widget::label(const char* s) {
 */
 void Widget::copy_label(const char* s) {
   if (label_ == s) return; // Avoid problems if label(label()) is called
-  if (flags_&COPIED_LABEL) free((void*)label_);
-  if (s) {
-    label_ = strdup(s);
-    flags_ |= COPIED_LABEL;
-  } else {
-    label_ = 0;
-    flags_ &= ~COPIED_LABEL;
-  }
+  if (flags_&COPIED_LABEL) delete[] label_;
+  label_ = newstring(s);
+  flags_ |= COPIED_LABEL;
 }
 
 /*! void Widget::image(Image*)

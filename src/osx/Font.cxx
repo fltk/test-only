@@ -75,7 +75,7 @@ ATSFontRef fltk::xfont() { return current->font; }
 FontSize::FontSize(const char* name, int Size) {
   current = this;
   next = 0;
-  q_name = strdup(name);
+  q_name = newstring(name);
   size = Size;
   ascent = Size*3/4;
   descent = Size-ascent;
@@ -97,7 +97,7 @@ FontSize::FontSize(const char* name, int Size) {
 
 FontSize::~FontSize() {
   if (current == this) current = 0;
-  free(q_name);
+  delete[] q_name;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -154,7 +154,7 @@ Font* fl_make_font(const char* name, int attrib) {
   }
   // no, lets create some fonts:
   IFont* newfont = new IFont[4];
-  newfont[0].f.name_ = strdup(name);
+  newfont[0].f.name_ = newstring(name);
   for (j = 0; j < 4; j++) {
     newfont[j].f.name_ = newfont[0].f.name_;
     newfont[j].f.attributes_ = attrib|j;

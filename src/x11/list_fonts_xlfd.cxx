@@ -152,7 +152,7 @@ int fltk::list_fonts(fltk::Font**& arrayp) {
     for (int j = 0; ; j++) {
       if (j >= 16) { // no, create a new font
 	newfont = new IFont;
-	newfont->f.name_ = strdup(newname);
+	newfont->f.name_ = newstring(newname);
 	newfont->f.attributes_ = attribute;
 	newfont->system_name = xlist[i];
 	newfont->bold = newfont;

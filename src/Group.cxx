@@ -62,8 +62,7 @@ and the items in them are widgets.
 #include <fltk/layout.h>
 #include <fltk/damage.h>
 #include <stdlib.h>
-
-#include <fltk/ScrollGroup.h>
+#include <string.h>
 
 using namespace fltk;
 
@@ -115,7 +114,7 @@ void Group::clear() {
       o->parent(0); // stops it from calling remove()
       delete o;
     }
-    free((void*)a);
+    delete[] a;
   }
 }
 
@@ -143,12 +142,15 @@ void Group::insert(Widget &o, int index) {
   o.parent(this);
   if (children_ == 0) {
     // allocate for 1 child
-    array_ = (Widget**)malloc(sizeof(Widget*));
+    array_ = new (Widget*)[1];
     array_[0] = &o;
   } else {
-    if (!(children_ & (children_-1))) // double number of children
-      array_ = (Widget**)realloc((void*)array_,
-				    2*children_*sizeof(Widget*));
+    if (!(children_ & (children_-1))) {// double number of children
+      Widget** newarray = new (Widget*)[2*children_];
+      memcpy(newarray, array_, children_*sizeof(Widget*));
+      delete[] array_;
+      array_ = newarray;
+    }
     for (int j = children_; j > index; --j) array_[j] = array_[j-1];
     array_[index] = &o;
   }

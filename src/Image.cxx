@@ -199,7 +199,7 @@ void Image::make_current() {
     rgb = (void*)CreateDIBSection(getDC(), &bmi, DIB_RGB_COLORS, NULL, NULL, 0x0);    
 #elif USE_QUARTZ
 #if 1
-    void *data = malloc(w_*h_*4);
+    void *data = new char[w_*h_*4];
     CGColorSpaceRef lut = CGColorSpaceCreateDeviceRGB();
     rgb = CGBitmapContextCreate(data, w_, h_, 8, 4*w_, lut, kCGImageAlphaNoneSkipLast);
     CGColorSpaceRelease(lut);
@@ -245,7 +245,7 @@ void Image::make_current() {
 	draw_rgb_part();
         uchar* data = generate_ae_bitmap();
 	const_cast<Image*>(this)->set_alpha_bitmap(bitmap, w, h);
-	free[] data;
+	delete[] data;
       }
       Image::_draw(x,y,w,h,style,flags);
     }
@@ -287,7 +287,8 @@ void Image::set_alpha_bitmap(const uchar* bitmap, int w, int h) {
     { 0x00, 0x88, 0x44, 0xcc, 0x22, 0xaa, 0x66, 0xee, 
       0x11, 0x99, 0x55, 0xdd, 0x33, 0xbb, 0x77, 0xff };
   int rowBytes = (w+7)>>3 ;
-  uchar *bmask = (uchar*)malloc(rowBytes*h), *dst = bmask;
+  uchar *bmask = new uchar[rowBytes*h];
+  *dst = bmask;
   const uchar *src = bitmap;
   for ( int i=rowBytes*h; i>0; i--,src++ ) {
     *dst++ = ((reverse[*src & 0x0f] & 0xf0) | (reverse[(*src >> 4) & 0x0f] & 0x0f))^0xff;

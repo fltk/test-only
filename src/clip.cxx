@@ -69,10 +69,13 @@ static inline void pushregion(Region r) {
   if (rstackptr >= rstacksize) {
     if (rstacksize) {
       rstacksize = 2*rstacksize;
-      rstack = (Region*)realloc(rstack, rstacksize*sizeof(Region));
+      Region* newstack = new Region[rstacksize];
+      memcpy(newstack, rstack, sizeof(Region)*rstackptr);
+      delete[] rstack;
+      rstack = newstack;
     } else {
       rstacksize = 16;
-      rstack = (Region*)malloc(rstacksize*sizeof(Region));
+      rstack = new Region[rstacksize];
       rstack[0] = 0;
     }
   }

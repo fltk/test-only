@@ -28,10 +28,10 @@
 #include <fltk/draw.h>
 #include <fltk/SharedImage.h>
 #include <fltk/xbmImage.h>
+#include <fltk/string.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 using namespace fltk;
 
 const char*	SharedImage::shared_image_root=0;
@@ -130,8 +130,8 @@ const char* SharedImage::get_filename(const char* name)
   int m = strlen(shared_image_root);
   int n = strlen(name) + m + 2;
   static char *s;
-  if (s) free(s);
-  s = (char*) malloc(n+1);
+  delete[] s;
+  s = new char[n+1];
   strcpy(s, shared_image_root);
   if (s[m-1] != '/') s[m++] = '/';
   strcpy(s+m, name);
@@ -147,7 +147,7 @@ SharedImage* SharedImage::get(SharedImage* (*create)(),
   {
     image=create();
     image->refcount = 1;
-    image->name = strdup(name);
+    image->name = newstring(name);
     image->datas=datas;
     image->setsize(-1,-1); // We mark the fact the it has never been measured yet
     image->l1 = image->l2 = 0;

@@ -88,7 +88,10 @@ static int sptr = 0;
 void fltk::push_matrix() {
   if (sptr >= stacksize) {
     stacksize = stacksize ? 2*stacksize : 16;
-    stack = (Matrix*)realloc(stack, stacksize*sizeof(Matrix));
+    Matrix* newstack = new Matrix[stacksize];
+    memcpy(newstack, stack, sptr*sizeof(Matrix));
+    delete[] stack;
+    stack = newstack;
   }
   stack[sptr++] = m;
 }
@@ -370,8 +373,11 @@ static int loop_array_size;
 
 static void add_n_points(int n) {
   point_array_size = point_array_size ? 2*point_array_size : 16;
-  if (numpoints+n >= point_array_size) point_array_size = n;
-  xpoint = (XPoint*)realloc((void*)xpoint,(point_array_size+1)*sizeof(XPoint));
+  if (numpoints+n >= point_array_size) point_array_size = numpoints+n;
+  XPoint* newpoints = new XPoint[point_array_size+1];
+  memcpy(newpoints, xpoint, numpoints*sizeof(XPoint));
+  delete[] xpoint;
+  xpoint = newpoints;
 }
 
 // The path also contins one dummy pie/chord piece:
@@ -598,7 +604,10 @@ void fltk::closepath() {
     // remember the new loop:
     if (loops >= loop_array_size) {
       loop_array_size = loop_array_size ? 2*loop_array_size : 16;
-      loop = (int*)realloc((void*)loop, loop_array_size*sizeof(int));
+      int* newloop = new int[loop_array_size];
+      memcpy(newloop, loop, loops*sizeof(int));
+      delete[] loop;
+      loop = newloop;
     }
     loop[loops++] = numpoints-loop_start;
     loop_start = numpoints;

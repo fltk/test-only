@@ -169,16 +169,16 @@ bool INIFile::load(const char* filename) {
       while (r>p && isspace(*(r-1))) r--;
       if (*q=='=') q++; else q = 0; // remember if = was found
       *r = 0;
-      char* name = strdup(p);
-      char* value = "";
+      const char* name = newstring(p);
+      const char* value = "";
       if (q) {
 	while (isspace(*q)) q++;
 	for (r = q; *r && *r != '\n'; ) r++;
 	while (r>q && isspace(*(r-1))) r--;
-	if (r > q) {*r = 0; value = strdup(q);}
+	if (r > q) {*r = 0; value = newstring(q);}
       }
       Entry* entry = new Entry();
-      entry->section = strdup(section);
+      entry->section = newstring(section);
       entry->name = name;
       entry->value = value;
       entry->serial = count;
@@ -227,8 +227,8 @@ const char* INIFile::get(const char* section, const char* name) {
 void INIFile::clear() {
   for (int i = count; i--;) {
     Entry* e = entries[i];
-    free((void*)(e->section));
-    free((void*)(e->name));
+    delete[] e->section;
+    delete[] e->name;
     if (e->value[0]) free((void*)(e->value));
     delete e;
   }

@@ -693,11 +693,16 @@ static int yankcut;	// length of valid contents of buffer, even if undocut=0
 static void undobuffersize(int n) {
   if (n > undobufferlength) {
     if (undobuffer) {
-      do {undobufferlength *= 2;} while (undobufferlength < n);
-      undobuffer = (char*)realloc(undobuffer, undobufferlength);
+      int m = 2*undobufferlength;
+      while (m < n) m *= 2;
+      char* newbuffer = new char[m];
+      memcpy(newbuffer, undobuffer, undobufferlength);
+      delete[] undobuffer;
+      undobuffer = newbuffer;
+      undobufferlength = m;
     } else {
       undobufferlength = n+9;
-      undobuffer = (char*)malloc(undobufferlength);
+      undobuffer = new char[undobufferlength];
     }
   }
 }
@@ -953,28 +958,28 @@ Input::Input(int x, int y, int w, int h, const char* l)
 
 /*! Make value() be a writable private buffer of at least \a len bytes. */
 void Input::reserve(int len) {
-  if (value_ == buffer && bufsize > len) {
-    buffer[size_] = 0;
-    return;
-  }
   if (!bufsize) {
-    if (len > size_) len += 9; // let a few characters insert before realloc
-    bufsize = len+1;
-    buffer = (char*)malloc(bufsize);
+    bufsize = (len > size_) ? len+9 : size_+1;
+    buffer = new char[bufsize];
+    memcpy(buffer, value_, size_);
   } else if (bufsize <= len) {
+    int newsize = (len > size_) ? len*2 : size_+1;
     // we may need to move old value in case it points into buffer:
-    int moveit = (value_ >= buffer && value_ < buffer+bufsize);
-    // enlarge current buffer
-    if (len > size_) {
-      do {bufsize *= 2;} while (bufsize <= len);
+    if (value_ >= buffer && value_ < buffer+bufsize) {
+      char* nbuffer = new char[newsize];
+      memcpy(nbuffer, value_, size_);
+      delete[] buffer;
+      buffer = nbuffer;
     } else {
-      bufsize = len+1;
+      delete[] buffer;
+      buffer = new char[newsize];
+      memcpy(buffer, value_, size_);
     }
-    char* nbuffer = (char*)realloc(buffer, bufsize);
-    if (moveit) value_ += (nbuffer-buffer);
-    buffer = nbuffer;
+    bufsize = newsize;
+  } else if (value_ != buffer) {
+    memmove(buffer, value_, size_);
   }
-  memmove(buffer, value_, size_); buffer[size_] = 0;
+  buffer[size_] = 0;
   value_ = buffer;
 }
 
@@ -1044,7 +1049,7 @@ bool Input::value(const char* str) {
 /*! The destructor destroys the memory used by value() */
 Input::~Input() {
   if (undowidget == this) undowidget = 0;
-  if (bufsize) free((void*)buffer);
+  delete[] buffer;
 }
 
 ////////////////////////////////////////////////////////////////

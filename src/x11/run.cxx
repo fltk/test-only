@@ -1439,7 +1439,7 @@ bool fltk::handle()
     fl_key_vector[keycode/8] |= (1 << (keycode%8));
     static char* buffer = 0;
     static int buffer_len;
-    if (!buffer) buffer = (char*) malloc(buffer_len = 20);
+    if (!buffer) buffer = new char[buffer_len = 20];
     int len;
     KeySym keysym;
 #if USE_XIM
@@ -1455,8 +1455,8 @@ bool fltk::handle()
 			      buffer, buffer_len-1, &keysym, &status);
       switch (status) {
       case XBufferOverflow:
-	buffer_len = len+1;
-	buffer = (char*)realloc(buffer, buffer_len);
+	delete[] buffer;
+	buffer = new char[buffer_len = len+1];
 	goto RETRY;
       case XLookupChars:
       case XLookupKeySym:

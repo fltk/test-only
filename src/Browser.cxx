@@ -189,7 +189,10 @@ void Browser::set_level(int n) {
   if (n > levels) {
     if (n > 255) fatal("More than 255 levels in Browser");
     for (int i = 0; i < NUMMARKS; i++) {
-      item_index[i]=(int*)realloc((void*)item_index[i],(n+1)*sizeof(int));
+      int* newlist = new int[n+1];
+      memcpy(newlist, item_index[i], n*sizeof(int));
+      delete[] item_index[i];
+      item_index[i] = newlist;
     }
     levels = n;
   }
@@ -1500,15 +1503,17 @@ void Browser::column_widths(const int *t) {
   if (t) while (*t++!=0) nColumn++;
   if (nColumn==0) {
     // free the column memory
-    if (column_widths_p) free(column_widths_p);
+    delete[] column_widths_i;
+    delete[] column_widths_p;
     column_widths_p = 0;
-    if (column_widths_i) free(column_widths_i);
     column_widths_i = 0;
   } else {
     // reallocate the column storage if needed
     if (nColumn>pnc) {
-      column_widths_p = (int*)realloc(column_widths_p, (nColumn+1)*sizeof(int));
-      column_widths_i = (int*)realloc(column_widths_i, (nColumn+1)*sizeof(int));
+      delete[] column_widths_i;
+      delete[] column_widths_p;
+      column_widths_p = new int[nColumn+1];
+      column_widths_i = new int[nColumn+1];
     }
     // copy the widths over into the new array
     memcpy(column_widths_p, column_widths_, (nColumn+1)*sizeof(int));
@@ -1783,7 +1788,7 @@ Browser::Browser(int X,int Y,int W,int H,const char* L)
   levels = 0;
   for (int i = 0; i < NUMMARKS; i++) {
     // allocate space for the top level of indexes
-    item_index[i] = (int*)malloc(sizeof(int));
+    item_index[i] = new int[1];
     item_index[i][0] = 0;
     item_position[i] = 0;
     item_level[i] = 0;
@@ -1795,9 +1800,9 @@ Browser::Browser(int X,int Y,int W,int H,const char* L)
 /*! The destructor deletes all the list items (because they are child
   fltk::Widgets of an fltk::Group) and destroys the browser. */
 Browser::~Browser() {
-  int i; for (i = 0; i < NUMMARKS; i++) free(item_index[i]);
-  if (column_widths_p) free(column_widths_p);
-  if (column_widths_i) free(column_widths_i);
+  int i; for (i = 0; i < NUMMARKS; i++) delete[] item_index[i];
+  delete[] column_widths_p;
+  delete[] column_widths_i;
   if (header_) {
     for (i=0; i<nHeader; i++) delete header_[i];  
     delete[] header_;

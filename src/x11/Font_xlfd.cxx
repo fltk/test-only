@@ -190,7 +190,7 @@ static void get_font_entry(char *buf, int buf_size, char **pp)
 
 static const char* get_utf8_font_name_from_basefont(const char *basefont, int safelevel = 0)
 {
-  char *pname = strdup(basefont), *pnameold;
+  char *pname = newstring(basefont), *pnameold;
   char weight[16], slant[16], ptsize[16];
   static char fontname[256];
 
@@ -208,7 +208,7 @@ static const char* get_utf8_font_name_from_basefont(const char *basefont, int sa
   get_font_entry(NULL, 0, &pname); /* pixsize */
   get_font_entry(NULL, 0, &pname); /* pixsize */
   get_font_entry(NULL, 0, &pname); /* pixsize */
-  free(pnameold);
+  delete[] pnameold;
 
   switch(safelevel) {
   case 0:
@@ -327,7 +327,7 @@ static XFontStruct* get_xfont_utf8(const char* basefont, int cc)
       printf("basefont = %s\n", basefont);
 #endif
 
-      xfont_utf8[font_index].name = strdup(fontname);
+      xfont_utf8[font_index].name = newstring(fontname);
 
       // try some safety fonts
       while((utf8_fontname = get_utf8_font_name_from_basefont(fontname, safelevel))) {

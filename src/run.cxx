@@ -131,6 +131,7 @@ static void fix_focus() {
   focus(0);
 }
 
+extern "C" {
 // This function is here because Window::label() uses it:
 /**
   Equivalent to strdup() except the C++ new[] operator is used. A
@@ -144,12 +145,13 @@ static void fix_focus() {
   replacement new-handler to work. FLTK uses this for all strings
   that it copies internally.
 */
-FL_API const char* newstring(const char *from) {
+const char* newstring(const char *from) {
   if (!from) return 0;
   unsigned n = strlen(from)+1;
   char* ret = new char[n];
   strcpy(ret, from);
   return ret;
+}
 }
 
 // This function is here because Window::label() uses it:

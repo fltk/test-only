@@ -2248,8 +2248,7 @@ HelpView::~HelpView ()
     free (links_);
   if (ntargets_)
     free (targets_);
-  if (value_)
-    free ((void *) value_);
+  delete[] value_;
   delete scrollbar_;
   delete hscrollbar_;
 }
@@ -2293,10 +2292,8 @@ HelpView::load (const char *f)  // I - Filename to load (may also have target)
   else if (slash > directory_ && slash[-1] != '/')
     *slash = '\0';
 
-  if (value_ != NULL) {
-    free ((void *) value_);
-    value_ = NULL;
-  }
+  delete[] value_;
+  value_ = NULL;
 
   if (strncmp (localname, "ftp:", 4) == 0 ||
       strncmp (localname, "http:", 5) == 0 ||
@@ -2310,7 +2307,7 @@ HelpView::load (const char *f)  // I - Filename to load (may also have target)
               "<BODY><H1>Error</H1>"
               "<P>Unable to follow the link \"%s\" - "
               "no handler exists for this URI scheme.</P></BODY>", localname);
-    value_ = strdup (error);
+    value_ = newstring(error);
   } else {
     if (strncmp (localname, "file:", 5) == 0)
       localname += 5;           // Adjust for local filename...
@@ -2320,7 +2317,7 @@ HelpView::load (const char *f)  // I - Filename to load (may also have target)
       len = ftell (fp);
       rewind (fp);
 
-      value_ = (const char *) calloc (len + 1, 1);
+      value_ = new char[len+1];
       fread ((void *) value_, 1, len, fp);
       fclose (fp);
     } else {
@@ -2329,7 +2326,7 @@ HelpView::load (const char *f)  // I - Filename to load (may also have target)
                 "<BODY><H1>Error</H1>"
                 "<P>Unable to follow the link \"%s\" - "
                 "%s.</P></BODY>", localname, strerror (errno));
-      value_ = strdup (error);
+      value_ = newstring(error);
     }
   }
 
@@ -2458,10 +2455,8 @@ void HelpView::value (const char *v)    // I - Text to view
   if (!v)
     return;
 
-  if (value_ != NULL)
-    free ((void *) value_);
-
-  value_ = strdup (v);
+  delete[] value_;
+  value_ = newstring(v);
 
   format ();
 

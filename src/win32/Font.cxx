@@ -190,7 +190,7 @@ Font* fl_make_font(const char* name, int attrib) {
   }
   // no, lets create some fonts:
   IFont* newfont = new IFont[4];
-  newfont[0].f.name_ = strdup(name);
+  newfont[0].f.name_ = newstring(name);
   for (j = 0; j < 4; j++) {
     newfont[j].f.name_ = newfont[0].f.name_;
     newfont[j].f.attributes_ = attrib|j;

@@ -26,8 +26,8 @@
 #include <config.h>
 #include <fltk/filename.h>
 #include <fltk/utf.h>
+#include <fltk/string.h>
 #include <sys/stat.h>
-#include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
 #ifdef _WIN32
@@ -36,7 +36,7 @@
 #endif
 
 static struct stat last_stat;
-static char *last_statname = 0;
+static const char *last_statname = 0;
 static bool last_result = false;
 static int last_op = 0;
 
@@ -44,8 +44,8 @@ static int last_op = 0;
 // queries different aspects on the same file. 'stat' can be relatively slow.
 static bool fill_stat(const char *name, int new_op) {
   if (last_op!=new_op && last_statname && strcmp(last_statname, name)==0) return last_result;
-  free((void*)last_statname);
-  last_statname = strdup(name);
+  delete[] last_statname;
+  last_statname = newstring(name);
   char namebuf[1024];
   utf8tomb(name, strlen(name), namebuf, 1024);
   name = namebuf;
