@@ -129,12 +129,13 @@
 #define HAVE_NDIR_H 0
 #define HAVE_SCANDIR 0
 
-
 #if defined(_MSC_VER)
 #	define HAVE_VSNPRINTF 1
 #	define HAVE_SNPRINTF  1
 #	define HAVE_VSPRINTF  1
-#   define HAVE_STRDUP    1
+#       define HAVE_STRCASECMP 1
+#       define HAVE_STRNCASECMP 1
+#       define HAVE_STRDUP    1
 #	include <stdio.h>
 #	define fl_snprintf  _snprintf
 #	define fl_vsnprintf _vsnprintf
@@ -223,6 +224,18 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 
 #define CONF_CACHED
 
+/**** MRS: This may go away! ****/
+/* Enables Windows GUI emulation: clicking on most widgets (such as
+   buttons) moves the focus to them. This makes some useful GUI designs
+   impossible. */
+#define CLICK_MOVES_FOCUS	1
+
+/* If false or not defined, then if NumLock is off keypad events are
+   translated to fltk::LEFT_KEY, etc.  If on, keypad keys are always
+   reported as fltk::KEYPAD0, fltk::KEYPAD1, ..., ignoring the setting
+   of the NumLock key. This is incredibly useful if you want your
+   program to actually use the keypad, and is recommended. */
+#define IGNORE_NUMLOCK		1
 /*
  * End of "$Id: config.h,v 1.1 2004/08/27 03:06:53 leka Exp $".
  */
