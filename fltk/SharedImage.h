@@ -1,5 +1,5 @@
 //
-// "$Id: SharedImage.h,v 1.10 2004/05/09 08:22:46 spitzak Exp $"
+// "$Id: SharedImage.h,v 1.11 2004/07/04 17:36:02 laza2000 Exp $"
 //
 // Images that are all put in a tree by "name" (usually a filename)
 // so that if the same name is used more than once the same instance
@@ -38,7 +38,7 @@ namespace fltk {
 struct FL_IMAGES_API ImageType;
 
 // Shared images class. 
-class FL_IMAGES_API SharedImage : public Image {
+class FL_API SharedImage : public Image {
 protected:
   static const char* shared_image_root;
 
@@ -99,10 +99,6 @@ public:
   // Clear the cache for this image and all of its children in the binary tree
   void clear_cache();
 
-  // Try to guess the filetype
-  // Beware that calling this force you to link in all image types !
-  static ImageType* guess(const char* name, const uchar* datas=0);
-
   // Set the position where images are looked for on disk
   static void set_root_directory(const char* d);
 
@@ -125,14 +121,21 @@ struct FL_IMAGES_API ImageType {
 };
 extern FL_IMAGES_API ImageType image_filetypes[];
 
+// Try to guess the filetype
+// Beware that calling this force you to link in all image types !
+FL_IMAGES_API ImageType* guess_image(const char* name, const uchar* datas=0);
+
 ////////////////////////////////////////////////////////////////
 
-class FL_IMAGES_API pngImage : public SharedImage {
-  void read();		// Uncompress PNG datas
-  pngImage() { }
-  static SharedImage* create() { return new pngImage; } // Instantiate
+// 
+// bmp and gif classes are build in libfltk so they are FL_API
+//
+
+class FL_API gifImage : public SharedImage {
+  void read();
+  gifImage() { }
+  static SharedImage* create() { return new gifImage; }
 public:
-// Check the given buffer if it is in PNG format
   static bool test(const uchar* datas, unsigned size=0);
   void _measure(float& W, float& H) const;
   static SharedImage* get(const char* name, const uchar* datas = 0) {
@@ -140,10 +143,10 @@ public:
   }
 };
 
-class FL_IMAGES_API gifImage : public SharedImage {
+class FL_API bmpImage : public SharedImage {
   void read();
-  gifImage() { }
-  static SharedImage* create() { return new gifImage; }
+  bmpImage() { }
+  static SharedImage* create() { return new bmpImage; }
 public:
   static bool test(const uchar* datas, unsigned size=0);
   void _measure(float& W, float& H) const;
@@ -165,17 +168,9 @@ public:
   }
 };
 
-class FL_IMAGES_API bmpImage : public SharedImage {
-  void read();
-  bmpImage() { }
-  static SharedImage* create() { return new bmpImage; }
-public:
-  static bool test(const uchar* datas, unsigned size=0);
-  void _measure(float& W, float& H) const;
-  static SharedImage* get(const char* name, const uchar* datas = 0) {
-    return SharedImage::get(create, name, datas);
-  }
-};
+// 
+// jpeg and png classes are in libfltk_images so they are FL_IMAGES_API
+//
 
 class FL_IMAGES_API jpegImage : public SharedImage {
   void read();
@@ -189,10 +184,23 @@ public:
   }
 };
 
+class FL_IMAGES_API pngImage : public SharedImage {
+  void read();		// Uncompress PNG datas
+  pngImage() { }
+  static SharedImage* create() { return new pngImage; } // Instantiate
+public:
+// Check the given buffer if it is in PNG format
+  static bool test(const uchar* datas, unsigned size=0);
+  void _measure(float& W, float& H) const;
+  static SharedImage* get(const char* name, const uchar* datas = 0) {
+    return SharedImage::get(create, name, datas);
+  }
+};
+
 }
 
 #endif
 
 //
-// End of "$Id: SharedImage.h,v 1.10 2004/05/09 08:22:46 spitzak Exp $"
+// End of "$Id: SharedImage.h,v 1.11 2004/07/04 17:36:02 laza2000 Exp $"
 //
