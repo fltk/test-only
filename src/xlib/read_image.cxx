@@ -1,5 +1,5 @@
 //
-// "$Id: read_image.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $"
+// "$Id: read_image.cxx,v 1.1.2.2 2004/04/25 01:44:22 easysw Exp $"
 //
 // Xlib X11 image reading routines for the Fast Light Tool Kit (FLTK).
 //
@@ -23,6 +23,10 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+
+// Defined in fl_color.cxx
+extern uchar fl_redmask, fl_greenmask, fl_bluemask;
+extern int fl_redshift, fl_greenshift, fl_blueshift, fl_extrashift;
 
 //
 // 'fl_read_image()' - Read an image from the current window.
@@ -100,8 +104,16 @@ fl_read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
   // Initialize the default colors/alpha in the whole image...
   memset(p, alpha, w * h * d);
 
+  // Check that we have valid mask/shift values...
+  if (!image->red_mask && image->bits_per_pixel > 12) {
+    // Greater than 12 bits must be TrueColor...
+    image->red_mask   = fl_redmask << fl_redshift;
+    image->green_mask = fl_greenmask << fl_greenshift;
+    image->blue_mask  = fl_bluemask << fl_blueshift;
+  }
+
   // Check if we have colormap image...
-  if (image->red_mask == 0) {
+  if (!image->red_mask) {
     // Get the colormap entries for this window...
     maxindex = fl_visual->visual->map_entries;
 
@@ -375,5 +387,5 @@ fl_read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
 
 
 //
-// End of "$Id: read_image.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $".
+// End of "$Id: read_image.cxx,v 1.1.2.2 2004/04/25 01:44:22 easysw Exp $".
 //
