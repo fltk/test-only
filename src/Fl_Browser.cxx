@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.88 2004/07/15 16:13:21 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.89 2004/08/01 02:49:02 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -783,6 +783,9 @@ bool Browser::set_item_visible(bool value)
 }
 
 void Browser::layout() {
+  // This flag is used by relayout() to indicate that autoscroll is needed:
+  bool scroll_to_item = layout_damage()&LAYOUT_CHILD;
+
   // clear the flags first so the other methods know it is ok to measure
   // the widgets:
   Widget::layout();
@@ -903,9 +906,11 @@ void Browser::layout() {
   layout_damage(0); // resize of scrollbars may have turned this on
 
   // Now that we got the sizes of everything, scroll to show current item:
-  goto_mark(FOCUS); make_item_visible(NOSCROLL);
+  if (scroll_to_item) {
+    goto_mark(FOCUS);
+    make_item_visible(NOSCROLL);
+  }
 
-  
   redraw(DAMAGE_CONTENTS); // assumme we need to redraw
   fltk::column_widths(last_columns);
   Item::clear_style();
@@ -1022,6 +1027,9 @@ bool Browser::make_item_visible(linepos where) {
     // go there:
     yposition(p);
     goto_mark(TEMP);
+  } else {
+    // turn on flag indicating that scrolling to item is wanted:
+    relayout(LAYOUT_CHILD);
   }
   return changed;
 }
@@ -1695,5 +1703,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.88 2004/07/15 16:13:21 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.89 2004/08/01 02:49:02 spitzak Exp $".
 //

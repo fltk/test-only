@@ -1,5 +1,5 @@
 //
-// "$Id: symbols.cxx,v 1.14 2004/07/29 09:07:55 spitzak Exp $"
+// "$Id: symbols.cxx,v 1.15 2004/08/01 02:49:02 spitzak Exp $"
 //
 // Symbol test program for the Fast Light Tool Kit (FLTK).
 //
@@ -40,17 +40,21 @@ int sort(const void* a, const void* b) {
 }
 
 struct {const char* name; const char* text;} specialtable[] = {
-  {"b", "@b;bold@n;\t@@b;"},
-  {"B", "@B11;\t@n;@@B#;(bg color)"},
-  {"C", "@C11;color\t@n;@@C#;"},
-  {"f", "@f;fixed\t@n;@@f;"},
-  {"i", "@i;italic\t@n;@@i;"},
-  {"n", "@n;normal\t@@n; (turn off all fx)"},
-  {"t", "@t;type\t@n;@@t; (screen font)"},
-  {"s", "@s+4;big\t@n;@@s+#;"},
-  {"S", "@S-4;small\t@n;@@s-#;"},
-  {"x", "@x10;t@x+3;e@x-4;x@x+5;t\t@n@@x#; (displace x)"},
-  {"y", "@y-1;t@y+1;e@y+3;x@y+5;t;\t@n@@y#; (displace y)"},
+  {"b", "@t@@b;\t@n@b;bold"},
+  {"B", "@t@@B#;\t@n@B11;bg color"},
+  {"C", "@t@@C#;\t@n@C11;color"},
+  {"f", "@t@@f;\t@n@f;fixed"},
+  {"i", "@t@@i;\t@n@i;italic"},
+  {"n", "@t@@n;\t@n;reset font & color"},
+  {"t", "@t@@t;\t@t;typewriter"},
+  {"s", "@t@@s+#;\t@n@s+4;bigger"},
+  {"S", "@t@@s-#;\t@n@S-4;smaller"},
+  {"x", "@t@@x#;\t@n@x10;t@x+3;e@x-4;x@x+5;t (displace x)"},
+  {"y", "@t@@y#;\t@n@y-1;t@y+1;e@y+3;x@y+5;t@n; (displace y)"},
+  {".", "@t@@.;\t@n@.;raw mode: @&"},
+  {"l",	"@t@@l;\t@n@l;left"},
+  {"c",	"@t@@c;\t@n@c;center"},
+  {"r",	"@t@@r;\t@n@r;right"}
 };
 
 void slider_cb(Widget* w, void* v) {
@@ -64,14 +68,14 @@ void slider_cb(Widget* w, void* v) {
   browser->redraw();
 }
 
-const char* labels[] = {"result", "command", 0};
+static const char* labels[] = {"command", "result", 0};
+static int widths[] = {170,-1,0};
 
 int main(int argc, char** argv) {
-  Window window(220,600);
+  Window window(250,700);
   window.begin();
   const int sliderh = 25;
   Browser browser(0,0,window.w(),window.h()-sliderh);
-  int widths[] = {58,-1,0};
   browser.column_widths(widths);
   browser.column_labels(labels);
   browser.color(GRAY85);
@@ -100,7 +104,7 @@ int main(int argc, char** argv) {
 	goto CONTINUE;
       }
     }
-    snprintf(buffer, 256, "@%s;\t@n@@%s;", symbol->name(), symbol->name());
+    snprintf(buffer, 256, "@t@@%s;\t@n@%s;", symbol->name(), symbol->name());
     browser.add(buffer);
   CONTINUE:;
   }

@@ -1,5 +1,5 @@
 //
-// "$Id: xpmImage.h,v 1.10 2004/06/04 08:31:26 spitzak Exp $"
+// "$Id: xpmImage.h,v 1.11 2004/08/01 02:49:02 spitzak Exp $"
 //
 // Image subclass that draws the data from an xpm format file.
 // XPM is a file format designed for small icons in X, it can
@@ -37,10 +37,14 @@ class FL_API xpmImage : public Image {
   Color fg, bg; // what color monochrome ones were drawn in
 public:
   const char * const * data;
-  xpmImage(const char * const * d) : Image(-1,0), data(d) {}
-  xpmImage(const unsigned char* const * d) : Image(-1,0), data((char**)d) {}
-  // some compilers with bugs may need this one: (?)
-  xpmImage(char ** d) : Image(-1,0), data(d) {}
+  // XPM files define the data all kinds of ways, so the constructor
+  // is overloaded to accept all the ones we have seen:
+  xpmImage(const char * const * d, const char* name = 0) :
+    Image(-1,0,name), data(d) {}
+  xpmImage(const unsigned char* const * d, const char* name = 0) :
+    Image(-1,0,name), data((char**)d) {}
+  xpmImage(char ** d, const char* name = 0) :
+    Image(-1,0,name), data(d) {}
 
   void _measure(float&, float&) const;
   void _draw(int, int, int, int, const Style*, Flags = 0) const;
@@ -52,5 +56,5 @@ public:
 #endif
 
 //
-// End of "$Id: xpmImage.h,v 1.10 2004/06/04 08:31:26 spitzak Exp $".
+// End of "$Id: xpmImage.h,v 1.11 2004/08/01 02:49:02 spitzak Exp $".
 //

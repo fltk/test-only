@@ -1,5 +1,5 @@
 //
-// "$Id: Image.h,v 1.11 2004/07/19 23:45:26 laza2000 Exp $"
+// "$Id: Image.h,v 1.12 2004/08/01 02:49:02 spitzak Exp $"
 //
 // Image object used to label widgets. This caches the image in a
 // server pixmap. Subclasses are used to decide how to change data
@@ -42,8 +42,8 @@ protected:
 
 public:
 
-  Image() : Symbol(0), w_(-1), h_(-1), rgb(0), alpha(0) {}
-  Image(int w, int h) : Symbol(0), w_(w), h_(h), rgb(0), alpha(0) {}
+  Image(const char* name=0) : Symbol(name), w_(-1), h_(-1), rgb(0), alpha(0) {}
+  Image(int w, int h, const char* name=0) : Symbol(name), w_(w), h_(h), rgb(0), alpha(0) {}
 
   int w() const {return w_;}
   int width() const {return w_;}
@@ -116,5 +116,5 @@ class FL_API ImageDraw {
 #endif
 
 //
-// End of "$Id: Image.h,v 1.11 2004/07/19 23:45:26 laza2000 Exp $".
+// End of "$Id: Image.h,v 1.12 2004/08/01 02:49:02 spitzak Exp $".
 //
