@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.96 2003/03/31 07:17:47 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.97 2003/04/06 18:55:23 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -202,6 +202,7 @@ int Window::handle(int event) {
       return 1;
     }
     break;
+#if 0
   case PUSH:
     // clicks outside windows exit the modal state. I give a bit of border
     // so if they are trying to resize the modal window an miss they don't
@@ -209,10 +210,13 @@ int Window::handle(int event) {
     if (event_x() < -4 || event_x() > w()+4 ||
 	event_y() < -4 || event_y() > h()+4) {
       if (modal()) exit_modal();
+      return;
     }
+#endif
 #if !defined(_WIN32) && !(defined(__APPLE__) && !USE_X11)
+  case PUSH:
     // Unused clicks raise windows:
-    else XMapRaised(xdisplay, i->xid);
+    XMapRaised(xdisplay, i->xid);
 #endif
   }
   return 0;
@@ -404,5 +408,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.96 2003/03/31 07:17:47 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.97 2003/04/06 18:55:23 spitzak Exp $".
 //
