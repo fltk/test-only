@@ -18,18 +18,6 @@ fltk::ReturnButton* f_panel_ok;
 
 fltk::Button* f_panel_cancel;
 
-static void cb___declspec(fltk::Item*, void*) {
-  f_attributes_input->value("__declspec(dllexport)");
-}
-
-static void cb___declspec1(fltk::Item*, void*) {
-  f_attributes_input->value("__declspec(dllimport)");
-}
-
-static void cb___stdcall(fltk::Item*, void*) {
-  f_attributes_input->value("__stdcall");
-}
-
 static void cb_static(fltk::Item*, void*) {
   f_attributes_input->value("static");
 }
@@ -46,6 +34,22 @@ static void cb_inline(fltk::Item*, void*) {
   f_attributes_input->value("inline");
 }
 
+static void cb_export(fltk::Item*, void*) {
+  f_attributes_input->value("export");
+}
+
+static void cb___declspec(fltk::Item*, void*) {
+  f_attributes_input->value("__declspec(dllexport)");
+}
+
+static void cb___declspec1(fltk::Item*, void*) {
+  f_attributes_input->value("__declspec(dllimport)");
+}
+
+static void cb___stdcall(fltk::Item*, void*) {
+  f_attributes_input->value("__stdcall");
+}
+
 static void cb_Set(fltk::Button*, void*) {
   f_name_input->value("");
   f_attributes_input->value("");
@@ -56,7 +60,7 @@ static void cb_Set(fltk::Button*, void*) {
 
 fltk::Window* make_function_panel() {
   fltk::Window* w;
-   {fltk::Window* o = function_panel = new fltk::Window(409, 208, "function/method");
+   {fltk::Window* o = function_panel = new fltk::Window(400, 208, "function/method");
     w = o;
     o->begin();
      {fltk::CheckButton* o = f_public_button = new fltk::CheckButton(13, 15, 95, 25, "public");
@@ -94,18 +98,6 @@ fltk::Window* make_function_panel() {
      {fltk::Choice* o = new fltk::Choice(278, 99, 111, 22, "attr:");
       o->box(fltk::THIN_DOWN_BOX);
       o->begin();
-       {fltk::Item* o = new fltk::Item("__declspec(dllexport)");
-        o->buttonbox(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)cb___declspec);
-      }
-       {fltk::Item* o = new fltk::Item("__declspec(dllimport)");
-        o->buttonbox(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)cb___declspec1);
-      }
-       {fltk::Item* o = new fltk::Item("__stdcall");
-        o->buttonbox(fltk::THIN_UP_BOX);
-        o->callback((fltk::Callback*)cb___stdcall);
-      }
        {fltk::Item* o = new fltk::Item("static");
         o->callback((fltk::Callback*)cb_static);
       }
@@ -118,6 +110,22 @@ fltk::Window* make_function_panel() {
        {fltk::Item* o = new fltk::Item("inline");
         o->buttonbox(fltk::THIN_UP_BOX);
         o->callback((fltk::Callback*)cb_inline);
+      }
+       {fltk::Item* o = new fltk::Item("export");
+        o->buttonbox(fltk::THIN_UP_BOX);
+        o->callback((fltk::Callback*)cb_export);
+      }
+       {fltk::Item* o = new fltk::Item("__declspec(dllexport)");
+        o->buttonbox(fltk::THIN_UP_BOX);
+        o->callback((fltk::Callback*)cb___declspec);
+      }
+       {fltk::Item* o = new fltk::Item("__declspec(dllimport)");
+        o->buttonbox(fltk::THIN_UP_BOX);
+        o->callback((fltk::Callback*)cb___declspec1);
+      }
+       {fltk::Item* o = new fltk::Item("__stdcall");
+        o->buttonbox(fltk::THIN_UP_BOX);
+        o->callback((fltk::Callback*)cb___stdcall);
       }
       o->end();
     }
@@ -265,9 +273,9 @@ fltk::Window* make_decl_panel() {
      {fltk::CheckButton* o = decl_public_button = new fltk::CheckButton(10, 11, 65, 22, "public");
       o->when(fltk::WHEN_NEVER);
     }
-     {fltk::Input* o = decl_input = new fltk::Input(10, 44, 270, 22, "can be any declartion, like \"int x;\",\nan external symbol like \"extern int\
- foo();\",\na #directive like \"#include <foo.h>\",\nor a comment like \"//foo\
-\" or \"/*foo*/\"");
+     {fltk::Input* o = decl_input = new fltk::Input(10, 44, 270, 22, "can be any declartion, like \"int x;\",\r\nan external symbol like \"extern i\
+nt foo();\",\r\na #directive like \"#include <foo.h>\",\r\nor a comment like \
+\"//foo\" or \"/*foo*/\"");
       o->align(fltk::ALIGN_BOTTOM|fltk::ALIGN_LEFT);
       o->when(fltk::WHEN_NEVER);
       fltk::Group::current()->resizable(o);

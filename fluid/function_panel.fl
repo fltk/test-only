@@ -10,7 +10,7 @@ Function {make_function_panel()} {open
 } {
   {fltk::Window} function_panel {
     label {function/method} open
-    xywh {373 189 409 208} resizable modal visible
+    xywh {296 145 400 208} resizable modal visible
   } {
     {fltk::CheckButton} f_public_button {
       label public
@@ -41,24 +41,9 @@ Function {make_function_panel()} {open
       xywh {281 176 115 22} box THIN_UP_BOX buttonbox DOWN_BOX shortcut 0xff1b
     }
     {fltk::Choice} {} {
-      label {attr:} open selected
+      label {attr:} open
       xywh {278 99 111 22} box THIN_DOWN_BOX
     } {
-      {fltk::Item} {} {
-        label {__declspec(dllexport)}
-        callback {f_attributes_input->value("__declspec(dllexport)");}
-        buttonbox THIN_UP_BOX
-      }
-      {fltk::Item} {} {
-        label {__declspec(dllimport)}
-        callback {f_attributes_input->value("__declspec(dllimport)");}
-        buttonbox THIN_UP_BOX
-      }
-      {fltk::Item} {} {
-        label __stdcall
-        callback {f_attributes_input->value("__stdcall");}
-        buttonbox THIN_UP_BOX
-      }
       {fltk::Item} {} {
         label static
         callback {f_attributes_input->value("static");}
@@ -74,6 +59,26 @@ Function {make_function_panel()} {open
       {fltk::Item} {} {
         label inline
         callback {f_attributes_input->value("inline");}
+        buttonbox THIN_UP_BOX
+      }
+      {fltk::Item} {} {
+        label export
+        callback {f_attributes_input->value("export");} selected
+        buttonbox THIN_UP_BOX
+      }
+      {fltk::Item} {} {
+        label {__declspec(dllexport)}
+        callback {f_attributes_input->value("__declspec(dllexport)");}
+        buttonbox THIN_UP_BOX
+      }
+      {fltk::Item} {} {
+        label {__declspec(dllimport)}
+        callback {f_attributes_input->value("__declspec(dllimport)");}
+        buttonbox THIN_UP_BOX
+      }
+      {fltk::Item} {} {
+        label __stdcall
+        callback {f_attributes_input->value("__stdcall");}
         buttonbox THIN_UP_BOX
       }
     }
@@ -167,7 +172,7 @@ Function {make_decl_panel()} {open
 } {
   {fltk::Window} decl_panel {
     label declaration open
-    xywh {152 819 290 175} resizable visible
+    xywh {276 412 290 175} resizable visible
   } {
     {fltk::CheckButton} decl_public_button {
       label public
