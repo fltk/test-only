@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.59 1999/12/07 02:01:38 vincent Exp $"
+# "$Id: Makefile,v 1.60 1999/12/19 15:21:55 vincent Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -74,6 +74,7 @@ CPPFILES = \
 	Fl_Single_Window.cxx \
 	Fl_Slider.cxx \
 	Fl_Style.cxx \
+	Fl_Style_start.cxx \
 	Fl_Tabs.cxx \
 	Fl_Tile.cxx \
 	Fl_Tooltip.cxx  \
@@ -269,5 +270,5 @@ install: $(LIBRARY).a $(DSONAME)
 	@cp ../fltk-config $(bindir)
 
 #
-# End of "$Id: Makefile,v 1.59 1999/12/07 02:01:38 vincent Exp $".
+# End of "$Id: Makefile,v 1.60 1999/12/19 15:21:55 vincent Exp $".
 #
