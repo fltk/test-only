@@ -32,6 +32,7 @@
 #include <fltk/Button.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <fltk/draw.h>
 
 #ifndef _WIN32
 #include "list_visuals.cxx"
@@ -61,22 +62,47 @@ xpmImage pixmap(porsche_xpm);
 
 #define WIDTH 75
 #define HEIGHT 75
-uchar* make_image() {
-  uchar* image = new uchar[3*WIDTH*HEIGHT];
+uchar* make_image(int n) {
+  uchar* image = new uchar[n*WIDTH*HEIGHT];
   uchar *p = image;
   for (int y = 0; y < HEIGHT; y++) {
     double Y = double(y)/(HEIGHT-1);
     for (int x = 0; x < WIDTH; x++) {
+      int a = 255;
+      if (n > 3) { // add alpha channel...
+	a = x-WIDTH/2;
+	int b = y-HEIGHT/2;
+	a = (a*a+b*b)*255/(WIDTH/2*HEIGHT/2)-100;
+	if (a > 255) a = 255;
+	if (a < 0) a = 0;
+      }
       double X = double(x)/(WIDTH-1);
-      *p++ = uchar(255*((1-X)*(1-Y))); // red in upper-left
-      *p++ = uchar(255*((1-X)*Y));	// green in lower-left
-      *p++ = uchar(255*(X*Y));	// blue in lower-right
+      *p++ = uchar(a*((1-X)*(1-Y))); // red in upper-left
+      *p++ = uchar(a*((1-X)*Y));	// green in lower-left
+      *p++ = uchar(a*(X*Y));	// blue in lower-right
+      if (n > 3) *p++ = a;
     }
   }
   return image;
 }
 
-rgbImage rgb_image(make_image(), WIDTH, HEIGHT);
+rgbImage rgb_image(make_image(3), WIDTH, HEIGHT, 3);
+uchar* rgbadata;
+rgbImage rgba_image((rgbadata=make_image(4)), WIDTH, HEIGHT, 4);
+
+class ImageTest : public Widget {
+  void draw() {
+    setcolor(RED);
+    fillrect(0,0,w(),h());
+    setcolor(BLACK);
+    addvertex(0,0);
+    addvertex(w(),h());
+    strokepath();
+    drawimage(rgbadata, 0, 0, WIDTH, HEIGHT, 4);
+  }
+public:
+  ImageTest(int x, int y, int w, int h) : Widget(x,y,w,h) {}
+};
 
 ////////////////////////////////////////////////////////////////
 
@@ -181,7 +207,7 @@ int main(int argc, char **argv) {
 	    "label() set to the name of that class.\n"
 	    "align() set to the flags selected below.\n"
 	    "Be sure to resize the window to see how it lays out");
-
+  ImageTest it(0,0,100,100);
 #define BWIDTH 60
 #define BHEIGHT 21
 
@@ -197,6 +223,8 @@ int main(int argc, char **argv) {
   i2.callback(choice_cb, &pixmap);
   Item i3("rgbImage");
   i3.callback(choice_cb, &rgb_image);
+  Item i4("rgbaImage");
+  i4.callback(choice_cb, &rgba_image);
   choice.end();
   choice.value(1); // set it to pixmap
   choice.tooltip("Subclass of Image to use");
@@ -239,11 +267,12 @@ int main(int argc, char **argv) {
   Widget box(10,0,290,controls.y());
   box.hide();
   window.resizable(box);
+
   window.end();
   window.show(argc, argv);
   return run();
 }
 
 //
-// End of "$Id: image.cxx,v 1.19 2004/05/07 06:36:24 spitzak Exp $".
+// End of "$Id: image.cxx,v 1.20 2004/06/04 08:35:11 spitzak Exp $".
 //
