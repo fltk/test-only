@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.5.2.5.2.9.2.3 2004/10/03 22:48:39 rokan Exp $"
+ * "$Id: config.h,v 1.5.2.5.2.9.2.4 2004/11/10 20:09:49 rokan Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK) for Visual C++.
  *
@@ -189,7 +189,7 @@
  * WinNT  >= Win2k
  */
 
-#define HAVE_ALPHABLEND    0
+#define HAVE_ALPHABLEND    1
 
 
 /*
@@ -200,5 +200,5 @@
 
 
 /*
- * End of "$Id: config.h,v 1.5.2.5.2.9.2.3 2004/10/03 22:48:39 rokan Exp $".
+ * End of "$Id: config.h,v 1.5.2.5.2.9.2.4 2004/11/10 20:09:49 rokan Exp $".
  */

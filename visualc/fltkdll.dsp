@@ -53,7 +53,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /machine:I386
-# ADD LINK32 opengl32.lib wsock32.lib comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll.pdb" /machine:I386 /out:"fltkdll.dll"
+# ADD LINK32 fltkjpeg.lib fltkpng.lib fltkz.lib opengl32.lib wsock32.lib comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll.pdb" /machine:I386 /out:"fltkdll.dll"
 # SUBTRACT LINK32 /pdb:none
 
 !ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
@@ -80,7 +80,7 @@ BSC32=bscmake.exe
 # ADD BSC32 /nologo
 LINK32=link.exe
 # ADD BASE LINK32 kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /subsystem:windows /dll /debug /machine:I386 /pdbtype:sept
-# ADD LINK32 opengl32.lib wsock32.lib comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdlld.pdb" /debug /machine:I386 /out:"fltkdlld.dll" /pdbtype:sept
+# ADD LINK32 fltkjpegd.lib fltkpngd.lib fltkzd.lib opengl32.lib wsock32.lib comctl32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdlld.pdb" /debug /machine:I386 /out:"fltkdlld.dll" /pdbtype:sept
 # SUBTRACT LINK32 /pdb:none /incremental:no
 
 !ENDIF 
@@ -99,7 +99,7 @@ DEP_CPP_FILEN=\
 	".\config.h"\
 	
 NODEP_CPP_FILEN=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -112,7 +112,7 @@ DEP_CPP_FILENA=\
 	".\config.h"\
 	
 NODEP_CPP_FILENA=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -123,7 +123,7 @@ DEP_CPP_FILENAM=\
 	"..\fl\fl_export.h"\
 	
 NODEP_CPP_FILENAM=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -136,7 +136,7 @@ DEP_CPP_FILENAME=\
 	".\config.h"\
 	
 NODEP_CPP_FILENAME=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -149,7 +149,7 @@ DEP_CPP_FILENAME_=\
 	".\config.h"\
 	
 NODEP_CPP_FILENAME_=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -160,7 +160,7 @@ DEP_CPP_FILENAME_M=\
 	"..\fl\fl_export.h"\
 	
 NODEP_CPP_FILENAME_M=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -173,7 +173,7 @@ DEP_CPP_FILENAME_S=\
 	".\config.h"\
 	
 NODEP_CPP_FILENAME_S=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -248,7 +248,7 @@ DEP_CPP_FL_AR=\
 	"..\FL\math.h"\
 	
 NODEP_CPP_FL_AR=\
-	"..\..\..\..\usr\include\math.h"\
+	"..\..\..\usr\include\math.h"\
 	
 # End Source File
 # Begin Source File
@@ -275,7 +275,7 @@ DEP_CPP_FL_ARC=\
 	"..\src\xlib\Fl_Xlib_Display.H"\
 	
 NODEP_CPP_FL_ARC=\
-	"..\..\..\..\usr\include\math.h"\
+	"..\..\..\usr\include\math.h"\
 	
 # End Source File
 # Begin Source File
@@ -299,7 +299,7 @@ DEP_CPP_FL_ARG=\
 	".\config.h"\
 	
 NODEP_CPP_FL_ARG=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -473,7 +473,7 @@ DEP_CPP_FL_CH=\
 	".\config.h"\
 	
 NODEP_CPP_FL_CH=\
-	"..\..\..\..\usr\include\math.h"\
+	"..\..\..\usr\include\math.h"\
 	
 # End Source File
 # Begin Source File
@@ -592,7 +592,7 @@ DEP_CPP_FL_COL=\
 	"..\FL\math.h"\
 	
 NODEP_CPP_FL_COL=\
-	"..\..\..\..\usr\include\math.h"\
+	"..\..\..\usr\include\math.h"\
 	
 # End Source File
 # Begin Source File
@@ -656,8 +656,13 @@ DEP_CPP_FL_DE=\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_display.h"\
 	"..\fl\fl_export.h"\
+	"..\fl\fl_group.h"\
 	"..\fl\fl_image.h"\
 	"..\fl\fl_widget.h"\
+	"..\fl\fl_window.h"\
+	"..\fl\mac.H"\
+	"..\fl\win32.h"\
+	"..\fl\x.h"\
 	"..\src\carbon\Fl_Carbon_Display.H"\
 	"..\src\win\fl_win_display.h"\
 	"..\src\xlib\Fl_Xlib_Display.H"\
@@ -678,7 +683,7 @@ DEP_CPP_FL_DI=\
 	"..\FL\math.h"\
 	
 NODEP_CPP_FL_DI=\
-	"..\..\..\..\usr\include\math.h"\
+	"..\..\..\usr\include\math.h"\
 	
 # End Source File
 # Begin Source File
@@ -838,7 +843,7 @@ DEP_CPP_FL_FI=\
 	".\config.h"\
 	
 NODEP_CPP_FL_FI=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -880,7 +885,7 @@ DEP_CPP_FL_FIL=\
 	"..\fl\fl_window.h"\
 	
 NODEP_CPP_FL_FIL=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -927,7 +932,7 @@ DEP_CPP_FL_FILE=\
 	".\config.h"\
 	
 NODEP_CPP_FL_FILE=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -970,7 +975,7 @@ DEP_CPP_FL_FILE_=\
 	".\config.h"\
 	
 NODEP_CPP_FL_FILE_=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -989,7 +994,7 @@ DEP_CPP_FL_FILE_I=\
 	".\config.h"\
 	
 NODEP_CPP_FL_FILE_I=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -1011,8 +1016,8 @@ DEP_CPP_FL_FILE_IC=\
 	".\config.h"\
 	
 NODEP_CPP_FL_FILE_IC=\
-	"..\..\..\..\usr\include\dirent.h"\
-	"..\..\..\..\usr\include\math.h"\
+	"..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\math.h"\
 	
 # End Source File
 # Begin Source File
@@ -1105,7 +1110,7 @@ DEP_CPP_FL_GET=\
 	".\config.h"\
 	
 NODEP_CPP_FL_GET=\
-	"..\..\..\..\usr\include\math.h"\
+	"..\..\..\usr\include\math.h"\
 	
 # End Source File
 # Begin Source File
@@ -1133,6 +1138,7 @@ DEP_CPP_FL_GL=\
 	"..\fl\fl_widget.h"\
 	"..\fl\fl_window.h"\
 	"..\FL\gl.h"\
+	"..\FL\gl_draw.H"\
 	"..\fl\mac.H"\
 	"..\fl\win32.h"\
 	"..\fl\x.h"\
@@ -1737,7 +1743,7 @@ DEP_CPP_FL_PR=\
 	".\config.h"\
 	
 NODEP_CPP_FL_PR=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -1745,6 +1751,7 @@ NODEP_CPP_FL_PR=\
 SOURCE=..\src\Fl_Printer.cxx
 DEP_CPP_FL_PRI=\
 	"..\fl\enumerations.h"\
+	"..\fl\fl.h"\
 	"..\fl\fl_device.h"\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
@@ -1875,9 +1882,11 @@ DEP_CPP_FL_SC=\
 	"..\fl\fl_draw.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
+	"..\fl\fl_image.h"\
 	"..\fl\fl_scroll.h"\
 	"..\fl\fl_scrollbar.h"\
 	"..\fl\fl_slider.h"\
+	"..\fl\fl_tiled_image.h"\
 	"..\fl\fl_valuator.h"\
 	"..\fl\fl_widget.h"\
 	
@@ -1887,6 +1896,7 @@ DEP_CPP_FL_SC=\
 SOURCE=..\src\fl_scroll_area.cxx
 DEP_CPP_FL_SCR=\
 	"..\fl\enumerations.h"\
+	"..\fl\fl.h"\
 	"..\fl\fl_export.h"\
 	"..\fl\fl_group.h"\
 	"..\fl\fl_widget.h"\
@@ -2184,7 +2194,7 @@ DEP_CPP_FL_VA=\
 	".\config.h"\
 	
 NODEP_CPP_FL_VA=\
-	"..\..\..\..\usr\include\math.h"\
+	"..\..\..\usr\include\math.h"\
 	
 # End Source File
 # Begin Source File
@@ -2203,7 +2213,7 @@ DEP_CPP_FL_VAL=\
 	"..\FL\math.h"\
 	
 NODEP_CPP_FL_VAL=\
-	"..\..\..\..\usr\include\math.h"\
+	"..\..\..\usr\include\math.h"\
 	
 # End Source File
 # Begin Source File
@@ -2259,7 +2269,7 @@ DEP_CPP_FL_VE=\
 	"..\src\xlib\vertex.cxx"\
 	
 NODEP_CPP_FL_VE=\
-	"..\..\..\..\usr\include\math.h"\
+	"..\..\..\usr\include\math.h"\
 	
 # End Source File
 # Begin Source File
@@ -2394,7 +2404,7 @@ DEP_CPP_FL_X_=\
 	".\config.h"\
 	
 NODEP_CPP_FL_X_=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -2489,7 +2499,7 @@ DEP_CPP_FORMS=\
 	"..\fl\forms.h"\
 	
 NODEP_CPP_FORMS=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -2548,7 +2558,7 @@ DEP_CPP_FORMS_=\
 	"..\fl\forms.h"\
 	
 NODEP_CPP_FORMS_=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -2619,7 +2629,7 @@ DEP_CPP_FORMS_FS=\
 	".\config.h"\
 	
 NODEP_CPP_FORMS_FS=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -2677,7 +2687,7 @@ DEP_CPP_FORMS_P=\
 	"..\fl\forms.h"\
 	
 NODEP_CPP_FORMS_P=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -2777,7 +2787,7 @@ DEP_CPP_NUMER=\
 	".\config.h"\
 	
 NODEP_CPP_NUMER=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File
@@ -2791,7 +2801,7 @@ DEP_CPP_SCAND=\
 	".\config.h"\
 	
 NODEP_CPP_SCAND=\
-	"..\..\..\..\usr\include\dirent.h"\
+	"..\..\..\usr\include\dirent.h"\
 	
 # End Source File
 # Begin Source File

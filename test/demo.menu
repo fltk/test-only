@@ -43,6 +43,7 @@
 	@d:fl_arc:arc
 	@d:fl_curve:curve
 	@d:fl_line_style:line_style
+	@d:Printing:device
 
 @main:Events:@u
 	@u:navigation:navigation
