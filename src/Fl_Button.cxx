@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.45 2002/01/28 08:02:59 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.46 2002/01/29 08:05:56 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -127,16 +127,8 @@ extern void fl_dotted_box(int,int,int,int);
 // a size (negative to put it on the right)
 void Fl_Button::draw(int glyph, int glyph_width) const
 {
-  Fl_Boxtype box = this->box();
-  // We need to erase the focus rectangle on FL_DAMAGE_HIGHTLIGHT for
-  // FL_NO_BOX buttons such as checkmarks:
-  if (damage()&FL_DAMAGE_EXPOSE && !box->fills_rectangle()
-      || box == FL_NO_BOX && damage()&FL_DAMAGE_HIGHLIGHT && !focused()) {
-    fl_push_clip(0, 0, this->w(), this->h());
-    parent()->draw_group_box();
-    fl_pop_clip();
-  }
-
+  // Figure out the colors to use. The flags are used by the label and
+  // glyph functions to figure out their colors:
   Fl_Flags flags;
   Fl_Color color;
   if (!active_r()) {
@@ -164,6 +156,37 @@ void Fl_Button::draw(int glyph, int glyph_width) const
     }
   }
 
+  Fl_Boxtype box = this->box();
+
+  // FL_NO_BOX does not need to draw anything other than the glyph
+  // unless this is a regular draw or the focus is going away. This
+  // avoids blinking and avoids double-drawing the label (which makes
+  // it bold if antialiasing is on):
+  if (box == FL_NO_BOX && !(damage()&FL_DAMAGE_EXPOSE) &&
+      !(damage()&FL_DAMAGE_HIGHLIGHT && !focused())) {
+    if (glyph_width < 0) {
+      int g = -glyph_width;
+      draw_glyph(glyph, w()-g-3, (h()-g)/2, g, g, glyph_flags);
+    } else if (glyph_width > 0) {
+      int g = glyph_width;
+      draw_glyph(glyph, 3, (h()-g)/2, g, g, glyph_flags);
+    }
+    if (focused()) {
+      fl_color(text_color());
+      fl_dotted_box(1, 1, w()-2, h()-2);
+    }
+    return;
+  }
+
+  // Erase the area around non-square boxes, or the entire background
+  // for a no-box widget:
+  if (box==FL_NO_BOX || damage()&FL_DAMAGE_EXPOSE && !box->fills_rectangle()) {
+    fl_push_clip(0, 0, this->w(), this->h());
+    parent()->draw_group_box();
+    fl_pop_clip();
+  }
+
+  // Draw the box:
   box->draw(0,0, this->w(), this->h(), color, flags);
   int x,y,w,h;
   x = y = 0; w = this->w(); h = this->h(); box->inset(x,y,w,h);
@@ -209,5 +232,5 @@ Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.45 2002/01/28 08:02:59 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.46 2002/01/29 08:05:56 spitzak Exp $".
 //

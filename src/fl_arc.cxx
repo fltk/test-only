@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arc.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_arc.cxx,v 1.7 2002/01/29 08:05:56 spitzak Exp $"
 //
 // Arc functions for the Fast Light Tool Kit (FLTK).
 //
@@ -25,7 +25,55 @@
 
 // Utility for drawing arcs and circles.  They are added to
 // the current fl_begin/fl_vertex/fl_end path.
-// Incremental math implementation:
+
+/*
+
+Algorithim is a modification of the Minsky scheme for incremental
+circle drawing. I made the modifications by accident trying to improve
+the output, but here is a mathematical description of what is happening,
+courtesy of Jim Wilson Gainesville, FL (my notes in parensthesis)
+
+I looked a Graphics Gems 1-5.  Volume 1 was colored in, but volume
+2 referred to the original scheme -- no half-Y-step.  I am willing to
+credit you for this innovative change.
+
+As you may have already analyzed, the exact scheme has a state
+transition matrix (to get from [x, y]T to [x", y"]T) of:
+
+        [ cos(e)  sin(e) ]
+        [-sin(e)  cos(e) ]
+
+(ie you multiply an x,y by the above matrix to rotate it by an angle e
+about the origin).
+
+The original (Minsky) scheme uses the approximant:
+
+        [ 1    e   ]
+        [-e  1-e^2 ]
+
+(this is the result of expanding the x += e*y, y -= e*x of the original
+algorithim)
+
+Both these transition matrices have the required determinant, 1.0.
+
+Obviously, the determinant is also 1.0 for your scheme (if I've done my
+sums correctly):
+
+        [  1-e^2/2     e    ]
+        [ -e+e^3/4  1-e^2/2 ]
+
+(Above, "^", exponentiation, has a higher precedence than "/", division,
+have a higher precedence than addition/subtraction/negation.)
+
+(this is what happens when you expand y -= e/2*x, x += e*y, y -= e/2*x)
+
+Minsky's scheme uses the first term of the Maclaurin series for cos(e)
+in the diagonal elements; you use the first *two* terms.  That's as far
+as my math-addled brain can carry me.  It is a neat innovation, and it
+sure draws damn fine circles.
+
+(Maclurin series for cos(x) is 1 - x^2/2! + x^4/4! - x^6/6! + x^8/8! - ...)
+*/
 
 #include <fltk/fl_draw.h>
 #include <fltk/math.h>
@@ -67,5 +115,5 @@ void fl_arc(double l, double b, double w, double h, double start, double end) {
 }
 
 //
-// End of "$Id: fl_arc.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_arc.cxx,v 1.7 2002/01/29 08:05:56 spitzak Exp $".
 //

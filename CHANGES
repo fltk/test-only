@@ -2025,3 +2025,6 @@ matces fltk1.1. Cleanup of the code to draw them.
 
 Checked in 1/27/02
 ////////////////////////////////////////////////////////////////
+
+Redrawing of Check buttons fixed to not overdraw the label, which was
+visible when Xft or other antialiasing was used.
