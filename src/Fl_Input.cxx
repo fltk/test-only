@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.38 2000/08/20 04:31:38 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.39 2000/09/07 08:52:35 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -82,7 +82,7 @@ const char* Fl_Input::expand(const char* p, char* buf,int wordwrap) const {
   return p;
 }
 
-// After filling in such a buffer, find the width to e
+// After filling in such a buffer, find the width to e:
 int Fl_Input::expandpos(
   const char* p,	// real string
   const char* e,	// pointer into real string
@@ -399,45 +399,6 @@ int Fl_Input::mouse_position(int X, int Y, int W, int /*H*/) const
   return l-value();
 }
 
-void Fl_Input::handle_mouse(int newpos, int drag)
-{
-  int newmark = drag ? mark() : newpos;
-  if (Fl::event_clicks()) {
-    // Multiple clicks, expand the selection to word/line boundaries:
-    int savepos = newpos;
-    if (newpos >= newmark) {
-      if (newpos == newmark) {
-	if (newpos < size()) newpos++;
-	else newmark--;
-      }
-      if (Fl::event_clicks() > 1) {
-	newpos = line_end(newpos);
-	newmark = line_start(newmark);
-      } else {
-	newpos = word_end(newpos);
-	newmark = word_start(newmark);
-      }
-    } else {
-      if (Fl::event_clicks() > 1) {
-	newpos = line_start(newpos);
-	newmark = line_end(newmark);
-      } else {
-	newpos = word_start(newpos);
-	newmark = word_end(newmark);
-      }
-    }
-    // If the multiple click does not increase the selection, revert
-    // to single-click behavior:
-    if (!drag && (mark() > position() ?
-                  (newmark >= position() && newpos <= mark()) :
-                  (newmark >= mark() && newpos <= position()))) {
-      Fl::event_clicks(0);
-      newmark = newpos = savepos;
-    }
-  }
-  position(newpos, newmark);
-}
-
 int Fl_Input::position(int p, int m) {
   was_up_down = 0;
   if (p<0) p = 0;
@@ -648,9 +609,7 @@ void Fl_Input::show_cursor(char v) {
   }
 }
 
-/*------------------------------*/
-
-#include <FL/Fl_Input.H>
+////////////////////////////////////////////////////////////////
 
 static Fl_Named_Style* style = new Fl_Named_Style("Input", 0, &style);
 
@@ -739,14 +698,6 @@ int Fl_Input::value(const char* str) {
   return value(str, str ? strlen(str) : 0);
 }
 
-void Fl_Input::layout() {
-//   int o[4];
-//   if (parent()) parent()->old_size(this,o);
-//   if (o[2] != w()) xscroll_ = 0;
-//   if (o[3] != h()) yscroll_ = 0;
-  Fl_Widget::layout();
-}
-
 Fl_Input::~Fl_Input() {
   if (undowidget == this) undowidget = 0;
   if (bufsize) free((void*)buffer);
@@ -822,7 +773,7 @@ int Fl_Input::handle_key() {
       return 1;
     }
     if (type() >= FL_MULTILINE_INPUT && !Fl::event_state(FL_CTRL|FL_SHIFT))
-      return replace(position(), mark(), "\n", 1);
+      return replace(position(), mark(), '\n');
     break;
   case FL_Tab:
     if (type() >= FL_MULTILINE_INPUT && !Fl::event_state(FL_CTRL|FL_SHIFT))
@@ -847,10 +798,15 @@ int Fl_Input::handle_key() {
 }
 
 int Fl_Input::handle(int event) {
+  int X=x(); int Y=y(); int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
+  return handle(event, X, Y, W, H);
+}
+
+int Fl_Input::handle(int event, int X, int Y, int W, int H) {
   static int dnd_save_position, dnd_save_mark;
   static int drag_start;
+  int newpos, newmark;
 
-  int X=x(); int Y=y(); int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
   switch (event) {
 
   case FL_ENTER:
@@ -899,17 +855,17 @@ int Fl_Input::handle(int event) {
     return handle_key();
 
   case FL_PUSH:
-    drag_start = mouse_position(X, Y, W, H);
+    drag_start = newpos = mouse_position(X, Y, W, H);
     if (focused() && !Fl::event_state(FL_SHIFT) && type()!=FL_SECRET_INPUT &&
 	(drag_start >= mark() && drag_start < position() ||
 	drag_start >= position() && drag_start < mark())) {
-      ; // user clicked int the selection, may be trying to drag
-    } else {
-      take_focus();
-      handle_mouse(drag_start, Fl::event_state(FL_SHIFT));
-      drag_start = -1;
+      // user clicked int the selection, may be trying to drag
+      return 1;
     }
-    return 1;
+    drag_start = -1;
+    take_focus();
+    newmark = Fl::event_state(FL_SHIFT) ? mark() : newpos;
+    goto HANDLE_MOUSE;
 
   case FL_DRAG:
     if (drag_start >= 0) {
@@ -921,12 +877,51 @@ int Fl_Input::handle(int event) {
       copy(); Fl::dnd();
       return 1;
     }
-    handle_mouse(mouse_position(X, Y, W, H), 1);
+    newpos = mouse_position(X, Y, W, H);
+    newmark = mark();
+  HANDLE_MOUSE:
+    if (Fl::event_clicks()) {
+      // Multiple clicks, expand the selection to word/line boundaries:
+      int savepos = newpos;
+      if (newpos >= newmark) {
+	if (newpos == newmark) {
+	  if (newpos < size()) newpos++;
+	  else newmark--;
+	}
+	if (Fl::event_clicks() > 1) {
+	  newpos = line_end(newpos);
+	  newmark = line_start(newmark);
+	} else {
+	  newpos = word_end(newpos);
+	  newmark = word_start(newmark);
+	}
+      } else {
+	if (Fl::event_clicks() > 1) {
+	  newpos = line_start(newpos);
+	  newmark = line_end(newmark);
+	} else {
+	  newpos = word_start(newpos);
+	  newmark = word_end(newmark);
+	}
+      }
+      // If the multiple click does not increase the selection, revert
+      // to single-click behavior:
+      if (event != FL_DRAG && (mark() > position() ?
+		    (newmark >= position() && newpos <= mark()) :
+		    (newmark >= mark() && newpos <= position()))) {
+	Fl::event_clicks(0);
+	newmark = newpos = savepos;
+      }
+    }
+    position(newpos, newmark);
     return 1;
 
   case FL_RELEASE:
     // if they just clicked in the middle of selection, move cursor there:
-    if (drag_start >= 0) {handle_mouse(drag_start, 0); drag_start = -1;}
+    if (drag_start >= 0) {
+      newpos = newmark = drag_start; drag_start = -1;
+      goto HANDLE_MOUSE;
+    }
     if (Fl::event_button() == 2) {
       Fl::event_is_click(0); // stop double click from picking a word
       Fl::paste(*this);
@@ -968,5 +963,5 @@ int Fl_Input::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.38 2000/08/20 04:31:38 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.39 2000/09/07 08:52:35 spitzak Exp $".
 //

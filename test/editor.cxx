@@ -1,5 +1,5 @@
 //
-// "$Id: editor.cxx,v 1.6 2000/08/10 02:26:36 clip Exp $"
+// "$Id: editor.cxx,v 1.7 2000/09/07 08:52:35 spitzak Exp $"
 //
 // A simple text editor program for the Fast Light Tool Kit (FLTK).
 //
@@ -429,7 +429,7 @@ Fl_Window* new_view() {
     m->find("&Search/Re&place Again")->callback(replace2_cb, w);
     w->editor = new Fl_Text_Editor(0, 30, 512, 354);
     w->editor->buffer(textbuf);
-    w->editor->text_font(FL_COURIER);
+    //w->editor->text_font(FL_COURIER);
   w->end();
   w->resizable(w->editor);
   w->callback((Fl_Callback *)close_cb, w);
@@ -450,5 +450,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: editor.cxx,v 1.6 2000/08/10 02:26:36 clip Exp $".
+// End of "$Id: editor.cxx,v 1.7 2000/09/07 08:52:35 spitzak Exp $".
 //

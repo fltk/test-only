@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.H,v 1.18 2000/08/20 04:31:36 spitzak Exp $"
+// "$Id: Fl_Input.H,v 1.19 2000/09/07 08:52:35 spitzak Exp $"
 //
 // Input base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -40,6 +40,11 @@ public:
   Fl_Input(int, int, int, int, const char* = 0);
   ~Fl_Input();
 
+  void draw();
+  void draw(int, int, int, int);
+  int handle(int);
+  int handle(int event, int, int, int, int);
+
   int value(const char*);
   int value(const char*, int);
   int static_value(const char*);
@@ -63,8 +68,18 @@ public:
   int cut(int n) {return replace(position(), position()+n, 0, 0);}
   int cut(int a, int b) {return replace(a, b, 0, 0);}
   int insert(const char* t, int l=0){return replace(position_, mark_, t, l);}
+  int replace(int a, int b, char c) {return replace(a,b,&c,1);}
   int copy();
   int undo();
+  int word_start(int i) const;
+  int word_end(int i) const;
+  int line_start(int i) const;
+  int line_end(int i) const;
+  int mouse_position(int, int, int, int) const;
+  int up_down_position(int position, int extend);
+  void maybe_do_callback();
+  int xscroll() const {return xscroll_;}
+  int yscroll() const {return yscroll_;}
 
 #if 0 // back compatability, but perhaps not a good idea as it breaks fluid:
   Fl_Boxtype box() const {return text_box();}
@@ -72,22 +87,6 @@ public:
   Fl_Color color() const {return text_background();}
   void color(Fl_Color c) {text_background(c);}
 #endif
-
-  void draw();
-  int handle(int);
-  void layout();
-
-  int word_start(int i) const;
-  int word_end(int i) const;
-  int line_start(int i) const;
-  int line_end(int i) const;
-  void draw(int, int, int, int);
-  int mouse_position(int, int, int, int) const;
-  int up_down_position(int position, int extend);
-  void handle_mouse(int position, int drag);
-  void maybe_do_callback();
-  int xscroll() const {return xscroll_;}
-  int yscroll() const {return yscroll_;}
 
 private:
   char erase_cursor_only;
@@ -121,5 +120,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Input.H,v 1.18 2000/08/20 04:31:36 spitzak Exp $".
+// End of "$Id: Fl_Input.H,v 1.19 2000/09/07 08:52:35 spitzak Exp $".
 //
