@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.16 2000/04/24 09:21:12 bill Exp $"
+// "$Id: fl_rect.cxx,v 1.17 2000/04/28 21:43:58 carl Exp $"
 //
 // Rectangle drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -314,7 +314,6 @@ void fl_clip(int x, int y, int w, int h) {
 // Replace top of stack with top of stack minus this rectangle:
 void fl_clip_out(int x, int y, int w, int h) {
   if (w <= 0 || h <= 0) return;
-  Region r = XRectangleRegion(x,y,w,h);
   Region current = rstack[rstackptr];
   // current must not be zero, you must push a rectangle first.
 #if 1
@@ -327,6 +326,7 @@ void fl_clip_out(int x, int y, int w, int h) {
     current = rstack[rstackptr] =
       XRectangleRegion(0,0,Fl_Window::current()->w(),Fl_Window::current()->h());
 #endif
+  Region r = XRectangleRegion(x,y,w,h);
 #ifndef WIN32
   Region temp = XCreateRegion();
   XSubtractRegion(current, r, temp);
@@ -451,5 +451,5 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H) {
 }
 
 //
-// End of "$Id: fl_rect.cxx,v 1.16 2000/04/24 09:21:12 bill Exp $".
+// End of "$Id: fl_rect.cxx,v 1.17 2000/04/28 21:43:58 carl Exp $".
 //
