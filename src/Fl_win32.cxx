@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.138 2001/02/20 19:58:49 robertk Exp $"
+// "$Id: Fl_win32.cxx,v 1.139 2001/02/22 15:50:57 robertk Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -773,10 +773,18 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     break;
 
   case WM_MOVE:
-    if (window->resize((signed short)LOWORD(lParam),
-                       (signed short)HIWORD(lParam),
-                       window->w(), window->h()))
-      resize_from_system = window;
+	{
+ 	int rx = (signed short)LOWORD(lParam);
+ 	int ry = (signed short)HIWORD(lParam);
+ 	Fl_Widget*o=window->parent();
+ 	if(o)	{rx-=o->x(); ry-=o->y();}
+ 	if (window->resize(rx,ry,window->w(), window->h()))
+ 	  resize_from_system = window;
+//    if (window->resize((signed short)LOWORD(lParam),
+//                       (signed short)HIWORD(lParam),
+//                       window->w(), window->h()))
+//      resize_from_system = window;
+    }
     break;
 
   case WM_SETCURSOR:
@@ -879,14 +887,25 @@ void Fl_Window::layout() {
   if (this == resize_from_system) {
     resize_from_system = 0;
   } else if (i) {
-    int x = this->x(); int y = this->y();
-    for (Fl_Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
-      x += p->x(); y += p->y();
-    }
-    int dx, dy, dw, dh; Fl_X::borders(this, dx, dy, dw, dh);
-    SetWindowPos(i->xid, 0, x-dx, y-dy, w()+dw, h()+dh, flags);
-    if (!(flags & SWP_NOSIZE)) {redraw(); /*i->wait_for_expose = 1;*/}
+     int real_x = this->x(); int real_y = this->y();
+     // this should not treat x,y differently from any other widget
+     for (Fl_Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
+       real_x += p->x(); real_y += p->y();
+     }
+
+	 int dx, dy, dw, dh; Fl_X::borders(this, dx, dy, dw, dh);
+     SetWindowPos(i->xid, 0, real_x-dx, real_y-dy, w()+dw, h()+dh, flags);
+     if (!(flags & SWP_NOSIZE)) {redraw(); /*i->wait_for_expose = 1;*/}
   }
+//  } else if (i) {
+//    int x = this->x(); int y = this->y();
+//    for (Fl_Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
+//      x += p->x(); y += p->y();
+//    }
+//    int dx, dy, dw, dh; Fl_X::borders(this, dx, dy, dw, dh);
+//    SetWindowPos(i->xid, 0, x-dx, y-dy, w()+dw, h()+dh, flags);
+//    if (!(flags & SWP_NOSIZE)) {redraw(); /*i->wait_for_expose = 1;*/}
+//  }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1255,5 +1274,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.138 2001/02/20 19:58:49 robertk Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.139 2001/02/22 15:50:57 robertk Exp $".
 //

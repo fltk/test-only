@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.91 2001/02/20 06:59:49 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.92 2001/02/22 15:50:57 robertk Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -390,7 +390,15 @@ int* Fl_Group::sizes() {
 }
 
 void Fl_Group::layout() {
-  if (!resizable() || ow()==w() && oh()==h()) {
+	bool bSameSize = ( ow()==w() && oh()==h() );
+	bool bNoChange;
+#ifdef WIN32
+	bool bSamePosition = ( ox()==x() && oy()==y() );
+    bNoChange = (bSamePosition && bSameSize);
+#else
+    bNoChange = bSameSize;
+#endif
+	if (!resizable() || bNoChange) {
     // If the size did not change or there is no resizable, everything
     // stays the same distance from the upper-left corner. If this is an
     // Fl_Window, the system (both X and Win32) will have moved all the
@@ -588,5 +596,5 @@ void Fl_Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.91 2001/02/20 06:59:49 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.92 2001/02/22 15:50:57 robertk Exp $".
 //
