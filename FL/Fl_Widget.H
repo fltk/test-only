@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.7 1999/03/14 06:46:19 carl Exp $"
+// "$Id: Fl_Widget.H,v 1.8 1999/03/15 05:55:00 carl Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -81,7 +81,8 @@ public:
 
   virtual void loadstyle();
 
-  void use_default_style() { style = default_style(); style->not_dynamic = 1; }
+  void modify_default_style()
+    {if (style) delete style; style = default_style(); style->not_dynamic = 1;}
 
   const char *tooltip() const { return tooltip_; }
   void tooltip(const char *t);
@@ -235,5 +236,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.7 1999/03/14 06:46:19 carl Exp $".
+// End of "$Id: Fl_Widget.H,v 1.8 1999/03/15 05:55:00 carl Exp $".
 //

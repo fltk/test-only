@@ -1,5 +1,5 @@
 //
-// "$Id: input.cxx,v 1.6 1999/03/14 06:46:45 carl Exp $"
+// "$Id: input.cxx,v 1.7 1999/03/15 05:55:02 carl Exp $"
 //
 // Input field test program for the Fast Light Tool Kit (FLTK).
 //
@@ -61,7 +61,7 @@ void color_cb(Fl_Widget* button, void* v) {
   Fl_Input def(0,0,0,0);
   Fl_Color c;
   
-  def.use_default_style();
+  def.modify_default_style();
   
   switch ((int)v) {
     case 0: c = def.color(); break;
@@ -129,5 +129,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: input.cxx,v 1.6 1999/03/14 06:46:45 carl Exp $".
+// End of "$Id: input.cxx,v 1.7 1999/03/15 05:55:02 carl Exp $".
 //
