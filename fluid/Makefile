@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.23 1999/11/10 12:21:46 bill Exp $"
+# "$Id: Makefile,v 1.24 1999/11/12 05:00:20 vincent Exp $"
 #
 # Fluid makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -46,16 +46,16 @@ CPPFILES = \
 ################################################################
 
 OBJECTS = $(CPPFILES:.cxx=.o)
-OBJECTSDLL = $(CPPFILES:.cxx=.odll)
+OBJECTSDLL = $(CPPFILES:.cxx=.dllo)
 
 include ../makeinclude
 
-.SUFFIXES : .cxx .c .o .odll
+.SUFFIXES : .cxx .c .o .dllo
 
 .cxx.o :
 	$(CXX) -I.. $(CXXFLAGS) -c $<
 
-.cxx.odll :
+.cxx.dllo :
 	$(CXX) -DFL_DLL -I.. $(CXXFLAGS) -c $< -o $@
 .c.o :
 	$(CC) -I.. $(CFLAGS) -c $<
@@ -68,7 +68,7 @@ $(PROGRAM) : $(OBJECTS) ../lib/$(LIBNAME)
 # for mingw32, to build the version of fluid that use the dll and that works
 # with plugins ...
 dll : $(OBJECTSDLL) ../lib/libfltkdll.2.a
-	$(EXPORTCOMMAND) $(OBJECTSDLL)  --output-lib ../libfluid.a --output-def fluid.def -D fluid.exe --output-exp fluid.exp --export-all-symbols
+	$(EXPORTCOMMAND) $(OBJECTSDLL)  --output-lib ../libfluid.a --def ../lib/null.def -D fluid.exe --output-exp fluid.exp
 	$(CXX) $(LDFLAGS) -o $(PROGRAM) $(OBJECTSDLL) -L../lib -lfltkdll.2 $(LDLIBS) $(LD_DLOPEN_FLAGS) fluid.exp
 
 
@@ -102,5 +102,5 @@ rebuild:
 	./fluid -c widget_panel.fl
 
 #
-# End of "$Id: Makefile,v 1.23 1999/11/10 12:21:46 bill Exp $".
+# End of "$Id: Makefile,v 1.24 1999/11/12 05:00:20 vincent Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Plugins.h,v 1.10 1999/10/12 03:01:52 vincent Exp $"
+// "$Id: Fluid_Plugins.h,v 1.11 1999/11/12 05:00:20 vincent Exp $"
 //
 // Plugins headers for the Fast Light Tool Kit (FLTK).
 //
@@ -69,7 +69,8 @@ void read_plugins();
 #  define FLUID_EXPORT __declspec( dllexport )
 #  define FLUID_IMPORT __declspec( dllimport )
 # else
-#  define FLUID_IMPORT __declspec( dllexport )
+#  define FLUID_IMPORT 
+//__declspec( dllexport )
 # endif
 #else
 # define FLUID_EXPORT
@@ -79,5 +80,5 @@ void read_plugins();
 #endif
 
 //
-// End of "$Id: Fluid_Plugins.h,v 1.10 1999/10/12 03:01:52 vincent Exp $"
+// End of "$Id: Fluid_Plugins.h,v 1.11 1999/11/12 05:00:20 vincent Exp $"
 //

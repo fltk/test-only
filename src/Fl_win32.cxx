@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.61 1999/11/10 19:27:32 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.62 1999/11/12 05:00:22 vincent Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -565,6 +565,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	Fl::handle(FL_SHOW, window);
 	resize_from_system = window;
 	window->resize(window->x(),window->y(),LOWORD(lParam),HIWORD(lParam));
+        window->layout();
       }
     }
     break;
@@ -867,5 +868,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.61 1999/11/10 19:27:32 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.62 1999/11/12 05:00:22 vincent Exp $".
 //

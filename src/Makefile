@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.45 1999/11/10 04:48:52 carl Exp $"
+# "$Id: Makefile,v 1.46 1999/11/12 05:00:22 vincent Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -224,11 +224,11 @@ libfltk.so.2 libfltk.sl.2: $(OBJECTS) $(DSOglNAME) $(DSOimagesNAME)
 	@echo $(DSOCOMMAND) $@ ...
 	@$(DSOCOMMAND) $@ $(OBJECTS)
 
-fltk.2.dll: $(OBJECTS) $(OBJECTSimages) $(OBJECTSgl)
+fltk.2.dll: $(OBJECTS:.o=.dllo) $(OBJECTSimages:.o=.dllo) $(OBJECTSgl:.o=.dllo)
 	@echo $(DSOCOMMAND) $@ ...
 	@rm -f $@
 	@$(DSOCOMMAND) -o $@ \
-	    $(OBJECTS) $(OBJECTSimages) $(OBJECTSgl) $(CXXFLAGS) $(GLDLIBS)
+	    $(OBJECTS:.o=.dllo) $(OBJECTSimages:.o=.dllo) $(OBJECTSgl:.o=.dllo) $(CXXFLAGS) $(GLDLIBS)
 
 libfltkgl.so.2 libfltkgl.sl.2: $(OBJECTSgl)
 	@echo $(DSOCOMMAND) $@ ...
@@ -238,12 +238,17 @@ libfltkimages.so.2 libfltkimages.sl.2: $(OBJECTSimages)
 	@echo $(DSOCOMMAND) $@ ...
 	@$(DSOCOMMAND) $@ $(OBJECTSimages)
 
-.SUFFIXES:	.cxx .h .o
+.SUFFIXES:	.cxx .h .o .dllo
 
 .cxx.o :
 	$(CXX) -I.. $(CXXFLAGS) -c $<
 .c.o :
 	$(CC) -I.. $(CFLAGS) -c $<
+
+.cxx.dllo :
+	$(CXX) -I.. $(CXXFLAGS) $(DLLCFLAGS) -c $< -o $@
+.c.dllo :
+	$(CC) -I.. $(CFLAGS) $(DLLCFLAGS) -c $< -o $@
 
 clean :
 	-@ rm -f *.o *.do $(DSONAME) $(DSOglNAME) $(DSOimagesNAME) $(LIBRARY) $(CLEAN) core *~ ../include/*~ makedepend cmap
@@ -284,5 +289,5 @@ install: $(LIBRARY) $(DSONAME)
 	@-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.45 1999/11/10 04:48:52 carl Exp $".
+# End of "$Id: Makefile,v 1.46 1999/11/12 05:00:22 vincent Exp $".
 #

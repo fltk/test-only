@@ -110,6 +110,8 @@ extern void (*fl_unlock_function)();
 
 static DWORD main_thread;
 
+CRITICAL_SECTION cs;
+
 static void unlock_function() {
   LeaveCriticalSection(&cs);
 }
