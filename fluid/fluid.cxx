@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.48 2001/03/08 23:49:29 robertk Exp $"
+// "$Id: fluid.cxx,v 1.49 2001/06/19 22:00:05 robertk Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -135,9 +135,16 @@ void goto_images_dir() {
   // Call to fl_set_images_root_directory so that images are corretly displayed in FLUID.
   // Construct the path name verbosely because images are loaded from draw() function and
   // we do not know what is the cwd at this time
-  strcpy(buffer+strlen(pwd)+1, buffer);
-  strcpy(buffer, pwd);
-  buffer[strlen(pwd)]='/';
+#ifdef WIN32
+  if(buffer[1] != ':') {
+#endif
+	// this is skipped on Win32 if the path has a drive letter (like "C:\whatever")
+	memmove(buffer+strlen(pwd)+1, buffer, strlen(buffer));
+	strcpy(buffer, pwd);
+	buffer[strlen(pwd)]='/';
+#ifdef WIN32
+  }
+#endif
   Fl_Shared_Image::set_root_directory(buffer);
 }
 
@@ -514,5 +521,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.48 2001/03/08 23:49:29 robertk Exp $".
+// End of "$Id: fluid.cxx,v 1.49 2001/06/19 22:00:05 robertk Exp $".
 //

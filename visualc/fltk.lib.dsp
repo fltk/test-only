@@ -560,6 +560,10 @@ SOURCE=..\src\Fl_Pixmap.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\Fl_ProgressBar.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\fl_rect.cxx
 # End Source File
 # Begin Source File

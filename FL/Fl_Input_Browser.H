@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.H,v 1.2 2001/03/01 09:20:08 clip Exp $"
+// "$Id: Fl_Input_Browser.H,v 1.3 2001/06/19 22:00:05 robertk Exp $"
 //
 // Combo box header file for the Fast Light Tool Kit (FLTK).
 //
@@ -49,6 +49,9 @@ public:
   void value(const char *v) { input->value(v); }
   const char *value() { return input->value(); }
 
+  void	callback(Fl_Callback* c, void* p) {input->callback(c,p); Fl_Menu_::callback(c, p);}
+  void	callback(Fl_Callback* c) { input->callback(c); Fl_Menu_::callback(c); }
+
 protected:
   virtual void draw();
 
@@ -60,5 +63,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Fl_Input_Browser.H,v 1.2 2001/03/01 09:20:08 clip Exp $".
+// End of "$Id: Fl_Input_Browser.H,v 1.3 2001/06/19 22:00:05 robertk Exp $".
 //

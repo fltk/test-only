@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.H,v 1.25 2001/03/22 20:18:26 robertk Exp $"
+// "$Id: Fl_Browser.H,v 1.26 2001/06/19 22:00:05 robertk Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -113,7 +113,7 @@ public:
   void display(int line, int value = 1);
   int topline() const {return item_number[FIRST_VISIBLE];}
   void value(int v) {if (goto_number(v)) set_focus();}
-  int value() const {return item_number[FOCUS];}
+  int value() const { return (item_number[FOCUS] < size() ? item_number[FOCUS] : 0);}
 
 private:
   friend class Fl_Input_Browser;
@@ -150,5 +150,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser.H,v 1.25 2001/03/22 20:18:26 robertk Exp $".
+// End of "$Id: Fl_Browser.H,v 1.26 2001/06/19 22:00:05 robertk Exp $".
 //

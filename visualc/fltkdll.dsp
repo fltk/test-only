@@ -2041,6 +2041,27 @@ DEP_CPP_FL_PI=\
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\Fl_ProgressBar.cxx
+DEP_CPP_FL_PR=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Box.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\fl\fl_progressbar.h"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\fl_rect.cxx
 DEP_CPP_FL_RE=\
 	"..\FL\Enumerations.H"\
