@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.84 2004/03/28 17:33:15 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.85 2004/05/07 06:36:22 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -1506,6 +1506,11 @@ static void revert(Style* s) {
   s->glyph_ = ::glyph;
 }
 static NamedStyle style("Browser", revert, &Browser::default_style);
+/*! This style mostly serves to set the parenting back to
+  Widget::default_style to avoid the gray color and larger leading
+  set by Menu::default_style. However it also sets it's own glyph()
+  function to one that draws the [+] and [-] indicators.
+*/
 NamedStyle* Browser::default_style = &::style;
 
 static int nogroup(int x) {Group::current(0); return x;}
@@ -1578,5 +1583,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.84 2004/03/28 17:33:15 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.85 2004/05/07 06:36:22 spitzak Exp $".
 //

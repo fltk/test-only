@@ -85,8 +85,8 @@ rgbImage rgb_image(make_image(), WIDTH, HEIGHT);
 #include <fltk/Choice.h>
 #include <fltk/Item.h>
 
-CheckButton *leftb,*rightb,*topb,*bottomb,*insideb,*tileb,
-  *clipb, *wrapb, *inactiveb;
+CheckButton *leftb,*rightb,*topb,*bottomb,*insideb,
+  *clipb, *wrapb, *inactiveb, *tileb;
 Button *b;
 Window *w;
 
@@ -105,9 +105,30 @@ void button_cb(Widget *,void *) {
   w->redraw();
 }
 
+#include <fltk/TiledImage.h>
+
+TiledImage* tiledimage = 0;
+
+void tile_cb(Widget* button, void*) {
+  if (button->value()) {
+    if (!tiledimage) tiledimage = new TiledImage(0);
+    tiledimage->image((Image*)(b->image()));
+    b->image(0);
+    b->box(tiledimage);
+  } else {
+    b->image(tiledimage->image());
+    b->box(0);
+  }
+  w->redraw();
+}
+
 void choice_cb(Widget* item, void* data) {
   b->label(item->label());
-  b->image((Image*)data);
+  if (tileb->value()) {
+    tiledimage->image((Image*)data);
+  } else {
+    b->image((Image*)data);
+  }
   w->redraw();
 }
 
@@ -180,6 +201,10 @@ int main(int argc, char **argv) {
   choice.value(1); // set it to pixmap
   choice.tooltip("Subclass of Image to use");
 
+  tileb= new CheckButton(115, 5, BWIDTH, BHEIGHT, "tiled");
+  tileb->callback(tile_cb);
+  tileb->tooltip("Use a TiledImage object around the Image");
+
   int y = 5+BHEIGHT;
   int x = 5;
   topb = new CheckButton(x, y, BWIDTH, BHEIGHT, "top"); x += BWIDTH;
@@ -220,5 +245,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: image.cxx,v 1.18 2004/05/04 07:30:44 spitzak Exp $".
+// End of "$Id: image.cxx,v 1.19 2004/05/07 06:36:24 spitzak Exp $".
 //

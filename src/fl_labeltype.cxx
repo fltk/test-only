@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.45 2004/02/05 07:21:21 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.46 2004/05/07 06:36:23 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -210,7 +210,7 @@ void Widget::draw_label(int X, int Y, int W, int H, const Style* style, Flags fl
     if (!(flags & (ALIGN_LEFT|ALIGN_RIGHT|ALIGN_TOP|ALIGN_BOTTOM|
 		   ALIGN_INSIDE)) && label_) {
       int d = (H-int(h+labelsize()+leading()+.5))>>1;
-      if (d >= 0) {
+      if (d >= 0 || w >= W) {
 	// put the image atop the text
 	Y += d; H -= d; flags |= ALIGN_TOP;
       } else {
@@ -350,5 +350,5 @@ void Widget::measure_label(int& w, int& h) const {
 }
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.45 2004/02/05 07:21:21 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.46 2004/05/07 06:36:23 spitzak Exp $".
 //

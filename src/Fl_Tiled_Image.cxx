@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tiled_Image.cxx,v 1.6 2003/08/04 06:55:33 spitzak Exp $"
+// "$Id: Fl_Tiled_Image.cxx,v 1.7 2004/05/07 06:36:23 spitzak Exp $"
 //
 // Tiled image code for the Fast Light Tool Kit (FLTK).
 //
@@ -34,7 +34,8 @@ using namespace fltk;
 // than the are to tile, and to fix old code that did not initialize
 // the w & h, or code that assummes this always returns values greater
 // than zero.
-void TiledImage::measure(float& w, float& h) const {
+void TiledImage::_measure(float& w, float& h) const {
+  if (!image_) return;
   float iw = w;
   float ih = h;
   image_->measure(iw,ih);
@@ -43,8 +44,9 @@ void TiledImage::measure(float& w, float& h) const {
 }
 
 // Tiled image with minimal redraw
-void TiledImage::draw(float x, float y, float w, float h, Flags flags) const
+void TiledImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
 {
+  if (!image_) return;
   float fW = w;
   float fH = h;
   image_->measure(fW,fH); if (fW <= 0 || fH <= 0) return;
@@ -55,7 +57,7 @@ void TiledImage::draw(float x, float y, float w, float h, Flags flags) const
   // Perhaps this should use the Align flags to set cx, cy.
 
   // Figure out the smallest rectangle enclosing this and the clip region:
-  int X,Y,W,H; clip_box(int(x), int(y), int(w), int(h), X, Y, W, H);
+  int X,Y,W,H; clip_box(x,y,w,h, X, Y, W, H);
   if (W <= 0 || H <= 0) return;
   cx += X-int(x); cy += Y-int(y);
   push_clip(X, Y, W, H);
@@ -77,6 +79,11 @@ void TiledImage::draw(float x, float y, float w, float h, Flags flags) const
   pop_clip();
 }
 
+const BoxInfo* TiledImage::boxinfo() const {
+  if (image_) return image_->boxinfo();
+  else return Symbol::boxinfo();
+}
+
 //
-// End of "$Id: Fl_Tiled_Image.cxx,v 1.6 2003/08/04 06:55:33 spitzak Exp $".
+// End of "$Id: Fl_Tiled_Image.cxx,v 1.7 2004/05/07 06:36:23 spitzak Exp $".
 //

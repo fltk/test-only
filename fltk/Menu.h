@@ -1,5 +1,5 @@
 //
-// "$Id: Menu.h,v 1.7 2004/01/18 07:34:37 spitzak Exp $"
+// "$Id: Menu.h,v 1.8 2004/05/07 06:36:22 spitzak Exp $"
 //
 // Base class for MenuBar, Choice, Browser. This manages a set
 // of child Item widgets, and handles a "List" object that can
@@ -60,6 +60,8 @@ public:
   List* list() const {return list_;}
   void list(List* l) {list_ = l;}
   void layout();
+
+  static NamedStyle* default_style;
 
   int children(const int* indexes, int level) const ;
   int children() const ;
@@ -144,5 +146,5 @@ private:
 #endif
 
 //
-// End of "$Id: Menu.h,v 1.7 2004/01/18 07:34:37 spitzak Exp $".
+// End of "$Id: Menu.h,v 1.8 2004/05/07 06:36:22 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.150 2004/01/25 06:55:05 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.151 2004/05/07 06:36:23 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -129,6 +129,7 @@ void MenuTitle::draw() {
     widget->clear_flag(SELECTED);
     pushed_ = 0;
     pop_matrix();
+    Item::clear_style();
 
   } else {
     // a title on a popup menu is drawn like a button
@@ -159,26 +160,27 @@ public:
   Widget* get_widget(int i);
   int is_parent(int i);
   int handle(int);
-  static NamedStyle* default_style;
+  Box* box() const;
+  float leading() const;
 };
 
-static void revert(Style *s) {
-  s->box_ = UP_BOX;
-  s->buttonbox_ = FLAT_BOX; // was used around selected items, ignored now
-  s->leading_ = 4;
+// Return the box to draw around the outside edge of popup menu.
+// Unfortunately all popups in your program need to match
+// due to the need to be compatable with Windows
+// menubars which have flatbox, and to avoid down boxes:
+Box* MWindow::box() const {
+//    Box* b = style()->box();
+//    if (b != FLAT_BOX) return b;
+  return Menu::default_style->box();
 }
-static NamedStyle style("Menu", revert, &MWindow::default_style);
-/*! Because the Windows interface style is inconsistent, this
-    extra style is used. The box() from this style is drawn
-    around the actual pop up windows used for menus, and the
-    leading() is used to space items vertically. This allows
-    most Menu classes to use the Widget::default_style and
-    still popup in a Windows-compatable way. Unfortunatly this
-    also means that all popup menus in your program share these
-    same settings, you cannot make them different for different
-    Menu widgets.
-*/
-NamedStyle* MWindow::default_style = &::style;
+
+// Return the leading between items. Main reason to not use the default
+// is so that a theme does not have to remember to set it for every
+// widget that pops up a menu:
+float MWindow::leading() const {
+  if (style()->leading_) return style()->leading_;
+  return Menu::default_style->leading();
+}
 
 // return any widget at a given level:
 Widget* MWindow::get_widget(int index) {
@@ -204,8 +206,7 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
 		 const char* t)
   : MenuWindow(X, Y, Wp, Hp, 0), menustate(m), level(l)
 {
-  style(default_style);
-  Item::set_style(menustate->widget);
+  style(menustate->widget->style());
 
   children = m->widget->children(m->indexes, l);
 
@@ -233,8 +234,7 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
     title = new MenuTitle(menustate, 0, 0, Wtitle, Htitle, 0);
   } else if (t) {
     // label title
-    const Style* style = menustate->widget->style();
-    setfont(style->labelfont(), style->labelsize());
+    setfont(labelfont(), labelsize());
     Wtitle = Htitle = 300; // rather arbitrary choice for maximum wrap width
     measure(t, Wtitle, Htitle, OUTPUT|ALIGN_WRAP);
     Wtitle += 16;
@@ -248,6 +248,7 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
   int hotKeysW = 0;
   int H = 0;
   int selected_y = 0;
+  Item::set_style(menustate->widget);
   for (int i = 0; i < children; i++) {
     Widget* widget = get_widget(i);
     if (!widget->visible()) continue;
@@ -265,6 +266,7 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
     // can't use sgi overlay for images:
     if (widget->image()) clear_overlay();
   }
+  Item::clear_style();
 
   W += hotKeysW + box->dw();
   if (Wp > W) W = Wp;
@@ -283,6 +285,7 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
 }
 
 MWindow::~MWindow() {
+  style(default_style);
   delete title;
 }
 
@@ -294,7 +297,8 @@ void MWindow::position(int X, int Y) {
 
 // return the top edge of item:
 int MWindow::ypos(int index) {
-  int x=0; int y=0; int w=0; int h=0; box()->inset(x,y,w,h);
+  int x=0; int y=0; int w=0; int h=0;
+  box()->inset(x,y,w,h);
   int leading = int(this->leading());
   for (int i = 0; i < index; i++) {
     Widget* widget = get_widget(i);
@@ -305,8 +309,9 @@ int MWindow::ypos(int index) {
 }
 
 void MWindow::draw() {
-  if (damage() != DAMAGE_CHILD) box()->draw(0, 0, w(), h(), style(), OUTPUT);
-  int x=0; int y=0; int w=this->w(); int h=0; box()->inset(x,y,w,h);
+  Box* box = this->box();
+  if (damage() != DAMAGE_CHILD) box->draw(0, 0, w(), h(), style(), OUTPUT);
+  int x=0; int y=0; int w=this->w(); int h=0; box->inset(x,y,w,h);
   int selected = level <= menustate->level ? menustate->indexes[level] : -1;
   int leading = int(this->leading());
   if (style()->hide_shortcut() &&
@@ -336,7 +341,7 @@ void MWindow::draw() {
 	// clipping so background pixmaps will work:
 	if (damage() == DAMAGE_CHILD) {
 	  push_clip(x,y,w,ih);
-	  box()->draw(0, 0, this->w(), this->h(), style(), OUTPUT);
+	  box->draw(0, 0, this->w(), this->h(), style(), OUTPUT);
 	  pop_clip();
 	}
       }
@@ -365,6 +370,7 @@ void MWindow::draw() {
     }
     y += ih;
   }
+  Item::clear_style();
   drawn_selected = selected;
   fl_hide_shortcut = false;
 }
@@ -537,8 +543,14 @@ int MWindow::handle(int event) {
     case SpaceKey:
     case ReturnKey:
     case KeypadEnter:
-      goto EXECUTE;
+      // hitting the shortcut twice exits the menu:
+      if (!p.widget->test_shortcut()) goto EXECUTE;
     case EscapeKey:
+      exit_modal();
+      return 1;
+    default:
+      // hitting the shortcut twice exits the menu:
+      if (!p.widget->test_shortcut()) break;
       exit_modal();
       return 1;
     }
@@ -672,19 +684,6 @@ Widget* Menu::try_popup(
     bool menubar)
 {
   Group::current(0); // fix possible programmer error...
-
-  // Incredible kludge!
-  // Fltk wants Browsers and Menus to look alike, and it makes sense
-  // when you try it, too. Unfortunatley Windows does not make them
-  // look alike: menus and menubars look more like buttons, using
-  // the window gray color and the labelfont(). I try to detect
-  // that here and shuffle around the colors in the style used by
-  // the menu windows:
-  MWindow::default_style->color_ = color();
-  if (menubar || MWindow::default_style->color_ == GRAY75)
-    MWindow::default_style->textcolor_ = labelcolor();
-  else
-    MWindow::default_style->textcolor_ = textcolor();
 
   // figure out where to pop up in screen coordinates:
   if (parent()) {
@@ -885,5 +884,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.150 2004/01/25 06:55:05 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.151 2004/05/07 06:36:23 spitzak Exp $".
 //

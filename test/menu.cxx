@@ -39,6 +39,11 @@ const char* const strings[] = {
 StringList thelist(strings, sizeof(strings)/sizeof(*strings));
 
 void build_hierarchy() {
+  new Item("&Alpha");
+  new Item("&Beta");
+  new Item("&Gamma");
+  new Item("&Delta");
+  new Item("&Epsilon");
   ItemGroup* g = new ItemGroup("submenu&1");
   g->begin();
   new Item("Item &1");
@@ -112,46 +117,62 @@ int main(int argc, char **argv) {
   menubar.end();
   menubar.tooltip("This is a menu bar");
 
-  Widget box(0,HEIGHT,WIDTH,400-HEIGHT);
+  const int VWIDTH=100;
+
+  MenuBar mb0(0,HEIGHT,VWIDTH,400-HEIGHT);
+  mb0.set_flag(PACK_VERTICAL);
+  mb0.begin();
+  build_hierarchy();
+  mb0.end();
+
+  Widget box(VWIDTH,HEIGHT,WIDTH-VWIDTH,400-HEIGHT);
   //box.color(WHITE);
   box.box(fltk::DOWN_BOX);
   box.tooltip("Press right button for a pop-up menu");
 
-  PopupMenu mb(0,25,WIDTH,400-HEIGHT, "popup");
+  PopupMenu mb(VWIDTH,HEIGHT,WIDTH-VWIDTH,400-HEIGHT, "popup");
   mb.callback(callback);
   mb.begin();
   build_hierarchy();
   mb.end();
   mb.type(PopupMenu::POPUP3);
 
-  PopupMenu mb1(10,50,100,25,"&PopupMenu");
+  int x = 180;
+  int y = 50;
+
+  PopupMenu mb1(x,y,100,25,"&PopupMenu");
   mb1.callback(callback);
   mb1.begin();
   build_hierarchy();
   mb1.end();
   mb1.tooltip("This is a menu button");
+  y += 60;
 
-  Choice ch(220,50,100,25,"&choice:");
+  Choice ch(x,y,100,25,"&choice:");
   ch.callback(callback);
   ch.begin();
   build_hierarchy();
   ch.end();
   ch.tooltip("This is a choice");
+  y += 60;
 
-  CycleButton cb(220,150,100,25,"&cycle:");
+  CycleButton cb(x,y,100,25,"&cycle:");
   cb.callback(callback);
   cb.list(&thelist);
   cb.tooltip("This is a cyclebutton");
+  y += 60;
 
-  InputBrowser ib(410,50,100,25,"Input&Browser:");
+  InputBrowser ib(x,y,100,25,"Input&Browser:");
   ib.type(InputBrowser::INDENTED);
   ib.callback(callback);
   ib.begin();
   build_hierarchy();
   ib.end();
   ib.tooltip("This is an InputBrowser");
+  y += 60;
 
-  Button button(100,100,100,30,"button");
+  Button button(x+200,y,100,30,"button");
+  button.tooltip("This is to test if clicking here to exit menus pushes the button");
 
   window.resizable(box);
   window.size_range(300,20);

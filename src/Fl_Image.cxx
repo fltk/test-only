@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.37 2004/05/04 07:30:43 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.38 2004/05/07 06:36:23 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -450,6 +450,15 @@ void Image::_draw(int x, int y, int w, int h, const Style* style, Flags flags) c
 */
 void Image::_measure(float& W, float& H) const { W=w(); H=h(); }
 
+/*! If the image has no alpha, it claims to fill the box. This is
+  only true if you draw the size it returned from measure() or
+  smaller. */
+const BoxInfo* Image::boxinfo() const {
+  if (!rgb || alpha) return Symbol::boxinfo();
+  static const BoxInfo filled = {0,0,0,0,true};
+  return &filled;
+}
+
 #include <fltk/Widget.h>
 
 /*! This is a 1.1 back-compatability function. It is the same as
@@ -461,5 +470,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.37 2004/05/04 07:30:43 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.38 2004/05/07 06:36:23 spitzak Exp $".
 //

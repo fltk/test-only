@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.55 2004/01/25 08:49:51 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.56 2004/05/07 06:36:23 spitzak Exp $"
 //
 // The Menu base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Group
@@ -199,9 +199,53 @@ static List default_list;
   rearranging, and deleting child Item and ItemGroup widgets.
 */
 
+static void revert(Style *s) {
+  s->box_ = UP_BOX;
+  s->color_ = GRAY75;
+  //s->textcolor_ = BLACK;
+  //s->buttonbox_ = FLAT_BOX; // was used around selected items, ignored now
+  s->leading_ = 4;
+}
+static NamedStyle style("Menu", revert, &Menu::default_style);
+/*! This style is assigned to Menu subclasses. It controls the
+    appearance of pop-up menu windows.
+
+    For Windows compatability this style redefines several things.  If
+    this style was not redefined, popup menus would be white, the
+    surrounding box would push in, and text would be drawn in the
+    textfont and with normal text spacing between the items. By
+    default this makes minimal changes to get Windows appearance: the
+    box() is UP_BOX, the color() is GRAY75, and the leading() is 4.
+    If you write a theme you probably need to set things here as well
+    as in the Widget::default_style.
+
+    Also for Windows compatability, the box() is used directly from
+    this style, not from the current widget. This is because the box
+    around menubars has to be different than the box around the pulldown
+    menus.
+
+    Useful fields:
+    - The box() is drawn around the popup menu. Used from this, not
+	the actual widget's style.
+    - The color() is the color of the popup menu.
+    - The buttonbox() is drawn around a "title" of the popup menu,
+    	and also around the titles of pull-down menus in a menubar.
+    - The textfont(), textsize(), and textcolor() are the default
+	for how the labels in each menu item are drawn.
+    - The buttoncolor(), labelfont(), labelsize() and labelcolor()
+	are \e not used. They can be used to draw the actual widget
+	in the window (ie the menubar or button that pops up the menu)
+
+    Some subclasses such as Browser set their style back to
+    Widget::default_style, so that they appear more like a text editor
+    (ie they put the color and leading back to normal).
+*/
+NamedStyle* Menu::default_style = &::style;
+
 Menu::Menu(int x,int y,int w, int h,const char* l)
   : Group(x,y,w,h,l), list_(&default_list), item_(0) {
   callback(default_callback);
+  style(default_style);
 }
 
 /*! \fn void Menu::list(List* list)
@@ -427,5 +471,5 @@ int Menu::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.55 2004/01/25 08:49:51 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.56 2004/05/07 06:36:23 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.40 2004/03/28 17:33:15 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.41 2004/05/07 06:36:23 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -35,6 +35,21 @@ using namespace fltk;
 
 ////////////////////////////////////////////////////////////////
 // @-sign commands
+
+/*! \addtogroup symbols
+
+  "&x" underscores the 'x'. This is a standard from Microsoft.
+
+  "&&" prints a single "&".
+
+  "@@" prints a single "@" sign. This is not a symbol, the next
+  character is printed or interpreted even if it is a semicolon or
+  space.
+
+  "@;" truncates the string at this point. This can be used to hide
+  program internal data in the label() by putting this before it.
+
+*/
 
 #include <fltk/Symbol.h>
 
@@ -404,6 +419,7 @@ static void wrap(
     } else if (*p=='@' && !(flags&RAW_LABEL) && p+1<end) {
       q = p+1;
       if (*q == '@') q++;
+      else if (*q == ';') end = p;
       else {
 	while (q<end && *q && !isspace(*q) && *q!='@' && *q!=';') q++;
 	symbol = Symbol::find(p+1,q);
@@ -649,5 +665,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.40 2004/03/28 17:33:15 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.41 2004/05/07 06:36:23 spitzak Exp $".
 //

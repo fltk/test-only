@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.21 2004/05/05 07:09:06 spitzak Exp $"
+// "$Id: fl_clip.cxx,v 1.22 2004/05/07 06:36:23 spitzak Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -26,8 +26,9 @@
 
 #include <config.h>
 #include <fltk/Window.h>
-#include <fltk/x.h>
 #include <fltk/draw.h>
+#include <fltk/x.h>
+#include <stdlib.h>
 using namespace fltk;
 
 /*! \defgroup clipping Clipping
@@ -351,5 +352,5 @@ int fltk::clip_box(int x,int y,int w,int h, int& X,int& Y,int& W,int& H) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.21 2004/05/05 07:09:06 spitzak Exp $"
+// End of "$Id: fl_clip.cxx,v 1.22 2004/05/07 06:36:23 spitzak Exp $"
 //

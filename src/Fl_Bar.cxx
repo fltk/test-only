@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bar.cxx,v 1.7 2003/11/04 08:10:58 spitzak Exp $"
+// "$Id: Fl_Bar.cxx,v 1.8 2004/05/07 06:36:22 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -48,12 +48,14 @@ BarGroup::BarGroup(int x, int y, int w, int h, const char* title)
   pushed = false;
   glyph_size_ = 10;
   saved_size = h;
-  align(ALIGN_LEFT|ALIGN_INSIDE);
+  align(ALIGN_INSIDE);
 }
+
+#define horizontal() ((type()&1) && !(this->flags()&PACK_VERTICAL))
 
 void BarGroup::glyph_box(int& x, int& y, int& w, int& h) {
   x = y = 0; w = this->w(); h = this->h(); //box()->inset(x,y,w,h);
-  if (type() & 1) { // horizontal
+  if (horizontal()) {
     w = open_ ? glyph_size_ : saved_size;
   } else {
     h = open_ ? glyph_size_ : saved_size;
@@ -119,16 +121,16 @@ void BarGroup::draw()
   if (open_) {
     if (damage() & ~DAMAGE_HIGHLIGHT) {
       // make it not draw the inside label:
-      int saved = flags(); align(ALIGN_TOP);
+      //int saved = flags(); align(ALIGN_TOP);
       Group::draw();
-      flags(saved);
+      //flags(saved);
     }
   } else if (damage() & ~(DAMAGE_CHILD|DAMAGE_HIGHLIGHT)) {
     draw_box();
     int x = 0,y = 0,w = this->w(),h = this->h(); box()->inset(x,y,w,h);
     Flags flags = current_flags();
-    if (type() & 1) // horizontal
-      draw_label(saved_size, y, w-saved_size, h, style(), flags);
+    if (horizontal())
+      draw_label(saved_size, y, w-saved_size, h, style(), flags|ALIGN_LEFT|ALIGN_INSIDE);
     else
       draw_label(x, saved_size, w, h-saved_size, style(), flags);
   }
@@ -137,7 +139,8 @@ void BarGroup::draw()
     if (pushed) f |= VALUE;
     if (highlighted) f |= HIGHLIGHT;
     int x,y,w,h; glyph_box(x,y,w,h);
-    draw_glyph(0, x, y, w, h, f);
+    draw_glyph((horizontal()?open_:!open_)?GLYPH_RIGHT_BUTTON:GLYPH_DOWN_BUTTON,
+	       x, y, w, h, f);
   }
 }
 
@@ -146,7 +149,7 @@ bool BarGroup::opened(bool v)
   if (open_) {
     if (v) return false;
     open_ = false;
-    if (type() & 1) { // horizontal
+    if (horizontal()) { // horizontal
       saved_size = h();
       resize(x(), y(), w(), glyph_size_);
     } else {
@@ -156,7 +159,7 @@ bool BarGroup::opened(bool v)
   } else {
     if (!v) return false;
     open_ = true;
-    if (type() & 1) // horizontal
+    if (horizontal()) // horizontal
       resize(x(), y(), w(), saved_size);
     else
       resize(x(), y(), saved_size, h());

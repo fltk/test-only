@@ -1,5 +1,5 @@
 //
-// "$Id: TiledImage.h,v 1.6 2003/08/05 08:09:54 spitzak Exp $"
+// "$Id: TiledImage.h,v 1.7 2004/05/07 06:36:22 spitzak Exp $"
 //
 // A tiled image completely fills the bounding box passed to it with
 // replications of the internal Image passed to it.
@@ -27,25 +27,25 @@
 #ifndef fltk_TiledImage_h
 #define fltk_TiledImage_h
 
-#include "Image.h"
+#include "Symbol.h"
 
 namespace fltk {
 
-class FL_API TiledImage : public Image {
+class FL_API TiledImage : public Symbol {
 protected:
-  Image* image_;
+  const Symbol* image_;
 public:
-  TiledImage(Image *i) : Image(), image_(i) {}
-  Image* image() const {return image_;}
-  void image(Image* i) {image_ = i;}
-  void measure(float& w, float& h) const;
-  void measure(int& w, int& h) const {Symbol::measure(w,h);}
-  void draw(float x, float y, float w, float h, Flags = 0) const;
+  TiledImage(Symbol *i) : Symbol(0), image_(i) {}
+  const Symbol* image() const {return image_;}
+  void image(const Symbol* i) {image_ = i;}
+  void _measure(float& w, float& h) const;
+  void _draw(int, int, int, int, const Style*, Flags) const;
+  const BoxInfo* boxinfo() const;
 };
 
 }
 #endif
 
 //
-// End of "$Id: TiledImage.h,v 1.6 2003/08/05 08:09:54 spitzak Exp $"
+// End of "$Id: TiledImage.h,v 1.7 2004/05/07 06:36:22 spitzak Exp $"
 //
