@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.1 1999/08/22 06:20:17 vincent Exp $"
+# "$Id: Makefile,v 1.2 1999/08/22 14:15:07 vincent Exp $"
 #
 # Fluid makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -32,7 +32,6 @@ CPPFILES = \
 
 OBJECTS = $(CPPFILES:.cxx=.o)
 
-LINKDLL = -Wl,-G -rdynamic
 INCLUDES = -I../../fluid -I../..
 
 include ../../makeinclude
@@ -47,7 +46,7 @@ include ../../makeinclude
 	$(CXX) $(INCLUDES) $(CXXFLAGS) -o $@ $< -L../lib -lfltk $(LDLIBS)
 
 $(PROGRAM) : $(OBJECTS) ../../lib/$(LIBNAME)
-	$(CXX) $(LINKDLL) $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS) -L../../lib -lfltk $(LDLIBS) -ldl
+	$(CXX) $(LD_DLL_FLAGS) $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS) -L../../lib -lfltk $(LDLIBS) -ldl
 
 clean :
 	-@ rm -f *.o $(PROGRAM) $(CLEAN) core *~ makedepend
@@ -58,5 +57,5 @@ depend:
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.1 1999/08/22 06:20:17 vincent Exp $".
+# End of "$Id: Makefile,v 1.2 1999/08/22 14:15:07 vincent Exp $".
 #

@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.40 1999/08/22 06:14:35 vincent Exp $"
+dnl# "$Id: configure.in,v 1.41 1999/08/22 14:15:04 vincent Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -188,6 +188,17 @@ if test "$ac_cv_have_overlay" = yes; then
     AC_DEFINE(HAVE_OVERLAY)
 fi
 
+AC_CHECK_LIB(dl, dlopen, \
+ AC_DEFINE(HAVE_DLOPEN) LD_FOR_DLL_FLAGS="-rdynamic",,)
+
+if test -n $LD_FOR_DLL_FLAGS; then
+    LD_DLL_FLAGS="-Wl,-G -rdynamic"
+fi
+
+AC_SUBST(LD_FOR_DLL_FLAGS)
+AC_SUBST(LD_DLL_FLAGS)
+
+
 MAKEDEPEND="\$(CXX) -M"
 
 dnl# add warnings to compiler switches:
@@ -258,8 +269,8 @@ else
     esac
 fi
 
-CFLAGS="$DEBUGFLAG $CFLAGS -D$uname"
-CXXFLAGS="$DEBUGFLAG $CXXFLAGS -D$uname"
+CFLAGS="$DEBUGFLAG $CFLAGS"
+CXXFLAGS="$DEBUGFLAG $CXXFLAGS"
 
 AC_SUBST(DSONAME)
 AC_SUBST(DSOCOMMAND)
@@ -270,5 +281,5 @@ AC_CONFIG_HEADER(config.h:configh.in)
 AC_OUTPUT(makeinclude)
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.40 1999/08/22 06:14:35 vincent Exp $".
+dnl# End of "$Id: configure.in,v 1.41 1999/08/22 14:15:04 vincent Exp $".
 dnl#

@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.9 1999/04/06 20:02:47 carl Exp $"
+# "$Id: makeinclude.in,v 1.10 1999/08/22 14:15:04 vincent Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -41,6 +41,10 @@ MAKEDEPEND	=@MAKEDEPEND@
 CFLAGS		=@CFLAGS@
 CXXFLAGS	=@CXXFLAGS@ @X_CFLAGS@
 
+# flags for the linker
+LD_FOR_DLL_FLAGS=@LD_FOR_DLL_FLAGS@
+LD_DLL_FLAGS	=@LD_DLL_FLAGS@
+
 # program to make the archive:
 LIBNAME		=@LIBNAME@
 LIBCOMMAND	=@LIBCOMMAND@
@@ -53,5 +57,5 @@ LDLIBS		=@LDFLAGS@ @LIBS@ @LDLIBS@ @X_EXTRA_LIBS@ -lm
 GLDLIBS		=@LDFLAGS@ @LIBS@ @GLLIB@ @LDLIBS@ @X_EXTRA_LIBS@ -lm
 
 #
-# End of "$Id: makeinclude.in,v 1.9 1999/04/06 20:02:47 carl Exp $".
+# End of "$Id: makeinclude.in,v 1.10 1999/08/22 14:15:04 vincent Exp $".
 #

@@ -8,7 +8,7 @@ snap 2
 Function {make_widget_panel()} {open
 } {
   Fl_Window {} {open
-    xywh {351 297 360 335} resizable hotspot visible
+    xywh {359 345 360 335} resizable hotspot visible
   } {
     Fl_Tabs panel_tabs {
       callback propagate_tabs open selected

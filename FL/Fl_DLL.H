@@ -1,4 +1,5 @@
-// Only Win32 and Linux are currently supported
+// DLL support for dlopen or WIN32
+// If the function dlopen exists on your system, you must define HAVE_DLOPEN
 
 #ifndef FL_DLL_H
 #define FL_DLL_H
@@ -33,7 +34,7 @@ typedef HINSTANCE FLDLhandle;
 #endif
 
 
-#elif defined(Linux)
+#elif defined(HAVE_DLOPEN)
 
 #include <dlfcn.h>
 typedef void* FLDLhandle;

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.34 1999/08/22 06:14:36 vincent Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.35 1999/08/22 14:15:06 vincent Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -1355,15 +1355,13 @@ pp = next_panel(pp+1, p) )
 void set_cb(Fl_Button*, void*) {
   haderror = 0;
   propagate_group(the_panel, 0);
-  for_all_plugins(p) propagate_group(p->panel, 0);
+  for_all_plugins(p) if(p->panel_is_orphan) propagate_group(p->panel, 0);
 }
 
 void ok_cb(Fl_Return_Button* o, void* v) {
   set_cb(o,v);
-  if (!haderror) {
+  if (!haderror)
     the_panel->hide();
-    for_all_plugins(p) p->panel->hide();
-  }
 }
 
 static void load_panel();
@@ -1388,6 +1386,7 @@ void revert_cb(Fl_Button*, void*) {
   // but for now only the first label works...
   if (numselected == 1) current_widget->label(oldlabel);
   propagate_group(the_panel, LOAD);
+  for_all_plugins(p) if(p->panel_is_orphan) propagate_group(p->panel, LOAD);
 }
 
 void cancel_cb(Fl_Button* o, void* v) {
@@ -1418,12 +1417,13 @@ static void load_panel() {
     }
   }
   if (numselected) {
+    for_all_plugins(p) p->please_show_panel = 0;
     propagate_group(the_panel, LOAD);
     for_all_plugins(p) {
-      p->please_show_panel = 0;
-      if(panel_tabs->find(p->panel) == panel_tabs->children()) {
+      if(p->panel_is_orphan) {
 	propagate_group(p->panel, LOAD);
 	if(p->please_show_panel) {
+	  p->panel_is_orphan = 0;
 	  panel_tabs->add(*p->panel);
 	  if(p->was_visible) panel_tabs->value(p->panel);
 	  the_panel->redraw();
@@ -1431,6 +1431,7 @@ static void load_panel() {
 	}
       } else {
 	if(!p->please_show_panel) {
+	  p->panel_is_orphan = 1;
 	  if(panel_tabs->value() == p->panel) {
 	    panel_tabs->value(panel_tabs->child(0));
 	    p->was_visible = 1;
@@ -1441,15 +1442,8 @@ static void load_panel() {
 	}
       }
     }	
-  } else {
+  } else
     the_panel->hide();
-/*    for_all_plugins(p) {
-      if(panel_tabs->find(p->panel) < panel_tabs->children()) {
-	panel_tabs->remove(*p->panel);
-	the_panel->redraw();
-      }
-    }*/
-  }
 }
 
 // This is called when user double-clicks an item, open or update the panel:
@@ -1458,7 +1452,10 @@ void Fl_Widget_Type::open() {
     the_panel = make_widget_panel();
     for_all_plugins(p) {
       p->make_panel();
-      p->panel->position(10, 10);
+      // All plugin panels are initially not mapped in the main pannel
+      p->panel_is_orphan = 1; 
+      //      if(p->panel->x() || p->panel->y()) // We trust the plugin if it has
+	p->panel->position(10, 10);      // set itself the position
       p->panel->label(p->name);
     }
   }
@@ -1466,12 +1463,6 @@ void Fl_Widget_Type::open() {
   load_panel();
   if (numselected) {
     the_panel->show();
-/*    for_all_plugins(p) {
-      if(p->please_show_panel)
-	panel_tabs->insert(*p->panel);
-      else
- 	panel_tabs->remove(*p->panel);
-    } */
   }
 }
 
@@ -2105,5 +2096,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.34 1999/08/22 06:14:36 vincent Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.35 1999/08/22 14:15:06 vincent Exp $".
 //
