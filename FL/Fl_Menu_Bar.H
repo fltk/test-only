@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.H,v 1.9 1999/04/13 20:18:33 carl Exp $"
+// "$Id: Fl_Menu_Bar.H,v 1.10 1999/04/28 01:50:07 carl Exp $"
 //
 // Menu bar header file for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,7 @@ public:
   };
 
   Fl_Menu_Bar(int x,int y,int w,int h,const char *l=0);
-  ~Fl_Menu_Bar() { for(int i=0; i<FL_MAX_MENU_TITLES; i++) delete titles[i]; }
+  ~Fl_Menu_Bar();
 
   virtual void loadstyle() const;
 
@@ -59,5 +59,5 @@ friend class TitleBox;
 #endif
 
 //
-// End of "$Id: Fl_Menu_Bar.H,v 1.9 1999/04/13 20:18:33 carl Exp $".
+// End of "$Id: Fl_Menu_Bar.H,v 1.10 1999/04/28 01:50:07 carl Exp $".
 //
