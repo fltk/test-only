@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.37 1999/12/20 08:33:09 bill Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.38 2000/01/09 15:41:59 mike Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -492,6 +492,9 @@ int Fl_Browser_::handle(int event) {
 
   switch (event) {
 
+  case FL_ENTER: // For tooltips
+    return 1;
+
   case FL_FOCUS:
   case FL_UNFOCUS:
     if (l) redraw_line(l);
@@ -688,5 +691,5 @@ static void revert(Fl_Style* s) {
 Fl_Style* Fl_Browser_::default_style = new Fl_Named_Style("Browser", revert, &Fl_Browser_::default_style);
 
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.37 1999/12/20 08:33:09 bill Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.38 2000/01/09 15:41:59 mike Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileBrowser.cxx,v 1.7 2000/01/09 01:06:10 bill Exp $"
+// "$Id: Fl_FileBrowser.cxx,v 1.8 2000/01/09 15:42:00 mike Exp $"
 //
 // Fl_FileBrowser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -54,6 +54,7 @@
 #include <os2.h>
 #endif /* __EMX__ */
 
+
 //
 // FL_BLINE definition from "Fl_Browser.cxx"...
 //
@@ -83,6 +84,7 @@ Fl_FileBrowser::item_height(void *p) const	// I - List item data
   char		*text;			// Pointer into text
   int		height;			// Width of line
   int		textheight;		// Height of text
+
 
   // Figure out the standard text height...
   textheight = textsize()+leading();
@@ -265,7 +267,7 @@ Fl_FileBrowser::Fl_FileBrowser(int        x,	// I - Upper-lefthand X coordinate
   // Initialize the filter pattern, current directory, and icon size...
   pattern_   = "*";
   directory_ = "";
-  iconsize_  = 3 * textsize() / 2;
+  iconsize_  = 20; // This looks best for the default icons, if loaded...
 }
 
 
@@ -306,44 +308,34 @@ Fl_FileBrowser::load(const char *directory)// I - Directory to load
       if (drives & 1)
       {
         sprintf(filename, "%c:", i);
-
-	if (i < 'C')
-	  add(filename, icon);
-	else
-	  add(filename, icon);
+        add(filename, icon);
 
 	num_files ++;
       }
-#else
-#if defined(__EMX__)
-    ULONG  CurDrive;
-    ULONG  DriveMap;     // Drive available bits
-    int start = 3;      /* 'C' */
+#elif defined(__EMX__)
+    ULONG	curdrive;	// Current drive
+    ULONG	drives;		// Drive available bits
+    int		start = 3;      // 'C' (MRS - dunno if this is correct!)
 
 
-    DosQueryCurrentDisk(&CurDrive, &DriveMap);
-    DriveMap>>=start-1;
-    for (i = 'A'; i <= 'Z'; i ++, DriveMap >>= 1)
-      if (DriveMap & 1)
+    DosQueryCurrentDisk(&curdrive, &drives);
+    drives >>= start - 1;
+    for (i = 'A'; i <= 'Z'; i ++, drives >>= 1)
+      if (drives & 1)
       {
         sprintf(filename, "%c:", i);
-
-	if (i < 'C')
-	  add(filename, icon);
-	else
-	  add(filename, icon);
+        add(filename, icon);
 
 	num_files ++;
       }
 #else
- 
     FILE	*mtab;		// /etc/mtab or /etc/mnttab file
     char	line[1024];	// Input line
 
     //
     // Open the file that contains a list of mounted filesystems...
     //
-#  if defined(hpux) || defined(__sun)
+#  if defined(__hpux) || defined(__sun)
     mtab = fopen("/etc/mnttab", "r");	// Fairly standard
 #  elif defined(__sgi) || defined(linux)
     mtab = fopen("/etc/mtab", "r");	// More standard
@@ -352,6 +344,7 @@ Fl_FileBrowser::load(const char *directory)// I - Directory to load
     if (mtab == NULL)
       mtab = fopen("/etc/vfstab", "r");
 #  endif
+
     if (mtab != NULL)
     {
       while (fgets(line, sizeof(line), mtab) != NULL)
@@ -368,7 +361,6 @@ Fl_FileBrowser::load(const char *directory)// I - Directory to load
       fclose(mtab);
     }
 #endif // WIN32
-#endif // _EMX__
   }
   else
   {
@@ -399,6 +391,17 @@ Fl_FileBrowser::load(const char *directory)// I - Directory to load
     if (num_files <= 0)
       return (0);
 
+    // Add directories first...
+    for (i = 0; i < num_files; i ++)
+      if (strcmp(files[i]->d_name, ".") != 0 &&
+          strcmp(files[i]->d_name, "..") != 0)
+      {
+	snprintf(filename, sizeof(filename), "%s/%s", directory_, files[i]->d_name);
+
+	if (filename_isdir(filename))
+          add(files[i]->d_name, Fl_FileIcon::find(filename));
+      }
+
     for (i = 0; i < num_files; i ++)
     {
       if (strcmp(files[i]->d_name, ".") != 0 &&
@@ -406,7 +409,7 @@ Fl_FileBrowser::load(const char *directory)// I - Directory to load
       {
 	snprintf(filename, sizeof(filename), "%s/%s", directory_, files[i]->d_name);
 
-	if (filename_isdir(filename) ||
+	if (!filename_isdir(filename) &&
             filename_match(files[i]->d_name, pattern_))
           add(files[i]->d_name, Fl_FileIcon::find(filename));
       }
@@ -440,5 +443,5 @@ Fl_FileBrowser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_FileBrowser.cxx,v 1.7 2000/01/09 01:06:10 bill Exp $".
+// End of "$Id: Fl_FileBrowser.cxx,v 1.8 2000/01/09 15:42:00 mike Exp $".
 //

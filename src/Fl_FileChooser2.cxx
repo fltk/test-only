@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.6 2000/01/08 22:29:50 vincent Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.7 2000/01/09 15:42:01 mike Exp $"
 //
 // More Fl_FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -46,6 +46,7 @@
 
 #include <config.h>
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <errno.h>
 #include <ctype.h>
@@ -68,10 +69,10 @@ extern "C" int access(const char *, int);
 void
 Fl_FileChooser::directory(const char *d)	// I - Directory to change to
 {
-  char	pathname[1024],			// Full path of directory
-	*pathptr,			// Pointer into full path
-	*dirptr;			// Pointer into directory
-  int	levels;				// Number of levels in directory
+  char		pathname[1024],			// Full path of directory
+		*pathptr,			// Pointer into full path
+		*dirptr;			// Pointer into directory
+  int		levels;				// Number of levels in directory
 
 
   // NULL == current directory
@@ -119,12 +120,11 @@ Fl_FileChooser::directory(const char *d)	// I - Directory to change to
       // Need to quote the slash first, and then add it to the menu...
       *pathptr++ = '\\';
       *pathptr++ = '/';
-      *pathptr++ = '\0';
+      *pathptr   = '\0';
       dirptr ++;
 
       dirMenu->add(pathname);
       levels ++;
-      pathptr = pathname;
     }
     else
       *pathptr++ = *dirptr++;
@@ -264,6 +264,13 @@ Fl_FileChooser::value(const char *filename)	// I - Filename + directory
     return;
   }
 
+  if (!filename[0])
+  {
+    // Just show the current directory...
+    directory(NULL);
+    return;
+  }
+
   // Switch to single-selection mode as needed
   if (type_ == MULTI)
     type(SINGLE);
@@ -282,7 +289,10 @@ Fl_FileChooser::value(const char *filename)	// I - Filename + directory
     directory(pathname);
   }
   else
+  {
+    directory(NULL);
     slash = pathname;
+  }
 
   // Set the input field to the remaining portion
   fileName->value(slash);
@@ -437,11 +447,7 @@ Fl_FileChooser::fileListCB()
   else
   {
     fileName->value(filename);
-
-    if (filename_isdir(pathname))
-      okButton->deactivate();
-    else
-      okButton->activate();
+    okButton->activate();
   }
 }
 
@@ -618,8 +624,7 @@ Fl_FileChooser::fileNameCB()
     // See if we need to enable the OK button...
     snprintf(pathname, sizeof(pathname), "%s/%s", directory_, fileName->value());
 
-    if ((type_ == CREATE || access(pathname, 0) == 0) &&
-        !filename_isdir(pathname))
+    if (type_ == CREATE || access(pathname, 0) == 0)
       okButton->activate();
     else
       okButton->deactivate();
@@ -628,5 +633,5 @@ Fl_FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.6 2000/01/08 22:29:50 vincent Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.7 2000/01/09 15:42:01 mike Exp $".
 //

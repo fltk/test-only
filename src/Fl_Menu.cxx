@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.75 2000/01/09 08:17:27 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.76 2000/01/09 15:42:01 mike Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -233,7 +233,7 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, int selected) const {
     lbox = title_style->box;
     break;
   case 5: // draw the text in an Fl_Choice
-    lflags |= FL_ALIGN_LEFT;
+    lflags |= FL_ALIGN_LEFT | FL_ALIGN_RIGHT;
     lbox = FL_NO_BOX;
     break;
   }
@@ -874,5 +874,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.75 2000/01/09 08:17:27 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.76 2000/01/09 15:42:01 mike Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileBrowser.H,v 1.2 2000/01/08 22:29:49 vincent Exp $"
+// "$Id: Fl_FileBrowser.H,v 1.3 2000/01/09 15:43:51 mike Exp $"
 //
 // Fl_FileBrowser definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -55,18 +55,21 @@ public:
   uchar		iconsize() const { return (iconsize_); };
   void		iconsize(uchar s) { iconsize_ = s; redraw(); };
 
+  void		directory(const char *directory) { load(directory); }
+  const char	*directory(void) const { return (directory_); }
+
   void		filter(const char *pattern);
   const char	*filter() const { return (pattern_); };
 
   int		load(const char *directory);
 
   uchar		textsize() const { return (Fl_Browser::textsize()); };
-  void		textsize(uchar s) { Fl_Browser::textsize(s); iconsize_ = 3 * s / 2; };
+  void		textsize(uchar s) { Fl_Browser::textsize(s); };
 
 };
 
 #endif // !_FL_FILEBROWSER_H_
 
 //
-// End of "$Id: Fl_FileBrowser.H,v 1.2 2000/01/08 22:29:49 vincent Exp $".
+// End of "$Id: Fl_FileBrowser.H,v 1.3 2000/01/09 15:43:51 mike Exp $".
 //

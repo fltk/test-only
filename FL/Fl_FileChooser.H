@@ -7,12 +7,14 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Fl_FileBrowser.H"
-#include <FL/Fl_Button.H>
-#include "Fl_FileInput.H"
 #include <FL/Fl_Choice.H>
+#include <FL/Fl_Button.H>
+#include "filename.H"
+#include "Fl_FileBrowser.h"
+#include "Fl_FileInput.h"
+#include <FL/Fl_Return_Button.H>
 
-class FL_API Fl_FileChooser {
+class Fl_FileChooser {
 public:
   enum { SINGLE, MULTI, CREATE };
   Fl_FileChooser(const char *d, const char *p, int t, const char *title);
@@ -20,28 +22,28 @@ public:
 private:
   inline void cb_window_i(Fl_Window*, void*);
   static void cb_window(Fl_Window*, void*);
-  Fl_FileBrowser *fileList;
-  inline void cb_fileList_i(Fl_FileBrowser*, void*);
-  static void cb_fileList(Fl_FileBrowser*, void*);
-  inline void cb_Cancel_i(Fl_Button*, void*);
-  static void cb_Cancel(Fl_Button*, void*);
-  Fl_Button *okButton;
-  inline void cb_okButton_i(Fl_Button*, void*);
-  static void cb_okButton(Fl_Button*, void*);
-  Fl_FileInput *fileName;
-  inline void cb_fileName_i(Fl_FileInput*, void*);
-  static void cb_fileName(Fl_FileInput*, void*);
+  Fl_Choice *dirMenu;
+  inline void cb_dirMenu_i(Fl_Choice*, void*);
+  static void cb_dirMenu(Fl_Choice*, void*);
   Fl_Button *upButton;
   inline void cb_upButton_i(Fl_Button*, void*);
   static void cb_upButton(Fl_Button*, void*);
   Fl_Button *newButton;
   inline void cb_newButton_i(Fl_Button*, void*);
   static void cb_newButton(Fl_Button*, void*);
-  Fl_Choice *dirMenu;
-  inline void cb_dirMenu_i(Fl_Choice*, void*);
-  static void cb_dirMenu(Fl_Choice*, void*);
   inline void cb__i(Fl_Button*, void*);
   static void cb_(Fl_Button*, void*);
+  Fl_FileBrowser *fileList;
+  inline void cb_fileList_i(Fl_FileBrowser*, void*);
+  static void cb_fileList(Fl_FileBrowser*, void*);
+  Fl_FileInput *fileName;
+  inline void cb_fileName_i(Fl_FileInput*, void*);
+  static void cb_fileName(Fl_FileInput*, void*);
+  Fl_Return_Button *okButton;
+  inline void cb_okButton_i(Fl_Return_Button*, void*);
+  static void cb_okButton(Fl_Return_Button*, void*);
+  inline void cb_Cancel_i(Fl_Button*, void*);
+  static void cb_Cancel(Fl_Button*, void*);
   char directory_[1024];
   int type_;
   void fileListCB();

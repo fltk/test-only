@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.19 2000/01/09 01:06:12 bill Exp $"
+// "$Id: fl_font.cxx,v 1.20 2000/01/09 15:42:02 mike Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,7 @@
 // Static variables containing the currently selected font & size:
 Fl_Font fl_font_;
 unsigned fl_size_;
+static Fl_FontSize* current_fontsize;
 
 // Static variable for the default encoding:
 const char *fl_encoding = "iso8859-1";
@@ -45,7 +46,6 @@ const char *fl_encoding = "iso8859-1";
 #include <stdlib.h>
 #include <string.h>
 
-static Fl_FontSize* current_fontsize;
 XFontStruct* fl_xfont;
 static GC font_gc;
 
@@ -297,5 +297,5 @@ Fl_Font_ fl_fonts[] = {
 #endif
 
 //
-// End of "$Id: fl_font.cxx,v 1.19 2000/01/09 01:06:12 bill Exp $".
+// End of "$Id: fl_font.cxx,v 1.20 2000/01/09 15:42:02 mike Exp $".
 //
