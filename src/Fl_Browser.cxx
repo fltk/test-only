@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.93 2004/08/02 12:31:44 laza2000 Exp $"
+// "$Id: Fl_Browser.cxx,v 1.94 2004/08/03 20:30:07 laza2000 Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -150,13 +150,6 @@ using namespace fltk;
   
 /*! \fn int Browser::nheader() const
   Return number of columns in browser.
-*/
-
-/*! \enum fltk::Browser::ColFlags
-  Flags to use with column_widths(const int *) method.
-  You can define column resize behaviour with these flags.
-  Please see column_widths(const int *) for detailed documentation.
-  \see column_widths(const int *)
 */
 
 ////////////////////////////////////////////////////////////////
@@ -613,11 +606,6 @@ void Browser::draw_item() {
   }
 
   int col_shift = X;
-  if (widget->image()) {
-    int iw,ih; widget->image()->measure(iw,ih);
-    col_shift += iw;
-  }
-
   int arrow_size = int(textsize())|1;
   int preview_open =
     (openclose_drag == 1 && pushed() && at_mark(FOCUS)) ? VALUE : 0;
@@ -642,15 +630,25 @@ void Browser::draw_item() {
   }
 
   if (focused() && is_focus) {
-    focusbox()->draw(x, y, widget->width(), h, style(), flags|(FOCUSED|OUTPUT));
+    if (column_widths_p) 
+      focusbox()->draw(x, y, W-col_shift+xposition_, h, style(), flags|(FOCUSED|OUTPUT));
+    else
+      focusbox()->draw(x, y, widget->width(), h, style(), flags|(FOCUSED|OUTPUT));
+  }
+
+  // Shift image width 
+  if (widget->image()) {
+    int iw,ih; widget->image()->measure(iw,ih);
+    col_shift += iw;
   }
 
   // Shift first column width, so labels after 1. column are lined up correctly.
   int saved_colw = 0;
   int *cols = (int *)column_widths_p;
   if(cols) {
-    saved_colw = cols[0];
+    saved_colw = cols[0];    
     cols[0] -= col_shift;
+    if (cols[0]==0) cols[0]--;    
   }
 
   push_matrix();
@@ -758,32 +756,26 @@ void Browser::draw() {
       for (int i=0; i<nHeader; i++) {
         header_[i]->set_damage(DAMAGE_ALL);
       }
-      Widget *hi = header_[nHeader-1];
-      int r = hi->x()+hi->w(), rr = X+W+(scrollbar.visible()?scrollbar.w():0);
-      if (r<rr) {
-        setcolor(buttoncolor());
-	fillrect(r, hi->y(), rr-r, hi->h());
-      }
-    }
-  } else {
-    // Update box in upper-right corner, if necessary
-    if (header_) {
-      Widget *hi = header_[nHeader-1];
-      int r = hi->x()+hi->w(), rr = X+W+(scrollbar.visible()?scrollbar.w():0);
-      if (r<rr) {
-        setcolor(buttoncolor());
-	fillrect(r, hi->y(), rr-r, hi->h());
-      }
     }
   }
+
   update_child(scrollbar);
   update_child(hscrollbar);
+
   if (header_) {
     push_clip(box()->dx(), box()->dy(), w()-box()->dw(), header_[0]->h());
     for (int i=0; i<nHeader; i++) {
       update_child(*header_[i]);
     }
     pop_clip();
+    
+    // Update box in upper-right corner, if necessary
+    Widget *hi = header_[nHeader-1];
+    int r = hi->x()+hi->w(), rr = X+W+(scrollbar.visible()?scrollbar.w():0);
+    if (r<rr) {
+      setcolor(buttoncolor());
+      fillrect(r, hi->y(), rr-r, hi->h());      
+    }
   }  
   Item::clear_style();
 }
@@ -847,7 +839,13 @@ void Browser::layout() {
   box()->inset(X,Y,W,H);
   if (scrollbar.visible()) W -= sw;
   if (hscrollbar.visible()) H -= sw;
-  if (header_) { H -= sw; Y += sw; }
+
+  int headerh = 0;
+  if (header_) { 
+    if (!header_[0]->h()) header_[0]->layout();
+    headerh = header_[0]->h();
+    H -= headerh; Y += headerh;     
+  }
 
   // Measure the height of all items and find widest one
   width_ = 0;
@@ -889,8 +887,9 @@ void Browser::layout() {
       else
         col_width += itemwidth;
     }
-    if (col_width > width_)
-      width_ = col_width;
+    //if (col_width > width_)
+    // Always set to headers width
+    width_ = col_width;
   }
 
   // Act as width=0, if we have flexible column so hcrollbar is invisible always
@@ -964,7 +963,7 @@ void Browser::layout() {
       if (ww<0) ww = 0;
       if (column_widths_p)
         column_widths_p[i] = itemwidth;
-      hi->resize(-xposition_+hx, Y-sw, ww, sw);	  
+      hi->resize(-xposition_+hx, Y-headerh, ww, headerh);	  
       hi->layout();
       hx += itemwidth;
     }
@@ -1200,6 +1199,7 @@ int Browser::handle(int event) {
     // For all mouse events check to see if we are in the scrollbar
     // areas and send to them:
     if (scrollbar.visible() &&
+        (event_y() >= scrollbar.y()) && 
 	(scrollbar_align()&ALIGN_LEFT ?
 	 (event_x() < scrollbar.x()+scrollbar.w()) :
 	 (event_x() >= scrollbar.x())))
@@ -1209,13 +1209,13 @@ int Browser::handle(int event) {
 	 (event_y() < hscrollbar.y()+hscrollbar.h()) :
 	 (event_y() >= hscrollbar.y())))
       return hscrollbar.send(event);
-	if (header_ && nHeader && event_y()<header_[0]->y()+header_[0]->h()) {
-	  for (int i=0; i<nHeader; i++) {
-		Widget *hi = header_[i];
-		if (event_x()>=hi->x() && event_x()<hi->x()+hi->w())
-		  return hi->send(event);
-	  }
-	}
+    if (header_ && nHeader && event_y()<header_[0]->y()+header_[0]->h()) {
+      for (int i=0; i<nHeader; i++) {
+        Widget *hi = header_[i];
+	if (event_x()>=hi->x() && event_x()<hi->x()+hi->w())
+	return hi->send(event);
+      }
+    }
     // find the item we are pointing at:
     if (!goto_position(event_y()-Y+yposition_) && !item()) return 0;
     // set xx to how far to left of widget they clicked:
@@ -1454,51 +1454,44 @@ Widget* Browser::goto_index(int a, int b, int c, int d, int e) {
 /*!  Sets the horizontal locations that each '\\t' character in an item
   should start printing text at. These are measured from the left edge
   of the browser, including any area for the open/close + glyphs.  
+
+  \li Array must end with 0 (zero) always
   
-  \li You can define flexible column by setting column width to Browser::Flexible (-1).
+  \li You can define flexible column by setting column width to -1.
       If you have flexible column in browser, all columns are resized to 
       match width of the browser, by resizing flexible column.
-
-  \li You can change column resize behaviour by ending widths array with 
-      specific flag. If you end array with 0 (zero), the Browser::Resize2Width method is used.
-      See example usage below.
 
 \code
   // Example 1: make three columns, total width of columns is 300 pixels.
   // Columns are resizable, but total width is kept always.
-  const int widths[]   = { 100, 100, 100, Browser::Resize2Width };
+  const int widths[]   = { 100, 100, 100, 0 };
 
   // Example 2: make three columns, total width of columns is always width of the browser.
   // Columns are resizable, third column is flexible and will take remaining space left.
-  const int widths[]   = { 100, 100, Browser::Flexible, 0 };
-
-  // Example 3: make three columns, where all columns 
-  // are resizable and resize will change width of the browser.
-  const int widths[]   = { 100, 100, 100, Browser::NormalResize };
+  const int widths[]   = { 100, 100, -1, 0 };
 \endcode
-  \see enum ColFlags
   */
 void Browser::column_widths(const int *t) {
   column_widths_ = t;
   int pnc = nColumn;
   nColumn = 0;
   // count the number of columns, end with 0 or <-1 , -1 is used for flexible column
-  if (t) while (*t) { if (*t<=0 && *t!=Flexible) break; t++; nColumn++; }
+  if (t) while (*t++!=0) nColumn++;
   if (nColumn==0) {
-	// free the column memory
-	if (column_widths_p) free(column_widths_p);
-	column_widths_p = 0;
-	if (column_widths_i) free(column_widths_i);
-	column_widths_i = 0;
+    // free the column memory
+    if (column_widths_p) free(column_widths_p);
+    column_widths_p = 0;
+    if (column_widths_i) free(column_widths_i);
+    column_widths_i = 0;
   } else {
-	// reallocate the column storage if needed
-	if (nColumn>pnc) {
-	  column_widths_p = (int*)realloc(column_widths_p, (nColumn+1)*sizeof(int));
-	  column_widths_i = (int*)realloc(column_widths_i, (nColumn+1)*sizeof(int));
-        }
-	// copy the widths over into the new array
-	memcpy(column_widths_p, column_widths_, (nColumn+1)*sizeof(int));
-	memcpy(column_widths_i, column_widths_, (nColumn+1)*sizeof(int));
+    // reallocate the column storage if needed
+    if (nColumn>pnc) {
+      column_widths_p = (int*)realloc(column_widths_p, (nColumn+1)*sizeof(int));
+      column_widths_i = (int*)realloc(column_widths_i, (nColumn+1)*sizeof(int));
+    }
+    // copy the widths over into the new array
+    memcpy(column_widths_p, column_widths_, (nColumn+1)*sizeof(int));
+    memcpy(column_widths_i, column_widths_, (nColumn+1)*sizeof(int));
   }
   // now recalculate the layout
   relayout();
@@ -1506,21 +1499,10 @@ void Browser::column_widths(const int *t) {
 }
 
 int Browser::set_column_start(int col, int x) {
-  // Detect if last int widths in array is 0
-  // If it is, we will keep original width.
-  // ie. when resizing columns, right edge will not move
-  bool resize_to_w = (column_widths_i[nColumn]==Resize2Width);
-
   // we must adjust all this column and the column to the left so that the
   // resulting edge ends at x
   if (col<=0) return -1; // we don't adjust the first column
-
-  if (resize_to_w) {
-    if (col>=nColumn) return -1; // out of bounds
-  } else {
-    // Allow last column resize
-    if (col>nColumn) return -1; // out of bounds
-  }
+  if (col>nColumn) return -1; // out of bounds
 
   // find the current column x and calculate the desired delta
   int ox = 0;
@@ -1529,7 +1511,10 @@ int Browser::set_column_start(int col, int x) {
   int cwp, cwi;
 
   if (col==nColumn) {
-    // Resize last column. 
+    // Cant tesize last column, if we have flexible column
+    int *p=column_widths_i; while (*p!=0) { if (*p++==-1) return 0; }
+    // Resize last column.
+    if (column_widths_p[col]==-1) return 0;
     if (column_widths_p[col-1]+dx<4) dx = -column_widths_p[col-1]+4;
     column_widths_i[col-1] += dx;
     goto RETURN;
@@ -1537,32 +1522,18 @@ int Browser::set_column_start(int col, int x) {
 
   // make sure that no column is smaller than 4 pixels (to the left)
   if (column_widths_p[col-1]+dx<4) {
-    if (resize_to_w) {
-      if (col>1)
-        dx = -column_widths_p[col-1]+4+set_column_start(col-1, x-4);
-      else
-        dx = -column_widths_p[col-1]+4;    
-    } else {
-      dx = -column_widths_p[col-1]+4;
-    }
+    dx = -column_widths_p[col-1]+4;
   }
   // make sure that no column is smaller than 4 pixels (to the right)
   cwp = column_widths_p[col], cwi = column_widths_i[col];
   if (cwi>0 && cwi<cwp) cwp = cwi;
   if (cwp-dx<4) {
-    if (resize_to_w) {
-      if (col<nColumn-1)
-        dx = cwp-4+set_column_start(col+1, x+4);
-      else
-        dx = cwp-4;
-    } else {
-      dx = cwp-4;
-    }
+    dx = cwp-4;
   }
   // now adjust the columns in the interactive field
   if (column_widths_i[col-1]>0) column_widths_i[col-1] += dx;
   //if (column_widths_i[col]>0) column_widths_i[col] -= dx;
-  if (resize_to_w || column_widths_i[col-1]==-1) column_widths_i[col] -= dx;
+  if (column_widths_i[col-1]==-1) column_widths_i[col] -= dx;
 
 RETURN:
   // finally recalculate the layout
@@ -1581,8 +1552,8 @@ void Browser::column_click_cb_(Widget *ww, void *d) {
 class BButton : public Button {
   uchar sides; // bit 0 set: user can drag left side, bit 1: right side
 public:
-  BButton(int x, int y, int w, int h, uchar s, const char *l=0) 
-  : Button(x, y, w, h, l) 
+  BButton(uchar s, const char *l=0) 
+  : Button(0,0,0,0, l) 
   { 
     sides = s;
     align(ALIGN_INSIDE|ALIGN_CLIP);
@@ -1636,6 +1607,12 @@ public:
     }
     return Button::handle(event);
   }
+
+  void layout() {
+    setfont(labelfont(),labelsize());
+    h(getascent()+getdescent()+leading());
+    Button::layout();
+  }
 };
 
 /*! Set an array of labels to put at the top of the browser. The initial
@@ -1660,10 +1637,8 @@ void Browser::column_labels(const char **t) {
     for (i=0; i<nHeader; i++) {
       uchar sides = 0;
       if (i>0) sides |= 1;
-      // Allow resizing of last column, if width array last int is NormalResize
-      if (i<nHeader-1 || (column_widths_i && column_widths_i[nColumn]==NormalResize) ) sides |= 2;
-      //if (i<nHeader-1) sides |= 2;
-      header_[i] = new BButton(0, 0, 1, 1, sides, column_labels_[i]);
+      if (i<nHeader) sides |= 2;
+      header_[i] = new BButton(sides, column_labels_[i]);
       header_[i]->parent(this);
       header_[i]->callback(column_click_cb_, (void*)i);
     }
@@ -1827,5 +1802,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.93 2004/08/02 12:31:44 laza2000 Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.94 2004/08/03 20:30:07 laza2000 Exp $".
 //

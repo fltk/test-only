@@ -1,5 +1,5 @@
 //
-// "$Id: Browser.h,v 1.5 2004/08/02 12:12:07 laza2000 Exp $"
+// "$Id: Browser.h,v 1.6 2004/08/03 20:30:24 laza2000 Exp $"
 //
 // Copyright 2002 by Bill Spitzak and others.
 //
@@ -39,12 +39,6 @@ public:
   Browser(int X,int Y,int W,int H,const char*l=0);
   static NamedStyle* default_style;
   ~Browser();
-
-  enum ColFlags {
-    NormalResize = -2,  /**< Normal column resize, total width can change */
-    Flexible = -1,      /**< Define flexible column */
-    Resize2Width = 0    /**< Columns keep original total width */
-  };
 
   enum { // values for type()
     NORMAL = 0,
@@ -178,5 +172,5 @@ private:
 #endif
 
 //
-// End of "$Id: Browser.h,v 1.5 2004/08/02 12:12:07 laza2000 Exp $".
+// End of "$Id: Browser.h,v 1.6 2004/08/03 20:30:24 laza2000 Exp $".
 //
