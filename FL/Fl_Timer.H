@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Timer.H,v 1.5.2.3.2.2.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Timer.H,v 1.5.2.3.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $"
 //
 // Timer header file for the Fast Light Tool Kit (FLTK).
 //
@@ -35,6 +35,10 @@
 #define FL_VALUE_TIMER		1
 #define FL_HIDDEN_TIMER		2
 
+/** This is provided only to emulate the Forms Timer widget. It works by
+ * making a timeout callback every 1/5 second. This is wasteful and
+ * inaccurate if you just want something to happen a fixed time in the
+ * future. You should directly call Fl::add_timeout() instead. */
 class FL_EXPORT Fl_Timer : public Fl_Widget {
   static void stepcb(void *);
   void step();
@@ -45,19 +49,37 @@ protected:
   void draw();
 public:
   int handle(int);
+    /** Creates a new Fl_Timer widget using the given type, position, size,
+     * and label string. The type parameter can be any of the following
+     * symbolic constants:
+     * \arg \c FL_NORMAL_TIMER - The timer just does the callback and
+     *       displays the string "Timer" in the widget.
+     * \arg \c FL_VALUE_TIMER - The timer does the callback and displays the
+     *      current timer value in the widget.
+     * \arg \c FL_HIDDEN_TIMER - The timer just does the callback and does
+     *      not display anything. */
   Fl_Timer(uchar t,int x,int y,int w,int h, const char *l);
+    /** Destroys the timer and removes the timeout. */
   ~Fl_Timer();
-  void value(double);
+    /** Sets the current timer value. */
+  void value(double timer);
+    /** Gets the current timer value. */
   double value() const {return delay>0.0?delay:0.0;}
+    /** Gets the direction of the timer. */
   char direction() const {return direction_;}
+    /** Sets the direction of the timer. If the direction is zero then the
+     * timer will count up, otherwise it will count down from the initial
+     * value(). */
   void direction(char d) {direction_ = d;}
+    /** Gets whether the timer is suspended. */
   char suspended() const {return !on;}
+    /** Sets whether the timer is suspended. */
   void suspended(char d);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Timer.H,v 1.5.2.3.2.2.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Timer.H,v 1.5.2.3.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $".
 //
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.H,v 1.22.2.8.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Shared_Image.H,v 1.22.2.8.2.2 2003/11/19 02:46:11 matthiaswm Exp $"
 //
 // Shared image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -33,7 +33,10 @@
 typedef Fl_Image *(*Fl_Shared_Handler)(const char *name, uchar *header,
                                        int headerlen);
 
-// Shared images class. 
+/** The Fl_Shared_Image class supports caching, loading, and drawing of 
+ * image files. Most applications will also want to link against the 
+ * fltk_images library and call thefl_register_images() function to support
+ * standard image formats such as BMP, GIF, JPEG, and PNG. */ 
 class FL_EXPORT Fl_Shared_Image : public Fl_Image {
   protected:
 
@@ -54,7 +57,14 @@ class FL_EXPORT Fl_Shared_Image : public Fl_Image {
 
   // Use get() and release() to load/delete images in memory...
   Fl_Shared_Image();
+    /** The constructors create a new shared image record in the image cache.
+     *
+     * The constructors are protected and cannot be used directly from a
+     * program. Use theget() method instead. */
   Fl_Shared_Image(const char *n, Fl_Image *img = 0);
+    /** The destructor free all memory and server resources that are used by
+     * the image. The destructor is protected and cannot be used directly
+     * from a program. Use the release() method instead. */
   virtual ~Fl_Shared_Image();
   void add();
   void update();
@@ -82,16 +92,15 @@ class FL_EXPORT Fl_Shared_Image : public Fl_Image {
   static void		remove_handler(Fl_Shared_Handler f);
 };
 
-//
-// The following function is provided in the fltk_images library and
-// registers all of the "extra" image file formats that are not part
-// of the core FLTK library...
-//
 
+/** This function is provided in the fltk_images library and
+ * registers all of the "extra" image file formats that are not part
+ * of the core FLTK library...
+ */
 FL_EXPORT extern void fl_register_images();
 
 #endif // !Fl_Shared_Image_H
 
 //
-// End of "$Id: Fl_Shared_Image.H,v 1.22.2.8.2.1 2003/11/02 01:37:42 easysw Exp $"
+// End of "$Id: Fl_Shared_Image.H,v 1.22.2.8.2.2 2003/11/19 02:46:11 matthiaswm Exp $"
 //

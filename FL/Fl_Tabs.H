@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.H,v 1.5.2.4.2.2.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Tabs.H,v 1.5.2.4.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $"
 //
 // Tab header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,26 @@
 
 #include "Fl_Group.H"
 
+/** The Fl_Tabs widget is the "file card tabs" interface that allows you to
+ * put lots and lots of buttons and switches in a panel, as popularized by
+ * many toolkits.
+ *   \image html tabs.gif
+ * Clicking the tab makes a child visible() by calling show() on it, and all
+ * other children are made invisible by calling hide() on them. Usually the
+ * children are Fl_Group widgets containing several widgets themselves.
+ *
+ * Each child makes a card, and it's label() is printed on the card tab,
+ * including the label font and style. The selection color of that child is
+ * used to color the tab, while the color of the child determines the
+ * background color of the pane.
+ *
+ * The size of the tabs is controlled by the bounding box of the children
+ * (there should be some space between the children and the edge of the
+ * Fl_Tabs), and the tabs may be placed "inverted" on the bottom, this is
+ * determined by which gap is larger. It is easiest to lay this out in fluid,
+ * using the fluid browser to select each child group and resize them until
+ * the tabs look the way you want them to. 
+ */
 class FL_EXPORT Fl_Tabs : public Fl_Group {
   Fl_Widget *value_;
   Fl_Widget *push_;
@@ -39,16 +59,25 @@ protected:
 
 public:
   int handle(int);
+    /** Gets the currently visible widget/tab. */
   Fl_Widget *value();
+    /** Sets the currently visible widget/tab. */
   int value(Fl_Widget *);
   Fl_Widget *push() const {return push_;}
   int push(Fl_Widget *);
-  Fl_Tabs(int,int,int,int,const char * = 0);
+    /** Creates a new Fl_Tabs widget using the given position, size, and
+     * label string. The default boxtype is \c FL_THIN_UP_BOX.
+     *
+     * Use add(Fl_Widget *) to add each child, which are usually Fl_Group
+     * widgets. The children should be sized to stay away from the top or
+     * bottom edge of the Fl_Tabs widget, which is where the tabs will be
+     * drawn. */
+  Fl_Tabs(int x,int y,int width,int height,const char *label = 0);
   Fl_Widget *which(int event_x, int event_y);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Tabs.H,v 1.5.2.4.2.2.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Tabs.H,v 1.5.2.4.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $".
 //

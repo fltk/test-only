@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_XPM_Image.H,v 1.1.2.2.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_XPM_Image.H,v 1.1.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $"
 //
 // XPM image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,15 +27,18 @@
 #define Fl_XPM_Image_H
 #  include "Fl_Pixmap.H"
 
+/** The Fl_XPM_Image class supports loading, caching, and drawing of X11
+ * Pixmap (XPM) images, including transparency. 
+ */
 class FL_EXPORT Fl_XPM_Image : public Fl_Pixmap {
 
   public:
-
+    /** The constructor loads the named XPM image. */
   Fl_XPM_Image(const char* filename);
 };
 
 #endif // !Fl_XPM_Image
 
 //
-// End of "$Id: Fl_XPM_Image.H,v 1.1.2.2.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_XPM_Image.H,v 1.1.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $".
 //

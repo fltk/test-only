@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_File_Input.H,v 1.1.2.2.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_File_Input.H,v 1.1.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $"
 //
 // File_Input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,11 @@
 #  include <FL/Fl_Input.H>
 
 
+/** This widget displays a pathname in a text input field. A navigation bar
+ * located above the input field allows the user to navigate upward in the
+ * directory tree. 
+ *   \image html Fl_File_Input.gif
+ */
 class FL_EXPORT Fl_File_Input : public Fl_Input
 {
   Fl_Color	errorcolor_;
@@ -44,12 +49,16 @@ class FL_EXPORT Fl_File_Input : public Fl_Input
 
 public:
 
-  Fl_File_Input(int,int,int,int,const char *t=0);
+    /** Creates a new Fl_File_Input widget using the given position, size, 
+     * and label string. The default boxtype is \c FL_DOWN_BOX. */
+  Fl_File_Input(int x,int y,int width,int height,const char *label=0);
 
-  virtual int handle(int);
+  virtual int handle(int event);
   virtual void draw();
 
+    /** Gets the box type to use for the navigation bar. */
   Fl_Boxtype	down_box() const { return (Fl_Boxtype)down_box_; }
+    /** Sets the box type to use for the navigation bar. */
   void		down_box(Fl_Boxtype b) { down_box_ = b; }
   Fl_Color	errorcolor() const { return errorcolor_; }
   void		errorcolor(Fl_Color c) { errorcolor_ = c; }
@@ -62,5 +71,5 @@ public:
 
 
 //
-// End of "$Id: Fl_File_Input.H,v 1.1.2.2.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_File_Input.H,v 1.1.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $".
 //

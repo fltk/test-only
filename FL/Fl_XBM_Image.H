@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_XBM_Image.H,v 1.1.2.2.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_XBM_Image.H,v 1.1.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $"
 //
 // XBM image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,15 +27,17 @@
 #define Fl_XBM_Image_H
 #  include "Fl_Bitmap.H"
 
+/** The Fl_XBM_Image class supports loading, caching, and drawing of X11
+ * Bitmap (XBM) bitmap files. */
 class FL_EXPORT Fl_XBM_Image : public Fl_Bitmap {
 
   public:
-
+    /** The constructor loads the named XBM image. */
   Fl_XBM_Image(const char* filename);
 };
 
 #endif // !Fl_XBM_Image_H
 
 //
-// End of "$Id: Fl_XBM_Image.H,v 1.1.2.2.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_XBM_Image.H,v 1.1.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $".
 //

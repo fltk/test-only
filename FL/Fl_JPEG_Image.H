@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_JPEG_Image.H,v 1.1.2.3.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_JPEG_Image.H,v 1.1.2.3.2.2 2003/11/19 02:46:11 matthiaswm Exp $"
 //
 // JPEG image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,15 +27,18 @@
 #define Fl_JPEG_Image_H
 #  include "Fl_Image.H"
 
+/** The Fl_JPEG_Image class supports loading, caching, and drawing of Joint
+ * Photographic Experts Group (JPEG) File Interchange Format (JFIF) images.
+ * The class supports grayscale and color (RGB) JPEG image files. */
 class FL_EXPORT Fl_JPEG_Image : public Fl_RGB_Image {
 
   public:
-
+    /** The constructor loads the named JPEG image. */
   Fl_JPEG_Image(const char* filename);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_JPEG_Image.H,v 1.1.2.3.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_JPEG_Image.H,v 1.1.2.3.2.2 2003/11/19 02:46:11 matthiaswm Exp $".
 //

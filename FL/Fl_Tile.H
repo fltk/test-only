@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tile.H,v 1.6.2.3.2.2.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Tile.H,v 1.6.2.3.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $"
 //
 // Tile header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,16 +28,46 @@
 
 #include "Fl_Group.H"
 
+/** The Fl_Tile class lets you resize the children by dragging the border
+ * between them: 
+ *   \image html Fl_Tile.gif
+ * Fl_Tile allows objects to be resized to zero dimensions. To prevent this
+ * you can use the resizable() to limit where corners can be dragged to.
+ *
+ * Even though objects can be resized to zero sizes, they must initially 
+ * have non-zero sizes so the Fl_Tile can figure out their layout. If
+ * desired, call position() after creating the children but before
+ * displaying the window to set the borders where you want.
+ *
+ * The "borders" are part of the children - Fl_Tile does not draw any
+ *  graphics of its own. In the example above, all of the children have
+ * \c FL_DOWN_BOX types, and the "ridges" you see are actually two adjacent
+ * FL_DOWN_BOX's drawn next to each other. All neighboring widgets share
+ * the same edge - the widget's thick borders make it appear as though the
+ * widgets aren't actually touching, but they are. If the edges of adjacent
+ * widgets do not touch, then it will be impossible to drag the
+ * corresponding edges.
+ *
+ * The "resizable" child widget (which should be invisible) limits where 
+ * the border can be dragged to. If you don't set it, it will be possible
+ * to drag the borders right to the edge, and thus resize objects on the
+ * edge to zero width or height. The resizable() widget is not resized by
+ * dragging any borders.
+ */
 class FL_EXPORT Fl_Tile : public Fl_Group {
 public:
   int handle(int);
+    /** Creates a new Fl_Tile widget using the given position, size, and
+     * label string. The default boxtype is \c FL_NO_BOX. */
   Fl_Tile(int X,int Y,int W,int H,const char*l=0) : Fl_Group(X,Y,W,H,l) {}
-  void resize(int, int, int, int);
-  void position(int, int, int, int);
+  void resize(int x, int y, int width, int height);
+    /** Drag the intersection at from_x,from_y to to_x,to_y. This redraws
+     * all the necessary children. */
+  void position(int from_x, int from_y, int to_x, int to_y);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Tile.H,v 1.6.2.3.2.2.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Tile.H,v 1.6.2.3.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $".
 //

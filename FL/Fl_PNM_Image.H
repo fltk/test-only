@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_PNM_Image.H,v 1.1.2.2.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_PNM_Image.H,v 1.1.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $"
 //
 // PNM image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,15 +27,19 @@
 #define Fl_PNM_Image_H
 #  include "Fl_Image.H"
 
+/** The Fl_PNM_Image class supports loading, caching, and drawing of 
+ * Portable Anymap (PNM, PBM, PGM, PPM) image files. The class loads bitmap,
+ * grayscale, and full-color images in both ASCII and binary formats. 
+ */
 class FL_EXPORT Fl_PNM_Image : public Fl_RGB_Image {
 
   public:
-
+    /** The constructor loads the named PNM image. */
   Fl_PNM_Image(const char* filename);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_PNM_Image.H,v 1.1.2.2.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_PNM_Image.H,v 1.1.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.H,v 1.7.2.3.2.3.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Double_Window.H,v 1.7.2.3.2.3.2.2 2003/11/19 02:46:11 matthiaswm Exp $"
 //
 // Double-buffered window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,19 @@
 
 #include "Fl_Window.H"
 
+/** The Fl_Double_Window class provides a double-buffered window. If
+ * possible this will use the X double buffering extension (Xdbe). If not,
+ * it will draw the window data into an off-screen pixmap, and then copy it
+ * to the on-screen window.
+ *
+ * It is highly recommended that you put the following code before the first
+ * show() of anywindow in your program:
+ *
+ * <tt>Fl::visual(FL_DOUBLE|FL_INDEX)</tt>
+ *
+ * This makes sure you can use Xdbe on servers where double buffering does
+ * not exist for every visual.
+ */
 class FL_EXPORT Fl_Double_Window : public Fl_Window {
 protected:
   void flush(int eraseoverlay);
@@ -41,6 +54,8 @@ public:
   ~Fl_Double_Window();
   Fl_Double_Window(int W, int H, const char *l = 0) 
     : Fl_Window(W,H,l), force_doublebuffering_(0) { type(FL_DOUBLE_WINDOW); }
+    /** Creates a new Fl_Double_Window widget using the given position,
+     * size, and label (title) string. */
   Fl_Double_Window(int X, int Y, int W, int H, const char *l = 0)
     : Fl_Window(X,Y,W,H,l), force_doublebuffering_(0) { type(FL_DOUBLE_WINDOW); }
 };
@@ -48,5 +63,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Double_Window.H,v 1.7.2.3.2.3.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Double_Window.H,v 1.7.2.3.2.3.2.2 2003/11/19 02:46:11 matthiaswm Exp $".
 //

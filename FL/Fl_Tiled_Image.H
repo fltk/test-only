@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tiled_Image.H,v 1.1.2.3.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Tiled_Image.H,v 1.1.2.3.2.2 2003/11/19 02:46:11 matthiaswm Exp $"
 //
 // Tiled image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,8 +28,9 @@
 
 #  include "Fl_Image.H"
 
-
-// Tiled image class. 
+/** The Fl_Tiled_Image class supports tiling of images over a specified 
+ * area. The source (tile) image is not copied unless you call the 
+ * color_average(), desaturate(), orinactive() methods. */
 class FL_EXPORT Fl_Tiled_Image : public Fl_Image {
   protected:
 
@@ -37,8 +38,9 @@ class FL_EXPORT Fl_Tiled_Image : public Fl_Image {
   int		alloc_image_;		// Did we allocate this image?
 
   public:
-
+    /** The constructors create a new tiled image containing the specified image. */
   Fl_Tiled_Image(Fl_Image *i, int W = 0, int H = 0);
+    /** The destructor free all memory and server resources that are used by the tiled image. */
   virtual ~Fl_Tiled_Image();
 
   virtual Fl_Image *copy(int W, int H);
@@ -52,5 +54,5 @@ class FL_EXPORT Fl_Tiled_Image : public Fl_Image {
 #endif // !Fl_Tiled_Image_H
 
 //
-// End of "$Id: Fl_Tiled_Image.H,v 1.1.2.3.2.1 2003/11/02 01:37:42 easysw Exp $"
+// End of "$Id: Fl_Tiled_Image.H,v 1.1.2.3.2.2 2003/11/19 02:46:11 matthiaswm Exp $"
 //

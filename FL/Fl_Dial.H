@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.H,v 1.7.2.3.2.2.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Dial.H,v 1.7.2.3.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $"
 //
 // Dial header file for the Fast Light Tool Kit (FLTK).
 //
@@ -35,6 +35,14 @@
 #define FL_LINE_DIAL	1
 #define FL_FILL_DIAL	2
 
+/** The Fl_Dial widget provides a circular dial to control a single
+ * floating point value. 
+ *   \image html dial.gif
+ * type(uchar) supports the following dials:
+ * \arg \c FL_NORMAL_DIAL - Draws a normal dial with a knob.
+ * \arg \c FL_LINE_DIAL - Draws a dial with a line.
+ * \arg \c FL_FILL_DIAL - Draws a dial with a filled arc.
+ */
 class FL_EXPORT Fl_Dial : public Fl_Valuator {
 
   short a1,a2;
@@ -49,11 +57,17 @@ protected:
 public:
 
   int handle(int);
+    /** Creates a new Fl_Dial widget using the given position, size, and
+     * label string. The default type is \c FL_NORMAL_DIAL. */
   Fl_Dial(int x,int y,int w,int h, const char *l = 0);
   short angle1() const {return a1;}
   void angle1(short a) {a1 = a;}
   short angle2() const {return a2;}
   void angle2(short a) {a2 = a;}
+    /** Sets the angles used for the minimum and maximum values. The default
+     * values are 45 and 315 (0 degrees is straight down and the angles
+     * progress clockwise). Normally angle1 is less than angle2, but if
+     * you reverse them the dial moves counter-clockwise. */
   void angles(short a, short b) {a1 = a; a2 = b;}
 
 };
@@ -61,5 +75,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Dial.H,v 1.7.2.3.2.2.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Dial.H,v 1.7.2.3.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $".
 //

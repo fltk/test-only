@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Roller.H,v 1.5.2.4.2.2.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Roller.H,v 1.5.2.4.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $"
 //
 // Roller header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,16 +30,22 @@
 #include "Fl_Valuator.H"
 #endif
 
+/** The Fl_Roller widget is a "dolly" control commonly used to move 
+ * 3D objects. 
+ *   \image html Fl_Roller.gif
+ */
 class FL_EXPORT Fl_Roller : public Fl_Valuator {
 protected:
   void draw();
 public:
   int handle(int);
+    /** Creates a new Fl_Roller widget using the given position, size, and
+     * label string. The default boxtype is \c FL_NO_BOX. */
   Fl_Roller(int X,int Y,int W,int H,const char* L=0);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Roller.H,v 1.5.2.4.2.2.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Roller.H,v 1.5.2.4.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $".
 //

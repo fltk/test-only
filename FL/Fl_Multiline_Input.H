@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Multiline_Input.H,v 1.4.2.3.2.2.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Multiline_Input.H,v 1.4.2.3.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $"
 //
 // Multiline input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,8 +28,20 @@
 
 #include "Fl_Input.H"
 
+/** This input field displays '\\n' characters as new lines rather than ^J,
+ * and accepts the Return, Tab, and up and down arrow keys. This is for 
+ * editing multiline text.
+ *
+ * This is far from the nirvana of text editors, and is probably only good
+ * for small bits of text, 10 lines at most. I think FLTK can be used to 
+ * write a powerful text editor, but it is not going to be a built-in 
+ * feature. Powerful text editors in a toolkit are a big source of bloat. 
+ * \see Fl_Text_Editor, Fl_Text_Display, Fl_Text_Buffer
+ */
 class Fl_Multiline_Input : public Fl_Input {
 public:
+      /** Creates a new Fl_Multiline_Input widget using the given position, 
+       * size, and label string. The default boxtype is \c FL_DOWN_BOX. */
     Fl_Multiline_Input(int X,int Y,int W,int H,const char *l = 0)
 	: Fl_Input(X,Y,W,H,l) {type(FL_MULTILINE_INPUT);}
 };
@@ -37,5 +49,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Multiline_Input.H,v 1.4.2.3.2.2.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Multiline_Input.H,v 1.4.2.3.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $".
 //

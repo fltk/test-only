@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pixmap.H,v 1.6.2.8.2.9.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Pixmap.H,v 1.6.2.8.2.9.2.2 2003/11/19 02:46:11 matthiaswm Exp $"
 //
 // Pixmap header file for the Fast Light Tool Kit (FLTK).
 //
@@ -35,6 +35,8 @@ struct Fl_Menu_Item;
 #    define explicit
 #  endif // __sgi && !_COMPILER_VERSION
 
+/** The Fl_Pixmap class supports caching and drawing of colormap (pixmap)
+ * images, including transparency. */
 class FL_EXPORT Fl_Pixmap : public Fl_Image {
   void copy_data();
   void delete_data();
@@ -55,10 +57,12 @@ class FL_EXPORT Fl_Pixmap : public Fl_Image {
   unsigned mask; // for internal use (mask bitmap)
 #endif // __APPLE__ || WIN32
   
+    /** The constructors create a new pixmap from the specified XPM data. */
   explicit Fl_Pixmap(char * const * D) : Fl_Image(-1,0,1), alloc_data(0), id(0), mask(0) {set_data((const char*const*)D); measure();}
   explicit Fl_Pixmap(uchar* const * D) : Fl_Image(-1,0,1), alloc_data(0), id(0), mask(0) {set_data((const char*const*)D); measure();}
   explicit Fl_Pixmap(const char * const * D) : Fl_Image(-1,0,1), alloc_data(0), id(0), mask(0) {set_data((const char*const*)D); measure();}
   explicit Fl_Pixmap(const uchar* const * D) : Fl_Image(-1,0,1), alloc_data(0), id(0), mask(0) {set_data((const char*const*)D); measure();}
+    /** The destructor free all memory and server resources that are used by the pixmap. */
   virtual ~Fl_Pixmap();
   virtual Fl_Image *copy(int W, int H);
   Fl_Image *copy() { return copy(w(), h()); }
@@ -74,5 +78,5 @@ class FL_EXPORT Fl_Pixmap : public Fl_Image {
 #endif
 
 //
-// End of "$Id: Fl_Pixmap.H,v 1.6.2.8.2.9.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Pixmap.H,v 1.6.2.8.2.9.2.2 2003/11/19 02:46:11 matthiaswm Exp $".
 //
