@@ -1,5 +1,5 @@
 //
-// "$Id: mac.h,v 1.1 2002/12/09 04:43:54 spitzak Exp $"
+// "$Id: mac.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
 //
 // Mac header file for the Fast Light Tool Kit (FLTK).
 //
@@ -166,6 +166,6 @@ extern CursHandle fl_default_cursor;
 #endif // !FL_MAC_H
 
 //
-// End of "$Id: mac.h,v 1.1 2002/12/09 04:43:54 spitzak Exp $".
+// End of "$Id: mac.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
 //
 

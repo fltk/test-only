@@ -1,9 +1,9 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: FillSlider.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// Slider that is filled from the end (like a progress bar)
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +23,21 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_FillSlider_h
+#define fltk_FillSlider_h
+
+#include "Slider.h"
+
+namespace fltk {
+
+class FL_API FillSlider : public Slider {
+public:
+  FillSlider(int x,int y,int w,int h,const char *l=0)
+    : Slider(x,y,w,h,l) {slider_size(0);}
+};
+
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: FillSlider.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

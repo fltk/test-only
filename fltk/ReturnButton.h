@@ -1,9 +1,9 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: ReturnButton.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// Draws a "enter key" glyph on itself and has Return as a shortcut.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +23,25 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_ReturnButton_h
+#define fltk_ReturnButton_h
+
+#include "Button.h"
+
+namespace fltk {
+
+class FL_API ReturnButton : public Button {
+public:
+  ReturnButton(int x,int y,int w,int h,const char *l=0);
+  static NamedStyle* default_style;
+protected:
+  void draw();
+};
+
+}
+
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: ReturnButton.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

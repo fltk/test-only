@@ -1,5 +1,5 @@
 /*
- * "$Id: vsnprintf.h,v 1.3 2001/09/10 01:16:17 spitzak Exp $"
+ * "$Id: vsnprintf.h,v 1.4 2002/12/09 04:47:59 spitzak Exp $"
  *
  * vsnprintf() function for the Fast Light Tool Kit (FLTK).
  *
@@ -75,6 +75,6 @@
 
 #endif
 /*
- * End of "$Id: vsnprintf.h,v 1.3 2001/09/10 01:16:17 spitzak Exp $".
+ * End of "$Id: vsnprintf.h,v 1.4 2002/12/09 04:47:59 spitzak Exp $".
  */
 

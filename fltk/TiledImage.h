@@ -1,9 +1,10 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: TiledImage.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// A tiled image completely fills the bounding box passed to it with
+// replications of the internal Image passed to it.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,12 +21,30 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_TiledImage_h
+#define fltk_TiledImage_h
+
+#include "Image.h"
+
+namespace fltk {
+
+class FL_API TiledImage : public Image {
+protected:
+  Image* image_;
+public:
+  TiledImage(Image *i) : Image(), image_(i) {}
+  Image* image() const {return image_;}
+  void image(Image* i) {image_ = i;}
+  void measure(int& w, int& h);
+  void draw(int x, int y, int w, int h, Flags = 0);
+};
+
+}
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: TiledImage.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //

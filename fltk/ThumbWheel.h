@@ -1,9 +1,9 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: ThumbWheel.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// Inventor-style thumbwheel control for a single floating point value.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +23,32 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_ThumbWheel_h
+#define fltk_ThumbWheel_h
+
+#ifndef fltk_Valuator_h
+#include "Valuator.h"
+#endif
+
+namespace fltk {
+
+class FL_API ThumbWheel : public Valuator {
+public:
+  enum { // values for type()
+    VERTICAL = 0,
+    HORIZONTAL = 1
+  };
+  int handle(int);
+  ThumbWheel(int X,int Y,int W,int H,const char* L=0);
+
+protected:
+  void draw();
+};
+
+}
+
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: ThumbWheel.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: forms.h,v 1.2 2002/02/25 09:00:20 spitzak Exp $"
+// "$Id: forms.h,v 1.3 2002/12/09 04:47:59 spitzak Exp $"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -852,5 +852,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.h,v 1.2 2002/02/25 09:00:20 spitzak Exp $".
+// End of "$Id: forms.h,v 1.3 2002/12/09 04:47:59 spitzak Exp $".
 //

@@ -1,9 +1,10 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: MultiLineOutput.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// Displays a multi-line sequence of text, the user can select text
+// and copy it to other programs. Does not have any scrollbars.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +24,24 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_MultiLineOutput_h
+#define fltk_MultiLineOutput_h
+
+#include "Output.h"
+
+namespace fltk {
+
+// This class is entirely inline.  If that changes, add FL_API to its declaration
+class MultiLineOutput : public Output {
+public:
+    MultiLineOutput(int x,int y,int w,int h,const char *l = 0)
+      : Output(x,y,w,h,l) {type(MULTILINE);}
+};
+
+}
+
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: MultiLineOutput.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

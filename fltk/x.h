@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.13 2002/09/18 05:51:45 spitzak Exp $"
+// "$Id: x.h,v 1.14 2002/12/09 04:48:00 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -33,19 +33,28 @@
 // for other operating systems (win32.h, mac.h) but the definition of
 // the symbols is different, and usage may be somewhat different.
 
-#ifndef Fl_X_H
-#define Fl_X_H
+#ifndef fltk_x_h
+#define fltk_x_h
 
-#include "Fl_Color.h"
+#include "Color.h"
 
 #ifdef _WIN32
 # include "win32.h"
+
 #elif (defined(__APPLE__) && !USE_X11)
 # include "mac.h"
 #else
 
+#ifdef __APPLE__
+typedef unsigned char uchar;
+typedef unsigned long ulong;
+#define size_t unsigned int
+#endif
+
 ////////////////////////////////////////////////////////////////
 // Try to get the parts of Xlib.h included while avoiding warnings:
+
+#define Window XWindow
 
 #if defined(_ABIN32) || defined(_ABI64) // fix for broken SGI Irix X .h files
 # pragma set woff 3322
@@ -65,151 +74,163 @@
  typedef struct _XftDraw XftDraw;
 #endif
 
+#undef Window
+
+extern FL_API Region	XRectangleRegion(int x, int y, int w, int h);
+
+namespace fltk {
+
 ////////////////////////////////////////////////////////////////
 // constant info about the X server connection:
 
-extern FL_API void	fl_open_display();
-extern FL_API void	fl_open_display(Display*);
-extern FL_API void	fl_close_display();
+extern FL_API void	open_display();
+extern FL_API void	open_display(Display*);
+extern FL_API void	close_display();
 
-extern FL_API Display*	fl_display;
-extern FL_API Window	fl_message_window;
-extern FL_API int	fl_screen;
-extern FL_API XVisualInfo* fl_visual;
-extern FL_API Colormap	fl_colormap;
+extern FL_API Display*	xdisplay;
+extern FL_API XWindow	message_window;
+extern FL_API int	xscreen;
+extern FL_API XVisualInfo* xvisual;
+extern FL_API Colormap	xcolormap;
 
 ////////////////////////////////////////////////////////////////
 // event handling:
 
-// feed events into fltk by setting fl_xevent and calling fl_handle:
-extern FL_API XEvent	fl_xevent;
-extern FL_API bool	fl_handle();
+// feed events into fltk by setting xevent and calling handle:
+extern FL_API XEvent	xevent;
+extern FL_API bool	handle();
 
-// set by last fl_xevent with a timestamp:
-extern FL_API ulong	fl_event_time;
+// set by last xevent with a timestamp:
+extern FL_API ulong	event_time;
 
 ////////////////////////////////////////////////////////////////
 // DnD:
 
-extern FL_API Window fl_dnd_source_window;
-extern FL_API Atom *fl_dnd_source_types;
-extern FL_API Atom fl_dnd_type;
-extern FL_API Atom fl_dnd_source_action;
-extern FL_API Atom fl_dnd_action;
+extern FL_API XWindow dnd_source_window;
+extern FL_API Atom *dnd_source_types;
+extern FL_API Atom dnd_type;
+extern FL_API Atom dnd_source_action;
+extern FL_API Atom dnd_action;
 
 ////////////////////////////////////////////////////////////////
 // drawing functions:
 
-extern FL_API GC	fl_gc;
-extern FL_API struct Fl_Drawable* fl_drawable;
-extern FL_API Window	fl_window;
-extern FL_API XFontStruct*	fl_xfont();
-extern FL_API ulong	fl_pixel; // ==fl_xpixel(fl_color())
-extern FL_API ulong	fl_xpixel(Fl_Color i);
-extern FL_API void	fl_clip_region(Region);
-extern FL_API Region	fl_clip_region();
-extern FL_API Region	XRectangleRegion(int x, int y, int w, int h);
+extern FL_API GC	gc;
+extern FL_API class Drawable* drawable;
+extern FL_API XWindow	xwindow;
+extern FL_API XFontStruct*	xfont();
+extern FL_API ulong	current_xpixel;
+extern FL_API ulong	xpixel(Color i);
+extern FL_API void	clip_region(Region);
+extern FL_API Region	clip_region();
 
 ////////////////////////////////////////////////////////////////
 // This class is an offscreen image that you plan to draw to repeatedly.
 // It contains "context" information that may be expensive or impossible
 // to recreate each time for drawing. On some systems this is a base
-// class for Fl_X, which describes a window. Because
+// class for CreatedWindow, which describes a window. Because
 // of differences in how these things are created & destroyed, and
 // the desire to have the id have a longer lifetime than this object,
 // intelligent constructors and destructors are not implemented.
 
-FL_API void fl_load_identity();
+FL_API void load_identity();
+FL_API void push_no_clip();
 
-class FL_API Fl_Drawable {
+class FL_API Drawable {
  public:
-  Window xid;
+  XWindow xid;
   XftDraw* draw;
-  Fl_Drawable() : draw(0) {}
-  Fl_Drawable(Pixmap p) : xid(p), draw(0) {}
+  Drawable() : draw(0) {}
+  Drawable(Pixmap p) : xid(p), draw(0) {}
   void create(int w, int h) {
-    xid = XCreatePixmap(fl_display, fl_window, w, h, fl_visual->depth);
+    xid = XCreatePixmap(xdisplay, xwindow, w, h, xvisual->depth);
   }
   void copy(int x, int y, int w, int h, int src_x, int src_y) {
-    XCopyArea(fl_display, xid, fl_window, fl_gc, src_x, src_y, w, h, x, y);
+    XCopyArea(xdisplay, xid, xwindow, gc, src_x, src_y, w, h, x, y);
   }
   void free_gc();
   void destroy() {
-    if (xid) {free_gc(); XFreePixmap(fl_display, xid); xid = 0;}
+    if (xid) {free_gc(); XFreePixmap(xdisplay, xid); xid = 0;}
   }
-  void make_current() {fl_drawable = this; fl_window=xid; fl_load_identity();}
+  void make_current() {drawable = this; xwindow=xid; load_identity();}
 };
 
 ////////////////////////////////////////////////////////////////
 // This is an offscreen image that is designed to be drawn into
 // exactly once and then repeatedly used as a source for copy. The
-// object is expected to fit into a void* space in the Fl_Image
+// object is expected to fit into a void* space in the Image
 // structure. Drawing into them is surrounded by macros that save
 // the current graphics state in local variables and create a
 // temporary drawing context.
 
 #define fl_create_offscreen(w,h) \
-  XCreatePixmap(fl_display, fl_window, w, h, fl_visual->depth)
+  XCreatePixmap(::fltk::xdisplay,::fltk::xwindow, w, h,::fltk::xvisual->depth)
 
 #define fl_begin_offscreen(id) \
-  {fl_push_matrix(); \
-  Fl_Drawable* _sd = fl_drawable; \
-  Fl_Drawable _nd(id); \
+  {::fltk::push_matrix(); \
+  ::fltk::Drawable* _sd = fltk::drawable; \
+  ::fltk::Drawable _nd(id); \
   _nd.make_current(); \
-  fl_push_no_clip()
+  ::fltk::push_no_clip()
 
 #define fl_end_offscreen() \
-  _nd.free_gc(); _sd->make_current(); fl_pop_clip(); fl_pop_matrix();}
+  _nd.free_gc(); _sd->make_current();::fltk::pop_clip();::fltk::pop_matrix();}
 
 #define fl_copy_offscreen(x,y,w,h,id,srcx,srcy) \
-  XCopyArea(fl_display, id, fl_window, fl_gc, srcx, srcy, w, h, x, y)
+  XCopyArea(::fltk::xdisplay, id, ::fltk::xwindow, ::fltk::gc, srcx, srcy, w, h, x, y)
 
-#define fl_delete_offscreen(id) XFreePixmap(fl_display, id)
+#define fl_delete_offscreen(id) XFreePixmap(::fltk::xdisplay, id)
 
 ////////////////////////////////////////////////////////////////
 // This is a binary offscreen image created from in-memory data. This is used
-// as an alpha mask by Fl_Image on systems that don't support alpha
+// as an alpha mask by Image on systems that don't support alpha
 // blending.
 
-static inline Pixmap fl_create_bitmap(const uchar* data, int w, int h) {
-  return XCreateBitmapFromData(fl_display, fl_window, (char*)data,(w+7)&-8, h);
+static inline Pixmap create_bitmap(const uchar* data, int w, int h) {
+  return XCreateBitmapFromData(xdisplay, xwindow, (char*)data,(w+7)&-8, h);
 }
-#define fl_delete_bitmap(id) XFreePixmap(fl_display, id)
+static inline void delete_bitmap(Pixmap id) {
+  XFreePixmap(xdisplay, id);
+}
 
 ////////////////////////////////////////////////////////////////
-#ifdef Fl_Window_H // only include this if <fltk/Fl_Window.h> was included
+#ifdef fltk_Window_h // only include this if <fltk/Window.h> was included
 
 // When fltk tells X about a window, one of these objects is created.
 // Warning: this object is highly subject to change!  It's definition
-// is only here so that fl_xid can be declared inline:
+// is only here so that xid(Window) can be declared inline:
 
-class FL_API Fl_X : public Fl_Drawable {
+class FL_API CreatedWindow : public Drawable {
 public:
-  Fl_Drawable backbuffer;
-  Fl_Window *window;
+  Drawable backbuffer;
+  Window *window;
   Region region;
   void expose(int x, int y, int w, int h);
-  Fl_X *next;
+  CreatedWindow *next;
   bool wait_for_expose;
   bool backbuffer_bad; // used for XDBE
-  static Fl_X* first;
-  static Fl_X* i(const Fl_Window* window) {return window->i;}
+  ::Cursor cursor;
+  const Widget* cursor_for;
+  static CreatedWindow* first;
+  static CreatedWindow* find(const Window* window) {return window->i;}
   void sendxjunk();
-  static void create(Fl_Window*,
+  static void create(Window*,
 		     XVisualInfo*, Colormap,
 		     int background = -1);
 };
 
-// convert xid <-> Fl_Window:
-inline Window fl_xid(const Fl_Window*w) {return Fl_X::i(w)->xid;}
-Fl_Window* fl_find(Window xid);
+// convert xid <-> Window:
+inline XWindow xid(const Window*w) {return CreatedWindow::find(w)->xid;}
+Window* find(XWindow xid);
 
-#endif //Fl_Window_H
+#endif // Window_h
 ////////////////////////////////////////////////////////////////
 
+}
+
 #endif	// not _WIN32
-#endif	//Fl_X_H
+#endif
 
 //
-// End of "$Id: x.h,v 1.13 2002/09/18 05:51:45 spitzak Exp $".
+// End of "$Id: x.h,v 1.14 2002/12/09 04:48:00 spitzak Exp $".
 //

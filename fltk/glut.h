@@ -1,5 +1,5 @@
 //
-// "$Id: glut.h,v 1.4 2002/12/09 04:43:54 spitzak Exp $"
+// "$Id: glut.h,v 1.5 2002/12/09 04:47:59 spitzak Exp $"
 //
 // GLUT emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -469,5 +469,5 @@ extern void APIENTRY glutSolidIcosahedron();
 #endif                  /* __glut_h__ */
 
 //
-// End of "$Id: glut.h,v 1.4 2002/12/09 04:43:54 spitzak Exp $".
+// End of "$Id: glut.h,v 1.5 2002/12/09 04:47:59 spitzak Exp $".
 //

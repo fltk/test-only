@@ -1,9 +1,9 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: WordwrapOutput.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// Small text output field that word-wraps its contents.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +23,23 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_WordwrapOutput_h
+#define fltk_WordwrapOutput_h
+
+#include "Output.h"
+
+namespace fltk {
+
+// This class is entirely inline.  If that changes, add FL_API to its declaration
+class WordwrapOutput : public Output {
+public:
+  WordwrapOutput(int x,int y,int w,int h,const char *l = 0)
+    : Output(x,y,w,h,l) {type(WORDWRAP);}
+};
+
+}
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: WordwrapOutput.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

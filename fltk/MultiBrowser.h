@@ -1,9 +1,10 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: MultiBrowser.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// Browser that lets the user select more than one item at a time.
+// Most of the implementation is in the base Browser class.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +24,24 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_MultiBrowser_h
+#define fltk_MultiBrowser_h
+
+#include "Browser.h"
+
+namespace fltk {
+
+// This class is entirely inline.  If that changes, add FL_API to its declaration
+class MultiBrowser : public Browser {
+public:
+    MultiBrowser(int x,int y,int w,int h,const char *l=0)
+	: Browser(x,y,w,h,l) {type(MULTI);}
+};
+
+}
+
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: MultiBrowser.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: Dial.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// Rotating value control
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +23,42 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_Dial_h
+#define fltk_Dial_h
+
+#ifndef fltk_Valuator_h
+#include "Valuator.h"
+#endif
+
+namespace fltk {
+
+class FL_API Dial : public Valuator {
+
+public:
+
+  enum {NORMAL = 0, LINE, FILL}; // values for type()
+  int handle(int);
+  Dial(int x,int y,int w,int h, const char *l = 0);
+  static NamedStyle* default_style;
+  short angle1() const {return a1;}
+  void angle1(short a) {a1 = a;}
+  short angle2() const {return a2;}
+  void angle2(short a) {a2 = a;}
+  void angles(short a, short b) {a1 = a; a2 = b;}
+
+protected:
+
+  void draw();
+
+private:
+
+  short a1,a2;
+
+};
+
+}
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: Dial.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

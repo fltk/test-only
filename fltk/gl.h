@@ -1,5 +1,5 @@
 //
-// "$Id: gl.h,v 1.7 2002/09/16 00:29:05 spitzak Exp $"
+// "$Id: gl.h,v 1.8 2002/12/09 04:47:59 spitzak Exp $"
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
@@ -33,50 +33,62 @@
 #ifndef gl_draw_H
 #define gl_draw_H
 
-#include "Fl_Color.h"
-#include "Fl_Flags.h"
-#include "Fl_Font.h"
+#include "Color.h"
+#include "Flags.h"
 
 #ifdef _WIN32
 # include <windows.h>
-#endif
-#ifndef APIENTRY
-# if defined(__CYGWIN__)
-#  define APIENTRY __attribute__ ((__stdcall__))
-# else
-#  define APIENTRY
-# endif
-#endif
-
-#ifdef __APPLE__
+# include <GL/gl.h>
+# undef DELETE
+# undef ERROR
+# undef IN
+# undef OUT
+# undef POINT
+# undef far
+# undef max
+# undef min
+# undef near
+#elif defined(__APPLE__)
 # include <OpenGL/gl.h>
 #else
+# ifndef APIENTRY
+#  if defined(__CYGWIN__)
+#   define APIENTRY __attribute__ ((__stdcall__))
+#  else
+#   define APIENTRY
+#  endif
+# endif
 # include <GL/gl.h>
 #endif
 
-FL_GL_API void gl_start();
-FL_GL_API void gl_finish();
+namespace fltk {
 
-FL_GL_API void gl_color(Fl_Color);
+struct Font;
 
-FL_GL_API void gl_rect(int x,int y,int w,int h);
-inline void gl_rectf(int x,int y,int w,int h) {glRecti(x,y,x+w,y+h);}
+FL_GL_API void glstart();
+FL_GL_API void glfinish();
 
-FL_GL_API void gl_font(Fl_Font f, float size);
-FL_GL_API float gl_height();
-FL_GL_API float gl_descent();
-FL_GL_API float gl_width(const char *);
-FL_GL_API float gl_width(const char *, int n);
+FL_GL_API void glsetcolor(Color);
 
-FL_GL_API void gl_draw(const char*);
-FL_GL_API void gl_draw(const char*, int n);
-FL_GL_API void gl_draw(const char*, float x, float y, float z = 0);
-FL_GL_API void gl_draw(const char*, int n, float x, float y, float z = 0);
+FL_GL_API void glstrokerect(int x,int y,int w,int h);
+inline void glfillrect(int x,int y,int w,int h) {glRecti(x,y,x+w,y+h);}
 
-FL_GL_API void gl_draw_image(const uchar *, int x,int y,int w,int h, int d=3, int ld=0);
+FL_GL_API void glsetfont(Font* f, float size);
+FL_GL_API float glgetascent();
+FL_GL_API float glgetdescent();
+FL_GL_API float glgetwidth(const char *);
+FL_GL_API float glgetwidth(const char *, int n);
 
+FL_GL_API void gldrawtext(const char*);
+FL_GL_API void gldrawtext(const char*, int n);
+FL_GL_API void gldrawtext(const char*, float x, float y, float z = 0);
+FL_GL_API void gldrawtext(const char*, int n, float x, float y, float z = 0);
+
+FL_GL_API void gldrawimage(const uchar *, int x,int y,int w,int h, int d=3, int ld=0);
+
+}
 #endif
 
 //
-// End of "$Id: gl.h,v 1.7 2002/09/16 00:29:05 spitzak Exp $".
+// End of "$Id: gl.h,v 1.8 2002/12/09 04:47:59 spitzak Exp $".
 //

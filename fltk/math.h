@@ -1,5 +1,5 @@
 //
-// "$Id: math.h,v 1.5 2002/09/18 05:51:45 spitzak Exp $"
+// "$Id: math.h,v 1.6 2002/12/09 04:47:59 spitzak Exp $"
 //
 // The purpose of this header file is to make math.h look the same as
 // Unix on other operating systems.
@@ -71,6 +71,7 @@
 # define expf(a)	exp(a)
 # define logf(a)	log(a)
 # define log10f(a)	log10(a)
+# undef sqrtf
 # define sqrtf(a)	sqrt(a)
 #endif
 #ifdef __alpha // powf is broken on alphas, at least in gcc
@@ -84,5 +85,5 @@
 #endif
 
 //
-// End of "$Id: math.h,v 1.5 2002/09/18 05:51:45 spitzak Exp $".
+// End of "$Id: math.h,v 1.6 2002/12/09 04:47:59 spitzak Exp $".
 //

@@ -1,9 +1,10 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: xbmImage.h,v 1.1 2002/12/09 04:48:00 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// Image subclass for in-memory xbm data (you #include the .xbm file
+// and then construct this).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +24,29 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_xbmImage_h
+#define fltk_xbmImage_h
+
+#include "Image.h"
+
+namespace fltk {
+
+class FL_API xbmImage : public Image {
+public:
+  const unsigned char *array;
+  xbmImage(const unsigned char *bits, int W, int H) : array(bits) {w = W; h = H;}
+  xbmImage(const char *bits, int W, int H) :
+    array((const unsigned char *)bits) {w = W; h = H;}
+  void draw(int, int, int, int, Flags = 0);
+  void draw(int x, int y, Flags f = 0) {draw(x,y,w,h,f);}
+  int width() const {return w;}
+  int height() const {return h;}
+};
+
+}
+
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: xbmImage.h,v 1.1 2002/12/09 04:48:00 spitzak Exp $".
 //

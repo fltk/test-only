@@ -1,9 +1,11 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: FloatInput.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// NumericInput modified to only allow floating point to by
+// typed. Currently this is implemented by the base class by checking
+// type() but this may change in the future.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +25,24 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_FloatInput_h
+#define fltk_FloatInput_h
+
+#include "NumericInput.h"
+
+namespace fltk {
+
+class FL_API FloatInput : public NumericInput {
+  virtual bool replace(int, int, const char*, int);
+public:
+  enum {FLOAT = 0, INT = 1};
+  FloatInput(int x,int y,int w,int h,const char *l = 0)
+    : NumericInput(x,y,w,h,l) {}
+};
+
+}
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: FloatInput.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

@@ -1,9 +1,8 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: file_chooser.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Popup file chooser.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +22,25 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_file_chooser_h
+#define fltk_file_chooser_h
+
+#include "FL_API.h"
+
+namespace fltk {
+
+FL_API void use_system_file_chooser(bool = true);
+
+FL_API char *file_chooser(const char *message,
+			  const char *pattern,
+			  const char *filename,
+			  bool save = true);
+FL_API void file_chooser_callback(void (*cb)(const char *));
+
+}
+
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: file_chooser.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

@@ -1,9 +1,12 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: ItemGroup.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// Widget designed to be a nested list in a menu or browser. This
+// copies the drawing and style code from Item. I did not modify the
+// base Menu class this way because the style inheritance would mess
+// up the styles of MenuButton and MenuBar. Code is in Item.cxx
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +26,20 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_ItemGroup_h
+#define fltk_ItemGroup_h
 
-//
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
-//
+#include "Menu.h"
+
+namespace fltk {
+
+class FL_API ItemGroup : public Menu {
+public:
+  void draw();
+  void layout();
+  ItemGroup(const char* label = 0);
+};
+
+}
+
+#endif

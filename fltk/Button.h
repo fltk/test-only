@@ -1,9 +1,9 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: Button.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// Push button widget
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +23,41 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_Button_h
+#define fltk_Button_h
+
+#ifndef fltk_Widget_h
+#include "Widget.h"
+#endif
+
+namespace fltk {
+
+class FL_API Button : public Widget {
+public:
+  enum { // values for type()
+    NORMAL = 0,
+    TOGGLE = RESERVED_TYPE+1,
+    RADIO  = RESERVED_TYPE+2,
+    HIDDEN = 3
+  };
+  bool  value() const {return Widget::value();}
+  bool	value(bool);
+  bool	set();
+  bool	clear();
+  void	setonly();
+  virtual int handle(int);
+  Button(int,int,int,int,const char * = 0);
+  static NamedStyle* default_style;
+
+protected:
+  virtual void draw();
+  void draw(int glyph, int glyph_width) const;
+};
+
+}
+
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: Button.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

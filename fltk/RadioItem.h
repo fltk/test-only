@@ -1,9 +1,10 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: RadioItem.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// This widget makes a radio item in a popup or pulldown Menu.
+// It's behavior in a Browser or other group is undefined.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +24,18 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_RadioItem_h
+#define fltk_RadioItem_h
 
-//
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
-//
+#include "Item.h"
+
+namespace fltk {
+
+class RadioItem : public Item {
+public:
+  RadioItem(const char* l = 0) : Item(l) {type(RADIO);}
+};
+
+}
+
+#endif

@@ -1,9 +1,10 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: show_colormap.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// Pretty much obsolete popup color chooser that lets you pick one
+// of the 256 indexed colors in fltk.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +24,18 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_show_colormap_h
+#define fltk_show_colormap_h
+
+#include "FL_API.h"
+#include "Color.h"
+
+namespace fltk {
+FL_API Color show_colormap(Color oldcol);
+}
+
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: show_colormap.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: FileInput.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// Fl_FileInput definitions for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1997-1999 by Easy Software Products.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +23,23 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_FileInput_h
+#define fltk_FileInput_h
+
+#include <fltk/Input.h>
+
+namespace fltk {
+
+class FL_API FileInput : public Input {
+ public:
+  FileInput(int x, int y, int w, int h, const char *l = 0) :
+      Input(x, y, w, h, l) {}
+  int handle(int);
+};
+
+}
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: FileInput.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

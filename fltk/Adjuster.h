@@ -1,7 +1,5 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
-//
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// "$Id: Adjuster.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,9 +21,38 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+// Undocumented valuator provided for back-compatability.
+// This may be removed before the final version.
+// 3-button "slider", made for Nuke
+
+#ifndef fltk_Adjuster_h
+#define fltk_Adjuster_h
+
+#include "Valuator.h"
+
+namespace fltk {
+
+class FL_API Adjuster : public Valuator {
+public:
+  Adjuster(int x, int y, int w, int h, const char *l=0);
+  static NamedStyle* default_style;
+  void soft(int x) {soft_ = x;}
+  int soft() const {return soft_;}
+  int handle(int);
+
+protected:
+  void draw();
+  void value_damage();
+
+private:
+  int drag, highlight, last;
+  int ix;
+  int soft_;
+};
+
+}
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: Adjuster.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

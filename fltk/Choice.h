@@ -1,9 +1,13 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: Choice.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// Popup list of items that the user can choose one of. Based on Motif
+// but modern equivalent is the OS/X popup choices.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// This is not a "combo box". You should try this, but if you insist
+// on that use the InputBrowser widget.
+//
+// Copyright 2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +27,28 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_Choice_h
+#define fltk_Choice_h
+
+#include "Menu.h"
+
+namespace fltk {
+
+class FL_API Choice : public Menu {
+public:
+  int handle(int);
+  Choice(int,int,int,int,const char * = 0);
+  static NamedStyle* default_style;
+  int value(int v);
+  int value() const {return Menu::value();}
+protected:
+  void draw();
+};
+
+}
+
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: Choice.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

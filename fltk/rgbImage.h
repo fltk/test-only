@@ -1,9 +1,9 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: rgbImage.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// Image subclass that draws uncompressed 8-bit rgb data from memory.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +23,27 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_rgbImage_h
+#define fltk_rgbImage_h
+
+#include "Image.h"
+
+namespace fltk {
+
+class FL_API rgbImage : public Image {
+  int depth;
+  const uchar* data;
+public:
+  rgbImage(const uchar* d, int W, int H, int D=3)
+    : data(d) {w = W; h = H; depth = D;}
+  void draw(int, int, int, int, Flags = 0);
+  void draw(int x, int y, Flags f = 0) {draw(x,y,w,h,f);}
+};
+
+}
+
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: rgbImage.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

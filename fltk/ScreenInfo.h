@@ -1,9 +1,8 @@
+// "$Id: ScreenInfo.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// Structure of rarely-changing information about the display screen.
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +22,25 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_ScreenInfo_h
+#define fltk_ScreenInfo_h
 
-//
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
-//
+#include "FL_API.h"
+
+namespace fltk {
+
+struct ScreenInfo {
+  int x, y, w, h;
+  int width;
+  int height;
+  int depth;
+  float dpi_x;
+  float dpi_y;
+  // other information may be added here in the future!
+};
+
+extern FL_API const ScreenInfo& screenInfo();
+
+}
+
+#endif

@@ -1,9 +1,10 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: Output.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// One-line text output, the user can select text and copy it
+// to other applications.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +24,26 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_Output_h
+#define fltk_Output_h
+
+#include "Input.h"
+
+namespace fltk {
+
+class FL_API Output : public Input {
+  virtual bool replace(int, int, const char*, int); // does nothing
+public:
+  Output(int x, int y, int w, int h, const char *l = 0);
+  int handle(int);
+  // this style is so Motif can have different color for output vs input:
+  static NamedStyle* default_style;
+};
+
+}
+
+#endif 
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: Output.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

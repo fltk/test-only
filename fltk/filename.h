@@ -1,5 +1,5 @@
 //
-// "$Id: filename.h,v 1.5 2002/09/16 00:29:05 spitzak Exp $"
+// "$Id: filename.h,v 1.6 2002/12/09 04:47:59 spitzak Exp $"
 //
 // Filename header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 #ifndef FL_FILENAME_H
 #define FL_FILENAME_H
 
-#include <fltk/Enumerations.h> // for FL_API
+#include "FL_API.h"
 
 #define FL_PATH_MAX 1024 // all buffers are assummed to be at least this long
 
@@ -42,10 +42,10 @@ FL_API bool filename_isdir(const char*);
 
 struct dirent {char d_name[1];};
 
-#elif defined(__linux_)
+#elif defined(__linux)
 
-#define __USE_LARGEFILE64
-#define __USE_GNU
+#define _GNU_SOURCE
+#include <features.h>
 #include <sys/types.h>
 #include <dirent.h>
 #define dirent dirent64
@@ -72,5 +72,5 @@ FL_API int filename_list(const char *d, struct dirent ***);
 #endif
 
 //
-// End of "$Id: filename.h,v 1.5 2002/09/16 00:29:05 spitzak Exp $".
+// End of "$Id: filename.h,v 1.6 2002/12/09 04:47:59 spitzak Exp $".
 //

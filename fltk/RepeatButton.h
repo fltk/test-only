@@ -1,9 +1,10 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: RepeatButton.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// This button does it's callback repeatedly (about 10/second) while
+// the user holds the button down.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +24,24 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_RepeatButton_h
+#define fltk_RepeatButton_h
+
+#include "Button.h"
+
+namespace fltk {
+
+class FL_API RepeatButton : public Button {
+  static void repeat_callback(void *);
+public:
+  int handle(int);
+  RepeatButton(int x,int y,int w,int h,const char *l=0) : Button(x,y,w,h,l) {}
+};
+
+}
+
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: RepeatButton.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

@@ -1,9 +1,11 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: SecretInput.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// One-line text input field that draws asterisks instead of the
+// letters. It also prevents the user from cutting or copying the
+// text and then pasting it somewhere.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +25,23 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_SecretInput_h
+#define fltk_SecretInput_h
+
+#include "Input.h"
+
+namespace fltk {
+
+class SecretInput : public Input {
+public:
+  SecretInput(int x,int y,int w,int h,const char *l = 0)
+    : Input(x,y,w,h,l) {type(SECRET);}
+};
+
+}
+
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: SecretInput.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.10 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: win32.h,v 1.11 2002/12/09 04:47:59 spitzak Exp $"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -45,7 +45,7 @@
 ////////////////////////////////////////////////////////////////
 // Emulate X somewhat:
 
-typedef HWND Window;
+typedef HWND XWindow;
 typedef POINT XPoint;
 struct FL_API XRectangle {int x, y, width, height;};
 typedef HRGN Region;
@@ -66,32 +66,35 @@ inline void XClipBox(Region r, XRectangle* rect) {
 #define XMapWindow(a,b)	ShowWindow(b, SW_RESTORE)
 #define XUnmapWindow(a,b) ShowWindow(b, SW_HIDE)
 
+namespace fltk {
+
 ////////////////////////////////////////////////////////////////
 // constant information about the display:
 
-#define fl_open_display()
-extern FL_API HINSTANCE	fl_display;
-extern FL_API HPALETTE	fl_palette; // non-zero only on 8-bit displays!
+extern FL_API void	open_display();
+extern FL_API void	close_display();
+extern FL_API HINSTANCE	xdisplay;
+extern FL_API HPALETTE	xpalette; // non-zero only on 8-bit displays!
 
 ////////////////////////////////////////////////////////////////
 // event handling:
 
-extern FL_API MSG fl_msg;
+extern FL_API MSG xmsg;
 
 ////////////////////////////////////////////////////////////////
 // drawing functions:
 
-extern FL_API HDC	fl_gc;
-inline FL_API HDC	fl_getDC() {return fl_gc ? fl_gc : GetDC(0);}
-extern FL_API HFONT	fl_xfont();
-extern FL_API TEXTMETRIC* fl_textmetric();
-extern FL_API COLORREF	fl_colorref;
-extern FL_API COLORREF	fl_wincolor(Fl_Color i);
-extern FL_API HPEN	fl_pen;
-extern FL_API HPEN	fl_create_pen();
-extern FL_API HBRUSH	fl_brush;
-extern FL_API void	fl_clip_region(Region);
-extern FL_API Region	fl_clip_region();
+extern FL_API HDC	gc;
+inline FL_API HDC	getDC() {return gc ? gc : GetDC(0);}
+extern FL_API HFONT	xfont();
+extern FL_API TEXTMETRIC* textmetric();
+extern FL_API COLORREF	current_xpixel;
+extern FL_API COLORREF	xpixel(Color i);
+extern FL_API HPEN	current_pen;
+extern FL_API HPEN	create_pen();
+extern FL_API HBRUSH	current_brush;
+extern FL_API void	clip_region(Region);
+extern FL_API Region	clip_region();
 
 ////////////////////////////////////////////////////////////////
 // This class is an offscreen image that you plan to draw to repeatedly.
@@ -102,30 +105,31 @@ extern FL_API Region	fl_clip_region();
 // the desire to have the id have a longer lifetime than this object,
 // intelligent constructors and destructors are not implemented.
 
-FL_API HDC fl_makeDC(HBITMAP);
-FL_API void fl_load_identity();
+FL_API HDC makeDC(HBITMAP);
+FL_API void load_identity();
+FL_API void push_no_clip();
 
-class FL_API Fl_Drawable {
+class FL_API Drawable {
  public:
   HWND xid;
   HDC dc;
-  Fl_Drawable() {}
-  Fl_Drawable(HBITMAP p) : xid((HWND)p), dc(fl_makeDC(p)) {}
+  Drawable() {}
+  Drawable(HBITMAP p) : xid((HWND)p), dc(makeDC(p)) {}
   void create(int w, int h) {
-    HBITMAP bitmap = CreateCompatibleBitmap(fl_gc, w, h);
+    HBITMAP bitmap = CreateCompatibleBitmap(gc, w, h);
     xid = (HWND)bitmap;
-    dc = fl_makeDC(bitmap);
+    dc = makeDC(bitmap);
   }
   void copy(int x, int y, int w, int h, int src_x, int src_y) {
-    BitBlt(fl_gc, x, y, w, h, dc, src_x, src_y, SRCCOPY);
+    BitBlt(gc, x, y, w, h, dc, src_x, src_y, SRCCOPY);
   }
   void free_gc() {
-    if (dc) {if (fl_gc == dc) fl_gc = 0; DeleteDC(dc); dc = 0;}
+    if (dc) {if (gc == dc) gc = 0; DeleteDC(dc); dc = 0;}
   }
   void destroy() {
     if (xid) {free_gc(); DeleteObject((HBITMAP)xid); xid = 0;}
   }
-  void make_current() {fl_gc = dc; fl_load_identity();}
+  void make_current() {gc = dc; load_identity();}
 };
 
 ////////////////////////////////////////////////////////////////
@@ -136,63 +140,67 @@ class FL_API Fl_Drawable {
 // the current graphics state in local variables and create a
 // temporary drawing context.
 
-#define fl_create_offscreen(w, h) CreateCompatibleBitmap(fl_gc, w, h)
+#define fl_create_offscreen(w, h) CreateCompatibleBitmap(fltk::gc, w, h)
 
 #define fl_begin_offscreen(id) \
-  {fl_push_matrix(); \
-  HDC _sdc = fl_gc; \
-  Fl_Drawable _nd(id); \
+  {fltk::push_matrix(); \
+  HDC _sdc = fltk::gc; \
+  fltk::Drawable _nd(id); \
   _nd.make_current(); \
-  fl_push_no_clip()
+  fltk::push_no_clip()
 
 #define fl_end_offscreen() \
-  _nd.free_gc(); fl_gc = _sdc; fl_pop_clip(); fl_pop_matrix();}
+  _nd.free_gc(); fltk::gc = _sdc; fltk::pop_clip(); fltk::pop_matrix();}
 
-FL_API void fl_copy_offscreen(int x,int y,int w,int h,HBITMAP id,int srcx,int srcy);
+FL_API void copy_offscreen(int x,int y,int w,int h,HBITMAP id,int srcx,int srcy);
+#define fl_copy_offscreen fltk::copy_offscreen
 
 #define fl_delete_offscreen(bitmap) DeleteObject(bitmap);
 
 ////////////////////////////////////////////////////////////////
 // Binary images, created from in-memory data:
 
-extern FL_API Pixmap fl_create_bitmap(const uchar* bitmap, int w, int h);
+FL_API Pixmap create_bitmap(const uchar* bitmap, int w, int h);
 
-#define fl_delete_bitmap(bitmap) DeleteObject((HBITMAP)(bitmap));
+static inline void delete_bitmap(Pixmap bitmap) {DeleteObject(bitmap);}
 
 ////////////////////////////////////////////////////////////////
-#ifdef Fl_Window_H // only include this if <fltk/Fl_Window.h> was included
+#ifdef fltk_Window_h // only include this if <fltk/Fl_Window.h> was included
 
 // When fltk tells X about a window, one of these objects is created.
 // Warning: this object is highly subject to change!  It's definition
 // is only here so that fl_xid can be declared inline:
 
-class FL_API Fl_X : public Fl_Drawable {
+class FL_API CreatedWindow : public Drawable {
 public:
-  Fl_Drawable backbuffer;
-  Fl_Window* window;
+  Drawable backbuffer;
+  Window* window;
   Region region;
   void expose(int x, int y, int w, int h);
-  Fl_X *next;
+  CreatedWindow* next;
   bool wait_for_expose;
   HCURSOR cursor;
-  static Fl_X* first;
-  static Fl_X* i(const Fl_Window* window) {return window->i;}
-  static int borders(const Fl_Window* w, int& dx, int& dy, int& dw, int& dh);
+  const Widget* cursor_for;
+  static CreatedWindow* first;
+  static CreatedWindow* find(const Window* window) {return window->i;}
+  static int borders(const Window* w, int& dx, int& dy, int& dw, int& dh);
   void set_minmax(LPMINMAXINFO minmax);
-  static void create(Fl_Window*);
+  static void create(Window*);
 };
 
-// convert xid <-> Fl_Window:
-inline Window fl_xid(const Fl_Window* window) {return Fl_X::i(window)->xid;}
-FL_API Fl_Window* fl_find(Window xid);
+// convert xid <-> Window:
+inline XWindow xid(const Window*w) {return CreatedWindow::find(w)->xid;}
+Window* find(XWindow xid);
 
-extern FL_API HCURSOR fl_default_cursor;
+extern FL_API HCURSOR default_cursor;
 
 #endif //Fl_Window_H
 ////////////////////////////////////////////////////////////////
 
+}
+
 #endif
 
 //
-// End of "$Id: win32.h,v 1.10 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: win32.h,v 1.11 2002/12/09 04:47:59 spitzak Exp $".
 //

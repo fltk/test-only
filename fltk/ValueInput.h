@@ -1,9 +1,9 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: ValueInput.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// Text field for inputing a floating-point number
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +23,36 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_ValueInput_h
+#define fltk_ValueInput_h
+
+#include "Valuator.h"
+#include "FloatInput.h"
+
+namespace fltk {
+
+class FL_API ValueInput : public Valuator {
+public:
+  FloatInput input;
+
+  int handle(int);
+  void draw();
+  ValueInput(int x,int y,int w,int h,const char *l=0);
+  ~ValueInput();
+
+protected:
+  void layout();
+
+private:
+  virtual void value_damage(); // cause damage() due to value() changing
+  static void input_cb(Widget*,void*);
+  void increment_cb();
+  static void repeat_callback(void* v);
+};
+
+}
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: ValueInput.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

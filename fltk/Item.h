@@ -1,9 +1,9 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: Item.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// Widget designed to be a menu or browser item.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +23,28 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_Item_h
+#define fltk_Item_h
 
-//
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
-//
+#ifndef fltk_Widget_h
+#include "Widget.h"
+#endif
+
+namespace fltk {
+
+class FL_API Item : public Widget {
+public:
+  enum { // values for type(), should match Button
+    NORMAL = 0,
+    TOGGLE = RESERVED_TYPE+1,
+    RADIO  = RESERVED_TYPE+2
+  };
+  void draw();
+  void layout();
+  Item(const char* label = 0);
+  static NamedStyle* default_style;
+};
+
+}
+
+#endif

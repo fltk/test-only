@@ -1,9 +1,9 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: LightButton.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// Forms/XForms/Flame style button with indicator light on left
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +23,23 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_Light_Button_h
+#define fltk_Light_Button_h
+
+#include "CheckButton.h"
+
+namespace fltk {
+
+class FL_API LightButton : public CheckButton {
+public:
+  LightButton(int x,int y,int w,int h,const char *l = 0);
+  static NamedStyle* default_style;
+  static void default_glyph(const Widget*, int, int,int,int,int, Flags);
+};
+
+}
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: LightButton.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

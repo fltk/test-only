@@ -1,9 +1,9 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: LineDial.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// Dial that draws a pointer rather than a dot.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +23,22 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_LineDial_h
+#define fltk_LineDial_h
+
+#include "Dial.h"
+
+namespace fltk {
+
+class FL_API LineDial : public Dial {
+public:
+  LineDial(int x,int y,int w,int h, const char *l = 0) :
+    Dial(x,y,w,h,l) {type(LINE);}
+};
+
+}
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: LineDial.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //

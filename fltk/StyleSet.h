@@ -1,9 +1,11 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: StyleSet.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// Saves and restores all the styles used by Widget constructors. Fluid
+// uses this so you can preview a style without fluid's own control
+// panels changing. I think this is broken, anybody want to fix it?
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +25,25 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_StyleSet_h
+#define fltk_StyleSet_h
 
-//
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
-//
+#include "Style.h"
+
+namespace fltk {
+
+class FL_API StyleSet {
+  NamedStyle* first_style;
+  Theme theme;
+  const char* scheme;
+  Color background;
+  void* reserved; // pointer to extra saved stuff
+public:
+  StyleSet();
+  void make_current();
+  ~StyleSet();
+};
+
+}
+
+#endif

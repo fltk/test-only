@@ -1,9 +1,11 @@
 //
-// "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: TiledGroup.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
 //
-// Directory header file for the Fast Light Tool Kit (FLTK).
+// The child widgets are expected to be all laid out to touch each other
+// and fill this group. The user can then move the boundaries between
+// them by grabbing the junctions between the children.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -23,9 +25,25 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// this file is for back-compatability only
-#include "filename.h"
+#ifndef fltk_TiledGroup_h
+#define fltk_TiledGroup_h
+
+#include "Group.h"
+
+namespace fltk {
+
+class FL_API TiledGroup : public Group {
+protected:
+  void layout();
+public:
+  int handle(int);
+  TiledGroup(int X,int Y,int W,int H,const char*l=0) : Group(X,Y,W,H,l) {}
+  void position(int, int, int, int);
+};
+
+}
+#endif
 
 //
-// End of "$Id: dirent.h,v 1.2 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: TiledGroup.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
 //
