@@ -1,5 +1,5 @@
 //
-// "$Id: fl_file_chooser.cxx,v 1.33 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id: fl_file_chooser.cxx,v 1.34 2004/07/27 10:34:00 laza2000 Exp $"
 //
 // File chooser widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,7 @@ static bool use_system_fc = false;
   API instead of using the one constructed in fltk. Ignored on other
   systems.
 */
-void use_system_file_chooser(bool useit) {use_system_fc = useit;}
+void fltk::use_system_file_chooser(bool useit) {use_system_fc = useit;}
 
 #ifdef _WIN32
 # include <windows.h>
@@ -121,5 +121,5 @@ char* fltk::file_chooser(const char* message,
 }
 
 //
-// End of "$Id: fl_file_chooser.cxx,v 1.33 2004/01/20 07:27:28 spitzak Exp $".
+// End of "$Id: fl_file_chooser.cxx,v 1.34 2004/07/27 10:34:00 laza2000 Exp $".
 //
