@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.31 2004/07/04 17:28:31 laza2000 Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.32 2004/07/10 23:05:44 laza2000 Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -194,7 +194,7 @@ int TextDisplay::longest_vline() {
 ** Change the size of the displayed text area
 */
 void TextDisplay::layout() {
-//printf("TextDisplay::layout\n");
+	//printf("TextDisplay::layout\n");
   if (!buffer() || !visible_r()) return;
   int X = 0, Y = 0, W = w(), H = h();
   box()->inset(X, Y, W, H);
@@ -330,7 +330,7 @@ void TextDisplay::layout() {
 
   update_v_scrollbar();
   update_h_scrollbar();
-  redraw(DAMAGE_ALL);
+  //redraw(DAMAGE_ALL);
 
   // clear the layout flag
   Widget::layout();
@@ -371,7 +371,7 @@ void TextDisplay::redisplay_range(int start, int end) {
   } else {
     damage_range2_start = min(damage_range2_start, start);
     damage_range2_end = max(damage_range2_end, end);
-  }
+  }	
   redraw(DAMAGE_SCROLL);
 }
 /*
@@ -670,8 +670,10 @@ void TextDisplay::display_insert() {
 }
 
 void TextDisplay::show_insert_position() {
-  display_insert_position_hint = 1;
-  relayout();
+	if(mCursorPos < mFirstChar || mCursorPos > mLastChar) {
+		display_insert_position_hint = 1;
+		relayout();
+	}
 }
 
 static void adjust_cursor_left( TextBuffer *CurBuffer, int *CursorPos )
@@ -857,7 +859,7 @@ void TextDisplay::buffer_modified_cb( int pos, int nInserted, int nDeleted,
      sure that the redisplay range covers the old cursor position so the
      old cursor gets erased, and erase the bits of the cursor which extend
      beyond the left and right edges of the text. */
-  startDispPos = pos;
+  startDispPos = pos-6; // FIXME: For UTF-8 safety.. should use utf8back() somehow
   if ( origCursorPos == startDispPos && textD->mCursorPos != startDispPos )
     startDispPos = min( startDispPos, origCursorPos - 1 );
   if ( linesInserted == linesDeleted ) {
@@ -946,6 +948,8 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
   fontHeight = mMaxsize;
   Y = text_area.y + visLineNum * fontHeight;
 
+	if(Y >= h()) return;
+
   /* Get the text, length, and  buffer position of the line to display */
   lineStartPos = mLineStarts[ visLineNum ];
   if ( lineStartPos == -1 ) {
@@ -988,7 +992,7 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
   for ( charIndex = 0; ; charIndex += charLen ) {
     charLen = charIndex >= lineLen ? 1 :
               TextBuffer::expand_character( lineStr[ charIndex ], outIndex,
-                                                expandedChar, buf->tab_distance(), buf->null_substitution_character() );
+                                            expandedChar, buf->tab_distance(), buf->null_substitution_character() );
 
     if (charIndex < lineLen && charLen > 1) {
       int i, ii = 0;;
@@ -1012,9 +1016,9 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
     }
     X += charWidth;
     outIndex += charLen;
-    if (charIndex < lineLen && lineStr[ charIndex ] == '\t')
-	  charLen = 1;
-  }
+		if (charIndex < lineLen && lineStr[ charIndex ] == '\t')
+			charLen = 1;
+	}
 
   /* Scan character positions from the beginning of the clipping range, and
      draw parts whenever the style changes (also note if the cursor is on
@@ -1041,51 +1045,46 @@ void TextDisplay::draw_vline(int visLineNum, int leftClip, int rightClip,
 				    buf->null_substitution_character());
 
     if (charIndex < lineLen) {
-	  if (charLen > 1) {
-        int i, ii = 0;;
+			if (charLen > 1) {
+        int i, ii = 0;
         i = utf8len(lineStr[ charIndex ]);
         while (i > 1) {
           i--;
           ii++;
           expandedChar[ii] = lineStr[ charIndex + ii ];
         }
-	  }
+			}
     } else
-	  expandedChar[0] = ' ';
+			expandedChar[0] = ' ';
 
     charStyle = position_style( lineStartPos, lineLen,
                                 charIndex, outIndex + dispIndexOffset );
-    if (charIndex < lineLen && lineStr[ charIndex ] == '\t'
-			|| charIndex >= lineLen ) {
-      charWidth = string_width( &expandedChar[ 0 ], 1, charStyle );
-      for ( i = 0; i < charLen; i++ ) {
-	    outPtr++;
-        outIndex++;
-	    X += charWidth;
-        draw_string( charStyle, startX, Y, X, &expandedChar[0], 1 );
-        startX = X;
-	  }
-      style = charStyle;
-	  charLen = 1;
-	} else {
-	  memcpy(outPtr, expandedChar, charLen);
-      charWidth = string_width( outPtr, charLen, charStyle );
-	  X += charWidth;
-      draw_string( charStyle, startX, Y, X, outPtr, charLen );
-	  outPtr += charLen;
-      outIndex += charLen;
+
+		if ( charStyle != style ) {
+			draw_string( style, startX, Y, X, outStr, outPtr - outStr );
       startX = X;
-      style = charStyle;
-	}
+      outPtr = outStr;
+			style = charStyle;
+		}
+
+		memcpy(outPtr, expandedChar, charLen);
+    charWidth = string_width( outPtr, charLen, charStyle );
+		outPtr += charLen;
+    outIndex += charLen;
+		X += charWidth;
+    style = charStyle;
+		
+		if (charIndex < lineLen && lineStr[ charIndex ] == '\t')
+			charLen = 1;	
 
     if ( outPtr - outStr + TextBuffer::MAX_EXP_CHAR_LEN >=
-	 MAX_DISP_LINE_LEN || X >= rightClip )
+				MAX_DISP_LINE_LEN || X >= rightClip )
       break;
   }
 
   /* Draw the remaining style segment */
   draw_string( style, startX, Y, X, outStr, outPtr - outStr );
-
+	
   /* Draw the cursor if part of it appeared on the redisplayed part of
      this line.  Also check for the cases which are not caught as the
      line is scanned above: when the cursor appears at the very end
@@ -1127,7 +1126,7 @@ void TextDisplay::draw_string( int style, int X, int Y, int toX,
   if ( style & FILL_MASK ) {
     clear_rect( style, X, Y, toX - X, mMaxsize );
     return;
-  }
+  }	
 
   /* Set font, color, and gc depending on style.  For normal text, GCs
      for normal drawing, or drawing within a TextSelection or highlight are
@@ -1391,7 +1390,7 @@ int TextDisplay::xy_to_position( int X, int Y, int posType ) {
 				    mBuffer->tab_distance(),
 				    mBuffer->null_substitution_character() );
     if (charLen > 1) {
-      int i, ii = 0;;
+      int i, ii = 0;
       i = utf8len(lineStr[ charIndex ]);
       while (i > 1) {
         i--;
@@ -1688,7 +1687,8 @@ void TextDisplay::scroll_(int topLineNum, int horizOffset) {
   mHorizOffset = horizOffset;
 
   // redraw all text
-  redraw(DAMAGE_SCROLL);
+  //redraw(DAMAGE_SCROLL);
+	redraw();
 }
 
 /*
@@ -1758,12 +1758,12 @@ int TextDisplay::measure_vline( int visLineNum ) {
       len = mBuffer->expand_character( lineStartPos + i,
                                        charCount, expandedChar );
 
-      if (len > 1) {
+      /*if (len > 1) {
         int n = 0;
         while (n++ < len) {
           expandedChar[n] = mBuffer->character( lineStartPos + i + n );
-		}
-	  }
+				}
+			}*/
       setfont( textfont(), textsize() );
 
       width += int(getwidth(expandedChar, len));
@@ -1776,12 +1776,12 @@ int TextDisplay::measure_vline( int visLineNum ) {
     for ( i = 0; i < lineLen; i += len ) {
       len = mBuffer->expand_character( lineStartPos + i,
                                        charCount, expandedChar );
-      if (len > 1) {
+      /*if (len > 1) {
         int n = 0;
         while (n++ < len) {
           expandedChar[n] = mBuffer->character( lineStartPos + i + n );
-		}
-	  }
+				}
+			}*/
       style = ( unsigned char ) mStyleBuffer->character(
                 lineStartPos + i ) - 'A';
 
@@ -2070,7 +2070,9 @@ int TextDisplay::handle(int event) {
         } else if (Y >= text_area.y+text_area.h) {
           move_down();
           pos = insert_position();
-        } else pos = xy_to_position(X, Y, CURSOR_POS);
+        } else 
+					pos = xy_to_position(X, Y, CURSOR_POS);
+				show_insert_position();
         drag_me(pos);
         return 1;
       }
@@ -2117,5 +2119,5 @@ int TextDisplay::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.31 2004/07/04 17:28:31 laza2000 Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.32 2004/07/10 23:05:44 laza2000 Exp $".
 //
