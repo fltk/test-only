@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.21 1999/10/20 23:22:19 vincent Exp $"
+// "$Id: Fl.H,v 1.22 1999/10/26 00:56:54 vincent Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -199,8 +199,13 @@ public:
   // Mutltithreading support
   static int thread_filedes[2];
   static void* thread_message;
-  static Fl_Mutex mutex;
+  static Fl_Mutex main_lock;
   
+  // initialise FLTK thread support (mainly, initialise Fl::main_mutex)
+  // called automatically in Fl::create_thread too ...
+  // if no thread support on this platform, return -1
+  static int init_threads_support();
+
   // create a new thread 
   // 'a': where to put the handler of the new thread
   // 'b': starting execution address
@@ -211,8 +216,8 @@ public:
   // 1 for highest, 0 for lowest.
   static int set_thread_priority(Fl_Thread, float prio = 0.5);
 
-  // sleep for 'a' milliseconds
-  static void sleep(int a);
+  // sleep for 'a' seconds
+  static void sleep(double a);
 
   // create a mutex
   static int mutex_init(Fl_Mutex&);
@@ -222,8 +227,8 @@ public:
 
   // lock/unlock a mutex
   // default is locking the whole fltk so that threads can update some widgets
-  static int lock(Fl_Mutex m = mutex);
-  static int unlock(Fl_Mutex m = mutex);
+  static int lock(Fl_Mutex m = main_lock);
+  static int unlock(Fl_Mutex m = main_lock);
 
   // make FLTK return from wait(), put message in Fl::thread_message
   // This should be safe, i.e. if several threads called awake at the same
@@ -236,5 +241,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.21 1999/10/20 23:22:19 vincent Exp $".
+// End of "$Id: Fl.H,v 1.22 1999/10/26 00:56:54 vincent Exp $".
 //

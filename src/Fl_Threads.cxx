@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Threads.cxx,v 1.3 1999/10/25 21:12:11 mike Exp $"
+// "$Id: Fl_Threads.cxx,v 1.4 1999/10/26 00:56:55 vincent Exp $"
 //
 // Threads support Fast Light Tool Kit (FLTK).
 //
@@ -27,9 +27,9 @@
 #include "config.h"
 
 
-int 	 Fl::thread_filedes[2];
-void* 	 Fl::thread_message;
-Fl_Mutex Fl::mutex;
+int Fl::thread_filedes[2];
+void* Fl::thread_message;
+Fl_Mutex Fl::main_lock;
 
 //
 // POSIX pthread
@@ -43,39 +43,76 @@ Fl_Mutex Fl::mutex;
 #include <stdlib.h>
 #include <unistd.h>
 
+// Initialise FLTK thread support (mainly, initialise Fl::main_mutex)
+// Called automatically in Fl::create_thread too ...
+
+#if !defined(PRI_OTHER_MAX)
+#if HAVE_SCHED_GET_PRIORITY_MAX
+#include <sched.h>
+
+int PRI_OTHER_MIN;
+int PRI_OTHER_MAX;
+#else
+#define PRI_OTHER_MIN 1
+#define PRI_OTHER_MAX 32
+#endif
+#endif
+
+int Fl::init_threads_support()
+{
+  if (Fl::main_lock == 0) {
+    Fl::mutex_init(Fl::main_lock);
+    Fl::lock(Fl::main_lock);
+#ifndef PRI_OTHER_MAX
+    PRI_OTHER_MIN = sched_get_priority_min(SCHED_OTHER);
+    PRI_OTHER_MAX = sched_get_priority_max(SCHED_OTHER);
+#endif
+  }
+  return 0;
+}
+
 // create a new thread 
 // 'a': where to put the handler of the new thread
 // 'b': starting execution address
 // 'c': one parameter to the function
 int Fl::create_thread(Fl_Thread& t, void *(*f) (void *), void* p)
 {
-  if (Fl::mutex == 0) {
-    Fl::mutex_init(Fl::mutex);
-    Fl::lock(Fl::mutex);
-  }
+  init_threads_support();
   return pthread_create((pthread_t*)&t, 0, f, p);
 }
 
 // set the priority of a thread. default value 0.5 for normal priority, 
 // 1 for highest, 0 for lowest.
-int Fl::set_thread_priority(Fl_Thread, float)
+
+int Fl::set_thread_priority(Fl_Thread t, float pri)
 {
-  // not implemented yet ...
+  //#if !defined(__FreeBSD__)
+  struct sched_param sp;
+  int policy;
+  if (pthread_getschedparam(t, &policy, &sp)) return -1;
+  sp.sched_priority = int(PRI_OTHER_MIN + 
+			  (PRI_OTHER_MAX - PRI_OTHER_MIN) * pri);
+  return pthread_setschedparam(t, policy, &sp);
+/*#else
   return -1;
+#endif*/
 }
 
-// sleep for 'a' milliseconds
-void Fl::sleep(int a)
+#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
+// sleep for 'a' seconds
+void Fl::sleep(double time)
 {
 #if HAVE_USLEEP
-  usleep(a * 1000);
+  usleep(int(time * 1000000));
 #else
-  struct timeval t;
+  timeval timeout;
 
-  t.tv_sec;
-  t.tv_usec = a * 1000;
+  timeout.tv_sec = int(time);
+  timeout.tv_usec = int(1000000 * (time-timeout.tv_sec));
 
-  select(0, NULL, NULL, NULL, &t);
+  select(0,0, 0, 0, &timeout);
 #endif // HAVE_USLEEP
 }
 
@@ -120,10 +157,6 @@ int Fl::awake(void* msg)
 #include "windows.h"
 #include "winbase.h"
 
-// create a new thread 
-// 'a': where to put the handler of the new thread
-// 'b': starting execution address
-// 'c': one parameter to the function
 #ifndef _MT
 #define _MT
 #endif
@@ -134,29 +167,40 @@ int Fl::awake(void* msg)
 
 static DWORD main_thread;
 
-int Fl::create_thread(Fl_Thread& t, void *(*f) (void *), void* p)
+// Initialise FLTK thread support (mainly, initialise Fl::main_mutex)
+// Called automatically in Fl::create_thread too ...
+int Fl::init_threads_support()
 {
-  main_thread = GetCurrentThreadId();
   if (Fl::mutex == 0) {
     Fl::mutex_init(Fl::mutex);
     Fl::lock(Fl::mutex);
+    main_thread = GetCurrentThreadId();
   }
+  return 0;
+}
+
+// create a new thread 
+// 'a': where to put the handler of the new thread
+// 'b': starting execution address
+// 'c': one parameter to the function
+int Fl::create_thread(Fl_Thread& t, void *(*f) (void *), void* p)
+{
+  init_threads_support();
   return t = (Fl_Thread)_beginthread((void( __cdecl * )( void * ))f, 0, p);
 }
 
 // set the priority of a thread. default value 0.5 for normal priority, 
 // 1 for highest, 0 for lowest.
-int Fl::set_thread_priority(Fl_Thread, float)
+int Fl::set_thread_priority(Fl_Thread t, float pri)
 {
-/*   return SetPriorityClass(GetCurrentProcess(), HIGH_PRIORITY_CLASS) &&
-          SetThreadPriority(thread, THREAD_PRIORITY_TIME_CRITICAL);*/
-  return -1;
+  return SetThreadPriority(t, int(THREAD_PRIORITY_LOWEST + 
+	(THREAD_PRIORITY_HIGHEST - THREAD_PRIORITY_LOWEST) * pri));
 }
 
-// sleep for 'a' milliseconds
-void Fl::sleep(int a)
+// sleep for 'a' seconds
+void Fl::sleep(double a)
 {
-  Sleep(a);
+  Sleep(int(a*1000));
 }
 
 // create a mutex
@@ -193,6 +237,13 @@ int Fl::awake(void* msg)
 #else
 
 
+// Initialise FLTK thread support (mainly, initialise Fl::main_mutex)
+// Called automatically in Fl::create_thread too ...
+int Fl::init_threads_support()
+{
+  return -1;
+}
+
 // create a new thread 
 // 'a': where to put the handler of the new thread
 // 'b': starting execution address
@@ -209,8 +260,8 @@ int Fl::set_thread_priority(Fl_Thread, float )
   return -1;
 }
 
-// sleep for 'a' milliseconds
-void Fl::sleep(int a)
+// sleep for 'a' seconds
+void Fl::sleep(double a)
 {
 }
 
@@ -245,5 +296,5 @@ int Fl::awake(void* msg)
 #endif
 
 //
-// End of "$Id: Fl_Threads.cxx,v 1.3 1999/10/25 21:12:11 mike Exp $".
+// End of "$Id: Fl_Threads.cxx,v 1.4 1999/10/26 00:56:55 vincent Exp $".
 //

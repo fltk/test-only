@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_Util.H,v 1.5 1999/10/17 22:27:07 vincent Exp $"
+// "$Id: Fl_Style_Util.H,v 1.6 1999/10/26 00:56:54 vincent Exp $"
 //
 // Style definition and plugin support
 //
@@ -36,7 +36,7 @@
 // If you think that loading plugins is unsecure, then uncomment this and
 // FLTK won't load any theme and style plugins
 // (Note that currently plugins are anyway loaded only if getuid == geteuid
-//  so SUID program cannot load plugins anyway ...)
+//  so that SUID program cannot load plugins ...)
 #define UNSECURE_FLTK
 
 class Fl_Style;
@@ -72,5 +72,5 @@ extern const char* fl_plugins_user_location;
 #endif
 
 //
-// End of "$Id: Fl_Style_Util.H,v 1.5 1999/10/17 22:27:07 vincent Exp $".
+// End of "$Id: Fl_Style_Util.H,v 1.6 1999/10/26 00:56:54 vincent Exp $".
 //

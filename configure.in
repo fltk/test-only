@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.55 1999/10/25 21:12:06 mike Exp $"
+dnl# "$Id: configure.in,v 1.56 1999/10/26 00:56:52 vincent Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -220,9 +220,6 @@ if test "$ac_cv_have_overlay" = yes; then
     AC_DEFINE(HAVE_OVERLAY)
 fi
 
-dnl ******** NOTE: IRIX does not support -rdynamic; if you need it for
-dnl ********       linux do a case statement after the check please...
-
 have_dlopen=no
 AC_CHECK_LIB(c, dlopen, \
      LD_DLOPEN_FLAGS=""
@@ -231,22 +228,26 @@ AC_CHECK_LIB(c, dlopen, \
       LD_DLOPEN_FLAGS="-ldl" have_dlopen=yes,,),
 )
 
-dnl ******** NOTE: IRIX does not support -rdynamic; if you need it for
-dnl ********       linux do a case statement after the check please...
 if test $have_dlopen = yes; then
     AC_DEFINE(HAVE_DLOPEN)
     LD_DLL_FLAGS="-shared"
+    if test "$uname" = "Linux"; then
+        LDLIBS="${LDLIBS} -rdynamic"
+    fi
 fi
 
 AC_SUBST(LD_DLOPEN_FLAGS)
 AC_SUBST(LD_DLL_FLAGS)
 
-
 have_pthread=no
 AC_CHECK_LIB(c, pthread_create, \
+     AC_CHECK_LIB(c, sched_get_priority_max, \
+        AC_DEFINE(HAVE_SCHED_GET_PRIORITY_MAX),,)
      have_pthread=yes,
      AC_CHECK_LIB(pthread, pthread_create, \
-      PTHREADLIBS=-lpthread have_pthread=yes,,),
+        AC_CHECK_LIB(pthread, sched_get_priority_max, \
+           AC_DEFINE(HAVE_SCHED_GET_PRIORITY_MAX),,)
+        PTHREADLIBS=-lpthread have_pthread=yes,,),
 )
 
 if test $have_pthread = yes; then
@@ -351,5 +352,5 @@ AC_OUTPUT(makeinclude)
 cp config.h FL/
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.55 1999/10/25 21:12:06 mike Exp $".
+dnl# End of "$Id: configure.in,v 1.56 1999/10/26 00:56:52 vincent Exp $".
 dnl#

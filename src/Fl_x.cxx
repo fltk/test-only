@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.37 1999/10/20 23:22:21 vincent Exp $"
+// "$Id: Fl_x.cxx,v 1.38 1999/10/26 00:56:55 vincent Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -190,7 +190,7 @@ double fl_wait(int timeout_flag, double time) {
 #endif
   int n;
 
-  if (Fl::mutex) Fl::unlock();
+  if (Fl::main_lock) Fl::unlock();
 
   if (!timeout_flag) {
 #if HAVE_POLL
@@ -214,7 +214,7 @@ double fl_wait(int timeout_flag, double time) {
 #endif
   }
 
-  if (Fl::mutex) Fl::lock();
+  if (Fl::main_lock) Fl::lock();
 
   if (n > 0) {
     for (int i=0; i<nfds; i++) {
@@ -820,5 +820,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.37 1999/10/20 23:22:21 vincent Exp $".
+// End of "$Id: Fl_x.cxx,v 1.38 1999/10/26 00:56:55 vincent Exp $".
 //
