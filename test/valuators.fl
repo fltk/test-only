@@ -15,7 +15,7 @@ fflush(stdout);} {}
 Function {} {open
 } {
   Fl_Window {} {
-    label {Valuator classes, showing values for type()} open
+    label {Valuator classes, showing values for the type()} open
     xywh {634 95 567 506} labelsize 10
     code0 {\#include <stdio.h>} visible
   } {
