@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.15 2003/02/21 18:16:53 spitzak Exp $"
+// "$Id: fl_arci.cxx,v 1.16 2003/04/19 21:45:29 spitzak Exp $"
 //
 // Arc (integer) drawing functions for the Fast Light Tool Kit (FLTK).
 //
@@ -50,13 +50,16 @@ void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
   int yb = y+h/2-int(h*sinf(a2*float(M_PI/180.0)));
   switch (what) {
   case FILLPIE:
+    setbrush();
     Pie(gc, x, y, x+w, y+h, xa, ya, xb, yb); 
     break;
   case FILLARC:
+    setbrush();
     Chord(gc, x, y, x+w, y+h, xa, ya, xb, yb); 
     break;
   case STROKEPIE: // not correct, should draw lines to center
   case STROKEARC:
+    setpen();
     Arc(gc, x, y, x+w, y+h, xa, ya, xb, yb); 
     break;
   }
@@ -94,5 +97,5 @@ void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
 }
 
 //
-// End of "$Id: fl_arci.cxx,v 1.15 2003/02/21 18:16:53 spitzak Exp $".
+// End of "$Id: fl_arci.cxx,v 1.16 2003/04/19 21:45:29 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.28 2002/12/22 05:30:22 easysw Exp $"
+// "$Id: fl_ask.cxx,v 1.29 2003/04/19 21:45:29 spitzak Exp $"
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
@@ -82,6 +82,7 @@ static int innards(
   const char *b1,
   const char *b2)
 {
+  Style::load_theme();
   Window window(3*BORDER_W+ICON_W+INPUT_W, 3*BORDER_H+ICON_H+BUTTON_H);
   window.begin();
 
@@ -97,9 +98,11 @@ static int innards(
   message.set_flag(ALIGN_LEFT|ALIGN_INSIDE|ALIGN_WRAP);
   message.style(message_style);
 
-  if (textfield) {delete textfield; textfield = 0;}
   if (istr) {
-    textfield = new Input(2*BORDER_W+ICON_W, 0, INPUT_W, 0);
+    if (textfield)
+      window.add(textfield);
+    else
+      textfield = new Input(2*BORDER_W+ICON_W, 0, INPUT_W, 0);
     textfield->h(int(textfield->textsize())+10);
     textfield->y(BORDER_H+ICON_H-textfield->h());
     message.h(textfield->y());
@@ -152,7 +155,7 @@ static int innards(
 	window.w()-(BUTTON_W+BORDER_W)*(i+1),
 	window.h()-(BORDER_H+BUTTON_H), BUTTON_W, BUTTON_H, blabels[i]);
       window.hotspot(button);
-      if (!textfield) window.focus(button);
+      if (!istr) window.focus(button);
     } else {
       button = new Button(
 	window.w()-(BUTTON_W+BORDER_W)*(i+1),
@@ -164,8 +167,8 @@ static int innards(
   window.end();
   button_number = 0;
   window.exec();
-  if (textfield)
-    textfield->parent()->remove(textfield); // don't destroy it yet
+  if (istr)
+    window.remove(textfield); // don't destroy it yet
   return button_number;
 }
 
@@ -229,5 +232,5 @@ const char *fltk::password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.28 2002/12/22 05:30:22 easysw Exp $".
+// End of "$Id: fl_ask.cxx,v 1.29 2003/04/19 21:45:29 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.20 2003/03/31 07:17:48 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.21 2003/04/19 21:45:29 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -366,6 +366,7 @@ void fltk::drawpoints() {
 
 void fltk::strokepath() {
 #ifdef _WIN32
+  setpen();
   if (circle_w > 0)
     Arc(gc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
 	0,0, 0,0);
@@ -400,6 +401,8 @@ void fltk::strokepath() {
 // the current pen invisible?
 void fltk::fillpath() {
 #ifdef _WIN32
+  setbrush();
+  setpen();
   if (circle_w > 0)
     Chord(gc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
 	  0,0, 0,0);
@@ -436,11 +439,9 @@ void fltk::fillpath() {
 // PostScript/PDF style systems.
 void fltk::fillstrokepath(Color color) {
 #ifdef _WIN32
-  COLORREF saved = current_xpixel;
-  current_xpixel = xpixel(color);
-  HPEN newpen = create_pen();
-  current_xpixel = saved;
-  HPEN oldpen = (HPEN)SelectObject(gc, newpen);
+  setbrush();
+  setcolor(color);
+  setpen();
   if (circle_w > 0)
     Chord(gc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
 	  0,0, 0,0);
@@ -450,8 +451,6 @@ void fltk::fillstrokepath(Color color) {
   } else if (numpoints > 2) {
     Polygon(gc, xpoint, numpoints);
   }
-  SelectObject(gc, oldpen);
-  DeleteObject(newpen);
   inline_newpath();
 #else
   if (circle_w > 0)
@@ -473,12 +472,11 @@ void fltk::fillstrokepath(Color color) {
     XFillPolygon(xdisplay, xwindow, gc, xpoint, numpoints, 0, 0);
     numpoints = saved_points; // throw away the extra points
   }
-  Color saved = getcolor();
-  setcolor(color); strokepath();
-  setcolor(saved);
+  setcolor(color);
+  strokepath();
 #endif
 }
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.20 2003/03/31 07:17:48 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.21 2003/04/19 21:45:29 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.98 2003/04/14 05:13:58 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.99 2003/04/19 21:45:29 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -228,12 +228,16 @@ void Window::show() {
     // create & map child windows:
     Group::handle(SHOW);
 
+    // We must turn this flag on first so when silly Windows calls
+    // the WinProc directly it is already on:
+    set_visible();
+
     // map the window:
 #ifdef _WIN32
     int showtype;
     if (parent())
       showtype = SW_RESTORE;
-    else if (fl_show_iconic)
+    else if (!modal() && fl_show_iconic)
       showtype = SW_SHOWMINNOACTIVE,fl_show_iconic = false;
     // If we've captured the mouse, we don't want do activate any
     // other windows from the code, or we lose the capture.
@@ -245,7 +249,7 @@ void Window::show() {
     ShowWindow(i->xid, showtype);
 #elif (defined(__APPLE__) && !USE_X11)
     if (parent()) return 1; // needs to update clip and redraw...
-    if (fl_show_iconic) {
+    if (!modal() && fl_show_iconic) {
       fl_show_iconic = 0;
       CollapseWindow( i->xid, true ); // \todo Mac ; untested
       //ShowWindow(i->xid); // ???
@@ -254,10 +258,10 @@ void Window::show() {
       ShowWindow(i->xid);
     }
 #else
+    // iconic stuff was done by create()
     XMapRaised(xdisplay, i->xid);
 #endif
 
-    set_visible();
     return;
   }
 
@@ -439,5 +443,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.98 2003/04/14 05:13:58 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.99 2003/04/19 21:45:29 spitzak Exp $".
 //

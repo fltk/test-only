@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.13 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: win32.h,v 1.14 2003/04/19 21:45:28 spitzak Exp $"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,9 @@
 #ifndef FL_WIN32_H
 #define FL_WIN32_H
 
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT 0x0500
+#endif
 #include <windows.h>
 #include <winuser.h>
 // In some of the distributions, the gcc header files are missing some stuff:
@@ -90,9 +93,8 @@ extern FL_API HFONT	xfont();
 extern FL_API TEXTMETRIC* textmetric();
 extern FL_API COLORREF	current_xpixel;
 extern FL_API COLORREF	xpixel(Color i);
-extern FL_API HPEN	current_pen;
-extern FL_API HPEN	create_pen();
-extern FL_API HBRUSH	current_brush;
+extern FL_API HPEN	setpen();
+extern FL_API HBRUSH	setbrush();
 extern FL_API void	clip_region(Region);
 extern FL_API Region	clip_region();
 
@@ -202,5 +204,5 @@ extern FL_API HCURSOR default_cursor;
 #endif
 
 //
-// End of "$Id: win32.h,v 1.13 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: win32.h,v 1.14 2003/04/19 21:45:28 spitzak Exp $".
 //

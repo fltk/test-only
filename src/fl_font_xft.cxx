@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.14 2003/03/02 03:38:14 nafees Exp $"
+// "$Id: fl_font_xft.cxx,v 1.15 2003/04/19 21:45:29 spitzak Exp $"
 //
 // Copyright 2001 Bill Spitzak and others.
 //
@@ -116,6 +116,7 @@ void fltk::set_encoding(const char* f) {
 }
 
 static XftFont* fontopen(const char* name, int attributes, bool core) {
+  open_display();
   int weight = XFT_WEIGHT_MEDIUM;
   if (attributes&BOLD) weight = XFT_WEIGHT_BOLD;
   int slant = XFT_SLANT_ROMAN;
@@ -400,5 +401,5 @@ int fltk::Font::encodings(const char**& arrayp) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.14 2003/03/02 03:38:14 nafees Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.15 2003/04/19 21:45:29 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.67 2003/03/31 07:17:48 spitzak Exp $"
+# "$Id: Makefile,v 1.68 2003/04/19 21:45:29 spitzak Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -121,6 +121,7 @@ TARGETS = \
 	keyboard$(EXEEXT) \
 	label$(EXEEXT) \
 	list_visuals$(EXEEXT) \
+	line_style$(EXEEXT) \
 	menu$(EXEEXT) \
 	shape$(EXEEXT) \
 	tile$(EXEEXT) \
@@ -129,15 +130,6 @@ TARGETS = \
 	pack$(EXEEXT) \
 	threads$(EXEEXT) \
 	valuators$(EXEEXT)
-
-# ALL =	CubeView adjuster arc ask boxtype browser button buttons checkers \
-# 	clock color_chooser cube cursor curve demo doublebuffer \
-# 	editor file_chooser fonts fullscreen gl_overlay glpuzzle \
-# 	hello iconize image input keyboard label list_visuals \
-# 	mandelbrot menu message navigation output overlay \
-# 	pixmap_browser radio resizable scroll shape subwindow \
-# 	symbols tabs tile fast_slow resize pack inactive sizes progress \
-# 	image_file layout threads menubar line_style valuators
 
 #
 # Make everything...
@@ -240,5 +232,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.67 2003/03/31 07:17:48 spitzak Exp $".
+# End of "$Id: Makefile,v 1.68 2003/04/19 21:45:29 spitzak Exp $".
 #

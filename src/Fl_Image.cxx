@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.29 2003/02/21 18:16:34 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.30 2003/04/19 21:45:28 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -74,6 +74,7 @@ void Image::_draw(int XP, int YP, Flags)
 # else
       // VP : new code to draw masked image under windows. Maybe not optimal, but works for win2k/95 and probably 98
       setcolor(0);
+      setbrush();
       SetTextColor(gc, 0);
       HDC new_gc = CreateCompatibleDC(gc);
       HDC new_gc2 = CreateCompatibleDC(gc);
@@ -107,6 +108,7 @@ void Image::_draw(int XP, int YP, Flags)
       HDC tempdc = CreateCompatibleDC(gc);
       SelectObject(tempdc, (HGDIOBJ)mask);
       SetTextColor(gc, 0); // VP : seems necessary at least under win95
+      setbrush();
       //SelectObject(gc, brush);
       // secret bitblt code found in old MSWindows reference manual:
       BitBlt(gc, X, Y, W, H, tempdc, cx, cy, 0xE20746L);
@@ -148,5 +150,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.29 2003/02/21 18:16:34 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.30 2003/04/19 21:45:28 spitzak Exp $".
 //

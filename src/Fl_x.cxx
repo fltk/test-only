@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.143 2003/03/31 07:17:47 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.144 2003/04/19 21:45:29 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1144,7 +1144,7 @@ void CreatedWindow::create(Window* window,
     XWMHints *hints = XAllocWMHints();
     hints->input = True; // some window managers require this to be sent?
     hints->flags = InputHint;
-    if (fl_show_iconic) {
+    if (!fltk::modal() && fl_show_iconic) {
       hints->flags |= StateHint;
       hints->initial_state = IconicState;
       fl_show_iconic = false;
@@ -1444,5 +1444,5 @@ bool fltk::get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.143 2003/03/31 07:17:47 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.144 2003/04/19 21:45:29 spitzak Exp $".
 //

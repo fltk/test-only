@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.33 2002/12/10 02:00:57 easysw Exp $"
+// "$Id: fl_color_win32.cxx,v 1.34 2003/04/19 21:45:29 spitzak Exp $"
 //
 // _WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -28,9 +28,11 @@
 // The current color:
 Color		fltk::current_color_;
 COLORREF	fltk::current_xpixel;
-HBRUSH		fltk::current_brush;
-HPEN		fltk::current_pen;
 HPALETTE	fltk::xpalette;
+static COLORREF	brush_for;
+static COLORREF	pen_for;
+static HBRUSH	current_brush;
+static HPEN	current_pen;
 
 COLORREF fltk::xpixel(Color i) {
   int index = i;
@@ -61,44 +63,76 @@ static int line_width = 0;
 void fltk::line_style(int style, int width, char* dashes) {
   static DWORD Cap[4]= {PS_ENDCAP_ROUND, PS_ENDCAP_FLAT, PS_ENDCAP_ROUND, PS_ENDCAP_SQUARE};
   static DWORD Join[4]={PS_JOIN_ROUND, PS_JOIN_MITER, PS_JOIN_ROUND, PS_JOIN_BEVEL};
-  lstyle = PS_GEOMETRIC | Cap[(style>>8)&3] | Join[(style>>12)&3];
   if (dashes && dashes[0]) {
-    lstyle |= PS_USERSTYLE;
+    lstyle = PS_USERSTYLE | Cap[(style>>8)&3] | Join[(style>>12)&3];
     int n; for (n = 0; n < 16 && *dashes;) dash_pattern[n++] = *dashes++;
     dash_pattern_size = n;
+    // fix cards that ignore dash pattern for zero width:
+    //if (!width) width = 1;
   } else {
     dash_pattern_size = 0;
-    lstyle |= style & 0xff; // allow them to pass any low 8 bits for style
+    // allow any low 8 bits for style
+    lstyle = style & 0xff | Cap[(style>>8)&3] | Join[(style>>12)&3];
   }
+  // for some reason zero width does not work at all:
+  if (!width) width = 1;
   line_width = width;
-  // fix cards that ignore dash pattern for zero width:
-  if (!width && (lstyle || dash_pattern_size)) line_width = 1;
-  current_pen = create_pen();
-  HPEN oldpen = (HPEN)SelectObject(gc, current_pen);
-  if (oldpen) DeleteObject(oldpen);
+  if (current_pen) {
+    DeleteObject(current_pen);
+    current_pen = 0;
+  }
 }
 
-HPEN fltk::create_pen() {
-  if (lstyle || line_width || dash_pattern_size) {
-    LOGBRUSH penbrush = {BS_SOLID, current_xpixel, 0}; // can this be brush?
-    return ExtCreatePen(lstyle, line_width, &penbrush,
-			dash_pattern_size, dash_pattern_size?dash_pattern:0);
-  } else {
-    return CreatePen(PS_SOLID, 1, current_xpixel);
+#if _WIN32_WINNT >= 0x0500
+static HPEN stockpen = (HPEN)GetStockObject(DC_PEN);
+static HBRUSH stockbrush = (HBRUSH)GetStockObject(DC_BRUSH);
+#endif
+
+HPEN fltk::setpen() {
+#if _WIN32_WINNT >= 0x0500
+  if (!lstyle && line_width <= 1) {
+    SelectObject(gc, stockpen);
+    SetDCPenColor(gc, current_xpixel);
+    return stockpen;
   }
+#endif
+  if (!current_pen) goto J1;
+  if (pen_for != current_xpixel) {
+    DeleteObject(current_pen);
+  J1:
+    if (lstyle) {
+      LOGBRUSH penbrush = {BS_SOLID, current_xpixel, 0};
+      current_pen = ExtCreatePen(lstyle|PS_GEOMETRIC, line_width, &penbrush,
+		dash_pattern_size, dash_pattern_size?dash_pattern:0);
+    } else {
+      current_pen = CreatePen(PS_SOLID, line_width, current_xpixel);
+    }
+    pen_for = current_xpixel;
+  }
+  SelectObject(gc, current_pen);
+  return current_pen;
+}
+
+HBRUSH fltk::setbrush() {
+#if _WIN32_WINNT >= 0x0500
+  SelectObject(gc, stockbrush);
+  SetDCBrushColor(gc, current_xpixel);
+#else
+  if (!current_brush) goto J1;
+  if (brush_for != current_xpixel) {
+    DeleteObject(current_brush);
+  J1:
+    current_brush = CreateSolidBrush(current_xpixel);
+    brush_for = current_xpixel;
+  }
+  SelectObject(gc, current_brush);
+#endif
+  return current_brush;
 }
 
 void fltk::setcolor(Color i) {
   current_color_ = i;
   current_xpixel = xpixel(i);
-
-  current_brush = CreateSolidBrush(current_xpixel);
-  HBRUSH oldbrush = (HBRUSH)SelectObject(gc, current_brush);
-  if (oldbrush) DeleteObject(oldbrush);
-
-  current_pen = create_pen();
-  HPEN oldpen = (HPEN)SelectObject(gc, current_pen);
-  if (oldpen) DeleteObject(oldpen);
 }
 
 // Used by setcolor_index
@@ -154,5 +188,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.33 2002/12/10 02:00:57 easysw Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.34 2003/04/19 21:45:29 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.30 2002/12/10 02:01:02 easysw Exp $"
+// "$Id: fl_rect.cxx,v 1.31 2003/04/19 21:45:29 spitzak Exp $"
 //
 // Non-path routines from draw.h that are used by the standard boxtypes
 // and thus are always linked into an fltk program.
@@ -32,6 +32,7 @@ void fltk::strokerect(int x, int y, int w, int h) {
   if (w<=0 || h<=0) return;
   transform(x,y);
 #ifdef _WIN32
+  setpen();
   MoveToEx(gc, x, y, 0L); 
   LineTo(gc, x+w-1, y);
   LineTo(gc, x+w-1, y+h-1);
@@ -49,7 +50,13 @@ void fltk::fillrect(int x, int y, int w, int h) {
   RECT rect;
   rect.left = x; rect.top = y;  
   rect.right = x + w; rect.bottom = y + h;
-  FillRect(gc, &rect, current_brush);
+#if 1
+  // From the MFC CDC class, apparently this is faster:
+  SetBkColor(gc, current_xpixel);
+  ExtTextOut(gc, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL);
+#else
+  FillRect(gc, &rect, setbrush());
+#endif
 #else
   XFillRectangle(xdisplay, xwindow, gc, x, y, w, h);
 #endif
@@ -59,6 +66,7 @@ void fltk::drawline(int x, int y, int x1, int y1) {
   transform(x,y);
   transform(x1,y1);
 #ifdef _WIN32
+  setpen();
   MoveToEx(gc, x, y, 0L); 
   LineTo(gc, x1, y1);
   // Draw the last point *again* because the GDI line drawing
@@ -79,5 +87,5 @@ void fltk::drawpoint(int x, int y) {
 }
 
 //
-// End of "$Id: fl_rect.cxx,v 1.30 2002/12/10 02:01:02 easysw Exp $".
+// End of "$Id: fl_rect.cxx,v 1.31 2003/04/19 21:45:29 spitzak Exp $".
 //
