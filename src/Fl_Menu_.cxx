@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.21 2000/05/17 07:08:08 bill Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.22 2000/05/23 02:28:27 carl Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -58,7 +58,7 @@ void Fl_Menu_::execute(Fl_Widget* w) {
   if (w->callback() == Fl_Widget::default_callback) {
     do_callback(this, w->user_data() ? w->user_data() : (void*)w);
   } else {
-    w->do_callback(w, user_data());
+    w->do_callback(w, w->user_data() ? w->user_data() : user_data());
   }
 }
 
@@ -108,5 +108,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.21 2000/05/17 07:08:08 bill Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.22 2000/05/23 02:28:27 carl Exp $"
 //
