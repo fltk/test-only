@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.71 2004/05/18 15:53:40 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.72 2004/06/04 08:58:04 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -38,7 +38,7 @@ using namespace fltk;
 extern bool fl_hide_shortcut;
 
 void MenuBar::draw() {
-  Menu::draw(this, 0, 0, highlight_, last_);
+  Menu::draw_in(this, 0, 0, highlight_, last_);
   last_ = highlight_;
 }
 
@@ -140,5 +140,5 @@ MenuBar::MenuBar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.71 2004/05/18 15:53:40 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.72 2004/06/04 08:58:04 spitzak Exp $".
 //

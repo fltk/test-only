@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.88 2004/04/17 18:58:20 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.89 2004/06/04 08:58:04 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -952,7 +952,7 @@ bool Input::static_value(const char* str, int len) {
   if (undowidget == this) undowidget = 0;
   if (str == value_ && len == size_) return false;
   if (len) { // non-empty new value:
-    if (xscroll_ || yscroll_) {
+    if (xscroll_ || (type() >= MULTILINE && yscroll_)) {
       xscroll_ = yscroll_ = 0;
       minimal_update(0);
     } else {
@@ -1595,5 +1595,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.88 2004/04/17 18:58:20 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.89 2004/06/04 08:58:04 spitzak Exp $".
 //

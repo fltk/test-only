@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.131 2004/04/17 18:58:19 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.132 2004/06/04 08:58:03 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -86,6 +86,7 @@ Group::Group(int X,int Y,int W,int H,const char *l,bool begin)
   focus_(-1),
   array_(0),
   resizable_(0), // fltk 1.0 used (this)
+  resize_align_(ALIGN_TOPLEFT|ALIGN_BOTTOMRIGHT),
   sizes_(0)
 {
   type(GROUP_TYPE);
@@ -502,44 +503,67 @@ void Group::layout() {
   int layout_damage = this->layout_damage();
   Widget::layout();
 
-  if (resizable() && children_) {
+  if (resizable() && children_ && layout_damage&(LAYOUT_WH|LAYOUT_DAMAGE)) {
     int* p = sizes(); // initialize the size array
 
-    if (layout_damage&LAYOUT_WH) {
+    // get changes in size from the initial size:
+    int dw = w()-p[1];
+    int dh = h()-p[3];
 
-      // get changes in size from the initial size:
-      int dw = w()-p[1];
-      int dh = h()-p[3];
+    p+=4;
 
-      p+=4;
+    // Calculate a new size & position for every child widget:
+    // get initial size of resizable():
+    int IX = *p++;
+    int IR = *p++;
+    int IY = *p++;
+    int IB = *p++;
 
-      // Calculate a new size & position for every child widget:
-      // get initial size of resizable():
-      int IX = *p++;
-      int IR = *p++;
-      int IY = *p++;
-      int IB = *p++;
-
-      Widget*const* a = array_;
-      Widget*const* e = a+children_;
-      while (a < e) {
-	Widget* o = *a++;
-	int X = *p++;
-	if (X >= IR) X += dw;
-	else if (X > IX) X = X + dw * (X-IX)/(IR-IX);
-	int R = *p++;
-	if (R >= IR) R += dw;
-	else if (R > IX) R = R + dw * (R-IX)/(IR-IX);
-
-	int Y = *p++;
-	if (Y >= IB) Y += dh;
-	else if (Y > IY) Y = Y + dh*(Y-IY)/(IB-IY);
-	int B = *p++;
-	if (B >= IB) B += dh;
-	else if (B > IY) B = B + dh*(B-IY)/(IB-IY);
-
-	o->resize(X, Y, R-X, B-Y);
+    Widget*const* a = array_;
+    Widget*const* e = a+children_;
+    while (a < e) {
+      Widget* o = *a++;
+      int X = *p++;
+      if (X >= IR) X += dw;
+      else if (X > IX) {
+	switch (resize_align_&12) {
+	case 0: X = X + dw/2; break; // ALIGN_CENTER
+	case 4: break; // ALIGN_LEFT
+	case 8: X = X+dw; break; // ALIGN_RIGHT
+	case 12: X = X + dw * (X-IX)/(IR-IX); break; // both
+	}
       }
+      int R = *p++;
+      if (R >= IR) R += dw;
+      else if (R > IX) {
+	switch (resize_align_&12) {
+	case 0: R = R + dw/2; break; // ALIGN_CENTER
+	case 4: break; // ALIGN_LEFT
+	case 8: R = R+dw; break; // ALIGN_RIGHT
+	case 12: R = R + dw * (R-IX)/(IR-IX); // both
+	}
+      }
+      int Y = *p++;
+      if (Y >= IB) Y += dh;
+      else if (Y > IY) {
+	switch (resize_align_&3) {
+	case 0: Y = Y + dh/2; break; // ALIGN_CENTER
+	case 1: break; // ALIGN_TOP
+	case 2: Y = Y+dh; break; // ALIGN_BOTTOM
+	case 3: Y = Y + dh*(Y-IY)/(IB-IY); break; //both;
+	}
+      }
+      int B = *p++;
+      if (B >= IB) B += dh;
+      else if (B > IY) {
+	switch (resize_align_&3) {
+	case 0: B = B + dh/2; break; // ALIGN_CENTER
+	case 1: break; // ALIGN_TOP
+	case 2: B = B+dh; break; // ALIGN_BOTTOM
+	case 3: B = B + dh*(B-IY)/(IB-IY); break; //both;
+	}
+      }
+      /*if (*/o->resize(X, Y, R-X, B-Y)/*) redraw()*/;
     }
   }
 
@@ -562,8 +586,6 @@ void Group::layout() {
       if (widget->layout_damage()) widget->layout();
     }
   }
-
-  if (layout_damage & LAYOUT_WH) redraw();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -682,5 +704,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.131 2004/04/17 18:58:19 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.132 2004/06/04 08:58:03 spitzak Exp $".
 //

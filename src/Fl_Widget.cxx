@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.111 2004/05/15 20:52:45 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.112 2004/06/04 08:58:04 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -373,6 +373,7 @@ void Widget::copy_label(const char* s) {
   class version sets layout_damage() to zero.
 */
 void Widget::layout() {
+  if (layout_damage_ & LAYOUT_XYWH) redraw();
   layout_damage_ = 0;
 }
 
@@ -833,6 +834,7 @@ int Widget::send(int event) {
     break;
 
   case SHORTCUT:
+    // This is sent even if the child is invisible
     if (active()) ret = handle(event);
     break;
 
@@ -1061,6 +1063,7 @@ void Widget::show() {
     clear_flag(INVISIBLE);
     if (visible_r()) {
       redraw_label(); redraw();
+      relayout();
       handle(SHOW);
     }
   }
@@ -1071,9 +1074,11 @@ void Widget::show() {
 void Widget::hide() {
   if (visible_r()) {
     set_flag(INVISIBLE);
+    relayout();
     // we must redraw the enclosing group that has an opaque box:
-    for (Widget *p = parent(); p; p = p->parent())
+    for (Widget *p = parent(); p; p = p->parent()) {
       if (p->box() != NO_BOX || !p->parent()) {p->redraw(); break;}
+    }
     handle(HIDE);
   } else {
     set_flag(INVISIBLE);
@@ -1136,5 +1141,5 @@ bool Widget::focused() const {return this == fltk::focus();}
 bool Widget::belowmouse() const {return this == fltk::belowmouse();}
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.111 2004/05/15 20:52:45 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.112 2004/06/04 08:58:04 spitzak Exp $".
 //

@@ -11,6 +11,7 @@ struct Cursor; // this is not public
 
 class Image;
 Cursor* cursor(Image*, int x, int y);
+extern FL_API Cursor* cursor(void *raw);
 
 extern FL_API Cursor* const CURSOR_DEFAULT; // == NULL
 extern FL_API Cursor* const CURSOR_ARROW;

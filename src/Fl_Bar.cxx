@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bar.cxx,v 1.10 2004/05/18 15:53:40 spitzak Exp $"
+// "$Id: Fl_Bar.cxx,v 1.11 2004/06/04 08:58:03 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -113,6 +113,8 @@ int BarGroup::handle(int event)
       redraw(DAMAGE_HIGHLIGHT);
     }
     return true;
+  case SHORTCUT:
+    return Group::handle(event);
   }
   if (open_) return Group::handle(event);
   else return 0;
@@ -136,7 +138,7 @@ void BarGroup::draw()
     else
       draw_label(x, saved_size, w, h-saved_size, style(), flags);
   }
-  if (damage() & (DAMAGE_EXPOSE|DAMAGE_HIGHLIGHT)) {
+  if (damage() & (DAMAGE_EXPOSE|DAMAGE_HIGHLIGHT|DAMAGE_ALL)) {
     Flags f = 0;
     if (pushed) f |= VALUE;
     if (highlighted) f |= HIGHLIGHT;

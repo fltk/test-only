@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pack.cxx,v 1.25 2004/05/15 20:52:45 spitzak Exp $"
+// "$Id: Fl_Pack.cxx,v 1.26 2004/06/04 08:58:04 spitzak Exp $"
 //
 // Packing widget for the Fast Light Tool Kit (FLTK).
 //
@@ -128,9 +128,8 @@ void PackedGroup::layout() {
     if (b < y || !resizable() && !saw_vertical) H -= (b-y);
     size(W,H);
   }
-  redraw();
 }
 
 //
-// End of "$Id: Fl_Pack.cxx,v 1.25 2004/05/15 20:52:45 spitzak Exp $".
+// End of "$Id: Fl_Pack.cxx,v 1.26 2004/06/04 08:58:04 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Group.h,v 1.5 2004/04/17 18:58:19 spitzak Exp $"
+// "$Id: Group.h,v 1.6 2004/06/04 08:58:03 spitzak Exp $"
 //
 // Group is the base class for all container widgets. For historical
 // reasons it also provides a default version of layout.
@@ -81,6 +81,9 @@ public:
   friend FL_FORMS_API void end_group(); // forms emulation function
   void fix_old_positions();
 
+  Flags resize_align() const {return resize_align_;}
+  void resize_align(Flags f) {resize_align_ = f;}
+
 protected:
 
   void draw_child(Widget&) const;
@@ -95,6 +98,7 @@ private:
   Widget** array_;
 
   Widget* resizable_;
+  Flags resize_align_;
   int *sizes_; // remembered initial sizes of children
 
   static Group *current_;
@@ -106,5 +110,5 @@ private:
 #endif
 
 //
-// End of "$Id: Group.h,v 1.5 2004/04/17 18:58:19 spitzak Exp $".
+// End of "$Id: Group.h,v 1.6 2004/06/04 08:58:03 spitzak Exp $".
 //

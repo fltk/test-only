@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.208 2004/06/01 01:24:22 easysw Exp $"
+// "$Id: Fl_win32.cxx,v 1.209 2004/06/04 08:58:04 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1076,7 +1076,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       buffer[0] = char(wParam);
       if (e_keysym==ReturnKey || e_keysym==KeypadEnter) buffer[0] = '\r';
       e_length = 1;
-    } else if ((e_state & NUMLOCK) && e_keysym >= Keypad && e_keysym <= KeypadLast) {
+    } else if (e_keysym >= Keypad && e_keysym <= KeypadLast) {
       buffer[0] = e_keysym-Keypad;
       e_length = 1;
     } else {
@@ -1150,14 +1150,16 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 		       (signed short)HIWORD(lParam),
 		       window->w(), window->h()))
       resize_from_system = window;
-    MakeWaitReturn();
 #else
-    // Don't bother having dragging windows call resize or layout, just
-    // set the coordinates directly. This should be faster but I can't
-    // see too much difference. This should also be copied to X version.
+    // Faster version that does not bother with calling resize as the
+    // user drags the window around. This was what most Win32 versions
+    // of fltk did. This breaks programs that want to track the current
+    // position to figure out what corner is being resized when layout
+    // is called.
     window->x((signed short)LOWORD(lParam));
     window->y((signed short)HIWORD(lParam));
 #endif
+    MakeWaitReturn();
     break;
 
   case WM_SETCURSOR:
@@ -1281,7 +1283,8 @@ void Window::layout() {
   } else {
     flags = 0;
   }
-  Group::layout();
+  if (layout_damage() & ~LAYOUT_XY) Group::layout();
+  else layout_damage(0);
   if (this == resize_from_system) {
     resize_from_system = 0;
   } else if (i && flags) {
@@ -1517,6 +1520,8 @@ void fltk::stop_drawing(HWND window) {}
 
 void fltk::stop_drawing(HBITMAP bitmap) {}
 
+static HDC screen_gc = 0;
+
 /** Return an arbitrary HDC which you can use for Win32 functions that
     need one as an argument. The returned value is short-lived and may
     be destroyed the next time anything is drawn into a window!
@@ -1524,7 +1529,8 @@ void fltk::stop_drawing(HBITMAP bitmap) {}
 HDC fltk::getDC() {
   //if (gc) return gc;
   if (CreatedWindow::first) return CreatedWindow::first->dc;
-  return GetDC(0);
+  if (screen_gc) ReleaseDC(0,screen_gc);
+  return (screen_gc = GetDC(0));
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1639,8 +1645,9 @@ Cleanup::~Cleanup() {
   if (fl_bitmap_dc) DeleteDC(fl_bitmap_dc);
   // get rid of allocated font resources
   fl_font_rid();
+  if (screen_gc) ReleaseDC(0,screen_gc);
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.208 2004/06/01 01:24:22 easysw Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.209 2004/06/04 08:58:04 spitzak Exp $".
 //

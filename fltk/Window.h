@@ -1,5 +1,5 @@
 //
-// "$Id: Window.h,v 1.4 2004/05/04 07:30:42 spitzak Exp $"
+// "$Id: Window.h,v 1.5 2004/06/04 08:58:03 spitzak Exp $"
 //
 // Window widget. This must be the outermost group. You can also put
 // them inside other widgets to use the system's window hierarchy.
@@ -64,7 +64,7 @@ public:
   void set_modal()	{set_flag(MODAL);} // back compatability only!
   void set_non_modal()	{set_flag(NON_MODAL);} // back compatability only!
 
-  bool double_buffer() const {return flags()&DOUBLE;}
+  bool double_buffer() const {return (flags()&DOUBLE)!=0;}
   void set_double_buffer() {set_flag(DOUBLE);}
   void clear_double_buffer() {clear_flag(DOUBLE);}
   void free_backbuffer();
@@ -138,5 +138,5 @@ private:
 #endif
 
 //
-// End of "$Id: Window.h,v 1.4 2004/05/04 07:30:42 spitzak Exp $".
+// End of "$Id: Window.h,v 1.5 2004/06/04 08:58:03 spitzak Exp $".
 //

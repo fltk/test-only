@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.75 2004/05/15 20:52:47 spitzak Exp $"
+# "$Id: Makefile,v 1.76 2004/06/04 08:58:05 spitzak Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -85,6 +85,7 @@ CPPFILES = \
 	pixmap_browser.cxx \
 	radio.cxx \
 	resizable.cxx \
+	resizealign.cxx \
 	scroll.cxx \
 	shape.cxx \
 	subwindow.cxx \
@@ -132,6 +133,7 @@ TARGETS = \
 	menu$(EXEEXT) \
 	pack$(EXEEXT) \
 	resizable$(EXEEXT) \
+	resizealign$(EXEEXT) \
 	shape$(EXEEXT) \
 	sizes$(EXEEXT) \
 	slider$(EXEEXT) \
@@ -256,5 +258,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.75 2004/05/15 20:52:47 spitzak Exp $".
+# End of "$Id: Makefile,v 1.76 2004/06/04 08:58:05 spitzak Exp $".
 #

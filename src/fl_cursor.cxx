@@ -1,5 +1,5 @@
 //
-// "$Id: fl_cursor.cxx,v 1.22 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: fl_cursor.cxx,v 1.23 2004/06/04 08:58:05 spitzak Exp $"
 //
 // Mouse cursor support for the Fast Light Tool Kit (FLTK).
 //
@@ -95,6 +95,14 @@ struct fltk::Cursor {
   uchar fontid;
   uchar tableid;
 };
+
+fltk::Cursor *fltk::cursor(void *raw) {
+  fltk::Cursor *c = new fltk::Cursor;
+  c->cursor = (::Cursor)raw;
+  c->fontid = 0;
+  c->tableid = 0;
+  return c;
+}
 
 static fltk::Cursor arrow = {0,35};
 static fltk::Cursor cross = {0,66};
@@ -219,6 +227,13 @@ struct fltk::Cursor {
   HCURSOR cursor;
 };
 
+fltk::Cursor *fltk::cursor(void *raw) {
+  fltk::Cursor *c = new fltk::Cursor;
+  c->cursor = (HCURSOR)raw;
+  c->resource = 0;
+  return c;
+}
+
 static fltk::Cursor arrow = {IDC_ARROW};
 static fltk::Cursor cross = {IDC_CROSS};
 static fltk::Cursor wait = {IDC_WAIT};
@@ -263,6 +278,13 @@ struct fltk::Cursor {
   ::Cursor* cursor;
   int resource;
 };
+
+fltk::Cursor *fltk::cursor(void *raw) {
+  fltk::Cursor *c = new fltk::Cursor;
+  c->cursor = (::Cursor)raw;
+  c->resource = 0;
+  return c;
+}
 
 static ::Cursor crsrHAND =
 {
@@ -405,5 +427,5 @@ fltk::Cursor* const fltk::CURSOR_NO	= &no;
 fltk::Cursor* const fltk::CURSOR_NONE	= &none;
 
 //
-// End of "$Id: fl_cursor.cxx,v 1.22 2004/03/25 18:13:18 spitzak Exp $".
+// End of "$Id: fl_cursor.cxx,v 1.23 2004/06/04 08:58:05 spitzak Exp $".
 //

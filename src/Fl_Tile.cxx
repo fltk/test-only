@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tile.cxx,v 1.25 2003/11/04 08:11:02 spitzak Exp $"
+// "$Id: Fl_Tile.cxx,v 1.26 2004/06/04 08:58:04 spitzak Exp $"
 //
 // Tile widget for the Fast Light Tool Kit (FLTK).
 //
@@ -69,13 +69,14 @@ void TiledGroup::position(int oix, int oiy, int newx, int newy) {
 void TiledGroup::layout() {
   int* p = sizes(); // remember the initial positions on first call here
   if (layout_damage() & LAYOUT_WH) {
-    layout_damage(layout_damage() & ~LAYOUT_WH);
     // drag the corner of the group to the new position:
     position(p[1], p[3], w(), h());
     // drag the corner of the resizable() to the new position:
     if (p[5] != p[1] || p[7] != p[3])
       position(p[5], p[7], p[5]+w()-p[1], p[7]+h()-p[3]);
   }
+  // Stop Group::layout() from moving the children any more:
+  layout_damage(layout_damage() & ~(LAYOUT_WH|LAYOUT_DAMAGE));
   Group::layout();
 }
 
@@ -165,5 +166,5 @@ int TiledGroup::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Tile.cxx,v 1.25 2003/11/04 08:11:02 spitzak Exp $".
+// End of "$Id: Fl_Tile.cxx,v 1.26 2004/06/04 08:58:04 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.169 2004/06/01 01:24:22 easysw Exp $"
+// "$Id: Fl_x.cxx,v 1.170 2004/06/04 08:58:04 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1147,9 +1147,9 @@ bool fltk::handle()
       } else {
         // Map keypad to special key...
 	static const unsigned short table[] = {
-	  FL_Home, FL_Left, FL_Up, FL_Right,
-	  FL_Down, FL_Page_Up, FL_Page_Down, FL_End,
-	  0xff0b/*XK_Clear*/, FL_Insert, FL_Delete};
+	  HomeKey, LeftKey, UpKey, RightKey,
+	  DownKey, PageUpKey, PageDownKey, EndKey,
+	  ClearKey, InsertKey, DeleteKey};
 	keysym = table[keysym-0xff95];
       }
     } else {
@@ -1292,7 +1292,8 @@ void Window::layout() {
       XMoveWindow(xdisplay, i->xid, x, y);
     }
   }
-  Group::layout();
+  if (layout_damage() & ~LAYOUT_XY) Group::layout();
+  else layout_damage(0);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1810,5 +1811,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.169 2004/06/01 01:24:22 easysw Exp $".
+// End of "$Id: Fl_x.cxx,v 1.170 2004/06/04 08:58:04 spitzak Exp $".
 //

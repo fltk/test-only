@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.153 2004/05/18 15:53:40 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.154 2004/06/04 08:58:04 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -232,7 +232,7 @@ static int menuleading(Widget* widget) {
     style attributes of the widget are used when figuring out the total
     size and the size of each item.
 */
-void Menu::layout(Widget* widget, const int* indexes, int level) const {
+void Menu::layout_in(Widget* widget, const int* indexes, int level) const {
   // vertical orientation only...
   if (widget->horizontal()) return;
   Box* box = menubox(widget);
@@ -280,8 +280,8 @@ void Menu::layout(Widget* widget, const int* indexes, int level) const {
     to be redrawn. This is used for minimal update to move the
     selection from one item to the next.
 */
-void Menu::draw(Widget* widget, const int* indexes, int level,
-		int selected, int drawn_selected) const {
+void Menu::draw_in(Widget* widget, const int* indexes, int level,
+		   int selected, int drawn_selected) const {
   Box* box = menubox(widget);
   const int leading = menuleading(widget);
   const unsigned char damage = widget->damage();
@@ -506,7 +506,7 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
     title = 0;
   }
 
-  menustate->widget->layout(this, menustate->indexes, level);
+  menustate->widget->layout_in(this, menustate->indexes, level);
   if (Wtitle > w()) w(Wtitle);
 
   // Move horizontally to center it, if we did not give an inital width
@@ -565,8 +565,8 @@ int MWindow::titlex(int index) {
 
 void MWindow::draw() {
   int selected = level <= menustate->level ? menustate->indexes[level] : -1;
-  menustate->widget->draw(this, menustate->indexes, level,
-			  selected, drawn_selected);
+  menustate->widget->draw_in(this, menustate->indexes, level,
+			     selected, drawn_selected);
   drawn_selected = selected;
 }
 
@@ -1054,5 +1054,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.153 2004/05/18 15:53:40 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.154 2004/06/04 08:58:04 spitzak Exp $".
 //
