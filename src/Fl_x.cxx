@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.164 2004/03/07 20:40:31 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.165 2004/03/12 08:35:56 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -24,7 +24,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#define CONSOLIDATE_MOTION 0 // this was 1 in fltk 1.0
+#define CONSOLIDATE_MOTION 1 // this was 1 in fltk 1.0
 
 #include <config.h>
 #include <fltk/x.h>
@@ -1610,5 +1610,5 @@ void Window::make_current() const {
   Returns the last window make_current() was called on. */
 
 //
-// End of "$Id: Fl_x.cxx,v 1.164 2004/03/07 20:40:31 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.165 2004/03/12 08:35:56 spitzak Exp $".
 //

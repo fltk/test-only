@@ -1,5 +1,5 @@
 //
-// "$Id: glut.h,v 1.9 2004/03/05 08:17:01 spitzak Exp $"
+// "$Id: glut.h,v 1.10 2004/03/12 08:35:56 spitzak Exp $"
 //
 // GLUT emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -374,13 +374,13 @@ enum {
 //#define GLUT_NUM_DIALS		608
 //#define GLUT_NUM_TABLET_BUTTONS	609
 
-inline int glutGetModifiers() {return fltk::event_state();}
 // WARNING: these values are different than Glut uses:
 enum {
   GLUT_ACTIVE_SHIFT	= fltk::SHIFT,
   GLUT_ACTIVE_CTRL	= fltk::CTRL,
   GLUT_ACTIVE_ALT	= fltk::ALT
 };
+inline int glutGetModifiers() { return fltk::event_state() & (GLUT_ACTIVE_SHIFT | GLUT_ACTIVE_CTRL | GLUT_ACTIVE_ALT) ;}
 
 FL_GLUT_API int glutLayerGet(GLenum);
 #define GLUT_OVERLAY_POSSIBLE		800
@@ -479,5 +479,5 @@ extern void APIENTRY glutSolidIcosahedron();
 #endif                  /* __glut_h__ */
 
 //
-// End of "$Id: glut.h,v 1.9 2004/03/05 08:17:01 spitzak Exp $".
+// End of "$Id: glut.h,v 1.10 2004/03/12 08:35:56 spitzak Exp $".
 //
