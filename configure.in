@@ -1,11 +1,11 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.98 2002/09/16 00:29:05 spitzak Exp $"
+dnl# "$Id: configure.in,v 1.99 2002/12/10 01:46:14 easysw Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
-dnl# Copyright 1998-1999 by Bill Spitzak and others.
+dnl# Copyright 1998-2003 by Bill Spitzak and others.
 dnl#
 dnl# This library is free software; you can redistribute it and/or
 dnl# modify it under the terms of the GNU Library General Public
@@ -459,5 +459,5 @@ AC_OUTPUT(makeinclude fltk-config)
 chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.98 2002/09/16 00:29:05 spitzak Exp $".
+dnl# End of "$Id: configure.in,v 1.99 2002/12/10 01:46:14 easysw Exp $".
 dnl#

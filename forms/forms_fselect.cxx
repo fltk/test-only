@@ -1,9 +1,9 @@
 //
-// "$Id: forms_fselect.cxx,v 1.4 2001/07/29 22:25:25 spitzak Exp $"
+// "$Id: forms_fselect.cxx,v 1.5 2002/12/10 01:46:16 easysw Exp $"
 //
 // Forms file selection routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -61,5 +61,5 @@ char*	fl_get_pattern() {return (char *)fl_pattern;}
 char*	fl_get_filename() {return fl_filename;}
 
 //
-// End of "$Id: forms_fselect.cxx,v 1.4 2001/07/29 22:25:25 spitzak Exp $".
+// End of "$Id: forms_fselect.cxx,v 1.5 2002/12/10 01:46:16 easysw Exp $".
 //

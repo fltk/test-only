@@ -1,9 +1,9 @@
 //
-// "$Id: glut_compatability.cxx,v 1.9 2002/09/23 07:15:22 spitzak Exp $"
+// "$Id: glut_compatability.cxx,v 1.10 2002/12/10 01:46:16 easysw Exp $"
 //
 // GLUT emulation routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -366,5 +366,5 @@ int glutLayerGet(GLenum type) {
 #endif
 
 //
-// End of "$Id: glut_compatability.cxx,v 1.9 2002/09/23 07:15:22 spitzak Exp $".
+// End of "$Id: glut_compatability.cxx,v 1.10 2002/12/10 01:46:16 easysw Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: forms_bitmap.cxx,v 1.8 2001/08/08 06:28:11 spitzak Exp $"
+// "$Id: forms_bitmap.cxx,v 1.9 2002/12/10 01:46:15 easysw Exp $"
 //
 // Forms compatible bitmap function for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -50,5 +50,5 @@ void Fl_FormsBitmap::draw() {
 }
 
 //
-// End of "$Id: forms_bitmap.cxx,v 1.8 2001/08/08 06:28:11 spitzak Exp $".
+// End of "$Id: forms_bitmap.cxx,v 1.9 2002/12/10 01:46:15 easysw Exp $".
 //

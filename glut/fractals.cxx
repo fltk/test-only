@@ -1,5 +1,5 @@
 //
-// "$Id: fractals.cxx,v 1.8 2001/07/29 22:25:25 spitzak Exp $"
+// "$Id: fractals.cxx,v 1.9 2002/12/10 01:46:16 easysw Exp $"
 //
 // Fractal drawing demo for the Fast Light Tool Kit (FLTK).
 //
@@ -7,7 +7,7 @@
 // demonstrate how to add fltk controls to a glut program.   The glut
 // code is unchanged except for the end (search for fltk to find changes).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -799,5 +799,5 @@ int main(int argc, char** argv)
 }
 
 //
-// End of "$Id: fractals.cxx,v 1.8 2001/07/29 22:25:25 spitzak Exp $".
+// End of "$Id: fractals.cxx,v 1.9 2002/12/10 01:46:16 easysw Exp $".
 //

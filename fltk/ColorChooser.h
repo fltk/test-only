@@ -1,9 +1,9 @@
 //
-// "$Id: ColorChooser.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: ColorChooser.h,v 1.2 2002/12/10 01:46:15 easysw Exp $"
 //
 // Color chooser header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -101,5 +101,5 @@ FL_API int color_chooser(const char* name, Color& c);
 #endif
 
 //
-// End of "$Id: ColorChooser.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: ColorChooser.h,v 1.2 2002/12/10 01:46:15 easysw Exp $".
 //

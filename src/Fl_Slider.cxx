@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.65 2002/12/09 04:52:26 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.66 2002/12/10 01:46:17 easysw Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -468,5 +468,5 @@ Slider::Slider(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.65 2002/12/09 04:52:26 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.66 2002/12/10 01:46:17 easysw Exp $".
 //

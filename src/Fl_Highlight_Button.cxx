@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Highlight_Button.cxx,v 1.9 2002/12/09 04:52:25 spitzak Exp $"
+// "$Id: Fl_Highlight_Button.cxx,v 1.10 2002/12/10 01:46:17 easysw Exp $"
 //
 // Highlight button widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -43,5 +43,5 @@ HighlightButton::HighlightButton(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Highlight_Button.cxx,v 1.9 2002/12/09 04:52:25 spitzak Exp $".
+// End of "$Id: Fl_Highlight_Button.cxx,v 1.10 2002/12/10 01:46:17 easysw Exp $".
 //

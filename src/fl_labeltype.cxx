@@ -1,7 +1,7 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.31 2002/12/09 04:52:30 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.32 2002/12/10 01:46:18 easysw Exp $"
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -230,5 +230,5 @@ void Widget::measure_label(int& w, int& h) const {
 }
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.31 2002/12/09 04:52:30 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.32 2002/12/10 01:46:18 easysw Exp $".
 //

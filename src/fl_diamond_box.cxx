@@ -1,9 +1,9 @@
 //
-// "$Id: fl_diamond_box.cxx,v 1.25 2002/12/09 04:52:29 spitzak Exp $"
+// "$Id: fl_diamond_box.cxx,v 1.26 2002/12/10 01:46:18 easysw Exp $"
 //
 // Diamond box code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -94,5 +94,5 @@ static DiamondBox diamondUpBox(0, "2AAWWMMTT", &diamondDownBox);
 Box* const fltk::DIAMOND_UP_BOX = &diamondUpBox;
 
 //
-// End of "$Id: fl_diamond_box.cxx,v 1.25 2002/12/09 04:52:29 spitzak Exp $".
+// End of "$Id: fl_diamond_box.cxx,v 1.26 2002/12/10 01:46:18 easysw Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.32 2002/12/09 04:52:24 spitzak Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.33 2002/12/10 01:46:16 easysw Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -504,5 +504,5 @@ int fltk::color_chooser(const char* name, Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.32 2002/12/09 04:52:24 spitzak Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.33 2002/12/10 01:46:16 easysw Exp $".
 //

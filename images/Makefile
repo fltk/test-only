@@ -1,9 +1,9 @@
 #
-# "$Id: Makefile,v 1.14 2002/02/21 06:55:26 nafees Exp $"
+# "$Id: Makefile,v 1.15 2002/12/10 01:46:16 easysw Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
-# Copyright 1998 by Bill Spitzak and others.
+# Copyright 1998-2003 by Bill Spitzak and others.
 #
 # This library is free software; you can redistribute it and/or
 # modify it under the terms of the GNU Library General Public
@@ -116,5 +116,5 @@ install_shared: shared
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.14 2002/02/21 06:55:26 nafees Exp $".
+# End of "$Id: Makefile,v 1.15 2002/12/10 01:46:16 easysw Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: FluidType.h,v 1.1 2002/12/09 16:44:02 spitzak Exp $"
+// "$Id: FluidType.h,v 1.2 2002/12/10 01:46:15 easysw Exp $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -11,7 +11,7 @@
 // instance of this object.  It could also have a "copy()" function,
 // but it was easier to implement this by using the file read/write
 // that is needed to save the setup anyways.
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -347,5 +347,5 @@ FLUID_API int storestring(const char *n, const char * & p, int nostrip=0);
 FLUID_API extern int include_H_from_C;
 
 //
-// End of "$Id: FluidType.h,v 1.1 2002/12/09 16:44:02 spitzak Exp $".
+// End of "$Id: FluidType.h,v 1.2 2002/12/10 01:46:15 easysw Exp $".
 //

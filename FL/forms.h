@@ -1,9 +1,9 @@
 //
-// "$Id: forms.h,v 1.1 2002/12/09 04:49:44 spitzak Exp $"
+// "$Id: forms.h,v 1.2 2002/12/10 01:46:15 easysw Exp $"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -853,5 +853,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.h,v 1.1 2002/12/09 04:49:44 spitzak Exp $".
+// End of "$Id: forms.h,v 1.2 2002/12/10 01:46:15 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group_Type.cxx,v 1.16 2002/12/09 04:52:21 spitzak Exp $"
+// "$Id: Fl_Group_Type.cxx,v 1.17 2002/12/10 01:46:15 easysw Exp $"
 //
 // fltk::Group object code for the Fast Light Tool Kit (FLTK).
 //
@@ -7,7 +7,7 @@
 // the fltk::Tabs widget, with special stuff to select tab items and
 // insure that only one is visible.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -300,5 +300,5 @@ public:
 TileType Tiletype;	// the "factory"
 
 //
-// End of "$Id: Fl_Group_Type.cxx,v 1.16 2002/12/09 04:52:21 spitzak Exp $".
+// End of "$Id: Fl_Group_Type.cxx,v 1.17 2002/12/10 01:46:15 easysw Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Style_Set.cxx,v 1.2 2002/12/09 04:52:26 spitzak Exp $"
+// "$Id: Fl_Style_Set.cxx,v 1.3 2002/12/10 01:46:17 easysw Exp $"
 //
 // Code for switching between named classes of style
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -96,5 +96,5 @@ StyleSet::~StyleSet() {
 }
 
 //
-// End of "$Id: Fl_Style_Set.cxx,v 1.2 2002/12/09 04:52:26 spitzak Exp $".
+// End of "$Id: Fl_Style_Set.cxx,v 1.3 2002/12/10 01:46:17 easysw Exp $".
 //

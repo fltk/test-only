@@ -1,9 +1,9 @@
 //
-// "$Id: Fluid_Plugins.h,v 1.16 2002/12/09 04:52:22 spitzak Exp $"
+// "$Id: Fluid_Plugins.h,v 1.17 2002/12/10 01:46:15 easysw Exp $"
 //
 // Plugins headers for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -75,5 +75,5 @@ void read_plugins();
 #endif
 
 //
-// End of "$Id: Fluid_Plugins.h,v 1.16 2002/12/09 04:52:22 spitzak Exp $"
+// End of "$Id: Fluid_Plugins.h,v 1.17 2002/12/10 01:46:15 easysw Exp $"
 //

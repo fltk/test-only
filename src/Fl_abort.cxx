@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_abort.cxx,v 1.13 2002/12/09 04:52:27 spitzak Exp $"
+// "$Id: Fl_abort.cxx,v 1.14 2002/12/10 01:46:18 easysw Exp $"
 //
 // Warning/error message code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -82,5 +82,5 @@ void (*fltk::error)(const char* format, ...) = ::error;
 void (*fltk::fatal)(const char* format, ...) = ::error;
 
 //
-// End of "$Id: Fl_abort.cxx,v 1.13 2002/12/09 04:52:27 spitzak Exp $".
+// End of "$Id: Fl_abort.cxx,v 1.14 2002/12/10 01:46:18 easysw Exp $".
 //

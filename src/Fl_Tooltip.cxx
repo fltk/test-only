@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.50 2002/12/09 04:52:26 spitzak Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.51 2002/12/10 01:46:17 easysw Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -216,5 +216,5 @@ static NamedStyle style("Tooltip", revert, &Tooltip::default_style);
 NamedStyle* Tooltip::default_style = &::style;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.50 2002/12/09 04:52:26 spitzak Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.51 2002/12/10 01:46:17 easysw Exp $".
 //

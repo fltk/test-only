@@ -1,5 +1,5 @@
 //
-// "$Id: doublebuffer.cxx,v 1.10 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: doublebuffer.cxx,v 1.11 2002/12/10 01:46:18 easysw Exp $"
 //
 // Double-buffering test program for the Fast Light Tool Kit (FLTK).
 //
@@ -13,7 +13,7 @@
 // This demo should work for both the GL and X versions of Fl,
 // even though the double buffering mechanism is totally different.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -124,5 +124,5 @@ int main() {
 }
 
 //
-// End of "$Id: doublebuffer.cxx,v 1.10 2002/09/16 00:29:06 spitzak Exp $".
+// End of "$Id: doublebuffer.cxx,v 1.11 2002/12/10 01:46:18 easysw Exp $".
 //

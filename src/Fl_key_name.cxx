@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_key_name.cxx,v 1.7 2002/12/09 04:52:27 spitzak Exp $"
+// "$Id: Fl_key_name.cxx,v 1.8 2002/12/10 01:46:18 easysw Exp $"
 //
 // Turn a fltk (X) keysym + fltk shift flags into a human-readable string.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -130,5 +130,5 @@ const char* fltk::key_name(int shortcut) {
 }
 
 //
-// End of "$Id: Fl_key_name.cxx,v 1.7 2002/12/09 04:52:27 spitzak Exp $"
+// End of "$Id: Fl_key_name.cxx,v 1.8 2002/12/10 01:46:18 easysw Exp $"
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Image.cxx,v 1.25 2002/12/09 04:52:25 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.26 2002/12/10 01:46:17 easysw Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -144,5 +144,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.25 2002/12/09 04:52:25 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.26 2002/12/10 01:46:17 easysw Exp $".
 //

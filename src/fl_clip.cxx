@@ -1,10 +1,10 @@
 //
-// "$Id: fl_clip.cxx,v 1.12 2002/12/09 04:52:29 spitzak Exp $"
+// "$Id: fl_clip.cxx,v 1.13 2002/12/10 01:46:18 easysw Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -242,5 +242,5 @@ int fltk::clip_box(int x,int y,int w,int h, int& X,int& Y,int& W,int& H) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.12 2002/12/09 04:52:29 spitzak Exp $"
+// End of "$Id: fl_clip.cxx,v 1.13 2002/12/10 01:46:18 easysw Exp $"
 //

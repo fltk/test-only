@@ -1,9 +1,9 @@
 //
-// "$Id: fl_file_chooser.cxx,v 1.29 2002/12/09 04:52:29 spitzak Exp $"
+// "$Id: fl_file_chooser.cxx,v 1.30 2002/12/10 01:46:18 easysw Exp $"
 //
 // File chooser widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -87,5 +87,5 @@ char* fltk::file_chooser(const char* message,
 }
 
 //
-// End of "$Id: fl_file_chooser.cxx,v 1.29 2002/12/09 04:52:29 spitzak Exp $".
+// End of "$Id: fl_file_chooser.cxx,v 1.30 2002/12/10 01:46:18 easysw Exp $".
 //

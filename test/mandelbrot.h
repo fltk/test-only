@@ -1,9 +1,9 @@
 //
-// "$Id: mandelbrot.h,v 1.7 2001/07/23 09:50:06 spitzak Exp $"
+// "$Id: mandelbrot.h,v 1.8 2002/12/10 01:46:18 easysw Exp $"
 //
 // Mandelbrot set header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -68,5 +68,5 @@ public:
 };
 
 //
-// End of "$Id: mandelbrot.h,v 1.7 2001/07/23 09:50:06 spitzak Exp $".
+// End of "$Id: mandelbrot.h,v 1.8 2002/12/10 01:46:18 easysw Exp $".
 //

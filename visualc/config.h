@@ -1,9 +1,9 @@
 /*
- * "$Id: config.h,v 1.20 2001/07/24 21:14:27 robertk Exp $"
+ * "$Id: config.h,v 1.21 2002/12/10 01:46:19 easysw Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
- * Copyright 1998-1999 by Bill Spitzak and others.
+ * Copyright 1998-2003 by Bill Spitzak and others.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -219,5 +219,5 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define CONF_CACHED
 
 /*
- * End of "$Id: config.h,v 1.20 2001/07/24 21:14:27 robertk Exp $".
+ * End of "$Id: config.h,v 1.21 2002/12/10 01:46:19 easysw Exp $".
  */
