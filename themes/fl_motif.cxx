@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.6 2000/04/15 07:36:28 carl Exp $"
+// "$Id: fl_motif.cxx,v 1.7 2000/05/30 10:37:52 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -110,7 +110,7 @@ static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color
 //	x += 4; y += 4; w -= 8; h -= 8;
       } else if (scrollbarstyle) {
 	// erase area behind scrollbars arrows
-	fl_color(scrollbarstyle->window_color);
+	fl_color(scrollbarstyle->text_background);
 	fl_rectf(x,y,w,h);
       }
       Fl_Color d1, d2, l1, l2;
@@ -174,13 +174,15 @@ static void choice_glyph(int, int x,int y,int w,int h, Fl_Color bc, Fl_Color,
 
 int fl_motif()
 {
+  Fl_Style::revert();
+
   fl_up_box.data = thin_motif_up_box.data;
   fl_down_box.data = thin_motif_down_box.data;
   Fl_Style::draw_boxes_inactive = 0;
 
   Fl_Widget::default_style->box = &thin_motif_up_box;
-  Fl_Widget::default_style->window_box = &thin_motif_down_box;
-  Fl_Widget::default_style->window_color = FL_GRAY;
+  Fl_Widget::default_style->text_box = &thin_motif_down_box;
+  Fl_Widget::default_style->text_background = FL_GRAY;
   Fl_Widget::default_style->selection_color = FL_BLACK;
   Fl_Widget::default_style->selection_text_color = FL_GRAY;
   Fl_Widget::default_style->glyph = motif_glyph;
@@ -188,30 +190,30 @@ int fl_motif()
   Fl_Style* s;
 
   if ((s = Fl_Style::find("menu"))) {
-    s->window_box = &thin_motif_menu_box;
+    s->text_box = &thin_motif_menu_box;
     s->selection_color = FL_GRAY;
     s->selection_text_color = FL_BLACK;
     s->leading = 0;
   }
 
   if ((s = Fl_Style::find("menu bar"))) {
-    s->window_box = &thin_motif_menu_box;
+    s->text_box = &thin_motif_menu_box;
     s->selection_color = FL_GRAY;
     s->selection_text_color = FL_BLACK;
   }
 
   if ((s = Fl_Style::find("scrollbar"))) {
     scrollbarstyle = s;
-    s->window_box = &thin_motif_down_box;
-    s->window_color = FL_DARK1;
+    s->text_box = &thin_motif_down_box;
+    s->text_background = FL_DARK1;
   }
 
   if ((s = Fl_Style::find("slider"))) {
-    s->window_color = FL_DARK1;
+    s->text_background = FL_DARK1;
   }
 
   if ((s = Fl_Style::find("value slider"))) {
-    s->window_color = FL_DARK1;
+    s->text_background = FL_DARK1;
   }
 
   if ((s = Fl_Style::find("highlight button"))) {
@@ -232,7 +234,7 @@ int fl_motif()
   }
 
   if ((s = Fl_Style::find("choice"))) {
-    s->window_box = &thin_motif_up_box;
+    s->text_box = &thin_motif_up_box;
     s->glyph = choice_glyph;
   }
 
@@ -240,5 +242,5 @@ int fl_motif()
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.6 2000/04/15 07:36:28 carl Exp $"
+// End of "$Id: fl_motif.cxx,v 1.7 2000/05/30 10:37:52 carl Exp $"
 //

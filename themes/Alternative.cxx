@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.26 2000/04/18 00:45:43 carl Exp $"
+// "$Id: Alternative.cxx,v 1.27 2000/05/30 10:37:50 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -175,7 +175,7 @@ alt_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
 //	x += 4; y += 4; w -= 8; h -= 8;
       } else if (scrollbarstyle) {
 	// erase area behind scrollbars arrows
-	fl_color(scrollbarstyle->window_color);
+	fl_color(scrollbarstyle->text_background);
 	fl_rectf(x,y,w,h);
       }
       Fl_Color d1, d2, l1, l2;
@@ -274,12 +274,12 @@ int fltk_theme(int, char**) {
 
   Fl_Style* s;
   if ((s = Fl_Style::find("menu bar"))) {
-    s->window_box = FL_HIGHLIGHT_BOX;
+    s->text_box = FL_HIGHLIGHT_BOX;
   }
 
   if ((s = Fl_Style::find("item"))) {
     s->glyph = alt_glyph;
-    s->window_box = FL_NO_BOX;
+    s->text_box = FL_NO_BOX;
   }
 
   if ((s = Fl_Style::find("menu button"))) {
@@ -287,7 +287,7 @@ int fltk_theme(int, char**) {
   }
 
   if ((s = Fl_Style::find("choice"))) {
-    s->window_box = FL_NORMAL_BOX;
+    s->text_box = FL_NORMAL_BOX;
     s->glyph = choice_glyph;
   }
 
@@ -319,5 +319,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.26 2000/04/18 00:45:43 carl Exp $".
+// End of "$Id: Alternative.cxx,v 1.27 2000/05/30 10:37:50 carl Exp $".
 //

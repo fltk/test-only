@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.14 2000/05/30 07:42:15 bill Exp $"
+// "$Id: Fl_Style.cxx,v 1.15 2000/05/30 10:37:49 carl Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -169,6 +169,7 @@ extern char fl_up_box_revert[];
 extern char fl_down_box_revert[];
 
 void Fl_Style::revert() {
+  Fl::theme_handler(0);
   fl_background((Fl_Color)0xc0c0c000);
   fl_up_box.data = fl_up_box_revert;
   fl_down_box.data = fl_down_box_revert;
@@ -178,14 +179,13 @@ void Fl_Style::revert() {
   for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
     if (p->name) {
       Fl_Style temp = *p;
-      memset((void*)p, 0, sizeof(*p));
+      memset((void*)p, 0, sizeof(Fl_Style));
       p->parent = temp.parent;
       p->revertfunc = temp.revertfunc;
       p->revertfunc(p);
     }
   }
 }
-
 ////////////////////////////////////////////////////////////////
 
 #include <FL/math.h>
@@ -211,5 +211,5 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.14 2000/05/30 07:42:15 bill Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.15 2000/05/30 10:37:49 carl Exp $".
 //

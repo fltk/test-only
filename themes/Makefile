@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.17 2000/04/18 00:45:43 carl Exp $"
+# "$Id: Makefile,v 1.18 2000/05/30 10:37:52 carl Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -23,8 +23,8 @@
 # Please report all bugs and problems to "fltk-bugs@easysw.com".
 #
 
-THEMES=essai.theme motif.theme classic.theme windows.theme Alternative.theme KDE1.theme KDE1_colors.theme
-SCHEMES=Alternative KDE1 Classic Motif OldMotif Windows Essai
+THEMES=essai.theme motif.theme classic.theme windows.theme Alternative.theme KDE.theme KDE_colors.theme
+SCHEMES=Alternative KDE Classic Motif OldMotif Windows Essai
 
 ################################################################
 
@@ -34,7 +34,7 @@ include ../makeinclude
 LIBRARY = ../lib/$(LIBNAME)_themes
 
 CPPFILES = \
-	fl_kde1.cxx \
+	fl_kde.cxx \
 	fl_windows.cxx \
 	fl_motif.cxx
 
@@ -81,12 +81,12 @@ Alternative.theme : Alternative.o fl_arci.po ../lib/$(LIBNAME).a
 	$(CXX)  $(LD_PLUGIN_FLAGS) $(CXXFLAGS) -o $@ $< fl_arci.po
 	cp $@ ../config/themes
 
-KDE1.theme : KDE1.o fl_kde1.o fl_list_fonts.po ../lib/$(LIBNAME).a
-	$(CXX)  $(LD_PLUGIN_FLAGS) $(CXXFLAGS) -o $@ $< fl_kde1.o fl_list_fonts.po
+KDE.theme : KDE.o fl_kde.o fl_list_fonts.po ../lib/$(LIBNAME).a
+	$(CXX)  $(LD_PLUGIN_FLAGS) $(CXXFLAGS) -o $@ $< fl_kde.o fl_list_fonts.po
 	cp $@ ../config/themes
 
-KDE1_colors.theme : KDE1_colors.o fl_kde1.o fl_list_fonts.po ../lib/$(LIBNAME).a
-	$(CXX)  $(LD_PLUGIN_FLAGS) $(CXXFLAGS) -o $@ $< fl_kde1.o fl_list_fonts.po
+KDE_colors.theme : KDE_colors.o fl_kde.o fl_list_fonts.po ../lib/$(LIBNAME).a
+	$(CXX)  $(LD_PLUGIN_FLAGS) $(CXXFLAGS) -o $@ $< fl_kde.o fl_list_fonts.po
 	cp $@ ../config/themes
 
 # What is this?
@@ -117,5 +117,5 @@ install : all
 #include makedepend
 
 #
-# End of "$Id: Makefile,v 1.17 2000/04/18 00:45:43 carl Exp $".
+# End of "$Id: Makefile,v 1.18 2000/05/30 10:37:52 carl Exp $".
 #

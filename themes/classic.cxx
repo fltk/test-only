@@ -1,5 +1,5 @@
 //
-// "$Id: classic.cxx,v 1.21 2000/04/15 07:36:28 carl Exp $"
+// "$Id: classic.cxx,v 1.22 2000/05/30 10:37:52 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -56,7 +56,7 @@ int fltk_theme(int, char**) {
   Fl_Widget::default_style->highlight_color = 0;
   Fl_Widget::default_style->label_size = 15;
   Fl_Widget::default_style->text_size = 15;
-  Fl_Widget::default_style->window_box = FL_DOWN_BOX;
+  Fl_Widget::default_style->text_box = FL_DOWN_BOX;
   Fl_Widget::default_style->selection_color = FL_DARK2;
   Fl_Widget::default_style->selection_text_color = 0;
 
@@ -64,31 +64,31 @@ int fltk_theme(int, char**) {
   if ((s = Fl_Style::find("menu"))) {
     s->selection_color = FL_WHITE;
     s->selection_text_color = 0;
-    s->window_color = FL_GRAY;
+    s->text_background = FL_GRAY;
   }
   if ((s = Fl_Style::find("item"))) {
     s->selection_color = FL_BLACK;
   }
   if ((s = Fl_Style::find("menu_bar"))) {
-    s->window_box = &menu_title_box;
+    s->text_box = &menu_title_box;
     s->selection_color = FL_GRAY;
-    s->window_color = FL_GRAY;
+    s->text_background = FL_GRAY;
   }
   if ((s = Fl_Style::find("check_button"))) {
     s->selection_color = FL_BLACK;
-    //s->window_color = FL_GRAY;
+    //s->text_background = FL_GRAY;
   }
   if ((s = Fl_Style::find("output"))) {
-    s->window_color = FL_GRAY;
+    s->text_background = FL_GRAY;
   }
   if ((s = Fl_Style::find("choice"))) {
-    s->window_color = FL_GRAY;
-    s->window_box = FL_UP_BOX;
+    s->text_background = FL_GRAY;
+    s->text_box = FL_UP_BOX;
     s->glyph = choice_glyph;
   }
   return 0;
 }
 
 //
-// End of "$Id: classic.cxx,v 1.21 2000/04/15 07:36:28 carl Exp $".
+// End of "$Id: classic.cxx,v 1.22 2000/05/30 10:37:52 carl Exp $".
 //

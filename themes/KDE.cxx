@@ -1,5 +1,5 @@
 //
-// "$Id: KDE1.cxx,v 1.9 2000/03/03 18:59:11 carl Exp $"
+// "$Id: KDE.cxx,v 1.1 2000/05/30 10:37:51 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -27,9 +27,9 @@
 #include <FL/fl_theme.H>
 
 extern "C" int fltk_theme(int, char**) {
-  return fl_kde1();
+  return fl_kde(0);
 }
 
 //
-// End of "$Id: KDE1.cxx,v 1.9 2000/03/03 18:59:11 carl Exp $".
+// End of "$Id: KDE.cxx,v 1.1 2000/05/30 10:37:51 carl Exp $".
 //

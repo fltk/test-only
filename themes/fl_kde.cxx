@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1.cxx,v 1.5 2000/05/30 07:42:21 bill Exp $"
+// "$Id: fl_kde.cxx,v 1.1 2000/05/30 10:37:52 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -23,8 +23,8 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// KDE version 1 theme.  This reads the KDE .kderc file to get all the
-// style information.  If the argument "colors" is passed then this skips
+// KDE version 1 & 2 theme.  This reads the KDE .kderc file to get all the
+// style information.  If the argument "co" is passed then this skips
 // over the windows/motif switching, which allows this to be loaded atop
 // another theme easily.
 
@@ -43,29 +43,51 @@
 #define PATH_MAX 128
 #endif
 
-static int colors_only;
+static int colors_only = 0;
 
 static const Fl_Frame_Box kdewin_menu_text_box(
   "kde windows menu window", "2AAUUIIXX", FL_DOWN_BOX);
 
 ////////////////////////////////////////////////////////////////
 #ifndef WIN32
+#include <unistd.h>
 #include <FL/x.H>
 
-static Atom General, Style, Palette;
+// KIPC is what KDE2 uses
+static Atom General, Style, Palette, KIPC;
+
+// For KDE2
+enum KIPCMessage {
+  PaletteChanged=0, FontChanged, StyleChanged, BackgroundChanged,
+  SettingsChanged, IconChanged, UserMessage=32
+};
 
 // this function handles KDE style change messages
 static int x_event_handler(int) {
   if (fl_xevent->type != ClientMessage) return 0; // not a Client message
   XClientMessageEvent* cm = (XClientMessageEvent*)fl_xevent;
   if (cm->message_type != General && cm->message_type != Palette
-      && (cm->message_type != Style || colors_only))
+      && cm->message_type != KIPC && cm->message_type != Style)
     return 0; // not the message we want
-  fl_kde1(colors_only);
+  if (cm->message_type == KIPC &&
+      cm->data.l[0] != PaletteChanged &&
+      cm->data.l[0] != FontChanged &&
+      cm->data.l[0] != StyleChanged)
+    return 0; // only interested in some IPC messages
+  if (colors_only && cm->message_type == Style)
+    return 0;
+  if (colors_only && cm->message_type == KIPC &&
+      cm->data.l[0] != PaletteChanged &&
+      cm->data.l[0] != FontChanged)
+    return 0;
+  // Geez, really need to work on that logic...
+  fl_kde(colors_only);
   return 1;
 }
 
 static void add_event_handler() {
+  Fl::theme_handler(x_event_handler);
+
   // create an X window to catch KDE style change messages
   static int do_once = 0;
   if (do_once) return;
@@ -79,23 +101,34 @@ static void add_event_handler() {
   General = XInternAtom(fl_display, "KDEChangeGeneral", False);
   Style = XInternAtom(fl_display, "KDEChangeStyle", False);
   Palette = XInternAtom(fl_display, "KDEChangePalette", False);
-  Fl::theme_handler(x_event_handler);
+  KIPC = XInternAtom(fl_display, "KIPC_COMM_ATOM", False);
 }
-  
+
+#endif
+
+#ifndef R_OK
+#define R_OK 4
 #endif
 ////////////////////////////////////////////////////////////////
 
-int fl_kde1(int co) {
+int fl_kde(int co) {
   colors_only = co;
+  Fl_Style::revert();
 
-  char kderc_path[PATH_MAX], home[PATH_MAX] = "", s[80];
+  char kderc_path[PATH_MAX], home[PATH_MAX] = "", s[80] = "";
   const char* p = getenv("HOME");
   if (p) strncpy(home, p, sizeof(home));
-  snprintf(kderc_path, sizeof(kderc_path), "%s/.kderc", home);
+  int kde1 = 0;
+  snprintf(kderc_path, sizeof(kderc_path), "%s/.kde/share/config/kdeglobals", home);
+  if (access(kderc_path, R_OK)) {
+    snprintf(kderc_path, sizeof(kderc_path), "%s/.kderc", home);
+    kde1 = 1;
+  }
   Fl_Config kderc(kderc_path);
 
-  if (kderc.get("KDE/widgetStyle", s, sizeof(s))) return 1;
-  int motif_style = !strcasecmp(s, "Motif") ? 1 : 0;
+  int motif_style = 0;
+  if (!kderc.get("KDE/widgetStyle", s, sizeof(s)) && !strcasecmp(s, "Motif"))
+    motif_style = 1;
   if (!colors_only) {
     Fl::theme(motif_style ? "motif" : "windows");
     // see below for modifications to the motif/windows themes
@@ -126,6 +159,14 @@ int fl_kde1(int co) {
   if (!kderc.get("General/windowBackground", s, sizeof(s)))
     window_background = fl_rgb(s);
 
+  Fl_Color button_foreground = FL_NO_COLOR;
+  if (!kderc.get("General/buttonForeground", s, sizeof(s)))
+    button_foreground = fl_rgb(s);
+
+  Fl_Color button_background = FL_NO_COLOR;
+  if (!kderc.get("General/buttonBackground", s, sizeof(s)))
+    button_background = fl_rgb(s);
+
   Fl_Font font = 0;
   int fontsize = FL_NORMAL_SIZE;
   static char fontencoding[32] = "";
@@ -134,7 +175,7 @@ int fl_kde1(int co) {
     int fontbold = 0, fontitalic = 0;
 
     if ( (p = strtok(s, ",")) ) strncpy(fontname, p, sizeof(fontname));
-    if ( (p = strtok(NULL, ",")) ) fontsize = atoi(p)*5/4;
+    if ( (p = strtok(NULL, ",")) ) fontsize = atoi(p);
     strtok(NULL, ","); // I have no idea what this is
     if ( (p = strtok(NULL, ",")) ) {
       strncpy(fontencoding, p, sizeof(fontencoding));
@@ -146,6 +187,28 @@ int fl_kde1(int co) {
     font = fl_font(fontname);
     if (font && fontbold) font = font->bold();
     if (font && fontitalic) font = font->italic();
+  }
+
+  Fl_Font menufont = 0;
+  int menufontsize = FL_NORMAL_SIZE;
+  static char menufontencoding[32] = "";
+  if (!kderc.get("General/menuFont", s, sizeof(s))) {
+    char fontname[64] = "";
+    int fontbold = 0, fontitalic = 0;
+
+    if ( (p = strtok(s, ",")) ) strncpy(fontname, p, sizeof(fontname));
+    if ( (p = strtok(NULL, ",")) ) menufontsize = atoi(p);
+    strtok(NULL, ","); // I have no idea what this is
+    if ( (p = strtok(NULL, ",")) ) {
+      strncpy(menufontencoding, p, sizeof(menufontencoding));
+      if (!strncasecmp(menufontencoding, "iso-", 4))
+        memmove(menufontencoding+3,menufontencoding+4, strlen(menufontencoding+4)+1); // hack!
+    }
+    if ( (p = strtok(NULL, ",")) && !strcmp(p, "75") ) fontbold = 1;
+    if ( (p = strtok(NULL, ",")) && !strcmp(p, "1") ) fontitalic = 1;
+    menufont = fl_font(fontname);
+    if (menufont && fontbold) menufont = font->bold();
+    if (menufont && fontitalic) menufont = font->italic();
   }
 
   // turn off highlighting:
@@ -191,16 +254,88 @@ int fl_kde1(int co) {
     if (foreground) style->color = 48;
   }
 */
+printf("here1\n");
+  if (button_background) {
+printf("here2\n");
+    if ((style = Fl_Style::find("button"))) {
+printf("here3\n");
+      style->color = button_background;
+      style->label_color = button_foreground;
+    }
+
+    if ((style = Fl_Style::find("highlight button"))) {
+      style->color = button_background;
+      style->label_color = button_foreground;
+    }
+
+    if ((style = Fl_Style::find("return button"))) {
+      style->color = button_background;
+      style->label_color = button_foreground;
+    }
+
+    if ((style = Fl_Style::find("check button"))) {
+      style->color = button_background;
+      style->label_color = button_foreground;
+    }
+
+    if ((style = Fl_Style::find("light button"))) {
+      style->color = button_background;
+      style->label_color = button_foreground;
+    }
+
+//    if ((style = Fl_Style::find("menu button"))) {
+//      style->color = button_background;
+//      style->label_color = button_foreground;
+//    }
+
+    if ((style = Fl_Style::find("choice"))) {
+      style->color = button_background;
+      style->label_color = button_foreground;
+    }
+
+    if ((style = Fl_Style::find("scrollbar"))) {
+      style->color = button_background;
+      style->label_color = button_foreground;
+    }
+
+    if ((style = Fl_Style::find("slider"))) {
+      style->color = button_background;
+      style->label_color = button_foreground;
+    }
+
+    if ((style = Fl_Style::find("menu"))) {
+      style->color = button_background;
+    }
+
+    if ((style = Fl_Style::find("item"))) {
+      style->label_color = button_foreground;
+    }
+  }
+
   if (font) {
-    if (*fontencoding) fl_encoding = fontencoding;
+// CET - FIXME    if (*fontencoding) fl_encoding = fontencoding;
     Fl_Widget::default_style->label_font = font;
     Fl_Widget::default_style->text_font = font;
     Fl_Widget::default_style->label_size = fontsize;
     Fl_Widget::default_style->text_size = fontsize;
   }
 
-  if (!colors_only) {
+  if (menufont && (style = Fl_Style::find("item"))) {
+    style->label_font = style->text_font = menufont;
+    style->label_size = style->text_size = menufontsize;
 
+    if ((style = Fl_Style::find("menu bar"))) {
+      style->label_font = style->text_font = menufont;
+      style->label_size = style->text_size = menufontsize;
+    }
+
+    if ((style = Fl_Style::find("menu title"))) {
+      style->label_font = style->text_font = menufont;
+      style->label_size = style->text_size = menufontsize;
+    }
+  }
+
+  if (!colors_only) {
     if (motif_style) {
 //    fl_set_color(FL_LIGHT2, FL_LIGHT1); // looks better for dark backgrounds
       if ((style = Fl_Style::find("menu"))) {
@@ -233,5 +368,5 @@ int fl_kde1(int co) {
 }
 
 //
-// End of "$Id: fl_kde1.cxx,v 1.5 2000/05/30 07:42:21 bill Exp $".
+// End of "$Id: fl_kde.cxx,v 1.1 2000/05/30 10:37:52 carl Exp $".
 //

@@ -52,7 +52,7 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     highlight color = light1                      # color of menu title box when it's highlighted
     selection color = puke green                  # color of menu title box when its submenu selected
     selection text color = white                  # color of menu title label when its submenu selected
-    window box = highlight			  # boxtype of menu titles
+    text box = highlight			  # boxtype of menu titles
 
   [widgets/menu button]                           # menu button attributes
 
@@ -83,50 +83,44 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
   [widgets/check button]                          # check button attributes
     off color = gray                              # color of light when not selected
     text color = red                              # color of light when selected
-    window color = white                          # color of light when not selected
-    box = none                                    # boxtype of button
-
-# I don't think this section does anything now!
-  [widgets/round button]                          # round button attributes
-    window color = white                          # color of light when not selected
-    text color = red                              # color of light when selected
+    text background = white                          # color of light when not selected
     box = none                                    # boxtype of button
 
   [widgets/light button]                          # light button attributes
     selection color = puke green                  # color of button when selected
     selection text color = white                  # color of button label when selected
     text color = red                              # color of light when selected
-    window color = black                          # color of light when not selected
+    text background = black                          # color of light when not selected
 
   [widgets/slider]                                # slider attributes
     color = gray                                  # color of the slider thumb
     selection color = puke green                  # color of nice slider thumb color mark
     text color = black                            # color of slider thumb symbol (if any)
-    window box = down                             # boxtype of the slider background area
+    text box = down                               # boxtype of the slider background area
 
   [widgets/value slider]                          # slider attributes
     color = gray
     selection color = puke green                  # color of nice slider thumb color mark
     text color = black                            # color of slider thumb symbol (if any)
-    window box = down
+    text box = down
 
   [widgets/scrollbar]                             # scroll bar attributes
     color = gray                                  # color of the scrollbar buttons
     selection color = puke green                  # color of the scrollbar buttons when pushed
     text color = black                            # color of scrollbar button symbols
     selection text color = white                  # color of scrollbar button symbols when pushed
-    window color = scroll bar gray                # color of scrollbar background area
-    window box = down                             # boxtype of the scrollbar background area
+    text background = scroll bar gray             # color of scrollbar background area
+    text box = down                               # boxtype of the scrollbar background area
 
   [widgets/input]                                 # input widget attributes
-    window box = down                             # boxtype of the input area
+    text box = down                               # boxtype of the input area
     selection color = puke green                  # background color of selected text
     selection text color = white                  # font color of selected text
     off color = black                             # cursor color
 
   [widgets/output]                                # output widget attributes
-    window color = light2                         # color of output area
-    window box = down                             # boxtype of the output area
+    text background = light2                      # color of output area
+    text box = down                               # boxtype of the output area
     selection color = puke green                  # background color of selected text
     selection text color = white                  # font color of selected text
 
@@ -136,12 +130,12 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     selection text color = white                  # font color of selected text
 
   [widgets/counter]                               # counter attributes
-    window color = light2                         # color of text area
+    text background = light2                      # color of text area
     selection color = puke green                  # color of buttons when selected
     selection text color = white                  # color of button symbols when selected
 
   [widgets/adjuster]                              # adjuster attributes
-    window color = light2                         # color of text area
+    text background = light2                      # color of text area
     selection color = puke green                  # color of buttons when selected
     selection text color = white                  # color of button symbols when selected
 

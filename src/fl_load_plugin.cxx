@@ -55,7 +55,10 @@ int fl_load_plugin(const char* n, const char* function,
   if (handle) {
     if (!function) return 0;
     Function f = (Function)dlsym(handle, function);
-    if (f) return f(argc, argv);
+    if (f) {
+      int r = f(argc, argv);
+      return r;
+    }
   }
   fprintf(stderr, "fl_load_plugin(): %s\n", dlerror());
   if (handle) { dlclose(handle); return -3; }

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.3 2000/04/15 04:47:25 carl Exp $"
+// "$Id: fl_windows.cxx,v 1.4 2000/05/30 10:37:52 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -100,6 +100,7 @@ inset_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
   f &= ~FL_INACTIVE;
   function(t, x+1, y+1, w, h, bc, FL_LIGHT3, f, FL_NO_BOX);
   function(t, x,   y,   w, h, bc, fl_inactive(fc), f, FL_NO_BOX);
+
 }
 
 static void
@@ -139,10 +140,12 @@ my_counter_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
 ////////////////////////////////////////////////////////////////
 
 int fl_windows() {
+  Fl_Style::revert();
+
   Fl_Style::draw_boxes_inactive = 0;
 
   // More accurate copy of the colors on the edges of boxes, from Win98
-  // Fltk by default uses colors picked by Bill for aestetic reasons:
+  // Fltk by default uses colors picked by Bill for aesthetic reasons:
   fl_up_box.data = "2AAXXIIUU";
   fl_down_box.data = "2XXIIUUAA";
 
@@ -157,7 +160,7 @@ int fl_windows() {
 
   if ((s = Fl_Style::find("item"))) {
     s->glyph = windows_glyph;
-    s->window_box = FL_NO_BOX; // no box around checkmarks
+    s->text_box = FL_NO_BOX; // no box around checkmarks
   }
 
   if ((s = Fl_Style::find("menu bar"))) {
@@ -165,16 +168,16 @@ int fl_windows() {
   }
 
   // this may be needed if fltk's default is the thin box:
-  Fl_Widget::default_style->window_box = FL_DOWN_BOX;
+  Fl_Widget::default_style->text_box = FL_DOWN_BOX;
 
   // The default is white, but setting this will overwrite any
   // value read from Windows, so I leave it as the slight gray we default to:
   //Fl_Widget::default_style->window_color = FL_WHITE;
-  
+
   if ((s = Fl_Style::find("scrollbar"))) {
     s->glyph = windows_glyph;
     s->box = &win98_menu_window_box;
-    s->window_color = 52;
+    s->text_background = 52;
   }
 
   if ((s = Fl_Style::find("highlight button"))) {
@@ -208,5 +211,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.3 2000/04/15 04:47:25 carl Exp $"
+// End of "$Id: fl_windows.cxx,v 1.4 2000/05/30 10:37:52 carl Exp $"
 //

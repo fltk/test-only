@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.55 2000/05/30 07:42:18 bill Exp $"
+// "$Id: fl_options.cxx,v 1.56 2000/05/30 10:37:50 carl Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -21,7 +21,7 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
-//
+//                                   Shell No 2
 
 #include <stdio.h>
 #include <string.h>
@@ -346,7 +346,6 @@ int Fl::scheme(const char *s) {
 }
 
 int Fl::theme(const char *t) {
-  fl_get_system_colors();
   if (!t) { Fl_Style::revert(); return 0; }
   char temp[PATH_MAX];
   strncpy(temp, t, sizeof(temp));
@@ -364,9 +363,10 @@ int Fl::theme(const char *t) {
     return -1;
   }
 
-  int r;
-  if ( (r = fl_load_plugin(tfile, "fltk_theme")) ) {
-    fprintf(stderr, "Cannot load theme \"%s\": %d\n", tfile, r);
+  strncpy(temp, tfile, sizeof(temp));
+  int r = fl_load_plugin(temp, "fltk_theme");
+  if (r) {
+    fprintf(stderr, "Cannot load theme \"%s\": %d\n", temp, r);
     return r;
   }
 
@@ -427,7 +427,7 @@ int Fl::getconf(const char *key, char *value, int value_length) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.55 2000/05/30 07:42:18 bill Exp $".
+// End of "$Id: fl_options.cxx,v 1.56 2000/05/30 10:37:50 carl Exp $".
 //
 
 

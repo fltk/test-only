@@ -1,5 +1,5 @@
 //
-// "$Id: KDE1_colors.cxx,v 1.5 2000/03/03 18:59:12 carl Exp $"
+// "$Id: KDE_colors.cxx,v 1.1 2000/05/30 10:37:51 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -23,17 +23,17 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// Just colors and fonts for KDE1 -- no boxtypes
-// This is done by passing an argument to the KDE1 plugin that causes
+// Just colors and fonts for KDE -- no boxtypes
+// This is done by passing an argument to the KDE plugin that causes
 // it to skip that stuff.
 
 #include <FL/Fl.H>
 #include <FL/fl_theme.H>
 
 extern "C" int fltk_theme(int, char**) {
-  return fl_kde1(1);
+  return fl_kde(1);
 }
 
 //
-// End of "$Id: KDE1_colors.cxx,v 1.5 2000/03/03 18:59:12 carl Exp $".
+// End of "$Id: KDE_colors.cxx,v 1.1 2000/05/30 10:37:51 carl Exp $".
 //

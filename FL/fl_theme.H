@@ -1,5 +1,5 @@
 //
-// "$Id: fl_theme.H,v 1.1 2000/03/03 18:59:06 carl Exp $"
+// "$Id: fl_theme.H,v 1.2 2000/05/30 10:37:46 carl Exp $"
 //
 // Header for themes that also go into fltk_themes static library.
 // These are the important common ones such as Windows, Motif, KDE1 & GNOME.
@@ -30,12 +30,12 @@
 #include <FL/Enumerations.H>
 
 FL_API int fl_windows();
-FL_API int fl_kde1(int = 0);
+FL_API int fl_kde(int = 0);
 FL_API int fl_gnome();
 FL_API int fl_motif();
 
 #endif
 
 //
-// End of "$Id: fl_theme.H,v 1.1 2000/03/03 18:59:06 carl Exp $".
+// End of "$Id: fl_theme.H,v 1.2 2000/05/30 10:37:46 carl Exp $".
 //
