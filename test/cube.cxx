@@ -28,11 +28,11 @@
 #include <config.h>
 #include <fltk/run.h>
 #include <fltk/draw.h>
-#include <fltk/Window.H>
-#include <fltk/Box.H>
-#include <fltk/Button.H>
-#include <fltk/RadioLightButton.H>
-#include <fltk/Slider.H>
+#include <fltk/Window.h>
+#include <fltk/Box.h>
+#include <fltk/Button.h>
+#include <fltk/RadioLightButton.h>
+#include <fltk/Slider.h>
 #include <stdlib.h>
 
 using namespace fltk;
@@ -107,7 +107,7 @@ void cube_box::draw() {
     glEnable(GL_DEPTH_TEST);
     glFrustum(-1,1,-1,1,2,10000);
     glTranslatef(0,0,-10);
-    setfont(HELVETICA_BOLD, 16 );
+    glsetfont(HELVETICA_BOLD, 16 );
   }
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
   glPushMatrix();
@@ -120,7 +120,7 @@ void cube_box::draw() {
   glPopMatrix();
   color(GRAY75);
   glDisable(GL_DEPTH_TEST);
-  drawtext(wire ? "Cube: wire" : "Cube: flat", -4.5f, -4.5f );
+  gldrawtext(wire ? "Cube: wire" : "Cube: flat", -4.5f, -4.5f );
   glEnable(GL_DEPTH_TEST);
 }
 
