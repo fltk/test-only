@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.H,v 1.10 1999/10/17 22:27:07 vincent Exp $"
+// "$Id: Fl_Color_Chooser.H,v 1.11 2000/05/22 20:17:27 carl Exp $"
 //
 // Color chooser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -63,11 +63,11 @@ public:
 class FL_API Fl_Color_Chooser : public Fl_Group {
   Flcc_HueBox huebox;
   Flcc_ValueBox valuebox;
+  Fl_Group nrgroup; // no resize group
   Fl_Choice choice;
   Flcc_Value_Input rvalue;
   Flcc_Value_Input gvalue;
   Flcc_Value_Input bvalue;
-  Fl_Box resize_box;
   double hue_, saturation_, value_;
   double r_, g_, b_;
   void set_valuators();
@@ -97,5 +97,5 @@ FL_API int fl_color_chooser(const char*name, Fl_Color& c);
 #endif
 
 //
-// End of "$Id: Fl_Color_Chooser.H,v 1.10 1999/10/17 22:27:07 vincent Exp $".
+// End of "$Id: Fl_Color_Chooser.H,v 1.11 2000/05/22 20:17:27 carl Exp $".
 //

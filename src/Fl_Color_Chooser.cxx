@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.19 2000/04/03 17:09:18 bill Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.20 2000/05/22 20:17:26 carl Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -319,12 +319,13 @@ Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
   : Fl_Group(0,0,180,100,L),
     huebox(0,0,100,100),
     valuebox(100,0,20,100),
-    choice(120,0,60,20),
-    rvalue(120,20,60,20),
-    gvalue(120,40,60,20),
-    bvalue(120,60,60,20),
-    resize_box(0,95,100,5)
+    nrgroup(120,0, 60, 100),
+    choice(120,0,60,25),
+    rvalue(120,25,60,25),
+    gvalue(120,50,60,25),
+    bvalue(120,75,60,25)
 {
+  nrgroup.end();
   choice.begin();
   new Fl_Item("rgb");
   new Fl_Item("byte");
@@ -332,7 +333,7 @@ Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
   new Fl_Item("hsv");
   choice.end();
   end();
-  resizable(resize_box);
+  resizable(huebox);
   resize(X,Y,W,H);
   layout();
   r_ = g_ = b_ = 0;
@@ -441,16 +442,17 @@ int CellBox::handle(int e) {
 
 static void make_it() {
   if (window) return;
-  window = new Fl_Window(210,165+65);
-  chooser = new Fl_Color_Chooser(5, 5, 200, 95);
-  ok_color = new Fl_Box(5, 105, 95, 30);
-  ok_color->box(FL_ENGRAVED_BOX);
+  window = new Fl_Window(210,240);
+  chooser = new Fl_Color_Chooser(5, 5, 200, 100);
   chooser->callback(chooser_cb);
-  ok_button = new Fl_Return_Button(5, 135, 95, 25, fl_ok);
-  cancel_color = new Fl_Box(110, 105, 95, 30);
+  new CellBox(5,110,200,60);
+  ok_color = new Fl_Box(5, 175, 95, 30);
+  ok_color->box(FL_ENGRAVED_BOX);
+  ok_button = new Fl_Return_Button(5, 210, 95, 25, fl_ok);
+  cancel_color = new Fl_Box(110, 175, 95, 30);
   cancel_color->box(FL_ENGRAVED_BOX);
-  cancel_button = new Fl_Button(110, 135, 95, 25, fl_cancel);
-  new CellBox(5,165,200,60);
+  cancel_button = new Fl_Button(110, 210, 95, 25, fl_cancel);
+  // window->size_range(210, 240); // minimum usable size?
   window->resizable(chooser);
   window->end();
   window->set_modal();
@@ -504,5 +506,5 @@ int fl_color_chooser(const char* name, Fl_Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.19 2000/04/03 17:09:18 bill Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.20 2000/05/22 20:17:26 carl Exp $".
 //
