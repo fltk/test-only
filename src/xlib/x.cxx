@@ -1,5 +1,5 @@
 //
-// "$Id: x.cxx,v 1.1.2.2 2004/05/13 21:04:19 easysw Exp $"
+// "$Id: x.cxx,v 1.1.2.3 2004/05/15 23:00:34 easysw Exp $"
 //
 // Xlib X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -1161,6 +1161,7 @@ int fl_handle(const XEvent& thisevent)
 ////////////////////////////////////////////////////////////////
 
 void Fl_Window::resize(int X,int Y,int W,int H) {
+  int is_a_move = (X != x() || Y != y());
   int is_a_resize = (W != w() || H != h());
   int resize_from_program = (this != resize_bug_fix);
   if (!resize_from_program) resize_bug_fix = 0;
@@ -1180,7 +1181,11 @@ void Fl_Window::resize(int X,int Y,int W,int H) {
   if (resize_from_program && shown()) {
     if (is_a_resize) {
       if (!resizable()) size_range(w(),h(),w(),h());
-      XMoveResizeWindow(fl_display, i->xid, X, Y, W>0 ? W : 1, H>0 ? H : 1);
+      if (is_a_move) {
+	XMoveResizeWindow(fl_display, i->xid, X, Y, W>0 ? W : 1, H>0 ? H : 1);
+      } else {
+	XResizeWindow(fl_display, i->xid, W>0 ? W : 1, H>0 ? H : 1);
+      }
     } else
       XMoveWindow(fl_display, i->xid, X, Y);
   }
@@ -1515,5 +1520,5 @@ void Fl_Window::make_current() {
 
 
 //
-// End of "$Id: x.cxx,v 1.1.2.2 2004/05/13 21:04:19 easysw Exp $".
+// End of "$Id: x.cxx,v 1.1.2.3 2004/05/15 23:00:34 easysw Exp $".
 //

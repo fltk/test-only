@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.cxx,v 1.5.2.7.2.11.2.5 2004/05/13 21:04:18 easysw Exp $"
+// "$Id: Fl_Gl_Choice.cxx,v 1.5.2.7.2.11.2.6 2004/05/15 23:00:33 easysw Exp $"
 //
 // OpenGL visual selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,7 @@
 #  include <FL/x.H>
 #  include <stdlib.h>
 #  include "Fl_Gl_Choice.H"
+#  include <FL/gl_draw.H>
 #  include "flstring.h"
 
 #  ifdef __APPLE__
@@ -245,6 +246,7 @@ static void del_context(GLContext ctx) {
       break;
     }
   }
+  if (!nContext) gl_remove_displaylist_fonts();
 }
 
 #  ifdef WIN32
@@ -350,5 +352,5 @@ void fl_delete_gl_context(GLContext context) {
 
 
 //
-// End of "$Id: Fl_Gl_Choice.cxx,v 1.5.2.7.2.11.2.5 2004/05/13 21:04:18 easysw Exp $".
+// End of "$Id: Fl_Gl_Choice.cxx,v 1.5.2.7.2.11.2.6 2004/05/15 23:00:33 easysw Exp $".
 //
