@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.48 1999/09/20 01:51:11 vincent Exp $"
+dnl# "$Id: configure.in,v 1.49 1999/09/23 18:15:49 vincent Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -218,12 +218,15 @@ if test "$ac_cv_have_overlay" = yes; then
 fi
 
 have_dlopen=no
-AC_CHECK_LIB(dl, dlopen, \
- AC_DEFINE(HAVE_DLOPEN) have_dlopen=yes,,)
+AC_CHECK_LIB(c, dlopen, \
+     LD_DLOPEN_FLAGS="-rdynamic" have_dlopen=yes,
+     AC_CHECK_LIB(dl, dlopen, \
+      LD_DLOPEN_FLAGS="-rdynamic -ldl" have_dlopen=yes,,),
+)
 
 if test $have_dlopen = yes; then
-    LD_DLOPEN_FLAGS="-rdynamic -ldl"
-    LD_DLL_FLAGS="-Wl,-G -rdynamic"
+    AC_DEFINE(HAVE_DLOPEN)
+    LD_DLL_FLAGS="-shared -rdynamic"
 fi
 
 AC_SUBST(LD_DLOPEN_FLAGS)
@@ -316,5 +319,5 @@ AC_OUTPUT(makeinclude)
 cp config.h FL/
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.48 1999/09/20 01:51:11 vincent Exp $".
+dnl# End of "$Id: configure.in,v 1.49 1999/09/23 18:15:49 vincent Exp $".
 dnl#
