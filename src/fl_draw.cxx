@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.28 2003/08/04 06:55:33 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.29 2003/08/04 14:49:41 spitzak Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -377,10 +377,13 @@ static float wrap(
 	  word_start = word_end = start = p-1; continue;
 	  //}
       }
-      add(segment_count, s, p, q, x, y+line_ascent);
       Symbol::text(p);
-      float W,H; W = H = getsize(); s->measure(W,H); x += W;
+      float W,H; W = H = getsize(); s->measure(W,H);
       Symbol::text("");
+      add(segment_count, s, p, q, x,
+	  // center it's height vertically about the font center:
+	  y+line_ascent-(getascent()-getdescent()+H)/2);
+      x += W;
       if (x > max_x+ix) max_x = x-ix;
       p = q;
       // skip the terminating space or semicolon:
@@ -480,8 +483,7 @@ void fltk::drawtext(
     Segment& s = segments[h];
     if (s.symbol) {
       Symbol::text(s.start);
-      s.symbol->draw(s.x+dx, s.y+dy-(getascent()-getdescent()+getsize())/2,
-		     getsize(), getsize());
+      s.symbol->draw(s.x+dx, s.y+dy, getsize(), getsize());
     } else {
       drawtext_transformed(s.start, s.end-s.start, s.x+dx, s.y+dy);
     }
@@ -501,5 +503,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.28 2003/08/04 06:55:33 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.29 2003/08/04 14:49:41 spitzak Exp $".
 //
