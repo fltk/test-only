@@ -1,9 +1,7 @@
 //
-// "$Id: fl_color.cxx,v 1.35 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id: fl_color.cxx,v 1.36 2004/01/25 06:55:05 spitzak Exp $"
 //
-// Color functions for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2001 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -42,29 +40,41 @@ using namespace fltk;
 /*! \typedef fltk::Color
 
   fltk::Color is a typedef for a 32-bit integer containing r,g,b bytes
-  and an "index" in the lowest byte. If rgb is non-zero, the index is
-  not used (it might be used by some code as an "alpha"). If rgb is
-  zero the "index" is used to look up a 256-entry color table maintained
-  by fltk, this is primarily for back-compatability, but is also used
-  to change the gray background and beveled edges of most widgets.
+  and an "index" in the lowest byte (the \e first byte on a
+  little-endian machine such as an x86).  For instance 0xFF008000 is
+  255 red, zero green, and 128 blue. If rgb are not zero then the low
+  byte is ignored, or may be treated as "alpha" by some code.
 
-  For instance 0xFF008000 is 255 red, zero green, and 128 blue. 0x20 is
-  index 20 into the fltk colormap.
+  If the rgb is zero, the N is the color "index". This index is used
+  to look up an fltk::Color in an internal table of 255 colors:
+
+  \image html fl_show_colormap.gif
+
+  Notice: this table is \e not the X colormap used by fltk.
+
+  A Color of zero (fltk::NO_COLOR) will draw black but is
+  ambiguous. It is returned as an error value or to indicate portions
+  of a Style that should be inherited, and it is also used as the
+  default label color for everything so that changing color zero can
+  be used by the -fg switch. You should use fltk::BLACK (56) to get
+  black.
+
+  The entries 1-31 in the colormap are settable by the user
+  program. The advantage of using these over fltk::rgb(r,g,b) is that
+  they are reproduced exactly on 8-bit screens (normal rgb colors are
+  selected on 8-bit screens by using fltk::nearest_index()). Colors
+  1-15 are preset for back compatability but fltk no longer uses these
+  so you can change them.
+
 */
-
-
-// The fltk "colormap". In fltk 1.0 this allowed the gui colors to be
-// stored in 8-bit locations. In fltk 2.0 this is preserved for back
-// compatability, but it also serves the purpose of reducing the set
-// of colors asked for on colormapped displays and to keep track of
-// the assignments of color on such displays. The contents of this
-// table are not to be confused with the X colormap, which I try to
-// hide completely.
 
 static unsigned cmap[256] = {
 #include "fl_cmap.h" // this is a file produced by "cmap.cxx":
 };
 
+/*! Set r,g,b to the 8-bit components of this color. If it is an indexed
+  color they are looked up in the table, otherwise they are simply copied
+  out of the color number. */
 void fltk::split_color(Color i,
 		       unsigned char& r,
 		       unsigned char& g,
@@ -75,6 +85,8 @@ void fltk::split_color(Color i,
   b = uchar(i>>8);
 }
 
+/*! Find an indexed color in the range 56-127 that is closest to this
+  color. If this is an indexed color it is returned unchanged. */
 Color fltk::nearest_index(Color i) {
   if (!(i & 0xFFFFFF00)) return i;
   uchar r = i>>24;
@@ -84,6 +96,8 @@ Color fltk::nearest_index(Color i) {
   return Color(BLACK + (b*5/256 * 5 + r*5/256) * 8 + g*8/256);
 }
 
+/*! Return (1-weight)*color0 + weight*color1. \a weight is clamped
+  to the 0-1 range before use. */
 Color fltk::lerp(Color color0, Color color1, float weight) {
   if (weight <= 0) return color0;
   if (weight >= 1) return color1;
@@ -96,15 +110,19 @@ Color fltk::lerp(Color color0, Color color1, float weight) {
 	(uchar)(((uchar)(rgb1>>8))*weight + ((uchar)(rgb0>>8))*(1-weight)));
 }
 
+/*! Same as lerp(c, GRAY75, .7), it grays out the color. */
 Color fltk::inactive(Color c) {
   return lerp(c, GRAY75, 0.70f);
 }
 
+/*! Same as (f&INACTIVE) ? inactive(c) : c */
 Color fltk::inactive(Color c, Flags f) {
   if (f&INACTIVE) return lerp(c, GRAY75, 0.70f);
   return c;
 }
 
+/*! Returns \a fg if fltk decides it can be seen well when drawn against
+  \a bg. Otherwise it returns either fltk::BLACK or fltk::WHITE. */
 Color fltk::contrast(Color fg, Color bg) {
   Color c1 = get_color_index(fg);
   Color c2 = get_color_index(bg);
@@ -129,18 +147,30 @@ Color fltk::contrast(Color fg, Color bg) {
 #error
 #endif
 
-void fltk::set_color_index(Color i, Color c) {
-  if (cmap[i] != c) {
+/*! Set one of the indexed colors to the given rgb color. \a i must be
+  in the range 0-255, and \a c must be a non-indexed rgb color. */
+void fltk::set_color_index(Color i, Color color) {
+  if (cmap[i] != color) {
     free_color(i);
-    cmap[i] = c;
+    cmap[i] = color;
   }
 }
 
-Color fltk::get_color_index(Color i) {
-  if (i & 0xFFFFFF00) return i;
-  return (Color)cmap[i];
+/*! Return the rgb form of \a color. If it is an indexed color that
+  entry is returned. If it is an rgb color it is returned unchanged. */
+Color fltk::get_color_index(Color color) {
+  if (color & 0xFFFFFF00) return color;
+  return (Color)cmap[color];
 }
 
+/*!\fn Color color(unsigned char red, unsigned char green, unsigned char blue);
+  Uses shift and add to make an rgb color out of the 8-bit components.
+*/
+
+/*! \fn Color color(unsigned char gray)
+  Makes a gray-scale color using an 8-bit gray level. This is
+  done by multiplying \a gray by 0x1010100. */
+
 //
-// End of "$Id: fl_color.cxx,v 1.35 2004/01/20 07:27:28 spitzak Exp $".
+// End of "$Id: fl_color.cxx,v 1.36 2004/01/25 06:55:05 spitzak Exp $".
 //

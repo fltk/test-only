@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.35 2004/01/21 09:18:10 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.36 2004/01/25 06:55:05 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -59,7 +59,7 @@ public:
   void _measure(float& w, float& h) const {
     setfont(normal_font, normal_size);
     ::dx = ::dy = 0;
-    w = h = 0;
+    w = 0; h = normal_size;
   }
 };
 static const NormalSymbol normalsymbol;
@@ -74,7 +74,7 @@ public:
   }
   void _measure(float& w, float& h) const {
     _draw(0,0,w,h,0,0);
-    w = h = 0;
+    w = 0;
   }
 };
 static const BoldSymbol boldsymbol;
@@ -89,7 +89,7 @@ public:
   }
   void _measure(float& w, float& h) const {
     _draw(0,0,w,h,0,0);
-    w = h = 0;
+    w = 0;
   }
 };
 static const ItalicSymbol italicsymbol;
@@ -104,7 +104,7 @@ public:
   }
   void _measure(float& w, float& h) const {
     _draw(0,0,w,h,0,0);
-    w = h = 0;
+    w = 0;
   }
 };
 static const FixedSymbol fixedsymbolf("f");
@@ -120,7 +120,7 @@ public:
     if (!fl_drawing_shadow) setcolor((Color)strtoul(text()+1,0,0));
   }
   void _measure(float& w, float& h) const {
-    w = h = 0;
+    w = 0;
   }
 };
 static const ColorSymbol colorsymbol;
@@ -148,7 +148,7 @@ public:
   }
   void _measure(float& w, float& h) const {
     _draw(0,0,w,h,0,0);
-    w = h = 0;
+    w = 0;
   }
 };
 static const SizeSymbol sizesymbols("s");
@@ -183,7 +183,7 @@ public:
   void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
   void _measure(float& w, float& h) const {
     ::dx += strtod(text()+1,0)*h/12;
-    w = h = 0;
+    w = 0;
   }
 };
 static const DxSymbol dxsymbol;
@@ -202,7 +202,7 @@ public:
   void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
   void _measure(float& w, float& h) const {
     ::dy -= strtod(text()+1,0)*h/12;
-    w = h = 0;
+    w = 0;
   }
 };
 static const DySymbol dysymbol;
@@ -249,7 +249,7 @@ struct Segment {
   const Symbol* symbol;
   const char* start;
   const char* end; // points after last character
-  float x,y; // Postion of left end of baseline
+  float x,y,w,h; // Postion of left end of baseline
 };
 
 // The current set of segments. Call add() to add a new one:
@@ -262,7 +262,7 @@ static /*inline*/ void add(int index,
 			   const Symbol* symbol,
 			   const char* start,
 			   const char* end,
-			   float x, float y
+			   float x, float y, float w, float h
 			   )
 {
   // enlarge the array if necessary:
@@ -283,6 +283,8 @@ static /*inline*/ void add(int index,
   s.end = end;
   s.x = x+dx;
   s.y = y+dy;
+  s.w = w;
+  s.h = h;
 }
 
 bool fl_hide_shortcut; // set by Choice
@@ -325,7 +327,8 @@ static float wrap(
       if (x+newwidth+guesswidth > ix+w && word_start > start) {
 	// break before this word
 	if (word_end > start) {
-	  add(segment_count, 0, start, word_end, x, y+line_ascent);
+	  add(segment_count, 0, start, word_end, x, y+line_ascent,
+	      width, getsize());
 	  if (x+width > max_x) max_x = x+width;
 	}
 	y += line_spacing;
@@ -343,7 +346,7 @@ static float wrap(
     if (start < p) {
       // add text before this next object
       width += getwidth(word_end, p-word_end);
-      add(segment_count, 0, start, p, x, y+line_ascent);
+      add(segment_count, 0, start, p, x, y+line_ascent, width, getsize());
       x += width;
       if (x > max_x) max_x = x;
     }
@@ -357,7 +360,7 @@ static float wrap(
       // add an underscore under next letter:
       if (!fl_hide_shortcut) {
 	const char* us = "_";
-	add(segment_count, 0, us, us+1, x, y+line_ascent);
+	add(segment_count, 0, us, us+1, x, y+line_ascent, getsize(),getsize());
       }
     } else if (*p == '@') {
       p++;
@@ -381,7 +384,7 @@ static float wrap(
       Symbol::text("");
       add(segment_count, s, p, q, x,
 	  // center it's height vertically about the font center:
-	  y+line_ascent-(getascent()-getdescent()+H)/2);
+	  y+line_ascent-(getascent()-getdescent()+H+1)/2, W, H);
       x += W;
       if (x > max_x) max_x = x;
       p = q;
@@ -406,7 +409,7 @@ static float split(
   normal_font = getfont();
   normal_size = getsize();
   line_spacing = int(getsize() + Widget::default_style->leading() + .5);
-  line_ascent = (line_spacing + getascent() - getdescent()) / 2;
+  line_ascent = (line_spacing + getascent() - getdescent() - 1) / 2;
   dx = dy = 0;
   const int* column = column_widths_;
 
@@ -504,8 +507,7 @@ void fltk::drawtext(
     Segment& s = segments[h];
     if (s.symbol) {
       Symbol::text(s.start);
-      s.symbol->draw(s.x+dx, s.y+dy, getsize(), getsize(),
-		     Widget::default_style, 0);
+      s.symbol->draw(s.x+dx, s.y+dy, s.w, s.h, Widget::default_style, 0);
     } else {
       drawtext_transformed(s.start, s.end-s.start, s.x+dx, s.y+dy);
     }
@@ -531,5 +533,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.35 2004/01/21 09:18:10 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.36 2004/01/25 06:55:05 spitzak Exp $".
 //

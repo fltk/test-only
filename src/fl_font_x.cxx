@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_x.cxx,v 1.17 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id: fl_font_x.cxx,v 1.18 2004/01/25 06:55:05 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -45,7 +45,10 @@ struct FontSize {
   //  ~FontSize();
 };
 
-// We store the attributes in neat blocks of 2^n:
+/*! Return a font from the same family with the extra attributes turned
+  on. This may return the same font if the attributes are already on
+  or there is no font with those attributes.
+*/
 fltk::Font* fltk::Font::plus(int x) {
   IFont* font = (IFont*)this;
   if (x & BOLD) font = font->bold;
@@ -53,10 +56,18 @@ fltk::Font* fltk::Font::plus(int x) {
   return &(font->f);
 }
 
+/*! \fn Font* Font::bold()
+  Same as plus(BOLD), returns a bold version of this font.
+*/
+/*! \fn Font* Font::italic()
+  Same as plus(ITALIC), returns an italic version of this font.
+*/
+
 /*! Returns the string actually passed to the operating system, which
   may be different than name().
 
   For Xlib this is a pattern sent to XListFonts to find all the sizes.
+  For most other systems this is the same as name() without any attributes.
 */
 const char* fltk::Font::system_name() {
   return ((IFont*)this)->system_name;
@@ -69,8 +80,14 @@ static GC font_gc; // which gc the font was set in last time
   current font. You must include <fltk/x.h> to use this. */
 XFontStruct* fltk::xfont() {return current->font;}
 
-/*! Return the string name used by the operating system to identify
-  this font. Mostly useful for debugging the ugly Xlib implementation. */
+/*!
+  Return the full X11 name for the currently selected font+size+encoding.
+  This is mostly useful for debugging, though maybe you need to copy
+  it to another program.
+
+  On non-X systems, and on modern X systems with Xft (antialiased fonts)
+  this returns current_font()->system_name().
+*/
 const char* fltk::Font::current_name() {return current->name;}
 
 FontSize::FontSize(const char* name, const char* nname) {
@@ -357,5 +374,5 @@ fltk::Font* const fltk::ZAPF_DINGBATS		= &(fonts[15].f);
 fltk::Font* fltk::font(int i) {return &(fonts[i%16].f);}
 
 //
-// End of "$Id: fl_font_x.cxx,v 1.17 2004/01/20 07:27:28 spitzak Exp $"
+// End of "$Id: fl_font_x.cxx,v 1.18 2004/01/25 06:55:05 spitzak Exp $"
 //

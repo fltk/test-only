@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.52 2004/01/13 06:51:48 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.53 2004/01/25 06:55:05 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -173,7 +173,7 @@ int Style::wheel_scroll_lines_ = 3;
   of widgets are drawn with the buttoncolor().
 
   If you want to change the overall color of all the gray parts of the
-  interface you want to call fltk::background(color) instead, as this
+  interface you want to call fltk::set_background(color) instead, as this
   will set the entry for fltk::GRAY75 and also set the "gray ramp" so
   that the edges of buttons are the same color.
 */
@@ -407,6 +407,7 @@ Flags Style::boxcolors(Flags flags, Color& bg, Color& fg) const {
       flags &= ~SELECTED;
       if (flags & OUTPUT) {bg = color(); fg = textcolor();}
       else {bg = buttoncolor(); fg = labelcolor();}
+      // fg = contrast(fg, bg);this messes up things
     }
   }
   if (flags & INACTIVE) fg = inactive(fg);
@@ -614,5 +615,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.52 2004/01/13 06:51:48 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.53 2004/01/25 06:55:05 spitzak Exp $".
 //

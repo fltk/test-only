@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.81 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.82 2004/01/25 06:55:04 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -786,6 +786,8 @@ void Browser::layout() {
   Widget::layout();
 
   Item::set_style(this);
+  const int *last_columns = fltk::column_widths();
+  fltk::column_widths(column_widths_p);
 
   // figure out the visible area:
   const int sw = scrollbar_width();
@@ -893,6 +895,7 @@ void Browser::layout() {
   goto_mark(FOCUS); make_item_visible(NOSCROLL);
 
   redraw(DAMAGE_CONTENTS); // assumme we need to redraw
+  fltk::column_widths(last_columns);
   Item::clear_style();
 }
 
@@ -1566,5 +1569,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.81 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.82 2004/01/25 06:55:04 spitzak Exp $".
 //

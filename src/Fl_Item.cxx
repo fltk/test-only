@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.32 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.33 2004/01/25 06:55:05 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -96,14 +96,8 @@ void Item::draw() {
   //box()->inset(x,y,w,h);
 
   if (type()) {
-    // if pushed, preview the resulting state:
-    int lflags = flags();
-    if (pushed()) {
-      if (type() != RADIO) lflags ^= VALUE;
-      else lflags |= VALUE;
-    }
     int gw = int(textsize())+2;
-    draw_glyph(0, x+3, y+((h-gw)>>1), gw, gw, lflags);
+    draw_glyph(0, x+3, y+((h-gw)>>1), gw, gw, flags());
     x += gw+3; w -= gw+3;
   }
   draw_label(x, y, w, h, style(), flags()|OUTPUT);

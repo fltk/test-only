@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.42 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id: fl_font.cxx,v 1.43 2004/01/25 06:55:05 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,16 @@
 #include <fltk/Font.h>
 #include <fltk/draw.h>
 #include <fltk/x.h>
+
+/*! \class fltk::Font
+
+Identifies a font. You can create these with fltk::font(name) or
+with fltk::list_fonts(). Do not attempt to create your instances
+or modify it.
+
+This is a struct so that fltk can initialize a table internally
+with constants. Don't use the undocumented fields.
+*/
 
 /*! \defgroup font Text Drawing
     \ingroup drawing
@@ -98,6 +108,11 @@ const char* fltk::Font::name() const {
   return buffer;
 }
 
+/*! \fn const char* fltk::Font::name(int* attributes)
+  Return a string name for this font, and put any attributes
+  (BOLD, ITALIC) into the location pointed to by \a attributes.
+*/
+
 //
-// End of "$Id: fl_font.cxx,v 1.42 2004/01/20 07:27:28 spitzak Exp $".
+// End of "$Id: fl_font.cxx,v 1.43 2004/01/25 06:55:05 spitzak Exp $".
 //

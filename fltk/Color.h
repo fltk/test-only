@@ -1,5 +1,5 @@
 //
-// "$Id: Color.h,v 1.4 2004/01/13 06:51:48 spitzak Exp $"
+// "$Id: Color.h,v 1.5 2004/01/25 06:55:04 spitzak Exp $"
 //
 // Color value. These are 32-bit unsigned numbers with RGB as the
 // upper 3 bytes. The lowest-order byte is treated as an "index"
@@ -38,58 +38,59 @@ namespace fltk {
 
 typedef unsigned Color;
 
+/*! Symbolic names for some of the indexed colors.
+
+  The 24-entry "gray ramp" is modified by fltk::set_background() so
+  that the color fltk::GRAY75 is the background color, and the others
+  are a nice range from black to white. These are used to draw box
+  edges. The gray levels are chosen to be evenly spaced, listed here
+  is the actual 8-bit and decimal gray level assigned by default.
+  Also listed here is the letter used for fltk::FrameBox and the old
+  fltk1.1 names used for these levels.
+
+  The remiander of the colormap is a 5x8x5 color cube. This cube is
+  used to dither images on 8-bit screens X colormaps to reduce the
+  number of colors used.
+*/
 enum {
-  NO_COLOR	= 0,
+  NO_COLOR	= 0, /*!< Black, empty place holder in Style */
 
-  // The gray ramp. The values shown here are the defaults. But
-  // calling set_background() (which a theme will often do) will alter
-  // this to a smooth curve such that the entry for GRAY75 is the
-  // default background color.
-  //
-  // Notice that actual luminance is approximatly the decimal
-  // value squared.
-  //
-  // There is a history of hard-to-remember names for these. For
-  // fltk 2.0 I provide a symbol for all multiples of 5% and 33%,
-  // using the closest available color for each. This works out
-  // quite well.
 		      // Hex   Decimal FrameBox Old names
-  GRAY00	= 32, // 00	.000	A	GRAY0 GRAY_RAMP
-  GRAY05	= 33, // 0d	.050	B
-  GRAY10	= 34, // 1a	.101	C
-  GRAY15	= 35, // 26	.149	D
-  GRAY20	= 36, // 31	.192	E
-  GRAY25	= 37, // 3d	.239	F
-  GRAY30	= 38, // 48	.282	G
-  GRAY33	= 39, // 55	.333	H	DARK3
-  GRAY35	= 40, // 5f	.372	I
-  GRAY40	= 41, // 6a	.416	J	18% gray
-  GRAY45	= 42, // 75	.459	K
-  GRAY50	= 43, // 80	.502	L
-  GRAY55	= 44, // 8a	.541	M
-  GRAY60	= 45, // 95	.584	N	DARK2
-  GRAY65	= 46, // a0	.627	O
-  GRAY66	= 47, // aa	.666	P	DARK1 INACTIVE_COLOR
-  GRAY70	= 48, // b5	.710	Q
-  GRAY75	= 49, // c0	.753	R	GRAY SELECTION_COLOR
-  GRAY80	= 50, // cb	.796	S
-  GRAY85	= 51, // d5	.835	T	LIGHT1
-		      // e0	.878	U
-  GRAY90	= 53, // ea	.917	V	LIGHT2
-  GRAY95	= 54, // f5	.961	W
-  GRAY99	= 55, // ff    1.000	X	LIGHT3
+  GRAY00	= 32, /*!< 00	.00	A       fltk1: GRAY0 GRAY_RAMP */
+  GRAY05	= 33, /*!< 0d	.05	B */
+  GRAY10	= 34, /*!< 1a	.10	C */
+  GRAY15	= 35, /*!< 26	.15	D */
+  GRAY20	= 36, /*!< 31	.19	E */
+  GRAY25	= 37, /*!< 3d	.24	F */
+  GRAY30	= 38, /*!< 48	.28	G */
+  GRAY33	= 39, /*!< 55	.33	H	fltk1: DARK3 */
+  GRAY35	= 40, /*!< 5f	.37	I */
+  GRAY40	= 41, /*!< 6a	.42	J	(18% gray card) */
+  GRAY45	= 42, /*!< 75	.46	K */
+  GRAY50	= 43, /*!< 80	.50	L */
+  GRAY55	= 44, /*!< 8a	.54	M */
+  GRAY60	= 45, /*!< 95	.58	N	fltk1: DARK2 */
+  GRAY65	= 46, /*!< a0	.63	O */
+  GRAY66	= 47, /*!< aa	.67	P	fltk1: DARK1 INACTIVE_COLOR */
+  GRAY70	= 48, /*!< b5	.71	Q */
+  GRAY75	= 49, /*!< c0	.75	R	fltk1: GRAY SELECTION_COLOR */
+  GRAY80	= 50, /*!< cb	.80	S */
+  GRAY85	= 51, /*!< d5	.84	T	fltk1: LIGHT1 */
+  //unnamed entry	   e0	.88	U
+  GRAY90	= 53, /*!< ea	.92	V	fltk1: LIGHT2 */
+  GRAY95	= 54, /*!< f5	.96	W */
+  GRAY99	= 55, /*!< ff  1.00	X	fltk1: LIGHT3 */
 
-  // color cube corners:
-  BLACK		= 0x38,
-  RED		= 0x58,
-  GREEN		= 0x3f,
-  YELLOW	= 0x5f,
-  BLUE		= 0xd8,
-  MAGENTA	= 0xf8,
-  CYAN		= 0xdf,
-  WHITE		= 0xff,
+  BLACK		= 0x38, /*!< Corner of color cube */
+  RED		= 0x58, /*!< Corner of color cube */
+  GREEN		= 0x3f, /*!< Corner of color cube */
+  YELLOW	= 0x5f, /*!< Corner of color cube */
+  BLUE		= 0xd8, /*!< Corner of color cube */
+  MAGENTA	= 0xf8, /*!< Corner of color cube */
+  CYAN		= 0xdf, /*!< Corner of color cube */
+  WHITE		= 0xff, /*!< Corner of color cube */
 
-  WINDOWS_BLUE	= 0x88 // default selection_color
+  WINDOWS_BLUE	= 0x88 /*!< default selection_color */
 };
 
 inline Color color(unsigned char r, unsigned char g, unsigned char b) {
@@ -113,5 +114,5 @@ FL_API Color nearest_index(Color);
 #endif
 
 //
-// End of "$Id: Color.h,v 1.4 2004/01/13 06:51:48 spitzak Exp $".
+// End of "$Id: Color.h,v 1.5 2004/01/25 06:55:04 spitzak Exp $".
 //

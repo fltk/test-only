@@ -135,7 +135,7 @@ void cb_when_enter_key(fltk::Widget* b, void* ptr) {
 }
 
 void button_cb(fltk::Widget* b, void *) {
-  printf("Button pushed\n");
+  printf("Button %s pushed\n", b->label());
 }
 
 #define USE_STRING_LIST 0

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.149 2004/01/18 07:34:37 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.150 2004/01/25 06:55:05 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -324,9 +324,10 @@ void MWindow::draw() {
       if (i == selected && !(flags & (OUTPUT|INACTIVE))) {
 	flags |= SELECTED;
 	//flags &= ~INACTIVE; // damn Windoze compatability...
-	// this allow a toggle or other widget to preview it's state:
-	if (event_state(ANY_BUTTON) && widget->takesevents())
-	  pushed_ = widget;
+	// If a TOGGLE item is pushed in, preview it's flipped state:
+// 	if (checkmark(widget) &&
+// 	    event_state(ANY_BUTTON) && widget->takesevents())
+// 	  flags ^= VALUE;
 	setcolor(menustate->widget->selection_color());
 	fillrect(x,y,w,ih);
       } else {
@@ -876,6 +877,7 @@ int Menu::popup(
 {
   Widget *selected = try_popup(X, Y, W, H, title, menubar);
   if (selected) {
+    if (checkmark(selected)) selected->invert_flag(VALUE);
     execute(selected);
     return 1;
   }
@@ -883,5 +885,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.149 2004/01/18 07:34:37 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.150 2004/01/25 06:55:05 spitzak Exp $".
 //

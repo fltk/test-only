@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.41 2004/01/23 06:34:37 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.42 2004/01/25 06:55:06 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -172,7 +172,7 @@ void Symbol::name(const char* name) {
 const Symbol* Symbol::iterate(int& i) {
   while (i < hashtablesize) {
     const Symbol* ret = hashtable[i++];
-    if (ret) return ret;
+    if (ret && ret != DELETED) return ret;
   }
   return 0;
 }
@@ -206,31 +206,34 @@ const Symbol* Symbol::find(const char* name) {
 const Symbol* Symbol::find(const char* name, const char* end) {
   if (!symbols_initialized) return 0; // does this ever happen?
 
-  // for back-compatability a leading # is ignored:
-  if (name[0] == '#') name++;
-
-  // Remove any leading integer:
-  if (name < end-1 && (name[0]=='+'||name[0]=='-') && isdigit(name[1])) name++;
-  while (name < end && isdigit(name[0])) name++;
-
-  // Try the name without any more changes:
+  // Try the name without any changes:
   int pos = hashindex(name, end-name, false);
   if (hashtable[pos]) return hashtable[pos];
 
-  // Remove trailing "arguments" and try lookup again:
-  const char* p = name;
+  // Now strip text off both ends and try again:
+
+  // for back-compatability a leading # is ignored:
+  const char* a = name;
+  if (a[0] == '#') a++;
+
+  // Remove any leading integer:
+  if (a < end-1 && (a[0]=='+'||a[0]=='-') && isdigit(a[1])) a++;
+  while (a < end && isdigit(a[0])) a++;
+
+  // Remove trailing "arguments":
+  const char* p = a;
   while (p < end) {
     if (isdigit(*p)) break;
     if (p < end-1 && (*p=='+'||*p=='-'||*p=='.') && isdigit(p[1])) break;
     p++;
   }
-  if (p < end) {
+  if (a < p && (a > name || p < end)) {
     const char* q = p+1;
     while (q < end) {
       if (isxdigit(*q) || strchr("+-.eExX,",*q)) q++;
       else return 0;
     }
-    pos = hashindex(name, p-name, false);
+    pos = hashindex(a, p-a, false);
     return hashtable[pos];
   }
   return 0;
@@ -698,5 +701,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.41 2004/01/23 06:34:37 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.42 2004/01/25 06:55:06 spitzak Exp $".
 //

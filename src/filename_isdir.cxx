@@ -1,5 +1,5 @@
 //
-// "$Id: filename_isdir.cxx,v 1.13 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id: filename_isdir.cxx,v 1.14 2004/01/25 06:55:05 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -74,10 +74,11 @@ double filename_size(const char* name) {
 */
 long int filename_mtime(const char *name) {
   if (fill_stat(name, 3)==false) return 0;
-  if (!last_stat.st_mtime) return last_stat.st_ctime;
-  return last_stat.st_mtime;
+  if (last_stat.st_mtime) return last_stat.st_mtime;
+  if (last_stat.st_atime) return last_stat.st_atime;
+  return last_stat.st_ctime;
 }
 
 //
-// End of "$Id: filename_isdir.cxx,v 1.13 2004/01/20 07:27:28 spitzak Exp $".
+// End of "$Id: filename_isdir.cxx,v 1.14 2004/01/25 06:55:05 spitzak Exp $".
 //

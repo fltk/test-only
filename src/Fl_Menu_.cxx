@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.53 2004/01/18 07:34:37 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.54 2004/01/25 06:55:05 spitzak Exp $"
 //
 // The Menu base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Group
@@ -267,41 +267,18 @@ Widget* Menu::child(int n) const {
 FL_API bool fl_dont_execute; // hack for fluid
 
 /*!
+  Calls do_callback(). First it sets item() to the given widget, so
+  the callback code can see it.
 
-  Standard action when the user picks an item. item() is set to it (so
-  the callback can find it) and the callback() of the Menu is
-  called. If you don't change the callback(), the default version does
+  Notice that this calls the callback on the Menu widget itself, not
+  on the menu item. However the default callback for Menu widget does
   item()->do_callback() so by default the callback for each menu item
   is done.
 */
 void Menu::execute(Widget* widget) {
   item(widget);
   if (fl_dont_execute) return;
-  if (!widget) return; // never do callback when no widget is picked
-#if 0
-  // This is removed, hopefully we can put *real* buttons into the menus
-  // and it breaks the ability to put real ones into browsers.
-  if (widget->type() == Item::RADIO) {
-    widget->set_value();
-    Group* g = widget->parent();
-    int i = g->find(widget);
-    int j;
-    for (j = i-1; j >= 0; j--) {
-      Widget* o = g->child(j);
-      if (o->type() != Item::RADIO) break;
-      o->clear_value();
-    }
-    for (j = i+1; j < g->children(); j++) {
-      Widget* o = g->child(j);
-      if (o->type() != Item::RADIO) break;
-      o->clear_value();
-    }
-  }
-#endif
-  if (checkmark(widget)) {
-    if (widget->value()) widget->clear_value(); else widget->set_value();
-  }
-  do_callback();
+  if (widget) do_callback();
 }
 
 /*! The default callback for Menu calls item()->do_callback() if item()
@@ -446,5 +423,5 @@ int Menu::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.53 2004/01/18 07:34:37 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.54 2004/01/25 06:55:05 spitzak Exp $"
 //

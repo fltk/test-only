@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.67 2003/12/15 03:03:13 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.68 2004/01/25 06:55:05 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -87,6 +87,7 @@ void Button::setonly() {
 
 static Button* held_down;
 
+#include <stdio.h>
 int Button::handle(int event) {
   static bool oldval;
   bool newval;
@@ -271,5 +272,5 @@ Button::Button(int x,int y,int w,int h, const char *l) : Widget(x,y,w,h,l) {
 */
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.67 2003/12/15 03:03:13 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.68 2004/01/25 06:55:05 spitzak Exp $".
 //

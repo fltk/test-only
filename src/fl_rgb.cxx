@@ -1,5 +1,5 @@
-// Function to turn a string into a color.  Used by themes and switches.
-// (the function color(r,g,b) is an inline function in Color.h)
+//
+// "$Id: fl_rgb.cxx,v 1.8 2004/01/25 06:55:06 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -25,6 +25,13 @@
 #include <fltk/Color.h>
 #include <stdio.h>
 
+/*! Turn a string into a color. On X this uses XParseColor to lookup
+  named colors like "red".
+
+  On other platforms it only understands colors of the form "n,n,n"
+  or hex strings of 3, 6, 9, or 12 digits. Maybe we should add the
+  standard web color names, there are only 16 of them.
+*/
 fltk::Color fltk::color(const char* name) {
   if (!name || !*name) return NO_COLOR;
   int R,G,B;
@@ -66,5 +73,5 @@ fltk::Color fltk::color(const char* name) {
 }
 
 //
-// End of "$Id: fl_rgb.cxx,v 1.7 2003/08/25 15:28:47 spitzak Exp $".
+// End of "$Id: fl_rgb.cxx,v 1.8 2004/01/25 06:55:06 spitzak Exp $".
 //
