@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.27 2003/07/01 07:03:14 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.28 2003/08/04 06:55:33 spitzak Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -54,21 +54,6 @@ using namespace fltk;
 
 #include <fltk/Symbol.h>
 
-// Sequences of characters that are not interpreted are turned into
-// this "symbol" which draws the text in the current font:
-class PlainText : public Symbol {
-public:
-  PlainText() : Symbol(0) {}
-  void draw(const char* start, const char* end, float x, float y) const {
-    drawtext_transformed(start, end-start, x, y);
-  }
-  void measure(const char* start, const char* end, float& w, float& h) const {
-    w = getwidth(start, end-start);
-    h = getsize();
-  }
-};
-static const PlainText plaintext;
-
 static Font* normal_font;
 static float normal_size;
 static Color normal_color;
@@ -82,11 +67,11 @@ bool fl_drawing_shadow; // true for engraved labels
 class NormalSymbol : public Symbol {
 public:
   NormalSymbol() : Symbol("n") {}
-  void draw(const char* start, const char* end, float x, float y) const {
+  void draw(float x, float y, float w, float h, Flags) const {
     setcolor(normal_color);
     setfont(normal_font, normal_size);
   }
-  void measure(const char* start, const char* end, float& w, float& h) const {
+  void measure(float& w, float& h) const {
     setfont(normal_font, normal_size);
     dx = dy = 0;
     w = h = 0;
@@ -98,11 +83,11 @@ static const NormalSymbol normalsymbol;
 class BoldSymbol : public Symbol {
 public:
   BoldSymbol() : Symbol("b") {}
-  void draw(const char* start, const char* end, float x, float y) const {
-    setfont(getfont()->bold(), getsize());
+  void draw(float x, float y, float w, float h, Flags=0) const {
+    setfont(getfont()->bold(), h);
   }
-  void measure(const char* start, const char* end, float& w, float& h) const {
-    draw(0,0,0,0);
+  void measure(float& w, float& h) const {
+    draw(0,0,w,h);
     w = h = 0;
   }
 };
@@ -112,11 +97,11 @@ static const BoldSymbol boldsymbol;
 class ItalicSymbol : public Symbol {
 public:
   ItalicSymbol() : Symbol("i") {}
-  void draw(const char* start, const char* end, float x, float y) const {
-    setfont(getfont()->italic(), getsize());
+  void draw(float x, float y, float w, float h, Flags=0) const {
+    setfont(getfont()->italic(), h);
   }
-  void measure(const char* start, const char* end, float& w, float& h) const {
-    draw(0,0,0,0);
+  void measure(float& w, float& h) const {
+    draw(0,0,w,h);
     w = h = 0;
   }
 };
@@ -126,11 +111,11 @@ static const ItalicSymbol italicsymbol;
 class FixedSymbol : public Symbol {
 public:
   FixedSymbol(const char* n) : Symbol(n) {}
-  void draw(const char* start, const char* end, float x, float y) const {
-    setfont(fltk::COURIER, getsize());
+  void draw(float x, float y, float w, float h, Flags=0) const {
+    setfont(fltk::COURIER, h);
   }
-  void measure(const char* start, const char* end, float& w, float& h) const {
-    draw(0,0,0,0);
+  void measure(float& w, float& h) const {
+    draw(0,0,w,h);
     w = h = 0;
   }
 };
@@ -142,10 +127,10 @@ static const FixedSymbol fixedsymbolt("t");
 class ColorSymbol : public Symbol {
 public:
   ColorSymbol() : Symbol("C") {}
-  void draw(const char* start, const char* end, float x, float y) const {
-    if (!fl_drawing_shadow) setcolor((Color)strtoul(start+1,0,0));
+  void draw(float x, float y, float w, float h, Flags) const {
+    if (!fl_drawing_shadow) setcolor((Color)strtoul(text()+1,0,0));
   }
-  void measure(const char* start, const char* end, float& w, float& h) const {
+  void measure(float& w, float& h) const {
     w = h = 0;
   }
 };
@@ -160,15 +145,15 @@ static const ColorSymbol colorsymbol;
 class SizeSymbol : public Symbol {
 public:
   SizeSymbol(const char* n) : Symbol(n) {}
-  void draw(const char* start, const char* end, float x, float y) const {
-    float n = float(strtod(start+1,0));
-    if (n < 0) n = getsize()*12/(12-n);
-    else if (*(start+1)=='+') n = getsize()*(12+n)/12;
+  void draw(float x, float y, float w, float h, Flags=0) const {
+    float n = float(strtod(text()+1,0));
+    if (n < 0) n = h*12/(12-n);
+    else if (*(text()+1)=='+') n = h*(12+n)/12;
     else if (n <= 0) n = normal_size;
     setfont(getfont(), n);
   }
-  void measure(const char* start, const char* end, float& w, float& h) const {
-    draw(start,end,0,0);
+  void measure(float& w, float& h) const {
+    draw(0,0,w,h);
     w = h = 0;
   }
 };
@@ -183,10 +168,8 @@ static const SizeSymbol sizesymbolS("S");
 class NothingSymbol : public Symbol {
 public:
   NothingSymbol() : Symbol(".") {}
-  void draw(const char* start, const char* end, float x, float y) const {}
-  void measure(const char* start, const char* end, float& w, float& h) const {
-    w = h = 0;
-  }
+  void draw(float x, float y, float w, float h, Flags=0) const {}
+  void measure(float& w, float& h) const {w = h = 0;}
 };
 static const NothingSymbol nothingsymbol;
 
@@ -200,9 +183,9 @@ static const NothingSymbol nothingsymbol;
 class DxSymbol : public Symbol {
 public:
   DxSymbol() : Symbol("x") {}
-  void draw(const char* start, const char* end, float x, float y) const {}
-  void measure(const char* start, const char* end, float& w, float& h) const {
-    dx += strtod(start+1,0)*getsize()/12;
+  void draw(float x, float y, float w, float h, Flags) const {}
+  void measure(float& w, float& h) const {
+    dx += strtod(text()+1,0)*h/12;
     w = h = 0;
   }
 };
@@ -218,9 +201,9 @@ static const DxSymbol dxsymbol;
 class DySymbol : public Symbol {
 public:
   DySymbol() : Symbol("y") {}
-  void draw(const char* start, const char* end, float x, float y) const {}
-  void measure(const char* start, const char* end, float& w, float& h) const {
-    dy -= strtod(start+1,0)*getsize()/12;
+  void draw(float x, float y, float w, float h, Flags) const {}
+  void measure(float& w, float& h) const {
+    dy -= strtod(text()+1,0)*h/12;
     w = h = 0;
   }
 };
@@ -233,9 +216,9 @@ static Color bgboxcolor;
 class BgBox : public Symbol {
 public:
   BgBox() : Symbol("B") {}
-  void draw(const char* start, const char* end, float x, float y) const {}
-  void measure(const char* start, const char* end, float& w, float& h) const {
-    bgboxcolor = (Color)strtoul(start+1,0,0);
+  void draw(float x, float y, float w, float h, Flags) const {}
+  void measure(float& w, float& h) const {
+    bgboxcolor = (Color)strtoul(text()+1,0,0);
     if (!bgboxcolor) bgboxcolor = BLACK;
     w = h = 0;
   }
@@ -343,7 +326,7 @@ static float wrap(
       if (x+newwidth+guesswidth > ix+w && word_start > start) {
 	// break before this word
 	if (word_end > start) {
-	  add(segment_count, &plaintext, start, word_end, x, y+line_ascent);
+	  add(segment_count, 0, start, word_end, x, y+line_ascent);
 	  if (x+width > max_x+ix) max_x = x+width-ix;
 	}
 	y += line_spacing;
@@ -361,7 +344,7 @@ static float wrap(
     if (start < p) {
       // add text before this next object
       width += getwidth(word_end, p-word_end);
-      add(segment_count, &plaintext, start, p, x, y+line_ascent);
+      add(segment_count, 0, start, p, x, y+line_ascent);
       x += width;
       if (x > max_x+ix) max_x = x-ix;
     }
@@ -375,7 +358,7 @@ static float wrap(
       // add an underscore under next letter:
       if (!fl_hide_shortcut) {
 	const char* us = "_";
-	add(segment_count, &plaintext, us, us+1, x, y+line_ascent);
+	add(segment_count, 0, us, us+1, x, y+line_ascent);
       }
     } else if (*p == '@') {
       p++;
@@ -395,7 +378,9 @@ static float wrap(
 	  //}
       }
       add(segment_count, s, p, q, x, y+line_ascent);
-      float W,H; s->measure(p,q,W,H); x += W;
+      Symbol::text(p);
+      float W,H; W = H = getsize(); s->measure(W,H); x += W;
+      Symbol::text("");
       if (x > max_x+ix) max_x = x-ix;
       p = q;
       // skip the terminating space or semicolon:
@@ -493,8 +478,15 @@ void fltk::drawtext(
   }
   for (h = 0; h < segment_count; h++) {
     Segment& s = segments[h];
-    s.symbol->draw(s.start, s.end, s.x+dx, s.y+dy);
+    if (s.symbol) {
+      Symbol::text(s.start);
+      s.symbol->draw(s.x+dx, s.y+dy-(getascent()-getdescent()+getsize())/2,
+		     getsize(), getsize());
+    } else {
+      drawtext_transformed(s.start, s.end-s.start, s.x+dx, s.y+dy);
+    }
   }
+  Symbol::text("");
  DONE:
   pop_matrix();
   setfont(normal_font, normal_size);
@@ -509,5 +501,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.27 2003/07/01 07:03:14 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.28 2003/08/04 06:55:33 spitzak Exp $".
 //

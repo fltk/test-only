@@ -1,5 +1,5 @@
 //
-// "$Id: Symbol.h,v 1.2 2003/08/04 03:35:43 spitzak Exp $"
+// "$Id: Symbol.h,v 1.3 2003/08/04 06:55:33 spitzak Exp $"
 //
 // The fltk drawing library
 //
@@ -26,21 +26,28 @@
 #ifndef fltk_Symbol_h
 #define fltk_Symbol_h
 
-#include "Flags.h" // for alignment values
+#include "FL_API.h"
+#include "Flags.h"
 #include "Color.h"
 
 namespace fltk {
 
 class FL_API Symbol {
   const char* name_;
+  static const char* text_;
+
+  // Forbid use of copy contructor and assign operator
+  Symbol & operator=(const Symbol &);
+  Symbol(const Symbol &);
+
  public:
   Symbol(const char* name);
   const char* name() const {return name_;}
   void name(const char*);
-  virtual void draw(const char* start, const char* end,
-		    float x, float y) const = 0;
-  virtual void measure(const char* start, const char* end,
-		       float& w, float& h) const = 0;
+  static void text(const char* s) {text_=s;}
+  static const char* text() {return text_;}
+  virtual void measure(float& w, float& h) const = 0;
+  virtual void draw(float x,float y,float w,float h,Flags = 0) const = 0;
   static const Symbol* find(const char* start, const char* end);
 };
 

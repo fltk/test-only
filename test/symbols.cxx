@@ -1,5 +1,5 @@
 //
-// "$Id: symbols.cxx,v 1.10 2003/08/02 21:35:07 spitzak Exp $"
+// "$Id: symbols.cxx,v 1.11 2003/08/04 06:55:33 spitzak Exp $"
 //
 // Symbol test program for the Fast Light Tool Kit (FLTK).
 //
@@ -32,6 +32,7 @@
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Value_Slider.H>
 #include <FL/fl_draw.H>
+#include <fltk/Symbol.h>
 
 int N = 0;
 #define W 70
@@ -78,6 +79,7 @@ void bt(const char *name) {
   a->align(FL_ALIGN_BOTTOM);
   a->labelsize(11);
   Fl_Box *b = new Fl_Box(FL_UP_BOX,x,y,W-20,H-20,strdup(name));
+  //b->image(fltk::Symbol::find(name+1, name+strlen(name)));
   b->labelcolor(FL_DARK3);
 }
 
@@ -126,5 +128,5 @@ bt("@DnArrow");
 }
 
 //
-// End of "$Id: symbols.cxx,v 1.10 2003/08/02 21:35:07 spitzak Exp $".
+// End of "$Id: symbols.cxx,v 1.11 2003/08/04 06:55:33 spitzak Exp $".
 //

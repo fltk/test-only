@@ -1,5 +1,5 @@
 //
-// "$Id: rgbImage.h,v 1.7 2003/06/25 06:11:43 spitzak Exp $"
+// "$Id: rgbImage.h,v 1.8 2003/08/04 06:55:33 spitzak Exp $"
 //
 // Image subclass that draws uncompressed 8-bit rgb data from memory.
 //
@@ -35,9 +35,9 @@ class FL_API rgbImage : public Image {
   const uchar* data;
 public:
   rgbImage(const uchar* d, int W, int H, int D=3)
-    : data(d) {w = W; h = H; depth = D;}
-  void draw(int, int, int, int, Flags = 0);
-  void draw(int x, int y, Flags f = 0) {draw(x,y,w,h,f);}
+    : data(d) {w_ = W; h_ = H; depth = D;}
+  void draw(float, float, float, float, Flags = 0) const;
+  void draw(float x, float y, Flags f = 0) const {draw(x,y,w_,h_,f);}
   bool write_jpeg(const char *filename, int quality=75, int dpi=150);
 };
 
@@ -46,5 +46,5 @@ public:
 #endif
 
 //
-// End of "$Id: rgbImage.h,v 1.7 2003/06/25 06:11:43 spitzak Exp $".
+// End of "$Id: rgbImage.h,v 1.8 2003/08/04 06:55:33 spitzak Exp $".
 //

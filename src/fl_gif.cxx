@@ -1,5 +1,5 @@
 //
-// "$Id: fl_gif.cxx,v 1.15 2002/12/18 08:34:22 spitzak Exp $"
+// "$Id: fl_gif.cxx,v 1.16 2003/08/04 06:55:33 spitzak Exp $"
 //
 // gif.cxx
 //
@@ -60,10 +60,10 @@ bool gifImage::test(const uchar *datas, unsigned size)
   return !strncmp((char*) datas,"GIF", 3);
 }
 
-void gifImage::measure(int  &W, int &H)
+void gifImage::measure(float &W, float &H) const
 {
-  if (w>=0) { 
-    W=w; H=h; 
+  if (w() >= 0) { 
+    W = w(); H = h(); 
     return; 
   }
 
@@ -79,23 +79,23 @@ void gifImage::measure(int  &W, int &H)
   else
   {
     if ((GifFile=fopen(get_filename(), "rb"))==NULL) {
-      w=W=0;
+      W = const_cast<gifImage*>(this)->w_ = 0;
       return;
     }
     if (fread(b,1,6,GifFile)<6) {
-      w=W=0;
+      W = const_cast<gifImage*>(this)->w_ = 0;
       return; /* quit on eof */
     }
   }
   if (b[0]!='G' || b[1]!='I' || b[2] != 'F') {
-      w=W=0;
+    W = const_cast<gifImage*>(this)->w_ = 0;
     return;
   }
 
-  GETSHORT(w);
-  GETSHORT(h);
-  W=w;
-  H=h;
+  GETSHORT(const_cast<gifImage*>(this)->w_);
+  GETSHORT(const_cast<gifImage*>(this)->h_);
+  W = w();
+  H = h();
   if(!datas) fclose(GifFile);
 }
 
@@ -395,7 +395,7 @@ void gifImage::read()
 
   data[Height+2] = 0; // null to end string array
 
-  Pixmap pixmap = fl_create_offscreen(w, h);
+  Pixmap pixmap = fl_create_offscreen(w(), h());
   id = (void*)pixmap;
   fl_begin_offscreen(pixmap);
 
@@ -404,7 +404,7 @@ void gifImage::read()
   draw_xpm(data, 0, 0, BLACK);
   set_mask_bitmap(0);
   if (bitmap) {
-    mask = (void*)create_bitmap(bitmap, w, h);
+    mask = (void*)create_bitmap(bitmap, w(), h());
     delete[] bitmap;
   }
   fl_end_offscreen();
@@ -418,5 +418,5 @@ void gifImage::read()
 }
 
 //
-// End of "$Id: fl_gif.cxx,v 1.15 2002/12/18 08:34:22 spitzak Exp $"
+// End of "$Id: fl_gif.cxx,v 1.16 2003/08/04 06:55:33 spitzak Exp $"
 //

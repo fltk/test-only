@@ -1,5 +1,5 @@
 //
-// "$Id: Widget.h,v 1.7 2003/03/09 07:51:36 spitzak Exp $"
+// "$Id: Widget.h,v 1.8 2003/08/04 06:55:33 spitzak Exp $"
 //
 // The base class of all widgets.
 //
@@ -32,7 +32,7 @@ namespace fltk {
 
 class FL_API Widget;
 class FL_API Window;
-class FL_API Image;
+class FL_API Symbol;
 class FL_API Group;
 struct Cursor;
 
@@ -95,9 +95,9 @@ public:
   void	label(const char* a);
   void	copy_label(const char* a);
 
-  Image* image() const		{ return image_; }
-  void	image(Image* a)		{ image_ = a; }
-  void	image(Image& a)		{ image_ = &a; }
+  const Symbol* image() const	{ return image_; }
+  void	image(const Symbol* a)	{ image_ = a; }
+  void	image(const Symbol& a)	{ image_ = &a; }
 
   const char *tooltip() const	{ return tooltip_; }
   void	tooltip(const char *t)	{ tooltip_ = t; }
@@ -270,10 +270,10 @@ public:
 private:
 
   const char*		label_;
-  Image*		image_;
+  const Symbol*		image_;
   int			shortcut_; // encode in the label?
   unsigned		flags_;
-  const Style*	style_;
+  const Style*		style_;
   Callback*		callback_;
   void*			user_data_;
   const char*		tooltip_; // make this into another widget?
@@ -302,5 +302,5 @@ enum { // Widget::when() values
 #endif
 
 //
-// End of "$Id: Widget.h,v 1.7 2003/03/09 07:51:36 spitzak Exp $".
+// End of "$Id: Widget.h,v 1.8 2003/08/04 06:55:33 spitzak Exp $".
 //

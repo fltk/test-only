@@ -1,5 +1,5 @@
 //
-// "$Id: SharedImage.h,v 1.5 2003/04/20 03:17:49 easysw Exp $"
+// "$Id: SharedImage.h,v 1.6 2003/08/04 06:55:33 spitzak Exp $"
 //
 // Images that are all put in a tree by "name" (usually a filename)
 // so that if the same name is used more than once the same instance
@@ -62,7 +62,7 @@ protected:
   void find_less_used();
   static void check_mem_usage();
 
-  const char* get_filename();// Return the filename obtained from the concatenation
+  const char* get_filename() const;// Return the filename obtained from the concatenation
                           // of the image root directory and this image name
                           // WARNING : the returned pointer will be
                           // available only until next call to get_filename
@@ -110,8 +110,8 @@ public:
   // Set the size of the cache (0 = unlimited is the default)
   static void set_cache_size(unsigned l);
 
-  void draw(int, int, int, int, Flags = 0);
-  void draw(int x, int y, Flags f = 0) {draw(x,y,w,h,f);}
+  void draw(float, float, float, float, Flags = 0) const;
+  void draw(float x, float y, Flags f = 0) const {draw(x,y,w(),h(),f);}
 };
 
 ////////////////////////////////////////////////////////////////
@@ -136,7 +136,7 @@ class FL_IMAGES_API pngImage : public SharedImage {
 public:
 // Check the given buffer if it is in PNG format
   static bool test(const uchar* datas, unsigned size=0);
-  void measure(int& W, int& H); // Return width and heigth
+  void measure(float& W, float& H) const;
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
@@ -148,7 +148,7 @@ class FL_IMAGES_API gifImage : public SharedImage {
   static SharedImage* create() { return new gifImage; }
 public:
   static bool test(const uchar* datas, unsigned size=0);
-  void measure(int& W, int& H);
+  void measure(float& W, float& H) const;
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
@@ -161,7 +161,7 @@ class FL_IMAGES_API xpmFileImage : public SharedImage {
   static SharedImage* create() { return new xpmFileImage; }
 public:
   static bool test(const uchar* datas, unsigned size=0);
-  void measure(int& W, int& H);
+  void measure(float& W, float& H) const;
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
@@ -173,7 +173,7 @@ class FL_IMAGES_API bmpImage : public SharedImage {
   static SharedImage* create() { return new bmpImage; }
 public:
   static bool test(const uchar* datas, unsigned size=0);
-  void measure(int& W, int& H);
+  void measure(float& W, float& H) const;
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
@@ -185,7 +185,7 @@ class FL_IMAGES_API jpegImage : public SharedImage {
   static SharedImage* create() { return new jpegImage; }
 public:
   static bool test(const uchar* datas, unsigned size=0);
-  void measure(int& W, int& H);
+  void measure(float& W, float& H) const;
   static SharedImage* get(const char* name, const uchar* datas = 0) {
     return SharedImage::get(create, name, datas);
   }
@@ -196,5 +196,5 @@ public:
 #endif
 
 //
-// End of "$Id: SharedImage.h,v 1.5 2003/04/20 03:17:49 easysw Exp $"
+// End of "$Id: SharedImage.h,v 1.6 2003/08/04 06:55:33 spitzak Exp $"
 //

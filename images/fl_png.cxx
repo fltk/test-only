@@ -1,5 +1,5 @@
 //
-// "$Id: fl_png.cxx,v 1.10 2003/02/02 10:39:22 spitzak Exp $"
+// "$Id: fl_png.cxx,v 1.11 2003/08/04 06:55:33 spitzak Exp $"
 //
 // PNG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -55,14 +55,14 @@ bool fltk::pngImage::test(const uchar* datas, unsigned size)
 #endif
 }
 
-void fltk::pngImage::measure(int &W, int &H)
+void fltk::pngImage::measure(float &W, float &H) const
 {
 #if !HAVE_LIBPNG
-  W = w = 0;
-  H = h = 0;
+  const_cast<pngImage*>(this)->w_ = 0;
+  W = H = 0;
 #else
-  if (w>=0) { 
-    W=w; H=h; 
+  if (w() >= 0) { 
+    W = w(); H = h(); 
     return; 
   }
 
@@ -74,7 +74,8 @@ void fltk::pngImage::measure(int &W, int &H)
   png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0,0,0);
 
   if (png_ptr == NULL) {
-    W = w = 0;
+    const_cast<pngImage*>(this)->w_ = 0;
+    W = H = 0;
     return;
   }
   info_ptr = png_create_info_struct(png_ptr);
@@ -90,7 +91,8 @@ void fltk::pngImage::measure(int &W, int &H)
   if (info_ptr == NULL || (datas == NULL && fp == NULL))
   {
     png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
-    W = w = 0;
+    const_cast<pngImage*>(this)->w_ = 0;
+    W = H = 0;
     return;
   }
 
@@ -118,8 +120,8 @@ void fltk::pngImage::measure(int &W, int &H)
   png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth,&color_type,
 	       NULL,NULL,NULL);
 
-  w=W=width;
-  h=H=height;
+  W = const_cast<pngImage*>(this)->w_ = width;
+  H = const_cast<pngImage*>(this)->h_ = height;
 
   png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
   if(fp) fclose(fp);
@@ -128,7 +130,8 @@ void fltk::pngImage::measure(int &W, int &H)
  error:
   png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
   if(fp) fclose(fp);
-  W = w = 0;
+  const_cast<pngImage*>(this)->w_ = 0;
+  W = H = 0;
   return;
 #endif
 }
@@ -252,5 +255,5 @@ void fltk::pngImage::read()
 }
 
 //
-// End of "$Id: fl_png.cxx,v 1.10 2003/02/02 10:39:22 spitzak Exp $"
+// End of "$Id: fl_png.cxx,v 1.11 2003/08/04 06:55:33 spitzak Exp $"
 //

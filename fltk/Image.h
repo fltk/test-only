@@ -1,5 +1,5 @@
 //
-// "$Id: Image.h,v 1.5 2003/04/20 03:17:47 easysw Exp $"
+// "$Id: Image.h,v 1.6 2003/08/04 06:55:33 spitzak Exp $"
 //
 // Image object used to label widgets. This caches the image in a
 // server pixmap. Subclasses are used to decide how to change data
@@ -28,34 +28,39 @@
 #ifndef fltk_Image_h
 #define fltk_Image_h
 
-#include "FL_API.h"
-#include "Flags.h"
+#include "Symbol.h"
 
 namespace fltk {
 
 class FL_API Widget;
 
-class FL_API Image {
-#if 1 // OLD STUFF
+class FL_API Image : public Symbol {
+
 protected:
-  int w, h;
+
+  int w_, h_;
   void* id, * mask;
-  void _draw(int x, int y, Flags);
+  void _draw(float x, float y, Flags) const;
+
 public:
-  Image() : id(0), mask(0) {}
-  virtual void measure(int& W, int& H);
-  virtual void draw(int x, int y, int w, int h, Flags = 0) = 0;
-  void draw(int x, int y, Flags f = 0) {draw(x,y,w,h,f);}
+
+  Image() : Symbol(0), id(0), mask(0) {}
+  virtual void measure(float& W, float& H) const;
+  virtual void draw(float x, float y, float w, float h, Flags = 0) const = 0;
+  void draw(float x, float y, Flags f = 0) const {draw(x,y,w_,h_,f);}
   virtual ~Image();
+
   // for back compatability only:
   void label(Widget* o);
-#else // NEW STUFF
+
+  int w() const {return w_;}
+  int width() const {return w_;}
+  int h() const {return h_;}
+  int height() const {return h_;}
+
+#if 0 // FLTK 1.1 interface, we should emulate some of this!
   int w_, h_, d_, ld_, count_;
   const char * const *data_;
-
-  // Forbid use of copy contructor and assign operator
-  Fl_Image & operator=(const Fl_Image &);
-  Fl_Image(const Fl_Image &);
 
   protected:
 
@@ -87,8 +92,6 @@ public:
   virtual void	measure(int& W, int& H);
   virtual void	uncache();
 
-  // for back compatability only:
-  virtual void	label(Widget*w);
 #endif // 0
 };
 
@@ -97,5 +100,5 @@ public:
 #endif
 
 //
-// End of "$Id: Image.h,v 1.5 2003/04/20 03:17:47 easysw Exp $".
+// End of "$Id: Image.h,v 1.6 2003/08/04 06:55:33 spitzak Exp $".
 //

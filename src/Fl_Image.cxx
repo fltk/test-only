@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.30 2003/04/19 21:45:28 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.31 2003/08/04 06:55:33 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -43,19 +43,19 @@ void fl_restore_clip(); // in rect.C
 // they are called and then call this method to quickly get them onto the
 // screen:
 
-void Image::_draw(int XP, int YP, Flags)
+void Image::_draw(float XP, float YP, Flags) const
 {
   // Calculate X,Y,W,H which is the box we are going to fill, and
   // calculate cx, cy which is the coordinate in the image of X,Y:
-  int X,Y,W,H; clip_box(XP,YP,w,h,X,Y,W,H);
-  int cx = X-XP;
-  int cy = Y-YP;
+  int X,Y,W,H; clip_box((int)XP,(int)YP,w(),h(),X,Y,W,H);
+  int cx = X-(int)XP;
+  int cy = Y-(int)YP;
   // clip the box down to the size of image, quit if empty:
   //if (cx < 0) {W += cx; X -= cx; cx = 0;}
-  if (cx+W > w) W = w-cx;
+  if (cx+W > w()) W = w()-cx;
   if (W <= 0) return;
   //if (cy < 0) {H += cy; Y -= cy; cy = 0;}
-  if (cy+H > h) H = h-cy;
+  if (cy+H > h()) H = h()-cy;
   if (H <= 0) return;
   // convert to Xlib coordinates:
   transform(X,Y);
@@ -94,8 +94,8 @@ void Image::_draw(int XP, int YP, Flags)
       // so the mask replaces the region instead. This can draw some of
       // the image outside the current clip region if it is not rectangular.
       XSetClipMask(xdisplay, gc, (Pixmap)mask);
-      int ox = X-cx; if (ox < 0) ox += w;
-      int oy = Y-cy; if (oy < 0) oy += h;
+      int ox = X-cx; if (ox < 0) ox += w();
+      int oy = Y-cy; if (oy < 0) oy += h();
       XSetClipOrigin(xdisplay, gc, X-cx, Y-cy);
       fl_copy_offscreen(X, Y, W, H, (Pixmap)id, cx, cy);
       // put the old clip region back
@@ -117,8 +117,8 @@ void Image::_draw(int XP, int YP, Flags)
       // OSX version nyi
 #else
       XSetStipple(xdisplay, gc, (Pixmap)mask);
-      int ox = X-cx; if (ox < 0) ox += w;
-      int oy = Y-cy; if (oy < 0) oy += h;
+      int ox = X-cx; if (ox < 0) ox += w();
+      int oy = Y-cy; if (oy < 0) oy += h();
       XSetTSOrigin(xdisplay, gc, ox, oy);
       XSetFillStyle(xdisplay, gc, FillStippled);
       XFillRectangle(xdisplay, xwindow, gc, X, Y, W, H);
@@ -133,7 +133,7 @@ void Image::_draw(int XP, int YP, Flags)
 
 // The default version of measure returns constants from the structure
 // that should have been set by a subclasses' constructor:
-void Image::measure(int& W, int& H) { W=w; H=h; }
+void Image::measure(float& W, float& H) const { W=w(); H=h(); }
 
 Image::~Image() {
   if (mask) delete_bitmap((Pixmap)mask);
@@ -150,5 +150,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.30 2003/04/19 21:45:28 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.31 2003/08/04 06:55:33 spitzak Exp $".
 //

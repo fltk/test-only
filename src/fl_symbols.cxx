@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.34 2003/08/04 03:35:43 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.35 2003/08/04 06:55:33 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -191,6 +191,20 @@ const Symbol* Symbol::find(const char* name, const char* end) {
   return 0;
 }
 
+/** \fn void Symbol::text(const char*)
+    Set the value returned by text()
+*/
+
+/** \fn const char* Symbol::text()
+
+    Return a pointer to right after the '@' sign to the text used to
+    invoke this symbol. This is a zero-length string if not being
+    called from drawtext(). This is useful for extracting the
+    arguments that are skipped by the find() method.
+*/
+
+const char* Symbol::text_ = "";
+
 /**************** The routines seen by the user *************************/
 
 // Internal class to define scalable square symbols:
@@ -198,10 +212,8 @@ class SymbolSymbol : public Symbol {
   void (*drawit)(Color);
 public:
   SymbolSymbol(const char* name, void (*f)(Color)) : Symbol(name), drawit(f) {}
-  void draw(const char* start, const char* end, float x, float y) const;
-  void measure(const char* start, const char* end, float& w, float& h) const {
-    w = h = int(getsize()+.5);
-  }
+  void draw(float x, float y, float w, float h, Flags=0) const;
+  void measure(float& w, float& h) const {} // returns size unchanged
 };
 
 /** Define a (hidden) subclass of Symbol that will draw a square icon.
@@ -243,13 +255,13 @@ void fltk::add_symbol(const char *name, void (*drawit)(Color), int scalable)
   new SymbolSymbol(name,drawit);
 }
 
-void SymbolSymbol::draw(const char* p, const char* end, float x, float y) const
+void SymbolSymbol::draw(float x, float y, float w, float h, Flags) const
 {
+  const char* p = text();
   if (*p == '#') p++; // ignore equalscale indicator from fltk1.1
-  float w,h; w = h = getsize();
   // move x,y to center of square:
   x += w/2;
-  y -= (getascent()-getdescent())/2;
+  y += h/2;
   // adjust the scale
   if (*p == '-' && isdigit(p[1])) {
     int n = p[1]-'0';
@@ -467,5 +479,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.34 2003/08/04 03:35:43 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.35 2003/08/04 06:55:33 spitzak Exp $".
 //

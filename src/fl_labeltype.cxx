@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.38 2003/07/23 04:55:50 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.39 2003/08/04 06:55:33 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -161,9 +161,11 @@ void Widget::draw_label(int X, int Y, int W, int H, Color color, Flags flags) co
 
   if (image_) {
 
-    int w = W;
-    int h = H;
-    image_->measure(w, h);
+    float fw = W;
+    float fh = H;
+    image_->measure(fw, fh);
+    int w = int(fw);
+    int h = int(fh);
 
     // If all the flags are off, draw the image and label centered "nicely"
     // by measuring their total size and centering that rectangle:
@@ -230,5 +232,5 @@ void Widget::measure_label(int& w, int& h) const {
 }
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.38 2003/07/23 04:55:50 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.39 2003/08/04 06:55:33 spitzak Exp $".
 //

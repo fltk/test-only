@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg.cxx,v 1.13 2003/02/02 10:39:22 spitzak Exp $"
+// "$Id: fl_jpeg.cxx,v 1.14 2003/08/04 06:55:33 spitzak Exp $"
 //
 // JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -256,13 +256,14 @@ static void drawimage_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar *b)
 static void declare_now(void*) { }
 #endif
 
-void fltk::jpegImage::measure(int &W, int &H)
+void fltk::jpegImage::measure(float &W, float &H) const
 {
 #if !HAVE_LIBJPEG
-  w=W=0;
+  const_cast<jpegImage*>(this)->w_ = 0;
+  W = H = 0;
 #else
-  if (w>=0) { 
-    W=w; H=h; 
+  if (w() >= 0) { 
+    W = w(); H = h(); 
     return; 
   }
 
@@ -284,7 +285,8 @@ void fltk::jpegImage::measure(int &W, int &H)
      */
     jpeg_destroy_decompress(&cinfo);
     if (!infile) fclose(infile);
-    w=W=0;
+    const_cast<jpegImage*>(this)->w_ = 0;
+    W = H = 0;
     return;
   }
 
@@ -294,7 +296,8 @@ void fltk::jpegImage::measure(int &W, int &H)
     jpeg_rawdatas_src(&cinfo, (JOCTET*) datas);
   } else {
     if ((infile = fopen(get_filename(), "rb")) == NULL) {
-      w=W=0;
+      const_cast<jpegImage*>(this)->w_ = 0;
+      W = H = 0;
       return;
     }
     jpeg_stdio_src(&cinfo, infile);
@@ -302,8 +305,8 @@ void fltk::jpegImage::measure(int &W, int &H)
 
   jpeg_read_header(&cinfo, TRUE);
 
-  W=w = cinfo.image_width;
-  H=h = cinfo.image_height;
+  W = const_cast<jpegImage*>(this)->w_ = cinfo.image_width;
+  H = const_cast<jpegImage*>(this)->h_ = cinfo.image_height;
 
   jpeg_destroy_decompress(&cinfo);
 
@@ -406,5 +409,5 @@ bool fltk::jpegImage::test(const uchar* datas, unsigned size)
 }
 
 //
-// End of "$Id: fl_jpeg.cxx,v 1.13 2003/02/02 10:39:22 spitzak Exp $"
+// End of "$Id: fl_jpeg.cxx,v 1.14 2003/08/04 06:55:33 spitzak Exp $"
 //

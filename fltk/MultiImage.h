@@ -1,5 +1,5 @@
 //
-// "$Id: MultiImage.h,v 1.5 2003/04/20 03:17:48 easysw Exp $"
+// "$Id: MultiImage.h,v 1.6 2003/08/04 06:55:33 spitzak Exp $"
 //
 // Image type that draws a different image depending on the flags,
 // for instace VALUE or SELECTED or HIGHLIGHT.
@@ -37,9 +37,9 @@ class FL_API MultiImage : public Image
   Image* images[MAXIMAGES];
   Flags flags[MAXIMAGES];
 public:
-  void measure(int&,int&);
-  void draw(int, int, int, int, Flags = 0);
-  void draw(int x, int y, Flags f = 0) {draw(x,y,w,h,f);}
+  void measure(float&, float&) const;
+  void draw(float, float, float, float, Flags = 0) const;
+  void draw(float x, float y, Flags f = 0) const {draw(x,y,w(),h(),f);}
   MultiImage(Image& image0,
 		Flags flags1, Image& image1) {
     images[0] = &image0;
@@ -130,5 +130,5 @@ public:
 #endif
 
 //
-// End of "$Id: MultiImage.h,v 1.5 2003/04/20 03:17:48 easysw Exp $".
+// End of "$Id: MultiImage.h,v 1.6 2003/08/04 06:55:33 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.27 2003/07/23 04:55:50 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.28 2003/08/04 06:55:33 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -115,10 +115,10 @@ void Item::layout() {
   int w = 250, h = 250; measure(label(), w, h, flags());
   if (type()) w += 15;
   if (image()) {
-    int W, H;
+    float W, H;
     image()->measure(W, H);
-    if (H > h) h = H;
-    w += W;
+    if (H > h) h = int(H);
+    w += int(W);
   }
   this->w(w/*-dw*/+6);
   this->h(h/*-dh*/);
@@ -158,10 +158,10 @@ void ItemGroup::layout() {
   int h; int w = 0; 
   measure(label(), w, h, flags());
   if (image()) {
-    int W, H;
+    float W, H;
     image()->measure(W, H);
-    if (H > h) h = H;
-    w += W;
+    if (H > h) h = int(H);
+    w += int(W);
   }
   this->w(w/*-dw*/+6);
   this->h(h/*-dh*/);

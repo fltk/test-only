@@ -1,5 +1,5 @@
 //
-// "$Id: xpmImage.h,v 1.5 2003/04/20 03:17:49 easysw Exp $"
+// "$Id: xpmImage.h,v 1.6 2003/08/04 06:55:33 spitzak Exp $"
 //
 // Image subclass that draws the data from an xpm format file.
 // XPM is a file format designed for small icons in X, it can
@@ -36,14 +36,14 @@ namespace fltk {
 class FL_API xpmImage : public Image {
 public:
   const char * const * data;
-  xpmImage(const char * const * d) : data(d) {w = -1;}
-  xpmImage(const unsigned char* const * d) : data((char**)d) {w = -1;}
+  xpmImage(const char * const * d) : data(d) {w_ = -1;}
+  xpmImage(const unsigned char* const * d) : data((char**)d) {w_ = -1;}
   // some compilers with bugs may need this one: (?)
-  xpmImage(char ** d) : data(d) {w = -1;}
+  xpmImage(char ** d) : data(d) {w_ = -1;}
 
-  void measure(int&,int&);
-  void draw(int, int, int, int, Flags = 0);
-  void draw(int x, int y, Flags f = 0) {draw(x,y,w,h,f);}
+  void measure(float&, float&) const;
+  void draw(float, float, float, float, Flags = 0) const;
+  void draw(float x, float y, Flags f = 0) const {draw(x,y,w_,h_,f);}
 
 };
 
@@ -52,5 +52,5 @@ public:
 #endif
 
 //
-// End of "$Id: xpmImage.h,v 1.5 2003/04/20 03:17:49 easysw Exp $".
+// End of "$Id: xpmImage.h,v 1.6 2003/08/04 06:55:33 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: TiledImage.h,v 1.4 2003/04/20 03:17:49 easysw Exp $"
+// "$Id: TiledImage.h,v 1.5 2003/08/04 06:55:33 spitzak Exp $"
 //
 // A tiled image completely fills the bounding box passed to it with
 // replications of the internal Image passed to it.
@@ -38,13 +38,13 @@ public:
   TiledImage(Image *i) : Image(), image_(i) {}
   Image* image() const {return image_;}
   void image(Image* i) {image_ = i;}
-  void measure(int& w, int& h);
-  void draw(int x, int y, int w, int h, Flags = 0);
+  void measure(float& w, float& h) const;
+  void draw(float x, float y, float w, float h, Flags = 0) const;
 };
 
 }
 #endif
 
 //
-// End of "$Id: TiledImage.h,v 1.4 2003/04/20 03:17:49 easysw Exp $"
+// End of "$Id: TiledImage.h,v 1.5 2003/08/04 06:55:33 spitzak Exp $"
 //

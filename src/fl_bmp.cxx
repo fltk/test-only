@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.16 2003/06/24 07:10:48 spitzak Exp $"
+// "$Id: fl_bmp.cxx,v 1.17 2003/08/04 06:55:33 spitzak Exp $"
 //
 // Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
 //
@@ -168,11 +168,11 @@ static short ReadLittleEndianUINT()
 }
 #endif
 
-void bmpImage::measure(int &W, int &H)
+void bmpImage::measure(float &W, float &H) const
 {
 
-  if (w>=0) { 
-    W=w; H=h; 
+  if (w() >= 0) { 
+    W=w(); H=h(); 
     return; 
   }
 
@@ -185,7 +185,7 @@ void bmpImage::measure(int &W, int &H)
     if ((bmpFile = fopen(get_filename(), "rb")) == NULL)
       {
 	SetError("Error while opening BMP texture file.");
-	w = W = 0;
+	W = const_cast<bmpImage*>(this)->w_ = 0;
 	return;
       }
 
@@ -199,7 +199,7 @@ void bmpImage::measure(int &W, int &H)
     {
       if (!datas) fclose(bmpFile);
       SetError("Error reading BMP texture file, not a legitimate BMP file.");
-      w = W = 0;
+      W = const_cast<bmpImage*>(this)->w_ = 0;
       return;
     }
 
@@ -210,14 +210,14 @@ void bmpImage::measure(int &W, int &H)
 
     // Read BMP info header structure
     /*infoHeader.headerSize =*/ ReadLittleEndianDWORD();
-    w = /*infoHeader.pixelWidth =*/ ReadLittleEndianDWORD();
-    h = /*infoHeader.pixelHeight =*/ ReadLittleEndianDWORD();
+    const_cast<bmpImage*>(this)->w_ = ReadLittleEndianDWORD();
+    const_cast<bmpImage*>(this)->h_ = ReadLittleEndianDWORD();
   }
 
   if (!datas) fclose(bmpFile);
 
-  W=w;
-  H=h;
+  W = w();
+  H = h();
   return;
 }
 
@@ -827,5 +827,5 @@ error:
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.16 2003/06/24 07:10:48 spitzak Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.17 2003/08/04 06:55:33 spitzak Exp $"
 //
