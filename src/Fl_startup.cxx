@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_startup.cxx,v 1.6 2001/07/25 17:22:20 clip Exp $"
+// "$Id: Fl_startup.cxx,v 1.7 2001/07/29 21:38:41 spitzak Exp $"
 //
 // Startup, scheme and theme handling code for the Fast Light
 // Tool Kit (FLTK).
@@ -40,7 +40,7 @@
 #include <fltk/x.h>
 #include <config.h>
 
-#ifndef WIN32
+#ifndef _WIN32
 #include <unistd.h>
 #else
 #include <io.h>
@@ -76,13 +76,25 @@ static int theme_handler(int e) {
 // this is necessary for future compatibility
 FL_API const char* fl_config_section = "default";
 
+static void rest_of_startup();
+
 // Startup stuff.  OK to execute more than once.
 static bool beenhere = false;
 void Fl::startup() {
+  if (beenhere) return;
   beenhere = true;
-#ifndef WIN32
+#ifndef _WIN32
   fl_open_display();
 #endif
+  rest_of_startup();
+}
+
+int Fl::reload_scheme() {
+  if (beenhere) {rest_of_startup(); return 0; }
+  return 1;
+}
+
+static void rest_of_startup() {
   conf_clear_cache(); // Force rereading of config files.
   char temp[PATH_MAX];
   const char* s = Fl::scheme();
@@ -284,11 +296,6 @@ int Fl::scheme(const char* s) {
   return 1;
 }
 
-int Fl::reload_scheme() {
-  if (beenhere) { Fl::startup(); return 0; }
-  return 1;
-}
-
 static int load_plugin(const char *t) {
 // don't try to load themes if not linked to shared libraries
 #ifdef FL_SHARED
@@ -377,5 +384,5 @@ static struct Startup {
 
 
 //
-// End of "$Id: Fl_startup.cxx,v 1.6 2001/07/25 17:22:20 clip Exp $".
+// End of "$Id: Fl_startup.cxx,v 1.7 2001/07/29 21:38:41 spitzak Exp $".
 //
