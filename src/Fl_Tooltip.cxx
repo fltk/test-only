@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.24 2000/08/11 00:53:47 clip Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.25 2001/01/23 18:47:55 spitzak Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -56,7 +56,7 @@ void Fl_TooltipBox::layout() {
   int ox = Fl::event_x_root()+5;
   //int ox = X+W/2;
   int oy = Y + H+2;
-  for (Fl_Window* p = widget->window(); p; p = p->window()) {
+  for (Fl_Widget* p = widget; p; p = p->parent()) {
     //ox += p->x();
     oy += p->y();
   }
@@ -105,7 +105,7 @@ void
 Fl_Tooltip::enter(Fl_Widget* w) {
   if (cheesy_flag  || w == widget) return;
   if (!w || w == window) { exit(widget); widget = 0; return; }
-  enter(w, w->x(), w->y(), w->w(), w->h(), w->tooltip());
+  enter(w, 0, 0, w->w(), w->h(), w->tooltip());
 }
 
 void
@@ -145,5 +145,5 @@ Fl_Named_Style* Fl_Tooltip::default_style =
   new Fl_Named_Style("Tooltip", revert, &Fl_Tooltip::default_style);
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.24 2000/08/11 00:53:47 clip Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.25 2001/01/23 18:47:55 spitzak Exp $".
 //

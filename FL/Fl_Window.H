@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.43 2000/09/27 16:25:48 spitzak Exp $"
+// "$Id: Fl_Window.H,v 1.44 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -79,8 +79,8 @@ public:
   int x_root() const ;
   int y_root() const ;
 
-  static Fl_Window *current() {return current_;}
-  void make_current();
+  static const Fl_Window *current() {return current_;}
+  void make_current() const;
 
   void cursor(Fl_Cursor, Fl_Color=FL_BLACK, Fl_Color=FL_WHITE);
   static void default_callback(Fl_Window*, void* v);
@@ -95,7 +95,7 @@ public:
 
 protected:
   virtual void create();
-  static Fl_Window *current_;
+  static const Fl_Window *current_;
 
 private:
 
@@ -120,5 +120,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.43 2000/09/27 16:25:48 spitzak Exp $".
+// End of "$Id: Fl_Window.H,v 1.44 2001/01/23 18:47:54 spitzak Exp $".
 //

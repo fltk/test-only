@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.31 2001/01/02 00:20:28 clip Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.32 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -75,11 +75,11 @@ void Fl_Adjuster::draw() {
   }
 
   if (damage()&FL_DAMAGE_ALL || last == 1 || highlight == 1)
-    draw_glyph(FL_GLYPH_FASTARROW, x(), y()+2*dy, W, H, f[1]);
+    draw_glyph(FL_GLYPH_FASTARROW, 0, 2*dy, W, H, f[1]);
   if (damage()&FL_DAMAGE_ALL || last == 2 || highlight == 2)
-    draw_glyph(FL_GLYPH_MEDIUMARROW, x()+dx, y()+dy, W, H, f[2]);
+    draw_glyph(FL_GLYPH_MEDIUMARROW, dx, dy, W, H, f[2]);
   if (damage()&FL_DAMAGE_ALL || last == 3 || highlight == 3)
-    draw_glyph(FL_GLYPH_SLOWARROW, x()+2*dx, y(), W, H, f[3]);
+    draw_glyph(FL_GLYPH_SLOWARROW, 2*dx, 0, W, H, f[3]);
 
   last = highlight;
 }
@@ -91,9 +91,9 @@ int Fl_Adjuster::handle(int event) {
 
   int which_button;
   if (w()>=h())
-    which_button = 3*(mx-x())/w() + 1;
+    which_button = 3*mx/w() + 1;
   else
-    which_button = 3-3*(Fl::event_y()-y()-1)/h();
+    which_button = 3-3*(Fl::event_y()-1)/h();
   if (which_button > 3) which_button = 3;
   else if (which_button < 1) which_button = 1;
 
@@ -109,7 +109,7 @@ int Fl_Adjuster::handle(int event) {
 
   case FL_DRAG:
     if (w() >= h()) {
-      delta = x()+(drag-1)*w()/3;	// left edge of button
+      delta = (drag-1)*w()/3;	// left edge of button
       if (mx < delta)
 	delta = mx-delta;
       else if (mx > (delta+w()/3)) // right edge of button
@@ -117,10 +117,10 @@ int Fl_Adjuster::handle(int event) {
       else
 	delta = 0;
     } else {
-      if (mx < x())
-	delta = mx-x();
-      else if (mx > (x()+w()))
-	delta = mx-x()-w();
+      if (mx < 0)
+	delta = mx;
+      else if (mx > w())
+	delta = mx-w();
       else
 	delta = 0;
     }
@@ -177,5 +177,5 @@ Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.31 2001/01/02 00:20:28 clip Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.32 2001/01/23 18:47:54 spitzak Exp $".
 //

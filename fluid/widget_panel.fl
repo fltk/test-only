@@ -35,8 +35,8 @@ Function {make_widget_panel()} {open
           callback image_cb
           tooltip {Select an image to label the widget}
           xywh {90 70 195 25} align 524308
-          code0 {o->color(o->window_color());}
-          code1 {o->box(o->window_box());}
+          code0 {o->color(o->text_background());}
+          code1 {o->box(o->text_box());}
         }
         Fl_Light_Button include_image_button {
           label {image inlined}
@@ -254,8 +254,8 @@ application and will prevent events from going to other windows.}
           code1 {o->menu(boxmenu);}
         } {}
         Fl_Choice {} {
-          label {Window Box:}
-          callback window_box_cb
+          label {Text Box:}
+          callback text_box_cb
           tooltip {Type of box to draw around a text display or other sunken area of the widget.}
           xywh {95 70 270 25}
           code0 {extern Fl_Menu_Item boxmenu[];}

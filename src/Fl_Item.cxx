@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.10 2000/10/17 07:50:08 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.11 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -50,8 +50,7 @@ Fl_Item::Fl_Item(const char* l) : Fl_Widget(0,0,0,0,l) {
 void Fl_Item::draw() {
   draw_box();
 
-  int x = this->x(); int y = this->y();
-  int w = this->w(); int h = this->h();
+  int x = 0; int y = 0; int w = this->w(); int h = this->h();
   box()->inset(x,y,w,h);
 
   if (type() == FL_TOGGLE_ITEM || type()==FL_RADIO_ITEM) {
@@ -122,9 +121,9 @@ Fl_Divider::Fl_Divider() : Fl_Widget(0,0,0,0) {
 
 void Fl_Divider::draw() {
   fl_color(FL_DARK3);
-  fl_xyline(x(), y(), x()+w());
+  fl_xyline(0, 0, w());
   fl_color(FL_LIGHT3);
-  fl_xyline(x(), y()+1, x()+w());
+  fl_xyline(0, 1, w());
 }
 
 void Fl_Divider::layout() {

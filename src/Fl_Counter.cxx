@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.38 2001/01/02 00:20:28 clip Exp $"
+// "$Id: Fl_Counter.cxx,v 1.39 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -72,19 +72,19 @@ void Fl_Counter::draw() {
   int xx[5], ww[5];
   if (type() == FL_NORMAL_COUNTER) {
     int W = w()*15/100;
-    xx[1] = x();	 ww[1] = W;
-    xx[2] = x()+1*W;     ww[2] = W;
-    xx[0] = x()+2*W;     ww[0] = w()-4*W;
-    xx[3] = x()+w()-2*W; ww[3] = W;
-    xx[4] = x()+w()-1*W; ww[4] = W;
+    xx[1] = 0;	     ww[1] = W;
+    xx[2] = 1*W;     ww[2] = W;
+    xx[0] = 2*W;     ww[0] = w()-4*W;
+    xx[3] = w()-2*W; ww[3] = W;
+    xx[4] = w()-1*W; ww[4] = W;
   } else {
     int W = w()*20/100;
-    xx[2] = x();	 ww[2] = W;
-    xx[0] = x()+W;	 ww[0] = w()-2*W;
-    xx[3] = x()+w()-1*W; ww[3] = W;
+    xx[2] = 0;	     ww[2] = W;
+    xx[0] = W;	     ww[0] = w()-2*W;
+    xx[3] = w()-1*W; ww[3] = W;
   }
 
-  draw_text_box(xx[0], y(), ww[0], h());
+  draw_text_box(xx[0], 0, ww[0], h());
 
   char str[128]; format(str);
   fl_font(text_font(), text_size());
@@ -92,23 +92,23 @@ void Fl_Counter::draw() {
     fl_color(selection_color());
     int h = text_size()+leading();
     int w = fl_width(str);
-    fl_rectf(xx[0]+(ww[0]-w)/2,y()+(this->h()-h)/2,w,h);
+    fl_rectf(xx[0]+(ww[0]-w)/2, (this->h()-h)/2,w,h);
     fl_color(selection_text_color());
   } else {
     fl_color(get_glyph_color());
   }
-  fl_draw(str, xx[0], y(), ww[0], h(), FL_ALIGN_CENTER);
+  fl_draw(str, xx[0], 0, ww[0], h(), FL_ALIGN_CENTER);
 
   if (type() == FL_NORMAL_COUNTER &&
       (damage()&FL_DAMAGE_ALL || last == 1 || highlight == 1))
-    draw_glyph(FL_GLYPH_2LEFTARROW, xx[1], y(), ww[1], h(), fl[1]);
+    draw_glyph(FL_GLYPH_2LEFTARROW, xx[1], 0, ww[1], h(), fl[1]);
   if (damage()&FL_DAMAGE_ALL || last == 2 || highlight == 2)
-    draw_glyph(FL_GLYPH_LEFTARROW, xx[2], y(), ww[2], h(), fl[2]);
+    draw_glyph(FL_GLYPH_LEFTARROW, xx[2], 0, ww[2], h(), fl[2]);
   if (damage()&FL_DAMAGE_ALL || last == 3 || highlight == 3)
-    draw_glyph(FL_GLYPH_RIGHTARROW, xx[3], y(), ww[3], h(), fl[3]);
+    draw_glyph(FL_GLYPH_RIGHTARROW, xx[3], 0, ww[3], h(), fl[3]);
   if (type() == FL_NORMAL_COUNTER &&
       (damage()&FL_DAMAGE_ALL || last == 4 || highlight == 4))
-    draw_glyph(FL_GLYPH_2RIGHTARROW, xx[4], y(), ww[4], h(), fl[4]);
+    draw_glyph(FL_GLYPH_2RIGHTARROW, xx[4], 0, ww[4], h(), fl[4]);
   last = highlight;
 }
 
@@ -139,14 +139,14 @@ int Fl_Counter::calc_mouseobj() {
   int mx = Fl::event_x();
   if (type() == FL_NORMAL_COUNTER) {
     int W = w()*15/100;
-    if (mx < x()+W) return 1;
-    if (mx < x()+2*W) return 2;
-    if (mx >= x()+w()-W) return 4;
-    if (mx >= x()+w()-2*W) return 3;
+    if (mx < W) return 1;
+    if (mx < 2*W) return 2;
+    if (mx >= w()-W) return 4;
+    if (mx >= w()-2*W) return 3;
   } else {
     int W = w()*20/100;
-    if (mx < x()+W) return 2;
-    if (mx >= x()+w()-W) return 3;
+    if (mx < W) return 2;
+    if (mx >= w()-W) return 3;
   }
   return 0;
 }
@@ -214,5 +214,5 @@ Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(
 }
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.38 2001/01/02 00:20:28 clip Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.39 2001/01/23 18:47:54 spitzak Exp $".
 //

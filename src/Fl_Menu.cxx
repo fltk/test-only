@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.100 2001/01/02 04:50:37 clip Exp $"
+// "$Id: Fl_Menu.cxx,v 1.101 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -144,13 +144,14 @@ void MenuTitle::draw() {
 
   // this allow a toggle or other widget to preview it's state:
   if (Fl::event_pushed()) Fl::pushed_ = widget;
-  widget->x(5);
-  widget->y((h()-widget->height())/2);
+  fl_x_ = 5;
+  fl_y_ = (h()-widget->height())/2;
   int save_w = widget->w(); widget->w(w()-10);
   widget->draw();
   widget->w(save_w);
   widget->clear_flag(FL_SELECTED);
   Fl::pushed_ = 0;
+  fl_x_ = fl_y_ = 0;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -335,12 +336,13 @@ void MenuWindow::draw() {
 	}
       }
       if (!widget->active_r()) flags |= FL_INACTIVE;
-      widget->x(x);
-      widget->y(y+leading/2);
+      fl_x_ = x;
+      fl_y_ = y+leading/2;
       int save_w = widget->w(); widget->w(w);
       widget->draw();
       widget->w(save_w);
       Fl::pushed_ = 0;
+      fl_x_ = fl_y_ = 0;
 
       if (is_parent(i)) {
 	// Use the item's fontsize for the size of the arrow, rather than h:
@@ -577,7 +579,7 @@ int Fl_Menu_::pulldown(
   ::style->color = text_background();
 
   // figure out where to pop up in screen coordinates:
-  if (W) for (Fl_Window* w = window(); w; w = w->window()) {
+  if (W) for (Fl_Widget* w = this; w; w = w->parent()) {
     X += w->x();
     Y += w->y();
   } else {
@@ -730,5 +732,5 @@ int Fl_Menu_::pulldown(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.100 2001/01/02 04:50:37 clip Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.101 2001/01/23 18:47:54 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.51 2000/09/27 16:25:51 spitzak Exp $"
+// "$Id: Fl_Choice.cxx,v 1.52 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@
 extern char fl_draw_shortcut;
 
 void Fl_Choice::draw() {
-  int X=x(); int Y=y(); int W=w(); int H=h();
+  int X=0; int Y=0; int W=w(); int H=h();
 #if MOTIF_STYLE
   draw_button();
   box()->inset(X,Y,W,H);
@@ -58,13 +58,15 @@ void Fl_Choice::draw() {
     if (focused()) o->set_flag(FL_SELECTED);
     else o->clear_flag(FL_SELECTED);
     fl_clip(X+2, Y+2, W-w1-2, H-4);
-    o->x(X);
-    o->y(Y+(H-o->height())/2);
+    int save_x = fl_x_; fl_x_ += X;
+    int save_y = fl_y_; fl_y_ += Y+(H-o->height())/2;
     int save_w = o->w(); o->w(W-w1);
     if (!(flags() & FL_NO_SHORTCUT_LABEL)) fl_draw_shortcut = 2;
     o->draw();
     fl_draw_shortcut = 0;
     o->w(save_w);
+    fl_y_ = save_y;
+    fl_x_ = save_x;
     fl_pop_clip();
   }
   // draw the little mark at the right:
@@ -140,7 +142,7 @@ int Fl_Choice::handle(int e) {
 //  Fl::event_is_click(0);
     take_focus();
   EXECUTE:
-    if (pulldown(x(), y(), w(), h(), 0)) redraw();
+    if (pulldown(0, 0, w(), h(), 0)) redraw();
     return 1;
 
   case FL_SHORTCUT:
@@ -193,5 +195,5 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.51 2000/09/27 16:25:51 spitzak Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.52 2001/01/23 18:47:54 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.35 2001/01/02 00:20:28 clip Exp $"
+// "$Id: Fl_Browser.cxx,v 1.36 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -403,11 +403,13 @@ void Fl_Browser::draw_item() {
     }
     fl_line_style(0);
   }
-  widget->x(x);
-  widget->y(y+(leading()+1)/2-1);
+  int save_x = fl_x_; fl_x_ += x;
+  int save_y = fl_y_; fl_y_ += y+(leading()+1)/2-1;
   int save_w = widget->w(); widget->w(X+W-x);
   widget->draw();
   widget->w(save_w);
+  fl_y_ = save_y;
+  fl_x_ = save_x;
 
   widget->invert_flag(preview_open);
 }
@@ -509,7 +511,7 @@ void Fl_Browser::layout() {
 
   // figure out the visible area:
 
-  X = x(); Y = y(); W = w(); H = h();
+  X = 0; Y = 0; W = w(); H = h();
   text_box()->inset(X,Y,W,H);
   if (scrollbar.visible()) {
     W -= scrollbar.w();
@@ -928,5 +930,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.35 2001/01/02 00:20:28 clip Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.36 2001/01/23 18:47:54 spitzak Exp $".
 //

@@ -214,6 +214,7 @@ int main(int argc, char **argv) {
         o->callback((Fl_Callback*)callback);
         o->angles(0,360);
       }
+      o->fix_old_positions();
       o->end();
     }
     { Fl_Box* o = new Fl_Box(300, 375, 145, 120, "Fl_Roller");
@@ -236,6 +237,7 @@ red) to show the areas these colors affect.");
       o->label_size(10);
       o->align(FL_ALIGN_WRAP);
     }
+    o->fix_old_positions();
     o->end();
   }
   w->show(argc, argv);

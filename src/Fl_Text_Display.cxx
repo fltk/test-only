@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.5 2000/08/10 09:24:32 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.6 2001/01/23 18:47:55 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -186,7 +186,7 @@ int Fl_Text_Display::longest_vline() {
 */
 void Fl_Text_Display::layout() {
   if (!buffer() || !visible_r()) return;
-  int X = x(), Y = y(), W = w(), H = h();
+  int X = 0, Y = 0, W = w(), H = h();
   text_box()->inset(X, Y, W, H);
   text_area.x = X+LEFT_MARGIN;
   text_area.y = Y+BOTTOM_MARGIN;
@@ -257,6 +257,9 @@ void Fl_Text_Display::layout() {
             large buffers.  If an efficient and non-costly way of doing this
             can be found, this might be a way to go.
       */
+      /* WAS: Suggestion: Try turning the horizontal scrollbar on when
+	 you first see a line that is too wide in the window, but then
+	 don't turn it off (ie mix both of your solutions). */
       if (scrollbar_align() & (FL_ALIGN_TOP|FL_ALIGN_BOTTOM) &&
           (mVScrollBar->visible() || longest_vline() > text_area.w))
       {
@@ -1785,12 +1788,11 @@ void Fl_Text_Display::draw(void) {
 
   // draw the scrollbars
   if (damage() & (FL_DAMAGE_ALL | FL_DAMAGE_CHILD)) {
-    //printf("drawing scrollbars\n");
-    if (mVScrollBar->damage() && mVScrollBar->visible())
-      ((Fl_Widget*)mVScrollBar)->draw();
-    if (mHScrollBar->damage() && mHScrollBar->visible())
-      ((Fl_Widget*)mHScrollBar)->draw();
+    mVScrollBar->damage(FL_DAMAGE_ALL);
+    mHScrollBar->damage(FL_DAMAGE_ALL);
   }
+  update_child(*mVScrollBar);
+  update_child(*mHScrollBar);
 
   // draw all of the text
   if (damage() & (FL_DAMAGE_ALL | FL_DAMAGE_EXPOSE)) {
@@ -1932,5 +1934,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.5 2000/08/10 09:24:32 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.6 2001/01/23 18:47:55 spitzak Exp $".
 //

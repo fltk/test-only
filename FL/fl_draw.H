@@ -1,7 +1,7 @@
 //
-// "$Id: fl_draw.H,v 1.23 2000/09/11 07:29:32 spitzak Exp $"
+// "$Id: fl_draw.H,v 1.24 2001/01/23 18:47:54 spitzak Exp $"
 //
-// Portable drawing function header file for the Fast Light Tool Kit (FLTK).
+// The fltk drawing library
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -35,6 +35,20 @@ FL_API void fl_color(Fl_Color);
 inline void fl_color(uchar r, uchar g, uchar b) {fl_color(fl_rgb(r,g,b));}
 extern FL_API Fl_Color fl_color_;
 inline Fl_Color fl_color() {return fl_color_;}
+
+// current area:
+extern FL_API int fl_x_;
+inline int fl_x() {return fl_x_;}
+inline int fl_x(int x) {return fl_x_ = x;}
+extern FL_API int fl_y_;
+inline int fl_y() {return fl_y_;}
+inline int fl_y(int x) {return fl_y_ = x;}
+extern FL_API int fl_w_;
+inline int fl_w() {return fl_w_;}
+inline int fl_w(int x) {return fl_w_ = x;}
+extern FL_API int fl_h_;
+inline int fl_h() {return fl_h_;}
+inline int fl_h(int x) {return fl_h_ = x;}
 
 // clip:
 FL_API void fl_clip(int x, int y, int w, int h);
@@ -105,10 +119,7 @@ FL_API void fl_scale(double x);
 FL_API void fl_translate(double x, double y);
 FL_API void fl_rotate(double d);
 FL_API void fl_mult_matrix(double a, double b, double c, double d, double x,double y);
-FL_API void fl_begin_points();
-FL_API void fl_begin_line();
-FL_API void fl_begin_loop();
-FL_API void fl_begin_polygon();
+FL_API void fl_begin();
 FL_API void fl_vertex(double x, double y);
 FL_API void fl_curve(double, double, double, double, double, double, double, double);
 FL_API void fl_arc(double x, double y, double r, double start, double a);
@@ -117,7 +128,6 @@ FL_API void fl_end_points();
 FL_API void fl_end_line();
 FL_API void fl_end_loop();
 FL_API void fl_end_polygon();
-FL_API void fl_begin_complex_polygon();
 FL_API void fl_gap();
 FL_API void fl_end_complex_polygon();
 // get and use transformed positions:
@@ -181,9 +191,14 @@ FL_API int fl_add_symbol(const char* name, void (*drawit)(Fl_Color), int scalabl
 //void fl_frame2(const char* s, int x, int y, int w, int h);
 #define fl_draw_box(b,x,y,w,h,c) ((b)->draw(x,y,w,h,c))
 #define fl_shortcut_label(l) Fl::key_name(l)
+#define fl_begin_points() fl_begin()
+#define fl_begin_line() fl_begin()
+#define fl_begin_loop() fl_begin()
+#define fl_begin_polygon() fl_begin()
+#define fl_begin_complex_polygon() fl_begin()
 
 #endif
 
 //
-// End of "$Id: fl_draw.H,v 1.23 2000/09/11 07:29:32 spitzak Exp $".
+// End of "$Id: fl_draw.H,v 1.24 2001/01/23 18:47:54 spitzak Exp $".
 //

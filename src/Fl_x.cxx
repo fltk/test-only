@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.99 2000/12/12 09:02:53 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.100 2001/01/23 18:47:55 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -979,10 +979,14 @@ int fl_handle(const XEvent& xevent)
 ////////////////////////////////////////////////////////////////
 
 void Fl_Window::layout() {
+  int x = this->x(); int y = this->y();
+  for (Fl_Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
+    x += p->x(); y += p->y();
+  }
   if (ow() == w() && oh() == h()) {
     if (this == resize_from_system) resize_from_system = 0;
-    else if (i && (ox() != x() || oy() != y()))
-      XMoveWindow(fl_display, i->xid, x(), y());
+    else if (i && (ox() != this->x() || oy() != this->y()))
+      XMoveWindow(fl_display, i->xid, x, y);
     for (int n = children(); n--;) {
       Fl_Widget* o = child(n);
       if (o->damage() & FL_DAMAGE_LAYOUT) o->layout();
@@ -993,7 +997,7 @@ void Fl_Window::layout() {
     if (this == resize_from_system) resize_from_system = 0;
     else if (i) {
       //if (!resizable()) size_range(w(), h(), w(), h());
-      XMoveResizeWindow(fl_display, i->xid, x(), y(),
+      XMoveResizeWindow(fl_display, i->xid, x, y,
 			w()>0 ? w() : 1, h()>0 ? h() : 1);
       i->wait_for_expose = 1; // (breaks menus somehow...)
       // redraw(); // 
@@ -1212,16 +1216,19 @@ void Fl_Window::label(const char *name,const char *iname) {
 // Drawing context
 
 Window fl_window;
-Fl_Window *Fl_Window::current_;
+const Fl_Window *Fl_Window::current_;
 GC fl_gc;
+// the current drawing origin
+int fl_x_, fl_y_;
 
-void Fl_Window::make_current() {
+void Fl_Window::make_current() const {
   static GC gc;	// the GC used by all X windows with fl_visual
   if (!gc) gc = XCreateGC(fl_display, i->xid, 0, 0);
   fl_window = i->xid;
   fl_gc = gc;
   current_ = this;
   fl_clip_region(0);
+  fl_x_ = fl_y_ = 0;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1270,5 +1277,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.99 2000/12/12 09:02:53 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.100 2001/01/23 18:47:55 spitzak Exp $".
 //

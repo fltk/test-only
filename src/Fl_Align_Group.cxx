@@ -65,7 +65,6 @@ void Fl_Align_Group::layout() {
   int W = (w() - (variable_is_y ? 0:total_label_space) - (nx + 1)*dw()) / nx;
   int H = (h() - (variable_is_y ? total_label_space:0) - (ny + 1)*dh()) / ny; 
   int cx = dw(), cy = dh();
-  if (!is_window()) {cx += x(); cy += y();}
   int icx = cx, icy = cy;
 
   u = v = 0;

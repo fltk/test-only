@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.41 2000/09/27 16:25:51 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.42 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 void Fl_Menu_Bar::draw() {
   if (damage()&(~FL_DAMAGE_HIGHLIGHT)) draw_box();
   if (!children()) { last_ = -1; return; }
-  int X = x()+3;
+  int X = 3;
   for (int i = 0; i < children(); i++) {
     Fl_Widget* widget = child(i);
     if (!widget->visible()) continue;
@@ -43,14 +43,16 @@ void Fl_Menu_Bar::draw() {
 	widget->set_flag(FL_HIGHLIGHT);
       else
 	widget->clear_flag(FL_HIGHLIGHT);
-      int x1 = X; int y1 = y(); int w1 = W; int h1 = this->h();
+      int x1 = X; int y1 = 0; int w1 = W; int h1 = this->h();
       box()->inset(x1,y1,w1,h1);
       text_box()->draw(this, X, y1+1, W, h1-2, widget->flags()&~FL_VALUE);
-      widget->x(X+5);
-      widget->y(y()+(h()-widget->h())/2);
+      int save_x = fl_x_; fl_x_ += X+5;
+      int save_y = fl_y_; fl_y_ += (h()-widget->h())/2;
       int save_w = widget->w(); widget->w(W-10);
       widget->draw();
       widget->w(save_w);
+      fl_y_ = save_y;
+      fl_x_ = save_x;
     }
     X += W;
   }
@@ -59,7 +61,7 @@ void Fl_Menu_Bar::draw() {
 
 int Fl_Menu_Bar::handle(int event) {
   if (!children()) return 0;
-  int X = x()+3;
+  int X = 3;
   int i;
   highlight_ = -1;
   // FL_LEAVE events don't get the right coordinates
@@ -67,7 +69,7 @@ int Fl_Menu_Bar::handle(int event) {
     Fl_Widget* widget = child(i);
     if (!widget->visible()) continue;
     int W = widget->width() + 10;
-    if (Fl::event_inside(X, y(), W, h())) {
+    if (Fl::event_inside(X, 0, W, h())) {
       highlight_ = i;
       break;
     }
@@ -85,7 +87,7 @@ int Fl_Menu_Bar::handle(int event) {
     value(-1);
   J1:
     highlight_ = -1; damage(FL_DAMAGE_HIGHLIGHT);
-    pulldown(x(), y(), w(), h(), 0, 1);
+    pulldown(0, 0, w(), h(), 0, 1);
     return 1;
   case FL_SHORTCUT:
     for (i = 0; i < children(); i++) {
@@ -138,5 +140,5 @@ Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.41 2000/09/27 16:25:51 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.42 2001/01/23 18:47:54 spitzak Exp $".
 //

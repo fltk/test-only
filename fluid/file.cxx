@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.21 2000/09/05 17:36:20 spitzak Exp $"
+// "$Id: file.cxx,v 1.22 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -651,9 +651,10 @@ void fl_end_group() {
     }
     g->oy_ = Y-g->oy_-g->h();
     //}
+  g->fix_old_positions();
   g->end();
 }
 
 //
-// End of "$Id: file.cxx,v 1.21 2000/09/05 17:36:20 spitzak Exp $".
+// End of "$Id: file.cxx,v 1.22 2001/01/23 18:47:54 spitzak Exp $".
 //

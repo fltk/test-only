@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.46 2001/01/02 00:20:28 clip Exp $"
+// "$Id: Fl_Slider.cxx,v 1.47 2001/01/23 18:47:55 spitzak Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -123,7 +123,7 @@ void Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags f) {
 
 void Fl_Slider::draw() {
   if (damage()&(~FL_DAMAGE_HIGHLIGHT)) draw_text_frame();
-  int X=x(); int Y=y(); int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
+  int X=0; int Y=0; int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
   Fl_Flags f = 0;
   if (!active_r()) {
     f |= FL_INACTIVE;
@@ -208,7 +208,7 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
 }
 
 int Fl_Slider::handle(int event) {
-  int X=x(); int Y=y(); int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
+  int X=0; int Y=0; int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
   if (event == FL_PUSH) take_focus();
 
   return handle(event,X,Y,W,H);
@@ -236,5 +236,5 @@ Fl_Slider::Fl_Slider(uchar t, int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.46 2001/01/02 00:20:28 clip Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.47 2001/01/23 18:47:55 spitzak Exp $".
 //

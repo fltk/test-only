@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group_Type.cxx,v 1.11 2000/10/17 07:50:08 spitzak Exp $"
+// "$Id: Fl_Group_Type.cxx,v 1.12 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Fl_Group object code for the Fast Light Tool Kit (FLTK).
 //
@@ -66,20 +66,29 @@ void fix_group_size(Fl_Type *t) {
   if (!t || !t->is_group() || t->is_menu_button()) return;
   Fl_Group* g = (Fl_Group*)((Fl_Group_Type*)t)->o;
   //if (g->resizable()) return;
-  int X = g->x();
-  int Y = g->y();
-  int R = X+g->w();
-  int B = Y+g->h();
+  int X = 0;
+  int Y = 0;
+  int R = g->w();
+  int B = g->h();
   for (Fl_Type *nn = t->first_child; nn; nn = nn->next_brother) {
     if (nn->is_widget()) {
-      Fl_Widget_Type* n = (Fl_Widget_Type*)nn;
-      int x = n->o->x();  if (x < X) X = x;
-      int y = n->o->y();  if (y < Y) Y = y;
-      int r = x+n->o->w();if (r > R) R = r;
-      int b = y+n->o->h();if (b > B) B = b;
+      Fl_Widget* o = ((Fl_Widget_Type*)nn)->o;
+      int x = o->x();  if (x < X) X = x;
+      int y = o->y();  if (y < Y) Y = y;
+      int r = x+o->w();if (r > R) R = r;
+      int b = y+o->h();if (b > B) B = b;
     }
   }
-  g->resize(X,Y,R-X,B-Y);
+  g->resize(g->x()+X,g->y()+Y,R-X,B-Y);
+  if (X || Y) {
+    for (Fl_Type *nn = t->first_child; nn; nn = nn->next_brother) {
+      if (nn->is_widget()) {
+	Fl_Widget* o = ((Fl_Widget_Type*)nn)->o;
+	o->x(o->x()-X);
+	o->y(o->y()-Y);
+      }
+    }
+  }
   g->init_sizes();
 }
 
@@ -97,7 +106,7 @@ void group_cb(Fl_Widget *, void *) {
   force_parent = 1;
   Fl_Group_Type *n = (Fl_Group_Type*)(Fl_Group_type.make());
   n->move_before(q);
-  n->o->resize(q->o->x(),q->o->y(),q->o->w(),q->o->h());
+  n->o->resize(0,0,0,0);
   for (Fl_Type *t = q->parent->first_child; t;) {
     Fl_Type* next = t->next_brother;
     if (t->selected && t != n) {
@@ -274,5 +283,5 @@ public:
 Fl_Tile_Type Fl_Tile_type;	// the "factory"
 
 //
-// End of "$Id: Fl_Group_Type.cxx,v 1.11 2000/10/17 07:50:08 spitzak Exp $".
+// End of "$Id: Fl_Group_Type.cxx,v 1.12 2001/01/23 18:47:54 spitzak Exp $".
 //

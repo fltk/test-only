@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.25 2000/08/12 08:43:53 spitzak Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.26 2001/01/23 18:47:55 spitzak Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -34,7 +34,6 @@ void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
   int numchildren = s->children(); int i;
   for (i = numchildren; i--;) {
     Fl_Widget& w = *s->child(i);
-    if (!fl_not_clipped(w.x(), w.y(), w.w(), w.h())) continue;
     // Partial-clipped children with their own damage will still need
     // to be redrawn before the scroll is finished drawing.  Don't clear
     // their damage in this case:
@@ -44,8 +43,7 @@ void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
 	  w.x()+w.w() > X+W || w.y()+w.h() > Y+H)
 	save = w.damage();
     }
-    w.set_damage(FL_DAMAGE_ALL);
-    w.draw_n_clip();
+    s->draw_child(w);
     w.set_damage(save);
   }
   // fill the rest of the region with color:
@@ -57,7 +55,7 @@ void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
 }
 
 void Fl_Scroll::bbox(int& X, int& Y, int& W, int& H) {
-  X = x(); Y = y(); W = w(); H = h(); text_box()->inset(X,Y,W,H);
+  X = 0; Y = 0; W = w(); H = h(); text_box()->inset(X,Y,W,H);
   if (scrollbar.visible()) {
     W -= scrollbar.w();
     if (scrollbar.flags() & FL_ALIGN_LEFT) X += scrollbar.w();
@@ -111,15 +109,15 @@ void Fl_Scroll::draw() {
 void Fl_Scroll::layout() {
 
   // move all the children and accumulate their bounding boxes:
-  int dx = layoutdx + ox() - x();
-  int dy = layoutdy + oy() - y();
+  int dx = layoutdx;
+  int dy = layoutdy;
   layoutdx = layoutdy = 0;
   scrolldx += dx;
   scrolldy += dy;
-  int l=x()+w();
-  int r=x();
-  int t=y()+h();
-  int b=y();
+  int l = w();
+  int r = 0;
+  int t = h();
+  int b = 0;
   int numchildren = children();
   for (int i=0; i < numchildren; i++) {
     Fl_Widget* o = child(i);
@@ -132,7 +130,7 @@ void Fl_Scroll::layout() {
   }
 
   // See if children would fit if we had no scrollbars...
-  int X=x(); int Y=y(); int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
+  int X=0; int Y=0; int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
   int vneeded = 0;
   int hneeded = 0;
   if (type() & VERTICAL) {
@@ -242,18 +240,23 @@ int Fl_Scroll::handle(int event) {
       // The event indicates that the focus changed to a different child,
       // auto-scroll to show it:
       Fl_Widget* w = Fl::focus();
-      int X,Y,R,B; bbox(X,Y,R,B); R += X; B += Y;
       int x = w->x();
+      int y = w->y();
+      for (Fl_Group* p = w->parent(); p != this; p = p->parent()) {
+	// if (!p) return 0; // this should never happen
+	x += p->x();
+	y += p->y();
+      }
+      int X,Y,R,B; bbox(X,Y,R,B); R += X; B += Y;
       int r = x+w->w();
       int dx = 0;
       if (x < X) {dx = X-x; if (r+dx > R) {dx = R-r; if (dx < 0) dx = 0;}}
       else if (r > R) {dx = R-r; if (x+dx < X) {dx = X-x; if (dx > 0) dx = 0;}}
-      int y = w->y();
       int b = y+w->h();
       int dy = 0;
       if (y < Y) {dy = Y-y; if (b+dy > B) {dy = B-b; if (dy < 0) dy = 0;}}
       else if (b > B) {dy = B-b; if (y+dy < Y) {dy = Y-y; if (dy > 0) dy = 0;}}
-      position(xposition_-dx+layoutdx, yposition_-dy+layoutdy);
+      position(xposition_-dx, yposition_-dy);
     }
     break;
 
@@ -282,5 +285,5 @@ int Fl_Scroll::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.25 2000/08/12 08:43:53 spitzak Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.26 2001/01/23 18:47:55 spitzak Exp $".
 //

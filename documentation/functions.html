@@ -267,13 +267,11 @@ event_is_click()</tt> is true.
 Fl::event_clicks()</tt>.  This can be used to set it to zero so that 
 later code does not think an item was double-clicked.</p>
 
-<h3><A name=event_inside>int Fl::event_inside(const Fl_Widget *) const
-<BR>int Fl::event_inside(int x, int y, int w, int h)</A></h3>
+<h3><A name=event_inside>int Fl::event_inside(int x, int y, int w, int h)</A></h3>
 
 Returns non-zero if the current <tt>event_x</tt> and <tt>event_y</tt>
-put it inside the widget or inside an arbitrary bounding box.  You 
-should always call this rather than doing your own comparison so you 
-are consistent about edge effects. 
+put it inside the passed box.  You should always call this rather than
+doing your own comparison so you are consistent about edge effects.
 
 <h3><A name=event_is_click>int Fl::event_is_click()
 <BR>void Fl::event_is_click(0)</A></h3>

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.5 2000/07/10 07:35:43 spitzak Exp $"
+// "$Id: fl_arci.cxx,v 1.6 2001/01/23 18:47:55 spitzak Exp $"
 //
 // Arc (integer) drawing functions for the Fast Light Tool Kit (FLTK).
 //
@@ -42,13 +42,18 @@
 void fl_arc(int x,int y,int w,int h,double a1,double a2) {
   if (w <= 0 || h <= 0) return;
 #ifdef WIN32
+  x += fl_x_; y += fl_y_;
   int xa = x+w/2+int(w*cos(a1/180.0*M_PI));
   int ya = y+h/2-int(h*sin(a1/180.0*M_PI));
   int xb = x+w/2+int(w*cos(a2/180.0*M_PI));
   int yb = y+h/2-int(h*sin(a2/180.0*M_PI));
   Arc(fl_gc, x, y, x+w, y+h, xa, ya, xb, yb); 
 #else
-  XDrawArc(fl_display, fl_window, fl_gc, x,y,w-1,h-1, int(a1*64),int((a2-a1)*64));
+  int A = int(a1*64);
+  int B = int(a2*64)-A;
+  XDrawArc(fl_display, fl_window, fl_gc,
+	   x+fl_x_, y+fl_y_, w-1, h-1,
+	   A, B);
 #endif
 }
 
@@ -56,6 +61,7 @@ void fl_pie(int x,int y,int w,int h,double a1,double a2) {
   if (w <= 0 || h <= 0) return;
 #ifdef WIN32
   if (a1 == a2) return;
+  x += fl_x_; y += fl_y_;
   int xa = x+w/2+int(w*cos(a1/180.0*M_PI));
   int ya = y+h/2-int(h*sin(a1/180.0*M_PI));
   int xb = x+w/2+int(w*cos(a2/180.0*M_PI));
@@ -63,10 +69,14 @@ void fl_pie(int x,int y,int w,int h,double a1,double a2) {
   SelectObject(fl_gc, fl_brush);
   Pie(fl_gc, x, y, x+w, y+h, xa, ya, xb, yb); 
 #else
-  XFillArc(fl_display, fl_window, fl_gc, x,y,w,h, int(a1*64),int((a2-a1)*64));
+  int A = int(a1*64);
+  int B = int(a2*64)-A;
+  XFillArc(fl_display, fl_window, fl_gc,
+	   x+fl_x_, y+fl_y_, w-1, h-1,
+	   A, B);
 #endif
 }
 
 //
-// End of "$Id: fl_arci.cxx,v 1.5 2000/07/10 07:35:43 spitzak Exp $".
+// End of "$Id: fl_arci.cxx,v 1.6 2001/01/23 18:47:55 spitzak Exp $".
 //

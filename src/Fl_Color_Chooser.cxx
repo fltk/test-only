@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.25 2000/08/10 09:24:31 spitzak Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.26 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -177,7 +177,7 @@ int Flcc_HueBox::handle(int e) {
     is = c->s();
   case FL_DRAG: {
     double Xf, Yf, H, S;
-    int ix = x(); int iy = y(); int iw = w(); int ih = h();
+    int ix = 0; int iy = 0; int iw = w(); int ih = h();
     box()->inset(ix, iy, iw, ih);
     Xf = (Fl::event_x()-ix)/double(iw);
     Yf = (Fl::event_y()-iy)/double(ih);
@@ -194,7 +194,7 @@ int Flcc_HueBox::handle(int e) {
 
 static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
   Flcc_HueBox* v = (Flcc_HueBox*)vv;
-  int x1 = v->x(); int y1 = v->y(); int w1 = v->w(); int h1 = v->h();
+  int x1 = 0; int y1 = 0; int w1 = v->w(); int h1 = v->h();
   v->box()->inset(x1,y1,w1,h1);
   double Yf = double(Y)/h1;
 #ifdef UPDATE_HUE_BOX
@@ -215,7 +215,7 @@ static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
 
 void Flcc_HueBox::draw() {
   if (damage()&FL_DAMAGE_ALL) draw_text_frame();
-  int x1 = x(); int y1 = y(); int w1 = w(); int h1 = h();
+  int x1 = 0; int y1 = 0; int w1 = w(); int h1 = h();
   box()->inset(x1,y1,w1,h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_clip(x1+px,y1+py,6,6);
   fl_draw_image(generate_image, this, x1, y1, w1, h1);
@@ -245,7 +245,7 @@ int Flcc_ValueBox::handle(int e) {
     iv = c->v();
   case FL_DRAG: {
     double Yf;
-    int x1 = x(); int y1 = y(); int w1 = w(); int h1 = h();
+    int x1 = 0; int y1 = 0; int w1 = w(); int h1 = h();
     box()->inset(x1,y1,w1,h1);
     Yf = 1-(Fl::event_y()-y1)/double(h1);
     if (fabs(Yf-iv)<(3*1.0/h())) Yf = iv;
@@ -259,7 +259,7 @@ int Flcc_ValueBox::handle(int e) {
 static double tr, tg, tb;
 static void generate_vimage(void* vv, int X, int Y, int W, uchar* buf) {
   Flcc_ValueBox* v = (Flcc_ValueBox*)vv;
-  int x1 = v->x(); int y1 = v->y(); int w1 = v->w(); int h1 = v->h();
+  int x1 = 0; int y1 = 0; int w1 = v->w(); int h1 = v->h();
   v->box()->inset(x1,y1,w1,h1);
   double Yf = 255*(1.0-double(Y)/h1);
   uchar r = uchar(tr*Yf+.5);
@@ -274,7 +274,7 @@ void Flcc_ValueBox::draw() {
   if (damage()&FL_DAMAGE_ALL) draw_text_frame();
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
   c->hsv2rgb(c->h(),c->s(),1.0,tr,tg,tb);
-  int x1 = x(); int y1 = y(); int w1 = w(); int h1 = h();
+  int x1 = 0; int y1 = 0; int w1 = w(); int h1 = h();
   box()->inset(x1,y1,w1,h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_clip(x1,y1+py,w1,6);
   fl_draw_image(generate_vimage, this, x1, y1, w1, h1);
@@ -320,10 +320,10 @@ Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
     huebox(0,0,100,100),
     valuebox(100,0,20,100),
     nrgroup(120,0, 60, 100),
-    choice(120,0,60,25),
-    rvalue(120,25,60,25),
-    gvalue(120,50,60,25),
-    bvalue(120,75,60,25)
+    choice(0,0,60,25),
+    rvalue(0,25,60,25),
+    gvalue(0,50,60,25),
+    bvalue(0,75,60,25)
 {
   nrgroup.end();
   choice.begin();
@@ -392,26 +392,20 @@ FL_API Fl_Color fl_color_cells[ROWS*COLS] = {
 // repeat it twice:
 32,32,32,37,37,39,39,43,43,47,47,49,49,55,55,55};
 
-class CellBox : public Fl_Box {
+class CellBox : public Fl_Widget {
 public:
-  CellBox(int X, int Y, int W, int H) : Fl_Box(X,Y,W,H) {}
+  CellBox(int X, int Y, int W, int H) : Fl_Widget(X,Y,W,H) {}
   void draw();
-  void draw_n_clip();
   int handle(int);
 };
 
-void CellBox::draw_n_clip() {
-  draw();
-  fl_clip_out(x(), y(), w(), h());
-}
-
 void CellBox::draw() {
   for (int Y = 0; Y < ROWS; Y++) {
-    int yy = y()+Y*h()/ROWS;
-    int hh = y()+(Y+1)*h()/ROWS - yy;
+    int yy = Y*h()/ROWS;
+    int hh = (Y+1)*h()/ROWS - yy;
     for (int X = 0; X < COLS; X++) {
-      int xx = x()+X*w()/COLS;
-      int ww = x()+(X+1)*w()/COLS - xx;
+      int xx = X*w()/COLS;
+      int ww = (X+1)*w()/COLS - xx;
       FL_DOWN_BOX->draw(xx,yy,ww,hh,fl_color_cells[Y*COLS+X]);
     }
   }
@@ -422,9 +416,9 @@ int CellBox::handle(int e) {
   case FL_PUSH: return 1;
   case FL_DRAG: return 1;
   case FL_RELEASE: {
-    int X = (Fl::event_x()-x())*COLS/w();
+    int X = Fl::event_x()*COLS/w();
     if (X < 0 || X >= COLS) return 1;
-    int Y = (Fl::event_y()-y())*ROWS/h();
+    int Y = Fl::event_y()*ROWS/h();
     if (Y < 0 || Y >= ROWS) return 1;
     X = X+Y*COLS;
     if (Fl::event_button() > 1) {
@@ -506,5 +500,5 @@ int fl_color_chooser(const char* name, Fl_Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.25 2000/08/10 09:24:31 spitzak Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.26 2001/01/23 18:47:54 spitzak Exp $".
 //

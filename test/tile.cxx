@@ -1,5 +1,5 @@
 //
-// "$Id: tile.cxx,v 1.6 2000/01/16 07:44:45 robertk Exp $"
+// "$Id: tile.cxx,v 1.7 2001/01/23 18:47:55 spitzak Exp $"
 //
 // Tile test program for the Fast Light Tool Kit (FLTK).
 //
@@ -30,10 +30,10 @@
 #include <FL/Fl_Button.H>
 
 int main(int argc, char** argv) {
-  Fl_Window window(300,300);
-  window.box(FL_NO_BOX);
+  Fl_Window window(320,320);
+  window.box(FL_FLAT_BOX);
   window.resizable(window);
-  Fl_Tile tile(0,0,300,300);
+  Fl_Tile tile(10,10,300,300);
   Fl_Group box0(0,0,150,150,"0");
   box0.box(FL_DOWN_BOX);
   box0.color(9);
@@ -91,5 +91,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: tile.cxx,v 1.6 2000/01/16 07:44:45 robertk Exp $".
+// End of "$Id: tile.cxx,v 1.7 2001/01/23 18:47:55 spitzak Exp $".
 //

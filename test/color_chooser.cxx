@@ -1,5 +1,5 @@
 //
-// "$Id: color_chooser.cxx,v 1.8 2000/01/16 07:44:40 robertk Exp $"
+// "$Id: color_chooser.cxx,v 1.9 2001/01/23 18:47:55 spitzak Exp $"
 //
 // Color chooser test program for the Fast Light Tool Kit (FLTK).
 //
@@ -67,7 +67,7 @@ void Pens::draw() {
   // use every color in the gray ramp:
   for (int i = 0; i < 3*8; i++) {
     fl_color((Fl_Color)(FL_GRAY_RAMP+i));
-    fl_line(x()+i, y(), x()+i, y()+h());
+    fl_line(i, 0, i, h());
   }
 }
 
@@ -147,5 +147,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: color_chooser.cxx,v 1.8 2000/01/16 07:44:40 robertk Exp $".
+// End of "$Id: color_chooser.cxx,v 1.9 2001/01/23 18:47:55 spitzak Exp $".
 //

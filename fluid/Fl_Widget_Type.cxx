@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.72 2000/10/18 07:38:54 spitzak Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.73 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -76,33 +76,26 @@ Fl_Type *Fl_Widget_Type::make() {
   // Figure out a border between widget and window:
   int B = p->o->w()/2; if (p->o->h()/2 < B) B = p->o->h()/2; if (B>25) B = 25;
 
-  int ULX,ULY; // parent's origin in window
-  if (!p->is_window()) { // if it is a group, add corner
-    ULX = p->o->x(); ULY = p->o->y();
-  } else {
-    ULX = ULY = 0;
-  }
-
   // Figure out a position and size for the widget
   int X,Y,W,H;
   if (is_group()) {	// fill the parent with the widget
-    X = ULX+B;
+    X = B;
     W = p->o->w()-B;
-    Y = ULY+B;
+    Y = B;
     H = p->o->h()-B;
   } else if (q != p) {	// copy position and size of current widget
     W = q->o->w();
     H = q->o->h();
     X = q->o->x()+W;
     Y = q->o->y();
-    if (X+W > ULX+p->o->w()) {
+    if (X+W > p->o->w()) {
       X = q->o->x();
       Y = q->o->y()+H;
-      if (Y+H > ULY+p->o->h()) Y = ULY+B;
+      if (Y+H > p->o->h()) Y = B;
     }
   } else {	// just make it small and square...
-    X = ULX+B;
-    Y = ULY+B;
+    X = B;
+    Y = B;
     W = H = B;
   }
 
@@ -1913,6 +1906,7 @@ void Fl_Widget_Type::write_properties() {
 int pasteoffset;
 
 void Fl_Widget_Type::read_property(const char *c) {
+  Fl_Widget* o = this->o;
   int x,y,w,h;
   if (!strcmp(c,"private")) {
     public_ = 0;
@@ -1920,8 +1914,13 @@ void Fl_Widget_Type::read_property(const char *c) {
     if (sscanf(read_word(),"%d %d %d %d",&x,&y,&w,&h) == 4) {
       x += pasteoffset;
       y += pasteoffset;
-      o->resize(x,y,w,h);
-      o->layout();
+      // adjust for older relative coordinates:
+      if (read_version < 2.0001 && !is_menu_item() && o->parent()) {
+	Fl_Group* p = o->parent();
+	while (p->parent()) {x -= p->x(); y -= p->y(); p = p->parent();}
+      }
+      o->x(x); o->y(y); o->w(w); o->h(h);
+      //o->layout();
     }
   } else if (!strcmp(c,"type")) {
     o->type(item_number(subtypes(), read_word()));
@@ -2160,5 +2159,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.72 2000/10/18 07:38:54 spitzak Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.73 2001/01/23 18:47:54 spitzak Exp $".
 //

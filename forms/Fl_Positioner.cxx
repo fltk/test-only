@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Positioner.cxx,v 1.9 2000/08/12 07:44:28 spitzak Exp $"
+// "$Id: Fl_Positioner.cxx,v 1.10 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Positioner widget for the Fast Light Tool Kit (FLTK).
 //
@@ -46,7 +46,7 @@ void Fl_Positioner::draw(int x, int y, int w, int h) {
 
 void Fl_Positioner::draw() {
   draw_box();
-  int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
+  int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
   draw(X,Y,W,H);
   draw_inside_label();
 }
@@ -94,7 +94,7 @@ int Fl_Positioner::handle(int event, int x, int y, int w, int h) {
 }
 
 int Fl_Positioner::handle(int e) {
-  int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
+  int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
   return handle(e,X,Y,W,H);
 }
 
@@ -135,5 +135,5 @@ Fl_Positioner::Fl_Positioner(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Positioner.cxx,v 1.9 2000/08/12 07:44:28 spitzak Exp $".
+// End of "$Id: Fl_Positioner.cxx,v 1.10 2001/01/23 18:47:54 spitzak Exp $".
 //

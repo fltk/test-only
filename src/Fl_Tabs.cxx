@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.43 2000/11/29 21:43:22 vincentp Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.44 2001/01/23 18:47:55 spitzak Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -88,14 +88,14 @@ int Fl_Tabs::tab_positions(int* p, int* w) {
 // return space needed for tabs.  Negative to put them on the bottom:
 int Fl_Tabs::tab_height() {
   int H = h();
-  int H2 = y();
+  int H2 = 0;
   int numchildren = children();
   for (int i=0; i < numchildren; i++) {
     Fl_Widget* o = child(i);
-    if (o->y() < y()+H) H = o->y()-y();
+    if (o->y() < H) H = o->y();
     if (o->y()+o->h() > H2) H2 = o->y()+o->h();
   }
-  H2 = y()+h()-H2;
+  H2 = h()-H2;
   int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
   if (H2 > H) {
     H = H2-dy;
@@ -110,16 +110,16 @@ int Fl_Tabs::tab_height() {
 Fl_Widget *Fl_Tabs::which(int event_x, int event_y) {
   int H = tab_height();
   if (H < 0) {
-    if (event_y > y()+h() || event_y < y()+h()+H) return 0;
+    if (event_y > h() || event_y < h()+H) return 0;
   } else {
-    if (event_y > y()+H || event_y < y()) return 0;
+    if (event_y > H || event_y < 0) return 0;
   }
-  if (event_x < x()) return 0;
+  if (event_x < 0) return 0;
   int p[128], w[128];
   int selected = tab_positions(p, w);
-  int d = (event_y-(H>=0?y():y()+h()))*TABSLOPE/H;
+  int d = (event_y-(H>=0?0:h()))*TABSLOPE/H;
   for (int i=0; i<children(); i++) {
-    if (event_x < x()+p[i+1]+(i<selected ? TABSLOPE-d : d)) return child(i);
+    if (event_x < p[i+1]+(i<selected ? TABSLOPE-d : d)) return child(i);
   }
   return 0;
 }
@@ -161,9 +161,9 @@ int Fl_Tabs::handle(int event) {
   case FL_PUSH: {
     int H = tab_height();
     if (H >= 0) {
-      if (Fl::event_y() > y()+H) break;
+      if (Fl::event_y() > H) break;
     } else {
-      if (Fl::event_y() < y()+h()+H) break;
+      if (Fl::event_y() < h()+H) break;
     }}
   case FL_DRAG:
   case FL_RELEASE:
@@ -272,11 +272,11 @@ void Fl_Tabs::draw() {
 
   H = tab_height();
   if (damage() & FL_DAMAGE_ALL) { // redraw the entire thing:
-    fl_clip(x(), y(), w(), h());
+    fl_clip(0, 0, w(), h());
     if (v) draw_child(*v);
     parent()->draw_group_box();
 /*    fl_color(color());
-    fl_rectf(x(), y()+(H>=0?0:h()+H), w(), H>=0?H:-H);*/
+    fl_rectf(0, H>=0 ? 0 : h()+H, w(), H>=0?H:-H);*/
     fl_pop_clip();
   } else { // redraw the child
     if (v) update_child(*v);
@@ -289,16 +289,16 @@ void Fl_Tabs::draw() {
     int i;
 
     for (i=0; i<selected; i++)
-      draw_tab(x()+p[i], x()+p[i+1], w[i], H, child(i), LEFT);
+      draw_tab(p[i], p[i+1], w[i], H, child(i), LEFT);
     for (i=children()-1; i > selected; i--)
-      draw_tab(x()+p[i], x()+p[i+1], w[i], H, child(i), RIGHT);
+      draw_tab(p[i], p[i+1], w[i], H, child(i), RIGHT);
     if (v) {
       i = selected;
-      draw_tab(x()+p[i], x()+p[i+1], w[i], H, child(i), SELECTED);
+      draw_tab(p[i], p[i+1], w[i], H, child(i), SELECTED);
     } else {
       // draw the edge when no selection:
       fl_color(H >= 0 ? FL_LIGHT3 : FL_DARK3);
-	  fl_xyline(x(), H >= 0 ? y()+H : y()+h()+H, x()+this->w());
+	  fl_xyline(0, H >= 0 ? H : h()+H, this->w());
     }
 
   }
@@ -310,8 +310,8 @@ void Fl_Tabs::draw_n_clip()
   draw();
   // The tabs widget build itself the clip_out region with a special shape
   if (damage()&FL_DAMAGE_ALL) {
-    fl_clip_out(x(), y()+(H>=0?0:h()+H), p[children()]+TABSLOPE, (H>=0?H:-H));
-    fl_clip_out(x(), y()+(H>0?H:0), this->w(), h()-(H>=0?H:-H-1));
+    fl_clip_out(0, H>=0 ? 0 : h()+H, p[children()]+TABSLOPE, (H>=0?H:-H));
+    fl_clip_out(0, H>0 ? H : 0, this->w(), h()-(H>=0?H:-H-1));
   }
 }
 
@@ -328,39 +328,37 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
   int sel = (what == SELECTED);
   fl_color(o->color());
   if (H >= 0) {
-    fl_polygon(x1, y()+H+sel, x1+TABSLOPE, y(), x2, y(),
-	       x2+TABSLOPE, y()+H+sel);
+    fl_polygon(x1, H+sel, x1+TABSLOPE, 0, x2, 0, x2+TABSLOPE, H+sel);
     fl_color(!sel && o==push_ ? FL_DARK3 : FL_LIGHT3);
-    fl_line(x1, y()+H, x1+TABSLOPE, y(), x2, y());
+    fl_line(x1, H, x1+TABSLOPE, 0, x2, 0);
     if (sel) {
-      if (x1>x()) fl_xyline(x(), y()+H, x1);
-      if (x2+TABSLOPE < x()+w()-1) fl_xyline(x2+TABSLOPE, y()+H, x()+w()-1);
+      if (x1>0) fl_xyline(0, H, x1);
+      if (x2+TABSLOPE < w()-1) fl_xyline(x2+TABSLOPE, H, w()-1);
     }
     fl_color(!sel && o==push_ ? FL_LIGHT3 : FL_DARK3);
-    fl_line(x2, y(), x2+TABSLOPE, y()+H);
+    fl_line(x2, 0, x2+TABSLOPE, H);
   } else {
-    fl_polygon(x1, y()+h()+H-sel, x1+TABSLOPE, y()+h(), x2, y()+h(),
-	       x2+TABSLOPE, y()+h()+H-sel);
+    fl_polygon(x1, h()+H-sel, x1+TABSLOPE, h(), x2, h(), x2+TABSLOPE, h()+H-sel);
     fl_color(!sel && o==push_ ? FL_DARK3 : FL_LIGHT3);
-    fl_line(x1+TABSLOPE, y()+h()-1, x2, y()+h()-1, x2+TABSLOPE, y()+h()+H);
+    fl_line(x1+TABSLOPE, h()-1, x2, h()-1, x2+TABSLOPE, h()+H);
     if (sel) {
-      if (x1>x()) fl_xyline(x(), y()+h()+H, x1);
-      if (x2+TABSLOPE < x()+w()-1) fl_xyline(x2+TABSLOPE, y()+h()+H,x()+w()-1);
+      if (x1>0) fl_xyline(0, h()+H, x1);
+      if (x2+TABSLOPE < w()-1) fl_xyline(x2+TABSLOPE, h()+H, w()-1);
     }
     fl_color(!sel && o==push_ ? FL_LIGHT3 : FL_DARK3);
-    fl_line(x1, y()+h()+H, x1+TABSLOPE, y()+h()-1);
+    fl_line(x1, h()+H, x1+TABSLOPE, h()-1);
   }
   if (W > TABSLOPE+EXTRASPACE/2) {
     if (sel && focused()) {
       fl_color(FL_BLACK);
       fl_line_style(FL_DOT);
       fl_rect(x2-W+TABSLOPE,
-	      y()+(H<0?h()+H-3:0)+1, W-TABSLOPE,
+	      (H<0?h()+H-3:0)+1, W-TABSLOPE,
 	      (H<0?-H:H)+1);
       fl_line_style(0);
     }
     o->draw_label((what==LEFT ? x1 : x2-W)+(TABSLOPE+EXTRASPACE/2),
-		  y()+(H<0?h()+H-2:0), W-(TABSLOPE+EXTRASPACE/2),
+		  (H<0?h()+H-2:0), W-(TABSLOPE+EXTRASPACE/2),
 		  (H<0?-H:H)+3, FL_ALIGN_CENTER);
   }
 }
@@ -380,5 +378,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.43 2000/11/29 21:43:22 vincentp Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.44 2001/01/23 18:47:55 spitzak Exp $".
 //

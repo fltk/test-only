@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Roller.cxx,v 1.19 2000/04/16 08:31:47 bill Exp $"
+// "$Id: Fl_Roller.cxx,v 1.20 2001/01/23 18:47:55 spitzak Exp $"
 //
 // Roller widget for the Fast Light Tool Kit (FLTK).
 //
@@ -67,7 +67,7 @@ int Fl_Roller::handle(int event) {
 
 void Fl_Roller::draw() {
   if (damage()&(FL_DAMAGE_ALL|FL_DAMAGE_HIGHLIGHT)) draw_box();
-  int X=x(); int Y=y(); int W=w()-1; int H=h()-1; box()->inset(X,Y,W,H);
+  int X=0; int Y=0; int W=w()-1; int H=h()-1; box()->inset(X,Y,W,H);
   if (W<=0 || H<=0) return;
 
   double s = step();
@@ -159,5 +159,5 @@ Fl_Roller::Fl_Roller(int X,int Y,int W,int H,const char* L) : Fl_Valuator(X,Y,W,
 }
 
 //
-// End of "$Id: Fl_Roller.cxx,v 1.19 2000/04/16 08:31:47 bill Exp $".
+// End of "$Id: Fl_Roller.cxx,v 1.20 2001/01/23 18:47:55 spitzak Exp $".
 //

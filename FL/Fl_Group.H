@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.H,v 1.28 2000/09/27 16:25:48 spitzak Exp $"
+// "$Id: Fl_Group.H,v 1.29 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
@@ -77,6 +77,7 @@ public:
   // back compatability function:
   Fl_Widget* & _ddfdesign_kludge() {return resizable_;}
   friend void fl_end_group(); // forms emulation function
+  void fix_old_positions();
 
 protected:
 
@@ -116,5 +117,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Group.H,v 1.28 2000/09/27 16:25:48 spitzak Exp $".
+// End of "$Id: Fl_Group.H,v 1.29 2001/01/23 18:47:54 spitzak Exp $".
 //

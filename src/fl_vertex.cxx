@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.8 2000/09/27 16:25:52 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.9 2001/01/23 18:47:55 spitzak Exp $"
 //
 // Portable drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -71,9 +71,9 @@ void fl_rotate(double d) {
   }
 }
 
-double fl_transform_x(double x, double y) {return x*m.a + y*m.c + m.x;}
+double fl_transform_x(double x, double y) {return x*m.a + y*m.c + m.x + fl_x_;}
 
-double fl_transform_y(double x, double y) {return x*m.b + y*m.d + m.y;}
+double fl_transform_y(double x, double y) {return x*m.b + y*m.d + m.y + fl_y_;}
 
 double fl_transform_dx(double x, double y) {return x*m.a + y*m.c;}
 
@@ -116,8 +116,8 @@ void fl_transformed_vertex(double xf, double yf) {
 }
 
 void fl_vertex(double x,double y) {
-  transformed_vertex(COORD_T(x*m.a + y*m.c + m.x + .5),
-		     COORD_T(x*m.b + y*m.d + m.y + .5));
+  transformed_vertex(COORD_T(x*m.a + y*m.c + m.x + .5)+fl_x_,
+		     COORD_T(x*m.b + y*m.d + m.y + .5)+fl_y_);
 }
 
 void fl_gap() {
@@ -231,13 +231,6 @@ void fl_end_complex_polygon() {
   fl_end_polygon();
 }
 
-// back-compatability functions:
-void fl_begin_points() {fl_begin();}
-void fl_begin_line() {fl_begin();}
-void fl_begin_loop() {fl_begin();}
-void fl_begin_polygon() {fl_begin();}
-void fl_begin_complex_polygon() {fl_begin();}
-
 //
-// End of "$Id: fl_vertex.cxx,v 1.8 2000/09/27 16:25:52 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.9 2001/01/23 18:47:55 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tile.cxx,v 1.15 2000/05/17 07:08:09 bill Exp $"
+// "$Id: Fl_Tile.cxx,v 1.16 2001/01/23 18:47:55 spitzak Exp $"
 //
 // Tile widget for the Fast Light Tool Kit (FLTK).
 //
@@ -67,26 +67,24 @@ void Fl_Tile::layout() {
   //clear layout flag, skip Fl_Group::layout()
   Fl_Widget::layout();
   // remember how much to move the child widgets:
-  int dx = x() - ox();
   int dw = w() - ow();
-  int dy = y() - oy();
   int dh = h() - oh();
   // find bottom-right of resizable:
   int* p = sizes();
   int OR = p[5];
-  int NR = x()+w()-(p[1]-OR);
+  int NR = w()-(p[1]-OR);
   int OB = p[7];
-  int NB = y()+h()-(p[3]-OB);
+  int NB = h()-(p[3]-OB);
   // move everything to be on correct side of new resizable:
   p += 8;
   int numchildren = children();
   for (int i=0; i < numchildren; i++) {
     Fl_Widget* o = child(i);
-    int X = o->x()+dx;
+    int X = o->x();
     int R = X+o->w();
     if (*p++ >= OR) X += dw; else if (X > NR) X = NR;
     if (*p++ >= OR) R += dw; else if (R > NR) R = NR;
-    int Y = o->y()+dy;
+    int Y = o->y();
     int B = Y+o->h();
     if (*p++ >= OB) Y += dh; else if (Y > NB) Y = NB;
     if (*p++ >= OB) B += dh; else if (B > NB) B = NB;
@@ -197,5 +195,5 @@ int Fl_Tile::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Tile.cxx,v 1.15 2000/05/17 07:08:09 bill Exp $".
+// End of "$Id: Fl_Tile.cxx,v 1.16 2001/01/23 18:47:55 spitzak Exp $".
 //

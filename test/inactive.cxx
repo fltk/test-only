@@ -49,6 +49,7 @@ int main(int argc, char **argv) {
           o->selection_text_color((Fl_Color)55);
           o->highlight_label_color((Fl_Color)55);
         }
+	o->fix_old_positions();
         o->end();
       }
       { Fl_Slider* o = new Fl_Slider(165, 50, 24, 150, "Fl_Slider");
@@ -63,6 +64,7 @@ int main(int argc, char **argv) {
         new Fl_Item("item");
         new Fl_Item("item");
         new Fl_Item("item");
+	o->fix_old_positions();
         o->end();
       }
       { Fl_Box* o = new Fl_Box(240, 205, 145, 50, "Fl_Box");
@@ -82,6 +84,7 @@ int main(int argc, char **argv) {
         o->type(1);
         o->maximum(100);
       }
+      o->fix_old_positions();
       o->end();
     }
     { Fl_Button* o = new Fl_Button(25, 265, 185, 25, "active");
@@ -93,6 +96,7 @@ int main(int argc, char **argv) {
       o->type(102);
       o->callback((Fl_Callback*)cb_inactive);
     }
+    o->fix_old_positions();
     o->end();
   }
   w->show(argc, argv);

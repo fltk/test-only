@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.132 2000/12/12 09:02:53 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.133 2001/01/23 18:47:55 spitzak Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -873,6 +873,10 @@ int Fl_X::borders(const Fl_Window* w, int& dx, int& dy, int& dw, int& dh) {
 ////////////////////////////////////////////////////////////////
 
 void Fl_Window::layout() {
+  int x = this->x(); int y = this->y();
+  for (Fl_Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
+    x += p->x(); y += p->y();
+  }
   UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER;
   if (ox() == x() && oy() == y()) flags |= SWP_NOMOVE;
   if (ow() == w() && oh() == h()) {
@@ -892,7 +896,7 @@ void Fl_Window::layout() {
     resize_from_system = 0;
   } else if (i) {
     int dx, dy, dw, dh; Fl_X::borders(this, dx, dy, dw, dh);
-    SetWindowPos(i->xid, 0, x()-dx, y()-dy, w()+dw, h()+dh, flags);
+    SetWindowPos(i->xid, 0, x-dx, y-dy, w()+dw, h()+dh, flags);
   }
 }
 
@@ -1054,11 +1058,13 @@ void Fl_Window::label(const char *name,const char *iname) {
 ////////////////////////////////////////////////////////////////
 // Drawing context
 
-Fl_Window *Fl_Window::current_;
+const Fl_Window *Fl_Window::current_;
 // the current context
 HDC fl_gc = 0;
 // the current window handle
 HWND fl_window = 0;
+// the current drawing origin
+int fl_x_, fl_y_;
 
 // Here we ensure only one GetDC is ever in place.
 HDC fl_GetDC(HWND w) {
@@ -1088,7 +1094,7 @@ Cleanup::~Cleanup() {
 }
 
 // make X drawing go into this window (called by subclass flush() impl.)
-void Fl_Window::make_current() {
+void Fl_Window::make_current() const {
   fl_GetDC(fl_xid(this));
 
 #if USE_COLORMAP
@@ -1102,6 +1108,7 @@ void Fl_Window::make_current() {
 
   current_ = this;
   fl_clip_region(0);
+  fl_x_ = fl_y_ = 0;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1253,5 +1260,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.132 2000/12/12 09:02:53 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.133 2001/01/23 18:47:55 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.88 2000/11/15 18:20:24 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.89 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -40,7 +40,7 @@
 Fl_Group* Fl_Group::current_;
 
 static void revert(Fl_Style* s) {
-  s->box = FL_NO_BOX;
+  s->box = FL_FLAT_BOX; //FL_NO_BOX;
 }
 
 // This style is unnamed since there is no reason for themes to change it:
@@ -195,18 +195,13 @@ int Fl_Group::send(int event, Fl_Widget& to) {
   }
 
   // Now send the event and return if the widget does not use it.
-  if (to.is_window()) {
-    // We must adjust the xy of events sent to child windows so they
-    // are relative to that window.
-    int save_x = Fl::e_x; Fl::e_x -= to.x();
-    int save_y = Fl::e_y; Fl::e_y -= to.y();
-    int ret = to.handle(event);
-    Fl::e_y = save_y;
-    Fl::e_x = save_x;
-    if (!ret) return 0;
-  } else {
-    if (!to.handle(event)) return 0;
-  }
+  // Adjust event to be relative to the widget:
+  int save_x = Fl::e_x; Fl::e_x -= to.x();
+  int save_y = Fl::e_y; Fl::e_y -= to.y();
+  int ret = to.handle(event);
+  Fl::e_y = save_y;
+  Fl::e_x = save_x;
+  if (!ret) return 0;
 
   switch (event) {
 
@@ -229,33 +224,11 @@ int Fl_Group::send(int event, Fl_Widget& to) {
   return 1;
 }
 
-// Translate the current keystroke into up/down/left/right for navigation,
-// returns zero for non shortcut/keyboard events:
-#define ctrl(x) (x^0x40)
+// Turn FL_Tab into FL_Right or FL_Left for keyboard navigation
 int Fl_Group::navigation_key() {
-  switch (Fl::event_key()) {
-  case 0: // not an FL_KEYBOARD/FL_SHORTCUT event
-    break;
-  case FL_Tab:
-    if (Fl::event_state(FL_CTRL)) return 0; // reserved for Fl_Tabs
+  if (Fl::event_key() == FL_Tab && !Fl::event_state(FL_CTRL))
     return Fl::event_state(FL_SHIFT) ? FL_Left : FL_Right;
-  case FL_Right:
-    return FL_Right;
-  case FL_Left:
-    return FL_Left;
-  case FL_Up:
-    return FL_Up;
-  case FL_Down:
-    return FL_Down;
-//   default:
-//     switch (Fl::event_text()[0]) {
-//     case ctrl('N') : return FL_Down;
-//     case ctrl('P') : return FL_Up;
-//     case ctrl('F') : return FL_Right;
-//     case ctrl('B') : return FL_Left;
-//     }
-  }
-  return 0;
+  return Fl::event_key();
 }
 
 int Fl_Group::handle(int event) {
@@ -295,8 +268,13 @@ int Fl_Group::handle(int event) {
   case FL_MOVE:
   case FL_DND_ENTER:
   case FL_DND_DRAG:
-    for (i = numchildren; i--;)
-      if (Fl::event_inside(child(i)) && send(event, *child(i))) return 1;
+    for (i = numchildren; i--;) {
+      Fl_Widget& o = *child(i);
+      int mx = Fl::event_x() - o.x();
+      int my = Fl::event_y() - o.y();
+      if (mx >= 0 && mx < o.w() && my >= 0 && my < o.h())
+	if (send(event, *child(i))) return 1;
+    }
     return 0;
   }
 
@@ -381,7 +359,7 @@ int* Fl_Group::sizes() {
   if (!sizes_) {
     int* p = sizes_ = new int[4*(children_+2)];
     // first thing in sizes array is the group's size:
-    if (!is_window()) {p[0] = ox(); p[2] = oy();} else {p[0] = p[2] = 0;}
+    p[0] = p[2] = 0;
     p[1] = p[0]+ow(); p[3] = p[2]+oh();
     // next is the resizable's size:
     p[4] = p[0]; // init to the group's size
@@ -415,22 +393,13 @@ void Fl_Group::layout() {
   // get changes from previous position:
   if (!resizable() || ow()==w() && oh()==h()) {
     if (!is_window()) {
-      int dx = x()-ox();
-      int dy = y()-oy();
       Fl_Widget*const* a = array_;
       Fl_Widget*const* e = a+children_;
-      while (a < e) {
-	Fl_Widget* o = *a++;
-	o->resize(o->x()+dx, o->y()+dy, o->w(), o->h());
-	o->layout();
-      }
+      while (a < e) (*a++)->layout();
     }
   } else if (children_) {
     // get changes in size from the initial size:
     int* p = sizes();
-    int dx = x()-p[0];
-    int dy = y()-p[2];
-    if (is_window()) dx = dy = 0;
     int dw = w()-(p[1]-p[0]);
     int dh = h()-(p[3]-p[2]);
     p+=4;
@@ -459,7 +428,7 @@ void Fl_Group::layout() {
       if (B >= IB) B += dh;
       else if (B > IY) B = B + dh*(B-IY)/(IB-IY);
 
-      o->resize(X+dx, Y+dy, R-X, B-Y);
+      o->resize(X, Y, R-X, B-Y);
       o->layout();
     }
   }
@@ -473,13 +442,15 @@ void Fl_Group::layout() {
 void Fl_Group::draw() {
   int numchildren = children();
   if (damage() & ~FL_DAMAGE_CHILD) {
-    // Full redraw of the group:
-    fl_clip(x(), y(), w(), h());
+    // Redraw the box and all the children
+    fl_clip(0, 0, w(), h());
     int n; for (n = numchildren; n;) draw_child(*child(--n));
-    draw_group_box();
-    fl_pop_clip(); // this is here for back compatability?
+    draw_box();
+    draw_inside_label();
+    fl_pop_clip();
+    // labels are drawn without the clip for back compatability so they
+    // can draw atop sibling widgets:
     for (n = 0; n < numchildren; n++) draw_outside_label(*child(n));
-    // perhaps fl_pop_clip() should be here?
   } else {
     // only some child widget has been damaged, draw them without
     // doing any clipping.  This is for maximum speed, even though
@@ -500,43 +471,72 @@ void Fl_Group::draw() {
 void Fl_Group::draw_n_clip()
 {
   draw();
-  fl_clip_out(x(), y(), w(), h());
+  fl_clip_out(0, 0, w(), h());
 }
 
 // Pieces of draw() that subclasses may want to use:
 
-// Draw the box and possibly some of the parent's box so that this
-// fills a rectangle:
+// Draw the background, this is used by draw_n_clip for widgets with
+// non-square area to fill in a rectangular area that they clip out.
+// Recursively calls the parent for 
 void Fl_Group::draw_group_box() const {
+// So that this may be called from any child's draw context, I need to
+// figure out the correct origin:
+  int save_x = fl_x_;
+  int save_y = fl_y_;
+#if 1
+  fl_x_ = 0;
+  fl_y_ = 0;
+  const Fl_Group* group = this;
+  while (!group->is_window()) {
+    fl_x_ += group->x();
+    fl_y_ += group->y();
+    group = group->parent();
+  }
+#else
+  // this does not work because it resets the clip region:
+  make_current();
+#endif
   if (!(box()->fills_rectangle() ||
 	image() && (flags()&FL_ALIGN_TILED) &&
 	(!(flags()&15) || (flags() & FL_ALIGN_INSIDE)))) {
-    if (parent()) parent()->draw_group_box();
-    else {
+    if (parent()) {
+      parent()->draw_group_box();
+    } else {
       fl_color(color());	
-      fl_rectf(x(),y(),w(),h());
+      fl_rectf(0, 0, w(), h());
     }
   }
   draw_box();
   draw_inside_label();
+  fl_y_ = save_y;
+  fl_x_ = save_x;
 }
 
 // Force a child to redraw and remove the rectangle it used from the clip
-// region:
+// region.
 void Fl_Group::draw_child(Fl_Widget& w) const {
   if (!w.visible() || w.is_window()) return;
   if (!fl_not_clipped(w.x(), w.y(), w.w(), w.h())) return;
+  int save_x = fl_x_; fl_x_ += w.x();
+  int save_y = fl_y_; fl_y_ += w.y();
   w.set_damage(FL_DAMAGE_ALL);
   w.draw_n_clip();
-  w.set_damage(0);
+  w.clear_damage();
+  fl_y_ = save_y;
+  fl_x_ = save_x;
 }
 
 // Redraw a single child in response to it's damage:
 void Fl_Group::update_child(Fl_Widget& w) const {
   if (w.damage() && w.visible() && !w.is_window() &&
       fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
+    int save_x = fl_x_; fl_x_ += w.x();
+    int save_y = fl_y_; fl_y_ += w.y();
     w.draw();	
     w.clear_damage();
+    fl_y_ = save_y;
+    fl_x_ = save_x;
   }
 }
 
@@ -553,24 +553,33 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
   int H = w.h();
   if (align & FL_ALIGN_TOP) {
     align ^= (FL_ALIGN_BOTTOM|FL_ALIGN_TOP);
-    Y = y();
-    H = w.y()-Y;
+    Y = 0;
+    H = w.y();
   } else if (align & FL_ALIGN_BOTTOM) {
     align ^= (FL_ALIGN_BOTTOM|FL_ALIGN_TOP);
     Y = Y+H;
-    H = y()+h()-Y;
+    H = h()-Y;
   } else if (align & FL_ALIGN_LEFT) {
     align ^= (FL_ALIGN_LEFT|FL_ALIGN_RIGHT);
-    X = x();
-    W = w.x()-X-3;
+    X = 0;
+    W = w.x()-3;
   } else if (align & FL_ALIGN_RIGHT) {
     align ^= (FL_ALIGN_LEFT|FL_ALIGN_RIGHT);
     X = X+W+3;
-    W = x()+this->w()-X;
+    W = this->w()-X;
   }
   w.draw_label(X,Y,W,H,(Fl_Flags)align);
 }
 
+void Fl_Group::fix_old_positions() {
+  if (is_window()) return; // in fltk 1.0 children of windows were relative
+  for (int i = 0; i < children(); i++) {
+    Fl_Widget& w = *(child(i));
+    w.x(w.x()-x());
+    w.y(w.y()-y());
+  }
+}
+
 //
-// End of "$Id: Fl_Group.cxx,v 1.88 2000/11/15 18:20:24 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.89 2001/01/23 18:47:54 spitzak Exp $".
 //

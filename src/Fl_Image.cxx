@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.15 2000/11/29 21:43:22 vincentp Exp $"
+// "$Id: Fl_Image.cxx,v 1.16 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,11 +30,11 @@
 
 // tiled image with minimal redraw
 void Fl_Image::draw_tiled(int x, int y, int pw, int ph, int cx, int cy) {
-  if (w<0) measure(w, h);
-  if (w==0) return;
+  if (w < 0) measure(w, h);
+  if (w == 0) return;
 
   int X,Y,W,H; fl_clip_box(x, y, pw, ph, X, Y, W, H);
-  if(W <= 0 || H <= 0) return;
+  if (W <= 0 || H <= 0) return;
   cx += X-x; cy += Y-y;
 
   int temp = -cx % w;
@@ -43,8 +43,8 @@ void Fl_Image::draw_tiled(int x, int y, int pw, int ph, int cx, int cy) {
   cy = (temp>0 ? h : 0) - temp;
 
   int ccx=cx;
-  while(-cy<H) {
-    while(-cx<W) {
+  while (-cy < H) {
+    while (-cx < W) {
       draw(X, Y, W, H, cx, cy);
       cx -= w;
     }
@@ -60,7 +60,7 @@ void fl_restore_clip(); // in fl_rect.C
 
 void Fl_Image::_draw(int XP, int YP, int WP, int HP, int cx, int cy)
 {
-  // account for current clip region (faster on Irix):
+  // cut the destination rectangle down to current clip region:
   int X,Y,W,H; fl_clip_box(XP,YP,WP,HP,X,Y,W,H);
   cx += X-XP; cy += Y-YP;
   // clip the box down to the size of image, quit if empty:
@@ -70,6 +70,9 @@ void Fl_Image::_draw(int XP, int YP, int WP, int HP, int cx, int cy)
   if (cy < 0) {H += cy; Y -= cy; cy = 0;}
   if (cy+H > h) H = h-cy;
   if (H <= 0) return;
+  // convert to Xlib coordinates:
+  X += fl_x_; Y += fl_y_;
+
   if (mask) {
     if (id) {
       // both color and mask:
@@ -98,11 +101,8 @@ void Fl_Image::_draw(int XP, int YP, int WP, int HP, int cx, int cy)
 # endif
 #else
       // I can't figure out how to combine a mask with existing region,
-      // so cut the image down to a clipped rectangle:
-      int nx, ny; fl_clip_box(X,Y,W,H,nx,ny,W,H);
-      cx += nx-X; X = nx;
-      cy += ny-Y; Y = ny;
-      // make X use the bitmap as a mask:
+      // so the mask replaces the region instead. This can draw some of
+      // the image outside the current clip region if it is not rectangular.
       XSetClipMask(fl_display, fl_gc, mask);
       int ox = X-cx; if (ox < 0) ox += w;
       int oy = Y-cy; if (oy < 0) oy += h;
@@ -164,5 +164,5 @@ void Fl_Image::label(Fl_Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.15 2000/11/29 21:43:22 vincentp Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.16 2001/01/23 18:47:54 spitzak Exp $".
 //

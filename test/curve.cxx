@@ -1,5 +1,5 @@
 //
-// "$Id: curve.cxx,v 1.5 2000/01/16 07:44:40 robertk Exp $"
+// "$Id: curve.cxx,v 1.6 2001/01/23 18:47:55 spitzak Exp $"
 //
 // Curve test program for the Fast Light Tool Kit (FLTK).
 //
@@ -38,22 +38,27 @@ int points;
 
 class Drawing : public Fl_Widget {
   void draw() {
-    fl_clip(x(),y(),w(),h());
+    fl_clip(0,0,w(),h());
     fl_color(FL_DARK3);
-    fl_rectf(x(),y(),w(),h());
+    fl_rectf(0,0,w(),h());
     fl_push_matrix();
     if (args[8]) {
-      fl_translate(x()+w()/2.0, y()+h()/2.0);
+      fl_translate(w()/2.0, h()/2.0);
       fl_rotate(args[8]);
-      fl_translate(-(x()+w()/2.0), -(y()+h()/2.0));
+      fl_translate(-w()/2.0, -h()/2.0);
     }
-    fl_translate(x(),y());
-    if (!points) {
-    fl_color(FL_WHITE);
-    fl_begin_complex_polygon();
-   fl_curve(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7]);
-    fl_end_complex_polygon();
+    fl_begin();
+    fl_curve(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7]);
+    if (points) {
+      fl_color(FL_WHITE);
+      fl_end_points();
+    } else {
+      fl_color(FL_WHITE);
+      fl_end_complex_polygon();
+      fl_color(FL_RED);
+      fl_end_line();
     }
+
     fl_color(FL_BLACK);
     fl_begin_line();
     fl_vertex(args[0],args[1]);
@@ -61,10 +66,6 @@ class Drawing : public Fl_Widget {
     fl_vertex(args[4],args[5]);
     fl_vertex(args[6],args[7]);
     fl_end_line();
-    fl_color(points ? FL_WHITE : FL_RED);
-    points ? fl_begin_points() : fl_begin_line();
-   fl_curve(args[0],args[1],args[2],args[3],args[4],args[5],args[6],args[7]);
-    points ? fl_end_points() : fl_end_line();
     fl_pop_matrix();
     fl_pop_clip();
   }
@@ -110,5 +111,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: curve.cxx,v 1.5 2000/01/16 07:44:40 robertk Exp $".
+// End of "$Id: curve.cxx,v 1.6 2001/01/23 18:47:55 spitzak Exp $".
 //

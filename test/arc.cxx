@@ -1,5 +1,5 @@
 //
-// "$Id: arc.cxx,v 1.6 2000/09/27 16:25:52 spitzak Exp $"
+// "$Id: arc.cxx,v 1.7 2001/01/23 18:47:55 spitzak Exp $"
 //
 // Arc drawing test program for the Fast Light Tool Kit (FLTK).
 //
@@ -33,26 +33,23 @@ const char* name[6] = {"X", "Y", "R", "start", "end", "rotate"};
 
 class Drawing : public Fl_Widget {
   void draw() {
-    fl_clip(x(),y(),w(),h());
+    fl_clip(0, 0, w(), h());
     fl_color(FL_DARK3);
-    fl_rectf(x(),y(),w(),h());
+    fl_rectf(0, 0, w(), h());
     fl_push_matrix();
     if (args[5]) {
-      fl_translate(x()+w()/2.0, y()+h()/2.0);
+      fl_translate(w()/2.0, h()/2.0);
       fl_rotate(args[5]);
-      fl_translate(-(x()+w()/2.0), -(y()+h()/2.0));
+      fl_translate(-w()/2.0, -h()/2.0);
     }
-    fl_color(FL_WHITE);
-    fl_translate(x(),y());
-    fl_begin_complex_polygon();
+    fl_begin();
     fl_arc(args[0],args[1],args[2],args[3],args[4]);
     fl_gap();
     fl_arc(140,140,20,0,-360);
     fl_circle(40,40,args[2]); // hardware circle
+    fl_color(FL_WHITE);
     fl_end_complex_polygon();
     fl_color(FL_RED);
-//     fl_begin_line();
-//     fl_arc(args[0],args[1],args[2],args[3],args[4]);
     fl_end_line();
     fl_pop_matrix();
     fl_pop_clip();
@@ -94,6 +91,6 @@ int main(int argc, char** argv) {
 
 
 //
-// End of "$Id: arc.cxx,v 1.6 2000/09/27 16:25:52 spitzak Exp $".
+// End of "$Id: arc.cxx,v 1.7 2001/01/23 18:47:55 spitzak Exp $".
 //
 

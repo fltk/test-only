@@ -1,5 +1,5 @@
 //
-// "$Id: win32.H,v 1.35 2000/08/04 10:21:59 clip Exp $"
+// "$Id: win32.H,v 1.36 2001/01/23 18:47:54 spitzak Exp $"
 //
 // WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -86,11 +86,13 @@ extern FL_API MSG fl_msg;
 
 extern FL_API HDC fl_makeDC(HBITMAP);
 #define fl_begin_offscreen(b) \
-  HDC _sgc=fl_gc; Window _sw=fl_window; \
-  fl_gc=fl_makeDC(b); fl_window=(HWND)b; fl_push_no_clip()
+  Window _sw = fl_window; fl_window = (HWND)(b); \
+  int _sx = fl_x_; int _sy = fl_y_; fl_x_ = fl_y_ = 0; \
+  HDC _sgc = fl_gc; fl_gc = fl_makeDC(b); fl_push_no_clip()
 
 #define fl_end_offscreen() \
-  fl_pop_clip(); DeleteDC(fl_gc); fl_window=_sw; fl_gc = _sgc
+  fl_pop_clip(); DeleteDC(fl_gc); \
+  fl_y_ = _sy; fl_x_ = _sx; fl_window=_sw; fl_gc = _sgc
 
 FL_API void fl_copy_offscreen(int x,int y,int w,int h,HBITMAP pixmap,int srcx,int srcy);
 #define fl_delete_offscreen(bitmap) DeleteObject(bitmap);
@@ -133,5 +135,5 @@ FL_API Fl_Window* fl_find(Window xid);
 #endif
 
 //
-// End of "$Id: win32.H,v 1.35 2000/08/04 10:21:59 clip Exp $".
+// End of "$Id: win32.H,v 1.36 2001/01/23 18:47:54 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.31 2000/08/10 09:24:31 spitzak Exp $"
+// "$Id: Fl_Dial.cxx,v 1.32 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,7 @@
 // All angles are measured with 0 to the right and counter-clockwise
 
 void Fl_Dial::draw() {
-  int X = x(); int Y = y(); int W = w(); int H = h();
+  int X = 0; int Y = 0; int W = w(); int H = h();
   if (!(type() == FL_FILL_DIAL && box() == FL_OVAL_BOX)) {
     if (damage()&FL_DAMAGE_ALL) draw_box();
     box()->inset(X,Y,W,H);
@@ -71,16 +71,10 @@ void Fl_Dial::draw() {
       fl_vertex(0.0,   0.04);
       fl_end_polygon();
       fl_color(linecolor);
-      fl_begin_loop();
-      fl_vertex(0.0,   0.0);
-      fl_vertex(-0.04, 0.0);
-      fl_vertex(-0.25, 0.25);
-      fl_vertex(0.0,   0.04);
       fl_end_loop();
     } else {
       fl_begin_polygon(); fl_circle(-0.20, 0.20, 0.07); fl_end_polygon();
-      fl_color(linecolor);
-      fl_begin_loop(); fl_circle(-0.20, 0.20, 0.07); fl_end_loop();
+      fl_color(linecolor); fl_end_loop();
     }
     fl_pop_matrix();
   }
@@ -93,7 +87,7 @@ void Fl_Dial::draw() {
 }
 
 int Fl_Dial::handle(int event) {
-  int X = x(); int Y = y(); int W = w(); int H = h();
+  int X = 0; int Y = 0; int W = w(); int H = h();
   box()->inset(X,Y,W,H);
   switch (event) {
   case FL_PUSH:
@@ -141,5 +135,5 @@ Fl_Dial::Fl_Dial(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.31 2000/08/10 09:24:31 spitzak Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.32 2001/01/23 18:47:54 spitzak Exp $".
 //

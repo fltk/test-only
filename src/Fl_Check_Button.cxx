@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.32 2001/01/02 00:20:28 clip Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.33 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -35,9 +35,9 @@ void Fl_Check_Button::draw() {
   // Draw the check box:
   int W = h();
   int d = h()/6;
-  draw_inside_label(x()+W-d, y(), w()-W+d, h(), flags);
-  int X = x()+d; int Y = y()+d+1; W = W-2*d-2;
-  if (X+W > x()+w()) X = x();
+  draw_inside_label(W-d, 0, w()-W+d, h(), flags);
+  int X = d; int Y = d+1; W = W-2*d-2;
+  if (X+W > w()) X = 0;
   if (flags&FL_VALUE) flags &= ~FL_HIGHLIGHT; // don't highlight selected buttons
   draw_glyph(shape, X, Y, W, W, flags);
 }

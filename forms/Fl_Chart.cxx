@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.cxx,v 1.9 2000/08/12 07:44:28 spitzak Exp $"
+// "$Id: Fl_Chart.cxx,v 1.10 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Forms-compatible chart widget for the Fast Light Tool Kit (FLTK).
 //
@@ -238,8 +238,8 @@ void Fl_Chart::draw() {
     int xx,yy,ww,hh;
     int i;
 
-    xx = x()+9;
-    yy = y()+9;
+    xx = 9;
+    yy = 9;
     ww = w()-2*9;
     hh = h()-2*9;
 
@@ -386,5 +386,5 @@ void Fl_Chart::maxsize(int m) {
 }
 
 //
-// End of "$Id: Fl_Chart.cxx,v 1.9 2000/08/12 07:44:28 spitzak Exp $".
+// End of "$Id: Fl_Chart.cxx,v 1.10 2001/01/23 18:47:54 spitzak Exp $".
 //

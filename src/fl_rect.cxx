@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.22 2000/07/14 08:35:01 clip Exp $"
+// "$Id: fl_rect.cxx,v 1.23 2001/01/23 18:47:55 spitzak Exp $"
 //
 // These routines from fl_draw.H are used by the standard boxtypes
 // and thus are always linked into an fltk program.
@@ -30,13 +30,14 @@
 void fl_rect(int x, int y, int w, int h) {
   if (w<=0 || h<=0) return;
 #ifdef WIN32
+  x += fl_x_; y += fl_y_;
   MoveToEx(fl_gc, x, y, 0L); 
   LineTo(fl_gc, x+w-1, y);
   LineTo(fl_gc, x+w-1, y+h-1);
   LineTo(fl_gc, x, y+h-1);
   LineTo(fl_gc, x, y);
 #else
-  XDrawRectangle(fl_display, fl_window, fl_gc, x, y, w-1, h-1);
+  XDrawRectangle(fl_display, fl_window, fl_gc, fl_x_+x, fl_y_+y, w-1, h-1);
 #endif
 }
 
@@ -44,19 +45,22 @@ void fl_rectf(int x, int y, int w, int h) {
   if (w<=0 || h<=0) return;
 #ifdef WIN32
   RECT rect;
+  x += fl_x_; y += fl_y_;
   rect.left = x; rect.top = y;  
   rect.right = x + w; rect.bottom = y + h;
   FillRect(fl_gc, &rect, fl_brush);
 #else
-  if (w && h) XFillRectangle(fl_display, fl_window, fl_gc, x, y, w, h);
+  XFillRectangle(fl_display, fl_window, fl_gc, fl_x_+x, fl_y_+y, w, h);
 #endif
 }
 
 void fl_xyline(int x, int y, int x1) {
+  y += fl_y_;
 #ifdef WIN32
-  MoveToEx(fl_gc, x, y, 0L); LineTo(fl_gc, x1+1, y);
+  MoveToEx(fl_gc, fl_x_+x, y, 0L);
+  LineTo(fl_gc, fl_x_+x1+1, y);
 #else
-  XDrawLine(fl_display, fl_window, fl_gc, x, y, x1, y);
+  XDrawLine(fl_display, fl_window, fl_gc, fl_x_+x, y, fl_x_+x1, y);
 #endif
 }
 
@@ -64,13 +68,13 @@ void fl_xyline(int x, int y, int x1, int y2) {
 #ifdef WIN32
   if (y2 < y) y2--;
   else y2++;
-  MoveToEx(fl_gc, x, y, 0L); 
-  LineTo(fl_gc, x1, y);
-  LineTo(fl_gc, x1, y2);
+  MoveToEx(fl_gc, fl_x_+x, fl_y_+y, 0L); 
+  LineTo(fl_gc, fl_x_+x1, fl_y_+y);
+  LineTo(fl_gc, fl_x_+x1, fl_y_+y2);
 #else
   XPoint p[3];
-  p[0].x = x;  p[0].y = p[1].y = y;
-  p[1].x = p[2].x = x1; p[2].y = y2;
+  p[0].x = fl_x_+x;  p[0].y = p[1].y = fl_y_+y;
+  p[1].x = p[2].x = fl_x_+x1; p[2].y = fl_y_+y2;
   XDrawLines(fl_display, fl_window, fl_gc, p, 3, 0);
 #endif
 }
@@ -79,26 +83,27 @@ void fl_xyline(int x, int y, int x1, int y2, int x3) {
 #ifdef WIN32
   if(x3 < x1) x3--;
   else x3++;
-  MoveToEx(fl_gc, x, y, 0L); 
-  LineTo(fl_gc, x1, y);
-  LineTo(fl_gc, x1, y2);
-  LineTo(fl_gc, x3, y2);
+  MoveToEx(fl_gc, fl_x_+x, fl_y_+y, 0L); 
+  LineTo(fl_gc, fl_x_+x1, fl_y_+y);
+  LineTo(fl_gc, fl_x_+x1, fl_y_+y2);
+  LineTo(fl_gc, fl_x_+x3, fl_y_+y2);
 #else
   XPoint p[4];
-  p[0].x = x;  p[0].y = p[1].y = y;
-  p[1].x = p[2].x = x1; p[2].y = p[3].y = y2;
-  p[3].x = x3;
+  p[0].x = fl_x_+x;  p[0].y = p[1].y = fl_y_+y;
+  p[1].x = p[2].x = fl_x_+x1; p[2].y = p[3].y = fl_y_+y2;
+  p[3].x = fl_x_+x3;
   XDrawLines(fl_display, fl_window, fl_gc, p, 4, 0);
 #endif
 }
 
 void fl_yxline(int x, int y, int y1) {
+  x += fl_x_;
 #ifdef WIN32
   if (y1 < y) y1--;
   else y1++;
-  MoveToEx(fl_gc, x, y, 0L); LineTo(fl_gc, x, y1);
+  MoveToEx(fl_gc, x, fl_y_+y, 0L); LineTo(fl_gc, x, fl_y_+y1);
 #else
-  XDrawLine(fl_display, fl_window, fl_gc, x, y, x, y1);
+  XDrawLine(fl_display, fl_window, fl_gc, x, fl_y_+y, x, fl_y_+y1);
 #endif
 }
 
@@ -106,13 +111,13 @@ void fl_yxline(int x, int y, int y1, int x2) {
 #ifdef WIN32
   if (x2 > x) x2++;
   else x2--;
-  MoveToEx(fl_gc, x, y, 0L); 
-  LineTo(fl_gc, x, y1);
-  LineTo(fl_gc, x2, y1);
+  MoveToEx(fl_gc, fl_x_+x, fl_y_+y, 0L); 
+  LineTo(fl_gc, fl_x_+x, fl_y_+y1);
+  LineTo(fl_gc, fl_x_+x2, fl_y_+y1);
 #else
   XPoint p[3];
-  p[0].x = p[1].x = x;  p[0].y = y;
-  p[1].y = p[2].y = y1; p[2].x = x2;
+  p[0].x = p[1].x = fl_x_+x;  p[0].y = fl_y_+y;
+  p[1].y = p[2].y = fl_y_+y1; p[2].x = fl_x_+x2;
   XDrawLines(fl_display, fl_window, fl_gc, p, 3, 0);
 #endif
 }
@@ -121,92 +126,92 @@ void fl_yxline(int x, int y, int y1, int x2, int y3) {
 #ifdef WIN32
   if(y3<y1) y3--;
   else y3++;
-  MoveToEx(fl_gc, x, y, 0L); 
-  LineTo(fl_gc, x, y1);
-  LineTo(fl_gc, x2, y1);
-  LineTo(fl_gc, x2, y3);
+  MoveToEx(fl_gc, fl_x_+x, fl_y_+y, 0L); 
+  LineTo(fl_gc, fl_x_+x, fl_y_+y1);
+  LineTo(fl_gc, fl_x_+x2, fl_y_+y1);
+  LineTo(fl_gc, fl_x_+x2, fl_y_+y3);
 #else
   XPoint p[4];
-  p[0].x = p[1].x = x;  p[0].y = y;
-  p[1].y = p[2].y = y1; p[2].x = p[3].x = x2;
-  p[3].y = y3;
+  p[0].x = p[1].x = fl_x_+x;  p[0].y = fl_y_+y;
+  p[1].y = p[2].y = fl_y_+y1; p[2].x = p[3].x = fl_x_+x2;
+  p[3].y = fl_y_+y3;
   XDrawLines(fl_display, fl_window, fl_gc, p, 4, 0);
 #endif
 }
 
 void fl_line(int x, int y, int x1, int y1) {
 #ifdef WIN32
-  MoveToEx(fl_gc, x, y, 0L); 
-  LineTo(fl_gc, x1, y1);
+  MoveToEx(fl_gc, fl_x_+x, fl_y_+y, 0L); 
+  LineTo(fl_gc, fl_x_+x1, fl_y_+y1);
   // Draw the last point *again* because the GDI line drawing
   // functions will not draw the last point ("it's a feature!"...)
-  SetPixel(fl_gc, x1, y1, fl_colorref);
+  SetPixel(fl_gc, fl_x_+x1, fl_y_+y1, fl_colorref);
 #else
-  XDrawLine(fl_display, fl_window, fl_gc, x, y, x1, y1);
+  XDrawLine(fl_display, fl_window, fl_gc, fl_x_+x, fl_y_+y, fl_x_+x1,fl_y_+y1);
 #endif
 }
 
 void fl_line(int x, int y, int x1, int y1, int x2, int y2) {
 #ifdef WIN32
-  MoveToEx(fl_gc, x, y, 0L); 
-  LineTo(fl_gc, x1, y1);
-  LineTo(fl_gc, x2, y2);
+  MoveToEx(fl_gc, fl_x_+x, fl_y_+y, 0L); 
+  LineTo(fl_gc, fl_x_+x1, fl_y_+y1);
+  LineTo(fl_gc, fl_x_+x2, fl_y_+y2);
   // Draw the last point *again* because the GDI line drawing
   // functions will not draw the last point ("it's a feature!"...)
-  SetPixel(fl_gc, x2, y2, fl_colorref);
+  SetPixel(fl_gc, fl_x_+x2, fl_y_+y2, fl_colorref);
 #else
   XPoint p[3];
-  p[0].x = x;  p[0].y = y;
-  p[1].x = x1; p[1].y = y1;
-  p[2].x = x2; p[2].y = y2;
+  p[0].x = fl_x_+x;  p[0].y = fl_y_+y;
+  p[1].x = fl_x_+x1; p[1].y = fl_y_+y1;
+  p[2].x = fl_x_+x2; p[2].y = fl_y_+y2;
   XDrawLines(fl_display, fl_window, fl_gc, p, 3, 0);
 #endif
 }
 
 void fl_loop(int x, int y, int x1, int y1, int x2, int y2) {
 #ifdef WIN32
-  MoveToEx(fl_gc, x, y, 0L); 
-  LineTo(fl_gc, x1, y1);
-  LineTo(fl_gc, x2, y2);
-  LineTo(fl_gc, x, y);
+  MoveToEx(fl_gc, fl_x_+x, fl_y_+y, 0L); 
+  LineTo(fl_gc, fl_x_+x1, fl_y_+y1);
+  LineTo(fl_gc, fl_x_+x2, fl_y_+y2);
+  LineTo(fl_gc, fl_x_+x, fl_y_+y);
 #else
   XPoint p[4];
-  p[0].x = x;  p[0].y = y;
-  p[1].x = x1; p[1].y = y1;
-  p[2].x = x2; p[2].y = y2;
-  p[3].x = x;  p[3].y = y;
+  p[0].x = fl_x_+x;  p[0].y = fl_y_+y;
+  p[1].x = fl_x_+x1; p[1].y = fl_y_+y1;
+  p[2].x = fl_x_+x2; p[2].y = fl_y_+y2;
+  p[3].x = fl_x_+x;  p[3].y = fl_y_+y;
   XDrawLines(fl_display, fl_window, fl_gc, p, 4, 0);
 #endif
 }
 
 void fl_loop(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) {
 #ifdef WIN32
-  MoveToEx(fl_gc, x, y, 0L); 
-  LineTo(fl_gc, x1, y1);
-  LineTo(fl_gc, x2, y2);
-  LineTo(fl_gc, x3, y3);
-  LineTo(fl_gc, x, y);
+  MoveToEx(fl_gc, fl_x_+x, fl_y_+y, 0L); 
+  LineTo(fl_gc, fl_x_+x1, fl_y_+y1);
+  LineTo(fl_gc, fl_x_+x2, fl_y_+y2);
+  LineTo(fl_gc, fl_x_+x3, fl_y_+y3);
+  LineTo(fl_gc, fl_x_+x, fl_y_+y);
 #else
   XPoint p[5];
-  p[0].x = x;  p[0].y = y;
-  p[1].x = x1; p[1].y = y1;
-  p[2].x = x2; p[2].y = y2;
-  p[3].x = x3; p[3].y = y3;
-  p[4].x = x;  p[4].y = y;
+  p[0].x = fl_x_+x;  p[0].y = fl_y_+y;
+  p[1].x = fl_x_+x1; p[1].y = fl_y_+y1;
+  p[2].x = fl_x_+x2; p[2].y = fl_y_+y2;
+  p[3].x = fl_x_+x3; p[3].y = fl_y_+y3;
+  p[4].x = fl_x_+x;  p[4].y = fl_y_+y;
   XDrawLines(fl_display, fl_window, fl_gc, p, 5, 0);
 #endif
 }
 
 void fl_polygon(int x, int y, int x1, int y1, int x2, int y2) {
   XPoint p[4];
-  p[0].x = x;  p[0].y = y;
-  p[1].x = x1; p[1].y = y1;
-  p[2].x = x2; p[2].y = y2;
+  p[0].x = fl_x_+x;  p[0].y = fl_y_+y;
+  p[1].x = fl_x_+x1; p[1].y = fl_y_+y1;
+  p[2].x = fl_x_+x2; p[2].y = fl_y_+y2;
 #ifdef WIN32
   SelectObject(fl_gc, fl_brush);
   Polygon(fl_gc, p, 3);
 #else
-  p[3].x = x;  p[3].y = y;
+  p[3] = p[0];
   XFillPolygon(fl_display, fl_window, fl_gc, p, 3, Convex, 0);
   XDrawLines(fl_display, fl_window, fl_gc, p, 4, 0);
 #endif
@@ -214,15 +219,15 @@ void fl_polygon(int x, int y, int x1, int y1, int x2, int y2) {
 
 void fl_polygon(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) {
   XPoint p[5];
-  p[0].x = x;  p[0].y = y;
-  p[1].x = x1; p[1].y = y1;
-  p[2].x = x2; p[2].y = y2;
-  p[3].x = x3; p[3].y = y3;
+  p[0].x = fl_x_+x;  p[0].y = fl_y_+y;
+  p[1].x = fl_x_+x1; p[1].y = fl_y_+y1;
+  p[2].x = fl_x_+x2; p[2].y = fl_y_+y2;
+  p[3].x = fl_x_+x3; p[3].y = fl_y_+y3;
 #ifdef WIN32
   SelectObject(fl_gc, fl_brush);
   Polygon(fl_gc, p, 4);
 #else
-  p[4].x = x;  p[4].y = y;
+  p[4] = p[0];
   XFillPolygon(fl_display, fl_window, fl_gc, p, 4, Convex, 0);
   XDrawLines(fl_display, fl_window, fl_gc, p, 5, 0);
 #endif
@@ -230,12 +235,12 @@ void fl_polygon(int x, int y, int x1, int y1, int x2, int y2, int x3, int y3) {
 
 void fl_point(int x, int y) {
 #ifdef WIN32
-  SetPixel(fl_gc, x, y, fl_colorref);
+  SetPixel(fl_gc, fl_x_+x, fl_y_+y, fl_colorref);
 #else
-  XDrawPoint(fl_display, fl_window, fl_gc, x, y);
+  XDrawPoint(fl_display, fl_window, fl_gc, fl_x_+x, fl_y_+y);
 #endif
 }
 
 //
-// End of "$Id: fl_rect.cxx,v 1.22 2000/07/14 08:35:01 clip Exp $".
+// End of "$Id: fl_rect.cxx,v 1.23 2001/01/23 18:47:55 spitzak Exp $".
 //

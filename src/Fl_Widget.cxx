@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.70 2001/01/02 00:20:28 clip Exp $"
+// "$Id: Fl_Widget.cxx,v 1.71 2001/01/23 18:47:55 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -125,7 +125,7 @@ void Fl_Widget::damage(uchar flags) {
     Fl::damage(FL_DAMAGE_CHILD);
   } else {
     // damage only the rectangle covered by a child widget:
-    damage(flags, x(), y(), w(), h());
+    damage(flags, 0, 0, w(), h());
   }
 }
 
@@ -133,6 +133,8 @@ void Fl_Widget::damage(uchar flags, int X, int Y, int W, int H) {
   Fl_Widget* window = this;
   // mark all parent widgets between this and window with FL_DAMAGE_CHILD:
   while (!window->is_window()) {
+    X += window->x();
+    Y += window->y();
     window->damage_ |= flags;
     window = window->parent();
     if (!window) return;
@@ -342,7 +344,7 @@ int Fl_Widget::test_shortcut() const {
 Fl_Flags Fl_Widget::draw_box() const {
   Fl_Flags f = flags();
   if (!active_r()) f |= FL_INACTIVE;
-  box()->draw(this, x(),y(),w(),h(), f);
+  box()->draw(this, 0, 0, w(), h(), f);
   return f;
 }
 
@@ -367,17 +369,17 @@ Fl_Flags Fl_Widget::draw_button(Fl_Flags flags) const {
   // We need to erase the focus rectangle for FL_NO_BOX buttons, such
   // as checkmarks:
   else if (box()==FL_NO_BOX && (damage()&FL_DAMAGE_HIGHLIGHT)) {
-    fl_clip(x(), y(), w(), h());
+    fl_clip(0, 0, w(), h());
     parent()->draw_group_box();
     fl_pop_clip();
   }
-  draw_box(x(), y(), w(), h(), flags);
+  draw_box(0, 0, w(), h(), flags);
   return flags;
 }
 
 // Draw the background behind text/recessed area:
 Fl_Flags Fl_Widget::draw_text_box() const {
-  return draw_text_box(x(),y(),w(),h());
+  return draw_text_box(0, 0, w(), h());
 }
 
 Fl_Flags Fl_Widget::draw_text_box(int x, int y, int w, int h) const {
@@ -389,7 +391,7 @@ Fl_Flags Fl_Widget::draw_text_box(int x, int y, int w, int h) const {
 
 // Draw only the edge of the text/recessed area, but no interior:
 Fl_Flags Fl_Widget::draw_text_frame() const {
-  return draw_text_frame(x(),y(),w(),h());
+  return draw_text_frame(0, 0, w(), h());
 }
 
 Fl_Flags Fl_Widget::draw_text_frame(int x, int y, int w, int h) const {
@@ -403,12 +405,15 @@ Fl_Flags Fl_Widget::draw_text_frame(int x, int y, int w, int h) const {
 Fl_Color Fl_Widget::get_glyph_color(Fl_Flags flags) const
 {
   Fl_Color c = text_color();
-  if (glyph_box() == FL_NO_BOX) {
-    if (flags&FL_SELECTED)
-      c = selection_text_color();
-    else if (flags&FL_HIGHLIGHT && highlight_label_color())
-      c = highlight_label_color();
-  }
+  // WAS: I commented out this NO_BOX test because it broke the browser
+  // indicators, however I don't know why this was added and what it fixes.
+  // Is it possible this test is inverted?
+  //if (glyph_box() == FL_NO_BOX) {
+  if (flags&FL_SELECTED)
+    c = selection_text_color();
+  else if (flags&FL_HIGHLIGHT && highlight_label_color())
+    c = highlight_label_color();
+  //}
   return fl_inactive(c, flags);
 }
 
@@ -445,20 +450,35 @@ Fl_Color Fl_Widget::get_label_color(Fl_Flags flags) const
   return fl_inactive(c, flags);
 }
 
+// Set up for incremental redraw:
+void Fl_Widget::make_current() const {
+  int x = 0;
+  int y = 0;
+  const Fl_Widget* widget = this;
+  while (!widget->is_window()) {
+    x += widget->x();
+    y += widget->y();
+    widget = widget->parent();
+  }
+  ((const Fl_Window*)widget)->make_current();
+  fl_x_ = x;
+  fl_y_ = y;
+}
+
 // Call the draw method, handle the clip out
 void Fl_Widget::draw_n_clip()
 {
   if (!(box()->fills_rectangle() ||
 	image() && (flags()&FL_ALIGN_TILED) &&
 	(!(flags()&15) || (flags() & FL_ALIGN_INSIDE)))) {
-    fl_clip(x(), y(), w(), h());
+    fl_clip(0, 0, w(), h());
     parent()->draw_group_box();
     fl_pop_clip();
   }
   draw();
-  fl_clip_out(x(), y(), w(), h());
+  fl_clip_out(0, 0, w(), h());
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.70 2001/01/02 00:20:28 clip Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.71 2001/01/23 18:47:55 spitzak Exp $".
 //

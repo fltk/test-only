@@ -1,5 +1,5 @@
 //
-// "$Id: x.H,v 1.26 2000/07/14 08:34:59 clip Exp $"
+// "$Id: x.H,v 1.27 2001/01/23 18:47:54 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -80,9 +80,11 @@ extern FL_API ulong fl_event_time;
   XCreatePixmap(fl_display, fl_window, w, h, fl_visual->depth)
 // begin/end are macros that save the old state in local variables:
 #define fl_begin_offscreen(pixmap) \
-  Window _sw=fl_window; fl_window=pixmap; fl_push_no_clip()
+  Window _sw = fl_window; fl_window = pixmap; \
+  int _sx = fl_x_; int _sy = fl_y_; fl_x_ = fl_y_ = 0; \
+  fl_push_no_clip()
 #define fl_end_offscreen() \
-  fl_pop_clip(); fl_window = _sw
+  fl_pop_clip(); fl_y_ = _sy; fl_x_ = _sx; fl_window = _sw
 
 #define fl_copy_offscreen(x,y,w,h,pixmap,srcx,srcy) \
   XCopyArea(fl_display, pixmap, fl_window, fl_gc, srcx, srcy, w, h, x, y)
@@ -128,5 +130,5 @@ Fl_Window* fl_find(Window xid);
 #endif
 
 //
-// End of "$Id: x.H,v 1.26 2000/07/14 08:34:59 clip Exp $".
+// End of "$Id: x.H,v 1.27 2001/01/23 18:47:54 spitzak Exp $".
 //

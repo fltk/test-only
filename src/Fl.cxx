@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.117 2000/12/12 09:16:20 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.118 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -126,12 +126,19 @@ static void elapse_timeouts() {
   }
 }
 
+// Continuously-adjusted error value, this is a number <= 0 for how late
+// we were at calling the last timeout. This appears to make repeat_timeout
+// very accurate even when processing takes a significant portion of the
+// time interval:
+static double missed_timeout_by;
+
 void Fl::add_timeout(double time, Fl_Timeout_Handler cb, void *arg) {
   elapse_timeouts();
   repeat_timeout(time, cb, arg);
 }
 
 void Fl::repeat_timeout(double time, Fl_Timeout_Handler cb, void *arg) {
+  time += missed_timeout_by; if (time < -.05) time = 0;
   Timeout* t = free_timeout;
   if (t) free_timeout = t->next;
   else t = new Timeout;
@@ -218,9 +225,11 @@ static char in_idle;
 int Fl::wait(double time_to_wait) {
   if (first_timeout) {
     elapse_timeouts();
-    while (Timeout* t = first_timeout) {
+    Timeout *t;
+    while ((t = first_timeout)) {
       if (t->time > 0) break;
       // The first timeout in the array has expired.
+      missed_timeout_by = t->time;
       // We must remove timeout from array before doing the callback:
       void (*cb)(void*) = t->cb;
       void *arg = t->arg;
@@ -354,13 +363,9 @@ void Fl::flush() {
 // Event handling:
 
 int Fl::event_inside(int x,int y,int w,int h) /*const*/ {
-  int mx = event_x() - x;
-  int my = event_y() - y;
+  int mx = e_x - x;
+  int my = e_y - y;
   return (mx >= 0 && mx < w && my >= 0 && my < h);
-}
-
-int Fl::event_inside(const Fl_Widget& o) /*const*/ {
-  return event_inside(o.x(), o.y(), o.w(), o.h());
 }
 
 void Fl::focus(Fl_Widget *o) {
@@ -629,7 +634,7 @@ int Fl::handle(int event, Fl_Window* window)
     int dx = window->x();
     int dy = window->y();
     for (const Fl_Widget* w = to; w; w = w->parent())
-      if (w->is_window()) {dx -= w->x(); dy -= w->y();}
+      {dx -= w->x(); dy -= w->y();}
     int save_x = Fl::e_x; Fl::e_x += dx;
     int save_y = Fl::e_y; Fl::e_y += dy;
     ret = to->handle(event);
@@ -670,5 +675,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.117 2000/12/12 09:16:20 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.118 2001/01/23 18:47:54 spitzak Exp $".
 //

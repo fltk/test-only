@@ -1,5 +1,5 @@
 //
-// "$Id: forms_compatability.cxx,v 1.10 2000/11/15 18:20:23 spitzak Exp $"
+// "$Id: forms_compatability.cxx,v 1.11 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Forms compatibility functions for the Fast Light Tool Kit (FLTK).
 //
@@ -58,37 +58,38 @@ void fl_end_form() {
 }
 
 void fl_end_group() {
-  Fl_Group* g = Fl_Group::current();
+  Fl_Group* group = Fl_Group::current();
   // set the dimensions of a group to surround contents
-  if (g->children() && !g->w()) {
-    Fl_Widget* o = g->child(0);
+  if (group->children() && !group->w()) {
+    Fl_Widget* o = group->child(0);
     int rx = o->x();
     int ry = o->y();
     int rw = rx+o->w();
     int rh = ry+o->h();
-    for (int i = 1; i < g->children(); i++) {
-      o = g->child(i);
+    for (int i = 1; i < group->children(); i++) {
+      o = group->child(i);
       if (o->x() < rx) rx = o->x();
       if (o->y() < ry) ry = o->y();
       if (o->x()+o->w() > rw) rw = o->x()+o->w();
       if (o->y()+o->h() > rh) rh = o->y()+o->h();
     }
-    g->x(g->ox_ = rx);
-    g->y(g->oy_ = ry);
-    g->w(g->ow_ = rw-rx);
-    g->h(g->oh_ = rh-ry);
+    group->x(group->ox_ = rx);
+    group->y(group->oy_ = ry);
+    group->w(group->ow_ = rw-rx);
+    group->h(group->oh_ = rh-ry);
   }
   // flip all the children's coordinate systems:
   if (fl_flip) {
-    Fl_Widget* o = (g->type()>=FL_WINDOW) ? g : g->window();
+    Fl_Widget* o = (group->type()>=FL_WINDOW) ? group : group->window();
     int Y = o->h();
-    for (int i = 0; i < g->children(); i++) {
-      Fl_Widget* o = g->child(i);
+    for (int i = 0; i < group->children(); i++) {
+      Fl_Widget* o = group->child(i);
       o->y(Y-o->y()-o->h());
     }
-    g->oy_ = Y-g->oy_-g->h();
+    group->oy_ = Y-group->oy_-group->h();
   }
-  g->end();
+  group->fix_old_positions();
+  group->end();
 }
 
 static int initargc;
@@ -254,5 +255,5 @@ char *fl_show_simple_input(const char *str1, const char *defstr) {
 }
 
 //
-// End of "$Id: forms_compatability.cxx,v 1.10 2000/11/15 18:20:23 spitzak Exp $".
+// End of "$Id: forms_compatability.cxx,v 1.11 2001/01/23 18:47:54 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.31 2000/09/11 07:29:32 spitzak Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.32 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -283,10 +283,13 @@ void Fl_Window_Type::newposition(Fl_Widget_Type *o,int &X,int &Y,int &R,int &T) 
     R += dx;
     T += dy;
   } else {
-    if (drag&LEFT) if (X==bx) X += dx; else if (X<bx+dx) X = bx+dx;
-    if (drag&BOTTOM) if (Y==by) Y += dy; else if (Y<by+dy) Y = by+dy;
-    if (drag&RIGHT) if (R==br) R += dx; else if (R>br+dx) R = br+dx;
-    if (drag&TOP) if (T==bt) T += dy; else if (T>bt+dx) T = bt+dx;
+    int ox = 0; int oy = 0;
+    Fl_Group* p = o->o->parent();
+    while (p->parent()) {ox += p->x(); oy += p->y(); p = p->parent();}
+    if (drag&LEFT) if (X+ox==bx) X += dx; else if (X<bx+dx-ox) X = bx+dx-ox;
+    if (drag&BOTTOM) if (Y+oy==by) Y += dy; else if (Y<by+dy-oy) Y = by+dy-oy;
+    if (drag&RIGHT) if (R+ox==br) R += dx; else if (R>br+dx-ox) R = br+dx-ox;
+    if (drag&TOP) if (T+oy==bt) T += dy; else if (T>bt+dx-oy) T = bt+dx-oy;
   }
   if (R<X) {int n = X; X = R; R = n;}
   if (T<Y) {int n = Y; Y = T; T = n;}
@@ -299,11 +302,14 @@ void Fl_Window_Type::draw_overlay() {
     for (Fl_Type* q = first_child; q; q = q->walk(this)) {
       if (q->selected && q->is_widget() && !q->is_menu_item()) {
 	numselected++;
-	Fl_Widget_Type* o = (Fl_Widget_Type*)q;
-	if (o->o->x() < bx) bx = o->o->x();
-	if (o->o->y() < by) by = o->o->y();
-	if (o->o->x()+o->o->w() > br) br = o->o->x()+o->o->w();
-	if (o->o->y()+o->o->h() > bt) bt = o->o->y()+o->o->h();
+	Fl_Widget* o = ((Fl_Widget_Type*)q)->o;
+	int x = o->x(); int y = o->y();
+	Fl_Group* p = o->parent();
+	while (p->parent()) {x += p->x(); y += p->y(); p = p->parent();}
+	if (x < bx) bx = x;
+	if (y < by) by = y;
+	if (x+o->w() > br) br = x+o->w();
+	if (y+o->h() > bt) bt = y+o->h();
       }
     }
     recalc = 0;
@@ -321,10 +327,16 @@ void Fl_Window_Type::draw_overlay() {
   bx = o->w(); by = o->h(); br = 0; bt = 0;
   for (Fl_Type* q = first_child; q; q = q->walk(this)) {
     if (q->selected && q->is_widget() && !q->is_menu_item()) {
-      Fl_Widget_Type* o = (Fl_Widget_Type*)q;
       int x,y,r,t;
-      newposition(o,x,y,r,t);
-      int hidden = (!o->o->visible_r());
+      newposition((Fl_Widget_Type*)q,x,y,r,t);
+      Fl_Widget* o = ((Fl_Widget_Type*)q)->o;
+      Fl_Group* p = o->parent();
+      while (p->parent()) {
+	x += p->x(); r += p->x();
+	y += p->y(); t += p->y();
+	p = p->parent();
+      }
+      int hidden = (!o->visible_r());
       if (hidden) fl_line_style(FL_DASH);
       fl_rect(x,y,r-x,t-y);
       if (x < bx) bx = x;
@@ -386,15 +398,6 @@ void Fl_Window_Type::moveallchildren()
       int x,y,r,t;
       newposition(o,x,y,r,t);
       o->o->resize(x,y,r-x,t-y);
-      // move all the children, whether selected or not:
-      for (Fl_Type* p = o->first_child; p; p = p->walk(o)) {
-	if (p->is_widget() && !p->is_menu_item()) {
-	  Fl_Widget_Type* o = (Fl_Widget_Type*)p;
-	  int x,y,r,t;
-	  newposition(o,x,y,r,t);
-	  o->o->resize(x,y,r-x,t-y);
-	}
-      }
       i = i->next_brother;
     } else {
       i = i->walk(this);
@@ -413,6 +416,32 @@ void Fl_Window_Type::moveallchildren()
 extern Fl_Menu_Item Main_Menu[];
 extern Fl_Menu_Item New_Menu[];
 
+// find the innermost item clicked on:
+Fl_Widget_Type* Fl_Window_Type::clicked_widget() {
+  Fl_Widget_Type* selection = this;
+  int x = 0; int y = 0;
+  for (;;) {
+    Fl_Widget_Type* inner_selection = 0;
+    for (Fl_Type* i = selection->first_child; i; i = i->next_brother) {
+      if (i->is_widget() && !i->is_menu_item()) {
+	Fl_Widget_Type* o = (Fl_Widget_Type*)i;
+	Fl_Widget* w = o->o;
+	if (w->visible_r()&&Fl::event_inside(w->x()+x,w->y()+y,w->w(),w->h()))
+	  inner_selection = o;
+      }
+    }
+    if (inner_selection) {
+      selection = inner_selection;
+      Fl_Widget* w = inner_selection->o;
+      x += w->x();
+      y += w->y();
+    } else {
+      break;
+    }
+  }
+  return selection;
+}
+
 int Fl_Window_Type::handle(int event) {
   static Fl_Type* selection;
   switch (event) {
@@ -427,20 +456,7 @@ int Fl_Window_Type::handle(int event) {
       in_this_only = 0;
       return 1;
     }
-    // find the innermost item clicked on:
-    selection = this;
-    for (;;) {
-      Fl_Widget_Type* inner_selection = 0;
-      for (Fl_Type* i = selection->first_child; i; i = i->next_brother) {
-	if (i->is_widget() && !i->is_menu_item()) {
-	  Fl_Widget_Type* o = (Fl_Widget_Type*)i;
-	  if (o->o->visible_r() && Fl::event_inside(o->o))
-	    inner_selection = o;
-	}
-      }
-      if (inner_selection) selection = inner_selection;
-      else break;
-    }
+    selection = clicked_widget();
     // see if user grabs edges of selected region:
     if (numselected && !(Fl::event_state(FL_SHIFT)) &&
 	mx<=br+snap && mx>=bx-snap && my<=bt+snap && my>=by-snap) {
@@ -495,15 +511,15 @@ int Fl_Window_Type::handle(int event) {
       // select everything in box:
       for (Fl_Type* i = first_child; i; i = i->walk(this)) {
 	if (i->is_widget() && !i->is_menu_item()) {
-	  Fl_Widget_Type* o = (Fl_Widget_Type*)i;
-	  if (o->o->parent()->visible_r()) {
-	    if (o->o->x()>=x1 && o->o->y()>y1 &&
-		o->o->x()+o->o->w()<mx && o->o->y()+o->o->h()<my) {
-	      if (toggle) select(o, !o->selected);
-	      else if (!n) select_only(o);
-	      else select(o, 1);
-	      n++;
-	    }
+	  Fl_Widget* o = ((Fl_Widget_Type*)i)->o;
+	  int x = o->x(); int y = o->y();
+	  Fl_Group* p = o->parent(); if (!p->visible_r()) continue;
+	  while (p->parent()) {x += p->x(); y += p->y(); p = p->parent();}
+	  if (x >= x1 && y > y1 && x+o->w() < mx && y+o->h() < my) {
+	    if (toggle) select(i, !i->selected);
+	    else if (!n) select_only(i);
+	    else select(i, 1);
+	    n++;
 	  }
 	}
       }
@@ -511,19 +527,7 @@ int Fl_Window_Type::handle(int event) {
       // if nothing in box, select what was clicked on:
       if (!n) {
 	// find the innermost item clicked on:
-	selection = this;
-	for (;;) {
-	  Fl_Widget_Type* inner_selection = 0;
-	  for (Fl_Type* i = selection->first_child; i; i = i->next_brother) {
-	    if (i->is_widget() && !i->is_menu_item()) {
-	      Fl_Widget_Type* o = (Fl_Widget_Type*)i;
-	      if (o->o->visible_r() && Fl::event_inside(o->o))
-		inner_selection = o;
-	    }
-	  }
-	  if (inner_selection) selection = inner_selection;
-	  else break;
-	}
+	selection = clicked_widget();
 	if (toggle) select(selection, !selection->selected);
 	else select_only(selection);
       }
@@ -678,5 +682,5 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.31 2000/09/11 07:29:32 spitzak Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.32 2001/01/23 18:47:54 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fractals.cxx,v 1.4 2000/08/10 09:24:30 spitzak Exp $"
+// "$Id: fractals.cxx,v 1.5 2001/01/23 18:47:54 spitzak Exp $"
 //
 // Fractal drawing demo for the Fast Light Tool Kit (FLTK).
 //
@@ -732,7 +732,7 @@ void choosefract(Fl_Widget*, void *value) {choosefract(long(value));}
 
 void handlemenu(Fl_Widget*, void *value) {handlemenu(long(value));}
 
-#include <FL/Fl_Button.H>
+#include <FL/Fl_Radio_Button.H>
 #include <FL/Fl_Group.H>
 #include <FL/Fl_Window.H>
 
@@ -745,27 +745,29 @@ int main(int argc, char** argv)
   window.resizable(window);
 
   // create a bunch of buttons:
-  Fl_Group *g = new Fl_Group(110,50,400-110,30,"Level:");
+  Fl_Group *g = new Fl_Group(50,50,400-110,30,"Level:");
   g->clear_flag(FL_ALIGN_MASK);
   g->set_flag(FL_ALIGN_LEFT);
   g->begin();
   Fl_Button *b;
-  b = new Fl_Button(110,50,30,30,"0"); b->callback(setlevel,(void*)0);
-  b = new Fl_Button(140,50,30,30,"1"); b->callback(setlevel,(void*)1);
-  b = new Fl_Button(170,50,30,30,"2"); b->callback(setlevel,(void*)2);
-  b = new Fl_Button(200,50,30,30,"3"); b->callback(setlevel,(void*)3);
-  b = new Fl_Button(230,50,30,30,"4"); b->callback(setlevel,(void*)4);
-  b = new Fl_Button(260,50,30,30,"5"); b->callback(setlevel,(void*)5);
-  b = new Fl_Button(290,50,30,30,"6"); b->callback(setlevel,(void*)6);
-  b = new Fl_Button(320,50,30,30,"7"); b->callback(setlevel,(void*)7);
-  b = new Fl_Button(350,50,30,30,"8"); b->callback(setlevel,(void*)8);
+  b = new Fl_Radio_Button(  0,0,30,25,"0"); b->callback(setlevel,(void*)0);
+  b = new Fl_Radio_Button( 30,0,30,25,"1"); b->callback(setlevel,(void*)1);
+  b = new Fl_Radio_Button( 60,0,30,25,"2"); b->callback(setlevel,(void*)2);
+  b = new Fl_Radio_Button( 90,0,30,25,"3"); b->callback(setlevel,(void*)3);
+  b = new Fl_Radio_Button(120,0,30,25,"4"); b->callback(setlevel,(void*)4);
+  b->set();
+  b = new Fl_Radio_Button(150,0,30,25,"5"); b->callback(setlevel,(void*)5);
+  b = new Fl_Radio_Button(180,0,30,25,"6"); b->callback(setlevel,(void*)6);
+  b = new Fl_Radio_Button(210,0,30,25,"7"); b->callback(setlevel,(void*)7);
+  b = new Fl_Radio_Button(240,0,30,25,"8"); b->callback(setlevel,(void*)8);
   g->end();
 
   b = new Fl_Button(400,50,100,30,"New Fractal"); b->callback(handlemenu,(void*)MENU_RAND);
   
-  b = new Fl_Button( 10,10,100,30,"Mountain"); b->callback(choosefract,(void*)MOUNTAIN);
-  b = new Fl_Button(110,10,100,30,"Tree"); b->callback(choosefract,(void*)TREE);
-  b = new Fl_Button(210,10,100,30,"Island"); b->callback(choosefract,(void*)ISLAND);
+  b = new Fl_Radio_Button( 10,10,100,25,"Mountain"); b->callback(choosefract,(void*)MOUNTAIN);
+  b = new Fl_Radio_Button(110,10,100,25,"Tree"); b->callback(choosefract,(void*)TREE);
+  b->set();
+  b = new Fl_Radio_Button(210,10,100,25,"Island"); b->callback(choosefract,(void*)ISLAND);
   b = new Fl_Button(400,10,100,30,"Quit"); b->callback(handlemenu,(void*)MENU_QUIT);
 
 
@@ -796,5 +798,5 @@ int main(int argc, char** argv)
 }
 
 //
-// End of "$Id: fractals.cxx,v 1.4 2000/08/10 09:24:30 spitzak Exp $".
+// End of "$Id: fractals.cxx,v 1.5 2001/01/23 18:47:54 spitzak Exp $".
 //
