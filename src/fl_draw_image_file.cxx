@@ -69,12 +69,10 @@ static void check_mem_usage()
     lifs->mem=0;
     fl_delete_offscreen(lifs->id);
     lifs->id=0;
-#ifndef WIN32
     if(lifs->mask) {
       fl_delete_offscreen(lifs->mask);
       lifs->mask = 0;
     }
-#endif
     goto again;
   }
 }
