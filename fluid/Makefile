@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.18 1999/09/17 16:23:55 vincent Exp $"
+# "$Id: Makefile,v 1.19 1999/09/19 05:01:41 vincent Exp $"
 #
 # Fluid makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -56,7 +56,7 @@ include ../makeinclude
 	$(CXX) -I.. $(CXXFLAGS) -c $<
 
 .cxx.odll :
-	$(CXX) -DFL_DLL -I.. $(CXXFLAGS) -c $<
+	$(CXX) -DFL_DLL -I.. $(CXXFLAGS) -c $< -o $@
 .c.o :
 	$(CC) -I.. $(CFLAGS) -c $<
 .cxx :
@@ -66,8 +66,8 @@ $(PROGRAM) : $(OBJECTS) ../lib/$(LIBNAME)
 	$(CXX) $(LDFLAGS) -o $(PROGRAM) $(OBJECTS) -L../lib -lfltk $(LDLIBS) $(LD_DLOPEN_FLAGS)
 
 # for mingw32, to build the version of fluid that use the dll
-fluid_dll.exe : $(OBJECTSDLL) ../lib/$(LIBNAME)
-	$(CXX) $(LDFLAGS) -o $(PROGRAM) $(OBJECTSDLL) -L../lib -lfltk.2_dll $(LDLIBS) $(LD_DLOPEN_FLAGS)
+fluid_dll.exe : $(OBJECTSDLL) ../lib/libfltkdll.2.a
+	$(CXX) $(LDFLAGS) -o $(PROGRAM) $(OBJECTSDLL) -L../lib -lfltkdll.2 $(GLDLIBS) $(LD_DLOPEN_FLAGS)
 
 
 clean :
@@ -100,5 +100,5 @@ rebuild:
 	./fluid -c widget_panel.fl
 
 #
-# End of "$Id: Makefile,v 1.18 1999/09/17 16:23:55 vincent Exp $".
+# End of "$Id: Makefile,v 1.19 1999/09/19 05:01:41 vincent Exp $".
 #

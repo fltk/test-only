@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.7 1999/09/17 16:23:56 vincent Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.8 1999/09/19 05:01:42 vincent Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -47,16 +47,7 @@ static unsigned char nosuch_bits[] = {
    0x55, 0x95, 0xa9, 0xab, 0x01, 0x81, 0xff, 0xff};
 Fl_Bitmap nosuch_bitmap(nosuch_bits, nosuch_width, nosuch_height);
 
-struct Fl_Image_Type fl_image_filetypes[] = {
-  { "XPM", Fl_XPM_Image::test, Fl_XPM_Image::get},
-  { "GIF", Fl_GIF_Image::test, Fl_GIF_Image::get},
-  { "PNG", Fl_PNG_Image::test, Fl_PNG_Image::get},
-  { "BMP", Fl_BMP_Image::test, Fl_BMP_Image::get},
-  { "JPEG", Fl_JPEG_Image::test, Fl_JPEG_Image::get},
-  { 0, Fl_UNKNOWN_Image::test, Fl_UNKNOWN_Image::get }
-};
-
-static char *root=0;
+char *fl_shared_image_root=0;
 
 static Fl_Shared_Image  *first_image = 0;
 
@@ -111,15 +102,15 @@ void Fl_Shared_Image::check_mem_usage()
 
 void Fl_Shared_Image::set_root_directory(char *d)
 {
-  if(root) free(root);
+  if(fl_shared_image_root) free(fl_shared_image_root);
   if(d[0] && d[strlen(d)-1]!='/')
   {
-    root=(char *) malloc(strlen(d)+2);
-    strcpy(root, d);
-    strcat(root, "/");
+    fl_shared_image_root=(char *) malloc(strlen(d)+2);
+    strcpy(fl_shared_image_root, d);
+    strcat(fl_shared_image_root, "/");
   }
   else
-    root=strdup(d);
+    fl_shared_image_root=strdup(d);
 }
 
 void Fl_Shared_Image::insert(Fl_Shared_Image*& p, Fl_Shared_Image* image) {
@@ -145,11 +136,10 @@ char* Fl_Shared_Image::get_filename()
 {
   if (name[0] == '/') return name;
   static char *s;
-// warning : the returned pointer will be available only until next call to get_filename
   if(s) free(s);
-  if(!root) root=strdup("");
-  s = (char*) malloc(strlen(name)+strlen(root)+1);
-  strcpy(s, root);
+  if(!fl_shared_image_root) fl_shared_image_root=strdup("");
+  s = (char*) malloc(strlen(name)+strlen(fl_shared_image_root)+1);
+  strcpy(s, fl_shared_image_root);
   strcat(s, name);
   return s;
 }
@@ -228,35 +218,6 @@ int Fl_Shared_Image::remove(char* name)
   else return 0;
 }
 
-Fl_Image_Type* Fl_Shared_Image::guess(char* name, unsigned char *datas)
-{
-  int loaded = 0;
-  size_t size = 1024;
-  if (!datas) {
-    datas = new uchar[1025];
-    datas[1024] = 0; // null-terminate so strstr() works
-    char s[1024];
-    if (name[0] == '/') strcpy(s, name);
-    else {
-      if(!root) root=strdup("");
-      strcpy(s, root);
-      strcat(s, name);
-    }
-    FILE* fp = fopen(s, "rb");
-    if (!fp)
-      return fl_image_filetypes + 
-	sizeof(fl_image_filetypes)/sizeof(fl_image_filetypes[0]) - 1;
-    size = fread(datas, 1, size, fp);
-    fclose(fp);
-    loaded = 1;
-  }
-  Fl_Image_Type* ft;
-  for (ft=fl_image_filetypes; ft->name; ft++)
-    if (ft->test(datas, size)) break;
-  if(loaded) free(datas);
-  return ft;
-}
-
 void Fl_Shared_Image::draw(int X, int Y, int W, int H, 
 				int cx, int cy)
 {
@@ -281,5 +242,5 @@ void Fl_Shared_Image::draw(int X, int Y, int W, int H,
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.7 1999/09/17 16:23:56 vincent Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.8 1999/09/19 05:01:42 vincent Exp $"
 //
