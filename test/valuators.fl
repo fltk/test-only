@@ -1,189 +1,189 @@
 # data file for the FLTK User Interface Designer (FLUID)
-version 2.0001 
+version 2.0002 
 images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
 gridx 5 
 gridy 5 
 snap 3
-Function {callback(Fl_Widget* o, void*)} {open private return_type void
+Function {callback(fltk::Widget* o, void*)} {open private return_type void
 } {
-  code {printf("%g     \\r", ((Fl_Valuator*)o)->value());
+  code {printf("%g     \\r", ((fltk::Valuator*)o)->value());
 fflush(stdout);} {}
 } 
 
 Function {} {open
 } {
-  Fl_Window {} {
+  {fltk::Window} {} {
     label {Valuator classes, showing values for the type()} open
-    xywh {459 329 565 490} resizable label_size 10
+    xywh {645 271 565 490} resizable labelsize 10
     extra_code {\#include <stdio.h>} visible
   } {
-    Fl_Box {} {
+    {fltk::Widget} {} {
       label Fl_Slider
-      xywh {10 10 280 235} align 17 box ENGRAVED_BOX label_font 1
+      xywh {10 10 280 235} align 17 box ENGRAVED_BOX labelfont 1 color 49
     }
-    Fl_Slider {} {
+    {fltk::Slider} {} {
       label VERTICAL
       callback callback
-      xywh {25 49 20 157} align 1 color 10 selection_color 1 label_size 8
+      xywh {25 49 20 157} align 1 color 10 selection_color 1 labelsize 8
     }
-    Fl_Slider {} {
+    {fltk::Slider} {} {
       label {VERTICAL|TICK_LEFT}
       callback callback
-      xywh {60 70 20 158} type {VERTICAL|Fl_Slider::TICK_ABOVE} color 10 selection_color 1 label_size 8
+      xywh {60 70 20 158} type {VERTICAL|fltk::Slider::TICK_ABOVE} color 10 selection_color 1 labelsize 8
     }
-    Fl_Slider {} {
+    {fltk::Slider} {} {
       label {VERTICAL|TICK_RIGHT}
       callback callback
-      xywh {100 49 20 157} type {VERTICAL|Fl_Slider::TICK_BELOW} align 1 color 10 selection_color 1 label_size 8
+      xywh {100 49 20 157} type {VERTICAL|fltk::Slider::TICK_BELOW} align 1 color 10 selection_color 1 labelsize 8
     }
-    Fl_Slider {} {
+    {fltk::Slider} {} {
       label HORIZONTAL
       callback callback
-      xywh {140 54 130 16} type HORIZONTAL color 10 selection_color 1 label_size 8
+      xywh {140 54 130 16} type HORIZONTAL color 10 selection_color 1 labelsize 8
     }
-    Fl_Slider {} {
+    {fltk::Slider} {} {
       label {HORIZONTAL|TICK_ABOVE}
       callback callback
-      xywh {140 81 130 22} type {HORIZONTAL|Fl_Slider::TICK_ABOVE} color 10 selection_color 1 label_size 8
+      xywh {140 81 130 22} type {HORIZONTAL|fltk::Slider::TICK_ABOVE} color 10 selection_color 1 labelsize 8
     }
-    Fl_Slider {} {
+    {fltk::Slider} {} {
       label {HORIZONTAL|TICK_ABOVE,box}
       callback callback
-      xywh {140 119 130 22} type {HORIZONTAL|Fl_Slider::TICK_ABOVE} box DOWN_BOX color 10 selection_color 1 label_size 8
+      xywh {140 119 130 22} type {HORIZONTAL|fltk::Slider::TICK_ABOVE} box DOWN_BOX color 10 selection_color 1 labelsize 8
     }
-    Fl_Slider {} {
+    {fltk::Slider} {} {
       label {HORIZONTAL|TICK_BELOW}
       callback callback
-      xywh {140 157 130 22} type {HORIZONTAL|Fl_Slider::TICK_BELOW} color 10 selection_color 1 label_size 8
+      xywh {140 157 130 22} type {HORIZONTAL|fltk::Slider::TICK_BELOW} color 10 selection_color 1 labelsize 8
     }
-    Fl_Slider {} {
+    {fltk::Slider} {} {
       label {HORIZONTAL|TICK_BOTH}
       callback callback
-      xywh {140 201 130 22} type {HORIZONTAL|Fl_Slider::TICK_BOTH} color 10 selection_color 1 label_size 8
+      xywh {140 201 130 22} type {HORIZONTAL|fltk::Slider::TICK_BOTH} color 10 selection_color 1 labelsize 8
     }
-    Fl_Box {} {
+    {fltk::Widget} {} {
       label Fl_Value_Input
-      xywh {295 10 260 126} align 17 box ENGRAVED_BOX label_font 1
+      xywh {295 10 260 126} align 17 box ENGRAVED_BOX labelfont 1 color 49
     }
-    Fl_Value_Input {} {
+    {fltk::ValueInput} {} {
       label {outside label}
-      callback callback selected
-      xywh {360 35 180 22} color 10 selection_color 1 label_size 8
+      callback callback
+      xywh {360 35 180 22} color 10 selection_color 1 labelsize 8
     }
-    Fl_Value_Input {} {
+    {fltk::ValueInput} {} {
       label inside
       callback callback
-      xywh {310 63 100 22} align 20 color 10 selection_color 1 label_size 8
+      xywh {310 63 100 22} align 20 color 10 selection_color 1 labelsize 8
     }
-    Fl_Value_Input {} {
+    {fltk::ValueInput} {} {
       label x
       callback callback
       xywh {410 63 65 22} align 20 color 10 selection_color 1 maximum 100 step 0.1
     }
-    Fl_Value_Input {} {
+    {fltk::ValueInput} {} {
       label y
       callback callback
       xywh {475 63 65 22} align 20 color 10 selection_color 1 maximum 100 step 0.1
     }
-    Fl_Value_Input {} {
+    {fltk::ValueInput} {} {
       label larger
       callback callback
       xywh {360 93 180 32} color 10 selection_color 1
     }
-    Fl_Box {} {
+    {fltk::Widget} {} {
       label Fl_Value_Slider
-      xywh {10 250 280 229} align 17 box ENGRAVED_BOX label_font 1
+      xywh {10 250 280 229} align 17 box ENGRAVED_BOX labelfont 1 color 49
     }
-    Fl_Box {} {
+    {fltk::Widget} {} {
       label {   Fl_Scrollbar}
-      xywh {295 141 145 131} align 21 box ENGRAVED_BOX label_font 1
+      xywh {295 141 145 131} align 21 box ENGRAVED_BOX labelfont 1 color 49
     }
-    Fl_Scrollbar {} {
+    {fltk::Scrollbar} {} {
       label HORIZONTAL
       callback callback
-      xywh {300 240 105 20} type HORIZONTAL color 10 selection_color 1 label_size 8 maximum 100
+      xywh {300 240 105 20} type HORIZONTAL color 10 selection_color 1 labelsize 8 maximum 100
     }
-    Fl_Scrollbar {} {
+    {fltk::Scrollbar} {} {
       label VERTICAL
       callback callback
-      xywh {405 145 20 115} color 10 selection_color 1 label_size 8 minimum 100 maximum 0
+      xywh {405 145 20 115} color 10 selection_color 1 labelsize 8 minimum 100 maximum 0
     }
-    Fl_Value_Slider {} {
+    {fltk::ValueSlider} {} {
       label VERTICAL
       callback callback
-      xywh {25 277 30 158} align 1 color 10 selection_color 1 label_size 8 text_size 10
+      xywh {25 277 30 158} align 1 color 10 selection_color 1 labelsize 8 textsize 10
     }
-    Fl_Value_Slider {} {
+    {fltk::ValueSlider} {} {
       label {VERTICAL|TICK_LEFT}
       callback callback
-      xywh {65 310 30 152} type {VERTICAL|Fl_Slider::TICK_ABOVE} color 10 selection_color 1 label_size 8 text_size 10
+      xywh {65 310 30 152} type {VERTICAL|fltk::Slider::TICK_ABOVE} color 10 selection_color 1 labelsize 8 textsize 10
     }
-    Fl_Value_Slider {} {
+    {fltk::ValueSlider} {} {
       label {VERTICAL|TICK_LEFT,box}
-      callback callback
-      xywh {105 283 35 158} type {VERTICAL|Fl_Slider::TICK_ABOVE} align 1 box DOWN_BOX color 10 selection_color 1 label_size 8 text_size 10
+      callback callback selected
+      xywh {105 283 35 158} type {VERTICAL|fltk::Slider::TICK_BELOW} align 1 box DOWN_BOX color 10 selection_color 1 labelsize 8 textsize 10
     }
-    Fl_Value_Slider {} {
+    {fltk::ValueSlider} {} {
       label HORIZONTAL
       callback callback
-      xywh {145 294 130 21} type HORIZONTAL color 10 selection_color 1 label_size 8
+      xywh {145 294 130 21} type HORIZONTAL color 10 selection_color 1 labelsize 8
     }
-    Fl_Value_Slider {} {
+    {fltk::ValueSlider} {} {
       label {HORIZONTAL|TICK_BELOW}
       callback callback
-      xywh {145 337 130 22} type {HORIZONTAL|Fl_Slider::TICK_BELOW} color 10 selection_color 1 label_size 8
+      xywh {145 337 130 22} type {HORIZONTAL|fltk::Slider::TICK_BELOW} color 10 selection_color 1 labelsize 8
     }
-    Fl_Value_Slider {} {
+    {fltk::ValueSlider} {} {
       label {HORIZONTAL|TICK_BELOW,box}
       callback callback
-      xywh {145 381 130 21} type {HORIZONTAL|Fl_Slider::TICK_BELOW} box DOWN_BOX color 10 selection_color 1 label_size 8
+      xywh {145 381 130 21} type {HORIZONTAL|fltk::Slider::TICK_BELOW} box DOWN_BOX color 10 selection_color 1 labelsize 8
     }
-    Fl_Value_Slider {} {
+    {fltk::ValueSlider} {} {
       label {HORIZONTAL|TICK_BOTH}
       callback callback
-      xywh {145 424 130 33} type {HORIZONTAL|Fl_Slider::TICK_BOTH} color 10 selection_color 1 label_size 8
+      xywh {145 424 130 33} type {HORIZONTAL|fltk::Slider::TICK_BOTH} color 10 selection_color 1 labelsize 8
     }
-    Fl_Box {} {
+    {fltk::Widget} {} {
       label Fl_Roller
-      xywh {295 277 145 136} align 17 box ENGRAVED_BOX label_font 1
+      xywh {295 277 145 136} align 17 box ENGRAVED_BOX labelfont 1 color 49
     }
-    Fl_Roller {} {
+    {fltk::ThumbWheel} {} {
       label HORIZONTAL
       callback callback
-      xywh {305 340 90 20} type HORIZONTAL color 10 selection_color 1 label_size 8
+      xywh {305 340 90 20} type HORIZONTAL color 10 selection_color 1 labelsize 8
     }
-    Fl_Roller {} {
+    {fltk::ThumbWheel} {} {
       label VERTICAL
       callback callback
-      xywh {405 299 20 103} color 10 selection_color 1 label_size 8
+      xywh {405 299 20 103} color 10 selection_color 1 labelsize 8
     }
-    Fl_Group {} {
+    {fltk::Group} {} {
       label Fl_Dial open
-      xywh {445 141 110 272} align 17 box ENGRAVED_BOX label_font 1
+      xywh {445 141 110 272} align 17 box ENGRAVED_BOX labelfont 1
     } {
-      Fl_Dial {} {
+      {fltk::Dial} {} {
         label NORMAL
         callback callback
-        xywh {22 24 65 65} color 10 selection_color 1 label_size 8 value 0.5
+        xywh {23 24 63 65} color 10 selection_color 1 labelsize 8 value 0.5
         extra_code {o->angles(0,315);}
       }
-      Fl_Dial {} {
+      {fltk::Dial} {} {
         label LINE
         callback callback
-        xywh {22 104 65 65} type LINE color 10 selection_color 1 label_size 8 value 0.5
+        xywh {23 104 63 65} type LINE color 10 selection_color 1 labelsize 8 value 0.5
       }
-      Fl_Dial {} {
+      {fltk::Dial} {} {
         label FILL
         callback callback
-        xywh {22 184 65 65} type FILL color 10 selection_color 1 label_size 8 value 0.75
+        xywh {23 184 63 65} type FILL color 10 selection_color 1 labelsize 8 value 0.75
         extra_code {o->angles(0,360);}
       }
     }
-    Fl_Box {} {
+    {fltk::Widget} {} {
       label {All widgets have color(green) and selection_color(red) to show the areas these colors affect.}
-      xywh {295 419 260 60} align 128 box ENGRAVED_BOX label_size 10
+      xywh {295 419 260 60} align 128 box ENGRAVED_BOX labelsize 10
     }
   }
 } 

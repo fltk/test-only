@@ -6,9 +6,9 @@
    they will override this and cause fltk to call the plugin instead.
 */
 
-#include <fltk/Fl_Style.h>
+#include <fltk/Style.h>
 
 extern "C" bool fltk_theme() {
-  fl_get_system_colors();
+  fltk::get_system_colors();
   return true;
 }

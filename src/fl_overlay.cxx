@@ -1,5 +1,5 @@
 //
-// "$Id: fl_overlay.cxx,v 1.8 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: fl_overlay.cxx,v 1.9 2002/12/09 04:52:30 spitzak Exp $"
 //
 // Overlay support for the Fast Light Tool Kit (FLTK).
 //
@@ -29,29 +29,30 @@
 // it.
 
 #include <fltk/x.h>
-#include <fltk/fl_draw.h>
+#include <fltk/draw.h>
+using namespace fltk;
 
 static int px,py,pw,ph;
 
 static void draw_current_rect() {
 #ifdef _WIN32
-  int old = SetROP2(fl_gc, R2_NOT);
-  fl_rect(px, py, pw, ph);
-  SetROP2(fl_gc, old);
+  int old = SetROP2(gc, R2_NOT);
+  strokerect(px, py, pw, ph);
+  SetROP2(gc, old);
 #else
-  XSetFunction(fl_display, fl_gc, GXxor);
-  XSetForeground(fl_display, fl_gc, 0xffffffff);
-  XDrawRectangle(fl_display, fl_window, fl_gc, px, py, pw, ph);
-  XSetFunction(fl_display, fl_gc, GXcopy);
+  XSetFunction(xdisplay, gc, GXxor);
+  XSetForeground(xdisplay, gc, 0xffffffff);
+  XDrawRectangle(xdisplay, xwindow, gc, px, py, pw, ph);
+  XSetFunction(xdisplay, gc, GXcopy);
 #endif
 }
 
-void fl_overlay_clear() {
+void fltk::overlay_clear() {
   if (pw > 0) {draw_current_rect(); pw = 0;}
 }
 
-void fl_overlay_rect(int x, int y, int w, int h) {
-  fl_transform(x,y);
+void fltk::overlay_rect(int x, int y, int w, int h) {
+  transform(x,y);
   if (w < 0) {x += w; w = -w;} else if (!w) w = 1;
   if (h < 0) {y += h; h = -h;} else if (!h) h = 1;
   if (pw > 0) {
@@ -63,5 +64,5 @@ void fl_overlay_rect(int x, int y, int w, int h) {
 }
 
 //
-// End of "$Id: fl_overlay.cxx,v 1.8 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: fl_overlay.cxx,v 1.9 2002/12/09 04:52:30 spitzak Exp $".
 //

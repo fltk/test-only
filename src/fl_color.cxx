@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.29 2002/09/18 05:51:46 spitzak Exp $"
+// "$Id: fl_color.cxx,v 1.30 2002/12/09 04:52:29 spitzak Exp $"
 //
 // Color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -23,8 +23,12 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl_Color.h>
-#include <fltk/fl_draw.h>
+#include <fltk/Color.h>
+#include <fltk/draw.h>
+#include <config.h>
+#include <fltk/x.h>
+#include <string.h>
+using namespace fltk;
 
 // The fltk "colormap". In fltk 1.0 this allowed the gui colors to be
 // stored in 8-bit locations. In fltk 2.0 this is preserved for back
@@ -34,67 +38,56 @@
 // table are not to be confused with the X colormap, which I try to
 // hide completely.
 
-static unsigned fl_cmap[256] = {
+static unsigned cmap[256] = {
 #include "fl_cmap.h" // this is a file produced by "cmap.cxx":
 };
 
-
-void fl_set_color(Fl_Color i, Fl_Color c) {
-  if (fl_cmap[i] != c) {
-    fl_free_color(i);
-    fl_cmap[i] = fl_get_color(c);
-  }
-}
-
-Fl_Color fl_get_color(Fl_Color i) {
-  if (i & 0xFFFFFF00) return i;
-  return (Fl_Color)fl_cmap[i];
-}
-
-void fl_get_color(Fl_Color i, uchar& r, uchar& g, uchar& b) {
-  if (!(i & 0xFFFFFF00)) i = Fl_Color(fl_cmap[i]);
+void fltk::split_color(Color i, uchar& r, uchar& g, uchar& b) {
+  if (!(i & 0xFFFFFF00)) i = Color(cmap[i]);
   r = uchar(i>>24);
   g = uchar(i>>16);
   b = uchar(i>>8);
 }
 
-Fl_Color fl_nearest_color(Fl_Color i) {
+Color fltk::nearest_index(Color i) {
   if (!(i & 0xFFFFFF00)) return i;
   uchar r = i>>24;
   uchar g = i>>16;
   uchar b = i>> 8;
-  //if (r == g && r == b) return fl_gray_ramp(r*FL_NUM_GRAY/256);
-  return fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
+  //if (r == g && r == b) return gray_ramp(r*NUM_GRAY/256);
+  return Color(BLACK + (b*5/256 * 5 + r*5/256) * 8 + g*8/256);
 }
 
-Fl_Color fl_color_average(Fl_Color color1, Fl_Color color2, double weight) {
-  Fl_Color rgb1 = fl_get_color(color1);
-  Fl_Color rgb2 = fl_get_color(color2);
-  if (rgb1 == rgb2) return color1;
-  return fl_rgb(
-	(uchar)(((uchar)(rgb1>>24))*weight + ((uchar)(rgb2>>24))*(1-weight)),
-	(uchar)(((uchar)(rgb1>>16))*weight + ((uchar)(rgb2>>16))*(1-weight)),
-	(uchar)(((uchar)(rgb1>>8))*weight + ((uchar)(rgb2>>8))*(1-weight)));
+Color fltk::lerp(Color color0, Color color1, float weight) {
+  if (weight <= 0) return color0;
+  if (weight >= 1) return color1;
+  Color rgb0 = get_color_index(color0);
+  Color rgb1 = get_color_index(color1);
+  if (rgb0 == rgb1) return color0;
+  return color(
+	(uchar)(((uchar)(rgb1>>24))*weight + ((uchar)(rgb0>>24))*(1-weight)),
+	(uchar)(((uchar)(rgb1>>16))*weight + ((uchar)(rgb0>>16))*(1-weight)),
+	(uchar)(((uchar)(rgb1>>8))*weight + ((uchar)(rgb0>>8))*(1-weight)));
 }
 
-Fl_Color fl_inactive(Fl_Color c) {
-  return fl_color_average(c, FL_GRAY, 0.30);
+Color fltk::inactive(Color c) {
+  return lerp(c, GRAY75, 0.70f);
 }
 
-Fl_Color fl_inactive(Fl_Color c, Fl_Flags f) {
-  if (f&FL_INACTIVE) return fl_inactive(c);
+Color fltk::inactive(Color c, Flags f) {
+  if (f&INACTIVE) return lerp(c, GRAY75, 0.70f);
   return c;
 }
 
-Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg) {
-  Fl_Color c1 = fl_get_color(fg);
-  Fl_Color c2 = fl_get_color(bg);
+Color fltk::contrast(Color fg, Color bg) {
+  Color c1 = get_color_index(fg);
+  Color c2 = get_color_index(bg);
   if ((c1^c2)&0x80800000)
     return fg;
   else if (c2&0x80800000)
-    return FL_BLACK;
+    return BLACK;
   else
-    return FL_WHITE;
+    return WHITE;
 }
 
 // Include the code for setting colors on the system and for managing
@@ -108,6 +101,18 @@ Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg) {
 # include "fl_color_x.cxx"
 #endif
 
+void fltk::set_color_index(Color i, Color c) {
+  if (cmap[i] != c) {
+    free_color(i);
+    cmap[i] = c;
+  }
+}
+
+Color fltk::get_color_index(Color i) {
+  if (i & 0xFFFFFF00) return i;
+  return (Color)cmap[i];
+}
+
 //
-// End of "$Id: fl_color.cxx,v 1.29 2002/09/18 05:51:46 spitzak Exp $".
+// End of "$Id: fl_color.cxx,v 1.30 2002/12/09 04:52:29 spitzak Exp $".
 //

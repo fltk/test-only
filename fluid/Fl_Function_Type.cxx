@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Function_Type.cxx,v 1.41 2002/05/02 14:58:59 easysw Exp $"
+// "$Id: Fl_Function_Type.cxx,v 1.42 2002/12/09 04:52:21 spitzak Exp $"
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,10 +23,10 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include "Fl_Type.h"
+#include <fltk/run.h>
+#include "FluidType.h"
 #include "Fluid_Image.h"
-#include <fltk/fl_show_input.h>
+#include <fltk/ask.h>
 #include <string.h>
 #include <stdio.h>
 #include <ctype.h>
@@ -150,12 +150,12 @@ const char *c_check(const char *c, int type) {
 
 ////////////////////////////////////////////////////////////////
 
-class Fl_Function_Type : public Fl_Type {
+class FunctionType : public FluidType {
   const char* return_type;
   const char* attributes;
   char public_, cdecl_, constructor, havewidgets;
 public:
-  Fl_Type *make();
+  FluidType *make();
   void write_code();
   void open();
   int ismain() {return name_ == 0;}
@@ -169,10 +169,10 @@ public:
   void read_property(const char *);
 };
 
-Fl_Type *Fl_Function_Type::make() {
-  Fl_Type *p = Fl_Type::current;
+FluidType *FunctionType::make() {
+  FluidType *p = FluidType::current;
   while (p && !p->is_decl_block()) p = p->parent;
-  Fl_Function_Type *o = new Fl_Function_Type();
+  FunctionType *o = new FunctionType();
   o->name("make_window()");
   o->attributes = 0;
   o->return_type = 0;
@@ -183,8 +183,8 @@ Fl_Type *Fl_Function_Type::make() {
   return o;
 }
 
-void Fl_Function_Type::write_properties() {
-  Fl_Type::write_properties();
+void FunctionType::write_properties() {
+  FluidType::write_properties();
   if (!public_) write_string("private");
   if (cdecl_) write_string("C");
   if (return_type) {
@@ -197,7 +197,7 @@ void Fl_Function_Type::write_properties() {
   }
 }
 
-void Fl_Function_Type::read_property(const char *c) {
+void FunctionType::read_property(const char *c) {
   if (!strcmp(c,"private")) {
     public_ = 0;
   } else if (!strcmp(c,"C")) {
@@ -207,23 +207,23 @@ void Fl_Function_Type::read_property(const char *c) {
   } else if (!strcmp(c,"attributes")) {
     storestring(read_word(),attributes);
   } else {
-    Fl_Type::read_property(c);
+    FluidType::read_property(c);
   }
 }
 
 #include "function_panel.h"
-#include <fltk/fl_ask.h>
+#include <fltk/ask.h>
 
-static void ok_callback(Fl_Widget* w, void*) {
+static void ok_callback(fltk::Widget* w, void*) {
   w->window()->set_value();
   w->window()->hide();
 }
 
-static void cancel_callback(Fl_Widget* w, void*) {
+static void cancel_callback(fltk::Widget* w, void*) {
   w->window()->hide();
 }
 
-void Fl_Function_Type::open() {
+void FunctionType::open() {
   if (!function_panel) {
     make_function_panel();
     f_panel_ok->callback(ok_callback);
@@ -236,7 +236,7 @@ void Fl_Function_Type::open() {
   f_c_button->value(cdecl_);
   const char* message = 0;
   for (;;) {
-    if (message) fl_alert(message);
+    if (message) fltk::alert(message);
     if (!function_panel->exec()) break;
     const char* c = f_name_input->value();
     while (isspace(*c)) c++;
@@ -259,15 +259,15 @@ void Fl_Function_Type::open() {
   function_panel = NULL;
 }
 
-Fl_Function_Type Fl_Function_type;
+FunctionType Functiontype;
 
-Fl_Widget_Type* last_group;
+WidgetType* last_group;
 
-void Fl_Function_Type::write_code() {
+void FunctionType::write_code() {
   const char* rtype = return_type;
   constructor=0;
   havewidgets = 0;
-  Fl_Type *child;
+  FluidType *child;
   char attr[256];
   if (attributes) {
     strncpy(attr, attributes, 255);
@@ -277,12 +277,13 @@ void Fl_Function_Type::write_code() {
   for (child = first_child; child; child = child->next_brother)
     if (child->is_widget()) {
       havewidgets = 1;
-      last_group = (Fl_Widget_Type*)child;
+      last_group = (WidgetType*)child;
     }
   write_c("\n");
   if (ismain()) {
-	write_c("int main%s(int argc, char **argv)%s\n",
-			gno_space_parens ? "" : " ", get_opening_brace(1));
+    write_c("#include <fltk/run.h>\n\n");
+    write_c("int main%s(int argc, char **argv)%s\n",
+	    gno_space_parens ? "" : " ", get_opening_brace(1));
     // write_c("int main(int argc, char **argv) {\n");
     if (havewidgets)
       rtype = last_group->subclass();
@@ -357,11 +358,11 @@ void Fl_Function_Type::write_code() {
   if(havewidgets) 
     write_c("%s%s* w;\n", indent(), last_group->subclass());
 
-  for (Fl_Type* q = first_child; q; q = q->next_brother) q->write_code();
+  for (FluidType* q = first_child; q; q = q->next_brother) q->write_code();
 
   if (ismain()) {
     if (havewidgets) write_c("%sw->show(argc, argv);\n", get_indent_string(1));
-    write_c("%sreturn %s%sFl::run()%s;\n", get_indent_string(1),
+    write_c("%sreturn %s%sfltk::run()%s;\n", get_indent_string(1),
 			gno_space_parens ? "" : " ",
 			galways_return_parens ? "(" : "", galways_return_parens ? ")" : "");
   } else if (havewidgets && !constructor && !return_type)
@@ -375,9 +376,9 @@ void Fl_Function_Type::write_code() {
 
 ////////////////////////////////////////////////////////////////
 
-class Fl_Code_Type : public Fl_Type {
+class CodeType : public FluidType {
 public:
-  Fl_Type *make();
+  FluidType *make();
   void write_code();
   void write_static();
   void open();
@@ -385,21 +386,21 @@ public:
   int is_code_block() const {return 0;}
 };
 
-Fl_Type *Fl_Code_Type::make() {
-  Fl_Type *p = Fl_Type::current;
+FluidType *CodeType::make() {
+  FluidType *p = FluidType::current;
   while (p && !p->is_code_block()) p = p->parent;
   if (!p) {
-    fl_message("Please select a function");
+    fltk::message("Please select a function");
     return 0;
   }
-  Fl_Code_Type *o = new Fl_Code_Type();
+  CodeType *o = new CodeType();
   o->name("printf(\"Hello, World!\\n\");");
   o->add(p);
   o->factory = this;
   return o;
 }
 
-void Fl_Code_Type::open() {
+void CodeType::open() {
   if (!code_panel) {
     make_code_panel();
     code_panel_ok->callback(ok_callback);
@@ -408,7 +409,7 @@ void Fl_Code_Type::open() {
   code_input->static_value(name());
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert(message);
+    if (message) fltk::alert(message);
     if (!code_panel->exec()) break;
     const char*c = code_input->value();
     message = c_check(c); if (message) continue;
@@ -420,17 +421,17 @@ void Fl_Code_Type::open() {
   code_panel = NULL;
 }
 
-Fl_Code_Type Fl_Code_type;
+CodeType Codetype;
 
-void Fl_Code_Type::write_code() {
+void CodeType::write_code() {
   const char* c = name();
   if (!c) return;
   //write_c("%s%s\n", indent(), c);
   write_code_block((char *)c);
-  for (Fl_Type* q = first_child; q; q = q->next_brother) q->write_code();
+  for (FluidType* q = first_child; q; q = q->next_brother) q->write_code();
 }
 
-void Fl_Code_Type::write_static() {
+void CodeType::write_static() {
   const char* c = name();
   if (!c) return;
   //write_c("%s%s\n", indent(), c);
@@ -439,10 +440,10 @@ void Fl_Code_Type::write_static() {
 
 ////////////////////////////////////////////////////////////////
 
-class Fl_CodeBlock_Type : public Fl_Type {
+class CodeBlockType : public FluidType {
   const char* after;
 public:
-  Fl_Type *make();
+  FluidType *make();
   void write_code();
   void open();
   virtual const char *type_name() const {return "codeblock";}
@@ -452,14 +453,14 @@ public:
   void read_property(const char *);
 };
 
-Fl_Type *Fl_CodeBlock_Type::make() {
-  Fl_Type *p = Fl_Type::current;
+FluidType *CodeBlockType::make() {
+  FluidType *p = FluidType::current;
   while (p && !p->is_code_block()) p = p->parent;
   if (!p) {
-    fl_message("Please select a function");
+    fltk::message("Please select a function");
     return 0;
   }
-  Fl_CodeBlock_Type *o = new Fl_CodeBlock_Type();
+  CodeBlockType *o = new CodeBlockType();
   o->name("if (test())");
   o->after = 0;
   o->add(p);
@@ -467,23 +468,23 @@ Fl_Type *Fl_CodeBlock_Type::make() {
   return o;
 }
 
-void Fl_CodeBlock_Type::write_properties() {
-  Fl_Type::write_properties();
+void CodeBlockType::write_properties() {
+  FluidType::write_properties();
   if (after) {
     write_string("after");
     write_word(after);
   }
 }
 
-void Fl_CodeBlock_Type::read_property(const char *c) {
+void CodeBlockType::read_property(const char *c) {
   if (!strcmp(c,"after")) {
     storestring(read_word(),after);
   } else {
-    Fl_Type::read_property(c);
+    FluidType::read_property(c);
   }
 }
 
-void Fl_CodeBlock_Type::open() {
+void CodeBlockType::open() {
   if (!codeblock_panel) {
     make_codeblock_panel();
     codeblock_panel_ok->callback(ok_callback);
@@ -493,7 +494,7 @@ void Fl_CodeBlock_Type::open() {
   code_after_input->static_value(after);
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert(message);
+    if (message) fltk::alert(message);
     if (!codeblock_panel->exec()) break;
     const char*c = code_before_input->value();
     message = c_check(c); if (message) continue;
@@ -508,13 +509,13 @@ void Fl_CodeBlock_Type::open() {
   codeblock_panel = NULL;
 }
 
-Fl_CodeBlock_Type Fl_CodeBlock_type;
+CodeBlockType CodeBlocktype;
 
-void Fl_CodeBlock_Type::write_code() {
+void CodeBlockType::write_code() {
   const char* c = name();
   write_c("%s%s%s", indent(), c ? c : "", get_opening_brace(0));
   indentation += 2;
-  for (Fl_Type* q = first_child; q; q = q->next_brother) q->write_code();
+  for (FluidType* q = first_child; q; q = q->next_brother) q->write_code();
   indentation -= 2;
   if (after) write_c("%s} %s\n", indent(), after);
   else write_c("%s}\n", indent());
@@ -522,10 +523,10 @@ void Fl_CodeBlock_Type::write_code() {
 
 ////////////////////////////////////////////////////////////////
 
-class Fl_Decl_Type : public Fl_Type {
+class DeclType : public FluidType {
   char public_;
 public:
-  Fl_Type *make();
+  FluidType *make();
   void write_code();
   void open();
   virtual const char *type_name() const {return "decl";}
@@ -533,10 +534,10 @@ public:
   void read_property(const char *);
 };
 
-Fl_Type *Fl_Decl_Type::make() {
-  Fl_Type *p = Fl_Type::current;
+FluidType *DeclType::make() {
+  FluidType *p = FluidType::current;
   while (p && !p->is_decl_block()) p = p->parent;
-  Fl_Decl_Type *o = new Fl_Decl_Type();
+  DeclType *o = new DeclType();
   o->public_ = 0;
   o->name("int x;");
   o->add(p);
@@ -544,20 +545,20 @@ Fl_Type *Fl_Decl_Type::make() {
   return o;
 }
 
-void Fl_Decl_Type::write_properties() {
-  Fl_Type::write_properties();
+void DeclType::write_properties() {
+  FluidType::write_properties();
   if (public_) write_string("public");
 }
 
-void Fl_Decl_Type::read_property(const char *c) {
+void DeclType::read_property(const char *c) {
   if (!strcmp(c,"public")) {
     public_ = 1;
   } else {
-    Fl_Type::read_property(c);
+    FluidType::read_property(c);
   }
 }
 
-void Fl_Decl_Type::open() {
+void DeclType::open() {
   if (!decl_panel) {
     make_decl_panel();
     decl_panel_ok->callback(ok_callback);
@@ -567,7 +568,7 @@ void Fl_Decl_Type::open() {
   decl_public_button->value(public_);
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert(message);
+    if (message) fltk::alert(message);
     if (!decl_panel->exec()) break;
     const char*c = decl_input->value();
     while (isspace(*c)) c++;
@@ -582,9 +583,9 @@ void Fl_Decl_Type::open() {
   decl_panel = NULL;
 }
 
-Fl_Decl_Type Fl_Decl_type;
+DeclType Decltype;
 
-void Fl_Decl_Type::write_code() {
+void DeclType::write_code() {
   const char* c = name();
   if (!c) return;
   // handle putting #include or extern or typedef into decl:
@@ -615,15 +616,15 @@ void Fl_Decl_Type::write_code() {
     }
   }
 
-  for (Fl_Type* q = first_child; q; q = q->next_brother) q->write_code();
+  for (FluidType* q = first_child; q; q = q->next_brother) q->write_code();
 }
 
 ////////////////////////////////////////////////////////////////
 
-class Fl_DeclBlock_Type : public Fl_Type {
+class DeclBlockType : public FluidType {
   const char* after;
 public:
-  Fl_Type *make();
+  FluidType *make();
   void write_code();
   void open();
   virtual const char *type_name() const {return "declblock";}
@@ -633,10 +634,10 @@ public:
   int is_decl_block() const {return 1;}
 };
 
-Fl_Type *Fl_DeclBlock_Type::make() {
-  Fl_Type *p = Fl_Type::current;
+FluidType *DeclBlockType::make() {
+  FluidType *p = FluidType::current;
   while (p && !p->is_decl_block()) p = p->parent;
-  Fl_DeclBlock_Type *o = new Fl_DeclBlock_Type();
+  DeclBlockType *o = new DeclBlockType();
   o->name("#if 1");
   o->after = strdup("#endif");
   o->add(p);
@@ -644,21 +645,21 @@ Fl_Type *Fl_DeclBlock_Type::make() {
   return o;
 }
 
-void Fl_DeclBlock_Type::write_properties() {
-  Fl_Type::write_properties();
+void DeclBlockType::write_properties() {
+  FluidType::write_properties();
   write_string("after");
   write_word(after);
 }
 
-void Fl_DeclBlock_Type::read_property(const char *c) {
+void DeclBlockType::read_property(const char *c) {
   if (!strcmp(c,"after")) {
     storestring(read_word(),after);
   } else {
-    Fl_Type::read_property(c);
+    FluidType::read_property(c);
   }
 }
 
-void Fl_DeclBlock_Type::open() {
+void DeclBlockType::open() {
   if (!declblock_panel) {
     make_declblock_panel();
     declblock_panel_ok->callback(ok_callback);
@@ -668,7 +669,7 @@ void Fl_DeclBlock_Type::open() {
   decl_after_input->static_value(after);
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert(message);
+    if (message) fltk::alert(message);
     if (!declblock_panel->exec()) break;
     const char*c = decl_before_input->value();
     while (isspace(*c)) c++;
@@ -687,26 +688,26 @@ void Fl_DeclBlock_Type::open() {
   declblock_panel = NULL;
 }
 
-Fl_DeclBlock_Type Fl_DeclBlock_type;
+DeclBlockType DeclBlocktype;
 
-void Fl_DeclBlock_Type::write_code() {
+void DeclBlockType::write_code() {
   const char* c = name();
   if (c) write_c("%s\n", c);
-  for (Fl_Type* q = first_child; q; q = q->next_brother) q->write_code();
+  for (FluidType* q = first_child; q; q = q->next_brother) q->write_code();
   if (after) write_c("%s\n", after);
 }
 
 ////////////////////////////////////////////////////////////////
 
-class Fl_Class_Type : public Fl_Type {
+class ClassType : public FluidType {
   const char* subclass_of;
   char public_;
 public:
   // state variables for output:
   char write_public_state; // true when public: has been printed
-  Fl_Class_Type* parent_class; // save class if nested
+  ClassType* parent_class; // save class if nested
 //
-  Fl_Type *make();
+  FluidType *make();
   void write_code();
   void open();
   virtual const char *type_name() const {return "class";}
@@ -721,8 +722,8 @@ public:
 // a member of a class. If need_nest is true then a fully-qualified
 // name (ie foo::bar::baz) of nested classes is returned, you need this
 // if you actually want to print the class.
-const char* Fl_Type::member_of(bool need_nest) const {
-  Fl_Type* p = parent;
+const char* FluidType::member_of(bool need_nest) const {
+  FluidType* p = parent;
   while (p) {
     if (p->is_class()) {
       if (!need_nest) return p->name();
@@ -741,10 +742,10 @@ const char* Fl_Type::member_of(bool need_nest) const {
   return 0;
 }
 
-Fl_Type *Fl_Class_Type::make() {
-  Fl_Type *p = Fl_Type::current;
+FluidType *ClassType::make() {
+  FluidType *p = FluidType::current;
   while (p && !p->is_decl_block()) p = p->parent;
-  Fl_Class_Type *o = new Fl_Class_Type();
+  ClassType *o = new ClassType();
   o->name("UserInterface");
   o->subclass_of = 0;
   o->public_ = 1;
@@ -753,8 +754,8 @@ Fl_Type *Fl_Class_Type::make() {
   return o;
 }
 
-void Fl_Class_Type::write_properties() {
-  Fl_Type::write_properties();
+void ClassType::write_properties() {
+  FluidType::write_properties();
   if (subclass_of) {
     write_string(":");
     write_word(subclass_of);
@@ -762,17 +763,17 @@ void Fl_Class_Type::write_properties() {
   if (!public_) write_string("private");
 }
 
-void Fl_Class_Type::read_property(const char *c) {
+void ClassType::read_property(const char *c) {
   if (!strcmp(c,"private")) {
     public_ = 0;
   } else if (!strcmp(c,":")) {
     storestring(read_word(), subclass_of);
   } else {
-    Fl_Type::read_property(c);
+    FluidType::read_property(c);
   }
 }
 
-void Fl_Class_Type::open() {
+void ClassType::open() {
   if (!class_panel) {
     make_class_panel();
     c_panel_ok->callback(ok_callback);
@@ -783,7 +784,7 @@ void Fl_Class_Type::open() {
   c_public_button->value(public_);
   const char* message = 0;
   for (;;) { // repeat as long as there are errors
-    if (message) fl_alert(message);
+    if (message) fltk::alert(message);
     if (!class_panel->exec()) break;
     const char*c = c_name_input->value();
     while (isspace(*c)) c++;
@@ -803,9 +804,9 @@ void Fl_Class_Type::open() {
   class_panel = NULL;
 }
 
-Fl_Class_Type Fl_Class_type;
+ClassType Classtype;
 
-static Fl_Class_Type *current_class;
+static ClassType *current_class;
 extern int varused_test;
 void write_public(int state) {
   if (!current_class || varused_test) return;
@@ -814,18 +815,18 @@ void write_public(int state) {
   write_h(state ? "public:\n" : "private:\n");
 }
 
-void Fl_Class_Type::write_code() {
+void ClassType::write_code() {
   parent_class = current_class;
   current_class = this;
   write_public_state = 0;
   write_h("\nclass %s ", name());
   if (subclass_of) write_h(": %s ", subclass_of);
   write_h("%s", get_opening_brace(1));
-  for (Fl_Type* q = first_child; q; q = q->next_brother) q->write_code();
+  for (FluidType* q = first_child; q; q = q->next_brother) q->write_code();
   write_h("};\n");
   current_class = parent_class;
 }
 
 //
-// End of "$Id: Fl_Function_Type.cxx,v 1.41 2002/05/02 14:58:59 easysw Exp $".
+// End of "$Id: Fl_Function_Type.cxx,v 1.42 2002/12/09 04:52:21 spitzak Exp $".
 //

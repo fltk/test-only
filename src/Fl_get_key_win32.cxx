@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key_win32.cxx,v 1.13 2002/01/28 08:03:00 spitzak Exp $"
+// "$Id: Fl_get_key_win32.cxx,v 1.14 2002/12/09 04:52:27 spitzak Exp $"
 //
 // _WIN32 keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
@@ -27,12 +27,13 @@
 // which are actually X keysyms.  So this has to translate to MSWindows
 // VK_x symbols.
 
-#include <fltk/Fl.h>
-#include <fltk/win32.h>
+#include <fltk/events.h>
+#include <fltk/x.h>
 #include <ctype.h>
+using namespace fltk;
 
 // convert an Fltk (X) keysym to a MSWindows VK symbol:
-// See also the inverse converter in Fl_win32.C
+// See also the inverse converter in win32.C
 // This table is in numeric order by Fltk symbol order for binary search:
 
 static const struct {unsigned short vk, fltk;} vktab[] = {
@@ -69,49 +70,49 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   {0xdc,	'|'},
   {0xdd,	'}'},
   {0xc0,	'~'},
-  {VK_BACK,	FL_BackSpace},
-  {VK_TAB,	FL_Tab},
-  {VK_CLEAR,	FL_Clear},
-  {VK_RETURN,	FL_Enter},
-  {VK_PAUSE,	FL_Pause},
-  {VK_SCROLL,	FL_Scroll_Lock},
-  {VK_ESCAPE,	FL_Escape},
-  {VK_HOME,	FL_Home},
-  {VK_LEFT,	FL_Left},
-  {VK_UP,	FL_Up},
-  {VK_RIGHT,	FL_Right},
-  {VK_DOWN,	FL_Down},
-  {VK_PRIOR,	FL_Page_Up},
-  {VK_NEXT,	FL_Page_Down},
-  {VK_END,	FL_End},
-  {VK_SNAPSHOT,	FL_Print},
-  {VK_INSERT,	FL_Insert},
-  {VK_APPS,	FL_Menu},
-  {VK_NUMLOCK,	FL_Num_Lock},
-//{VK_???,	FL_KP_Enter},
-  {VK_MULTIPLY,	FL_KP('*')},
-  {VK_ADD,	FL_KP('+')},
-  {VK_SUBTRACT,	FL_KP('-')},
-  {VK_DECIMAL,	FL_KP('.')},
-  {VK_DIVIDE,	FL_KP('/')},
-  {VK_LSHIFT,	FL_Shift_L},
-  {VK_RSHIFT,	FL_Shift_R},
-  {VK_LCONTROL,	FL_Control_L},
-  {VK_RCONTROL,	FL_Control_R},
-  {VK_CAPITAL,	FL_Caps_Lock},
-  {VK_LMENU,	FL_Alt_L},
-  {VK_RMENU,	FL_Alt_R},
-  {VK_LWIN,	FL_Win_L},
-  {VK_RWIN,	FL_Win_R},
-  {VK_DELETE,	FL_Delete}
+  {VK_BACK,	BackSpaceKey},
+  {VK_TAB,	TabKey},
+  {VK_CLEAR,	ClearKey},
+  {VK_RETURN,	ReturnKey},
+  {VK_PAUSE,	PauseKey},
+  {VK_SCROLL,	ScrollLockKey},
+  {VK_ESCAPE,	EscapeKey},
+  {VK_HOME,	HomeKey},
+  {VK_LEFT,	LeftKey},
+  {VK_UP,	UpKey},
+  {VK_RIGHT,	RightKey},
+  {VK_DOWN,	DownKey},
+  {VK_PRIOR,	PageUpKey},
+  {VK_NEXT,	PageDownKey},
+  {VK_END,	EndKey},
+  {VK_SNAPSHOT,	PrintKey},
+  {VK_INSERT,	InsertKey},
+  {VK_APPS,	MenuKey},
+  {VK_NUMLOCK,	NumLockKey},
+//{VK_???,	KyepadEnter},
+  {VK_MULTIPLY,	MultiplyKey},
+  {VK_ADD,	AddKey},
+  {VK_SUBTRACT,	SubtractKey},
+  {VK_DECIMAL,	DecimalKey},
+  {VK_DIVIDE,	DivideKey},
+  {VK_LSHIFT,	LeftShiftKey},
+  {VK_RSHIFT,	RightShiftKey},
+  {VK_LCONTROL,	LeftControlKey},
+  {VK_RCONTROL,	RightControlKey},
+  {VK_CAPITAL,	CapsLockKey},
+  {VK_LMENU,	LeftAltKey},
+  {VK_RMENU,	RightAltKey},
+  {VK_LWIN,	LeftCommandKey},
+  {VK_RWIN,	RightCommandKey},
+  {VK_DELETE,	DeleteKey}
 };
 
 static int fltk2ms(int fltk) {
   if (fltk >= '0' && fltk <= '9') return fltk;
   if (fltk >= 'A' && fltk <= 'Z') return fltk;
   if (fltk >= 'a' && fltk <= 'z') return fltk-('a'-'A');
-  if (fltk > FL_F(0) && fltk <= FL_F(16)) return fltk-FL_F(0)+VK_F1-1;
-  if (fltk >= FL_KP('0') && fltk<=FL_KP('9')) return fltk-FL_KP('0')+VK_NUMPAD0;
+  if (fltk >= F1Key && fltk <= LastFunctionKey) return fltk-F1Key+VK_F1;
+  if (fltk >= Keypad0 && fltk<=Keypad9) return fltk-Keypad0+VK_NUMPAD0;
   int a = 0;
   int b = sizeof(vktab)/sizeof(*vktab);
   while (a < b) {
@@ -122,16 +123,16 @@ static int fltk2ms(int fltk) {
   return 0;
 }
 
-bool Fl::event_key_state(int k) {
+bool fltk::event_key_state(int k) {
   return (GetKeyState(fltk2ms(k))&~1) != 0;
 }
 
-bool Fl::get_key_state(int k) {
+bool fltk::get_key_state(int k) {
   uchar foo[256];
   GetKeyboardState(foo);
   return (foo[fltk2ms(k)]&~1) != 0;
 }
 
 //
-// End of "$Id: Fl_get_key_win32.cxx,v 1.13 2002/01/28 08:03:00 spitzak Exp $".
+// End of "$Id: Fl_get_key_win32.cxx,v 1.14 2002/12/09 04:52:27 spitzak Exp $".
 //

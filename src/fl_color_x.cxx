@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_x.cxx,v 1.7 2001/11/29 17:39:30 spitzak Exp $"
+// "$Id: fl_color_x.cxx,v 1.8 2002/12/09 04:52:29 spitzak Exp $"
 //
 // X color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -23,11 +23,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// This file does not compile independently, it is included by fl_color.cxx
+// This file does not compile independently, it is included by color.cxx
 
-#include <config.h>
-#include <fltk/x.h>
-#include <string.h>
+#include "XColorMap.h"
 
 ////////////////////////////////////////////////////////////////
 // Code to look at the X visual and figure out the best way to turn
@@ -37,40 +35,40 @@
 
 int fl_redbits, fl_greenbits, fl_bluebits;
 int fl_redshift, fl_greenshift, fl_blueshift, fl_extrashift;
-uchar fl_redmask, fl_greenmask, fl_bluemask;
+unsigned char fl_redmask, fl_greenmask, fl_bluemask;
 static uchar beenhere;
 
 static void figure_out_visual() {
   beenhere = 1;
-  if (!fl_visual->red_mask || !fl_visual->green_mask || !fl_visual->blue_mask){
+  if (!xvisual->red_mask || !xvisual->green_mask || !xvisual->blue_mask){
 #if USE_COLORMAP
     fl_redmask = 0;
     // make sure black & white are allocated:
-    fl_xpixel(FL_WHITE);
-    fl_xpixel(FL_BLACK);
+    fl_xmap(WHITE, 0xff, 0xff, 0xff);
+    fl_xmap(BLACK, 0, 0, 0);
     return;
 #else
-    Fl::fatal("Requires TrueColor visual");
+    fatal("Requires TrueColor visual");
 #endif
   }
 
   // get the bit masks into a more useful form:
   int i,j,m;
 
-  for (i = 0, m = 1; m; i++, m<<=1) if (fl_visual->red_mask & m) break;
-  for (j = i; m; j++, m<<=1) if (!(fl_visual->red_mask & m)) break;
+  for (i = 0, m = 1; m; i++, m<<=1) if (xvisual->red_mask & m) break;
+  for (j = i; m; j++, m<<=1) if (!(xvisual->red_mask & m)) break;
   fl_redshift = j-8;
   fl_redbits = j-i; if (fl_redbits > 8) fl_redbits = 8;
   fl_redmask = 0xff << (8-fl_redbits);
 
-  for (i = 0, m = 1; m; i++, m<<=1) if (fl_visual->green_mask & m) break;
-  for (j = i; m; j++, m<<=1) if (!(fl_visual->green_mask & m)) break;
+  for (i = 0, m = 1; m; i++, m<<=1) if (xvisual->green_mask & m) break;
+  for (j = i; m; j++, m<<=1) if (!(xvisual->green_mask & m)) break;
   fl_greenshift = j-8;
   fl_greenbits = j-i; if (fl_greenbits > 8) fl_greenbits = 8;
   fl_greenmask = 0xff << (8-fl_greenbits);
 
-  for (i = 0, m = 1; m; i++, m<<=1) if (fl_visual->blue_mask & m) break;
-  for (j = i; m; j++, m<<=1) if (!(fl_visual->blue_mask & m)) break;
+  for (i = 0, m = 1; m; i++, m<<=1) if (xvisual->blue_mask & m) break;
+  for (j = i; m; j++, m<<=1) if (!(xvisual->blue_mask & m)) break;
   fl_blueshift = j-8;
   fl_bluebits = j-i; if (fl_bluebits > 8) fl_bluebits = 8;
   fl_bluemask = 0xff << (8-fl_bluebits);
@@ -94,20 +92,18 @@ static void figure_out_visual() {
 // and then requested from X.  If this fails the current X colormap
 // is searched for the nearest match.
 
-#include "Fl_XColor.h"
-
 #if USE_COLORMAP
-Fl_XColor fl_xmap[256];
+static XColorMap normal_xmap[256];
 #if USE_OVERLAY | USE_GL_OVERLAY
 bool fl_overlay = false;
-Fl_XColor fl_overlay_xmap[256];
+static XColorMap overlay_xmap[256];
 Colormap fl_overlay_colormap;
 XVisualInfo* fl_overlay_visual;
 ulong fl_transparent_pixel;
 #endif
 #endif
 
-ulong fl_xpixel(Fl_Color i) {
+ulong fltk::xpixel(Color i) {
   if (!beenhere) figure_out_visual();
 
 #if USE_COLORMAP
@@ -119,7 +115,7 @@ ulong fl_xpixel(Fl_Color i) {
     {
 #endif
     // return color for a TrueColor visual:
-    if (!(i & 0xFFFFFF00)) i = (Fl_Color)fl_cmap[i];
+    if (!(i & 0xFFFFFF00)) i = (Color)cmap[i];
     return
       ((((i>>24)& fl_redmask)  << fl_redshift)+
        (((i>>16)& fl_greenmask)<< fl_greenshift)+
@@ -131,38 +127,44 @@ ulong fl_xpixel(Fl_Color i) {
   // rest of this is for a colormapped visual (it will work for a TrueColor
   // visual but wastes time):
 
-  // translate rgb colors into color index:
-  int index = fl_nearest_color(i);
-
-  // see if we have already allocated it:
-#if USE_OVERLAY | USE_GL_OVERLAY
-  Fl_XColor &xmap = fl_overlay ? fl_overlay_xmap[index] : fl_xmap[index];
-#else
-  Fl_XColor &xmap = fl_xmap[index];
-#endif
-  if (!xmap.mapped) {
-    // figure out the rgb to ask for.  Use the specified one unless this
-    // is an indexed color, in which case we use the colormap entry:
-    if (!(i & 0xFFFFFF00)) i = (Fl_Color)fl_cmap[i];
-    uchar r = i>>24;
-    uchar g = i>>16;
-    uchar b = i>> 8;
-    fl_allocate_xpixel(xmap, r, g, b);
+  // Figure out the index and the rgb colors wanted
+  unsigned char index, r,g,b;
+  if (i & 0xffffff00) { // an rgb color
+    r = i>>24;
+    g = i>>16;
+    b = i>> 8;
+    //if (r == g && r == b) index = GRAY00+r*(GRAY99-GRAY00)/256;
+    index = (unsigned char) (BLACK + (b*5/256 * 5 + r*5/256) * 8 + g*8/256);
+  } else { // an indexed color
+    index = (unsigned char) i;
+    i = (Color)cmap[i];
+    r = i>>24;
+    g = i>>16;
+    b = i>> 8;
   }
-  return xmap.pixel;
+  return fl_xmap(index,r,g,b).pixel;
 }
 
-// Create an X colormap entry and place it in the given xmap entry:
-void fl_allocate_xpixel(Fl_XColor& xmap, uchar r, uchar g, uchar b)
+// Return an entry from the current colormap, using the index.
+// If the color is not allocated, allocate it using the passed rgb values
+XColorMap& fl_xmap(uchar index, uchar r, uchar g, uchar b)
 {
+  // see if we have already allocated it:
 #if USE_OVERLAY | USE_GL_OVERLAY
-  Colormap colormap = fl_overlay ? fl_overlay_colormap : fl_colormap;
+  XColorMap &xmap = fl_overlay ? overlay_xmap[index] : normal_xmap[index];
+#else
+  XColorMap &xmap = normal_xmap[index];
+#endif
+  if (xmap.mapped) return xmap;
+
+#if USE_OVERLAY | USE_GL_OVERLAY
+  Colormap colormap = fl_overlay ? fl_overlay_colormap : xcolormap;
   static XColor* ac[2];
   XColor*& allcolors = ac[fl_overlay];
   static int nc[2];
   int& numcolors = nc[fl_overlay];
 #else
-  Colormap colormap = fl_colormap;
+  Colormap colormap = colormap;
   static XColor *allcolors;
   static int numcolors;
 #endif
@@ -176,13 +178,13 @@ void fl_allocate_xpixel(Fl_XColor& xmap, uchar r, uchar g, uchar b)
     // Try XAllocColor:
     XColor xcol;
     xcol.red = r<<8; xcol.green = g<<8; xcol.blue = b<<8;
-    if (XAllocColor(fl_display, colormap, &xcol)) {
+    if (XAllocColor(xdisplay, colormap, &xcol)) {
       xmap.mapped = 1;
       xmap.r = xcol.red>>8;
       xmap.g = xcol.green>>8;
       xmap.b = xcol.blue>>8;
       xmap.pixel = xcol.pixel;
-      return;
+      return xmap;
     }
 
     // Failed, read the colormap so we can search it:
@@ -192,10 +194,10 @@ void fl_allocate_xpixel(Fl_XColor& xmap, uchar r, uchar g, uchar b)
 #if USE_OVERLAY | USE_GL_OVERLAY
     if (fl_overlay) numcolors = fl_overlay_visual->colormap_size; else
 #endif
-      numcolors = fl_visual->colormap_size;
+      numcolors = xvisual->colormap_size;
     if (!allcolors) allcolors = new XColor[numcolors];
     for (int p = numcolors; p--;) allcolors[p].pixel = p;
-    XQueryColors(fl_display, colormap, allcolors, numcolors);
+    XQueryColors(xdisplay, colormap, allcolors, numcolors);
   }
 
   // Find least-squares match in the colormap:
@@ -218,7 +220,7 @@ void fl_allocate_xpixel(Fl_XColor& xmap, uchar r, uchar g, uchar b)
   // avoid another round-trip to the server.  But then X does not
   // know that this program "owns" this value, and can (and will)
   // change it when the program that did allocate it exits:
-  if (XAllocColor(fl_display, colormap, &p)) {
+  if (XAllocColor(xdisplay, colormap, &p)) {
     xmap.mapped = 1;
     xmap.pixel = p.pixel;
   } else {
@@ -233,30 +235,32 @@ void fl_allocate_xpixel(Fl_XColor& xmap, uchar r, uchar g, uchar b)
   xmap.r = p.red>>8;
   xmap.g = p.green>>8;
   xmap.b = p.blue>>8;
-#endif
+  return xmap;
+#endif // USE_COLORMAP
 }
 
-Fl_Color fl_color_;
-ulong fl_pixel;
+Color fltk::current_color_;
+ulong fltk::current_xpixel;
 
-void fl_color(Fl_Color i) {
-  fl_color_ = i;
-  fl_pixel = fl_xpixel(i);
-  XSetForeground(fl_display, fl_gc, fl_pixel);
+void fltk::setcolor(Color i) {
+  current_color_ = i;
+  current_xpixel = xpixel(i);
+  XSetForeground(xdisplay, gc, current_xpixel);
 }
 
-void fl_free_color(Fl_Color i) {
+// This is used by setcolor_index()
+static inline void free_color(Color i) {
 #if USE_COLORMAP
-  if (fl_xmap[i].mapped) {
-    if (fl_xmap[i].mapped == 1)
-      XFreeColors(fl_display, fl_colormap, &(fl_xmap[i].pixel), 1, 0);
-    fl_xmap[i].mapped = 0;
+  if (normal_xmap[i].mapped) {
+    if (normal_xmap[i].mapped == 1)
+      XFreeColors(xdisplay, xcolormap, &(normal_xmap[i].pixel), 1, 0);
+    normal_xmap[i].mapped = 0;
   }
 #if USE_OVERLAY | USE_GL_OVERLAY
-  if (fl_overlay_xmap[i].mapped) {
-    if (fl_overlay_xmap[i].mapped == 1)
-      XFreeColors(fl_display, fl_overlay_colormap, &(fl_overlay_xmap[i].pixel),1,0);
-    fl_overlay_xmap[i].mapped = 0;
+  if (overlay_xmap[i].mapped) {
+    if (overlay_xmap[i].mapped == 1)
+      XFreeColors(xdisplay, fl_overlay_colormap, &(overlay_xmap[i].pixel),1,0);
+    overlay_xmap[i].mapped = 0;
   }
 #endif
 #endif
@@ -266,7 +270,7 @@ void fl_free_color(Fl_Color i) {
 // This is here because Win32 makes it impossible to seperately set
 // the color and line style:
 
-void fl_line_style(int style, int width, char* dashes) {
+void fltk::line_style(int style, int width, char* dashes) {
   char buf[7];
   int ndashes = dashes ? strlen(dashes) : 0;
   // emulate the _WIN32 dash patterns on X
@@ -285,10 +289,10 @@ void fl_line_style(int style, int width, char* dashes) {
     char* p = dashes = buf;
     switch (style & 0xff) {
     default:
-    case FL_DASH:
+    case DASH:
       *p++ = dash; *p++ = gap;
       break;
-    case FL_DOT:
+    case DOT:
       *p++ = dot; *p++ = gap;
       // Bug in XFree86 3.0? If I only use the above two pieces it does
       // not completely "erase" the previous dash pattern. Making it longer
@@ -296,23 +300,23 @@ void fl_line_style(int style, int width, char* dashes) {
       // the dot pattern (not the dash), and only for 0-width lines:
       *p++ = dot; *p++ = gap; *p++ = dot; *p++ = gap;
       break;
-    case FL_DASHDOT:
+    case DASHDOT:
       *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap;
       break;
-    case FL_DASHDOTDOT:
+    case DASHDOTDOT:
       *p++ = dash; *p++ = gap; *p++ = dot; *p++ = gap; *p++ = dot; *p++ = gap;
       break;
     }
     ndashes = p-buf;
   }
-  if (ndashes) XSetDashes(fl_display, fl_gc, 0, dashes, ndashes);
+  if (ndashes) XSetDashes(xdisplay, gc, 0, dashes, ndashes);
   static int Cap[4] = {CapButt, CapButt, CapRound, CapProjecting};
   static int Join[4] = {JoinMiter, JoinMiter, JoinRound, JoinBevel};
-  XSetLineAttributes(fl_display, fl_gc, width, 
+  XSetLineAttributes(xdisplay, gc, width, 
 		     ndashes ? LineOnOffDash : LineSolid,
 		     Cap[(style>>8)&3], Join[(style>>12)&3]);
 }
 
 //
-// End of "$Id: fl_color_x.cxx,v 1.7 2001/11/29 17:39:30 spitzak Exp $"
+// End of "$Id: fl_color_x.cxx,v 1.8 2002/12/09 04:52:29 spitzak Exp $"
 //

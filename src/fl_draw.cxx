@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.22 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.23 2002/12/09 04:52:29 spitzak Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,30 +23,42 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// Implementation of fl_draw(const char*,int,int,int,int,Fl_Align)
+// Implementation of draw(const char*,int,int,int,int,Align)
 // Used to draw all the labels and text, this routine:
 
 // Breaks them into lines at \n characters.
 
-// Splits it at every \t tab character and uses fl_column_widths() to
+// Splits it at every \t tab character and uses column_widths() to
 // set each section into a column.
 
 // Parses '&x' combinations to produce MicroSoft style underscores,
-// unless FL_RAW_LABEL flag is set.
+// unless RAW_LABEL flag is set.
 
-// Word wraps the labels to fit into their column (if FL_ALIGN_WRAP
+// Word wraps the labels to fit into their column (if ALIGN_WRAP
 // flag is on) and aligns them agains the inside of their boxes.
 
-#include <fltk/fl_draw.h>
+#include <fltk/draw.h>
 #include <fltk/math.h>
 #include <string.h>
+using namespace fltk;
+
+// These are for getting the default leading:
+#include <fltk/Widget.h>
+#include <fltk/Style.h>
+
+static int line_spacing() {
+  return int(getsize() + Widget::default_style->leading + .5);
+}
+static float line_ascent() {
+  return (line_spacing() + getascent() - getdescent()) / 2;
+}
 
 // Any string longer than this does not get &x underscore processing.
 #define MAX_LENGTH_FOR_UNDERSCORE 128
 
-const int* fl_column_widths_ = 0;
+const int* fltk::column_widths_ = 0;
 
-// The implementation splits the text up into individual calls to fl_draw.
+// The implementation splits the text up into individual calls to draw.
 // Each has an x/y position and a segment of text. Probably should be
 // expanded to have a font & size, This will allow
 // much more complex drawing than we currently support, such as imbedded
@@ -70,7 +82,7 @@ static /*inline*/ void set(int index,
 		  const char* end,
 		  float width,
 		  float x, float y, float w,
-		  Fl_Flags flags
+		  Flags flags
 		  )
 {
   // enlarge the array if necessary:
@@ -85,13 +97,13 @@ static /*inline*/ void set(int index,
   s.start = start;
   s.end = end;
   if (x+width > max_x) max_x = x+width;
-  if (flags & FL_ALIGN_RIGHT) {
+  if (flags & ALIGN_RIGHT) {
     s.x = x+w-width;
-    if (flags & FL_ALIGN_LEFT && s.x > x) s.x = x;
+    if (flags & ALIGN_LEFT && s.x > x) s.x = x;
   }
-  else if (flags & FL_ALIGN_LEFT) s.x = x;
+  else if (flags & ALIGN_LEFT) s.x = x;
   else s.x = x+(w-width)/2;
-  s.y = y+fl_height()-fl_descent();
+  s.y = y + line_ascent();
 }
 
 // word-wrap a section of text into one segment per line:
@@ -100,22 +112,22 @@ static float wrap(
   const char* start,
   const char* end,
   float x, float y, float w,
-  Fl_Flags flags,
+  Flags flags,
   int& index
   )
 {
   float width = 0;
-  if (flags & FL_ALIGN_WRAP) {
+  if (flags & ALIGN_WRAP) {
     const char* word_start = start;
     const char* word_end = start;
     for (const char* p = start; ; p++) {
       if (p >= end || *p == ' ') {
 	// test for word-wrap:
 	if (word_start < p) {
-	  float newwidth = width + fl_width(word_end, p-word_end);
+	  float newwidth = width + getwidth(word_end, p-word_end);
 	  if (word_end > start && newwidth > w) { // break before this word
 	    set(index++, start, word_end, width, x, y, w, flags);
-	    y += fl_height();
+	    y += line_spacing();
 	    start = word_end = p = word_start;
 	    width = 0;
 	    continue;
@@ -129,13 +141,13 @@ static float wrap(
       }
     }
   } else {
-    width = fl_width(start, end-start);
+    width = getwidth(start, end-start);
   }
   if (start < end) set(index++, start, end, width, x, y, w, flags);
   return y;
 }
 
-bool fl_hide_shortcut; // set by Fl_Choice
+bool fl_hide_shortcut; // set by Choice
 
 // Parses and lays out the text into segments. Return value is the
 // y height of the text. The width is stored in max_x. The index is
@@ -143,14 +155,14 @@ bool fl_hide_shortcut; // set by Fl_Choice
 static float split(
     const char* str,
     int W, int /*H*/,
-    Fl_Flags flags,
+    Flags flags,
     int& index,
     char* tempbuf // for the underscore stuff...
     )
 {
-  const int* column = fl_column_widths_;
+  const int* column = column_widths_;
 
-  bool look_for_underscore = !(flags & FL_RAW_LABEL);
+  bool look_for_underscore = !(flags & RAW_LABEL);
   bool saw_underscore = false;
 
   float x = 0;
@@ -165,7 +177,7 @@ static float split(
       w = W-x;
     } else if (*p == '\t') {
       if (column && *column) w = *column++;
-      else w = ((p-str+8)&-8)*fl_width("2",1);
+      else w = ((p-str+8)&-8)*getwidth("2",1);
     } else {
       if (*p == '&' && look_for_underscore) saw_underscore = true;
       p++;
@@ -199,8 +211,8 @@ static float split(
 	  const char* text = "_";
 	  float save_y = s.y;
 	  set(index, text, text+1, 0,
-	      s.x+fl_width(s.start, underscore_at-s.start), y, 0,
-	      FL_ALIGN_LEFT);
+	      s.x+getwidth(s.start, underscore_at-s.start), y, 0,
+	      ALIGN_LEFT);
 	  segments[index].y = save_y;
 	  index++;
 	  break;
@@ -211,9 +223,9 @@ static float split(
     }
     if (newy > max_y) max_y = newy;
     if (!*p) {
-      return max_y+fl_height();
+      return max_y+line_spacing();
     } else if (*p == '\n') {
-      x = 0; y = max_y+fl_height(); max_y = y; column = fl_column_widths_;
+      x = 0; y = max_y+line_spacing(); max_y = y; column = column_widths_;
     } else { // tab
       x += w;
     }
@@ -221,44 +233,39 @@ static float split(
   }
 }
 
-void fl_draw(
+void fltk::drawtext(
     const char* str,	// the (multi-line) string
     int X, int Y, int W, int H,	// bounding box
-    Fl_Flags flags
+    Flags flags
 ) {
   if (!str || !*str) return;
   char tempbuf[MAX_LENGTH_FOR_UNDERSCORE];
   int index = 0;
   int h = int(split(str, W, H, flags, index, tempbuf)+.5);
-  fl_transform(X,Y);
+  transform(X,Y);
   int dy;
-  if (flags & FL_ALIGN_BOTTOM) {
+  if (flags & ALIGN_BOTTOM) {
     dy = Y+H-h;
-    if ((flags & FL_ALIGN_TOP) && dy > Y) dy = Y;
-  } else if (flags & FL_ALIGN_TOP) {
+    if ((flags & ALIGN_TOP) && dy > Y) dy = Y;
+  } else if (flags & ALIGN_TOP) {
     dy = Y;
   } else {
     dy = Y+((H-h)>>1);
   }
   for (int i = 0; i < index; i++) {
     Segment& s = segments[i];
-    fl_transformed_draw(s.start, s.end-s.start, s.x+X, s.y+dy);
+    drawtext_transformed(s.start, s.end-s.start, s.x+X, s.y+dy);
   }
 }
 
-void fl_measure(const char* str, int& w, int& h, Fl_Flags flags) {
-  if (!str || !*str) {w = 0; h = int(fl_height()); return;}
+void fltk::measure(const char* str, int& w, int& h, Flags flags) {
+  if (!str || !*str) {w = 0; h = int(getsize()+.5); return;}
   char tempbuf[MAX_LENGTH_FOR_UNDERSCORE];
   int index = 0;
   h = int(split(str, w, h, flags, index, tempbuf)+.5);
   w = int(max_x+.5);
 }
 
-// back-compatable one:
-//  void fl_measure(const char* str, int& w, int& h) {
-//    fl_measure(str, w, h, w ? FL_ALIGN_WRAP : 0);
-//  }
-
 //
-// End of "$Id: fl_draw.cxx,v 1.22 2002/09/16 00:29:06 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.23 2002/12/09 04:52:29 spitzak Exp $".
 //

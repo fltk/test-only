@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.22 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: checkers.cxx,v 1.23 2002/12/09 04:52:31 spitzak Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -141,13 +141,19 @@ int nodes;		// count of nodes
 typedef char piece;
 
 // Piece values so that BLACK and WHITE are bit flags:
-#define EMPTY 0
-#define BLACK 1
-#define WHITE 2
-#define KING 4
-#define BLACKKING 5
-#define WHITEKING 6
-#define BLUE 8
+enum {
+  EMPTY = 0,
+  BLACK = 1,
+  WHITE = 2,
+  KING  = 4,
+  BLACKKING = 5,
+  WHITEKING = 6,
+  BLUE	= 8,
+  FRIEND = BLACK,
+  FRIENDKING = BLACKKING,
+  ENEMY	= WHITE,
+  ENEMYKING = WHITEKING
+};
 
 const piece flip[9] = {
   EMPTY, WHITE, BLACK, 0, 0, WHITEKING, BLACKKING, 0, BLUE};
@@ -173,10 +179,6 @@ char is_protected[45];
 
 piece flipboard[45];	// swapped if enemy is black
 piece *tb;		// pointer to real or swapped board
-#define FRIEND BLACK
-#define FRIENDKING BLACKKING
-#define ENEMY WHITE
-#define ENEMYKING WHITEKING
 
 char check(int target,int direction) {
   // see if enemy at target can be jumped from direction by our piece
@@ -857,12 +859,14 @@ int VT100main() {
 // fltk interface:
 #ifdef FLTK
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Double_Window.h>
-#include <fltk/Fl_Bitmap.h>
-#include <fltk/fl_draw.h>
-#include <fltk/Fl_Menu_Item.h>
-#include <fltk/fl_ask.h>
+#include <fltk/run.h>
+#include <fltk/events.h>
+#include <fltk/DoubleBufferWindow.h>
+#include <fltk/xbmImage.h>
+#include <fltk/draw.h>
+#include <FL/Fl_Menu_Item.h>
+#include <fltk/ask.h>
+#include <fltk/Cursor.h>
 
 //----------------------------------------------------------------
 // old 4-level NeXT images have been seperated into bitmaps so they
@@ -887,26 +891,26 @@ int VT100main() {
 #include "whiteking_3.xbm"
 #include "whiteking_4.xbm"
 
-Fl_Bitmap *bm[4][4];
+fltk::xbmImage *bm[4][4];
 
 void make_bitmaps() {
   if (bm[0][0]) return;
-  bm[0][0] = new Fl_Bitmap(black_1_bits, black_1_width, black_1_height);
-  bm[0][1] = new Fl_Bitmap(black_2_bits, black_1_width, black_1_height);
-  bm[0][2] = new Fl_Bitmap(black_3_bits, black_1_width, black_1_height);
-  bm[0][3] = new Fl_Bitmap(black_4_bits, black_1_width, black_1_height);
-  bm[1][0] = new Fl_Bitmap(white_1_bits, black_1_width, black_1_height);
-  bm[1][1] = new Fl_Bitmap(white_2_bits, black_1_width, black_1_height);
-  bm[1][2] = new Fl_Bitmap(white_3_bits, black_1_width, black_1_height);
-  bm[1][3] = new Fl_Bitmap(white_4_bits, black_1_width, black_1_height);
-  bm[2][0] = new Fl_Bitmap(blackking_1_bits, black_1_width, black_1_height);
-  bm[2][1] = new Fl_Bitmap(blackking_2_bits, black_1_width, black_1_height);
-  bm[2][2] = new Fl_Bitmap(blackking_3_bits, black_1_width, black_1_height);
-  bm[2][3] = new Fl_Bitmap(blackking_4_bits, black_1_width, black_1_height);
-  bm[3][0] = new Fl_Bitmap(whiteking_1_bits, black_1_width, black_1_height);
-  bm[3][1] = new Fl_Bitmap(whiteking_2_bits, black_1_width, black_1_height);
-  bm[3][2] = new Fl_Bitmap(whiteking_3_bits, black_1_width, black_1_height);
-  bm[3][3] = new Fl_Bitmap(whiteking_4_bits, black_1_width, black_1_height);
+  bm[0][0] = new fltk::xbmImage(black_1_bits, black_1_width, black_1_height);
+  bm[0][1] = new fltk::xbmImage(black_2_bits, black_1_width, black_1_height);
+  bm[0][2] = new fltk::xbmImage(black_3_bits, black_1_width, black_1_height);
+  bm[0][3] = new fltk::xbmImage(black_4_bits, black_1_width, black_1_height);
+  bm[1][0] = new fltk::xbmImage(white_1_bits, black_1_width, black_1_height);
+  bm[1][1] = new fltk::xbmImage(white_2_bits, black_1_width, black_1_height);
+  bm[1][2] = new fltk::xbmImage(white_3_bits, black_1_width, black_1_height);
+  bm[1][3] = new fltk::xbmImage(white_4_bits, black_1_width, black_1_height);
+  bm[2][0] = new fltk::xbmImage(blackking_1_bits, black_1_width, black_1_height);
+  bm[2][1] = new fltk::xbmImage(blackking_2_bits, black_1_width, black_1_height);
+  bm[2][2] = new fltk::xbmImage(blackking_3_bits, black_1_width, black_1_height);
+  bm[2][3] = new fltk::xbmImage(blackking_4_bits, black_1_width, black_1_height);
+  bm[3][0] = new fltk::xbmImage(whiteking_1_bits, black_1_width, black_1_height);
+  bm[3][1] = new fltk::xbmImage(whiteking_2_bits, black_1_width, black_1_height);
+  bm[3][2] = new fltk::xbmImage(whiteking_3_bits, black_1_width, black_1_height);
+  bm[3][3] = new fltk::xbmImage(whiteking_4_bits, black_1_width, black_1_height);
 }
 
 // Unfortunately, this is necessary on Windows 'cause GDI resources aren't
@@ -920,7 +924,7 @@ void make_bitmaps() {
 #define ISIZE black_1_width
 
 void draw_piece(int which, int x, int y) {
-  if (!fl_not_clipped(x,y,ISIZE,ISIZE)) return;
+  if (!fltk::not_clipped(x,y,ISIZE,ISIZE)) return;
   switch (which) {
   case BLACK: which = 0; break;
   case WHITE: which = 1; break;
@@ -928,15 +932,15 @@ void draw_piece(int which, int x, int y) {
   case WHITEKING: which = 3; break;
   default: return;
   }
-  fl_color(FL_BLACK); bm[which][0]->draw(x, y);
-  fl_color(FL_INACTIVE_COLOR); bm[which][1]->draw(x, y);
-  fl_color(FL_SELECTION_COLOR); bm[which][2]->draw(x, y);
-  fl_color(FL_WHITE); bm[which][3]->draw(x, y);
+  fltk::setcolor(fltk::GRAY00); bm[which][0]->draw(x, y);
+  fltk::setcolor(fltk::GRAY33); bm[which][1]->draw(x, y);
+  fltk::setcolor(fltk::GRAY66); bm[which][2]->draw(x, y);
+  fltk::setcolor(fltk::GRAY99); bm[which][3]->draw(x, y);
 }
 
 //----------------------------------------------------------------
 
-class Board : public Fl_Double_Window {
+class Board : public fltk::DoubleBufferWindow {
   void draw();
   int handle(int);
 public:
@@ -944,7 +948,7 @@ public:
   void drop_piece(int);
   void animate(node* move, int backwards);
   void computer_move(int);
-  Board(int w, int h) : Fl_Double_Window(w,h) {color(15);}
+  Board(int w, int h) : fltk::DoubleBufferWindow(w,h) {color(15);}
 };
 
 #define BOXSIZE 52
@@ -963,47 +967,47 @@ int squarey(int i) {return (usermoves(i,2)-'1')*BOXSIZE+BMOFFSET;}
 
 void Board::draw() {
   make_bitmaps();
-  fl_color(color()); fl_rectf(0,0,w(),h());
-  fl_color((Fl_Color)10 /*107*/);
+  fltk::setcolor(color()); fltk::fillrect(0,0,w(),h());
+  fltk::setcolor((fltk::Color)107 /*10*/);
   int x; for (x=0; x<8; x++) for (int y=0; y<8; y++) {
-    if (!((x^y)&1)) fl_rectf(BORDER+x*BOXSIZE, BORDER+y*BOXSIZE,
+    if (!((x^y)&1)) fltk::fillrect(BORDER+x*BOXSIZE, BORDER+y*BOXSIZE,
 			     BOXSIZE-BORDER, BOXSIZE-BORDER);
   }
-  fl_color(FL_DARK3 /*FL_GRAY_RAMP+4*/);
+  fltk::setcolor(fltk::GRAY33 /*fltk::GRAY20*/);
   for (x=0; x<9; x++) {
-    fl_rectf(x*BOXSIZE,0,BORDER,h());
-    fl_rectf(0,x*BOXSIZE,w(),BORDER);
+    fltk::fillrect(x*BOXSIZE,0,BORDER,h());
+    fltk::fillrect(0,x*BOXSIZE,w(),BORDER);
   }
   for (int i = 5; i < 40; i++) if (i != erase_this) {
     draw_piece(b[i], squarex(i), squarey(i));
   }
   if (showlegal) {
-    fl_color(FL_WHITE);
+    fltk::setcolor(fltk::WHITE);
     node* n;
     for (n = root->son; n; n = showlegal==2 ? n->son : n->brother) {
       int x1 = squarex(n->from)+BOXSIZE/2-5;
       int y1 = squarey(n->from)+BOXSIZE/2-5;
       int x2 = squarex(n->to)+BOXSIZE/2-5;
       int y2 = squarey(n->to)+BOXSIZE/2-5;
-      fl_line(x1,y1,x2,y2);
-      fl_push_matrix();
-      fl_mult_matrix(x2-x1,y2-y1,y1-y2,x2-x1,x2,y2);
-      fl_vertex(0,0);
-      fl_vertex(-.3f,  .1f);
-      fl_vertex(-.3f, -.1f);
-      fl_fill();
-      fl_pop_matrix();
+      fltk::drawline(x1,y1,x2,y2);
+      fltk::push_matrix();
+      fltk::concat(x2-x1,y2-y1,y1-y2,x2-x1,x2,y2);
+      fltk::addvertex(0,0);
+      fltk::addvertex(-.3f,  .1f);
+      fltk::addvertex(-.3f, -.1f);
+      fltk::fillpath();
+      fltk::pop_matrix();
     }
     int num = 1;
-    fl_color(FL_BLACK);
-    fl_font(FL_HELVETICA_BOLD,10);
+    fltk::setcolor(fltk::BLACK);
+    fltk::setfont(labelfont(),10);
     for (n = root->son; n; n = showlegal==2 ? n->son : n->brother) {
       int x1 = squarex(n->from)+BOXSIZE/2-5;
       int y1 = squarey(n->from)+BOXSIZE/2-5;
       int x2 = squarex(n->to)+BOXSIZE/2-5;
       int y2 = squarey(n->to)+BOXSIZE/2-5;
       char buf[20]; sprintf(buf,"%d",num);
-      fl_draw(buf, x1+int((x2-x1)*.85)-3, y1+int((y2-y1)*.85)+5);
+      fltk::drawtext(buf, x1+int((x2-x1)*.85)-3, y1+int((y2-y1)*.85)+5);
       num++;
     }
   }
@@ -1040,7 +1044,9 @@ void Board::drop_piece(int i) {
   }
 }
 
-//#include <unistd.h>
+#ifndef _WIN32
+# include <unistd.h>
+#endif
 
 // show move (call this *before* the move, *after* undo):
 void Board::animate(node* move, int backwards) {
@@ -1058,8 +1064,10 @@ void Board::animate(node* move, int backwards) {
     int x = x1+(x2-x1)*i/STEPS;
     int y = y1+(y2-y1)*i/STEPS;
     drag_piece(move->from,x,y);
-    Fl::flush();
-    //usleep(50);
+    fltk::flush();
+#ifndef _WIN32
+    usleep(25);
+#endif
   }
   drop_piece(t);
   if (move->jump) redraw();
@@ -1073,13 +1081,13 @@ void message(const char* m, ...) {
   va_start(a,m);
   vsprintf(buffer, m, a);
   va_end(a);
-  fl_message(buffer);
+  fltk::message(buffer);
 }
 
 void Board::computer_move(int help) {
   if (!playing) return;
-  cursor(FL_CURSOR_WAIT);
-  Fl::flush();
+  cursor(fltk::CURSOR_WAIT);
+  fltk::flush();
   busy = 1; abortflag = 0;
   node* move = calcmove(root);
   busy = 0;
@@ -1087,7 +1095,7 @@ void Board::computer_move(int help) {
     if (!help && move->value <= -30000) {
       message("%s resigns", move->who ? "White" : "Black");
       playing = autoplay = 0;
-      cursor(FL_CURSOR_DEFAULT);
+      cursor(fltk::CURSOR_DEFAULT);
       return;
     }
     animate(move,0);
@@ -1098,7 +1106,7 @@ void Board::computer_move(int help) {
     message("%s has no move", root->who ? "Black" : "White");
     playing = autoplay = 0;
   }
-  if (!autoplay) cursor(FL_CURSOR_DEFAULT);
+  if (!autoplay) cursor(fltk::CURSOR_DEFAULT);
 }
 
 extern Fl_Menu_Item menu[];
@@ -1109,24 +1117,24 @@ int Board::handle(int e) {
   board = this;
   if (busy) {
     switch(e) {
-    case FL_PUSH:
-      busymenu->popup(Fl::event_x(), Fl::event_y());
+    case fltk::PUSH:
+      busymenu->popup(fltk::event_x(), fltk::event_y());
       return 1;
-    case FL_SHORTCUT:
+    case fltk::SHORTCUT:
       return busymenu->test_shortcut() != 0;
     default:
-      return Fl_Window::handle(e);
+      return fltk::Window::handle(e);
     }
   }
   node *t, *n;
   static int deltax, deltay;
   int dist;
   switch (e) {
-  case FL_PUSH:
-    if (Fl::event_button() > 1) {
+  case fltk::PUSH:
+    if (fltk::event_button() > 1) {
       static const Fl_Menu_Item* previous;
       const Fl_Menu_Item* i =
-	menu->popup(Fl::event_x(), Fl::event_y(), 0, previous);
+	menu->popup(fltk::event_x(), fltk::event_y(), 0, previous);
       if (i) previous = i;
       return 1;
     }
@@ -1135,27 +1143,27 @@ int Board::handle(int e) {
       for (t = root->son; t; t = t->brother) {
 	int x = squarex(t->from);
 	int y = squarey(t->from);
-	if (Fl::event_inside(x,y,BOXSIZE,BOXSIZE)) {
-	  deltax = Fl::event_x()-x;
-	  deltay = Fl::event_y()-y;
+	if (fltk::event_inside(x,y,BOXSIZE,BOXSIZE)) {
+	  deltax = fltk::event_x()-x;
+	  deltay = fltk::event_y()-y;
 	  drag_piece(t->from,x,y);
 	  return 1;
 	}
       }
     }
     return 0;
-  case FL_SHORTCUT:
+  case fltk::SHORTCUT:
     return menu->test_shortcut() != 0;
-  case FL_DRAG:
-    drag_piece(erase_this, Fl::event_x()-deltax, Fl::event_y()-deltay);
+  case fltk::DRAG:
+    drag_piece(erase_this, fltk::event_x()-deltax, fltk::event_y()-deltay);
     return 1;
-  case FL_RELEASE:
+  case fltk::RELEASE:
     // find the closest legal move he dropped it on:
     dist = 50*50; n = 0;
     for (t = root->son; t; t = t->brother) if (t->from==erase_this) {
-      int d1 = Fl::event_x()-deltax-squarex(t->to);
+      int d1 = fltk::event_x()-deltax-squarex(t->to);
       int d = d1*d1;
-      d1 = Fl::event_y()-deltay-squarey(t->to);
+      d1 = fltk::event_y()-deltay-squarey(t->to);
       d += d1*d1;
       if (d < dist) {dist = d; n = t;}
     }
@@ -1167,37 +1175,38 @@ int Board::handle(int e) {
     computer_move(0);
     return 1;
   default:
-    return Fl_Window::handle(e);
+    return fltk::Window::handle(e);
   }
 }
 
-void quit_cb(Fl_Widget*, void*) { exit(0); }
+void quit_cb(fltk::Widget*, void*) { exit(0); }
 
+#include <fltk/visual.h>
 int FLTKmain(int argc, char** argv) {
-  Fl::visual(FL_DOUBLE|FL_INDEX);
+  fltk::visual(fltk::DOUBLE_BUFFER|fltk::INDEXED_COLOR);
   Board b(BOARDSIZE,BOARDSIZE);
   b.callback(quit_cb);
   b.show(argc,argv);
-  return Fl::run();
+  return fltk::run();
 } 
 
-void autoplay_cb(Fl_Widget*, void*) {
+void autoplay_cb(fltk::Widget*, void*) {
   if (autoplay) {autoplay = 0; return;}
   if (!playing) return;
   autoplay = 1;
   while (autoplay) {board->computer_move(0); board->computer_move(0);}
 }
 
-#include <fltk/Fl_Box.h>
-Fl_Window *copyright_window;
-void copyright_cb(Fl_Widget*, void*) {
+fltk::Window *copyright_window;
+void copyright_cb(fltk::Widget*, void*) {
   if (!copyright_window) {
-    copyright_window = new Fl_Window(400,270,"About checkers");
-    copyright_window->color(FL_WHITE);
-    Fl_Box *b = new Fl_Box(20,0,380,270,copyright);
-    b->label_size(10);
-	b->clear_flag(FL_ALIGN_MASK);
-    b->set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
+    copyright_window = new fltk::Window(400,270,"About checkers");
+    //copyright_window->color(fltk::WHITE);
+    copyright_window->begin();
+    fltk::Widget *b = new fltk::Widget(20,0,380,270,copyright);
+    b->labelsize(10);
+    b->clear_flag(fltk::ALIGN_MASK);
+    b->set_flag(fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE|fltk::ALIGN_WRAP);
     copyright_window->end();
   }
   copyright_window->hotspot(copyright_window);
@@ -1205,75 +1214,76 @@ void copyright_cb(Fl_Widget*, void*) {
   copyright_window->show();
 }
 
-void debug_cb(Fl_Widget*v, void*) {
+void debug_cb(fltk::Widget*v, void*) {
   debug = v->value();
 }
 
-void forced_cb(Fl_Widget*v, void*) {
+void forced_cb(fltk::Widget*v, void*) {
   forcejumps = v->value();
   killnode(root->son); root->son = 0;
   if (showlegal) {expandnode(root); board->redraw();}
 }
 
-void move_cb(Fl_Widget*, void*) {
+void move_cb(fltk::Widget*, void*) {
   if (playing) board->computer_move(1);
   if (playing) board->computer_move(0);
 }
 
-void newgame_cb(Fl_Widget*, void*) {
+void newgame_cb(fltk::Widget*, void*) {
   showlegal = 0;
   newgame();
   board->redraw();
 }
 
-void legal_cb(Fl_Widget*, void*) {
+void legal_cb(fltk::Widget*, void*) {
   if (showlegal == 1) {showlegal = 0; board->redraw(); return;}
   if (!playing) return;
   expandnode(root);
   showlegal = 1; board->redraw();
 }
 
-void predict_cb(Fl_Widget*, void*) {
+void predict_cb(fltk::Widget*, void*) {
   if (showlegal == 2) {showlegal = 0; board->redraw(); return;}
   if (playing) expandnode(root);
   showlegal = 2; board->redraw();
 }
 
-void switch_cb(Fl_Widget*, void* pb) {
+void switch_cb(fltk::Widget*, void* pb) {
   user = !user;
   board->computer_move(0);
 }
 
-void undo_cb(Fl_Widget*, void* pb) {
+void undo_cb(fltk::Widget*, void* pb) {
   board->animate(undomove(),1);
   board->animate(undomove(),1);
 }
 
 //--------------------------
 
-#include <fltk/Fl_Slider.h>
-#include <fltk/Fl_Value_Output.h>
+#include <fltk/HorizontalSlider.h>
+#include <fltk/ValueInput.h>
 
-Fl_Window *intel_window;
-Fl_Value_Output *intel_output;
+fltk::Window *intel_window;
+fltk::ValueInput *intel_output;
 
-void intel_slider_cb(Fl_Widget*w, void*) {
-  double v = ((Fl_Slider*)w)->value();
+void intel_slider_cb(fltk::Widget*w, void*) {
+  double v = ((fltk::Slider*)w)->value();
   int n = int(v*v);
   intel_output->value(n);
   maxevaluate = maxnodes = n;
 }
 
-void intel_cb(Fl_Widget*, void*) {
+void intel_cb(fltk::Widget*, void*) {
   if (!intel_window) {
-    intel_window = new Fl_Window(200,25,"Checkers Intelligence");
-    Fl_Slider* s = new Fl_Slider(60,0,140,25);
-    s->type(FL_HOR_NICE_SLIDER);
+    intel_window = new fltk::Window(200,25,"Checkers Intelligence");
+    intel_window->begin();
+    fltk::Slider* s = new fltk::HorizontalSlider(60,0,140,25);
     s->minimum(1); s->maximum(500); s->value(50);
     s->callback(intel_slider_cb);
-    intel_output = new Fl_Value_Output(0,0,60,25);
+    intel_output = new fltk::ValueInput(0,0,60,25);
     intel_output->value(maxevaluate);
     intel_window->resizable(s);
+    intel_window->end();
   }
   intel_window->hotspot(intel_window);
   intel_window->set_non_modal();
@@ -1282,9 +1292,9 @@ void intel_cb(Fl_Widget*, void*) {
 
 //---------------------------
 
-void stop_cb(Fl_Widget*, void*) {abortflag = 1;}
+void stop_cb(fltk::Widget*, void*) {abortflag = 1;}
 
-void continue_cb(Fl_Widget*, void*) {}
+void continue_cb(fltk::Widget*, void*) {}
 
 Fl_Menu_Item menu[] = {
   {"Autoplay", 'a', autoplay_cb},
@@ -1335,7 +1345,7 @@ int didabort(void) {
 #ifdef BOTH
   if (!terminal)
 #endif
-    Fl::check();
+    fltk::check();
 #endif
   if (abortflag) {
     autoplay = 0;
@@ -1350,8 +1360,8 @@ int main(int argc, char **argv) {
   newgame();
 #ifdef BOTH
   int i = 1;
-  if (Fl::args(argc, argv, i, arg) < argc) {
-    fprintf(stderr," -t : use VT100 display\n", Fl::help);
+  if (fltk::args(argc, argv, i, arg) < argc) {
+    fprintf(stderr," -t : use VT100 display\n", fltk::help);
     exit(1);
   }
   if (!getenv("DISPLAY")) terminal = 1;
@@ -1366,5 +1376,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.22 2002/09/16 00:29:06 spitzak Exp $".
+// End of "$Id: checkers.cxx,v 1.23 2002/12/09 04:52:31 spitzak Exp $".
 //

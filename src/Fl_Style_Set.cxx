@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_Set.cxx,v 1.1 2002/02/10 22:57:48 spitzak Exp $"
+// "$Id: Fl_Style_Set.cxx,v 1.2 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Code for switching between named classes of style
 //
@@ -23,14 +23,15 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl_Style_Set.h>
-#include <fltk/Fl_Widget.h>
+#include <fltk/StyleSet.h>
+#include <fltk/Widget.h>
 #include <string.h>
 #include <stdlib.h>
+using namespace fltk;
 
-static Fl_Style_Set* current_set;
+static StyleSet* current_set;
 
-Fl_Style_Set::Fl_Style_Set() {
+StyleSet::StyleSet() {
   // The first one constructed becomes the current one:
   if (!current_set) {
     current_set = this;
@@ -39,44 +40,44 @@ Fl_Style_Set::Fl_Style_Set() {
   // Otherwise we must init to a blank set:
   theme = 0;
   scheme = 0;
-  background = 0xc0c0c000; // fl_get_color(FL_GRAY); // 
+  background = 0xc0c0c000; // get_color_index(GRAY75); // 
   // Make all the named styles build copies of themselves and then
   // assign that list to this set:
-  Fl_Named_Style* saved = Fl_Named_Style::first;
-  Fl_Named_Style::first = 0;
-  Fl_Named_Style* l = saved;
-  Fl_Named_Style* default_style = Fl_Widget::default_style;
+  NamedStyle* saved = NamedStyle::first;
+  NamedStyle::first = 0;
+  NamedStyle* l = saved;
+  NamedStyle* default_style = Widget::default_style;
   while (l) {
-    Fl_Named_Style* newstyle =
-      new Fl_Named_Style(l->name,l->revertfunc,l->back_pointer);
+    NamedStyle* newstyle =
+      new NamedStyle(l->name,l->revertfunc,l->back_pointer);
     if (l == default_style) default_style = newstyle;
     l = l->next;
   }
   // Update parent entries 
-  // (suppose only possible parent is Fl_Widget::default_style    
-  for (l = Fl_Named_Style::first; l; l = l->next) {
+  // (suppose only possible parent is Widget::default_style    
+  for (l = NamedStyle::first; l; l = l->next) {
     if (l->parent) l->parent = default_style;
   }
-  first_style = Fl_Named_Style::first;
-  Fl_Named_Style::first = saved;
+  first_style = NamedStyle::first;
+  NamedStyle::first = saved;
 }
 
-void Fl_Style_Set::make_current() {
+void StyleSet::make_current() {
   if (this == current_set) return;
 
   // update the fields in the current set so they are saved:
-  Fl_Style_Set* c = current_set;
-  c->theme = Fl_Style::theme();
-  c->scheme = Fl_Style::scheme();
-  c->background = fl_get_color(FL_GRAY);
-  c->first_style = Fl_Named_Style::first;
+  StyleSet* c = current_set;
+  c->theme = Style::theme();
+  c->scheme = Style::scheme();
+  c->background = get_color_index(GRAY75);
+  c->first_style = NamedStyle::first;
 
   current_set = this;
 
-  Fl_Style::theme(theme);
-  Fl_Style::scheme(scheme);
-  fl_background(background);
-  Fl_Named_Style *l = Fl_Named_Style::first = first_style;
+  Style::theme(theme);
+  Style::scheme(scheme);
+  set_background(background);
+  NamedStyle *l = NamedStyle::first = first_style;
   while (l) {
     *(l->back_pointer) = l;
     l = l->next;
@@ -84,7 +85,7 @@ void Fl_Style_Set::make_current() {
 }
 
 // The destructor has not been tested and I'm not sure what it should do
-Fl_Style_Set::~Fl_Style_Set() {
+StyleSet::~StyleSet() {
 #if 0
   if (current_set == this) {
     current_set = 0;
@@ -95,5 +96,5 @@ Fl_Style_Set::~Fl_Style_Set() {
 }
 
 //
-// End of "$Id: Fl_Style_Set.cxx,v 1.1 2002/02/10 22:57:48 spitzak Exp $".
+// End of "$Id: Fl_Style_Set.cxx,v 1.2 2002/12/09 04:52:26 spitzak Exp $".
 //

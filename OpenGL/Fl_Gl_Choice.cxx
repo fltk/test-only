@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.cxx,v 1.20 2002/04/25 16:39:33 spitzak Exp $"
+// "$Id: Fl_Gl_Choice.cxx,v 1.21 2002/12/09 04:52:21 spitzak Exp $"
 //
 // OpenGL visual selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,14 +26,15 @@
 #include <config.h>
 #if HAVE_GL
 
-#include <fltk/Fl.h>
-#include "Fl_Gl_Choice.h"
+#include "GlChoice.h"
+#include <fltk/visual.h>
 #include <stdlib.h>
+using namespace fltk;
 
-static Fl_Gl_Choice* first;
+static GlChoice* first;
 
-Fl_Gl_Choice* Fl_Gl_Choice::find(int mode) {
-  Fl_Gl_Choice* g;
+GlChoice* GlChoice::find(int mode) {
+  GlChoice* g;
   
   for (g = first; g; g = g->next) if (g->mode == mode) return g;
 
@@ -41,7 +42,7 @@ Fl_Gl_Choice* Fl_Gl_Choice::find(int mode) {
 
   // Replacement for ChoosePixelFormat() that finds one with an overlay
   // if possible:
-  HDC dc = fl_getDC();
+  HDC dc = getDC();
   int pixelFormat = 0;
   PIXELFORMATDESCRIPTOR chosen_pfd;
   for (int i = 1; ; i++) {
@@ -49,13 +50,13 @@ Fl_Gl_Choice* Fl_Gl_Choice::find(int mode) {
     if (!DescribePixelFormat(dc, i, sizeof(pfd), &pfd)) break;
     // continue if it does not satisfy our requirements:
     if (~pfd.dwFlags & (PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL)) continue;
-    if (pfd.iPixelType != ((mode&FL_INDEX)?1:0)) continue;
-    if ((mode & FL_ALPHA) && !pfd.cAlphaBits) continue;
-    if ((mode & FL_ACCUM) && !pfd.cAccumBits) continue;
-    if ((!(mode & FL_DOUBLE)) != (!(pfd.dwFlags & PFD_DOUBLEBUFFER))) continue;
-    if ((!(mode & FL_STEREO)) != (!(pfd.dwFlags & PFD_STEREO))) continue;
-    if ((mode & FL_DEPTH) && !pfd.cDepthBits) continue;
-    if ((mode & FL_STENCIL) && !pfd.cStencilBits) continue;
+    if (pfd.iPixelType != ((mode&INDEXED_COLOR)?1:0)) continue;
+    if ((mode & ALPHA_BUFFER) && !pfd.cAlphaBits) continue;
+    if ((mode & ACCUM_BUFFER) && !pfd.cAccumBits) continue;
+    if ((!(mode & DOUBLE_BUFFER)) != (!(pfd.dwFlags & PFD_DOUBLEBUFFER))) continue;
+    if ((!(mode & STEREO)) != (!(pfd.dwFlags & PFD_STEREO))) continue;
+    if ((mode & DEPTH_BUFFER) && !pfd.cDepthBits) continue;
+    if ((mode & STENCIL_BUFFER) && !pfd.cStencilBits) continue;
     // see if better than the one we have already:
     if (pixelFormat) {
       // offering overlay is better:
@@ -73,58 +74,58 @@ Fl_Gl_Choice* Fl_Gl_Choice::find(int mode) {
 
   int list[32];
   int n = 0;
-  if (mode & FL_INDEX) {
+  if (mode & INDEXED_COLOR) {
     list[n++] = GLX_BUFFER_SIZE;
     list[n++] = 8; // glut tries many sizes, but this should work...
   } else {
     list[n++] = GLX_RGBA;
     list[n++] = GLX_GREEN_SIZE;
-    list[n++] = (mode & FL_RGB8) ? 8 : 1;
-    if (mode & FL_ALPHA) {
+    list[n++] = (mode & RGB24_COLOR) ? 8 : 1;
+    if (mode & ALPHA_BUFFER) {
       list[n++] = GLX_ALPHA_SIZE;
       list[n++] = 1;
     }
-    if (mode & FL_ACCUM) {
+    if (mode & ACCUM_BUFFER) {
       list[n++] = GLX_ACCUM_GREEN_SIZE;
       list[n++] = 1;
-      if (mode & FL_ALPHA) {
+      if (mode & ALPHA_BUFFER) {
 	list[n++] = GLX_ACCUM_ALPHA_SIZE;
 	list[n++] = 1;
       }
     }
   }
-  if (mode & FL_DOUBLE) {
+  if (mode & DOUBLE_BUFFER) {
     list[n++] = GLX_DOUBLEBUFFER;
   }
-  if (mode & FL_DEPTH) {
+  if (mode & DEPTH_BUFFER) {
     list[n++] = GLX_DEPTH_SIZE; list[n++] = 1;
   }
-  if (mode & FL_STENCIL) {
+  if (mode & STENCIL_BUFFER) {
     list[n++] = GLX_STENCIL_SIZE; list[n++] = 1;
   }
-  if (mode & FL_STEREO) {
+  if (mode & STEREO) {
     list[n++] = GLX_STEREO;
   }
 #if defined(GLX_VERSION_1_1) && defined(GLX_SGIS_multisample)
-  if (mode & FL_MULTISAMPLE) {
+  if (mode & MULTISAMPLE) {
     list[n++] = GLX_SAMPLES_SGIS;
     list[n++] = 4; // value Glut uses
   }
 #endif
   list[n] = 0;
     
-  fl_open_display();
-  XVisualInfo* vis = glXChooseVisual(fl_display, fl_screen, list);
+  open_display();
+  XVisualInfo* vis = glXChooseVisual(xdisplay, xscreen, list);
   if (!vis) {
 # if defined(GLX_VERSION_1_1) && defined(GLX_SGIS_multisample)
-    if (mode&FL_MULTISAMPLE) return find(mode&~FL_MULTISAMPLE);
+    if (mode&MULTISAMPLE) return find(mode&~MULTISAMPLE);
 # endif
     return 0;
   }
 
 #endif
 
-  g = new Fl_Gl_Choice;
+  g = new GlChoice;
   g->mode = mode;
   g->next = first;
   first = g;
@@ -135,12 +136,12 @@ Fl_Gl_Choice* Fl_Gl_Choice::find(int mode) {
 #else
   g->vis = vis;
 
-  if (/*MaxCmapsOfScreen(ScreenOfDisplay(fl_display,fl_screen))==1 && */
-      vis->visualid == fl_visual->visualid &&
+  if (/*MaxCmapsOfScreen(ScreenOfDisplay(xdisplay,xscreen))==1 && */
+      vis->visualid == xvisual->visualid &&
       !getenv("MESA_PRIVATE_CMAP"))
-    g->colormap = fl_colormap;
+    g->colormap = xcolormap;
   else
-    g->colormap = XCreateColormap(fl_display, RootWindow(fl_display,fl_screen),
+    g->colormap = XCreateColormap(xdisplay, RootWindow(xdisplay,xscreen),
 				  vis->visual, AllocNone);
 #endif
 
@@ -151,8 +152,8 @@ static GLContext first_context;
 
 #ifdef _WIN32
 
-GLContext fl_create_gl_context(const Fl_Window* window, const Fl_Gl_Choice* g, int layer) {
-  Fl_X* i = Fl_X::i(window);
+GLContext fltk::create_gl_context(const Window* window, const GlChoice* g, int layer) {
+  CreatedWindow* i = CreatedWindow::find(window);
   SetPixelFormat(i->dc, g->pixelFormat, &g->pfd);
   GLContext context =
     layer ? wglCreateLayerContext(i->dc, layer) : wglCreateContext(i->dc);
@@ -165,8 +166,8 @@ GLContext fl_create_gl_context(const Fl_Window* window, const Fl_Gl_Choice* g, i
 
 #else
 
-GLContext fl_create_gl_context(XVisualInfo* vis) {
-  GLContext context = glXCreateContext(fl_display, vis, first_context, 1);
+GLContext fltk::create_gl_context(XVisualInfo* vis) {
+  GLContext context = glXCreateContext(xdisplay, vis, first_context, 1);
   if (!first_context) first_context = context;
   return context;
 }
@@ -174,37 +175,37 @@ GLContext fl_create_gl_context(XVisualInfo* vis) {
 #endif
 
 static GLContext cached_context;
-static const Fl_Window* cached_window;
+static const Window* cached_window;
 
-void fl_set_gl_context(const Fl_Window* w, GLContext context) {
+void fltk::set_gl_context(const Window* w, GLContext context) {
   if (context != cached_context || w != cached_window) {
     cached_context = context;
     cached_window = w;
 #ifdef _WIN32
-    wglMakeCurrent(Fl_X::i(w)->dc, context);
+    wglMakeCurrent(CreatedWindow::find(w)->dc, context);
 #else
-    glXMakeCurrent(fl_display, fl_xid(w), context);
+    glXMakeCurrent(xdisplay, xid(w), context);
 #endif
   }
 }
 
-void fl_no_gl_context() {
+void fltk::no_gl_context() {
   cached_context = 0;
   cached_window = 0;
 #ifdef _WIN32
   wglMakeCurrent(0, 0);
 #else
-  glXMakeCurrent(fl_display, 0, 0);
+  glXMakeCurrent(xdisplay, 0, 0);
 #endif
 }
 
-void fl_delete_gl_context(GLContext context) {
-  if (cached_context == context) fl_no_gl_context();
+void fltk::delete_gl_context(GLContext context) {
+  if (cached_context == context) no_gl_context();
   if (context != first_context) {
 #ifdef _WIN32
     wglDeleteContext(context);
 #else
-    glXDestroyContext(fl_display, context);
+    glXDestroyContext(xdisplay, context);
 #endif
   }
 }
@@ -212,5 +213,5 @@ void fl_delete_gl_context(GLContext context) {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.cxx,v 1.20 2002/04/25 16:39:33 spitzak Exp $".
+// End of "$Id: Fl_Gl_Choice.cxx,v 1.21 2002/12/09 04:52:21 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: keyboard.cxx,v 1.12 2002/01/28 08:03:00 spitzak Exp $"
+// "$Id: keyboard.cxx,v 1.13 2002/12/09 04:52:31 spitzak Exp $"
 //
 // Keyboard/event test program for the Fast Light Tool Kit (FLTK).
 //
@@ -41,84 +41,93 @@
 #include "keyboard_ui.cxx"
 #include <stdio.h>
 #include <ctype.h>
+#include <fltk/run.h>
 
 // these are used to identify which buttons are which:
-void key_cb(Fl_Button*, void*) {}
-void shift_cb(Fl_Button*, void*) {}
-
-// this is used to stop Esc from exiting the program:
-int handle(int e) {
-  return (e == FL_SHORTCUT); // eat all keystrokes
-}
+void key_cb(fltk::Button*, void*) {}
+void shift_cb(fltk::Button*, void*) {}
 
 struct {int n; const char* text;} table[] = {
-  {FL_Escape, "FL_Escape"},
-  {FL_BackSpace, "FL_BackSpace"},
-  {FL_Tab, "FL_Tab"},
-  {FL_Enter, "FL_Enter"},
-  {FL_Print, "FL_Print"},
-  {FL_Scroll_Lock, "FL_Scroll_Lock"},
-  {FL_Pause, "FL_Pause"},
-  {FL_Insert, "FL_Insert"},
-  {FL_Home, "FL_Home"},
-  {FL_Page_Up, "FL_Page_Up"},
-  {FL_Delete, "FL_Delete"},
-  {FL_End, "FL_End"},
-  {FL_Page_Down, "FL_Page_Down"},
-  {FL_Left, "FL_Left"},
-  {FL_Up, "FL_Up"},
-  {FL_Right, "FL_Right"},
-  {FL_Down, "FL_Down"},
-  {FL_Shift_L, "FL_Shift_L"},
-  {FL_Shift_R, "FL_Shift_R"},
-  {FL_Control_L, "FL_Control_L"},
-  {FL_Control_R, "FL_Control_R"},
-  {FL_Caps_Lock, "FL_Caps_Lock"},
-  {FL_Alt_L, "FL_Alt_L"},
-  {FL_Alt_R, "FL_Alt_R"},
-  {FL_Win_L, "FL_Win_L"},
-  {FL_Win_R, "FL_Win_R"},
-  {FL_Menu, "FL_Menu"},
-  {FL_Num_Lock, "FL_Num_Lock"},
-  {FL_KP_Enter, "FL_KP_Enter"}
+  {fltk::EscapeKey, "fltk::EscapeKey"},
+  {fltk::BackSpaceKey, "fltk::BackSpaceKey"},
+  {fltk::TabKey, "fltk::TabKey"},
+  {fltk::ReturnKey, "fltk::ReturnKey"},
+  {fltk::PrintKey, "fltk::PrintKey"},
+  {fltk::ScrollLockKey, "fltk::ScrollLockKey"},
+  {fltk::PauseKey, "fltk::PauseKey"},
+  {fltk::InsertKey, "fltk::InsertKey"},
+  {fltk::HomeKey, "fltk::HomeKey"},
+  {fltk::PageUpKey, "fltk::PageUpKey"},
+  {fltk::DeleteKey, "fltk::DeleteKey"},
+  {fltk::EndKey, "fltk::EndKey"},
+  {fltk::PageDownKey, "fltk::PageDownKey"},
+  {fltk::LeftKey, "fltk::LeftKey"},
+  {fltk::UpKey, "fltk::UpKey"},
+  {fltk::RightKey, "fltk::RightKey"},
+  {fltk::DownKey, "fltk::DownKey"},
+  {fltk::LeftShiftKey, "fltk::LeftShiftKey"},
+  {fltk::RightShiftKey, "fltk::RightShiftKey"},
+  {fltk::LeftControlKey, "fltk::LeftControlKey"},
+  {fltk::RightControlKey, "fltk::RightControlKey"},
+  {fltk::CapsLockKey, "fltk::CapsLockKey"},
+  {fltk::LeftAltKey, "fltk::LeftAltKey"},
+  {fltk::RightAltKey, "fltk::RightAltKey"},
+  {fltk::LeftCommandKey, "fltk::LeftCommandKey"},
+  {fltk::RightCommandKey, "fltk::RightCommandKey"},
+  {fltk::MenuKey, "fltk::MenuKey"},
+  {fltk::NumLockKey, "fltk::NumLockKey"},
+  {fltk::KeypadEnter, "fltk::KeypadEnter"},
+  {fltk::MultiplyKey, "fltk::MultiplyKey"},
+  {fltk::AddKey, "fltk::AddKey"},
+  {fltk::SubtractKey, "fltk::SubtractKey"},
+  {fltk::DecimalKey, "fltk::DecimalKey"},
+  {fltk::DivideKey, "fltk::DivideKey"},
+  {fltk::Keypad0, "fltk::Keypad0"},
+  {fltk::Keypad1, "fltk::Keypad1"},
+  {fltk::Keypad2, "fltk::Keypad2"},
+  {fltk::Keypad3, "fltk::Keypad3"},
+  {fltk::Keypad4, "fltk::Keypad4"},
+  {fltk::Keypad5, "fltk::Keypad5"},
+  {fltk::Keypad6, "fltk::Keypad6"},
+  {fltk::Keypad7, "fltk::Keypad7"},
+  {fltk::Keypad8, "fltk::Keypad8"},
+  {fltk::Keypad9, "fltk::Keypad9"},
+  {fltk::SpaceKey,"fltk::SpaceKey (' ')"}
 };
 
 int main(int argc, char** argv) {
-  Fl::add_handler(handle);
-  Fl_Window *window = make_window();
+  fltk::Window *window = make_window();
   window->show(argc,argv);
   for (;;) {
-    Fl::wait();
+    fltk::wait();
     if (!window->visible()) break;
     
     // update all the buttons with the current key and shift state:
     for (int i = 0; i < window->children(); i++) {
-      Fl_Widget* b = window->child(i);
-      if (b->callback() == (Fl_Callback*)key_cb) {
+      fltk::Widget* b = window->child(i);
+      if (b->callback() == (fltk::Callback*)key_cb) {
 	int i = (int)(long)b->user_data();
 	if (!i) i = tolower(b->label()[0]);
-	((Fl_Button*)b)->value(Fl::event_key_state(i));
-	if (i == Fl::event_key()) ((Fl_Button*)b)->take_focus();
-      } else if (b->callback() == (Fl_Callback*)shift_cb) {
+	((fltk::Button*)b)->value(fltk::event_key_state(i));
+	if (i == fltk::event_key()) ((fltk::Button*)b)->take_focus();
+      } else if (b->callback() == (fltk::Callback*)shift_cb) {
 	int i = (int)(long)b->user_data();
-	((Fl_Button*)b)->value(Fl::event_state(i));
+	((fltk::Button*)b)->value(fltk::event_state(i));
       }
     }
 
     // figure out the keyname:
     char buffer[100];
     const char *keyname = buffer;
-    int k = Fl::event_key();
-    if (!k)
+    int k = fltk::event_key();
+    if (!k) {
       keyname = "0";
-    else if (k < 256) {
+    } else if (k <= 7) {
+      sprintf(buffer, "(mouse button %d)", k);
+    } else if (k < 256 && k != 32) {
       sprintf(buffer, "'%c'", k);
-    } else if (k >= FL_F(0) && k <= FL_F_Last) {
-      sprintf(buffer, "FL_F(%d)", k - FL_F(0));
-    } else if (k >= FL_KP(0) && k <= FL_KP_Last) {
-      sprintf(buffer, "FL_KP('%c')", k-FL_KP(0));
-    } else if (k >= FL_Button(0) && k <= FL_Button(7)) {
-      sprintf(buffer, "FL_Button(%d)", k-FL_Button(0));
+    } else if (k >= fltk::F0Key && k <= fltk::LastFunctionKey) {
+      sprintf(buffer, "fltk::F%dKey", k - fltk::F0Key);
     } else {
       sprintf(buffer, "0x%04x", k);
       for (int i = 0; i < int(sizeof(table)/sizeof(*table)); i++)
@@ -126,11 +135,16 @@ int main(int argc, char** argv) {
     }
     key_output->value(keyname);
 
-    text_output->value(Fl::event_text());
+    if (fltk::event_text()[0] == 32)
+      text_output->value("\" \"");
+    else if (fltk::event_text()[0])
+      text_output->value(fltk::event_text());
+    else
+      text_output->value("\"\"");
   }
   return 0;
 }
 
 //
-// End of "$Id: keyboard.cxx,v 1.12 2002/01/28 08:03:00 spitzak Exp $".
+// End of "$Id: keyboard.cxx,v 1.13 2002/12/09 04:52:31 spitzak Exp $".
 //

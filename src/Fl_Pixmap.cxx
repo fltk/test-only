@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pixmap.cxx,v 1.17 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: Fl_Pixmap.cxx,v 1.18 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,37 +23,37 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// An Fl_Image that draws inline XPM data.
+// An Image that draws inline XPM data.
 
-// See fl_draw_pixmap.C for code used to get the actual data into pixmap.
+// See draw_pixmap.C for code used to get the actual data into pixmap.
 // Implemented without using the xpm library (which I can't use because
-// it interferes with the color cube used by fl_draw_image).
+// it interferes with the color cube used by drawimage).
 
-#include <fltk/Fl.h>
-#include <fltk/fl_draw.h>
+#include <fltk/xpmImage.h>
+#include <fltk/draw.h>
 #include <fltk/x.h>
-#include <fltk/Fl_Pixmap.h>
+using namespace fltk;
 
-void Fl_Pixmap::measure(int& W,int& H) {
-  if (w < 0) fl_measure_pixmap(data, w, h);
+void xpmImage::measure(int& W,int& H) {
+  if (w < 0) measure_xpm(data, w, h);
   W=w; 
   H=h;
 }
 
-void Fl_Pixmap::draw(int X, int Y, int, int, Fl_Flags flags)
+void xpmImage::draw(int X, int Y, int, int, Flags flags)
 {
-  if (w < 0) fl_measure_pixmap(data, w, h);
+  if (w < 0) measure_xpm(data, w, h);
   if (!w) return; // ignore empty or bad pixmap data
   if (!id) {
     Pixmap pixmap = fl_create_offscreen(w, h);
     id = (void*)pixmap;
     fl_begin_offscreen(pixmap);
     uchar *bitmap = 0;
-    fl_set_mask_bitmap(&bitmap);
-    fl_draw_pixmap(data, 0, 0, FL_NO_COLOR);
-    fl_set_mask_bitmap(0);
+    set_mask_bitmap(&bitmap);
+    draw_xpm(data, 0, 0, NO_COLOR);
+    set_mask_bitmap(0);
     if (bitmap) {
-      mask = (void*)fl_create_bitmap(bitmap, w, h);
+      mask = (void*)create_bitmap(bitmap, w, h);
       delete[] bitmap;
     }
     fl_end_offscreen();
@@ -62,5 +62,5 @@ void Fl_Pixmap::draw(int X, int Y, int, int, Fl_Flags flags)
 }
 
 //
-// End of "$Id: Fl_Pixmap.cxx,v 1.17 2001/12/10 06:25:42 spitzak Exp $".
+// End of "$Id: Fl_Pixmap.cxx,v 1.18 2002/12/09 04:52:26 spitzak Exp $".
 //

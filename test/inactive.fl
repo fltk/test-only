@@ -1,5 +1,5 @@
 # data file for the FLTK User Interface Designer (FLUID)
-version 2.0001 
+version 2.0002 
 images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
@@ -8,81 +8,81 @@ gridy 11
 snap 3
 Function {} {open
 } {
-  Fl_Window {} {open
+  {fltk::Window} {} {open
     xywh {46 192 395 280} resizable visible
   } {
-    Fl_Group the_group {
+    {fltk::Group} the_group {
       label {activate()/deactivate() called on this Fl_Group} open
       xywh {5 6 384 239} align 17 resizable box ENGRAVED_BOX
     } {
-      Fl_Button {} {
+      {fltk::Button} {} {
         label button
         xywh {25 27 105 22}
       }
-      Fl_Group {} {
+      {fltk::Group} {} {
         label {Child group} open
         xywh {25 75 105 105}
       } {
-        Fl_Check_Button {} {
+        {fltk::CheckButton} {} {
           label red
-          xywh {0 0 105 25} type RADIO label_color 1 selection_color 1 selected_text_color 1 highlight_label_color 1
+          xywh {0 0 105 25} type RADIO labelcolor 1 selection_color 1 selection_textcolor 1 highlight_labelcolor 1
         }
-        Fl_Check_Button {} {
+        {fltk::CheckButton} {} {
           label green
-          xywh {0 25 105 25} type RADIO label_color 2 selection_color 2 selected_text_color 2 highlight_label_color 2
+          xywh {0 25 105 25} type RADIO labelcolor 2 selection_color 2 selection_textcolor 2 highlight_labelcolor 2
         }
-        Fl_Check_Button {} {
+        {fltk::CheckButton} {} {
           label blue
-          xywh {0 50 105 25} type RADIO label_color 4 selection_color 4 selected_text_color 4 highlight_label_color 4
+          xywh {0 50 105 25} type RADIO labelcolor 4 selection_color 4 selection_textcolor 4 highlight_labelcolor 4
         }
-        Fl_Check_Button {} {
+        {fltk::CheckButton} {} {
           label white
-          xywh {0 75 105 25} type RADIO label_color 7 selection_color 7 selected_text_color 55 highlight_label_color 55
+          xywh {0 75 105 25} type RADIO labelcolor 7 selection_color 7 selection_textcolor 55 highlight_labelcolor 55
         }
       }
-      Fl_Slider {} {
+      {fltk::Slider} {} {
         label Fl_Slider
         xywh {140 25 24 150} value 0.5
       }
-      Fl_Input {} {
+      {fltk::Input} {} {
         xywh {170 27 195 22}
         extra_code {o->static_value("Fl_Input");}
       }
-      Fl_Input_Browser {} {
+      {fltk::InputBrowser} {} {
         label {input browser} open
         xywh {255 60 110 22}
         extra_code {o->value("Shemp");}
       } {
-        Fl_Item {} {
+        {fltk::Item} {} {
           label Moe
           }
-        Fl_Item {} {
+        {fltk::Item} {} {
           label Larry
           }
-        Fl_Item {} {
+        {fltk::Item} {} {
           label Curly
           }
       }
-      Fl_Box {} {
+      {fltk::Widget} {} {
         label Fl_Box
-        xywh {215 137 145 88} box ENGRAVED_BOX label_font 3 label_type SHADOW_LABEL label_size 38
+        xywh {215 137 145 88} box ENGRAVED_BOX labelfont 3 labeltype SHADOW_LABEL labelsize 38
       }
-      Fl_Value_Output {} {
+      {fltk::ValueInput} {} {
         label {value:} selected
         tooltip {This Fl_Value_Output widget has a tooltip.}
-        xywh {230 93 135 33} text_font 5 text_color 4 text_size 24 maximum 10000 step 1
+        xywh {230 93 135 33} textfont 5 textcolor 4 textsize 24 maximum 10000 step 1
       }
-      Fl_Scrollbar {} {
+      {fltk::Scrollbar} {} {
         label scrollbar
         xywh {15 195 180 20} type HORIZONTAL maximum 100
       }
     }
-    Fl_Button {} {
+    {fltk::Button} {} {
       label active
       callback {the_group->activate();}
       xywh {5 250 190 25} type RADIO value 1
     }
-    Fl_Button {} {
+    {fltk::Button} {} {
       label inactive
       callback {the_group->deactivate();}
       xywh {205 250 184 25} type RADIO

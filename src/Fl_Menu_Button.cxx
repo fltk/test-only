@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.50 2002/06/09 23:20:18 spitzak Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.51 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,35 +23,36 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Menu_Button.h>
-#include <fltk/fl_draw.h>
-#include <fltk/Fl_Group.h>
-#include <fltk/Fl_Item.h>
+#include <fltk/PopupMenu.h>
+#include <fltk/events.h>
+#include <fltk/damage.h>
+#include <fltk/Box.h>
+#include <fltk/draw.h>
+#include <fltk/Item.h>
 
-extern Fl_Widget* fl_did_clipping;
+using namespace fltk;
 
-void Fl_Menu_Button::draw() {
+extern Widget* fl_did_clipping;
+
+void PopupMenu::draw() {
   if (type()&7) { // draw nothing for the popup types
     fl_did_clipping = this;
     return;
   }
-  Fl_Boxtype box = this->box();
-  // We need to erase the focus rectangle on FL_DAMAGE_HIGHTLIGHT for
-  // FL_NO_BOX buttons such as checkmarks:
-  if (damage()&FL_DAMAGE_EXPOSE && !box->fills_rectangle()
-      || box == FL_NO_BOX && damage()&FL_DAMAGE_HIGHLIGHT && !focused()) {
-    fl_push_clip(0, 0, this->w(), this->h());
-    parent()->draw_group_box();
-    fl_pop_clip();
+  Box* box = this->box();
+  // We need to erase the focus rectangle on DAMAGE_HIGHTLIGHT for
+  // NO_BOX buttons such as checkmarks:
+  if (damage()&DAMAGE_EXPOSE && !box->fills_rectangle()
+      || box == NO_BOX && damage()&DAMAGE_HIGHLIGHT && !focused()) {
+    draw_background();
   }
-  Fl_Flags flags;
-  Fl_Color color;
+  Flags flags;
+  Color color;
   if (!active_r()) {
-    flags = FL_INACTIVE;
+    flags = INACTIVE;
     color = this->color();
   } else if (belowmouse()) {
-    flags = FL_HIGHLIGHT;
+    flags = HIGHLIGHT;
     color = highlight_color();
     if (!color) color = this->color();
   } else {
@@ -63,52 +64,52 @@ void Fl_Menu_Button::draw() {
   x = y = 0; w = this->w(); h = this->h(); box->inset(x,y,w,h);
   draw_inside_label(x,y,w,h,flags);
   if (focused()) {
-    focus_box()->draw(x+1, y+1, w-2, h-2, text_color(), FL_INVISIBLE);
+    focusbox()->draw(x+1, y+1, w-2, h-2, textcolor(), INVISIBLE);
   }
   // draw the little mark at the right:
-  int w1 = text_size();
-  draw_glyph(FL_GLYPH_DOWN, x+w-w1, y, w1, h, flags);
+  int w1 = int(textsize());
+  draw_glyph(GLYPH_DOWN, x+w-w1, y, w1, h, flags);
 }
 
-int Fl_Menu_Button::popup() {
-  if (box() == FL_NO_BOX) type(POPUP3); // back compatibility hack
+int PopupMenu::popup() {
+  if (box() == NO_BOX) type(POPUP3); // back compatibility hack
   if (type()&7) {
     if (label()) {
-      Fl_Item title(label());
-      return Fl_Menu_::popup(Fl::event_x(), Fl::event_y(), 0,0, &title);
+      Item title(label());
+      return Menu::popup(event_x(), event_y(), 0,0, &title);
     } else {
-      return Fl_Menu_::popup(Fl::event_x(), Fl::event_y());
+      return Menu::popup(event_x(), event_y());
     }
   } else {
-    return Fl_Menu_::popup(0, 0, w(), h());
+    return Menu::popup(0, 0, w(), h());
   }
 }
 
-int Fl_Menu_Button::handle(int e) {
+int PopupMenu::handle(int e) {
   if (!children()) return 0;
   switch (e) {
 
-  case FL_FOCUS:
-  case FL_UNFOCUS:
+  case FOCUS:
+  case UNFOCUS:
     if (type()&7) return 0;
-    redraw(FL_DAMAGE_HIGHLIGHT);
+    redraw(DAMAGE_HIGHLIGHT);
     return 1;
 
-  case FL_ENTER:
-  case FL_LEAVE:
+  case ENTER:
+  case LEAVE:
     if (type()&7) return 0;
-    if (highlight_color() && takesevents()) redraw(FL_DAMAGE_HIGHLIGHT);
-  case FL_MOVE:
+    if (highlight_color() && takesevents()) redraw(DAMAGE_HIGHLIGHT);
+  case MOVE:
     return 1;
 
-  case FL_PUSH:
+  case PUSH:
     // If you uncomment this line (or make a subclass that does this) then
     // a mouse click picks the current item, and the menu goes away.  The
     // user must drag the mouse to select a different item.  Depending on
     // the size and usage of the menu, this may be more user-friendly:
-    // Fl::event_is_click(0);
+    // event_is_click(0);
     if (type()&7) {
-      if (!(type() & (1 << (Fl::event_button()-1)))) return 0;
+      if (!(type() & (1 << (event_button()-1)))) return 0;
     } else {
       if (click_to_focus()) take_focus();
     }
@@ -117,12 +118,12 @@ int Fl_Menu_Button::handle(int e) {
     popup();
     return 1;
 
-  case FL_SHORTCUT:
+  case SHORTCUT:
     if (test_shortcut()) goto EXECUTE;
     return handle_shortcut();
 
-  case FL_KEY:
-    if (Fl::event_key() == FL_Enter || Fl::event_key() == ' ') goto EXECUTE;
+  case KEY:
+    if (event_key() == ReturnKey || event_key() == SpaceKey) goto EXECUTE;
     return 0;
 
   default:
@@ -130,21 +131,21 @@ int Fl_Menu_Button::handle(int e) {
   }
 }
 
-static void revert(Fl_Style* s) {
-  s->color = FL_GRAY;
-  s->box = FL_UP_BOX;
+static void revert(Style* s) {
+  s->color = GRAY75;
+  s->box = UP_BOX;
 }
-static Fl_Named_Style style("Menu_Button", revert, &Fl_Menu_Button::default_style);
-Fl_Named_Style* Fl_Menu_Button::default_style = &::style;
+static NamedStyle style("Menu_Button", revert, &PopupMenu::default_style);
+NamedStyle* PopupMenu::default_style = &::style;
 
-Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l)
-  : Fl_Menu_(X,Y,W,H,l)
+PopupMenu::PopupMenu(int X,int Y,int W,int H,const char *l)
+  : Menu(X,Y,W,H,l)
 {
   style(default_style);
-  align(FL_ALIGN_CENTER);
+  align(ALIGN_CENTER);
   //set_click_to_focus();
 }
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.50 2002/06/09 23:20:18 spitzak Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.51 2002/12/09 04:52:26 spitzak Exp $".
 //

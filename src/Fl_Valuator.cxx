@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.27 2002/09/09 01:39:58 spitzak Exp $"
+// "$Id: Fl_Valuator.cxx,v 1.28 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Valuator widget for the Fast Light Tool Kit (FLTK).
 //
@@ -25,17 +25,19 @@
 
 // Base class for sliders and all other one-value "knobs"
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Valuator.h>
+#include <fltk/Valuator.h>
+#include <fltk/events.h>
+#include <fltk/damage.h>
 #include <fltk/math.h>
 #include <stdio.h>
 #include <stdlib.h>
+using namespace fltk;
 
-Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
-  : Fl_Widget(X,Y,W,H,L) {
-  clear_flag(FL_ALIGN_MASK);
-  set_flag(FL_ALIGN_BOTTOM);
-  when(FL_WHEN_CHANGED);
+Valuator::Valuator(int X, int Y, int W, int H, const char* L)
+  : Widget(X,Y,W,H,L) {
+  clear_flag(ALIGN_MASK);
+  set_flag(ALIGN_BOTTOM);
+  when(WHEN_CHANGED);
   value_ = 0.0;
   step_ = 0;
   minimum_ = 0;
@@ -43,19 +45,11 @@ Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
   linesize_ = 1;
 }
 
-#ifndef FLTK_2
-void Fl_Valuator::precision(int p) {
-  int B = 1;
-  for (int i=0; i<p; i++) B *= 10;
-  step_ = 1.0f/B;
-}
-#endif
-
-void Fl_Valuator::value_damage() {
-  redraw(FL_DAMAGE_VALUE); // default version does partial-redraw
+void Valuator::value_damage() {
+  redraw(DAMAGE_VALUE); // default version does partial-redraw
 }
 
-int Fl_Valuator::value(double v) {
+int Valuator::value(double v) {
   clear_changed();
   if (v == value_) return 0;
   value_ = v;
@@ -63,11 +57,11 @@ int Fl_Valuator::value(double v) {
   return 1;
 }
 
-double Fl_Valuator::previous_value_;
+double Valuator::previous_value_;
 
-// inline void Fl_Valuator::handle_push() {previous_value_ = value_;}
+// inline void Valuator::handle_push() {previous_value_ = value_;}
 
-void Fl_Valuator::handle_drag(double v) {
+void Valuator::handle_drag(double v) {
   // round to nearest multiple of step:
   if (step_ >= 1) {
     v = rint(v/step_)*step_;
@@ -88,73 +82,73 @@ void Fl_Valuator::handle_drag(double v) {
   if (v != value_) {
     value_ = v;
     value_damage();
-    if (when() & FL_WHEN_CHANGED || !Fl::pushed()) do_callback();
+    if (when() & WHEN_CHANGED || !pushed()) do_callback();
     else set_changed();
   }
 }
 
-void Fl_Valuator::handle_release() {
-  if (when()&FL_WHEN_RELEASE && !Fl::pushed()) {
+void Valuator::handle_release() {
+  if (when()&WHEN_RELEASE && !pushed()) {
     // insure changed() is off even if no callback is done.  It may have
     // been turned on by the drag, and then the slider returned to it's
     // initial position:
     clear_changed();
     // now do the callback only if slider in new position or always is on:
-    if (value_ != previous_value_ || when() & FL_WHEN_NOT_CHANGED)
+    if (value_ != previous_value_ || when() & WHEN_NOT_CHANGED)
       do_callback();
   }
 }
 
-int Fl_Valuator::format(char* buffer) {
+int Valuator::format(char* buffer) {
   double v = value();
   if (step_ <= 0) return sprintf(buffer, "%g", v);
   else if (rint(step_) == step_) return sprintf(buffer, "%ld", long(v));
   int i, x;
-  int istep_ = int(1/(step_-floor(step_)));
+  int istep_ = int(1/(step_-floor(step_))+.5);
   for (x = 10, i = 2; x < istep_; x *= 10) i++;
   if (x == istep_) i--;
   return sprintf(buffer, "%.*f", i, v);
 }
 
-int Fl_Valuator::handle(int event) {
+int Valuator::handle(int event) {
   switch(event) {
-    case FL_ENTER:
-    case FL_LEAVE:
-      if (highlight_color() && takesevents()) redraw(FL_DAMAGE_HIGHLIGHT);
-    case FL_MOVE:
+    case ENTER:
+    case LEAVE:
+      if (highlight_color() && takesevents()) redraw(DAMAGE_HIGHLIGHT);
+    case MOVE:
       return 1;
-    case FL_FOCUS:
-    case FL_UNFOCUS:
-      redraw(FL_DAMAGE_HIGHLIGHT);
+    case FOCUS:
+    case UNFOCUS:
+      redraw(DAMAGE_HIGHLIGHT);
       return 1;
-    case FL_KEY: {
+    case KEY: {
       float i;
-      switch (Fl::event_key()) {
-        case FL_Down:
-        case FL_Left:
+      switch (event_key()) {
+        case DownKey:
+        case LeftKey:
           i = -linesize();
 	  goto J1;
-        case FL_Up:
-        case FL_Right:
+        case UpKey:
+        case RightKey:
           i = linesize();
       J1:
-	  if (Fl::event_state()&(FL_SHIFT|FL_CTRL|FL_ALT)) i *= 10;
+	  if (event_state()&(SHIFT|CTRL|ALT)) i *= 10;
 	  if (maximum() < minimum()) i = -i;
           handle_drag(value()+i);
           return 1;
-        case FL_Home:
+        case HomeKey:
           handle_drag(minimum());
           return 1;
-        case FL_End:
+        case EndKey:
           handle_drag(maximum());
           return 1;
       }
       return 0;
     }
-    case FL_MOUSEWHEEL: {
+    case MOUSEWHEEL: {
       // For normal valuators, each click is linesize(), wheel_scroll_lines
-      // is ignored. However Fl_Scrollbar does use wheel_scroll_lines.
-      handle_drag(value()+Fl::event_dy()*linesize());
+      // is ignored. However Scrollbar does use wheel_scroll_lines.
+      handle_drag(value()+event_dy()*linesize());
       return 1;
     }
   }
@@ -162,5 +156,5 @@ int Fl_Valuator::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.27 2002/09/09 01:39:58 spitzak Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.28 2002/12/09 04:52:26 spitzak Exp $".
 //

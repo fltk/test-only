@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Numeric_Input.cxx,v 1.6 2002/09/18 05:51:46 spitzak Exp $"
+// "$Id: Fl_Numeric_Input.cxx,v 1.7 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Copyright 2002 by Bill Spitzak, Digital Domain, and others.
 //
@@ -32,12 +32,14 @@
 // 300 Rose Avenue, Venice, CA 90291, USA
 // (310)314-2800 FAX(310)314-2888
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Numeric_Input.h>
+#include <fltk/events.h>
+#include <fltk/NumericInput.h>
 #include <stdio.h>
 
+using namespace fltk;
+
 // Sets the string value to the %g formatted version of v
-void Fl_Numeric_Input::value(double v) {
+void NumericInput::value(double v) {
   char buf[100];
   sprintf(buf, "%g", v);
 #if 0
@@ -46,49 +48,49 @@ void Fl_Numeric_Input::value(double v) {
   else
     sprintf(buf, "%.3g", v);
 #endif
-  Fl_Input::value(buf);
+  Input::value(buf);
 }
 
 // Sets the string value to the %d formatted version of v
-void Fl_Numeric_Input::value(int v) {
+void NumericInput::value(int v) {
   char buf[100];
   sprintf(buf, "%d", v);
-  Fl_Input::value(buf);
+  Input::value(buf);
 }
 
 static int clickmouse;
 
-int Fl_Numeric_Input::handle(int event) {
+int NumericInput::handle(int event) {
   switch (event) {
-  case FL_KEY:
-    switch (Fl::event_key()) {
-    case FL_Up:
+  case KEY:
+    switch (event_key()) {
+    case UpKey:
       return handle_arrow(1);
-    case FL_Down:
+    case DownKey:
       return handle_arrow(-1);
     }
     break;
-  case FL_MOUSEWHEEL:
-    return handle_arrow(Fl::event_dy());
-  case FL_PUSH:
-	if (Fl::event_state(FL_ALT)) clickmouse = Fl::event_x();
+  case MOUSEWHEEL:
+    return handle_arrow(event_dy());
+  case PUSH:
+	if (event_state(ALT)) clickmouse = event_x();
 	break;
-  case FL_DRAG:
-	if (Fl::event_state(FL_ALT)) {
-	  int dx = (Fl::event_x()-clickmouse)/5;
+  case DRAG:
+	if (event_state(ALT)) {
+	  int dx = (event_x()-clickmouse)/5;
 	  if (dx<=-1 || dx>=1) {
-		clickmouse = Fl::event_x();
+		clickmouse = event_x();
 		return handle_arrow(dx);
 	  }
 	  return 1;
 	}
 	break;
   }
-  return Fl_Input::handle(event);
+  return Input::handle(event);
 }
 
 // Handle and up or down arrow key:
-int Fl_Numeric_Input::handle_arrow(int dir)
+int NumericInput::handle_arrow(int dir)
 {
   // locate the character to change:
   int p; char c;
@@ -149,7 +151,7 @@ int Fl_Numeric_Input::handle_arrow(int dir)
     for (p = q; ; p--) {
       if (p < 0 || (v[p] < '0' || v[p] > '9') && v[p] != '.') {
 	if (p >= 0 && v[p] == '-') {
-	  Fl_Input::replace(p, p+1, 0,0);
+	  Input::replace(p, p+1, 0,0);
 	  q--;
 	} else {
 	  replace(p+1, p+1, '-');
@@ -170,11 +172,11 @@ int Fl_Numeric_Input::handle_arrow(int dir)
 	while (g > 0 && v[g-1]=='0') g--;
 	if (!(g > 0 && (v[g-1]>='0' && v[g-1]<='9' || v[g-1]=='.'))) {
 	  if (p < q) {
-	    Fl_Input::replace(g, p+1, 0, 0);
+	    Input::replace(g, p+1, 0, 0);
 	    q -= p-g+1;
 	    goto DONE;
 	  }
-	  Fl_Input::replace(g, p, 0, 0);
+	  Input::replace(g, p, 0, 0);
 	  q -= p-g;
 	  p = g;
 	}
@@ -189,7 +191,7 @@ int Fl_Numeric_Input::handle_arrow(int dir)
  DONE:
   position(q, q+1);
   when(save_when);
-  if (save_when&(FL_WHEN_CHANGED|FL_WHEN_ENTER_KEY) && changed()) {
+  if (save_when&(WHEN_CHANGED|WHEN_ENTER_KEY) && changed()) {
     clear_changed(); do_callback();
   }
   return 1;

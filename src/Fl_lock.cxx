@@ -1,4 +1,4 @@
-/* Fl_Lock.cxx
+/* Lock.cxx
 
    I would prefer that fltk contain the minimal amount of extra stuff
    for doing threads.  There are other portable thread wrapper libraries
@@ -6,25 +6,25 @@
    is an attempt to make minimal additions and make them self-contained
    in this source file.
 
-   Fl::lock() - recursive lock.  Plus you must call this before the
-   first call to Fl::wait()/run() to initialize the thread system.
-   The lock is locked all the time except when Fl::wait() is waiting
+   lock() - recursive lock.  Plus you must call this before the
+   first call to wait()/run() to initialize the thread system.
+   The lock is locked all the time except when wait() is waiting
    for events.
 
-   Fl::unlock() - release the recursive lock.
+   unlock() - release the recursive lock.
 
-   Fl::awake(void*) - Causes Fl::wait() to return (with the lock locked)
+   awake(void*) - Causes wait() to return (with the lock locked)
    even if there are no events ready.
 
-   Fl::thread_message() - returns an argument sent to an Fl::awake call,
+   thread_message() - returns an argument sent to an awake call,
    or returns null if none.  Warning: the current implementation only
    has a one-entry queue and only returns the most recent value!
 
-   See also the Fl_Threads.h header file, which provides convienence
+   See also the Threads.h header file, which provides convienence
    functions so you can create your own threads and mutexes.
 */
 
-#include <fltk/Fl.h>
+#include <fltk/run.h>
 #include <config.h>
 
 ////////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@
 #include <windows.h>
 #include <process.h>
 
-// these pointers are in Fl_win32.cxx:
+// these pointers are in win32.cxx:
 extern void (*fl_lock_function)();
 extern void (*fl_unlock_function)();
 
@@ -49,7 +49,7 @@ static void lock_function() {
   EnterCriticalSection(&cs);
 }
 
-void Fl::lock() {
+void fltk::lock() {
   if (!main_thread)
     InitializeCriticalSection(&cs);
   lock_function();
@@ -60,12 +60,12 @@ void Fl::lock() {
   }
 }
 
-void Fl::unlock() {
+void fltk::unlock() {
   unlock_function();
 }
 
-// when called from a thread, it causes FLTK to awake from Fl::wait()
-void Fl::awake(void* msg) {
+// when called from a thread, it causes FLTK to awake from wait()
+void fltk::awake(void* msg) {
   PostThreadMessage( main_thread, WM_USER, (WPARAM)msg, 0);
 }
 
@@ -83,12 +83,14 @@ static void lock_function() {
   pthread_mutex_lock(&fltk_mutex);
 }
 
-void Fl::unlock() {
+void fltk::unlock() {
   pthread_mutex_unlock(&fltk_mutex);
 }
 
-// this is needed for the Fl_Mutex constructor:
-pthread_mutexattr_t Fl_Mutex_attrib = {PTHREAD_MUTEX_RECURSIVE_NP};
+namespace fltk {
+// this is needed for the Mutex constructor:
+pthread_mutexattr_t Mutex_attrib = {PTHREAD_MUTEX_RECURSIVE_NP};
+}
 
 #else
 // Make a recursive lock out of the pthread mutex:
@@ -104,7 +106,7 @@ static void lock_function() {
   counter++;
 }
 
-void Fl::unlock() {
+void fltk::unlock() {
   if (!--counter) pthread_mutex_unlock(&fltk_mutex);
 }
 
@@ -117,7 +119,7 @@ extern void (*fl_lock_function)();
 extern void (*fl_unlock_function)();
 
 static void* thread_message_;
-void* Fl::thread_message() {
+void* fltk::thread_message() {
   void* r = thread_message_;
   thread_message_ = 0;
   return r;
@@ -127,18 +129,18 @@ static void thread_awake_cb(int fd, void*) {
   read(fd, &thread_message_, sizeof(void*));
 }
 
-void Fl::lock() {
+void fltk::lock() {
   lock_function();
   if (!thread_filedes[1]) { // initialize the mt support
     // Init threads communication pipe to let threads awake FLTK from wait
     pipe(thread_filedes);
-    Fl::add_fd(thread_filedes[0], FL_READ, thread_awake_cb);
+    add_fd(thread_filedes[0], READ, thread_awake_cb);
     fl_lock_function = lock_function;
-    fl_unlock_function = Fl::unlock;
+    fl_unlock_function = unlock;
   }
 }
 
-void Fl::awake(void* msg) {
+void fltk::awake(void* msg) {
   write(thread_filedes[1], &msg, sizeof(void*));
 }
 

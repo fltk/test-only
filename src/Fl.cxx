@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.154 2002/10/04 07:48:13 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.155 2002/12/09 04:52:23 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,48 +23,70 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
+#include <fltk/run.h>
+#include <fltk/events.h>
+#include <fltk/error.h>
+#include <fltk/damage.h>
+#include <fltk/layout.h>
+#include <fltk/Window.h>
+#include <fltk/Style.h>
+#include <fltk/Tooltip.h>
 #include <fltk/x.h>
-#include <fltk/Fl_Style.h>
-#include <fltk/Fl_Tooltip.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 #include <config.h>
 #include <assert.h>
+// things that should be in different source files:
+#include <fltk/FL_VERSION.h>
+#include <fltk/ScreenInfo.h>
 
-float Fl::version() {return FL_VERSION;}
+using namespace fltk;
+
+float fltk::version() {return FL_VERSION;}
 
 //
 // Globals...
 //
 
-Fl_Widget	*Fl::belowmouse_,
-		*Fl::pushed_,
-		*Fl::focus_,
-		*Fl::modal_;
-int		Fl::damage_,
-		Fl::e_type,
-		Fl::e_x,
-		Fl::e_y,
-		Fl::e_dx,
-		Fl::e_dy,
-		Fl::e_x_root,
-		Fl::e_y_root,
-		Fl::e_state,
-		Fl::e_clicks,
-		Fl::e_is_click,
-		Fl::e_keysym;
-char		*Fl::e_text = "";
-int		Fl::e_length;
-bool		Fl::grab_,
-		Fl::exit_modal_;
+Widget	*fltk::belowmouse_,
+	*fltk::pushed_,
+	*fltk::focus_,
+	*fltk::modal_;
+int	fltk::e_type,
+	fltk::e_x,
+	fltk::e_y,
+	fltk::e_dx,
+	fltk::e_dy,
+	fltk::e_x_root,
+	fltk::e_y_root,
+	fltk::e_state,
+	fltk::e_clicks,
+	fltk::e_is_click,
+	fltk::e_keysym;
+char	*fltk::e_text = "";
+int	fltk::e_length;
+bool	fltk::grab_,
+	fltk::exit_modal_;
 
-static Fl_Window *xfocus;	// which window X thinks has focus
-static Fl_Window *xmousewin;// which window X thinks has FL_ENTER
+static Window *xfocus;	// which window X thinks has focus
+static Window *xmousewin; // which window X thinks has ENTER
 
-void fl_fix_focus();
+// Update focus() in response to anything that might change it.
+// This is called whenever a window is added or hidden, and whenever
+// X says the focus window has changed.
+static void fix_focus() {
+  Widget* w = xfocus;
+  // Modal overrides whatever the system says the focus is:
+  if (grab_ || w && modal_) w = modal_;
+  if (w) {
+    if (w->contains(focus())) return; // already has it
+    e_keysym = 0; // make widgets not think a keystroke moved focus
+    if (w->take_focus()) return;
+  }
+  // give nothing the focus:
+  focus(0);
+}
 
 #ifdef _WIN32
 # include "Fl_win32.cxx"
@@ -106,8 +128,8 @@ static void elapse_timeouts() {
   static struct timeval prevclock;
   struct timeval newclock;
   gettimeofday(&newclock, NULL);
-  float elapsed = newclock.tv_sec - prevclock.tv_sec +
-    (newclock.tv_usec - prevclock.tv_usec)/1000000.0f;
+  float elapsed = float(newclock.tv_sec - prevclock.tv_sec) +
+    float(newclock.tv_usec - prevclock.tv_usec)/1000000.0f;
   prevclock.tv_sec = newclock.tv_sec;
   prevclock.tv_usec = newclock.tv_usec;
 #endif
@@ -124,12 +146,12 @@ static void elapse_timeouts() {
 // time interval:
 static float missed_timeout_by;
 
-void Fl::add_timeout(float time, Fl_Timeout_Handler cb, void *arg) {
+void fltk::add_timeout(float time, TimeoutHandler cb, void *arg) {
   elapse_timeouts();
   repeat_timeout(time, cb, arg);
 }
 
-void Fl::repeat_timeout(float time, Fl_Timeout_Handler cb, void *arg) {
+void fltk::repeat_timeout(float time, TimeoutHandler cb, void *arg) {
   time += missed_timeout_by; if (time < -.05f) time = 0;
   Timeout* t = free_timeout;
   if (t) free_timeout = t->next;
@@ -144,13 +166,13 @@ void Fl::repeat_timeout(float time, Fl_Timeout_Handler cb, void *arg) {
   *p = t;
 }
 
-bool Fl::has_timeout(Fl_Timeout_Handler cb, void *arg) {
+bool fltk::has_timeout(TimeoutHandler cb, void *arg) {
   for (Timeout* t = first_timeout; t; t = t->next)
     if (t->cb == cb && t->arg == arg) return true;
   return false;
 }
 
-void Fl::remove_timeout(Fl_Timeout_Handler cb, void *arg) {
+void fltk::remove_timeout(TimeoutHandler cb, void *arg) {
   // This version removes all matching timeouts, not just the first one.
   // This may change in the future.
   for (Timeout** p = &first_timeout; *p;) {
@@ -171,7 +193,7 @@ void Fl::remove_timeout(Fl_Timeout_Handler cb, void *arg) {
 // This is a bit messy because I want to allow checks to be added,
 // removed, and have wait() called from inside them, to do this
 // next_check points at the next unprocessed one for the outermost
-// call to Fl::wait().
+// call to wait().
 
 struct Check {
   void (*cb)(void*);
@@ -180,7 +202,7 @@ struct Check {
 };
 static Check* first_check, *next_check, *free_check;
 
-void Fl::add_check(Fl_Timeout_Handler cb, void *arg) {
+void fltk::add_check(TimeoutHandler cb, void *arg) {
   Check* t = free_check;
   if (t) free_check = t->next;
   else t = new Check;
@@ -191,7 +213,7 @@ void Fl::add_check(Fl_Timeout_Handler cb, void *arg) {
   first_check = t;
 }
 
-void Fl::remove_check(Fl_Timeout_Handler cb, void *arg) {
+void fltk::remove_check(TimeoutHandler cb, void *arg) {
   for (Check** p = &first_check; *p;) {
     Check* t = *p;
     if (t->cb == cb && t->arg == arg) {
@@ -208,25 +230,25 @@ void Fl::remove_check(Fl_Timeout_Handler cb, void *arg) {
 ////////////////////////////////////////////////////////////////
 // wait/run/check/ready:
 
-void (*Fl::idle)(); // see Fl_add_idle.cxx for the add/remove functions
+void (*fltk::idle)(); // see add_idle.cxx for the add/remove functions
 
-static char in_idle;
+static bool in_idle;
 
 #define FOREVER 1e20f
 
-int Fl::run() {
-  while (first_window()) wait(FOREVER);
+int fltk::run() {
+  while (Window::first()) wait(FOREVER);
   return(0);
 // WAS: This was tried for fltk 2.0, and the callback for closing the last
-// window in Fl_Window.C called exit(). This proved to be unpopular:
+// window in Window.C called exit(). This proved to be unpopular:
 //  for (;;) wait(FOREVER);
 }
 
-int Fl::wait() {
+int fltk::wait() {
   return wait(FOREVER);
 }
 
-int Fl::wait(float time_to_wait) {
+int fltk::wait(float time_to_wait) {
   int ret = 0;
   // checks are a bit messy so that add/remove and wait may be called
   // from inside them without causing an infinite loop. We must also
@@ -240,7 +262,7 @@ int Fl::wait(float time_to_wait) {
     next_check = first_check;
   }
   if (idle) {
-    if (!in_idle) {in_idle = 1; idle(); in_idle = 0;}
+    if (!in_idle) {in_idle = true; idle(); in_idle = false;}
     // the idle function may turn off idle, we can then wait:
     if (idle && time_to_wait > 0) {time_to_wait = 0; ret = 1;}
   }
@@ -276,11 +298,11 @@ int Fl::wait(float time_to_wait) {
   return ret;
 }
 
-int Fl::check() {
+int fltk::check() {
   return wait(0.0);
 }
 
-int Fl::ready() {
+int fltk::ready() {
   if (first_timeout) {
     elapse_timeouts();
     if (first_timeout->time <= 0) return 1;
@@ -294,56 +316,59 @@ int Fl::ready() {
 ////////////////////////////////////////////////////////////////
 // Window list management:
 
-Fl_X* Fl_X::first;
+CreatedWindow* CreatedWindow::first;
 
-Fl_Window* fl_find(Window xid) {
-  Fl_X *x;
-  for (Fl_X **pp = &Fl_X::first; (x = *pp); pp = &x->next)
+Window* fltk::find(XWindow xid) {
+  CreatedWindow *x;
+  for (CreatedWindow **pp = &CreatedWindow::first; (x = *pp); pp = &x->next)
     if (x->xid == xid) {
-      if (x != Fl_X::first) {
+      if (x != CreatedWindow::first) {
 	// make this window be first to speed up searches
 	*pp = x->next;
-	x->next = Fl_X::first;
-	Fl_X::first = x;
+	x->next = CreatedWindow::first;
+	CreatedWindow::first = x;
       }
       return x->window;
     }
   return 0;
 }
 
-Fl_Window* Fl::first_window() {
-  for (Fl_X* x = Fl_X::first;; x = x->next) {
+Window* Window::first() {
+  for (CreatedWindow* x = CreatedWindow::first;; x = x->next) {
     if (!x) return 0;
-    Fl_Window* window = x->window;
+    Window* window = x->window;
     if (window->visible() && !window->parent() && !window->override())
       return window;
   }
 }
 
-Fl_Window* Fl::next_window(const Fl_Window* w) {
-  for (Fl_X* x = Fl_X::i(w)->next;; x = x->next) {
+Window* Window::next() {
+  for (CreatedWindow* x = CreatedWindow::find(this)->next;; x = x->next) {
     if (!x) return 0;
-    Fl_Window* window = x->window;
+    Window* window = x->window;
     if (window->visible() && !window->parent() && !window->override())
       return window;
   }
 }
 
-void Fl::first_window(Fl_Window* window) {
+void Window::first(Window* window) {
   if (!window || !window->shown()) return;
-  fl_find(fl_xid(window));
+  fltk::find(xid(window));
 }
 
-void Fl::redraw() {
-  for (Fl_X* x = Fl_X::first; x; x = x->next) x->window->redraw();
+void fltk::redraw() {
+  for (CreatedWindow* x = CreatedWindow::first; x; x = x->next)
+    x->window->redraw();
 }
 
-void Fl::flush() {
-  if (damage()) {
-    damage_ = 0;
-    for (Fl_X* x = Fl_X::first; x; x = x->next) {
-      if (x->wait_for_expose) {damage_ = 1; continue;}
-      Fl_Window* window = x->window;
+bool fl_windows_damaged;
+
+void fltk::flush() {
+  if (fl_windows_damaged) {
+    fl_windows_damaged = false;
+    for (CreatedWindow* x = CreatedWindow::first; x; x = x->next) {
+      if (x->wait_for_expose) {fl_windows_damaged = true; continue;}
+      Window* window = x->window;
       if (window->visible_r() && window->w()>0 && window->h()>0) {
 	if (window->layout_damage()) window->layout();
 	if (window->damage() || x->region) {
@@ -360,102 +385,92 @@ void Fl::flush() {
 #elif (defined(__APPLE__) && !USE_X11)
   //QDFlushPortBuffer( GetWindowPort(xid), 0 ); // \todo do we need this?
 #else
-  if (fl_display) XFlush(fl_display);
+  if (xmousewin) {
+    CreatedWindow* i = CreatedWindow::find(xmousewin);
+    if (i->cursor != None && !i->cursor_for->contains(belowmouse_)) {
+      i->cursor = None;
+      XDefineCursor(xdisplay, i->xid, None);
+    }
+  }
+  XFlush(xdisplay);
 #endif
 }
 
 ////////////////////////////////////////////////////////////////
 // Event handling:
 
-bool Fl::event_inside(int x,int y,int w,int h) /*const*/ {
+bool fltk::event_inside(int x,int y,int w,int h) /*const*/ {
   int mx = e_x - x;
   int my = e_y - y;
   return (mx >= 0 && mx < w && my >= 0 && my < h);
 }
 
-void Fl::focus(Fl_Widget *o) {
-  Fl_Widget *p = focus_;
+void fltk::focus(Widget *o) {
+  Widget *p = focus_;
   if (o != p) {
-    Fl::compose_reset();
+    compose_reset();
     focus_ = o;
-    for (; p && !p->contains(o); p = p->parent()) p->handle(FL_UNFOCUS);
-    for (; o; o = o->parent()) o->handle(FL_FOCUS);
+    for (; p && !p->contains(o); p = p->parent()) p->handle(UNFOCUS);
+    for (; o; o = o->parent()) o->handle(FOCUS);
   }
 }
 
-static char dnd_flag = 0; // makes belowmouse send DND_LEAVE instead of LEAVE
+static bool dnd_flag; // makes belowmouse send DND_LEAVE instead of LEAVE
 
-void Fl::belowmouse(Fl_Widget *o) {
-  Fl_Widget *p = belowmouse_;
+void fltk::belowmouse(Widget *o) {
+  Widget *p = belowmouse_;
   if (o != p) {
     belowmouse_ = o;
     for (; p && !p->contains(o); p = p->parent())
-      p->handle(dnd_flag ? FL_DND_LEAVE : FL_LEAVE);
+      p->handle(dnd_flag ? DND_LEAVE : LEAVE);
   }
 }
 
-void Fl::pushed(Fl_Widget *o) {
+void fltk::pushed(Widget *o) {
   pushed_ = o;
 }
 
-// Update focus() in response to anything that might change it.
-// This is called whenever a window is added or hidden, and whenever
-// X says the focus window has changed.
-
-void fl_fix_focus() {
-  Fl_Widget* w = xfocus;
-  // Modal overrides whatever the system says the focus is:
-  if (Fl::grab_ || w && Fl::modal_) w = Fl::modal_;
-  if (w) {
-    if (w->contains(Fl::focus())) return; // already has it
-    Fl::e_keysym = 0; // make widgets not think a keystroke moved focus
-    if (w->take_focus()) return;
-  }
-  // give nothing the focus:
-  Fl::focus(0);
-}
-
-// This function is called by ~Fl_Widget() and by Fl_Widget::deactivate
-// and by Fl_Widget::hide().  It indicates that the widget does not want
+// This function is called by ~Widget() and by Widget::deactivate
+// and by Widget::hide().  It indicates that the widget does not want
 // to receive any more events, and also removes all global variables that
 // point at the widget.
 // I changed this from the 1.0.1 behavior, the older version could send
-// FL_LEAVE or FL_UNFOCUS events to the widget.  This appears to not be
+// LEAVE or UNFOCUS events to the widget.  This appears to not be
 // desirable behavior and caused flwm to crash.
 
-void Fl_Widget::throw_focus() {
-  if (contains(Fl::pushed())) Fl::pushed_ = 0;
+void Widget::throw_focus() {
+  if (contains(fltk::pushed())) pushed_ = 0;
 #if !defined(_WIN32) && !(defined(__APPLE__) && !USE_X11)
   if (contains(selection_requestor)) selection_requestor = 0;
 #endif
-  if (contains(Fl::belowmouse())) {Fl::belowmouse_ = 0; Fl::e_is_click = 0;}
-  if (this == xmousewin) xmousewin = Fl::first_window();
-  if (contains(Fl::focus())) Fl::focus_ = 0;
+  if (contains(fltk::belowmouse())) {belowmouse_ = 0; e_is_click = 0;}
+  if (this == xmousewin) xmousewin = Window::first();
+  if (contains(focus())) focus_ = 0;
   if (this == xfocus) xfocus = 0;
-  if (this == Fl_Tooltip::current()) Fl_Tooltip::current(0);
-  if (this == Fl::modal_) {Fl::modal_ = 0; Fl::exit_modal();}
+  if (this == Tooltip::current()) Tooltip::current(0);
+  if (this == modal_) {modal_ = 0; exit_modal();}
 }
 
 ////////////////////////////////////////////////////////////////
 
-void Fl::modal(Fl_Widget* widget, bool grab) {
+void fltk::modal(Widget* widget, bool grab) {
 
   // release the old grab:
   if (grab_) {
     grab_ = false;
 #ifdef _WIN32
     ReleaseCapture();
-    // if (event() == FL_PUSH) repost_the_push_event(); NYI
+    // if (event() == PUSH) repost_the_push_event(); NYI
 #elif (defined(__APPLE__) && !USE_X11)
     // dunno what to do here
 #else
-    XUngrabKeyboard(fl_display, fl_event_time);
-    Fl::event_is_click(0); // avoid double click
-    XAllowEvents(fl_display, event()==FL_PUSH ? ReplayPointer : AsyncPointer, CurrentTime);
-    XUngrabPointer(fl_display, fl_event_time); // Qt did not do this...
-    XFlush(fl_display); // make sure we are out of danger before continuing...
+    XUngrabKeyboard(xdisplay, event_time);
+    event_is_click(0); // avoid double click
+    XAllowEvents(xdisplay, event()==PUSH ? ReplayPointer : AsyncPointer, CurrentTime);
+    XUngrabPointer(xdisplay, event_time); // Qt did not do this...
+    XFlush(xdisplay); // make sure we are out of danger before continuing...
 #endif
-    // because we "pushed back" the FL_PUSH, make it think no buttons are down:
+    // because we "pushed back" the PUSH, make it think no buttons are down:
     e_state &= 0xffffff;
     e_keysym = 0;
   }
@@ -466,26 +481,26 @@ void Fl::modal(Fl_Widget* widget, bool grab) {
   // grab is running. I just grab fltk's first window:
   if (grab && widget) {
 #ifdef _WIN32
-    Fl_Window* window = first_window();
+    Window* window = Window::first();
     if (window) {
-      SetActiveWindow(fl_xid(window));
-      SetCapture(fl_xid(window));
+      SetActiveWindow(xid(window));
+      SetCapture(xid(window));
       grab_ = true;
     }
 #elif (defined(__APPLE__) && !USE_X11)
     // dunno what to do here
 #else
-    Fl_Window* window = first_window();
+    Window* window = Window::first();
     if (window &&
-	XGrabKeyboard(fl_display,
-		      fl_xid(window),
+	XGrabKeyboard(xdisplay,
+		      xid(window),
 		      true, // owner_events
 		      GrabModeAsync, // pointer_mode
 		      GrabModeAsync, // keyboard_mode
-		      fl_event_time) == GrabSuccess) {
-      //XAllowEvents(fl_display, SyncKeyboard, CurrentTime);
-      if (XGrabPointer(fl_display,
-		       fl_xid(window),
+		      event_time) == GrabSuccess) {
+      //XAllowEvents(xdisplay, SyncKeyboard, CurrentTime);
+      if (XGrabPointer(xdisplay,
+		       xid(window),
 		       true, // owner_events
 		       ButtonPressMask|ButtonReleaseMask|
 		       ButtonMotionMask|PointerMotionMask,
@@ -493,12 +508,12 @@ void Fl::modal(Fl_Widget* widget, bool grab) {
 		       GrabModeAsync, // keyboard_mode
 		       None, // confine_to
 		       None, // cursor
-		       fl_event_time) == GrabSuccess) {
+		       event_time) == GrabSuccess) {
 	grab_ = true;
-	XAllowEvents(fl_display, SyncPointer, CurrentTime);
+	XAllowEvents(xdisplay, SyncPointer, CurrentTime);
       } else {
 	//printf("XGrabPointer failed\n");
-	XUngrabKeyboard(fl_display, fl_event_time);
+	XUngrabKeyboard(xdisplay, event_time);
       }
     } else {
       //printf("XGrabKeyboard failed\n");
@@ -507,7 +522,7 @@ void Fl::modal(Fl_Widget* widget, bool grab) {
   }
 
   modal_ = widget;
-  fl_fix_focus();
+  fix_focus();
   // Generate a dummy move event so the highlights are correct for
   // the new modal widget. This is mostly useful when exiting modal
   // state because it will correct the highlights in the new top
@@ -516,9 +531,9 @@ void Fl::modal(Fl_Widget* widget, bool grab) {
   // hide any modal windows or widgets before calling this to turn
   // modal state off.
   if (xmousewin) {
-    handle(FL_MOVE, xmousewin);
+    handle(MOVE, xmousewin);
     // Don't pop up the tooltip for whatever they are pointing at:
-    Fl_Tooltip::current(belowmouse_);
+    Tooltip::current(belowmouse_);
   }
 //    printf("modal %s, xmousewin %s, belowmouse %s\n",
 //  	 modal_ ? modal_->label() : "NULL",
@@ -530,13 +545,13 @@ void Fl::modal(Fl_Widget* widget, bool grab) {
 ////////////////////////////////////////////////////////////////
 
 struct handler_link {
-  int (*handle)(int);
+  int (*handle)(int, Window*);
   const handler_link *next;
 };
 
 static const handler_link *handlers = 0;
 
-void Fl::add_handler(int (*h)(int)) {
+void fltk::add_event_handler(int (*h)(int, Window*)) {
   handler_link *l = new handler_link;
   l->handle = h;
   l->next = handlers;
@@ -545,61 +560,61 @@ void Fl::add_handler(int (*h)(int)) {
 
 bool (*fl_local_grab)(int); // used by fl_dnd_x.cxx
 
-bool Fl::handle(int event, Fl_Window* window)
+bool fltk::handle(int event, Window* window)
 {
   e_type = event;
   if (fl_local_grab) return fl_local_grab(event);
 
-  Fl_Widget* to = window;
+  Widget* to = window;
 
   switch (event) {
 
-  case FL_PUSH:
+  case PUSH:
     if (pushed()) to = pushed();
-    Fl_Tooltip::current(to);
+    Tooltip::current(to);
     break;
 
-  case FL_ENTER:
+  case ENTER:
     // this is a fix for DnD where the parent of a widget accepts the
-    // FL_DND_DRAG but the widget accepts FL_DRAG. When the mouse is
+    // DND_DRAG but the widget accepts DRAG. When the mouse is
     // released X generated a drag event which would cause the belowmouse
     // widget to change before the release event happens.
     if (to->contains(belowmouse())) return 0;
-  case FL_MOVE:
-//case FL_DRAG: // does not happen
-    if (pushed()) {to = pushed_; event = FL_DRAG; break;}
-    {Fl_Widget* pbm = belowmouse();
+  case MOVE:
+//case DRAG: // does not happen
+    if (pushed()) {to = pushed_; event = DRAG; break;}
+    {Widget* pbm = belowmouse();
     if (modal_ && !modal_->contains(to)) to = modal_;
-    bool ret = to && to->send(FL_MOVE);
-    if (pbm != belowmouse()) Fl_Tooltip::enter(belowmouse());
+    bool ret = to && to->send(MOVE);
+    if (pbm != belowmouse()) Tooltip::enter(belowmouse());
     return ret;}
 
-  case FL_LEAVE:
-    if (!pushed_) {belowmouse(0); Fl_Tooltip::exit();}
+  case LEAVE:
+    if (!pushed_) {belowmouse(0); Tooltip::exit();}
     return true;
 
-  case FL_RELEASE:
+  case RELEASE:
     to = pushed();
-    if (!event_state(FL_BUTTONS)) pushed_=0;
+    if (!event_state(ANY_BUTTON)) pushed_=0;
     break;
 
-  case FL_DND_ENTER:
-  case FL_DND_DRAG:
-    dnd_flag = 1;
+  case DND_ENTER:
+  case DND_DRAG:
+    dnd_flag = true;
     break;
 
-  case FL_DND_LEAVE:
-    dnd_flag = 1;
+  case DND_LEAVE:
+    dnd_flag = true;
     belowmouse(0);
-    dnd_flag = 0;
+    dnd_flag = false;
     return true;
 
-  case FL_DND_RELEASE:
+  case DND_RELEASE:
     to = belowmouse();
     break;
 
-  case FL_KEY:
-    Fl_Tooltip::exit();
+  case KEY:
+    Tooltip::exit();
     xfocus = window; // this should already be set, but just in case.
     // try sending keystroke to the focus:
     to = focus();
@@ -609,11 +624,11 @@ bool Fl::handle(int event, Fl_Window* window)
       to = to->parent();
     }
     // try sending a shortcut to the window:
-    if (handle(FL_SHORTCUT, window)) return true;
+    if (handle(SHORTCUT, window)) return true;
     // Try using upper-case instead of lower-case for letter shortcuts:
-    if (islower(Fl::e_text[0])) {
-      Fl::e_text[0] ^= 0x20;
-      return handle(FL_SHORTCUT, window);
+    if (islower(e_text[0])) {
+      e_text[0] ^= 0x20;
+      return handle(SHORTCUT, window);
     }
     return false;
 
@@ -629,21 +644,21 @@ bool Fl::handle(int event, Fl_Window* window)
   if (!ret) {
     // try the chain of global event handlers:
     for (const handler_link *h = handlers; h; h = h->next)
-      if (h->handle(event)) {ret = true; break;}
+      if (h->handle(event, window)) {ret = true; break;}
   }
-  dnd_flag = 0;
+  dnd_flag = false;
 
-  if (event == FL_RELEASE && !pushed_) {
+  if (event == RELEASE && !pushed_) {
     // send a dummy move event when the user releases the mouse:
-    if (xmousewin) handle(FL_MOVE, xmousewin);
+    if (xmousewin) handle(MOVE, xmousewin);
     else belowmouse(0);
     // Don't pop up the tooltip for whatever they are pointing at:
-    Fl_Tooltip::current(belowmouse_);
+    Tooltip::current(belowmouse_);
   }
 
   return ret;
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.154 2002/10/04 07:48:13 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.155 2002/12/09 04:52:23 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.35 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.36 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Copyright 1998-2002 by Bill Spitzak and others.
 //
@@ -22,24 +22,27 @@
 //
 
 // Fltk widget for input of a floating-point value. Contains an inner
-// Fl_Input widget and two buttons to increment/decrement the value.
+// Input widget and two buttons to increment/decrement the value.
 //
-// This is *not* an Fl_Group even though it has a "child"
+// This is *not* an Group even though it has a "child"
 // widget, this appears to be a good idea and fltk should support it.
-// However Fl_Widget::parent() returns an Fl_Group, not an Fl_Widget
+// However Widget::parent() returns an Group, not an Widget
 // like it did in fltk 1.1 so this may not be proper C++.
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Value_Input.h>
-#include <fltk/Fl_Group.h>
+#include <fltk/ValueInput.h>
+#include <fltk/Group.h>
+#include <fltk/events.h>
+#include <fltk/damage.h>
+#include <fltk/Box.h>
 #include <stdlib.h>
+using namespace fltk;
 
-void Fl_Value_Input::input_cb(Fl_Widget*, void* v) {
-  Fl_Value_Input& t = *(Fl_Value_Input*)v;
+void ValueInput::input_cb(Widget*, void* v) {
+  ValueInput& t = *(ValueInput*)v;
   double nv;
   if (t.step()>=1.0) nv = strtol(t.input.value(), 0, 0);
   else nv = strtod(t.input.value(), 0);
-  if (nv != t.value() || t.when() & FL_WHEN_NOT_CHANGED) {
+  if (nv != t.value() || t.when() & WHEN_NOT_CHANGED) {
     t.set_value(nv);
     if (t.when()) {
       t.clear_changed();
@@ -55,21 +58,21 @@ static char which_highlight = 0;
 // For the pushed() widget, which button is pushed:
 static char which_pushed = 0;
 
-void Fl_Value_Input::draw() {
+void ValueInput::draw() {
   int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
   const int bw = H/2; W -= bw;
-  if (damage() & FL_DAMAGE_ALL) {
+  if (damage() & DAMAGE_ALL) {
     draw_frame();
-    input.set_damage(FL_DAMAGE_ALL);
+    input.set_damage(DAMAGE_ALL);
   }
-  if (damage() & (FL_DAMAGE_ALL | FL_DAMAGE_HIGHLIGHT)) {
-    Fl_Flags f[2]; f[0] = f[1] = 0;
-    if (which_highlight && this==Fl::belowmouse())
-      f[which_highlight-1] = FL_HIGHLIGHT;
-    if (which_pushed && this==Fl::pushed())
-      f[which_pushed-1] = FL_VALUE | FL_HIGHLIGHT;
-    draw_glyph(FL_GLYPH_UP_BUTTON, X+W, Y, bw, bw, f[0]);
-    draw_glyph(FL_GLYPH_DOWN_BUTTON, X+W, Y+bw, bw, H-bw, f[1]);
+  if (damage() & (DAMAGE_ALL | DAMAGE_HIGHLIGHT)) {
+    Flags f[2]; f[0] = f[1] = 0;
+    if (which_highlight && belowmouse())
+      f[which_highlight-1] = HIGHLIGHT;
+    if (which_pushed && pushed())
+      f[which_pushed-1] = VALUE | HIGHLIGHT;
+    draw_glyph(GLYPH_UP_BUTTON, X+W, Y, bw, bw, f[0]);
+    draw_glyph(GLYPH_DOWN_BUTTON, X+W, Y+bw, bw, H-bw, f[1]);
   }
   input.label(label());
   input.align(align());
@@ -78,9 +81,9 @@ void Fl_Value_Input::draw() {
   input.set_damage(0);
 }
 
-void Fl_Value_Input::increment_cb() {
+void ValueInput::increment_cb() {
   double i = linesize();
-  if (Fl::event_state()&(FL_SHIFT|FL_CTRL|FL_ALT)) i *= 10;
+  if (event_state()&(SHIFT|CTRL|ALT)) i *= 10;
   if (which_pushed == 2) i = -i;
   handle_drag(value()+i);
 }
@@ -88,91 +91,89 @@ void Fl_Value_Input::increment_cb() {
 #define INITIALREPEAT .5f
 #define REPEAT .1f
 
-void Fl_Value_Input::repeat_callback(void* v) {
-  Fl_Value_Input* b = (Fl_Value_Input*)v;
-  if (which_pushed) {
-    Fl::repeat_timeout(REPEAT, repeat_callback, b);
-    b->increment_cb();
-  }
-}
-
-int Fl_Value_Input::handle(int event) {
+int ValueInput::handle(int event) {
   int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
   const int bw = H/2; W -= bw;
   int n;
   switch (event) {
-  case FL_FOCUS:
-    Fl::focus(&input);
+  case FOCUS:
+    focus(&input);
     break;
-  case FL_ENTER:
-  case FL_MOVE:
+  case ENTER:
+  case MOVE:
     if (!highlight_color()) return 1;
-    if (Fl::event_inside(X+W, 0, w()-(X+W), Y+bw)) n = 1;
-    else if (Fl::event_inside(X+W, Y+bw, w()-(X+W), h()-(Y+bw))) n = 2;
+    if (event_inside(X+W, 0, w()-(X+W), Y+bw)) n = 1;
+    else if (event_inside(X+W, Y+bw, w()-(X+W), h()-(Y+bw))) n = 2;
     else n = 0;
     if (n != which_highlight) {
       which_highlight = n;
-      redraw(FL_DAMAGE_HIGHLIGHT);
+      redraw(DAMAGE_HIGHLIGHT);
     }
     return 1;
-  case FL_LEAVE:
+  case LEAVE:
     if (which_highlight) {
       which_highlight = 0;
-      redraw(FL_DAMAGE_HIGHLIGHT);
+      redraw(DAMAGE_HIGHLIGHT);
     }
     return 1;
-  case FL_PUSH:
-  case FL_DRAG:
+  case PUSH:
+  case DRAG:
     // figure out what button is pushed:
-    if (Fl::event_inside(X+W, 0, w()-(X+W), Y+bw)) n = 1;
-    else if (Fl::event_inside(X+W, Y+bw, w()-(X+W), h()-(Y+bw))) n = 2;
+    if (event_inside(X+W, 0, w()-(X+W), Y+bw)) n = 1;
+    else if (event_inside(X+W, Y+bw, w()-(X+W), h()-(Y+bw))) n = 2;
     else n = 0;
-    if (event == FL_PUSH) {
+    if (event == PUSH) {
       if (!n) break; // send mouse event to the input field
       handle_push();
     }
     if (n != which_pushed) {
-      Fl::remove_timeout(repeat_callback, this);
+      remove_timeout();
       which_highlight = which_pushed = n;
-      redraw(FL_DAMAGE_HIGHLIGHT);
+      redraw(DAMAGE_HIGHLIGHT);
       if (n) {
-	Fl::add_timeout(INITIALREPEAT, repeat_callback, this);
+	add_timeout(INITIALREPEAT);
 	increment_cb();
       }
     }
     return 1;
-  case FL_RELEASE:
-    if (Fl::pushed()) return 1; // ignore multiple buttons being released
+  case TIMEOUT:
     if (which_pushed) {
-      Fl::remove_timeout((Fl_Timeout_Handler)repeat_callback, this);
+      repeat_timeout(REPEAT);
+      increment_cb();
+    }
+    return 1;
+  case RELEASE:
+    if (pushed()) return 1; // ignore multiple buttons being released
+    if (which_pushed) {
+      remove_timeout();
       which_pushed = 0;
-      redraw(FL_DAMAGE_HIGHLIGHT);
+      redraw(DAMAGE_HIGHLIGHT);
     }
     handle_release();
     return 1;
   // make any drop replace all the text:
-  case FL_DND_ENTER:
-  case FL_DND_DRAG:
-  case FL_DND_LEAVE:
+  case DND_ENTER:
+  case DND_DRAG:
+  case DND_LEAVE:
     // we return false if input has focus so drag-out works:
     return (!input.focused());
-  case FL_DND_RELEASE:
+  case DND_RELEASE:
     take_focus();
     return 1;
-  case FL_PASTE:
+  case PASTE:
     // dropped text produces this, replace all input text with it:
     input.position(0, input.size());
     break;
   }
-  input.type(step()>=1.0 ? Fl_Float_Input::INT : Fl_Float_Input::FLOAT);
+  input.type(step()>=1.0 ? FloatInput::INT : FloatInput::FLOAT);
   input.when(when());
   int r = input.send(event);
-  if (!r) r = Fl_Valuator::handle(event);
+  if (!r) r = Valuator::handle(event);
   return r;
 }
 
-void Fl_Value_Input::layout() {
-  Fl_Valuator::layout();
+void ValueInput::layout() {
+  Valuator::layout();
   // this is needed so events sent directly to the input get correct
   // coordinates:
   input.resize(0, 0, w(), h());
@@ -181,7 +182,7 @@ void Fl_Value_Input::layout() {
   value_damage();
 }
 
-void Fl_Value_Input::value_damage() {
+void ValueInput::value_damage() {
   // Only redraw the text if the numeric value is different..
   if (input.value()[0]) {
     double nv;
@@ -192,25 +193,25 @@ void Fl_Value_Input::value_damage() {
   char buf[128];
   format(buf);
   input.value(buf);
-  input.position(0, input.size()); // highlight it all
+  //input.position(0, input.size()); // highlight it all
 }
 
-Fl_Value_Input::Fl_Value_Input(int x, int y, int w, int h, const char* l)
-: Fl_Valuator(x, y, w, h, l), input(x, y, w, h, 0) {
-  //soft_ = 0;
-  if (input.parent())  // defeat automatic-add
-    input.parent()->remove(input);
-  input.parent((Fl_Group*)this); // kludge!
+static int nogroup(int x) {Group::current(0); return x;}
+
+ValueInput::ValueInput(int x, int y, int w, int h, const char* l)
+: Valuator(x, y, w, h, l), input(nogroup(x), y, w, h, 0) {
+  input.parent((Group*)this); // kludge!
   input.callback(input_cb, this);
-  clear_flag(FL_ALIGN_MASK);
-  set_flag(FL_ALIGN_LEFT);
+  clear_flag(ALIGN_MASK);
+  set_flag(ALIGN_LEFT);
   set_click_to_focus();
+  Group::current(parent());
 }
 
-Fl_Value_Input::~Fl_Value_Input() {
-  input.parent(0); // keep it from calling Fl_Group::remove(&input) on this
+ValueInput::~ValueInput() {
+  input.parent(0); // keep it from calling Group::remove(&input) on this
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.35 2002/09/16 00:29:06 spitzak Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.36 2002/12/09 04:52:26 spitzak Exp $".
 //

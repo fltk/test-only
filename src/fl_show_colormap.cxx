@@ -1,5 +1,5 @@
 //
-// "$Id: fl_show_colormap.cxx,v 1.23 2002/01/28 08:03:00 spitzak Exp $"
+// "$Id: fl_show_colormap.cxx,v 1.24 2002/12/09 04:52:30 spitzak Exp $"
 //
 // Colormap color selection dialog for the Fast Light Tool Kit (FLTK).
 //
@@ -26,44 +26,46 @@
 // Select a color from the colormap.
 // Pretty much unchanged from Forms.
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Single_Window.h>
-#include <fltk/fl_draw.h>
-#include <fltk/fl_show_colormap.h>
-#include <config.h>
+#include <fltk/show_colormap.h>
+#include <fltk/MenuWindow.h>
+#include <fltk/ScreenInfo.h>
+#include <fltk/Box.h>
+#include <fltk/draw.h>
+#include <fltk/events.h>
+#include <fltk/damage.h>
+using namespace fltk;
 
 #define BOXSIZE 14
 #define BORDER 4
 
-class ColorMenu : public Fl_Window {
+class ColorMenu : public MenuWindow {
 public:
-  Fl_Color initial, which, previous;
-  void drawbox(Fl_Color);
+  Color initial, which, previous;
+  void drawbox(Color);
   void draw();
   int handle(int);
-  ColorMenu(Fl_Color oldcol);
+  ColorMenu(Color oldcol);
 };
 
-ColorMenu::ColorMenu(Fl_Color oldcol)
-  : Fl_Window(BOXSIZE*8+1+2*BORDER, BOXSIZE*32+1+2*BORDER)
+ColorMenu::ColorMenu(Color oldcol)
+  : MenuWindow(BOXSIZE*8+1+2*BORDER, BOXSIZE*32+1+2*BORDER)
 {
-  set_override();
   initial = which = oldcol;
-  style(Fl_Widget::default_style);
+  style(Widget::default_style);
 }
 
-void ColorMenu::drawbox(Fl_Color C) {
-  Fl_Color c = Fl_Color(C & 0xFF); // get the color index
+void ColorMenu::drawbox(Color C) {
+  Color c = Color(C & 0xFF); // get the color index
   int x = (c%8)*BOXSIZE+BORDER;
   int y = (c/8)*BOXSIZE+BORDER;
-  if (c == which) FL_DOWN_BOX->draw(x+1, y+1, BOXSIZE-1, BOXSIZE-1, c);
-  else FL_BORDER_BOX->draw(x, y, BOXSIZE+1, BOXSIZE+1, c);
+  if (c == which) DOWN_BOX->draw(x+1, y+1, BOXSIZE-1, BOXSIZE-1, c);
+  else BORDER_BOX->draw(x, y, BOXSIZE+1, BOXSIZE+1, c);
 }
 
 void ColorMenu::draw() {
-  if (damage() != FL_DAMAGE_CHILD) {
+  if (damage() != DAMAGE_CHILD) {
     draw_box();
-    for (int c = 0; c < 256; c++) drawbox((Fl_Color)c);
+    for (int c = 0; c < 256; c++) drawbox((Color)c);
   } else {
     drawbox(previous);
     drawbox(which);
@@ -74,43 +76,45 @@ void ColorMenu::draw() {
 int ColorMenu::handle(int e) {
   unsigned c = which;
   switch (e) {
-  case FL_PUSH:
-  case FL_MOVE:
-  case FL_DRAG: {
-    int X = (Fl::event_x_root() - x() - BORDER);
+  case PUSH:
+  case MOVE:
+  case DRAG: {
+    int X = (event_x_root() - x() - BORDER);
     if (X >= 0) X = X/BOXSIZE;
-    int Y = (Fl::event_y_root() - y() - BORDER);
+    int Y = (event_y_root() - y() - BORDER);
     if (Y >= 0) Y = Y/BOXSIZE;
     if (X >= 0 && X < 8 && Y >= 0 && Y < 32)
       c = 8*Y + X;
     else
       c = initial;
     } break;
-  case FL_RELEASE:
-    if (!(Fl::event_state(FL_BUTTONS))) Fl::exit_modal();
+  case RELEASE:
+    if (!(event_state(ANY_BUTTON))) exit_modal();
     return 1;
-  case FL_KEY:
-    switch (Fl::event_key()) {
-    case FL_Up: if (c > 7) c -= 8; break;
-    case FL_Down: if (c < 256-8) c += 8; break;
-    case FL_Left: if (c > 0) c--; break;
-    case FL_Right: if (c < 255) c++; break;
-    case FL_Escape: which = initial; Fl::exit_modal(); return 1;
-    case FL_Enter: Fl::exit_modal(); return 1;
+  case KEY:
+    switch (event_key()) {
+    case UpKey: if (c > 7) c -= 8; break;
+    case DownKey: if (c < 256-8) c += 8; break;
+    case LeftKey: if (c > 0) c--; break;
+    case RightKey: if (c < 255) c++; break;
+    case EscapeKey: which = initial; exit_modal(); return 1;
+    case ReturnKey: exit_modal(); return 1;
     default: return 0;
     }
     break;
   default:
-    return Fl_Window::handle(e);
+    return Window::handle(e);
   }
   if (c != which) {
-    which = (Fl_Color)c; redraw(FL_DAMAGE_CHILD);
+    which = (Color)c; redraw(DAMAGE_CHILD);
     int bx = (c%8)*BOXSIZE+BORDER;
     int by = (c/8)*BOXSIZE+BORDER;
     int px = x();
     int py = y();
-    if (px+bx+BOXSIZE+BORDER >= Fl::w()) px = Fl::w()-bx-BOXSIZE-BORDER;
-    if (py+by+BOXSIZE+BORDER >= Fl::h()) py = Fl::h()-by-BOXSIZE-BORDER;
+    int w = screenInfo().w;
+    if (px+bx+BOXSIZE+BORDER >= w) px = w-bx-BOXSIZE-BORDER;
+    int h = screenInfo().h;
+    if (py+by+BOXSIZE+BORDER >= h) py = h-by-BOXSIZE-BORDER;
     if (px+bx < BORDER) px = BORDER-bx;
     if (py+by < BORDER) py = BORDER-by;
     position(px,py);
@@ -118,18 +122,18 @@ int ColorMenu::handle(int e) {
   return 1;
 }
 
-Fl_Color fl_show_colormap(Fl_Color oldcol) {
+Color fltk::show_colormap(Color oldcol) {
   ColorMenu m(oldcol);
   if (m.which > 255) {
-    m.position(Fl::event_x_root()+5, Fl::event_y_root()-m.h()/2);
+    m.position(event_x_root()+5, event_y_root()-m.h()/2);
   } else {
-    m.position(Fl::event_x_root()-(oldcol%8)*BOXSIZE-BOXSIZE/2-BORDER,
-	       Fl::event_y_root()-(oldcol/8)*BOXSIZE-BOXSIZE/2-BORDER);
+    m.position(event_x_root()-(oldcol%8)*BOXSIZE-BOXSIZE/2-BORDER,
+	       event_y_root()-(oldcol/8)*BOXSIZE-BOXSIZE/2-BORDER);
   }
   m.exec(0, true);
   return m.which;
 }
 
 //
-// End of "$Id: fl_show_colormap.cxx,v 1.23 2002/01/28 08:03:00 spitzak Exp $".
+// End of "$Id: fl_show_colormap.cxx,v 1.24 2002/12/09 04:52:30 spitzak Exp $".
 //

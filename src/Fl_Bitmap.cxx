@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.cxx,v 1.16 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: Fl_Bitmap.cxx,v 1.17 2002/12/09 04:52:24 spitzak Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -23,17 +23,18 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
+#include <fltk/events.h>
 #include <fltk/x.h>
-#include <fltk/fl_draw.h>
-#include <fltk/Fl_Bitmap.h>
+#include <fltk/draw.h>
+#include <fltk/xbmImage.h>
+using namespace fltk;
 
 #ifdef _WIN32
 // replicate XCreateBitmapFromData:
 // Written by Matt
 // Updated by Mike to just make a simple 1-bit deep bitmap; I don't think it
 // needs to do the other stuff since 1-bit bitmaps are used for text, too...
-Pixmap fl_create_bitmap(const uchar* bitmap, int w, int h) {
+Pixmap fltk::create_bitmap(const uchar* bitmap, int w, int h) {
   // this won't work ehen the user changes display mode during run or
   // has two screens with differnet depths
   static uchar hiNibble[16] =
@@ -61,12 +62,12 @@ Pixmap fl_create_bitmap(const uchar* bitmap, int w, int h) {
 }
 #endif
 
-void Fl_Bitmap::draw(int x, int y, int, int, Fl_Flags flags)
+void xbmImage::draw(int x, int y, int, int, Flags flags)
 {
-  if (!mask) mask = (void*)fl_create_bitmap(array, w, h);
+  if (!mask) mask = (void*)create_bitmap(array, w, h);
   _draw(x, y, flags);
 }
 
 //
-// End of "$Id: Fl_Bitmap.cxx,v 1.16 2001/12/10 06:25:42 spitzak Exp $".
+// End of "$Id: Fl_Bitmap.cxx,v 1.17 2002/12/09 04:52:24 spitzak Exp $".
 //

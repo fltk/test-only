@@ -20,25 +20,26 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// The Fl_Align_Group overrides all group's children's label alignments to
-// it's own align() value, tiles and resize()s the children to fit in the space 
-// not required by the (outsize) labels. 
+// The AlignGroup overrides all group's children's label alignments to
+// it's own align() value, tiles and resize()s the children to fit in
+// the space not required by the (outsize) labels.
 
 #include <stdio.h>
 #include <string.h>
-#include <fltk/fl_draw.h>
-#include <fltk/Fl_Flags.h>
-#include <fltk/Fl_Group.h>
-#include <fltk/Fl_Align_Group.h>
+#include <fltk/draw.h>
+#include <fltk/Flags.h>
+#include <fltk/AlignGroup.h>
 
-void Fl_Align_Group::layout() {
-  Fl_Widget::layout();
+using namespace fltk;
+
+void AlignGroup::layout() {
+  Widget::layout();
   int i;
 
   int n_lines = n_to_break() ? 
                 (children() / n_to_break() + (children() % n_to_break()?1:0)):
 		1;
-  bool variable_is_y = (align() & (FL_ALIGN_TOP|FL_ALIGN_BOTTOM)) != 0;
+  bool variable_is_y = (align() & (ALIGN_TOP|ALIGN_BOTTOM)) != 0;
   int nx = vertical() ? n_lines : n_to_break() ? n_to_break() : children(); 
   int ny = vertical() ? n_to_break() ? n_to_break() : children() : n_lines;
   int n_variable = variable_is_y ? ny : nx;
@@ -50,10 +51,10 @@ void Fl_Align_Group::layout() {
   int numchildren = children();
   if (align()) {
     for (i = 0; i < numchildren; i++) {
-      Fl_Widget* o = child(i);
-      fl_font(o->label_font(),o->label_size());
+      Widget* o = child(i);
+      setfont(o->labelfont(),o->labelsize());
       int w = this->w()-o->w(),h = this->h()-o->h();
-      fl_measure(o->label(),w,h,o->flags());
+      measure(o->label(),w,h,o->flags());
       if (variable_is_y) w = h;
       int which = (variable_is_y == vertical()) ? u : v; 
       if (label_space[which] < w) label_space[which] = w;
@@ -69,11 +70,11 @@ void Fl_Align_Group::layout() {
 
   u = v = 0;
   for (i = 0; i < numchildren; i++) {
-    Fl_Widget* o = child(i);
+    Widget* o = child(i);
     int which = (variable_is_y == vertical()) ? u : v; 
     int X = cx, Y = cy;
-    if (align() & FL_ALIGN_TOP) Y += label_space[which];
-    else if (!variable_is_y && align() & FL_ALIGN_LEFT) X += label_space[which];
+    if (align() & ALIGN_TOP) Y += label_space[which];
+    else if (!variable_is_y && align() & ALIGN_LEFT) X += label_space[which];
 
     o->resize(X,Y,W,H);
     o->align(align());

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_dnd_x.cxx,v 1.9 2002/10/26 09:55:31 spitzak Exp $"
+// "$Id: fl_dnd_x.cxx,v 1.10 2002/12/09 04:52:29 spitzak Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,39 +23,42 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
+#include <fltk/Window.h>
+#include <fltk/run.h>
+#include <fltk/events.h>
+#include <fltk/Cursor.h>
 #include <fltk/x.h>
+using namespace fltk;
 
-extern Atom fl_XdndAware;
-extern Atom fl_XdndSelection;
-extern Atom fl_XdndEnter;
-extern Atom fl_XdndTypeList;
-extern Atom fl_XdndPosition;
-extern Atom fl_XdndLeave;
-extern Atom fl_XdndDrop;
-extern Atom fl_XdndStatus;
-extern Atom fl_XdndActionCopy;
-extern Atom fl_XdndFinished;
-extern Atom fl_textplain;
-//extern Atom fl_XdndProxy;
+extern Atom XdndAware;
+extern Atom XdndSelection;
+extern Atom XdndEnter;
+extern Atom XdndTypeList;
+extern Atom XdndPosition;
+extern Atom XdndLeave;
+extern Atom XdndDrop;
+extern Atom XdndStatus;
+extern Atom XdndActionCopy;
+extern Atom XdndFinished;
+extern Atom textplain;
+//extern Atom XdndProxy;
 extern Atom *fl_incoming_dnd_source_types;
 
 extern bool fl_i_own_selection[2];
 
-extern void fl_sendClientMessage(Window window, Atom message,
-                                 unsigned long d0,
-                                 unsigned long d1=0,
-                                 unsigned long d2=0,
-                                 unsigned long d3=0,
-                                 unsigned long d4=0);
+extern void fl_sendClientMessage(XWindow xwindow, Atom message,
+				 unsigned long d0,
+				 unsigned long d1=0,
+				 unsigned long d2=0,
+				 unsigned long d3=0,
+				 unsigned long d4=0);
 
 // return version # of Xdnd this window supports.  Also change the
 // window to the proxy if it uses a proxy:
-static int dnd_aware(Window& window) {
+static int dnd_aware(XWindow xwindow) {
   Atom actual; int format; unsigned long count, remaining;
   unsigned char *data = 0;
-  XGetWindowProperty(fl_display, window, fl_XdndAware,
+  XGetWindowProperty(xdisplay, xwindow, XdndAware,
 		     0, 4, False, XA_ATOM,
 		     &actual, &format,
 		     &count, &remaining, &data);
@@ -68,12 +71,12 @@ static bool drop_ok;
 static bool moved;
 
 static bool grabfunc(int event) {
-  if (event == FL_RELEASE) Fl::pushed(0);
-  else if (event == FL_MOVE) moved = true;
-  else if (!event && fl_xevent.type == ClientMessage
-	   && fl_xevent.xclient.message_type == fl_XdndStatus) {
-    drop_ok = fl_xevent.xclient.data.l[1] != 0;
-    if (drop_ok) fl_dnd_action = fl_xevent.xclient.data.l[3];
+  if (event == RELEASE) pushed(0);
+  else if (event == MOVE) moved = true;
+  else if (!event && xevent.type == ClientMessage
+	   && xevent.xclient.message_type == XdndStatus) {
+    drop_ok = xevent.xclient.data.l[1] != 0;
+    if (drop_ok) dnd_action = xevent.xclient.data.l[3];
   }
   return false;
 }
@@ -81,141 +84,140 @@ static bool grabfunc(int event) {
 extern bool (*fl_local_grab)(int); // in Fl.cxx
 
 // send an event to an fltk window belonging to this program:
-static bool local_handle(int event, Fl_Window* window) {
+static bool local_handle(int event, Window* window) {
   fl_local_grab = 0;
-  Fl::e_x = Fl::e_x_root-window->x();
-  Fl::e_y = Fl::e_y_root-window->y();
-  int ret = Fl::handle(event,window);
+  e_x = e_x_root-window->x();
+  e_y = e_y_root-window->y();
+  int ret = handle(event,window);
   fl_local_grab = grabfunc;
   return ret;
 }
 
-bool Fl::dnd() {
+#include <fltk/Cursor.h>
+extern fltk::Cursor fl_drop_ok_cursor;
+
+bool fltk::dnd() {
   // Remember any user presets for the action and types:
   Atom* types;
   Atom action;
-  Atom local_source_types[2] = {fl_textplain, 0};
-  if (fl_dnd_source_types == fl_incoming_dnd_source_types) {
+  Atom local_source_types[2] = {textplain, 0};
+  if (dnd_source_types == fl_incoming_dnd_source_types) {
     types = local_source_types;
-    action = fl_XdndActionCopy;
+    action = XdndActionCopy;
   } else {
-    types = fl_dnd_source_types;
-    action = fl_dnd_source_action;
+    types = dnd_source_types;
+    action = dnd_source_action;
   }
 
-  Fl_Window* source_fl_window = Fl::first_window();
-  Window source_window = fl_xid(source_fl_window);
+  Window* source_window = Window::first();
+  XWindow source_xwindow = xid(source_window);
 
   fl_local_grab = grabfunc;
-  Window target_window = 0;
-  Fl_Window* local_window = 0;
+  XWindow target_window = 0;
+  Window* local_window = 0;
   int version = 4; int dest_x, dest_y;
-  XSetSelectionOwner(fl_display, fl_XdndSelection, fl_message_window, fl_event_time);
-  Fl_Cursor oldcursor = FL_CURSOR_DEFAULT;
+  XSetSelectionOwner(xdisplay, XdndSelection, message_window, event_time);
+  //  Cursor oldcursor = CURSOR_DEFAULT;
   drop_ok = true;
   moved = true;
 
-  while (Fl::pushed()) {
+  while (pushed()) {
 
     // figure out what window we are pointing at:
-    Window new_window = 0; int new_version = 0;
-    Fl_Window* new_local_window = 0;
-    for (Window child = RootWindow(fl_display, fl_screen);;) {
-      Window root; unsigned int junk3;
-      XQueryPointer(fl_display, child, &root, &child,
+    XWindow new_window = 0; int new_version = 0;
+    Window* new_local_window = 0;
+    for (XWindow child = RootWindow(xdisplay, xscreen);;) {
+      XWindow root; unsigned int junk3;
+      XQueryPointer(xdisplay, child, &root, &child,
 		    &e_x_root, &e_y_root, &dest_x, &dest_y, &junk3);
       if (!child) {
 	if (!new_window && (new_version = dnd_aware(root))) new_window = root;
 	break;
       }
       new_window = child;
-      if ((new_local_window = fl_find(child))) break;
+      if ((new_local_window = find(child))) break;
       if ((new_version = dnd_aware(new_window))) break;
     }
 
     if (new_window != target_window) {
       if (local_window) {
-	fl_dnd_source_window = 0;
-	local_handle(FL_DND_LEAVE, local_window);
+	dnd_source_window = 0;
+	local_handle(DND_LEAVE, local_window);
       } else if (version) {
-	fl_sendClientMessage(target_window, fl_XdndLeave, source_window);
+	fl_sendClientMessage(target_window, XdndLeave, source_xwindow);
       }
       version = new_version;
       target_window = new_window;
       local_window = new_local_window;
       if (local_window) {
-	fl_dnd_source_window = source_window;
-	fl_dnd_source_types = types;
-	fl_dnd_type = fl_textplain;
-	local_handle(FL_DND_ENTER, local_window);
+	dnd_source_window = source_xwindow;
+	dnd_source_types = types;
+	dnd_type = textplain;
+	local_handle(DND_ENTER, local_window);
       } else if (version) {
-	fl_sendClientMessage(target_window, fl_XdndEnter, source_window,
+	fl_sendClientMessage(target_window, XdndEnter, source_xwindow,
 			     version<<24,
 			     types[0], types[1], types[1] ? types[2] : 0);
       }
     }
     if (local_window) {
-      fl_dnd_source_window = source_window;
-      fl_dnd_source_types = types;// ?? is this needed?
-      fl_dnd_action = fl_XdndActionCopy;
-      drop_ok = local_handle(FL_DND_DRAG, local_window);
+      dnd_source_window = source_xwindow;
+      dnd_source_types = types;// ?? is this needed?
+      dnd_action = action;
+      drop_ok = local_handle(DND_DRAG, local_window);
     } else if (version) {
       if (moved)
-	fl_sendClientMessage(target_window, fl_XdndPosition, source_window,
-			     0, (e_x_root<<16)|e_y_root, fl_event_time,
-			     fl_dnd_source_action);
+	fl_sendClientMessage(target_window, XdndPosition, source_xwindow,
+			     0, (e_x_root<<16)|e_y_root, event_time,
+			     action);
     } else {
       // Windows that don't support DnD are reported as ok because
       // we are going to try the middle-mouse click on them:
-      drop_ok = types[0]==fl_textplain;
+      drop_ok = types[0]==textplain;
     }
-    Fl_Cursor cursor = Fl_Cursor(drop_ok ? 21 : FL_CURSOR_NO);
-    if (cursor != oldcursor) {
-      oldcursor = cursor;
-      source_fl_window->cursor(cursor);
-    }
+    source_window->cursor(drop_ok ? &fl_drop_ok_cursor : CURSOR_NO);
     moved = false;
-    Fl::wait();
+    wait();
   }
 
   if (!drop_ok) ;
   else if (local_window) {
     fl_i_own_selection[0] = true;
-    if (local_handle(FL_DND_RELEASE, local_window)) paste(*belowmouse(),false);
+    if (local_handle(DND_RELEASE, local_window)) paste(*belowmouse(),false);
   } else if (version) {
-    fl_sendClientMessage(target_window, fl_XdndDrop, source_window,
-		      0, fl_event_time);
+    fl_sendClientMessage(target_window, XdndDrop, source_xwindow,
+			 0, event_time);
   } else if (target_window) {
     // fake a drop by clicking the middle mouse button:
     XButtonEvent msg;
     msg.type = ButtonPress;
     msg.window = target_window;
-    msg.root = RootWindow(fl_display, fl_screen);
+    msg.root = RootWindow(xdisplay, xscreen);
     msg.subwindow = 0;
-    msg.time = fl_event_time+1;
+    msg.time = event_time+1;
     msg.x = dest_x;
     msg.y = dest_y;
-    msg.x_root = Fl::e_x_root;
-    msg.y_root = Fl::e_y_root;
+    msg.x_root = e_x_root;
+    msg.y_root = e_y_root;
     msg.state = 0x0;
     msg.button = Button2;
-    XSendEvent(fl_display, target_window, False, 0L, (XEvent*)&msg);
+    XSendEvent(xdisplay, target_window, False, 0L, (XEvent*)&msg);
     msg.time++;
     msg.state = 0x200;
     msg.type = ButtonRelease;
-    XSendEvent(fl_display, target_window, False, 0L, (XEvent*)&msg);
+    XSendEvent(xdisplay, target_window, False, 0L, (XEvent*)&msg);
   }
 
   fl_local_grab = 0;
-  if (oldcursor) source_fl_window->cursor(FL_CURSOR_DEFAULT);
+  source_window->cursor(0);
 
   // reset the action and type:
-  fl_dnd_source_types = fl_incoming_dnd_source_types;
+  dnd_source_types = fl_incoming_dnd_source_types;
 
   return drop_ok;
 }
 
 
 //
-// End of "$Id: fl_dnd_x.cxx,v 1.9 2002/10/26 09:55:31 spitzak Exp $".
+// End of "$Id: fl_dnd_x.cxx,v 1.10 2002/12/09 04:52:29 spitzak Exp $".
 //

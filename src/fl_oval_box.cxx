@@ -1,5 +1,5 @@
 //
-// "$Id: fl_oval_box.cxx,v 1.20 2002/02/10 22:57:49 spitzak Exp $"
+// "$Id: fl_oval_box.cxx,v 1.21 2002/12/09 04:52:30 spitzak Exp $"
 //
 // Oval box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,50 +27,59 @@
 // Less-used box types are in seperate files so they are not linked
 // in if not used.
 
-#include <fltk/Fl_Boxtype.h>
-#include <fltk/fl_draw.h>
+#include <fltk/Box.h>
+#include <fltk/Style.h>
+#include <fltk/draw.h>
+using namespace fltk;
 
-void Fl_Oval_Flat_Box::draw(
-	int x, int y, int w, int h, Fl_Color color, Fl_Flags) const
-{
-  fl_ellipse(x, y, w-1, h-1);
-  fl_color(color);
-  fl_fill();
-}
-Fl_Oval_Flat_Box::Fl_Oval_Flat_Box(const char* n) : Fl_Boxtype_(n) {
-  dx_ = dy_ = dw_ = dh_ = 0;
-  fills_rectangle_ = 0;
-}
-const Fl_Oval_Flat_Box fl_oval_flat_box(0);
+class OvalBox : public Box {
+public:
+  void draw(int x, int y, int w, int h, Color color, Flags f) const {
+    addellipse(x, y, w-1, h-1);
+    setcolor(color);
+    fillstrokepath(inactive(BLACK,f));
+  }
+  OvalBox(const char* n) : Box(n) {
+    dx_ = dy_ = 1; dw_ = dh_ = 2;
+    fills_rectangle_ = 0;
+  }
+};
+static OvalBox ovalBox(0);
+Box* const fltk::OVAL_BOX = &ovalBox;
 
-void Fl_Oval_Box::draw(
-	int x, int y, int w, int h, Fl_Color color, Fl_Flags f) const
-{
-  fl_ellipse(x, y, w-1, h-1);
-  fl_color(color);
-  fl_fill_stroke(fl_inactive(FL_BLACK,f));
-}
-Fl_Oval_Box::Fl_Oval_Box(const char* n) : Fl_Boxtype_(n) {
-  dx_ = dy_ = 1; dw_ = dh_ = 2;
-  fills_rectangle_ = 0;
-}
-const Fl_Oval_Box fl_oval_box(0);
+class OvalShadowBox : public Box {
+public:
+  void draw(int x, int y, int w, int h, Color color, Flags f) const {
+    w-=3; h-=3;
+    addellipse(x+3, y+3, w, h);
+    setcolor(GRAY33);
+    fillpath();
+    ovalBox.draw(x, y, w, h, color, f);
+  }
+  OvalShadowBox(const char* n) : Box(n) {
+    dx_ = dy_ = 1; dw_ = dh_ = 5;
+    fills_rectangle_ = 0;
+  }
+};
+static OvalShadowBox ovalShadowBox(0);
+Box* const fltk::OSHADOW_BOX = &ovalShadowBox;
 
-void Fl_Oval_Shadow_Box::draw(
-	int x, int y, int w, int h, Fl_Color color, Fl_Flags f) const
-{
-  w-=3; h-=3;
-  fl_ellipse(x+3, y+3, w, h);
-  fl_color(FL_DARK3);
-  fl_fill();
-  fl_oval_box.draw(x, y, w, h, color, f);
-}
-Fl_Oval_Shadow_Box::Fl_Oval_Shadow_Box(const char* n) : Fl_Boxtype_(n) {
-  dx_ = dy_ = 1; dw_ = dh_ = 5;
-  fills_rectangle_ = 0;
-}
-const Fl_Oval_Shadow_Box fl_oval_shadow_box(0);
+class OvalFlatBox : public Box {
+public:
+  void draw(int x, int y, int w, int h, Color color, Flags) const {
+    addellipse(x, y, w-1, h-1);
+    setcolor(color);
+    fillpath();
+  }
+  OvalFlatBox(const char* n) : Box(n) {
+    dx_ = dy_ = dw_ = dh_ = 0;
+    fills_rectangle_ = 0;
+  }
+};
+static OvalFlatBox ovalFlatBox(0);
+Box* const fltk::OFLAT_BOX = &ovalFlatBox;
+
 
 //
-// End of "$Id: fl_oval_box.cxx,v 1.20 2002/02/10 22:57:49 spitzak Exp $".
+// End of "$Id: fl_oval_box.cxx,v 1.21 2002/12/09 04:52:30 spitzak Exp $".
 //

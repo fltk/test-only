@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_key_name.cxx,v 1.6 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_key_name.cxx,v 1.7 2002/12/09 04:52:27 spitzak Exp $"
 //
 // Turn a fltk (X) keysym + fltk shift flags into a human-readable string.
 //
@@ -23,14 +23,15 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Widget.h>
-#include <fltk/fl_draw.h>
+#include <fltk/events.h>
+#include <fltk/Widget.h>
+#include <fltk/draw.h>
 #include <ctype.h>
 #include <string.h>
 #ifndef _WIN32
 #include <fltk/x.h>
 #endif
+using namespace fltk;
 
 // This table must be in numeric order by fltk (X) keysym number.
 // On X the table is much shorter as it is only the names that
@@ -38,53 +39,53 @@
 struct Keyname {int key; const char* name;};
 static Keyname table[] = {
 #ifdef _WIN32 // if not X
-  {FL_BackSpace, "Backspace"},
-  {FL_Tab,	"Tab"},
-  {FL_Clear,	"Clear"},
+  {BackSpaceKey, "Backspace"},
+  {TabKey,	"Tab"},
+  {ClearKey,	"Clear"},
 #endif
-  {FL_Enter,	"Enter"}, // X says "Return"
+  {ReturnKey,	"Enter"}, // X says "Return"
 #ifdef _WIN32 // if not X
-  {FL_Pause,	"Pause"},
-  {FL_Scroll_Lock, "Scroll_Lock"},
-  {FL_Escape,	"Escape"},
-  {FL_Home,	"Home"},
-  {FL_Left,	"Left"},
-  {FL_Up,	"Up"},
-  {FL_Right,	"Right"},
-  {FL_Down,	"Down"},
+  {PauseKey,	"Pause"},
+  {ScrollLockKey,"ScrollLock"},
+  {EscapeKey,	"Escape"},
+  {HomeKey,	"Home"},
+  {LeftKey,	"Left"},
+  {UpKey,	"Up"},
+  {RightKey,	"Right"},
+  {DownKey,	"Down"},
 #endif
-  {FL_Page_Up,	"Page_Up"}, // X says "Prior"
-  {FL_Page_Down,"Page_Down"}, // X says "Next"
+  {PageUpKey,	"PageUp"}, // X says "Prior"
+  {PageDownKey,	"PageDown"}, // X says "Next"
 #ifdef _WIN32 // if not X
-  {FL_End,	"End"},
-  {FL_Print,	"Print"},
-  {FL_Insert,	"Insert"},
-  {FL_Menu,	"Menu"},
-  {FL_Num_Lock,	"Num_Lock"},
-  {FL_KP_Enter,	"KP_Enter"},
-  {FL_Shift_L,	"Shift_L"},
-  {FL_Shift_R,	"Shift_R"},
-  {FL_Control_L,"Control_L"},
-  {FL_Control_R,"Control_R"},
-  {FL_Caps_Lock,"Caps_Lock"},
-  {FL_Alt_L,	"Alt_L"},
-  {FL_Alt_R,	"Alt_R"},
+  {EndKey,	"End"},
+  {PrintKey,	"Print"},
+  {InsertKey,	"Insert"},
+  {MenuKey,	"Menu"},
+  {NumLockKey,	"NumLock"},
+  {KeypadEnter,	"KeypadEnter"},
+  {LeftShiftKey,"LeftShift"},
+  {RightShiftKey,"RightShift"},
+  {LeftControlKey, "LeftControl"},
+  {RightControlKey,"RightControl"},
+  {CapsLockKey,	"CapsLock"},
+  {LeftAltKey,	"LeftAlt"},
+  {RightAltKey,	"RightAlt"},
 #endif
-  {FL_Win_L,	"Win_L"}, // X says "Super_L"
-  {FL_Win_R,	"Win_R"}, // X says "Super_R"
+  {LeftCommandKey,	"LeftCommand"}, // X says "Super_L"
+  {RightCommandKey,	"RightCommand"}, // X says "Super_R"
 #ifdef _WIN32 // if not X
-  {FL_Delete,	"Delete"}
+  {DeleteKey,	"Delete"}
 #endif
 };
 
-const char* Fl::key_name(int shortcut) {
+const char* fltk::key_name(int shortcut) {
   static char buf[20];
   char *p = buf;
   if (!shortcut) {*p = 0; return buf;}
-  if (shortcut & FL_WIN) {strcpy(p,"Win+"); p += 5;}
-  if (shortcut & FL_ALT) {strcpy(p,"Alt+"); p += 4;}
-  if (shortcut & FL_SHIFT) {strcpy(p,"Shift+"); p += 6;}
-  if (shortcut & FL_CTRL) {strcpy(p,"Ctrl+"); p += 5;}
+  if (shortcut & COMMAND) {strcpy(p,"Command+"); p += 5;}
+  if (shortcut & ALT) {strcpy(p,"Alt+"); p += 4;}
+  if (shortcut & SHIFT) {strcpy(p,"Shift+"); p += 6;}
+  if (shortcut & CTRL) {strcpy(p,"Ctrl+"); p += 5;}
   int key = shortcut & 0xFFFF;
 
   // binary search the table for a match:
@@ -99,16 +100,16 @@ const char* Fl::key_name(int shortcut) {
   }
   if (!q) {
 #ifdef _WIN32 // if not X
-    if (key >= FL_F(0) && key <= FL_F_Last) {
+    if (key >= F0Key && key <= LastFunctionKey) {
       *p++ = 'F';
-      if (key > FL_F(9)) *p++ = (key-FL_F(0))/10+'0';
-      *p++ = (key-FL_F(0))%10 + '0';
+      if (key > F9Key) *p++ = (key-F0Key)/10+'0';
+      *p++ = (key-F0Key)%10 + '0';
       *p = 0;
       return buf;
     }
-    if (key >= FL_KP(0) && key <= FL_KP_Last) {
-      // mark keypad keys with KP_ prefix
-      strcpy(p,"KP_"); p += 3;
+    if (key >= Keypad && key <= KeypadLast) {
+      // mark keypad keys with Keypad prefix
+      strcpy(p,"Keypad"); p += 6;
       *p++ = uchar(key & 127);
       *p = 0;
       return buf;
@@ -129,5 +130,5 @@ const char* Fl::key_name(int shortcut) {
 }
 
 //
-// End of "$Id: Fl_key_name.cxx,v 1.6 2002/01/20 07:37:15 spitzak Exp $"
+// End of "$Id: Fl_key_name.cxx,v 1.7 2002/12/09 04:52:27 spitzak Exp $"
 //

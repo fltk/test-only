@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.11 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: fl_arci.cxx,v 1.12 2002/12/09 04:52:28 spitzak Exp $"
 //
 // Arc (integer) drawing functions for the Fast Light Tool Kit (FLTK).
 //
@@ -24,7 +24,7 @@
 //
 
 // Draw pie slices, chord shapes, and curved lines, using the facilities
-// of X or Windows instead of the line segment drawing that fl_arc(...)
+// of X or Windows instead of the line segment drawing that arc(...)
 // uses.  These draw the limited
 // circle types provided by X and NT graphics.  The advantage of
 // these is that small ones draw quite nicely (probably due to stored
@@ -33,15 +33,14 @@
 // This is merged into a single function to make writing a dispatch
 // table easier.
 
-#include <fltk/fl_draw.h>
-#include <fltk/x.h>
-#ifdef _WIN32
+#include <fltk/draw.h>
 #include <fltk/math.h>
-#endif
+#include <fltk/x.h>
+using namespace fltk;
 
-void fl_pie(int x,int y,int w,int h,float a1,float a2, int what) {
+void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
   if (w <= 0 || h <= 0) return;
-  fl_transform(x,y);
+  transform(x,y);
 #ifdef _WIN32
   if (a1 == a2) return;
   w++; h++; // is this needed to match X?
@@ -50,35 +49,37 @@ void fl_pie(int x,int y,int w,int h,float a1,float a2, int what) {
   int xb = x+w/2+int(w*cosf(a2*float(M_PI/180.0)));
   int yb = y+h/2-int(h*sinf(a2*float(M_PI/180.0)));
   switch (what) {
-  case FL_PIE:
-    Pie(fl_gc, x, y, x+w, y+h, xa, ya, xb, yb); 
+  case FILLPIE:
+    Pie(gc, x, y, x+w, y+h, xa, ya, xb, yb); 
     break;
-  case FL_CHORD:
-    Chord(fl_gc, x, y, x+w, y+h, xa, ya, xb, yb); 
+  case FILLARC:
+    Chord(gc, x, y, x+w, y+h, xa, ya, xb, yb); 
     break;
-  case FL_ARC:
-    Arc(fl_gc, x, y, x+w, y+h, xa, ya, xb, yb); 
+  case STROKEPIE: // not correct, should draw lines to center
+  case STROKEARC:
+    Arc(gc, x, y, x+w, y+h, xa, ya, xb, yb); 
     break;
   }
 #else
   int A = int(a1*64);
   int B = int(a2*64)-A;
   switch(what) {
-  case FL_PIE:
-    XSetArcMode(fl_display, fl_gc, ArcPieSlice);
+  case FILLPIE:
+    XSetArcMode(xdisplay, gc, ArcPieSlice);
     goto J1;
-  case FL_CHORD:
-    XSetArcMode(fl_display, fl_gc, ArcChord);
+  case FILLARC:
+    XSetArcMode(xdisplay, gc, ArcChord);
   J1:
-    XFillArc(fl_display, fl_window, fl_gc, x, y, w, h, A, B);
+    XFillArc(xdisplay, xwindow, gc, x, y, w, h, A, B);
     break;
-  case FL_ARC:
-    XDrawArc(fl_display, fl_window, fl_gc, x, y, w, h, A, B);
+  case STROKEPIE: // not correct, should draw lines to center
+  case STROKEARC:
+    XDrawArc(xdisplay, xwindow, gc, x, y, w, h, A, B);
     break;
   }
 #endif
 }
 
 //
-// End of "$Id: fl_arci.cxx,v 1.11 2002/09/16 00:29:06 spitzak Exp $".
+// End of "$Id: fl_arci.cxx,v 1.12 2002/12/09 04:52:28 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 # data file for the FLTK User Interface Designer (FLUID)
-version 2.0001 
+version 2.0002 
 images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
@@ -42,10 +42,13 @@ decl {extern const char *get_opening_brace(int is_function);} {public
 decl {extern const char *get_indent_string(int level);} {public
 } 
 
-decl {extern void show_coding_style_cb(Fl_Widget *, void *);} {public
+decl {\#include <fltk/Widget.h>} {public
 } 
 
-decl {extern void write_includes_from_code(char*);} {selected public
+decl {extern void show_coding_style_cb(fltk::Widget *, void *);} {public
+} 
+
+decl {extern void write_includes_from_code(char*);} {public
 } 
 
 decl {int brace_style;} {} 
@@ -72,109 +75,110 @@ gtab_size = tab_size;
 galways_return_parens = always_return_parens;} {}
 } 
 
-Function {make_codingstyle_window()} {} {
-  Fl_Window {} {
-    xywh {188 283 310 255} resizable visible
+Function {make_codingstyle_window()} {open
+} {
+  {fltk::Window} {} {open
+    xywh {436 416 310 255} resizable visible
   } {
-    Fl_Tabs {} {open
+    {fltk::TabGroup} {} {open
       xywh {0 0 303 220} box EMBOSSED_BOX
     } {
-      Fl_Group {} {
-        label {Brace Style} open
+      {fltk::Group} {} {
+        label {Brace Style} open selected
         xywh {0 25 303 195}
       } {
-        Fl_Group {} {
+        {fltk::Group} {} {
           label {Brace Style} open
           xywh {14 22 282 122} align 5 box ENGRAVED_BOX
         } {
-          Fl_Box {} {
+          {fltk::Widget} {} {
             label {if ( x ) \{}
-            private xywh {20 6 47 20} align 20
+            private xywh {20 6 47 20} align 20 box NO_BOX
           }
-          Fl_Box {} {
+          {fltk::Widget} {} {
             label {++y;}
-            private xywh {20 25 45 20} align 24
+            private xywh {20 25 45 20} align 24 box NO_BOX
           }
-          Fl_Box {} {
+          {fltk::Widget} {} {
             label {\}}
-            private xywh {20 41 36 20} align 20
+            private xywh {20 41 36 20} align 20 box NO_BOX
           }
-          Fl_Box {} {
+          {fltk::Widget} {} {
             label {if ( x )}
-            private xywh {114 6 47 20} align 20
+            private xywh {114 6 47 20} align 20 box NO_BOX
           }
-          Fl_Box {} {
+          {fltk::Widget} {} {
             label {\{}
-            private xywh {114 25 36 20} align 20
+            private xywh {114 25 36 20} align 20 box NO_BOX
           }
-          Fl_Box {} {
+          {fltk::Widget} {} {
             label {++y;}
-            private xywh {115 42 46 20} align 24
+            private xywh {115 42 46 20} align 24 box NO_BOX
           }
-          Fl_Box {} {
+          {fltk::Widget} {} {
             label {\}}
-            private xywh {114 59 36 20} align 20
+            private xywh {114 59 36 20} align 20 box NO_BOX
           }
-          Fl_Round_Button pStyle1 {
+          {fltk::RadioButton} pStyle1 {
             label {Style 1}
             callback {if(o->value())
    brace_style = 1;}
-            private xywh {16 84 66 25} type RADIO value 1
+            private xywh {16 84 66 25} value 1
           }
-          Fl_Box {} {
+          {fltk::Widget} {} {
             label {if ( x )}
-            private xywh {201 6 47 20} align 20
+            private xywh {201 6 47 20} align 20 box NO_BOX
           }
-          Fl_Box {} {
+          {fltk::Widget} {} {
             label {\{}
-            private xywh {201 25 36 20} align 24
+            private xywh {201 25 36 20} align 24 box NO_BOX
           }
-          Fl_Box {} {
+          {fltk::Widget} {} {
             label {++y;}
-            private xywh {227 42 34 22} align 24
+            private xywh {227 42 34 22} align 24 box NO_BOX
           }
-          Fl_Box {} {
+          {fltk::Widget} {} {
             label {\}}
-            private xywh {201 59 36 20} align 24
+            private xywh {201 59 36 20} align 24 box NO_BOX
           }
-          Fl_Round_Button pStyle2 {
+          {fltk::RadioButton} pStyle2 {
             label {Style 2}
             callback {if(o->value())
    brace_style = 2;}
-            private xywh {109 84 66 25} type RADIO
+            private xywh {109 84 66 25}
           }
-          Fl_Round_Button pStyle3 {
+          {fltk::RadioButton} pStyle3 {
             label {Style 3}
             callback {if(o->value())
    brace_style = 3;}
-            private xywh {200 84 66 25} type RADIO
+            private xywh {200 84 66 25}
           }
         }
-        Fl_Check_Button pNoSpaceParens {
+        {fltk::CheckButton} pNoSpaceParens {
           label {No space before parentheses}
           callback {no_space_parens = o->value();;}
           private xywh {15 147 195 22}
         }
-        Fl_Check_Button pBraceFuncs {
+        {fltk::CheckButton} pBraceFuncs {
           label {Apply to function braces}
           callback {brace_functions = o->value();}
           private xywh {15 170 174 22} value 1
         }
       }
-      Fl_Group {} {
+      {fltk::Group} {} {
         label Other open
         xywh {0 25 303 183} hide
       } {
-        Fl_Group {} {
+        {fltk::Group} {} {
           label Indentation open
           xywh {11 22 218 90} align 5 box ENGRAVED_BOX
         } {
-          Fl_Value_Input pTabSize {
+          {fltk::ValueInput} pTabSize {
             label {Tab size for indents}
             callback {tab_size = (int)o->value();}
             private xywh {129 33 31 22} maximum 12 value 2
           }
-          Fl_Check_Button pIndentTabs {
+          {fltk::CheckButton} pIndentTabs {
             label {Indent with tabs}
             callback {indent_tabs = o->value();
 if(o->value())
@@ -183,32 +187,32 @@ else
    pTabSize->show();}
             private xywh {13 7 114 22}
           }
-          Fl_Check_Button pIndentCode {
+          {fltk::CheckButton} pIndentCode {
             label {Indent code blocks}
             callback {indent_code = o->value();}
             private xywh {14 58 151 22}
           }
         }
-        Fl_Check_Button pReturnParens {
+        {fltk::CheckButton} pReturnParens {
           label {Always use parentheses on return}
           callback {always_return_parens = o->value();}
           private xywh {10 120 220 22}
         }
       }
     }
-    Fl_Button {} {
+    {fltk::Button} {} {
       label Cancel
       callback {o->window()->hide();}
       xywh {106 223 59 25}
     }
-    Fl_Button {} {
+    {fltk::Button} {} {
       label Save
       callback {use_coding_style();
 save_coding_style();
 o->window()->hide();}
       xywh {171 223 59 25}
     }
-    Fl_Button {} {
+    {fltk::Button} {} {
       label Use
       callback {use_coding_style();
 o->window()->hide();}

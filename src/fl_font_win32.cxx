@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.44 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.45 2002/12/09 04:52:29 spitzak Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -24,40 +24,58 @@
 //
 
 #include <fltk/x.h>
-#include <fltk/Fl_Font.h>
+#include <fltk/Font.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <fltk/math.h>
 
-class Fl_FontSize {
-public:
-  Fl_FontSize *next;	// linked list for a single Fl_Font_
-  Fl_FontSize *next_all;// linked list so we can destroy em all
-  unsigned size;
-  int charset;
-  int width[256];
+using namespace fltk;
+
+// One of these is made for each combination of size + encoding:
+struct FontSize {
+  FontSize *next;	// linked list for a single Font
+  FontSize *next_all;// linked list so we can destroy em all
   HFONT font;
+  int charset;
+  unsigned size;
+  int width[256];
   TEXTMETRIC metr;
-  Fl_FontSize(const char* fontname, int size, int charset);
-  ~Fl_FontSize();
+  FontSize(const char* fontname, int attr, int size, int charset);
+  ~FontSize();
 };
 
-static Fl_FontSize* fl_fontsize;
-static Fl_FontSize* all_fonts;
+// The xft font implementation adds the xft name and the above list:
+struct IFont {
+  fltk::Font f;
+  int attribute_mask; // all attributes that can be turned on
+  FontSize* first;
+};
 
-Fl_FontSize::Fl_FontSize(const char* name, int size, int charset) {
-  fl_fontsize = this;
+// We store the attributes in neat blocks of 2^n:
+fltk::Font* fltk::Font::plus(int x) {
+  IFont* font = (IFont*)this;
+  x &= font->attribute_mask & ~attributes_;
+  return &((font+x)->f);
+}
 
-  int weight = FW_NORMAL;
-  int italic = 0;
-  // may be efficient, but this is non-obvious
-  switch (*name++) {
-  case 'I': italic = 1; break;
-  case 'P': italic = 1;
-  case 'B': weight = FW_BOLD; break;
-  case ' ': break;
-  default: name--;
-  }
+const char* fltk::Font::system_name() {
+  return name_;
+}
+
+static FontSize *current;
+  
+// Change the encoding to use for the next font selection.
+void fltk::set_encoding(const char* f) {
+  encoding_ = f;
+}
+
+static FontSize* all_fonts;
+
+FontSize::FontSize(const char* name, int attr, int size, int charset) {
+  current = this;
+
+  int weight = (attr&BOLD) ? FW_BOLD : FW_NORMAL;
+  int italic = (attr&ITALIC) ? 1 : 0;
 
   HFONT font = CreateFont(
     -size,	    // use "char size"
@@ -76,12 +94,12 @@ Fl_FontSize::Fl_FontSize(const char* name, int size, int charset) {
     name		// pointer to typeface name string
   );
 
-  HDC dc = fl_getDC();
+  HDC dc = getDC();
   SelectObject(dc, font);
-  GetTextMetrics(dc, &fl_fontsize->metr);
+  GetTextMetrics(dc, &current->metr);
   //BOOL ret = GetCharWidthFloat(dc, metr.tmFirstChar, metr.tmLastChar, font->width+metr.tmFirstChar);
   //...would be the right call, but is not implemented into Window95! (WinNT?)
-  //GetCharWidth(dc, 0, 255, fl_fontsize->width);
+  //GetCharWidth(dc, 0, 255, current->width);
 
   this->font = font;
   this->size = size;
@@ -90,16 +108,16 @@ Fl_FontSize::Fl_FontSize(const char* name, int size, int charset) {
   all_fonts = this;
 }
 
-Fl_FontSize::~Fl_FontSize() {
-  if (this == fl_fontsize) fl_fontsize = 0;
+FontSize::~FontSize() {
+  if (this == current) current = 0;
   DeleteObject(font);
 }
 
 // Deallocate Win32 fonts on exit. Warning: it will crash if you try
 // to do any fonts after this, because the pointers are not changed!
 void fl_font_rid() {
-  for (Fl_FontSize* fontsize = all_fonts; fontsize;) {
-    Fl_FontSize* next = fontsize->next;
+  for (FontSize* fontsize = all_fonts; fontsize;) {
+    FontSize* next = fontsize->next;
     delete fontsize;
     fontsize = next;
   }
@@ -107,92 +125,134 @@ void fl_font_rid() {
 
 ////////////////////////////////////////////////////////////////
 
-// The predefined fonts that fltk has:  bold:       italic:
-Fl_Font_ fl_fonts[] = {
-{" Arial",				fl_fonts+1, fl_fonts+2},
-{"BArial", 				fl_fonts+1, fl_fonts+3},
-{"IArial",				fl_fonts+3, fl_fonts+2},
-{"PArial",				fl_fonts+3, fl_fonts+3},
-{" Courier New",			fl_fonts+5, fl_fonts+6},
-{"BCourier New",			fl_fonts+5, fl_fonts+7},
-{"ICourier New",			fl_fonts+7, fl_fonts+6},
-{"PCourier New",			fl_fonts+7, fl_fonts+7},
-{" Times New Roman",			fl_fonts+9, fl_fonts+10},
-{"BTimes New Roman",			fl_fonts+9, fl_fonts+11},
-{"ITimes New Roman",			fl_fonts+11,fl_fonts+10},
-{"PTimes New Roman",			fl_fonts+11,fl_fonts+11},
-{" Symbol",				fl_fonts+12,fl_fonts+12},
-{" Terminal",				fl_fonts+14,fl_fonts+14},
-{"BTerminal",				fl_fonts+14,fl_fonts+14},
-{" Wingdings",				fl_fonts+15,fl_fonts+15},
+// The predefined fonts that fltk has:
+static IFont fonts [] = {
+  {{"Arial",	0},	3,	0},
+  {{"Arial",	1},	3,	0},
+  {{"Arial",	2},	3,	0},
+  {{"Arial",	3},	3,	0},
+  {{"Courier New",0},	3,	0},
+  {{"Courier New",1},	3,	0},
+  {{"Courier New",2},	3,	0},
+  {{"Courier New",3},	3,	0},
+  {{"Times New Roman",	0},	3,	0},
+  {{"Times New Roman",	1},	3,	0},
+  {{"Times New Roman",	2},	3,	0},
+  {{"Times New Roman",	3},	3,	0},
+  {{"Symbol",	0},	0,	0},
+  {{"Terminal",	0},	1,	0},
+  {{"Terminal",	1},	1,	0},
+  {{"Wingdings",0},	0,	0}
 };
+
+fltk::Font* const fltk::HELVETICA 		= &(fonts[0].f);
+fltk::Font* const fltk::HELVETICA_BOLD		= &(fonts[1].f);
+fltk::Font* const fltk::HELVETICA_ITALIC	= &(fonts[2].f);
+fltk::Font* const fltk::HELVETICA_BOLD_ITALIC	= &(fonts[3].f);
+fltk::Font* const fltk::COURIER 		= &(fonts[4].f);
+fltk::Font* const fltk::COURIER_BOLD		= &(fonts[5].f);
+fltk::Font* const fltk::COURIER_ITALIC		= &(fonts[6].f);
+fltk::Font* const fltk::COURIER_BOLD_ITALIC	= &(fonts[7].f);
+fltk::Font* const fltk::TIMES 			= &(fonts[8].f);
+fltk::Font* const fltk::TIMES_BOLD		= &(fonts[9].f);
+fltk::Font* const fltk::TIMES_ITALIC		= &(fonts[10].f);
+fltk::Font* const fltk::TIMES_BOLD_ITALIC	= &(fonts[11].f);
+fltk::Font* const fltk::SYMBOL_FONT		= &(fonts[12].f);
+fltk::Font* const fltk::SCREEN_FONT		= &(fonts[13].f);
+fltk::Font* const fltk::SCREEN_BOLD_FONT	= &(fonts[14].f);
+fltk::Font* const fltk::ZAPF_DINGBATS		= &(fonts[15].f);
+
+// Turn an old integer into a predefined font:
+fltk::Font* fltk::font(int i) {return &(fonts[i%16].f);}
+
+////////////////////////////////////////////////////////////////
+
+// For fltk::list_fonts(), make a new font, and optionally the bold and
+// italic subfonts:
+Font* fl_make_font(const char* name, int attrib) {
+  // see if it is one of our built-in fonts and return it:
+  int j; for (j = 0; j < 16; j++) {
+    if (fonts[j].f.attributes_ == attrib &&
+	!strcasecmp(fonts[j].f.name_, name)) return &(fonts[j].f);
+  }
+  // no, lets create some fonts:
+  IFont* newfont = new IFont[4];
+  newfont[0].f.name_ = strdup(name);
+  for (j = 0; j < 4; j++) {
+    newfont[j].f.name_ = newfont[0].f.name_;
+    newfont[j].f.attributes_ = attrib|j;
+    newfont[j].attribute_mask = 3;
+    newfont[j].first = 0;
+  }
+  return &(newfont[0].f);
+}
 
 ////////////////////////////////////////////////////////////////
 // Public interface:
 
-#define current_font (fl_fontsize->font)
-HFONT fl_xfont() {return current_font;}
-TEXTMETRIC* fl_textmetric() {return &(fl_fontsize->metr);}
+HFONT fltk::xfont() {return current->font;}
+TEXTMETRIC* fltk::textmetric() {return &(current->metr);}
+
+const char* fltk::Font::current_name() {
+  return current_font_->name_;
+}
 
 // we need to decode the encoding somehow!
 static int charset = DEFAULT_CHARSET;
 
-void fl_font(Fl_Font font, float psize) {
+void fltk::setfont(Font* font, float psize) {
 
   // only integers supported right now, I think there is a newer
   // interface that takes arbitrary sizes, though...
   psize = int(psize+.5);
   unsigned size = unsigned(psize);
 
-  if (font == fl_font_ && psize == fl_size_ &&
-      fl_fontsize->charset == charset) return;
-  fl_font_ = font; fl_size_ = psize;
+  if (font == current_font_ && psize == current_size_ &&
+      current->charset == charset) return;
+  current_font_ = font; current_size_ = psize;
 
-  Fl_FontSize* f;
+  FontSize* f;
   // search the fontsizes we have generated already:
-  for (f = font->first; f; f = f->next)
+  for (f = ((IFont*)font)->first; f; f = f->next)
     if (f->size == size && f->charset == charset) break;
   if (!f) {
-    f = new Fl_FontSize(font->name_, size, charset);
-    f->next = font->first;
-    ((Fl_Font_*)font)->first = f;
+    f = new FontSize(font->name_, font->attributes_, size, charset);
+    f->next = ((IFont*)font)->first;
+    ((IFont*)font)->first = f;
   }
-  fl_fontsize = f;
+  current = f;
 }
 
-float fl_height() {
-  return (fl_fontsize->metr.tmAscent + fl_fontsize->metr.tmDescent);
-}
-
-float fl_descent() { return fl_fontsize->metr.tmDescent; }
+float fltk::getascent()  { return current->metr.tmAscent; }
+float fltk::getdescent() { return current->metr.tmDescent; }
   
-float fl_width(const char* c, int n) {
+float fltk::getwidth(const char* c, int n) {
   SIZE size;
-  HDC dc = fl_getDC();
-  SelectObject(dc, current_font);
+  HDC dc = getDC();
+  SelectObject(dc, current->font);
   // I think win32 has a fractional version of this:
   GetTextExtentPoint(dc, c, n, &size);
   return size.cx;
 }
 
-void fl_transformed_draw(const char *str, int n, float x, float y) {
-  SetTextColor(fl_gc, fl_colorref);
-  HGDIOBJ oldfont = SelectObject(fl_gc, current_font);
-  TextOut(fl_gc, int(floorf(x+.5f)), int(floorf(y+.5f)), str, n);
-  SelectObject(fl_gc, oldfont);
+void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
+  SetTextColor(gc, current_xpixel);
+  HGDIOBJ oldfont = SelectObject(gc, current->font);
+  TextOut(gc, int(floorf(x+.5f)), int(floorf(y+.5f)), str, n);
+  SelectObject(gc, oldfont);
 }
 
 // Change the encoding to use for the next font selection.
 // Encodings is NYI. We need a way to translate the ISO encoding names
 // to Win32 encoding enumerations. Ie "iso8859-1" turns into ANSI_CHARSET,
 // etc.
-void fl_encoding(const char* f) {
-  if (f != fl_encoding_) {
-    fl_encoding_ = f;
+void fltk::set_encoding(const char* f) {
+  if (f != encoding_) {
+    encoding_ = f;
     // charset = decode_the_encoding(f);
   }
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.44 2002/09/16 00:29:06 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.45 2002/12/09 04:52:29 spitzak Exp $".
 //

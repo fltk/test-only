@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.56 2002/09/16 00:29:05 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.57 2002/12/09 04:52:24 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,50 +23,53 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Button.h>
-#include <fltk/Fl_Group.h>
+#include <fltk/events.h>
+#include <fltk/damage.h>
+#include <fltk/Button.h>
+#include <fltk/Group.h>
+#include <fltk/Box.h>
+using namespace fltk;
 
-bool Fl_Button::set() {
+bool Button::set() {
   clear_changed();
   if (!value()) {set_value(); redraw(); return true;}
   return false;
 }
 
-bool Fl_Button::clear() {
+bool Button::clear() {
   clear_changed();
   if (value()) {clear_value(); redraw(); return true;}
   return false;
 }
 
-bool Fl_Button::value(bool v) {
+bool Button::value(bool v) {
   return v ? set() : clear();
 }
 
-void Fl_Button::setonly() { // set this radio button on, turn others off
+void Button::setonly() { // set this radio button on, turn others off
   set();
   for (int i = parent()->children(); i--;) {
-    Fl_Widget* o = parent()->child(i);
+    Widget* o = parent()->child(i);
     if (o != this && o->type() == RADIO)
-      ((Fl_Button*)o)->clear();
+      ((Button*)o)->clear();
   }
 }
 
-static Fl_Button* held_down;
+static Button* held_down;
 
-int Fl_Button::handle(int event) {
+int Button::handle(int event) {
   static bool oldval;
   bool newval;
   switch (event) {
-  case FL_ENTER:
-  case FL_LEAVE:
-    if (highlight_color() && takesevents()) redraw(FL_DAMAGE_HIGHLIGHT);
-  case FL_MOVE:
+  case ENTER:
+  case LEAVE:
+    if (highlight_color() && takesevents()) redraw(DAMAGE_HIGHLIGHT);
+  case MOVE:
     return 1;
-  case FL_PUSH:
+  case PUSH:
     oldval = value();
-  case FL_DRAG:
-    if (Fl::event_inside(0,0,w(),h())) {
+  case DRAG:
+    if (event_inside(0,0,w(),h())) {
       held_down = this;
       if (type() == RADIO) newval = 1;
       else newval = !oldval;
@@ -74,10 +77,10 @@ int Fl_Button::handle(int event) {
       held_down = 0;
       newval = oldval;
     }
-    if (value(newval) && when()&FL_WHEN_CHANGED) do_callback();
+    if (value(newval) && when()&WHEN_CHANGED) do_callback();
     return 1;
-  case FL_RELEASE:
-    redraw(FL_DAMAGE_VALUE);
+  case RELEASE:
+    redraw(DAMAGE_VALUE);
     held_down = 0;
     if (value() == oldval) return 1;
     if (type() == RADIO)
@@ -86,29 +89,29 @@ int Fl_Button::handle(int event) {
       ; // leave it as set
     else {
       value(oldval);
-      if (when() & FL_WHEN_CHANGED) do_callback();
+      if (when() & WHEN_CHANGED) do_callback();
     }
-    if (when() & FL_WHEN_RELEASE) do_callback(); else set_changed();
+    if (when() & WHEN_RELEASE) do_callback(); else set_changed();
     return 1;
-  case FL_FOCUS:
-  case FL_UNFOCUS:
-    redraw(FL_DAMAGE_HIGHLIGHT);
-    // grab initial focus if we are an Fl_Return_Button:
+  case FOCUS:
+  case UNFOCUS:
+    redraw(DAMAGE_HIGHLIGHT);
+    // grab initial focus if we are an ReturnButton:
     return shortcut()=='\r' ? 2 : 1;
-  case FL_KEY:
-    if (Fl::event_key() == ' ') goto EXECUTE;
+  case KEY:
+    if (event_key() == ' ') goto EXECUTE;
     return 0;
-  case FL_SHORTCUT:
+  case SHORTCUT:
     if (!test_shortcut()) return 0;
   EXECUTE:
     if (type() == RADIO && !value()) {
       setonly();
-      if (when() & FL_WHEN_CHANGED) do_callback();
+      if (when() & WHEN_CHANGED) do_callback();
     } else if (type()) { // TOGGLE
       value(!value());
-      if (when() & FL_WHEN_CHANGED) do_callback();
+      if (when() & WHEN_CHANGED) do_callback();
     }
-    if (when() & FL_WHEN_RELEASE) do_callback(); else set_changed();
+    if (when() & WHEN_RELEASE) do_callback(); else set_changed();
     return 1;
   default:
     return 0;
@@ -117,70 +120,67 @@ int Fl_Button::handle(int event) {
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/fl_draw.h>
+#include <fltk/draw.h>
 
-extern Fl_Widget* fl_did_clipping;
+extern Widget* fl_did_clipping;
 
 // Draw button-like widgets with an optional glyph. The glyph is given
 // a size (negative to put it on the right)
-void Fl_Button::draw(int glyph, int glyph_width) const
+void Button::draw(int glyph, int glyph_width) const
 {
   // Figure out the colors to use. The flags are used by the label and
   // glyph functions to figure out their colors:
-  Fl_Flags flags;
-  Fl_Color color;
+  Flags flags;
+  Color color;
   if (!active_r()) {
-    flags = FL_INACTIVE;
+    flags = INACTIVE;
     color = this->color();
   } else if (belowmouse()) {
-    flags = FL_HIGHLIGHT;
+    flags = HIGHLIGHT;
     color = highlight_color();
     if (!color) color = this->color();
   } else {
     flags = 0;
     color = this->color();
   }
-  Fl_Flags glyph_flags = flags;
+  Flags glyph_flags = flags;
   if (glyph_width) {
-    if (this == held_down) flags |= FL_VALUE;
-    if (value()) glyph_flags |= FL_VALUE;
+    if (this == held_down) flags |= VALUE;
+    if (value()) glyph_flags |= VALUE;
   } else if (value()) {
-    flags |= FL_VALUE;
+    flags |= VALUE;
     // Use the pushed-in color if the user has explicitly set it
     // on this widget:
     if (style()->selection_color) {
       color = style()->selection_color;
-      flags |= FL_SELECTED; // this makes label use selected_text_color()
+      flags |= SELECTED; // this makes label use selected_textcolor()
     }
   }
 
   bool draw_label = true;
   int x = 0, y = 0, w = this->w(), h = this->h();
-  Fl_Boxtype box = this->box();
+  Box* box = this->box();
 
-  if (box == FL_NO_BOX) {
-    // If the box is FL_NO_BOX we need to avoid drawing the label so
+  if (box == NO_BOX) {
+    // If the box is noBox we need to avoid drawing the label so
     // that it does not blink and does not draw multiple times (which
     // will make it look bold if antialiasing is on).
     /* if (!label()) {
       // don't do anything if no label, so buttons that are an image
       // only will redraw correctly and with minimum blinking.
-      } else */ if ((damage()&FL_DAMAGE_EXPOSE) ||
-	(damage()&FL_DAMAGE_HIGHLIGHT) && !focused()) {
+      } else */
+    if ((damage()&DAMAGE_EXPOSE) ||
+	(damage()&DAMAGE_HIGHLIGHT) && !focused()) {
       // erase the background behind where the label will draw:
-      fl_push_clip(0, 0, w, h);
-      parent()->draw_group_box();
-      fl_pop_clip();
+      draw_background();
     } else {
       // Don't draw the label unnecessarily:
       draw_label = false;
     }
   } else {
-    if ((damage()&FL_DAMAGE_EXPOSE) && !box->fills_rectangle()) {
+    if ((damage()&DAMAGE_EXPOSE) && !box->fills_rectangle()) {
       // Erase the area behind non-square boxes
-      fl_push_clip(0, 0, w, h);
-      parent()->draw_group_box();
-      fl_pop_clip();
+      draw_background();
     }
     // Draw the box:
     box->draw(0, 0, w, h, color, flags);
@@ -200,13 +200,13 @@ void Fl_Button::draw(int glyph, int glyph_width) const
   }
 
   if (focused()) {
-    focus_box()->draw(x+1, y+1, w-2, h-2,
-		      flags&FL_SELECTED ? selection_text_color():label_color(),
-		      FL_INVISIBLE);
+    focusbox()->draw(x+1, y+1, w-2, h-2,
+		      flags&SELECTED ? selection_textcolor():labelcolor(),
+		      INVISIBLE);
   }
 }
 
-void Fl_Button::draw() {
+void Button::draw() {
   if (type() == HIDDEN) {
     fl_did_clipping = this;
     return;
@@ -216,19 +216,19 @@ void Fl_Button::draw() {
 
 ////////////////////////////////////////////////////////////////
 
-static void revert(Fl_Style* s) {
-  s->color = FL_GRAY;
-  s->box = FL_UP_BOX;
+static void revert(Style* s) {
+  s->color = GRAY75;
+  s->box = UP_BOX;
 }
 
-static Fl_Named_Style style("Button", revert, &Fl_Button::default_style);
-Fl_Named_Style* Fl_Button::default_style = &::style;
+static NamedStyle style("Button", revert, &Button::default_style);
+NamedStyle* Button::default_style = &::style;
 
-Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h,l) {
+Button::Button(int x,int y,int w,int h, const char *l) : Widget(x,y,w,h,l) {
   style(default_style);
   //set_click_to_focus();
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.56 2002/09/16 00:29:05 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.57 2002/12/09 04:52:24 spitzak Exp $".
 //

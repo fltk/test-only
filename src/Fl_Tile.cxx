@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tile.cxx,v 1.19 2002/04/11 07:47:46 spitzak Exp $"
+// "$Id: Fl_Tile.cxx,v 1.20 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Tile widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,20 +27,23 @@
 // The size of the first child determines where the resize border is.
 // The resizebox is used to limit where the border can be dragged to.
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Tile.h>
-#include <fltk/Fl_Window.h>
+#include <fltk/TiledGroup.h>
+#include <fltk/Window.h>
+#include <fltk/events.h>
+#include <fltk/layout.h>
+#include <fltk/Cursor.h>
 #include <stdlib.h>
+using namespace fltk;
 
 // Drag the edges that were initially at oldx,oldy to newx,newy:
 // pass zero as oldx or oldy to disable drag in that direction:
 
-void Fl_Tile::position(int oix, int oiy, int newx, int newy) {
+void TiledGroup::position(int oix, int oiy, int newx, int newy) {
   int* p = sizes();
   p += 8; // skip group & resizable's saved size
   int numchildren = children();
   for (int i=0; i < numchildren; p += 4, i++) {
-    Fl_Widget* o = child(i);
+    Widget* o = child(i);
     //if (o == resizable()) continue;
     int X = o->x();
     int R = X+o->w();
@@ -63,37 +66,26 @@ void Fl_Tile::position(int oix, int oiy, int newx, int newy) {
 }
 
 // resizing is equivalent to moving  the lower-right corner (sort of):
-void Fl_Tile::layout() {
+void TiledGroup::layout() {
   int* p = sizes(); // remember the initial positions on first call here
-  if (layout_damage() & FL_LAYOUT_WH) {
-    layout_damage(layout_damage() & ~FL_LAYOUT_WH);
+  if (layout_damage() & LAYOUT_WH) {
+    layout_damage(layout_damage() & ~LAYOUT_WH);
     // drag the corner of the group to the new position:
     position(p[1], p[3], w(), h());
     // drag the corner of the resizable() to the new position:
     if (p[5] != p[1] || p[7] != p[3])
       position(p[5], p[7], p[5]+w()-p[1], p[7]+h()-p[3]);
   }
-  Fl_Group::layout();
+  Group::layout();
 }
 
-static void set_cursor(Fl_Tile*t, Fl_Cursor c) {
-  static Fl_Cursor cursor;
-  if (cursor == c) return;
-  cursor = c;
-#ifdef __sgi
-  t->window()->cursor(c,FL_RED,FL_WHITE);
-#else
-  t->window()->cursor(c);
-#endif
-}
+static Cursor* cursors[4] = {
+  0,
+  CURSOR_WE,
+  CURSOR_NS,
+  CURSOR_MOVE};
 
-static Fl_Cursor cursors[4] = {
-  FL_CURSOR_DEFAULT,
-  FL_CURSOR_WE,
-  FL_CURSOR_NS,
-  FL_CURSOR_MOVE};
-
-int Fl_Tile::handle(int event) {
+int TiledGroup::handle(int event) {
   static int sdrag;
   static int sdx, sdy;
   static int sx, sy;
@@ -101,14 +93,14 @@ int Fl_Tile::handle(int event) {
 #define DRAGV 2
 #define GRABAREA 4
 
-  int mx = Fl::event_x();
-  int my = Fl::event_y();
+  int mx = event_x();
+  int my = event_y();
 
   switch (event) {
 
-  case FL_MOVE:
-  case FL_ENTER:
-  case FL_PUSH: {
+  case MOVE:
+  case ENTER:
+  case PUSH: {
     int mindx = 100;
     int mindy = 100;
     int oldx = 0;
@@ -117,7 +109,7 @@ int Fl_Tile::handle(int event) {
     int* p = q+8;
     int numchildren = children();
     for (int i=0; i < numchildren; p += 4, i++) {
-      Fl_Widget* o = child(i);
+      Widget* o = child(i);
       if (o == resizable()) continue;
       if (p[1]<q[1] && o->y()<=my+GRABAREA && o->y()+o->h()>=my-GRABAREA) {
 	int t = mx - (o->x()+o->w());
@@ -139,31 +131,27 @@ int Fl_Tile::handle(int event) {
     sdrag = 0; sx = sy = 0;
     if (mindx <= GRABAREA) {sdrag = DRAGH; sx = oldx;}
     if (mindy <= GRABAREA) {sdrag |= DRAGV; sy = oldy;}
-    set_cursor(this, cursors[sdrag]);
+    cursor(cursors[sdrag]);
     if (sdrag) return 1;
-    return Fl_Group::handle(event);
+    return Group::handle(event);
   }
 
-  case FL_LEAVE:
-    set_cursor(this, FL_CURSOR_DEFAULT);
-    break;
-
-  case FL_DRAG:
-    // This is necessary if CONSOLIDATE_MOTION in Fl_x.C is turned off:
+  case DRAG:
+    // This is necessary if CONSOLIDATE_MOTION in x.C is turned off:
     // if (damage()) return 1; // don't fall behind
-  case FL_RELEASE: {
+  case RELEASE: {
     if (!sdrag) return 0; // should not happen
-    Fl_Widget* r = resizable(); if (!r) r = this;
+    Widget* r = resizable(); if (!r) r = this;
     int newx;
     if (sdrag&DRAGH) {
-      newx = Fl::event_x()-sdx;
+      newx = event_x()-sdx;
       if (newx < r->x()) newx = r->x();
       else if (newx > r->x()+r->w()) newx = r->x()+r->w();
     } else
       newx = sx;
     int newy;
     if (sdrag&DRAGV) {
-      newy = Fl::event_y()-sdy;
+      newy = event_y()-sdy;
       if (newy < r->y()) newy = r->y();
       else if (newy > r->y()+r->h()) newy = r->y()+r->h();
     } else
@@ -174,9 +162,9 @@ int Fl_Tile::handle(int event) {
 
   }
 
-  return Fl_Group::handle(event);
+  return Group::handle(event);
 }
 
 //
-// End of "$Id: Fl_Tile.cxx,v 1.19 2002/04/11 07:47:46 spitzak Exp $".
+// End of "$Id: Fl_Tile.cxx,v 1.20 2002/12/09 04:52:26 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Return_Button.cxx,v 1.35 2002/09/09 01:39:58 spitzak Exp $"
+// "$Id: Fl_Return_Button.cxx,v 1.36 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Return button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,13 +23,14 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Return_Button.h>
-#include <fltk/fl_draw.h>
+#include <fltk/ReturnButton.h>
+#include <fltk/events.h>
+#include <fltk/draw.h>
+using namespace fltk;
 
-// this is public so fl_draw_symbol can call it:
-void fl_glyph_return(const Fl_Widget*, int,
-		     int x,int y,int w,int h, Fl_Flags)
+// this is public so draw_symbol can call it:
+void fl_glyph_return(const Widget*, int,
+		     int x,int y,int w,int h, Flags)
 {
   int size = w; if (h<size) size = h;
   int d = (size+2)/4; if (d<3) d = 3;
@@ -38,43 +39,44 @@ void fl_glyph_return(const Fl_Widget*, int,
   int x1 = x0+d;
   int y0 = y+h/2;
 #if 1
-  fl_color(FL_LIGHT3);
-  fl_newpath();
-  fl_vertex(x0, y0);
-  fl_vertex(x1, y0+d);
-  fl_vertex(x1, y0+t);
-  fl_vertex(x1+d+2*t, y0+t);
-  fl_vertex(x1+d+2*t, y0-d);
-  fl_stroke();
-  fl_line(x1, y0-t, x1, y0-d);
-  fl_color(fl_gray_ramp(0));
-  fl_line(x0, y0, x1, y0-d);
-  fl_newpath();
-  fl_vertex(x1+1, y0-t);
-  fl_vertex(x1+d, y0-t);
-  fl_vertex(x1+d, y0-d);
-  fl_vertex(x1+d+2*t, y0-d);
-  fl_color(FL_DARK3); fl_stroke();
+  setcolor(WHITE);
+  newpath();
+  addvertex(x0, y0);
+  addvertex(x1, y0+d);
+  addvertex(x1, y0+t);
+  addvertex(x1+d+2*t, y0+t);
+  addvertex(x1+d+2*t, y0-d);
+  strokepath();
+  drawline(x1, y0-t, x1, y0-d);
+  setcolor(GRAY00);
+  drawline(x0, y0, x1, y0-d);
+  newpath();
+  addvertex(x1+1, y0-t);
+  addvertex(x1+d, y0-t);
+  addvertex(x1+d, y0-d);
+  addvertex(x1+d+2*t, y0-d);
+  setcolor(GRAY33);
+  strokepath();
 #else // solid arrow written by Carl
-  fl_color(fl_inactive(fc, f));
-  fl_polygon(x0,y0, x1,y0+d, x1, y0-d);
-  fl_rectf(x1,y0-t,d,2*t+1);
-  fl_rectf(x1+d,y0-d,2*t+1,d+t+1);
+  setcolor(inactive(fc, f));
+  polygon(x0,y0, x1,y0+d, x1, y0-d);
+  fillrect(x1,y0-t,d,2*t+1);
+  fillrect(x1+d,y0-d,2*t+1,d+t+1);
 #endif
 }
 
-void Fl_Return_Button::draw() {
-  Fl_Button::draw(0,-2*text_size());
+void ReturnButton::draw() {
+  Button::draw(0,-2*int(textsize()));
 }
 
-static void revert(Fl_Style* s) {
+static void revert(Style* s) {
   s->glyph = fl_glyph_return;
 }
-static Fl_Named_Style style("Return_Button", revert, &Fl_Return_Button::default_style);
-Fl_Named_Style* Fl_Return_Button::default_style = &::style;
+static NamedStyle style("ReturnButton", revert, &ReturnButton::default_style);
+NamedStyle* ReturnButton::default_style = &::style;
 
-Fl_Return_Button::Fl_Return_Button(int x,int y,int w,int h,const char *l)
-  : Fl_Button(x,y,w,h,l)
+ReturnButton::ReturnButton(int x,int y,int w,int h,const char *l)
+  : Button(x,y,w,h,l)
 {
   default_style->parent = style();
   style(default_style);
@@ -82,5 +84,5 @@ Fl_Return_Button::Fl_Return_Button(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Return_Button.cxx,v 1.35 2002/09/09 01:39:58 spitzak Exp $".
+// End of "$Id: Fl_Return_Button.cxx,v 1.36 2002/12/09 04:52:26 spitzak Exp $".
 //

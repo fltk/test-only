@@ -1,7 +1,7 @@
 //
-// "$Id: color_chooser.cxx,v 1.11 2001/07/29 22:17:02 spitzak Exp $"
+// "$Id: color_chooser.cxx,v 1.12 2002/12/09 04:52:31 spitzak Exp $"
 //
-// Color chooser test program for the Fast Light Tool Kit (FLTK).
+// Color chooser test program for the Fast Light Tool Kit (fltk).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,18 +23,19 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/Fl_Box.h>
-#include <fltk/Fl_Button.h>
-#include <fltk/fl_show_colormap.h>
-#include <fltk/Fl_Color_Chooser.h>
-#include <fltk/Fl_RGB_Image.h>
+#include <fltk/run.h>
+#include <fltk/Window.h>
+#include <fltk/visual.h>
+#include <fltk/Button.h>
+#include <fltk/show_colormap.h>
+#include <fltk/ColorChooser.h>
+#include <fltk/rgbImage.h>
 #include <fltk/x.h>
-#include <fltk/fl_draw.h>
-
+#include <fltk/error.h>
+#include <fltk/draw.h>
 #include <stdlib.h>
 #include <stdio.h>
+
 #ifndef _WIN32
 #include "list_visuals.cxx"
 #endif
@@ -57,95 +58,96 @@ void make_image() {
   }
 }
 
-class Pens : public Fl_Box {
+class Pens : public fltk::Widget {
   void draw();
 public:
   Pens(int X, int Y, int W, int H, const char* L)
-    : Fl_Box(X,Y,W,H,L) {}
+    : fltk::Widget(X,Y,W,H,L) {}
 };
 void Pens::draw() {
   // use every color in the gray ramp:
   for (int i = 0; i < 3*8; i++) {
-    fl_color((Fl_Color)(FL_GRAY_RAMP+i));
-    fl_line(i, 0, i, h());
+    fltk::setcolor((fltk::Color)(fltk::GRAY00+i));
+    fltk::drawline(i, 0, i, h());
   }
 }
 
-Fl_Color c = FL_GRAY;
-#define fullcolor_cell (FL_FREE_COLOR)
+fltk::Color c = fltk::GRAY75;
+#define fullcolor_cell ((fltk::Color)16)
 
-void cb1(Fl_Widget *, void *v) {
-  c = fl_show_colormap(c);
-  Fl_Box* b = (Fl_Box*)v;
+void cb1(fltk::Widget *, void *v) {
+  c = fltk::show_colormap(c);
+  fltk::Widget* b = (fltk::Widget*)v;
   b->color(c);
   b->parent()->redraw();
 }
 
-void cb2(Fl_Widget *, void *v) {
+void cb2(fltk::Widget *, void *v) {
   uchar r,g,b;
 //  Fl::get_color(c,r,g,b);
-  fl_get_color(c,r,g,b);
-  if (!fl_color_chooser("New color:",r,g,b)) return;
+  fltk::split_color(c,r,g,b);
+  if (!fltk::color_chooser("New color:",r,g,b)) return;
   c = fullcolor_cell;
-  fl_set_color(fullcolor_cell, fl_rgb(r,g,b));
-  Fl_Box* bx = (Fl_Box*)v;
+  fltk::set_color_index(fullcolor_cell, fltk::color(r,g,b));
+  fltk::Widget* bx = (fltk::Widget*)v;
   bx->color(fullcolor_cell);
   bx->parent()->redraw();
 }
 
 int main(int argc, char ** argv) {
-  fl_set_color(fullcolor_cell, fl_rgb(145,159,170));
-  Fl_Window window(400,400);
-  Fl_Box box(50,50,300,300);
-  box.box(FL_THIN_DOWN_BOX);
+  fltk::set_color_index(fullcolor_cell, fltk::color(145,159,170));
+  fltk::Window window(400,400);
+  window.begin();
+  fltk::Widget box(50,50,300,300);
+  box.box(fltk::THIN_DOWN_BOX);
   c = fullcolor_cell;
   box.color(c);
-  Fl_Button b1(140,120,120,30,"fl_show_colormap");
+  fltk::Button b1(140,120,120,30,"fltk::show_colormap");
   b1.callback(cb1,&box);
-  Fl_Button b2(140,160,120,30,"fl_choose_color");
+  fltk::Button b2(140,160,120,30,"fltk::choose_color");
   b2.callback(cb2,&box);
-  Fl_Box image_box(140,200,120,120,0);
+  fltk::Widget image_box(140,200,120,120,0);
   make_image();
-  (new Fl_RGB_Image(image, width, height))->label(&image_box);
-  Fl_Box b(140,320,120,0,"Example of fl_draw_image()");
+  (new fltk::rgbImage(image, width, height))->label(&image_box);
+  fltk::Widget b(140,320,120,0,"Example of fltk::draw_image()");
   Pens p(80,200,3*8,120,"lines");
-  p.set_flag(FL_ALIGN_TOP);
+  p.set_flag(fltk::ALIGN_TOP);
   int i = 1;
-  if (!Fl::args(argc,argv,i) || i != argc-1) {
+  if (!fltk::args(argc,argv,i) || i != argc-1) {
     printf("usage: %s <switches> visual-number\n"
 	   " - : default visual\n"
-	   " r : call Fl::visual(FL_RGB)\n"
-	   " c : call Fl::own_colormap()\n",argv[0]);
+	   " r : call fltk::visual(fltk::RGB)\n"
+	   " c : call fltk::own_colormap()\n",argv[0]);
 #ifndef _WIN32
     printf(" # : use this visual with an empty colormap:\n");
     list_visuals();
 #endif
-    puts(Fl::help);
+    puts(fltk::help);
     exit(1);
   }
   if (argv[i][0] == 'r') {
-    if (!Fl::visual(FL_RGB)) printf("Fl::visual(FL_RGB) returned false.\n");
+    if (!fltk::visual(fltk::RGB_COLOR)) printf("fltk::visual(fltk::RGB_COLOR) returned false.\n");
   } else if (argv[i][0] == 'c') {
-    Fl::own_colormap();
+    fltk::own_colormap();
   } else if (argv[i][0] != '-') {
 #ifndef _WIN32
     int visid = atoi(argv[i]);
-    fl_open_display();
+    fltk::open_display();
     XVisualInfo templt; int num;
     templt.visualid = visid;
-    fl_visual = XGetVisualInfo(fl_display, VisualIDMask, &templt, &num);
-    if (!fl_visual) Fl::fatal("No visual with id %d",visid);
-    fl_colormap = XCreateColormap(fl_display, RootWindow(fl_display,fl_screen),
-				  fl_visual->visual, AllocNone);
-    fl_xpixel(FL_BLACK); // make sure black is allocated
+    fltk::xvisual= XGetVisualInfo(fltk::xdisplay, VisualIDMask, &templt, &num);
+    if (!fltk::xvisual) fltk::fatal("No visual with id %d",visid);
+    fltk::xcolormap = XCreateColormap(fltk::xdisplay, RootWindow(fltk::xdisplay,fltk::xscreen),
+				  fltk::xvisual->visual, AllocNone);
+    fltk::xpixel(fltk::BLACK); // make sure black is allocated
 #else
-    Fl::fatal("Visual id's not supported on MSWindows");
+    fltk::fatal("Visual id's not supported on MSWindows");
 #endif
   }
   window.show(argc,argv);
-  return Fl::run();
+  return fltk::run();
 }
 
 //
-// End of "$Id: color_chooser.cxx,v 1.11 2001/07/29 22:17:02 spitzak Exp $".
+// End of "$Id: color_chooser.cxx,v 1.12 2002/12/09 04:52:31 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.cxx,v 1.48 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: Fl_Value_Slider.cxx,v 1.49 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Value slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,16 +23,16 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Value_Slider.h>
-#include <fltk/fl_draw.h>
-#include <fltk/Fl_Output.h>
-#include <fltk/Fl_Group.h>
+#include <fltk/ValueSlider.h>
+#include <fltk/damage.h>
+#include <fltk/draw.h>
+#include <fltk/Box.h>
+using namespace fltk;
 
-void Fl_Value_Slider::draw() {
+void ValueSlider::draw() {
 
   // figure out the inner size of the box:
-  Fl_Boxtype box = this->box();
+  Box* box = this->box();
   int ix = 0, iy = 0, iw = w(), ih = h();
   box->inset(ix,iy,iw,ih);
 
@@ -60,30 +60,30 @@ void Fl_Value_Slider::draw() {
     tw = 35; sx += tw; sw -= tw;
     if (iy) {ty = iy; th = ih;} // if box has border, center text
   } else {
-    th = text_size(); sh -= th; ty += sh;
+    th = int(textsize()); sh -= th; ty += sh;
     if (ix) {tx = ix; tw = iw;} // if box has border, center text
   }
 
-  Fl_Flags flags = 0;
+  Flags flags = 0;
   if (!active_r()) {
-    flags |= FL_INACTIVE;
+    flags |= INACTIVE;
   } else {
-    if (Fl::pushed() == this) flags |= FL_VALUE;
-    if (belowmouse()) flags |= FL_HIGHLIGHT;
+    if (pushed()) flags |= VALUE;
+    if (belowmouse()) flags |= HIGHLIGHT;
   }
 
   // minimal-update the slider, if it indicates the background needs
   // to be drawn, draw that. We draw the slot if the current box type
   // has no border:
-  if (Fl_Slider::draw(sx, sy, sw, sh, flags, iy==0)) {
+  if (Slider::draw(sx, sy, sw, sh, flags, iy==0)) {
 
     // draw the box or the visible parts of the window
-    if (!box->fills_rectangle()) parent()->draw_group_box();
+    if (!box->fills_rectangle()) draw_background();
     box->draw(0, 0, w(), h(), color(), flags);
 
     // draw the focus indicator inside the box:
     if (focused()) {
-      focus_box()->draw(ix+1, iy+1, iw-2, ih-2, text_color(), FL_INVISIBLE);
+      focusbox()->draw(ix+1, iy+1, iw-2, ih-2, textcolor(), INVISIBLE);
     }
 
     if (type() & TICK_BOTH) {
@@ -100,60 +100,60 @@ void Fl_Value_Slider::draw() {
 	case TICK_BOTH: sx = ix; sw = iw; break;
 	}
       }
-      Fl_Color color = text_color();
-      if (!active_r()) color = fl_inactive(color);
-      fl_color(color);
+      Color color = textcolor();
+      if (!active_r()) color = inactive(color);
+      setcolor(color);
       draw_ticks(sx, sy, sw, sh, (slider_size()+1)/2);
     }
 
-    fl_pop_clip();
+    pop_clip();
   }
 
   // draw the text:
-  if (damage() & (FL_DAMAGE_ALL|FL_DAMAGE_VALUE)) {
-    fl_push_clip(tx, ty, tw, th);
+  if (damage() & (DAMAGE_ALL|DAMAGE_VALUE)) {
+    push_clip(tx, ty, tw, th);
     // erase the background if not already done:
-    if (!(damage()&FL_DAMAGE_ALL)) {
-      if (!box->fills_rectangle()) parent()->draw_group_box();
+    if (!(damage()&DAMAGE_ALL)) {
+      if (!box->fills_rectangle()) draw_background();
       box->draw(0, 0, w(), h(), color(), flags);
       if (focused()) {
-	focus_box()->draw(ix+1, iy+1, iw-2, ih-2, text_color(), FL_INVISIBLE);
+	focusbox()->draw(ix+1, iy+1, iw-2, ih-2, textcolor(), INVISIBLE);
       }
     }
     // now draw the text:
     char buf[128];
     format(buf);
-    fl_font(text_font(), text_size());
-    fl_color(fl_inactive(text_color(),flags));
-    fl_draw(buf, tx, ty, tw, th, 0);
-    fl_pop_clip();
+    setfont(textfont(), textsize());
+    setcolor(inactive(textcolor(),flags));
+    drawtext(buf, tx, ty, tw, th, 0);
+    pop_clip();
   }
 
 }
 
-int Fl_Value_Slider::handle(int event) {
+int ValueSlider::handle(int event) {
   // figure out the inner size of the slider and text areas:
-  Fl_Boxtype box = this->box();
+  Box* box = this->box();
   int ix = 0, iy = 0, iw = w(), ih = h();
   box->inset(ix,iy,iw,ih);
   if (horizontal()) {
     int tw = 35; ix += tw; iw -= tw;
   } else {
-    int th = text_size(); ih -= th;
+    int th = int(textsize()); ih -= th;
   }
-  return Fl_Slider::handle(event, ix, iy, iw, ih);
+  return Slider::handle(event, ix, iy, iw, ih);
 }
 
-static void revert(Fl_Style *s) {
-  s->color = FL_GRAY;
-  s->box = FL_FLAT_BOX;
+static void revert(Style *s) {
+  s->color = GRAY75;
+  s->box = FLAT_BOX;
   //s->glyph = ::glyph;
 }
-static Fl_Named_Style style("Value_Slider", revert, &Fl_Value_Slider::default_style);
-Fl_Named_Style* Fl_Value_Slider::default_style = &::style;
+static NamedStyle style("ValueSlider", revert, &ValueSlider::default_style);
+NamedStyle* ValueSlider::default_style = &::style;
 
-Fl_Value_Slider::Fl_Value_Slider(int x, int y, int w, int h, const char*l)
-: Fl_Slider(x, y, w, h, l) {
+ValueSlider::ValueSlider(int x, int y, int w, int h, const char*l)
+: Slider(x, y, w, h, l) {
   if (!default_style->glyph) default_style->glyph = style()->glyph;
   style(default_style);
   step(.01);
@@ -161,5 +161,5 @@ Fl_Value_Slider::Fl_Value_Slider(int x, int y, int w, int h, const char*l)
 }
 
 //
-// End of "$Id: Fl_Value_Slider.cxx,v 1.48 2002/09/16 00:29:06 spitzak Exp $".
+// End of "$Id: Fl_Value_Slider.cxx,v 1.49 2002/12/09 04:52:26 spitzak Exp $".
 //

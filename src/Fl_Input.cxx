@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.73 2002/10/26 09:55:30 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.74 2002/12/09 04:52:25 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,13 +27,17 @@
 // subclass and replacing the replace(...) function, to make a version
 // that rejects changes you don't want to allow.
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Input.h>
-#include <fltk/fl_draw.h>
+#include <fltk/Input.h>
+#include <fltk/events.h>
+#include <fltk/damage.h>
+#include <fltk/Box.h>
+#include <fltk/draw.h>
 #include <fltk/math.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+
+using namespace fltk;
 
 #define MAXBUF 1024
 
@@ -43,7 +47,7 @@
 // Stop at then end of the line, or truncate if necessary so the resulting
 // string and null terminator fits in a buffer of size MAXBUF.  Returns
 // pointer to the character after the last one copied.
-const char* Fl_Input::expand(const char* p, char* buf,int wordwrap) const {
+const char* Input::expand(const char* p, char* buf,int wordwrap) const {
   char* o = buf;
   char* e = buf+(MAXBUF-4);
   const char* lastspace = p;
@@ -55,7 +59,7 @@ const char* Fl_Input::expand(const char* p, char* buf,int wordwrap) const {
     while (o<e && p < value_+size_) {*o++ = '*'; p++;}
   } else while (o<e) {
     if (wordwrap && (p >= value_+size_ || isspace(*p))) {
-      width_to_lastspace += (int)fl_width(lastspace_out, o-lastspace_out);
+      width_to_lastspace += (int)getwidth(lastspace_out, o-lastspace_out);
       if (p > lastspace+1) {
 	if (word_count && width_to_lastspace > wordwrap) {
 	  p = lastspace; o = lastspace_out; break;
@@ -84,7 +88,7 @@ const char* Fl_Input::expand(const char* p, char* buf,int wordwrap) const {
 }
 
 // After filling in such a buffer, find the width to e:
-float Fl_Input::expandpos(
+float Input::expandpos(
   const char* p,	// real string
   const char* e,	// pointer into real string
   const char* buf,	// conversion of real string by expand()
@@ -102,7 +106,7 @@ float Fl_Input::expandpos(
     }
   }
   if (returnn) *returnn = n;
-  return fl_width(buf, n);
+  return getwidth(buf, n);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -116,29 +120,29 @@ float Fl_Input::expandpos(
 // avoid blinking, not to make draw() less expensive. A few minor attempts
 // to make draw() not think about clipped text are implemented, though.
 
-static Fl_Input* erase_cursor_only;
+static Input* erase_cursor_only;
 
-void Fl_Input::minimal_update(int p) {
+void Input::minimal_update(int p) {
   if (erase_cursor_only == this) erase_cursor_only = 0;
-  if (damage() & FL_DAMAGE_ALL) return; // don't waste time if it won't be done
-  if (damage() & FL_DAMAGE_VALUE) {
+  if (damage() & DAMAGE_ALL) return; // don't waste time if it won't be done
+  if (damage() & DAMAGE_VALUE) {
     if (p < mu_p) mu_p = p;
   } else {
     mu_p = p;
   }
-  redraw(FL_DAMAGE_VALUE);
+  redraw(DAMAGE_VALUE);
 }
 
-void Fl_Input::minimal_update(int p, int q) {
+void Input::minimal_update(int p, int q) {
   if (q < p) p = q;
   minimal_update(p);
 }
 
 // Erase a cursor that was drawn at the given point and possibly draw new one:
-void Fl_Input::erase_cursor_at(int p) {
+void Input::erase_cursor_at(int p) {
   if (!damage()) {
     mu_p = p;
-    redraw(FL_DAMAGE_VALUE);
+    redraw(DAMAGE_VALUE);
     erase_cursor_only = this;
   } else {
     minimal_update(p);
@@ -149,45 +153,46 @@ void Fl_Input::erase_cursor_at(int p) {
 
 static float up_down_pos;
 static bool was_up_down;
-static Fl_Input* dnd_target;
+static Input* dnd_target;
 static int dnd_target_position;
 
-void Fl_Input::setfont() const {
-  fl_font(text_font(), text_size());
+void Input::setfont() const {
+  fltk::setfont(textfont(), textsize());
 }
 
-void Fl_Input::draw() {
-  if (damage() & FL_DAMAGE_ALL) draw_frame();
+void Input::draw() {
+  if (damage() & DAMAGE_ALL) draw_frame();
   int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
   draw(X, Y, W, H);
 }
 
-#if 1
-#define line_height() int(fl_height()+leading()+.5)
-#else
-#define line_height() (text_size()+leading())
-#endif
+static int line_spacing(float leading) {
+  return int(getsize() + leading + .5);
+}
+static float line_ascent(float leading) {
+  return (line_spacing(leading) + getascent() - getdescent()) / 2;
+}
 
-void Fl_Input::draw(int X, int Y, int W, int H)
+void Input::draw(int X, int Y, int W, int H)
 {
   setfont();
-  int height = line_height();
-  float desc = height-fl_descent()-leading()/2.0f;
-
-  if (damage() & FL_DAMAGE_ALL) {
+  const float leading = this->leading();
+  int height = line_spacing(leading);
+  float desc = line_ascent(leading);
+  if (damage() & DAMAGE_ALL) {
     // draw and measure the inside label:
-    if (label() && label()[0] && (!(flags()&15)||(flags()&FL_ALIGN_INSIDE))) {
-      fl_font(label_font(), label_size());
-      float width = fl_width(label());
-      label_width = int(width+fl_width(":")+2.5);
-      fl_color(color());
-      fl_rectf(X, Y, label_width, H);
-      Fl_Color color = label_color();
-      if (!active_r()) color = fl_inactive(color);
-      fl_color(color);
+    if (label() && label()[0] && (!(flags()&15)||(flags()&ALIGN_INSIDE))) {
+      fltk::setfont(labelfont(), labelsize());
+      float width = getwidth(label());
+      label_width = int(width+getwidth(":")+2.5);
+      setcolor(color());
+      fillrect(X, Y, label_width, H);
+      Color color = labelcolor();
+      if (!active_r()) color = inactive(color);
+      setcolor(color);
       float y = Y+((H-height)>>1)+desc;
-      fl_draw(label(), X+2, y);
-      fl_draw(":", X+2+width, y);
+      drawtext(label(), X+2, y);
+      drawtext(":", X+2+width, y);
       setfont();
     } else {
       label_width = 0;
@@ -195,15 +200,15 @@ void Fl_Input::draw(int X, int Y, int W, int H)
   }
   X += label_width; W -= label_width;
 
-  Fl_Color background = color();
+  Color background = color();
   bool erase_cursor_only =
     this == ::erase_cursor_only &&
-    !(damage() & (FL_DAMAGE_ALL|FL_DAMAGE_EXPOSE));
+    !(damage() & (DAMAGE_ALL|DAMAGE_EXPOSE));
 
   // handle a totally blank one quickly:
   if (!size() && !focused() && this != dnd_target) {
-    fl_color(background);
-    fl_rectf(X, Y, W, H);
+    setcolor(background);
+    fillrect(X, Y, W, H);
     return;
   }
 
@@ -273,15 +278,15 @@ void Fl_Input::draw(int X, int Y, int W, int H)
 
   // if we are not doing minimal update a single erase is done,
   // rather than one per line:
-  if (damage() & FL_DAMAGE_ALL) {
-    fl_color(background);
-    fl_rectf(X, Y, W, H);
+  if (damage() & DAMAGE_ALL) {
+    setcolor(background);
+    fillrect(X, Y, W, H);
   }
 
-  fl_push_clip(X, Y, W, H);
+  push_clip(X, Y, W, H);
 
-  Fl_Color textcolor = text_color();
-  if (!active_r()) textcolor = fl_inactive(text_color());
+  Color textcolor = this->textcolor();
+  if (!active_r()) textcolor = inactive(textcolor);
 
   // I leave a small border on the edge which shrinks as the input field
   // gets smaller than 12:
@@ -299,7 +304,7 @@ void Fl_Input::draw(int X, int Y, int W, int H)
 
     if (ypos <= -height) goto CONTINUE; // clipped off top
 
-    if (!(damage()&FL_DAMAGE_ALL)) {	// for minimal update:
+    if (!(damage()&DAMAGE_ALL)) {	// for minimal update:
       const char* pp = value()+mu_p; // pointer to where minimal update starts
       if (e < pp) goto CONTINUE2; // this line is before the changes
       if (erase_cursor_only && p > pp) goto CONTINUE2; // this line is after
@@ -314,9 +319,9 @@ void Fl_Input::draw(int X, int Y, int W, int H)
 	if (erase_cursor_only) r = x+2;
       }
       // clip to and erase it:
-      fl_color(background);
-      fl_rectf(x, Y+ypos, r-x, height);
-      fl_push_clip(x, Y+ypos, r-x, height);
+      setcolor(background);
+      fillrect(x, Y+ypos, r-x, height);
+      push_clip(x, Y+ypos, r-x, height);
       // it now draws entire line over it
       // this should not draw letters to left of erased area, but
       // that is nyi.
@@ -329,9 +334,9 @@ void Fl_Input::draw(int X, int Y, int W, int H)
       float x1 = xpos;
       int offset1 = 0;
       if (pp > p) {
-	fl_color(textcolor);
+	setcolor(textcolor);
 	x1 += expandpos(p, pp, buf, &offset1);
-	fl_draw(buf, offset1, xpos, Y+ypos+desc);
+	drawtext(buf, offset1, xpos, Y+ypos+desc);
       }
       // draw selected text for this line:
       pp = value()+selend;
@@ -339,29 +344,29 @@ void Fl_Input::draw(int X, int Y, int W, int H)
       int offset2;
       if (pp <= e) x2 = xpos+expandpos(p, pp, buf, &offset2);
       else offset2 = strlen(buf);
-      fl_color(selection_color());
-      int xx = int(x1); fl_rectf(xx, Y+ypos, int(x2+.5)-xx, height);
-      fl_color(selection_text_color());
-      fl_draw(buf+offset1, offset2-offset1, x1, Y+ypos+desc);
+      setcolor(selection_color());
+      int xx = int(x1); fillrect(xx, Y+ypos, int(x2+.5)-xx, height);
+      setcolor(selection_textcolor());
+      drawtext(buf+offset1, offset2-offset1, x1, Y+ypos+desc);
       // draw unselected text after the selection:
       if (pp < e) {
-	fl_color(textcolor);
-	fl_draw(buf+offset2, x2, Y+ypos+desc);
+	setcolor(textcolor);
+	drawtext(buf+offset2, x2, Y+ypos+desc);
       }
     } else {
       // draw unselected text:
-      fl_color(textcolor);
-      fl_draw(buf, xpos, Y+ypos+desc);
+      setcolor(textcolor);
+      drawtext(buf, xpos, Y+ypos+desc);
     }
 
-    if (!(damage()&FL_DAMAGE_ALL)) fl_pop_clip();
+    if (!(damage()&DAMAGE_ALL)) pop_clip();
 
   CONTINUE2:
     // draw the cursor:
     if ((this==dnd_target || focused() && selstart == selend) &&
 	cursor_position >= p-value() && cursor_position <= e-value()) {
-      fl_color(textcolor);
-      fl_rectf(xpos+curx, Y+ypos, 2, height);
+      setcolor(textcolor);
+      fillrect(xpos+curx, Y+ypos, 2, height);
     }
 
   CONTINUE:
@@ -372,41 +377,41 @@ void Fl_Input::draw(int X, int Y, int W, int H)
   }
 
   // for minimal update, erase all lines below last one if necessary:
-  if (!(damage()&FL_DAMAGE_ALL) && type() >= MULTILINE && ypos<H
+  if (!(damage()&DAMAGE_ALL) && type() >= MULTILINE && ypos<H
       && (!erase_cursor_only || p <= value()+mu_p)) {
     if (ypos < 0) ypos = 0;
-    fl_color(background);
-    fl_rectf(X, Y+ypos, W, H-ypos);
+    setcolor(background);
+    fillrect(X, Y+ypos, W, H-ypos);
   }
 
-  fl_pop_clip();
+  pop_clip();
 }
 
 static int isword(char c) {
   return (c&128 || isalnum(c) || strchr("#%&-/@\\_~", c));
 }
 
-int Fl_Input::word_end(int i) const {
+int Input::word_end(int i) const {
   if (type() == SECRET) return size();
   while (!i || !isword(index(i-1))) i++;
   while (i < size() && isword(index(i))) i++;
   return i;
 }
 
-int Fl_Input::word_start(int i) const {
+int Input::word_start(int i) const {
   if (type() == SECRET) return 0;
   while (!isword(index(i))) i--;
   while (i > 0 && isword(index(i-1))) i--;
   return i;
 }
 
-int Fl_Input::line_end(int i) const {
+int Input::line_end(int i) const {
   if (type() >= WORDWRAP) {
     // go to the start of the paragraph:
     int j = i;
     while (j > 0 && index(j-1) != '\n') j--;
     // now measure lines until we get past i, end of that line is real eol:
-    int wordwrap = w()-Fl::box_dw(box())-6;
+    int wordwrap = w()-box()->dw()-6;
     setfont();
     for (const char* p=value()+j; ;) {
       char buf[MAXBUF];
@@ -422,13 +427,13 @@ int Fl_Input::line_end(int i) const {
   }
 }
 
-int Fl_Input::line_start(int i) const {
+int Input::line_start(int i) const {
   if (type() < MULTILINE) return 0;
   int j = i;
   while (j > 0 && index(j-1) != '\n') j--;
   if (type() >= WORDWRAP) {
     // now measure lines until we get past i, start of that line is real eol:
-    int wordwrap = w()-Fl::box_dw(box())-6;
+    int wordwrap = w()-box()->dw()-6;
     setfont();
     for (const char* p=value()+j; ;) {
       char buf[MAXBUF];
@@ -440,7 +445,7 @@ int Fl_Input::line_start(int i) const {
   return j;
 }
 
-int Fl_Input::mouse_position(int X, int Y, int W, int /*H*/) const
+int Input::mouse_position(int X, int Y, int W, int /*H*/) const
 {
   if (!size()) return 0;
 
@@ -449,7 +454,7 @@ int Fl_Input::mouse_position(int X, int Y, int W, int /*H*/) const
   // figure out what line we are pointing at:
   int theline = 0;
   if (type() >= MULTILINE) {
-    theline = Fl::event_y()-Y+yscroll_;
+    theline = event_y()-Y+yscroll_;
     if (theline < 0) return 0;
     // CET - FIXME - this widget should keep track of the line heights
     // internally.  Using the style accessor functions is not guaranteed
@@ -457,7 +462,7 @@ int Fl_Input::mouse_position(int X, int Y, int W, int /*H*/) const
     // should _only_ be used in layout() and draw().
     // WAS: I think this is ok. Calls in response to user events can
     // assumme layout() has been called recently.
-    theline /= line_height();
+    theline /= line_spacing(leading());
   }
 
   int wordwrap = (type() > MULTILINE) ? W-8 : 0;
@@ -476,22 +481,22 @@ int Fl_Input::mouse_position(int X, int Y, int W, int /*H*/) const
 
   // Do a binary search for the character that starts before this position:
   int xpos = X-xscroll_; if (W > 12) xpos += 3;
-  const char *l, *r, *t; float f0 = Fl::event_x()-xpos;
+  const char *l, *r, *t; float f0 = event_x()-xpos;
   for (l = p, r = e; l<r; ) {
     t = l+(r-l+1)/2;
     int f = xpos+int(expandpos(p, t, buf, 0)+.5);
-    if (f <= Fl::event_x()) {l = t; f0 = Fl::event_x()-f;}
+    if (f <= event_x()) {l = t; f0 = event_x()-f;}
     else r = t-1;
   }
   // see if closer to character on the right:
   if (l < e) {
-    int f1 = xpos+int(expandpos(p, l+1, buf, 0)+.5)-Fl::event_x();
+    int f1 = xpos+int(expandpos(p, l+1, buf, 0)+.5)-event_x();
     if (f1 < f0) l = l+1;
   }
   return l-value();
 }
 
-void Fl_Input::position(int p, int m) {
+void Input::position(int p, int m) {
   was_up_down = false;
   if (p<0) p = 0;
   if (p>size()) p = size();
@@ -511,10 +516,10 @@ void Fl_Input::position(int p, int m) {
   mark_ = m;
 }
 
-void Fl_Input::up_down_position(int i, bool keepmark) {
+void Input::up_down_position(int i, bool keepmark) {
   // cursor must already be at start of line!
   setfont();
-  int wordwrap = type() > MULTILINE ? w()-Fl::box_dw(box())-6 : 0;
+  int wordwrap = type() > MULTILINE ? w()-box()->dw()-6 : 0;
   char buf[MAXBUF];
   const char* p = value()+i;
   const char* e = expand(p, buf, wordwrap);
@@ -529,13 +534,13 @@ void Fl_Input::up_down_position(int i, bool keepmark) {
   was_up_down = true;
 }
 
-bool Fl_Input::copy(bool clipboard) {
+bool Input::copy(bool clipboard) {
   int b = position();
   int e = mark();
   if (b != e) {
     if (b > e) {b = mark(); e = position();}
     if (type() == SECRET) e = b;
-    Fl::copy(value()+b, e-b, clipboard);
+    fltk::copy(value()+b, e-b, clipboard);
     return true;
   }
   return false;
@@ -545,7 +550,7 @@ bool Fl_Input::copy(bool clipboard) {
 
 static char* undobuffer;
 static int undobufferlength;
-static Fl_Input* undowidget;
+static Input* undowidget;
 static bool undo_is_redo;
 static int undoat;	// points after insertion
 static int undocut;	// number of characters deleted there
@@ -565,7 +570,7 @@ static void undobuffersize(int n) {
 }
 
 // all changes go through here, delete characters b-e and insert text:
-bool Fl_Input::replace(int b, int e, const char* text, int ilen) {
+bool Input::replace(int b, int e, const char* text, int ilen) {
 
   was_up_down = false;
 
@@ -645,11 +650,11 @@ bool Fl_Input::replace(int b, int e, const char* text, int ilen) {
 
   mark_ = position_ = undoat;
 
-  if (when()&FL_WHEN_CHANGED) do_callback(); else set_changed();
+  if (when()&WHEN_CHANGED) do_callback(); else set_changed();
   return true;
 }
 
-bool Fl_Input::undo() {
+bool Input::undo() {
   if (undowidget != this || !undocut && !undoinsert) return false;
   was_up_down = false;
 
@@ -683,35 +688,35 @@ bool Fl_Input::undo() {
   undo_is_redo = !undo_is_redo;
 
   minimal_update(b1);
-  if (when()&FL_WHEN_CHANGED) do_callback(); else set_changed();
+  if (when()&WHEN_CHANGED) do_callback(); else set_changed();
   return true;
 }
 
 #if 0
-bool Fl_Input::yank() {
+bool Input::yank() {
   // fake yank by trying to get it out of undobuffer
   return yankcut && change(position(), position(), undobuffer, yankcut);
 }
 #endif
 
-void Fl_Input::maybe_do_callback() {
-  if (changed() || (when()&FL_WHEN_NOT_CHANGED)) {
+void Input::maybe_do_callback() {
+  if (changed() || (when()&WHEN_NOT_CHANGED)) {
     clear_changed(); do_callback();}
 }
 
 ////////////////////////////////////////////////////////////////
 
-static void revert(Fl_Style *s) {
-  s->leading = 2;
+static void revert(Style *s) {
+  //s->leading = 2; // this is the default now
 }
-static Fl_Named_Style style("Input", revert, &Fl_Input::default_style);
-Fl_Named_Style* Fl_Input::default_style = &::style;
+static NamedStyle style("Input", revert, &Input::default_style);
+NamedStyle* Input::default_style = &::style;
 
-Fl_Input::Fl_Input(int x, int y, int w, int h, const char* l)
-  : Fl_Widget(x, y, w, h, l)
+Input::Input(int x, int y, int w, int h, const char* l)
+  : Widget(x, y, w, h, l)
 {
-  clear_flag(FL_ALIGN_MASK);
-  set_flag(FL_ALIGN_LEFT);
+  clear_flag(ALIGN_MASK);
+  set_flag(ALIGN_LEFT);
   set_click_to_focus();
   mark_ = position_ = size_ = 0;
   bufsize = 0;
@@ -722,7 +727,7 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char* l)
   label_width = 0;
 }
 
-void Fl_Input::put_in_buffer(int len) {
+void Input::put_in_buffer(int len) {
   if (value_ == buffer && bufsize > len) {
     buffer[size_] = 0;
     return;
@@ -748,7 +753,7 @@ void Fl_Input::put_in_buffer(int len) {
   value_ = buffer;
 }
 
-bool Fl_Input::static_value(const char* str, int len) {
+bool Input::static_value(const char* str, int len) {
   clear_changed();
   if (undowidget == this) undowidget = 0;
   if (str == value_ && len == size_) return false;
@@ -778,21 +783,21 @@ bool Fl_Input::static_value(const char* str, int len) {
   return true;
 }
 
-bool Fl_Input::static_value(const char* str) {
+bool Input::static_value(const char* str) {
   return static_value(str, str ? strlen(str) : 0);
 }
 
-bool Fl_Input::value(const char* str, int len) {
+bool Input::value(const char* str, int len) {
   bool ret = static_value(str, len);
   if (len) put_in_buffer(len);
   return ret;
 }
 
-bool Fl_Input::value(const char* str) {
+bool Input::value(const char* str) {
   return value(str, str ? strlen(str) : 0);
 }
 
-Fl_Input::~Fl_Input() {
+Input::~Input() {
   if (undowidget == this) undowidget = 0;
   if (bufsize) free((void*)buffer);
 }
@@ -800,50 +805,50 @@ Fl_Input::~Fl_Input() {
 ////////////////////////////////////////////////////////////////
 
 // Move the point, move the mark only if shift is not held down:
-void Fl_Input::shift_position(int p) {
-  position(p, Fl::event_state(FL_SHIFT) ? mark() : p);
+void Input::shift_position(int p) {
+  position(p, event_state(SHIFT) ? mark() : p);
 }
-void Fl_Input::shift_up_down_position(int p) {
-  up_down_position(p, Fl::event_state(FL_SHIFT));
+void Input::shift_up_down_position(int p) {
+  up_down_position(p, event_state(SHIFT));
 }
 
 // Due to MicroSoft-compatable programs assigning the Emacs control keys
 // to menu items, this is about the best design I could come up with that
 // allows Emacs bindings but allows people who want to reuse those keys
 // for shortcuts to assign them. Previous solutions were not local to
-// Fl_Input, which made it difficult to add or change the key assignments.
+// Input, which made it difficult to add or change the key assignments.
 // This has a recursion test as some programs will turn the shortcut back
 // into a keystroke and report it here...
-bool Fl_Input::key_is_shortcut() {
+bool Input::key_is_shortcut() {
   static bool recursion;
   if (recursion) return false;
   recursion = true;
-  bool ret = Fl::handle(FL_SHORTCUT, window()) != 0;
+  bool ret = fltk::handle(SHORTCUT, window()) != 0;
   recursion = false;
   return ret;
 }
 
-bool Fl_Input::handle_key() {
+bool Input::handle_key() {
 
   int i;
 
   // insert any text:
-  if (Fl::compose(i)) {
-    if (!i && !Fl::event_length()) return 1;
+  if (compose(i)) {
+    if (!i && !event_length()) return 1;
     return replace(position(), i ? position()-i : mark(),
-		   Fl::event_text(), Fl::event_length());
+		   event_text(), event_length());
   }
 
-  bool ctrl = Fl::event_state(FL_CTRL);
-  bool shift = Fl::event_state(FL_SHIFT);
-  bool alt = Fl::event_state(FL_ALT|FL_META);
+  bool ctrl = event_state(CTRL);
+  bool shift = event_state(SHIFT);
+  bool alt = event_state(ALT|COMMAND);
 
-  switch (Fl::event_key()) {
+  switch (event_key()) {
 
   case 'b':
     if (key_is_shortcut()) return true;
     ctrl = alt;
-  case FL_Left:
+  case LeftKey:
     i = position_-1; if (!shift && mark_<i) i = mark_;
     shift_position(ctrl ? word_start(i) : i);
     return true;
@@ -851,7 +856,7 @@ bool Fl_Input::handle_key() {
   case 'f':
     if (key_is_shortcut()) return true;
     ctrl = alt;
-  case FL_Right:
+  case RightKey:
     i = position_+1; if (!shift && mark_>i) i = mark_;
     shift_position(ctrl ? word_end(i) : i);
     return true;
@@ -859,7 +864,7 @@ bool Fl_Input::handle_key() {
   case 'p':
     if (key_is_shortcut()) return true;
     ctrl = alt;
-  case FL_Up:
+  case UpKey:
     if (type() < MULTILINE) return false;
     i = position_; if (!shift && mark_<i) i = mark_;
     i = line_start(i);
@@ -870,7 +875,7 @@ bool Fl_Input::handle_key() {
   case 'n':
     if (key_is_shortcut()) return true;
     ctrl = alt;
-  case FL_Down:
+  case DownKey:
     if (type() < MULTILINE) return false;
     i = position_; if (!shift && mark_>i) i = mark_;
     i = line_end(i);
@@ -878,19 +883,19 @@ bool Fl_Input::handle_key() {
     else up_down_position(i+1, shift);
     return true;
 
-  case FL_Page_Up: {
+  case PageUpKey: {
     if (type() < MULTILINE) return false;
     i = line_start(position());
     setfont();
-    for (int n = h()/line_height(); n--;) i = line_start(i-1);
+    for (int n = h()/line_spacing(leading()); n--;) i = line_start(i-1);
     shift_position(i);
     return true;}
 
-  case FL_Page_Down: {
+  case PageDownKey: {
     if (type() < MULTILINE) return false;
     i = line_end(position());
     setfont();
-    for (int n = h()/line_height(); n--;) i = line_end(i)+1;
+    for (int n = h()/line_spacing(leading()); n--;) i = line_end(i)+1;
     shift_position(i+1);
     return true;}
 
@@ -905,27 +910,27 @@ bool Fl_Input::handle_key() {
     }
     if (key_is_shortcut()) return true;
     ctrl = alt;
-  case FL_Home:
+  case HomeKey:
     shift_position(ctrl ? 0 : line_start(position()));
     return true;
 
   case 'e':
     if (key_is_shortcut()) return true;
     ctrl = alt;
-  case FL_End:
+  case EndKey:
     shift_position(ctrl ? size() : line_end(position()));
     return true;
 
-  case FL_Insert:
+  case InsertKey:
     if (ctrl) copy();
-    else if (shift) Fl::paste(*this, true);
+    else if (shift) paste(*this, true);
     else return false; // CUA toggles insert mode on/off
     return true;
 
   case 'd':
     if (key_is_shortcut()) return true;
     ctrl = alt;
-  case FL_Delete:
+  case DeleteKey:
     // I don't know what CUA does with ctrl+delete, I made it delete words
     if (shift) copy();
     if (mark() != position()) cut();
@@ -935,16 +940,16 @@ bool Fl_Input::handle_key() {
   case 'h': // retro-Emacs, modern versions do "help"
     if (key_is_shortcut()) return true;
     ctrl = alt;
-  case FL_BackSpace:
+  case BackSpaceKey:
     // I don't know what CUA does with ctrl+backspace, I made it delete words
     if (mark() != position()) cut();
     else cut(ctrl ? word_start(position()-1)-position() : -1);
     return true;
 
-  case FL_Enter:
-  case FL_KP_Enter:
+  case ReturnKey:
+  case KeypadEnter:
     // if (key_is_shortcut()) return true;
-    if (when() & FL_WHEN_ENTER_KEY) {
+    if (when() & WHEN_ENTER_KEY) {
       position(size(), 0);
       maybe_do_callback();
       return true;
@@ -952,9 +957,9 @@ bool Fl_Input::handle_key() {
     if (type() < MULTILINE || ctrl || shift) return false;
     return replace(position(), mark(), '\n');
 
-  case FL_Tab:
+  case TabKey:
     /*if (type() < MULTILINE || ctrl || shift)*/ return false;
-    //return replace(position(), mark(), Fl::event_text(), 1);
+    //return replace(position(), mark(), event_text(), 1);
 
   case 'k': // Emacs clear-to-end-of-line
     if (key_is_shortcut()) return true;
@@ -963,7 +968,7 @@ bool Fl_Input::handle_key() {
     if (i == position() && i < size()) i++;
     if (cut(position(), i))
       // Make all the adjacent ^K's go into the clipboard, like Emacs:
-      Fl::copy(undobuffer, yankcut, true);
+      fltk::copy(undobuffer, yankcut, true);
     return true;
 
   case 'c':
@@ -991,7 +996,7 @@ bool Fl_Input::handle_key() {
 
   case 'v':
     if (!ctrl && key_is_shortcut()) return true;
-    Fl::paste(*this,true);
+    paste(*this,true);
     return true;
 
   case 'w': // Emacs cut
@@ -1010,7 +1015,7 @@ bool Fl_Input::handle_key() {
     return undo_is_redo && undo();
 #if 0
     // This is actually Emacs paste so do that if nothing else:
-    Fl::paste(*this,true);
+    paste(*this,true);
     return true;
 #endif
 
@@ -1030,15 +1035,15 @@ bool Fl_Input::handle_key() {
   }
 
   // Insert any other keys (like ^J) into the text, if no shortcuts eat them:
-  if (Fl::event_length()) {
+  if (event_length()) {
     if (key_is_shortcut()) return true;
-    return replace(position(), mark(), Fl::event_text(), Fl::event_length());
+    return replace(position(), mark(), event_text(), event_length());
   }
 
   return false;
 }
 
-int Fl_Input::handle(int event) {
+int Input::handle(int event) {
   int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
   return handle(event, X, Y, W, H);
 }
@@ -1050,43 +1055,35 @@ int Fl_Input::handle(int event) {
 
 #if DND_OUT
 static int drag_start;
-
-// We wait after mouse press for this timeout to start DnD. This is how
-// OS/X is doing DnD now:
-static void dnd_timeout(void* p) {
-  // drag the data:
-  ((Fl_Input*)p)->copy(false);
-  Fl::dnd();
-}
 #endif
 
-int Fl_Input::handle(int event, int X, int Y, int W, int H) {
+int Input::handle(int event, int X, int Y, int W, int H) {
   X += label_width; W -= label_width;
   int newpos, newmark;
 
   switch (event) {
 
-  case FL_ENTER:
-  case FL_LEAVE:
-  case FL_MOVE:
+  case ENTER:
+  case LEAVE:
+  case MOVE:
     return 1; // For tooltips
 
-  case FL_FOCUS:
+  case FOCUS:
 #if 0
-    switch (Fl::event_key()) {
-    case FL_Right:
+    switch (event_key()) {
+    case Right:
       position(0);
       break;
-    case FL_Left:
+    case Left:
       position(size());
       break;
-    case FL_Down:
+    case Down:
       up_down_position(0, 0);
       break;
-    case FL_Up:
+    case Up:
       up_down_position(line_start(size()), 0);
       break;
-    case FL_Tab:
+    case Tab:
       position(size(),0);
       break;
     default:
@@ -1094,7 +1091,7 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
       break;
     }
 #else
-    if (Fl::event() == FL_KEY) {
+    if (fltk::event() == KEY) {
       position(size(),0);
     } else {
       position(position(), mark());
@@ -1104,30 +1101,38 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
     if (mark_ != position_) minimal_update(mark_, position_);
     // else just make the cursor appear:
     else minimal_update(size()+1);
-    return 2; // returns 2 to make Fl_Group think it really important
+    return 2; // returns 2 to make Group think it really important
 
-  case FL_UNFOCUS:
+  case UNFOCUS:
     // redraw the highlight area:
     if (mark_ != position_) minimal_update(mark_, position_);
     // else make the cursor disappear:
     else erase_cursor_at(position_);
-  case FL_HIDE:
-    if (when() & FL_WHEN_RELEASE) maybe_do_callback();
+  case HIDE:
+    if (when() & WHEN_RELEASE) maybe_do_callback();
     return 1;
 
-  case FL_SHORTCUT:
+  case SHORTCUT:
     // If the user types text to a widget that does not want it, it will
     // call here eventually. Take the focus on the assumption they are
     // trying to type into this text field:
-    if (Fl::event_text()[0]<=' ') return 0;
-    if (Fl::event_state(FL_ALT|FL_WIN)) return 0;
-    //if (key_is_shortcut()) return 0; // did not work, needs recursion test
+#if 1
+    if (event_text()[0] < ' ' && event_key() != BackSpaceKey) return 0;
+    if (event_state(ALT|COMMAND)) return 0;
+#else
+    // attempt to see if nobody else interested in key. This did not
+    // work as keys that did nothing still moved the focus.
+    {static bool recursion;
+    if (recursion) return 0;
+    recursion = true; bool r = key_is_shortcut(); recursion = false;
+    if (r) return 0;}
+#endif
     position(size());
     take_focus();
-  case FL_KEYBOARD:
+  case KEY:
     return handle_key();
 
-  case FL_PUSH:
+  case PUSH:
     newpos = mouse_position(X, Y, W, H);
 #if DND_OUT
     // detect if the user tries to grab the selected text:
@@ -1136,29 +1141,39 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 	newpos >= position() && newpos < mark())) {
       drag_start = newpos;
       // Wait to see if they move the mouse much before dragging:
-      Fl::add_timeout(.25, dnd_timeout, this);
+      add_timeout(.25);
       return 1;
     }
     drag_start = -1;
 #endif
     //take_focus();
-    newmark = Fl::event_state(FL_SHIFT) ? mark() : newpos;
+    newmark = event_state(SHIFT) ? mark() : newpos;
     goto HANDLE_MOUSE;
 
-  case FL_DRAG:
+#if DND_OUT
+  case TIMEOUT:
+    if (drag_start >= 0) {
+      drag_start = -1;
+      copy(false);
+      fltk::dnd();
+    }
+    return 1;
+#endif
+
+  case DRAG:
 #if DND_OUT
     if (drag_start >= 0) { // if they started inside the selection
-      if (Fl::event_is_click()) return 1; // wait until debounce is done
+      if (event_is_click()) return 1; // wait until debounce is done
       // give up on DnD and start the selection:
-      Fl::remove_timeout(dnd_timeout, this);
-      newmark = Fl::event_state(FL_SHIFT) ? mark() : drag_start;
+      remove_timeout();
+      newmark = event_state(SHIFT) ? mark() : drag_start;
       drag_start = -1;
     } else
 #endif
       newmark = mark();
     newpos = mouse_position(X, Y, W, H);
   HANDLE_MOUSE:
-    if (Fl::event_clicks()) {
+    if (event_clicks()) {
       // Multiple clicks, expand the selection to word/line boundaries:
       int savepos = newpos;
       if (newpos >= newmark) {
@@ -1166,7 +1181,7 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 	  if (newpos < size()) newpos++;
 	  else newmark--;
 	}
-	if (Fl::event_clicks() > 1) {
+	if (event_clicks() > 1) {
 	  newpos = line_end(newpos);
 	  newmark = line_start(newmark);
 	} else {
@@ -1174,7 +1189,7 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 	  newmark = word_start(newmark);
 	}
       } else {
-	if (Fl::event_clicks() > 1) {
+	if (event_clicks() > 1) {
 	  newpos = line_start(newpos);
 	  newmark = line_end(newmark);
 	} else {
@@ -1184,38 +1199,38 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
       }
       // If the multiple click does not increase the selection, revert
       // to single-click behavior:
-      if (event != FL_DRAG && (mark() > position() ?
+      if (event != DRAG && (mark() > position() ?
 		    (newmark >= position() && newpos <= mark()) :
 		    (newmark >= mark() && newpos <= position()))) {
-	Fl::event_clicks(0);
+	event_clicks(0);
 	newmark = newpos = savepos;
       }
     }
     position(newpos, newmark);
-    return 1;
+    if (event != RELEASE) return 1;
 
-  case FL_RELEASE:
+  case RELEASE:
 #if DND_OUT
     // if they just clicked in the middle of selection, move cursor there:
     if (drag_start >= 0) {
       newpos = newmark = drag_start; drag_start = -1;
-      Fl::remove_timeout(dnd_timeout, this);
+      remove_timeout();
       goto HANDLE_MOUSE;
     }
 #endif
-    if (Fl::event_button() == 2) {
-      Fl::event_is_click(0); // stop double-click from picking a word
-      Fl::paste(*this,false);
-    } else if (!Fl::event_is_click()) {
+    if (event_button() == 2) {
+      event_is_click(0); // stop double-click from picking a word
+      paste(*this,false);
+    } else if (position_ != mark_) {
       // copy drag-selected text for middle-mouse click:
       copy(false);
     }
     return 1;
 
-  case FL_DND_ENTER:
-    Fl::belowmouse(this); // send the leave events first
+  case DND_ENTER:
+    fltk::belowmouse(this); // send the leave events first
     // fall through:
-  case FL_DND_DRAG: {
+  case DND_DRAG: {
     int p = mouse_position(X, Y, W, H);
 #if 0 //DND_OUT
     // detect if they are dropping atop the original selection:
@@ -1239,24 +1254,24 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
     }
     return 1;}
 
-  case FL_DND_LEAVE:
+  case DND_LEAVE:
     if (dnd_target == this) {
       dnd_target = 0;
       erase_cursor_at(dnd_target_position);
     }
     return 1;
 
-  case FL_DND_RELEASE:
+  case DND_RELEASE:
 #if DND_OUT
     if (dnd_target != this) return 0;
     if (focused()) {
       int p = dnd_target_position;
       if (p <= position() && p <= mark()) {
 	// we are inserting before the selection
-	if (!Fl::event_state(FL_SHIFT|FL_CTRL|FL_ALT|FL_WIN)) cut();
+	if (!event_state(SHIFT|CTRL|ALT|COMMAND)) cut();
       } else if (p >= position() && p >= mark()) {
 	// we are inserting after the selection, cut & adjust offset
-	if (!Fl::event_state(FL_SHIFT|FL_CTRL|FL_ALT|FL_WIN)) {
+	if (!event_state(SHIFT|CTRL|ALT|COMMAND)) {
 	  dnd_target_position -= abs(mark()-position());
 	  cut();
 	}
@@ -1273,9 +1288,9 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
     take_focus();
     return 1;
 
-  case FL_PASTE: {
-    const char* t = Fl::event_text();
-    int n = Fl::event_length();
+  case PASTE: {
+    const char* t = event_text();
+    int n = event_length();
     // strip trailing nulls:
     while (n > 0 && !t[n-1]) n--;
     // strip all trailing control & whitespace for single-line inputs:
@@ -1289,5 +1304,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.73 2002/10/26 09:55:30 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.74 2002/12/09 04:52:25 spitzak Exp $".
 //

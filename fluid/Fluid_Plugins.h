@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Plugins.h,v 1.15 2001/08/05 10:48:38 spitzak Exp $"
+// "$Id: Fluid_Plugins.h,v 1.16 2002/12/09 04:52:22 spitzak Exp $"
 //
 // Plugins headers for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 #define FLUID_PLUGINS_H
 
 struct Fl_Menu_Item;
-class Fl_Group;
+namespace fltk {class Group;}
 
 #define PLUGINS_EXTENSION ".flpl"
 
@@ -41,7 +41,7 @@ struct Fluid_Plugin {
   int           please_show_panel; // Set it to 1 when a widget use 
                                    // some settings of this panel
 
-  Fl_Group*    panel;		   // This has to be filled by the
+  fltk::Group*    panel;		   // This has to be filled by the
                                    // make panel function
 
   // dynamic variables used by fluid only
@@ -75,5 +75,5 @@ void read_plugins();
 #endif
 
 //
-// End of "$Id: Fluid_Plugins.h,v 1.15 2001/08/05 10:48:38 spitzak Exp $"
+// End of "$Id: Fluid_Plugins.h,v 1.16 2002/12/09 04:52:22 spitzak Exp $"
 //

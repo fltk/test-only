@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key_mac.cxx,v 1.2 2002/09/09 01:39:58 spitzak Exp $"
+// "$Id: Fl_get_key_mac.cxx,v 1.3 2002/12/09 04:52:27 spitzak Exp $"
 //
 // MacOS keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
@@ -27,11 +27,11 @@
 // which are actually X keysyms.  So this has to translate to macOS
 // symbols.
 
-#include <fltk/Fl.h>
+#include <fltk/events.h>
 #include <fltk/x.h>
 
 // convert an FLTK (X) keysym to a MacOS symbol:
-// See also the inverse converter in Fl_mac.cxx
+// See also the inverse converter in mac.cxx
 // This table is in numeric order by FLTK symbol order for binary search:
 
 static const struct {unsigned short vk, fltk;} vktab[] = {
@@ -47,21 +47,21 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   { 32, 'U' }, {  9, 'V'  }, { 13, 'W'  }, {  7, 'X'  }, 
   { 16, 'Y' }, {  6, 'Z'  }, 
   { 33, '[' }, { 30, ']' }, { 50, '`' },  { 42, '|' },
-  { 51, FL_BackSpace }, { 48, FL_Tab }, { 36, FL_Enter }, { 127, FL_Pause },
-  { 107, FL_Scroll_Lock }, { 53, FL_Escape }, { 0x73, FL_Home }, { 123, FL_Left },
-  { 126, FL_Up }, { 124, FL_Right }, { 125, FL_Down }, { 0x74, FL_Page_Up },
-  { 0x79, FL_Page_Down },  { 119, FL_End }, { 0x71, FL_Print }, { 127, FL_Insert },
-  { 127, FL_Menu }, { 114, FL_Help }, { 0x47, FL_Num_Lock }, 
-  { 76, FL_KP_Enter }, { 67, FL_KP+'*' }, { 69, FL_KP+'+'}, { 78, FL_KP+'-' }, { 65, FL_KP+'.' }, { 75, FL_KP+'/' }, 
-  { 82, FL_KP+'0' }, { 83, FL_KP+'1' }, { 84, FL_KP+'2' }, { 85, FL_KP+'3' }, 
-  { 86, FL_KP+'4' }, { 87, FL_KP+'5' }, { 88, FL_KP+'6' }, { 89, FL_KP+'7' }, 
-  { 91, FL_KP+'8' }, { 92, FL_KP+'9' }, { 81, FL_KP+'=' }, 
-  { 0x7a, FL_F+1 }, { 0x78, FL_F+2  }, { 0x63, FL_F+3  }, { 0x76, FL_F+4  }, 
-  { 0x60, FL_F+5 }, { 0x61, FL_F+6  }, { 0x62, FL_F+7  }, { 0x64, FL_F+8  }, 
-  { 0x65, FL_F+9 }, { 0x6D, FL_F+10 }, { 0x67, FL_F+11 }, { 0x6f, FL_F+12 }, 
-  { 56, FL_Shift_L }, { 56, FL_Shift_R }, { 55, FL_Control_L }, { 55, FL_Control_R }, 
-  { 57, FL_Caps_Lock }, { 59, FL_Meta_L }, { 59, FL_Meta_R },
-  { 58, FL_Alt_L }, { 58, FL_Alt_R },
+  { 51, BackSpace }, { 48, Tab }, { 36, Enter }, { 127, Pause },
+  { 107, ScrollLockKey }, { 53, Escape }, { 0x73, Home }, { 123, Left },
+  { 126, Up }, { 124, Right }, { 125, Down }, { 0x74, Page_Up },
+  { 0x79, Page_Down },  { 119, End }, { 0x71, Print }, { 127, Insert },
+  { 127, MenuKey }, { 114, Help }, { 0x47, Num_Lock }, 
+  { 76, Keypad_Enter }, { 67, Keypad+'*' }, { 69, Keypad+'+'}, { 78, Keypad+'-' }, { 65, Keypad+'.' }, { 75, Keypad+'/' }, 
+  { 82, Keypad+'0' }, { 83, Keypad+'1' }, { 84, Keypad+'2' }, { 85, Keypad+'3' }, 
+  { 86, Keypad+'4' }, { 87, Keypad+'5' }, { 88, Keypad+'6' }, { 89, Keypad+'7' }, 
+  { 91, Keypad+'8' }, { 92, Keypad+'9' }, { 81, Keypad+'=' }, 
+  { 0x7a, F+1 }, { 0x78, F+2  }, { 0x63, F+3  }, { 0x76, F+4  }, 
+  { 0x60, F+5 }, { 0x61, F+6  }, { 0x62, F+7  }, { 0x64, F+8  }, 
+  { 0x65, F+9 }, { 0x6D, F+10 }, { 0x67, F+11 }, { 0x6f, F+12 }, 
+  { 56, Shift_L }, { 56, Shift_R }, { 55, Control_L }, { 55, Control_R }, 
+  { 57, Caps_Lock }, { 59, Meta_L }, { 59, Meta_R },
+  { 58, Alt_L }, { 58, Alt_R },
 };
 
 static int fltk2mac(int fltk) {
@@ -76,14 +76,14 @@ static int fltk2mac(int fltk) {
 }
 
 //: returns true, if that key was pressed during the last event
-int Fl::event_key(int k) {
+int event_key(int k) {
   return get_key(k);
 }
 
 #include <stdio.h>
 
 //: returns true, if that key is pressed right now
-int Fl::get_key(int k) {
+int get_key(int k) {
   KeyMap foo;
   GetKeys(foo);
 #ifdef MAC_TEST_FOR_KEYCODES
@@ -99,5 +99,5 @@ int Fl::get_key(int k) {
 }
 
 //
-// End of "$Id: Fl_get_key_mac.cxx,v 1.2 2002/09/09 01:39:58 spitzak Exp $".
+// End of "$Id: Fl_get_key_mac.cxx,v 1.3 2002/12/09 04:52:27 spitzak Exp $".
 //

@@ -27,9 +27,9 @@
 // for other system-specific code.
 
 #include <config.h>
-#include <fltk/Fl.h>
+#include <fltk/events.h>
 #include <fltk/x.h>
-#include <fltk/Fl_Window.h>
+#include <fltk/Window.h>
 
 extern EventRef fl_os_event;
 extern char *fl_selection_buffer;
@@ -39,9 +39,9 @@ extern int fl_selection_length;
 /**
  * drag and drop whatever is in the cut-copy-paste buffer
  * - create a selection first using: 
- *     Fl::copy(const char *stuff, int len, 0)
+ *     copy(const char *stuff, int len, 0)
  */
-int Fl::dnd()
+int dnd()
 {
   OSErr result;
   DragReference dragRef;
@@ -65,11 +65,11 @@ int Fl::dnd()
   ConvertEventRefToEventRecord( fl_os_event, &event );
   result = TrackDrag( dragRef, &event, region );
 
-  Fl_Widget *w = Fl::pushed();
+  Widget *w = pushed();
   if ( w )
   {
-    w->handle( FL_RELEASE );
-    Fl::pushed( 0 );
+    w->handle( RELEASE );
+    pushed( 0 );
   }
 
   if ( result != noErr ) { DisposeRgn( region ); DisposeDrag( dragRef ); return false; }

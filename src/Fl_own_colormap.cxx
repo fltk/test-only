@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_own_colormap.cxx,v 1.6 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: Fl_own_colormap.cxx,v 1.7 2002/12/09 04:52:27 spitzak Exp $"
 //
 // Private colormap support for the Fast Light Tool Kit (FLTK).
 //
@@ -31,23 +31,23 @@
 // and copy the first 16 colors from the default colormap so that we won't
 // get huge color changes when switching windows.
 
-#include <config.h>
-#include <fltk/Fl.h>
+#include <fltk/visual.h>
 #include <fltk/x.h>
+#include <config.h>
 
 #ifdef _WIN32
 // There is probably something relevant to do on MSWindows 8-bit displays
 // but I don't know what it is
 
-void Fl::own_colormap() {}
+void fltk::own_colormap() {}
 
 #else
 // X version
 
-void Fl::own_colormap() {
-  fl_open_display();
+void fltk::own_colormap() {
+  open_display();
 #if USE_COLORMAP
-  switch (fl_visual->c_class) {
+  switch (xvisual->c_class) {
   case GrayScale :
   case PseudoColor :
   case DirectColor :
@@ -59,19 +59,19 @@ void Fl::own_colormap() {
   XColor colors[16];
   // Get the first 16 colors from the default colormap...
   for (i = 0; i < 16; i ++) colors[i].pixel = i;
-  XQueryColors(fl_display, fl_colormap, colors, 16);
+  XQueryColors(xdisplay, xcolormap, colors, 16);
   // Create a new colormap...
-  fl_colormap = XCreateColormap(fl_display,
-				RootWindow(fl_display,fl_screen),
-				fl_visual->visual, AllocNone);
+  xcolormap = XCreateColormap(xdisplay,
+			      RootWindow(xdisplay,xscreen),
+			      xvisual->visual, AllocNone);
   // Copy those first 16 colors to our own colormap:
   for (i = 0; i < 16; i ++)
-    XAllocColor(fl_display, fl_colormap, colors + i);
+    XAllocColor(xdisplay, xcolormap, colors + i);
 #endif
 }
 
 #endif
 
 //
-// End of "$Id: Fl_own_colormap.cxx,v 1.6 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: Fl_own_colormap.cxx,v 1.7 2002/12/09 04:52:27 spitzak Exp $".
 //

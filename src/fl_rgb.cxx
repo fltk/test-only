@@ -1,5 +1,5 @@
 // Function to turn a string into a color.  Used by themes and switches.
-// (the function fl_rgb(r,g,b) is an inline function in Fl_Color.h)
+// (the function color(r,g,b) is an inline function in Color.h)
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -22,16 +22,16 @@
 //
 
 #include <fltk/x.h>
-#include <fltk/Fl_Color.h>
+#include <fltk/Color.h>
 #include <stdio.h>
 
-Fl_Color fl_rgb(const char* name) {
-  if (!name || !*name) return FL_NO_COLOR;
+fltk::Color fltk::color(const char* name) {
+  if (!name || !*name) return NO_COLOR;
   int R,G,B;
-  Fl_Color c;
+  Color c;
   // read the KDE-style d,d,d color:
   if (sscanf(name, "%d,%d,%d", &R,&G,&B) == 3) {
-    c = fl_rgb(R,G,B);
+    c = color(R,G,B);
   } else {
 #ifdef _WIN32
     // simulation of XParseColor:
@@ -45,26 +45,26 @@ Fl_Color fl_rgb(const char* name) {
       case 2: pattern = "%2x%2x%2x"; break;
       case 3: pattern = "%3x%3x%3x"; break;
       case 4: pattern = "%4x%4x%4x"; break;
-      default: return FL_NO_COLOR;
+      default: return NO_COLOR;
     }
-    if (sscanf(name, pattern, &R,&G,&B) != 3) return FL_NO_COLOR;
+    if (sscanf(name, pattern, &R,&G,&B) != 3) return NO_COLOR;
     switch(m) {
       case 1: R *= 0x11; G *= 0x11; B *= 0x11; break;
       case 3: R >>= 4; G >>= 4; B >>= 4; break;
       case 4: R >>= 8; G >>= 8; B >>= 8; break;
     }
-    c = fl_rgb(R,G,B);
+    c = color(R,G,B);
 #else
     XColor x;
-    fl_open_display();
-    if (!XParseColor(fl_display, fl_colormap, name, &x)) return FL_NO_COLOR;
-    c = fl_rgb(x.red>>8, x.green>>8, x.blue>>8);
+    open_display();
+    if (!XParseColor(xdisplay, xcolormap, name, &x)) return NO_COLOR;
+    c = color(x.red>>8, x.green>>8, x.blue>>8);
 #endif
   }
-  if (!c) c = FL_BLACK;
+  if (!c) c = BLACK;
   return c;
 }
 
 //
-// End of "$Id: fl_rgb.cxx,v 1.4 2001/07/29 22:04:44 spitzak Exp $".
+// End of "$Id: fl_rgb.cxx,v 1.5 2002/12/09 04:52:30 spitzak Exp $".
 //

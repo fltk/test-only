@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arc.cxx,v 1.10 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: fl_arc.cxx,v 1.11 2002/12/09 04:52:28 spitzak Exp $"
 //
 // Arc functions for the Fast Light Tool Kit (FLTK).
 //
@@ -24,15 +24,16 @@
 //
 
 // Utility for drawing arcs and circles.  They are added to
-// the current fl_begin/fl_vertex/fl_end path.
+// the current begin/vertex/end path.
 
 // Based on code donated by Jim Wilson
 
-#include <fltk/fl_draw.h>
+#include <fltk/draw.h>
 #include <fltk/math.h>
+using namespace fltk;
 
-void fl_arc(float l, float b, float w, float h, float start, float end) {
-
+void fltk::addarc(float l, float b, float w, float h, float start, float end)
+{
   const float x = l+w/2;
   const float y = b+h/2;
   float angle = start*float(M_PI/180);
@@ -50,8 +51,8 @@ void fl_arc(float l, float b, float w, float h, float start, float end) {
   
   float epsilon; {
     // calculate area of parallelogram defined by diameters
-    float dx1,dy1; dx1=w; dy1=0; fl_transform_distance(dx1,dy1);
-    float dx2,dy2; dx2=0; dy2=h; fl_transform_distance(dx2,dy2);
+    float dx1,dy1; dx1=w; dy1=0; transform_distance(dx1,dy1);
+    float dx2,dy2; dx2=0; dy2=h; transform_distance(dx2,dy2);
     float r = fabsf(dx1*dy2 - dx2*dy1);
     r = .5f*sqrtf(r);     // approximate radius
     // I don't understand this part:
@@ -67,7 +68,7 @@ void fl_arc(float l, float b, float w, float h, float start, float end) {
     epsilon = angle/i;		// Arc length for equal-size steps
     // calculate transformation matrix that does rotation by epsilon in
     // a scaled by w,h coordinate system. We could in fact figure out a
-    // transformation for the actual current fl_transform and calculate
+    // transformation for the actual current transform and calculate
     // real pixel positions, have not figured this out yet:
     const float m00 = cosf(epsilon);
     const float m11 = m00;
@@ -82,15 +83,15 @@ void fl_arc(float l, float b, float w, float h, float start, float end) {
       *p++ = y + Y;
     } while (--i);
   }
-  fl_vertices((p-points[0])/2, points);
+  addvertices((p-points[0])/2, points);
 }
 
-#if 0 // portable version.  X-specific one in fl_vertex.C
-void fl_circle(float x,float y,float r) {
-  _fl_arc(x, y, r, r, 0, 360);
+#if 0 // portable version.  X-specific one in vertex.C
+void fltk::addcircle(float x,float y,float r) {
+  add_arc(x, y, r, r, 0, 360);
 }
 #endif
 
 //
-// End of "$Id: fl_arc.cxx,v 1.10 2002/09/16 00:29:06 spitzak Exp $".
+// End of "$Id: fl_arc.cxx,v 1.11 2002/12/09 04:52:28 spitzak Exp $".
 //

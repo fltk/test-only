@@ -1,5 +1,5 @@
 //
-// "$Id: scandir_win32.c,v 1.15 2001/08/08 06:28:11 spitzak Exp $"
+// "$Id: scandir_win32.c,v 1.16 2002/12/09 04:52:30 spitzak Exp $"
 //
 // _WIN32 scandir function for the Fast Light Tool Kit (FLTK).
 //
@@ -95,5 +95,5 @@ int scandir(const char *dirname, struct dirent ***namelist,
 }
 
 //
-// End of "$Id: scandir_win32.c,v 1.15 2001/08/08 06:28:11 spitzak Exp $".
+// End of "$Id: scandir_win32.c,v 1.16 2002/12/09 04:52:30 spitzak Exp $".
 //

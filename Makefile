@@ -1,4 +1,4 @@
-# "$Id: Makefile,v 1.26 2002/02/10 22:57:47 spitzak Exp $"
+# "$Id: Makefile,v 1.27 2002/12/09 04:52:21 spitzak Exp $"
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -24,7 +24,8 @@
 
 SHELL=/bin/sh
 
-DIRS	= src images fluid forms OpenGL glut themes test
+DIRS	= src images fluid OpenGL themes test
+# forms and glut are removed for now
 
 GENERATED = makeinclude fltk-config
 
@@ -114,5 +115,5 @@ native-dist:
 	epm -v -f native fltk
 
 #
-# End of "$Id: Makefile,v 1.26 2002/02/10 22:57:47 spitzak Exp $".
+# End of "$Id: Makefile,v 1.27 2002/12/09 04:52:21 spitzak Exp $".
 #

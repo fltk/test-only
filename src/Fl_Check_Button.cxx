@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.37 2002/02/10 22:57:48 spitzak Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.38 2002/12/09 04:52:24 spitzak Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,51 +23,53 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Check_Button.h>
-#include <fltk/fl_draw.h>
-#include <fltk/Fl_Group.h>
+#include <fltk/CheckButton.h>
+#include <fltk/Group.h>
+#include <fltk/Box.h>
+#include <fltk/draw.h>
 
-static void default_glyph(const Fl_Widget* widget, int glyph,
-			  int x,int y,int w,int h, Fl_Flags flags)
+using namespace fltk;
+
+static void default_glyph(const Widget* widget, int glyph,
+			  int x,int y,int w,int h, Flags flags)
 {
-  Fl_Boxtype box = widget->button_box();
-  box->draw(x, y, w, h, widget->button_color(), flags);
+  Box* box = widget->buttonbox();
+  box->draw(x, y, w, h, widget->buttoncolor(), flags);
   box->inset(x, y, w, h);
-  if (flags & FL_VALUE) {
-    Fl_Color color = (box == FL_NO_BOX && (flags&FL_SELECTED)) ?
-      widget->selection_text_color() : widget->text_color();
-    fl_color(fl_inactive(color, flags));
+  if (flags & VALUE) {
+    Color color = (box == NO_BOX && (flags&SELECTED)) ?
+      widget->selection_textcolor() : widget->textcolor();
+    setcolor(inactive(color, flags));
     x += 1;
     w = h - 2;
     int d1 = w/3;
     int d2 = w-d1;
     y += (h+d2)/2-d1-2;
     for (int n = 0; n < 3; n++, y++) {
-      fl_line(x, y, x+d1, y+d1);
-      fl_line(x+d1, y+d1, x+w-1, y+d1-d2+1);
+      drawline(x, y, x+d1, y+d1);
+      drawline(x+d1, y+d1, x+w-1, y+d1-d2+1);
     }
   }
 }
 
-void Fl_Check_Button::draw() {
-  Fl_Button::draw(0, text_size()+2);
+void CheckButton::draw() {
+  Button::draw(0, int(textsize())+2);
 }
 
-static void revert(Fl_Style* s) {
-  s->box = FL_NO_BOX;
-  s->color = FL_GRAY;
-  s->button_box = FL_DOWN_BOX;
-  s->button_color = FL_WHITE;
+static void revert(Style* s) {
+  s->box = NO_BOX;
+  s->color = GRAY75;
+  s->buttonbox = DOWN_BOX;
+  s->buttoncolor = WHITE;
   s->glyph = ::default_glyph;
 }
-static Fl_Named_Style style("Check_Button", revert, &Fl_Check_Button::default_style);
-Fl_Named_Style* Fl_Check_Button::default_style = &::style;
+static NamedStyle style("Check_Button", revert, &CheckButton::default_style);
+NamedStyle* CheckButton::default_style = &::style;
 
-Fl_Check_Button::Fl_Check_Button(int x, int y, int w, int h, const char *l)
-  : Fl_Button(x, y, w, h, l)
+CheckButton::CheckButton(int x, int y, int w, int h, const char *l)
+  : Button(x, y, w, h, l)
 {
   style(default_style);
   type(TOGGLE);
-  set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+  set_flag(ALIGN_LEFT|ALIGN_INSIDE);
 }

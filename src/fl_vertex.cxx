@@ -1,9 +1,9 @@
 //
-// "$Id: fl_vertex.cxx,v 1.17 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.18 2002/12/09 04:52:30 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
-// Also see fl_arc.cxx and fl_curve.cxx
+// Also see arc.cxx and curve.cxx
 //
 // Copyright 2001 by Bill Spitzak and others.
 //
@@ -25,9 +25,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/fl_draw.h>
-#include <fltk/x.h>
+#include <fltk/draw.h>
 #include <fltk/math.h>
+#include <fltk/x.h>
 #include <stdlib.h>
 
 ////////////////////////////////////////////////////////////////
@@ -43,11 +43,11 @@ static Matrix m = {1, 0, 0, 1, 0, 0, 0, 0, true};
 static Matrix stack[10];
 static int sptr = 0;
 
-void fl_push_matrix() {stack[sptr++] = m;}
+void fltk::push_matrix() {stack[sptr++] = m;}
 
-void fl_pop_matrix() {m = stack[--sptr];}
+void fltk::pop_matrix() {m = stack[--sptr];}
 
-void fl_mult_matrix(float a, float b, float c, float d, float x, float y) {
+void fltk::concat(float a, float b, float c, float d, float x, float y) {
   if (m.trivial) {
     m.a = a; m.b = b; m.c = c; m.d = d;
     m.x += x; m.ix = int(floorf(m.x+.5f));
@@ -66,34 +66,34 @@ void fl_mult_matrix(float a, float b, float c, float d, float x, float y) {
   }
 }
 
-void fl_scale(float x,float y) {
-  if (x != 1.0 && y != 1.0) fl_mult_matrix(x,0,0,y,0,0);
+void fltk::scale(float x,float y) {
+  if (x != 1.0 && y != 1.0) concat(x,0,0,y,0,0);
 }
 
-void fl_scale(float x) {
-  if (x != 1.0) fl_mult_matrix(x,0,0,x,0,0);
+void fltk::scale(float x) {
+  if (x != 1.0) concat(x,0,0,x,0,0);
 }
 
-void fl_translate(float x,float y) {
+void fltk::translate(float x,float y) {
   if (m.trivial) {
     m.x += x; m.ix = int(floorf(m.x+.5f));
     m.y += y; m.iy = int(floorf(m.y+.5f));
     m.trivial = m.ix==m.x && m.iy==m.y;
   } else {
-    fl_mult_matrix(1,0,0,1,x,y);
+    concat(1,0,0,1,x,y);
   }
 }
 
-void fl_translate(int x, int y) {
+void fltk::translate(int x, int y) {
   if (m.trivial) {
-    m.ix += x; m.x = m.ix;
-    m.iy += y; m.y = m.iy;
+    m.ix += x; m.x = float(m.ix);
+    m.iy += y; m.y = float(m.iy);
   } else {
-    fl_mult_matrix(1,0,0,1,x,y);
+    concat(1,0,0,1,float(x),float(y));
   }
 }
 
-void fl_rotate(float d) {
+void fltk::rotate(float d) {
   if (d) {
     float s, c;
     if (d == 0) {s = 0; c = 1;}
@@ -101,11 +101,11 @@ void fl_rotate(float d) {
     else if (d == 180) {s = 0; c = -1;}
     else if (d == 270 || d == -90) {s = -1; c = 0;}
     else {s = sinf(d*float(M_PI/180)); c = cosf(d*float(M_PI/180));}
-    fl_mult_matrix(c,-s,s,c,0,0);
+    concat(c,-s,s,c,0,0);
   }
 }
 
-void fl_load_identity() {
+void fltk::load_identity() {
   m.a = 1; m.b = 0; m.c = 0; m.d = 1;
   m.x = 0; m.y = 0;
   m.ix = 0; m.iy = 0;
@@ -115,7 +115,7 @@ void fl_load_identity() {
 ////////////////////////////////////////////////////////////////
 // Return the transformation of points:
 
-void fl_transform(float& x, float& y) {
+void fltk::transform(float& x, float& y) {
   if (!m.trivial) {
     float t = x*m.a + y*m.c + m.x;
     y = x*m.b + y*m.d + m.y;
@@ -126,7 +126,7 @@ void fl_transform(float& x, float& y) {
   }
 }
 
-void fl_transform_distance(float& x, float& y) {
+void fltk::transform_distance(float& x, float& y) {
   if (!m.trivial) {
     float t = x*m.a + y*m.c;
     y = x*m.b + y*m.d;
@@ -134,7 +134,7 @@ void fl_transform_distance(float& x, float& y) {
   }
 }
 
-void fl_transform(int& x, int& y) {
+void fltk::transform(int& x, int& y) {
   if (!m.trivial) {
     int t = int(floorf(x*m.a + y*m.c + m.x + .5f));
     y = int(floorf(x*m.b + y*m.d + m.y + .5f));
@@ -156,9 +156,9 @@ typedef short COORD_T;
 #endif
 
 // Storage of the current path:
-static XPoint *point; // all the points
+static XPoint *xpoint; // all the points
 static int point_array_size;
-static int points; // number of points
+static int numpoints; // number of points
 static int loop_start; // point at start of current loop
 static int* loop; // number of points in each loop
 static int loops; // number of loops
@@ -166,22 +166,22 @@ static int loop_array_size;
 
 static void add_n_points(int n) {
   point_array_size = point_array_size ? 2*point_array_size : 16;
-  if (points+n >= point_array_size) point_array_size = n;
-  point = (XPoint*)realloc((void*)point, (point_array_size+1)*sizeof(XPoint));
+  if (numpoints+n >= point_array_size) point_array_size = n;
+  xpoint = (XPoint*)realloc((void*)xpoint,(point_array_size+1)*sizeof(XPoint));
 }
 
-void fl_vertex(float X, float Y) {
+void fltk::addvertex(float X, float Y) {
   COORD_T x = COORD_T(floorf(X*m.a + Y*m.c + m.x + .5f));
   COORD_T y = COORD_T(floorf(X*m.b + Y*m.d + m.y + .5f));
-  if (!points || x != point[points-1].x || y != point[points-1].y) {
-    if (points+1 >= point_array_size) add_n_points(1);
-    point[points].x = x;
-    point[points].y = y;
-    points++;
+  if (!numpoints || x != xpoint[numpoints-1].x || y != xpoint[numpoints-1].y) {
+    if (numpoints+1 >= point_array_size) add_n_points(1);
+    xpoint[numpoints].x = x;
+    xpoint[numpoints].y = y;
+    numpoints++;
   }
 }
 
-void fl_vertex(int X, int Y) {
+void fltk::addvertex(int X, int Y) {
   COORD_T x,y;
   if (m.trivial) {
     x = COORD_T(X+m.ix);
@@ -190,26 +190,26 @@ void fl_vertex(int X, int Y) {
     x = COORD_T(floorf(X*m.a + Y*m.c + m.x + .5f));
     y = COORD_T(floorf(X*m.b + Y*m.d + m.y + .5f));
   }
-  if (!points || x != point[points-1].x || y != point[points-1].y) {
-    if (points+1 >= point_array_size) add_n_points(1);
-    point[points].x = x;
-    point[points].y = y;
-    points++;
+  if (!numpoints || x != xpoint[numpoints-1].x || y != xpoint[numpoints-1].y) {
+    if (numpoints+1 >= point_array_size) add_n_points(1);
+    xpoint[numpoints].x = x;
+    xpoint[numpoints].y = y;
+    numpoints++;
   }
 }
 
-void fl_vertices(int n, const float array[][2]) {
-  if (points+n >= point_array_size) add_n_points(n);
+void fltk::addvertices(int n, const float array[][2]) {
+  if (numpoints+n >= point_array_size) add_n_points(n);
   const float* a = array[0];
   const float* e = a+2*n;
-  int pn = points;
+  int pn = numpoints;
   if (m.trivial) {
     for (; a < e; a += 2) {
       COORD_T x = COORD_T(floorf(a[0] + m.x + .5f));
       COORD_T y = COORD_T(floorf(a[1] + m.y + .5f));
-      if (!pn || x != point[pn-1].x || y != point[pn-1].y) {
-	point[pn].x = x;
-	point[pn].y = y;
+      if (!pn || x != xpoint[pn-1].x || y != xpoint[pn-1].y) {
+	xpoint[pn].x = x;
+	xpoint[pn].y = y;
 	pn++;
       }
     }
@@ -217,28 +217,28 @@ void fl_vertices(int n, const float array[][2]) {
     for (; a < e; a += 2) {
       COORD_T x = COORD_T(floorf(a[0]*m.a + a[1]*m.c + m.x + .5f));
       COORD_T y = COORD_T(floorf(a[0]*m.b + a[1]*m.d + m.y + .5f));
-      if (!pn || x != point[pn-1].x || y != point[pn-1].y) {
-	point[pn].x = x;
-	point[pn].y = y;
+      if (!pn || x != xpoint[pn-1].x || y != xpoint[pn-1].y) {
+	xpoint[pn].x = x;
+	xpoint[pn].y = y;
 	pn++;
       }
     }
   }
-  points = pn;
+  numpoints = pn;
 }
 
-void fl_vertices(int n, const int array[][2]) {
-  if (points+n >= point_array_size) add_n_points(n);
+void fltk::addvertices(int n, const int array[][2]) {
+  if (numpoints+n >= point_array_size) add_n_points(n);
   const int* a = array[0];
   const int* e = a+2*n;
-  int pn = points;
+  int pn = numpoints;
   if (m.trivial) {
     for (; a < e; a += 2) {
       COORD_T x = COORD_T(a[0]+m.ix);
       COORD_T y = COORD_T(a[1]+m.iy);
-      if (!pn || x != point[pn-1].x || y != point[pn-1].y) {
-	point[pn].x = x;
-	point[pn].y = y;
+      if (!pn || x != xpoint[pn-1].x || y != xpoint[pn-1].y) {
+	xpoint[pn].x = x;
+	xpoint[pn].y = y;
 	pn++;
       }
     }
@@ -246,49 +246,49 @@ void fl_vertices(int n, const int array[][2]) {
     for (; a < e; a += 2) {
       COORD_T x = COORD_T(floorf(a[0]*m.a + a[1]*m.c + m.x + .5f));
       COORD_T y = COORD_T(floorf(a[0]*m.b + a[1]*m.d + m.y + .5f));
-      if (!pn || x != point[pn-1].x || y != point[pn-1].y) {
-	point[pn].x = x;
-	point[pn].y = y;
+      if (!pn || x != xpoint[pn-1].x || y != xpoint[pn-1].y) {
+	xpoint[pn].x = x;
+	xpoint[pn].y = y;
 	pn++;
       }
     }
   }
-  points = pn;
+  numpoints = pn;
 }
 
-void fl_transformed_vertices(int n, const float array[][2]) {
-  if (points+n >= point_array_size) add_n_points(n);
+void fltk::addvertices_transformed(int n, const float array[][2]) {
+  if (numpoints+n >= point_array_size) add_n_points(n);
   const float* a = array[0];
   const float* e = a+2*n;
-  int pn = points;
+  int pn = numpoints;
   for (; a < e; a += 2) {
     COORD_T x = COORD_T(floorf(a[0] + .5f));
     COORD_T y = COORD_T(floorf(a[1] + .5f));
-    if (!pn || x != point[pn-1].x || y != point[pn-1].y) {
-      point[pn].x = x;
-      point[pn].y = y;
+    if (!pn || x != xpoint[pn-1].x || y != xpoint[pn-1].y) {
+      xpoint[pn].x = x;
+      xpoint[pn].y = y;
       pn++;
     }
   }
-  points = pn;
+  numpoints = pn;
 }
 
-void fl_closepath() {
-  if (points > loop_start+2) {
+void fltk::closepath() {
+  if (numpoints > loop_start+2) {
     // close the shape by duplicating first point:
-    XPoint& q = point[loop_start];
+    XPoint& q = xpoint[loop_start];
     // the array always has one extra point so we don't need to check
-    XPoint& p = point[points-1];
-    if (p.x != q.x || p.y != q.y) point[points++] = q;
+    XPoint& p = xpoint[numpoints-1];
+    if (p.x != q.x || p.y != q.y) xpoint[numpoints++] = q;
     // remember the new loop:
     if (loops >= loop_array_size) {
       loop_array_size = loop_array_size ? 2*loop_array_size : 16;
       loop = (int*)realloc((void*)loop, loop_array_size*sizeof(int));
     }
-    loop[loops++] = points-loop_start;
-    loop_start = points;
+    loop[loops++] = numpoints-loop_start;
+    loop_start = numpoints;
   } else {
-    points = loop_start;
+    numpoints = loop_start;
   }
 }
 
@@ -305,8 +305,8 @@ static int circle_x, circle_y, circle_w, circle_h;
 // the transform. Currently only one per path is supported, this uses
 // commands on the server to draw a nicer circle than the path mechanism
 // can make.
-void fl_circle(float x, float y, float r) {
-  fl_transform(x,y);
+void fltk::addcircle(float x, float y, float r) {
+  transform(x,y);
   float rt = r * sqrtf(fabsf(m.a*m.d-m.b*m.c));
   circle_w = circle_h = int(rt*2 + .5);
   circle_x = int(floorf(x - circle_w*.5f + .5f));
@@ -315,15 +315,15 @@ void fl_circle(float x, float y, float r) {
 
 // Add an ellipse to the path. On X/Win32 this only works for 90 degree
 // rotations and only one ellipse (or cirlce) per path is supported.
-void fl_ellipse(float x, float y, float w, float h) {
+void fltk::addellipse(float x, float y, float w, float h) {
 #if 1
   // Use X/Win32 drawing functions as best we can. Only works for 90
   // degree rotations:
   x += w/2;
   y += h/2;
-  fl_transform(x,y);
-  float d1x,d1y; d1x = w; d1y = 0; fl_transform_distance(d1x, d1y);
-  float d2x,d2y; d2x = 0; d2y = h; fl_transform_distance(d2x, d2y);
+  transform(x,y);
+  float d1x,d1y; d1x = w; d1y = 0; transform_distance(d1x, d1y);
+  float d2x,d2y; d2x = 0; d2y = h; transform_distance(d2x, d2y);
   float rx = sqrtf(d1x*d1x+d2x*d2x)/2;
   float ry = sqrtf(d1y*d1y+d2y*d2y)/2;
   circle_w = int(rx*2 + .5f);
@@ -333,9 +333,9 @@ void fl_ellipse(float x, float y, float w, float h) {
 #else
   // This produces the correct image, but not as nice as using circles
   // produced by the server:
-  fl_closepath();
-  fl_arc(x, y, w, h, 0, 360);
-  fl_closepath();
+  closepath();
+  add_arc(x, y, w, h, 0, 360);
+  closepath();
 #endif
 }
 
@@ -343,82 +343,82 @@ void fl_ellipse(float x, float y, float w, float h) {
 // Draw the path:
 
 static inline void inline_newpath() {
-  points = loop_start = loops = circle_w = 0;
+  numpoints = loop_start = loops = circle_w = 0;
 }
-void fl_newpath() {inline_newpath();}
+void fltk::newpath() {inline_newpath();}
 
-void fl_points() {
+void fltk::drawpoints() {
 #ifdef _WIN32
-  for (int i=0; i<points; i++)
-    SetPixel(fl_gc, point[i].x, point[i].y, fl_colorref);
+  for (int i=0; i<numpoints; i++)
+    SetPixel(gc, xpoint[i].x, xpoint[i].y, current_xpixel);
 #else
-  if (points > 0) XDrawPoints(fl_display, fl_window, fl_gc, point, points, 0);
+  if (numpoints > 0) XDrawPoints(xdisplay, xwindow, gc, xpoint, numpoints, 0);
 #endif
   inline_newpath();
 }
 
-void fl_stroke() {
+void fltk::strokepath() {
 #ifdef _WIN32
   if (circle_w > 0)
-    Arc(fl_gc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
+    Arc(gc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
 	0,0, 0,0);
   int loop_start = 0;
   for (int n = 0; n < loops; n++) {
     int loop_size = loop[n];
-    Polyline(fl_gc, point+loop_start, loop_size);
+    Polyline(gc, xpoint+loop_start, loop_size);
     loop_start += loop_size;
   }
-  int loop_size = points-loop_start;
+  int loop_size = numpoints-loop_start;
   if (loop_size > 1)
-    Polyline(fl_gc, point+loop_start, loop_size);
+    Polyline(gc, xpoint+loop_start, loop_size);
 #else
   if (circle_w > 0)
-    XDrawArc(fl_display, fl_window, fl_gc,
+    XDrawArc(xdisplay, xwindow, gc,
 	     circle_x, circle_y, circle_w, circle_h, 0, 360*64);
   int loop_start = 0;
   for (int n = 0; n < loops; n++) {
     int loop_size = loop[n];
-    XDrawLines(fl_display, fl_window, fl_gc, point+loop_start, loop_size, 0);
+    XDrawLines(xdisplay, xwindow, gc, xpoint+loop_start, loop_size, 0);
     loop_start += loop_size;
   }
-  int loop_size = points-loop_start;
+  int loop_size = numpoints-loop_start;
   if (loop_size > 1)
-    XDrawLines(fl_display, fl_window, fl_gc, point+loop_start, loop_size, 0);
+    XDrawLines(xdisplay, xwindow, gc, xpoint+loop_start, loop_size, 0);
 #endif
   inline_newpath();
 }
 
-// Warning: result is different on X and Win32! Use fl_fill_stroke().
+// Warning: result is different on X and Win32! Use fill_stroke().
 // There may be a way to tell Win32 to do what X does, perhaps by making
 // the current pen invisible?
-void fl_fill() {
+void fltk::fillpath() {
 #ifdef _WIN32
   if (circle_w > 0)
-    Chord(fl_gc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
+    Chord(gc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
 	  0,0, 0,0);
   if (loops) {
-    fl_closepath();
-    PolyPolygon(fl_gc, point, loop, loops);
-  } else if (points > 2) {
-    Polygon(fl_gc, point, points);
+    closepath();
+    PolyPolygon(gc, xpoint, loop, loops);
+  } else if (numpoints > 2) {
+    Polygon(gc, xpoint, numpoints);
   }
 #else
   if (circle_w > 0)
-    XFillArc(fl_display, fl_window, fl_gc,
+    XFillArc(xdisplay, xwindow, gc,
 	     circle_x, circle_y, circle_w, circle_h, 0, 64*360);
-  if (loops) fl_closepath();
-  if (points > 2) {
+  if (loops) closepath();
+  if (numpoints > 2) {
     if (loops > 2) {
       // back-trace the lines between each "disconnected" part so they
       // are actually connected:
-      if (points+loops-2 >= point_array_size) add_n_points(loops-2);
-      int n = points-1;
+      if (numpoints+loops-2 >= point_array_size) add_n_points(loops-2);
+      int n = numpoints-1;
       for (int i = loops; --i > 1;) {
 	n -= loop[i];
-	point[points++] = point[n];
+	xpoint[numpoints++] = xpoint[n];
       }
     }
-    XFillPolygon(fl_display, fl_window, fl_gc, point, points, 0, 0);
+    XFillPolygon(xdisplay, xwindow, gc, xpoint, numpoints, 0, 0);
   }
 #endif
   inline_newpath();
@@ -427,51 +427,51 @@ void fl_fill() {
 // This seems to produce very similar results on X and Win32. Also
 // should be faster than seperate fill & stroke on Win32 and on
 // PostScript/PDF style systems.
-void fl_fill_stroke(Fl_Color color) {
+void fltk::fillstrokepath(Color color) {
 #ifdef _WIN32
-  COLORREF saved = fl_colorref;
-  fl_colorref = fl_wincolor(color);
-  HPEN newpen = fl_create_pen();
-  fl_colorref = saved;
-  HPEN oldpen = (HPEN)SelectObject(fl_gc, newpen);
+  COLORREF saved = current_xpixel;
+  current_xpixel = xpixel(color);
+  HPEN newpen = create_pen();
+  current_xpixel = saved;
+  HPEN oldpen = (HPEN)SelectObject(gc, newpen);
   if (circle_w > 0)
-    Chord(fl_gc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
+    Chord(gc, circle_x, circle_y, circle_x+circle_w+1, circle_y+circle_h+1,
 	  0,0, 0,0);
   if (loops) {
-    fl_closepath();
-    PolyPolygon(fl_gc, point, loop, loops);
-  } else if (points > 2) {
-    Polygon(fl_gc, point, points);
+    closepath();
+    PolyPolygon(gc, xpoint, loop, loops);
+  } else if (numpoints > 2) {
+    Polygon(gc, xpoint, numpoints);
   }
-  SelectObject(fl_gc, oldpen);
+  SelectObject(gc, oldpen);
   DeleteObject(newpen);
   inline_newpath();
 #else
   if (circle_w > 0)
-    XFillArc(fl_display, fl_window, fl_gc,
+    XFillArc(xdisplay, xwindow, gc,
 	     circle_x, circle_y, circle_w, circle_h, 0, 64*360);
-  fl_closepath();
-  if (points > 2) {
-    int saved_points = points;
+  closepath();
+  if (numpoints > 2) {
+    int saved_points = numpoints;
     if (loops > 2) {
       // back-trace the lines between each "disconnected" part so they
       // are actually connected:
-      if (points+loops-2 >= point_array_size) add_n_points(loops-2);
+      if (numpoints+loops-2 >= point_array_size) add_n_points(loops-2);
       int n = saved_points-1;
       for (int i = loops; --i > 1;) {
 	n -= loop[i];
-	point[points++] = point[n];
+	xpoint[numpoints++] = xpoint[n];
       }
     }
-    XFillPolygon(fl_display, fl_window, fl_gc, point, points, 0, 0);
-    points = saved_points; // throw away the extra points
+    XFillPolygon(xdisplay, xwindow, gc, xpoint, numpoints, 0, 0);
+    numpoints = saved_points; // throw away the extra points
   }
-  Fl_Color saved = fl_color();
-  fl_color(color); fl_stroke();
-  fl_color(saved);
+  Color saved = getcolor();
+  setcolor(color); strokepath();
+  setcolor(saved);
 #endif
 }
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.17 2002/09/16 00:29:06 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.18 2002/12/09 04:52:30 spitzak Exp $".
 //

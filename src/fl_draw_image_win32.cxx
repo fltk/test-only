@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_win32.cxx,v 1.11 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: fl_draw_image_win32.cxx,v 1.12 2002/12/09 04:52:29 spitzak Exp $"
 //
 // _WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -42,6 +42,9 @@
 
 ////////////////////////////////////////////////////////////////
 
+#include <fltk/Color.h>
+using namespace fltk;
+
 #define MAXBUFFER 0x40000 // 256k
 
 #if USE_COLORMAP
@@ -64,15 +67,15 @@ static void dither(uchar* to, const uchar* from, int w, int delta) {
   }
   for (;; from += d, to += td) {
     r += from[0]; if (r < 0) r = 0; else if (r>255) r = 255;
-    int rr = r*FL_NUM_RED/256;
-    r -= rr*255/(FL_NUM_RED-1);
+    int rr = r*5/256;
+    r -= rr*255/4;
     g += from[1]; if (g < 0) g = 0; else if (g>255) g = 255;
-    int gg = g*FL_NUM_GREEN/256;
-    g -= gg*255/(FL_NUM_GREEN-1);
+    int gg = g*8/256;
+    g -= gg*255/7;
     b += from[2]; if (b < 0) b = 0; else if (b>255) b = 255;
-    int bb = b*FL_NUM_BLUE/256;
-    b -= bb*255/(FL_NUM_BLUE-1);
-    *to = uchar(FL_COLOR_CUBE+(bb*FL_NUM_RED+rr)*FL_NUM_GREEN+gg);
+    int bb = b*5/256;
+    b -= bb*255/4;
+    *to = uchar(BLACK+(bb*5+rr)*8+gg);
     if (!--w) break;
   }
   ri = r; gi = g; bi = b;
@@ -80,8 +83,8 @@ static void dither(uchar* to, const uchar* from, int w, int delta) {
 
 // error-diffusion dither into the fltk colormap
 static void monodither(uchar* to, const uchar* from, int w, int delta) {
-  static int ri,dir;
-  int r=ri;
+  static int ri, gi, bi, dir;
+  int r=ri, g=gi, b=bi;
   int d, td;
   if (dir) {
     dir = 0;
@@ -95,10 +98,16 @@ static void monodither(uchar* to, const uchar* from, int w, int delta) {
     td = 1;
   }
   for (;; from += d, to += td) {
-    r += *from; if (r < 0) r = 0; else if (r>255) r = 255;
-    int rr = r*FL_NUM_GRAY/256;
-    r -= rr*255/(FL_NUM_GRAY-1);
-    *to = uchar(FL_GRAY_RAMP+rr);
+    r += from[0]; if (r < 0) r = 0; else if (r>255) r = 255;
+    int rr = r*5/256;
+    r -= rr*255/4;
+    g += from[0]; if (g < 0) g = 0; else if (g>255) g = 255;
+    int gg = g*8/256;
+    g -= gg*255/7;
+    b += from[0]; if (b < 0) b = 0; else if (b>255) b = 255;
+    int bb = b*5/256;
+    b -= bb*255/4;
+    *to = uchar(BLACK+(bb*5+rr)*8+gg);
     if (!--w) break;
   }
   ri = r;
@@ -108,20 +117,20 @@ static void monodither(uchar* to, const uchar* from, int w, int delta) {
 
 static void innards(const uchar *buf, int X, int Y, int W, int H,
 		    int delta, int linedelta, int mono,
-		    Fl_Draw_Image_Cb cb, void* userdata)
+		    DrawImageCallback cb, void* userdata)
 {
 #if USE_COLORMAP
-  char indexed = (fl_palette != 0);
+  char indexed = (xpalette != 0);
 #endif
 
   if (!linedelta) linedelta = W*delta;
 
   int x, y, w, h;
-  fl_clip_box(X,Y,W,H,x,y,w,h);
+  clip_box(X,Y,W,H,x,y,w,h);
   if (w<=0 || h<=0) return;
   if (buf) buf += (x-X)*delta + (y-Y)*linedelta;
-  fl_transform(x,y);
-  fl_transform(X,Y);
+  transform(x,y);
+  transform(X,Y);
 
   static U32 bmibuffer[256+12] = {0};
   BITMAPINFO &bmi = *((BITMAPINFO*)bmibuffer);
@@ -215,7 +224,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
         }
       }
     }
-    SetDIBitsToDevice(fl_gc, x, y+j-k, w, k, 0, 0, 0, k,
+    SetDIBitsToDevice(gc, x, y+j-k, w, k, 0, 0, 0, k,
 		      (LPSTR)((uchar*)buffer+(blocking-k)*linesize),
 		      &bmi,
 #if USE_COLORMAP
@@ -228,11 +237,11 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 }
 
 #if USE_COLORMAP
-#define DITHER_RECTF fl_palette
+#define DITHER_FILLRECT !xpalette
 #else
-#define DITHER_RECTF false
+#define DITHER_FILLRECT true
 #endif
 
 //
-// End of "$Id: fl_draw_image_win32.cxx,v 1.11 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: fl_draw_image_win32.cxx,v 1.12 2002/12/09 04:52:29 spitzak Exp $".
 //

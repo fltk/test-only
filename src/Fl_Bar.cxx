@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bar.cxx,v 1.2 2002/05/06 06:31:26 spitzak Exp $"
+// "$Id: Fl_Bar.cxx,v 1.3 2002/12/09 04:52:24 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -21,22 +21,25 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// Based on Fl_Frametab V2 contributed by Curtis Edwards (curt1@trilec.com)
+// Based on Frametab V2 contributed by Curtis Edwards (curt1@trilec.com)
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Bar.h>
+#include <fltk/BarGroup.h>
+#include <fltk/Box.h>
+#include <fltk/events.h>
+#include <fltk/damage.h>
+using namespace fltk;
 
-static void revert(Fl_Style *s) {
-  //s->box = FL_UP_BOX;
-  s->box = FL_FLAT_BOX;
-  s->color = FL_GRAY;
-  s->label_size = 10;
+static void revert(Style *s) {
+  //s->box = UP_BOX;
+  s->box = FLAT_BOX;
+  s->color = GRAY75;
+  s->labelsize = 10;
 }
-static Fl_Named_Style style("Bar", revert, &Fl_Bar::default_style);
-Fl_Named_Style* Fl_Bar::default_style = &::style;
+static NamedStyle style("BarGroup", revert, &BarGroup::default_style);
+NamedStyle* BarGroup::default_style = &::style;
 
-Fl_Bar::Fl_Bar(int x, int y, int w, int h, const char* title)
-  : Fl_Group(x, y, w, h,title)
+BarGroup::BarGroup(int x, int y, int w, int h, const char* title)
+  : Group(x, y, w, h,title)
 {
   type(HORIZONTAL);
   style(default_style);
@@ -45,10 +48,10 @@ Fl_Bar::Fl_Bar(int x, int y, int w, int h, const char* title)
   pushed = false;
   glyph_size_ = 10;
   saved_size = h;
-  align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+  align(ALIGN_LEFT|ALIGN_INSIDE);
 }
 
-void Fl_Bar::glyph_box(int& x, int& y, int& w, int& h) {
+void BarGroup::glyph_box(int& x, int& y, int& w, int& h) {
   x = y = 0; w = this->w(); h = this->h(); //box()->inset(x,y,w,h);
   if (type() & 1) { // horizontal
     w = open_ ? glyph_size_ : saved_size;
@@ -57,70 +60,70 @@ void Fl_Bar::glyph_box(int& x, int& y, int& w, int& h) {
   }
 }
 
-int Fl_Bar::handle(int event)
+int BarGroup::handle(int event)
 {
   int x,y,w,h;
   switch (event) {
-  case FL_ENTER:
-  case FL_MOVE:
-  case FL_LEAVE:
+  case ENTER:
+  case MOVE:
+  case LEAVE:
     if (highlight_color() && takesevents()) {
       glyph_box(x,y,w,h);
-      bool hl = Fl::event_inside(x,y,w,h);
+      bool hl = event_inside(x,y,w,h);
       if (hl != highlighted) {
 	highlighted = hl;
-	redraw(FL_DAMAGE_HIGHLIGHT);
+	redraw(DAMAGE_HIGHLIGHT);
       }
     }
     break;
-  case FL_PUSH:
+  case PUSH:
     glyph_box(x,y,w,h);
-    if (Fl::event_inside(x,y,w,h)) {
+    if (event_inside(x,y,w,h)) {
       pushed = highlighted = true;
-      redraw(FL_DAMAGE_HIGHLIGHT);
+      redraw(DAMAGE_HIGHLIGHT);
       return true;
     }
     break;
-  case FL_DRAG:
+  case DRAG:
     glyph_box(x,y,w,h);
-    if (Fl::event_inside(x,y,w,h)) {
+    if (event_inside(x,y,w,h)) {
       if (!pushed) {
 	pushed = highlighted = true;
-	redraw(FL_DAMAGE_HIGHLIGHT);
+	redraw(DAMAGE_HIGHLIGHT);
       }
     } else {
       if (pushed) {
 	pushed = false;
-	redraw(FL_DAMAGE_HIGHLIGHT);
+	redraw(DAMAGE_HIGHLIGHT);
       }
     }
     return true;
-  case FL_RELEASE:
+  case RELEASE:
     if (pushed) {
       opened(!open_);
       pushed = false;
       highlighted = true;
-      redraw(FL_DAMAGE_HIGHLIGHT);
+      redraw(DAMAGE_HIGHLIGHT);
     } else if (highlighted) {
       highlighted = false;
-      redraw(FL_DAMAGE_HIGHLIGHT);
+      redraw(DAMAGE_HIGHLIGHT);
     }
     return true;
   }
-  if (open_) return Fl_Group::handle(event);
+  if (open_) return Group::handle(event);
   else return 0;
 }
 
-void Fl_Bar::draw()
+void BarGroup::draw()
 {
   if (open_) {
-    if (damage() & ~FL_DAMAGE_HIGHLIGHT) {
+    if (damage() & ~DAMAGE_HIGHLIGHT) {
       // make it not draw the inside label:
-      int saved = flags(); align(FL_ALIGN_TOP);
-      Fl_Group::draw();
+      int saved = flags(); align(ALIGN_TOP);
+      Group::draw();
       flags(saved);
     }
-  } else if (damage() & ~(FL_DAMAGE_CHILD|FL_DAMAGE_HIGHLIGHT)) {
+  } else if (damage() & ~(DAMAGE_CHILD|DAMAGE_HIGHLIGHT)) {
     draw_box();
     int x = 0,y = 0,w = this->w(),h = this->h(); box()->inset(x,y,w,h);
     if (type() & 1) // horizontal
@@ -128,16 +131,16 @@ void Fl_Bar::draw()
     else
       draw_inside_label(x, saved_size, w, h-saved_size, 0);
   }
-  if (damage() & (FL_DAMAGE_EXPOSE|FL_DAMAGE_HIGHLIGHT)) {
-    Fl_Flags f = 0;
-    if (pushed) f |= FL_VALUE;
-    if (highlighted) f |= FL_HIGHLIGHT;
+  if (damage() & (DAMAGE_EXPOSE|DAMAGE_HIGHLIGHT)) {
+    Flags f = 0;
+    if (pushed) f |= VALUE;
+    if (highlighted) f |= HIGHLIGHT;
     int x,y,w,h; glyph_box(x,y,w,h);
     draw_glyph(0, x, y, w, h, f);
   }
 }
 
-bool Fl_Bar::opened(bool v)
+bool BarGroup::opened(bool v)
 {
   if (open_) {
     if (v) return false;
@@ -163,7 +166,7 @@ bool Fl_Bar::opened(bool v)
 }
 
 // Don't move widgets around while we are closed!
-void Fl_Bar::layout() {
-  if (open_) Fl_Group::layout();
-  else Fl_Widget::layout();
+void BarGroup::layout() {
+  if (open_) Group::layout();
+  else Widget::layout();
 }

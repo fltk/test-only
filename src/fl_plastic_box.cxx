@@ -1,5 +1,5 @@
 //
-// "$Id: fl_plastic_box.cxx,v 1.1 2002/02/10 22:57:49 spitzak Exp $"
+// "$Id: fl_plastic_box.cxx,v 1.2 2002/12/09 04:52:30 spitzak Exp $"
 //
 // "Plastic" drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -26,42 +26,54 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include <fltk/Fl_Boxtype.h>
-#include <fltk/Fl_Style.h>
-#include <fltk/fl_draw.h>
+// This has been removed from the namespace version of fltk. It should
+// be put into a theme.
+
+#include <fltk/Box.h>
+#include <fltk/Style.h>
+#include <fltk/draw.h>
 #include <string.h>
+using namespace fltk;
 
 extern void fl_to_inactive(const char* s, char* to);
 
-static inline Fl_Color shade_color(uchar gc, Fl_Color bc) {
-  return fl_color_average(gc+(FL_GRAY_RAMP-'A'), bc, 0.75f);
+static inline Color shade_color(uchar gc, Color bc) {
+  return lerp(gc+(BLACK-'A'), bc, 0.75f);
 }
 
 #if 0 // this code is not used in fltk 2.0
-static void shade_frame(int x, int y, int w, int h, const char *c, Fl_Color bc) {
-  uchar *g = fl_gray_ramp();
+static void shade_frame(int x, int y, int w, int h, const char *c, Color bc) {
+  uchar *g = gray_ramp();
   int b = strlen(c) / 4 + 1;
 
   for (x += b, y += b, w -= 2 * b + 1, h -= 2 * b + 1; b > 1; b --)
   {
     // Draw lines around the perimeter of the button, 4 colors per
     // circuit.
-    fl_color(shade_color(*c++, bc));
-    fl_line(x, y + h + b, x + w - 1, y + h + b, x + w + b - 1, y + h);
-    fl_color(shade_color(*c++, bc));
-    fl_line(x + w + b - 1, y + h, x + w + b - 1, y, x + w - 1, y - b);
-    fl_color(shade_color(*c++, bc));
-    fl_line(x + w - 1, y - b, x, y - b, x - b, y);
-    fl_color(shade_color(*c++, bc));
-    fl_line(x - b, y, x - b, y + h, x, y + h + b);
+    setcolor(shade_color(*c++, bc));
+    drawline(x, y + h + b, x + w - 1, y + h + b, x + w + b - 1, y + h);
+    setcolor(shade_color(*c++, bc));
+    drawline(x + w + b - 1, y + h, x + w + b - 1, y, x + w - 1, y - b);
+    setcolor(shade_color(*c++, bc));
+    drawline(x + w - 1, y - b, x, y - b, x - b, y);
+    setcolor(shade_color(*c++, bc));
+    drawline(x - b, y, x - b, y + h, x, y + h + b);
   }
 }
 #endif
 
-void Fl_Plastic_Box::draw(int x, int y, int w, int h, Fl_Color bc, Fl_Flags f) const
+// Diamond with an edge pattern like FrameBox:
+class PlasticBox : public FrameBox {
+public:
+  void draw(int,int,int,int, Color, Flags=0) const;
+  PlasticBox(const char* n, const char* s, const FrameBox* d=0)
+    : FrameBox(n, s, d) { fills_rectangle_ = 0; }
+};
+
+void PlasticBox::draw(int x, int y, int w, int h, Color bc, Flags f) const
 {
-  const char* c = (f & FL_VALUE) ? down->data() : data();
-  char buf[26]; if (f&FL_INACTIVE && Fl_Style::draw_boxes_inactive) {
+  const char* c = (f & VALUE) ? down->data() : data();
+  char buf[26]; if (f&INACTIVE && Style::draw_boxes_inactive) {
     fl_to_inactive(c, buf); c = buf;}
 
   int		i, j;
@@ -75,77 +87,73 @@ void Fl_Plastic_Box::draw(int x, int y, int w, int h, Fl_Color bc, Fl_Flags f) c
 
     for (i = 0, j = 0; j < chalf; i ++, j += cstep) {
       // Draw the top line and points...
-      fl_color(shade_color(c[i], bc));
-      fl_line(x + 1, y + i, x + w - 1, y + i);
+      setcolor(shade_color(c[i], bc));
+      drawline(x + 1, y + i, x + w - 1, y + i);
 
-      fl_color(shade_color(c[i] - 2, bc));
-      fl_point(x, y + i + 1);
-      fl_point(x + w - 1, y + i + 1);
+      setcolor(shade_color(c[i] - 2, bc));
+      draw_point(x, y + i + 1);
+      draw_point(x + w - 1, y + i + 1);
 
       // Draw the bottom line and points...
-      fl_color(shade_color(c[clen - i], bc));
-      fl_line(x + 1, y + h - 1 - i, x + w - 1, y + h - 1 - i);
+      setcolor(shade_color(c[clen - i], bc));
+      drawline(x + 1, y + h - 1 - i, x + w - 1, y + h - 1 - i);
 
-      fl_color(shade_color(c[clen - i] - 2, bc));
-      fl_point(x, y + h - i);
-      fl_point(x + w - 1, y + h - i);
+      setcolor(shade_color(c[clen - i] - 2, bc));
+      draw_point(x, y + h - i);
+      draw_point(x + w - 1, y + h - i);
     }
 
     // Draw the interior and sides...
     i = chalf / cstep;
 
-    fl_color(shade_color(c[chalf], bc));
-    fl_rectf(x + 1, y + i, w - 2, h - 2 * i);
+    setcolor(shade_color(c[chalf], bc));
+    fillrect(x + 1, y + i, w - 2, h - 2 * i);
 
-    fl_color(shade_color(c[chalf] - 2, bc));
-    fl_line(x, y + i, x, y + h - i);
-    fl_line(x + w - 1, y + i, x + w - 1, y + h - i);
+    setcolor(shade_color(c[chalf] - 2, bc));
+    drawline(x, y + i, x, y + h - i);
+    drawline(x + w - 1, y + i, x + w - 1, y + h - i);
   } else {
     // Vertical shading...
     if (clen >= w) cstep = 2;
 
     for (i = 0, j = 0; j < chalf; i ++, j += cstep) {
       // Draw the left line and points...
-      fl_color(shade_color(c[i], bc));
-      fl_line(x + i, y + 1, x + i, y + h - 1);
+      setcolor(shade_color(c[i], bc));
+      drawline(x + i, y + 1, x + i, y + h - 1);
 
-      fl_color(shade_color(c[i] - 2, bc));
-      fl_point(x + i + 1, y);
-      fl_point(x + i + 1, y + h - 1);
+      setcolor(shade_color(c[i] - 2, bc));
+      draw_point(x + i + 1, y);
+      draw_point(x + i + 1, y + h - 1);
 
       // Draw the right line and points...
-      fl_color(shade_color(c[clen - i], bc));
-      fl_line(x + w - 1 - i, y + 1, x + w - 1 - i, y + h - 1);
+      setcolor(shade_color(c[clen - i], bc));
+      drawline(x + w - 1 - i, y + 1, x + w - 1 - i, y + h - 1);
 
-      fl_color(shade_color(c[clen - i] - 2, bc));
-      fl_point(x + w - 1 - i, y);
-      fl_point(x + w - 1 - i, y + h - 1);
+      setcolor(shade_color(c[clen - i] - 2, bc));
+      draw_point(x + w - 1 - i, y);
+      draw_point(x + w - 1 - i, y + h - 1);
     }
 
     // Draw the interior, top, and bottom...
     i = chalf / cstep;
 
-    fl_color(shade_color(c[chalf], bc));
-    fl_rectf(x + i, y + 1, w - 2 * i, h - 2);
+    setcolor(shade_color(c[chalf], bc));
+    fillrect(x + i, y + 1, w - 2 * i, h - 2);
 
-    fl_color(shade_color(c[chalf - 2], bc));
-    fl_line(x + i, y, x + w - i, y);
-    fl_line(x + i, y + h - 1, x + w - i, y + h);
+    setcolor(shade_color(c[chalf - 2], bc));
+    drawline(x + i, y, x + w - i, y);
+    drawline(x + i, y + h - 1, x + w - i, y + h);
   }
 }
 
-Fl_Plastic_Box::Fl_Plastic_Box(const char* n, const char* s, const Fl_Frame_Box* d)
-  : Fl_Frame_Box(n, s, d)
-{
-  fills_rectangle_ = 0;
-}
-
-const Fl_Plastic_Box fl_plastic_down_box(0, "STUVWWWVT");
-const Fl_Plastic_Box fl_plastic_up_box(0, "TXSPPQQRSSTTUVS", &fl_plastic_down_box);
+static PlasticBox plasticDownBox(0, "STUVWWWVT");
+Box* const fl_PLASTIC_DOWN_BOX = &plasticDownBox;
+static PlasticBox plasticUpBox(0, "TXSPPQQRSSTTUVS", &plasticDownBox);
+Box* const fl_PLASTIC_UP_BOX = &plasticUpBox;
 
 // up_frame =  "MNFKKLNO"
 // down_frame = "LLRRTTLL"
 
 //
-// End of "$Id: fl_plastic_box.cxx,v 1.1 2002/02/10 22:57:49 spitzak Exp $".
+// End of "$Id: fl_plastic_box.cxx,v 1.2 2002/12/09 04:52:30 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.26 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: fonts.cxx,v 1.27 2002/12/09 04:52:31 spitzak Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,61 +23,62 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Double_Window.h>
-#include <fltk/Fl_Hold_Browser.h>
-#include <fltk/Fl_Check_Button.h>
-#include <fltk/fl_draw.h>
-#include <fltk/Fl_Box.h>
+#include <fltk/run.h>
+#include <fltk/DoubleBufferWindow.h>
+#include <fltk/Browser.h>
+#include <fltk/CheckButton.h>
+#include <fltk/draw.h>
+#include <fltk/Font.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
-Fl_Window *form;
+fltk::Window *form;
 
-class FontDisplay : public Fl_Widget {
+class FontDisplay : public fltk::Widget {
   void draw();
 public:
-  Fl_Font font; unsigned size; const char* encoding;
-  FontDisplay(Fl_Boxtype B, int X, int Y, int W, int H, const char* L = 0) :
-    Fl_Widget(X,Y,W,H,L) {box(B); font = 0; size = 14;}
+  fltk::Font* font; unsigned size; const char* encoding;
+  FontDisplay(fltk::Box* B, int X, int Y, int W, int H, const char* L = 0) :
+    fltk::Widget(X,Y,W,H,L) {box(B); font = 0; size = 14;}
 };
+
+fltk::Widget* id_box;
 
 void FontDisplay::draw() {
   draw_box();
-  int ix = 0, iy = 0, iw = w(), ih = h();
-  box()->inset(ix, iy, iw, ih);
-  fl_push_clip(ix, iy, iw, ih);
-  const char* saved_encoding = fl_encoding();
-  fl_encoding(encoding);
-  fl_font(font, size);
-  fl_color(FL_BLACK);
+  fltk::push_clip(2,2,w()-2,h()-2);
+  const char* saved_encoding = fltk::get_encoding();
+  fltk::set_encoding(encoding);
+  fltk::setfont(font, size);
+  id_box->label(fltk::Font::current_name());
+  id_box->redraw();
+  fltk::setcolor(fltk::BLACK);
   char buffer[32];
   for (int Y = 1; Y < 8; Y++) {
     for (int X = 0; X < 32; X++) buffer[X] = (32*Y+X);
-    fl_draw(buffer, 32, 3, 3+fl_height()*Y);
+    fltk::drawtext(buffer, 32, 3, 3+(size+leading())*Y);
   }
-  fl_encoding(saved_encoding);
-  fl_pop_clip();
+  fltk::set_encoding(saved_encoding);
+  fltk::pop_clip();
 }
 
 FontDisplay *textobj;
 
-Fl_Hold_Browser *fontobj, *sizeobj, *encobj;
+fltk::Browser *fontobj, *sizeobj, *encobj;
 
-Fl_Font* fonts; // list returned by fltk
+fltk::Font** fonts; // list returned by fltk
 
-Fl_Group *button_group;
-Fl_Check_Button* bold_button, *italic_button;
-Fl_Box* id_box;
+fltk::Group *button_group;
+fltk::CheckButton* bold_button, *italic_button;
 
 int pickedsize = 14;
 
-void font_cb(Fl_Widget *, long) {
+void font_cb(fltk::Widget *, long) {
   int fn = fontobj->value();
 //printf("font: %d    name: %s   bigname: %s\n", fn, fonts[fn]->name(), fonts[fn]->system_name());
 
-  Fl_Font f = fonts[fn];
+  fltk::Font* f = fonts[fn];
   if (f->bold() == f) bold_button->deactivate();
   else bold_button->activate();
   if (f->italic() == f) italic_button->deactivate();
@@ -94,7 +95,7 @@ void font_cb(Fl_Widget *, long) {
   for (int i = 0; i < ne; i++) {
     encobj->add(encodings[i]);
     if (!strcmp(encodings[i], saved)) picked = i;
-    if (!strcmp(encodings[i], fl_encoding())) iso8859 = i;
+    if (!strcmp(encodings[i], fltk::get_encoding())) iso8859 = i;
   }
   if (picked < 0) picked = iso8859;
   textobj->encoding = encodings[picked];
@@ -104,8 +105,8 @@ void font_cb(Fl_Widget *, long) {
   int *s; int n = f->sizes(s);
   if (!n) {
     // no sizes (this only happens on X)
-    fl_font(f, pickedsize);
-    textobj->size = (int)fl_height();
+    fltk::setfont(f, pickedsize);
+    textobj->size = (int)fltk::getsize();
   } else if (s[0] == 0) {
     // many sizes;
     int j = 1;
@@ -132,75 +133,75 @@ void font_cb(Fl_Widget *, long) {
   encobj->redraw();
   sizeobj->redraw();
   textobj->redraw();
-  id_box->label(textobj->font->system_name());
-  id_box->redraw();
   button_group->redraw();
 }
 
-void encoding_cb(Fl_Widget *, long) {
+void encoding_cb(fltk::Widget *, long) {
   int i = encobj->value();
 // CET - FIXME - new browser code has value starting from 0!
 //  if (!i) return;
-  textobj->encoding = encobj->text(i);
+  textobj->encoding = encobj->child(i)->label();
   textobj->redraw();
-  id_box->redraw();
 }
 
-void size_cb(Fl_Widget *, long) {
+void size_cb(fltk::Widget *, long) {
   int i = sizeobj->value();
 // CET - FIXME - new browser code has value starting from 0!
 //  if (!i) return;
-  const char *c = sizeobj->text(i);
+  const char *c = sizeobj->child(i)->label();
   while (*c < '0' || *c > '9') c++;
   pickedsize = atoi(c);
   textobj->size = pickedsize;
   textobj->redraw();
-  id_box->redraw();
 }
 
 void create_the_forms() {
-  form = new Fl_Double_Window(550,390);
-
-  textobj = new FontDisplay(FL_ENGRAVED_BOX,10,10,530,160);
-  textobj->clear_flag(FL_ALIGN_MASK);
-  textobj->set_flag(FL_ALIGN_TOP|FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_CLIP);
-  id_box = new Fl_Box(10, 172, 530, 15);
-  id_box->box(FL_ENGRAVED_BOX);
-  id_box->label_size(10);
-  id_box->set_flag(FL_ALIGN_INSIDE|FL_ALIGN_CLIP);
-  button_group = new Fl_Group(10, 190, 140, 20);
-  bold_button = new Fl_Check_Button(0, 0, 70, 20, "Bold");
+  form = new fltk::DoubleBufferWindow(550,390);
+  form->begin();
+  id_box = new fltk::Widget(10, 172, 530, 15);
+  id_box->box(fltk::ENGRAVED_BOX);
+  id_box->labelsize(10);
+  id_box->labelfont(fltk::COURIER);
+  id_box->set_flag(fltk::ALIGN_INSIDE|fltk::ALIGN_CLIP|fltk::ALIGN_LEFT);
+  textobj = new FontDisplay(fltk::ENGRAVED_BOX,10,10,530,160);
+  textobj->clear_flag(fltk::ALIGN_MASK);
+  textobj->set_flag(fltk::ALIGN_TOP|fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE|fltk::ALIGN_CLIP);
+  button_group = new fltk::Group(10, 190, 140, 20);
+  button_group->begin();
+  bold_button = new fltk::CheckButton(0, 0, 70, 20, "Bold");
+  bold_button->labelfont(bold_button->labelfont()->bold());
   bold_button->callback(font_cb, 1);
-  italic_button = new Fl_Check_Button(70, 0, 70, 20, "Italic");
+  italic_button = new fltk::CheckButton(70, 0, 70, 20, "Italic");
+  italic_button->labelfont(italic_button->labelfont()->italic());
   italic_button->callback(font_cb, 1);
   button_group->end();
-  fontobj = new Fl_Hold_Browser(10, 210, 280, 170);
-  fontobj->when(FL_WHEN_CHANGED);
+  fontobj = new fltk::Browser(10, 210, 280, 170);
+  fontobj->when(fltk::WHEN_CHANGED);
   fontobj->callback(font_cb);
   form->resizable(fontobj);
-  encobj = new Fl_Hold_Browser(300, 210, 100, 170);
-  encobj->when(FL_WHEN_CHANGED);
+  encobj = new fltk::Browser(300, 210, 100, 170);
+  encobj->when(fltk::WHEN_CHANGED);
   encobj->callback(encoding_cb, 1);
-  sizeobj = new Fl_Hold_Browser(410, 210, 130, 170);
-  sizeobj->when(FL_WHEN_CHANGED);
+  sizeobj = new fltk::Browser(410, 210, 130, 170);
+  sizeobj->when(fltk::WHEN_CHANGED);
   sizeobj->callback(size_cb);
   form->end();
 }
 
-#include <fltk/fl_ask.h>
+#include <fltk/ask.h>
 
 int main(int argc, char **argv) {
   create_the_forms();
-  int numfonts = fl_list_fonts(fonts);
+  int numfonts = fltk::list_fonts(fonts);
   for (int i = 0; i < numfonts; i++) fontobj->add(fonts[i]->name());
 // CET - FIXME - new browser code has value starting from 0!
   fontobj->value(0);
-  textobj->encoding = fl_encoding();
+  textobj->encoding = fltk::get_encoding();
   font_cb(fontobj,0);
   form->show(argc,argv);
-  return Fl::run();
+  return fltk::run();
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.26 2002/09/16 00:29:06 spitzak Exp $".
+// End of "$Id: fonts.cxx,v 1.27 2002/12/09 04:52:31 spitzak Exp $".
 //

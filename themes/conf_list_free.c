@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_list_free.c,v 1.3 2002/02/10 22:57:50 spitzak Exp $"
+   "$Id: conf_list_free.c,v 1.4 2002/12/09 04:52:32 spitzak Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -55,5 +55,5 @@ conf_list_free(conf_list *list)
 } /* conf_list_free() */
 
 /*
-    End of "$Id: conf_list_free.c,v 1.3 2002/02/10 22:57:50 spitzak Exp $".
+    End of "$Id: conf_list_free.c,v 1.4 2002/12/09 04:52:32 spitzak Exp $".
 */

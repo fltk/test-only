@@ -1,5 +1,5 @@
 //
-// "$Id: fl_shadow_box.cxx,v 1.15 2002/01/23 08:46:02 spitzak Exp $"
+// "$Id: fl_shadow_box.cxx,v 1.16 2002/12/09 04:52:30 spitzak Exp $"
 //
 // Shadow box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -23,31 +23,36 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl_Boxtype.h>
-#include <fltk/fl_draw.h>
+#include <fltk/Box.h>
+#include <fltk/Style.h>
+#include <fltk/draw.h>
+using namespace fltk;
 
-#define BW 3
+#define SIZE 3
 
-void Fl_Shadow_Box::draw(
-	int x, int y, int w, int h, Fl_Color color, Fl_Flags f) const
-{
-  w-=BW; h-=BW;
-  if (!(f & FL_INVISIBLE)) {
-    fl_color(color);
-    fl_rectf(x+1,y+1,w-2,h-2);
+class ShadowBox : public Box {
+public:
+  void draw(int x, int y, int w, int h, Color color, Flags f) const
+  {
+    w-=SIZE; h-=SIZE;
+    if (!(f & INVISIBLE)) {
+      setcolor(color);
+      fillrect(x+1,y+1,w-2,h-2);
+    }
+    setcolor(GRAY33);
+    fillrect(x+SIZE, y+h,  w, SIZE);
+    fillrect(x+w,  y+SIZE, SIZE,  h);
+    setcolor(inactive(BLACK,f));
+    strokerect(x,y,w,h);
   }
-  fl_color(FL_DARK3);
-  fl_rectf(x+BW, y+h,  w, BW);
-  fl_rectf(x+w,  y+BW, BW,  h);
-  fl_color(fl_inactive(FL_BLACK,f));
-  fl_rect(x,y,w,h);
-}
-Fl_Shadow_Box::Fl_Shadow_Box(const char* n) : Fl_Boxtype_(n) {
-  dx_ = dy_ = 1; dw_ = dh_ = 2+BW;
-  fills_rectangle_ = 0;
-}
-const Fl_Shadow_Box fl_shadow_box(0);
+  ShadowBox(const char* n) : Box(n) {
+    dx_ = dy_ = 1; dw_ = dh_ = 2+SIZE;
+    fills_rectangle_ = 0;
+  }
+};
+static ShadowBox shadowBox(0);
+Box* const fltk::SHADOW_BOX = &shadowBox;
 
 //
-// End of "$Id: fl_shadow_box.cxx,v 1.15 2002/01/23 08:46:02 spitzak Exp $".
+// End of "$Id: fl_shadow_box.cxx,v 1.16 2002/12/09 04:52:30 spitzak Exp $".
 //

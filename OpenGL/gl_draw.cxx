@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.23 2002/09/16 00:29:05 spitzak Exp $"
+// "$Id: gl_draw.cxx,v 1.24 2002/12/09 04:52:21 spitzak Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -24,19 +24,20 @@
 //
 
 // Functions from <fltk/gl.h>
-// See also Fl_Gl_Window and gl_start.C
+// See also GlWindow and gl_start.C
 
 #include <config.h>
 #if HAVE_GL
 
-#include <fltk/fl_draw.h>
+#include <fltk/draw.h>
 #include <fltk/gl.h>
-#include "Fl_Gl_Choice.h"
 #include <string.h>
+#include "GlChoice.h"
+using namespace fltk;
 
 // binary tree of all the fonts+sizes we have made so far:
 struct FontSize {
-  Fl_Font font;
+  fltk::Font* font;
   float size;
   FontSize* left, *right;
   int listbase;
@@ -46,9 +47,9 @@ struct FontSize {
 };
 static FontSize* root, *current;
 
-void gl_font(Fl_Font font, float size) {
-  fl_font(font, size); // necessary so fl_measure() works
-  size = fl_size(); // get the rounded value
+void fltk::glsetfont(fltk::Font* font, float size) {
+  setfont(font, size); // necessary so measure() works
+  size = getsize(); // get the rounded value
   if (!current || current->font != font || current->size != size) {
     FontSize** p = &root;
     while (*p) {
@@ -64,14 +65,14 @@ void gl_font(Fl_Font font, float size) {
     current->left = current->right = 0;
     current->listbase = glGenLists(256);
 #ifdef _WIN32
-    int base = fl_textmetric()->tmFirstChar;
-    int size = fl_textmetric()->tmLastChar - base + 1;
+    int base = textmetric()->tmFirstChar;
+    int size = textmetric()->tmLastChar - base + 1;
     HDC hdc = GetDC(0);
-    HFONT oldFid = (HFONT)SelectObject(hdc, fl_xfont());
+    HFONT oldFid = (HFONT)SelectObject(hdc, xfont());
     wglUseFontBitmaps(hdc, base, size, current->listbase+base); 
     SelectObject(hdc, oldFid);
 #else
-    XFontStruct* xfont = fl_xfont();
+    XFontStruct* xfont = fltk::xfont();
 #if USE_XFT
     current->xfont = xfont;
 #endif
@@ -84,54 +85,48 @@ void gl_font(Fl_Font font, float size) {
   glListBase(current->listbase);
 }
 
-void gl_font(int fontid, float size) {
-  gl_font(fl_fonts + (fontid % 16), size);
-}
-
-void gl_draw(const char* str, int n) {
+void fltk::gldrawtext(const char* str, int n) {
   glCallLists(n, GL_UNSIGNED_BYTE, str);
 }
 
-void gl_draw(const char* str, int n, float x, float y, float z) {
+void fltk::gldrawtext(const char* str, int n, float x, float y, float z) {
   glRasterPos3f(x, y, z);
-  gl_draw(str, n);
+  gldrawtext(str, n);
 }
 
-void gl_draw(const char* str) {
-  gl_draw(str, strlen(str));
+void fltk::gldrawtext(const char* str) {
+  gldrawtext(str, strlen(str));
 }
 
-void gl_draw(const char* str, float x, float y, float z) {
-  gl_draw(str, strlen(str), x, y, z);
+void fltk::gldrawtext(const char* str, float x, float y, float z) {
+  gldrawtext(str, strlen(str), x, y, z);
 }
 
 #if USE_XFT
 // We must use the X font, the normal functions will use the Xft font:
 
-float gl_height() {
-  return current->xfont->ascent+current->xfont->descent;
-}
+float fltk::glgetascent() { return current->xfont->ascent; }
 
-float gl_descent() { return current->xfont->descent; }
+float fltk::glgetdescent() { return current->xfont->descent; }
 
-float gl_width(const char* s, int n) {
+float fltk::glgetwidth(const char* s, int n) {
   return XTextWidth(current->xfont, s, n);
 }
 
-float gl_width(const char* s) {return gl_width(s, strlen(s));}
+float fltk::glgetwidth(const char* s) {return glgetwidth(s, strlen(s));}
 
 #else
 // The old X and Windows versions use exactly the same fonts for OpenGL
 // and for normal drawing, so we can share the functions:
 
-float gl_height() {return fl_height();}
-float gl_descent() {return fl_descent();}
-float gl_width(const char* s) {return fl_width(s);}
-float gl_width(const char* s, int n) {return fl_width(s,n);}
+float fltk::glgetascent() {return getascent();}
+float fltk::glgetdescent() {return getdescent();}
+float fltk::glgetwidth(const char* s) {return getwidth(s);}
+float fltk::glgetwidth(const char* s, int n) {return getwidth(s,n);}
 
 #endif
 
-void gl_rect(int x, int y, int w, int h) {
+void fltk::glstrokerect(int x, int y, int w, int h) {
   if (w < 0) {w = -w; x = x-w;}
   if (h < 0) {h = -h; y = y-h;}
   glBegin(GL_LINE_STRIP);
@@ -150,40 +145,40 @@ extern int fl_overlay_depth;
 #endif
 #endif
 
-void gl_color(Fl_Color i) {
+void fltk::glsetcolor(Color i) {
 #if USE_GL_OVERLAY
 #ifndef _WIN32
-  if (fl_overlay) {glIndexi(int(fl_xpixel(i))); return;}
+  if (fl_overlay) {glIndexi(int(xpixel(i))); return;}
 #else
   if (fl_overlay && fl_overlay_depth) {
-    i = fl_nearest_color(i); // convert to 8-bit color
+    i = nearest_index(i); // convert to 8-bit color
     if (fl_overlay_depth < 8) {
       // only black & white produce the expected colors.  This could
-      // be improved by fixing the colormap set in Fl_Gl_Overlay.cxx
+      // be improved by fixing the colormap set in GlOverlay.cxx
       unsigned size = 1<<fl_overlay_depth;
       if (!i) glIndexi(size-2);
       else if (i >= size-2) glIndexi(size-1);
       else glIndexi(i);
     } else {
-      glIndexi(i ? i : FL_GRAY_RAMP);
+      glIndexi(i ? i : BLACK);
     }
     return;
   }   
 #endif
 #endif
-  Fl_Color c = fl_get_color(i);
-  glColor3ub((uchar)(c>>24), (uchar)(c>>16), (uchar)(c>>8));
+  uchar r,g,b; split_color(i,r,g,b);
+  glColor3ub(r,g,b);
 }
   
-void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
+void fltk::gldrawimage(const uchar* b, int x, int y, int w, int h, int d, int ld) {
   if (!ld) ld = w*d;
   glPixelStorei(GL_UNPACK_ROW_LENGTH, ld/d);
   glRasterPos2i(x, y);
-  glDrawPixels(w, h, d<4?GL_RGB:GL_RGBA, GL_UNSIGNED_BYTE, (const ulong*)b);
+  glDrawPixels(w, h, d<4?GL_RGB:GL_RGBA, GL_UNSIGNED_BYTE, (const unsigned long*)b);
 }
 
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.23 2002/09/16 00:29:05 spitzak Exp $".
+// End of "$Id: gl_draw.cxx,v 1.24 2002/12/09 04:52:21 spitzak Exp $".
 //

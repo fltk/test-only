@@ -1,7 +1,7 @@
 //
-// "$Id: fl_rect.cxx,v 1.27 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: fl_rect.cxx,v 1.28 2002/12/09 04:52:30 spitzak Exp $"
 //
-// Non-path routines from fl_draw.h that are used by the standard boxtypes
+// Non-path routines from draw.h that are used by the standard boxtypes
 // and thus are always linked into an fltk program.
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
@@ -24,59 +24,60 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/fl_draw.h>
+#include <fltk/draw.h>
 #include <fltk/x.h>
+using namespace fltk;
 
-void fl_rect(int x, int y, int w, int h) {
+void fltk::strokerect(int x, int y, int w, int h) {
   if (w<=0 || h<=0) return;
-  fl_transform(x,y);
+  transform(x,y);
 #ifdef _WIN32
-  MoveToEx(fl_gc, x, y, 0L); 
-  LineTo(fl_gc, x+w-1, y);
-  LineTo(fl_gc, x+w-1, y+h-1);
-  LineTo(fl_gc, x, y+h-1);
-  LineTo(fl_gc, x, y);
+  MoveToEx(gc, x, y, 0L); 
+  LineTo(gc, x+w-1, y);
+  LineTo(gc, x+w-1, y+h-1);
+  LineTo(gc, x, y+h-1);
+  LineTo(gc, x, y);
 #else
-  XDrawRectangle(fl_display, fl_window, fl_gc, x, y, w-1, h-1);
+  XDrawRectangle(xdisplay, xwindow, gc, x, y, w-1, h-1);
 #endif
 }
 
-void fl_rectf(int x, int y, int w, int h) {
+void fltk::fillrect(int x, int y, int w, int h) {
   if (w<=0 || h<=0) return;
-  fl_transform(x,y);
+  transform(x,y);
 #ifdef _WIN32
   RECT rect;
   rect.left = x; rect.top = y;  
   rect.right = x + w; rect.bottom = y + h;
-  FillRect(fl_gc, &rect, fl_brush);
+  FillRect(gc, &rect, current_brush);
 #else
-  XFillRectangle(fl_display, fl_window, fl_gc, x, y, w, h);
+  XFillRectangle(xdisplay, xwindow, gc, x, y, w, h);
 #endif
 }
 
-void fl_line(int x, int y, int x1, int y1) {
-  fl_transform(x,y);
-  fl_transform(x1,y1);
+void fltk::drawline(int x, int y, int x1, int y1) {
+  transform(x,y);
+  transform(x1,y1);
 #ifdef _WIN32
-  MoveToEx(fl_gc, x, y, 0L); 
-  LineTo(fl_gc, x1, y1);
+  MoveToEx(gc, x, y, 0L); 
+  LineTo(gc, x1, y1);
   // Draw the last point *again* because the GDI line drawing
   // functions will not draw the last point ("it's a feature!"...)
-  SetPixel(fl_gc, x1, y1, fl_colorref);
+  SetPixel(gc, x1, y1, current_xpixel);
 #else
-  XDrawLine(fl_display, fl_window, fl_gc, x, y, x1, y1);
+  XDrawLine(xdisplay, xwindow, gc, x, y, x1, y1);
 #endif
 }
 
-void fl_point(int x, int y) {
-  fl_transform(x,y);
+void fltk::drawpoint(int x, int y) {
+  transform(x,y);
 #ifdef _WIN32
-  SetPixel(fl_gc, x, y, fl_colorref);
+  SetPixel(gc, x, y, current_xpixel);
 #else
-  XDrawPoint(fl_display, fl_window, fl_gc, x, y);
+  XDrawPoint(xdisplay, xwindow, gc, x, y);
 #endif
 }
 
 //
-// End of "$Id: fl_rect.cxx,v 1.27 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: fl_rect.cxx,v 1.28 2002/12/09 04:52:30 spitzak Exp $".
 //

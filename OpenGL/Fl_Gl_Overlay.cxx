@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Overlay.cxx,v 1.19 2002/03/26 18:00:34 spitzak Exp $"
+// "$Id: Fl_Gl_Overlay.cxx,v 1.20 2002/12/09 04:52:21 spitzak Exp $"
 //
 // OpenGL overlay code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,26 +26,26 @@
 #include <config.h>
 #if HAVE_GL
 
-#include <fltk/Fl.h>
-#include "Fl_Gl_Choice.h"
-#include <fltk/Fl_Gl_Window.h>
-#include <stdlib.h>
+#include "GlChoice.h"
+#include <fltk/GlWindow.h>
+#include <fltk/damage.h>
+using namespace fltk;
 
 #if !USE_GL_OVERLAY
 
-bool Fl_Gl_Window::can_do_overlay() {return 0;}
+bool GlWindow::can_do_overlay() {return 0;}
 
-void Fl_Gl_Window::make_overlay() {overlay = this;}
+void GlWindow::make_overlay() {overlay = this;}
 
 #else
 
-// Methods on Fl_Gl_Window that create an overlay window.  Because
+// Methods on GlWindow that create an overlay window.  Because
 // many programs don't need the overlay, this is seperated into this
 // source file so it is not linked in if not used.
 
-// Under X this is done by creating another window, of class _Fl_Gl_Overlay
-// which is a subclass of Fl_Gl_Window except it uses the overlay planes.
-// A pointer to this is stored in the "overlay" pointer of the Fl_Gl_Window.
+// Under X this is done by creating another window, of class GlOverlay
+// which is a subclass of GlWindow except it uses the overlay planes.
+// A pointer to this is stored in the "overlay" pointer of the GlWindow.
 
 // Under win32 another GLX context is created to draw into the overlay
 // and it is stored in into the "overlay" pointer.
@@ -64,18 +64,20 @@ extern XVisualInfo *fl_overlay_visual;
 extern Colormap fl_overlay_colormap;
 extern unsigned long fl_transparent_pixel;
 
-class _Fl_Gl_Overlay : public Fl_Gl_Window {
+namespace fltk {
+class GlOverlay : public GlWindow {
   void flush();
   void draw();
 public:
   void create();
-  _Fl_Gl_Overlay(int x, int y, int w, int h) :
-    Fl_Gl_Window(x,y,w,h) {
-    set_flag(FL_INACTIVE);
+  GlOverlay(int x, int y, int w, int h) :
+    GlWindow(x,y,w,h) {
+    set_flag(INACTIVE);
   }
 };
+}
 
-void _Fl_Gl_Overlay::flush() {
+void GlOverlay::flush() {
   make_current();
 #if BOXX_OVERLAY_BUGS
   // The BoXX overlay is broken and you must not call swap-buffers. This
@@ -91,10 +93,10 @@ void _Fl_Gl_Overlay::flush() {
   valid(1);
 }
 
-void _Fl_Gl_Overlay::draw() {
+void GlOverlay::draw() {
   if (!valid_) glClearIndex((GLfloat)fl_transparent_pixel);
-  Fl_Gl_Window *w = (Fl_Gl_Window *)parent();
-  if (damage() != FL_DAMAGE_EXPOSE && !(w->mode() & FL_NO_ERASE_OVERLAY))
+  GlWindow *w = (GlWindow *)parent();
+  if (damage() != DAMAGE_EXPOSE && !(w->mode() & NO_ERASE_OVERLAY))
     glClear(GL_COLOR_BUFFER_BIT);
   uchar save_valid = w->valid_;
   w->valid_ = valid_;
@@ -105,32 +107,33 @@ void _Fl_Gl_Overlay::draw() {
   w->valid_ = save_valid;
 }
 
-void _Fl_Gl_Overlay::create() {
-  Fl_X::create(this, fl_overlay_visual, fl_overlay_colormap, int(fl_transparent_pixel));
+void GlOverlay::create() {
+  CreatedWindow::create(this, fl_overlay_visual, fl_overlay_colormap,
+			int(fl_transparent_pixel));
   // find the outermost window to tell wm about the colormap:
-  Fl_Window *w = window();
-  for (;;) {Fl_Window *w1 = w->window(); if (!w1) break; w = w1;}
-  XSetWMColormapWindows(fl_display, fl_xid(w), &(Fl_X::i(this)->xid), 1);
-  context(fl_create_gl_context(fl_overlay_visual), 1);
+  Window *w = window();
+  for (;;) {Window *w1 = w->window(); if (!w1) break; w = w1;}
+  XSetWMColormapWindows(xdisplay, xid(w), &(CreatedWindow::find(this)->xid), 1);
+  context(create_gl_context(fl_overlay_visual), 1);
   valid(0);
 }
 
-bool Fl_Gl_Window::can_do_overlay() {
+bool GlWindow::can_do_overlay() {
   if (fl_find_overlay_visual()) return true;
 #if 0
 // This may work if SERVER_OVERLAY_VISUALS is not set in X server, but glX
 // is still able to locate an overlay. This should be in fl_overlay_visual.cxx
   static int list[] = {GLX_LEVEL, 1, 0};
-  fl_overlay_visual = glXChooseVisual(fl_display, fl_screen, list);
+  fl_overlay_visual = glXChooseVisual(xdisplay, xscreen, list);
   if (fl_overlay_visual) return true;
 #endif
   return false;
 }
 
-void Fl_Gl_Window::make_overlay() {
+void GlWindow::make_overlay() {
   if (overlay) return;
   if (can_do_overlay()) {
-    _Fl_Gl_Overlay* o = new _Fl_Gl_Overlay(0,0,w(),h());
+    GlOverlay* o = new GlOverlay(0,0,w(),h());
     overlay = o;
     add(*o);
     o->show();
@@ -146,13 +149,13 @@ void Fl_Gl_Window::make_overlay() {
 //static COLORREF *palette;
 extern int fl_overlay_depth;
 
-void Fl_Gl_Window::make_overlay() {
+void GlWindow::make_overlay() {
   if (overlay) return;
 
-  GLContext context = fl_create_gl_context(this, gl_choice, 1);
+  GLContext context = create_gl_context(this, gl_choice, 1);
   if (!context) {overlay = this; return;} // fake the overlay
 
-  HDC hdc = Fl_X::i(this)->dc;
+  HDC hdc = CreatedWindow::find(this)->dc;
   overlay = context;
   LAYERPLANEDESCRIPTOR pfd;
   wglDescribeLayerPlane(hdc, gl_choice->pixelFormat, 1, sizeof(pfd), &pfd);
@@ -165,7 +168,7 @@ void Fl_Gl_Window::make_overlay() {
     int n = (1<<fl_overlay_depth)-1;
     // copy all colors except #0 into the overlay palette:
     for (int i = 0; i <= n; i++) {
-      uchar r,g,b; Fl::get_color((Fl_Color)i,r,g,b);
+      uchar r,g,b; fltk::split_color(Color(i),r,g,b);
       palette[i] = RGB(r,g,b);
     }
     // always provide black & white in the last 2 pixels:
@@ -181,9 +184,9 @@ void Fl_Gl_Window::make_overlay() {
   return;
 }
 
-bool Fl_Gl_Window::can_do_overlay() {
+bool GlWindow::can_do_overlay() {
   if (!gl_choice) {
-    gl_choice = Fl_Gl_Choice::find(mode_);
+    gl_choice = GlChoice::find(mode_);
     if (!gl_choice) return false;
   }
   return (gl_choice->pfd.bReserved & 15) != 0;
@@ -194,37 +197,37 @@ bool Fl_Gl_Window::can_do_overlay() {
 
 #endif
 
-void Fl_Gl_Window::redraw_overlay() {
+void GlWindow::redraw_overlay() {
   if (!shown()) return;
   make_overlay();
 #ifndef _WIN32
   if (overlay != this)
-    ((Fl_Gl_Window*)overlay)->redraw();
+    ((GlWindow*)overlay)->redraw();
   else
 #endif
-    redraw(FL_DAMAGE_OVERLAY);
+    redraw(DAMAGE_OVERLAY);
 }
 
-void Fl_Gl_Window::make_overlay_current() {
+void GlWindow::make_overlay_current() {
   make_overlay();
 #if USE_GL_OVERLAY
   if (overlay != this) {
 #ifdef _WIN32
-    fl_set_gl_context(this, (GLContext)overlay);
+    set_gl_context(this, (GLContext)overlay);
 #else
-    ((Fl_Gl_Window*)overlay)->make_current();
+    ((GlWindow*)overlay)->make_current();
 #endif
   } else
 #endif
     glDrawBuffer(GL_FRONT);
 }
 
-void Fl_Gl_Window::hide_overlay() {
+void GlWindow::hide_overlay() {
 #if USE_GL_OVERLAY
 #ifdef _WIN32
   // nothing needs to be done?  Or should it be erased?
 #else
-  if (overlay && overlay!=this) ((Fl_Gl_Window*)overlay)->hide();
+  if (overlay && overlay!=this) ((GlWindow*)overlay)->hide();
 #endif
 #endif
 }
@@ -232,5 +235,5 @@ void Fl_Gl_Window::hide_overlay() {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Overlay.cxx,v 1.19 2002/03/26 18:00:34 spitzak Exp $".
+// End of "$Id: Fl_Gl_Overlay.cxx,v 1.20 2002/12/09 04:52:21 spitzak Exp $".
 //

@@ -1,8 +1,8 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.44 2002/10/04 07:48:14 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.45 2002/12/09 04:52:26 spitzak Exp $"
 //
-// The Fl_Menu_ base class is used by browsers, choices, menu bars
-// menu buttons, and perhaps other things.  It is simply an Fl_Group
+// The Menu base class is used by browsers, choices, menu bars
+// menu buttons, and perhaps other things.  It is simply an Group
 // but provides functions to select and identify one of the widgets
 // in the hierarchy below it and do that widget's callback directly.
 //
@@ -26,93 +26,96 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Menu_.h>
-#include <fltk/Fl_Item.h> // for TOGGLE, RADIO
-#define checkmark(item) (item->type()>=Fl_Item::TOGGLE && item->type()<=Fl_Item::RADIO)
+#include <fltk/events.h>
+#include <fltk/Menu.h>
+
+#include <fltk/Item.h> // for TOGGLE, RADIO
+#define checkmark(item) (item->type()>=Item::TOGGLE && item->type()<=Item::RADIO)
+
+using namespace fltk;
 
 ////////////////////////////////////////////////////////////////
 
-// The base Fl_List class just returns the widget from the Fl_Group's
-// children.  All Fl_Menu_s share a single instance of this by default,
+// The base List class just returns the widget from the Group's
+// children.  All Menus share a single instance of this by default,
 // so the default behavior is that child widgets appear as items in
 // the menu or browser.
 
-// Subclasses of Fl_List may want to call the base class to allow
+// Subclasses of List may want to call the base class to allow
 // normal widgets to be prepended to whatever they return.
 
-int Fl_List::children(const Fl_Menu_* menu, const int* indexes, int level) {
-  Fl_Group* group = (Fl_Group*)menu;
+int List::children(const Menu* menu, const int* indexes, int level) {
+  Group* group = (Group*)menu;
   while (level--) {
     int i = *indexes++;
     //if (i < 0 || i >= group->children()) return -1;
-    Fl_Widget* widget = group->child(i);
+    Widget* widget = group->child(i);
     if (!widget->is_group()) return -1;
-    group = (Fl_Group*)widget;
+    group = (Group*)widget;
   }
   return group->children();
 }
 
-Fl_Widget* Fl_List::child(const Fl_Menu_* menu, const int* indexes,int level) {
-  Fl_Group* group = (Fl_Group*)menu;
+Widget* List::child(const Menu* menu, const int* indexes,int level) {
+  Group* group = (Group*)menu;
   for (;;) {
     int i = *indexes++;
     //if (i < 0 || i >= group->children()) return 0;
-    Fl_Widget* widget = group->child(i);
+    Widget* widget = group->child(i);
     if (!level--) return widget;
     if (!widget->is_group()) return 0;
-    group = (Fl_Group*)widget;
+    group = (Group*)widget;
   }
 }
 
-void Fl_List::flags_changed(const Fl_Menu_*, Fl_Widget*) {}
+void List::flags_changed(const Menu*, Widget*) {}
 
-static Fl_List default_list;
+static List default_list;
 
-Fl_Menu_::Fl_Menu_(int x,int y,int w, int h,const char* l)
-  : Fl_Group(x,y,w,h,l), list_(&default_list), item_(0) {
+Menu::Menu(int x,int y,int w, int h,const char* l)
+  : Group(x,y,w,h,l), list_(&default_list), item_(0) {
   callback(default_callback);
   end();
 }
 
-int Fl_Menu_::children(const int* indexes, int level) const {
+int Menu::children(const int* indexes, int level) const {
   return list_->children(this, indexes, level);
 }
 
-int Fl_Menu_::children() const {
+int Menu::children() const {
   return list_->children(this, 0, 0);
 }
 
-Fl_Widget* Fl_Menu_::child(const int* indexes, int level) const {
+Widget* Menu::child(const int* indexes, int level) const {
   return list_->child(this, indexes, level);
 }
 
-Fl_Widget* Fl_Menu_::child(int n) const {
+Widget* Menu::child(int n) const {
   return list_->child(this, &n, 0);
 }
 
 ////////////////////////////////////////////////////////////////
 
-FL_API int fl_dont_execute = 0; // hack for fluid
+FL_API bool fl_dont_execute; // hack for fluid
 
 // Do the callback for the current item:
-void Fl_Menu_::execute(Fl_Widget* widget) {
+void Menu::execute(Widget* widget) {
   item(widget);
   if (fl_dont_execute) return;
   if (!widget) return; // never do callback when no widget is picked
-  if (widget->type() == Fl_Item::RADIO) {
+  if (widget->type() == Item::RADIO) {
     widget->set_value();
-    Fl_Group* g = widget->parent();
+    Group* g = widget->parent();
     int i = g->find(widget);
     int j;
     for (j = i-1; j >= 0; j--) {
-      Fl_Widget* o = g->child(j);
-      if (o->type() != Fl_Item::RADIO) break;
+      Widget* o = g->child(j);
+      if (o->type() != Item::RADIO) break;
       o->clear_value();
     }
     for (j = i+1; j < g->children(); j++) {
-      Fl_Widget* o = g->child(j);
-      if (o->type() != Fl_Item::RADIO) break;
+      Widget* o = g->child(j);
+      if (o->type() != Item::RADIO) break;
       o->clear_value();
     }
   } else if (checkmark(widget)) {
@@ -123,28 +126,28 @@ void Fl_Menu_::execute(Fl_Widget* widget) {
 }
 
 // Normally the callback for the menu is set to this:
-void Fl_Menu_::default_callback(Fl_Widget* widget, void*) {
-  Fl_Widget* item = ((Fl_Menu_*)widget)->item();
+void Menu::default_callback(Widget* widget, void*) {
+  Widget* item = ((Menu*)widget)->item();
   if (item) item->do_callback();
 }
 
 ////////////////////////////////////////////////////////////////
 //
-// The current item is remembered in the focus index from the Fl_Group
+// The current item is remembered in the focus index from the Group
 // at each level.  This is used by popup menus to pop up at the same
 // item next time.
 //
 // Storing it this way allows widgets to be inserted and deleted and
-// the currently selected item does not change (because Fl_Group updates
-// the focus index). But if an Fl_List is used and it does not return
-// a different Fl_Group for each level in the hierarchy, the focus
-// indexes will write over each other. Fl_Browser currently uses it's
+// the currently selected item does not change (because Group updates
+// the focus index). But if an List is used and it does not return
+// a different Group for each level in the hierarchy, the focus
+// indexes will write over each other. Browser currently uses it's
 // own code (with the insert/delete broken) to get around this.
 //
 // item() is set to the located widget.
 // True is returned if the indexes differ from last time.
 
-bool Fl_Menu_::focus(const int* indexes, int level) {
+bool Menu::focus(const int* indexes, int level) {
   int i = indexes[0];
   bool ret = false;
   if (value() != i) {value(i); ret = true;}
@@ -152,7 +155,7 @@ bool Fl_Menu_::focus(const int* indexes, int level) {
   item(child(i));
   int j = 1;
   while (item() && item()->is_group()) {
-    Fl_Group* group = (Fl_Group*)item();
+    Group* group = (Group*)item();
     int i = (j > level) ? -1 : indexes[j++];
     if (group->focus() != i) {group->focus(i); ret = true;}
     if (i < 0 || i >= group->children()) break;
@@ -162,14 +165,14 @@ bool Fl_Menu_::focus(const int* indexes, int level) {
 }
 
 // Set item() according to the focus fields. item() may have been altered
-// by the widget drawing or because an Fl_List is being used. The new
+// by the widget drawing or because an List is being used. The new
 // value for item() is returned.
-Fl_Widget* Fl_Menu_::get_focus() {
+Widget* Menu::get_focus() {
   int i = value();
   if (i < 0 || i >= children()) {item(0); return 0;}
   item(child(i));
   while (item() && item()->is_group()) {
-    Fl_Group* group = (Fl_Group*)item();
+    Group* group = (Group*)item();
     int i = group->focus();
     if (i < 0 || i >= group->children()) break;
     item(group->child(i));
@@ -179,11 +182,11 @@ Fl_Widget* Fl_Menu_::get_focus() {
 
 ////////////////////////////////////////////////////////////////
 
-// Shortcuts only search the immediate children of an Fl_Menu_ that
-// uses an Fl_List. If the Fl_List returns an Fl_Group indicating
+// Shortcuts only search the immediate children of an Menu that
+// uses an List. If the List returns an Group indicating
 // nested children, the actual children of that group are searched,
-// rather than asking the Fl_List to enumerate all of them. This is
-// necessary because some Fl_Lists are infinite in size, and usually
+// rather than asking the List to enumerate all of them. This is
+// necessary because some Lists are infinite in size, and usually
 // they don't have shortcuts anyway.
 
 // This will return invisible (but active) items, even
@@ -193,30 +196,30 @@ Fl_Widget* Fl_Menu_::get_focus() {
 // visible.
 
 // recursive innards of handle_shortcut:
-static Fl_Widget* shortcut_search(Fl_Group* g) {
-  Fl_Widget* widget = 0;
+static Widget* shortcut_search(Group* g) {
+  Widget* widget = 0;
   for (int i = 0; i < g->children(); i++) {
-    Fl_Widget* item = g->child(i);
+    Widget* item = g->child(i);
     if (!item->active()) continue;
-    if (Fl::test_shortcut(item->shortcut())) {g->focus(i); return item;}
+    if (test_shortcut(item->shortcut())) {g->focus(i); return item;}
     if (!widget && item->is_group() /*&& IS_OPEN*/) {
-      widget = shortcut_search((Fl_Group*)item);
+      widget = shortcut_search((Group*)item);
       if (widget) g->focus(i);
     }
   }
   return widget;
 }
 
-int Fl_Menu_::handle_shortcut() {
-  if (Fl::event_clicks()) return 0; // ignore repeating keys
-  Fl_Widget* widget = 0;
+int Menu::handle_shortcut() {
+  if (event_clicks()) return 0; // ignore repeating keys
+  Widget* widget = 0;
   int children = this->children();
   for (int i = 0; i < children; i++) {
-    Fl_Widget* item = child(i);
+    Widget* item = child(i);
     if (!item->takesevents()) continue;
-    if (Fl::test_shortcut(item->shortcut())) {value(i); widget=item; break;}
+    if (fltk::test_shortcut(item->shortcut())) {value(i); widget=item; break;}
     if (!widget && item->is_group() /*&& IS_OPEN*/) {
-      widget = shortcut_search((Fl_Group*)item);
+      widget = shortcut_search((Group*)item);
       if (widget) value(i);
     }
   }
@@ -225,5 +228,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.44 2002/10/04 07:48:14 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.45 2002/12/09 04:52:26 spitzak Exp $"
 //

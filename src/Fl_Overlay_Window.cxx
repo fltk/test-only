@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Overlay_Window.cxx,v 1.18 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Overlay_Window.cxx,v 1.19 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Overlay window code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,31 +27,33 @@
 // on top of that.  Uses the hardware to draw the overlay if
 // possible, otherwise it just draws in the front buffer.
 
-#include <config.h>
-#include <fltk/Fl.h>
-#include <fltk/Fl_Overlay_Window.h>
-#include <fltk/fl_draw.h>
+#include <fltk/OverlayWindow.h>
+#include <fltk/damage.h>
+#include <fltk/draw.h>
 #include <fltk/x.h>
+#include <config.h>
 
-void Fl_Overlay_Window::flush() {
+using namespace fltk;
+
+void OverlayWindow::flush() {
 #if BOXX_OVERLAY_BUGS
   if (overlay_ && overlay_ != this && overlay_->shown()) {
     // all drawing to windows hidden by overlay windows is ignored, fix this
-    XUnmapWindow(fl_display, fl_xid(overlay_));
-    Fl_Double_Window::flush(0);
-    XMapWindow(fl_display, fl_xid(overlay_));
+    XUnmapWindow(xdisplay, xid(overlay_));
+    DoubleBufferWindow::flush(0);
+    XMapWindow(xdisplay, xid(overlay_));
     return;
   }
 #endif
-  bool erase_overlay = (damage()&FL_DAMAGE_OVERLAY) != 0;
-  set_damage(damage()&~FL_DAMAGE_OVERLAY);
-  Fl_Double_Window::flush(erase_overlay);
+  bool erase_overlay = (damage()&DAMAGE_OVERLAY) != 0;
+  set_damage(damage()&~DAMAGE_OVERLAY);
+  DoubleBufferWindow::flush(erase_overlay);
   if (overlay_ == this) draw_overlay();
-  fl_clip_region(0); // turn off any clip it left on
+  clip_region(0); // turn off any clip it left on
 }
 
-void Fl_Overlay_Window::layout() {
-  Fl_Double_Window::layout();
+void OverlayWindow::layout() {
+  DoubleBufferWindow::layout();
   if (overlay_ && overlay_!=this) {
     overlay_->resize(0,0,w(),h());
     overlay_->layout();
@@ -60,12 +62,12 @@ void Fl_Overlay_Window::layout() {
 
 #if !USE_OVERLAY
 
-int Fl_Overlay_Window::can_do_overlay() {return 0;}
+int OverlayWindow::can_do_overlay() {return 0;}
 
-void Fl_Overlay_Window::redraw_overlay() {
+void OverlayWindow::redraw_overlay() {
   overlay_ = this;
-  set_damage(damage()|FL_DAMAGE_OVERLAY);
-  Fl::damage(FL_DAMAGE_CHILD);
+  set_damage(damage()|DAMAGE_OVERLAY);
+  redraw(DAMAGE_CHILD);
 }
 
 #else
@@ -74,54 +76,55 @@ extern XVisualInfo *fl_find_overlay_visual();
 extern XVisualInfo *fl_overlay_visual;
 extern Colormap fl_overlay_colormap;
 extern unsigned long fl_transparent_pixel;
-static GC gc;	// the GC used by all X windows
-extern uchar fl_overlay; // changes how fl_color(x) works
+static GC ovlgc;	// the GC used by all X windows
+extern uchar fl_overlay; // changes how color(x) works
 
-class _Fl_Overlay : public Fl_Window {
-  friend class Fl_Overlay_Window;
+class _Overlay : public Window {
+  friend class fltk::OverlayWindow;
   void flush();
   void create();
 public:
-  _Fl_Overlay(int x, int y, int w, int h) :
-    Fl_Window(x,y,w,h) {set_flag(FL_INACTIVE);}
+  _Overlay(int x, int y, int w, int h) :
+    Window(x,y,w,h) {set_flag(INACTIVE);}
 };
 
-int Fl_Overlay_Window::can_do_overlay() {
+int OverlayWindow::can_do_overlay() {
   return fl_find_overlay_visual() != 0;
 }
 
-void _Fl_Overlay::create() {
-  Fl_X::create(this, fl_overlay_visual, fl_overlay_colormap, int(fl_transparent_pixel));
+void _Overlay::create() {
+  CreatedWindow::create(this, fl_overlay_visual, fl_overlay_colormap,
+			int(fl_transparent_pixel));
   // find the outermost window to tell wm about the colormap:
-  Fl_Window *w = window();
-  for (;;) {Fl_Window *w1 = w->window(); if (!w1) break; w = w1;}
-  XSetWMColormapWindows(fl_display, fl_xid(w), &(Fl_X::i(this)->xid), 1);
+  Window *w = window();
+  for (;;) {Window *w1 = w->window(); if (!w1) break; w = w1;}
+  XSetWMColormapWindows(xdisplay, xid(w), &(CreatedWindow::find(this)->xid),1);
 }
 
-void _Fl_Overlay::flush() {
-  fl_window = fl_xid(this);
-  if (!gc) gc = XCreateGC(fl_display, fl_xid(this), 0, 0);
-  fl_gc = gc;
-  fl_overlay = 1;
-  Fl_Overlay_Window *w = (Fl_Overlay_Window *)parent();
+void _Overlay::flush() {
+  xwindow = xid(this);
+  if (!ovlgc) ovlgc = XCreateGC(xdisplay, xwindow, 0, 0);
+  fltk::gc = ovlgc;
+  fl_overlay = true;
+  OverlayWindow *w = (OverlayWindow *)parent();
   current_ = w;
-  Fl_X *i = Fl_X::i(this);
-  if (damage() == FL_DAMAGE_EXPOSE) {
-    fl_clip_region(i->region); i->region = 0;
+  CreatedWindow *i = CreatedWindow::find(this);
+  if (damage() == DAMAGE_EXPOSE) {
+    clip_region(i->region); i->region = 0;
     w->draw_overlay();
-    fl_clip_region(0);
+    clip_region(0);
   } else {
-    XClearWindow(fl_display, fl_xid(this));
+    XClearWindow(xdisplay, xid(this));
     w->draw_overlay();
   }
-  fl_overlay = 0;
+  fl_overlay = false;
 }
 
-void Fl_Overlay_Window::redraw_overlay() {
-  if (!fl_display) return; // this prevents fluid -c from opening display
+void OverlayWindow::redraw_overlay() {
+  if (!xdisplay) return; // this prevents fluid -c from opening display
   if (!overlay_) {
     if (can_do_overlay()) {
-      overlay_ = new _Fl_Overlay(0,0,w(),h());
+      overlay_ = new _Overlay(0,0,w(),h());
       add_resizable(*overlay_);
       overlay_->show();
     } else {
@@ -130,8 +133,8 @@ void Fl_Overlay_Window::redraw_overlay() {
   }
   if (shown()) {
     if (overlay_ == this) {
-      set_damage(damage()|FL_DAMAGE_OVERLAY);
-      Fl::damage(FL_DAMAGE_CHILD);
+      set_damage(damage()|DAMAGE_OVERLAY);
+      redraw(DAMAGE_CHILD);
     } else {
       overlay_->redraw();
     }
@@ -141,5 +144,5 @@ void Fl_Overlay_Window::redraw_overlay() {
 #endif
 
 //
-// End of "$Id: Fl_Overlay_Window.cxx,v 1.18 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Overlay_Window.cxx,v 1.19 2002/12/09 04:52:26 spitzak Exp $".
 //

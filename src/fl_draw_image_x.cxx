@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_x.cxx,v 1.4 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: fl_draw_image_x.cxx,v 1.5 2002/12/09 04:52:29 spitzak Exp $"
 //
 // Image drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -23,9 +23,11 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// This file is not independently compiled, it is included by fl_draw_image.cxx
+// This file is not independently compiled, it is included by drawimage.cxx
 
-#include "Fl_XColor.h"
+#include <fltk/error.h>
+#include "XColorMap.h"
+using namespace fltk;
 
 // A list of assumptions made about the X display:
 
@@ -78,9 +80,8 @@ static void color8_converter(const uchar *from, uchar *to, int w, int delta) {
     r += from[0]; if (r < 0) r = 0; else if (r>255) r = 255;
     g += from[1]; if (g < 0) g = 0; else if (g>255) g = 255;
     b += from[2]; if (b < 0) b = 0; else if (b>255) b = 255;
-    Fl_Color i = fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
-    Fl_XColor& xmap = fl_xmap[i];
-    if (!xmap.mapped) fl_allocate_xpixel(xmap,r,g,b);
+    uchar i = (uchar)(BLACK + (b*5/256 * 5 + r*5/256) * 8 + g*8/256);
+    XColorMap& xmap = fl_xmap(i,(uchar)r,(uchar)g,(uchar)b);
     r -= xmap.r;
     g -= xmap.g;
     b -= xmap.b;
@@ -108,9 +109,8 @@ static void mono8_converter(const uchar *from, uchar *to, int w, int delta) {
     r += from[0]; if (r < 0) r = 0; else if (r>255) r = 255;
     g += from[0]; if (g < 0) g = 0; else if (g>255) g = 255;
     b += from[0]; if (b < 0) b = 0; else if (b>255) b = 255;
-    Fl_Color i = fl_color_cube(r*FL_NUM_RED/256,g*FL_NUM_GREEN/256,b*FL_NUM_BLUE/256);
-    Fl_XColor& xmap = fl_xmap[i];
-    if (!xmap.mapped) fl_allocate_xpixel(xmap,r,g,b);
+    uchar i = (uchar)(BLACK + (b*5/256 * 5 + r*5/256) * 8 + g*8/256);
+    XColorMap& xmap = fl_xmap(i,(uchar)r,(uchar)g,(uchar)b);
     r -= xmap.r;
     g -= xmap.g;
     b -= xmap.b;
@@ -340,20 +340,20 @@ mono32_converter(const uchar *from,uchar *to,int w, int delta) {
 
 static void figure_out_visual() {
 
-  fl_xpixel(FL_BLACK); // make sure figure_out_visual in fl_color.cxx is called
+  xpixel(BLACK); // make sure figure_out_visual in color.cxx is called
 
   static XPixmapFormatValues *pfvlist;
-  static int FL_NUM_pfv;
-  if (!pfvlist) pfvlist = XListPixmapFormats(fl_display,&FL_NUM_pfv);
+  static int NUM_pfv;
+  if (!pfvlist) pfvlist = XListPixmapFormats(xdisplay,&NUM_pfv);
   XPixmapFormatValues *pfv;
-  for (pfv = pfvlist; pfv < pfvlist+FL_NUM_pfv; pfv++)
-    if (pfv->depth == fl_visual->depth) break;
+  for (pfv = pfvlist; pfv < pfvlist+NUM_pfv; pfv++)
+    if (pfv->depth == xvisual->depth) break;
   i.format = ZPixmap;
-  i.byte_order = ImageByteOrder(fl_display);
+  i.byte_order = ImageByteOrder(xdisplay);
 //i.bitmap_unit = 8;
 //i.bitmap_bit_order = MSBFirst;
 //i.bitmap_pad = 8;
-  i.depth = fl_visual->depth;
+  i.depth = xvisual->depth;
   i.bits_per_pixel = pfv->bits_per_pixel;
 
   if (i.bits_per_pixel & 7) bytes_per_pixel = 0; // produce fatal error
@@ -361,7 +361,7 @@ static void figure_out_visual() {
 
   unsigned int n = pfv->scanline_pad/8;
   if (pfv->scanline_pad & 7 || (n&(n-1)))
-    Fl::fatal("Can't do scanline_pad of %d",pfv->scanline_pad);
+    fatal("Can't do scanline_pad of %d",pfv->scanline_pad);
   if (n < sizeof(STORETYPE)) n = sizeof(STORETYPE);
   scanline_add = n-1;
   scanline_mask = -n;
@@ -372,8 +372,8 @@ static void figure_out_visual() {
     mono_converter = mono8_converter;
     return;
   }
-  if (!fl_visual->red_mask)
-    Fl::fatal("Can't do %d bits_per_pixel colormap",i.bits_per_pixel);
+  if (!xvisual->red_mask)
+    fatal("Can't do %d bits_per_pixel colormap",i.bits_per_pixel);
 #endif
 
   // otherwise it is a TrueColor visual:
@@ -410,7 +410,7 @@ static void figure_out_visual() {
       converter = bgr_converter;
       mono_converter = rrr_converter;
     } else {
-      Fl::fatal("Can't do arbitrary 24bit color");
+      fatal("Can't do arbitrary 24bit color");
     }
     break;
 
@@ -437,7 +437,7 @@ static void figure_out_visual() {
     break;
 
   default:
-    Fl::fatal("Can't do %d bits_per_pixel",i.bits_per_pixel);
+    fatal("Can't do %d bits_per_pixel",i.bits_per_pixel);
   }
 
 }
@@ -446,15 +446,15 @@ static void figure_out_visual() {
 
 static void innards(const uchar *buf, int X, int Y, int W, int H,
 		    int delta, int linedelta, int mono,
-		    Fl_Draw_Image_Cb cb, void* userdata)
+		    DrawImageCallback cb, void* userdata)
 {
   if (!linedelta) linedelta = W*delta;
 
   int dx, dy, w, h;
-  fl_clip_box(X,Y,W,H,dx,dy,w,h);
+  clip_box(X,Y,W,H,dx,dy,w,h);
   if (w<=0 || h<=0) return;
   dx -= X; dy -= Y;
-  fl_transform(X,Y);
+  transform(X,Y);
 
   if (!bytes_per_pixel) figure_out_visual();
   i.width = w;
@@ -511,7 +511,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 	  buf += linedelta;
 	  to += linesize;
 	}
-	XPutImage(fl_display,fl_window,fl_gc, &i, 0, 0, X+dx, Y+dy+j-k, w, k);
+	XPutImage(xdisplay,xwindow,gc, &i, 0, 0, X+dx, Y+dy+j-k, w, k);
       }
     } else {
       STORETYPE* linebuf = new STORETYPE[(W*delta+(sizeof(STORETYPE)-1))/sizeof(STORETYPE)];
@@ -523,15 +523,15 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 	  conv((uchar*)linebuf, (uchar*)to, w, delta);
 	  to += linesize;
 	}
-	XPutImage(fl_display,fl_window,fl_gc, &i, 0, 0, X+dx, Y+dy+j-k, w, k);
+	XPutImage(xdisplay,xwindow,gc, &i, 0, 0, X+dx, Y+dy+j-k, w, k);
       }
       delete[] linebuf;
     }
   }
 }
 
-#define DITHER_RECTF (fl_visual->depth > 16)
+#define DITHER_FILLRECT (xvisual->depth <= 16)
 
 //
-// End of "$Id: fl_draw_image_x.cxx,v 1.4 2002/07/01 15:28:19 spitzak Exp $"
+// End of "$Id: fl_draw_image_x.cxx,v 1.5 2002/12/09 04:52:29 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Output.cxx,v 1.33 2002/10/26 09:55:30 spitzak Exp $"
+// "$Id: Fl_Output.cxx,v 1.34 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,24 +23,26 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Output.h>
-#include <fltk/fl_draw.h>
+#include <fltk/events.h>
+#include <fltk/Output.h>
+#include <fltk/draw.h>
 
-bool Fl_Output::replace(int, int, const char*, int) {
+using namespace fltk;
+
+bool Output::replace(int, int, const char*, int) {
   // By making this function return false, all editing is disallowed:
   return false;
 }
 
-int Fl_Output::handle(int event) {
-  // The Fl_Input may grab the focus if sent a shortcut, prevent this:
-  if (event == FL_SHORTCUT) return 0;
+int Output::handle(int event) {
+  // The Input may grab the focus if sent a shortcut, prevent this:
+  if (event == SHORTCUT) return 0;
   // You can't drag&drop on it either:
-  if (event == FL_DND_ENTER) return 0;
-  // Don't return 3 for FL_FOCUS, return 1 instead:
-  if (Fl_Input::handle(event)) {
+  if (event == DND_ENTER) return 0;
+  // Don't return 3 for FOCUS, return 1 instead:
+  if (Input::handle(event)) {
     // clicking or selecting text does the callback:
-    if (event == FL_RELEASE) do_callback();
+    if (event == RELEASE) do_callback();
     return 1;
   }
   return 0;
@@ -48,15 +50,15 @@ int Fl_Output::handle(int event) {
 
 // Output has it's own style so the color can be set to gray like
 // some themes want:
-static Fl_Named_Style style("Output", 0, &Fl_Output::default_style);
-Fl_Named_Style* Fl_Output::default_style = &::style;
+static NamedStyle style("Output", 0, &Output::default_style);
+NamedStyle* Output::default_style = &::style;
 
-Fl_Output::Fl_Output(int x, int y, int w, int h, const char *l)
-  : Fl_Input(x, y, w, h, l)
+Output::Output(int x, int y, int w, int h, const char *l)
+  : Input(x, y, w, h, l)
 {
   style(default_style);
 }
 
 //
-// End of "$Id: Fl_Output.cxx,v 1.33 2002/10/26 09:55:30 spitzak Exp $".
+// End of "$Id: Fl_Output.cxx,v 1.34 2002/12/09 04:52:26 spitzak Exp $".
 //

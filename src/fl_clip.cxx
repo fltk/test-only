@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.11 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: fl_clip.cxx,v 1.12 2002/12/09 04:52:29 spitzak Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -24,8 +24,10 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/fl_draw.h>
 #include <fltk/x.h>
+#include <fltk/Window.h>
+#include <fltk/draw.h>
+using namespace fltk;
 
 #define STACK_SIZE 11
 #define STACK_MAX (STACK_SIZE - 2)
@@ -35,7 +37,7 @@ int fl_clip_state_number = 0; // used by code that needs to update clip regions
 
 // Return the current region (for Xft and Xrender use), return null if
 // no clipping.
-Region fl_clip_region() {
+Region fltk::clip_region() {
   return rstack[rstackptr];
 }
 
@@ -51,8 +53,6 @@ Region XRectangleRegion(int x, int y, int w, int h) {
 }
 #endif
 
-int fl_clip_version;
-
 // Make the system's clip match the top of the clip stack.  This can
 // be used after changing the stack, or to undo any clobbering of clip
 // done by your program:
@@ -60,15 +60,15 @@ void fl_restore_clip() {
   Region r = rstack[rstackptr];
   fl_clip_state_number++;
 #ifdef _WIN32
-  SelectClipRgn(fl_gc, r); //if r is NULL, clip is automatically cleared
+  SelectClipRgn(gc, r); //if r is NULL, clip is automatically cleared
 #else
-  if (r) XSetRegion(fl_display, fl_gc, r);
-  else XSetClipMask(fl_display, fl_gc, 0);
+  if (r) XSetRegion(xdisplay, gc, r);
+  else XSetClipMask(xdisplay, gc, 0);
 #endif
 }
 
 // Replace the top of the clip stack:
-void fl_clip_region(Region r) {
+void fltk::clip_region(Region r) {
   Region oldr = rstack[rstackptr];
   if (oldr) XDestroyRegion(oldr);
   rstack[rstackptr] = r;
@@ -76,10 +76,10 @@ void fl_clip_region(Region r) {
 }
 
 // Intersect & push a new clip rectangle:
-void fl_push_clip(int x, int y, int w, int h) {
+void fltk::push_clip(int x, int y, int w, int h) {
   Region r;
   if (w > 0 && h > 0) {
-    fl_transform(x,y);
+    transform(x,y);
     r = XRectangleRegion(x, y, w, h);
     Region current = rstack[rstackptr];
     if (current) {
@@ -104,13 +104,13 @@ void fl_push_clip(int x, int y, int w, int h) {
 }
 
 // Replace top of stack with top of stack minus this rectangle:
-void fl_clip_out(int x, int y, int w, int h) {
+void fltk::clip_out(int x, int y, int w, int h) {
   if (w <= 0 || h <= 0) return;
   Region current = rstack[rstackptr];
   // current must not be zero, you must push a rectangle first.  I
   // return without doing anything because that makes some old fltk code work:
   if (!current) return;
-  fl_transform(x,y);
+  transform(x,y);
   Region r = XRectangleRegion(x, y, w, h);
 #ifndef _WIN32
   Region temp = XCreateRegion();
@@ -125,8 +125,8 @@ void fl_clip_out(int x, int y, int w, int h) {
   fl_restore_clip();
 }
 
-// make there be no clip (used by fl_begin_offscreen() only!)
-void fl_push_no_clip() {
+// make there be no clip (used by begin_offscreen() only!)
+void fltk::push_no_clip() {
   // this does not test maximum so that this is guaranteed to work,
   // there is one extra slot at the top of the stack.
   /*if (rstackptr < STACK_MAX)*/ rstack[++rstackptr] = 0;
@@ -134,7 +134,7 @@ void fl_push_no_clip() {
 }
 
 // pop back to previous clip:
-void fl_pop_clip() {
+void fltk::pop_clip() {
   if (rstackptr > 0) {
     Region oldr = rstack[rstackptr--];
     if (oldr) XDestroyRegion(oldr);
@@ -145,15 +145,13 @@ void fl_pop_clip() {
 ////////////////////////////////////////////////////////////////
 // clipping tests:
 
-#include <fltk/Fl_Window.h>
-
 // does this rectangle intersect current clip?
-int fl_not_clipped(int x, int y, int w, int h) {
-  fl_transform(x,y);
+int fltk::not_clipped(int x, int y, int w, int h) {
+  transform(x,y);
   // first check against the window so we get rid of coordinates
   // outside the 16-bit range the X/Win32 calls take:
-  if (x+w <= 0 || y+h <= 0 || x >= Fl_Window::current()->w()
-      || y >= Fl_Window::current()->h()) return 0;
+  if (x+w <= 0 || y+h <= 0 || x >= Window::current()->w()
+      || y >= Window::current()->h()) return 0;
   Region r = rstack[rstackptr];
   if (!r) return 1;
 #ifndef _WIN32
@@ -181,17 +179,17 @@ int fl_not_clipped(int x, int y, int w, int h) {
 }
 
 // return rectangle surrounding intersection of this rectangle and clip,
-int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H) {
+int fltk::clip_box(int x,int y,int w,int h, int& X,int& Y,int& W,int& H) {
   Region r = rstack[rstackptr];
   if (!r) {X = x; Y = y; W = w; H = h; return 0;}
   // Test against the window to get 16-bit values (this is only done if
-  // a clip region exists as otherwise it breaks fl_push_no_clip()):
+  // a clip region exists as otherwise it breaks push_no_clip()):
   int ret = 1;
-  int dx = x; int dy = y; fl_transform(x,y); dx = x-dx; dy = y-dy;
+  int dx = x; int dy = y; transform(x,y); dx = x-dx; dy = y-dy;
   if (x < 0) {w += x; x = 0; ret = 2;}
-  int t = Fl_Window::current()->w(); if (x+w > t) {w = t-x; ret = 2;}
+  int t = Window::current()->w(); if (x+w > t) {w = t-x; ret = 2;}
   if (y < 0) {h += y; y = 0; ret = 2;}
-  t = Fl_Window::current()->h(); if (y+h > t) {h = t-y; ret = 2;}
+  t = Window::current()->h(); if (y+h > t) {h = t-y; ret = 2;}
   // check for total clip (or for empty rectangle):
   if (w <= 0 || h <= 0) {W = H = 0; return 0;}
 #ifndef _WIN32
@@ -244,5 +242,5 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.11 2002/07/01 15:28:19 spitzak Exp $"
+// End of "$Id: fl_clip.cxx,v 1.12 2002/12/09 04:52:29 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_x.cxx,v 1.7 2002/02/18 04:58:15 spitzak Exp $"
+// "$Id: fl_list_fonts_x.cxx,v 1.8 2002/12/09 04:52:30 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -43,6 +43,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <config.h>
+#include "IFont.h"
+using namespace fltk;
 
 // return dash number N, or pointer to ending null if none:
 static const char* font_word(const char* p, int n) {
@@ -53,7 +55,7 @@ static const char* font_word(const char* p, int n) {
 }
 
 // turn word N of a X font name into either some attribute bits
-// (right now 0, FL_BOLD, or FL_ITALIC), or into -1 indicating that
+// (right now 0, BOLD, or ITALIC), or into -1 indicating that
 // the word should be put into the name:
 
 static int attribute(int n, const char *p) {
@@ -67,10 +69,10 @@ static int attribute(int n, const char *p) {
 	!strncmp(p,"regular",7)) return 0;
     if (!strncmp(p,"bold",4) ||
 	!strncmp(p+4,"bold",4) ||
-	!strncmp(p+5,"bold",4)) return FL_BOLD;
+	!strncmp(p+5,"bold",4)) return BOLD;
   } else if (n == 4) { // slant
     if (*p == 'r') return 0;
-    if (*p == 'i' || *p == 'o') return FL_ITALIC;
+    if (*p == 'i' || *p == 'o') return ITALIC;
   }
   return -1;
 }
@@ -100,19 +102,6 @@ static int to_nice(char* o, const char* p) {
   return type;
 }
 
-// public function that calls the converter.  If ap is null it will also
-// add bold/italic words to the end of the nice name.
-const char* Fl_Font_::name(int* ap) const {
-  static char buffer[128];
-  int type = to_nice(buffer, name_);
-  if (ap) *ap = type;
-  else {
-    if (type & FL_BOLD) strcat(buffer," bold");
-    if (type & FL_ITALIC) strcat(buffer, " italic");
-  }
-  return buffer;
-}
-
 ////////////////////////////////////////////////////////////////
 // Generate a list of every font known by X server:
 
@@ -127,18 +116,18 @@ static int sort_function(const void *aa, const void *bb) {
 }
 }
 
-int fl_list_fonts(Fl_Font*& arrayp) {
-  static Fl_Font* font_array = 0;
+int fltk::list_fonts(fltk::Font**& arrayp) {
+  static fltk::Font** font_array = 0;
   static int num_fonts = 0;
   if (font_array) {arrayp = font_array; return num_fonts;}
 
-  fl_open_display();
+  open_display();
   int xlistsize;
-  char **xlist = XListFonts(fl_display, "-*", 10000, &xlistsize);
+  char **xlist = XListFonts(xdisplay, "-*", 10000, &xlistsize);
   if (!xlist) return 0; // ???
   qsort(xlist, xlistsize, sizeof(*xlist), sort_function);
 
-  Fl_Font_* family = 0; // current family
+  IFont* family = 0; // current family
   char family_name[128] = ""; // nice name of current family
 
   int array_size = 0;
@@ -154,16 +143,18 @@ int fl_list_fonts(Fl_Font*& arrayp) {
       if (nextattribute != attribute || strcmp(nextname, newname)) break;
     }
 
-    Fl_Font_* newfont;
+    IFont* newfont;
     // See if it is one of our built-in fonts:
     const char* skip_foundry = font_word(xlist[i],2);
     int length = font_word(skip_foundry, 6)-skip_foundry;
     for (int j = 0; ; j++) {
       if (j >= 16) { // no, create a new font
-	newfont = new Fl_Font_;
-	newfont->name_ = xlist[i];
-	newfont->bold_ = newfont;
-	newfont->italic_ = newfont;
+	newfont = new IFont;
+	newfont->f.name_ = strdup(newname);
+	newfont->f.attributes_ = attribute;
+	newfont->system_name = xlist[i];
+	newfont->bold = newfont;
+	newfont->italic = newfont;
 	newfont->first = 0;
 	newfont->xlist = xlist+i;
 	newfont->n = -n;
@@ -171,8 +162,9 @@ int fl_list_fonts(Fl_Font*& arrayp) {
       }
       // see if it is one of our built-in fonts:
       // if so, set the list of x fonts, since we have it anyway
-      if (!strncmp(skip_foundry, fl_fonts[j].name_+2, length)) {
-	newfont = fl_fonts+j;
+      IFont* match = (IFont*)(fltk::font(j));
+      if (!strncmp(skip_foundry, match->system_name+2, length)) {
+	newfont = match;
 	if (!newfont->xlist) {
 	  newfont->xlist = xlist+i;
 	  newfont->n = -n;
@@ -183,10 +175,10 @@ int fl_list_fonts(Fl_Font*& arrayp) {
 
     if (attribute && !strcmp(newname, family_name)) {
       switch (attribute) {
-      case FL_BOLD: family->bold_ = newfont; break;
-      case FL_ITALIC: family->italic_ = newfont; break;
-      case FL_BOLD|FL_ITALIC:
-	family->bold_->italic_ = family->italic_->bold_ = newfont;
+      case BOLD: family->bold = newfont; break;
+      case ITALIC: family->italic = newfont; break;
+      case BOLD|ITALIC:
+	family->bold->italic = family->italic->bold = newfont;
 	break;
       }
     } else {
@@ -194,9 +186,9 @@ int fl_list_fonts(Fl_Font*& arrayp) {
       strcpy(family_name, newname);
       if (num_fonts >= array_size) {
 	array_size = 2*array_size+128;
-	font_array = (Fl_Font*)realloc(font_array, array_size*sizeof(Fl_Font));
+	font_array = (fltk::Font**)realloc(font_array, array_size*sizeof(fltk::Font*));
       }
-      font_array[num_fonts++] = newfont;
+      font_array[num_fonts++] = &(newfont->f);
     }
 
     i += n;
@@ -208,19 +200,19 @@ int fl_list_fonts(Fl_Font*& arrayp) {
 ////////////////////////////////////////////////////////////////
 // Return all the encodings for this font:
 
-int Fl_Font_::encodings(const char**& arrayp) const {
-  if (!xlist) {
-    fl_open_display();
-    Fl_Font_* t = (Fl_Font_*)this; // cast away const
-    t->xlist = XListFonts(fl_display, name_, 100, &(t->n));
+int fltk::Font::encodings(const char**& arrayp) {
+  IFont* t = (IFont*)this;
+  if (!t->xlist) {
+    open_display();
+    t->xlist = XListFonts(xdisplay, t->system_name, 100, &(t->n));
     if (!t->xlist) return 0;
   }
-  int listsize = n;
+  int listsize = t->n;
   if (listsize < 0) listsize = -listsize;
   static const char* array[128];
   int count = 0;
   for (int i = 0; i < listsize; i++) {
-    char *q = xlist[i];
+    char *q = t->xlist[i];
     const char *c = font_word(q,13);
     if (!*c++ || !*c) continue;
     // insert-sort the new encoding into list:
@@ -244,19 +236,19 @@ int Fl_Font_::encodings(const char**& arrayp) const {
 ////////////////////////////////////////////////////////////////
 
 // Return all the point sizes supported by this font:
-int Fl_Font_::sizes(int*& sizep) const {
-  if (!xlist) {
-    fl_open_display();
-    Fl_Font_* t = (Fl_Font_*)this; // cast away const
-    t->xlist = XListFonts(fl_display, name_, 100, &(t->n));
+int fltk::Font::sizes(int*& sizep) {
+  IFont* t = (IFont*)this;
+  if (!t->xlist) {
+    open_display();
+    t->xlist = XListFonts(xdisplay, t->system_name, 100, &(t->n));
     if (!t->xlist) return 0;
   }
-  int listsize = n;
+  int listsize = t->n;
   if (listsize < 0) listsize = -listsize;
   static int array[128];
   int count = 0;
   for (int i = 0; i < listsize; i++) {
-    char *q = xlist[i];
+    char *q = t->xlist[i];
     const char* d = font_word(q,7);
     if (!*d++) continue;
     int s = strtol(d,0,10);
@@ -279,5 +271,5 @@ int Fl_Font_::sizes(int*& sizep) const {
 }
 
 //
-// End of "$Id: fl_list_fonts_x.cxx,v 1.7 2002/02/18 04:58:15 spitzak Exp $"
+// End of "$Id: fl_list_fonts_x.cxx,v 1.8 2002/12/09 04:52:30 spitzak Exp $"
 //

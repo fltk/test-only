@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_FileIcon.cxx,v 1.11 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: Fl_FileIcon.cxx,v 1.12 2002/12/09 04:52:25 spitzak Exp $"
 //
-// Fl_FileIcon routines for the Fast Light Tool Kit (FLTK).
+// FileIcon routines for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1997-1999 by Easy Software Products.
 //
@@ -24,11 +24,11 @@
 //
 // Contents:
 //
-//   Fl_FileIcon::Fl_FileIcon()       - Create a new file icon.
-//   Fl_FileIcon::~Fl_FileIcon()      - Remove a file icon.
-//   Fl_FileIcon::add()               - Add data to an icon.
-//   Fl_FileIcon::find()              - Find an icon based upon a given file.
-//   Fl_FileIcon::draw()              - Draw an icon.
+//   FileIcon::FileIcon()       - Create a new file icon.
+//   FileIcon::~FileIcon()      - Remove a file icon.
+//   FileIcon::add()	       - Add data to an icon.
+//   FileIcon::find()	      - Find an icon based upon a given file.
+//   FileIcon::draw()	      - Draw an icon.
 //
 
 //
@@ -48,11 +48,10 @@
 # include <unistd.h>
 #endif
 
-#include <fltk/Fl_FileIcon.h>
-#include <fltk/Fl_Widget.h>
-#include <fltk/fl_draw.h>
+#include <fltk/FileIcon.h>
+#include <fltk/Widget.h>
+#include <fltk/draw.h>
 #include <fltk/filename.h>
-
 
 //
 // Define missing POSIX/XPG4 macros as needed...
@@ -66,22 +65,23 @@
 #  define S_ISLNK(m) (((m) & S_IFMT) == S_IFLNK)
 #endif /* !S_ISDIR */
 
+using namespace fltk;
 
 //
 // Icon cache...
 //
 
-Fl_FileIcon	*Fl_FileIcon::first_ = (Fl_FileIcon *)0;
+FileIcon	*FileIcon::first_ = (FileIcon *)0;
 
 
 //
-// 'Fl_FileIcon::Fl_FileIcon()' - Create a new file icon.
+// 'FileIcon::FileIcon()' - Create a new file icon.
 //
 
-Fl_FileIcon::Fl_FileIcon(const char *p,	/* I - Filename pattern */
-                         int        t,	/* I - File type */
-		         int        nd,	/* I - Number of data values */
-		         short      *d)	/* I - Data values */
+FileIcon::FileIcon(const char *p,	/* I - Filename pattern */
+			 int	t,	/* I - File type */
+			 int	nd,	/* I - Number of data values */
+			 short      *d)	/* I - Data values */
 {
   // Initialize the pattern and type...
   pattern_ = p;
@@ -108,18 +108,18 @@ Fl_FileIcon::Fl_FileIcon(const char *p,	/* I - Filename pattern */
 
 
 //
-// 'Fl_FileIcon::~Fl_FileIcon()' - Remove a file icon.
+// 'FileIcon::~FileIcon()' - Remove a file icon.
 //
 
-Fl_FileIcon::~Fl_FileIcon()
+FileIcon::~FileIcon()
 {
-  Fl_FileIcon	*current,	// Current icon in list
+  FileIcon	*current,	// Current icon in list
 		*prev;		// Previous icon in list
 
 
   // Find the icon in the list...
-  for (current = first_, prev = (Fl_FileIcon *)0;
-       current != this && current != (Fl_FileIcon *)0;
+  for (current = first_, prev = (FileIcon *)0;
+       current != this && current != (FileIcon *)0;
        prev = current, current = current->next_);
 
   // Remove the icon from the list as needed...
@@ -138,11 +138,11 @@ Fl_FileIcon::~Fl_FileIcon()
 
 
 //
-// 'Fl_FileIcon::add()' - Add data to an icon.
+// 'FileIcon::add()' - Add data to an icon.
 //
 
 short *			// O - Pointer to new data value
-Fl_FileIcon::add(short d)	// I - Data to add
+FileIcon::add(short d)	// I - Data to add
 {
   short	*dptr;		// Pointer to new data value
 
@@ -172,14 +172,14 @@ Fl_FileIcon::add(short d)	// I - Data to add
 
 
 //
-// 'Fl_FileIcon::find()' - Find an icon based upon a given file.
+// 'FileIcon::find()' - Find an icon based upon a given file.
 //
 
-Fl_FileIcon *				// O - Matching file icon or NULL
-Fl_FileIcon::find(const char *filename,	// I - Name of file */
-                  int        filetype)	// I - Enumerated file type
+FileIcon *				// O - Matching file icon or NULL
+FileIcon::find(const char *filename,	// I - Name of file */
+		  int	filetype)	// I - Enumerated file type
 {
-  Fl_FileIcon	*current;		// Current file in list
+  FileIcon	*current;		// Current file in list
   struct stat	fileinfo;		// Information on file
 
 
@@ -188,28 +188,28 @@ Fl_FileIcon::find(const char *filename,	// I - Name of file */
     if (!stat(filename, &fileinfo))
     {
       if (S_ISDIR(fileinfo.st_mode))
-        filetype = DIR;
+	filetype = DIR;
 #ifdef S_IFIFO
       else if (S_ISFIFO(fileinfo.st_mode))
-        filetype = FIFO;
+	filetype = FIFO;
 #endif // S_IFIFO
 #if defined(S_ICHR) && defined(S_IBLK)
       else if (S_ISCHR(fileinfo.st_mode) || S_ISBLK(fileinfo.st_mode))
-        filetype = DEVICE;
+	filetype = DEVICE;
 #endif // S_ICHR && S_IBLK
 #ifdef S_ILNK
       else if (S_ISLNK(fileinfo.st_mode))
-        filetype = LINK;
+	filetype = LINK;
 #endif // S_ILNK
       else
-        filetype = PLAIN;
+	filetype = PLAIN;
     }
 
   // Loop through the available file types and return any match that
   // is found...
-  for (current = first_; current != (Fl_FileIcon *)0; current = current->next_)
+  for (current = first_; current != (FileIcon *)0; current = current->next_)
     if ((current->type_ == filetype || current->type_ == ANY) &&
-        filename_match(filename, current->pattern_))
+	filename_match(filename, current->pattern_))
       break;
 
   // Return the match (if any)...
@@ -218,18 +218,18 @@ Fl_FileIcon::find(const char *filename,	// I - Name of file */
 
 
 //
-// 'Fl_FileIcon::draw()' - Draw an icon.
+// 'FileIcon::draw()' - Draw an icon.
 //
 
 void
-Fl_FileIcon::draw(int      x,		// I - Upper-lefthand X
-                  int      y,		// I - Upper-lefthand Y
-	          int      w,		// I - Width of bounding box
-	          int      h,		// I - Height of bounding box
-                  Fl_Color ic,		// I - Icon color...
+FileIcon::draw(int      x,		// I - Upper-lefthand X
+		  int      y,		// I - Upper-lefthand Y
+		  int      w,		// I - Width of bounding box
+		  int      h,		// I - Height of bounding box
+		  Color ic,		// I - Icon color...
 		  int      active)	// I - Active or inactive?
 {
-  Fl_Color	c;		// Current color
+  Color	c;		// Current color
   short		*d;		// Pointer to data
   short		*prim;		// Pointer to start of primitive...
   float		scale;		// Scale of icon
@@ -242,10 +242,10 @@ Fl_FileIcon::draw(int      x,		// I - Upper-lefthand X
   // Setup the transform matrix as needed...
   scale = w < h ? w : h;
 
-  fl_push_matrix();
-  fl_translate(x + 0.5f * (w - scale),
-               y + 0.5f * (h + scale));
-  fl_scale(scale, -scale);
+  push_matrix();
+  translate(x + 0.5f * (w - scale),
+	       y + 0.5f * (h + scale));
+  fltk::scale(scale, -scale);
 
   // Loop through the array until we see an unmatched END...
   d    = data_;
@@ -253,77 +253,77 @@ Fl_FileIcon::draw(int      x,		// I - Upper-lefthand X
   c    = ic;
 
   if (active)
-    fl_color(c);
+    setcolor(c);
   else
-    fl_color(fl_inactive(c));
+    setcolor(inactive(c));
 
   while (*d != END || prim)
     switch (*d)
     {
       case END :
-          switch (*prim)
+	  switch (*prim)
 	  {
 	    case LINE :
-		fl_stroke();
+		strokepath();
 		break;
 
 	    case CLOSEDLINE :
-		fl_closepath();
-		fl_stroke();
+		closepath();
+		strokepath();
 		break;
 
 	    case POLYGON :
-		fl_fill();
+		fillpath();
 		break;
 
 	    case OUTLINEPOLYGON : {
-		Fl_Color color = prim[1]==256 ? ic : (Fl_Color)prim[1];
-		if (!active) color = fl_inactive(color);
-		fl_fill_stroke(color);
+		Color color = prim[1]==256 ? ic : (Color)prim[1];
+		if (!active) color = inactive(color);
+		fillstrokepath(color);
 		break;}
 	  }
 
-          prim = NULL;
+	  prim = NULL;
 	  d ++;
 	  break;
 
       case COLOR :
-          if (d[1] == 256)
+	  if (d[1] == 256)
 	    c = ic;
 	  else
-	    c = (Fl_Color)d[1];
+	    c = (Color)d[1];
 
-          if (!active)
-	    c = fl_inactive(c);
+	  if (!active)
+	    c = inactive(c);
 
-          fl_color(c);
+	  setcolor(c);
 	  d += 2;
 	  break;
 
       case LINE :
       case CLOSEDLINE :
       case POLYGON :
-          prim = d;
+	  prim = d;
 	  d ++;
 	  break;
 
       case OUTLINEPOLYGON :
-          prim = d;
+	  prim = d;
 	  d += 2;
 	  break;
 
       case VERTEX :
-          if (prim)
-	    fl_vertex(d[1] * 0.0001f, d[2] * 0.0001f);
+	  if (prim)
+	    addvertex(d[1] * 0.0001f, d[2] * 0.0001f);
 	  d += 3;
 	  break;
     }
 
   // Restore the transform matrix
-  fl_pop_matrix();
+  pop_matrix();
 }
 
 
 //
-// End of "$Id: Fl_FileIcon.cxx,v 1.11 2002/09/16 00:29:06 spitzak Exp $".
+// End of "$Id: Fl_FileIcon.cxx,v 1.12 2002/12/09 04:52:25 spitzak Exp $".
 //

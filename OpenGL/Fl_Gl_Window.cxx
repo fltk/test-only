@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.38 2002/07/01 15:28:18 spitzak Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.39 2002/12/09 04:52:21 spitzak Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,11 +26,14 @@
 #include <config.h>
 #if HAVE_GL
 
-#include <fltk/Fl.h>
-#include "Fl_Gl_Choice.h"
-#include <fltk/Fl_Gl_Window.h>
+#include "GlChoice.h"
+#include <fltk/GlWindow.h>
+#include <fltk/damage.h>
+#include <fltk/error.h>
+#include <fltk/visual.h>
 #include <stdlib.h>
 #include <string.h>
+using namespace fltk;
 
 ////////////////////////////////////////////////////////////////
 
@@ -57,31 +60,31 @@ static char SWAP_TYPE; // 0 = determine it from environment variable
 
 ////////////////////////////////////////////////////////////////
 
-bool Fl_Gl_Window::can_do(int a) {
-  return Fl_Gl_Choice::find(a) != 0;
+bool GlWindow::can_do(int a) {
+  return GlChoice::find(a) != 0;
 }
 
-void Fl_Gl_Window::create() {
+void GlWindow::create() {
   if (!gl_choice) {
-    gl_choice = Fl_Gl_Choice::find(mode_);
-    if (!gl_choice) {Fl::error("Insufficient GL support"); return;}
+    gl_choice = GlChoice::find(mode_);
+    if (!gl_choice) {error("Insufficient GL support"); return;}
   }
 #ifndef _WIN32
-  Fl_X::create(this, gl_choice->vis, gl_choice->colormap, -1);
-  //if (overlay && overlay != this) ((Fl_Gl_Window*)overlay)->show();
+  CreatedWindow::create(this, gl_choice->vis, gl_choice->colormap, -1);
+  //if (overlay && overlay != this) ((GlWindow*)overlay)->show();
 #else
-  Fl_Window::create();
+  Window::create();
 #endif
 }
 
-void Fl_Gl_Window::invalidate() {
+void GlWindow::invalidate() {
   valid(0);
 #ifndef _WIN32
-  if (overlay) ((Fl_Gl_Window*)overlay)->valid(0);
+  if (overlay) ((GlWindow*)overlay)->valid(0);
 #endif
 }
 
-bool Fl_Gl_Window::mode(int m) {
+bool GlWindow::mode(int m) {
   if (m == mode_) return false;
   mode_ = m;
   // destroy context and g:
@@ -96,17 +99,17 @@ bool Fl_Gl_Window::mode(int m) {
 
 #define NON_LOCAL_CONTEXT 0x80000000
 
-void Fl_Gl_Window::make_current() {
+void GlWindow::make_current() {
   current_ = this;
   if (!context_) {
     mode_ &= ~NON_LOCAL_CONTEXT;
-    context_ = fl_create_gl_context(this, gl_choice);
+    context_ = create_gl_context(this, gl_choice);
     valid(0);
   }
-  fl_set_gl_context(this, context_);
+  set_gl_context(this, context_);
 }
 
-void Fl_Gl_Window::ortho() {
+void GlWindow::ortho() {
 // Alpha NT seems to have a broken OpenGL that does not like negative coords:
 #ifdef _M_ALPHA
   glLoadIdentity();
@@ -121,22 +124,22 @@ void Fl_Gl_Window::ortho() {
 #endif
 }
 
-void Fl_Gl_Window::swap_buffers() {
+void GlWindow::swap_buffers() {
 #ifdef _WIN32
 #if USE_GL_OVERLAY
   // Do not swap the overlay, to match GLX:
-  wglSwapLayerBuffers(Fl_X::i(this)->dc, WGL_SWAP_MAIN_PLANE);
+  wglSwapLayerBuffers(CreatedWindow::find(this)->dc, WGL_SWAP_MAIN_PLANE);
 #else
-  SwapBuffers(Fl_X::i(this)->dc);
+  SwapBuffers(CreatedWindow::find(this)->dc);
 #endif
 #else
-  glXSwapBuffers(fl_display, fl_xid(this));
+  glXSwapBuffers(xdisplay, xid(this));
 #endif
 }
 
-void Fl_Gl_Window::draw_swap() {
+void GlWindow::draw_swap() {
   draw();
-  if (!(mode_ & FL_NO_AUTO_SWAP)) swap_buffers();
+  if (!(mode_ & NO_AUTO_SWAP)) swap_buffers();
 }
 
 #if USE_GL_OVERLAY && defined(_WIN32)
@@ -144,18 +147,18 @@ int fl_overlay_depth = 0;
 bool fl_overlay;
 #endif
 
-void Fl_Gl_Window::flush() {
+void GlWindow::flush() {
   uchar save_valid = valid_;
   uchar save_damage = damage();
 
-  Fl_X* i = Fl_X::i(this);
+  CreatedWindow* i = CreatedWindow::find(this);
 #if USE_GL_OVERLAY && defined(_WIN32)
-  if (save_damage == FL_DAMAGE_OVERLAY && !i->region) goto OVERLAY_ONLY;
+  if (save_damage == DAMAGE_OVERLAY && !i->region) goto OVERLAY_ONLY;
 #endif
 
   make_current();
 
-  if (mode_ & FL_DOUBLE) {
+  if (mode_ & DOUBLE_BUFFER) {
 
     glDrawBuffer(GL_BACK);
 
@@ -173,7 +176,7 @@ void Fl_Gl_Window::flush() {
     if (SWAP_TYPE == NODAMAGE) {
 
       // don't draw if only overlay damage or expose events:
-      if (save_damage != FL_DAMAGE_OVERLAY || !save_valid)
+      if (save_damage != DAMAGE_OVERLAY || !save_valid)
 	draw_swap();
       else
 	swap_buffers();
@@ -181,7 +184,7 @@ void Fl_Gl_Window::flush() {
     } else if (SWAP_TYPE == COPY) {
 
       // don't draw if only the overlay is damaged:
-      if (save_damage != FL_DAMAGE_OVERLAY || i->region || !save_valid)
+      if (save_damage != DAMAGE_OVERLAY || i->region || !save_valid)
 	draw_swap();
       else
 	swap_buffers();
@@ -190,16 +193,16 @@ void Fl_Gl_Window::flush() {
       // If we are faking the overlay, use CopyPixels to act like
       // SWAP_TYPE == COPY.  Otherwise overlay redraw is way too slow.
       // don't draw if only the overlay is damaged:
-      if (damage1_ || save_damage != FL_DAMAGE_OVERLAY || i->region || !save_valid) draw();
+      if (damage1_ || save_damage != DAMAGE_OVERLAY || i->region || !save_valid) draw();
       // we use a seperate context for the copy because rasterpos must be 0
       // and depth test needs to be off:
       static GLContext ortho_context = 0;
-      static Fl_Gl_Window* ortho_window = 0;
+      static GlWindow* ortho_window = 0;
       if (!ortho_context) {
-	ortho_context = fl_create_gl_context(this, gl_choice);
+	ortho_context = create_gl_context(this, gl_choice);
 	save_valid = 0;
       }
-      fl_set_gl_context(this, ortho_context);
+      set_gl_context(this, ortho_context);
       if (!save_valid || ortho_window != this) {
 	ortho_window = this;
 	glDisable(GL_DEPTH_TEST);
@@ -220,7 +223,7 @@ void Fl_Gl_Window::flush() {
       set_damage(~0);
       draw();
       if (overlay == this) draw_overlay();
-      if (!(mode_ & FL_NO_AUTO_SWAP)) swap_buffers();
+      if (!(mode_ & NO_AUTO_SWAP)) swap_buffers();
       goto NO_OVERLAY;
 
     }
@@ -244,7 +247,7 @@ void Fl_Gl_Window::flush() {
  OVERLAY_ONLY:
   // Draw into hardware overlay planes if they are damaged:
   if (overlay && overlay != this
-      && (i->region || save_damage&FL_DAMAGE_OVERLAY || !save_valid)) {
+      && (i->region || save_damage&DAMAGE_OVERLAY || !save_valid)) {
 #if SGI320_BUG
     // SGI 320 messes up overlay with user-defined cursors:
     bool fixcursor = false;
@@ -253,10 +256,10 @@ void Fl_Gl_Window::flush() {
       SetCursor(0);
     }
 #endif
-    fl_set_gl_context(this, (GLContext)overlay);
+    set_gl_context(this, (GLContext)overlay);
     if (fl_overlay_depth) wglRealizeLayerPalette(i->dc, 1, TRUE);
     glDisable(GL_SCISSOR_TEST);
-    if (!(mode_&FL_NO_ERASE_OVERLAY)) glClear(GL_COLOR_BUFFER_BIT);
+    if (!(mode_&NO_ERASE_OVERLAY)) glClear(GL_COLOR_BUFFER_BIT);
     fl_overlay = true;
     valid(save_valid);
     draw_overlay();
@@ -270,52 +273,52 @@ void Fl_Gl_Window::flush() {
   valid(1);
 }
 
-void Fl_Gl_Window::layout() {
+void GlWindow::layout() {
   valid(0);
 #ifndef _WIN32
   if (!resizable() && overlay && overlay != this)
-    ((Fl_Gl_Window*)overlay)->resize(0,0,w(),h());
+    ((GlWindow*)overlay)->resize(0,0,w(),h());
 #endif
-  Fl_Window::layout();
+  Window::layout();
 }
 
-void Fl_Gl_Window::context(void* v, bool destroy_flag) {
-  if (context_ && !(mode_&NON_LOCAL_CONTEXT)) fl_delete_gl_context(context_);
+void GlWindow::context(void* v, bool destroy_flag) {
+  if (context_ && !(mode_&NON_LOCAL_CONTEXT)) delete_gl_context(context_);
   context_ = (GLContext)v;
   if (destroy_flag) mode_ &= ~NON_LOCAL_CONTEXT;
   else mode_ |= NON_LOCAL_CONTEXT;
 }    
 
-void Fl_Gl_Window::destroy() {
+void GlWindow::destroy() {
   context(0);
 #if USE_GL_OVERLAY
   if (overlay && overlay != this) {
 #ifdef _WIN32
-    fl_delete_gl_context((GLContext)overlay);
+    delete_gl_context((GLContext)overlay);
 #endif
     overlay = 0;
   }
 #endif
-  Fl_Window::destroy();
+  Window::destroy();
 }
 
-Fl_Gl_Window::~Fl_Gl_Window() {
+GlWindow::~GlWindow() {
   destroy();
 }
 
-void Fl_Gl_Window::init() {
+void GlWindow::init() {
   end(); // we probably don't want any children
-  mode_ = FL_RGB | FL_DEPTH | FL_DOUBLE;
+  mode_ = DEPTH_BUFFER | DOUBLE_BUFFER;
   context_ = 0;
   gl_choice = 0;
   overlay = 0;
   damage1_ = 0;
 }
 
-void Fl_Gl_Window::draw_overlay() {}
+void GlWindow::draw_overlay() {}
 
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.38 2002/07/01 15:28:18 spitzak Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.39 2002/12/09 04:52:21 spitzak Exp $".
 //

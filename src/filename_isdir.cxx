@@ -1,5 +1,5 @@
 //
-// "$Id: filename_isdir.cxx,v 1.8 2001/08/08 06:28:11 spitzak Exp $"
+// "$Id: filename_isdir.cxx,v 1.9 2002/12/09 04:52:28 spitzak Exp $"
 //
 // Directory detection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -23,7 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// Used by fl_file_chooser
+// Used by file_chooser
 
 #include <config.h>
 #include <fltk/filename.h>
@@ -48,5 +48,5 @@ bool filename_isdir(const char* name) {
 }
 
 //
-// End of "$Id: filename_isdir.cxx,v 1.8 2001/08/08 06:28:11 spitzak Exp $".
+// End of "$Id: filename_isdir.cxx,v 1.9 2002/12/09 04:52:28 spitzak Exp $".
 //

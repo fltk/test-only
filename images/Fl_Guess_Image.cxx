@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Guess_Image.cxx,v 1.7 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Guess_Image.cxx,v 1.8 2002/12/09 04:52:23 spitzak Exp $"
 //
 // Guessing image type code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,14 +27,15 @@
 // Keep uncompressed images in memory for later use. 
 
 #include <config.h>
-#include <fltk/Fl.h>
-#include <fltk/fl_draw.h>
-#include <fltk/Fl_Shared_Image.h>
-#include <fltk/Fl_Bitmap.h>
+#include <fltk/draw.h>
+#include <fltk/SharedImage.h>
+#include <fltk/xbmImage.h>
+//#include <fltk/xpmImage.h>
 #include <fltk/x.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+using namespace fltk;
 
 // Bitmap used when we couldn't guess the filetype
 #define nosuch_width 16
@@ -44,18 +45,18 @@ static unsigned char nosuch_bits[] = {
    0x55, 0x94, 0x69, 0xaa, 0xd5, 0x94, 0xa9, 0xa8, 0x55, 0x95, 0xa9, 0xa9,
    0x55, 0x95, 0xa9, 0xab, 0x01, 0x81, 0xff, 0xff};
 
-FL_IMAGES_API Fl_Bitmap nosuch_bitmap(nosuch_bits, nosuch_width, nosuch_height);
+FL_IMAGES_API xbmImage nosuch_bitmap(nosuch_bits, nosuch_width, nosuch_height);
 
-Fl_Image_Type fl_image_filetypes[] = {
-  { "XPM", Fl_XPM_Image::test, Fl_XPM_Image::get},
-  { "GIF", Fl_GIF_Image::test, Fl_GIF_Image::get},
-  { "PNG", Fl_PNG_Image::test, Fl_PNG_Image::get},
-  { "BMP", Fl_BMP_Image::test, Fl_BMP_Image::get},
-  { "JPEG", Fl_JPEG_Image::test, Fl_JPEG_Image::get},
-  { 0, Fl_UNKNOWN_Image::test, Fl_UNKNOWN_Image::get }
+ImageType fltk::image_filetypes[] = {
+  //  { "xpm", xpmImage::test, xpmImage::get},
+  { "gif", gifImage::test, gifImage::get},
+  { "png", pngImage::test, pngImage::get},
+  { "bmp", bmpImage::test, bmpImage::get},
+  { "jpeg",jpegImage::test, jpegImage::get},
+  { 0, 0, 0}
 };
 
-FL_IMAGES_API Fl_Image_Type* Fl_Shared_Image::guess(const char* name, const uchar* datas)
+FL_IMAGES_API ImageType* SharedImage::guess(const char* name, const uchar* datas)
 {
   uchar* read_data = 0;
   const uchar* test_data = datas;
@@ -63,20 +64,20 @@ FL_IMAGES_API Fl_Image_Type* Fl_Shared_Image::guess(const char* name, const ucha
   if (!datas) {
     FILE* fp = fopen(get_filename(name), "rb");
     if (!fp)
-      return fl_image_filetypes + 
-	sizeof(fl_image_filetypes)/sizeof(fl_image_filetypes[0]) - 1;
+      return image_filetypes + 
+	sizeof(image_filetypes)/sizeof(image_filetypes[0]) - 1;
     test_data = read_data = new uchar[1025];
     read_data[1024] = 0; // null-terminate so strstr() works
     size = fread(read_data, 1, size, fp);
     fclose(fp);
   }
-  Fl_Image_Type* ft;
-  for (ft=fl_image_filetypes; ft->name; ft++)
+  ImageType* ft;
+  for (ft=image_filetypes; ft->name; ft++)
     if (ft->test(test_data, size)) break;
   delete[] read_data;
   return ft;
 }
 
 //
-// End of "$Id: Fl_Guess_Image.cxx,v 1.7 2001/07/23 09:50:04 spitzak Exp $"
+// End of "$Id: Fl_Guess_Image.cxx,v 1.8 2002/12/09 04:52:23 spitzak Exp $"
 //

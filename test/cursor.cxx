@@ -1,5 +1,5 @@
 //
-// "$Id: cursor.cxx,v 1.9 2002/10/26 09:55:31 spitzak Exp $"
+// "$Id: cursor.cxx,v 1.10 2002/12/09 04:52:31 spitzak Exp $"
 //
 // Cursor test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,153 +23,61 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/Fl_Hor_Value_Slider.h>
-#include <fltk/Fl_Choice.h>
-#include <fltk/fl_draw.h>
-#include <fltk/Fl_Box.h>
+// This is a complete rewrite that replaces the old test program.
+// Cursors are no longer identified by an integer.
 
-Fl_Color fg = FL_BLACK;
-Fl_Color bg = 255;
-Fl_Cursor cursor = FL_CURSOR_DEFAULT;
+#include <fltk/run.h>
+#include <fltk/events.h>
+#include <fltk/Window.h>
+#include <fltk/Cursor.h>
 
-Fl_Hor_Value_Slider *cursor_slider;
+using namespace fltk;
 
-void choice_cb(Fl_Widget *, void *v) {
-  cursor = (Fl_Cursor)(long)v;
-  cursor_slider->value(cursor);
-  fl_cursor(cursor,fg,bg);
-}
-
-Fl_Menu_Item choices[] = {
-  {"FL_CURSOR_DEFAULT",0,choice_cb,(void*)FL_CURSOR_DEFAULT},
-  {"FL_CURSOR_ARROW",0,choice_cb,(void*)FL_CURSOR_ARROW},
-  {"FL_CURSOR_CROSS",0,choice_cb,(void*)FL_CURSOR_CROSS},
-  {"FL_CURSOR_WAIT",0,choice_cb,(void*)FL_CURSOR_WAIT},
-  {"FL_CURSOR_INSERT",0,choice_cb,(void*)FL_CURSOR_INSERT},
-  {"FL_CURSOR_HAND",0,choice_cb,(void*)FL_CURSOR_HAND},
-  {"FL_CURSOR_HELP",0,choice_cb,(void*)FL_CURSOR_HELP},
-  {"FL_CURSOR_MOVE",0,choice_cb,(void*)FL_CURSOR_MOVE},
-  {"FL_CURSOR_NS",0,choice_cb,(void*)FL_CURSOR_NS},
-  {"FL_CURSOR_WE",0,choice_cb,(void*)FL_CURSOR_WE},
-  {"FL_CURSOR_NWSE",0,choice_cb,(void*)FL_CURSOR_NWSE},
-  {"FL_CURSOR_NESW",0,choice_cb,(void*)FL_CURSOR_NESW},
-  {"FL_CURSOR_NO",0,choice_cb,(void*)FL_CURSOR_NO},
-  {"FL_CURSOR_NONE",0,choice_cb,(void*)FL_CURSOR_NONE},
-#if 0
-  {"FL_CURSOR_N",0,choice_cb,(void*)FL_CURSOR_N},
-  {"FL_CURSOR_NE",0,choice_cb,(void*)FL_CURSOR_NE},
-  {"FL_CURSOR_E",0,choice_cb,(void*)FL_CURSOR_E},
-  {"FL_CURSOR_SE",0,choice_cb,(void*)FL_CURSOR_SE},
-  {"FL_CURSOR_S",0,choice_cb,(void*)FL_CURSOR_S},
-  {"FL_CURSOR_SW",0,choice_cb,(void*)FL_CURSOR_SW},
-  {"FL_CURSOR_W",0,choice_cb,(void*)FL_CURSOR_W},
-  {"FL_CURSOR_NW",0,choice_cb,(void*)FL_CURSOR_NW},
-#endif
-  {0}
-};
-
-void setcursor(Fl_Widget *o, void *) {
-  Fl_Hor_Value_Slider *slider = (Fl_Hor_Value_Slider *)o;
-  cursor = Fl_Cursor((int)slider->value());
-  fl_cursor(cursor,fg,bg);
-}
-
-void setfg(Fl_Widget *o, void *) {
-  Fl_Hor_Value_Slider *slider = (Fl_Hor_Value_Slider *)o;
-  fg = Fl_Color((int)slider->value());
-  fl_cursor(cursor,fg,bg);
-}
-
-void setbg(Fl_Widget *o, void *) {
-  Fl_Hor_Value_Slider *slider = (Fl_Hor_Value_Slider *)o;
-  bg = Fl_Color((int)slider->value());
-  fl_cursor(cursor,fg,bg);
-}
-
-#if 0
-// draw the label without any ^C or \nnn conversions:
-Fl_Font_ cfont = {"cursor"};
-class CharBox : public Fl_Box {
-  void draw() {
-    fl_font(&cfont, 14);
-    fl_draw(label(), x()+w()/2, y()+h()/2);
-  }
+class CursorBox : public Widget {
+  Cursor* cursor;
+  int handle(int);
 public:
-  CharBox(int X, int Y, int W, int H, const char* L) : Fl_Box(X,Y,W,H,L) {}
+  CursorBox(int x, int y, int w, int h, const char* name, Cursor* c)
+    : Widget(x,y,w,h,name), cursor(c) {}
 };
-#endif
+
+int CursorBox::handle(int event) {
+  if (event == ENTER) Widget::cursor(cursor);
+  if (event == PUSH) return true; // drag the cursor around
+  return Widget::handle(event);
+}
+
+struct {const char* name; Cursor* cursor;} table[] = {
+  {"0", 0},
+  {"CURSOR_ARROW",	CURSOR_ARROW},
+  {"CURSOR_CROSS",	CURSOR_CROSS},
+  {"CURSOR_WAIT",	CURSOR_WAIT},
+  {"CURSOR_INSERT",	CURSOR_INSERT},
+  {"CURSOR_HAND",	CURSOR_HAND},
+  {"CURSOR_HELP",	CURSOR_HELP},
+  {"CURSOR_MOVE",	CURSOR_MOVE},
+  {"CURSOR_NS",		CURSOR_NS},
+  {"CURSOR_WE",		CURSOR_WE},
+  {"CURSOR_NWSE",	CURSOR_NWSE},
+  {"CURSOR_NESW",	CURSOR_NESW},
+  {"CURSOR_NO",		CURSOR_NO},
+  {"CURSOR_NONE",	CURSOR_NONE},
+};
+#define COUNT (sizeof(table)/sizeof(*table))
+#define W 200
+#define H 25
+#define GAP 5
 
 int main(int argc, char **argv) {
-  Fl_Window window(400,300);
-
-  Fl_Choice choice(80,100,200,25,"Cursor:");
-  choice.menu(choices);
-  choice.when(FL_WHEN_RELEASE|FL_WHEN_NOT_CHANGED);
-
-  Fl_Hor_Value_Slider slider1(80,180,310,30,"Cursor:");
-  cursor_slider = &slider1;
-  slider1.clear_flag(FL_ALIGN_MASK);
-  slider1.set_flag(FL_ALIGN_LEFT);
-  slider1.step(1);
-#ifndef FLTK_2
-  slider1.precision(0);
-#endif
-  slider1.range(0,100);
-  slider1.value(0);
-  slider1.callback(setcursor);
-  slider1.value(cursor);
-
-  Fl_Hor_Value_Slider slider2(80,220,310,30,"fgcolor:");
-  slider2.clear_flag(FL_ALIGN_MASK);
-  slider2.set_flag(FL_ALIGN_LEFT);
-  slider2.step(1);
-#ifndef FLTK_2
-  slider2.precision(0);
-#endif
-  slider2.range(0,255);
-  slider2.value(0);
-  slider2.callback(setfg);
-  slider2.value(fg);
-
-  Fl_Hor_Value_Slider slider3(80,260,310,30,"bgcolor:");
-  slider3.clear_flag(FL_ALIGN_MASK);
-  slider3.set_flag(FL_ALIGN_LEFT);
-  slider3.step(1);
-#ifndef FLTK_2
-  slider3.precision(0);
-#endif
-  slider3.range(0,255);
-  slider3.value(0);
-  slider3.callback(setbg);
-  slider3.value(bg);
-
-#if 0
-  // draw the manual's diagram of cursors...
-  window.size(400,800);
-  int y = 300;
-  char buf[100]; char *p = buf;
-  for (Fl_Menu_Item* m = choices; m->label(); m++) {
-    Fl_Box* b = new Fl_Box(35,y,150,25,m->label());
-	b->clear_flag(FL_ALIGN_MASK);
-    b->set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
-    int n = (int)(m->argument());
-    if (n == FL_CURSOR_NONE) break;
-    if (n == FL_CURSOR_DEFAULT) n = FL_CURSOR_ARROW;
-    p[0] = (char)((n-1)*2);
-    p[1] = 0;
-    b = new CharBox(15,y,20,20,p); p+=2;
-    y += 25;
-  }
-#endif
-
-  window.resizable(window);
+  Window window(W+2*GAP, (H+GAP)*COUNT+GAP);
+  window.begin();
+  for (unsigned i = 0; i < COUNT; i++)
+    new CursorBox(GAP, GAP+i*(H+GAP), W, H, table[i].name, table[i].cursor);
   window.end();
-  window.show(argc,argv);
-  return Fl::run();
+  window.show(argc, argv);
+  return run();
 }
 
 //
-// End of "$Id: cursor.cxx,v 1.9 2002/10/26 09:55:31 spitzak Exp $".
+// End of "$Id: cursor.cxx,v 1.10 2002/12/09 04:52:31 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_display.cxx,v 1.7 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: Fl_display.cxx,v 1.8 2002/12/09 04:52:27 spitzak Exp $"
 //
 // Display function for the Fast Light Tool Kit (FLTK).
 //
@@ -23,23 +23,25 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// Startup method to set what display to use.
-// Using setenv makes programs that are exec'd use the same display.
+// Startup method to set what display to use.  Using setenv makes
+// programs that are exec'd use the same display.  This sets the
+// environment variable on non-X systems, in case they can pay
+// attention to it. Unfortunatly it also does some uglification that X
+// needs: it adds the "0.0" to the end if it appears to be a machine
+// name.
 
-#include <fltk/Fl.h>
+#include <fltk/run.h>
 #include <stdlib.h>
 #include <string.h>
 
-void Fl::display(const char *d) {
-#if !defined(_WIN32)
+void fltk::display(const char *d) {
   char *e = new char[strlen(d)+13];
   strcpy(e,"DISPLAY=");
   strcpy(e+8,d);
   for (char *c = e+8; *c!=':'; c++) if (!*c) {strcpy(c,":0.0"); break;}
   putenv(e);
-#endif /* !_WIN32 */
 }
 
 //
-// End of "$Id: Fl_display.cxx,v 1.7 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: Fl_display.cxx,v 1.8 2002/12/09 04:52:27 spitzak Exp $".
 //

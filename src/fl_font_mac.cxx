@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_mac.cxx,v 1.2 2002/09/09 01:39:58 spitzak Exp $"
+// "$Id: fl_font_mac.cxx,v 1.3 2002/12/09 04:52:29 spitzak Exp $"
 //
 // MacOS font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 //: GetFNum (theName: Str255; VAR familyID: Integer);
 //: FUNCTION FMSwapFont (inRec: FMInput): FMOutPtr;
 
-Fl_FontSize::Fl_FontSize(const char* name, int Size) {
+FontSize::FontSize(const char* name, int Size) {
   knowMetrics = 0;
   switch (*name++) {
   case 'I': face = italic; break;
@@ -51,9 +51,9 @@ Fl_FontSize::Fl_FontSize(const char* name, int Size) {
   minsize = maxsize = size;
 }
 
-Fl_FontSize* fl_fontsize = 0L;
+FontSize* fontsize = 0L;
 
-Fl_FontSize::~Fl_FontSize() {
+FontSize::~FontSize() {
 /*
 #if HAVE_GL
 // Delete list created by gl_draw().  This is not done by this code
@@ -67,12 +67,12 @@ Fl_FontSize::~Fl_FontSize() {
 // }
 #endif
   */
-  if (this == fl_fontsize) fl_fontsize = 0;
+  if (this == fontsize) fontsize = 0;
 }
 
 ////////////////////////////////////////////////////////////////
 
-static Fl_Fontdesc built_in_table[] = {
+static Fontdesc built_in_table[] = {
 {" Arial"},
 {"BArial"},
 {"IArial"},
@@ -91,32 +91,32 @@ static Fl_Fontdesc built_in_table[] = {
 {" Webdings"},
 };
 
-Fl_Fontdesc* fl_fonts = built_in_table;
+Fontdesc* fonts = built_in_table;
 
-void fl_font(Fl_FontSize* s) {
-  fl_fontsize = s;
-  if (fl_window) SetPort( GetWindowPort(fl_window) );
-  TextFont(fl_fontsize->font);	//: select font into current QuickDraw GC
-  TextFace(fl_fontsize->face);
-  TextSize(fl_fontsize->size);
-  if (!fl_fontsize->knowMetrics) {	//: get the true metrics for the currnet GC (fails on multiple monitors with different dpi's!)
+void setfont(FontSize* s) {
+  fontsize = s;
+  if (xwindow) SetPort( GetWindowPort(xwindow) );
+  TextFont(fontsize->font);	//: select font into current QuickDraw GC
+  TextFace(fontsize->face);
+  TextSize(fontsize->size);
+  if (!fontsize->knowMetrics) {	//: get the true metrics for the currnet GC (fails on multiple monitors with different dpi's!)
     FontInfo fi; GetFontInfo(&fi);
-    fl_fontsize->ascent = fi.ascent;
-    fl_fontsize->descent = fi.descent;
+    fontsize->ascent = fi.ascent;
+    fontsize->descent = fi.descent;
     FMetricRec mr; FontMetrics(&mr);
     short *f = (short*)*mr.wTabHandle; //: get the char size table
-    for (int i=0; i<256; i++) fl_fontsize->width[i] = f[2*i];
-    fl_fontsize->knowMetrics = 1;
+    for (int i=0; i<256; i++) fontsize->width[i] = f[2*i];
+    fontsize->knowMetrics = 1;
   }
 }
 
-static Fl_FontSize* find(int fnum, int size) {
-  Fl_Fontdesc* s = fl_fonts+fnum;
-  if (!s->name) s = fl_fonts; // use 0 if fnum undefined
-  Fl_FontSize* f;
+static FontSize* find(int fnum, int size) {
+  Fontdesc* s = fonts+fnum;
+  if (!s->name) s = fonts; // use 0 if fnum undefined
+  FontSize* f;
   for (f = s->first; f; f = f->next)
     if (f->minsize <= size && f->maxsize >= size) return f;
-  f = new Fl_FontSize(s->name, size);
+  f = new FontSize(s->name, size);
   f->next = s->first;
   s->first = f;
   return f;
@@ -126,31 +126,22 @@ static Fl_FontSize* find(int fnum, int size) {
 // Public interface:
 
 
-void fl_font(int fnum, int size) {
-  fl_font(find(fnum, size));
+void fltk::setfont(Font* font, float size) {
+  setfont(find(fnum, size));
 }
 
-int fl_height() {
-  return fl_fontsize->ascent+fl_fontsize->descent;
+int fltk::getascent()  { return fontsize->ascent; }
+int fltk::getdescent() { return fontsize->descent; }
+
+float fltk::getwidth(const char* c, int n) {
+  return float(TextWidth( c, 0, n ));
 }
 
-int fl_descent() {
-  return fl_fontsize->descent;
-}
-
-double fl_width(const char* c, int n) {
-  return (double)TextWidth( c, 0, n );
-}
-
-double fl_width(uchar c) {
-  return (double)TextWidth( &c, 0, 1 );
-}
-
-void fl_draw(const char* str, int n, int x, int y) {
-  MoveTo(x, y);
+void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
+  MoveTo(int(floorf(x+.5)), int(floorf(y+l5)));
   DrawText(str, 0, n);
 }
 
 //
-// End of "$Id: fl_font_mac.cxx,v 1.2 2002/09/09 01:39:58 spitzak Exp $".
+// End of "$Id: fl_font_mac.cxx,v 1.3 2002/12/09 04:52:29 spitzak Exp $".
 //

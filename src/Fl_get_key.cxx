@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key.cxx,v 1.13 2002/09/18 05:51:46 spitzak Exp $"
+// "$Id: Fl_get_key.cxx,v 1.14 2002/12/09 04:52:27 spitzak Exp $"
 //
 // Keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
@@ -31,23 +31,23 @@
 
 // Return the current state of a key.  This is the X version.  I identify
 // keys (mostly) by the X keysym.  So this turns the keysym into a keycode
-// and looks it up in the X key bit vector, which Fl_x.C keeps track of.
+// and looks it up in the X key bit vector, which x.C keeps track of.
 
-#include <fltk/Fl.h>
+#include <fltk/events.h>
 #include <fltk/x.h>
 
-extern char fl_key_vector[32]; // in Fl_x.C
+extern char fl_key_vector[32]; // in x.C
 
-bool Fl::event_key_state(int keysym) {
-  if (keysym > FL_Button(0) && keysym <= FL_Button(8))
-    return Fl::event_state(FL_BUTTON(keysym-FL_Button(0))) != 0;
-  int keycode = XKeysymToKeycode(fl_display, keysym);
+bool fltk::event_key_state(int keysym) {
+  if (keysym > 0 && keysym <= 8)
+    return event_state(BUTTON(keysym)) != 0;
+  int keycode = XKeysymToKeycode(xdisplay, keysym);
   if (!keycode) {
 #ifdef __sgi
     // get some missing PC keyboard keys:
-    if (keysym == FL_Win_L) keycode = 147;
-    else if (keysym == FL_Win_R) keycode = 148;
-    else if (keysym == FL_Menu) keycode = 149;
+    if (keysym == LeftCommandKey) keycode = 147;
+    else if (keysym == RightCommandKey) keycode = 148;
+    else if (keysym == MenuKey) keycode = 149;
     else
 #endif
       keycode = keysym & 0xff; // undo the |0x8000 done to unknown keycodes
@@ -55,14 +55,14 @@ bool Fl::event_key_state(int keysym) {
   return (fl_key_vector[keycode/8] & (1 << (keycode%8))) != 0;
 }
 
-bool Fl::get_key_state(int k) {
-  fl_open_display();
-  XQueryKeymap(fl_display, fl_key_vector);
+bool fltk::get_key_state(int k) {
+  open_display();
+  XQueryKeymap(xdisplay, fl_key_vector);
   return event_key_state(k);
 }
 
 #endif
 
 //
-// End of "$Id: Fl_get_key.cxx,v 1.13 2002/09/18 05:51:46 spitzak Exp $".
+// End of "$Id: Fl_get_key.cxx,v 1.14 2002/12/09 04:52:27 spitzak Exp $".
 //

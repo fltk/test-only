@@ -1,9 +1,9 @@
 //
-// "$Id: fl_dnd_win32.cxx,v 1.6 2002/05/16 07:48:11 spitzak Exp $"
+// "$Id: fl_dnd_win32.cxx,v 1.7 2002/12/09 04:52:29 spitzak Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 // This is code for dragging *out* of the application. Code for dragging
-// into the application is in Fl_win32.cxx
+// into the application is in win32.cxx
 //
 // Copyright 1998-2002 by Bill Spitzak and others.
 //
@@ -26,8 +26,8 @@
 
 // I believe this was written by Matthias Melcher, correct?
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
+#include <fltk/events.h>
+#include <fltk/Window.h>
 #include <fltk/x.h>
 
 // All of the following code requires GCC 3.x or a non-GNU compiler...
@@ -64,7 +64,7 @@ public:
       delete this;
     return nTemp;
   }
-  STDMETHODIMP GiveFeedback( ulong ) { return DRAGDROP_S_USEDEFAULTCURSORS; }
+  STDMETHODIMP GiveFeedback( ULONG ) { return DRAGDROP_S_USEDEFAULTCURSORS; }
   STDMETHODIMP QueryContinueDrag( BOOL esc, DWORD keyState ) { 
     if ( esc ) 
       return DRAGDROP_S_CANCEL;
@@ -137,9 +137,9 @@ public:
 /**
  * drag and drop whatever is in the cut-copy-paste buffer
  * - create a selection first using: 
- *     Fl::copy(const char *stuff, int len, 0)
+ *     copy(const char *stuff, int len, 0)
  */
-bool Fl::dnd()
+bool fltk::dnd()
 {
   DWORD dropEffect;
   ReleaseCapture();
@@ -155,13 +155,13 @@ bool Fl::dnd()
   fds->Release();
 
   // Windows handled the mouse release, remember that:
-  pushed_ = 0;
-  e_state &= ~FL_BUTTONS;
+  fltk::pushed_ = 0;
+  fltk::e_state &= ~fltk::ANY_BUTTON;
 
   return ret==DRAGDROP_S_DROP; // or DD_S_CANCEL
 }
 #else
-bool Fl::dnd()
+bool fltk::dnd()
 {
   // Always indicate DnD failed when using GCC < 3...
   return false;
@@ -170,5 +170,5 @@ bool Fl::dnd()
 
 
 //
-// End of "$Id: fl_dnd_win32.cxx,v 1.6 2002/05/16 07:48:11 spitzak Exp $".
+// End of "$Id: fl_dnd_win32.cxx,v 1.7 2002/12/09 04:52:29 spitzak Exp $".
 //

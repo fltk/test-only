@@ -1,10 +1,10 @@
 //
-// "$Id: factory.cxx,v 1.26 2002/06/21 06:17:09 spitzak Exp $"
+// "$Id: factory.cxx,v 1.27 2002/12/09 04:52:23 spitzak Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
 // Type classes for most of the fltk widgets.  Most of the work
-// is done by code in Fl_Widget_Type.C.  Also a factory instance
+// is done by code in WidgetType.C.  Also a factory instance
 // of each of these type classes.
 //
 // This file also contains the "new" menu, which has a pointer
@@ -31,383 +31,381 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Group.h>
+#include <fltk/run.h>
+#include <fltk/Group.h>
 #include <string.h>
 #include <stdio.h>
 #include <config.h> // for strcasecmp
 
 #include "Fluid_Plugins.h"
-#include "Fl_Type.h"
+#include "FluidType.h"
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/Fl_Box.h>
-class Fl_Box_Type : public Fl_Widget_Type {
-public:
-  virtual const char *type_name() const {return "Fl_Box";}
-  Fl_Widget *widget(int x,int y,int w, int h) {
-    return new Fl_Box(x,y,w,h,"label");}
-  Fl_Widget_Type *_make() {return new Fl_Box_Type();}
-};
-static Fl_Box_Type Fl_Box_type;
+const char *WidgetType::type_name() const {return "fltk::Widget";}
+fltk::Widget *WidgetType::widget(int x,int y,int w, int h) {
+  return new fltk::Widget(x,y,w,h,"label");
+}
+WidgetType *WidgetType::_make() {return new WidgetType();}
+static WidgetType Widgettype;
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/Fl_Button.h>
+#include <fltk/Button.h>
 static const Enumeration buttontype_menu[] = {
-  {"Normal", 0,		(void*)Fl_Button::NORMAL},
-  {"Toggle", "TOGGLE",	(void*)Fl_Button::TOGGLE},
-  {"Radio",  "RADIO",	(void*)Fl_Button::RADIO},
+  {"Normal", 0,		(void*)fltk::Button::NORMAL},
+  {"Toggle", "TOGGLE",	(void*)fltk::Button::TOGGLE},
+  {"Radio",  "RADIO",	(void*)fltk::Button::RADIO},
   {0}};
-class Fl_Button_Type : public Fl_Widget_Type {
+class ButtonType : public WidgetType {
   const Enumeration *subtypes() const {return buttontype_menu;}
 public:
-  virtual const char *type_name() const {return "Fl_Button";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Button(x,y,w,h,"button");}
-  Fl_Widget_Type *_make() {return new Fl_Button_Type();}
+  virtual const char *type_name() const {return "fltk::Button";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    return new fltk::Button(x,y,w,h,"button");}
+  WidgetType *_make() {return new ButtonType();}
   int is_button() const {return 1;}
 };
-static Fl_Button_Type Fl_Button_type;
+static ButtonType Buttontype;
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/Fl_Return_Button.h>
-class Fl_Return_Button_Type : public Fl_Button_Type {
+#include <fltk/ReturnButton.h>
+class ReturnButtonType : public ButtonType {
 public:
-  virtual const char *type_name() const {return "Fl_Return_Button";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Return_Button(x,y,w,h,0);}
-  Fl_Widget_Type *_make() {return new Fl_Return_Button_Type();}
+  virtual const char *type_name() const {return "fltk::ReturnButton";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    return new fltk::ReturnButton(x,y,w,h,0);}
+  WidgetType *_make() {return new ReturnButtonType();}
 };
-static Fl_Return_Button_Type Fl_Return_Button_type;
+static ReturnButtonType ReturnButtontype;
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/Fl_Repeat_Button.h>
-class Fl_Repeat_Button_Type : public Fl_Widget_Type {
+#include <fltk/RepeatButton.h>
+class RepeatButtonType : public WidgetType {
 public:
-  virtual const char *type_name() const {return "Fl_Repeat_Button";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Repeat_Button(x,y,w,h,0);}
-  Fl_Widget_Type *_make() {return new Fl_Repeat_Button_Type();}
+  virtual const char *type_name() const {return "fltk::RepeatButton";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    return new fltk::RepeatButton(x,y,w,h,0);}
+  WidgetType *_make() {return new RepeatButtonType();}
 };
-static Fl_Repeat_Button_Type Fl_Repeat_Button_type;
+static RepeatButtonType RepeatButtontype;
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/Fl_Light_Button.h>
-class Fl_Light_Button_Type : public Fl_Button_Type {
-public:
-  int is_light_button() const {return 1;}
-  virtual const char *type_name() const {return "Fl_Light_Button";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Light_Button(x,y,w,h,"button");}
-  Fl_Widget_Type *_make() {return new Fl_Light_Button_Type();}
-};
-static Fl_Light_Button_Type Fl_Light_Button_type;
-
-////////////////////////////////////////////////////////////////
-
-#include <fltk/Fl_Check_Button.h>
-class Fl_Check_Button_Type : public Fl_Button_Type {
+#include <fltk/LightButton.h>
+class LightButtonType : public ButtonType {
 public:
   int is_light_button() const {return 1;}
-  virtual const char *type_name() const {return "Fl_Check_Button";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Check_Button(x,y,w,h,"button");}
-  Fl_Widget_Type *_make() {return new Fl_Check_Button_Type();}
+  virtual const char *type_name() const {return "fltk::LightButton";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    return new fltk::LightButton(x,y,w,h,"button");}
+  WidgetType *_make() {return new LightButtonType();}
 };
-static Fl_Check_Button_Type Fl_Check_Button_type;
+static LightButtonType LightButtontype;
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/Fl_Round_Button.h>
-class Fl_Round_Button_Type : public Fl_Button_Type {
+#include <fltk/CheckButton.h>
+class CheckButtonType : public ButtonType {
 public:
   int is_light_button() const {return 1;}
-  virtual const char *type_name() const {return "Fl_Round_Button";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Round_Button(x,y,w,h,"button");}
-  Fl_Widget_Type *_make() {return new Fl_Round_Button_Type();}
+  virtual const char *type_name() const {return "fltk::CheckButton";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    return new fltk::CheckButton(x,y,w,h,"button");}
+  WidgetType *_make() {return new CheckButtonType();}
 };
-static Fl_Round_Button_Type Fl_Round_Button_type;
+static CheckButtonType CheckButtontype;
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/Fl_Input.h>
+#include <fltk/RadioButton.h>
+class RadioButtonType : public ButtonType {
+public:
+  int is_light_button() const {return 1;}
+  virtual const char *type_name() const {return "fltk::RadioButton";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    return new fltk::RadioButton(x,y,w,h,"button");}
+  WidgetType *_make() {return new RadioButtonType();}
+};
+static RadioButtonType RadioButtontype;
+
+////////////////////////////////////////////////////////////////
+
+#include <fltk/Input.h>
 static const Enumeration input_type_menu[] = {
-  {"Normal",	0,	(void*)Fl_Input::NORMAL},
-  {"Float",	0,	(void*)1,			"Fl_Float_Input"},
-  {"Int",	0,	(void*)2,			"Fl_Int_Input"},
-  {"Secret",	0,	(void*)Fl_Input::SECRET,	"Fl_Secret_Input"},
-  {"Multiline",	0,	(void*)Fl_Input::MULTILINE,	"Fl_Multiline_Input"},
-  {"Wordwrap",	0,	(void*)Fl_Input::WORDWRAP,	"Fl_Wordwrap_Input"},
+  {"Normal",	0,	(void*)fltk::Input::NORMAL},
+  {"Numeric",	0,	(void*)6,			"fltk::NumericInput"},
+  {"Float",	0,	(void*)1,			"fltk::FloatInput"},
+  {"Int",	0,	(void*)2,			"fltk::IntInput"},
+  {"Secret",	0,	(void*)fltk::Input::SECRET,	"fltk::SecretInput"},
+  {"Multiline",	0,	(void*)fltk::Input::MULTILINE,	"fltk::MultiLineInput"},
+  {"Wordwrap",	0,	(void*)fltk::Input::WORDWRAP,	"fltk::WordwrapInput"},
   {0}};
-class Fl_Input_Type : public Fl_Widget_Type {
+class InputType : public WidgetType {
   int is_input() const {return 1;}
   const Enumeration *subtypes() const {return input_type_menu;}
 public:
-  virtual const char *type_name() const {return "Fl_Input";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    Fl_Input *o = new Fl_Input(x,y,w,h,"input:");
+  virtual const char *type_name() const {return "fltk::Input";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    fltk::Input *o = new fltk::Input(x,y,w,h,"input:");
     o->value("Text Input");
     return o;
   }
-  Fl_Widget_Type *_make() {return new Fl_Input_Type();}
+  WidgetType *_make() {return new InputType();}
 };
-static Fl_Input_Type Fl_Input_type;
+static InputType Inputtype;
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/Fl_Clock.h>
-class Fl_Clock_Type : public Fl_Widget_Type {
+#include <fltk/Clock.h>
+class ClockType : public WidgetType {
 public:
-  virtual const char *type_name() const {return "Fl_Clock";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Clock(x,y,w,h);}
-  Fl_Widget_Type *_make() {return new Fl_Clock_Type();}
+  virtual const char *type_name() const {return "fltk::Clock";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    return new fltk::Clock(x,y,w,h);}
+  WidgetType *_make() {return new ClockType();}
 };
-static Fl_Clock_Type Fl_Clock_type;
+static ClockType Clocktype;
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/Fl_Adjuster.h>
-class Fl_Adjuster_Type : public Fl_Widget_Type {
+#include <fltk/Adjuster.h>
+class AdjusterType : public WidgetType {
   int is_valuator() const {return 1;}
   int is_adjuster() const {return 1;}
 public:
-  virtual const char *type_name() const {return "Fl_Adjuster";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Adjuster(x,y,w,h);}
-  Fl_Widget_Type *_make() {return new Fl_Adjuster_Type();}
+  virtual const char *type_name() const {return "fltk::Adjuster";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    return new fltk::Adjuster(x,y,w,h);}
+  WidgetType *_make() {return new AdjusterType();}
 };
-static Fl_Adjuster_Type Fl_Adjuster_type;
+static AdjusterType Adjustertype;
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/Fl_Dial.h>
+#include <fltk/Dial.h>
 static const Enumeration dial_type_menu[] = {
-  {"Dot", 	0,	(void*)Fl_Dial::NORMAL},
-  {"Line",	"LINE",	(void*)Fl_Dial::LINE},
-  {"Fill",	"FILL",	(void*)Fl_Dial::FILL},
+  {"Dot", 	0,	(void*)fltk::Dial::NORMAL},
+  {"Line",	"LINE",	(void*)fltk::Dial::LINE},
+  {"Fill",	"FILL",	(void*)fltk::Dial::FILL},
   {0}};
-class Fl_Dial_Type : public Fl_Widget_Type {
+class DialType : public WidgetType {
   const Enumeration *subtypes() const {return dial_type_menu;}
   int is_valuator() const {return 1;}
 public:
-  virtual const char *type_name() const {return "Fl_Dial";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Dial(x,y,w,h);}
-  Fl_Widget_Type *_make() {return new Fl_Dial_Type();}
+  virtual const char *type_name() const {return "fltk::Dial";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    return new fltk::Dial(x,y,w,h);}
+  WidgetType *_make() {return new DialType();}
 };
-static Fl_Dial_Type Fl_Dial_type;
+static DialType Dialtype;
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/Fl_Roller.h>
+#include <fltk/ThumbWheel.h>
 static const Enumeration roller_type_menu[] = {
-  {"Vertical",   "VERTICAL",   (void*)Fl_Roller::VERTICAL},
-  {"Horizontal", "HORIZONTAL", (void*)Fl_Roller::HORIZONTAL},
+  {"Vertical",   "VERTICAL",   (void*)fltk::ThumbWheel::VERTICAL},
+  {"Horizontal", "HORIZONTAL", (void*)fltk::ThumbWheel::HORIZONTAL},
   {0}};
-class Fl_Roller_Type : public Fl_Widget_Type {
+class ThumbWheelType : public WidgetType {
   const Enumeration *subtypes() const {return roller_type_menu;}
   int is_valuator() const {return 1;}
 public:
-  virtual const char *type_name() const {return "Fl_Roller";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Roller(x,y,w,h);}
-  Fl_Widget_Type *_make() {return new Fl_Roller_Type();}
+  virtual const char *type_name() const {return "fltk::ThumbWheel";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    return new fltk::ThumbWheel(x,y,w,h);}
+  WidgetType *_make() {return new ThumbWheelType();}
 };
-static Fl_Roller_Type Fl_Roller_type;
+static ThumbWheelType ThumbWheeltype;
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/Fl_Scrollbar.h>
+#include <fltk/Scrollbar.h>
 static const Enumeration slider_type_menu[] = {
-  {"Vertical Lin No ticks","VERTICAL",	(void*)Fl_Slider::VERTICAL},
-  {"Vertical Lin Left","VERTICAL|Fl_Slider::TICK_ABOVE",(void*)(Fl_Slider::VERTICAL|Fl_Slider::TICK_ABOVE)},
-  {"Vertical Lin Right","VERTICAL|Fl_Slider::TICK_BELOW",(void*)(Fl_Slider::VERTICAL|Fl_Slider::TICK_BELOW)},
-  {"Vertical Lin Both","VERTICAL|Fl_Slider::TICK_BOTH",(void*)(Fl_Slider::VERTICAL|Fl_Slider::TICK_BOTH)},
+  {"Vertical Lin No ticks","VERTICAL",	(void*)fltk::Slider::VERTICAL},
+  {"Vertical Lin Left","VERTICAL|fltk::Slider::TICK_ABOVE",(void*)(fltk::Slider::VERTICAL|fltk::Slider::TICK_ABOVE)},
+  {"Vertical Lin Right","VERTICAL|fltk::Slider::TICK_BELOW",(void*)(fltk::Slider::VERTICAL|fltk::Slider::TICK_BELOW)},
+  {"Vertical Lin Both","VERTICAL|fltk::Slider::TICK_BOTH",(void*)(fltk::Slider::VERTICAL|fltk::Slider::TICK_BOTH)},
 
-  {"Vertical Log No ticks","VERTICAL|Fl_Slider::LOG",	(void*)(Fl_Slider::VERTICAL|Fl_Slider::LOG)},
-  {"Vertical Log Left","VERTICAL|Fl_Slider::LOG|Fl_Slider::TICK_ABOVE",(void*)(Fl_Slider::VERTICAL|Fl_Slider::LOG|Fl_Slider::TICK_ABOVE)},
-  {"Vertical Log Right","VERTICAL|Fl_Slider::LOG|Fl_Slider::TICK_BELOW",(void*)(Fl_Slider::VERTICAL|Fl_Slider::LOG|Fl_Slider::TICK_BELOW)},
-  {"Vertical Log Both","VERTICAL|Fl_Slider::LOG|Fl_Slider::TICK_BOTH",(void*)(Fl_Slider::VERTICAL|Fl_Slider::LOG|Fl_Slider::TICK_BOTH)},
+  {"Vertical Log No ticks","VERTICAL|fltk::Slider::LOG",	(void*)(fltk::Slider::VERTICAL|fltk::Slider::LOG)},
+  {"Vertical Log Left","VERTICAL|fltk::Slider::LOG|fltk::Slider::TICK_ABOVE",(void*)(fltk::Slider::VERTICAL|fltk::Slider::LOG|fltk::Slider::TICK_ABOVE)},
+  {"Vertical Log Right","VERTICAL|fltk::Slider::LOG|fltk::Slider::TICK_BELOW",(void*)(fltk::Slider::VERTICAL|fltk::Slider::LOG|fltk::Slider::TICK_BELOW)},
+  {"Vertical Log Both","VERTICAL|fltk::Slider::LOG|fltk::Slider::TICK_BOTH",(void*)(fltk::Slider::VERTICAL|fltk::Slider::LOG|fltk::Slider::TICK_BOTH)},
 
-  {"Horizontal Lin No ticks","HORIZONTAL",	(void*)Fl_Slider::HORIZONTAL},
-  {"Horizontal Lin Above","HORIZONTAL|Fl_Slider::TICK_ABOVE",(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::TICK_ABOVE)},
-  {"Horizontal Lin Below","HORIZONTAL|Fl_Slider::TICK_BELOW",(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::TICK_BELOW)},
-  {"Horizontal Lin Both","HORIZONTAL|Fl_Slider::TICK_BOTH",(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::TICK_BOTH)},
+  {"Horizontal Lin No ticks","HORIZONTAL",	(void*)fltk::Slider::HORIZONTAL},
+  {"Horizontal Lin Above","HORIZONTAL|fltk::Slider::TICK_ABOVE",(void*)(fltk::Slider::HORIZONTAL|fltk::Slider::TICK_ABOVE)},
+  {"Horizontal Lin Below","HORIZONTAL|fltk::Slider::TICK_BELOW",(void*)(fltk::Slider::HORIZONTAL|fltk::Slider::TICK_BELOW)},
+  {"Horizontal Lin Both","HORIZONTAL|fltk::Slider::TICK_BOTH",(void*)(fltk::Slider::HORIZONTAL|fltk::Slider::TICK_BOTH)},
 
-  {"Horizontal Log No ticks","HORIZONTAL|Fl_Slider::LOG",	(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::LOG)},
-  {"Horizontal Log Above","HORIZONTAL|Fl_Slider::LOG|Fl_Slider::TICK_ABOVE",(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::LOG|Fl_Slider::TICK_ABOVE)},
-  {"Horizontal Log Below","HORIZONTAL|Fl_Slider::LOG|Fl_Slider::TICK_BELOW",(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::LOG|Fl_Slider::TICK_BELOW)},
-  {"Horizontal Log Both","HORIZONTAL|Fl_Slider::LOG|Fl_Slider::TICK_BOTH",(void*)(Fl_Slider::HORIZONTAL|Fl_Slider::LOG|Fl_Slider::TICK_BOTH)},
+  {"Horizontal Log No ticks","HORIZONTAL|fltk::Slider::LOG",	(void*)(fltk::Slider::HORIZONTAL|fltk::Slider::LOG)},
+  {"Horizontal Log Above","HORIZONTAL|fltk::Slider::LOG|fltk::Slider::TICK_ABOVE",(void*)(fltk::Slider::HORIZONTAL|fltk::Slider::LOG|fltk::Slider::TICK_ABOVE)},
+  {"Horizontal Log Below","HORIZONTAL|fltk::Slider::LOG|fltk::Slider::TICK_BELOW",(void*)(fltk::Slider::HORIZONTAL|fltk::Slider::LOG|fltk::Slider::TICK_BELOW)},
+  {"Horizontal Log Both","HORIZONTAL|fltk::Slider::LOG|fltk::Slider::TICK_BOTH",(void*)(fltk::Slider::HORIZONTAL|fltk::Slider::LOG|fltk::Slider::TICK_BOTH)},
 
   {0}};
-class Fl_Slider_Type : public Fl_Widget_Type {
+class SliderType : public WidgetType {
   const Enumeration *subtypes() const {return slider_type_menu;}
   int is_valuator() const {return 2;}
   int is_slider() const {return 1;}
 public:
-  virtual const char *type_name() const {return "Fl_Slider";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Slider(x,y,w,h);}
-  Fl_Widget_Type *_make() {return new Fl_Slider_Type();}
+  virtual const char *type_name() const {return "fltk::Slider";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    return new fltk::Slider(x,y,w,h);}
+  WidgetType *_make() {return new SliderType();}
 };
-static Fl_Slider_Type Fl_Slider_type;
+static SliderType Slidertype;
 
 static const Enumeration scrollbar_type_menu[] = {
-  {"Vertical",	"VERTICAL",	(void*)Fl_Scrollbar::VERTICAL},
-  {"Horizontal","HORIZONTAL",	(void*)Fl_Scrollbar::HORIZONTAL},
+  {"Vertical",	"VERTICAL",	(void*)fltk::Scrollbar::VERTICAL},
+  {"Horizontal","HORIZONTAL",	(void*)fltk::Scrollbar::HORIZONTAL},
   {0}};
-class Fl_Scrollbar_Type : public Fl_Slider_Type {
+class ScrollbarType : public SliderType {
   const Enumeration *subtypes() const {return scrollbar_type_menu;}
   int is_scrollbar() const {return 1;}
 public:
-  virtual const char *type_name() const {return "Fl_Scrollbar";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Scrollbar(x,y,w,h);}
-  Fl_Widget_Type *_make() {return new Fl_Scrollbar_Type();}
+  virtual const char *type_name() const {return "fltk::Scrollbar";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    return new fltk::Scrollbar(x,y,w,h);}
+  WidgetType *_make() {return new ScrollbarType();}
 };
-static Fl_Scrollbar_Type Fl_Scrollbar_type;
+static ScrollbarType Scrollbartype;
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/Fl_Output.h>
+#include <fltk/Output.h>
 static const Enumeration output_type_menu[] = {
-  {"Normal",	0,	(void*)Fl_Output::NORMAL},
-  {"Multiline",	0,	(void*)Fl_Output::MULTILINE, "Fl_Multiline_Output"},
-  {"Wordwrap",	0,	(void*)Fl_Output::WORDWRAP, "Fl_Wordwrap_Output"},
+  {"Normal",	0,	(void*)fltk::Output::NORMAL},
+  {"Multiline",	0,	(void*)fltk::Output::MULTILINE, "fltk::MultilineOutput"},
+  {"Wordwrap",	0,	(void*)fltk::Output::WORDWRAP, "fltk::WordwrapOutput"},
   {0}};
-class Fl_Output_Type : public Fl_Input_Type {
+class OutputType : public InputType {
   const Enumeration *subtypes() const {return output_type_menu;}
 public:
-  virtual const char *type_name() const {return "Fl_Output";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    Fl_Output *o = new Fl_Output(x,y,w,h,"output:");
+  virtual const char *type_name() const {return "fltk::Output";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    fltk::Output *o = new fltk::Output(x,y,w,h,"output:");
     o->value("Text Output");
     return o;
   }
-  Fl_Widget_Type *_make() {return new Fl_Output_Type();}
+  WidgetType *_make() {return new OutputType();}
 };
-static Fl_Output_Type Fl_Output_type;
+static OutputType Outputtype;
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/Fl_Value_Input.h>
-class Fl_Value_Input_Type : public Fl_Widget_Type {
+#include <fltk/ValueInput.h>
+class ValueInputType : public WidgetType {
 public:
   int is_value_input() const {return 1;}
-  virtual const char *type_name() const {return "Fl_Value_Input";}
+  virtual const char *type_name() const {return "fltk::ValueInput";}
   int is_valuator() const {return 1;}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    Fl_Value_Input *o = new Fl_Value_Input(x,y,w,h,"value:");
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    fltk::ValueInput *o = new fltk::ValueInput(x,y,w,h,"value:");
     return o;
   }
-  Fl_Widget_Type *_make() {return new Fl_Value_Input_Type();}
+  WidgetType *_make() {return new ValueInputType();}
 };
-static Fl_Value_Input_Type Fl_Value_Input_type;
+static ValueInputType ValueInputtype;
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/Fl_Value_Slider.h>
-class Fl_Value_Slider_Type : public Fl_Slider_Type {
+#include <fltk/ValueSlider.h>
+class ValueSliderType : public SliderType {
 public:
   int is_value_slider() const {return 1;}
-  virtual const char *type_name() const {return "Fl_Value_Slider";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Value_Slider(x,y,w,h);}
-  Fl_Widget_Type *_make() {return new Fl_Value_Slider_Type();}
+  virtual const char *type_name() const {return "fltk::ValueSlider";}
+  fltk::Widget *widget(int x,int y,int w,int h) {
+    return new fltk::ValueSlider(x,y,w,h);}
+  WidgetType *_make() {return new ValueSliderType();}
 };
-static Fl_Value_Slider_Type Fl_Value_Slider_type;
+static ValueSliderType ValueSlidertype;
 
 ////////////////////////////////////////////////////////////////
 
-extern class Fl_Function_Type Fl_Function_type;
-extern class Fl_Code_Type Fl_Code_type;
-extern class Fl_CodeBlock_Type Fl_CodeBlock_type;
-extern class Fl_Decl_Type Fl_Decl_type;
-extern class Fl_DeclBlock_Type Fl_DeclBlock_type;
-extern class Fl_Class_Type Fl_Class_type;
-extern class Fl_Window_Type Fl_Window_type;
-extern class Fl_Group_Type Fl_Group_type;
-extern class Fl_Pack_Type Fl_Pack_type;
-extern class Fl_Tabs_Type Fl_Tabs_type;
-extern class Fl_Scroll_Type Fl_Scroll_type;
-extern class Fl_Tile_Type Fl_Tile_type;
-extern class Fl_Choice_Type Fl_Choice_type;
-extern class Fl_Menu_Bar_Type Fl_Menu_Bar_type;
-extern class Fl_Menu_Button_Type Fl_Menu_Button_type;
-extern class Fl_Menu_Item_Type Fl_Menu_Item_type;
-extern class Fl_Menu_Divider_Type Fl_Menu_Divider_type;
-extern class Fl_Submenu_Type Fl_Submenu_type;
-extern class Fl_Browser_Type Fl_Browser_type;
-extern class Fl_Input_Browser_Type Fl_Input_Browser_type;
+extern class FunctionType Functiontype;
+extern class CodeType Codetype;
+extern class CodeBlockType CodeBlocktype;
+extern class DeclType Decltype;
+extern class DeclBlockType DeclBlocktype;
+extern class ClassType Classtype;
+extern class WindowType Windowtype;
+extern class GroupType Grouptype;
+extern class PackType Packtype;
+extern class TabsType Tabstype;
+extern class ScrollType Scrolltype;
+extern class TileType Tiletype;
+extern class ChoiceType Choicetype;
+extern class MenuBarType MenuBartype;
+extern class PopupMenuType PopupMenutype;
+extern class ItemType Itemtype;
+extern class DividerType Dividertype;
+extern class SubmenuType Submenutype;
+extern class BrowserType Browsertype;
+extern class InputBrowserType InputBrowsertype;
 
-extern void select(Fl_Type *,int);
-extern void select_only(Fl_Type *);
+extern void select(FluidType *,int);
+extern void select_only(FluidType *);
 
-static void cb(Fl_Widget *, void *v) {
-  Fl_Type *t = ((Fl_Type*)v)->make();
+static void cb(fltk::Widget *, void *v) {
+  FluidType *t = ((FluidType*)v)->make();
   if (t) {select_only(t); modflag = 1; t->open();}
 }
 
-#include <fltk/Fl_Menu_Item.h>
+#include <FL/Fl_Menu_Item.h>
 
 Fl_Menu_Item New_Menu[] = {
 {"code",0,0,0,FL_SUBMENU},
-  {"function/method",0,cb,(void*)&Fl_Function_type},
-  {"code",0,cb,(void*)&Fl_Code_type},
-  {"code block",0,cb,(void*)&Fl_CodeBlock_type},
-  {"declaration",0,cb,(void*)&Fl_Decl_type},
-  {"declaration block",0,cb,(void*)&Fl_DeclBlock_type},
-  {"class",0,cb,(void*)&Fl_Class_type},
+  {"function/method",0,cb,(void*)&Functiontype},
+  {"code",0,cb,(void*)&Codetype},
+  {"code block",0,cb,(void*)&CodeBlocktype},
+  {"declaration",0,cb,(void*)&Decltype},
+  {"declaration block",0,cb,(void*)&DeclBlocktype},
+  {"class",0,cb,(void*)&Classtype},
 {0},
 {"group",0,0,0,FL_SUBMENU},
-  {0,0,cb,(void*)&Fl_Window_type},
-  {0,0,cb,(void*)&Fl_Group_type},
-  {0,0,cb,(void*)&Fl_Pack_type},
-  {0,0,cb,(void*)&Fl_Tabs_type},
-  {0,0,cb,(void*)&Fl_Scroll_type},
-  {0,0,cb,(void*)&Fl_Tile_type},
+  {0,0,cb,(void*)&Windowtype},
+  {0,0,cb,(void*)&Grouptype},
+  {0,0,cb,(void*)&Packtype},
+  {0,0,cb,(void*)&Tabstype},
+  {0,0,cb,(void*)&Scrolltype},
+  {0,0,cb,(void*)&Tiletype},
 {0},
 {"buttons",0,0,0,FL_SUBMENU},
-  {0,0,cb,(void*)&Fl_Button_type},
-  {0,0,cb,(void*)&Fl_Return_Button_type},
-  {0,0,cb,(void*)&Fl_Light_Button_type},
-  {0,0,cb,(void*)&Fl_Check_Button_type},
-  {0,0,cb,(void*)&Fl_Round_Button_type},
-  {0,0,cb,(void*)&Fl_Repeat_Button_type},
+  {0,0,cb,(void*)&Buttontype},
+  {0,0,cb,(void*)&ReturnButtontype},
+  {0,0,cb,(void*)&LightButtontype},
+  {0,0,cb,(void*)&CheckButtontype},
+  {0,0,cb,(void*)&RadioButtontype},
+  {0,0,cb,(void*)&RepeatButtontype},
 {0},
 {"valuators",0,0,0,FL_SUBMENU},
-  {0,0,cb,(void*)&Fl_Slider_type},
-  {0,0,cb,(void*)&Fl_Value_Slider_type},
-  {0,0,cb,(void*)&Fl_Value_Input_type},
-  {0,0,cb,(void*)&Fl_Scrollbar_type},
-  {0,0,cb,(void*)&Fl_Adjuster_type},
-  {0,0,cb,(void*)&Fl_Dial_type},
-  {0,0,cb,(void*)&Fl_Roller_type},
+  {0,0,cb,(void*)&Slidertype},
+  {0,0,cb,(void*)&ValueSlidertype},
+  {0,0,cb,(void*)&ValueInputtype},
+  {0,0,cb,(void*)&Scrollbartype},
+  {0,0,cb,(void*)&Adjustertype},
+  {0,0,cb,(void*)&Dialtype},
+  {0,0,cb,(void*)&ThumbWheeltype},
 {0},
 {"text",0,0,0,FL_SUBMENU},
-  {0,0,cb,(void*)&Fl_Input_type},
-  {0,0,cb,(void*)&Fl_Output_type},
+  {0,0,cb,(void*)&Inputtype},
+  {0,0,cb,(void*)&Outputtype},
 {0},
 {"menus",0,0,0,FL_SUBMENU},
-  {0,0,cb,(void*)&Fl_Menu_Bar_type},
-  {0,0,cb,(void*)&Fl_Menu_Button_type},
-  {0,0,cb,(void*)&Fl_Choice_type},
-  {0,0,cb,(void*)&Fl_Browser_type},
-  {0,0,cb,(void*)&Fl_Input_Browser_type},
-  {0,0,cb, (void*)&Fl_Submenu_type},
-  {0,0,cb, (void*)&Fl_Menu_Item_type},
-  {0,0,cb, (void*)&Fl_Menu_Divider_type},
+  {0,0,cb,(void*)&MenuBartype},
+  {0,0,cb,(void*)&PopupMenutype},
+  {0,0,cb,(void*)&Choicetype},
+  {0,0,cb,(void*)&Browsertype},
+  {0,0,cb,(void*)&InputBrowsertype},
+  {0,0,cb, (void*)&Submenutype},
+  {0,0,cb, (void*)&Itemtype},
+  {0,0,cb, (void*)&Dividertype},
 {0},
 {"other",0,0,0,FL_SUBMENU},
-  {0,0,cb,(void*)&Fl_Box_type},
-  {0,0,cb,(void*)&Fl_Clock_type},
+  {0,0,cb,(void*)&Widgettype},
+  {0,0,cb,(void*)&Clocktype},
 {0},
 {"plugins",0,0,Plugins_New_Menu,FL_SUBMENU_POINTER},
 {0}};
@@ -419,8 +417,8 @@ void fill_in_New_Menu(Fl_Menu_Item* menu) {
     if (m->flags & FL_SUBMENU) level++;
     if (!m->text && !m->user_data()) level--;
     if (m->user_data() && !m->flags && !m->text) {
-      const char *n = ((Fl_Type*)(m->user_data()))->type_name();
-      if (!strncmp(n,"Fl_",3)) n += 3;
+      const char *n = ((FluidType*)(m->user_data()))->type_name();
+      //if (!strncmp(n,"fltk::",3)) n += 6;
       m->text = n;
       m->callback_ = cb;
     }
@@ -431,27 +429,22 @@ void fill_in_New_Menu() {
   fill_in_New_Menu(New_Menu);
 }
 
-// use keyword to pick the type, this is used to parse files:
 int reading_file;
-Fl_Type *Fl_Type_make(const char *tn, Fl_Menu_Item* menu) {
+
+// Recursive function for searching submenus:
+static FluidType *FluidType_make(const char *tn, Fl_Menu_Item* menu) {
   int level = 0;
   reading_file = 1; // makes labels be null
-  Fl_Type *r = 0;
-  // some back-compatability:
-  if (!strcasecmp(tn, "submenu")) tn = "Fl_Item_Group";
-  else if (!strcasecmp(tn, "menuitem")) tn = "Fl_Item";
-  else if (!strcasecmp(tn, "Fl_Counter")) tn = "Fl_Value_Input";
-  else if (!strcasecmp(tn, "Fl_Value_Output")) tn = "Fl_Value_Input";
-  //
+  FluidType *r = 0;
   for (unsigned i = 0; level||menu[i].user_data() || menu[i].text; i++) {
     Fl_Menu_Item *m = menu+i;
     if (m->flags & FL_SUBMENU) level++;
     if (!m->text && !m->user_data()) level--;
     if (!m->user_data()) continue;
     if(m->flags & FL_SUBMENU_POINTER) {
-      if(r = Fl_Type_make(tn, (Fl_Menu_Item*) m->user_data()), r) break;
+      if(r = FluidType_make(tn, (Fl_Menu_Item*) m->user_data()), r) break;
     } else {
-      Fl_Type *t = (Fl_Type*)(m->user_data());
+      FluidType *t = (FluidType*)(m->user_data());
       if (!strcasecmp(tn,t->type_name())) {r = t->make(); break;}
     }
   }
@@ -459,11 +452,46 @@ Fl_Type *Fl_Type_make(const char *tn, Fl_Menu_Item* menu) {
   return r;
 }
 
-Fl_Type *Fl_Type_make(const char *tn) {
-  return Fl_Type_make(tn, New_Menu);
+static struct {const char* oldname; const char* newname;} ntable[] = {
+  {"submenu",		"fltk::ItemGroup"},
+  {"menuitem",		"fltk::Item"},
+  {"Fl_Counter",	"fltk::ValueInput"},
+  {"Fl_ValueOutput",	"fltk::ValueInput"},
+  {"Fl_Value_Output",	"fltk::ValueInput"},
+  {"Fl_Tabs",		"fltk::TabGroup"},
+  {"Fl_Return_Button",	"fltk::ReturnButton"},
+  {"fltk::EnterButton",	"fltk::ReturnButton"},
+  {"Fl_Box",		"fltk::Widget"},
+  {"Fl_Round_Button",	"fltk::RadioButton"},
+  {"Fl_Pack",		"fltk::PackedGroup"},
+  {"Fl_Tabs",		"fltk::TabGroup"},
+  {"Fl_Scroll",		"fltk::ScrollGroup"},
+  {"Fl_Bar",		"fltk::BarGroup"},
+  {"Fl_Roller",		"fltk::ThumbWheel"}
+};
+
+// Create a new type by name:
+FluidType *FluidType_make(const char *tn) {
+  const char* p = 0;
+  // First try any of our direct translations:
+  for (unsigned n = 0; n < sizeof(ntable)/sizeof(*ntable); n++) {
+    if (!strcasecmp(ntable[n].oldname, tn)) {p = ntable[n].newname; break;}
+  }
+  char buffer[128];
+  // Now try cooking old names into new ones:
+  if (!p && !strncmp(tn, "Fl_", 3)) {
+    p = buffer;
+    strcpy(buffer, "fltk::");
+    char* q = buffer+6;
+    for (const char* r = tn+3; *r; r++) if (*r != '_') *q++ = *r;
+    *q = 0;
+  } else if (!p) {
+    p = tn;
+  }
+  return FluidType_make(p, New_Menu);
 }
 
-#include <fltk/Fl_Browser.h>
+#include <fltk/Browser.h>
 
 ////////////////////////////////////////////////////////////////
 
@@ -475,24 +503,24 @@ Fl_Type *Fl_Type_make(const char *tn) {
 struct symbol {const char *name; int value;};
 
 static symbol table[] = {
-  {"BLACK",	FL_BLACK},
-  {"RED",	FL_RED},
-  {"GREEN",	FL_GREEN},
-  {"YELLOW",	FL_YELLOW},
-  {"BLUE",	FL_BLUE},
-  {"MAGENTA",	FL_MAGENTA},
-  {"CYAN",	FL_CYAN},
-  {"WHITE",	FL_WHITE},
+  {"BLACK",	fltk::BLACK},
+  {"RED",	fltk::RED},
+  {"GREEN",	fltk::GREEN},
+  {"YELLOW",	fltk::YELLOW},
+  {"BLUE",	fltk::BLUE},
+  {"MAGENTA",	fltk::MAGENTA},
+  {"CYAN",	fltk::CYAN},
+  {"WHITE",	fltk::WHITE},
 
-  {"LCOL",		FL_BLACK},
-  {"COL1",		FL_GRAY},
+  {"LCOL",		fltk::BLACK},
+  {"COL1",		fltk::GRAY75},
   {"MCOL",		51},
   {"LEFT_BCOL",		55},
   {"TOP_BCOL",		53},
   {"BOTTOM_BCOL",	45},
   {"RIGHT_BCOL",	39},
-  {"INACTIVE",		FL_INACTIVE_COLOR},
-  {"INACTIVE_COL",	FL_INACTIVE_COLOR},
+  {"INACTIVE",		fltk::GRAY66},
+  {"INACTIVE_COL",	fltk::GRAY66},
   {"FREE_COL1",		16},
   {"FREE_COL2",		17},
   {"FREE_COL3",		18},
@@ -519,31 +547,31 @@ static symbol table[] = {
   {"DARKTOMATO",	113},
   {"WHEAT",		174},
 
-  {"ALIGN_CENTER",	FL_ALIGN_CENTER},
-  {"ALIGN_TOP",		FL_ALIGN_TOP},
-  {"ALIGN_BOTTOM",	FL_ALIGN_BOTTOM},
-  {"ALIGN_LEFT",	FL_ALIGN_LEFT},
-  {"ALIGN_RIGHT",	FL_ALIGN_RIGHT},
-  {"ALIGN_INSIDE",	FL_ALIGN_INSIDE},
-  {"ALIGN_TOP_LEFT",	 FL_ALIGN_TOP | FL_ALIGN_LEFT},
-  {"ALIGN_TOP_RIGHT",	 FL_ALIGN_TOP | FL_ALIGN_RIGHT},
-  {"ALIGN_BOTTOM_LEFT",	 FL_ALIGN_BOTTOM | FL_ALIGN_LEFT},
-  {"ALIGN_BOTTOM_RIGHT", FL_ALIGN_BOTTOM | FL_ALIGN_RIGHT},
-  {"ALIGN_CENTER|FL_ALIGN_INSIDE",	FL_ALIGN_CENTER|FL_ALIGN_INSIDE},
-  {"ALIGN_TOP|FL_ALIGN_INSIDE",		FL_ALIGN_TOP|FL_ALIGN_INSIDE},
-  {"ALIGN_BOTTOM|FL_ALIGN_INSIDE",	FL_ALIGN_BOTTOM|FL_ALIGN_INSIDE},
-  {"ALIGN_LEFT|FL_ALIGN_INSIDE",	FL_ALIGN_LEFT|FL_ALIGN_INSIDE},
-  {"ALIGN_RIGHT|FL_ALIGN_INSIDE",	FL_ALIGN_RIGHT|FL_ALIGN_INSIDE},
-  {"ALIGN_INSIDE|FL_ALIGN_INSIDE",	FL_ALIGN_INSIDE|FL_ALIGN_INSIDE},
-  {"ALIGN_TOP_LEFT|FL_ALIGN_INSIDE",	FL_ALIGN_TOP|FL_ALIGN_LEFT|FL_ALIGN_INSIDE},
-  {"ALIGN_TOP_RIGHT|FL_ALIGN_INSIDE",	FL_ALIGN_TOP|FL_ALIGN_RIGHT|FL_ALIGN_INSIDE},
-  {"ALIGN_BOTTOM_LEFT|FL_ALIGN_INSIDE",	FL_ALIGN_BOTTOM|FL_ALIGN_LEFT|FL_ALIGN_INSIDE},
-  {"ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE",FL_ALIGN_BOTTOM|FL_ALIGN_RIGHT|FL_ALIGN_INSIDE},
+  {"ALIGN_CENTER",	fltk::ALIGN_CENTER},
+  {"ALIGN_TOP",		fltk::ALIGN_TOP},
+  {"ALIGN_BOTTOM",	fltk::ALIGN_BOTTOM},
+  {"ALIGN_LEFT",	fltk::ALIGN_LEFT},
+  {"ALIGN_RIGHT",	fltk::ALIGN_RIGHT},
+  {"ALIGN_INSIDE",	fltk::ALIGN_INSIDE},
+  {"ALIGN_TOP_LEFT",	 fltk::ALIGN_TOP | fltk::ALIGN_LEFT},
+  {"ALIGN_TOP_RIGHT",	 fltk::ALIGN_TOP | fltk::ALIGN_RIGHT},
+  {"ALIGN_BOTTOM_LEFT",	 fltk::ALIGN_BOTTOM | fltk::ALIGN_LEFT},
+  {"ALIGN_BOTTOM_RIGHT", fltk::ALIGN_BOTTOM | fltk::ALIGN_RIGHT},
+  {"ALIGN_CENTER|FL_ALIGN_INSIDE",	fltk::ALIGN_CENTER|fltk::ALIGN_INSIDE},
+  {"ALIGN_TOP|FL_ALIGN_INSIDE",		fltk::ALIGN_TOP|fltk::ALIGN_INSIDE},
+  {"ALIGN_BOTTOM|FL_ALIGN_INSIDE",	fltk::ALIGN_BOTTOM|fltk::ALIGN_INSIDE},
+  {"ALIGN_LEFT|FL_ALIGN_INSIDE",	fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE},
+  {"ALIGN_RIGHT|FL_ALIGN_INSIDE",	fltk::ALIGN_RIGHT|fltk::ALIGN_INSIDE},
+  {"ALIGN_INSIDE|FL_ALIGN_INSIDE",	fltk::ALIGN_INSIDE|fltk::ALIGN_INSIDE},
+  {"ALIGN_TOP_LEFT|FL_ALIGN_INSIDE",	fltk::ALIGN_TOP|fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE},
+  {"ALIGN_TOP_RIGHT|FL_ALIGN_INSIDE",	fltk::ALIGN_TOP|fltk::ALIGN_RIGHT|fltk::ALIGN_INSIDE},
+  {"ALIGN_BOTTOM_LEFT|FL_ALIGN_INSIDE",	fltk::ALIGN_BOTTOM|fltk::ALIGN_LEFT|fltk::ALIGN_INSIDE},
+  {"ALIGN_BOTTOM_RIGHT|FL_ALIGN_INSIDE",fltk::ALIGN_BOTTOM|fltk::ALIGN_RIGHT|fltk::ALIGN_INSIDE},
 
-  {"ALIGN_LEFT_TOP",	 FL_ALIGN_TOP | FL_ALIGN_LEFT},
-  {"ALIGN_RIGHT_TOP",	 FL_ALIGN_TOP | FL_ALIGN_RIGHT},
-  {"ALIGN_LEFT_BOTTOM",	 FL_ALIGN_BOTTOM | FL_ALIGN_LEFT},
-  {"ALIGN_RIGHT_BOTTOM", FL_ALIGN_BOTTOM | FL_ALIGN_RIGHT},
+  {"ALIGN_LEFT_TOP",	 fltk::ALIGN_TOP | fltk::ALIGN_LEFT},
+  {"ALIGN_RIGHT_TOP",	 fltk::ALIGN_TOP | fltk::ALIGN_RIGHT},
+  {"ALIGN_LEFT_BOTTOM",	 fltk::ALIGN_BOTTOM | fltk::ALIGN_LEFT},
+  {"ALIGN_RIGHT_BOTTOM", fltk::ALIGN_BOTTOM | fltk::ALIGN_RIGHT},
   {"INVALID_STYLE",	 255},
   {"NORMAL_STYLE",	 0},
   {"BOLD_STYLE",	 1},
@@ -580,21 +608,21 @@ static symbol table[] = {
   {"RETURN_CHANGED",	1},
   {"RETURN_END",	2},
   {"RETURN_ALWAYS",	3},
-  {"PUSH_BUTTON",	Fl_Button::TOGGLE},
-  {"RADIO_BUTTON",	Fl_Button::RADIO},
-  {"HIDDEN_BUTTON",	Fl_Button::HIDDEN},
-  {"SELECT_BROWSER",	Fl_Browser::NORMAL},
-  {"HOLD_BROWSER",	Fl_Browser::NORMAL},
-  {"MULTI_BROWSER",	Fl_Browser::MULTI},
-  //  {"SIMPLE_COUNTER",	Fl_Counter::SIMPLE},
-  {"LINE_DIAL",		Fl_Dial::LINE},
-  {"FILL_DIAL",		Fl_Dial::FILL},
-  {"VERT_SLIDER",	Fl_Slider::VERTICAL},
-  {"HOR_SLIDER",	Fl_Slider::HORIZONTAL},
-  {"VERT_FILL_SLIDER",	Fl_Slider::VERTICAL},
-  {"HOR_FILL_SLIDER",	Fl_Slider::HORIZONTAL},
-  {"VERT_NICE_SLIDER",	Fl_Slider::VERTICAL},
-  {"HOR_NICE_SLIDER",	Fl_Slider::HORIZONTAL},
+  {"PUSH_BUTTON",	fltk::Button::TOGGLE},
+  {"RADIO_BUTTON",	fltk::Button::RADIO},
+  {"HIDDEN_BUTTON",	fltk::Button::HIDDEN},
+  {"SELECT_BROWSER",	fltk::Browser::NORMAL},
+  {"HOLD_BROWSER",	fltk::Browser::NORMAL},
+  {"MULTI_BROWSER",	fltk::Browser::MULTI},
+  //  {"SIMPLE_COUNTER",	fltk::Counter::SIMPLE},
+  {"LINE_DIAL",		fltk::Dial::LINE},
+  {"FILL_DIAL",		fltk::Dial::FILL},
+  {"VERT_SLIDER",	fltk::Slider::VERTICAL},
+  {"HOR_SLIDER",	fltk::Slider::HORIZONTAL},
+  {"VERT_FILL_SLIDER",	fltk::Slider::VERTICAL},
+  {"HOR_FILL_SLIDER",	fltk::Slider::HORIZONTAL},
+  {"VERT_NICE_SLIDER",	fltk::Slider::VERTICAL},
+  {"HOR_NICE_SLIDER",	fltk::Slider::HORIZONTAL},
 };
 
 #include <stdlib.h>
@@ -612,5 +640,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.26 2002/06/21 06:17:09 spitzak Exp $".
+// End of "$Id: factory.cxx,v 1.27 2002/12/09 04:52:23 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.38 2002/09/18 05:51:46 spitzak Exp $"
+// "$Id: fl_font.cxx,v 1.39 2002/12/09 04:52:29 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -24,13 +24,13 @@
 //
 
 #include <config.h>
-#include <fltk/Fl_Font.h>
-#include <fltk/fl_draw.h>
+#include <fltk/Font.h>
+#include <fltk/draw.h>
 
 // Static variables containing the currently selected font, size, encoding:
-Fl_Font fl_font_;
-float fl_size_;
-const char *fl_encoding_ = "iso8859-1";
+fltk::Font* fltk::current_font_;
+float fltk::current_size_;
+const char *fltk::encoding_ = "iso8859-1";
   
 #ifdef _WIN32
 # include "fl_font_win32.cxx"
@@ -45,19 +45,29 @@ const char *fl_encoding_ = "iso8859-1";
 #endif
 
 void
-fl_draw(const char* str, float x, float y) {
-  fl_draw(str, strlen(str), x, y);
+fltk::drawtext(const char* str, float x, float y) {
+  drawtext(str, strlen(str), x, y);
 }
 
 void
-fl_draw(const char* str, int n, float x, float y) {
-  fl_transform(x,y);
-  fl_transformed_draw(str, n, x, y);
+fltk::drawtext(const char* str, int n, float x, float y) {
+  transform(x,y);
+  drawtext_transformed(str, n, x, y);
 }
 
 float
-fl_width(const char* c) { return fl_width(c, strlen(c)); }
+fltk::getwidth(const char* c) { return getwidth(c, strlen(c)); }
+
+// turn a stored font name into a pretty name:
+const char* fltk::Font::name() const {
+  if (!attributes_) return name_;
+  static char *buffer; if (!buffer) buffer = new char[128];
+  strcpy(buffer, name_);
+  if (attributes_ & BOLD) strcat(buffer, " bold");
+  if (attributes_ & ITALIC) strcat(buffer, " italic");
+  return buffer;
+}
 
 //
-// End of "$Id: fl_font.cxx,v 1.38 2002/09/18 05:51:46 spitzak Exp $".
+// End of "$Id: fl_font.cxx,v 1.39 2002/12/09 04:52:29 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_xpm.cxx,v 1.19 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: fl_xpm.cxx,v 1.20 2002/12/09 04:52:30 spitzak Exp $"
 //
 // XPM reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -25,16 +25,22 @@
 
 // Image type that reads an xpm file in from disk.  Normal use of xpm
 // files is to imbed them in the source code with #include, in that
-// case you want to use an Fl_Pixmap object.
+// case you want to use an xpmImage object.
 
-#include <fltk/Fl.h>
-#include <fltk/fl_draw.h>
+// Currently commented out as it has the same name as the non-file
+// version. We need to figure out an efficient method of having both
+// in-memory and file data, probably by making all the file ones
+// subclasses...
+
+#include <fltk/xpmImage.h>
+#include <fltk/events.h>
+#include <fltk/draw.h>
 #include <fltk/x.h>
-#include <fltk/Fl_Shared_Image.h>
-#include <stdio.h>
 #include <ctype.h>
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+using namespace fltk;
 
 static int hexdigit(int x) {
   if (isdigit(x)) return x-'0';
@@ -120,66 +126,66 @@ static char** read(char *name, int oneline = 0) {
   return data;
 }
 
-int Fl_XPM_Image::test(const unsigned char *datas, size_t)
+bool xpmImage::test(const unsigned char *data, size_t)
 {
-  return (strstr((char*) datas,"/* XPM") != 0);
+  return (strstr((char*) data,"/* XPM") != 0);
 }
 
-void Fl_XPM_Image::measure(int &W, int &H)
+void xpmImage::measure(int &W, int &H)
 {
   if (w>=0) { 
     W=w; H=h; 
     return; 
   }
   int loaded=0;
-  char *const* ldatas = (char *const*)datas;
-  if (!ldatas) {
-    ldatas = ::read((char *)get_filename(), 1);
-    if (!ldatas) {W = w = 0; return;}
+  char *const* ldata = (char *const*)data;
+  if (!ldata) {
+    ldata = ::read((char *)get_filename(), 1);
+    if (!ldata) {W = w = 0; return;}
     loaded=1;
   }
 
-  fl_measure_pixmap(ldatas, w, h);
+  measure_xpm(ldata, w, h);
   if (loaded) {
-    delete[] ldatas[0];
-    free((void*)ldatas);
+    delete[] ldata[0];
+    free((void*)ldata);
   }
   W=w; H=h;
 }
 
-void Fl_XPM_Image::read()
+void xpmImage::read()
 {
   id = mask = 0;
   int loaded=0;
-  char *const* ldatas = (char *const*)datas;
-  if (!ldatas) {
-    ldatas = ::read((char *)get_filename());
-    if (!ldatas) return;
+  char *const* ldata = (char *const*)data;
+  if (!ldata) {
+    ldata = ::read((char *)get_filename());
+    if (!ldata) return;
     loaded=1;
   }
   int w, h;
-  fl_measure_pixmap(ldatas, w, h);
-  Pixmap pixmap = fl_create_offscreen(w, h);
+  measure_xpm(ldata, w, h);
+  Pixmap pixmap = create_offscreen(w, h);
   id = (void*)pixmap;
   fl_begin_offscreen(pixmap);
   uchar *bitmap = 0;
-  fl_set_mask_bitmap(&bitmap);
-  fl_draw_pixmap(ldatas, 0, 0, FL_NO_COLOR);
-  fl_set_mask_bitmap(0);
+  set_mask_bitmap(&bitmap);
+  draw_xpm(ldata, 0, 0, NO_COLOR);
+  set_mask_bitmap(0);
   if (bitmap) {
-    mask = (void*)fl_create_bitmap(bitmap, w, h);
+    mask = (void*)create_bitmap(bitmap, w, h);
     delete[] bitmap;
   }
   fl_end_offscreen();
 
   if(loaded) {
-    char* const* save = ldatas;
-    while (*ldatas) delete[] *ldatas++;
+    char* const* save = ldata;
+    while (*ldata) delete[] *ldata++;
     free((void*)save);
   }
   return;
 }
 
 //
-// End of "$Id: fl_xpm.cxx,v 1.19 2001/09/10 01:16:17 spitzak Exp $"
+// End of "$Id: fl_xpm.cxx,v 1.20 2002/12/09 04:52:30 spitzak Exp $"
 //

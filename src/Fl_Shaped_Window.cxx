@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shaped_Window.cxx,v 1.9 2002/09/18 05:51:46 spitzak Exp $"
+// "$Id: Fl_Shaped_Window.cxx,v 1.10 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -23,48 +23,52 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl_Shaped_Window.h>
+#include <fltk/ShapedWindow.h>
 #include <fltk/x.h>
 
 #ifdef _WIN32
-static HRGN bitmap2region(Fl_Bitmap*);
+static HRGN bitmap2region(fltk::xbmImage*);
 #elif (defined(__APPLE__) && !USE_X11)
 // Not yet implemented for Apple
 #else
+#define Window XWindow
 #include <X11/extensions/shape.h>
+#undef Window
 #endif
+
+using namespace fltk;
 
 // maybe one day we'll want to be able to resize the clip mask
 // when the window resized
-static Fl_Bitmap* resize_bitmap(Fl_Bitmap*, int, int);
+static xbmImage* resize_bitmap(xbmImage*, int, int);
 
-void Fl_Shaped_Window::draw() {
+void ShapedWindow::draw() {
   if ((lw != w() || lh != h() || changed) && shape_) {
     // size of window has change since last time
     lw = w(); lh = h();
-    Fl_Bitmap* mask = resize_bitmap(shape_, w(), h());
+    xbmImage* mask = resize_bitmap(shape_, w(), h());
 #ifdef _WIN32
     HRGN region = bitmap2region(mask);
-    SetWindowRgn(fl_xid(this), region, TRUE);
+    SetWindowRgn(xid(this), region, TRUE);
 #elif (defined(__APPLE__) && !USE_X11)
     // not yet implemented for Apple
 #else
-    Pixmap pmask = XCreateBitmapFromData(fl_display, fl_xid(this),
+    Pixmap pmask = XCreateBitmapFromData(xdisplay, xid(this),
                   (const char*)mask->array, mask->width(), mask->height());
     hide();
-    XShapeCombineMask(fl_display, fl_xid(this), ShapeBounding, 0, 0,
+    XShapeCombineMask(xdisplay, xid(this), ShapeBounding, 0, 0,
                       pmask, ShapeSet);
     show();
-    if (pmask != None) XFreePixmap(fl_display, pmask);
+    if (pmask != None) XFreePixmap(xdisplay, pmask);
 #endif
     changed = 0;
   }
-  Fl_Double_Window::draw();
+  DoubleBufferWindow::draw();
 }
 
 // maybe one day we'll want to be able to resize the clip mask
 // bitmap when the window is resized
-static Fl_Bitmap* resize_bitmap(Fl_Bitmap* bitmap, int /*W*/, int /*H*/) {
+static xbmImage* resize_bitmap(xbmImage* bitmap, int /*W*/, int /*H*/) {
   return bitmap; // CET - FIXME - someday...
 }
 
@@ -78,9 +82,9 @@ static inline BYTE bit(int x) { return (BYTE)(1 << (x % 8)); }
 // (also LGPLed).  Their code was based on code originally written by
 // Jean-Edouard Lachand-Robert.  Ain't open source great?
 //
-// Modified by me to use an Fl_Bitmap, to not hog memory, to not leak memory
+// Modified by me to use an xbmImage, to not hog memory, to not leak memory
 // (I hope) and to allow bitmaps of arbitrary dimensions. -CET
-static HRGN bitmap2region(Fl_Bitmap* bitmap) {
+static HRGN bitmap2region(xbmImage* bitmap) {
   HRGN hRgn = 0;
   /* For better performances, we will use the ExtCreateRegion()
    * function to create the region. This function take a RGNDATA
@@ -170,5 +174,5 @@ static HRGN bitmap2region(Fl_Bitmap* bitmap) {
 #endif
 
 //
-// End of "$Id: Fl_Shaped_Window.cxx,v 1.9 2002/09/18 05:51:46 spitzak Exp $"
+// End of "$Id: Fl_Shaped_Window.cxx,v 1.10 2002/12/09 04:52:26 spitzak Exp $"
 //

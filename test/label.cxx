@@ -1,5 +1,5 @@
 //
-// "$Id: label.cxx,v 1.12 2001/07/23 09:50:06 spitzak Exp $"
+// "$Id: label.cxx,v 1.13 2002/12/09 04:52:31 spitzak Exp $"
 //
 // Label test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,141 +23,148 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Double_Window.h>
-#include <fltk/Fl_Box.h>
-#include <fltk/Fl_Hor_Value_Slider.h>
-#include <fltk/Fl_Toggle_Button.h>
-#include <fltk/Fl_Input.h>
-#include <fltk/Fl_Choice.h>
-#include <fltk/fl_draw.h>
+#include <FL/Fl_Menu_Item.h>
+#include <fltk/run.h>
+#include <fltk/DoubleBufferWindow.h>
+#include <fltk/Box.h>
+#include <fltk/HorizontalValueSlider.h>
+#include <fltk/ToggleButton.h>
+#include <fltk/Input.h>
+#include <fltk/Choice.h>
+#include <fltk/draw.h>
+using namespace fltk;
 
-Fl_Toggle_Button *leftb,*rightb,*topb,*bottomb,*insideb,*clipb,*wrapb;
-Fl_Box *text;
-Fl_Input *input;
-Fl_Hor_Value_Slider *fonts;
-Fl_Hor_Value_Slider *sizes;
-Fl_Double_Window *window;
+ToggleButton *leftb,*rightb,*topb,*bottomb,*insideb,*clipb,*wrapb;
+Widget *textbox;
+Input *input;
+HorizontalValueSlider *fontslider;
+HorizontalValueSlider *sizes;
+DoubleBufferWindow *window;
 
-void button_cb(Fl_Widget *,void *) {
+void button_cb(Widget *,void *) {
   int i = 0;
-  if (leftb->value()) i |= FL_ALIGN_LEFT;
-  if (rightb->value()) i |= FL_ALIGN_RIGHT;
-  if (topb->value()) i |= FL_ALIGN_TOP;
-  if (bottomb->value()) i |= FL_ALIGN_BOTTOM;
-  if (insideb->value()) i |= FL_ALIGN_INSIDE;
-  if (clipb->value()) i |= FL_ALIGN_CLIP;
-  if (wrapb->value()) i |= FL_ALIGN_WRAP;
-  text->align(i);
+  if (leftb->value()) i |= ALIGN_LEFT;
+  if (rightb->value()) i |= ALIGN_RIGHT;
+  if (topb->value()) i |= ALIGN_TOP;
+  if (bottomb->value()) i |= ALIGN_BOTTOM;
+  if (insideb->value()) i |= ALIGN_INSIDE;
+  if (clipb->value()) i |= ALIGN_CLIP;
+  if (wrapb->value()) i |= ALIGN_WRAP;
+  textbox->align(i);
   window->redraw();
 }
 
-void font_cb(Fl_Widget *,void *) {
-  text->label_font(fl_fonts +  int(fonts->value()));
+void font_cb(Widget *,void *) {
+  textbox->labelfont(font(int(fontslider->value())));
   window->redraw();
 }
 
-void size_cb(Fl_Widget *,void *) {
-  text->label_size(int(sizes->value()));
+void size_cb(Widget *,void *) {
+  textbox->labelsize(int(sizes->value()));
   window->redraw();
 }
 
-void input_cb(Fl_Widget *,void *) {
-  text->label(input->value());
+void input_cb(Widget *,void *) {
+  textbox->label(input->value());
   window->redraw();
 }
 
-void normal_cb(Fl_Widget *,void *) {
-  text->label_type(FL_NORMAL_LABEL);
+void normal_cb(Widget *,void *) {
+  textbox->labeltype(NORMAL_LABEL);
   window->redraw();
 }
 
-void symbol_cb(Fl_Widget *,void *) {
-  text->label_type(FL_SYMBOL_LABEL);
+void symbol_cb(Widget *,void *) {
+  textbox->labeltype(SYMBOL_LABEL);
   if (input->value()[0] != '@') {
     input->static_value("@->");
-    text->label("@->");
+    textbox->label("@->");
   }
   window->redraw();
 }
 
-void shadow_cb(Fl_Widget *,void *) {
-  text->label_type(FL_SHADOW_LABEL);
+void shadow_cb(Widget *,void *) {
+  textbox->labeltype(SHADOW_LABEL);
   window->redraw();
 }
 
-void embossed_cb(Fl_Widget *,void *) {
-  text->label_type(FL_EMBOSSED_LABEL);
+void embossed_cb(Widget *,void *) {
+  textbox->labeltype(EMBOSSED_LABEL);
   window->redraw();
 }
 
-void engraved_cb(Fl_Widget *,void *) {
-  text->label_type(FL_ENGRAVED_LABEL);
+void engraved_cb(Widget *,void *) {
+  textbox->labeltype(ENGRAVED_LABEL);
   window->redraw();
 }
 
 Fl_Menu_Item choices[] = {
-  {"FL_NORMAL_LABEL",0,normal_cb},
-  {"FL_SYMBOL_LABEL",0,symbol_cb},
-  {"FL_SHADOW_LABEL",0,shadow_cb},
-  {"FL_ENGRAVED_LABEL",0,engraved_cb},
-  {"FL_EMBOSSED_LABEL",0,embossed_cb},
+  {"NORMAL_LABEL",0,normal_cb},
+  {"SYMBOL_LABEL",0,symbol_cb},
+  {"SHADOW_LABEL",0,shadow_cb},
+  {"ENGRAVED_LABEL",0,engraved_cb},
+  {"EMBOSSED_LABEL",0,embossed_cb},
   {0}};
 
 int main(int argc, char **argv) {
-  window = new Fl_Double_Window(400,400);
+  window = new DoubleBufferWindow(400,400);
+  window->begin();
 
-  input = new Fl_Input(50,375,350,25);
+  input = new Input(50,375,350,25);
   input->static_value("The quick brown fox jumps over the lazy dog.");
-  input->when(FL_WHEN_CHANGED);
+  input->when(WHEN_CHANGED);
   input->callback(input_cb);
 
-  sizes= new Fl_Hor_Value_Slider(50,350,350,25,"Size:");
-  sizes->clear_flag(FL_ALIGN_MASK);
-  sizes->set_flag(FL_ALIGN_LEFT);
+  sizes= new HorizontalValueSlider(50,350,350,25,"Size:");
+  sizes->type(Slider::HORIZONTAL|Slider::TICK_ABOVE);
+  sizes->clear_flag(ALIGN_MASK);
+  sizes->set_flag(ALIGN_LEFT);
   sizes->range(1,64);
   sizes->step(1);
   sizes->value(14);
   sizes->callback(size_cb);
 
-  fonts=new Fl_Hor_Value_Slider(50,325,350,25,"Font:");
-  fonts->clear_flag(FL_ALIGN_MASK);
-  fonts->set_flag(FL_ALIGN_LEFT);
-  fonts->range(0,15);
-  fonts->step(1);
-  fonts->value(0);
-  fonts->callback(font_cb);
+  fontslider=new HorizontalValueSlider(50,325,350,25,"Font:");
+  fontslider->type(Slider::HORIZONTAL|Slider::TICK_ABOVE);
+  fontslider->clear_flag(ALIGN_MASK);
+  fontslider->set_flag(ALIGN_LEFT);
+  fontslider->range(0,15);
+  fontslider->step(1);
+  fontslider->value(0);
+  fontslider->callback(font_cb);
 
-  Fl_Group *g = new Fl_Group(50,300,350,25);
-  leftb = new Fl_Toggle_Button(50,300,50,25,"left");
+  Group *g = new Group(50,300,350,25);
+  g->begin();
+  leftb = new ToggleButton(50,300,50,25,"left");
   leftb->callback(button_cb);
-  rightb = new Fl_Toggle_Button(100,300,50,25,"right");
+  rightb = new ToggleButton(100,300,50,25,"right");
   rightb->callback(button_cb);
-  topb = new Fl_Toggle_Button(150,300,50,25,"top");
+  topb = new ToggleButton(150,300,50,25,"top");
   topb->callback(button_cb);
-  bottomb = new Fl_Toggle_Button(200,300,50,25,"bottom");
+  bottomb = new ToggleButton(200,300,50,25,"bottom");
   bottomb->callback(button_cb);
-  insideb = new Fl_Toggle_Button(250,300,50,25,"inside");
+  insideb = new ToggleButton(250,300,50,25,"inside");
   insideb->callback(button_cb);
-  wrapb = new Fl_Toggle_Button(300,300,50,25,"wrap");
+  wrapb = new ToggleButton(300,300,50,25,"wrap");
   wrapb->callback(button_cb);
-  clipb = new Fl_Toggle_Button(350,300,50,25,"clip");
+  clipb = new ToggleButton(350,300,50,25,"clip");
   clipb->callback(button_cb);
   g->fix_old_positions();
   g->end();
 
-  Fl_Choice *c = new Fl_Choice(50,275,200,25);
+  Choice *c = new Choice(50,275,200,25);
   c->menu(choices);
 
-  text= new Fl_Box(FL_ENGRAVED_BOX,100,75,200,100,input->value());
-  text->clear_flag(FL_ALIGN_MASK);
-  text->set_flag(FL_ALIGN_CENTER);
-  window->resizable(text);
+  textbox= new Widget(100,75,200,100,input->value());
+  textbox->box(ENGRAVED_BOX);
+  textbox->clear_flag(ALIGN_MASK);
+  textbox->set_flag(ALIGN_CENTER);
+  window->resizable(textbox);
   window->end();
   window->show(argc,argv);
-  return Fl::run();
+  return run();
 }
 
 //
-// End of "$Id: label.cxx,v 1.12 2001/07/23 09:50:06 spitzak Exp $".
+// End of "$Id: label.cxx,v 1.13 2002/12/09 04:52:31 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_engraved_label.cxx,v 1.12 2001/08/05 21:12:15 spitzak Exp $"
+// "$Id: fl_engraved_label.cxx,v 1.13 2002/12/09 04:52:29 spitzak Exp $"
 //
 // Engraved label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -25,39 +25,45 @@
 
 // Drawing code for XForms style engraved & embossed labels
 
-#include <fltk/Fl_Widget.h>
-#include <fltk/Fl_Labeltype.h>
-#include <fltk/fl_draw.h>
+#include <fltk/Widget.h>
+#include <fltk/LabelType.h>
+#include <fltk/draw.h>
+using namespace fltk;
 
 // data is dx, dy, color triples
 
-void Fl_Engraved_Label::draw(const char* label,
-			     int X, int Y, int W, int H,
-			     Fl_Color fill, Fl_Flags flags) const
+void EngravedLabel::draw(const char* label,
+			 int X, int Y, int W, int H,
+			 Color fill, Flags flags) const
 {
   for (const int *data = this->data; ; data += 3) {
-    Fl_Color c = (Fl_Color)(data[2]);
-    fl_color(c ? c : fl_inactive(fill, flags));
-    fl_draw(label, X+data[0], Y+data[1], W, H, flags);
+    Color c = (Color)(data[2]);
+    NORMAL_LABEL->draw(label,
+		       X+data[0], Y+data[1], W, H,
+		       c ? c : inactive(fill, flags),
+		       flags&~INACTIVE);
     if (!c) break;
   }
 }
 
-static const int shadow_data[2][3] = {{2,2,FL_DARK3},{0,0,0}};
-const Fl_Engraved_Label fl_shadow_label("shadow", shadow_data);
+static const int shadow_data[2][3] = {{2,2,GRAY33},{0,0,0}};
+static EngravedLabel shadowLabel("shadow", shadow_data);
+LabelType* const fltk::SHADOW_LABEL = &shadowLabel;
 
 static const int engraved_data[7][3] = {
-  {1,0,FL_LIGHT3},{1,1,FL_LIGHT3},{0,1,FL_LIGHT3},
-  {-1,0,FL_DARK3},{-1,-1,FL_DARK3},{0,-1,FL_DARK3},
+  {1,0,GRAY99},{1,1,GRAY99},{0,1,GRAY99},
+  {-1,0,GRAY33},{-1,-1,GRAY33},{0,-1,GRAY33},
   {0,0,0}};
-const Fl_Engraved_Label fl_engraved_label("engraved", engraved_data);
+static EngravedLabel engravedLabel("engraved", engraved_data);
+LabelType* const fltk::ENGRAVED_LABEL = &engravedLabel;
 
 static const int embossed_data[7][3] = {
-  {-1,0,FL_LIGHT3},{-1,-1,FL_LIGHT3},{0,-1,FL_LIGHT3},
-  {1,0,FL_DARK3},{1,1,FL_DARK3},{0,1,FL_DARK3},
+  {-1,0,GRAY99},{-1,-1,GRAY99},{0,-1,GRAY99},
+  {1,0,GRAY33},{1,1,GRAY33},{0,1,GRAY33},
   {0,0,0}};
-const Fl_Engraved_Label fl_embossed_label("embossed", embossed_data);
+static EngravedLabel embossedLabel("embossed", embossed_data);
+LabelType* const fltk::EMBOSSED_LABEL = &embossedLabel;
 
 //
-// End of "$Id: fl_engraved_label.cxx,v 1.12 2001/08/05 21:12:15 spitzak Exp $".
+// End of "$Id: fl_engraved_label.cxx,v 1.13 2002/12/09 04:52:29 spitzak Exp $".
 //

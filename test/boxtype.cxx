@@ -1,5 +1,5 @@
 //
-// "$Id: boxtype.cxx,v 1.10 2002/03/10 23:10:24 spitzak Exp $"
+// "$Id: boxtype.cxx,v 1.11 2002/12/09 04:52:30 spitzak Exp $"
 //
 // Boxtype test program for the Fast Light Tool Kit (FLTK).
 //
@@ -25,76 +25,74 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <fltk/Fl.h>
-#include <fltk/Fl_Single_Window.h>
-#include <fltk/Fl_Box.h>
+#include <fltk/run.h>
+#include <fltk/Window.h>
 
 int N = 0;
 #define W 150
 #define H 50
 #define ROWS 6
 
-Fl_Window *window;
-
-void bt(const char *name, Fl_Boxtype type, int square=0) {
+void bt(const char *name, fltk::Box* type, int square=0) {
   int x = N%4;
   int y = N/4;
   N++;
   x = x*W+10;
   y = y*H+10;
-  Fl_Box *b = new Fl_Box(type,x,y,square ? H-20 : W-20,H-20,name);
-  b->label_size(11);
+  fltk::Widget *b = new fltk::Widget(x,y,square ? H-20 : W-20,H-20,name);
+  b->box(type);
+  b->labelsize(11);
   if (square) {
-	  b->clear_flag(FL_ALIGN_MASK);
-	  b->set_flag(FL_ALIGN_RIGHT);
+	  b->clear_flag(fltk::ALIGN_MASK);
+	  b->set_flag(fltk::ALIGN_RIGHT);
   }
 }
 
 int main(int argc, char ** argv) {
-  window = new Fl_Single_Window(4*W,ROWS*H);
-  window->box(FL_FLAT_BOX);
-  window->color(12);// light blue
-  bt("FL_NO_BOX",FL_NO_BOX);
-  bt("FL_FLAT_BOX",FL_FLAT_BOX);
+  fltk::Window window(4*W,ROWS*H);
+  window.color(12);// light blue
+  window.begin();
+  bt("fltk::NO_BOX",fltk::NO_BOX);
+  bt("fltk::FLAT_BOX",fltk::FLAT_BOX);
 //  N += 2; // go to start of next row to line up boxes & frames
-  bt("FL_UP_BOX",FL_UP_BOX);
-  bt("FL_DOWN_BOX",FL_DOWN_BOX);
-//  bt("FL_UP_FRAME",FL_UP_FRAME);
-//  bt("FL_DOWN_FRAME",FL_DOWN_FRAME);
-  bt("FL_THIN_UP_BOX",FL_THIN_UP_BOX);
-  bt("FL_THIN_DOWN_BOX",FL_THIN_DOWN_BOX);
-//  bt("FL_THIN_UP_FRAME",FL_THIN_UP_FRAME);
-//  bt("FL_THIN_DOWN_FRAME",FL_THIN_DOWN_FRAME);
-  bt("FL_ENGRAVED_BOX",FL_ENGRAVED_BOX);
-  bt("FL_EMBOSSED_BOX",FL_EMBOSSED_BOX);
-//  bt("FL_ENGRAVED_FRAME",FL_ENGRAVED_FRAME);
-//  bt("FL_EMBOSSED_FRAME",FL_EMBOSSED_FRAME);
-  bt("FL_BORDER_BOX",FL_BORDER_BOX);
-  bt("FL_SHADOW_BOX",FL_SHADOW_BOX);
-//  bt("FL_BORDER_FRAME",FL_BORDER_FRAME);
-//  bt("FL_SHADOW_FRAME",FL_SHADOW_FRAME);
-  bt("FL_ROUNDED_BOX",FL_ROUNDED_BOX);
-  bt("FL_RSHADOW_BOX",FL_RSHADOW_BOX);
-//  bt("FL_ROUNDED_FRAME",FL_ROUNDED_FRAME);
-  bt("FL_RFLAT_BOX",FL_RFLAT_BOX);
-  bt("FL_OVAL_BOX",FL_OVAL_BOX);
-  bt("FL_OSHADOW_BOX",FL_OSHADOW_BOX);
-//  bt("FL_OVAL_FRAME",FL_OVAL_FRAME);
-  bt("FL_OFLAT_BOX",FL_OFLAT_BOX);
-  bt("FL_ROUND_UP_BOX",FL_ROUND_UP_BOX);
-  bt("FL_ROUND_DOWN_BOX",FL_ROUND_DOWN_BOX);
-  bt("FL_DIAMOND_UP_BOX",FL_DIAMOND_UP_BOX);
-  bt("FL_DIAMOND_DOWN_BOX",FL_DIAMOND_DOWN_BOX);
-  bt("FL_PLASTIC_UP_BOX", FL_PLASTIC_UP_BOX);
-  bt("FL_PLASTIC_DOWN_BOX", FL_PLASTIC_DOWN_BOX);
-  bt("FL_DOTTED_FRAME", FL_DOTTED_FRAME);
-  bt("FL_BORDER_FRAME", FL_BORDER_FRAME);
-  window->resizable(window);
-  window->end();
-  window->show(argc,argv);
-  return Fl::run();
+  bt("fltk::UP_BOX",fltk::UP_BOX);
+  bt("fltk::DOWN_BOX",fltk::DOWN_BOX);
+//  bt("fltk::UP_FRAME",fltk::UP_FRAME);
+//  bt("fltk::DOWN_FRAME",fltk::DOWN_FRAME);
+  bt("fltk::THIN_UP_BOX",fltk::THIN_UP_BOX);
+  bt("fltk::THIN_DOWN_BOX",fltk::THIN_DOWN_BOX);
+//  bt("fltk::THIN_UP_FRAME",fltk::THIN_UP_FRAME);
+//  bt("fltk::THIN_DOWN_FRAME",fltk::THIN_DOWN_FRAME);
+  bt("fltk::ENGRAVED_BOX",fltk::ENGRAVED_BOX);
+  bt("fltk::EMBOSSED_BOX",fltk::EMBOSSED_BOX);
+//  bt("fltk::ENGRAVED_FRAME",fltk::ENGRAVED_FRAME);
+//  bt("fltk::EMBOSSED_FRAME",fltk::EMBOSSED_FRAME);
+  bt("fltk::ROUND_UP_BOX",fltk::ROUND_UP_BOX);
+  bt("fltk::ROUND_DOWN_BOX",fltk::ROUND_DOWN_BOX);
+  bt("fltk::DIAMOND_UP_BOX",fltk::DIAMOND_UP_BOX);
+  bt("fltk::DIAMOND_DOWN_BOX",fltk::DIAMOND_DOWN_BOX);
+//  bt("fltk::BORDER_FRAME",fltk::BORDER_FRAME);
+//  bt("fltk::SHADOW_FRAME",fltk::SHADOW_FRAME);
+  bt("fltk::BORDER_BOX",fltk::BORDER_BOX);
+  bt("fltk::ROUNDED_BOX",fltk::ROUNDED_BOX);
+  bt("fltk::RSHADOW_BOX",fltk::RSHADOW_BOX);
+//  bt("fltk::ROUNDED_FRAME",fltk::ROUNDED_FRAME);
+  bt("fltk::RFLAT_BOX",fltk::RFLAT_BOX);
+  bt("fltk::SHADOW_BOX",fltk::SHADOW_BOX);
+  bt("fltk::OVAL_BOX",fltk::OVAL_BOX);
+  bt("fltk::OSHADOW_BOX",fltk::OSHADOW_BOX);
+//  bt("fltk::OVAL_FRAME",fltk::OVAL_FRAME);
+  bt("fltk::OFLAT_BOX",fltk::OFLAT_BOX);
+//    bt("fltk::PLASTIC_UP_BOX", fltk::PLASTIC_UP_BOX);
+//    bt("fltk::PLASTIC_DOWN_BOX", fltk::PLASTIC_DOWN_BOX);
+  bt("fltk::DOTTED_FRAME", fltk::DOTTED_FRAME);
+  bt("fltk::BORDER_FRAME", fltk::BORDER_FRAME);
+  window.resizable(window);
+  window.end();
+  window.show(argc,argv);
+  return fltk::run();
 }
 
 //
-// End of "$Id: boxtype.cxx,v 1.10 2002/03/10 23:10:24 spitzak Exp $".
+// End of "$Id: boxtype.cxx,v 1.11 2002/12/09 04:52:30 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: classic.cxx,v 1.32 2002/02/10 22:57:50 spitzak Exp $"
+// "$Id: classic.cxx,v 1.33 2002/12/09 04:52:32 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -25,88 +25,88 @@
 
 // fltk classic appearance
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Widget.h>
-#include <fltk/Fl_Check_Button.h>
-#include <fltk/Fl_Scrollbar.h>
-#include <fltk/Fl_Input.h>
-#include <fltk/Fl_Output.h>
-#include <fltk/Fl_Style.h>
-#include <stdio.h>
+#include <fltk/Widget.h>
+#include <fltk/CheckButton.h>
+#include <fltk/Scrollbar.h>
+#include <fltk/Input.h>
+#include <fltk/Output.h>
+#include <fltk/Style.h>
+#include <fltk/Box.h>
 #include <string.h>
 
-static void choice_glyph(const Fl_Widget* widget, int,
-			 int x,int y,int w,int h, Fl_Flags f)
+static void choice_glyph(const fltk::Widget* widget, int,
+			 int x,int y,int w,int h, fltk::Flags f)
 {
   int H = 7;
-  FL_THIN_UP_BOX->draw(x, y+(h-H)/2, w-4, H, widget->button_color(), f);
+  fltk::THIN_UP_BOX->draw(x, y+(h-H)/2, w-4, H, widget->buttoncolor(), f);
 }
 
+#include <fltk/LabelType.h>
+
 // Disable the engraving of inactive labels:
-class Motif_Labeltype : public Fl_Labeltype_ {
+class Motif_Labeltype : public fltk::LabelType {
 public:
   void draw(const char* label,
 	    int X, int Y, int W, int H,
-	    Fl_Color c, Fl_Flags f) const
+	    fltk::Color c, fltk::Flags f) const
     {
-      if (f & FL_INACTIVE) {
-	c = fl_inactive(c);
-	f &= ~FL_INACTIVE;
+      if (f & fltk::INACTIVE) {
+	c = fltk::inactive(c);
+	f &= ~fltk::INACTIVE;
       }
-      FL_NORMAL_LABEL->draw(label, X,Y,W,H,c,f);
+      fltk::NORMAL_LABEL->draw(label, X,Y,W,H,c,f);
     }
-  Motif_Labeltype(const char*n) : Fl_Labeltype_(n) {}
+  Motif_Labeltype(const char*n) : fltk::LabelType(n) {}
 };
 static const Motif_Labeltype motif_label(0);
 
-static Fl_Frame_Box always_up_box(0, "AAAAWUJJUTNN");
-static const Fl_Highlight_Box menu_title_box(0, &always_up_box);
+static fltk::FrameBox always_up_box(0, "AAAAWUJJUTNN");
+static fltk::HighlightBox menu_title_box(0, &always_up_box);
 
-extern const Fl_Frame_Box classic_down_box;
-static const Fl_Frame_Box classic_up_box(0, "AAAAWUJJUTNN",&classic_down_box);
-const Fl_Frame_Box classic_down_box(0, "NNTUJJUWAAAA",&classic_up_box);
+static fltk::FrameBox classic_down_box(0, "NNTUJJUWAAAA");
+static fltk::FrameBox classic_up_box(0, "AAAAWUJJUTNN", &classic_down_box);
 
 extern "C" bool fltk_theme() {
 
-  fl_get_system_colors();
+  fltk::get_system_colors();
 
-  Fl_Widget::default_style->button_box = &classic_up_box;
-  Fl_Widget::default_style->box = &classic_down_box;
-  Fl_Widget::default_style->highlight_color = 0;
-  Fl_Widget::default_style->label_size = 14;
-  Fl_Widget::default_style->text_size = 14;
-  Fl_Widget::default_style->selection_color = FL_DARK2;
-  Fl_Widget::default_style->selection_text_color = 0;
+  fltk::Widget::default_style->buttonbox = &classic_up_box;
+  fltk::Widget::default_style->box = &classic_down_box;
+  fltk::Widget::default_style->highlight_color = 0;
+  fltk::Widget::default_style->labelsize = 14;
+  fltk::Widget::default_style->textsize = 14;
+  fltk::Widget::default_style->selection_color = fltk::GRAY60;
+  fltk::Widget::default_style->selection_textcolor = 0;
 
-  Fl_Style* s;
-  if ((s = Fl_Style::find("button"))) {
+  fltk::Style* s;
+  if ((s = fltk::Style::find("button"))) {
     s->box = &classic_up_box;
   }
-  if ((s = Fl_Style::find("menu"))) {
-    s->selection_color = FL_WHITE;
-    s->selection_text_color = 0;
-    s->color = FL_GRAY;
+  if ((s = fltk::Style::find("menu"))) {
+    s->selection_color = fltk::WHITE;
+    s->selection_textcolor = 0;
+    s->color = fltk::GRAY75;
   }
-  if ((s = Fl_Style::find("item"))) {
-    s->text_color = FL_BLACK;
+  if ((s = fltk::Style::find("item"))) {
+    s->textcolor = fltk::BLACK;
   }
-  if ((s = Fl_Style::find("menu_bar"))) {
-    s->button_box = &menu_title_box;
-    s->selection_color = FL_GRAY;
+  if ((s = fltk::Style::find("menu_bar"))) {
+    s->buttonbox = &menu_title_box;
+    s->selection_color = fltk::GRAY75;
   }
-  if ((s = Fl_Style::find("check_button"))) {
-    s->text_color = FL_BLACK;
-    //s->button_color = FL_GRAY;
+  if ((s = fltk::Style::find("check_button"))) {
+    s->textcolor = fltk::BLACK;
+    //s->buttoncolor = fltk::GRAY;
   }
-  if ((s = Fl_Style::find("output"))) {
-    s->color = FL_GRAY;
+  if ((s = fltk::Style::find("output"))) {
+    s->color = fltk::GRAY75;
   }
-  if ((s = Fl_Style::find("choice"))) {
+  if ((s = fltk::Style::find("choice"))) {
     s->glyph = choice_glyph;
   }
   return true;
 }
 
 //
-// End of "$Id: classic.cxx,v 1.32 2002/02/10 22:57:50 spitzak Exp $".
+// End of "$Id: classic.cxx,v 1.33 2002/12/09 04:52:32 spitzak Exp $".
 //

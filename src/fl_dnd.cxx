@@ -1,5 +1,5 @@
 //
-// "$Id: fl_dnd.cxx,v 1.5 2002/09/18 05:51:46 spitzak Exp $"
+// "$Id: fl_dnd.cxx,v 1.6 2002/12/09 04:52:29 spitzak Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
@@ -32,5 +32,5 @@
 #endif
 
 //
-// End of "$Id: fl_dnd.cxx,v 1.5 2002/09/18 05:51:46 spitzak Exp $".
+// End of "$Id: fl_dnd.cxx,v 1.6 2002/12/09 04:52:29 spitzak Exp $".
 //

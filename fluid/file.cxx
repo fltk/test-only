@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.27 2002/03/26 18:00:34 spitzak Exp $"
+// "$Id: file.cxx,v 1.28 2002/12/09 04:52:23 spitzak Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -35,9 +35,8 @@
 #include <stdarg.h>
 #include "alignment_panel.h"
 #include "Fluid_Image.h"
-#include <fltk/Fl.h>
-#include "Fl_Type.h"
-
+#include "FluidType.h"
+#include <fltk/FL_VERSION.h>
 
 ////////////////////////////////////////////////////////////////
 // BASIC FILE WRITING:
@@ -154,7 +153,7 @@ int close_read() {
   return 1;
 }
 
-#include <fltk/fl_message.h>
+#include <fltk/ask.h>
 
 void read_error(const char *format, ...) {
   va_list args;
@@ -162,7 +161,7 @@ void read_error(const char *format, ...) {
   if (!fin) {
     char buffer[1024];
     vsprintf(buffer, format, args);
-    fl_message(buffer);
+    fltk::message(buffer);
   } else {
     fprintf(stderr, "%s:%d: ", fname, lineno);
     vfprintf(stderr, format, args);
@@ -333,7 +332,7 @@ int write_file(const char *filename, int selected_only) {
       write_string("\n%s %d",inttable[i].name, *inttable[i].value);
   }
   if (theme && *theme) { write_string("\ntheme "); write_word(theme); }
-  for (Fl_Type *p = Fl_Type::first; p;) {
+  for (FluidType *p = FluidType::first; p;) {
     if (!selected_only || p->selected) {
       p->write();
       write_string("\n");
@@ -352,11 +351,11 @@ void read_fdesign();
 
 double read_version;
 
-extern Fl_Type *Fl_Type_make(const char *tn);
+extern FluidType *FluidType_make(const char *tn);
 extern void set_theme(const char* s);
 
-static void read_children(Fl_Type *p, int paste) {
-  Fl_Type::current = p;
+static void read_children(FluidType *p, int paste) {
+  FluidType::current = p;
   for (;;) {
     unsigned int i;
     const char *c = read_word();
@@ -387,9 +386,9 @@ static void read_children(Fl_Type *p, int paste) {
 
     // back compatability with Vincent Penne's original class code:
     if (!p && !strcmp(c,"define_in_struct")) {
-      Fl_Type *t = Fl_Type_make("class");
+      FluidType *t = FluidType_make("class");
       t->name(read_word());
-      Fl_Type::current = p = t;
+      FluidType::current = p = t;
       paste = 1; // stops "missing }" error
       continue;
     }
@@ -429,7 +428,7 @@ static void read_children(Fl_Type *p, int paste) {
       }
     }
 
-    {Fl_Type *t = Fl_Type_make(c);
+    {FluidType *t = FluidType_make(c);
     if (!t) {
       read_error("Unknown word \"%s\"", c);
       continue;
@@ -456,7 +455,7 @@ static void read_children(Fl_Type *p, int paste) {
       goto REUSE_C;
     }
     read_children(t, 0);}
-    Fl_Type::current = p;
+    FluidType::current = p;
   CONTINUE:;
   }
 }
@@ -468,10 +467,10 @@ int read_file(const char *filename, int merge) {
   if (!open_read(filename)) return 0;
   if (merge) deselect(); 
   else delete_all();
-  read_children(Fl_Type::current, merge);
-  Fl_Type::current = 0;
-  for (Fl_Type *o = Fl_Type::first; o; o = o->walk())
-    if (o->selected) {Fl_Type::current = o; break;}
+  read_children(FluidType::current, merge);
+  FluidType::current = 0;
+  for (FluidType *o = FluidType::first; o; o = o->walk())
+    if (o->selected) {FluidType::current = o; break;}
   return close_read();
 }
 
@@ -518,49 +517,49 @@ int read_fdesign_line(const char*& name, const char*& value) {
 
 int fdesign_flip;
 int fdesign_magic;
-#include <fltk/Fl_Group.h>
+#include <fltk/Group.h>
 
 static const char *class_matcher[] = {
-"FL_CHECKBUTTON", "Fl_Check_Button",
-"FL_ROUNDBUTTON", "Fl_Round_Button",
-"FL_ROUND3DBUTTON", "Fl_Round_Button",
-"FL_LIGHTBUTTON", "Fl_Light_Button",
-"FL_FRAME", "Fl_Box",
-"FL_LABELFRAME", "Fl_Box",
-"FL_TEXT", "Fl_Box",
-"FL_VALSLIDER", "Fl_Value_Slider",
-"FL_MENU", "Fl_Menu_Button",
-"3", "FL_BITMAP",
-"1", "FL_BOX",
-"71","FL_BROWSER",
-"11","FL_BUTTON",
-"4", "FL_CHART",
-"42","FL_CHOICE",
-"61","FL_CLOCK",
-"25","FL_COUNTER",
-"22","FL_DIAL",
-"101","FL_FREE",
-"31","FL_INPUT",
-"12","Fl_Light_Button",
-"41","FL_MENU",
-"23","FL_POSITIONER",
-"13","Fl_Round_Button",
-"21","FL_SLIDER",
-"2", "FL_BOX", // was FL_TEXT
-"62","FL_TIMER",
-"24","Fl_Value_Slider",
+"fltk::CHECKBUTTON", "fltk::CheckButton",
+"fltk::ROUNDBUTTON", "fltk::RadioButton",
+"fltk::ROUND3DBUTTON", "fltk::RadioButton",
+"fltk::LIGHTBUTTON", "fltk::LightButton",
+"fltk::FRAME", "fltk::Box",
+"fltk::LABELFRAME", "fltk::Box",
+"fltk::TEXT", "fltk::Box",
+"fltk::VALSLIDER", "fltk::ValueSlider",
+"fltk::MENU", "fltk::PopupMenu",
+"3", "fltk::BITMAP",
+"1", "fltk::BOX",
+"71","fltk::BROWSER",
+"11","fltk::BUTTON",
+"4", "fltk::CHART",
+"42","fltk::CHOICE",
+"61","fltk::CLOCK",
+"25","fltk::COUNTER",
+"22","fltk::DIAL",
+"101","fltk::FREE",
+"31","fltk::INPUT",
+"12","fltk::LightButton",
+"41","fltk::MENU",
+"23","fltk::POSITIONER",
+"13","fltk::RadioButton",
+"21","fltk::SLIDER",
+"2", "fltk::BOX", // was fltk::TEXT
+"62","fltk::TIMER",
+"24","fltk::ValueSlider",
 0};
 
 void read_fdesign() {
   fdesign_magic = atoi(read_word());
   fdesign_flip = (fdesign_magic < 13000);
-  Fl_Widget_Type *window = 0;
-  Fl_Widget_Type *group = 0;
-  Fl_Widget_Type *widget = 0;
-  if (!Fl_Type::current) {
-    Fl_Type *t = Fl_Type_make("Function");
+  WidgetType *window = 0;
+  WidgetType *group = 0;
+  WidgetType *widget = 0;
+  if (!FluidType::current) {
+    FluidType *t = FluidType_make("Function");
     t->name("create_the_forms()");
-    Fl_Type::current = t;
+    FluidType::current = t;
   }
   for (;;) {
     const char *name;
@@ -569,34 +568,34 @@ void read_fdesign() {
 
     if (!strcmp(name,"Name")) {
 
-      window = (Fl_Widget_Type*)Fl_Type_make("Fl_Window");
+      window = (WidgetType*)FluidType_make("fltk::Window");
       window->name(value);
       window->label(value);
-      Fl_Type::current = widget = window;
+      FluidType::current = widget = window;
 
     } else if (!strcmp(name,"class")) {
 
-      if (!strcmp(value,"FL_BEGIN_GROUP")) {
-	group = widget = (Fl_Widget_Type*)Fl_Type_make("Fl_Group");
-	Fl_Type::current = group;
-      } else if (!strcmp(value,"FL_END_GROUP")) {
+      if (!strcmp(value,"fltk::BEGIN_GROUP")) {
+	group = widget = (WidgetType*)FluidType_make("fltk::Group");
+	FluidType::current = group;
+      } else if (!strcmp(value,"fltk::END_GROUP")) {
 	if (group) {
-	  Fl_Group* g = (Fl_Group*)(group->o);
+	  fltk::Group* g = (fltk::Group*)(group->o);
 	  g->begin();
 	  // g->forms_end();
-	  fl_end_group(); // how 'bout this instead?
-	  Fl_Group::current(0);
+	  fltk::end_group(); // how 'bout this instead?
+	  fltk::Group::current(0);
 	}
 	group = widget = 0;
-	Fl_Type::current = window;
+	FluidType::current = window;
       } else {
 	for (int i = 0; class_matcher[i]; i += 2)
 	  if (!strcmp(value,class_matcher[i])) {
 	    value = class_matcher[i+1]; break;}
-	widget = (Fl_Widget_Type*)Fl_Type_make(value);
+	widget = (WidgetType*)FluidType_make(value);
 	if (!widget) {
-	  printf("class %s not found, using Fl_Button\n", value);
-	  widget = (Fl_Widget_Type*)Fl_Type_make("Fl_Button");
+	  printf("class %s not found, using fltk::Button\n", value);
+	  widget = (WidgetType*)FluidType_make("fltk::Button");
 	}
       }
 
@@ -609,11 +608,11 @@ void read_fdesign() {
 
 // This is copied from forms_compatability.cxx:
 
-void fl_end_group() {
-  Fl_Group* g = Fl_Group::current();
+void fltk::end_group() {
+  fltk::Group* g = fltk::Group::current();
   // set the dimensions of a group to surround contents
   if (g->children() && !g->w()) {
-    Fl_Widget* o = g->child(0);
+    fltk::Widget* o = g->child(0);
     int rx = o->x();
     int ry = o->y();
     int rw = rx+o->w();
@@ -631,11 +630,11 @@ void fl_end_group() {
     g->h(rh-ry);
   }
   // flip all the children's coordinate systems:
-  //if (fl_flip) {
-    Fl_Widget* o = g->is_window() ? g : g->window();
+  //if (fltk::flip) {
+    fltk::Widget* o = g->is_window() ? g : g->window();
     int Y = o->h();
     for (int i=g->children(); i--;) {
-      Fl_Widget* o = g->child(i);
+      fltk::Widget* o = g->child(i);
 //      o->y(Y-o->y()-o->h());
       // I think this is equivalent?
       o->position(o->x(), Y-o->y()-o->h());
@@ -647,5 +646,5 @@ void fl_end_group() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.27 2002/03/26 18:00:34 spitzak Exp $".
+// End of "$Id: file.cxx,v 1.28 2002/12/09 04:52:23 spitzak Exp $".
 //

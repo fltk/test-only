@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.49 2002/10/26 09:55:30 spitzak Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.50 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -24,21 +24,22 @@
 
 // Try to keep this code from bloating up, as it is always linked in.
 
-#include <fltk/Fl_Tooltip.h>
-#include <fltk/fl_draw.h>
-#include <fltk/Fl_Menu_Window.h>
+#include <fltk/Tooltip.h>
+#include <fltk/MenuWindow.h>
+#include <fltk/ScreenInfo.h>
+#include <fltk/events.h>
+#include <fltk/run.h>
+#include <fltk/draw.h>
+using namespace fltk;
 
-float		Fl_Tooltip::delay_ = 1.0f;
-bool		Fl_Tooltip::enabled_ = true;
+float		Tooltip::delay_ = 1.0f;
+bool		Tooltip::enabled_ = true;
 
 #define MAX_WIDTH 400
 
-class Fl_TooltipBox : public Fl_Menu_Window {
+class TooltipBox : public MenuWindow {
 public:
-  Fl_TooltipBox() : Fl_Menu_Window(0, 0) {
-    style(Fl_Tooltip::default_style);
-    end();
-  }
+  TooltipBox() : MenuWindow(0, 0) {style(Tooltip::default_style);}
   void draw();
   void layout();
 #ifdef _WIN32
@@ -47,44 +48,46 @@ public:
 #endif
 };
 
-static Fl_Tooltip::Generator generator;
+static Tooltip::Generator generator;
 static void* argument;
-Fl_Widget* Fl_Tooltip::widget;
+Widget* Tooltip::widget;
 static int X,Y,W,H;
-static Fl_TooltipBox *window = 0;
+static TooltipBox *window = 0;
 
-void Fl_TooltipBox::layout() {
-  fl_font(label_font(), label_size());
+void TooltipBox::layout() {
+  setfont(labelfont(), labelsize());
   int ww, hh;
   ww = MAX_WIDTH;
-  fl_measure(label(), ww, hh, FL_ALIGN_LEFT|FL_ALIGN_WRAP|FL_ALIGN_INSIDE);
+  measure(label(), ww, hh, ALIGN_LEFT|ALIGN_WRAP|ALIGN_INSIDE);
   ww += 6; hh += 6;
 
+  const ScreenInfo& info = screenInfo();
+
   // find position on the screen of the widget:
-  int ox = Fl::event_x_root();
+  int ox = event_x_root();
   //int ox = X+W/2;
   int oy = Y + H+2;
-  for (Fl_Widget* p = Fl_Tooltip::current(); p; p = p->parent()) {
+  for (Widget* p = Tooltip::current(); p; p = p->parent()) {
     //ox += p->x();
     oy += p->y();
   }
-  if (ox+ww > Fl::w()) ox = Fl::w() - ww;
+  if (ox+ww > info.width) ox = info.width - ww;
   if (ox < 0) ox = 0;
   if (H > 30) {
-    oy = Fl::event_y_root()+13;
-    if (oy+hh > Fl::h()) oy -= 23+hh;
+    oy = event_y_root()+13;
+    if (oy+hh > info.height) oy -= 23+hh;
   } else {
-    if (oy+hh > Fl::h()) oy -= (4+hh+H);
+    if (oy+hh > info.height) oy -= (4+hh+H);
   }
   if (oy < 0) oy = 0;
 
   resize(ox, oy, ww, hh);
-  Fl_Menu_Window::layout();
+  MenuWindow::layout();
 }
 
-void Fl_TooltipBox::draw() {
+void TooltipBox::draw() {
   draw_box();
-  draw_label(3, 3, w()-6, h()-6, FL_ALIGN_LEFT|FL_ALIGN_WRAP|FL_ALIGN_INSIDE);
+  draw_label(3, 3, w()-6, h()-6, ALIGN_LEFT|ALIGN_WRAP|ALIGN_INSIDE);
 }
 
 static bool recent_tooltip;
@@ -99,19 +102,19 @@ static void tooltip_timeout(void*) {
   if (recursion) return;
   recursion = true;
   const char* tip =
-    generator ? generator(Fl_Tooltip::current(), argument) : (const char*)argument;
+    generator ? generator(Tooltip::current(), argument) : (const char*)argument;
   if (!tip || !*tip) {
     if (window) window->hide();
   } else {
-    //if (Fl::grab()) return;
-    if (!window) window = new Fl_TooltipBox;
-    // this cast bypasses the normal Fl_Window label() code:
-    ((Fl_Widget*)window)->label(tip);
+    //if (grab()) return;
+    if (!window) window = new TooltipBox;
+    // this cast bypasses the normal Window label() code:
+    ((Widget*)window)->label(tip);
     window->layout();
     window->redraw();
     window->show();
   }
-  Fl::remove_timeout(recent_timeout);
+  remove_timeout(recent_timeout);
   recent_tooltip = true;
   recursion = false;
 }
@@ -122,9 +125,9 @@ static void tooltip_timeout(void*) {
 // be found do exit(). If you don't want this behavior (for instance
 // if you want the tooltip to reappear when the mouse moves back in)
 // call the fancier enter() below.
-void Fl_Tooltip::enter(Fl_Widget* w) {
+void Tooltip::enter(Widget* w) {
   // find the enclosing group with a tooltip:
-  Fl_Widget* tw = w;
+  Widget* tw = w;
   for (;;) {
     if (!tw) {exit(); return;}
     if (tw->tooltip()) break;
@@ -137,10 +140,10 @@ void Fl_Tooltip::enter(Fl_Widget* w) {
 // tooltip.  This is useful to prevent a tooltip from reappearing when
 // a modal overlapping window is deleted. Fltk does this automatically
 // when you click the mouse button.
-void Fl_Tooltip::current(Fl_Widget* w) {
+void Tooltip::current(Widget* w) {
   exit();
   // find the enclosing group with a tooltip:
-  Fl_Widget* tw = w;
+  Widget* tw = w;
   for (;;) {
     if (!tw) return;
     if (tw->tooltip()) break;
@@ -153,17 +156,17 @@ void Fl_Tooltip::current(Fl_Widget* w) {
 }
 
 // Hide any visible tooltip.
-void Fl_Tooltip::exit() {
+void Tooltip::exit() {
   if (!widget) return;
   widget = 0;
-  Fl::remove_timeout(tooltip_timeout);
-  Fl::remove_timeout(recent_timeout);
+  remove_timeout(tooltip_timeout);
+  remove_timeout(recent_timeout);
   if (window) window->hide();
   if (recent_tooltip) {
-    if (Fl::event_state() & FL_BUTTONS)
+    if (event_state() & ANY_BUTTON)
       recent_tooltip = 0;
     else
-      Fl::add_timeout(.2f, recent_timeout);
+      add_timeout(.2f, recent_timeout);
   }
 }
 
@@ -174,8 +177,8 @@ void Fl_Tooltip::exit() {
 // widget and data to generate the text, this must be a static data
 // buffer, this function allows you to defer the calculation of the
 // tooltip text until it is first needed.
-void Fl_Tooltip::enter(Fl_Widget* wid, int x,int y,int w,int h,
-		       Fl_Tooltip::Generator gen, void* data)
+void Tooltip::enter(Widget* wid, int x,int y,int w,int h,
+		       Tooltip::Generator gen, void* data)
 {
   if (recursion) return;
   // act like exit() if nothing:
@@ -184,13 +187,13 @@ void Fl_Tooltip::enter(Fl_Widget* wid, int x,int y,int w,int h,
   }
   // do nothing if it is the same:
   if (wid==widget && gen == generator && data == argument) return;
-  Fl::remove_timeout(tooltip_timeout);
-  Fl::remove_timeout(recent_timeout);
+  remove_timeout(tooltip_timeout);
+  remove_timeout(recent_timeout);
   // remember it:
   widget = wid; X = x; Y = y; W = w; H = h;
   generator = gen; argument = data;
   // popup the tooltip immediately if it was recently up:
-  if (recent_tooltip || Fl_Tooltip::delay() < .1) {
+  if (recent_tooltip || Tooltip::delay() < .1) {
 #ifdef WIN32
     // possible fix for the Windows titlebar, it seems to want the
     // window to be destroyed, moving it messes up the parenting:
@@ -199,19 +202,19 @@ void Fl_Tooltip::enter(Fl_Widget* wid, int x,int y,int w,int h,
     tooltip_timeout(0);
   } else {
     if (window) window->hide();
-    Fl::add_timeout(Fl_Tooltip::delay(), tooltip_timeout);
+    add_timeout(Tooltip::delay(), tooltip_timeout);
   }
 }
 
-static void revert(Fl_Style* s) {
-  s->box = FL_BORDER_BOX;
-  s->color = (Fl_Color)215;
-  s->text_color = FL_DARK3;
-  s->label_color = FL_BLACK;
+static void revert(Style* s) {
+  s->box = BORDER_BOX;
+  s->color = (Color)215;
+  s->textcolor = GRAY33;
+  s->labelcolor = BLACK;
 }
-static Fl_Named_Style style("Tooltip", revert, &Fl_Tooltip::default_style);
-Fl_Named_Style* Fl_Tooltip::default_style = &::style;
+static NamedStyle style("Tooltip", revert, &Tooltip::default_style);
+NamedStyle* Tooltip::default_style = &::style;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.49 2002/10/26 09:55:30 spitzak Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.50 2002/12/09 04:52:26 spitzak Exp $".
 //

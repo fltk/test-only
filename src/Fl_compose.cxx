@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_compose.cxx,v 1.13 2002/06/21 06:17:09 spitzak Exp $"
+// "$Id: Fl_compose.cxx,v 1.14 2002/12/09 04:52:27 spitzak Exp $"
 //
 // Character compose processing for the Fast Light Tool Kit (FLTK).
 //
@@ -23,7 +23,8 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
+#include <fltk/events.h>
+using namespace fltk;
 
 // Before searching anything the following conversions are made:
 // '"', ';' -> ":"     "/" -> "|"    "=",'_' -> "-"
@@ -162,9 +163,9 @@ static const char dead_keys[] = {
 };
 #endif
 
-int Fl::compose_state;
+int fltk::compose_state;
 
-bool Fl::compose(int& del) {
+bool fltk::compose(int& del) {
 
   del = 0;
   char ascii = e_text[0];
@@ -175,7 +176,7 @@ bool Fl::compose(int& del) {
   // Alt+letters are reserved for shortcuts.  But alt+foreign letters
   // has to be allowed, because some key layouts require alt to be held
   // down in order to type them...
-  if ((e_state & (FL_ALT|FL_WIN)) && !(ascii & 128)) return false;
+  if ((e_state & (ALT|COMMAND)) && !(ascii & 128)) return false;
 
   if (compose_state == 1) { // after the compose key
     
@@ -189,7 +190,7 @@ bool Fl::compose(int& del) {
     if (compose_state != 1) return true;
 
     // The right-hand ctrl and any letter "quotes" the control character:
-    if (e_length && Fl::event_key()<128) {
+    if (e_length && event_key()<128) {
       compose_state = 0;
       return true;
     }
@@ -212,7 +213,7 @@ bool Fl::compose(int& del) {
   int i = e_keysym;
 
   // See if they type the compose prefix key:
-  if (i == FL_Control_R || i == 0xff20/* Multi-Key */) {
+  if (i == RightControlKey || i == 0xff20/* Multi-Key */) {
     compose_state = 1;
     return true;
   }

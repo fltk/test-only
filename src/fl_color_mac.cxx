@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_mac.cxx,v 1.2 2002/09/09 01:39:58 spitzak Exp $"
+// "$Id: fl_color_mac.cxx,v 1.3 2002/12/09 04:52:29 spitzak Exp $"
 //
 // MacOS color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -30,24 +30,14 @@
 
 // MacOS - matt: the macintosh port does not support colormaps
 
-#include <config.h>
-#include <fltk/Fl.h>
-#include <fltk/x.h>
-#include <fltk/fl_draw.h>
-
-static unsigned fl_cmap[256] = {
-#include "fl_cmap.h" // this is a file produced by "cmap.cxx":
+static unsigned cmap[256] = {
+#include "cmap.h" // this is a file produced by "cmap.cxx":
 };
 
-// Translations to mac data structures:
-Fl_XMap fl_xmap[256];
+Color color_;
 
-Fl_XMap* fl_current_xmap;
-
-Fl_Color fl_color_;
-
-void fl_color(Fl_Color i) {
-  fl_color_ = i;
+void color(Color i) {
+  color_ = i;
   int index;
   uchar r, g, b;
   if (i & 0xFFFFFF00) {
@@ -58,7 +48,7 @@ void fl_color(Fl_Color i) {
   } else {
     // translate index into rgb:
     index = i;
-    unsigned c = fl_cmap[i];
+    unsigned c = cmap[i];
     r = c>>24;
     g = c>>16;
     b = c>> 8;
@@ -70,7 +60,7 @@ void fl_color(Fl_Color i) {
   RGBForeColor(&rgb);
 }
 
-void fl_color(uchar r, uchar g, uchar b) {
+void color(uchar r, uchar g, uchar b) {
   RGBColor rgb; 
   rgb.red   = (r<<8)|r;
   rgb.green = (g<<8)|g;
@@ -78,12 +68,12 @@ void fl_color(uchar r, uchar g, uchar b) {
   RGBForeColor(&rgb);
 }
 
-void Fl::set_color(Fl_Color i, unsigned c) {
-  if (fl_cmap[i] != c) {
-    fl_cmap[i] = c;
+void setcolor(Color i, unsigned c) {
+  if (cmap[i] != c) {
+    cmap[i] = c;
   }
 }
 
 //
-// End of "$Id: fl_color_mac.cxx,v 1.2 2002/09/09 01:39:58 spitzak Exp $".
+// End of "$Id: fl_color_mac.cxx,v 1.3 2002/12/09 04:52:29 spitzak Exp $".
 //

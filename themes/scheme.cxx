@@ -1,5 +1,5 @@
 //
-// "$Id: scheme.cxx,v 1.1 2002/02/10 22:57:50 spitzak Exp $"
+// "$Id: scheme.cxx,v 1.2 2002/12/09 04:52:32 spitzak Exp $"
 //
 // Startup, scheme and theme handling code for the Fast Light
 // Tool Kit (FLTK).
@@ -31,7 +31,7 @@
 // defined by plugin code and thus the only part that was being used was
 // the "themes" line from the file.
 
-// The scheme argument (set by Fl_Style::scheme() or by the -scheme
+// The scheme argument (set by fltk::Style::scheme() or by the -scheme
 // switch when Fl::arg() is used) is used to choose the scheme file to
 // read, by adding ".scheme" to the end. If not specified or null,
 // "default" is used.  There are some sample scheme files provided for
@@ -41,15 +41,13 @@
 #include <string.h>
 #include <limits.h>
 #include <stdlib.h>
-#include <fltk/Fl.h>
-#include <fltk/fl_load_plugin.h>
-#include <fltk/Fl_Color.h>
-#include <fltk/Fl_Font.h>
-#include <fltk/Fl_Labeltype.h>
-#include <fltk/Fl_Style.h>
-#include <fltk/Fl_Widget.h>
-#include <fltk/x.h>
-#include <config.h>
+#include <fltk/load_plugin.h>
+#include <fltk/Color.h>
+#include <fltk/Font.h>
+#include <fltk/LabelType.h>
+#include <fltk/Style.h>
+#include <fltk/Widget.h>
+#include <fltk/Box.h>
 #include "conf.h"
 
 #ifndef _WIN32
@@ -64,18 +62,18 @@
 #define PATH_MAX 128
 #endif
 
-static Fl_Color grok_color(const char* cf, const char *colstr) {
+static fltk::Color grok_color(const char* cf, const char *colstr) {
   char key[80], val[32];
   const char *p = colstr;
   snprintf(key, sizeof(key), "aliases/%s", colstr);
   if (!getconf(cf, key, val, sizeof(val))) p = val;
   char* q;
   long l = strtoul(p, &q, 0);
-  if (!*q) return (Fl_Color)l;
-  return fl_rgb(p);
+  if (!*q) return (fltk::Color)l;
+  return fltk::color(p);
 }
 
-static Fl_Font grok_font(const char* cf, const char* fontstr) {
+static fltk::Font* grok_font(const char* cf, const char* fontstr) {
   char key[80], val[80];
   const char *p = fontstr;
   snprintf(key, sizeof(key), "aliases/%s", fontstr);
@@ -83,20 +81,20 @@ static Fl_Font grok_font(const char* cf, const char* fontstr) {
 
   char* q;
   long l = strtoul(p, &q, 0);
-  if (!*q) return fl_fonts+l;
+  if (!*q) return fltk::font(l);
 
-  return fl_find_font(p);
+  return fltk::font(p);
 }
 
 extern "C" bool fltk_theme() {
 
-  const char* scheme = Fl_Style::scheme();
+  const char* scheme = fltk::Style::scheme();
   if (!scheme || !*scheme) scheme = "default";
 
   char temp[PATH_MAX];
   snprintf(temp, PATH_MAX, "%s.scheme", scheme);
   char sfile_buf[PATH_MAX];
-  const char* sfile = fl_find_config_file(sfile_buf, PATH_MAX, temp);
+  const char* sfile = fltk::find_config_file(sfile_buf, PATH_MAX, temp);
   if (!sfile) {
     fprintf(stderr, "Cannot find scheme \"%s\"\n", temp);
     return false;
@@ -112,27 +110,27 @@ extern "C" bool fltk_theme() {
 
   if (!::getconf(sfile, "general/themes", temp, sizeof(temp))) {
     recurse = true;
-    Fl_Theme f = Fl_Style::load_theme(temp);
+    fltk::Theme f = fltk::Style::load_theme(temp);
     if (f) f();
     else fprintf(stderr,"Unable to load %s theme\n", temp);
     recurse = false;
   }
 
   char valstr[80];
-  Fl_Color col;
+  fltk::Color col;
 
   if (!::getconf(sfile, "global colors/background", valstr, sizeof(valstr))) {
     col = grok_color(sfile, valstr);
-    fl_background(fl_get_color(col));
+    fltk::set_background(fltk::get_color_index(col));
   }
 
-  static struct { const char* key; Fl_Color col; } colors[] = {
-    { "DARK1", FL_DARK1 },
-    { "DARK2", FL_DARK2 },
-    { "DARK3", FL_DARK3 },
-    { "LIGHT1", FL_LIGHT1 },
-    { "LIGHT2", FL_LIGHT2 },
-    { "LIGHT3", FL_LIGHT3 },
+  static struct { const char* key; fltk::Color col; } colors[] = {
+    { "DARK1", fltk::GRAY66 },
+    { "DARK2", fltk::GRAY60 },
+    { "DARK3", fltk::GRAY33 },
+    { "LIGHT1", fltk::GRAY85 },
+    { "LIGHT2", fltk::GRAY90 },
+    { "LIGHT3", fltk::GRAY99 },
     { 0, 0 }
   };
 
@@ -141,20 +139,20 @@ extern "C" bool fltk_theme() {
     int res = ::getconf(sfile, temp, valstr, sizeof(valstr));
     if (!res) {
       col = grok_color(sfile, valstr);
-      fl_set_color(colors[i].col, col);
+      fltk::set_color_index(colors[i].col, col);
     }
   }
 
   conf_list section_list = 0, key_list = 0;
   conf_entry* cent;
 
-  Fl_Font font;
-  Fl_Labeltype labeltype;
-  Fl_Boxtype boxtype;
+  fltk::Font* font;
+  fltk::LabelType* labeltype;
+  fltk::Box* boxtype;
 
   if (!getconf_sections(sfile, "widgets", &section_list)) {
     for (cent = section_list; cent; cent = cent->next) {
-      Fl_Style* style = Fl_Style::find(cent->key);
+      fltk::Style* style = fltk::Style::find(cent->key);
       if (!style) continue;
 
       snprintf(temp, sizeof(temp), "widgets/%s", cent->key);
@@ -162,11 +160,11 @@ extern "C" bool fltk_theme() {
 
       // box around widget
       if (!getconf_list(key_list, "box", valstr, sizeof(valstr)))
-        if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->box = boxtype;
+        if ( (boxtype = fltk::Box::find(valstr)) ) style->box = boxtype;
 
       // box around buttons within widget
       if (!getconf_list(key_list, "button box", valstr, sizeof(valstr)))
-        if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->button_box = boxtype;
+        if ( (boxtype = fltk::Box::find(valstr)) ) style->buttonbox = boxtype;
 
       // color of widget background
       if (!getconf_list(key_list, "color", valstr, sizeof(valstr)))
@@ -174,7 +172,7 @@ extern "C" bool fltk_theme() {
 
       // color of widget's label
       if (!getconf_list(key_list, "label color", valstr, sizeof(valstr)))
-        style->label_color = grok_color(sfile, valstr);
+        style->labelcolor = grok_color(sfile, valstr);
 
       // color of widget's background when widget is selected
       if (!getconf_list(key_list, "selection color", valstr, sizeof(valstr)))
@@ -184,11 +182,11 @@ extern "C" bool fltk_theme() {
       // color of widget's label when widget selected
       // color of widget's glyph when widget selected and no glyph box
       if (!getconf_list(key_list, "selection text color", valstr, sizeof(valstr)))
-        style->selection_text_color = grok_color(sfile, valstr);
+        style->selection_textcolor = grok_color(sfile, valstr);
 
       // background of buttons within widget
       if (!getconf_list(key_list, "button color", valstr, sizeof(valstr)))
-        style->button_color = grok_color(sfile, valstr);
+        style->buttoncolor = grok_color(sfile, valstr);
 
       // color of widget's background when widget is highlighted
       if (!getconf_list(key_list, "highlight color", valstr, sizeof(valstr)))
@@ -197,31 +195,31 @@ extern "C" bool fltk_theme() {
       // color of widget's label when widget highlighted
       // color of widget's glyph/text when widget highlighted and no text/glyph box
       if (!getconf_list(key_list, "highlight label color", valstr, sizeof(valstr)))
-        style->highlight_label_color = grok_color(sfile, valstr);
+        style->highlight_labelcolor = grok_color(sfile, valstr);
 
       // color of text/glyph within widget
       if (!getconf_list(key_list, "text color", valstr, sizeof(valstr)))
-        style->text_color = grok_color(sfile, valstr);
+        style->textcolor = grok_color(sfile, valstr);
 
       // font used for widget's label
       if (!getconf_list(key_list, "label font", valstr, sizeof(valstr)))
-        if ( (font = grok_font(sfile, valstr)) ) style->label_font = font;
+        if ( (font = grok_font(sfile, valstr)) ) style->labelfont = font;
 
       // font used for text within widget
       if (!getconf_list(key_list, "text font", valstr, sizeof(valstr)))
-        if ( (font = grok_font(sfile, valstr)) ) style->text_font = font;
+        if ( (font = grok_font(sfile, valstr)) ) style->textfont = font;
 
       // type of widget's label
       if (!getconf_list(key_list, "label type", valstr, sizeof(valstr)))
-        if ( (labeltype = Fl_Labeltype_::find(valstr)) ) style->label_type = labeltype;
+        if ( (labeltype = fltk::LabelType::find(valstr)) ) style->labeltype = labeltype;
 
       // font size of widget's label
       if (!getconf_list(key_list, "label size", valstr, sizeof(valstr)))
-        style->label_size = (int)strtol(valstr,0,0);
+        style->labelsize = (int)strtol(valstr,0,0);
 
       // font size of text within widget
       if (!getconf_list(key_list, "text size", valstr, sizeof(valstr)))
-        style->text_size = (int)strtol(valstr,0,0);
+        style->textsize = (int)strtol(valstr,0,0);
 
       // leading
       if (!getconf_list(key_list, "leading", valstr, sizeof(valstr)))
@@ -235,5 +233,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: scheme.cxx,v 1.1 2002/02/10 22:57:50 spitzak Exp $".
+// End of "$Id: scheme.cxx,v 1.2 2002/12/09 04:52:32 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 # data file for the FLTK User Interface Designer (FLUID)
-version 2.0001 
+version 2.0002 
 images_dir ./ 
 do_not_include_H_from_C 
 header_name {.h} 
@@ -9,34 +9,34 @@ gridy 11
 snap 3
 Function {make_images_dir_window()} {open
 } {
-  Fl_Window images_dir_window {
+  {fltk::Window} images_dir_window {
     label {Images root directory}
     callback {images_dir_window->hide();
 modal=0;} open
-    xywh {409 202 310 100} resizable visible
+    xywh {409 202 310 98} resizable visible
   } {
-    Fl_Input images_dir_input {
+    {fltk::Input} images_dir_input {
       xywh {10 22 220 22} hotspot
     }
-    Fl_Button {} {
+    {fltk::Button} {} {
       label {Browse ...}
       callback {browse_dir_cb();}
       private xywh {230 22 70 22}
     }
-    Fl_Box {} {
-      label {(relative to the location of the .fl file)}
-      xywh {10 44 220 16} align 149 label_size 10
+    {fltk::Widget} {} {
+      label {(relative to the location of the .fl file)} selected
+      xywh {10 44 220 16} align 149 box NO_BOX labelsize 10
     }
-    Fl_Return_Button {} {
+    {fltk::ReturnButton} {} {
       label OK
       callback {images_dir_window->hide();
 modal=0;}
       private xywh {150 66 70 22} shortcut 0xff0d
     }
-    Fl_Button {} {
+    {fltk::Button} {} {
       label Cancel
       callback {images_dir_window->hide();
-modal=0; cancel=1;} selected
+modal=0; cancel=1;}
       private xywh {230 66 70 22}
     }
   }

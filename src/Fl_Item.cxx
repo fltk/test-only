@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.20 2002/09/24 07:35:19 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.21 2002/12/09 04:52:25 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -23,40 +23,43 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl_Item.h>
-#include <fltk/fl_draw.h>
-#include <fltk/Fl_Image.h>
-#include <fltk/Fl_Check_Button.h>
+#include <fltk/Item.h>
+#include <fltk/Image.h>
+#include <fltk/CheckButton.h>
+#include <fltk/Box.h>
+#include <fltk/draw.h>
 #include <string.h>
+
+using namespace fltk;
 
 // Style used to draw menu items.  This controls the font and label color,
 // how the toggle/radio buttons are drawn, and other "contents" of the
 // menu item that can also be drawn into a browser, even though the
 // browser has different selection drawing rules.  The background color,
 // selected color and box drawn around selected items is controlled
-// by the Menu style in Fl_Menu.cxx.
+// by the Menu style in PopupMenu.cxx.
 
-static void revert(Fl_Style* s) {
-  s->box = FL_NO_BOX;
-  s->color = FL_GRAY;
-  s->button_box = FL_DOWN_BOX;
-  // s->button_box = FL_NO_BOX; // makes it look more like Windows
-  s->button_color = FL_WHITE;
-  //s->glyph = Fl_Check_Button::default_glyph;
+static void revert(Style* s) {
+  s->box = NO_BOX;
+  s->color = GRAY75;
+  s->buttonbox = DOWN_BOX;
+  // s->buttonbox = NO_BOX; // makes it look more like Windows
+  s->buttoncolor = WHITE;
+  //s->glyph = CheckButton::default_glyph;
 }
-static Fl_Named_Style style("Item", revert, &Fl_Item::default_style);
-Fl_Named_Style* Fl_Item::default_style = &::style;
+static NamedStyle style("Item", revert, &Item::default_style);
+NamedStyle* Item::default_style = &::style;
 
-Fl_Item::Fl_Item(const char* l) : Fl_Widget(0,0,0,0,l) {
+Item::Item(const char* l) : Widget(0,0,0,0,l) {
   // we need to defer setting the glyph to here because C++ has no way
   // to make sure the check button style is constructed before this style:
   if (!default_style->glyph)
-    default_style->glyph = Fl_Check_Button::default_style->glyph;
+    default_style->glyph = CheckButton::default_style->glyph;
   style(default_style);
-  set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+  set_flag(ALIGN_LEFT|ALIGN_INSIDE);
 }
 
-void Fl_Item::draw() {
+void Item::draw() {
   draw_box();
 
   int x = 0; int y = 0; int w = this->w(); int h = this->h();
@@ -66,10 +69,10 @@ void Fl_Item::draw() {
     // if pushed, preview the resulting state:
     int lflags = flags();
     if (pushed()) {
-      if (type() != RADIO) lflags ^= FL_VALUE;
-      else lflags |= FL_VALUE;
+      if (type() != RADIO) lflags ^= VALUE;
+      else lflags |= VALUE;
     }
-    int gw = text_size()+2;
+    int gw = int(textsize())+2;
     draw_glyph(0, x+3, y+((h-gw)>>1), gw, gw, lflags);
     x += gw+3; w -= gw+3;
   }
@@ -77,12 +80,12 @@ void Fl_Item::draw() {
 }
 
 // Measure the space the draw() will take:
-// maybe this should be the default layout() function for Fl_Widget?
-void Fl_Item::layout() {
+// maybe this should be the default layout() function for Widget?
+void Item::layout() {
   if (w() && h()) return; // already at the correct size
   int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
-  fl_font(label_font(), label_size());
-  int w = 250, h = 250; fl_measure(label(), w, h, flags());
+  setfont(labelfont(), labelsize());
+  int w = 250, h = 250; measure(label(), w, h, flags());
   if (type()) w += 15;
   if (image()) {
     int W, H;
@@ -92,34 +95,34 @@ void Fl_Item::layout() {
   }
   this->w(w-dw+6);
   this->h(h-dh);
-  Fl_Widget::layout();
+  Widget::layout();
 }
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/Fl_Item_Group.h>
+#include <fltk/ItemGroup.h>
 
-Fl_Item_Group::Fl_Item_Group(const char* l) : Fl_Menu_(0,0,0,0,l) {
+ItemGroup::ItemGroup(const char* l) : Menu(0,0,0,0,l) {
   style(::style);
-  align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
-  begin(); // undo the end() in Fl_Menu_
+  align(ALIGN_LEFT|ALIGN_INSIDE);
+  begin(); // undo the end() in Menu
 }
 
-// implementation of draw & layout should be identical to Fl_Item type()==0
+// implementation of draw & layout should be identical to Item type()==0
 
-void Fl_Item_Group::draw() {
+void ItemGroup::draw() {
   draw_box();
   int x = 0; int y = 0; int w = this->w(); int h = this->h();
   box()->inset(x,y,w,h);
   draw_label(x+3, y, w-6, h, flags());
 }
 
-void Fl_Item_Group::layout() {
+void ItemGroup::layout() {
   if (w() && h()) return; // already at the correct size
   int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
-  fl_font(label_font(), label_size());
+  setfont(labelfont(), labelsize());
   int h; int w = 0; 
-  fl_measure(label(), w, h, flags());
+  measure(label(), w, h, flags());
   if (image()) {
     int W, H;
     image()->measure(W, H);
@@ -128,26 +131,33 @@ void Fl_Item_Group::layout() {
   }
   this->w(w-dw+6);
   this->h(h-dh);
-  Fl_Widget::layout();
+  Widget::layout();
 }
 
 ////////////////////////////////////////////////////////////////
-// Fl_Divider, does not share any code, but closely related:
+// Divider, does not share any code, but closely related:
 
-#include <fltk/Fl_Divider.h>
+#include <fltk/Divider.h>
 
-Fl_Divider::Fl_Divider() : Fl_Widget(0,0,0,0) {
+Divider::Divider() : Widget(0,0,0,0) {
   style(::style);
-  set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_OUTPUT);
+  set_flag(ALIGN_LEFT|ALIGN_INSIDE|OUTPUT);
 }
 
-void Fl_Divider::draw() {
-  fl_color(FL_DARK3);
-  fl_line(0, 0, w(), 0);
-  fl_color(FL_LIGHT3);
-  fl_line(0, 1, w(), 1);
+void Divider::draw() {
+  setcolor(GRAY33);
+  if (w() > h()) {
+    drawline(0, 0, w()-1, 0);
+    setcolor(WHITE);
+    drawline(0, 1, w()-1, 1);
+  } else if (h()) {
+    drawline(0, 0, 0, h()-1);
+    setcolor(WHITE);
+    drawline(1, 0, 1, h()-1);
+  }
 }
 
-void Fl_Divider::layout() {
-  h(2);
+void Divider::layout() {
+  if (!w()) w(2);
+  if (!h()) h(2);
 }

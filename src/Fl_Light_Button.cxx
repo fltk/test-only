@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.cxx,v 1.32 2002/09/09 01:39:57 spitzak Exp $"
+// "$Id: Fl_Light_Button.cxx,v 1.33 2002/12/09 04:52:25 spitzak Exp $"
 //
 // Lighted button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,45 +23,47 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// The Fl_Light_Button draws the indicator as a rectangle in the
+// The LightButton draws the indicator as a rectangle in the
 // style of Flame.  This is done by replacing the glyph drawing function
 // in the default style.
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Light_Button.h>
+#include <fltk/LightButton.h>
+#include <fltk/Box.h>
 
-static void glyph(const Fl_Widget* widget, int/*t*/,
-		  int x,int y,int w,int h, Fl_Flags f)
+using namespace fltk;
+
+static void glyph(const Widget* widget, int/*t*/,
+		  int x,int y,int w,int h, Flags f)
 {
   int ww = w/2+1;
-  Fl_Color color;
-  if (f & FL_VALUE) {
-    f = f&FL_INACTIVE;
+  Color color;
+  if (f & VALUE) {
+    f = f&INACTIVE;
     color = widget->selection_color();
-  } else if ((color = widget->style()->button_color)) {
+  } else if ((color = widget->style()->buttoncolor)) {
     // if user set the color of the button draw that color
-    f = f&FL_INACTIVE;
+    f = f&INACTIVE;
   } else {
-    f = f&FL_INACTIVE | FL_INVISIBLE; // draw frame only
+    f = f&INACTIVE | INVISIBLE; // draw frame only
     color = widget->color();
   }
-  FL_THIN_DOWN_BOX->draw(x+((w-ww)>>1), y, ww, h, color, f);
+  THIN_DOWN_BOX->draw(x+((w-ww)>>1), y, ww, h, color, f);
 }
 
-static void revert(Fl_Style* s) {
-  s->selection_color = FL_YELLOW;
+static void revert(Style* s) {
+  s->selection_color = YELLOW;
   s->glyph = glyph;
 }
-static Fl_Named_Style style("Light_Button", revert, &Fl_Light_Button::default_style);
-Fl_Named_Style* Fl_Light_Button::default_style = &::style;
+static NamedStyle style("Light_Button", revert, &LightButton::default_style);
+NamedStyle* LightButton::default_style = &::style;
 
-Fl_Light_Button::Fl_Light_Button(int x, int y, int w, int h, const char *l)
-  : Fl_Check_Button(x, y, w, h, l)
+LightButton::LightButton(int x, int y, int w, int h, const char *l)
+  : CheckButton(x, y, w, h, l)
 {
-  default_style->parent = Fl_Button::default_style;
+  default_style->parent = Button::default_style;
   style(default_style);
 }
 
 //
-// End of "$Id: Fl_Light_Button.cxx,v 1.32 2002/09/09 01:39:57 spitzak Exp $".
+// End of "$Id: Fl_Light_Button.cxx,v 1.33 2002/12/09 04:52:25 spitzak Exp $".
 //

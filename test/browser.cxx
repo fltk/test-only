@@ -1,15 +1,15 @@
 // Maarten de Boer's toggle tree demo program rewritten to use the
 // fltk 2.0 browser.  This unfortunately required a bunch of changes.
 
-#include <fltk/Fl_Browser.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/Fl_Button.h>
-#include <fltk/Fl_Scroll.h>
-#include <fltk/Fl.h>
-#include <fltk/Fl_Pixmap.h>
-#include <fltk/Fl_Item.h>
-#include <fltk/Fl_Item_Group.h>
-#include <fltk/Fl_Check_Button.h>
+#include <fltk/Browser.h>
+#include <fltk/Window.h>
+#include <fltk/Button.h>
+#include <fltk/run.h>
+#include <fltk/events.h>
+#include <fltk/xpmImage.h>
+#include <fltk/Item.h>
+#include <fltk/ItemGroup.h>
+#include <fltk/CheckButton.h>
 
 #include "folder_small.xpm"
 #include "file_small.xpm"
@@ -17,26 +17,26 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-Fl_Pixmap* folderSmall;
-Fl_Pixmap* fileSmall;
+fltk::xpmImage* folderSmall;
+fltk::xpmImage* fileSmall;
 
 void
-cb_test(Fl_Widget* browser, void*) {
-  Fl_Widget* w = ((Fl_Browser*)browser)->item();
+cb_test(fltk::Widget* browser, void*) {
+  fltk::Widget* w = ((fltk::Browser*)browser)->item();
   printf("Callback, browser->item() = '%s'",
 	 w && w->label() ? w->label() : "null");
-  if (Fl::event_clicks()) printf(", Double Click");
+  if (fltk::event_clicks()) printf(", Double Click");
   printf("\n");
 }
 
 void
-cb_remove(Fl_Widget*, void* ptr) {
-  Fl_Browser* tree = (Fl_Browser*) ptr;
-  if (tree->type() & Fl_Browser::MULTI) {
-    Fl_Widget* w = tree->goto_top();
+cb_remove(fltk::Widget*, void* ptr) {
+  fltk::Browser* tree = (fltk::Browser*) ptr;
+  if (tree->type() & fltk::Browser::MULTI) {
+    fltk::Widget* w = tree->goto_top();
     while (w) {
       if (w->selected()) {
-	Fl_Group* g = w->parent();
+	fltk::Group* g = w->parent();
 	g->remove(w);
 	delete w;
 	g->relayout();
@@ -46,9 +46,9 @@ cb_remove(Fl_Widget*, void* ptr) {
       }
     }
   } else {
-    Fl_Widget* w = tree->goto_focus();
+    fltk::Widget* w = tree->goto_focus();
     if (w) {
-      Fl_Group* g = w->parent();
+      fltk::Group* g = w->parent();
       g->remove(w);
       delete w;
       g->relayout();
@@ -57,85 +57,85 @@ cb_remove(Fl_Widget*, void* ptr) {
 }
 
 void
-cb_multi(Fl_Widget* w, void* ptr) {
-  Fl_Browser* tree = (Fl_Browser*) ptr;
-  tree->type(w->value() ? Fl_Browser::MULTI : Fl_Browser::NORMAL);
+cb_multi(fltk::Widget* w, void* ptr) {
+  fltk::Browser* tree = (fltk::Browser*) ptr;
+  tree->type(w->value() ? fltk::Browser::MULTI : fltk::Browser::NORMAL);
   tree->relayout();
 }
 
-static Fl_Group* current_group(Fl_Browser* tree) {
-  Fl_Widget* w = tree->goto_focus();
+static fltk::Group* current_group(fltk::Browser* tree) {
+  fltk::Widget* w = tree->goto_focus();
   if (!w) return tree;
-  if (w->is_group() && w->flags()&FL_VALUE) return (Fl_Group*)w;
+  if (w->is_group() && w->flags()&fltk::VALUE) return (fltk::Group*)w;
   return w->parent() ? w->parent() : tree;
 }
 
-static Fl_Group* add_folder(Fl_Group* parent,
-		       const char* name, int open, Fl_Image* image) {
+static fltk::Group* add_folder(fltk::Group* parent,
+		       const char* name, int open, fltk::Image* image) {
   parent->begin();
-  Fl_Item_Group* o = new Fl_Item_Group(name);
+  fltk::ItemGroup* o = new fltk::ItemGroup(name);
   o->image(image);
-  if (open) o->set_flag(FL_VALUE);
+  if (open) o->set_flag(fltk::VALUE);
   return o;
 }
 
-static Fl_Widget* add_paper(Fl_Group* parent,
-			   const char* name, int, Fl_Image* image) {
+static fltk::Widget* add_paper(fltk::Group* parent,
+			   const char* name, int, fltk::Image* image) {
   parent->begin();
-  Fl_Item* o = new Fl_Item(name);
+  fltk::Item* o = new fltk::Item(name);
   o->image(image);
   return o;
 }
 
 void
-cb_add_folder(Fl_Widget*, void* ptr) {
-  Fl_Browser* tree = (Fl_Browser*) ptr;
+cb_add_folder(fltk::Widget*, void* ptr) {
+  fltk::Browser* tree = (fltk::Browser*) ptr;
   add_folder(current_group(tree), "Added folder", 1, folderSmall);
   tree->relayout();
 }
 
 void
-cb_add_paper(Fl_Widget*, void* ptr) {
-  Fl_Browser* tree = (Fl_Browser*) ptr;
+cb_add_paper(fltk::Widget*, void* ptr) {
+  fltk::Browser* tree = (fltk::Browser*) ptr;
   add_paper(current_group(tree), "New paper", 0, fileSmall);
   tree->relayout();
 }
 
-void cb_when_changed(Fl_Widget* b, void* ptr) {
-  Fl_Browser* tree = (Fl_Browser*)ptr;
+void cb_when_changed(fltk::Widget* b, void* ptr) {
+  fltk::Browser* tree = (fltk::Browser*)ptr;
   if (b->value())
-    tree->when(tree->when()|FL_WHEN_CHANGED);
+    tree->when(tree->when()|fltk::WHEN_CHANGED);
   else
-    tree->when(tree->when()&~FL_WHEN_CHANGED);
+    tree->when(tree->when()&~fltk::WHEN_CHANGED);
 }
 
-void cb_when_release(Fl_Widget* b, void* ptr) {
-  Fl_Browser* tree = (Fl_Browser*)ptr;
+void cb_when_release(fltk::Widget* b, void* ptr) {
+  fltk::Browser* tree = (fltk::Browser*)ptr;
   if (b->value())
-    tree->when(tree->when()|FL_WHEN_RELEASE);
+    tree->when(tree->when()|fltk::WHEN_RELEASE);
   else
-    tree->when(tree->when()&~FL_WHEN_RELEASE);
+    tree->when(tree->when()&~fltk::WHEN_RELEASE);
 }
 
-void cb_when_not_changed(Fl_Widget* b, void* ptr) {
-  Fl_Browser* tree = (Fl_Browser*)ptr;
+void cb_when_not_changed(fltk::Widget* b, void* ptr) {
+  fltk::Browser* tree = (fltk::Browser*)ptr;
   if (b->value())
-    tree->when(tree->when()|FL_WHEN_NOT_CHANGED);
+    tree->when(tree->when()|fltk::WHEN_NOT_CHANGED);
   else
-    tree->when(tree->when()&~FL_WHEN_NOT_CHANGED);
+    tree->when(tree->when()&~fltk::WHEN_NOT_CHANGED);
 }
 
-void cb_when_enter_key(Fl_Widget* b, void* ptr) {
-  Fl_Browser* tree = (Fl_Browser*)ptr;
+void cb_when_enter_key(fltk::Widget* b, void* ptr) {
+  fltk::Browser* tree = (fltk::Browser*)ptr;
   if (b->value())
-    tree->when(tree->when()|FL_WHEN_ENTER_KEY);
+    tree->when(tree->when()|fltk::WHEN_ENTER_KEY);
   else
-    tree->when(tree->when()&~FL_WHEN_ENTER_KEY);
+    tree->when(tree->when()&~fltk::WHEN_ENTER_KEY);
 }
 
 #define USE_STRING_LIST 0
 #if USE_STRING_LIST
-#include <fltk/Fl_String_List.h>
+#include <fltk/fltk::String_List.h>
 
 const char* const strings[] = {
   "foo", "bar", "number 2", "number 3", "another item", "blah", "zoo"
@@ -144,54 +144,55 @@ const char* const strings[] = {
 
 int main(int argc,char** argv) {
 
-  Fl_Window win(240, 304, "Browser Example");
+  fltk::Window win(240, 304, "Browser Example");
+  win.begin();
 
-  Fl_Browser tree(10, 10, 220, 180);
+  fltk::Browser tree(10, 10, 220, 180);
   tree.indented(1);
   tree.callback(cb_test);
 
-  Fl_Button remove_button(5, 200, 70, 22, "Remove");
-  remove_button.callback((Fl_Callback*)cb_remove, (void *)&tree);
+  fltk::Button remove_button(5, 200, 70, 22, "Remove");
+  remove_button.callback((fltk::Callback*)cb_remove, (void *)&tree);
 
-  Fl_Button add_paper_button(5, 224, 70, 22, "Add Paper");
-  add_paper_button.callback((Fl_Callback*)cb_add_paper, (void *)&tree);
+  fltk::Button add_paper_button(5, 224, 70, 22, "Add Paper");
+  add_paper_button.callback((fltk::Callback*)cb_add_paper, (void *)&tree);
 
-  Fl_Button add_folder_button(5, 248, 70, 22, "Add Folder");
-  add_folder_button.callback((Fl_Callback*)cb_add_folder, (void *)&tree);
+  fltk::Button add_folder_button(5, 248, 70, 22, "Add Folder");
+  add_folder_button.callback((fltk::Callback*)cb_add_folder, (void *)&tree);
 
-  Fl_Check_Button multi_button(80, 200, 160, 20, "Fl_Browser::MULTI");
-  multi_button.callback((Fl_Callback*)cb_multi, (void *)&tree);
+  fltk::CheckButton multi_button(80, 200, 160, 20, "fltk::Browser::MULTI");
+  multi_button.callback((fltk::Callback*)cb_multi, (void *)&tree);
 
-  Fl_Check_Button when_changed_button(80, 220, 160, 20, "FL_WHEN_CHANGED");
+  fltk::CheckButton when_changed_button(80, 220, 160, 20, "fltk::WHEN_CHANGED");
   when_changed_button.callback(cb_when_changed, (void *)&tree);
 
-  Fl_Check_Button when_not_changed_button(80, 240, 160, 20, "FL_WHEN_NOT_CHANGED");
+  fltk::CheckButton when_not_changed_button(80, 240, 160, 20, "fltk::WHEN_NOT_CHANGED");
   when_not_changed_button.callback(cb_when_not_changed, (void *)&tree);
 
-  Fl_Check_Button when_release_button(80, 260, 160, 20, "FL_WHEN_RELEASE");
+  fltk::CheckButton when_release_button(80, 260, 160, 20, "fltk::WHEN_RELEASE");
   when_release_button.callback(cb_when_release, (void *)&tree);
   when_release_button.set_value();
 
-  Fl_Check_Button when_enter_key_button(80, 280, 160, 20, "FL_WHEN_ENTER_KEY");
+  fltk::CheckButton when_enter_key_button(80, 280, 160, 20, "fltk::WHEN_ENTER_KEY");
   when_enter_key_button.callback(cb_when_enter_key, (void *)&tree);
 
   win.resizable(tree);
   win.end();
 
-  folderSmall = new Fl_Pixmap(folder_small);
-  fileSmall = new Fl_Pixmap(file_small);
+  folderSmall = new fltk::xpmImage(folder_small);
+  fileSmall = new fltk::xpmImage(file_small);
 
 #if USE_STRING_LIST
-  //tree.list(new Fl_String_List("alpha\0beta\0ceta\0delta\0red\0green\0blue\0"));
-  tree.list(new Fl_String_List(strings, sizeof(strings)/sizeof(*strings)));
-  //tree.list(new Fl_String_List(strings));
+  //tree.list(new fltk::String_List("alpha\0beta\0ceta\0delta\0red\0green\0blue\0"));
+  tree.list(new fltk::String_List(strings, sizeof(strings)/sizeof(*strings)));
+  //tree.list(new fltk::String_List(strings));
 #else
   //int w[3] = {150, 200, 0};
   //tree.column_widths(w);
 
   // Add some nodes with icons -- some open, some closed.
-  // Fl_ToggleNode::Fl_ToggleNode( LABEL , CAN_OPEN (default=1) , ICON )
-  Fl_Group* g;
+  // fltk::ToggleNode::fltk::ToggleNode( LABEL , CAN_OPEN (default=1) , ICON )
+  fltk::Group* g;
 
   g = add_folder(&tree, "aaa\t123", 1, folderSmall);
 
@@ -248,9 +249,9 @@ int main(int argc,char** argv) {
 #endif
 #endif
 
-  //Fl::visual(FL_RGB);
+  //fltk::visual(fltk::RGB);
   win.show(argc,argv);
 
-  Fl::run();
+  fltk::run();
   return 0;
 }

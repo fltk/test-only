@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_add_idle.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_add_idle.cxx,v 1.10 2002/12/09 04:52:27 spitzak Exp $"
 //
 // Idle routine support for the Fast Light Tool Kit (FLTK).
 //
@@ -26,31 +26,32 @@
 // Allows you to manage an arbitrary set of idle() callbacks.
 // Replaces the older set_idle() call (which is used to implement this)
 
-#include <fltk/Fl.h>
+#include <fltk/run.h>
+using namespace fltk;
 
-struct idle_cb {
+struct IdleCb {
   void (*cb)(void*);
   void* data;
-  idle_cb *next;
+  IdleCb *next;
 };
 
 // the callbacks are stored linked in a ring.  last points at the one
 // just called, first at the next to call.  last->next == first.
 
-static idle_cb* first;
-static idle_cb* last;
-static idle_cb* freelist;
+static IdleCb* first;
+static IdleCb* last;
+static IdleCb* freelist;
 
 static void call_idle() {
-  idle_cb* p = first;
+  IdleCb* p = first;
   last = p; first = p->next;
   p->cb(p->data); // this may call add_idle() or remove_idle()!
 }
 
-void Fl::add_idle(void (*cb)(void*), void* data) {
-  idle_cb* p = freelist;
+void add_idle(void (*cb)(void*), void* data) {
+  IdleCb* p = freelist;
   if (p) freelist = p->next;
-  else p = new idle_cb;
+  else p = new IdleCb;
   p->cb = cb;
   p->data = data;
   if (first) {
@@ -64,16 +65,16 @@ void Fl::add_idle(void (*cb)(void*), void* data) {
   }
 }
 
-bool Fl::has_idle(void (*cb)(void*), void* data) {
-  for (idle_cb* p = first; p != last; p = p->next)
+bool has_idle(void (*cb)(void*), void* data) {
+  for (IdleCb* p = first; p != last; p = p->next)
     if (p->cb == cb && p->data == data) return true;
   return false;
 }
 
-void Fl::remove_idle(void (*cb)(void*), void* data) {
-  idle_cb* p = first;
+void remove_idle(void (*cb)(void*), void* data) {
+  IdleCb* p = first;
   if (!p) return;
-  idle_cb* l = last;
+  IdleCb* l = last;
   for (;; p = p->next) {
     if (p->cb == cb && p->data == data) break;
     if (p==last) return; // not found
@@ -91,5 +92,5 @@ void Fl::remove_idle(void (*cb)(void*), void* data) {
 }
 
 //
-// End of "$Id: Fl_add_idle.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_add_idle.cxx,v 1.10 2002/12/09 04:52:27 spitzak Exp $".
 //

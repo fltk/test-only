@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.10 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.11 2002/12/09 04:52:29 spitzak Exp $"
 //
 // Copyright 2001 Bill Spitzak and others.
 //
@@ -36,7 +36,7 @@
 // these is about as good as the fltk ones (I hope to fix it so it is
 // exactly as good...), plus it can cache it's results and share them
 // between programs, so using this should be a win in all cases. Also
-// it should be obvious by comparing this file and fl_font_x.cxx that
+// it should be obvious by comparing this file and font_x.cxx that
 // it is a lot easier to program to Xft than to Xlib.
 //
 // To actually get antialiasing you need the following:
@@ -56,12 +56,16 @@
 // itself. You should edit the ~/.xftconfig file to "fix" things, there
 // are several web pages of information on how to do this.
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Font.h>
-#include <fltk/fl_draw.h>
-#include <fltk/x.h>
+#include <fltk/events.h>
+#include <fltk/Font.h>
+#include <fltk/draw.h>
 #include <fltk/math.h>
+
+#include <fltk/x.h>
+#define Window XWindow
 #include <X11/Xft/Xft.h>
+#undef Window
+
 // define some symbols missing from some Xft header files:
 #ifndef XFT_MINSPACE
 #define XFT_MINSPACE        "minspace"  /* Bool use minimum line spacing */
@@ -75,104 +79,110 @@ typedef struct _XftMatrix {
 #include <string.h>
 #include <stdlib.h>
 
-class Fl_FontSize {
-public:
-  Fl_FontSize *next;	// linked list for this Fl_Fontdesc
+using namespace fltk;
+
+// One of these is made for each combination of size + encoding:
+struct FontSize {
+  FontSize *next;	// linked list for this Fontdesc
   XftFont* font;
   const char* encoding;
-  Fl_FontSize(const char* xfontname);
   float size;
-  //~Fl_FontSize();
+  //~FontSize();
 };
 
-static Fl_FontSize *fl_fontsize;
-#define current_font (fl_fontsize->font)
+// The xft font implementation adds the xft name and the above list:
+struct IFont {
+  fltk::Font f;
+  int attribute_mask; // all attributes that can be turned on
+  FontSize* first;
+};
+
+// We store the attributes in neat blocks of 2^n:
+fltk::Font* fltk::Font::plus(int x) {
+  IFont* font = (IFont*)this;
+  x &= font->attribute_mask & ~attributes_;
+  return &((font+x)->f);
+}
+
+const char* fltk::Font::system_name() {
+  return name_;
+}
+
+static FontSize *current;
   
 // Change the encoding to use for the next font selection.
-void fl_encoding(const char* f) {
-  fl_encoding_ = f;
+void fltk::set_encoding(const char* f) {
+  encoding_ = f;
 }
 
-void fl_font(Fl_Font font, float size) {
-  // Reduce the number of sizes by rounding to various multiples:
-  size = rint(10*size)/10;
-  if (font == fl_font_ && size == fl_size_ &&
-      !strcasecmp(fl_fontsize->encoding, fl_encoding_))
-    return;
-  fl_font_ = font; fl_size_ = size;
-  Fl_FontSize* f;
-  // search the fontsizes we have generated already
-  for (f = font->first; f; f = f->next) {
-    if (f->size == size && !strcasecmp(f->encoding, fl_encoding_))
-      break;
-  }
-  if (!f) {
-    f = new Fl_FontSize(font->name_);
-    f->next = font->first;
-    ((Fl_Font_*)font)->first = f;
-  }
-  fl_fontsize = f;
-}
-
-static XftFont* fontopen(const char* name, bool core) {
-  int slant = XFT_SLANT_ROMAN;
+static XftFont* fontopen(const char* name, int attributes, bool core) {
   int weight = XFT_WEIGHT_MEDIUM;
-  // may be efficient, but this is non-obvious
-  switch (*name++) {
-  case 'I': slant = XFT_SLANT_ITALIC; break;
-  case 'P': slant = XFT_SLANT_ITALIC;
-  case 'B': weight = XFT_WEIGHT_BOLD; break;
-  case ' ': break;
-  default: name--;
-  }
+  if (attributes&BOLD) weight = XFT_WEIGHT_BOLD;
+  int slant = XFT_SLANT_ROMAN;
+  if (attributes&ITALIC) slant = XFT_SLANT_ITALIC;
   // this call is extremely slow...
-  return XftFontOpen(fl_display, fl_screen,
+  return XftFontOpen(xdisplay, xscreen,
 		     XFT_FAMILY, XftTypeString, name,
 		     XFT_WEIGHT, XftTypeInteger, weight,
 		     XFT_SLANT, XftTypeInteger, slant,
-		     XFT_ENCODING, XftTypeString, fl_encoding_,
-		     XFT_PIXEL_SIZE, XftTypeDouble, (double)fl_size_,
+		     XFT_ENCODING, XftTypeString, encoding_,
+		     XFT_PIXEL_SIZE, XftTypeDouble, (double)current_size_,
 		     core ? XFT_CORE : 0, XftTypeBool, true,
 		     XFT_RENDER, XftTypeBool, false,
 		     0);
 }
 
-Fl_FontSize::Fl_FontSize(const char* name) {
-  encoding = fl_encoding_;
-  size = fl_size_;
-  font = fontopen(name, false);
-}
-
-// This call is used by opengl to get a bitmapped font. Xft actually does
-// a pretty good job of selecting X fonts...
-XFontStruct* fl_xfont() {
-  if (current_font->core) return current_font->u.core.font;
-  static XftFont* xftfont;
-  if (xftfont) XftFontClose (fl_display, xftfont);
-  xftfont = fontopen(fl_font_->name_, true);
-  return xftfont->u.core.font;
+void fltk::setfont(fltk::Font* font, float size) {
+  // Reduce the number of sizes by rounding to various multiples:
+  size = rint(10*size)/10;
+  if (font == current_font_ && size == current_size_ &&
+      !strcasecmp(current->encoding, encoding_))
+    return;
+  current_font_ = font; current_size_ = size;
+  FontSize* f;
+  // search the fontsizes we have generated already
+  for (f = ((IFont*)font)->first; f; f = f->next) {
+    if (f->size == size && !strcasecmp(f->encoding, encoding_))
+      break;
+  }
+  if (!f) {
+    f = new FontSize();
+    f->encoding = encoding_;
+    f->size = current_size_;
+    f->font = fontopen(font->name_, font->attributes_, false);
+    f->next = ((IFont*)font)->first;
+    ((IFont*)font)->first = f;
+  }
+  current = f;
 }
 
 #if 0 // this is never called!
-Fl_FontSize::~Fl_FontSize() {
-  if (this == fl_fontsize) fl_fontsize = 0;
-  XftFontClose(fl_display, font);
+FontSize::~FontSize() {
+  if (this == current) current = 0;
+  XftFontClose(xdisplay, font);
 }
 #endif
 
-#if 1
-// Some of the line spacings these return are insanely big!
-//int fl_height() { return current_font->height; }
-float fl_height() { return current_font->ascent + current_font->descent; }
-float fl_descent() { return current_font->descent; }
-#else
-float fl_height() { return fl_size_;}
-float fl_descent() { return fl_size_/4;}
-#endif
+// This call is used by gl_setfont to get a bitmapped font. Xft actually does
+// a pretty good job of selecting X fonts...
+XFontStruct* fltk::xfont() {
+  if (current->font->core) return current->font->u.core.font;
+  static XftFont* xftfont;
+  if (xftfont) XftFontClose (xdisplay, xftfont);
+  xftfont = fontopen(current_font_->name_, current_font_->attributes_, true);
+  return xftfont->u.core.font;
+}
 
-float fl_width(const char *str, int n) {
+const char* fltk::Font::current_name() {
+  return current_font_->name_;
+}
+
+float fltk::getascent()  { return current->font->ascent; }
+float fltk::getdescent() { return current->font->descent; }
+
+float fltk::getwidth(const char *str, int n) {
   XGlyphInfo i;
-  XftTextExtents8(fl_display, current_font, (XftChar8 *)str, n, &i);
+  XftTextExtents8(xdisplay, current->font, (XftChar8 *)str, n, &i);
   return i.xOff;
 }
 
@@ -190,7 +200,7 @@ extern int fl_clip_state_number;
 static int clip_state_number = 0; // which clip we did last
 static XftDraw* clipped_draw = 0;  // the XftDraw we did it to
 
-void Fl_Drawable::free_gc() {
+void fltk::Drawable::free_gc() {
   if (draw) {
     XftDrawDestroy(draw);
     draw = 0;
@@ -198,140 +208,134 @@ void Fl_Drawable::free_gc() {
   }
 };
 
-void fl_transformed_draw(const char *str, int n, float x, float y) {
-  XftDraw* draw = fl_drawable->draw;
+void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
+  XftDraw* draw = drawable->draw;
 
   if (!draw) {
 #if USE_OVERLAY
-    if (fl_overlay)
+    if (overlay)
       draw =
-	XftDrawCreate(fl_display, fl_drawable->xid,
-		      fl_overlay_visual->visual, fl_overlay_colormap);
+	XftDrawCreate(xdisplay, drawable->xid,
+		      overlay_visual->visual, overlay_colormap);
     else
 #endif
     draw =
-      XftDrawCreate(fl_display, fl_drawable->xid,
-		    fl_visual->visual, fl_colormap);
-    Region region = fl_clip_region();
+      XftDrawCreate(xdisplay, drawable->xid,
+		    xvisual->visual, xcolormap);
+    Region region = clip_region();
     if (region) XftDrawSetClip(draw, region);
     clip_state_number = fl_clip_state_number;
-    clipped_draw = fl_drawable->draw = draw;
+    clipped_draw = drawable->draw = draw;
   } else if (clip_state_number!=fl_clip_state_number || draw!=clipped_draw) {
     clip_state_number = fl_clip_state_number;
     clipped_draw = draw;
-    XftDrawSetClip(draw, fl_clip_region());
+    XftDrawSetClip(draw, clip_region());
   }
 
   // Use fltk's color allocator, copy the results to match what
   // XftCollorAllocValue returns:
-  XftColor color;
-  color.pixel = fl_pixel;
-  uchar r,g,b; fl_get_color(fl_color_, r,g,b);
+  static XftColor color;
+  color.pixel = current_xpixel;
+  uchar r,g,b; split_color(get_color(), r,g,b);
   color.color.red   = r*0x101;
   color.color.green = g*0x101;
   color.color.blue  = b*0x101;
   color.color.alpha = 0xffff;
 
-  XftDrawString8(draw, &color, current_font,
+  XftDrawString8(draw, &color, current->font,
 		 int(floorf(x+.5f)), int(floorf(y+.5f)),	
 		 (XftChar8 *)str, n);
 }
 
 ////////////////////////////////////////////////////////////////
 
-// The predefined fonts that fltk has:  bold:       italic:
-Fl_Font_
-fl_fonts[] = {
-{" sans",		fl_fonts+1, fl_fonts+2},
-{"Bsans",		fl_fonts+1, fl_fonts+3},
-{"Isans",		fl_fonts+3, fl_fonts+2},
-{"Psans",		fl_fonts+3, fl_fonts+3},
-{" mono",		fl_fonts+5, fl_fonts+6},
-{"Bmono",		fl_fonts+5, fl_fonts+7},
-{"Imono",		fl_fonts+7, fl_fonts+6},
-{"Pmono",		fl_fonts+7, fl_fonts+7},
-{" serif",		fl_fonts+9, fl_fonts+10},
-{"Bserif",		fl_fonts+9, fl_fonts+11},
-{"Iserif",		fl_fonts+11,fl_fonts+10},
-{"Pserif",		fl_fonts+11,fl_fonts+11},
-{" symbol",		fl_fonts+12,fl_fonts+12},
-{" screen",		fl_fonts+14,fl_fonts+14},
-{"Bscreen",		fl_fonts+14,fl_fonts+14},
-{" dingbats",		fl_fonts+15,fl_fonts+15},
+// The predefined fonts that fltk has:
+static IFont fonts [] = {
+  {{"sans",	0},	3,	0},
+  {{"sans",	1},	3,	0},
+  {{"sans",	2},	3,	0},
+  {{"sans",	3},	3,	0},
+  {{"mono",	0},	3,	0},
+  {{"mono",	1},	3,	0},
+  {{"mono",	2},	3,	0},
+  {{"mono",	3},	3,	0},
+  {{"serif",	0},	3,	0},
+  {{"serif",	1},	3,	0},
+  {{"serif",	2},	3,	0},
+  {{"serif",	3},	3,	0},
+  {{"symbol",	0},	0,	0},
+  {{"screen",	0},	1,	0},
+  {{"screen",	1},	1,	0},
+  {{"dingbats",	0},	0,	0}
 };
+
+fltk::Font* const fltk::HELVETICA 		= &(fonts[0].f);
+fltk::Font* const fltk::HELVETICA_BOLD		= &(fonts[1].f);
+fltk::Font* const fltk::HELVETICA_ITALIC	= &(fonts[2].f);
+fltk::Font* const fltk::HELVETICA_BOLD_ITALIC	= &(fonts[3].f);
+fltk::Font* const fltk::COURIER 		= &(fonts[4].f);
+fltk::Font* const fltk::COURIER_BOLD		= &(fonts[5].f);
+fltk::Font* const fltk::COURIER_ITALIC		= &(fonts[6].f);
+fltk::Font* const fltk::COURIER_BOLD_ITALIC	= &(fonts[7].f);
+fltk::Font* const fltk::TIMES 			= &(fonts[8].f);
+fltk::Font* const fltk::TIMES_BOLD		= &(fonts[9].f);
+fltk::Font* const fltk::TIMES_ITALIC		= &(fonts[10].f);
+fltk::Font* const fltk::TIMES_BOLD_ITALIC	= &(fonts[11].f);
+fltk::Font* const fltk::SYMBOL_FONT		= &(fonts[12].f);
+fltk::Font* const fltk::SCREEN_FONT		= &(fonts[13].f);
+fltk::Font* const fltk::SCREEN_BOLD_FONT	= &(fonts[14].f);
+fltk::Font* const fltk::ZAPF_DINGBATS		= &(fonts[15].f);
+
+// Turn an old integer into a predefined font:
+fltk::Font* fltk::font(int i) {return &(fonts[i%16].f);}
 
 ////////////////////////////////////////////////////////////////
 // The rest of this is for listing fonts:
 
-// turn a stored font name into a pretty name:
-const char* Fl_Font_::name(int* ap) const {
-  int type;
-  switch (name_[0]) {
-  case 'B': type = FL_BOLD; break;
-  case 'I': type = FL_ITALIC; break;
-  case 'P': type = FL_BOLD | FL_ITALIC; break;
-  default:  type = 0; break;
-  }
-  if (ap) {*ap = type; return name_+1;}
-  if (!type) {return name_+1;}
-  static char *buffer = new char[128];
-  strcpy(buffer, name_+1);
-  if (type & FL_BOLD) strcat(buffer, " bold");
-  if (type & FL_ITALIC) strcat(buffer, " italic");
-  return buffer;
-}
-
 extern "C" {
 static int sort_function(const void *aa, const void *bb) {
-  const char* name_a = (*(Fl_Font_**)aa)->name_;
-  const char* name_b = (*(Fl_Font_**)bb)->name_;
-  int ret = strcasecmp(name_a+1, name_b+1); if (ret) return ret;
-  return name_a[0]-name_b[0]; // sort by attribute
-}
-}
+  fltk::Font* a = *(fltk::Font**)aa;
+  fltk::Font* b = *(fltk::Font**)bb;
+  int ret = strcasecmp(a->name_, b->name_); if (ret) return ret;
+  return a->attributes_ - b->attributes_;
+}}
 
-static Fl_Font_* make_a_font(char attrib, const char* name) {
-  Fl_Font_* newfont = new Fl_Font_;
-  char *n = new char[strlen(name)+2];
-  n[0] = attrib;
-  strcpy(n+1, name);
-  newfont->name_ = n;
-  newfont->bold_ = newfont;
-  newfont->italic_ = newfont;
-  newfont->first = 0;
-  return newfont;
-}
-
-int fl_list_fonts(Fl_Font*& arrayp) {
-  static Fl_Font *font_array = 0;
+int fltk::list_fonts(fltk::Font**& arrayp) {
+  static fltk::Font** font_array = 0;
   static int num_fonts = 0;
 
   if (font_array) { arrayp = font_array; return num_fonts; }
 
   XftFontSet *fs;
   char *name;
-  fl_open_display();
-  fs = XftListFonts(fl_display, fl_screen, 0, XFT_FAMILY, 0);
+  open_display();
+  fs = XftListFonts(xdisplay, xscreen, 0, XFT_FAMILY, 0);
   num_fonts = fs->nfont;
-  font_array = (Fl_Font *)calloc(num_fonts, sizeof(Fl_Font *));
+  font_array = (fltk::Font**)calloc(num_fonts, sizeof(fltk::Font *));
   for (int i = 0; i < num_fonts; i++) {
-    if (XftPatternGetString(fs->fonts[i], XFT_FAMILY, 0, &name) == XftResultMatch) {
-      Fl_Font_* base = make_a_font(' ', name);
-      base->italic_ = make_a_font('I', name);
-      //if (bNeedBold) {
-	base->bold_ = make_a_font('B', name);
-	base->italic_->bold_ = base->bold_->italic_ = make_a_font('P', name);
-	//}
-      font_array[i] = base;
+    if (XftPatternGetString(fs->fonts[i], XFT_FAMILY, 0, &name)
+	== XftResultMatch) {
+      // Make a block of 4 for bold, italic combinations
+      IFont* newfont = new IFont[4];
+      newfont[0].f.name_ = strdup(name);
+      for (int j = 0; j < 4; j++) {
+	newfont[j].f.name_ = newfont[0].f.name_;
+	newfont[j].f.attributes_ = j;
+	newfont[j].attribute_mask = 3;
+	newfont[j].first = 0;
+      }
+      font_array[i] = &(newfont->f);
     }
   }
   XftFontSetDestroy(fs);
 
-  qsort(font_array, num_fonts, sizeof(Fl_Font), sort_function);
+  qsort(font_array, num_fonts, sizeof(*font_array), sort_function);
 
   arrayp = font_array;
   return num_fonts;
 }
+
+////////////////////////////////////////////////////////////////
 
 extern "C" {
 static int int_sort(const void *aa, const void *bb) {
@@ -339,15 +343,13 @@ static int int_sort(const void *aa, const void *bb) {
 }
 }
 
-////////////////////////////////////////////////////////////////
-
 // Return all the point sizes supported by this font:
 // Suprisingly enough Xft works exactly like fltk does and returns
 // the same list. Except there is no way to tell if the font is scalable.
-int Fl_Font_::sizes(int*& sizep) const {
-  fl_open_display();
-  XftFontSet* fs = XftListFonts(fl_display, fl_screen,
-				XFT_FAMILY, XftTypeString, name_+1, 0,
+int fltk::Font::sizes(int*& sizep) {
+  open_display();
+  XftFontSet* fs = XftListFonts(xdisplay, xscreen,
+				XFT_FAMILY, XftTypeString, name_, 0,
 				XFT_PIXEL_SIZE, 0);
   static int* array = 0;
   static int array_size = 0;
@@ -371,14 +373,14 @@ int Fl_Font_::sizes(int*& sizep) const {
 ////////////////////////////////////////////////////////////////
 // Return all the encodings for this font:
 
-int Fl_Font_::encodings(const char**& arrayp) const {
-  fl_open_display();
+int fltk::Font::encodings(const char**& arrayp) {
+  open_display();
   // we need to keep the previous return value around so the strings are
   // not destroyed.
   static XftFontSet* fs;
   if (fs) XftFontSetDestroy(fs);
-  fs = XftListFonts(fl_display, fl_screen,
-		    XFT_FAMILY, XftTypeString, name_+1, 0,
+  fs = XftListFonts(xdisplay, xscreen,
+		    XFT_FAMILY, XftTypeString, name_, 0,
 		    XFT_ENCODING, 0);
   static const char** array = 0;
   static int array_size = 0;
@@ -398,5 +400,5 @@ int Fl_Font_::encodings(const char**& arrayp) const {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.10 2002/09/16 00:29:06 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.11 2002/12/09 04:52:29 spitzak Exp $"
 //

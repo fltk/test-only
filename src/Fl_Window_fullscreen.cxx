@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_fullscreen.cxx,v 1.14 2002/03/11 08:22:35 spitzak Exp $"
+// "$Id: Fl_Window_fullscreen.cxx,v 1.15 2002/12/09 04:52:27 spitzak Exp $"
 //
 // Fullscreen window support for the Fast Light Tool Kit (FLTK).
 //
@@ -23,16 +23,18 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
+#include <fltk/Window.h>
+#include <fltk/ScreenInfo.h>
+#include <fltk/events.h>
 #include <fltk/x.h>
+using namespace fltk;
 
 // Neither the X or Win32 version will successfully hide the taskbar.
 // I would like it, but maybe that should be a third state of the window.
 // On both systems it looks like it is much harder to do it.
 
-void Fl_Window::fullscreen() {
-  const Fl_Screen_Info& info = Fl::info();
+void Window::fullscreen() {
+  const ScreenInfo& info = screenInfo();
 #ifndef _WIN32
   // Most X window managers will not place the window where we want it unless
   // the border is turned off. And most (all except Irix 4DWM, as far as I
@@ -47,14 +49,14 @@ void Fl_Window::fullscreen() {
   resize(info.x, info.y, info.w, info.h);
 }
 
-void Fl_Window::fullscreen_off(int X,int Y,int W,int H) {
+void Window::fullscreen_off(int X,int Y,int W,int H) {
 #ifndef _WIN32
-  clear_flag(Fl_Window::FL_NOBORDER);
+  clear_flag(Window::NOBORDER);
   if (shown()) i->sendxjunk();
 #endif
   resize(X, Y, W, H);
 }
 
 //
-// End of "$Id: Fl_Window_fullscreen.cxx,v 1.14 2002/03/11 08:22:35 spitzak Exp $".
+// End of "$Id: Fl_Window_fullscreen.cxx,v 1.15 2002/12/09 04:52:27 spitzak Exp $".
 //

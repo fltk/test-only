@@ -1,5 +1,5 @@
 //
-// "$Id: fl_overlay_visual.cxx,v 1.6 2001/11/29 17:39:30 spitzak Exp $"
+// "$Id: fl_overlay_visual.cxx,v 1.7 2002/12/09 04:52:30 spitzak Exp $"
 //
 // X overlay support for the Fast Light Tool Kit (FLTK).
 //
@@ -24,14 +24,15 @@
 //
 
 // Return an overlay visual, if any.  Also allocate a colormap and
-// record the depth for fl_color() to use.
+// record the depth for color() to use.
 // Another disgusting X interface, based on code extracted and
 // purified with great difficulty from XLayerUtil.C:
 
 #include <config.h>
 #if !defined(_WIN32) && (USE_OVERLAY || USE_GL_OVERLAY)
-#include <fltk/Fl.h>
+#include <fltk/events.h>
 #include <fltk/x.h>
+using namespace fltk;
 
 // SERVER_OVERLAY_VISUALS property element:
 struct OverlayInfo {
@@ -50,15 +51,15 @@ XVisualInfo *fl_find_overlay_visual() {
   if (beenhere) return fl_overlay_visual;
   beenhere = true;
 
-  fl_open_display();
+  open_display();
   Atom overlayVisualsAtom =
-    XInternAtom(fl_display,"SERVER_OVERLAY_VISUALS",1);
+    XInternAtom(xdisplay,"SERVER_OVERLAY_VISUALS",1);
   if (!overlayVisualsAtom) return 0;
   OverlayInfo *overlayInfo;
   ulong sizeData, bytesLeft;
   Atom actualType;
   int actualFormat;
-  if (XGetWindowProperty(fl_display, RootWindow(fl_display, fl_screen),
+  if (XGetWindowProperty(xdisplay, RootWindow(xdisplay, xscreen),
 			 overlayVisualsAtom, 0L, 10000L, False,
 			 overlayVisualsAtom, &actualType, &actualFormat,
 			 &sizeData, &bytesLeft,
@@ -74,8 +75,8 @@ XVisualInfo *fl_find_overlay_visual() {
       XVisualInfo templt;
       templt.visualid = overlayInfo[i].overlay_visual;
       int num;
-      XVisualInfo *v1=XGetVisualInfo(fl_display, VisualIDMask, &templt, &num);
-      if (v1->screen == fl_screen && v1->c_class == PseudoColor
+      XVisualInfo *v1=XGetVisualInfo(xdisplay, VisualIDMask, &templt, &num);
+      if (v1->screen == xscreen && v1->c_class == PseudoColor
 	  && (!v || v1->depth > v->depth && v1->depth <= 8)) {
 	if (v) XFree((char*)v);
 	v = v1;
@@ -87,17 +88,17 @@ XVisualInfo *fl_find_overlay_visual() {
     if (v) {
       fl_overlay_visual = v;
       fl_overlay_colormap = 
-	XCreateColormap(fl_display, RootWindow(fl_display, fl_screen),
+	XCreateColormap(xdisplay, RootWindow(xdisplay, xscreen),
 			v->visual, AllocNone);
     }
   }
   XFree((char*)overlayInfo);
-  //printf("overlay visual %d selected\n", fl_overlay_visual->visualid);
+  //printf("overlay visual %d selected\n", overlay_visual->visualid);
   return fl_overlay_visual;
 }
 
 #endif
 
 //
-// End of "$Id: fl_overlay_visual.cxx,v 1.6 2001/11/29 17:39:30 spitzak Exp $".
+// End of "$Id: fl_overlay_visual.cxx,v 1.7 2002/12/09 04:52:30 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tiled_Image.cxx,v 1.2 2001/12/11 05:48:45 spitzak Exp $"
+// "$Id: Fl_Tiled_Image.cxx,v 1.3 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Tiled image code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,8 +23,9 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include <fltk/Fl_Tiled_Image.h>
-#include <fltk/fl_draw.h>
+#include <fltk/TiledImage.h>
+#include <fltk/draw.h>
+using namespace fltk;
 
 // A tiled image "resizes" to completely fill any passed bounding box,
 // so this can just return the values unchanged. This maximizes the
@@ -33,7 +34,7 @@
 // than the are to tile, and to fix old code that did not initialize
 // the w & h, or code that assummes this always returns values greater
 // than zero.
-void Fl_Tiled_Image::measure(int& w, int& h) {
+void TiledImage::measure(int& w, int& h) {
   int iw = w;
   int ih = h;
   image_->measure(iw,ih);
@@ -42,7 +43,7 @@ void Fl_Tiled_Image::measure(int& w, int& h) {
 }
 
 // Tiled image with minimal redraw
-void Fl_Tiled_Image::draw(int x, int y, int w, int h, Fl_Flags flags)
+void TiledImage::draw(int x, int y, int w, int h, Flags flags)
 {
   int iw = w;
   int ih = h;
@@ -52,10 +53,10 @@ void Fl_Tiled_Image::draw(int x, int y, int w, int h, Fl_Flags flags)
   // Perhaps this should use the Align flags to set cx, cy.
 
   // Figure out the smallest rectangle enclosing this and the clip region:
-  int X,Y,W,H; fl_clip_box(x, y, w, h, X, Y, W, H);
+  int X,Y,W,H; clip_box(x, y, w, h, X, Y, W, H);
   if (W <= 0 || H <= 0) return;
   cx += X-x; cy += Y-y;
-  fl_push_clip(X, Y, W, H);
+  push_clip(X, Y, W, H);
 
   int temp = -cx % iw;
   cx = (temp>0 ? iw : 0) - temp;
@@ -71,9 +72,9 @@ void Fl_Tiled_Image::draw(int x, int y, int w, int h, Fl_Flags flags)
     cy -= ih;
     cx = ccx;
   }
-  fl_pop_clip();
+  pop_clip();
 }
 
 //
-// End of "$Id: Fl_Tiled_Image.cxx,v 1.2 2001/12/11 05:48:45 spitzak Exp $".
+// End of "$Id: Fl_Tiled_Image.cxx,v 1.3 2002/12/09 04:52:26 spitzak Exp $".
 //

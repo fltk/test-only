@@ -1,70 +1,70 @@
 # data file for the FLTK User Interface Designer (FLUID)
-version 2.0001 
+version 2.0002 
 images_dir ./ 
 header_name {.h} 
 code_name {.cxx} 
 gridx 10 
 gridy 10 
 snap 3
-Function {make_alignment_window()} {open selected
+Function {make_alignment_window()} {open
 } {
-  Fl_Window alignment_window {
+  {fltk::Window} alignment_window {
     label {fluid Preferences} open
-    xywh {265 250 210 310} resizable non_modal visible
+    xywh {271 271 210 310} resizable non_modal visible
   } {
-    Fl_Group {} {
+    {fltk::Group} {} {
       label {Alignment:} open
       xywh {10 20 190 100} align 5 box ENGRAVED_BOX
     } {
-      Fl_Input horizontal_input {
+      {fltk::Input} horizontal_input {
         label {Horizontal:}
         user_data 1 user_data_type long
         callback alignment_cb
         xywh {80 10 100 22}
-        extra_code {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
+        extra_code {o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);}
       }
-      Fl_Input vertical_input {
+      {fltk::Input} vertical_input {
         label {Vertical:}
         user_data 2 user_data_type long
         callback alignment_cb
         xywh {80 40 100 22}
-        extra_code {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
+        extra_code {o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);}
       }
-      Fl_Input snap_input {
+      {fltk::Input} snap_input {
         label {Snap:}
         user_data 3 user_data_type long
         callback alignment_cb
         xywh {80 70 100 22}
-        extra_code {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
+        extra_code {o->when(fltk::WHEN_RELEASE|fltk::WHEN_ENTER_KEY);}
       }
     }
-    Fl_Group {} {
+    {fltk::Group} {} {
       label {Output File Names:} open
       xywh {10 140 190 130} align 5 box ENGRAVED_BOX
     } {
-      Fl_Box {} {
-        label {Use "name.ext" to set name or just ".ext" to set only extension.}
-        xywh {10 10 170 30} align 148 label_size 10
+      {fltk::Widget} {} {
+        label {Use "name.ext" to set name or just ".ext" to set only extension.} selected
+        xywh {10 10 170 30} align 148 box NO_BOX labelsize 11
       }
-      Fl_Input header_file_input {
+      {fltk::Input} header_file_input {
         label {Header File:}
         user_data 1 user_data_type {void*}
         callback header_input_cb
         xywh {90 40 90 22} when CHANGED
       }
-      Fl_Input code_file_input {
+      {fltk::Input} code_file_input {
         label {Code File:}
         user_data 1 user_data_type {void*}
         callback code_input_cb
         xywh {90 70 90 22} when CHANGED
       }
-      Fl_Check_Button include_H_from_C_button {
+      {fltk::CheckButton} include_H_from_C_button {
         label {\#include "header" in code}
         callback include_H_from_C_button_cb
         xywh {10 98 170 22} value 1
       }
     }
-    Fl_Button {} {
+    {fltk::Button} {} {
       label Close
       callback {alignment_window->hide();}
       xywh {140 280 60 22}

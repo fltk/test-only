@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts.cxx,v 1.16 2002/09/18 05:51:46 spitzak Exp $"
+// "$Id: fl_list_fonts.cxx,v 1.17 2002/12/09 04:52:30 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -22,7 +22,7 @@
 //
 
 #include <config.h>
-#include <fltk/fl_draw.h>
+#include <fltk/Font.h>
 #include <string.h>
 
 #ifdef _WIN32
@@ -31,41 +31,43 @@
 # include "fl_list_fonts_mac.cxx"
 #else
 # if USE_XFT
-// the code is included by fl_font.cxx
+// the code is included by font.cxx
 # else
 #  include "fl_list_fonts_x.cxx"
 # endif
 #endif
 
+using namespace fltk;
+
 // For Xlib the only way to reliably get a font is to enumerate them all
 // and then search. For Xft and Win32 we should be able to program a more
 // direct call, as long as we accumulate all the names we searched for
-// into an array and fl_list_fonts can add all the missing ones to the
+// into an array and list_fonts can add all the missing ones to the
 // array. This is sufficiently painful that I have not done this yet.
 
-Fl_Font fl_find_font(const char* name, int attributes /* = 0 */) {
+fltk::Font* fltk::font(const char* name, int attributes /* = 0 */) {
   if (!name || !*name) return 0;
   // find out if the " bold" or " italic" are on the end:
   int length = strlen(name);
   if (length > 7 && !strncasecmp(name+length-7, " italic", 7)) {
-    length -= 7; attributes |= FL_ITALIC;
+    length -= 7; attributes |= ITALIC;
   }
   if (length > 5 && !strncasecmp(name+length-5, " bold", 5)) {
-    length -= 5; attributes |= FL_BOLD;
+    length -= 5; attributes |= BOLD;
   }
-  Fl_Font font = 0;
-  // always try the built-in fonts first, becasue fl_list_fonts is *slow*...
+  Font* font = 0;
+  // always try the built-in fonts first, becasue list_fonts is *slow*...
   int i; for (i = 0; i < 16; i += (i < 12 ? 4 : 1)) {
-    font = fl_fonts+i;
+    font = fltk::font(i);
     const char* fontname = font->name();
     if (!strncasecmp(name, fontname, length) && !fontname[length]) goto GOTIT;
   }
   // now try all the fonts on the server, using a binary search:
   font = 0;
-  {Fl_Font* list; int b = fl_list_fonts(list); int a = 0;
+  {Font** list; int b = list_fonts(list); int a = 0;
   while (a < b) {
     int c = (a+b)/2;
-    Fl_Font testfont = list[c];
+    Font* testfont = list[c];
     const char* fontname = testfont->name();
     int d = strncasecmp(name, fontname, length);
     if (!d) {
@@ -78,11 +80,9 @@ Fl_Font fl_find_font(const char* name, int attributes /* = 0 */) {
   }}
   if (!font) return 0;
  GOTIT:
-  if (attributes & FL_BOLD) font = font->bold_;
-  if (attributes & FL_ITALIC) font = font->italic_;
-  return font;
+  return font->plus(attributes);
 }
 
 //
-// End of "$Id: fl_list_fonts.cxx,v 1.16 2002/09/18 05:51:46 spitzak Exp $".
+// End of "$Id: fl_list_fonts.cxx,v 1.17 2002/12/09 04:52:30 spitzak Exp $".
 //

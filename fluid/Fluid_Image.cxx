@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Image.cxx,v 1.26 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fluid_Image.cxx,v 1.27 2002/12/09 04:52:22 spitzak Exp $"
 //
 // Pixmap label support for the Fast Light Tool Kit (FLTK).
 //
@@ -23,9 +23,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Widget.h>
-#include "Fl_Type.h"
+#include <fltk/run.h>
+#include <fltk/Widget.h>
+#include "FluidType.h"
 #include "Fluid_Image.h"
 #include <string.h>
 #include <stdio.h>
@@ -44,7 +44,7 @@ const char *images_dir = "";
 
 ////////////////////////////////////////////////////////////////
 
-static uchar* fl_store_datas_from_file(const char *filename, size_t &size)
+static uchar* store_datas_from_file(const char *filename, size_t &size)
 {
   uchar *d=0;
   FILE *fd = fopen(filename, "rb");
@@ -69,24 +69,24 @@ static uchar* fl_store_datas_from_file(const char *filename, size_t &size)
 
 class generic_image : public Fluid_Image {
 protected:
-  Fl_Shared_Image *p;
+  fltk::SharedImage *p;
   int *linelength;
-  Fl_Image_Type* filetype;
+  fltk::ImageType* filetype;
 public:
   generic_image(const char *name);
   ~generic_image();
-  virtual void label(Fl_Widget *); // set the label of this widget
+  virtual void label(fltk::Widget *); // set the label of this widget
   virtual void write_static();
   virtual void write_code();
   static int test_file(char *buffer);
 };
 
 int generic_image::test_file(char *buffer) {
-  Fl_Image_Type* ft = Fl_Shared_Image::guess("", (uchar*)buffer);
+  fltk::ImageType* ft = fltk::SharedImage::guess("", (uchar*)buffer);
   return ft->name != 0;
 }
 
-void generic_image::label(Fl_Widget *o) {
+void generic_image::label(fltk::Widget *o) {
   o->image(p);
 }
 
@@ -98,7 +98,7 @@ void generic_image::write_static() {
   if (!p) return;
   if(image_file_header_written != write_number)
   {
-    write_c("\n#include <fltk/Fl_Shared_Image.h>\n");
+    write_c("\n#include <fltk/SharedImage.h>\n");
     image_file_header_written = write_number;
   }
   if (inlined) {
@@ -122,7 +122,7 @@ void generic_image::write_static() {
 	fclose(fp);
       }
     } else {
-      d = fl_store_datas_from_file(name(), l);
+      d = store_datas_from_file(name(), l);
       if(d) {
 #if 1
 	write_c("static const unsigned char %s[%d] = {\n", unique_id(this, "datas", filename_name(name()), 0), l);
@@ -143,7 +143,7 @@ void generic_image::write_static() {
 
 void generic_image::write_code() {
   if (!p) return;
-  write_c("%so->image(Fl_%s_Image::get(\"%s\"", indent(), filetype->name, name());
+  write_c("%so->image(fltk::%sImage::get(\"%s\"", indent(), filetype->name, name());
   if (inlined)
     write_c(", %s%s", (filetype->name && !strcasecmp(filetype->name, "xpm")) ? 
 		"(uchar*)" : "", unique_id(this, "datas", filename_name(name()), 0));
@@ -151,7 +151,7 @@ void generic_image::write_code() {
 }
 
 generic_image::generic_image(const char *name) : Fluid_Image(name) {
-  filetype = Fl_Shared_Image::guess((char *) name);
+  filetype = fltk::SharedImage::guess((char *) name);
   p = filetype->get((char*) name);
   inlined = 1;
 }
@@ -160,14 +160,14 @@ generic_image::~generic_image() {
 }
 
 ////////////////////////////////////////////////////////////////
-#include <fltk/Fl_Bitmap.h>
+#include <fltk/xbmImage.h>
 
 class bitmap_image : public Fluid_Image {
-  Fl_Bitmap *p;
+  fltk::xbmImage *p;
 public:
   ~bitmap_image();
   bitmap_image(const char *name, FILE *);
-  virtual void label(Fl_Widget *); // set the label of this widget
+  virtual void label(fltk::Widget *); // set the label of this widget
   virtual void write_static();
   virtual void write_code();
   static int test_file(char *buffer);
@@ -178,7 +178,7 @@ int bitmap_image::test_file(char *buffer) {
   return (strstr(buffer,"#define ") != 0);
 }
 
-void bitmap_image::label(Fl_Widget *o) {
+void bitmap_image::label(fltk::Widget *o) {
   o->image(p);
 }
 
@@ -188,7 +188,7 @@ void bitmap_image::write_static() {
   if (!p) return;
   write_c("\n");
   if (bitmap_header_written != write_number) {
-    write_c("#include <fltk/Fl_Bitmap.h>\n");
+    write_c("#include <fltk/xbmImage.h>\n");
     bitmap_header_written = write_number;
   }
   int w, h;
@@ -205,7 +205,7 @@ void bitmap_image::write_static() {
   write_cstring((const char*)(p->array), n);
   write_c(";\n");
 #endif
-  write_c("static Fl_Bitmap %s(%s, %d, %d);\n",
+  write_c("static fltk::Bitmap %s(%s, %d, %d);\n",
 	  unique_id(this, "bitmap", filename_name(name()), 0),
 	  unique_id(this, "bits", filename_name(name()), 0),
 	  w, h);
@@ -216,6 +216,14 @@ void bitmap_image::write_code() {
   write_c("%so->image(%s);\n", indent(),
 	  unique_id(this, "bitmap", filename_name(name()), 0));
 }
+
+#define ns_width 16
+#define ns_height 16
+static unsigned char ns_bits[] = {
+   0x00, 0x00, 0x80, 0x01, 0xc0, 0x03, 0xe0, 0x07, 0x80, 0x01, 0x80, 0x01,
+   0x80, 0x01, 0x80, 0x01, 0x80, 0x01, 0x80, 0x01, 0x80, 0x01, 0x80, 0x01,
+   0xe0, 0x07, 0xc0, 0x03, 0x80, 0x01, 0x00, 0x00};
+static fltk::xbmImage nosuch_bitmap(ns_bits, ns_width, ns_height);
 
 bitmap_image::bitmap_image(const char *name, FILE *f) : Fluid_Image(name) {
   p = &nosuch_bitmap; // if any problems with parse we exit with this
@@ -249,7 +257,7 @@ bitmap_image::bitmap_image(const char *name, FILE *f) : Fluid_Image(name) {
       while (*a && *a++ != ',');
     }
   }
-  p = new Fl_Bitmap(data,wh[0],wh[1]);
+  p = new fltk::xbmImage(data,wh[0],wh[1]);
 }
 
 bitmap_image::~bitmap_image() {
@@ -350,11 +358,11 @@ Fluid_Image::~Fluid_Image() {
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/fl_file_chooser.h>
+#include <fltk/file_chooser.h>
 
 Fluid_Image *ui_find_image(Fluid_Image *old) {
   goto_images_dir();
-  const char *name = fl_file_chooser("Image", "*.{bm|xbm|xpm|gif|png|bmp|jpg|jpeg}",
+  const char *name = fltk::file_chooser("Image", "*.{bm|xbm|xpm|gif|png|bmp|jpg|jpeg}",
 				     old ? old->name() : 0);
   Fluid_Image *ret = (name && *name) ? Fluid_Image::find(name) : 0;
   leave_images_dir();
@@ -371,23 +379,23 @@ void browse_dir_cb();
 
 void browse_dir_cb()
 {
-  char *f = fl_file_chooser("Images directory","",
+  char *f = fltk::file_chooser("Images directory","",
 			    images_dir_input->value());
   if(f) images_dir_input->value(f);
 }
 
-void set_images_dir_cb(Fl_Widget *, void *) {
+void set_images_dir_cb(fltk::Widget *, void *) {
   goto_source_dir();
   if(!images_dir_window) make_images_dir_window();
   images_dir_input->value(images_dir);
   images_dir_window->show();
   cancel=0; modal=1;
-  while(modal) Fl::wait();
+  while(modal) fltk::wait();
   if(!cancel)
     images_dir = images_dir_input->value();
   leave_source_dir();
 }
  
 //
-// End of "$Id: Fluid_Image.cxx,v 1.26 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fluid_Image.cxx,v 1.27 2002/12/09 04:52:22 spitzak Exp $".
 //

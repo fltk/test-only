@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_load.cxx,v 1.5 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Browser_load.cxx,v 1.6 2002/12/09 04:52:24 spitzak Exp $"
 //
 // File loading routines for the Fast Light Tool Kit (FLTK).
 //
@@ -23,13 +23,13 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Browser.h>
+#include <fltk/events.h>
+#include <fltk/Browser.h>
 #include <stdio.h>
 
-int Fl_Browser::load(const char *filename) {
-#define MAXFL_BLINE 1024
-    char newtext[MAXFL_BLINE];
+int Browser::load(const char *filename) {
+#define MAXBLINE 1024
+    char newtext[MAXBLINE];
     int c;
     int i;
     clear();
@@ -39,7 +39,7 @@ int Fl_Browser::load(const char *filename) {
     i = 0;
     do {
 	c = getc(fl);
-	if (c == '\n' || c <= 0 || i>=(MAXFL_BLINE-1)) {
+	if (c == '\n' || c <= 0 || i>=(MAXBLINE-1)) {
 	    newtext[i] = 0;
 	    add(newtext);
 	    i = 0;
@@ -51,5 +51,5 @@ int Fl_Browser::load(const char *filename) {
 }
 
 //
-// End of "$Id: Fl_Browser_load.cxx,v 1.5 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Browser_load.cxx,v 1.6 2002/12/09 04:52:24 spitzak Exp $".
 //

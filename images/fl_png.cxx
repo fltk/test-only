@@ -1,5 +1,5 @@
 //
-// "$Id: fl_png.cxx,v 1.5 2001/10/22 05:31:10 spitzak Exp $"
+// "$Id: fl_png.cxx,v 1.6 2002/12/09 04:52:23 spitzak Exp $"
 //
 // PNG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,10 +26,9 @@
 //
 // provides functions to measure and decompress PNG files
 
-#include <fltk/Fl.h>
-#include <fltk/fl_draw.h>
+#include <fltk/draw.h>
 #include <fltk/x.h>
-#include <fltk/Fl_Shared_Image.h>
+#include <fltk/SharedImage.h>
 #include <config.h>
 #if HAVE_PNG
 #include <png.h>
@@ -47,7 +46,7 @@ static void read_data_fn(png_structp /*png_ptr*/,png_bytep d,png_size_t length)
 static void declare_now(void*) { }
 #endif
 
-int Fl_PNG_Image::test(const uchar* datas, size_t size)
+bool fltk::pngImage::test(const uchar* datas, size_t size)
 {
 #if !HAVE_PNG
   return 0;
@@ -56,7 +55,7 @@ int Fl_PNG_Image::test(const uchar* datas, size_t size)
 #endif
 }
 
-void Fl_PNG_Image::measure(int &W, int &H)
+void fltk::pngImage::measure(int &W, int &H)
 {
 #if !HAVE_PNG
   W = w = 0;
@@ -135,14 +134,14 @@ void Fl_PNG_Image::measure(int &W, int &H)
 }
 
 #if HAVE_PNG
-static void fl_draw_image_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar* b)
+static void drawimage_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar* b)
 {
   png_read_row((png_structp)v, b, NULL);
 }
 #endif
 
 
-void Fl_PNG_Image::read()
+void fltk::pngImage::read()
 {
   id = mask = 0;
 
@@ -234,12 +233,12 @@ void Fl_PNG_Image::read()
     d=4; //    png_set_strip_alpha(png_ptr); 
   // png_set_strip_alpha doesn't seem to work ... too bad
  
-  { // We use a block because fl_begin_offscreen creates a local
+  { // We use a block because begin_offscreen creates a local
     // and we have 'goto error' before this point
     Pixmap pixmap = fl_create_offscreen(width, height);
     id = (void*)pixmap;
     fl_begin_offscreen(pixmap);
-    fl_draw_image(fl_draw_image_cb, png_ptr, 0, 0, width, height, d);
+    drawimage(drawimage_cb, png_ptr, 0, 0, width, height, d);
     fl_end_offscreen();
   }
 
@@ -253,5 +252,5 @@ void Fl_PNG_Image::read()
 }
 
 //
-// End of "$Id: fl_png.cxx,v 1.5 2001/10/22 05:31:10 spitzak Exp $"
+// End of "$Id: fl_png.cxx,v 1.6 2002/12/09 04:52:23 spitzak Exp $"
 //

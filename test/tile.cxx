@@ -1,5 +1,5 @@
 //
-// "$Id: tile.cxx,v 1.8 2001/07/23 09:50:06 spitzak Exp $"
+// "$Id: tile.cxx,v 1.9 2002/12/09 04:52:31 spitzak Exp $"
 //
 // Tile test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,73 +23,77 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Double_Window.h>
-#include <fltk/Fl_Tile.h>
-#include <fltk/Fl_Box.h>
-#include <fltk/Fl_Button.h>
+#include <fltk/run.h>
+#include <fltk/DoubleBufferWindow.h>
+#include <fltk/TiledGroup.h>
+#include <fltk/Button.h>
 
 int main(int argc, char** argv) {
-  Fl_Window window(320,320);
-  window.box(FL_FLAT_BOX);
+  fltk::Window window(320,320);
+  window.begin();
   window.resizable(window);
-  Fl_Tile tile(10,10,300,300);
-  Fl_Group box0(0,0,150,150,"0");
-  box0.box(FL_DOWN_BOX);
-  box0.color(9);
-  box0.label_size(36);
-  box0.set_flag(FL_ALIGN_CLIP);
 
-  Fl_Button but(20, 20, 100, 30, "Button");
+  fltk::TiledGroup tile(10,10,300,300);
+  tile.begin();
+
+  fltk::Group box0(0,0,150,150,"0");
+  box0.box(fltk::DOWN_BOX);
+  box0.color(9);
+  box0.labelsize(36);
+  box0.set_flag(fltk::ALIGN_CLIP);
+
+  box0.begin();
+  fltk::Button but(20, 20, 100, 30, "Button");
   box0.end();
 
-  Fl_Window w1(150,0,150,150,"1");
-  w1.box(FL_NO_BOX);
-  Fl_Box box1(0,0,150,150,"1\nThis is a\nchild\nX window");
-  box1.box(FL_DOWN_BOX);
+  fltk::Window w1(150,0,150,150,"1");
+  w1.begin();
+  fltk::Widget box1(0,0,150,150,"1\nThis is a\nchild\nX window");
+  box1.box(fltk::DOWN_BOX);
   box1.color(19);
-  box1.label_size(18);
-  box1.set_flag(FL_ALIGN_CLIP);
+  box1.labelsize(18);
+  box1.set_flag(fltk::ALIGN_CLIP);
   w1.resizable(box1);
   w1.end();
 
-  //  Fl_Tile tile2(0,150,150,150);
-  Fl_Box box2a(0,150,70,150,"2a");
-  box2a.box(FL_DOWN_BOX);
+  //  fltk::Tile tile2(0,150,150,150);
+  fltk::Widget box2a(0,150,70,150,"2a");
+  box2a.box(fltk::DOWN_BOX);
   box2a.color(12);
-  box2a.label_size(36);
-  box2a.set_flag(FL_ALIGN_CLIP);
-  Fl_Box box2b(70,150,80,150,"2b");
-  box2b.box(FL_DOWN_BOX);
+  box2a.labelsize(36);
+  box2a.set_flag(fltk::ALIGN_CLIP);
+  fltk::Widget box2b(70,150,80,150,"2b");
+  box2b.box(fltk::DOWN_BOX);
   box2b.color(13);
-  box2b.label_size(36);
-  box2b.set_flag(FL_ALIGN_CLIP);
+  box2b.labelsize(36);
+  box2b.set_flag(fltk::ALIGN_CLIP);
   //tile2.end();
 
-  //Fl_Tile tile3(150,150,150,150);
-  Fl_Box box3a(150,150,150,70,"3a");
-  box3a.box(FL_DOWN_BOX);
+  //Tile tile3(150,150,150,150);
+  fltk::Widget box3a(150,150,150,70,"3a");
+  box3a.box(fltk::DOWN_BOX);
   box3a.color(12);
-  box3a.label_size(36);
-  box3a.set_flag(FL_ALIGN_CLIP);
-  Fl_Box box3b(150,150+70,150,80,"3b");
-  box3b.box(FL_DOWN_BOX);
+  box3a.labelsize(36);
+  box3a.set_flag(fltk::ALIGN_CLIP);
+  fltk::Widget box3b(150,150+70,150,80,"3b");
+  box3b.box(fltk::DOWN_BOX);
   box3b.color(13);
-  box3b.label_size(36);
-  box3b.set_flag(FL_ALIGN_CLIP);
+  box3b.labelsize(36);
+  box3b.set_flag(fltk::ALIGN_CLIP);
   //tile3.end();
   
-  Fl_Box r(10,0,300-10,300-10);
+  fltk::Widget r(10,0,300-10,300-10);
+  //r.box(fltk::BORDER_FRAME);
+  r.hide();
   tile.resizable(r);
-  //  r.box(FL_BORDER_FRAME);
 
   tile.end();
   window.end();
   window.show(argc,argv);
   w1.show();
-  return Fl::run();
+  return fltk::run();
 }
 
 //
-// End of "$Id: tile.cxx,v 1.8 2001/07/23 09:50:06 spitzak Exp $".
+// End of "$Id: tile.cxx,v 1.9 2002/12/09 04:52:31 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: cmap.cxx,v 1.9 2002/10/04 07:48:15 spitzak Exp $"
+// "$Id: cmap.cxx,v 1.10 2002/12/09 04:52:28 spitzak Exp $"
 //
 // Colormap generation program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,7 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// This program produces the contents of "fl_cmap.h" as stdout
+// This program produces the contents of "cmap.h" as stdout
 
 // #include <gl/gl.h>
 #include <stdio.h>
@@ -59,12 +59,12 @@ static short cmap[256][3] = {
   {113,113,198},	// pale blue
   {142, 56,142},	// purple, orchid, pale magenta
   { 56,142,142},	// cadet blue, aquamarine, pale cyan
-// The next location is used for FL_SELECTION_COLOR. It formerly was 2/3 gray
+// The next location is used for SELECTION_COLOR. It formerly was 2/3 gray
 // but this is changed to be the Windows blue color. This allows the default
 // behavior on both X and Windows to match:
   {  0,  0,128},
 //{170,170,170},	// old 2/3 gray color
-// These next 16 are the FL_FREE_COLOR area. In some versions of fltk
+// These next 16 are the FREE_COLOR area. In some versions of fltk
 // these were filled with random colors that a Irix 5.3 machine placed
 // in these locations. Other versions of fltk filled this with the 1/3
 // gray above to discourage their use. This newest version uses colors
@@ -109,27 +109,27 @@ static short cmap[256][3] = {
 // The rest of the colormap is a gray ramp and table, filled in below:
 };
 
-// This is Fl::background from Fl_get_system_colors.C, with modifications:
+// This is background from get_system_colors.C, with modifications:
 
-#define FL_GRAY_RAMP 32
-#define FL_NUM_GRAY  24
-#define FL_GRAY 49 // old value is 47
+#define GRAY_RAMP 32
+#define NUM_GRAY  24
+#define GRAY 49 // old value is 47
 typedef unsigned char uchar;
 #include <math.h>
 
 void background(uchar r, uchar g, uchar b) {
   // replace the gray ramp so that color 47 (by default 2/3) is this color
   if (!r) r = 1; else if (r==255) r = 254;
-  double powr = log(r/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
+  double powr = log(r/255.0)/log((GRAY-GRAY_RAMP)/(NUM_GRAY-1.0));
   if (!g) g = 1; else if (g==255) g = 254;
-  double powg = log(g/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
+  double powg = log(g/255.0)/log((GRAY-GRAY_RAMP)/(NUM_GRAY-1.0));
   if (!b) b = 1; else if (b==255) b = 254;
-  double powb = log(b/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
-  for (int i = 0; i < FL_NUM_GRAY; i++) {
-    double gray = i/(FL_NUM_GRAY-1.0);
-    cmap[i+FL_GRAY_RAMP][0] = uchar(pow(gray,powr)*255+.5);
-    cmap[i+FL_GRAY_RAMP][1] = uchar(pow(gray,powg)*255+.5);
-    cmap[i+FL_GRAY_RAMP][2] = uchar(pow(gray,powb)*255+.5);
+  double powb = log(b/255.0)/log((GRAY-GRAY_RAMP)/(NUM_GRAY-1.0));
+  for (int i = 0; i < NUM_GRAY; i++) {
+    double gray = i/(NUM_GRAY-1.0);
+    cmap[i+GRAY_RAMP][0] = uchar(pow(gray,powr)*255+.5);
+    cmap[i+GRAY_RAMP][1] = uchar(pow(gray,powg)*255+.5);
+    cmap[i+GRAY_RAMP][2] = uchar(pow(gray,powb)*255+.5);
   }
 }
 
@@ -204,5 +204,5 @@ int main() {
 }
 
 //
-// End of "$Id: cmap.cxx,v 1.9 2002/10/04 07:48:15 spitzak Exp $".
+// End of "$Id: cmap.cxx,v 1.10 2002/12/09 04:52:28 spitzak Exp $".
 //

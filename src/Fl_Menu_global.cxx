@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_global.cxx,v 1.8 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: Fl_Menu_global.cxx,v 1.9 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Global menu shortcut code for the Fast Light Tool Kit (FLTK).
 //
@@ -24,25 +24,31 @@
 //
 
 // Make all the shortcuts in this menu global.
+
 // Currently only one menu at a time and you cannot destruct the menu,
 // is this sufficient?
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Menu_.h>
+// This should probably also put the items on the the Mac menubar.
 
-static Fl_Menu_* the_widget;
+#include <fltk/events.h>
+#include <fltk/Menu.h>
+#include <fltk/Window.h>
 
-static int handler(int e) {
-  if (e != FL_SHORTCUT || Fl::modal()) return 0;
-  Fl::first_window(the_widget->window());
+using namespace fltk;
+
+static Menu* the_widget;
+
+static int handler(int e, Window*) {
+  if (e != SHORTCUT || modal()) return 0;
+  Window::first(the_widget->window());
   return the_widget->handle_shortcut();
 }
 
-void Fl_Menu_::global() {
-  if (!the_widget) Fl::add_handler(handler);
+void Menu::global() {
+  if (!the_widget) add_event_handler(handler);
   the_widget = this;
 }
 
 //
-// End of "$Id: Fl_Menu_global.cxx,v 1.8 2001/12/10 06:25:42 spitzak Exp $".
+// End of "$Id: Fl_Menu_global.cxx,v 1.9 2002/12/09 04:52:26 spitzak Exp $".
 //

@@ -1,9 +1,8 @@
-/* fl_plugin.cxx
- *
- * "$Id: fl_load_plugin.cxx,v 1.18 2002/09/18 05:51:46 spitzak Exp $"
+/*
+ * "$Id: fl_load_plugin.cxx,v 1.19 2002/12/09 04:52:30 spitzak Exp $"
  *
  * This is a wrapper to make it simple to load plugins on various
- * systems. fl_load_plugin(file, symbol) will load the file as a
+ * systems. load_plugin(file, symbol) will load the file as a
  * plugin and then return a pointer to "symbol" in that file.
  *
  * If symbol is null it will return a non-zero value if the plugin
@@ -15,7 +14,7 @@
  *
  */
 
-#include <fltk/fl_load_plugin.h>
+#include <fltk/load_plugin.h>
 #include <stdio.h>
 #include <config.h>
 
@@ -24,7 +23,7 @@
 # include <windows.h>
 # include <winbase.h>
 
-void* fl_load_plugin(const char* name, const char* symbol) {
+void* load_plugin(const char* name, const char* symbol) {
   HINSTANCE handle = LoadLibrary(name);
   if (handle) {
     if (!symbol) return (void*)handle;
@@ -48,15 +47,16 @@ void* fl_load_plugin(const char* name, const char* symbol) {
 
 #else
 #if HAVE_DLOPEN
+#include <unistd.h>
 
-# ifdef __APPLE__
-#  include "dlload_osx.cxx"
-# else
-#  include <unistd.h>
-#  include <dlfcn.h>
-# endif
+#ifdef __APPLE__
+# include "dlload_osx.cxx"
+# define RTLD_NOW 1 // set to anything for now
+#else
+# include <dlfcn.h>
+#endif
 
-void* fl_load_plugin(const char* name, const char* symbol) {
+void* load_plugin(const char* name, const char* symbol) {
   // do not allow plugins if this executable is setuid
   if (getuid() != geteuid())  {
     fprintf(stderr, "%s: plugins disabled in setuid programs\n", name);
@@ -74,7 +74,7 @@ void* fl_load_plugin(const char* name, const char* symbol) {
 
 #else
 
-void* fl_load_plugin(const char* name, const char*) {
+void* load_plugin(const char* name, const char*) {
   fprintf(stderr, "%s: loading of plugins not supported\n", name);
   return 0;
 }
@@ -83,5 +83,5 @@ void* fl_load_plugin(const char* name, const char*) {
 #endif
 
 //
-// End of "$Id: fl_load_plugin.cxx,v 1.18 2002/09/18 05:51:46 spitzak Exp $"
+// End of "$Id: fl_load_plugin.cxx,v 1.19 2002/12/09 04:52:30 spitzak Exp $"
 //

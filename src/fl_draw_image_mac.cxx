@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_mac.cxx,v 1.2 2002/09/09 01:39:58 spitzak Exp $"
+// "$Id: fl_draw_image_mac.cxx,v 1.3 2002/12/09 04:52:29 spitzak Exp $"
 //
 // MacOS image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -25,8 +25,8 @@
 
 ////////////////////////////////////////////////////////////////
 
-#include <fltk/Fl.h>
-#include <fltk/fl_draw.h>
+#include <fltk/events.h>
+#include <fltk/draw.h>
 #include <fltk/x.h>
 
 #define MAXBUFFER 0x40000 // 256k
@@ -49,7 +49,7 @@
  */
 static void innards(const uchar *buf, int X, int Y, int W, int H,
 		    int delta, int linedelta, int mono,
-		    Fl_Draw_Image_Cb cb, void* userdata)
+		    DrawImageCb cb, void* userdata)
 {
   if (!linedelta) linedelta = W*delta;
 
@@ -109,7 +109,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
               }
             }
           
-            fl_copy_offscreen( X, Y, W, H, gw, 0, 0 );
+            copy_offscreen( X, Y, W, H, gw, 0, 0 );
             direct = 1;
           }
         }
@@ -135,11 +135,11 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
       for ( int j=0; j<W; j++ )
       {
         if ( mono )          
-          { fl_color( src[0], src[0], src[0] ); src++; }
+          { color( src[0], src[0], src[0] ); src++; }
         else
-          { fl_color( src[0], src[1], src[2] ); src+=3; }
+          { color( src[0], src[1], src[2] ); src+=3; }
         MoveTo( X+j, Y+i );
-        Line( 0, 0 );
+        Drawline( 0, 0 );
       }
     }
     delete[] tmpBuf;
@@ -152,11 +152,11 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
       for ( int j=0; j<W; j++ )
       {
         if ( mono )          
-          fl_color( src[0], src[0], src[0] );
+          color( src[0], src[0], src[0] );
         else
-          fl_color( src[0], src[1], src[2] );
+          color( src[0], src[1], src[2] );
         MoveTo( X+j, Y+i );
-        Line( 0, 0 );
+        Drawline( 0, 0 );
         src += delta;
       }
     }
@@ -164,11 +164,11 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 
 // \todo Mac : the above function does not support subregions yet
 #ifdef later_we_do_this
-// \todo Mac : the following code is taken from fl_draw_image_win32 and needs to be modified for Mac Carbon
+// \todo Mac : the following code is taken from drawimage_win32 and needs to be modified for Mac Carbon
 //  if (!linedelta) linedelta = W*delta;
 
   int x, y, w, h;
-  fl_clip_box(X,Y,W,H,x,y,w,h);
+  clip_box(X,Y,W,H,x,y,w,h);
   if (w<=0 || h<=0) return;
   if (buf) buf += (x-X)*delta + (y-Y)*linedelta;
 
@@ -243,7 +243,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
         }
       }
     }
-//    SetDIBitsToDevice(fl_gc, x, y+j-k, w, k, 0, 0, 0, k,
+//    SetDIBitsToDevice(gc, x, y+j-k, w, k, 0, 0, 0, k,
 //		      (LPSTR)((uchar*)buffer+(blocking-k)*linesize),
 //		      &bmi,
 //		      DIB_RGB_COLORS
@@ -252,26 +252,26 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 #endif
 }
 
-void fl_draw_image(const uchar* buf, int x, int y, int w, int h, int d, int l){
+void drawimage(const uchar* buf, int x, int y, int w, int h, int d, int l){
   innards(buf,x,y,w,h,d,l,(d<3&&d>-3),0,0);
 }
-void fl_draw_image(Fl_Draw_Image_Cb cb, void* data,
+void drawimage(DrawImageCb cb, void* data,
 		   int x, int y, int w, int h,int d) {
   innards(0,x,y,w,h,d,0,(d<3&&d>-3),cb,data);
 }
-void fl_draw_image_mono(const uchar* buf, int x, int y, int w, int h, int d, int l){
+void drawimagemono(const uchar* buf, int x, int y, int w, int h, int d, int l){
   innards(buf,x,y,w,h,d,l,1,0,0);
 }
-void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data,
+void drawimagemono(DrawImageCb cb, void* data,
 		   int x, int y, int w, int h,int d) {
   innards(0,x,y,w,h,d,0,1,cb,data);
 }
 
-void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {
-  fl_color(r,g,b);
-  fl_rectf(x,y,w,h);
+void fillrect(int x, int y, int w, int h, uchar r, uchar g, uchar b) {
+  color(r,g,b);
+  fillrect(x,y,w,h);
 }
 
 //
-// End of "$Id: fl_draw_image_mac.cxx,v 1.2 2002/09/09 01:39:58 spitzak Exp $".
+// End of "$Id: fl_draw_image_mac.cxx,v 1.3 2002/12/09 04:52:29 spitzak Exp $".
 //

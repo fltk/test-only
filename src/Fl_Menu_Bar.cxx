@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.54 2002/09/09 01:39:58 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.55 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,128 +23,142 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Menu_Bar.h>
-#include <fltk/fl_draw.h>
+#include <fltk/MenuBar.h>
+#include <fltk/events.h>
+#include <fltk/damage.h>
+#include <fltk/Box.h>
+#include <fltk/draw.h>
+#include <fltk/Tooltip.h>
 #include <config.h>
+#include <fltk/Item.h> // for TOGGLE, RADIO
+#define checkmark(item) (item->type()>=Item::TOGGLE && item->type()<=Item::RADIO)
 
-void Fl_Menu_Bar::draw() {
-  if (damage()&(~FL_DAMAGE_HIGHLIGHT)) draw_box();
+using namespace fltk;
+
+void MenuBar::draw() {
+  if (damage()&(~DAMAGE_HIGHLIGHT)) draw_box();
   if (!children()) { last_ = -1; return; }
+  int x1 = 0; int y1 = 0; int w1 = w(); int h1 = this->h();
+  box()->inset(x1,y1,w1,h1);
   int X = 3;
   for (int i = 0; i < children(); i++) {
-    Fl_Widget* widget = child(i);
+    Widget* widget = child(i);
     if (!widget->visible()) continue;
+    widget->h(h1-2);
     int W = widget->width() + 10;
-    if (damage()&(~FL_DAMAGE_HIGHLIGHT) || last_ == i || highlight_ == i) {
+    if (damage()&(~DAMAGE_HIGHLIGHT) || last_ == i || highlight_ == i) {
       // If you change how the items are drawn, you probably need to
       // change MenuTitle::draw and the functions find_selected and
-      // titlex in Fl_Menu.cxx.
+      // titlex in PopupMenu.cxx.
       if (i == highlight_ && takesevents() && widget->active_r())
-	widget->set_flag(FL_HIGHLIGHT);
+	widget->set_flag(HIGHLIGHT);
       else
-	widget->clear_flag(FL_HIGHLIGHT);
-      widget->clear_flag(FL_SELECTED);
-      int x1 = X; int y1 = 0; int w1 = W; int h1 = this->h();
-      box()->inset(x1,y1,w1,h1);
-      button_box()->draw(X, y1+1, W, h1-2, button_color(), widget->flags()&~FL_VALUE);
-      fl_push_matrix();
-      fl_translate(X+5, (h()-widget->h())>>1);
+	widget->clear_flag(HIGHLIGHT);
+      widget->clear_flag(SELECTED);
+      buttonbox()->draw(X, y1+1, W, h1-2, buttoncolor(), widget->flags()&~VALUE);
+      push_matrix();
+      translate(X+5, (h()-widget->h())>>1);
       int save_w = widget->w(); widget->w(W-10);
       widget->draw();
       widget->w(save_w);
-      fl_pop_matrix();
+      pop_matrix();
     }
     X += W;
   }
   last_ = highlight_;
 }
 
-int Fl_Menu_Bar::handle(int event) {
+int MenuBar::handle(int event) {
   int children = this->children();
   if (!children) return 0;
   int X = 3;
   int i;
   highlight_ = -1;
-  // FL_LEAVE events don't get the right coordinates
-  if (event != FL_LEAVE) for (i = 0; i < children; ++i) {
-    Fl_Widget* widget = child(i);
+  // LEAVE events don't get the right coordinates
+  if (event != LEAVE && takesevents()) for (i = 0; i < children; ++i) {
+    Widget* widget = child(i);
     if (!widget->visible()) continue;
     int W = widget->width() + 10;
-    if (Fl::event_inside(X, 0, W, h())) {
-      highlight_ = i;
+    if (event_inside(X, 0, W, h())) {
+      highlight_ = widget->takesevents() ? i : -1;
       break;
     }
     X += W;
   }
   switch (event) {
-  case FL_MOVE:
-  case FL_ENTER:
-  case FL_LEAVE:
+  case MOVE:
+  case ENTER:
+  case LEAVE:
     if (highlight_ == last_) return 1;
-    if (takesevents()) redraw(FL_DAMAGE_HIGHLIGHT);
+    Tooltip::exit();
+    redraw(DAMAGE_HIGHLIGHT);
     return 1;
-  case FL_PUSH:
+  case PUSH:
     if (highlight_ < 0) return 0;
     value(-1);
   J1:
-    highlight_ = -1; redraw(FL_DAMAGE_HIGHLIGHT);
+    highlight_ = -1; redraw(DAMAGE_HIGHLIGHT);
     popup(0, 0, w(), h(), 0, true);
     return 1;
-  case FL_SHORTCUT:
+  case SHORTCUT:
+    // First check against the &x or shortcut() of top-level items:
     for (i = 0; i < children; i++) {
-      Fl_Widget* w = child(i);
-      if (w->is_group() && w->active() && w->test_shortcut()) {
-	value(i); goto J1;
+      Widget* w = child(i);
+      if (w->active() && w->test_shortcut()) {
+	if (w->is_group()) {value(i); goto J1;} // menu title
+	execute(w); // button in the menu bar
+	if (checkmark(w)) redraw();
+	return 1;
       }
     }
+    // Now test against the shortcut() of any item in any submenu:
     if (handle_shortcut()) return 1;
     return 0;
-  case FL_KEYUP:
+  case KEYUP:
     // In the future maybe any shortcut() will work, but for now
     // only the Alt key does. Setting the shortcut to zero will disable
     // the alt key shortcut.
-    if (shortcut() != FL_Alt_L && shortcut() != FL_Alt_R) break;
-    if (Fl::event_key() != FL_Alt_L && Fl::event_key() != FL_Alt_R) break;
+    if (shortcut() != LeftAltKey && shortcut() != RightAltKey) break;
+    if (event_key() != LeftAltKey && event_key() != RightAltKey) break;
     // checking for event_clicks insures that the keyup matches the
     // keydown that preceeded it, so Alt was pressed & released without
     // any intermediate values.  On X it is false if Alt is held down
     // for a long time, too:
-    if (!Fl::event_is_click()) break;
+    if (!event_is_click()) break;
     // okay we got the shortcut, find first menu and pop it up:
     for (i = 0; i < children; i++) {
-      Fl_Widget* w = child(i);
+      Widget* w = child(i);
       if (w->active()) {value(i); goto J1;}
     }
   }
   return 0;
 }
 
-// The default style for menu bars.  The button_box() is used to draw
-// the boxes around the popup titles, this is done by Fl_Menu.cxx, and
+// The default style for menu bars.  The buttonbox() is used to draw
+// the boxes around the popup titles, this is done by PopupMenu.cxx, and
 // done here for highlight boxes.
 
-static void revert(Fl_Style* s) {
-  s->color = FL_GRAY;
-  s->box = FL_FLAT_BOX;
+static void revert(Style* s) {
+  s->color = GRAY75;
+  s->box = FLAT_BOX;
 #if 0
   // NT 4.0 style
-  s->button_box = FL_FLAT_BOX;
+  s->buttonbox = FLAT_BOX;
 #else
   // Windows98 style:
-  s->button_box = FL_HIGHLIGHT_BOX;
+  s->buttonbox = HIGHLIGHT_UP_BOX;
 #endif
 }
-static Fl_Named_Style style("Menu_Bar", revert, &Fl_Menu_Bar::default_style);
-Fl_Named_Style* Fl_Menu_Bar::default_style = &::style;
+static NamedStyle style("Menu_Bar", revert, &MenuBar::default_style);
+NamedStyle* MenuBar::default_style = &::style;
 
-Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l)
-  : Fl_Menu_(x,y,w,h,l)
+MenuBar::MenuBar(int x,int y,int w,int h,const char *l)
+  : Menu(x,y,w,h,l)
 {
   style(default_style);
-  shortcut(FL_Alt_L);
+  shortcut(LeftAltKey);
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.54 2002/09/09 01:39:58 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.55 2002/12/09 04:52:26 spitzak Exp $".
 //

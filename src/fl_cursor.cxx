@@ -1,5 +1,5 @@
 //
-// "$Id: fl_cursor.cxx,v 1.15 2002/10/26 09:55:31 spitzak Exp $"
+// "$Id: fl_cursor.cxx,v 1.16 2002/12/09 04:52:29 spitzak Exp $"
 //
 // Mouse cursor support for the Fast Light Tool Kit (FLTK).
 //
@@ -24,71 +24,92 @@
 //
 
 // Change the current cursor.
+//
+// This needs a lot of work and is commented out for now...
+//
 // Under X the cursor is attached to the X window.  I tried to hide
 // this and pretend that changing the cursor is a drawing function.
-// This avoids a field in the Fl_Window, and I suspect is more
+// This avoids a field in the Window, and I suspect is more
 // portable to other systems.
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
+#include <fltk/Cursor.h>
+#include <fltk/Window.h>
 #include <fltk/x.h>
-#include <fltk/fl_draw.h>
+#include <fltk/draw.h>
+#include <fltk/Color.h>
 
-void fl_cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
-  if (Fl::first_window()) Fl::first_window()->cursor(c,fg,bg);
-}
+using namespace fltk;
 
+#ifdef __sgi
+FL_API Color fl_cursor_fg = RED;
+#else
+FL_API Color fl_cursor_fg = BLACK;
+#endif
+FL_API Color fl_cursor_bg = WHITE;
+
+////////////////////////////////////////////////////////////////
 #ifdef _WIN32
 
-void Fl_Window::cursor(Fl_Cursor c, Fl_Color, Fl_Color) {
-  if (!i) return;
-  if (c > FL_CURSOR_NESW) {
-    i->cursor = 0;
-  } else if (c == FL_CURSOR_DEFAULT) {
-    i->cursor = fl_default_cursor;
-  } else {
-    LPSTR n;
-    switch (c) {
-    case FL_CURSOR_ARROW:	n = IDC_ARROW; break;
-    case FL_CURSOR_CROSS:	n = IDC_CROSS; break;
-    case FL_CURSOR_WAIT:	n = IDC_WAIT; break;
-    case FL_CURSOR_INSERT:	n = IDC_IBEAM; break;
-    case FL_CURSOR_HELP:	n = IDC_HELP; break;
-#ifdef IDC_HAND
-    case FL_CURSOR_HAND:	n = IDC_HAND; break;
-#else
-    case FL_CURSOR_HAND:	n = IDC_UPARROW; break;
+struct fltk::Cursor {
+  LPSTR resource;
+  HCURSOR cursor;
+};
+
+static fltk::Cursor arrow = {IDC_ARROW};
+static fltk::Cursor cross = {IDC_CROSS};
+static fltk::Cursor wait = {IDC_WAIT};
+static fltk::Cursor insert = {IDC_IBEAM};
+#ifndef IDC_HAND
+# define IDC_HAND IDC_UPARROW
 #endif
-    case FL_CURSOR_MOVE:	n = IDC_SIZEALL; break;
-    case FL_CURSOR_N:
-    case FL_CURSOR_S:
-    case FL_CURSOR_NS:		n = IDC_SIZENS; break;
-    case FL_CURSOR_NE:
-    case FL_CURSOR_SW:
-    case FL_CURSOR_NESW:	n = IDC_SIZENESW; break;
-    case FL_CURSOR_E:
-    case FL_CURSOR_W:
-    case FL_CURSOR_WE:		n = IDC_SIZEWE; break;
-    case FL_CURSOR_SE:
-    case FL_CURSOR_NW:
-    case FL_CURSOR_NWSE:	n = IDC_SIZENWSE; break;
-    default:			n = IDC_NO; break;
-    }
-    i->cursor = LoadCursor(NULL, n);
+static fltk::Cursor hand = {IDC_HAND};
+static fltk::Cursor help = {IDC_HELP};
+static fltk::Cursor move = {IDC_SIZEALL};
+static fltk::Cursor ns = {IDC_SIZENS};
+static fltk::Cursor we = {IDC_SIZEWE};
+static fltk::Cursor nwse = {IDC_SIZENWSE};
+static fltk::Cursor nesw = {IDC_SIZENESW};
+static fltk::Cursor no = {IDC_NO};
+static fltk::Cursor none = {0};
+
+void Widget::cursor(fltk::Cursor* c) const {
+  Window* window = is_window() ? (Window*)this : this->window();
+  if (!window) return;
+  while (window->parent()) window = window->window();
+  CreatedWindow* i = CreatedWindow::find(window);
+  if (!i) return;
+  HCURSOR xcursor;
+  if (!c) {
+    xcursor = default_cursor;
+  } else {
+    if (!c->cursor && c->resource) c->cursor = LoadCursor(NULL, c->resource);
+    xcursor = c->cursor;
   }
-  SetCursor(i->cursor);
+  i->cursor_for = this;
+  if (xcursor != i->cursor) {
+    i->cursor = xcursor;
+    SetCursor(xcursor);
+  }
 }
 
+////////////////////////////////////////////////////////////////
 #elif (defined(__APPLE__) && !USE_X11)
 
-static Cursor crsrHAND =
+struct fltk::Cursor {
+  ::Cursor* cursor;
+  TYPE? resource;
+};
+
+static ::Cursor crsrHAND =
 {
   { 0x0600, 0x0900, 0x0900, 0x0900, 0x09C0, 0x0938, 0x6926, 0x9805,
     0x8801, 0x4801, 0x2002, 0x2002, 0x1004, 0x0804, 0x0408, 0x0408 },
   { 0x0600, 0x0F00, 0x0F00, 0x0F00, 0x0FC0, 0x0FF8, 0x6FFE, 0xFFFF,
     0xFFFF, 0x7FFF, 0x3FFE, 0x3FFE, 0x1FFC, 0x0FFC, 0x07F8, 0x07F8 },
   { 1, 5 } // Hotspot: ( y, x )
-}, *crsrHANDptr = &crsrHAND;
+};
+static fltk::Cursor hand = {&crsrHAND};
+
 static Cursor crsrHELP =
 {
   { 0x0000, 0x4000, 0x6000, 0x7000, 0x783C, 0x7C7E, 0x7E66, 0x7F06,
@@ -96,7 +117,9 @@ static Cursor crsrHELP =
   { 0xC000, 0xE000, 0xF000, 0xF83C, 0xFC7E, 0xFEFF, 0xFFFF, 0xFFFF,
     0xFFFE, 0xFFFC, 0xFE3C, 0xEF3C, 0xCF3C, 0x07BC, 0x0798, 0x0380 },
   { 1, 1 }
-}, *crsrHELPptr = &crsrHELP;
+};
+static fltk::Cursor help = {&crsrHELP};
+
 static Cursor crsrMOVE =
 {
   { 0x0000, 0x0180, 0x03C0, 0x07E0, 0x07E0, 0x1998, 0x399C, 0x7FFE,
@@ -104,7 +127,9 @@ static Cursor crsrMOVE =
   { 0x0180, 0x03C0, 0x07E0, 0x0FF0, 0x1FF8, 0x3FFC, 0x7FFE, 0xFFFF,
     0xFFFF, 0x7FFE, 0x3FFC, 0x1FF8, 0x0FF0, 0x07E0, 0x03C0, 0x0180 },
   { 8, 8 }
-}, *crsrMOVEptr = &crsrMOVE;
+};
+static fltk::Cursor move = {&crsrMOVE};
+
 static Cursor crsrNS =
 {
   { 0x0000, 0x0180, 0x03C0, 0x07E0, 0x0FF0, 0x0180, 0x0180, 0x0180,
@@ -112,7 +137,9 @@ static Cursor crsrNS =
   { 0x0180, 0x03C0, 0x07E0, 0x0FF0, 0x1FF8, 0x1FF8, 0x03C0, 0x03C0,
     0x03C0, 0x03C0, 0x1FF8, 0x1FF8, 0x0FF0, 0x07E0, 0x03C0, 0x0180 },
   { 8, 8 }
-}, *crsrNSptr = &crsrNS;
+};
+static fltk::Cursor ns = {&crsrNS};
+
 static Cursor crsrWE =
 {
   { 0x0000, 0x0000, 0x0000, 0x0000, 0x0810, 0x1818, 0x381C, 0x7FFE,
@@ -120,7 +147,9 @@ static Cursor crsrWE =
   { 0x0000, 0x0000, 0x0000, 0x0C30, 0x1C38, 0x3C3C, 0x7FFE, 0xFFFF,
     0xFFFF, 0x7FFE, 0x3C3C, 0x1C38, 0x0C30, 0x0000, 0x0000, 0x0000 },
   { 8, 8 }
-}, *crsrWEptr = &crsrWE;
+};
+static fltk::Cursor we = {&crsrWE};
+
 static Cursor crsrNWSE =
 {
   { 0x0000, 0x7E00, 0x7C00, 0x7800, 0x7C00, 0x6E00, 0x4710, 0x03B0,
@@ -128,7 +157,9 @@ static Cursor crsrNWSE =
   { 0xFF00, 0xFF00, 0xFE00, 0xFC00, 0xFE00, 0xFF18, 0xEFB8, 0xC7F8,
     0x03F8, 0x01F8, 0x03F8, 0x07F8, 0x07F8, 0x0000, 0x0000, 0x0000 },
   { 8, 8 }
-}, *crsrNWSEptr = &crsrNWSE;
+};
+static fltk::Cursor nwse = {&crsrNWSE};
+
 static Cursor crsrNESW =
 {
   { 0x0000, 0x03F0, 0x01F0, 0x00F0, 0x01F0, 0x03B0, 0x4710, 0x6E00,
@@ -136,7 +167,9 @@ static Cursor crsrNESW =
   { 0x07F8, 0x07F8, 0x03F8, 0x01F8, 0x03F8, 0xC7F8, 0xEFB8, 0xFF18,
     0xFE00, 0xFC00, 0xFE00, 0xFF00, 0xFF00, 0x0000, 0x0000, 0x0000 },
   { 8, 8 }
-}, *crsrNESWptr = &crsrNESW;
+};
+static fltk::Cursor nesw = {&crsrNESW};
+
 static Cursor crsrNONE =
 {
   { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
@@ -144,7 +177,9 @@ static Cursor crsrNONE =
   { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
   { 0, 0 }
-}, *crsrNONEptr = &crsrNONE;
+};
+static fltk::Cursor none = {&crsrNONE};
+
 static Cursor crsrARROW =
 {
   { 0x0000, 0x4000, 0x6000, 0x7000, 0x7800, 0x7C00, 0x7E00, 0x7F00,
@@ -152,53 +187,67 @@ static Cursor crsrARROW =
   { 0xC000, 0xE000, 0xF000, 0xF800, 0xFC00, 0xFE00, 0xFF00, 0xFF80,
     0xFFC0, 0xFFC0, 0xFE00, 0xEF00, 0xCF00, 0x0780, 0x0780, 0x0380 },
   { 1, 1 }
-}, *crsrARROWptr = &crsrARROW;
+};
+static fltk::Cursor arrow = {&crsrARROW};
 
+static fltk::Cursor cross = {0, crossCursor};
+static fltk::Cursor wait = {0,watchCursor};
+static fltk::Cursor insert = {0, iBeamCursor};
+static fltk::Cursor no = {???};
 
-void Fl_Window::cursor(Fl_Cursor c, Fl_Color, Fl_Color) {
-  if (!shown()) return;
-  switch (c) {
-  case FL_CURSOR_CROSS:     i->cursor = GetCursor( crossCursor ); break;
-  case FL_CURSOR_WAIT:      i->cursor = GetCursor( watchCursor ); break;
-  case FL_CURSOR_INSERT:    i->cursor = GetCursor( iBeamCursor ); break;
-  case FL_CURSOR_N:
-  case FL_CURSOR_S:
-  case FL_CURSOR_NS:        i->cursor = &crsrNSptr; break;
-  case FL_CURSOR_HELP:	i->cursor = &crsrHELPptr; break;
-  case FL_CURSOR_HAND:	i->cursor = &crsrHANDptr; break;
-  case FL_CURSOR_MOVE:	i->cursor = &crsrMOVEptr; break;
-  case FL_CURSOR_NE:
-  case FL_CURSOR_SW:
-  case FL_CURSOR_NESW:	i->cursor = &crsrNESWptr; break;
-  case FL_CURSOR_E:
-  case FL_CURSOR_W:
-  case FL_CURSOR_WE:	i->cursor = &crsrWEptr; break;
-  case FL_CURSOR_SE:
-  case FL_CURSOR_NW:
-  case FL_CURSOR_NWSE:	i->cursor = &crsrNWSEptr; break;
-  case FL_CURSOR_NONE:	i->cursor = &crsrNONEptr; break;
-  case FL_CURSOR_ARROW:   	i->cursor = &crsrARROWptr; break;
-  case FL_CURSOR_DEFAULT:
-  default:
-    i->cursor = fl_default_cursor; break;
+void Widget::cursor(fltk::Cursor* c) const {
+  Window* window = is_window() ? (Window*)this : this->window();
+  if (!window) return;
+  while (window->parent()) window = window->window();
+  CreatedWindow* i = CreatedWindow::find(window);
+  if (!i) return;
+  CursHandle xcursor;
+  if (!c) {
+    xcursor = default_cursor;
+  } else {
+    if (!c->cursor) c->cursor = GetCursor(c->resource);
+    xcursor = &c->cursor;
   }
-  SetCursor( *i->cursor );
+  i->cursor_for = this;
+  if (xcursor != i->cursor) {
+    i->cursor = xcursor;
+    SetCursor(xcursor);
+  }
 }
 
+////////////////////////////////////////////////////////////////
 #else // X11 version
 
-#include <X11/cursorfont.h>
+struct fltk::Cursor {
+  ::Cursor cursor;
+  uchar fontid;
+  uchar tableid;
+};
 
-// I like the MSWindows resize cursors, so I duplicate them here:
+static fltk::Cursor arrow = {0,35};
+static fltk::Cursor cross = {0,66};
+static fltk::Cursor wait = {0,76};
+static fltk::Cursor insert = {0,77};
+static fltk::Cursor hand = {0,31};
+static fltk::Cursor help = {0,47};
+static fltk::Cursor move = {0,27};
+static fltk::Cursor ns = {0,0,0};
+static fltk::Cursor we = {0,0,1};
+static fltk::Cursor nwse = {0,0,2};
+static fltk::Cursor nesw = {0,0,3};
+static fltk::Cursor no = {0,0,4};
+static fltk::Cursor none = {0,0,5};
+
+// this probably should be a nicer bitmap:
+fltk::Cursor fl_drop_ok_cursor = {0,21};
 
 #define CURSORSIZE 16
 #define HOTXY 8
 static struct TableEntry {
   uchar bits[CURSORSIZE*CURSORSIZE/8];
   uchar mask[CURSORSIZE*CURSORSIZE/8];
-  Cursor cursor;
 } table[] = {
-  {{	// FL_CURSOR_NS
+  {{	// CURSOR_NS
    0x00, 0x00, 0x80, 0x01, 0xc0, 0x03, 0xe0, 0x07, 0x80, 0x01, 0x80, 0x01,
    0x80, 0x01, 0x80, 0x01, 0x80, 0x01, 0x80, 0x01, 0x80, 0x01, 0x80, 0x01,
    0xe0, 0x07, 0xc0, 0x03, 0x80, 0x01, 0x00, 0x00},
@@ -206,7 +255,7 @@ static struct TableEntry {
    0x80, 0x01, 0xc0, 0x03, 0xe0, 0x07, 0xf0, 0x0f, 0xf0, 0x0f, 0xc0, 0x03,
    0xc0, 0x03, 0xc0, 0x03, 0xc0, 0x03, 0xc0, 0x03, 0xc0, 0x03, 0xf0, 0x0f,
    0xf0, 0x0f, 0xe0, 0x07, 0xc0, 0x03, 0x80, 0x01}},
-  {{	// FL_CURSOR_EW
+  {{	// CURSOR_EW
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x08, 0x10,
    0x0c, 0x30, 0xfe, 0x7f, 0xfe, 0x7f, 0x0c, 0x30, 0x08, 0x10, 0x00, 0x00,
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
@@ -214,7 +263,7 @@ static struct TableEntry {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x18, 0x18, 0x1c, 0x38,
    0xfe, 0x7f, 0xff, 0xff, 0xff, 0xff, 0xfe, 0x7f, 0x1c, 0x38, 0x18, 0x18,
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00}},
-  {{	// FL_CURSOR_NWSE
+  {{	// CURSOR_NWSE
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x78, 0x00, 0x38, 0x00, 0x78, 0x00,
    0xe8, 0x00, 0xc0, 0x01, 0x80, 0x03, 0x00, 0x17, 0x00, 0x1e, 0x00, 0x1c,
    0x00, 0x1e, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
@@ -222,7 +271,7 @@ static struct TableEntry {
    0x00, 0x00, 0x00, 0x00, 0xfc, 0x00, 0xfc, 0x00, 0x7c, 0x00, 0xfc, 0x00,
    0xfc, 0x01, 0xec, 0x03, 0xc0, 0x37, 0x80, 0x3f, 0x00, 0x3f, 0x00, 0x3e,
    0x00, 0x3f, 0x00, 0x3f, 0x00, 0x00, 0x00, 0x00}},
-  {{	// FL_CURSOR_NESW
+  {{	// CURSOR_NESW
    0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x1e, 0x00, 0x1c, 0x00, 0x1e,
    0x00, 0x17, 0x80, 0x03, 0xc0, 0x01, 0xe8, 0x00, 0x78, 0x00, 0x38, 0x00,
    0x78, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00},
@@ -230,7 +279,7 @@ static struct TableEntry {
    0x00, 0x00, 0x00, 0x00, 0x00, 0x3f, 0x00, 0x3f, 0x00, 0x3e, 0x00, 0x3f,
    0x80, 0x3f, 0xc0, 0x37, 0xec, 0x03, 0xfc, 0x01, 0xfc, 0x00, 0x7c, 0x00,
    0xfc, 0x00, 0xfc, 0x00, 0x00, 0x00, 0x00, 0x00}},
-  {{	// FL_CURSOR_NO
+  {{	// CURSOR_NO
    0x00, 0x00, 0xc0, 0x03, 0xf0, 0x0f, 0x38, 0x1c, 0x3c, 0x30, 0x7c, 0x30,
    0xe6, 0x60, 0xc6, 0x61, 0x86, 0x63, 0x06, 0x67, 0x0c, 0x3e, 0x0c, 0x3c,
    0x38, 0x1c, 0xf0, 0x0f, 0xc0, 0x03, 0x00, 0x00},
@@ -238,54 +287,75 @@ static struct TableEntry {
    0xc0, 0x03, 0xf0, 0x0f, 0xf8, 0x1f, 0xfc, 0x3f, 0x7e, 0x7c, 0xfe, 0x78,
    0xff, 0xf1, 0xef, 0xf3, 0xcf, 0xf7, 0x8f, 0xff, 0x1e, 0x7f, 0x3e, 0x7e,
    0xfc, 0x3f, 0xf8, 0x1f, 0xf0, 0x0f, 0xc0, 0x03}},
-  {{0}, {0}} // FL_CURSOR_NONE & unknown
+  {{0}, {0}} // CURSOR_NONE
 };
 
-void Fl_Window::cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
+void Widget::cursor(fltk::Cursor* c) const {
+  Window* window = is_window() ? (Window*)this : this->window();
+  if (!window) return;
+  CreatedWindow* i = CreatedWindow::find(window);
   if (!i) return;
-  Cursor cursor;
-  int deleteit = 0;
+  ::Cursor xcursor;
   if (!c) {
-    cursor = None;
+    xcursor = None;
   } else {
-    if (c >= FL_CURSOR_NS) {
-      TableEntry *q = (c > FL_CURSOR_NO) ? table+5 : table+(c-FL_CURSOR_NS);
-      if (!(q->cursor)) {
+    // Figure out the X cursor if not already figured out:
+    if (!c->cursor) {
+      if (c->fontid) {
+	c->cursor = XCreateFontCursor(xdisplay, (c->fontid-1)*2);
+      } else {
+	TableEntry *q = table+c->tableid;
 	XColor dummy;
-	Pixmap p = XCreateBitmapFromData(fl_display,
-	  RootWindow(fl_display, fl_screen), (const char*)(q->bits),
-	  CURSORSIZE, CURSORSIZE);
-	Pixmap m = XCreateBitmapFromData(fl_display,
-	  RootWindow(fl_display, fl_screen), (const char*)(q->mask),
-	  CURSORSIZE, CURSORSIZE);
-	q->cursor = XCreatePixmapCursor(fl_display, p,m,&dummy, &dummy,
+	Pixmap p = XCreateBitmapFromData(xdisplay,
+		RootWindow(xdisplay, xscreen), (const char*)(q->bits),
+		CURSORSIZE, CURSORSIZE);
+	Pixmap m = XCreateBitmapFromData(xdisplay,
+		RootWindow(xdisplay, xscreen), (const char*)(q->mask),
+		CURSORSIZE, CURSORSIZE);
+	c->cursor = XCreatePixmapCursor(xdisplay, p,m,&dummy, &dummy,
 					HOTXY, HOTXY);
-	XFreePixmap(fl_display, m);
-	XFreePixmap(fl_display, p);
+	XFreePixmap(xdisplay, m);
+	XFreePixmap(xdisplay, p);
       }
-      cursor = q->cursor;
-    } else {
-      cursor = XCreateFontCursor(fl_display, (c-1)*2);
-      deleteit = 1;
+      uchar r,g,b;
+      XColor fgc;
+      split_color(fl_cursor_fg, r,g,b);
+      fgc.red = r*0x101;
+      fgc.green = g*0x101;
+      fgc.blue = b*0x101;
+      XColor bgc;
+      split_color(fl_cursor_bg, r,g,b);
+      bgc.red = r*0x101;
+      bgc.green = g*0x101;
+      bgc.blue = b*0x101;
+      XRecolorCursor(xdisplay, c->cursor, &fgc, &bgc);
     }
-    XColor fgc;
-    fg = fl_get_color(fg);
-    fgc.red = (fg>>16)&0xFF00;
-    fgc.green = (fg>>8)&0xFF00;
-    fgc.blue = fg & 0xFF00;
-    XColor bgc;
-    bg = fl_get_color(bg);
-    bgc.red = (bg>>16)&0xFF00;
-    bgc.green = (bg>>8)&0xFF00;
-    bgc.blue = bg & 0xFF00;
-    XRecolorCursor(fl_display, cursor, &fgc, &bgc);
+    xcursor = c->cursor;
   }
-  XDefineCursor(fl_display, fl_xid(this), cursor);
-  if (deleteit) XFreeCursor(fl_display, cursor);
+  i->cursor_for = this;
+  if (xcursor != i->cursor) {
+    i->cursor = xcursor;
+    XDefineCursor(xdisplay, i->xid, xcursor);
+  }
 }
 
 #endif
 
+fltk::Cursor* const fltk::CURSOR_DEFAULT= 0;
+fltk::Cursor* const fltk::CURSOR_ARROW	= &arrow;
+fltk::Cursor* const fltk::CURSOR_CROSS	= &cross;
+fltk::Cursor* const fltk::CURSOR_WAIT	= &wait;
+fltk::Cursor* const fltk::CURSOR_INSERT	= &insert;
+fltk::Cursor* const fltk::CURSOR_HAND	= &hand;
+fltk::Cursor* const fltk::CURSOR_HELP	= &help;
+fltk::Cursor* const fltk::CURSOR_MOVE	= &move;
+fltk::Cursor* const fltk::CURSOR_NS	= &ns;
+fltk::Cursor* const fltk::CURSOR_WE	= &we;
+fltk::Cursor* const fltk::CURSOR_NWSE	= &nwse;
+fltk::Cursor* const fltk::CURSOR_NESW	= &nesw;
+fltk::Cursor* const fltk::CURSOR_NO	= &no;
+fltk::Cursor* const fltk::CURSOR_NONE	= &none;
+
 //
-// End of "$Id: fl_cursor.cxx,v 1.15 2002/10/26 09:55:31 spitzak Exp $".
+// End of "$Id: fl_cursor.cxx,v 1.16 2002/12/09 04:52:29 spitzak Exp $".
 //

@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_Style.cxx,v 1.37 2002/05/06 06:31:27 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.38 2002/12/09 04:52:26 spitzak Exp $"
 //
-// Code for managing Fl_Style structures.
+// Code for managing Style structures.
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,9 +23,8 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Widget.h>
-#include <fltk/fl_load_plugin.h>
+#include <fltk/Widget.h>
+#include <fltk/load_plugin.h>
 #include <fltk/vsnprintf.h>
 #include <string.h>
 #include <stdlib.h>
@@ -37,46 +36,51 @@
 #else
 # include <unistd.h>
 #endif
+#include <ctype.h>
+#include <fltk/math.h>
+using namespace fltk;
 
-Fl_Named_Style* Fl_Named_Style::first;
+NamedStyle* NamedStyle::first;
 
 // Do not change the contents of this ever.  The themes depend on getting
 // a known state initially.
-static void revert(Fl_Style* s) {
-  s->parent                = 0;	// this is the topmost style always
-  s->box                   = FL_DOWN_BOX;
-  s->button_box		   = FL_UP_BOX;
-  s->focus_box		   = FL_DOTTED_FRAME;
-  s->glyph                 = Fl_Widget::default_glyph;
-  s->label_font            = FL_HELVETICA;
-  s->text_font             = FL_HELVETICA;
-  s->label_type            = FL_NORMAL_LABEL;
-  s->color                 = fl_gray_ramp(FL_NUM_GRAY-1);
-  s->button_color	   = FL_GRAY;
-  s->label_color           = FL_BLACK;
-  s->selection_color	   = FL_BLUE_SELECTION_COLOR;
-  s->selection_text_color  = FL_WHITE;
-  s->highlight_color       = FL_NO_COLOR;
-  s->highlight_label_color = FL_NO_COLOR;
-  s->text_color            = FL_BLACK;
-  s->label_size		   = 12;
-  s->text_size             = 12;
-  s->leading		   = 0;
+static void revert(Style* s) {
+  s->parent		= 0;	// this is the topmost style always
+  s->box		= DOWN_BOX;
+  s->buttonbox		= UP_BOX;
+  s->focusbox		= DOTTED_FRAME;
+  s->glyph		= Widget::default_glyph;
+  s->labelfont		= HELVETICA;
+  s->textfont		= HELVETICA;
+  s->labeltype		= NORMAL_LABEL;
+  s->color		= WHITE; // GRAY99?
+  s->buttoncolor	= GRAY75;
+  s->labelcolor		= BLACK;
+  s->textcolor		= BLACK;
+  s->selection_color	= WINDOWS_BLUE;
+  s->selection_textcolor= WHITE;
+  s->highlight_color	= NO_COLOR;
+  s->highlight_labelcolor= NO_COLOR;
+  s->labelsize		= 12;
+  s->textsize		= 12;
+  s->leading		= 2;
+  s->scrollbar_width	= 15;
+  s->scrollbar_align	= ALIGN_RIGHT|ALIGN_BOTTOM;
 }
 
-static Fl_Named_Style default_named_style("default", ::revert, &Fl_Widget::default_style);
-Fl_Named_Style* Fl_Widget::default_style = &default_named_style;
+static NamedStyle default_named_style("default", ::revert, &Widget::default_style);
+NamedStyle* Widget::default_style = &default_named_style;
 
 // Copying a style pointer from another widget is not safe if that
 // style is dynamic() because it may change or be deleted.  This makes
 // another dynamic() copy if necessary.
 
-bool Fl_Widget::copy_style(const Fl_Style* t) {
+bool Widget::copy_style(const Style* t) {
   if (style_ == t) return false;
-  if (style_ && style_->dynamic()) delete (Fl_Style*)style_;
+  if (style_ && style_->dynamic()) delete (Style*)style_;
   if (!t->dynamic()) {style_ = t; return false;}
-  Fl_Style* newstyle = new Fl_Style;
-  newstyle->parent = (Fl_Style*)t;
+  Style* newstyle = new Style;
+  newstyle->parent = (Style*)t;
   style_ = newstyle;
   return true;
 }
@@ -85,10 +89,10 @@ bool Fl_Widget::copy_style(const Fl_Style* t) {
 // of their current style and setting it there.  Because this copy does
 // not have any children the recursive search is not needed:
 
-Fl_Style* fl_unique_style(const Fl_Style* & pointer) {
-  if (pointer->dynamic()) return (Fl_Style*)pointer;
-  Fl_Style* newstyle = new Fl_Style;
-  newstyle->parent = (Fl_Style*)pointer;
+Style* unique_style(const Style* & pointer) {
+  if (pointer->dynamic()) return (Style*)pointer;
+  Style* newstyle = new Style;
+  newstyle->parent = (Style*)pointer;
   pointer = newstyle;
   return newstyle;
 }
@@ -96,63 +100,64 @@ Fl_Style* fl_unique_style(const Fl_Style* & pointer) {
 // Retrieve/set values from a style, using parent's value if not in child:
 
 #define style_functions(TYPE,FIELD)	\
-TYPE Fl_Widget::FIELD() const {		\
-  for (const Fl_Style* s = style_;;) {	\
+TYPE Widget::FIELD() const {		\
+  for (const Style* s = style_;;) {	\
     if (s->FIELD) return s->FIELD;	\
     s = s->parent;			\
     if (!s) return 0;			\
   }					\
 }					\
-void Fl_Widget::FIELD(TYPE v) {		\
-  fl_unique_style(style_)->FIELD = v;	\
+void Widget::FIELD(TYPE v) {		\
+  unique_style(style_)->FIELD = v;	\
 }
 
-style_functions(Fl_Boxtype,box)
-style_functions(Fl_Boxtype,button_box)
-style_functions(Fl_Boxtype,focus_box)
-style_functions(Fl_Glyph,glyph)
-style_functions(Fl_Font,label_font)
-style_functions(Fl_Font,text_font)
-style_functions(Fl_Labeltype,label_type)
-style_functions(Fl_Color,color)
-style_functions(Fl_Color,button_color)
-style_functions(Fl_Color,label_color)
-style_functions(Fl_Color,selection_color)
-style_functions(Fl_Color,selection_text_color)
-style_functions(Fl_Color,highlight_color)
-style_functions(Fl_Color,highlight_label_color)
-style_functions(Fl_Color,text_color)
-style_functions(unsigned,label_size)
-style_functions(unsigned,text_size)
-style_functions(unsigned,leading)
+style_functions(Box*,		box		)
+style_functions(Box*,		buttonbox	)
+style_functions(Box*,		focusbox	)
+style_functions(GlyphStyle,	glyph		)
+style_functions(Font*,		labelfont	)
+style_functions(Font*,		textfont	)
+style_functions(LabelType*,	labeltype	)
+style_functions(Color,		color		)
+style_functions(Color,		buttoncolor	)
+style_functions(Color,		labelcolor	)
+style_functions(Color,		selection_color	)
+style_functions(Color,		selection_textcolor)
+style_functions(Color,		highlight_color	)
+style_functions(Color,		highlight_labelcolor)
+style_functions(Color,		textcolor	)
+style_functions(float,		labelsize	)
+style_functions(float,		textsize	)
+style_functions(float,		leading		)
+style_functions(unsigned char,	scrollbar_align	)
+style_functions(unsigned char,	scrollbar_width	)
 
 // Named styles provide a list that can be searched by theme plugins.
 // The "revert" function is mostly provided to make it easy to initialize
 // the fields even though C++ does not allow a structure constant.
 // It is also used to undo theme changes.
 
-static void plainrevert(Fl_Style*) {}
+static void plainrevert(Style*) {}
 
-Fl_Named_Style::Fl_Named_Style(const char* n, void (*revert)(Fl_Style*), Fl_Named_Style** pds) {
+NamedStyle::NamedStyle(const char* n, void (*revert)(Style*), NamedStyle** pds) {
   memset((void*)this, 0, sizeof(*this));
-  parent = Fl_Widget::default_style; // revert may want to change this
+  parent = Widget::default_style; // revert may want to change this
   if (revert) { revertfunc = revert; revert(this); }
   else revertfunc = plainrevert;
-  next = Fl_Named_Style::first;
-  Fl_Named_Style::first = this;
+  next = NamedStyle::first;
+  NamedStyle::first = this;
   back_pointer = pds;
   name = n;
 }
 
 // This constructor is used to create dynamic() styles for widgets that
 // change their own attributes:
-Fl_Style::Fl_Style() {
+Style::Style() {
   memset((void*)this, 0, sizeof(*this));
 }
 
-#include <ctype.h>
-Fl_Style* Fl_Style::find(const char* name) {
-  for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
+Style* Style::find(const char* name) {
+  for (NamedStyle* p = NamedStyle::first; p; p = p->next) {
     const char* a = p->name;
     const char* b = name;
     if (!a) continue;
@@ -169,32 +174,28 @@ Fl_Style* Fl_Style::find(const char* name) {
   return 0;
 }
 
-bool Fl_Style::draw_boxes_inactive = true;
-unsigned Fl_Style::scrollbar_width = 15;
-Fl_Flags Fl_Style::scrollbar_align = FL_ALIGN_RIGHT|FL_ALIGN_BOTTOM;
-int Fl_Style::wheel_scroll_lines = 3;
+bool Style::draw_boxes_inactive = true;
+int Style::wheel_scroll_lines = 3;
 
 ////////////////////////////////////////////////////////////////
 // Themes:
 
-void Fl_Style::revert() {
-  // fl_background((Fl_Color)0xc0c0c000); // not necessary?
+void Style::revert() {
+  // set_background((Color)0xc0c0c000); // not necessary?
   draw_boxes_inactive = 1;
-  scrollbar_width = 15;
-  scrollbar_align = FL_ALIGN_RIGHT|FL_ALIGN_BOTTOM;
-  for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
+  for (NamedStyle* p = NamedStyle::first; p; p = p->next) {
     if (p->name) {
-      Fl_Style temp = *p;
-      memset((void*)p, 0, sizeof(Fl_Style));
+      Style temp = *p;
+      memset((void*)p, 0, sizeof(Style));
       p->parent = temp.parent;
       p->revertfunc = temp.revertfunc;
       p->revertfunc(p);
     }
   }
-  Fl::redraw();
+  fltk::redraw();
 }
 
-Fl_Color fl_bg_switch = 0; // set by -bg in Fl_arg.cxx
+Color fl_bg_switch = 0; // set by -bg in arg.cxx
 
 static bool theme_loaded;
 
@@ -203,7 +204,7 @@ static bool theme_loaded;
 // load_theme() is called this same actions will be done). Otherwise
 // this will call revert() on the styles and run the current theme
 // procedure.
-void Fl_Style::reload_theme() {
+void Style::reload_theme() {
   if (theme_loaded) {
     theme_loaded = false;
     revert();
@@ -215,23 +216,23 @@ void Fl_Style::reload_theme() {
 // been called. Normally this is called when the first window is shown()
 // but you can call this if you want your program to be able to use any
 // settings the theme made.
-void Fl_Style::load_theme() {
+void Style::load_theme() {
   if (theme_loaded) return;
   theme_loaded = true;
   if (!theme_) theme_ = load_theme("default");
   theme_();
-  if (fl_bg_switch) fl_background(fl_bg_switch);
+  if (fl_bg_switch) set_background(fl_bg_switch);
 }
 
-Fl_Theme Fl_Style::theme_;
-const char* Fl_Style::scheme_;
+Theme Style::theme_;
+const char* Style::scheme_;
 
 ////////////////////////////////////////////////////////////////
 // Theme plugin finder & loader
 
-#ifndef FL_SHARED
+#ifndef SHARED
 
-Fl_Theme Fl_Style::load_theme(const char* name) {
+Theme Style::load_theme(const char* name) {
   // no name leaves the built-in default:
   if (!name || !*name) return fltk_theme;
   // "default" works:
@@ -247,7 +248,7 @@ Fl_Theme Fl_Style::load_theme(const char* name) {
 # define FILENAME_MAX 1024
 #endif
 
-Fl_Theme Fl_Style::load_theme(const char* name) {
+Theme Style::load_theme(const char* name) {
   // no name leaves the built-in default:
   if (!name || !*name) return fltk_theme;
 
@@ -261,7 +262,7 @@ Fl_Theme Fl_Style::load_theme(const char* name) {
 
   // search for the file:
   char path_buf[FILENAME_MAX];
-  const char *path = fl_find_config_file(path_buf, FILENAME_MAX, name);
+  const char *path = find_config_file(path_buf, FILENAME_MAX, name);
 
   if (!path) {
     // If they said "default" it is ok if the plugin is not found:
@@ -269,10 +270,10 @@ Fl_Theme Fl_Style::load_theme(const char* name) {
     return 0;
   }
 
-  return (Fl_Theme)fl_load_plugin(path, "fltk_theme");
+  return (Theme)load_plugin(path, "fltk_theme");
 }
 
-const char* fl_find_config_file(char* path, int size, const char* name)
+const char* find_config_file(char* path, int size, const char* name)
 {
   // See if the user typed in an "absolute" path name
   if (name[0] == '/' || name[0] == '.'
@@ -310,36 +311,34 @@ const char* fl_find_config_file(char* path, int size, const char* name)
 
 ///////////////////////////////////////////////////////////////
 
-#include <fltk/math.h>
-
-// FL_GRAY is replaced with the passed color. For intermediate colors
+// GRAY is replaced with the passed color. For intermediate colors
 // the gray ramp is replaced with a gamma curve that passes through that
 // color. If the color is too dark or light then the gray ramp is left
-// at a straight line and FL_GRAY is not between the two adjacent entries.
+// at a straight line and GRAY is not between the two adjacent entries.
 
-void fl_background(Fl_Color c) {
+void fltk::set_background(Color c) {
   int r = (c>>24)&255;
   double powr;
   if (r < 0x30 || r > 0xf0) powr = 1;
-  else powr = log(r/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
+  else powr = log(r/255.0)/log((GRAY75-GRAY00)/float(GRAY99-GRAY00));
   int g = (c>>16)&255;
   double powg;
   if (g < 0x30 || g > 0xf0) powg = 1;
-  else powg = log(g/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
+  else powg = log(g/255.0)/log((GRAY75-GRAY00)/float(GRAY99-GRAY00));
   int b = (c>>8)&255;
   double powb;
   if (b < 0x30 || b > 0xf0) powb = 1;
-  else powb = log(b/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
-  for (int i = 0; i < FL_NUM_GRAY; i++) if (i != FL_GRAY) {
-    double gray = i/(FL_NUM_GRAY-1.0);
-    fl_set_color(fl_gray_ramp(i),
-		 fl_rgb(uchar(pow(gray,powr)*255+.5),
-			uchar(pow(gray,powg)*255+.5),
-			uchar(pow(gray,powb)*255+.5)));
+  else powb = log(b/255.0)/log((GRAY75-GRAY00)/float(GRAY99-GRAY00));
+  for (int i = 0; i <= (GRAY99-GRAY00); i++) if (i != GRAY75) {
+    double gray = i/float(GRAY99-GRAY00);
+    set_color_index(Color(GRAY00+i),
+		    color(uchar(pow(gray,powr)*255+.5),
+			  uchar(pow(gray,powg)*255+.5),
+			  uchar(pow(gray,powb)*255+.5)));
   }
-  fl_set_color(FL_GRAY, c);
+  set_color_index(GRAY75, c);
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.37 2002/05/06 06:31:27 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.38 2002/12/09 04:52:26 spitzak Exp $".
 //

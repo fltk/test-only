@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.24 2002/10/26 09:55:31 spitzak Exp $"
+// "$Id: fl_ask.cxx,v 1.25 2002/12/09 04:52:28 spitzak Exp $"
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
@@ -23,42 +23,41 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// Implementation of fl_message, fl_ask, fl_choice, fl_input
-// The three-message fl_show_x functions are for forms compatibility
+// Implementation of message, ask, choice, input
+// The three-message show_x functions are for forms compatibility
 // mostly.  In most cases it is easier to get a multi-line message
 // by putting newlines in the message.
 
-#include <fltk/Fl.h>
-#include <fltk/fl_draw.h>
-#include <fltk/fl_ask.h>
-#include <fltk/Fl_Box.h>
-#include <fltk/Fl_Button.h>
-#include <fltk/Fl_Return_Button.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/Fl_Input.h>
-#include <fltk/Fl_Secret_Input.h>
-
+#include <fltk/events.h>
+#include <fltk/draw.h>
+#include <fltk/ask.h>
+#include <fltk/Button.h>
+#include <fltk/ReturnButton.h>
+#include <fltk/Window.h>
+#include <fltk/Input.h>
+#include <fltk/SecretInput.h>
 #include <fltk/vsnprintf.h>
 #include <string.h>
+using namespace fltk;
 
-static void m_revert(Fl_Style* s) {
-  s->box = FL_NO_BOX;
+static void m_revert(Style* s) {
+  s->box = NO_BOX;
 }
-static Fl_Named_Style m_style("Message", m_revert, &fl_message_style);
-Fl_Named_Style* fl_message_style = &m_style;
+static NamedStyle m_style("Message", m_revert, &message_style);
+NamedStyle* fltk::message_style = &m_style;
 
-static void i_revert(Fl_Style* s) {
-  s->box = FL_THIN_UP_BOX;
-  s->label_font = FL_TIMES_BOLD;
-  s->label_size = 34;
-  s->color = FL_WHITE;
-  s->label_color = FL_BLUE;
+static void i_revert(Style* s) {
+  s->box = THIN_UP_BOX;
+  s->labelfont = TIMES_BOLD;
+  s->labelsize = 34;
+  s->color = WHITE;
+  s->labelcolor = BLUE;
 }
-static Fl_Named_Style i_style("Icon", i_revert, &fl_icon_style);
-Fl_Named_Style* fl_icon_style = &i_style;
+static NamedStyle i_style("Icon", i_revert, &fltk::icon_style);
+NamedStyle* fltk::icon_style = &i_style;
 
 static int button_number;
-static void set_button_number(Fl_Widget* w, long a) {
+static void set_button_number(Widget* w, long a) {
   button_number = a;
   w->window()->hide();
 }
@@ -71,7 +70,7 @@ static void set_button_number(Fl_Widget* w, long a) {
 #define BUTTON_W 75
 #define BUTTON_H 21
 
-static Fl_Input *input;
+static Input *textfield;
 
 // In this call the buttons are in backwards order from right to left,
 // this is because "no" (0) is on the right.
@@ -83,30 +82,30 @@ static int innards(
   const char *b1,
   const char *b2)
 {
-  Fl_Window window(3*BORDER_W+ICON_W+INPUT_W, 3*BORDER_H+ICON_H+BUTTON_H);
+  Window window(3*BORDER_W+ICON_W+INPUT_W, 3*BORDER_H+ICON_H+BUTTON_H);
+  window.begin();
 
   // This keeps the icon from resizing.
-  Fl_Group ig(BORDER_W, BORDER_H, ICON_W, ICON_H);
-
-  Fl_Box icon(0, 0, ICON_W, ICON_H);
-  icon.style(fl_icon_style);
+  Group ig(BORDER_W, BORDER_H, ICON_W, ICON_H);
+  ig.begin();
+  Widget icon(0, 0, ICON_W, ICON_H);
+  icon.style(icon_style);
   icon.label(iconlabel);
-
   ig.end();
 
-  Fl_Box message(2*BORDER_W+ICON_W, 0, INPUT_W, 2*BORDER_H+ICON_H);
-  message.set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
-  message.style(fl_message_style);
+  Widget message(2*BORDER_W+ICON_W, 0, INPUT_W, 2*BORDER_H+ICON_H);
+  message.set_flag(ALIGN_LEFT|ALIGN_INSIDE|ALIGN_WRAP);
+  message.style(message_style);
 
-  if (input) {delete input; input = 0;}
+  if (textfield) {delete textfield; textfield = 0;}
   if (istr) {
-    input = new Fl_Input(2*BORDER_W+ICON_W, 0, INPUT_W, 0);
-    input->h(input->text_size()+10);
-    input->y(BORDER_H+ICON_H-input->h());
-    message.h(input->y());
-    input->type(itype);
-    input->value(istr);
-    window.focus(input);
+    textfield = new Input(2*BORDER_W+ICON_W, 0, INPUT_W, 0);
+    textfield->h(int(textfield->textsize())+10);
+    textfield->y(BORDER_H+ICON_H-textfield->h());
+    message.h(textfield->y());
+    textfield->type(itype);
+    textfield->value(istr);
+    window.focus(textfield);
   }
 
   window.resizable(message);
@@ -115,10 +114,23 @@ static int innards(
   char buffer[1024];
   if (!strcmp(fmt,"%s")) {
     message.label(va_arg(ap, const char*));
+  } else if (!strchr(fmt, '%')) {
+    message.label(fmt);
   } else {
     vsnprintf(buffer, 1024, fmt, ap);
     message.label(buffer);
   }
+
+  window.end();
+  window.layout();
+  setfont(message.labelfont(), message.labelsize());
+  int w = 800; int h; measure(message.label(), w, h, 0); w+=6; h+=6;
+  w -= message.w(); if (w < 0) w = 0;
+  h -= message.h(); if (h < 0) h = 0;
+  window.size(window.w()+w, window.h()+h);
+  window.layout();
+
+  window.begin();
 
   const char* blabels[3];
   blabels[0] = b0;
@@ -134,60 +146,58 @@ static int innards(
   }
 
   for (i = 3; i--;) if (blabels[i]) {
-    Fl_Button* button;
+    Button* button;
     if (i == default_button) {
-      button = new Fl_Return_Button(
-	3*BORDER_W+ICON_W+INPUT_W-(BUTTON_W+BORDER_W)*(i+1),
-	2*BORDER_H+ICON_H, BUTTON_W, BUTTON_H, blabels[i]);
+      button = new ReturnButton(
+	window.w()-(BUTTON_W+BORDER_W)*(i+1),
+	window.h()-(BORDER_H+BUTTON_H), BUTTON_W, BUTTON_H, blabels[i]);
       window.hotspot(button);
-      if (!input) window.focus(button);
+      if (!textfield) window.focus(button);
     } else {
-      button = new Fl_Button(
-	3*BORDER_W+ICON_W+INPUT_W-(BUTTON_W+BORDER_W)*(i+1),
-	2*BORDER_H+ICON_H, BUTTON_W, BUTTON_H, blabels[i]);
+      button = new Button(
+	window.w()-(BUTTON_W+BORDER_W)*(i+1),
+	window.h()-(BORDER_H+BUTTON_H), BUTTON_W, BUTTON_H, blabels[i]);
     }
     button->callback(set_button_number, i);
   }
 
   window.end();
-
   button_number = 0;
   window.exec();
-  if (input) input->parent()->remove(input); // don't destroy it yet
+  if (textfield)
+    textfield->parent()->remove(textfield); // don't destroy it yet
   return button_number;
 }
 
 // pointers you can use to change fltk to a foreign language:
-const char* fl_no = "No";
-const char* fl_yes= "Yes";
-const char* fl_ok = "OK";
-const char* fl_cancel= "Cancel";
+const char* fltk::no = "No";
+const char* fltk::yes= "Yes";
+const char* fltk::ok = "OK";
+const char* fltk::cancel= "Cancel";
 
-// fltk functions:
-
-void fl_message(const char *fmt, ...) {
+void fltk::message(const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
-  innards("i", 0, 0, fmt, ap, fl_ok, 0, 0);
+  innards("i", 0, 0, fmt, ap, ok, 0, 0);
   va_end(ap);
 }
 
-void fl_alert(const char *fmt, ...) {
+void fltk::alert(const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
-  innards("!", 0, 0, fmt, ap, fl_ok, 0, 0);
+  innards("!", 0, 0, fmt, ap, ok, 0, 0);
   va_end(ap);
 }
 
-int fl_ask(const char *fmt, ...) {
+int fltk::ask(const char *fmt, ...) {
   va_list ap;
   va_start(ap, fmt);
-  int r = innards("?", 0, 0, fmt, ap, fl_no, fl_yes, 0);
+  int r = innards("?", 0, 0, fmt, ap, no, yes, 0);
   va_end(ap);
   return r;
 }
 
-int fl_choice(const char*fmt,const char *b0,const char *b1,const char *b2,...){
+int fltk::choice(const char*fmt,const char *b0,const char *b1,const char *b2,...){
   va_list ap;
   va_start(ap, b2);
   int r = innards("?", 0, 0, fmt, ap, b2, b1, b0);
@@ -198,26 +208,26 @@ int fl_choice(const char*fmt,const char *b0,const char *b1,const char *b2,...){
 static const char* input_innards(const char* fmt, va_list ap,
 				 const char* defstr, uchar type) {
   int r = innards("?", defstr ? defstr : "", type,
-		  fmt, ap, fl_cancel, fl_ok, 0);
-  return r ? input->value() : 0;
+		  fmt, ap, cancel, ok, 0);
+  return r ? textfield->value() : 0;
 }
 
-const char* fl_input(const char *fmt, const char *defstr, ...) {
+const char* fltk::input(const char *fmt, const char *defstr, ...) {
   va_list ap;
   va_start(ap, defstr);
-  const char* r = input_innards(fmt, ap, defstr, FL_NORMAL_INPUT);
+  const char* r = input_innards(fmt, ap, defstr, Input::NORMAL);
   va_end(ap);
   return r;
 }
 
-const char *fl_password(const char *fmt, const char *defstr, ...) {
+const char *fltk::password(const char *fmt, const char *defstr, ...) {
   va_list ap;
   va_start(ap, defstr);
-  const char* r = input_innards(fmt, ap, defstr, FL_SECRET_INPUT);
+  const char* r = input_innards(fmt, ap, defstr, Input::SECRET);
   va_end(ap);
   return r;
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.24 2002/10/26 09:55:31 spitzak Exp $".
+// End of "$Id: fl_ask.cxx,v 1.25 2002/12/09 04:52:28 spitzak Exp $".
 //

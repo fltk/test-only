@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.24 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.25 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,52 +27,49 @@
 // Keep uncompressed images in memory for later use. 
 
 #include <config.h>
-#include <fltk/Fl.h>
-#include <fltk/fl_draw.h>
-#include <fltk/Fl_Shared_Image.h>
-#include <fltk/Fl_Bitmap.h>
+#include <fltk/events.h>
+#include <fltk/draw.h>
+#include <fltk/SharedImage.h>
+#include <fltk/xbmImage.h>
 #include <fltk/x.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+using namespace fltk;
 
+const char*	SharedImage::shared_image_root=0;
+SharedImage*	SharedImage::first_image = 0;
+int		SharedImage::image_used=0;
+size_t		SharedImage::mem_usage_limit=0;
+size_t		SharedImage::mem_used=0;
+int		SharedImage::forbid_delete = 1;
 
-FL_IMAGES_API const char *Fl_Shared_Image::fl_shared_image_root=0;
-
-FL_IMAGES_API Fl_Shared_Image  *Fl_Shared_Image::first_image = 0;
-
-FL_IMAGES_API int Fl_Shared_Image::image_used=0;
-FL_IMAGES_API size_t Fl_Shared_Image::mem_usage_limit=0;
-
-FL_IMAGES_API size_t Fl_Shared_Image::mem_used=0;
-FL_IMAGES_API int Fl_Shared_Image::forbid_delete = 1;
-
-//     static size_t mem_used=0; (now moved to Fl.cxx !)
+// static size_t mem_used=0; (now moved to Fl.cxx !)
 // This contains the total number of pixmap pixels in the cache
 // WARNING : this is updated incrementally, so beware that it keeps balanced
 // when deleting or creating pixmaps !
 
-Fl_Shared_Image::~Fl_Shared_Image()
+SharedImage::~SharedImage()
 {
   if(forbid_delete)
     fprintf(stderr, 
-      "FLTK user error : deleting an Fl_Shared_Image object is forbiden !\n");
+      "FLTK user error : deleting an SharedImage object is forbiden !\n");
   if(id) mem_used -= w*h;
 }
 
-void Fl_Shared_Image::set_cache_size(size_t l)
+void SharedImage::set_cache_size(size_t l)
 {
   mem_usage_limit = l;
 }
 
-static Fl_Shared_Image *limage; // used to find the less used image
-void Fl_Shared_Image::find_less_used() {
+static SharedImage *limage; // used to find the less used image
+void SharedImage::find_less_used() {
   if(l1) l1->find_less_used();
   if(l2) l2->find_less_used();
   if(id && (limage->id == 0 || used<limage->used)) limage=this;
 }
-void Fl_Shared_Image::check_mem_usage()
+void SharedImage::check_mem_usage()
 {
   if(mem_usage_limit==0 || first_image==NULL || mem_used < mem_usage_limit) 
     return;
@@ -85,7 +82,7 @@ void Fl_Shared_Image::check_mem_usage()
       fl_delete_offscreen(Pixmap(limage->id));
       limage->id=0;
       if(limage->mask) {
-	fl_delete_bitmap(Pixmap(limage->mask));
+	delete_bitmap(Pixmap(limage->mask));
 	limage->mask = 0;
       }
     } else return;
@@ -93,25 +90,25 @@ void Fl_Shared_Image::check_mem_usage()
 }
 
 
-class fl_shared_image_destructor_class {
+class shared_image_destructor_class {
   int dummy;
 public:
-  fl_shared_image_destructor_class() { dummy = 0; }
-  ~fl_shared_image_destructor_class() {
-    if (Fl_Shared_Image::first_image) Fl_Shared_Image::first_image->clear_cache();
+  shared_image_destructor_class() { dummy = 0; }
+  ~shared_image_destructor_class() {
+    if (SharedImage::first_image) SharedImage::first_image->clear_cache();
   }
 };
 
-fl_shared_image_destructor_class fl_shared_image_destructor;
+shared_image_destructor_class shared_image_destructor;
 
-void Fl_Shared_Image::clear_cache()
+void SharedImage::clear_cache()
 {
   if(id) {
     mem_used -= w*h;
     fl_delete_offscreen((Pixmap)id);
     id=0;
     if(mask) {
-      fl_delete_bitmap((Pixmap)mask);
+      delete_bitmap((Pixmap)mask);
       mask = 0;
     }
   }
@@ -119,11 +116,11 @@ void Fl_Shared_Image::clear_cache()
   if (l2) l2->clear_cache();
 }
 
-void Fl_Shared_Image::set_root_directory(const char *d) {
-  fl_shared_image_root = d;
+void SharedImage::set_root_directory(const char *d) {
+  shared_image_root = d;
 }
 
-void Fl_Shared_Image::insert(Fl_Shared_Image*& p, Fl_Shared_Image* image) {
+void SharedImage::insert(SharedImage*& p, SharedImage* image) {
   if(p == 0)
     p = image;
   else {
@@ -133,7 +130,7 @@ void Fl_Shared_Image::insert(Fl_Shared_Image*& p, Fl_Shared_Image* image) {
   }
 }
 
-Fl_Shared_Image* Fl_Shared_Image::find(Fl_Shared_Image* image, const char* name) {
+SharedImage* SharedImage::find(SharedImage* image, const char* name) {
   if(image == 0) return 0;
   int c = strcmp(name, image->name);
   if(c == 0) return image;
@@ -142,30 +139,30 @@ Fl_Shared_Image* Fl_Shared_Image::find(Fl_Shared_Image* image, const char* name)
 }
 
 
-const char* Fl_Shared_Image::get_filename() {
+const char* SharedImage::get_filename() {
   return get_filename(name);
 }
 
-const char* Fl_Shared_Image::get_filename(const char* name)
+const char* SharedImage::get_filename(const char* name)
 {
-  if (name[0] == '/' || !fl_shared_image_root || !*fl_shared_image_root)
+  if (name[0] == '/' || !shared_image_root || !*shared_image_root)
     return name;
-  int m = strlen(fl_shared_image_root);
+  int m = strlen(shared_image_root);
   int n = strlen(name) + m + 2;
   static char *s;
   if (s) free(s);
   s = (char*) malloc(n+1);
-  strcpy(s, fl_shared_image_root);
+  strcpy(s, shared_image_root);
   if (s[m-1] != '/') s[m++] = '/';
   strcpy(s+m, name);
   return s;
 }
 
 
-Fl_Shared_Image* Fl_Shared_Image::get(Fl_Shared_Image* (*create)(),
+SharedImage* SharedImage::get(SharedImage* (*create)(),
 				      const char* name, const uchar *datas)
 {
-  Fl_Shared_Image *image=Fl_Shared_Image::find(first_image, name);
+  SharedImage *image=SharedImage::find(first_image, name);
   if(!image)
   {
     image=create();
@@ -175,7 +172,7 @@ Fl_Shared_Image* Fl_Shared_Image::get(Fl_Shared_Image* (*create)(),
     image->w = -1; // We mark the fact the it has never been measured yet
     image->l1 = image->l2 = 0;
     image->id=image->mask=0;
-    Fl_Shared_Image::insert(first_image, image);
+    SharedImage::insert(first_image, image);
   } else {
     if(image->datas==NULL) image->datas=datas;
     image->refcount++;
@@ -184,27 +181,27 @@ Fl_Shared_Image* Fl_Shared_Image::get(Fl_Shared_Image* (*create)(),
   return image;
 }
 
-void Fl_Shared_Image::reload(const uchar* pdatas)
+void SharedImage::reload(const uchar* pdatas)
 {
   if (id) {
     mem_used -= w*h;
     fl_delete_offscreen((Pixmap)id);
     id=0;
     if (mask) {
-      fl_delete_bitmap((Pixmap)mask);
+      delete_bitmap((Pixmap)mask);
       mask = 0;
     }
   }
   if (pdatas) datas = pdatas;
   measure(w, h);
 }
-void Fl_Shared_Image::reload(const char* name, const uchar* pdatas)
+void SharedImage::reload(const char* name, const uchar* pdatas)
 {
-  Fl_Shared_Image *image=Fl_Shared_Image::find(first_image, name);
+  SharedImage *image=SharedImage::find(first_image, name);
   if (image) image->reload(pdatas);
 }
 
-void Fl_Shared_Image::remove_from_tree(Fl_Shared_Image*& p, Fl_Shared_Image* image) {
+void SharedImage::remove_from_tree(SharedImage*& p, SharedImage* image) {
   if (p) {
     int c = strcmp(image->name, p->name);
     if (c == 0) {
@@ -218,7 +215,7 @@ void Fl_Shared_Image::remove_from_tree(Fl_Shared_Image*& p, Fl_Shared_Image* ima
   }
 }
 
-int Fl_Shared_Image::remove()
+int SharedImage::remove()
 {
   if (--refcount) return 0;
   remove_from_tree(first_image, this);
@@ -227,14 +224,14 @@ int Fl_Shared_Image::remove()
   forbid_delete = 1;
   return 1;
 }
-int Fl_Shared_Image::remove(const char* name)
+int SharedImage::remove(const char* name)
 {
-  Fl_Shared_Image *image=Fl_Shared_Image::find(first_image, name);
+  SharedImage *image=SharedImage::find(first_image, name);
   if (image) return image->remove();
   else return 0;
 }
 
-void Fl_Shared_Image::draw(int X, int Y, int, int, Fl_Flags flags)
+void SharedImage::draw(int X, int Y, int, int, Flags flags)
 {
   if (w<0) measure(w, h);
   if (w==0) return;
@@ -257,5 +254,5 @@ void Fl_Shared_Image::draw(int X, int Y, int, int, Fl_Flags flags)
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.24 2001/12/10 06:25:42 spitzak Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.25 2002/12/09 04:52:26 spitzak Exp $"
 //

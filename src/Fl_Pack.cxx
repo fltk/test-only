@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pack.cxx,v 1.21 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Pack.cxx,v 1.22 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Packing widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,7 +23,10 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl_Pack.h>
+#include <fltk/PackedGroup.h>
+#include <fltk/layout.h>
+#include <fltk/Box.h>
+using namespace fltk;
 
 // Resizes all the child widgets to be the full width and stacks them
 // vertically. All widgets before the resizable (or all of them if
@@ -34,34 +37,34 @@
 // A child widget can change it's height by calling layout() on itself
 // and this will rearrange all other widgets to accomodate the new height.
 
-// If resizable is not set, the Fl_Pack itself resizes to surround the
-// items, allowing it to be imbedded in a surrounding Fl_Pack.
+// If resizable is not set, the PackedGroup itself resizes to surround the
+// items, allowing it to be imbedded in a surrounding PackedGroup.
 
 // The code can support widgets that extend vertically, these are put
 // against the left edge (or the right if after the resizable()). This
-// is done by setting FL_VERTICAL_LAYOUT in the type().
+// is done by setting VERTICAL_LAYOUT in the type().
 
-#define is_vertical(widget) (type()&1 || widget->flags()&FL_PACK_VERTICAL)
+#define is_vertical(widget) (type()&1 || widget->flags()&PACK_VERTICAL)
 
-Fl_Pack::Fl_Pack(int x,int y,int w ,int h,const char *l)
-: Fl_Group(x, y, w, h, l) {
+PackedGroup::PackedGroup(int x,int y,int w ,int h,const char *l)
+: Group(x, y, w, h, l) {
   spacing_ = 0;
   type(VERTICAL);
   //resizable(0);
 }
 
-void Fl_Pack::layout() {
+void PackedGroup::layout() {
   for (int iter = 0; iter < 2; iter++) {
     if (!layout_damage()) break;
 
     // we only need to do something special if the group is resized:
-    if (!(layout_damage() & (FL_LAYOUT_WH|FL_LAYOUT_DAMAGE)) || !children()) {
-      Fl_Group::layout();
-      if (!(layout_damage() & FL_LAYOUT_DAMAGE)) break;
+    if (!(layout_damage() & (LAYOUT_WH|LAYOUT_DAMAGE)) || !children()) {
+      Group::layout();
+      if (!(layout_damage() & LAYOUT_DAMAGE)) break;
     }
 
     // clear the layout flags, so any resizes of children will set them again:
-    Fl_Widget::layout();
+    Widget::layout();
 
     // This is the rectangle to lay out the remaining widgets in:
     int x = 0;
@@ -75,7 +78,7 @@ void Fl_Pack::layout() {
 
     // layout all the top & left widgets (the ones before the resizable):
     int i; for (i = 0; i < children(); i++) {
-      Fl_Widget* widget = child(i);
+      Widget* widget = child(i);
       if (widget->contains(resizable())) break;
       if (!widget->visible()) continue;
       if (is_vertical(widget)) {
@@ -95,7 +98,7 @@ void Fl_Pack::layout() {
 
     // layout all the bottom & right widgets by going backwards:
     for (i = children()-1; i > resizable_index; i--) {
-      Fl_Widget* widget = child(i);
+      Widget* widget = child(i);
       if (!widget->visible()) continue;
       if (is_vertical(widget)) {
 	int W = widget->w();
@@ -114,7 +117,7 @@ void Fl_Pack::layout() {
 
     // Lay out the resizable widget to fill the remaining space:
     if (resizable_index < children()) {
-      Fl_Widget* widget = child(resizable_index);
+      Widget* widget = child(resizable_index);
       widget->resize(x, y, r-x, b-y);
       widget->layout();
     }
@@ -130,5 +133,5 @@ void Fl_Pack::layout() {
 }
 
 //
-// End of "$Id: Fl_Pack.cxx,v 1.21 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Pack.cxx,v 1.22 2002/12/09 04:52:26 spitzak Exp $".
 //

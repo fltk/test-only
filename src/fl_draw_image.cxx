@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image.cxx,v 1.17 2002/09/18 05:51:46 spitzak Exp $"
+// "$Id: fl_draw_image.cxx,v 1.18 2002/12/09 04:52:29 spitzak Exp $"
 //
 // Image drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -24,8 +24,8 @@
 //
 
 #include <config.h>
-#include <fltk/Fl.h>
-#include <fltk/fl_draw.h>
+#include <fltk/events.h>
+#include <fltk/draw.h>
 #include <fltk/x.h>
 
 // I hope a simple and portable method of drawing color and monochrome
@@ -38,41 +38,43 @@
 // the "delta" and "linedelta", making them negative, though this may
 // defeat some of the shortcuts in translating the image for X.
 
-// These files define "innards" and the "DITHER_RECTF" macro:
+// These files define "innards" and the "DITHER_FILLRECT" macro:
 #ifdef _WIN32
 # include "fl_draw_image_win32.cxx"
 #elif (defined(__APPLE__) && !USE_X11)
 # include "fl_draw_image_mac.cxx"
 #else
-#include "fl_draw_image_x.cxx"
+# include "fl_draw_image_x.cxx"
 #endif
 
-void fl_draw_image(const uchar* buf, int x, int y, int w, int h, int d, int l){
+void fltk::drawimage(const uchar* buf, int x, int y, int w, int h, int d, int l){
   innards(buf,x,y,w,h,d,l,(d<3&&d>-3),0,0);
 }
-void fl_draw_image(Fl_Draw_Image_Cb cb, void* data,
+void fltk::drawimage(DrawImageCallback cb, void* data,
 		   int x, int y, int w, int h,int d) {
   innards(0,x,y,w,h,d,0,(d<3&&d>-3),cb,data);
 }
-void fl_draw_image_mono(const uchar* buf, int x, int y, int w, int h, int d, int l){
+void fltk::drawimagemono(const uchar* buf, int x, int y, int w, int h, int d, int l){
   innards(buf,x,y,w,h,d,l,1,0,0);
 }
-void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data,
+void fltk::drawimagemono(DrawImageCallback cb, void* data,
 		   int x, int y, int w, int h,int d) {
   innards(0,x,y,w,h,d,0,1,cb,data);
 }
 
-void fl_rectf(int x, int y, int w, int h, Fl_Color C) {
-  if (DITHER_RECTF) {
-    fl_color(C);
-    fl_rectf(x,y,w,h);
+#if 0
+void fltk::fill_color_rect(int x, int y, int w, int h, Color C) {
+  if (!DITHER_FILLRECT) {
+    setcolor(C);
+    fillrect(x,y,w,h);
   } else {
     uchar c[3];
-    fl_get_color(C, c[0], c[1], c[2]);
+    split_color(C, c[0], c[1], c[2]);
     innards(c,x,y,w,h,0,0,0,0,0);
   }
 }
+#endif
 
 //
-// End of "$Id: fl_draw_image.cxx,v 1.17 2002/09/18 05:51:46 spitzak Exp $".
+// End of "$Id: fl_draw_image.cxx,v 1.18 2002/12/09 04:52:29 spitzak Exp $".
 //

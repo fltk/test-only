@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Radio_Button.cxx,v 1.1 2002/02/10 22:57:48 spitzak Exp $"
+// "$Id: Fl_Radio_Button.cxx,v 1.2 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Radio button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,40 +23,40 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Radio_Button.h>
-#include <fltk/fl_draw.h>
-#include <fltk/Fl_Group.h>
+#include <fltk/RadioButton.h>
+#include <fltk/draw.h>
+#include <fltk/Box.h>
+using namespace fltk;
 
-static void default_glyph(const Fl_Widget* widget, int glyph,
-			  int x,int y,int w,int h, Fl_Flags flags)
+static void default_glyph(const Widget* widget, int glyph,
+			  int x,int y,int w,int h, Flags flags)
 {
   // h = (h+1)&(~1); // even only
-  Fl_Boxtype box = widget->button_box();
-  box->draw(x, y, w, h, widget->button_color(), flags);
+  Box* box = widget->buttonbox();
+  box->draw(x, y, w, h, widget->buttoncolor(), flags);
   box->inset(x, y, w, h);
-  if (flags & FL_VALUE) {
-    Fl_Color color = (box == FL_NO_BOX && (flags&FL_SELECTED)) ?
-      widget->selection_text_color() : widget->text_color();
-    fl_color(fl_inactive(color, flags));
+  if (flags & VALUE) {
+    Color color = (box == NO_BOX && (flags&SELECTED)) ?
+      widget->selection_textcolor() : widget->textcolor();
+    setcolor(inactive(color, flags));
     int d = h/6;
-    fl_ellipse(x+d, y+d, h-d-d-1, h-d-d-1);
-    fl_fill();
+    addellipse(x+d, y+d, h-d-d-1, h-d-d-1);
+    fillpath();
   }
 }
 
-static void revert(Fl_Style* s) {
-  s->box = FL_NO_BOX;
-  s->color = FL_GRAY;
-  s->button_box = FL_ROUND_DOWN_BOX;
-  s->button_color = FL_WHITE;
+static void revert(Style* s) {
+  s->box = NO_BOX;
+  s->color = GRAY75;
+  s->buttonbox = ROUND_DOWN_BOX;
+  s->buttoncolor = WHITE;
   s->glyph = ::default_glyph;
 }
-static Fl_Named_Style style("Radio_Button", revert, &Fl_Radio_Button::default_style);
-Fl_Named_Style* Fl_Radio_Button::default_style = &::style;
+static NamedStyle style("Radio_Button", revert, &RadioButton::default_style);
+NamedStyle* RadioButton::default_style = &::style;
 
-Fl_Radio_Button::Fl_Radio_Button(int x, int y, int w, int h, const char *l)
-  : Fl_Check_Button(x, y, w, h, l)
+RadioButton::RadioButton(int x, int y, int w, int h, const char *l)
+  : CheckButton(x, y, w, h, l)
 {
   style(default_style);
   type(RADIO);

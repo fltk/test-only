@@ -1,5 +1,5 @@
 //
-// "$Id: list_visuals.cxx,v 1.8 2001/07/29 22:17:02 spitzak Exp $"
+// "$Id: list_visuals.cxx,v 1.9 2002/12/09 04:52:31 spitzak Exp $"
 //
 // Visual list utility for the Fast Light Tool Kit (FLTK).
 //
@@ -32,37 +32,18 @@
 //
 
 #ifdef _WIN32
-#include <fltk/Fl.h>
-#include <fltk/fl_message.h>
+#include <fltk/error.h>
 
 int main(int, char**) {
-  fl_alert("Currently, this program works only under X.");
+  fltk::fatal("Currently, this program works only under X.");
   return 1;
 }
 
 #else
 
 #include <config.h>
-
-#ifndef Fl_H
-
 #include <fltk/x.h>
 #include <stdio.h>
-#include <stdlib.h>
-
-Display *fl_display;
-int fl_screen;
-const char *dname;
-void fl_open_display() {
-  fl_display = XOpenDisplay(dname);
-  if (!fl_display) {
-    fprintf(stderr,"Can't open display: %s\n",XDisplayName(dname));
-    exit(1);
-  }
-  fl_screen = DefaultScreen(fl_display);
-}
-
-#endif
 
 const char *ClassNames[] = {
   "StaticGray ",
@@ -82,12 +63,17 @@ typedef struct _OverlayInfo {
 } OverlayInfo;
 
 #if HAVE_MULTIBUF
+#define Window XWindow
 #include <X11/extensions/multibuf.h>
+#undef Window
 #endif
 
 #if HAVE_XDBE
+#define Window XWindow
 #include <X11/extensions/Xdbe.h>
+#undef Window
 #endif
+
 
 static void print_mask(XVisualInfo* p) {
   int n = 0;
@@ -118,23 +104,24 @@ static void print_mask(XVisualInfo* p) {
 }
 
 void list_visuals() {
-  fl_open_display();
+  using namespace fltk;
+  fltk::open_display();
   XVisualInfo vTemplate;
   int num;
-  XVisualInfo *visualList = XGetVisualInfo(fl_display,0,&vTemplate,&num);
+  XVisualInfo *visualList = XGetVisualInfo(xdisplay,0,&vTemplate,&num);
 
   XPixmapFormatValues *pfvlist;
   static int numpfv;
-  pfvlist = XListPixmapFormats(fl_display, &numpfv);
+  pfvlist = XListPixmapFormats(xdisplay, &numpfv);
 
   OverlayInfo *overlayInfo = 0;
   int numoverlayinfo = 0;
-  Atom overlayVisualsAtom = XInternAtom(fl_display,"SERVER_OVERLAY_VISUALS",1);
+  Atom overlayVisualsAtom = XInternAtom(xdisplay,"SERVER_OVERLAY_VISUALS",1);
   if (overlayVisualsAtom) {
     unsigned long sizeData, bytesLeft;
     Atom actualType;
     int actualFormat;
-    if (!XGetWindowProperty(fl_display, RootWindow(fl_display, fl_screen),
+    if (!XGetWindowProperty(xdisplay, RootWindow(xdisplay, xscreen),
 			   overlayVisualsAtom, 0L, 10000L, False,
 			   overlayVisualsAtom, &actualType, &actualFormat,
 			   &sizeData, &bytesLeft,
@@ -146,8 +133,8 @@ void list_visuals() {
   int event_base, error_base;
   XmbufBufferInfo *mbuf, *sbuf;
   int nmbuf = 0, nsbuf = 0;
-  if (XmbufQueryExtension(fl_display,&event_base, &error_base)) {
-    XmbufGetScreenInfo(fl_display,RootWindow(fl_display,fl_screen),
+  if (XmbufQueryExtension(xdisplay,&event_base, &error_base)) {
+    XmbufGetScreenInfo(xdisplay,RootWindow(xdisplay,xscreen),
 		       &nmbuf, &mbuf, &nsbuf, &sbuf);
   }
 #endif
@@ -156,10 +143,10 @@ void list_visuals() {
   int event_base, error_base;
   int numdouble = 0;
   XdbeVisualInfo *dbe = 0;
-  if (XdbeQueryExtension(fl_display, &event_base, &error_base)) {
-    Drawable root = RootWindow(fl_display,fl_screen);
+  if (XdbeQueryExtension(xdisplay, &event_base, &error_base)) {
+    XWindow root = RootWindow(xdisplay,xscreen);
     int numscreens = 1;
-    XdbeScreenVisualInfo *a = XdbeGetVisualInfo(fl_display,&root,&numscreens);
+    XdbeScreenVisualInfo *a = XdbeGetVisualInfo(xdisplay,&root,&numscreens);
     if (!a) printf("error getting double buffer visuals\n");
     else {
       dbe = a->visinfo;
@@ -213,7 +200,7 @@ void list_visuals() {
       printf(" doublebuf(perflevel %d)",dbe[j].perflevel);
 #endif
 
-    if (p->visualid==XVisualIDFromVisual(DefaultVisual(fl_display,fl_screen)))
+    if (p->visualid==XVisualIDFromVisual(DefaultVisual(xdisplay,xscreen)))
       printf(" (default visual)");
 
     putchar('\n');
@@ -222,10 +209,11 @@ void list_visuals() {
 
 #endif
 
-#ifndef Fl_H
+#ifndef fltk_run_h
+#include <fltk/run.h>
 int main(int argc, char **argv) {
   if (argc == 1);
-  else if (argc == 2 && argv[1][0]!='-') dname = argv[1];
+  else if (argc == 2 && argv[1][0]!='-') fltk::display(argv[1]);
   else {fprintf(stderr,"usage: %s <display>\n",argv[0]); exit(1);}
   list_visuals();
   return 0;
@@ -233,5 +221,5 @@ int main(int argc, char **argv) {
 #endif
 
 //
-// End of "$Id: list_visuals.cxx,v 1.8 2001/07/29 22:17:02 spitzak Exp $".
+// End of "$Id: list_visuals.cxx,v 1.9 2002/12/09 04:52:31 spitzak Exp $".
 //

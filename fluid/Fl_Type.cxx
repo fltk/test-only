@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.32 2002/06/09 23:20:12 spitzak Exp $"
+// "$Id: Fl_Type.cxx,v 1.33 2002/12/09 04:52:22 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,35 +23,35 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// Each object created by Fluid is a subclass of Fl_Type. The majority
-// of these are going to describe Fl_Widgets, so you will see the word
-// "widget" used a lot instead of Fl_Type. But there are also functions
+// Each object created by Fluid is a subclass of FluidType. The majority
+// of these are going to describe fltk::Widgets, so you will see the word
+// "widget" used a lot instead of FluidType. But there are also functions
 // and lines of code and anything else that can go into the browser.
 //
-// A hierarchial list of all Fl_Types is managed. The Widget Browser
+// A hierarchial list of all FluidTypes is managed. The Widget Browser
 // is the display in the main window of this list. Most of this code
 // is concerned with drawing and updating the widget browser, with
 // keeping the list up to date and rearranging it, and keeping track
 // of which objects are selected.
 //
-// The "Type Browser" is also a list of Fl_Type, but is used for the
+// The "Type Browser" is also a list of FluidType, but is used for the
 // popup menu of new objects to create. In this case these are
 // "factory instances", not "real" ones.  Factory instances exist only
 // so the "make" method can be called on them.  They are not in the
 // linked list and are not written to files or copied or otherwise
 // examined.
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Multi_Browser.h>
-#include <fltk/Fl_Item.h>
-#include <fltk/fl_draw.h>
+#include <fltk/run.h>
+#include <fltk/MultiBrowser.h>
+#include <fltk/Item.h>
+#include <fltk/draw.h>
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
 #include <config.h> // for strcasecmp
 
-#include "Fl_Type.h"
+#include "FluidType.h"
 #include "Fluid_Image.h"
 
 ////////////////////////////////////////////////////////////////
@@ -73,7 +73,7 @@ const Enumeration* from_value(int data, const Enumeration* table)
 
 const Enumeration* from_text(const char* text, const Enumeration* table)
 {
-  // For back compatability we strip leading FL_ from symbols:
+  // For back compatability we strip leading fltk:: from symbols:
   if (text[0]=='F' && text[1]=='L' && text[2]=='_') text += 3;
   for (;table->menu_entry; table++) {
     if (table->symbol && !strcmp(table->symbol, text)) return table;
@@ -116,21 +116,21 @@ const char* number_to_text(int number, const Enumeration* table)
 }
 
 ////////////////////////////////////////////////////////////////
-// Code to translate a table of Enumeration entries into Fl_Menu items:
+// Code to translate a table of Enumeration entries into fltk::Menu items:
 
-class Enumeration_List : public Fl_List {
-  virtual int children(const Fl_Menu_*, const int* indexes, int level);
-  virtual Fl_Widget* child(const Fl_Menu_*, const int* indexes, int level);
+class Enumeration_List : public fltk::List {
+  virtual int children(const fltk::Menu*, const int* indexes, int level);
+  virtual fltk::Widget* child(const fltk::Menu*, const int* indexes, int level);
 };
 
 static Enumeration_List enumeration_list;
 
-void set_menu(Fl_Menu_* menu, const Enumeration* list) {
+void set_menu(fltk::Menu* menu, const Enumeration* list) {
   menu->list(&enumeration_list);
   menu->user_data((void*)list);
 }
 
-int Enumeration_List::children(const Fl_Menu_* menu, const int*, int level)
+int Enumeration_List::children(const fltk::Menu* menu, const int*, int level)
 {
   if (level) return -1;
   const Enumeration* e = (const Enumeration*)(menu->user_data());
@@ -139,16 +139,16 @@ int Enumeration_List::children(const Fl_Menu_* menu, const int*, int level)
   return n;
 }
 
-Fl_Widget* Enumeration_List::child(const Fl_Menu_* menu, const int* indexes, int)
+fltk::Widget* Enumeration_List::child(const fltk::Menu* menu, const int* indexes, int)
 {
   const Enumeration* e = (const Enumeration*)(menu->user_data());
   int n = *indexes;
   while (n && e->menu_entry) {n--; e++;}
   if (!e->menu_entry) return 0;
-  static Fl_Widget* widget;
+  static fltk::Widget* widget;
   if (!widget) {
-    Fl_Group::current(0);
-    widget = new Fl_Item();
+    fltk::Group::current(0);
+    widget = new fltk::Item();
   }
   widget->user_data((void*)e);
   widget->label(e->menu_entry);
@@ -159,35 +159,34 @@ Fl_Widget* Enumeration_List::child(const Fl_Menu_* menu, const int* indexes, int
 
 ////////////////////////////////////////////////////////////////
 
-Fl_Type *Fl_Type::first;
-Fl_Type *Fl_Type::current;
+FluidType *FluidType::first;
+FluidType *FluidType::current;
 
-class Widget_List : public Fl_List {
-  virtual int children(const Fl_Menu_*, const int* indexes, int level);
-  virtual Fl_Widget* child(const Fl_Menu_*, const int* indexes, int level);
-  virtual void flags_changed(const Fl_Menu_*, Fl_Widget*);
+class Widget_List : public fltk::List {
+  virtual int children(const fltk::Menu*, const int* indexes, int level);
+  virtual fltk::Widget* child(const fltk::Menu*, const int* indexes, int level);
+  virtual void flags_changed(const fltk::Menu*, fltk::Widget*);
 };
 
 static Widget_List widgetlist;
 
-static Fl_Browser *widget_browser;
+static fltk::Browser *widget_browser;
 
-static void Widget_Browser_callback(Fl_Widget *,void *) {
-  if (Fl_Type::current) Fl_Type::current->open();
+static void Widget_Browser_callback(fltk::Widget *,void *) {
+  if (FluidType::current) FluidType::current->open();
 }
 
-Fl_Widget *make_widget_browser(int x,int y,int w,int h) {
-  widget_browser = new Fl_Multi_Browser(x,y,w,h);
-  widget_browser->end();
+fltk::Widget *make_widget_browser(int x,int y,int w,int h) {
+  widget_browser = new fltk::MultiBrowser(x,y,w,h);
   widget_browser->list(&widgetlist);
   widget_browser->callback(Widget_Browser_callback);
-  widget_browser->when(FL_WHEN_ENTER_KEY);
+  widget_browser->when(fltk::WHEN_ENTER_KEY);
   widget_browser->indented(1);
   return widget_browser;
 }
 
-int Widget_List::children(const Fl_Menu_*, const int* indexes, int level) {
-  Fl_Type* item = Fl_Type::first;
+int Widget_List::children(const fltk::Menu*, const int* indexes, int level) {
+  FluidType* item = FluidType::first;
   if (!item) return 0;
   for (int l = 0; l < level; l++) {
     for (int i = indexes[l]; item && i; --i) item = item->next_brother;
@@ -198,8 +197,8 @@ int Widget_List::children(const Fl_Menu_*, const int* indexes, int level) {
   return n;
 }
 
-Fl_Widget* Widget_List::child(const Fl_Menu_*, const int* indexes, int level) {
-  Fl_Type* item = Fl_Type::first;
+fltk::Widget* Widget_List::child(const fltk::Menu*, const int* indexes, int level) {
+  FluidType* item = FluidType::first;
   if (!item) return 0;
   for (int l = 0;; l++) {
     for (int i = indexes[l]; item && i; --i) item = item->next_brother;
@@ -207,10 +206,10 @@ Fl_Widget* Widget_List::child(const Fl_Menu_*, const int* indexes, int level) {
     if (l >= level) break;
     item = item->first_child;
   }
-  static Fl_Widget* widget;
+  static fltk::Widget* widget;
   if (!widget) {
-    Fl_Group::current(0);
-    widget = new Fl_Item();
+    fltk::Group::current(0);
+    widget = new fltk::Item();
   }
   widget->user_data(item);
   if (item->selected) widget->set_selected();
@@ -225,14 +224,14 @@ Fl_Widget* Widget_List::child(const Fl_Menu_*, const int* indexes, int level) {
   return widget;
 }
 
-void Widget_List::flags_changed(const Fl_Menu_*, Fl_Widget* w) {
-  Fl_Type* item = (Fl_Type*)(w->user_data());
+void Widget_List::flags_changed(const fltk::Menu*, fltk::Widget* w) {
+  FluidType* item = (FluidType*)(w->user_data());
   item->open_ = w->value();
   item->new_selected = w->selected();
   if (item->new_selected != item->selected) selection_changed(item);
 }
 
-void select(Fl_Type* item, int value) {
+void select(FluidType* item, int value) {
   item->new_selected = value != 0;
   if (item->new_selected != item->selected) {
     selection_changed(item);
@@ -240,14 +239,14 @@ void select(Fl_Type* item, int value) {
   }
 }
 
-void select_only(Fl_Type* i) {
-  for (Fl_Type* item = Fl_Type::first; item; item = item->walk())
+void select_only(FluidType* i) {
+  for (FluidType* item = FluidType::first; item; item = item->walk())
     select(item, item == i);
   if (!widget_browser || !i) return;
   int indexes[100];
   int L = 100;
   while (i) {
-    Fl_Type* child = i->parent ? i->parent->first_child : Fl_Type::first;
+    FluidType* child = i->parent ? i->parent->first_child : FluidType::first;
     int n; for (n = 0; child != i; child=child->next_brother) n++;
     indexes[--L] = n;
     i = i->parent;
@@ -257,18 +256,18 @@ void select_only(Fl_Type* i) {
 }
 
 void deselect() {
-  for (Fl_Type* item = Fl_Type::first; item; item = item->walk())
+  for (FluidType* item = FluidType::first; item; item = item->walk())
     select(item,0);
 }
 
 // Generate a descriptive text for this item, to put in browser & window
 // titles. Warning: the buffer used is overwritten each time!
-const char* Fl_Type::title() {
+const char* FluidType::title() {
 #define MAXLABEL 128
   static char buffer[MAXLABEL];
   const char* t1 = type_name();
   const char* type = 0;
-  if (is_widget()) type = t1 = ((Fl_Widget_Type*)this)->subclass();
+  if (is_widget()) type = t1 = ((WidgetType*)this)->subclass();
   const char* name = this->name();
   bool quoted = false;
   if (!name || !*name) {
@@ -301,7 +300,7 @@ void redraw_browser() {
   widget_browser->redraw();
 }
 
-Fl_Type::Fl_Type() {
+FluidType::FluidType() {
   factory = 0;
   parent = 0;
   first_child = 0;
@@ -315,13 +314,13 @@ Fl_Type::Fl_Type() {
   callback_ = 0;
 }
 
-// Calling walk(N) will return every Fl_Type under N by scanning
+// Calling walk(N) will return every FluidType under N by scanning
 // the tree. Start with N->first_child. If N is null this will
-// walk the entire tree, start with Fl_Type::first.
+// walk the entire tree, start with FluidType::first.
 
-Fl_Type* Fl_Type::walk(const Fl_Type* topmost) const {
+FluidType* FluidType::walk(const FluidType* topmost) const {
   if (first_child) return first_child;
-  const Fl_Type* p = this;
+  const FluidType* p = this;
   while (!p->next_brother) {
     p = p->parent;
     if (p == topmost) return 0;
@@ -331,9 +330,9 @@ Fl_Type* Fl_Type::walk(const Fl_Type* topmost) const {
 
 // walk() is the same as walk(0), which walks the entire tree:
 
-Fl_Type* Fl_Type::walk() const {
+FluidType* FluidType::walk() const {
   if (first_child) return first_child;
-  const Fl_Type* p = this;
+  const FluidType* p = this;
   while (!p->next_brother) {
     p = p->parent;
     if (!p) return 0;
@@ -342,15 +341,15 @@ Fl_Type* Fl_Type::walk() const {
 }
 
 // turn a click at x,y on this into the actual picked object:
-Fl_Type* Fl_Type::click_test(int,int) {return 0;}
-void Fl_Type::add_child(Fl_Type*, Fl_Type*) {}
-void Fl_Type::move_child(Fl_Type*, Fl_Type*) {}
-void Fl_Type::remove_child(Fl_Type*) {}
+FluidType* FluidType::click_test(int,int) {return 0;}
+void FluidType::add_child(FluidType*, FluidType*) {}
+void FluidType::move_child(FluidType*, FluidType*) {}
+void FluidType::remove_child(FluidType*) {}
 
 // add as a new child of p:
-void Fl_Type::add(Fl_Type *p) {
+void FluidType::add(FluidType *p) {
   parent = p;
-  Fl_Type* q = p ? p->first_child : Fl_Type::first;
+  FluidType* q = p ? p->first_child : FluidType::first;
   if (q) {
     // find the last child:
     while (q->next_brother) q = q->next_brother;
@@ -362,7 +361,7 @@ void Fl_Type::add(Fl_Type *p) {
     if (p)
       p->first_child = this;
     else
-      Fl_Type::first = this;
+      FluidType::first = this;
   }
   if (p) p->add_child(this,0);
   open_ = 1;
@@ -371,12 +370,12 @@ void Fl_Type::add(Fl_Type *p) {
 }
 
 // add to a parent before another widget:
-void Fl_Type::insert(Fl_Type *g) {
+void FluidType::insert(FluidType *g) {
   parent = g->parent;
   previous_brother = g->previous_brother;
   if (previous_brother) previous_brother->next_brother = this;
   else if (parent) parent->first_child = this;
-  else Fl_Type::first = this;
+  else FluidType::first = this;
   next_brother = g;
   g->previous_brother = this;
   if (parent) parent->add_child(this, g);
@@ -384,10 +383,10 @@ void Fl_Type::insert(Fl_Type *g) {
 }
 
 // delete from parent:
-void Fl_Type::remove() {
+void FluidType::remove() {
   if (previous_brother) previous_brother->next_brother = next_brother;
   else if (parent) parent->first_child = next_brother;
-  else Fl_Type::first = next_brother;
+  else FluidType::first = next_brother;
   if (next_brother) next_brother->previous_brother = previous_brother;
   previous_brother = next_brother = 0;
   if (parent) parent->remove_child(this);
@@ -422,42 +421,42 @@ int storestring(const char *n, const char * & p, int nostrip) {
   return 1;
 }
 
-void Fl_Type::name(const char *n) {
+void FluidType::name(const char *n) {
   if (storestring(n,name_)) widget_browser->redraw();
 }
 
-void Fl_Type::label(const char *n) {
+void FluidType::label(const char *n) {
   if (storestring(n,label_,1)) {
     setlabel(label_);
     if (!name_) widget_browser->redraw();
   }
 }
 
-void Fl_Type::tooltip(const char *n) {
+void FluidType::tooltip(const char *n) {
   storestring(n,tooltip_,1);
 }
 
-void Fl_Type::callback(const char *n) {
+void FluidType::callback(const char *n) {
   storestring(n,callback_);
 }
 
-void Fl_Type::user_data(const char *n) {
+void FluidType::user_data(const char *n) {
   storestring(n,user_data_);
 }
 
-void Fl_Type::user_data_type(const char *n) {
+void FluidType::user_data_type(const char *n) {
   storestring(n,user_data_type_);
 }
 
-void Fl_Type::open() {
+void FluidType::open() {
   printf("Open of '%s' is not yet implemented\n",type_name());
 }
 
-void Fl_Type::setlabel(const char *) {}
+void FluidType::setlabel(const char *) {}
 
-Fl_Type::~Fl_Type() {
-  for (Fl_Type* f = first_child; f;) {
-    Fl_Type* next = f->next_brother;
+FluidType::~FluidType() {
+  for (FluidType* f = first_child; f;) {
+    FluidType* next = f->next_brother;
     delete f;
     f = next;
   }
@@ -470,45 +469,45 @@ Fl_Type::~Fl_Type() {
   if (widget_browser) widget_browser->relayout();
 }
 
-int Fl_Type::is_parent() const {return 0;}
-int Fl_Type::is_widget() const {return 0;}
-int Fl_Type::is_valuator() const {return 0;}
-int Fl_Type::is_button() const {return 0;}
-int Fl_Type::is_light_button() const {return 0;}
-int Fl_Type::is_menu_item() const {return 0;}
-int Fl_Type::is_menu_button() const {return 0;}
-int Fl_Type::is_group() const {return 0;}
-int Fl_Type::is_window() const {return 0;}
-int Fl_Type::is_code_block() const {return 0;}
-int Fl_Type::is_decl_block() const {return 0;}
-int Fl_Type::is_class() const {return 0;}
-int Fl_Type::is_counter() const {return 0;}
-int Fl_Type::is_adjuster() const {return 0;}
-int Fl_Type::is_slider() const {return 0;}
-int Fl_Type::is_scrollbar() const {return 0;}
-int Fl_Type::is_choice() const {return 0;}
-int Fl_Type::is_browser() const {return 0;}
-int Fl_Type::is_input() const {return 0;}
-int Fl_Type::is_value_input() const {return 0;}
-int Fl_Type::is_value_output() const {return 0;}
-int Fl_Type::is_value_slider() const {return 0;}
+int FluidType::is_parent() const {return 0;}
+int FluidType::is_widget() const {return 0;}
+int FluidType::is_valuator() const {return 0;}
+int FluidType::is_button() const {return 0;}
+int FluidType::is_light_button() const {return 0;}
+int FluidType::is_menu_item() const {return 0;}
+int FluidType::is_menu_button() const {return 0;}
+int FluidType::is_group() const {return 0;}
+int FluidType::is_window() const {return 0;}
+int FluidType::is_code_block() const {return 0;}
+int FluidType::is_decl_block() const {return 0;}
+int FluidType::is_class() const {return 0;}
+int FluidType::is_counter() const {return 0;}
+int FluidType::is_adjuster() const {return 0;}
+int FluidType::is_slider() const {return 0;}
+int FluidType::is_scrollbar() const {return 0;}
+int FluidType::is_choice() const {return 0;}
+int FluidType::is_browser() const {return 0;}
+int FluidType::is_input() const {return 0;}
+int FluidType::is_value_input() const {return 0;}
+int FluidType::is_value_output() const {return 0;}
+int FluidType::is_value_slider() const {return 0;}
 
 ////////////////////////////////////////////////////////////////
 
-Fl_Type *in_this_only; // set if menu popped-up in window
+FluidType *in_this_only; // set if menu popped-up in window
 
-void select_all_cb(Fl_Widget *,void *) {
-  Fl_Type *parent = Fl_Type::current ? Fl_Type::current->parent : 0;
+void select_all_cb(fltk::Widget *,void *) {
+  FluidType *parent = FluidType::current ? FluidType::current->parent : 0;
   if (in_this_only) {
     // make sure we don't select outside the current window
-    Fl_Type* p;
+    FluidType* p;
     for (p = parent; p && p != in_this_only; p = p->parent);
     if (!p) parent = in_this_only;
   }
   for (;;) {
     // select all children of parent:
     int changed = 0;
-    for (Fl_Type *t = parent ? parent->first_child : Fl_Type::first;
+    for (FluidType *t = parent ? parent->first_child : FluidType::first;
 	 t; t = t->walk(parent))
       if (!t->selected) {changed = 1; select(t,1);}
     if (changed) break;
@@ -519,9 +518,9 @@ void select_all_cb(Fl_Widget *,void *) {
 }
 
 void delete_all(int selected_only) {
-  for (Fl_Type *f = Fl_Type::first; f;) {
+  for (FluidType *f = FluidType::first; f;) {
     if (f->selected || !selected_only) {
-      Fl_Type* next = f->next_brother;
+      FluidType* next = f->next_brother;
       delete f;
       f = next;
     } else {
@@ -537,33 +536,33 @@ void delete_all(int selected_only) {
 
 // move f (and it's children) into list before g:
 // returns pointer to whatever is after f & children
-void Fl_Type::move_before(Fl_Type* g) {
+void FluidType::move_before(FluidType* g) {
   remove();
   insert(g);
 }
 
 // move selected widgets in their parent's list:
-void earlier_cb(Fl_Widget*,void*) {
-  Fl_Type *parent = Fl_Type::current ? Fl_Type::current->parent : 0;
-  for (Fl_Type* f = parent ? parent->first_child : Fl_Type::first; f; ) {
-    Fl_Type* next = f->next_brother;
+void earlier_cb(fltk::Widget*,void*) {
+  FluidType *parent = FluidType::current ? FluidType::current->parent : 0;
+  for (FluidType* f = parent ? parent->first_child : FluidType::first; f; ) {
+    FluidType* next = f->next_brother;
     if (f->selected) {
-      Fl_Type* g = f->previous_brother;
+      FluidType* g = f->previous_brother;
       if (g && !g->selected) f->move_before(g);
     }
     f = next;
   }
 }
 
-void later_cb(Fl_Widget*,void*) {
-  Fl_Type *parent = Fl_Type::current ? Fl_Type::current->parent : 0;
-  Fl_Type *f;
-  for (f = parent ? parent->first_child : Fl_Type::first;f && f->next_brother;)
+void later_cb(fltk::Widget*,void*) {
+  FluidType *parent = FluidType::current ? FluidType::current->parent : 0;
+  FluidType *f;
+  for (f = parent ? parent->first_child : FluidType::first;f && f->next_brother;)
     f = f->next_brother;
   for (;f;) {
-    Fl_Type* prev = f->previous_brother;
+    FluidType* prev = f->previous_brother;
     if (f->selected) {
-      Fl_Type* g = f->next_brother;
+      FluidType* g = f->next_brother;
       if (g && !g->selected) g->move_before(f);
     }
     f = prev;
@@ -573,9 +572,9 @@ void later_cb(Fl_Widget*,void*) {
 ////////////////////////////////////////////////////////////////
 
 // write a widget and all it's children:
-void Fl_Type::write() {
+void FluidType::write() {
   int level = 0;
-  for (Fl_Type* p = parent; p; p = p->parent) level++;
+  for (FluidType* p = parent; p; p = p->parent) level++;
   write_indent(level);
   write_word(type_name());
   write_word(name());
@@ -585,14 +584,14 @@ void Fl_Type::write() {
   if (!is_parent()) return;
   // now do children:
   write_open(level);
-  Fl_Type *child;
+  FluidType *child;
   for (child = first_child; child; child = child->next_brother) child->write();
   write_close(level);
 }
 
-void Fl_Type::write_properties() {
+void FluidType::write_properties() {
   int level = 0;
-  for (Fl_Type* p = parent; p; p = p->parent) level++;
+  for (FluidType* p = parent; p; p = p->parent) level++;
   // repeat this for each attribute:
   if (label()) {
     write_indent(level+1);
@@ -622,7 +621,7 @@ void Fl_Type::write_properties() {
   }
 }
 
-void Fl_Type::read_property(const char *c) {
+void FluidType::read_property(const char *c) {
   if (!strcmp(c,"label"))
     label(read_word());
   else if (!strcmp(c,"tooltip"))
@@ -641,8 +640,8 @@ void Fl_Type::read_property(const char *c) {
     read_error("Unknown property \"%s\"", c);
 }
 
-int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
+int FluidType::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.32 2002/06/09 23:20:12 spitzak Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.33 2002/12/09 04:52:22 spitzak Exp $".
 //

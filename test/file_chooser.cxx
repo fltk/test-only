@@ -1,5 +1,5 @@
 //
-// "$Id: file_chooser.cxx,v 1.7 2002/03/10 23:10:25 spitzak Exp $"
+// "$Id: file_chooser.cxx,v 1.8 2002/12/09 04:52:31 spitzak Exp $"
 //
 // File chooser test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,22 +23,22 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Button.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/Fl_Input.h>
-#include <fltk/fl_file_chooser.h>
+#include <fltk/run.h>
+#include <fltk/Button.h>
+#include <fltk/Window.h>
+#include <fltk/Input.h>
+#include <fltk/file_chooser.h>
 
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
 
-Fl_Input *pattern, *current;
+fltk::Input *pattern, *current;
 
-void pickfile(Fl_Widget *) {
+void pickfile(fltk::Widget *) {
   const char *p;
-  p = fl_file_chooser("Pick a file",pattern->value(),current->value());
+  p = fltk::file_chooser("Pick a file",pattern->value(),current->value());
   if (p) current->value(p);
 }
 
@@ -47,19 +47,20 @@ void thecb(const char *name) {
 }
 
 int main(int argc, char **argv) {
-  Fl_Window window(200,115);
-  pattern = new Fl_Input(60,10,130,25,"Pattern: ");
+  fltk::Window window(200,115);
+  window.begin();
+  pattern = new fltk::Input(60,10,130,25,"Pattern: ");
   pattern->static_value("*");
-  current = new Fl_Input(60,45,130,25,"Current: ");
-  Fl_Button button(110,80,80,25,"&Choose file");
+  current = new fltk::Input(60,45,130,25,"Current: ");
+  fltk::Button button(110,80,80,25,"&Choose file");
   button.callback(pickfile);
   window.end();
   window.show(argc, argv);
   //  Fl_FileIcon::load_system_icons();
-  fl_file_chooser_callback(thecb);
-  return Fl::run();
+  fltk::file_chooser_callback(thecb);
+  return fltk::run();
 }
 
 //
-// End of "$Id: file_chooser.cxx,v 1.7 2002/03/10 23:10:25 spitzak Exp $".
+// End of "$Id: file_chooser.cxx,v 1.8 2002/12/09 04:52:31 spitzak Exp $".
 //

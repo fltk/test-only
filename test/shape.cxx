@@ -1,5 +1,5 @@
 //
-// "$Id: shape.cxx,v 1.7 2001/07/23 09:50:06 spitzak Exp $"
+// "$Id: shape.cxx,v 1.8 2002/12/09 04:52:31 spitzak Exp $"
 //
 // Tiny OpenGL demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -24,17 +24,17 @@
 //
 
 #include <config.h>
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/Fl_Hor_Slider.h>
+#include <fltk/run.h>
+#include <fltk/Window.h>
+#include <fltk/HorizontalSlider.h>
 #include <fltk/math.h>
 
 #if HAVE_GL
 
 #include <fltk/gl.h>
-#include <fltk/Fl_Gl_Window.h>
+#include <fltk/GlWindow.h>
 
-class shape_window : public Fl_Gl_Window {
+class shape_window : public fltk::GlWindow {
   void draw();
 public:
   int sides;
@@ -42,7 +42,8 @@ public:
 };
 
 shape_window::shape_window(int x,int y,int w,int h,const char *l) :
-Fl_Gl_Window(x,y,w,h,l) {
+  fltk::GlWindow(x,y,w,h,l)
+{
   sides = 3;
 }
 
@@ -67,12 +68,11 @@ void shape_window::draw() {
 
 #else
 
-#include <fltk/Fl_Box.h>
-class shape_window : public Fl_Box {
+class shape_window : public fltk::Widget {
 public:	
   int sides;
   shape_window(int x,int y,int w,int h,const char *l=0)
-    :Fl_Box(FL_DOWN_BOX,x,y,w,h,l){
+    : Widget(FLTK::DOWN_BOX,x,y,w,h,l){
       label("This demo does\nnot work without GL");
   }
 };
@@ -80,15 +80,16 @@ public:
 #endif
 
 // when you change the data, as in this callback, you must call redraw():
-void sides_cb(Fl_Widget *o, void *p) {
+void sides_cb(fltk::Widget *o, void *p) {
   shape_window *sw = (shape_window *)p;
-  sw->sides = int(((Fl_Slider *)o)->value());
+  sw->sides = int(((fltk::Slider *)o)->value());
   sw->redraw();
 }
 
 int main(int argc, char **argv) {
 
-  Fl_Window window(300, 330);
+  fltk::Window window(300, 330);
+  window.begin();
 
 // the shape window could be it's own window, but here we make it
 // a child window:
@@ -97,9 +98,9 @@ int main(int argc, char **argv) {
   window.resizable(&sw);
   //  window.size_range(300,330,0,0,1,1,1);
 // add a knob to control it:
-  Fl_Hor_Slider slider(50, 295, window.w()-60, 30, "Sides:");
-  slider.clear_flag(FL_ALIGN_MASK);
-  slider.set_flag(FL_ALIGN_LEFT);
+  fltk::HorizontalSlider slider(50, 295, window.w()-60, 30, "Sides:");
+  slider.clear_flag(fltk::ALIGN_MASK);
+  slider.set_flag(fltk::ALIGN_LEFT);
   slider.callback(sides_cb,&sw);
   slider.value(sw.sides);
   slider.step(1);
@@ -108,9 +109,9 @@ int main(int argc, char **argv) {
   window.end();
   window.show(argc,argv);
     
-  return Fl::run();
+  return fltk::run();
 }
 
 //
-// End of "$Id: shape.cxx,v 1.7 2001/07/23 09:50:06 spitzak Exp $".
+// End of "$Id: shape.cxx,v 1.8 2002/12/09 04:52:31 spitzak Exp $".
 //

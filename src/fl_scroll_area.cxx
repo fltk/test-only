@@ -1,5 +1,5 @@
 //
-// "$Id: fl_scroll_area.cxx,v 1.9 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: fl_scroll_area.cxx,v 1.10 2002/12/09 04:52:30 spitzak Exp $"
 //
 // Scrolling routines for the Fast Light Tool Kit (FLTK).
 //
@@ -28,11 +28,11 @@
 // into the drawing area.
 
 #include <fltk/x.h>
-#include <fltk/fl_draw.h>
+#include <fltk/draw.h>
 
 // scroll a rectangle and redraw the newly exposed portions:
-void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
-	       void (*draw_area)(void*, int,int,int,int), void* data)
+void fltk::scrollrect(int X, int Y, int W, int H, int dx, int dy,
+		       void (*draw_area)(void*, int,int,int,int), void* data)
 {
   if (!dx && !dy) return;
   if (dx <= -W || dx >= W || dy <= -H || dy >= H) {
@@ -68,19 +68,19 @@ void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
     clip_y = Y+src_h;
     clip_h = H-src_h;
   }
-  int ox = 0; int oy = 0; fl_transform(ox, oy);
+  int ox = 0; int oy = 0; transform(ox, oy);
 #ifdef _WIN32
-  BitBlt(fl_gc, dest_x+ox, dest_y+oy, src_w, src_h,
-	 fl_gc, src_x+ox, src_y+oy, SRCCOPY);
+  BitBlt(gc, dest_x+ox, dest_y+oy, src_w, src_h,
+	 gc, src_x+ox, src_y+oy, SRCCOPY);
   // NYI: need to redraw areas that the source of BitBlt was bad due to
   // overlapped windows, somehow similar to what X does.
 #else
-  XCopyArea(fl_display, fl_window, fl_window, fl_gc,
+  XCopyArea(xdisplay, xwindow, xwindow, gc,
 	    src_x+ox, src_y+oy, src_w, src_h,
 	    dest_x+ox, dest_y+oy);
 // Synchronous update by waiting for graphics expose events:
   for (;;) {
-    XEvent e; XWindowEvent(fl_display, fl_window, ExposureMask, &e);
+    XEvent e; XWindowEvent(xdisplay, xwindow, ExposureMask, &e);
     if (e.type == NoExpose) break;
     // otherwise assumme it is a GraphicsExpose event:
     draw_area(data, e.xexpose.x-ox, e.xexpose.y-oy,
@@ -93,5 +93,5 @@ void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
 }
 
 //
-// End of "$Id: fl_scroll_area.cxx,v 1.9 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: fl_scroll_area.cxx,v 1.10 2002/12/09 04:52:30 spitzak Exp $".
 //

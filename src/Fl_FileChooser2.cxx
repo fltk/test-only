@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.16 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.17 2002/12/09 04:52:25 spitzak Exp $"
 //
-// More Fl_FileChooser routines for the Fast Light Tool Kit (FLTK).
+// More FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1997-2000 by Easy Software Products.
 //
@@ -24,25 +24,26 @@
 //
 // Contents:
 //
-//   Fl_FileChooser::directory()  - Set the directory in the file chooser.
-//   Fl_FileChooser::count()      - Return the number of selected files.
-//   Fl_FileChooser::value()      - Return a selected filename.
-//   Fl_FileChooser::up()         - Go up one directory.
-//   Fl_FileChooser::newdir()     - Make a new directory.
-//   Fl_FileChooser::rescan()     - Rescan the current directory.
-//   Fl_FileChooser::fileListCB() - Handle clicks (and double-clicks) in the
+//   FileChooser::directory()  - Set the directory in the file chooser.
+//   FileChooser::count()      - Return the number of selected files.
+//   FileChooser::value()      - Return a selected filename.
+//   FileChooser::up()         - Go up one directory.
+//   FileChooser::newdir()     - Make a new directory.
+//   FileChooser::rescan()     - Rescan the current directory.
+//   FileChooser::fileListCB() - Handle clicks (and double-clicks) in the
 //                                  FileBrowser.
-//   Fl_FileChooser::fileNameCB() - Handle text entry in the FileBrowser.
+//   FileChooser::fileNameCB() - Handle text entry in the FileBrowser.
 //
 
 //
 // Include necessary headers.
 //
 
-#include <fltk/Fl_FileChooser.h>
+#include <fltk/FileChooser.h>
 #include <fltk/filename.h>
-#include <fltk/fl_ask.h>
+#include <fltk/ask.h>
 #include <fltk/vsnprintf.h>
+#include <fltk/events.h>
 #include <config.h>
 #include <errno.h>
 #include <ctype.h>
@@ -57,12 +58,14 @@
 #  include <pwd.h>
 #endif /* _WIN32 */
 
+using namespace fltk;
+
 //
-// 'Fl_FileChooser::directory()' - Set the directory in the file chooser.
+// 'FileChooser::directory()' - Set the directory in the file chooser.
 //
 
 void
-Fl_FileChooser::directory(const char *d)	// I - Directory to change to
+FileChooser::directory(const char *d)	// I - Directory to change to
 {
   char		pathname[1024],			// Full path of directory
 		*pathptr,			// Pointer into full path
@@ -141,11 +144,11 @@ Fl_FileChooser::directory(const char *d)	// I - Directory to change to
 
 
 //
-// 'Fl_FileChooser::count()' - Return the number of selected files.
+// 'FileChooser::count()' - Return the number of selected files.
 //
 
 int				// O - Number of selected files
-Fl_FileChooser::count()
+FileChooser::count()
 {
   int		i;		// Looping var
   int		count;		// Number of selected files
@@ -179,7 +182,7 @@ Fl_FileChooser::count()
     if (fileList->selected(i))
     {
       // See if this file is a directory...
-      filename = (char *)fileList->text(i);
+      filename = (char *)fileList->child(i)->label();
       if (directory_[0] != '\0')
 	snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
       else
@@ -197,11 +200,11 @@ Fl_FileChooser::count()
 
 
 //
-// 'Fl_FileChooser::value()' - Return a selected filename.
+// 'FileChooser::value()' - Return a selected filename.
 //
 
 const char *			// O - Filename or NULL
-Fl_FileChooser::value(int f)	// I - File number
+FileChooser::value(int f)	// I - File number
 {
   int		i;		// Looping var
   int		count;		// Number of selected files
@@ -223,7 +226,7 @@ Fl_FileChooser::value(int f)	// I - File number
     if (fileList->selected(i))
     {
       // See if this file is a directory...
-      name = fileList->text(i);
+      name = fileList->child(i)->label();
       snprintf(pathname, sizeof(pathname), "%s/%s", directory_, name);
 
       if (!filename_isdir(pathname))
@@ -240,11 +243,11 @@ Fl_FileChooser::value(int f)	// I - File number
 
 
 //
-// 'Fl_FileChooser::value()' - Set the current filename.
+// 'FileChooser::value()' - Set the current filename.
 //
 
 void
-Fl_FileChooser::value(const char *filename)	// I - Filename + directory
+FileChooser::value(const char *filename)	// I - Filename + directory
 {
   int	i,					// Looping var
   	count;					// Number of items in list
@@ -299,7 +302,7 @@ Fl_FileChooser::value(const char *filename)	// I - Filename + directory
   count = fileList->size();
 
   for (i = 0; i < count; i ++)
-    if (strcmp(fileList->text(i), slash) == 0)
+    if (strcmp(fileList->child(i)->label(), slash) == 0)
     {
       fileList->select(i);
       break;
@@ -308,11 +311,11 @@ Fl_FileChooser::value(const char *filename)	// I - Filename + directory
 
 
 //
-// 'Fl_FileChooser::up()' - Go up one directory.
+// 'FileChooser::up()' - Go up one directory.
 //
 
 void
-Fl_FileChooser::up()
+FileChooser::up()
 {
   char *slash;		// Trailing slash
 
@@ -336,18 +339,18 @@ Fl_FileChooser::up()
 
 
 //
-// 'Fl_FileChooser::newdir()' - Make a new directory.
+// 'FileChooser::newdir()' - Make a new directory.
 //
 
 void
-Fl_FileChooser::newdir()
+FileChooser::newdir()
 {
   const char	*dir;		// New directory name
   char		pathname[1024];	// Full path of directory
 
 
   // Get a directory name from the user
-  if ((dir = fl_input("New Directory?")) == NULL)
+  if ((dir = input("New Directory?")) == NULL)
     return;
 
   // Make it relative to the current directory as needed...
@@ -371,7 +374,7 @@ Fl_FileChooser::newdir()
 #endif /* _WIN32 || __EMX__ */
     if (errno != EEXIST)
     {
-      fl_alert("Unable to create directory!");
+      alert("Unable to create directory!");
       return;
     }
 
@@ -381,11 +384,11 @@ Fl_FileChooser::newdir()
 
 
 //
-// 'Fl_FileChooser::rescan()' - Rescan the current directory.
+// 'FileChooser::rescan()' - Rescan the current directory.
 //
 
 void
-Fl_FileChooser::rescan()
+FileChooser::rescan()
 {
   // Clear the current filename
   fileName->value("");
@@ -398,18 +401,18 @@ Fl_FileChooser::rescan()
 
 
 //
-// 'Fl_FileChooser::fileListCB()' - Handle clicks (and double-clicks) in the
+// 'FileChooser::fileListCB()' - Handle clicks (and double-clicks) in the
 //                               FileBrowser.
 //
 
 void
-Fl_FileChooser::fileListCB()
+FileChooser::fileListCB()
 {
   char	filename[1024],		// New filename
 	pathname[1024];		// Full pathname to file
 
 
-  strncpy(filename, fileList->text(fileList->value()), sizeof(filename) - 1);
+  strncpy(filename, fileList->item()->label(), sizeof(filename) - 1);
   filename[sizeof(filename) - 1] = '\0';
 
 #if defined(_WIN32) || defined(__EMX__)
@@ -431,7 +434,7 @@ Fl_FileChooser::fileListCB()
   }
 #endif /* _WIN32 || __EMX__ */
 
-  if (Fl::event_clicks() || Fl::event_key() == FL_Enter)
+  if (event_clicks() || event_key() == ReturnKey)
   {
     puts("double-click");
     if (filename_isdir(pathname))
@@ -452,11 +455,11 @@ Fl_FileChooser::fileListCB()
 
 
 //
-// 'Fl_FileChooser::fileNameCB()' - Handle text entry in the FileBrowser.
+// 'FileChooser::fileNameCB()' - Handle text entry in the FileBrowser.
 //
 
 void
-Fl_FileChooser::fileNameCB()
+FileChooser::fileNameCB()
 {
   char		*filename,	// New filename
 		*slash,		// Pointer to trailing slash
@@ -529,7 +532,7 @@ Fl_FileChooser::fileNameCB()
   }
 #endif /* _WIN32 || __EMX__ */
 
-  if (Fl::event_key() == FL_Enter)
+  if (event_key() == ReturnKey)
   {
     // Enter pressed - select or change directory...
     if (filename_isdir(pathname))
@@ -547,10 +550,10 @@ Fl_FileChooser::fileNameCB()
     else
     {
       // File doesn't exist, so alert the user...
-      fl_alert("Please choose an existing file!");
+      alert("Please choose an existing file!");
     }
   }
-  else if (Fl::event_key() != FL_Delete)
+  else if (event_key() != DeleteKey)
   {
     // Check to see if the user has entered a directory...
     if ((slash = strrchr(filename, '/')) == NULL)
@@ -590,7 +593,7 @@ Fl_FileChooser::fileNameCB()
 
     for (i = 0; i < num_files && max_match > min_match; i ++)
     {
-      file = fileList->text(i);
+      file = fileList->child(i)->label();
 
 #if defined(_WIN32) || defined(__EMX__)
       if (strnicmp(filename, file, min_match) == 0)
@@ -634,7 +637,7 @@ Fl_FileChooser::fileNameCB()
 
     // If we have any matches, add them to the input field...
     if (first_line > 0 && min_match == max_match &&
-        max_match == (int)strlen(fileList->text(first_line)))
+        max_match == (int)strlen(fileList->child(first_line)->label()))
       fileList->select(first_line);
     else if (max_match > min_match && max_match != 100000)
     {
@@ -646,7 +649,7 @@ Fl_FileChooser::fileNameCB()
       // Otherwise, put the cursor at the end of the selection so
       // s/he can press the right arrow to accept the selection
       // (Tab and End also do this for both cases.)
-      if (Fl::event_key() == FL_BackSpace)
+      if (event_key() == BackSpaceKey)
         fileName->position(min_match - 1, max_match);
       else
         fileName->position(max_match, min_match);
@@ -664,5 +667,5 @@ Fl_FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.16 2001/09/10 01:16:17 spitzak Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.17 2002/12/09 04:52:25 spitzak Exp $".
 //

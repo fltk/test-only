@@ -1,5 +1,5 @@
 //
-// "$Id: threads.cxx,v 1.11 2002/01/11 08:49:08 spitzak Exp $"
+// "$Id: threads.cxx,v 1.12 2002/12/09 04:52:31 spitzak Exp $"
 //
 // Threading example program for the Fast Light Tool Kit (FLTK).
 //
@@ -26,24 +26,24 @@
 #include <config.h>
 
 #if HAVE_PTHREAD || defined(WIN32)
-#  include <fltk/Fl.h>
-#  include <fltk/Fl_Window.h>
-#  include <fltk/Fl_Browser.h>
-#  include <fltk/Fl_Value_Output.h>
-#  include <fltk/Fl_Threads.h>
+#  include <fltk/Window.h>
+#  include <fltk/Browser.h>
+#  include <fltk/ValueInput.h>
+#  include <fltk/Threads.h>
+#  include <fltk/run.h>
 #  include <stdio.h>
 #  include <math.h>
 
-Fl_Thread prime_thread;
+fltk::Thread prime_thread;
 
-Fl_Browser *browser1, *browser2;
-Fl_Value_Output *value1, *value2;
+fltk::Browser *browser1, *browser2;
+fltk::ValueInput *value1, *value2;
 int start2 = 3;
 
 void* prime_func(void* p)
 {
-  Fl_Browser* browser = (Fl_Browser*) p;
-  Fl_Value_Output *value;
+  fltk::Browser* browser = (fltk::Browser*) p;
+  fltk::ValueInput *value;
   int n;
   int step;
 
@@ -66,12 +66,12 @@ void* prime_func(void* p)
     if (p >= hn) {
       char s[128];
       sprintf(s, "%d", n);
-      Fl::lock();
+      fltk::lock();
       browser->add(s);
       browser->bottomline(browser->size());
       if (n > value->value()) value->value(n);
-      Fl::unlock();
-      Fl::awake((void*) (browser == browser1? p:0));	// Cause the browser to redraw ...
+      fltk::unlock();
+      fltk::awake((void*) (browser == browser1? p:0));	// Cause the browser to redraw ...
     }
   }
   return 0;
@@ -79,52 +79,54 @@ void* prime_func(void* p)
 
 int main()
 {
-  Fl_Window* w = new Fl_Window(200, 200, "Single Thread");
-  browser1 = new Fl_Browser(0, 0, 200, 175);
+  fltk::Window* w = new fltk::Window(200, 200, "Single Thread");
+  w->begin();
+  browser1 = new fltk::Browser(0, 0, 200, 175);
   w->resizable(browser1);
-  value1 = new Fl_Value_Output(100, 175, 200, 25, "Max Prime:");
+  value1 = new fltk::ValueInput(100, 175, 200, 25, "Max Prime:");
   w->end();
   w->show();
-  w = new Fl_Window(200, 200, "Six Threads");
-  browser2 = new Fl_Browser(0, 0, 200, 175);
+  w = new fltk::Window(200, 200, "Six Threads");
+  w->begin();
+  browser2 = new fltk::Browser(0, 0, 200, 175);
   w->resizable(browser2);
-  value2 = new Fl_Value_Output(100, 175, 200, 25, "Max Prime:");
+  value2 = new fltk::ValueInput(100, 175, 200, 25, "Max Prime:");
   w->end();
   w->show();
   
   browser1->add("Prime numbers:");
   browser2->add("Prime numbers:");
 
-  Fl::lock(); // you must do this before creating any threads!
+  fltk::lock(); // you must do this before creating any threads!
 
   // One thread displaying in one browser
-  fl_create_thread(prime_thread, prime_func, browser1);
+  fltk::create_thread(prime_thread, prime_func, browser1);
   // Several threads displaying in another browser
-  fl_create_thread(prime_thread, prime_func, browser2);
-  fl_create_thread(prime_thread, prime_func, browser2);
-  fl_create_thread(prime_thread, prime_func, browser2);
-  fl_create_thread(prime_thread, prime_func, browser2);
-  fl_create_thread(prime_thread, prime_func, browser2);
-  fl_create_thread(prime_thread, prime_func, browser2);
+  fltk::create_thread(prime_thread, prime_func, browser2);
+  fltk::create_thread(prime_thread, prime_func, browser2);
+  fltk::create_thread(prime_thread, prime_func, browser2);
+  fltk::create_thread(prime_thread, prime_func, browser2);
+  fltk::create_thread(prime_thread, prime_func, browser2);
+  fltk::create_thread(prime_thread, prime_func, browser2);
 
-  //  Fl::run();
+  //  fltk::run();
   while (w->visible()) {
-    Fl::wait();
-//    void* m = Fl::thread_message();
+    fltk::wait();
+//    void* m = fltk::thread_message();
 //    printf("Received message: %p\n", m);
   }
 
   return 0;
 }
 #else
-#  include <FL/fl_ask.H>
+#  include <FL/fltk::ask.H>
 
 int main() {
-  fl_alert("Sorry, threading not supported on this platform!");
+  fltk::alert("Sorry, threading not supported on this platform!");
 }
 #endif // HAVE_PTHREAD || WIN32
 
 
 //
-// End of "$Id: threads.cxx,v 1.11 2002/01/11 08:49:08 spitzak Exp $".
+// End of "$Id: threads.cxx,v 1.12 2002/12/09 04:52:31 spitzak Exp $".
 //

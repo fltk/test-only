@@ -1,5 +1,5 @@
 //
-// "$Id: fl_curve.cxx,v 1.8 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: fl_curve.cxx,v 1.9 2002/12/09 04:52:29 spitzak Exp $"
 //
 // Bezier curve functions for the Fast Light Tool Kit (FLTK).
 //
@@ -24,23 +24,24 @@
 //
 
 // Utility for drawing Bezier curves, adding the points to
-// the current fl_begin/fl_vertex/fl_end path.
+// the current begin/vertex/end path.
 // Incremental math implementation:
 // I very much doubt this is optimal!  From Foley/vanDam page 511.
 // If anybody has a better algorithim, please send it!
 
-#include <fltk/fl_draw.h>
-#include <math.h>
+#include <fltk/draw.h>
+#include <fltk/math.h>
+using namespace fltk;
 
-void fl_curve(float x0, float y0,
-	      float x1, float y1,
-	      float x2, float y2,
-	      float x3, float y3) {
+void fltk::addcurve(float x0, float y0,
+		    float x1, float y1,
+		    float x2, float y2,
+		    float x3, float y3) {
 
-  fl_transform(x0,y0);
-  fl_transform(x1,y1);
-  fl_transform(x2,y2);
-  fl_transform(x3,y3);
+  transform(x0,y0);
+  transform(x1,y1);
+  transform(x2,y2);
+  transform(x3,y3);
   float x = x0; float y = y0;
 
 #define MAXPOINTS 100
@@ -98,9 +99,9 @@ void fl_curve(float x0, float y0,
   // draw point n:
   *p++ = x3;
   *p++ = y3;
-  fl_transformed_vertices((p-points[0])/2, points);
+  addvertices_transformed((p-points[0])/2, points);
 }
 
 //
-// End of "$Id: fl_curve.cxx,v 1.8 2002/09/16 00:29:06 spitzak Exp $".
+// End of "$Id: fl_curve.cxx,v 1.9 2002/12/09 04:52:29 spitzak Exp $".
 //

@@ -1,30 +1,31 @@
-#include <fltk/Fl_String_List.h>
-#include <fltk/Fl_Item.h>
+#include <fltk/StringList.h>
+#include <fltk/Item.h>
+using namespace fltk;
 
-int Fl_String_List::children(const Fl_Menu_* group, const int* indexes, int level) {
+int StringList::children(const Menu* group, const int* indexes, int level) {
   // Get number of widget children:
-  int n = Fl_List::children(group, 0,0);	
+  int n = List::children(group, 0,0);	
   if (!level) {
     // top level has widgets + all strings
     return children_ + n;
   } else if (*indexes < n) {
     // return children counts for widgets:
-    return Fl_List::children(group, indexes, level);
+    return List::children(group, indexes, level);
   } else {
     // the strings have no children:
     return -1;
   }
 }
 
-Fl_Widget* Fl_String_List::child(const Fl_Menu_* group, const int* indexes, int level) {
+Widget* StringList::child(const Menu* group, const int* indexes, int level) {
   // Return children for any widgets:
-  int n = *indexes - Fl_List::children(group, 0,0);
-  if (n < 0) return Fl_List::child(group, indexes, level);
+  int n = *indexes - List::children(group, 0,0);
+  if (n < 0) return List::child(group, indexes, level);
   // Construct reusable widget for string and return it:
-  static Fl_Widget* widget;
+  static Widget* widget;
   if (!widget) {
-    Fl_Group::current(0);
-    widget = new Fl_Item();
+    Group::current(0);
+    widget = new Item();
   }
   widget->type(0);
   widget->label(array[n]);
@@ -33,12 +34,12 @@ Fl_Widget* Fl_String_List::child(const Fl_Menu_* group, const int* indexes, int 
   return widget;
 }
 
-Fl_String_List::Fl_String_List(const char*const* a) {
+StringList::StringList(const char*const* a) {
   array = a;
   for (children_ = 0; a && a[children_]; children_++);
 }
 
-Fl_String_List::Fl_String_List(const char* s) {
+StringList::StringList(const char* s) {
   if (!s || !*s) {children_ = 0; return;}
   const char* temp[256];
   int n = 0;

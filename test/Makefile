@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.57 2002/10/04 07:48:16 spitzak Exp $"
+# "$Id: Makefile,v 1.58 2002/12/09 04:52:30 spitzak Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -37,14 +37,24 @@ CPPFILES =\
 	resize.cxx pack.cxx inactive.cxx sizes.cxx image_file.cxx progress.cxx \
 	layout.cxx threads.cxx menubar.cxx line_style.cxx valuators.cxx
 
-ALL =	CubeView adjuster arc ask boxtype browser button buttons checkers \
-	clock color_chooser cube cursor curve demo doublebuffer \
-	editor file_chooser fonts fullscreen gl_overlay glpuzzle \
-	hello iconize image input keyboard label list_visuals \
-	mandelbrot menu message navigation output overlay \
-	pixmap_browser radio resizable scroll shape subwindow \
-	symbols tabs tile fast_slow resize pack inactive sizes progress \
-	image_file layout threads menubar line_style valuators
+# only some of the demos have been changed to use namespaces:
+ALL =	browser checkers boxtype \
+	color_chooser cursor demo \
+	file_chooser fonts gl_overlay \
+	hello image input keyboard label list_visuals \
+	menu \
+	shape \
+	tile inactive sizes \
+	threads valuators
+
+# ALL =	CubeView adjuster arc ask boxtype browser button buttons checkers \
+# 	clock color_chooser cube cursor curve demo doublebuffer \
+# 	editor file_chooser fonts fullscreen gl_overlay glpuzzle \
+# 	hello iconize image input keyboard label list_visuals \
+# 	mandelbrot menu message navigation output overlay \
+# 	pixmap_browser radio resizable scroll shape subwindow \
+# 	symbols tabs tile fast_slow resize pack inactive sizes progress \
+# 	image_file layout threads menubar line_style valuators
 
 all:	demos
 
@@ -115,5 +125,5 @@ install_shared:
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.57 2002/10/04 07:48:16 spitzak Exp $".
+# End of "$Id: Makefile,v 1.58 2002/12/09 04:52:30 spitzak Exp $".
 #

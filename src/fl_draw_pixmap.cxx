@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_pixmap.cxx,v 1.14 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: fl_draw_pixmap.cxx,v 1.15 2002/12/09 04:52:29 spitzak Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -24,7 +24,7 @@
 //
 
 // Implemented without using the xpm library (which I can't use because
-// it interferes with the color cube used by fl_draw_image).
+// it interferes with the color cube used by drawimage).
 // Current implementation is cheap and slow, and works best on a full-color
 // display.  Transparency is not handled, and colors are dithered to
 // the color cube.  Color index is achieved by adding the id
@@ -33,16 +33,17 @@
 // as I want to discourage programs that require support files to work.
 // All data needed by a program ui should be compiled in!!!
 
+#include <fltk/Color.h>
+#include <fltk/draw.h>
 #include <config.h>
-#include <fltk/Fl_Color.h>
-#include <fltk/fl_draw.h>
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
+using namespace fltk;
 
 static int ncolors, chars_per_pixel;
 
-int fl_measure_pixmap(const char*const* data, int &w, int &h) {
+int fltk::measure_xpm(const char*const* data, int &w, int &h) {
   int i = sscanf(data[0],"%d %d %d %d",&w,&h,&ncolors,&chars_per_pixel);
   if (i<4 || w<=0 || h<=0 ||
       chars_per_pixel!=1 && chars_per_pixel!=2) return w=0;
@@ -51,8 +52,8 @@ int fl_measure_pixmap(const char*const* data, int &w, int &h) {
 
 #ifdef U64
 
-// The callback from fl_draw_image to get a row of data passes this:
-struct pixmap_data {
+// The callback from drawimage to get a row of data passes this:
+struct xpm_data {
   int w, h;
   const uchar*const* data;
   union {
@@ -63,7 +64,7 @@ struct pixmap_data {
 
 // callback for 1 byte per pixel:
 static void cb1(void*v, int x, int y, int w, uchar* buf) {
-  pixmap_data& d = *(pixmap_data*)v;
+  xpm_data& d = *(xpm_data*)v;
   const uchar* p = d.data[y]+x;
   U64* q = (U64*)buf;
   for (int X=(w+1)/2; X--; p += 2) {
@@ -77,7 +78,7 @@ static void cb1(void*v, int x, int y, int w, uchar* buf) {
 
 // callback for 2 bytes per pixel:
 static void cb2(void*v, int x, int y, int w, uchar* buf) {
-  pixmap_data& d = *(pixmap_data*)v;
+  xpm_data& d = *(xpm_data*)v;
   const uchar* p = d.data[y]+2*x;
   U64* q = (U64*)buf;
   for (int X=(w+1)/2; X--;) {
@@ -95,8 +96,8 @@ static void cb2(void*v, int x, int y, int w, uchar* buf) {
 
 #else
 
-// The callback from fl_draw_image to get a row of data passes this:
-struct pixmap_data {
+// The callback from drawimage to get a row of data passes this:
+struct xpm_data {
   int w, h;
   const uchar*const* data;
   union {
@@ -107,7 +108,7 @@ struct pixmap_data {
 
 // callback for 1 byte per pixel:
 static void cb1(void*v, int x, int y, int w, uchar* buf) {
-  pixmap_data& d = *(pixmap_data*)v;
+  xpm_data& d = *(xpm_data*)v;
   const uchar* p = d.data[y]+x;
   U32* q = (U32*)buf;
   for (int X=w; X--;) *q++ = d.colors[*p++];
@@ -115,7 +116,7 @@ static void cb1(void*v, int x, int y, int w, uchar* buf) {
 
 // callback for 2 bytes per pixel:
 static void cb2(void*v, int x, int y, int w, uchar* buf) {
-  pixmap_data& d = *(pixmap_data*)v;
+  xpm_data& d = *(xpm_data*)v;
   const uchar* p = d.data[y]+2*x;
   U32* q = (U32*)buf;
   for (int X=w; X--;) {
@@ -126,17 +127,17 @@ static void cb2(void*v, int x, int y, int w, uchar* buf) {
 
 #endif
 
-static uchar **fl_mask_bitmap;
+static uchar **mask_bitmap;
 
-void fl_set_mask_bitmap(uchar **ppBitmap)
+void fltk::set_mask_bitmap(uchar **ppBitmap)
 {
-	fl_mask_bitmap = ppBitmap;
+	mask_bitmap = ppBitmap;
 }
 
 
-int fl_draw_pixmap(const char*const* di, int x, int y, Fl_Color bg) {
-  pixmap_data d;
-  if (!fl_measure_pixmap(di, d.w, d.h)) return 0;
+int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
+  xpm_data d;
+  if (!measure_xpm(di, d.w, d.h)) return 0;
   const uchar*const* data = (const uchar*const*)(di+1);
   int transparent_index = -1;
 
@@ -154,11 +155,7 @@ int fl_draw_pixmap(const char*const* di, int x, int y, Fl_Color bg) {
 #endif
 #endif
       transparent_index = ' ';
-      bg = fl_get_color(bg);
-      c[0] = uchar(bg>>24);
-      c[1] = uchar(bg>>16);
-      c[2] = uchar(bg>>8);
-      c[3] = 0;
+      split_color(bg, c[0], c[1], c[2]); c[3] = 0;
       p += 4;
       ncolors--;
     }
@@ -213,14 +210,13 @@ int fl_draw_pixmap(const char*const* di, int x, int y, Fl_Color bg) {
       c += 4;
 #endif
 #endif
-      Fl_Color C = fl_rgb((const char*)p);
+      Color C = color((const char*)p);
       if (C) {
 	c[0] = uchar(C>>24);
 	c[1] = uchar(C>>16);
 	c[2] = uchar(C>>8);
       } else { // assume "None" or "#transparent" for any errors
 	// this should be transparent...
-	bg = fl_get_color(bg);
 	transparent_index = index;
       }
       c[3] = 0;
@@ -228,8 +224,8 @@ int fl_draw_pixmap(const char*const* di, int x, int y, Fl_Color bg) {
   }
   d.data = data;
 
-  // build the mask bitmap used by Fl_Pixmap:
-  if (fl_mask_bitmap && transparent_index >= 0) {
+  // build the mask bitmap used by xpmImage:
+  if (mask_bitmap && transparent_index >= 0) {
     // search for usage of the transparent index, if none we act like
     // the image is opaque (which avoids some buggy code on X/Win32):
     int y;
@@ -250,7 +246,7 @@ int fl_draw_pixmap(const char*const* di, int x, int y, Fl_Color bg) {
   GOTIT:
     int W = (d.w+7)/8;
     uchar* bitmap = new uchar[W * d.h];
-    *fl_mask_bitmap = bitmap;
+    *mask_bitmap = bitmap;
     for (y = 0; y < d.h; y++) {
       const uchar* p = data[y];
       if (chars_per_pixel <= 1) {
@@ -280,11 +276,11 @@ int fl_draw_pixmap(const char*const* di, int x, int y, Fl_Color bg) {
   }
  NO_MASK:
 
-  fl_draw_image(chars_per_pixel==1 ? cb1 : cb2, &d, x, y, d.w, d.h, 4);
+  drawimage(chars_per_pixel==1 ? cb1 : cb2, &d, x, y, d.w, d.h, 4);
   if (chars_per_pixel > 1) for (int i = 0; i < 256; i++) delete[] d.byte1[i];
   return 1;
 }
 
 //
-// End of "$Id: fl_draw_pixmap.cxx,v 1.14 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: fl_draw_pixmap.cxx,v 1.15 2002/12/09 04:52:29 spitzak Exp $".
 //

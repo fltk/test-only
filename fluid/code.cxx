@@ -1,5 +1,5 @@
 //
-// "$Id: code.cxx,v 1.17 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: code.cxx,v 1.18 2002/12/09 04:52:23 spitzak Exp $"
 //
 // Code output routines for the Fast Light Tool Kit (FLTK).
 //
@@ -29,8 +29,8 @@
 #include <string.h>
 #include <stdarg.h>
 
-#include <fltk/Fl.h>
-#include "Fl_Type.h"
+#include <fltk/run.h>
+#include "FluidType.h"
 #include "alignment_panel.h"
 #include "coding_style.h"
 
@@ -260,6 +260,7 @@ void write_h(const char* format,...) {
 }
 
 #include <fltk/filename.h>
+#include <fltk/FL_VERSION.h>
 int write_number;
 
 int write_code(const char *s, const char *t) {
@@ -293,14 +294,12 @@ int write_code(const char *s, const char *t) {
   fprintf(header_file, "#define %s\n", define_name);
   }  
 
-  write_declare("#include <fltk/Fl.h>");
-
   if (t && include_H_from_C)
     write_c("#include \"%s\"\n", filename_name(t));
-  for (Fl_Type* p = Fl_Type::first; p; p = p->next_brother) {
+  for (FluidType* p = FluidType::first; p; p = p->next_brother) {
     // write all static data for this & all children first
     p->write_static();
-    for (Fl_Type* q = p->first_child; q; q = q->walk(p))
+    for (FluidType* q = p->first_child; q; q = q->walk(p))
       q->write_static();
     // then write the nested code:
     p->write_code();
@@ -319,13 +318,13 @@ int write_code(const char *s, const char *t) {
 
 ////////////////////////////////////////////////////////////////
 
-void Fl_Type::write_static() {}
+void FluidType::write_static() {}
 
-void Fl_Type::write_code() {
+void FluidType::write_code() {
   write_h("// Header for %s\n", title());
   write_c("// Code for %s\n", title());
 }
 
 //
-// End of "$Id: code.cxx,v 1.17 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: code.cxx,v 1.18 2002/12/09 04:52:23 spitzak Exp $".
 //

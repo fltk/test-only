@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.cxx,v 1.19 2002/10/26 09:55:30 spitzak Exp $"
+// "$Id: Fl_Input_Browser.cxx,v 1.20 2002/12/09 04:52:25 spitzak Exp $"
 //
 // Input Browser (Combo Box) widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,23 +23,28 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Input_Browser.h>
-#include <fltk/Fl_Menu_Window.h>
-#include <fltk/Fl_Browser.h>
-#include <fltk/fl_draw.h>
+#include <fltk/InputBrowser.h>
+#include <fltk/MenuWindow.h>
+#include <fltk/Browser.h>
+#include <fltk/ScreenInfo.h>
+#include <fltk/events.h>
+#include <fltk/damage.h>
+#include <fltk/Box.h>
+#include <fltk/draw.h>
 
-static Fl_Named_Style style("Input_Browser", 0, &Fl_Input_Browser::default_style);
-Fl_Named_Style* Fl_Input_Browser::default_style = &::style;
+using namespace fltk;
 
-Fl_Input_Browser::Fl_Input_Browser(int x, int y, int w, int h, const char *l)
-  : Fl_Menu_(x, y, w, h, l)
+static NamedStyle style("InputBrowser", 0, &InputBrowser::default_style);
+NamedStyle* InputBrowser::default_style = &::style;
+
+InputBrowser::InputBrowser(int x, int y, int w, int h, const char *l)
+  : Menu(x, y, w, h, l),
+    input(x, y, w, h)
 {
-  align(FL_ALIGN_LEFT);
+  align(ALIGN_LEFT);
   style(default_style);
-  input = new Fl_Input(x, y, w, h);
-  if (input->parent()) input->parent()->remove(input);
-  input->parent(this);
+  if (input.parent()) input.parent()->remove(input);
+  input.parent(this);
   minh_ = 10;
   maxw_ = 600;
   maxh_ = 400;
@@ -47,145 +52,146 @@ Fl_Input_Browser::Fl_Input_Browser(int x, int y, int w, int h, const char *l)
 }
 
 // these are only used when in grabbed state so only one exists at once
-static Fl_Menu_Window *mw;
-static Fl_Input_Browser *ib;
-static Fl_Browser *b;
+static MenuWindow *mw;
+static InputBrowser *ib;
+static Browser *b;
 
-class ComboWindow : public Fl_Menu_Window {
+class ComboWindow : public MenuWindow {
   public:
     int handle(int);
-    ComboWindow(int x, int y, int w, int h) : Fl_Menu_Window(x, y, w, h) {}
+    ComboWindow(int x, int y, int w, int h) : MenuWindow(x, y, w, h) {}
 };
 
 int
 ComboWindow::handle(int event) {
   switch (event) {
-  case FL_MOVE:
-  case FL_DRAG:
-  case FL_RELEASE:
+  case MOVE:
+  case DRAG:
+  case RELEASE:
     return b->handle(event);
   }
-  return Fl_Menu_Window::handle(event);
+  return MenuWindow::handle(event);
 }
 
-class ComboBrowser : public Fl_Browser {
+class ComboBrowser : public Browser {
   public:
     int handle(int);
     ComboBrowser(int x, int y, int w, int h)
-      : Fl_Browser(x, y, w, h, 0) {}
+      : Browser(x, y, w, h, 0) {}
 };
 
 int
 ComboBrowser::handle(int event) {
   switch (event) {
-  case FL_KEY:
-    if (Fl::event_key() == FL_Escape) {
-      Fl::exit_modal();
+  case KEY:
+    if (event_key() == EscapeKey) {
+      exit_modal();
       return 1;
     }
     break;
-  case FL_PUSH:
-    if (!Fl::event_inside(0, 0, w(), h())) {
-      Fl::exit_modal();
+  case PUSH:
+    if (!event_inside(0, 0, w(), h())) {
+      exit_modal();
       return 0;
     }
     break;
-  case FL_MOVE:
-    event = FL_DRAG;
-  case FL_RELEASE:
-  case FL_DRAG:
+  case MOVE:
+    event = DRAG;
+  case RELEASE:
+  case DRAG:
     // this causes a drag-in to the widget to work:
-    if (Fl::event_inside(0, 0, w(), h())) Fl::pushed(this);
+    if (event_inside(0, 0, w(), h())) fltk::pushed(this);
     else return 0;
   }
 #if 0
   // vertical scrollbar event
-  int vse = scrollbar.visible() && Fl::event_inside(scrollbar.x(),
+  int vse = scrollbar.visible() && event_inside(scrollbar.x(),
             scrollbar.y(), scrollbar.w(), h());
 
   // horizontal scrollbar event
-  int hse = hscrollbar.visible() && Fl::event_inside(hscrollbar.x(),
+  int hse = hscrollbar.visible() && event_inside(hscrollbar.x(),
             hscrollbar.y(), w(), hscrollbar.h());
 
 //  int X = x(), Y = y(), W = w(), H = h(); box()->inset(X, Y, W, H);
-//  if (!Fl::event_inside(X, Y, W, H)) return 0;
-  if (!Fl::event_inside(0, 0, w(), h())) return 0;
+//  if (!event_inside(X, Y, W, H)) return 0;
+  if (!event_inside(0, 0, w(), h())) return 0;
 
-  if (event == FL_MOVE && !vse && !hse) event = FL_DRAG;
+  if (event == MOVE && !vse && !hse) event = DRAG;
 #endif
-  return Fl_Browser::handle(event);
+  return Browser::handle(event);
 }
 
-static void ComboBrowser_cb(Fl_Widget*, void*) {
+static void ComboBrowser_cb(Widget*, void*) {
   // we get callbacks for all keys?
-  if (Fl::event() != FL_KEY && Fl::event() != FL_RELEASE) return;
-  if (Fl::event() == FL_KEY && Fl::event_key() != FL_Enter
-      && Fl::event_key() != ' ')
+  if (event() != KEY && event() != RELEASE) return;
+  if (event() == KEY && event_key() != ReturnKey
+      && event_key() != ' ')
     return;
-  Fl_Widget *item = b->item();
+  Widget *item = b->item();
   if (item->is_group()) return; // can't select a group!
   ib->item(item);
   ib->value(item->label());
-  ib->redraw(FL_DAMAGE_VALUE);
+  ib->redraw(DAMAGE_VALUE);
   mw->hide();
 }
 
 // CET - FIXME - this doesn't seem to be working
 // Use this to copy all the items out of one group into another:
-class Share_List : public Fl_List {
+class Share_List : public List {
 public:
-  Fl_Menu_* other;
-  int children(const Fl_Menu_*, const int* indexes, int level) {
+  Menu* other;
+  int children(const Menu*, const int* indexes, int level) {
     return other->children(indexes, level);
   }
-  Fl_Widget* child(const Fl_Menu_*, const int* indexes, int level) {
+  Widget* child(const Menu*, const int* indexes, int level) {
     return other->child(indexes, level);
   }
-  void flags_changed(const Fl_Menu_*, Fl_Widget* widget) {
+  void flags_changed(const Menu*, Widget* widget) {
     other->list()->flags_changed(other,widget);
   }
 } share_list; // only one instance of this.
 
 int
-Fl_Input_Browser::handle(int e) {
+InputBrowser::handle(int e) {
   int TX, TY = 0, TW, TH = h();
   if (type()&NONEDITABLE) {
     TX = 0; TW = w();
   } else {
-    TX = input->x()+input->w(); TW = w()-(input->x()+input->w());
+    TX = input.x()+input.w(); TW = w()-(input.x()+input.w());
   }
-  if (Fl::event_inside(TX, TY, TW, TH))
+  if (event_inside(TX, TY, TW, TH))
     over_now = 1;
   else
     over_now = 0;
-  if (over_now != over_last) redraw(FL_DAMAGE_HIGHLIGHT);
+  if (over_now != over_last) redraw(DAMAGE_HIGHLIGHT);
 
-  if (e == FL_FOCUS) Fl::focus(input);
+  if (e == FOCUS) fltk::focus(input);
 
-  if ((Fl::event_inside(input->x(), input->y(), input->w(), input->h()) || e == FL_KEY)
-    && !(type()&NONEDITABLE) && Fl::pushed() != this)
+  if ((event_inside(input.x(), input.y(), input.w(), input.h()) || e == KEY)
+    && !(type()&NONEDITABLE) && !pushed())
   {
-    if (e == FL_PUSH) Fl::pushed(input);
-    return input->handle(e);
+    if (e == PUSH) fltk::pushed(input);
+    return input.handle(e);
   }
 
   switch (e) {
-    case FL_PUSH: {
-      redraw(FL_DAMAGE_VALUE);
+    case PUSH: {
+      redraw(DAMAGE_VALUE);
       if (!children()) return 1;
       ib = this;
       // dummy W,H used -- will be replaced.
-      Fl_Group::current(0);
-      mw = new ComboWindow(Fl::event_x_root()-Fl::event_x(),
-                           Fl::event_y_root()-Fl::event_y()+h(),
+      Group::current(0);
+      mw = new ComboWindow(event_x_root()-event_x(),
+                           event_y_root()-event_y()+h(),
                            200,400);
+      mw->begin();
       // dummy W,H used -- will be replaced.
       b = new ComboBrowser(0,0,200,400);
       b->indented((type()&INDENTED) != 0);
-      b->box(FL_BORDER_BOX);
+      b->box(BORDER_BOX);
       share_list.other = this;
       b->list(&share_list);
-      b->when(FL_WHEN_RELEASE_ALWAYS);
+      b->when(WHEN_RELEASE_ALWAYS);
       b->callback(ComboBrowser_cb);
       mw->end();
       b->layout(); // (WAS: it is ok to do this)
@@ -197,77 +203,77 @@ Fl_Input_Browser::handle(int e) {
       if (H < minh_) H = minh_;
       int X = mw->x();
       int Y = mw->y();
-      int down = Fl::info().height - Y;
-      int up = Fl::event_y_root() - Fl::event_y();
+      int down = screenInfo().height - Y;
+      int up = event_y_root() - event_y();
       if (H > down) {
         if (up > down) {
-          Y = Fl::event_y_root() - Fl::event_y() - H;
+          Y = event_y_root() - event_y() - H;
           if (Y < 0) { Y = 0; H = up; }
         } else {
           H = down;
         }
       }
-      if (X + W > Fl::info().width) {
-        X = Fl::info().width - W;
-        if (X < 0) { X = 0; W = Fl::info().width; }
+      if (X + W > screenInfo().width) {
+        X = screenInfo().width - W;
+        if (X < 0) { X = 0; W = screenInfo().width; }
       }
       mw->resize(X, Y, W, H);
-      b->Fl_Widget::size(W, H);
+      b->Widget::size(W, H);
 
-      b->value(item() ? b->Fl_Group::find(item()) : 0);
+      b->value(item() ? b->Group::find(item()) : 0);
       b->make_item_visible();
 
       mw->exec(0, true);
 
       delete mw;
       if (type()&NONEDITABLE) throw_focus();
-      else Fl::focus(input);
+      else fltk::focus(input);
 
       ib = 0;
-      redraw(FL_DAMAGE_VALUE);
+      redraw(DAMAGE_VALUE);
       return 1;
     }
 
-    case FL_FOCUS:
-    case FL_UNFOCUS:
+    case FOCUS:
+    case UNFOCUS:
       if (type()&NONEDITABLE) break;
-      return input->handle(e);
+      return input.handle(e);
 
-    case FL_ENTER: case FL_MOVE: return 1;
+    case ENTER: case MOVE: return 1;
   }
   return 0;
 }
 
 void
-Fl_Input_Browser::draw() {
-  Fl_Flags f = flags();
-  if (!active_r()) f |= FL_INACTIVE;
+InputBrowser::draw() {
+  Flags f = flags();
+  if (!active_r()) f |= INACTIVE;
   minw_ = w();
-  if (damage()&FL_DAMAGE_ALL) draw_frame();
+  if (damage()&DAMAGE_ALL) draw_frame();
   int X = 0, Y = 0, W = w(), H = h(); box()->inset(X, Y, W, H);
   int W1 = H*4/5;
-  if (damage()&(FL_DAMAGE_ALL|FL_DAMAGE_CHILD)) {
-    input->resize(X, Y, W-W1, H);
-    input->set_damage(FL_DAMAGE_ALL);
-    input->copy_style(style()); // force it to use this style
-    input->box(FL_FLAT_BOX);
+  if (damage()&(DAMAGE_ALL|DAMAGE_CHILD)) {
+    input.resize(X, Y, W-W1, H);
+    input.set_damage(DAMAGE_ALL);
+    input.copy_style(style()); // force it to use this style
+    input.box(FLAT_BOX);
     // fix for relative coordinates
-    fl_push_matrix();
-    fl_translate(X,Y);
-    input->draw();
-    fl_pop_matrix();
-    input->set_damage(0);
+    push_matrix();
+    translate(X,Y);
+    input.draw();
+    pop_matrix();
+    input.set_damage(0);
   }
-  if (damage()&(FL_DAMAGE_ALL|FL_DAMAGE_VALUE|FL_DAMAGE_HIGHLIGHT)) {
-    if (ib == this) f |= FL_VALUE;
-    if (over_now) f |= FL_HIGHLIGHT;
+  if (damage()&(DAMAGE_ALL|DAMAGE_VALUE|DAMAGE_HIGHLIGHT)) {
+    if (ib == this) f |= VALUE;
+    if (over_now) f |= HIGHLIGHT;
     X += W-W1; W = W1;
     // draw the little mark at the right:
-    draw_glyph(FL_GLYPH_DOWN_BUTTON, X, Y, W, H, f);
+    draw_glyph(GLYPH_DOWN_BUTTON, X, Y, W, H, f);
     over_last = over_now;
   }
 }
 
 //
-// End of "$Id: Fl_Input_Browser.cxx,v 1.19 2002/10/26 09:55:30 spitzak Exp $".
+// End of "$Id: Fl_Input_Browser.cxx,v 1.20 2002/12/09 04:52:25 spitzak Exp $".
 //

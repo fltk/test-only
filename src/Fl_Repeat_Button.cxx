@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Repeat_Button.cxx,v 1.9 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: Fl_Repeat_Button.cxx,v 1.10 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Repeat button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,43 +23,42 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Repeat_Button.h>
+#include <fltk/RepeatButton.h>
+#include <fltk/events.h>
+using namespace fltk;
 
 #define INITIALREPEAT .5f
 #define REPEAT .1f
 
-void Fl_Repeat_Button::repeat_callback(void *v) {
-  Fl_Button *b = (Fl_Button*)v;
-  Fl::add_timeout(REPEAT,repeat_callback,b);
-  b->do_callback();
-}
-
-int Fl_Repeat_Button::handle(int event) {
+int RepeatButton::handle(int event) {
   bool newval;
   switch (event) {
-  case FL_HIDE:
-  case FL_DEACTIVATE:
-  case FL_RELEASE:
+  case HIDE:
+  case DEACTIVATE:
+  case RELEASE:
     newval = false; goto J1;
-  case FL_PUSH:
-  case FL_DRAG:
-    newval = Fl::event_inside(0, 0, w(), h());
+  case PUSH:
+  case DRAG:
+    newval = event_inside(0, 0, w(), h());
   J1:
     if (value(newval)) {
       if (newval) {
-	Fl::add_timeout(INITIALREPEAT,repeat_callback,this);
+	add_timeout(INITIALREPEAT);
 	do_callback();
       } else {
-	Fl::remove_timeout(repeat_callback,this);
+	remove_timeout();
       }
     }
     return newval;
+  case TIMEOUT:
+    repeat_timeout(REPEAT);
+    do_callback();
+    return 1;
   default:
-    return Fl_Button::handle(event);
+    return Button::handle(event);
   }
 }
 
 //
-// End of "$Id: Fl_Repeat_Button.cxx,v 1.9 2002/09/16 00:29:06 spitzak Exp $".
+// End of "$Id: Fl_Repeat_Button.cxx,v 1.10 2002/12/09 04:52:26 spitzak Exp $".
 //

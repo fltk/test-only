@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Plugins.cxx,v 1.24 2002/02/18 04:58:15 spitzak Exp $"
+// "$Id: Fluid_Plugins.cxx,v 1.25 2002/12/09 04:52:22 spitzak Exp $"
 //
 // Plugins code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,10 +26,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <fltk/Fl.h>
+#include <fltk/run.h>
+#include <fltk/Group.h>
 #include "Fluid_Plugins.h"
-#include <fltk/Fl_Menu_Item.h>
-#include <fltk/fl_load_plugin.h>
+#include <FL/Fl_Menu_Item.h>
+#include <fltk/load_plugin.h>
 #include <config.h> // for strcasecmp
 
 Fluid_Plugin* plugins[MAXPLUGINS];
@@ -52,7 +53,7 @@ static void ReadPlugin(char* s, const char* location)
 
     sprintf(s2, "%s%s", location, s);
 
-    Fluid_Plugin* d = (Fluid_Plugin*)fl_load_plugin(s2, "fluid_plugin");
+    Fluid_Plugin* d = (Fluid_Plugin*)load_plugin(s2, "fluid_plugin");
 
     if (d) {
       s[strlen(s)-sizeof(PLUGINS_EXTENSION)+1] = 0;
@@ -84,6 +85,7 @@ static void ReadPlugin(char* s, const char* location)
 
 static void ReadPlugins(const char* location)
 {
+#if 0
   dirent **d = 0;
   int n = filename_list(location, &d);
 
@@ -98,15 +100,16 @@ static void ReadPlugins(const char* location)
 //    free((void*)(d[i]));
   }
   free((void*)d);
+#endif
 }
 
 // Here, we create some useless object just to be sure that the whole 
 // FLTK library will be linked in fluid.
 // This function even do not need to be called ...
-#include <fltk/Fl_Pixmap.h>
+#include <fltk/xpmImage.h>
 void link_whole_fltk()
 {
-  new Fl_Pixmap((char**)0);
+  new fltk::xpmImage((char**)0);
   // add some more if you get problems when reading your plugins ...
 }
 
@@ -130,5 +133,5 @@ void read_plugins() {}
 #endif
 
 //
-// End of "$Id: Fluid_Plugins.cxx,v 1.24 2002/02/18 04:58:15 spitzak Exp $"
+// End of "$Id: Fluid_Plugins.cxx,v 1.25 2002/12/09 04:52:22 spitzak Exp $"
 //

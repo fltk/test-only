@@ -2,8 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ctype.h>
-#include <fltk/Fl_Window.h>
-#include "Fl_Type.h"	// for indent() prototype
+#include <fltk/Window.h>
+#include "FluidType.h"	// for indent() prototype
 #if defined(_WIN32) && !defined (__GNUC__)
 #	define strcasecmp  stricmp
 #else
@@ -11,7 +11,7 @@
 #endif
 
 // these two are in the FLUID output from coding_style.fl									  
-extern Fl_Window *make_codingstyle_window();
+extern fltk::Window *make_codingstyle_window();
 extern void load_codingstyle_window();
 
 int gbrace_style = 1;
@@ -124,9 +124,9 @@ const char *get_opening_brace(int isfunction)
 	return " {\n";
 }
 
-void show_coding_style_cb(Fl_Widget *, void *)
+void show_coding_style_cb(fltk::Widget *, void *)
 {
-	static Fl_Window *pWindow = NULL;
+	static fltk::Window *pWindow = NULL;
 
 	if(!pWindow)
 		pWindow = make_codingstyle_window();

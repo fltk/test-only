@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.40 2002/09/09 01:39:56 spitzak Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.41 2002/12/09 04:52:22 spitzak Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
-// The widget describing an Fl_Window.  This is also all the code
+// The widget describing an fltk::Window.  This is also all the code
 // for interacting with the overlay, which allows the user to
 // select, move, and resize the children widgets.
 //
@@ -27,11 +27,13 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Overlay_Window.h>
-#include <fltk/fl_message.h>
-#include <fltk/fl_draw.h>
-#include "Fl_Type.h"
+#include <fltk/events.h>
+#include <fltk/damage.h>
+#include <fltk/OverlayWindow.h>
+#include <fltk/ask.h>
+#include <fltk/draw.h>
+#include <fltk/Box.h>
+#include "FluidType.h"
 #include <math.h>
 #include <stdlib.h>
 #include "alignment_panel.h"
@@ -43,7 +45,7 @@ int snap = 3;
 
 int include_H_from_C = 1;
 
-void alignment_cb(Fl_Input *i, long v) {
+void alignment_cb(fltk::Input *i, long v) {
   int n = (int)strtol(i->value(),0,0);
   if (n < 0) n = 0;
   switch (v) {
@@ -56,7 +58,7 @@ void alignment_cb(Fl_Input *i, long v) {
 extern const char* header_file_name;
 extern const char* code_file_name;
 
-void show_alignment_cb(Fl_Widget *, void *) {
+void show_alignment_cb(fltk::Widget *, void *) {
   if (!alignment_window) make_alignment_window();
   include_H_from_C_button->value(include_H_from_C);
   header_file_input->value(header_file_name);
@@ -68,59 +70,54 @@ void show_alignment_cb(Fl_Widget *, void *) {
   alignment_window->show();
 }
 
-void header_input_cb(Fl_Input* i, void*) {
+void header_input_cb(fltk::Input* i, void*) {
   header_file_name = i->value();
 }
-void code_input_cb(Fl_Input* i, void*) {
+void code_input_cb(fltk::Input* i, void*) {
   code_file_name = i->value();
 }
 
-void include_H_from_C_button_cb(Fl_Check_Button* b, void*) {
+void include_H_from_C_button_cb(fltk::CheckButton* b, void*) {
   include_H_from_C = b->value();
 }
 
 ////////////////////////////////////////////////////////////////
 
-const char* Fl_Window_Type::type_name() const {return "Fl_Window";}
+const char* WindowType::type_name() const {return "fltk::Window";}
 
 static const Enumeration window_type_menu[] = {
-  {"Single", 0, (void*)Fl_Widget::WINDOW_TYPE},
-  {"Double", 0, (void*)(Fl_Widget::WINDOW_TYPE+1), "Fl_Double_Window"},
+  {"Single", 0, (void*)fltk::Widget::WINDOW_TYPE},
+  {"Double", 0, (void*)(fltk::Widget::WINDOW_TYPE+1), "fltk::DoubleBufferWindow"},
   {0}};
 
-const Enumeration* Fl_Window_Type::subtypes() const {return window_type_menu;}
+const Enumeration* WindowType::subtypes() const {return window_type_menu;}
 
 int overlays_invisible;
 
-// The following Fl_Widget is used to simulate the windows.  It has
-// an overlay for the fluid ui, and special-cases the FL_NO_BOX.
+// The following fltk::Widget is used to simulate the windows.  It has
+// an overlay for the fluid ui, and special-cases the fltk::NO_BOX.
 
-class Overlay_Window : public Fl_Overlay_Window {
+class Overlay_Window : public fltk::OverlayWindow {
   void draw();
   void draw_overlay();
 public:
-  Fl_Window_Type *window;
+  WindowType *window;
   int handle(int);
-  Overlay_Window(int w,int h) : Fl_Overlay_Window(w,h) {Fl_Group::current(0);}
+  Overlay_Window(int w,int h) : fltk::OverlayWindow(w,h) {fltk::Group::current(0);}
 };
 void Overlay_Window::draw() {
   const int CHECKSIZE = 8;
   // see if box is clear or a frame or rounded:
-  if ((damage()&FL_DAMAGE_ALL) &&
-      box() != FL_FLAT_BOX &&
-      box() != FL_UP_BOX &&
-      box() != FL_DOWN_BOX &&
-      box() != FL_THIN_UP_BOX &&
-      box() != FL_THIN_DOWN_BOX) {
+  if ((damage()&fltk::DAMAGE_ALL) && !box()->fills_rectangle()) {
     // if so, draw checkerboard so user can see what areas are clear:
     for (int y = 0; y < h(); y += CHECKSIZE) 
       for (int x = 0; x < w(); x += CHECKSIZE) {
-	fl_color(((y/(2*CHECKSIZE))&1) != ((x/(2*CHECKSIZE))&1) ?
-		 FL_WHITE : FL_BLACK);
-	fl_rectf(x,y,CHECKSIZE,CHECKSIZE);
+	fltk::setcolor(((y/(2*CHECKSIZE))&1) != ((x/(2*CHECKSIZE))&1) ?
+		 fltk::WHITE : fltk::BLACK);
+	fltk::fillrect(x,y,CHECKSIZE,CHECKSIZE);
       }
   }
-  Fl_Overlay_Window::draw();
+  fltk::OverlayWindow::draw();
 }
 
 void Overlay_Window::draw_overlay() {
@@ -130,22 +127,22 @@ int Overlay_Window::handle(int e) {
   return window->handle(e);
 }
 
-#include <fltk/Fl_Style_Set.h>
-extern Fl_Style_Set* fluid_style_set;
-extern Fl_Style_Set* style_set;
+#include <fltk/StyleSet.h>
+extern fltk::StyleSet* fluid_style_set;
+extern fltk::StyleSet* style_set;
 
-Fl_Type *Fl_Window_Type::make() {
-  Fl_Type *p = Fl_Type::current;
+FluidType *WindowType::make() {
+  FluidType *p = FluidType::current;
   while (p && !p->is_code_block()) p = p->parent;
   if (!p) {
-    fl_message("Please select a function");
+    fltk::message("Please select a function");
     return 0;
   }
   style_set->make_current();
-  Fl_Window_Type *o = new Fl_Window_Type();
+  WindowType *o = new WindowType();
   if (!this->o) {// template widget
-    this->o = new Fl_Window(100,100);
-    Fl_Group::current(0);
+    this->o = new fltk::Window(100,100);
+    fltk::Group::current(0);
   }
   o->factory = this;
   o->drag = 0;
@@ -162,24 +159,24 @@ Fl_Type *Fl_Window_Type::make() {
   return o;
 }
 
-void Fl_Window_Type::add_child(Fl_Type* cc, Fl_Type* before) {
-  Fl_Widget_Type* c = (Fl_Widget_Type*)cc;
-  Fl_Widget* b = before ? ((Fl_Widget_Type*)before)->o : 0;
-  ((Fl_Window*)o)->insert(*(c->o), b);
+void WindowType::add_child(FluidType* cc, FluidType* before) {
+  WidgetType* c = (WidgetType*)cc;
+  fltk::Widget* b = before ? ((WidgetType*)before)->o : 0;
+  ((fltk::Window*)o)->insert(*(c->o), b);
   o->redraw();
 }
 
-void Fl_Window_Type::remove_child(Fl_Type* cc) {
-  Fl_Widget_Type* c = (Fl_Widget_Type*)cc;
-  ((Fl_Window*)o)->remove(c->o);
+void WindowType::remove_child(FluidType* cc) {
+  WidgetType* c = (WidgetType*)cc;
+  ((fltk::Window*)o)->remove(c->o);
   o->redraw();
 }
 
-void Fl_Window_Type::move_child(Fl_Type* cc, Fl_Type* before) {
-  Fl_Widget_Type* c = (Fl_Widget_Type*)cc;
-  ((Fl_Window*)o)->remove(c->o);
-  Fl_Widget* b = before ? ((Fl_Widget_Type*)before)->o : 0;
-  ((Fl_Window*)o)->insert(*(c->o), b);
+void WindowType::move_child(FluidType* cc, FluidType* before) {
+  WidgetType* c = (WidgetType*)cc;
+  ((fltk::Window*)o)->remove(c->o);
+  fltk::Widget* b = before ? ((WidgetType*)before)->o : 0;
+  ((fltk::Window*)o)->insert(*(c->o), b);
   o->redraw();
 }
 
@@ -187,11 +184,11 @@ void Fl_Window_Type::move_child(Fl_Type* cc, Fl_Type* before) {
 
 // Double-click on window widget shows the window, or if already shown,
 // it shows the control panel.
-void Fl_Window_Type::open() {
+void WindowType::open() {
   Overlay_Window *w = (Overlay_Window *)o;
   if (w->shown()) {
     w->show();
-    Fl_Widget_Type::open();
+    WidgetType::open();
   } else {
     w->size_range(10, 10, 0, 0, gridx, gridy);
     w->show();
@@ -201,50 +198,50 @@ void Fl_Window_Type::open() {
 // control panel items:
 #include "widget_panel.h"
 
-void modal_cb(Fl_Check_Button* i, void* v) {
+void modal_cb(fltk::CheckButton* i, void* v) {
   if (v == LOAD) {
     if (!current_widget->is_window()) {i->hide(); return;}
     i->show();
-    i->value(((Fl_Window_Type *)current_widget)->modal);
+    i->value(((WindowType *)current_widget)->modal);
   } else {
-    ((Fl_Window_Type *)current_widget)->modal = i->value();
+    ((WindowType *)current_widget)->modal = i->value();
   }
 }
 
-void non_modal_cb(Fl_Check_Button* i, void* v) {
+void non_modal_cb(fltk::CheckButton* i, void* v) {
   if (v == LOAD) {
     if (!current_widget->is_window()) {i->hide(); return;}
     i->show();
-    i->value(((Fl_Window_Type *)current_widget)->non_modal);
+    i->value(((WindowType *)current_widget)->non_modal);
   } else {
-    ((Fl_Window_Type *)current_widget)->non_modal = i->value();
+    ((WindowType *)current_widget)->non_modal = i->value();
   }
 }
 
-void border_cb(Fl_Check_Button* i, void* v) {
+void border_cb(fltk::CheckButton* i, void* v) {
   if (v == LOAD) {
     if (!current_widget->is_window()) {i->hide(); return;}
     i->show();
-    i->value(((Fl_Window_Type *)current_widget)->border);
+    i->value(((WindowType *)current_widget)->border);
   } else {
-    ((Fl_Window_Type *)current_widget)->border = i->value();
+    ((WindowType *)current_widget)->border = i->value();
   }
 }
 
 ////////////////////////////////////////////////////////////////
 
-void Fl_Window_Type::setlabel(const char *n) {
-  if (o) ((Fl_Window *)o)->label(n);
+void WindowType::setlabel(const char *n) {
+  if (o) ((fltk::Window *)o)->label(n);
 }
 
 // make() is called on this widget when user picks window off New menu:
-Fl_Window_Type Fl_Window_type;
+WindowType Windowtype;
 
 // calculate actual move by moving mouse position (mx,my) to
 // nearest multiple of gridsize, and snap to original position
-void Fl_Window_Type::newdx() {
+void WindowType::newdx() {
   int dx, dy;
-  if (Fl::event_state(FL_ALT) || drag == BOX) {
+  if (fltk::event_state(fltk::ALT) || drag == BOX) {
     dx = mx-x1;
     dy = my-y1;
   } else {
@@ -274,7 +271,7 @@ void Fl_Window_Type::newdx() {
 }
 
 // Move a widget according to dx and dy calculated above
-void Fl_Window_Type::newposition(Fl_Widget_Type *o,int &X,int &Y,int &R,int &T) {
+void WindowType::newposition(WidgetType *o,int &X,int &Y,int &R,int &T) {
   X = o->o->x();
   Y = o->o->y();
   R = X+o->o->w();
@@ -287,7 +284,7 @@ void Fl_Window_Type::newposition(Fl_Widget_Type *o,int &X,int &Y,int &R,int &T) 
     T += dy;
   } else {
     int ox = 0; int oy = 0;
-    Fl_Group* p = o->o->parent();
+    fltk::Group* p = o->o->parent();
     while (p->parent()) {ox += p->x(); oy += p->y(); p = p->parent();}
     if (drag&LEFT) if (X+ox==bx) X += dx; else if (X<bx+dx-ox) X = bx+dx-ox;
     if (drag&BOTTOM) if (Y+oy==by) Y += dy; else if (Y<by+dy-oy) Y = by+dy-oy;
@@ -298,16 +295,16 @@ void Fl_Window_Type::newposition(Fl_Widget_Type *o,int &X,int &Y,int &R,int &T) 
   if (T<Y) {int n = Y; Y = T; T = n;}
 }
 
-void Fl_Window_Type::draw_overlay() {
+void WindowType::draw_overlay() {
   if (recalc) {
     bx = o->w(); by = o->h(); br = 0; bt = 0;
     numselected = 0;
-    for (Fl_Type* q = first_child; q; q = q->walk(this)) {
+    for (FluidType* q = first_child; q; q = q->walk(this)) {
       if (q->selected && q->is_widget() && !q->is_menu_item()) {
 	numselected++;
-	Fl_Widget* o = ((Fl_Widget_Type*)q)->o;
+	fltk::Widget* o = ((WidgetType*)q)->o;
 	int x = o->x(); int y = o->y();
-	Fl_Group* p = o->parent();
+	fltk::Group* p = o->parent();
 	while (p->parent()) {x += p->x(); y += p->y(); p = p->parent();}
 	if (x < bx) bx = x;
 	if (y < by) by = y;
@@ -317,87 +314,87 @@ void Fl_Window_Type::draw_overlay() {
     }
     recalc = 0;
   }
-  fl_color(FL_RED);
+  fltk::setcolor(fltk::RED);
   if (drag==BOX && (x1 != mx || y1 != my)) {
     int x = x1; int r = mx; if (x > r) {x = mx; r = x1;}
     int y = y1; int b = my; if (y > b) {y = my; b = y1;}
-    fl_rect(x,y,r-x,b-y);
+    fltk::strokerect(x,y,r-x,b-y);
   }
   if (overlays_invisible && !drag) return;
-  if (selected) fl_rect(0,0,o->w(),o->h());
+  if (selected) fltk::strokerect(0,0,o->w(),o->h());
   if (!numselected) return;
   int bx,by,br,bt;
   bx = o->w(); by = o->h(); br = 0; bt = 0;
-  for (Fl_Type* q = first_child; q; q = q->walk(this)) {
+  for (FluidType* q = first_child; q; q = q->walk(this)) {
     if (q->selected && q->is_widget() && !q->is_menu_item()) {
       int x,y,r,t;
-      newposition((Fl_Widget_Type*)q,x,y,r,t);
-      Fl_Widget* o = ((Fl_Widget_Type*)q)->o;
-      Fl_Group* p = o->parent();
+      newposition((WidgetType*)q,x,y,r,t);
+      fltk::Widget* o = ((WidgetType*)q)->o;
+      fltk::Group* p = o->parent();
       while (p->parent()) {
 	x += p->x(); r += p->x();
 	y += p->y(); t += p->y();
 	p = p->parent();
       }
       int hidden = (!o->visible_r());
-      if (hidden) fl_line_style(FL_DASH);
-      fl_rect(x,y,r-x,t-y);
+      if (hidden) fltk::line_style(fltk::DASH);
+      fltk::strokerect(x,y,r-x,t-y);
       if (x < bx) bx = x;
       if (y < by) by = y;
       if (r > br) br = r;
       if (t > bt) bt = t;
-      if (hidden) fl_line_style(FL_SOLID);
+      if (hidden) fltk::line_style(fltk::SOLID);
     }
   }
   if (selected) return;
-  if (numselected>1) fl_rect(bx,by,br-bx,bt-by);
-  fl_rectf(bx,by,5,5);
-  fl_rectf(br-5,by,5,5);
-  fl_rectf(br-5,bt-5,5,5);
-  fl_rectf(bx,bt-5,5,5);
+  if (numselected>1) fltk::strokerect(bx,by,br-bx,bt-by);
+  fltk::fillrect(bx,by,5,5);
+  fltk::fillrect(br-5,by,5,5);
+  fltk::fillrect(br-5,bt-5,5,5);
+  fltk::fillrect(bx,bt-5,5,5);
 }
 
 // Calculate new bounding box of selected widgets:
-void Fl_Window_Type::fix_overlay() {
+void WindowType::fix_overlay() {
   recalc = 1;
   ((Overlay_Window *)(this->o))->redraw_overlay();
 }
 
 // do that for every window (when selected set changes):
 void redraw_overlays() {
-  for (Fl_Type *o=Fl_Type::first; o; o=o->walk())
-    if (o->is_window()) ((Fl_Window_Type*)o)->fix_overlay();
+  for (FluidType *o=FluidType::first; o; o=o->walk())
+    if (o->is_window()) ((WindowType*)o)->fix_overlay();
 }
 
-#include <fltk/Fl_Menu_Bar.h>
-extern Fl_Menu_Bar* menubar;
+#include <fltk/MenuBar.h>
+extern fltk::MenuBar* menubar;
 
-void toggle_overlays(Fl_Widget *,void *) {
+void toggle_overlays(fltk::Widget *,void *) {
   if (overlays_invisible)
     menubar->find("&Edit/Show Overlays")->set_value();
   else
     menubar->find("&Edit/Show Overlays")->clear_value();
   if (overlaybutton) overlaybutton->value(overlays_invisible);
   overlays_invisible = !overlays_invisible;
-  for (Fl_Type *o=Fl_Type::first; o; o=o->walk())
+  for (FluidType *o=FluidType::first; o; o=o->walk())
     if (o->is_window()) {
-      Fl_Widget_Type* w = (Fl_Widget_Type*)o;
+      WidgetType* w = (WidgetType*)o;
       ((Overlay_Window*)(w->o))->redraw_overlay();
     }
 }
 
-extern void select(Fl_Type *,int);
-extern void select_only(Fl_Type *);
-extern Fl_Type* in_this_only;
-extern void fix_group_size(Fl_Type *t);
+extern void select(FluidType *,int);
+extern void select_only(FluidType *);
+extern FluidType* in_this_only;
+extern void fix_group_size(FluidType *t);
 
 // move the selected children according to current dx,dy,drag state:
-void Fl_Window_Type::moveallchildren()
+void WindowType::moveallchildren()
 {
-  Fl_Type *i;
+  FluidType *i;
   for (i = first_child; i;) {
     if (i->selected && i->is_widget() && !i->is_menu_item()) {
-      Fl_Widget_Type* o = (Fl_Widget_Type*)i;
+      WidgetType* o = (WidgetType*)i;
       int x,y,r,t;
       newposition(o,x,y,r,t);
       o->o->resize(x,y,r-x,t-y);
@@ -415,28 +412,28 @@ void Fl_Window_Type::moveallchildren()
   dx = dy = 0;
 }
 
-#include <fltk/Fl_Menu_Item.h>
+#include <FL/Fl_Menu_Item.h>
 
 extern Fl_Menu_Item Main_Menu[];
 extern Fl_Menu_Item New_Menu[];
 
 // find the innermost item clicked on:
-Fl_Widget_Type* Fl_Window_Type::clicked_widget() {
-  Fl_Widget_Type* selection = this;
+WidgetType* WindowType::clicked_widget() {
+  WidgetType* selection = this;
   int x = 0; int y = 0;
   for (;;) {
-    Fl_Widget_Type* inner_selection = 0;
-    for (Fl_Type* i = selection->first_child; i; i = i->next_brother) {
+    WidgetType* inner_selection = 0;
+    for (FluidType* i = selection->first_child; i; i = i->next_brother) {
       if (i->is_widget() && !i->is_menu_item()) {
-	Fl_Widget_Type* o = (Fl_Widget_Type*)i;
-	Fl_Widget* w = o->o;
-	if (w->visible_r()&&Fl::event_inside(w->x()+x,w->y()+y,w->w(),w->h()))
+	WidgetType* o = (WidgetType*)i;
+	fltk::Widget* w = o->o;
+	if (w->visible_r()&&fltk::event_inside(w->x()+x,w->y()+y,w->w(),w->h()))
 	  inner_selection = o;
       }
     }
     if (inner_selection) {
       selection = inner_selection;
-      Fl_Widget* w = inner_selection->o;
+      fltk::Widget* w = inner_selection->o;
       x += w->x();
       y += w->y();
     } else {
@@ -446,15 +443,15 @@ Fl_Widget_Type* Fl_Window_Type::clicked_widget() {
   return selection;
 }
 
-int Fl_Window_Type::handle(int event) {
-  static Fl_Type* selection;
+int WindowType::handle(int event) {
+  static FluidType* selection;
   switch (event) {
-  case FL_PUSH:
-    x1 = mx = Fl::event_x();
-    y1 = my = Fl::event_y();
+  case fltk::PUSH:
+    x1 = mx = fltk::event_x();
+    y1 = my = fltk::event_y();
     drag = 0;
     // test for popup menu:
-    if (Fl::event_button() >= 3) {
+    if (fltk::event_button() >= 3) {
       in_this_only = this; // modifies how some menu items work.
       New_Menu->popup(mx,my,"New");
       in_this_only = 0;
@@ -462,7 +459,7 @@ int Fl_Window_Type::handle(int event) {
     }
     selection = clicked_widget();
     // see if user grabs edges of selected region:
-    if (numselected && !(Fl::event_state(FL_SHIFT)) &&
+    if (numselected && !(fltk::event_state(fltk::SHIFT)) &&
 	mx<=br+snap && mx>=bx-snap && my<=bt+snap && my>=by-snap) {
       int snap1 = snap>5 ? snap : 5;
       int w1 = (br-bx)/4; if (w1 > snap1) w1 = snap1;
@@ -474,11 +471,11 @@ int Fl_Window_Type::handle(int event) {
       if (!drag) drag = DRAG;
     }
     // do object-specific selection of other objects:
-    {Fl_Type* t = selection->click_test(mx, my);
+    {FluidType* t = selection->click_test(mx, my);
     if (t) {
       //if (t == selection) return 1; // indicates mouse eaten w/o change
-      if (Fl::event_state(FL_SHIFT)) {
-	Fl::event_is_click(0);
+      if (fltk::event_state(fltk::SHIFT)) {
+	fltk::event_is_click(0);
 	select(t, !t->selected);
       } else {
 	select_only(t);
@@ -490,34 +487,34 @@ int Fl_Window_Type::handle(int event) {
       if (!drag) drag = BOX; // if all else fails, start a new selection region
     }}
     return 1;
-  case FL_DRAG:
+  case fltk::DRAG:
     if (!drag) return 0;
-    mx = Fl::event_x();
-    my = Fl::event_y();
+    mx = fltk::event_x();
+    my = fltk::event_y();
     newdx();
     return 1;
-  case FL_RELEASE:
+  case fltk::RELEASE:
     if (!drag) return 0;
-    mx = Fl::event_x();
-    my = Fl::event_y();
+    mx = fltk::event_x();
+    my = fltk::event_y();
     newdx();
-    if (drag != BOX && (dx || dy || !Fl::event_is_click())) {
+    if (drag != BOX && (dx || dy || !fltk::event_is_click())) {
       if (dx || dy) moveallchildren();
-    } else if ((Fl::event_clicks() || Fl::event_state(FL_CTRL))) {
-      Fl_Widget_Type::open();
+    } else if ((fltk::event_clicks() || fltk::event_state(fltk::CTRL))) {
+      WidgetType::open();
     } else {
       if (mx<x1) {int t = x1; x1 = mx; mx = t;}
       if (my<y1) {int t = y1; y1 = my; my = t;}
       int n = 0;
-      int toggle = Fl::event_state(FL_SHIFT);
-      if (toggle) Fl::event_is_click(0);
+      int toggle = fltk::event_state(fltk::SHIFT);
+      if (toggle) fltk::event_is_click(0);
 
       // select everything in box:
-      for (Fl_Type* i = first_child; i; i = i->walk(this)) {
+      for (FluidType* i = first_child; i; i = i->walk(this)) {
 	if (i->is_widget() && !i->is_menu_item()) {
-	  Fl_Widget* o = ((Fl_Widget_Type*)i)->o;
+	  fltk::Widget* o = ((WidgetType*)i)->o;
 	  int x = o->x(); int y = o->y();
-	  Fl_Group* p = o->parent(); if (!p->visible_r()) continue;
+	  fltk::Group* p = o->parent(); if (!p->visible_r()) continue;
 	  while (p->parent()) {x += p->x(); y += p->y(); p = p->parent();}
 	  if (x >= x1 && y > y1 && x+o->w() < mx && y+o->h() < my) {
 	    if (toggle) select(i, !i->selected);
@@ -548,25 +545,25 @@ int Fl_Window_Type::handle(int event) {
       }
     return 1;
 
-  case FL_FOCUS:
-  case FL_UNFOCUS:
+  case fltk::FOCUS:
+  case fltk::UNFOCUS:
     return 1;
 
-  case FL_KEY: {
+  case fltk::KEY: {
 
-    switch (Fl::event_key()) {
+    switch (fltk::event_key()) {
 
-    case FL_Escape:
-      ((Fl_Window*)o)->hide();
+    case fltk::EscapeKey:
+      ((fltk::Window*)o)->hide();
       return 1;
 
-    case FL_Tab: {
-      int backtab = (Fl::event_state(FL_SHIFT));
+    case fltk::TabKey: {
+      int backtab = (fltk::event_state(fltk::SHIFT));
       // see if the current item is in this window:
-      Fl_Type *i = Fl_Type::current;
+      FluidType *i = FluidType::current;
       while (i && i->parent != this) i = i->parent;
       if (i) {
-	i = Fl_Type::current;
+	i = FluidType::current;
 	for (;;) {
 	  if (backtab) {
 	    if (i->previous_brother) {
@@ -582,21 +579,21 @@ int Fl_Window_Type::handle(int event) {
 	  } else i = i->walk(this);
 	  if (!i) break;
 	  if (i->is_widget() && !i->is_menu_item() &&
-	      ((Fl_Widget_Type*)i)->o->parent()->visible_r()) break;
+	      ((WidgetType*)i)->o->parent()->visible_r()) break;
 	}
       }
       if (!i) i = first_child;
       select_only(i);
       return 1;}
 
-    case FL_Left:  dx = -1; dy = 0; goto ARROW;
-    case FL_Right: dx = +1; dy = 0; goto ARROW;
-    case FL_Up:    dx = 0; dy = -1; goto ARROW;
-    case FL_Down:  dx = 0; dy = +1; goto ARROW;
+    case fltk::LeftKey:  dx = -1; dy = 0; goto ARROW;
+    case fltk::RightKey: dx = +1; dy = 0; goto ARROW;
+    case fltk::UpKey:    dx = 0; dy = -1; goto ARROW;
+    case fltk::DownKey:  dx = 0; dy = +1; goto ARROW;
     ARROW:
       // for some reason BOTTOM/TOP are swapped... should be fixed...
-      drag = (Fl::event_state(FL_SHIFT)) ? (RIGHT|TOP) : DRAG;
-      if (Fl::event_state(FL_CTRL)) {dx *= gridx; dy *= gridy;}
+      drag = (fltk::event_state(fltk::SHIFT)) ? (RIGHT|TOP) : DRAG;
+      if (fltk::event_state(fltk::CTRL)) {dx *= gridx; dy *= gridy;}
       moveallchildren();
       drag = 0;
       return 1;
@@ -609,14 +606,14 @@ int Fl_Window_Type::handle(int event) {
       return 0;
     }}
 
-  case FL_SHORTCUT: {
+  case fltk::SHORTCUT: {
     in_this_only = this; // modifies how some menu items work.
     const Fl_Menu_Item* r = Main_Menu->test_shortcut();
     in_this_only = 0;
     return r != 0;}
 
   default:
-    return ((Overlay_Window *)o)->Fl_Overlay_Window::handle(event);
+    return ((Overlay_Window *)o)->fltk::OverlayWindow::handle(event);
   }
 }
 
@@ -625,21 +622,24 @@ int Fl_Window_Type::handle(int event) {
 #include <stdio.h>
 #include <string.h>
 
-void Fl_Window_Type::write_code() {
-  Fl_Widget_Type::write_code1();
-  for (Fl_Type* q = first_child; q; q = q->next_brother) q->write_code();
+void WindowType::write_code() {
+  WidgetType::write_code1();
+  if (first_child) {
+    write_c("%so->begin();\n", indent());
+    for (FluidType* q = first_child; q; q = q->next_brother) q->write_code();
+    write_c("%so->end();\n", indent());
+  }
   write_extra_code();
   if (modal) write_c("%so->set_modal();\n", indent());
   else if (non_modal) write_c("%so->set_non_modal();\n", indent());
   if (!border) write_c("%so->clear_border();\n", indent());
-  write_c("%so->end();\n", indent());
-  if (((Fl_Window*)o)->resizable() == o)
+  if (((fltk::Window*)o)->resizable() == o)
     write_c("%so->resizable(o);\n", indent());
   write_block_close();
 }
 
-void Fl_Window_Type::write_properties() {
-  Fl_Widget_Type::write_properties();
+void WindowType::write_properties() {
+  WidgetType::write_properties();
   if (modal) write_string("modal");
   else if (non_modal) write_string("non_modal");
   if (!border) write_string("noborder");
@@ -647,28 +647,28 @@ void Fl_Window_Type::write_properties() {
 }
 
 extern int pasteoffset;
-void Fl_Window_Type::read_property(const char *c) {
+void WindowType::read_property(const char *c) {
   if (!strcmp(c,"modal")) {
     modal = 1;
   } else if (!strcmp(c,"non_modal")) {
     non_modal = 1;
   } else if (!strcmp(c, "visible")) {
-    if (Fl::first_window()) open(); // only if we are using user interface
+    if (fltk::Window::first()) open(); // only if we are using user interface
   } else if (!strcmp(c,"noborder")) {
     border = 0;
   } else if (!strcmp(c,"xclass")) {
     ; // obsolete string, ignore it
   } else if (!strcmp(c,"xywh")) {
-    Fl_Widget_Type::read_property(c);
+    WidgetType::read_property(c);
     pasteoffset = 0; // make it not apply to contents
   } else {
-    Fl_Widget_Type::read_property(c);
+    WidgetType::read_property(c);
   }
 }
 
-int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
+int WindowType::read_fdesign(const char* name, const char* value) {
   int x;
-  o->box(FL_NO_BOX); // because fdesign always puts an Fl_Box next
+  o->box(fltk::NO_BOX); // because fdesign always puts an fltk::Box next
   if (!strcmp(name,"Width")) {
     if (sscanf(value,"%d",&x) == 1) o->size(x,o->h());
   } else if (!strcmp(name,"Height")) {
@@ -680,11 +680,11 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
   } else if (!strcmp(name,"title")) {
     label(value);
   } else {
-    return Fl_Widget_Type::read_fdesign(name,value);
+    return WidgetType::read_fdesign(name,value);
   }
   return 1;
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.40 2002/09/09 01:39:56 spitzak Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.41 2002/12/09 04:52:22 spitzak Exp $".
 //

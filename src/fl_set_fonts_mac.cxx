@@ -1,5 +1,5 @@
 //
-// "$Id: fl_set_fonts_mac.cxx,v 1.2 2002/09/09 01:39:58 spitzak Exp $"
+// "$Id: fl_set_fonts_mac.cxx,v 1.3 2002/12/09 04:52:30 spitzak Exp $"
 //
 // MacOS font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -29,31 +29,31 @@
 // and bold italic.
 
 // turn a stored font name into a pretty name:
-const char* Fl::get_font_name(Fl_Font fnum, int* ap) {
-  const char* p = fl_fonts[fnum].name;
+const char* get_font_name(Font* fnum, int* ap) {
+  const char* p = fonts[fnum].name;
   if (!p || !*p) {if (ap) *ap = 0; return "";}
   int type;
   switch (*p) {
-  case 'B': type = FL_BOLD; break;
-  case 'I': type = FL_ITALIC; break;
-  case 'P': type = FL_BOLD | FL_ITALIC; break;
+  case 'B': type = BOLD; break;
+  case 'I': type = ITALIC; break;
+  case 'P': type = BOLD | ITALIC; break;
   default:  type = 0; break;
   }
   if (ap) *ap = type;
   if (!type) return p+1;
   static char *buffer; if (!buffer) buffer = new char[128];
   strcpy(buffer, p+1);
-  if (type & FL_BOLD) strcat(buffer, " bold");
-  if (type & FL_ITALIC) strcat(buffer, " italic");
+  if (type & BOLD) strcat(buffer, " bold");
+  if (type & ITALIC) strcat(buffer, " italic");
   return buffer;
 }
 
-static int fl_free_font = FL_FREE_FONT;
+static int free_font = FREE_FONT;
 
-Fl_Font Fl::set_fonts(const char* xstarname) {
+Font* setfonts(const char* xstarname) {
 #pragma unused ( xstarname )
-  if (fl_free_font != FL_FREE_FONT) 
-    return (Fl_Font)fl_free_font;
+  if (free_font != FREE_FONT) 
+    return (Font*)free_font;
   static char styleLU[] = " BIP";
   FMFontFamilyInstanceIterator ffiIterator;
   FMFontFamilyIterator ffIterator;
@@ -77,9 +77,9 @@ Fl_Font Fl::set_fonts(const char* xstarname) {
     buf[ buf[0]+1 ] = 0;
     //printf( "Font Family: %s\n", buf+1 );
     int i;
-    for (i=0; i<FL_FREE_FONT; i++) // skip if one of our built-in fonts
-      if (!strcmp(Fl::get_font_name((Fl_Font)i),(char*)buf+1)) break;
-    if ( i < FL_FREE_FONT ) continue;
+    for (i=0; i<FREE_FONT; i++) // skip if one of our built-in fonts
+      if (!strcmp(get_font_name((Font*)i),(char*)buf+1)) break;
+    if ( i < FREE_FONT ) continue;
     FMCreateFontFamilyInstanceIterator( family, &ffiIterator );
     char pStyle = 0, nStyle;
     for (;;)
@@ -91,20 +91,20 @@ Fl_Font Fl::set_fonts(const char* xstarname) {
       if ( ( pStyle & ( 1<<(style&0x03) ) ) == 0 )
       {
         buf[0] = nStyle;
-        Fl::set_font((Fl_Font)(fl_free_font++), strdup((char*)buf));
+        setfont((Font*)(free_font++), strdup((char*)buf));
         pStyle |= ( 1<<(style&0x03) );
       }
     }
     FMDisposeFontFamilyInstanceIterator( &ffiIterator );
   }
   FMDisposeFontFamilyIterator( &ffIterator );
-  return (Fl_Font)fl_free_font;
+  return (Font*)free_font;
 }
 
 static int array[128];
-int Fl::get_font_sizes(Fl_Font fnum, int*& sizep) {
-  Fl_Fontdesc *s = fl_fonts+fnum;
-  if (!s->name) s = fl_fonts; // empty slot in table, use entry 0
+int get_font_sizes(Font* fnum, int*& sizep) {
+  Fontdesc *s = fonts+fnum;
+  if (!s->name) s = fonts; // empty slot in table, use entry 0
 
   Str255 name;
   int len = strlen( s->name ); strncpy( (char*)(name+1), s->name+1, len ); name[0] = len-1;
@@ -152,5 +152,5 @@ int Fl::get_font_sizes(Fl_Font fnum, int*& sizep) {
 }
 
 //
-// End of "$Id: fl_set_fonts_mac.cxx,v 1.2 2002/09/09 01:39:58 spitzak Exp $".
+// End of "$Id: fl_set_fonts_mac.cxx,v 1.3 2002/12/09 04:52:30 spitzak Exp $".
 //

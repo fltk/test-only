@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.26 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.27 2002/12/09 04:52:30 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -32,13 +32,15 @@
 // Version 2.1 a
 // Date: Oct  2, 1992
 
-#include <fltk/Fl_Style.h>
-#include <fltk/fl_draw.h>
+#include <fltk/Style.h>
+#include <fltk/draw.h>
+#include <fltk/events.h>
 #include <string.h>
+using namespace fltk;
 
 typedef struct {
   const char *name;
-  void (*drawit)(Fl_Color);
+  void (*drawit)(Color);
   char scalable;
   char notempty;
 } SYMBOL;
@@ -70,14 +72,14 @@ static int find(const char *name) {
   }
 }
 
-static void fl_init_symbols(void);
+static void init_symbols(void);
 
 /**************** The routines seen by the user *************************/
 
-int fl_add_symbol(const char *name, void (*drawit)(Fl_Color), int scalable)
+int fltk::add_symbol(const char *name, void (*drawit)(Color), int scalable)
 /* Adds a symbol to the system. Returns whether correct. */
 {
-  fl_init_symbols();
+  init_symbols();
   int pos;
   if (symbnumb > MAXSYMBOL / 2) return 0;	// table is full
   pos = find(name);
@@ -89,15 +91,15 @@ int fl_add_symbol(const char *name, void (*drawit)(Fl_Color), int scalable)
   return 1;
 }
 
-// this function is in Fl_Return_Button.cxx:
-void fl_glyph_return(const Fl_Widget*, int,
-		     int x,int y,int w,int h, Fl_Flags);
+// this function is in ReturnButton.cxx:
+void fl_glyph_return(const Widget*, int,
+		     int x,int y,int w,int h, Flags);
 
 // provided for back compatability:
-int fl_draw_symbol(const char *label,int x,int y,int w,int h,Fl_Color col) {
+int fltk::draw_symbol(const char *label,int x,int y,int w,int h,Color col) {
   const char *p = label;
   if (*p++ != '@') return 0;
-  fl_init_symbols();
+  init_symbols();
   bool equalscale = false;
   if (*p == '#') {
     equalscale = true;
@@ -142,15 +144,15 @@ int fl_draw_symbol(const char *label,int x,int y,int w,int h,Fl_Color col) {
     fl_glyph_return(0,0, x,y,w,h, 0);
     return 1;
   }
-  fl_push_matrix();
-  fl_translate(x+w/2,y+h/2);
+  push_matrix();
+  translate(x+w/2,y+h/2);
   if (symbols[pos].scalable) {
     if (equalscale) {if (w<h) h = w; else w = h;}
-    fl_scale(0.5f*w, 0.5f*h);
-    fl_rotate(rotangle/10.0f);
+    scale(0.5f*w, 0.5f*h);
+    rotate(rotangle/10.0f);
   }
   (symbols[pos].drawit)(col);
-  fl_pop_matrix();
+  pop_matrix();
   return 1;
 }
 
@@ -159,113 +161,113 @@ int fl_draw_symbol(const char *label,int x,int y,int w,int h,Fl_Color col) {
 /* Some help stuff */
 
 #define BP
-#define EP fl_fill()
+#define EP fillpath()
 #define BL
-#define EL fl_stroke()
+#define EL strokepath()
 #define BC
-#define EC fl_closepath(); fl_color(FL_BLACK); fl_stroke()
-#define EF(c) fl_fill_stroke(FL_BLACK)
-#define vv(x,y) fl_vertex(x,y)
+#define EC closepath(); setcolor(BLACK); strokepath()
+#define EF(c) fillstrokepath(BLACK)
+#define vv(x,y) addvertex(x,y)
 
-static void rectangle(float x,float y,float x2,float y2,Fl_Color col) {
-  fl_color(col);
+static void rectangle(float x,float y,float x2,float y2,Color col) {
+  setcolor(col);
   BP; vv(x,y); vv(x2,y); vv(x2,y2); vv(x,y2); EF(col);
 }
 
 /* The drawing routines */
 
-static void draw_arrow1(Fl_Color col)
+static void draw_arrow1(Color col)
 {
-  fl_color(col);
+  setcolor(col);
   BP; vv(-0.8f,-0.4f); vv(-0.8f,0.4f); vv(0.0f,0.4f); vv(0.0f,-0.4f); EP;
   BP; vv(0.0f,0.8f); vv(0.8f,0.0f); vv(0.0f,-0.8f); vv(0.0f,-0.4f); vv(0.0f,0.4f); EP;
   BC; vv(-0.8f,-0.4f); vv(-0.8f,0.4f); vv(0.0f,0.4f); vv(0.0f,0.8f); vv(0.8f,0.0f);
       vv(0.0f,-0.8f); vv(0.0f,-0.4f); EC;
 }
 
-static void draw_arrow2(Fl_Color col)
+static void draw_arrow2(Color col)
 {
-  fl_color(col);
+  setcolor(col);
   BP; vv(-0.3f,0.8f); vv(0.50f,0.0f); vv(-0.3f,-0.8f); EF(col);
 }
 
-static void draw_arrow3(Fl_Color col)
+static void draw_arrow3(Color col)
 {
-  fl_color(col);
+  setcolor(col);
   BP; vv(0.1f,0.8f); vv(0.9f,0.0f); vv(0.1f,-0.8f); EF(col);
   BP; vv(-0.7f,0.8f); vv(0.1f,0.0f); vv(-0.7f,-0.8f); EF(col);
 }
 
-static void draw_arrowbar(Fl_Color col)
+static void draw_arrowbar(Color col)
 {
-  fl_color(col);
+  setcolor(col);
   BP; vv(0.2f,0.8f); vv(0.6f,0.8f); vv(0.6f,-0.8f); vv(0.2f,-0.8f); EF(col);
   BP; vv(-0.6f,0.8f); vv(0.2f,0.0f); vv(-0.6f,-0.8f); EF(col);
 }
 
-static void draw_arrowbox(Fl_Color col)
+static void draw_arrowbox(Color col)
 {
-  fl_color(col);
+  setcolor(col);
   BP; vv(-0.6f,0.8f); vv(0.2f,0.0f); vv(-0.6f,-0.8f); EF(col);
   BC; vv(0.2f,0.8f); vv(0.6f,0.8f); vv(0.6f,-0.8f); vv(0.2f,-0.8f); EC;
 }
 
-static void draw_bararrow(Fl_Color col)
+static void draw_bararrow(Color col)
 {
-  fl_color(col);
+  setcolor(col);
   BP; vv(0.1f,0.8f); vv(0.9f,0.0f); vv(0.1f,-0.8f); EF(col);
   BP; vv(-0.5f,0.8f); vv(-0.1f,0.8f); vv(-0.1f,-0.8f); vv(-0.5f,-0.8f); EF(col);
 }
 
-static void draw_doublebar(Fl_Color col) { 
+static void draw_doublebar(Color col) { 
   rectangle(-0.6f,-0.8f,-.1f,.8f,col);
   rectangle(.1f,-0.8f,.6f,.8f,col); 
 }
 
-static void draw_arrow01(Fl_Color col)
-  { fl_rotate(180); draw_arrow1(col); }
+static void draw_arrow01(Color col)
+  { rotate(180); draw_arrow1(col); }
 
-static void draw_arrow02(Fl_Color col)
-  { fl_rotate(180); draw_arrow2(col); }
+static void draw_arrow02(Color col)
+  { rotate(180); draw_arrow2(col); }
 
-static void draw_arrow03(Fl_Color col)
-  { fl_rotate(180); draw_arrow3(col); }
+static void draw_arrow03(Color col)
+  { rotate(180); draw_arrow3(col); }
 
-static void draw_0arrowbar(Fl_Color col)
-  { fl_rotate(180); draw_arrowbar(col); }
+static void draw_0arrowbar(Color col)
+  { rotate(180); draw_arrowbar(col); }
 
-static void draw_0arrowbox(Fl_Color col)
-  { fl_rotate(180); draw_arrowbox(col); }
+static void draw_0arrowbox(Color col)
+  { rotate(180); draw_arrowbox(col); }
 
-static void draw_0bararrow(Fl_Color col)
-  { fl_rotate(180); draw_bararrow(col); }
+static void draw_0bararrow(Color col)
+  { rotate(180); draw_bararrow(col); }
 
-static void draw_square(Fl_Color col)
+static void draw_square(Color col)
   { rectangle(-1,-1,1,1,col); }
 
-static void draw_uparrow(Fl_Color) {
-  fl_color(FL_LIGHT3);
+static void draw_uparrow(Color) {
+  setcolor(GRAY99);
   BL; vv(-.8f,.8f); vv(-.8f,-.8f); vv(.8f,0.0f); EL;
-  fl_color(FL_DARK3);
+  setcolor(GRAY33);
   BL; vv(-.8f,.8f); vv(.8f, 0.0f); EL;
 }
 
-static void draw_downarrow(Fl_Color) {
-  fl_color(FL_DARK3);
+static void draw_downarrow(Color) {
+  setcolor(GRAY33);
   BL; vv(-.8f,.8f); vv(-.8f,-.8f); vv(.8f,0.0f); EL;
-  fl_color(FL_LIGHT3);
+  setcolor(GRAY99);
   BL; vv(-.8f,.8f); vv(.8f, 0.0f); EL;
 }
 
-static void draw_arrow1bar(Fl_Color col)
+static void draw_arrow1bar(Color col)
 {
   draw_arrow1(col);
   rectangle(.6f,-.8f,.9f,.8f, col);
 }
 
-static void draw_doublearrow(Fl_Color col)
+static void draw_doublearrow(Color col)
 {
-  fl_color(col);
+  setcolor(col);
   BP; vv(-0.35f,-0.4f); vv(-0.35f,0.4f); vv(0.35f,0.4f); vv(0.35f,-0.4f); EP;
   BP; vv(0.15f,0.8f); vv(0.95f,0.0f); vv(0.15f,-0.8f); EP;
   BP; vv(-0.15f,0.8f); vv(-0.95f,0.0f); vv(-0.15f,-0.8f); EP;
@@ -275,23 +277,23 @@ static void draw_doublearrow(Fl_Color col)
       vv(-0.95f,0.0f); vv(-0.15f,0.8f); EC;
 }
 
-static void draw_arrow(Fl_Color col)
+static void draw_arrow(Color col)
 {
-  fl_color(col);
+  setcolor(col);
   BP; vv(0.65f,0.1f); vv(1.0f,0.0f); vv(0.65f,-0.1f); EF(col);
   BL; vv(-1.0f,0.0f); vv(0.65f,0.0f); EL;
 }
 
-static void draw_circle(Fl_Color col) {
-  fl_color(col); BP; fl_ellipse(-1,-1,2,2); EF(col);
+static void draw_circle(Color col) {
+  setcolor(col); BP; addellipse(-1,-1,2,2); EF(col);
 }
 
-static void draw_line(Fl_Color col)
-  { fl_color(col); BL; vv(-1.0f,0.0f); vv(1.0f,0.0f); EL; }
+static void draw_line(Color col)
+  { setcolor(col); BL; vv(-1.0f,0.0f); vv(1.0f,0.0f); EL; }
 
-static void draw_plus(Fl_Color col)
+static void draw_plus(Color col)
 {
-  fl_color(col);
+  setcolor(col);
   BP; vv(-0.9f,-0.15f); vv(-0.9f,0.15f); vv(0.9f,0.15f); vv(0.9f,-0.15f); EP;
   BP; vv(-0.15f,-0.9f); vv(-0.15f,0.9f); vv(0.15f,0.9f); vv(0.15f,-0.9f); EP;
 
@@ -302,86 +304,47 @@ static void draw_plus(Fl_Color col)
   EC;
 }
 
-static void draw_menu(Fl_Color col)
+static void draw_menu(Color col)
 {
   rectangle(-0.65f, 0.85f, 0.65f, -0.25f, col);
   rectangle(-0.65f, -0.6f, 0.65f, -1.0f, col);
 }
 
-static void fl_init_symbols(void) {
+static void init_symbols(void) {
   static char beenhere;
   if (beenhere) return;
   beenhere = 1;
   symbnumb = 0;
 
-  fl_add_symbol("",		draw_arrow1,		1);
-  fl_add_symbol("->",		draw_arrow1,		1);
-  fl_add_symbol(">",		draw_arrow2,		1);
-  fl_add_symbol(">>",		draw_arrow3,		1);
-  fl_add_symbol(">|",		draw_arrowbar,		1);
-  fl_add_symbol(">[]",		draw_arrowbox,		1);
-  fl_add_symbol("|>",		draw_bararrow,		1);
-  fl_add_symbol("<-",		draw_arrow01,		1);
-  fl_add_symbol("<",		draw_arrow02,		1);
-  fl_add_symbol("<<",		draw_arrow03,		1);
-  fl_add_symbol("|<",		draw_0arrowbar,		1);
-  fl_add_symbol("[]<",		draw_0arrowbox,		1);
-  fl_add_symbol("<|",		draw_0bararrow,		1);
-  fl_add_symbol("<->",		draw_doublearrow,	1);
-  fl_add_symbol("-->",		draw_arrow,		1);
-  fl_add_symbol("+",		draw_plus,		1);
-  fl_add_symbol("->|",		draw_arrow1bar,		1);
-  fl_add_symbol("arrow",	draw_arrow,		1);
-  fl_add_symbol("returnarrow",	0,			3);
-  fl_add_symbol("square",	draw_square,		1);
-  fl_add_symbol("circle",	draw_circle,		1);
-  fl_add_symbol("line",		draw_line,		1);
-  fl_add_symbol("plus",		draw_plus,		1);
-  fl_add_symbol("menu",		draw_menu,		1);
-  fl_add_symbol("UpArrow",	draw_uparrow,		1);
-  fl_add_symbol("DnArrow",	draw_downarrow,		1);
-  fl_add_symbol("||",		draw_doublebar,		1);
+  add_symbol("",		draw_arrow1,		1);
+  add_symbol("->",		draw_arrow1,		1);
+  add_symbol(">",		draw_arrow2,		1);
+  add_symbol(">>",		draw_arrow3,		1);
+  add_symbol(">|",		draw_arrowbar,		1);
+  add_symbol(">[]",		draw_arrowbox,		1);
+  add_symbol("|>",		draw_bararrow,		1);
+  add_symbol("<-",		draw_arrow01,		1);
+  add_symbol("<",		draw_arrow02,		1);
+  add_symbol("<<",		draw_arrow03,		1);
+  add_symbol("|<",		draw_0arrowbar,		1);
+  add_symbol("[]<",		draw_0arrowbox,		1);
+  add_symbol("<|",		draw_0bararrow,		1);
+  add_symbol("<->",		draw_doublearrow,	1);
+  add_symbol("-->",		draw_arrow,		1);
+  add_symbol("+",		draw_plus,		1);
+  add_symbol("->|",		draw_arrow1bar,		1);
+  add_symbol("arrow",	draw_arrow,		1);
+  add_symbol("returnarrow",	0,			3);
+  add_symbol("square",	draw_square,		1);
+  add_symbol("circle",	draw_circle,		1);
+  add_symbol("line",		draw_line,		1);
+  add_symbol("plus",		draw_plus,		1);
+  add_symbol("menu",		draw_menu,		1);
+  add_symbol("UpArrow",	draw_uparrow,		1);
+  add_symbol("DnArrow",	draw_downarrow,		1);
+  add_symbol("||",		draw_doublebar,		1);
 }
-
-////////////////////////////////////////////////////////////////
-
-#include <fltk/Fl_Labeltype.h>
-
-void Fl_Symbol_Label::draw(const char* label,
-			   int X, int Y, int W, int H,
-			   Fl_Color fill, Fl_Flags align) const
-{
-  fill = fl_inactive(fill, align);
-  int x1 = X;
-  int y1 = Y;
-  int w1 = W;
-  int h1 = H;
-  if (align & 15) {
-    if (w1 < h1) h1 = w1; else w1 = h1;
-    if (align & FL_ALIGN_LEFT) ;
-    else if (align & FL_ALIGN_RIGHT) x1 = X+W-w1;
-    else x1 = X+((W-w1)>>1);
-    if (align & FL_ALIGN_TOP) ;
-    else if (align & FL_ALIGN_BOTTOM) y1 = Y+H-h1;
-    else y1 = Y+((H-h1)>>1);
-  }
-  if (!fl_draw_symbol(label, x1, y1, w1, h1, fill)) {
-    fl_color(fill);
-    fl_draw(label, X, Y, W, H, align);
-  }
-}
-
-const Fl_Symbol_Label fl_symbol_label("symbol");
-
-#include <fltk/Fl.h>
-#include <fltk/Fl_Widget.h>
-
-#ifndef FLTK_2
-void Fl::enable_symbols() {
-  Fl_Widget::default_style->label_type = FL_SYMBOL_LABEL;
-}
-#endif
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.26 2002/09/16 00:29:06 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.27 2002/12/09 04:52:30 spitzak Exp $".
 //

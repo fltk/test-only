@@ -1,9 +1,9 @@
 //
-// "$Id: fl_gif.cxx,v 1.12 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: fl_gif.cxx,v 1.13 2002/12/09 04:52:29 spitzak Exp $"
 //
-// fl_gif.cxx
+// gif.cxx
 //
-// Convert GIF to Fl_Offscreen. Currently, do GIF-->XPM-->Fl_Offscreen !!
+// Convert GIF to Offscreen. Currently, do GIF-->XPM-->Offscreen !!
 //
 
 
@@ -43,26 +43,26 @@
  *                     (415) 336-1080
  */
 
+#include <fltk/SharedImage.h>
+#include <fltk/draw.h>
+#include <fltk/x.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <fltk/Fl.h>
-#include <fltk/fl_draw.h>
-#include <fltk/x.h>
-#include <fltk/Fl_Shared_Image.h>
 
 typedef unsigned char uchar;
+
+using namespace fltk;
 
 #define NEXTBYTE (dat? *dat++ : getc(GifFile))
 #define GETSHORT(var) var = NEXTBYTE; var += NEXTBYTE << 8
 
-
-int Fl_GIF_Image::test(const unsigned char *datas, size_t size)
+bool gifImage::test(const unsigned char *datas, size_t size)
 {
   return !strncmp((char*) datas,"GIF", size<3? size:3);
 }
 
-void Fl_GIF_Image::measure(int  &W, int &H)
+void gifImage::measure(int  &W, int &H)
 {
   if (w>=0) { 
     W=w; H=h; 
@@ -101,7 +101,7 @@ void Fl_GIF_Image::measure(int  &W, int &H)
   if(!datas) fclose(GifFile);
 }
 
-void Fl_GIF_Image::read()
+void gifImage::read()
 {
   id = mask = 0;
 
@@ -402,11 +402,11 @@ void Fl_GIF_Image::read()
   fl_begin_offscreen(pixmap);
 
   uchar *bitmap = 0;
-  fl_set_mask_bitmap(&bitmap);
-  fl_draw_pixmap(data, 0, 0, FL_BLACK);
-  fl_set_mask_bitmap(0);
+  set_mask_bitmap(&bitmap);
+  draw_xpm(data, 0, 0, BLACK);
+  set_mask_bitmap(0);
   if (bitmap) {
-    mask = (void*)fl_create_bitmap(bitmap, w, h);
+    mask = (void*)create_bitmap(bitmap, w, h);
     delete[] bitmap;
   }
   fl_end_offscreen();
@@ -420,5 +420,5 @@ void Fl_GIF_Image::read()
 }
 
 //
-// End of "$Id: fl_gif.cxx,v 1.12 2001/09/10 01:16:17 spitzak Exp $"
+// End of "$Id: fl_gif.cxx,v 1.13 2002/12/09 04:52:29 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Window.cxx,v 1.16 2002/10/26 09:55:30 spitzak Exp $"
+// "$Id: Fl_Menu_Window.cxx,v 1.17 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Menu window code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,13 +23,15 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Menu_Window.h>
+#include <fltk/damage.h>
+#include <fltk/MenuWindow.h>
 #include <fltk/x.h>
-#include <fltk/fl_draw.h>
+#include <fltk/draw.h>
 #include <config.h>
 
-// This is the window type used by Fl_Menu to make the pop-ups, and for
+using namespace fltk;
+
+// This is the window type used by Menu to make the pop-ups, and for
 // tooltip popups.
 // 
 // It used to draw in the overlay planes if possible. Because xft does
@@ -47,58 +49,59 @@ extern XVisualInfo *fl_find_overlay_visual();
 extern XVisualInfo *fl_overlay_visual;
 extern Colormap fl_overlay_colormap;
 extern unsigned long fl_transparent_pixel;
-static GC gc;	// the GC used by all X windows
-extern uchar fl_overlay; // changes how fl_color(x) works
+static GC menugc; // the GC used by all X windows
+extern bool fl_overlay; // changes how color(x) works
 #endif
 
-void Fl_Menu_Window::create() {
+void MenuWindow::create() {
   set_override();
 #if USE_OVERLAY
   if (overlay() && fl_find_overlay_visual()) {
-    XInstallColormap(fl_display, fl_overlay_colormap);
-    Fl_X::create(this, fl_overlay_visual, fl_overlay_colormap, int(fl_transparent_pixel));
+    XInstallColormap(xdisplay, fl_overlay_colormap);
+    CreatedWindow::create(this, fl_overlay_visual, fl_overlay_colormap,
+			  int(fl_transparent_pixel));
   } else
 #endif
-    Fl_Single_Window::create();
+    Window::create();
 }
 
-void Fl_Menu_Window::flush() {
+void MenuWindow::flush() {
 #if USE_OVERLAY
-  if (!fl_overlay_visual || !overlay()) {Fl_Single_Window::flush(); return;}
-  Fl_X *i = Fl_X::i(this);
-  fl_window = i->xid;
-  if (!gc) gc = XCreateGC(fl_display, i->xid, 0, 0);
-  fl_gc = gc;
-  fl_overlay = 1;
+  if (!fl_overlay_visual || !overlay()) {Window::flush(); return;}
+  CreatedWindow *i = CreatedWindow::find(this);
+  xwindow = i->xid;
+  if (!menugc) menugc = XCreateGC(xdisplay, i->xid, 0, 0);
+  fltk::gc = menugc;
+  fl_overlay = true;
   current_ = this;
   bool expose =
-    (damage() & FL_DAMAGE_EXPOSE) && !(damage() & FL_DAMAGE_ALL);
-  if (expose) set_damage(damage() & ~FL_DAMAGE_EXPOSE);
+    (damage() & DAMAGE_EXPOSE) && !(damage() & DAMAGE_ALL);
+  if (expose) set_damage(damage() & ~DAMAGE_EXPOSE);
   if (damage()) draw();
   if (expose) {
-    fl_clip_region(i->region); i->region = 0;
-    set_damage(FL_DAMAGE_EXPOSE); draw();
-    fl_clip_region(0);
+    clip_region(i->region); i->region = 0;
+    set_damage(DAMAGE_EXPOSE); draw();
+    clip_region(0);
   }
-  fl_overlay = 0;
+  fl_overlay = false;
 #else
-  Fl_Single_Window::flush();
+  Window::flush();
 #endif
 }
 
-void Fl_Menu_Window::destroy() {
+void MenuWindow::destroy() {
 #if USE_OVERLAY
   // Fix the colormap flashing on Maximum Impact Graphics by erasing the
   // menu before unmapping it:
-  if (gc && shown()) XClearWindow(fl_display, fl_xid(this));
+  if (gc && shown()) XClearWindow(xdisplay, xid(this));
 #endif
-  Fl_Single_Window::destroy();
+  Window::destroy();
 }
 
-Fl_Menu_Window::~Fl_Menu_Window() {
+MenuWindow::~MenuWindow() {
   destroy();
 }
 
 //
-// End of "$Id: Fl_Menu_Window.cxx,v 1.16 2002/10/26 09:55:30 spitzak Exp $".
+// End of "$Id: Fl_Menu_Window.cxx,v 1.17 2002/12/09 04:52:26 spitzak Exp $".
 //

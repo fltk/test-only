@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_FileIcon2.cxx,v 1.12 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: Fl_FileIcon2.cxx,v 1.13 2002/12/09 04:52:25 spitzak Exp $"
 //
-// Fl_FileIcon loading routines for the Fast Light Tool Kit (FLTK).
+// FileIcon loading routines for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1997-1999 by Easy Software Products.
 //
@@ -24,15 +24,20 @@
 //
 // Contents:
 //
-//   Fl_FileIcon::load()              - Load an icon file...
-//   Fl_FileIcon::load_fti()          - Load an SGI-format FTI file...
-//   Fl_FileIcon::load_xpm()          - Load an XPM icon file...
-//   Fl_FileIcon::load_system_icons() - Load the standard system icons/filetypes.
+//   FileIcon::load()              - Load an icon file...
+//   FileIcon::load_fti()          - Load an SGI-format FTI file...
+//   FileIcon::load_xpm()          - Load an XPM icon file...
+//   FileIcon::load_system_icons() - Load the standard system icons/filetypes.
 //
 
 //
 // Include necessary header files...
 //
+
+#include <fltk/FileIcon.h>
+#include <fltk/filename.h>
+#include <fltk/draw.h>
+#include <config.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,10 +53,7 @@
 #  include <unistd.h>
 #endif /* _WIN32 */
 
-#include <fltk/Fl_FileIcon.h>
-#include <fltk/filename.h>
-#include <config.h>
-
+using namespace fltk;
 
 //
 // Local functions...
@@ -64,11 +66,11 @@ static char	*get_kde_val(char *str, const char *key);
 
 
 //
-// 'Fl_FileIcon::load()' - Load an icon file...
+// 'FileIcon::load()' - Load an icon file...
 //
 
 void
-Fl_FileIcon::load(const char *f)	// I - File to read from
+FileIcon::load(const char *f)	// I - File to read from
 {
   const char	*ext;			// File extension
 
@@ -87,11 +89,11 @@ Fl_FileIcon::load(const char *f)	// I - File to read from
 
 
 //
-// 'Fl_FileIcon::load_fti()' - Load an SGI-format FTI file...
+// 'FileIcon::load_fti()' - Load an SGI-format FTI file...
 //
 
 void
-Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
+FileIcon::load_fti(const char *fti)	// I - File to read from
 {
   FILE	*fp;			// File pointer
   int	ch;			// Current character
@@ -104,7 +106,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
   // Try to open the file...
   if ((fp = fopen(fti, "rb")) == NULL)
   {
-    fprintf(stderr, "Fl_FileIcon::load_fti(): Unable to open \"%s\" - %s\n",
+    fprintf(stderr, "FileIcon::load_fti(): Unable to open \"%s\" - %s\n",
             fti, strerror(errno));
     return;
   }
@@ -134,7 +136,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
     // OK, this character better be a letter...
     if (!isalpha(ch))
     {
-      fprintf(stderr, "Fl_FileIcon::load_fti(): Expected a letter at file position %ld (saw '%c')\n",
+      fprintf(stderr, "FileIcon::load_fti(): Expected a letter at file position %ld (saw '%c')\n",
               ftell(fp) - 1, ch);
       break;
     }
@@ -156,7 +158,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
     // Make sure we stopped on a parenthesis...
     if (ch != '(')
     {
-      fprintf(stderr, "Fl_FileIcon::load_fti(): Expected a ( at file position %ld (saw '%c')\n",
+      fprintf(stderr, "FileIcon::load_fti(): Expected a ( at file position %ld (saw '%c')\n",
               ftell(fp) - 1, ch);
       break;
     }
@@ -177,7 +179,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
     // Make sure we stopped on a parenthesis...
     if (ch != ')')
     {
-      fprintf(stderr, "Fl_FileIcon::load_fti(): Expected a ) at file position %ld (saw '%c')\n",
+      fprintf(stderr, "FileIcon::load_fti(): Expected a ) at file position %ld (saw '%c')\n",
               ftell(fp) - 1, ch);
       break;
     }
@@ -185,7 +187,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
     // Make sure the next character is a semicolon...
     if ((ch = getc(fp)) != ';')
     {
-      fprintf(stderr, "Fl_FileIcon::load_fti(): Expected a ; at file position %ld (saw '%c')\n",
+      fprintf(stderr, "FileIcon::load_fti(): Expected a ; at file position %ld (saw '%c')\n",
               ftell(fp) - 1, ch);
       break;
     }
@@ -199,15 +201,15 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
       //
       //     name           FLTK color
       //     -------------  ----------
-      //     iconcolor      256; mapped to the icon color in Fl_FileIcon::draw()
-      //     shadowcolor    FL_DARK3
-      //     outlinecolor   FL_BLACK
+      //     iconcolor      256; mapped to the icon color in FileIcon::draw()
+      //     shadowcolor    GRAY33
+      //     outlinecolor   BLACK
       if (strcmp(params, "iconcolor") == 0)
         add_color(256);
       else if (strcmp(params, "shadowcolor") == 0)
-        add_color(FL_DARK3);
+        add_color(GRAY33);
       else if (strcmp(params, "outlinecolor") == 0)
-        add_color(FL_BLACK);
+        add_color(BLACK);
       else
       {
         short c = atoi(params);	// Color value
@@ -217,8 +219,8 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
 	{
 	  // Composite color; compute average...
 	  c = -c;
-	  add_color(fl_color_average((Fl_Color)(c >> 4),
-	                             (Fl_Color)(c & 15), 0.5));
+	  add_color(lerp((Color)(c >> 4),
+	                             (Color)(c & 15), 0.5));
 	}
 	else
 	  add_color(c);
@@ -241,9 +243,9 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
       if (strcmp(params, "iconcolor") == 0)
         data_[outline] = 256;
       else if (strcmp(params, "shadowcolor") == 0)
-	data_[outline] = FL_DARK3;
+	data_[outline] = GRAY33;
       else if (strcmp(params, "outlinecolor") == 0)
-        data_[outline] = FL_BLACK;
+        data_[outline] = BLACK;
       else
       {
         short c = atoi(params);	// Color value
@@ -253,7 +255,7 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
 	{
 	  // Composite color; compute average...
 	  c = -c;
-	  data_[outline] = fl_color_average((Fl_Color)(c >> 4), (Fl_Color)(c & 15), 0.5);
+	  data_[outline] = lerp((Color)(c >> 4), (Color)(c & 15), 0.5);
 	}
 	else
 	  data_[outline] = c;
@@ -272,11 +274,11 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
       if (sscanf(params, "%f,%f", &x, &y) != 2)
         break;
 
-      add_vertex((short)(x * 100.0 + 0.5), (short)(y * 100.0 + 0.5));
+      addvertex(x * 100.0f, y * 100.0f);
     }
     else
     {
-      fprintf(stderr, "Fl_FileIcon::load_fti(): Unknown command \"%s\" at file position %ld.\n",
+      fprintf(stderr, "FileIcon::load_fti(): Unknown command \"%s\" at file position %ld.\n",
               command, ftell(fp) - 1);
       break;
     }
@@ -294,11 +296,11 @@ Fl_FileIcon::load_fti(const char *fti)	// I - File to read from
 
 
 //
-// 'Fl_FileIcon::load_xpm()' - Load an XPM icon file...
+// 'FileIcon::load_xpm()' - Load an XPM icon file...
 //
 
 void
-Fl_FileIcon::load_xpm(const char *xpm)	// I - File to read from
+FileIcon::load_xpm(const char *xpm)	// I - File to read from
 {
   FILE		*fp;			// File pointer
   int		i, j;			// Looping vars
@@ -311,7 +313,7 @@ Fl_FileIcon::load_xpm(const char *xpm)	// I - File to read from
   int		startx;			// Starting X coord
   int		width, height;		// Width and height of image
   int		ncolors;		// Number of colors
-  short		colors[256];		// Colors
+  Color		colors[256];		// Colors
   int		red, green, blue;	// Red, green, and blue values
 
 
@@ -360,7 +362,7 @@ Fl_FileIcon::load_xpm(const char *xpm)	// I - File to read from
     if ((ptr = strstr(ptr, "c ")) == NULL)
     {
       // No color; make this black...
-      colors[ch] = FL_BLACK;
+      colors[ch] = BLACK;
     }
     else if (ptr[2] == '#')
     {
@@ -413,28 +415,22 @@ Fl_FileIcon::load_xpm(const char *xpm)	// I - File to read from
 	    blue = strtol(val, NULL, 16);
 	    break;
       }
-
-      if (red == green && green == blue)
-        colors[ch] = FL_GRAY_RAMP + (FL_NUM_GRAY - 1) * red / 255;
-      else
-        colors[ch] = fl_color_cube((FL_NUM_RED - 1) * red / 255,
-	                           (FL_NUM_GREEN - 1) * green / 255,
-				   (FL_NUM_BLUE - 1) * blue / 255);
+      colors[ch] = color(red, green, blue);
     }
     else
     {
       // Read a color name...
       if (strncasecmp(ptr + 2, "white", 5) == 0)
-        colors[ch] = FL_WHITE;
+        colors[ch] = WHITE;
       else if (strncasecmp(ptr + 2, "black", 5) == 0)
-        colors[ch] = FL_BLACK;
+        colors[ch] = BLACK;
       else if (strncasecmp(ptr + 2, "none", 4) == 0)
       {
-        colors[ch] = FL_BLACK;
+        colors[ch] = BLACK;
 	bg = ch;
       }
       else
-        colors[ch] = FL_GRAY;
+        colors[ch] = GRAY75;
     }
   }
 
@@ -463,10 +459,10 @@ Fl_FileIcon::load_xpm(const char *xpm)	// I - File to read from
 	{
           add_color(colors[ch]);
 	  add(POLYGON);
-	  add_vertex(startx * 9000 / width + 1000, y * 9000 / height + 500);
-	  add_vertex(x * 9000 / width + 1000,      y * 9000 / height + 500);
-	  add_vertex(x * 9000 / width + 1000,      (y + 1) * 9000 / height + 500);
-	  add_vertex(startx * 9000 / width + 1000, (y + 1) * 9000 / height + 500);
+	  addvertex(startx * 9000 / width + 1000, y * 9000 / height + 500);
+	  addvertex(x * 9000 / width + 1000,      y * 9000 / height + 500);
+	  addvertex(x * 9000 / width + 1000,      (y + 1) * 9000 / height + 500);
+	  addvertex(startx * 9000 / width + 1000, (y + 1) * 9000 / height + 500);
 	  add(END);
         }
 
@@ -478,10 +474,10 @@ Fl_FileIcon::load_xpm(const char *xpm)	// I - File to read from
     {
       add_color(colors[ch]);
       add(POLYGON);
-      add_vertex(startx * 9000 / width + 1000, y * 9000 / height + 500);
-      add_vertex(x * 9000 / width + 1000,      y * 9000 / height + 500);
-      add_vertex(x * 9000 / width + 1000,      (y + 1) * 9000 / height + 500);
-      add_vertex(startx * 9000 / width + 1000, (y + 1) * 9000 / height + 500);
+      addvertex(startx * 9000 / width + 1000, y * 9000 / height + 500);
+      addvertex(x * 9000 / width + 1000,      y * 9000 / height + 500);
+      addvertex(x * 9000 / width + 1000,      (y + 1) * 9000 / height + 500);
+      addvertex(startx * 9000 / width + 1000, (y + 1) * 9000 / height + 500);
       add(END);
     }
   }
@@ -498,22 +494,22 @@ Fl_FileIcon::load_xpm(const char *xpm)	// I - File to read from
 
 
 //
-// 'Fl_FileIcon::load_system_icons()' - Load the standard system icons/filetypes.
+// 'FileIcon::load_system_icons()' - Load the standard system icons/filetypes.
 
 void
-Fl_FileIcon::load_system_icons(void)
+FileIcon::load_system_icons(void)
 {
-  Fl_FileIcon	*icon;		// New icons
+  FileIcon	*icon;		// New icons
   static int	init = 0;	// Have the icons been initialized?
   static short	plain[] =	// Plain file icon
 		{
-		  COLOR, 256, OUTLINEPOLYGON, FL_GRAY,
+		  COLOR, 256, OUTLINEPOLYGON, GRAY75,
 		  VERTEX, 2000, 1000, VERTEX, 2000, 9000,
 		  VERTEX, 6000, 9000, VERTEX, 8000, 7000,
-		  VERTEX, 8000, 1000, END, OUTLINEPOLYGON, FL_GRAY,
+		  VERTEX, 8000, 1000, END, OUTLINEPOLYGON, GRAY75,
 		  VERTEX, 6000, 9000, VERTEX, 6000, 7000,
 		  VERTEX, 8000, 7000, END,
-		  COLOR, FL_BLACK, LINE, VERTEX, 6000, 7000,
+		  COLOR, BLACK, LINE, VERTEX, 6000, 7000,
 		  VERTEX, 8000, 7000, VERTEX, 8000, 1000,
 		  VERTEX, 2000, 1000, END, LINE, VERTEX, 3000, 7000,
 		  VERTEX, 5000, 7000, END, LINE, VERTEX, 3000, 6000,
@@ -526,26 +522,26 @@ Fl_FileIcon::load_system_icons(void)
 		};
   static short	image[] =	// Image file icon
 		{
-		  COLOR, 256, OUTLINEPOLYGON, FL_GRAY,
+		  COLOR, 256, OUTLINEPOLYGON, GRAY75,
 		  VERTEX, 2000, 1000, VERTEX, 2000, 9000,
 		  VERTEX, 6000, 9000, VERTEX, 8000, 7000,
-		  VERTEX, 8000, 1000, END, OUTLINEPOLYGON, FL_GRAY,
+		  VERTEX, 8000, 1000, END, OUTLINEPOLYGON, GRAY75,
 		  VERTEX, 6000, 9000, VERTEX, 6000, 7000,
 		  VERTEX, 8000, 7000, END,
-		  COLOR, FL_BLACK, LINE, VERTEX, 6000, 7000,
+		  COLOR, BLACK, LINE, VERTEX, 6000, 7000,
 		  VERTEX, 8000, 7000, VERTEX, 8000, 1000,
 		  VERTEX, 2000, 1000, END,
-		  COLOR, FL_RED, POLYGON, VERTEX, 3500, 2500,
+		  COLOR, RED, POLYGON, VERTEX, 3500, 2500,
 		  VERTEX, 3000, 3000, VERTEX, 3000, 4000,
 		  VERTEX, 3500, 4500, VERTEX, 4500, 4500,
 		  VERTEX, 5000, 4000, VERTEX, 5000, 3000,
 		  VERTEX, 4500, 2500, END,
-		  COLOR, FL_GREEN, POLYGON, VERTEX, 5500, 2500,
+		  COLOR, GREEN, POLYGON, VERTEX, 5500, 2500,
 		  VERTEX, 5000, 3000, VERTEX, 5000, 4000,
 		  VERTEX, 5500, 4500, VERTEX, 6500, 4500,
 		  VERTEX, 7000, 4000, VERTEX, 7000, 3000,
 		  VERTEX, 6500, 2500, END,
-		  COLOR, FL_BLUE, POLYGON, VERTEX, 4500, 3500,
+		  COLOR, BLUE, POLYGON, VERTEX, 4500, 3500,
 		  VERTEX, 4000, 4000, VERTEX, 4000, 5000,
 		  VERTEX, 4500, 5500, VERTEX, 5500, 5500,
 		  VERTEX, 6000, 5000, VERTEX, 6000, 4000,
@@ -559,11 +555,11 @@ Fl_FileIcon::load_system_icons(void)
 		  VERTEX, 9000, 1000, END,
 		  POLYGON, VERTEX, 1000, 7500, VERTEX, 2500, 9000,
 		  VERTEX, 5000, 9000, VERTEX, 6500, 7500, END,
-		  COLOR, FL_WHITE, LINE, VERTEX, 1500, 1500,
+		  COLOR, WHITE, LINE, VERTEX, 1500, 1500,
 		  VERTEX, 1500, 7000, VERTEX, 9000, 7000, END,
-		  COLOR, FL_BLACK, LINE, VERTEX, 9000, 7500,
+		  COLOR, BLACK, LINE, VERTEX, 9000, 7500,
 		  VERTEX, 9000, 1000, VERTEX, 1000, 1000, END,
-		  COLOR, FL_GRAY, LINE, VERTEX, 1000, 1000,
+		  COLOR, GRAY75, LINE, VERTEX, 1000, 1000,
 		  VERTEX, 1000, 7500, VERTEX, 2500, 9000,
 		  VERTEX, 5000, 9000, VERTEX, 6500, 7500,
 		  VERTEX, 9000, 7500, END,
@@ -577,7 +573,7 @@ Fl_FileIcon::load_system_icons(void)
     if (!access("/usr/share/mimelnk", F_OK))
     {
       // Load KDE icons...
-      icon = new Fl_FileIcon("*", Fl_FileIcon::PLAIN);
+      icon = new FileIcon("*", FileIcon::PLAIN);
       icon->load_xpm("/usr/share/icons/unknown.xpm");
 
       load_kde_icons("/usr/share/mimelnk");
@@ -585,82 +581,82 @@ Fl_FileIcon::load_system_icons(void)
     else if (!access("/usr/share/icons/folder.xpm", F_OK))
     {
       // Load GNOME icons...
-      icon = new Fl_FileIcon("*", Fl_FileIcon::PLAIN);
+      icon = new FileIcon("*", FileIcon::PLAIN);
       icon->load_xpm("/usr/share/icons/page.xpm");
 
-      icon = new Fl_FileIcon("*", Fl_FileIcon::DIR);
+      icon = new FileIcon("*", FileIcon::DIR);
       icon->load_xpm("/usr/share/icons/folder.xpm");
     }
     else if (!access("/usr/dt/appconfig/icons", F_OK))
     {
       // Load CDE icons...
-      icon = new Fl_FileIcon("*", Fl_FileIcon::PLAIN);
+      icon = new FileIcon("*", FileIcon::PLAIN);
       icon->load_xpm("/usr/dt/appconfig/icons/C/Dtdata.m.pm");
 
-      icon = new Fl_FileIcon("*", Fl_FileIcon::DIR);
+      icon = new FileIcon("*", FileIcon::DIR);
       icon->load_xpm("/usr/dt/appconfig/icons/C/DtdirB.m.pm");
 
-      icon = new Fl_FileIcon("core", Fl_FileIcon::PLAIN);
+      icon = new FileIcon("core", FileIcon::PLAIN);
       icon->load_xpm("/usr/dt/appconfig/icons/C/Dtcore.m.pm");
 
-      icon = new Fl_FileIcon("*.{bmp|bw|gif|jpg|pbm|pcd|pgm|ppm|png|ras|rgb|tif|xbm|xpm}", Fl_FileIcon::PLAIN);
+      icon = new FileIcon("*.{bmp|bw|gif|jpg|pbm|pcd|pgm|ppm|png|ras|rgb|tif|xbm|xpm}", FileIcon::PLAIN);
       icon->load_xpm("/usr/dt/appconfig/icons/C/Dtimage.m.pm");
 
-      icon = new Fl_FileIcon("*.{eps|pdf|ps}", Fl_FileIcon::PLAIN);
+      icon = new FileIcon("*.{eps|pdf|ps}", FileIcon::PLAIN);
       icon->load_xpm("/usr/dt/appconfig/icons/C/Dtps.m.pm");
 
-      icon = new Fl_FileIcon("*.ppd", Fl_FileIcon::PLAIN);
+      icon = new FileIcon("*.ppd", FileIcon::PLAIN);
       icon->load_xpm("/usr/dt/appconfig/icons/C/DtPrtpr.m.pm");
     }
     else if (!access("/usr/lib/filetype", F_OK))
     {
       // Load SGI icons...
-      icon = new Fl_FileIcon("*", Fl_FileIcon::PLAIN);
+      icon = new FileIcon("*", FileIcon::PLAIN);
       icon->load_fti("/usr/lib/filetype/iconlib/generic.doc.fti");
 
-      icon = new Fl_FileIcon("*", Fl_FileIcon::DIR);
+      icon = new FileIcon("*", FileIcon::DIR);
       icon->load_fti("/usr/lib/filetype/iconlib/generic.folder.closed.fti");
 
-      icon = new Fl_FileIcon("core", Fl_FileIcon::PLAIN);
+      icon = new FileIcon("core", FileIcon::PLAIN);
       icon->load_fti("/usr/lib/filetype/default/iconlib/CoreFile.fti");
 
-      icon = new Fl_FileIcon("*.{bmp|bw|gif|jpg|pbm|pcd|pgm|ppm|png|ras|rgb|tif|xbm|xpm}", Fl_FileIcon::PLAIN);
+      icon = new FileIcon("*.{bmp|bw|gif|jpg|pbm|pcd|pgm|ppm|png|ras|rgb|tif|xbm|xpm}", FileIcon::PLAIN);
       icon->load_fti("/usr/lib/filetype/system/iconlib/ImageFile.fti");
 
       if (!access("/usr/lib/filetype/install/iconlib/acroread.doc.fti", F_OK))
       {
-	icon = new Fl_FileIcon("*.{eps|ps}", Fl_FileIcon::PLAIN);
+	icon = new FileIcon("*.{eps|ps}", FileIcon::PLAIN);
 	icon->load_fti("/usr/lib/filetype/system/iconlib/PostScriptFile.closed.fti");
 
-	icon = new Fl_FileIcon("*.pdf", Fl_FileIcon::PLAIN);
+	icon = new FileIcon("*.pdf", FileIcon::PLAIN);
 	icon->load_fti("/usr/lib/filetype/install/iconlib/acroread.doc.fti");
       }
       else
       {
-	icon = new Fl_FileIcon("*.{eps|pdf|ps}", Fl_FileIcon::PLAIN);
+	icon = new FileIcon("*.{eps|pdf|ps}", FileIcon::PLAIN);
 	icon->load_fti("/usr/lib/filetype/system/iconlib/PostScriptFile.closed.fti");
       }
 
       if (!access("/usr/lib/filetype/install/iconlib/html.fti", F_OK))
       {
-	icon = new Fl_FileIcon("*.{htm|html|shtml}", Fl_FileIcon::PLAIN);
+	icon = new FileIcon("*.{htm|html|shtml}", FileIcon::PLAIN);
         icon->load_fti("/usr/lib/filetype/iconlib/generic.doc.fti");
 	icon->load_fti("/usr/lib/filetype/install/iconlib/html.fti");
       }
 
       if (!access("/usr/lib/filetype/install/iconlib/color.ps.idle.fti", F_OK))
       {
-	icon = new Fl_FileIcon("*.ppd", Fl_FileIcon::PLAIN);
+	icon = new FileIcon("*.ppd", FileIcon::PLAIN);
 	icon->load_fti("/usr/lib/filetype/install/iconlib/color.ps.idle.fti");
       }
     }
     else
     {
       // Create the default icons...
-      new Fl_FileIcon("*", Fl_FileIcon::PLAIN, sizeof(plain) / sizeof(plain[0]), plain);
-      new Fl_FileIcon("*.{bmp|bw|gif|jpg|pbm|pcd|pgm|ppm|png|ras|rgb|tif|xbm|xpm}", Fl_FileIcon::PLAIN,
+      new FileIcon("*", FileIcon::PLAIN, sizeof(plain) / sizeof(plain[0]), plain);
+      new FileIcon("*.{bmp|bw|gif|jpg|pbm|pcd|pgm|ppm|png|ras|rgb|tif|xbm|xpm}", FileIcon::PLAIN,
                    sizeof(image) / sizeof(image[0]), image);
-      new Fl_FileIcon("*", Fl_FileIcon::DIR, sizeof(dir) / sizeof(dir[0]), dir);
+      new FileIcon("*", FileIcon::DIR, sizeof(dir) / sizeof(dir[0]), dir);
     }
 
     // Mark things as initialized...
@@ -720,7 +716,7 @@ load_kde_mimelnk(const char *filename)
   char		mimetype[1024];
   char		*val;
   char		full_iconfilename[1024];
-  Fl_FileIcon	*icon;
+  FileIcon	*icon;
 
 
   if ((fp = fopen(filename, "rb")) != NULL)
@@ -740,9 +736,9 @@ load_kde_mimelnk(const char *filename)
       sprintf(full_iconfilename, "/usr/share/icons/%s", iconfilename);
 
       if (strcmp(mimetype, "inode/directory") == 0)
-	icon = new Fl_FileIcon("*", Fl_FileIcon::DIR);
+	icon = new FileIcon("*", FileIcon::DIR);
       else
-        icon = new Fl_FileIcon(kde_to_fltk_pattern(pattern), Fl_FileIcon::PLAIN);
+        icon = new FileIcon(kde_to_fltk_pattern(pattern), FileIcon::PLAIN);
 
       icon->load_xpm(full_iconfilename);
     }
@@ -807,5 +803,5 @@ get_kde_val(char       *str,
 
 
 //
-// End of "$Id: Fl_FileIcon2.cxx,v 1.12 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: Fl_FileIcon2.cxx,v 1.13 2002/12/09 04:52:25 spitzak Exp $".
 //

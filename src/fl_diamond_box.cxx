@@ -1,5 +1,5 @@
 //
-// "$Id: fl_diamond_box.cxx,v 1.24 2002/01/28 08:03:00 spitzak Exp $"
+// "$Id: fl_diamond_box.cxx,v 1.25 2002/12/09 04:52:29 spitzak Exp $"
 //
 // Diamond box code for the Fast Light Tool Kit (FLTK).
 //
@@ -28,65 +28,71 @@
 
 // The diamond box draws best if the area is square!
 
-#include <fltk/Fl_Boxtype.h>
-#include <fltk/Fl_Style.h>
-#include <fltk/Fl_Widget.h>
-#include <fltk/fl_draw.h>
+#include <fltk/Box.h>
+#include <fltk/Style.h>
+#include <fltk/Widget.h>
+#include <fltk/draw.h>
 #include <string.h>
+
+using namespace fltk;
+
+// Diamond with an edge pattern like FrameBox:
+class DiamondBox : public FrameBox {
+public:
+  void draw(int,int,int,int, Color, Flags=0) const;
+  DiamondBox(const char* n, const char* s, const FrameBox* d=0)
+    : FrameBox(n, s, d) { fills_rectangle_ = 0; }
+};
 
 extern void fl_to_inactive(const char* s, char* to);
 
-void Fl_Diamond_Box::draw(int x, int y, int w, int h,
-			  Fl_Color c, Fl_Flags f) const
+void DiamondBox::draw(int x, int y, int w, int h,
+			  Color c, Flags f) const
 {
   int x1 = x+w/2;
   if (w&1) w--; else {w -= 2; x++;}
   int y1 = y+h/2;
   if (h&1) h--; else {h -= 2; y++;}
-  const char* s = (f & FL_VALUE) ? down->data() : data();
-  char buf[26]; if (f&FL_INACTIVE && Fl_Style::draw_boxes_inactive) {
+  const char* s = (f & VALUE) ? down->data() : data();
+  char buf[26]; if (f&INACTIVE && Style::draw_boxes_inactive) {
     fl_to_inactive(s, buf); s = buf;}
   const char* t;
   if (*s == '2') {t = s+1; s += 3;} else {t = s+2;}
   while (*s && *t && w > 0 && h > 0) {
     // draw upper-right line:
-    fl_color(*s++ + (FL_GRAY_RAMP-'A'));
-    fl_line(x+w, y1, x1, y);
+    setcolor(*s++ + (GRAY00-'A'));
+    drawline(x+w, y1, x1, y);
     // draw upper-left line:
-    fl_color(*s++ + (FL_GRAY_RAMP-'A'));
-    fl_line(x1, y, x, y1);
+    setcolor(*s++ + (GRAY00-'A'));
+    drawline(x1, y, x, y1);
     s += 2;
     // draw lower-left line:
-    fl_color(*t++ + (FL_GRAY_RAMP-'A'));
-    fl_line(x, y1, x1, y+h);
+    setcolor(*t++ + (GRAY00-'A'));
+    drawline(x, y1, x1, y+h);
     // draw lower-right line:
-    fl_color(*t++ + (FL_GRAY_RAMP-'A'));
-    fl_line(x1, y+h, x+w, y1);
+    setcolor(*t++ + (GRAY00-'A'));
+    drawline(x1, y+h, x+w, y1);
     t += 2;
     x++; y++; w -= 2; h -= 2;
   }
-  if (w > 0 && h > 0 && !(f & FL_INVISIBLE)) {
+  if (w > 0 && h > 0 && !(f & INVISIBLE)) {
     // draw the interior, assumming the edges are the same thickness
     // as the normal square box:
-    fl_newpath();
-    fl_vertex(x, y1);
-    fl_vertex(x1, y);
-    fl_vertex(x+w,y1);
-    fl_vertex(x1,y+h);
-    fl_color(c);
-    fl_fill_stroke(c);
+    newpath();
+    addvertex(x, y1);
+    addvertex(x1, y);
+    addvertex(x+w,y1);
+    addvertex(x1,y+h);
+    setcolor(c);
+    fillstrokepath(c);
   }
 }
 
-Fl_Diamond_Box::Fl_Diamond_Box(const char* n, const char* s, const Fl_Frame_Box* d)
-  : Fl_Frame_Box(n, s, d)
-{
-  fills_rectangle_ = 0;
-}
-
-const Fl_Diamond_Box fl_diamond_down_box(0, "2WWMMPPAA");
-const Fl_Diamond_Box fl_diamond_up_box(0, "2AAWWMMTT", &fl_diamond_down_box);
+static DiamondBox diamondDownBox(0, "2WWMMPPAA");
+Box* const fltk::DIAMOND_DOWN_BOX = &diamondDownBox;
+static DiamondBox diamondUpBox(0, "2AAWWMMTT", &diamondDownBox);
+Box* const fltk::DIAMOND_UP_BOX = &diamondUpBox;
 
 //
-// End of "$Id: fl_diamond_box.cxx,v 1.24 2002/01/28 08:03:00 spitzak Exp $".
+// End of "$Id: fl_diamond_box.cxx,v 1.25 2002/12/09 04:52:29 spitzak Exp $".
 //

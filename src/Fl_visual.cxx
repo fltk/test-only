@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_visual.cxx,v 1.13 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: Fl_visual.cxx,v 1.14 2002/12/09 04:52:27 spitzak Exp $"
 //
 // Visual support for the Fast Light Tool Kit (FLTK).
 //
@@ -25,34 +25,38 @@
 
 // Set the default visual according to passed switches:
 
-#include <config.h>
-#include <fltk/Fl.h>
+#include <fltk/visual.h>
 #include <fltk/x.h>
+#include <config.h>
 
 #ifdef _WIN32
-int Fl::visual(int flags) {
-  if (flags & FL_DOUBLE) return 0;
-  int ret = 1;
+bool fltk::visual(int flags) {
+  if (flags & DOUBLE_BUFFER) return false;
+  bool ret = true;
   HDC screen = GetDC(0);
-  if ((!(flags & FL_INDEX) && GetDeviceCaps(screen, BITSPIXEL) <= 8) ||
-     ((flags & FL_RGB8) && GetDeviceCaps(screen, BITSPIXEL)<24)) ret = 0;
+  if ((!(flags & INDEXED_COLOR) && GetDeviceCaps(screen, BITSPIXEL) <= 8) ||
+     ((flags & RGB24_COLOR) && GetDeviceCaps(screen, BITSPIXEL)<24)) ret = false;
   ReleaseDC(0, screen);
   return ret;
 }
 #else
 
 #if USE_XDBE
+#define Window XWindow
 #include <X11/extensions/Xdbe.h>
+#undef Window
 #endif
 
+using namespace fltk;
+
 static int test_visual(XVisualInfo& v, int flags) {
-  if (v.screen != fl_screen) return 0;
+  if (v.screen != xscreen) return 0;
 #if USE_COLORMAP
-  if (!(flags & FL_INDEX)) {
+  if (!(flags & INDEXED_COLOR)) {
     if (v.c_class != StaticColor && v.c_class != TrueColor) return 0;
     if (v.depth <= 8) return 0; // fltk will work better in colormap mode
   }
-  if (flags & FL_RGB8) {
+  if (flags & RGB24_COLOR) {
     if (v.depth < 24) return 0;
   }
   // for now, fltk does not like colormaps of more than 8 bits:
@@ -62,14 +66,14 @@ static int test_visual(XVisualInfo& v, int flags) {
   if (v.c_class != StaticColor && v.c_class != TrueColor) return 0;
 #endif
 #if USE_XDBE
-  if (flags & FL_DOUBLE) {
+  if (flags & DOUBLE_BUFFER) {
     static XdbeScreenVisualInfo *xdbejunk;
     if (!xdbejunk) {
       int event_base, error_base;
-      if (!XdbeQueryExtension(fl_display, &event_base, &error_base)) return 0;
-      Drawable root = RootWindow(fl_display,fl_screen);
+      if (!XdbeQueryExtension(xdisplay, &event_base, &error_base)) return 0;
+      XWindow root = RootWindow(xdisplay, xscreen);
       int numscreens = 1;
-      xdbejunk = XdbeGetVisualInfo(fl_display,&root,&numscreens);
+      xdbejunk = XdbeGetVisualInfo(xdisplay,&root,&numscreens);
       if (!xdbejunk) return 0;
     }
     for (int j = 0; ; j++) {
@@ -81,32 +85,32 @@ static int test_visual(XVisualInfo& v, int flags) {
   return 1;
 }
 
-int Fl::visual(int flags) {
+bool fltk::visual(int flags) {
 #if USE_XDBE == 0
-  if (flags & FL_DOUBLE) return 0;
+  if (flags & DOUBLE_BUFFER) return false;
 #endif
-  fl_open_display();
+  open_display();
   // always use default if possible:
-  if (test_visual(*fl_visual, flags)) return 1;
+  if (test_visual(*xvisual, flags)) return true;
   // get all the visuals:
   XVisualInfo vTemplate;
   int num;
-  XVisualInfo *visualList = XGetVisualInfo(fl_display, 0, &vTemplate, &num);
+  XVisualInfo *visualList = XGetVisualInfo(xdisplay, 0, &vTemplate, &num);
   // find all matches, use the one with greatest depth:
   XVisualInfo *found = 0;
   for (int i=0; i<num; i++) if (test_visual(visualList[i], flags)) {
     if (!found || found->depth < visualList[i].depth)
       found = &visualList[i];
   }
-  if (!found) {XFree((void*)visualList); return 0;}
-  fl_visual = found;
-  fl_colormap = XCreateColormap(fl_display, RootWindow(fl_display,fl_screen),
-				fl_visual->visual, AllocNone);
-  return 1;
+  if (!found) {XFree((void*)visualList); return false;}
+  xvisual = found;
+  xcolormap = XCreateColormap(xdisplay, RootWindow(xdisplay,xscreen),
+			      xvisual->visual, AllocNone);
+  return true;
 }
 
 #endif
 
 //
-// End of "$Id: Fl_visual.cxx,v 1.13 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: Fl_visual.cxx,v 1.14 2002/12/09 04:52:27 spitzak Exp $".
 //

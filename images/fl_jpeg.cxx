@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg.cxx,v 1.8 2001/10/22 05:31:10 spitzak Exp $"
+// "$Id: fl_jpeg.cxx,v 1.9 2002/12/09 04:52:23 spitzak Exp $"
 //
 // JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -25,10 +25,9 @@
 
 // JPEG image decompression. From example code in libjpeg distribution.
 
-#include <fltk/Fl.h>
-#include <fltk/fl_draw.h>
+#include <fltk/draw.h>
 #include <fltk/x.h>
-#include <fltk/Fl_Shared_Image.h>
+#include <fltk/SharedImage.h>
 #include <config.h>
 #if HAVE_JPEG
 #include <stdio.h>
@@ -238,9 +237,9 @@ my_error_exit (j_common_ptr cinfo)
   longjmp(myerr->setjmp_buffer, 1);
 }
 
-static void fl_draw_image_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar *b)
+static void drawimage_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar *b)
 {
-  // x,y,w *should* be used, if this can be called by fl_draw_image
+  // x,y,w *should* be used, if this can be called by drawimage
   // while clipping is on.  However when an Fl_Offscreen is being
   // created the clipping is off, so these are not used.
   // To handle them, skip until you reach line y (y always increases).
@@ -257,7 +256,7 @@ static void fl_draw_image_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar *b)
 static void declare_now(void*) { }
 #endif
 
-void Fl_JPEG_Image::measure(int &W, int &H)
+void fltk::jpegImage::measure(int &W, int &H)
 {
 #if !HAVE_JPEG
   w=W=0;
@@ -314,7 +313,7 @@ void Fl_JPEG_Image::measure(int &W, int &H)
 #endif
 }
 
-void Fl_JPEG_Image::read()
+void fltk::jpegImage::read()
 {
   id = mask = 0;
 #if HAVE_JPEG
@@ -356,7 +355,7 @@ void Fl_JPEG_Image::read()
   Pixmap pixmap = fl_create_offscreen(cinfo.output_width, cinfo.output_height);
   id = (void*)pixmap;
   fl_begin_offscreen(pixmap);
-  fl_draw_image(fl_draw_image_cb, &cinfo, 0, 0, cinfo.output_width, cinfo.output_height, cinfo.output_components);
+  drawimage(drawimage_cb, &cinfo, 0, 0, cinfo.output_width, cinfo.output_height, cinfo.output_components);
   fl_end_offscreen();
 
   jpeg_finish_decompress(&cinfo);
@@ -367,7 +366,7 @@ void Fl_JPEG_Image::read()
 #endif
 }
 
-int Fl_JPEG_Image::test(const uchar* datas, size_t size)
+bool fltk::jpegImage::test(const uchar* datas, size_t size)
 {
 #if !HAVE_JPEG
   return 0;
@@ -407,5 +406,5 @@ int Fl_JPEG_Image::test(const uchar* datas, size_t size)
 }
 
 //
-// End of "$Id: fl_jpeg.cxx,v 1.8 2001/10/22 05:31:10 spitzak Exp $"
+// End of "$Id: fl_jpeg.cxx,v 1.9 2002/12/09 04:52:23 spitzak Exp $"
 //

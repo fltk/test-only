@@ -1,5 +1,5 @@
 //
-// "$Id: demo.cxx,v 1.16 2001/07/29 22:17:02 spitzak Exp $"
+// "$Id: demo.cxx,v 1.17 2002/12/09 04:52:31 spitzak Exp $"
 //
 // Main demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -31,48 +31,51 @@
 #else
 #  include <unistd.h>
 #endif
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/Fl_Box.h>
-#include <fltk/Fl_Button.h>
+#include <fltk/run.h>
+#include <fltk/Window.h>
+#include <fltk/Box.h>
+#include <fltk/Button.h>
 #include <fltk/filename.h>
-#include <fltk/x.h>
+#include <fltk/error.h>
 
 /* The form description */
 
-void doexit(Fl_Widget *, void *);
-void doback(Fl_Widget *, void *);
-void dobut(Fl_Widget *, long);
+void doexit(fltk::Widget *, void *);
+void doback(fltk::Widget *, void *);
+void dobut(fltk::Widget *, long);
 
-Fl_Window *form;
-Fl_Button *but[9];
+fltk::Window *form;
+fltk::Button *but[9];
 
 void create_the_forms() {
-  Fl_Widget *obj;
-  form = new Fl_Window(370, 450);
-  obj = new Fl_Box(FL_ENGRAVED_BOX,20,20,330,40,"FLTK Demonstration");
-  obj->color(FL_GRAY-4);
-  obj->label_size(24);
-  obj->label_font(FL_HELVETICA_BOLD);
-  obj->label_type(FL_ENGRAVED_LABEL);
-  obj = new Fl_Box(FL_ENGRAVED_BOX,20,70,330,330,0);
-  obj->color(FL_GRAY-6);
-  obj = new Fl_Button(20,20,330,380); obj->type(FL_HIDDEN_BUTTON);
+  fltk::Widget *obj;
+  form = new fltk::Window(370, 450);
+  form->begin();
+  obj = new fltk::Widget(20,20,330,40,"fltk Demonstration");
+  obj->box(fltk::ENGRAVED_BOX);
+  obj->color(fltk::GRAY60);
+  obj->labelsize(24);
+  obj->labelfont(fltk::HELVETICA_BOLD);
+  obj->labeltype(fltk::ENGRAVED_LABEL);
+  obj = new fltk::Widget(20,70,330,330,0);
+  obj->box(fltk::ENGRAVED_BOX);
+  obj->color(fltk::GRAY50);
+  obj = new fltk::Button(20,20,330,380); obj->type(fltk::Button::HIDDEN);
   obj->callback(doback);
-  obj = but[0] = new Fl_Button(40,90,90,90);
-  obj = but[1] = new Fl_Button(140,90,90,90);
-  obj = but[2] = new Fl_Button(240,90,90,90);
-  obj = but[3] = new Fl_Button(40,190,90,90);
-  obj = but[4] = new Fl_Button(140,190,90,90);
-  obj = but[5] = new Fl_Button(240,190,90,90);
-  obj = but[6] = new Fl_Button(40,290,90,90);
-  obj = but[7] = new Fl_Button(140,290,90,90);
-  obj = but[8] = new Fl_Button(240,290,90,90);
+  obj = but[0] = new fltk::Button(40,90,90,90);
+  obj = but[1] = new fltk::Button(140,90,90,90);
+  obj = but[2] = new fltk::Button(240,90,90,90);
+  obj = but[3] = new fltk::Button(40,190,90,90);
+  obj = but[4] = new fltk::Button(140,190,90,90);
+  obj = but[5] = new fltk::Button(240,190,90,90);
+  obj = but[6] = new fltk::Button(40,290,90,90);
+  obj = but[7] = new fltk::Button(140,290,90,90);
+  obj = but[8] = new fltk::Button(240,290,90,90);
   for (int i=0; i<9; i++) {
-    but[i]->set_flag(FL_ALIGN_WRAP);
+    but[i]->set_flag(fltk::ALIGN_WRAP);
     but[i]->callback(dobut, i);
   }
-  obj = new Fl_Button(130,410,110,30,"Exit");
+  obj = new fltk::Button(130,410,110,30,"Exit");
   obj->callback(doexit);
   form->end();
 }
@@ -188,7 +191,7 @@ void pop_menu()
 
 /* The callback Routines */
 
-void dobut(Fl_Widget *, long arg)
+void dobut(fltk::Widget *, long arg)
 /* handles a button push */
 {
   int men = find_menu(stack[stsize-1]);
@@ -263,9 +266,9 @@ void dobut(Fl_Widget *, long arg)
   }
 }
 
-void doback(Fl_Widget *, void *) {pop_menu();}
+void doback(fltk::Widget *, void *) {pop_menu();}
 
-void doexit(Fl_Widget *, void *) {exit(0);}
+void doexit(fltk::Widget *, void *) {exit(0);}
 
 int load_the_menu(const char fname[])
 /* Loads the menu file. Returns whether successful. */
@@ -276,7 +279,7 @@ int load_the_menu(const char fname[])
   fin = fopen(fname,"r");
   if (fin == NULL)
   {
-//    fl_show_message("ERROR","","Cannot read the menu description file.");
+//    fltk::show_message("ERROR","","Cannot read the menu description file.");
     return 0;
   }
   for (;;) {
@@ -317,20 +320,20 @@ int main(int argc, char **argv) {
   filename_setext(buf,".menu");
   const char *fname = buf;
   int i = 0;
-  if (!Fl::args(argc,argv,i) || i < argc-1)
-    Fl::fatal("Usage: %s <switches> <menufile>\n%s",Fl::help);
+  if (!fltk::args(argc,argv,i) || i < argc-1)
+    fltk::fatal("Usage: %s <switches> <menufile>\n%s",fltk::help);
   if (i < argc) fname = argv[i];
-  if (!load_the_menu(fname)) Fl::fatal("Can't open %s",fname);
+  if (!load_the_menu(fname)) fltk::fatal("Can't open %s",fname);
   strcpy(buf,fname);
   const char *c = filename_name(buf);
   if (c > buf) {buf[c-buf] = 0; chdir(buf);}
   push_menu("@main");
   form->show(argc,argv);
-  Fl::run();
+  fltk::run();
   return 0;
 }
 
 //
-// End of "$Id: demo.cxx,v 1.16 2001/07/29 22:17:02 spitzak Exp $".
+// End of "$Id: demo.cxx,v 1.17 2002/12/09 04:52:31 spitzak Exp $".
 //
 

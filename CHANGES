@@ -2472,3 +2472,8 @@ your application to undo something.
 Clicking on Fl_Output does the callback.
 
 Added FL_CURSOR_NO (slash in circle)
+
+////////////////////////////////////////////////////////////////
+
+Fl_Browser could crash if you used arrow keys to navigate to an item
+who's callback would delete the browser.

@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_FileInput.cxx,v 1.5 2002/01/28 08:02:59 spitzak Exp $"
+// "$Id: Fl_FileInput.cxx,v 1.6 2002/12/09 04:52:25 spitzak Exp $"
 //
-// Fl_FileInput routines for the Fast Light Tool Kit (FLTK).
+// FileInput routines for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1997-1999 by Easy Software Products.
 //
@@ -24,16 +24,17 @@
 //
 // Contents:
 //
-//   Fl_FileInput::handle() - Handle tab events.
+//   FileInput::handle() - Handle tab events.
 //
 
 //
 // Include necessary header files...
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_FileInput.h>
+#include <fltk/events.h>
+#include <fltk/FileInput.h>
 
+using namespace fltk;
 
 //
 // Note: This has got to be a runner for the world's shortest class.
@@ -45,13 +46,13 @@
 //
 
 //
-// 'Fl_FileInput::handle()' - Handle tab events.
+// 'FileInput::handle()' - Handle tab events.
 //
 
 int				// O - 1 if we handled the event
-Fl_FileInput::handle(int event)	// I - Event to handle
+FileInput::handle(int event)	// I - Event to handle
 {
-  if (event == FL_KEY && Fl::event_key() == FL_Tab &&
+  if (event == KEY && event_key() == TabKey &&
       mark() != position())
   {
     // Set the current cursor position to the end of the selection...
@@ -64,12 +65,12 @@ Fl_FileInput::handle(int event)	// I - Event to handle
   }
   else
   {
-    // Use the Fl_Input handler...
-    return (Fl_Input::handle(event));
+    // Use the Input handler...
+    return (Input::handle(event));
   }
 }
 
 
 //
-// End of "$Id: Fl_FileInput.cxx,v 1.5 2002/01/28 08:02:59 spitzak Exp $".
+// End of "$Id: Fl_FileInput.cxx,v 1.6 2002/12/09 04:52:25 spitzak Exp $".
 //

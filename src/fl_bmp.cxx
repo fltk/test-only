@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.14 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: fl_bmp.cxx,v 1.15 2002/12/09 04:52:28 spitzak Exp $"
 //
 // Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
 //
@@ -30,13 +30,15 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include <fltk/Fl.h>
-#include <fltk/fl_draw.h>
+#include <fltk/SharedImage.h> // defines bmpImage.h
+#include <fltk/events.h>
+#include <fltk/error.h>
+#include <fltk/draw.h>
 #include <fltk/x.h>
-#include <fltk/Fl_Shared_Image.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+using namespace fltk;
 
 const int PIXEL_SIZE = 4;  // Number of bytes a pixel requires.
 const int IMG_NON_TRANSPARENT = 0;
@@ -83,14 +85,14 @@ typedef unsigned char uchar;
 static FILE *bmpFile;
 static uchar* bmpDatas;
 
-int Fl_BMP_Image::test(const uchar* buffer, size_t size)
+bool bmpImage::test(const uchar* buffer, unsigned size)
 {
   return !strncmp((char*)buffer, "BM", size<2? size:2);
 }
 
 inline void SetError(const char* s)
 {
-  Fl::warning(s);
+  warning(s);
 }
 
 static uchar GETC()
@@ -166,7 +168,7 @@ static short ReadLittleEndianUINT()
 }
 #endif
 
-void Fl_BMP_Image::measure(int &W, int &H)
+void bmpImage::measure(int &W, int &H)
 {
 
   if (w>=0) { 
@@ -219,7 +221,7 @@ void Fl_BMP_Image::measure(int &W, int &H)
   return;
 }
 
-void Fl_BMP_Image::read()
+void bmpImage::read()
 {
   id = mask = 0;
 
@@ -808,7 +810,7 @@ void Fl_BMP_Image::read()
 
     Pixmap pixmap = fl_create_offscreen(_width, _height);
     fl_begin_offscreen(pixmap);
-    fl_draw_image(rgbBuf, 0, 0, _width, _height, PIXEL_SIZE);
+    drawimage(rgbBuf, 0, 0, _width, _height, PIXEL_SIZE);
     fl_end_offscreen();
     id = (void*)pixmap;
 
@@ -825,5 +827,5 @@ error:
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.14 2001/12/10 06:25:42 spitzak Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.15 2002/12/09 04:52:28 spitzak Exp $"
 //

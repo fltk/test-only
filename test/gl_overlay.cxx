@@ -1,5 +1,5 @@
 //
-// "$Id: gl_overlay.cxx,v 1.7 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: gl_overlay.cxx,v 1.8 2002/12/09 04:52:31 spitzak Exp $"
 //
 // OpenGL overlay test program for the Fast Light Tool Kit (FLTK).
 //
@@ -24,27 +24,27 @@
 //
 
 #include <config.h>
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/Fl_Hor_Slider.h>
-#include <fltk/Fl_Toggle_Button.h>
+#include <fltk/run.h>
+#include <fltk/Window.h>
+#include <fltk/HorizontalSlider.h>
+#include <fltk/ToggleButton.h>
 #include <fltk/math.h>
 
 #if !HAVE_GL
-#include <fltk/Fl_Box.h>
-class shape_window : public Fl_Box {
+
+class shape_window : public fltk::Widget {
 public:	
   int sides;
   shape_window(int x,int y,int w,int h,const char *l=0)
-    :Fl_Box(FL_DOWN_BOX,x,y,w,h,l){
+    :fltk::Widget(FLTK::DOWN_BOX,x,y,w,h,l){
       label("This demo does\nnot work without GL");
   }
 };
 #else
 #include <fltk/gl.h>
-#include <fltk/Fl_Gl_Window.h>
+#include <fltk/GlWindow.h>
 
-class shape_window : public Fl_Gl_Window {
+class shape_window : public fltk::GlWindow {
   void draw();
   void draw_overlay();
 public:
@@ -53,10 +53,13 @@ public:
   shape_window(int x,int y,int w,int h,const char *l=0);
 };
 
-shape_window::shape_window(int x,int y,int w,int h,const char *l) :
-Fl_Gl_Window(x,y,w,h,l) {
+shape_window::shape_window(int x,int y,int w,int h,const char *l)
+  : fltk::GlWindow(x,y,w,h,l)
+{
   sides = overlay_sides = 3;
 }
+
+#include <stdio.h>
 
 void shape_window::draw() {
 // the valid() property may be used to avoid reinitializing your
@@ -74,9 +77,13 @@ void shape_window::draw() {
     glVertex3f(cos(ang),sin(ang),0);
   }
   glEnd();
-  gl_color(FL_WHITE);
-  gl_font(FL_HELVETICA, FL_NORMAL_SIZE);
-  gl_draw("text", .1, .5);
+  fltk::glsetcolor(fltk::WHITE);
+  fltk::glsetfont(labelfont(), labelsize());
+  static int count = 0;
+  count++;
+  char buffer[40];
+  sprintf(buffer, "normal draw %d", count);
+  fltk::gldrawtext(buffer, .1, .5);
 }
 
 void shape_window::draw_overlay() {
@@ -88,73 +95,98 @@ void shape_window::draw_overlay() {
     glViewport(0,0,w(),h());
   }
 // draw an amazing graphic:
-  gl_color(FL_RED);
+  fltk::glsetcolor(fltk::RED);
   glBegin(GL_LINE_LOOP);
   for (int i=0; i<overlay_sides; i++) {
     double ang = i*2*M_PI/overlay_sides;
     glVertex3f(cos(ang),sin(ang),0);
   }
   glEnd();
-  glEnd();
-  gl_font(FL_HELVETICA, FL_NORMAL_SIZE);
-  gl_draw("overlay text", .1, .6);
+  fltk::glsetfont(labelfont(), labelsize());
+  static int count = 0;
+  count++;
+  char buffer[40];
+  sprintf(buffer, "overlay draw %d", count);
+  fltk::gldrawtext(buffer, .1, .6);
 }
 #endif
 
 // when you change the data, as in this callback, you must call redraw():
-void sides_cb(Fl_Widget *o, void *p) {
+void sides_cb(fltk::Widget *o, void *p) {
   shape_window *sw = (shape_window *)p;
-  sw->sides = int(((Fl_Slider *)o)->value());
+  sw->sides = int(((fltk::Slider *)o)->value());
   sw->redraw();
 }
 
 #if HAVE_GL
-void overlay_sides_cb(Fl_Widget *o, void *p) {
+void overlay_sides_cb(fltk::Widget *o, void *p) {
   shape_window *sw = (shape_window *)p;
-  sw->overlay_sides = int(((Fl_Slider *)o)->value());
+  sw->overlay_sides = int(((fltk::Slider *)o)->value());
   sw->redraw_overlay();
 }
 #endif
-#include <stdio.h>
+
 int main(int argc, char **argv) {
 
-  Fl_Window window(300, 370);
+  fltk::Window window(300, 370);
+  window.begin();
 
   shape_window sw(10, 75, window.w()-20, window.h()-90);
-//sw.mode(FL_RGB);
+//sw.mode(FLTK::RGB);
   window.resizable(&sw);
 
-  Fl_Hor_Slider slider(60, 5, window.w()-70, 30, "Sides:");
-  slider.clear_flag(FL_ALIGN_MASK);
-  slider.set_flag(FL_ALIGN_LEFT);
-  slider.callback(sides_cb,&sw);
-  slider.value(sw.sides);
-  slider.step(1);
-  slider.range(3,40);
-
-  Fl_Hor_Slider oslider(60, 40, window.w()-70, 30, "Overlay:");
-  oslider.clear_flag(FL_ALIGN_MASK);
-  oslider.set_flag(FL_ALIGN_LEFT);
+  fltk::HorizontalSlider oslider(60, 5, window.w()-70, 30, "Overlay:");
+  oslider.clear_flag(fltk::ALIGN_MASK);
+  oslider.set_flag(fltk::ALIGN_LEFT);
 #if HAVE_GL
   oslider.callback(overlay_sides_cb,&sw);
   oslider.value(sw.overlay_sides);
 #endif
   oslider.step(1);
   oslider.range(3,40);
+  oslider.tooltip("Move this slider to make overlay redraw");
+
+  fltk::HorizontalSlider slider(60, 40, window.w()-70, 30, "Normal:");
+  slider.clear_flag(fltk::ALIGN_MASK);
+  slider.set_flag(fltk::ALIGN_LEFT);
+  slider.callback(sides_cb,&sw);
+  slider.value(sw.sides);
+  slider.step(1);
+  slider.range(3,40);
+  oslider.tooltip("Move this slider to make background image redraw");
 
   window.end();
   window.show(argc,argv);
+
 #if HAVE_GL
-  printf("Can do overlay = %d\n", sw.can_do_overlay());
+  sw.tooltip(sw.can_do_overlay() ?
+
+"The red image is drawn by implementing fltk::GlWindow::draw_overlay().\n"
+"\n"
+"Hardware overlays may be unable to draw some "
+"colors or may exhibit bugs. If you see the red outline but no red text "
+"this is a known bug on Windows."
+:
+"The red image is drawn by implementing fltk::GlWindow::draw_overlay().\n"
+"\n"
+"You do not have OpenGL overlay hardware, so fltk "
+"simulates it. To work on all OpenGl hardware the simulation is very "
+"simple by default. You can reduce redraws of the background by changing the "
+"environment variable $GL_SWAP_TYPE:\n"
+"\n"
+"setenv GL_SWAP_TYPE USE_COPY (almost always works)\n"
+"setenv GL_SWAP_TYPE COPY (works on some cards)\n"
+"setenv GL_SWAP_TYPE NODAMAGE (works only with software OpenGl)"
+	     );
   sw.show();
   sw.redraw_overlay();
 #else
   sw.show();
 #endif
 
-  return Fl::run();
+  return fltk::run();
 }
 
 //
-// End of "$Id: gl_overlay.cxx,v 1.7 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: gl_overlay.cxx,v 1.8 2002/12/09 04:52:31 spitzak Exp $".
 //

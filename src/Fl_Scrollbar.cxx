@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.62 2002/10/04 07:48:14 spitzak Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.63 2002/12/09 04:52:26 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,15 +23,18 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Scrollbar.h>
-#include <fltk/fl_draw.h>
+#include <fltk/Scrollbar.h>
+#include <fltk/events.h>
+#include <fltk/damage.h>
+#include <fltk/Box.h>
+#include <fltk/draw.h>
 #include <math.h>
 #include <stdlib.h>
+using namespace fltk;
 
 #define vertical() (!(type()&1))
 
-int Fl_Scrollbar::value(int p, int w, int t, int l) {
+int Scrollbar::value(int p, int w, int t, int l) {
 //	p = position, first line displayed
 //	w = window, number of lines displayed
 //	t = top, number of first line
@@ -48,7 +51,7 @@ int Fl_Scrollbar::value(int p, int w, int t, int l) {
   }
   int ls = int(linesize());
   pagesize(w>2*ls ? w-ls : ls);
-  return Fl_Slider::value(p);
+  return Slider::value(p);
 }
 
 enum {NOTHING = 0, UP_ARROW, DOWN_ARROW, ABOVE_SLIDER, BELOW_SLIDER, SLIDER};
@@ -60,7 +63,7 @@ static char which_pushed = 0;
 // How belowmouse() widget was last drawn:
 static char last_;
 
-void Fl_Scrollbar::increment_cb() {
+void Scrollbar::increment_cb() {
   double i;
   switch (which_pushed) {
   case UP_ARROW: i = -linesize(); break;
@@ -74,15 +77,7 @@ void Fl_Scrollbar::increment_cb() {
 #define INITIALREPEAT .5f
 #define REPEAT .05f
 
-void Fl_Scrollbar::timeout_cb(void* v) {
-  Fl_Scrollbar* s = (Fl_Scrollbar*)v;
-  if (which_pushed) {
-    Fl::add_timeout(REPEAT, timeout_cb, s);
-    s->increment_cb();
-  }
-}
-
-int Fl_Scrollbar::handle(int event) {
+int Scrollbar::handle(int event) {
   // area of scrollbar:
   int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
 
@@ -94,10 +89,10 @@ int Fl_Scrollbar::handle(int event) {
   }
 
   // which widget part is highlighted?
-  int mx = Fl::event_x();
-  int my = Fl::event_y();
+  int mx = event_x();
+  int my = event_y();
   int which_part;
-  if (!Fl::event_inside(0, 0, w(), h())) which_part = NOTHING;
+  if (!event_inside(0, 0, w(), h())) which_part = NOTHING;
   else if (vertical()) {
     if (my < Y) which_part = UP_ARROW;
     else if (my >= Y+H) which_part = DOWN_ARROW;
@@ -118,39 +113,39 @@ int Fl_Scrollbar::handle(int event) {
     }
   }
   switch (event) {
-  case FL_FOCUS:
+  case FOCUS:
     return 0;
-  case FL_ENTER:
-  case FL_MOVE:
+  case ENTER:
+  case MOVE:
     if (!highlight_color()) return 1;
     if (which_part != which_highlight) {
       which_highlight = which_part;
-      redraw(FL_DAMAGE_HIGHLIGHT);
+      redraw(DAMAGE_HIGHLIGHT);
     }
     return 1;
-  case FL_LEAVE:
+  case LEAVE:
     if (which_highlight) {
       which_highlight = 0;
-      redraw(FL_DAMAGE_HIGHLIGHT);
+      redraw(DAMAGE_HIGHLIGHT);
     }
     return 1;
-  case FL_PUSH:
+  case PUSH:
     // Clicking on the slider or middle or right click on the trough
     // gives us normal slider behavior:
     if (which_part == SLIDER ||
-	Fl::event_button() > 1 && which_part > DOWN_ARROW) {
+	event_button() > 1 && which_part > DOWN_ARROW) {
       which_pushed = SLIDER;
-      return Fl_Slider::handle(event, X,Y,W,H);
+      return Slider::handle(event, X,Y,W,H);
     }
     handle_push();
     // middle/right click on arrows jumps to that end:
-    if (Fl::event_button()>1) {
+    if (event_button()>1) {
       if (which_part==UP_ARROW) handle_drag(vertical()?maximum():minimum());
       else if (which_part==DOWN_ARROW) handle_drag(vertical()?minimum():maximum());
     }
     goto J1;
-  case FL_DRAG:
-    if (which_pushed==SLIDER) return Fl_Slider::handle(event, X,Y,W,H);
+  case DRAG:
+    if (which_pushed==SLIDER) return Slider::handle(event, X,Y,W,H);
     if (which_part == SLIDER) which_part = NOTHING;
     // it is okay to switch between arrows and nothing, but no other
     // changes are allowed:
@@ -159,108 +154,114 @@ int Fl_Scrollbar::handle(int event) {
     else which_part = which_pushed;
   J1:
     if (which_part != which_pushed) {
-      Fl::remove_timeout(timeout_cb, this);
+      remove_timeout();
       which_highlight = which_pushed = which_part;
-      redraw(FL_DAMAGE_HIGHLIGHT);
+      redraw(DAMAGE_HIGHLIGHT);
       if (which_part) {
-	Fl::add_timeout(INITIALREPEAT, timeout_cb, this);
+	add_timeout(INITIALREPEAT);
 	increment_cb();
       }
     }
     return 1;
-  case FL_RELEASE:
+  case TIMEOUT:
+    if (which_pushed) {
+      repeat_timeout(REPEAT);
+      increment_cb();
+    }
+    return 1;
+  case RELEASE:
     if (which_pushed == SLIDER) {
-      Fl_Slider::handle(event, X,Y,W,H);
+      Slider::handle(event, X,Y,W,H);
     } else if (which_pushed) {
-      Fl::remove_timeout(timeout_cb, this);
+      remove_timeout();
       handle_release();
-      redraw(FL_DAMAGE_HIGHLIGHT);
+      redraw(DAMAGE_HIGHLIGHT);
     }
     which_pushed = NOTHING;
     return 1;
-  case FL_MOUSEWHEEL: {
-    float n = (vertical() ? -Fl::event_dy() : Fl::event_dx())
-      * Fl_Style::wheel_scroll_lines * linesize();
+  case MOUSEWHEEL: {
+    float n = (vertical() ? -event_dy() : event_dx())
+      * Style::wheel_scroll_lines * linesize();
     if (fabsf(n) > pagesize()) n = (n<0)?-pagesize():pagesize();
     handle_drag(value()+n);
     return 1;
   }
-  case FL_KEY:
-    if (vertical()) switch(Fl::event_key()) {
-    case FL_Home: handle_drag(maximum()); return 1;
-    case FL_End:  handle_drag(minimum()); return 1;
-    case FL_Page_Up: handle_drag(value()-pagesize()); return 1;
-    case FL_Page_Down: handle_drag(value()+pagesize()); return 1;
+  case KEY:
+    if (vertical()) switch(event_key()) {
+    case HomeKey: handle_drag(maximum()); return 1;
+    case EndKey:  handle_drag(minimum()); return 1;
+    case PageUpKey: handle_drag(value()-pagesize()); return 1;
+    case PageDownKey: handle_drag(value()+pagesize()); return 1;
     } // else fall through...
   default:
-    return Fl_Slider::handle(event);
+    return Slider::handle(event);
   }
 }
 
-void Fl_Scrollbar::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_frame();
+void Scrollbar::draw() {
+  if (damage()&DAMAGE_ALL) draw_frame();
 
   int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
   int ix = X; int iy = Y; int iw = W; int ih = H;
 
-  char pushed_ = this==Fl::pushed() ? which_pushed : NOTHING;
-  char highlight_ = this==Fl::belowmouse() ? which_highlight : NOTHING;
+  char pushed_ = pushed() ? which_pushed : NOTHING;
+  char highlight_ = belowmouse() ? which_highlight : NOTHING;
 
   // 1 = left/top   2 = right/bottom   5 = slider button
-  Fl_Flags f1 = 0, f2 = 0, f5 = 0;
+  Flags f1 = 0, f2 = 0, f5 = 0;
   if (!active_r()) {
-    f1 = f2 = f5 = FL_INACTIVE;
+    f1 = f2 = f5 = INACTIVE;
   } else {
-    if (pushed_ == UP_ARROW) f1 = FL_VALUE|FL_HIGHLIGHT;
-    else if (highlight_ == UP_ARROW) f1 = FL_HIGHLIGHT;
-    if (pushed_ == DOWN_ARROW) f2 = FL_VALUE|FL_HIGHLIGHT;
-    else if (highlight_ == DOWN_ARROW) f2 = FL_HIGHLIGHT;
-    if (pushed_ == SLIDER) f5 = FL_VALUE|FL_HIGHLIGHT;
-    else if (highlight_ == SLIDER) f5 = FL_HIGHLIGHT;
+    if (pushed_ == UP_ARROW) f1 = VALUE|HIGHLIGHT;
+    else if (highlight_ == UP_ARROW) f1 = HIGHLIGHT;
+    if (pushed_ == DOWN_ARROW) f2 = VALUE|HIGHLIGHT;
+    else if (highlight_ == DOWN_ARROW) f2 = HIGHLIGHT;
+    if (pushed_ == SLIDER) f5 = VALUE|HIGHLIGHT;
+    else if (highlight_ == SLIDER) f5 = HIGHLIGHT;
   }
 
   if (vertical() && H >= 3*W) {
-    if (damage()&FL_DAMAGE_ALL || last_ == UP_ARROW || highlight_ == UP_ARROW)
-      draw_glyph(FL_GLYPH_UP_BUTTON, X, Y, W, W, f1);
-    if (damage()&FL_DAMAGE_ALL || last_ ==DOWN_ARROW|| highlight_ ==DOWN_ARROW)
-      draw_glyph(FL_GLYPH_DOWN_BUTTON, X, Y+H-W, W, W, f2);
+    if (damage()&DAMAGE_ALL || last_ == UP_ARROW || highlight_ == UP_ARROW)
+      draw_glyph(GLYPH_UP_BUTTON, X, Y, W, W, f1);
+    if (damage()&DAMAGE_ALL || last_ ==DOWN_ARROW|| highlight_ ==DOWN_ARROW)
+      draw_glyph(GLYPH_DOWN_BUTTON, X, Y+H-W, W, W, f2);
     iy += W; ih -= 2*W;
 
   } else if (W >= 3*H) { // horizontal:
-    if (damage()&FL_DAMAGE_ALL || last_ == UP_ARROW || highlight_ == UP_ARROW)
-      draw_glyph(FL_GLYPH_LEFT_BUTTON, X, Y, H, H, f1);
-    if (damage()&FL_DAMAGE_ALL || last_ ==DOWN_ARROW|| highlight_ ==DOWN_ARROW)
-      draw_glyph(FL_GLYPH_RIGHT_BUTTON, X+W-H, Y, H, H, f2);
+    if (damage()&DAMAGE_ALL || last_ == UP_ARROW || highlight_ == UP_ARROW)
+      draw_glyph(GLYPH_LEFT_BUTTON, X, Y, H, H, f1);
+    if (damage()&DAMAGE_ALL || last_ ==DOWN_ARROW|| highlight_ ==DOWN_ARROW)
+      draw_glyph(GLYPH_RIGHT_BUTTON, X+W-H, Y, H, H, f2);
     ix += H; iw -= 2*H;
   }
   last_ = highlight_;
 
-  if (Fl_Slider::draw(ix, iy, iw, ih, f5, false)) {
-    fl_color(color());
-    fl_rectf(ix, iy, iw, ih);
-    fl_pop_clip();
+  if (Slider::draw(ix, iy, iw, ih, f5, false)) {
+    setcolor(color());
+    fillrect(ix, iy, iw, ih);
+    pop_clip();
   }
 
 }
 
-static void glyph(const Fl_Widget* widget, int glyph,
-		  int x,int y,int w,int h, Fl_Flags flags)
+static void glyph(const Widget* widget, int glyph,
+		  int x,int y,int w,int h, Flags flags)
 {
-  if (!glyph) flags &= ~FL_VALUE;
-  Fl_Widget::default_glyph(widget, glyph, x, y, w, h, flags);
+  if (!glyph) flags &= ~VALUE;
+  Widget::default_glyph(widget, glyph, x, y, w, h, flags);
 }
 
-static void revert(Fl_Style* s) {
-  //s->highlight_color = FL_WHITE;
-  s->box = FL_FLAT_BOX;
-  s->color = FL_DARK2;
+static void revert(Style* s) {
+  //s->highlight_color = WHITE;
+  s->box = FLAT_BOX;
+  s->color = GRAY60;
   s->glyph = ::glyph;
 }
-static Fl_Named_Style style("Scrollbar", revert, &Fl_Scrollbar::default_style);
-Fl_Named_Style* Fl_Scrollbar::default_style = &::style;
+static NamedStyle style("Scrollbar", revert, &Scrollbar::default_style);
+NamedStyle* Scrollbar::default_style = &::style;
 
-Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
-  : Fl_Slider(X, Y, W, H, L)
+Scrollbar::Scrollbar(int X, int Y, int W, int H, const char* L)
+  : Slider(X, Y, W, H, L)
 {
   style(default_style);
   step(1);
@@ -268,5 +269,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.62 2002/10/04 07:48:14 spitzak Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.63 2002/12/09 04:52:26 spitzak Exp $".
 //

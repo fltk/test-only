@@ -1,7 +1,7 @@
 //
-// "$Id: hello.cxx,v 1.9 2002/03/11 08:22:35 spitzak Exp $"
+// "$Id: hello.cxx,v 1.10 2002/12/09 04:52:31 spitzak Exp $"
 //
-// Demo program from the fltk documentation.
+// The first demo program from the fltk documentation.
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,22 +23,24 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/Fl_Box.h>
+#include <fltk/Window.h>
+#include <fltk/Widget.h>
+#include <fltk/run.h>
+using namespace fltk;
 
 int main(int argc, char **argv) {
-  Fl_Window *window = new Fl_Window(300,180);
-  Fl_Box *box = new Fl_Box(20,40,260,100,"Hello, World!");
-  box->box(FL_UP_BOX);
-  box->label_font(FL_HELVETICA_BOLD_ITALIC);
-  box->label_size(36);
-  box->label_type(FL_SHADOW_LABEL);
+  Window *window = new Window(300, 180);
+  window->begin();
+  Widget *box = new Widget(20, 40, 260, 100, "Hello, World!");
+  box->box(UP_BOX);
+  box->labelfont(HELVETICA_BOLD_ITALIC);
+  box->labelsize(36);
+  box->labeltype(SHADOW_LABEL);
   window->end();
   window->show(argc, argv);
-  return Fl::run();
+  return run();
 }
 
 //
-// End of "$Id: hello.cxx,v 1.9 2002/03/11 08:22:35 spitzak Exp $".
+// End of "$Id: hello.cxx,v 1.10 2002/12/09 04:52:31 spitzak Exp $".
 //
