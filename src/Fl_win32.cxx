@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.84 2000/01/07 22:58:53 mike Exp $"
+// "$Id: Fl_win32.cxx,v 1.85 2000/01/09 08:17:28 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -595,7 +595,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_KEYUP:
   case WM_SYSKEYUP:
     // save the keysym until we figure out the characters:
-    Fl::e_keysym = ms2fltk(wParam,lParam&(1<<24));
+    {int k = ms2fltk(wParam,lParam&(1<<24));
+    if (k == Fl::e_keysym) Fl::e_clicks++; else Fl::e_clicks = 0;
+    Fl::e_keysym = k;}
     // See if TranslateMessage turned it into a WM_*CHAR message:
     if (PeekMessage(&fl_msg, hWnd, WM_CHAR, WM_SYSDEADCHAR, 1)) {
       uMsg = fl_msg.message;
@@ -625,7 +627,10 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       }
       if (GetKeyState(VK_SCROLL)) state |= FL_SCROLL_LOCK;
       Fl::e_state = state;}
-    if (lParam & (1<<31)) goto DEFAULT; // ignore up events after fixing shift
+    if (lParam & (1<<31)) { // key up events.
+      if (Fl::handle(FL_KEYUP, window)) return 0;
+      break;
+    }
     if (uMsg == WM_CHAR || uMsg == WM_SYSCHAR) {
       buffer[0] = char(wParam);
       Fl::e_length = 1;
@@ -1093,5 +1098,5 @@ int fl_windows_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.84 2000/01/07 22:58:53 mike Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.85 2000/01/09 08:17:28 bill Exp $".
 //

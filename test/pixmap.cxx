@@ -1,5 +1,5 @@
 //
-// "$Id: pixmap.cxx,v 1.5 1999/08/16 07:31:36 bill Exp $"
+// "$Id: pixmap.cxx,v 1.6 2000/01/09 08:17:33 bill Exp $"
 //
 // Pixmap label test program for the Fast Light Tool Kit (FLTK).
 //
@@ -57,7 +57,7 @@ int arg(int, char **argv, int &i) {
 int main(int argc, char **argv) {
   int i = 1;
   if (Fl::args(argc,argv,i,arg) < argc)
-    Fl::fatal(" -8 # : use default visual\n%s\n",Fl::help);
+    Fl::fatal(" -8 : use default visual\n%s\n",Fl::help);
 
   Fl_Window window(400,400); ::w = &window;
   Fl_Button b(140,160,120,120,"World's fastest toolkit"); ::b = &b;
@@ -82,5 +82,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: pixmap.cxx,v 1.5 1999/08/16 07:31:36 bill Exp $".
+// End of "$Id: pixmap.cxx,v 1.6 2000/01/09 08:17:33 bill Exp $".
 //

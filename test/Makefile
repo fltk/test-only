@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.38 1999/12/16 03:14:04 vincent Exp $"
+# "$Id: Makefile,v 1.39 2000/01/09 08:17:32 bill Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -32,7 +32,7 @@ CPPFILES =\
 	gl_overlay.cxx hello.cxx iconize.cxx image.cxx input.cxx \
 	keyboard.cxx label.cxx list_visuals.cxx mandelbrot.cxx menubar.cxx \
 	message.cxx navigation.cxx output.cxx overlay.cxx pixmap.cxx \
-	pixmap_browser.cxx radio.cxx resizebox.cxx scroll.cxx shape.cxx \
+	pixmap_browser.cxx radio.cxx resizable.cxx scroll.cxx shape.cxx \
 	subwindow.cxx symbols.cxx tabs.cxx tile.cxx valuators.cxx fast_slow.cxx \
 	resize.cxx pack.cxx inactive.cxx sizes.cxx image_file.cxx \
 	layout.cxx threads.cxx fltk_scheme.cxx
@@ -42,7 +42,7 @@ ALL =	CubeView adjuster arc ask bitmap boxtype browser button buttons checkers \
 	editor file_chooser fonts fullscreen gl_overlay glpuzzle \
 	hello iconize image input keyboard label list_visuals \
 	mandelbrot menubar message navigation output overlay pixmap \
-	pixmap_browser radio resizebox scroll shape subwindow \
+	pixmap_browser radio resizable scroll shape subwindow \
 	symbols tabs tile valuators fast_slow resize pack inactive sizes \
 	image_file layout threads fltk_scheme
 
@@ -105,5 +105,5 @@ install:
 	@echo Nothing to install in test directory.
 
 #
-# End of "$Id: Makefile,v 1.38 1999/12/16 03:14:04 vincent Exp $".
+# End of "$Id: Makefile,v 1.39 2000/01/09 08:17:32 bill Exp $".
 #

@@ -1,0 +1,131 @@
+# data file for the FLTK User Interface Designer (FLUID)
+version 2.0000 
+images_dir ./ 
+header_name {.h} 
+code_name {.cxx} 
+gridx 5 
+gridy 5 
+snap 3
+Function {} {open
+} {
+  Fl_Window {} {open
+    xywh {94 297 560 470} resizable box NO_BOX visible
+  } {
+    Fl_Menu_Bar {} {open
+      xywh {0 0 560 25}
+    } {
+      menuitem {} {
+        label This
+        xywh {0 0 100 20}
+      }
+      menuitem {} {
+        label is
+        xywh {10 10 100 20}
+      }
+      menuitem {} {
+        label a
+        xywh {20 20 100 20}
+      }
+      menuitem {} {
+        label Menu
+        xywh {30 30 100 20}
+      }
+      menuitem {} {
+        label Bar
+        xywh {40 40 100 20}
+      }
+    }
+    Fl_Button {} {
+      label These
+      xywh {0 25 95 25} color 47
+    }
+    Fl_Box {} {
+      label {
+This program demonstrates how you set the resizable() of a window to get things to resize the way you want.}
+      xywh {95 25 465 419} align 209 box FLAT_BOX color 19 labelcolor 7
+    }
+    Fl_Button {} {
+      label {are some}
+      xywh {0 50 95 25} color 47
+    }
+    Fl_Button {} {
+      label buttons
+      xywh {0 75 95 25} color 47
+    }
+    Fl_Button {} {
+      label {we don't want}
+      xywh {0 100 95 25} color 47
+    }
+    Fl_Button {} {
+      label {to resize.}
+      xywh {0 125 95 25} color 47
+    }
+    Fl_Button {} {
+      label nonscaling
+      xywh {0 419 95 25} color 47
+    }
+    Fl_Box {} {
+      label {This status message will resize horizontally only.}
+      xywh {0 444 460 25} align 20 box BORDER_BOX color 55
+    }
+    Fl_Button {} {
+      label {@>>}
+      xywh {535 444 25 26} labeltype SYMBOL_LABEL
+    }
+    Fl_Button {} {
+      label {@<<}
+      xywh {460 445 25 25} labeltype SYMBOL_LABEL
+    }
+    Fl_Button {} {
+      label {@<}
+      xywh {485 445 25 25} labeltype SYMBOL_LABEL
+    }
+    Fl_Button {} {
+      label {@>}
+      xywh {510 445 25 25} labeltype SYMBOL_LABEL
+    }
+    Fl_Box {} {
+      label {This is the resizable() of the window.
+It is normally invisible.}
+      tooltip {To make it invisible, use an Fl_Box with the default box(FL_NO_BOX) and no label.
+
+Fltk sets the window's minimum size such that this widget's minimum size is 100, unless it starts out smaller than that.  You can override this default by calling size_range() on the window.}
+      xywh {95 150 365 270} align 192 resizable box BORDER_BOX color 37 labelcolor 1
+    }
+    Fl_Button {} {
+      label {Things that}
+      xywh {0 150 95 25} color 2389675008
+    }
+    Fl_Button {} {
+      label {overlap the box}
+      xywh {0 175 95 25} color 2389675008
+    }
+    Fl_Button {} {
+      label {will scale.}
+      xywh {0 200 95 25} color 2389675008
+    }
+    Fl_Group {} {
+      label {A group} open
+      tooltip {This group has resizable(0) (this is the default).  But you can set a group's resizable to nest different resize behavior.}
+      xywh {0 225 95 190} align 18 box ENGRAVED_BOX labeltype ENGRAVED_LABEL labelcolor 49
+    } {
+      Fl_Button {} {
+        label {You can put} selected
+        xywh {5 230 85 25} color 47
+      }
+      Fl_Button {} {
+        label {them inside} selected
+        xywh {5 255 85 25} color 47
+      }
+      Fl_Button {} {
+        label {a group to} selected
+        xywh {5 280 85 25} color 47
+      }
+      Fl_Button {} {
+        label {stop scaling.} selected
+        xywh {5 305 85 25} color 47
+      }
+    }
+  }
+  code {// w->size_range(w->w()-w->resizable()->w(), w->h()-w->resizable()->h());} {}
+} 

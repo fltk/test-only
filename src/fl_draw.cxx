@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.10 1999/11/16 07:36:10 bill Exp $"
+// "$Id: fl_draw.cxx,v 1.11 2000/01/09 08:17:30 bill Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -128,9 +128,13 @@ void fl_draw(
   // figure out vertical position of the first line:
   int ypos;
   int height = fl_height();
-  if (align & FL_ALIGN_BOTTOM) ypos = y+h-(lines-1)*height;
-  else if (align & FL_ALIGN_TOP) ypos = y+height;
-  else ypos = y+(h-lines*height)/2+height;
+  if (align & FL_ALIGN_BOTTOM) {
+    ypos = y+h-lines*height;
+    if (align & FL_ALIGN_TOP && ypos > y) ypos = y;
+  }
+  else if (align & FL_ALIGN_TOP) ypos = y;
+  else ypos = y+(h-lines*height)/2;
+  ypos += height;
 
   // now draw all the lines:
   int desc = fl_descent();
@@ -138,9 +142,12 @@ void fl_draw(
     if (lines>1) e = expand(p, buf, w, buflen, width, align&FL_ALIGN_WRAP);
 
     int xpos;
-    if (align & FL_ALIGN_LEFT) xpos = x;
-    else if (align & FL_ALIGN_RIGHT) xpos = x+w-int(width+.5);
-    else xpos = x+w/2-int(width)/2;
+    if (align & FL_ALIGN_RIGHT) {
+      xpos = x+w-width;
+      if (align & FL_ALIGN_LEFT && xpos > x) xpos = x;
+    }
+    else if (align & FL_ALIGN_LEFT) xpos = x;
+    else xpos = x+w/2-width/2;
 
     callthis(buf,buflen,xpos,ypos-desc);
 
@@ -176,7 +183,7 @@ void fl_measure(const char* str, int& w, int& h) {
   int W = 0;
   for (p=str,lines=0; ;) {
     e = expand(p, buf, w, buflen, width, w!=0);
-    if (int(width) > W) W = int(width);
+    if (width > W) W = width;
     lines++;
     if (!*e) break;
     p = e;
@@ -186,5 +193,5 @@ void fl_measure(const char* str, int& w, int& h) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.10 1999/11/16 07:36:10 bill Exp $".
+// End of "$Id: fl_draw.cxx,v 1.11 2000/01/09 08:17:30 bill Exp $".
 //

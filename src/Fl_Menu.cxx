@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.74 2000/01/09 01:06:11 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.75 2000/01/09 08:17:27 bill Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -615,6 +615,18 @@ int menuwindow::handle(int e) {
     }
     break;
 
+  case FL_KEYUP:
+    if ((Fl::event_key() == FL_Alt_L || Fl::event_key() == FL_Alt_R)
+	&& Fl::event_clicks()) {
+      // checking for event_clicks insures that the keyup matches the
+      // keydown that preceeded it, so Alt was pressed & released without
+      // any intermediate values.
+      setitem(0, -1);
+      p.state = DONE_STATE;
+      return 1;
+    } else
+      return 0;
+
   case FL_SHORTCUT: {
     for (int menu = p.nummenus; menu--;) {
       menuwindow &mw = *(p.menus[menu]);
@@ -715,8 +727,9 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
 
   if (menubar) {
     p.menu_number = 0;
-    p.item_number = -1;
-    mw.handle(FL_DRAG); // get menu mouse points at to appear
+    p.item_number = p.menus[0]->selected;
+    if (p.item_number < 0)
+      mw.handle(FL_DRAG); // get menu mouse points at to appear
   } else {
     // create submenus until we locate the one with selected item
     // in it, positioning them so that one is selected:
@@ -861,5 +874,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.74 2000/01/09 01:06:11 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.75 2000/01/09 08:17:27 bill Exp $".
 //

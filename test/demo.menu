@@ -28,7 +28,7 @@
 	@w:GL overlay:gl_overlay
 	@w:iconize:iconize
 	@w:fullscreen:fullscreen
-	@w:resizable:resizebox
+	@w:resizable:resizable
 	@w:resize:resize
 
 @main:Drawing\nTests:@d

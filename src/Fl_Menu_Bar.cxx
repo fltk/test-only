@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.31 2000/01/07 08:50:27 bill Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.32 2000/01/09 08:17:28 bill Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -75,6 +75,17 @@ int Fl_Menu_Bar::handle(int event) {
     if (v) {picked(v); return 1;}
     if (visible_r() && (v = menu()->find_shortcut())) goto J1;
     return 0;
+  case FL_KEYUP:
+    if ((Fl::event_key() == FL_Alt_L || Fl::event_key() == FL_Alt_R)
+	&& Fl::event_clicks()) {
+      // checking for event_clicks insures that the keyup matches the
+      // keydown that preceeded it, so Alt was pressed & released without
+      // any intermediate values.  On X it is false if Alt is held down
+      // for a long time, too.
+      v = menu();
+      while (v && !v->activevisible()) v = v->next();
+      goto J1;
+    }
   }
   return 0;
 }
@@ -86,5 +97,5 @@ static void revert(Fl_Style* s) {
 Fl_Style* Fl_Menu_Bar::default_style = new Fl_Named_Style("Menu_Bar", revert, &Fl_Menu_Bar::default_style);
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.31 2000/01/07 08:50:27 bill Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.32 2000/01/09 08:17:28 bill Exp $".
 //

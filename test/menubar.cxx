@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.22 2000/01/07 08:50:42 bill Exp $"
+// "$Id: menubar.cxx,v 1.23 2000/01/09 08:17:33 bill Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -173,7 +173,7 @@ Fl_Menu_Item pulldown[] = {
 };
 
 #define WIDTH 600
-#define HEIGHT 30 // use 25 for better Windoze look
+#define HEIGHT 24 //30 // use 25 for better Windoze look
 
 int main(int argc, char **argv) {
   for (int i=0; i<99; i++) {
@@ -229,5 +229,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.22 2000/01/07 08:50:42 bill Exp $".
+// End of "$Id: menubar.cxx,v 1.23 2000/01/09 08:17:33 bill Exp $".
 //

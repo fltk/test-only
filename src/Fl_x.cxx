@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.58 2000/01/08 21:16:24 mike Exp $"
+// "$Id: Fl_x.cxx,v 1.59 2000/01/09 08:17:29 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -464,28 +464,32 @@ int fl_handle(const XEvent& xevent)
     event = FL_UNFOCUS;
     break;
 
-  case KeyPress: {
+  case KeyPress:
+  case KeyRelease: {
     int keycode = xevent.xkey.keycode;
-    fl_key_vector[keycode/8] |= (1 << (keycode%8));
-    static char buffer[21];
     KeySym keysym;
-    int len = XLookupString((XKeyEvent*)&(xevent.xkey),buffer,20,&keysym,0);
-    if (keysym && keysym < 0x400) { // a character in latin-1,2,3,4 sets
-      // force it to type a character (not sure if this ever is needed):
-      if (!len) {buffer[0] = char(keysym); len = 1;}
-      // ignore all effects of shift on the keysyms, which makes it a lot
-      // easier to program shortcuts and is Windows-compatable:
+    if (xevent.type == KeyPress) {
+      event = FL_KEYBOARD;
+      fl_key_vector[keycode/8] |= (1 << (keycode%8));
+      static char buffer[21];
+      int len = XLookupString((XKeyEvent*)&(xevent.xkey), buffer, 20, &keysym, 0);
+      if (keysym && keysym < 0x400) { // a character in latin-1,2,3,4 sets
+	// force it to type a character (not sure if this ever is needed):
+	if (!len) {buffer[0] = char(keysym); len = 1;}
+	// ignore all effects of shift on the keysyms, which makes it a lot
+	// easier to program shortcuts and is Windows-compatable:
+	keysym = XKeycodeToKeysym(fl_display, keycode, 0);
+      }
+      if (Fl::event_state(FL_CTRL) && keysym == '-') buffer[0] = 0x1f; // ^_
+      buffer[len] = 0;
+      Fl::e_text = buffer;
+      Fl::e_length = len;
+    } else {
+      event = FL_KEYUP;
+      fl_key_vector[keycode/8] &= ~(1 << (keycode%8));
+      // keyup events just get the unshifted keysym:
       keysym = XKeycodeToKeysym(fl_display, keycode, 0);
     }
-#ifdef __sgi
-    // You can plug a microsoft keyboard into an sgi but the extra shift
-    // keys are not translated.  Make them translate like XFree86 does:
-    else if (!keysym) switch(keycode) {
-    case 147: keysym = FL_Meta_L; break;
-    case 148: keysym = FL_Meta_R; break;
-    case 149: keysym = FL_Menu; break;
-    }
-#endif
 #if 0
     // Attempt to fix keyboards that send "delete" for the key in the
     // upper-right corner of the main keyboard.  But it appears that
@@ -497,21 +501,31 @@ int fl_handle(const XEvent& xevent)
       else if (keysym == FL_BackSpace) got_backspace = 1;
     }
 #endif
+#ifdef __sgi
+    // You can plug a microsoft keyboard into an sgi but the extra shift
+    // keys are not translated.  Make them translate like XFree86 does:
+    if (!keysym) switch(keycode) {
+    case 147: keysym = FL_Meta_L; break;
+    case 148: keysym = FL_Meta_R; break;
+    case 149: keysym = FL_Menu; break;
+    }
+#endif
     // We have to get rid of the XK_KP_function keys, because they are
     // not produced on Windows and thus case statements tend not to check
-    // for them.  There are 15 of these in the range 0xff91 ... 0xff9f
-    else if (keysym >= 0xff91 && keysym <= 0xff9f) {
+    // for them:
+    if (keysym >= 0xff91 && keysym <= 0xff9f) {
       // Try to make them turn into FL_KP+'c' so that NumLock is
-      // irrelevant, by looking at the shifted code.  This matches the
-      // behavior of the translator in Fl_win32.C, and IMHO is the
-      // user-friendly result:
+      // irrelevant, by looking at the shifted code:
       unsigned long keysym1 = XKeycodeToKeysym(fl_display, keycode, 1);
       if (keysym1 <= 0x7f || keysym1 > 0xff9f && keysym1 <= FL_KP_Last) {
 	keysym = keysym1 | FL_KP;
-	buffer[0] = char(keysym1) & 0x7F; len = 1;
+	if (xevent.type == KeyPress) {
+	  Fl::e_text[0] = char(keysym1) & 0x7F;
+	  Fl::e_text[1] = 0;
+	  Fl::e_length = 1;
+	}
       } else {
-	// If that failed to work, just translate them to the matching
-	// normal function keys:
+	// If that failed to work, translate assumming PC keyboard layout:
 	static const unsigned short table[15] = {
 	  FL_F+1, FL_F+2, FL_F+3, FL_F+4,
 	  FL_Home, FL_Left, FL_Up, FL_Right,
@@ -526,20 +540,9 @@ int fl_handle(const XEvent& xevent)
       keysym = FL_Tab;
       Fl::e_state |= FL_SHIFT;
     }
-    buffer[len] = 0;
     Fl::e_keysym = int(keysym);
-    Fl::e_text = buffer;
-    Fl::e_length = len;
-    set_event_xy(); Fl::e_is_click = 0;
-    if (Fl::event_state(FL_CTRL) && keysym == '-') buffer[0] = 0x1f; // ^_
-    event = FL_KEYBOARD;
+    set_event_xy(); checkdouble();
     break;}
-
-  case KeyRelease: {
-    int keycode = xevent.xkey.keycode;
-    fl_key_vector[keycode/8] &= ~(1 << (keycode%8));
-    set_event_xy();}
-    break;
 
   case EnterNotify:
     if (xevent.xcrossing.detail == NotifyInferior) break;
@@ -845,5 +848,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.58 2000/01/08 21:16:24 mike Exp $".
+// End of "$Id: Fl_x.cxx,v 1.59 2000/01/09 08:17:29 bill Exp $".
 //

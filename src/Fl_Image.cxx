@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.9 1999/10/18 06:11:08 bill Exp $"
+// "$Id: Fl_Image.cxx,v 1.10 2000/01/09 08:17:27 bill Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -31,11 +31,17 @@
 void Fl_Image::draw(int X, int Y, int W, int H, Fl_Flags f) {
   if (w<0) measure(w, h);
   int cx;
-  if (f & FL_ALIGN_LEFT) cx = 0;
-  else if (f & FL_ALIGN_RIGHT) cx = w-W;
+  if (f & FL_ALIGN_RIGHT) {
+    cx = w-W;
+    if (f & FL_ALIGN_LEFT && cx < 0) cx = 0;
+  }
+  else if (f & FL_ALIGN_LEFT) cx = 0;
   else cx = w/2-W/2;
   int cy;
-  if (f & FL_ALIGN_BOTTOM) cy = h-H;
+  if (f & FL_ALIGN_BOTTOM) {
+    cy = h-H;
+    if (f & FL_ALIGN_TOP && cy < 0) cy = 0;
+  }
   else if (f & FL_ALIGN_TOP) cy = 0;
   else cy = h/2-H/2;
   if (f & FL_ALIGN_TILED) {
@@ -170,5 +176,5 @@ void Fl_Image::label(Fl_Menu_Item* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.9 1999/10/18 06:11:08 bill Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.10 2000/01/09 08:17:27 bill Exp $".
 //

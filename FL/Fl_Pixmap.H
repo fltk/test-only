@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pixmap.H,v 1.12 1999/11/01 22:51:31 carl Exp $"
+// "$Id: Fl_Pixmap.H,v 1.13 2000/01/09 08:17:23 bill Exp $"
 //
 // Pixmap header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,8 +32,10 @@ class FL_API Fl_Pixmap : public Fl_Image {
 public:
   const char * const * data;
   Fl_Pixmap(const char * const * d) : data(d) {w = -1;}
-  Fl_Pixmap(char ** d) { Fl_Pixmap((const char* const*)d); }
   Fl_Pixmap(const uchar* const * d) : data((char**)d) {w = -1;}
+  // some compilers with bugs may need this one: (?)
+  Fl_Pixmap(char ** d)		    : data(d) {w = -1;}
+
   void measure(int&,int&);
 
   void draw(int, int, int, int, int cx, int cy);
@@ -48,5 +50,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Pixmap.H,v 1.12 1999/11/01 22:51:31 carl Exp $".
+// End of "$Id: Fl_Pixmap.H,v 1.13 2000/01/09 08:17:23 bill Exp $".
 //
