@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Function_Type.cxx,v 1.32 2001/03/07 23:07:39 robertk Exp $"
+// "$Id: Fl_Function_Type.cxx,v 1.33 2001/03/28 19:46:07 robertk Exp $"
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
 //
@@ -36,6 +36,44 @@
 // quick check of any C code for legality, returns an error message
 
 static char buffer[128]; // for error messages
+
+const char *strip_default_args(const char *name) {
+	static char *buffer = NULL;
+	static size_t bufsize = 0;
+	if(!bufsize || bufsize < strlen(name) + 1) {
+		if(buffer) delete[] buffer;
+		size_t allocsize = strlen(name) * 2;	// the *2 is just arbitrary pad
+		buffer = new char[allocsize]; 
+		if(buffer) bufsize = allocsize;
+	}
+	if(buffer) {
+		char *pbuff = buffer;
+		const char *pname = name;
+		int skipping = 0;
+		int inargs = 0;
+		while(*pname) {
+			if(!inargs) {
+				if(*pname == '(')
+					inargs = 1;
+			}
+			else if(!skipping) {
+				if(*pname == '=') {
+					skipping = 1;
+					++pname;
+					continue;
+				}
+			} else if(*pname == ',' || *pname == ')') {
+				skipping = 0;
+			}
+			else if (skipping) {
+				++pname;
+				continue;
+			}
+			*pbuff++ = *pname++;
+		}
+	}
+	return buffer;
+}
 
 // check a quoted string ending in either " or ' or >:
 const char *_q_check(const char * & c, int type) {
@@ -296,7 +334,7 @@ void Fl_Function_Type::write_code() {
       *sptr = '\0';
 
       write_h("%s%s;\n", attr, s);
-      write_c("%s::%s%s", k, name(), get_opening_brace(1));
+      write_c("%s::%s%s", k, strip_default_args(name()), get_opening_brace(1));
     } else {
       if (public_) {
 	if (cdecl_)
@@ -305,7 +343,7 @@ void Fl_Function_Type::write_code() {
 	  write_h("%s%s%s %s;\n", attr, rtype, star, name());
       }
       else write_c("static ");
-      write_c("%s%s %s%s", rtype, star, name(), get_opening_brace(1));
+      write_c("%s%s %s%s", rtype, star, strip_default_args(name()), get_opening_brace(1));
     }
   }
   indentation += 2;
@@ -764,5 +802,5 @@ void Fl_Class_Type::write_code() {
 }
 
 //
-// End of "$Id: Fl_Function_Type.cxx,v 1.32 2001/03/07 23:07:39 robertk Exp $".
+// End of "$Id: Fl_Function_Type.cxx,v 1.33 2001/03/28 19:46:07 robertk Exp $".
 //
