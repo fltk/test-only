@@ -54,6 +54,7 @@ public:
   void hide() {destroy();}
 #endif
   int handle(int ev) {
+#if 0
     if (ev==ENTER) {
       // Entered tooltip window, hide tooltip 
       // and add timeout to pop same tooltip again
@@ -61,6 +62,7 @@ public:
       hide();
       fltk::add_timeout(Tooltip::delay(), tooltip_timeout);      
     }
+#endif
     return MenuWindow::handle(ev);
   }
 };
@@ -77,22 +79,32 @@ void TooltipBox::layout() {
   measure(label(), ww, hh, flags()|OUTPUT);
   ww += 7; hh += 6;
 
-  // find position on the screen of the widget:
-  int ox = event_x_root();
-  //int ox = rectangle.center_x();
-  int oy = rectangle.center_y();
-  for (Widget* p = Tooltip::current(); p; p = p->parent()) {
-    //ox += p->x();
-    oy += p->y();
-  }
+  // find position on the screen of the rectangle that popped up the tooltip:
+  Rectangle r(rectangle);
+  for (Widget* p = Tooltip::current(); p; p = p->parent()) r.move(p->x(), p->y());
+
+  // figure out the corner of the tooltip:
+  int ox = event_x_root()+10;
+  if (ox > r.r()-2) ox = r.r()-2;
+  int oy = event_y_root()+16;
+  if (oy > r.b()-2) oy = r.b()-2;
+
+  // swap sides around so it is on-screen:
   const Monitor& monitor = Monitor::find(ox, oy);
-  if (ox+ww > monitor.r()) ox = monitor.r() - ww;
+  if (ox+ww > monitor.r()) {
+#if 0
+    ox = event_x_root()-3;
+    if (ox < r.x()+2) ox = r.x()+2;
+    ox -= ww;
+#else
+    ox = monitor.r()-ww;
+#endif
+  }
   if (ox < monitor.x()) ox = monitor.x();
-  if (rectangle.h() > 30) {
-    oy = event_y_root()+13;
-    if (oy+hh > monitor.h()) oy -= 23+hh;
-  } else {
-    if (oy+hh > monitor.h()) oy -= (4+hh+rectangle.h());
+  if (oy+hh > monitor.b()) {
+    oy = event_y_root()-3;
+    if (oy < r.y()+2) oy = r.y()+2;
+    oy -= hh;
   }
   if (oy < monitor.y()) oy = monitor.y();
 
@@ -140,6 +152,7 @@ static void tooltip_timeout(void*) {
 // if you want the tooltip to reappear when the mouse moves back in)
 // call the fancier enter() below.
 void Tooltip::enter(Widget* w) {
+  if (w == ::window) return;
   // find the enclosing group with a tooltip:
   Widget* tw = w;
   for (;;) {
