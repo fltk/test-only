@@ -1,5 +1,5 @@
 //
-// "$Id: Symbol.h,v 1.5 2003/11/04 08:10:56 spitzak Exp $"
+// "$Id: Symbol.h,v 1.6 2004/01/23 06:34:34 spitzak Exp $"
 //
 // The fltk drawing library
 //
@@ -78,6 +78,7 @@ class FL_API Symbol {
   static const Symbol* find(const char* name);
 
   static const Symbol* find(const char* start, const char* end);
+  static const Symbol* iterate(int& index);
   static void text(const char* s) {text_=s;}
   static const char* text() {return text_;}
 };

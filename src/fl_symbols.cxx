@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.40 2004/01/21 09:18:10 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.41 2004/01/23 06:34:37 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -156,6 +156,25 @@ void Symbol::name(const char* name) {
     // if table is more than half-full we need to reallocate it:
     if (++num_symbols > hashtablesize/2) double_hashtable();
   }
+}
+
+/*! You can call this to get a list of all Symbols that have
+  a non-null name(). The symbols are returned out of the hash
+  table and are in random order.
+  \code
+  for (int i = 0;;) {
+    const Symbol* symbol = Symbol::iterate(i);
+    if (!symbol) break;
+    ...
+  }
+  \endcode
+*/
+const Symbol* Symbol::iterate(int& i) {
+  while (i < hashtablesize) {
+    const Symbol* ret = hashtable[i++];
+    if (ret) return ret;
+  }
+  return 0;
 }
 
 /** Locate a symbol by the name used to construct it. Returns either
@@ -679,5 +698,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.40 2004/01/21 09:18:10 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.41 2004/01/23 06:34:37 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: symbols.cxx,v 1.11 2003/08/04 06:55:33 spitzak Exp $"
+// "$Id: symbols.cxx,v 1.12 2004/01/23 06:34:44 spitzak Exp $"
 //
 // Symbol test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,110 +23,84 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-#include <FL/Fl.H>
-#include <FL/Fl_Single_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Value_Slider.H>
-#include <FL/fl_draw.H>
+#include <fltk/Window.h>
+#include <fltk/Browser.h>
 #include <fltk/Symbol.h>
+#include <fltk/run.h>
+#include <fltk/string.h>
+#include <fltk/HorizontalSlider.h>
+#include <stdlib.h>
 
-int N = 0;
-#define W 70
-#define H 70
-#define ROWS 5
-#define COLS 5
+using namespace fltk;
 
-Fl_Window *window;
-
-void slider_cb(Fl_Widget *w, void *) {
-  static char buf[80];
-  int val = (int)(((Fl_Value_Slider*)w)->value());
-  Fl_Window *win = (Fl_Window*)w->parent();       // get parent window
-  for (int i = win->children(); i--; ) {          // all window children
-    Fl_Widget *wc = win->child(i);
-    const char *l = wc->label();
-    if ( *l == '@' ) {                            // all children with '@'
-      if ( *(++l) == '@' ) {                      // ascii legend?
-        l++;
-	while (isdigit(*l)) { l++; }
-        if (val == 0) { sprintf(buf, "@@%s", l); }
-        else          { sprintf(buf, "@@%d%s", val, l); }
-      } else {                                    // box with symbol
-        while (isdigit(*l)) { l++; }
-        if (val == 0) { sprintf(buf, "@%s", l); }
-	else          { sprintf(buf, "@%d%s", val, l); }
-      }
-      free((void*)(wc->label()));
-      wc->label(strdup(buf));
-    }
-  }
-  win->redraw();
+int sort(const void* a, const void* b) {
+  const Symbol* A = *(const Symbol**)a;
+  const Symbol* B = *(const Symbol**)b;
+  return strcasecmp(A->name(), B->name());
 }
 
-void bt(const char *name) {
-  int x = N%COLS;
-  int y = N/COLS;
-  char buf[255];
-  N++;
-  x = x*W+10;
-  y = y*H+10;
-  sprintf(buf, "@%s", name);
-  Fl_Box *a = new Fl_Box(FL_NO_BOX,x,y,W-20,H-20,strdup(buf));
-  a->align(FL_ALIGN_BOTTOM);
-  a->labelsize(11);
-  Fl_Box *b = new Fl_Box(FL_UP_BOX,x,y,W-20,H-20,strdup(name));
-  //b->image(fltk::Symbol::find(name+1, name+strlen(name)));
-  b->labelcolor(FL_DARK3);
+struct {const char* name; const char* text;} specialtable[] = {
+  {"b", "@b;bold@n;\t@@b;"},
+  {"B", "@B11;\t@n;@@B#;(bg color)"},
+  {"C", "@C11;color\t@n;@@C#;"},
+  {"f", "@f;fixed\t@n;@@f;"},
+  {"i", "@i;italic\t@n;@@i;"},
+  {"n", "@n;normal\t@@n; (turn off all fx)"},
+  {"t", "@t;type\t@n;@@t; (screen font)"},
+  {"s", "@s+4;big\t@n;@@s+#;"},
+  {"S", "@S-4;small\t@n;@@s-#;"},
+  {"x", "@x10;t@x+3;e@x-4;x@x+5;t\t@n@@x#; (displace x)"},
+  {"y", "@y-1;t@y+1;e@y+3;x@y+5;t;\t@n@@y#; (displace y)"},
+};
+
+void slider_cb(Widget* w, void* v) {
+  Browser* browser = (Browser*)v;
+  browser->textsize(((Slider*)w)->value());
+  // make it remeasure all the child items (not sure if this is a bug
+  // in the Browser or not:
+  for (int i = 0; i < browser->children(); i++)
+    browser->child(i)->h(0);
+  browser->relayout();
+  browser->redraw();
 }
 
-int main(int argc, char ** argv) {
-  window = new Fl_Single_Window(COLS*W,ROWS*H+60);
-bt("@->");
-bt("@>");
-bt("@>>");
-bt("@>|");
-bt("@>[]");
-bt("@|>");
-bt("@<-");
-bt("@<");
-bt("@<<");
-bt("@|<");
-bt("@[]<");
-bt("@<|");
-bt("@<->");
-bt("@-->");
-bt("@+");
-bt("@->|");
-bt("@||");
-bt("@arrow");
-bt("@returnarrow");
-bt("@square");
-bt("@circle");
-bt("@line");
-bt("@menu");
-bt("@UpArrow");
-bt("@DnArrow");
-
-  Fl_Value_Slider slider((int)(window->w()*.10+.5),
-                         window->h()-40,
-                         (int)(window->w()*.80+.5),
-                         16,
-                         "Orientation");
-  slider.type(FL_HORIZONTAL);
-  slider.range(0.0, 9.0);
-  slider.value(0.0);
+int main(int argc, char** argv) {
+  Window window(170,600);
+  window.begin();
+  const int sliderh = 25;
+  Browser browser(0,0,window.w(),window.h()-sliderh);
+  int widths[] = {48,0};
+  browser.column_widths(widths);
+  browser.color(GRAY85);
+  window.resizable(browser);
+  Slider slider(0, browser.h(), window.w(), sliderh);
+  slider.type(Slider::HORIZONTAL|Slider::TICK_ABOVE|Slider::LOG);
+  slider.range(1,60);
   slider.step(1);
-  slider.callback(slider_cb, &slider);
-
-  window->resizable(window);
-  window->show(argc,argv);
-  return Fl::run();
+  slider.value(browser.textsize());
+  slider.callback(slider_cb, &browser);
+  window.end();
+  const Symbol* table[1000];
+  int n = 0;
+  int i; for (i=0;;) {
+    const Symbol* symbol = Symbol::iterate(i);
+    if (!symbol) break;
+    table[n++] = symbol;
+  }
+  qsort(table, n, sizeof(*table), sort);
+  for (i=0; i<n; i++) {
+    const Symbol* symbol = table[i];
+    char buffer[256];
+    for (unsigned j = 0; j < sizeof(specialtable)/sizeof(*specialtable); j++) {
+      if (!strcmp(specialtable[j].name, symbol->name())) {
+	browser.add(specialtable[j].text);
+	goto CONTINUE;
+      }
+    }
+    snprintf(buffer, 256, "@%s;\t@n@@%s;", symbol->name(), symbol->name());
+    browser.add(buffer);
+  CONTINUE:;
+  }
+  window.show(argc, argv);
+  return fltk::run();
 }
-
-//
-// End of "$Id: symbols.cxx,v 1.11 2003/08/04 06:55:33 spitzak Exp $".
-//
