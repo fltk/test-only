@@ -1,5 +1,5 @@
 //
-// "$Id: CycleButton.cxx,v 1.2 2004/06/04 08:32:00 spitzak Exp $"
+// "$Id: CycleButton.cxx,v 1.3 2004/07/04 17:15:18 laza2000 Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -211,7 +211,8 @@ int CycleButton::handle(int e) {
   }
 }
 
-static NamedStyle style("CycleButton", 0, 0);
+static NamedStyle style("CycleButton", 0, &CycleButton::default_style);
+NamedStyle* CycleButton::default_style = &::style;
 
 CycleButton::CycleButton(int x,int y,int w,int h, const char *l)
   : Menu(x,y,w,h,l)
@@ -224,5 +225,5 @@ CycleButton::CycleButton(int x,int y,int w,int h, const char *l)
 }
 
 //
-// End of "$Id: CycleButton.cxx,v 1.2 2004/06/04 08:32:00 spitzak Exp $".
+// End of "$Id: CycleButton.cxx,v 1.3 2004/07/04 17:15:18 laza2000 Exp $".
 //
