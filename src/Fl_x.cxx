@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.73 2000/05/30 07:42:18 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.74 2000/06/02 09:15:39 carl Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -697,6 +697,13 @@ void Fl_X::create(Fl_Window* w,
 			 InputOutput,
 			 visual->visual,
 			 mask, &attr);
+
+  // figure out where OS really put window
+  XWindowAttributes actual;
+  XGetWindowAttributes(fl_display, x->xid, &actual);
+  // tell Fl_Window about it
+  w->resize(actual.x, actual.y, actual.width, actual.height);
+
   x->other_xid = 0;
   x->w = w; w->i = x;
   x->region = 0;
@@ -902,5 +909,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.73 2000/05/30 07:42:18 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.74 2000/06/02 09:15:39 carl Exp $".
 //
