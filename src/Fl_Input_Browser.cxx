@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.cxx,v 1.2 2001/03/01 02:00:53 clip Exp $"
+// "$Id: Fl_Input_Browser.cxx,v 1.3 2001/03/01 09:20:08 clip Exp $"
 //
 // Input Browser (Combo Box) widget for the Fast Light Tool Kit (FLTK).
 //
@@ -42,6 +42,7 @@ Fl_Input_Browser::Fl_Input_Browser(int x, int y, int w, int h, const char *l)
   minh_ = 10;
   maxw_ = 600;
   maxh_ = 400;
+  over_now = 0; over_last = 1;
 }
 
 // these are only used when in grabbed state so only one exists at once
@@ -103,12 +104,19 @@ static void ComboBrowser_cb(Fl_Widget *w, void *v) {
 
 int
 Fl_Input_Browser::handle(int e) {
+  if (Fl::event_inside(input->x()+input->w(), 0, w()-(input->x()+input->w()), h()))
+    over_now = 1;
+  else
+    over_now = 0;
+  if (over_now != over_last) damage(FL_DAMAGE_HIGHLIGHT);
+
   if ((Fl::event_inside(input->x(), input->y(), input->w(), input->h()) || e == FL_KEY)
     && !(type()&FL_NONEDITABLE_INPUT_BROWSER) && Fl::pushed() != this)
   {
     if (e == FL_PUSH) Fl::pushed(input);
     return input->handle(e);
   }
+
   switch (e) {
     case FL_PUSH: {
       Fl::pushed(this);
@@ -133,8 +141,8 @@ Fl_Input_Browser::handle(int e) {
       mw->end();
       Fl::grab(mw);
       b->layout();// shouldn't call this directly
-      int W = b->last_max_width+b->scrollbar.w()+b->box()->dx();
-      int H = b->last_height+b->box()->dy();
+      int W = b->last_max_width+b->scrollbar.w()+b->text_box()->dw();
+      int H = b->last_height+b->text_box()->dh();
       if (W > maxw_) W = maxw_;
       if (H > maxh_) H = maxh_;
       if (W < minw_) W = minw_;
@@ -152,10 +160,9 @@ Fl_Input_Browser::handle(int e) {
       delete mw;
       if (type()&FL_NONEDITABLE_INPUT_BROWSER) throw_focus();
       else Fl::focus(input);
+      Fl::handle(FL_MOVE, Fl::first_window());//force extra move event
       return 1;
     }
-
-    case FL_ENTER: case FL_MOVE: return 1; break;
 
     case FL_RELEASE:
       damage(FL_DAMAGE_SCROLL);
@@ -167,12 +174,15 @@ Fl_Input_Browser::handle(int e) {
       return input->handle(e);
 
     case FL_DRAG:
-      if (!Fl::event_inside(input->w(), 0, w()-input->w(), h())) {
+      if (!Fl::event_inside(input->x()+input->w(), 0, w()-(input->x()+input->w()), h()))
+      {
         Fl::pushed(b);
         damage(FL_DAMAGE_SCROLL);
         return 1;
       }
       return 1;
+
+    case FL_ENTER: case FL_MOVE: return 1;
   }
   return Fl_Menu_::handle(e);
 }
@@ -198,15 +208,17 @@ Fl_Input_Browser::draw() {
     fl_x_ -= X; fl_y_ -= Y;
     input->clear_damage();
   }
-  if (damage()&(FL_DAMAGE_ALL|FL_DAMAGE_SCROLL)) {
-    if  (Fl::pushed() == this) f |= FL_VALUE;
+  if (damage()&(FL_DAMAGE_ALL|FL_DAMAGE_SCROLL|FL_DAMAGE_HIGHLIGHT)) {
+    if  (Fl::pushed() == this) f |= (FL_VALUE/*|FL_SELECTED*/);
+    if (over_now) f |= FL_HIGHLIGHT;
     X += W-W1; W = W1;
     box()->draw(this, X, Y, W, H, f);
     box()->inset(X, Y, W, H);
     draw_glyph(FL_GLYPH_DOWN, X, Y, W, H, f);
+    over_last = over_now;
   }
 }
 
 //
-// End of "$Id: Fl_Input_Browser.cxx,v 1.2 2001/03/01 02:00:53 clip Exp $".
+// End of "$Id: Fl_Input_Browser.cxx,v 1.3 2001/03/01 09:20:08 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.H,v 1.1 2001/02/28 21:19:49 clip Exp $"
+// "$Id: Fl_Input_Browser.H,v 1.2 2001/03/01 09:20:08 clip Exp $"
 //
 // Combo box header file for the Fast Light Tool Kit (FLTK).
 //
@@ -54,10 +54,11 @@ protected:
 
   Fl_Input *input;
   int minw_, minh_, maxw_, maxh_;
+  int over_now, over_last;
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Input_Browser.H,v 1.1 2001/02/28 21:19:49 clip Exp $".
+// End of "$Id: Fl_Input_Browser.H,v 1.2 2001/03/01 09:20:08 clip Exp $".
 //
