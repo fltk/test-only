@@ -46,8 +46,8 @@
 #  endif
 # else
 #  define FL_HEADER1
-#  define static __declspec(dllimport) static
-#  define extern __declspec(dllimport) extern
+#  define FL_IMPORT static __declspec(dllimport) static
+#  define FL_IMPORT extern __declspec(dllimport) extern
 # endif
 #endif
 

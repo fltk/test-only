@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.H,v 1.15 1999/09/14 17:52:28 carl Exp $"
+// "$Id: Fl_Input_.H,v 1.16 1999/09/19 04:58:54 vincent Exp $"
 //
 // Input base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -46,8 +46,8 @@ public:
 
   int value(const char*);
   int value(const char*, int);
-  int static_value(const char*);
-  int static_value(const char*, int);
+  int FL_IMPORT static_value(const char*);
+  int FL_IMPORT static_value(const char*, int);
   const char* value() const {return value_;}
   char index(int i) const {return value_[i];}
   int size() const {return size_;}
@@ -107,5 +107,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Input_.H,v 1.15 1999/09/14 17:52:28 carl Exp $".
+// End of "$Id: Fl_Input_.H,v 1.16 1999/09/19 04:58:54 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: x.H,v 1.16 1999/09/14 17:52:30 carl Exp $"
+// "$Id: x.H,v 1.17 1999/09/19 04:58:59 vincent Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -47,15 +47,15 @@ FL_EXPORT void fl_open_display();
 FL_EXPORT void fl_close_display();
 
 // constant info about the X server connection:
-extern FL_EXPORT Display *fl_display;
-extern FL_EXPORT int fl_screen;
-extern FL_EXPORT XVisualInfo *fl_visual;
-extern FL_EXPORT Colormap fl_colormap;
+FL_IMPORT extern FL_EXPORT Display *fl_display;
+FL_IMPORT extern FL_EXPORT int fl_screen;
+FL_IMPORT extern FL_EXPORT XVisualInfo *fl_visual;
+FL_IMPORT extern FL_EXPORT Colormap fl_colormap;
 
 // drawing functions:
-extern FL_EXPORT GC fl_gc;
-extern FL_EXPORT Window fl_window;
-extern FL_EXPORT XFontStruct* fl_xfont;
+FL_IMPORT extern FL_EXPORT GC fl_gc;
+FL_IMPORT extern FL_EXPORT Window fl_window;
+FL_IMPORT extern FL_EXPORT XFontStruct* fl_xfont;
 FL_EXPORT ulong fl_xpixel(Fl_Color i);
 FL_EXPORT void fl_clip_region(Region);
 FL_EXPORT Region XRectangleRegion(int x, int y, int w, int h); // in fl_rect.cxx
@@ -64,8 +64,8 @@ FL_EXPORT Region XRectangleRegion(int x, int y, int w, int h); // in fl_rect.cxx
 FL_EXPORT int fl_handle(const XEvent&);
 
 // you can use these in Fl::add_handler() to look at events:
-extern FL_EXPORT const XEvent* fl_xevent;
-extern FL_EXPORT ulong fl_event_time;
+FL_IMPORT extern FL_EXPORT const XEvent* fl_xevent;
+FL_IMPORT extern FL_EXPORT ulong fl_event_time;
 
 // off-screen pixmaps: create, destroy, draw into, copy to window:
 #define Fl_Offscreen ulong
@@ -83,7 +83,7 @@ extern FL_EXPORT ulong fl_event_time;
 
 // binary images, created from in-memory data:
 // See Fl_Image::_draw() for code that uses these.
-static inline ulong fl_create_bitmap(const uchar* bitmap, int w, int h) {
+FL_IMPORT static inline ulong fl_create_bitmap(const uchar* bitmap, int w, int h) {
   return XCreateBitmapFromData(fl_display, fl_window,
 			       (const char*)bitmap, (w+7)&-8, h);
 }
@@ -104,10 +104,10 @@ public:
   Fl_X *next;
   int wait_for_expose;
   int backbuffer_bad; // used for XDBE
-  static Fl_X* first;
-  static Fl_X* i(const Fl_Window* w) {return w->i;}
+  FL_IMPORT static Fl_X* first;
+  FL_IMPORT static Fl_X* i(const Fl_Window* w) {return w->i;}
   void sendxjunk();
-  static void create(Fl_Window*,
+  FL_IMPORT static void create(Fl_Window*,
 		     XVisualInfo*, Colormap,
 		     int background = -1);
 };
@@ -120,5 +120,5 @@ FL_EXPORT Fl_Window* fl_find(Window xid);
 #endif
 
 //
-// End of "$Id: x.H,v 1.16 1999/09/14 17:52:30 carl Exp $".
+// End of "$Id: x.H,v 1.17 1999/09/19 04:58:59 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Font.H,v 1.3 1999/09/14 17:52:28 carl Exp $"
+// "$Id: Fl_Font.H,v 1.4 1999/09/19 04:58:53 vincent Exp $"
 //
 // Fonts used by FLTK styles and drawing code
 //
@@ -60,7 +60,7 @@ enum {
 typedef const Fl_Font_* Fl_Font;
 
 // Built-in fonts:
-extern FL_EXPORT Fl_Font_ fl_fonts[16];
+FL_IMPORT extern FL_EXPORT Fl_Font_ fl_fonts[16];
 #define FL_HELVETICA		(fl_fonts+0)
 #define FL_HELVETICA_BOLD	(fl_fonts+1)
 #define FL_HELVETICA_ITALIC	(fl_fonts+2)

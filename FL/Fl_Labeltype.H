@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Labeltype.H,v 1.1 1999/08/16 07:30:51 bill Exp $"
+// "$Id: Fl_Labeltype.H,v 1.2 1999/09/19 04:58:54 vincent Exp $"
 //
 // Labeltypes used by FLTK styles.
 //
@@ -29,7 +29,7 @@
 #include "Fl_Color.H"
 #include "Fl_Flags.H"
 
-// struct rather than class to allow static constants:
+// struct rather than class to allow FL_IMPORT static constants:
 struct Fl_Labeltype_ {
   void (*draw_)(const Fl_Labeltype_*, const char*,
 	       int,int,int,int, Fl_Color fill, Fl_Flags);
@@ -41,17 +41,17 @@ struct Fl_Labeltype_ {
 
 typedef const Fl_Labeltype_* Fl_Labeltype;
 
-FL_EXPORT extern Fl_Labeltype_ fl_no_label;
+FL_EXPORT FL_IMPORT extern Fl_Labeltype_ fl_no_label;
 #define FL_NO_LABEL &fl_normal_label
-FL_EXPORT extern Fl_Labeltype_ fl_normal_label;
+FL_EXPORT FL_IMPORT extern Fl_Labeltype_ fl_normal_label;
 #define FL_NORMAL_LABEL &fl_normal_label
-FL_EXPORT extern const Fl_Labeltype_ fl_symbol_label;
+FL_EXPORT FL_IMPORT extern const Fl_Labeltype_ fl_symbol_label;
 #define FL_SYMBOL_LABEL &fl_symbol_label
-FL_EXPORT extern const Fl_Labeltype_ fl_shadow_label;
+FL_EXPORT FL_IMPORT extern const Fl_Labeltype_ fl_shadow_label;
 #define FL_SHADOW_LABEL &fl_shadow_label
-FL_EXPORT extern const Fl_Labeltype_ fl_engraved_label;
+FL_EXPORT FL_IMPORT extern const Fl_Labeltype_ fl_engraved_label;
 #define FL_ENGRAVED_LABEL &fl_engraved_label
-FL_EXPORT extern const Fl_Labeltype_ fl_embossed_label;
+FL_EXPORT FL_IMPORT extern const Fl_Labeltype_ fl_embossed_label;
 #define FL_EMBOSSED_LABEL &fl_embossed_label
 
 #endif

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.H,v 1.13 1999/08/25 08:14:09 bill Exp $"
+// "$Id: fl_draw.H,v 1.14 1999/09/19 04:58:58 vincent Exp $"
 //
 // Portable drawing function header file for the Fast Light Tool Kit (FLTK).
 //
@@ -33,7 +33,7 @@
 // Colors:
 FL_EXPORT void fl_color(Fl_Color);
 inline void fl_color(uchar r, uchar g, uchar b) {fl_color(fl_rgb(r,g,b));}
-extern FL_EXPORT Fl_Color fl_color_;
+FL_IMPORT extern FL_EXPORT Fl_Color fl_color_;
 inline Fl_Color fl_color() {return fl_color_;}
 
 // clip:
@@ -127,10 +127,10 @@ FL_EXPORT double fl_transform_dy(double x, double y);
 FL_EXPORT void fl_transformed_vertex(double x, double y);
 
 // current font+size+encoding:
-FL_EXPORT extern const char* fl_encoding;
+FL_EXPORT FL_IMPORT extern const char* fl_encoding;
 FL_EXPORT void fl_font(const Fl_Font, unsigned size);
 FL_EXPORT void fl_font(const Fl_Font, unsigned size, const char* encoding);
-FL_EXPORT extern Fl_FontSize* fl_font_;
+FL_EXPORT FL_IMPORT extern Fl_FontSize* fl_font_;
 inline Fl_FontSize* fl_font() {return fl_font_;}
 FL_EXPORT void fl_font(Fl_FontSize*);
 
@@ -164,7 +164,7 @@ FL_EXPORT int fl_draw_pixmap(const char*const* data, int x,int y,Fl_Color=FL_GRA
 FL_EXPORT int fl_measure_pixmap(const char*const* data, int &w, int &h);
 
 // other:
-extern FL_EXPORT void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
+FL_IMPORT extern FL_EXPORT void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
 	                        void (*draw_area)(void*, int,int,int,int), void* data);
 FL_EXPORT const char* fl_shortcut_label(int);
 FL_EXPORT void fl_overlay_rect(int,int,int,int);
@@ -183,5 +183,5 @@ FL_EXPORT int fl_add_symbol(const char* name, void (*drawit)(Fl_Color), int scal
 #endif
 
 //
-// End of "$Id: fl_draw.H,v 1.13 1999/08/25 08:14:09 bill Exp $".
+// End of "$Id: fl_draw.H,v 1.14 1999/09/19 04:58:58 vincent Exp $".
 //

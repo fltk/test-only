@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.24 1999/09/14 17:52:28 carl Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.25 1999/09/19 04:58:55 vincent Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -43,7 +43,7 @@ enum { // values for flags:
   FL_MENU_HORIZONTAL = 0x100
 };
 
-extern FL_EXPORT int fl_old_shortcut(const char*);
+FL_IMPORT extern FL_EXPORT int fl_old_shortcut(const char*);
 
 class Fl_Menu_;
 class Fl_Image;
@@ -59,7 +59,7 @@ struct Fl_Menu_Item {
   // style code and must eventually be deleted from your initializers.
 
 #ifndef FLTK_2
-  // Dummy variables to handle static initializers (see above).  These are
+  // Dummy variables to handle FL_IMPORT static initializers (see above).  These are
   // not used-- you can't initialize style information with the initializers
   // anymore.
   uchar clobberMe1;
@@ -140,8 +140,8 @@ struct Fl_Menu_Item {
   void do_callback(Fl_Widget* o,long arg) const {callback_(o, (void*)arg);}
 
   int size() const ;
-  static Fl_Style default_style;
-  static Fl_Style title_style;
+  FL_IMPORT static Fl_Style default_style;
+  FL_IMPORT static Fl_Style title_style;
 
 #ifndef FLTK_2
   // this section is very bad.  Use of this will leak memory because the
@@ -245,5 +245,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.24 1999/09/14 17:52:28 carl Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.25 1999/09/19 04:58:55 vincent Exp $".
 //

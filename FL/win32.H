@@ -1,5 +1,5 @@
 //
-// "$Id: win32.H,v 1.20 1999/09/17 16:23:54 vincent Exp $"
+// "$Id: win32.H,v 1.21 1999/09/19 04:58:58 vincent Exp $"
 //
 // WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -78,20 +78,20 @@ public:
   HDC private_dc; // used for OpenGL
   HCURSOR cursor;
   inline void flush() {w->flush();}
-  static FL_EXPORT Fl_X* first;
-  static FL_EXPORT Fl_X* i(const Fl_Window* w) {return w->i;}
-  static FL_EXPORT int fake_X_wm(const Fl_Window* w,int &X, int &Y,
+  FL_IMPORT static FL_EXPORT Fl_X* first;
+  FL_IMPORT static FL_EXPORT Fl_X* i(const Fl_Window* w) {return w->i;}
+  FL_IMPORT static FL_EXPORT int fake_X_wm(const Fl_Window* w,int &X, int &Y,
 		                 int &bt,int &bx,int &by);
   FL_EXPORT void set_minmax(LPMINMAXINFO minmax);
-  static FL_EXPORT Fl_X* create(Fl_Window*);
+  FL_IMPORT static FL_EXPORT Fl_X* create(Fl_Window*);
 };
-extern FL_EXPORT HCURSOR fl_default_cursor;
+FL_IMPORT extern FL_EXPORT HCURSOR fl_default_cursor;
 inline Window fl_xid(const Fl_Window*w) {return Fl_X::i(w)->xid;}
 FL_EXPORT Fl_Window* fl_find(Window xid);
-extern FL_EXPORT char fl_override_redirect; // hack into Fl_Window::make_xid()
+FL_IMPORT extern FL_EXPORT char fl_override_redirect; // hack into Fl_Window::make_xid()
 
 // most recent fl_color() or fl_rgbcolor() points at one of these:
-extern FL_EXPORT struct Fl_XMap {
+FL_IMPORT extern FL_EXPORT struct Fl_XMap {
   COLORREF rgb;	// this should be the type the RGB() macro returns
   HPEN pen;	// pen, 0 if none created yet
   int brush;	// ref to solid brush, 0 if none created yet
@@ -100,18 +100,18 @@ inline COLORREF fl_RGB() {return fl_current_xmap->rgb;}
 inline HPEN fl_pen() {return fl_current_xmap->pen;}
 FL_EXPORT HBRUSH fl_brush(); // allocates a brush if necessary
 
-extern FL_EXPORT HINSTANCE fl_display;
-extern FL_EXPORT Window fl_window;
-extern FL_EXPORT HDC fl_gc;
-extern FL_EXPORT HPALETTE fl_palette; // non-zero only on 8-bit displays!
-extern FL_EXPORT HDC fl_GetDC(Window);
-extern FL_EXPORT MSG fl_msg;
+FL_IMPORT extern FL_EXPORT HINSTANCE fl_display;
+FL_IMPORT extern FL_EXPORT Window fl_window;
+FL_IMPORT extern FL_EXPORT HDC fl_gc;
+FL_IMPORT extern FL_EXPORT HPALETTE fl_palette; // non-zero only on 8-bit displays!
+FL_IMPORT extern FL_EXPORT HDC fl_GetDC(Window);
+FL_IMPORT extern FL_EXPORT MSG fl_msg;
 
 // off-screen pixmaps: create, destroy, draw into, copy to window
 #define Fl_Offscreen HBITMAP
 #define fl_create_offscreen(w, h) CreateCompatibleBitmap(fl_gc, w, h)
 
-extern FL_EXPORT HDC fl_makeDC(HBITMAP);
+FL_IMPORT extern FL_EXPORT HDC fl_makeDC(HBITMAP);
 #define fl_begin_offscreen(b) \
   HDC _sgc=fl_gc; Window _sw=fl_window; \
   fl_gc=fl_makeDC(b); fl_window=(HWND)b; fl_push_no_clip()
@@ -124,11 +124,11 @@ FL_EXPORT void fl_copy_offscreen(int x,int y,int w,int h,HBITMAP pixmap,int srcx
 
 // binary images, created from in-memory data:
 // See Fl_Image::_draw() for code that uses these.
-extern ulong fl_create_bitmap(const uchar* bitmap, int w, int h);
+FL_IMPORT extern ulong fl_create_bitmap(const uchar* bitmap, int w, int h);
 #define fl_delete_bitmap(bitmap) DeleteObject((HBITMAP)(bitmap));
 
 #endif
 
 //
-// End of "$Id: win32.H,v 1.20 1999/09/17 16:23:54 vincent Exp $".
+// End of "$Id: win32.H,v 1.21 1999/09/19 04:58:58 vincent Exp $".
 //

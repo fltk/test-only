@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.H,v 1.12 1999/08/16 07:30:48 bill Exp $"
+// "$Id: Fl_Button.H,v 1.13 1999/09/19 04:58:52 vincent Exp $"
 //
 // Button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -35,7 +35,7 @@
 #define FL_RADIO_BUTTON         (FL_RESERVED_TYPE+2)
 #define FL_HIDDEN_BUTTON        3 // for Forms compatability
 
-extern int fl_old_shortcut(const char*);
+FL_IMPORT extern int fl_old_shortcut(const char*);
 
 class Fl_Button : public Fl_Widget {
 public:
@@ -57,5 +57,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Button.H,v 1.12 1999/08/16 07:30:48 bill Exp $".
+// End of "$Id: Fl_Button.H,v 1.13 1999/09/19 04:58:52 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.24 1999/09/14 17:52:29 carl Exp $"
+// "$Id: Fl_Widget.H,v 1.25 1999/09/19 04:58:56 vincent Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -52,7 +52,7 @@ public:
   int style(Fl_Style* s);
   int style(Fl_Style& s) {return style(&s);}
   int copy_style(const Fl_Style* s);
-  static Fl_Style default_style;
+  FL_IMPORT static Fl_Style default_style;
 
   Fl_Group* parent() const {return parent_;}
   Fl_Window* window() const ;
@@ -94,12 +94,12 @@ public:
   Fl_When when() const {return (Fl_When)when_;}
   void when(uchar i) {when_ = i;}
 
-  static void default_callback(Fl_Widget*, void*);
+  FL_IMPORT static void default_callback(Fl_Widget*, void*);
   void do_callback() {callback_(this,user_data_);}
   void do_callback(Fl_Widget* o,void* arg=0) {callback_(o,arg);}
   void do_callback(Fl_Widget* o,long arg) {callback_(o,(void*)arg);}
   int test_shortcut();
-  static int test_shortcut(const char*);
+  FL_IMPORT static int test_shortcut(const char*);
   int contains(const Fl_Widget*) const ;
   int inside(const Fl_Widget* o) const {return o ? o->contains(this) : 0;}
 
@@ -268,5 +268,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.24 1999/09/14 17:52:29 carl Exp $".
+// End of "$Id: Fl_Widget.H,v 1.25 1999/09/19 04:58:56 vincent Exp $".
 //

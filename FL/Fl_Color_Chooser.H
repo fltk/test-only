@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.H,v 1.7 1999/09/14 17:52:27 carl Exp $"
+// "$Id: Fl_Color_Chooser.H,v 1.8 1999/09/19 04:58:53 vincent Exp $"
 //
 // Color chooser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -71,8 +71,8 @@ class Fl_Color_Chooser : public Fl_Group {
   double hue_, saturation_, value_;
   double r_, g_, b_;
   FL_EXPORT void set_valuators();
-  static FL_EXPORT void rgb_cb(Fl_Widget*, void*);
-  static FL_EXPORT void mode_cb(Fl_Widget*, void*);
+  FL_IMPORT static FL_EXPORT void rgb_cb(Fl_Widget*, void*);
+  FL_IMPORT static FL_EXPORT void mode_cb(Fl_Widget*, void*);
 public:
   int mode() {return choice.value();}
   double h() const {return hue_;}
@@ -85,8 +85,8 @@ public:
   void value(Fl_Color);
   FL_EXPORT int hsv(double,double,double);
   FL_EXPORT int rgb(double,double,double);
-  static FL_EXPORT void hsv2rgb(double, double, double,double&,double&,double&);
-  static FL_EXPORT void rgb2hsv(double, double, double,double&,double&,double&);
+  FL_IMPORT static FL_EXPORT void hsv2rgb(double, double, double,double&,double&,double&);
+  FL_IMPORT static FL_EXPORT void rgb2hsv(double, double, double,double&,double&,double&);
   FL_EXPORT Fl_Color_Chooser(int,int,int,int,const char* = 0);
 };
 
@@ -97,5 +97,5 @@ FL_EXPORT int fl_color_chooser(const char*name, Fl_Color& c);
 #endif
 
 //
-// End of "$Id: Fl_Color_Chooser.H,v 1.7 1999/09/14 17:52:27 carl Exp $".
+// End of "$Id: Fl_Color_Chooser.H,v 1.8 1999/09/19 04:58:53 vincent Exp $".
 //

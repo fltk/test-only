@@ -44,8 +44,8 @@
 #   endif
 #  else
 #   undef FL_HEADER1
-#   undef static
-#   undef extern
+#   undef FL_IMPORT static
+#   undef FL_IMPORT extern
 #  endif
 # endif
 #endif

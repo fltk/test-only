@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.H,v 1.1 1999/08/16 07:30:48 bill Exp $"
+// "$Id: Fl_Boxtype.H,v 1.2 1999/09/19 04:58:52 vincent Exp $"
 //
 // Boxes used by FLTK styles.
 //
@@ -29,7 +29,7 @@
 #include "Fl_Color.H"
 #include "Fl_Flags.H"
 
-// struct rather than class to allow static constants:
+// struct rather than class to allow FL_IMPORT static constants:
 struct Fl_Boxtype_ {
   void (*draw_)(const Fl_Boxtype_*,
 	       int,int,int,int, Fl_Color fill, Fl_Flags);
@@ -47,53 +47,53 @@ struct Fl_Boxtype_ {
 
 typedef const Fl_Boxtype_* Fl_Boxtype;
 
-FL_EXPORT extern const Fl_Boxtype_ fl_flat_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_flat_box;
 #define FL_FLAT_BOX (&fl_flat_box)
-FL_EXPORT extern const Fl_Boxtype_ fl_flat_up_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_flat_up_box;
 #define FL_FLAT_UP_BOX (&fl_flat_up_box)
-FL_EXPORT extern const Fl_Boxtype_ fl_flat_down_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_flat_down_box;
 #define FL_FLAT_DOWN_BOX (&fl_flat_down_box)
-FL_EXPORT extern Fl_Boxtype_ fl_normal_box;
+FL_EXPORT FL_IMPORT extern Fl_Boxtype_ fl_normal_box;
 #define FL_NORMAL_BOX (&fl_normal_box)
-FL_EXPORT extern Fl_Boxtype_ fl_down_box;
+FL_EXPORT FL_IMPORT extern Fl_Boxtype_ fl_down_box;
 #define FL_DOWN_BOX (&fl_down_box)
-FL_EXPORT extern const Fl_Boxtype_ fl_thin_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_thin_box;
 #define FL_THIN_BOX (&fl_thin_box)
-FL_EXPORT extern const Fl_Boxtype_ fl_thin_down_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_thin_down_box;
 #define FL_THIN_DOWN_BOX (&fl_thin_down_box)
-FL_EXPORT extern const Fl_Boxtype_ fl_engraved_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_engraved_box;
 #define FL_ENGRAVED_BOX (&fl_engraved_box)
-FL_EXPORT extern const Fl_Boxtype_ fl_embossed_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_embossed_box;
 #define FL_EMBOSSED_BOX (&fl_embossed_box)
-FL_EXPORT extern const Fl_Boxtype_ fl_border_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_border_box;
 #define FL_BORDER_BOX (&fl_border_box)
-FL_EXPORT extern const Fl_Boxtype_ fl_shadow_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_shadow_box;
 #define FL_SHADOW_BOX (&fl_shadow_box)
-FL_EXPORT extern const Fl_Boxtype_ fl_rounded_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_rounded_box;
 #define FL_ROUNDED_BOX (&fl_rounded_box)
-FL_EXPORT extern const Fl_Boxtype_ fl_rshadow_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_rshadow_box;
 #define FL_RSHADOW_BOX (&fl_rshadow_box)
-FL_EXPORT extern const Fl_Boxtype_ fl_rflat_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_rflat_box;
 #define FL_RFLAT_BOX (&fl_rflat_box)
-FL_EXPORT extern const Fl_Boxtype_ fl_round_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_round_box;
 #define FL_ROUND_BOX (&fl_round_box)
-FL_EXPORT extern const Fl_Boxtype_ fl_round_down_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_round_down_box;
 #define FL_ROUND_DOWN_BOX (&fl_round_down_box)
-FL_EXPORT extern const Fl_Boxtype_ fl_diamond_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_diamond_box;
 #define FL_DIAMOND_BOX (&fl_diamond_box)
-FL_EXPORT extern const Fl_Boxtype_ fl_diamond_down_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_diamond_down_box;
 #define FL_DIAMOND_DOWN_BOX (&fl_diamond_down_box)
-FL_EXPORT extern const Fl_Boxtype_ fl_oval_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_oval_box;
 #define FL_OVAL_BOX (&fl_oval_box)
-FL_EXPORT extern const Fl_Boxtype_ fl_oval_shadow_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_oval_shadow_box;
 #define FL_OSHADOW_BOX (&fl_oval_shadow_box)
-FL_EXPORT extern const Fl_Boxtype_ fl_oval_flat_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_oval_flat_box;
 #define FL_OFLAT_BOX (&fl_oval_flat_box)
 
 // depreciated but still-useful values:
-FL_EXPORT extern const Fl_Boxtype_ fl_no_box;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_no_box;
 #define FL_NO_BOX (&fl_no_box)
-FL_EXPORT extern const Fl_Boxtype_ fl_border_frame;
+FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_border_frame;
 #define FL_BORDER_FRAME (&fl_border_frame)
 
 #ifndef FLTK_2 // back compatability section

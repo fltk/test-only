@@ -1,5 +1,5 @@
 /*
-   "$Id: conf.h,v 1.5 1999/08/11 10:20:24 carl Exp $"
+   "$Id: conf.h,v 1.6 1999/09/19 04:58:57 vincent Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -102,7 +102,7 @@
 #  define CONF_ERR_AGAIN	8		/* try operation again (lockfile existed?) */
 
 #  ifdef __cplusplus
-extern "C" {
+FL_IMPORT extern "C" {
 #  endif
 
   /* data types */
@@ -115,11 +115,11 @@ extern "C" {
   typedef conf_entry* conf_list;
 
   /* global variables */
-  extern int    conf_DOS;                                                       /* write files with DOS end of line? */
-  extern char   conf_sep;                                                       /* seperator charactor used in config files */
-  extern char   conf_level_sep;                                                 /* seperator used to denote nested sections */
-  extern char	conf_comment_sep;						/* denotes comments */
-  extern int	conf_comment_column;						/* the column comments start in */
+  FL_IMPORT extern int    conf_DOS;                                                       /* write files with DOS end of line? */
+  FL_IMPORT extern char   conf_sep;                                                       /* seperator charactor used in config files */
+  FL_IMPORT extern char   conf_level_sep;                                                 /* seperator used to denote nested sections */
+  FL_IMPORT extern char	conf_comment_sep;						/* denotes comments */
+  FL_IMPORT extern int	conf_comment_column;						/* the column comments start in */
 
 
   /* function declarations */
@@ -304,7 +304,7 @@ extern "C" {
         arguments:
                 error: error number returned by [gs]etconf* functions
         return value:
-                returns pointer to a static error message string
+                returns pointer to a FL_IMPORT static error message string
   */
   const char *getconf_error(int error);                                         /* get error string associated with error number */
 
@@ -396,5 +396,5 @@ extern "C" {
 #endif /* !CONF_H */
 
 /*
- * End of "$Id: conf.h,v 1.5 1999/08/11 10:20:24 carl Exp $".
+ * End of "$Id: conf.h,v 1.6 1999/09/19 04:58:57 vincent Exp $".
  */

@@ -1,5 +1,5 @@
 //
-// "$Id: forms.H,v 1.9 1999/08/16 07:30:54 bill Exp $"
+// "$Id: forms.H,v 1.10 1999/09/19 04:58:58 vincent Exp $"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -166,7 +166,7 @@ typedef int FL_COLOR;
 // fltk interaction:
 
 #define FL_CMD_OPT void
-extern FL_EXPORT void fl_initialize(int*, char*[], const char*, FL_CMD_OPT*, int);
+FL_IMPORT extern FL_EXPORT void fl_initialize(int*, char*[], const char*, FL_CMD_OPT*, int);
 inline void fl_finish() {}
 
 typedef void (*FL_IO_CALLBACK) (int, void*);
@@ -308,7 +308,7 @@ enum {	// "b" arguement values:
 };
 inline void fl_set_form_hotspot(Fl_Window* w,int x,int y) {w->hotspot(x,y);}
 inline void fl_set_form_hotobject(Fl_Window* w, Fl_Widget* o) {w->hotspot(o);}
-extern FL_EXPORT char fl_flip;	// in forms.C
+FL_IMPORT extern FL_EXPORT char fl_flip;	// in forms.C
 inline void fl_flip_yorigin() {fl_flip = 1;}
 
 #define fl_prepare_form_window fl_show_form
@@ -319,7 +319,7 @@ inline void fl_raise_form(Fl_Window* f) {f->show();}
 inline void fl_hide_form(Fl_Window* f) {f->hide();}
 inline void fl_pop_form(Fl_Window* f) {f->show();}
 
-extern FL_EXPORT char fl_modal_next; // in forms.C
+FL_IMPORT extern FL_EXPORT char fl_modal_next; // in forms.C
 inline void fl_activate_all_forms() {}
 inline void fl_deactivate_all_forms() {fl_modal_next = 1;}
 inline void fl_deactivate_form(Fl_Window*w) {w->deactivate();}
@@ -841,5 +841,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.H,v 1.9 1999/08/16 07:30:54 bill Exp $".
+// End of "$Id: forms.H,v 1.10 1999/09/19 04:58:58 vincent Exp $".
 //
