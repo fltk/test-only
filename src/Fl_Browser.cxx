@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.53 2002/01/11 08:49:08 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.54 2002/01/14 18:10:27 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -639,10 +639,8 @@ bool Fl_Browser::set_focus() {
 
 // force current item to a state and do callback for multibrowser:
 bool Fl_Browser::set_selected(bool value, int do_callback) {
-  if (!multi()) {
-    if (value) return (select_only_this(do_callback));
-    else return deselect(do_callback);
-  }
+  if (multi()) {
+    if (value) set_focus();
   Fl_Flags f = item()->flags();
   if (value) {
     if (f & FL_VALUE) return false;
@@ -660,6 +658,10 @@ bool Fl_Browser::set_selected(bool value, int do_callback) {
     set_changed();
   }
   return true;
+  } else {
+    if (value) return (select_only_this(do_callback));
+    else return deselect(do_callback);
+  }
 }
 
 // Turn off all lines in the browser:
@@ -789,20 +791,20 @@ int Fl_Browser::handle(int event) {
     Fl::event_clicks(0); // make program not think it is a double-click
     switch (Fl::event_key()) {
     case FL_Right:
+      if (goto_visible_focus())
+	{item_open(true); next_visible();}
+      goto AFTER_MOVEMENT_KEY;
     case FL_Left:
+      if (goto_visible_focus())
+	if (!item_open(false)) {previous_visible(); item_open(false);}
+      goto AFTER_MOVEMENT_KEY;
     case FL_Up:
+      if (goto_visible_focus()) previous_visible();
+      goto AFTER_MOVEMENT_KEY;
     case FL_Down:
-      if (!goto_visible_focus()) {
-	// If the focus was scrolled off, we just change the item to
-	// the top one in the browser.
-	if (!item()) break;
-      } else if (Fl::event_key() == FL_Up || Fl::event_key() == FL_Left) {
-	  if (!previous_visible()) return 1;
-	if (Fl::event_key() == FL_Left) item_open(false);
-      } else {
-	if (Fl::event_key() == FL_Right) item_open(true);
-	if (!next_visible()) return 1;
-      }
+      if (goto_visible_focus()) next_visible();
+    AFTER_MOVEMENT_KEY:
+      if (!item()) return 1;
       if (multi() && Fl::event_state(FL_SHIFT|FL_CTRL)) {
 	if (Fl::event_state(FL_SHIFT)) set_selected(1,FL_WHEN_CHANGED);
 	set_focus();
@@ -1001,5 +1003,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.53 2002/01/11 08:49:08 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.54 2002/01/14 18:10:27 spitzak Exp $".
 //

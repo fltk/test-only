@@ -1919,6 +1919,14 @@ control panel for an item.
 Checked in 1/11/02
 ////////////////////////////////////////////////////////////////
 
+Left arrow on an open parent in Fl_Browser closes it.
+
+Fluid: changing the selected set of widgets while the control panel is
+open correctly updates the control panel to show that set. The
+resizable checkbox fixed.
+
+Fl_Menu_Window does not use overlay except on SGI, so that it works
+with xft implementations.
 
 
 

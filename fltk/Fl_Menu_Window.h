@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Window.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Menu_Window.h,v 1.2 2002/01/14 18:10:27 spitzak Exp $"
 //
 // Menu window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -40,7 +40,6 @@ public:
   int overlay() {return !(flags()&NO_OVERLAY);}
   void set_overlay() {clear_flag(NO_OVERLAY);}
   void clear_overlay() {set_flag(NO_OVERLAY);}
-  void erase();
   ~Fl_Menu_Window();
   Fl_Menu_Window(int W, int H, const char *l = 0)
     : Fl_Single_Window(W,H,l) {}
@@ -52,5 +51,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Window.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Menu_Window.h,v 1.2 2002/01/14 18:10:27 spitzak Exp $".
 //

@@ -29,19 +29,32 @@ Fl_Window* make_widget_panel() {
    {  Fl_Window* o = new Fl_Window(380, 373);
     w = o;
     ((Fl_Window*)(o))->hotspot(o);
-     {    Fl_Tabs* o = panel_tabs = new Fl_Tabs(10, 10, 365, 331);
+     {    Fl_Tabs* o = panel_tabs = new Fl_Tabs(0, 10, 380, 326);
       o->callback((Fl_Callback*)propagate_tabs);
-       {      Fl_Group* o = new Fl_Group(0, 23, 365, 297, "GUI");
+       {      Fl_Group* o = new Fl_Group(0, 23, 380, 297, "GUI");
         o->callback((Fl_Callback*)propagate_group);
-         {        Fl_Input* o = new Fl_Input(80, 11, 275, 22, "Label:");
+         {        Fl_Input* o = new Fl_Input(80, 11, 170, 22, "Class:");
+          o->callback((Fl_Callback*)subclass_cb, (void*)(4));
+          o->when(FL_WHEN_CHANGED);
+          o->tooltip("This allows you to name a user-defined class that this widget is an instance \
+of, rather than an fltk built-in class. You will need to add a #include declar\
+ation so that the definition of your class is included in the fluid output.");
+        }
+         {        Fl_Choice* o = new Fl_Choice(250, 11, 120, 22); o->begin();
+          o->callback((Fl_Callback*)subtype_cb);
+          o->tooltip("Selects a value for type() for this widget");
+          o->end();
+        }
+         {        Fl_Input* o = new Fl_Input(80, 33, 290, 22, "Label:");
           o->callback((Fl_Callback*)label_cb);
           o->when(FL_WHEN_CHANGED);
           o->tooltip("Text displayed on or next to the widget");
+          o->take_focus();
         }
-         {        Fl_Box* o = image_label = new Fl_Box(9, 33, 71, 22, "Image:");
+         {        Fl_Box* o = image_label = new Fl_Box(9, 55, 71, 22, "Image:");
           o->align(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
         }
-         {        Fl_Button* o = new Fl_Button(80, 33, 220, 22, "Image name");
+         {        Fl_Button* o = new Fl_Button(80, 55, 220, 22, "Image name");
           o->box(FL_DOWN_BOX);
           o->color((Fl_Color)7);
           o->callback((Fl_Callback*)image_cb);
@@ -50,66 +63,65 @@ Fl_Window* make_widget_panel() {
           o->color(o->text_background());
           o->box(o->text_box());
         }
-         {        Fl_Check_Button* o = include_image_button = new Fl_Check_Button(305, 33, 50, 22, "inline");
+         {        Fl_Check_Button* o = include_image_button = new Fl_Check_Button(305, 55, 50, 22, "inline");
           o->label_size(10);
           o->callback((Fl_Callback*)image_inlined_cb);
           o->align(132|FL_ALIGN_INSIDE);
           o->tooltip("The image data is inserted as inline data into the output C++ code, rather th\
 an generating code to read the image file.");
         }
-         {        Fl_Box* o = new Fl_Box(10, 55, 70, 22, "Alignment:");
+         {        Fl_Box* o = new Fl_Box(10, 77, 70, 22, "Alignment:");
           o->align(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
         }
-         {        Fl_Button* o = new Fl_Button(80, 56, 20, 20, "@-1<-");
+         {        Fl_Button* o = new Fl_Button(80, 78, 20, 20, "@-1<-");
           o->type(101);
           o->label_type(FL_SYMBOL_LABEL);
           o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_LEFT));
           o->tooltip("Places label on the left of the widget");
         }
-         {        Fl_Button* o = new Fl_Button(100, 56, 20, 20, "@-1->");
+         {        Fl_Button* o = new Fl_Button(100, 78, 20, 20, "@-1->");
           o->type(101);
           o->label_type(FL_SYMBOL_LABEL);
           o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_RIGHT));
           o->tooltip("Places label on the right of the widget");
         }
-         {        Fl_Button* o = new Fl_Button(120, 56, 20, 20, "@-18");
+         {        Fl_Button* o = new Fl_Button(120, 78, 20, 20, "@-18");
           o->type(101);
           o->label_type(FL_SYMBOL_LABEL);
           o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_TOP));
           o->tooltip("Places label on the top of the widget");
         }
-         {        Fl_Button* o = new Fl_Button(140, 56, 20, 20, "@-12");
+         {        Fl_Button* o = new Fl_Button(140, 78, 20, 20, "@-12");
           o->type(101);
           o->label_type(FL_SYMBOL_LABEL);
           o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_BOTTOM));
           o->tooltip("Places label on the bottom of the widget");
         }
-         {        Fl_Button* o = new Fl_Button(165, 56, 40, 20, "inside");
+         {        Fl_Button* o = new Fl_Button(165, 78, 40, 20, "inside");
           o->type(101);
           o->label_type(FL_SYMBOL_LABEL);
           o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_INSIDE));
           o->tooltip("Places label inside the widget");
         }
-         {        Fl_Button* o = new Fl_Button(205, 56, 40, 20, "clip");
+         {        Fl_Button* o = new Fl_Button(205, 78, 40, 20, "clip");
           o->type(101);
           o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_CLIP));
           o->tooltip("Turn on clipping to the widget\'s area when drawing label.  This is slower so\
  it should be left off if label will fit");
         }
-         {        Fl_Button* o = new Fl_Button(245, 56, 40, 20, "wrap");
+         {        Fl_Button* o = new Fl_Button(245, 78, 40, 20, "wrap");
           o->type(101);
           o->callback((Fl_Callback*)align_cb, (void*)(FL_ALIGN_WRAP));
           o->tooltip("Word-wrap the label");
         }
-         {        Fl_Value_Input* o = widget_x = new Fl_Value_Input(80, 83, 55, 22, "x,y,w,h:");
+         {        Fl_Value_Input* o = widget_x = new Fl_Value_Input(80, 105, 55, 22, "x,y,w,h:");
           o->maximum(2000);
           o->step(1);
           o->value(10);
           o->callback((Fl_Callback*)x_cb);
           o->tooltip("The x coordinate of the widget.");
         }
-         {        Fl_Value_Input* o = widget_y = new Fl_Value_Input(135, 83, 55, 22);
-          o->label_size(10);
+         {        Fl_Value_Input* o = widget_y = new Fl_Value_Input(135, 105, 55, 22);
           o->maximum(2000);
           o->step(1);
           o->value(10);
@@ -117,8 +129,7 @@ an generating code to read the image file.");
           o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
           o->tooltip("The y coordinate of the widget.");
         }
-         {        Fl_Value_Input* o = widget_width = new Fl_Value_Input(190, 83, 55, 22);
-          o->label_size(10);
+         {        Fl_Value_Input* o = widget_width = new Fl_Value_Input(190, 105, 55, 22);
           o->maximum(2000);
           o->step(1);
           o->value(10);
@@ -126,8 +137,7 @@ an generating code to read the image file.");
           o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
           o->tooltip("The width of the widget.");
         }
-         {        Fl_Value_Input* o = widget_height = new Fl_Value_Input(245, 83, 55, 22);
-          o->label_size(10);
+         {        Fl_Value_Input* o = widget_height = new Fl_Value_Input(245, 105, 55, 22);
           o->maximum(2000);
           o->step(1);
           o->value(10);
@@ -135,48 +145,37 @@ an generating code to read the image file.");
           o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
           o->tooltip("The height of the widget.");
         }
-         {        Fl_Check_Button* o = set_xy = new Fl_Check_Button(305, 83, 55, 22, "Set xy");
-          o->label_size(10);
+         {        Fl_Check_Button* o = set_xy = new Fl_Check_Button(305, 105, 60, 22, "Set xy");
           o->callback((Fl_Callback*)set_xy_cb);
           o->tooltip("Window will use this x,y rather than being positioned by the operating system\
 .");
         }
-         {        Fl_Input* o = new Fl_Input(80, 110, 95, 22, "X Class:");
-          o->callback((Fl_Callback*)xclass_cb);
-          o->when(FL_WHEN_CHANGED);
-          o->tooltip("The X class name which should be used for this widget.  This can be used to c\
-hoose icons.");
-        }
-         {        Fl_Check_Button* o = new Fl_Check_Button(175, 110, 55, 22, "Border");
-          o->label_size(10);
+         {        Fl_Check_Button* o = new Fl_Check_Button(145, 132, 70, 22, "Border");
           o->callback((Fl_Callback*)border_cb);
           o->tooltip("Enable the window manager border");
         }
-         {        Fl_Check_Button* o = new Fl_Check_Button(235, 110, 55, 22, "Modal");
-          o->label_size(10);
+         {        Fl_Check_Button* o = new Fl_Check_Button(210, 132, 70, 22, "Modal");
           o->callback((Fl_Callback*)modal_cb);
-          o->tooltip("This window will stay on top of others in the application and will prevent ev\
-ents from going to other windows.");
+          o->tooltip("This window will stay on top of others in the application and will block even\
+ts from going to other windows until it is hidden or closed.");
         }
-         {        Fl_Check_Button* o = new Fl_Check_Button(295, 110, 60, 22, "Child");
-          o->label_size(10);
+         {        Fl_Check_Button* o = new Fl_Check_Button(290, 132, 70, 22, "Child");
           o->callback((Fl_Callback*)non_modal_cb);
           o->tooltip("This window will stay on top of others in the application.");
         }
-         {        Fl_Value_Input* o = new Fl_Value_Input(80, 114, 55, 22, "Value:");
-          o->label_size(10);
+         {        Fl_Value_Input* o = new Fl_Value_Input(80, 138, 55, 22, "Value:");
           o->callback((Fl_Callback*)value_cb);
           o->hide();
           o->tooltip("The initial value (integer) of this widget");
         }
-         {        Fl_Value_Input* o = new Fl_Value_Input(135, 114, 55, 22, "Minimum:");
+         {        Fl_Value_Input* o = new Fl_Value_Input(135, 138, 55, 22, "Minimum:");
           o->label_size(10);
           o->callback((Fl_Callback*)min_cb);
           o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
           o->hide();
           o->tooltip("The minimum value for this valuator");
         }
-         {        Fl_Value_Input* o = new Fl_Value_Input(190, 114, 55, 22, "Maximum:");
+         {        Fl_Value_Input* o = new Fl_Value_Input(190, 138, 55, 22, "Maximum:");
           o->label_size(10);
           o->value(1);
           o->callback((Fl_Callback*)max_cb);
@@ -184,35 +183,32 @@ ents from going to other windows.");
           o->hide();
           o->tooltip("The maximum value for this valuator");
         }
-         {        Fl_Value_Input* o = new Fl_Value_Input(245, 114, 55, 22, "Size:");
+         {        Fl_Value_Input* o = new Fl_Value_Input(245, 138, 55, 22, "Size:");
           o->label_size(10);
           o->callback((Fl_Callback*)slider_size_cb);
           o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
           o->hide();
           o->tooltip("The size of the scroller");
         }
-         {        Fl_Value_Input* o = new Fl_Value_Input(300, 114, 55, 22, "Step:");
+         {        Fl_Value_Input* o = new Fl_Value_Input(300, 138, 55, 22, "Step:");
           o->label_size(10);
           o->callback((Fl_Callback*)step_cb);
           o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
           o->hide();
           o->tooltip("Amount to change this valuator when mouse moves 1 pixel");
         }
-         {        Fl_Group* o = new Fl_Group(80, 136, 275, 22, "Attributes:");
+         {        Fl_Group* o = new Fl_Group(80, 158, 280, 22, "Attributes:");
           o->callback((Fl_Callback*)propagate_group);
           o->align(FL_ALIGN_LEFT);
-           {          Fl_Check_Button* o = new Fl_Check_Button(0, 0, 70, 22, "Visible");
-            o->label_size(10);
+           {          Fl_Check_Button* o = new Fl_Check_Button(0, 0, 65, 22, "Visible");
             o->callback((Fl_Callback*)visible_cb);
-            o->tooltip("Determines whether the widget is initially visible");
+            o->tooltip("If unchecked the widget is initially invisible.");
           }
-           {          Fl_Check_Button* o = new Fl_Check_Button(70, 0, 65, 22, "Active");
-            o->label_size(10);
+           {          Fl_Check_Button* o = new Fl_Check_Button(65, 0, 65, 22, "Active");
             o->callback((Fl_Callback*)active_cb);
-            o->tooltip("Determines whether the widget is initially active (enabled)");
+            o->tooltip("If unchecked the widget is initially inactive (disabled, grayed out).");
           }
-           {          Fl_Check_Button* o = new Fl_Check_Button(135, 0, 70, 22, "Resizable");
-            o->label_size(10);
+           {          Fl_Check_Button* o = new Fl_Check_Button(130, 0, 80, 22, "Resizable");
             o->callback((Fl_Callback*)resizable_cb);
             o->when(FL_WHEN_CHANGED);
             o->tooltip("If on, this widget and all it\'s parents are resizable.  When the parent resi\
@@ -220,8 +216,7 @@ zes it moves/resizes all it\'s children so that this widget\'s edges remain th\
 e same distance from all four sides of the parent.  If this is off this widget\
  will not resize, unless it overlaps a resizable sibling.");
           }
-           {          Fl_Check_Button* o = new Fl_Check_Button(205, 0, 70, 22, "Hotspot");
-            o->label_size(10);
+           {          Fl_Check_Button* o = new Fl_Check_Button(210, 0, 70, 22, "Hotspot");
             o->callback((Fl_Callback*)hotspot_cb);
             o->when(FL_WHEN_CHANGED);
             o->tooltip("Positions the window so this widget is under the mouse.  This is done when sh\
@@ -229,7 +224,7 @@ ow() is called.");
           }
           o->end();
         }
-         {        Shortcut_Button* o = new Shortcut_Button(80, 159, 275, 22, "Shortcut:");
+         {        Shortcut_Button* o = new Shortcut_Button(80, 181, 290, 22, "Shortcut:");
           o->box(FL_DOWN_BOX);
           o->color((Fl_Color)7);
           o->callback((Fl_Callback*)shortcut_in_cb);
@@ -238,22 +233,21 @@ ow() is called.");
 o delete the shortcut:\n   Click here, then type backspace.\nTo get out of sho\
 rtcut-setting mode:\n   Click the mouse on this again, or on some other field.");
         }
-         {        Fl_Input* o = new Fl_Input(80, 187, 275, 100, "Tooltip:");
+         {        Fl_Input* o = new Fl_Input(80, 209, 290, 78, "Tooltip:");
           o->type(5);
           o->text_box(FL_BORDER_BOX);
           o->text_background((Fl_Color)-7936);
           o->callback((Fl_Callback*)tooltip_cb);
           o->tooltip("The pop up tooltip which should be used for the widget.");
         }
-         {        Fl_Box* o = new Fl_Box(80, 207, 275, 80, "resizable");
+         {        Fl_Box* o = new Fl_Box(80, 220, 275, 67, "resizable");
           o->hide();
           o->deactivate();
           Fl_Group::current()->resizable(o);
         }
         o->end();
-        Fl_Group::current()->resizable(o);
       }
-      { Fl_Group* o = new Fl_Group(0, 25, 365, 295, "Style");
+       {      Fl_Group* o = new Fl_Group(0, 23, 380, 297, "Style");
         o->callback((Fl_Callback*)propagate_group);
         o->hide();
          {        Fl_Choice* o = new Fl_Choice(85, 9, 270, 22, "Box:"); o->begin();
@@ -314,7 +308,7 @@ black top-left chip in the color chooser) to leave the label colors unchanged.")
           o->menu(boxmenu);
           o->end();
         }
-         {        Fl_Box* o = new Fl_Box(85, 145, 270, 100, "resizable");
+         {        Fl_Box* o = new Fl_Box(85, 242, 270, 3, "resizable");
           o->hide();
           o->deactivate();
           Fl_Group::current()->resizable(o);
@@ -363,52 +357,40 @@ black top-left chip in the color chooser) to leave the label colors unchanged.")
         }
         o->end();
       }
-       {      Fl_Group* o = new Fl_Group(0, 25, 365, 306, "C++");
+       {      Fl_Group* o = new Fl_Group(0, 23, 380, 302, "C++");
         o->callback((Fl_Callback*)propagate_group);
         o->hide();
-         {        Fl_Input* o = new Fl_Input(80, 9, 170, 22, "Class:");
-          o->callback((Fl_Callback*)subclass_cb, (void*)(4));
-          o->when(FL_WHEN_CHANGED);
-          o->tooltip("This allows you to name a user-defined class that this widget is an instance \
-of, rather than an fltk built-in class. You will need to add a #include declar\
-ation so that the definition of your class is included in the fluid output.");
-        }
-         {        Fl_Choice* o = new Fl_Choice(250, 9, 105, 22); o->begin();
-          o->callback((Fl_Callback*)subtype_cb);
-          o->tooltip("Selects a value for type() for this widget");
-          o->end();
-        }
-         {        Fl_Input* o = new Fl_Input(80, 31, 225, 22, "Name:");
+         {        Fl_Input* o = new Fl_Input(80, 11, 230, 22, "Name:");
           o->callback((Fl_Callback*)name_cb);
           o->when(FL_WHEN_CHANGED);
           o->tooltip("The variable or member name in which to store a pointer to this widget.");
         }
-         {        Fl_Check_Button* o = new Fl_Check_Button(305, 31, 50, 22, "public");
+         {        Fl_Check_Button* o = new Fl_Check_Button(315, 11, 50, 22, "public");
           o->label_size(10);
           o->callback((Fl_Callback*)name_public_cb);
           o->when(FL_WHEN_CHANGED);
           o->tooltip("Make the variable public");
         }
-         {        Fl_Input* o = v_input[0] = new Fl_Input(80, 53, 275, 22, "Extra Code:");
+         {        Fl_Input* o = v_input[0] = new Fl_Input(80, 44, 285, 22, "Extra Code:");
           o->callback((Fl_Callback*)v_input_cb, (void*)(0));
           o->tooltip("Extra code to be exectuted when the widget is created");
         }
-         {        Fl_Input* o = v_input[1] = new Fl_Input(80, 75, 275, 22);
+         {        Fl_Input* o = v_input[1] = new Fl_Input(80, 66, 275, 22);
           o->callback((Fl_Callback*)v_input_cb, (void*)(1));
           o->tooltip("Extra code to be exectuted when the widget is created");
         }
-         {        Fl_Input* o = v_input[2] = new Fl_Input(80, 97, 275, 22);
+         {        Fl_Input* o = v_input[2] = new Fl_Input(80, 88, 275, 22);
           o->callback((Fl_Callback*)v_input_cb, (void*)(2));
           o->tooltip("Extra code to be exectuted when the widget is created");
         }
-         {        Fl_Input* o = v_input[3] = new Fl_Input(80, 119, 275, 22);
+         {        Fl_Input* o = v_input[3] = new Fl_Input(80, 110, 275, 22);
           o->callback((Fl_Callback*)v_input_cb, (void*)(3));
           o->tooltip("Extra code to be exectuted when the widget is created");
         }
         { Fl_Box* o = callback_label = new Fl_Box(10, 160, 70, 20, "Callback:");
           o->align(FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
         }
-         {        Fl_Input* o = new Fl_Input(80, 141, 275, 110);
+         {        Fl_Input* o = new Fl_Input(80, 141, 285, 110);
           o->type(4);
           o->callback((Fl_Callback*)callback_cb);
           o->tooltip("The name of the callback function, or code body of the callback function");
@@ -423,7 +405,7 @@ ation so that the definition of your class is included in the fluid output.");
           o->tooltip("Value passed as the second argument to the callback.  This must be of the typ\
 e given below.");
         }
-         {        Fl_Choice* o = new Fl_Choice(265, 251, 90, 22, "When:"); o->begin();
+         {        Fl_Choice* o = new Fl_Choice(265, 251, 100, 22, "When:"); o->begin();
           o->callback((Fl_Callback*)when_cb);
           o->when(FL_WHEN_NEVER);
           o->tooltip("What actions cause the callback to be called.");
@@ -432,7 +414,7 @@ e given below.");
         }
          {        Fl_Input* o = new Fl_Input(80, 273, 145, 22, "Type:");
           o->callback((Fl_Callback*)user_data_type_cb);
-          o->tooltip("Type of the user data (must \\\"long\\\" or a pointer type)");
+          o->tooltip("Type of User Data. This must be \"long\" or a pointer.");
         }
          {        Fl_Check_Button* o = new Fl_Check_Button(265, 273, 90, 22, "no change");
           o->label_size(10);
@@ -442,13 +424,14 @@ e given below.");
 e has not changed.");
         }
         o->end();
+        Fl_Group::current()->resizable(o);
       }
       o->end();
-      Fl_Group::current()->resizable(o);
     }
     { Fl_Group* o = new Fl_Group(95, 340, 275, 25);
-       {      Fl_Check_Button* o = overlaybutton = new Fl_Check_Button(0, 0, 90, 22, "&Overlays");
+       {      Fl_Check_Button* o = overlaybutton = new Fl_Check_Button(0, 0, 120, 22, "&Overlays");
         o->callback((Fl_Callback*)overlay_cb);
+        Fl_Group::current()->resizable(o);
         o->tooltip("Turns the overlays (red outlines) off so you can see the edges better.");
         o->value(!overlays_invisible);
       }
@@ -462,6 +445,7 @@ e has not changed.");
         o->tooltip("Sorry, cancel does not really work yet.");
       }
       o->end();
+      Fl_Group::current()->resizable(o);
     }
     o->end();
   }

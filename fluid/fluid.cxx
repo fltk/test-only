@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.54 2001/11/20 20:23:39 robertk Exp $"
+// "$Id: fluid.cxx,v 1.55 2002/01/14 18:10:27 spitzak Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -434,7 +434,9 @@ void make_main_window() {
     menubar->box(FL_FLAT_BOX);
     fill_in_New_Menu();
     menubar->menu(Main_Menu);
-    menubar->global();
+    // this is removed because the new ctrl+bindings mess up emacs in
+    // the text fields:
+    //    menubar->global();
     main_window->end();
   }
 }
@@ -525,5 +527,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.54 2001/11/20 20:23:39 robertk Exp $".
+// End of "$Id: fluid.cxx,v 1.55 2002/01/14 18:10:27 spitzak Exp $".
 //

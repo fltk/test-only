@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.27 2002/01/11 08:49:08 spitzak Exp $"
+// "$Id: Fl_Type.cxx,v 1.28 2002/01/14 18:10:27 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -110,7 +110,7 @@ Fl_Widget* Widget_List::child(const Fl_Menu_*, const int* indexes, int level) {
     widget = new Fl_Item();
   }
   widget->user_data(item);
-  if (item->new_selected) widget->set_flag(FL_VALUE);
+  if (item->selected) widget->set_flag(FL_VALUE);
   else widget->clear_flag(FL_VALUE);
   if (item->is_parent() && item->open_) widget->set_flag(FL_OPEN);
   else widget->clear_flag(FL_OPEN);
@@ -125,21 +125,16 @@ Fl_Widget* Widget_List::child(const Fl_Menu_*, const int* indexes, int level) {
 void Widget_List::flags_changed(const Fl_Menu_*, Fl_Widget* w) {
   Fl_Type* item = (Fl_Type*)(w->user_data());
   item->open_ = (w->flags()&FL_OPEN)!=0;
-  int value = (w->flags()&FL_VALUE)!=0;
-  if (value != item->new_selected) {
-    item->new_selected = value;
-    selection_changed(item);
-  }
-  if (value) Fl_Type::current = item;
+  item->new_selected = (w->flags()&FL_VALUE)!=0;
+  if (item->new_selected != item->selected) selection_changed(item);
 }
 
 void select(Fl_Type* item, int value) {
-  if (value != item->new_selected) {
-    item->new_selected = value;
+  item->new_selected = value != 0;
+  if (item->new_selected != item->selected) {
     selection_changed(item);
     widget_browser->redraw();
   }
-  if (value) Fl_Type::current = item;
 }
 
 void select_only(Fl_Type* i) {
@@ -410,7 +405,7 @@ void select_all_cb(Fl_Widget *,void *) {
     int changed = 0;
     for (Fl_Type *t = parent ? parent->first_child : Fl_Type::first;
 	 t; t = t->walk(parent))
-      if (!t->new_selected) {changed = 1; select(t,1);}
+      if (!t->selected) {changed = 1; select(t,1);}
     if (changed) break;
     // if everything was selected, try a higher parent:
     if (!parent || parent == in_this_only) break;
@@ -544,5 +539,5 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.27 2002/01/11 08:49:08 spitzak Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.28 2002/01/14 18:10:27 spitzak Exp $".
 //

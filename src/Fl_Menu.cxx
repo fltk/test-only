@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.116 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.117 2002/01/14 18:10:27 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -352,10 +352,11 @@ int MenuWindow::find_selected(int mx, int my) {
   my -= y();
   if (my < 0 || my >= h()) return -1;
   if (is_menubar) {
+    if (mx < 0) return -1;
     int x = 3;
     for (int i = 0; ; i++) {
       Fl_Widget* widget = get_widget(i);
-      if (!widget) return i-1;
+      if (!widget) return -1;
       if (!widget->visible()) continue;
       x += widget->width()+10;
       if (x > mx) return i;
@@ -742,5 +743,5 @@ int Fl_Menu_::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.116 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.117 2002/01/14 18:10:27 spitzak Exp $".
 //

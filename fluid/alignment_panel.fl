@@ -10,7 +10,7 @@ Function {make_alignment_window()} {open
 } {
   Fl_Window alignment_window {
     label {fluid Preferences} open
-    xywh {265 250 210 310} modal visible
+    xywh {265 250 210 310} resizable non_modal visible
   } {
     Fl_Group {} {
       label {Alignment:} open
@@ -33,7 +33,7 @@ Function {make_alignment_window()} {open
       Fl_Input snap_input {
         label {Snap:}
         user_data 3 user_data_type long
-        callback alignment_cb
+        callback alignment_cb selected
         xywh {80 70 100 22}
         code0 {o->when(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY);}
       }
@@ -60,7 +60,7 @@ Function {make_alignment_window()} {open
       }
       Fl_Check_Button include_H_from_C_button {
         label {\#include "header" in code}
-        callback include_H_from_C_button_cb selected
+        callback include_H_from_C_button_cb
         xywh {10 98 170 22} value 1
       }
     }

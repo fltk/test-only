@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.78 2002/01/11 08:49:08 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.79 2002/01/14 18:10:27 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -114,10 +114,16 @@ int Fl_Window::handle(int event) {
 	// back-compatability automatic size_range() based on resizable():
 	if (!parent() && !size_range_set) {
 	  if (resizable()) {
+	    // find the innermost nested resizable():
 	    Fl_Widget *o = resizable();
-	    int minw = o->w(); if (minw > 100) minw = 100;
-	    int minh = o->h(); if (minh > 100) minh = 100;
-	    size_range(w() - o->w() + minw, h() - o->h() + minh, 0, 0);
+	    while (o->is_group()) {
+	      Fl_Widget* p = ((Fl_Group*)o)->resizable();
+	      if (!p || p == o) break;
+	      o = p;
+	    }
+	    int minw = w(); if (o->w() > 72) minw -= (o->w()-72);
+	    int minh = h(); if (o->h() > 72) minh -= (o->h()-72);
+	    size_range(minw, minh, 0, 0);
 	  } else {
 	    size_range(w(), h(), w(), h());
 	  }
@@ -149,11 +155,7 @@ int Fl_Window::handle(int event) {
     }
 
     case FL_HIDE:
-#ifdef _WIN32
-      // Try to stop the annoying "raise another program" behavior
-      // This does not appear to work unfortunately...
-      //if (child_of_) ((Fl_Window*)child_of_)->show();
-#endif
+      if (flags()&FL_MODAL) Fl::modal(0, false);
       if (i) XUnmapWindow(fl_display, i->xid);
       break;
   }
@@ -216,7 +218,7 @@ bool Fl_Window::exec(const Fl_Window* w, bool grab) {
   Fl_Widget* saved_modal = Fl::modal(); bool saved_grab = Fl::grab();
   Fl::modal(this, grab);
   show();
-  while (!Fl::exit_modal_flag()) Fl::wait();
+  while (Fl::modal() && !Fl::exit_modal_flag()) Fl::wait();
   hide();
   Fl::modal(saved_modal, saved_grab);
   return value();
@@ -352,5 +354,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.78 2002/01/11 08:49:08 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.79 2002/01/14 18:10:27 spitzak Exp $".
 //

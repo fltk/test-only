@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.81 2001/12/17 01:04:38 easysw Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.82 2002/01/14 18:10:27 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,8 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <ctype.h>
+
 #include "coding_style.h"
 
 // Make an Fl_Widget_Type subclass instance.
@@ -192,8 +194,9 @@ void sort(Fl_Type *parent) {
       for (g = parent->first_child; g != f; g = g->next_brother) {
 	if (!g->selected) continue;
 	Fl_Widget* gw = ((Fl_Widget_Type*)g)->o;
-	if (gw->y() > fw->y()) break;
-	if (gw->y() == fw->y() && gw->x() > fw->x()) break;
+	if (gw->y() >= fw->y()+fw->h()) break;
+	if (gw->y()+gw->h() > fw->y() && gw->x() >= fw->x()+fw->w()) break;
+	if (gw->y() >= fw->y() && gw->x() > fw->x()) break;
       }
       if (g != f) f->move_before(g);
     }
@@ -579,29 +582,29 @@ void when_button_cb(Fl_Check_Button* i, void *v) {
 }
 
 uchar Fl_Widget_Type::resizable() const {
-  if (is_window()) return ((Fl_Window*)o)->resizable() != 0;
-  Fl_Group* p = o->parent();
-  if (p) return p->resizable() == o;
-  else return 0;
+  if (is_group()) if (!((Fl_Group*)o)->resizable()) return false;
+  Fl_Group* group = o->parent();
+  if (group && group->resizable() != o) return false;
+  return true;
 }
 
-void Fl_Widget_Type::resizable(uchar v) {
-  if (v) {
-    if (resizable()) return;
-    if (is_window()) {
-      ((Fl_Window*)o)->resizable(o);
-      ((Fl_Window*)o)->init_sizes();
-    } else {
-      Fl_Group* p = (Fl_Group*)o->parent();
-      if (p) {p->resizable(o); p->init_sizes();}
+void Fl_Widget_Type::resizable(uchar value) {
+  if (value) {
+    Fl_Widget* child = o;
+    Fl_Group* group = is_group() ? (Fl_Group*)o : o->parent();
+    while (group) {
+      if (group->resizable() != child) {
+	group->resizable(child);
+	group->init_sizes();
+      }
+      child = group;
+      group = group->parent();
     }
   } else {
-    if (!resizable()) return;
-    if (is_window()) {
-      ((Fl_Window*)o)->resizable(0);
-    } else {
-      Fl_Group* p = (Fl_Group*)o->parent();
-      if (p) p->resizable(0);
+    Fl_Group* group = is_group() ? (Fl_Group*)o : o->parent();
+    while (group) {
+      group->resizable(0);
+      group = group->parent();
     }
   }
 }
@@ -1159,12 +1162,22 @@ void v_input_cb(Fl_Input* i, void* v) {
 
 void subclass_cb(Fl_Input* i, void* v) {
   if (v == LOAD) {
-    i->static_value(current_widget->subclass());
-  } else {
-    const char *c = i->value();
+    const char* s = 0;
     for_all_selected_widgets() {
       Fl_Widget_Type *t = (Fl_Widget_Type*)o;
-      t->subclass(c);
+      const char* c = t->subclass();
+      if (!c || !*c) c = t->type_name();
+      if (!s || !*s) s = c;
+      else if (strcmp(s,c)) {s = 0; break;}
+    }
+    i->static_value(s);
+  } else {
+    const char *c = i->value();
+    while (isspace(*c)) c++;
+    for_all_selected_widgets() {
+      Fl_Widget_Type *t = (Fl_Widget_Type*)o;
+      if (!*c || !strcmp(t->type_name(), c)) t->subclass(0);
+      else t->subclass(c);
     }
   }
   Fl_Color tc = FL_BLACK;
@@ -1492,6 +1505,7 @@ void selection_changed(Fl_Type *p) {
   if (p && the_panel && the_panel->visible()) {
     // store all changes to the current selected objects:
     set_cb(0,0);
+#if 0
     if (haderror) {
       // If there is an error, try to put selected flags and Fl_Type::current
       // back to the previous values:
@@ -1505,10 +1519,12 @@ void selection_changed(Fl_Type *p) {
       redraw_browser();
       return;
     }
+#endif
   }
   // update the selected flags to new set:
   for (Fl_Type *o = Fl_Type::first; o; o = o->walk())
     o->selected = o->new_selected;
+  if (p && p->new_selected) Fl_Type::current = p;
   redraw_overlays();
   // load the panel with the new settings:
   load_panel();
@@ -1516,8 +1532,6 @@ void selection_changed(Fl_Type *p) {
 
 ////////////////////////////////////////////////////////////////
 // Writing the C code:
-
-#include <ctype.h>
 
 // test to see if user named a function, or typed in code:
 int is_name(const char *c) {
@@ -2170,5 +2184,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.81 2001/12/17 01:04:38 easysw Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.82 2002/01/14 18:10:27 spitzak Exp $".
 //

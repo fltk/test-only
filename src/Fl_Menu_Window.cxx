@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Window.cxx,v 1.14 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: Fl_Menu_Window.cxx,v 1.15 2002/01/14 18:10:27 spitzak Exp $"
 //
 // Menu window code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,18 +23,23 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// This is the window type used by Fl_Menu to make the pop-ups.
-// It draws in the overlay planes if possible.
-
-// Also here is the implementation of the mouse & keyboard grab,
-// which are used so that clicks outside the program's windows
-// can be used to dismiss the menus.
-
 #include <fltk/Fl.h>
 #include <fltk/Fl_Menu_Window.h>
 #include <fltk/x.h>
 #include <fltk/fl_draw.h>
 #include <config.h>
+
+// This is the window type used by Fl_Menu to make the pop-ups, and for
+// tooltip popups.
+// 
+// It used to draw in the overlay planes if possible. Because xft does
+// not work in overlays this has been disabled except on Irix (where
+// overlays are still faster and save-under does not work):
+
+#if USE_OVERLAY && !defined(__sgi)
+#undef USE_OVERLAY
+#define USE_OVERLAY 0
+#endif
 
 // _WIN32 note: USE_OVERLAY is false
 #if USE_OVERLAY
@@ -80,19 +85,12 @@ void Fl_Menu_Window::flush() {
 #endif
 }
 
-void Fl_Menu_Window::erase() {
-#if USE_OVERLAY
-  if (!gc || !shown()) return;
-//XSetForeground(fl_display, gc, 0);
-//XFillRectangle(fl_display, fl_xid(this), gc, 0, 0, w(), h());
-  XClearWindow(fl_display, fl_xid(this));
-#endif
-}
-
-// Fix the colormap flashing on Maximum Impact Graphics by erasing the
-// menu before unmapping it:
 void Fl_Menu_Window::destroy() {
-  erase();
+#if USE_OVERLAY
+  // Fix the colormap flashing on Maximum Impact Graphics by erasing the
+  // menu before unmapping it:
+  if (gc && shown()) XClearWindow(fl_display, fl_xid(this));
+#endif
   Fl_Single_Window::destroy();
 }
 
@@ -101,5 +99,5 @@ Fl_Menu_Window::~Fl_Menu_Window() {
 }
 
 //
-// End of "$Id: Fl_Menu_Window.cxx,v 1.14 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: Fl_Menu_Window.cxx,v 1.15 2002/01/14 18:10:27 spitzak Exp $".
 //

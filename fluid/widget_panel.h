@@ -10,6 +10,9 @@ extern Fl_Tabs *panel_tabs;
 #include <fltk/Fl_Group.h>
 extern void propagate_group(Fl_Group*, void*);
 #include <fltk/Fl_Input.h>
+extern void subclass_cb(Fl_Input*, void*);
+#include <fltk/Fl_Choice.h>
+extern void subtype_cb(Fl_Choice*, void*);
 extern void label_cb(Fl_Input*, void*);
 #include <fltk/Fl_Box.h>
 extern Fl_Box *image_label;
@@ -30,7 +33,6 @@ extern void height_cb(Fl_Value_Input*, void*);
 extern Fl_Value_Input *widget_height;
 extern void set_xy_cb(Fl_Check_Button*, void*);
 extern Fl_Check_Button *set_xy;
-extern void xclass_cb(Fl_Input*, void*);
 extern void border_cb(Fl_Check_Button*, void*);
 extern void modal_cb(Fl_Check_Button*, void*);
 extern void non_modal_cb(Fl_Check_Button*, void*);
@@ -46,7 +48,6 @@ extern void hotspot_cb(Fl_Check_Button*, void*);
 #include "Shortcut_Button.h"
 extern void shortcut_in_cb(Shortcut_Button*, void*);
 extern void tooltip_cb(Fl_Input*, void*);
-#include <fltk/Fl_Choice.h>
 extern Fl_Menu_Item boxmenu[];
 extern void box_cb(Fl_Choice*, void*);
 #include <fltk/Fl_Light_Button.h>
@@ -67,8 +68,6 @@ extern void textsize_cb(Fl_Value_Input*, void*);
 extern void textcolor_cb(Fl_Light_Button*, void*);
 extern void selected_textcolor_cb(Fl_Light_Button*, void*);
 extern void default_cb(Fl_Button*, void*);
-extern void subclass_cb(Fl_Input*, void*);
-extern void subtype_cb(Fl_Choice*, void*);
 extern void name_cb(Fl_Input*, void*);
 extern void name_public_cb(Fl_Check_Button*, void*);
 extern void v_input_cb(Fl_Input*, void*);
