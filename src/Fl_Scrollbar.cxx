@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.12 1999/04/05 17:42:55 carl Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.13 1999/04/06 22:18:06 carl Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -205,24 +205,24 @@ void Fl_Scrollbar::draw() {
       fl_polygon(X+WX-DX, Y, X-DX, Y+WY, X-DX, Y-WY);
       if (Fl::widget_style() == FL_MOTIF_STYLE) {
         X = x()+w1/2+WX/2;
-        fl_color((pushed_&1) ? lc1 : dc1);
-        fl_line(X-WX+DX, Y, X+DX, Y+WY, X+DX, Y-WY);
         fl_color((pushed_&1) ? lc2 : dc2);
         fl_line(X-WX+DX+1, Y, X+DX-1, Y+WY-1, X+DX-1, Y-WY+1);
-        fl_color((pushed_&1) ? dc1 : lc1);
-        fl_line(X-WX+DX, Y, X+DX, Y-WY);
         fl_color((pushed_&1) ? dc2 : lc2);
         fl_line(X-WX+DX+1, Y, X+DX-1, Y-WY+1);
+        fl_color((pushed_&1) ? lc1 : dc1);
+        fl_line(X-WX+DX, Y, X+DX, Y+WY, X+DX, Y-WY);
+        fl_color((pushed_&1) ? dc1 : lc1);
+        fl_line(X-WX+DX, Y, X+DX, Y-WY);
 
         X = x()+w()-(X-x())-1;
-        fl_color((pushed_&2) ? dc1 : lc1);
-        fl_line(X+WX-DX, Y, X-DX, Y-WY, X-DX, Y+WY);
         fl_color((pushed_&2) ? dc2 : lc2);
         fl_line(X+WX-DX-1, Y, X-DX+1, Y-WY+1, X-DX+1, Y+WY-1);
-        fl_color((pushed_&2) ? lc1 : dc1);
-        fl_line(X+WX-DX, Y, X-DX, Y+WY);
         fl_color((pushed_&2) ? lc2 : dc2);
         fl_line(X+WX-DX-1, Y, X-DX+1, Y+WY-1);
+        fl_color((pushed_&2) ? dc1 : lc1);
+        fl_line(X+WX-DX, Y, X-DX, Y-WY, X-DX, Y+WY);
+        fl_color((pushed_&2) ? lc1 : dc1);
+        fl_line(X+WX-DX, Y, X-DX, Y+WY);
       }
     }
   } else { // vertical
@@ -278,24 +278,24 @@ void Fl_Scrollbar::draw() {
       fl_polygon(X, Y+WY-DY, X-WX, Y-DY, X+WX, Y-DY);
       if (Fl::widget_style() == FL_MOTIF_STYLE) {
         Y = y()+w1/2+WY/2;
-        fl_color((pushed_&1) ? lc1 : dc1);
-        fl_line(X, Y-WY+DY, X+WX, Y+DY, X-WX, Y+DY);
         fl_color((pushed_&1) ? lc2 : dc2);
         fl_line(X, Y-WY+DY+1, X+WX-1, Y+DY-1, X-WX+1, Y+DY-1);
-        fl_color((pushed_&1) ? dc1 : lc1);
-        fl_line(X, Y-WY+DY, X-WX, Y+DY);
         fl_color((pushed_&1) ? dc2 : lc2);
         fl_line(X, Y-WY+DY+1, X-WX+1, Y+DY-1);
+        fl_color((pushed_&1) ? lc1 : dc1);
+        fl_line(X, Y-WY+DY, X+WX, Y+DY, X-WX, Y+DY);
+        fl_color((pushed_&1) ? dc1 : lc1);
+        fl_line(X, Y-WY+DY, X-WX, Y+DY);
 
         Y = y()+h()-(Y-y())-1;
-        fl_color((pushed_&2) ? dc1 : lc1);
-        fl_line(X, Y+WY-DY, X-WX, Y-DY, X+WX, Y-DY);
         fl_color((pushed_&2) ? dc2 : lc2);
         fl_line(X, Y+WY-DY-1, X-WX+1, Y-DY+1, X+WX-1, Y-DY+1);
-        fl_color((pushed_&2) ? lc1 : dc1);
-        fl_line(X, Y+WY-DY, X+WX, Y-DY);
         fl_color((pushed_&2) ? lc2 : dc2);
         fl_line(X, Y+WY-DY-1, X+WX-1, Y-DY+1);
+        fl_color((pushed_&2) ? dc1 : lc1);
+        fl_line(X, Y+WY-DY, X-WX, Y-DY, X+WX, Y-DY);
+        fl_color((pushed_&2) ? lc1 : dc1);
+        fl_line(X, Y+WY-DY, X+WX, Y-DY);
       }
     }
   }
@@ -341,5 +341,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L) : Fl_Slide
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.12 1999/04/05 17:42:55 carl Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.13 1999/04/06 22:18:06 carl Exp $".
 //
