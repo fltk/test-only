@@ -1,5 +1,5 @@
 //
-// "$Id: KDE1.cxx,v 1.7 2000/02/14 11:33:02 bill Exp $"
+// "$Id: KDE1.cxx,v 1.8 2000/03/03 02:45:54 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -34,7 +34,7 @@
 #include <string.h>
 #include <stdlib.h>
 #include <limits.h>
-#include "Conf_Database.H"
+#include <FL/fl_config.H>
 
 #ifndef PATH_MAX
 #define PATH_MAX 128
@@ -90,12 +90,12 @@ extern "C" int fltk_theme(int argc, char**)
   const char* p = getenv("HOME");
   if (p) strncpy(home, p, sizeof(home));
   snprintf(kderc_path, sizeof(kderc_path), "%s/.kderc", home);
-  Conf_Database kderc(kderc_path);
+  Fl_Config kderc(kderc_path);
 
   if (kderc.get("KDE/widgetStyle", s, sizeof(s))) return 1;
   int motif_style = !strcasecmp(s, "Motif") ? 1 : 0;
   if (!colors_only) {
-    Fl::loadtheme(motif_style ? "motif" : "windows");
+    Fl::theme(motif_style ? "motif" : "windows");
     // see below for modifications to the motif/windows themes
   }
 
@@ -265,5 +265,5 @@ extern "C" int fltk_theme(int argc, char**)
 }
 
 //
-// End of "$Id: KDE1.cxx,v 1.7 2000/02/14 11:33:02 bill Exp $".
+// End of "$Id: KDE1.cxx,v 1.8 2000/03/03 02:45:54 carl Exp $".
 //

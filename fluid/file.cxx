@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.16 2000/01/19 09:41:44 bill Exp $"
+// "$Id: file.cxx,v 1.17 2000/03/03 02:45:52 carl Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -480,7 +480,7 @@ int read_file(const char *filename, int merge) {
   for (Fl_Type *o = Fl_Type::first; o; o = o->next)
     if (o->selected) {Fl_Type::current = o; break;}
   Fl_Style::start("style1");
-  Fl::theme(theme,0);
+  Fl::theme(theme);
   Fl_Style::start("fluid_style");
   return close_read();
 }
@@ -658,5 +658,5 @@ void fl_end_group() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.16 2000/01/19 09:41:44 bill Exp $".
+// End of "$Id: file.cxx,v 1.17 2000/03/03 02:45:52 carl Exp $".
 //

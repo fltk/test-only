@@ -1,5 +1,5 @@
 //
-// "$Id: KDE1_colors.cxx,v 1.3 2000/01/07 08:50:46 bill Exp $"
+// "$Id: KDE1_colors.cxx,v 1.4 2000/03/03 02:45:54 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -30,9 +30,10 @@
 #include <FL/Fl.H>
 
 extern "C" int fltk_theme(int, char**) {
-  return Fl::loadtheme("KDE1", "colors");
+// CET - FIXME - do this properly
+  return Fl::theme("KDE1");
 }
 
 //
-// End of "$Id: KDE1_colors.cxx,v 1.3 2000/01/07 08:50:46 bill Exp $".
+// End of "$Id: KDE1_colors.cxx,v 1.4 2000/03/03 02:45:54 carl Exp $".
 //
