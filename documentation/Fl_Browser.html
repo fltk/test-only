@@ -134,7 +134,6 @@ the callback is also done if the user double-clicks a non-parent item.</li>
 <li><a href="#set_item_visible">set_item_visible</a></li>
 <li><a href="#topline">topline</a></li>
 <li><a href="#topline">topline</a></li>
-<li><a href="#type">type</a></li>
 <li><a href="#value">value</a></li>
 <li><a href="#value">value</a></li>
 <li><a href="#width">width</a></li>
@@ -155,44 +154,6 @@ The constructor makes an empty browser.
 
 The destructor deletes all the list items (because they are child
 Fl_Widgets of an Fl_Group) and destroys the browser. 
-
-<a name=type><h4>void Fl_Browser::type(char);</h4></a>
-
-The bits of the type() are used to control what scrollbars are allowed
-to be visible and is also used by subclasses to change
-functionality. The default value is
-<tt>Fl_Browser::BOTH</tt>. Disabling the scrollbar does not stop the
-browser from scrolling, the user can still move it by moving the focus
-with the arrow keys or by dragging the mouse.
-
-<ul>
-<li><tt>Fl_Browser::HORIZONTAL</tt> Allow a horizontal scrollbar but
-it turns off if the data will fit.
-
-<li><tt>Fl_Browser::VERTICAL</tt> Allow a vertical scrollbar but it
-turns off if the data will fit.
-
-<li><tt>Fl_Browser::BOTH</tt> Same as <tt>Fl_Browser::HORIZONTAL |
-Fl_Browser::VERTICAL</tt>
-
-<li><tt>Fl_Browser::ALWAYS_ON</tt> Force the scrollbars to stay on
-even if the data does fit.
-
-<li><tt>Fl_Browser::HORIZONTAL_ALWAYS</tt> Same as
-<tt>Fl_Browser::ALWAYS_ON | Fl_Browser::HORIZONTAL</tt>
-
-<li><tt>Fl_Browser::VERTICAL_ALWAYS</tt> Same as <tt>Fl_Browser::ALWAYS_ON |
-Fl_Browser::VERTICAL</tt>
-
-<li><tt>Fl_Browser::BOTH_ALWAYS</tt> Same as <tt>
-Fl_Browser::ALWAYS_ON | Fl_Browser::HORIZONTAL |
-Fl_Browser::VERTICAL</tt>
-
-<li><tt>Fl_Browser::MULTI</tt> This bit is turned on by the <a
-href=Fl_Multi_Browser.html>Fl_Multi_Browser</a> and must be left on
-for it to work correctly.
-
-</ul>
 
 <a name=width><h4>int width() const</h4></a>
 

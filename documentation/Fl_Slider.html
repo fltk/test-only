@@ -110,7 +110,7 @@ href="Fl_Valuator#pagesize">pagesize()</a> apart.
 <br>void Fl_Slider::slider_size(unsigned char)</h4></a>
 
 Get or set the dimensions of the moving piece of slider. This is
-measured in pixels in a direction perpendicular to the slider's movement.
+measured in pixels in a direction parallel to the slider's movement.
 The default value is 12.
 
 <p>Setting slider_size() to zero will make the slider into a "fill"
@@ -121,8 +121,8 @@ indicator.
 <a name=tick_size><h4>unsigned char Fl_Slider::tick_size() const
 <br>void Fl_Slider::tick_size(unsigned char)</h4></a>
 
-The slider is shrunk this many pixels so that the tick marks are
-visible next to it. The default value is 4.
+The slider is shrunk this many pixels from the widget's width so that
+the tick marks are visible next to it. The default value is 4.
 
 <a name=slider_position><h4>int Fl_Slider::slider_position(double value, int w); (protected)</h4></a>
 
