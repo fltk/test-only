@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.27 1999/11/10 12:21:53 bill Exp $"
+// "$Id: Fl_Slider.cxx,v 1.28 1999/11/10 18:06:06 carl Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,13 +27,6 @@
 #include <FL/Fl_Slider.H>
 #include <FL/fl_draw.H>
 #include <math.h>
-
-static void revert(Fl_Style *s) {
-  s->box = FL_THIN_DOWN_BOX;
-  s->color = FL_DARK2;
-}
-
-Fl_Named_Style Fl_Slider::default_style("Slider", revert);
 
 Fl_Slider::Fl_Slider(int x, int y, int w, int h, const char* l)
 : Fl_Valuator(x, y, w, h, l) {
@@ -209,6 +202,13 @@ int Fl_Slider::handle(int event) {
 		h()-box()->dh());
 }
 
+static void revert(Fl_Style *s) {
+  s->box = FL_THIN_DOWN_BOX;
+  s->color = FL_DARK2;
+}
+
+Fl_Style Fl_Slider::default_style("Slider", revert);
+
 //
-// End of "$Id: Fl_Slider.cxx,v 1.27 1999/11/10 12:21:53 bill Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.28 1999/11/10 18:06:06 carl Exp $".
 //

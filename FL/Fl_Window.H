@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.26 1999/11/10 12:21:44 bill Exp $"
+// "$Id: Fl_Window.H,v 1.27 1999/11/10 18:05:57 carl Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -96,7 +96,7 @@ protected:
 
 private:
 
-  static Fl_Named_Style default_style;
+  static Fl_Style default_style;
   friend class Fl_X; Fl_X *i; // points at the system-specific stuff
   const char* iconlabel_;
   const char* xclass_;
@@ -119,5 +119,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.26 1999/11/10 12:21:44 bill Exp $".
+// End of "$Id: Fl_Window.H,v 1.27 1999/11/10 18:05:57 carl Exp $".
 //

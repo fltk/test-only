@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Style.cxx,v 1.6 1999/11/10 12:21:51 bill Exp $"
+// "$Id: Fl_Input_Style.cxx,v 1.7 1999/11/10 18:06:04 carl Exp $"
 //
 // Style of Fl_Input for the Fast Light Tool Kit (FLTK).
 //
@@ -41,12 +41,12 @@ static void revert(Fl_Style* s) {
   s->off_color = FL_BLACK;
 }
 
-Fl_Named_Style Fl_Input::default_style("Input", revert);
+Fl_Style Fl_Input::default_style("Input", revert);
 
 #include <FL/Fl_Output.H>
 
-Fl_Named_Style Fl_Output::default_style("Output", revert);
+Fl_Style Fl_Output::default_style("Output", revert);
 
 //
-// End of "$Id: Fl_Input_Style.cxx,v 1.6 1999/11/10 12:21:51 bill Exp $".
+// End of "$Id: Fl_Input_Style.cxx,v 1.7 1999/11/10 18:06:04 carl Exp $".
 //

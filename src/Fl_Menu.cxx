@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.51 1999/11/10 12:21:52 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.52 1999/11/10 18:06:04 carl Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -81,7 +81,7 @@ static void mw_revert(Fl_Style* s) {
   s->box = FL_UP_BOX;
 }
 
-static Fl_Named_Style menuwindow_default_style("Menu_Window", mw_revert);
+static Fl_Style menuwindow_default_style("Menu_Window", mw_revert);
 
 static void mi_revert(Fl_Style* s) {
   s->box = FL_FLAT_BOX;
@@ -93,7 +93,7 @@ static void mi_revert(Fl_Style* s) {
   s->parent = &Fl_Widget::default_style;
 }
 
-Fl_Named_Style Fl_Menu_Item::default_style("Menu_Item", mi_revert);
+Fl_Style Fl_Menu_Item::default_style("Menu_Item", mi_revert);
 
 static void mt_revert(Fl_Style* s) {
   s->box = FL_HIGHLIGHT_UP_BOX;
@@ -104,7 +104,7 @@ static void mt_revert(Fl_Style* s) {
   s->parent = &Fl_Widget::default_style;
 }
 
-Fl_Named_Style Fl_Menu_Item::title_style("Menu_Title", mt_revert);
+Fl_Style Fl_Menu_Item::title_style("Menu_Title", mt_revert);
 
 extern Fl_Style* fl_unique_style(const Fl_Style* & pointer); // in Fl_Widget.c
 
@@ -849,5 +849,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.51 1999/11/10 12:21:52 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.52 1999/11/10 18:06:04 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.18 1999/11/10 12:21:55 bill Exp $"
+// "$Id: fl_options.cxx,v 1.19 1999/11/10 18:06:08 carl Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -367,7 +367,7 @@ int Fl::getconf(const char *key, char *value, int value_length)
 { return ::getconf(fl_find_config_file("flconfig"), key, value, value_length); }
 
 Fl_Style* Fl_Style::find(const char* name) {
-  for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
+  for (Fl_Style* p = Fl_Style::first; p; p = p->next) {
     const char* a = p->name;
     const char* b = name;
     for (;;) {
@@ -384,9 +384,15 @@ Fl_Style* Fl_Style::find(const char* name) {
 }
 
 static void style_clear(Fl_Style *s) {
-  Fl_Style *p = s->parent;
-  memset(s, 0, sizeof(*s));
-  s->parent = p;
+  Fl_Style temp = *s;
+printf("f1: %p\n", s->first);
+  memset((void*)s, 0, sizeof(*s));
+
+  s->parent = temp.parent;
+  s->name = temp.name;
+  s->revertfunc = temp.revertfunc;
+  s->next = temp.next;
+printf("f2: %p\n", s->first);
 }
 
 extern int fl_extra_menu_spacing;
@@ -407,15 +413,15 @@ void Fl_Style::revert() {
   fl_down_box.dw_ = 4;
   fl_down_box.dh_ = 4;
 
-  for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
+  for (Fl_Style* p = Fl_Style::first; p; p = p->next) {
     style_clear(p);
-    if (p->revert) p->revert(p);
+    if (p->revertfunc) p->revertfunc(p);
   }
   Fl::redraw();
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.18 1999/11/10 12:21:55 bill Exp $".
+// End of "$Id: fl_options.cxx,v 1.19 1999/11/10 18:06:08 carl Exp $".
 //
 
 

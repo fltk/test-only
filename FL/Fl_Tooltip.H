@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.H,v 1.10 1999/11/10 12:21:44 bill Exp $"
+// "$Id: Fl_Tooltip.H,v 1.11 1999/11/10 18:05:56 carl Exp $"
 //
 // Tooltip definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -58,7 +58,7 @@ public:
   static void boxtype(Fl_Boxtype b) { default_style.box = b; }
   static Fl_Boxtype boxtype() { return default_style.box; }
 
-  static Fl_Named_Style default_style;
+  static Fl_Style default_style;
 private:
   static float delay_;
   static int enabled_;
@@ -67,5 +67,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Tooltip.H,v 1.10 1999/11/10 12:21:44 bill Exp $".
+// End of "$Id: Fl_Tooltip.H,v 1.11 1999/11/10 18:05:56 carl Exp $".
 //

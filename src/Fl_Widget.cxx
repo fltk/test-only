@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.35 1999/11/10 12:21:54 bill Exp $"
+// "$Id: Fl_Widget.cxx,v 1.36 1999/11/10 18:06:07 carl Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -183,9 +183,8 @@ int Fl_Widget::contains(const Fl_Widget *o) const {
 Fl_Style* fl_unique_style(const Fl_Style* & pointer) {
   if (pointer->dynamic) return (Fl_Style*)pointer;
   Fl_Style* newstyle = new Fl_Style;
-  memset(newstyle, 0, sizeof(*newstyle));
-  newstyle->dynamic = 1;
   newstyle->parent = (Fl_Style*)pointer;
+  newstyle->dynamic = 1;
   pointer = newstyle;
   return newstyle;
 }
@@ -194,8 +193,6 @@ Fl_Style* fl_unique_style(const Fl_Style* & pointer) {
 // for general use, use copy_style()
 
 void Fl_Widget::style(Fl_Style* s) {
-  s->parent = &Fl_Widget::default_style;
-
   // use this for multilevel inheritance?
   // if (style_) { s->parent = style_; }
 
@@ -210,7 +207,6 @@ void Fl_Widget::style(Fl_Style* s) {
 int Fl_Widget::copy_style(const Fl_Style* t) {
   if (!t->dynamic) {style_ = t; return 0;}
   Fl_Style* s = new Fl_Style;
-  memset(s, 0, sizeof(*s));
   s->parent = (Fl_Style*)t;
   s->dynamic = 1;
   if (style_ && style_->dynamic) delete style_;
@@ -250,16 +246,19 @@ void Fl_Widget::seti(const unsigned * p, unsigned v) {
 
 // Named styles provide a list that can be searched by theme plugins.
 // The "revert" function is mostly provided to get around C++ problems
-// with constructors.  It may be able to be used to undo any theme
+// with constructors. (?)  It may be able to be used to undo any theme
 // changes.
 
-Fl_Named_Style* Fl_Named_Style::first = 0;
+Fl_Style* Fl_Style::first = 0;
 
-Fl_Named_Style::Fl_Named_Style(const char* n, void (*r)(Fl_Style*)) :
-  name(n), revert(r), next(first)
+Fl_Style::Fl_Style(const char* n, void (*r)(Fl_Style*))
 {
-  first = this;
-  if (r) r(this);
+  memset((void*)this, 0, sizeof(*this));
+
+  parent = &Fl_Widget::default_style;
+
+  if (n) { name = n; next = first; first = this;}
+  if (r) { revertfunc = r; r(this); }
 }
 
 // When a widget is destroyed it can destroy unique styles:
@@ -350,32 +349,31 @@ void Fl_Widget::draw_n_clip()
     fl_clip_out(x(), y(), w(), h());
 }
 
+// Do not change the contents of this ever.  The themes depend on getting
+// a known state initially.
 static void revert(Fl_Style* s) {
-  static Fl_Style default_style = {
-    FL_UP_BOX,	      // box
-    FL_UP_BOX,        // glyph_box - for light buttons & sliders
-    fl_glyph,         // glyphs
-    FL_HELVETICA,     // label_font
-    FL_HELVETICA,     // text_font
-    FL_NORMAL_LABEL,  // label_type
-    FL_GRAY,          // color
-    FL_BLACK,         // label_color
-    FL_LIGHT1,        // selection_color / down_color / on_color
-    FL_BLACK,         // selection_text_color
-    FL_GRAY,          // off_color
-    FL_NO_COLOR,      // highlight_color
-    FL_BLACK,         // highlight_label_color
-    FL_BLACK,         // text_color
-    FL_NORMAL_SIZE,   // label_size
-    FL_NORMAL_SIZE,   // text_size
-    0,                // parent
-    0                 // dynamic
-  };
-  *s = default_style;
+    s->box                   = FL_UP_BOX;        // box
+    s->glyph_box             = FL_UP_BOX;        // glyph_box - for light buttons & sliders
+    s->glyph                 = fl_glyph;         // glyphs
+    s->label_font            = FL_HELVETICA;     // label_font
+    s->text_font             = FL_HELVETICA;     // text_font
+    s->label_type            = FL_NORMAL_LABEL;  // label_type
+    s->color                 = FL_GRAY;          // color
+    s->label_color           = FL_BLACK;         // label_color
+    s->selection_color       = FL_LIGHT1;        // selection_color / down_color / on_color
+    s->selection_text_color  = FL_BLACK;         // selection_text_color
+    s->off_color             = FL_GRAY;          // off_color
+    s->highlight_color       = FL_NO_COLOR;      // highlight_color
+    s->highlight_label_color = FL_BLACK;         // highlight_label_color
+    s->text_color            = FL_BLACK;         // text_color
+    s->label_size            = FL_NORMAL_SIZE;   // label_size
+    s->text_size             = FL_NORMAL_SIZE;   // text_size
+
+    s->parent                = 0;                // this is the topmost style always
 }
 
-Fl_Named_Style Fl_Widget::default_style("default", revert);
+Fl_Style Fl_Widget::default_style("default", revert);
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.35 1999/11/10 12:21:54 bill Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.36 1999/11/10 18:06:07 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.40 1999/11/10 16:39:30 vincent Exp $"
+// "$Id: Fl_Group.cxx,v 1.41 1999/11/10 18:06:03 carl Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -217,11 +217,12 @@ int Fl_Group::navigation(int key) {
 
 ////////////////////////////////////////////////////////////////
 
-// this is private as there is no need for themes to alter this:
-static Fl_Style group_style = {
-  FL_NO_BOX // box
-  // rest is zero and inherited from parent's style
+static void revert(Fl_Style* s) {
+  s->box = FL_NO_BOX;
 };
+
+// this is private as there is no need for themes to alter this:
+static Fl_Style group_style(0, revert);
 
 Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
 : Fl_Widget(X,Y,W,H,l),
@@ -559,8 +560,6 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
   w.draw_label(X,Y,W,H,(Fl_Flags)align);
 }
 
-
-
 //
-// End of "$Id: Fl_Group.cxx,v 1.40 1999/11/10 16:39:30 vincent Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.41 1999/11/10 18:06:03 carl Exp $".
 //

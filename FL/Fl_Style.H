@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.12 1999/11/10 12:21:43 bill Exp $"
+// "$Id: Fl_Style.H,v 1.13 1999/11/10 18:05:56 carl Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -35,7 +35,6 @@
 typedef void (*Fl_Glyph)(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype = FL_UP_BOX);
 
 struct FL_API Fl_Style {
-
   Fl_Boxtype	box;
   Fl_Boxtype	glyph_box; // needed for all Light Buttons & sliders
   Fl_Glyph	glyph;
@@ -58,6 +57,12 @@ struct FL_API Fl_Style {
 
   Fl_Style*     parent;
   uchar         dynamic; // is this a modifiable style?
+
+  const char*   name;
+  void          (*revertfunc)(Fl_Style*);
+  Fl_Style*     next;
+  static Fl_Style* first;
+  Fl_Style(const char* n = 0, void (*)(Fl_Style*) = 0);
 
   void setp(const void** p, const void* v) { *p = v; }
   void seti(unsigned* p, unsigned v) { *p = v; }
@@ -89,15 +94,6 @@ struct FL_API Fl_Style {
   static void revert(); // reverts the entire world of styles to defaults
 };
 
-class FL_API Fl_Named_Style : public Fl_Style {
-public:
-  const char* name;
-  void (*revert)(Fl_Style*);
-  Fl_Named_Style* next;
-  static Fl_Named_Style* first;
-  Fl_Named_Style(const char* n, void (*)(Fl_Style*) = 0);
-};
-
 FL_API void fl_glyph(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype = FL_UP_BOX);
 
 enum Fl_Glyphtype {	// glyph types
@@ -126,5 +122,5 @@ FL_API int fl_windows();
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.12 1999/11/10 12:21:43 bill Exp $".
+// End of "$Id: Fl_Style.H,v 1.13 1999/11/10 18:05:56 carl Exp $".
 //
