@@ -1,5 +1,5 @@
 //
-// "$Id: Window.h,v 1.6 2004/10/19 06:17:10 spitzak Exp $"
+// "$Id: Window.h,v 1.7 2004/11/17 08:48:04 spitzak Exp $"
 //
 // Window widget. This must be the outermost group. You can also put
 // them inside other widgets to use the system's window hierarchy.
@@ -78,7 +78,7 @@ public:
   void hotspot(const Widget*, bool offscreen = false);
   void hotspot(const Widget& p, bool offscrn = false) {hotspot(&p,offscrn);}
   void size_range(int a, int b, int c=0, int d=0, int e=0, int f=0)
-    { minw=a; minh=b; maxw=c; maxh=d; dw=e; dh=f; size_range_(); }
+    { minw=(short)a; minh=(short)b; maxw=(short)c; maxh=(short)d; dw=(uchar)e; dh=(uchar)f; size_range_(); }
 
   bool shown() const {return i != 0;}
   void show();
@@ -140,5 +140,5 @@ private:
 #endif
 
 //
-// End of "$Id: Window.h,v 1.6 2004/10/19 06:17:10 spitzak Exp $".
+// End of "$Id: Window.h,v 1.7 2004/11/17 08:48:04 spitzak Exp $".
 //
