@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.21 2000/06/06 14:37:31 mike Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.22 2000/10/17 07:50:08 spitzak Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -72,6 +72,21 @@ static Fl_Widget* append(
 
 static int find_flag; // lame-o attempt to reuse the code
 
+// Comparison that does not care about deleted '&' signs:
+static int compare(const char* a, const char* b) {
+  for (;;) {
+    int n = *a-*b;
+    if (n) {
+      if (*a == '&') a++;
+      else if (*b == '&') b++;
+      else return n;
+    } else if (*a) {
+      a++; b++;
+    } else {
+      return 0;
+    }
+  }
+}
 // Add an item.  The text is split at '/' characters to automatically
 // produce submenus (actually a totally unnecessary feature as you can
 // now add submenu titles directly by setting SUBMENU in the flags):
@@ -112,7 +127,7 @@ Fl_Widget* Fl_Menu_::add(
 	break;
       }
       Fl_Widget* w = group->child(--n);
-      if (w->is_group() && w->label() && !strcmp(w->label(), item)) {
+      if (w->is_group() && w->label() && !compare(w->label(), item)) {
 	group = (Fl_Group*)w;
 	break;
       }
@@ -129,7 +144,7 @@ Fl_Widget* Fl_Menu_::add(
       break;
     }
     Fl_Widget* w = group->child(--n);
-    if (w->label() && !strcmp(w->label(), item)) {
+    if (w->label() && !compare(w->label(), item)) {
       if (find_flag) return w;
       o = w;
       break;
@@ -191,5 +206,5 @@ Fl_Widget* Fl_Menu_::add(const char *str) {
 }
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.21 2000/06/06 14:37:31 mike Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.22 2000/10/17 07:50:08 spitzak Exp $".
 //

@@ -51,7 +51,6 @@ void build_hierarchy() {
   new Fl_Item("Program");
   g2->end();
   g1->end();
-  (new Fl_Item_Group("List"))->list(&thelist);
   g->end();
 }
 
@@ -90,9 +89,6 @@ int main(int argc, char **argv) {
   o = new Fl_Item("Toggle 4"); o->type(FL_TOGGLE_ITEM); o->set_flag(FL_MENU_STAYS_UP);
   options.end();
   Fl_Item item("&Item"); item.type(FL_TOGGLE_ITEM);
-  Fl_Item_Group list("&List");
-  list.end();
-  list.list(&thelist);
   menubar.end();
   menubar.tooltip("This is a menu bar");
 

@@ -40,7 +40,7 @@ cb_remove(Fl_Widget*, void* ptr) {
 	g->relayout();
 	w = tree->goto_top();
       } else {
-	w = tree->forward();
+	w = tree->next();
       }
     }
   } else {

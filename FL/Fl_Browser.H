@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.H,v 1.21 2000/09/11 07:29:32 spitzak Exp $"
+// "$Id: Fl_Browser.H,v 1.22 2000/10/17 07:50:07 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -82,8 +82,9 @@ public:
   Fl_Widget* goto_number(int n); // set HERE to n'th visible item
   Fl_Widget* goto_visible_focus(); // set HERE to focus if visible
   Fl_Widget* goto_index(const int* indexes, int level);
-  Fl_Widget* forward(); // set HERE to next visible item
-  Fl_Widget* backward(); // set HERE to previous visible item
+  Fl_Widget* next(); // set HERE to next widget
+  Fl_Widget* next_visible(); // set HERE to next visible item
+  Fl_Widget* previous_visible(); // set HERE to previous visible item
   void set_mark(int dest, int mark); // set dest to mark
   int compare_marks(int mark1, int mark2); // returns >0 if mark1 after mark2
   int at_mark(int mark) { return !compare_marks(HERE,mark); }
@@ -96,7 +97,7 @@ public:
   int item_select_only(int do_callback = 0);
 
   // fltk 1.0 Fl_Browser emulation: (see also Fl_Menu_.H)
-  void deselect(int do_callback = 0);
+  int deselect(int do_callback = 0);
   int select(int line, int value = 1);
   int selected(int line);
   void topline(int line) {goto_number(line); set_top();}
@@ -145,5 +146,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser.H,v 1.21 2000/09/11 07:29:32 spitzak Exp $".
+// End of "$Id: Fl_Browser.H,v 1.22 2000/10/17 07:50:07 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.31 2000/09/27 16:25:51 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.32 2000/10/17 07:50:08 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -35,7 +35,7 @@
 // compile with your desired options, and use your renamed widget.
 // Deal with it.
 
-#define DRAW_STRIPES 1 // draw Macintosh-style stripes
+#define DRAW_STRIPES 0 // draw Macintosh-style stripes
 #define TRIANGLE_GLYPH 0 // use Macintosh/fltk-style glyphs
 
 ////////////////////////////////////////////////////////////////
@@ -82,7 +82,7 @@ Fl_Widget* Fl_Browser::goto_top() {
   }
   item(child(item_index[HERE],0));
   // skip leading invisible widgets:
-  if (!item()->visible()) return forward();
+  if (!item()->visible()) return next_visible();
   return item();
 }
 
@@ -140,7 +140,7 @@ int Fl_Browser::is_set(int mark) {
 }
 
 // Move forward to the next visible item (what down-arrow does).
-Fl_Widget* Fl_Browser::forward() {
+Fl_Widget* Fl_Browser::next_visible() {
   if (item()->visible()) {
     item_position[HERE] += item()->height();
     item_number[HERE]++;
@@ -178,7 +178,7 @@ Fl_Widget* Fl_Browser::forward() {
 }
 
 // Move backward to previous visible item:
-Fl_Widget* Fl_Browser::backward() {
+Fl_Widget* Fl_Browser::previous_visible() {
 
   // there's got to be simpler logic for this loop...
   for (;;) {
@@ -214,6 +214,24 @@ Fl_Widget* Fl_Browser::backward() {
   return item();
 }
 
+// Move to the next item even if invisible. This will walk the entire
+// tree. The vertical position is NOT set!
+// Move forward to the next visible item (what down-arrow does).
+Fl_Widget* Fl_Browser::next() {
+  if (children(item_index[HERE], item_level[HERE]+1) > 0) {
+    set_level(item_level[HERE]+1);
+    item_index[HERE][item_level[HERE]] = 0;
+  } else {
+    item_index[HERE][item_level[HERE]]++;
+  }
+  for (;;) {
+    if (item(child(item_index[HERE], item_level[HERE]))) return item();
+    if (item_level[HERE] <= 0) return 0;
+    item_level[HERE]--;
+    item_index[HERE][item_level[HERE]]++;
+  }
+}
+
 // set current item to one at or before Y pixels from top of browser
 Fl_Widget* Fl_Browser::goto_position(int Y) {
   if (Y < 0) Y = 0;
@@ -223,14 +241,14 @@ Fl_Widget* Fl_Browser::goto_position(int Y) {
   } else {
     // move backwards until we are before or at the position:
     while (item_position[HERE] > Y) {
-      if (!backward()) {goto_top(); break;}
+      if (!previous_visible()) {goto_top(); break;}
     }
   }
   // move forward to the item:
   if (item()) for (;;) {
     int h = item()->height();
     if (item_position[HERE]+h > Y) break;
-    if (!forward()) {backward(); return 0;}
+    if (!next_visible()) {previous_visible(); return 0;}
   }
   return item();
 }
@@ -328,6 +346,7 @@ void Fl_Browser::draw_item() {
   } else {
     widget->clear_flag(FL_SELECTED);
     flags = 0;
+#if DRAW_STRIPES
     Fl_Color c0 = text_background();
     Fl_Color c1 = color();
     if (item_number[HERE] & 1 && c1 != c0) {
@@ -343,6 +362,10 @@ void Fl_Browser::draw_item() {
       fl_color(c0);
       fl_rectf(X, y, W, h);
     }
+#else
+    fl_color(text_background());
+    fl_rectf(X, y, W, h);
+#endif
   }
 
   int arrow_size = text_size()|1;
@@ -401,7 +424,7 @@ void Fl_Browser::draw_clip(int x, int y, int w, int h) {
     int item_y = Y+item_position[HERE]-yposition_;
     if (item_y >= y+h) break;
     if (draw_all || !at_mark(REDRAW_0) && !at_mark(REDRAW_1)) draw_item();
-    if (!forward()) break;
+    if (!next_visible()) break;
   }
 
   // erase the area below the last item:
@@ -465,7 +488,7 @@ void Fl_Browser::layout() {
     if (at_mark(FOCUS)) set_mark(FOCUS, HERE);
     int w = item()->width()+arrow_size*item_level[HERE];
     if (w > max_width) max_width = w;
-    if (!forward()) break;
+    if (!next_visible()) break;
   }
   set_mark(FIRST_VISIBLE, HERE);
   // count all the rest of the items:
@@ -473,7 +496,7 @@ void Fl_Browser::layout() {
     if (at_mark(FOCUS)) set_mark(FOCUS, HERE);
     int w = item()->width()+arrow_size*item_level[HERE];
     if (w > max_width) max_width = w;
-    if (!forward()) break;
+    if (!next_visible()) break;
   }
   if (indented()) max_width += arrow_size; // optional if no groups!
 
@@ -583,17 +606,19 @@ int Fl_Browser::set_focus() {
 
 // force current item to a state and do callback for multibrowser:
 int Fl_Browser::item_select(int value, int do_callback) {
-  if (value) {
-    if (!multi()) return item_select_only(do_callback);
-    if (item()->value()) return 0;
-    item()->set_flag(FL_VALUE);
-    list()->flags_changed(this, item());
-  } else {
-    if (!multi()) {deselect(do_callback); return 1;}
-    if (!item()->value()) return 0;
-    item()->clear_flag(FL_VALUE);
-    list()->flags_changed(this, item());
+  if (!multi()) {
+    if (value) return (item_select_only(do_callback));
+    else return deselect(do_callback);
   }
+  Fl_Flags f = item()->flags();
+  if (value) {
+    if (f & FL_VALUE) return 0;
+    item()->set_flag(FL_VALUE);
+  } else {
+    if (!(f & FL_VALUE)) return 0;
+    item()->clear_flag(FL_VALUE);
+  }
+  list()->flags_changed(this, item());
   damage_item(HERE);
   if (when() & do_callback) {
     clear_changed();
@@ -605,35 +630,20 @@ int Fl_Browser::item_select(int value, int do_callback) {
 }
 
 // Turn off all lines in the browser:
-void Fl_Browser::deselect(int do_callback) {
+int Fl_Browser::deselect(int do_callback) {
   unset_mark(HERE);
-  item_select_only(do_callback);
+  return item_select_only(do_callback);
 }
 
-// Set the browser to only this item:
+// Set both the single and multi-browser to only this item:
 int Fl_Browser::item_select_only(int do_callback) {
   if (multi()) {
     set_focus();
     int ret = 0;
-    // turn off all other items:
-    // we can't use forward(), we must visit EVERY item...
-    item_index[HERE][0] = 0; item_level[HERE] = 0;
-    for (;;) {
-      item(child(item_index[HERE], item_level[HERE]));
-      if (!item()) {
-	if (item_level[HERE] <= 0) break;
-	item_level[HERE]--;
-	item_index[HERE][item_level[HERE]]++;
-      } else {
-	if (item_select(at_mark(FOCUS), do_callback)) ret = 1;
-	if (children(item_index[HERE], item_level[HERE]+1) > 0) {
-	  set_level(item_level[HERE]+1);
-	  item_index[HERE][item_level[HERE]] = 0;
-	} else {
-	  item_index[HERE][item_level[HERE]]++;
-	}
-      }
-    }
+    // Turn off all other items:
+    if (goto_top()) do {
+      if (item_select(at_mark(FOCUS), do_callback)) ret = 1;
+    } while (next());
     goto_mark(FOCUS);
     return ret;
   } else {
@@ -716,7 +726,7 @@ int Fl_Browser::handle(int event) {
       for (;;) {
 	item_select(drag_type, FL_WHEN_CHANGED);
 	if (at_mark(USER_0)) break;
-	if (!(direction<0 ? forward() : backward())) break;
+	if (!(direction<0 ? next_visible() : previous_visible())) break;
       }
     } else {
       item_select_only(FL_WHEN_CHANGED);
@@ -727,14 +737,10 @@ int Fl_Browser::handle(int event) {
     if (openclose_drag) {
       if (openclose_drag == 1) {
 	goto_mark(FOCUS);
-	item()->invert_flag(FL_OPEN);
-	list()->flags_changed(this, item());
-	relayout();
+	goto TOGGLE_OPEN;
       }
-      Fl::event_clicks(0);
-      return 0;
-    }
-    if (when() && Fl::event_clicks()) goto DO_CALLBACK;
+    } else if (when() && Fl::event_clicks())
+      goto DO_CALLBACK;
     goto RELEASE;
 
   case FL_KEYBOARD:
@@ -742,7 +748,7 @@ int Fl_Browser::handle(int event) {
     case FL_Up:
     case FL_Down:
       if (!goto_visible_focus()) break;
-      if (!(Fl::event_key() == FL_Up ? backward() : forward())) return 1;
+      if (!(Fl::event_key() == FL_Up ? previous_visible() : next_visible())) return 1;
       if (multi() && Fl::event_state(FL_SHIFT|FL_CTRL)) {
 	if (Fl::event_state(FL_SHIFT)) item_select(1,FL_WHEN_CHANGED);
 	set_focus();
@@ -754,7 +760,8 @@ int Fl_Browser::handle(int event) {
       if (!goto_visible_focus()) {
 	return 1;
       } else if (item_is_parent()) {
-	item()->invert_flag(FL_OPEN);
+      TOGGLE_OPEN:
+	item()->flags(item()->flags() ^ FL_OPEN);
 	list()->flags_changed(this, item());
 	relayout();
 	goto RELEASE;
@@ -791,7 +798,7 @@ Fl_Widget* Fl_Browser::goto_visible_focus() {
   if (item_position[FOCUS] < yposition_ ||
       item_position[FOCUS] > yposition_+H) {
     if (!goto_mark(FIRST_VISIBLE)) return 0;
-    if (item_position[HERE] < yposition_) forward();
+    if (item_position[HERE] < yposition_) next_visible();
     return item();
   } else {
     return goto_mark(FOCUS);
@@ -806,10 +813,10 @@ Fl_Widget* Fl_Browser::goto_index(const int* indexes, int level) {
     if (!goto_top()) return 0;
   // move until we are before it:
   while (::compare_marks(item_index[HERE],item_level[HERE],indexes,level) > 0)
-    if (!backward()) return 0;
+    if (!previous_visible()) return 0;
   // move until we are after it:
   while (::compare_marks(item_index[HERE],item_level[HERE],indexes,level) < 0)
-    if (!forward())  return backward();
+    if (!next_visible())  return previous_visible();
   return item();
 }
 
@@ -828,13 +835,13 @@ Fl_Widget* Fl_Browser::goto_number(int number) {
   } else {
     // move backwards until we are before or at the position:
     while (item_number[HERE] > number) {
-      if (!backward()) {goto_top(); break;}
+      if (!previous_visible()) {goto_top(); break;}
     }
   }
   // move forward to the item:
   for (;;) {
     if (item_index[HERE][TOPLEVEL] >= number) break;
-    if (!forward()) return 0;
+    if (!next_visible()) return 0;
   }
   return item();
 }
@@ -914,5 +921,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.31 2000/09/27 16:25:51 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.32 2000/10/17 07:50:08 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.41 2000/08/06 07:39:44 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.42 2000/10/17 07:50:08 spitzak Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -274,7 +274,9 @@ void Fl_Tabs::draw() {
   if (damage() & FL_DAMAGE_ALL) { // redraw the entire thing:
     fl_clip(x(), y(), w(), h());
     if (v) draw_child(*v);
-    parent()->draw_group_box();
+    //    parent()->draw_group_box();
+    fl_color(color());
+    fl_rectf(x(), y()+(H>=0?0:h()+H), w(), H>=0?H:-H);
     fl_pop_clip();
   } else { // redraw the child
     if (v) update_child(*v);
@@ -378,5 +380,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.41 2000/08/06 07:39:44 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.42 2000/10/17 07:50:08 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.H,v 1.27 2000/09/27 16:25:48 spitzak Exp $"
+// "$Id: Fl_Menu_.H,v 1.28 2000/10/17 07:50:07 spitzak Exp $"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -43,9 +43,6 @@ class FL_API Fl_Menu_ : public Fl_Group {
 public:
 
   Fl_Menu_(int,int,int,int, const char* l=0);
-  Fl_Menu_(const char* l = 0);
-  void layout();
-  void draw();
 
   Fl_List* list() const {return list_;}
   void list(Fl_List* l) {list_ = l;}
@@ -56,7 +53,7 @@ public:
   Fl_Widget* child(int index) const ;
 
   Fl_Widget* item() const {return item_;}
-  void item(Fl_Widget* w) {item_ = w;}
+  Fl_Widget* item(Fl_Widget* w) {return item_ = w;}
   virtual int goto_item(const int* indexes, int level);
 
   int popup(int x,int y, const char* title = 0);
@@ -136,5 +133,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Menu_.H,v 1.27 2000/09/27 16:25:48 spitzak Exp $".
+// End of "$Id: Fl_Menu_.H,v 1.28 2000/10/17 07:50:07 spitzak Exp $".
 //

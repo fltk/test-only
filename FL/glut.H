@@ -1,5 +1,5 @@
 //
-// "$Id: glut.H,v 1.16 2000/08/20 04:31:36 spitzak Exp $"
+// "$Id: glut.H,v 1.17 2000/10/17 07:50:07 spitzak Exp $"
 //
 // GLUT emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -427,11 +427,15 @@ FL_GLUT_API int glutBitmapWidth(void *font, int character);
 
 extern "C" {
 
-extern FL_GLUT_API int glutExtensionSupported(const char *name);
+#ifndef APIENTRY
+#define APIENTRY
+#endif
+
+extern APIENTRY int glutExtensionSupported(const char *name);
 
 /* Stroke font opaque addresses (use constants instead in source code). */
-extern FL_GLUT_API void *glutStrokeRoman;
-extern FL_GLUT_API void *glutStrokeMonoRoman;
+extern APIENTRY void *glutStrokeRoman;
+extern APIENTRY void *glutStrokeMonoRoman;
 
 /* Stroke font constants (use these in GLUT program). */
 #ifdef _WIN32
@@ -443,33 +447,33 @@ extern FL_GLUT_API void *glutStrokeMonoRoman;
 #endif
 
 /* GLUT font sub-API */
-extern FL_GLUT_API void glutStrokeCharacter(void *font, int character);
-extern FL_GLUT_API int glutStrokeWidth(void *font, int character);
+extern APIENTRY void glutStrokeCharacter(void *font, int character);
+extern APIENTRY int glutStrokeWidth(void *font, int character);
 
 /* GLUT pre-built models sub-API */
-extern FL_GLUT_API void glutWireSphere(GLdouble radius, GLint slices, GLint stacks);
-extern FL_GLUT_API void glutSolidSphere(GLdouble radius, GLint slices, GLint stacks);
-extern FL_GLUT_API void glutWireCone(GLdouble base, GLdouble height, GLint slices, GLint stacks);
-extern FL_GLUT_API void glutSolidCone(GLdouble base, GLdouble height, GLint slices, GLint stacks);
-extern FL_GLUT_API void glutWireCube(GLdouble size);
-extern FL_GLUT_API void glutSolidCube(GLdouble size);
-extern FL_GLUT_API void glutWireTorus(GLdouble innerRadius, GLdouble outerRadius, GLint sides, GLint rings);
-extern FL_GLUT_API void glutSolidTorus(GLdouble innerRadius, GLdouble outerRadius, GLint sides, GLint rings);
-extern FL_GLUT_API void glutWireDodecahedron();
-extern FL_GLUT_API void glutSolidDodecahedron();
-extern FL_GLUT_API void glutWireTeapot(GLdouble size);
-extern FL_GLUT_API void glutSolidTeapot(GLdouble size);
-extern FL_GLUT_API void glutWireOctahedron();
-extern FL_GLUT_API void glutSolidOctahedron();
-extern FL_GLUT_API void glutWireTetrahedron();
-extern FL_GLUT_API void glutSolidTetrahedron();
-extern FL_GLUT_API void glutWireIcosahedron();
-extern FL_GLUT_API void glutSolidIcosahedron();
+extern APIENTRY void glutWireSphere(GLdouble radius, GLint slices, GLint stacks);
+extern APIENTRY void glutSolidSphere(GLdouble radius, GLint slices, GLint stacks);
+extern APIENTRY void glutWireCone(GLdouble base, GLdouble height, GLint slices, GLint stacks);
+extern APIENTRY void glutSolidCone(GLdouble base, GLdouble height, GLint slices, GLint stacks);
+extern APIENTRY void glutWireCube(GLdouble size);
+extern APIENTRY void glutSolidCube(GLdouble size);
+extern APIENTRY void glutWireTorus(GLdouble innerRadius, GLdouble outerRadius, GLint sides, GLint rings);
+extern APIENTRY void glutSolidTorus(GLdouble innerRadius, GLdouble outerRadius, GLint sides, GLint rings);
+extern APIENTRY void glutWireDodecahedron();
+extern APIENTRY void glutSolidDodecahedron();
+extern APIENTRY void glutWireTeapot(GLdouble size);
+extern APIENTRY void glutSolidTeapot(GLdouble size);
+extern APIENTRY void glutWireOctahedron();
+extern APIENTRY void glutSolidOctahedron();
+extern APIENTRY void glutWireTetrahedron();
+extern APIENTRY void glutSolidTetrahedron();
+extern APIENTRY void glutWireIcosahedron();
+extern APIENTRY void glutSolidIcosahedron();
 
 }
 
 #endif                  /* __glut_h__ */
 
 //
-// End of "$Id: glut.H,v 1.16 2000/08/20 04:31:36 spitzak Exp $".
+// End of "$Id: glut.H,v 1.17 2000/10/17 07:50:07 spitzak Exp $".
 //

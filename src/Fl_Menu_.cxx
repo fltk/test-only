@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.31 2000/09/27 16:25:51 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.32 2000/10/17 07:50:08 spitzak Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -64,9 +64,15 @@ Fl_Widget* Fl_List::child(const Fl_Menu_* menu, const int* indexes,int level) {
   }
 }
 
-void Fl_List::flags_changed(const Fl_Menu_*, Fl_Widget*) {}
+void Fl_List::flags_changed(const Fl_Menu_*, Fl_Widget* w) {}
 
-Fl_List default_list; // this should be local!
+static Fl_List default_list; // this should be local!
+
+Fl_Menu_::Fl_Menu_(int x,int y,int w, int h,const char* l)
+  : Fl_Group(x,y,w,h,l), list_(&default_list) {
+  item_ = 0;
+  end();
+}
 
 int Fl_Menu_::children(const int* indexes, int level) const {
   return list_->children(this, indexes, level);
@@ -102,13 +108,13 @@ void Fl_Menu_::execute() {
     int j;
     for (j = i-1; j >= 0; j--) {
       Fl_Widget* o = g->child(j);
-      if (o->type() == FL_RADIO_ITEM) o->clear_value();
-      else break;
+      if (o->type() != FL_RADIO_ITEM) break;
+      o->clear_value();
     }
     for (j = i+1; j < g->children(); j++) {
       Fl_Widget* o = g->child(j);
-      if (o->type() == FL_RADIO_ITEM) o->clear_value();
-      else break;
+      if (o->type() != FL_RADIO_ITEM) break;
+      o->clear_value();
     }
   }
   // If the item's data is zero, use the menus data:
@@ -164,5 +170,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.31 2000/09/27 16:25:51 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.32 2000/10/17 07:50:08 spitzak Exp $"
 //
