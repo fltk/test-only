@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.11 1999/03/15 18:19:09 carl Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.12 1999/04/18 16:25:03 carl Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -68,12 +68,9 @@ static Fl_Menu_Item* insert(
   memmove(array+n+1, array+n, sizeof(Fl_Menu_Item)*(size-n+1));
   // create the new item:
   Fl_Menu_Item* m = array+n;
+  memset(m, 0, sizeof(Fl_Menu_Item));
   m->text = text ? strdup(text) : 0;
-  m->shortcut_ = 0;
-  m->callback_ = 0;
-  m->user_data_ = 0;
   m->flags = flags;
-  m->_style = 0;
   return array;
 }
 
@@ -139,6 +136,8 @@ int Fl_Menu_Item::add(
     m = array+n;
   }
 
+  memset(m, 0, sizeof(Fl_Menu_Item));
+
   /* fill it in */
   m->shortcut_ = shortcut;
   m->callback_ = cb;
@@ -153,7 +152,7 @@ int Fl_Menu_::add(const char *t, int s, Fl_Callback *c,void *v,int f) {
   if (!menu_) {
     alloc = 2; // indicates that the strings can be freed
     menu_ = new Fl_Menu_Item[INITIAL_MENU_SIZE+1];
-    menu_[0].text = 0;
+    memset(menu_, 0, sizeof(Fl_Menu_Item)*(INITIAL_MENU_SIZE+1));
   }
   if (alloc) ::alloc = &menu_;
   int r = menu_->add(t,s,c,v,f);
@@ -198,5 +197,5 @@ void Fl_Menu_::remove(int i) {
 }
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.11 1999/03/15 18:19:09 carl Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.12 1999/04/18 16:25:03 carl Exp $".
 //
