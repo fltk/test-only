@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_Util.cxx,v 1.6 1999/10/12 03:01:53 vincent Exp $"
+// "$Id: Fl_Style_Util.cxx,v 1.7 1999/10/22 03:11:21 vincent Exp $"
 //
 // Style definition and plugin support
 //
@@ -29,8 +29,6 @@
 #include <string.h>
 
 #include <FL/Fl_Widget.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Output.H>
 #include <FL/Fl_Window.H>
 
 static Fl_Style_D default_styles[] = {
@@ -140,5 +138,5 @@ bool fl_parse_style_entry(char* name, Fl_Style& style, char* s)
 }
 
 //
-// End of "$Id: Fl_Style_Util.cxx,v 1.6 1999/10/12 03:01:53 vincent Exp $".
+// End of "$Id: Fl_Style_Util.cxx,v 1.7 1999/10/22 03:11:21 vincent Exp $".
 //

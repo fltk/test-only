@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.23 1999/10/16 22:54:37 vincent Exp $"
+// "$Id: Fl_Widget.cxx,v 1.24 1999/10/22 03:11:21 vincent Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -410,8 +410,8 @@ void Fl_Widget::draw_n_clip()
 // this by declaring their styles here, already set up as though the
 // inheritance tree was built:
 
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Output.H>
+/*#include <FL/Fl_Input.H>
+#include <FL/Fl_Output.H>*/
 
 Fl_Style Fl_Widget::default_style = {
   FL_NORMAL_BOX,// box
@@ -432,5 +432,5 @@ Fl_Style Fl_Widget::default_style = {
 };
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.23 1999/10/16 22:54:37 vincent Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.24 1999/10/22 03:11:21 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.9 1999/10/09 15:32:16 vincent Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.10 1999/10/22 03:11:21 vincent Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -37,15 +37,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-
-// Bitmap used when we couldn't guess the filetype
-#define nosuch_width 16
-#define nosuch_height 16
-static unsigned char nosuch_bits[] = {
-   0xff, 0xf0, 0x81, 0x88, 0xd5, 0x90, 0x69, 0xa8, 0x55, 0x94, 0x69, 0xaa,
-   0x55, 0x94, 0x69, 0xaa, 0xd5, 0x94, 0xa9, 0xa8, 0x55, 0x95, 0xa9, 0xa9,
-   0x55, 0x95, 0xa9, 0xab, 0x01, 0x81, 0xff, 0xff};
-Fl_Bitmap nosuch_bitmap(nosuch_bits, nosuch_width, nosuch_height);
 
 char *fl_shared_image_root=0;
 
@@ -242,5 +233,5 @@ void Fl_Shared_Image::draw(int X, int Y, int W, int H,
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.9 1999/10/09 15:32:16 vincent Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.10 1999/10/22 03:11:21 vincent Exp $"
 //

@@ -16,9 +16,9 @@ void* prime_func(void* p)
     int p;
     for (p=2; p<n; p++) if ( n%p == 0 ) break;
     if (p == n) {
-      Fl::lock();
       char s[128];
       sprintf(s, "%d", n);
+      Fl::lock();
       browser->add(s);
       Fl::unlock();
       Fl::awake();	// Cause the browser to redraw ...
@@ -52,10 +52,7 @@ int main()
   Fl::create_thread(prime_thread, prime_func, browser2);
   Fl::create_thread(prime_thread, prime_func, browser2);
 
-  while(Fl::wait()) {
-    if (Fl::thread_message)
-      browser1->add("youpie !!");
-  }
+  Fl::run();
 
   return 0;
 }

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Guess_Image.cxx,v 1.1 1999/09/19 04:42:20 vincent Exp $"
+// "$Id: Fl_Guess_Image.cxx,v 1.2 1999/10/22 03:11:20 vincent Exp $"
 //
 // Guessing image type code for the Fast Light Tool Kit (FLTK).
 //
@@ -35,6 +35,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+// Bitmap used when we couldn't guess the filetype
+#define nosuch_width 16
+#define nosuch_height 16
+static unsigned char nosuch_bits[] = {
+   0xff, 0xf0, 0x81, 0x88, 0xd5, 0x90, 0x69, 0xa8, 0x55, 0x94, 0x69, 0xaa,
+   0x55, 0x94, 0x69, 0xaa, 0xd5, 0x94, 0xa9, 0xa8, 0x55, 0x95, 0xa9, 0xa9,
+   0x55, 0x95, 0xa9, 0xab, 0x01, 0x81, 0xff, 0xff};
+Fl_Bitmap nosuch_bitmap(nosuch_bits, nosuch_width, nosuch_height);
 
 extern char *fl_shared_image_root;
 
@@ -77,5 +86,5 @@ Fl_Image_Type* Fl_Shared_Image::guess(char* name, unsigned char *datas)
 }
 
 //
-// End of "$Id: Fl_Guess_Image.cxx,v 1.1 1999/09/19 04:42:20 vincent Exp $"
+// End of "$Id: Fl_Guess_Image.cxx,v 1.2 1999/10/22 03:11:20 vincent Exp $"
 //
