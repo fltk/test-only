@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.29 1999/05/05 20:48:35 carl Exp $"
+// "$Id: Fl_Menu.cxx,v 1.30 1999/05/05 20:50:16 carl Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -389,8 +389,6 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int erase) {
 
   // the shortcuts and arrows assumme fl_color() was left set by draw():
   if (m->submenu()) {
-    int y1 = y+(h-14)/2;
-//    fl_polygon(x+w-13, y1+2, x+w-13, y1+2+10, x+w-3, y1+2+5);
     fl_draw_symbol("@>", x+w-h+6, y+3, h-6, h-6, FL_BLACK);
   } else if (m->shortcut_) {
     Fl_Font font = button ? button->textfont() : (Fl_Font)popup_style.textfont;
@@ -873,5 +871,5 @@ Fl_Color Fl_Menu_Item::down_labelcolor() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.29 1999/05/05 20:48:35 carl Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.30 1999/05/05 20:50:16 carl Exp $".
 //
