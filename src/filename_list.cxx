@@ -1,5 +1,5 @@
 //
-// "$Id: filename_list.cxx,v 1.14 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: filename_list.cxx,v 1.15 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Filename list routines for the Fast Light Tool Kit (FLTK).
 //
@@ -51,12 +51,12 @@ int filename_list(const char *d, dirent ***list) {
   // changes:
   return scandir(d, list, 0, (int(*)(const void*,const void*))numericsort);
 #else
-  // This version is when we define our own scandir (WIN32 and perhaps
+  // This version is when we define our own scandir (_WIN32 and perhaps
   // some Unix systems) and apparently on Irix:
   return scandir(d, list, 0, numericsort);
 #endif
 }
 
 //
-// End of "$Id: filename_list.cxx,v 1.14 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: filename_list.cxx,v 1.15 2001/07/29 22:04:43 spitzak Exp $".
 //

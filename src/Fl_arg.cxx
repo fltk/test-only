@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.34 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_arg.cxx,v 1.35 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@
 #include <stdio.h>
 #include <limits.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 int XParseGeometry(const char*, int*, int*, unsigned int*, unsigned int*);
 #define NoValue		0x0000
 #define XValue  	0x0001
@@ -97,7 +97,7 @@ int Fl::arg(int argc, char **argv, int &i) {
     if (!flags) return 0;
     geometry = v;
 
-#ifndef WIN32
+#ifndef _WIN32
   } else if (match(s, "display")) {
     Fl::display(v);
 #endif
@@ -153,7 +153,7 @@ void Fl_Window::show(int argc, char **argv) {
     //  if (mh > gh) gh = mh;
     Fl_Widget *r = resizable();
     if (!r) resizable(this);
-    // for WIN32 we assume window is not mapped yet:
+    // for _WIN32 we assume window is not mapped yet:
     if (flags & (XValue | YValue))
       x(-1), resize(gx,gy,gw,gh);
     else
@@ -169,7 +169,7 @@ void Fl_Window::show(int argc, char **argv) {
 
   show();
 
-#ifndef WIN32
+#ifndef _WIN32
   // set the command string, used by state-saving window managers:
   int i;
   int n=0; for (i=0; i<argc; i++) n += strlen(argv[i])+1;
@@ -186,7 +186,7 @@ void Fl_Window::show(int argc, char **argv) {
 
 static const char * const helpmsg =
 "options are:\n"
-#ifndef WIN32
+#ifndef _WIN32
 " -d[isplay] host:n.n\n"
 #endif
 " -g[eometry] WxH+X+Y\n"
@@ -202,7 +202,7 @@ void Fl::args(int argc, char **argv) {
   int i; if (Fl::args(argc,argv,i) < argc) Fl::error(helpmsg);
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 
 /* the following function was stolen from the X sources as indicated. */
 
@@ -338,8 +338,8 @@ int XParseGeometry(const char* string, int* x, int* y,
   return (mask);
 }
 
-#endif // ifdef WIN32
+#endif // ifdef _WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.34 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.35 2001/07/29 22:04:43 spitzak Exp $".
 //

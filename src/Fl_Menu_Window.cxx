@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Window.cxx,v 1.11 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Menu_Window.cxx,v 1.12 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Menu window code for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@
 #include <fltk/fl_draw.h>
 #include <config.h>
 
-// WIN32 note: HAVE_OVERLAY is false
+// _WIN32 note: HAVE_OVERLAY is false
 #if HAVE_OVERLAY
 extern XVisualInfo *fl_find_overlay_visual();
 extern XVisualInfo *fl_overlay_visual;
@@ -93,5 +93,5 @@ Fl_Menu_Window::~Fl_Menu_Window() {
 }
 
 //
-// End of "$Id: Fl_Menu_Window.cxx,v 1.11 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_Menu_Window.cxx,v 1.12 2001/07/29 22:04:43 spitzak Exp $".
 //

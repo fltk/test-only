@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_visual.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_visual.cxx,v 1.13 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Visual support for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 #include <fltk/Fl.h>
 #include <fltk/x.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 int Fl::visual(int flags) {
   if (flags & FL_DOUBLE) return 0;
   int ret = 1;
@@ -108,5 +108,5 @@ int Fl::visual(int flags) {
 #endif
 
 //
-// End of "$Id: Fl_visual.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_visual.cxx,v 1.13 2001/07/29 22:04:43 spitzak Exp $".
 //

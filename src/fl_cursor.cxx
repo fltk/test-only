@@ -1,5 +1,5 @@
 //
-// "$Id: fl_cursor.cxx,v 1.11 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_cursor.cxx,v 1.12 2001/07/29 22:04:44 spitzak Exp $"
 //
 // Mouse cursor support for the Fast Light Tool Kit (FLTK).
 //
@@ -38,7 +38,7 @@ void fl_cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
   if (Fl::first_window()) Fl::first_window()->cursor(c,fg,bg);
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 
 void Fl_Window::cursor(Fl_Cursor c, Fl_Color, Fl_Color) {
   if (!i) return;
@@ -173,5 +173,5 @@ void Fl_Window::cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
 #endif
 
 //
-// End of "$Id: fl_cursor.cxx,v 1.11 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_cursor.cxx,v 1.12 2001/07/29 22:04:44 spitzak Exp $".
 //

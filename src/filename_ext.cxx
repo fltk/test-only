@@ -1,5 +1,5 @@
 //
-// "$Id: filename_ext.cxx,v 1.5 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: filename_ext.cxx,v 1.6 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Filename extension routines for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,7 @@ const char *filename_ext(const char *buf) {
   const char *p = buf;
   for (p=buf; *p; p++) {
     if (*p == '/') q = 0;
-#if defined(WIN32) || defined(__EMX__)
+#if defined(_WIN32) || defined(__EMX__)
     else if (*p == '\\') q = 0;
 #endif
     else if (*p == '.') q = p;
@@ -41,5 +41,5 @@ const char *filename_ext(const char *buf) {
 }
 
 //
-// End of "$Id: filename_ext.cxx,v 1.5 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: filename_ext.cxx,v 1.6 2001/07/29 22:04:43 spitzak Exp $".
 //

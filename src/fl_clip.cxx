@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_clip.cxx,v 1.7 2001/07/29 22:04:43 spitzak Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -32,7 +32,7 @@
 static Region rstack[STACK_SIZE];
 static int rstackptr=0;
 
-#ifndef WIN32
+#ifndef _WIN32
 // Missing X call: (is this the fastest way to init a 1-rectangle region?)
 // MSWindows equivalent exists, implemented inline in win32.h
 Region XRectangleRegion(int x, int y, int w, int h) {
@@ -49,7 +49,7 @@ Region XRectangleRegion(int x, int y, int w, int h) {
 // done by your program:
 void fl_restore_clip() {
   Region r = rstack[rstackptr];
-#ifdef WIN32
+#ifdef _WIN32
   SelectClipRgn(fl_gc, r); //if r is NULL, clip is automatically cleared
 #else
   if (r) XSetRegion(fl_display, fl_gc, r);
@@ -73,7 +73,7 @@ void fl_push_clip(int x, int y, int w, int h) {
     r = XRectangleRegion(x+fl_x_, y+fl_y_, w, h);
     Region current = rstack[rstackptr];
     if (current) {
-#ifndef WIN32
+#ifndef _WIN32
       Region temp = XCreateRegion();
       XIntersectRegion(current, r, temp);
       XDestroyRegion(r);
@@ -83,7 +83,7 @@ void fl_push_clip(int x, int y, int w, int h) {
 #endif
     }
   } else { // make empty clip region:
-#ifndef WIN32
+#ifndef _WIN32
     r = XCreateRegion();
 #else
     r = CreateRectRgn(0,0,0,0);
@@ -101,7 +101,7 @@ void fl_clip_out(int x, int y, int w, int h) {
   // return without doing anything because that makes some old fltk code work:
   if (!current) return;
   Region r = XRectangleRegion(x+fl_x_, y+fl_y_, w, h);
-#ifndef WIN32
+#ifndef _WIN32
   Region temp = XCreateRegion();
   XSubtractRegion(current, r, temp);
   XDestroyRegion(r);
@@ -146,7 +146,7 @@ int fl_not_clipped(int x, int y, int w, int h) {
       || y >= Fl_Window::current()->h()) return 0;
   Region r = rstack[rstackptr];
   if (!r) return 1;
-#ifndef WIN32
+#ifndef _WIN32
   return XRectInRegion(r, x, y, w, h);
 #else
   //RECT rect;
@@ -185,7 +185,7 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H) {
   t = Fl_Window::current()->h(); if (y+h > t) {h = t-y; ret = 2;}
   // check for total clip (or for empty rectangle):
   if (w <= 0 || h <= 0) {W = H = 0; return 0;}
-#ifndef WIN32
+#ifndef _WIN32
   switch (XRectInRegion(r, x, y, w, h)) {
   case 0: // completely outside
     W = H = 0;
@@ -235,5 +235,5 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $"
+// End of "$Id: fl_clip.cxx,v 1.7 2001/07/29 22:04:43 spitzak Exp $"
 //

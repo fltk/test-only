@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_x.cxx,v 1.4 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_color_x.cxx,v 1.5 2001/07/29 22:04:44 spitzak Exp $"
 //
 // X color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -267,7 +267,7 @@ void fl_free_color(Fl_Color i) {
 void fl_line_style(int style, int width, char* dashes) {
   char buf[7];
   int ndashes = dashes ? strlen(dashes) : 0;
-  // emulate the WIN32 dash patterns on X
+  // emulate the _WIN32 dash patterns on X
   if (!ndashes && style&0xff) {
     int w = width ? width : 1;
     char dash, dot, gap;
@@ -312,5 +312,5 @@ void fl_line_style(int style, int width, char* dashes) {
 }
 
 //
-// End of "$Id: fl_color_x.cxx,v 1.4 2001/07/23 09:50:05 spitzak Exp $"
+// End of "$Id: fl_color_x.cxx,v 1.5 2001/07/29 22:04:44 spitzak Exp $"
 //

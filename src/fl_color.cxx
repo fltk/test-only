@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.26 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_color.cxx,v 1.27 2001/07/29 22:04:44 spitzak Exp $"
 //
 // Color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -100,12 +100,12 @@ Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg) {
 // Include the code for setting colors on the system and for managing
 // system colormaps:
 
-#ifdef WIN32
+#ifdef _WIN32
 #include "fl_color_win32.cxx"
 #else
 #include "fl_color_x.cxx"
 #endif
 
 //
-// End of "$Id: fl_color.cxx,v 1.26 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_color.cxx,v 1.27 2001/07/29 22:04:44 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_conf.cxx,v 1.3 2001/07/24 16:25:08 clip Exp $"
+// "$Id: fl_conf.cxx,v 1.4 2001/07/29 22:04:44 spitzak Exp $"
 //
 // Config file reading routines for the Fast Light Tool Kit (FLTK).
 //
@@ -31,16 +31,18 @@
 #include <fltk/conf.h>
 #include <config.h>
 
-#if defined(WIN32)
-#  include <io.h>
-#  define access(a,b) _access(a,b)
-#  define R_OK 4
+#if USE_CONF || USE_PLUGINS
+
+#if defined(_WIN32)
+# include <io.h>
+# define access(a,b) _access(a,b)
+# define R_OK 4
 #else
-#  include <unistd.h>
-#endif /* WIN32 */
+# include <unistd.h>
+#endif /* _WIN32 */
 
 #ifndef PATH_MAX
-#define PATH_MAX 128
+# define PATH_MAX 128
 #endif
 
 // This should stay public so that programs can locate their config files
@@ -57,7 +59,7 @@ const char* fl_find_config_file(const char* fn, bool cflag) {
     snprintf(path, sizeof(path), "%s%s%s", cptr, "/.fltk/", fn);
     if (cflag || !access(path, R_OK)) return path;
   }
-#ifdef WIN32
+#ifdef _WIN32
   cptr = getenv("HOMEPATH");
   if (cptr) {
     snprintf(path, sizeof(path), "%s%s%s", cptr, "/fltk/", fn);
@@ -74,6 +76,10 @@ const char* fl_find_config_file(const char* fn, bool cflag) {
   return (cflag || !access(path, R_OK)) ? path : 0;
 }
 
+#endif
+
+#if USE_CONF
+
 // flconfig_section is always "default".
 // For now... - CET
 
@@ -86,6 +92,8 @@ int fl_getconf(const char *key, char *value, int value_length) {
   return ::getconf(fl_config, temp, value, value_length);
 }
 
+#endif
+
 //
-// End of "$Id: fl_conf.cxx,v 1.3 2001/07/24 16:25:08 clip Exp $".
+// End of "$Id: fl_conf.cxx,v 1.4 2001/07/29 22:04:44 spitzak Exp $".
 //

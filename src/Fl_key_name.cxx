@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_key_name.cxx,v 1.2 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_key_name.cxx,v 1.3 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Turn a fltk (X) keysym + fltk shift flags into a human-readable string.
 //
@@ -28,11 +28,11 @@
 #include <fltk/fl_draw.h>
 #include <ctype.h>
 #include <string.h>
-#ifndef WIN32
+#ifndef _WIN32
 #include <fltk/x.h>
 #endif
 
-#ifdef WIN32 // if not X
+#ifdef _WIN32 // if not X
 // This table must be in numeric order by fltk (X) keysym number:
 struct Keyname {int key; const char* name;};
 static Keyname table[] = {
@@ -78,7 +78,7 @@ const char* Fl::key_name(int shortcut) {
   if (shortcut & FL_SHIFT) {strcpy(p,"Shift+"); p += 6;}
   if (shortcut & FL_CTRL) {strcpy(p,"Ctrl+"); p += 5;}
   int key = shortcut & 0xFFFF;
-#ifdef WIN32 // if not X
+#ifdef _WIN32 // if not X
   if (key >= FL_F && key <= FL_F_Last) {
     *p++ = 'F';
     if (key > FL_F+9) *p++ = (key-FL_F)/10+'0';
@@ -118,5 +118,5 @@ const char* Fl::key_name(int shortcut) {
 }
 
 //
-// End of "$Id: Fl_key_name.cxx,v 1.2 2001/07/23 09:50:05 spitzak Exp $"
+// End of "$Id: Fl_key_name.cxx,v 1.3 2001/07/29 22:04:43 spitzak Exp $"
 //

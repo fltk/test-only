@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.26 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Clock.cxx,v 1.27 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,9 +28,9 @@
 #include <fltk/fl_draw.h>
 #include <math.h>
 #include <time.h>
-#ifndef WIN32
+#ifndef _WIN32
 #  include <sys/time.h>
-#endif /* !WIN32 */
+#endif /* !_WIN32 */
 
 // Original clock display written by Paul Haeberli at SGI.
 // Modifications by Mark Overmars for Forms
@@ -123,7 +123,7 @@ Fl_Clock::Fl_Clock(uchar t, int x, int y, int w, int h, const char *l)
 }
 
 static void tick(void *v) {
-#ifdef WIN32
+#ifdef _WIN32
   ((Fl_Clock*)v)->value(time(0));
   Fl::add_timeout(1.0, (Fl_Timeout_Handler)tick, v);
 #else
@@ -172,5 +172,5 @@ Fl_Clock_Output::Fl_Clock_Output(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Clock.cxx,v 1.26 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.27 2001/07/29 22:04:43 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.111 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.112 2001/07/29 22:04:43 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -899,6 +899,7 @@ void Fl_Window::layout() {
       x += p->x(); y += p->y();
     }
     if (ow() == w() && oh() == h()) {
+      if (parent() || x != ox() || y != oy())
       XMoveWindow(fl_display, i->xid, x, y);
     } else {
       //if (!resizable()) size_range(w(), h(), w(), h());
@@ -1335,5 +1336,5 @@ FL_API void fl_bounce_button_press() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.111 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.112 2001/07/29 22:04:43 spitzak Exp $".
 //

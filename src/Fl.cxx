@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.127 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.128 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -70,7 +70,7 @@ FL_API void (*Fl_Tooltip::enter)(Fl_Widget *) = nothing;
 FL_API void (*Fl_Tooltip::enter_area)(Fl_Widget *, int, int, int, int, const char *) = nothing2;
 FL_API void (*Fl_Tooltip::exit)(Fl_Widget *) = nothing;
 
-#ifdef WIN32
+#ifdef _WIN32
 #include "Fl_win32.cxx"
 #else
 #include "Fl_x.cxx"
@@ -88,7 +88,7 @@ struct Timeout {
 };
 static Timeout* first_timeout, *free_timeout;
 
-#ifndef WIN32
+#ifndef _WIN32
 #include <sys/time.h>
 #endif
 
@@ -99,7 +99,7 @@ static Timeout* first_timeout, *free_timeout;
 static char reset_clock = 1;
 
 static void elapse_timeouts() {
-#ifdef WIN32
+#ifdef _WIN32
   unsigned long newclock = GetTickCount();
   static unsigned long prevclock;
   double elapsed = (newclock-prevclock)/1000.0;
@@ -354,7 +354,7 @@ void Fl::flush() {
       if (x->region) {XDestroyRegion(x->region); x->region = 0;}
     }
   }
-#ifdef WIN32
+#ifdef _WIN32
   GdiFlush();
 #else
   if (fl_display) XFlush(fl_display);
@@ -432,7 +432,7 @@ void fl_fix_focus() {
 
 void Fl_Widget::throw_focus() {
   if (contains(Fl::pushed())) Fl::pushed_ = 0;
-#ifndef WIN32
+#ifndef _WIN32
   if (contains(fl_selection_requestor)) fl_selection_requestor = 0;
 #endif
   if (contains(Fl::belowmouse())) Fl::belowmouse_ = 0;
@@ -466,7 +466,7 @@ void Fl_Widget::throw_focus() {
 
 void Fl::grab(Fl_Widget* widget) {
   grab_ = widget;
-#ifdef WIN32
+#ifdef _WIN32
   HWND w = fl_xid(first_window());
   SetActiveWindow(w); // is this necessary?
   SetCapture(w);
@@ -493,7 +493,7 @@ void Fl::grab(Fl_Widget* widget) {
 
 void Fl::release() {
   grab_ = 0;
-#ifdef WIN32
+#ifdef _WIN32
   ReleaseCapture();
 #else
   XUngrabKeyboard(fl_display, fl_event_time);
@@ -667,5 +667,5 @@ bool Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.127 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.128 2001/07/29 22:04:43 spitzak Exp $".
 //

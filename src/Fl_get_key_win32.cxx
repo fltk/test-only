@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_get_key_win32.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_get_key_win32.cxx,v 1.10 2001/07/29 22:04:43 spitzak Exp $"
 //
-// WIN32 keyboard state routines for the Fast Light Tool Kit (FLTK).
+// _WIN32 keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -133,5 +133,5 @@ bool Fl::get_key(int k) {
 }
 
 //
-// End of "$Id: Fl_get_key_win32.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_get_key_win32.cxx,v 1.10 2001/07/29 22:04:43 spitzak Exp $".
 //

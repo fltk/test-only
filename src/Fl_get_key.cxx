@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_get_key.cxx,v 1.7 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
@@ -23,7 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#ifdef WIN32
+#ifdef _WIN32
 #include "Fl_get_key_win32.cxx"
 #else
 
@@ -60,5 +60,5 @@ bool Fl::get_key(int k) {
 #endif
 
 //
-// End of "$Id: Fl_get_key.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_get_key.cxx,v 1.7 2001/07/29 22:04:43 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileBrowser.cxx,v 1.12 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_FileBrowser.cxx,v 1.13 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Fl_FileBrowser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -43,10 +43,10 @@
 #include <config.h>
 #include <string.h>
 
-#if defined(WIN32)
+#if defined(_WIN32)
 #  include <windows.h>
 #  include <direct.h>
-#endif /* WIN32 */
+#endif /* _WIN32 */
 
 #if defined(__EMX__)
 #define  INCL_DOS
@@ -299,7 +299,7 @@ Fl_FileBrowser::load(const char *directory)// I - Directory to load
     if (icon == (Fl_FileIcon *)0)
       icon = Fl_FileIcon::find("any", Fl_FileIcon::DIR);
 
-#if defined(WIN32)
+#if defined(_WIN32)
     DWORD	drives;		// Drive available bits
 
     drives = GetLogicalDrives();
@@ -359,7 +359,7 @@ Fl_FileBrowser::load(const char *directory)// I - Directory to load
 
       fclose(mtab);
     }
-#endif // WIN32
+#endif // _WIN32
   }
   else
   {
@@ -370,7 +370,7 @@ Fl_FileBrowser::load(const char *directory)// I - Directory to load
     // Build the file list...
     //
 
-#if defined(WIN32) || defined(__EMX__)
+#if defined(_WIN32) || defined(__EMX__)
     strncpy(filename, directory_, sizeof(filename) - 1);
     filename[sizeof(filename) - 1] = '\0';
 
@@ -385,7 +385,7 @@ Fl_FileBrowser::load(const char *directory)// I - Directory to load
     num_files = filename_list(filename, &files);
 #else
     num_files = filename_list(directory_, &files);
-#endif /* WIN32 || __EMX__ */
+#endif /* _WIN32 || __EMX__ */
 
     if (num_files <= 0)
       return (0);
@@ -442,5 +442,5 @@ Fl_FileBrowser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_FileBrowser.cxx,v 1.12 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_FileBrowser.cxx,v 1.13 2001/07/29 22:04:43 spitzak Exp $".
 //

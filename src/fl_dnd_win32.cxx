@@ -1,5 +1,5 @@
 //
-// "$Id: fl_dnd_win32.cxx,v 1.3 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_dnd_win32.cxx,v 1.4 2001/07/29 22:04:44 spitzak Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 // in selection_buffer (length = selection_length) and drop it on the
 // target. It should either not return until the mouse is released
 // or it should cause the DRAG+RELEASE events to not be passed to the
-// program somehow. I'm pretty sure this is a simple call in WIN32:
+// program somehow. I'm pretty sure this is a simple call in _WIN32:
 
 #include <fltk/Fl.h>
 #include <fltk/Fl_Window.h>
@@ -54,5 +54,5 @@ bool Fl::dnd() {
 
 
 //
-// End of "$Id: fl_dnd_win32.cxx,v 1.3 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_dnd_win32.cxx,v 1.4 2001/07/29 22:04:44 spitzak Exp $".
 //

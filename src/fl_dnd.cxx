@@ -1,5 +1,5 @@
 //
-// "$Id: fl_dnd.cxx,v 1.2 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_dnd.cxx,v 1.3 2001/07/29 22:04:44 spitzak Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,12 +23,12 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#ifdef WIN32
+#ifdef _WIN32
 #include "fl_dnd_win32.cxx"
 #else
 #include "fl_dnd_x.cxx"
 #endif
 
 //
-// End of "$Id: fl_dnd.cxx,v 1.2 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_dnd.cxx,v 1.3 2001/07/29 22:04:44 spitzak Exp $".
 //

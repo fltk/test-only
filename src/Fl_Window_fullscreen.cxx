@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_fullscreen.cxx,v 1.11 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Window_fullscreen.cxx,v 1.12 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Fullscreen window support for the Fast Light Tool Kit (FLTK).
 //
@@ -26,13 +26,13 @@
 #include <fltk/Fl.h>
 #include <fltk/Fl_Window.h>
 
-#ifndef WIN32
+#ifndef _WIN32
 #include <fltk/x.h>
 extern Atom fl_MOTIF_WM_HINTS; // in Fl_x.cxx
 #endif
 
 void Fl_Window::fullscreen() {
-#ifdef WIN32
+#ifdef _WIN32
   // something must be done so that the taskbar is hidden...
 #else
   // Irix 4DWM will work if we use the MOTIF_WM_HINTS property to turn
@@ -54,11 +54,11 @@ void Fl_Window::fullscreen() {
 
 void Fl_Window::fullscreen_off(int X,int Y,int W,int H) {
   resize(X,Y,W,H);
-#ifndef WIN32
+#ifndef _WIN32
   if (i) i->sendxjunk(); // makes the border turn back on
 #endif
 }
 
 //
-// End of "$Id: Fl_Window_fullscreen.cxx,v 1.11 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_Window_fullscreen.cxx,v 1.12 2001/07/29 22:04:43 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_file_chooser.cxx,v 1.26 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_file_chooser.cxx,v 1.27 2001/07/29 22:04:44 spitzak Exp $"
 //
 // File chooser widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,7 +27,7 @@
 #include <fltk/fl_file_chooser.h>
 #include <fltk/Fl_FileChooser.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <windows.h>
 #include <commdlg.h>
 #include <direct.h>
@@ -74,7 +74,7 @@ void fl_file_chooser_callback(void (*cb)(const char*)) {
 
 char* fl_file_chooser(const char* message, const char* pat, const char* fname)
 {
-#ifdef WIN32
+#ifdef _WIN32
   if(guse_windows_filereq) {
     init_wreq_struct(message, pat, fname);
 	if(GetSaveFileName(&wreq))
@@ -94,5 +94,5 @@ char* fl_file_chooser(const char* message, const char* pat, const char* fname)
 }
 
 //
-// End of "$Id: fl_file_chooser.cxx,v 1.26 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_file_chooser.cxx,v 1.27 2001/07/29 22:04:44 spitzak Exp $".
 //

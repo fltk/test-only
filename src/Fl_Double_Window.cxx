@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.cxx,v 1.20 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Double_Window.cxx,v 1.21 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Double-buffered window code for the Fast Light Tool Kit (FLTK).
 //
@@ -59,7 +59,7 @@ static bool can_xdbe() {
 #endif
 
 void Fl_Double_Window::create() {
-#ifndef WIN32
+#ifndef _WIN32
   // don't set the background pixel
   Fl_X::create(this, fl_visual, fl_colormap, -1);
 #else
@@ -67,7 +67,7 @@ void Fl_Double_Window::create() {
 #endif
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 
 // Code used to switch output to an off-screen window.  See macros in
 // win32.h which save the old state in local variables.
@@ -140,7 +140,7 @@ void Fl_Double_Window::flush(int eraseoverlay) {
 #endif
   if (damage() & ~FL_DAMAGE_EXPOSE) {
     fl_clip_region(i->region); i->region = 0;
-#ifdef WIN32
+#ifdef _WIN32
     HDC _sgc = fl_gc;
     fl_gc = fl_makeDC(i->other_xid);
     fl_restore_clip(); // duplicate region into new gc
@@ -205,5 +205,5 @@ Fl_Double_Window::~Fl_Double_Window() {
 }
 
 //
-// End of "$Id: Fl_Double_Window.cxx,v 1.20 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Double_Window.cxx,v 1.21 2001/07/29 22:04:43 spitzak Exp $".
 //

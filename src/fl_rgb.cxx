@@ -33,7 +33,7 @@ Fl_Color fl_rgb(const char* name) {
   if (sscanf(name, "%d,%d,%d", &R,&G,&B) == 3) {
     c = fl_rgb(R,G,B);
   } else {
-#ifdef WIN32
+#ifdef _WIN32
     // simulation of XParseColor:
     if (*name == '#') name++;
     if (name[0]=='0' && name[1]=='x') name += 2;
@@ -66,5 +66,5 @@ Fl_Color fl_rgb(const char* name) {
 }
 
 //
-// End of "$Id: fl_rgb.cxx,v 1.3 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_rgb.cxx,v 1.4 2001/07/29 22:04:44 spitzak Exp $".
 //

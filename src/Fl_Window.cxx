@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.70 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.71 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -146,7 +146,7 @@ int Fl_Window::handle(int event) {
 
       Fl_Group::handle(event); // make the child windows map first
 
-#ifdef WIN32
+#ifdef _WIN32
       int showtype;
       if (parent())
         showtype = SW_RESTORE;
@@ -188,7 +188,7 @@ int Fl_Window::handle(int event) {
       //      } else {
       if (i) XUnmapWindow(fl_display, i->xid);
       //      }
-#ifdef WIN32
+#ifdef _WIN32
       // Try to stop the annoying "raise another program" behavior
       Fl_Window* w = (Fl_Window*) modal_for();
       if (w) w->show();
@@ -206,7 +206,7 @@ int Fl_Window::handle(int event) {
   // Raise windows that are clicked on, but don't raise when the
   // user hits buttons.  Unfortunately stupid ol' Win32 does this
   // all the time so there is not much I can do here...
-#ifndef WIN32
+#ifndef _WIN32
   if (event == FL_PUSH && !parent()) XMapRaised(fl_display, i->xid);
 #endif
   return 0;
@@ -234,7 +234,7 @@ void Fl_Window::show() {
     clear_visible();
   } else if (!parent()) {
     // raise/deiconize windows already-visible windows
-#ifdef WIN32
+#ifdef _WIN32
     if (IsIconic(i->xid)) OpenIcon(i->xid);
     if (!Fl::grab() && !override()) BringWindowToTop(i->xid);
 #else
@@ -266,7 +266,7 @@ int Fl_Window::exec(const Fl_Window* w) {
   return value();
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 extern const Fl_Window* fl_mdi_window;
 void Fl_Window::show_inside(const Fl_Window* w) {
   fl_mdi_window = w;
@@ -317,7 +317,7 @@ void Fl_Window::destroy() {
   throw_focus();
   clear_visible();
 
-#ifdef WIN32
+#ifdef _WIN32
   // we need to delete the pen and brush objects in the dc
   HDC dc = x->private_dc ? x->private_dc : GetDC(x->xid);
   COLORREF rgb = RGB(0, 0, 0);
@@ -348,5 +348,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.70 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.71 2001/07/29 22:04:43 spitzak Exp $".
 //

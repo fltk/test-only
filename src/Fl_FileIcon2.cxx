@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileIcon2.cxx,v 1.11 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_FileIcon2.cxx,v 1.12 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Fl_FileIcon loading routines for the Fast Light Tool Kit (FLTK).
 //
@@ -41,12 +41,12 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#if defined(WIN32)
+#if defined(_WIN32)
 #  include <io.h>
 #  define F_OK 04
 #else
 #  include <unistd.h>
-#endif /* WIN32 */
+#endif /* _WIN32 */
 
 #include <fltk/Fl_FileIcon.h>
 #include <fltk/filename.h>
@@ -807,5 +807,5 @@ get_kde_val(char       *str,
 
 
 //
-// End of "$Id: Fl_FileIcon2.cxx,v 1.11 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_FileIcon2.cxx,v 1.12 2001/07/29 22:04:43 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shaped_Window.cxx,v 1.4 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Shaped_Window.cxx,v 1.5 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 #include <fltk/Fl_Shaped_Window.h>
 #include <fltk/x.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include <malloc.h>
 static HRGN bitmap2region(Fl_Bitmap*);
 #else
@@ -41,7 +41,7 @@ void Fl_Shaped_Window::draw() {
   if ((lw != w() || lh != h() || changed) && shape_) { // size of window has change since last time
     lw = w(); lh = h();
     Fl_Bitmap* mask = resize_bitmap(shape_, w(), h());
-#ifndef WIN32
+#ifndef _WIN32
     Pixmap pmask = XCreateBitmapFromData(fl_display, fl_xid(this),
                   (const char*)mask->array, mask->w, mask->h);
     hide();
@@ -64,7 +64,7 @@ static Fl_Bitmap* resize_bitmap(Fl_Bitmap* bitmap, int /*W*/, int /*H*/) {
   return bitmap; // CET - FIXME - someday...
 }
 
-#ifdef WIN32
+#ifdef _WIN32
 static inline BYTE bit(int x) { return (BYTE)(1 << (x % 8)); }
 
 // Windows uses regions only to specify the clip mask of a window therefore
@@ -165,5 +165,5 @@ static HRGN bitmap2region(Fl_Bitmap* bitmap) {
 #endif
 
 //
-// End of "$Id: Fl_Shaped_Window.cxx,v 1.4 2001/07/23 09:50:05 spitzak Exp $"
+// End of "$Id: Fl_Shaped_Window.cxx,v 1.5 2001/07/29 22:04:43 spitzak Exp $"
 //

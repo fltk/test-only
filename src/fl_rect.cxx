@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.25 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_rect.cxx,v 1.26 2001/07/29 22:04:44 spitzak Exp $"
 //
 // Non-path routines from fl_draw.h that are used by the standard boxtypes
 // and thus are always linked into an fltk program.
@@ -29,7 +29,7 @@
 
 void fl_rect(int x, int y, int w, int h) {
   if (w<=0 || h<=0) return;
-#ifdef WIN32
+#ifdef _WIN32
   x += fl_x_; y += fl_y_;
   MoveToEx(fl_gc, x, y, 0L); 
   LineTo(fl_gc, x+w-1, y);
@@ -43,7 +43,7 @@ void fl_rect(int x, int y, int w, int h) {
 
 void fl_rectf(int x, int y, int w, int h) {
   if (w<=0 || h<=0) return;
-#ifdef WIN32
+#ifdef _WIN32
   RECT rect;
   x += fl_x_; y += fl_y_;
   rect.left = x; rect.top = y;  
@@ -55,7 +55,7 @@ void fl_rectf(int x, int y, int w, int h) {
 }
 
 void fl_line(int x, int y, int x1, int y1) {
-#ifdef WIN32
+#ifdef _WIN32
   MoveToEx(fl_gc, fl_x_+x, fl_y_+y, 0L); 
   LineTo(fl_gc, fl_x_+x1, fl_y_+y1);
   // Draw the last point *again* because the GDI line drawing
@@ -67,7 +67,7 @@ void fl_line(int x, int y, int x1, int y1) {
 }
 
 void fl_point(int x, int y) {
-#ifdef WIN32
+#ifdef _WIN32
   SetPixel(fl_gc, fl_x_+x, fl_y_+y, fl_colorref);
 #else
   XDrawPoint(fl_display, fl_window, fl_gc, fl_x_+x, fl_y_+y);
@@ -75,5 +75,5 @@ void fl_point(int x, int y) {
 }
 
 //
-// End of "$Id: fl_rect.cxx,v 1.25 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_rect.cxx,v 1.26 2001/07/29 22:04:44 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: filename_isdir.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: filename_isdir.cxx,v 1.7 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Directory detection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -33,19 +33,19 @@
 
 int filename_isdir(const char* n) {
   struct stat s;
-#if defined(WIN32) || defined(__EMX__)
-  // Append a slash to the pathname if we have L:, since WIN32 is horribly
+#if defined(_WIN32) || defined(__EMX__)
+  // Append a slash to the pathname if we have L:, since _WIN32 is horribly
   // stupid about that...
   char pathname[1024];
   if (strlen(n) == 2 && n[1] == ':') {
     snprintf(pathname, sizeof(pathname), "%s/", n);
     n = pathname;
   }
-#endif // WIN32 || __EMX__
+#endif // _WIN32 || __EMX__
 
   return !stat(n, &s) && (s.st_mode&0170000)==0040000;
 }
 
 //
-// End of "$Id: filename_isdir.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: filename_isdir.cxx,v 1.7 2001/07/29 22:04:43 spitzak Exp $".
 //

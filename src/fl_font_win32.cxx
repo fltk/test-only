@@ -1,7 +1,7 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.35 2001/07/24 07:48:23 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.36 2001/07/29 22:04:44 spitzak Exp $"
 //
-// WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
+// _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -198,5 +198,5 @@ win_renderer = {
 Fl_Font_Renderer *fl_font_renderer = &win_renderer;
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.35 2001/07/24 07:48:23 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.36 2001/07/29 22:04:44 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.cxx,v 1.12 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Bitmap.cxx,v 1.13 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 #include <fltk/fl_draw.h>
 #include <fltk/Fl_Bitmap.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 // replicate XCreateBitmapFromData:
 // Written by Matt
 // Updated by Mike to just make a simple 1-bit deep bitmap; I don't think it
@@ -68,5 +68,5 @@ void Fl_Bitmap::draw(int X, int Y, int W, int H, int cx, int cy)
 }
 
 //
-// End of "$Id: Fl_Bitmap.cxx,v 1.12 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Bitmap.cxx,v 1.13 2001/07/29 22:04:43 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.13 2001/07/29 22:04:44 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -99,7 +99,7 @@ double fl_transform_dy(double x, double y) {return x*m.b + y*m.d;}
 // Path construction:
 
 // typedef what the x,y fields in a point are:
-#ifdef WIN32
+#ifdef _WIN32
 typedef int COORD_T;
 #else
 typedef short COORD_T;
@@ -204,7 +204,7 @@ void fl_ellipse(double x, double y, double w, double h) {
 // Draw the path:
 
 void fl_points() {
-#ifdef WIN32
+#ifdef _WIN32
   for (int i=0; i<points; i++)
     SetPixel(fl_gc, point[i].x, point[i].y, fl_colorref);
 #else
@@ -214,7 +214,7 @@ void fl_points() {
 }
 
 void fl_stroke() {
-#ifdef WIN32
+#ifdef _WIN32
   if (circle_w > 0)
     Arc(fl_gc, circle_x, circle_y, circle_x+circle_w, circle_y+circle_h,
 	0,0, 0,0);
@@ -248,7 +248,7 @@ void fl_stroke() {
 // There may be a way to tell Win32 to do what X does, perhaps by making
 // the current pen invisible?
 void fl_fill() {
-#ifdef WIN32
+#ifdef _WIN32
   if (circle_w > 0)
     Chord(fl_gc, circle_x, circle_y, circle_x+circle_w, circle_y+circle_h,
 	  0,0, 0,0);
@@ -273,7 +273,7 @@ void fl_fill() {
 // should be faster than seperate fill & stroke on Win32 and on
 // PostScript/PDF style systems.
 void fl_fill_stroke(Fl_Color color) {
-#ifdef WIN32
+#ifdef _WIN32
   COLORREF saved = fl_colorref;
   fl_colorref = fl_wincolor(color);
   HPEN newpen = fl_create_pen();
@@ -305,5 +305,5 @@ void fl_fill_stroke(Fl_Color color) {
 }
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.13 2001/07/29 22:04:44 spitzak Exp $".
 //

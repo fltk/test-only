@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_list_fonts.cxx,v 1.13 2001/07/29 22:04:44 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -23,7 +23,7 @@
 
 #include <fltk/fl_draw.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 #include "fl_list_fonts_win32.cxx"
 #else
 #include "fl_list_fonts_x.cxx"
@@ -70,5 +70,5 @@ Fl_Font fl_find_font(const char* name, int attributes /* = 0 */) {
 }
 
 //
-// End of "$Id: fl_list_fonts.cxx,v 1.12 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_list_fonts.cxx,v 1.13 2001/07/29 22:04:44 spitzak Exp $".
 //

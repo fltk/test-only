@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.93 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.94 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -269,6 +269,13 @@ int Fl_Group::handle(int event) {
       if (mx >= 0 && mx < o.w() && my >= 0 && my < o.h())
 	if (send(event, *child(i))) return 1;
     }
+    if (tooltip() && (event==FL_ENTER || event==FL_MOVE)) {
+      Fl::belowmouse(this);
+      return 1;
+    }
+    return 0;
+
+  case FL_LEAVE:
     return 0;
   }
 
@@ -410,6 +417,7 @@ void Fl_Group::layout() {
     int* p = sizes();
     int dw = w()-p[1];
     int dh = h()-p[3];
+
     p+=4;
 
     // Calculate a new size & position for every child widget:
@@ -603,5 +611,5 @@ void Fl_Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.93 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.94 2001/07/29 22:04:43 spitzak Exp $".
 //

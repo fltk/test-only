@@ -1,5 +1,5 @@
 //
-// "$Id: fl_scroll_area.cxx,v 1.7 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_scroll_area.cxx,v 1.8 2001/07/29 22:04:44 spitzak Exp $"
 //
 // Scrolling routines for the Fast Light Tool Kit (FLTK).
 //
@@ -70,7 +70,7 @@ void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
     clip_y = Y+src_h;
     clip_h = H-src_h;
   }
-#ifdef WIN32
+#ifdef _WIN32
   BitBlt(fl_gc, dest_x+fl_x_, dest_y+fl_y_, src_w, src_h,
 	 fl_gc, src_x+fl_x_, src_y+fl_y_, SRCCOPY);
   // NYI: need to redraw areas that the source of BitBlt was bad due to
@@ -94,5 +94,5 @@ void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
 }
 
 //
-// End of "$Id: fl_scroll_area.cxx,v 1.7 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_scroll_area.cxx,v 1.8 2001/07/29 22:04:44 spitzak Exp $".
 //

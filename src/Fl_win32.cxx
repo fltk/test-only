@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_win32.cxx,v 1.152 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.153 2001/07/29 22:04:43 spitzak Exp $"
 //
-// WIN32-specific code for the Fast Light Tool Kit (FLTK).
+// _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
@@ -25,7 +25,7 @@
 //
 
 // This file contains win32-specific code for fltk which is always linked
-// in.	Search other files for "WIN32" or filenames ending in _win32.C
+// in.	Search other files for "_WIN32" or filenames ending in _win32.C
 // for other system-specific code.
 
 #include <config.h>
@@ -82,7 +82,7 @@
 // devices, or pipes...
 //
 // Microsoft provides the Berkeley select() call and an asynchronous
-// select function that sends a WIN32 message when the select condition
+// select function that sends a _WIN32 message when the select condition
 // exists...
 
 #ifndef USE_ASYNC_SELECT
@@ -186,7 +186,7 @@ static int fl_wait(double time_to_wait) {
 
 #ifndef USE_ASYNC_SELECT
   if (nfds) {
-    // For WIN32 we need to poll for socket input FIRST, since
+    // For _WIN32 we need to poll for socket input FIRST, since
     // the event queue is not something we can select() on...
     timeval t;
     t.tv_sec = 0;
@@ -681,7 +681,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	&& uMsg != WM_CHAR) state |= FL_ALT;
     if (GetKeyState(VK_NUMLOCK)) state |= FL_NUM_LOCK;
     if (GetKeyState(VK_LWIN)&~1 || GetKeyState(VK_RWIN)&~1) {
-      // WIN32 bug?  GetKeyState returns garbage if the user hit the
+      // _WIN32 bug?  GetKeyState returns garbage if the user hit the
       // meta key to pop up start menu.  Sigh.
       if ((GetAsyncKeyState(VK_LWIN)|GetAsyncKeyState(VK_RWIN))&~1)
 	state |= FL_META;
@@ -747,19 +747,27 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     } else { // resize, deiconize
       // supposedly a Paint event will come in turn off iconize indicator
       if (window->resize(window->x(), window->y(),
-			 LOWORD(lParam), HIWORD(lParam)))
+			 LOWORD(lParam), HIWORD(lParam))) {
 	resize_from_system = window;
-      //window->layout(); // This works, but is it the right way?
+	window->layout(); // This works, but is it the right way?
+    }
     }
     break;
 
   case WM_MOVE:
     if (!window || window->parent()) break; // ignore child windows
+#if 0
     if (window->resize((signed short)LOWORD(lParam),
 		       (signed short)HIWORD(lParam),
 		       window->w(),
-		       window->h()))
+		       window->h())) {
       resize_from_system = window;
+      window->layout();
+    }
+#else
+    window->x((signed short)LOWORD(lParam));
+    window->y((signed short)HIWORD(lParam));
+#endif
     break;
 
   case WM_SETCURSOR:
@@ -856,12 +864,14 @@ int Fl_X::borders(const Fl_Window* window, int& dx,int& dy,int& dw,int& dh) {
 
 void Fl_Window::layout() {
   UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER | SWP_NOACTIVATE;
-  if (ow() == w() && oh() == h()) flags |= SWP_NOSIZE;
-//  if (ox() == x() && oy() == y()) flags |= SWP_NOMOVE;
+  if (ow() == w() && oh() == h()) {
+    flags |= SWP_NOSIZE;
+    if (ox() == x() && oy() == y()) flags = 0;
+  }
   Fl_Group::layout();
   if (this == resize_from_system) {
     resize_from_system = 0;
-  } else if (i) {
+  } else if (i && flags) {
      int real_x = this->x(); int real_y = this->y();
      // this should not treat x,y differently from any other widget
      for (Fl_Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
@@ -871,15 +881,6 @@ void Fl_Window::layout() {
      SetWindowPos(i->xid, 0, real_x-dx, real_y-dy, w()+dw, h()+dh, flags);
      if (!(flags & SWP_NOSIZE)) {redraw(); /*i->wait_for_expose = true;*/}
   }
-//  } else if (i) {
-//    int x = this->x(); int y = this->y();
-//    for (Fl_Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
-//	x += p->x(); y += p->y();
-//    }
-//    int dx, dy, dw, dh; Fl_X::borders(this, dx, dy, dw, dh);
-//    SetWindowPos(i->xid, 0, x-dx, y-dy, w()+dw, h()+dh, flags);
-//    if (!(flags & SWP_NOSIZE)) {redraw(); /*i->wait_for_expose = true;*/}
-//  }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1271,5 +1272,5 @@ void swap_fl_coordinates(int newx, int newy, int *savex, int *savey) {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.152 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.153 2001/07/29 22:04:43 spitzak Exp $".
 //

@@ -1,6 +1,6 @@
 /* fl_plugin.cxx
  *
- * "$Id: fl_load_plugin.cxx,v 1.15 2001/07/24 16:25:08 clip Exp $"
+ * "$Id: fl_load_plugin.cxx,v 1.16 2001/07/29 22:04:44 spitzak Exp $"
  *
  * This is a wrapper to make it simple to load plugins on various
  * systems. fl_load_plugin(file, symbol) will load the file as a
@@ -19,11 +19,11 @@
 #include <stdio.h>
 #include <config.h>
 
-#if HAVE_DLOPEN || defined(WIN32)
+#if HAVE_DLOPEN || defined(_WIN32)
 
 #include <errno.h>
 
-#ifndef WIN32
+#ifndef _WIN32
 
 # include <unistd.h>
 # include <dlfcn.h>
@@ -42,7 +42,7 @@ typedef HINSTANCE DLhandle;
 #endif
 
 void* fl_load_plugin(const char* name, const char* symbol) {
-#ifndef WIN32
+#ifndef _WIN32
   // do not allow plugins if this executable is setuid
   if (getuid() != geteuid()) return 0;
 #endif
@@ -50,7 +50,7 @@ void* fl_load_plugin(const char* name, const char* symbol) {
 
   DLhandle handle = dlopen(name, RTLD_NOW);
   if (!handle) {
-#ifndef WIN32
+#ifndef _WIN32
     fprintf(stderr, "%s\n", dlerror());
 #else
     fprintf(stderr, "%s: error loading plugin\n", name);
@@ -62,7 +62,7 @@ void* fl_load_plugin(const char* name, const char* symbol) {
 
   void* f = (void*)dlsym(handle, symbol);
   if (!f) {
-#ifndef WIN32
+#ifndef _WIN32
     fprintf(stderr, "%s\n", dlerror());
 #else
     fprintf(stderr, "%s: function %s missing\n", name, symbol);
@@ -82,5 +82,5 @@ void* fl_load_plugin(const char* name, const char*) {
 #endif
 
 //
-// End of "$Id: fl_load_plugin.cxx,v 1.15 2001/07/24 16:25:08 clip Exp $"
+// End of "$Id: fl_load_plugin.cxx,v 1.16 2001/07/29 22:04:44 spitzak Exp $"
 //

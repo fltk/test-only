@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_util.c,v 1.7 2001/07/23 09:50:05 spitzak Exp $"
+   "$Id: conf_util.c,v 1.8 2001/07/29 22:04:43 spitzak Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -57,7 +57,7 @@ int conf_is_path_rooted(const char *fn)
 {
   /* see if an absolute name was given: */
   if (fn[0] == '/' || fn[0] == '.'
-#ifdef WIN32
+#ifdef _WIN32
       || fn[0] == '\\' || fn[1]==':'
 #endif
       )
@@ -70,7 +70,7 @@ const char *conf_basename(const char *fn)
   const char *p;
 
   if ( (p = strrchr(fn, '/'))
-#ifdef WIN32
+#ifdef _WIN32
       || (p = strrchr(fn, '\\'))
 #endif
       )
@@ -90,5 +90,5 @@ const char *conf_dirname(char *fn)
 }
 
 /*
-    End of "$Id: conf_util.c,v 1.7 2001/07/23 09:50:05 spitzak Exp $".
+    End of "$Id: conf_util.c,v 1.8 2001/07/29 22:04:43 spitzak Exp $".
 */

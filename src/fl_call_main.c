@@ -1,5 +1,5 @@
 /*
- * "$Id: fl_call_main.c,v 1.11 2001/07/23 09:50:05 spitzak Exp $"
+ * "$Id: fl_call_main.c,v 1.12 2001/07/29 22:04:43 spitzak Exp $"
  *
  * Copyright 1998-1999 by Bill Spitzak and others.
  *
@@ -28,7 +28,7 @@
  * This WinMain() function can be overridden by an application and
  * is provided for compatibility with programs written for other
  * operating systems that conform to the ANSI standard entry point
- * "main()".  This will allow you to build a WIN32 Application
+ * "main()".  This will allow you to build a _WIN32 Application
  * without any special settings.
  *
  * Because of problems with the Microsoft Visual C++ header files
@@ -45,7 +45,7 @@
  * Microsoft(r) Windows(r) that allows for it.
  */
 
-#if defined(WIN32) && !defined(FL_LIBRARY) && !defined (__GNUC__) 
+#if defined(_WIN32) && !defined(FL_LIBRARY) && !defined (__GNUC__) 
 
 #include <windows.h>
 #include <stdio.h>
@@ -72,7 +72,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   //
   // While we can detect if the program was run from the command-line -
   // look at the CMDLINE environment variable, it will be "WIN" for
-  // programs started from the GUI - the shell seems to run all WIN32
+  // programs started from the GUI - the shell seems to run all _WIN32
   // applications in the background anyways...
 
   AllocConsole();
@@ -85,9 +85,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   return main(__argc, __argv);
 }
 
-#endif /* WIN32 && !FL_LIBRARY && !__GNUC__ */
+#endif /* _WIN32 && !FL_LIBRARY && !__GNUC__ */
 
 /*
- * End of "$Id: fl_call_main.c,v 1.11 2001/07/23 09:50:05 spitzak Exp $".
+ * End of "$Id: fl_call_main.c,v 1.12 2001/07/29 22:04:43 spitzak Exp $".
  */
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.73 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.74 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -159,7 +159,7 @@ void Fl_Widget::damage(uchar flags, int X, int Y, int W, int H) {
   if (window->damage() & ~FL_DAMAGE_LAYOUT) {
     // if we already have damage we must merge with existing region:
     if (i->region) {
-#ifndef WIN32
+#ifndef _WIN32
       XRectangle R;
       R.x = X; R.y = Y; R.width = W; R.height = H;
       XUnionRectWithRegion(&R, i->region, i->region);
@@ -484,5 +484,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.73 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.74 2001/07/29 22:04:43 spitzak Exp $".
 //

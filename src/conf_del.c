@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_del.c,v 1.17 2001/07/23 09:50:05 spitzak Exp $"
+   "$Id: conf_del.c,v 1.18 2001/07/29 22:04:43 spitzak Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -281,7 +281,7 @@ delconf(const char *configfile, const char *k)
 
         fclose(ifp);                                                            /* close files */
         fclose(ifp2);
-#ifdef WIN32
+#ifdef _WIN32
 	unlink(configfile);							/* can't rename to a file that exists? */ 
 #endif
         if (rename(configfile2, configfile) == -1)                              /* if can't rename temp file to real file */
@@ -293,5 +293,5 @@ delconf(const char *configfile, const char *k)
 } /* delconf() */
 
 /*
-    End of "$Id: conf_del.c,v 1.17 2001/07/23 09:50:05 spitzak Exp $".
+    End of "$Id: conf_del.c,v 1.18 2001/07/29 22:04:43 spitzak Exp $".
 */

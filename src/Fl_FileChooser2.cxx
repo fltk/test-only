@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.14 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.15 2001/07/29 22:04:43 spitzak Exp $"
 //
 // More Fl_FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -50,13 +50,13 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 
-#if defined(WIN32)
+#if defined(_WIN32)
 #  include <direct.h>
 #  include <io.h>
 #else
 #  include <unistd.h>
 #  include <pwd.h>
-#endif /* WIN32 */
+#endif /* _WIN32 */
 
 //
 // 'Fl_FileChooser::directory()' - Set the directory in the file chooser.
@@ -78,11 +78,11 @@ Fl_FileChooser::directory(const char *d)	// I - Directory to change to
   if (d[0] != '\0')
   {
     // Make the directory absolute...
-#if defined(WIN32) || defined(__EMX__)
+#if defined(_WIN32) || defined(__EMX__)
     if (d[0] != '/' && d[0] != '\\' && d[1] != ':')
 #else
     if (d[0] != '/' && d[0] != '\\')
-#endif /* WIN32 || __EMX__ */
+#endif /* _WIN32 || __EMX__ */
       filename_absolute(directory_, d);
     else
     {
@@ -102,11 +102,11 @@ Fl_FileChooser::directory(const char *d)	// I - Directory to change to
 
   // Clear the directory menu and fill it as needed...
   dirMenu->clear();
-#if defined(WIN32) || defined(__EMX__)
+#if defined(_WIN32) || defined(__EMX__)
   dirMenu->add("My Computer");
 #else
   dirMenu->add("File Systems");
-#endif /* WIN32 || __EMX__ */
+#endif /* _WIN32 || __EMX__ */
 
   levels = 0;
   for (dirptr = directory_, pathptr = pathname; *dirptr != '\0';)
@@ -352,11 +352,11 @@ Fl_FileChooser::newdir()
     return;
 
   // Make it relative to the current directory as needed...
-#if defined(WIN32) || defined(__EMX__)
+#if defined(_WIN32) || defined(__EMX__)
   if (dir[0] != '/' && dir[0] != '\\' && dir[1] != ':')
 #else
   if (dir[0] != '/' && dir[0] != '\\')
-#endif /* WIN32 || __EMX__ */
+#endif /* _WIN32 || __EMX__ */
     snprintf(pathname, sizeof(pathname), "%s/%s", directory_, dir);
   else
   {
@@ -365,11 +365,11 @@ Fl_FileChooser::newdir()
   }
 
   // Create the directory; ignore EEXIST errors...
-#if defined(WIN32)
+#if defined(_WIN32)
   if (mkdir(pathname))
 #else
   if (mkdir(pathname, 0777))
-#endif /* WIN32 || __EMX__ */
+#endif /* _WIN32 || __EMX__ */
     if (errno != EEXIST)
     {
       fl_alert("Unable to create directory!");
@@ -413,7 +413,7 @@ Fl_FileChooser::fileListCB()
   strncpy(filename, fileList->text(fileList->value()), sizeof(filename) - 1);
   filename[sizeof(filename) - 1] = '\0';
 
-#if defined(WIN32) || defined(__EMX__)
+#if defined(_WIN32) || defined(__EMX__)
   if (directory_[0] != '\0' && filename[0] != '/' && filename[0] != '\\' &&
       !(isalpha(filename[0]) && filename[1] == ':'))
     snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
@@ -430,7 +430,7 @@ Fl_FileChooser::fileListCB()
     strncpy(pathname, filename, sizeof(pathname) - 1);
     pathname[sizeof(pathname) - 1] = '\0';
   }
-#endif /* WIN32 || __EMX__ */
+#endif /* _WIN32 || __EMX__ */
 
   if (Fl::event_clicks() || Fl::event_key() == FL_Enter)
   {
@@ -479,7 +479,7 @@ Fl_FileChooser::fileNameCB()
     return;
   }
 
-#if defined(WIN32) || defined(__EMX__)
+#if defined(_WIN32) || defined(__EMX__)
   if (directory_[0] != '\0' && filename[0] != '/' && filename[0] != '\\' &&
       !(isalpha(filename[0]) && filename[1] == ':'))
     snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
@@ -528,7 +528,7 @@ Fl_FileChooser::fileNameCB()
     strncpy(pathname, filename, sizeof(pathname) - 1);
     pathname[sizeof(pathname) - 1] = '\0';
   }
-#endif /* WIN32 || __EMX__ */
+#endif /* _WIN32 || __EMX__ */
 
   if (Fl::event_key() == FL_Enter)
   {
@@ -593,11 +593,11 @@ Fl_FileChooser::fileNameCB()
     {
       file = fileList->text(i);
 
-#if defined(WIN32) || defined(__EMX__)
+#if defined(_WIN32) || defined(__EMX__)
       if (strnicmp(filename, file, min_match) == 0)
 #else
       if (strncmp(filename, file, min_match) == 0)
-#endif // WIN32 || __EMX__
+#endif // _WIN32 || __EMX__
       {
         // OK, this one matches; check against the previous match
 	if (max_match == 100000)
@@ -615,11 +615,11 @@ Fl_FileChooser::fileNameCB()
 	{
 	  // Succeeding match; compare to find maximum string match...
 	  while (max_match > min_match)
-#if defined(WIN32) || defined(__EMX__)
+#if defined(_WIN32) || defined(__EMX__)
 	    if (strnicmp(file, pathname, max_match) == 0)
 #else
 	    if (strncmp(file, pathname, max_match) == 0)
-#endif // WIN32 || __EMX__
+#endif // _WIN32 || __EMX__
 	      break;
 	    else
 	      max_match --;
@@ -665,5 +665,5 @@ Fl_FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.14 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.15 2001/07/29 22:04:43 spitzak Exp $".
 //

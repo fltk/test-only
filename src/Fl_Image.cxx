@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.19 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.20 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -105,7 +105,7 @@ void Fl_Image::_draw(int XP, int YP, int WP, int HP, int cx, int cy)
   if (mask) {
     if (id) {
       // both color and mask:
-#ifdef WIN32
+#ifdef _WIN32
 # if 0
       HDC new_gc = CreateCompatibleDC(fl_gc);
       SelectObject(new_gc, (void*)mask);
@@ -143,7 +143,7 @@ void Fl_Image::_draw(int XP, int YP, int WP, int HP, int cx, int cy)
 #endif
     } else {
       // mask only
-#ifdef WIN32
+#ifdef _WIN32
       HDC tempdc = CreateCompatibleDC(fl_gc);
       SelectObject(tempdc, (HGDIOBJ)mask);
       SetTextColor(fl_gc, 0); // VP : seems necessary at least under win95
@@ -193,5 +193,5 @@ void Fl_Image::label(Fl_Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.19 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.20 2001/07/29 22:04:43 spitzak Exp $".
 //

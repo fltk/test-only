@@ -1,5 +1,5 @@
 //
-// "$Id: filename_expand.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: filename_expand.cxx,v 1.7 2001/07/29 22:04:43 spitzak Exp $"
 //
 // Filename expansion routines for the Fast Light Tool Kit (FLTK).
 //
@@ -31,13 +31,13 @@
 #include <fltk/filename.h>
 #include <stdlib.h>
 #include <string.h>
-#if defined(WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
 #else
 # include <unistd.h>
 # include <pwd.h>
 #endif
 
-#if defined(WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
+#if defined(_WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
 static inline int isdirsep(char c) {return c=='/' || c=='\\';}
 #else
 #define isdirsep(c) ((c)=='/')
@@ -59,7 +59,7 @@ int filename_expand(char *to,const char *from) {
     case '~':	// a home directory name
       if (e <= a+1) {	// current user's directory
 	value = getenv("HOME");
-#ifndef WIN32
+#ifndef _WIN32
       } else {	// another user's directory
 	struct passwd *pwd;
 	char t = *e; *(char *)e = 0; 
@@ -76,7 +76,7 @@ int filename_expand(char *to,const char *from) {
     if (value) {
       // substitutions that start with slash delete everything before them:
       if (isdirsep(value[0])) start = a;
-#if defined(WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
+#if defined(_WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
       // also if it starts with "A:"
       if (value[0] && value[1]==':') start = a;
 #endif
@@ -87,7 +87,7 @@ int filename_expand(char *to,const char *from) {
       ret++;
     } else {
       a = e+1;
-#if defined(WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
+#if defined(_WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
       if (*e == '\\') {*e = '/'; ret++;} // ha ha!
 #endif
     }
@@ -97,5 +97,5 @@ int filename_expand(char *to,const char *from) {
 }
 
 //
-// End of "$Id: filename_expand.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: filename_expand.cxx,v 1.7 2001/07/29 22:04:43 spitzak Exp $".
 //
