@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.31 2002/12/15 10:42:50 spitzak Exp $"
+// "$Id: file.cxx,v 1.32 2004/07/04 17:38:08 laza2000 Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -43,6 +43,7 @@
 
 static FILE *fout;
 
+#include <fltk/ask.h>
 int open_write(const char *s) {
   if (!s) {fout = stdout; return 1;}
   FILE *f = fopen(s,"w");
@@ -646,5 +647,5 @@ void read_fdesign() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.31 2002/12/15 10:42:50 spitzak Exp $".
+// End of "$Id: file.cxx,v 1.32 2004/07/04 17:38:08 laza2000 Exp $".
 //

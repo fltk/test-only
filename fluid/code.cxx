@@ -1,5 +1,5 @@
 //
-// "$Id: code.cxx,v 1.21 2003/01/14 06:51:02 spitzak Exp $"
+// "$Id: code.cxx,v 1.22 2004/07/04 17:38:08 laza2000 Exp $"
 //
 // Code output routines for the Fast Light Tool Kit (FLTK).
 //
@@ -260,6 +260,7 @@ void write_h(const char* format,...) {
 }
 
 #include <fltk/filename.h>
+#include <fltk/ask.h>
 #include <fltk/FL_VERSION.h>
 int write_number;
 
@@ -269,7 +270,7 @@ int write_code(const char *s, const char *t) {
   indentation = 0;
   if (!s) code_file = stdout;
   else {
-    FILE *f = fopen(s,"w");
+    FILE *f = fopen(s,"w");	
     if (!f) return 0;
     code_file = f;
   }
@@ -326,5 +327,5 @@ void FluidType::write_code() {
 }
 
 //
-// End of "$Id: code.cxx,v 1.21 2003/01/14 06:51:02 spitzak Exp $".
+// End of "$Id: code.cxx,v 1.22 2004/07/04 17:38:08 laza2000 Exp $".
 //
