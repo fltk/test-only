@@ -41,9 +41,18 @@
 // if the delta is any amount other than 1, 3, or 4.
 
 ////////////////////////////////////////////////////////////////
+//
+// WARNING: This file SHOULDN'T be used directly!
+//   - It's included from /src/drawimage.cxx
+//
+////////////////////////////////////////////////////////////////
 
 #include <fltk/Color.h>
+#include <fltk/Font.h>
+#include <fltk/draw.h>
+#include <config.h>
 #include <stdio.h>
+#include <windows.h>
 using namespace fltk;
 
 #define MAXBUFFER 0x40000 // 256k
