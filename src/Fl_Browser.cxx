@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.91 2004/08/02 12:11:43 laza2000 Exp $"
+// "$Id: Fl_Browser.cxx,v 1.92 2004/08/02 12:23:59 laza2000 Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -1483,7 +1483,7 @@ void Browser::column_widths(const int *t) {
   int pnc = nColumn;
   nColumn = 0;
   // count the number of columns, end with 0 or <-1 , -1 is used for flexible column
-  if (t) while (*t) { nColumn++; if (*t<=0 && *t!=Flexible) break; t++; }
+  if (t) while (*t) { if (*t<=0 && *t!=Flexible) break; t++; nColumn++; }
   if (nColumn==0) {
 	// free the column memory
 	if (column_widths_p) free(column_widths_p);
@@ -1509,7 +1509,7 @@ int Browser::set_column_start(int col, int x) {
   // Detect if last int widths in array is 0
   // If it is, we will keep original width.
   // ie. when resizing columns, right edge will not move
-  bool resize_to_w = (column_widths_i[nColumn]==0);
+  bool resize_to_w = (column_widths_i[nColumn]==Resize2Width);
 
   // we must adjust all this column and the column to the left so that the
   // resulting edge ends at x
@@ -1659,8 +1659,8 @@ void Browser::column_labels(const char **t) {
     for (i=0; i<nHeader; i++) {
       uchar sides = 0;
       if (i>0) sides |= 1;
-      // Allow resizing of last column, if width array last int is <0
-      if (i<nHeader-1 || (column_widths_i && column_widths_i[nColumn]<0) ) sides |= 2;
+      // Allow resizing of last column, if width array last int is NormalResize
+      if (i<nHeader-1 || (column_widths_i && column_widths_i[nColumn]==NormalResize) ) sides |= 2;
       //if (i<nHeader-1) sides |= 2;
       header_[i] = new BButton(0, 0, 1, 1, sides, column_labels_[i]);
       header_[i]->parent(this);
@@ -1826,5 +1826,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.91 2004/08/02 12:11:43 laza2000 Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.92 2004/08/02 12:23:59 laza2000 Exp $".
 //
