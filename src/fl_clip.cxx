@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.20 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: fl_clip.cxx,v 1.21 2004/05/05 07:09:06 spitzak Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -48,10 +48,25 @@ using namespace fltk;
   transformed coordianates.</i>
 */
 
-#define STACK_SIZE 11
-#define STACK_MAX (STACK_SIZE - 2)
-static Region rstack[STACK_SIZE];
-static int rstackptr=0;
+static Region emptyrstack = 0;
+static Region* rstack = &emptyrstack;
+static int rstacksize = 0;
+static int rstackptr = 0;
+
+static inline void pushregion(Region r) {
+  if (rstackptr >= rstacksize) {
+    if (rstacksize) {
+      rstacksize = 2*rstacksize;
+      rstack = (Region*)realloc(rstack, rstacksize*sizeof(Region));
+    } else {
+      rstacksize = 16;
+      rstack = (Region*)malloc(rstacksize*sizeof(Region));
+      rstack[0] = 0;
+    }
+  }
+  rstack[++rstackptr] = r;
+}
+
 int fl_clip_state_number = 0; // used by code that needs to update clip regions
 
 /*! Return the current region as a system-specific structure. You must
@@ -141,7 +156,7 @@ void fltk::push_clip(int x, int y, int w, int h) {
     r = XCreateRegion();
 #endif
   }
-  if (rstackptr < STACK_MAX) rstack[++rstackptr] = r;
+  pushregion(r);
   fl_restore_clip();
 }
 
@@ -180,9 +195,7 @@ void fltk::clip_out(int x, int y, int w, int h) {
   an offscreen area.
 */
 void fltk::push_no_clip() {
-  // this does not test maximum so that this is guaranteed to work,
-  // there is one extra slot at the top of the stack.
-  /*if (rstackptr < STACK_MAX)*/ rstack[++rstackptr] = 0;
+  pushregion(0);
   fl_restore_clip();
 }
 
@@ -338,5 +351,5 @@ int fltk::clip_box(int x,int y,int w,int h, int& X,int& Y,int& W,int& H) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.20 2004/03/25 18:13:18 spitzak Exp $"
+// End of "$Id: fl_clip.cxx,v 1.21 2004/05/05 07:09:06 spitzak Exp $"
 //
