@@ -48,6 +48,7 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
+#include <fltk/utf.h>
 #if defined(_WIN32) && !defined(__CYGWIN__)
 #include <windows.h>
 #include <fltk/utf.h>
@@ -659,8 +660,12 @@ FileChooser::fileNameCB()
       // Otherwise, put the cursor at the end of the selection so
       // s/he can press the right arrow to accept the selection
       // (Tab and End also do this for both cases.)
+      const char *back, *end;
+      end = pathname + strlen(pathname);
+      back = utf8back(pathname + min_match - 1, pathname, end);
+      //      if (back == pathname + min_match - 1) back--;
       if (event_key() == BackSpaceKey)
-        fileName->position(min_match - 1, max_match);
+        fileName->position(back-pathname, max_match);
       else
         fileName->position(max_match, min_match);
     }
