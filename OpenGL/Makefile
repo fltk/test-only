@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.3 2000/06/06 13:44:30 carl Exp $"
+# "$Id: Makefile,v 1.4 2000/06/10 04:10:23 carl Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -36,30 +36,33 @@ DEMOS =
 
 ################################################################
 
+XTRAFLAGS = -DFL_GL_LIBRARY
+
 include ../makeinclude
 
 LIBRARY = ../lib/$(LIBNAME)_gl
 DSONAME = ../lib/$(DSOLIBglNAME)
-LIBRARIES = $(LIBRARY).$(LIBEXT) $(DSONAME).$(DSOEXT)
+LIBRARIES = $(LIBRARY)$(LIBEXT) $(DSONAME)$(DSOEXT)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
-all:	$(LIBRARY).$(LIBEXT) $(DSONAME).$(DSOEXT) $(DEMOS)
+all:	$(LIBRARIES) $(DEMOS)
 
 $(LIBRARY).a: $(OBJECTS)
-#	@echo $(LIBCOMMAND) $@ $(OBJECTS)
 	@rm -f $@
-	-@$(LIBCOMMAND) $@ $(OBJECTS)
-	-@$(RANLIB) $@
+	$(LIBCOMMAND) $@ $(OBJECTS)
+	$(RANLIB) $@
 
 $(DSONAME).so.2 $(DSONAME).sl.2: $(OBJECTS:.o=.shared.o)
-	@echo $(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o)
-	@$(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o)
-
-$(DSONAME).2.dll: $(OBJECTS:.o=.dll.o)
-	@echo $(DSOCOMMAND) $@ $(OBJECTS:.o=.dll.o) $(CXXFLAGS) $(GLDLIBS)
 	@rm -f $@
-	@$(DSOCOMMAND) -o $@ $(OBJECTS:.o=.dll.o) $(CXXFLAGS) $(GLDLIBS)
+	$(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o) $(DSOLIBS)
+
+DLLIMPORTLIBS = ../lib/$(LIBNAME).2.dll$(LIBEXT)
+DLLIMPORTNAME = $(LIBNAME)_gl.2.dll$(LIBEXT)
+$(DSONAME).2.dll: $(OBJECTS:.o=.shared.o)
+	@rm -f $@
+	$(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o) $(DSOLIBS) $(DLLIMPORTLIBS)
+	mv $@.import ../lib/$(DLLIMPORTNAME)
 
 $(DEMOS): $(LIBRARIES)
 
@@ -68,8 +71,8 @@ $(DEMOS): $(LIBRARIES)
 #	../fluid/fluid -c $<
 
 clean :
-	@ rm -f *.o $(DEMOS) $(LIBRARY).$(LIBEXT) core *~ makedepend
-	-@test -n "$(DSOEXT)" && rm -f $(DSONAME).$(DSOEXT)
+	@rm -f *.o $(DEMOS) $(LIBRARY)$(LIBEXT) ../lib/$(DLLIMPORTNAME) core *~ makedepend
+	@if [ -n "$(DSOEXT)" ]; then rm -f $(DSONAME)$(DSOEXT); fi
 	@touch makedepend
 
 depend:
@@ -81,19 +84,21 @@ include makedepend
 
 install: $(LIBRARIES)
 	@echo "Installing libraries..."
-	@-mkdir -p $(libdir)
-	@-rm -f $(libdir)/$(LIBNAME)_gl.$(LIBEXT)
-	@-test -n "$(DSOEXT)" && rm -f $(libdir)/$(DSOLIBglNAME).$(DSOEXT)
-	@-test -n "$(DSOSHORTEXT)" && rm -f $(libdir)/$(DSOLIBglNAME).$(DSOSHORTEXT)
-	@-cp $(LIBRARY).$(LIBEXT) $(libdir)
-	@-chmod 644 $(libdir)/$(LIBNAME)_gl.$(LIBEXT) 
-	@if test -n "$(DSOEXT)"; then \
-		cp $(DSONAME).$(DSOEXT) $(libdir); \
-		chmod 755 $(libdir)/$(DSOLIBglNAME).$(DSOEXT); \
-		test -n "$(DSOSHORTEXT)" && \
-			ln -s $(DSOLIBglNAME).$(DSOEXT) $(libdir)/$(DSOLIBglNAME).$(DSOSHORTEXT); \
+	@mkdir -p $(libdir)
+	@rm -f $(libdir)/$(LIBNAME)_gl$(LIBEXT)
+	@rm -f $(libdir)/$(DLLIMPORTNAME)
+	@if [ -n "$(DSOEXT)" ]; then rm -f $(libdir)/$(DSOLIBglNAME)$(DSOEXT); fi
+	@if [ -n "$(DSOSHORTEXT)" ]; then rm -f $(libdir)/$(DSOLIBglNAME)$(DSOSHORTEXT); fi
+	@cp $(LIBRARY)$(LIBEXT) $(libdir)
+	@-chmod 644 $(libdir)/$(LIBNAME)_gl$(LIBEXT) 
+	@if [ -n "$(DSOEXT)" ]; then \
+		cp $(DSONAME)$(DSOEXT) $(libdir); \
+		chmod 755 $(libdir)/$(DSOLIBglNAME)$(DSOEXT); \
+		if [ -n "$(DSOSHORTEXT)" ]; then \
+			ln -s $(DSOLIBglNAME)$(DSOEXT) $(libdir)/$(DSOLIBglNAME)$(DSOSHORTEXT); fi; \
 	fi
+	@if [ -f "../lib/$(DLLIMPORTNAME)" ]; then cp ../lib/$(DLLIMPORTNAME) $(libdir); fi
 
 #
-# End of "$Id: Makefile,v 1.3 2000/06/06 13:44:30 carl Exp $".
+# End of "$Id: Makefile,v 1.4 2000/06/10 04:10:23 carl Exp $".
 #

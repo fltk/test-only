@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.H,v 1.14 2000/05/17 07:08:03 bill Exp $"
+// "$Id: Fl_Shared_Image.H,v 1.15 2000/06/10 04:10:19 carl Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 #include <FL/Fl_Image.H>
 #include <stddef.h>
 
-struct Fl_Image_Type;
+struct FL_IMAGES_API Fl_Image_Type;
 
 // Shared images class. 
 class Fl_Shared_Image : public Fl_Image {
@@ -173,7 +173,7 @@ public:
   }
 };
 
-class Fl_Bitmap;
+class FL_API Fl_Bitmap;
 extern FL_IMAGES_API Fl_Bitmap nosuch_bitmap;
 
 class FL_IMAGES_API Fl_UNKNOWN_Image {
@@ -187,5 +187,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Shared_Image.H,v 1.14 2000/05/17 07:08:03 bill Exp $"
+// End of "$Id: Fl_Shared_Image.H,v 1.15 2000/06/10 04:10:19 carl Exp $"
 //

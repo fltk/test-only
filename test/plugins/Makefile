@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.15 2000/06/03 14:23:45 mike Exp $"
+# "$Id: Makefile,v 1.16 2000/06/10 04:10:33 carl Exp $"
 #
 # Fluid plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -32,30 +32,26 @@ CPPFILES = \
 
 OBJECTS = $(CPPFILES:.cxx=.o)
 
-INCLUDES = -I../../fluid -I../..
+XTRAFLAGS = -I../../fluid -I../..
 
 include ../../makeinclude
 
 all: $(PROGRAM) Fl_NSlider.o
 
 $(PROGRAM) : $(OBJECTS) ../../lib/$(LIBNAME).a
-	echo Linking $@...
-	$(CXX) $(LD_PLUGIN_FLAGS) $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS)
-
-win32 : $(OBJECTS) ../../lib/$(LIBNAME).a
-	dllwrap $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS) -L../../lib -lfltkdll.2 -lfluid $(GLDLIBS) --output-def essai_plugin.def
+	$(DSOCOMMAND) $@ $(OBJECTS) $(DSOLIBS)
 
 clean :
 	-@ rm -f *.o $(PROGRAM) $(CLEAN) core *~ makedepend
 	@touch makedepend
 
 depend:
-	$(MAKEDEPEND) $(INCLUDES) $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
+	$(MAKEDEPEND) $(XTRAFLAGS) $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
 
 install:
 
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.15 2000/06/03 14:23:45 mike Exp $".
+# End of "$Id: Makefile,v 1.16 2000/06/10 04:10:33 carl Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Font.H,v 1.9 2000/05/27 01:17:22 carl Exp $"
+// "$Id: Fl_Font.H,v 1.10 2000/06/10 04:10:17 carl Exp $"
 //
 // Fonts used by FLTK styles and drawing code
 //
@@ -26,9 +26,9 @@
 #ifndef Fl_Font_h
 #define Fl_Font_h
 
-#include <FL/Enumerations.H> // for FL_EXPORT
+#include <FL/Enumerations.H> // for FL_API
 
-class Fl_FontSize; // secret internal data
+class FL_API Fl_FontSize; // secret internal data
 
 // This is a struct so I can init a table with constants:
 struct FL_API Fl_Font_ {
@@ -84,9 +84,9 @@ extern FL_API Fl_Font_ fl_fonts[16];
 
 // Return a font by name + attributes.  On X this will open the display
 // and list all the fonts!
-Fl_Font fl_font(const char* name);
+FL_API Fl_Font fl_font(const char* name);
 
 // Find and return every font on the system.
-int fl_list_fonts(Fl_Font*& arrayp);
+FL_API int fl_list_fonts(Fl_Font*& arrayp);
 
 #endif

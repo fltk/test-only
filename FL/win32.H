@@ -1,5 +1,5 @@
 //
-// "$Id: win32.H,v 1.31 2000/05/30 07:41:59 bill Exp $"
+// "$Id: win32.H,v 1.32 2000/06/10 04:10:22 carl Exp $"
 //
 // WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -48,7 +48,7 @@ typedef HWND Window;
 typedef POINT XPoint;
 struct FL_API XRectangle {int x, y, width, height;};
 typedef HRGN Region;
-void fl_clip_region(Region);
+FL_API void fl_clip_region(Region);
 inline Region XRectangleRegion(int x, int y, int w, int h) {
     return CreateRectRgn(x,y,x+w,y+h);
 }
@@ -70,7 +70,7 @@ FL_API struct FL_API Fl_XMap {
   HPEN pen;	// pen, 0 if none created yet
   HBRUSH brush;	// ref to solid brush, 0 if none created yet
 };
-extern Fl_XMap fl_current_xmap;
+extern FL_API Fl_XMap fl_current_xmap;
 inline COLORREF fl_RGB() {return fl_current_xmap.rgb;}
 inline HPEN fl_pen() {return fl_current_xmap.pen;}
 inline HBRUSH fl_brush() {return fl_current_xmap.brush;}
@@ -95,7 +95,7 @@ extern FL_API HDC fl_makeDC(HBITMAP);
 #define fl_end_offscreen() \
   fl_pop_clip(); DeleteDC(fl_gc); fl_window=_sw; fl_gc = _sgc
 
-void fl_copy_offscreen(int x,int y,int w,int h,HBITMAP pixmap,int srcx,int srcy);
+FL_API void fl_copy_offscreen(int x,int y,int w,int h,HBITMAP pixmap,int srcx,int srcy);
 #define fl_delete_offscreen(bitmap) DeleteObject(bitmap);
 
 // binary images, created from in-memory data:
@@ -129,11 +129,11 @@ public:
   static Fl_X* create(Fl_Window*);
 };
 inline Window fl_xid(const Fl_Window*w) {return Fl_X::i(w)->xid;}
-Fl_Window* fl_find(Window xid);
+FL_API Fl_Window* fl_find(Window xid);
 
 #endif
 #endif
 
 //
-// End of "$Id: win32.H,v 1.31 2000/05/30 07:41:59 bill Exp $".
+// End of "$Id: win32.H,v 1.32 2000/06/10 04:10:22 carl Exp $".
 //

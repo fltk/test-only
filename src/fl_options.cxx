@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.56 2000/05/30 10:37:50 carl Exp $"
+// "$Id: fl_options.cxx,v 1.57 2000/06/10 04:10:32 carl Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -387,35 +387,22 @@ const char* fl_find_config_file(const char* fn, int cflag) {
 
   if (conf_is_path_rooted(fn)) {
     strcpy(path, fn);
-  } else {
-    char *cptr = getenv(HOMEVAR);
-    if (cptr) {
-      snprintf(path, sizeof(path), "%s%s%s", cptr, HOMEFLTKDIR, fn);
-      if (cflag || !access(path, R_OK)) return path;
-    }
-
-#ifndef WIN32
-    snprintf(path, sizeof(path), CONFIGDIR "/%s", fn);
-#else
-    char windir[PATH_MAX], user[80] = "Default User";
-    GetWindowsDirectory(windir, sizeof(windir));
-    DWORD d = sizeof(user);
-    GetUserName(user, &d);
-
-    cptr = getenv("USERPROFILE");
-    if (cptr) {
-      snprintf(path, sizeof(path), "%s\\Aplication Data\\fltk\\%s", cptr, fn);
-      if (cflag || !access(path, R_OK)) return path;
-    }
-
-    snprintf(path, sizeof(path), "%s\\Profiles\\%s\\Application Data\\fltk\\%s",
-             windir, user, fn);
-    if (cflag || !access(path, R_OK)) return path;
-
-    snprintf(path, sizeof(path), "%s\\fltk\\%s", windir, fn);
-#endif
+    return (cflag || !access(path, R_OK)) ? path : 0;
   }
+  char *cptr = getenv(HOMEVAR);
+  if (cptr) {
+    snprintf(path, sizeof(path), "%s%s%s", cptr, HOMEFLTKDIR, fn);
+    if (cflag || !access(path, R_OK)) return path;
+  }
+#ifdef WIN32
+  cptr = getenv("USERPROFILE");
+  if (cptr) {
+    snprintf(path, sizeof(path), "%s\\Application Data\\fltk\\%s", cptr, fn);
+    if (cflag || !access(path, R_OK)) return path;
+  }
+#endif
 
+  snprintf(path, sizeof(path), CONFIGDIR "/%s", fn);
   return (cflag || !access(path, R_OK)) ? path : 0;
 }
 
@@ -427,7 +414,7 @@ int Fl::getconf(const char *key, char *value, int value_length) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.56 2000/05/30 10:37:50 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.57 2000/06/10 04:10:32 carl Exp $".
 //
 
 

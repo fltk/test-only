@@ -9,4 +9,4 @@
   # FLTK comes with:
   #   Alternative, Alt2, Classic, Essai, KDE, Motif, OldMotif, Windows
 
-  scheme = KDE
+  scheme = Alternative

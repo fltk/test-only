@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.36 2000/06/06 13:44:27 carl Exp $"
+ * "$Id: configh.in,v 1.37 2000/06/10 04:10:14 carl Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -127,21 +127,15 @@
 #define HAVE_SNPRINTF 0
 #define HAVE_VSPRINTF 0
 
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
+#if !HAVE_SNPRINTF
+#  include <FL/vsnprintf.h>
+#  define snprintf fl_snprintf
+#endif /* !HAVE_SNPRINTF */
 
-#  if !HAVE_SNPRINTF
-extern int snprintf(char* str, size_t size, const char* fmt, ...);
-#  endif /* !HAVE_SNPRINTF */
-
-#  if !HAVE_VSNPRINTF
-extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
-#  endif /* !HAVE_VSNPRINTF */
-
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+#if !HAVE_VSNPRINTF
+#  include <FL/vsnprintf.h>
+#  define vsnprintf fl_vsnprintf
+#endif /* !HAVE_VSNPRINTF */
 
 /*
  * Possibly missing other functions
@@ -150,26 +144,14 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define HAVE_ATOL 0
 
 #if ! HAVE_ATOL
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-long atol(const char*);
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+#  include <FL/conf.h>
 #  define atol(a) conf_atol(a)
 #endif /* !HAVE_ATOL */
 
 #define HAVE_STRCASECMP 0
 
 #if ! HAVE_STRCASECMP
-#ifdef __cplusplus
-extern "C" {
-#endif /* __cplusplus */
-int conf_strcasecmp(const char*, const char*);
-#ifdef __cplusplus
-}
-#endif /* __cplusplus */
+#  include <FL/conf.h>
 #  define strcasecmp(a,b) conf_strcasecmp(a,b)
 #endif
 
@@ -233,5 +215,5 @@ int conf_strcasecmp(const char*, const char*);
 #define CONFIGDIR "."
 
 /*
- * End of "$Id: configh.in,v 1.36 2000/06/06 13:44:27 carl Exp $".
+ * End of "$Id: configh.in,v 1.37 2000/06/10 04:10:14 carl Exp $".
  */

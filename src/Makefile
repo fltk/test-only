@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.78 2000/06/06 13:44:38 carl Exp $"
+# "$Id: Makefile,v 1.79 2000/06/10 04:10:31 carl Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -192,6 +192,8 @@ CLEAN =
 
 ################################################################
 
+XTRAFLAGS = -DFL_LIBRARY
+
 include ../makeinclude
 
 LIBRARY = ../lib/$(LIBNAME)
@@ -199,26 +201,27 @@ DSONAME = ../lib/$(DSOLIBNAME)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
-all:	$(LIBRARY).$(LIBEXT) $(DSONAME).$(DSOEXT)
+all:	$(LIBRARY)$(LIBEXT) $(DSONAME)$(DSOEXT)
 
 $(LIBRARY).a: $(OBJECTS) fl_call_main.o
-	@echo $(LIBCOMMAND) $@ $(OBJECTS) fl_call_main.o
 	@rm -f $@
-	@$(LIBCOMMAND) $@ $(OBJECTS) fl_call_main.o
-	@$(RANLIB) $@
+	$(LIBCOMMAND) $@ $(OBJECTS) fl_call_main.o
+	$(RANLIB) $@
 
 $(DSONAME).so.2 $(DSONAME).sl.2: $(OBJECTS:.o=.shared.o)
-	@echo $(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o)
-	@$(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o)
+	@-rm -f $@
+	$(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o) $(DSOLIBS)
 
-$(DSONAME).2.dll: $(OBJECTS:.o=.dll.o)
-	@echo $(DSOCOMMAND) $@ $(OBJECTS:.o=.dll.o) $(CXXFLAGS) $(GLDLIBS)
-	@rm -f $@
-	@$(DSOCOMMAND) -o $@ $(OBJECTS:.o=.dll.o) $(CXXFLAGS) $(GLDLIBS)
+DLLIMPORTNAME = $(LIBNAME).2.dll$(LIBEXT)
+$(DSONAME).2.dll: $(OBJECTS:.o=.shared.o)
+	@-rm -f $@
+	$(DSOCOMMAND) $@ $(OBJECTS:.o=.shared.o) $(DSOLIBS)
+	mv $@.import ../lib/$(DLLIMPORTNAME)
 
 clean :
-	-@ rm -f *.o $(LIBRARY).$(LIBEXT) $(CLEAN) core *~ ../include/*~ makedepend cmap
-	-@test -n "$(DSOEXT)" && rm -f $(DSONAME).$(DSOEXT)
+	@rm -f *.o $(LIBRARY)$(LIBEXT) ../lib/$(DLLIMPORTNAME) $(CLEAN) \
+	        core *~ ../include/*~ makedepend cmap
+	@if [ -n "$(DSOEXT)" ]; then rm -f $(DSONAME)$(DSOEXT); fi
 	@touch makedepend
 
 depend:
@@ -227,36 +230,38 @@ include makedepend
 
 ################################################################
 
-install: $(LIBRARY).$(LIBEXT) $(DSONAME).$(DSOEXT)
+install: $(LIBRARY)$(LIBEXT) $(DSONAME)$(DSOEXT)
 	@echo "Installing libraries..."
-	@-mkdir -p $(libdir)
-	@-rm -f $(libdir)/$(LIBNAME).$(LIBEXT)
-	@-test -n "$(DSOEXT)" && rm -f $(libdir)/$(DSOLIBNAME).$(DSOEXT)
-	@-test -n "$(DSOSHORTEXT)" && rm -f $(libdir)/$(DSOLIBNAME).$(DSOSHORTEXT)
-	@-cp $(LIBRARY).$(LIBEXT) $(libdir)
-	@-chmod 644 $(libdir)/$(LIBNAME).$(LIBEXT)
-	@if test -n "$(DSOEXT)"; then \
-		cp $(DSONAME).$(DSOEXT) $(libdir); \
-		chmod 755 $(libdir)/$(DSOLIBNAME).$(DSOEXT) ; \
-		test -n $(DSOSHORTEXT) && \
-			ln -s $(DSOLIBNAME).$(DSOEXT) $(libdir)/$(DSOLIBNAME).$(DSOSHORTEXT); \
+	@mkdir -p $(libdir)
+	@rm -f $(libdir)/$(LIBNAME)$(LIBEXT)
+	@rm -f $(libdir)/$(DLLIMPORTNAME)
+	@if [ -n "$(DSOEXT)" ]; then rm -f $(libdir)/$(DSOLIBNAME)$(DSOEXT); fi
+	@if [ -n "$(DSOSHORTEXT)" ]; then rm -f $(libdir)/$(DSOLIBNAME)$(DSOSHORTEXT); fi
+	@cp $(LIBRARY)$(LIBEXT) $(libdir)
+	@-chmod 644 $(libdir)/$(LIBNAME)$(LIBEXT)
+	@if [ -n "$(DSOEXT)" ]; then \
+		cp $(DSONAME)$(DSOEXT) $(libdir); \
+		chmod 755 $(libdir)/$(DSOLIBNAME)$(DSOEXT) ; \
+		if [ -n "$(DSOSHORTEXT)" ]; then \
+			ln -s $(DSOLIBNAME)$(DSOEXT) $(libdir)/$(DSOLIBNAME)$(DSOSHORTEXT); fi; \
 	fi
+	@if [ -f "../lib/$(DLLIMPORTNAME)" ]; then cp ../lib/$(DLLIMPORTNAME) $(libdir); fi
 	@echo "Installing include files..."
-	@-mkdir -p $(includedir)
+	@mkdir -p $(includedir)
 	@rm -rf $(includedir)/FL $(includedir)/Fl
-	@-mkdir -p $(includedir)/FL
-	@-cp ../FL/*.[Hh]  $(includedir)/FL
+	@mkdir -p $(includedir)/FL
+	@cp ../FL/*.[Hh]  $(includedir)/FL
 	@-chmod 755 $(includedir)/FL
 	@-chmod 644 $(includedir)/FL/*
-	@if [ ! "$(OSTYPE)" = "cygwin32" ]; then for file in $(includedir)/FL/*.H; do\
+	@if [ ! "$(SYSTYPE)" = "WIN32" ]; then for file in $(includedir)/FL/*.H; do\
 		newfile="`basename $$file H`h";\
 		ln -s $$file $(includedir)/FL/$$newfile;\
 	done; fi
-	@if [ ! "$(OSTYPE)" = "cygwin32" ]; then ln -sf FL $(includedir)/Fl; fi
+	@if [ ! "$(SYSTYPE)" = "WIN32" ]; then ln -sf FL $(includedir)/Fl; fi
 	@echo "Installing fltk-config..."
-	@-mkdir -p $(bindir)
+	@mkdir -p $(bindir)
 	@cp ../fltk-config $(bindir)
 
 #
-# End of "$Id: Makefile,v 1.78 2000/06/06 13:44:38 carl Exp $".
+# End of "$Id: Makefile,v 1.79 2000/06/10 04:10:31 carl Exp $".
 #

@@ -99,11 +99,11 @@ public:
 
 typedef unsigned long Fl_Thread;
 
-static int fl_create_thread(Fl_Thread& t, void *(*f) (void *), void* p) {
+FL_API static int fl_create_thread(Fl_Thread& t, void *(*f) (void *), void* p) {
   return t = (Fl_Thread)_beginthread((void( __cdecl * )( void * ))f, 0, p);
 }
 
-class Fl_Mutex {
+class FL_API Fl_Mutex {
   friend class Fl_SignalMutex;
   CRITICAL_SECTION cs;
   Fl_Mutex(const Fl_Mutex&);
@@ -115,7 +115,7 @@ public:
   ~Fl_Mutex() {DeleteCriticalSection(&cs);}
 };
 
-class Fl_SignalMutex : public Fl_Mutex {
+class FL_API Fl_SignalMutex : public Fl_Mutex {
   HANDLE event;
 public:
   Fl_SignalMutex() : Fl_Mutex() {event = CreateEvent(0, FALSE, FALSE, 0);}

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.H,v 1.12 2000/05/27 01:17:23 carl Exp $"
+// "$Id: fl_ask.H,v 1.13 2000/06/10 04:10:21 carl Exp $"
 //
 // Standard dialog header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 #include "Fl_Font.H"
 #include "Fl_Style.H"
 
-class Fl_Widget;
+class FL_API Fl_Widget;
 
 FL_API void fl_message(const char *,...);
 FL_API void fl_alert(const char *,...);
@@ -59,5 +59,5 @@ extern FL_API const char* fl_cancel;
 #endif
 
 //
-// End of "$Id: fl_ask.H,v 1.12 2000/05/27 01:17:23 carl Exp $".
+// End of "$Id: fl_ask.H,v 1.13 2000/06/10 04:10:21 carl Exp $".
 //

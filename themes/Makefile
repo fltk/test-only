@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.20 2000/06/06 13:44:40 carl Exp $"
+# "$Id: Makefile,v 1.21 2000/06/10 04:10:34 carl Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -23,14 +23,19 @@
 # Please report all bugs and problems to "fltk-bugs@easysw.com".
 #
 
-THEMES=essai.theme motif.theme classic.theme windows.theme Alternative.theme KDE.theme KDE_colors.theme
-SCHEMES=Alternative KDE Classic Motif OldMotif Windows Essai
+# essai.theme removed from default list because it requires -ljpeg
+# and breaks the build on some platforms
+THEMES = motif.theme classic.theme windows.theme Alternative.theme \
+         KDE.theme KDE_colors.theme
+SCHEMES = Alternative KDE Classic Motif OldMotif Windows
 
 ################################################################
 
-INCLUDES = -I..
+XTRAFLAGS =
 
 include ../makeinclude
+include $(THEMEINCLUDE)
+
 LIBRARY = ../lib/$(LIBNAME)_themes
 
 CPPFILES = \
@@ -38,87 +43,72 @@ CPPFILES = \
 	fl_windows.cxx \
 	fl_motif.cxx
 
-OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
+OBJECTS = $(CPPFILES:.cxx=.shared.o) $(CFILES:.c=.shared.o)
 
-all : $(LIBRARY).$(LIBEXT) $(THEMES)
-
-.cxx.o :
-	echo $(CXX) -DFL_DLL -DFL_INPLUGIN $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $<
-	$(CXX) -DFL_DLL -DFL_INPLUGIN $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $<
-.c.o :
-	echo $(CC) -DFL_DLL -DFL_INPLUGIN $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $<
-	$(CC) -DFL_DLL -DFL_INPLUGIN $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $<
-%.po : ../src/%.cxx
-	echo $(CXX) -DFL_DLL -DFL_INPLUGIN $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $< -o $@
-	$(CXX) -DFL_DLL -DFL_INPLUGIN $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $< -o $@
-%.po : ../images/%.cxx
-	echo $(CXX) -DFL_DLL -DFL_INPLUGIN $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $< -o $@
-	$(CXX) -DFL_DLL -DFL_INPLUGIN $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $< -o $@
-%.po : ../src/%.c
-	echo $(CC) -DFL_DLL -DFL_INPLUGIN $(INCLUDES) $(CFLAGS) $(SUPFLAGS) -c $< -o $@
-	$(CC) -DFL_DLL -DFL_INPLUGIN $(INCLUDES) $(CFLAGS) $(SUPFLAGS) -c $< -o $@
+all : $(LIBRARY)$(LIBEXT) $(THEMES)
 
 $(LIBRARY).a: $(OBJECTS)
-	@echo $(LIBCOMMAND) $@ $(OBJECTS)
 	@rm -f $@
-	@$(LIBCOMMAND) $@ $(OBJECTS)
-	@$(RANLIB) $@
+	$(LIBCOMMAND) $@ $(OBJECTS)
+	$(RANLIB) $@
 
-essai.theme : essai.o fl_jpeg.po Fl_Shared_Image.po fl_draw_image.po
-	$(CXX)  $(LD_PLUGIN_FLAGS) $(CXXFLAGS) -o $@ $< fl_jpeg.po Fl_Shared_Image.po fl_draw_image.po -L../lib -ljpeg
+ESSAI_OBJ = essai.shared.o fl_jpeg.po Fl_Shared_Image.po fl_draw_image.po
+essai.theme : $(ESSAI_OBJ)
+	$(THEMECOMMAND) $@ $(ESSAI_OBJ) -ljpeg $(DSOLIBS) $(THEMELIBS)
+	cp $@ ../config/themes
+	cp bg*.jpeg ../config/themes
+
+
+MOTIF_OBJ = motif.shared.o fl_motif.shared.o
+motif.theme : $(MOTIF_OBJ)
+	$(THEMECOMMAND) $@ $(MOTIF_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-motif.theme : motif.o fl_motif.o ../lib/$(LIBNAME).$(LIBEXT)
-	$(CXX)  $(LD_PLUGIN_FLAGS) $(CXXFLAGS) -o $@ $< fl_motif.o
+CLASSIC_OBJ = classic.shared.o
+classic.theme : $(CLASSIC_OBJ)
+	$(THEMECOMMAND) $@ $(CLASSIC_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-classic.theme : classic.o ../lib/$(LIBNAME).$(LIBEXT)
-	$(CXX)  $(LD_PLUGIN_FLAGS) $(CXXFLAGS) -o $@ $<
+WINDOWS_OBJ = windows.shared.o fl_windows.shared.o fl_engraved_label.po
+windows.theme : $(WINDOWS_OBJ)
+	$(THEMECOMMAND) $@ $(WINDOWS_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-windows.theme : windows.o fl_windows.o fl_engraved_label.po ../lib/$(LIBNAME).$(LIBEXT)
-	$(CXX)  $(LD_PLUGIN_FLAGS) $(CXXFLAGS) -o $@ $< fl_windows.o fl_engraved_label.po
+ALT_OBJ = Alternative.shared.o fl_arci.po
+Alternative.theme : $(ALT_OBJ)
+	$(THEMECOMMAND) $@ $(ALT_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-Alternative.theme : Alternative.o fl_arci.po ../lib/$(LIBNAME).$(LIBEXT)
-	$(CXX)  $(LD_PLUGIN_FLAGS) $(CXXFLAGS) -o $@ $< fl_arci.po
+KDE_OBJ = KDE.shared.o fl_kde.shared.o fl_list_fonts.po
+KDE.theme : $(KDE_OBJ)
+	$(THEMECOMMAND) $@ $(KDE_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-KDE.theme : KDE.o fl_kde.o fl_list_fonts.po ../lib/$(LIBNAME).$(LIBEXT)
-	$(CXX)  $(LD_PLUGIN_FLAGS) $(CXXFLAGS) -o $@ $< fl_kde.o fl_list_fonts.po
+KDEC_OBJ = KDE_colors.shared.o fl_kde.shared.o fl_list_fonts.po
+KDE_colors.theme : $(KDEC_OBJ)
+	$(THEMECOMMAND) $@ $(KDEC_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
-
-KDE_colors.theme : KDE_colors.o fl_kde.o fl_list_fonts.po ../lib/$(LIBNAME).$(LIBEXT)
-	$(CXX)  $(LD_PLUGIN_FLAGS) $(CXXFLAGS) -o $@ $< fl_kde.o fl_list_fonts.po
-	cp $@ ../config/themes
-
-# What is this?
-win32 : $(OBJECTS) ../lib/$(LIBNAME).$(LIBEXT)
-	dllwrap $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS) -L../lib -lfltkdll.2 $(GLDLIBS)
-	dllwrap $(CXXFLAGS) -o $(PROGRAM2) $(OBJECTS2) -L../lib -lfltkdll.2 $(GLDLIBS)
-	dllwrap $(CXXFLAGS) -o $(PROGRAM3) $(OBJECTS3) -L../lib -lfltkdll.2 $(GLDLIBS)
 
 clean :
-	-@ rm -f *.o *.po $(LIBRARY).$(LIBEXT) $(THEMES) ../config/themes/*.theme core *~ makedepend
+	-@ rm -f *.shared.o *.po $(LIBRARY)$(LIBEXT) $(THEMES) ../config/themes/*.theme core *~ makedepend
 	@touch makedepend
 
 install : all
 	@echo "Installing library..."
 	@-mkdir -p $(libdir)
-	@rm -f $(libdir)/$(LIBNAME)_themes.$(LIBEXT)
-	@-cp $(LIBRARY).$(LIBEXT) $(libdir)
-	@-chmod 644 $(libdir)/$(LIBNAME)_themes.$(LIBEXT)
+	@rm -f $(libdir)/$(LIBNAME)_themes$(LIBEXT)
+	@-cp $(LIBRARY)$(LIBEXT) $(libdir)
+	@-chmod 644 $(libdir)/$(LIBNAME)_themes$(LIBEXT)
 	@echo "Installing themes..."
-	@-mkdir -p $(libdir)/fltk
 	@-mkdir -p $(libdir)/fltk/schemes
 	@-mkdir -p $(libdir)/fltk/themes
-	(cd ../config/schemes; cp -f $(SCHEMES) $(libdir)/fltk/schemes)
-	cp -f $(THEMES) $(libdir)/fltk/themes
+	@(cd ../config/schemes; cp -f $(SCHEMES) $(libdir)/fltk/schemes)
+	@cp -f $(THEMES) $(libdir)/fltk/themes
 
 #depend:
-#	$(MAKEDEPEND) $(INCLUDES) $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
+#	$(MAKEDEPEND) $(XTRAFLAGS) $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
 #include makedepend
 
 #
-# End of "$Id: Makefile,v 1.20 2000/06/06 13:44:40 carl Exp $".
+# End of "$Id: Makefile,v 1.21 2000/06/10 04:10:34 carl Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.22 2000/05/30 07:42:11 bill Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.23 2000/06/10 04:10:30 carl Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -383,7 +383,7 @@ static void chooser_cb(Fl_Widget*, void*) {
 #define ROWS 4
 #define COLS 16
 
-FL_EXPORT Fl_Color fl_color_cells[ROWS*COLS] = {
+FL_API Fl_Color fl_color_cells[ROWS*COLS] = {
 // first the 16 assignable fltk color indexes:
 0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
 16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,
@@ -506,5 +506,5 @@ int fl_color_chooser(const char* name, Fl_Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.22 2000/05/30 07:42:11 bill Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.23 2000/06/10 04:10:30 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.110 2000/06/03 08:49:16 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.111 2000/06/10 04:10:30 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -960,7 +960,7 @@ void Fl_X::set_minmax(LPMINMAXINFO minmax)
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/filename.H> // need so FL_EXPORT filename_name works
+#include <FL/filename.H> // need so FL_API filename_name works
 
 // returns pointer to the filename, or null if name ends with '/'
 const char *filename_name(const char *name) {
@@ -1186,5 +1186,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.110 2000/06/03 08:49:16 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.111 2000/06/10 04:10:30 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.31 2000/05/30 07:41:57 bill Exp $"
+// "$Id: Fl_Style.H,v 1.32 2000/06/10 04:10:20 carl Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -34,7 +34,7 @@
 
 typedef void (*Fl_Glyph)(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype = FL_UP_BOX);
 
-struct Fl_Named_Style;
+struct FL_API Fl_Named_Style;
 
 struct FL_API Fl_Style {
   Fl_Boxtype	box;
@@ -103,5 +103,5 @@ struct FL_API Fl_Named_Style : public Fl_Style {
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.31 2000/05/30 07:41:57 bill Exp $".
+// End of "$Id: Fl_Style.H,v 1.32 2000/06/10 04:10:20 carl Exp $".
 //

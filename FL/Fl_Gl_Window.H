@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.H,v 1.13 1999/10/17 20:40:04 vincent Exp $"
+// "$Id: Fl_Gl_Window.H,v 1.14 2000/06/10 04:10:18 carl Exp $"
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,9 +27,9 @@
 
 #include "Fl_Window.H"
 
-class Fl_Gl_Choice; // structure to hold result of glXChooseVisual
+class FL_GL_API Fl_Gl_Choice; // structure to hold result of glXChooseVisual
 
-class FL_API Fl_Gl_Window : public Fl_Window {
+class FL_GL_API Fl_Gl_Window : public Fl_Window {
 
   int mode_;
   const int* alist;
@@ -83,8 +83,10 @@ public:
     : Fl_Window(X,Y,W,H,l) {init();}
 };
 
+FL_GL_API int fl_gl_visual(int, int *alist=0);
+
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.H,v 1.13 1999/10/17 20:40:04 vincent Exp $".
+// End of "$Id: Fl_Gl_Window.H,v 1.14 2000/06/10 04:10:18 carl Exp $".
 //

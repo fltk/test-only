@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# This will make links in your lib directory so that if you build
+# with --enable-shared, the demo programs will link to the shared
+# libraries.  You must then, of course, set your LD_LIBRARY_PATH
+# correctly to this directory in order to run the demos.
+
+ln -s libfltk.so.2 libfltk.so
+ln -s libfltk_gl.so.2 libfltk_gl.so
+ln -s libfltk_glut.so.2 libfltk_glut.so
+ln -s libfltk_forms.so.2 libfltk_forms.so
+ln -s libfltk_images.so.2 libfltk_images.so

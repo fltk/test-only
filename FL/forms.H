@@ -1,5 +1,5 @@
 //
-// "$Id: forms.H,v 1.19 2000/05/15 05:52:19 bill Exp $"
+// "$Id: forms.H,v 1.20 2000/06/10 04:10:22 carl Exp $"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -164,7 +164,7 @@ typedef int FL_COLOR;
 // fltk interaction:
 
 #define FL_CMD_OPT void
-extern FL_API void fl_initialize(int*, char*[], const char*, FL_CMD_OPT*, int);
+extern FL_FORMS_API void fl_initialize(int*, char*[], const char*, FL_CMD_OPT*, int);
 inline void fl_finish() {}
 
 typedef void (*FL_IO_CALLBACK) (int, void*);
@@ -181,8 +181,8 @@ inline void fl_remove_timeout(int) {}
 // type of callback is different!
 inline void fl_set_idle_callback(void (*cb)()) {Fl::set_idle(cb);}
 
-Fl_Widget* fl_do_forms(void);
-Fl_Widget* fl_check_forms();
+FL_FORMS_API Fl_Widget* fl_do_forms(void);
+FL_FORMS_API Fl_Widget* fl_check_forms();
 inline Fl_Widget* fl_do_only_forms(void) {return fl_do_forms();}
 inline Fl_Widget* fl_check_only_forms(void) {return fl_check_forms();}
 
@@ -207,7 +207,7 @@ inline void fl_reset_focus_object(Fl_Widget* o) {Fl::focus(o);}
 
 inline void fl_set_object_boxtype(Fl_Widget* o, Fl_Boxtype a) {o->box(a);}
 inline void fl_set_object_lsize(Fl_Widget* o,int s) {o->label_size(s);}
-void fl_set_object_lstyle(Fl_Widget* o,int a);
+FL_FORMS_API void fl_set_object_lstyle(Fl_Widget* o,int a);
 inline void fl_set_object_lcol(Fl_Widget* o, unsigned a) {o->label_color((Fl_Color)a);}
 #define fl_set_object_lcolor  fl_set_object_lcol
 inline void fl_set_object_lalign(Fl_Widget* o, Fl_Align a) { o->clear_flag(FL_ALIGN_MASK); o->set_flag(a);}
@@ -268,8 +268,8 @@ inline Fl_Window* fl_bgn_form(Fl_Boxtype b,int w,int h) {
 inline void fl_addto_form(Fl_Window* f) {f->begin();}
 inline Fl_Group* fl_bgn_group() {return new Fl_Group(0,0,0,0,0);}
 inline void fl_addto_group(Fl_Widget* o) {((Fl_Group* )o)->begin();}
-void fl_end_group();
-void fl_end_form();
+FL_FORMS_API void fl_end_group();
+FL_FORMS_API void fl_end_form();
 #define resizebox _ddfdesign_kludge()
 
 inline void fl_scale_form(Fl_Window* f, double x, double y) {
@@ -281,7 +281,7 @@ inline void fl_set_form_geometry(Fl_Window* f,int x,int y,int w,int h) {
 #define fl_set_initial_placement fl_set_form_geometry
 inline void fl_adjust_form_size(Fl_Window*) {}
 
-void fl_show_form(Fl_Window* f,int p,int b,const char* n);
+FL_FORMS_API void fl_show_form(Fl_Window* f,int p,int b,const char* n);
 enum {	// "p" argument values:
   FL_PLACE_FREE = 0,	// make resizable
   FL_PLACE_MOUSE = 1,	// mouse centered on form
@@ -306,7 +306,7 @@ enum {	// "b" arguement values:
 };
 inline void fl_set_form_hotspot(Fl_Window* w,int x,int y) {w->hotspot(x,y);}
 inline void fl_set_form_hotobject(Fl_Window* w, Fl_Widget* o) {w->hotspot(o);}
-extern FL_API char fl_flip;	// in forms.C
+extern FL_FORMS_API char fl_flip;	// in forms.C
 inline void fl_flip_yorigin() {fl_flip = 1;}
 
 #define fl_prepare_form_window fl_show_form
@@ -317,7 +317,7 @@ inline void fl_raise_form(Fl_Window* f) {f->show();}
 inline void fl_hide_form(Fl_Window* f) {f->hide();}
 inline void fl_pop_form(Fl_Window* f) {f->show();}
 
-extern FL_API char fl_modal_next; // in forms.C
+extern FL_FORMS_API char fl_modal_next; // in forms.C
 inline void fl_activate_all_forms() {}
 inline void fl_deactivate_all_forms() {fl_modal_next = 1;}
 inline void fl_deactivate_form(Fl_Window*w) {w->deactivate();}
@@ -433,7 +433,7 @@ inline void fl_replace_browser_line(Fl_Widget* o, int n, const char* s) {
     ((Fl_Browser*)o)->replace(n,s);}
 inline char* fl_get_browser_line(Fl_Widget* o, int n) {
     return (char*)(((Fl_Browser*)o)->text(n));}
-FL_API int fl_load_browser(Fl_Widget* o, const char* f);
+FL_FORMS_API int fl_load_browser(Fl_Widget* o, const char* f);
 inline void fl_select_browser_line(Fl_Widget* o, int n) {
     ((Fl_Browser*)o)->select(n,1);}
 inline void fl_deselect_browser_line(Fl_Widget* o, int n) {
@@ -482,9 +482,9 @@ inline int fl_isdisplayed_browser_line(Fl_Widget* o, int n) {
 #define FL_PUSH_BUTTON		FL_TOGGLE_BUTTON
 #define FL_MENU_BUTTON		9
 
-extern FL_API int fl_old_shortcut(const char*);
+extern FL_FORMS_API int fl_old_shortcut(const char*);
 
-Fl_Button* fl_add_button(uchar t,int x,int y,int w,int h,const char* l);
+FL_FORMS_API Fl_Button* fl_add_button(uchar t,int x,int y,int w,int h,const char* l);
 inline int fl_get_button(Fl_Widget* b) {return ((Fl_Button*)b)->value();}
 inline void fl_set_button(Fl_Widget* b, int v) {((Fl_Button*)b)->value(v);}
 inline int fl_get_button_numb(Fl_Widget*) {return Fl::event_button();}
@@ -653,9 +653,9 @@ fl_add_free(int t,double x,double y,double w,double h,const char* l,
 #include <FL/fl_show_colormap.H>
 
 inline int fl_show_question(const char* c, int = 0) {return fl_ask(c);}
-void fl_show_message(const char *,const char *,const char *);
-void fl_show_alert(const char *,const char *,const char *,int=0);
-int fl_show_question(const char *,const char *,const char *);
+FL_FORMS_API void fl_show_message(const char *,const char *,const char *);
+FL_FORMS_API void fl_show_alert(const char *,const char *,const char *,int=0);
+FL_FORMS_API int fl_show_question(const char *,const char *,const char *);
 inline const char *fl_show_input(const char *l,const char*d=0) {return fl_input(l,d);}
 /*const*/ char *fl_show_simple_input(const char *label, const char *deflt = 0);
 int fl_show_choice(
@@ -682,11 +682,11 @@ inline int fl_show_choices(const char* c,int n,const char* b1,const char* b2,
 inline int do_matching(char* a, const char* b) {return filename_match(a,b);}
 
 // Forms-compatable file chooser (implementation in fselect.C):
-char* fl_show_file_selector(const char* message,const char* dir,
+FL_FORMS_API char* fl_show_file_selector(const char* message,const char* dir,
 			    const char* pat,const char* fname);
-char*	fl_get_directory();
-char*	fl_get_pattern();
-char*	fl_get_filename();
+FL_FORMS_API char*	fl_get_directory();
+FL_FORMS_API char*	fl_get_pattern();
+FL_FORMS_API char*	fl_get_filename();
 
 #include <FL/Fl_Input.H>
 forms_constructor(Fl_Input, fl_add_input)
@@ -820,7 +820,7 @@ inline void fl_set_slider_precision(Fl_Widget* o, int i) {
 
 // The forms text object was the same as an Fl_Box except it inverted the
 // meaning of FL_ALIGN_INSIDE.  Implementation in forms.C
-class FL_API Fl_FormsText : public Fl_Widget {
+class FL_FORMS_API Fl_FormsText : public Fl_Widget {
 protected:
     void draw();
 public:
@@ -837,7 +837,7 @@ inline double fl_get_timer(Fl_Widget* o) {return ((Fl_Timer*)o)->value();}
 inline void fl_suspend_timer(Fl_Widget* o) {((Fl_Timer*)o)->suspended(1);}
 inline void fl_resume_timer(Fl_Widget* o) {((Fl_Timer*)o)->suspended(0);}
 inline void fl_set_timer_countup(Fl_Widget* o,char d) {((Fl_Timer*)o)->direction(d);}
-void fl_gettime(long* sec, long* usec);
+FL_FORMS_API void fl_gettime(long* sec, long* usec);
 
 // Fl_XYPlot nyi
 
@@ -850,5 +850,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.H,v 1.19 2000/05/15 05:52:19 bill Exp $".
+// End of "$Id: forms.H,v 1.20 2000/06/10 04:10:22 carl Exp $".
 //

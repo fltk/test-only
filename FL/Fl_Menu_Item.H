@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.42 2000/02/14 11:32:35 bill Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.43 2000/06/10 04:10:19 carl Exp $"
 //
 // Back-compatability menu items for FLTK.  The new Fl_Menu_ class
 // converts these tables into child Fl_Item and Fl_Group_Item widgets.
@@ -46,11 +46,11 @@ enum { // values for flags:
   FL_MENU_HORIZONTAL = 0x100 // not used!
 };
 
-//extern FL_EXPORT int fl_old_shortcut(const char*);
+//extern FL_API int fl_old_shortcut(const char*);
 
-class Fl_Menu_;
+class FL_API Fl_Menu_;
 
-struct Fl_Menu_Item {
+struct FL_API Fl_Menu_Item {
   const char *text;
   int shortcut_;
   Fl_Callback *callback_;
@@ -66,14 +66,14 @@ struct Fl_Menu_Item {
   // Fl_Menu_ and child widgets!  These also do not match the fltk 1.0
   // calls very much.  This does the callback directly, in fltk 1.0 the
   // menu item was retruned and you had to do the callback yourself.
-  FL_EXPORT int popup(int X, int Y, const char *title=0, void* user_data = 0) const;
-  FL_EXPORT int test_shortcut(void* user_data = 0) const;
+  int popup(int X, int Y, const char *title=0, void* user_data = 0) const;
+  int test_shortcut(void* user_data = 0) const;
 
   // return offset of terminating null item:
-  FL_EXPORT int size() const ;
+  int size() const ;
 
   // advance a pointer by N items, skipping submenus:
-  FL_EXPORT const Fl_Menu_Item *next(int=1) const;
+  const Fl_Menu_Item *next(int=1) const;
   Fl_Menu_Item *next(int i=1) {
     return (Fl_Menu_Item*)(((const Fl_Menu_Item*)this)->next(i));}
 
@@ -115,17 +115,17 @@ struct Fl_Menu_Item {
   void shortcut(int s) {shortcut_ = s;}
   void set() {flags |= FL_MENU_VALUE;}
   void clear() {flags &= ~FL_MENU_VALUE;}
-  FL_EXPORT void setonly();
+  void setonly();
   void show() {flags &= ~FL_MENU_INVISIBLE;}
   void hide() {flags |= FL_MENU_INVISIBLE;}
   void activate() {flags &= ~FL_MENU_INACTIVE;}
   void deactivate() {flags |= FL_MENU_INACTIVE;}
 
   // used by menubar:
-  FL_EXPORT int measure(int* h, const Fl_Menu_*) const;
-  FL_EXPORT void draw(int x, int y, int w, int h, const Fl_Menu_*, int t=0) const;
+  int measure(int* h, const Fl_Menu_*) const;
+  void draw(int x, int y, int w, int h, const Fl_Menu_*, int t=0) const;
 
-  FL_EXPORT const Fl_Menu_Item* find_shortcut(int *ip=0) const;
+  const Fl_Menu_Item* find_shortcut(int *ip=0) const;
 
   void do_callback(Fl_Widget* o) const {callback_(o, user_data_);}
   void do_callback(Fl_Widget* o,void* arg) const {callback_(o, arg);}
@@ -135,7 +135,7 @@ struct Fl_Menu_Item {
   int checked() const {return flags&FL_MENU_VALUE;}
   void check() {flags |= FL_MENU_VALUE;}
   void uncheck() {flags &= ~FL_MENU_VALUE;}
-  FL_EXPORT int add(const char*, int shortcut, Fl_Callback*, void* =0, int = 0);
+  int add(const char*, int shortcut, Fl_Callback*, void* =0, int = 0);
   int add(const char*a, const char* b, Fl_Callback* c,
 	  void* d = 0, int e = 0) {
     return add(a,fl_old_shortcut(b),c,d,e);}
@@ -161,5 +161,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.42 2000/02/14 11:32:35 bill Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.43 2000/06/10 04:10:19 carl Exp $".
 //

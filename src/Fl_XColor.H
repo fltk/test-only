@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_XColor.H,v 1.6 1999/02/16 22:27:52 mike Exp $"
+// "$Id: Fl_XColor.H,v 1.7 2000/06/10 04:10:30 carl Exp $"
 //
 // X-specific color definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -28,17 +28,17 @@
 
 // one of these for each color in fltk's "colormap":
 // if overlays are enabled, another one for the overlay
-struct Fl_XColor {
+FL_API struct Fl_XColor {
   unsigned char r,g,b;	// actual color used by X
   unsigned char mapped;	// true when XAllocColor done
   unsigned long pixel;	// the X pixel to use
 };
-extern FL_EXPORT Fl_XColor fl_xmap[/*overlay*/][256];
+extern FL_API Fl_XColor fl_xmap[/*overlay*/][256];
 
 // mask & shifts to produce xcolor for truecolor visuals:
-extern FL_EXPORT unsigned char fl_redmask, fl_greenmask, fl_bluemask;
-extern FL_EXPORT int fl_redshift, fl_greenshift, fl_blueshift, fl_extrashift;
+extern FL_API unsigned char fl_redmask, fl_greenmask, fl_bluemask;
+extern FL_API int fl_redshift, fl_greenshift, fl_blueshift, fl_extrashift;
 
 //
-// End of "$Id: Fl_XColor.H,v 1.6 1999/02/16 22:27:52 mike Exp $".
+// End of "$Id: Fl_XColor.H,v 1.7 2000/06/10 04:10:30 carl Exp $".
 //

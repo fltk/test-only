@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.50 2000/05/30 07:41:58 bill Exp $"
+// "$Id: Fl_Widget.H,v 1.51 2000/06/10 04:10:20 carl Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -34,10 +34,10 @@ enum { // Values for type():
   FL_WINDOW		= 0xF0
 };
 
-class Fl_Widget;
-class Fl_Window;
-class Fl_Image;
-class Fl_Group;
+class FL_API Fl_Widget;
+class FL_API Fl_Window;
+class FL_API Fl_Image;
+class FL_API Fl_Group;
 
 typedef void (Fl_Callback )(Fl_Widget*, void*);
 typedef Fl_Callback* Fl_Callback_p; // needed for BORLAND
@@ -290,5 +290,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.50 2000/05/30 07:41:58 bill Exp $".
+// End of "$Id: Fl_Widget.H,v 1.51 2000/06/10 04:10:20 carl Exp $".
 //

@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.76 2000/06/06 13:44:28 carl Exp $"
+dnl# "$Id: configure.in,v 1.77 2000/06/10 04:10:14 carl Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -30,120 +30,100 @@ AC_INIT(src/Fl.cxx)
 AC_PROG_RANLIB
 
 LIBNAME="libfltk"
-LIBEXT="a"
+LIBEXT=".a"
 if test "$RANLIB" != ":"; then
   LIBCOMMAND="ar cr"
 else
   LIBCOMMAND="ar crs"
 fi
-DSOCOMMAND="echo"
 DSOCFLAGS=""
 DSOEXT=""
 DSOSHORTEXT=""
-
+DSOLIBS=""
+THEMELIBS=""
+THEMEINCLUDE="makeinclude.with-po"
 dnl# Get the operating system and version number...
 
 uname=`uname`
 uversion=`uname -r | sed -e 's/-.*$//g;s/\.//g'`
 dnl# uversion=`uname -r | sed -e '1,$s/\.//g'`
-if test "$uname" = "IRIX64"; then
-    uname="IRIX"
-fi
+if test -z "$uname"; then uname="WIN32"; fi
+if test "$uname" = "IRIX64"; then uname="IRIX"; fi
 
 dnl# Clear debugging flags and only enable debugging if the user asks for
 dnl# it.
 
+LDLIBS="-lX11 -lXext"
 DEBUGFLAG=""
 CFLAGS="${CFLAGS:=}"
 CXXFLAGS="${CXXFLAGS:=}"
 COPTS=""
 CXXOPTS=""
-
+SYSTYPE="UNIX"
+DSOCFLAGS="-fPIC"
 case $uname in
-    CYGWIN*)
-	CFLAGS="$CFLAGS -DWIN32 -mno-cygwin"
-	CXXFLAGS="$CXXFLAGS -DWIN32 -mno-cygwin"
-	uname="CYGWIN"
-	LDLIBS="-lgdi32 -luser32 -lmsvcrt -lwsock32 -mno-cygwin -mwindows"
- 	LDDLLLIBS="-lgdi32 -luser32 -lmsvcrt -lwsock32 -lopengl32 -lglu32"
-        EXPORTCOMMAND="dlltool"
-	;;
-    *)
-	LDLIBS="-lX11 -lXext"
-	;;
+      SunOS* | UNIX_S*)
+	  DSOCFLAGS="-KPIC"
+	  DSOCOMMAND="\${CXX} -Wl,-h,\$@ -G $DEBUGFLAG -o"
+	  THEMECOMMAND="\${CXX} -Wl,-h,\$@ -G $DEBUGFLAG -o"
+	  ;;
+      HP-UX*)
+	  DSOCOMMAND="ld -b -z +h \$@ $DEBUGFLAG -o"
+	  THEMECOMMAND="ld -b -z +h \$@ $DEBUGFLAG -o"
+	  ;;
+      CYGWIN* | WIN32)
+          uname="WIN32"
+	  CFLAGS="$CFLAGS -DWIN32"
+	  CXXFLAGS="$CXXFLAGS -DWIN32"
+	  LDLIBS="-lgdi32 -luser32 -lmsvcrt -lwsock32 -lws2_32 -mwindows"
+	  SYSTYPE="WIN32"
+	  DSOLIBS="-lgdi32 -luser32 -lmsvcrt -lwsock32 -lws2_32 -lopengl32 -lglu32"
+          DSOCFLAGS="-DFL_DLL"
+          DSOCOMMAND="\${CXX} -Wl,--out-implib,\$@.import -shared $DEBUGFLAG -o"
+          THEMECOMMAND="\${CXX} -shared $DEBUGFLAG -o"
+	  THEMELIBS="-L ../lib -lfltk.2.dll"
+	  THEMEINCLUDE="makeinclude.no-po"
+	  ;;
+      *)
+          echo Using GNU GCC style shared libraries
+          DSOCOMMAND="\${CXX} -shared $DEBUGFLAG -o"
+          THEMECOMMAND="\${CXX} -shared $DEBUGFLAG -o"
+	  ;;
 esac
-
-dnl# Sometimes uname command doesn't work under Cygwin!?
-if test "$OSTYPE" = "cygwin32"
-then
-	CFLAGS="$CFLAGS -DWIN32 -mno-cygwin"
-	CXXFLAGS="$CXXFLAGS -DWIN32 -mno-cygwin"
-	uname="CYGWIN"
-	LDLIBS="-lgdi32 -luser32 -lmsvcrt -lwsock32 -mno-cygwin -mwindows"
- 	LDDLLLIBS="-lgdi32 -luser32 -lmsvcrt -lwsock32 -lopengl32 -lglu32"
-        EXPORTCOMMAND="dlltool"
-fi
-
-AC_SUBST(LDLIBS)
-AC_SUBST(LDDLLLIBS)
 
 AC_ARG_ENABLE(debug, [  --enable-debug          turn on debugging [default=no]],[if eval "test x$enable_debug = xyes"; then
   DEBUGFLAG="-g "
 fi])
 AC_ARG_ENABLE(shared, [  --enable-shared         turn on shared libraries [default=no]],[
 if eval "test x$enable_shared = xyes"; then
-  DSOCFLAGS="-fPIC"
   DSOLIBNAME="libfltk"
   DSOLIBimagesNAME="libfltk_images"
   DSOLIBformsNAME="libfltk_forms"
   DSOLIBglNAME="libfltk_gl"
   DSOLIBglutNAME="libfltk_glut"
+  DSOEXT=".so.2"
+  DSOSHORTEXT=".so"
   case $uname in
-      SunOS* | UNIX_S*)
-	  DSOCFLAGS="-KPIC"
-	  DSOEXT="so.2"
-	  DSOSHORTEXT="so"
-	  DSOCOMMAND="\${CXX} -Wl,-h,\$@ \$(LDLIBS) -G $DEBUGFLAG -o"
-	  ;;
       HP-UX*)
-	  DSOEXT="sl.2"
-	  DSOSHORTEXT="sl"
-	  DSOCOMMAND="ld -b -z +h \$@ $DEBUGFLAG -o"
+	  DSOEXT=".sl.2"
+	  DSOSHORTEXT=".sl"
 	  ;;
-      OSF1*)
-	  DSOEXT="so.2"
-	  DSOSHORTEXT="so"
-          DSOCOMMAND="\${CXX} -Wl,-soname,\$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
- 	  ;;
-      IRIX*)
-	  DSOEXT="so.2"
-	  DSOSHORTEXT="so"
-          DSOCOMMAND="\${CXX} -soname \$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
-	  ;;
-      CYGWIN*)
-          DSOCFLAGS=""
+    WIN32)
           DSOLIBNAME="fltk"
           DSOLIBimagesNAME="fltk_images"
           DSOLIBformsNAME="fltk_forms"
           DSOLIBglNAME="fltk_gl"
           DSOLIBglutNAME="fltk_glut"
-	  DLLCFLAGS="-DFL_DLL -DFL_LIBRARY"
-	  DSOEXT="dll"
+	  DSOEXT=".2.dll"
 	  DSOSHORTEXT=""
-          DSOCOMMAND="dllwrap --export-all --target i386-mingw32 \
-	--implib ../lib/libfltkdll.2.a \
-	--output-exp ../lib/libfltkdll.2.exp \
-	--driver-name \${CXX}"
-	  ;;
-      *)
-          echo "Warning: shared libraries may not be supported.  Trying -shared"
-	  echo "         option with compiler."
-	  DSOEXT="so.2"
-	  DSOSHORTEXT="so"
-          DSOCOMMAND="\${CXX} -Wl,-soname,\$@ -shared $DEBUGFLAG -o"
 	  ;;
   esac
 fi])
+
+AC_SUBST(LDLIBS)
+AC_SUBST(DSOLIBS)
+AC_SUBST(THEMELIBS)
+AC_SUBST(THEMEINCLUDE)
 
 AC_PROG_CC
 AC_PROG_CXX
@@ -200,7 +180,7 @@ CPPFLAGS="$CPPFLAGS $X_CFLAGS"
 
 dnl# My test to see if OpenGL is on this machine:
 GLLIB=
-if test "$uname" = "CYGWIN"
+if test "$uname" = "WIN32"
 then
     GLLIB="-lopengl32 -lglu32"
     AC_DEFINE(HAVE_GL)
@@ -236,7 +216,7 @@ AC_CHECK_HEADER(X11/extensions/Xdbe.h, \
     fi)
 
 ac_cv_have_overlay=no
-if test "$uname" != "CYGWIN"; then
+if test "$uname" != "WIN32"; then
     AC_CACHE_CHECK("for X overlay visuals", ac_cv_have_overlay,
 	if xprop -root 2>/dev/null | grep -c "SERVER_OVERLAY_VISUALS" >/dev/null; then
 	    ac_cv_have_overlay=yes
@@ -260,7 +240,6 @@ fi
 
 if test "$have_pthread" = yes; then
     LDLIBS="$LDLIBS"
-    LDDLLLIBS="$LDDLLLIBS"
     GLDLIBS="$GLDLIBS"
     AC_DEFINE(HAVE_PTHREAD)
 fi
@@ -280,14 +259,12 @@ fi
 
 if test "$have_dlopen" = yes; then
     AC_DEFINE(HAVE_DLOPEN)
-    LD_PLUGIN_FLAGS="-shared"
     if test "$uname" = "Linux"; then
         LD_DLOPEN_FLAGS="${LD_DLOPEN_FLAGS} -rdynamic"
     fi
 fi
 
 AC_SUBST(LD_DLOPEN_FLAGS)
-AC_SUBST(LD_PLUGIN_FLAGS)
 
 MAKEDEPEND="\${CXX} -M"
 
@@ -297,8 +274,8 @@ if test -n "$GXX"; then
     COPTS="-Wall $COPTS"
     CXXOPTS="-Wall -Wno-return-type $CXXOPTS"
     if test -z "$DEBUGFLAG"; then
-        COPTS="-O2 -fforce-mem -fforce-addr -fcaller-saves -fomit-frame-pointer"
-        CXXOPTS="-O2 -fforce-mem -fforce-addr -fcaller-saves -fomit-frame-pointer"
+        COPTS="$COPTS -O2 -fforce-mem -fforce-addr -fcaller-saves -fomit-frame-pointer"
+        CXXOPTS="$CXXOPTS -O2 -fforce-mem -fforce-addr -fcaller-saves -fomit-frame-pointer"
     fi
 
     # See if GCC supports -fno-exceptions...
@@ -389,8 +366,8 @@ fi
 AC_SUBST(DSOEXT)
 AC_SUBST(DSOSHORTEXT)
 AC_SUBST(DSOCOMMAND)
+AC_SUBST(THEMECOMMAND)
 AC_SUBST(DSOCFLAGS)
-AC_SUBST(EXPORTCOMMAND)
 AC_SUBST(LIBNAME)
 AC_SUBST(LIBEXT)
 AC_SUBST(DSOLIBNAME)
@@ -400,12 +377,12 @@ AC_SUBST(DSOLIBglNAME)
 AC_SUBST(DSOLIBglutNAME)
 AC_SUBST(LIBCOMMAND)
 AC_SUBST(MAKEDEPEND)
-AC_SUBST(DLLCFLAGS)
+AC_SUBST(SYSTYPE)
 AC_CONFIG_HEADER(config.h:configh.in)
 AC_OUTPUT(makeinclude fltk-config)
 
 chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.76 2000/06/06 13:44:28 carl Exp $".
+dnl# End of "$Id: configure.in,v 1.77 2000/06/10 04:10:14 carl Exp $".
 dnl#

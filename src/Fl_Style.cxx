@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.15 2000/05/30 10:37:49 carl Exp $"
+// "$Id: Fl_Style.cxx,v 1.16 2000/06/10 04:10:30 carl Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -185,6 +185,7 @@ void Fl_Style::revert() {
       p->revertfunc(p);
     }
   }
+  Fl::redraw();
 }
 ////////////////////////////////////////////////////////////////
 
@@ -211,5 +212,5 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.15 2000/05/30 10:37:49 carl Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.16 2000/06/10 04:10:30 carl Exp $".
 //

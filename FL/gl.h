@@ -1,5 +1,5 @@
 //
-// "$Id: gl.h,v 1.10 1999/11/16 07:36:05 bill Exp $"
+// "$Id: gl.h,v 1.11 2000/06/10 04:10:22 carl Exp $"
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
@@ -42,35 +42,35 @@
 #endif
 #include <GL/gl.h>
 
-void gl_start();
-void gl_finish();
+FL_GL_API void gl_start();
+FL_GL_API void gl_finish();
 
-void gl_color(Fl_Color);
+FL_GL_API void gl_color(Fl_Color);
 inline void gl_color(int c) {gl_color((Fl_Color)c);} // back compatability
 
-void gl_rect(int x,int y,int w,int h);
+FL_GL_API void gl_rect(int x,int y,int w,int h);
 inline void gl_rectf(int x,int y,int w,int h) {glRecti(x,y,x+w,y+h);}
 
-void gl_font(Fl_Font f, int size);
-int  gl_height();
-int  gl_descent();
-int  gl_width(const char *);
-int  gl_width(const char *, int n);
-int  gl_width(uchar);
+FL_GL_API void gl_font(Fl_Font f, int size);
+FL_GL_API int  gl_height();
+FL_GL_API int  gl_descent();
+FL_GL_API int  gl_width(const char *);
+FL_GL_API int  gl_width(const char *, int n);
+FL_GL_API int  gl_width(uchar);
 
-void gl_draw(const char*);
-void gl_draw(const char*, int n);
-void gl_draw(const char*, int x, int y);
-void gl_draw(const char*, double x, double y);
-void gl_draw(const char*, int n, int x, int y);
-void gl_draw(const char*, int n, double x, double y);
-void gl_draw(const char*, int x, int y, int w, int h, Fl_Flags);
-void gl_measure(const char*, int& x, int& y);
+FL_GL_API void gl_draw(const char*);
+FL_GL_API void gl_draw(const char*, int n);
+FL_GL_API void gl_draw(const char*, int x, int y);
+FL_GL_API void gl_draw(const char*, double x, double y);
+FL_GL_API void gl_draw(const char*, int n, int x, int y);
+FL_GL_API void gl_draw(const char*, int n, double x, double y);
+FL_GL_API void gl_draw(const char*, int x, int y, int w, int h, Fl_Flags);
+FL_GL_API void gl_measure(const char*, int& x, int& y);
 
-void gl_draw_image(const uchar *, int x,int y,int w,int h, int d=3, int ld=0);
+FL_GL_API void gl_draw_image(const uchar *, int x,int y,int w,int h, int d=3, int ld=0);
 
 #endif
 
 //
-// End of "$Id: gl.h,v 1.10 1999/11/16 07:36:05 bill Exp $".
+// End of "$Id: gl.h,v 1.11 2000/06/10 04:10:22 carl Exp $".
 //

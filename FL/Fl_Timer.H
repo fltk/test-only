@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Timer.H,v 1.9 1999/11/27 15:44:48 carl Exp $"
+// "$Id: Fl_Timer.H,v 1.10 2000/06/10 04:10:20 carl Exp $"
 //
 // Timer header file for the Fast Light Tool Kit (FLTK).
 //
@@ -35,7 +35,7 @@
 #define FL_VALUE_TIMER		1
 #define FL_HIDDEN_TIMER		2
 
-class FL_API Fl_Timer : public Fl_Widget {
+class FL_FORMS_API Fl_Timer : public Fl_Widget {
   static void stepcb(void *);
   void step();
   char on, direction_;
@@ -58,6 +58,6 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Timer.H,v 1.9 1999/11/27 15:44:48 carl Exp $".
+// End of "$Id: Fl_Timer.H,v 1.10 2000/06/10 04:10:20 carl Exp $".
 //
 

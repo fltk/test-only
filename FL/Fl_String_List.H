@@ -8,7 +8,7 @@
 
 #include <FL/Fl_Group.H>
 
-class Fl_String_List : public Fl_List {
+class FL_API Fl_String_List : public Fl_List {
   const char* const * array;
   int children_;
 public:

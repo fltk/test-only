@@ -1,5 +1,5 @@
 //
-//  "$Id: fl_config.H,v 1.8 2000/05/27 01:17:23 carl Exp $"
+//  "$Id: fl_config.H,v 1.9 2000/06/10 04:10:21 carl Exp $"
 //
 //  Configuration file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -35,7 +35,7 @@
 #include <FL/Enumerations.H>
 #include <FL/conf.h>
 
-class Fl_Config
+class FL_API Fl_Config
 {
   protected:
     char      *_configFile;
@@ -134,5 +134,5 @@ class Fl_Config
 #endif
 
 //
-// End of "$Id: fl_config.H,v 1.8 2000/05/27 01:17:23 carl Exp $".
+// End of "$Id: fl_config.H,v 1.9 2000/06/10 04:10:21 carl Exp $".
 //

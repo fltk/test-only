@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Multiline_Input.H,v 1.7 1999/12/08 17:40:29 bill Exp $"
+// "$Id: Fl_Multiline_Input.H,v 1.8 2000/06/10 04:10:19 carl Exp $"
 //
 // Multiline input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 
 #include "Fl_Input.H"
 
-class Fl_Multiline_Input : public Fl_Input {
+class FL_API Fl_Multiline_Input : public Fl_Input {
 public:
     Fl_Multiline_Input(int x,int y,int w,int h,const char *l = 0)
 	: Fl_Input(x,y,w,h,l) {type(FL_MULTILINE_INPUT);}
@@ -37,5 +37,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Multiline_Input.H,v 1.7 1999/12/08 17:40:29 bill Exp $".
+// End of "$Id: Fl_Multiline_Input.H,v 1.8 2000/06/10 04:10:19 carl Exp $".
 //

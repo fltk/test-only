@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Positioner.H,v 1.10 2000/01/10 06:31:03 bill Exp $"
+// "$Id: Fl_Positioner.H,v 1.11 2000/06/10 04:10:19 carl Exp $"
 //
 // Positioner header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 #include <FL/Fl_Widget.H>
 #endif
 
-class FL_API Fl_Positioner : public Fl_Widget {
+class FL_FORMS_API Fl_Positioner : public Fl_Widget {
 
   double xmin, ymin;
   double xmax, ymax;
@@ -71,5 +71,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Positioner.H,v 1.10 2000/01/10 06:31:03 bill Exp $".
+// End of "$Id: Fl_Positioner.H,v 1.11 2000/06/10 04:10:19 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.1 2000/05/17 07:08:11 bill Exp $"
+// "$Id: fl_clip.cxx,v 1.2 2000/06/10 04:10:31 carl Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -31,7 +31,7 @@
 #define STACK_MAX (STACK_SIZE - 2)
 static Region rstack[STACK_SIZE];
 static int rstackptr=0;
-int fl_clip_state_number=0; // used by gl_begin.C to update GL clip
+FL_API int fl_clip_state_number=0; // used by gl_begin.C to update GL clip
 
 #ifndef WIN32
 // Missing X call: (is this the fastest way to init a 1-rectangle region?)
@@ -228,5 +228,5 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.1 2000/05/17 07:08:11 bill Exp $"
+// End of "$Id: fl_clip.cxx,v 1.2 2000/06/10 04:10:31 carl Exp $"
 //

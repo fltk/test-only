@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.H,v 1.18 2000/01/10 06:30:59 bill Exp $"
+// "$Id: Fl_Chart.H,v 1.19 2000/06/10 04:10:16 carl Exp $"
 //
 // Forms chart header file for the Fast Light Tool Kit (FLTK).
 //
@@ -42,13 +42,13 @@
 #define FL_CHART_MAX		128
 #define FL_CHART_LABEL_MAX	18
 
-struct FL_API FL_CHART_ENTRY {
+struct FL_FORMS_API FL_CHART_ENTRY {
    float val;
    uchar col;
    char str[FL_CHART_LABEL_MAX+1];
 };
 
-class FL_API Fl_Chart : public Fl_Widget {
+class FL_FORMS_API Fl_Chart : public Fl_Widget {
 public:
   Fl_Chart(int,int,int,int,const char * = 0);
 
@@ -79,5 +79,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Chart.H,v 1.18 2000/01/10 06:30:59 bill Exp $".
+// End of "$Id: Fl_Chart.H,v 1.19 2000/06/10 04:10:16 carl Exp $".
 //

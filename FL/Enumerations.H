@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.46 2000/04/16 08:31:41 bill Exp $"
+// "$Id: Enumerations.H,v 1.47 2000/06/10 04:10:15 carl Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -27,8 +27,6 @@
 #define Fl_Enumerations_H
 
 #include <FL/Fl_Export.H>
-
-#define FL_EXPORT // Not used anymore, but there are still some in sources
 
 //
 // The FLTK version number; this is changed slightly from the beta versions
@@ -209,5 +207,5 @@ enum Fl_Damage {
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.46 2000/04/16 08:31:41 bill Exp $".
+// End of "$Id: Enumerations.H,v 1.47 2000/06/10 04:10:15 carl Exp $".
 //

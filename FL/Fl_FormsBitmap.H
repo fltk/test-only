@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FormsBitmap.H,v 1.8 1999/11/27 15:44:45 carl Exp $"
+// "$Id: Fl_FormsBitmap.H,v 1.9 2000/06/10 04:10:17 carl Exp $"
 //
 // Forms bitmap header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 
 #include <FL/Fl_Bitmap.H>
 
-class FL_API Fl_FormsBitmap : public Fl_Widget {
+class FL_FORMS_API Fl_FormsBitmap : public Fl_Widget {
     Fl_Bitmap *b;
 protected:
     void draw();
@@ -42,5 +42,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_FormsBitmap.H,v 1.8 1999/11/27 15:44:45 carl Exp $".
+// End of "$Id: Fl_FormsBitmap.H,v 1.9 2000/06/10 04:10:17 carl Exp $".
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.45 2000/06/06 13:44:39 carl Exp $"
+# "$Id: Makefile,v 1.46 2000/06/10 04:10:32 carl Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -51,57 +51,45 @@ all:	$(ALL)
 include ../makeinclude
 
 .cxx:
-	echo $(CXX) -I.. $(CXXFLAGS) $< $(LDLIBS) -o $@
 	$(CXX) -I.. $(CXXFLAGS) $< $(LDLIBS) -o $@
 
 $(ALL):  ../lib/$(LIBNAME).a
 
 # FLUID file rules
 .fl.cxx .fl.h:
-	echo Generating $<...
 	../fluid/fluid -c $<
 
 .fl:
-	echo Generating, compiling, and linking $@...
 	../fluid/fluid -c $<
 	$(CXX) -I.. $(CXXFLAGS) $@.cxx $(LDLIBS) -o $@
 
 
 # Other programs needing special "help"...
 CubeView: CubeMain.o CubeView.o CubeViewUI.o
-	echo $(CXX) CubeMain.o CubeView.o CubeViewUI.o `../fltk-config --use-gl --ldflags` $(DEBUGFLAGS) -o $@
 	$(CXX) CubeMain.o CubeView.o CubeViewUI.o `../fltk-config --use-gl --ldflags` $(DEBUGFLAGS) -o $@
 CubeMain.o: CubeViewUI.h CubeView.h
 CubeView.o: CubeView.h
 
 glpuzzle: glpuzzle.cxx
-	echo $(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 	$(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 cube: cube.cxx
-	echo $(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 	$(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 fullscreen: fullscreen.cxx
-	echo $(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 	$(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 gl_overlay: gl_overlay.cxx
-	echo $(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 	$(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 keyboard: keyboard.cxx keyboard_ui.cxx
 mandelbrot: mandelbrot.cxx mandelbrot_ui.cxx
 shape: shape.cxx
-	echo $(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 	$(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 image_file: image_file.cxx
-	echo $(CXX) $< `../fltk-config --use-images --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 	$(CXX) $< `../fltk-config --use-images --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 threads: threads.cxx
-	echo $(CXX) $< `../fltk-config --multithread --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 	$(CXX) $< `../fltk-config --multithread --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 
 # If you have libjpeg installed, you might want to try this test program:
 
 jpeg_image: jpeg_image.cxx
-	echo $(CXX) -I.. $(CXXFLAGS) -I../../../local/jpeg-6b -L../../../local/jpeg-6b jpeg_image.cxx -L../lib -lfltk $(LDLIBS) $(IMAGELIBS) -lXext -o $@
 	$(CXX) -I.. $(CXXFLAGS) -I../../../local/jpeg-6b -L../../../local/jpeg-6b jpeg_image.cxx -L../lib -lfltk $(LDLIBS) $(IMAGELIBS) -lXext -o $@
 
 depend:
@@ -114,5 +102,5 @@ install:
 	@echo Nothing to install in test directory.
 
 #
-# End of "$Id: Makefile,v 1.45 2000/06/06 13:44:39 carl Exp $".
+# End of "$Id: Makefile,v 1.46 2000/06/10 04:10:32 carl Exp $".
 #

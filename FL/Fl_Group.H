@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.H,v 1.23 2000/05/17 07:08:03 bill Exp $"
+// "$Id: Fl_Group.H,v 1.24 2000/06/10 04:10:18 carl Exp $"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 #include "Fl_Widget.H"
 #endif
 
-class Fl_Group;
+class FL_API Fl_Group;
 
 class FL_API Fl_List {
 public:
@@ -126,5 +126,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Group.H,v 1.23 2000/05/17 07:08:03 bill Exp $".
+// End of "$Id: Fl_Group.H,v 1.24 2000/06/10 04:10:18 carl Exp $".
 //
