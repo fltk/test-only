@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Type.cxx,v 1.21 1999/03/31 19:14:19 carl Exp $"
+// "$Id: Fl_Menu_Type.cxx,v 1.22 1999/04/05 21:59:15 carl Exp $"
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
@@ -351,9 +351,14 @@ void Fl_Menu_Item_Type::write_code2() {
   if (o->is_style_forced(Fl_Widget::LABELSIZE))
     write_c("%s%s[%d].labelsize(%d);\n", indent(), name, i, o->labelsize());
 
-  if (o->is_style_forced(Fl_Widget::LABELTYPE))
-    write_c("%s%s[%d].labeltype(FL_%s);\n", indent(), name, i,
-            labeltypename(o->labeltype()));
+  if (o->is_style_forced(Fl_Widget::LABELTYPE)) {
+    if (labeltypename(o->labeltype()))
+      write_c("%s%s[%d].labeltype(FL_%s);\n", indent(), name, i,
+              labeltypename(o->labeltype()));
+    else
+      write_c("%s%s[%d].labeltype((Fl_Labeltype)%d);\n", indent(), name, i,
+              o->labeltype());
+  }
 
   if (o->is_style_forced(Fl_Widget::COLOR2))
     write_c("%s%s[%d].down_color((Fl_Color)%d);\n", indent(), name, i,
@@ -505,5 +510,5 @@ int Shortcut_Button::handle(int e) {
 }
   
 //
-// End of "$Id: Fl_Menu_Type.cxx,v 1.21 1999/03/31 19:14:19 carl Exp $".
+// End of "$Id: Fl_Menu_Type.cxx,v 1.22 1999/04/05 21:59:15 carl Exp $".
 //
