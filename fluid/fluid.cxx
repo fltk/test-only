@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.58 2002/02/10 22:57:47 spitzak Exp $"
+// "$Id: fluid.cxx,v 1.59 2002/10/26 09:55:30 spitzak Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -176,11 +176,10 @@ void save_cb(Fl_Widget *, void *v) {
 
 void exit_cb(Fl_Widget *,void *) {
   if (modflag)
-    switch (fl_choice("Save changes before exiting?", "Cancel", "No", "Yes"))
-    {
-      case 0 : /* Cancel */
+    switch (fl_choice("Save changes before exiting?", "Yes", "No", "Cancel")) {
+      case 2 : /* Cancel */
           return;
-      case 2 : /* Yes */
+      case 0 : /* Yes */
           save_cb(NULL, NULL);
 	  if (modflag) return;	// Didn't save!
     }
@@ -552,5 +551,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.58 2002/02/10 22:57:47 spitzak Exp $".
+// End of "$Id: fluid.cxx,v 1.59 2002/10/26 09:55:30 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.72 2002/10/04 07:48:14 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.73 2002/10/26 09:55:30 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -546,6 +546,7 @@ bool Fl_Input::copy(bool clipboard) {
 static char* undobuffer;
 static int undobufferlength;
 static Fl_Input* undowidget;
+static bool undo_is_redo;
 static int undoat;	// points after insertion
 static int undocut;	// number of characters deleted there
 static int undoinsert;	// number of characters inserted
@@ -583,6 +584,8 @@ bool Fl_Input::replace(int b, int e, const char* text, int ilen) {
 #endif
 
   put_in_buffer(size_+ilen);
+
+  if (undo_is_redo) {undowidget = 0; undo_is_redo = false;}
 
   if (e>b) {
     if (undowidget == this && b == undoat) {
@@ -647,8 +650,8 @@ bool Fl_Input::replace(int b, int e, const char* text, int ilen) {
 }
 
 bool Fl_Input::undo() {
-  was_up_down = false;
   if (undowidget != this || !undocut && !undoinsert) return false;
+  was_up_down = false;
 
   int ilen = undocut;
   int xlen = undoinsert;
@@ -677,6 +680,7 @@ bool Fl_Input::undo() {
   undoat = b;
   mark_ = b /* -ilen */;
   position_ = b;
+  undo_is_redo = !undo_is_redo;
 
   minimal_update(b1);
   if (when()&FL_WHEN_CHANGED) do_callback(); else set_changed();
@@ -1000,18 +1004,22 @@ bool Fl_Input::handle_key() {
     copy();
     return cut();
 
-  case 'y': // Emacs paste
+  case 'y':
+    // Check for more global redo action first:
     if (key_is_shortcut()) return true;
+    return undo_is_redo && undo();
+#if 0
+    // This is actually Emacs paste so do that if nothing else:
     Fl::paste(*this,true);
     return true;
-
-  case 'z':
-    if (!ctrl && key_is_shortcut()) return true;
-    return undo();
+#endif
 
   case '/': // Emacs undo
     if (key_is_shortcut()) return true;
-    return undo();
+  case 'z':
+    // For undo we undo local typing first. Only if this fails do
+    // we run some appliation menu item for undo:
+    return !undo_is_redo && undo();
 
     // Other interesting Emacs characters:
     // 'q' quotes next character
@@ -1281,5 +1289,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.72 2002/10/04 07:48:14 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.73 2002/10/26 09:55:30 spitzak Exp $".
 //

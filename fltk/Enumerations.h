@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.h,v 1.9 2002/09/16 00:29:05 spitzak Exp $"
+// "$Id: Enumerations.h,v 1.10 2002/10/26 09:55:30 spitzak Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -168,6 +168,7 @@ enum Fl_Cursor {	// standard cursors
   FL_CURSOR_WE		= 79,
   FL_CURSOR_NWSE	= 80,
   FL_CURSOR_NESW	= 81,
+  FL_CURSOR_NO		= 82,
   FL_CURSOR_NONE	= 255,
   // for back compatability (non MSWindows ones):
   FL_CURSOR_N		= 70,
@@ -232,5 +233,5 @@ enum {
 #endif
 
 //
-// End of "$Id: Enumerations.h,v 1.9 2002/09/16 00:29:05 spitzak Exp $".
+// End of "$Id: Enumerations.h,v 1.10 2002/10/26 09:55:30 spitzak Exp $".
 //

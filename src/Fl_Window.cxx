@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.89 2002/10/04 07:48:15 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.90 2002/10/26 09:55:30 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -70,6 +70,7 @@ void Fl_Window::_Fl_Window() {
   //resizable(0); // new default for group
   size_range_set = 0;
   child_of_ = 0;
+  shortcut(FL_Escape);
   callback((Fl_Callback*)default_callback);
 }
 
@@ -82,7 +83,6 @@ Fl_Window::Fl_Window(int W, int H, const char *l)
 // fix common user error of a missing end() with current(0):
   : Fl_Group((Fl_Group::current(0),FL_USEDEFAULT), FL_USEDEFAULT, W, H, l) {
   _Fl_Window();
-  shortcut(FL_Escape);
   clear_visible();
 }
 
@@ -188,15 +188,24 @@ int Fl_Window::handle(int event) {
 
   int ret = Fl_Group::handle(event); if (ret) return ret;
 
-  if (!parent()) {
-    // Make the Escape key close windows:
-    if (event == FL_SHORTCUT && !Fl::event_clicks() && test_shortcut()) {
-      do_callback();
-      return 1;
+  // unused events can close windows or raise them:
+  if (!parent()) switch (event) {
+  case FL_KEY:
+  case FL_SHORTCUT:
+    if (Fl::event_clicks()) break; // make repeating key not close everything
+    if (test_shortcut()) {do_callback(); return 1;}
+    break;
+  case FL_PUSH:
+    // clicks outside windows exit the modal state. I give a bit of border
+    // so if they are trying to resize the modal window an miss they don't
+    // exit:
+    if (Fl::event_x() < -4 || Fl::event_x() > w()+4 ||
+	Fl::event_y() < -4 || Fl::event_y() > h()+4) {
+      if (Fl::modal()) Fl::exit_modal();
     }
 #if !defined(_WIN32) && !(defined(__APPLE__) && !USE_X11)
     // Unused clicks raise windows:
-    if (event == FL_PUSH) XMapRaised(fl_display, i->xid);
+    else XMapRaised(fl_display, i->xid);
 #endif
   }
   return 0;
@@ -368,5 +377,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.89 2002/10/04 07:48:15 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.90 2002/10/26 09:55:30 spitzak Exp $".
 //

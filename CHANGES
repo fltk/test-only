@@ -2445,3 +2445,30 @@ implement. Instead the calling code insures that such indexes are
 never sent.
 
 ////////////////////////////////////////////////////////////////
+
+It looks like Fl_Menu_Window always has set_override() done, and
+set_override() is not done anywhere else. So I made Fl_Menu_Window do
+this automatically and made set_override undocumented. So if you want
+a borderless popup window use Fl_Menu_Window.
+
+Fl_Menu_Window and many other window subclasses did not have the
+default Fl_Escape shortcut due to a small mistake in the code. They
+now all have the same default.
+
+Clicking outside any modal window exits the modal state. This is useful
+for popups so you don't have to make a subclass just to catch this. It
+also appears to be a good GUI idea in general, programs do not appear
+"stuck" just because the user does not notice a modal window.
+
+Fl_Choice: the buttons have been rearranged to go from left to right
+in the same order as the arguments.
+
+Fl_Input: ctrl+y added for "redo". Typing Ctrl+z (undo) or ctrl+y more
+than once returns false, so another widget can handle them. Ie. if
+your application has an undo, and the user edits some text, typing
+ctrl+z will first undo the text editing, typing it again will cause
+your application to undo something.
+
+Clicking on Fl_Output does the callback.
+
+Added FL_CURSOR_NO (slash in circle)

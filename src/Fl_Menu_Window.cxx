@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Window.cxx,v 1.15 2002/01/14 18:10:27 spitzak Exp $"
+// "$Id: Fl_Menu_Window.cxx,v 1.16 2002/10/26 09:55:30 spitzak Exp $"
 //
 // Menu window code for the Fast Light Tool Kit (FLTK).
 //
@@ -52,6 +52,7 @@ extern uchar fl_overlay; // changes how fl_color(x) works
 #endif
 
 void Fl_Menu_Window::create() {
+  set_override();
 #if USE_OVERLAY
   if (overlay() && fl_find_overlay_visual()) {
     XInstallColormap(fl_display, fl_overlay_colormap);
@@ -99,5 +100,5 @@ Fl_Menu_Window::~Fl_Menu_Window() {
 }
 
 //
-// End of "$Id: Fl_Menu_Window.cxx,v 1.15 2002/01/14 18:10:27 spitzak Exp $".
+// End of "$Id: Fl_Menu_Window.cxx,v 1.16 2002/10/26 09:55:30 spitzak Exp $".
 //

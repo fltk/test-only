@@ -1,5 +1,5 @@
 //
-// "$Id: fl_dnd_x.cxx,v 1.8 2002/06/18 06:47:32 spitzak Exp $"
+// "$Id: fl_dnd_x.cxx,v 1.9 2002/10/26 09:55:31 spitzak Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
@@ -169,7 +169,7 @@ bool Fl::dnd() {
       // we are going to try the middle-mouse click on them:
       drop_ok = types[0]==fl_textplain;
     }
-    Fl_Cursor cursor = Fl_Cursor(drop_ok ? 21 : 1);
+    Fl_Cursor cursor = Fl_Cursor(drop_ok ? 21 : FL_CURSOR_NO);
     if (cursor != oldcursor) {
       oldcursor = cursor;
       source_fl_window->cursor(cursor);
@@ -217,5 +217,5 @@ bool Fl::dnd() {
 
 
 //
-// End of "$Id: fl_dnd_x.cxx,v 1.8 2002/06/18 06:47:32 spitzak Exp $".
+// End of "$Id: fl_dnd_x.cxx,v 1.9 2002/10/26 09:55:31 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: cursor.cxx,v 1.8 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: cursor.cxx,v 1.9 2002/10/26 09:55:31 spitzak Exp $"
 //
 // Cursor test program for the Fast Light Tool Kit (FLTK).
 //
@@ -55,6 +55,7 @@ Fl_Menu_Item choices[] = {
   {"FL_CURSOR_WE",0,choice_cb,(void*)FL_CURSOR_WE},
   {"FL_CURSOR_NWSE",0,choice_cb,(void*)FL_CURSOR_NWSE},
   {"FL_CURSOR_NESW",0,choice_cb,(void*)FL_CURSOR_NESW},
+  {"FL_CURSOR_NO",0,choice_cb,(void*)FL_CURSOR_NO},
   {"FL_CURSOR_NONE",0,choice_cb,(void*)FL_CURSOR_NONE},
 #if 0
   {"FL_CURSOR_N",0,choice_cb,(void*)FL_CURSOR_N},
@@ -105,7 +106,6 @@ int main(int argc, char **argv) {
 
   Fl_Choice choice(80,100,200,25,"Cursor:");
   choice.menu(choices);
-  choice.callback(choice_cb);
   choice.when(FL_WHEN_RELEASE|FL_WHEN_NOT_CHANGED);
 
   Fl_Hor_Value_Slider slider1(80,180,310,30,"Cursor:");
@@ -171,5 +171,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: cursor.cxx,v 1.8 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: cursor.cxx,v 1.9 2002/10/26 09:55:31 spitzak Exp $".
 //

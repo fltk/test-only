@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.23 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_ask.cxx,v 1.24 2002/10/26 09:55:31 spitzak Exp $"
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
@@ -73,6 +73,8 @@ static void set_button_number(Fl_Widget* w, long a) {
 
 static Fl_Input *input;
 
+// In this call the buttons are in backwards order from right to left,
+// this is because "no" (0) is on the right.
 static int innards(
   const char* iconlabel,
   const char *istr, int itype,
@@ -122,11 +124,14 @@ static int innards(
   blabels[0] = b0;
   blabels[1] = b1;
   blabels[2] = b2;
-  int default_button = b1 ? 1 : 0;
 
+  // Button with '*' is default, if none the left-most one is:
+  int default_button = 0;
   int i;
-  for (i = 0; i <= 2; i++)
-    if (blabels[i] && blabels[i][0] == '*') {blabels[i]++; default_button = i;}
+  for (i = 2; i >= 0; i--) if (blabels[i]) {
+    if (!default_button) default_button = i;
+    if (blabels[i][0] == '*') {blabels[i]++; default_button = i;}
+  }
 
   for (i = 3; i--;) if (blabels[i]) {
     Fl_Button* button;
@@ -185,9 +190,9 @@ int fl_ask(const char *fmt, ...) {
 int fl_choice(const char*fmt,const char *b0,const char *b1,const char *b2,...){
   va_list ap;
   va_start(ap, b2);
-  int r = innards("?", 0, 0, fmt, ap, b0, b1, b2);
+  int r = innards("?", 0, 0, fmt, ap, b2, b1, b0);
   va_end(ap);
-  return r;
+  return 2-r;
 }
 
 static const char* input_innards(const char* fmt, va_list ap,
@@ -214,5 +219,5 @@ const char *fl_password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.23 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_ask.cxx,v 1.24 2002/10/26 09:55:31 spitzak Exp $".
 //
