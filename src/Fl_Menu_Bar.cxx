@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.80 2005/01/24 08:07:26 spitzak Exp $"
+// "$Id$"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -44,9 +44,9 @@ void MenuBar::draw() {
 }
 
 int MenuBar::handle(int event) {
-  unsigned children = this->children();
+  int children = this->children();
   if (!children) return 0;
-  unsigned i;
+  int i;
   switch (event) {
   case LEAVE:
     highlight_ = -1;
@@ -67,16 +67,18 @@ int MenuBar::handle(int event) {
     } else {
       Tooltip::exit();
     }
-  J2:
+J2:
     if (highlight_ == last_) return 1;
     redraw(DAMAGE_CHILD);
     return 1;
   case PUSH:
     if (highlight_ < 0) return 0;
     value(-1);
-  J1:
+J1:
     highlight_ = -1; redraw(DAMAGE_CHILD);
     popup(0, 0, w(), h(), 0, true);
+    if (lastfocus_) lastfocus_->take_focus();
+    lastfocus_ = 0;
     return 1;
   case SHORTCUT:
     // Test against the shortcut() of any item in any submenu:
@@ -107,11 +109,79 @@ int MenuBar::handle(int event) {
     // any intermediate values.  On X it is false if Alt is held down
     // for a long time, too:
     if (!event_is_click()) break;
+
+    // If there's no widget to revert focus,
+    // it's better to do nothing in thiscase
+    if (!fltk::focus()) {
+      lastfocus_ = 0;
+      break;
+    }
+
+    // We are focused, return focus to old focused widget    
+    if (focused()) {      
+      if (lastfocus_) lastfocus_->take_focus();
+      lastfocus_ = 0;      
+      highlight_ = -1; value(-1);
+      redraw(DAMAGE_CHILD);
+      return 1;
+    }    
+
     // okay we got the shortcut, find first menu and pop it up:
     for (i = 0; i < children; i++) {
       Widget* w = child(i);
-      if (w->active()) {value(i); goto J1;}
+      if (w->active()) {
+        value(i); highlight_ = i;
+        lastfocus_ = fltk::focus();
+        take_focus();        
+        return 1;
+      }
     }
+    break;
+  case KEY:
+    switch (event_key()) {
+    case RightKey:
+      i=value()+1;
+J3:
+      for (; i < children; i++) {
+        Widget* w = child(i);
+        if (w->active()) {
+          value(i); highlight_ = i;
+          redraw(DAMAGE_CHILD);
+          return 1;
+        }        
+      }
+      i = 0;
+      goto J3;
+    case LeftKey:
+      i=value()-1;
+J4:
+      for (; i >= 0; i--) {
+        Widget* w = child(i);
+        if (w->active()) {
+          value(i); highlight_ = i;
+          redraw(DAMAGE_CHILD);
+          return 1;
+        }        
+      }
+      i = children-1;
+      goto J4;
+    case DownKey:
+      /* Popup menu */
+      goto J1;
+    default:
+      break;
+    }
+    // Handle shortcuts
+    handle_shortcut();
+    return 1;
+  case UNFOCUS:
+    value(-1); highlight_ = -1;
+    redraw(DAMAGE_CHILD);
+    return 1;
+  case FOCUS:
+    // Only accept keyboard focus from ALT keys
+    if (event_key() != LeftAltKey && event_key() != RightAltKey) break;
+    return 1;
   }
   return 0;
 }
@@ -141,8 +211,9 @@ MenuBar::MenuBar(int x,int y,int w,int h,const char *l)
   style(default_style);
   shortcut(LeftAltKey);
   highlight_ = last_ = -1;
+  lastfocus_ = 0;
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.80 2005/01/24 08:07:26 spitzak Exp $".
+// End of "$Id$".
 //
