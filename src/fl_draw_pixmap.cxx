@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_pixmap.cxx,v 1.17 2002/12/10 02:00:59 easysw Exp $"
+// "$Id: fl_draw_pixmap.cxx,v 1.18 2004/06/04 08:31:26 spitzak Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -134,6 +134,7 @@ void fltk::set_mask_bitmap(uchar **ppBitmap)
 	mask_bitmap = ppBitmap;
 }
 
+Color fg_kludge;
 
 int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
   xpm_data d;
@@ -174,6 +175,12 @@ int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
       *c = 0;
     }
   } else {	// normal XPM colormap with names
+    uchar f[3];
+    uchar b[3];
+    if (fg_kludge) {
+      split_color(fg_kludge, f[0], f[1], f[2]);
+      split_color(bg, b[0], b[1], b[2]);
+    }
     if (chars_per_pixel>1) memset(d.byte1, 0, sizeof(d.byte1));
     for (int i=0; i<ncolors; i++) {
       const uchar* p = *data++;
@@ -215,9 +222,15 @@ int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
 	c[0] = uchar(C>>24);
 	c[1] = uchar(C>>16);
 	c[2] = uchar(C>>8);
+	if (fg_kludge) {
+	  c[0] = (c[0]*b[0]+(255-c[0])*f[0])/255;
+	  c[1] = (c[1]*b[1]+(255-c[1])*f[1])/255;
+	  c[2] = (c[2]*b[2]+(255-c[2])*f[2])/255;
+	}
       } else { // assume "None" or "#transparent" for any errors
 	// this should be transparent...
 	transparent_index = index;
+	c[0] = c[1] = c[2] = 0;
       }
       c[3] = 0;
     }
@@ -282,5 +295,5 @@ int fltk::draw_xpm(const char*const* di, int x, int y, Color bg) {
 }
 
 //
-// End of "$Id: fl_draw_pixmap.cxx,v 1.17 2002/12/10 02:00:59 easysw Exp $".
+// End of "$Id: fl_draw_pixmap.cxx,v 1.18 2004/06/04 08:31:26 spitzak Exp $".
 //

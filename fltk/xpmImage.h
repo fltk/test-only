@@ -1,5 +1,5 @@
 //
-// "$Id: xpmImage.h,v 1.9 2004/05/04 07:30:42 spitzak Exp $"
+// "$Id: xpmImage.h,v 1.10 2004/06/04 08:31:26 spitzak Exp $"
 //
 // Image subclass that draws the data from an xpm format file.
 // XPM is a file format designed for small icons in X, it can
@@ -34,6 +34,7 @@
 namespace fltk {
 
 class FL_API xpmImage : public Image {
+  Color fg, bg; // what color monochrome ones were drawn in
 public:
   const char * const * data;
   xpmImage(const char * const * d) : Image(-1,0), data(d) {}
@@ -51,5 +52,5 @@ public:
 #endif
 
 //
-// End of "$Id: xpmImage.h,v 1.9 2004/05/04 07:30:42 spitzak Exp $".
+// End of "$Id: xpmImage.h,v 1.10 2004/06/04 08:31:26 spitzak Exp $".
 //

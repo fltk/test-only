@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pixmap.cxx,v 1.26 2004/05/04 07:30:43 spitzak Exp $"
+// "$Id: Fl_Pixmap.cxx,v 1.27 2004/06/04 08:31:26 spitzak Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,8 @@
 #include <fltk/xpmImage.h>
 #include <fltk/draw.h>
 #include <fltk/x.h>
+#include <fltk/Style.h>
+#include <fltk/string.h>
 using namespace fltk;
 
 void xpmImage::_measure(float& W, float& H) const {
@@ -45,9 +47,28 @@ void xpmImage::_measure(float& W, float& H) const {
   H = h();
 }
 
+extern Color fg_kludge;
+
 void xpmImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
 {
+  Color bg = NO_COLOR;
+  Color fg = NO_COLOR;
+  // detect our kludge for monochrome xpm images of letters:
+  if (!strcmp(data[1]," \tc #FFFFFF")) {
+    // it is monochrome...
+    style->boxcolors(flags, bg, fg);
+    bg = get_color_index(bg); if (!bg) bg = BLACK;
+    fg = get_color_index(fg); if (!fg) fg = BLACK;
+    if (fg != this->fg || bg != this->bg) {
+      xpmImage* t = const_cast<xpmImage*>(this);
+      t->destroy_cache();
+      t->fg = fg;
+      t->bg = bg;
+      goto REDRAW;
+    }
+  }      
   if (!drawn()) {
+  REDRAW:
     if (this->w() < 0) {
       int W,H;
       measure_xpm(data,W,H);
@@ -57,7 +78,9 @@ void xpmImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags
     ImageDraw idraw(const_cast<xpmImage*>(this));
     uchar *bitmap = 0;
     set_mask_bitmap(&bitmap);
-    draw_xpm(data, 0, 0, NO_COLOR);
+    fg_kludge = fg;
+    draw_xpm(data, 0, 0, bg);
+    fg_kludge = 0;
     set_mask_bitmap(0);
     if (bitmap) {
       (const_cast<xpmImage*>(this))->set_alpha_bitmap(bitmap, this->w(), this->h());
@@ -68,5 +91,5 @@ void xpmImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags
 }
 
 //
-// End of "$Id: Fl_Pixmap.cxx,v 1.26 2004/05/04 07:30:43 spitzak Exp $".
+// End of "$Id: Fl_Pixmap.cxx,v 1.27 2004/06/04 08:31:26 spitzak Exp $".
 //
