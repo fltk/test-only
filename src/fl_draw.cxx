@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.15 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.16 2001/07/24 16:05:15 robertk Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -40,9 +40,11 @@
 #include <fltk/fl_draw.h>
 #include <string.h>
 
-#define MAXBUF 1024
+//#define MAXBUF 1024
 
 const int* fl_column_widths_ = 0;
+static size_t working_buffer_size_ = 128;	// may grow as program runs
+static int MAXSEGMENTS = 50;				// this too
 
 // The implementation splits the text up into individual calls to fl_draw.
 // Each has an x/y position and a segment of text. Probably should be
@@ -123,6 +125,22 @@ static int wrap(
 
 bool fl_hide_shortcut; // set by Fl_Choice
 
+static void set_max_segments(const char *str) {
+	int max = 10;	// leave some extra room 
+	while(str && *str) {
+		if(*str == '\t' || *str == '\n')
+			++max;
+		++str;
+	}
+	if(MAXSEGMENTS < max)
+		MAXSEGMENTS = max;
+}
+
+static inline void set_working_buffer_size(const char *str) {
+	if(strlen(str) > working_buffer_size_ - 1)
+		working_buffer_size_ = strlen(str) * 2;
+}
+
 // Parses and lays out the text into segments. Return value is the
 // y height of the text. The width is stored in max_x.
 static int split(
@@ -202,17 +220,17 @@ static int split(
   }
 }
 
-#define MAXSEGMENTS 50
-
 void fl_draw(
     const char* str,	// the (multi-line) string
     int X, int Y, int W, int H,	// bounding box
     Fl_Flags flags
 ) {
   if (!str || !*str) return;
+  set_max_segments(str);
+  set_working_buffer_size(str);
   Segment segments[MAXSEGMENTS];
   Segment* segment = segments;
-  char tempbuf[128];
+  char tempbuf[working_buffer_size_];
   int h = split(str, W, H, flags, segment, segments+MAXSEGMENTS-1, tempbuf);
   int dy;
   if (flags & FL_ALIGN_BOTTOM) {
@@ -230,9 +248,11 @@ void fl_draw(
 
 void fl_measure(const char* str, int& w, int& h, Fl_Flags flags) {
   if (!str || !*str) {w = 0; h = fl_height(); return;}
+  set_max_segments(str);
+  set_working_buffer_size(str);
   Segment segments[MAXSEGMENTS];
   Segment* segment = segments;
-  char tempbuf[128];
+  char tempbuf[working_buffer_size_];
   h = split(str, w, h, flags, segment, segments+MAXSEGMENTS-1, tempbuf);
   w = max_x;
 }
@@ -243,5 +263,5 @@ void fl_measure(const char* str, int& w, int& h, Fl_Flags flags) {
 //  }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.15 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.16 2001/07/24 16:05:15 robertk Exp $".
 //

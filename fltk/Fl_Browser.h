@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Browser.h,v 1.2 2001/07/24 16:05:15 robertk Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -114,6 +114,8 @@ public:
   void format_char(char c) {format_char_ = c;}
   char column_char() const {return column_char_;}
   void column_char(char c) {column_char_ = c;}
+  const int *column_widths() { return column_widths_; }
+  void column_widths(const int *pWidths)  { column_widths_ = pWidths; }
   bool displayed(int line);
   void display(int line, bool value = true);
   int topline() const {return item_index[FIRST_VISIBLE][0];}
@@ -125,6 +127,7 @@ private:
   char indented_;
   char format_char_;
   char column_char_;
+  const int *column_widths_;
   int xposition_, yposition_;
   int scrolldx, scrolldy;
   int last_height, last_max_width, last_num_lines;
@@ -155,5 +158,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Browser.h,v 1.2 2001/07/24 16:05:15 robertk Exp $".
 //

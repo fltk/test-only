@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.43 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.44 2001/07/24 16:05:15 robertk Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -443,6 +443,8 @@ void Fl_Browser::draw_clip(int x, int y, int w, int h) {
 //#include <stdio.h>
 
 void Fl_Browser::draw() {
+	const int *last_columns = fl_column_widths();
+	fl_column_widths(column_widths_);
   uchar d = damage();
   if (d & FL_DAMAGE_ALL) { // full redraw
     //printf("full redraw damage %x\n", d);
@@ -481,6 +483,7 @@ void Fl_Browser::draw() {
   }
   update_child(scrollbar);
   update_child(hscrollbar);
+  fl_column_widths(last_columns);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -927,6 +930,7 @@ Fl_Browser::Fl_Browser(int X,int Y,int W,int H,const char* L)
   indented_ = 0;
   format_char_ = '@';
   column_char_ = '\t';
+  column_widths_ = 0;
   // set all the marks to the top:
   levels = 0;
   for (int i = 0; i < NUMMARKS; i++) {
@@ -944,5 +948,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.43 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.44 2001/07/24 16:05:15 robertk Exp $".
 //

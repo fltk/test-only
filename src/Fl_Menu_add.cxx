@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.26 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.27 2001/07/24 16:05:15 robertk Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -107,7 +107,13 @@ Fl_Widget* Fl_Menu_::add(
 
   const char *p;
   char *q;
-  char buf[1024];
+  static char *buf = new char[1024];
+  static size_t bufsize = 1024;
+  if(strlen(text) > bufsize) {
+	  if(buf) delete[] buf;
+	  buf = new char[strlen(text) * 2];
+	  bufsize = (buf) ? strlen(text) * 2 : 0;
+  }
 
   int flags1 = 0;
   const char* item;
@@ -121,7 +127,7 @@ Fl_Widget* Fl_Menu_::add(
 
     // copy to buf, changing \x to x:
     q = buf; item = buf;
-    for (p=text; *p && *p != '/' && q<buf+1023; *q++ = *p++) if (*p=='\\') p++;
+    for (p=text; *p && *p != '/' && q<buf+bufsize-1; *q++ = *p++) if (*p=='\\') p++;
     *q = 0;
 
     // if not followed by slash it is not a menu title:
@@ -209,7 +215,13 @@ Fl_Widget* Fl_Menu_::find(const char* label) const {
 // adds many menu items, with '|' seperating the menu items, and tab
 // seperating the menu item names from an optional shortcut string.
 Fl_Widget* Fl_Menu_::add(const char *str) {
-  char buf[128];
+  static char *buf = new char[128];
+  static size_t bufsize = 128;
+  if(strlen(str) > bufsize - 1) {
+	  delete[] buf;
+	  buf = new char[strlen(str) * 2];
+	  bufsize = (buf) ? strlen(str) * 2 : 0;
+  }
   Fl_Widget* r = 0;
   while (*str) {
     const char* start = str;
@@ -232,5 +244,5 @@ Fl_Widget* Fl_Menu_::add(const char *str) {
 }
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.26 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.27 2001/07/24 16:05:15 robertk Exp $".
 //
