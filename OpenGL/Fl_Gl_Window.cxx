@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.41 2003/01/22 06:21:50 spitzak Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.42 2003/01/24 08:11:27 spitzak Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -153,7 +153,7 @@ void GlWindow::flush() {
 
   CreatedWindow* i = CreatedWindow::find(this);
 #if USE_GL_OVERLAY && defined(_WIN32)
-  if (save_damage == DAMAGE_OVERLAY && !i->region) goto OVERLAY_ONLY;
+  if (save_damage == DAMAGE_OVERLAY && overlay && overlay != this && !i->region) goto OVERLAY_ONLY;
 #endif
 
   make_current();
@@ -320,5 +320,5 @@ void GlWindow::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.41 2003/01/22 06:21:50 spitzak Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.42 2003/01/24 08:11:27 spitzak Exp $".
 //

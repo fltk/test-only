@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.160 2003/01/22 06:21:51 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.161 2003/01/24 08:11:28 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -563,14 +563,14 @@ void fltk::add_event_handler(int (*h)(int, Window*)) {
 
 bool (*fl_local_grab)(int); // used by fl_dnd_x.cxx
 
-static int send_from_root(Widget* widget, int event) {
+static bool send_from_root(Widget* widget, int event) {
   // get the mouse coordinates relative to the parent of widget:
   e_x = e_x_root;
   e_y = e_y_root;
   for (Widget *t= widget->parent(); t; t = t->parent()) {
     e_x -= t->x(); e_y -= t->y();
   }
-  return widget->send(event);
+  return widget->send(event) != 0;
 }
 
 extern int fl_pushed_dx, fl_pushed_dy;
@@ -603,7 +603,7 @@ bool fltk::handle(int event, Window* window)
       } else {
 	e_x = e_x_root+fl_pushed_dx;
 	e_y = e_y_root+fl_pushed_dy;
-	return pushed()->handle(DRAG);
+	return pushed()->handle(DRAG) != 0;
       }
     }
     {Widget* pbm = belowmouse();
@@ -620,7 +620,7 @@ bool fltk::handle(int event, Window* window)
     } else if (to) {
       e_x = e_x_root+fl_pushed_dx;
       e_y = e_y_root+fl_pushed_dy;
-      return to->handle(RELEASE);
+      return to->handle(RELEASE) != 0;
     } else {
       return false;
     }
@@ -691,5 +691,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.160 2003/01/22 06:21:51 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.161 2003/01/24 08:11:28 spitzak Exp $".
 //

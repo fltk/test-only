@@ -1,5 +1,5 @@
 /*
- * "$Id: string.h.in,v 1.4 2003/01/15 12:28:17 easysw Exp $"
+ * "$Id: string.h.in,v 1.5 2003/01/24 08:11:28 spitzak Exp $"
  *
  * Common string header file for the Fast Light Tool Kit (FLTK).
  *
@@ -67,17 +67,20 @@
  *
  * Also, the DLL C runtime libraries contain snprintf and vsnprintf
  * functions, but not all linkers add the leading underscore when
- * linking, thus the definition.
+ * linking, thus the definition. WAS: according to Microsoft, they
+ * added the underscore in front of all symbols not in the c standard
+ * library. This of course was stupid, they didn't put an undescore
+ * in front of any Win32 calls which aren't in the c standard either!
  */
 
-#  if (defined(WIN32) && !defined(__CYGWIN__)) || defined(__EMX__)
+#  if (defined(_WIN32) && !defined(__CYGWIN__)) || defined(__EMX__)
 #    define strcasecmp(s,t)	stricmp((s), (t))
 #    define strncasecmp(s,t,n)	strnicmp((s), (t), (n))
 #    define vsnprintf		_vsnprintf
 #    define snprintf		_snprintf
 #  elif @FLTK_STRINGS_H@
 #    include <strings.h>
-#  endif /* WIN32 */
+#  endif /* _WIN32 */
 
 #  ifdef __cplusplus
 extern "C" {
@@ -104,7 +107,7 @@ extern int  strcasecmp(const char *, const char *);
 extern int  strncasecmp(const char *, const char *, int);
 extern char *strdup(const char *);
 #  else
-#    if !@FLTK_STRCASECMP@
+#    if @FLTK_STRCASECMP@
 FL_API extern int fltk_strcasecmp(const char *, const char *);
 #      define strcasecmp fltk_strcasecmp
 #    endif
@@ -145,5 +148,5 @@ FL_API extern size_t fltk_strlcpy(char *, const char *, size_t);
 
 
 /*
- * End of "$Id: string.h.in,v 1.4 2003/01/15 12:28:17 easysw Exp $".
+ * End of "$Id: string.h.in,v 1.5 2003/01/24 08:11:28 spitzak Exp $".
  */

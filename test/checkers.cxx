@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.25 2003/01/19 07:55:01 spitzak Exp $"
+// "$Id: checkers.cxx,v 1.26 2003/01/24 08:11:29 spitzak Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -1059,14 +1059,14 @@ void Board::animate(node* move, int backwards) {
   int y1 = squarey(f);
   int x2 = squarex(t);
   int y2 = squarey(t);
-  const int STEPS=35;
+  const int STEPS=20; // was 35;
   for (int i=0; i<STEPS; i++) {
     int x = x1+(x2-x1)*i/STEPS;
     int y = y1+(y2-y1)*i/STEPS;
     drag_piece(move->from,x,y);
     fltk::flush();
 #ifndef _WIN32
-    usleep(25);
+    usleep(0);
 #endif
   }
   drop_piece(t);
@@ -1376,5 +1376,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.25 2003/01/19 07:55:01 spitzak Exp $".
+// End of "$Id: checkers.cxx,v 1.26 2003/01/24 08:11:29 spitzak Exp $".
 //
