@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.32 2004/05/15 20:52:44 spitzak Exp $"
+// "$Id: factory.cxx,v 1.33 2005/01/02 19:24:01 leka Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -233,6 +233,19 @@ static ThumbWheelType ThumbWheeltype;
 
 ////////////////////////////////////////////////////////////////
 
+#include <fltk/ProgressBar.h>
+class ProgressBarType : public WidgetType {
+public:
+  virtual const char *type_name() const { return "fltk::ProgressBar"; }
+  fltk::Widget *widget(int x, int y, int w, int h) {
+    return new fltk::ProgressBar(x, y, w, h);
+  }
+  WidgetType *_make() { return new ProgressBarType(); }
+};
+static ProgressBarType ProgressBartype;
+
+////////////////////////////////////////////////////////////////
+
 #include <fltk/Scrollbar.h>
 static const Enumeration slider_type_menu[] = {
   {"Linear No ticks",	"LINEAR",	(void*)(fltk::Slider::LINEAR)},
@@ -403,6 +416,7 @@ Fl_Menu_Item New_Menu[] = {
   {0,0,cb,(void*)&Adjustertype},
   {0,0,cb,(void*)&Dialtype},
   {0,0,cb,(void*)&ThumbWheeltype},
+  {0,0,cb,(void*)&ProgressBartype},
 {0},
 {"text",0,0,0,FL_SUBMENU},
   {0,0,cb,(void*)&Inputtype},
@@ -654,5 +668,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.32 2004/05/15 20:52:44 spitzak Exp $".
+// End of "$Id: factory.cxx,v 1.33 2005/01/02 19:24:01 leka Exp $".
 //
