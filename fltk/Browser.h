@@ -1,5 +1,5 @@
 //
-// "$Id: Browser.h,v 1.7 2005/01/24 08:07:06 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 2002 by Bill Spitzak and others.
 //
@@ -70,6 +70,7 @@ public:
   Widget* previous_visible();
   bool item_is_visible() const;
   bool item_is_parent() const;
+  bool item_is_open() const;
 
   bool set_focus();
   bool set_item_selected(bool value = true, int do_callback = 0);
@@ -138,12 +139,14 @@ private:
   // need to make some sort of public interface but I have not figured
   // it out completely.
   enum { // predefined marks
-    HERE = 0, // current item, the one moved by all the calls
-    FOCUS,
-    FIRST_VISIBLE,
-    REDRAW_0,
-    REDRAW_1,
-    TEMP,
+    HERE = 0,	// current item, the one moved by all the calls
+    FOCUS,	// what the user thinks is the curren item
+    FIRST_VISIBLE, // item at top of scroll region
+    REDRAW_0,	// item that needs to be redrawn
+    REDRAW_1,	// a second item that needs to be redrawn
+    OPEN,	// this and all parents are open
+    TEMP,	// scratch space
+    TEMP2,	// scratch space, currently unused
     NUMMARKS
   };
   Widget* goto_mark(int mark); // set HERE to mark
@@ -172,5 +175,5 @@ private:
 #endif
 
 //
-// End of "$Id: Browser.h,v 1.7 2005/01/24 08:07:06 spitzak Exp $".
+// End of "$Id$".
 //

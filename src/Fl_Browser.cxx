@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.104 2005/01/25 09:49:11 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -296,13 +296,24 @@ bool Browser::item_is_parent() const {
   return children(item_index[HERE],item_level[HERE]+1) >= 0;
 }
 
+/** If item_is_parent() is true, return true if this item is open.
+    If this is not a parent the result is undefined. */
+bool Browser::item_is_open() const {
+  if (item()->flags()&VALUE) return true;
+  for (int i = 0; i <= item_level[HERE]; i++) {
+    if (i > item_level[OPEN]) return false;
+    if (item_index[HERE][i] != item_index[OPEN][i]) return false;
+  }
+  return true;
+}
+
 /*! Move forward to the next visible item (what down-arrow does).
   This does not move and returns null if we are at the bottom. */
 Widget* Browser::next_visible() {
   if (item_is_visible()) {
     if (!layout_damage()) item_position[HERE] += item()->height();
     // If we are on an open group title with children, go to first item in group
-    if (item()->flags()&VALUE && item_is_parent()) {
+    if (item_is_open() && item_is_parent()) {
       int n = item_level[HERE]+1;
       set_level(n);
       open_level[HERE] = n;
@@ -371,7 +382,7 @@ Widget* Browser::previous_visible() {
     item(child(item_index[HERE], item_level[HERE]));
 
     // go to last child in a group:
-    while (item()->flags()&VALUE && item()->visible() && item_is_parent()) {
+    while (item_is_open() && item()->visible() && item_is_parent()) {
       int n = children(item_index[HERE], item_level[HERE]+1);
       if (n <= 0) break; // the group is empty, remain on it's title
       set_level(item_level[HERE]+1);
@@ -610,16 +621,14 @@ void Browser::draw_item() {
 
   int col_shift = interior.x();
   int arrow_size = int(textsize())|1;
-  int preview_open =
-    (openclose_drag == 1 && pushed() && at_mark(FOCUS)) ? VALUE : 0;
-  widget->invert_flag(preview_open);
+  bool preview_open = openclose_drag == 1 && pushed() && at_mark(FOCUS);
 
   // draw the glyphs, one for each nesting level:
   for (int j = indented() ? 0 : 1; j <= item_level[HERE]; j++) {
     int g = item_index[HERE][j] < children(item_index[HERE],j) - 1;
     if (j == item_level[HERE]) {
       if (children(item_index[HERE],j+1)>=0)
-	if (widget->flags() & VALUE)
+	if (item_is_open() != preview_open)
 	  g += OPEN_ELL;
 	else
 	  g += CLOSED_ELL;
@@ -666,7 +675,6 @@ void Browser::draw_item() {
   // Restore column width
   if (cols) cols[0] = saved_colw;
 
-  widget->invert_flag(preview_open);
 }
 
 void Browser::draw_clip_cb(void* v, const Rectangle& r) {
@@ -786,13 +794,16 @@ void Browser::draw() {
   false if it was already in that state.  */
 bool Browser::set_item_opened(bool open)
 {
-  if (!item() || !item_is_parent()) return false;
+  if (!item() || item_is_open()==open || !item_is_parent()) return false;
   if (open) {
-    if (item()->flags() & VALUE) return false;
     item()->set_flag(VALUE);
+    set_mark(OPEN, HERE);
   } else {
-    if (!(item()->flags() & VALUE)) return false;
     item()->clear_flag(VALUE);
+    if (item_is_open()) {
+      if (item_level[HERE]) item_level[OPEN] = item_level[HERE]-1;
+      else unset_mark(OPEN);
+    }
   }
   list()->flags_changed(this, item());
   relayout(LAYOUT_CHILD);
@@ -1102,7 +1113,7 @@ bool Browser::make_item_visible(linepos where) {
 }
 
 /*! This is for use by the MultiBrowser subclass.
-  Turn the fltk::VALUE flag on or off in the current item (use
+  Turn the fltk::SELECTED flag on or off in the current item (use
   goto_index() to set the current item before calling this).
 
   If this is not a MultiBrowser, this does select_only_this()
@@ -1292,7 +1303,7 @@ int Browser::handle(int event) {
     goto_mark(FOCUS);
     if (openclose_drag == 1 || event_clicks() && item_is_parent()) {
       // toggle the open/close state of this item:
-      set_item_opened(!(item()->flags()&VALUE));
+      set_item_opened(!item_is_open());
       event_is_click(0); // make next click not be double
       if (when()&WHEN_CHANGED) do_callback();
       return 1;
@@ -1777,6 +1788,7 @@ Browser::Browser(int X,int Y,int W,int H,const char* L)
     item_position[i] = 0;
     item_level[i] = 0;
   }
+  item_index[OPEN][0] = -1;
   Group::current(parent());
 }
 
@@ -1819,5 +1831,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.104 2005/01/25 09:49:11 spitzak Exp $".
+// End of "$Id$".
 //

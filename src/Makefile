@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.125 2005/01/27 08:50:24 spitzak Exp $"
+# "$Id$"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -33,6 +33,11 @@ include ../makeinclude
 #
 # Files for this directory...
 #
+
+# The following should be added but they don't work as long as the images
+# library is seperated:
+#	Fl_Help_Dialog.cxx \
+#	Fl_Help_View.cxx \
 
 CPPFILES = \
 	Fl.cxx \
@@ -292,5 +297,5 @@ uninstall:
 	$(RM) $(libdir)/$(DSOLINK)
 
 #
-# End of "$Id: Makefile,v 1.125 2005/01/27 08:50:24 spitzak Exp $".
+# End of "$Id$".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.161 2005/01/24 08:34:30 spitzak Exp $"
+// "$Id$"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -917,6 +917,7 @@ Widget* Menu::try_popup(
       if (p.indexes[p.level] < 0) break;
       if (p.current_children() < 0) break;
       Widget* widget = p.current_widget();
+      if (!widget->is_group()) break;
       if (!widget->takesevents()) break;
       Group* group = (Group*)widget;
       int item = group->focus_index();
@@ -1073,5 +1074,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.161 2005/01/24 08:34:30 spitzak Exp $".
+// End of "$Id$".
 //
