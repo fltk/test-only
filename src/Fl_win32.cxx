@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.90 2000/03/02 20:47:15 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.91 2000/03/03 21:21:44 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1112,9 +1112,8 @@ void fl_windows_colors() {
     Fl_Widget::default_style->text_size = fontsize;
   }
 */
-  return 0;
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.90 2000/03/02 20:47:15 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.91 2000/03/03 21:21:44 carl Exp $".
 //

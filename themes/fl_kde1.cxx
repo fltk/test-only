@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1.cxx,v 1.1 2000/03/03 18:59:12 carl Exp $"
+// "$Id: fl_kde1.cxx,v 1.2 2000/03/03 21:21:45 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -31,11 +31,13 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
 #include <FL/fl_draw.H>
+#include <FL/fl_config.H>
+#include <FL/fl_theme.H>
+#include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <limits.h>
-#include <FL/fl_config.H>
-#include <FL/fl_theme.H>
+#include <config.h>
 
 #ifndef PATH_MAX
 #define PATH_MAX 128
@@ -267,5 +269,5 @@ int fl_kde1(int co) {
 }
 
 //
-// End of "$Id: fl_kde1.cxx,v 1.1 2000/03/03 18:59:12 carl Exp $".
+// End of "$Id: fl_kde1.cxx,v 1.2 2000/03/03 21:21:45 carl Exp $".
 //

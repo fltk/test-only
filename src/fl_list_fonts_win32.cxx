@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.2 2000/01/17 21:36:18 bill Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.3 2000/03/03 21:21:44 carl Exp $"
 //
 // WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#include <config.h>
 
 int Fl_Font_::encodings(const char**& arrayp) const {
   // CET - FIXME - What about this encoding stuff?
@@ -65,15 +66,16 @@ int Fl_Font_::sizes(int*& sizep) const {
 
 static Fl_Font_* make_a_font(char attrib, const char* name) {
   // see if it is one of our built-in fonts and return it:
-  for (int i = 0; i < 16; i++) {
+  for (int j = 0; j < 16; j++) {
     if (fl_fonts[j].name_[0] == attrib &&
-	  !stricmp(fl_fonts[j].name_+1, attrib)) return fl_fonts+j;
+	  !strcasecmp(fl_fonts[j].name_+1, name)) return fl_fonts+j;
   }
   // no, lets create a font:
   Fl_Font_* newfont = new Fl_Font_;
-  newfont->name_ = new char[strlen(name)+2];
-  newfont->name_[0] = attrib;
-  strcpy(newfont->name_+1, name);
+  char *n = new char[strlen(name)+2];
+  n[0] = attrib;
+  strcpy(n+1, name);
+  newfont->name_ = n;
   newfont->bold = newfont;
   newfont->italic = newfont;
   newfont->first = 0;
@@ -126,5 +128,5 @@ int fl_list_fonts(Fl_Font*& arrayp) {
 
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.2 2000/01/17 21:36:18 bill Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.3 2000/03/03 21:21:44 carl Exp $"
 //

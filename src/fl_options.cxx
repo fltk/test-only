@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.44 2000/03/03 18:59:10 carl Exp $"
+// "$Id: fl_options.cxx,v 1.45 2000/03/03 21:21:44 carl Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -200,6 +200,8 @@ static Fl_Font grok_font(const char* cf, const char* sec, const char* fontstr) {
 
 extern "C" int conf_is_path_rooted(const char *);
 static void revert_styles();
+
+extern void fl_windows_colors();
 
 int loadscheme(int b) {
   use_schemes = b;
@@ -427,7 +429,8 @@ const char* fl_find_config_file(const char* fn) {
 #else
     char windir[PATH_MAX], user[80] = "Default User";
     GetWindowsDirectory(windir, sizeof(windir));
-    GetUserName(user, sizeof(user));
+    DWORD d = sizeof(user);
+    GetUserName(user, &d);
 
     cptr = getenv("USERPROFILE");
     if (cptr) {
@@ -507,7 +510,7 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.44 2000/03/03 18:59:10 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.45 2000/03/03 21:21:44 carl Exp $".
 //
 
 

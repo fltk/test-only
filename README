@@ -77,14 +77,9 @@ BUILDING FLTK UNDER MICROSOFT WINDOWS
     directory.  Just open (or double-click on) the "fltk.dsw" file to
     get the whole shebang.
 
-    The second method is to use a GNU-based development tool with the
-    files in the "makefiles" directory.  To build using one of these
-    tools simply copy the appropriate makeinclude and config files to
-    the main directory and do a make:
-
-	copy makefiles\Makefile.<env> Makefile
-	make
-
+    The second method is to use the Cygwin GNU-based development tools.
+    For information on how to build in this environment, please read
+    the README.cygwin file.
 
 BUILDING FLTK UNDER OS/2
 
@@ -139,7 +134,7 @@ MESA
     Mesa.  FLTK has been tested with Mesa on several machines (and also
     with "real" OpenGL on SGI machines).
 
-    Mesa is available at "http://www.ssec.wisc.edu/~brianp/Mesa.html".
+    Mesa is available at "http://www.mesa3d.org".
 
     The configure script will not see Mesa unless it is installed as
     either libGL or libMesaGL.  If you don't want to do this you will
