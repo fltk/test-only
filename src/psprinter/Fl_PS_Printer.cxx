@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_PS_Printer.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// "$Id: Fl_PS_Printer.cxx,v 1.1.2.2 2004/03/30 20:49:33 rokan Exp $"
 //
 // Postscript device class for the Fast Light Tool Kit (FLTK).
 //
@@ -37,11 +37,7 @@
 #include <FL/Enumerations.H>
 
 
-  
-
-
-////////////////////// Prolog string ////////////////////////////////////////
-
+//  Prolog string 
 
 static const char * prolog =
 "%%%%BeginProlog\n"
@@ -106,7 +102,7 @@ static const char * prolog =
 "/GL { setgray } bind def\n"
 "/SRGB { setrgbcolor } bind def\n"
 
-//////////////////// color images ////////////////////////
+//  color images 
 
 "/CI { GS /py exch def /px exch def /sy exch def /sx exch def\n"
   "translate \n"
@@ -116,7 +112,7 @@ static const char * prolog =
   " colorimage GR\n"
 "} bind def\n"
 
-///////////////////  gray images //////////////////////////
+//  gray images 
 
 "/GI { GS /py exch def /px exch def /sy exch def /sx exch def \n"
   "translate \n"
@@ -128,7 +124,7 @@ static const char * prolog =
   "image GR\n"
 "} bind def\n"
 
-////////////////// single-color bitmask ///////////////////
+// single-color bitmask 
 
 "/MI { GS /py exch def /px exch def /sy exch def /sx exch def \n"
   "translate \n"
@@ -138,8 +134,33 @@ static const char * prolog =
   "imagemask GR\n"
 "} bind def\n"
 
-////////////////   color image dict /////////////
 
+//  path 
+
+"/BFP { newpath moveto }  def\n"
+"/BP { newpath } bind def \n"
+"/PL { lineto } bind def \n"
+"/PM { moveto } bind def \n"
+"/MT { moveto } bind def \n"
+"/LT { lineto } bind def \n"
+"/EFP { closepath fill } bind def\n"  //was:stroke
+"/ELP { stroke } bind def\n"  
+"/ECP { closepath stroke } bind def\n"  // Closed (loop)
+"/LW { setlinewidth } bind def\n"
+
+// ////////////////////////// misc ////////////////
+"/TR { translate } bind def\n"
+"/CT { concat } bind def\n"
+"/RCT { matrix invertmatrix concat} bind def\n"
+"/SC { scale } bind def\n"
+//"/GPD { currentpagedevice /PageSize get} def\n"
+
+;
+
+
+static const char * prolog_2 =  // prolog relevant only if lang_level >1
+
+// color image dictionaries
 "/CII {GS /inter exch def /py exch def /px exch def /sy exch def /sx exch def \n"
   "translate \n"
   "sx sy scale\n"
@@ -158,7 +179,7 @@ static const char * prolog =
   "end\n"
 "IDD image GR} bind def\n"
 
-//////////////// gray image dict ///////////////////
+// gray image dict 
 
 
 "/GII {GS /inter exch def /py exch def /px exch def /sy exch def /sx exch def \n"
@@ -180,15 +201,16 @@ static const char * prolog =
   "end\n"
 "IDD image GR} bind def\n"
 
+;
 
-///////////////////  masked color images   ///////
+static const char * prolog_3 = // prolog relevant only if lang_level >2
+
+// masked color images 
 "/CIM {GS /inter exch def /my exch def /mx exch def /py exch def /px exch def /sy exch def /sx exch def \n"
   "translate \n"
   "sx sy scale\n"
   "/DeviceRGB setcolorspace\n"
   
-
-
 "/IDD 8 dict def\n"
 
 "IDD begin\n"
@@ -224,20 +246,13 @@ static const char * prolog =
 "} bind def\n"
 
 
-
-///////////////////  masked gray images   ////////////////
-
-
-
-
-
+//  masked gray images 
 "/GIM {GS /inter exch def /my exch def /mx exch def /py exch def /px exch def /sy exch def /sx exch def \n"
   "translate \n"
   "sx sy scale\n"
   "/DeviceGray setcolorspace\n"
 
   "/IDD 8 dict def\n"
-
 
   "IDD begin\n"
     "/ImageType 1 def\n"
@@ -273,30 +288,9 @@ static const char * prolog =
 
 
 "\n"
-        ///////////////////////////  path ////////////////////
-
-"/BFP { newpath moveto }  def\n"
-"/BP { newpath } bind def \n"
-"/PL { lineto } bind def \n"
-"/PM { moveto } bind def \n"
-"/MT { moveto } bind def \n"
-"/LT { lineto } bind def \n"
-"/EFP { closepath fill } bind def\n"  //was:stroke
-"/ELP { stroke } bind def\n"  
-"/ECP { closepath stroke } bind def\n"  // Closed (loop)
-"/LW { setlinewidth } bind def\n"
-
-        //////////////////////////// misc ////////////////
-"/TR { translate } bind def\n"
-"/CT { concat } bind def\n"
-"/RCT { matrix invertmatrix concat} bind def\n"
-"/SC { scale } bind def\n"
-//"/GPD { currentpagedevice /PageSize get} def\n"
-
 ;
 
-
-////////////////////// end prolog ////////////////////////
+// end prolog 
 
 
 
@@ -331,7 +325,7 @@ void Fl_PS_Printer::reset(){
 
 
 
-///////////////// destructor, finishes postscript, closes FILE  ///////////////
+// /////////////// destructor, finishes postscript, closes FILE  ///////////////
  
 Fl_PS_Printer::~Fl_PS_Printer() {
   if(nPages){  // for eps nPages is 0 so it is fine ....
@@ -357,7 +351,7 @@ Fl_PS_Printer::~Fl_PS_Printer() {
 }
 
 
-///////////////// PostScript constructors /////////////////////////////////////
+// /////////////// PostScript constructors /////////////////////////////////////
 
 
 Fl_PS_Printer::Fl_PS_Printer(FILE *o, int lang_level, int pages):clip_(0),interpolate_(0){
@@ -377,6 +371,10 @@ Fl_PS_Printer::Fl_PS_Printer(FILE *o, int lang_level, int pages):clip_(0),interp
     fprintf(output, "%%%%Pages: (atend)\n");
   fprintf(output, "%%%%EndComments\n");
   fprintf(output, prolog);
+  if(lang_level >1)
+      fprintf(output, prolog_2);
+  if(lang_level >2)
+      fprintf(output, prolog_3);
   if(lang_level_>=3){
     fprintf(output, "/CS { clipsave } bind def\n");
     fprintf(output, "/CR { cliprestore } bind def\n");
@@ -405,7 +403,7 @@ void Fl_PS_Printer::page_policy(int p){
 
 
 
-///////////////////  eps constructor ////////////////////////////////////
+// /////////////////  eps constructor ////////////////////////////////////
   
 Fl_PS_Printer::Fl_PS_Printer(FILE *o, int lang_level, int x, int y, int w, int h)
   :clip_(0),interpolate_(0)
@@ -427,6 +425,11 @@ Fl_PS_Printer::Fl_PS_Printer(FILE *o, int lang_level, int x, int y, int w, int h
   height_ = h;
 
   fprintf(output, prolog);
+  if(lang_level >1)
+      fprintf(output, prolog_2);
+  if(lang_level >2)
+      fprintf(output, prolog_3);
+      
   if(lang_level_>=3){
     fprintf(output, "/CS { clipsave } bind def\n");
     fprintf(output, "/CR { cliprestore } bind def\n");
@@ -450,7 +453,7 @@ Fl_PS_Printer::Fl_PS_Printer(FILE *o, int lang_level, int x, int y, int w, int h
 };
 
 
-////////////////////// paging //////////////////////////////////////////
+// //////////////////// paging //////////////////////////////////////////
 
 
 
@@ -459,12 +462,8 @@ void Fl_PS_Printer::page(double pw, double ph, int media) {
   if (nPages){
     fprintf(output, "CR\nGR\nGR\nSP\nrestore\n");
   }
-
   ++nPages;
   fprintf(output, "%%%%Page: %i %i\n" , nPages , nPages);
-
-
-
   if (pw>ph){
     fprintf(output, "%%%%PageOrientation: Landscape\n");
     //fprintf(output, "%i Orientation\n", 1);
@@ -473,10 +472,7 @@ void Fl_PS_Printer::page(double pw, double ph, int media) {
     //fprintf(output, "%i Orientation\n", 0);
   }
 
-
-
   fprintf(output, "%%%%BeginPageSetup\n");
-
   if((media & MEDIA) &&(lang_level_>1)){
       int r = media & REVERSED;
       if(r) r = 2;
@@ -490,21 +486,14 @@ void Fl_PS_Printer::page(double pw, double ph, int media) {
     else
       if(media & REVERSED)
         fprintf(output, "180 rotate %i %i translate\n", int(-pw), int(-ph));
-  
-
-
-
   fprintf(output, "%%%%EndPageSetup\n");
-
-
+  
   pw_=pw;
   ph_=ph;
-
   reset();
 
   fprintf(output, "save\n");
   fprintf(output, "GS\n");
-
   fprintf(output, "%g %g TR\n", (double)0 /*lm_*/ , ph_ /* - tm_*/);
   fprintf(output, "1 -1 SC\n");
   line_style(0);
@@ -543,7 +532,7 @@ void Fl_PS_Printer::place(double x, double y, double tx, double ty, double scale
 
 
 //
-// End of "$Id: Fl_PS_Printer.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $".
+// End of "$Id: Fl_PS_Printer.cxx,v 1.1.2.2 2004/03/30 20:49:33 rokan Exp $".
 //
 
 

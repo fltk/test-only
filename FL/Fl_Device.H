@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Device.H,v 1.1.2.5 2004/03/30 19:45:58 rokan Exp $"
+// "$Id: Fl_Device.H,v 1.1.2.6 2004/03/30 20:49:33 rokan Exp $"
 //
 // Fl_Device dispatching class for the Fast Light Tool Kit (FLTK).
 //
@@ -43,7 +43,14 @@ class Fl_Image_Cache;
 /**
 * A base class for all output devices.
 *
-* A new Device class should not be a direct subclass of Fl_Device but rather of Fl_Display or Fl_Printer
+* This pure virtual class defines all device-specific drawing primitives as its virtual methods.
+* These protected methods can not be used direcly but can be called using standard FLTK drawing 
+* functions when the device is set as a current one.
+* A new Device class should not be a direct subclass of Fl_Device but rather of Fl_Display or
+* Fl_Printer and it must define all the drawing functions, including drawing of three basic image
+* classes - Fl_RGB_Image, FL_Pixmap and Fl_Bitmap. Devices which allow renrering with precision
+* better than logical (screen) pixel - such as printers - should allow fine (subpixel) rendering
+* of text glyphs and also precision drawing of "double" path (vertex) primitives.
 */
 
 class FL_EXPORT Fl_Device{
@@ -66,7 +73,7 @@ protected:
  
 
 public:
-  /** An RTTI emulation of device classes. It returns values < 256 if the device is a screen device 
+  /** An RTTI emulation of device classes. It returns values < 256 if it is a screen device 
   * - a subcalls of Fl_Display. */
   int type(){return type_;}; // <256 for screen devices
   
@@ -240,5 +247,5 @@ extern FL_EXPORT Fl_Device * fl_device;
 
 
 //
-// End of "$Id: Fl_Device.H,v 1.1.2.5 2004/03/30 19:45:58 rokan Exp $".
+// End of "$Id: Fl_Device.H,v 1.1.2.6 2004/03/30 20:49:33 rokan Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Printer.H,v 1.1.2.2 2004/03/29 22:41:11 rokan Exp $"
+// "$Id: Fl_Printer.H,v 1.1.2.3 2004/03/30 20:49:33 rokan Exp $"
 //
 // Fl_Printer header file for the Fast Light Tool Kit (FLTK).
 //
@@ -89,32 +89,20 @@ public:
 protected:
 
   int nPages;
-  //double lm_,tm_,rm_,bm_;
   double pw_, ph_;
-  //int orientation_;
 
 public:
-//  static const char * format_names;
   static const int page_formats[NO_PAGE_FORMATS][2];
   virtual void page(double pw, double ph, int media = 0)=0;
   virtual void page(int format)=0;
   double page_width(){return pw_;};
   double page_height(){return ph_;};
-  //virtual   void page()=0;
-  //virtual void margins(double left, double top, double right, double bottom)=0;
-
-  //virtual void fit(double x, double y, double w, double h, int align)=0;
-  //virtual void fit(double x, double y, double w, double h, double dpi, int align)=0;
-  //void fit(Fl_Widget * w, int align);
-  //void fit(Fl_Widget * w, double dpi, int align);
 
   virtual void place(double x, double y,  double tx, double ty,  double scale = 1)=0;
   virtual void place(double x, double y, double w, double h, double tx, double ty, double tw, double th, int align = FL_ALIGN_CENTER);
   void place(Fl_Widget * w, double tx, double ty, double tw, double th, int align = FL_ALIGN_CENTER ){
     place(w->x(), w->y(), w->w(), w->h(), tx, ty, tw, th, align);
   };
-    //void place(Fl_Widget * w, double tx, double ty, double tw, double th, double dpi, int align) {place(w->x(), w->y(), w->w(), w->h(), tx, ty, tw, th, dpi, align);};
-   // Fl_Printer():lm_(72), tm_(72), rm_(72), bm_(72)/*,orientation_(0)*/{};
 };
 
 
@@ -124,5 +112,5 @@ public:
 #endif
 
 //
-// "$Id: Fl_Printer.H,v 1.1.2.2 2004/03/29 22:41:11 rokan Exp $"
+// "$Id: Fl_Printer.H,v 1.1.2.3 2004/03/30 20:49:33 rokan Exp $"
 //
