@@ -21,11 +21,10 @@ BUILDING AND INSTALLING FLTK UNDER APPLE OS X
     as need, but we would also like to ask our users to contribute bug 
     reports, bug fixes, and code improvements. 
  
-     - All standard widget types including GlWindow are supported. 
+     - All standard widget types including Menus and GlWindow are supported. 
      - Bitmap support is fully implemented, pixmap support is somewhat of a hack 
        though and does not include grayed out images. 
      - Image creation and drawing is very buggy an likely to crash.
-     - Menu bars render funny and unexpectedly close sub menus.
      - Pie and Arc code draws additional lines.
      - Text editor does not support fractional character lengths.
      - UTF 8 is not supported.

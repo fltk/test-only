@@ -485,9 +485,9 @@ void Window::show() {
 #elif USE_QUARTZ
     if (!modal() && fl_show_iconic) {
       fl_show_iconic = 0;
-      CollapseWindow( i->xid, true ); // \todo Mac ; untested
+      ::CollapseWindow( i->xid, true ); // \todo Mac ; untested
     } else {
-      ShowWindow(i->xid);
+      ::ShowWindow(i->xid);
     }
 #else
 #error
@@ -506,10 +506,10 @@ void Window::show() {
       if (IsIconic(i->xid)) deferred_call(OPEN_ICON, i->xid);
       if (!grab() && !override()) deferred_call(RAISE_WINDOW, i->xid);
 #elif USE_QUARTZ
-      ShowWindow(i->xid); // does this de-iconize?
+      ::ShowWindow(i->xid); // does this de-iconize?
       if (!grab() && !override()) {
-	BringToFront(i->xid);
-	SelectWindow(i->xid);
+	::BringToFront(i->xid);
+	::SelectWindow(i->xid);
       }
 #else
 #error

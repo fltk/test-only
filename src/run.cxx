@@ -1213,8 +1213,8 @@ bool fltk::handle(int event, Window* window)
 //default: break;
   }
 
-  // restrict to modal widgets:
-  if (outside_modal(to)) to = modal_;
+  // restrict to modal widgets (except SHOW and HIDE):
+  if (event!=SHOW && event!=HIDE && outside_modal(to)) to = modal_;
   if (to && to->send(event)) {dnd_flag = false; return true;}
   dnd_flag = false;
 
