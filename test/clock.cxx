@@ -1,5 +1,5 @@
 //
-// "$Id: clock.cxx,v 1.5 2000/06/03 05:32:20 carl Exp $"
+// "$Id: clock.cxx,v 1.6 2000/06/06 14:37:32 mike Exp $"
 //
 // Clock test program for the Fast Light Tool Kit (FLTK).
 //
@@ -26,6 +26,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Shaped_Window.H>
 #include <FL/Fl_Round_Clock.H>
+#include <stdlib.h>
 
 #include "circle.xbm" // bitmap mask for window shape
 
@@ -67,5 +68,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: clock.cxx,v 1.5 2000/06/03 05:32:20 carl Exp $".
+// End of "$Id: clock.cxx,v 1.6 2000/06/06 14:37:32 mike Exp $".
 //

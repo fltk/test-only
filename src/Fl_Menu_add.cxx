@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.20 2000/05/15 05:52:26 bill Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.21 2000/06/06 14:37:31 mike Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -39,6 +39,7 @@
 #include <FL/Fl_Item_Group.H>
 #include <FL/Fl_Divider.H>
 #include <FL/Fl_Menu_Item.H>
+#include <string.h>
 
 // Return a new menu item:
 static int insert_here;
@@ -190,5 +191,5 @@ Fl_Widget* Fl_Menu_::add(const char *str) {
 }
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.20 2000/05/15 05:52:26 bill Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.21 2000/06/06 14:37:31 mike Exp $".
 //
