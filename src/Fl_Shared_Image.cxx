@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.3 1999/08/29 19:53:30 vincent Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.4 1999/08/30 09:36:08 vincent Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -141,7 +141,7 @@ Fl_Shared_Image* Fl_Shared_Image::find(Fl_Shared_Image* image, char* name) {
 char* Fl_Shared_Image::get_filename()
 {
   static char *s;
-// warning : the returned pointer will be available only until next call to convert
+// warning : the returned pointer will be available only until next call to get_filename
   if(s) free(s);
   if(!root) root=strdup("");
   s = (char*) malloc(strlen(name)+strlen(root)+1);
@@ -157,12 +157,12 @@ Fl_Shared_Image* Fl_Shared_Image::get(Fl_Shared_Image* (*create)(),
   Fl_Shared_Image *image=Fl_Shared_Image::find(first_image, name);
   if(!image)
   {
-    int dummy;
+    //    int dummy;
     image=create();
     image->name = strdup(name);
     image->datas=datas;
-    image->w = -1;
-    image->measure(dummy, dummy);
+    image->w = -1; // We mark the fact the it has never been measured yet
+    //    image->measure(dummy, dummy);
     image->l1 = image->l2 = 0;
     image->id=image->mask=0;
     Fl_Shared_Image::insert(first_image, image);
@@ -191,9 +191,8 @@ Fl_Image_Type* Fl_Shared_Image::guess(char* name, unsigned char *datas)
     loaded = 1;
   }
   Fl_Image_Type* ft;
-  for (ft=fl_image_filetypes; ft->name; ft++) {
+  for (ft=fl_image_filetypes; ft->name; ft++)
     if (ft->test(datas, size)) break;
-  }
   if(loaded) free(datas);
   return ft;
 }
@@ -201,15 +200,16 @@ Fl_Image_Type* Fl_Shared_Image::guess(char* name, unsigned char *datas)
 void Fl_Shared_Image::draw(int X, int Y, int W, int H, 
 				int cx, int cy)
 {
-  if(w==0) return;
-  if(!id && !mask) // Need to uncompress the image ?
+  if (w<0) measure(w, h);
+  if (w==0) return;
+  if (!id && !mask) // Need to uncompress the image ?
   {
     used = image_used++; // do this before check_mem_usage
     mem_used += w*h;
     check_mem_usage();
 
     read();
-    if(!id && !mask) return; 
+    if (!id && !mask) return; 
   }
   else
     used = image_used++;
@@ -217,5 +217,5 @@ void Fl_Shared_Image::draw(int X, int Y, int W, int H,
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.3 1999/08/29 19:53:30 vincent Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.4 1999/08/30 09:36:08 vincent Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pixmap.H,v 1.9 1999/08/25 08:14:09 bill Exp $"
+// "$Id: Fl_Pixmap.H,v 1.10 1999/08/30 09:36:06 vincent Exp $"
 //
 // Pixmap header file for the Fast Light Tool Kit (FLTK).
 //
@@ -34,13 +34,11 @@ public:
   Fl_Pixmap(const char * const * d) : data(d) {w = -1;}
   Fl_Pixmap(const uchar* const * d) : data((char**)d) {w = -1;}
   void measure(int&,int&);
+
   void draw(int, int, int, int, int cx, int cy);
   
-  // The following method is also defined in the parent class
-  // but should be faster (no call to measure(w, h))
   void draw(int X, int Y) {draw(X,Y,1000,1000,0,0);}
 
-  // to be removed
   void draw(int X, int Y, int W, int H, Fl_Flags f=0) {
     Fl_Image::draw(X,Y,W,H,f);
   }
@@ -49,5 +47,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Pixmap.H,v 1.9 1999/08/25 08:14:09 bill Exp $".
+// End of "$Id: Fl_Pixmap.H,v 1.10 1999/08/30 09:36:06 vincent Exp $".
 //
