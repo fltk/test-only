@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.15 1999/04/29 04:57:13 carl Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.16 1999/05/04 22:54:21 carl Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -123,6 +123,7 @@ J1:
   case FL_ENTER:
   case FL_LEAVE:
   case FL_MOVE:
+    if (!takesevents()) return 1;
     e = event;
     last_tb = current_tb;
     current_tb = 0;
@@ -188,5 +189,5 @@ Fl_Menu_Bar::~Fl_Menu_Bar() {
   }
 }
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.15 1999/04/29 04:57:13 carl Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.16 1999/05/04 22:54:21 carl Exp $".
 //

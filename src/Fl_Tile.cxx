@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tile.cxx,v 1.5 1999/01/07 19:17:27 mike Exp $"
+// "$Id: Fl_Tile.cxx,v 1.6 1999/05/04 22:54:22 carl Exp $"
 //
 // Tile widget for the Fast Light Tool Kit (FLTK).
 //
@@ -127,6 +127,7 @@ int Fl_Tile::handle(int event) {
 
   case FL_MOVE:
   case FL_ENTER:
+    if (!takesevents()) break;
   case FL_PUSH: {
     int mindx = 100;
     int mindy = 100;
@@ -164,7 +165,7 @@ int Fl_Tile::handle(int event) {
   }
 
   case FL_LEAVE:
-    set_cursor(this, FL_CURSOR_DEFAULT);
+    if (takesevents()) set_cursor(this, FL_CURSOR_DEFAULT);
     break;
 
   case FL_DRAG:
@@ -196,5 +197,5 @@ int Fl_Tile::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Tile.cxx,v 1.5 1999/01/07 19:17:27 mike Exp $".
+// End of "$Id: Fl_Tile.cxx,v 1.6 1999/05/04 22:54:22 carl Exp $".
 //

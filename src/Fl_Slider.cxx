@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.14 1999/04/07 18:45:56 carl Exp $"
+// "$Id: Fl_Slider.cxx,v 1.15 1999/05/04 22:54:22 carl Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -258,8 +258,8 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
   switch (event) {
   case FL_ENTER:
   case FL_LEAVE:
-    if (type()==FL_HOR_FILL_SLIDER || type() == FL_VERT_FILL_SLIDER) return 1;
-    redraw();
+    if (takesevents() && type()!=FL_HOR_FILL_SLIDER && type()!=FL_VERT_FILL_SLIDER)
+      redraw();
     return 1;
   case FL_PUSH:
     if (!Fl::event_inside(x, y, w, h)) return 0;
@@ -332,5 +332,5 @@ Fl_Color Fl_Slider::fly_color() const {
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.14 1999/04/07 18:45:56 carl Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.15 1999/05/04 22:54:22 carl Exp $".
 //

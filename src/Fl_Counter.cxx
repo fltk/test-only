@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.12 1999/04/04 03:45:24 gustavo Exp $"
+// "$Id: Fl_Counter.cxx,v 1.13 1999/05/04 22:54:21 carl Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -155,7 +155,7 @@ int Fl_Counter::handle(int event) {
     return 1;
   case FL_ENTER:
   case FL_LEAVE:
-    if (fly_box()) redraw();
+    if (takesevents() && fly_box()) redraw();
     return 1;
   default:
     return 0;
@@ -258,5 +258,5 @@ Fl_Color Fl_Counter::fly_color() const {
 }
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.12 1999/04/04 03:45:24 gustavo Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.13 1999/05/04 22:54:21 carl Exp $".
 //

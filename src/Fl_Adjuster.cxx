@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.9 1999/04/04 03:45:23 gustavo Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.10 1999/05/04 22:54:20 carl Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -159,7 +159,7 @@ int Fl_Adjuster::handle(int event) {
     return 1;
   case FL_ENTER:
   case FL_LEAVE:
-    if (fly_box()) redraw();
+    if (takesevents() && fly_box()) redraw();
     return 1;
   }
   return 0;
@@ -198,5 +198,5 @@ Fl_Boxtype Fl_Adjuster::fly_box() const {
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.9 1999/04/04 03:45:23 gustavo Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.10 1999/05/04 22:54:20 carl Exp $".
 //

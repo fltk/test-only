@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.10 1999/04/10 14:13:49 carl Exp $"
+// "$Id: Fl_Button.cxx,v 1.11 1999/05/04 22:54:20 carl Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -95,10 +95,8 @@ int Fl_Button::handle(int event) {
   int newval;
   switch (event) {
   case FL_ENTER:
-    if (fly_box()) redraw();
-    return 1;
   case FL_LEAVE:
-    if (fly_box()) redraw();
+    if (takesevents() && fly_box()) redraw();
     return 1;
   case FL_PUSH:
   case FL_DRAG:
@@ -195,5 +193,5 @@ Fl_Color Fl_Button::down_labelcolor() const {
 Fl_Color Fl_Button::down_color() const {return selection_color();}
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.10 1999/04/10 14:13:49 carl Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.11 1999/05/04 22:54:20 carl Exp $".
 //

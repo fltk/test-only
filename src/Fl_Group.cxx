@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.15 1999/04/13 20:18:39 carl Exp $"
+// "$Id: Fl_Group.cxx,v 1.16 1999/05/04 22:54:21 carl Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -141,24 +141,23 @@ int Fl_Group::handle(int event) {
   case FL_MOVE:
     for (i = children(); i--;) {
       o = a[i];
-      if (o->takesevents() && Fl::event_inside(o)) {
-	if (o->contains(Fl::belowmouse())) {
-	  return send(o,FL_MOVE);
-	} else if (send(o,FL_ENTER)) {
-	  if (!o->contains(Fl::belowmouse())) Fl::belowmouse(o);
-	  return 1;
-	}
+      if (o->visible() && Fl::event_inside(o)) {
+        if (o->contains(Fl::belowmouse())) {
+          return send(o,FL_MOVE);
+        } else if (send(o,FL_ENTER)) {
+          Fl::belowmouse(o);
+          return 1;
+        }
       }
     }
     Fl::belowmouse(this);
     return 1;
 
   case FL_PUSH:
-    Fl_Tooltip::exit(this);
+    Fl_Tooltip::enter(0);
     for (i = children(); i--;) {
       o = a[i];
       if (o->takesevents() && Fl::event_inside(o)) {
-        Fl_Tooltip::exit(o);
 	if (send(o,FL_PUSH)) {
 	  if (Fl::pushed() && !o->contains(Fl::pushed())) Fl::pushed(o);
 	  return 1;
@@ -495,5 +494,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.15 1999/04/13 20:18:39 carl Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.16 1999/05/04 22:54:21 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.15 1999/03/31 14:52:45 mike Exp $"
+// "$Id: Fl_Choice.cxx,v 1.16 1999/05/04 22:54:21 carl Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -141,7 +141,7 @@ int Fl_Choice::handle(int e) {
     return 1;
   case FL_ENTER:
   case FL_LEAVE:
-    if (fly_box()) redraw();
+    if (takesevents() && fly_box()) redraw();
     return 1;
   default:
     return 0;
@@ -163,5 +163,5 @@ Fl_Color Fl_Choice::fly_color() const {
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.15 1999/03/31 14:52:45 mike Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.16 1999/05/04 22:54:21 carl Exp $".
 //

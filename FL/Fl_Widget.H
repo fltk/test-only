@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.18 1999/04/13 20:18:34 carl Exp $"
+// "$Id: Fl_Widget.H,v 1.19 1999/05/04 22:54:18 carl Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -194,7 +194,7 @@ public:
   int output() const {return (flags_&OUTPUT);}
   void set_output() {flags_ |= OUTPUT;}
   void clear_output() {flags_ &= ~OUTPUT;}
-  int takesevents() const {return !(flags_&(INACTIVE|INVISIBLE|OUTPUT));}
+  int takesevents() const {return (!output()&&active_r()&&visible_r()) ? 1 : 0;}
   int changed() const {return flags_&CHANGED;}
   void set_changed() {flags_ |= CHANGED;}
   void clear_changed() {flags_ &= ~CHANGED;}
@@ -273,5 +273,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.18 1999/04/13 20:18:34 carl Exp $".
+// End of "$Id: Fl_Widget.H,v 1.19 1999/05/04 22:54:18 carl Exp $".
 //
