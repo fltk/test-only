@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.4 1999/11/01 02:59:06 carl Exp $"
+# "$Id: Makefile,v 1.5 1999/11/01 15:20:07 mike Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -37,10 +37,10 @@ include ../makeinclude
 .SUFFIXES : .cxx .c .o
 
 .cxx.o :
-	$(CXX) -DFL_DLL -DFL_INPLUGIN -fPIC $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $<
+	$(CXX) -DFL_DLL -DFL_INPLUGIN $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $<
 
 %.po : ../src/%.cxx
-	$(CXX) -DFL_DLL -DFL_INPLUGIN -fPIC $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $< -o $@
+	$(CXX) -DFL_DLL -DFL_INPLUGIN $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $< -o $@
 
 essai : essai.o fl_jpeg.po Fl_Shared_Image.po fl_draw_image.po
 	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $< fl_jpeg.po Fl_Shared_Image.po fl_draw_image.po -ljpeg
@@ -79,5 +79,5 @@ install :
 #include makedepend
 
 #
-# End of "$Id: Makefile,v 1.4 1999/11/01 02:59:06 carl Exp $".
+# End of "$Id: Makefile,v 1.5 1999/11/01 15:20:07 mike Exp $".
 #
