@@ -88,12 +88,6 @@ extern "C" {
   typedef int (*compare_func_t) (const void *, const void *);
 }
 
-// FIXME This fixes linkage problem in VC++ 6.0
-// Dejan : If there is some better way, please inform me.
-#if defined(_MSC_VER) && defined(__cplusplus)
-  extern "C" const char* newstring(const char *from);
-#endif
-
 //// Local functions...// static int quote_char (const char *);
 static void scrollbar_callback (Widget * s, void *);
 static void hscrollbar_callback (Widget * s, void *);
@@ -140,6 +134,16 @@ static const char *broken_xpm[] = {
 
 static xpmImage broken_image(broken_xpm);
 
+// FIXME This should be moved somewhere...
+extern "C" {
+  const char* newstring(const char *from) {
+    if (!from) return 0;
+    unsigned n = strlen(from)+1;
+    char* ret = new char[n];
+    strcpy(ret, from);
+    return ret;
+  }
+}
 
 //
 // 'HelpView::add_block()' - Add a text block to the list.
