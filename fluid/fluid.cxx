@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.67 2004/03/14 07:38:35 spitzak Exp $"
+// "$Id: fluid.cxx,v 1.68 2004/08/06 09:54:19 laza2000 Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -479,6 +479,17 @@ void set_filename(const char *c) {
   if (filename) free((void *)filename);
   filename = strdup(c);
   if (main_window) main_window->label(filename);
+  
+  /* Change directory to .fl file directory
+   * so generated .h/.cxx files goes there also.
+   */
+  char curdir[1024]; 
+  const char *start = c;
+  const char *end = filename_name(c);
+  int len = end-start;
+  strncpy(curdir, start, len);
+  curdir[len] = 0;
+  chdir(curdir);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -564,5 +575,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.67 2004/03/14 07:38:35 spitzak Exp $".
+// End of "$Id: fluid.cxx,v 1.68 2004/08/06 09:54:19 laza2000 Exp $".
 //
