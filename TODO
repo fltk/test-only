@@ -1,5 +1,5 @@
 FLTK 2.0 TODO
--------------
+=============
 
 	- Fix configure script and makefiles.
 	- fltk::FloatInput/IntInput doesn't return 1 from handle
