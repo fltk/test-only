@@ -1,0 +1,54 @@
+CREDITS - Fast Light Tool Kit (FLTK) Version 2.0
+------------------------------------------------
+
+    This file lists the people responsible for the toolkit you
+    are now using.  If you've looking for your name in lights
+    but we've forgotten you here, please send an email to
+    "fltk-bugs@fltk.org" and we'll update this file accordingly.
+
+
+CORE DEVELOPERS
+
+    The following people do the day-to-day development of FLTK:
+
+        Craig P. Earls
+	Curtis Edwards (trilex@users.sf.net)
+	Gustavo Hime (hime@users.sf.net)
+	Talbot Hughes
+	Robert Kesterson (robertk@users.sf.net)
+	Mikko Lahteenmaki (laza2000@users.sf.net)
+	Dejan Lekic (leka@users.sf.net)
+	Matthias Melcher (matthias@users.sf.net)
+	James Dean Palmer (jamespalmer@users.sf.net)
+	Martin Pekar (cortex@users.sf.net)
+	Vincent Penne (vincentp@users.sf.net)
+	Bill Spitzak (spitzak@users.sf.net)
+        Michael Sweet (easysw@users.sf.net)
+	Carl Thompson (clip@users.sf.net)
+	Nafees Bin Zafar (nafees@users.sf.net)
+
+
+OTHER CONTRIBUTORS
+
+    The following people have contributed fixes or enhancements
+    for FLTK:
+
+	Teun Burgers
+	Peter Burns
+	Fabien Costantini
+	Stephen Davies
+	Greg Ercolano
+	Yuri Fedorchenko
+	George Garvey
+	Mikael Hultgren
+	Stuart Levy
+	Mike Lindner
+	Alexander Mai
+	Alexander Rabi
+	James Roth
+	Albrecht Schlosser
+        Andrea Suatoni
+	Paul Sydney
+	Emanuele Vicentini
+	Jim Wilson
+	Ken Yarnall
