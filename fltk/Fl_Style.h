@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Style.h,v 1.2 2001/07/24 07:48:23 spitzak Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -112,10 +112,8 @@ struct FL_API Fl_Named_Style : public Fl_Style {
   Fl_Named_Style(const char* name, void (*revert)(Fl_Style*), Fl_Named_Style**);
 };
 
-FL_API void fl_get_system_colors();
-
 #endif
 
 //
-// End of "$Id: Fl_Style.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Style.h,v 1.2 2001/07/24 07:48:23 spitzak Exp $".
 //

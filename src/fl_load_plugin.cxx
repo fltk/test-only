@@ -1,45 +1,51 @@
-// fl_plugin.cxx
+/* fl_plugin.cxx
+ *
+ * This is a wrapper to make it simple to load plugins on various
+ * systems. fl_load_plugin(file, symbol) will load the file as a
+ * plugin and then return a pointer to "symbol" in that file.
+ *
+ * If symbol is null it will return a non-zero value if the plugin
+ * loads but you cannot use this value for anything.
+ *
+ * If there is any problem (file not found, does not load as a plugin,
+ * the symbol is not found) it will return null if there is any problem
+ * and print debugging info on stderr.
+ *
+ */
 
-#include <fltk/Fl.h>
 #include <fltk/fl_load_plugin.h>
-//#include <fltk/conf.h>
-#include <fltk/vsnprintf.h>
-#include <errno.h>
+#include <stdio.h>
 #include <config.h>
+
+#if HAVE_DLOPEN || defined(WIN32)
+
+#include <errno.h>
 
 #ifndef WIN32
 
-#include <unistd.h>
-#include <dlfcn.h>
+# include <unistd.h>
+# include <dlfcn.h>
 typedef void* DLhandle;
 
 #else
 
 // simulate posix on windows:
-#include <windows.h>
-#include <winbase.h>
+# include <windows.h>
+# include <winbase.h>
 typedef HINSTANCE DLhandle;
-#define dlopen(a,b) LoadLibrary(a)
-#define RTLD_NOW 2
-#define dlsym(handle, sym) GetProcAddress(handle, sym)
+# define dlopen(a,b) LoadLibrary(a)
+# define RTLD_NOW 2
+# define dlsym(handle, sym) GetProcAddress(handle, sym)
 
 #endif
 
-#ifndef PATH_MAX
-#define PATH_MAX 128
-#endif
-
-// returns address of function() (can be used as handle)
-void* fl_load_plugin(const char* name, const char* function) {
+void* fl_load_plugin(const char* name, const char* symbol) {
 #ifndef WIN32
   // do not allow plugins if this executable is setuid
   if (getuid() != geteuid()) return 0;
 #endif
-  if (!name || !function) return 0;
-//   char name[PATH_MAX];
-//   if (!conf_is_path_rooted(n)) snprintf(name, sizeof(name), "./%s", n);
-//   else strncpy(name, n, sizeof(name));
-  // open plugin, any errors will be printed
+  if (!name) return 0;
+
   DLhandle handle = dlopen(name, RTLD_NOW);
   if (!handle) {
 #ifndef WIN32
@@ -50,14 +56,25 @@ void* fl_load_plugin(const char* name, const char* function) {
     return 0;
   }
 
-  void* f = (void*)dlsym(handle, function);
+  if (!symbol) return (void*)handle;
+
+  void* f = (void*)dlsym(handle, symbol);
   if (!f) {
 #ifndef WIN32
     fprintf(stderr, "%s\n", dlerror());
 #else
-    fprintf(stderr, "%s: function %s missing\n", name, function);
+    fprintf(stderr, "%s: function %s missing\n", name, symbol);
 #endif
     return 0;
   }
   return f;
 }
+
+#else
+
+void* fl_load_plugin(const char* name, const char*) {
+  fprintf(stderr, "%s: loading of plugins not supported\n", name);
+  return 0;
+}
+
+#endif

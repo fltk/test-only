@@ -1,8 +1,7 @@
 //
-// "$Id: Fl_startup.cxx,v 1.2 2001/07/24 04:44:26 clip Exp $"
+// "$Id: Fl_startup.cxx,v 1.3 2001/07/24 07:48:23 spitzak Exp $"
 //
-// Startup, scheme and theme handling code for the Fast Light
-// Tool Kit (FLTK).
+// Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -24,21 +23,38 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <stdio.h>
 #include <string.h>
 #include <limits.h>
 #include <stdlib.h>
 #include <fltk/Fl.h>
-#include <fltk/conf.h>
-#include <fltk/fl_load_plugin.h>
 #include <fltk/Fl_Color.h>
 #include <fltk/Fl_Font.h>
 #include <fltk/Fl_Labeltype.h>
 #include <fltk/Fl_Style.h>
 #include <fltk/Fl_Widget.h>
-#include <fltk/fl_theme.h>
-#include <fltk/x.h>
+#include <fltk/vsnprintf.h>
 #include <config.h>
+
+#if USE_PLUGINS
+# include <fltk/fl_theme.h>
+# include <fltk/fl_load_plugin.h>
+#endif
+
+#if USE_CONF
+# include <fltk/conf.h>
+#endif
+
+#if defined(WIN32)
+#  include <windows.h>
+#  include <io.h>
+#  define F_OK 04
+#else
+#  include <unistd.h>
+#endif /* WIN32 */
+
+#ifndef R_OK
+#define R_OK 4
+#endif
 
 #ifndef PATH_MAX
 #define PATH_MAX 128
@@ -48,8 +64,7 @@ const char* Fl::scheme_ = 0;
 Fl_Color fl_bg_switch = 0; // set by -bg in Fl_arg.cxx
 const char* fl_startup_theme = 0; // set by -theme in Fl_arg.cxx
 
-FL_API const char* fl_config = 0;
-
+#if USE_PLUGINS
 // This is necessary so that only one theme will process events at a time.
 // It's not as easy as just removing the old theme's handler whenever a new
 // theme is loaded because multiple themes may be loaded but that may not
@@ -63,31 +78,209 @@ void fl_theme_handler(Fl_Theme_Handler handler) {
 static int theme_handler(int e) {
   return _theme_handler ? _theme_handler(e) : 0;
 }
-
-// this is necessary for future compatibility
-FL_API const char* fl_config_section = "default";
-
-// Startup stuff.  OK to execute more than once.
-static bool beenhere = false;
-void Fl::startup() {
-  beenhere = true;
-#ifndef WIN32
-  fl_open_display();
 #endif
+
+static void rest_of_reload();
+#if USE_CONF
+static const char* fl_config = 0;
+static bool load_scheme(const char*);
+#endif
+#if USE_PLUGINS
+static bool load_plugins(const char*);
+#endif
+
+// Get the display opened and the scheme/theme loaded. This is normally
+// called when the first Fl_Window::show() is done. You can also call
+// this to manually load the scheme.
+static bool started;
+void Fl::startup() {
+  // This can be called any number of times:
+  if (started) return;
+  started = true;
+#if USE_PLUGINS
+  // Set up so the code from fl_theme_handler is called on X events:
+  Fl::add_handler(theme_handler);
+#endif
+  // Now load everything:
+  rest_of_reload(); // this does XOpenDisplay on X
+}
+
+// This is called on receipt of a theme-change event from the system,
+// or when the user tries to change the scheme or theme.
+void Fl::reload_scheme() {
+  if (!started) return;
+  // get us back into the vanilla state:
+  Fl_Style::revert();
+#if USE_PLUGINS
+  fl_theme_handler(0);
+#endif
+#if USE_CONF
   conf_clear_cache(); // Force rereading of config files.
+#endif
+  // remake all the changes:
+  rest_of_reload();
+  // and redraw so the changes are visible:
+  Fl::redraw();
+}
+
+void fl_get_system_colors(); // in Fl_x.cxx or Fl_win32.cxx
+
+// This function goes from the "vanilla" state (where all the styles
+// and everything else is in the state it was when fltk starts up)
+// and the state set by the command line switches, config file, and
+// plugins:
+static void rest_of_reload() {
+
+  fl_get_system_colors(); // this does XOpenDisplay on X
+
+#if USE_CONF
+  // app_defined_reset_callback();
+
+  // WAS: I believe all this getconf stuff can be replaced by code
+  // that loads exactly one plugin:
+
+  // Find Carl's file:
+  if (!fl_config) {
+    const char *p = fl_find_config_file("flconfig");
+    if (p) fl_config = strdup(p);
+  }
+
   char temp[PATH_MAX];
+# if USE_PLUGINS
+  // Carl's file may name plugins to load:
+  if (!fl_getconf("plugins", temp, sizeof(temp))) load_plugins(temp);
+# endif
+
+  // It may name another Carl file to load, or -scheme may do this:
   const char* s = Fl::scheme();
   if (!s && !fl_getconf("scheme", temp, sizeof(temp))) s = temp;
-  Fl::scheme(s);
+  load_scheme(s);
+#endif
 
+#if USE_PLUGINS
+  // It may name more plugins, or -theme may do this:
   const char *t = fl_startup_theme;
+#if USE_CONF
   if (!t && !fl_getconf("themes", temp, sizeof(temp))) t = temp;
-  if (t) Fl::theme(t);
+#endif
+  load_plugins(t);
+#endif
+
+  // always let -bg override anything the plugin did:
   if (fl_bg_switch) fl_background(fl_bg_switch);
 }
 
+// If the app changes the scheme, we check for actual differences and
+// cause a reload if there are any:
+bool Fl::scheme(const char* s) {
+  // See if the new string is different. If not return false. If it
+  // is, duplicate and store it in Fl::scheme().
+  if (s && !strcasecmp(s, "none")) s = 0;
+  if (!s) {
+    if (!scheme_) return false;
+    free((void*)scheme_);
+    scheme_ = 0;
+  } else {
+    if (scheme_) {
+      if (!strcasecmp(s, scheme_)) return false;
+      free((void*)scheme_);
+    }
+    scheme_ = strdup(s);
+  }
+  // If there is a change, make it happen:
+  reload_scheme();
+  return true;
+}
+
 ////////////////////////////////////////////////////////////////
-// The scheme file reader:
+#if USE_PLUGINS
+// This function loads a space-seperated list of plugins from the
+// search path and returns true if they all load ok.
+
+static bool load_plugins(const char* t) {
+  if (!t) return true;
+  char temp[PATH_MAX], *p, *s;
+  strncpy(temp, t, sizeof(temp));
+  p = strtok_r(temp, CONF_WHITESPACE, &s);
+  while (p) {
+    if (!Fl::plugin(p)) return false;
+    p = strtok_r(0, CONF_WHITESPACE, &s);
+  }
+  return true;
+}
+
+bool Fl::plugin(const char *t) {
+// don't try to load themes if not linked to shared libraries
+#ifdef FL_SHARED
+//#if 1
+// WAS - I temporarily enabled this for testing.
+// CET - OK, but we should let people know that all themes will  not
+// necessarily work when not linked dynamically to to save ourselves
+// a support headache.
+  char temp[PATH_MAX];
+  strncpy(temp, t, sizeof(temp));
+  if (strlen(temp)<7 || strcasecmp(temp+strlen(temp)-7, ".plugin"))
+    strncat(temp, ".plugin", sizeof(temp)-strlen(temp)-1);
+  const char* tfile = access(temp, R_OK) ? 0 : temp;
+  if (!tfile) {
+    strncpy(temp, t, sizeof(temp));
+    if (strlen(temp)<6 || strcasecmp(temp+strlen(temp)-6, ".theme"))
+      strncat(temp, ".theme", sizeof(temp)-strlen(temp)-1);
+  }
+  if (!tfile && !conf_is_path_rooted(t)) {
+    snprintf(temp, sizeof(temp), "plugins/%s", t);
+    if (strlen(temp)<7 || strcasecmp(temp+strlen(temp)-7, ".plugin"))
+      strncat(temp, ".plugin", sizeof(temp)-strlen(temp)-1);
+    tfile = fl_find_config_file(temp);
+  }
+  if (!tfile && !conf_is_path_rooted(t)) {
+    snprintf(temp, sizeof(temp), "themes/%s", t);
+    if (strlen(temp)<6 || strcasecmp(temp+strlen(temp)-6, ".theme"))
+      strncat(temp, ".theme", sizeof(temp)-strlen(temp)-1);
+    tfile = fl_find_config_file(temp);
+  }
+  if (!tfile) {
+    fprintf(stderr, "Cannot find plugin \"%s\"\n", t);
+    return false;
+  }
+
+  strncpy(temp, tfile, sizeof(temp));
+  Fl_Theme_Function f = (Fl_Theme_Function)fl_load_plugin(temp, "fltk_plugin");
+  if (!f) {
+    fprintf(stderr, "Cannot load plugin \"%s\"\n", temp);
+    return false;
+  }
+
+  if ( f() ) {
+    fprintf(stderr, "Cannot start plugin \"%s\"\n", temp);
+    return false;
+  }
+
+  return true;
+#else
+  fprintf(stderr, "FLTK linked statically, cannot load plugin \"%s\"\n", t);
+  return true;
+#endif
+}
+
+#endif // USE_PLUGINS
+////////////////////////////////////////////////////////////////
+#if USE_CONF
+
+// Read Carl's main file ~/.fltk/flconfig
+
+// flconfig_section is always "default".
+// For now... - CET
+static const char* fl_config_section = "default";
+
+int fl_getconf(const char *key, char *value, int value_length) {
+  char temp[80];
+  snprintf(temp, sizeof(temp), "%s/%s", fl_config_section, key);
+  return ::getconf(fl_config, temp, value, value_length);
+}
+
+////////////////////////////////////////////////////////////////
+// Read Carl's #2 file ~/.fltk/scheme/something
 
 static Fl_Color grok_color(const char* cf, const char *colstr) {
   char key[80], val[32];
@@ -95,8 +288,8 @@ static Fl_Color grok_color(const char* cf, const char *colstr) {
   snprintf(key, sizeof(key), "aliases/%s", colstr);
   if (!getconf(cf, key, val, sizeof(val))) p = val;
   char* q;
-  long l = strtoul(p, &q, 0);
-  if (!*q) return (Fl_Color)l;
+  Fl_Color c = Fl_Color(strtoul(p, &q, 0));
+  if (!*q) return c;
   return fl_rgb(p);
 }
 
@@ -107,18 +300,15 @@ static Fl_Font grok_font(const char* cf, const char* fontstr) {
   if (!getconf(cf, key, val, sizeof(val))) p = val;
 
   char* q;
-  long l = strtoul(p, &q, 0);
+  unsigned long l = strtoul(p, &q, 0);
   if (!*q) return fl_fonts+l;
 
   return fl_find_font(p);
 }
 
-static int load_scheme(const char *s) {
-  Fl_Style::revert();
-  if (!s || !*s) {
-    fl_get_system_colors();
-    return 0;
-  }
+static bool load_scheme(const char *s) {
+
+  if (!s || !*s) return 0;
 
   char temp[PATH_MAX];
   strncpy(temp, s, sizeof(temp));
@@ -130,18 +320,20 @@ static int load_scheme(const char *s) {
 
   if (!p) {
     fprintf(stderr, "Cannot find scheme \"%s\"\n", temp);
-    fl_get_system_colors();
-    return -1;
+    return false;
   }
 
   char sfile[PATH_MAX];
   strncpy(sfile, p, sizeof(sfile));
+
+#if USE_PLUGINS
   if (!::getconf(sfile, "general/themes", temp, sizeof(temp)))
-    if (Fl::theme(temp)) {
+    if (!load_plugins(temp)) {
       fprintf(stderr, "Could not load theme(s).  Will not load scheme!\n");
-      fl_get_system_colors();
-      return -2;
+      return false;
     }
+#endif
+
   char valstr[80];
   Fl_Color col;
 
@@ -176,6 +368,7 @@ static int load_scheme(const char *s) {
   Fl_Labeltype labeltype;
   Fl_Boxtype boxtype;
 
+  // Carl: This does not seem to be working. This 'if' is never done:
   if (!getconf_sections(sfile, "widgets", &section_list)) {
     for (cent = section_list; cent; cent = cent->next) {
       Fl_Style* style = Fl_Style::find(cent->key);
@@ -256,117 +449,13 @@ static int load_scheme(const char *s) {
     conf_list_free(&section_list);
   }
 
-  Fl::redraw();
   return 0;
 }
 
-static int schemes_enabled = 1;
-void Fl::enable_schemes(int b) { schemes_enabled = b; }
-
-// When we change the scheme we automatically call load_scheme if needed:
-int Fl::scheme(const char* s) {
-  if (s) {
-    if (!strcasecmp(s, "none")) s = 0;
-    else s = strdup(s);
-  }
-  if (scheme_) free((void*)scheme_);
-  scheme_ = s;
-  if (beenhere) return schemes_enabled ? load_scheme(s) : -99;
-  return 1;
-}
-
-int Fl::reload_scheme() {
-  if (beenhere) { Fl::startup(); return 0; }
-  return 1;
-}
-
-static int load_plugin(const char *t) {
-// don't try to load themes if not linked to shared libraries
-#ifdef FL_SHARED
-  char temp[PATH_MAX];
-  strncpy(temp, t, sizeof(temp));
-  if (strlen(temp)<7 || strcasecmp(temp+strlen(temp)-7, ".plugin"))
-    strncat(temp, ".plugin", sizeof(temp)-strlen(temp)-1);
-  const char* tfile = access(temp, R_OK) ? 0 : temp;
-  if (!tfile) {
-    strncpy(temp, t, sizeof(temp));
-    if (strlen(temp)<6 || strcasecmp(temp+strlen(temp)-6, ".theme"))
-      strncat(temp, ".theme", sizeof(temp)-strlen(temp)-1);
-  }
-  if (!tfile && !conf_is_path_rooted(t)) {
-    snprintf(temp, sizeof(temp), "plugins/%s", t);
-    if (strlen(temp)<7 || strcasecmp(temp+strlen(temp)-7, ".plugin"))
-      strncat(temp, ".plugin", sizeof(temp)-strlen(temp)-1);
-    tfile = fl_find_config_file(temp);
-  }
-  if (!tfile && !conf_is_path_rooted(t)) {
-    snprintf(temp, sizeof(temp), "themes/%s", t);
-    if (strlen(temp)<6 || strcasecmp(temp+strlen(temp)-6, ".theme"))
-      strncat(temp, ".theme", sizeof(temp)-strlen(temp)-1);
-    tfile = fl_find_config_file(temp);
-  }
-  if (!tfile) {
-    fprintf(stderr, "Cannot find plugin \"%s\"\n", t);
-    return -1;
-  }
-
-  strncpy(temp, tfile, sizeof(temp));
-  Fl_Theme_Function f = (Fl_Theme_Function)fl_load_plugin(temp, "fltk_plugin");
-  if (!f) {
-    fprintf(stderr, "Cannot load plugin \"%s\"\n", temp);
-    return -2;
-  }
-
-  if ( f() ) {
-    fprintf(stderr, "Cannot start plugin \"%s\"\n", temp);
-    return -3;
-  }
-
-  Fl::redraw();
-  return 0;
-#else
-  fprintf(stderr, "FLTK linked statically, cannot load plugin or theme: %s\n", t);
-  return 1;
-#endif
-}
-
-static int plugin(const char* t) {
-  if (!t) return 0;
-  char temp[PATH_MAX], *p, *s = 0;
-  strncpy(temp, t, sizeof(temp));
-  p = strtok_r(temp, CONF_WHITESPACE, &s);
-  while (p) {
-    int r;
-    if ( (r = load_plugin(p)) ) return r;
-    p = strtok_r(0, CONF_WHITESPACE, &s);
-  }
-
-  return 0;
-}
-
-static int themes_enabled = 1;
-void Fl::enable_themes(int b) { themes_enabled = b; }
-
-int Fl::theme(const char* t) {
-  if (!themes_enabled) return -99;
-  return plugin(t);
-}
-
-// This startup code is executed only once before main()
-static struct Startup {
-  Startup() {
-    if (!fl_config) {
-      const char *p = fl_find_config_file("flconfig");
-      if (p) fl_config = strdup(p);
-    }
-    Fl::add_handler(theme_handler);
-    char temp[PATH_MAX];
-
-    if (!fl_getconf("plugins", temp, sizeof(temp))) plugin(temp);
-  }
-} startup;
-
+#endif // USE_CONF
 
 //
-// End of "$Id: Fl_startup.cxx,v 1.2 2001/07/24 04:44:26 clip Exp $".
+// End of "$Id: Fl_startup.cxx,v 1.3 2001/07/24 07:48:23 spitzak Exp $".
 //
+
+

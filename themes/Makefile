@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.28 2001/07/24 04:44:26 clip Exp $"
+# "$Id: Makefile,v 1.29 2001/07/24 07:48:23 spitzak Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -28,7 +28,7 @@
 # * xft.plugin is not in default list because it requires XFree86 4,
 #   the "render" extension, the Xft library, and the freetype2 library.
 THEMES = motif.theme classic.theme windows.theme Alternative.theme \
-	KDE.theme KDE_colors.theme syscolors.theme
+	KDE.theme KDE_colors.theme
 SCHEMES = Alternative KDE Classic Motif OldMotif Windows
 
 ################################################################
@@ -108,11 +108,6 @@ KDE_colors.theme : $(KDEC_OBJ)
 	$(THEMECOMMAND) $@ $(KDEC_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-SYSC_OBJ = syscolors.shared.o
-syscolors.theme : $(SYSC_OBJ)
-	$(THEMECOMMAND) $@ $(SYSC_OBJ) $(DSOLIBS) $(THEMELIBS)
-	cp $@ ../config/themes
-
 clean :
 	-@ rm -f *.shared.o $(LIBRARY)$(LIBEXT) *.theme *.plugin ../config/themes/*.theme ../config/plugins/*.plugin core *~ makedepend
 	@touch makedepend
@@ -142,5 +137,5 @@ depend:
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.28 2001/07/24 04:44:26 clip Exp $".
+# End of "$Id: Makefile,v 1.29 2001/07/24 07:48:23 spitzak Exp $".
 #

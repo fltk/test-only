@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Roller.cxx,v 1.22 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Roller.cxx,v 1.23 2001/07/24 07:48:23 spitzak Exp $"
 //
 // Roller widget for the Fast Light Tool Kit (FLTK).
 //
@@ -29,13 +29,14 @@
 #include <fltk/Fl_Roller.h>
 #include <fltk/fl_draw.h>
 #include <math.h>
+#include <config.h>
 
 int Fl_Roller::handle(int event) {
   static int ipos;
   int newpos = horizontal() ? Fl::event_x() : -Fl::event_y();
   switch (event) {
   case FL_PUSH:
-#ifdef WINDOWS_COMPATABILITY
+#if CLICK_MOVES_FOCUS
     take_focus();
 #endif
     handle_push();
@@ -165,5 +166,5 @@ Fl_Roller::Fl_Roller(int X,int Y,int W,int H,const char* L) : Fl_Valuator(X,Y,W,
 }
 
 //
-// End of "$Id: Fl_Roller.cxx,v 1.22 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_Roller.cxx,v 1.23 2001/07/24 07:48:23 spitzak Exp $".
 //

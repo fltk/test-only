@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.49 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.50 2001/07/24 07:48:23 spitzak Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,7 @@
 #include <fltk/Fl_Slider.h>
 #include <fltk/fl_draw.h>
 #include <math.h>
+#include <config.h>
 
 // Draw the background behind the slider, draw() calls this more than
 // once with different clipping so the slider does not blink:
@@ -209,7 +210,7 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
 
 int Fl_Slider::handle(int event) {
   int X=0; int Y=0; int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
-#ifdef WINDOWS_COMPATABILITY
+#if CLICK_MOVES_FOCUS
   if (event == FL_PUSH) take_focus();
 #endif
   return handle(event,X,Y,W,H);
@@ -237,5 +238,5 @@ Fl_Slider::Fl_Slider(uchar t, int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.49 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.50 2001/07/24 07:48:23 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde.cxx,v 1.16 2001/07/24 04:44:26 clip Exp $"
+// "$Id: fl_kde.cxx,v 1.17 2001/07/24 07:48:23 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -132,7 +132,7 @@ int fl_kde(int co) {
   if (!kderc.get("KDE/widgetStyle", s, sizeof(s)) && !strcasecmp(s, "Motif"))
     motif_style = 1;
   if (!colors_only) {
-    Fl::theme(motif_style ? "motif" : "windows");
+    Fl::plugin(motif_style ? "motif" : "windows");
     // see below for modifications to the motif/windows themes
   }
 
@@ -368,5 +368,5 @@ int fl_kde(int co) {
 }
 
 //
-// End of "$Id: fl_kde.cxx,v 1.16 2001/07/24 04:44:26 clip Exp $".
+// End of "$Id: fl_kde.cxx,v 1.17 2001/07/24 07:48:23 spitzak Exp $".
 //

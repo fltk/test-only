@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_keys.c,v 1.11 2001/07/23 09:50:05 spitzak Exp $"
+   "$Id: conf_keys.c,v 1.12 2001/07/24 07:48:23 spitzak Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -23,6 +23,7 @@
 */
 
 #include <fltk/conf.h>
+#include <fltk/vsnprintf.h>
 #include <config.h>
 
 extern int conf_is_path_rooted(const char *);
@@ -191,5 +192,5 @@ getconf_list(const conf_list list, const char *k, char *svalue, int slen)
 } /* getconf_list() */
 
 /*
-    End of "$Id: conf_keys.c,v 1.11 2001/07/23 09:50:05 spitzak Exp $".
+    End of "$Id: conf_keys.c,v 1.12 2001/07/24 07:48:23 spitzak Exp $".
 */

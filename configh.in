@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.43 2001/07/23 09:50:03 spitzak Exp $"
+ * "$Id: configh.in,v 1.44 2001/07/24 07:48:22 spitzak Exp $"
  *
  * If this file is "config.h", it has been copied from "configh.in" by
  * the ./configure program, which has replaced some of the symbols
@@ -155,9 +155,44 @@
 #define HAVE_PTHREAD 0
 
 /*
+ * Read the conf files. If you turn this off you can delete all the
+ * conf_*.c source files from the library.
+ */
+
+#define USE_CONF 1
+
+/*
+ * Load plugins. This makes it understand -theme and also load plugins
+ * named in conf files (if conf files are enabled). Requies HAVE_DLOPEN
+ */
+
+#define USE_PLUGINS HAVE_DLOPEN
+
+/*
+ * Enable workarounds for bugs in the overlay hardware support in the
+ * XFree86 drivers provided by Boxx for their FireGL cards.
+ */
+#define BOXX_OVERLAY_BUGS 0
+
+/*
+ * Enables Windows GUI emulation: clicking on most widgets (such as
+ * buttons) moves the focus to them. This makes some useful GUI designs
+ * impossible.
+ */
+#define CLICK_MOVES_FOCUS 0
+
+/*
+ * Enables Windows GUI emulation: hitting the Alt key navigates the
+ * focus to the menubar. This makes using Alt as a modifier for dragging
+ * windows difficult as the user must click the mouse if they thought
+ * they were going to drag and change their minds.
+ */
+#define ALT_GOES_TO_MENUBAR 0
+
+/*
  * CONFIGDIR
  *
- * Global location to look for files not in ~/.fltk
+ * Where, after ~/.fltk, to look for conf and plugin files
  */
 
 #define CONFIGDIR "."
@@ -173,5 +208,5 @@
 #define CONF_CACHED
 
 /*
- * End of "$Id: configh.in,v 1.43 2001/07/23 09:50:03 spitzak Exp $".
+ * End of "$Id: configh.in,v 1.44 2001/07/24 07:48:22 spitzak Exp $".
  */

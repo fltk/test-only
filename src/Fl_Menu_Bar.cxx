@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.44 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.45 2001/07/24 07:48:23 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -26,6 +26,7 @@
 #include <fltk/Fl.h>
 #include <fltk/Fl_Menu_Bar.h>
 #include <fltk/fl_draw.h>
+#include <config.h>
 
 void Fl_Menu_Bar::draw() {
   if (damage()&(~FL_DAMAGE_HIGHLIGHT)) draw_box();
@@ -98,6 +99,7 @@ int Fl_Menu_Bar::handle(int event) {
     }
     if (handle_shortcut()) return 1;
     return 0;
+#if ALT_GOES_TO_MENUBAR
   case FL_KEYUP:
     if ((Fl::event_key() == FL_Alt_L || Fl::event_key() == FL_Alt_R)
 	&& Fl::event_clicks()) {
@@ -111,6 +113,7 @@ int Fl_Menu_Bar::handle(int event) {
       }
       return 0;
     }
+#endif
   }
   return 0;
 }
@@ -140,5 +143,5 @@ Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.44 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.45 2001/07/24 07:48:23 spitzak Exp $".
 //

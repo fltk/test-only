@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.38 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.39 2001/07/24 07:48:23 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -26,6 +26,7 @@
 #include <fltk/Fl.h>
 #include <fltk/Fl_Button.h>
 #include <fltk/Fl_Group.h>
+#include <config.h>
 
 int Fl_Button::set() {
   clear_changed();
@@ -75,7 +76,7 @@ int Fl_Button::handle(int event) {
   case FL_MOVE:
     return 1;
   case FL_PUSH:
-#ifdef WINDOWS_COMPATABILITY
+#if CLICK_MOVES_FOCUS
     take_focus();
 #endif
     oldval = value();
@@ -142,5 +143,5 @@ Fl_Round_Button::Fl_Round_Button(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.38 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.39 2001/07/24 07:48:23 spitzak Exp $".
 //

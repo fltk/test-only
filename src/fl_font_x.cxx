@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_x.cxx,v 1.4 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_font_x.cxx,v 1.5 2001/07/24 07:48:23 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,6 @@
 
 #include <ctype.h>
 #include <stdlib.h>
-#include <string.h>
 
 void* fl_xfont;
 static GC font_gc;
@@ -280,5 +279,5 @@ x11_renderer = {
 Fl_Font_Renderer *fl_font_renderer = &x11_renderer;
 
 //
-// End of "$Id: fl_font_x.cxx,v 1.4 2001/07/23 09:50:05 spitzak Exp $"
+// End of "$Id: fl_font_x.cxx,v 1.5 2001/07/24 07:48:23 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Overlay_Window.cxx,v 1.14 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Overlay_Window.cxx,v 1.15 2001/07/24 07:48:23 spitzak Exp $"
 //
 // Overlay window code for the Fast Light Tool Kit (FLTK).
 //
@@ -34,7 +34,7 @@
 #include <fltk/x.h>
 
 void Fl_Overlay_Window::flush() {
-#ifdef BOXX_BUGS
+#if BOXX_OVERLAY_BUGS
   if (overlay_ && overlay_ != this && overlay_->shown()) {
     // all drawing to windows hidden by overlay windows is ignored, fix this
     XUnmapWindow(fl_display, fl_xid(overlay_));
@@ -134,5 +134,5 @@ void Fl_Overlay_Window::redraw_overlay() {
 #endif
 
 //
-// End of "$Id: Fl_Overlay_Window.cxx,v 1.14 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_Overlay_Window.cxx,v 1.15 2001/07/24 07:48:23 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.26 2001/07/24 01:20:59 clip Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.27 2001/07/24 07:48:23 spitzak Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,8 +27,6 @@
 #if HAVE_GL
 
 #include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/x.h>
 #include "Fl_Gl_Choice.h"
 #include <fltk/Fl_Gl_Window.h>
 #include <stdlib.h>
@@ -331,5 +329,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.26 2001/07/24 01:20:59 clip Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.27 2001/07/24 07:48:23 spitzak Exp $".
 //
