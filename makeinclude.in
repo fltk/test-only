@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.7.2.11.2.23.2.9 2004/07/06 00:22:49 easysw Exp $"
+# "$Id: makeinclude.in,v 1.7.2.11.2.23.2.10 2004/07/23 19:42:50 easysw Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 #
@@ -63,6 +63,7 @@ IMGLIBNAME	= @IMGLIBNAME@
 PSLIBNAME	= @PSLIBNAME@
 GDILIBNAME	= @GDILIBNAME@
 LIBCOMMAND	= @LIBCOMMAND@
+LIBEXT		= @LIBEXT@
 RANLIB		= @RANLIB@
 DSONAME		= @DSONAME@
 FLDSONAME	= @FLDSONAME@
@@ -148,5 +149,5 @@ CAT3EXT		= @CAT3EXT@
 	mv t.z $@
 
 #
-# End of "$Id: makeinclude.in,v 1.7.2.11.2.23.2.9 2004/07/06 00:22:49 easysw Exp $".
+# End of "$Id: makeinclude.in,v 1.7.2.11.2.23.2.10 2004/07/23 19:42:50 easysw Exp $".
 #

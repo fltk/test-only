@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.mingw31,v 1.1.2.2.2.6 2004/04/06 22:37:23 rokan Exp $"
+# "$Id: makeinclude.mingw31,v 1.1.2.2.2.7 2004/07/23 19:42:50 easysw Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # (this file for MingW using GCC 3.1.x)
@@ -83,6 +83,7 @@ IMGLIBNAME	= ../lib/libfltk_images.a
 PSLIBNAME	= libfltk_ps.a
 GDILIBNAME	= libfltk_gdi.a
 LIBCOMMAND	= ar -ruv
+LIBEXT		= .a
 RANLIB		= ranlib
 DSONAME		=
 FLDSONAME	=
@@ -128,5 +129,5 @@ THREADS		=threads
 	$(CXX) $(INCLUDES) $(CXXFLAGS) $< -c
 
 #
-# End of "$Id: makeinclude.mingw31,v 1.1.2.2.2.6 2004/04/06 22:37:23 rokan Exp $".
+# End of "$Id: makeinclude.mingw31,v 1.1.2.2.2.7 2004/07/23 19:42:50 easysw Exp $".
 #
