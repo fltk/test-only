@@ -1,5 +1,5 @@
 //
-// "$Id: fl_file_chooser.cxx,v 1.23 2001/03/09 17:13:24 robertk Exp $"
+// "$Id: fl_file_chooser.cxx,v 1.24 2001/03/12 16:15:32 robertk Exp $"
 //
 // File chooser widget for the Fast Light Tool Kit (FLTK).
 //
@@ -30,8 +30,9 @@
 #ifdef WIN32
 #include <windows.h>
 #include <commdlg.h>
+#include <direct.h>
 static int guse_windows_filereq = 0;
-static char filenamebuffer[MAX_PATH];
+static char filenamebuffer[MAX_PATH] = "";
 static OPENFILENAME wreq;
 #ifndef OPENFILENAME_SIZE_VERSION_400
 #	define OPENFILENAME_SIZE_VERSION_400 sizeof(OPENFILENAME)
@@ -48,11 +49,16 @@ void init_wreq_struct(const char *message, const char *pat, const char *fname)
 	wreq.lStructSize = OPENFILENAME_SIZE_VERSION_400; // needed for Win < Win2k
 	wreq.lpstrFilter = pat;
 	wreq.nFilterIndex = (pat) ? 1 : 0;	
-	memset(filenamebuffer, 0, MAX_PATH);
-	strncpy(filenamebuffer, fname, MAX_PATH);
 	wreq.lpstrFile = filenamebuffer;
 	wreq.nMaxFile = MAX_PATH;
 	wreq.lpstrTitle = message ? message : "Select the filename";
+	if(fname) {
+	  memset(filenamebuffer, 0, MAX_PATH);
+	  if((filenamebuffer[1] == ':') && (_getdrive() + 'A' - 1 == filenamebuffer[0]))
+	    strncpy(filenamebuffer, fname + 2, MAX_PATH);
+	  else
+	    strncpy(filenamebuffer, fname, MAX_PATH);
+	}
 	wreq.Flags = OFN_NOCHANGEDIR;
 }
 #endif
@@ -89,5 +95,5 @@ char* fl_file_chooser(const char* message, const char* pat, const char* fname)
 }
 
 //
-// End of "$Id: fl_file_chooser.cxx,v 1.23 2001/03/09 17:13:24 robertk Exp $".
+// End of "$Id: fl_file_chooser.cxx,v 1.24 2001/03/12 16:15:32 robertk Exp $".
 //

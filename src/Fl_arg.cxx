@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.32 2001/03/10 20:38:22 clip Exp $"
+// "$Id: Fl_arg.cxx,v 1.33 2001/03/12 16:15:32 robertk Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -174,12 +174,12 @@ void Fl_Window::show(int argc, char **argv) {
   int i;
   int n=0; for (i=0; i<argc; i++) n += strlen(argv[i])+1;
   char *buffer = new char[n];
-#endif
   char *p = buffer;
   for (i=0; i<argc; i++) for (const char *q = argv[i]; (*p++ = *q++););
   XChangeProperty(fl_display, fl_xid(this), XA_WM_COMMAND, XA_STRING, 8, 0,
 		  (unsigned char *)buffer, p-buffer-1);
   delete[] buffer;
+#endif
 }
 
 // Calls useful for simple demo programs, with automatic help message:
@@ -341,5 +341,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.32 2001/03/10 20:38:22 clip Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.33 2001/03/12 16:15:32 robertk Exp $".
 //
