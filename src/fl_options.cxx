@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.37 1999/11/24 00:58:02 carl Exp $"
+// "$Id: fl_options.cxx,v 1.38 1999/11/27 00:58:25 carl Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -75,16 +75,7 @@ void fl_theme_handler(Fl_Theme_Handler handler) {
   _theme_handler = handler;
 }
 
-static int is_path_rooted(const char *fn) {
-  // see if an absolute name was given:
-  if (fn[0] == '/' || fn[0] == '.'
-#ifdef WIN32
-      || fn[0] == '\\' || fn[1]==':'
-#endif
-      )
-    return 1;
-  return 0;
-}
+extern "C" int conf_is_path_rooted(const char *);
 
 static Fl_Color grok_color(const char* cf, const char *colstr) {
   char key[80], val[32];
@@ -137,7 +128,7 @@ int Fl::loadscheme(int b) {
   if (!b) return 0;
 
   char temp[PATH_MAX];
-  if (is_path_rooted(scheme())) strncpy(temp, scheme(), sizeof(temp));
+  if (conf_is_path_rooted(scheme())) strncpy(temp, scheme(), sizeof(temp));
   else snprintf(temp, sizeof(temp), "schemes/%s", scheme());
 
   const char *p = fl_find_config_file(temp);
@@ -316,7 +307,7 @@ int Fl::loadtheme(int b) {
   if (!b) return 0;
 
   char temp[PATH_MAX];
-  if (is_path_rooted(theme())) strncpy(temp, theme(), sizeof(temp));
+  if (conf_is_path_rooted(theme())) strncpy(temp, theme(), sizeof(temp));
   else snprintf(temp, sizeof(temp), "themes/%s", theme());
 
   if (strlen(temp)<5 || strcasecmp(temp+strlen(temp)-5, ".fltp"))
@@ -488,7 +479,7 @@ int fl_windows_colors() {
 const char* fl_find_config_file(const char* fn) {
   static char path[PATH_MAX];
 
-  if (is_path_rooted(fn)) {
+  if (conf_is_path_rooted(fn)) {
     strcpy(path, fn);
   } else {
     char *cptr = getenv("HOME");
@@ -543,7 +534,7 @@ void Fl_Style::revert() {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.37 1999/11/24 00:58:02 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.38 1999/11/27 00:58:25 carl Exp $".
 //
 
 

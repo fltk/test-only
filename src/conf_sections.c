@@ -1,9 +1,9 @@
 /*
-   "$Id: conf_sections.c,v 1.4 1999/08/11 10:20:29 carl Exp $"
+   "$Id: conf_sections.c,v 1.5 1999/11/27 00:58:24 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
-    Carl Thompson's config file routines version 0.21
+    Carl Thompson's config file routines version 0.3
     Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
@@ -25,6 +25,9 @@
 #include <FL/conf.h>
 #include <config.h>
 
+extern int conf_is_path_rooted(const char *);
+extern const char* conf_dirname(const char *);
+
 /*
         int getconf_sections(const char *configfile, const char *section,
                              conf_list *list)
@@ -38,94 +41,100 @@
                       to conf_entry) of subsections
         return values:
                 returns 0 for OK or error code defined in conf.h
-                returns a pointer to first in list of entries in "list"
 */
 int
-getconf_sections(const char *configfile, const char *section, conf_list *list)
+getconf_sections(const char *configfile, const char *sec, conf_list *list)
 {
-        FILE        *ifp;                                                       /* file pointer for config file */
-        char        section2[CONF_MAX_SECT_LEN + 2];                            /* section with [] added */
-        char        line[CONF_MAX_LINE_LEN];                                    /* line buffer */
-        char        *p, *p2;                                                    /* miscelaneous char pointers */
-        conf_entry  **current;                                                  /* pointer to pointer to current entry */
+  FILE       *ifp;                                                              /* file pointer for config file */
+  char       current_section[CONF_MAX_SECT_LEN + 2] = "";                       /* current section */
+  char       section[CONF_MAX_SECT_LEN + 1];                                    /* desired section */
+  char       line[CONF_MAX_LINE_LEN];                                           /* line buffer */
+  char       *p;                                                                /* miscelaneous char pointer */
+  int        section_found;                                                     /* did we ever find the right section? */
+  conf_entry **current;                                                         /* pointer to pointer to current entry */
+  static int depth = 0;                                                         /* don't go too deep */
 
-        if (!configfile || !list)
-                return CONF_ERR_ARGUMENT;                                       /* NULL pointer was passed */
+  if (!configfile || !list) return CONF_ERR_ARGUMENT;                           /* NULL pointer was passed */
+  if (!sec) sec = "";                                                           /* toplevel section */
 
-        conf_list_free(list);                                                   /* free list passed to us */
+  conf_list_free(list);                                                         /* free list passed to us */
+  current = list;                                                               /* pointer to current (first) entry */
 
-        current = list;                                                         /* pointer to current (first) entry */
+  ifp = fopen(configfile, "r");
+  if (!ifp) return CONF_ERR_FILE;                                               /* could not open config file */
 
-        ifp = fopen(configfile, "r");
-        if (!ifp)
-                return CONF_ERR_FILE;                                           /* could not open config file */
+  if (strlen(sec) > (CONF_MAX_SECT_LEN - 1))                                    /* if section name too long */
+    return CONF_ERR_ARGUMENT;                                                   /* bail out */
+  strncpy(section, sec, sizeof(section));
+  trim(section);
+  if (*section && *(section + strlen(section) - 1) != conf_level_sep) {                                                               /* add trailing '/' to section name */
+    *(section + strlen(section) + 1) = (char)0;
+    *(section + strlen(section)) = conf_level_sep;
+  }
 
-        if (section && *section)                                                /* if we are not looking in top-level section */
-        {
-                sprintf(section2, "[%s]", section);                             /* add [] to section name */
+  section_found = (*section) ? 0 : 1;                                           /* found the right section if we want toplevel */
+  while (fgets(line, sizeof(line), ifp)) {                                      /* while there are still lines in the section */
+    if ( (p = strchr(line, conf_comment_sep)) ) *p = (char)0;                   /* kill comment */
 
-                while ((p = fgets(line, sizeof(line), ifp)))                    /* keep reading lines until section found */
-		{
-			if ((p2 = strchr(line, conf_comment_sep)))              /* if there is a comment */
-				*p2 = (char)0;					/* kill it */
+    trim(line);                                                                 /* remove unnecessary whitespace */
+    if (!(*line)) continue;                                                     /* this is a blank line, go to next line */
 
-            		if (!strcasecmp(trim(line), section2))			/* if this is the section we are loooking for */
-		               break;						/* stop looking */
-		}
-		
-                if (!p)
-                {                                                               /* section was not found */
-                        fclose(ifp);
-                        return CONF_ERR_SECTION;
-                } /* if (!fp) */
-
-                sprintf(section2, "[%s%c", section, conf_level_sep);            /* beginning of subsection name */
+    if (*line == '[') {                                                         /* in new section */
+      strncpy(current_section, line + 1, sizeof(current_section));
+      if (section_found && !strncasecmp(section, current_section, strlen(section))) {
+        char found[CONF_MAX_SECT_LEN];
+        strncpy(found, current_section + strlen(section), sizeof(found));
+        p = found + strlen(found) - 1;
+        if (*p != ']') continue;                                                /* No ']' ?  This shouldn't happen! */
+        *p = (char)0;                                                           /* lose the ']' */
+        (*current) = (conf_entry *)malloc(sizeof(conf_entry));                  /* allocate memory for this entry */
+        if (*current) (*current)->data = strdup(found);                         /* duplicate the key for this entry */
+        if ((*current == 0) || ((*current)->data == 0)) {                       /* if we had a memory allocation problem */
+          fclose(ifp);                                                          /* close data file */
+          return CONF_ERR_MEMORY;                                               /* and bail out */
         }
-        else
-        {
-                strcpy(section2, "[");                                          /* beginning of subsection name */
-        }
+        (*current)->next = 0;                                                   /* set this entry's next pointer to null */
+        current = &((*current)->next);                                          /* point to next entry */
+      }
+      *(current_section + strlen(current_section) - 1) = conf_level_sep;
+      if (!strcasecmp(current_section, section)) section_found = 1;             /* this is the section we want */
+      continue;                                                                 /* go to next line in file */
+    }
 
+    if (strncasecmp(current_section, section, strlen(current_section)))
+      continue;                                                                 /* not wanted section or parent */
 
-        while (fgets(line, sizeof(line), ifp))                                  /* while there are still lines in the file */
-        {
-		if ((p2 = strchr(line, conf_comment_sep)))
-			*p2 = (char)0;
-		
-                trim(line);                                                     /* remove unnecessary whitespace */
-		
-                if (*line != '[')                                               /* if this is not a section name */
-                        continue;                                               /* go to the next line */
+    if ( (p = strchr(line, conf_sep)) ) continue;                               /* if there is a separator go to next line */
+    p = strtok(line, CONF_WHITESPACE);                                          /* get the command */
+    if (!strcasecmp(p, "include")) {                                            /* it is include command */
+      char fn[CONF_MAXPATHLEN];                                                 /* filename of include file */
+      char s[CONF_MAX_SECT_LEN];                                                /* what to look for in included file */
+      int r;
 
-                if (strncmp(line, section2, strlen(section2)))                  /* if this is a different section */
-                        break;                                                  /* we are done */
+      p = strtok(0, "");                                                        /* get the name of file to be included */
+      trim(p);                                                                  /* kill unecessary whitespace */
+      if (conf_is_path_rooted(p)) strncpy(fn, p, sizeof(fn));                   /* fully qualified path */
+      else snprintf(fn, sizeof(fn), "%s%s", conf_dirname(configfile), p);       /* figure out pathname */
+      strncpy(s, section + strlen(current_section), sizeof(s));                 /* section/key to look up in included file */
+      if (depth == CONF_MAX_INCLUDE) return CONF_ERR_DEPTH;                     /* went too deep */
+      depth++;
+      r = getconf_sections(fn, s, current);                                     /* look for what we want in included file */
+      depth--;
+      if (r == CONF_ERR_DEPTH) return CONF_ERR_DEPTH;                           /* went too deep */
+      if (r == CONF_ERR_MEMORY) return CONF_ERR_MEMORY;                         /* buy some RAM */
+      if (!r) {
+        section_found = 1;                                                      /* we found what we wanted in included file */
+        while (*current) current = &((*current)->next);
+      }
+    }
+  } /* while (fgets(line, sizeof(line), ifp)) */
 
-                if ((p = strrchr(line, ']')))                                   /* find trailing ']' in section name */
-                        *p = (char)0;                                           /* remove it */
+  fclose(ifp);                                                                  /* close the config file */
 
-                p = line + strlen(section2);                                    /* first character of subsection name */
-
-                if (strchr(p, conf_level_sep))                                  /* if this is a sub-subsection */
-                        continue;                                               /* go to next line */
-
-                (*current) = (conf_entry *)malloc(sizeof(conf_entry));          /* allocate memory for this entry */
-                if (*current)
-                        (*current)->data = strdup(p);                           /* duplicate subsection name for this entry */
-                if ((*current == NULL) || ((*current)->data == NULL))           /* if we had a memory allocation problem */
-                {
-                        fclose(ifp);                                            /* close data file */
-                        conf_list_free(list);                                   /* free what we did already */
-                        return CONF_ERR_MEMORY;                                 /* and bail out */
-                }
-                (*current)->next = NULL;                                        /* set this entry's next pointer to null */
-                current = &((*current)->next);                                  /* point to next entry */
-        } /* while (fgets(line, sizeof(line), ifp)) */
-
-        /* all done! */
-        fclose(ifp);
-        return CONF_SUCCESS;                                                    /* key was not found */
-} /* getconf_sections() */
+  if (!section_found) return CONF_ERR_SECTION;                                  /* section was never found */
+  return CONF_SUCCESS;                                                          /* it worked? */
+} /* getconf_keys() */
 
 /*
-    End of "$Id: conf_sections.c,v 1.4 1999/08/11 10:20:29 carl Exp $".
+    End of "$Id: conf_sections.c,v 1.5 1999/11/27 00:58:24 carl Exp $".
 */

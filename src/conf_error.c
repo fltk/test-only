@@ -1,9 +1,9 @@
 /*
-   "$Id: conf_error.c,v 1.4 1999/08/11 10:20:28 carl Exp $"
+   "$Id: conf_error.c,v 1.5 1999/11/27 00:58:23 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
-    Carl Thompson's config file routines version 0.21
+    Carl Thompson's config file routines version 0.3
     Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
@@ -44,14 +44,14 @@ getconf_error(int error)                                                        
         case CONF_ERR_FILE: return "could not access config file";
         case CONF_ERR_SECTION: return "config file section not found";
         case CONF_ERR_KEY: return "key not found in section";
-        case CONF_ERR_DEPTH: return "section nesting too deep";
+        case CONF_ERR_DEPTH: return "section or include nesting too deep";
         case CONF_ERR_MEMORY: return "could not allocate memory";
-        case CONF_ERR_NOVALUE: return "no value associated with key";
+        case CONF_ERR_NOVALUE: return "invalid value associated with key";
         case CONF_ERR_AGAIN: return "try operation again (lockfile exists?)";
         default: return "unknown error";
     }
 }
 
 /*
-    End of "$Id: conf_error.c,v 1.4 1999/08/11 10:20:28 carl Exp $".
+    End of "$Id: conf_error.c,v 1.5 1999/11/27 00:58:23 carl Exp $".
 */

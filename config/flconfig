@@ -4,7 +4,7 @@
 # FLTK comes with:
 #   Alternative, Alt2, Classic, Essai, KDE1, Motif, OldMotif, Windows
 
-default scheme = Alternative
+default scheme = KDE1
 
 [mouse wheel]                 # using mode = 0 won't touch your button events (X)
   # scroll forward 1 page

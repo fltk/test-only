@@ -1,9 +1,9 @@
 /*
-   "$Id: conf.h,v 1.10 1999/11/01 02:21:17 carl Exp $"
+   "$Id: conf.h,v 1.11 1999/11/27 00:58:20 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
-    Carl Thompson's config file routines version 0.21
+    Carl Thompson's config file routines version 0.3
     Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
@@ -26,7 +26,7 @@
         author:         Carl Thompson (clip@home.net)
         source type:    Ansi C
         start date:     16 Dec 1995
-        last modified:  8 Aug 1999
+        last modified:  26 Nov 1999
 
         Typical config file format:
 
@@ -74,6 +74,7 @@
 #  include <fcntl.h>
 #  include <ctype.h>
 #  include <errno.h>
+#  include <limits.h>
 #  if defined(WIN32) || defined(__EMX__)
 #    include <io.h>
 #  else
@@ -85,10 +86,15 @@
 /* misc defines */
 #  define CONF_WHITESPACE	" \t\n\r"	/* all whitespace characters */
 #  define CONF_MAX_LEVEL	10		/* maximum depth of sections in config file */
+#  define CONF_MAX_INCLUDE	10		/* maximum depth of includes in config file */
 #  define CONF_INDENT		2		/* number of spaces to use for indenting */
 #  define CONF_MAX_LINE_LEN	512		/* maximum length of line in config file */
 #  define CONF_MAX_SECT_LEN	128		/* maximum length of section name */
-#  define CONF_MAXPATHLEN	128		/* maximum length of pathname */
+#  ifdef PATH_MAX
+#    define CONF_MAXPATHLEN	PATH_MAX
+#  else
+#    define CONF_MAXPATHLEN	128		/* maximum length of pathname */
+#  endif
 
 
 /* error defines */
@@ -97,9 +103,9 @@
 #  define CONF_ERR_FILE		2		/* trouble accessing config file or directory */
 #  define CONF_ERR_SECTION	3		/* requested section was not found */
 #  define CONF_ERR_KEY		4		/* requested key was not found */
-#  define CONF_ERR_DEPTH	5		/* nested sections in config file too deep */
+#  define CONF_ERR_DEPTH	5		/* nested sections or includes in config file too deep */
 #  define CONF_ERR_MEMORY	6		/* memory allocation error */
-#  define CONF_ERR_NOVALUE	7		/* key found, but no value associated with it */
+#  define CONF_ERR_NOVALUE	7		/* key found, but invalid value associated with it */
 #  define CONF_ERR_AGAIN	8		/* try operation again (lockfile existed?) */
 
 #  ifdef __cplusplus
@@ -116,7 +122,6 @@ extern "C" {
   typedef conf_entry* conf_list;
 
   /* global variables */
-  extern FL_API int    conf_DOS;                                                /* write files with DOS end of line? */
   extern FL_API char   conf_sep;                                                /* seperator charactor used in config files */
   extern FL_API char   conf_level_sep;                                          /* seperator used to denote nested sections */
   extern FL_API char	conf_comment_sep;					/* denotes comments */
@@ -401,5 +406,5 @@ extern "C" {
 #endif /* !CONF_H */
 
 /*
- * End of "$Id: conf.h,v 1.10 1999/11/01 02:21:17 carl Exp $".
+ * End of "$Id: conf.h,v 1.11 1999/11/27 00:58:20 carl Exp $".
  */

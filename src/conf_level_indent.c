@@ -1,9 +1,9 @@
 /*
-   "$Id: conf_level_indent.c,v 1.4 1999/08/11 10:20:29 carl Exp $"
+   "$Id: conf_level_indent.c,v 1.5 1999/11/27 00:58:24 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
-    Carl Thompson's config file routines version 0.21
+    Carl Thompson's config file routines version 0.3
     Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
@@ -37,5 +37,5 @@ level_indent(int l)
 }
 
 /*
-    End of "$Id: conf_level_indent.c,v 1.4 1999/08/11 10:20:29 carl Exp $".
+    End of "$Id: conf_level_indent.c,v 1.5 1999/11/27 00:58:24 carl Exp $".
 */

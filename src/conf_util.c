@@ -1,9 +1,9 @@
 /*
-   "$Id: conf_trim.c,v 1.4 1999/08/11 10:20:30 carl Exp $"
+   "$Id: conf_util.c,v 1.1 1999/11/27 00:58:25 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
-    Carl Thompson's config file routines version 0.21
+    Carl Thompson's config file routines version 0.3
     Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
@@ -53,6 +53,42 @@ trim(char *s)
         return s;
 }
 
+int conf_is_path_rooted(const char *fn)
+{
+  // see if an absolute name was given:
+  if (fn[0] == '/' || fn[0] == '.'
+#ifdef WIN32
+      || fn[0] == '\\' || fn[1]==':'
+#endif
+      )
+    return 1;
+  return 0;
+}
+
+const char *conf_basename(const char *fn)
+{
+  const char *p;
+
+  if ( (p = strrchr(fn, '/'))
+#ifdef WIN32
+      || (p = strrchr(fn, '\\'))
+#endif
+      )
+    return p + 1;
+  return fn;
+}
+
+/* this will modify the input string! */
+const char *conf_dirname(char *fn)
+{
+  static char dirname[CONF_MAXPATHLEN];
+
+  strncpy(dirname, fn, sizeof(dirname));
+  *((char *)conf_basename(dirname)) = (char)0;
+
+  return dirname;
+}
+
 /*
-    End of "$Id: conf_trim.c,v 1.4 1999/08/11 10:20:30 carl Exp $".
+    End of "$Id: conf_util.c,v 1.1 1999/11/27 00:58:25 carl Exp $".
 */
