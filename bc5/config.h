@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.6 1999/11/15 04:02:33 carl Exp $"
+ * "$Id: config.h,v 1.7 1999/11/23 06:10:51 vincent Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -191,5 +191,11 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define HAVE_PTHREAD_SETSCHEDPARAM 0
 
 /*
- * End of "$Id: config.h,v 1.6 1999/11/15 04:02:33 carl Exp $".
+ * Some Win32 specific functions
+ */
+
+#define HAVE_TRACKMOUSEEVENT 1
+
+/*
+ * End of "$Id: config.h,v 1.7 1999/11/23 06:10:51 vincent Exp $".
  */

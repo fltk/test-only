@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.67 1999/11/21 06:25:22 vincent Exp $"
+dnl# "$Id: configure.in,v 1.68 1999/11/23 06:10:50 vincent Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -252,6 +252,8 @@ if test $have_pthread = yes; then
     AC_DEFINE(HAVE_PTHREAD)
 fi
 
+AC_CHECK_FUNCS(TrackMouseEvent, AC_DEFINE(HAVE_TRACKMOUSEEVENT))
+
 MAKEDEPEND="\$(CXX) -M"
 
 dnl# add warnings to compiler switches:
@@ -360,5 +362,5 @@ cd ..
 chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.67 1999/11/21 06:25:22 vincent Exp $".
+dnl# End of "$Id: configure.in,v 1.68 1999/11/23 06:10:50 vincent Exp $".
 dnl#

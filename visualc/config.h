@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.12 1999/10/17 16:01:17 vincent Exp $"
+ * "$Id: config.h,v 1.13 1999/11/23 06:10:55 vincent Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -185,5 +185,11 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define strcasecmp(a,b) stricmp(a,b)
 
 /*
- * End of "$Id: config.h,v 1.12 1999/10/17 16:01:17 vincent Exp $".
+ * Some Win32 specific functions
+ */
+
+#define HAVE_TRACKMOUSEEVENT 1
+
+/*
+ * End of "$Id: config.h,v 1.13 1999/11/23 06:10:55 vincent Exp $".
  */

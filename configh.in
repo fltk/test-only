@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.31 1999/11/17 01:39:42 vincent Exp $"
+ * "$Id: configh.in,v 1.32 1999/11/23 06:10:50 vincent Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -216,5 +216,11 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define FLTK_LIBDIR ""
 
 /*
- * End of "$Id: configh.in,v 1.31 1999/11/17 01:39:42 vincent Exp $".
+ * Some Win32 specific functions
+ */
+
+#define HAVE_TRACKMOUSEEVENT 0
+
+/*
+ * End of "$Id: configh.in,v 1.32 1999/11/23 06:10:50 vincent Exp $".
  */
