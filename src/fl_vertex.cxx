@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.19 2002/12/10 02:01:03 easysw Exp $"
+// "$Id: fl_vertex.cxx,v 1.20 2003/03/31 07:17:48 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -40,10 +40,17 @@ struct Matrix {
 };
 
 static Matrix m = {1, 0, 0, 1, 0, 0, 0, 0, true};
-static Matrix stack[10];
+static Matrix* stack;
+static int stacksize = 0;
 static int sptr = 0;
 
-void fltk::push_matrix() {stack[sptr++] = m;}
+void fltk::push_matrix() {
+  if (sptr >= stacksize) {
+    stacksize = stacksize ? 2*stacksize : 16;
+    stack = (Matrix*)realloc(stack, stacksize*sizeof(Matrix));
+  }
+  stack[sptr++] = m;
+}
 
 void fltk::pop_matrix() {m = stack[--sptr];}
 
@@ -473,5 +480,5 @@ void fltk::fillstrokepath(Color color) {
 }
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.19 2002/12/10 02:01:03 easysw Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.20 2003/03/31 07:17:48 spitzak Exp $".
 //

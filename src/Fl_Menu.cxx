@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.138 2003/03/09 07:51:36 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.139 2003/03/31 07:17:46 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -539,22 +539,30 @@ int MWindow::handle(int event) {
     {for (int menu = p.nummenus; menu--;) {
       MWindow &mw = *(p.menus[menu]);
       int nextitem = -1;
+      static char lastkey; // test for same key multiple times
+      if (p.indexes[menu] < 0) lastkey = 0;
       for (int item = 0; item < mw.children; item++) {
 	widget = mw.get_widget(item);
-	if (!widget->takesevents()) continue;
-	if (fltk::test_shortcut(widget->shortcut())) {
+	if (widget->active() && fltk::test_shortcut(widget->shortcut())) {
 	  setitem(p, menu, item);
+	  lastkey = 0;
 	  goto EXECUTE;
 	}
+	// continue unless this item can be picked by the keystroke:
+	if (!widget->takesevents()) continue;
 	if (widget->test_label_shortcut()) {
-	  nextitem = item;
+	  // underscored items are jumped to immediately on first keystroke:
+	  if (event_text()[0]!=lastkey) {nextitem = item; continue;}
 	} else {
 	  const char* l = widget->label();
-	  if (l && tolower(*l) == event_text()[0]) {
-	    if (nextitem < 0 || nextitem <= p.indexes[menu] && item > p.indexes[menu]) nextitem = item;
-	  }
+	  if (!l || tolower(*l) != event_text()[0]) continue;
 	}
+	// cycle around the selectable items:
+	if (nextitem < 0 ||
+	    nextitem <= p.indexes[menu] && item > p.indexes[menu])
+	  nextitem = item;
       }
+      lastkey = event_text()[0];
       if (nextitem >= 0) {
 	setitem(p, menu, nextitem);
 	return 1;
@@ -606,11 +614,13 @@ int MWindow::handle(int event) {
 
   case RELEASE:
     pushed_ = 0;
-    // The initial click just b
-    // If they clicked a menu title then make the menu stay up, rather
-    // than selecting that menu title:
+    // The initial click just brings up the menu. The user has to either
+    // drag the mouse around, hold it still for a long time, or click
+    // again to actually pick an item and dismiss the menu. You can
+    // make the first click pick the item (which might be useful for
+    // a Choice style list) by setting event_is_click(false) before
+    // doing the popup.
     if (p.state == INITIAL_STATE && event_is_click()) return 1;
-    //&& (p.indexes[p.level] < 0 || p.current_children() >= 0)) return 1;
   EXECUTE: // execute the item pointed to by w and current item
     // If they click outside menu we quit:
     if (p.indexes[p.level]<0) {exit_modal(); return 1;}
@@ -810,5 +820,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.138 2003/03/09 07:51:36 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.139 2003/03/31 07:17:46 spitzak Exp $".
 //

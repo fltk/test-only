@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.39 2003/02/07 08:21:25 spitzak Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.40 2003/03/31 07:17:47 spitzak Exp $"
 //
 // Copyright 1998-2002 by Bill Spitzak and others.
 //
@@ -194,7 +194,7 @@ void ValueInput::value_damage() {
       if (!oldv) {
 	if (!value()) return;
       } else {
-	if (fabs(fabs(value()/oldv)-1) < .000001) return;
+	if (fabs(fabs(value()/oldv)-1) < 1.2e-7) return;
       }
     }
   }
@@ -221,5 +221,5 @@ ValueInput::~ValueInput() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.39 2003/02/07 08:21:25 spitzak Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.40 2003/03/31 07:17:47 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.95 2003/03/09 07:51:36 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.96 2003/03/31 07:17:47 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -262,7 +262,7 @@ void Window::show(const Window* w) {
 }
 
 void Window::child_of(const Window* w) {
-  // if (contains(w)) return;
+  if (contains(w)) return;
   while (w && w->parent()) w = w->window();
   if (child_of_ != w) destroy();
   child_of_ = w;
@@ -404,5 +404,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.95 2003/03/09 07:51:36 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.96 2003/03/31 07:17:47 spitzak Exp $".
 //

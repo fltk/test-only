@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.48 2003/03/09 07:51:36 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.49 2003/03/31 07:17:46 spitzak Exp $"
 //
 // The Menu base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Group
@@ -201,38 +201,52 @@ Widget* Menu::get_focus() {
 // &x shortcuts are ignored, on the assumption that the menu is not
 // visible...
 
-// recursive innards of handle_shortcut:
+// Recursive innards of handle_shortcut. The recursive part only works
+// for real children of a child Group, the hierarchy in a List is ignored.
+// This is because generating every item in a list could take a very
+// long time, possibly forever.
 static Widget* shortcut_search(Group* g) {
-  Widget* widget = 0;
   for (int i = 0; i < g->children(); i++) {
     Widget* item = g->child(i);
     if (!item->active()) continue;
-    if (test_shortcut(item->shortcut())) {g->focus(i); return item;}
-    if (!widget && item->is_group() /*&& IS_OPEN*/) {
-      widget = shortcut_search((Group*)item);
-      if (widget) g->focus(i);
+    if (fltk::test_shortcut(item->shortcut())) {
+      g->focus(i);
+      return item;
+    }
+    if (item->is_group()) {
+      item = shortcut_search((Group*)item);
+      if (item) {
+	g->focus(i);
+	return item;
+      }
     }
   }
-  return widget;
+  return 0;
 }
 
 int Menu::handle_shortcut() {
   if (event_clicks()) return 0; // ignore repeating keys
-  Widget* widget = 0;
   int children = this->children();
   for (int i = 0; i < children; i++) {
     Widget* item = child(i);
-    if (!item->takesevents()) continue;
-    if (fltk::test_shortcut(item->shortcut())) {value(i); widget=item; break;}
-    if (!widget && item->is_group() /*&& IS_OPEN*/) {
-      widget = shortcut_search((Group*)item);
-      if (widget) value(i);
+    if (!item->active()) continue;
+    if (fltk::test_shortcut(item->shortcut())) {
+      value(i);
+      execute(item);
+      return 1;
+    }
+    if (item->is_group()) {
+      item = shortcut_search((Group*)item);
+      if (item) {
+	value(i);
+	execute(item);
+	return 1;
+      }
     }
   }
-  if (widget) {execute(widget); return 1;}
   return 0;
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.48 2003/03/09 07:51:36 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.49 2003/03/31 07:17:46 spitzak Exp $"
 //

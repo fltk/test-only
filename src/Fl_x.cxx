@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.142 2003/03/09 07:51:36 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.143 2003/03/31 07:17:47 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1030,8 +1030,39 @@ void CreatedWindow::create(Window* window,
     }
     attr.event_mask = ExposureMask;
   } else {
-    if (X == USEDEFAULT) X = (DisplayWidth(xdisplay, xscreen)-W)>>1;
-    if (Y == USEDEFAULT) Y = (DisplayHeight(xdisplay, xscreen)-H)>>1;
+    if (X == USEDEFAULT || Y == USEDEFAULT) {
+      // Select a window position. Some window managers will ignore this
+      // because we do not set the "USPosition" or "PSPosition" bits in
+      // the hints, indicating that automatic placement should be done.
+      // But it appears that newer window managers use the position,
+      // especially for child windows, so we better set it:
+      const Window* parent = window->child_of();
+      int sw = DisplayWidth(xdisplay, xscreen);
+      int sh = DisplayHeight(xdisplay, xscreen);
+      if (parent) {
+	X = parent->x()+((parent->w()-W)>>1);
+	if (X <= parent->x()) X = parent->x()+1;
+	Y = parent->y()+((parent->h()-H)>>1);
+	if (Y < parent->y()+20) Y = parent->y()+20;
+      } else {
+	X = (sw-W)>>1;
+	Y = (sh-H)>>1;
+      }
+      if (!modal()) {
+	static const Window* pp = 0;
+	static int delta = 0;
+	if (parent != pp) {pp = parent; delta = 0;}
+	X += delta;
+	Y += delta;
+	delta += 16;
+      }
+      if (X+W >= sw) X = sw-W-1;
+      if (X < 1) X = 1;
+      if (Y+H >= sh) Y = sh-H-1;
+      if (Y < 20) Y = 20;
+      // we do not compare to sw/sh here because I think it may mess up
+      // some virtual desktop implementations
+    }
     root = RootWindow(xdisplay, xscreen);
     attr.event_mask =
       ExposureMask | StructureNotifyMask
@@ -1175,7 +1206,7 @@ void CreatedWindow::sendxjunk() {
     prop[1] = 1|2|16; // MWM_FUNC_ALL | MWM_FUNC_RESIZE | MWM_FUNC_MAXIMIZE
   }
 
-  if (window->x() != USEDEFAULT || window->y() != USEDEFAULT) {
+  if (window->x() != USEDEFAULT && window->y() != USEDEFAULT) {
     hints.flags |= USPosition;
     hints.x = window->x();
     hints.y = window->y();
@@ -1413,5 +1444,5 @@ bool fltk::get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.142 2003/03/09 07:51:36 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.143 2003/03/31 07:17:47 spitzak Exp $".
 //

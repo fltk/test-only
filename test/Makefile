@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.66 2003/01/15 02:27:19 easysw Exp $"
+# "$Id: Makefile,v 1.67 2003/03/31 07:17:48 spitzak Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -105,6 +105,7 @@ CFILES	=
 
 # only some of the demos have been changed to use namespaces:
 TARGETS = \
+	arc$(EXEEXT) \
 	browser$(EXEEXT) \
 	checkers$(EXEEXT) \
 	boxtype$(EXEEXT) \
@@ -239,5 +240,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.66 2003/01/15 02:27:19 easysw Exp $".
+# End of "$Id: Makefile,v 1.67 2003/03/31 07:17:48 spitzak Exp $".
 #

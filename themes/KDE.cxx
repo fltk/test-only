@@ -1,5 +1,5 @@
 //
-// "$Id: KDE.cxx,v 1.10 2003/02/02 10:39:23 spitzak Exp $"
+// "$Id: KDE.cxx,v 1.11 2003/03/31 07:17:49 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -66,22 +66,15 @@ enum KIPCMessage {
 static int x_event_handler(int,Window*) {
   if (fltk::xevent.type != ClientMessage) return 0; // not a Client message
   XClientMessageEvent* cm = (XClientMessageEvent*)&fltk::xevent;
-  if (cm->message_type != ChangeGeneral && cm->message_type != ChangePalette
-      && cm->message_type != KIPC && cm->message_type != ChangeStyle)
-    return 0; // not the message we want
-  if (cm->message_type == KIPC &&
-      cm->data.l[0] != PaletteChanged &&
-      cm->data.l[0] != FontChanged &&
-      cm->data.l[0] != StyleChanged)
-    return 0; // only interested in some IPC messages
-  if (colors_only && cm->message_type == KIPC &&
-      cm->data.l[0] != PaletteChanged &&
-      cm->data.l[0] != FontChanged)
-    return 0;
-  if (colors_only && cm->message_type == ChangeStyle)
-    return 0;
-  // Geez, really need to work on that logic...
-
+  if (cm->message_type == KIPC) {
+    if (cm->data.l[0] == PaletteChanged) ;
+    else if (cm->data.l[0] == FontChanged) ;
+    else if (!colors_only && cm->data.l[0] == StyleChanged) ;
+    else return 0;
+  } else if (cm->message_type == ChangeGeneral) ;
+  else if (cm->message_type == ChangePalette) ;
+  else if (!colors_only && cm->message_type == ChangeStyle) ;
+  else return 0;
   Style::reload_theme();
 
   return 1;
@@ -127,6 +120,7 @@ extern "C" bool fltk_theme() {
   }
   conf_clear_cache();
   
+#if 0
   int motif_style = 0;
   if (!colors_only) {
     if (!getconf(kderc, "KDE/widgetStyle", s, sizeof(s)) && !strcasecmp(s, "Motif"))
@@ -142,6 +136,7 @@ extern "C" bool fltk_theme() {
       // see below for modifications to the motif/windows themes
     }
   }
+#endif
 
   Color foreground = NO_COLOR;
   if (!getconf(kderc, "General/foreground", s, sizeof(s)))
@@ -314,6 +309,7 @@ extern "C" bool fltk_theme() {
   }
 */
 
+#if 0
   if (!colors_only) {
     if (motif_style) {
 //    setcolor(GRAY90, GRAY85); // looks better for dark backgrounds
@@ -336,6 +332,7 @@ extern "C" bool fltk_theme() {
 //      }
     }
   }
+#endif
 
 #ifndef _WIN32
   add_event_handler();
@@ -344,5 +341,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: KDE.cxx,v 1.10 2003/02/02 10:39:23 spitzak Exp $".
+// End of "$Id: KDE.cxx,v 1.11 2003/03/31 07:17:49 spitzak Exp $".
 //

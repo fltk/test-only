@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.162 2003/03/09 07:51:36 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.163 2003/03/31 07:17:43 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -385,7 +385,7 @@ void fltk::flush() {
 #elif (defined(__APPLE__) && !USE_X11)
   //QDFlushPortBuffer( GetWindowPort(xid), 0 ); // \todo do we need this?
 #else
-  if (xmousewin) {
+  if (xmousewin && !pushed() && !grab()) {
     CreatedWindow* i = CreatedWindow::find(xmousewin);
     if (i->cursor != None && !i->cursor_for->contains(belowmouse_)) {
       i->cursor = None;
@@ -691,5 +691,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.162 2003/03/09 07:51:36 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.163 2003/03/31 07:17:43 spitzak Exp $".
 //

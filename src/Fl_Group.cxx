@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.122 2003/02/02 10:39:23 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.123 2003/03/31 07:17:45 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -277,17 +277,14 @@ int Group::handle(int event) {
     }
     return Widget::handle(event);
 
-  default: {
-    // Try to give all other events to every child, starting at focus:
-    if (!numchildren) break;
-    int previous = focus_;
-    if (previous < 0 || previous >= numchildren) previous = 0;
-    for (i = previous;;) {
+  default:
+    // Try to give any other event to the focus:
+    if (focus_ >= 0 && focus_ < numchildren)
+      if (child(focus_)->send(event)) return true;
+    // Then try all other children in top to bottom order:
+    for (i = numchildren; i--;) if (i != focus_)
       if (child(i)->send(event)) return true;
-      if (++i >= numchildren) i = 0;
-      if (i == previous) break;
-    }
-    break;}
+    break;
 
   }
   return Widget::handle(event);
@@ -581,5 +578,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.122 2003/02/02 10:39:23 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.123 2003/03/31 07:17:45 spitzak Exp $".
 //
