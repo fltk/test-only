@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.H,v 1.5.2.3.2.16.2.6 2004/03/29 22:41:11 rokan Exp $"
+// "$Id: Fl_Image.H,v 1.5.2.3.2.16.2.7 2004/04/04 02:11:17 rokan Exp $"
 //
 // Image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,9 +38,8 @@ class Fl_Device;
 
 /** Fl_Image_Cache is a base class for all image caches.
 *
-* If an image class requires a cache, this cache should be a subclass of this class.
-* It should add additional member for actual cache data. Image uncache() method just 
-* calls destructor of this cache. 
+* If an image class requires a cache data, a new class he cache data should be derived 
+* from this class. New class should add additional member for actual cache data. 
 */
 
 class Fl_Image_Cache{
@@ -51,11 +50,13 @@ class Fl_Image_Cache{
   Fl_Image * image;
   Fl_Device * device;
   
-public:
-  /** The constructor adds the cache to both image and the device cache list 
-  * so user does not need to care about this */
+protected:
+  /** Protected constructor adds the cache to both image and the device cache list 
+  * and derived class does not need to care about theses */
   Fl_Image_Cache(Fl_Image * im, Fl_Device * dev);
-  /** The destructor also removes cache from image and device cache list */ 
+public:
+  /** Fl_Image::uncache() method just calls this destructor.
+  * The destructor removes also its cache pointers from image and device cache list */ 
   virtual ~Fl_Image_Cache();
 };
   
@@ -198,5 +199,5 @@ class FL_EXPORT Fl_RGB_Image : public Fl_Image {
 #endif // !Fl_Image_H
 
 //
-// End of "$Id: Fl_Image.H,v 1.5.2.3.2.16.2.6 2004/03/29 22:41:11 rokan Exp $".
+// End of "$Id: Fl_Image.H,v 1.5.2.3.2.16.2.7 2004/04/04 02:11:17 rokan Exp $".
 //

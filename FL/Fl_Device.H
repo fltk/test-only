@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Device.H,v 1.1.2.7 2004/04/02 20:50:27 rokan Exp $"
+// "$Id: Fl_Device.H,v 1.1.2.8 2004/04/04 02:11:17 rokan Exp $"
 //
 // Fl_Device dispatching class for the Fast Light Tool Kit (FLTK).
 //
@@ -48,7 +48,7 @@ class Fl_Image_Cache;
 * functions when the device is set as a current one.
 * A new Device class should not be a direct subclass of Fl_Device but rather of Fl_Display or
 * Fl_Printer and it must define all the drawing functions, including drawing of three basic image
-* classes - Fl_RGB_Image, FL_Pixmap and Fl_Bitmap. Devices which allow renrering with precision
+* classes - Fl_RGB_Image, FL_Pixmap and Fl_Bitmap. Devices which allow rendering with precision
 * better than logical (screen) pixel - such as printers - should allow fine (subpixel) rendering
 * of text glyphs and also precision drawing of "double" path (vertex) primitives.
 */
@@ -247,5 +247,5 @@ extern FL_EXPORT Fl_Device * fl_device;
 
 
 //
-// End of "$Id: Fl_Device.H,v 1.1.2.7 2004/04/02 20:50:27 rokan Exp $".
+// End of "$Id: Fl_Device.H,v 1.1.2.8 2004/04/04 02:11:17 rokan Exp $".
 //

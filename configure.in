@@ -1,7 +1,7 @@
 dnl -*- sh -*-
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.33.2.31.2.91.2.10 2004/03/28 10:30:29 rokan Exp $"
+dnl "$Id: configure.in,v 1.33.2.31.2.91.2.11 2004/04/04 02:11:17 rokan Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -90,8 +90,8 @@ LIBNAME="../lib/libfltk.a"
 FLLIBNAME="../lib/libfltk_forms.a"
 GLLIBNAME="../lib/libfltk_gl.a"
 IMGLIBNAME="../lib/libfltk_images.a"
-PSLIBNAME="../../lib/libfltk_ps.a"
-GDILIBNAME="../../lib/libfltk_gdi.a"
+PSLIBNAME="libfltk_ps.a"
+GDILIBNAME="libfltk_gdi.a"
 AC_SUBST(FLLIBNAME)
 AC_SUBST(GLDEMOS)
 AC_SUBST(GLLIBNAME)
@@ -898,5 +898,5 @@ dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.10 2004/03/28 10:30:29 rokan Exp $".
+dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.11 2004/04/04 02:11:17 rokan Exp $".
 dnl

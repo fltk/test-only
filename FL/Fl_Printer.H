@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Printer.H,v 1.1.2.4 2004/04/02 20:50:27 rokan Exp $"
+// "$Id: Fl_Printer.H,v 1.1.2.5 2004/04/04 02:11:17 rokan Exp $"
 //
 // Fl_Printer header file for the Fast Light Tool Kit (FLTK).
 //
@@ -88,21 +88,22 @@ public:
 
 
 protected:
-
   double pw_, ph_;
+  static const int page_formats[NO_PAGE_FORMATS][2];
 
 public:
   static void doc_info(const char * info){ doc_info_ = info;};
   static const char * doc_info(){return doc_info_;};
 
-  static const int page_formats[NO_PAGE_FORMATS][2];
+
   virtual void page(double pw, double ph, int media = 0)=0;
   virtual void page(int format)=0;
+  //virtual void orientation (int 
   double page_width(){return pw_;};
   double page_height(){return ph_;};
 
   virtual void place(double x, double y,  double tx, double ty,  double scale = 1)=0;
-  virtual void place(double x, double y, double w, double h, double tx, double ty, double tw, double th, int align = FL_ALIGN_CENTER);
+  void place(double x, double y, double w, double h, double tx, double ty, double tw, double th, int align = FL_ALIGN_CENTER);
   void place(Fl_Widget * w, double tx, double ty, double tw, double th, int align = FL_ALIGN_CENTER ){
     place(w->x(), w->y(), w->w(), w->h(), tx, ty, tw, th, align);
   };
@@ -115,5 +116,5 @@ public:
 #endif
 
 //
-// "$Id: Fl_Printer.H,v 1.1.2.4 2004/04/02 20:50:27 rokan Exp $"
+// "$Id: Fl_Printer.H,v 1.1.2.5 2004/04/04 02:11:17 rokan Exp $"
 //

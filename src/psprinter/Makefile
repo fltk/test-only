@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+# "$Id: Makefile,v 1.1.2.2 2004/04/04 02:11:18 rokan Exp $"
 #
 # Postscript library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -46,12 +46,12 @@ include ../../makeinclude
 
 PSOBJECTS = $(PSCPPFILES:.cxx=.o)
 
-all:	$(PSLIBNAME) $(PSDSONAME) 
+all:	../../lib/$(PSLIBNAME) $(PSDSONAME) 
 
 
 # Posrscript targets
 
-$(PSLIBNAME): $(PSOBJECTS)
+../../lib/$(PSLIBNAME): $(PSOBJECTS)
 	echo $(LIBCOMMAND) $@ ...
 	-$(RM) $@
 	$(LIBCOMMAND) $@ $(PSOBJECTS)
@@ -91,9 +91,9 @@ libfltk_ps_s.a: $(PSOBJECTS)
 	
 
 clean :
-	-@ $(RM) *.o  $PSDSONAME\
+	-@ $(RM) *.o  $(PSDSONAME) \
 		../../lib/$(PSLIBNAME) \
-		libfltk_ps.so\
+		libfltk_ps.so \
 		libfltk_ps.sl \
 		libfltk_ps.dylib\
 
@@ -106,11 +106,11 @@ include makedepend
 
 ################################################################
 
-install: $(PSLIBNAME) $(PSDSONAME)
+install: ../../lib/$(PSLIBNAME) $(PSDSONAME)
 	echo "Installing fltk postscript libraries in $(libdir)..."
 	-$(MKDIR) $(libdir)
 	$(RM) $(libdir)/$(PSLIBNAME)
-	-$(CP)  $(PSLIBNAME) $(libdir)
+	-$(CP)  ../../lib/$(PSLIBNAME) $(libdir)
 
 
 	if test x$(PSDSONAME) = xlibfltk_ps.so.1.2; then\
@@ -140,10 +140,9 @@ install: $(PSLIBNAME) $(PSDSONAME)
 
 uninstall:
 	echo "Uninstalling postscript libraries..."
-	$(RM) $(libdir)/$(LIBNAME)
 
 	
-	if test x$(PSLIBNAME) != x; then\
+	if test x$(libdir)/$(PSLIBNAME) != x; then\
 		$(RM) $(libdir)/$(PSLIBNAME);\
 	fi
 	if test x$(PSDSONAME) = xlibfltk_ps.so.1.2; then\
@@ -161,5 +160,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $".
+# End of "$Id: Makefile,v 1.1.2.2 2004/04/04 02:11:18 rokan Exp $".
 #

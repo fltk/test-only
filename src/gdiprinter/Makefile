@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+# "$Id: Makefile,v 1.1.2.2 2004/04/04 02:11:18 rokan Exp $"
 #
 # Gdi printing library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -46,12 +46,12 @@ include ../../makeinclude
 
 GDIOBJECTS = $(GDICPPFILES:.cxx=.o)
 
-all:	$(GDILIBNAME)
+all:	../../lib/$(GDILIBNAME)
 
 
 # Gdi printer  targets
 
-$(GDILIBNAME): $(GDIOBJECTS)
+../../lib/$(GDILIBNAME): $(GDIOBJECTS)
 	echo $(LIBCOMMAND) $@ ...
 	-$(RM) $@
 	$(LIBCOMMAND) $@ $(GDIOBJECTS)
@@ -106,11 +106,11 @@ include makedepend
 
 ################################################################
 
-install: $(GDILIBNAME) $(GDIDSONAME)
+install: ../../lib/$(GDILIBNAME) $(GDIDSONAME)
 	echo "Installing fltk gdi libraries in $(libdir)..."
 	-$(MKDIR) $(libdir)
 	$(RM) $(libdir)/$(GDILIBNAME)
-	-$(CP)  $(GDILIBNAME) $(libdir)
+	-$(CP)  ../../lib/$(GDILIBNAME) $(libdir)
 
 
 	if test x$(GDIDSONAME) = xlibfltk_gdi.so.1.2; then\
@@ -143,7 +143,7 @@ uninstall:
 	$(RM) $(libdir)/$(LIBNAME)
 
 	
-	if test x$(GDILIBNAME) != x; then\
+	if test x$(libdir)/$(GDILIBNAME) != x; then\
 		$(RM) $(libdir)/$(GDILIBNAME);\
 	fi
 	if test x$(GDIDSONAME) = xlibfltk_gdi.so.1.2; then\
@@ -161,5 +161,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $".
+# End of "$Id: Makefile,v 1.1.2.2 2004/04/04 02:11:18 rokan Exp $".
 #

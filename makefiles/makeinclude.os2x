@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.os2x,v 1.1.2.4.2.10.2.6 2004/03/28 13:10:00 rokan Exp $"
+# "$Id: makeinclude.os2x,v 1.1.2.4.2.10.2.7 2004/04/04 02:11:17 rokan Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 #
@@ -58,8 +58,8 @@ CXXFLAGS	= $(OPTIM) -O4 -mpentium -Zmt
 LIBNAME		= ../lib/libfltk.a
 FLLIBNAME	= ../lib/libfltk_forms.a
 GLLIBNAME	=
-IMGLIBNAME	= ../lib/libfltk_images.a
-PSLIBNAME	= ../lib/libfltk_ps.a
+IMGLIBNAME	= libfltk_images.a
+PSLIBNAME	= libfltk_ps.a
 LIBCOMMAND	= ar.exe cr
 RANLIB		= ar.exe s
 DSONAME		=
@@ -127,5 +127,5 @@ CAT3EXT		=3
 	mv t.z $@
 
 #
-# End of "$Id: makeinclude.os2x,v 1.1.2.4.2.10.2.6 2004/03/28 13:10:00 rokan Exp $".
+# End of "$Id: makeinclude.os2x,v 1.1.2.4.2.10.2.7 2004/04/04 02:11:17 rokan Exp $".
 #
