@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.229 2004/08/03 07:26:35 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.230 2004/08/06 20:44:03 laza2000 Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1706,7 +1706,8 @@ void CreatedWindow::create(Window* window) {
   int ucslen = 0;
   static wchar_t ucs_name[1024];
   if (name && *name) ucslen = utf8towc(name, strlen(name), ucs_name, 1024);
-	
+	else ucs_name[0] = 0;
+
   x->xid = __CreateWindowExW(styleEx,
                              L"fltk", ucs_name, style,
 			     xp, yp, window->w()+dw, window->h()+dh,
@@ -2133,5 +2134,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.229 2004/08/03 07:26:35 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.230 2004/08/06 20:44:03 laza2000 Exp $".
 //
