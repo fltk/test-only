@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_win32.cxx,v 1.17 2004/06/09 05:38:58 spitzak Exp $"
+// "$Id: fl_draw_image_win32.cxx,v 1.18 2004/07/04 17:25:12 laza2000 Exp $"
 //
 // _WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -204,11 +204,11 @@ fkjlkasdjf
 //    else
   head.bV5Size = sizeof(BITMAPV5HEADER);
   head.bV5Width = w;
-  head.bV5Height = h;
+  //head.bV5Height = h;
   head.bV5Planes = 1;
   head.bV5BitCount = pixelsize*8;
   head.bV5Compression = BI_BITFIELDS;
-  head.bV5SizeImage = w*h*pixelsize;
+  //head.bV5SizeImage = w*h*pixelsize;
   head.bV5XPelsPerMeter = 72;
   head.bV5YPelsPerMeter = 72;
   head.bV5ClrUsed = 0;
@@ -232,7 +232,6 @@ fkjlkasdjf
     buffer = new U32[(size+3)/4];
   }}
 
-  head.bV5Height = h;
   static U32* line_buffer;
   if (!buf) {
     int size = W*delta;
@@ -243,20 +242,20 @@ fkjlkasdjf
       line_buffer = new U32[(size+3)/4];
     }
   }
+
+  int ypos = h+y;
   for (int j=0; j<h; ) {
     int k;
-    uchar* bottomline;
+    uchar *to = (uchar*)buffer;
     for (k = 0; j<h && k<blocking; k++, j++) {
       const uchar* from;
-      if (!buf) { // run the converter:
+      if (!buf) { // run the converter:		  
         cb(userdata, x-X, y-Y+j, w, (uchar*)line_buffer);
         from = (uchar*)line_buffer;
       } else {
         from = buf;
         buf += linedelta;
       }
-      uchar *to = (uchar*)buffer+(blocking-k-1)*linesize;
-      bottomline = to;
 #if USE_COLORMAP
       if (indexed) {
         if (mono)
@@ -277,9 +276,12 @@ fkjlkasdjf
           }
         }
     }
+		head.bV5Height = -k;
+		head.bV5SizeImage = k*linesize;
+		ypos -= k;
 #if 1
-    SetDIBitsToDevice(dc, x, y+j-k, w, k, 0, 0, 0, k,
-		      (LPSTR)bottomline,
+		SetDIBitsToDevice(dc, x, ypos, w, k, 0, 0, 0, k,
+		      (LPSTR)buffer,
 		      (BITMAPINFO*)&head,
 #if USE_COLORMAP
 		      indexed ? DIB_PAL_COLORS : DIB_RGB_COLORS
@@ -298,7 +300,7 @@ fkjlkasdjf
     HBITMAP b = CreateDIBitmap(dc,
 			       (BITMAPINFOHEADER*)&head,
 			       CBM_INIT,
-			       (LPSTR)bottomline,
+			       (LPSTR)buffer,
 			       (BITMAPINFO*)&head,
 			       DIB_RGB_COLORS); 
 
@@ -307,14 +309,13 @@ fkjlkasdjf
     HBITMAP hMonoBitmap = CreateBitmap(w,h,1,1,NULL);
 
     ICONINFO ii;
-    ii.fIcon = FALSE;
+    ii.fIcon = TRUE;
     ii.xHotspot = 0;
     ii.yHotspot = 0;
     ii.hbmMask = b; //hMonoBitmap;
     ii.hbmColor = b;
     HICON imageIcon = ::CreateIconIndirect(&ii);
-    DrawIconEx(dc, x, y+j-k, imageIcon, w, k, 0, NULL, DI_NORMAL);
-
+    DrawIconEx(dc, x, ypos, imageIcon, w, k, 0, NULL, DI_NORMAL);
     // Clean up all the mess
     ::DestroyIcon(imageIcon);
     ::DeleteObject(hMonoBitmap);
@@ -330,5 +331,5 @@ fkjlkasdjf
 #endif
 
 //
-// End of "$Id: fl_draw_image_win32.cxx,v 1.17 2004/06/09 05:38:58 spitzak Exp $".
+// End of "$Id: fl_draw_image_win32.cxx,v 1.18 2004/07/04 17:25:12 laza2000 Exp $".
 //
