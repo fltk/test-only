@@ -44,7 +44,6 @@
 
 @main:Events:@u
 	@u:navigation:navigation
-	@u:minimum update:minimum
 	@u:keyboard:keyboard
 	@u:fast & slow widgets:fast_slow
 	@u:inactive:inactive
