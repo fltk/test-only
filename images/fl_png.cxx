@@ -1,5 +1,5 @@
 //
-// "$Id: fl_png.cxx,v 1.4 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: fl_png.cxx,v 1.5 2001/10/22 05:31:10 spitzak Exp $"
 //
 // PNG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -236,8 +236,9 @@ void Fl_PNG_Image::read()
  
   { // We use a block because fl_begin_offscreen creates a local
     // and we have 'goto error' before this point
-    id = fl_create_offscreen(width, height);
-    fl_begin_offscreen(id);
+    Pixmap pixmap = fl_create_offscreen(width, height);
+    id = (void*)pixmap;
+    fl_begin_offscreen(pixmap);
     fl_draw_image(fl_draw_image_cb, png_ptr, 0, 0, width, height, d);
     fl_end_offscreen();
   }
@@ -252,5 +253,5 @@ void Fl_PNG_Image::read()
 }
 
 //
-// End of "$Id: fl_png.cxx,v 1.4 2001/07/23 09:50:04 spitzak Exp $"
+// End of "$Id: fl_png.cxx,v 1.5 2001/10/22 05:31:10 spitzak Exp $"
 //
