@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pack.cxx,v 1.16 2000/05/30 07:42:14 bill Exp $"
+// "$Id: Fl_Pack.cxx,v 1.17 2000/06/23 07:09:15 bill Exp $"
 //
 // Packing widget for the Fast Light Tool Kit (FLTK).
 //
@@ -60,6 +60,13 @@ void Fl_Pack::draw() {
         Y = current_position;
         H = o->h();
       }
+      // Last child, if resizable, takes all remaining room
+      if(i == 0 && o == this->resizable()) {
+       if(horizontal())
+         W = this->w() - Fl::box_dw(box()) - maximum_position;
+       else
+         H = this->h() - Fl::box_dh(box()) - maximum_position;
+      }
       if (spacing_ && current_position>maximum_position &&
   	  (X != o->x() || Y != o->y() || d&FL_DAMAGE_ALL)) {
         fl_color(color());
@@ -104,5 +111,5 @@ void Fl_Pack::draw() {
 }
 
 //
-// End of "$Id: Fl_Pack.cxx,v 1.16 2000/05/30 07:42:14 bill Exp $".
+// End of "$Id: Fl_Pack.cxx,v 1.17 2000/06/23 07:09:15 bill Exp $".
 //

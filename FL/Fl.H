@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.52 2000/06/18 07:57:25 bill Exp $"
+// "$Id: Fl.H,v 1.53 2000/06/23 07:09:11 bill Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -91,6 +91,7 @@ public:
   static int run();
   static Fl_Widget* readqueue();
   static void add_timeout(double t,Fl_Timeout_Handler,void* v = 0);
+  static void repeat_timeout(double t, Fl_Timeout_Handler,void* = 0);
   static int has_timeout(Fl_Timeout_Handler, void* = 0);
   static void remove_timeout(Fl_Timeout_Handler, void* = 0);
   static void add_fd(int fd, int when, void (*cb)(int,void*),void* =0);
@@ -234,5 +235,5 @@ FL_API const char* fl_find_config_file(const char*, int = 0);
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.52 2000/06/18 07:57:25 bill Exp $".
+// End of "$Id: Fl.H,v 1.53 2000/06/23 07:09:11 bill Exp $".
 //

@@ -75,26 +75,36 @@ but <tt>Fl::ready()</tt> does not.
 <tt>Fl::wait()</tt>, <tt>Fl::check()</tt>, and <tt>Fl::ready()</tt>.
 Fltk will not recursively call the idle callback.
 
-<h3><A name=add_timeout>void Fl::add_timeout(float t, void (*cb)(void*), void* = 0)</A></h3>
-
+<h3><A name=add_timeout>static void Fl::add_timeout(float t, void (*cb)(void*),void*v=0)</A></h3>
 
 Add a one-shot timeout callback.  The function will be called by
-<tt>Fl::wait()</tt> at <i>t</i> seconds after this function is called
-(except if you call this inside a timeout callback, then the time is
-measured from when the callback was done, to allow accurate repeating
-events).  The optional <tt>void*</tt> argument is passed to the
+<tt>Fl::wait()</tt> at <i>t</i> seconds after this function is called.
+The optional <tt>void*</tt> argument is passed to the callback.
+
+<h3><A name=repeat_timeout>static void Fl::repeat_timeout(float t, void (*cb)(void*),void*v=0)</A></h3>
+
+Inside a timeout callback you can call this to add another timeout.
+Rather than the time being measured from "now", it is measured from
+when the system call elapsed that caused this timeout to be called.  This
+will result in far more accurate spacing of the timeout callbacks, it
+also has slightly less system call overhead.  (It will also use all
+your machine time if your timeout code and fltk's overhead take more
+than <i>t</i> seconds, as the real timeout will be reduced to zero).
+
+<p>It is undefined what this does if called from outside a timeout
 callback.
 
-<P>This code will print &quot;TICK&quot; each second on stdout:
+<P>This code will print &quot;TICK&quot; each second on stdout, with a
+fair degree of accuracy:
 
 <UL><PRE>void callback(void*) {
- printf(&quot;TICK\n&quot;);
- Fl::add_timeout(1.0,callback);
+  printf(&quot;TICK\n&quot;);
+  Fl::repeat_timeout(1.0,callback);
 }
 
 main() {
- Fl::add_timeout(1.0,callback);
- Fl::run();
+  Fl::add_timeout(1.0,callback);
+  for (;;) Fl::wait();
 }</PRE></UL>
 
 <h3><A name=arg>int Fl::arg(int argc, char **argv, int &amp;i)</A></h3>

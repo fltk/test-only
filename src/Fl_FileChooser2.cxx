@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.7 2000/01/09 15:42:01 mike Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.8 2000/06/23 07:09:14 bill Exp $"
 //
 // More Fl_FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -557,7 +557,7 @@ Fl_FileChooser::fileNameCB()
     max_match  = 100000;
     first_line = 0;
 
-    for (i = 1; i <= num_files && max_match > min_match; i ++)
+    for (i = 0; i < num_files && max_match > min_match; i ++)
     {
       file = fileList->text(i);
 
@@ -633,5 +633,5 @@ Fl_FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.7 2000/01/09 15:42:01 mike Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.8 2000/06/23 07:09:14 bill Exp $".
 //

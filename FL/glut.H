@@ -1,5 +1,5 @@
 //
-// "$Id: glut.H,v 1.14 2000/06/10 04:10:22 carl Exp $"
+// "$Id: glut.H,v 1.15 2000/06/23 07:09:11 bill Exp $"
 //
 // GLUT emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -434,8 +434,13 @@ extern FL_GLUT_API void *glutStrokeRoman;
 extern FL_GLUT_API void *glutStrokeMonoRoman;
 
 /* Stroke font constants (use these in GLUT program). */
-#define GLUT_STROKE_ROMAN		(&glutStrokeRoman)
-#define GLUT_STROKE_MONO_ROMAN		(&glutStrokeMonoRoman)
+#ifdef _WIN32
+# define GLUT_STROKE_ROMAN		((void*)0)
+# define GLUT_STROKE_MONO_ROMAN		((void*)1)
+#else
+# define GLUT_STROKE_ROMAN		(&glutStrokeRoman)
+# define GLUT_STROKE_MONO_ROMAN		(&glutStrokeMonoRoman)
+#endif
 
 /* GLUT font sub-API */
 extern FL_GLUT_API void glutStrokeCharacter(void *font, int character);
@@ -466,5 +471,5 @@ extern FL_GLUT_API void glutSolidIcosahedron();
 #endif                  /* __glut_h__ */
 
 //
-// End of "$Id: glut.H,v 1.14 2000/06/10 04:10:22 carl Exp $".
+// End of "$Id: glut.H,v 1.15 2000/06/23 07:09:11 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.76 2000/06/19 06:01:30 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.77 2000/06/23 07:09:14 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -179,7 +179,7 @@ int Fl_Group::send(int event, Fl_Widget& to) {
 
   case FL_ENTER:
   case FL_MOVE:
-    if (&to == Fl::pushed()) return 1; // don't send both move & drag to widget
+//  if (&to == Fl::pushed()) return 1; // don't send both move & drag to widget
     // figure out correct type of event:
     event = (to.contains(Fl::belowmouse())) ? FL_MOVE : FL_ENTER;
     // Enter/exit are sent to inactive widgets so that tooltips will work.
@@ -570,5 +570,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.76 2000/06/19 06:01:30 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.77 2000/06/23 07:09:14 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.101 2000/06/18 11:05:38 vincent Exp $"
+// "$Id: Fl.cxx,v 1.102 2000/06/23 07:09:13 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -174,12 +174,11 @@ int Fl::ready() {
 }
 
 void Fl::add_timeout(double t, Fl_Timeout_Handler cb, void *v) {
+  elapse_timeouts();
+  repeat_timeout(t, cb, v);
+}
 
-  // This little test gets rid of about half the calls to get the time
-  // and has the added advantage of making timeouts that think they
-  // are happening at regular intervals actually happen at regular
-  // intervals:
-  if (!in_timeout) elapse_timeouts();
+void Fl::repeat_timeout(double t, Fl_Timeout_Handler cb, void *v) {
 
   if (numtimeouts >= timeout_array_size) {
     timeout_array_size = 2*timeout_array_size+1;
@@ -491,19 +490,23 @@ int Fl::handle(int event, Fl_Window* window)
   case FL_MOVE:
 //case FL_DRAG: // does not happen
     xmousewin = window; // this should already be set, but just in case.
-    if (window != pushed() && (!modal() || window == modal()))
-      send(event, window, window);
     if (pushed()) return send(FL_DRAG, pushed(), window);
+    else if (!modal() || window == modal()) send(event, window, window);
     return 1;
 
   case FL_LEAVE:
-    belowmouse(0);
+    if (!pushed_) belowmouse(0);
     return 1;
 
   case FL_RELEASE: {
     Fl_Widget* w = pushed();
     if (!(event_pushed())) pushed_=0;
-    return send(event, w, window);}
+    send(event, w, window);
+    if (!pushed_) {
+      if (xmousewin) send(FL_MOVE, xmousewin, window);
+      else belowmouse(0);
+    }
+    return 1;}
 
   // only send FL_KEYUP to focus widget since FL_KEY only goes there
   case FL_KEYUP:
@@ -543,5 +546,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.101 2000/06/18 11:05:38 vincent Exp $".
+// End of "$Id: Fl.cxx,v 1.102 2000/06/23 07:09:13 bill Exp $".
 //
