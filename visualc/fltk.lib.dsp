@@ -132,66 +132,6 @@ LIB32=link.exe -lib
 # Name "fltk - Win32 Release MinSize"
 # Begin Source File
 
-SOURCE=..\src\conf.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_del.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_endtrim.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_error.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_get.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_getboolean.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_getlong.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_keys.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_list_free.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_sections.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_set.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_setboolean.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_setlong.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_strcnt.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_util.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\fastarrow.h
 # End Source File
 # Begin Source File
@@ -321,10 +261,6 @@ SOURCE=..\src\Fl_Color_Chooser.cxx
 # Begin Source File
 
 SOURCE=..\src\Fl_compose.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\fl_conf.cxx
 # End Source File
 # Begin Source File
 
@@ -564,7 +500,15 @@ SOURCE=..\src\Fl_Pixmap.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\fl_plastic_box.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\Fl_ProgressBar.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Radio_Button.cxx
 # End Source File
 # Begin Source File
 
@@ -636,10 +580,6 @@ SOURCE=..\src\Fl_Slider.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_startup.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\Fl_String_List.cxx
 # End Source File
 # Begin Source File
@@ -648,7 +588,7 @@ SOURCE=..\src\Fl_Style.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Style_start.cxx
+SOURCE=..\src\Fl_Style_Set.cxx
 # End Source File
 # Begin Source File
 
@@ -733,6 +673,10 @@ SOURCE=..\src\Fl_XColor.H
 # Begin Source File
 
 SOURCE=..\src\fl_xpm.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fltk_theme.cxx
 # End Source File
 # Begin Source File
 

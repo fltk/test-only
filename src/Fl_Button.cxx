@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.48 2002/03/10 23:10:23 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.49 2002/03/29 18:52:57 robertk Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -182,7 +182,8 @@ void Fl_Button::draw(int glyph, int glyph_width) const
 
   // Erase the area around non-square boxes, or the entire background
   // for a no-box widget:
-  if (box==FL_NO_BOX || damage()&FL_DAMAGE_EXPOSE && !box->fills_rectangle()) {
+  if ((box==FL_NO_BOX || damage()&FL_DAMAGE_EXPOSE && !box->fills_rectangle())
+		|| takesevents()) {
     fl_push_clip(0, 0, this->w(), this->h());
     parent()->draw_group_box();
     fl_pop_clip();
@@ -235,5 +236,5 @@ Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.48 2002/03/10 23:10:23 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.49 2002/03/29 18:52:57 robertk Exp $".
 //

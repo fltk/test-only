@@ -153,132 +153,6 @@ LINK32=link.exe
 # Name "fltkdll - Win32 Release MinSize"
 # Begin Source File
 
-SOURCE=..\src\conf.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_del.c
-DEP_CPP_CONF_=\
-	"..\fltk\conf.h"\
-	"..\fltk\Fl_Export.h"\
-	".\config.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_endtrim.c
-DEP_CPP_CONF_E=\
-	"..\fltk\conf.h"\
-	"..\fltk\Fl_Export.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_error.c
-DEP_CPP_CONF_ER=\
-	"..\fltk\conf.h"\
-	"..\fltk\Fl_Export.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_get.c
-DEP_CPP_CONF_G=\
-	"..\fltk\conf.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\vsnprintf.h"\
-	".\config.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_getboolean.c
-DEP_CPP_CONF_GE=\
-	"..\fltk\conf.h"\
-	"..\fltk\Fl_Export.h"\
-	".\config.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_getlong.c
-DEP_CPP_CONF_GET=\
-	"..\fltk\conf.h"\
-	"..\fltk\Fl_Export.h"\
-	".\config.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_keys.c
-DEP_CPP_CONF_K=\
-	"..\fltk\conf.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\vsnprintf.h"\
-	".\config.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_list_free.c
-DEP_CPP_CONF_L=\
-	"..\fltk\conf.h"\
-	"..\fltk\Fl_Export.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_sections.c
-DEP_CPP_CONF_S=\
-	"..\fltk\conf.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\vsnprintf.h"\
-	".\config.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_set.c
-DEP_CPP_CONF_SE=\
-	"..\fltk\conf.h"\
-	"..\fltk\Fl_Export.h"\
-	".\config.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_setboolean.c
-DEP_CPP_CONF_SET=\
-	"..\fltk\conf.h"\
-	"..\fltk\Fl_Export.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_setlong.c
-DEP_CPP_CONF_SETL=\
-	"..\fltk\conf.h"\
-	"..\fltk\Fl_Export.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_strcnt.c
-DEP_CPP_CONF_ST=\
-	"..\fltk\conf.h"\
-	"..\fltk\Fl_Export.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\conf_util.c
-DEP_CPP_CONF_U=\
-	"..\fltk\conf.h"\
-	"..\fltk\Fl_Export.h"\
-	
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\fastarrow.h
 # End Source File
 # Begin Source File
@@ -381,9 +255,6 @@ DEP_CPP_FL_AB=\
 	"..\fltk\Fl_Color.h"\
 	"..\fltk\Fl_Export.h"\
 	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
 	"..\fltk\vsnprintf.h"\
 	
 # End Source File
@@ -397,9 +268,6 @@ DEP_CPP_FL_AD=\
 	"..\fltk\Fl_Color.h"\
 	"..\fltk\Fl_Export.h"\
 	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
 	
 # End Source File
 # Begin Source File
@@ -553,8 +421,6 @@ DEP_CPP_FL_BI=\
 	"..\fltk\Fl_Flags.h"\
 	"..\fltk\Fl_Font.h"\
 	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	
@@ -589,6 +455,8 @@ DEP_CPP_FL_BOX=\
 	"..\fltk\Fl_Labeltype.h"\
 	"..\fltk\Fl_Style.h"\
 	"..\fltk\Fl_Widget.h"\
+	"..\fltk\win32.h"\
+	"..\fltk\x.h"\
 	".\config.h"\
 	
 # End Source File
@@ -789,26 +657,6 @@ DEP_CPP_FL_COM=\
 	"..\fltk\Fl_Color.h"\
 	"..\fltk\Fl_Export.h"\
 	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\fl_conf.cxx
-DEP_CPP_FL_CON=\
-	"..\fltk\conf.h"\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
-	".\config.h"\
 	
 # End Source File
 # Begin Source File
@@ -914,9 +762,6 @@ DEP_CPP_FL_DIS=\
 	"..\fltk\Fl_Color.h"\
 	"..\fltk\Fl_Export.h"\
 	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
 	
 # End Source File
 # Begin Source File
@@ -988,8 +833,6 @@ DEP_CPP_FL_DRA=\
 	"..\fltk\Fl_Export.h"\
 	"..\fltk\Fl_Flags.h"\
 	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	"..\src\fl_draw_image_win32.cxx"\
@@ -1194,9 +1037,6 @@ DEP_CPP_FL_FILEIC=\
 	"..\fltk\Fl_Export.h"\
 	"..\fltk\Fl_FileIcon.h"\
 	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
 	".\config.h"\
 	
 # End Source File
@@ -1249,8 +1089,6 @@ DEP_CPP_FL_FO=\
 	"..\fltk\Fl_Export.h"\
 	"..\fltk\Fl_Flags.h"\
 	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	"..\src\fl_font_win32.cxx"\
@@ -1273,9 +1111,6 @@ DEP_CPP_FL_GE=\
 	"..\fltk\Fl_Color.h"\
 	"..\fltk\Fl_Export.h"\
 	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	"..\src\fl_get_key_win32.cxx"\
@@ -1568,8 +1403,6 @@ DEP_CPP_FL_LIS=\
 	"..\fltk\Fl_Export.h"\
 	"..\fltk\Fl_Flags.h"\
 	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	"..\src\fl_list_fonts_win32.cxx"\
@@ -1620,9 +1453,6 @@ DEP_CPP_FL_LOC=\
 	"..\fltk\Fl_Color.h"\
 	"..\fltk\Fl_Export.h"\
 	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
 	".\config.h"\
 	
 # End Source File
@@ -1877,9 +1707,6 @@ DEP_CPP_FL_OVER=\
 	"..\fltk\Fl_Color.h"\
 	"..\fltk\Fl_Export.h"\
 	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
@@ -1919,9 +1746,6 @@ DEP_CPP_FL_OW=\
 	"..\fltk\Fl_Color.h"\
 	"..\fltk\Fl_Export.h"\
 	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
@@ -1957,11 +1781,24 @@ DEP_CPP_FL_PI=\
 	"..\fltk\Fl_Flags.h"\
 	"..\fltk\Fl_Font.h"\
 	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_Labeltype.h"\
 	"..\fltk\Fl_Pixmap.h"\
-	"..\fltk\Fl_Style.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_plastic_box.cxx
+DEP_CPP_FL_PL=\
+	"..\fltk\Enumerations.h"\
+	"..\fltk\Fl_Boxtype.h"\
+	"..\fltk\Fl_Color.h"\
+	"..\fltk\fl_draw.h"\
+	"..\fltk\Fl_Export.h"\
+	"..\fltk\Fl_Flags.h"\
+	"..\fltk\Fl_Font.h"\
+	"..\fltk\Fl_Labeltype.h"\
+	"..\fltk\Fl_Style.h"\
 	
 # End Source File
 # Begin Source File
@@ -1979,6 +1816,27 @@ DEP_CPP_FL_PR=\
 	"..\fltk\Fl_Font.h"\
 	"..\fltk\Fl_Labeltype.h"\
 	"..\fltk\Fl_ProgressBar.h"\
+	"..\fltk\Fl_Style.h"\
+	"..\fltk\Fl_Widget.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Radio_Button.cxx
+DEP_CPP_FL_RA=\
+	"..\fltk\Enumerations.h"\
+	"..\fltk\Fl.h"\
+	"..\fltk\Fl_Boxtype.h"\
+	"..\fltk\Fl_Button.h"\
+	"..\fltk\Fl_Check_Button.h"\
+	"..\fltk\Fl_Color.h"\
+	"..\fltk\fl_draw.h"\
+	"..\fltk\Fl_Export.h"\
+	"..\fltk\Fl_Flags.h"\
+	"..\fltk\Fl_Font.h"\
+	"..\fltk\Fl_Group.h"\
+	"..\fltk\Fl_Labeltype.h"\
+	"..\fltk\fl_radio_button.h"\
 	"..\fltk\Fl_Style.h"\
 	"..\fltk\Fl_Widget.h"\
 	
@@ -2059,9 +1917,7 @@ DEP_CPP_FL_RGB=\
 	"..\fltk\Fl_Flags.h"\
 	"..\fltk\Fl_Font.h"\
 	"..\fltk\Fl_Image.h"\
-	"..\fltk\Fl_Labeltype.h"\
 	"..\fltk\Fl_RGB_Image.h"\
-	"..\fltk\Fl_Style.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	
@@ -2258,6 +2114,7 @@ DEP_CPP_FL_SL=\
 	"..\fltk\Fl_Export.h"\
 	"..\fltk\Fl_Flags.h"\
 	"..\fltk\Fl_Font.h"\
+	"..\fltk\Fl_Group.h"\
 	"..\fltk\Fl_Labeltype.h"\
 	"..\fltk\Fl_Slider.h"\
 	"..\fltk\Fl_Style.h"\
@@ -2268,30 +2125,8 @@ DEP_CPP_FL_SL=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_startup.cxx
-DEP_CPP_FL_ST=\
-	"..\fltk\conf.h"\
-	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
-	"..\fltk\Fl_Boxtype.h"\
-	"..\fltk\Fl_Color.h"\
-	"..\fltk\Fl_Export.h"\
-	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\fl_load_plugin.h"\
-	"..\fltk\Fl_Style.h"\
-	"..\fltk\fl_theme.h"\
-	"..\fltk\Fl_Widget.h"\
-	"..\fltk\win32.h"\
-	"..\fltk\x.h"\
-	".\config.h"\
-	
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\Fl_String_List.cxx
-DEP_CPP_FL_STR=\
+DEP_CPP_FL_ST=\
 	"..\fltk\Enumerations.h"\
 	"..\fltk\Fl_Boxtype.h"\
 	"..\fltk\Fl_Color.h"\
@@ -2320,18 +2155,19 @@ DEP_CPP_FL_STY=\
 	"..\fltk\Fl_Flags.h"\
 	"..\fltk\Fl_Font.h"\
 	"..\fltk\Fl_Labeltype.h"\
+	"..\fltk\fl_load_plugin.h"\
 	"..\fltk\Fl_Style.h"\
-	"..\fltk\fl_theme.h"\
 	"..\fltk\Fl_Widget.h"\
 	"..\fltk\math.h"\
+	"..\fltk\vsnprintf.h"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Style_start.cxx
+SOURCE=..\src\Fl_Style_Set.cxx
 DEP_CPP_FL_STYL=\
 	"..\fltk\Enumerations.h"\
-	"..\fltk\Fl.h"\
 	"..\fltk\Fl_Boxtype.h"\
 	"..\fltk\Fl_Color.h"\
 	"..\fltk\Fl_Export.h"\
@@ -2339,6 +2175,7 @@ DEP_CPP_FL_STYL=\
 	"..\fltk\Fl_Font.h"\
 	"..\fltk\Fl_Labeltype.h"\
 	"..\fltk\Fl_Style.h"\
+	"..\fltk\fl_style_set.h"\
 	"..\fltk\Fl_Widget.h"\
 	
 # End Source File
@@ -2561,6 +2398,7 @@ DEP_CPP_FL_VALUE=\
 	"..\fltk\Fl_Export.h"\
 	"..\fltk\Fl_Flags.h"\
 	"..\fltk\Fl_Font.h"\
+	"..\fltk\Fl_Group.h"\
 	"..\fltk\Fl_Input.h"\
 	"..\fltk\Fl_Labeltype.h"\
 	"..\fltk\Fl_Output.h"\
@@ -2597,9 +2435,6 @@ DEP_CPP_FL_VI=\
 	"..\fltk\Fl_Color.h"\
 	"..\fltk\Fl_Export.h"\
 	"..\fltk\Fl_Flags.h"\
-	"..\fltk\Fl_Font.h"\
-	"..\fltk\Fl_Labeltype.h"\
-	"..\fltk\Fl_Style.h"\
 	"..\fltk\win32.h"\
 	"..\fltk\x.h"\
 	".\config.h"\
@@ -2706,6 +2541,20 @@ DEP_CPP_FL_WINDOW=\
 # Begin Source File
 
 SOURCE=..\src\Fl_XColor.H
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fltk_theme.cxx
+DEP_CPP_FLTK_=\
+	"..\fltk\Enumerations.h"\
+	"..\fltk\Fl_Boxtype.h"\
+	"..\fltk\Fl_Color.h"\
+	"..\fltk\Fl_Export.h"\
+	"..\fltk\Fl_Flags.h"\
+	"..\fltk\Fl_Font.h"\
+	"..\fltk\Fl_Labeltype.h"\
+	"..\fltk\Fl_Style.h"\
+	
 # End Source File
 # Begin Source File
 
