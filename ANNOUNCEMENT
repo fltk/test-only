@@ -1,14 +1,29 @@
 ----TEXT----
 
-The second release candidate for FLTK 1.1.4 is now available for
-download and testing.  You now have until August 12th, 2003 to
-report any problems with this release candidate using the
-software trouble report form at the following URL:
+The FLTK Team has begun the next phase in the evolution of FLTK.
+The 1.2 series will focus on adding UTF-8, print, basic style
+support, custom cursor support, true alpha-blending of images,
+Quartz support on OSX, and updating the menu widgets to the FLTK
+2.0 implementation. The new series will also include new widgets
+such as Fl_Combobox, Fl_Dock, Fl_Image_Browser,
+Fl_Image_Display, Fl_Spinbox, Fl_Table, Fl_Toolbar_Window, and
+Fl_View.
+
+FLTK 1.2 is now available via anonymous CVS and beta snapshots
+will start appearing over the next few weeks.  Please report all
+problems using the software trouble report form at the following
+URL:
 
     http://www.fltk.org/str.php
 
-If no priority 4 or 5 STRs are received and confirmed before
-this date, FLTK 1.1.4 will be released.
+----
+
+The first beta release for FLTK 1.2.0 is now available for
+download and testing.  Please report any problems with this beta
+release using the software trouble report form at the following
+URL:
+
+    http://www.fltk.org/str.php
 
 Note: Since problems reported on the FLTK newsgroups or mailing
 lists are *not* automatically entered as STRs, it is important
@@ -230,6 +245,27 @@ Changes since FLTK 1.1.3 include:
 	  without a background color set.
 
 ----HTML----
+
+<P>The FLTK Team has begun the next phase in the evolution of FLTK.
+The 1.2 series will focus on adding UTF-8, print, basic style
+support, custom cursor support, true alpha-blending of images,
+Quartz support on OSX, and updating the menu widgets to the FLTK
+2.0 implementation. The new series will also include new widgets
+such as Fl_Combobox, Fl_Dock, Fl_Image_Browser,
+Fl_Image_Display, Fl_Spinbox, Fl_Table, Fl_Toolbar_Window, and
+Fl_View.
+
+<P>FLTK 1.2 is now available via anonymous CVS and beta snapshots
+will start appearing over the next few weeks.  Please report all
+problems using the software trouble report form at the following
+URL:
+
+<PRE>
+    <A HREF="http://www.fltk.org/str.php">http://www.fltk.org/str.php</A>
+</PRE>
+
+----
+
 
 <P>The second release candidate for FLTK 1.1.4 is now available
 for download and testing. You now have until August 12th, 2003 to

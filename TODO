@@ -1,26 +1,35 @@
-FLTK 2.0 TODO
--------------
+TODO - 1.2.0
+------------
 
-	- Fix configure script and makefiles.
-	- fltk::FloatInput/IntInput doesn't return 1 from handle
-	  for non-number characters; this means that those
-	  characters go to other widgets instead.
-	  WAS: this is done on purpose. You can subclass and return
-	  1 if you want.
-	- fltk::ValueInput buttons don't draw inactive.
-	- Inactive widgets get engraved label type???
-	- Selection in fltk::Input/InputBrowser is not drawn
-	  inactive.
-	  WAS: inactive widgets should not have focus so this
-	  should not be a problem. However may be a problem for
-	  Browser which shows selection even when it does not have focus.
-	- fltk::Tabs needs to be updated to use the 1.1.x
-	  drawing code.
-	  WAS: I personally prefer the diagonal tabs.
-	- FLUID widget panel has random widgets in red?
-	  WAS: that is supposed to indicate which are set to
-	  non-default values, but it may be broken.
-	- Need to fix labels/etc. of widget panel.
-	- Don't move checkers so slow.
-	- strlcat/strlcpy/etc.
+The following tasks remain to be completed for 1.2.0:
 
+    ALL PLATFORMS
+
+	- Fix DSO versioning (1.2 is version 3, not 1.2)
+	- Fl_Device stuff for display and print (future support
+	  for rendering to PS/PDF/SVG/PNG/JPEG/etc. files)
+	- Fl_Combobox, Fl_Dock, Fl_Image_Browser, Fl_Image_Display,
+	  Fl_Spinbox, Fl_Table, Fl_Toolbar_Window widgets from
+	  various sources
+	- Fl_View/Fl_Menu widgets based on 2.0 browser/menu
+	  code, keeping old Fl_Browser_ based widgets for source
+	  compatibility.
+	- Fl_Style structure pointer for widgets
+	- fl_cursor patch
+
+    X11
+
+	- UTF-8 support on standard X11
+	  (emulate using XmbLookupString and XmbDrawString)
+	- Alpha blending images using Xrender (when available)
+	- Xshm support (when available)
+
+    WIN32
+
+	- UTF-8 support
+	- AlphaBlend for alpha-blended images
+
+    OSX
+
+	- UTF-8 support
+	- Quartz instead of QuickDraw
