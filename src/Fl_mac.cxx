@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.13 2003/11/11 09:40:40 spitzak Exp $"
+// "$Id: Fl_mac.cxx,v 1.14 2003/12/13 11:06:53 spitzak Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -315,8 +315,10 @@ static pascal OSStatus carbonDispatchHandler( EventHandlerCallRef nextHandler, E
     case kEventMouseDragged:
       if ( capture )
         ret = SendEventToEventTarget( event, GetWindowEventTarget( capture ) );
-      else if ( os_capture )
+      else if ( os_capture ) {
         ret = SendEventToEventTarget( event, GetWindowEventTarget( os_capture ) );
+	os_capture = 0;
+      }
       break;
     }
     break;
@@ -1581,6 +1583,6 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_mac.cxx,v 1.13 2003/11/11 09:40:40 spitzak Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.14 2003/12/13 11:06:53 spitzak Exp $".
 //
 

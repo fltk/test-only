@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.201 2003/11/14 07:15:12 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.202 2003/12/13 11:06:53 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1073,6 +1073,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     static char buffer[2];
     if (uMsg == WM_CHAR || uMsg == WM_SYSCHAR) {
       buffer[0] = char(wParam);
+      if (e_keysym==ReturnKey || e_keysym==KeypadEnter) buffer[0] = '\r';
       e_length = 1;
     } else if (e_keysym >= Keypad && e_keysym <= KeypadLast) {
       buffer[0] = e_keysym-Keypad;
@@ -1330,7 +1331,7 @@ void CreatedWindow::create(Window* window) {
     RegisterClassEx(&wc);
     fl_wake_msg = RegisterWindowMessage("fltk::ThreadWakeup");
     // This is needed or multiple DLL's get confused (?):
-    // No doing this makes none of the windows appear:
+    // No, doing this makes none of the windows appear:
     //UnregisterClass(wc.lpszClassName, xdisplay);
 #if USE_DRAGDROP
     OleInitialize(0L);
@@ -1702,5 +1703,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.201 2003/11/14 07:15:12 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.202 2003/12/13 11:06:53 spitzak Exp $".
 //

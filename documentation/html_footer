@@ -1,7 +1,7 @@
 <hr>
 <address><small>
 $datetime.
-<a href="http://www.fltk.org"><img src="tiny.gif" align="center" alt="FLTK"></a>
+<a href="http://www.fltk.org"><img src="../tiny.gif" align="center" alt="FLTK"></a>
 &copy;2003 Bill Spitzak and Others. All rights reserved.
 </small></address>
 </body></html>

@@ -3,11 +3,31 @@
 
 <h1>Introduction to FLTK</h1>
 
+<p>This manual describes the Fast Light Tool Kit ("FLTK") version 2.0, a
+C++ Graphical User Interface (GUI) toolkit for UNIX and Microsoft
+Windows.  Each of the chapters in this manual is designed as a
+tutorial for using FLTK, while the appendices provide a convenient
+reference for all FLTK widgets, functions, and operating system
+interfaces.</p>
+
 The Fast Light Tool Kit (&quot;FLTK&quot;, pronounced &quot;fulltick&quot;) is a LGPL'd 
 C++ graphical user interface toolkit for X (UNIX&reg;), OpenGL&reg;, and 
 Microsoft&reg; Windows&reg; NT 4.0, 95, or 98. It was originally developed by 
 Mr. Bill Spitzak and is currently maintained by a small group of 
 developers across the world with a central repository in the US. 
+
+<h2><a name=tm>Copyrights and Trademarks</a></h2>
+
+<p>FLTK is &copy;1998-2003 by Bill Spitzak and others.  Use and
+distribution of FLTK is governed by the <A HREF=license.html>FLTK
+Library License</a> (which is the GNU Library General Public License
+with an exception added that allows you to distribute
+statically-linked programs using the library without providing source
+code to the program or the library).</p>
+
+<P>UNIX is a registered trademark of the X Open Group, Inc.  Microsoft
+and Windows are registered trademarks of Microsoft Corporation. OpenGL
+is a registered trademark of Silicon Graphics, Inc.</p>
 
 <h2><a name=features>Features</a></h2>
 
@@ -48,7 +68,7 @@ foreign letter compose!</LI>
 
 <h2><a name=licensing>Licensing</a></h2>
 
-<p>FLTK comes with complete free source code. FLTK is &copy;1998-2001
+<p>FLTK comes with complete free source code. FLTK is &copy;1998-2003
 by Bill Spitzak and others.  Use and distribution of FLTK is governed
 by the <A HREF=license.html>FLTK Library License</a> (which is the GNU
 Library General Public License with an exception added that allows you
@@ -123,121 +143,6 @@ with the GNU general public license.  Response from Internet users
 indicated that the Linux market dwarfed the SGI and high-speed GL 
 market, so he rewrote it to use X for all drawing, greatly speeding it 
 up on these machines.  That is the version you have now.
-
-<P>Digital Domain has since withdrawn support for FLTK.  While Bill is 
-no longer able to actively develop it, he still contributes to FLTK in 
-his free time and is a part of the FLTK development team.
-
-<h2><a name=iinstall>Building and Installing FLTK Under UNIX</a></h2>
-
-In most cases you can just type &quot;make&quot;.  This will run configure with 
-the default of no options and then compile everything. 
-<P>FLTK uses GNU autoconf to configure itself for your UNIX platform. 
-The main things that the configure script will look for are the X11 and
-OpenGL (or Mesa) header and library files.  If these cannot be
-found in the standard include/library locations you'll need to define the
-<tt>CFLAGS</tt>, <tt>CXXFLAGS</tt>, and <tt>LDFLAGS</tt> environment
-variables. For the Bourne and Korn shells you'd use:</P>
-
-<PRE>
-CFLAGS=-I<I>includedir</I>; export CFLAGS
-CXXFLAGS=-I<I>includedir</I>; export CXXFLAGS
-LDFLAGS=-L<I>libdir</I>; export LDFLAGS
-</PRE>
-
-For C shell and tcsh, use:
-
-<PRE>
-setenv CFLAGS "-I<I>includedir</I>"
-setenv CXXFLAGS "-I<I>includedir</I>"
-setenv LDFLAGS "-L<I>libdir</I>"
-</PRE>
-
-By default configure will look for a C++ compiler named <tt>CC</tt>, <tt>c++</tt>,
-<tt>g++</tt>, or <tt>gcc</tt> in that order. To use another compiler you need
-to set the <tt>CXX</tt> environment variable:
-
-<PRE>
-CXX=xlC; export CXX
-or
-setenv CXX "xlC"
-</PRE>
-
-The <tt>CC</tt> environment variable can also be used to override the
-default C compiler (<tt>cc</tt> or <tt>gcc</tt>), which is used for a
-few FLTK source files.
-
-<P>You can run configure yourself to get the exact setup you need. Type 
-&quot;./configure &lt;options&gt;&quot;, where options are: </P>
-
-<DL>
-<DT>--enable-debug</DT>
-<DD>Enable debugging code &amp; symbols</DD>
-<DT>--enable-shared</DT>
-<DD>Enable generation of shared libraries</DD>
-<DT>--bindir=/path</DT>
-<DD>Set the location for executables [default = /usr/local/bin]</DD>
-<DT>--libdir=/path</DT>
-<DD>Set the location for libraries [default = /usr/local/lib]</DD>
-<DT>--includedir=/path</DT>
-<DD>Set the location for include files. [default = /usr/local/include]</DD>
-<DT>--prefix=/dir</DT>
-<DD>Set the directory prefix for files [default = /usr/local]</DD>
-</DL>
-
-When the configure script is done you can just run the &quot;make&quot; command. 
-This will build the library, FLUID tool, and all of the test programs. 
-<P>To install the library, become root and type &quot;make install&quot;.  This 
-will copy the &quot;fluid&quot; executable to &quot;bindir&quot;, the header files to 
-&quot;includedir&quot;, and the library files to &quot;libdir&quot;. </P>
-
-<h2><a name=install_win32>Building FLTK Under Microsoft Windows</a></h2>
-
-There are two ways to build FLTK under Microsoft Windows.  The first
-is to use the Visual C++ 5.0 project files under the
-&quot;visualc&quot; directory.  Just open (or double-click on) the
-&quot;fltk.dsw&quot; file to get the whole shebang.
-
-<P>The second method is to use a GNU-based development tool with the
-files in the &quot;makefiles&quot; directory.  To build using one of
-these tools simply copy the appropriate makeinclude and config files
-to the main directory and do a make: </P>
-
-<PRE>
-copy makefiles\Makefile.&lt;env&gt; Makefile
-make
-</PRE>
-
-<H3>Using the Visual C++ DLL Library</H3>
-
-The &quot;fltkdll.dsp&quot; project file builds a DLL-version of the FLTK
-library. Because of name mangling differences between PC compilers (even
-between different versions of Visual C++!) you can only use the DLL that
-is generated with the same version compiler that you built it with.
-
-<P>When compiling an application or DLL that uses the FLTK DLL, you will need
-to define the <tt>fltk::SHARED</tt> preprocessor symbol to get the correct linkage
-commands embedded within the FLTK header files.
-
-<h2><a name=iinstall_os2>Building FLTK Under OS/2</a></h2>
-
-The current OS/2 build requires XFree86 for OS/2 to work.  A native 
-Presentation Manager version has not been implemented yet (volunteers 
-are welcome!). 
-
-<p>The current set of Makefiles/configuration files assumes that EMX
-0.9d and libExt (from <A
-HREF="http://posix2.sourceforge.net">posix2.sourceforge.net</A>) is
-installed.
-
-<P>To build the XFree86 version of FLTK for OS/2, copy the appropriate 
-makeinclude and config files to the main directory and do a make: </P>
-
-<PRE>
-copy makefiles\Makefile.os2x Makefile
-make
-</PRE>
-
 <h2><a name=www>Internet Resources</a></H2>
 
 FLTK is available on the 'net in a bunch of locations: 

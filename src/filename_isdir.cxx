@@ -1,5 +1,5 @@
 //
-// "$Id: filename_isdir.cxx,v 1.11 2002/12/10 02:00:56 easysw Exp $"
+// "$Id: filename_isdir.cxx,v 1.12 2003/12/13 11:06:53 spitzak Exp $"
 //
 // Directory detection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -29,9 +29,16 @@
 #include <fltk/filename.h>
 #include <sys/stat.h>
 #include <string.h>
+#include <stdlib.h>
 
-bool filename_isdir(const char* name) {
-  struct stat s;
+static struct stat last_stat;
+static char *last_statname = 0;
+static bool last_result = false;
+static int last_op = 0;
+
+// This function makes sure that 'stat' is only called once if the users
+// queries different aspects on the same file. 'stat' can be relatively slow.
+static bool fill_stat(const char *name, int new_op) {
 #if defined(_WIN32) || defined(__EMX__)
   // _WIN32 apparently thinks A: is not a directory, but A:/ is!
   char buffer[4];
@@ -43,10 +50,33 @@ bool filename_isdir(const char* name) {
     name = buffer;
   }
 #endif // _WIN32 || __EMX__
+  if (!last_statname) {
+    last_statname = (char*)malloc(FL_PATH_MAX);
+  }
+  if (last_op!=new_op && strcmp(last_statname, name)==0)
+    return last_result;
+  strncpy(last_statname, name, FL_PATH_MAX-1);
+  last_statname[FL_PATH_MAX-1] = 0;
+  last_result = (stat(name, &last_stat)==0);
+  return last_result;
+}
 
-  return !stat(name, &s) && (s.st_mode&0170000)==0040000;
+bool filename_isdir(const char* name) {
+  if (fill_stat(name, 1)==false) return false;
+  return (last_stat.st_mode&0170000)==0040000;
+}
+
+double filename_size(const char* name) {
+  if (fill_stat(name, 2)==false) return 0.0;
+  return (double)last_stat.st_size;
+}
+
+long int filename_mtime(const char *name) {
+  if (fill_stat(name, 3)==false) return 0;
+  if (!last_stat.st_mtime) return last_stat.st_ctime;
+  return last_stat.st_mtime;
 }
 
 //
-// End of "$Id: filename_isdir.cxx,v 1.11 2002/12/10 02:00:56 easysw Exp $".
+// End of "$Id: filename_isdir.cxx,v 1.12 2003/12/13 11:06:53 spitzak Exp $".
 //

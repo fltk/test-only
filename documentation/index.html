@@ -4,247 +4,44 @@
   <meta content="Copyright 1998-2003 by Bill Spitzak and Others."
 name=Copyright />
   <meta content="Revision 12" name=DocNumber />
-  <title>FLTK 2.0.0 Programming Manual</title>
+  <title>FLTK 2.0 Manual</title>
  </head>
 <body bgcolor=white>
 
-<center><h1>
-<img src="fltk.gif" alt = "FLTK"><br>FLTK 2.0.0 Programming Manual</h1>
-Revision 12 by Michael Sweet, Craig P. Earls, and Bill Spitzak<br>
-All contents &copy;1998-2003 by Bill Spitzak and others.<br>
+<center>
+<img src="fltk_shadow.png" alt = "FLTK">
+<br>Revision 12 by Michael Sweet, Craig P. Earls, and Bill Spitzak<br>
+All contents &copy;1998-2003 by Bill Spitzak and others.</h1>
 </center>
 
-<!-- Paste the contents of fltk.d/toc.html here -->
-<!-- Then use replace-regexp "\#[_0-9]+" with "" to remove -->
-<!-- htmldoc-generated tags -->
+<!-- Files in the html subdirectory are produced by Doxygen! -->
+<!-- Notice that some of them don't exist yet. They will be "modules" -->
 
-<BR>
-<BR><B><A HREF="preface.html#preface">Preface</A></B>
-<UL>
-<LI><A HREF="preface.html#tm">Copyrights and Trademarks</A></LI>
-<LI><A HREF="preface.html#abbreviations">Abbreviations</A></LI>
-</UL>
-<B><A HREF="intro.html">Introduction to FLTK</A></B>
-<UL>
-<LI><A HREF="intro.html#features">Features</A></LI>
-<LI><A HREF="intro.html#licensing">Licensing</A></LI>
-<LI><A HREF="intro.html#iwhatdoes">What Does &quot;FLTK&quot; Mean?</A></LI>
-<LI><A HREF="intro.html#history">History of FLTK</A></LI>
-<LI><A HREF="intro.html#iinstall">Building and Installing FLTK Under
- UNIX</A></LI>
-<LI><A HREF="intro.html#install_win32">Building FLTK Under Microsoft
- Windows</A></LI>
-<LI><A HREF="intro.html#iinstall_os2">Building FLTK Under OS/2</A></LI>
-<LI><A HREF="intro.html#www">Internet Resources</A></LI>
-<LI><A HREF="intro.html#bugs">Reporting Bugs</A></LI>
-</UL>
-<B><A HREF="basics.html#basics">FLTK Basics</A></B>
-<UL>
-<LI><A HREF="basics.html#sample">A sample FLTK program</A></LI>
-<LI><A HREF="basics.html#compiling">Compiling your program</A></LI>
-<LI><A HREF="common.html#callbacks">Callbacks</A></LI>
-<LI><A HREF="common.html#buttons">Buttons</A></LI>
-<LI><A HREF="common.html#text">Text</A></LI>
-<LI><A HREF="common.html#valuators">Valuators</A></LI>
-<LI><A HREF="common.html#groups">Groups</A></LI>
-<LI><A HREF="common.html#size_common">Setting the Size and Position of
- Widgets</A></LI>
-<LI><A HREF="common.html#colors_common">Colors</A></LI>
-<LI><A HREF="common.html#boxtypes">Box Types</A></LI>
-<LI><A HREF="common.html#labels">Labels and Label Types</A></LI>
-<LI><A HREF="common.html#shortcuts">Shortcuts</A></LI>
-</UL>
-<B><A HREF="editor.html">Designing a Simple Text Editor</A></B>
-<UL>
-<LI><A HREF="editor.html#egoals">Determining the Goals of the Text
- Editor</A></LI>
-<LI><A HREF="editor.html#edesign">Designing the Main Window</A></LI>
-<LI><A HREF="editor.html#evariables">Variables</A></LI>
-<LI><A HREF="editor.html#emenus">Menubars and Menus</A></LI>
-<LI><A HREF="editor.html#eediting">Editing the Text</A></LI>
-<LI><A HREF="editor.html#ereplace">The Replace Dialog</A></LI>
-<LI><A HREF="editor.html#ecallbacks">Callbacks</A></LI>
-<LI><A HREF="editor.html#eother">Other Functions</A></LI>
-<LI><A HREF="editor.html#ecompiling">Compiling the Editor</A></LI>
-<LI><A HREF="editor.html#efinal">The Final Product</A></LI>
-</UL>
-<B><A HREF="fluid.html">Programming with FLUID</A></B>
-<UL>
-<LI><A HREF="fluid.html#fwhat">What is FLUID?</A></LI>
-<LI><A HREF="fluid.html#frunning">Running FLUID Under UNIX</A></LI>
-<LI><A HREF="fluid.html#fwin32">Running FLUID Under Microsoft Windows</A>
-</LI>
-<LI><A HREF="fluid.html#fcompile">Compiling .fl files</A></LI>
-<LI><A HREF="fluid.html#ftutorial">A Short Tutorial</A></LI>
-<LI><A HREF="fluid.html#freference">FLUID Reference</A></LI>
-</UL>
-<B><A HREF="Fl.html">class Fl</A></B>
-<UL>
-<LI><A HREF="Fl.html#startup">Startup functions</A></LI>
-<LI><A HREF="Fl.html#waiting">Waiting for events</A></LI>
-<LI><A HREF="Fl.html#flredraw">Redrawing</A></LI>
-<LI><A HREF="Fl.html#events">Events</A></LI>
-<LI><A HREF="Fl.html#copypaste">Copy, Paste, and Drag &amp; Drop</A></LI>
-<LI><A HREF="Fl.html#fmultithread">Multithreading</A></LI>
-<LI><A HREF="Fl.html#errors">Errors</A></LI>
-</UL>
-<B><A HREF="utility.html">The FLTK "Environment"</A></B>
-<UL>
-<LI><A HREF="utility.html#args">Argument parser</A></LI>
-<LI><A HREF="utility.html#ucolor">Color Choosers</A></LI>
-<LI><A HREF="utility.html#upopup">Popup messages and questions</A></LI>
-<LI><A HREF="utility.html#ufilechooser">File Chooser</A></LI>
-</UL>
-<B><A HREF="events.html">Handling Events</A></B>
-<UL>
-<LI><A HREF="events.html#emouse">Mouse Events</A></LI>
-<LI><A HREF="events.html#ekeyboard">Keyboard Events</A></LI>
-<LI><A HREF="events.html#ewidget">Widget Events</A></LI>
-<LI><A HREF="events.html#eclipboard">Clipboard Events</A></LI>
-</UL>
-<B><A HREF="drawing.html">Drawing Things in FLTK</A></B>
-<UL>
-<LI><A HREF="drawing.html#dwhen">When Can You Draw Things in FLTK?</A></LI>
-<LI><A HREF="drawing.html#dfunc">FLTK Drawing Functions</A></LI>
-<LI><A HREF="drawing.html#dtransformation">Current Transformation</A></LI>
-<LI><A HREF="drawing.html#dclipping">Clipping</A></LI>
-<LI><A HREF="drawing.html#dcolors">Colors</A></LI>
-<LI><A HREF="drawing.html#dlines">Line dashes and thickness</A></LI>
-<LI><A HREF="drawing.html#dpath">Path construction and drawing</A></LI>
-<LI><A HREF="drawing.html#dfast">Drawing that bypasses the path
- mechanism</A></LI>
-<LI><A HREF="drawing.html#dtext">Text</A></LI>
-<LI><A HREF="drawing.html#dimages">Images</A></LI>
-</UL>
-<B><A HREF="opengl.html">Using OpenGL</A></B>
-<UL>
-<LI><A HREF="opengl.html#glusing">Using OpenGL in FLTK</A></LI>
-<LI><A HREF="opengl.html#glsubclass">Making a Subclass of fltk::GlWindow</A>
-</LI>
-<LI><A HREF="opengl.html#glnormal">Using OpenGL in Normal FLTK Windows</A>
-</LI>
-<LI><A HREF="opengl.html#drawing">OpenGL Drawing Functions</A></LI>
-<LI><A HREF="opengl.html#drawing">Speeding up OpenGL</A></LI>
-<LI><A HREF="opengl.html#drawing">Using OpenGL Optimizer with FLTK</A></LI>
-</UL>
-<B><A HREF="widgets.html">Class Reference</A></B>
-<UL>
-<LI><A HREF="widgets.html">Class Hierarchy</A></LI>
-<LI><A HREF="Fl_Bar.html">class fltk::Bar</A></LI>
-<LI><A HREF="Fl_Bitmap.html">class fltk::Bitmap</A></LI>
-<LI><A HREF="Fl_Box.html">class fltk::InvisibleBox</A></LI>
-<LI><A HREF="Fl_Boxtype.html">typedef fltk::Box</A></LI>
-<LI><A HREF="Fl_Browser.html">class fltk::Browser</A></LI>
-<LI><A HREF="Fl_Button.html">class fltk::Button</A></LI>
-<LI><A HREF="Fl_Chart.html">class fltk::Chart</A></LI>
-<LI><A HREF="Fl_Check_Button.html">class fltk::CheckButton</A></LI>
-<LI><A HREF="Fl_Choice.html">class fltk::Choice</A></LI>
-<LI><A HREF="Fl_Clock.html">class fltk::Clock</A></LI>
-<LI><A HREF="Fl_Color_Chooser.html">class fltk::ColorChooser</A></LI>
-<LI><A HREF="Fl_Color.html">typedef fltk::Color</A></LI>
-<LI><A HREF="Fl_Dial.html">class fltk::Dial</A></LI>
-<LI><A HREF="Fl_Double_Window.html">class fltk::DoubleBufferWindow</A>
-</LI>
-<LI><A HREF="Fl_End.html">class fltk::End</A></LI>
-<LI><A HREF="Fl_Float_Input.html">class fltk::FloatInput</A></LI>
-<LI><A HREF="Fl_Font.html">typedef fltk::Font</A></LI>
-<LI><A HREF="Fl_Free.html">class fltk::Free</A></LI>
-<LI><A HREF="Fl_Gl_Window.html">class fltk::GlWindow</A></LI>
-<LI><A HREF="Fl_Group.html">class fltk::Group</A></LI>
-<LI><A HREF="Fl_Image.html">class fltk::Image</A></LI>
-<LI><A HREF="Fl_Input.html">class fltk::Input</A></LI>
-<LI><A HREF="Fl_Int_Input.html">class fltk::IntInput</A></LI>
-<LI><A HREF="Fl_Item_Group.html">class fltk::ItemGroup</A></LI>
-<LI><A HREF="Fl_Item.html">class fltk::Item</A></LI>
-<LI><A HREF="Fl_Labeltype.html">typedef fltk::Labeltype</A></LI>
-<LI><A HREF="Fl_Light_Button.html">class fltk::LightButton</A></LI>
-<LI><A HREF="Fl_List.html">class fltk::List</A></LI>
-<LI><A HREF="Fl_Menu_Bar.html">class fltk::MenuBar</A></LI>
-<LI><A HREF="Fl_Menu_Button.html">class fltk::MenuButton</A></LI>
-<LI><A HREF="Fl_Menu_.html">class fltk::Menu</A></LI>
-<LI><A HREF="Fl_Menu_Item.html">struct Fl_Menu_Item</A></LI>
-<LI><A HREF="Fl_Menu_Window.html">class fltk::MenuWindow</A></LI>
-<LI><A HREF="Fl_Multi_Browser.html">class fltk::MultiBrowser</A></LI>
-<LI><A HREF="Fl_Multi_Image.html">class fltk::MultiImage</A></LI>
-<LI><A HREF="Fl_Multiline_Input.html">class fltk::MultilineInput</A>
-</LI>
-<LI><A HREF="Fl_Multiline_Output.html">class fltk::MultilineOutput</A>
-</LI>
-<LI><A HREF="Fl_Named_Style.html">class fltk::NamedStyle</A></LI>
-<LI><A HREF="Fl_Numeric_Input.html">class fltk::NumericInput</A></LI>
-<LI><A HREF="Fl_Output.html">class fltk::Output</A></LI>
-<LI><A HREF="Fl_Overlay_Window.html">class fltk::OverlayWindow</A></LI>
-<LI><A HREF="Fl_Pack.html">class fltk::Pack</A></LI>
-<LI><A HREF="Fl_Pixmap.html">class fltk::Pixmap</A></LI>
-<LI><A HREF="Fl_Positioner.html">class fltk::Positioner</A></LI>
-<LI><A HREF="Fl_Repeat_Button.html">class fltk::RepeatButton</A></LI>
-<LI><A HREF="Fl_Return_Button.html">class fltk::ReturnButton</A></LI>
-<LI><A HREF="Fl_RGB_Image.html">class fltk::RGB_Image</A></LI>
-<LI><A HREF="Fl_Roller.html">class fltk::Roller</A></LI>
-<LI><A HREF="Fl_Round_Button.html">class fltk::RoundButton</A></LI>
-<LI><A HREF="Fl_Scrollbar.html">class fltk::Scrollbar</A></LI>
-<LI><A HREF="Fl_Scroll.html">class fltk::Scroll</A></LI>
-<LI><A HREF="Fl_Secret_Input.html">class fltk::SecretInput</A></LI>
-<LI><A HREF="Fl_Slider.html">class fltk::Slider</A></LI>
-<LI><A HREF="Fl_Style.html">struct fltk::Style</A></LI>
-<LI><A HREF="Fl_Style_Set.html">class fltk::StyleSet</A></LI>
-<LI><A HREF="Fl_Tabs.html">class fltk::Tabs</A></LI>
-<LI><A HREF="Fl_Text_Buffer.html">class fltk::TextBuffer</A></LI>
-<LI><A HREF="Fl_Text_Display.html">class fltk::TextDisplay</A></LI>
-<LI><A HREF="Fl_Text_Editor.html">class fltk::TextEditor</A></LI>
-<LI><A HREF="Fl_Tile.html">class fltk::Tile</A></LI>
-<LI><A HREF="Fl_Timer.html">class fltk::Timer</A></LI>
-<LI><A HREF="Fl_Tooltip.html">class fltk::Tooltip</A></LI>
-<LI><A HREF="Fl_Valuator.html">class fltk::Valuator</A></LI>
-<LI><A HREF="Fl_Value_Input.html">class fltk::ValueInput</A></LI>
-<LI><A HREF="Fl_Value_Slider.html">class fltk::ValueSlider</A></LI>
-<LI><A HREF="Fl_Widget.html">class fltk::Widget</A></LI>
-<LI><A HREF="Fl_Window.html">class fltk::Window</A></LI>
-<LI><A HREF="Fl_Wordwrap_Input.html">class fltk::WordwrapInput</A></LI>
-<LI><A HREF="Fl_Wordwrap_Output.html">class fltk::WordwrapOutput</A>
-</LI>
-</UL>
-<B><A HREF="subclassing.html">Making Your Own Widgets</A></B>
-<UL>
-<LI><A HREF="subclassing.html#swidget">Making a Subclass of fltk::Widget</A>
-</LI>
-<LI><A HREF="subclassing.html#sgroup">Making a Composite Widget</A></LI>
-<LI><A HREF="subclassing.html#swindow">Making a subclass of fltk::Window</A>
-</LI>
-</UL>
-<B><A HREF="theme.html">Themes</A></B>
-<UL>
-<LI><A HREF="theme.html#tplugins">Theme plugins</A></LI>
-<LI><A HREF="theme.html#tcontrol">Controlling themes</A></LI>
-<LI><A HREF="theme.html#timplement">Implementing a Theme</A></LI>
-</UL>
-<B><A HREF="x.html">System-Specific Interfaces</A></B>
-<UL>
-<LI><A HREF="x.html#xunix">X11/Unix</A></LI>
-<LI><A HREF="win32.html">WIN32</A></LI>
-</UL>
-<B><A HREF="forms.html">Forms Compatibility</A></B>
-<UL>
-<LI><A HREF="forms.html#fimport">Importing Forms Layout Files</A></LI>
-<LI><A HREF="forms.html#fheader">Using the Compatibility Header File</A></LI>
-<LI><A HREF="forms.html#fwidgets">Forms-specific Widget classes</A></LI>
-<LI><A HREF="forms.html#fbugs">Problems You Will Encounter</A></LI>
-<LI><A HREF="forms.html#fnotes">Additional Notes</A></LI>
-</UL>
-<B><A HREF="glut.html">GLUT Compatibility</A></B>
-<UL>
-<LI><A HREF="glut.html#gusing">Using the GLUT Compatibility Header File</A>
-</LI>
-<LI><A HREF="glut.html#gbugs">Known Problems</A></LI>
-<LI><A HREF="glut.html#gmixing">Mixing GLUT and FLTK Code</A></LI>
-<LI><A HREF="glut.html#Glut_Window">class fltk::Glut_Window</A></LI>
-</UL>
-<B><A HREF="license.html">Software License</A></B>
-<UL>
-<LI><A HREF="license.html#lfltk">FLTK Library Licence, Version 2</A></LI>
-<LI><A HREF="license.html#lexception">EXCEPTION NOTICE</A></LI>
-<LI><A HREF="license.html#lgpl">GNU Library General Public License
- (LGPL)</A></LI>
-</UL>
+<p><b>FLTK Manual</b>
+<ul>
+<li><a href="intro.html">Introduction</a>
+<li><a href="compiling.html">Compiling and Installing FLTK</a>
+<li><a href="basics.html">A sample FLTK program</a>
+<li><a href="editor.html">Designing a Simple Text Editor</a>
+<li><a href="common.html">(unwritten chapters about widgets here)</a>
+<li><a href="fluid.html">Programming with FLUID</a>
+<!-- Insert more descriptive text from reference chapters here -->
+<li><a href="subclassing.html">Making Your Own Widgets</a></b>
+<li><a href="opengl.html">Using OpenGL</a>
+</ul>
+
+<p><b>FLTK Reference</b>
+<ul>
+<li><a href="Fl.html">FLTK functions</a></li> <!-- Should be Doxygen output -->
+<li><a href="utility.html">The FLTK "Environment"</a></li> <!-- Doxygen! -->
+<li><a href="html/hierarchy.html">FLTK Class Hierarchy</a></li>
+<li><a href="events.html">Events</a> <!-- More Doxygen! -->
+<li><a href="html/group__drawing.html">Drawing functions</a></li>
+<li><a href="x.html">X11/Unix-specific functions</a></li>
+<li><a href="win32.html">WIN32-specific functions</a></li>
+<li><a href="forms.html">Forms Compatibility</a></li>
+<li><a href="glut.html">GLUT Compatibility</a></li>
+<li><a href="license.html">Software License</a></li>
+<ul>
 
 </body></html>

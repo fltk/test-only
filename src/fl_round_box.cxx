@@ -1,5 +1,5 @@
 //
-// "$Id: fl_round_box.cxx,v 1.32 2003/11/04 08:11:04 spitzak Exp $"
+// "$Id: fl_round_box.cxx,v 1.33 2003/12/13 11:06:53 spitzak Exp $"
 //
 // Round box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -38,7 +38,7 @@ class RoundBox : public FrameBox {
 public:
   void _draw(int,int,int,int, const Style*, Flags) const;
   RoundBox(const char* n, const char* s, const FrameBox* d=0)
-    : FrameBox(n, s, d) {}
+    : FrameBox(n, s, d) {boxinfo_.fills_rectangle = 0;}
 };
 
 enum {UPPER_LEFT, LOWER_RIGHT, CLOSED, FILL};
@@ -115,5 +115,5 @@ static RoundBox roundUpBox("round_up", "AAWWMMTT", &roundDownBox);
 Box* const fltk::ROUND_UP_BOX = &roundUpBox;
 
 //
-// End of "$Id: fl_round_box.cxx,v 1.32 2003/11/04 08:11:04 spitzak Exp $".
+// End of "$Id: fl_round_box.cxx,v 1.33 2003/12/13 11:06:53 spitzak Exp $".
 //

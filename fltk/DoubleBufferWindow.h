@@ -1,5 +1,5 @@
 //
-// "$Id: DoubleBufferWindow.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: DoubleBufferWindow.h,v 1.3 2003/12/13 11:06:53 spitzak Exp $"
 //
 // Double-buffered window. Uses XDBE if possible on X. Uses offscreen
 // pixmap on Windows or on X if no XDBE.
@@ -40,8 +40,8 @@ public:
   virtual void layout();
   ~DoubleBufferWindow();
   DoubleBufferWindow(int W, int H, const char *l = 0) : Window(W,H,l) {}
-  DoubleBufferWindow(int X, int Y, int W, int H, const char *l = 0)
-    : Window(X,Y,W,H,l) {}
+  DoubleBufferWindow(int X, int Y, int W, int H, const char *l = 0, bool begin=false)
+    : Window(X,Y,W,H,l,begin) {}
 
 protected:
 
@@ -61,5 +61,5 @@ private:
 #endif
 
 //
-// End of "$Id: DoubleBufferWindow.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: DoubleBufferWindow.h,v 1.3 2003/12/13 11:06:53 spitzak Exp $".
 //

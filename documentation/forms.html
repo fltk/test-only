@@ -61,10 +61,10 @@ The following widget classes are provided to allow direct porting of
 Forms programs. They should not be used in normal FLTK programs.
 
 <ul>
-<li><a href=Fl_FormsBitmap.html>fltk::FormsBitmap</a></li>
-<li><a href=Fl_FormsPixmap.html>fltk::FormsPixmap</a></li>
-<li><a href=Fl_Free.html>fltk::Free</a></li>
-<li><a href=Fl_Timer.html>fltk::Timer</a></li>
+<li><a href=Fl_FormsBitmap.html>Fl_FormsBitmap</a></li>
+<li><a href=Fl_FormsPixmap.html>Fl_FormsPixmap</a></li>
+<li><a href=Fl_Free.html>Fl_Free</a></li>
+<li><a href=Fl_Timer.html>Fl_Timer</a></li>
 </ul>
 
 <h2><a name=fbugs>Problems You Will Encounter</a></h2>
@@ -74,12 +74,12 @@ Forms programs. They should not be used in normal FLTK programs.
 features (such as the &quot;canvas&quot; widget) are needed by most large 
 programs.  You will need to rewrite these to use FLTK subclasses. </P>
 
-<p><A href=Fl_Free.html#Free><tt>fltk::Free</tt></A> widgets emulate 
+<p><A href=Fl_Free.html#Free><tt>Fl_Free</tt></A> widgets emulate 
 the <I>old</I> Forms &quot;free&quot; widget.  It may be useful for porting 
 programs that change the <tt>handle()</tt> function on widgets, but you 
 will still need to rewrite things. </P>
 
-<p><A href=Fl_Timer.html#Timer><tt>fltk::Timer</tt></A> widgets are 
+<p><A href=Fl_Timer.html#Timer><tt>Fl_Timer</tt></A> widgets are 
 provided to emulate the XForms timer.  These work, but are quite 
 inefficient and inaccurate compared to using <A href=Fl.html#add_timeout>
 <tt>fltk::add_timeout()</tt></A>. </P>
@@ -110,56 +110,56 @@ to be hidden.  You can store the same information in the <tt>user_data()</tt>
 all occurances of &quot;-&gt;fdui&quot; and edit to use &quot;-&gt;user_data()&quot; instead. 
  This will require casts and is not trivial. </P>
 
-<p>The prototype for the functions passed to <tt>fltk::add_timeout()</tt>
- and <tt>fltk::set_idle_callback()</tt> callback are different. </P>
+<p>The prototype for the functions passed to <tt>fl_add_timeout()</tt>
+ and <tt>fl_set_idle_callback()</tt> callback are different. </P>
 
 <p><B>All the following XForms calls are missing:</B></P>
 
 <p>
 <UL>
-<LI><tt>fltk::REVISION</tt>, <tt>fltk::library_version()</tt></LI>
-<LI><tt>fltk::RETURN_DBLCLICK</tt> (use <tt>fltk::event_clicks()</tt>) </LI>
-<LI><tt>fltk::add_signal_callback()</tt></LI>
-<LI><tt>fltk::set_form_atactivate()</tt> <tt>fltk::set_form_atdeactivate()</tt>
+<LI><tt>FL_REVISION</tt>, <tt>fl_library_version()</tt></LI>
+<LI><tt>FL_RETURN_DBLCLICK</tt> (use <tt>fl_event_clicks()</tt>) </LI>
+<LI><tt>fl_add_signal_callback()</tt></LI>
+<LI><tt>fl_set_form_atactivate()</tt> <tt>fl_set_form_atdeactivate()</tt>
 </LI>
-<LI><tt>fltk::set_form_property()</tt></LI>
-<LI><tt>fltk::set_app_mainform()</tt>, <tt>fltk::get_app_mainform()</tt></LI>
-<LI><tt>fltk::set_form_minsize()</tt>, <tt>fltk::set_form_maxsize()</tt></LI>
-<LI><tt>fltk::set_form_event_cmask()</tt>, <tt>fltk::get_form_event_cmask()</tt>
+<LI><tt>fl_set_form_property()</tt></LI>
+<LI><tt>fl_set_app_mainform()</tt>, <tt>fl_get_app_mainform()</tt></LI>
+<LI><tt>fl_set_form_minsize()</tt>, <tt>fl_set_form_maxsize()</tt></LI>
+<LI><tt>fl_set_form_event_cmask()</tt>, <tt>fl_get_form_event_cmask()</tt>
 </LI>
-<LI><tt>fltk::set_form_dblbuffer()</tt>, <tt>fltk::set_object_dblbuffer()</tt>
- (use an <tt>fltk::DoubleBufferWindow</tt> instead) </LI>
-<LI><tt>fltk::adjust_form_size()</tt></LI>
-<LI><tt>fltk::register_raw_callback()</tt></LI>
-<LI><tt>fltk::set_object_bw()</tt>, <tt>fltk::set_border_width()</tt></LI>
-<LI><tt>fltk::set_object_resize()</tt>, <tt>fltk::set_object_gravity()</tt></LI>
-<LI><tt>fltk::set_object_shortcutkey()</tt></LI>
-<LI><tt>fltk::set_object_automatic()</tt></LI>
-<LI><tt>fltk::get_object_bbox()</tt> (maybe FLTK should do this) </LI>
-<LI><tt>fltk::set_object_prehandler()</tt>, <tt>fltk::set_object_posthandler()</tt>
+<LI><tt>fl_set_form_dblbuffer()</tt>, <tt>fl_set_object_dblbuffer()</tt>
+ (use an <tt>Fl_DoubleBufferWindow</tt> instead) </LI>
+<LI><tt>fl_adjust_form_size()</tt></LI>
+<LI><tt>fl_register_raw_callback()</tt></LI>
+<LI><tt>fl_set_object_bw()</tt>, <tt>fl_set_border_width()</tt></LI>
+<LI><tt>fl_set_object_resize()</tt>, <tt>fl_set_object_gravity()</tt></LI>
+<LI><tt>fl_set_object_shortcutkey()</tt></LI>
+<LI><tt>fl_set_object_automatic()</tt></LI>
+<LI><tt>fl_get_object_bbox()</tt> (maybe FLTK should do this) </LI>
+<LI><tt>fl_set_object_prehandler()</tt>, <tt>fl_set_object_posthandler()</tt>
 </LI>
-<LI><tt>fltk::enumerate_fonts()</tt></LI>
+<LI><tt>fl_enumerate_fonts()</tt></LI>
 <LI>Most drawing functions </LI>
-<LI><tt>fltk::set_coordunit()</tt> (FLTK uses pixels all the time) </LI>
-<LI><tt>fltk::ringbell()</tt></LI>
-<LI><tt>fltk::gettime()</tt></LI>
-<LI><tt>fltk::win*()</tt> (all these functions) </LI>
-<LI><tt>fltk::initialize(argc,argv,x,y,z)</tt> ignores last 3 arguments </LI>
-<LI><tt>fltk::read_bitmapfile()</tt>, <tt>fltk::read_pixmapfile()</tt></LI>
-<LI><tt>fltk::addto_browser_chars()</tt></LI>
-<LI><tt>fltk::MENUBUTTON</tt> just draws normally </LI>
-<LI><tt>fltk::set_bitmapbutton_file()</tt>, <tt>fltk::set_pixmapbutton_file()</tt>
+<LI><tt>fl_set_coordunit()</tt> (FLTK uses pixels all the time) </LI>
+<LI><tt>fl_ringbell()</tt></LI>
+<LI><tt>fl_gettime()</tt></LI>
+<LI><tt>fl_win*()</tt> (all these functions) </LI>
+<LI><tt>fl_initialize(argc,argv,x,y,z)</tt> ignores last 3 arguments </LI>
+<LI><tt>fl_read_bitmapfile()</tt>, <tt>fl_read_pixmapfile()</tt></LI>
+<LI><tt>fl_addto_browser_chars()</tt></LI>
+<LI><tt>FL_MENUBUTTON</tt> just draws normally </LI>
+<LI><tt>fl_set_bitmapbutton_file()</tt>, <tt>fl_set_pixmapbutton_file()</tt>
 </LI>
-<LI><tt>fltk::CANVAS</tt> objects </LI>
-<LI><tt>fltk::DIGITAL_CLOCK</tt> (comes out analog) </LI>
-<LI><tt>fltk::create_bitmap_cursor()</tt>, <tt>fltk::set_cursor_color()</tt></LI>
-<LI><tt>fltk::set_dial_angles()</tt></LI>
-<LI><tt>fltk::show_oneliner()</tt></LI>
-<LI><tt>fltk::set_choice_shortcut(a,b,c) </tt></LI>
+<LI><tt>FL_CANVAS</tt> objects </LI>
+<LI><tt>FL_DIGITAL_CLOCK</tt> (comes out analog) </LI>
+<LI><tt>fl_create_bitmap_cursor()</tt>, <tt>fl_set_cursor_color()</tt></LI>
+<LI><tt>fl_set_dial_angles()</tt></LI>
+<LI><tt>fl_show_oneliner()</tt></LI>
+<LI><tt>fl_set_choice_shortcut(a,b,c) </tt></LI>
 <LI>command log </LI>
 <LI>Only some of file selector is emulated </LI>
-<LI><tt>fltk::DATE_INPUT</tt></LI>
-<LI><tt>fltk::pup*()</tt> (all these functions) </LI>
+<LI><tt>FL_DATE_INPUT</tt></LI>
+<LI><tt>fl_pup*()</tt> (all these functions) </LI>
 <LI>textbox object (should be easy but I had no sample programs) </LI>
 <LI>xyplot object </LI>
 </UL>
@@ -172,18 +172,19 @@ encountered when going from old Forms to XForms:
 
 <h3>Does Not Run In Background</h3>
 
-The IRISGL library always forked when you created the first window, 
-unless &quot;foreground()&quot; was called.  FLTK acts like &quot;foreground()&quot; is 
-called all the time.  If you really want the fork behavior do &quot;if 
-(fork()) exit(0)&quot; right at the start of your program. 
+The IRISGL library always forked when you created the first window,
+unless &quot;foreground()&quot; was called.  FLTK acts like
+&quot;foreground()&quot; is called all the time.  If you really want
+the fork behavior do &quot;if (fork()) exit(0)&quot; right at the
+start of your program.
 
-<h3>You Cannot Use IRISGL Windows or fltk::queue</h3>
+<h3>You Cannot Use IRISGL Windows or fl_queue</h3>
 
 If a Forms (not XForms) program if you wanted your own window for 
 displaying things you would create a IRISGL window and draw in it, 
 periodically calling Forms to check if the user hit buttons on the 
 panels.  If the user did things to the IRISGL window, you would find 
-this out by having the value fltk::EVENT returned from the call to Forms. 
+this out by having the value fl_EVENT returned from the call to Forms. 
 
 <p>None of this works with FLTK.  Nor will it compile, the necessary 
 calls are not in the interface. </P>
@@ -200,9 +201,9 @@ OpenGL window. </P>
 <p>One easy way to hack your program so it works is to make the <tt>
 draw()</tt> and <tt>handle()</tt> methods on your window set some 
 static variables, storing what event happened.  Then in the main loop 
-of your program, call <tt>fltk::wait()</tt> and then check these 
+of your program, call <tt>fl_wait()</tt> and then check these 
 variables, acting on them as though they are events read from <tt>
-fltk::queue</tt>. </P>
+fl_queue</tt>. </P>
 
 <h3>You Must Use OpenGL to Draw Everything</h3>
 
@@ -212,7 +213,7 @@ available that you might want to investigate. </P>
 
 <h3>You Cannot Make Forms Subclasses</h3>
 
-Programs that call <tt>fltk::make_object</tt> or directly setting the 
+Programs that call <tt>fl_make_object</tt> or directly setting the 
 handle routine will not compile.  You have to rewrite them to use a 
 subclass of <tt>fltk::Widget</tt>.  It is important to note that the <tt>
 handle()</tt> method is not exactly the same as the <tt>handle()</tt>
@@ -237,13 +238,13 @@ lot of errors about &quot;getvaluator&quot;.  You should substitute:
 <TR><TH align=center>Forms</TH><TH align=center>FLTK</TH></TR>
 <TR><TD>MOUSE_X</TD><TD>fltk::event_x_root()</TD></TR>
 <TR><TD>MOUSE_Y</TD><TD>fltk::event_y_root()</TD></TR>
-<TR><TD>LEFTSHIFTKEY,RIGHTSHIFTKEY</TD><TD>fltk::event_shift()</TD></TR>
-<TR><TD>CAPSLOCKKEY</TD><TD>fltk::event_capslock()</TD></TR>
-<TR><TD>LEFTCTRLKEY,RIGHTCTRLKEY</TD><TD>fltk::event_ctrl()</TD></TR>
-<TR><TD>LEFTALTKEY,RIGHTALTKEY</TD><TD>fltk::event_alt()</TD></TR>
-<TR><TD>MOUSE1,RIGHTMOUSE</TD><TD>fltk::event_state()</TD></TR>
-<TR><TD>MOUSE2,MIDDLEMOUSE</TD><TD>fltk::event_state()</TD></TR>
-<TR><TD>MOUSE3,LEFTMOUSE</TD><TD>fltk::event_state()</TD></TR>
+<TR><TD>LEFTSHIFTKEY,RIGHTSHIFTKEY</TD><TD>fltk::event_state(fltk::SHIFT)</TD></TR>
+<TR><TD>CAPSLOCKKEY</TD><TD>fltk::event_state(fltk::CAPS_LOCK)</TD></TR>
+<TR><TD>LEFTCTRLKEY,RIGHTCTRLKEY</TD><TD>fltk::event_state(fltk::CTRL)</TD></TR>
+<TR><TD>LEFTALTKEY,RIGHTALTKEY</TD><TD>fltk::event_state(fltk::ALT)</TD></TR>
+<TR><TD>MOUSE1,RIGHTMOUSE</TD><TD>fltk::event_state(fltk::BUTTON1)</TD></TR>
+<TR><TD>MOUSE2,MIDDLEMOUSE</TD><TD>fltk::event_state(fltk::BUTTON2)</TD></TR>
+<TR><TD>MOUSE3,LEFTMOUSE</TD><TD>fltk::event_state(fltk::BUTTON3)</TD></TR>
 </table></center>
 
 Anything else in <tt>getvaluator</tt> and you are on your own... 

@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.58 2003/11/04 08:10:55 spitzak Exp $"
+// "$Id: Enumerations.H,v 1.59 2003/12/13 11:06:53 spitzak Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -234,10 +234,10 @@ enum {
 #define FL_BOLD			fltk::HELVETICA_BOLD
 #define FL_ITALIC		fltk::HELVETICA_ITALIC
 
-#define FL_NORMAL_SIZE (fltk::Widget::default_style->label_size)
-#define FL_FOREGROUND_COLOR (fltk::Widget::default_style->label_color)
-#define FL_BACKGROUND2_COLOR (fltk::Widget::default_style->color)
-#define FL_SELECTION_COLOR (fltk::Widget::default_style->selection_color)
+#define FL_NORMAL_SIZE (fltk::Widget::default_style->label_size_)
+#define FL_FOREGROUND_COLOR (fltk::Widget::default_style->label_color_)
+#define FL_BACKGROUND2_COLOR (fltk::Widget::default_style->color_)
+#define FL_SELECTION_COLOR (fltk::Widget::default_style->selection_color_)
 
 #define Fl_Color	fltk::Color
 enum {
@@ -353,5 +353,5 @@ enum Fl_Damage {
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.58 2003/11/04 08:10:55 spitzak Exp $".
+// End of "$Id: Enumerations.H,v 1.59 2003/12/13 11:06:53 spitzak Exp $".
 //

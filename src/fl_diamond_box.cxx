@@ -1,5 +1,5 @@
 //
-// "$Id: fl_diamond_box.cxx,v 1.28 2003/11/04 08:11:03 spitzak Exp $"
+// "$Id: fl_diamond_box.cxx,v 1.29 2003/12/13 11:06:53 spitzak Exp $"
 //
 // Diamond box code for the Fast Light Tool Kit (FLTK).
 //
@@ -41,7 +41,7 @@ class DiamondBox : public FrameBox {
 public:
   void _draw(int,int,int,int, const Style*, Flags=0) const;
   DiamondBox(const char* n, const char* s, const FrameBox* d=0)
-    : FrameBox(n, s, d) { }
+    : FrameBox(n, s, d) {boxinfo_.fills_rectangle = 0;}
 };
 
 extern void fl_to_inactive(const char* s, char* to);
@@ -95,5 +95,5 @@ static DiamondBox diamondUpBox("diamond_up", "2AAWWMMTT", &diamondDownBox);
 Box* const fltk::DIAMOND_UP_BOX = &diamondUpBox;
 
 //
-// End of "$Id: fl_diamond_box.cxx,v 1.28 2003/11/04 08:11:03 spitzak Exp $".
+// End of "$Id: fl_diamond_box.cxx,v 1.29 2003/12/13 11:06:53 spitzak Exp $".
 //

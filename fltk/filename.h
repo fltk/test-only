@@ -1,5 +1,5 @@
 //
-// "$Id: filename.h,v 1.11 2003/10/28 17:45:13 spitzak Exp $"
+// "$Id: filename.h,v 1.12 2003/12/13 11:06:53 spitzak Exp $"
 //
 // Filename header file for the Fast Light Tool Kit (FLTK).
 //
@@ -39,6 +39,8 @@ FL_API bool filename_expand(char *, const char *from); // do $x and ~x
 FL_API bool filename_absolute(char *, const char *from, const char* pwd=0);  // prepend pwd or getcwd()
 FL_API bool filename_match(const char *, const char *pattern); // glob match
 FL_API bool filename_isdir(const char*);
+FL_API double filename_size(const char *); // return size of file
+FL_API long int filename_mtime(const char *); // return modification time
 
 ////////////////////////////////////////////////////////////////
 // dirent (what a pain)...
@@ -83,5 +85,5 @@ FL_API int filename_list(const char *d, struct dirent ***);
 #endif
 
 //
-// End of "$Id: filename.h,v 1.11 2003/10/28 17:45:13 spitzak Exp $".
+// End of "$Id: filename.h,v 1.12 2003/12/13 11:06:53 spitzak Exp $".
 //

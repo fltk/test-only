@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.78 2003/11/09 02:48:21 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.79 2003/12/13 11:06:53 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -22,6 +22,7 @@
 //
 
 #include <fltk/Browser.h>
+#include <fltk/Button.h>
 #include <fltk/events.h>
 #include <fltk/damage.h>
 #include <fltk/layout.h>
@@ -30,6 +31,7 @@
 #include <fltk/draw.h>
 #include <fltk/error.h>
 #include <stdlib.h>
+#include <string.h>
 using namespace fltk;
 
 ////////////////////////////////////////////////////////////////
@@ -481,8 +483,8 @@ void Browser::draw_clip(int x, int y, int w, int h) {
 }
 
 void Browser::draw() {
-	const int *last_columns = column_widths();
-	column_widths(column_widths_);
+  const int *last_columns = fltk::column_widths();
+  fltk::column_widths(column_widths_p);
   uchar d = damage();
   Item::set_style(this);
   if (d & DAMAGE_ALL) { // full redraw
@@ -500,8 +502,8 @@ void Browser::draw() {
     int clipped = 0;
     for (int n = REDRAW_0; n <= REDRAW_1; n++) {
       if (goto_mark(n)) {
-	if (!clipped) {push_clip(X,Y,W,H); clipped = 1;}
-	draw_item();
+	    if (!clipped) {push_clip(X,Y,W,H); clipped = 1;}
+	    draw_item();
       }
     }
     if (d & DAMAGE_CHILD) {
@@ -536,10 +538,27 @@ void Browser::draw() {
       setcolor(buttoncolor());
       fillrect(scrollbar.x(), hscrollbar.y(), scrollbar.w(), hscrollbar.h());
     }
+	if (header) {
+	  for (int i=0; i<nHeader; i++) {
+		header[i]->set_damage(DAMAGE_ALL);
+	  }
+	  Widget *hi = header[nHeader-1];
+	  int r = hi->x()+hi->w(), rr = X+W+(scrollbar.visible()?scrollbar.w():0);
+	  if (r<rr) {
+		setcolor(buttoncolor());
+		fillrect(r, hi->y(), rr-r, hi->h());
+	  }
+	}
   }
   update_child(scrollbar);
   update_child(hscrollbar);
-  column_widths(last_columns);
+  if (header) {
+	for (int i=0; i<nHeader; i++) {
+	  update_child(*header[i]);
+	}
+  }
+  
+  fltk::column_widths(last_columns);
   Item::clear_style();
 }
 
@@ -590,6 +609,7 @@ void Browser::layout() {
   box()->inset(X,Y,W,H);
   if (scrollbar.visible()) W -= sw;
   if (hscrollbar.visible()) H -= sw;
+  if (header) { H -= sw; Y += sw; }
 
   // Measure the height of all items and find widest one
   width_ = 0;
@@ -659,6 +679,29 @@ void Browser::layout() {
   hscrollbar.value(xposition_, W, 0, width_);
   hscrollbar.linesize(scrollbar.linesize());
 
+  if (header) {
+	int hx = X, hw = 0, flex = -1;
+	for (int i=0; i<nHeader; i++) {
+	  Widget *hi = header[i];
+	  hw = (i<nColumn)?column_widths_[i]:0;
+	  if (hw==0) hw = 100;
+	  if (hw==-1) { hw = 0; flex = i; }
+	  hi->resize(hx, Y-sw, hw, sw);
+	  hx += hw;
+	}
+	if (flex>=0) {
+	  int delta = W-hx-X;
+	  Widget *hi = header[flex];
+	  hi->size(delta, hi->h());
+	  if (column_widths_p && flex<nColumn)
+		column_widths_p[flex] = delta;
+	  for (int i=flex+1; i<nHeader; i++) {
+		hi = header[i];
+		hi->position(hi->x()+delta, hi->y());
+	  }
+	}
+  }
+  
   layout_damage(0); // resize of scrollbars may have turned this on
 
   // Now that we got the sizes of everything, scroll to show current item:
@@ -841,6 +884,13 @@ int Browser::handle(int event) {
 	 (event_y() < hscrollbar.y()+hscrollbar.h()) :
 	 (event_y() >= hscrollbar.y())))
       return hscrollbar.send(event);
+	if (header && nHeader && event_y()<header[0]->y()+header[0]->h()) {
+	  for (int i=0; i<nHeader; i++) {
+		Widget *hi = header[i];
+		if (event_x()>=hi->x() && event_x()<hi->x()+hi->w())
+		  return hi->send(event);
+	  }
+	}
     // find the item we are pointing at:
     if (!goto_position(event_y()-Y+yposition_) && !item()) return 0;
     // set xx to how far to left of widget they clicked:
@@ -1066,6 +1116,59 @@ Widget* Browser::goto_index(int a, int b, int c, int d, int e) {
   return goto_index(indexes,i);
 }
 
+void Browser::column_widths(const int *t) {
+  column_widths_ = t;
+  int pnc = nColumn;
+  nColumn = 0;
+  // count the number of columns
+  if (t) while (*t++) nColumn++;
+  if (nColumn==0) {
+	// free the column memory
+	if (column_widths_p) free(column_widths_p);
+	column_widths_p = 0;
+  } else {
+	// reallocate the column storage if needed
+	if (nColumn>pnc)
+	  column_widths_p = (int*)realloc(column_widths_p, (nColumn+1)*sizeof(int));
+	// copy the widths over into the new array
+	memcpy(column_widths_p, column_widths_, (nColumn+1)*sizeof(int));
+  }
+  // now recalculate the layout
+  if (header)
+	layout();
+  redraw();
+}
+
+void Browser::column_click_cb_(Widget *ww, void *d) {
+  Browser *w = (Browser*)(ww->parent());
+  w->selected_column_ = (int)d;
+  w->do_callback();
+  w->selected_column_ = -1;
+}
+
+void Browser::column_labels(const char **t) {
+  column_labels_ = t;
+  int i;
+  for (i=0; i<nHeader; i++) {
+	delete header[i];
+  }
+  delete[] header;
+  nHeader = 0; header = 0;
+  if (t) { // create new header widgets
+	Group *g = Group::current();
+	Group::current(0);
+	while (*t++) nHeader++;
+	header = new Widget*[nHeader];
+	for (i=0; i<nHeader; i++) {
+	  header[i] = new Button(0, 0, 1, 1, column_labels_[i]);
+	  header[i]->parent(this);
+	  header[i]->callback(column_click_cb_, (void*)i);
+	}
+	Group::current(g);
+  }
+  layout();
+}
+
 ////////////////////////////////////////////////////////////////
 // Fltk 1.0 emulation
 // Items are numbered and children of top-level items are ignored.
@@ -1120,8 +1223,12 @@ Browser::Browser(int X,int Y,int W,int H,const char* L)
   scrollbar.parent(this);
   scrollbar.callback(scrollbar_cb);
   indented_ = 0;
-  format_char_ = '@';
   column_widths_ = 0;
+  column_widths_p = 0;
+  column_labels_ = 0;
+  selected_column_ = -1;
+  nColumn = 0;
+  nHeader = 0; header = 0;
   // set all the marks to the top:
   levels = 0;
   for (int i = 0; i < NUMMARKS; i++) {
@@ -1136,8 +1243,9 @@ Browser::Browser(int X,int Y,int W,int H,const char* L)
 
 Browser::~Browser() {
   for (int i = 0; i < NUMMARKS; i++) free(item_index[i]);
+  if (column_widths_p) free(column_widths_p);
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.78 2003/11/09 02:48:21 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.79 2003/12/13 11:06:53 spitzak Exp $".
 //

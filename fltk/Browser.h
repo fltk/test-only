@@ -1,5 +1,5 @@
 //
-// "$Id: Browser.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: Browser.h,v 1.3 2003/12/13 11:06:53 spitzak Exp $"
 //
 // Copyright 2002 by Bill Spitzak and others.
 //
@@ -92,10 +92,11 @@ public:
   int value() const {return focus_index()[0];}
 
   // Maybe these should be moved to base Menu class:
-  char format_char() const {return format_char_;}
-  void format_char(char c) {format_char_ = c;}
-  const int *column_widths() const { return column_widths_; }
-  void column_widths(const int *pWidths)  { column_widths_ = pWidths; }
+  const int *column_widths() const { return column_widths_p; }
+  void column_widths(const int *pWidths);
+  const char **column_labels() const { return column_labels_; }
+  void column_labels(const char **pLabels);
+  int selected_column() { return selected_column_; }
 
   // Convienence functions for flat browsers:
   bool select(int line, bool value = true);
@@ -110,8 +111,9 @@ public:
 private:
 
   bool indented_;
-  char format_char_;
   const int *column_widths_;
+  int *column_widths_p;
+  const char **column_labels_;
   int xposition_, yposition_;
   int width_, height_;
   int scrolldx, scrolldy;
@@ -121,6 +123,9 @@ private:
   void draw_clip(int,int,int,int);
   static void draw_clip_cb(void*,int,int,int,int);
   int X,Y,W,H; // bounding box area
+  
+  Widget **header;
+  int nHeader, nColumn, selected_column_;
 
   int multi() const {return type()&MULTI;}
 
@@ -154,6 +159,7 @@ private:
   int levels; // maximum depth of all items encountered so far
   void set_level(int); // increases levels by reallocating the arrays
 
+  static void column_click_cb_(Widget*, void*);
 };
 
 }
@@ -161,5 +167,5 @@ private:
 #endif
 
 //
-// End of "$Id: Browser.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: Browser.h,v 1.3 2003/12/13 11:06:53 spitzak Exp $".
 //
