@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.18 1999/10/12 22:22:54 vincent Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.19 1999/10/13 16:04:03 vincent Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -96,10 +96,10 @@ int Fl_Tabs::tab_height() {
   H2 = y()+h()-H2;
   if (H2 > H) {
     H = H2-box()->dy();
-    return (H <= 0) ? 0 : -H;
+    return (H <= 0) ? 0 : -H-1;
   } else {
     H = H-box()->dy();
-    return (H <= 0) ? 0 : H;
+    return (H <= 0) ? 0 : H+1;
   }
 }
 
@@ -196,9 +196,6 @@ void Fl_Tabs::draw() {
 
   int H = tab_height();
   if (damage() & FL_DAMAGE_ALL) { // redraw the entire thing:
-/*    fl_clip(x(), y()+(H>=0?H:0), w(), h()-(H>=0?H:-H));
-    draw_box();
-    fl_pop_clip();*/
     if (v) draw_child(*v);
   } else { // redraw the child
     if (v) update_child(*v);
@@ -207,16 +204,18 @@ void Fl_Tabs::draw() {
   // restore the tab's label
   if (v) v->label(l);
 
- // draw the tabs if needed:
+  // draw the tabs if needed:
   if (v && (damage() & (FL_DAMAGE_EXPOSE|FL_DAMAGE_ALL))) {
     int p[128]; int w[128];
     int selected = tab_positions(p,w);
     int i;
 
     // draw the parent's box under the tabs
-    fl_clip(x(), y()+(H>=0?0:h()+H), p[children()-1]+w[children()-1]+TABSLOPE, (H>=0?H:-H));
-    parent()->draw_box();
-    fl_pop_clip();
+    if (damage()&FL_DAMAGE_ALL) {
+      fl_clip(x(), y()+(H>=0?0:h()+H), p[children()-1]+w[children()-1]+TABSLOPE, (H>=0?H:-H));
+      parent()->draw_group_box();
+      fl_pop_clip();
+    }
 
     Fl_Widget*const* a = array();
     for (i=0; i<selected; i++)
@@ -240,6 +239,7 @@ void Fl_Tabs::draw_n_clip()
   clear_damage(FL_DAMAGE_ALL);
   draw();
   clear_damage();
+  // clip out is done in the draw() method ...
 }
 
 void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
@@ -300,5 +300,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.18 1999/10/12 22:22:54 vincent Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.19 1999/10/13 16:04:03 vincent Exp $".
 //

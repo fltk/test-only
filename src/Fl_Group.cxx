@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.33 1999/10/13 08:34:09 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.34 1999/10/13 16:04:03 vincent Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -461,7 +461,8 @@ void Fl_Group::layout() {
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Button.H>
 
-// Draw the surrounding box of a group : if no box, draw parent's box
+// Draw the surrounding box of a group ; if non rectangular box, 
+// draw parent's box behind
 void Fl_Group::draw_group_box() const {
   if (!box()->rectangular)
     if (parent()) parent()->draw_group_box();
@@ -481,13 +482,6 @@ void Fl_Group::draw() {
       if (w.visible() && w.type() < FL_WINDOW &&
 	  fl_not_clipped(w.x(), w.y(), w.w(), w.h()))
 	w.draw_n_clip();
-    }
-    if (parent() && parent()->type() == FL_TABS) {
-      Fl_Tabs* t = (Fl_Tabs*)parent();
-      int H = t->tab_height();
-      fl_clip(t->x(), t->y()+(H>=0?H:0), t->w(), t->h()-(H>=0?H:-H));
-      t->draw_box();
-      fl_pop_clip();
     }
     draw_group_box();
     draw_label();
@@ -568,5 +562,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.33 1999/10/13 08:34:09 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.34 1999/10/13 16:04:03 vincent Exp $".
 //
