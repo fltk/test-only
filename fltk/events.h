@@ -1,5 +1,5 @@
 //
-// "$Id: events.h,v 1.3 2002/12/15 10:42:49 spitzak Exp $"
+// "$Id: events.h,v 1.4 2003/01/14 06:51:01 spitzak Exp $"
 //
 // Event types and data. A Widget::handle() method needs this.
 //
@@ -41,20 +41,20 @@ enum {
   UNFOCUS	= 7,
   KEY		= 8,
   KEYUP		= 9,
-  MOVE		= 10,
-  SHORTCUT	= 11,
-  ACTIVATE	= 12,
+  FOCUS_CHANGE	= 10,
+  MOVE		= 11,
+  SHORTCUT	= 12,
   DEACTIVATE	= 13,
-  SHOW		= 14,
+  ACTIVATE	= 14,
   HIDE		= 15,
-  MOUSEWHEEL	= 16,
+  SHOW		= 16,
   PASTE		= 17,
-  DND_ENTER	= 18,
-  DND_DRAG	= 19,
-  DND_LEAVE	= 20,
-  DND_RELEASE	= 21,
-  FOCUS_CHANGE	= 22,
-  TIMEOUT	= 23,
+  TIMEOUT	= 18,
+  MOUSEWHEEL	= 19,
+  DND_ENTER	= 20,
+  DND_DRAG	= 21,
+  DND_LEAVE	= 22,
+  DND_RELEASE	= 23,
   TOOLTIP	= 24
 };
 

@@ -1,7 +1,7 @@
 dnl -*- sh -*-
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.106 2003/01/05 07:40:27 spitzak Exp $"
+dnl "$Id: configure.in,v 1.107 2003/01/14 06:51:01 spitzak Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -167,7 +167,8 @@ if test x$enable_shared = xyes; then
             fi
 	    ;;
 	Linux* | *BSD*)
-            DSOCOMMAND="\$(CXX) -Wl,-soname,\$@ \$(LDLIBS) -shared -fPIC $DEBUGFLAG -o"
+#            DSOCOMMAND="\$(CXX) -Wl,-soname,\$@ \$(LDLIBS) -shared -fPIC $DEBUGFLAG -o"
+            DSOCOMMAND="\$(CXX) \$(LDLIBS) -shared -fPIC $DEBUGFLAG -o"
 	    if test "$libdir" != "/usr/lib"; then
 		    DSOLINK="-Wl,-rpath,$libdir"
             fi
@@ -902,5 +903,5 @@ dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.106 2003/01/05 07:40:27 spitzak Exp $".
+dnl End of "$Id: configure.in,v 1.107 2003/01/14 06:51:01 spitzak Exp $".
 dnl

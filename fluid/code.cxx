@@ -1,5 +1,5 @@
 //
-// "$Id: code.cxx,v 1.20 2002/12/10 02:00:32 easysw Exp $"
+// "$Id: code.cxx,v 1.21 2003/01/14 06:51:02 spitzak Exp $"
 //
 // Code output routines for the Fast Light Tool Kit (FLTK).
 //
@@ -165,7 +165,7 @@ void write_cstring(const char *w, int length) {
     case '\f': c = 'f'; goto QUOTED;
     case '\r': c = 'r'; goto QUOTED;
     case '\"':
-    case '\'':
+    //case '\'':
     case '\\':
     QUOTED:
       if (linelength >= 77) {fputs("\\\n",code_file); linelength = 0;}
@@ -326,5 +326,5 @@ void FluidType::write_code() {
 }
 
 //
-// End of "$Id: code.cxx,v 1.20 2002/12/10 02:00:32 easysw Exp $".
+// End of "$Id: code.cxx,v 1.21 2003/01/14 06:51:02 spitzak Exp $".
 //

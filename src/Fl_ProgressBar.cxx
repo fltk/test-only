@@ -13,7 +13,7 @@ ProgressBar::ProgressBar(int x, int y, int w, int h, const char *lbl)
   mShowPct = true; 
   box(DOWN_BOX);
   selection_color(BLUE);
-  setcolor(WHITE);
+  color(WHITE);
   textcolor(RED);
 }
 

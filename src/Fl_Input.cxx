@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.78 2002/12/18 08:34:21 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.79 2003/01/14 06:51:02 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -994,6 +994,11 @@ bool Input::handle_key() {
     position(i+1);
     return 1;
 
+  case 'u': // Clear the field
+    if (key_is_shortcut()) return true;
+    position(size(), 0);
+    return cut();
+
   case 'v':
     if (!ctrl && key_is_shortcut()) return true;
     paste(*this,true);
@@ -1312,5 +1317,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.78 2002/12/18 08:34:21 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.79 2003/01/14 06:51:02 spitzak Exp $".
 //

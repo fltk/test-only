@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.135 2002/12/18 08:34:22 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.136 2003/01/14 06:51:02 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -382,13 +382,15 @@ int MWindow::find_selected(int mx, int my) {
     int leading = int(this->leading()); // +2 ?
     int x=0; int y=0; int w=this->w(); int h=this->h(); box()->inset(x,y,w,h);
     if (mx < x || mx >= w) return -1;
+    int lasti = -1; // last visible one
     for (int i = 0; i < children; i++) {
       Widget* widget = get_widget(i);
-      if (!widget->visible()) continue;
-      y += widget->height()+leading;
-      if (y > my) return i;
+      if (!widget->visible()) continue; // skip if not visible
+      y += widget->height()+leading; // find bottom edge
+      if (y > my) return i; // if mouse above that edge, we found it
+      lasti = i; // remember last visible one
     }
-    return children-1;
+    return lasti; // if mouse off bottom, return last visible one
   }
 }
 
@@ -412,19 +414,22 @@ enum {INITIAL_STATE = 0,// no mouse up or down since popup() called
 };
 
 // scroll so item i is visible on screen, return true if it moves
+#define BORDER 2
 int MWindow::autoscroll(int i) {
   if (is_menubar || i < 0) return 0;
-  int Y = y()+ypos(i);
-  if (Y <= y()) {
-    Y = y()-Y+10;
+  // figure out where the item is on the screen:
+  int Y = ypos(i);
+  // figure out where new top of menu should be:
+  if (y()+Y <= screenInfo().y) {
+    Y = -Y+BORDER;
   } else {
     Widget* widget = get_widget(i);
-    Y = Y+widget->height()+int(leading())-h()-y();
-    if (Y < 0) return 0;
-    Y = -Y-10;
+    Y += widget->height()+int(leading());
+    if (y()+Y >= screenInfo().h) Y = screenInfo().h-Y-BORDER;
+    else return 0;
   }
-  MWindow::position(x(), y()+Y);
-  // y(y()+Y); // don't wait for response from X
+  // move it to that new position:
+  MWindow::position(x(), Y);
   return 1;
 }
 
@@ -774,5 +779,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.135 2002/12/18 08:34:22 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.136 2003/01/14 06:51:02 spitzak Exp $".
 //

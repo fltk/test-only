@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.cxx,v 1.22 2002/12/10 02:00:28 easysw Exp $"
+// "$Id: Fl_Gl_Choice.cxx,v 1.23 2003/01/14 06:51:01 spitzak Exp $"
 //
 // OpenGL visual selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,7 @@
 #include "GlChoice.h"
 #include <fltk/visual.h>
 #include <stdlib.h>
+
 using namespace fltk;
 
 static GlChoice* first;
@@ -213,5 +214,5 @@ void fltk::delete_gl_context(GLContext context) {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.cxx,v 1.22 2002/12/10 02:00:28 easysw Exp $".
+// End of "$Id: Fl_Gl_Choice.cxx,v 1.23 2003/01/14 06:51:01 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.44 2003/01/05 07:40:27 spitzak Exp $"
+# "$Id: makeinclude.in,v 1.45 2003/01/14 06:51:01 spitzak Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -91,7 +91,8 @@ GLDEMOS		= @GLDEMOS@
 THREADS		= @THREADS@
 
 # Name of FLUID executable we install
-FLUID		= @FLUID@$(EXEEXT)
+#FLUID		= @FLUID@$(EXEEXT)
+FLUID		= fluid$(EXEEXT)
 
 # Possible steps after linking...
 POSTBUILD	= @POSTBUILD@
@@ -132,5 +133,5 @@ CAT3EXT		= @CAT3EXT@
 	mv t.z $@
 
 #
-# End of "$Id: makeinclude.in,v 1.44 2003/01/05 07:40:27 spitzak Exp $".
+# End of "$Id: makeinclude.in,v 1.45 2003/01/14 06:51:01 spitzak Exp $".
 #

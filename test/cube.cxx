@@ -1,5 +1,5 @@
 //
-// "$Id: cube.cxx,v 1.17 2002/12/10 02:01:04 easysw Exp $"
+// "$Id: cube.cxx,v 1.18 2003/01/14 06:51:02 spitzak Exp $"
 //
 // Another forms test program for the Fast Light Tool Kit (FLTK).
 //
@@ -26,31 +26,33 @@
 //
 
 #include <config.h>
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/Fl_Box.h>
-#include <fltk/Fl_Button.h>
-#include <fltk/Fl_Radio_Light_Button.h>
-#include <fltk/Fl_Slider.h>
+#include <fltk/run.h>
+#include <fltk/Window.h>
+#include <fltk/Box.h>
+#include <fltk/Button.h>
+#include <fltk/RadioLightButton.h>
+#include <fltk/Slider.h>
 #include <stdlib.h>
 
+using namespace fltk;
+
 #if !HAVE_GL
-class cube_box : public Fl_Box {
+class cube_box : public Box {
 public:	
   double lasttime;
   int wire;
   double size;
   double speed;
   cube_box(int x,int y,int w,int h,const char *l=0)
-    :Fl_Box(FL_DOWN_BOX,x,y,w,h,l){
+    :Box(DOWN_BOX,x,y,w,h,l){
       label("This demo does\nnot work without GL");
   }
 };
 #else
-#include <fltk/Fl_Gl_Window.h>
+#include <fltk/GlWindow.h>
 #include <fltk/gl.h>
 
-class cube_box : public Fl_Gl_Window {
+class cube_box : public GlWindow {
   void draw();
 public:
   double lasttime;
@@ -58,7 +60,7 @@ public:
   double size;
   double speed;
   cube_box(int x,int y,int w,int h,const char *l=0)
-    : Fl_Gl_Window(x,y,w,h,l) {lasttime = 0.0;}
+    : GlWindow(x,y,w,h,l) {lasttime = 0.0;}
 };
 
 /* The cube definition */
@@ -118,29 +120,29 @@ void cube_box::draw() {
 
 #endif
 
-Fl_Window *form;
-Fl_Slider *speed, *size;
-Fl_Button *button, *wire, *flat;
+Window *form;
+Slider *speed, *size;
+Button *button, *wire, *flat;
 cube_box *cube, *cube2;
 
-static void exit_cb(Fl_Widget* w, void*) {exit(0);}
+static void exit_cb(Widget* w, void*) {exit(0);}
 
 void makeform(const char *name) {
-  form = new Fl_Window(510+390,390,name);
-  (void) new Fl_Box(FL_DOWN_BOX,20,20,350,350,"");
-  (void) new Fl_Box(FL_DOWN_BOX,510,20,350,350,"");
-  speed = new Fl_Slider(390,90,40,220,"Speed");
-  size = new Fl_Slider(450,90,40,220,"Size");
-  wire = new Fl_Radio_Light_Button(390,20,100,30,"Wire");
-  flat = new Fl_Radio_Light_Button(390,50,100,30,"Flat");
-  button = new Fl_Button(390,340,100,30,"Exit");
+  form = new Window(510+390,390,name);
+  form->begin();
+//  (void) new Box(DOWN_BOX,20,20,350,350,"");
+//  (void) new Box(DOWN_BOX,510,20,350,350,"");
+  speed = new Slider(390,90,40,220,"Speed");
+  size = new Slider(450,90,40,220,"Size");
+  wire = new RadioLightButton(390,20,100,30,"Wire");
+  flat = new RadioLightButton(390,50,100,30,"Flat");
+  button = new Button(390,340,100,30,"Exit");
   button->callback(exit_cb);
-  cube = new cube_box(23,23,344,344, 0);
+  cube  = new cube_box(23,23,344,344, 0);
   cube2 = new cube_box(513,23,344,344, 0);
-  Fl_Box *b = new Fl_Box(FL_NO_BOX,cube->x(),size->y(),
-			 cube->w(),size->h(),0);
-  form->resizable(b);
-  b->hide();
+//  Box *b = new Box(NO_BOX,cube->x(),size->y(), cube->w(),size->h(),0);
+//  form->resizable(b);
+//  b->hide();
   form->end();
 }
 #include <stdio.h>
@@ -158,21 +160,21 @@ int main(int argc, char **argv) {
   Fl::run();
 #else
   for (;form->visible();) {
-    if (form->iconic() || !speed->value())
-      Fl::wait();	// waits until something happens
-    else
-      Fl::check();	// returns immediately
-    cube->wire = wire->value();
-    cube2->wire = !wire->value();
-    cube->size = cube2->size = size->value();
-    cube->speed = cube2->speed = speed->value();
-    cube->redraw();
-    cube2->redraw();
+	if (form->iconic() || !speed->value())
+	  wait();	// waits until something happens
+	else
+	  check();	// returns immediately
+	cube->wire = wire->value();
+	cube2->wire = !wire->value();
+	cube->size = cube2->size = size->value();
+	cube->speed = cube2->speed = speed->value();
+	cube->redraw();
+	cube2->redraw();
   }
 #endif
   return 0;
 }
 
 //
-// End of "$Id: cube.cxx,v 1.17 2002/12/10 02:01:04 easysw Exp $".
+// End of "$Id: cube.cxx,v 1.18 2003/01/14 06:51:02 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.64 2002/12/22 05:30:22 easysw Exp $"
+# "$Id: Makefile,v 1.65 2003/01/14 06:51:02 spitzak Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -228,12 +228,17 @@ image_file$(EXEEXT): image_file.o ../lib/$(LIBPREFIX)fltk_images$(LIBSUFFIX)
 	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKIMG) $(LDLIBS) -o $@
 	$(POSTBUILD) $@ ../FL/mac.r
 
+help$(EXEEXT): help.o ../lib/$(LIBPREFIX)fltk_images$(LIBSUFFIX)
+	echo Linking $@...
+	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTKIMG) $(LDLIBS) -o $@
+	$(POSTBUILD) $@ ../FL/mac.r
+
 
 install:
 
 
 #
-# End of "$Id: Makefile,v 1.64 2002/12/22 05:30:22 easysw Exp $".
+# End of "$Id: Makefile,v 1.65 2003/01/14 06:51:02 spitzak Exp $".
 #
 # DO NOT DELETE
 
