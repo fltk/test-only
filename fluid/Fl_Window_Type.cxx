@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.27 2000/05/30 07:42:05 bill Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.28 2000/06/12 14:26:17 vincent Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -352,7 +352,10 @@ void redraw_overlays() {
 extern Fl_Menu_Bar* menubar;
 
 void toggle_overlays(Fl_Widget *,void *) {
-  menubar->find("&Edit/Show Overlays")->value(overlays_invisible);
+  if (overlays_invisible)
+    menubar->find("&Edit/Show Overlays")->set_value();
+  else
+    menubar->find("&Edit/Show Overlays")->clear_value();
   if (overlaybutton) overlaybutton->value(overlays_invisible);
   overlays_invisible = !overlays_invisible;
   for (Fl_Type *o=Fl_Type::first; o; o=o->next)
@@ -639,5 +642,5 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.27 2000/05/30 07:42:05 bill Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.28 2000/06/12 14:26:17 vincent Exp $".
 //
