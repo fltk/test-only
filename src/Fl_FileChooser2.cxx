@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.21 2003/01/26 06:33:10 spitzak Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.22 2003/11/09 02:26:30 spitzak Exp $"
 //
 // More FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -118,7 +118,9 @@ FileChooser::directory(const char *d)	// I - Directory to change to
     if (*dirptr == '/' || *dirptr == '\\')
     {
       // Need to quote the slash first, and then add it to the menu...
-      *pathptr++ = '\\';
+      // Quoting is no longer needed with new menu->add() code, which
+      // was changed to match fltk1.1
+      // *pathptr++ = '\\';
       *pathptr++ = '/';
       *pathptr   = '\0';
       dirptr ++;
@@ -669,5 +671,5 @@ FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.21 2003/01/26 06:33:10 spitzak Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.22 2003/11/09 02:26:30 spitzak Exp $".
 //
