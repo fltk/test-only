@@ -1,5 +1,5 @@
 //
-// "$Id: fltk_theme_win32.cxx,v 1.5 2004/07/27 07:03:08 spitzak Exp $"
+// "$Id: fltk_theme_win32.cxx,v 1.6 2004/07/29 09:07:55 spitzak Exp $"
 //
 // Copyright 2004 Bill Spitzak and others.
 //
@@ -158,13 +158,13 @@ extern "C" bool fltk_theme() {
     SystemParametersInfoW(SPI_GETNONCLIENTMETRICS, sncm, &ncm, SPIF_SENDCHANGE);
 
     Font* font; float size;
-    unsigned short *name;
+    wchar_t *name;
     const int BUFLEN = 1024;
     char buffer[BUFLEN];
 
     // get font info for regular widgets from LOGFONT structure
-    name = (unsigned short *)ncm.lfMessageFont.lfFaceName;
-    utf8from16(buffer, BUFLEN, name, wcslen(US2WC(name)));
+    name = ncm.lfMessageFont.lfFaceName;
+    utf8fromwc(buffer, BUFLEN, name, wcslen(name));
     font = fltk::font(buffer,
                      (ncm.lfMessageFont.lfWeight >= 600 ? BOLD : 0) +
                      (ncm.lfMessageFont.lfItalic ? ITALIC : 0));
@@ -176,8 +176,8 @@ extern "C" bool fltk_theme() {
     Widget::default_style->textsize_ = size;
 
     // get font info for menu items from LOGFONT structure
-    name = (unsigned short *)ncm.lfMenuFont.lfFaceName;
-    utf8from16(buffer, BUFLEN, name, wcslen(US2WC(name)));
+    name = ncm.lfMenuFont.lfFaceName;
+    utf8fromwc(buffer, BUFLEN, name, wcslen(name));
     font = fltk::font(buffer,
                      (ncm.lfMenuFont.lfWeight >= 600 ? BOLD : 0) +
                      (ncm.lfMenuFont.lfItalic ? ITALIC : 0));
@@ -192,8 +192,8 @@ extern "C" bool fltk_theme() {
     }
 
     if ((style = Style::find("Tooltip"))) {
-      name = (unsigned short *)ncm.lfStatusFont.lfFaceName;
-      utf8from16(buffer, BUFLEN, name, wcslen(US2WC(name)));
+      name = ncm.lfStatusFont.lfFaceName;
+      utf8fromwc(buffer, BUFLEN, name, wcslen(name));
       // get font info for tooltips from LOGFONT structure
       font = fltk::font(buffer,
                        (ncm.lfStatusFont.lfWeight >= 600 ? BOLD : 0) +
@@ -265,5 +265,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: fltk_theme_win32.cxx,v 1.5 2004/07/27 07:03:08 spitzak Exp $".
+// End of "$Id: fltk_theme_win32.cxx,v 1.6 2004/07/29 09:07:55 spitzak Exp $".
 //

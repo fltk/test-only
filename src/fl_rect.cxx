@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.40 2004/06/23 07:17:19 spitzak Exp $"
+// "$Id: fl_rect.cxx,v 1.41 2004/07/29 09:07:54 spitzak Exp $"
 //
 // Non-path routines from draw.h that are used by the standard boxtypes
 // and thus are always linked into an fltk program.
@@ -65,7 +65,7 @@ void fltk::strokerect(int x, int y, int w, int h) {
   SetRect(&rect, x, y, x+w, y+h);
   FrameRect(&rect);
 #else
-#error
+# error
 #endif
 }
 
@@ -183,5 +183,5 @@ void fltk::drawpoint(float X, float Y) {
 /** \} */
 
 //
-// End of "$Id: fl_rect.cxx,v 1.40 2004/06/23 07:17:19 spitzak Exp $".
+// End of "$Id: fl_rect.cxx,v 1.41 2004/07/29 09:07:54 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.30 2004/07/27 07:03:08 spitzak Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.31 2004/07/29 09:07:54 spitzak Exp $"
 //
 // _WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -88,9 +88,9 @@ int Font::sizes(int*& sizep) {
   //cyPerInch = GetDeviceCaps(dc, LOGPIXELSY);
   //if (cyPerInch < 1) cyPerInch = 1;
   if (has_unicode()) {
-    unsigned short ucs[1024];
-    int ucslen = utf8to16(name_, strlen(name_), ucs, 1024);;
-    EnumFontFamiliesW(dc, (LPCWSTR)ucs, EnumSizeCb, 0);
+    wchar_t ucs[1024];
+    int ucslen = utf8towc(name_, strlen(name_), ucs, 1024);;
+    EnumFontFamiliesW(dc, ucs, EnumSizeCb, 0);
   } else {
     EnumFontFamiliesA(dc, name_, (FONTENUMPROCA)EnumSizeCb, 0);
   }
@@ -124,7 +124,7 @@ static int CALLBACK enumcbW(CONST LOGFONTW* lplf,
   // in order to match X!  I can't tell if each different encoding is
   // returned sepeartely or not.  This is what fltk 1.0 did:
   if (lplf->lfCharSet != ANSI_CHARSET) return 1;
-  const unsigned short *name = (const unsigned short*)(lplf->lfFaceName);
+  const wchar_t *name = lplf->lfFaceName;
   //const char *name = (const char*)(((ENUMLOGFONT *)lplf)->elfFullName);
 
   if (num_fonts >= array_size) {
@@ -134,9 +134,9 @@ static int CALLBACK enumcbW(CONST LOGFONTW* lplf,
   int attrib = 0;
 //    if (lplf->lfWeight > 400 || strstr(name, " Bold") == name+strlen(name)-5)
 //      attrib = BOLD;
-  int n = wcslen((LPCWSTR)name), count;
+  int n = wcslen(name), count;
   char buffer[1024];
-  utf8from16(buffer, 1024, name, wcslen((LPCWSTR)name));
+  utf8fromwc(buffer, 1024, name, wcslen(name));
   font_array[num_fonts++] = fl_make_font(buffer, attrib);
   return 1;
 }
@@ -179,5 +179,5 @@ int fltk::list_fonts(Font**& arrayp) {
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.30 2004/07/27 07:03:08 spitzak Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.31 2004/07/29 09:07:54 spitzak Exp $"
 //

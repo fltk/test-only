@@ -1,5 +1,5 @@
 //
-// "$Id: filename_list.cxx,v 1.22 2004/07/21 07:16:01 laza2000 Exp $"
+// "$Id: filename_list.cxx,v 1.23 2004/07/29 09:07:54 spitzak Exp $"
 //
 // Filename list routines for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,10 @@
 
 #include <config.h>
 #include <fltk/filename.h>
+#include <fltk/utf.h>
 #include <ctype.h>
+#include <string.h>
+#include <stdio.h>
 
 extern "C" {
 static int
@@ -95,5 +98,5 @@ int filename_list(const char *d, dirent ***list) {
 }
 
 //
-// End of "$Id: filename_list.cxx,v 1.22 2004/07/21 07:16:01 laza2000 Exp $".
+// End of "$Id: filename_list.cxx,v 1.23 2004/07/29 09:07:54 spitzak Exp $".
 //

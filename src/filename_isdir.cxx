@@ -1,5 +1,5 @@
 //
-// "$Id: filename_isdir.cxx,v 1.20 2004/07/27 07:03:07 spitzak Exp $"
+// "$Id: filename_isdir.cxx,v 1.21 2004/07/29 09:07:54 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -23,12 +23,13 @@
 
 #include <config.h>
 #include <fltk/filename.h>
+#include <fltk/utf.h>
 #include <sys/stat.h>
 #include <string.h>
+#include <stdio.h>
 #include <stdlib.h>
 #ifdef _WIN32
 #include <windows.h>
-#include <fltk/utf.h>
 #include <fltk/x.h>
 #endif
 
@@ -47,10 +48,10 @@ static bool fill_stat(const char *name, int new_op) {
   if (last_op!=new_op && strcmp(last_statname, name)==0) return last_result;
   strncpy(last_statname, name, FL_PATH_MAX-1);
   last_statname[FL_PATH_MAX-1] = 0;
-#if defined(_WIN32) || defined(__EMX__)
   char namebuf[FL_PATH_MAX];
   utf8tomb(name, strlen(name), namebuf, FL_PATH_MAX);
   name = namebuf;
+#if defined(_WIN32) || defined(__EMX__)
   // _WIN32 apparently thinks A: is not a directory, but A:/ is!
   char buffer[4];
   if (name[0] && name[1]==':' && name[2] == 0) {
@@ -88,5 +89,5 @@ long int filename_mtime(const char *name) {
 }
 
 //
-// End of "$Id: filename_isdir.cxx,v 1.20 2004/07/27 07:03:07 spitzak Exp $".
+// End of "$Id: filename_isdir.cxx,v 1.21 2004/07/29 09:07:54 spitzak Exp $".
 //

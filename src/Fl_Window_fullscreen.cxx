@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_fullscreen.cxx,v 1.24 2004/07/25 23:22:14 spitzak Exp $"
+// "$Id: Fl_Window_fullscreen.cxx,v 1.25 2004/07/29 09:07:53 spitzak Exp $"
 //
 // Fullscreen window support for the Fast Light Tool Kit (FLTK).
 //
@@ -179,7 +179,7 @@ void Window::fullscreen_off(int X,int Y,int W,int H) {
   You may turn off the window manager border before calling show() on
   the window the first time. On most window managers this means the
   user cannot move, iconize, or resize the window (unless your program
-   does it).
+  does it).
 */
 
 /*! bool Window::border() const
@@ -205,5 +205,5 @@ void Window::fullscreen_off(int X,int Y,int W,int H) {
   Returns true if set_override() has been called. */
 
 //
-// End of "$Id: Fl_Window_fullscreen.cxx,v 1.24 2004/07/25 23:22:14 spitzak Exp $".
+// End of "$Id: Fl_Window_fullscreen.cxx,v 1.25 2004/07/29 09:07:53 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 /*
- * "$Id: utf.h,v 1.6 2004/07/27 07:03:07 spitzak Exp $"
+ * "$Id: utf.h,v 1.7 2004/07/29 09:07:52 spitzak Exp $"
  *
  * UTF-8 functions used by fltk
  *
@@ -27,6 +27,7 @@
 #define fltk_utf_h
 
 #include "FL_API.h"
+#include <stdlib.h>
 
 /*! \addtogroup utilities
   \{ */
@@ -43,13 +44,14 @@ FL_API int	utf8encode(unsigned, char*);
 FL_API const char* utf8fwd(const char*, const char* start, const char* end);
 FL_API const char* utf8back(const char*, const char* start, const char* end);
 
-FL_API unsigned	utf8to32(const char*, unsigned, unsigned*, unsigned);
-FL_API unsigned utf8to16(const char*, unsigned, unsigned short*, unsigned);
-FL_API unsigned utf8toa (const char*, unsigned, char*, unsigned);
+FL_API unsigned	utf8towc(const char*, unsigned, wchar_t*, unsigned);
 FL_API unsigned utf8tomb(const char*, unsigned, char*, unsigned);
-FL_API unsigned utf8from32(char*, unsigned, const unsigned*, unsigned);
-FL_API unsigned utf8from16(char*, unsigned, const unsigned short*, unsigned);
+FL_API unsigned utf8toa (const char*, unsigned, char*, unsigned);
+FL_API unsigned utf8fromwc(char*, unsigned, const wchar_t*, unsigned);
 FL_API unsigned utf8frommb(char*, unsigned, const char*, unsigned);
+FL_API unsigned utf8froma (char*, unsigned, const char*, unsigned);
+FL_API int utf8locale();
+FL_API int utf8test(const char*, unsigned);
 
 #ifdef __cplusplus
 }

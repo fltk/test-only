@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileBrowser.cxx,v 1.18 2003/01/26 06:33:10 spitzak Exp $"
+// "$Id: Fl_FileBrowser.cxx,v 1.19 2004/07/29 09:07:53 spitzak Exp $"
 //
 // FileBrowser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -39,6 +39,7 @@
 #include <fltk/draw.h>
 #include <fltk/filename.h>
 #include <fltk/string.h>
+#include <fltk/utf.h>
 #include <stdlib.h>
 #include <config.h>
 
@@ -392,10 +393,14 @@ FileBrowser::load(const char *directory)// I - Directory to load
       if (strcmp(files[i]->d_name, ".") != 0 &&
           strcmp(files[i]->d_name, "..") != 0)
       {
-	snprintf(filename, sizeof(filename), "%s/%s", directory_, files[i]->d_name);
+        char namebuf[FL_PATH_MAX];
+        memset(namebuf, 0, sizeof(namebuf));
+        utf8frommb(namebuf, sizeof(namebuf), files[i]->d_name, strlen(files[i]->d_name));
+	snprintf(filename, sizeof(filename), "%s/%s", directory_, namebuf);
 
-	if (filename_isdir(filename))
-          add(files[i]->d_name, FileIcon::find(filename));
+	if (filename_isdir(filename)) {
+          add(namebuf, FileIcon::find(filename));
+        }
       }
 
     for (i = 0; i < num_files; i ++)
@@ -403,11 +408,15 @@ FileBrowser::load(const char *directory)// I - Directory to load
       if (strcmp(files[i]->d_name, ".") != 0 &&
           strcmp(files[i]->d_name, "..") != 0)
       {
-	snprintf(filename, sizeof(filename), "%s/%s", directory_, files[i]->d_name);
+        char namebuf[FL_PATH_MAX];
+        memset(namebuf, 0, sizeof(namebuf));
+        utf8frommb(namebuf, sizeof(namebuf), files[i]->d_name, strlen(files[i]->d_name));
+	snprintf(filename, sizeof(filename), "%s/%s", directory_, namebuf);
 
 	if (!filename_isdir(filename) &&
-            filename_match(files[i]->d_name, pattern_))
-          add(files[i]->d_name, FileIcon::find(filename));
+            filename_match(namebuf, pattern_)) {
+          add(namebuf, FileIcon::find(filename));
+        }
       }
 
       free(files[i]);
@@ -439,5 +448,5 @@ FileBrowser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_FileBrowser.cxx,v 1.18 2003/01/26 06:33:10 spitzak Exp $".
+// End of "$Id: Fl_FileBrowser.cxx,v 1.19 2004/07/29 09:07:53 spitzak Exp $".
 //

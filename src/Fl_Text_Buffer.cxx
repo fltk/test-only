@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Buffer.cxx,v 1.18 2004/07/27 07:03:07 spitzak Exp $"
+// "$Id: Fl_Text_Buffer.cxx,v 1.19 2004/07/29 09:07:53 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -2262,14 +2262,10 @@ static int min( int i1, int i2 ) {
   return i1 <= i2 ? i1 : i2;
 }
 
-#ifdef _WIN32
-# include <fltk/x.h> // For US2WC
-#endif
-
 int
 TextBuffer::insertfile(const char *name, int pos, int buflen) {
   FILE *fp;  int r;
-#ifdef _WIN32
+#if 0 // not clear if this should take filename or utf-8?
   char buf[1024];
   utf8tomb(name, strlen(name), buf, 1024);
   name = buf;
@@ -2292,7 +2288,7 @@ TextBuffer::insertfile(const char *name, int pos, int buflen) {
 int
 TextBuffer::outputfile(const char *name, int start, int end, int buflen) {
   FILE *fp;
-#ifdef _WIN32
+#if 0 // not clear if this should take filename or utf-8?
   char buf[1024];
   utf8tomb(name, strlen(name), buf, 1024);
   name = buf;
@@ -2313,5 +2309,5 @@ TextBuffer::outputfile(const char *name, int start, int end, int buflen) {
 
 
 //
-// End of "$Id: Fl_Text_Buffer.cxx,v 1.18 2004/07/27 07:03:07 spitzak Exp $".
+// End of "$Id: Fl_Text_Buffer.cxx,v 1.19 2004/07/29 09:07:53 spitzak Exp $".
 //

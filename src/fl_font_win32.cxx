@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.59 2004/07/27 10:41:26 laza2000 Exp $"
+// "$Id: fl_font_win32.cxx,v 1.60 2004/07/29 09:07:54 spitzak Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -107,7 +107,7 @@ FontSize::FontSize(const char* name, int attr, int size, int charset) {
   lf.lfQuality        = DEFAULT_QUALITY;
 
   int ucslen;
-  ucslen = utf8to16(name, strlen(name), (unsigned short*)lf.lfFaceName, LF_FACESIZE);
+  ucslen = utf8towc(name, strlen(name), lf.lfFaceName, LF_FACESIZE);
   lf.lfFaceName[ucslen] = 0;
 
   // This one does exactly same thing as CreateFont,
@@ -257,10 +257,10 @@ float fltk::getwidth(const char* text, int n) {
   SelectObject(dc, current->font);
   // I think win32 has a fractional version of this:
   int ucslen; 
-  static unsigned short ucs[UCS_BUFSIZE];
+  wchar_t ucs[UCS_BUFSIZE];
   while(n > 0) {
-    ucslen = utf8to16(text, n, ucs, UCS_BUFSIZE);
-    GetTextExtentPoint32W(dc, (LPCWSTR)ucs, ucslen, &size);		
+    ucslen = utf8towc(text, n, ucs, UCS_BUFSIZE);
+    GetTextExtentPoint32W(dc, ucs, ucslen, &size);		
     ret += size.cx;
     n -= UCS_BUFSIZE;
     text += UCS_BUFSIZE;
@@ -272,15 +272,15 @@ void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
   SetTextColor(dc, current_xpixel);
   HGDIOBJ oldfont = SelectObject(dc, current->font);
 
-  static unsigned short ucs[UCS_BUFSIZE];
+  wchar_t ucs[UCS_BUFSIZE];
   while(n > 0) {
-    int ucslen = utf8to16(text, n, ucs, UCS_BUFSIZE);
-    TextOutW(dc, int(floorf(x+.5f)), int(floorf(y+.5f)), (LPCWSTR)ucs, ucslen);
+    int ucslen = utf8towc(text, n, ucs, UCS_BUFSIZE);
+    TextOutW(dc, int(floorf(x+.5f)), int(floorf(y+.5f)), ucs, ucslen);
     n -= UCS_BUFSIZE;
     text += UCS_BUFSIZE;
     if(n > 0) {
       SIZE size;
-      GetTextExtentPoint32W(dc, (LPCWSTR)ucs, ucslen, &size);
+      GetTextExtentPoint32W(dc, ucs, ucslen, &size);
       x += size.cx;
     }
   }
@@ -289,5 +289,5 @@ void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.59 2004/07/27 10:41:26 laza2000 Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.60 2004/07/29 09:07:54 spitzak Exp $".
 //

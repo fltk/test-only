@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.26 2004/07/27 07:03:08 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.27 2004/07/29 09:07:54 spitzak Exp $"
 //
 // Copyright 2004 Bill Spitzak and others.
 //
@@ -212,16 +212,20 @@ const char* fltk::Font::current_name() {
 float fltk::getascent()  { return current->font->ascent; }
 float fltk::getdescent() { return current->font->descent; }
 
-// Unfortunatly the Xft UTF-8 interface does not do what I want, which
-// is to print something for error sequences. So instead we decode into
-// 32-bit characters and draw that. For the vast majority of text this
-// uses the 8-bit interface:
+// Unfortunatly the Xft UTF-8 interface barfs on error sequences and
+// does not print anything. This is very annoying. Alternative version
+// here will user our converter to wchar_t and print that, but I would
+// rather see Xft fixed.
 
 float fltk::getwidth(const char *str, int n) {
-  unsigned buffer[1024];
-  int count = utf8to32(str, n, buffer, 1024);
   XGlyphInfo i;
+#if 1
+  XftTextExtentsUtf8(xdisplay, current->font, (XftChar8*)str, n, &i);
+#else
+  wchar_t buffer[1024];
+  int count = utf8towc(str, n, buffer, 1024);
   XftTextExtents32(xdisplay, current->font, (XftChar32*)buffer, count, &i);
+#endif
   return i.xOff;
 }
 
@@ -267,11 +271,17 @@ void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
   color.color.blue  = b*0x101;
   color.color.alpha = 0xffff;
 
-  unsigned buffer[1024];
-  int count = utf8to32(str, n, buffer, 1024);
+#if 1
+  XftDrawStringUtf8(xft_gc, &color, current->font,
+		    int(floorf(x+.5f)), int(floorf(y+.5f)),	
+		    (XftChar8*)str, n);
+#else
+  wchar_t buffer[1024];
+  int count = utf8towc(str, n, buffer, 1024);
   XftDrawString32(xft_gc, &color, current->font,
 		  int(floorf(x+.5f)), int(floorf(y+.5f)),	
 		  (XftChar32*)buffer, count);
+#endif
 }
 
 void fltk::stop_drawing(XWindow window) {
@@ -440,5 +450,5 @@ int fltk::Font::encodings(const char**& arrayp) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.26 2004/07/27 07:03:08 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.27 2004/07/29 09:07:54 spitzak Exp $"
 //

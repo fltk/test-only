@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.35 2004/05/18 15:53:40 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.36 2004/07/29 09:07:53 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -219,13 +219,15 @@ Divider::Divider() : Widget(0,0,0,0) {
 void Divider::draw() {
   setcolor(GRAY33);
   if (w() > h()) {
-    drawline(0, 0, w()-1, 0);
+    int y = (h()-1)/2;
+    drawline(0, y, w()-1, y);
     setcolor(WHITE);
-    drawline(0, 1, w()-1, 1);
+    drawline(0, y+1, w()-1, y+1);
   } else if (h()) {
-    drawline(0, 0, 0, h()-1);
+    int x = (w()-1)/2;
+    drawline(x, 0, x, h()-1);
     setcolor(WHITE);
-    drawline(1, 0, 1, h()-1);
+    drawline(x+1, 0, x+1, h()-1);
   }
 }
 

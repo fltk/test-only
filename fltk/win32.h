@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.27 2004/07/27 07:03:07 spitzak Exp $"
+// "$Id: win32.h,v 1.28 2004/07/29 09:07:53 spitzak Exp $"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -73,13 +73,6 @@ extern pfCreateFontIndirectW __CreateFontIndirectW;
 extern pfGetTextMetricsW     __GetTextMetricsW;
 
 }; /* extern "C" */
-
-#ifdef __MINGW32__
-// MinGW cannot convert ushort to wchar_t ...
-# define US2WC(x) ((wchar_t*)x)
-#else
-# define US2WC(x) (x)
-#endif
 
 namespace fltk {
 
@@ -157,5 +150,5 @@ extern FL_API HCURSOR default_cursor;
 #endif
 
 //
-// End of "$Id: win32.h,v 1.27 2004/07/27 07:03:07 spitzak Exp $".
+// End of "$Id: win32.h,v 1.28 2004/07/29 09:07:53 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: symbols.cxx,v 1.13 2004/05/15 20:52:47 spitzak Exp $"
+// "$Id: symbols.cxx,v 1.14 2004/07/29 09:07:55 spitzak Exp $"
 //
 // Symbol test program for the Fast Light Tool Kit (FLTK).
 //
@@ -64,13 +64,16 @@ void slider_cb(Widget* w, void* v) {
   browser->redraw();
 }
 
+const char* labels[] = {"result", "command", 0};
+
 int main(int argc, char** argv) {
-  Window window(170,600);
+  Window window(220,600);
   window.begin();
   const int sliderh = 25;
   Browser browser(0,0,window.w(),window.h()-sliderh);
-  int widths[] = {48,0};
+  int widths[] = {58,-1,0};
   browser.column_widths(widths);
+  browser.column_labels(labels);
   browser.color(GRAY85);
   window.resizable(browser);
   Slider slider(0, browser.h(), window.w(), sliderh);

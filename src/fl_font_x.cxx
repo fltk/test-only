@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_x.cxx,v 1.23 2004/07/15 16:25:09 spitzak Exp $"
+// "$Id: fl_font_x.cxx,v 1.24 2004/07/29 09:07:54 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -120,7 +120,7 @@ FontSize::~FontSize() {
 // I see no sign of "FontSets" working. Instead this supposedly will
 // draw the correct letters if you happen to pick an iso10646-1 font.
 
-// This is similar to utf8to16() but works with the big-endian-only
+// This is similar to utf8towc() but works with the big-endian-only
 // structure X seems to want, and does not bother with surrogate
 // pairs.  If all characters are 1 byte or errors it returns
 // null. Otherwise it converts it to 16-bit and returns the allocated
@@ -756,5 +756,5 @@ fltk::Font* const fltk::ZAPF_DINGBATS		= &(fonts[15].f);
 fltk::Font* fltk::font(int i) {return &(fonts[i%16].f);}
 
 //
-// End of "$Id: fl_font_x.cxx,v 1.23 2004/07/15 16:25:09 spitzak Exp $"
+// End of "$Id: fl_font_x.cxx,v 1.24 2004/07/29 09:07:54 spitzak Exp $"
 //

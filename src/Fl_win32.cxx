@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.225 2004/07/28 19:06:05 laza2000 Exp $"
+// "$Id: Fl_win32.cxx,v 1.226 2004/07/29 09:07:53 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -670,16 +670,16 @@ static void pasteA(Widget& receiver, char* txt) {
 }
 
 /* Handle CF_UNICODETEXT paste */
-static void pasteW(Widget& receiver, unsigned short* ucs) {
+static void pasteW(Widget& receiver, wchar_t* ucs) {
   static char* previous_buffer = 0;
   static int previous_length = 0;
-  int ucslen = wcslen(US2WC(ucs));
-  int len = utf8from16(previous_buffer, previous_length, ucs, ucslen);
+  int ucslen = wcslen(ucs);
+  int len = utf8fromwc(previous_buffer, previous_length, ucs, ucslen);
   if (len >= previous_length) {
     delete[] previous_buffer;
     previous_length = len+1;
     previous_buffer = new char[previous_length];
-    len = utf8from16(previous_buffer, previous_length, ucs, ucslen);
+    len = utf8fromwc(previous_buffer, previous_length, ucs, ucslen);
   }
   e_text = previous_buffer;
   // strip the CRLF pairs: ($%$#@^)
@@ -709,7 +709,7 @@ void fltk::paste(Widget &receiver, bool clipboard) {
     HANDLE h;
     h = GetClipboardData(CF_UNICODETEXT);
     if (h) {
-      pasteW(receiver, (unsigned short*)GlobalLock(h));
+      pasteW(receiver, (wchar_t*)GlobalLock(h));
       GlobalUnlock(h);
       goto DONEPASTE;
     }
@@ -729,12 +729,12 @@ DONEPASTE:
 // this block is usually handed to Windows and Windows deletes it.
 HANDLE fl_global_selection(int clipboard) {
   //printf("fl_global_selection(%d)\n", clipboard);
-  int n = utf8to16(selection_buffer[clipboard],
+  int n = utf8towc(selection_buffer[clipboard],
 		   selection_length[clipboard],
 		   0, 0);
-  HANDLE h = GlobalAlloc(GHND, sizeof(unsigned short) * (n+1));
+  HANDLE h = GlobalAlloc(GHND, sizeof(wchar_t) * (n+1));
   LPWSTR p = (LPWSTR)GlobalLock(h);
-  utf8to16(selection_buffer[clipboard],
+  utf8towc(selection_buffer[clipboard],
 	   selection_length[clipboard],
 	   p, n+1);
   GlobalUnlock(h);
@@ -889,7 +889,7 @@ public:
     fmt.cfFormat = CF_UNICODETEXT;
     // if it is ASCII text, send an PASTE with that text
     if ( data->GetData( &fmt, &medium )==S_OK ) {
-      pasteW(*target, (unsigned short*)GlobalLock( medium.hGlobal ));
+      pasteW(*target, (wchar_t*)GlobalLock( medium.hGlobal ));
       GlobalUnlock( medium.hGlobal );
       ReleaseStgMedium( &medium );
       SetForegroundWindow( hwnd );
@@ -924,19 +924,19 @@ public:
       for ( i=0; i<nf; i++ ) nn += DragQueryFileA( hdrop, i, 0, 0 );
       nn += nf;
       if (has_unicode()) {
-        unsigned short *buffer = (unsigned short*)malloc( (nn+1) * sizeof(unsigned short) );
+	wchar_t *buffer = new wchar_t[nn+1];
 	unsigned short *dst = buffer;
 	for ( i=0; i<nf; i++ ) {
-	  n = DragQueryFileW( hdrop, i, US2WC(dst), nn );
+	  n = DragQueryFileW( hdrop, i, dst, nn );
 	  dst += n;
 	  if ( i<nf-1 ) *dst++ = '\n';
 	}
 	*dst = 0;
 	pasteW(*target, buffer);
-	free(buffer);
+	delete[] buffer;
       } else {
-        char* buffer = (char*)malloc(nn+1);
-        e_length = nn;
+	char* buffer = new char[nn+1];
+	e_length = nn;
 	char *dst = e_text = buffer;
 	for ( i=0; i<nf; i++ ) {
 	  n = DragQueryFileA( hdrop, i, dst, nn );
@@ -945,7 +945,7 @@ public:
 	}
 	*dst = 0;
 	target->handle(PASTE);
-	free(buffer);
+	delete[] buffer;
       }
       e_length = 0;
       ReleaseStgMedium( &medium );
@@ -1699,11 +1699,11 @@ void CreatedWindow::create(Window* window) {
   const char *name = window->label();
 
   int ucslen = 0;
-  static unsigned short ucs_name[1024];
-  if (name && *name) ucslen = utf8to16(name, strlen(name), ucs_name, 1024);
+  static wchar_t ucs_name[1024];
+  if (name && *name) ucslen = utf8towc(name, strlen(name), ucs_name, 1024);
 	
   x->xid = __CreateWindowExW(styleEx,
-                             L"fltk", (LPCWSTR)ucs_name, style,
+                             L"fltk", ucs_name, style,
 			     xp, yp, window->w()+dw, window->h()+dh,
 			     parent,
 			     NULL, // menu
@@ -1827,9 +1827,9 @@ void Window::label(const char *name,const char *iname) {
   if (i && !parent()) {
     if (!name) name = "";
     int ucslen;
-    static unsigned short ucs[1024];
-    ucslen = utf8to16(name, strlen(name), ucs, 1024);
-    __SetWindowTextW(i->xid, (LPCWSTR)ucs);
+    static wchar_t ucs[1024];
+    ucslen = utf8towc(name, strlen(name), ucs, 1024);
+    __SetWindowTextW(i->xid, ucs);
     // if (!iname) iname = filename_name(name);
     // should do something with iname here, it should label the taskbar icon
   }
@@ -2026,6 +2026,8 @@ extern "C" {
 static inline void CVT2ANSI(LPCWSTR src, char dst[], int dstlen) {
   // WAS: Should this use GetACP() instead of CP_ACP?
   // ML: I think it does same thing internally?
+  // WAS: apparently this call does not null-terminate, even though
+  // msdn documentation claims it does.
   int len = 0;
   if (src && *src)
     len = WideCharToMultiByte(CP_ACP, 0, src, wcslen(src), dst, dstlen-1, NULL, NULL); 
@@ -2126,5 +2128,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.225 2004/07/28 19:06:05 laza2000 Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.226 2004/07/29 09:07:53 spitzak Exp $".
 //

@@ -96,7 +96,6 @@ scandir (const char *dir, struct dirent ***namelist,
       dsize = &d->d_name[_D_ALLOC_NAMLEN (d)] - (char *) d;
       v[i] = (struct dirent *) malloc (dsize);
       if (v[i] == NULL) goto lose;
-
       memcpy (v[i++], d, dsize);
     }
 
