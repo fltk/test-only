@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Box.cxx,v 1.24 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Box.cxx,v 1.25 2002/10/04 07:48:13 spitzak Exp $"
 //
 // Box widget for the Fast Light Tool Kit (FLTK).
 //
@@ -22,12 +22,6 @@
 //
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
-
-// In fltk2 the only difference between Fl_Box and Fl_Widget is that
-// the box type defaults to FL_NO_BOX and there is a constructor that
-// sets the box type. Also the drawing function does a special hack
-// to do nothing if the widget is invisible, to avoid breaking old
-// programs (they should hide() the widget instead!)
 
 #include <fltk/Fl_Widget.h>
 #include <fltk/Fl_Box.h>
@@ -69,5 +63,5 @@ void Fl_Box::draw() {
 }
 
 //
-// End of "$Id: Fl_Box.cxx,v 1.24 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Box.cxx,v 1.25 2002/10/04 07:48:13 spitzak Exp $".
 //

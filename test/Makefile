@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.56 2002/02/10 22:57:49 spitzak Exp $"
+# "$Id: Makefile,v 1.57 2002/10/04 07:48:16 spitzak Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -101,6 +101,10 @@ include makedepend
 
 clean:
 	-@ rm -f $(ALL) *.exe jpeg_image *.o core *~
+	-@ for file in *.fl; do\
+		rm `basename $${file} .fl`.cxx 2> /dev/null; \
+		rm `basename $${file} .fl`.h 2> /dev/null; \
+	done
 
 install:
 
@@ -111,5 +115,5 @@ install_shared:
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.56 2002/02/10 22:57:49 spitzak Exp $".
+# End of "$Id: Makefile,v 1.57 2002/10/04 07:48:16 spitzak Exp $".
 #

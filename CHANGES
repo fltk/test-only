@@ -2422,3 +2422,26 @@ programs.
 
 More fixes so tooltips don't reappear when a menu is dismissed.
 
+////////////////////////////////////////////////////////////////
+
+Middle & right mouse button click on scrollbar arrows jumps to that
+end.
+
+Child window handling assummed that if you destroyed an Fl_Window and
+made a different one that the new one would have a different memory
+address. On Windows 2000 this was not always true (probably due to a
+improved memory allocator) and the result is that modal dialogs would
+often not appear. Fixed so the destroy() of a window will also
+destroy() any windows that are child_of() it. This will also
+replicate Windows behavior on X: child windows go away rather than
+becoming unparented.
+
+Navigation, especially inside an Fl_Tabs, is fixed. This is done by
+making FL_KEY do navigation rather than FL_SHORTCUT.
+
+Changes so Fl_List does not have to check for illegal indexes in
+child() and children() methods. This makes them much easier to
+implement. Instead the calling code insures that such indexes are
+never sent.
+
+////////////////////////////////////////////////////////////////

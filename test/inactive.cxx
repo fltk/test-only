@@ -71,7 +71,7 @@ int main (int argc, char **argv) {
         o->label_type(FL_SHADOW_LABEL);
         o->label_size(38);
       }
-       {Fl_Value_Output* o = new Fl_Value_Output(230, 93, 135, 33, "value:");
+       {Fl_Value_Input* o = new Fl_Value_Input(230, 93, 135, 33, "value:");
         o->text_font(fl_fonts+5);
         o->text_color((Fl_Color)4);
         o->text_size(24);
@@ -98,5 +98,5 @@ int main (int argc, char **argv) {
     o->end();
   }
   w->show(argc, argv);
-  return Fl::run();
+  return  Fl::run();
 }

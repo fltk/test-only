@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.61 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.62 2002/10/04 07:48:14 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -143,6 +143,11 @@ int Fl_Scrollbar::handle(int event) {
       return Fl_Slider::handle(event, X,Y,W,H);
     }
     handle_push();
+    // middle/right click on arrows jumps to that end:
+    if (Fl::event_button()>1) {
+      if (which_part==UP_ARROW) handle_drag(vertical()?maximum():minimum());
+      else if (which_part==DOWN_ARROW) handle_drag(vertical()?minimum():maximum());
+    }
     goto J1;
   case FL_DRAG:
     if (which_pushed==SLIDER) return Fl_Slider::handle(event, X,Y,W,H);
@@ -263,5 +268,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.61 2002/09/16 00:29:06 spitzak Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.62 2002/10/04 07:48:14 spitzak Exp $".
 //

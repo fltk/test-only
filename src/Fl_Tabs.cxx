@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.57 2002/09/23 07:15:22 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.58 2002/10/04 07:48:14 spitzak Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -142,11 +142,14 @@ int Fl_Tabs::handle(int event) {
     }
     // otherwise this indicates that somebody is trying to give focus to this
     switch (navigation_key()) {
-    default:
-      //if (focus() < 0) break; // stay on the tab
-      // else fall through...
     case FL_Left:
     case FL_Up:
+      if (tab_height() < 0) goto GOTO_TABS; else goto GOTO_CONTENTS;
+    case FL_Right:
+    case FL_Down:
+      if (tab_height() < 0) goto GOTO_CONTENTS; else goto GOTO_TABS;
+    default:
+    GOTO_CONTENTS:
       // Try to give the contents the focus. Also preserve a return value
       // of 2 (which indicates the contents have a text field):
       if (selected) {
@@ -156,9 +159,8 @@ int Fl_Tabs::handle(int event) {
 	  return n;
 	}
       }
-    case FL_Right:
-    case FL_Down:
-      // moving right moves focus to the tabs.
+    GOTO_TABS:
+      focus(-1);
       return true;
     }
 
@@ -201,45 +203,49 @@ int Fl_Tabs::handle(int event) {
     return 1;}
 
   case FL_KEY:
-    switch (Fl::event_key()) {
-    case ' ':
-    case FL_Right:
-      break;
-    case FL_BackSpace:
-    case FL_Left:
-      backwards = 1;
-      break;
-    default:
-      return 0;
-    }
-  MOVE:
-    for (i = children()-1; i>0; i--) if (child(i)->visible()) break;
-    if (backwards) {i = i ? i-1 : children()-1;}
-    else {i++; if (i >= children()) i = 0;}
-    value(child(i)); do_callback();
-    return 1;
-
-  case FL_SHORTCUT:
-    if (Fl::event_key()==FL_Tab && Fl::event_state(FL_CTRL)) {
-      backwards = Fl::event_state(FL_SHIFT);
-      goto MOVE;
-    }
-    if (!selected) return 0;
-    if (selected->send(event)) return 1;
-    if (!contains(Fl::focus())) return 0;
+    if (Fl::focus()==this) {
+      switch (Fl::event_key()) {
+      case ' ':
+      case FL_Right:
+	goto MOVE;
+      case FL_BackSpace:
+      case FL_Left:
+	backwards = 1;
+      MOVE:
+	for (i = children()-1; i>0; i--) if (child(i)->visible()) break;
+	if (backwards) {i = i ? i-1 : children()-1;}
+	else {i++; if (i >= children()) i = 0;}
+	value(child(i)); do_callback();
+	return 1;
+      }
+    }      
     switch (navigation_key()) {
     case FL_Right:
     case FL_Down:
+      if (tab_height()<0) goto UP_CASE;
+    DOWN_CASE:
       if (focus() < 0 && selected) return selected->take_focus();
       else return 0;
     case FL_Left:
     case FL_Up:
+      if (tab_height()<0) goto DOWN_CASE;
+    UP_CASE:
       if (focus() >= 0) {Fl::focus(this); return 1;}
       else return 0;
     default:
       return 0;
     }
-  }  
+    break;
+
+  // This makes ctrl+tab move between tabs when the focus is on a
+  // widget that is not inside the tabs:
+  case FL_SHORTCUT:
+    if (Fl::event_key() == FL_Tab && Fl::event_state(FL_CTRL)) {
+      backwards = Fl::event_state(FL_SHIFT);
+      goto MOVE;
+    }
+    break;
+  }
 
   if (selected) return selected->send(event);
   return 0;
@@ -418,5 +424,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.57 2002/09/23 07:15:22 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.58 2002/10/04 07:48:14 spitzak Exp $".
 //

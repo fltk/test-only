@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.71 2002/09/16 00:29:06 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.72 2002/10/04 07:48:14 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -939,7 +939,7 @@ bool Fl_Input::handle_key() {
 
   case FL_Enter:
   case FL_KP_Enter:
-    if (key_is_shortcut()) return true;
+    // if (key_is_shortcut()) return true;
     if (when() & FL_WHEN_ENTER_KEY) {
       position(size(), 0);
       maybe_do_callback();
@@ -949,8 +949,8 @@ bool Fl_Input::handle_key() {
     return replace(position(), mark(), '\n');
 
   case FL_Tab:
-    if (type() < MULTILINE || ctrl || shift) return false;
-    return replace(position(), mark(), Fl::event_text(), 1);
+    /*if (type() < MULTILINE || ctrl || shift)*/ return false;
+    //return replace(position(), mark(), Fl::event_text(), 1);
 
   case 'k': // Emacs clear-to-end-of-line
     if (key_is_shortcut()) return true;
@@ -1086,7 +1086,7 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
       break;
     }
 #else
-    if (Fl::event() == FL_KEY || Fl::event() == FL_SHORTCUT) {
+    if (Fl::event() == FL_KEY) {
       position(size(),0);
     } else {
       position(position(), mark());
@@ -1281,5 +1281,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.71 2002/09/16 00:29:06 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.72 2002/10/04 07:48:14 spitzak Exp $".
 //

@@ -75,5 +75,5 @@ er should not go into fits echoing resizes back and forth!");
     o->end();
   }
   w->show(argc, argv);
-  return Fl::run();
+  return  Fl::run();
 }

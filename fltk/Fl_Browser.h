@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.h,v 1.7 2002/01/25 10:10:00 spitzak Exp $"
+// "$Id: Fl_Browser.h,v 1.8 2002/10/04 07:48:13 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -144,6 +144,7 @@ private:
   void unset_mark(int mark);  // makes mark have illegal value
   bool is_set(int mark);  // false if unset_mark was called
   void damage_item(int mark); // make this item redraw
+  int siblings; // # of children of parent of HERE item
 
   // For each mark:
   unsigned char item_level[NUMMARKS]; // depth in hierarchy of the item
@@ -165,5 +166,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser.h,v 1.7 2002/01/25 10:10:00 spitzak Exp $".
+// End of "$Id: Fl_Browser.h,v 1.8 2002/10/04 07:48:13 spitzak Exp $".
 //

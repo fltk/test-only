@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.88 2002/09/18 05:51:46 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.89 2002/10/04 07:48:15 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -183,6 +183,7 @@ int Fl_Window::handle(int event) {
     if (flags()&FL_MODAL) Fl::modal(0, false);
     if (i) XUnmapWindow(fl_display, i->xid);
     break;
+
   }
 
   int ret = Fl_Group::handle(event); if (ret) return ret;
@@ -346,7 +347,7 @@ void Fl_Window::destroy() {
   // recursively remove any subwindows:
   for (Fl_X *x1 = Fl_X::first; x1;) {
     Fl_Window* subwindow = x1->window;
-    if (subwindow->window() == this) {
+    if (subwindow->window() == this || subwindow->child_of() == this) {
       subwindow->destroy();
       x1 = Fl_X::first;
     } else x1 = x1->next;
@@ -367,5 +368,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.88 2002/09/18 05:51:46 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.89 2002/10/04 07:48:15 spitzak Exp $".
 //

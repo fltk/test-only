@@ -3,9 +3,8 @@
 #include "image_file.h"
 #include <stdio.h>
 #include <fltk/fl_file_chooser.h>
-#include <fltk/Fl_Tiled_Image.h>
 
-Fl_Window *window=(Fl_Window *)0;
+Fl_Window* window;
 
 #include <fltk/Fl_Shared_Image.h>
 static const unsigned char datas_coucou[4328] = {
@@ -212,11 +211,10 @@ static const unsigned char datas_coucou[4328] = {
 152,119,117,63,208,9,86,248,223,33,250,169,183,253,236,176,15,223,56,142,245,
 63,29,34,171,173,78,153,43,170,0,0,0,0,73,69,78,68,174,66,96,130};
 
-Fl_Value_Slider *slider=(Fl_Value_Slider *)0;
+Fl_Value_Slider* slider;
 
 static void cb_slider(Fl_Value_Slider* o, void*) {
   Fl_Shared_Image::set_cache_size((int)o->value()*1024);
-
 }
 static const unsigned char datas_testimg[5756] = {
 255,216,255,224,0,16,74,70,73,70,0,1,1,0,0,1,0,1,0,0,255,219,0,67,0,8,6,6,
@@ -499,46 +497,46 @@ static void cb_Load(Fl_Button*, void*) {
   im->measure(w, h);
   image_window->size(w, h);
   image_window->show();
-
 }
 
-Fl_Window *browser_window=(Fl_Window *)0;
+Fl_Window* browser_window;
 
-Fl_Browser *browser=(Fl_Browser *)0;
+Fl_Browser* browser;
 
-Fl_Window *image_window=(Fl_Window *)0;
+Fl_Window* image_window;
 
-Fl_Box *image_box=(Fl_Box *)0;
+Fl_Box* image_box;
 
 int main (int argc, char **argv) {
 
   Fl_Window* w;
   Fl_Shared_Image::set_root_directory("images");
-   {  Fl_Window* o = window = new Fl_Window(660, 405, "The background is a BMP file");
-    o->image(new Fl_Tiled_Image(Fl_BMP_Image::get("ulon.bmp")));
+   {Fl_Window* o = window = new Fl_Window(660, 405, "The background is a BMP file");
+    o->image(Fl_BMP_Image::get("ulon.bmp"));
     o->box(FL_NO_BOX);
-    o->align(FL_ALIGN_INSIDE); // need to fix it so this is not necessary!
-     {    Fl_Box* o = new Fl_Box(23, 158, 352, 197, "tiled GIF image loaded from disk");
-      o->image(new Fl_Tiled_Image(Fl_GIF_Image::get("coucou.gif")));
+    o->align(32);
+     {Fl_Box* o = new Fl_Box(23, 158, 352, 197, "tiled GIF image loaded from disk");
+      o->image(Fl_GIF_Image::get("coucou.gif"));
       o->label_font(fl_fonts+1);
       o->label_type(FL_SHADOW_LABEL);
       o->label_color((Fl_Color)3);
+      o->align(32);
     }
-     {    Fl_Box* o = new Fl_Box(100, 23, 170, 102, "PNG image with datas included in code");
-      o->image(new Fl_Tiled_Image(Fl_PNG_Image::get("coucou.png", datas_coucou)));
+     {Fl_Box* o = new Fl_Box(100, 23, 170, 102, "PNG image with datas included in code");
+      o->image(Fl_PNG_Image::get("coucou.png", datas_coucou));
       o->label_font(fl_fonts+1);
       o->label_type(FL_SHADOW_LABEL);
       o->label_color((Fl_Color)3);
+      o->align(32);
     }
-     {    Fl_Box* o = new Fl_Box(408, 16, 134, 109, "XPM image loaded from disk");
+     {Fl_Box* o = new Fl_Box(408, 16, 134, 109, "XPM image loaded from disk");
       o->image(Fl_XPM_Image::get("../porsche.xpm"));
       o->label_font(fl_fonts+1);
       o->label_type(FL_SHADOW_LABEL);
       o->label_color((Fl_Color)3);
       o->deactivate();
     }
-     {    Fl_Value_Slider* o = slider = new Fl_Value_Slider(40, 368, 288, 22, "Size of the image cache in kilo pixels (0 for unlimited)");
-      o->type(5);
+     {Fl_Value_Slider* o = slider = new Fl_Value_Slider(40, 368, 288, 22, "Size of the image cache in kilo pixels (0 for unlimited)");
       o->label_font(fl_fonts+1);
       o->label_type(FL_SHADOW_LABEL);
       o->label_color((Fl_Color)3);
@@ -546,38 +544,39 @@ int main (int argc, char **argv) {
       o->step(1);
       o->callback((Fl_Callback*)cb_slider);
     }
-     {    Fl_Box* o = new Fl_Box(395, 195, 230, 150, "JPEG image stored in the executable");
+     {Fl_Box* o = new Fl_Box(395, 195, 230, 150, "JPEG image stored in the executable");
       o->image(Fl_JPEG_Image::get("testimg.jpg", datas_testimg));
       o->label_font(fl_fonts+1);
       o->label_type(FL_SHADOW_LABEL);
       o->label_color((Fl_Color)3);
+      o->align(32);
     }
-     {    Fl_Button* o = new Fl_Button(510, 15, 135, 30, "Load an image ...");
+     {Fl_Button* o = new Fl_Button(510, 15, 135, 30, "Load an image ...");
       o->callback((Fl_Callback*)cb_Load);
     }
     o->end();
     o->resizable(o);
   }
-   {  Fl_Window* o = browser_window = new Fl_Window(255, 150, "Image in the cache");
-     {    Fl_Browser* o = browser = new Fl_Browser(0, 0, 255, 115); o->begin();
+   {Fl_Window* o = browser_window = new Fl_Window(255, 150, "Image in the cache");
+     {Fl_Browser* o = browser = new Fl_Browser(0, 0, 255, 115); o->begin();
       o->end();
     }
-     {    Fl_Box* o = new Fl_Box(0, 115, 165, 20, "Italic : out of the cache");
+     {Fl_Box* o = new Fl_Box(0, 115, 165, 20, "Italic : out of the cache");
       o->align(133|FL_ALIGN_INSIDE);
     }
-     {    Fl_Box* o = new Fl_Box(0, 130, 205, 20, "Grey : just loaded or unloaded");
+     {Fl_Box* o = new Fl_Box(0, 130, 205, 20, "Grey : just loaded or unloaded");
       o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
     }
     o->end();
   }
-   {  Fl_Window* o = image_window = new Fl_Window(115, 100);
+   {Fl_Window* o = image_window = new Fl_Window(115, 100);
     w = o;
-     {    Fl_Box* o = image_box = new Fl_Box(0, 0, 115, 100);
+     {Fl_Box* o = image_box = new Fl_Box(0, 0, 115, 100);
       o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
     }
     o->end();
   }
   window->show();
   w->show(argc, argv);
-  return Fl::run();
+  return  Fl::run();
 }

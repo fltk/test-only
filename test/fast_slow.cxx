@@ -43,5 +43,5 @@ ero.");
     o->resizable(o);
   }
   w->show(argc, argv);
-  return Fl::run();
+  return  Fl::run();
 }

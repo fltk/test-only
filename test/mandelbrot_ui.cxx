@@ -65,8 +65,6 @@ void Drawing_Window::make_window() {
       o->when(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE);
     }
      {Fl_Slider* o = new Fl_Slider(80, 38, 160, 20, "brightness:");
-      o->type(Fl_Slider::HORIZONTAL_NICE);
-      o->box(FL_FLAT_BOX);
       o->step(1);
       o->callback((Fl_Callback*)cb_brightness);
       o->align(FL_ALIGN_LEFT);
@@ -78,8 +76,6 @@ void Drawing_Window::make_window() {
       o->align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
     }
      {Fl_Slider* o = new Fl_Slider(80, 60, 160, 20, "iterations:");
-      o->type(Fl_Slider::HORIZONTAL_NICE);
-      o->box(FL_FLAT_BOX);
       o->step(1);
       o->callback((Fl_Callback*)cb_iterations);
       o->align(FL_ALIGN_LEFT);

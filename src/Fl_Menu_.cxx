@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.43 2002/09/24 07:35:19 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.44 2002/10/04 07:48:14 spitzak Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -45,7 +45,7 @@ int Fl_List::children(const Fl_Menu_* menu, const int* indexes, int level) {
   Fl_Group* group = (Fl_Group*)menu;
   while (level--) {
     int i = *indexes++;
-    if (i < 0 || i >= group->children()) return -1;
+    //if (i < 0 || i >= group->children()) return -1;
     Fl_Widget* widget = group->child(i);
     if (!widget->is_group()) return -1;
     group = (Fl_Group*)widget;
@@ -57,7 +57,7 @@ Fl_Widget* Fl_List::child(const Fl_Menu_* menu, const int* indexes,int level) {
   Fl_Group* group = (Fl_Group*)menu;
   for (;;) {
     int i = *indexes++;
-    if (i < 0 || i >= group->children()) return 0;
+    //if (i < 0 || i >= group->children()) return 0;
     Fl_Widget* widget = group->child(i);
     if (!level--) return widget;
     if (!widget->is_group()) return 0;
@@ -148,6 +148,7 @@ bool Fl_Menu_::focus(const int* indexes, int level) {
   int i = indexes[0];
   bool ret = false;
   if (value() != i) {value(i); ret = true;}
+  if (i < 0 || i >= children()) {item(0); return ret;}
   item(child(i));
   int j = 1;
   while (item() && item()->is_group()) {
@@ -165,6 +166,7 @@ bool Fl_Menu_::focus(const int* indexes, int level) {
 // value for item() is returned.
 Fl_Widget* Fl_Menu_::get_focus() {
   int i = value();
+  if (i < 0 || i >= children()) {item(0); return 0;}
   item(child(i));
   while (item() && item()->is_group()) {
     Fl_Group* group = (Fl_Group*)item();
@@ -223,5 +225,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.43 2002/09/24 07:35:19 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.44 2002/10/04 07:48:14 spitzak Exp $"
 //

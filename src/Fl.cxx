@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.153 2002/09/24 07:35:19 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.154 2002/10/04 07:48:13 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -604,7 +604,10 @@ bool Fl::handle(int event, Fl_Window* window)
     // try sending keystroke to the focus:
     to = focus();
     if (modal_ && !modal_->contains(to)) to = modal_;
-    if (to && to->send(event)) return true;
+    while (to) {
+      if (to->send(event)) return true;
+      to = to->parent();
+    }
     // try sending a shortcut to the window:
     if (handle(FL_SHORTCUT, window)) return true;
     // Try using upper-case instead of lower-case for letter shortcuts:
@@ -642,5 +645,5 @@ bool Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.153 2002/09/24 07:35:19 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.154 2002/10/04 07:48:13 spitzak Exp $".
 //

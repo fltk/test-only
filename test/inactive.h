@@ -13,6 +13,6 @@ extern Fl_Group* the_group;
 #include <fltk/Fl_Input_Browser.h>
 #include <fltk/Fl_Item.h>
 #include <fltk/Fl_Box.h>
-#include <fltk/Fl_Value_Output.h>
+#include <fltk/Fl_Value_Input.h>
 #include <fltk/Fl_Scrollbar.h>
 #endif

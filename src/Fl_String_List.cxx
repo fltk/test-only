@@ -2,20 +2,25 @@
 #include <fltk/Fl_Item.h>
 
 int Fl_String_List::children(const Fl_Menu_* group, const int* indexes, int level) {
-  int n = Fl_List::children(group, 0,0);
+  // Get number of widget children:
+  int n = Fl_List::children(group, 0,0);	
   if (!level) {
+    // top level has widgets + all strings
     return children_ + n;
   } else if (*indexes < n) {
+    // return children counts for widgets:
     return Fl_List::children(group, indexes, level);
   } else {
+    // the strings have no children:
     return -1;
   }
 }
 
 Fl_Widget* Fl_String_List::child(const Fl_Menu_* group, const int* indexes, int level) {
+  // Return children for any widgets:
   int n = *indexes - Fl_List::children(group, 0,0);
   if (n < 0) return Fl_List::child(group, indexes, level);
-  if (n >= children_) return 0;
+  // Construct reusable widget for string and return it:
   static Fl_Widget* widget;
   if (!widget) {
     Fl_Group::current(0);

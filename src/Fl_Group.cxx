@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.115 2002/09/24 07:35:19 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.116 2002/10/04 07:48:14 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -71,7 +71,7 @@ void Fl_Group::clear() {
     Fl_Widget*const* e = a+children_;
     // clear everything now, in case fl_fix_focus recursively calls us:
     children_ = 0;
-    focus_ = 0;
+    focus_ = -1;
     if (resizable_) resizable_ = this;
     // okay, now it is safe to destroy the children:
     while (e > a) {
@@ -195,14 +195,57 @@ int Fl_Group::handle(int event) {
     case FL_Down:
       for (i=0; i < numchildren; ++i)
 	if (child(i)->take_focus()) return true;
-      break;
+      return false;
     case FL_Left:
     case FL_Up:
       for (i = numchildren; i--;)
 	if (child(i)->take_focus()) return true;
-      break;
+      return false;
     }
-    return false;
+
+  case FL_DRAG:
+  case FL_RELEASE:
+  case FL_LEAVE:
+  case FL_DND_LEAVE:
+    // Ignore these. We handle them if the belowmouse of pushed widget
+    // has been set to this. Subclasses may do something with these.
+    // Definately do not pass them to child widgets!
+    break;
+
+  case FL_KEY: {
+    // keyboard navigation
+    if (!numchildren) break;
+    int key = navigation_key();
+    if (!key) break;
+    int previous = focus_;
+    if (previous < 0 || previous >= numchildren) previous = 0;
+    for (i = previous;;) {
+      if (key == FL_Left || key == FL_Up) {
+	if (i) --i;
+	else {
+	  if (parent()) return false;
+	  i = numchildren-1;
+	}
+      } else {
+	++i;
+	if (i >= numchildren) {
+	  if (parent()) return false;
+	  i = 0;
+	}
+      }
+      if (i == previous) {
+	Fl::focus(0);
+	return child(i)->take_focus();
+      }
+      if (key == FL_Down || key == FL_Up) {
+	// for up/down, the widgets have to overlap horizontally:
+	Fl_Widget* o = child(i);
+	Fl_Widget* p = child(previous);
+	if (o->x() >= p->x()+p->w() || o->x()+o->w() <= p->x()) continue;
+      }
+      if (child(i)->take_focus()) return true;
+    }
+    break;}
 
   case FL_PUSH:
   case FL_ENTER:
@@ -226,22 +269,9 @@ int Fl_Group::handle(int event) {
     }
     return Fl_Widget::handle(event);
 
-  case FL_DRAG:
-  case FL_RELEASE:
-  case FL_KEY:
-  case FL_LEAVE:
-  case FL_DND_LEAVE:
-    // Ignore these. We handle them if the belowmouse of pushed widget
-    // has been set to this. Subclasses may do something with these.
-    // Definately do not pass them to child widgets!
-    return false;
-
-  }
-
-  // Try to give all other events to every child, starting at focus:
-
-  if (numchildren) {
-    // Try to give to each child, starting at focus:
+  default: {
+    // Try to give all other events to every child, starting at focus:
+    if (!numchildren) break;
     int previous = focus_;
     if (previous < 0 || previous >= numchildren) previous = 0;
     for (i = previous;;) {
@@ -249,37 +279,8 @@ int Fl_Group::handle(int event) {
       if (++i >= numchildren) i = 0;
       if (i == previous) break;
     }
+    break;}
 
-    if (event == FL_SHORTCUT) {
-      // Try to do keyboard navigation for unused shortcut keys:
-      int key = navigation_key();
-      if (key) for (i = previous;;) {
-	if (key == FL_Left || key == FL_Up) {
-	  if (i) --i;
-	  else {
-	    if (parent()) return false;
-	    i = numchildren-1;
-	  }
-	} else {
-	  ++i;
-	  if (i >= numchildren) {
-	    if (parent()) return false;
-	    i = 0;
-	  }
-	}
-	if (i == previous) {
-	  Fl::focus(0);
-	  return child(i)->take_focus();
-	}
-	if (key == FL_Down || key == FL_Up) {
-	  // for up/down, the widgets have to overlap horizontally:
-	  Fl_Widget* o = child(i);
-	  Fl_Widget* p = child(previous);
-	  if (o->x() >= p->x()+p->w() || o->x()+o->w() <= p->x()) continue;
-	}
-	if (child(i)->take_focus()) return true;
-      }
-    }
   }
   return Fl_Widget::handle(event);
 }
@@ -587,5 +588,5 @@ void Fl_Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.115 2002/09/24 07:35:19 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.116 2002/10/04 07:48:14 spitzak Exp $".
 //

@@ -112,5 +112,5 @@ fault by calling size_range() on the window.");
   }
   // w->size_range(w->w()-w->resizable()->w(), w->h()-w->resizable()->h());
   w->show(argc, argv);
-  return Fl::run();
+  return  Fl::run();
 }

@@ -1,5 +1,5 @@
 //
-// "$Id: cmap.cxx,v 1.8 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: cmap.cxx,v 1.9 2002/10/04 07:48:15 spitzak Exp $"
 //
 // Colormap generation program for the Fast Light Tool Kit (FLTK).
 //
@@ -133,6 +133,33 @@ void background(uchar r, uchar g, uchar b) {
   }
 }
 
+/* Exact resulting percentages of the gray map entries:
+A 32 0.0
+B 33 0.0509803921569
+C 34 0.101960784314
+D 35 0.149019607843
+E 36 0.192156862745
+F 37 0.239215686275
+G 38 0.282352941176
+H 39 0.333333333333
+I 40 0.372549019608
+J 41 0.41568627451
+K 42 0.458823529412
+L 43 0.501960784314
+M 44 0.541176470588
+N 45 0.58431372549
+O 46 0.627450980392
+P 47 0.666666666667
+Q 48 0.709803921569
+R 49 0.752941176471
+S 50 0.796078431373
+T 51 0.835294117647
+U 52 0.878431372549
+V 53 0.917647058824
+W 54 0.960784313725
+X 55 1.0
+*/
+
 int main() {
   int i,r,g,b;
 #if 0
@@ -177,5 +204,5 @@ int main() {
 }
 
 //
-// End of "$Id: cmap.cxx,v 1.8 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: cmap.cxx,v 1.9 2002/10/04 07:48:15 spitzak Exp $".
 //

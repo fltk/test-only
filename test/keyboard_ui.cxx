@@ -536,5 +536,5 @@ Fl_Window* make_window() {
     o->end();
     o->resizable(o);
   }
-  return w;
+  return  w;
 }
