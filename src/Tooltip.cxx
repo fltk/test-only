@@ -53,18 +53,6 @@ public:
   // You have to destroy the window or it will not raise next time:
   void hide() {destroy();}
 #endif
-  int handle(int ev) {
-#if 0
-    if (ev==ENTER) {
-      // Entered tooltip window, hide tooltip 
-      // and add timeout to pop same tooltip again
-      recent_tooltip = 0;
-      hide();
-      fltk::add_timeout(Tooltip::delay(), tooltip_timeout);      
-    }
-#endif
-    return MenuWindow::handle(ev);
-  }
 };
 
 static Tooltip::Generator generator;
@@ -83,29 +71,16 @@ void TooltipBox::layout() {
   Rectangle r(rectangle);
   for (Widget* p = Tooltip::current(); p; p = p->parent()) r.move(p->x(), p->y());
 
-  // figure out the corner of the tooltip:
-  int ox = event_x_root()+10;
-  if (ox > r.r()-2) ox = r.r()-2;
-  int oy = event_y_root()+16;
-  if (oy > r.b()-2) oy = r.b()-2;
+  const Monitor& monitor = Monitor::find(event_x_root(),event_y_root());
 
-  // swap sides around so it is on-screen:
-  const Monitor& monitor = Monitor::find(ox, oy);
-  if (ox+ww > monitor.r()) {
-#if 0
-    ox = event_x_root()-3;
-    if (ox < r.x()+2) ox = r.x()+2;
-    ox -= ww;
-#else
-    ox = monitor.r()-ww;
-#endif
-  }
+  // figure out the corner of the tooltip:
+  int ox = event_x_root();
+  if (ox+ww > monitor.r()) ox = monitor.r()-ww;
   if (ox < monitor.x()) ox = monitor.x();
-  if (oy+hh > monitor.b()) {
-    oy = event_y_root()-3;
-    if (oy < r.y()+2) oy = r.y()+2;
-    oy -= hh;
-  }
+
+  int oy = event_y_root()+16;
+  if (oy < r.b()) oy = r.b();
+  if (oy+hh > monitor.b()) oy = r.y()-hh;
   if (oy < monitor.y()) oy = monitor.y();
 
   resize(ox, oy, ww, hh);
@@ -152,7 +127,7 @@ static void tooltip_timeout(void*) {
 // if you want the tooltip to reappear when the mouse moves back in)
 // call the fancier enter() below.
 void Tooltip::enter(Widget* w) {
-  if (w == ::window) return;
+  //if (w == ::window) return;
   // find the enclosing group with a tooltip:
   Widget* tw = w;
   for (;;) {
