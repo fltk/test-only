@@ -63,7 +63,7 @@ LIB32=link.exe -lib
 # PROP Output_Dir "fltk_opengl___Win32_Debug"
 # PROP Intermediate_Dir "fltk_opengl___Win32_Debug"
 # PROP Target_Dir ""
-# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ  /c
+# ADD BASE CPP /nologo /W3 /Gm /GX /ZI /Od /D "WIN32" /D "_DEBUG" /D "_MBCS" /D "_LIB" /YX /FD /GZ /c
 # ADD CPP /nologo /MTd /GR /GX /ZI /Od /I "." /I "..\.." /D "_POSIX_" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /FR"Debug/" /Fp"Debug/fltk_opengl.lib.pch" /YX /Fo"Debug/" /Fd"Debug/" /FD /c
 # ADD BASE RSC /l 0x41d /d "_DEBUG"
 # ADD RSC /l 0x41d /d "_DEBUG"
@@ -110,6 +110,10 @@ SOURCE=..\..\OpenGL\gl_start.cxx
 # Begin Source File
 
 SOURCE=..\..\OpenGL\GlChoice.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\fltk\GlWindow.h
 # End Source File
 # End Group
 # End Target
