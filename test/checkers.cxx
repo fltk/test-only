@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.12 1999/08/16 07:31:33 bill Exp $"
+// "$Id: checkers.cxx,v 1.13 1999/08/25 16:31:42 carl Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -1294,7 +1294,7 @@ Fl_Menu_Item menu[] = {
   {"Switch sides", 's', switch_cb},
   {"Undo", 'u', undo_cb, 0, FL_MENU_DIVIDER},
   {"Forced jumps rule", 'f', forced_cb, 0, FL_MENU_TOGGLE|FL_MENU_VALUE},
-  {"Debug", 'd', debug_cb, "d", FL_MENU_TOGGLE},
+  {"Debug", 'd', debug_cb, 0, FL_MENU_TOGGLE},
   {"Intelligence...", 'i', intel_cb, 0, FL_MENU_DIVIDER},
   {"Copyright", 'c', copyright_cb},
   {"Quit", 'q', quit_cb},
@@ -1304,7 +1304,7 @@ Fl_Menu_Item busymenu[] = {
   {"Stop", '.', stop_cb},
   {"Autoplay", 'a', autoplay_cb},
   {"Continue", 0, continue_cb},
-  {"Debug", 'd', debug_cb, "d", FL_MENU_TOGGLE},
+  {"Debug", 'd', debug_cb, 0, FL_MENU_TOGGLE},
   {"Intelligence...", 'i', intel_cb},
   {"Copyright", 'c', copyright_cb},
   {"Quit", 'q', quit_cb},
@@ -1365,5 +1365,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.12 1999/08/16 07:31:33 bill Exp $".
+// End of "$Id: checkers.cxx,v 1.13 1999/08/25 16:31:42 carl Exp $".
 //
