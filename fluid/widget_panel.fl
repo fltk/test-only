@@ -2,239 +2,239 @@
 version 2.00 
 header_name {.h} 
 code_name {.cxx} 
-gridx 10 
+gridx 5 
 gridy 5 
 snap 2
 Function {make_widget_panel()} {open
 } {
-  Fl_Window {} {open
-    xywh {376 98 387 470} resizable hotspot visible
+  Fl_Window {} {
+    xywh {376 98 370 460} resizable hotspot visible
   } {
     Fl_Input {} {
-      label {name:}
+      label {Name:}
       callback name_cb
       tooltip {The variable name which should be used for this widget}
-      xywh {90 10 220 20} when 1 box THIN_DOWN_BOX
+      xywh {80 10 220 20} when 1 box THIN_DOWN_BOX
     }
     Fl_Light_Button {} {
       label public
       callback name_public_cb
       tooltip {Determines whether the widget is is publicly accessible}
-      xywh {310 10 60 20} when 1 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {300 10 60 20} when 1 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
     }
     Fl_Input {} {
-      label {class:}
+      label {Class:}
       user_data 4
       callback subclass_cb
       tooltip {The class of this widget}
-      xywh {90 35 180 20} when 1 box THIN_DOWN_BOX
+      xywh {80 35 180 20} when 1 box THIN_DOWN_BOX
     }
     Fl_Choice {} {
       callback subtype_cb
       tooltip {The \\"type\\" which should be used for this widget}
-      xywh {270 35 100 20} box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {260 35 100 20} box THIN_UP_BOX fly_box THIN_UP_BOX
     } {}
     Fl_Input {} {
-      label {label:}
+      label {Label:}
       callback label_cb
       tooltip {The label which this widget should display}
-      xywh {90 60 280 20} when 1 box THIN_DOWN_BOX
+      xywh {80 60 280 20} when 1 box THIN_DOWN_BOX
     }
     Fl_Button {} {
       label {@-1<-}
       user_data FL_ALIGN_LEFT
       callback align_cb
       tooltip {Places label on the left of the widget}
-      xywh {270 80 20 20} type Toggle labeltype SYMBOL_LABEL labelcolor 8 box THIN_UP_BOX down_box THIN_DOWN_BOX fly_box THIN_UP_BOX down_labelcolor 1
+      xywh {260 80 20 20} type Toggle labeltype SYMBOL_LABEL box THIN_UP_BOX down_box THIN_DOWN_BOX fly_box THIN_UP_BOX down_labelcolor 1
     }
     Fl_Button {} {
       label {@-1->}
       user_data FL_ALIGN_RIGHT
       callback align_cb
       tooltip {Places label on the right of the widget}
-      xywh {290 80 20 20} type Toggle labeltype SYMBOL_LABEL labelcolor 8 box THIN_UP_BOX down_box THIN_DOWN_BOX fly_box THIN_UP_BOX down_labelcolor 1
+      xywh {280 80 20 20} type Toggle labeltype SYMBOL_LABEL box THIN_UP_BOX down_box THIN_DOWN_BOX fly_box THIN_UP_BOX down_labelcolor 1
     }
     Fl_Button {} {
       label {@-18}
       user_data FL_ALIGN_TOP
       callback align_cb
       tooltip {Places label on the top of the widget}
-      xywh {310 80 20 20} type Toggle labeltype SYMBOL_LABEL labelcolor 8 box THIN_UP_BOX down_box THIN_DOWN_BOX fly_box THIN_UP_BOX down_labelcolor 1
+      xywh {300 80 20 20} type Toggle labeltype SYMBOL_LABEL box THIN_UP_BOX down_box THIN_DOWN_BOX fly_box THIN_UP_BOX down_labelcolor 1
     }
     Fl_Button {} {
       label {@-12}
       user_data FL_ALIGN_BOTTOM
       callback align_cb
       tooltip {Places label on the bottom of the widget}
-      xywh {330 80 20 20} type Toggle labeltype SYMBOL_LABEL labelcolor 8 box THIN_UP_BOX down_box THIN_DOWN_BOX fly_box THIN_UP_BOX down_labelcolor 1
+      xywh {320 80 20 20} type Toggle labeltype SYMBOL_LABEL box THIN_UP_BOX down_box THIN_DOWN_BOX fly_box THIN_UP_BOX down_labelcolor 1
     }
     Fl_Button {} {
       label {@-3square}
       user_data FL_ALIGN_INSIDE
       callback align_cb
       tooltip {Places label inside the widget}
-      xywh {350 80 20 20} type Toggle labeltype SYMBOL_LABEL labelcolor 8 box THIN_UP_BOX down_box THIN_DOWN_BOX fly_box THIN_UP_BOX down_labelcolor 1
+      xywh {340 80 20 20} type Toggle labeltype SYMBOL_LABEL box THIN_UP_BOX down_box THIN_DOWN_BOX fly_box THIN_UP_BOX down_labelcolor 1
     }
     Fl_Button {} {
       label wrap
       user_data FL_ALIGN_WRAP
       callback align_cb
       tooltip {Determines whether the widget's label is \\"wrapped\\" across multiple lines in the widget}
-      xywh {140 80 50 20} type Toggle labelsize 12 box THIN_UP_BOX down_box THIN_DOWN_BOX fly_box THIN_UP_BOX down_labelcolor 1
+      xywh {130 80 50 20} type Toggle labelsize 12 box THIN_UP_BOX down_box THIN_DOWN_BOX fly_box THIN_UP_BOX down_labelcolor 1
     }
     Fl_Button {} {
       label clip
       user_data FL_ALIGN_CLIP
       callback align_cb
       tooltip {Determines whether the widget's label is \\"clipped\\" so that no part of it displays outside of the widget's borders}
-      xywh {90 80 50 20} type Toggle labelsize 12 box THIN_UP_BOX down_box THIN_DOWN_BOX fly_box THIN_UP_BOX down_labelcolor 1
+      xywh {80 80 50 20} type Toggle labelsize 12 box THIN_UP_BOX down_box THIN_DOWN_BOX fly_box THIN_UP_BOX down_labelcolor 1
     }
     Fl_Input {} {
-      label {xclass:}
+      label {X Class:}
       callback xclass_cb
       tooltip {The X class name which should be used for this widget}
-      xywh {90 105 280 20} when 1 box THIN_DOWN_BOX
+      xywh {80 105 280 20} when 1 box THIN_DOWN_BOX
     }
     Fl_Button {} {
-      label {shortcut:}
+      label {Shortcut:}
       callback shortcut_in_cb
       tooltip {Specifies the shortcut for the widget}
-      xywh {90 105 280 20} align 4 color 7 selection_color 7 box THIN_DOWN_BOX down_box THIN_DOWN_BOX fly_box THIN_DOWN_BOX
+      xywh {80 105 280 20} align 4 color 7 selection_color 7 box THIN_DOWN_BOX down_box THIN_DOWN_BOX fly_box THIN_DOWN_BOX
       code0 {\#include "Shortcut_Button.h"}
       class Shortcut_Button
     }
     Fl_Value_Input {} {
-      label {size:}
+      label {Size:}
       callback slider_size_cb
-      tooltip {???}
-      xywh {20 165 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
+      tooltip {The size of the scroller}
+      xywh {10 165 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
     }
     Fl_Value_Input {} {
-      label {minimum:}
+      label {Minimum:}
       callback min_cb
       tooltip {The minimum value for this valuator}
-      xywh {90 165 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
+      xywh {80 165 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
     }
     Fl_Value_Input {} {
-      label {maximum:}
+      label {Maximum:}
       callback max_cb
       tooltip {The maximum value for this valuator}
-      xywh {160 165 70 20} align 5 labelsize 10 box THIN_DOWN_BOX value 1
+      xywh {150 165 70 20} align 5 labelsize 10 box THIN_DOWN_BOX value 1
     }
     Fl_Value_Input {} {
-      label {step:}
+      label {Step:}
       callback step_cb
       tooltip {???}
-      xywh {230 165 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
+      xywh {220 165 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
     }
     Fl_Value_Input {} {
-      label {value:}
+      label {Value:}
       callback value_cb
       tooltip {The initial value (interger) of this widget}
-      xywh {300 165 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
+      xywh {290 165 70 20} align 5 labelsize 10 box THIN_DOWN_BOX
     }
     Fl_Group {} {
       callback propagate_load open
-      xywh {20 190 350 25} align 5
+      xywh {10 190 350 25} align 5
     } {
       Fl_Light_Button {} {
-        label {non modal}
+        label Nonmodal
         callback non_modal_cb
         tooltip {Determines whether the window is non-modal}
-        xywh {20 190 70 20} align 148 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {10 190 70 20} align 148 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
       Fl_Light_Button {} {
         label visible
         callback visible_cb
         tooltip {Determines whether the widget is initially visible}
-        xywh {90 190 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {80 190 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
       Fl_Light_Button {} {
-        label modal
+        label Modal
         callback modal_cb
         tooltip {Determines whether the window is modal}
-        xywh {90 190 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {80 190 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
       Fl_Light_Button {} {
         label active
         callback active_cb
         tooltip {Determines whether the widget is initially active (enabled)}
-        xywh {160 190 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {150 190 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
       Fl_Light_Button {} {
-        label border
-        callback border_cb selected
+        label Border
+        callback border_cb
         tooltip {Determines whether the window has a border}
-        xywh {160 190 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {150 190 70 20} labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
       Fl_Light_Button {} {
-        label resizable
+        label Resizable
         callback resizable_cb
         tooltip {Determines whether the widget is resizable}
-        xywh {230 190 70 20} when 1 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {220 190 70 20} when 1 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
       Fl_Light_Button {} {
-        label hotspot
+        label Hotspot
         callback hotspot_cb
         tooltip {Positions the window under this widget when shown.}
-        xywh {300 190 70 20} when 1 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+        xywh {290 190 70 20} when 1 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       }
     }
     Fl_Input {v_input[0]} {
-      label {extra code:}
+      label {Extra Code:}
       user_data 0
       callback v_input_cb
       tooltip {Extra code to be exectuted when the widget is created}
-      xywh {90 220 280 20} box THIN_DOWN_BOX
+      xywh {80 220 280 20} box THIN_DOWN_BOX
     }
     Fl_Input {v_input[1]} {
       user_data 1
       callback v_input_cb
       tooltip {Extra code to be exectuted when the widget is created}
-      xywh {90 240 280 20} box THIN_DOWN_BOX
+      xywh {80 240 280 20} box THIN_DOWN_BOX
     }
     Fl_Input {v_input[2]} {
       user_data 2
       callback v_input_cb
       tooltip {Extra code to be exectuted when the widget is created}
-      xywh {90 260 280 20} box THIN_DOWN_BOX
+      xywh {80 260 280 20} box THIN_DOWN_BOX
     }
     Fl_Input {v_input[3]} {
       user_data 3
       callback v_input_cb
       tooltip {Extra code to be exectuted when the widget is created}
-      xywh {90 280 280 20} box THIN_DOWN_BOX
+      xywh {80 280 280 20} box THIN_DOWN_BOX
     }
     Fl_Box callback_label {
-      label {callback:}
-      xywh {0 310 90 20} align 24
+      label {Callback:}
+      xywh {-10 310 90 20} align 24
     }
     Fl_Input {} {
       callback callback_cb
       tooltip {The name of the callback, or code body of the callback for the widget}
-      xywh {90 310 280 50} type Multiline box THIN_DOWN_BOX
+      xywh {80 310 280 50} type Multiline box THIN_DOWN_BOX
     }
     Fl_Box {} {
       label label
-      xywh {90 370 100 30} hide deactivate resizable
+      xywh {80 370 100 30} hide deactivate resizable
     }
     Fl_Input {} {
-      label {user data:}
+      label {User Data:}
       callback user_data_cb
       tooltip {User data for the widget (must be of the type below)}
-      xywh {90 370 170 20} box THIN_DOWN_BOX
+      xywh {80 370 140 20} box THIN_DOWN_BOX
     }
     Fl_Input {} {
-      label {type:}
+      label {Type:}
       callback user_data_type_cb
       tooltip {Type of the user data (must \\"long\\" or a pointer type)}
-      xywh {90 390 170 20} box THIN_DOWN_BOX
+      xywh {80 390 140 20} box THIN_DOWN_BOX
     }
     Fl_Choice {} {
-      label {when:}
+      label {When:}
       callback when_cb
       tooltip {Determines when the widget's callback is called}
-      xywh {270 370 100 20} align 5 when 0 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {260 370 100 20} when 0 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
       code0 {extern Fl_Menu_Item whenmenu[];}
       code1 {o->menu(whenmenu);}
     } {}
@@ -242,42 +242,42 @@ Function {make_widget_panel()} {open
       label {no change}
       callback when_button_cb
       tooltip {???}
-      xywh {270 390 100 20} when 0 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {260 390 100 20} when 0 labelsize 10 box THIN_UP_BOX fly_box THIN_UP_BOX
     }
     Fl_Group {} {open
-      xywh {10 425 360 35}
+      xywh {10 425 350 25}
     } {
       Fl_Light_Button overlaybutton {
         label {&Overlays}
         callback overlay_cb
         tooltip {Turns overlays (red outlines)  of the selected  widgets on or off}
-        xywh {20 425 90 35} selection_color 1
+        xywh {145 425 80 25} selection_color 1
         code0 {extern int overlays_invisible;}
         code1 {o->value(!overlays_invisible);}
       }
       Fl_Button {} {
         label Cancel
         callback cancel_cb
-        xywh {190 455 90 5} hide
+        xywh {180 450 90 0} hide
       }
       Fl_Return_Button {} {
         label Close
         callback ok_cb
         tooltip {Closes this attribute window}
-        xywh {280 425 90 35}
+        xywh {290 425 70 25}
       }
       Fl_Button {} {
         label Style
         callback style_cb
         tooltip {Shows the \\"style\\" panel which allows you to change the style attributes of the widget}
-        xywh {120 425 90 35}
+        xywh {235 425 45 25}
       }
     }
     Fl_Input {} {
-      label {tooltip:}
+      label {Tooltip:}
       callback tooltip_cb
       tooltip {The pop up tooltip which should be used for the widget}
-      xywh {90 130 280 20} box THIN_DOWN_BOX
+      xywh {80 130 280 20} box THIN_DOWN_BOX
     }
   }
 } 
@@ -285,136 +285,136 @@ Function {make_widget_panel()} {open
 Function {make_style_panel()} {open
 } {
   Fl_Window {} {open
-    xywh {35 287 330 279} hide
+    xywh {35 287 315 260} visible
   } {
     Fl_Choice {} {
-      label {label type:}
+      label {Label Type:}
       callback labeltype_cb
       tooltip {Determines the type of label used for the widget}
-      xywh {90 15 220 20} box THIN_UP_BOX fly_box THIN_UP_BOX textsize 12
+      xywh {85 10 220 20} box THIN_UP_BOX fly_box THIN_UP_BOX textsize 12
       code0 {extern Fl_Menu_Item labeltypemenu[];}
       code1 {o->menu(labeltypemenu);}
     } {}
     Fl_Choice {} {
-      label {label font:}
+      label {Label Font:}
       callback labelfont_cb open
       tooltip {Determines the font used for the widget's label}
-      xywh {90 35 180 20} box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {85 30 180 20} box THIN_UP_BOX fly_box THIN_UP_BOX
       code0 {extern Fl_Menu_Item fontmenu[];}
       code1 {o->menu(fontmenu);}
     } {}
     Fl_Value_Input {} {
       callback labelsize_cb
       tooltip {Determines the size of the font used for the widget's label}
-      xywh {270 35 40 20} box THIN_DOWN_BOX maximum 100 step 1 value 14
+      xywh {265 30 40 20} box THIN_DOWN_BOX maximum 100 step 1 value 14
     }
     Fl_Choice {} {
-      label {text font:}
+      label {Text Font:}
       callback textfont_cb open
       tooltip {Determines the font used for the widget's text (usage varies)}
-      xywh {90 55 180 20} box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {85 50 180 20} box THIN_UP_BOX fly_box THIN_UP_BOX
       code0 {extern Fl_Menu_Item fontmenu[];}
       code1 {o->menu(fontmenu);}
     } {}
     Fl_Value_Input {} {
       callback textsize_cb
       tooltip {Determines the size of the font used for the widget's text}
-      xywh {270 55 40 20} box THIN_DOWN_BOX maximum 100 step 1 value 14
+      xywh {265 50 40 20} box THIN_DOWN_BOX maximum 100 step 1 value 14
     }
     Fl_Choice {} {
-      label {box:}
+      label {Box:}
       callback box_cb
       tooltip {Determines which box type should be used for the widget}
-      xywh {90 85 220 20} box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {85 80 220 20} box THIN_UP_BOX fly_box THIN_UP_BOX
       code0 {extern Fl_Menu_Item boxmenu[];}
       code1 {o->menu(boxmenu);}
     } {}
     Fl_Choice {} {
-      label {down box:}
+      label {Down Box:}
       callback down_box_cb
       tooltip {Determines the second box type used by the widget}
-      xywh {90 105 220 20} box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {85 100 220 20} box THIN_UP_BOX fly_box THIN_UP_BOX
       code0 {extern Fl_Menu_Item boxmenu[];}
       code1 {o->menu(boxmenu);}
     } {}
     Fl_Choice {} {
-      label {highlight box:}
+      label {Highlight Box:}
       callback highlight_box_cb open
       tooltip {Determines the box used by the widget when it is highlighted}
-      xywh {90 125 220 20} box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {85 120 220 20} box THIN_UP_BOX fly_box THIN_UP_BOX
       code0 {extern Fl_Menu_Item boxmenu[];}
       code1 {o->menu(boxmenu);}
     } {}
     Fl_Light_Button {} {
-      label color
+      label Color
       callback color_cb
       tooltip {Determines the background color used by the widget}
-      xywh {20 160 90 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {15 155 90 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
       code0 {o->type(0);}
     }
     Fl_Light_Button {} {
-      label {label color}
+      label {Label Color}
       callback labelcolor_cb
       tooltip {Determines the color used by the widget's label}
-      xywh {110 160 110 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {105 155 110 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
       code0 {o->type(0);}
     }
     Fl_Light_Button {} {
-      label {selection color}
+      label {Selection Color}
       callback color2_cb
       tooltip {Determines the secondary color used by the widget}
-      xywh {220 160 90 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {215 155 90 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
       code0 {o->type(0);}
     }
     Fl_Light_Button {} {
-      label {text color}
+      label {Text Color}
       callback textcolor_cb
       tooltip {Determines the color used by the widget's text}
-      xywh {20 180 90 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {15 175 90 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
       code0 {o->type(0);}
     }
     Fl_Light_Button {} {
-      label {highlight color}
+      label {Highlight Color}
       callback highlightcolor_cb
       tooltip {Determines the background color used by the widget when it is highlighted}
-      xywh {220 180 90 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {215 175 90 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
       code0 {o->type(0);}
     }
     Fl_Light_Button {} {
       label {down label color}
       callback down_labelcolor_cb
       tooltip {Determines the color used by the widget's label when the widget is \\"pressed\\"}
-      xywh {110 180 110 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {105 175 110 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
       code0 {o->type(0);}
     }
     Fl_Light_Button {} {
-      label {selected text color}
+      label {Selected Text Color}
       callback selected_textcolor_cb
       tooltip {Determines the color of selected text (but not the color of the selection background)}
-      xywh {110 180 110 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {105 175 110 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
       code0 {o->type(0);}
     }
     Fl_Light_Button {} {
-      label color3
-      callback color3_cb
+      label {Color3???}
+      callback color3_cb selected
       tooltip {???}
-      xywh {110 200 110 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
+      xywh {105 195 110 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
       code0 {o->type(0);}
     }
     Fl_Group {} {open
-      xywh {20 230 290 35}
+      xywh {15 225 290 25}
     } {
       Fl_Button {} {
         label {Default Style}
         callback default_cb
         tooltip {Clears all custom attributes and uses the user's style defaults}
-        xywh {20 230 90 35}
+        xywh {135 225 90 25}
       }
       Fl_Return_Button {} {
         label Close
         callback style_ok_cb
         tooltip {Closes this style attributes window}
-        xywh {220 230 90 35}
+        xywh {235 225 70 25}
       }
     }
   }
