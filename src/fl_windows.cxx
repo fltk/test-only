@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.4 1999/11/10 19:27:34 carl Exp $"
+// "$Id: fl_windows.cxx,v 1.5 1999/11/11 14:17:27 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -47,6 +47,17 @@ const Fl_Boxtype_ win98_menu_title_box = {
 
 int fl_windows() {
   Fl_Style::revert(); // revert to FLTK default styles
+
+  fl_up_box.data = "2AAXXIIUU";
+  fl_up_box.dx_ = 2;
+  fl_up_box.dy_ = 2;
+  fl_up_box.dw_ = 4;
+  fl_up_box.dh_ = 4;
+  fl_down_box.data = "2XXIIUUAA";
+  fl_down_box.dx_ = 2;
+  fl_down_box.dy_ = 2;
+  fl_down_box.dw_ = 4;
+  fl_down_box.dh_ = 4;
 
   Fl_Widget::default_style.set_selection_color(FL_GRAY);
   Fl_Widget::default_style.set_label_size(12);
@@ -110,5 +121,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.4 1999/11/10 19:27:34 carl Exp $".
+// End of "$Id: fl_windows.cxx,v 1.5 1999/11/11 14:17:27 carl Exp $".
 //
