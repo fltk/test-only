@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Font.H,v 1.1 1999/08/16 07:30:50 bill Exp $"
+// "$Id: Fl_Font.H,v 1.2 1999/08/20 08:32:22 bill Exp $"
 //
 // Fonts used by FLTK styles and drawing code
 //
@@ -42,9 +42,11 @@ struct Fl_Font_ {
   // return the system-specific name, different for each font:
   const char* system_name() const {return name_;}
   // return the "nice" name:
-  FL_EXPORT const char* name(int* attributes = 0) const;
+  FL_EXPORT const char* name(int* = 0) const;
   // return array of sizes:
   FL_EXPORT int sizes(int*& sizep) const;
+  // return array of encodings:
+  FL_EXPORT int encodings(const char**& sizep) const;
   // "measurement" is considered a drawing function, see fl_draw.h
 };
 
@@ -86,12 +88,5 @@ FL_EXPORT Fl_Font fl_font(const char* name);
 // The "everything" flag makes something for every font on an X system,
 // even if it does not have a well-formed font name.
 FL_EXPORT int fl_list_fonts(Fl_Font*& arrayp, bool everything = false);
-
-// You can change this string to change the "preferred" encoding.  If
-// a given font is available in multiple encodings this one is
-// returned.  You'll get a font even if it does not have this
-// encoding, because otherwise it is pretty user-unfriendly.
-
-FL_EXPORT extern const char* fl_encoding;
 
 #endif

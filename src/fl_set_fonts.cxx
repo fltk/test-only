@@ -1,5 +1,5 @@
 //
-// "$Id: fl_set_fonts.cxx,v 1.9 1999/08/18 08:02:20 bill Exp $"
+// "$Id: fl_set_fonts.cxx,v 1.10 1999/08/20 08:32:27 bill Exp $"
 //
 // More font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -41,12 +41,10 @@
 // Internally fonts are stored with a "system name", which is a string
 // that is different for every font and can be used to quickly locate
 // the font on the system.  For X this is a string that when passed to
-// XListFonts returns all sizes of that font, and is of the form:
+// XListFonts returns all sizes and encodings of that font, and is of
+// the form:
 
-// "-*-family-weight-slant-width1-style-*-registry-encoding"
-// or
 // "-*-family-weight-slant-width1-style-*"
-// when the registry-encoding matches fl_encoding.
 
 // The fltk interface, and much of the innards of this, uses "nice" names.
 // This is a straght-forward translation of the name to compress it to
@@ -87,7 +85,7 @@ static int attribute(int n, const char *p) {
 }
 
 // turn the system name into a nice name, write it to output buffer,
-// and return the accumulated attribute values:
+// and return the accumulated attribute:
 
 static int to_nice(char* o, const char* p) {
 
@@ -108,20 +106,20 @@ static int to_nice(char* o, const char* p) {
       else type |= t;
     }
 
-    // skip over the '*' for the size and get the registry-encoding:
-    x = fl_font_word(e,2);
-    if (*x) {x++; *o++ = '('; while (*x) *o++ = *x++; *o++ = ')';}
-
   } else {
     // non standard font name, I look for the words bold & italic and
     // strip them out.  Also strip out all *, -, and spaces and replace
     // them with spaces.
 
+    bool punctuation = false;
     for (;*p; p++) {
       if (!strncmp(p,"bold",4)) {type |= FL_BOLD; p += 3; continue;}
       if (!strncmp(p,"italic",6)) {type |= FL_ITALIC; p += 5; continue;}
-      if (*p == '*' || *p == ' ' || *p == '-');
-      else *o++ = *p;
+      if (*p == '*' || *p == ' ' || *p == '-') punctuation = true;
+      else {
+	if (punctuation) {*o++ = ' '; punctuation = false;}
+	*o++ = *p;
+      }
     }
   }
 
@@ -130,7 +128,7 @@ static int to_nice(char* o, const char* p) {
 }
 
 // public function that calls the converter.  If ap is null it will also
-// add bold/italic words to the end of the nice name:
+// add bold/italic words to the end of the nice name.
 const char* Fl_Font_::name(int* ap) const {
   static char *buffer; if (!buffer) buffer = new char[128];
   int type = to_nice(buffer, name_);
@@ -145,24 +143,20 @@ const char* Fl_Font_::name(int* ap) const {
 ////////////////////////////////////////////////////////////////
 // Generate a list of every font known by X server:
 
-// return non-zero if the registry-encoding should be used:
-static int use_registry(const char *p) {
-  return *p && *p!='*' && strcmp(p, fl_encoding);
-}
-
 // converts an X font name to a system name, returns point size:
+// returns -1 if no change was made to font name
 static int to_canonical(char *to, const char *from) {
   char* c = fl_find_fontsize((char*)from);
   if (!c) return -1; // no point size found...
+  // don't return the 10x14 style fonts as sizes:
+  if (c >= from+2 && isdigit(*(c-2))) return -1;
   char* endptr;
   int size = strtol(c,&endptr,10);
   if (from[0] == '-') {
     // replace the "foundry" with -*-:
     *to++ = '-'; *to++ = '*';
     for (from++; *from && *from != '-'; from++);
-    // skip to the registry-encoding:
-    endptr = (char*)fl_font_word(endptr,6);
-    if (*endptr && !use_registry(endptr+1)) endptr = "";
+    endptr = "";
   }
   int n = c-from;
   strncpy(to,from,n);
@@ -195,8 +189,7 @@ static int ultrasort(const void *aa, const void *bb) {
   const char *b = *(char **)bb;
 
   // all standard fonts go first:
-  if (*a == '-') {if (*b != '-') return -1;}
-  else if (*b == '-') return 1;
+  if (*a == '-') {if (*b != '-') return -1;} else if (*b == '-') return 1;
 
   char acanon_buf[128];
   int asize = to_canonical(acanon_buf, a);
@@ -303,6 +296,42 @@ int fl_list_fonts(Fl_Font*& arrayp, bool everything) {
 }
 
 ////////////////////////////////////////////////////////////////
+// Return all the encodings for this font:
+
+int Fl_Font_::encodings(const char**& arrayp) const {
+  if (name_[0] != '-') return 0; // non-standard fonts have no encodings
+  if (!xlist) {
+    fl_open_display();
+    Fl_Font_* t = (Fl_Font_*)this; // cast away const
+    t->xlist = XListFonts(fl_display, name_, 100, &(t->n));
+    if (!t->xlist) return 0;
+  }
+  int listsize = n;
+  if (listsize < 0) listsize = -listsize;
+  static const char* array[128];
+  int count = 0;
+  for (int i = 0; i < listsize; i++) {
+    char *q = xlist[i];
+    const char *c = fl_font_word(q,13);
+    if (!*c++ || !*c) continue;
+    // insert-sort the new encoding into list:
+    int n;
+    for (n = count; n > 0; n--) {
+      int cmp = numericsort(array[n-1], c);
+      if (cmp < 0) break;
+      if (cmp == 0) goto CONTINUE;
+    }
+    for (int m = count; m > n; m--) array[m] = array[m-1];
+    array[n] = c;
+    count++;
+    if (count >= 128) break;
+  CONTINUE:;
+  }
+  arrayp = array;
+  return count;
+}
+
+////////////////////////////////////////////////////////////////
 
 // Return all the point sizes supported by this font:
 int Fl_Font_::sizes(int*& sizep) const {
@@ -314,33 +343,32 @@ int Fl_Font_::sizes(int*& sizep) const {
   }
   int listsize = n;
   if (listsize < 0) listsize = -listsize;
-  static int sizes[128];
-  int numsizes = 0;
+  static int array[128];
+  int count = 0;
   for (int i = 0; i < listsize; i++) {
     char *q = xlist[i];
     char *d = fl_find_fontsize(q);
     if (!d) continue;
     int s = strtol(d,0,10);
-    if (!numsizes || sizes[numsizes-1] < s) {
-      sizes[numsizes++] = s;
-    } else {
-      // insert-sort the new size into list:
-      int n;
-      for (n = numsizes-1; n > 0; n--) if (sizes[n-1] < s) break;
-      if (sizes[n] != s) {
-	for (int m = numsizes; m > n; m--) sizes[m] = sizes[m-1];
-	sizes[n] = s;
-	numsizes++;
-      }
+    // insert-sort the new size into list:
+    int n;
+    for (n = count; n > 0; n--) {
+      int cmp = array[n-1]-s;
+      if (cmp < 0) break;
+      if (cmp == 0) goto CONTINUE;
     }
-    if (numsizes >= 128) break;
+    for (int m = count; m > n; m--) array[m] = array[m-1];
+    array[n] = s;
+    count++;
+    if (count >= 128) break;
+  CONTINUE:;
   }
-  sizep = sizes;
-  return numsizes;
+  sizep = array;
+  return count;
 }
 
 #endif
 
 //
-// End of "$Id: fl_set_fonts.cxx,v 1.9 1999/08/18 08:02:20 bill Exp $".
+// End of "$Id: fl_set_fonts.cxx,v 1.10 1999/08/20 08:32:27 bill Exp $".
 //

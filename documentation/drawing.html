@@ -273,8 +273,8 @@ non-square scaled.</I>
 
 <H3><A name=text>Text</A></H3>
 
-<H4><A name=fl_font>void fl_font(<a href=Fl_Font.html>Fl_Font</a>, int
-size)</A></H4>
+<H4><A name=fl_font>
+void fl_font(<a href=Fl_Font.html>Fl_Font</a>, int size)</h4>
 
 Set the current font.  It is scaled so that the point size is
 <i>size</i> pixels tall (other transformations are not yet supported).
@@ -284,11 +284,31 @@ transformation, so keep it the identity.
 <p>You may call this outside a draw context if necessary to call <TT>
 fl_width()</TT>, but on X this will open the display. 
 
-<H4><a href=Fl_Font.html>Fl_Font</a> fl_font()
-<BR> int fl_size()</H4>
+<h4>void fl_font(<a href=Fl_Font.html>Fl_Font</a>, int size, const char* encoding)</h4>
 
-Returns the font and size set by the most recent call to <TT>
-fl_font(a,b)</TT>.  This can be used to save/restore the font. 
+<p>Select a font and name the encoding you would prefer to get.  If
+the encoding cannot be found, one of the existing encodings is picked
+at random.  The first version of fl_draw() is equivalent to calling
+this with <tt>fl_encoding</tt>.  The only way to find out what
+encodings are going to work is to call <a
+href=Fl_Font.html>Fl_Font::encodings()</a>.
+
+<p>This call is provided to handle some of the evils of present day
+internationalization.  In the future I hope that UTF-8 encoding will
+be supported by the window system and thus by fltk, avoiding the need
+for this (and for "wide" characters which fltk does not and will never
+support!).
+
+<h4>extern const char* fl_encoding;</h4>
+
+The default encoding to use.  The default value of this is "iso8859-1".
+
+<H4>Fl_FontSize* fl_font();<br>
+void fl_font(Fl_FontSize*)</h4>
+
+Save or restore the font using an opaque object called
+<tt>Fl_FontSize</tt>.  This lets drawing code preserve the current
+font, size, and encoding while temporarily using another.
 
 <H4>void fl_draw(const char *, float x, float y)
 <BR>void fl_draw(const char *, int n, float x, float y)</H4>

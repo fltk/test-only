@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FontSize.H,v 1.1 1999/08/16 07:31:15 bill Exp $"
+// "$Id: Fl_FontSize.H,v 1.2 1999/08/20 08:32:26 bill Exp $"
 //
 // Font definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -43,6 +43,7 @@ class Fl_FontSize {
 public:
   Fl_FontSize *next;	// linked list for this Fl_Fontdesc
 #ifndef WIN32
+  const char* encoding;
   XFontStruct* font;	// X font information
   FL_EXPORT Fl_FontSize(const char* xfontname);
 #else
@@ -59,8 +60,6 @@ public:
   FL_EXPORT ~Fl_FontSize();
 };
 
-extern FL_EXPORT Fl_FontSize *fl_fontsize; // the currently selected one
-
 #ifndef WIN32
 // functions for parsing X font names:
 FL_EXPORT const char* fl_font_word(const char *p, int n);
@@ -70,5 +69,5 @@ FL_EXPORT char *fl_find_fontsize(char *name);
 #endif
 
 //
-// End of "$Id: Fl_FontSize.H,v 1.1 1999/08/16 07:31:15 bill Exp $".
+// End of "$Id: Fl_FontSize.H,v 1.2 1999/08/20 08:32:26 bill Exp $".
 //

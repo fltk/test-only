@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.H,v 1.11 1999/08/16 07:30:54 bill Exp $"
+// "$Id: fl_draw.H,v 1.12 1999/08/20 08:32:22 bill Exp $"
 //
 // Portable drawing function header file for the Fast Light Tool Kit (FLTK).
 //
@@ -126,14 +126,15 @@ FL_EXPORT double fl_transform_dx(double x, double y);
 FL_EXPORT double fl_transform_dy(double x, double y);
 FL_EXPORT void fl_transformed_vertex(double x, double y);
 
-// current font:
+// current font+size+encoding:
+FL_EXPORT extern const char* fl_encoding;
 FL_EXPORT void fl_font(const Fl_Font, unsigned size);
-extern FL_EXPORT Fl_Font fl_font_;
-inline Fl_Font fl_font() {return fl_font_;}
-extern FL_EXPORT unsigned fl_size_;
-inline unsigned fl_size() {return fl_size_;}
+FL_EXPORT void fl_font(const Fl_Font, unsigned size, const char* encoding);
+FL_EXPORT extern Fl_FontSize* fl_font_;
+inline Fl_FontSize* fl_font() {return fl_font_;}
+FL_EXPORT void fl_font(Fl_FontSize*);
 
-// information you can get about the current font:
+// information you can get about the current font+size+encoding:
 FL_EXPORT int   fl_height();	// using "size" should work ok
 FL_EXPORT int   fl_descent();
 FL_EXPORT double fl_width(const char*);
@@ -182,5 +183,5 @@ FL_EXPORT int fl_add_symbol(const char* name, void (*drawit)(Fl_Color), int scal
 #endif
 
 //
-// End of "$Id: fl_draw.H,v 1.11 1999/08/16 07:30:54 bill Exp $".
+// End of "$Id: fl_draw.H,v 1.12 1999/08/20 08:32:22 bill Exp $".
 //

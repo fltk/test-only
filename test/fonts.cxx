@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.8 1999/08/18 08:02:21 bill Exp $"
+// "$Id: fonts.cxx,v 1.9 1999/08/20 08:32:29 bill Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -35,38 +35,41 @@
 
 Fl_Window *form;
 
-Fl_Font* fonts;
-
 class FontDisplay : public Fl_Widget {
   void draw();
 public:
-  Fl_Font font; int size;
+  Fl_Font font; unsigned size; const char* encoding;
   FontDisplay(Fl_Boxtype B, int X, int Y, int W, int H, const char* L = 0) :
     Fl_Widget(X,Y,W,H,L) {box(B); font = 0; size = 14;}
 };
 void FontDisplay::draw() {
   draw_box();
-  fl_font(font, size);
+  fl_font(font, size, encoding);
   fl_color(FL_BLACK);
-  fl_draw(label(), x()+3, y()+3, w()-6, h()-6, align());
+  char buffer[32];
+  for (int Y = 0; Y < 8; Y++) {
+    for (int X = 0; X < 32; X++) buffer[X] = 32*Y+X;
+    fl_draw(buffer, 32, x()+3, y()+3+fl_height()*(Y+1));
+  }
   fl_font(FL_HELVETICA,10);
   fl_draw(font->system_name(), x()+3, y()+3, w()-6, h()-6, FL_ALIGN_BOTTOM_LEFT);
 }
 
 FontDisplay *textobj;
 
-Fl_Hold_Browser *fontobj, *sizeobj;
+Fl_Hold_Browser *fontobj, *sizeobj, *encobj;
 
-int *sizes[1000];
-int numsizes[1000];
-int pickedsize = 14;
+Fl_Font* fonts; // list returned by fltk
 
 Fl_Check_Button* bold_button, *italic_button;
+
+int pickedsize = 14;
 
 void font_cb(Fl_Widget *, long) {
   int fn = fontobj->value();
   if (!fn) return;
   fn--;
+
   Fl_Font f = fonts[fn];
   if (f->bold == f) bold_button->deactivate();
   else bold_button->activate();
@@ -76,9 +79,23 @@ void font_cb(Fl_Widget *, long) {
   if (italic_button->value()) f = f->italic;
   textobj->font = f;
 
+  int pickedencoding = encobj->value()-1;
+  encobj->clear();
+  const char** encodings; int ne = f->encodings(encodings);
+  if (!ne) {
+    textobj->encoding = fl_encoding;
+  } else {
+    pickedencoding = 0;
+    for (int i = 0; i < ne; i++) {
+      encobj->add(encodings[i]);
+      if (!strcmp(encodings[i], fl_encoding)) pickedencoding = i;
+    }
+    textobj->encoding = encodings[pickedencoding];
+    encobj->value(pickedencoding+1);
+  }
+
   sizeobj->clear();
-  int n = numsizes[fn];
-  int *s = sizes[fn];
+  int *s; int n = f->sizes(s);
   if (!n) {
     // no sizes
   } else if (s[0] == 0) {
@@ -102,6 +119,14 @@ void font_cb(Fl_Widget *, long) {
     }
     sizeobj->value(w+1);
   }
+
+  textobj->redraw();
+}
+
+void encoding_cb(Fl_Widget *, long) {
+  int i = encobj->value();
+  if (!i) return;
+  textobj->encoding = encobj->text(i);
   textobj->redraw();
 }
 
@@ -131,12 +156,14 @@ void create_the_forms() {
   textobj = new FontDisplay(FL_FRAME_BOX,10,10,530,160,label);
   textobj->align(FL_ALIGN_TOP|FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_CLIP);
   bold_button = new Fl_Check_Button(10, 170, 70, 20, "Bold");
-  bold_button->callback(font_cb);
+  bold_button->callback(font_cb, 1);
   italic_button = new Fl_Check_Button(80, 170, 70, 20, "Italic");
-  italic_button->callback(font_cb);
-  fontobj = new Fl_Hold_Browser(10, 190, 390, 170);
+  italic_button->callback(font_cb, 1);
+  fontobj = new Fl_Hold_Browser(10, 190, 280, 170);
   fontobj->callback(font_cb);
   form->resizable(fontobj);
+  encobj = new Fl_Hold_Browser(300, 190, 100, 170);
+  encobj->callback(encoding_cb, 1);
   sizeobj = new Fl_Hold_Browser(410, 190, 130, 170);
   sizeobj->callback(size_cb);
   form->end();
@@ -146,30 +173,8 @@ void create_the_forms() {
 
 int main(int argc, char **argv) {
   create_the_forms();
-  bool everything = fl_ask("Get everything? (if no, only gets text fonts)");
-  int numfonts = fl_list_fonts(fonts, everything);
-  for (int i = 0; i < numfonts; i++) {
-#if 0
-    int t; const char *name = fonts[i]->name(&t);
-    char buffer[128];
-    if (t) {
-      char *p = buffer;
-      if (t & FL_BOLD) {*p++ = '@'; *p++ = 'b';}
-      if (t & FL_ITALIC) {*p++ = '@'; *p++ = 'i';}
-      strcpy(p,name);
-      name = buffer;
-    }
-    fontobj->add(name);
-#else
-    fontobj->add(fonts[i]->name());
-#endif
-    int *s; int n = fonts[i]->sizes(s);
-    numsizes[i] = n;
-    if (n) {
-      sizes[i] = new int[n];
-      for (int j=0; j<n; j++) sizes[i][j] = s[j];
-    }
-  }
+  int numfonts = fl_list_fonts(fonts, true);
+  for (int i = 0; i < numfonts; i++) fontobj->add(fonts[i]->name());
   fontobj->value(1);
   font_cb(fontobj,0);
   form->show(argc,argv);
@@ -177,5 +182,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.8 1999/08/18 08:02:21 bill Exp $".
+// End of "$Id: fonts.cxx,v 1.9 1999/08/20 08:32:29 bill Exp $".
 //

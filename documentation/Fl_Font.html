@@ -57,17 +57,30 @@ is overwritten each call.
 FL_ITALIC</TT>.  If this pointer is zero then the attributes are
 indicated by adding "Bold" or "Italic" to the name.
 
-<h4>int Fl_Font_::sizes(int *&amp;sizep) const;</h4>
+<h4>int Fl_Font_::encodings(const char** &amp;array) const;</h4>
 
-Return an array of sizes in <TT>sizep</TT>.  The return value is the
+Sets <i>array</i> to point at a list of encoding names.  The return
+value is the length of this array.  Each string identifies an
+"encoding" that is supported by this font.  These strings may be
+passed to the <a href=drawing.html#fl_font><TT>fl_font()</TT></a> to
+select what characters the first 256 codes print.  If fltk cannot
+figure out the encodings it returns a zero-length array, in which case
+you should only pass <tt>fl_encoding</tt> to <tt>fl_font()</tt>.  The
+returned array points at a static buffer that is overwritten each
+call, so you want to copy it if you plan to keep it.
+
+<h4>int Fl_Font_::sizes(int *&amp;array) const;</h4>
+
+Sets <i>array</i> to point at a list of sizes.  The return value is the
 length of this array.  The sizes are sorted from smallest to largest
-and indicate what sizes can be given to <TT>fl_font()</TT> that will
-be matched exactly (<TT>fl_font()</TT> will pick the closest size for
-other sizes).  A zero in the first location of the array indicates a
+and indicate what sizes can be given to <a
+href=drawing.html#fl_font><TT>fl_font()</TT></a> that will be matched
+exactly (<TT>fl_font()</TT> will pick the closest size for other
+sizes).  A zero in the first location of the array indicates a
 scalable font, where any size works, although the array may list sizes
-that work &quot;better&quot; than others.  Warning: the returned array
-points at a static buffer that is overwritten each call.  Under X this
-will open the display.
+that work &quot;better&quot; than others.  The returned array points
+at a static buffer that is overwritten each call, so you want to copy
+it if you plan to keep it.
 
 <h4>Fl_Font fl_font(const char* name, int attributes = 0);</h4>
 
@@ -92,14 +105,5 @@ Windows.
 
 <p>Subsequent calls always return the same array, and the value for
 <i>everything</i> is ignored.
-
-<h4>extern const char* fl_encoding;</h4>
-
-You can change this string to change the "preferred" encoding.  If a
-given font is available in multiple encodings this one is returned.
-Unlike other drawing toolkits this does not prevent the font from
-being found if the given encoding is not available, it will just
-return some random encoding (in my opinion this behavior is what the
-user wants).
 
 </body></html>
