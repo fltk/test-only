@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key_win32.cxx,v 1.17 2003/09/06 22:37:36 spitzak Exp $"
+// "$Id: Fl_get_key_win32.cxx,v 1.18 2004/06/06 21:08:32 spitzak Exp $"
 //
 // _WIN32 keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@ using namespace fltk;
 // See also the inverse converter in win32.C
 // This table is in numeric order by Fltk symbol order for binary search:
 
-static const struct {unsigned short vk, fltk;} vktab[] = {
+static const struct {unsigned short vk, fltk, ext;} vktab[] = {
   {VK_SPACE,	' '},
   {'1',		'!'},
   {0xde,	'\"'},
@@ -89,12 +89,22 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   {VK_INSERT,	InsertKey},
   {VK_APPS,	MenuKey},
   {VK_NUMLOCK,	NumLockKey},
-//{VK_???,	KyepadEnter},
+//    {VK_RETURN,	KeypadEnter},
   {VK_MULTIPLY,	MultiplyKey},
   {VK_ADD,	AddKey},
   {VK_SUBTRACT,	SubtractKey},
   {VK_DECIMAL,	DecimalKey},
   {VK_DIVIDE,	DivideKey},
+//    {VK_INSERT,	Keypad0},
+//    {VK_END,	Keypad1},
+//    {VK_DOWN,	Keypad2},
+//    {VK_NEXT,	Keypad3},
+//    {VK_LEFT,	Keypad4},
+//    {VK_CLEAR,	Keypad5},
+//    {VK_RIGHT,	Keypad6},
+//    {VK_HOME,	Keypad7},
+//    {VK_UP,	Keypad8},
+//    {VK_PRIOR,	Keypad9},
   {VK_LSHIFT,	LeftShiftKey},
   {VK_RSHIFT,	RightShiftKey},
   {VK_LCONTROL,	LeftCtrlKey},
@@ -106,6 +116,8 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   {VK_RMENU,	RightAltKey},
   {VK_DELETE,	DeleteKey}
 };
+
+extern bool fl_last_was_extended;
 
 static int fltk2ms(int fltk) {
   if (fltk >= '0' && fltk <= '9') return fltk;
@@ -128,11 +140,12 @@ bool fltk::event_key_state(int k) {
 }
 
 bool fltk::get_key_state(int k) {
-  uchar foo[256];
-  GetKeyboardState(foo);
-  return (foo[fltk2ms(k)]&~1) != 0;
+  return (GetAsyncKeyState(fltk2ms(k))&~1) != 0;
+//    uchar foo[256];
+//    GetKeyboardState(foo);
+//    return (foo[fltk2ms(k)]&~1) != 0;
 }
 
 //
-// End of "$Id: Fl_get_key_win32.cxx,v 1.17 2003/09/06 22:37:36 spitzak Exp $".
+// End of "$Id: Fl_get_key_win32.cxx,v 1.18 2004/06/06 21:08:32 spitzak Exp $".
 //

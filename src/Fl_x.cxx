@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.171 2004/06/04 16:39:59 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.172 2004/06/06 21:08:32 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1142,7 +1142,8 @@ bool fltk::handle()
       else extra_state &= ~META;
 #endif
     } else if (keysym >= 0xff95 && keysym <= 0xff9f) { // XK_KP_*
-      if (e_state & NUMLOCK) {
+      if (fl_actual_keysym != int(keysym) && (e_state&NUMLOCK)) {
+	// numlock has changed it into a Keypad+n key
 	keysym = fl_actual_keysym;
       } else {
 #if 0 // turn them always into numeric keys (my preference):
@@ -1158,6 +1159,12 @@ bool fltk::handle()
 	  DownKey, PageUpKey, PageDownKey, EndKey,
 	  ClearKey, InsertKey, DeleteKey};
 	keysym = table[keysym-0xff95];
+	e_text[0] = 0;
+	e_length = 0;
+	// This is what Windows does so if the user uses shift+keypad
+	// to get an arrow, the text editor does not think it is a
+	// shift+arrow:
+	if (e_state&NUMLOCK) e_state &= ~SHIFT;
 #endif
       }
     } else {
@@ -1819,5 +1826,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.171 2004/06/04 16:39:59 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.172 2004/06/06 21:08:32 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.209 2004/06/04 08:58:04 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.210 2004/06/06 21:08:32 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -830,17 +830,17 @@ static const struct {unsigned short vk, fltk, extended;} vktab[] = {
   {VK_CAPITAL,	CapsLockKey},
   {VK_ESCAPE,	EscapeKey},
   {VK_SPACE,	SpaceKey},
-  {VK_PRIOR,	Keypad9,	PageUpKey},
-  {VK_NEXT,	Keypad3,	PageDownKey},
-  {VK_END,	Keypad1,	EndKey},
-  {VK_HOME,	Keypad7,	HomeKey},
-  {VK_LEFT,	Keypad4,	LeftKey},
-  {VK_UP,	Keypad8,	UpKey},
-  {VK_RIGHT,	Keypad6,	RightKey},
-  {VK_DOWN,	Keypad2,	DownKey},
+  {VK_PRIOR,	PageUpKey},
+  {VK_NEXT,	PageDownKey},
+  {VK_END,	EndKey},
+  {VK_HOME,	HomeKey},
+  {VK_LEFT,	LeftKey},
+  {VK_UP,	UpKey},
+  {VK_RIGHT,	RightKey},
+  {VK_DOWN,	DownKey},
   {VK_SNAPSHOT, PrintKey},	// does not work on NT
-  {VK_INSERT,	Keypad0,	InsertKey},
-  {VK_DELETE,	DecimalKey,	DeleteKey},
+  {VK_INSERT,	InsertKey},
+  {VK_DELETE,	DeleteKey},
   {VK_LWIN,	LeftMetaKey},
   {VK_RWIN,	RightMetaKey},
   {VK_APPS,	MenuKey},
@@ -863,7 +863,8 @@ static const struct {unsigned short vk, fltk, extended;} vktab[] = {
   {0xdd,	']'},
   {0xde,	'\''}
 };
-static int ms2fltk(int vk, int extended) {
+bool fl_last_was_extended;
+static inline int ms2fltk(int vk, LPARAM lParam) {
   static unsigned short vklut[256];
   static unsigned short extendedlut[256];
   if (!vklut[1]) { // init the table
@@ -877,7 +878,13 @@ static int ms2fltk(int vk, int extended) {
     }
     for (i = 0; i < 256; i++) if (!extendedlut[i]) extendedlut[i] = vklut[i];
   }
-  return extended ? extendedlut[vk] : vklut[vk];
+  if (lParam&(1<<24)) {
+    if (!(lParam&(1<<31))) fl_last_was_extended = true;
+    return extendedlut[vk];
+  } else {
+    if (!(lParam&(1<<31))) fl_last_was_extended = false;
+    return vklut[vk];
+  }
 }
 
 #if USE_COLORMAP
@@ -1026,7 +1033,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_KEYUP:
   case WM_SYSKEYUP:
     // save the keysym until we figure out the characters:
-    e_keysym = ms2fltk(wParam,lParam&(1<<24));
+    e_keysym = ms2fltk(wParam,lParam);
     // See if TranslateMessage turned it into a WM_*CHAR message:
     if (PeekMessage(&msg, hWnd, WM_CHAR, WM_SYSDEADCHAR, PM_REMOVE)) {
       uMsg = msg.message;
@@ -1076,9 +1083,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       buffer[0] = char(wParam);
       if (e_keysym==ReturnKey || e_keysym==KeypadEnter) buffer[0] = '\r';
       e_length = 1;
-    } else if (e_keysym >= Keypad && e_keysym <= KeypadLast) {
-      buffer[0] = e_keysym-Keypad;
-      e_length = 1;
+//      } else if (e_keysym >= Keypad && e_keysym <= KeypadLast) {
+//        buffer[0] = e_keysym-Keypad;
+//        e_length = 1;
     } else {
       buffer[0] = 0;
       e_length = 0;
@@ -1649,5 +1656,5 @@ Cleanup::~Cleanup() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.209 2004/06/04 08:58:04 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.210 2004/06/06 21:08:32 spitzak Exp $".
 //
