@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.31 1999/08/28 15:39:11 vincent Exp $"
+# "$Id: Makefile,v 1.32 1999/09/10 21:21:04 vincent Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -213,7 +213,7 @@ all:	$(LIBRARY) $(DSONAME)
 
 $(LIBRARY): $(OBJECTS) $(OBJECTSgl) $(OBJECTSimages)
 	@echo $(LIBCOMMAND) $@ ...
-	@/bin/rm -f $@
+	@rm -f $@
 	@$(LIBCOMMAND) $@ $(OBJECTS) $(OBJECTSgl) $(OBJECTSimages)
 	@$(RANLIB) $@
 
@@ -275,5 +275,5 @@ install: $(LIBRARY) $(DSONAME)
 	@-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.31 1999/08/28 15:39:11 vincent Exp $".
+# End of "$Id: Makefile,v 1.32 1999/09/10 21:21:04 vincent Exp $".
 #
