@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# "$Id: fltk-config.in,v 1.12.2.16.2.6 2004/04/06 22:37:22 rokan Exp $"
+# "$Id: fltk-config.in,v 1.12.2.16.2.7 2004/07/06 00:22:49 easysw Exp $"
 # 
 # FLTK configuration utility.
 #
@@ -59,7 +59,7 @@ LDLIBS="@LIBS@"
 LIBNAME="@LIBNAME@"
 DSONAME="@DSONAME@"
 DSOLINK="@DSOLINK@"
-IMAGELIBS="@IMAGELIBS@"
+IMAGELIBS="-ljpeg -lpng -lz"
 
 SHAREDSUFFIX="@SHAREDSUFFIX@"
 
@@ -285,5 +285,5 @@ if test "$echo_libs" = "yes"; then
 fi
 
 #
-# End of "$Id: fltk-config.in,v 1.12.2.16.2.6 2004/04/06 22:37:22 rokan Exp $".
+# End of "$Id: fltk-config.in,v 1.12.2.16.2.7 2004/07/06 00:22:49 easysw Exp $".
 #

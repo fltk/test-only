@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.1.4.1 2004/07/05 14:15:00 easysw Exp $"
+# "$Id: Makefile,v 1.1.4.2 2004/07/06 00:22:49 easysw Exp $"
 #
 # PNG library makefile for the Fast Light Toolkit (FLTK).
 #
@@ -51,6 +51,26 @@ clean:
 
 
 #
+# Install everything...
+#
+
+install: libpng.a
+	echo "Installing libpng.a in $(libdir)..."
+	-$(MKDIR) $(libdir)
+	$(RM) $(libdir)/libpng.a
+	-$(CP) libpng.a $(libdir)
+
+
+#
+# Uninstall everything...
+#
+
+uninstall:
+	echo "Uninstalling libpng.a in $(libdir)..."
+	$(RM) $(libdir)/libpng.a
+
+
+#
 # libpng.a
 #
 
@@ -74,5 +94,5 @@ $(OBJS):	../makeinclude
 
 
 #
-# End of "$Id: Makefile,v 1.1.4.1 2004/07/05 14:15:00 easysw Exp $".
+# End of "$Id: Makefile,v 1.1.4.2 2004/07/06 00:22:49 easysw Exp $".
 #
