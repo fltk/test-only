@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.8 1999/11/14 04:36:58 carl Exp $"
+// "$Id: fl_windows.cxx,v 1.9 1999/11/14 08:42:52 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -49,19 +49,21 @@ extern void fl_frame(Fl_Boxtype b, int x, int y, int w, int h,
 extern void fl_flatx(Fl_Boxtype b, int x, int y, int w, int h,
                      Fl_Color c, Fl_Flags f);
 
-// some new boxtypes (look familiar?)
-static const Fl_Boxtype_ thick_motif_down_box = {
-};
+// a boxtype drawing function in fl_boxtype.cxx
+extern void fl_highlightx(Fl_Boxtype b, int x, int y, int w, int h,
+			  Fl_Color c, Fl_Flags f);
 
-static const Fl_Boxtype_ win98_menu_title_box = {
-  fl_flatx, 0, FL_THIN_DOWN_BOX, FL_THIN_UP_BOX, 1,1,2,2,1
+// some new boxtypes (look familiar?)
+
+const Fl_Boxtype_ win98_menu_title_box = {
+  fl_highlightx, 0, FL_THIN_UP_BOX, 1,1,2,2,1
 };
 
 static const Fl_Boxtype_ win98_menu_window_box = {
 #ifndef WIN32
-  fl_frame, "2AAUUIIXX", FL_DOWN_BOX, &win98_menu_window_box, 2,2,4,4, 1
+  fl_frame, "2AAUUIIXX", &win98_menu_window_box, 2,2,4,4, 1
 #else
-  fl_frame, "2AARRMMUU", FL_DOWN_BOX, &win98_menu_window_box, 2,2,4,4, 1
+  fl_frame, "2AARRMMUU", &win98_menu_window_box, 2,2,4,4, 1
 #endif
 };
 
@@ -75,8 +77,6 @@ static Fl_Color what_color(int wincol) {
   return FL_BLACK;
 }
 #endif
-
-extern int fl_extra_menu_spacing;
 
 int fl_windows() {
   Fl_Style::revert(); // revert to FLTK default styles
@@ -98,11 +98,10 @@ int fl_windows() {
   Fl_Widget::default_style.set_selection_color(FL_GRAY);
   Fl_Widget::default_style.set_label_size(12);
 
-  fl_extra_menu_spacing = 2;
-
   Fl_Style* s;
   if ((s = Fl_Style::find("menu window"))) {
     s->set_box(&win98_menu_window_box);
+    s->set_leading(4);
   }
 
   if ((s = Fl_Style::find("menu title"))) {
@@ -282,5 +281,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.8 1999/11/14 04:36:58 carl Exp $".
+// End of "$Id: fl_windows.cxx,v 1.9 1999/11/14 08:42:52 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.16 1999/11/13 03:01:21 carl Exp $"
+// "$Id: Fl_Style.H,v 1.17 1999/11/14 08:42:41 bill Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -54,24 +54,23 @@ struct FL_API Fl_Style {
   Fl_Color	text_color;
   unsigned	label_size;
   unsigned	text_size;
+  unsigned	leading;
 
   Fl_Style*     parent;
-  int           dynamic; // was this style dynamically created so widget
-                         // could modify its attributes
-
-  Fl_Style(const char* name = 0, void (*revertfunc)(Fl_Style*) = 0);
-
   const char*   name;
   void          (*revertfunc)(Fl_Style*);
   Fl_Style*     next;
   static Fl_Style* first;
+  int dynamic() const {return !revertfunc;}
+
+  Fl_Style(const char* name, void (*revertfunc)(Fl_Style*)=0);
+  Fl_Style(); // creates a dynamic() one
 
   void setp(const void** p, const void* v) { *p = v; }
   void seti(unsigned* p, unsigned v) { *p = v; }
 
   void set_box(Fl_Boxtype v)		{setp((const void**)&box, v);}
   void set_glyph_box(Fl_Boxtype v)	{setp((const void**)&glyph_box, v);}
-  void set_box2(Fl_Boxtype v)		{setp((const void**)&glyph_box, v);}
   void set_glyph(Fl_Glyph v)	        {setp((const void**)&glyph, (const void*)v);}
   void set_label_font(Fl_Font v)	{setp((const void**)&label_font, v);}
   void set_text_font(Fl_Font v)		{setp((const void**)&text_font, v);}
@@ -89,6 +88,7 @@ struct FL_API Fl_Style {
   void set_text_color(Fl_Color v)	{seti(&text_color, v);}
   void set_label_size(unsigned v)	{seti(&label_size, v);}
   void set_text_size(unsigned v)	{seti(&text_size, v);}
+  void set_leading(unsigned v)		{seti(&leading, v);}
 
   // find a default style by its string ID
   static Fl_Style* find(const char* name);
@@ -122,5 +122,5 @@ FL_API int fl_windows();
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.16 1999/11/13 03:01:21 carl Exp $".
+// End of "$Id: Fl_Style.H,v 1.17 1999/11/14 08:42:41 bill Exp $".
 //

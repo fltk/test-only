@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1.cxx,v 1.3 1999/11/10 20:52:38 carl Exp $"
+// "$Id: fl_kde1.cxx,v 1.4 1999/11/14 08:42:50 bill Exp $"
 //
 // Make FLTK do the KDE thing!
 //
@@ -51,8 +51,6 @@ static Fl_Color parse_color(const char *instr) {
   return col;
 }
 
-extern int fl_extra_menu_spacing;
-
 int fl_kde1() {
   Fl::theme(0); Fl::scheme(0); // will not be using themes or schemes
 
@@ -101,9 +99,9 @@ int fl_kde1() {
       style->set_selection_color(FL_DARK1);
       style->set_off_color(background);
     }
-    fl_extra_menu_spacing = 2; // seemed like this was much more under KDE yesterday...
-  } else {
-    fl_extra_menu_spacing = 5; // seemed like this was much more under KDE yesterday...
+  }
+  if ((style = Fl_Style::find("menu window"))) {
+    style->set_leading(motif_style ? 2 : 5);
   }
 
   Fl::redraw();
@@ -112,5 +110,5 @@ int fl_kde1() {
 }
 
 //
-// End of "$Id: fl_kde1.cxx,v 1.3 1999/11/10 20:52:38 carl Exp $".
+// End of "$Id: fl_kde1.cxx,v 1.4 1999/11/14 08:42:50 bill Exp $".
 //

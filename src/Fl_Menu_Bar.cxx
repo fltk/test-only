@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.27 1999/11/12 19:55:30 carl Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.28 1999/11/14 08:42:47 bill Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,10 +32,10 @@ void Fl_Menu_Bar::draw() {
   const Fl_Menu_Item* m;
   int X = x()+3;
   for (m=menu(); m->text; m = m->next()) {
-    int W = m->measure(0, this, 1) + 16;
-    int selected = (m == highlight_ && m->highlight_color()) ? 3 : 1;
+    int W = m->measure(0, this) + 16;
+    int selected = (m == highlight_ && m->highlight_color()) ? 3 : 4;
     if (damage()&(~FL_DAMAGE_HIGHLIGHT) || last_ == m || highlight_ == m)
-      m->draw(X, y() + 3, W, h() - 6, this, 2, selected);
+      m->draw(X, y() + 3, W, h() - 6, this, selected);
     X += W;
   }
   last_ = highlight_;
@@ -48,7 +48,7 @@ int Fl_Menu_Bar::handle(int event) {
   highlight_ = 0;
   // FL_LEAVE events don't get the right coordinates
   if (event != FL_LEAVE) for (m=menu(); m->text; m = m->next()) {
-    int W = m->measure(0, this, 1) + 16;
+    int W = m->measure(0, this) + 16;
     if (m->active() && Fl::event_inside(X, y() + 3, W, h() - 6)) {
       highlight_ = m;
       break;
@@ -86,5 +86,5 @@ static void revert(Fl_Style* s) {
 Fl_Style Fl_Menu_Bar::default_style("Menu_Bar", revert);
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.27 1999/11/12 19:55:30 carl Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.28 1999/11/14 08:42:47 bill Exp $".
 //

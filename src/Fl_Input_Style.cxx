@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Style.cxx,v 1.7 1999/11/10 18:06:04 carl Exp $"
+// "$Id: Fl_Input_Style.cxx,v 1.8 1999/11/14 08:42:46 bill Exp $"
 //
 // Style of Fl_Input for the Fast Light Tool Kit (FLTK).
 //
@@ -23,15 +23,16 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// The style is defined in a separate file so that the rest of Fl_Input
-// does not get always linked in ...
-// Fl_Output is also defined here, output widgets use it as a reference
-// so that themes that set input and output to different colors work.
-// To avoid problems with inheritance (so that a theme can just change
-// input) I need to default to identical appearance, which matches
-// how Windoze works anyway...
+// The styles for Fl_Input and Fl_Output are referenced directly by
+// some parts of fltk's code.  I put them here so that uses of them does
+// not link in the rest of the Fl_Input/Output code.
+//
+// It is possible that Fl_Output's style should be a child of Fl_Input's.
+// This could be done by making it's own revert() function and setting
+// parent in it.
 
 #include <FL/Fl_Input.H>
+#include <FL/Fl_Output.H>
 
 static void revert(Fl_Style* s) {
   s->box = FL_THIN_DOWN_BOX;
@@ -43,10 +44,8 @@ static void revert(Fl_Style* s) {
 
 Fl_Style Fl_Input::default_style("Input", revert);
 
-#include <FL/Fl_Output.H>
-
 Fl_Style Fl_Output::default_style("Output", revert);
 
 //
-// End of "$Id: Fl_Input_Style.cxx,v 1.7 1999/11/10 18:06:04 carl Exp $".
+// End of "$Id: Fl_Input_Style.cxx,v 1.8 1999/11/14 08:42:46 bill Exp $".
 //

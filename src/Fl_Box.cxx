@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Box.cxx,v 1.16 1999/11/11 17:47:32 carl Exp $"
+// "$Id: Fl_Box.cxx,v 1.17 1999/11/14 08:42:44 bill Exp $"
 //
 // Box widget for the Fast Light Tool Kit (FLTK).
 //
@@ -31,9 +31,9 @@ void Fl_Box::draw() {
   draw_label();
 }
 
-// Call the draw method, handle the clip out
-void Fl_Box::draw_n_clip()
-{
+// Since FL_NO_BOX boxes are often used as invisible resizeboxes, I
+// check for this and avoid unnecessary clipping.
+void Fl_Box::draw_n_clip() {
   if (box() != FL_NO_BOX || label() || image())
     Fl_Widget::draw_n_clip();
 }
@@ -53,5 +53,5 @@ Fl_Box::Fl_Box(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Box.cxx,v 1.16 1999/11/11 17:47:32 carl Exp $".
+// End of "$Id: Fl_Box.cxx,v 1.17 1999/11/14 08:42:44 bill Exp $".
 //

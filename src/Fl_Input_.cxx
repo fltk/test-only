@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.cxx,v 1.32 1999/11/10 04:48:50 carl Exp $"
+// "$Id: Fl_Input_.cxx,v 1.33 1999/11/14 08:42:45 bill Exp $"
 //
 // Common input widget routines for the Fast Light Tool Kit (FLTK).
 //
@@ -151,7 +151,7 @@ void Fl_Input_::setfont() const {
 
 void Fl_Input_::drawtext(int X, int Y, int W, int H) {
 
-Fl_Flags fl = active_r() ? FL_NO_FLAGS : FL_INACTIVE;
+  Fl_Flags fl = active_r() ? FL_NO_FLAGS : FL_INACTIVE;
   if (Fl::focus()!=this && !size()) {
     // we have to erase it if cursor was there
     fl_color(fl_inactive(color(), fl));
@@ -185,7 +185,7 @@ Fl_Flags fl = active_r() ? FL_NO_FLAGS : FL_INACTIVE;
 
   // count how many lines and put the last one into the buffer:
   // And figure out where the cursor is:
-  int height = fl_height();
+  int height = fl_height()+leading();
   int lines;
   int curx, cury;
   for (p=value(), curx=cury=lines=0; ;) {
@@ -231,7 +231,7 @@ Fl_Flags fl = active_r() ? FL_NO_FLAGS : FL_INACTIVE;
 
   p = value();
   // visit each line and draw it:
-  int desc = height-fl_descent();
+  int desc = height-(fl_descent()-leading()/2);
   int ypos = -yscroll_;
   for (; ypos < H;) {
 
@@ -334,7 +334,7 @@ void Fl_Input_::handle_mouse(int X, int Y,
   char buf[MAXBUF];
 
   int theline = (type()==FL_MULTILINE_INPUT) ?
-    (Fl::event_y()-Y+yscroll_)/fl_height() : 0;
+    (Fl::event_y()-Y+yscroll_)/(fl_height()+leading()) : 0;
 
   if (W > 12) {X += 3; W -= 6;} // add a left/right border
 
@@ -742,5 +742,5 @@ Fl_Input_::~Fl_Input_() {
 }
 
 //
-// End of "$Id: Fl_Input_.cxx,v 1.32 1999/11/10 04:48:50 carl Exp $".
+// End of "$Id: Fl_Input_.cxx,v 1.33 1999/11/14 08:42:45 bill Exp $".
 //

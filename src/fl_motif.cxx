@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.7 1999/11/10 20:52:39 carl Exp $"
+// "$Id: fl_motif.cxx,v 1.8 1999/11/14 08:42:50 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -47,45 +47,41 @@ extern void fl_frame(Fl_Boxtype b, int x, int y, int w, int h,
 extern void fl_flatx(Fl_Boxtype b, int x, int y, int w, int h,
                      Fl_Color c, Fl_Flags f);
 
+// a boxtype drawing function in fl_boxtype.cxx
+extern void fl_highlightx(Fl_Boxtype b, int x, int y, int w, int h,
+                     Fl_Color c, Fl_Flags f);
+
 // some new boxtypes (look familiar?)
 static const Fl_Boxtype_ thick_motif_down_box = {
-  fl_frame, "HHVVHHVVHHVV", &thick_motif_down_box, &thick_motif_down_box, 3,3,6,6, 1
+  fl_frame, "HHVVHHVVHHVV", &thick_motif_down_box, 3,3,6,6, 1
 };
 
 static const Fl_Boxtype_ thick_motif_up_box = {
-  fl_frame, "VVHHVVHHVVHH", &thick_motif_up_box, &thick_motif_up_box, 3,3,6,6, 1
-};
-
-static const Fl_Boxtype_ thick_motif_box = {
-  fl_frame, "VVHHVVHHVVHH", &thick_motif_down_box, &thick_motif_box, 3,3,6,6, 1
+  fl_frame, "VVHHVVHHVVHH", &thick_motif_down_box, 3,3,6,6, 1
 };
 
 static const Fl_Boxtype_ thin_motif_down_box = {
-  fl_frame, "HHVVHHVV", &thin_motif_down_box, &thin_motif_down_box, 2,2,4,4, 1
+  fl_frame, "HHVVHHVV", &thin_motif_down_box, 2,2,4,4, 1
 };
 
 static const Fl_Boxtype_ thin_motif_up_box = {
-  fl_frame, "VVHHVVHH", &thin_motif_up_box, &thin_motif_up_box, 2,2,4,4, 1
-};
-
-static const Fl_Boxtype_ thin_motif_box = {
-  fl_frame, "VVHHVVHH", &thin_motif_down_box, &thin_motif_box, 2,2,4,4, 1
+  fl_frame, "VVHHVVHH", &thin_motif_down_box, 2,2,4,4, 1
 };
 
 static const Fl_Boxtype_ thick_motif_highlight_box = {
-  fl_flatx, 0, &thick_motif_down_box, &thick_motif_up_box, 3,3,6,6, 1
+  fl_highlightx, 0, &thick_motif_down_box, 3,3,6,6, 1
 };
 
 static const Fl_Boxtype_ thin_motif_highlight_box = {
-  fl_flatx, 0, &thin_motif_down_box, &thin_motif_up_box, 2,2,4,4, 1
+  fl_highlightx, 0, &thin_motif_down_box, 2,2,4,4, 1
 };
 
 static const Fl_Boxtype_ thick_motif_title_box = {
-  fl_flatx, 0, &thick_motif_up_box, &thick_motif_up_box, 3,3,6,6, 1
+  fl_flatx, 0, &thick_motif_up_box, 3,3,6,6, 1
 };
 
 static const Fl_Boxtype_ thin_motif_title_box = {
-  fl_flatx, 0, &thin_motif_up_box, &thin_motif_up_box, 2,2,4,4, 1
+  fl_flatx, 0, &thin_motif_up_box, 2,2,4,4, 1
 };
 
 static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
@@ -118,7 +114,7 @@ static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color
     }
     case FL_GLYPH_CHECK:
       x += 2; y += 2; w -= 4; h -= 4; // fudge factor
-      thin_motif_box.draw(x, y, w, h, box == FL_NO_BOX ? bc : fc, f); // hack! for color
+      thin_motif_up_box.draw(x, y, w, h, box == FL_NO_BOX ? bc : fc, f); // hack! for color
       break;
     case FL_GLYPH_RIGHT:
     case FL_GLYPH_LEFT:
@@ -191,28 +187,31 @@ int fl_motif() {
   fl_down_box.dw_ = 4;
   fl_down_box.dh_ = 4;
 
-  Fl_Widget::default_style.set_box(&thin_motif_box);
+  Fl_Widget::default_style.set_box(&thin_motif_up_box);
   Fl_Widget::default_style.set_selection_color(FL_DARK1);
-  Fl_Widget::default_style.set_glyph_box(&thin_motif_box);
+  Fl_Widget::default_style.set_glyph_box(&thin_motif_up_box);
   Fl_Widget::default_style.set_highlight_color(0);
   Fl_Widget::default_style.set_glyph(motif_glyph);
 
   Fl_Style* s;
 
   if ((s = Fl_Style::find("menu item"))) {
-    s->set_box(&thin_motif_highlight_box);
+    s->set_box(&thin_motif_title_box);
     s->set_glyph_box(FL_NO_BOX);
-    s->set_highlight_color(FL_GRAY);
-    s->set_highlight_label_color(FL_BLACK);
-    s->set_on_color(FL_DARK1);
+    s->set_selection_color(FL_NO_COLOR);
+    s->set_selection_text_color(FL_NO_COLOR);
     s->set_off_color(FL_GRAY);
   }
 
+  if ((s = Fl_Style::find("menu window"))) {
+    s->set_leading(0);
+  }
+
   if ((s = Fl_Style::find("menu title"))) {
-    s->set_glyph_box(FL_NO_BOX);
     s->set_box(&thin_motif_title_box);
-    s->set_selection_color(FL_GRAY);
-    s->set_selection_text_color(FL_BLACK);
+    s->set_glyph_box(FL_NO_BOX);
+    s->set_selection_color(FL_NO_COLOR);
+    s->set_selection_text_color(FL_NO_COLOR);
     s->set_off_color(FL_GRAY);
   }
 
@@ -268,12 +267,12 @@ int fl_motif() {
     s->set_box(&thin_motif_down_box);
   }
 
-  static Fl_Boxtype_Definer motif("motif", thin_motif_box);
+  static Fl_Boxtype_Definer motif("motif", thin_motif_up_box);
   static Fl_Boxtype_Definer motif_up("motif up", thin_motif_up_box);
   static Fl_Boxtype_Definer motif_down("motif down", thin_motif_down_box);
   static Fl_Boxtype_Definer motif_highlight("motif highlight", thin_motif_highlight_box);
   static Fl_Boxtype_Definer motif_title("motif title", thin_motif_title_box);
-  static Fl_Boxtype_Definer motif_thick("motif thick", thick_motif_box);
+  static Fl_Boxtype_Definer motif_thick("motif thick", thick_motif_up_box);
   static Fl_Boxtype_Definer motif_thick_up("motif thick up", thick_motif_up_box);
   static Fl_Boxtype_Definer motif_thick_down("motif thick down", thick_motif_down_box);
   static Fl_Boxtype_Definer motif_thick_highlight("motif thick highlight", thick_motif_highlight_box);
@@ -284,5 +283,5 @@ int fl_motif() {
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.7 1999/11/10 20:52:39 carl Exp $".
+// End of "$Id: fl_motif.cxx,v 1.8 1999/11/14 08:42:50 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.56 1999/11/12 19:55:29 carl Exp $"
+// "$Id: Fl_Menu.cxx,v 1.57 1999/11/14 08:42:46 bill Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -69,6 +69,7 @@ const Fl_Menu_Item* Fl_Menu_Item::next(int n) const {
 // this style structure is only used for the frames of menuwindows
 static void mw_revert(Fl_Style* s) {
   s->box = FL_UP_BOX;
+  s->leading = 4;
 }
 
 static Fl_Style menuwindow_default_style("Menu_Window", mw_revert);
@@ -76,33 +77,33 @@ static Fl_Style menuwindow_default_style("Menu_Window", mw_revert);
 static void mi_revert(Fl_Style* s) {
   s->box = FL_FLAT_BOX;
   s->glyph_box = FL_DOWN_BOX;
-  s->selection_color = FL_BLACK;
-  s->off_color = FL_WHITE;
-  s->highlight_color = FL_BLUE_SELECTION_COLOR;
-  s->highlight_label_color = FL_WHITE;
-  s->parent = &Fl_Widget::default_style;
-}
-
-Fl_Style Fl_Menu_Item::default_style("Menu_Item", mi_revert);
-
-static void mt_revert(Fl_Style* s) {
-  s->box = FL_HIGHLIGHT_UP_BOX;
-  s->glyph_box = FL_DOWN_BOX;
   s->selection_color = FL_BLUE_SELECTION_COLOR;
   s->selection_text_color = FL_WHITE;
   s->off_color = FL_WHITE;
   s->parent = &Fl_Widget::default_style;
 }
 
+Fl_Style Fl_Menu_Item::default_style("Menu_Item", mi_revert);
+
+// This style is directly referenced for the menu titles (actually
+// only the box, selection, and highlight colors are used):
+
+static void mt_revert(Fl_Style* s) {
+  //s->box = FL_HIGHLIGHT_UP_BOX;
+  s->box = FL_FLAT_BOX;
+  s->selection_color = FL_BLUE_SELECTION_COLOR;
+  s->selection_text_color = FL_WHITE;
+// it actually acts like the menu_item's style is it's parent...
+//  s->parent = &Fl_Widget::default_style;
+}
+
 Fl_Style Fl_Menu_Item::title_style("Menu_Title", mt_revert);
 
 extern Fl_Style* fl_unique_style(const Fl_Style* & pointer); // in Fl_Widget.c
 
-// Return the style to use.  Inherit it if this is the first time this
-// one has been referenced.
+// Return the style to use:
 const Fl_Style* Fl_Menu_Item::style() const {
-  if (style_) return style_;
-  return flags()&FL_MENU_TITLE ? &title_style : &default_style;
+  return style_ ? style_ : &default_style;
 }
 
 unsigned Fl_Menu_Item::geti(const unsigned* a) const {
@@ -170,16 +171,12 @@ extern char fl_draw_shortcut;
 #include <FL/Fl_Image.H>
 
 // width of label, including effect of & characters:
-int Fl_Menu_Item::measure(int* hp, const Fl_Menu_*, int title) const {
-  Fl_Menu_Item* m = (Fl_Menu_Item*)this;
-  if (title) m->flags_ |= FL_MENU_TITLE;
-  else m->flags_ &= ~FL_MENU_TITLE;
+int Fl_Menu_Item::measure(int* hp, const Fl_Menu_*) const {
   fl_font(label_font(), label_size());
   fl_draw_shortcut = 1;
   int h; if (!hp) hp = &h;
   int w = 0; fl_measure(label(), w, *hp);
   fl_draw_shortcut = 0;
-  *hp += 2; // add a bit of leading
   if (flags() & (FL_MENU_TOGGLE|FL_MENU_RADIO)) w += 15;
   if (image_) {
     int W, H;
@@ -192,62 +189,77 @@ int Fl_Menu_Item::measure(int* hp, const Fl_Menu_*, int title) const {
 }
 
 void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_*,
- 			int selected, int draw_box) const {
-  Fl_Menu_Item* m = (Fl_Menu_Item*)this;
-  if (selected == 2) m->flags_ |= FL_MENU_TITLE;
-  else m->flags_ &= ~FL_MENU_TITLE;
-  Fl_Boxtype b = box();
-  Fl_Flags bf = 0;
-  Fl_Color c = color();
-  Fl_Color lc = label_color();
-  Fl_Flags f = flags() & FL_MENU_INACTIVE;
-  if (f) {
-    selected = 0;
-    lc = fl_inactive(lc);
-  } else switch (draw_box) {
-    case 0:
-      b = FL_NO_BOX;
-      break;
-    case 2:
-      bf = FL_VALUE;
-      c = selection_color();
-      lc = selection_text_color();
-      break;
-    case 3:
-      bf = FL_HIGHLIGHT;
-      c = highlight_color();
-      lc = highlight_label_color();
-      break;
+ 			int selected) const {
+  Fl_Boxtype lbox = box();
+  Fl_Flags lflags = FL_ALIGN_LEFT;
+  Fl_Color lcolor = color();
+  Fl_Color llabel_color = label_color();
+  switch (selected) {
+  case 0: // unselected menu item
+    break;
+  case 1: // selected menu item
+    lflags = FL_VALUE | FL_ALIGN_LEFT;
+    if (default_style.selection_color) 
+      lcolor = default_style.selection_color;
+    if (default_style.selection_text_color) 
+      llabel_color = default_style.selection_text_color;
+    break;
+  case 2: // title or menubar item when menu popped up
+    lflags = FL_VALUE | FL_ALIGN_CENTER;
+    lbox = title_style.box;
+    if (title_style.selection_color) 
+      lcolor = title_style.selection_color;
+    if (title_style.selection_text_color) 
+      llabel_color = title_style.selection_text_color;
+    break;
+  case 3: // highlighted menubar item
+    lflags = FL_HIGHLIGHT | FL_ALIGN_CENTER;
+    lbox = title_style.box;
+    lcolor = title_style.highlight_color;
+    if (!lcolor) lcolor = highlight_color();
+    llabel_color = title_style.highlight_label_color;
+    if (!llabel_color) llabel_color = highlight_label_color();
+    break;
+  case 4: // plain menubar item
+    lflags = FL_ALIGN_CENTER;
+    lbox = title_style.box;
+    break;
+  case 5: // draw the text in an Fl_Choice
+    lbox = FL_NO_BOX;
+    break;
   }
+  if (flags() & FL_MENU_INACTIVE) {
+    llabel_color = fl_inactive(llabel_color);
+    lflags |= FL_INACTIVE;
+  }    
+  lbox->draw(x, y, w, h, lcolor, lflags);
 
-  if (selected) f |= FL_MENU_VALUE;
-  b->draw(x, y, w, h, c, bf);
   if (flags() & (FL_MENU_TOGGLE|FL_MENU_RADIO)) {
-    f = flags() & FL_MENU_VALUE;
-    if (selected && Fl::pushed()) {
+    Fl_Flags gflags = (flags() & FL_MENU_VALUE) ? FL_VALUE : 0;
+    if ((selected==1 || selected==2) && Fl::pushed()) {
       // if pushed, preview the resulting state
-      if (flags() & FL_MENU_RADIO) f |= FL_MENU_VALUE;
-      else f ^= FL_MENU_VALUE;
+      if (flags() & FL_MENU_RADIO) gflags |= FL_VALUE;
+      else gflags ^= FL_VALUE;
     }
-    if (f&FL_MENU_VALUE) c = selection_color();
-    Fl_Glyphtype g = (flags()&FL_MENU_RADIO) ? FL_GLYPH_RADIO : FL_GLYPH_CHECK;
-    Fl_Color cc = (glyph_box()==FL_NO_BOX) ? lc : label_color();
-    glyph()(g, x+3, y+(h-13)/2, 13, 13, off_color(), cc, f<<8, glyph_box());
+    glyph()((flags()&FL_MENU_RADIO) ? FL_GLYPH_RADIO : FL_GLYPH_CHECK,
+	    x+3, y+(h-13)/2, 13, 13,
+	    off_color(),
+	    (glyph_box()==FL_NO_BOX) ? llabel_color : label_color(),
+	    gflags,
+	    glyph_box());
     x += 15; w -= 15;
   }
 
   if (image_) {
     int W, H;
     image_->measure(W, H);
-    fl_color(lc);
-    image_->draw(x, y, W, h, (flags()<<8) | FL_ALIGN_LEFT);
+    fl_color(llabel_color);
+    image_->draw(x, y, W, h, lflags);
     x += W; w -= W;
   }
   if (!fl_draw_shortcut) fl_draw_shortcut = 1;
   fl_font(label_font(), label_size());
-  f = flags() & FL_MENU_INACTIVE;
-  label_type()->draw(label(), x+3, y, w>6 ? w-6 : 0, h, lc,
-                     flags()&FL_MENU_TITLE ? FL_ALIGN_CENTER : FL_ALIGN_LEFT);
+  label_type()->draw(label(), x+3, y, w>6 ? w-6 : 0, h, llabel_color, lflags);
   fl_draw_shortcut = 0;
 }
 
@@ -264,8 +276,6 @@ menutitle::menutitle(int X, int Y, int W, int H, const Fl_Menu_Item* L) :
 // appearance of current menus are pulled from this parent widget:
 static const Fl_Menu_* button;
 
-extern int fl_extra_menu_spacing;
-
 menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
 		       const Fl_Menu_Item* picked, const Fl_Menu_Item* t, 
 		       int menubar, int menubar_title)
@@ -276,7 +286,7 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
   clear_border();
   menu = m;
   drawn_selected = -1;
-  box(menuwindow_default_style.box);
+  style(menuwindow_default_style);
   selected = -1;
   {int i = 0;
   if (m) for (const Fl_Menu_Item* m1=m; ; m1 = m1->next(), i++) {
@@ -299,10 +309,10 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
   int Wtitle = 0;
   int Htitle = 0;
   int hotKeysw = 0;
-  if (t) Wtitle = t->measure(&Htitle, button, 1) + 16;
+  if (t) Wtitle = t->measure(&Htitle, button) + 16;
   int W = 0;
   if (m) for (; m->text; m = m->next()) {
-    int h; int w1 = m->measure(&h, button, 0);
+    int h; int w1 = m->measure(&h, button);
     if (h > itemheight) itemheight = h;
     if (m->flags() & FL_MENU_DIVIDER) num_dividers++;
     if (m->flags() & (FL_SUBMENU|FL_SUBMENU_POINTER)) w1 += 16;
@@ -315,7 +325,7 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
     if (m->image_) clear_overlay();
   }
 
-  itemheight += (itemheight/8 + fl_extra_menu_spacing); // Add extra spacing.  This seems OK.
+  itemheight += leading();
   W += itemheight; // More extra spacing
 
   if (selected >= 0 && !Wp) X -= W/2;
@@ -375,7 +385,7 @@ void menuwindow::autoscroll(int i) {
 ////////////////////////////////////////////////////////////////
 
 void menutitle::draw() {
-  menu->draw(0, 0, w(), h(), button, 2, 2);
+  menu->draw(0, 0, w(), h(), button, 2);
 }
 
 void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int /*erase*/) {
@@ -386,15 +396,14 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int /*erase*/) {
   int y = ypos(i);
   int h = itemheight;
 
-  int s = (i == selected);
-  m->draw(x, y, w, h, button, s, s ? 3 : 1);
+  m->draw(x, y, w, h, button, (i == selected));
 
   Fl_Color fc = m->label_color(), bc = color();
   Fl_Flags f = 0;
   if (m->active()) {
     if (i == selected) {
-      fc = m->highlight_label_color();
-      bc = m->highlight_color();
+      bc = m->selection_color();
+      fc = m->selection_text_color();
       f = FL_VALUE;
     }
   } else {
@@ -403,9 +412,9 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int /*erase*/) {
   }
 
   if (m->submenu()) {
-    int dx = m->box()->highlight->dx() + fl_extra_menu_spacing/2;
-    int dy = m->box()->highlight->dy() + fl_extra_menu_spacing/2;
-    int dh = m->box()->highlight->dh() + fl_extra_menu_spacing;
+    int dx = m->box()->down->dx();
+    int dy = m->box()->down->dy();
+    int dh = m->box()->down->dh();
     glyph()(FL_GLYPH_RIGHT, x+w-h+dx, y+dy, h-dh, h-dh, bc, fc,f, FL_NO_BOX);
   } else if (m->shortcut_) {
     fl_font(label_font(), label_size());
@@ -448,7 +457,7 @@ int menuwindow::find_selected(int mx, int my) {
     const Fl_Menu_Item* m = menu;
     for (; ; m = m->next(), i++) {
       if (!m->text) return -1;
-      x += m->measure(0, button, 0) + 16;
+      x += m->measure(0, button) + 16;
       if (x > mx) break;
     }
     return i;
@@ -464,7 +473,7 @@ int menuwindow::find_selected(int mx, int my) {
 int menuwindow::titlex(int i) {
   const Fl_Menu_Item* m;
   int x = 3;
-  for (m=menu; i--; m = m->next()) x += m->measure(0, button, 1) + 16;
+  for (m=menu; i--; m = m->next()) x += m->measure(0, button) + 16;
   return x;
 }
 
@@ -839,5 +848,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.56 1999/11/12 19:55:29 carl Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.57 1999/11/14 08:42:46 bill Exp $".
 //

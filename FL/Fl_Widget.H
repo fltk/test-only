@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.36 1999/11/10 19:27:29 carl Exp $"
+// "$Id: Fl_Widget.H,v 1.37 1999/11/14 08:42:41 bill Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -49,8 +49,8 @@ public:
   virtual ~Fl_Widget();
 
   const Fl_Style* style() const {return style_;}
-  void style(Fl_Style* s);
-  void style(Fl_Style& s) {style(&s);}
+  void style(const Fl_Style* s) {style_ = s;}
+  void style(const Fl_Style& s) {style_ = &s;}
   int copy_style(const Fl_Style* s);
   static Fl_Style default_style;
 
@@ -166,6 +166,7 @@ public:
   Fl_Color text_color()		const {return (Fl_Color)geti((const unsigned*)&style_->text_color);}
   unsigned label_size()		const {return geti((const unsigned*)&style_->label_size);}
   unsigned text_size()		const {return geti((const unsigned*)&style_->text_size);}
+  unsigned leading()		const {return geti((const unsigned*)&style_->leading);}
 
   void box(Fl_Boxtype a)	{setp((const void**)&style_->box, a);}
   void glyph_box(Fl_Boxtype a)	{setp((const void**)&style_->glyph_box, a);}
@@ -187,6 +188,7 @@ public:
   void text_color(Fl_Color a)	{seti(&style_->text_color, a);}
   void label_size(unsigned a)	{seti(&style_->label_size, a);}
   void text_size(unsigned a)	{seti(&style_->text_size, a);}
+  void leading(unsigned a)	{seti(&style_->leading, a);}
 
 #ifndef FLTK_2  // back-compatability section:
   Fl_Boxtype down_box()		const {return glyph_box();}
@@ -279,5 +281,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.36 1999/11/10 19:27:29 carl Exp $".
+// End of "$Id: Fl_Widget.H,v 1.37 1999/11/14 08:42:41 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.H,v 1.10 1999/11/10 19:27:28 carl Exp $"
+// "$Id: Fl_Boxtype.H,v 1.11 1999/11/14 08:42:40 bill Exp $"
 //
 // Boxes used by FLTK styles.
 //
@@ -35,7 +35,6 @@ struct FL_API Fl_Boxtype_ {
 	       int,int,int,int, Fl_Color fill, Fl_Flags);
   const void* data;
   const Fl_Boxtype_* down;
-  const Fl_Boxtype_* highlight;
   int dx_, dy_, dw_, dh_;
   int rectangular;
 // public:
@@ -70,11 +69,10 @@ extern FL_API const Fl_Boxtype_ fl_flat_up_box;
 #define FL_FLAT_UP_BOX (&fl_flat_up_box)
 extern FL_API const Fl_Boxtype_ fl_flat_down_box;
 #define FL_FLAT_DOWN_BOX (&fl_flat_down_box)
-extern FL_API const Fl_Boxtype_ fl_highlight_down_box;
-#define FL_HIGHLIGHT_DOWN_BOX (&fl_highlight_down_box)
-#define FL_HIGHLIGHT_BOX FL_HIGHLIGHT_DOWN_BOX
 extern FL_API const Fl_Boxtype_ fl_highlight_up_box;
 #define FL_HIGHLIGHT_UP_BOX (&fl_highlight_up_box)
+extern FL_API const Fl_Boxtype_ fl_highlight_down_box;
+#define FL_HIGHLIGHT_DOWN_BOX (&fl_highlight_down_box)
 extern FL_API Fl_Boxtype_ fl_up_box;
 #define FL_UP_BOX (&fl_up_box)
 extern FL_API Fl_Boxtype_ fl_down_box;
@@ -138,5 +136,5 @@ extern FL_API const Fl_Boxtype_ fl_border_frame;
 #endif
 
 //
-// End of "$Id: Fl_Boxtype.H,v 1.10 1999/11/10 19:27:28 carl Exp $".
+// End of "$Id: Fl_Boxtype.H,v 1.11 1999/11/14 08:42:40 bill Exp $".
 //

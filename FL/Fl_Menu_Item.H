@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.36 1999/11/11 18:13:30 carl Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.37 1999/11/14 08:42:40 bill Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -41,8 +41,7 @@ enum { // values for flags:
   FL_SUBMENU		= 0x040,
   FL_MENU_DIVIDER	= 0x080,
   FL_MENU_HORIZONTAL	= 0x100,
-  FL_MENU_STAYS_UP	= 0x200,
-  FL_MENU_TITLE         = 0x400
+  FL_MENU_STAYS_UP	= 0x200
 };
 
 extern FL_API int fl_old_shortcut(const char*);
@@ -74,7 +73,7 @@ struct FL_API Fl_Menu_Item {
   const Fl_Style* style_;
 
 #ifdef DONT_LEAK_MEMORY
-  ~Fl_Menu_Item() if (style_->dynamic) delete s; }
+  ~Fl_Menu_Item() if (style_->dynamic()) delete s; }
 #endif
 
   // advance N items, skipping submenus:
@@ -121,8 +120,8 @@ struct FL_API Fl_Menu_Item {
   Fl_Flags flags() const {return Fl_Flags(flags_);}
 
   // used by menubar:
-  int measure(int* h, const Fl_Menu_*, int title) const;
-  void draw(int x, int y, int w, int h, const Fl_Menu_*, int t=0, int draw_box = 1) const;
+  int measure(int* h, const Fl_Menu_*) const;
+  void draw(int x, int y, int w, int h, const Fl_Menu_*, int selected=0) const;
 
   // popup menus without using an Fl_Menu_ widget: (highly depreciated!)
   const Fl_Menu_Item* popup(
@@ -260,5 +259,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.36 1999/11/11 18:13:30 carl Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.37 1999/11/14 08:42:40 bill Exp $".
 //
