@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Output.H,v 1.8 1999/03/18 05:33:21 carl Exp $"
+// "$Id: Fl_Value_Output.H,v 1.9 1999/03/18 22:58:57 carl Exp $"
 //
 // Value output header file for the Fast Light Tool Kit (FLTK).
 //
@@ -35,7 +35,7 @@ class Fl_Value_Output : public Fl_Valuator {
 public:
   Fl_Output output;
 
-  virtual void loadstyle() { output.loadstyle(); }
+  virtual void loadstyle() const { output.loadstyle(); }
 
   int handle(int);
   void draw();
@@ -45,8 +45,10 @@ public:
   void soft(uchar x) {soft_ = x;}
   uchar soft() const {return soft_;}
 
-  int is_style_forced(Fl_Widget::Attribute a) { return Fl_Widget::is_style_forced(a); }
-  int is_style_forced(Fl_Input_::Attribute a) { return output.is_style_forced(a); }
+  int is_style_forced(Fl_Widget::Attribute a) const
+    { return Fl_Widget::is_style_forced(a); }
+  int is_style_forced(Fl_Input_::Attribute a) const
+    { return output.is_style_forced(a); }
 
   Fl_Font textfont() const {return output.textfont();}
   void textfont(uchar s) {output.textfont(s);}
@@ -66,5 +68,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Fl_Value_Output.H,v 1.8 1999/03/18 05:33:21 carl Exp $".
+// End of "$Id: Fl_Value_Output.H,v 1.9 1999/03/18 22:58:57 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter_SW.cxx,v 1.1 1999/03/14 06:46:29 carl Exp $"
+// "$Id: Fl_Counter_SW.cxx,v 1.2 1999/03/18 22:59:04 carl Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -24,37 +24,37 @@
 #include <FL/Fl_Counter.H>
 
 void Fl_Counter::textfont(uchar s) {
-  wstyle();
+  mstyle(&_style);
   COUNTER_STYLE->sbf |= bf(TEXTFONT);
   COUNTER_STYLE->counter(TEXTFONT)=s;
 }
 
 void Fl_Counter::textsize(uchar s) {
-  wstyle();
+  mstyle(&_style);
   COUNTER_STYLE->sbf |= bf(TEXTSIZE);
   COUNTER_STYLE->counter(TEXTSIZE)=s;
 }
 
 void Fl_Counter::textcolor(uchar n) {
-  wstyle();
+  mstyle(&_style);
   COUNTER_STYLE->sbf |= bf(TEXTCOLOR);
   COUNTER_STYLE->counter(TEXTCOLOR)=n;
 }
 
 void Fl_Counter::down_box(Fl_Boxtype b) {
-  wstyle();
+  mstyle(&_style);
   COUNTER_STYLE->sbf |= bf(DOWN_BOX);
   COUNTER_STYLE->counter(DOWN_BOX)=b;
 }
 
 void Fl_Counter::fly_box(Fl_Boxtype b) {
-  wstyle();
+  mstyle(&_style);
   COUNTER_STYLE->sbf |= bf(FLY_BOX);
   COUNTER_STYLE->counter(FLY_BOX)=b;
 }
 
 void Fl_Counter::fly_color(uchar c) {
-  wstyle();
+  mstyle(&_style);
   COUNTER_STYLE->sbf |= bf(FLY_COLOR);
   COUNTER_STYLE->counter(FLY_COLOR)=c;
 }

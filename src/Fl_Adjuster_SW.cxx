@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster_SW.cxx,v 1.1 1999/03/14 06:46:25 carl Exp $"
+// "$Id: Fl_Adjuster_SW.cxx,v 1.2 1999/03/18 22:59:01 carl Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -24,13 +24,13 @@
 #include <FL/Fl_Adjuster.H>
 
 void Fl_Adjuster::fly_color(uchar c) {
-  wstyle();
+  mstyle(&_style);
   ADJUSTER_STYLE->sbf |= bf(FLY_COLOR);
   ADJUSTER_STYLE->adjuster(FLY_COLOR)=c;
 }
 
 void Fl_Adjuster::fly_box(uchar b) {
-  wstyle();
+  mstyle(&_style);
   ADJUSTER_STYLE->sbf |= bf(FLY_BOX);
   ADJUSTER_STYLE->adjuster(FLY_BOX)=b;
 }

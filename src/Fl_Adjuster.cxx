@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.7 1999/03/15 18:19:05 carl Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.8 1999/03/18 22:59:01 carl Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -38,7 +38,7 @@ static Fl_Bitmap slowarrow(slowarrow_bits, slowarrow_width, slowarrow_height);
 
 #define DEFAULT_STYLE ((Style*)default_style())
 
-void Fl_Adjuster::loadstyle() {
+void Fl_Adjuster::loadstyle() const {
   if (!Fl::s_adjuster) {
     Fl::s_adjuster = 1;
 
@@ -160,7 +160,7 @@ int Fl_Adjuster::handle(int event) {
   return 0;
 }
 
-Fl_Adjuster::Style Fl_Adjuster::_default_style;
+Fl_Widget::Style* Fl_Adjuster::_default_style = 0;
 
 Fl_Adjuster::Style::Style() : Fl_Widget::Style() {
   sbf = 0;
@@ -193,5 +193,5 @@ Fl_Boxtype Fl_Adjuster::fly_box() const {
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.7 1999/03/15 18:19:05 carl Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.8 1999/03/18 22:59:01 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Fly_Button.cxx,v 1.1 1999/03/14 06:46:30 carl Exp $"
+// "$Id: Fl_Fly_Button.cxx,v 1.2 1999/03/18 22:59:05 carl Exp $"
 //
 // Fly button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -29,13 +29,13 @@
 
 #define DEFAULT_STYLE ((Style*)default_style())
 
-Fl_Fly_Button::Style Fl_Fly_Button::_default_style;
+Fl_Widget::Style* Fl_Fly_Button::_default_style = 0;
 
 Fl_Fly_Button::Style::Style() : Fl_Button::Style() {
   widget(BOX) = FL_FLAT_BOX;
 }
 
-void Fl_Fly_Button::loadstyle() {
+void Fl_Fly_Button::loadstyle() const {
   if (!Fl::s_fly_button) {
     Fl::s_fly_button = 1;
 
@@ -64,5 +64,5 @@ void Fl_Fly_Button::loadstyle() {
 Fl_Fly_Button::Fl_Fly_Button(int x,int y,int w,int h,const char *l) : Fl_Button(x,y,w,h,l) {}
 
 //
-// End of "$Id: Fl_Fly_Button.cxx,v 1.1 1999/03/14 06:46:30 carl Exp $".
+// End of "$Id: Fl_Fly_Button.cxx,v 1.2 1999/03/18 22:59:05 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Round_Button.cxx,v 1.5 1999/03/14 06:46:34 carl Exp $"
+// "$Id: Fl_Round_Button.cxx,v 1.6 1999/03/18 22:59:09 carl Exp $"
 //
 // Round button for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,7 @@
 
 #define DEFAULT_STYLE ((Style*)default_style())
 
-Fl_Round_Button::Style Fl_Round_Button::_default_style;
+Fl_Widget::Style* Fl_Round_Button::_default_style = 0;
 
 Fl_Round_Button::Style::Style() : Fl_Light_Button::Style() {
   widget(COLOR2) = FL_RED;
@@ -40,7 +40,7 @@ Fl_Round_Button::Style::Style() : Fl_Light_Button::Style() {
   button(DOWN_BOX) = FL_ROUND_DOWN_BOX;
 }
 
-void Fl_Round_Button::loadstyle() {
+void Fl_Round_Button::loadstyle() const {
   if (!Fl::s_round_button) {
     Fl::s_round_button = 1;
 
@@ -70,5 +70,5 @@ void Fl_Round_Button::loadstyle() {
 Fl_Round_Button::Fl_Round_Button(int x,int y,int w,int h, const char *l) : Fl_Light_Button(x,y,w,h,l) {}
 
 //
-// End of "$Id: Fl_Round_Button.cxx,v 1.5 1999/03/14 06:46:34 carl Exp $".
+// End of "$Id: Fl_Round_Button.cxx,v 1.6 1999/03/18 22:59:09 carl Exp $".
 //

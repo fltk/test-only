@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.22 1999/03/15 18:19:08 carl Exp $"
+// "$Id: Fl_Menu.cxx,v 1.23 1999/03/18 22:59:06 carl Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -40,10 +40,10 @@ static int in_popup = 0;
 
 // destructor but no constructor
 Fl_Menu_Item::~Fl_Menu_Item() {
-  if (_style && _style != &default_style) delete _style;
+  if (_style && _style != default_style()) delete _style;
 }
 
-Fl_Menu_Item::Style Fl_Menu_Item::default_style;
+Fl_Menu_Item::Style* Fl_Menu_Item::_default_style = 0;
 
 Fl_Menu_Item::Style::Style() {
   sbf = 0;
@@ -70,7 +70,7 @@ static struct {
   uchar textsize;
 } popup_style = { FL_MEDIUM_UP_BOX, FL_GRAY, FL_HELVETICA, FL_NORMAL_SIZE };
 
-void Fl_Menu_Item::loadstyle() {
+void Fl_Menu_Item::loadstyle() const {
   if (!Fl::s_menu_item) {
     Fl::s_menu_item = 1;
 
@@ -90,7 +90,7 @@ void Fl_Menu_Item::loadstyle() {
       { "menu title highlight label color", TITLE_FLY_LABELCOLOR },
       { 0 }
     };
-    Fl::load_attributes("menu item", default_style.menu_item_,
+    Fl::load_attributes("menu item", default_style()->menu_item_,
                                  menu_item_attributes);
 
   Fl::find("popup menu/color", popup_style.color, 1);
@@ -158,7 +158,7 @@ public:
   const Fl_Menu_Item* menu;
   menuwindow(const Fl_Menu_Item* m, int X, int Y, int W, int H,
 	     const Fl_Menu_Item* picked, const Fl_Menu_Item* title,
-	     int menubar = 0, int menubar_title = 0);
+	     int menubar = 0);
   ~menuwindow();
   void set_selected(int);
   int find_selected(int mx, int my);
@@ -193,21 +193,21 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
   Fl_Color lc = labelcolor();
   Fl_Color dlc = down_labelcolor();
   if (selected == 2)
-    dlc = (Fl_Color)Fl_Menu_Item::default_style.menu_item(TITLE_DOWN_LABELCOLOR);
+    dlc = (Fl_Color)default_style()->menu_item(TITLE_DOWN_LABELCOLOR);
 
   l.value = text;
   l.type = labeltype();
-  l.font = labelsize() ? labelfont() : m ? (uchar)m->textfont() : Fl_Menu_Item::default_style.menu_item(LABELFONT);
-  l.size = labelsize() ? labelsize() : m ? m->textsize() : Fl_Menu_Item::default_style.menu_item(LABELSIZE);
+  l.font = labelsize() ? labelfont() : m ? (uchar)m->textfont() : default_style()->menu_item(LABELFONT);
+  l.size = labelsize() ? labelsize() : m ? m->textsize() : default_style()->menu_item(LABELSIZE);
   l.color = selected ? dlc : lc;
   if (!active() || (m && !m->active_r())) l.color = inactive((Fl_Color)l.color);
   if (selected) {
     Fl_Color r = down_color();
     Fl_Boxtype b = down_box();
     if (selected == 2) { // menu title
-      r = (Fl_Color)Fl_Menu_Item::default_style.menu_item(TITLE_DOWN_COLOR);
+      r = (Fl_Color)default_style()->menu_item(TITLE_DOWN_COLOR);
       b = in_popup ? (Fl_Boxtype)popup_style.box :
-                     (Fl_Boxtype)Fl_Menu_Item::default_style.menu_item(TITLE_DOWN_BOX);
+                     (Fl_Boxtype)default_style()->menu_item(TITLE_DOWN_BOX);
       fl_draw_box(b, x, y, w, h, r);
       x += 3;
       w -= 8;
@@ -260,13 +260,13 @@ menutitle::menutitle(int X, int Y, int W, int H, const Fl_Menu_Item* L) :
 
 menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
 		       const Fl_Menu_Item* picked, const Fl_Menu_Item* t, 
-		       int menubar, int menubar_title)
+		       int menubar)
   : Fl_Menu_Window(X, Y, Wp, Hp, 0)
 {
   end();
 
   // if this is a popup, then we need to get the menu button style info from config file
-  Fl_Menu_Item::loadstyle();
+  { Fl_Menu_Item m; memset(&m, 0, sizeof(m)); m.loadstyle(); }
 
   set_modal();
   clear_border();
@@ -750,7 +750,7 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
 	// delete all the old menus and create new one:
 	while (p.nummenus > p.menu_number+1) delete p.p[--p.nummenus];
 	p.p[p.nummenus++]= new menuwindow(menutable, nX, nY,
-					  title?1:0, 0, 0, title, 0, menubar);
+					  title?1:0, 0, 0, title, 0);
       }
     } else { // !m->submenu():
       while (p.nummenus > p.menu_number+1) delete p.p[--p.nummenus];
@@ -759,7 +759,7 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
 	fakemenu = new menuwindow(0,
 				  cw.x()+cw.titlex(p.item_number),
 				  cw.y()+cw.h(), 0, 0,
-				  0, m, 0, 1);
+				  0, m, 0);
 	fakemenu->title->show();
       }
     }
@@ -823,46 +823,46 @@ void Fl_Bitmap::label(Fl_Menu_Item* o) {
 
 Fl_Labeltype Fl_Menu_Item::labeltype() const {
   if (!_style || !(MENU_ITEM_STYLE->sbf & bf(LABELTYPE)))
-    return (Fl_Labeltype)default_style.menu_item(LABELTYPE);
+    return (Fl_Labeltype)default_style()->menu_item(LABELTYPE);
   return (Fl_Labeltype)MENU_ITEM_STYLE->menu_item(LABELTYPE);
 }
 
 Fl_Color Fl_Menu_Item::labelcolor() const {
   if (!_style || !(MENU_ITEM_STYLE->sbf & bf(LABELCOLOR)))
-    return (Fl_Color)default_style.menu_item(LABELCOLOR);
+    return (Fl_Color)default_style()->menu_item(LABELCOLOR);
   return (Fl_Color)MENU_ITEM_STYLE->menu_item(LABELCOLOR);
 }
 
 Fl_Font Fl_Menu_Item::labelfont() const {
   if (!_style || !(MENU_ITEM_STYLE->sbf & bf(LABELFONT)))
-    return (Fl_Font)default_style.menu_item(LABELFONT);
+    return (Fl_Font)default_style()->menu_item(LABELFONT);
   return (Fl_Font)MENU_ITEM_STYLE->menu_item(LABELFONT);
 }
 
 uchar Fl_Menu_Item::labelsize() const {
   if (!_style || !(MENU_ITEM_STYLE->sbf & bf(LABELSIZE)))
-    return default_style.menu_item(LABELSIZE);
+    return default_style()->menu_item(LABELSIZE);
   return MENU_ITEM_STYLE->menu_item(LABELSIZE);
 }
 
 Fl_Boxtype Fl_Menu_Item::down_box() const {
   if (!_style || !(MENU_ITEM_STYLE->sbf & bf(DOWN_BOX)))
-    return (Fl_Boxtype)default_style.menu_item(DOWN_BOX);
+    return (Fl_Boxtype)default_style()->menu_item(DOWN_BOX);
   return (Fl_Boxtype)MENU_ITEM_STYLE->menu_item(DOWN_BOX);
 }
 
 Fl_Color Fl_Menu_Item::down_color() const {
   if (!_style || !(MENU_ITEM_STYLE->sbf & bf(DOWN_COLOR)))
-    return (Fl_Color)default_style.menu_item(DOWN_COLOR);
+    return (Fl_Color)default_style()->menu_item(DOWN_COLOR);
   return (Fl_Color)MENU_ITEM_STYLE->menu_item(DOWN_COLOR);
 }
 
 Fl_Color Fl_Menu_Item::down_labelcolor() const {
   if (!_style || !(MENU_ITEM_STYLE->sbf & bf(DOWN_LABELCOLOR)))
-    return (Fl_Color)default_style.menu_item(DOWN_LABELCOLOR);
+    return (Fl_Color)default_style()->menu_item(DOWN_LABELCOLOR);
   return (Fl_Color)MENU_ITEM_STYLE->menu_item(DOWN_LABELCOLOR);
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.22 1999/03/15 18:19:08 carl Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.23 1999/03/18 22:59:06 carl Exp $".
 //

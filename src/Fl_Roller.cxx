@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Roller.cxx,v 1.7 1999/03/14 06:46:33 carl Exp $"
+// "$Id: Fl_Roller.cxx,v 1.8 1999/03/18 22:59:08 carl Exp $"
 //
 // Roller widget for the Fast Light Tool Kit (FLTK).
 //
@@ -132,14 +132,14 @@ void Fl_Roller::draw() {
   }
 }
 
-Fl_Roller::Style Fl_Roller::_default_style;
+Fl_Widget::Style* Fl_Roller::_default_style = 0;
 
 Fl_Roller::Style::Style() : Fl_Widget::Style() {
   widget(BOX) = FL_MEDIUM_UP_BOX;
 }
 
 
-void Fl_Roller::loadstyle() {
+void Fl_Roller::loadstyle() const {
   if (!Fl::s_roller) {
     Fl::s_roller = 1;
 
@@ -161,5 +161,5 @@ Fl_Roller::Fl_Roller(int X,int Y,int W,int H,const char* L) : Fl_Valuator(X,Y,W,
 }
 
 //
-// End of "$Id: Fl_Roller.cxx,v 1.7 1999/03/14 06:46:33 carl Exp $".
+// End of "$Id: Fl_Roller.cxx,v 1.8 1999/03/18 22:59:08 carl Exp $".
 //

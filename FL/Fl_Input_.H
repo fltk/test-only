@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.H,v 1.10 1999/03/18 05:33:20 carl Exp $"
+// "$Id: Fl_Input_.H,v 1.11 1999/03/18 22:58:54 carl Exp $"
 //
 // Input base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -40,6 +40,8 @@
 #define FL_SECRET_INPUT		5
 
 class Fl_Input_ : public Fl_Widget {
+  friend class Fl_Value_Input;
+  friend class Fl_Value_Output;
 public:
   enum Attribute {
     TEXTFONT = 0,
@@ -58,14 +60,15 @@ public:
     uchar& input(Attribute a) { return input_[a]; }
   };
 
-  int is_style_forced(Fl_Widget::Attribute a) { return Fl_Widget::is_style_forced(a); }
-  int is_style_forced(Attribute a)
+  int is_style_forced(Fl_Widget::Attribute a) const
+    { return Fl_Widget::is_style_forced(a); }
+  int is_style_forced(Attribute a) const
     { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
 
   void copy_style(Fl_Input_* o)
-    { wstyle(); *((Style*)_style) = *((Style*)o->style()); }
+    { mstyle(&_style); *((Style*)_style) = *((Style*)o->style()); }
 
-  virtual void loadstyle();
+  virtual void loadstyle() const;
 
   void resize(int, int, int, int);
 
@@ -112,10 +115,10 @@ public:
   void selected_textcolor(uchar n);
 
 protected:
-  static Style _default_style;
+  static Fl_Widget::Style* _default_style;
 
-  virtual Fl_Widget::Style* default_style() const { return &_default_style; }
-  virtual void wstyle() { if (!_style) _style = new Style; }
+  virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
+  virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
 
   int wordboundary(int i) const;
   int lineboundary(int i) const;
@@ -153,5 +156,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Input_.H,v 1.10 1999/03/18 05:33:20 carl Exp $".
+// End of "$Id: Fl_Input_.H,v 1.11 1999/03/18 22:58:54 carl Exp $".
 //

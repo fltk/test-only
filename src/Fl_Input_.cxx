@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.cxx,v 1.23 1999/03/15 18:19:07 carl Exp $"
+// "$Id: Fl_Input_.cxx,v 1.24 1999/03/18 22:59:05 carl Exp $"
 //
 // Common input widget routines for the Fast Light Tool Kit (FLTK).
 //
@@ -642,7 +642,7 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
 
 /*------------------------------*/
 
-Fl_Input_::Style Fl_Input_::_default_style;
+Fl_Widget::Style* Fl_Input_::_default_style = 0;
 
 Fl_Input_::Style::Style() : Fl_Widget::Style() {
   sbf = 0;
@@ -658,7 +658,7 @@ Fl_Input_::Style::Style() : Fl_Widget::Style() {
   input(SELECTED_TEXTCOLOR) = FL_BLACK;
 }
 
-void Fl_Input_::loadstyle() {
+void Fl_Input_::loadstyle() const {
   if (!Fl::s_input) {
     Fl::s_input = 1;
 
@@ -808,5 +808,5 @@ Fl_Color Fl_Input_::selected_textcolor() const {
 }
 
 //
-// End of "$Id: Fl_Input_.cxx,v 1.23 1999/03/15 18:19:07 carl Exp $".
+// End of "$Id: Fl_Input_.cxx,v 1.24 1999/03/18 22:59:05 carl Exp $".
 //

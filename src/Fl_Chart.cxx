@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.cxx,v 1.7 1999/03/15 18:19:06 carl Exp $"
+// "$Id: Fl_Chart.cxx,v 1.8 1999/03/18 22:59:03 carl Exp $"
 //
 // Forms-compatible chart widget for the Fast Light Tool Kit (FLTK).
 //
@@ -223,7 +223,7 @@ static void draw_piechart(int x,int y,int w,int h,
     }
 }
 
-void Fl_Chart::loadstyle() {
+void Fl_Chart::loadstyle() const {
   if (!Fl::s_chart) {
     Fl::s_chart = 1;
 
@@ -300,7 +300,7 @@ void Fl_Chart::draw() {
 #define FL_CHART_LCOL		FL_LCOL
 #define FL_CHART_ALIGN		FL_ALIGN_BOTTOM
 
-Fl_Chart::Style Fl_Chart::_default_style;
+Fl_Widget::Style* Fl_Chart::_default_style = 0;
 
 Fl_Chart::Style::Style() : Fl_Widget::Style() {
   sbf = 0;
@@ -427,5 +427,5 @@ Fl_Color Fl_Chart::textcolor() const {
 }
 
 //
-// End of "$Id: Fl_Chart.cxx,v 1.7 1999/03/15 18:19:06 carl Exp $".
+// End of "$Id: Fl_Chart.cxx,v 1.8 1999/03/18 22:59:03 carl Exp $".
 //

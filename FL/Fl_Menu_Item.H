@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.12 1999/03/18 05:33:20 carl Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.13 1999/03/18 22:58:55 carl Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -76,7 +76,7 @@ struct Fl_Menu_Item {
     uchar& menu_item(Attribute a) { return menu_item_[a]; }
   };
 
-  static Style default_style;
+  static Fl_Menu_Item::Style* _default_style;
 
   const char *text;	// label()
   int shortcut_;
@@ -95,15 +95,15 @@ struct Fl_Menu_Item {
 
   ~Fl_Menu_Item();
 
-  Style* style() { if (_style) return _style; return &default_style; }
+  Style* style() const { if (_style) return _style; return default_style(); }
 
-  int is_style_forced(Attribute a)
+  int is_style_forced(Attribute a) const
     { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
 
   void copy_style(Fl_Menu_Item* o)
-    { wstyle(); *((Style*)_style) = *((Style*)o->style()); }
+    { mstyle(&_style); *((Style*)_style) = *((Style*)o->style()); }
 
-  static void loadstyle();
+  void loadstyle() const;
   uchar bf(uchar a) const {return (uchar)1 << a;}
 
   // advance N items, skipping submenus:
@@ -192,11 +192,12 @@ struct Fl_Menu_Item {
   int size() const ;
 
   void modify_default_style() {
-    if (_style && _style != &default_style) delete _style;
-    _style = &default_style;
+    if (_style && _style != default_style()) delete _style;
+    _style = default_style();
   }
 
-  void wstyle() { if (!_style) _style = new Style; }
+  Fl_Menu_Item::Style* default_style() const { mstyle(&_default_style); return _default_style; }
+  void mstyle(Fl_Menu_Item::Style** s) const { if (!(*s)) (*s) = new Style; }
 };
 
 typedef Fl_Menu_Item Fl_Menu; // back compatability
@@ -217,5 +218,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.12 1999/03/18 05:33:20 carl Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.13 1999/03/18 22:58:55 carl Exp $".
 //

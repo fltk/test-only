@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.5 1999/03/14 06:46:28 carl Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.6 1999/03/18 22:59:04 carl Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,7 @@
 // diamond is smaller than the widget size and can be surchecked by
 // another box type, for compatability with Forms.
 
-Fl_Check_Button::Style Fl_Check_Button::_default_style;
+Fl_Widget::Style* Fl_Check_Button::_default_style = 0;
 
 
 Fl_Check_Button::Style::Style() : Fl_Light_Button::Style() {
@@ -42,7 +42,7 @@ Fl_Check_Button::Style::Style() : Fl_Light_Button::Style() {
   button(DOWN_LABELCOLOR) = FL_BLACK;
 }
 
-void Fl_Check_Button::loadstyle() {
+void Fl_Check_Button::loadstyle() const {
   if (!Fl::s_check_button) {
     Fl::s_check_button = 1;
 

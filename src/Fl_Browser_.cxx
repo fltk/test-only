@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.12 1999/03/15 18:19:06 carl Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.13 1999/03/18 22:59:01 carl Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -66,7 +66,7 @@ static void hscrollbar_callback(Fl_Widget* s, void*) {
 int Fl_Browser_::scrollbar_width_ = 17;
 
 
-void Fl_Browser_::loadstyle() {
+void Fl_Browser_::loadstyle() const {
   if (!Fl::s_browser) {
     Fl::s_browser = 1;
 
@@ -610,7 +610,7 @@ int Fl_Browser_::handle(int event) {
   return 0;
 }
 
-Fl_Browser_::Style Fl_Browser_::_default_style;
+Fl_Widget::Style* Fl_Browser_::_default_style = 0;
 
 Fl_Browser_::Style::Style() : Fl_Widget::Style() {
   sbf = 0;
@@ -697,5 +697,5 @@ Fl_Color Fl_Browser_::selected_textcolor() const {
   return (Fl_Color)BROWSER_STYLE->browser(SELECTED_TEXTCOLOR);
 }
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.12 1999/03/15 18:19:06 carl Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.13 1999/03/18 22:59:01 carl Exp $".
 //

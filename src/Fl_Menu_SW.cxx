@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_SW.cxx,v 1.1 1999/03/14 06:46:32 carl Exp $"
+// "$Id: Fl_Menu_SW.cxx,v 1.2 1999/03/18 22:59:08 carl Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -24,25 +24,25 @@
 #include <FL/Fl_Menu_.H>
 
 void Fl_Menu_::textfont(uchar s) {
-  wstyle();
+  mstyle(&_style);
   MENU_STYLE->sbf |= bf(TEXTFONT);
   MENU_STYLE->menu(TEXTFONT)=s;
 }
 
 void Fl_Menu_::textsize(uchar s) {
-  wstyle();
+  mstyle(&_style);
   MENU_STYLE->sbf |= bf(TEXTSIZE);
   MENU_STYLE->menu(TEXTSIZE)=s;
 }
 
 void Fl_Menu_::textcolor(uchar n) {
-  wstyle();
+  mstyle(&_style);
   MENU_STYLE->sbf |= bf(TEXTCOLOR);
   MENU_STYLE->menu(TEXTCOLOR)=n;
 }
 
 void Fl_Menu_::down_box(Fl_Boxtype b) {
-  wstyle();
+  mstyle(&_style);
   MENU_STYLE->sbf |= bf(DOWN_BOX);
   MENU_STYLE->menu(DOWN_BOX)=b;
 }

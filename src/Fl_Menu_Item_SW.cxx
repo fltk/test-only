@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item_SW.cxx,v 1.1 1999/03/14 06:46:32 carl Exp $"
+// "$Id: Fl_Menu_Item_SW.cxx,v 1.2 1999/03/18 22:59:08 carl Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -24,50 +24,50 @@
 #include <FL/Fl_Menu_Item.H>
 
 void Fl_Menu_Item::label(Fl_Labeltype a, const char* b) {
-  wstyle();
+  mstyle(&_style);
   MENU_ITEM_STYLE->sbf |= bf(LABELTYPE);
   MENU_ITEM_STYLE->menu_item(LABELTYPE)=a;
   text = b;
 }
 
 void Fl_Menu_Item::labeltype(Fl_Labeltype a) {
-  wstyle();
+  mstyle(&_style);
   MENU_ITEM_STYLE->sbf |= bf(LABELTYPE);
   MENU_ITEM_STYLE->menu_item(LABELTYPE)=a;
 }
 
 void Fl_Menu_Item::labelcolor(uchar a) {
-  wstyle();
+  mstyle(&_style);
   MENU_ITEM_STYLE->sbf |= bf(LABELCOLOR);
   MENU_ITEM_STYLE->menu_item(LABELCOLOR)=a;
 }
 
 void Fl_Menu_Item::labelfont(uchar a) {
-  wstyle();
+  mstyle(&_style);
   MENU_ITEM_STYLE->sbf |= bf(LABELFONT);
   MENU_ITEM_STYLE->menu_item(LABELFONT)=a;
 }
 
 void Fl_Menu_Item::labelsize(uchar a) {
-  wstyle();
+  mstyle(&_style);
   MENU_ITEM_STYLE->sbf |= bf(LABELSIZE);
   MENU_ITEM_STYLE->menu_item(LABELSIZE)=a;
 }
 
 void Fl_Menu_Item::down_box(uchar b) {
-  wstyle();
+  mstyle(&_style);
   MENU_ITEM_STYLE->sbf |= bf(DOWN_BOX);
   MENU_ITEM_STYLE->menu_item(DOWN_BOX)=b;
 }
 
 void Fl_Menu_Item::down_color(uchar c) {
-  wstyle();
+  mstyle(&_style);
   MENU_ITEM_STYLE->sbf |= bf(DOWN_COLOR);
   MENU_ITEM_STYLE->menu_item(DOWN_COLOR)=c;
 }
 
 void Fl_Menu_Item::down_labelcolor(uchar c) {
-  wstyle();
+  mstyle(&_style);
   MENU_ITEM_STYLE->sbf |= bf(DOWN_LABELCOLOR);
   MENU_ITEM_STYLE->menu_item(DOWN_LABELCOLOR)=c;
 }

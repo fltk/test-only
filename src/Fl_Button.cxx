@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.6 1999/03/15 18:19:06 carl Exp $"
+// "$Id: Fl_Button.cxx,v 1.7 1999/03/18 22:59:02 carl Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 
 #define DEFAULT_STYLE ((Style*)default_style())
 
-void Fl_Button::loadstyle() {
+void Fl_Button::loadstyle() const {
   if (!Fl::s_button) {
     Fl::s_button = 1;
 
@@ -149,7 +149,7 @@ int Fl_Button::handle(int event) {
   }
 }
 
-Fl_Button::Style Fl_Button::_default_style;
+Fl_Widget::Style* Fl_Button::_default_style = 0;
 
 Fl_Button::Style::Style() : Fl_Widget::Style() {
   widget(BOX) = FL_MEDIUM_UP_BOX;
@@ -196,5 +196,5 @@ Fl_Color Fl_Button::down_labelcolor() const {
 Fl_Color Fl_Button::down_color() const {return selection_color();}
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.6 1999/03/15 18:19:06 carl Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.7 1999/03/18 22:59:02 carl Exp $".
 //

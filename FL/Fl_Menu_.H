@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.H,v 1.11 1999/03/18 05:33:20 carl Exp $"
+// "$Id: Fl_Menu_.H,v 1.12 1999/03/18 22:58:54 carl Exp $"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -51,17 +51,18 @@ public:
     uchar& menu(Attribute a) { return menu_[a]; }
   };
 
-  int is_style_forced(Fl_Widget::Attribute a) { return Fl_Widget::is_style_forced(a); }
-  int is_style_forced(Attribute a)
+  int is_style_forced(Fl_Widget::Attribute a) const
+    { return Fl_Widget::is_style_forced(a); }
+  int is_style_forced(Attribute a) const
     { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
 
   void copy_style(Fl_Menu_* o)
-    { wstyle(); *((Style*)_style) = *((Style*)o->style()); }
+    { mstyle(&_style); *((Style*)_style) = *((Style*)o->style()); }
 
   Fl_Menu_(int,int,int,int,const char * =0);
   ~Fl_Menu_();
 
-  virtual void loadstyle();
+  virtual void loadstyle() const;
   const Fl_Menu_Item* test_shortcut() {return picked(menu()->test_shortcut());}
   void global();
 
@@ -106,10 +107,10 @@ public:
 
 protected:
   uchar alloc;
-  static Style _default_style;
+  static Fl_Widget::Style* _default_style;
 
-  virtual Fl_Widget::Style* default_style() const { return &_default_style; }
-  virtual void wstyle() { if (!_style) _style = new Style; }
+  virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
+  virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
 
   const Fl_Menu_Item* picked(const Fl_Menu_Item*);
 
@@ -121,5 +122,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Menu_.H,v 1.11 1999/03/18 05:33:20 carl Exp $".
+// End of "$Id: Fl_Menu_.H,v 1.12 1999/03/18 22:58:54 carl Exp $".
 //

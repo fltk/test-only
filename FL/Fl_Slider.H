@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.H,v 1.9 1999/03/18 05:33:21 carl Exp $"
+// "$Id: Fl_Slider.H,v 1.10 1999/03/18 22:58:57 carl Exp $"
 //
 // Slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -56,14 +56,15 @@ public:
     uchar& slider(Attribute a) { return slider_[a]; }
   };
 
-  int is_style_forced(Fl_Widget::Attribute a) { return Fl_Widget::is_style_forced(a); }
-  int is_style_forced(Attribute a)
+  int is_style_forced(Fl_Widget::Attribute a) const
+    { return Fl_Widget::is_style_forced(a); }
+  int is_style_forced(Attribute a) const
     { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
 
   void copy_style(Fl_Slider* o)
-    { wstyle(); *((Style*)_style) = *((Style*)o->style()); }
+    { mstyle(&_style); *((Style*)_style) = *((Style*)o->style()); }
 
-  virtual void loadstyle();
+  virtual void loadstyle() const;
 
   void draw();
   int handle(int);
@@ -82,10 +83,10 @@ public:
   void fly_color(uchar c);
 
 protected:
-  static Style _default_style;
+  static Fl_Widget::Style* _default_style;
 
-  virtual Fl_Widget::Style* default_style() const { return &_default_style; }
-  virtual void wstyle() { if (!_style) _style = new Style; }
+  virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
+  virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
 
   // these allow subclasses to put the slider in a smaller area:
   void draw(int, int, int, int);
@@ -100,5 +101,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Slider.H,v 1.9 1999/03/18 05:33:21 carl Exp $".
+// End of "$Id: Fl_Slider.H,v 1.10 1999/03/18 22:58:57 carl Exp $".
 //

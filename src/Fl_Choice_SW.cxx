@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice_SW.cxx,v 1.1 1999/03/14 06:46:28 carl Exp $"
+// "$Id: Fl_Choice_SW.cxx,v 1.2 1999/03/18 22:59:04 carl Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -24,13 +24,13 @@
 #include <FL/Fl_Choice.H>
 
 void Fl_Choice::fly_box(Fl_Boxtype b) {
-  wstyle();
+  mstyle(&_style);
   CHOICE_STYLE->sbf |= bf(FLY_BOX);
   CHOICE_STYLE->choice(FLY_BOX)=b;
 }
 
 void Fl_Choice::fly_color(uchar c) {
-  wstyle();
+  mstyle(&_style);
   CHOICE_STYLE->sbf |= bf(FLY_COLOR);
   CHOICE_STYLE->choice(FLY_COLOR)=c;
 }

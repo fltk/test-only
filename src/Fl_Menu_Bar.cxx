@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.8 1999/03/14 06:46:31 carl Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.9 1999/03/18 22:59:07 carl Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -49,12 +49,12 @@ void TitleBox::draw() {
 
   Fl_Boxtype bt;
   Fl_Color col, lc;
-  if (Fl_Menu_Item::default_style.menu_item(Fl_Menu_Item::TITLE_FLY_BOX) &&
+  if (mi->default_style()->menu_item(Fl_Menu_Item::TITLE_FLY_BOX) &&
       current == this && active() && !Fl::pushed() && e != FL_LEAVE)
   {
-    bt = (Fl_Boxtype)Fl_Menu_Item::default_style.menu_item(Fl_Menu_Item::TITLE_FLY_BOX);
-    col = (Fl_Color)Fl_Menu_Item::default_style.menu_item(Fl_Menu_Item::TITLE_FLY_COLOR);
-    lc = (Fl_Color)Fl_Menu_Item::default_style.menu_item(Fl_Menu_Item::TITLE_FLY_LABELCOLOR);
+    bt = (Fl_Boxtype)mi->default_style()->menu_item(Fl_Menu_Item::TITLE_FLY_BOX);
+    col = (Fl_Color)mi->default_style()->menu_item(Fl_Menu_Item::TITLE_FLY_COLOR);
+    lc = (Fl_Color)mi->default_style()->menu_item(Fl_Menu_Item::TITLE_FLY_LABELCOLOR);
   } else {
     bt = FL_FLAT_BOX;
     col = color();
@@ -134,13 +134,13 @@ J1:
   return 0;
 }
 
-Fl_Menu_Bar::Style Fl_Menu_Bar::_default_style;
+Fl_Widget::Style* Fl_Menu_Bar::_default_style = 0;
 
 Fl_Menu_Bar::Style::Style() : Fl_Menu_::Style() {
   widget(BOX) = FL_MEDIUM_UP_BOX;
 }
 
-void Fl_Menu_Bar::loadstyle() {
+void Fl_Menu_Bar::loadstyle() const {
   if (!Fl::s_menu_bar) {
     Fl::s_menu_bar = 1;
 
@@ -172,5 +172,5 @@ Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l) : Fl_Menu_(x,y,w
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.8 1999/03/14 06:46:31 carl Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.9 1999/03/18 22:59:07 carl Exp $".
 //

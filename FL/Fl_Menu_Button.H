@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.H,v 1.9 1999/03/18 05:33:20 carl Exp $"
+// "$Id: Fl_Menu_Button.H,v 1.10 1999/03/18 22:58:55 carl Exp $"
 //
 // Menu button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -46,15 +46,17 @@ public:
     uchar& menu_button(Attribute a) { return menu_button_[a]; }
   };
 
-  int is_style_forced(Fl_Widget::Attribute a) { return Fl_Widget::is_style_forced(a); }
-  int is_style_forced(Fl_Menu_::Attribute a) { return Fl_Menu_::is_style_forced(a); }
-  int is_style_forced(Attribute a)
+  int is_style_forced(Fl_Widget::Attribute a) const
+    { return Fl_Widget::is_style_forced(a); }
+  int is_style_forced(Fl_Menu_::Attribute a) const
+    { return Fl_Menu_::is_style_forced(a); }
+  int is_style_forced(Attribute a) const
     { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
 
   void copy_style(Fl_Menu_Button* o)
-    { wstyle(); *((Style*)_style) = *((Style*)o->style()); }
+    { mstyle(&_style); *((Style*)_style) = *((Style*)o->style()); }
 
-  virtual void loadstyle();
+  virtual void loadstyle() const;
 
   Fl_Boxtype fly_box() const;
   void fly_box(Fl_Boxtype b);
@@ -69,10 +71,10 @@ public:
   Fl_Menu_Button(int,int,int,int,const char * =0);
 
 protected:
-  static Style _default_style;
+  static Fl_Widget::Style* _default_style;
 
-  virtual Fl_Widget::Style* default_style() const { return &_default_style; }
-  virtual void wstyle() { if (!_style) _style = new Style; }
+  virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
+  virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
 
   void draw();
 };
@@ -80,5 +82,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Button.H,v 1.9 1999/03/18 05:33:20 carl Exp $".
+// End of "$Id: Fl_Menu_Button.H,v 1.10 1999/03/18 22:58:55 carl Exp $".
 //

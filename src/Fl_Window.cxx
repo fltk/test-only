@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.7 1999/03/14 06:46:36 carl Exp $"
+// "$Id: Fl_Window.cxx,v 1.8 1999/03/18 22:59:11 carl Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -34,7 +34,7 @@
 
 #define DEFAULT_STYLE ((Style*)default_style())
 
-Fl_Window::Style Fl_Window::_default_style;
+Fl_Widget::Style* Fl_Window::_default_style = 0;
 
 Fl_Window::Style::Style() : Fl_Widget::Style() {
   widget(LABELTYPE) = FL_NO_LABEL;
@@ -50,7 +50,7 @@ static void stylechange(int) {
 }
 #endif
 
-void Fl_Window::loadstyle() {
+void Fl_Window::loadstyle() const {
   if (!Fl::s_background) {
     Fl::s_background = 1;
 
@@ -161,5 +161,5 @@ void Fl_Window::default_callback(Fl_Window* window, void* v) {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.7 1999/03/14 06:46:36 carl Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.8 1999/03/18 22:59:11 carl Exp $".
 //

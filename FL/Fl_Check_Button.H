@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.H,v 1.7 1999/03/15 18:18:59 carl Exp $"
+// "$Id: Fl_Check_Button.H,v 1.8 1999/03/18 22:58:53 carl Exp $"
 //
 // Check button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -36,17 +36,17 @@ public:
 
   Fl_Check_Button(int x,int y,int w,int h,const char *l = 0);
 
-  virtual void loadstyle();
+  virtual void loadstyle() const;
 
 protected:
-  static Style _default_style;
+  static Fl_Widget::Style* _default_style;
 
-  virtual Fl_Widget::Style* default_style() const { return &_default_style; }
-  virtual void wstyle() { if (!_style) _style = new Style; }
+  virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
+  virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Check_Button.H,v 1.7 1999/03/15 18:18:59 carl Exp $".
+// End of "$Id: Fl_Check_Button.H,v 1.8 1999/03/18 22:58:53 carl Exp $".
 //

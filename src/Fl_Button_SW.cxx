@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button_SW.cxx,v 1.1 1999/03/14 06:46:27 carl Exp $"
+// "$Id: Fl_Button_SW.cxx,v 1.2 1999/03/18 22:59:03 carl Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -24,25 +24,25 @@
 #include <FL/Fl_Button.H>
 
 void Fl_Button::down_box(Fl_Boxtype b) {
-  wstyle();
+  mstyle(&_style);
   BUTTON_STYLE->sbf |= bf(DOWN_BOX);
   BUTTON_STYLE->button(DOWN_BOX)=b;
 }
 
 void Fl_Button::fly_box(Fl_Boxtype b) {
-  wstyle();
+  mstyle(&_style);
   BUTTON_STYLE->sbf |= bf(FLY_BOX);
   BUTTON_STYLE->button(FLY_BOX)=b;
 }
 
 void Fl_Button::down_labelcolor(uchar c) {
-  wstyle();
+  mstyle(&_style);
   BUTTON_STYLE->sbf |= bf(DOWN_LABELCOLOR);
   BUTTON_STYLE->button(DOWN_LABELCOLOR)=c;
 }
 
 void Fl_Button::fly_color(uchar c) {
-  wstyle();
+  mstyle(&_style);
   BUTTON_STYLE->sbf |= bf(FLY_COLOR);
   BUTTON_STYLE->button(FLY_COLOR)=c;
 }

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.H,v 1.8 1999/03/18 05:33:21 carl Exp $"
+// "$Id: Fl_Value_Input.H,v 1.9 1999/03/18 22:58:57 carl Exp $"
 //
 // Value input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -33,7 +33,7 @@ class Fl_Value_Input : public Fl_Valuator {
 public:
   Fl_Input input;
 
-  virtual void loadstyle() { input.loadstyle(); }
+  virtual void loadstyle() const { input.loadstyle(); }
   int handle(int);
   void draw();
   void resize(int,int,int,int);
@@ -43,8 +43,10 @@ public:
   void soft(char x) {soft_ = x;}
   char soft() const {return soft_;}
 
-  int is_style_forced(Fl_Widget::Attribute a) { return Fl_Widget::is_style_forced(a); }
-  int is_style_forced(Fl_Input_::Attribute a) { return input.is_style_forced(a); }
+  int is_style_forced(Fl_Widget::Attribute a) const
+    { return Fl_Widget::is_style_forced(a); }
+  int is_style_forced(Fl_Input_::Attribute a) const
+    { return input.is_style_forced(a); }
 
   Fl_Font textfont() const {return input.textfont();}
   void textfont(uchar s) {input.textfont(s);}
@@ -67,5 +69,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Value_Input.H,v 1.8 1999/03/18 05:33:21 carl Exp $".
+// End of "$Id: Fl_Value_Input.H,v 1.9 1999/03/18 22:58:57 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.12 1999/03/18 05:33:21 carl Exp $"
+// "$Id: Fl_Widget.H,v 1.13 1999/03/18 22:58:58 carl Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -79,7 +79,7 @@ public:
 
   virtual ~Fl_Widget();
 
-  virtual void loadstyle();
+  virtual void loadstyle() const;
 
   // These next few functions are mainly used for FLUID
   
@@ -100,12 +100,12 @@ public:
   }
 
   // has this attribute been forced to a particular value?
-  int is_style_forced(Attribute a)
+  int is_style_forced(Attribute a) const
     { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
 
   // copy the style of another widget
   void copy_style(Fl_Widget* o)
-    { wstyle(); *((Style*)_style) = *((Style*)o->style()); }
+    { mstyle(&_style); *((Style*)_style) = *((Style*)o->style()); }
 
   const char *tooltip() const { return tooltip_; }
   void tooltip(const char *t);
@@ -210,14 +210,14 @@ public:
   void color2(uchar a);
 
 protected:
-  static Style _default_style;
+  static Fl_Widget::Style* _default_style;
   Style* _style;
 
   Fl_Widget(int,int,int,int,const char* =0);
 
-  virtual Fl_Widget::Style* default_style() const { return &_default_style; }
-  Style* style() { if (_style) return _style; return default_style(); }
-  virtual void wstyle() { if (!_style) _style = new Style; }
+  virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
+  Style* style() const { if (_style) return _style; return default_style(); }
+  virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
 
   void x(int v) {x_ = v;}
   void y(int v) {y_ = v;}
@@ -260,5 +260,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.12 1999/03/18 05:33:21 carl Exp $".
+// End of "$Id: Fl_Widget.H,v 1.13 1999/03/18 22:58:58 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button_SW.cxx,v 1.1 1999/03/14 06:46:32 carl Exp $"
+// "$Id: Fl_Menu_Button_SW.cxx,v 1.2 1999/03/18 22:59:07 carl Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -24,13 +24,13 @@
 #include <FL/Fl_Menu_Button.H>
 
 void Fl_Menu_Button::fly_box(Fl_Boxtype b) {
-  wstyle();
+  mstyle(&_style);
   MENU_BUTTON_STYLE->sbf |= bf(FLY_BOX);
   MENU_BUTTON_STYLE->menu_button(FLY_BOX)=b;
 }
 
 void Fl_Menu_Button::fly_color(uchar c) {
-  wstyle();
+  mstyle(&_style);
   MENU_BUTTON_STYLE->sbf |= bf(FLY_COLOR);
   MENU_BUTTON_STYLE->menu_button(FLY_COLOR)=c;
 }

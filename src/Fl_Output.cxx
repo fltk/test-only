@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Output.cxx,v 1.7 1999/03/14 06:46:33 carl Exp $"
+// "$Id: Fl_Output.cxx,v 1.8 1999/03/18 22:59:08 carl Exp $"
 //
 // Output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,13 +32,13 @@
 
 #define DEFAULT_STYLE ((Style*)default_style())
 
-Fl_Output::Style Fl_Output::_default_style;
+Fl_Widget::Style* Fl_Output::_default_style = 0;
 
 Fl_Output::Style::Style() : Fl_Input_::Style() {
   widget(COLOR) = 51;
 }
 
-void Fl_Output::loadstyle() {
+void Fl_Output::loadstyle() const {
   if (!Fl::s_output) {
     Fl::s_output = 1;
 
@@ -83,5 +83,5 @@ int Fl_Output::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Output.cxx,v 1.7 1999/03/14 06:46:33 carl Exp $".
+// End of "$Id: Fl_Output.cxx,v 1.8 1999/03/18 22:59:08 carl Exp $".
 //

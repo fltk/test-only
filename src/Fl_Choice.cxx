@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.12 1999/03/15 18:19:07 carl Exp $"
+// "$Id: Fl_Choice.cxx,v 1.13 1999/03/18 22:59:04 carl Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -35,7 +35,7 @@
 
 extern char fl_draw_shortcut;
 
-void Fl_Choice::loadstyle() {
+void Fl_Choice::loadstyle() const {
   if (!Fl::s_choice) {
     Fl::s_choice = 1;
 
@@ -92,7 +92,7 @@ void Fl_Choice::draw() {
   draw_label();
 }
 
-Fl_Choice::Style Fl_Choice::_default_style;
+Fl_Widget::Style* Fl_Choice::_default_style = 0;
 
 Fl_Choice::Style::Style() : Fl_Menu_::Style() {
   sbf = 0;
@@ -159,5 +159,5 @@ Fl_Color Fl_Choice::fly_color() const {
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.12 1999/03/15 18:19:07 carl Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.13 1999/03/18 22:59:04 carl Exp $".
 //

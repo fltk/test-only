@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.10 1999/03/15 18:19:09 carl Exp $"
+// "$Id: Fl_Slider.cxx,v 1.11 1999/03/18 22:59:09 carl Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 
 #define DEFAULT_STYLE ((Style*)default_style())
 
-Fl_Slider::Style Fl_Slider::_default_style;
+Fl_Widget::Style* Fl_Slider::_default_style = 0;
 
 Fl_Slider::Style::Style() : Fl_Widget::Style() {
   sbf = 0;
@@ -40,7 +40,7 @@ Fl_Slider::Style::Style() : Fl_Widget::Style() {
   slider(SLIDER_BOX) = FL_MEDIUM_UP_BOX2;
 }
 
-void Fl_Slider::loadstyle() {
+void Fl_Slider::loadstyle() const {
   if (!Fl::s_slider) {
     Fl::s_slider = 1;
 
@@ -330,5 +330,5 @@ Fl_Color Fl_Slider::fly_color() const {
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.10 1999/03/15 18:19:09 carl Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.11 1999/03/18 22:59:09 carl Exp $".
 //

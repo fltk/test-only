@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_SW.cxx,v 1.1 1999/03/14 06:46:31 carl Exp $"
+// "$Id: Fl_Input_SW.cxx,v 1.2 1999/03/18 22:59:06 carl Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -24,31 +24,31 @@
 #include <FL/Fl_Input_.H>
 
 void Fl_Input_::textfont(uchar s) {
-  wstyle();
+  mstyle(&_style);
   INPUT_STYLE->sbf |= bf(TEXTFONT);
   INPUT_STYLE->input(TEXTFONT)=s;
 }
 
 void Fl_Input_::textsize(uchar s) {
-  wstyle();
+  mstyle(&_style);
   INPUT_STYLE->sbf |= bf(TEXTSIZE);
   INPUT_STYLE->input(TEXTSIZE)=s;
 }
 
 void Fl_Input_::textcolor(uchar n) {
-  wstyle();
+  mstyle(&_style);
   INPUT_STYLE->sbf |= bf(TEXTCOLOR);
   INPUT_STYLE->input(TEXTCOLOR)=n;
 }
 
 void Fl_Input_::cursor_color(uchar n) {
-  wstyle();
+  mstyle(&_style);
   INPUT_STYLE->sbf |= bf(CURSOR_COLOR);
   INPUT_STYLE->input(CURSOR_COLOR)=n;
 }
 
 void Fl_Input_::selected_textcolor(uchar n) {
-  wstyle();
+  mstyle(&_style);
   INPUT_STYLE->sbf |= bf(SELECTED_TEXTCOLOR);
   INPUT_STYLE->input(SELECTED_TEXTCOLOR)=n;
 }
