@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.64 2003/02/02 10:39:23 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.65 2003/08/11 00:42:43 spitzak Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -57,7 +57,9 @@ int TabGroup::tab_positions(int* p, int* w) {
     Widget* o = child(i);
     if (o->visible()) selected = i;
     if (o->label()) {
-      int wt = 0; int ht = 0; o->measure_label(wt,ht);
+      int wt = 300; int ht = 300; // rather arbitrary choice for max size
+      setfont(o->labelfont(), o->labelsize());
+      measure(o->label(), wt, ht, o->flags());
       w[i] = wt+TABSLOPE+EXTRASPACE;
       //if (2*TABSLOPE > w[i]) w[i] = 2*TABSLOPE;
     } else 
@@ -434,5 +436,5 @@ TabGroup::TabGroup(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.64 2003/02/02 10:39:23 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.65 2003/08/11 00:42:43 spitzak Exp $".
 //

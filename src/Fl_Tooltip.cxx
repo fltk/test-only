@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.53 2003/02/02 10:39:23 spitzak Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.54 2003/08/11 00:42:43 spitzak Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,7 @@
 #include <fltk/events.h>
 #include <fltk/run.h>
 #include <fltk/draw.h>
+#include <fltk/Box.h>
 using namespace fltk;
 
 float		Tooltip::delay_ = 1.0f;
@@ -90,7 +91,8 @@ void TooltipBox::layout() {
 
 void TooltipBox::draw() {
   draw_box();
-  draw_label(3, 3, w()-6, h()-6, textcolor(), flags());
+  int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
+  draw_label(X, Y, W, H, textcolor(), flags()|OUTPUT);
 }
 
 static bool recent_tooltip;
@@ -219,5 +221,5 @@ static NamedStyle style("Tooltip", revert, &Tooltip::default_style);
 NamedStyle* Tooltip::default_style = &::style;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.53 2003/02/02 10:39:23 spitzak Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.54 2003/08/11 00:42:43 spitzak Exp $".
 //

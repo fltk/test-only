@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.39 2003/08/04 06:55:33 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.40 2003/08/11 00:42:43 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -53,24 +53,6 @@ void LabelType::draw(const char* label,
     draw(label, X+1, Y+1, W, H, GRAY90, flags&~INACTIVE);
     color = inactive(color);
   }
-#if 0
-  if (!(flags&RAW_LABEL) && *label == '@') {
-    int x1 = X;
-    int y1 = Y;
-    int w1 = W;
-    int h1 = H;
-    if (flags & 15) { // if alignement is not center
-      if (w1 < h1) h1 = w1; else w1 = h1;
-      if (flags & ALIGN_LEFT) ;
-      else if (flags & ALIGN_RIGHT) x1 = X+W-w1;
-      else x1 = X+((W-w1)>>1);
-      if (flags & ALIGN_TOP) ;
-      else if (flags & ALIGN_BOTTOM) y1 = Y+H-h1;
-      else y1 = Y+((H-h1)>>1);
-    }
-    if (draw_symbol(label, x1, y1, w1, h1, color)) return;
-  }
-#endif
   setcolor(color);
   drawtext(label, X, Y, W, H, flags);
 }
@@ -92,26 +74,13 @@ LabelType* const fltk::NO_LABEL = &noLabel;
 ////////////////////////////////////////////////////////////////
 // Drawing methods (designed to be called from a draw() implementation):
 
-// Draw only the edge of the widget. Assummes boxtype is rectangular:
-void Widget::draw_frame() const {
-  Flags flags = this->flags();
-  if (!active_r()) flags |= INACTIVE;
-  if (focused()) flags |= SELECTED;
-  box()->draw(0, 0, w(), h(), color(), flags|INVISIBLE);
-}
-
-// Fill the entire widget with it's box, handle non-rectangular boxes:
-void Widget::draw_box() const {
-  Box* box = this->box();
-  if (damage()&DAMAGE_EXPOSE && !box->fills_rectangle() && parent())
-    draw_background();
-  Flags flags = this->flags();
-  if (!active_r()) flags |= INACTIVE;
-  if (focused()) flags |= SELECTED;
-  box->draw(0, 0, w(), h(), color(), flags);
-}
-
-// Set up for incremental redraw:
+/** Change the graphics state so we are ready to draw into the widget.
+    The transformation is set so 0,0 is at the upper-left corner of
+    the widget and 1 unit equals one pixel. The transformation stack
+    is empied, and all other graphics state is left in unknown
+    settings.  This will already be done before draw() is called on a
+    widget.
+*/
 void Widget::make_current() const {
   int x = 0;
   int y = 0;
@@ -125,37 +94,85 @@ void Widget::make_current() const {
   translate(x,y);
 }
 
-// The normal call for a draw() method. Draws the label inside the
-// widget's box, if the align is set to draw an inside label.
+/** Draw the widget's box() such that it fills the entire area of the
+    widget. If the box is not rectangluar, this also draws the area
+    of the parent widget that is exposed. The box drawing routine gets
+    the flags() from the widget, plus INACTIVE if !active_r(), and plus
+    SELECTED if the widget has the focus.
+*/
+void Widget::draw_box() const {
+  Box* box = this->box();
+  if (damage()&DAMAGE_EXPOSE && !box->fills_rectangle() && parent())
+    draw_background();
+  Flags flags = this->flags();
+  if (!active_r()) flags |= INACTIVE;
+  if (focused()) flags |= SELECTED;
+  box->draw(0, 0, w(), h(), color(), flags);
+}
+
+/** Same as draw_box() but draws only the boundary of the box() by
+    calling it's draw routine with the INVISIBLE flag set. This only
+    works for rectangular boxes.  This is useful for avoiding blinking
+    during update for widgets that erase their contents as part of
+    redrawing them anyway (ie anything displaying text).
+*/
+void Widget::draw_frame() const {
+  Flags flags = this->flags();
+  if (!active_r()) flags |= INACTIVE;
+  if (focused()) flags |= SELECTED;
+  box()->draw(0, 0, w(), h(), color(), flags|INVISIBLE);
+}
+
+/** Calls draw_label() with the area inside the box() and with
+    the labelcolor() and flags().
+*/
 void Widget::draw_inside_label() const {
-  // return immediately if not an inside label:
-  if ((flags()&15) && !(flags() & ALIGN_INSIDE)) return;
+  // Do a quick test to see if we don't want to draw anything:
+  if (!image() && (!label() || !*label() ||
+		   (flags()&15) && !(flags() & ALIGN_INSIDE))) return;
   // figure out the inside of the box():
   int X=0; int Y=0; int W=w_; int H=h_; box()->inset(X,Y,W,H);
   // and draw it:
   draw_inside_label(X,Y,W,H);
 }
 
-// Draws only inside labels, but allows the caller to specify the box.
-// Some widgets use this to move the area the label is drawn.
+/** Calls draw_label() with the given area and the labelcolor()
+    and flags().
+*/
 void Widget::draw_inside_label(int X, int Y, int W, int H) const
 {
-  // return immediately if not an inside label:
-  if ((flags()&15) && !(flags() & ALIGN_INSIDE)) return;
-  // add some interior border for the text:
-  if (W > 11 && flags()&(ALIGN_LEFT|ALIGN_RIGHT)) {X += 3; W -= 6;}
-  // draw with the normal label color:
   draw_label(X, Y, W, H, labelcolor(), flags());
 }
 
-bool fl_use_textfont;
+/** Draws labels inside the widget. \a XYWH is the bounding box to
+    fit the label into. \a color is the color to draw the label.
+    \a flags are used to control how the label is drawn, and are
+    usually copied from the flags() of the widget.
 
-// Draw the label in any box, and using the passed labelcolor and flags.
-// This is used by Group and TabGroup to draw outside labels, and by
-// buttons to get the label color correct:
+    If the flags contain any ALIGN flags and don't have ALIGN_INSIDE
+    then the label() is not drawn. Instead the image() is drawn to
+    fill the box (most image() types will center the picture).
+
+    Otherwise it tries to put the label() and the image() into the
+    box in a nice way. The image() is put against the side that any
+    ALIGN flags say, and then the label() is put next to that.
+*/
 void Widget::draw_label(int X, int Y, int W, int H, Color color, Flags flags) const
 {
   if (!active_r()) flags |= INACTIVE; // maybe caller should do this?
+
+  // If label is drawn outside, draw the image only:
+  if ((flags&15) && !(flags & ALIGN_INSIDE)) {
+    if (!image_) return;
+    setcolor(color);
+    float fw = W;
+    float fh = H;
+    image_->measure(fw, fh);
+    if (flags & ALIGN_CLIP) push_clip(X, Y, W, H);
+    image_->draw(X+((W-int(fw))>>1), Y+((H-int(fh))>>1),W,H,flags);
+    if (flags & ALIGN_CLIP) pop_clip();
+    return;
+  }
 
   if (flags & ALIGN_CLIP) push_clip(X, Y, W, H);
 
@@ -178,7 +195,7 @@ void Widget::draw_label(int X, int Y, int W, int H, Color color, Flags flags) co
       } else {
 	// put image to left
 	int text_w = W; int text_h = H;
-	if (fl_use_textfont)
+	if (flags&OUTPUT)
 	  setfont(textfont(), textsize());
 	else
 	  setfont(labelfont(), labelsize());
@@ -215,7 +232,16 @@ void Widget::draw_label(int X, int Y, int W, int H, Color color, Flags flags) co
   }
 
   if (label_ && *label_) {
-    if (fl_use_textfont)
+    // add some interior border for the text:
+    if (W > 6 && flags&ALIGN_LEFT) {
+      if (W > 9) {X += 3; W -= 6;}
+      else {X += W-6; W = 6;}
+    }
+    if (W > 6 && flags&ALIGN_RIGHT) {
+      if (W > 9) W -= 6;
+      else W = 6;
+    }
+    if (flags&OUTPUT)
       setfont(textfont(), textsize());
     else
       setfont(labelfont(), labelsize());
@@ -225,12 +251,6 @@ void Widget::draw_label(int X, int Y, int W, int H, Color color, Flags flags) co
   if (flags & ALIGN_CLIP) pop_clip();
 }
 
-void Widget::measure_label(int& w, int& h) const {
-  setfont(labelfont(), labelsize());
-  w = h = 300; // rather arbitrary choice for maximum wrap width
-  measure(label(), w, h, flags());
-}
-
 //
-// End of "$Id: fl_labeltype.cxx,v 1.39 2003/08/04 06:55:33 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.40 2003/08/11 00:42:43 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.63 2003/07/23 04:55:50 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.64 2003/08/11 00:42:43 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -162,7 +162,7 @@ void Button::draw(int glyph, int glyph_width) const
   }
 
   // only draw "inside" labels:
-  bool draw_label = (!(flags&15) || (flags & ALIGN_INSIDE));
+  bool draw_label = true;
   int x = 0, y = 0, w = this->w(), h = this->h();
 
   // For back-compatability box() is used if it is directly set and
@@ -212,7 +212,6 @@ void Button::draw(int glyph, int glyph_width) const
   if (draw_label) {
     // turn on this flag that makes some images draw differently:
     if (focused()) flags |= SELECTED;
-    if (lw > 11 && (flags&(ALIGN_LEFT|ALIGN_RIGHT))) {lx += 3; lw -= 6;}
     this->draw_label(lx, y, lw, h, labelcolor, flags);
   }
 
@@ -244,5 +243,5 @@ Button::Button(int x,int y,int w,int h, const char *l) : Widget(x,y,w,h,l) {
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.63 2003/07/23 04:55:50 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.64 2003/08/11 00:42:43 spitzak Exp $".
 //

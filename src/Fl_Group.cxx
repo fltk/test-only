@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.123 2003/03/31 07:17:45 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.124 2003/08/11 00:42:43 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -537,11 +537,26 @@ void Group::update_child(Widget& w) const {
   }
 }
 
-// Parents normally call this to draw outside labels:
+/** Groups normally call this to draw the label() outside a widget.
+    This uses the flags() to determine where to put the label. If
+    the ALIGN flags are all zero, or if ALIGN_INSIDE is turned
+    on, then nothing is done. Otherwise the align is used to select
+    a rectangle outside the widget and the widget's label() is
+    formatted into that area.
+
+    The font is set to labelfont()/labelsize(), and labelcolor()
+    is used to color the text. The flags are passed to the draw()
+    function, but with the alignment changed to put the text against
+    the widget, and INACTIVE is added if active_r() is false.
+
+    The image() of the widget is not drawn by this. It is always
+    drawn inside the widget.
+*/
 void Group::draw_outside_label(Widget& w) const {
   if (!w.visible()) return;
   // skip any labels that are inside the widget:
   if (!(w.flags()&15) || (w.flags() & ALIGN_INSIDE)) return;
+  if (!w.label() || !*w.label()) return;
   // invent a box that is outside the widget:
   Flags align = w.flags();
   int X = w.x();
@@ -565,9 +580,17 @@ void Group::draw_outside_label(Widget& w) const {
     X = X+W+3;
     W = this->w()-X;
   }
-  w.draw_label(X,Y,W,H, w.labelcolor(), align);
+  if (!w.active_r()) align |= INACTIVE;
+  //push_clip(X, Y, W, H); // this will break some old fltk programs
+  setfont(w.labelfont(), w.labelsize());
+  w.labeltype()->draw(w.label(), X, Y, W, H, w.labelcolor(), align);
+  //pop_clip();
 }
 
+/** Add x() and y() to the position of all children. This can be used
+    to fix children widgets created for fltk1.1, where the x/y were
+    always relative to the window, rather than the surrounding group.
+*/
 void Group::fix_old_positions() {
   if (is_window()) return; // in fltk 1.0 children of windows were relative
   for (int i = 0; i < children(); i++) {
@@ -578,5 +601,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.123 2003/03/31 07:17:45 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.124 2003/08/11 00:42:43 spitzak Exp $".
 //

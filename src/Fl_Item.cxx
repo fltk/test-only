@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.28 2003/08/04 06:55:33 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.29 2003/08/11 00:42:43 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -73,8 +73,6 @@ void Item::set_style(const Style* style) {
   ::style.parent = style;
 }
 
-extern bool fl_use_textfont;
-
 /** By default an item just draws it's label using the textcolor.
     If flags() has SELECTED on it uses selection_textcolor. This
     assummes the caller has already drawn the background.
@@ -101,9 +99,7 @@ void Item::draw() {
   Color color = 0;
   if (flags() & SELECTED) color = selection_textcolor();
   if (!color) color = textcolor();
-  fl_use_textfont = true;
-  draw_label(x+3, y, w-6, h, color, flags());
-  fl_use_textfont = false;
+  draw_label(x, y, w, h, color, flags()|OUTPUT);
 }
 
 /** Measure the space the draw() will take and set w() and h().
@@ -146,9 +142,7 @@ void ItemGroup::draw() {
   Color color = 0;
   if (flags() & SELECTED) color = selection_textcolor();
   if (!color) color = textcolor();
-  fl_use_textfont = true;
-  draw_label(x+3, y, w-6, h, color, flags());
-  fl_use_textfont = false;
+  draw_label(x, y, w, h, color, flags()|OUTPUT);
 }
 
 void ItemGroup::layout() {
