@@ -112,7 +112,7 @@ LIB32=link.exe -lib
 # PROP Intermediate_Dir "fltk___Win32_Release_MinSize"
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /GX /Os /Ob2 /I "." /I "..\.." /D "_POSIX_" /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /FD /c
-# ADD CPP /nologo /MD /GR /GX /Os /Ob2 /I "." /I "..\.." /D "NDEBUG" /D "_MSC_DLL" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /FD /c
+# ADD CPP /nologo /MD /GR /GX /Os /Ob2 /I "..\.." /I "." /D "NDEBUG" /D "_MSC_DLL" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /FD /c
 # ADD BASE RSC /l 0x409
 # ADD RSC /l 0x409
 BSC32=bscmake.exe
@@ -681,6 +681,10 @@ SOURCE=..\..\src\mediumarrow.h
 # Begin Source File
 
 SOURCE=..\..\src\scandir.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\shortcuts.cxx
 # End Source File
 # Begin Source File
 

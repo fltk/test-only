@@ -132,13 +132,14 @@
 
 #if defined(_MSC_VER)
 #	define HAVE_VSNPRINTF 1
-#	define HAVE_SNPRINTF 1
-#	define HAVE_VSPRINTF 1
+#	define HAVE_SNPRINTF  1
+#	define HAVE_VSPRINTF  1
+#   define HAVE_STRDUP    1
 #	include <stdio.h>
-#	define fl_snprintf _snprintf
+#	define fl_snprintf  _snprintf
 #	define fl_vsnprintf _vsnprintf
-#	define snprintf _snprintf
-#	define vsnprintf _vsnprintf
+#	define snprintf     _snprintf
+#	define vsnprintf    _vsnprintf
 #else
 
 /*
