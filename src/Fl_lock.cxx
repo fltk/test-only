@@ -116,17 +116,23 @@ static void unlock_function() {
   LeaveCriticalSection(&cs);
 }
 
-void Fl::lock() {
+static void lock_function() {
   EnterCriticalSection(&cs);
+}
+
+void Fl::lock() {
+  if (!main_thread)
+    InitializeCriticalSection(&cs);
+  lock_function();
   if (!main_thread) {
-    fl_lock_function = lock;
+    fl_lock_function = lock_function;
     fl_unlock_function = unlock_function;
     main_thread = GetCurrentThreadId();
   }
 }
 
 void Fl::unlock() {
-  LeaveCriticalSection(&cs);
+  unlock_function();
 }
 
 // when called from a thread, it causes FLTK to awake from Fl::wait()

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.6 1999/11/22 19:46:16 carl Exp $"
+// "$Id: Fl_Style.cxx,v 1.7 1999/11/23 07:28:32 vincent Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -67,7 +67,7 @@ Fl_Style* Fl_Widget::default_style;
 
 int Fl_Widget::copy_style(const Fl_Style* t) {
   if (style_ == t) return 0;
-  if (style_ && style_->dynamic()) delete style_;
+  if (style_ && style_->dynamic()) delete (Fl_Style*)style_;
   if (!t->dynamic()) {style_ = t; return 0;}
   Fl_Style* newstyle = new Fl_Style;
   newstyle->parent = (Fl_Style*)t;
@@ -168,5 +168,5 @@ Fl_Named_Style* Fl_Style::find(const char* name) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.6 1999/11/22 19:46:16 carl Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.7 1999/11/23 07:28:32 vincent Exp $".
 //

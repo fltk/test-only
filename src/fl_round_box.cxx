@@ -1,5 +1,5 @@
 //
-// "$Id: fl_round_box.cxx,v 1.17 1999/11/21 06:23:31 carl Exp $"
+// "$Id: fl_round_box.cxx,v 1.18 1999/11/23 07:28:34 vincent Exp $"
 //
 // Round box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,7 @@
 #include <FL/Fl_Boxtype.H>
 #include <FL/Fl_Style.H>
 #include <FL/fl_draw.H>
+#include <string.h>
 
 // A compiler from a certain very large software company will not compile
 // the function pointer assignment due to the name conflict with fl_arc.
@@ -111,5 +112,5 @@ const Fl_Round_Box fl_round_down_box(0, FL_DOWN_BOX);
 const Fl_Round_Box fl_round_box(0, FL_NORMAL_BOX);
 
 //
-// End of "$Id: fl_round_box.cxx,v 1.17 1999/11/21 06:23:31 carl Exp $".
+// End of "$Id: fl_round_box.cxx,v 1.18 1999/11/23 07:28:34 vincent Exp $".
 //

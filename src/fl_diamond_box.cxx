@@ -1,5 +1,5 @@
 //
-// "$Id: fl_diamond_box.cxx,v 1.13 1999/11/21 06:23:28 carl Exp $"
+// "$Id: fl_diamond_box.cxx,v 1.14 1999/11/23 07:28:34 vincent Exp $"
 //
 // Diamond box code for the Fast Light Tool Kit (FLTK).
 //
@@ -31,6 +31,7 @@
 #include <FL/Fl_Boxtype.H>
 #include <FL/Fl_Style.H>
 #include <FL/fl_draw.H>
+#include <string.h>
 
 extern void fl_to_inactive(const char* s, char* to);
 
@@ -84,5 +85,5 @@ const Fl_Diamond_Box fl_diamond_down_box(0, FL_DOWN_BOX);
 const Fl_Diamond_Box fl_diamond_box(0, FL_NORMAL_BOX);
 
 //
-// End of "$Id: fl_diamond_box.cxx,v 1.13 1999/11/21 06:23:28 carl Exp $".
+// End of "$Id: fl_diamond_box.cxx,v 1.14 1999/11/23 07:28:34 vincent Exp $".
 //

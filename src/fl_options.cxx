@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.32 1999/11/22 12:05:55 vincent Exp $"
+// "$Id: fl_options.cxx,v 1.33 1999/11/23 07:28:34 vincent Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -36,11 +36,14 @@
 #include <FL/Fl_Style.H>
 #include <FL/Fl_Widget.H>
 #include <config.h>
-#ifdef WIN32
-#include <windows.h>
+#if defined(WIN32) || defined(__EMX__)
+#  include <windows.h>
+#  include <io.h>
+extern "C" int access(const char *, int);
+#  define F_OK 0
 #else
-#include <unistd.h>
-#endif
+#  include <unistd.h>
+#endif /* WIN32 || __EMX__ */
 
 #ifndef R_OK
 #define R_OK 4
@@ -539,7 +542,7 @@ void Fl_Style::revert() {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.32 1999/11/22 12:05:55 vincent Exp $".
+// End of "$Id: fl_options.cxx,v 1.33 1999/11/23 07:28:34 vincent Exp $".
 //
 
 
