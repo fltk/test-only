@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.17 1999/04/05 15:21:45 carl Exp $"
+// "$Id: Fl_Window.cxx,v 1.18 1999/04/07 01:13:42 carl Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -61,7 +61,7 @@ void Fl_Window::loadstyle() const {
     Fl::find("global/background green", g, 1);
     Fl::find("global/background blue", b, 1);
 
-    Fl::background(r, g, b);
+    if (!res) Fl::background(r, g, b);
 
     char s[32];
     if (!Fl::find("global/widget style", s, sizeof(s), 1)) {
@@ -164,5 +164,5 @@ void Fl_Window::default_callback(Fl_Window* window, void* v) {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.17 1999/04/05 15:21:45 carl Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.18 1999/04/07 01:13:42 carl Exp $".
 //
