@@ -1,5 +1,5 @@
 //
-// "$Id: Image.h,v 1.10 2004/05/07 06:36:22 spitzak Exp $"
+// "$Id: Image.h,v 1.11 2004/07/19 23:45:26 laza2000 Exp $"
 //
 // Image object used to label widgets. This caches the image in a
 // server pixmap. Subclasses are used to decide how to change data
@@ -35,7 +35,7 @@ namespace fltk {
 class FL_API Widget;
 
 class FL_API Image : public Symbol {
-
+protected:
   int w_, h_;
   void* rgb; // system-specific thing holding rgb (and maybe alpha)
   void* alpha; // system-specific thing holding alpha if necessary
@@ -116,5 +116,5 @@ class FL_API ImageDraw {
 #endif
 
 //
-// End of "$Id: Image.h,v 1.10 2004/05/07 06:36:22 spitzak Exp $".
+// End of "$Id: Image.h,v 1.11 2004/07/19 23:45:26 laza2000 Exp $".
 //
