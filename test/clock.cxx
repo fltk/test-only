@@ -1,5 +1,5 @@
 //
-// "$Id: clock.cxx,v 1.6 2000/06/06 14:37:32 mike Exp $"
+// "$Id: clock.cxx,v 1.7 2000/06/06 23:32:12 carl Exp $"
 //
 // Clock test program for the Fast Light Tool Kit (FLTK).
 //
@@ -26,6 +26,9 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Shaped_Window.H>
 #include <FL/Fl_Round_Clock.H>
+#include <FL/Fl_Menu_Button.H>
+#include <FL/Fl_Item.H>
+#include <FL/fl_ask.H>
 #include <stdlib.h>
 
 #include "circle.xbm" // bitmap mask for window shape
@@ -38,11 +41,12 @@ class ClockWindow : public Fl_Shaped_Window {
 
 int ClockWindow::handle(int e) {
   static int bx, by;
-  switch(e) {
+  static int button1 = 0;
+  if (e == FL_PUSH) button1 = (Fl::event_button() == 1);
+  if (button1) switch(e) {
     case FL_DRAG:
       position(x()+Fl::event_x_root()-bx, y()+Fl::event_y_root()-by);
     case FL_PUSH:
-      if (Fl::event_button() > 1) exit(0);
       bx = Fl::event_x_root(); by = Fl::event_y_root();
       show(); // so the window will click-to-front
       return 1;
@@ -50,14 +54,25 @@ int ClockWindow::handle(int e) {
   return Fl_Shaped_Window::handle(e);
 }
 
+Fl_Item *about_item, *exit_item;
+void callback(Fl_Widget* w, void* d) {
+  if (d == exit_item) exit(0);
+  fl_message("FLTK-- Copyright 2000 Bill Spitzak and others");
+}
+
 int main(int argc, char **argv) {
   ClockWindow window(220, 220, "Fl_Round_Clock");
   window.color(FL_BLACK);
   window.clear_border(); // some window managers do this for you!
   Fl_Round_Clock clock(2,2,216,216);
-  clock.tooltip("Drag the mouse with the left button to move\n"
-                "the clock and right click to exit.");
-  // window.resizable(clock); - Not today, maybe never!
+  Fl_Menu_Button popup(0, 0, 220, 220);
+  popup.type(Fl_Menu_Button::POPUP3);
+  popup.begin();
+  about_item = new Fl_Item("About clock");
+  exit_item = new Fl_Item("Exit clock");
+  popup.end();
+  popup.callback(callback);
+  // window.resizable(popup); - Not today, maybe never!
   window.end();
   window.xclass("Fl_Clock");
   window.show();
@@ -68,5 +83,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: clock.cxx,v 1.6 2000/06/06 14:37:32 mike Exp $".
+// End of "$Id: clock.cxx,v 1.7 2000/06/06 23:32:12 carl Exp $".
 //
