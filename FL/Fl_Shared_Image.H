@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.H,v 1.2 1999/08/28 19:51:41 vincent Exp $"
+// "$Id: Fl_Shared_Image.H,v 1.3 1999/08/29 19:53:27 vincent Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -41,15 +41,16 @@ protected:
   unsigned int     used;  // Last time used, for cache handling purpose
 
   Fl_Shared_Image() { };  // Constructor is private on purpose,
-                          // use fl_get_shared_image rather
+                          // use the get function rather
   ~Fl_Shared_Image();
 
   void find_less_used();
   static void check_mem_usage();
 
-  char* get_filename();  // Return the filename obtained from the concatenation
-                         // of the image root directory and this image name
-  virtual void read() = 0;
+  char* get_filename();   // Return the filename obtained from the concatenation
+                          // of the image root directory and this image name
+
+  virtual void read() = 0;// decompress the image and create its pixmap
 
   static void Fl_Shared_Image::insert(Fl_Shared_Image*& p, Fl_Shared_Image* ifs);
   static Fl_Shared_Image* Fl_Shared_Image::find(Fl_Shared_Image* ifs, char* name);
@@ -61,14 +62,19 @@ public:
   // file with filename name if datas==0.
   static Fl_Shared_Image* get(Fl_Shared_Image* (*create)(), 
 			      char* name, unsigned char *datas=0);
-  // same, but try to guess the filetype
+
+  // try to guess the filetype
   static Fl_Image_Type* guess(char* name, unsigned char *datas=0);
+
+  // set the position where images are looked for on disk
+  static void set_root_directory(char *d);
+
+  // set the size of the cache (0 = unlimited)
+  static void set_cache_size(size_t l);
 
   virtual void draw(int X, int Y, int W, int H, int cx, int cy);
 };
 
-void fl_set_images_root_directory(char *d);
-void fl_set_images_cache_size(size_t l);
 
 
 // Description of a file format
@@ -151,7 +157,7 @@ extern Fl_Bitmap nosuch_bitmap;
 
 class Fl_UNKNOWN_Image {
 public:
-  static bool test(unsigned char *datas, size_t size=0) { return 0; };
+  static bool test(unsigned char *datas, size_t size=0) { return 1; };
   static Fl_Shared_Image* get(char* name, uchar* datas = 0) { 
     return (Fl_Shared_Image*) &nosuch_bitmap; 
   };
@@ -160,5 +166,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Shared_Image.H,v 1.2 1999/08/28 19:51:41 vincent Exp $"
+// End of "$Id: Fl_Shared_Image.H,v 1.3 1999/08/29 19:53:27 vincent Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.23 1999/08/28 16:17:47 carl Exp $"
+// "$Id: fluid.cxx,v 1.24 1999/08/29 19:53:29 vincent Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -100,7 +100,7 @@ void goto_source_dir() {
   if (chdir(buffer)<0) {fprintf(stderr, "Can't chdir to %s : %s\n",
 				buffer, strerror(errno)); return;}
   in_source_dir = 1;
-  fl_set_images_root_directory(buffer);
+  Fl_Shared_Image::set_root_directory(buffer);
 }
 
 #include "Fluid_Image.h"
@@ -133,7 +133,7 @@ void goto_images_dir() {
   strcpy(buffer+strlen(pwd)+1, buffer);
   strcpy(buffer, pwd);
   buffer[strlen(pwd)]='/';
-  fl_set_images_root_directory(buffer);
+  Fl_Shared_Image::set_root_directory(buffer);
 }
 
 void leave_source_dir() {
@@ -478,5 +478,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.23 1999/08/28 16:17:47 carl Exp $".
+// End of "$Id: fluid.cxx,v 1.24 1999/08/29 19:53:29 vincent Exp $".
 //

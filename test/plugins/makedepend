@@ -1,0 +1,24 @@
+essai_plugin.o: essai_plugin.cxx ../../fluid/Fluid_Plugins.h \
+ ../../FL/Fl_Menu.H ../../FL/Fl_Menu_Item.H ../../FL/Fl_Widget.H \
+ ../../FL/Fl_Style.H ../../FL/Enumerations.H ../../FL/Fl_Boxtype.H \
+ ../../FL/Fl_Color.H ../../FL/Fl_Flags.H ../../FL/Fl_Labeltype.H \
+ ../../FL/Fl_Font.H ../../fluid/Fl_Type.h ../../fluid/Fluid_Image.h \
+ ../../FL/Fl_Shared_Image.H ../../FL/Fl_Image.H \
+ /usr/local/lib/gcc-lib/i686-linux/pgcc-2.91.66/include/stddef.h \
+ ../../FL/Fl_Tabs.H ../../FL/Fl_Group.H ../../FL/Fl_Pack.H \
+ ../../FL/Fl_Menu_.H ../../FL/Fl_Menu_Button.H ../../FL/Fl_Choice.H \
+ ../../FL/Fl_Menu_Bar.H Fl_Pix_Button.cxx ../../FL/Fl.H \
+ Fl_Pix_Button.H ../../FL/Fl_Button.H ../../FL/Fl_Pixmap.H \
+ ../../FL/fl_draw.H /usr/include/math.h /usr/include/features.h \
+ /usr/include/sys/cdefs.h /usr/include/gnu/stubs.h \
+ /usr/include/huge_val.h /usr/include/mathcalls.h \
+ /usr/local/lib/gcc-lib/i686-linux/pgcc-2.91.66/include/float.h \
+ play_buttons256.xpm pause_buttons256.xpm Fl_NSlider.cxx Fl_NSlider.H \
+ ../../FL/Fl_Valuator.H /usr/include/stdio.h /usr/include/libio.h \
+ /usr/include/_G_config.h /usr/include/gnu/types.h \
+ /usr/local/lib/gcc-lib/i686-linux/pgcc-2.91.66/include/stdarg.h \
+ /usr/include/stdio_lim.h /usr/include/stdlib.h \
+ /usr/include/sys/types.h /usr/include/time.h /usr/include/endian.h \
+ /usr/include/bytesex.h /usr/include/sys/select.h \
+ /usr/include/selectbits.h /usr/include/alloca.h essai_panel.cxx \
+ essai_panel.h ../../FL/Fl_Slider.H ../../FL/Fl_Window.H

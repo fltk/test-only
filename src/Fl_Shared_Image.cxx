@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.2 1999/08/28 19:51:43 vincent Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.3 1999/08/29 19:53:30 vincent Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -75,7 +75,7 @@ Fl_Shared_Image::~Fl_Shared_Image()
    "FLTK user error : deleting an Fl_Shared_Image object is forbiden !\n");
 }
 
-void fl_set_images_cache_size(size_t l)
+void Fl_Shared_Image::set_cache_size(size_t l)
 {
   mem_usage_limit = l;
 }
@@ -106,7 +106,7 @@ void Fl_Shared_Image::check_mem_usage()
   } while(mem_used >= mem_usage_limit);
 }
 
-void fl_set_images_root_directory(char *d)
+void Fl_Shared_Image::set_root_directory(char *d)
 {
   if(root) free(root);
   if(d[0] && d[strlen(d)-1]!='/')
@@ -177,7 +177,8 @@ Fl_Image_Type* Fl_Shared_Image::guess(char* name, unsigned char *datas)
   bool loaded = 0;
   size_t size = 1024;
   if (!datas) {
-    datas = new uchar[1024];
+    datas = new uchar[1025];
+    datas[1024] = 0; // null-terminate so strstr() works
     char *s;
     if(!root) root=strdup("");
     s = (char*) malloc(strlen(name)+strlen(root)+1);
@@ -216,5 +217,5 @@ void Fl_Shared_Image::draw(int X, int Y, int W, int H,
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.2 1999/08/28 19:51:43 vincent Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.3 1999/08/29 19:53:30 vincent Exp $"
 //

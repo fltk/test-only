@@ -10,21 +10,21 @@ decl {\#include <stdio.h>} {}
 
 Function {main()} {open return_type int
 } {
-  code {fl_set_images_root_directory("images");} {}
+  code {Fl_Shared_Image::set_root_directory("images");} {}
   Fl_Window window {
     label {The background is a BMP file} open
-    xywh {235 419 660 405} resizable box NO_BOX visible
+    xywh {112 441 660 405} resizable box NO_BOX visible
   } {
     Fl_Box {} {
       xywh {0 0 660 405} align 32 labelfont 1 labeltype SHADOW_LABEL image not_inlined {ulon.bmp} labelcolor 3
     }
     Fl_Box {} {
-      label {tiled GIF image loaded from disk} selected
-      xywh {23 158 352 197} align 32 box UP_BOX labelfont 1 labeltype SHADOW_LABEL image not_inlined {coucou.gif} labelcolor 3
+      label {tiled GIF image loaded from disk}
+      xywh {23 158 352 197} align 32 labelfont 1 labeltype SHADOW_LABEL image not_inlined {coucou.gif} labelcolor 3
     }
     Fl_Box {} {
       label {PNG image with datas included in code}
-      xywh {85 33 170 102} align 32 box UP_BOX labelfont 1 labeltype SHADOW_LABEL image {coucou.png} labelcolor 3
+      xywh {100 23 170 102} align 32 labelfont 1 labeltype SHADOW_LABEL image {coucou.png} color 0 labelcolor 3
     }
     Fl_Box {} {
       label {XPM image loaded from disk}
@@ -32,24 +32,28 @@ Function {main()} {open return_type int
     }
     Fl_Value_Slider slider {
       label {Size of the image cache in kilo pixels (0 for unlimited)}
-      callback {fl_set_images_cache_size((int)o->value()*1024);}
+      callback {Fl_Shared_Image::set_cache_size((int)o->value()*1024);}
       xywh {40 368 288 22} type {Horz Knob} labelfont 1 labeltype SHADOW_LABEL labelcolor 3 maximum 100 step 1
     }
     Fl_Box {} {
       label {JPEG image stored in the executable}
-      xywh {395 195 230 150} box UP_BOX labelfont 1 labeltype SHADOW_LABEL image {testimg.jpg} labelcolor 3
+      xywh {395 195 230 150} labelfont 1 labeltype SHADOW_LABEL image {testimg.jpg} labelcolor 3
     }
   }
   Fl_Window browser_window {
     label {Image in the cache} open
-    xywh {562 234 255 120} visible
+    xywh {593 115 255 120} visible
   } {
     Fl_Browser browser {
       xywh {0 0 255 85}
     }
     Fl_Box {} {
-      label {Italic : out of the cache Grey : just loaded}
-      xywh {0 85 165 35} align 149
+      label {Italic : out of the cache}
+      xywh {0 85 165 20} align 149
+    }
+    Fl_Box {} {
+      label {Grey : just loaded or unloaded} selected
+      xywh {0 100 205 20} align 21
     }
   }
   code {// Absolutly horrible code, please don't look at it !

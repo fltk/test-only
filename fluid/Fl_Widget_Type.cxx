@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.41 1999/08/28 15:39:08 vincent Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.42 1999/08/29 19:53:28 vincent Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -1371,7 +1371,7 @@ inline Fluid_Plugin** next_panel(Fluid_Plugin** pp, Fluid_Plugin* &p)
   if(pp < plugins+nbplugins) p = *pp;
   return pp;
 }
-#define for_all_plugins(p) for(Fluid_Plugin *p, **pp = next_panel(plugins, p); \
+#define for_all_plugins(p) for(Fluid_Plugin *p, **pp = next_panel(plugins, p);\
 pp-plugins<nbplugins; \
 pp = next_panel(pp+1, p) )
 
@@ -2127,5 +2127,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.41 1999/08/28 15:39:08 vincent Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.42 1999/08/29 19:53:28 vincent Exp $".
 //
