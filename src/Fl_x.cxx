@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.173 2004/06/09 05:38:58 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.174 2004/06/11 08:07:19 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1661,6 +1661,7 @@ void fltk::draw_into(XWindow window) {
     }
   } else {
     cc = cairo_create();
+    cairo_set_line_width(cc,1);
   }
   cairo_set_target_drawable (cc, xdisplay, window);
 }
@@ -1840,5 +1841,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.173 2004/06/09 05:38:58 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.174 2004/06/11 08:07:19 spitzak Exp $".
 //

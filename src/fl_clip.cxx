@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.23 2004/06/09 05:38:58 spitzak Exp $"
+// "$Id: fl_clip.cxx,v 1.24 2004/06/11 08:07:20 spitzak Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -103,7 +103,8 @@ Region XRectangleRegion(int x, int y, int w, int h) {
 void fl_restore_clip() {
   Region r = rstack[rstackptr];
   fl_clip_state_number++;
-#if USE_X11
+#if USE_CAIRO
+#elif USE_X11
   if (r) XSetRegion(xdisplay, gc, r);
   else XSetClipMask(xdisplay, gc, 0);
 #elif defined(_WIN32)
@@ -181,6 +182,7 @@ void fltk::push_clip(int x, int y, int w, int h) {
   fl_restore_clip();
 }
 
+#if !NO_CLIP_OUT
 /*!
   Remove the rectangle from the current clip region, thus making it a
   more complex shape. This does not push the stack, it just replaces
@@ -211,6 +213,7 @@ void fltk::clip_out(int x, int y, int w, int h) {
 #endif
   fl_restore_clip();
 }
+#endif
 
 /*!
   Pushes an empty clip region on the stack so nothing will be
@@ -383,5 +386,5 @@ int fltk::clip_box(int x,int y,int w,int h, int& X,int& Y,int& W,int& H) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.23 2004/06/09 05:38:58 spitzak Exp $"
+// End of "$Id: fl_clip.cxx,v 1.24 2004/06/11 08:07:20 spitzak Exp $"
 //

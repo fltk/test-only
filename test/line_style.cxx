@@ -48,7 +48,7 @@ Fl_Menu_Item style_menu[] = {
   {"fltk::SOLID",	0, 0, (void*)SOLID},
   {"fltk::DASH",	0, 0, (void*)DASH},
   {"fltk::DOT",		0, 0, (void*)DOT},
-  {"fltk:;DASHDOT",	0, 0, (void*)DASHDOT},
+  {"fltk::DASHDOT",	0, 0, (void*)DASHDOT},
   {"fltk::DASHDOTDOT",	0, 0, (void*)DASHDOTDOT},
   {0}
 };
@@ -56,7 +56,7 @@ Fl_Menu_Item style_menu[] = {
 Fl_Menu_Item cap_menu[] = {
   {"default",		0, 0, 0},
   {"fltk::CAP_FLAT",	0, 0, (void*)CAP_FLAT},
-  {"fltk:;CAP_ROUND",	0, 0, (void*)CAP_ROUND},
+  {"fltk::CAP_ROUND",	0, 0, (void*)CAP_ROUND},
   {"fltk::CAP_SQUARE",	0, 0, (void*)CAP_SQUARE},
   {0}
 };

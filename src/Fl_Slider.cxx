@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.72 2004/05/15 20:52:45 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.73 2004/06/11 08:07:19 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -307,7 +307,9 @@ void Slider::draw()
   // minimal-update the slider, if it indicates the background needs
   // to be drawn, draw that. We draw the slot if the current box type
   // has no border:
+#if !NO_CLIP_OUT
   if (draw(sx, sy, sw, sh, f2, iy==0)) {
+#endif
 
     // draw the box or the visible parts of the window
     if (!box->fills_rectangle()) draw_background();
@@ -336,8 +338,12 @@ void Slider::draw()
       draw_ticks(ix, iy, iw, ih, (slider_size_+1)/2);
     }
 
+#if NO_CLIP_OUT
+    draw(sx, sy, sw, sh, f2, iy==0);
+#else
     pop_clip();
   }
+#endif
 }
 
 /*! This call is provied so subclasses can draw the moving part inside
@@ -396,6 +402,7 @@ bool Slider::draw(int ix, int iy, int iw, int ih, Flags flags, bool slot)
     else sglyph=16;
   }
 
+#if !NO_CLIP_OUT
   if (damage()&DAMAGE_ALL) {
 
     push_clip(0, 0, w(), h());
@@ -424,6 +431,7 @@ bool Slider::draw(int ix, int iy, int iw, int ih, Flags flags, bool slot)
     return false;
 
   }
+#endif
   old_position = sp;
 
   // we draw a slot if it seems the box has no border:
@@ -447,8 +455,13 @@ bool Slider::draw(int ix, int iy, int iw, int ih, Flags flags, bool slot)
     THIN_DOWN_BOX->draw(slx, sly, slw, slh, style(), flags&INACTIVE|INVISIBLE);
     setcolor(BLACK);
     fillrect(slx+1,sly+1,slw-2,slh-2);
+#if !NO_CLIP_OUT
     clip_out(slx, sly, slw, slh);
+#endif
   }
+#if NO_CLIP_OUT
+  draw_glyph(sglyph, sx, sy, sw, sh, flags); // draw slider in new position
+#endif
   return true;
 }
 
@@ -574,5 +587,5 @@ Slider::Slider(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.72 2004/05/15 20:52:45 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.73 2004/06/11 08:07:19 spitzak Exp $".
 //

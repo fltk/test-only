@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.133 2004/06/09 05:38:57 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.134 2004/06/11 08:07:17 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -54,6 +54,7 @@ and the items in them are widgets.
 
 */
 
+#include <config.h>
 #include <fltk/Group.h>
 #include <fltk/Box.h>
 #include <fltk/draw.h>
@@ -594,7 +595,7 @@ void Group::layout() {
 void Group::draw() {
   int numchildren = children();
   if (damage() & ~DAMAGE_CHILD) {
-#if 0
+#if NO_CLIP_OUT
     // blinky-draw:
     draw_box();
     draw_label();
@@ -704,5 +705,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.133 2004/06/09 05:38:57 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.134 2004/06/11 08:07:17 spitzak Exp $".
 //

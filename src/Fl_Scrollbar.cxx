@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.69 2004/05/15 20:52:45 spitzak Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.70 2004/06/11 08:07:18 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -23,6 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#include <config.h>
 #include <fltk/Scrollbar.h>
 #include <fltk/events.h>
 #include <fltk/damage.h>
@@ -275,12 +276,17 @@ void Scrollbar::draw() {
   }
   last_ = highlight_;
 
+#if NO_CLIP_OUT
+  setcolor(color());
+  fillrect(ix, iy, iw, ih);
+  Slider::draw(ix, iy, iw, ih, f5, false);
+#else
   if (Slider::draw(ix, iy, iw, ih, f5, false)) {
     setcolor(color());
     fillrect(ix, iy, iw, ih);
     pop_clip();
   }
-
+#endif
 }
 
 static void glyph(int glyph,
@@ -307,5 +313,5 @@ Scrollbar::Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.69 2004/05/15 20:52:45 spitzak Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.70 2004/06/11 08:07:18 spitzak Exp $".
 //

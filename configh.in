@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.57 2004/06/09 06:22:20 spitzak Exp $"
+ * "$Id: configh.in,v 1.58 2004/06/11 08:07:13 spitzak Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -79,6 +79,15 @@
  */
 
 #define USE_CAIRO		0
+
+/*
+ * If this is true then assumme fltk::clip_out() either does not work
+ * or it is really slow. This is for graphic systems that don't support
+ * non-rectangular clipping regions. Notice that this makes fltk skip
+ * a lot of tricks it uses to avoid blinking. However this may not
+ * matter if your graphics are double-buffered anyway.
+ */
+#define NO_CLIP_OUT USE_CAIRO
 
 /*
  * Do we have the X double-buffer extension?  Turning this on will
@@ -322,5 +331,5 @@
 
 
 /*
- * End of "$Id: configh.in,v 1.57 2004/06/09 06:22:20 spitzak Exp $".
+ * End of "$Id: configh.in,v 1.58 2004/06/11 08:07:13 spitzak Exp $".
  */

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.38 2004/06/09 05:38:58 spitzak Exp $"
+// "$Id: fl_rect.cxx,v 1.39 2004/06/11 08:07:20 spitzak Exp $"
 //
 // Non-path routines from draw.h that are used by the standard boxtypes
 // and thus are always linked into an fltk program.
@@ -48,7 +48,10 @@ using namespace fltk;
 void fltk::strokerect(int x, int y, int w, int h) {
   if (w <= 0 || h <= 0) return;
   transform(x,y);
-#if USE_X11
+#if USE_CAIRO
+  cairo_rectangle(cc,x+.5,y+.5,w-1,h-1);
+  cairo_stroke(cc);
+#elif USE_X11
   XDrawRectangle(xdisplay, xwindow, gc, x, y, w-1, h-1);
 #elif defined(_WIN32)
   setpen();
@@ -70,7 +73,10 @@ void fltk::strokerect(int x, int y, int w, int h) {
 void fltk::fillrect(int x, int y, int w, int h) {
   if (w <= 0 || h <= 0) return;
   transform(x,y);
-#if USE_X11
+#if USE_CAIRO
+  cairo_rectangle(cc,x,y,w,h);
+  cairo_fill(cc);
+#elif USE_X11
   XFillRectangle(xdisplay, xwindow, gc, x, y, w, h);
 #elif defined(_WIN32)
   RECT rect;
@@ -83,7 +89,7 @@ void fltk::fillrect(int x, int y, int w, int h) {
   SetRect(&rect, x, y, x+w, y+h);
   PaintRect(&rect);
 #else
-#error
+# error
 #endif
 }
 
@@ -91,7 +97,11 @@ void fltk::fillrect(int x, int y, int w, int h) {
 void fltk::drawline(int x, int y, int x1, int y1) {
   transform(x,y);
   transform(x1,y1);
-#if USE_X11
+#if USE_CAIRO
+  cairo_move_to(cc,x+.5,y+.5);
+  cairo_line_to(cc,x1+.5,y1+.5);
+  cairo_stroke(cc);
+#elif USE_X11
   XDrawLine(xdisplay, xwindow, gc, x, y, x1, y1);
 #elif defined(_WIN32)
   setpen();
@@ -113,7 +123,11 @@ void fltk::drawline(int x, int y, int x1, int y1) {
 void fltk::drawline(float X, float Y, float X1, float Y1) {
   transform(X,Y); int x = int(floorf(X)+.5); int y = int(floorf(Y)+.5);
   transform(X1,Y1);int x1 = int(floorf(X1)+.5); int y1 = int(floorf(Y1)+.5);
-#if USE_X11
+#if USE_CAIRO
+  cairo_move_to(cc,X+.5,Y+.5);
+  cairo_line_to(cc,X1+.5,Y1+.5);
+  cairo_stroke(cc);
+#elif USE_X11
   XDrawLine(xdisplay, xwindow, gc, x, y, x1, y1);
 #elif defined(_WIN32)
   setpen();
@@ -133,7 +147,11 @@ void fltk::drawline(float X, float Y, float X1, float Y1) {
 /*! Draw a dot at the given point. */
 void fltk::drawpoint(int x, int y) {
   transform(x,y);
-#if USE_X11
+#if USE_CAIRO
+  cairo_move_to(cc,x,y);
+  cairo_line_to(cc,x,y);
+  cairo_stroke(cc);
+#elif USE_X11
   XDrawPoint(xdisplay, xwindow, gc, x, y);
 #elif defined(_WIN32)
   SetPixel(dc, x, y, current_xpixel);
@@ -147,7 +165,11 @@ void fltk::drawpoint(int x, int y) {
 /*! Draw a dot at the given point. */
 void fltk::drawpoint(float X, float Y) {
   transform(X,Y); int x = int(floorf(X)); int y = int(floorf(Y));
-#if USE_X11
+#if USE_CAIRO
+  cairo_move_to(cc,X,Y);
+  cairo_line_to(cc,X,Y);
+  cairo_stroke(cc);
+#elif USE_X11
   XDrawPoint(xdisplay, xwindow, gc, x, y);
 #elif defined(_WIN32)
   SetPixel(dc, x, y, current_xpixel);
@@ -161,5 +183,5 @@ void fltk::drawpoint(float X, float Y) {
 /** \} */
 
 //
-// End of "$Id: fl_rect.cxx,v 1.38 2004/06/09 05:38:58 spitzak Exp $".
+// End of "$Id: fl_rect.cxx,v 1.39 2004/06/11 08:07:20 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.68 2004/01/18 05:25:33 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.69 2004/06/11 08:07:19 spitzak Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,7 @@
 // Each child widget is a card, and it's label() is printed on the card tab.
 // Clicking the tab makes that card visible.
 
+#include <config.h>
 #include <fltk/TabGroup.h>
 #include <fltk/events.h>
 #include <fltk/damage.h>
@@ -346,11 +347,13 @@ void TabGroup::draw() {
     }
 
   }
+#if !NO_CLIP_OUT
   if (damage() & DAMAGE_EXPOSE) {
     clip_out(0, H>=0 ? 0 : h()+H, p[children()]+TABSLOPE, (H>=0?H:-H));
     clip_out(0, H>0 ? H : 0, this->w(), h()-(H>=0?H:-H-1));
     fl_did_clipping = this;
   }
+#endif
 }
 
 void TabGroup::draw_tab(int x1, int x2, int W, int H, Widget* o, int what) {
@@ -434,5 +437,5 @@ TabGroup::TabGroup(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.68 2004/01/18 05:25:33 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.69 2004/06/11 08:07:19 spitzak Exp $".
 //

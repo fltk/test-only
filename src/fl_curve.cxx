@@ -1,5 +1,5 @@
 //
-// "$Id: fl_curve.cxx,v 1.12 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id: fl_curve.cxx,v 1.13 2004/06/11 08:07:20 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -27,8 +27,10 @@
 // I very much doubt this is optimal!  From Foley/vanDam page 511.
 // If anybody has a better algorithim, please send it!
 
+#include <config.h>
 #include <fltk/draw.h>
 #include <fltk/math.h>
+#include <fltk/x.h>
 using namespace fltk;
 
 /*!
@@ -45,6 +47,10 @@ void fltk::addcurve(float x0, float y0,
   transform(x1,y1);
   transform(x2,y2);
   transform(x3,y3);
+#if USE_CAIRO
+  cairo_line_to(cc,x0,y0);
+  cairo_curve_to(cc,x1,y1,x2,y2,x3,y3);
+#else
   float x = x0; float y = y0;
 
 #define MAXPOINTS 100
@@ -103,8 +109,9 @@ void fltk::addcurve(float x0, float y0,
   *p++ = x3;
   *p++ = y3;
   addvertices_transformed((p-points[0])/2, points);
+#endif
 }
 
 //
-// End of "$Id: fl_curve.cxx,v 1.12 2004/01/20 07:27:28 spitzak Exp $".
+// End of "$Id: fl_curve.cxx,v 1.13 2004/06/11 08:07:20 spitzak Exp $".
 //

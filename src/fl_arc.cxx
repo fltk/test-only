@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arc.cxx,v 1.14 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id: fl_arc.cxx,v 1.15 2004/06/11 08:07:20 spitzak Exp $"
 //
 // Arc functions for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,8 @@
 
 // Based on code donated by Jim Wilson
 
+#include <config.h>
+#include <fltk/x.h>
 #include <fltk/draw.h>
 #include <fltk/math.h>
 using namespace fltk;
@@ -42,6 +44,15 @@ using namespace fltk;
 */
 void fltk::addarc(float l, float t, float w, float h, float start, float end)
 {
+#if USE_CAIRO
+  float x = l+w/2;
+  float y = t+h/2;
+  translate(x,y);
+  if (start > end)
+    cairo_arc(cc,x,y,w/2,start*(-M_PI/180),end*(-M_PI/180));
+  else
+    cairo_arc_negative(cc,x,y,w/2,start*(-M_PI/180),end*(-M_PI/180));
+#else
   const float x = l+w/2;
   const float y = t+h/2;
   float angle = start*float(M_PI/180);
@@ -92,14 +103,15 @@ void fltk::addarc(float l, float t, float w, float h, float start, float end)
     } while (--i);
   }
   addvertices((p-points[0])/2, points);
+#endif
 }
 
 #if 0 // portable version.  X-specific one in vertex.C
 void fltk::addcircle(float x,float y,float r) {
-  add_arc(x, y, r, r, 0, 360);
+  addarc(x, y, r, r, 0, 360);
 }
 #endif
 
 //
-// End of "$Id: fl_arc.cxx,v 1.14 2004/01/20 07:27:28 spitzak Exp $".
+// End of "$Id: fl_arc.cxx,v 1.15 2004/06/11 08:07:20 spitzak Exp $".
 //

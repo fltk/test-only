@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_x.cxx,v 1.13 2004/05/05 07:19:10 spitzak Exp $"
+// "$Id: fl_color_x.cxx,v 1.14 2004/06/11 08:07:20 spitzak Exp $"
 //
 // X color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -256,6 +256,10 @@ ulong fltk::current_xpixel;
 */
 void fltk::setcolor(Color i) {
   current_color_ = i;
+#if USE_CAIRO
+  uchar r,g,b; split_color(i,r,g,b);
+  cairo_set_rgb_color(cc,r/255.0,g/255.0,b/255.0);
+#endif
   current_xpixel = xpixel(i);
   XSetForeground(xdisplay, gc, current_xpixel);
 }
@@ -358,6 +362,20 @@ void fltk::line_style(int style, int width, char* dashes) {
     }
     ndashes = p-buf;
   }
+#if USE_CAIRO
+  cairo_set_line_width(cc, width ? width : 1);
+  int c = (style>>8)&3; if (c) c--;
+  cairo_set_line_cap(cc, (cairo_line_cap)c);
+  int j = (style>>12)&3; if (j) j--;
+  cairo_set_line_join(cc, (cairo_line_join)j);
+  if (ndashes) {
+    double dash[20];
+    for (int i = 0; i < ndashes; i++) dash[i] = dashes[i];
+    cairo_set_dash(cc, dash, ndashes, 0);
+  } else {
+    cairo_set_dash(cc, 0, 0, 0);
+  }
+#endif
   if (ndashes) XSetDashes(xdisplay, gc, 0, dashes, ndashes);
   static int Cap[4] = {CapButt, CapButt, CapRound, CapProjecting};
   static int Join[4] = {JoinMiter, JoinMiter, JoinRound, JoinBevel};
@@ -367,5 +385,5 @@ void fltk::line_style(int style, int width, char* dashes) {
 }
 
 //
-// End of "$Id: fl_color_x.cxx,v 1.13 2004/05/05 07:19:10 spitzak Exp $"
+// End of "$Id: fl_color_x.cxx,v 1.14 2004/06/11 08:07:20 spitzak Exp $"
 //

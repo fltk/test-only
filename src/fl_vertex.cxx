@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.28 2004/06/09 05:38:58 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.29 2004/06/11 08:07:20 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -283,6 +283,7 @@ void fltk::transform_distance(int& x, int& y) {
   \{
 */
 
+#if !USE_CAIRO
 // typedef what the x,y fields in a point are:
 #if USE_X11
 typedef short COORD_T;
@@ -308,6 +309,7 @@ static void add_n_points(int n) {
   if (numpoints+n >= point_array_size) point_array_size = n;
   xpoint = (XPoint*)realloc((void*)xpoint,(point_array_size+1)*sizeof(XPoint));
 }
+#endif
 
 /*!
   Add a single vertex to the current path. (If you are familiar
@@ -315,6 +317,10 @@ static void add_n_points(int n) {
   fltk::closepath was done last, otherwise it does a "lineto").
 */
 void fltk::addvertex(float X, float Y) {
+#if USE_CAIRO
+  transform(X,Y);
+  cairo_line_to(cc,X,Y);
+#else
   COORD_T x = COORD_T(floorf(X*m.a + Y*m.c + m.x + .5f));
   COORD_T y = COORD_T(floorf(X*m.b + Y*m.d + m.y + .5f));
   if (!numpoints || x != xpoint[numpoints-1].x || y != xpoint[numpoints-1].y) {
@@ -323,6 +329,7 @@ void fltk::addvertex(float X, float Y) {
     xpoint[numpoints].y = y;
     numpoints++;
   }
+#endif
 }
 
 /*!
@@ -335,6 +342,10 @@ void fltk::addvertex(float X, float Y) {
   get maximum calculation speed.
 */
 void fltk::addvertex(int X, int Y) {
+#if USE_CAIRO
+  transform(X,Y);
+  cairo_line_to(cc,X,Y);
+#else
   COORD_T x,y;
   if (m.trivial) {
     x = COORD_T(X+m.ix);
@@ -349,6 +360,7 @@ void fltk::addvertex(int X, int Y) {
     xpoint[numpoints].y = y;
     numpoints++;
   }
+#endif
 }
 
 /*!
@@ -356,6 +368,15 @@ void fltk::addvertex(int X, int Y) {
   than calling fltk::addvertex once for each point.
 */
 void fltk::addvertices(int n, const float array[][2]) {
+#if USE_CAIRO
+  const float* a = array[0];
+  const float* e = a+2*n;
+  for (; a < e; a += 2) {
+    float X = a[0]; float Y = a[1];
+    transform(X,Y);
+    cairo_line_to(cc,X,Y);
+  }
+#else
   if (numpoints+n >= point_array_size) add_n_points(n);
   const float* a = array[0];
   const float* e = a+2*n;
@@ -382,10 +403,20 @@ void fltk::addvertices(int n, const float array[][2]) {
     }
   }
   numpoints = pn;
+#endif
 }
 
 /*! Add a whole set of integer vertices to the current path. */
 void fltk::addvertices(int n, const int array[][2]) {
+#if USE_CAIRO
+  const int* a = array[0];
+  const int* e = a+2*n;
+  for (; a < e; a += 2) {
+    float X = a[0]; float Y = a[1];
+    transform(X,Y);
+    cairo_line_to(cc,X,Y);
+  }
+#else
   if (numpoints+n >= point_array_size) add_n_points(n);
   const int* a = array[0];
   const int* e = a+2*n;
@@ -412,13 +443,21 @@ void fltk::addvertices(int n, const int array[][2]) {
     }
   }
   numpoints = pn;
+#endif
 }
 
 /*! Adds a whole set of vertcies that have been produced from values
   returned by fltk::transform(). This is how curve() and arc() are
-  implemented.
+  implemented. Not implemented if Cairo is in use!
 */
 void fltk::addvertices_transformed(int n, const float array[][2]) {
+#if USE_CAIRO
+  const float* a = array[0];
+  const float* e = a+2*n;
+  for (; a < e; a += 2) {
+    cairo_line_to(cc,a[0],a[1]);
+  }
+#else
   if (numpoints+n >= point_array_size) add_n_points(n);
   const float* a = array[0];
   const float* e = a+2*n;
@@ -433,6 +472,7 @@ void fltk::addvertices_transformed(int n, const float array[][2]) {
     }
   }
   numpoints = pn;
+#endif
 }
 
 /*!
@@ -445,6 +485,9 @@ void fltk::addvertices_transformed(int n, const float array[][2]) {
   in them will not draw anything when filled.
 */
 void fltk::closepath() {
+#if USE_CAIRO
+  cairo_close_path(cc);
+#else
   if (numpoints > loop_start+2) {
     // close the shape by duplicating first point:
     XPoint& q = xpoint[loop_start];
@@ -461,6 +504,7 @@ void fltk::closepath() {
   } else {
     numpoints = loop_start;
   }
+#endif
 }
 
 ////////////////////////////////////////////////////////////////
@@ -470,7 +514,9 @@ void fltk::closepath() {
 //
 // We keep track of exactly one "nice" circle:
 
+#if !USE_CAIRO
 static int circle_x, circle_y, circle_w, circle_h;
+#endif
 
 /*!
   Add a circle to the path. It is always a circle, irregardless of the
@@ -481,11 +527,17 @@ static int circle_x, circle_y, circle_w, circle_h;
   Xlib and GDI32. Currently you can only draw one circle per path.
 */
 void fltk::addcircle(float x, float y, float r) {
+#if USE_CAIRO
+  closepath();
+  cairo_arc(cc,x,y,r,0,M_PI*2);
+  closepath();
+#elif
   transform(x,y);
   float rt = r * sqrtf(fabsf(m.a*m.d-m.b*m.c));
   circle_w = circle_h = int(rt*2 + .5);
   circle_x = int(floorf(x - circle_w*.5f + .5f));
   circle_y = int(floorf(y - circle_h*.5f + .5f));
+#endif
 }
 
 /*!
@@ -497,7 +549,7 @@ void fltk::addcircle(float x, float y, float r) {
   for 90 degree rotations and reflections.
 */
 void fltk::addellipse(float x, float y, float w, float h) {
-#if 1
+#if !USE_CAIRO
   // Use X/Win32 drawing functions as best we can. Only works for 90
   // degree rotations:
   x += w/2;
@@ -515,13 +567,17 @@ void fltk::addellipse(float x, float y, float w, float h) {
   // This produces the correct image, but not as nice as using circles
   // produced by the server:
   closepath();
-  add_arc(x, y, w, h, 0, 360);
+  addarc(x, y, w, h, 0, 360);
   closepath();
 #endif
 }
 
 static inline void inline_newpath() {
+#if USE_CAIRO
+  cairo_new_path(cc);
+#else
   numpoints = loop_start = loops = circle_w = 0;
+#endif
 }
 /*! Clear the current "path". This is normally done by fltk::fillpath() or
   any other drawing command. */
@@ -535,7 +591,9 @@ void fltk::newpath() {inline_newpath();}
   don't think that works on X.
 */
 void fltk::drawpoints() {
-#if USE_X11
+#if USE_CAIRO
+  // Not implemented!
+#elif USE_X11
   if (numpoints > 0) XDrawPoints(xdisplay, xwindow, gc, xpoint, numpoints, 0);
 #elif defined(_WIN32)
   for (int i=0; i<numpoints; i++)
@@ -554,7 +612,9 @@ void fltk::drawpoints() {
   the line), then clear the path.
 */
 void fltk::strokepath() {
-#if USE_X11
+#if USE_CAIRO
+  cairo_stroke(cc);
+#elif USE_X11
   if (circle_w > 0)
     XDrawArc(xdisplay, xwindow, gc,
 	     circle_x, circle_y, circle_w, circle_h, 0, 360*64);
@@ -615,7 +675,9 @@ void fltk::strokepath() {
   making the current pen invisible?
 */
 void fltk::fillpath() {
-#if USE_X11
+#if USE_CAIRO
+  cairo_fill(cc);
+#elif USE_X11
   if (circle_w > 0)
     XFillArc(xdisplay, xwindow, gc,
 	     circle_x, circle_y, circle_w, circle_h, 0, 64*360);
@@ -677,7 +739,13 @@ void fltk::fillpath() {
   be faster.
 */
 void fltk::fillstrokepath(Color color) {
-#if USE_X11
+#if USE_CAIRO
+  cairo_save(cc);
+  cairo_fill(cc);
+  cairo_restore(cc);
+  setcolor(color);
+  cairo_stroke(cc);
+#elif USE_X11
   if (circle_w > 0)
     XFillArc(xdisplay, xwindow, gc,
 	     circle_x, circle_y, circle_w, circle_h, 0, 64*360);
@@ -740,5 +808,5 @@ void fltk::fillstrokepath(Color color) {
 /** \} */
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.28 2004/06/09 05:38:58 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.29 2004/06/11 08:07:20 spitzak Exp $".
 //
