@@ -1,7 +1,7 @@
 [Project]
 FileName=FLTK.dev
 Name=FLTK
-UnitCount=130
+UnitCount=131
 Type=2
 Ver=1
 ObjFiles=
@@ -1300,7 +1300,7 @@ OverrideBuildCmd=0
 BuildCmd=$(CC) -c vsnprintf.c -o vsnprintf.o $(CFLAGS)
 
 [Unit131]
-FileName=..\..\src\ValueOutput.cxx
+FileName=..\..\src\shortcuts.cxx
 CompileCpp=1
 Folder=FLTK
 Compile=1
@@ -1343,7 +1343,7 @@ BuildCmd=
 Major=2
 Minor=0
 Release=0
-Build=2
+Build=4
 LanguageID=1033
 CharsetID=1252
 CompanyName=FLTK Development Team

@@ -1,9 +1,6 @@
-/*
- * "$Id: string.h,v 1.1 2004/09/25 01:52:34 leka Exp $"
+/* "$Id: string.h,v 1.2 2004/12/25 02:03:09 leka Exp $"
  *
- * Common string header file for the Fast Light Tool Kit (FLTK).
- *
- * Copyright 1998-2003 by Bill Spitzak and others.
+ * Copyright 1998-2004 by Bill Spitzak and others.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -23,58 +20,111 @@
  * Please report all bugs and problems to "fltk-bugs@fltk.org".
  */
 
+/* This file is designed to work on Windows, Linux, and BSD systems.
+   It may need to be edited to work on other systems. Please try
+   to do this by adding #if statements so this file remains portable.
+
+   Some versions of fltk wrote this file using autoconf. I never liked
+   this because I could not share the header file between systems, so
+   I have reverted to a constant version.
+*/
+
 #ifndef fltk_string_h
-#  define fltk_string_h
+#define fltk_string_h
 
-#  include <fltk/FL_API.h>
-#  include <stdio.h>
-#  include <stdlib.h>
-#  include <stdarg.h>
+#include "FL_API.h"
 
-/*
- * Include the standard string function header file...
- */
+#if 1
+# include <string.h>
+#endif
 
-#  include <string.h>
-#  include <ctype.h>
+#if 1 /* for va_list */
+# include <stdarg.h>
+#endif
 
+#if 1 /* for sprintf, vsprintf, snprintf and vsnprintf */
+# include <stdio.h>
+#endif
 
-/*
- * Windows defines functions called "stricmp" and "strnicmp" which
- * work just like "strcasecmp" and "strncasecmp" under UNIX.
- *
- * Also, the DLL C runtime libraries contain snprintf and vsnprintf
- * functions, but not all linkers add the leading underscore when
- * linking, thus the definition.
- */
+#if 0
+# include <stdlib.h>
+#endif
 
-#  define strcasecmp(s,t)	stricmp((s), (t))
-#  define strncasecmp(s,t,n)	strnicmp((s), (t), (n))
-#  define vsnprintf		_vsnprintf
-#  define snprintf		_snprintf
+#if 0
+# include <ctype.h>
+/* Unixware defines these macros in above header for the obsolete BSD
+   functions, get rid of them as it prevents you making a variable
+   named "index"! */
+# ifdef index
+#  undef index
+# endif
+# ifdef rindex
+#  undef rindex
+# endif
+#endif
 
-#  ifdef __cplusplus
+#if 0
+# include <strings.h>
+#endif
+
+#if 0 /*defined(__MWERKS__)*/
+/* MetroWerks' CodeWarrior put some functions in <extras.h> but that
+   file does not play well with others, so we don't include it. */
+# include <extras.h>
+#endif
+
+/* Windows has equivalent functions, but being Microsoft they added
+   gratuitoius changes to the names to stop code from being portable: */
+#if (defined(_WIN32) && !defined(__CYGWIN__)) || defined(__EMX__)
+# define strcasecmp(s,t)	stricmp(s, t)
+# define strncasecmp(s,t,n)	strnicmp(s, t, n)
+# define vsnprintf		_vsnprintf
+# define snprintf		_snprintf
+#endif
+
+/*! \addtogroup utilities
+  \{ */
+
+#ifdef __cplusplus
 extern "C" {
-#  endif /* __cplusplus */
+#endif
 
-/*
- * Define the strlcat and strlcpy functions that work the
- * way strncpy and strncat *should* have worked in the
- * first place.
- */
+#if defined(DOXYGEN) || defined(__MWERKS__)
+FL_API extern int strcasecmp(const char *, const char *);
+#endif
 
-FL_API extern size_t fltk_strlcat(char *, const char *, size_t);
-#  define strlcat fltk_strlcat
+#if defined(DOXYGEN) || defined(__MWERKS__)
+FL_API extern int strncasecmp(const char *, const char *, size_t);
+#endif
 
-FL_API extern size_t fltk_strlcpy(char *, const char *, size_t);
-#  define strlcpy fltk_strlcpy
+#if defined(DOXYGEN) || defined(__MWERKS__)
+FL_API extern char *strdup(const char *);
+#endif
 
-#  ifdef __cplusplus
+#if defined(DOXYGEN)
+FL_API extern int snprintf(char *, size_t, const char *, ...);
+#endif
+
+#if defined(DOXYGEN)
+FL_API extern int vsnprintf(char *, size_t, const char *, va_list ap);
+#endif
+
+#if defined(DOXYGEN) || !defined(__BSD__)
+FL_API extern size_t strlcat(char *, const char *, size_t);
+#endif
+
+#if defined(DOXYGEN) || !defined(__BSD__)
+FL_API extern size_t strlcpy(char *, const char *, size_t);
+#endif
+
+#ifdef __cplusplus
 }
-#  endif /* __cplusplus */
-#endif /* !fltk_string_h */
+#endif
 
+/*! \} */
+
+#endif
 
 /*
- * End of "$Id: string.h,v 1.1 2004/09/25 01:52:34 leka Exp $".
+ * End of "$Id: string.h,v 1.2 2004/12/25 02:03:09 leka Exp $".
  */
