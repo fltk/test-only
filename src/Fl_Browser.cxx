@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.95 2004/08/04 05:59:50 laza2000 Exp $"
+// "$Id: Fl_Browser.cxx,v 1.96 2004/08/06 09:01:57 laza2000 Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -1504,9 +1504,13 @@ int Browser::set_column_start(int col, int x) {
   if (col<=0) return -1; // we don't adjust the first column
   if (col>nColumn) return -1; // out of bounds
 
+  bool has_flex = false;
   // find the current column x and calculate the desired delta
   int ox = 0;
-  for (int i=0; i<col; i++) ox += column_widths_p[i];
+  for (int i=0; i<col; i++) { 
+    ox += column_widths_p[i];
+    if (column_widths_i[i]==-1) has_flex = true;
+  }
   int dx = x + xposition_ - ox;
   int cwp, cwi;
 
@@ -1532,8 +1536,7 @@ int Browser::set_column_start(int col, int x) {
   }
   // now adjust the columns in the interactive field
   if (column_widths_i[col-1]>0) column_widths_i[col-1] += dx;
-  //if (column_widths_i[col]>0) column_widths_i[col] -= dx;
-  if (column_widths_i[col-1]==-1) column_widths_i[col] -= dx;
+  if (has_flex) { column_widths_i[col] -= dx; }
 
 RETURN:
   // finally recalculate the layout
@@ -1610,7 +1613,7 @@ public:
 
   void layout() {
     setfont(labelfont(),labelsize());
-    h(getascent()+getdescent()+leading());
+    h(int(getascent()+getdescent()+leading()+box()->dh()));
     Button::layout();
   }
 };
@@ -1802,5 +1805,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.95 2004/08/04 05:59:50 laza2000 Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.96 2004/08/06 09:01:57 laza2000 Exp $".
 //
