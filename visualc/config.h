@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.10 1999/08/23 16:43:15 vincent Exp $"
+ * "$Id: config.h,v 1.11 1999/10/17 15:57:42 vincent Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -173,8 +173,17 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
  
 #define HAVE_PNG 0
 
+/*
+ * HAVE_JPEG
+ *
+ * Do we have libjpeg ?
+ *
+ */
+  
+#define HAVE_JPEG 1
+
 #define strcasecmp(a,b) stricmp(a,b)
 
 /*
- * End of "$Id: config.h,v 1.10 1999/08/23 16:43:15 vincent Exp $".
+ * End of "$Id: config.h,v 1.11 1999/10/17 15:57:42 vincent Exp $".
  */
