@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.h,v 1.4 2001/12/16 22:32:02 spitzak Exp $"
+// "$Id: Fl_Window.h,v 1.5 2002/07/15 05:55:37 spitzak Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -44,6 +44,7 @@ public:
   void label(const char*);
   void iconlabel(const char*);
   void label(const char* label, const char* iconlabel);
+  void copy_label(const char* c) {Fl_Widget::copy_label(c); label(label());}
   const void* icon() const	{return icon_;}
   void icon(const void * ic)	{icon_ = ic;}
   static const char* xclass()	{return xclass_;}
@@ -116,5 +117,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.h,v 1.4 2001/12/16 22:32:02 spitzak Exp $".
+// End of "$Id: Fl_Window.h,v 1.5 2002/07/15 05:55:37 spitzak Exp $".
 //

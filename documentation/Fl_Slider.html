@@ -47,13 +47,13 @@ have the same sign. Otherwise the slider position is the square root
 of the value (or -sqrt(-value) for negative values).
 
 <p>You can turn on tick marks by turning on bits in the type(). The
-tick marks are the <a href="Fl_Valuator.html#pagesize">pagesize()</a>
-apart. For log sliders, they are the <a
-href="Fl_Valuator.html#pagesize">pagesize()</a> apart near zero, and
-every ten tickmarks they are ten times further apart. The color of the
-tick marks is controlled by <a
+tick marks are placed the <a href="#slider_size">slider_size()</a> or
+more apart (they are also no closer than the <a
+href="Fl_Valuator.html#step">step()</a> value). The color of the tick
+marks is controlled by <a
 href="Fl_Widget.html#text_color">text_color()</a>, and the font used
-to draw the "0" and "1" is <a href="Fl_Widget.html#text_font">text_font()</a>.
+to draw the numbers is <a
+href="Fl_Widget.html#text_font">text_font()</a>.
 
 <p>Setting the <a href="Fl_Widget.html#box">box()</a> as shown in the
 example on the bottom-left will remove the "slot" and draw a box
@@ -122,9 +122,6 @@ the slider.
 the slider.
 
 </ul>
-
-<p>The ticks are placed the <a
-href="Fl_Valuator.html#pagesize">pagesize()</a> apart.
 
 <a name=slider_size><h4>unsigned char Fl_Slider::slider_size() const
 <br>void Fl_Slider::slider_size(unsigned char)</h4></a>

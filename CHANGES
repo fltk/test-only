@@ -2341,3 +2341,16 @@ make linesize & pagesize be the actual increments.  Fl_Slider draws
 tick marks at intelligent distances (I hope), and if step() is
 non-zero it does a lot of work to select "nice" values (powers of 10
 times 1,2, or 5) depending on the slider scale.
+
+////////////////////////////////////////////////////////////////
+
+Fixed vertical centering of some labels and text.
+
+Sliders can draw differently when pushed (the default glyph function
+draws them the same but some themes could use this).
+
+Scrollbars highlighting cleaned up and tested.
+
+Documentation of new drawing functions.
+
+Added Fl_Window::copy_label()

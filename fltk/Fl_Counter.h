@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.h,v 1.3 2002/06/21 06:17:09 spitzak Exp $"
+// "$Id: Fl_Counter.h,v 1.4 2002/07/15 05:55:37 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -34,10 +34,10 @@ public:
   Fl_Counter(int x,int y,int w,int h,const char *l = 0)
     : Fl_Value_Input(x, y, w, h, l) {align(FL_ALIGN_BOTTOM);}
 #ifndef FLTK_2
-  double step() const {return Fl_Valuator::step();}
+  float step() const {return Fl_Valuator::step();}
   void step(double a) {Fl_Valuator::step(a);}
-  void lstep(double a) {pagesize(int(a/step()));}
-  double lstep() const {return pagesize()*step();}
+  void lstep(double a) {linesize(a);}
+  float lstep() const {return linesize();}
   void step(double a,double b) {step(a); lstep(b);}
 #endif
 };
@@ -50,5 +50,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Counter.h,v 1.3 2002/06/21 06:17:09 spitzak Exp $".
+// End of "$Id: Fl_Counter.h,v 1.4 2002/07/15 05:55:37 spitzak Exp $".
 //

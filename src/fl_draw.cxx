@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.19 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.20 2002/07/15 05:55:38 spitzak Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -38,6 +38,7 @@
 // flag is on) and aligns them agains the inside of their boxes.
 
 #include <fltk/fl_draw.h>
+#include <fltk/math.h>
 #include <string.h>
 
 // Any string longer than this does not get &x underscore processing.
@@ -139,7 +140,7 @@ bool fl_hide_shortcut; // set by Fl_Choice
 // Parses and lays out the text into segments. Return value is the
 // y height of the text. The width is stored in max_x. The index is
 // set to be the number of segments.
-static int split(
+static double split(
     const char* str,
     int W, int /*H*/,
     Fl_Flags flags,
@@ -210,7 +211,7 @@ static int split(
     }
     if (newy > max_y) max_y = newy;
     if (!*p) {
-      return int(max_y+fl_height());
+      return max_y+fl_height();
     } else if (*p == '\n') {
       x = 0; y = max_y+fl_height(); max_y = y; column = fl_column_widths_;
     } else { // tab
@@ -228,7 +229,7 @@ void fl_draw(
   if (!str || !*str) return;
   char tempbuf[MAX_LENGTH_FOR_UNDERSCORE];
   int index = 0;
-  int h = split(str, W, H, flags, index, tempbuf);
+  int h = int(rint(split(str, W, H, flags, index, tempbuf)));
   fl_transform(X,Y);
   int dy;
   if (flags & FL_ALIGN_BOTTOM) {
@@ -237,7 +238,7 @@ void fl_draw(
   } else if (flags & FL_ALIGN_TOP) {
     dy = Y;
   } else {
-    dy = Y+(H-h)/2;
+    dy = Y+(H+h+1)/2-h;
   }
   for (int i = 0; i < index; i++) {
     Segment& s = segments[i];
@@ -249,7 +250,7 @@ void fl_measure(const char* str, int& w, int& h, Fl_Flags flags) {
   if (!str || !*str) {w = 0; h = int(fl_height()); return;}
   char tempbuf[MAX_LENGTH_FOR_UNDERSCORE];
   int index = 0;
-  h = split(str, w, h, flags, index, tempbuf);
+  h = int(rint(split(str, w, h, flags, index, tempbuf)));
   w = int(max_x+.5);
 }
 
@@ -259,5 +260,5 @@ void fl_measure(const char* str, int& w, int& h, Fl_Flags flags) {
 //  }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.19 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.20 2002/07/15 05:55:38 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.33 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.34 2002/07/15 05:55:38 spitzak Exp $"
 //
 // Copyright 1998-2002 by Bill Spitzak and others.
 //
@@ -52,6 +52,7 @@ void Fl_Value_Input::input_cb(Fl_Widget*, void* v) {
 
 // For the belowmouse() widget, which button is highlighted:
 static char which_highlight = 0;
+// For the pushed() widget, which button is pushed:
 static char which_pushed = 0;
 
 void Fl_Value_Input::draw() {
@@ -79,7 +80,7 @@ void Fl_Value_Input::draw() {
 
 void Fl_Value_Input::increment_cb() {
   double i = linesize();
-  if (Fl::event_state()&(FL_SHIFT|FL_CTRL|FL_ALT)) i = pagesize();
+  if (Fl::event_state()&(FL_SHIFT|FL_CTRL|FL_ALT)) i *= 10;
   if (which_pushed == 2) i = -i;
   handle_drag(value()+i);
 }
@@ -90,7 +91,7 @@ void Fl_Value_Input::increment_cb() {
 void Fl_Value_Input::repeat_callback(void* v) {
   Fl_Value_Input* b = (Fl_Value_Input*)v;
   if (which_pushed) {
-    Fl::add_timeout(REPEAT, repeat_callback, b);
+    Fl::repeat_timeout(REPEAT, repeat_callback, b);
     b->increment_cb();
   }
 }
@@ -211,5 +212,5 @@ Fl_Value_Input::~Fl_Value_Input() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.33 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.34 2002/07/15 05:55:38 spitzak Exp $".
 //

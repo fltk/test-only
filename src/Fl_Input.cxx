@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.67 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.68 2002/07/15 05:55:37 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 #include <fltk/Fl.h>
 #include <fltk/Fl_Input.h>
 #include <fltk/fl_draw.h>
-#include <math.h>
+#include <fltk/math.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
@@ -163,15 +163,17 @@ void Fl_Input::draw() {
 }
 
 #if 1
-#define line_height() int(fl_height()+leading())
-#define line_descent() int(fl_height()+leading()-fl_descent())
+#define line_height() int(rint(fl_height()+leading()))
 #else
 #define line_height() (text_size()+leading())
-#define line_descent() (line_height()-int(fl_descent()))
 #endif
 
 void Fl_Input::draw(int X, int Y, int W, int H)
 {
+  setfont();
+  int height = line_height();
+  double desc = height-fl_descent()-leading()/2.0;
+
   if (damage() & FL_DAMAGE_ALL) {
     // draw and measure the inside label:
     if (label() && label()[0] && (!(flags()&15)||(flags()&FL_ALIGN_INSIDE))) {
@@ -183,8 +185,10 @@ void Fl_Input::draw(int X, int Y, int W, int H)
       Fl_Color color = label_color();
       if (!active_r()) color = fl_inactive(color);
       fl_color(color);
-      fl_draw(label(), X+2, Y+H/2+4);
-      fl_draw(":", X+width+2, Y+H/2+4);
+      double y = Y+(H+height+1)/2-height+desc;
+      fl_draw(label(), X+2, y);
+      fl_draw(":", X+2+width, y);
+      setfont();
     } else {
       label_width = 0;
     }
@@ -212,7 +216,6 @@ void Fl_Input::draw(int X, int Y, int W, int H)
     selend = position(); selstart = mark();
   }
 
-  setfont();
   int wordwrap = (type() > MULTILINE) ? W-8 : 0;
 
   const char *p, *e;
@@ -220,8 +223,6 @@ void Fl_Input::draw(int X, int Y, int W, int H)
 
   // count how many lines and put the last one into the buffer:
   // And figure out where the cursor is:
-  int height = line_height();
-  int desc = line_descent();
   int lines;
   int curx, cury;
   int cursor_position = (this==dnd_target) ? dnd_target_position : position();
@@ -267,7 +268,7 @@ void Fl_Input::draw(int X, int Y, int W, int H)
       erase_cursor_only = false;
     }
   } else {
-    yscroll_ = -(H-height)/2;
+    yscroll_ = -((H+height+1)/2-height);
   }
 
   // if we are not doing minimal update a single erase is done,
@@ -1275,5 +1276,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.67 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.68 2002/07/15 05:55:37 spitzak Exp $".
 //

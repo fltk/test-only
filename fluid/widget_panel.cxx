@@ -180,14 +180,14 @@ ts from going to other windows until it is hidden or closed.");
           o->when(FL_WHEN_ENTER_KEY);
           o->tooltip("The initial value of this widget");
         }
-         {Fl_Value_Input* o = new Fl_Value_Input(135, 132, 55, 22, "mn");
+         {Fl_Value_Input* o = new Fl_Value_Input(135, 132, 55, 22, "min");
           o->label_size(10);
           o->callback((Fl_Callback*)min_cb);
           o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
           o->when(FL_WHEN_ENTER_KEY);
           o->tooltip("The minimum value for this valuator");
         }
-         {Fl_Value_Input* o = new Fl_Value_Input(190, 132, 55, 22, "mx");
+         {Fl_Value_Input* o = new Fl_Value_Input(190, 132, 55, 22, "max");
           o->label_size(10);
           o->value(1);
           o->callback((Fl_Callback*)max_cb);
@@ -195,31 +195,21 @@ ts from going to other windows until it is hidden or closed.");
           o->when(FL_WHEN_ENTER_KEY);
           o->tooltip("The maximum value for this valuator");
         }
-         {Fl_Value_Input* o = new Fl_Value_Input(245, 132, 45, 22, "s");
+         {Fl_Value_Input* o = new Fl_Value_Input(245, 132, 60, 22, "step");
           o->label_size(10);
           o->callback((Fl_Callback*)step_cb);
           o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
           o->when(FL_WHEN_ENTER_KEY);
           o->tooltip("step:\nRound all movements to multiples of this.\n");
         }
-         {Fl_Value_Input* o = new Fl_Value_Input(290, 132, 40, 22, "L");
+         {Fl_Value_Input* o = new Fl_Value_Input(305, 132, 65, 22, "line");
           o->label_size(10);
           o->minimum(1);
           o->step(1);
           o->callback((Fl_Callback*)line_cb);
           o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
           o->when(FL_WHEN_ENTER_KEY);
-          o->tooltip("linesize:\nNumber of steps to move for arrow keys.");
-        }
-         {Fl_Value_Input* o = new Fl_Value_Input(330, 132, 40, 22, "P");
-          o->label_size(10);
-          o->minimum(1);
-          o->step(1);
-          o->callback((Fl_Callback*)page_cb);
-          o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
-          o->when(FL_WHEN_ENTER_KEY);
-          o->tooltip("pagesize:\nNumber of steps to move for PageUp/PageDown\nHow far apart tick ma\
-rks are.");
+          o->tooltip("linesize:\nIncrement/decrement for arrow keys.");
         }
          {Fl_Group* o = new Fl_Group(80, 158, 280, 22, "Attributes");
           o->callback((Fl_Callback*)propagate_group);
@@ -448,5 +438,5 @@ e given below.");
     }
     o->end();
   }
-  return w;
+  return  w;
 }

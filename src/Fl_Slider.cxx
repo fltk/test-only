@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.61 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.62 2002/07/15 05:55:38 spitzak Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,7 @@
 #include <fltk/fl_draw.h>
 #include <fltk/math.h>
 #include <config.h>
+#include <stdio.h>
 
 // Return the location of the left/top edge of a box of slider_size() would
 // be if the area the slider can move in is of width/height w.
@@ -131,9 +132,6 @@ void Fl_Slider::draw_ticks(int x, int y, int w, int h, int min_spacing)
     w = h;
   }
   if (w <= 0) return;
-  Fl_Color color = text_color();
-  if (!active_r()) color = fl_inactive(color);
-  fl_color(color);
   double A = minimum();
   double B = maximum();
   if (A > B) {A = B; B = minimum();}
@@ -150,6 +148,7 @@ void Fl_Slider::draw_ticks(int x, int y, int w, int h, int min_spacing)
     derivative = B/(w*w)*30;
     if (A < 0) derivative *= 4;
   }
+  if (min_spacing < 1) min_spacing = 10; // fix for fill sliders
   derivative *= min_spacing;
   if (derivative < step()) derivative = step();
 
@@ -165,17 +164,29 @@ void Fl_Slider::draw_ticks(int x, int y, int w, int h, int min_spacing)
     if (log() && n > 10) {n = 2; num *= 10;}
     double v = double(num*n)/denom;
     if (v > fabs(A) && v > fabs(B)) break;
+    int small = n%5 ? 2 : 0;
     if (v >= A && v <= B) {
       int t = slider_position(v, w);
-      fl_line(x1+dx*t, y1+dy*t, x2+dx*t, y2+dy*t);
-      if (v == 0 || v == 1) {
+      fl_line(x1+dx*t+dy*small, y1+dy*t+dx*small, x2+dx*t, y2+dy*t);
+      if (n%10 == 0) {
+	char buffer[20]; sprintf(buffer,"%g",v);
+	char* p = buffer;
+	while (p[0]=='0' && p[1]) p++;
 	fl_font(text_font(), text_size());
-	fl_draw(v?"1":"0", x1+dx*t+1, y1+dy*t+fl_size()-fl_descent()+1);
+	fl_draw(p, x1+dx*t+1, y1+dy*t+fl_size()-fl_descent());
       }
     }
-    if (-v >= A && -v <= B) {
+    if (v && -v >= A && -v <= B) {
       int t = slider_position(-v, w);
-      fl_line(x1+dx*t, y1+dy*t, x2+dx*t, y2+dy*t);
+      fl_line(x1+dx*t+dy*small, y1+dy*t+dx*small, x2+dx*t, y2+dy*t);
+      if (n%10 == 0) {
+	char buffer[20]; sprintf(buffer+1,"%g",v);
+	char* p = buffer+1;
+	while (p[0]=='0' && p[1]) p++;
+	p--; p[0] = '-';
+	fl_font(text_font(), text_size());
+	fl_draw(p, x1+dx*t+1, y1+dy*t+fl_size()-fl_descent());
+      }
     }
   }
 }
@@ -209,7 +220,7 @@ void Fl_Slider::draw()
   if (!active_r()) {
     flags |= FL_INACTIVE;
   } else {
-    //if (Fl::pushed() == this) f |= FL_VALUE;
+    if (Fl::pushed() == this) flags |= FL_VALUE;
     if (belowmouse()) flags |= FL_HIGHLIGHT;
   }
 
@@ -239,6 +250,9 @@ void Fl_Slider::draw()
 	case TICK_BELOW: iw += ix; ix = sx+sw/2+(iy?0:3); iw -= ix; break;
 	}
       }
+      Fl_Color color = text_color();
+      if (!active_r()) color = fl_inactive(color);
+      fl_color(color);
       draw_ticks(ix, iy, iw, ih, slider_size_);
     }
 
@@ -336,6 +350,7 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
     redraw(FL_DAMAGE_ALL);
     return 1;
   case FL_PUSH:
+    redraw(FL_DAMAGE_HIGHLIGHT);
     handle_push();
   case FL_DRAG: {
     // figure out the space the slider moves in and where the event is:
@@ -385,6 +400,7 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
     return 1;}
   case FL_RELEASE:
     handle_release();
+    redraw(FL_DAMAGE_HIGHLIGHT);
     return 1;
   case FL_KEY:
     // Only arrows in the correct direction are used.  This allows the
@@ -409,6 +425,7 @@ int Fl_Slider::handle(int event) {return handle(event,0,0,w(),h());}
 static void glyph(const Fl_Widget* widget, int glyph,
 		  int x,int y,int w,int h, Fl_Flags flags)
 {
+  if (!glyph) flags &= ~FL_VALUE;
   Fl_Widget::default_glyph(widget, glyph, x, y, w, h, flags);
   // draw the divider line into slider:
   if (!glyph) {
@@ -448,5 +465,5 @@ Fl_Slider::Fl_Slider(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.61 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.62 2002/07/15 05:55:38 spitzak Exp $".
 //

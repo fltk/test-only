@@ -9,7 +9,7 @@ snap 2
 Function {make_widget_panel()} {open
 } {
   Fl_Window {} {open
-    xywh {74 345 380 373} resizable hotspot visible
+    xywh {119 598 380 373} resizable hotspot visible
   } {
     Fl_Tabs panel_tabs {
       callback propagate_tabs open
@@ -169,39 +169,31 @@ Function {make_widget_panel()} {open
           xywh {80 132 55 22} when ENTER_KEY
         }
         Fl_Value_Input {} {
-          label mn
-          callback min_cb
+          label min
+          callback min_cb selected
           tooltip {The minimum value for this valuator}
           xywh {135 132 55 22} align 20 when ENTER_KEY label_size 10
         }
         Fl_Value_Input {} {
-          label mx
+          label max
           callback max_cb
           tooltip {The maximum value for this valuator}
           xywh {190 132 55 22} align 20 when ENTER_KEY label_size 10 value 1
         }
         Fl_Value_Input {} {
-          label s
-          callback step_cb selected
+          label step
+          callback step_cb
           tooltip {step:
 Round all movements to multiples of this.
 }
-          xywh {245 132 45 22} align 20 when ENTER_KEY label_size 10
+          xywh {245 132 60 22} align 20 when ENTER_KEY label_size 10
         }
         Fl_Value_Input {} {
-          label L
+          label line
           callback line_cb
           tooltip {linesize:
-Number of steps to move for arrow keys.}
-          xywh {290 132 40 22} align 20 when ENTER_KEY label_size 10 minimum 1 step 1
-        }
-        Fl_Value_Input {} {
-          label P
-          callback page_cb
-          tooltip {pagesize:
-Number of steps to move for PageUp/PageDown
-How far apart tick marks are.}
-          xywh {330 132 40 22} align 20 when ENTER_KEY label_size 10 minimum 1 step 1
+Increment/decrement for arrow keys.}
+          xywh {305 132 65 22} align 20 when ENTER_KEY label_size 10 minimum 1 step 1
         }
         Fl_Group {} {
           label Attributes

@@ -1,5 +1,5 @@
 //
-// "$Id: math.h,v 1.3 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: math.h,v 1.4 2002/07/15 05:55:37 spitzak Exp $"
 //
 // The purpose of this header file is to make math.h look the same as
 // Unix on other operating systems.
@@ -35,18 +35,18 @@
 
 # ifndef M_PI
 #  define M_PI		3.14159265358979323846
-#  define M_PI_2		1.57079632679489661923
-#  define M_PI_4		0.78539816339744830962
-#  define M_1_PI		0.31830988618379067154
-#  define M_2_PI		0.63661977236758134308
+#  define M_PI_2	1.57079632679489661923
+#  define M_PI_4	0.78539816339744830962
+#  define M_1_PI	0.31830988618379067154
+#  define M_2_PI	0.63661977236758134308
 #  define M_SQRT2	1.41421356237309504880
 #  define M_SQRT1_2	0.70710678118654752440
 # endif
 
-# define rint(v)			floor((v)+.5)
-# define copysign		_copysign
-# define drand48()		((double)rand()/RAND_MAX)
-# define srand48(n)		srand((n));
+# define rint(v)	floor((v)+.5)
+# define copysign	_copysign
+# define drand48()	((double)rand()/RAND_MAX)
+# define srand48(n)	srand((n));
 
 #endif
 
@@ -83,5 +83,5 @@
 #endif
 
 //
-// End of "$Id: math.h,v 1.3 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: math.h,v 1.4 2002/07/15 05:55:37 spitzak Exp $".
 //

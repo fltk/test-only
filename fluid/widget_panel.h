@@ -42,7 +42,6 @@ extern void min_cb(Fl_Value_Input*, void*);
 extern void max_cb(Fl_Value_Input*, void*);
 extern void step_cb(Fl_Value_Input*, void*);
 extern void line_cb(Fl_Value_Input*, void*);
-extern void page_cb(Fl_Value_Input*, void*);
 extern void visible_cb(Fl_Check_Button*, void*);
 extern void active_cb(Fl_Check_Button*, void*);
 extern void resizable_cb(Fl_Check_Button*, void*);

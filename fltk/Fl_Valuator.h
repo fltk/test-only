@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.h,v 1.7 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: Fl_Valuator.h,v 1.8 2002/07/15 05:55:37 spitzak Exp $"
 //
 // Valuator header file for the Fast Light Tool Kit (FLTK).
 //
@@ -51,9 +51,6 @@ public:
   float linesize() const {return linesize_;}
   void linesize(double a) {linesize_ = float(a);}
 
-  float pagesize() const {return pagesize_;}
-  void pagesize(double a) {pagesize_ = float(a);}
-
   virtual int format(char*);
 
   int handle(int);
@@ -83,12 +80,11 @@ private:
   float maximum_;
   float step_;
   float linesize_;
-  float pagesize_;
 
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Valuator.h,v 1.7 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: Fl_Valuator.h,v 1.8 2002/07/15 05:55:37 spitzak Exp $".
 //

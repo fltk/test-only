@@ -57,17 +57,14 @@ drawing functions:
 <a name=dtransformation><h2>Current Transformation</h2></a>
 
 FLTK provides an arbitrary 2-D linear transformation (ie rotation,
-scale, skew, reflections, and translation).
+scale, skew, reflections, and translation). This is very similar to
+PostScript, PDF, and SVG.
 
-<p><i>To speed up implementations (or make them possible on some
-devices) many of the drawing commands ignore anything other than the
-translation, and often they round the translation to the nearest
-integer.</i> The only commands guaranteed to obey the rotation and
-scale of the transfromation are <a
-href="#fl_vertex"><tt>fl_vertex</tt></a>, <a
-href="#fl_curve"><tt>fl_curve</tt></a>, and <a
-href="#fl_arc"><tt>fl_arc</tt></a>. Conversely, do not rely on the
-transformation being ignored by an operator either!
+<p><i>Due to limited graphics capabilities of some systems, all
+drawing methods that take 4 integer values (defining a box) only
+transform the x and y values, and round them to the nearest
+integer. You should use functions that take floating-point coordinates
+if you want accurately scaled drawings.
 
 <h4><a name=fl_push_matrix>void fl_push_matrix()</a>
 <br><a name=fl_pop_matrix>void fl_pop_matrix()</a></h4>
@@ -79,40 +76,47 @@ stack is 10.
 <br>void fl_scale(float x)</a>
 <br><a name=fl_translate>void fl_translate(float x, float y)</a>
 <br><a name=fl_rotate>void fl_rotate(float d)</a>
-<br><a name=fl_mult_matrix>void fl_mult_matrix(float a,  float b,  float c,  float d,  float x,  float y)</a></h4>
+<br><a name=fl_mult_matrix>void fl_mult_matrix(float a, float b, float c, float d, float x, float y)</a></h4>
 
 Concatenate another transformation onto the current one.  The rotation 
 angle is in degrees (not radians) and is counter-clockwise. 
 
-<h4><a name=fl_transform_x>double fl_transform_x(double x, double y)</a>
-<br><a name=fl_transform_y>double fl_transform_y(double x, double y)</a></h4>
+<h4><a name=fl_load_identity>void fl_load_identity()</a>
 
-Return the actual x (or y) coordinate after x,y is transformed by the
-current transform. This value may be passed to
-<tt>fl_transformed_vertex</tt> or to the functions that dont do
-transforms yet, like <tt><a href=#fl_draw>fl_draw</a></tt> (but be warned that these may
-change in future versions).
+Replace the current transform with the identity transform, which puts
+0,0 in the top-left corner of the window and each unit is 1 pixel in
+size.
 
-<h4><a name=fl_transform_dx>double fl_transform_dx(double x, double y)</a>
-<br><a name=fl_transform_dy>double fl_transform_dy(double x, double y)</a></h4>
+<h4><a name=fl_transform>void fl_transform(double& x, double& y)</a></h4>
 
-Similar, but the translation is ignored, so this transforms a distance
-vector, instead of an actual point.
+Replace x and y with the transformed coordinates.
+
+<h4><a name=fl_transform>void fl_transform(int& x, int& y)</a></h4>
+
+Replace x and y with the transformed coordinates, rounded to the
+nearest integer.
+
+<h4><a name=fl_transform_distance>void fl_transform_distance(double& x, double& y)</a></h4>
+
+Replace x and y with the tranformed coordinates, ignoring
+translation. This transforms a vector which is measuring a distance
+between two positions, rather than a position.
 
 <A name=dclipping><h2>Clipping</h2></a>
 
-You can limit all your drawing to a region by calling <tt>
-fl_push_clip</tt>, and put the drawings back by using <tt>fl_pop_clip</tt>.
-Fltk may also set up clipping before draw() is called to limit the
-drawing to the region of the window that is damaged.
+You can limit all your drawing to a region by calling <a
+href="#fl_push_clip"><tt>fl_push_clip()</tt></a>, and put the drawings
+back by using <a href="#fl_pop_clip"><tt>fl_pop_clip()</tt></a>.  Fltk
+may also set up clipping before draw() is called to limit the drawing
+to the region of the window that is damaged.
 
 <p>When drawing you can also test the current clip region with
 <tt>fl_not_clipped()</tt> and <tt>fl_clip_box()</tt>.  By using these
 to skip over complex drawings that are clipped you can greatly speed
 up your program's redisplay.
 
-<p>The clip region is measured in pixels (it is unaffected by the current 
-transformation matrix). 
+<p>Notice that the width and height of the clipping region is measured
+in transformed coordianates.
 
 <a name=fl_push_clip><h4>void fl_push_clip(int x, int y, int w, int h)</h4></a>
 
@@ -196,9 +200,9 @@ whatever value is fastest.
 <ul>
 <li><tt>FL_SOLID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -------</tt>
 <li><tt>FL_DASH&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - - - -</tt>
-<li><tt>FL_DOT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .......</tt>
-<li><tt>FL_DASHDOT&nbsp;&nbsp;&nbsp; - . - .</tt>
-<li><tt>FL_DASHDOTDOT - .. -</tt>
+<li><tt>FL_DOT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ·········</tt>
+<li><tt>FL_DASHDOT&nbsp;&nbsp;&nbsp; - · - ·</tt>
+<li><tt>FL_DASHDOTDOT - ·· - ··</tt>
 <li><tt>FL_CAP_FLAT</tt>
 <li><tt>FL_CAP_ROUND</tt>
 <li><tt>FL_CAP_SQUARE</tt> (extends past end point 1/2 line width)
@@ -233,25 +237,26 @@ OpenGL when greater accuracy and/or performance is required.
 Clear the current "path". This is normally done by fl_fill() or any
 other drawing command.
 
-<a name=fl_vertex><h4>void fl_vertex(float x, float y)</h4></a>
+<a name=fl_vertex><h4>void fl_vertex(double x, double y)
+<br>void fl_vertex(int x, int y)</h4></a>
 
 Add a single vertex to the current path. (If you are familiar with
 PostScript, this does a "moveto" if the path is clear or fl_closepath
 was done last, otherwise it does a "lineto").
 
-<h4>void fl_vertex(int x, int y)</h4>
+<a name=fl_vertices><h4>void fl_vertices(int n, const float v[][2]);
+<br>void fl_vertices(int n, const int v[][2]);</h4></a>
 
-Add a single vertex to the current path. <i>The current
-transformation, other than integer translation, may be ignored on some
-platforms, in order to make this faster! Use the double version if you
-want the transform to work.</i>
+Add a whole set of vertices to the current path. This is much faster
+than calling fl_vertex once for each point. Notice that the array is
+float rather than double.
 
-<a name=fl_transformed_vertex><h4>void fl_transformed_vertex(float x, float y)</h4></a>
+<a name=fl_transformed_vertices><h4>void fl_transformed_vertices(int n, const float v[][2]);</h4></a>
 
-Add a single vertex to the current path. The passed values are not
-transformed and may be based on values returned by
-<tt>fl_transform_x()</tt>, <tt>fl_transform_y()</tt>, or
-<tt>fl_transform_dx()</tt> or <tt>fl_transform_dy()</tt>.
+Add a set of vertices to the current path where the coordinates are
+in the units returned by <a href="#fl_transform">fl_transform()</a>.
+This is used by <a href="#fl_curve">fl_curve()</a> and can be used by
+other code to calculate shapes.
 
 <a name=fl_closepath><h4>void fl_closepath();</h4></a>
 
@@ -295,16 +300,19 @@ tries to take advantage of the X/Win32 graphics primitives like fl_ellipse.
 
 <a name=fl_points><h4> void fl_points()</h4></a>
 
-Draw a point (one pixel) for every vertex in the path, then clear the path.
+Draw a point (one pixel) for every vertex in the path, then clear the
+path.
 
 <a name=fl_stroke><h4> void fl_stroke()</h4></a>
 
 Draw a line between all the points in the path (see fl_line_type() for
-ways to set the thicknesss and dot pattern of the line).
+ways to set the thicknesss and dot pattern of the line), then clear
+the path.
 
 <a name=fl_fill><h4>void fl_fill()</h4></a>
 
-Does <tt>fl_closepath()</tt> and then fill with the current color.
+Does <tt>fl_closepath()</tt> and then fill with the current color, and
+then clear the path.
 
 <p>For portability, you should only draw polygons that appear the same
 whether "even/odd" or "non-zero" winding rules are used to fill them.
@@ -314,31 +322,23 @@ of the outside.
 <a name=fl_fill_stroke><h4>void fl_fill_stroke(Fl_Color linecolor)</h4></a>
 
 Does <tt>fl_fill()</tt>, then sets the current color to
-<i>linecolor</i> and does <tt>fl_stroke</tt> with the same closed path.
+<i>linecolor</i> and does <tt>fl_stroke</tt> with the same closed
+path, and then clears the path.
 
 <A name=dfast><h2>Drawing that bypasses the path mechanism</h2></a>
 
-For speed and convienence, and to get some necessary graphics on the
-rather primitive interface provided by X and Win32, fltk has some
-calls that could be done with paths but are provided directly.
-
-<a name=fl_rectf><h4>void fl_rectf(int x, int y, int w, int h)</h4></a>
-
-Color a rectangle that exactly fills the given bounding box.
-
-<h4>void fl_rectf(int x, int y, int w, int h, <a
-href=Fl_Color.html>Fl_Color</a>)</h4>
-
-Color a rectangle with "exactly" the passed <tt>r,g,b</tt> color.  On
-screens with less than 24 bits of color this is done by drawing a
-solid-colored block using <A
-href=#fl_draw_image><tt>fl_draw_image()</tt> </A> so that dithering is
-produced.
+These graphics will go directly to the primitives provided by X or
+GDI. Only the x,y coordinates are transformed and in most cases they
+are rounded to the nearest integer.
 
 <a name=fl_rect><h4>void fl_rect(int x, int y, int w, int h)</h4></a>
 
 Draw a line <I>inside</I> this bounding box (currently correct only
 for 0-thickness lines).
+
+<a name=fl_rectf><h4>void fl_rectf(int x, int y, int w, int h)</h4></a>
+
+Color a rectangle that exactly fills the given bounding box.
 
 <a name=fl_line><h4>void fl_line(int x, int y, int x1, int y1)</h4></a>
 
@@ -356,12 +356,10 @@ translation of the current transformation is obeyed on most systems.
 <p>The allowed types are:
 
 <ul>
-
 <li><tt>FL_PIE</tt> fills a pie-slice shape
 <li><tt>FL_CHORD</tt> join the ends of the arc with a straight line
 and fill.
 <li><tt>FL_ARC</tt> stroke the curved edge of the arc.
-
 </ul>
 
 <a name=dtext><h2>Text</h2></a>
@@ -371,11 +369,12 @@ passed as a font. For most uses one of the built-in constant fonts
 like <tt>FL_HELVETICA</tt> can be used.
 
 <A name=fl_font><h4>
-void fl_font(<a href=Fl_Font.html>Fl_Font</a>, unsigned size)</h4></a>
+void fl_font(<a href=Fl_Font.html>Fl_Font</a>, double size)</h4></a>
 
-Set the current font.  It is scaled so that the font height (sum of
-ascent plus descent, minimum line spacing) is <i>size</i> pixels.
-The font size is unaffected by the current transformation.
+Set the current font and font scaling so the size is <i>size</i>
+pixels. The size is unaffected by the current transformation matrix
+(you may be able to use <a href="#fl_transform">fl_transform()</a> to
+get the size to get a properly scaled font).
 
 <p>The size is given in pixels. Many pieces of software express sizes
 in "points" (for mysterious reasons, since everything else is measured
@@ -385,11 +384,11 @@ following code:
 <pre>
 const Fl_Screen_Info& info = <a href="Fl.html#info">Fl::info()</a>;
 double pixels_per_point = info.height/(info.height_mm*(72/25.4));
-int font_pixel_size = int(font_point_size*pixels_per_point + .5)
+double font_pixel_size = font_point_size*pixels_per_point;
 </pre>
 
-<A name=fl_font_named><h4>void fl_font(const char* name, unsigned size);<br>
-void fl_font(const char* name, int attributes, unsigned size);</h4></a>
+<A name=fl_font_named><h4>void fl_font(const char* name, double size);<br>
+void fl_font(const char* name, int attributes, double size);</h4></a>
 
 Set the current font by name. Exactly what names work depend on your
 system, it is best to use <a
@@ -424,7 +423,7 @@ will be removed.
 
 Returns the current font.
 
-<a name=fl_size><h4>unsigned fl_size()</h4></a>
+<a name=fl_size><h4>double fl_size()</h4></a>
 
 Returns the current font size.
 
@@ -432,45 +431,57 @@ Returns the current font size.
 
 Returns the current encoding.
 
-<a name=fl_height><h4>int fl_height()</h4></a>
+<a name=fl_height><h4>double fl_height()</h4></a>
 
-Returns the vertical size of the font according to the system.  It is
-highly recommended that you use <tt>fl_size()</tt> instead for
-portability and because many X fonts return erroneous values for this.
+Returns the vertical size of the font according to the system.  I
+recommended that you use <tt>fl_size()</tt> instead for portability
+and because many X fonts return erroneous values for this. Notice that
+the dimension is in transformed coordinates.
 
-<a name=fl_descent><h4>int fl_descent()</h4></a>
+<a name=fl_descent><h4>double fl_descent()</h4></a>
 
 Recommended distance above the bottom of a <tt>fl_height()</tt> tall 
 box to draw the text at so it looks centered vertically in that box. 
+Notice that the dimension is in transformed coordinates.
 
-<a name=fl_width><h4>int fl_width(const char*)
-<BR>int fl_width(const char*, int n)
-<BR>int fl_width(uchar)</h4></a>
+<a name=fl_width><h4>double fl_width(const char*)
+<br>double fl_width(const char*, int n)</h4></a>
 
-Return the pixel width of a nul-terminated string, a sequence of
-<tt>n</tt> characters, or a single character in the current font.
+Return the pixel width of a nul-terminated string, or a string of
+length <tt>n</tt> bytes.  Notice that the dimension is in transformed
+coordinates.
 
-<a name=fl_draw><h4>void fl_draw(const char*, int x, int y)
-<br>void fl_draw(const char*, int n, int x, int y)</h4></a>
+<a name=fl_draw><h4>void fl_draw(const char*, double x, double y)
+<br>void fl_draw(const char*, int n, double x, double y)</h4></a>
 
-Draw a nul-terminated string or an array of <tt>n</tt> characters 
+Draw a nul-terminated string or an array of <i>n</i> bytes
 starting at the given location. 
+
+<a name=fl_transformed_draw><h4>void fl_transformed_draw(const char*,
+int n, double x, double y)</h4></a>
+
+Draw an array of <i>n</i> bytes starting at the given location,
+which is given in actual device units, such as those returned by <a
+href="#fl_transform">fl_transform()</a>. You must use this if you wish
+to accurately append pieces of text together.
 
 <h4>void fl_draw(const char*, int x, int y, int w, int h, Fl_Flags)</h4>
 
 Fancy string drawing function which is used to draw all the labels.
-The string is formatted and aligned inside the passed box.  Handles
-'\t' and '\n', expands all other control characters to ^X, and aligns
-inside or against the edges of the box.  See <A
+The string is formatted and aligned inside the passed box (only the
+x/y are transformed, the width and height are in device units).
+Handles '\t' and '\n', expands all other control characters to ^X, and
+aligns inside or against the edges of the box.  See <A
 href=Fl_Labeltype.html> <tt>Fl_Labeltype_::draw()</tt></A> for values
-for the flags.  The value <tt>FL_ALIGN_INSIDE</tt> is ignored, as this
-function always prints inside the box.
+for the flags (<tt>FL_ALIGN_INSIDE</tt> is ignored, it acts like it is
+always on).
 
 <a name=fl_measure><h4>void fl_measure(const char*, int& w, int& h)</h4></a>
 
 Measure how wide and tall the string will be when printed by the
 <tt>fl_draw(...align)</tt> function.  If the incoming <i>w</i> is
-non-zero it will wrap to that width.
+non-zero it will wrap to that width.  Notice that the dimensions are
+in transformed coordinates.
 
 <a name=dimages><h2>Images</h2></a>
 

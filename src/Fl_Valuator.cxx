@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.25 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: Fl_Valuator.cxx,v 1.26 2002/07/15 05:55:38 spitzak Exp $"
 //
 // Valuator widget for the Fast Light Tool Kit (FLTK).
 //
@@ -41,7 +41,6 @@ Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
   minimum_ = 0;
   maximum_ = 1;
   linesize_ = 1;
-  pagesize_ = 10;
 }
 
 #ifndef FLTK_2
@@ -141,17 +140,17 @@ int Fl_Valuator::handle(int event) {
       redraw(FL_DAMAGE_HIGHLIGHT);
       return 1;
     case FL_KEY: {
-      float i = linesize();
-      if (Fl::event_state()&(FL_SHIFT|FL_CTRL|FL_ALT)) i = pagesize();
+      float i;
       switch (Fl::event_key()) {
-        case FL_Page_Up: i = pagesize(); goto MOVE_BY_i;
-        case FL_Page_Down: i = -pagesize(); goto MOVE_BY_i;
         case FL_Down:
         case FL_Left:
-          i = -i;
+          i = -linesize();
+	  goto J1;
         case FL_Up:
         case FL_Right:
-          MOVE_BY_i:
+          i = linesize();
+      J1:
+	  if (Fl::event_state()&(FL_SHIFT|FL_CTRL|FL_ALT)) i *= 10;
 	  if (maximum() < minimum()) i = -i;
           handle_drag(value()+i);
           return 1;
@@ -175,5 +174,5 @@ int Fl_Valuator::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.25 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.26 2002/07/15 05:55:38 spitzak Exp $".
 //
