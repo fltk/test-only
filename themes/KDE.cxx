@@ -1,5 +1,5 @@
 //
-// "$Id: KDE.cxx,v 1.6 2002/02/18 04:58:15 spitzak Exp $"
+// "$Id: KDE.cxx,v 1.7 2002/03/09 21:25:36 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -127,11 +127,6 @@ extern "C" bool fltk_theme() {
   }
   conf_clear_cache();
   
-  // 2.0 used pixelsize and 2.1 of KDE used pointsize of fonts, but there
-  // is no really good way to figure out which is in use. This is a guess:
-  bool newer_kde = false;
-  if (!getconf(kderc, "KDE/AntiAliasing", s, sizeof(s))) newer_kde = true;
-
   int motif_style = 0;
   if (!colors_only) {
     if (!getconf(kderc, "KDE/widgetStyle", s, sizeof(s)) && !strcasecmp(s, "Motif"))
@@ -181,6 +176,9 @@ extern "C" bool fltk_theme() {
   if (!getconf(kderc, "General/buttonBackground", s, sizeof(s)))
     button_background = fl_rgb(s);
 
+  const Fl_Screen_Info& info = Fl::info();
+  double pixels_per_point = info.height/(info.height_mm*(72/25.4));
+
   Fl_Font font = 0;
   int fontsize = FL_NORMAL_SIZE;
   static char fontencoding[32] = "";
@@ -195,8 +193,7 @@ extern "C" bool fltk_theme() {
       strncpy(fontname, p, sizeof(fontname));
     }
     if ( (p = strtok_r(0, ",", &sv)) ) {
-      fontsize = atoi(p);
-      if (newer_kde) fontsize = (4*fontsize+2)/3;
+      fontsize = int(atoi(p) * pixels_per_point + .5);
     }
     strtok_r(0, ",", &sv); // I have no idea what this is
     if ( (p = strtok_r(0, ",", &sv)) ) {
@@ -223,8 +220,7 @@ extern "C" bool fltk_theme() {
       strncpy(fontname, p, sizeof(fontname));
     }
     if ( (p = strtok_r(0, ",", &sv)) ) {
-      menufontsize = atoi(p);
-      if (newer_kde) menufontsize = (4*menufontsize+2)/3;
+      menufontsize = int(atoi(p) * pixels_per_point + .5);
     }
     strtok_r(0, ",", &sv); // I have no idea what this is
     if ( (p = strtok_r(0, ",", &sv)) ) {
@@ -373,5 +369,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: KDE.cxx,v 1.6 2002/02/18 04:58:15 spitzak Exp $".
+// End of "$Id: KDE.cxx,v 1.7 2002/03/09 21:25:36 spitzak Exp $".
 //

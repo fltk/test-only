@@ -1,9 +1,9 @@
 //
-// "$Id: fl_dnd_x.cxx,v 1.5 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fl_dnd_x.cxx,v 1.6 2002/03/09 21:25:36 spitzak Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/Fl.h>
@@ -39,9 +39,9 @@ extern Atom fl_XdndActionCopy;
 extern Atom fl_XdndFinished;
 //extern Atom fl_XdndProxy;
 
-extern char fl_i_own_selection;
+extern bool fl_i_own_selection[2];
 
-void fl_sendClientMessage(Window window, Atom message,
+extern void fl_sendClientMessage(Window window, Atom message,
                                  unsigned long d0,
                                  unsigned long d1=0,
                                  unsigned long d2=0,
@@ -49,7 +49,7 @@ void fl_sendClientMessage(Window window, Atom message,
                                  unsigned long d4=0);
 
 // return version # of Xdnd this window supports.  Also change the
-// window the the proxy if it uses a proxy:
+// window to the proxy if it uses a proxy:
 static int dnd_aware(Window& window) {
   Atom actual; int format; unsigned long count, remaining;
   unsigned char *data = 0;
@@ -133,7 +133,7 @@ bool Fl::dnd() {
   }
 
   if (local_window) {
-    fl_i_own_selection = 1;
+    fl_i_own_selection[0] = true;
     if (local_handle(FL_DND_RELEASE, local_window)) paste(*belowmouse(),false);
   } else if (version) {
     fl_sendClientMessage(target_window, fl_XdndDrop, source_window,
@@ -166,5 +166,5 @@ bool Fl::dnd() {
 
 
 //
-// End of "$Id: fl_dnd_x.cxx,v 1.5 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fl_dnd_x.cxx,v 1.6 2002/03/09 21:25:36 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_fullscreen.cxx,v 1.12 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: Fl_Window_fullscreen.cxx,v 1.13 2002/03/09 21:25:36 spitzak Exp $"
 //
 // Fullscreen window support for the Fast Light Tool Kit (FLTK).
 //
@@ -25,40 +25,48 @@
 
 #include <fltk/Fl.h>
 #include <fltk/Fl_Window.h>
-
-#ifndef _WIN32
 #include <fltk/x.h>
-extern Atom fl_MOTIF_WM_HINTS; // in Fl_x.cxx
-#endif
+
+// Neither the X or Win32 version will successfully hide the taskbar.
+// I would like it, but maybe that should be a third state of the window.
+// On both systems it looks like it is much harder to do it.
 
 void Fl_Window::fullscreen() {
-#ifdef _WIN32
-  // something must be done so that the taskbar is hidden...
-#else
-  // Irix 4DWM will work if we use the MOTIF_WM_HINTS property to turn
-  // the border off.  Most other window managers will ignore this and
-  // leave the border on.  Newer window managers will position the
-  // window correctly even if the border is on, but far too many of
-  // them will insist on moving it down&right by the border thickness...
-  if (i) {
-    // see the file /usr/include/X11/Xm/MwmUtil.h:
-    long prop[5] = {2, 1, 0, 0, 0};
-    XChangeProperty(fl_display, fl_xid(this),
-		    fl_MOTIF_WM_HINTS, fl_MOTIF_WM_HINTS,
-		    32, 0, (unsigned char *)prop, 5);
+  const Fl_Screen_Info& info = Fl::info();
+#ifndef _WIN32
+  // Most X window managers will not place the window where we want it unless
+  // the border is turned off. And most (all except Irix 4DWM, as far as I
+  // can tell) will ignore attempts to change the border unless the window
+  // is unmapped. Telling the window manager about the border changing
+  // is done by i->sendxjunk().
+  if (shown()) XUnmapWindow(fl_display,i->xid);
+  clear_border();
+#endif
+  resize(info.x, info.y, info.w, info.h);
+#ifndef _WIN32
+  if (shown()) {
+    layout();
+    i->sendxjunk();
+    XMapWindow(fl_display,i->xid);
   }
 #endif
-  if (!x()) x(1); // force it to call XResizeWindow()
-  resize(0,0,Fl::w(),Fl::h());
 }
 
 void Fl_Window::fullscreen_off(int X,int Y,int W,int H) {
-  resize(X,Y,W,H);
 #ifndef _WIN32
-  if (i) i->sendxjunk(); // makes the border turn back on
+  if (shown()) XUnmapWindow(fl_display,i->xid);
+  clear_flag(Fl_Window::FL_NOBORDER);
+#endif
+  resize(X, Y, W, H);
+#ifndef _WIN32
+  if (shown()) {
+    layout();
+    i->sendxjunk();
+    XMapWindow(fl_display,i->xid);
+  }
 #endif
 }
 
 //
-// End of "$Id: Fl_Window_fullscreen.cxx,v 1.12 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: Fl_Window_fullscreen.cxx,v 1.13 2002/03/09 21:25:36 spitzak Exp $".
 //

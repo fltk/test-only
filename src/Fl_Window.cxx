@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.82 2002/03/06 08:50:45 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.83 2002/03/09 21:25:36 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -313,6 +313,10 @@ void Fl_Window::flush() {
 
 ////////////////////////////////////////////////////////////////
 
+#if !defined(_WIN32) && USE_XFT
+extern void fl_destroy_xft_draw(Window);
+#endif
+
 void Fl_Window::destroy() {
   Fl_X* x = i;
   if (!x) return;
@@ -353,6 +357,9 @@ void Fl_Window::destroy() {
   if (x->region) XDestroyRegion(x->region);
   DestroyWindow(x->xid);
 #else
+# if USE_XFT
+  fl_destroy_xft_draw(x->xid);
+# endif
   if (x->region) XDestroyRegion(x->region);
   XDestroyWindow(fl_display, x->xid);
 #endif
@@ -364,5 +371,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.82 2002/03/06 08:50:45 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.83 2002/03/09 21:25:36 spitzak Exp $".
 //

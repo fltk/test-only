@@ -374,9 +374,20 @@ like <tt>FL_HELVETICA</tt> can be used.
 <A name=fl_font><h4>
 void fl_font(<a href=Fl_Font.html>Fl_Font</a>, unsigned size)</h4></a>
 
-Set the current font.  It is scaled so that the point size is
-<i>size</i> pixels tall.  The font size is unaffected by the current
-transformation.
+Set the current font.  It is scaled so that the font height (sum of
+ascent plus descent, minimum line spacing) is <i>size</i> pixels.
+The font size is unaffected by the current transformation.
+
+<p>The size is given in pixels. Many pieces of software express sizes
+in "points" (for mysterious reasons, since everything else is measured
+in pixels!). To convert these point sizes to pixel sizes use the
+following code:
+
+<ul><pre>
+const Fl_Screen_Info& info = <a href="Fl.html#info">Fl::info()</a>;
+double pixels_per_point = info.height/(info.height_mm*(72/25.4));
+int font_pixel_size = int(font_point_size*pixels_per_point + .5)
+</pre></ul>
 
 <A name=fl_font_named><h4>void fl_font(const char* name, unsigned size);<br>
 void fl_font(const char* name, int attributes, unsigned size);</h4></a>

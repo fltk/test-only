@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.122 2002/02/10 22:57:49 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.123 2002/03/09 21:25:36 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -298,12 +298,7 @@ void fl_open_display(Display* d) {
   fl_XdndFinished       = XInternAtom(d, "XdndFinished",	0);
   //fl_XdndProxy        = XInternAtom(d, "XdndProxy",		0);
 
-  fl_screen = DefaultScreen(fl_display);
-  // construct an XVisualInfo that matches the default Visual:
-  XVisualInfo templt; int num;
-  templt.visualid = XVisualIDFromVisual(DefaultVisual(fl_display,fl_screen));
-  fl_visual = XGetVisualInfo(fl_display, VisualIDMask, &templt, &num);
-  fl_colormap = DefaultColormap(fl_display,fl_screen);
+  fl_screen = DefaultScreen(d);
 
   // Carl inserted something much like the KDE plugin does to register
   // a style client message.  I would prefer to either leave this up
@@ -334,10 +329,16 @@ void fl_open_display(Display* d) {
 
   fl_message_window =
     XCreateSimpleWindow(d, RootWindow(d,fl_screen), 0,0,1,1,0, 0, 0);
-  Atom style_atom = XInternAtom(fl_display, "FLTK_STYLE_WINDOW", False);
+  Atom style_atom = XInternAtom(d, "FLTK_STYLE_WINDOW", False);
   long data = 1;
-  XChangeProperty(fl_display, fl_message_window, style_atom, style_atom, 32,
+  XChangeProperty(d, fl_message_window, style_atom, style_atom, 32,
                   PropModeReplace, (unsigned char *)&data, 1);
+
+  // construct an XVisualInfo that matches the default Visual:
+  XVisualInfo templt; int num;
+  templt.visualid = XVisualIDFromVisual(DefaultVisual(d, fl_screen));
+  fl_visual = XGetVisualInfo(d, VisualIDMask, &templt, &num);
+  fl_colormap = DefaultColormap(d, fl_screen);
 
 #if !USE_COLORMAP
   Fl::visual(FL_RGB);
@@ -1318,5 +1319,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.122 2002/02/10 22:57:49 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.123 2002/03/09 21:25:36 spitzak Exp $".
 //

@@ -2108,3 +2108,13 @@ constructor.
 
 Checked in 3/5/02
 ////////////////////////////////////////////////////////////////
+
+Fixed warning messages from Xft. This is probably a temporary fix,
+according to keithp (author of Xft) I am doing this wrong.
+
+Fixed Fl_Window::fullscreen() on X. Under KDE/Gnome it does not hide
+the panel, which is the same problem that exists on Windows,
+too. Fixing on either X or Windows looks difficult.
+
+Fixed the KDE theme plugin to correctly calculate pixel size of fonts
+from point size, added something to documentation about how to do this.

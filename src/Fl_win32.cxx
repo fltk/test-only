@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.166 2002/02/25 09:00:22 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.167 2002/03/09 21:25:36 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -48,12 +48,23 @@
 #define USE_ASYNC_SELECT
 
 //
+// USE_TRACK_MOUSE - define it if you have TrackMouseEvent()...
+//
+// Apparently, at least some versions of Cygwin/MingW don't provide
+// the TrackMouseEvent() function.  You can define this by hand
+// if you have it - this is only needed to support subwindow
+// enter/leave notification under Windows.
+//
+
+//#define USE_TRACK_MOUSE
+
+//
 // WM_SYNCPAINT is an "undocumented" message, which is finally defined in
 // VC++ 6.0.
 //
 #ifndef WM_SYNCPAINT
 #  define WM_SYNCPAINT 0x0088
-#endif /* !WM_SYNCPAINT */
+#endif
 
 #ifndef WM_MOUSELEAVE
 #  define WM_MOUSELEAVE 0x02a3
@@ -64,7 +75,7 @@
 #endif
 
 #ifndef WHEEL_DELTA
-#	define WHEEL_DELTA 120	// according to MSDN.
+#  define WHEEL_DELTA 120	// according to MSDN.
 #endif
 
 //
@@ -571,21 +582,17 @@ static Fl_Window* resize_from_system;
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
   fl_msg.message = uMsg;
-  static int syncpaint_count;
 
   Fl_Window *window = fl_find(hWnd);
 
   switch (uMsg) {
 
-  case WM_SYNCPAINT:
-    // Damage somehow is lost and this fixes it. Apparently two WM_SYNCPAINT
-    // events in a row are a signal to redraw the entire window.
-    if (syncpaint_count) {
-      InvalidateRect(fl_window,0,FALSE);
-      syncpaint_count = 0;
-    } else {
-      syncpaint_count = 1;
-    }
+  case WM_SYNCPAINT :
+  case WM_NCPAINT :
+  case WM_ERASEBKGND :
+    // Andreas Weitl - WM_SYNCPAINT needs to be passed to DefWindowProc
+    // so that Windows can generate the proper paint messages...
+    // Similarly, WM_NCPAINT and WM_ERASEBKGND need this, too...
     break;
 
   case WM_CAPTURECHANGED:
@@ -613,7 +620,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     return 1;
 
   case WM_PAINT: {
-    syncpaint_count = 0;
     if (!window) break;
     Fl_X *i = Fl_X::i(window);
     i->wait_for_expose = false;
@@ -649,7 +655,19 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_RBUTTONDOWN:	mouse_event(window, 0, 3, wParam, lParam); return 0;
   case WM_RBUTTONDBLCLK:mouse_event(window, 1, 3, wParam, lParam); return 0;
   case WM_RBUTTONUP:	mouse_event(window, 2, 3, wParam, lParam); return 0;
-  case WM_MOUSEMOVE:	mouse_event(window, 3, 0, wParam, lParam); return 0;
+
+  case WM_MOUSEMOVE:
+#ifdef USE_TRACK_MOUSE
+    if (Fl::belowmouse() != window) {
+      TRACKMOUSEEVENT tme;
+      tme.cbSize    = sizeof(TRACKMOUSEEVENT);
+      tme.dwFlags   = TME_LEAVE;
+      tme.hwndTrack = hWnd;
+      _TrackMouseEvent(&tme);
+    }
+#endif // USE_TRACK_MOUSE
+    mouse_event(window, 3, 0, wParam, lParam);
+    return 0;
 
   case WM_MOUSELEAVE:
     if (window == xmousewin) xmousewin = 0;
@@ -1320,5 +1338,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.166 2002/02/25 09:00:22 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.167 2002/03/09 21:25:36 spitzak Exp $".
 //
