@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.30 2004/08/25 17:10:37 spitzak Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.31 2004/12/19 18:09:33 leka Exp $"
 //
 // More FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -59,6 +59,9 @@
 #else
 # include <unistd.h>
 # include <pwd.h>
+#endif
+#if (__MINGW32__)
+#  include <ctype.h> // needed for isalpha()
 #endif
 
 using namespace fltk;
@@ -674,5 +677,5 @@ FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.30 2004/08/25 17:10:37 spitzak Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.31 2004/12/19 18:09:33 leka Exp $".
 //
