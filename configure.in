@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.41 1999/08/22 14:15:04 vincent Exp $"
+dnl# "$Id: configure.in,v 1.42 1999/08/22 14:42:07 vincent Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -193,6 +193,8 @@ AC_CHECK_LIB(dl, dlopen, \
 
 if test -n $LD_FOR_DLL_FLAGS; then
     LD_DLL_FLAGS="-Wl,-G -rdynamic"
+    CFLAGS="-DHAVE_DLOPEN $CFLAGS"
+    CXXFLAGS="-DHAVE_DLOPEN $CXXFLAGS"
 fi
 
 AC_SUBST(LD_FOR_DLL_FLAGS)
@@ -281,5 +283,5 @@ AC_CONFIG_HEADER(config.h:configh.in)
 AC_OUTPUT(makeinclude)
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.41 1999/08/22 14:15:04 vincent Exp $".
+dnl# End of "$Id: configure.in,v 1.42 1999/08/22 14:42:07 vincent Exp $".
 dnl#
