@@ -139,7 +139,7 @@ DISTRIBUTE_GROUP_DOC   = NO
 # The TAB_SIZE tag can be used to set the number of spaces in a tab. 
 # Doxygen uses this value to replace tabs by spaces in code fragments.
 
-TAB_SIZE               = 8
+TAB_SIZE               = 4
 
 # This tag can be used to specify a number of aliases that acts 
 # as commands in the documentation. An alias has the form "name=value". 
@@ -558,14 +558,14 @@ HTML_ALIGN_MEMBERS     = YES
 # Microsoft HTML help workshop to generate a compressed HTML help file (.chm) 
 # of the generated HTML documentation.
 
-GENERATE_HTMLHELP      = NO
+GENERATE_HTMLHELP      = YES
 
 # If the GENERATE_HTMLHELP tag is set to YES, the CHM_FILE tag can 
 # be used to specify the file name of the resulting .chm file. You 
 # can add a path in front of the file if the result should not be 
 # written to the html output dir.
 
-CHM_FILE               = 
+CHM_FILE               = fltk_reference
 
 # If the GENERATE_HTMLHELP tag is set to YES, the HHC_LOCATION tag can 
 # be used to specify the location (absolute path including file name) of 
@@ -578,13 +578,13 @@ HHC_LOCATION           =
 # controls if a separate .chi index file is generated (YES) or that 
 # it should be included in the master .chm file (NO).
 
-GENERATE_CHI           = NO
+GENERATE_CHI           = YES
 
 # If the GENERATE_HTMLHELP tag is set to YES, the BINARY_TOC flag 
 # controls whether a binary table of contents is generated (YES) or a 
 # normal table of contents (NO) in the .chm file.
 
-BINARY_TOC             = NO
+BINARY_TOC             = YES
 
 # The TOC_EXPAND flag can be set to YES to add extra items for group members 
 # to the contents of the HTML help documentation and to the tree view.
@@ -595,7 +595,7 @@ TOC_EXPAND             = NO
 # top of each HTML page. The value NO (the default) enables the index and 
 # the value YES disables it.
 
-DISABLE_INDEX          = YES
+DISABLE_INDEX          = NO
 
 # This tag can be used to set the number of enum values (range [1..20]) 
 # that doxygen will group on one line in the generated HTML documentation.
@@ -609,7 +609,7 @@ ENUM_VALUES_PER_LINE   = 4
 # Netscape 6.0+, Internet explorer 5.0+, or Konqueror). Windows users are 
 # probably better off using the HTML help feature.
 
-GENERATE_TREEVIEW      = NO
+GENERATE_TREEVIEW      = YES
 
 # If the treeview is enabled (see GENERATE_TREEVIEW) then this tag can be 
 # used to set the initial width (in pixels) of the frame in which the tree 
