@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.145 2002/05/14 15:56:14 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.146 2002/05/15 16:38:01 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -269,11 +269,11 @@ int Fl::wait(double time_to_wait) {
   } else {
     reset_clock = 1; // remember that elapse_timeouts was not called
   }
-  // update display after the callbacks but before waiting:
-  flush();
   // run the system-specific part that waits for sockets & events:
   if (time_to_wait <= 0.0) time_to_wait = 0.0;
+  else flush();
   if (fl_wait(time_to_wait)) ret = 1;
+  if (!time_to_wait) flush();
   return ret;
 }
 
@@ -552,8 +552,12 @@ bool Fl::handle(int event, Fl_Window* window)
   case FL_ENTER:
   case FL_MOVE:
 //case FL_DRAG: // does not happen
-    if (pushed()) {to = pushed_; event = FL_DRAG;}
-    break;
+    if (pushed()) {to = pushed_; event = FL_DRAG; break;}
+    {Fl_Widget* pbm = belowmouse();
+    if (modal_ && !modal_->contains(to)) to = modal_;
+    bool ret = to && to->send(FL_MOVE);
+    if (pbm != belowmouse()) Fl_Tooltip::enter(belowmouse());
+    return ret;}
 
   case FL_LEAVE:
     if (!pushed_) {belowmouse(0); Fl_Tooltip::enter(0);}
@@ -615,13 +619,11 @@ bool Fl::handle(int event, Fl_Window* window)
     // send a dummy move event when the user releases the mouse:
     if (xmousewin) handle(FL_MOVE, xmousewin);
     else belowmouse(0);
-  } else if (event == FL_MOVE) {
-    Fl_Tooltip::enter(belowmouse());
   }
 
   return ret;
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.145 2002/05/14 15:56:14 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.146 2002/05/15 16:38:01 spitzak Exp $".
 //
