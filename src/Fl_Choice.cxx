@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.46 2000/05/30 07:42:10 bill Exp $"
+// "$Id: Fl_Choice.cxx,v 1.47 2000/08/10 09:24:31 spitzak Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -33,7 +33,7 @@
 extern char fl_draw_shortcut;
 
 void Fl_Choice::draw() {
-  Fl_Color lc = draw_button(flags());
+  draw_button();
   int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
   int w1 = H*4/5;
   Fl_Widget* o = children() ? item() : 0;
@@ -50,26 +50,19 @@ void Fl_Choice::draw() {
 //  }
   if (o) {
     fl_clip(X+2, Y+2, W-w1-2, H-4);
-    int save_flags = o->flags();
-    if (active_r()) o->clear_flag(FL_INACTIVE);
-    else o->set_flag(FL_INACTIVE);
     o->x(X);
     o->y(Y+(H-o->height())/2);
     int save_w = o->w(); o->w(W-w1);
     fl_color(o->label_color());
     if (!(flags() & FL_NO_SHORTCUT_LABEL)) fl_draw_shortcut = 2;
+    o->clear_flag(FL_SELECTED);
     o->draw();
     fl_draw_shortcut = 0;
     o->w(save_w);
-    if (save_flags & FL_INACTIVE) o->set_flag(FL_INACTIVE);
-    else o->clear_flag(FL_INACTIVE);
     fl_pop_clip();
   }
   // draw the little mark at the right:
-  Fl_Flags f = 0;
-  Fl_Color gc = (text_box() == FL_NO_BOX) ? lc : text_color();
-  if (!active_r()) f |= FL_INACTIVE;
-  glyph()(FL_GLYPH_CHOICE, X+W-w1-2, Y, w1, H, text_background(),gc,f,text_box());
+  draw_glyph(FL_GLYPH_CHOICE, X+W-w1-2, Y, w1, H, 0);
 }
 
 // int Fl_Choice::value(int v) {
@@ -156,5 +149,5 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.46 2000/05/30 07:42:10 bill Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.47 2000/08/10 09:24:31 spitzak Exp $".
 //

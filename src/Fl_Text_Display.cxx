@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.4 2000/08/09 04:34:37 clip Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.5 2000/08/10 09:24:32 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -61,9 +61,7 @@ static int countlines( const char *string );
 // CET - FIXME
 #define TMPFONTWIDTH 6
 
-static void revert(Fl_Style* s) {
-  s->box = FL_DOWN_BOX;
-}
+static void revert(Fl_Style*) {}
 
 static Fl_Named_Style *style = new Fl_Named_Style("text display", revert, &style);
 
@@ -189,7 +187,7 @@ int Fl_Text_Display::longest_vline() {
 void Fl_Text_Display::layout() {
   if (!buffer() || !visible_r()) return;
   int X = x(), Y = y(), W = w(), H = h();
-  box()->inset(X, Y, W, H);
+  text_box()->inset(X, Y, W, H);
   text_area.x = X+LEFT_MARGIN;
   text_area.y = Y+BOTTOM_MARGIN;
   text_area.w = W-LEFT_MARGIN-RIGHT_MARGIN;
@@ -1743,7 +1741,7 @@ void Fl_Text_Display::draw(void) {
   if (damage() & FL_DAMAGE_ALL) {
     //printf("drawing all\n");
     // draw the box()
-    draw_frame();
+    draw_text_frame();
 
     // left margin
     fl_rectf(text_area.x-LEFT_MARGIN, text_area.y-TOP_MARGIN,
@@ -1934,5 +1932,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.4 2000/08/09 04:34:37 clip Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.5 2000/08/10 09:24:32 spitzak Exp $".
 //

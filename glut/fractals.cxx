@@ -1,5 +1,5 @@
 //
-// "$Id: fractals.cxx,v 1.3 2000/01/16 07:44:29 robertk Exp $"
+// "$Id: fractals.cxx,v 1.4 2000/08/10 09:24:30 spitzak Exp $"
 //
 // Fractal drawing demo for the Fast Light Tool Kit (FLTK).
 //
@@ -780,7 +780,7 @@ int main(int argc, char** argv)
 
   agvInit(1); /* 1 cause we don't have our own idle */
 
-  glutReshapeFunc(reshape); reshape(512,512);
+  glutReshapeFunc(reshape); //reshape(512,512);
   glutDisplayFunc(display);
   glutVisibilityFunc(visible);
   glutMenuStateFunc(menuuse);
@@ -796,5 +796,5 @@ int main(int argc, char** argv)
 }
 
 //
-// End of "$Id: fractals.cxx,v 1.3 2000/01/16 07:44:29 robertk Exp $".
+// End of "$Id: fractals.cxx,v 1.4 2000/08/10 09:24:30 spitzak Exp $".
 //

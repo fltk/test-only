@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.8 2000/05/31 00:04:45 carl Exp $"
+// "$Id: fl_motif.cxx,v 1.9 2000/08/10 09:24:33 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -64,11 +64,11 @@ thin_motif_always_up_box("motif up","VVHHVVHH");
 static const Fl_Highlight_Box
 thin_motif_menu_box("motif thin menu", &thin_motif_always_up_box);
 
-static Fl_Style* scrollbarstyle;
-
-static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
-                Fl_Flags f, Fl_Boxtype box)
+static void motif_glyph(Fl_Widget* widget, int t,
+			int x, int y, int w, int h, Fl_Flags f)
 {
+  Fl_Color fc = widget->glyph_color(f);
+  Fl_Color bc = widget->box_color(f);
   switch (t) {
     case FL_GLYPH_ROUND: {
       w = (w-1)|1; h = (h-1)|1;
@@ -77,8 +77,8 @@ static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color
       Fl_Color light = FL_LIGHT2, dark = FL_DARK3;
       if (f&FL_VALUE) { light = FL_DARK3; dark = FL_LIGHT2; }
 
-      if (f&FL_INACTIVE)
-        { fc = fl_inactive(fc); light = fl_inactive(light); dark = fl_inactive(dark); }
+//       if (f&FL_INACTIVE)
+//         { light = fl_inactive(light); dark = fl_inactive(dark); }
       fl_color((f & FL_VALUE) ? fc : bc);
       fl_polygon(x+3,y1, x1,y+3, x+w-4,y1, x1,y+h-4);
 
@@ -97,35 +97,40 @@ static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color
 			     (f & FL_VALUE) ? fc : bc,
 			     f & ~FL_FOCUSED); // hack! for color
       break;
+    case FL_GLYPH_RIGHT_BUTTON:
+    case FL_GLYPH_LEFT_BUTTON:
+    case FL_GLYPH_UP_BUTTON:
+    case FL_GLYPH_DOWN_BUTTON:
+      // draw background of scroll buttons
+      fl_color(widget->text_background());
+      fl_rectf(x,y,w,h);
+      goto JUMP1;
     case FL_GLYPH_RIGHT:
     case FL_GLYPH_LEFT:
     case FL_GLYPH_UP:
-    case FL_GLYPH_DOWN: {
-      if (h > w) {y += (h-w)/2; h = w;}
-      else if (w > h) {x += (w-h)/2; w = h;}
-      if (box == FL_NO_BOX) {
-	// menu fudge factor
-	if (w > 10) {x += (w-10)/2; y += (w-10)/2; w = h = 10;}
+    case FL_GLYPH_DOWN:
+      // menu fudge factor
+      if (w > 10) {x += (w-10)/2; y += (w-10)/2; w = h = 10;}
 //	x += 2; y += 2; w -= 4; h -= 4;
 //	x += 4; y += 4; w -= 8; h -= 8;
-      } else if (scrollbarstyle) {
-	// erase area behind scrollbars arrows
-	fl_color(scrollbarstyle->text_background);
-	fl_rectf(x,y,w,h);
-      }
-      Fl_Color d1, d2, l1, l2;
+    JUMP1:
+      if (h > w) {y += (h-w)/2; h = w;}
+      else if (w > h) {x += (w-h)/2; w = h;}
+      {Fl_Color d1, d2, l1, l2;
       if (f&FL_VALUE) {
         d1 = FL_LIGHT2; d2 = FL_LIGHT2; l1 = FL_DARK3; l2 = FL_DARK3;
       } else{
         l1 = FL_LIGHT2; l2 = FL_LIGHT2; d1 = FL_DARK3; d2 = FL_DARK3;
       }
 
-      if (f&FL_INACTIVE) {
-        l1 = fl_inactive(l1); l2 = fl_inactive(l2);
-        d1 = fl_inactive(d1); d2 = fl_inactive(d2);
-      }
+//       if (f&FL_INACTIVE) {
+//         l1 = fl_inactive(l1); l2 = fl_inactive(l2);
+//         d1 = fl_inactive(d1); d2 = fl_inactive(d2);
+//       }
 
-      if (t == FL_GLYPH_RIGHT) {
+      switch (t) {
+      case FL_GLYPH_RIGHT:
+      case FL_GLYPH_RIGHT_BUTTON:
         fl_color(bc); fl_polygon(x,y, x+w-1,y+h/2, x,y+h-1);
         fl_color(l2); fl_line(x+2,y+2, x+w-3,y+h/2);
         fl_color(d2); fl_line(x+2,y+h-3, x+w-3,y+h/2);
@@ -133,7 +138,9 @@ static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color
         fl_color(d2); fl_line(x+1,y+h-2, x+w-2,y+h/2);
         fl_color(l1); fl_line(x,y+h-1, x,y, x+w-1,y+h/2);
         fl_color(d1); fl_line(x,y+h-1, x+w-1,y+h/2);
-      } else if (t == FL_GLYPH_LEFT) {
+	break;
+      case FL_GLYPH_LEFT:
+      case FL_GLYPH_LEFT_BUTTON:
         fl_color(bc); fl_polygon(x+w-1,y, x+w-1,y+h-1, x,y+h/2);
         fl_color(d2); fl_line(x+w-3,y+h-3, x+2,y+h/2);
         fl_color(l2); fl_line(x+w-3,y+2, x+2,y+h/2);
@@ -141,7 +148,9 @@ static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color
         fl_color(l2); fl_line(x+w-2,y+1, x+1,y+h/2);
         fl_color(d1); fl_line(x+w-1,y, x+w-1,y+h-1, x,y+h/2);
         fl_color(l1); fl_line(x+w-1,y, x,y+h/2);
-      } else if (t == FL_GLYPH_DOWN) {
+	break;
+      case FL_GLYPH_DOWN:
+      case FL_GLYPH_DOWN_BUTTON:
         fl_color(bc); fl_polygon(x,y, x+w/2,y+h-1, x+w-1,y);
         fl_color(l2); fl_line(x+2,y+2, x+w/2,y+h-3);
         fl_color(d2); fl_line(x+w-3,y+2, x+w/2,y+h-3);
@@ -149,7 +158,9 @@ static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color
         fl_color(d2); fl_line(x+w-2,y+1, x+w/2,y+h-2);
         fl_color(l1); fl_line(x+w-1,y, x,y, x+w/2,y+h-1);
         fl_color(d1); fl_line(x+w-1,y, x+w/2,y+h-1);
-      } else { // UP
+	break;
+      case FL_GLYPH_UP:
+      case FL_GLYPH_UP_BUTTON:
         fl_color(bc); fl_polygon(x,y+h-1, x+w-1,y+h-1, x+w/2,y);
         fl_color(d2); fl_line(x+w-3,y+h-3, x+w/2,y+2);
         fl_color(l2); fl_line(x+2,y+h-3, x+w/2,y+2);
@@ -157,25 +168,46 @@ static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color
         fl_color(l2); fl_line(x+1,y+h-2, x+w/2,y+1);
         fl_color(d1); fl_line(x,y+h-1, x+w-1,y+h-1, x+w/2,y);
         fl_color(l1); fl_line(x,y+h-1, x+w/2,y);
+	break;
       }
       break;
     }
     default:
-      box->draw(x,y,w,h, bc, f);
+      fl_glyph(widget, t, x,y,w,h, f);
   }
 }
 
-static void choice_glyph(int, int x,int y,int w,int h, Fl_Color bc, Fl_Color,
-		  Fl_Flags f, Fl_Boxtype)
+// Although this is currently the default fltk glyph for a choice, we
+// may change the default to be less motif-like in the future.  So this
+// code replaces it anyway:
+static void choice_glyph(const Fl_Widget* widget, int,
+			 int x,int y,int w,int h, Fl_Flags f)
 {
-  int H = 7;
-  FL_UP_BOX->draw(x, y+(h-H)/2, w-4, H, bc, f);
+  int H = h/3;
+  y += (h-H)/2;
+  h = H;
+  widget->box()->draw(widget,x,y,w,h,f);
 }
+
+// Disable the engraving of inactive labels:
+class Motif_Labeltype : public Fl_Labeltype_ {
+public:
+  void draw(const char* label,
+	    int X, int Y, int W, int H,
+	    Fl_Color c, Fl_Flags f) const
+    {
+      if (f & FL_INACTIVE) {
+	c = fl_inactive(c);
+	f &= ~FL_INACTIVE;
+      }
+      FL_NORMAL_LABEL->draw(label, X,Y,W,H,c,f);
+    }
+  Motif_Labeltype(const char*n) : Fl_Labeltype_(n) {}
+};
+static const Motif_Labeltype motif_label(0);
 
 int fl_motif()
 {
-  fl_up_box.data = thin_motif_up_box.data;
-  fl_down_box.data = thin_motif_down_box.data;
   Fl_Style::draw_boxes_inactive = 0;
 
   Fl_Widget::default_style->box = &thin_motif_up_box;
@@ -184,14 +216,15 @@ int fl_motif()
   Fl_Widget::default_style->selection_color = FL_BLACK;
   Fl_Widget::default_style->selection_text_color = FL_GRAY;
   Fl_Widget::default_style->glyph = motif_glyph;
+  Fl_Widget::default_style->label_type = &motif_label;
 
   Fl_Style* s;
 
   if ((s = Fl_Style::find("menu"))) {
     s->text_box = &thin_motif_menu_box;
     s->selection_color = FL_GRAY;
-    s->selection_text_color = FL_BLACK;
-    s->leading = 0;
+    s->selection_text_color = FL_RED;
+    //s->leading = 0;
   }
 
   if ((s = Fl_Style::find("menu bar"))) {
@@ -201,7 +234,6 @@ int fl_motif()
   }
 
   if ((s = Fl_Style::find("scrollbar"))) {
-    scrollbarstyle = s;
     s->text_box = &thin_motif_down_box;
     s->text_background = FL_DARK1;
   }
@@ -220,15 +252,16 @@ int fl_motif()
   }
 
   if ((s = Fl_Style::find("check button"))) {
-    s->selection_color = FL_DARK1;
+    s->text_color = FL_DARK1;
   }
 
   if ((s = Fl_Style::find("radio button"))) {
-    s->selection_color = FL_DARK1;
+    s->text_color = FL_DARK1;
   }
 
   if ((s = Fl_Style::find("item"))) {
-    s->selection_color = FL_DARK1;
+    s->text_color = FL_DARK1;
+    s->selection_text_color = FL_BLACK;
   }
 
   if ((s = Fl_Style::find("choice"))) {
@@ -240,5 +273,5 @@ int fl_motif()
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.8 2000/05/31 00:04:45 carl Exp $"
+// End of "$Id: fl_motif.cxx,v 1.9 2000/08/10 09:24:33 spitzak Exp $"
 //

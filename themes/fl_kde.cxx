@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde.cxx,v 1.9 2000/08/04 10:22:02 clip Exp $"
+// "$Id: fl_kde.cxx,v 1.10 2000/08/10 09:24:33 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -170,10 +170,10 @@ int fl_kde(int co) {
   Fl_Font font = 0;
   int fontsize = FL_NORMAL_SIZE;
   static char fontencoding[32] = "";
-  char* sv; // to save strtok_r() state
   if (!kderc.get("General/font", s, sizeof(s))) {
     char fontname[64] = "";
     int fontbold = 0, fontitalic = 0;
+    char* sv; // to save strtok_r() state
 
     if ( (p = strtok_r(s, ",", &sv)) ) strncpy(fontname, p, sizeof(fontname));
     if ( (p = strtok_r(0, ",", &sv)) ) fontsize = atoi(p);
@@ -366,5 +366,5 @@ int fl_kde(int co) {
 }
 
 //
-// End of "$Id: fl_kde.cxx,v 1.9 2000/08/04 10:22:02 clip Exp $".
+// End of "$Id: fl_kde.cxx,v 1.10 2000/08/10 09:24:33 spitzak Exp $".
 //

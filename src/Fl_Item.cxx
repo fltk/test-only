@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.5 2000/05/30 07:42:12 bill Exp $"
+// "$Id: Fl_Item.cxx,v 1.6 2000/08/10 09:24:31 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -48,8 +48,6 @@ Fl_Item::Fl_Item(const char* l) : Fl_Widget(0,0,0,0,l) {
 }
 
 void Fl_Item::draw() {
-  Fl_Color label_color = fl_color();
-
   draw_box();
 
   int x = this->x(); int y = this->y();
@@ -63,16 +61,12 @@ void Fl_Item::draw() {
       if (type()==FL_TOGGLE_ITEM) lflags ^= FL_VALUE;
       else lflags |= FL_VALUE;
     }
-    glyph()(type()==FL_RADIO_ITEM ? FL_GLYPH_ROUND : FL_GLYPH_CHECK,
-	    x+3, y+(h-13)/2, 13, 13,
-	    text_background(),
-	    text_box()==FL_NO_BOX ? label_color : selection_color(),
-	    lflags,
-	    text_box());
+    draw_glyph(type()==FL_RADIO_ITEM ? FL_GLYPH_ROUND : FL_GLYPH_CHECK,
+	       x+3, y+(h-13)/2, 13, 13, lflags);
     x += 15; w -= 15;
   }
 
-  draw_label(x+3, y, w-6, h, label_color, flags());
+  draw_label(x+3, y, w-6, h, flags());
 }
 
 // Measure the space the draw() will take:

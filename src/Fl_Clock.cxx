@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.21 2000/05/30 07:42:11 bill Exp $"
+// "$Id: Fl_Clock.cxx,v 1.22 2000/08/10 09:24:31 spitzak Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -102,7 +102,6 @@ void Fl_Clock_Output::draw(int x, int y, int w, int h) {
 void Fl_Clock_Output::draw() {
   draw_box();
   draw(x(), y(), w(), h());
-  draw_label();
 }
 
 void Fl_Clock_Output::value(int h, int m, int s) {
@@ -168,8 +167,6 @@ static Fl_Named_Style* style = new Fl_Named_Style("clock", revert, &style);
 
 Fl_Clock_Output::Fl_Clock_Output(int x, int y, int w, int h, const char *l)
 : Fl_Widget(x, y, w, h, l) {
-//   box(FL_UP_BOX);
-//   selection_color(fl_gray_ramp(5));
   style(::style);
   clear_flag(FL_ALIGN_MASK);
   set_flag(FL_ALIGN_BOTTOM);
@@ -180,5 +177,5 @@ Fl_Clock_Output::Fl_Clock_Output(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Clock.cxx,v 1.21 2000/05/30 07:42:11 bill Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.22 2000/08/10 09:24:31 spitzak Exp $".
 //

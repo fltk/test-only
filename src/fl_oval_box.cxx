@@ -1,5 +1,5 @@
 //
-// "$Id: fl_oval_box.cxx,v 1.14 2000/01/16 07:44:37 robertk Exp $"
+// "$Id: fl_oval_box.cxx,v 1.15 2000/08/10 09:24:32 spitzak Exp $"
 //
 // Oval box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,45 +29,48 @@
 
 #include <FL/Fl_Boxtype.H>
 #include <FL/fl_draw.H>
+#include <FL/Fl_Widget.H>
 
-
-void Fl_Oval_Flat_Box::draw(int x, int y, int w, int h,
-			    Fl_Color c, Fl_Flags) const {
-  fl_color(c);
+void Fl_Oval_Flat_Box::draw(const Fl_Widget* widget,
+			    int x, int y, int w, int h, Fl_Flags f) const
+{
+  fl_color(widget->box_color(f));
   fl_pie(x, y, w, h, 0, 360);
 }
-void Fl_Oval_Flat_Box::inset(int&,int&,int&,int&) const {}
-int Fl_Oval_Flat_Box::fills_rectangle() const {return false;}
+Fl_Oval_Flat_Box::Fl_Oval_Flat_Box(const char* n) : Fl_Boxtype_(n) {
+  dx_ = dy_ = dw_ = dh_ = 0;
+  fills_rectangle_ = 0;
+}
 const Fl_Oval_Flat_Box fl_oval_flat_box(0);
 
-void Fl_Oval_Box::draw(int x, int y, int w, int h,
-		       Fl_Color c, Fl_Flags f) const {
-  fl_color(c);
+void Fl_Oval_Box::draw(const Fl_Widget* widget,
+		       int x, int y, int w, int h, Fl_Flags f) const
+{
+  fl_color(widget->box_color(f));
   fl_pie(x, y, w-1, h-1, 0, 360);
-  fl_color(fl_inactive(FL_BLACK, f));
+  fl_color(widget->glyph_color(f));
   fl_arc(x, y, w, h, 0, 360);
 }
-
-void Fl_Oval_Box::inset(int& x,int& y,int& w,int& h) const {
-  x++; y++; w-=2; h-=2;
+Fl_Oval_Box::Fl_Oval_Box(const char* n) : Fl_Boxtype_(n) {
+  dx_ = dy_ = 1; dw_ = dh_ = 2;
+  fills_rectangle_ = 0;
 }
-
-int Fl_Oval_Box::fills_rectangle() const {return false;}
-
 const Fl_Oval_Box fl_oval_box(0);
 
-void Fl_Oval_Shadow_Box::draw(int x, int y, int w, int h,
-			      Fl_Color c, Fl_Flags f) const {
+void Fl_Oval_Shadow_Box::draw(const Fl_Widget* widget,
+			      int x, int y, int w, int h, Fl_Flags f) const
+{
   w-=3; h-=3;
-  fl_oval_flat_box.draw(x+3, y+3, w, h, FL_DARK3, FL_NO_FLAGS);
-  fl_oval_box.draw(x, y, w, h, c, f);
+  fl_color(FL_DARK3);
+  fl_pie(x+3, y+3, w, h, 0, 360);
+  fl_oval_box.draw(widget, x, y, w, h, f);
 }
-void Fl_Oval_Shadow_Box::inset(int& x,int& y,int& w,int& h) const {
-  x++; y++; w-=5; h-=5;
+Fl_Oval_Shadow_Box::Fl_Oval_Shadow_Box(const char* n) : Fl_Boxtype_(n) {
+  dx_ = dy_ = 1; dw_ = dh_ = 5;
+  fills_rectangle_ = 0;
 }
-int Fl_Oval_Shadow_Box::fills_rectangle() const {return false;}
 const Fl_Oval_Shadow_Box fl_oval_shadow_box(0);
 
 //
-// End of "$Id: fl_oval_box.cxx,v 1.14 2000/01/16 07:44:37 robertk Exp $".
+// End of "$Id: fl_oval_box.cxx,v 1.15 2000/08/10 09:24:32 spitzak Exp $".
 //

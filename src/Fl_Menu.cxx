@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.91 2000/07/21 00:31:52 clip Exp $"
+// "$Id: Fl_Menu.cxx,v 1.92 2000/08/10 09:24:31 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -63,7 +63,6 @@
 // around selected items:
 
 static void revert(Fl_Style* s) {
-  s->box = FL_UP_BOX;
   s->text_box = FL_FLAT_BOX;
   s->leading = 4;
 }
@@ -93,8 +92,12 @@ MenuTitle::MenuTitle(int X, int Y, int W, int H, Fl_Widget* L, Fl_Group* button)
 
 void MenuTitle::draw() {
   Fl_Boxtype box = text_box(); // used for menubars
-  if (box == FL_NO_BOX) box = FL_DOWN_BOX; // used for popup menus
-  box->draw(0, 0, w(), h(), selection_color(), FL_VALUE);
+  Fl_Flags f = FL_VALUE|FL_SELECTED;
+  if (box == FL_NO_BOX) {
+    box = Fl_Widget::default_style->box; // used for popup menus
+    f = FL_SELECTED;
+  }
+  box->draw(this, 0, 0, w(), h(), f);
   // this allow a toggle or other widget to preview it's state:
   if (Fl::event_pushed()) Fl::pushed_ = widget;
   widget->x(5);
@@ -251,8 +254,7 @@ int MenuWindow::ypos(int index) {
 }
 
 void MenuWindow::draw() {
-  if (damage() != FL_DAMAGE_CHILD)
-    box()->draw(0, 0, w(), h(), color(), FL_FRAME_ONLY);
+  if (damage() != FL_DAMAGE_CHILD) draw_box(0, 0, w(), h(), FL_FRAME_ONLY);
   int x=0; int y=0; int w=this->w(); int h=0; box()->inset(x,y,w,h);
   for (int i = 0; i < numitems; i++) {
     Fl_Widget* widget = group->child(i);
@@ -261,36 +263,37 @@ void MenuWindow::draw() {
     // for minimal update, only draw the items that changed selection:
     if (damage() != FL_DAMAGE_CHILD || i == selected || i == drawn_selected) {
 
-      Fl_Flags flags = widget->flags() & ~FL_VALUE;
-      Fl_Color bgcolor = color();
-      Fl_Color label_color = widget->label_color();
+      Fl_Flags flags = widget->flags() & ~(FL_VALUE|FL_SELECTED);
       if (i == selected && !(flags & FL_OUTPUT)) {
-	flags |= FL_VALUE;
-	bgcolor = selection_color();
-	label_color = selection_text_color();
+	widget->set_flag(FL_SELECTED);
+	flags |= FL_VALUE|FL_SELECTED;
 	// this allow a toggle or other widget to preview it's state:
 	if (Fl::event_pushed() && widget->takesevents()) Fl::pushed_ = widget;
+      } else {
+	widget->clear_flag(FL_SELECTED);
       }
 
       int X = x; int Y = y; int W = w; int H = ih+real_leading;
-      text_box()->draw(X, Y, W, H, bgcolor, flags);
+      text_box()->draw(this, X, Y, W, H, flags);
       text_box()->inset(X, Y, W, H);
       widget->x(X);
       widget->y(Y+leading()/2);
       int save_w = widget->w(); widget->w(W);
-      fl_color(label_color); widget->draw();
+
+      widget->draw();
       widget->w(save_w);
       Fl::pushed_ = 0;
 
       if (widget->is_group()) {
 	// Use the item's fontsize for the size of the arrow, rather than h:
 	int nh = widget->label_size()+2;
-	glyph()(FL_GLYPH_RIGHT, X+W-nh, Y+(H-nh)/2, nh, nh, bgcolor,
-		label_color, flags, FL_NO_BOX);
+	widget->draw_glyph(FL_GLYPH_RIGHT, X+W-nh, Y+(H-nh)/2, nh, nh, flags);
       } else if (widget->shortcut()) {
 	flags = (flags & (~FL_ALIGN_MASK)) | FL_ALIGN_RIGHT;
+	Fl_Color c = (flags&FL_SELECTED) ? widget->selection_text_color() :
+	  widget->text_color();
 	widget->label_type()->draw(fl_shortcut_label(widget->shortcut()),
-			      X, Y, W-3, H, label_color, flags);
+			X, Y, W-3, H, c, flags);
       }
     }
     y += ih+real_leading;
@@ -694,5 +697,5 @@ int Fl_Menu_::popup(int X, int Y, const char* title) {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.91 2000/07/21 00:31:52 clip Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.92 2000/08/10 09:24:31 spitzak Exp $".
 //

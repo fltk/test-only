@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.28 2000/07/12 01:39:07 clip Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.29 2000/08/10 09:24:31 spitzak Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -29,19 +29,14 @@
 #include <FL/Fl_Group.H>
 
 void Fl_Check_Button::draw() {
-  Fl_Flags f = flags();
   // Draw the outer box as though it were a button:
-  Fl_Color lc = draw_button(pushed() ? (f|FL_VALUE) : (f&~FL_VALUE));
-
+  Fl_Flags flags = draw_button(pushed()?FL_VALUE:0);
+  flags = (flags&~FL_VALUE)|(this->flags()&FL_VALUE);
   // Draw the check box:
   int d = h()/6;
   int W = (w()<h() ? w() : h()) - 2*d - 2;
-  Fl_Color gc = (text_box() == FL_NO_BOX) ? lc : text_color();
-  if (!active_r()) f |= FL_INACTIVE;
-  glyph()(/* type() == FL_RADIO_BUTTON ? FL_GLYPH_ROUND : */ shape,
-          x()+d, y()+d+1, W, W, text_background(), gc, f, text_box());
-
-  draw_button_label(x()+W+d, y(), w()-W-d, h(), lc);
+  draw_glyph(shape, x()+d, y()+d+1, W, W, flags);
+  draw_inside_label(x()+W+d, y(), w()-W-d, h(), flags);
 }
 
 int Fl_Check_Button::handle(int event) {
@@ -51,9 +46,6 @@ int Fl_Check_Button::handle(int event) {
 
 static void revert(Fl_Style* s) {
   s->box = FL_NO_BOX;
-  s->selection_color = FL_GRAY;
-  s->selection_text_color = FL_BLACK;
-  s->text_color = FL_BLACK;
 }
 
 static Fl_Named_Style* style = new Fl_Named_Style("Check Button", revert, &style);

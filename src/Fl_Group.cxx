@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.80 2000/08/09 02:24:29 clip Exp $"
+// "$Id: Fl_Group.cxx,v 1.81 2000/08/10 09:24:31 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -253,6 +253,13 @@ int Fl_Group::navigation_key() {
     return FL_Up;
   case FL_Down:
     return FL_Down;
+//   default:
+//     switch (Fl::event_text()[0]) {
+//     case ctrl('N') : return FL_Down;
+//     case ctrl('P') : return FL_Up;
+//     case ctrl('F') : return FL_Right;
+//     case ctrl('B') : return FL_Left;
+//     }
   }
   return 0;
 }
@@ -517,7 +524,7 @@ void Fl_Group::draw_group_box() const {
     }
   }
   draw_box();
-  draw_label();
+  draw_inside_label();
 }
 
 // Force a child to redraw and remove the rectangle it used from the clip
@@ -571,5 +578,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.80 2000/08/09 02:24:29 clip Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.81 2000/08/10 09:24:31 spitzak Exp $".
 //

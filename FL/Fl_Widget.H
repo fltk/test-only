@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.53 2000/07/20 22:53:17 clip Exp $"
+// "$Id: Fl_Widget.H,v 1.54 2000/08/10 09:24:30 spitzak Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -165,22 +165,29 @@ public:
   void	damage(uchar c,int,int,int,int);
   void	damage_label()		;
 
+  void  draw_box(int x,int y,int w,int h, Fl_Flags f) const
+    { box()->draw(this,x,y,w,h,f); }
   void	draw_box() const	;
-  void  draw_box(Fl_Boxtype, Fl_Color) const;
-  void  draw_box(Fl_Boxtype, int, int, int, int, Fl_Color) const;
-  void	draw_frame() const	;
-  void	draw_text_box() const	;
+  Fl_Flags draw_button() const	;
+  Fl_Flags draw_button(Fl_Flags) const;
+
   void	draw_text_frame() const ;
-  void	draw_label() const	;
-  void	draw_label(Fl_Color) const;
-  void	draw_glyph(int, int,int,int,int, Fl_Flags) const;
-  Fl_Color draw_button(Fl_Flags) const	;
-  void	draw_button_label(int,int,int,int,Fl_Color) const;
-  void	draw_label(int,int,int,int, Fl_Flags) const;
-  void	draw_label(int x,int y,int w,int h) const
-    { draw_label(x, y, w, h, flags()); }
-  void	draw_label(int,int,int,int, Fl_Color, Fl_Flags) const;
-  void	measure_label(int&, int&) const;
+  void	draw_text_frame(int,int,int,int) const ;
+  void	draw_text_box() const ;
+  void	draw_text_box(int,int,int,int) const ;
+
+  void	draw_glyph(int t, int x,int y,int w,int h, Fl_Flags f) const
+    { glyph()(this,t,x,y,w,h,f); }
+
+  void  draw_label(int x,int y,int w,int h, Fl_Flags f) const ;
+  void  draw_inside_label(int x,int y,int w,int h, Fl_Flags f) const ;
+  void  draw_inside_label(int x,int y,int w,int h) const ;
+  void	draw_inside_label() const;
+
+  void	measure_label(int&, int&) const ;
+
+  Fl_Color glyph_color(Fl_Flags f) const ;
+  Fl_Color box_color(Fl_Flags f) const ;
 
   Fl_Boxtype	box()			const;
   Fl_Boxtype	text_box()		const;
@@ -286,5 +293,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.53 2000/07/20 22:53:17 clip Exp $".
+// End of "$Id: Fl_Widget.H,v 1.54 2000/08/10 09:24:30 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.46 2000/06/03 08:49:15 bill Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.47 2000/08/10 09:24:32 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -165,21 +165,22 @@ void Fl_Scrollbar::draw() {
   else if (highlight_ == 2)
     f2 = FL_HIGHLIGHT;
   Fl_Flags f = (highlight_ == 5) ? FL_HIGHLIGHT : 0;
+  if (!active_r()) {f1 |= FL_INACTIVE; f2 |= FL_INACTIVE;}
 
   if (horizontal()) {
     if (W < 3*H) {Fl_Slider::draw(X,Y,W,H,f); last_ = highlight_; return; }
     Fl_Slider::draw(X+H,Y,W-2*H,H,f);
     if (damage()&FL_DAMAGE_ALL || last_ == 1 || highlight_ == 1)
-      draw_glyph(FL_GLYPH_LEFT, X, Y, H, H, f1);
+      draw_glyph(FL_GLYPH_LEFT_BUTTON, X, Y, H, H, f1);
     if (damage()&FL_DAMAGE_ALL || last_ == 2 || highlight_ == 2)
-      draw_glyph(FL_GLYPH_RIGHT, X+W-H, Y, H, H, f2);
+      draw_glyph(FL_GLYPH_RIGHT_BUTTON, X+W-H, Y, H, H, f2);
   } else { // vertical
     if (H < 3*W) {Fl_Slider::draw(X,Y,W,H,f); last_ = highlight_; return; }
     Fl_Slider::draw(X,Y+W,W,H-2*W,f);
     if (damage()&FL_DAMAGE_ALL || last_ == 1 || highlight_ == 1)
-      draw_glyph(FL_GLYPH_UP, X, Y, W, W, f1);
+      draw_glyph(FL_GLYPH_UP_BUTTON, X, Y, W, W, f1);
     if (damage()&FL_DAMAGE_ALL || last_ == 2 || highlight_ == 2)
-      draw_glyph(FL_GLYPH_DOWN, X, Y+H-W, W, W, f2);
+      draw_glyph(FL_GLYPH_DOWN_BUTTON, X, Y+H-W, W, W, f2);
   }
   last_ = highlight_;
 }
@@ -202,5 +203,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.46 2000/06/03 08:49:15 bill Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.47 2000/08/10 09:24:32 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.26 2000/06/12 15:07:39 vincent Exp $"
+// "$Id: Fl_Browser.cxx,v 1.27 2000/08/10 09:24:31 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -294,10 +294,10 @@ enum {
 };
 
 static void
-glyph(int glyph, int x, int y, int w, int h, Fl_Color, Fl_Color color,
-      Fl_Flags, Fl_Boxtype) {
+glyph(const Fl_Widget* widget, int glyph, int x,int y,int w,int h, Fl_Flags f)
+{
   // fl_color((Fl_Color)9); fl_rect(x,y,w,h); // draw boundary for testing
-  fl_color(color);
+  fl_color(widget->glyph_color(f));
   int lx = x+w/2;
   int ly = y+(h-1)/2;
   switch (glyph) {
@@ -322,8 +322,8 @@ glyph(int glyph, int x, int y, int w, int h, Fl_Color, Fl_Color color,
   case OPEN_ELL:
     fl_yxline(lx, y, ly);
   J1:
-    fl_glyph(glyph < OPEN_ELL ? FL_GLYPH_RIGHT : FL_GLYPH_DOWN,
-	     x, y, w, h, color, color, 0, FL_NO_BOX);
+    fl_glyph(widget, glyph < OPEN_ELL ? FL_GLYPH_RIGHT : FL_GLYPH_DOWN,
+	     x, y, w, h, f);
     break;
 #else
   default: {
@@ -349,18 +349,18 @@ void Fl_Browser::draw_item() {
   int y = Y+item_position[HERE]-yposition_;
   int h = widget->height();
 
-  Fl_Color label_color;
-  Fl_Color glyph_color;
+  Fl_Flags flags;
 
   int is_focus = at_mark(FOCUS);
 
   if (multi() ? item_selected() : is_focus) {
     fl_color(selection_color());
     fl_rectf(X, y, W, h);
-    label_color = glyph_color = selection_text_color();
+    widget->set_flag(FL_SELECTED);
+    flags = FL_SELECTED;
   } else {
-    glyph_color = text_color();
-    label_color = widget->text_color();
+    widget->clear_flag(FL_SELECTED);
+    flags = 0;
     Fl_Color c0 = text_background();
     Fl_Color c1 = color();
     if (item_number[HERE] & 1 && c1 != c0) {
@@ -395,12 +395,12 @@ void Fl_Browser::draw_item() {
 	g += ELL;
       }
     }
-    glyph()(g, x, y, arrow_size, h, FL_BLACK, glyph_color, 0, FL_NO_BOX);
+    draw_glyph(g, x, y, arrow_size, h, flags);
     x += arrow_size;
   }
 
   if (focused() && is_focus) {
-    fl_color(glyph_color);
+    fl_color(glyph_color(flags));
     fl_line_style(FL_DASH);
     int w = widget->width();
     if (x + w > X+W) {
@@ -412,7 +412,6 @@ void Fl_Browser::draw_item() {
     }
     fl_line_style(0);
   }
-  fl_color(label_color);
   widget->x(x);
   widget->y(y+(leading()+1)/2-1);
   widget->draw();
@@ -909,5 +908,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.26 2000/06/12 15:07:39 vincent Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.27 2000/08/10 09:24:31 spitzak Exp $".
 //

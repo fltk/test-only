@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.39 2000/07/30 03:46:04 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.40 2000/08/10 09:24:32 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -39,21 +39,17 @@ void Fl_Menu_Bar::draw() {
       // If you change how the items are drawn, you probably need to
       // change MenuTitle::draw and the functions find_selected and
       // titlex in Fl_Menu.cxx.
-      Fl_Flags flags = (widget->flags()&FL_INACTIVE);
-      Fl_Color bgcolor = color();
-      Fl_Color label_color = widget->label_color();
-      if (i == highlight_ && highlight_color() && takesevents()) {
-	flags |= FL_HIGHLIGHT;
-	bgcolor = highlight_color();
-	Fl_Color c = highlight_label_color(); if (c) label_color = c;
-      }
+      if (i == highlight_ && highlight_color() && takesevents())
+	widget->set_flag(FL_HIGHLIGHT);
+      else
+	widget->clear_flag(FL_HIGHLIGHT);
       int x1 = X; int y1 = y(); int w1 = W; int h1 = this->h();
       box()->inset(x1,y1,w1,h1);
-      text_box()->draw(X, y1+1, W, h1-2, bgcolor, flags);
+      text_box()->draw(this, X, y1+1, W, h1-2, widget->flags());
       widget->x(X+5);
       widget->y(y()+(h()-widget->h())/2);
       int save_w = widget->w(); widget->w(W-10);
-      fl_color(label_color); widget->draw();
+      widget->draw();
       widget->w(save_w);
     }
     X += W;
@@ -142,5 +138,5 @@ Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.39 2000/07/30 03:46:04 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.40 2000/08/10 09:24:32 spitzak Exp $".
 //

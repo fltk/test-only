@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.65 2000/06/12 02:06:00 bill Exp $"
+// "$Id: Fl_Widget.cxx,v 1.66 2000/08/10 09:24:32 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -309,52 +309,29 @@ int Fl_Widget::belowmouse() const {return this == Fl::belowmouse();}
 
 // Draw the surrounding box of a normal widget:
 void Fl_Widget::draw_box() const {
-  box()->draw(x(),y(),w(),h(), color(), active_r() ? FL_NO_FLAGS:FL_INACTIVE);
+  Fl_Flags f = flags();
+  if (!active_r()) f |= FL_INACTIVE;
+  box()->draw(this, x(),y(),w(),h(), f);
 }
 
-void  Fl_Widget::draw_box(Fl_Boxtype b, Fl_Color c) const {
-  b->draw(x(),y(),w(),h(), c, active_r() ? FL_NO_FLAGS : FL_INACTIVE);
+// Draw the box and label as for an Fl_Button, return flags to pass to
+// draw_label:
+Fl_Flags Fl_Widget::draw_button() const {
+  return draw_button(flags());
 }
 
-void  Fl_Widget::draw_box(Fl_Boxtype b, int x, int y, int w, int h, Fl_Color c) const {
-  b->draw(x,y,w,h, c, active_r() ? FL_NO_FLAGS : FL_INACTIVE);
-}
-
-// Draw the surrounding box but no interior:
-void Fl_Widget::draw_frame() const {
-  box()->draw(x(), y(), w(), h(), color(),
-	      active_r() ? FL_FRAME_ONLY : (FL_INACTIVE|FL_FRAME_ONLY));
-}
-
-// Draw the surrounding box of a text area widget:
-void Fl_Widget::draw_text_box() const {
-  text_box()->draw(x(),y(),w(),h(), text_background(),
-		   active_r() ? FL_NO_FLAGS : FL_INACTIVE);
-}
-
-// Draw the surrounding box but no interior:
-void Fl_Widget::draw_text_frame() const {
-  text_box()->draw(x(), y(), w(), h(), text_background(),
-		   active_r() ? FL_FRAME_ONLY : (FL_INACTIVE|FL_FRAME_ONLY));
-}
-
-// Draw the box of a widget that acts as a button, and return the color
-// to pass to draw_button_label():
-Fl_Color Fl_Widget::draw_button(Fl_Flags flags) const {
-  Fl_Color background_color = color();
-  Fl_Color foreground_color = label_color();
-  if (!active_r()) {
+// This version is used to override the setting of FL_VALUE:
+Fl_Flags Fl_Widget::draw_button(Fl_Flags flags) const {
+  // only use the pushed-in color if the user has explicitly set it
+  // on this widget:
+  if ((flags&FL_VALUE) && style_->selection_color)
+    flags |= FL_SELECTED;
+  if (!active_r())
     flags |= FL_INACTIVE;
-  } else if (belowmouse()) {
+  else if (belowmouse())
     flags |= FL_HIGHLIGHT;
-    Fl_Color c = highlight_color(); if (c) background_color = c;
-    c = highlight_label_color(); if (c) foreground_color = c;
-  }
-  if (flags&FL_VALUE && box() != FL_NO_BOX) {
-    background_color = selection_color();
-    foreground_color = selection_text_color();
-  }
-  if (focused()) flags |= FL_FOCUSED;
+  if (focused())
+    flags |= FL_FOCUSED;
   // We need to erase the focus rectangle for FL_NO_BOX buttons, such
   // as checkmarks:
   else if (box()==FL_NO_BOX && (damage()&FL_DAMAGE_HIGHLIGHT)) {
@@ -362,23 +339,59 @@ Fl_Color Fl_Widget::draw_button(Fl_Flags flags) const {
     parent()->draw_group_box();
     fl_pop_clip();
   }
-  box()->draw(x(), y(), w(), h(), background_color, flags);
-  return foreground_color;
+  draw_box(x(), y(), w(), h(), flags);
+  return flags;
 }
 
-void Fl_Widget::draw_glyph(int T,int X,int Y,int W,int H, Fl_Flags flags) const
+// Draw the background behind text/recessed area:
+void Fl_Widget::draw_text_box() const {
+  draw_text_box(x(),y(),w(),h());
+}
+
+void Fl_Widget::draw_text_box(int x, int y, int w, int h) const {
+  Fl_Flags f = flags();
+  if (!active_r()) f |= FL_INACTIVE;
+  text_box()->draw(this, x,y,w,h, f);
+  text_box()->inset(x,y,w,h); //if (w <= 0 || h <= 0) return;
+  fl_color(text_background());
+  fl_rectf(x,y,w,h);
+}
+
+// Draw only the edge of the text/recessed area, but no interior:
+void Fl_Widget::draw_text_frame() const {
+  draw_text_frame(x(),y(),w(),h());
+}
+
+void Fl_Widget::draw_text_frame(int x, int y, int w, int h) const {
+  Fl_Flags f = flags();
+  if (!active_r()) f |= FL_INACTIVE;
+  text_box()->draw(this, x,y,w,h, f|FL_FRAME_ONLY);
+}
+
+// Return the color to draw images on buttons:
+Fl_Color Fl_Widget::glyph_color(Fl_Flags flags) const
 {
-  Fl_Color background_color =
-    (flags & FL_VALUE) ? selection_color() : color();
-  Fl_Color foreground_color =
-    (flags & FL_VALUE) ? selection_text_color() : text_color();
-  if (!active_r()) {
-    flags |= FL_INACTIVE;
-  } else if (flags & FL_HIGHLIGHT) {
-    Fl_Color c = highlight_color(); if (c) background_color = c;
-    c = highlight_label_color(); if (c) foreground_color = c;
+  if (flags & FL_INACTIVE)
+    return fl_inactive(text_color());
+  else if (flags & FL_SELECTED)
+    return selection_text_color();
+  else if (flags & FL_HIGHLIGHT) {
+    Fl_Color c = highlight_label_color();
+    if (c) return c;
   }
-  glyph()(T, X,Y,W,H, background_color, foreground_color, flags, box());
+  return text_color();
+}
+
+// Return the color to draw buttons:
+Fl_Color Fl_Widget::box_color(Fl_Flags flags) const
+{
+  if (flags & FL_SELECTED)
+    return selection_color();
+  else if (flags & FL_HIGHLIGHT) {
+    Fl_Color c = highlight_color();
+    if (c) return c;
+  }
+  return color();
 }
 
 // Call the draw method, handle the clip out
@@ -396,5 +409,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.65 2000/06/12 02:06:00 bill Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.66 2000/08/10 09:24:32 spitzak Exp $".
 //

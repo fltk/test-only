@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.20 2000/05/15 05:52:27 bill Exp $"
+// "$Id: fl_glyph.cxx,v 1.21 2000/08/10 09:24:32 spitzak Exp $"
 //
 // Glyph drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,98 +23,125 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-
+#include <FL/Fl_Widget.H>
 #include <FL/Fl_Style.H>
 #include <FL/fl_draw.H>
 
-void fl_glyph(int t, int x,int y,int w,int h,
-	      Fl_Color bc, Fl_Color fc, Fl_Flags f, Fl_Boxtype box)
+void fl_glyph(const Fl_Widget* widget, int t,
+	      int x,int y,int w,int h, Fl_Flags f)
 {
-  fc = fl_inactive(fc, f);
-  bc = fl_inactive(bc, f);
+  Fl_Boxtype box;
+  Fl_Color color = widget->glyph_color(f);
 
   // handle special glyphs that don't draw the box:
   switch (t) {
-    case FL_GLYPH_CHECK:
-      box->draw(x,y,w,h, bc, f & ~(FL_VALUE|FL_FOCUSED));
-      if (f & FL_VALUE) {
-        fl_color(fc);
-        box->inset(x,y,w,h);
-        x += 1;
-        w = h - 2;
-        int d1 = w/3;
-        int d2 = w-d1;
-        y = y+(h+d2)/2-d1-2;
-        fl_line(x, y, x+d1, y+d1, x+w-1, y+d1-d2+1);
-        y++;
-        fl_line(x, y, x+d1, y+d1, x+w-1, y+d1-d2+1);
-        y++;
-        fl_line(x, y, x+d1, y+d1, x+w-1, y+d1-d2+1);
-      }
-      return;
 
-    case FL_GLYPH_ROUND:
-      h = (h+1)&(~1); // even only
-      if (box != FL_NO_BOX)
-	FL_ROUND_DOWN_BOX->draw(x,y,h,h, bc, f&~(FL_VALUE|FL_FOCUSED));
-      if (f & FL_VALUE) {
-        fl_color(fc);
-        int d = h/4; // box != FL_NO_BOX ? h/4 : 0; //h/5;
-        fl_pie(x+d,y+d,h-d-d-1,h-d-d-1,0,360);
-      }
-      return;
+  case FL_GLYPH_CHECK:
+    box = widget->text_box();
+    if (box != FL_NO_BOX) {
+      box->draw(widget, x,y,w,h, f&FL_INACTIVE|FL_FRAME_ONLY);
+      box->inset(x,y,w,h);
+      fl_color(widget->text_background());
+      fl_rectf(x,y,w,h);
+      color = fl_inactive(widget->text_color(),f);
+    }
+    if (f & FL_VALUE) {
+      fl_color(color);
+      x += 1;
+      w = h - 2;
+      int d1 = w/3;
+      int d2 = w-d1;
+      y = y+(h+d2)/2-d1-2;
+      fl_line(x, y, x+d1, y+d1, x+w-1, y+d1-d2+1);
+      y++;
+      fl_line(x, y, x+d1, y+d1, x+w-1, y+d1-d2+1);
+      y++;
+      fl_line(x, y, x+d1, y+d1, x+w-1, y+d1-d2+1);
+    }
+    return;
 
+  case FL_GLYPH_ROUND:
+    h = (h+1)&(~1); // even only
+    box = widget->text_box();
+    if (box != FL_NO_BOX) {
+      FL_ROUND_DOWN_BOX->draw(x,y,w,h,widget->text_background(),f&FL_INACTIVE);
+      color = fl_inactive(widget->text_color(),f);
+    }
+    if (f & FL_VALUE) {
+      fl_color(color);
+      int d = h/4; // box != FL_NO_BOX ? h/4 : 0; //h/5;
+      fl_pie(x+d,y+d,h-d-d-1,h-d-d-1,0,360);
+    }
+    return;
+
+  case FL_GLYPH_UP:
+  case FL_GLYPH_DOWN:
+  case FL_GLYPH_LEFT:
+  case FL_GLYPH_RIGHT:
+    // these glyphs do not have a box
+    break;
+
+  case FL_GLYPH_CHOICE: {
+    // make the box much smaller:
+    int H = h/3;
+    y += (h-H)/2;
+    h = H;
+  } // and fall through to default case to draw the box:
+  default: {
+    Fl_Boxtype box = widget->box();
+    box->draw(widget,x,y,w,h,f);
+    box->inset(x,y,w,h);
+    }
   }
 
-  box->draw(x,y,w,h, bc, f);
-  box->inset(x,y,w,h);
-  fl_color(fc);
+  // to draw the shape inactive, draw it twice to get the engraved look:
+  for (int i = (f&FL_INACTIVE) ? 1 : 0; i >= 0; i--) {
+    fl_color(i ? Fl_Color(FL_LIGHT3) : color);
 
-  int w1 = (w+2)/3;
-  switch(t) {
-    case FL_GLYPH_UP: {
-      int x1 = x+(w-1)/2-w1;
-      int y1 = y+(h-w1-1)/2;
+    int w1 = (w+2)/3; int x1,y1;
+    switch(t) {
+
+    case FL_GLYPH_UP_BUTTON:
+    case FL_GLYPH_UP:
+      x1 = x+(w-1)/2-w1+i;
+      y1 = y+(h-w1-1)/2+i;
       fl_polygon(x1, y1+w1, x1+2*w1, y1+w1, x1+w1, y1);
       break;
-    }
-    case FL_GLYPH_DOWN: {
-      int x1 = x+(w-1)/2-w1;
-      int y1 = y+(h-w1)/2;
+
+    case FL_GLYPH_DOWN_BUTTON:
+    case FL_GLYPH_DOWN:
+      x1 = x+(w-1)/2-w1+i;
+      y1 = y+(h-w1)/2+i;
       fl_polygon(x1, y1, x1+w1, y1+w1, x1+2*w1, y1);
       break;
-    }
-    case FL_GLYPH_LEFT: {
-      int x1 = x+(w-w1-1)/2;
-      int y1 = y+(h-1)/2-w1;
+
+    case FL_GLYPH_LEFT_BUTTON:
+    case FL_GLYPH_LEFT:
+      x1 = x+(w-w1-1)/2+i;
+      y1 = y+(h-1)/2-w1+i;
       fl_polygon(x1, y1+w1, x1+w1, y1+2*w1, x1+w1, y1);
       break;
-    }
-    case FL_GLYPH_RIGHT: {
-      int x1 = x+(w-w1)/2;
-      int y1 = y+(h-1)/2-w1;
+
+    case FL_GLYPH_RIGHT_BUTTON:
+    case FL_GLYPH_RIGHT:
+      x1 = x+(w-w1)/2+i;
+      y1 = y+(h-1)/2-w1+i;
       fl_polygon(x1, y1, x1, y1+2*w1, x1+w1, y1+w1);
       break;
-    }
-    case FL_GLYPH_VNSLIDER: {
-      int d = (h-4)/2;
-      FL_THIN_DOWN_BOX->draw(x, y+d, w, h-2*d, fc);
+
+    case FL_GLYPH_VNSLIDER:
+      y1 = (h-4)/2;
+      FL_THIN_DOWN_BOX->draw(x, y+y1, w, h-2*y1, widget->selection_color());
       break;
-    }
-    case FL_GLYPH_HNSLIDER: {
-      int d = (w-4)/2;
-      FL_THIN_DOWN_BOX->draw(x+d, y, w-2*d, h, fc);
-      break;
-    }
-    case FL_GLYPH_CHOICE: {
-      int H = h/3;
-      int Y = y + (h-H)/2;
-      FL_UP_BOX->draw(x,Y,w,H, bc, f);
+
+    case FL_GLYPH_HNSLIDER:
+      x1 = (w-4)/2;
+      FL_THIN_DOWN_BOX->draw(x+x1, y, w-2*x1, h, widget->selection_color());
       break;
     }
   }
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.20 2000/05/15 05:52:27 bill Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.21 2000/08/10 09:24:32 spitzak Exp $".
 //

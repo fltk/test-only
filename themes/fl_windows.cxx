@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.6 2000/07/14 08:35:01 clip Exp $"
+// "$Id: fl_windows.cxx,v 1.7 2000/08/10 09:24:33 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -40,128 +40,31 @@
 // Different box type used by win98 sometimes:
 
 static const Fl_Frame_Box
-win98_menu_window_box("win98 menu window", "2AARRMMUU", FL_DOWN_BOX);
+win98_menu_window_box(0, "2AARRMMUU", FL_DOWN_BOX);
 
-////////////////////////////////////////////////////////////////
-// Draw inactive labels as a thin engraved look:
-
-static int engraved_data[2][3] = {{1,1,FL_LIGHT3},{0,0,0}};
-// static int embossed_data[2][3] = {{-1,-1,FL_LIGHT3},{0,0,0}};
-
-static const Fl_Engraved_Label
-win98_engraved_label("windows engraved", engraved_data);
-
-// static const Fl_Engraved_Label
-// win98_embossed_label("windows embossed", embossed_data);
-
-class Win98_Label : public Fl_Engraved_Label {
-  void draw(const char*, int,int,int,int, Fl_Color fill, Fl_Flags=0) const;
-public:
-  Win98_Label(const char* n, const int p[][3]) : Fl_Engraved_Label(n,p) {}
-};
-
-void Win98_Label::draw(const char* label,
-		       int X, int Y, int W, int H,
-		       Fl_Color fill, Fl_Flags f) const
-{
-  if (f&FL_INACTIVE && fill != FL_WHITE)
-    Fl_Engraved_Label::draw(label, X, Y, W, H, fill, f);
-  else Fl_Labeltype_::draw(label, X, Y, W, H, fill, f);
-}
-
-static const Win98_Label win98_label("windows", engraved_data);
-
-////////////////////////////////////////////////////////////////
-// This glyph function just makes the inactive engraved look by calling
-// the original function twice with different colors.
-// Pretty nasty, but it works (WAS: I agree)
-
-static void
-inset_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
-	    Fl_Flags f, Fl_Boxtype box, Fl_Glyph function)
-{
-  // Draw active widgets, slider thumbs or check or radio buttons normally:
-  if (!(f & FL_INACTIVE && fc != FL_WHITE) ||
-      t == FL_GLYPH_VSLIDER || t == FL_GLYPH_HSLIDER ||
-      t == FL_GLYPH_VNSLIDER || t == FL_GLYPH_HNSLIDER ||
-      t == FL_GLYPH_CHECK || t == FL_GLYPH_ROUND ||
-      t == FL_GLYPH_LIGHT)
-  {
-    function(t, x, y, w, h, bc, fc, f, box);
-    return;
-  }
-
-  // draw the box once:
-  if (box != FL_NO_BOX) {
-    box->draw(x,y,w,h,bc,f);
-    box->inset(x,y,w,h);
-  }
-
-  f &= ~FL_INACTIVE;
-  function(t, x+1, y+1, w, h, bc, FL_LIGHT3, f, FL_NO_BOX);
-  function(t, x,   y,   w, h, bc, fl_inactive(fc), f, FL_NO_BOX);
-
-}
-
-static void
-windows_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
-              Fl_Flags f, Fl_Boxtype box)
-{
-  inset_glyph(t,x,y,w,h,bc,fc,f,box,fl_glyph);
-}
-
-static Fl_Glyph return_glyph = 0;
-
-static void
-my_return_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
-                Fl_Flags f, Fl_Boxtype box)
-{
-  inset_glyph(t,x,y,w,h,bc,fc,f,box,return_glyph);
-}
-
-static Fl_Glyph adjuster_glyph = 0;
-
-static void
-my_adjuster_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
-                  Fl_Flags f, Fl_Boxtype box)
-{
-  inset_glyph(t,x,y,w,h,bc,fc,f,box,adjuster_glyph);
-}
-
-static Fl_Glyph counter_glyph = 0;
-
-static void
-my_counter_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
-                 Fl_Flags f, Fl_Boxtype box)
-{
-  inset_glyph(t,x,y,w,h,bc,fc,f,box,counter_glyph);
-}
+// More accurate copy of the colors on the edges of boxes, from Win98
+// Fltk by default uses colors picked by Bill for aesthetic reasons:
+extern const Fl_Frame_Box win98_down_box;
+static const Fl_Frame_Box win98_up_box(0, "2AAXXIIUU", &win98_down_box);
+       const Fl_Frame_Box win98_down_box(0, "2XXIIUUAA", &win98_up_box);
 
 ////////////////////////////////////////////////////////////////
 
 int fl_windows() {
-  // this shouldn't be here, but the tricky glyph functions break without it
-  Fl_Style::revert();
-  fl_get_system_colors();
-
   Fl_Style::draw_boxes_inactive = 0;
 
-  // More accurate copy of the colors on the edges of boxes, from Win98
-  // Fltk by default uses colors picked by Bill for aesthetic reasons:
-  fl_up_box.data = "2AAXXIIUU";
-  fl_down_box.data = "2XXIIUUAA";
-
-  Fl_Widget::default_style->label_type = &win98_label;
+  Fl_Widget::default_style->box = &win98_up_box;
+  // this may be needed if fltk's default is the thin box:
+  Fl_Widget::default_style->text_box = &win98_down_box;
 
   Fl_Style* s;
+
   if ((s = Fl_Style::find("menu"))) {
-    s->glyph = windows_glyph;
     s->box = &win98_menu_window_box;
     s->leading = 6;
   }
 
   if ((s = Fl_Style::find("item"))) {
-    s->glyph = windows_glyph;
     s->text_box = FL_NO_BOX; // no box around checkmarks
   }
 
@@ -169,15 +72,11 @@ int fl_windows() {
     s->highlight_color = FL_GRAY; // needed for title highlighting
   }
 
-  // this may be needed if fltk's default is the thin box:
-  Fl_Widget::default_style->text_box = FL_DOWN_BOX;
-
   // The default is white, but setting this will overwrite any
   // value read from Windows, so I leave it as the slight gray we default to:
   //Fl_Widget::default_style->window_color = FL_WHITE;
 
   if ((s = Fl_Style::find("scrollbar"))) {
-    s->glyph = windows_glyph;
     s->box = &win98_menu_window_box;
     s->text_background = 52;
   }
@@ -186,32 +85,9 @@ int fl_windows() {
     s->highlight_color = FL_GRAY;
   }
 
-  if ((s = Fl_Style::find("check button"))) {
-    s->glyph = windows_glyph;
-  }
-
-  if ((s = Fl_Style::find("return button"))) {
-    return_glyph = s->glyph;
-    s->glyph = my_return_glyph;
-  }
-
-  if ((s = Fl_Style::find("menu button"))) {
-    s->glyph = windows_glyph;
-  }
-
-  if ((s = Fl_Style::find("adjuster"))) {
-    adjuster_glyph = s->glyph;
-    s->glyph = my_adjuster_glyph;
-  }
-
-  if ((s = Fl_Style::find("counter"))) {
-    counter_glyph = s->glyph;
-    s->glyph = my_counter_glyph;
-  }
-
   return 0;
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.6 2000/07/14 08:35:01 clip Exp $"
+// End of "$Id: fl_windows.cxx,v 1.7 2000/08/10 09:24:33 spitzak Exp $"
 //

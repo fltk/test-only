@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.43 2000/05/30 07:42:15 bill Exp $"
+// "$Id: Fl_Slider.cxx,v 1.44 2000/08/10 09:24:32 spitzak Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -108,25 +108,21 @@ void Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags f) {
   // Sigh. Special case for "nice" sliders
   if (type() == FL_HOR_NICE_SLIDER || type() == FL_VERT_NICE_SLIDER)
     fc = selection_color();
-  if (!active_r()) {
-    f |= FL_INACTIVE;
-  } else if ((f&FL_HIGHLIGHT) && highlight_color()) {
-    bc = highlight_color();
-  }
+  if ((f&FL_HIGHLIGHT) && highlight_color()) bc = highlight_color();
   if (horizontal()) {
     int g;
     if (type() == FL_HOR_NICE_SLIDER) g = FL_GLYPH_HNSLIDER;
     else if (type() == FL_HOR_FILL_SLIDER) g = 0;
     else g = FL_GLYPH_HSLIDER;
-    glyph()(g, x+X, y, S, h, bc, fc, f, box());
-    draw_button_label(x+X, y, S, h, label_color());
+    draw_glyph(g, x+X, y, S, h, f);
+    draw_inside_label(x+X, y, S, h, f);
   } else {
     int g;
     if (type() == FL_VERT_NICE_SLIDER) g = FL_GLYPH_VNSLIDER;
     else if (type() == FL_VERT_FILL_SLIDER) g = 0;
     else g = FL_GLYPH_VSLIDER;
-    glyph()(g, x, y+X, w, S, bc, fc, f, box());
-    draw_button_label(x, y+X, w, S, label_color());
+    draw_glyph(g, x, y+X, w, S, f);
+    draw_inside_label(x, y+X, w, S, f);
   }
 }
 
@@ -136,7 +132,6 @@ void Fl_Slider::draw() {
   Fl_Flags f = 0;
   if (belowmouse()) f = FL_HIGHLIGHT;
   draw(X,Y,W,H, f);
-  if (damage()&FL_DAMAGE_ALL) draw_label();
 }
 
 int Fl_Slider::handle(int event, int x, int y, int w, int h) {
@@ -240,5 +235,5 @@ Fl_Slider::Fl_Slider(uchar t, int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.43 2000/05/30 07:42:15 bill Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.44 2000/08/10 09:24:32 spitzak Exp $".
 //

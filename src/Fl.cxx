@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.106 2000/08/06 07:39:44 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.107 2000/08/10 09:24:31 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -363,21 +363,27 @@ void Fl_Widget::throw_focus() {
 
 ////////////////////////////////////////////////////////////////
 
-// "Grab" is done while menu systems are up.  This has two
-// effects: The window system is told to "grab" events and send all of
-// them to this application, and all events we get are sent to the
-// "grab handler" rather than to normal widgets.
+// local_grab() causes all windows to be frozen (as though a modal window
+// was up) and all events are passed to the provided grab function.
+// Use release() to undo this. You can also temporarily undo it by
+// setting the function to zero.
+
+void Fl::local_grab(int (*cb)(int, void*), void* user_data) {
+  grab_ = cb;
+  grab_data = user_data;
+}
+
+// grab() does the same thing but also messes with the window system
+// in an attempt to get events from the entire screen. This is used
+// when menus are up so they can be dismissed with a click anywhere.
+// Use release() to undo this.
+
+// On X this is dangerous if your program goes into an infinite loop
+// because the server will be locked up!
 
 // On both X and Win32 "this application" has to be identified by a
 // window, fltk just picks the top-most displayed window, which is not
 // necessarily where the events are really going!
-
-// CET - FIXME - Would someone look at this window grab stuff and see
-// whether this is done properly?
-// WAS - It didn't do show(), but otherwise this was correct.  I also
-// changed it so an arbitrary widget can be used, not just a window
-static int widget_grab(int e, void* w) { return ((Fl_Widget*)w)->handle(e); }
-void Fl::grab(Fl_Widget* w) { grab(widget_grab, w); }
 
 void Fl::grab(int (*cb)(int, void*), void* user_data) {
   grab_ = cb;
@@ -426,6 +432,10 @@ void Fl::release() {
     Fl::belowmouse(0);
   }
 }
+
+// Back-compatability function to use the handle method of a widget:
+static int widget_grab(int e, void* w) { return ((Fl_Widget*)w)->handle(e); }
+void Fl::grab(Fl_Widget* w) { grab(widget_grab, w); }
 
 ////////////////////////////////////////////////////////////////
 
@@ -555,5 +565,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.106 2000/08/06 07:39:44 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.107 2000/08/10 09:24:31 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Labeltype.H,v 1.7 1999/11/19 10:06:41 bill Exp $"
+// "$Id: Fl_Labeltype.H,v 1.8 2000/08/10 09:24:30 spitzak Exp $"
 //
 // Labeltypes used by FLTK styles.
 //
@@ -32,7 +32,7 @@
 // the abstract base class:
 class FL_API Fl_Labeltype_ {
 public:
-  virtual void draw(const char*, int,int,int,int, Fl_Color fill, Fl_Flags=0) const;
+  virtual void draw(const char*, int,int,int,int, Fl_Color, Fl_Flags) const;
   const char* name;
   const Fl_Labeltype_* next;
   static const Fl_Labeltype_* first;
@@ -46,25 +46,25 @@ extern FL_API Fl_Labeltype_ fl_normal_label;
 #define FL_NORMAL_LABEL (&fl_normal_label)
 
 class FL_API Fl_No_Label : public Fl_Labeltype_ {
-  void draw(const char*, int,int,int,int, Fl_Color fill, Fl_Flags=0) const;
 public:
+  void draw(const char*, int,int,int,int, Fl_Color, Fl_Flags) const;
   Fl_No_Label(const char * n) : Fl_Labeltype_(n) {}
 };
 extern FL_API Fl_No_Label fl_no_label;
 #define FL_NO_LABEL (&fl_no_label)
 
 class FL_API Fl_Symbol_Label : public Fl_Labeltype_ {
-  void draw(const char*, int,int,int,int, Fl_Color fill, Fl_Flags=0) const;
 public:
+  void draw(const char*, int,int,int,int, Fl_Color, Fl_Flags) const;
   Fl_Symbol_Label(const char * n) : Fl_Labeltype_(n) {}
 };
 extern FL_API const Fl_Symbol_Label fl_symbol_label;
 #define FL_SYMBOL_LABEL (&fl_symbol_label)
 
 class FL_API Fl_Engraved_Label : public Fl_Labeltype_ {
-public:
-  void draw(const char*, int,int,int,int, Fl_Color fill, Fl_Flags=0) const;
   const int* data;
+public:
+  void draw(const char*, int,int,int,int, Fl_Color, Fl_Flags) const;
   Fl_Engraved_Label(const char * n, const int p[][3])
     : Fl_Labeltype_(n), data((const int*)p) {}
 };

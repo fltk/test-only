@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.36 2000/08/06 07:39:44 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.37 2000/08/10 09:24:31 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -145,7 +145,6 @@ void Fl_Input::draw() {
 
 void Fl_Input::draw(int X, int Y, int W, int H) 
 {
-  Fl_Flags fl = active_r() ? FL_NO_FLAGS : FL_INACTIVE;
   Fl_Color background = text_background();
   if (!show_cursor() && !size()) {
     // we have to erase it if cursor was there
@@ -222,7 +221,8 @@ void Fl_Input::draw(int X, int Y, int W, int H)
   }
 
   fl_clip(X, Y, W, H);
-  Fl_Color textcolor = fl_inactive(text_color(), fl);
+  Fl_Color textcolor = text_color();
+  if (!active_r()) textcolor = fl_inactive(text_color());
 
   p = value();
   // visit each line and draw it:
@@ -934,13 +934,13 @@ int Fl_Input::handle(int event) {
     return handle_key();
 
   case FL_PUSH:
-    take_focus();
     drag_start = mouse_position(X, Y, W, H);
     if (focused() && !Fl::event_state(FL_SHIFT) && type()!=FL_SECRET_INPUT &&
 	(drag_start >= mark() && drag_start < position() ||
 	drag_start >= position() && drag_start < mark())) {
       ; // user clicked int the selection, may be trying to drag
     } else {
+      take_focus();
       handle_mouse(drag_start, Fl::event_state(FL_SHIFT));
       drag_start = -1;
     }
@@ -1003,5 +1003,5 @@ int Fl_Input::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.36 2000/08/06 07:39:44 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.37 2000/08/10 09:24:31 spitzak Exp $".
 //

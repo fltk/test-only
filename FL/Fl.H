@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.58 2000/08/06 07:39:43 spitzak Exp $"
+// "$Id: Fl.H,v 1.59 2000/08/10 09:24:30 spitzak Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -112,6 +112,8 @@ public:
   static Fl_Window* modal() {return modal_;}
   static int (*grab())(int, void*) {return grab_;}
   static void grab(int (*)(int, void*), void* = 0);
+  static void local_grab(int (*f)(int, void*)) {grab_ = f;}
+  static void local_grab(int (*f)(int, void*), void* v);
   static void grab(Fl_Widget*);
   static void grab(Fl_Widget& w) { grab(&w); }
   static void release();
@@ -232,5 +234,5 @@ FL_API void fl_startup();
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.58 2000/08/06 07:39:43 spitzak Exp $".
+// End of "$Id: Fl.H,v 1.59 2000/08/10 09:24:30 spitzak Exp $".
 //

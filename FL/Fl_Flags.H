@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Flags.H,v 1.8 2000/05/15 05:52:19 bill Exp $"
+// "$Id: Fl_Flags.H,v 1.9 2000/08/10 09:24:30 spitzak Exp $"
 //
 // Unified flags set for fltk
 //
@@ -76,11 +76,12 @@ enum {
   FL_CHANGED		= 0x00004000, // value changed since last callback
   FL_COPIED_LABEL	= 0x00008000, // copy_label() was called
 
-// Values used to draw boxes:
+// Values used to draw boxes, glyphs, labels:
   FL_FOCUSED		= 0x00010000, // draw with keyboard focus
   FL_HIGHLIGHT		= 0x00020000, // draw highlighted
   FL_FRAME_ONLY		= 0x00040000, // don't draw interior
-  FL_NO_SHORTCUT_LABEL	= 0x00080000  // don't draw &x in label as underscore
+  FL_SELECTED		= 0x00080000, // draw using selection colors
+  FL_NO_SHORTCUT_LABEL	= 0x00100000  // don't draw &x in label as underscore
 
 };
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.37 2000/07/12 01:39:07 clip Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.38 2000/08/10 09:24:32 spitzak Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -29,15 +29,12 @@
 #include <FL/Fl_Group.H>
 
 void Fl_Menu_Button::draw() {
-  Fl_Color lc = draw_button(flags());
-  draw_label(lc);
-  // draw the little mark at the right:
+  Fl_Flags flags = draw_button(0);
   int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
+  draw_inside_label(X,Y,W,H,flags);
+  // draw the little mark at the right:
   int w1 = H*4/5;
-  Fl_Flags f = 0;
-  Fl_Color gc = (text_box() == FL_NO_BOX) ? lc : text_color();
-  if (!active_r()) f |= FL_INACTIVE;
-  glyph()(FL_GLYPH_DOWN, X+W-w1, Y, w1, H, text_background(), gc, f, text_box());
+  draw_glyph(FL_GLYPH_DOWN, X+W-w1, Y, w1, H, flags);
 }
 
 void Fl_Menu_Button::draw_n_clip() {
@@ -46,7 +43,6 @@ void Fl_Menu_Button::draw_n_clip() {
   else
     box(FL_NO_BOX); 
 }
-
 
 int Fl_Menu_Button::popup() {
   if (box() == FL_NO_BOX) type(POPUP3); // back compatibility hack
@@ -118,5 +114,5 @@ Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.37 2000/07/12 01:39:07 clip Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.38 2000/08/10 09:24:32 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.24 2000/06/12 06:35:37 bill Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.25 2000/08/10 09:24:31 spitzak Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -231,7 +231,7 @@ void Flcc_HueBox::draw() {
   if (X < 0) X = 0; else if (X > w1-6) X = w1-6;
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
   //  fl_color(c->v()>.75 ? FL_BLACK : FL_WHITE);
-  FL_UP_BOX->draw(x1+X, y1+Y, 6, 6, FL_GRAY);
+  draw_box(x1+X, y1+Y, 6, 6, 0);
   px = X; py = Y;
 }
 
@@ -281,7 +281,7 @@ void Flcc_ValueBox::draw() {
   if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
   int Y = int((1-c->v()) * (h1-6));
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
-  FL_UP_BOX->draw(x1, y1+Y, w1, 6, FL_GRAY);
+  draw_box(x1, y1+Y, w1, 6, 0);
   py = Y;
 }
 
@@ -506,5 +506,5 @@ int fl_color_chooser(const char* name, Fl_Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.24 2000/06/12 06:35:37 bill Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.25 2000/08/10 09:24:31 spitzak Exp $".
 //

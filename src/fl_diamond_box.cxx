@@ -1,5 +1,5 @@
 //
-// "$Id: fl_diamond_box.cxx,v 1.17 1999/11/29 08:47:04 bill Exp $"
+// "$Id: fl_diamond_box.cxx,v 1.18 2000/08/10 09:24:32 spitzak Exp $"
 //
 // Diamond box code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,7 @@
 
 #include <FL/Fl_Boxtype.H>
 #include <FL/Fl_Style.H>
+#include <FL/Fl_Widget.H>
 #include <FL/fl_draw.H>
 #include <string.h>
 
@@ -42,7 +43,7 @@ void Fl_Diamond_Box::draw(int x, int y, int w, int h,
   h &= -2;
   int x1 = x+w/2;
   int y1 = y+h/2;
-  const char* s = (f & FL_VALUE) ? data_from->down->data : data_from->data;
+  const char* s = (f & FL_VALUE) ? down->data() : data();
   char buf[26]; if (f&FL_INACTIVE && Fl_Style::draw_boxes_inactive) {
     fl_to_inactive(s, buf); s = buf;}
   if (!(f & FL_FRAME_ONLY)) {
@@ -75,14 +76,20 @@ void Fl_Diamond_Box::draw(int x, int y, int w, int h,
   }
 }
 
-void Fl_Diamond_Box::inset(int& x,int& y,int& w,int& h) const {
-  data_from->inset(x,y,w,h);
+void Fl_Diamond_Box::draw(const Fl_Widget* widget,
+			int x, int y, int w, int h, Fl_Flags f) const {
+  draw(x,y,w,h, widget->box_color(f), f);
 }
-int Fl_Diamond_Box::fills_rectangle() const {return false;}
 
-const Fl_Diamond_Box fl_diamond_up_box(0, FL_UP_BOX);
-const Fl_Diamond_Box fl_diamond_down_box(0, FL_DOWN_BOX);
+Fl_Diamond_Box::Fl_Diamond_Box(const char* n, const char* s, const Fl_Frame_Box* d)
+  : Fl_Frame_Box(n, s, d)
+{
+  fills_rectangle_ = 0;
+}
+
+const Fl_Diamond_Box fl_diamond_up_box(0, "2WWMMPPAA", &fl_diamond_down_box);
+const Fl_Diamond_Box fl_diamond_down_box(0, "2AAWWMMTT", &fl_diamond_up_box);
 
 //
-// End of "$Id: fl_diamond_box.cxx,v 1.17 1999/11/29 08:47:04 bill Exp $".
+// End of "$Id: fl_diamond_box.cxx,v 1.18 2000/08/10 09:24:32 spitzak Exp $".
 //

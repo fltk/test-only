@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.89 2000/08/10 02:26:36 clip Exp $"
+// "$Id: Fl_x.cxx,v 1.90 2000/08/10 09:24:32 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -490,18 +490,18 @@ static int dnd_aware(Window& window) {
 
 // send an event to an fltk window belonging to this program:
 static int local_handle(int event, Fl_Window* window) {
-  Fl::grab_ = 0;
+  Fl::local_grab(0);
   Fl::e_x = Fl::e_x_root-window->x();
   Fl::e_y = Fl::e_y_root-window->y();
   int ret = Fl::handle(event,window);
-  Fl::grab_ = grabfunc;
+  Fl::local_grab(grabfunc);
   return ret;
 }
 
 int Fl::dnd() {
   Fl::first_window()->cursor((Fl_Cursor)21);
   Window source_window = fl_xid(Fl::first_window());
-  grab_ = grabfunc;
+  local_grab(grabfunc);
   Window target_window = 0;
   Fl_Window* local_window = 0;
   int version = 4; int dest_x, dest_y;
@@ -578,7 +578,7 @@ int Fl::dnd() {
     XSendEvent(fl_display, target_window, False, 0L, (XEvent*)&msg);
   }
 
-  grab_ = 0;
+  release();
   Fl::first_window()->cursor(FL_CURSOR_DEFAULT);
   return 1;
 }
@@ -740,21 +740,6 @@ int fl_handle(const XEvent& xevent)
     }
     break;}
 
-  case MapNotify: {
-    window = fl_find(xevent.xmapping.window);
-    // figure out where OS really put window
-    XWindowAttributes actual;
-    XGetWindowAttributes(fl_display, fl_xid(window), &actual);
-    int X, Y, W = actual.width, H = actual.height;
-    Window cr;
-    XTranslateCoordinates(fl_display, fl_xid(window), actual.root,
-                          0, 0, &X, &Y, &cr);
-
-    // tell Fl_Window about it
-    window->resize(X, Y, W, H);
-    break;
-  }
-
   case UnmapNotify:
     window = fl_find(xevent.xmapping.window);
     if (window) {Fl_X::i(window)->wait_for_expose = 1; return 1;}
@@ -908,21 +893,48 @@ int fl_handle(const XEvent& xevent)
     event = FL_LEAVE;
     break;
 
-  case ConfigureNotify: {
-    // We cannot rely on the x,y position in the configure notify event.
-    // I now think this is an unavoidable problem with X: it is impossible
-    // for a window manager to prevent the "real" notify event from being
-    // sent when it resizes the contents, even though it can send an
-    // artificial event with the correct position afterwards (and some
-    // window managers do not send this fake event anyway)
-    // So anyway, do a round trip to find the correct x,y:
-    window = fl_find(xevent.xconfigure.window);
+#if 0
+    // This appears to break tooltips though I can't figure out why.
+    // My reading of X documentation is that ConfigureNotify should be
+    // used instead and that window managers that don't send it are
+    // broken.
+  case MapNotify: {
+    window = fl_find(xevent.xmapping.window);
     if (!window) break;
-    Window r, c; int X, Y, wX, wY; unsigned int m;
+    int X,Y,W,H;
+    // figure out where OS really put window
+    XWindowAttributes actual;
+    XGetWindowAttributes(fl_display, fl_xid(window), &actual);
+    W = actual.width, H = actual.height;
+    Window crap;
+    XTranslateCoordinates(fl_display, fl_xid(window), actual.root,
+                          0, 0, &X, &Y, &crap);
+    // tell Fl_Window about it
+    if (window->resize(X,Y,W,H)) resize_from_system = window;
+    break;
+  }
+#endif
+
+  case ConfigureNotify: {
+    // Based on code from Carl, I don't rely on anything being correct
+    // in the events, instead the new window shape and position is
+    // queried from the server.  Being X they of course require *2*
+    // round trips for something that should require none!
+    window = fl_find(xevent.xconfigure.window); // same location for MapNotify
+    if (!window) break;
+    int X,Y,W,H;
+    W = xevent.xconfigure.width; H = xevent.xconfigure.height;
+#if 1
+    Window crap;
+    XTranslateCoordinates(fl_display, fl_xid(window),
+			  RootWindow(fl_display, fl_screen),
+                          0, 0, &X, &Y, &crap);
+#else
+    Window r, c; int wX, wY; unsigned int m;
     XQueryPointer(fl_display, fl_xid(window), &r, &c, &X, &Y, &wX, &wY, &m);
-    if (window->resize(X-wX, Y-wY,
-		       xevent.xconfigure.width, xevent.xconfigure.height))
-      resize_from_system = window;
+    X -= wX; Y -= wY;
+#endif
+    if (window->resize(X,Y,W,H)) resize_from_system = window;
     return 1;}
 
   case SelectionNotify: {
@@ -1301,5 +1313,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.89 2000/08/10 02:26:36 clip Exp $".
+// End of "$Id: Fl_x.cxx,v 1.90 2000/08/10 09:24:32 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Return_Button.cxx,v 1.26 2000/07/12 01:39:07 clip Exp $"
+// "$Id: Fl_Return_Button.cxx,v 1.27 2000/08/10 09:24:32 spitzak Exp $"
 //
 // Return button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,8 +28,8 @@
 #include <FL/fl_draw.H>
 
 // this is public so fl_draw_symbol can call it:
-void fl_glyph_return(int, int x,int y,int w,int h, Fl_Color, Fl_Color /*fc*/,
-                     Fl_Flags /*f*/, Fl_Boxtype)
+void fl_glyph_return(const Fl_Widget*, int,
+		     int x,int y,int w,int h, Fl_Flags)
 {
   int size = w; if (h<size) size = h;
   int d = (size+2)/4; if (d<3) d = 3;
@@ -55,14 +55,11 @@ void fl_glyph_return(int, int x,int y,int w,int h, Fl_Color, Fl_Color /*fc*/,
 }
 
 void Fl_Return_Button::draw() {
-  Fl_Color lc = draw_button(flags());
-  Fl_Color gc = (text_box() == FL_NO_BOX) ? lc : text_color();
+  Fl_Flags flags = draw_button();
   int W = h();
   if (w()/3 < W) W = w()/3;
-  Fl_Flags f = 0;
-  if (!active_r()) f |= FL_INACTIVE;
-  glyph()(0, x()+w()-W-4, y(), W, h(), text_background(), gc, f, text_box());
-  draw_button_label(x(), y(), w()-W+4, h(), lc);
+  draw_glyph(0, x()+w()-W-4, y(), W, h(), flags);
+  draw_inside_label(x(), y(), w()-W+4, h(), flags);
 }
 
 static void revert(Fl_Style* s) {
@@ -81,5 +78,5 @@ Fl_Return_Button::Fl_Return_Button(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Return_Button.cxx,v 1.26 2000/07/12 01:39:07 clip Exp $".
+// End of "$Id: Fl_Return_Button.cxx,v 1.27 2000/08/10 09:24:32 spitzak Exp $".
 //

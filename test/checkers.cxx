@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.16 2000/05/02 06:09:16 carl Exp $"
+// "$Id: checkers.cxx,v 1.17 2000/08/10 09:24:32 spitzak Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -961,7 +961,7 @@ int squarey(int i) {return (usermoves(i,2)-'1')*BOXSIZE+BMOFFSET;}
 
 void Board::draw() {
   make_bitmaps();
-  fl_draw_box(box(),0,0,w(),h(),color());
+  box()->draw(this,0,0,w(),h(),0);
   fl_color((Fl_Color)10 /*107*/);
   int x; for (x=0; x<8; x++) for (int y=0; y<8; y++) {
     if (!((x^y)&1)) fl_rectf(BORDER+x*BOXSIZE, BORDER+y*BOXSIZE,
@@ -1109,7 +1109,7 @@ int Board::handle(int e) {
     case FL_SHORTCUT:
       return busymenu->test_shortcut(this);
     default:
-      return 0;
+      return Fl_Window::handle(e);
     }
   }
   node *t, *n;
@@ -1158,7 +1158,7 @@ int Board::handle(int e) {
     computer_move(0);
     return 1;
   default:
-    return 0;
+    return Fl_Window::handle(e);
   }
 }
 
@@ -1360,5 +1360,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.16 2000/05/02 06:09:16 carl Exp $".
+// End of "$Id: checkers.cxx,v 1.17 2000/08/10 09:24:32 spitzak Exp $".
 //

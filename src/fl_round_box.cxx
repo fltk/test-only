@@ -1,5 +1,5 @@
 //
-// "$Id: fl_round_box.cxx,v 1.22 1999/12/15 08:31:03 bill Exp $"
+// "$Id: fl_round_box.cxx,v 1.23 2000/08/10 09:24:32 spitzak Exp $"
 //
 // Round box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,7 @@
 #include <FL/Fl_Boxtype.H>
 #include <FL/Fl_Style.H>
 #include <FL/fl_draw.H>
+#include <FL/Fl_Widget.H>
 #include <string.h>
 
 // A compiler from a certain very large software company will not compile
@@ -80,7 +81,7 @@ extern void fl_to_inactive(const char* s, char* to);
 void Fl_Round_Box::draw(int x, int y, int w, int h,
 			Fl_Color c, Fl_Flags f) const
 {
-  const char* s = (f & FL_VALUE) ? data_from->down->data : data_from->data;
+  const char* s = (f & FL_VALUE) ? down->data() : data();
   char buf[26]; if (f&FL_INACTIVE && Fl_Style::draw_boxes_inactive) {
     fl_to_inactive(s, buf); s = buf;}
   if (!(f & FL_FRAME_ONLY)) {
@@ -107,14 +108,20 @@ void Fl_Round_Box::draw(int x, int y, int w, int h,
   }
 }
 
-void Fl_Round_Box::inset(int& x,int& y,int& w,int& h) const {
-  data_from->inset(x,y,w,h);
+void Fl_Round_Box::draw(const Fl_Widget* widget,
+			int x, int y, int w, int h, Fl_Flags f) const {
+  draw(x,y,w,h, widget->box_color(f), f);
 }
-int Fl_Round_Box::fills_rectangle() const {return false;}
 
-const Fl_Round_Box fl_round_down_box(0, FL_DOWN_BOX);
-const Fl_Round_Box fl_round_up_box(0, FL_UP_BOX);
+Fl_Round_Box::Fl_Round_Box(const char* n, const char* s, const Fl_Frame_Box* d)
+  : Fl_Frame_Box(n, s, d)
+{
+  fills_rectangle_ = 0;
+}
+
+const Fl_Round_Box fl_round_up_box(0, "2AAWWMMTT", &fl_round_down_box);
+const Fl_Round_Box fl_round_down_box(0, "2WWMMPPAA", &fl_round_up_box);
 
 //
-// End of "$Id: fl_round_box.cxx,v 1.22 1999/12/15 08:31:03 bill Exp $".
+// End of "$Id: fl_round_box.cxx,v 1.23 2000/08/10 09:24:32 spitzak Exp $".
 //

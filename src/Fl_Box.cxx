@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Box.cxx,v 1.20 2000/02/14 11:32:46 bill Exp $"
+// "$Id: Fl_Box.cxx,v 1.21 2000/08/10 09:24:31 spitzak Exp $"
 //
 // Box widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 
 void Fl_Box::draw() {
   draw_box();
-  draw_label();
+  draw_inside_label();
 }
 
 // Since FL_NO_BOX boxes are often used as invisible resizeboxes, I
@@ -52,5 +52,5 @@ Fl_Box::Fl_Box(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Box.cxx,v 1.20 2000/02/14 11:32:46 bill Exp $".
+// End of "$Id: Fl_Box.cxx,v 1.21 2000/08/10 09:24:31 spitzak Exp $".
 //

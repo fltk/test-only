@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.25 2000/07/14 08:35:01 clip Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.26 2000/08/10 09:24:32 spitzak Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -52,14 +52,14 @@ void Fl_Menu_::execute(Fl_Widget* w) {
       else break;
     }
   }
+  void* data = w->user_data(); if (!data) data = user_data();
   if (w->callback() == Fl_Widget::default_callback) {
     // Items without a callback cause the menu/browser's callback to
-    // be called and the item's user data passed, or the item itself
-    // if the item has no user data:
-    do_callback(this, w->user_data() ? w->user_data() : (void*)w);
+    // be called:
+    do_callback(this, data);
   } else {
     // Items with a callback work just like any other widget:
-    w->do_callback(w, w->user_data());
+    w->do_callback(w, data);
   }
 }
 
@@ -109,5 +109,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.25 2000/07/14 08:35:01 clip Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.26 2000/08/10 09:24:32 spitzak Exp $"
 //

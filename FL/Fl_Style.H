@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.33 2000/07/14 08:34:59 clip Exp $"
+// "$Id: Fl_Style.H,v 1.34 2000/08/10 09:24:30 spitzak Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -32,7 +32,11 @@
 #include "Fl_Labeltype.H"
 #include "Fl_Font.H"
 
-typedef void (*Fl_Glyph)(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype = FL_UP_BOX);
+class Fl_Widget;
+
+typedef void (*Fl_Glyph)(const Fl_Widget*, int type,
+			 int,int,int,int,
+			 Fl_Flags);
 
 struct FL_API Fl_Named_Style;
 
@@ -73,7 +77,9 @@ struct FL_API Fl_Style {
   static Fl_Named_Style* find(const char* name);
 };
 
-FL_API void fl_glyph(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype);
+FL_API void fl_glyph(const Fl_Widget*, int type,
+		     int,int,int,int,
+		     Fl_Flags);
 
 enum Fl_Glyphtype {	// glyph types understood by fl_glyph()
   // the numbers 0-99 are reserved for private glyph functions
@@ -84,11 +90,14 @@ enum Fl_Glyphtype {	// glyph types understood by fl_glyph()
   FL_GLYPH_DOWN,
   FL_GLYPH_LEFT,
   FL_GLYPH_RIGHT,
+  FL_GLYPH_UP_BUTTON,
+  FL_GLYPH_DOWN_BUTTON,
+  FL_GLYPH_LEFT_BUTTON,
+  FL_GLYPH_RIGHT_BUTTON,
   FL_GLYPH_VSLIDER,
   FL_GLYPH_HSLIDER,
   FL_GLYPH_VNSLIDER,
   FL_GLYPH_HNSLIDER,
-  FL_GLYPH_LIGHT,
   FL_GLYPH_CHOICE
 };
 
@@ -105,5 +114,5 @@ FL_API void fl_get_system_colors();
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.33 2000/07/14 08:34:59 clip Exp $".
+// End of "$Id: Fl_Style.H,v 1.34 2000/08/10 09:24:30 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.22 2000/08/04 10:22:01 clip Exp $"
+// "$Id: Fl_Style.cxx,v 1.23 2000/08/10 09:24:32 spitzak Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -33,7 +33,7 @@ Fl_Named_Style* Fl_Named_Style::first;
 // Do not change the contents of this ever.  The themes depend on getting
 // a known state initially.
 static void revert(Fl_Style* s) {
-  s->box                   = FL_NORMAL_BOX;
+  s->box                   = FL_UP_BOX;
   s->text_box		   = FL_DOWN_BOX;
   s->glyph                 = fl_glyph;
   s->label_font            = FL_HELVETICA;
@@ -165,15 +165,9 @@ int Fl_Style::draw_boxes_inactive = 1;
 int Fl_Style::scrollbar_width = 15;
 int Fl_Style::scrollbar_align = FL_ALIGN_RIGHT|FL_ALIGN_BOTTOM;
 
-// for some reason putting "const" in front of these makes gcc make them private:
-extern char fl_up_box_revert[];
-extern char fl_down_box_revert[];
-
 void Fl_Style::revert() {
   fl_theme_handler(0);
   fl_background((Fl_Color)0xc0c0c000);
-  fl_up_box.data = fl_up_box_revert;
-  fl_down_box.data = fl_down_box_revert;
   draw_boxes_inactive = 1;
   scrollbar_width = 15;
   scrollbar_align = FL_ALIGN_RIGHT|FL_ALIGN_BOTTOM;
@@ -213,5 +207,5 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.22 2000/08/04 10:22:01 clip Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.23 2000/08/10 09:24:32 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Type.cxx,v 1.33 2000/07/14 08:35:00 clip Exp $"
+// "$Id: Fl_Menu_Type.cxx,v 1.34 2000/08/10 09:24:30 spitzak Exp $"
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
@@ -106,7 +106,7 @@ Fl_Menu_Bar_Type Fl_Menu_Bar_type;
 #include <FL/fl_draw.H>
 
 void Shortcut_Button::draw() {
-  text_box()->draw(x(),y(),w(),h(),value() ? selection_color() : text_background(), flags());
+  text_box()->draw(this, x(),y(),w(),h(),flags()|(value()?FL_SELECTED:0));
   fl_font(text_font(), text_size());
   fl_color(value() ? selection_text_color() : text_color());
   fl_draw(fl_shortcut_label(svalue),x()+6,y(),w(),h(),FL_ALIGN_LEFT);
@@ -161,5 +161,5 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
 }
 
 //
-// End of "$Id: Fl_Menu_Type.cxx,v 1.33 2000/07/14 08:35:00 clip Exp $".
+// End of "$Id: Fl_Menu_Type.cxx,v 1.34 2000/08/10 09:24:30 spitzak Exp $".
 //

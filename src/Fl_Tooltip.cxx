@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.22 2000/01/10 06:31:25 bill Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.23 2000/08/10 09:24:32 spitzak Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,7 @@ public:
   Fl_TooltipBox() : Fl_Menu_Window(0, 0, 0, 0) {
     style(Fl_Tooltip::style());}
   void draw() {
-    box()->draw(0,0,w(),h(),color(),0);
+    draw_box(0,0,w(),h(),0);
     draw_label(3, 3, w()-6, h()-6,
 	       Fl_Flags(FL_ALIGN_LEFT|FL_ALIGN_WRAP|FL_ALIGN_INSIDE));
   }
@@ -137,5 +137,5 @@ Fl_Named_Style* Fl_Tooltip::default_style =
   new Fl_Named_Style("Tooltip", revert, &Fl_Tooltip::default_style);
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.22 2000/01/10 06:31:25 bill Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.23 2000/08/10 09:24:32 spitzak Exp $".
 //

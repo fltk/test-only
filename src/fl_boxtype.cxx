@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.37 2000/06/10 04:10:31 carl Exp $"
+// "$Id: fl_boxtype.cxx,v 1.38 2000/08/10 09:24:32 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -28,40 +28,47 @@
 
 #include <FL/Fl_Boxtype.H>
 #include <FL/Fl_Style.H>
+#include <FL/Fl_Widget.H>
 #include <FL/fl_draw.H>
 #include <string.h>
 #include <config.h>
 
 ////////////////////////////////////////////////////////////////
 
-void Fl_No_Box::draw(int x, int y, int w, int h, Fl_Color c,Fl_Flags f) const {
-  if (!(f & FL_FRAME_ONLY) && (f & FL_FOCUSED) && h > 4 && w > 4) {
+static void focus_rectangle(int x, int y, int w, int h, Fl_Color c) {
+  if (h > 4 && w > 4) {
     fl_color(fl_contrast(FL_BLACK, c));
     fl_line_style(FL_DOT);
     fl_rect(x+1,y+1,w-2,h-2);
     fl_line_style(0);
   }
 }
-void Fl_No_Box::inset(int&,int&,int&,int&) const {}
-int Fl_No_Box::fills_rectangle() const {return false;}
+
+void Fl_No_Box::draw(const Fl_Widget*,
+		     int x, int y, int w, int h, Fl_Flags f) const {
+  if (!(f & FL_FRAME_ONLY) && (f & FL_FOCUSED))
+    focus_rectangle(x,y,w,h,FL_GRAY);
+}
+Fl_No_Box::Fl_No_Box(const char* name) : Fl_Boxtype_(name) {
+  dx_ = dy_ = dw_ = dh_ = 0;
+  fills_rectangle_ = 0;
+}
 const Fl_No_Box fl_no_box("none");
 
-void Fl_Flat_Box::draw(int x, int y, int w, int h,
-		       Fl_Color c, Fl_Flags f) const
+void Fl_Flat_Box::draw(const Fl_Widget* widget,
+		       int x, int y, int w, int h, Fl_Flags f) const
 {
   if (!(f & FL_FRAME_ONLY) && h > 0 && w > 0) {
-    fl_color(c);
+    Fl_Color color = widget->box_color(f);
+    fl_color(color);
     fl_rectf(x,y,w,h);
-    if ((f & FL_FOCUSED) && h > 4 && w > 4) {
-      fl_color(fl_contrast(FL_BLACK, c));
-      fl_line_style(FL_DOT);
-      fl_rect(x+1,y+1,w-2,h-2);
-      fl_line_style(0);
-    }
+    if (f & FL_FOCUSED) focus_rectangle(x, y, w, h, color);
   }
 }
-void Fl_Flat_Box::inset(int&,int&,int&,int&) const {}
-int Fl_Flat_Box::fills_rectangle() const {return true;}
+Fl_Flat_Box::Fl_Flat_Box(const char* name) : Fl_Boxtype_(name) {
+  dx_ = dy_ = dw_ = dh_ = 0;
+  fills_rectangle_ = 0;
+}
 const Fl_Flat_Box fl_flat_box("flat");
 
 ////////////////////////////////////////////////////////////////
@@ -72,11 +79,13 @@ FL_API void fl_to_inactive(const char* s, char* to) {
   *to = 0;
 }
 
+// widget draw() methods can use this to draw boxes at arbitary places
+// in the window:
 void Fl_Frame_Box::draw(int x, int y, int w, int h,
 			Fl_Color c, Fl_Flags f) const
 {
-  const char* s = data;
-  if (f & FL_VALUE) s = down->data;
+  const char* s = data();
+  if (f & FL_VALUE) s = down->data();
   char buf[26]; if (f&FL_INACTIVE && Fl_Style::draw_boxes_inactive) {
     fl_to_inactive(s, buf); s = buf;}
   if (h > 0 && w > 0) {
@@ -103,25 +112,29 @@ void Fl_Frame_Box::draw(int x, int y, int w, int h,
       if (!*s) break;
     }
   }
-  fl_flat_box.draw(x, y, w, h, c, f);
+  if (!(f & FL_FRAME_ONLY)) {
+    fl_color(c);
+    fl_rectf(x,y,w,h);
+    if (f & FL_FOCUSED) focus_rectangle(x,y,w,h,c);
+  }
 }
 
-void Fl_Frame_Box::inset(int& x, int& y, int& w, int& h) const
+void Fl_Frame_Box::draw(const Fl_Widget* widget,
+			int x, int y, int w, int h, Fl_Flags f) const {
+  draw(x,y,w,h, widget->box_color(f), f);
+}
+Fl_Frame_Box::Fl_Frame_Box(const char* n, const char* s, const Fl_Frame_Box* d)
+  : Fl_Boxtype_(n), data_(s), down(d ? d : this)
 {
-  int i = strlen(data)/2;
-  w -= i; h -= i;
+  fills_rectangle_ = 1;
+  int i = strlen(s)/2;
+  dw_ = dh_ = i;
   i /= 2;
-  x += i; y += i;
+  dx_ = dy_ = i;
 }
 
-int Fl_Frame_Box::fills_rectangle() const {return true;}
-
-// for some reason putting "const" in front of these makes gcc make them private:
-char fl_up_box_revert[] = "2AAWWMMTT";
-char fl_down_box_revert[] = "2WWMMPPAA";
-
-      Fl_Frame_Box fl_down_box("down", fl_down_box_revert, &fl_up_box);
-      Fl_Frame_Box fl_up_box("up", fl_up_box_revert, &fl_down_box);
+const Fl_Frame_Box fl_down_box("down", "2WWMMPPAA", &fl_up_box);
+const Fl_Frame_Box fl_up_box("up", "2AAWWMMTT", &fl_down_box);
 
 const Fl_Frame_Box fl_thin_down_box("thin down", "2WWHH", &fl_thin_up_box);
 const Fl_Frame_Box fl_thin_up_box("thin up", "2HHWW", &fl_thin_down_box);
@@ -133,36 +146,36 @@ const Fl_Frame_Box fl_embossed_box("embossed", "WWHHHHWW");
 const Fl_Frame_Box fl_border_box("border", "AAAA");
 
 ////////////////////////////////////////////////////////////////
-// Deprecated "frame" values:
+// Deprecated "frame" box, appaently needed for fltk 1.0 compatability?
 
-void Fl_Border_Frame::draw(int x, int y, int w, int h,
-			   Fl_Color c, Fl_Flags) const
+void Fl_Border_Frame::draw(const Fl_Widget* widget,
+			   int x, int y, int w, int h, Fl_Flags) const
 {
-  fl_color(c); fl_rect(x, y, w, h);
+  fl_color(widget->color()); fl_rect(x, y, w, h);
 }
-void Fl_Border_Frame::inset(int& x, int& y, int& w, int& h) const {
-  x++; y++; w-=2; h-=2;
+Fl_Border_Frame::Fl_Border_Frame(const char* n) : Fl_Boxtype_(n) {
+  dx_ = dy_ = 1;
+  dw_ = dh_ = 2;
+  fills_rectangle_ = 0;
 }
-int Fl_Border_Frame::fills_rectangle() const {return false;}
-
 const Fl_Border_Frame fl_border_frame("border frame");
 
 ////////////////////////////////////////////////////////////////
-// draw a box only when highlighted or value:
+// draw a box only when highlighted or selected:
 
-void Fl_Highlight_Box::draw(int x, int y, int w, int h,
-			    Fl_Color c, Fl_Flags f) const
+void Fl_Highlight_Box::draw(const Fl_Widget* widget,
+			    int x, int y, int w, int h, Fl_Flags f) const
 {
-  if (f & (FL_HIGHLIGHT|FL_VALUE))
-    down->draw(x,y,w,h,c,f);
+  if (f & (FL_HIGHLIGHT|FL_SELECTED))
+    down->draw(widget,x,y,w,h,f);
   else
-    Fl_Flat_Box::draw(x,y,w,h,c,f);
+    Fl_Flat_Box::draw(widget,x,y,w,h,f);
 }
-void Fl_Highlight_Box::inset(int& x, int& y, int& w, int& h) const {
-  down->inset(x,y,w,h);
-}
-int Fl_Highlight_Box::fills_rectangle() const {
-  return down->fills_rectangle();
+Fl_Highlight_Box::Fl_Highlight_Box(const char* n, const Fl_Boxtype b)
+  : Fl_Flat_Box(n), down(b)
+{
+  dx_ = dy_ = dw_ = dh_ = 0;
+  fills_rectangle_ = 1;
 }
 
 const Fl_Highlight_Box fl_highlight_up_box("highlight up", &fl_thin_up_box);
@@ -177,5 +190,5 @@ const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
 const Fl_Boxtype_* Fl_Boxtype_::first = 0;
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.37 2000/06/10 04:10:31 carl Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.38 2000/08/10 09:24:32 spitzak Exp $".
 //

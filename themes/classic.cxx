@@ -1,5 +1,5 @@
 //
-// "$Id: classic.cxx,v 1.24 2000/07/21 01:24:35 clip Exp $"
+// "$Id: classic.cxx,v 1.25 2000/08/10 09:24:33 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -35,22 +35,41 @@
 #include <stdio.h>
 #include <string.h>
 
-static void choice_glyph(int, int x,int y,int w,int h, Fl_Color bc, Fl_Color,
-		  Fl_Flags f, Fl_Boxtype box)
+static void choice_glyph(const Fl_Widget* widget, int,
+			 int x,int y,int w,int h, Fl_Flags f)
 {
   int H = 7;
-  FL_THIN_UP_BOX->draw(x, y+(h-H)/2, w-4, H, bc, f);
+  FL_THIN_UP_BOX->draw(x, y+(h-H)/2, w-4, H, widget->box_color(f), f);
 }
 
-static Fl_Frame_Box always_up_box(0,FL_UP_BOX->data);
+// Disable the engraving of inactive labels:
+class Motif_Labeltype : public Fl_Labeltype_ {
+public:
+  void draw(const char* label,
+	    int X, int Y, int W, int H,
+	    Fl_Color c, Fl_Flags f) const
+    {
+      if (f & FL_INACTIVE) {
+	c = fl_inactive(c);
+	f &= ~FL_INACTIVE;
+      }
+      FL_NORMAL_LABEL->draw(label, X,Y,W,H,c,f);
+    }
+  Motif_Labeltype(const char*n) : Fl_Labeltype_(n) {}
+};
+static const Motif_Labeltype motif_label(0);
 
+static Fl_Frame_Box always_up_box(0, "AAAAWUJJUTNN");
 static const Fl_Highlight_Box menu_title_box(0, &always_up_box);
+
+extern const Fl_Frame_Box classic_down_box;
+static const Fl_Frame_Box classic_up_box(0, "AAAAWUJJUTNN",&classic_down_box);
+const Fl_Frame_Box classic_down_box(0, "NNTUJJUWAAAA",&classic_up_box);
 
 extern "C" int fltk_theme() {
 
-  fl_up_box.data = always_up_box.data = "AAAAWUJJUTNN";
-  fl_down_box.data = "NNTUJJUWAAAA";
-
+  Fl_Widget::default_style->box = &classic_up_box;
+  Fl_Widget::default_style->text_box = &classic_down_box;
   Fl_Widget::default_style->highlight_color = 0;
   Fl_Widget::default_style->label_size = 15;
   Fl_Widget::default_style->text_size = 15;
@@ -65,28 +84,25 @@ extern "C" int fltk_theme() {
     s->text_background = FL_GRAY;
   }
   if ((s = Fl_Style::find("item"))) {
-    s->selection_color = FL_BLACK;
+    s->text_color = FL_BLACK;
   }
   if ((s = Fl_Style::find("menu_bar"))) {
     s->text_box = &menu_title_box;
     s->selection_color = FL_GRAY;
-    s->text_background = FL_GRAY;
   }
   if ((s = Fl_Style::find("check_button"))) {
-    s->selection_color = FL_BLACK;
+    s->text_color = FL_BLACK;
     //s->text_background = FL_GRAY;
   }
   if ((s = Fl_Style::find("output"))) {
     s->text_background = FL_GRAY;
   }
   if ((s = Fl_Style::find("choice"))) {
-    s->text_background = FL_GRAY;
-    s->text_box = FL_UP_BOX;
     s->glyph = choice_glyph;
   }
   return 0;
 }
 
 //
-// End of "$Id: classic.cxx,v 1.24 2000/07/21 01:24:35 clip Exp $".
+// End of "$Id: classic.cxx,v 1.25 2000/08/10 09:24:33 spitzak Exp $".
 //

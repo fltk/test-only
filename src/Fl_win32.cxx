@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.125 2000/08/10 02:26:36 clip Exp $"
+// "$Id: Fl_win32.cxx,v 1.126 2000/08/10 09:24:32 spitzak Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -399,10 +399,10 @@ static int grabfunc(int event, void*) {
 
 int Fl::dnd() {
   Fl::first_window()->cursor(FL_CURSOR_HAND);
-  grab_ = grabfunc;
+  Fl::local_grab(grabfunc);
   while (Fl::pushed()) Fl::wait();
   Fl::first_window()->cursor(FL_CURSOR_DEFAULT);
-  grab_ = 0;
+  Fl::release();
   return 1;
 }
 
@@ -1269,5 +1269,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.125 2000/08/10 02:26:36 clip Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.126 2000/08/10 09:24:32 spitzak Exp $".
 //

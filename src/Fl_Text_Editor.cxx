@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Editor.cxx,v 1.4 2000/08/09 04:22:36 clip Exp $"
+// "$Id: Fl_Text_Editor.cxx,v 1.5 2000/08/10 09:24:32 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -30,9 +30,7 @@
 #include <string.h>
 #include <ctype.h>
 
-static void revert(Fl_Style* s) {
-  s->box = FL_DOWN_BOX;
-}
+static void revert(Fl_Style*) {}
 
 static Fl_Named_Style *style = new Fl_Named_Style("text editor", revert, &style);
 
@@ -435,5 +433,5 @@ int Fl_Text_Editor::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Text_Editor.cxx,v 1.4 2000/08/09 04:22:36 clip Exp $".
+// End of "$Id: Fl_Text_Editor.cxx,v 1.5 2000/08/10 09:24:32 spitzak Exp $".
 //

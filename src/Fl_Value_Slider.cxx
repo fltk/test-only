@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.cxx,v 1.28 2000/07/20 05:28:32 clip Exp $"
+// "$Id: Fl_Value_Slider.cxx,v 1.29 2000/08/10 09:24:32 spitzak Exp $"
 //
 // Value slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -36,20 +36,16 @@ void Fl_Value_Slider::draw() {
   } else {
     syy += 25; bhh = 25; shh -= 25;
   }
-  Fl_Flags f = active_r() ? FL_NO_FLAGS : FL_INACTIVE;
   if (damage()&(~FL_DAMAGE_HIGHLIGHT))
-    text_box()->draw(sxx, syy, sww, shh, text_background(), f|FL_FRAME_ONLY);
-  if (!active_r()) f = FL_INACTIVE;
-  else if (belowmouse() && highlight_color()) f = FL_HIGHLIGHT;
-  else f = 0;
+    draw_text_frame(sxx, syy, sww, shh);
   text_box()->inset(sxx, syy, sww, shh);
-  Fl_Slider::draw(sxx, syy, sww, shh, f);
+  Fl_Slider::draw(sxx, syy, sww, shh, flags());
   if (damage()&(~FL_DAMAGE_HIGHLIGHT)) {
-    text_box()->draw(bxx, byy, bww, bhh, text_background(), f);
+    draw_text_box(bxx, byy, bww, bhh);
     char buf[128];
     format(buf);
     fl_font(text_font(), text_size());
-    fl_color(fl_inactive(text_color(), f));
+    fl_color(glyph_color(flags()));
     fl_draw(buf, bxx, byy, bww, bhh, FL_ALIGN_CLIP);
   }
 }
@@ -80,5 +76,5 @@ Fl_Value_Slider::Fl_Value_Slider(int x, int y, int w, int h, const char*l)
 }
 
 //
-// End of "$Id: Fl_Value_Slider.cxx,v 1.28 2000/07/20 05:28:32 clip Exp $".
+// End of "$Id: Fl_Value_Slider.cxx,v 1.29 2000/08/10 09:24:32 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.28 2000/07/30 03:46:04 spitzak Exp $"
+// "$Id: essai.cxx,v 1.29 2000/08/10 09:24:33 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -46,18 +46,16 @@
 
 class Fl_Image_Box : public Fl_Boxtype_ {
   Fl_Flags mask;
-  void inset(int& x,int& y,int& w,int& h) const {fl_up_box.inset(x,y,w,h);}
-  int fills_rectangle() const {return true;}
 public:
-  void draw(int,int,int,int, Fl_Color fill, Fl_Flags) const;
+  void draw(const Fl_Widget*, int,int,int,int, Fl_Flags) const;
   Fl_Shared_Image* normal_img;
   Fl_Shared_Image* down_img;
   Fl_Shared_Image* highlight_img;
   Fl_Image_Box(const char*, const char*, const char*, Fl_Flags = 0);
 };
 
-void Fl_Image_Box::draw(int x, int y, int w, int h,
-			Fl_Color fill, Fl_Flags flags) const
+void Fl_Image_Box::draw(const Fl_Widget*, int x, int y, int w, int h,
+			Fl_Flags flags) const
 {
   Fl_Shared_Image* img;
 
@@ -65,7 +63,7 @@ void Fl_Image_Box::draw(int x, int y, int w, int h,
   else if (flags&FL_HIGHLIGHT) img = highlight_img;
   else img = normal_img;
 
-  fl_up_box.draw(x,y,w,h,fill,(flags|FL_FRAME_ONLY)&(~mask));
+  fl_up_box.draw(x,y,w,h,0,(flags|FL_FRAME_ONLY)&(~mask));
   if (!(flags&FL_FRAME_ONLY)) {
     fl_up_box.inset(x,y,w,h);
     img->draw_tiled(x,y,w,h, -w/2, -h/2);
@@ -78,33 +76,33 @@ void Fl_Image_Box::draw(int x, int y, int w, int h,
   }
 }
 
-extern FL_API const char* fl_find_config_file(const char* fn);
-
 Fl_Image_Box::Fl_Image_Box(const char* normal_b, const char* down_b, const char* highlight_b, Fl_Flags m) :
 Fl_Boxtype_(0), mask(m) {
+  dx_ = fl_up_box.dx();
+  dy_ = fl_up_box.dy();
+  dw_ = fl_up_box.dw();
+  dh_ = fl_up_box.dh();
+  fills_rectangle_ = true;
   normal_img = Fl_JPEG_Image::get(fl_find_config_file(normal_b));
   down_img = Fl_JPEG_Image::get(fl_find_config_file(down_b));
   highlight_img = Fl_JPEG_Image::get(fl_find_config_file(highlight_b));
 }
 
 class Fl_Image_NoBorderBox : public Fl_Image_Box {
-  void draw(int,int,int,int, Fl_Color fill, Fl_Flags) const;
-  void inset(int& x,int& y,int& w,int& h) const {}
+  void draw(const Fl_Widget*, int,int,int,int, Fl_Flags) const;
 public:
-  Fl_Image_NoBorderBox(const char*a, const char*b, const char*c, Fl_Flags m = 0) : Fl_Image_Box(a,b,c,m) {}
+  Fl_Image_NoBorderBox(const char*a, const char*b, const char*c, Fl_Flags m = 0) : Fl_Image_Box(a,b,c,m) {dx_=dy_=dw_=dh_=0;}
 };
 
-void Fl_Image_NoBorderBox::draw(int x, int y, int w, int h,
-				Fl_Color fill, Fl_Flags flags) const
+void Fl_Image_NoBorderBox::draw(const Fl_Widget* widget,
+			int x, int y, int w, int h, Fl_Flags flags) const
 {
-  if (flags&(FL_VALUE|FL_HIGHLIGHT)) {
-    Fl_Image_Box::draw(x,y,w,h,fill,flags);
+  if (flags&(FL_SELECTED|FL_HIGHLIGHT)) {
+    Fl_Image_Box::draw(widget, x,y,w,h, flags);
     return;
   }
-  Fl_Shared_Image* img;
-  img = normal_img;
   if (!(flags&FL_FRAME_ONLY)) {
-    img->draw_tiled(x, y, w, h, -w/2, -h/2);
+    normal_img->draw_tiled(x, y, w, h, -w/2, -h/2);
     if ((flags & FL_FOCUSED) && h > 4 && w > 4) {
       fl_color(FL_BLACK);
       fl_line_style(FL_DOT);
@@ -156,5 +154,5 @@ int fltk_theme() {
 }
 
 //
-// End of "$Id: essai.cxx,v 1.28 2000/07/30 03:46:04 spitzak Exp $".
+// End of "$Id: essai.cxx,v 1.29 2000/08/10 09:24:33 spitzak Exp $".
 //

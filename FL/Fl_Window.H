@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.40 2000/08/10 02:26:36 clip Exp $"
+// "$Id: Fl_Window.H,v 1.41 2000/08/10 09:24:30 spitzak Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -98,11 +98,11 @@ protected:
 
   virtual void create();
   static Fl_Window *current_;
-  const Fl_Window* modal_for_;
 
 private:
 
   friend class Fl_X; Fl_X *i; // points at the system-specific stuff
+  const Fl_Window* modal_for_;
   const char* iconlabel_;
   const void* icon_;
   // size_range stuff:
@@ -122,5 +122,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.40 2000/08/10 02:26:36 clip Exp $".
+// End of "$Id: Fl_Window.H,v 1.41 2000/08/10 09:24:30 spitzak Exp $".
 //
