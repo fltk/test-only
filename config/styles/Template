@@ -141,9 +141,9 @@ version = 7                                       # version number of style
   box = 30                                        # boxtype of choice button
   highlight box = 30                              # boxtype of choice when mouse is over it
   down box = 42                                   # boxtype of choice pull down menu window
-  text font = 0                                   # font of text displayed on choice
-  text size = 14                                  # font size of text on button and shortcuts
-  text color = 0                                  # font color of text displayed on choice
+  text font = 0                                   # font of text displayed on choice and shortcuts
+  text size = 14                                  # font size of text on choice and shortcuts
+  text color = 0                                  # font color of text displayed on choice and shortcuts
 
 [menu bar]                                        # menu bar attributes
   label color = 0                                 # probably does nothing

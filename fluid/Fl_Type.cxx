@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.8 1999/03/18 05:33:22 carl Exp $"
+// "$Id: Fl_Type.cxx,v 1.9 1999/03/24 23:12:18 carl Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -478,6 +478,7 @@ int Fl_Type::is_parent() const {return 0;}
 int Fl_Type::is_widget() const {return 0;}
 int Fl_Type::is_valuator() const {return 0;}
 int Fl_Type::is_button() const {return 0;}
+int Fl_Type::is_light_button() const {return 0;}
 int Fl_Type::is_menu_item() const {return 0;}
 int Fl_Type::is_menu_button() const {return 0;}
 int Fl_Type::is_group() const {return 0;}
@@ -659,5 +660,5 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.8 1999/03/18 05:33:22 carl Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.9 1999/03/24 23:12:18 carl Exp $".
 //

@@ -24,6 +24,7 @@ extern void box_cb(Fl_Choice*, void*);
 extern void callback_cb(Fl_Input*, void*);
 extern void cancel_cb(Fl_Button*, void*);
 extern void color2_cb(Fl_Light_Button*, void*);
+extern void color3_cb(Fl_Light_Button*, void*);
 extern void color_cb(Fl_Light_Button*, void*);
 extern void default_cb(Fl_Button*, void*);
 extern void down_box_cb(Fl_Choice*, void*);

@@ -8,7 +8,7 @@ snap 2
 Function {make_widget_panel()} {open
 } {
   Fl_Window {} {open
-    xywh {85 49 387 448} resizable hotspot visible
+    xywh {118 26 387 448} resizable hotspot visible
   } {
     Fl_Input {} {
       label {name:}
@@ -239,7 +239,7 @@ Function {make_widget_panel()} {open
 Function {make_style_panel()} {open
 } {
   Fl_Window {} {open selected
-    xywh {508 216 325 262} visible
+    xywh {83 79 330 279} visible
   } {
     Fl_Choice {} {
       label {label type:}
@@ -259,6 +259,13 @@ Function {make_style_panel()} {open
       callback labelsize_cb
       xywh {270 35 40 20} box THIN_DOWN_BOX maximum 100 step 1 value 14
     }
+    Fl_Choice {} {
+      label {text font:}
+      callback textfont_cb open
+      xywh {90 55 180 20} box THIN_UP_BOX fly_box THIN_UP_BOX
+      code0 {extern Fl_Menu_Item fontmenu[];}
+      code1 {o->menu(fontmenu);}
+    } {}
     Fl_Value_Input {} {
       callback textsize_cb
       xywh {270 55 40 20} box THIN_DOWN_BOX maximum 100 step 1 value 14
@@ -309,42 +316,41 @@ Function {make_style_panel()} {open
       code0 {o->type(0);}
     }
     Fl_Light_Button {} {
+      label {highlight color}
+      callback highlightcolor_cb
+      xywh {220 180 90 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
+      code0 {o->type(0);}
+    }
+    Fl_Light_Button {} {
       label {down label color}
       callback down_labelcolor_cb
       xywh {110 180 110 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
       code0 {o->type(0);}
     }
     Fl_Light_Button {} {
-      label {highlight color}
-      callback highlightcolor_cb
-      xywh {220 180 90 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
-      code0 {o->type(0);}
-    }
-    Fl_Choice {} {
-      label {text font:}
-      callback textfont_cb
-      xywh {90 55 180 20} box THIN_UP_BOX fly_box THIN_UP_BOX
-      code0 {extern Fl_Menu_Item fontmenu[];}
-      code1 {o->menu(fontmenu);}
-    } {}
-    Fl_Light_Button {} {
       label {selected text color}
       callback selected_textcolor_cb
       xywh {110 180 110 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
       code0 {o->type(0);}
     }
+    Fl_Light_Button {} {
+      label color3
+      callback color3_cb
+      xywh {110 200 110 20} labelsize 10 box THIN_UP_BOX down_box THIN_UP_BOX fly_box THIN_UP_BOX
+      code0 {o->type(0);}
+    }
     Fl_Group {} {open
-      xywh {20 215 290 35}
+      xywh {20 215 290 50}
     } {
       Fl_Button {} {
         label {Default Style}
         callback default_cb
-        xywh {20 215 90 35}
+        xywh {20 230 90 35}
       }
       Fl_Return_Button {} {
         label Close
         callback style_ok_cb
-        xywh {220 215 90 35}
+        xywh {220 230 90 35}
       }
     }
   }

@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.5 1999/03/18 05:33:25 carl Exp $"
+// "$Id: factory.cxx,v 1.6 1999/03/24 23:12:20 carl Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -103,6 +103,7 @@ static Fl_Repeat_Button_Type Fl_Repeat_Button_type;
 #include <FL/Fl_Light_Button.H>
 class Fl_Light_Button_Type : public Fl_Button_Type {
 public:
+  int is_light_button() const {return 1;}
   virtual const char *type_name() {return "Fl_Light_Button";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     return new Fl_Light_Button(x,y,w,h,"button");}
@@ -115,6 +116,7 @@ static Fl_Light_Button_Type Fl_Light_Button_type;
 #include <FL/Fl_Check_Button.H>
 class Fl_Check_Button_Type : public Fl_Button_Type {
 public:
+  int is_light_button() const {return 1;}
   virtual const char *type_name() {return "Fl_Check_Button";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     return new Fl_Check_Button(x,y,w,h,"button");}
@@ -127,6 +129,7 @@ static Fl_Check_Button_Type Fl_Check_Button_type;
 #include <FL/Fl_Round_Button.H>
 class Fl_Round_Button_Type : public Fl_Button_Type {
 public:
+  int is_light_button() const {return 1;}
   virtual const char *type_name() {return "Fl_Round_Button";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     return new Fl_Round_Button(x,y,w,h,"button");}
@@ -678,5 +681,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.5 1999/03/18 05:33:25 carl Exp $".
+// End of "$Id: factory.cxx,v 1.6 1999/03/24 23:12:20 carl Exp $".
 //

@@ -278,7 +278,7 @@ Fl_Window* make_widget_panel() {
 
 Fl_Window* make_style_panel() {
   Fl_Window* w;
-  { Fl_Window* o = new Fl_Window(325, 262);
+  { Fl_Window* o = new Fl_Window(330, 279);
     w = o;
     { Fl_Choice* o = new Fl_Choice(90, 15, 220, 20, "label type:");
       o->box(FL_THIN_UP_BOX);
@@ -299,6 +299,12 @@ Fl_Window* make_style_panel() {
       o->step(1);
       o->value(14);
       o->callback((Fl_Callback*)labelsize_cb);
+    }
+    { Fl_Choice* o = new Fl_Choice(90, 55, 180, 20, "text font:");
+      o->box(FL_THIN_UP_BOX);
+      o->fly_box(FL_THIN_UP_BOX);
+      o->callback((Fl_Callback*)textfont_cb);
+      o->menu(fontmenu);
     }
     { Fl_Value_Input* o = new Fl_Value_Input(270, 55, 40, 20);
       o->box(FL_THIN_DOWN_BOX);
@@ -357,14 +363,6 @@ Fl_Window* make_style_panel() {
       o->callback((Fl_Callback*)textcolor_cb);
       o->type(0);
     }
-    { Fl_Light_Button* o = new Fl_Light_Button(110, 180, 110, 20, "down label color");
-      o->box(FL_THIN_UP_BOX);
-      o->down_box(FL_THIN_UP_BOX);
-      o->fly_box(FL_THIN_UP_BOX);
-      o->labelsize(10);
-      o->callback((Fl_Callback*)down_labelcolor_cb);
-      o->type(0);
-    }
     { Fl_Light_Button* o = new Fl_Light_Button(220, 180, 90, 20, "highlight color");
       o->box(FL_THIN_UP_BOX);
       o->down_box(FL_THIN_UP_BOX);
@@ -373,11 +371,13 @@ Fl_Window* make_style_panel() {
       o->callback((Fl_Callback*)highlightcolor_cb);
       o->type(0);
     }
-    { Fl_Choice* o = new Fl_Choice(90, 55, 180, 20, "text font:");
+    { Fl_Light_Button* o = new Fl_Light_Button(110, 180, 110, 20, "down label color");
       o->box(FL_THIN_UP_BOX);
+      o->down_box(FL_THIN_UP_BOX);
       o->fly_box(FL_THIN_UP_BOX);
-      o->callback((Fl_Callback*)textfont_cb);
-      o->menu(fontmenu);
+      o->labelsize(10);
+      o->callback((Fl_Callback*)down_labelcolor_cb);
+      o->type(0);
     }
     { Fl_Light_Button* o = new Fl_Light_Button(110, 180, 110, 20, "selected text color");
       o->box(FL_THIN_UP_BOX);
@@ -387,11 +387,19 @@ Fl_Window* make_style_panel() {
       o->callback((Fl_Callback*)selected_textcolor_cb);
       o->type(0);
     }
-    { Fl_Group* o = new Fl_Group(20, 215, 290, 35);
-      { Fl_Button* o = new Fl_Button(20, 215, 90, 35, "Default Style");
+    { Fl_Light_Button* o = new Fl_Light_Button(110, 200, 110, 20, "color3");
+      o->box(FL_THIN_UP_BOX);
+      o->down_box(FL_THIN_UP_BOX);
+      o->fly_box(FL_THIN_UP_BOX);
+      o->labelsize(10);
+      o->callback((Fl_Callback*)color3_cb);
+      o->type(0);
+    }
+    { Fl_Group* o = new Fl_Group(20, 215, 290, 50);
+      { Fl_Button* o = new Fl_Button(20, 230, 90, 35, "Default Style");
         o->callback((Fl_Callback*)default_cb);
       }
-      { Fl_Return_Button* o = new Fl_Return_Button(220, 215, 90, 35, "Close");
+      { Fl_Return_Button* o = new Fl_Return_Button(220, 230, 90, 35, "Close");
         o->callback((Fl_Callback*)style_ok_cb);
       }
       o->end();
