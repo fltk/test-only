@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.3 2002/12/09 04:52:27 spitzak Exp $"
+// "$Id: Fl_mac.cxx,v 1.4 2003/01/05 07:40:29 spitzak Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -85,7 +85,7 @@ static struct FD {
 static int G_pipe[2] = { 0,0 };		// work around pthread_cancel() problem
 static pthread_mutex_t select_mutex;	// lock for above data
 
-void add_fd(int n, int events, void (*cb)(int, void*), void *v) {
+void fltk::add_fd(int n, int events, void (*cb)(int, void*), void *v) {
   remove_fd(n, events);
   pthread_mutex_lock(&select_mutex);
   int i = nfds++;
@@ -104,11 +104,11 @@ void add_fd(int n, int events, void (*cb)(int, void*), void *v) {
   pthread_mutex_unlock(&select_mutex);
 }
 
-void add_fd(int fd, void (*cb)(int, void*), void* v) {
+void fltk::add_fd(int fd, void (*cb)(int, void*), void* v) {
   add_fd(fd, POLLIN, cb, v);
 }
 
-void remove_fd(int n, int events) {
+void fltk::remove_fd(int n, int events) {
   pthread_mutex_lock(&select_mutex);
   int i,j;
   for (i=j=0; i<nfds; i++) {
@@ -218,8 +218,8 @@ static void HandleDataReady()
 
 // these pointers are set by the lock() function:
 static void nothing() {}
-void (*lock_function)() = nothing;
-void (*unlock_function)() = nothing;
+void (*fl_lock_function)() = nothing;
+void (*fl_unlock_function)() = nothing;
 
 static int got_events = 0;
 
@@ -227,15 +227,15 @@ static int got_events = 0;
 
 // public variables
 //Handle system_menu;
-//Sys_Menu_Bar *sys_menu_bar = 0;
+//Sys_Menu_Bar *fltk::sys_menu_bar = 0;
 
 static WindowRef capture = 0;
 static WindowRef os_capture = 0;
 
 static Window* resize_from_system;
 static CursPtr default_cursor_ptr;
-static Cursor default_cursor;
-CursHandle default_cursor;
+static ::Cursor _default_cursor;
+CursHandle fltk::default_cursor;
 
 /**
  * handle Apple Menu items (can be created using the Sys_Menu_Bar
@@ -297,7 +297,7 @@ static pascal OSStatus carbonDispatchHandler( EventHandlerCallRef nextHandler, E
   OSStatus ret = eventNotHandledErr;
   HICommand cmd;
 
-  lock_function();
+  fl_lock_function();
 
   got_events = 1;
 
@@ -341,7 +341,7 @@ static pascal OSStatus carbonDispatchHandler( EventHandlerCallRef nextHandler, E
     ret = CallNextEventHandler( nextHandler, event ); // let the OS handle the activation, but continue to get a click-through effect
   QuitApplicationEventLoop();
 
-  unlock_function();
+  fl_unlock_function();
 
   return ret;
 }
@@ -352,9 +352,9 @@ static pascal OSStatus carbonDispatchHandler( EventHandlerCallRef nextHandler, E
  */
 static pascal void timerProcCB( EventLoopTimerRef, void* )
 {
-  lock_function();
+  fl_lock_function();
   QuitApplicationEventLoop();
-  unlock_function();
+  fl_unlock_function();
 }
 
 /**
@@ -364,13 +364,13 @@ static pascal void timerProcCB( EventLoopTimerRef, void* )
 static void breakMacEventLoop()
 {
   EventRef breakEvent;
-  // lock_function(); // WAS: I don't think the lock is needed
+  // fl_lock_function(); // WAS: I don't think the lock is needed
   CreateEvent( 0, kEventClassFLTK, kEventFLTKBreakLoop, 0,
 	       kEventAttributeUserEvent, &breakEvent );
   PostEventToQueue( GetCurrentEventQueue(), breakEvent,
 		    kEventPriorityLow /*kEventPriorityStandard*/ );
   ReleaseEvent( breakEvent );
-  //unlock_function();
+  // fl_unlock_function();
 }
 
 /**
@@ -378,7 +378,7 @@ static void breakMacEventLoop()
  * do the callbacks for the events and sockets. Returns non-zero if
  * anything happened during the time period.
  */
-static inline int wait(double time) 
+static inline int fl_wait(double time) 
 {
   static bool been_here = 0;
   static RgnHandle rgn;
@@ -446,7 +446,7 @@ static inline int wait(double time)
     pthread_create(&dataready_tid, NULL, dataready_thread, userdata);
   }
 
-  unlock_function();
+  fl_unlock_function();
 
   if ( time > 0.0 ) {
     SetEventLoopTimerNextFireTime( timer, time );
@@ -476,7 +476,7 @@ static inline int wait(double time)
     }
   }
 
-  lock_function();
+  fl_lock_function();
   // we send LEAVE only if the mouse did not enter some other window:
   // I'm not sure if this is needed or if it works...
   //if (!xmousewin) handle(LEAVE, 0);
@@ -487,7 +487,7 @@ static inline int wait(double time)
  * ready() is just like wait(0.0) except no callbacks are done.
  * \todo nyi, check if there is actually a message pending!
  */
-static inline int ready() {
+static inline int fl_ready() {
   return 1;
 }
 
@@ -500,14 +500,14 @@ static inline int ready() {
  */
 static OSErr QuitAppleEventHandler( const AppleEvent *appleEvt, AppleEvent* reply, UInt32 refcon )
 {
-  lock_function();
-  while (!modal() && X::first ) {
-    X *x = X::first;
+  fl_lock_function();
+  while (!modal() && CreatedWindow::first ) {
+    CreatedWindow *x = CreatedWindow::first;
     if (!x->window->parent()) x->window->do_callback();
     // quit if callback did not close the window:
-    if ( X::first == x ) break;
+    if ( CreatedWindow::first == x ) break;
   }
-  unlock_function();
+  fl_unlock_function();
   return noErr;
 }
 
@@ -528,7 +528,7 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
   WindowClass winClass;
   static Window *activeWindow = 0;
   
-  lock_function();
+  fl_lock_function();
   
   switch ( kind )
   {
@@ -587,7 +587,7 @@ static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, Eve
     break;
   }
 
-  unlock_function();
+  fl_unlock_function();
 
   return ret;
 }
@@ -602,7 +602,7 @@ static pascal OSStatus carbonMousewheelHandler( EventHandlerCallRef nextHandler,
   Window *window = (Window*)userData;
   EventMouseWheelAxis axis;
 
-  lock_function();
+  fl_lock_function();
   
   GetEventParameter( event, kEventParamMouseWheelAxis, typeMouseWheelAxis, NULL, sizeof(EventMouseWheelAxis), NULL, &axis );
   long delta;
@@ -618,12 +618,12 @@ static pascal OSStatus carbonMousewheelHandler( EventHandlerCallRef nextHandler,
     if ( e_dy) handle( MOUSEWHEEL, window );
   }
   else {
-    unlock_function();
+    fl_unlock_function();
 
     return eventNotHandledErr;
   }
 
-  unlock_function();
+  fl_unlock_function();
   
   return noErr;
 }
@@ -634,7 +634,7 @@ static pascal OSStatus carbonMousewheelHandler( EventHandlerCallRef nextHandler,
  */
 static void chord_to_e_state( UInt32 chord )
 {
-  static ulong state[] = 
+  static int state[] = 
   { 
     0, BUTTON1, BUTTON3, BUTTON1|BUTTON3, BUTTON2,
     BUTTON2|BUTTON1, BUTTON2|BUTTON3, BUTTON2|BUTTON1|BUTTON3
@@ -652,7 +652,7 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
   static int keysym[] = { 0, 1, 3, 2};
   static int px, py;
 
-  lock_function();
+  fl_lock_function();
   
   os_event = event;
   Window *window = (Window*)userData;
@@ -664,14 +664,14 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
   GetEventParameter( event, kEventParamClickCount, typeUInt32, NULL, sizeof(UInt32), NULL, &clickCount );
   UInt32 chord;
   GetEventParameter( event, kEventParamMouseChord, typeUInt32, NULL, sizeof(UInt32), NULL, &chord );
-  WindowRef xid = xid(window), tempXid;
+  WindowRef xid = fltk::xid(window), tempXid;
   int sendEvent = 0, part;
   switch ( GetEventKind( event ) )
   {
   case kEventMouseDown:
     part = FindWindow( pos, &tempXid );
     if ( part != inContent ) {
-      unlock_function();
+      fl_unlock_function();
       return CallNextEventHandler( nextHandler, event ); // let the OS handle this for us
     }
     if ( !IsWindowActive( xid ) )
@@ -715,7 +715,7 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
     break;
   }
 
-  unlock_function();
+  fl_unlock_function();
   
   return noErr;
 }
@@ -726,13 +726,13 @@ static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, Even
  */
 static void mods_to_e_state( UInt32 mods )
 {
-  long state = 0;
-  if ( mods & kEventKeyModifierNumLockMask ) state |= NUM_LOCK;
-  if ( mods & cmdKey ) state |= CTRL;
+  int state = 0;
+  if ( mods & kEventKeyModifierNumLockMask ) state |= NUMLOCK;
+  if ( mods & cmdKey ) state |= COMMAND;
   if ( mods & (optionKey|rightOptionKey) ) state |= ALT;
-  if ( mods & (controlKey|rightControlKey) ) state |= META;
+  if ( mods & (controlKey|rightControlKey) ) state |= CTRL;
   if ( mods & (shiftKey|rightShiftKey) ) state |= SHIFT;
-  if ( mods & alphaLock ) state |= CAPS_LOCK;
+  if ( mods & alphaLock ) state |= CAPSLOCK;
   e_state = ( e_state & 0xff000000 ) | state;
   //printf( "State 0x%08x (%04x)\n", e_state, mods );
 }
@@ -743,15 +743,15 @@ static void mods_to_e_state( UInt32 mods )
  */
 static void mods_to_e_keysym( UInt32 mods )
 {
-  if ( mods & cmdKey ) e_keysym = Control_L;
-  else if ( mods & kEventKeyModifierNumLockMask ) e_keysym = Num_Lock;
-  else if ( mods & optionKey ) e_keysym = Alt_L;
-  else if ( mods & rightOptionKey ) e_keysym = Alt_R;
-  else if ( mods & controlKey ) e_keysym = Meta_L;
-  else if ( mods & rightControlKey ) e_keysym = Meta_R;
-  else if ( mods & shiftKey ) e_keysym = Shift_L;
-  else if ( mods & rightShiftKey ) e_keysym = Shift_R;
-  else if ( mods & alphaLock ) e_keysym = Caps_Lock;
+  if ( mods & cmdKey ) e_keysym = LeftCommandKey;
+  else if ( mods & kEventKeyModifierNumLockMask ) e_keysym = NumLockKey;
+  else if ( mods & optionKey ) e_keysym = LeftAltKey;
+  else if ( mods & rightOptionKey ) e_keysym = RightAltKey;
+  else if ( mods & controlKey ) e_keysym = LeftControlKey;
+  else if ( mods & rightControlKey ) e_keysym = RightControlKey;
+  else if ( mods & shiftKey ) e_keysym = LeftShiftKey;
+  else if ( mods & rightShiftKey ) e_keysym = RightShiftKey;
+  else if ( mods & alphaLock ) e_keysym = CapsLockKey;
   else e_keysym = 0;
 }
 
@@ -764,14 +764,14 @@ static unsigned short macKeyLookUp[128] =
     'y', 't', '1', '2', '3', '4', '6', '5',
     '=', '9', '7', '-', '8', '0', ']', 'o',
 
-    'u', '[', 'i', 'p', Enter, 'l', 'j', '\'',
+    'u', '[', 'i', 'p', ReturnKey, 'l', 'j', '\'',
     'k', ';', '\\', ',', '/', 'n', 'm', '.',
 
-    Tab, ' ', '`', BackSpace, 0, Escape, 0, 0,
+    TabKey, SpaceKey, '`', BackSpaceKey, 0, EscapeKey, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
 
-    0, KeypadPeriod, RightKey, KeypadStar, 0, KeypadPlus, LeftKey, NumLockKey,
-    DownKey, 0, 0, KeypadSlash, KeypadEnter, UpKey, KeypadMinus, 0,
+    0, DecimalKey, RightKey, MultiplyKey, 0, AddKey, LeftKey, NumLockKey,
+    DownKey, 0, 0, DivideKey, KeypadEnter, UpKey, SubtractKey, 0,
 
     0, Keypad+'=', Keypad0, Keypad1, Keypad2, Keypad3, Keypad4, Keypad5,
     Keypad6, Keypad7, 0, Keypad8, Keypad9, 0, 0, 0,
@@ -794,7 +794,7 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
   UInt32 mods;
   static UInt32 prevMods = 0xffffffff;
 
-  lock_function();
+  fl_lock_function();
   
   GetEventParameter( event, kEventParamKeyModifiers, typeUInt32, NULL, sizeof(UInt32), NULL, &mods );
   if ( prevMods == 0xffffffff ) prevMods = mods;
@@ -808,14 +808,14 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
   {
   case kEventRawKeyDown:
   case kEventRawKeyRepeat:
-    sendEvent = KEYBOARD;
+    sendEvent = KEY;
     // fall through
   case kEventRawKeyUp:
     if ( !sendEvent ) sendEvent = KEYUP;
     sym = macKeyLookUp[ keyCode & 0x7f ];
     e_keysym = sym;
     if ( keyCode==0x4c ) key=0x0d;
-    if ( ( (sym>=Keypad(0)) && (sym<=Keypad_Last) ) || ((sym&0xff00)==0) || (sym==Tab) ) {
+    if ( ( (sym>=Keypad0) && (sym<=KeypadLast) ) || ((sym&0xff00)==0) || (sym==TabKey) ) {
       buffer[0] = key;
       e_length = 1;
     } else {
@@ -831,7 +831,7 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
     {
       mods_to_e_keysym( tMods );
       if ( e_keysym ) 
-        sendEvent = ( prevMods<mods ) ? KEYBOARD : KEYUP;
+        sendEvent = ( prevMods<mods ) ? KEY : KEYUP;
       e_length = 0;
       buffer[0] = 0;
       prevMods = mods;
@@ -841,11 +841,11 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
   }
   while (window->parent()) window = window->window();
   if (sendEvent && handle(sendEvent,window)) {
-    unlock_function();
+    fl_unlock_function();
   
     return noErr; // return noErr if FLTK handled the event
   } else {
-    unlock_function();
+    fl_unlock_function();
   
     return CallNextEventHandler( nextHandler, event );
   }
@@ -868,8 +868,8 @@ void open_display() {
 			   0, false );
 
     // create the Mac Handle for the default cursor (a pointer to a pointer)
-    GetQDGlobalsArrow(&default_cursor);
-    default_cursor_ptr = &default_cursor;
+    GetQDGlobalsArrow(&_default_cursor);
+    default_cursor_ptr = &_default_cursor;
     default_cursor  = &default_cursor_ptr;
     
     ClearMenuBar();
@@ -882,7 +882,7 @@ void open_display() {
 
 static bool reload_info = true;
 
-const ScreenInfo& info() {
+const ScreenInfo& fltk::screenInfo() {
   static ScreenInfo info;
   if (reload_info) {
     reload_info = false;
@@ -895,8 +895,8 @@ const ScreenInfo& info() {
     info.height = r.bounds.bottom;
     info.h = info.height-info.y;
     // I don't know if this scale info is available...
-    info.width_mm = int(info.width*25.4/75);
-    info.height_mm = int(info.height*25.4/75);
+    info.dpi_x = 100;
+    info.dpi_y = 100;
   }
   return info;
 }
@@ -904,7 +904,7 @@ const ScreenInfo& info() {
 /**
  * get the current mouse pointer world coordinates
  */
-void get_mouse(int &x, int &y) 
+void fltk::get_mouse(int &x, int &y) 
 {
   open_display();
   Point loc; 
@@ -915,10 +915,10 @@ void get_mouse(int &x, int &y)
 }
 
 // Damage all the child windows as well as this one...
-static void recursive_expose(X* i) {
+static void recursive_expose(CreatedWindow* i) {
   i->wait_for_expose = false;
   i->expose(0, 0, i->window->w(), i->window->h());
-  for (X* c = i->children; c; c = c->brother) recursive_expose(c);
+  for (CreatedWindow* c = i->children; c; c = c->brother) recursive_expose(c);
 }
 
 /**
@@ -934,7 +934,7 @@ static void recursive_expose(X* i) {
 void handleUpdateEvent( WindowPtr xid ) 
 {
   Window *window = find( xid );
-  X *i = X::i( window );
+  CreatedWindow *i = CreatedWindow::find( window );
   recursive_expose(i);
   breakMacEventLoop();
 }
@@ -1000,10 +1000,12 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
     e_x = px - target->x();
     e_y = py - target->y();
     dnd_target_window = target;
+#if 0
     if ( handle( DND_ENTER, target ) )
       cursor( CURSOR_HAND ); //ShowDragHilite( ); // modify the mouse cursor?!
     else
       cursor( CURSOR_DEFAULT ); //HideDragHilite( dragRef );
+#endif
     breakMacEventLoop();
     return noErr;
   case kDragTrackingInWindow:
@@ -1015,16 +1017,18 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
     e_x = px - target->x();
     e_y = py - target->y();
     dnd_target_window = target;
+#if 0
     if ( handle( DND_DRAG, target ) )
       cursor( CURSOR_HAND ); //ShowDragHilite( ); // modify the mouse cursor?!
     else
       cursor( CURSOR_DEFAULT ); //HideDragHilite( dragRef );
+#endif
     breakMacEventLoop();
     return noErr;
     break;
   case kDragTrackingLeaveWindow:
     // HideDragHilite()
-    cursor( CURSOR_DEFAULT ); //HideDragHilite( dragRef );
+    //    cursor( CURSOR_DEFAULT ); //HideDragHilite( dragRef );
     if ( dnd_target_window )
     {
       handle( DND_LEAVE, dnd_target_window );
@@ -1155,7 +1159,7 @@ void Window::create()
 {
   // Create structure to hold the rectangle, initialize the parts that
   // are the same for outer and child windows:
-  X* x = new X;
+  CreatedWindow* x = new CreatedWindow;
   x->backbuffer.xid = 0;
   x->window = this; i = x;
   x->region = 0;
@@ -1174,16 +1178,16 @@ void Window::create()
     for (Widget *o = parent(); ; o = o->parent()) {
       if (o->is_window()) {root = (Window*)o; break;}
     }
-    X *rootx = X::i(root);
+    CreatedWindow *rootx = CreatedWindow::find(root);
     x->xid = rootx->xid; // Not sure if this is a good idea
     // we need to add it to very end, so overlapping brothers are easy
     // to find:
-    X** p = &(rootx->children);
+    CreatedWindow** p = &(rootx->children);
     while (*p) p = &((*p)->brother);
     *p = x;
     x->wait_for_expose = false;
-    x->next = X::first;
-    X::first = x;
+    x->next = CreatedWindow::first;
+    CreatedWindow::first = x;
   } else {
     // create a desktop window
     int dx, dy, dw, dh; // border thickness
@@ -1246,8 +1250,8 @@ void Window::create()
     }
 
     x->wait_for_expose = true;
-    x->next = X::first;
-    X::first = x;
+    x->next = CreatedWindow::first;
+    CreatedWindow::first = x;
 
     // if (resizable()) DrawGrowIcon(x->xid); this should be in flush()?
 
@@ -1355,7 +1359,7 @@ void Window::make_current() const
   if (!i->subRegion) {
     i->subRegion = NewRgn();
     SetRectRgn(i->subRegion, 0, 0, w(), h());
-    for (X* cx = i->children; cx; cx = cx->brother) {
+    for (CreatedWindow* cx = i->children; cx; cx = cx->brother) {
       Region r = NewRgn();
       Window* cw = cx->window;
       int x = cw->x();
@@ -1364,7 +1368,7 @@ void Window::make_current() const
       DiffRgn(i->subRegion, r, i->subRegion);
       DisposeRgn(r);
     }
-    for (X* cx = i->brother; cx; cx = cx->brother) {
+    for (CreatedWindow* cx = i->brother; cx; cx = cx->brother) {
       Region r = NewRgn();
       Window* cw = cx->window;
       int x = cw->x()-this->x();
@@ -1391,7 +1395,7 @@ static ScrapRef myScrap = 0;
  * stuff: pointer to selected data
  * size of selected data
  */
-void copy(const char *stuff, int len, bool clipboard) {
+void fltk::copy(const char *stuff, int len, bool clipboard) {
   if (!stuff || len<0) return;
   if (len+1 > selection_buffer_length[clipboard]) {
     delete[] selection_buffer[clipboard];
@@ -1416,7 +1420,7 @@ void copy(const char *stuff, int len, bool clipboard) {
 }
 
 // Call this when a "paste" operation happens:
-void paste(Widget &receiver, bool clipboard) {
+void fltk::paste(Widget &receiver, bool clipboard) {
   if (clipboard) {
     // see if we own the selection, if not go get it:
     ScrapRef scrap = 0;
@@ -1445,6 +1449,6 @@ void paste(Widget &receiver, bool clipboard) {
 }
 
 //
-// End of "$Id: Fl_mac.cxx,v 1.3 2002/12/09 04:52:27 spitzak Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.4 2003/01/05 07:40:29 spitzak Exp $".
 //
 

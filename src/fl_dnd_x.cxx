@@ -1,5 +1,5 @@
 //
-// "$Id: fl_dnd_x.cxx,v 1.10 2002/12/09 04:52:29 spitzak Exp $"
+// "$Id: fl_dnd_x.cxx,v 1.11 2003/01/05 07:40:29 spitzak Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
@@ -93,7 +93,6 @@ static bool local_handle(int event, Window* window) {
   return ret;
 }
 
-#include <fltk/Cursor.h>
 extern fltk::Cursor fl_drop_ok_cursor;
 
 bool fltk::dnd() {
@@ -219,5 +218,5 @@ bool fltk::dnd() {
 
 
 //
-// End of "$Id: fl_dnd_x.cxx,v 1.10 2002/12/09 04:52:29 spitzak Exp $".
+// End of "$Id: fl_dnd_x.cxx,v 1.11 2003/01/05 07:40:29 spitzak Exp $".
 //

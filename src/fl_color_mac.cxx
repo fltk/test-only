@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_mac.cxx,v 1.3 2002/12/09 04:52:29 spitzak Exp $"
+// "$Id: fl_color_mac.cxx,v 1.4 2003/01/05 07:40:29 spitzak Exp $"
 //
 // MacOS color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -30,14 +30,10 @@
 
 // MacOS - matt: the macintosh port does not support colormaps
 
-static unsigned cmap[256] = {
-#include "cmap.h" // this is a file produced by "cmap.cxx":
-};
+Color fltk::current_color_;
 
-Color color_;
-
-void color(Color i) {
-  color_ = i;
+void fltk::color(Color i) {
+  current_color_ = i;
   int index;
   uchar r, g, b;
   if (i & 0xFFFFFF00) {
@@ -60,20 +56,9 @@ void color(Color i) {
   RGBForeColor(&rgb);
 }
 
-void color(uchar r, uchar g, uchar b) {
-  RGBColor rgb; 
-  rgb.red   = (r<<8)|r;
-  rgb.green = (g<<8)|g;
-  rgb.blue  = (b<<8)|b;
-  RGBForeColor(&rgb);
-}
-
-void setcolor(Color i, unsigned c) {
-  if (cmap[i] != c) {
-    cmap[i] = c;
-  }
-}
+// Used by setcolor_index
+static void free_color(Color) {}
 
 //
-// End of "$Id: fl_color_mac.cxx,v 1.3 2002/12/09 04:52:29 spitzak Exp $".
+// End of "$Id: fl_color_mac.cxx,v 1.4 2003/01/05 07:40:29 spitzak Exp $".
 //

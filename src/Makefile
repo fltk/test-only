@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.111 2002/12/22 05:30:22 easysw Exp $"
+# "$Id: Makefile,v 1.112 2003/01/05 07:40:29 spitzak Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -166,7 +166,7 @@ CFILES	= \
 	string.c \
 	vsnprintf.c
 
-LIBNAME	=	../lib/$(LIBPREFIX)fltk$(LIBSUFFIX)
+LIBNAME	=	$(LIBPREFIX)fltk$(LIBSUFFIX)
 DSONAME	=	$(DSOPREFIX)fltk$(DSOSUFFIX)
 OBJECTS =	$(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
@@ -177,9 +177,9 @@ OBJECTS =	$(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
 all:		$(LIBTARGET) $(DSOTARGET)
 
-static:		$(LIBNAME)
+static:		../lib/$(LIBNAME)
 
-shared:		$(DSONAME)
+shared:		../lib/$(DSONAME)
 
 
 #
@@ -190,8 +190,8 @@ clean:
 	$(RM) *.bck
 	$(RM) *.o
 	$(RM) core*
-	$(RM) $(LIBNAME)
-	$(RM) $(DSONAME)
+	$(RM) ../lib/$(LIBNAME)
+	$(RM) ../lib/$(DSONAME)
 
 
 #
@@ -213,29 +213,17 @@ include makedepend
 # Make static libraries...
 #
 
-$(LIBNAME):	$(OBJECTS)
+../lib/$(LIBNAME): $(OBJECTS)
 	$(RM) $@
 	echo $(LIBCOMMAND) $@ ...
 	$(LIBCOMMAND) $@ $(OBJECTS)
 	$(RANLIB) $@
 
-libfltk.so.2.0: $(OBJECTS)
+../lib/$(DSONAME): $(OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
-	$(RM) libfltk.so
-	$(LN) libfltk.so.2.0 libfltk.so
-
-libfltk.sl.2.0: $(OBJECTS)
-	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
-	$(RM) libfltk.sl
-	$(LN) libfltk.sl.2.0 libfltk.sl
-
-libfltk.2.0.dylib: $(OBJECTS)
-	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(OBJECTS) $(IMAGELIBS)
-	$(RM) libfltk.dylib
-	$(LN) libfltk.2.0.dylib libfltk.dylib
+	$(RM) ../lib/$(DSOPREFIX)fltk$(DSOSYMLINK)
+	$(LN) $(DSONAME) ../lib/$(DSOPREFIX)fltk$(DSOSYMLINK)
 
 libfltk_s.a: $(OBJECTS)
 	echo $(DSOCOMMAND) libfltk_s.o ...
@@ -288,7 +276,7 @@ install_programs:
 
 
 #
-# End of "$Id: Makefile,v 1.111 2002/12/22 05:30:22 easysw Exp $".
+# End of "$Id: Makefile,v 1.112 2003/01/05 07:40:29 spitzak Exp $".
 #
 # DO NOT DELETE
 

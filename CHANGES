@@ -2492,3 +2492,11 @@ Only a few of the test/ programs ported, others commented out of the
 makefile.
 
 It's not loading themes, I will fix asap.
+
+////////////////////////////////////////////////////////////////
+
+Mac code updated some. It now compiles about half way. Still need to
+work on it...
+
+Changed strings.c to the official bsd code that returns the correct
+values for strlcat and strlcpy.

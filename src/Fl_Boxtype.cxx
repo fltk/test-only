@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.10 2002/12/10 02:00:38 easysw Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.11 2003/01/05 07:40:29 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -44,7 +44,7 @@ public:
   void draw(int x,int y,int w,int h, Color c, Flags) const {
     if (w <= 1 || h <= 1) return;
     setcolor(c);
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(__APPLE__) || USE_X11
     // X version uses stipple pattern because there seem to be too many
     // servers with bugs when drawing dotted lines:
     static const char pattern[] 
@@ -242,5 +242,5 @@ Box* Box::find(const char* name) {
 Box* Box::first = 0;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.10 2002/12/10 02:00:38 easysw Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.11 2003/01/05 07:40:29 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 /*
- * "$Id: string.c,v 1.1 2002/12/22 05:30:22 easysw Exp $"
+ * "$Id: string.c,v 1.2 2003/01/05 07:40:29 spitzak Exp $"
  *
  * BSD string functions for the Fast Light Tool Kit (FLTK).
  *
@@ -59,23 +59,14 @@ int				/* O - Result of comparison (-1, 0, or 1) */
 fltk_strcasecmp(const char *s,	/* I - First string */
                 const char *t)	/* I - Second string */
 {
-  while (*s != '\0' && *t != '\0')
+  for (;;)
   {
-    if (tolower(*s) < tolower(*t))
-      return (-1);
-    else if (tolower(*s) > tolower(*t))
-      return (1);
-
+    int x = tolower(*s) - tolower(*t);
+    if (x) return x;
+    if (!*s) return 0;
     s ++;
     t ++;
   }
-
-  if (*s == '\0' && *t == '\0')
-    return (0);
-  else if (*s != '\0')
-    return (1);
-  else
-    return (-1);
 }
 #endif /* !HAVE_STRCASECMP */
 
@@ -89,105 +80,86 @@ fltk_strncasecmp(const char *s,	/* I - First string */
                  const char *t,	/* I - Second string */
 		 size_t     n)	/* I - Maximum number of characters to compare */
 {
-  while (*s != '\0' && *t != '\0' && n > 0)
+  while (n--)
   {
-    if (tolower(*s) < tolower(*t))
-      return (-1);
-    else if (tolower(*s) > tolower(*t))
-      return (1);
-
-    s ++;
-    t ++;
-    n --;
+    int x = tolower(*s) - tolower(*t);
+    if (x) return x;
+    if (!*s) return 0;
   }
-
-  if (n == 0)
-    return (0);
-  else if (*s == '\0' && *t == '\0')
-    return (0);
-  else if (*s != '\0')
-    return (1);
-  else
-    return (-1);
+  return 0;
 }
 #endif /* !HAVE_STRNCASECMP */
 
 
 #  if !HAVE_STRLCAT
-/*
- * 'fltk_strlcat()' - Safely concatenate two strings.
- */
+/*!
+  Appends src to string dst of size siz (unlike strncat, siz is the
+  full size of dst, not space left).  At most siz-1 characters
+  will be copied.  Always NUL terminates (unless siz == 0).
+  Returns strlen(initial dst) + strlen(src); if retval >= siz,
+  truncation occurred.
+*/
+size_t fltk_strlcat(char *dst, const char *src, size_t siz)
+{
+	register char *d = dst;
+	register const char *s = src;
+	register size_t n = siz;
+	size_t dlen;
 
-size_t				/* O - Length of string */
-fltk_strlcat(char       *dst,	/* O - Destination string */
-           const char *src,	/* I - Source string */
-	   size_t     size) {	/* I - Size of destination string buffer */
-  size_t	srclen;		/* Length of source string */
-  size_t	dstlen;		/* Length of destination string */
+	/* Find the end of dst and adjust bytes left but don't go past end */
+	while (*d != '\0' && n-- != 0)
+		d++;
+	dlen = d - dst;
+	n = siz - dlen;
 
+	if (n == 0)
+		return(dlen + strlen(s));
+	while (*s != '\0') {
+		if (n != 1) {
+			*d++ = *s;
+			n--;
+		}
+		s++;
+	}
+	*d = '\0';
 
- /*
-  * Figure out how much room is left...
-  */
-
-  dstlen = strlen(dst);
-  size   -= dstlen + 1;
-
-  if (!size) return (dstlen);	/* No room, return immediately... */
-
- /*
-  * Figure out how much room is needed...
-  */
-
-  srclen = strlen(src);
-
- /*
-  * Copy the appropriate amount...
-  */
-
-  if (srclen > size) srclen = size;
-
-  memcpy(dst + dstlen, src, srclen);
-  dst[dstlen + srclen] = '\0';
-
-  return (dstlen + srclen);
+	return(dlen + (s - src));	/* count does not include NUL */
 }
 #  endif /* !HAVE_STRLCAT */
 
 #  if !HAVE_STRLCPY
-/*
- * 'fltk_strlcpy()' - Safely copy two strings.
- */
+/*!
+  Copy src to string dst of size siz.  At most siz-1 characters
+  will be copied.  Always NUL terminates (unless siz == 0).
+  Returns strlen(src); if retval >= siz, truncation occurred.
+*/
+size_t strlcpy(char* dst, const char* src, size_t siz)
+{
+	register char *d = dst;
+	register const char *s = src;
+	register size_t n = siz;
 
-size_t				/* O - Length of string */
-fltk_strlcpy(char       *dst,	/* O - Destination string */
-             const char *src,	/* I - Source string */
-	     size_t      size) {/* I - Size of destination string buffer */
-  size_t	srclen;		/* Length of source string */
+	/* Copy as many bytes as will fit */
+	if (n != 0 && --n != 0) {
+		do {
+			if ((*d++ = *s++) == 0)
+				break;
+		} while (--n != 0);
+	}
 
+	/* Not enough room in dst, add NUL and traverse rest of src */
+	if (n == 0) {
+		if (siz != 0)
+			*d = '\0';		/* NUL-terminate dst */
+		while (*s++)
+			;
+	}
 
- /*
-  * Figure out how much room is needed...
-  */
-
-  size --;
-
-  srclen = strlen(src);
-
- /*
-  * Copy the appropriate amount...
-  */
-
-  if (srclen > size) srclen = size;
-
-  memcpy(dst, src, srclen);
-  dst[srclen] = '\0';
-
-  return (srclen);
+	return(s - src - 1);	/* count does not include NUL */
 }
 #  endif /* !HAVE_STRLCPY */
 
 
 /*
- * End of "$Id: string.c,v 1.1 2002/12/22 05:30:22 easysw Exp $".
+ * End of "$Id: string.c,v 1.2 2003/01/05 07:40:29 spitzak Exp $".
  */

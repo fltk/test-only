@@ -1,7 +1,7 @@
 dnl -*- sh -*-
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.105 2003/01/02 16:50:03 easysw Exp $"
+dnl "$Id: configure.in,v 1.106 2003/01/05 07:40:27 spitzak Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -26,7 +26,7 @@ dnl Please report all bugs and problems to "fltk-bugs@fltk.org".
 dnl
 
 dnl We need at least autoconf 2.50...
-AC_PREREQ(2.50)
+dnl AC_PREREQ(2.50)
 
 dnl Required file in package...
 AC_INIT(src/Fl.cxx)
@@ -902,5 +902,5 @@ dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.105 2003/01/02 16:50:03 easysw Exp $".
+dnl End of "$Id: configure.in,v 1.106 2003/01/05 07:40:27 spitzak Exp $".
 dnl

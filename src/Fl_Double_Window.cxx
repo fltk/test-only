@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.cxx,v 1.27 2002/12/10 02:00:40 easysw Exp $"
+// "$Id: Fl_Double_Window.cxx,v 1.28 2003/01/05 07:40:29 spitzak Exp $"
 //
 // Double-buffered window code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,9 +30,14 @@
 #include <fltk/x.h>
 #include <fltk/draw.h>
 
+#if defined(__APPLE__) && !USE_X11
 // On systems that support double buffering "naturally" the base
 // Window class will probably do double-buffer and this subclass
 // does nothing.
+
+#else
+////////////////////////////////////////////////////////////////
+// Windows and X need double-buffer emulation
 
 #if USE_XDBE
 
@@ -65,7 +70,7 @@ using namespace fltk;
 #endif
 
 void DoubleBufferWindow::create() {
-#ifndef _WIN32
+#if !defined(_WIN32) && !defined(__APPLE__) || USE_X11
   // don't set the background pixel
   CreatedWindow::create(this, xvisual, xcolormap, -1);
 #else
@@ -184,6 +189,8 @@ DoubleBufferWindow::~DoubleBufferWindow() {
   destroy();
 }
 
+#endif
+
 //
-// End of "$Id: Fl_Double_Window.cxx,v 1.27 2002/12/10 02:00:40 easysw Exp $".
+// End of "$Id: Fl_Double_Window.cxx,v 1.28 2003/01/05 07:40:29 spitzak Exp $".
 //

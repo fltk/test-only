@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.16 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: x.h,v 1.17 2003/01/05 07:40:29 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -44,12 +44,6 @@
 #elif (defined(__APPLE__) && !USE_X11)
 # include "mac.h"
 #else
-
-#ifdef __APPLE__
-typedef unsigned char uchar;
-typedef unsigned long ulong;
-#define size_t unsigned int
-#endif
 
 ////////////////////////////////////////////////////////////////
 // Try to get the parts of Xlib.h included while avoiding warnings:
@@ -232,5 +226,5 @@ Window* find(XWindow xid);
 #endif
 
 //
-// End of "$Id: x.h,v 1.16 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: x.h,v 1.17 2003/01/05 07:40:29 spitzak Exp $".
 //
