@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.13 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.14 2001/12/17 15:01:54 easysw Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -1792,14 +1792,18 @@ void Fl_Text_Display::draw(void) {
   if (damage() & (FL_DAMAGE_ALL | FL_DAMAGE_VALUE)) {
     //printf("drawing all text\n");
     int X, Y, W, H;
-    fl_clip_box(text_area.x, text_area.y,
-                text_area.w, text_area.h,
-                X, Y, W, H);
-    draw_text(X, Y, W, H); // this sets the clipping internally
-
-    // draw some lines of text
+    if (fl_clip_box(text_area.x, text_area.y, text_area.w, text_area.h,
+                    X, Y, W, H)) {
+      // Draw text using the intersected clipping box...
+      // (this sets the clipping internally)
+      draw_text(X, Y, W, H);
+    } else {
+      // Draw the whole area...
+      draw_text(text_area.x, text_area.y, text_area.w, text_area.h);
+    }
   }
   else if (damage() & FL_DAMAGE_SCROLL) {
+    // draw some lines of text
     fl_push_clip(text_area.x, text_area.y,
                  text_area.w, text_area.h);
     //printf("drawing text from %d to %d\n", damage_range1_start, damage_range1_end);
@@ -1943,5 +1947,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.13 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.14 2001/12/17 15:01:54 easysw Exp $".
 //
