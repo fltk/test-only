@@ -1,5 +1,5 @@
 //
-// "$Id: scandir_win32.c,v 1.21 2004/07/27 07:03:08 spitzak Exp $"
+// "$Id: scandir_win32.c,v 1.22 2004/07/27 10:37:31 laza2000 Exp $"
 //
 // _WIN32 scandir function for the Fast Light Tool Kit (FLTK).
 //
@@ -92,8 +92,6 @@ int scandir(const char *dirname, struct dirent ***namelist,
   }
   FindClose(h);
 
-  free (findIn);
-
   if (compar) qsort (dir, nDir, sizeof(*dir),
 		     (int(*)(const void*, const void*))compar);
 
@@ -102,5 +100,5 @@ int scandir(const char *dirname, struct dirent ***namelist,
 }
 
 //
-// End of "$Id: scandir_win32.c,v 1.21 2004/07/27 07:03:08 spitzak Exp $".
+// End of "$Id: scandir_win32.c,v 1.22 2004/07/27 10:37:31 laza2000 Exp $".
 //
