@@ -1,5 +1,5 @@
 //
-// "$Id: x.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $"
+// "$Id: x.cxx,v 1.1.2.2 2004/05/13 21:04:19 easysw Exp $"
 //
 // Xlib X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -1172,6 +1172,11 @@ void Fl_Window::resize(int X,int Y,int W,int H) {
   } else {
     x(X); y(Y);
   }
+
+  if (resize_from_program && is_a_resize && !resizable()) {
+    size_range(w(), h(), w(), h());
+  }
+
   if (resize_from_program && shown()) {
     if (is_a_resize) {
       if (!resizable()) size_range(w(),h(),w(),h());
@@ -1510,5 +1515,5 @@ void Fl_Window::make_current() {
 
 
 //
-// End of "$Id: x.cxx,v 1.1.2.1 2004/03/28 10:30:32 rokan Exp $".
+// End of "$Id: x.cxx,v 1.1.2.2 2004/05/13 21:04:19 easysw Exp $".
 //
