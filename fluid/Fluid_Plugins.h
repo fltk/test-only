@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Plugins.h,v 1.7 1999/09/14 17:52:34 carl Exp $"
+// "$Id: Fluid_Plugins.h,v 1.8 1999/09/20 01:51:16 vincent Exp $"
 //
 // Plugins headers for the Fast Light Tool Kit (FLTK).
 //
@@ -25,8 +25,8 @@
 #ifndef FLUID_PLUGINS_H
 #define FLUID_PLUGINS_H
 
-#include <FL/Fl_Menu.H>
-#include "Fl_Type.h"
+class Fl_Menu_Item;
+class Fl_Window;
 
 #define PLUGINS_EXTENSION ".fluidplugin"
 
@@ -60,29 +60,18 @@ void fill_in_New_Menu(Fl_Menu_Item* menu);
 
 void read_plugins();
 
-// windows specific strange things happening here ...
-#ifdef WIN32
-# ifdef FLUID_INDLL
-#  define FLUID_EXPORT __declspec( dllimport )
-# elif defined(OUTDLL)
-#  define FLUID_EXPORT __declspec( dllexport )
-# else
-#  define FLUID_EXPORT
-# endif
-
-
-# ifdef FLUID_OUTDLL
-#  define FLUID_IMPORT __declspec( dllimport )
-# elif defined(INDLL)
-#  define FLUID_IMPORT __declspec( dllexport )
-# else
-#  define FLUID_IMPORT
-# endif
+// Need to FLUID_EXPORT the fluid_plugin symbol in each plugins
+// FLUID_IMPORT is for symbols in fluid that the plugin want to access
+#if defined(WIN32) && defined(FLUID_PLUGIN)
+# define FLUID_EXPORT __declspec( dllexport )
+# define FLUID_IMPORT __declspec( dllimport )
+#else
+# define FLUID_EXPORT
+# define FLUID_IMPORT
 #endif
-
 
 #endif
 
 //
-// End of "$Id: Fluid_Plugins.h,v 1.7 1999/09/14 17:52:34 carl Exp $"
+// End of "$Id: Fluid_Plugins.h,v 1.8 1999/09/20 01:51:16 vincent Exp $"
 //

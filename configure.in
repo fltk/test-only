@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.47 1999/09/19 05:01:40 vincent Exp $"
+dnl# "$Id: configure.in,v 1.48 1999/09/20 01:51:11 vincent Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -61,6 +61,7 @@ case $uname in
 	uname="CYGWIN"
 	LDLIBS="-lgdi32 -luser32 -lmsvcrt -lwsock32 -mno-cygwin -mwindows"
  	LDDLLLIBS="-lgdi32 -luser32 -lmsvcrt -lwsock32 -lopengl32 -lglu32"
+        EXPORTCOMMAND="dlltool"
 	;;
     *)
 	LDLIBS="-lX11 -lXext"
@@ -100,7 +101,10 @@ cd 	  ;;
       CYGWIN*)
 	  DSOLIBNAME="fltk.2"
 	  DSOEXT=".dll"
-          DSOCOMMAND="dllwrap"
+          DSOCOMMAND="dllwrap --export-all --output-def \
+	../lib/libfltkdll.2.def \
+	--implib ../lib/libfltkdll.2.a \
+	--driver-name \$(CXX)"
 	  PICFLAG=0
 	  ;;
       *)
@@ -302,6 +306,7 @@ CXXFLAGS="$DEBUGFLAG $CXXFLAGS"
 AC_SUBST(DSOLIBNAME)
 AC_SUBST(DSOEXT)
 AC_SUBST(DSOCOMMAND)
+AC_SUBST(EXPORTCOMMAND)
 AC_SUBST(LIBNAME)
 AC_SUBST(LIBCOMMAND)
 AC_SUBST(MAKEDEPEND)
@@ -311,5 +316,5 @@ AC_OUTPUT(makeinclude)
 cp config.h FL/
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.47 1999/09/19 05:01:40 vincent Exp $".
+dnl# End of "$Id: configure.in,v 1.48 1999/09/20 01:51:11 vincent Exp $".
 dnl#

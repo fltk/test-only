@@ -1,0 +1,20 @@
+essai_plugin.o: essai_plugin.cxx \
+ d:\penne\latex\gcc-2.95\bin\..\lib\gcc-lib\i386-mingw32\2.95\..\..\..\..\i386-mingw32\include\stdio.h \
+ d:\penne\latex\gcc-2.95\bin\..\lib\gcc-lib\i386-mingw32\2.95\..\..\..\..\i386-mingw32\include\_mingw.h \
+ d:\penne\latex\gcc-2.95\bin\..\lib\gcc-lib\i386-mingw32\2.95\..\..\..\..\i386-mingw32\include\stddef.h \
+ ..\..\fluid\Fluid_Plugins.h ..\..\FL\Fl_Menu.H \
+ ..\..\FL\Fl_Menu_Item.H ..\..\FL\Fl_Widget.H ..\..\FL\Fl_Style.H \
+ ..\..\FL\Enumerations.H ..\..\FL\Fl_Boxtype.H ..\..\FL\Fl_Color.H \
+ ..\..\FL\Fl_Flags.H ..\..\FL\Fl_Labeltype.H ..\..\FL\Fl_Font.H \
+ ..\..\fluid\Fl_Type.h ..\..\fluid\Fluid_Image.h \
+ ..\..\FL\Fl_Shared_Image.H ..\..\FL\Fl_Image.H ..\..\FL\Fl_Tabs.H \
+ ..\..\FL\Fl_Group.H ..\..\FL\Fl_Pack.H ..\..\FL\Fl_Menu_.H \
+ ..\..\FL\Fl_Menu_Button.H ..\..\FL\Fl_Choice.H ..\..\FL\Fl_Menu_Bar.H \
+ Fl_Pix_Button.cxx ..\..\FL\Fl.H Fl_Pix_Button.H ..\..\FL\Fl_Button.H \
+ ..\..\FL\Fl_Pixmap.H ..\..\FL\fl_draw.H \
+ d:\penne\latex\gcc-2.95\bin\..\lib\gcc-lib\i386-mingw32\2.95\..\..\..\..\i386-mingw32\include\math.h \
+ play_buttons256.xpm pause_buttons256.xpm Fl_NSlider.cxx Fl_NSlider.H \
+ ..\..\FL\Fl_Valuator.H \
+ d:\penne\latex\gcc-2.95\bin\..\lib\gcc-lib\i386-mingw32\2.95\..\..\..\..\i386-mingw32\include\stdlib.h \
+ essai_panel.cxx essai_panel.h ..\..\FL\Fl_Slider.H \
+ ..\..\FL\Fl_Window.H

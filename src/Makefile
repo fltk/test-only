@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.34 1999/09/19 04:43:08 vincent Exp $"
+# "$Id: Makefile,v 1.35 1999/09/20 01:51:18 vincent Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -221,40 +221,19 @@ libfltk.so.2 libfltk.sl.2: $(OBJECTS) $(DSOglNAME) $(DSOimagesNAME)
 	@echo $(DSOCOMMAND) $@ ...
 	@$(DSOCOMMAND) $@ $(OBJECTS)
 
-fltk.2.dll: $(OBJECTS) #fltkgl.2.dll fltkimages.2.dll
+fltk.2.dll: $(OBJECTS) $(OBJECTSimages) $(OBJECTSgl)
 	@echo $(DSOCOMMAND) $@ ...
 	@rm -f $@
-	@$(DSOCOMMAND) --export-all --output-def ../lib/libfltkdll.2.def \
-	--implib ../lib/libfltkdll.2.a \
-	--driver-name $(CXX) \
-	 -o $@ \
+	@$(DSOCOMMAND) -o $@ \
 	    $(OBJECTS) $(OBJECTSimages) $(OBJECTSgl) $(CXXFLAGS) $(GLDLIBS)
 
 libfltkgl.so.2 libfltkgl.sl.2: $(OBJECTSgl)
 	@echo $(DSOCOMMAND) $@ ...
 	@$(DSOCOMMAND) $@ $(OBJECTSgl)
 
-fltkgl.2.dll: $(OBJECTSgl)
-	@echo $(DSOCOMMAND) $@ ...
-	@rm -f $@
-	@$(DSOCOMMAND) --export-all --output-def ../lib/libfltkgldll.2.def \
-	--implib ../lib/libfltkgldll.2.a \
-	--driver-name $(CXX) \
-	 -o $@ \
-	    $(OBJECTSgl) $(CXXFLAGS) $(LDLIBS)
-
 libfltkimages.so.2 libfltkimages.sl.2: $(OBJECTSimages)
 	@echo $(DSOCOMMAND) $@ ...
 	@$(DSOCOMMAND) $@ $(OBJECTSimages)
-
-fltkimages.2.dll: $(OBJECTSimages)
-	@echo $(DSOCOMMAND) $@ ...
-	@rm -f $@
-	@$(DSOCOMMAND) --export-all --output-def ../lib/libfltkimagesdll.2.def \
-	--implib ../lib/libfltkimagesdll.2.a \
-	--driver-name $(CXX) \
-	 -o $@ \
-	    $(OBJECTSimages) $(CXXFLAGS) $(LDLIBS)
 
 .SUFFIXES:	.cxx .h .o
 
@@ -302,5 +281,5 @@ install: $(LIBRARY) $(DSONAME)
 	@-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.34 1999/09/19 04:43:08 vincent Exp $".
+# End of "$Id: Makefile,v 1.35 1999/09/20 01:51:18 vincent Exp $".
 #

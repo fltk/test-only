@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.11 1999/08/22 06:14:37 vincent Exp $"
+// "$Id: factory.cxx,v 1.12 1999/09/20 01:51:17 vincent Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -42,6 +42,7 @@
 #endif
 
 #include "Fluid_Plugins.h"
+#include "Fl_Type.h"
 
 ////////////////////////////////////////////////////////////////
 
@@ -641,5 +642,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.11 1999/08/22 06:14:37 vincent Exp $".
+// End of "$Id: factory.cxx,v 1.12 1999/09/20 01:51:17 vincent Exp $".
 //

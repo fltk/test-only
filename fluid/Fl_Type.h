@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.h,v 1.15 1999/09/10 16:48:22 bill Exp $"
+// "$Id: Fl_Type.h,v 1.16 1999/09/20 01:51:14 vincent Exp $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,7 @@
 
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Menu.H>
+#include "Fluid_Plugins.h"
 #include "Fluid_Image.h"
 
 class Fl_Type {
@@ -62,7 +63,7 @@ public:	// things that should not be public:
   char visible; // true if all parents are open
   char rtti;	// hack because I have no rtti, this is 0 for base class
   int level;	// number of parents over this
-  static Fl_Type *first, *last; // linked list of all objects
+  FLUID_IMPORT static Fl_Type *first, *last; // linked list of all objects
   Fl_Type *next, *prev;	// linked list of all objects
 
   Fl_Type *factory;
@@ -99,7 +100,7 @@ public:
   virtual void move_child(Fl_Type*, Fl_Type* beforethis);
   virtual void remove_child(Fl_Type*);
 
-  static Fl_Type *current;  // most recently picked object
+  FLUID_IMPORT static Fl_Type *current;  // most recently picked object
   virtual void open();	// what happens when you double-click
 
   // read and write data to a saved file:
@@ -285,7 +286,7 @@ public:
 };
 
 void* const LOAD = (void *)9831;
-extern Fl_Widget_Type *current_widget; // one of the selected ones
+FLUID_IMPORT extern Fl_Widget_Type *current_widget; // one of the selected ones
 
 #include <FL/Fl_Tabs.H>
 #include <FL/Fl_Pack.H>
@@ -322,8 +323,8 @@ public:
   int is_group() const {return 1;}
 };
 
-extern const char pack_type_name[];
-extern Fl_Menu_Item pack_type_menu[];
+FLUID_IMPORT extern const char pack_type_name[];
+FLUID_IMPORT extern Fl_Menu_Item pack_type_menu[];
 
 class Fl_Pack_Type : public Fl_Group_Type {
   Fl_Menu_Item *subtypes() {return pack_type_menu;}
@@ -332,7 +333,7 @@ public:
   Fl_Widget_Type *_make() {return new Fl_Pack_Type();}
 };
 
-extern const char tabs_type_name[];
+FLUID_IMPORT extern const char tabs_type_name[];
 
 class Fl_Tabs_Type : public Fl_Group_Type {
 public:
@@ -345,8 +346,8 @@ public:
   void remove_child(Fl_Type*);
 };
 
-extern const char scroll_type_name[];
-extern Fl_Menu_Item scroll_type_menu[];
+FLUID_IMPORT extern const char scroll_type_name[];
+FLUID_IMPORT extern Fl_Menu_Item scroll_type_menu[];
 
 class Fl_Scroll_Type : public Fl_Group_Type {
   Fl_Menu_Item *subtypes() {return scroll_type_menu;}
@@ -355,7 +356,7 @@ public:
   Fl_Widget_Type *_make() {return new Fl_Scroll_Type();}
 };
 
-extern const char tile_type_name[];
+FLUID_IMPORT extern const char tile_type_name[];
 
 class Fl_Tile_Type : public Fl_Group_Type {
 public:
@@ -363,7 +364,7 @@ public:
   Fl_Widget_Type *_make() {return new Fl_Tile_Type();}
 };
 
-extern Fl_Menu_Item window_type_menu[];
+FLUID_IMPORT extern Fl_Menu_Item window_type_menu[];
 
 class Fl_Window_Type : public Fl_Widget_Type {
   Fl_Menu_Item* subtypes() {return window_type_menu;}
@@ -412,7 +413,7 @@ public:
   int is_window() const {return 1;}
 };
 
-extern Fl_Menu_Item menu_item_type_menu[];
+FLUID_IMPORT extern Fl_Menu_Item menu_item_type_menu[];
 
 class Fl_Menu_Item_Type : public Fl_Widget_Type {
 public:
@@ -471,7 +472,7 @@ public:
   void write_code2();
 };
 
-extern Fl_Menu_Item button_type_menu[];
+FLUID_IMPORT extern Fl_Menu_Item button_type_menu[];
 
 #include <FL/Fl_Menu_Button.H>
 class Fl_Menu_Button_Type : public Fl_Menu_Type {
@@ -483,7 +484,7 @@ public:
   Fl_Widget_Type *_make() {return new Fl_Menu_Button_Type();}
 };
 
-extern Fl_Menu_Item dummymenu[];
+FLUID_IMPORT extern Fl_Menu_Item dummymenu[];
 
 #include <FL/Fl_Choice.H>
 class Fl_Choice_Type : public Fl_Menu_Type {
@@ -508,7 +509,7 @@ public:
 };
 // object list operations:
 Fl_Widget *make_widget_browser(int x,int y,int w,int h);
-extern int modflag;
+FLUID_IMPORT extern int modflag;
 void delete_all(int selected_only=0);
 void selection_changed(Fl_Type* new_current);
 
@@ -530,10 +531,10 @@ void write_carray(const char *,int length);
 void write_indent(int n);
 void write_open(int);
 void write_close(int n);
-extern int write_number;
+FLUID_IMPORT extern int write_number;
 void write_public(int state); // writes pubic:/private: as needed
-extern int indentation;
-extern const char* indent();
+FLUID_IMPORT extern int indentation;
+FLUID_IMPORT extern const char* indent();
 
 int read_file(const char *, int merge);
 const char *read_word(int wantbrace = 0);
@@ -545,8 +546,8 @@ const char *c_check(const char *c, int type = 0);
 // replace a string pointer with new value, strips leading/trailing blanks:
 int storestring(const char *n, const char * & p, int nostrip=0);
 
-extern int include_H_from_C;
+FLUID_IMPORT extern int include_H_from_C;
 
 //
-// End of "$Id: Fl_Type.h,v 1.15 1999/09/10 16:48:22 bill Exp $".
+// End of "$Id: Fl_Type.h,v 1.16 1999/09/20 01:51:14 vincent Exp $".
 //

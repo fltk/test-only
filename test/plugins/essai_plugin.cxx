@@ -1,4 +1,8 @@
+#include <stdio.h>
+#include <FL/Fl_Menu.H>
+#include <FL/Fl_Window.H>
 #include "Fluid_Plugins.h"
+#include "Fl_Type.h"
 #include "Fl_Pix_Button.cxx"
 
 #include "play_buttons256.xpm"
@@ -159,7 +163,7 @@ void make_panel()
 
 
 // This is the description of the plugin
-Fluid_Plugin fluid_plugin = {
+FLUID_EXPORT Fluid_Plugin fluid_plugin = {
   "Essai",       // Name of the plugin
   options_menu,  // pointer on the 'option' menu
   new_menu,      // pointer on the 'new' menu
