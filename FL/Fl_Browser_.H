@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.H,v 1.15 1999/09/19 04:58:52 vincent Exp $"
+// "$Id: Fl_Browser_.H,v 1.16 1999/10/16 22:54:32 vincent Exp $"
 //
 // Common browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -111,6 +111,7 @@ protected:
 
   void layout();
   void draw();
+  void draw_n_clip();
   int handle(int);
   Fl_Browser_(int,int,int,int,const char * = 0);
 
@@ -134,5 +135,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser_.H,v 1.15 1999/09/19 04:58:52 vincent Exp $".
+// End of "$Id: Fl_Browser_.H,v 1.16 1999/10/16 22:54:32 vincent Exp $".
 //

@@ -85,7 +85,7 @@ Fl_Window* make_about_panel(const char *copyright) {
         }
         o->end();
       }
-      { Fl_Box* o = new Fl_Box(57, 135, 56, 4);
+      { Fl_Box* o = new Fl_Box(57, 135, 56, 2);
         o->box(FL_FLAT_BOX);
         o->color((Fl_Color)14);
         o->selection_color((Fl_Color)47);

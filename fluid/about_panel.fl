@@ -10,7 +10,7 @@ Function {make_about_panel(const char *copyright)} {open
 } {
   Fl_Window about_panel {
     label {about fluid} open
-    xywh {242 474 303 258} resizable hotspot box UP_BOX color 97 selection_color 47 non_modal visible
+    xywh {328 293 303 258} resizable hotspot box UP_BOX color 97 selection_color 47 non_modal visible
   } {
     Fl_Group display_group {open
       xywh {10 10 289 240}
@@ -34,7 +34,7 @@ Function {make_about_panel(const char *copyright)} {open
         code3 {h<èFA}
       }
       Fl_Group {} {
-        label fluid
+        label fluid selected
         xywh {10 135 150 105} align 16 box ROUND_UP_BOX labelfont 1 labeltype SHADOW_LABEL color 14 labelcolor 6 selection_color 47 labelsize 40
       } {
         Fl_Box {} {
@@ -47,11 +47,11 @@ Function {make_about_panel(const char *copyright)} {open
         }
       }
       Fl_Box {} {
-        xywh {57 135 56 4} box FLAT_BOX color 14 selection_color 47
+        xywh {57 135 56 2} box FLAT_BOX color 14 selection_color 47
       }
       Fl_Group {} {
         xywh {145 23 149 122} box OFLAT_BOX labelfont 1 labeltype SHADOW_LABEL color 14 labelcolor 7 selection_color 47 labelsize 18
-        code3 {ð9ÐA }
+        code3 {ð9ÐA}
       } {
         Fl_Box {} {
           label {FLTK User

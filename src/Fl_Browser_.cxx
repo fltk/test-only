@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.18 1999/08/16 07:31:13 bill Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.19 1999/10/16 22:54:36 vincent Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -351,6 +351,11 @@ J1:
   real_hposition_ = hposition_;
 }
 
+void Fl_Browser_::draw_n_clip()
+{
+  Fl_Widget::draw_n_clip(); // Jump over the overloaded definition if Fl_Group
+}
+
 // Quick way to delete and reset everything:
 void Fl_Browser_::new_list() {
   top_ = 0;
@@ -641,5 +646,5 @@ void Fl_Browser_::item_select(void*, int) {}
 int Fl_Browser_::item_selected(void* l) const {return l==selection_;}
 
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.18 1999/08/16 07:31:13 bill Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.19 1999/10/16 22:54:36 vincent Exp $".
 //

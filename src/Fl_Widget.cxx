@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.22 1999/10/12 22:22:55 vincent Exp $"
+// "$Id: Fl_Widget.cxx,v 1.23 1999/10/16 22:54:37 vincent Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -389,7 +389,8 @@ void Fl_Widget::draw_glyph(int T, int X,int Y,int W,int H, Fl_Flags f) const {
 #include <FL/fl_draw.H>
 void Fl_Widget::draw_n_clip()
 {
-  if (!box()->rectangular) {
+  if (!box()->rectangular && !(image() && (flags()&FL_ALIGN_TILED) && 
+		(!(flags()&15) || (flags() & FL_ALIGN_INSIDE)))) {
     fl_clip(x(), y(), w(), h());
     parent()->draw_group_box();
     fl_pop_clip();
@@ -431,5 +432,5 @@ Fl_Style Fl_Widget::default_style = {
 };
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.22 1999/10/12 22:22:55 vincent Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.23 1999/10/16 22:54:37 vincent Exp $".
 //

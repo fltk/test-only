@@ -14,12 +14,9 @@ Function {main()} {open return_type int
 } {
   code {Fl_Shared_Image::set_root_directory("images");} {}
   Fl_Window window {
-    label {The background is a BMP file} open
-    xywh {264 174 660 405} resizable box NO_BOX visible
+    label {The background is a BMP file} open selected
+    xywh {97 235 660 405} align 536870944 resizable box NO_BOX image not_inlined {ulon.bmp} visible
   } {
-    Fl_Box {} {
-      xywh {0 0 660 405} align 32 labelfont 1 labeltype SHADOW_LABEL image not_inlined {ulon.bmp} labelcolor 3
-    }
     Fl_Box {} {
       label {tiled GIF image loaded from disk}
       xywh {23 158 352 197} align 32 labelfont 1 labeltype SHADOW_LABEL image not_inlined {coucou.gif} labelcolor 3
@@ -60,7 +57,7 @@ image_window->show();}
   }
   Fl_Window browser_window {
     label {Image in the cache} open
-    xywh {634 580 255 150} visible
+    xywh {646 652 255 150} visible
   } {
     Fl_Browser browser {
       xywh {0 0 255 115}
@@ -75,7 +72,7 @@ image_window->show();}
     }
   }
   Fl_Window image_window {open
-    xywh {474 568 115 100} visible
+    xywh {478 592 115 100} visible
   } {
     Fl_Box image_box {
       xywh {0 0 115 100} align 21

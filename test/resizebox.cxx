@@ -1,5 +1,5 @@
 //
-// "$Id: resizebox.cxx,v 1.4 1999/01/07 19:18:00 mike Exp $"
+// "$Id: resizebox.cxx,v 1.5 1999/10/16 22:54:39 vincent Exp $"
 //
 // Resize box test program for the Fast Light Tool Kit (FLTK).
 //
@@ -65,6 +65,7 @@ int main(int argc, char **argv) {
   window = new Fl_Single_Window(W3,W3);
   window->box(FL_NO_BOX);
   Fl_Box *n;
+  Fl_Group* g;
   for (int x = 0; x<4; x++) for (int y = 0; y<4; y++) {
     if ((x==1 || x==2) && (y==1 || y==2)) continue;
     n = new Fl_Box(FL_FRAME_BOX,x*(B+W1)+B,y*(B+W1)+B,W1,W1,0);
@@ -74,8 +75,10 @@ int main(int argc, char **argv) {
   n->color(12);
   n = new Fl_Box(FL_FRAME_BOX,4*W1+5*B,B,W1,5*W1+4*B,0);
   n->color(13);
-  n = new Fl_Box(FL_FRAME_BOX,W1+B+B,W1+B+B,2*W1+B,2*W1+B,0);
-  n->color(8);
+
+  g = new Fl_Group(W1+B+B,W1+B+B,2*W1+B,2*W1+B,0);
+  g->box(FL_FRAME_BOX);
+  g->color(8);
 
   Fl::enable_symbols();
   Fl_Button *b = new Fl_Radio_Button(W1+B+50,W1+B+30,20,20,"@6>");
@@ -84,6 +87,7 @@ int main(int argc, char **argv) {
   (new Fl_Radio_Button(W1+B+10,W1+B+30,20,20,"@4>"))->callback(b_cb,4);
   (new Fl_Radio_Button(W1+B+30,W1+B+50,20,20,"@2>"))->callback(b_cb,2);
   (new Fl_Radio_Button(W1+B+30,W1+B+30,20,20,"off"))->callback(b_cb,0);
+  g->end();
 
   box = new Fl_Box(FL_FLAT_BOX,0,0,0,0,"resizable");
   box->color(FL_DARK2);
@@ -97,5 +101,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: resizebox.cxx,v 1.4 1999/01/07 19:18:00 mike Exp $".
+// End of "$Id: resizebox.cxx,v 1.5 1999/10/16 22:54:39 vincent Exp $".
 //

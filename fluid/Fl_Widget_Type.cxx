@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.48 1999/10/12 03:01:52 vincent Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.49 1999/10/16 22:54:33 vincent Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -1953,6 +1953,11 @@ void Fl_Widget_Type::read_property(const char *c) {
       Fluid_Image *i = Fluid_Image::find(label());
       if (!i) read_error("Image file '%s' not found", label());
       setimage(i); label(0);
+      if (!strcmp(c,"image_file")) {
+	c = read_word();
+	if (i && c[0]=='d') i->inlined = 0;
+	if (c[1]=='t') o->align(o->align()|FL_ALIGN_TILED);
+      }
     } else {
       o->labeltype((Fl_Labeltype)item_pointer(labeltypemenu,c));
     }
@@ -2131,5 +2136,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.48 1999/10/12 03:01:52 vincent Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.49 1999/10/16 22:54:33 vincent Exp $".
 //
