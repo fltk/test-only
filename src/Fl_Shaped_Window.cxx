@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Shaped_Window.cxx,v 1.12 2002/12/10 02:00:50 easysw Exp $"
+// "$Id: Fl_Shaped_Window.cxx,v 1.12.2.1 2003/11/07 04:02:04 easysw Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-1999 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,55 +20,57 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
+// Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/ShapedWindow.h>
-#include <fltk/x.h>
+#include <FL/Fl_Shaped_Window.H>
+#include <FL/x.H>
 
 #ifdef _WIN32
-static HRGN bitmap2region(fltk::xbmImage*);
-#elif (defined(__APPLE__) && !USE_X11)
+static HRGN bitmap2region(Fl_Bitmap*);
+#elif (defined(__MACOS__) && !USE_X11)
 // Not yet implemented for Apple
+#elif NANO_X
+// for microwindows too ;-)
+#elif DJGPP
+// for microwindows too ;-)
 #else
-#define Window XWindow
 #include <X11/extensions/shape.h>
-#undef Window
 #endif
-
-using namespace fltk;
 
 // maybe one day we'll want to be able to resize the clip mask
 // when the window resized
-static xbmImage* resize_bitmap(xbmImage*, int, int);
+static Fl_Bitmap* resize_bitmap(Fl_Bitmap*, int, int);
 
-void ShapedWindow::draw() {
+void Fl_Shaped_Window::draw() {
   if ((lw != w() || lh != h() || changed) && shape_) {
     // size of window has change since last time
     lw = w(); lh = h();
-    xbmImage* mask = resize_bitmap(shape_, w(), h());
+    Fl_Bitmap* mask = resize_bitmap(shape_, w(), h());
 #ifdef _WIN32
     HRGN region = bitmap2region(mask);
-    SetWindowRgn(xid(this), region, TRUE);
-#elif (defined(__APPLE__) && !USE_X11)
+    SetWindowRgn(fl_xid(this), region, TRUE);
+#elif (defined(__MACOS__) && !USE_X11)
     // not yet implemented for Apple
+#elif NANO_X
+#elif DJGPP
 #else
-    Pixmap pmask = XCreateBitmapFromData(xdisplay, xid(this),
-                  (const char*)mask->array, mask->width(), mask->height());
+    Pixmap pmask = XCreateBitmapFromData(fl_display, fl_xid(this),
+                  (const char*)mask->array, mask->w(), mask->h());
     hide();
-    XShapeCombineMask(xdisplay, xid(this), ShapeBounding, 0, 0,
+    XShapeCombineMask(fl_display, fl_xid(this), ShapeBounding, 0, 0,
                       pmask, ShapeSet);
     show();
-    if (pmask != None) XFreePixmap(xdisplay, pmask);
+    if (pmask != None) XFreePixmap(fl_display, pmask);
 #endif
     changed = 0;
   }
-  DoubleBufferWindow::draw();
+  Fl_Window::draw();
 }
 
 // maybe one day we'll want to be able to resize the clip mask
 // bitmap when the window is resized
-static xbmImage* resize_bitmap(xbmImage* bitmap, int /*W*/, int /*H*/) {
+static Fl_Bitmap* resize_bitmap(Fl_Bitmap* bitmap, int /*W*/, int /*H*/) {
   return bitmap; // CET - FIXME - someday...
 }
 
@@ -82,9 +84,9 @@ static inline BYTE bit(int x) { return (BYTE)(1 << (x % 8)); }
 // (also LGPLed).  Their code was based on code originally written by
 // Jean-Edouard Lachand-Robert.  Ain't open source great?
 //
-// Modified by me to use an xbmImage, to not hog memory, to not leak memory
+// Modified by me to use an Fl_Bitmap, to not hog memory, to not leak memory
 // (I hope) and to allow bitmaps of arbitrary dimensions. -CET
-static HRGN bitmap2region(xbmImage* bitmap) {
+static HRGN bitmap2region(Fl_Bitmap* bitmap) {
   HRGN hRgn = 0;
   /* For better performances, we will use the ExtCreateRegion()
    * function to create the region. This function take a RGNDATA
@@ -100,15 +102,15 @@ static HRGN bitmap2region(xbmImage* bitmap) {
   pData->rdh.nCount = pData->rdh.nRgnSize = 0;
   SetRect(&pData->rdh.rcBound, MAXLONG, MAXLONG, 0, 0);
 
-  const int bpl = (bitmap->width()+7)/8; // number of bytes per line of pixels
+  const int bpl = (bitmap->w()+7)/8; // number of bytes per line of pixels
   BYTE* p8 = (BYTE*)bitmap->array;
   BYTE* p;
-  for (int y = 0; y < bitmap->height(); y++) {
+  for (int y = 0; y < bitmap->h(); y++) {
     /* Scan each bitmap row from left to right*/
-    for (int x = 0; x < bitmap->width(); x++) {
+    for (int x = 0; x < bitmap->w(); x++) {
       /* Search for a continuous range of "non transparent pixels"*/
       int x0 = x;
-      while (x < bitmap->width()) {
+      while (x < bitmap->w()) {
         p = p8 + x / 8;
         if (!((*p) & bit(x))) break; /* This pixel is "transparent"*/
         x++;
@@ -174,5 +176,5 @@ static HRGN bitmap2region(xbmImage* bitmap) {
 #endif
 
 //
-// End of "$Id: Fl_Shaped_Window.cxx,v 1.12 2002/12/10 02:00:50 easysw Exp $"
+// End of "$Id: Fl_Shaped_Window.cxx,v 1.12.2.1 2003/11/07 04:02:04 easysw Exp $"
 //
