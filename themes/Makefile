@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.11 1999/11/21 06:23:35 carl Exp $"
+# "$Id: Makefile,v 1.12 1999/12/08 17:40:35 bill Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -45,7 +45,7 @@ include ../makeinclude
 	$(CXX) -DFL_DLL -DFL_INPLUGIN $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $< -o $@
 
 essai.fltp : essai.o fl_jpeg.po Fl_Shared_Image.po fl_draw_image.po
-	$(CXX)  $(LD_PLUGIN_FLAGS) $(CXXFLAGS) -o $@ $< fl_jpeg.po Fl_Shared_Image.po fl_draw_image.po -ljpeg
+	$(CXX)  $(LD_PLUGIN_FLAGS) $(CXXFLAGS) -o $@ $< fl_jpeg.po Fl_Shared_Image.po fl_draw_image.po -L../lib -ljpeg
 	cp $@ ../config/themes
 
 motif.fltp : motif.o fl_motif.po ../lib/$(LIBNAME).a
@@ -94,5 +94,5 @@ install :
 #include makedepend
 
 #
-# End of "$Id: Makefile,v 1.11 1999/11/21 06:23:35 carl Exp $".
+# End of "$Id: Makefile,v 1.12 1999/12/08 17:40:35 bill Exp $".
 #

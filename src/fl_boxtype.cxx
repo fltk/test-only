@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.30 1999/11/29 08:47:03 bill Exp $"
+// "$Id: fl_boxtype.cxx,v 1.31 1999/12/08 17:40:33 bill Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -42,9 +42,13 @@ const Fl_No_Box fl_no_box("none");
 void Fl_Flat_Box::draw(int x, int y, int w, int h,
 		       Fl_Color c, Fl_Flags f) const
 {
-  if (!(f & FL_FRAME_ONLY)) {
+  if (!(f & FL_FRAME_ONLY) && h > 0 && w > 0) {
     fl_color(c);
     fl_rectf(x,y,w,h);
+    if ((f & FL_FOCUSED) && h > 4 && w > 4) {
+      fl_color(FL_INACTIVE_COLOR);
+      fl_rect(x+1,y+1,w-2,h-2);
+    }
   }
 }
 void Fl_Flat_Box::inset(int&,int&,int&,int&) const {}
@@ -90,10 +94,7 @@ void Fl_Frame_Box::draw(int x, int y, int w, int h,
       if (!*s) break;
     }
   }
-  if (!(f & FL_FRAME_ONLY) && h > 0 && w > 0) {
-    fl_color(c);
-    fl_rectf(x,y,w,h);
-  }
+  fl_flat_box.draw(x, y, w, h, c, f);
 }
 
 void Fl_Frame_Box::inset(int& x, int& y, int& w, int& h) const
@@ -166,5 +167,5 @@ const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
 const Fl_Boxtype_* Fl_Boxtype_::first = 0;
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.30 1999/11/29 08:47:03 bill Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.31 1999/12/08 17:40:33 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Multiline_Input.H,v 1.6 1999/11/27 15:44:46 carl Exp $"
+// "$Id: Fl_Multiline_Input.H,v 1.7 1999/12/08 17:40:29 bill Exp $"
 //
 // Multiline input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -37,5 +37,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Multiline_Input.H,v 1.6 1999/11/27 15:44:46 carl Exp $".
+// End of "$Id: Fl_Multiline_Input.H,v 1.7 1999/12/08 17:40:29 bill Exp $".
 //

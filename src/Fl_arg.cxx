@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.20 1999/12/02 09:53:45 bill Exp $"
+// "$Id: Fl_arg.cxx,v 1.21 1999/12/08 17:40:33 bill Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -136,6 +136,7 @@ int Fl::args(int argc, char** argv, int& i, int (*cb)(int,char**,int&)) {
 
 // show a main window, use any parsed arguments
 void Fl_Window::show(int argc, char **argv) {
+  if (argc < 1) {show(); return;}
   if (!arg_called) Fl::args(argc,argv);
 
   if (geometry) {
@@ -174,7 +175,6 @@ void Fl_Window::show(int argc, char **argv) {
   }
 
 #ifndef WIN32
-  if (argc < 1) return;
   // set the command string, used by state-saving window managers:
   int i;
   int n=0; for (i=0; i<argc; i++) n += strlen(argv[i])+1;
@@ -352,5 +352,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.20 1999/12/02 09:53:45 bill Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.21 1999/12/08 17:40:33 bill Exp $".
 //
