@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.26 2000/04/28 21:48:24 carl Exp $"
+// "$Id: menubar.cxx,v 1.27 2000/05/01 09:42:22 carl Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -43,7 +43,7 @@ Fl_Menu_* menus[4];
 
 void test_cb(Fl_Widget* w, void*) {
   Fl_Menu_* mw = (Fl_Menu_*)w;
-  const Fl_Menu_Item* m = mw->mvalue();
+  const Fl_Widget* m = mw->item();
   if (!m)
     printf("NULL\n");
   else if (m->shortcut())
@@ -229,5 +229,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.26 2000/04/28 21:48:24 carl Exp $".
+// End of "$Id: menubar.cxx,v 1.27 2000/05/01 09:42:22 carl Exp $".
 //
