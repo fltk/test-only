@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.43 1999/08/18 03:50:16 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.44 1999/08/26 07:58:16 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -785,58 +785,6 @@ Fl_X* Fl_X::make(Fl_Window* w) {
 
 HINSTANCE fl_display = GetModuleHandle(NULL);
 
-//
-// This WinMain() function can be overridden by an application and
-// is provided for compatibility with programs written for other
-// operating systems that conform to the ANSI standard entry point
-// "main()".  This will allow you to build a WIN32 Application
-// without any special settings.
-//
-// Because of problems with the Microsoft Visual C++ header files
-// and/or compiler, you cannot have a WinMain function in a DLL.
-// I don't know why.  Thus, this nifty feature is only available
-// if you link to the static library.
-//
-// Currently the debug version of this library will create a
-// console window for your application so you can put printf()
-// statements for debugging or informational purposes.  Ultimately
-// we want to update this to always use the parent's console,
-// but at present we have not identified a function or API in
-// Microsoft(r) Windows(r) that allows for it.
-//
-
-#if !defined(FL_DLL) && !defined(__GNUC__)
-
-extern "C" int fl_call_main();
-
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-                             LPSTR lpCmdLine, int nCmdShow) {
-  // Save the current instance in the fl_display variable...
-  fl_display = hInstance;
-
-#ifdef _DEBUG
-  // If we are using compiling in debug mode, open a console window so
-  // we can see any printf's, etc...
-  //
-  // While we can detect if the program was run from the command-line -
-  // look at the CMDLINE environment variable, it will be "WIN" for
-  // programs started from the GUI - the shell seems to run all WIN32
-  // applications in the background anyways...
-
-  AllocConsole();
-  freopen("conin$", "r", stdin);
-  freopen("conout$", "w", stdout);
-  freopen("conout$", "w", stderr);
-#endif // _DEBUG
-
-  // Run the standard main entry point function...
-  return fl_call_main();
-}
-
-#endif /* !FL_DLL && !__GNUC__ */
-
-////////////////////////////////////////////////////////////////
-
 void Fl_Window::size_range_() {
   size_range_set = 1;
 }
@@ -951,5 +899,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.43 1999/08/18 03:50:16 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.44 1999/08/26 07:58:16 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Image.cxx,v 1.11 1999/08/26 00:06:54 vincent Exp $"
+// "$Id: Fluid_Image.cxx,v 1.12 1999/08/26 07:58:14 bill Exp $"
 //
 // Pixmap label support for the Fast Light Tool Kit (FLTK).
 //
@@ -120,9 +120,16 @@ void pixmap_image::write_static() {
     } else {
       d = fl_store_datas_from_file(name(), l);
       if(d) {
+#if 0
 	write_c("static uchar %s[] = {\n", unique_id(this, "datas", filename_name(name()), 0));
 	write_carray((const char*)d, l);
 	write_c("};\n");
+#else
+	write_c("static unsigned char* %s = (unsigned char*)\n",
+		unique_id(this, "datas", filename_name(name()), 0));
+	write_cstring((const char*)d, l);
+	write_c(";\n");
+#endif
 	free(d);
       }
     }
@@ -471,5 +478,5 @@ void set_images_dir_cb(Fl_Widget *, void *) {
 }
  
 //
-// End of "$Id: Fluid_Image.cxx,v 1.11 1999/08/26 00:06:54 vincent Exp $".
+// End of "$Id: Fluid_Image.cxx,v 1.12 1999/08/26 07:58:14 bill Exp $".
 //
