@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.14 2000/06/03 08:49:11 bill Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.15 2000/06/10 19:41:14 carl Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -53,11 +53,11 @@
 #define COPY 2		// unchanged
 #define NODAMAGE 3	// unchanged even by X expose() events
 
-#ifdef MESA
-#define SWAP_TYPE NODAMAGE
-#else
+//#ifdef MESA
+//#define SWAP_TYPE NODAMAGE
+//#else
 #define SWAP_TYPE SWAP
-#endif
+//#endif
 
 ////////////////////////////////////////////////////////////////
 
@@ -309,5 +309,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.14 2000/06/03 08:49:11 bill Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.15 2000/06/10 19:41:14 carl Exp $".
 //
