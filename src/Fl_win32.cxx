@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.195 2003/09/06 22:37:36 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.196 2003/09/15 05:56:43 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -191,7 +191,7 @@ void* fltk::thread_message() {
   return r;
 }
 
-MSG msg;
+MSG fltk::msg;
 
 UINT fl_wake_msg = 0;
 
@@ -1557,5 +1557,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.195 2003/09/06 22:37:36 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.196 2003/09/15 05:56:43 spitzak Exp $".
 //

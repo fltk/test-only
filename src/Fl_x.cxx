@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.151 2003/09/06 22:37:36 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.152 2003/09/15 05:56:43 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1117,7 +1117,13 @@ void CreatedWindow::create(Window* window,
     }
 
     // Send child window information:
-    if (window->child_of() && window->child_of()->shown())
+#if 0
+    // This worked for KDE but Gnome puts the window on the desktop
+    if (modal() == window)
+      XSetTransientForHint(xdisplay, x->xid, None);
+    else
+#endif
+      if (window->child_of() && window->child_of()->shown())
       XSetTransientForHint(xdisplay, x->xid, window->child_of()->i->xid);
 
     // Make it receptive to DnD:
@@ -1127,8 +1133,15 @@ void CreatedWindow::create(Window* window,
 
     // Set up the icon and initial icon state:
     XWMHints *hints = XAllocWMHints();
-    hints->input = True; // some window managers require this to be sent?
     hints->flags = InputHint;
+    hints->input = True; // some window managers require this to be sent?
+#if 0
+    // not clear if this does anything useful. I have not seen any effect
+    // on KDE or Gnome:
+    for (const Window* w = window; w; w = w->child_of())
+      if (w->shown()) hints->window_group = w->i->xid;
+    hints->flags |= WindowGroupHint;
+#endif
     if (!fltk::modal() && fl_show_iconic) {
       hints->flags |= StateHint;
       hints->initial_state = IconicState;
@@ -1429,5 +1442,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.151 2003/09/06 22:37:36 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.152 2003/09/15 05:56:43 spitzak Exp $".
 //

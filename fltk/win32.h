@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.19 2003/08/26 16:14:26 spitzak Exp $"
+// "$Id: win32.h,v 1.20 2003/09/15 05:56:43 spitzak Exp $"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -79,7 +79,7 @@ extern FL_API HPALETTE	xpalette; // non-zero only on 8-bit displays!
 ////////////////////////////////////////////////////////////////
 // event handling:
 
-extern FL_API MSG xmsg;
+extern FL_API MSG msg;
 
 ////////////////////////////////////////////////////////////////
 // drawing functions:
@@ -199,5 +199,5 @@ extern FL_API HCURSOR default_cursor;
 #endif
 
 //
-// End of "$Id: win32.h,v 1.19 2003/08/26 16:14:26 spitzak Exp $".
+// End of "$Id: win32.h,v 1.20 2003/09/15 05:56:43 spitzak Exp $".
 //

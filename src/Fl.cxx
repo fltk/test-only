@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.165 2003/08/25 15:28:47 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.166 2003/09/15 05:56:43 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -597,13 +597,14 @@ static bool send_from_root(Widget* widget, int event) {
 }
 
 extern int fl_pushed_dx, fl_pushed_dy;
+Window* fl_actual_window;
 
 bool fltk::handle(int event, Window* window)
 {
   e_type = event;
   if (fl_local_grab) return fl_local_grab(event);
 
-  Widget* to = window;
+  Widget* to = fl_actual_window = window;
 
   switch (event) {
 
@@ -714,5 +715,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.165 2003/08/25 15:28:47 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.166 2003/09/15 05:56:43 spitzak Exp $".
 //

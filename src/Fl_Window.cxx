@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.102 2003/09/03 06:08:07 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.103 2003/09/15 05:56:43 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -116,6 +116,8 @@ static void keep_app_active() {
 }
 #endif
 
+extern Window* fl_actual_window; // in Fl.cxx
+
 int Window::handle(int event) {
   switch (event) {
   case SHOW:
@@ -140,6 +142,14 @@ int Window::handle(int event) {
 #endif
     break;
 
+  case PUSH:
+    // If we are in a modal state, see if the user is clicking on
+    // another window. If so, just raise this (the modal) window.
+    if (modal()==this && fl_actual_window != this) {
+      show();
+      return 0;
+    }
+    break;
   }
 
   int ret = Group::handle(event); if (ret) return ret;
@@ -148,27 +158,18 @@ int Window::handle(int event) {
   if (!parent()) switch (event) {
   case KEY:
   case SHORTCUT:
+    // See if the user hit Escape (or whatever the shortcut is)
+    // and close the window:
     if (test_shortcut()) {
       if (!event_clicks())// make repeating key not close everything
 	do_callback();
       return 1;
     }
     break;
-#if 0
-  case PUSH:
-    // clicks outside windows exit the modal state. I give a bit of border
-    // so if they are trying to resize the modal window an miss they don't
-    // exit:
-    if (event_x() < -4 || event_x() > w()+4 ||
-	event_y() < -4 || event_y() > h()+4) {
-      if (modal()) exit_modal();
-      return;
-    }
-#endif
 #if !defined(_WIN32) && !(defined(__APPLE__) && !USE_X11)
   case PUSH:
-    show();
-    //XMapRaised(xdisplay, i->xid);
+    // unused clicks raise the window.
+    if (shown()) XMapRaised(xdisplay, i->xid);
 #endif
   }
   return 0;
@@ -468,5 +469,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.102 2003/09/03 06:08:07 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.103 2003/09/15 05:56:43 spitzak Exp $".
 //
