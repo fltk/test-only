@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.25 1999/08/29 23:38:01 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.26 1999/09/01 08:23:52 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -452,7 +452,7 @@ void Fl_Group::layout() {
     int dw = w()-(p[1]-p[0]);
     int dh = h()-(p[3]-p[2]);
     p+=4;
- 
+
     // get initial size of resizable():
     int IX = *p++;
     int IR = *p++;
@@ -554,5 +554,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.25 1999/08/29 23:38:01 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.26 1999/09/01 08:23:52 bill Exp $".
 //

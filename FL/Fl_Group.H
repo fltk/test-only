@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.H,v 1.11 1999/08/29 23:37:59 bill Exp $"
+// "$Id: Fl_Group.H,v 1.12 1999/09/01 08:23:48 bill Exp $"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
@@ -60,7 +60,7 @@ public:
   void layout();
   int handle(int);
   void begin() {current_ = this;}
-  void end() {sizes();current_ = (Fl_Group*)parent();}
+  void end() {current_ = (Fl_Group*)parent();}
   static Fl_Group *current() {return current_;}
   static void current(Fl_Group *g) {current_ = g;}
 
@@ -103,5 +103,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Group.H,v 1.11 1999/08/29 23:37:59 bill Exp $".
+// End of "$Id: Fl_Group.H,v 1.12 1999/09/01 08:23:48 bill Exp $".
 //

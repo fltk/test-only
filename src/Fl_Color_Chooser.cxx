@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.10 1999/08/16 07:31:14 bill Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.11 1999/09/01 08:23:52 bill Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -180,8 +180,8 @@ int Flcc_HueBox::handle(int e) {
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
   switch (e) {
   case FL_PUSH:
-    ih = c->hue();
-    is = c->saturation();
+    ih = c->h();
+    is = c->s();
   case FL_DRAG: {
     double Xf, Yf, H, S;
     Xf = (Fl::event_x()-x()-box()->dx())/double(w()-box()->dw());
@@ -190,7 +190,7 @@ int Flcc_HueBox::handle(int e) {
     if (fabs(H-ih) < 3*6.0/w()) H = ih;
     if (fabs(S-is) < 3*1.0/h()) S = is;
     if (Fl::event_state(FL_CTRL)) H = ih;
-    if (c->hsv(H, S, c->value())) c->do_callback();
+    if (c->hsv(H, S, c->v())) c->do_callback();
     } return 1;
   default:
     return 0;
@@ -202,7 +202,7 @@ static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
   int iw = v->w()-v->box()->dw();
   double Yf = double(Y)/(v->h()-v->box()->dh());
 #ifdef UPDATE_HUE_BOX
-  const double V = ((Fl_Color_Chooser*)(v->parent()))->value();
+  const double V = ((Fl_Color_Chooser*)(v->parent()))->v();
 #else
   const double V = 1.0;
 #endif
@@ -228,15 +228,15 @@ void Flcc_HueBox::draw() {
   if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
 #ifdef CIRCLE
-  int X = int(.5*(cos(c->hue()*(M_PI/3.0))*c->saturation()+1) * (w1-6));
-  int Y = int(.5*(1-sin(c->hue()*(M_PI/3.0))*c->saturation()) * (h1-6));
+  int X = int(.5*(cos(c->h()*(M_PI/3.0))*c->s()+1) * (w1-6));
+  int Y = int(.5*(1-sin(c->h()*(M_PI/3.0))*c->s()) * (h1-6));
 #else
-  int X = int(c->hue()/6.0*(w1-6));
-  int Y = int((1-c->saturation())*(h1-6));
+  int X = int(c->h()/6.0*(w1-6));
+  int Y = int((1-c->s())*(h1-6));
 #endif
   if (X < 0) X = 0; else if (X > w1-6) X = w1-6;
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
-  //  fl_color(c->value()>.75 ? FL_BLACK : FL_WHITE);
+  //  fl_color(c->v()>.75 ? FL_BLACK : FL_WHITE);
   FL_UP_BOX->draw(x1+X, y1+Y, 6, 6, FL_GRAY);
   px = X; py = Y;
 }
@@ -248,12 +248,12 @@ int Flcc_ValueBox::handle(int e) {
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
   switch (e) {
   case FL_PUSH:
-    iv = c->value();
+    iv = c->v();
   case FL_DRAG: {
     double Yf;
     Yf = 1-(Fl::event_y()-y()-box()->dy())/double(h()-box()->dh());
     if (fabs(Yf-iv)<(3*1.0/h())) Yf = iv;
-    if (c->hsv(c->hue(),c->saturation(),Yf)) c->do_callback();
+    if (c->hsv(c->h(),c->s(),Yf)) c->do_callback();
     } return 1;
   default:
     return 0;
@@ -275,7 +275,7 @@ static void generate_vimage(void* vv, int X, int Y, int W, uchar* buf) {
 void Flcc_ValueBox::draw() {
   if (damage()&FL_DAMAGE_ALL) draw_frame();
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
-  c->hsv2rgb(c->hue(),c->saturation(),1.0,tr,tg,tb);
+  c->hsv2rgb(c->h(),c->s(),1.0,tr,tg,tb);
   int x1 = x()+box()->dx();
   int y1 = y()+box()->dy();
   int w1 = w()-box()->dw();
@@ -283,7 +283,7 @@ void Flcc_ValueBox::draw() {
   if (damage() == FL_DAMAGE_EXPOSE) fl_clip(x1,y1+py,w1,6);
   fl_draw_image(generate_vimage, this, x1, y1, w1, h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
-  int Y = int((1-c->value()) * (h1-6));
+  int Y = int((1-c->v()) * (h1-6));
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
   FL_UP_BOX->draw(x1, y1+Y, w1, 6, FL_GRAY);
   py = Y;
@@ -347,6 +347,15 @@ Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
   choice.callback(mode_cb);
 }
 
+Fl_Color Fl_Color_Chooser::value() const {
+  return fl_rgb(uchar(255*r()+.5), uchar(255*g()+.5), uchar(255*b()+.5));
+}
+
+void Fl_Color_Chooser::value(Fl_Color c) {
+  c = fl_get_color(c);
+  rgb(uchar(c>>24)/255.0, uchar(c>>16)/255.0, uchar(c>>8)/255.0);
+}
+
 ////////////////////////////////////////////////////////////////
 // fl_color_chooser():
 
@@ -354,80 +363,144 @@ Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Return_Button.H>
 
-class ColorChip : public Fl_Widget {
-  void draw();
-public:
-  uchar r,g,b;
-  ColorChip(int X, int Y, int W, int H) : Fl_Widget(X,Y,W,H) {}
-};
-
-void ColorChip::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_frame();
-  fl_rectf(x()+box()->dx(),
-	   y()+box()->dy(),
-	   w()-box()->dw(),
-	   h()-box()->dh(),r,g,b);
-}
-
-static void chooser_cb(Fl_Widget* o, void* vv) {
-  Fl_Color_Chooser* c = (Fl_Color_Chooser*)o;
-  ColorChip* v = (ColorChip*)vv;
-  v->r = uchar(255*c->r()+.5);
-  v->g = uchar(255*c->g()+.5);
-  v->b = uchar(255*c->b()+.5);
-  v->damage(FL_DAMAGE_EXPOSE);
-}
-
 extern const char* fl_ok;
 extern const char* fl_cancel;
 
-int fl_color_chooser(const char* name, double& r, double& g, double& b) {
-  Fl_Window window(210,165,name);
-  Fl_Color_Chooser chooser(5, 5, 200, 95);
-  ColorChip ok_color(5, 105, 95, 30);
-  Fl_Return_Button ok_button(5, 135, 95, 25, fl_ok);
-  ColorChip cancel_color(110, 105, 95, 30);
-  cancel_color.r = uchar(255*r+.5); ok_color.r = cancel_color.r;
-  ok_color.g = cancel_color.g = uchar(255*g+.5);
-  ok_color.b = cancel_color.b = uchar(255*b+.5);
-  Fl_Button cancel_button(110, 135, 95, 25, fl_cancel);
-  window.resizable(chooser);
-  chooser.rgb(r,g,b);
-  chooser.callback(chooser_cb, &ok_color);
-  window.end();
-  window.set_modal();
-  window.hotspot(window);
-  window.show();
-  while (window.shown()) {
+static Fl_Window* window;
+static Fl_Color_Chooser* chooser;
+static Fl_Box* ok_color;
+static Fl_Button* ok_button;
+static Fl_Box* cancel_color;
+static Fl_Button* cancel_button;
+
+// this location is used to preserve index Fl_Color values:
+static Fl_Color picked_color;
+
+static void chooser_cb(Fl_Widget*, void*) {
+  ok_color->color(picked_color = chooser->value());
+  ok_color->redraw();
+}
+
+#define ROWS 4
+#define COLS 16
+
+FL_EXPORT Fl_Color fl_color_cells[ROWS*COLS] = {
+// first the 16 assignable fltk color indexes:
+0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,
+16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,
+// then the closest gray ramps to 0,1/4,1/3,1/2,2/3,3/4,1:
+32,32,32,37,37,39,39,43,43,47,47,49,49,55,55,55,
+// repeat it twice:
+32,32,32,37,37,39,39,43,43,47,47,49,49,55,55,55};
+
+class CellBox : public Fl_Box {
+public:
+  CellBox(int X, int Y, int W, int H) : Fl_Box(X,Y,W,H) {}
+  void draw();
+  int handle(int);
+};
+
+void CellBox::draw() {
+  for (int Y = 0; Y < ROWS; Y++) {
+    int yy = y()+Y*h()/ROWS;
+    int hh = y()+(Y+1)*h()/ROWS - yy;
+    for (int X = 0; X < COLS; X++) {
+      int xx = x()+X*w()/COLS;
+      int ww = x()+(X+1)*w()/COLS - xx;
+      FL_DOWN_BOX->draw(xx,yy,ww,hh,fl_color_cells[Y*COLS+X]);
+    }
+  }
+}
+
+static CellBox* cellbox;
+
+int CellBox::handle(int e) {
+  switch (e) {
+  case FL_PUSH: return 1;
+  case FL_DRAG: return 1;
+  case FL_RELEASE: {
+    int X = (Fl::event_x()-x())*COLS/w();
+    if (X < 0 || X >= COLS) return 1;
+    int Y = (Fl::event_y()-y())*ROWS/h();
+    if (Y < 0 || Y >= ROWS) return 1;
+    X = X+Y*COLS;
+    if (Fl::event_button() > 1) {
+      fl_color_cells[X] = picked_color;
+      redraw();
+    } else {
+      chooser->value(picked_color = fl_color_cells[X]);
+      ok_color->color(picked_color);
+      ok_color->redraw();
+    }
+    return 1;}
+  }
+  return Fl_Widget::handle(e);
+}
+
+static void make_it() {
+  if (window) return;
+  window = new Fl_Window(210,165+65);
+  chooser = new Fl_Color_Chooser(5, 5, 200, 95);
+  ok_color = new Fl_Box(5, 105, 95, 30);
+  ok_color->box(FL_ENGRAVED_BOX);
+  chooser->callback(chooser_cb);
+  ok_button = new Fl_Return_Button(5, 135, 95, 25, fl_ok);
+  cancel_color = new Fl_Box(110, 105, 95, 30);
+  cancel_color->box(FL_ENGRAVED_BOX);
+  cancel_button = new Fl_Button(110, 135, 95, 25, fl_cancel);
+  cellbox = new CellBox(5,165,200,60);
+  window->resizable(chooser);
+  window->end();
+  window->set_modal();
+}
+
+static bool run_it(const char* name) {
+  window->label(name);
+  ok_color->color(chooser->value());
+  cancel_color->color(chooser->value());
+  window->hotspot(window);
+  window->show();
+  while (window->shown()) {
     Fl::wait();
     for (;;) {
       Fl_Widget* o = Fl::readqueue();
       if (!o) break;
-      if (o == &ok_button) {
-	r = chooser.r();
-	g = chooser.g();
-	b = chooser.b();
-	return 1;
-      }
-      if (o == &window || o == &cancel_button) return 0;
+      if (o == ok_button) {window->hide(); return true;}
+      if (o == window || o == cancel_button) {window->hide(); return false;}
     }
   }
-  return 0;
+  return false;
 }
 
-int fl_color_chooser(const char* name, uchar& r, uchar& g, uchar& b) {
-  double dr = r/255.0;
-  double dg = g/255.0;
-  double db = b/255.0;
-  if (fl_color_chooser(name,dr,dg,db)) {
-    r = uchar(255*dr+.5);
-    g = uchar(255*dg+.5);
-    b = uchar(255*db+.5);
-    return 1;
-  }
-  return 0;
+bool fl_color_chooser(const char* name, double& r, double& g, double& b) {
+  make_it();
+  chooser->rgb(r,g,b);
+  if (!run_it(name)) return false;
+  r = chooser->r();
+  g = chooser->g();
+  b = chooser->b();
+  return true;
+}
+
+bool fl_color_chooser(const char* name, uchar& r, uchar& g, uchar& b) {
+  make_it();
+  chooser->rgb(r/255.0, g/255.0, b/255.0);
+  if (!run_it(name)) return false;
+  r = uchar(255*chooser->r()+.5);
+  g = uchar(255*chooser->g()+.5);
+  b = uchar(255*chooser->b()+.5);
+  return true;
+}
+
+bool fl_color_chooser(const char* name, Fl_Color& c) {
+  make_it();
+  chooser->value(c);
+  picked_color = c;
+  if (!run_it(name)) return false;
+  c = picked_color;
+  return true;
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.10 1999/08/16 07:31:14 bill Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.11 1999/09/01 08:23:52 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.42 1999/08/29 19:53:28 vincent Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.43 1999/09/01 08:23:50 bill Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -210,7 +210,7 @@ Fl_Type *sort(Fl_Type *parent) {
 // The control panels!
 
 #include "widget_panel.h"
-#include <FL/fl_show_colormap.H>
+#include <FL/Fl_Color_Chooser.H>
 
 // All the callbacks use the argument to indicate whether to load or store.
 // This avoids the need for pointers to all the widgets, and keeps the
@@ -774,7 +774,7 @@ void color_cb(Fl_Light_Button* i, void *v) {
     else i->label("Color");
     i->show();
   } else {
-    c = fl_show_colormap(c);
+    if (!fl_color_chooser(i->label(), c)) return;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget()) {
         modflag = 1;
@@ -798,7 +798,7 @@ void color2_cb(Fl_Light_Button* i, void *v) {
     else i->label("Selection Color");
     i->show();
   } else {
-    c = fl_show_colormap(c);
+    if (!fl_color_chooser(i->label(), c)) return;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget()) {
         modflag = 1;
@@ -817,7 +817,7 @@ void color3_cb(Fl_Light_Button* i, void *v) {
   if (v == LOAD) {
     i->show();
   } else {
-    c = fl_show_colormap(c);
+    if (!fl_color_chooser(i->label(), c)) return;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget()) {
         modflag = 1;
@@ -834,7 +834,7 @@ void color3_cb(Fl_Light_Button* i, void *v) {
 void labelcolor_cb(Fl_Light_Button* i, void *v) {
   Fl_Color c = current_widget->o->labelcolor();
   if (v != LOAD) {
-    c = fl_show_colormap(c);
+    if (!fl_color_chooser(i->label(), c)) return;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget()) {
         modflag = 1;
@@ -907,7 +907,7 @@ void textcolor_cb(Fl_Light_Button* i, void* v) {
     i->show();
   } else {
     tc = i->selection_color();
-    tc = fl_show_colormap(tc);
+    if (!fl_color_chooser(i->label(), tc)) return;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget()) {
         modflag = 1;
@@ -928,7 +928,7 @@ void selected_textcolor_cb(Fl_Light_Button* i, void* v) {
     i->show();
   } else {
     tc = i->selection_color();
-    tc = fl_show_colormap(tc);
+    if (!fl_color_chooser(i->label(), tc)) return;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next)
       if (o->selected && o->is_widget()) {
         modflag = 1;
@@ -949,7 +949,7 @@ void highlightcolor_cb(Fl_Light_Button* i, void *v) {
     i->show();
   } else {
     c = i->selection_color();
-    c = fl_show_colormap(c);
+    if (!fl_color_chooser(i->label(), c)) return;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_widget()) {
         modflag = 1;
@@ -971,7 +971,7 @@ void highlight_label_color_cb(Fl_Light_Button* i, void *v) {
     i->show();
   } else {
     c = i->selection_color();
-    c = fl_show_colormap(c);
+    if (!fl_color_chooser(i->label(), c)) return;
     for (Fl_Type *o = Fl_Type::first; o; o = o->next) {
       if (o->selected && o->is_widget()) {
         modflag = 1;
@@ -1846,25 +1846,25 @@ void Fl_Widget_Type::write_properties() {
     write_word(image->name());
   }
   if (o->color() != tplate->color())
-    write_string("color %d", o->color());
+    write_string("color %u", o->color());
   if (o->label_color() != tplate->label_color())
-    write_string("labelcolor %d", o->label_color());
+    write_string("labelcolor %u", o->label_color());
   if (o->selection_color() != tplate->selection_color())
-    write_string("selection_color %d", o->selection_color());
+    write_string("selection_color %u", o->selection_color());
   if (o->selection_text_color() != tplate->selection_text_color())
-    write_string("selected_textcolor %d", o->selection_text_color());
+    write_string("selected_textcolor %u", o->selection_text_color());
   if (o->off_color() != tplate->off_color())
-    write_string("off_color %d", o->off_color());
+    write_string("off_color %u", o->off_color());
   if (o->highlight_color() != tplate->highlight_color())
-    write_string("highlight_color %d", o->highlight_color());
+    write_string("highlight_color %u", o->highlight_color());
   if (o->highlight_label_color() != tplate->highlight_label_color())
-    write_string("highlight_label_color %d", o->highlight_label_color());
+    write_string("highlight_label_color %u", o->highlight_label_color());
   if (o->text_color() != tplate->text_color())
-    write_string("textcolor %d", o->text_color());
+    write_string("textcolor %u", o->text_color());
   if (o->label_size() != tplate->label_size())
-    write_string("labelsize %d", o->label_size());
+    write_string("labelsize %u", o->label_size());
   if (o->text_size() != tplate->text_size())
-    write_string("textsize %d", o->text_size());
+    write_string("textsize %u", o->text_size());
 
   if (is_button()) {
     Fl_Button* b = (Fl_Button*)o;
@@ -1956,7 +1956,8 @@ void Fl_Widget_Type::read_property(const char *c) {
   } else if (!strcmp(c, "image")) {
     bool inlined = 1;
     c = read_word();
-    if(!strcmp(c, "not_inlined")) {
+    if (!strcmp(c, "inlined")) c = read_word(); // for back compatability
+    if (!strcmp(c, "not_inlined")) {
       inlined = 0;
       c = read_word();
     }
@@ -1965,27 +1966,27 @@ void Fl_Widget_Type::read_property(const char *c) {
     if (!i) read_error("Image file '%s' not found", c);
     setimage(i);
   } else if (!strcmp(c,"color")) {
-    int n = sscanf(read_word(),"%d %d",&x,&y);
+    int n = sscanf(read_word(),"%u %u",&x,&y);
     o->color(x);
     if (n == 2) o->selection_color(y); // back compatability...
   } else if (!strcmp(c,"labelcolor")) {
-    if (sscanf(read_word(),"%d",&x) == 1) o->label_color(x);
+    if (sscanf(read_word(),"%u",&x) == 1) o->label_color(x);
   } else if (!strcmp(c,"selection_color")) {
-    if (sscanf(read_word(),"%d",&x)) o->selection_color(x);
+    if (sscanf(read_word(),"%u",&x)) o->selection_color(x);
   } else if (!strcmp(c,"selected_textcolor")) {
-    if (sscanf(read_word(),"%d",&x)) o->selection_text_color(x);
+    if (sscanf(read_word(),"%u",&x)) o->selection_text_color(x);
   } else if (!strcmp(c,"off_color")) {
-    if (sscanf(read_word(),"%d",&x)) o->off_color(x);
+    if (sscanf(read_word(),"%u",&x)) o->off_color(x);
   } else if (!strcmp(c,"highlight_color")) {
-    if (sscanf(read_word(),"%d",&x)) o->highlight_color(x);
+    if (sscanf(read_word(),"%u",&x)) o->highlight_color(x);
   } else if (!strcmp(c,"highlight_label_color")) {
-    if (sscanf(read_word(),"%d",&x)) o->highlight_label_color(x);
+    if (sscanf(read_word(),"%u",&x)) o->highlight_label_color(x);
   } else if (!strcmp(c,"textcolor")) {
-    if (sscanf(read_word(),"%d",&x)) o->text_color(x);
+    if (sscanf(read_word(),"%u",&x)) o->text_color(x);
   } else if (!strcmp(c,"labelsize")) {
-    if (sscanf(read_word(),"%d",&x)) o->label_size(x);
+    if (sscanf(read_word(),"%u",&x)) o->label_size(x);
   } else if (!strcmp(c,"textsize")) {
-    if (sscanf(read_word(),"%d",&x)) o->text_size(x);
+    if (sscanf(read_word(),"%u",&x)) o->text_size(x);
 
   } else if (!strcmp(c,"minimum") && is_valuator()) {
     ((Fl_Valuator*)o)->minimum(strtod(read_word(),0));
@@ -2127,5 +2128,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.42 1999/08/29 19:53:28 vincent Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.43 1999/09/01 08:23:50 bill Exp $".
 //
