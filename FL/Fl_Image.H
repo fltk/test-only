@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.H,v 1.5.2.3.2.16.2.5 2004/03/28 10:30:29 rokan Exp $"
+// "$Id: Fl_Image.H,v 1.5.2.3.2.16.2.6 2004/03/29 22:41:11 rokan Exp $"
 //
 // Image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -36,11 +36,15 @@ struct Fl_Label;
 class Fl_Image;
 class Fl_Device;
 
-//RK: This is base class for all image caches. It also functions as a list of images for devices.
-// Constructor inserts the image/cache to the list, destructor removes it from both image and the list.
+/** Fl_Image_Cache is a base class for all image caches.
+*
+* If an image class requires a cache, this cache should be a subclass of this class.
+* It should add additional member for actual cache data. Image uncache() method just 
+* calls destructor of this cache. 
+*/
 
 class Fl_Image_Cache{
-protected:
+
   friend class Fl_Device;
   Fl_Image_Cache * prev;   // for list of caches in device
   Fl_Image_Cache * next;   // for list of caches in device
@@ -48,7 +52,10 @@ protected:
   Fl_Device * device;
   
 public:
+  /** The constructor adds the cache to both image and the device cache list 
+  * so user does not need to care about this */
   Fl_Image_Cache(Fl_Image * im, Fl_Device * dev);
+  /** The destructor also removes cache from image and device cache list */ 
   virtual ~Fl_Image_Cache();
 };
   
@@ -71,11 +78,13 @@ class FL_EXPORT Fl_Image {
   Fl_Image & operator=(const Fl_Image &);
   Fl_Image(const Fl_Image &);
 
+  Fl_Image_Cache * cache_; // now private because Fl_Image_Cache constructor/destructor cares about this pointer
+  
   protected:
   friend class Fl_Image_Cache;
   friend class Fl_Device;
 
-  Fl_Image_Cache * cache_;
+
 
     /** This protected method sets the image width. */
   void w(int W) {w_ = W;}
@@ -157,8 +166,8 @@ class FL_EXPORT Fl_Image {
     /** If the image has been cached for display, delete the cache data. This allows you to 
      * change the data used for the image and then redraw it without recreating an 
      * image object. */
-  virtual void uncache(){delete cache_;};   // RK: CRITICAL common uncache might not need to be virtual any more
-
+     // TODO uncache does not need to be virtual any more... ?
+  virtual void uncache(){delete cache_;}; 
 };
 
 /** The Fl_RGB_Image class supports caching and drawing of full-color images with 1 to 4 
@@ -189,5 +198,5 @@ class FL_EXPORT Fl_RGB_Image : public Fl_Image {
 #endif // !Fl_Image_H
 
 //
-// End of "$Id: Fl_Image.H,v 1.5.2.3.2.16.2.5 2004/03/28 10:30:29 rokan Exp $".
+// End of "$Id: Fl_Image.H,v 1.5.2.3.2.16.2.6 2004/03/29 22:41:11 rokan Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Device.H,v 1.1.2.3 2004/03/29 21:22:34 rokan Exp $"
+// "$Id: Fl_Device.H,v 1.1.2.4 2004/03/29 22:41:11 rokan Exp $"
 //
 // Fl_Device dispatching class for the Fast Light Tool Kit (FLTK).
 //
@@ -40,6 +40,11 @@ typedef void (*Fl_Draw_Image_Cb)(void* ,int,int,int,uchar*);
 
 class Fl_Image_Cache;
 
+/**
+* A base class for all output devices.
+*
+* Device classes should not be a direct subclasses of Fl_Device but rather of Fl_Display or Fl_Printer
+*/
 
 class FL_EXPORT Fl_Device{
 protected:
@@ -52,9 +57,10 @@ protected:
  
 
 public:
-
+  /** An RTTI emulation of device classes.
+  *
+  * @return returns type < 256 if the device is a screen device - subcalls of Fl_Display. */
   int type(){return type_;}; // <256 for screen devices
-  
   
 protected: 
   // usesrs should not use drawing methods directly, but set the device as current
@@ -208,13 +214,12 @@ protected:
 
 public:
 
+  /** Sets the device as current, all following drawings will be ditected to that device.
+  * Returns previously active device. */
   virtual Fl_Device * set_current();
-  Fl_Device * current(Fl_Device * dev){return dev->set_current();};
-  Fl_Device * current();
-
-  //virtual   void draw(Fl_Widget *w){Fl_Device * c = set_current(); w->redraw(); fl_draw(w); c->set_current();};
-
-
+  /** Returns currently active device */
+  static Fl_Device * current();
+  
   virtual   ~Fl_Device();
   Fl_Device():image_caches(0){};
 
@@ -227,5 +232,5 @@ extern FL_EXPORT Fl_Device * fl_device;
 
 
 //
-// End of "$Id: Fl_Device.H,v 1.1.2.3 2004/03/29 21:22:34 rokan Exp $".
+// End of "$Id: Fl_Device.H,v 1.1.2.4 2004/03/29 22:41:11 rokan Exp $".
 //

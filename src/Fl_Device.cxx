@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Device.cxx,v 1.1.2.1 2004/03/29 21:22:35 rokan Exp $"
+// "$Id: Fl_Device.cxx,v 1.1.2.2 2004/03/29 22:41:11 rokan Exp $"
 //
 // Device class for the Fast Light Tool Kit (FLTK).
 //
@@ -32,13 +32,20 @@ Fl_Device::~Fl_Device(){
 };
 
 
-
 Fl_Image_Cache * Fl_Device::check_image_cache(Fl_Image * im){
    if(!im->cache_) return 0;
    if(this != im->cache_->device) im->uncache();
    return im->cache_;
 };
 
+Fl_Device * Fl_Device::set_current(){
+  if(fl_device == this) return this;
+  Fl_Device * c = fl_device;
+  fl_device = this;
+  return c;
+};
+
+Fl_Device * Fl_Device::current(){ return fl_device;};
 
 // Following should go later into the subdirectories
 
@@ -61,14 +68,8 @@ Fl_Device * fl_device=&fl_disp;
   extern FL_EXPORT void push_xmaps();
 #endif
 
-Fl_Device * Fl_Device::current(){ return fl_device;};
 
-Fl_Device * Fl_Device::set_current(){
-  if(fl_device == this) return this;
-  Fl_Device * c = fl_device;
-  fl_device = this;
-  return c;
-};
+
 
 #ifdef WIN32
 #include <FL/Fl.H>
@@ -86,6 +87,6 @@ Fl_Device * FL_DISPLAY::set_current(){
 
 
 //
-// "$Id: Fl_Device.cxx,v 1.1.2.1 2004/03/29 21:22:35 rokan Exp $"
+// "$Id: Fl_Device.cxx,v 1.1.2.2 2004/03/29 22:41:11 rokan Exp $"
 //
 
