@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Positioner.cxx,v 1.1 1999/11/07 08:11:27 bill Exp $"
+// "$Id: Fl_Positioner.cxx,v 1.2 1999/11/10 13:23:08 carl Exp $"
 //
 // Positioner widget for the Fast Light Tool Kit (FLTK).
 //
@@ -105,15 +105,13 @@ int Fl_Positioner::handle(int e) {
 
 #include <FL/Fl_Input.H>
 
-Fl_Style Fl_Positioner::default_style;
-
 static void revert(Fl_Style* s) {
   s->box = FL_THIN_DOWN_BOX;
   s->color = FL_WHITE;
   s->selection_color = FL_RED;
 }
 
-static Fl_Style_Definer x("positioner", Fl_Positioner::default_style, revert);
+Fl_Named_Style Fl_Positioner::default_style("Positioner", revert);
 
 Fl_Positioner::Fl_Positioner(int x, int y, int w, int h, const char* l)
 : Fl_Widget(x, y, w, h, l) {
@@ -141,5 +139,5 @@ void Fl_Positioner::ybounds(double a, double b) {
 }
 
 //
-// End of "$Id: Fl_Positioner.cxx,v 1.1 1999/11/07 08:11:27 bill Exp $".
+// End of "$Id: Fl_Positioner.cxx,v 1.2 1999/11/10 13:23:08 carl Exp $".
 //
