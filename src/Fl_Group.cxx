@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.134 2004/06/11 08:07:17 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.135 2004/07/10 23:17:57 laza2000 Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -674,7 +674,9 @@ void Group::draw_child(Widget& w) const {
     w.set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
     w.draw();
     w.set_damage(0);
+#if !NO_CLIP_OUT
     if (fl_did_clipping != &w) clip_out(0,0,w.w(),w.h());
+#endif
     pop_matrix();
   }
 }
@@ -705,5 +707,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.134 2004/06/11 08:07:17 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.135 2004/07/10 23:17:57 laza2000 Exp $".
 //
