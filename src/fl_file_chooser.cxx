@@ -1,5 +1,5 @@
 //
-// "$Id: fl_file_chooser.cxx,v 1.18 1999/10/26 15:43:12 mike Exp $"
+// "$Id: fl_file_chooser.cxx,v 1.19 2000/01/08 22:29:52 vincent Exp $"
 //
 // File chooser widget for the Fast Light Tool Kit (FLTK).
 //
@@ -25,7 +25,7 @@
 
 #include <config.h>
 #include <FL/fl_file_chooser.H>
-#include <FL/Fl_FileChooser.h>
+#include <FL/Fl_FileChooser.H>
 
 
 static Fl_FileChooser	*fc = (Fl_FileChooser *)0;
@@ -57,5 +57,5 @@ char* fl_file_chooser(const char* message, const char* pat, const char* fname)
 }
 
 //
-// End of "$Id: fl_file_chooser.cxx,v 1.18 1999/10/26 15:43:12 mike Exp $".
+// End of "$Id: fl_file_chooser.cxx,v 1.19 2000/01/08 22:29:52 vincent Exp $".
 //

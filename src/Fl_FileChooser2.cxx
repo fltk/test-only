@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.5 2000/01/07 22:58:52 mike Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.6 2000/01/08 22:29:50 vincent Exp $"
 //
 // More Fl_FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -39,7 +39,7 @@
 // Include necessary headers.
 //
 
-#include <FL/Fl_FileChooser.h>
+#include <FL/Fl_FileChooser.H>
 #include <FL/filename.H>
 #include <FL/fl_ask.H>
 #include <FL/x.H>
@@ -628,5 +628,5 @@ Fl_FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.5 2000/01/07 22:58:52 mike Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.6 2000/01/08 22:29:50 vincent Exp $".
 //

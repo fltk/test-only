@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileBrowser.cxx,v 1.5 2000/01/07 22:58:52 mike Exp $"
+// "$Id: Fl_FileBrowser.cxx,v 1.6 2000/01/08 22:29:50 vincent Exp $"
 //
 // Fl_FileBrowser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -35,7 +35,7 @@
 // Include necessary header files...
 //
 
-#include <FL/Fl_FileBrowser.h>
+#include <FL/Fl_FileBrowser.H>
 #include <FL/fl_draw.H>
 #include <FL/filename.H>
 #include <stdio.h>
@@ -415,5 +415,5 @@ Fl_FileBrowser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_FileBrowser.cxx,v 1.5 2000/01/07 22:58:52 mike Exp $".
+// End of "$Id: Fl_FileBrowser.cxx,v 1.6 2000/01/08 22:29:50 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileBrowser.H,v 1.1 2000/01/08 22:14:13 vincent Exp $"
+// "$Id: Fl_FileBrowser.H,v 1.2 2000/01/08 22:29:49 vincent Exp $"
 //
 // Fl_FileBrowser definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,7 @@
 #  define _FL_FILEBROWSER_H_
 
 #  include <FL/Fl_Browser.H>
-#  include <FL/Fl_FileIcon.h>
+#  include <FL/Fl_FileIcon.H>
 
 
 //
@@ -68,5 +68,5 @@ public:
 #endif // !_FL_FILEBROWSER_H_
 
 //
-// End of "$Id: Fl_FileBrowser.H,v 1.1 2000/01/08 22:14:13 vincent Exp $".
+// End of "$Id: Fl_FileBrowser.H,v 1.2 2000/01/08 22:29:49 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 /*
-   "$Id: conf.h,v 1.1 2000/01/07 08:50:47 bill Exp $"
+   "$Id: conf.h,v 1.2 2000/01/08 22:29:53 vincent Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -81,7 +81,7 @@
 #    include <unistd.h>
 #  endif /* WIN32 || __EMX__ */
 
-#include <FL/Fl_Export.h>
+#include <FL/Fl_Export.H>
 
 /* misc defines */
 #  define CONF_WHITESPACE	" \t\n\r"	/* all whitespace characters */
@@ -406,5 +406,5 @@ extern "C" {
 #endif /* !CONF_H */
 
 /*
- * End of "$Id: conf.h,v 1.1 2000/01/07 08:50:47 bill Exp $".
+ * End of "$Id: conf.h,v 1.2 2000/01/08 22:29:53 vincent Exp $".
  */

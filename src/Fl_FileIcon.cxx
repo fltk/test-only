@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileIcon.cxx,v 1.5 2000/01/08 21:16:23 mike Exp $"
+// "$Id: Fl_FileIcon.cxx,v 1.6 2000/01/08 22:29:51 vincent Exp $"
 //
 // Fl_FileIcon routines for the Fast Light Tool Kit (FLTK).
 //
@@ -49,7 +49,7 @@ extern "C" int access(const char *, int);
 #  include <unistd.h>
 #endif /* WIN32 || __EMX__ */
 
-#include <FL/Fl_FileIcon.h>
+#include <FL/Fl_FileIcon.H>
 #include <FL/Fl_Widget.H>
 #include <FL/fl_draw.H>
 #include <FL/filename.H>
@@ -410,5 +410,5 @@ Fl_FileIcon::draw(int      x,		// I - Upper-lefthand X
 
 
 //
-// End of "$Id: Fl_FileIcon.cxx,v 1.5 2000/01/08 21:16:23 mike Exp $".
+// End of "$Id: Fl_FileIcon.cxx,v 1.6 2000/01/08 22:29:51 vincent Exp $".
 //

@@ -1,4 +1,4 @@
-#include <FL/fl_config.H>
+#include "../themes/conf.h"
 #include <FL/x.H>
 #include <stdio.h>
 #include <stdlib.h>

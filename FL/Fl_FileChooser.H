@@ -7,9 +7,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include "Fl_FileBrowser.h"
+#include "Fl_FileBrowser.H"
 #include <FL/Fl_Button.H>
-#include "Fl_FileInput.h"
+#include "Fl_FileInput.H"
 #include <FL/Fl_Choice.H>
 
 class FL_API Fl_FileChooser {

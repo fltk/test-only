@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileInput.cxx,v 1.2 2000/01/07 22:58:53 mike Exp $"
+// "$Id: Fl_FileInput.cxx,v 1.3 2000/01/08 22:29:52 vincent Exp $"
 //
 // Fl_FileInput routines for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,7 @@
 //
 
 #include <FL/Fl.H>
-#include <FL/Fl_FileInput.h>
+#include <FL/Fl_FileInput.H>
 
 
 //
@@ -71,5 +71,5 @@ Fl_FileInput::handle(int event)	// I - Event to handle
 
 
 //
-// End of "$Id: Fl_FileInput.cxx,v 1.2 2000/01/07 22:58:53 mike Exp $".
+// End of "$Id: Fl_FileInput.cxx,v 1.3 2000/01/08 22:29:52 vincent Exp $".
 //
