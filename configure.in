@@ -48,15 +48,15 @@ dnl Get the operating system and version number...
 uname=`uname`
 uversion=`uname -r | sed -e '1,$s/[[^0-9]]//g'`
 case $uname in
-	IRIX*)
-		uname="IRIX"
-		;;
-	MINGW*)
-		uname="MINGW"
-		;;
-	*)
-		uname="CYGWIN"
-		;;
+  IRIX*)
+    uname="IRIX"
+  ;;
+  MINGW*)
+    uname="MINGW"
+  ;;
+  CYGWIN*)
+    uname="CYGWIN"
+  ;;
 esac
 
 dnl Don't automatically add "-g" to compiler options...
