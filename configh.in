@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.16 1999/03/31 21:47:02 mike Exp $"
+ * "$Id: configh.in,v 1.17 1999/04/12 15:40:22 mike Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -26,6 +26,25 @@
 
 #include <stdarg.h>
 #include <sys/types.h>
+
+/*
+ * FL_DEFAULT_STYLE:
+ *
+ * The default style for applications; normally we default to the
+ * Microsoft Windows style, which also looks a lot like GTK, Qt, etc.
+ *
+ * You can change this by defining FL_DEFAULT_STYLE to one of the
+ * following:
+ *
+ *    FL_WINDOWS_STYLE  - A style that looks like Microsoft Windows
+ *    FL_MOTIF_STYLE    - A style that looks like standard CDE/Motif
+ *    FL_SGI_STYLE      - A style that looks like the SGI "Indigo Magic"
+ *                        version of Motif.
+ */
+
+#define FL_DEFAULT_STYLE FL_WINDOWS_STYLE
+/*#define FL_DEFAULT_STYLE FL_MOTIF_STYLE*/
+/*#define FL_DEFAULT_STYLE FL_SGI_STYLE*/
 
 /*
  * BORDER_WIDTH:
@@ -183,5 +202,5 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define HAVE_POLL 0
 
 /*
- * End of "$Id: configh.in,v 1.16 1999/03/31 21:47:02 mike Exp $".
+ * End of "$Id: configh.in,v 1.17 1999/04/12 15:40:22 mike Exp $".
  */
