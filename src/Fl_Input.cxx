@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.68 2002/07/15 05:55:37 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.69 2002/08/06 07:20:47 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -283,10 +283,15 @@ void Fl_Input::draw(int X, int Y, int W, int H)
   Fl_Color textcolor = text_color();
   if (!active_r()) textcolor = fl_inactive(text_color());
 
+  // I leave a small border on the edge which shrinks as the input field
+  // gets smaller than 12:
+  int xpos = W-9; if (xpos > 3) xpos = 3; else if (xpos < 1) xpos = 1;
+  xpos += X-xscroll_;
+
+  int ypos = -yscroll_;
+
   // visit each line and draw it:
   p = value();
-  int xpos = X-xscroll_; if (W > 12) xpos += 3;
-  int ypos = -yscroll_;
   for (; ypos < H;) {
 
     // re-expand line unless it is the last one calculated above:
@@ -1276,5 +1281,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.68 2002/07/15 05:55:37 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.69 2002/08/06 07:20:47 spitzak Exp $".
 //

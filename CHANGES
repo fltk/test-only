@@ -2354,3 +2354,7 @@ Scrollbars highlighting cleaned up and tested.
 Documentation of new drawing functions.
 
 Added Fl_Window::copy_label()
+
+////////////////////////////////////////////////////////////////
+
+Added EXEEXT to configure.in and makeinclude.in
