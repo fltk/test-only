@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.83 2004/03/17 06:43:27 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.84 2004/03/28 17:33:15 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -884,7 +884,7 @@ void Browser::layout() {
     int space = W-width; // number of pixels that will fill the flex columns
 	int hx = X;          // current x position for this column
     // now set the actual column widths
-	for (int i=0; i<nHeader; i++) {
+	for (i=0; i<nHeader; i++) {
 	  Widget *hi = header[i];
       int itemwidth = (i<nColumn)?column_widths_[i]:0;
       if (itemwidth==0) itemwidth = -1;
@@ -1578,5 +1578,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.83 2004/03/17 06:43:27 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.84 2004/03/28 17:33:15 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.174 2004/03/25 18:13:17 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.175 2004/03/28 17:33:14 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -932,6 +932,23 @@ static bool send_from_root(Widget* widget, int event) {
 extern int fl_pushed_dx, fl_pushed_dy;
 Window* fl_actual_window;
 
+/*! Return true if modal state is on, but w is not a child of modal.
+  Possible contains() should do this all the time.
+*/
+static bool outside_modal(const Widget* b) {
+  if (!modal()) return false;
+  if (!b) return true;
+  for (;;) {
+    if (b == modal()) return false;
+    const Widget* c = b->parent();
+    if (!c) {
+      if (b->is_window() && (c = ((Window*)b)->child_of())) ;
+      else return true;
+    }
+    b = c;
+  }
+}
+
 /*! This is the function called from the system-specific code for all
   events that can be passed to Widget::handle().
 
@@ -970,7 +987,7 @@ bool fltk::handle(int event, Window* window)
   case MOVE:
   case DRAG: // does not happen from system code, but user code may send this
     if (pushed()) {
-      if (modal_ && !modal_->contains(pushed())) {
+      if (outside_modal(pushed())) {
 	return send_from_root(modal_, DRAG);
       } else {
 	e_x = e_x_root+fl_pushed_dx;
@@ -979,7 +996,7 @@ bool fltk::handle(int event, Window* window)
       }
     }
     {Widget* pbm = belowmouse();
-    if (modal_ && !modal_->contains(to)) to = modal_;
+    if (outside_modal(to)) to = modal_;
     bool ret = to && send_from_root(to,MOVE);
     if (pbm != belowmouse()) Tooltip::enter(belowmouse());
     return ret;}
@@ -987,7 +1004,7 @@ bool fltk::handle(int event, Window* window)
   case RELEASE:
     to = pushed();
     if (!event_state(ANY_BUTTON)) pushed_=0;
-    if (modal_ && !modal_->contains(to)) {
+    if (outside_modal(to)) {
       return send_from_root(modal_, RELEASE);
     } else if (to) {
       e_x = e_x_root+fl_pushed_dx;
@@ -1021,7 +1038,7 @@ bool fltk::handle(int event, Window* window)
     xfocus = window; // this should already be set, but just in case.
     // try sending keystroke to the focus:
     to = focus();
-    if (modal_ && !modal_->contains(to)) to = modal_;
+    if (outside_modal(to)) to = modal_;
     while (to) {
       if (send_from_root(to,event)) return true;
       to = to->parent();
@@ -1039,7 +1056,7 @@ bool fltk::handle(int event, Window* window)
   }
 
   // restrict to modal widgets:
-  if (modal_ && !modal_->contains(to)) to = modal_;
+  if (outside_modal(to)) to = modal_;
 
   bool ret = to && send_from_root(to,event);
   if (!ret) {
@@ -1061,5 +1078,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.174 2004/03/25 18:13:17 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.175 2004/03/28 17:33:14 spitzak Exp $".
 //

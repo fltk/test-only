@@ -1,3 +1,5 @@
+// Test of the various subclasses of Menu
+
 #include <fltk/run.h>
 #include <fltk/Item.h>
 #include <fltk/ItemGroup.h>
@@ -8,6 +10,7 @@
 #include <fltk/PopupMenu.h>
 #include <fltk/InputBrowser.h>
 #include <fltk/Choice.h>
+#include <fltk/CycleButton.h>
 #include <fltk/Button.h>
 #include <fltk/draw.h>
 #include <stdio.h>
@@ -134,6 +137,11 @@ int main(int argc, char **argv) {
   build_hierarchy();
   ch.end();
   ch.tooltip("This is a choice");
+
+  CycleButton cb(220,150,100,25,"&cycle:");
+  cb.callback(callback);
+  cb.list(&thelist);
+  cb.tooltip("This is a cyclebutton");
 
   InputBrowser ib(410,50,100,25,"Input&Browser:");
   ib.type(InputBrowser::INDENTED);

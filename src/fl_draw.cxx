@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.39 2004/03/17 06:43:27 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.40 2004/03/28 17:33:15 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -350,7 +350,7 @@ static float align(int first_segment,
     int a = segments[i].ascent; if (a > max_a) max_a = a;
   }
   float my = y;
-  for (int i = first_segment; i < segment_count; i++) {
+  for (i = first_segment; i < segment_count; i++) {
     segments[i].x += dx;
     float dy = max_a-segments[i].ascent;
     segments[i].y += dy;
@@ -649,5 +649,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.39 2004/03/17 06:43:27 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.40 2004/03/28 17:33:15 spitzak Exp $".
 //
