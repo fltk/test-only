@@ -88,8 +88,9 @@ J1:
       Widget* w = child(i);
       if (w->active() && w->test_label_shortcut()) {
 	if (w->is_group()) {value(i); goto J1;} // menu title
+        focus_index(Group::find(w)); // Set focus_index, so Menu::get_item() works
+        if (checkmark(w)) { w->invert_flag(VALUE); redraw(); }
   	execute(w); // button in the menu bar
-//  	if (checkmark(w)) redraw();
   	return 1;
       }
     }
