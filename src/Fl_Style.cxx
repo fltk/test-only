@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.50 2003/11/11 07:36:31 spitzak Exp $"
-//
-// Code for managing Style structures.
+// "$Id: Fl_Style.cxx,v 1.51 2004/01/07 06:57:06 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -40,10 +38,42 @@
 
 using namespace fltk;
 
-NamedStyle* NamedStyle::first;
+/*! \class fltk::Style
+
+  Each widget has a pointer to an instance of Style. Usually
+  many widgets share pointers to the same one. Styles are linked
+  into a hierarchy tree by the parent_ pointers.
+
+  When you look up a value from a style (such as when box() is called)
+  it looks at that style and each parent up until it finds a non-zero
+  value to return, or until there are no more parents, in which case
+  zero is returned. Thus changing a parent style can make global
+  changes as long as widgets do not have local values set.
+
+  When you "set" a style (such as by calling box(UP_BOX)) then the
+  local member variable is set. Notice that by setting a zero value
+  you will indicate that it should return the parent value.
+
+  The method Widget::box(BOX) will create a dynamic() style for that
+  widget, which is a child of the original style, and set the box in
+  that style. This "unique" style is reused for any other changes to
+  that widget and it is deleted when the widget is deleted. Thus
+  changes to a single widget do not affect other widgets, but the
+  majority of widgets all share a Style structure.
+
+  Occasionally it is useful to see if a field has been set. To do this
+  you can directly access the local member variables using names like box_.
+
+*/
+
+/*! \fn bool Style::dynamic() const
+  True if this Style is unique to the Widget that owns it, and is not
+  shared with other Widgets.
+*/
 
 // Do not change the contents of this ever.  The themes depend on getting
-// a known state initially.
+// a known state initially. Make sure the documentation below matches the
+// default values!
 static void revert(Style* s) {
   s->parent_		= 0;	// this is the topmost style always
   s->box_		= DOWN_BOX;
@@ -68,6 +98,157 @@ static void revert(Style* s) {
   s->scrollbar_align_	= ALIGN_RIGHT|ALIGN_BOTTOM;
 }
 
+bool Style::hide_shortcut_ = true;
+bool Style::draw_boxes_inactive_ = true;
+int Style::wheel_scroll_lines_ = 3;
+
+/*! \fn Box* Style::box() const
+  The type of box to draw around the outer edge of the widget (for the
+  majority of widgets, some classes ignore this or use it to draw only
+  text fields inside the widget). The default is fltk::DOWN_BOX.
+*/
+
+/*! \fn Box* Style::buttonbox()	const
+  The type of box to draw buttons internal the widget (notice that
+  fltk::Button uses box, however). The default is fltk::UP_BOX.
+*/
+
+/*! \fn Box* Style::focusbox() const
+  Type of box to draw to indicate focus. This is always called with
+  the fltk::INVISIBLE flag as only the border should be drawn. The
+  default is fltk::DOTTED_FRAME. (Warning: this may go away and we
+  may require the basic boxes to draw this).
+*/
+
+/*! \fn GlyphStyle Style::glyph() const;
+
+  Draw part of a widget, called a "glyph". Examples are the up and
+  down arrows on sliders, the slider itself, and check boxes. The base
+  class draws arrow buttons (because they are so commonly used), but
+  most widgets that use this define their own function to call. A
+  theme can make these functions point at it's own code and thus
+  customize the appearance of widgets quite a bit.
+
+  See \ref glyphs for the numbers.
+  If you wish to write your own glyph function you should examine the
+  ones in the fltk source code and in the sample theme plugins to see
+  how the arguments are interpreted.
+*/
+
+/*! \fn Font* Style::labelfont() const;
+  The font used to draw the label. Default is fltk::HELVETICA. 
+*/
+
+/*! \fn float Style::labelsize() const;
+  Size of labelfont(). Default is 12. 
+*/
+
+/*! \fn Font* Style::textfont() const;
+  Font to use to draw information inside the widget, such as the text
+  in a text editor or menu or browser. Default is fltk::HELVETICA. 
+*/
+
+/*! \fn float Style::textsize() const;
+  Size of text_font. Checkboxes and some other widgets use this to
+  control the size of the glyph. Default is 12.
+*/
+
+/*! \fn float Style::leading() const;
+  Extra spacing added between text lines or other things that are
+  stacked vertically. The default is 2. The function fltk::drawtext() 
+  will use the value from Widget::default_style, but text editors
+  and browsers and menus and similar widgets will use the local value.
+*/
+
+/*! \fn LabelType* Style::labeltype() const;
+  How to draw the label. This provides things like inset, shadow, and
+  the symbols. fltk::NORMAL_LABEL.
+*/
+
+/*! \fn Color Style::color() const;
+
+  Color of the widgets. The default is fltk::WHITE. You may think most
+  widgets are gray, but this is because Group and Window have their
+  own Style with this set to fltk::GRAY75, and also because many parts
+  of widgets are drawn with the buttoncolor().
+
+  If you want to change the overall color of all the gray parts of the
+  interface you want to call fltk::background(color) instead, as this
+  will set the entry for fltk::GRAY75 and also set the "gray ramp" so
+  that the edges of buttons are the same color.
+*/
+
+/*! \fn Color Style::textcolor() const;
+  Color to draw text inside the widget. Default is black. Check and
+  radio buttons use this to control the color of the checkmark. It also
+  controls the color glyphs() are drawn in.
+*/
+
+/*! \fn Color Style::selection_color() const;
+  Color drawn behind selected text in inputs, or selected browser or
+  menu items, or lit light buttons. The default is fltk::WINDOWS_BLUE.
+*/
+
+/*! \fn Color Style::selection_textcolor() const;
+  The color to draw text atop the selection_color. The default of zero
+  indicates that fltk will choose a contrasting color (either the same
+  as the original color or white or black). I recommend you use the
+  default if possible.
+*/
+
+/*! \fn Color Style::highlight_color() const;
+
+  The color to draw the widget when the mouse is over it (for
+  scrollbars and sliders this is used to color the buttons). Depending
+  on the widget this will either recolor the buttons that are normally
+  colored with buttoncolor(), or will recolor the main area that is
+  normally colored with color().
+
+  The default value is zero, which indicates that highlighting is disabled.  */
+
+/*! \fn Color Style::labelcolor() const;
+  Color used to draw labels. Default is fltk::BLACK.  */
+
+/*! \fn Color Style::highlight_textcolor() const;
+  Color used to draw the labels or text when the background is drawn
+  in the highlight_color. The default of zero indicates that fltk will
+  choose a contrasting color (either the same as the original color or
+  white or black). I recommend you use the default if possible.
+*/
+
+/*! \fn Color Style::buttoncolor() const;
+  Color used when drawing buttons. Default is fltk::GRAY75.  */
+
+/*! \fn unsigned char Style::scrollbar_align() const;
+  Where to place scrollbars around a Browser or other scrolling widget.
+  The default is fltk::ALIGN_RIGHT|fltk::ALIGN_BOTTOM.
+*/
+
+/*! \fn unsigned char Style::scrollbar_width() const;
+  How wide the scrollbars are around a Browser or other scrolling widget.
+  The default is 15.
+*/
+
+/*! \fn bool hide_shortcut() const;
+  If false, draw &x in labels as an underscore. If true (the default)
+  then the underscores are not drawn. In this case you should limit
+  your &x shortcuts to menubar items, as shortcuts in buttons are not
+  visible. The menubar will show them when Alt is held down.
+*/
+
+/*! \fn bool draw_boxes_inactive() const
+  If false then most of the built-in box types draw the same even if
+  fltk::INACTIVE is passed to them. This repliates Windows appearance.
+  If true (the default) then the boxes themselves gray out.
+*/
+
+/*! \fn int wheel_scroll_lines() const
+  How many lines to move for one click of a mouse wheel. The default
+  is 3.
+*/
+
+NamedStyle* NamedStyle::first;
+
 static NamedStyle default_named_style("default", ::revert, &Widget::default_style);
 NamedStyle* Widget::default_style = &default_named_style;
 
@@ -75,8 +256,7 @@ NamedStyle* Widget::default_style = &default_named_style;
   another widget is not safe if that
   style is dynamic() because it may change or be deleted.  This makes
   another dynamic() copy if necessary. For non-dynamic styles the
-  pointer is copied.
-*/
+  pointer is copied.  */
 bool Widget::copy_style(const Style* t) {
   if (style_ == t) return false;
   if (style_ && style_->dynamic()) delete (Style*)style_;
@@ -189,7 +369,7 @@ void Widget::highlight_textcolor(Color v) {
 }
 #endif
 
-/** Calculate the colors to draw a box and labels inside that box.
+/*! Calculate the colors to draw a box and labels inside that box.
 
     This is the standard function used by all the built-in fltk
     Symbols and boxes to select the colors to draw. It provides a
@@ -199,23 +379,20 @@ void Widget::highlight_textcolor(Color v) {
     widget.
 
     Flags that are understood:
-
-    HIGHLIGHT: if highlight_color() is non-zero, set bg to
-    highlight_color() and fg to highlight_textcolor().
-
-    SELECTED: if selection_color() is non-zero, set bg to
-    selection_color() and fg to selection_textcolor().
-
-    OUTPUT: Set bg to color(), fg to textcolor(). If false bg is set
-    to buttoncolor() and fg to labelcolor().  Widgets set this true
-    for their main box, and false for any buttons inside themselves.
-
-    INACTIVE: Change the fg to a gray color.
+    - HIGHLIGHT: if highlight_color() is non-zero, set bg to
+      highlight_color() and fg to highlight_textcolor().
+    - SELECTED: if selection_color() is non-zero, set bg to
+      selection_color() and fg to selection_textcolor().
+    - OUTPUT: Set bg to color(), fg to textcolor(). If false bg is set
+      to buttoncolor() and fg to labelcolor().  Widgets set this true
+      for their main box, and false for any buttons inside themselves.
+    - INACTIVE: Change the fg to a gray color.
 
     It then further modifies fg so that it contrasts with the bg.
 
     Return value is \a flags with unused flags turned off. Currently
-    HIGHLIGHT is turned off if not usable due to a missing highlight_color().  */
+    HIGHLIGHT is turned off if not usable due to a missing highlight_color().
+*/
 Flags Style::boxcolors(Flags flags, Color& bg, Color& fg) const {
   // this is not correct! It should search the styles in order and
   // decide what to do as it searches. For instance highligh_textcolor
@@ -291,10 +468,6 @@ Style* Style::find(const char* name) {
   }
   return 0;
 }
-
-bool Style::hide_shortcut_ = true;
-bool Style::draw_boxes_inactive_ = true;
-int Style::wheel_scroll_lines_ = 3;
 
 ////////////////////////////////////////////////////////////////
 // Themes:
@@ -404,11 +577,12 @@ bool fltk::reset_theme() {
 
 ///////////////////////////////////////////////////////////////
 
-// GRAY is replaced with the passed color. For intermediate colors
-// the gray ramp is replaced with a gamma curve that passes through that
-// color. If the color is too dark or light then the gray ramp is left
-// at a straight line and GRAY is not between the two adjacent entries.
-
+/*!
+  fltk::GRAY75 is replaced with the passed color, and all the other
+  fltk::GRAY* colors are replaced with a color ramp (or sometimes
+  a straight line) so that using them for highlighted edges of
+  raised buttons looks correct.
+*/
 void fltk::set_background(Color c) {
   uchar r, g, b;
   split_color( c, r, g, b );
@@ -432,5 +606,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.50 2003/11/11 07:36:31 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.51 2004/01/07 06:57:06 spitzak Exp $".
 //

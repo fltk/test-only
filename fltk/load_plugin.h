@@ -6,6 +6,7 @@
 
 #include "FL_API.h"
 
+/*! \addtogroup utilities */
 FL_API void* load_plugin(const char* name, const char* symbol);
 
 #endif

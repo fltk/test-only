@@ -1,5 +1,5 @@
 //
-// "$Id: draw.h,v 1.6 2003/11/04 08:10:57 spitzak Exp $"
+// "$Id: draw.h,v 1.7 2004/01/07 06:57:06 spitzak Exp $"
 //
 // The fltk drawing library
 //
@@ -33,7 +33,8 @@ namespace fltk {
 
 struct Font;
 
-// current transformation:
+/*! \addtogroup transformation
+  \{ */
 FL_API void push_matrix();
 FL_API void pop_matrix();
 FL_API void scale(float x, float y);
@@ -50,15 +51,20 @@ FL_API void transform(int& x, int& y);
 FL_API void transform_distance(float& x, float& y);
 FL_API void transform_distance(int& x, int& y);
 
-// clip:
+/*! \} */
+
+/*! \addtogroup clipping
+  \{ */
 FL_API void push_clip(int x, int y, int w, int h);
 FL_API void clip_out(int x, int y, int w, int h);
 FL_API void pop_clip();
 FL_API void push_no_clip();
 FL_API int not_clipped(int x, int y, int w, int h);
 FL_API int clip_box(int, int, int, int, int& x, int& y, int& w, int& h);
+/*! \} */
 
-// Colors:
+/*! \addtogroup color
+  \{ */
 FL_API void setcolor(Color);
 extern FL_API Color current_color_;
 inline Color getcolor() {return current_color_;}
@@ -80,8 +86,10 @@ enum {
   JOIN_ROUND	= 0x2000,
   JOIN_BEVEL	= 0x3000
 };
+/*! \} */
 
-// Build the path:
+/*! \addtogroup path
+  \{ */
 FL_API void newpath();
 FL_API void addvertex(float x, float y);
 FL_API void addvertex(int x, int y);
@@ -93,14 +101,18 @@ FL_API void addarc(float x,float y,float w,float h, float a1, float a2);
 FL_API void addcircle(float x, float y, float r);
 FL_API void addellipse(float x, float y, float w, float h);
 FL_API void closepath();
+/*! \} */
 
-// draw the path:
+/*! \addtogroup stroke
+  \{ */
 FL_API void drawpoints();
 FL_API void strokepath();
 FL_API void fillpath();
 FL_API void fillstrokepath(Color);
+/*! \} */
 
-// drawing that bypasses the path mechanism:
+/*! \addtogroup rectangle
+  \{ */
 FL_API void strokerect(int x, int y, int w, int h);
 FL_API void fillrect(int x, int y, int w, int h);
 FL_API void drawpoint(float x, float y);
@@ -115,8 +127,10 @@ inline void fillarc(int x,int y,int w,int h,float a,float a2) {
   fillpie(x,y,w,h,a,a2,FILLARC);}
 inline void strokearc(int x,int y,int w,int h,float a,float a2) {
   fillpie(x,y,w,h,a,a2,STROKEARC);}
+/*! \} */
 
-// current font+size:
+/*! \addtogroup font
+  \{ */
 FL_API void setfont(Font*, float size);
 FL_API void setfont(const char*, float size);
 FL_API void setfont(const char*, int attributes, float size);
@@ -151,14 +165,17 @@ extern FL_API const int* column_widths_;
 inline const int* column_widths() {return column_widths_;}
 inline void column_widths(const int* i) {column_widths_ = i;}
 // see also Symbol.h for @-sign commands
+/*! \} */
 
-// images:
+/*! \addtogroup images
+  \{ */
 FL_API void drawimage(const uchar*, int,int,int,int, int delta=3, int ldelta=0);
 FL_API void drawimagemono(const uchar*, int,int,int,int, int delta=1, int ld=0);
 typedef void (*DrawImageCallback)(void*,int,int,int,uchar*);
 FL_API void drawimage(DrawImageCallback, void*, int,int,int,int, int delta=3);
 FL_API void drawimagemono(DrawImageCallback, void*, int,int,int,int, int delta=1);
 FL_API uchar *readimage(uchar *p, int x,int y, int w, int h, int alpha=0);
+/*! \} */
 
 // depreciated:
 FL_API int draw_xpm(const char*const* data, int x, int y, Color=GRAY75);
@@ -175,5 +192,5 @@ FL_API int draw_symbol(const char* label, int x,int y,int w,int h, Color);
 #endif
 
 //
-// End of "$Id: draw.h,v 1.6 2003/11/04 08:10:57 spitzak Exp $".
+// End of "$Id: draw.h,v 1.7 2004/01/07 06:57:06 spitzak Exp $".
 //

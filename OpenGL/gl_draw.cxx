@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.26 2002/12/10 02:00:28 easysw Exp $"
+// "$Id: gl_draw.cxx,v 1.27 2004/01/07 06:57:06 spitzak Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -35,57 +35,59 @@
 #include "GlChoice.h"
 using namespace fltk;
 
-// binary tree of all the fonts+sizes we have made so far:
+#if USE_X11
+#undef HFONT
+#define HFONT XFontStruct*
+#endif
+
+// Binary tree of all the glListBase assignments we have made so far:
 struct FontSize {
-  fltk::Font* font;
-  float size;
+  HFONT xfont;
   FontSize* left, *right;
   int listbase;
-#if USE_XFT
-  XFontStruct* xfont;
-#endif
 };
 static FontSize* root, *current;
+static HFONT current_xfont;
+bool setlistbase = true;
 
 void fltk::glsetfont(fltk::Font* font, float size) {
   setfont(font, size); // necessary so measure() works
-  size = getsize(); // get the rounded value
-  if (!current || current->font != font || current->size != size) {
-    FontSize** p = &root;
-    while (*p) {
-      if (font < (*p)->font) p = &((*p)->left);
-      else if (font > (*p)->font) p = &((*p)->right);
-      else if (size < (*p)->size) p = &((*p)->left);
-      else if (size > (*p)->size) p = &((*p)->right);
-      else {current = *p; goto GOTIT;}
-    }
-    *p = current = new FontSize;
-    current->font = font;
-    current->size = size;
-    current->left = current->right = 0;
-    current->listbase = glGenLists(256);
-#ifdef _WIN32
-    int base = textmetric()->tmFirstChar;
-    int size = textmetric()->tmLastChar - base + 1;
-    HDC hdc = GetDC(0);
-    HFONT oldFid = (HFONT)SelectObject(hdc, xfont());
-    wglUseFontBitmaps(hdc, base, size, current->listbase+base); 
-    SelectObject(hdc, oldFid);
-#else
-    XFontStruct* xfont = fltk::xfont();
-#if USE_XFT
-    current->xfont = xfont;
-#endif
-    int base = xfont->min_char_or_byte2;
-    int size = xfont->max_char_or_byte2-base+1;
-    glXUseXFont(xfont->fid, base, size, current->listbase+base);
-#endif
-  }
- GOTIT:
-  glListBase(current->listbase);
+  current_xfont = fltk::xfont();
+  setlistbase = true;
 }
 
 void fltk::gldrawtext(const char* str, int n) {
+  if (setlistbase) {
+    setlistbase = false;
+    if (!current || current->xfont != current_xfont) {
+      FontSize** p = &root;
+      while (*p) {
+	if (current_xfont < (*p)->xfont) p = &((*p)->left);
+	else if (current_xfont > (*p)->xfont) p = &((*p)->right);
+	else {current = *p; goto GOTIT;}
+      }
+      *p = current = new FontSize;
+      current->xfont = current_xfont;
+      current->left = current->right = 0;
+      current->listbase = glGenLists(256);
+#if USE_X11
+      int base = current_xfont->min_char_or_byte2;
+      int size = current_xfont->max_char_or_byte2-base+1;
+      glXUseXFont(current_xfont->fid, base, size, current->listbase+base);
+#elif defined(_WIN32)
+      int base = textmetric()->tmFirstChar;
+      int size = textmetric()->tmLastChar - base + 1;
+      HDC hdc = GetDC(0);
+      HFONT oldFid = (HFONT)SelectObject(hdc, current_xfont);
+      wglUseFontBitmaps(hdc, base, size, current->listbase+base); 
+      SelectObject(hdc, oldFid);
+#else
+#error
+#endif
+    }
+  GOTIT:
+    glListBase(current->listbase);
+  }
   glCallLists(n, GL_UNSIGNED_BYTE, str);
 }
 
@@ -105,12 +107,12 @@ void fltk::gldrawtext(const char* str, float x, float y, float z) {
 #if USE_XFT
 // We must use the X font, the normal functions will use the Xft font:
 
-float fltk::glgetascent() { return current->xfont->ascent; }
+float fltk::glgetascent() { return current_xfont->ascent; }
 
-float fltk::glgetdescent() { return current->xfont->descent; }
+float fltk::glgetdescent() { return current_xfont->descent; }
 
 float fltk::glgetwidth(const char* s, int n) {
-  return XTextWidth(current->xfont, s, n);
+  return XTextWidth(current_xfont, s, n);
 }
 
 float fltk::glgetwidth(const char* s) {return glgetwidth(s, strlen(s));}
@@ -180,5 +182,5 @@ void fltk::gldrawimage(const uchar* b, int x, int y, int w, int h, int d, int ld
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.26 2002/12/10 02:00:28 easysw Exp $".
+// End of "$Id: gl_draw.cxx,v 1.27 2004/01/07 06:57:06 spitzak Exp $".
 //

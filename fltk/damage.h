@@ -5,6 +5,8 @@
 
 namespace fltk {
 
+/*! \addtogroup damage
+ \{ */
 enum {
   DAMAGE_VALUE		= 0x01,
   DAMAGE_PUSHED		= 0x02,
@@ -17,6 +19,7 @@ enum {
   DAMAGE_CONTENTS	= 0x40, // reused value
   DAMAGE_ALL		= 0x80
 };
+/*! \} */
 
 }
 

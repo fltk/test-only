@@ -1,7 +1,4 @@
-// "$Id: visual.h,v 1.3 2003/04/20 03:17:49 easysw Exp $"
-//
-// Mostly X-specific crap to allow you to force the "visual" used by
-// fltk to one you like. Does nothing on other systems.
+// "$Id: visual.h,v 1.4 2004/01/07 06:57:06 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -30,7 +27,16 @@
 
 namespace fltk {
 
-enum { // Values for visual(), glVisual(), GlWindow::mode()
+/*! \addtogroup visual
+  X-specific crap to allow you to force the "visual" used by
+  fltk to one you like. Does nothing on other systems, and probably
+  does nothing on modern X systems. In any case, call this first,
+  for instance fltk::visual(fltk::RGB_COLOR) will get you a full
+  color display instead of an 8-bit colormap, if possible.
+  \{
+*/
+
+enum {
   RGB_COLOR	= 0,
   INDEXED_COLOR	= 1,
   SINGLE_BUFFER	= 0,
@@ -44,13 +50,13 @@ enum { // Values for visual(), glVisual(), GlWindow::mode()
   STEREO	= 256
 };
 
-// Make it capable of displaying the given attributes:
+/*! Make it capable of displaying the given attributes. */
 extern FL_API bool visual(int);
 
-// Use OpenGL to choose the visual:
+/*! Use OpenGL to choose the visual. */
 extern FL_API bool glVisual(int);
 
-// Make it use it's own colormap:
+/*! Make it use it's own colormap. */
 extern FL_API void own_colormap();
 
 }

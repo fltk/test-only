@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Style_Set.cxx,v 1.6 2003/11/04 08:11:01 spitzak Exp $"
-//
-// Code for switching between named classes of style
+// "$Id: Fl_Style_Set.cxx,v 1.7 2004/01/07 06:57:06 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -29,10 +27,39 @@
 #include <stdlib.h>
 using namespace fltk;
 
+/*! \class fltk::StyleSet
+
+  Fltk can manage "sets" of styles. This is useful for making a
+  program that displays more than one "theme" at a time, such as a
+  program that edits or creates themes. The "test" widgets can display
+  the theme under development, while the main widgets stay
+  unchanged. Fluid uses this to allow you to try your program under
+  different themes.
+
+  Each widget "belongs" to a set, which is assigned to the current set
+  when the widget is constructed.
+
+  The actual implementation is to change the pointers such as
+  fltk::Widget::default_style for every widget class to point to a new
+  copy, so when the constructors for each widget are run they assign
+  the new copy. The previous copies are saved and restored if the
+  older set name is used.
+
+  There are some problems. Many widgets are dynamically created (for
+  instance pop-up menus) and may not inherit the expected theme unless
+  you are careful. Also some global things such as the background
+  color cannot be seperated into sets.
+*/
+
 static StyleSet* current_set;
 
 extern "C" FL_API bool fltk_theme();
 
+/*! The \e first StyleSet you create is made into the current one and
+  is made equal to the current settings of the styles. All subsequent
+  StyleSet are set to the Style::revert() version of the current ones,
+  and you must call make_current() on them to make them useful.
+*/
 StyleSet::StyleSet() {
   // The first one constructed becomes the current one:
   if (!current_set) {
@@ -63,6 +90,11 @@ StyleSet::StyleSet() {
   NamedStyle::first = saved;
 }
 
+/*!
+  Make this set be current. All widgets created after this use this
+  set, and calling fltk::reload_theme() will change the styles
+  belonging to this set.
+*/
 void StyleSet::make_current() {
   if (this == current_set) return;
 
@@ -83,7 +115,8 @@ void StyleSet::make_current() {
   }
 }
 
-// The destructor has not been tested and I'm not sure what it should do
+/*! The destructor does nothing. It is not clear what it should do, as
+  Widgets may still be using the styles. */
 StyleSet::~StyleSet() {
 #if 0
   if (current_set == this) {
@@ -95,5 +128,5 @@ StyleSet::~StyleSet() {
 }
 
 //
-// End of "$Id: Fl_Style_Set.cxx,v 1.6 2003/11/04 08:11:01 spitzak Exp $".
+// End of "$Id: Fl_Style_Set.cxx,v 1.7 2004/01/07 06:57:06 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: events.h,v 1.6 2003/09/06 22:37:36 spitzak Exp $"
+// "$Id: events.h,v 1.7 2004/01/07 06:57:06 spitzak Exp $"
 //
 // Event types and data. A Widget::handle() method needs this.
 //
@@ -30,6 +30,9 @@
 
 namespace fltk {
 
+/*! \addtogroup events
+  \{
+*/
 enum {
   NO_EVENT	= 0,
   PUSH		= 1,
@@ -58,8 +61,7 @@ enum {
   TOOLTIP	= 24
 };
 
-// event_key() and get_key(n) return these values.
-// The values match X11 keysym assignments
+/*! \brief event_key() and get_key(n) values. */
 enum {
   LeftButton	= 1,
   MiddleButton	= 2,
@@ -131,7 +133,7 @@ enum {
   DeleteKey	= 0xffff
 };
 
-// event_state():
+/*! \brief event_state() bit flags. */
 enum {
   SHIFT		= 0x00010000,
   CAPSLOCK	= 0x00020000,
@@ -145,7 +147,9 @@ enum {
   BUTTON3	= 0x04000000,
   ANY_BUTTON	= 0x7f000000
 };
+/*! Turn \a n into BUTTONn */
 inline unsigned BUTTON(int n) {return 0x00800000 << n;}
+/*! \} */
 
 class Widget;
 class Window;
@@ -176,6 +180,9 @@ extern FL_API bool exit_modal_;
 
 ////////////////////////////////////////////////////////////////
 
+/*! \addtogroup events
+  \{
+*/
 // event information:
 inline int  event()			{return e_type;}
 inline int  event_x()			{return e_x;}
@@ -231,6 +238,8 @@ inline bool exit_modal_flag()		{return exit_modal_;}
 FL_API void copy(const char* stuff, int len, bool clipboard = false);
 FL_API void paste(Widget &receiver, bool clipboard = false);
 FL_API bool dnd();
+
+/*! \} */
 
 }
 

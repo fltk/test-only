@@ -1,5 +1,5 @@
 //
-// "$Id: show_colormap.h,v 1.3 2003/04/20 03:17:49 easysw Exp $"
+// "$Id: show_colormap.h,v 1.4 2004/01/07 06:57:06 spitzak Exp $"
 //
 // Pretty much obsolete popup color chooser that lets you pick one
 // of the 256 indexed colors in fltk.
@@ -31,11 +31,12 @@
 #include "Color.h"
 
 namespace fltk {
+/*! \addtogroup utilities */
 FL_API Color show_colormap(Color oldcol);
 }
 
 #endif
 
 //
-// End of "$Id: show_colormap.h,v 1.3 2003/04/20 03:17:49 easysw Exp $".
+// End of "$Id: show_colormap.h,v 1.4 2004/01/07 06:57:06 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Flags.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: Flags.h,v 1.3 2004/01/07 06:57:06 spitzak Exp $"
 //
 // Unified flags set for fltk. These flags control the appearance of
 // boxes and widgets. This same value is used to:
@@ -37,7 +37,14 @@
 
 namespace fltk {
 
+/*! \addtogroup flags
+  \{ */
+
+/*! Type returned by fltk::Widget::flags() and passed to fltk::Box
+  and many other drawing functions. */
 typedef int Flags;
+
+/*! For back compatability with fltk1.1 */
 typedef Flags Align; // for back compatability
 
 enum {
@@ -45,27 +52,29 @@ enum {
 
   // from Align, values are comptable with fltk 1.0:
   // These control the location and appearance of labels:
-  ALIGN_CENTER		= 0,
-  ALIGN_TOP		= 0x00000001,
-  ALIGN_BOTTOM		= 0x00000002,
-  ALIGN_LEFT		= 0x00000004,
-  ALIGN_RIGHT		= 0x00000008,
-  ALIGN_INSIDE		= 0x00000010,
-  ALIGN_CLIP		= 0x00000040,
-  ALIGN_WRAP		= 0x00000080,
-  ALIGN_MASK		= 0x000000FF,
+  ALIGN_CENTER		= 0,	//!< (0) The label is centered
+  ALIGN_TOP		= 0x00000001, //!< The label is top-aligned
+  ALIGN_BOTTOM		= 0x00000002, //!< The label is bottom-aligned
+  ALIGN_LEFT		= 0x00000004, //!< The label is left-aligned
+  ALIGN_RIGHT		= 0x00000008, //!< The label is right-aligned
+  ALIGN_INSIDE		= 0x00000010, //!< The label is put inside widget
+  ALIGN_CLIP		= 0x00000040, //!< The label is clipped to the widget
+  ALIGN_WRAP		= 0x00000080, //!< The label is word-wrapped
+  ALIGN_MASK		= 0x000000FF, //!< Used to split align() from flags()
 
-  INACTIVE		= 0x00000100, // does not get events, gray it out
-  OUTPUT		= 0x00000200, // does not get events
-  VALUE			= 0x00000400, // indicates true/down/on state
-  SELECTED		= 0x00000800, // draw using selection colors
-  INVISIBLE		= 0x00001000, // does not get events, does not draw
-  HIGHLIGHT		= 0x00002000, // draw highlighted
-  CHANGED		= 0x00004000, // value changed since last callback
-  COPIED_LABEL		= 0x00008000, // copy_label() was called
-  RAW_LABEL		= 0x00010000, // don't interpret & or @ in label
-  PACK_VERTICAL		= 0x00020000, // Pack puts this widget vertical
-  CLICK_TO_FOCUS	= 0x00040000  // Set true if clicking this widget causes it to take focus
+  INACTIVE		= 0x00000100, //!< does not get events, gray it out
+  OUTPUT		= 0x00000200, //!< does not get events
+  VALUE			= 0x00000400, //!< indicates true/down/on state
+  SELECTED		= 0x00000800, //!< draw using selection colors
+  INVISIBLE		= 0x00001000, //!< !visible(), draw empty
+  HIGHLIGHT		= 0x00002000, //!< draw highlighted
+  CHANGED		= 0x00004000, //!< value() changed since last callback
+  COPIED_LABEL		= 0x00008000, //!< copy_label() was called
+  RAW_LABEL		= 0x00010000, //!< don't interpret & or @ in label
+  PACK_VERTICAL		= 0x00020000, //!< fltk::Pack puts this widget vertical
+  CLICK_TO_FOCUS	= 0x00040000  //!< Set true if clicking this widget causes it to take focus
+
+/*! \} */
 
 };
 

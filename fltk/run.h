@@ -1,5 +1,5 @@
 //
-// "$Id: run.h,v 1.6 2003/08/25 15:28:47 spitzak Exp $"
+// "$Id: run.h,v 1.7 2004/01/07 06:57:06 spitzak Exp $"
 //
 // The basic fltk runtime. Every program needs to call this somewhere.
 //
@@ -35,16 +35,17 @@ namespace fltk {
 
 FL_API float version();
 
-// argument parsers:
+/*! \addtogroup environment
+  \{ */
 FL_API int arg(int, char**, int&);
 FL_API int args(int, char**, int&, int (*)(int,char**,int&) = 0);
 extern FL_API const char* const help;
 FL_API void args(int, char**);
-
-// things called by initialization:
 FL_API void display(const char*);
+/*! \} */
 
-// execution:
+/*! \addtogroup execution
+  \{ */
 FL_API int wait();
 FL_API int wait(float time);
 FL_API int check();
@@ -79,12 +80,15 @@ enum {READ = 1, WRITE = 4, EXCEPT = 8};
 FL_API void add_fd(int fd, int when, FileHandler, void* =0);
 FL_API void add_fd(int fd, FileHandler, void* = 0);
 FL_API void remove_fd(int, int when = -1);
+/*! \} */
 
-// Multithreading support:
+/*! \addtogroup multithreading
+  \{ */
 FL_API void lock();
 FL_API void unlock();
 FL_API void awake(void* message = 0);
 FL_API void* thread_message();
+/*! \} */
 
 }
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Style.h,v 1.11 2003/11/04 08:10:56 spitzak Exp $"
+// "$Id: Style.h,v 1.12 2004/01/07 06:57:06 spitzak Exp $"
 //
 // Style structure used by Widgets
 //
@@ -97,9 +97,28 @@ extern FL_API LabelType* const EMBOSSED_LABEL;
 
 class Style;
 
-typedef void (*GlyphStyle)(int type,
+/*! \addtogroup glyphs
+  \{ */
+typedef void (*GlyphStyle)(int number,
 			   int,int,int,int, const Style*,
 			   Flags);
+/*! Numbers understood by fltk::Widget::default_glyph(). All other numbers
+  draw the same as GLYPH_BOX. The numbers
+  0-99 are reserved for per-Widget glyphs, for instance for parts
+  of the fltk::Slider or for the checkmark drawn by fltk::CheckButton.
+*/
+enum GlyphNumber {
+  GLYPH_BOX = 100,	//!< Draw an empty box
+  GLYPH_UP,		//!< draw an up arrow
+  GLYPH_DOWN,		//!< draw a down arrow
+  GLYPH_LEFT,		//!< draw a left arrow
+  GLYPH_RIGHT,		//!< draw a right arrow
+  GLYPH_UP_BUTTON,	//!< draw an up arrow in a box
+  GLYPH_DOWN_BUTTON,	//!< draw a down arrow in a box
+  GLYPH_LEFT_BUTTON,	//!< draw a left arrow in a box
+  GLYPH_RIGHT_BUTTON	//!< draw a right arrow in a box
+};
+/*! \} */
 
 class FL_API Style {
  public:
@@ -199,20 +218,8 @@ struct FL_API NamedStyle : public Style {
   NamedStyle(const char* name, void (*revert)(Style*), NamedStyle**);
 };
 
-enum GlyphNumber {	// glyph types understood by Widget::default_glyph()
-  // the numbers 0-99 are reserved for private glyph functions
-  GLYPH_BOX = 100,
-  GLYPH_UP,
-  GLYPH_DOWN,
-  GLYPH_LEFT,
-  GLYPH_RIGHT,
-  GLYPH_UP_BUTTON,
-  GLYPH_DOWN_BUTTON,
-  GLYPH_LEFT_BUTTON,
-  GLYPH_RIGHT_BUTTON
-};
-
-// Themes:
+/*! \addtogroup themes
+  \{ */
 extern "C" {typedef bool (*Theme)();}
 extern FL_API Theme theme_;
 inline Theme theme() {return theme_;}
@@ -225,9 +232,10 @@ FL_API bool system_theme();
 }
 
 extern "C" FL_API bool fltk_theme();
+/*! \} */
 
 #endif
 
 //
-// End of "$Id: Style.h,v 1.11 2003/11/04 08:10:56 spitzak Exp $".
+// End of "$Id: Style.h,v 1.12 2004/01/07 06:57:06 spitzak Exp $".
 //

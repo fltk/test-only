@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.107 2003/12/15 03:03:13 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.108 2004/01/07 06:57:06 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -290,20 +290,7 @@ void Widget::copy_label(const char* s) {
 
   Each Widget, and most drawing functions, take a bitmask of
   flags that indicate the current state and exactly how to draw
-  things. The following flags are defined:
-
-  - fltk::INVISIBLE - !visible() 
-  - fltk::INACTIVE - !active() 
-  - fltk::OUTPUT - output() 
-  - fltk::VALUE - value() 
-  - fltk::SELECTED - selected() 
-  - fltk::HIGHLIGHT - draw highlighted 
-  - fltk::CHANGED - changed() 
-  - fltk::COPIED_LABEL - indicates copy_label() was called 
-  - fltk::RAW_LABEL - prevents interpretation of '&' and '@' in labels 
-  - fltk::ALIGN_* - see align()
-  - fltk::PACK_VERTICAL - fltk::Pack puts this widget vertical 
-  - fltk::CLICK_TO_FOCUS - click_to_focus() 
+  things. See \ref flags for values.
 */
 
 /*! void Widget::align(Flags);
@@ -311,24 +298,7 @@ void Widget::copy_label(const char* s) {
   Forces the values of all the fltk::ALIGN_* flags to the passed
   value. This determines how the label is printed next to or inside
   the widget. The default value is fltk::ALIGN_CENTER, which centers
-  the label. The value can be any of these constants or'd together:
-
-  - fltk::ALIGN_CENTER - The label is centered (0). 
-  - fltk::ALIGN_TOP - The label is top-aligned. 
-  - fltk::ALIGN_BOTTOM - The label is bottom-aligned. 
-  - fltk::ALIGN_LEFT - The label is left-aligned. 
-  - fltk::ALIGN_RIGHT - The label is right-aligned. 
-  - fltk::ALIGN_CLIP - The label is clipped to the widget. 
-  - fltk::ALIGN_WRAP - The label text is wrapped as needed. 
-  - fltk::ALIGN_TOP_LEFT
-  - fltk::ALIGN_TOP_RIGHT
-  - fltk::ALIGN_BOTTOM_LEFT
-  - fltk::ALIGN_BOTTOM_RIGHT
-  - fltk::ALIGN_LEFT_TOP
-  - fltk::ALIGN_RIGHT_TOP
-  - fltk::ALIGN_LEFT_BOTTOM
-  - fltk::ALIGN_RIGHT_BOTTOM
-  - fltk::ALIGN_INSIDE - 'or' this with other values to put label inside the widget.
+  the label. The value can be any of the ALIGN \ref flags or'd together.
 */
 
 /*! \fn void Widget::when(uchar)
@@ -459,8 +429,8 @@ void Widget::relayout(uchar flags) {
 /*! \fn uchar Widget::layout_damage() const
 
   The 'or' of all the calls to relayout() or resize() done since the
-  last time layout() was called. Cleared to zero by
-  Widget::layout().
+  last time layout() was called.
+  For more information see the \ref layout chapter.
 
   A typical layout function does not care about the widget moving, an
   easy way to skip it is as follows:
@@ -472,18 +442,6 @@ MyClass::layout() {
   redraw();
 }
 \endcode
-
-  The following bit values are defined: 
-
-  - fltk::LAYOUT_X - x() changed by resize()
-  - fltk::LAYOUT_Y - y() changed by resize()
-  - fltk::LAYOUT_XY - same as fltk::LAYOUT_X|fltk::LAYOUT_Y
-  - fltk::LAYOUT_W - w() changed by resize()
-  - fltk::LAYOUT_H - h() changed by resize()
-  - fltk::LAYOUT_WH - same as fltk::LAYOUT_W|fltk::LAYOUT_H
-  - fltk::LAYOUT_XYWH - same as fltk::LAYOUT_XY|fltk::LAYOUT_WH
-  - fltk::LAYOUT_CHILD - layout() needs to be called on a child of this group widget.
-  - fltk::LAYOUT_DAMAGE - relayout() was called.
 */
 
 /*! \fn void Widget::layout_damage(uchar c)
@@ -496,6 +454,11 @@ MyClass::layout() {
 
   The 'or' of all the calls to redraw() done since the last
   draw(). Cleared to zero after draw() is called.
+
+  See \ref damage for more information.
+*/
+
+/*! \addtogroup damage
 
   When redrawing your widgets you should look at the damage bits to
   see what parts of your widget need redrawing. The handle() method
@@ -520,37 +483,46 @@ MyClass::draw() {
 }
   \endcode
 
-  Fltk assigns meaning to the following bits in the damage: 
+  Except for DAMAGE_ALL, each widget is allowed to assign any meaning
+  to any of the bits it wants. The enumerations are just to provide
+  suggested meanings.
+*/
 
-  - fltk::DAMAGE_CHILD - A child of this group widget needs to be
+/*! \var fltk::DAMAGE_CHILD
+  A child of this group widget needs to be
   redrawn (non-group widgets can use this bit for their own purposes).
-
-  - fltk::DAMAGE_CHILD_LABEL - An outside label of this widget needs
+*/
+/*! \var fltk::DAMAGE_CHILD_LABEL
+  An outside label of this widget needs
   to be redrawn. This is handled (and this bit is cleared) by the
   parent group.
-
-  - fltk::DAMAGE_EXPOSE - Damage caused by damage() or by expose
+*/
+/*! \var fltk::DAMAGE_EXPOSE
+  Damage caused by damage() or by expose
   events from the operating system. If this and fltk::DAMAGE_ALL is on
   the widget should draw every pixel inside it's region.
-
-  - fltk::DAMAGE_ALL - This bit is set by redraw() and indicates that
+*/
+/*! \var fltk::DAMAGE_ALL
+  This bit is set by redraw() and indicates that
   all of the widget (but not "holes" where the background shows
   through) needs to be redraw.
-
-  To avoid collisions with the these and
-  any other future assigned bit values, widgets should limit
-  themselves to these predefined bits for managing their own
-  damage. You can use the names if they are appropriate, or define
-  your own symbols with the same values:
-
-  - fltk::DAMAGE_VALUE
-  - fltk::DAMAGE_PUSHED
-  - fltk::DAMAGE_SCROLL
-  - fltk::DAMAGE_OVERLAY Same value as fltk::DAMAGE_SCROLL. 
-  - fltk::DAMAGE_HIGHLIGHT
-  - fltk::DAMAGE_CONTENTS Same as fltk::DAMAGE_EXPOSE but if fltk::DAMAGE_ALL is off you can use this for your own purposes.
-
 */
+/*! \var fltk::DAMAGE_VALUE
+  A widget may use this to indicate that the displayed value has changed. */
+/*! \var fltk::DAMAGE_PUSHED
+  A widget may use this to indicate that the user has pushed or released
+  a button. */
+/*! \var fltk::DAMAGE_SCROLL
+  A widget may use this to indicate that
+  the displayed data has scrolled moved horizontally and/or vertically. */
+/*! \var fltk::DAMAGE_OVERLAY
+  Same value as fltk::DAMAGE_SCROLL. */
+/*! \var fltk::DAMAGE_HIGHLIGHT
+  A widget may use this to indicate that
+  the mouse has entered/exited part of the widget. */
+/*! \var fltk::DAMAGE_CONTENTS
+  Same as fltk::DAMAGE_EXPOSE but if fltk::DAMAGE_ALL is off a widget can
+  use this for it's own purposes. */
 
 /*! \fn void Widget::set_damage(uchar c)
 
@@ -636,7 +608,7 @@ void Widget::redraw_highlight() {
 ////////////////////////////////////////////////////////////////
 // Events:
 
-/*! Handle an <a href=events.html>event</a>. Returns non-zero if the
+/*! Handle an \ref events(event). Returns non-zero if the
   widget understood and used the event.
 
   The default version returns true for
@@ -644,12 +616,12 @@ void Widget::redraw_highlight() {
   (ones where box() is not NO_BOX). This is done so you can put tooltips
   on the base widget.
 
-  Information on how to write your own version of handle() is <a
-  href=subclassing.html#handle>here</a>.
+  Information on how to write your own version of handle() is can
+  be found under \ref events.
 
-  If you want to send an event to a widget you probably want to use
-  send() which will do some extra processing before and
-  after the event is handled.
+  If you want to send an event to a widget you do not want to call
+  this, you probably want to call send() which will do some extra
+  processing before and after the event is handled.
 */
 int Widget::handle(int event) {
   switch (event) {
@@ -1091,5 +1063,5 @@ void Widget::draw()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.107 2003/12/15 03:03:13 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.108 2004/01/07 06:57:06 spitzak Exp $".
 //

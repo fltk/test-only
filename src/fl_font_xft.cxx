@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.17 2003/08/03 16:55:13 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.18 2004/01/07 06:57:06 spitzak Exp $"
 //
 // Copyright 2001 Bill Spitzak and others.
 //
@@ -88,6 +88,7 @@ struct FontSize {
   const char* encoding;
   float size;
   //~FontSize();
+  XFontStruct* xfont;
 };
 
 // The xft font implementation adds the xft name and the above list:
@@ -108,8 +109,8 @@ const char* fltk::Font::system_name() {
   return name_;
 }
 
-static FontSize *current;
-  
+static FontSize* current;
+
 // Change the encoding to use for the next font selection.
 void fltk::set_encoding(const char* f) {
   encoding_ = f;
@@ -151,6 +152,7 @@ void fltk::setfont(fltk::Font* font, float size) {
     f->encoding = encoding_;
     f->size = current_size_;
     f->font = fontopen(font->name_, font->attributes_, false);
+    f->xfont = 0; // figure this out later
     f->next = ((IFont*)font)->first;
     ((IFont*)font)->first = f;
   }
@@ -168,18 +170,25 @@ FontSize::~FontSize() {
 // a pretty good job of selecting X fonts. Unfortunatlye Xft2 seems to have
 // completely hidden or removed this interface...
 XFontStruct* fltk::xfont() {
+  if (!current->xfont) {
 #if defined(XFT_MAJOR) && XFT_MAJOR >= 2
-  // kludge!
-  static XFontStruct* some_font = 0;
-  if (!some_font) some_font = XLoadQueryFont(xdisplay, "variable");
-  return some_font;
+    // kludge!
+    static XFontStruct* some_font = 0;
+    if (!some_font) some_font = XLoadQueryFont(xdisplay, "variable");
+    current->xfont = some_font;
 #else
-  if (current->font->core) return current->font->u.core.font;
-  static XftFont* xftfont;
-  if (xftfont) XftFontClose (xdisplay, xftfont);
-  xftfont = fontopen(current_font_->name_, current_font_->attributes_, true);
-  return xftfont->u.core.font;
+    if (current->font->core) {
+      current->xfont = current->font->u.core.font;
+    } else {
+      static XftFont* xftfont;
+      if (xftfont) XftFontClose (xdisplay, xftfont);
+      // select the "core" version of the font:
+      xftfont = fontopen(current_font_->name_,current_font_->attributes_,true);
+      current->xfont = xftfont->u.core.font;
+    }
 #endif
+  }
+  return current->xfont;
 }
 
 const char* fltk::Font::current_name() {
@@ -409,5 +418,5 @@ int fltk::Font::encodings(const char**& arrayp) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.17 2003/08/03 16:55:13 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.18 2004/01/07 06:57:06 spitzak Exp $"
 //

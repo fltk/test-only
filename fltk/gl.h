@@ -1,5 +1,5 @@
 //
-// "$Id: gl.h,v 1.10 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: gl.h,v 1.11 2004/01/07 06:57:06 spitzak Exp $"
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
@@ -65,6 +65,8 @@ namespace fltk {
 
 struct Font;
 
+/*! \addtogroup opengl
+  \{ */
 FL_GL_API void glstart();
 FL_GL_API void glfinish();
 
@@ -85,10 +87,11 @@ FL_GL_API void gldrawtext(const char*, float x, float y, float z = 0);
 FL_GL_API void gldrawtext(const char*, int n, float x, float y, float z = 0);
 
 FL_GL_API void gldrawimage(const uchar *, int x,int y,int w,int h, int d=3, int ld=0);
+/*! \} */
 
 }
 #endif
 
 //
-// End of "$Id: gl.h,v 1.10 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: gl.h,v 1.11 2004/01/07 06:57:06 spitzak Exp $".
 //
