@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.235 2004/10/29 06:42:55 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.236 2004/10/30 05:13:27 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -53,10 +53,12 @@ using namespace fltk;
 #endif
 
 //
-// USE_ASYNC_SELECT - define it if you have WSAAsyncSelect()...
+// USE_ASYNC_SELECT - define it non-zero if you have WSAAsyncSelect()...
 //
+#define USE_ASYNC_SELECT 1
 
-#define USE_ASYNC_SELECT
+// USE_IMM - define it non-zero if you want Input Method
+#define USE_IMM 1
 
 //
 // WM_SYNCPAINT is an "undocumented" message, which is finally defined in
@@ -94,6 +96,7 @@ using namespace fltk;
 // like GUI programs on more sensible operating systems
 #define WM_MAKEWAITRETURN (WM_USER+0x401)
 
+#if USE_IMM
 #define IMM_DYNAMIC_LOADING 1
 
 #ifdef IMM_DYNAMIC_LOADING
@@ -120,10 +123,9 @@ HIMC (WINAPI *pfnImmAssociateContext)(HWND, HIMC);
 # define pfnImmAssociateContext ImmAssociateContext
 #endif
 
-bool fl_use_imm32 = false;
+static bool fl_use_imm32 = false;
 
-bool fl_load_imm32()
-{
+static bool fl_load_imm32() {
 #ifdef IMM_DYNAMIC_LOADING
   hLibImm = __LoadLibraryW(L"imm32.dll");
   if (hLibImm == NULL)
@@ -151,9 +153,12 @@ bool fl_load_imm32()
 #endif
   return true;
 }
+#endif
 
-void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
-{
+void fl_set_spot(fltk::Font *f, Widget *w, int x, int y) {
+#if USE_IMM
+  if (!fl_use_imm32) return;
+
   HWND hwnd;
   {Window* flwindow = w->window();
   if (!flwindow || !flwindow->shown()) return;
@@ -164,9 +169,6 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
   static Widget *spotw = NULL;
   //static RECT spot_set;
   static RECT spot;
-
-  if (!fl_use_imm32)
-    return;
 
   if (w != spotw) {
     spotw = w;
@@ -211,6 +213,7 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
       pfnImmReleaseContext(hwnd, himc);
     }
   }
+#endif
 }
 
 /**
@@ -1538,7 +1541,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
      	  dbcsbuf[0] = (unsigned char) wParam;
 	}
 	dbcsbuf[2] = 0;
-	e_length = utf8frommb(buffer, 31, dbcsbuf, dbcsl);
+	e_length = utf8frommb(buffer, sizeof(buffer), dbcsbuf, dbcsl);
+	if (e_length >= sizeof(buffer)) e_length = sizeof(buffer)-1;
 	dbcsbuf[0] = 0;
       }
     } else {
@@ -1871,7 +1875,9 @@ void CreatedWindow::create(Window* window) {
     OleInitialize(0L);
 #endif
 
+#if USE_IMM
     fl_use_imm32 = fl_load_imm32();
+#endif
   }
 
   HWND parent;
@@ -1891,7 +1897,7 @@ void CreatedWindow::create(Window* window) {
     Widget* p = window->parent();
     while (!p->is_window()) {
       xp += p->x(); yp += p->y();
-      p=p->parent()) {
+      p=p->parent();
     }
     parent = fltk::xid((Window*)p);
 
@@ -1955,17 +1961,6 @@ void CreatedWindow::create(Window* window) {
 
 #if USE_DRAGDROP
   RegisterDragDrop(x->xid, &flDropTarget);
-#endif
-
-#if 0
-  // WAS: I swear this breaks our programs! It causes the main window
-  // titlebar to lose focus highlight and often the program completely
-  // loses keyboard focus! This is on win2000. We cannot use this unless
-  // this problem is fixed. Also it does not appear to actually put the
-  // window atop the taskbar anyway...
-  if (window->override())
-    SetWindowPos(x->xid, HWND_TOPMOST, 0,0,0,0,
-		 SWP_NOMOVE|SWP_NOSIZE|SWP_NOACTIVATE|SWP_NOSENDCHANGING);
 #endif
 }
 
@@ -2356,5 +2351,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.235 2004/10/29 06:42:55 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.236 2004/10/30 05:13:27 spitzak Exp $".
 //

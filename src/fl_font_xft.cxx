@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.28 2004/07/30 04:51:15 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.29 2004/10/30 05:13:27 spitzak Exp $"
 //
 // Copyright 2004 Bill Spitzak and others.
 //
@@ -216,15 +216,29 @@ float fltk::getdescent() { return current->font->descent; }
 // does not print anything. This is very annoying. Alternative version
 // here will user our converter to wchar_t and print that, but I would
 // rather see Xft fixed.
+//
+// Older Xft seems to crash xlib on certain lengths. This was a real
+// pain to track down!
+#define WCBUFLEN 256
 
 float fltk::getwidth(const char *str, int n) {
   XGlyphInfo i;
 #if 0
   XftTextExtentsUtf8(xdisplay, current->font, (XftChar8*)str, n, &i);
 #else
-  wchar_t buffer[1024];
-  int count = utf8towc(str, n, buffer, 1024);
+  wchar_t localbuffer[WCBUFLEN];
+  wchar_t* buffer = localbuffer;
+  wchar_t* mallocbuffer = 0;
+  int count = utf8towc(str, n, buffer, WCBUFLEN);
+  if (count >= WCBUFLEN) {
+    buffer = mallocbuffer = new wchar_t[count+3];
+    count = utf8towc(str, n, buffer, count+3);
+  }
+  // fix some lengths that cause older Xft to crash (!):
+  if ((count&255)==253) buffer[count++] = 0;
+  if ((count&255)==254) buffer[count++] = 0;
   XftTextExtents32(xdisplay, current->font, (XftChar32*)buffer, count, &i);
+  delete[] mallocbuffer;
 #endif
   return i.xOff;
 }
@@ -276,11 +290,21 @@ void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
 		    int(floorf(x+.5f)), int(floorf(y+.5f)),	
 		    (XftChar8*)str, n);
 #else
-  wchar_t buffer[1024];
-  int count = utf8towc(str, n, buffer, 1024);
+  wchar_t localbuffer[WCBUFLEN];
+  wchar_t* buffer = localbuffer;
+  wchar_t* mallocbuffer = 0;
+  int count = utf8towc(str, n, buffer, WCBUFLEN);
+  if (count >= WCBUFLEN) {
+    buffer = mallocbuffer = new wchar_t[count+3];
+    count = utf8towc(str, n, buffer, count+3);
+  }
+  // fix some lengths that cause older Xft to crash (!):
+  if ((count&255)==253) buffer[count++] = ' ';
+  if ((count&255)==254) buffer[count++] = ' ';
   XftDrawString32(xft_gc, &color, current->font,
 		  int(floorf(x+.5f)), int(floorf(y+.5f)),	
 		  (XftChar32*)buffer, count);
+  delete[] mallocbuffer;
 #endif
 }
 
@@ -450,5 +474,5 @@ int fltk::Font::encodings(const char**& arrayp) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.28 2004/07/30 04:51:15 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.29 2004/10/30 05:13:27 spitzak Exp $"
 //

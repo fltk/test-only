@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_abort.cxx,v 1.21 2004/07/29 09:07:53 spitzak Exp $"
+// "$Id: Fl_abort.cxx,v 1.22 2004/10/30 05:13:26 spitzak Exp $"
 //
 // Warning/error message code for the Fast Light Tool Kit (FLTK).
 //
@@ -64,8 +64,7 @@ static void warning(const char *format, ...) {
   va_start(args, format);
   int buflen = vsnprintf(buf, 1024, format, args);
   va_end(args);
-  int ucslen = utf8towc(buf, buflen, ucsbuf, 1024);
-  ucsbuf[ucslen] = 0;
+  utf8towc(buf, buflen, ucsbuf, 1024);
   MessageBoxW(0, ucsbuf, L"Warning", MB_ICONEXCLAMATION|MB_OK);
 }
 
@@ -76,8 +75,7 @@ static void error(const char *format, ...) {
   va_start(args, format);
   int buflen = vsnprintf(buf, 1024, format, args);
   va_end(args);
-  int ucslen = utf8towc(buf, buflen, ucsbuf, 1024);
-  ucsbuf[ucslen] = 0;
+  utf8towc(buf, buflen, ucsbuf, 1024);
   MessageBoxW(0, ucsbuf, L"Error", MB_ICONSTOP|MB_SYSTEMMODAL);
   exit(1);
 }
@@ -116,5 +114,5 @@ void (*fltk::error)(const char* format, ...) = ::error;
 void (*fltk::fatal)(const char* format, ...) = ::error;
 
 //
-// End of "$Id: Fl_abort.cxx,v 1.21 2004/07/29 09:07:53 spitzak Exp $".
+// End of "$Id: Fl_abort.cxx,v 1.22 2004/10/30 05:13:26 spitzak Exp $".
 //

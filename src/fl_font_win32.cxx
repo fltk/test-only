@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.60 2004/07/29 09:07:54 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.61 2004/10/30 05:13:27 spitzak Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -106,9 +106,7 @@ FontSize::FontSize(const char* name, int attr, int size, int charset) {
   lf.lfOutPrecision   = OUT_DEFAULT_PRECIS;
   lf.lfQuality        = DEFAULT_QUALITY;
 
-  int ucslen;
-  ucslen = utf8towc(name, strlen(name), lf.lfFaceName, LF_FACESIZE);
-  lf.lfFaceName[ucslen] = 0;
+  utf8towc(name, strlen(name), lf.lfFaceName, LF_FACESIZE);
 
   // This one does exactly same thing as CreateFont,
   // But we use CreateFontIndirect, since Windows CE does not have CreateFont
@@ -247,47 +245,43 @@ void fltk::setfont(Font* font, float psize) {
 
 float fltk::getascent()  { return current->metr.tmAscent; }
 float fltk::getdescent() { return current->metr.tmDescent; }
-  
-#define UCS_BUFSIZE 512
+
+#define WCBUFLEN 256
 
 float fltk::getwidth(const char* text, int n) {	
-  SIZE size;
-	int ret = 0;
   HDC dc = getDC();
   SelectObject(dc, current->font);
-  // I think win32 has a fractional version of this:
-  int ucslen; 
-  wchar_t ucs[UCS_BUFSIZE];
-  while(n > 0) {
-    ucslen = utf8towc(text, n, ucs, UCS_BUFSIZE);
-    GetTextExtentPoint32W(dc, ucs, ucslen, &size);		
-    ret += size.cx;
-    n -= UCS_BUFSIZE;
-    text += UCS_BUFSIZE;
+  wchar_t localbuffer[WCBUFLEN];
+  wchar_t* buffer = localbuffer;
+  wchar_t* mallocbuffer = 0;
+  int count = utf8towc(text, n, buffer, WCBUFLEN);
+  if (count >= WCBUFLEN) {
+    buffer = mallocbuffer = new wchar_t[count+1];
+    count = utf8towc(text, n, buffer, count+1);
   }
-  return (float)ret;
+  // I think win32 has a fractional version of this:
+  SIZE size; GetTextExtentPoint32W(dc, buffer, count, &size);
+  delete[] mallocbuffer;
+  return (float)(size.cx);
 }
 
 void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
   SetTextColor(dc, current_xpixel);
   HGDIOBJ oldfont = SelectObject(dc, current->font);
-
-  wchar_t ucs[UCS_BUFSIZE];
-  while(n > 0) {
-    int ucslen = utf8towc(text, n, ucs, UCS_BUFSIZE);
-    TextOutW(dc, int(floorf(x+.5f)), int(floorf(y+.5f)), ucs, ucslen);
-    n -= UCS_BUFSIZE;
-    text += UCS_BUFSIZE;
-    if(n > 0) {
-      SIZE size;
-      GetTextExtentPoint32W(dc, ucs, ucslen, &size);
-      x += size.cx;
-    }
+  wchar_t localbuffer[WCBUFLEN];
+  wchar_t* buffer = localbuffer;
+  wchar_t* mallocbuffer = 0;
+  int count = utf8towc(text, n, buffer, WCBUFLEN);
+  if (count >= WCBUFLEN) {
+    buffer = mallocbuffer = new wchar_t[count+1];
+    count = utf8towc(text, n, buffer, count+1);
   }
-
+  TextOutW(dc, int(floorf(x+.5f)), int(floorf(y+.5f)), buffer, count);
+  delete[] mallocbuffer;
+  // Why are we setting the font back every time?
   SelectObject(dc, oldfont);
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.60 2004/07/29 09:07:54 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.61 2004/10/30 05:13:27 spitzak Exp $".
 //

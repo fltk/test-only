@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.156 2004/10/29 06:42:55 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.157 2004/10/30 05:13:26 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -191,14 +191,11 @@ Widget* MWindow::get_widget(int index) {
 }
 
 static const Monitor* monitor;
-#ifdef _WIN32
-// Until we can get the menus to appear above the toolbar (see Fl_win32.cxx)
-// we must make them scroll to miss them. Change this macro if this is
-// ever fixed to match the Unix version:
-#define MENUAREA (monitor->work)
-#else
 #define MENUAREA (*monitor)
-#endif
+// If we are unable to get our menus atop the toolbar (this was happening
+// in WIN32 for awhile) change the definition to this to make the menus
+// scroll to avoid the toolbar:
+//#define MENUAREA (monitor->work)
 
 ////////////////////////////////////////////////////////////////
 
@@ -1061,5 +1058,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.156 2004/10/29 06:42:55 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.157 2004/10/30 05:13:26 spitzak Exp $".
 //
