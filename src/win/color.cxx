@@ -1,5 +1,5 @@
 //
-// "$Id: color.cxx,v 1.1.2.3 2004/09/10 02:38:49 rokan Exp $"
+// "$Id: color.cxx,v 1.1.2.4 2004/10/25 20:08:34 rokan Exp $"
 //
 // WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -253,7 +253,6 @@ fl_select_palette(void)
 
 
 
-
 //void _fl_clear_xmap(Fl_XMap& xmap){clear_xmap(xmap);};
 
 
@@ -306,5 +305,5 @@ FL_EXPORT void pop_xmaps(){
 
 
 //
-// End of "$Id: color.cxx,v 1.1.2.3 2004/09/10 02:38:49 rokan Exp $".
+// End of "$Id: color.cxx,v 1.1.2.4 2004/10/25 20:08:34 rokan Exp $".
 //

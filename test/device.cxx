@@ -589,8 +589,6 @@ public:
   My_Button(int x, int y, int w, int h, const char * label = 0):Fl_Button(x,y,w,h,label){}
 };
 
-
-
 int main(int argc, char ** argv) {
 
 
@@ -598,8 +596,8 @@ int main(int argc, char ** argv) {
     Fl::visual(FL_RGB);
  
 
-   Fl_Window * w2 = new Fl_Window(500,560,"Graphics test");
-   Fl_Group *c2 =new Fl_Group(3, 43, 494, 514 );
+  Fl_Window * w2 = new Fl_Window(500,560,"Graphics test");
+  Fl_Group *c2 =new Fl_Group(3, 43, 494, 514 );
 
 
   new MyWidget(10,140);
@@ -609,7 +607,7 @@ int main(int argc, char ** argv) {
   new MyWidget5(140,270);
 
   make_image();
-  Fl_RGB_Image *rgb = new Fl_RGB_Image(image, width, height,4);
+  Fl_RGB_Image *rgb = new Fl_RGB_Image(image, width, height, 4);
   My_Button b_rgb(10,245,100,100,"Image w/Alpha");
   b_rgb.image(rgb);
 
@@ -668,7 +666,6 @@ int main(int argc, char ** argv) {
   b5->callback(print2,c2);
 
   w2->end();
-  //w2->show(argc, argv);
   w2->show(argc, argv);
    
 
