@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.37 2002/12/10 02:00:51 easysw Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.38 2003/02/03 02:33:57 spitzak Exp $"
 //
 // Copyright 1998-2002 by Bill Spitzak and others.
 //
@@ -66,7 +66,7 @@ void ValueInput::draw() {
     input.set_damage(DAMAGE_ALL);
   }
   if (damage() & (DAMAGE_ALL | DAMAGE_HIGHLIGHT)) {
-    Flags f[2]; f[0] = f[1] = 0;
+    Flags f[2]; f[0] = f[1] = active_r() ? 0 : INACTIVE;
     if (which_highlight && belowmouse())
       f[which_highlight-1] = HIGHLIGHT;
     if (which_pushed && pushed())
@@ -213,5 +213,5 @@ ValueInput::~ValueInput() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.37 2002/12/10 02:00:51 easysw Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.38 2003/02/03 02:33:57 spitzak Exp $".
 //

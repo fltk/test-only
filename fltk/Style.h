@@ -1,5 +1,5 @@
 //
-// "$Id: Style.h,v 1.3 2002/12/15 10:42:49 spitzak Exp $"
+// "$Id: Style.h,v 1.4 2003/02/03 02:33:56 spitzak Exp $"
 //
 // Style structure used by Widgets
 //
@@ -111,11 +111,11 @@ struct FL_API Style {
   Font*		textfont;
   LabelType*	labeltype;
   Color		color;
-  Color		buttoncolor;
-  Color		labelcolor;
   Color		textcolor;
   Color		selection_color;
   Color		selection_textcolor;
+  Color		buttoncolor;
+  Color		labelcolor;
   Color		highlight_color;
   Color		highlight_labelcolor;
   float		labelsize;
@@ -178,5 +178,5 @@ extern "C" FL_API bool fltk_theme();
 #endif
 
 //
-// End of "$Id: Style.h,v 1.3 2002/12/15 10:42:49 spitzak Exp $".
+// End of "$Id: Style.h,v 1.4 2003/02/03 02:33:56 spitzak Exp $".
 //

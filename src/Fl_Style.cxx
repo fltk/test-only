@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.43 2003/01/22 06:21:51 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.44 2003/02/03 02:33:57 spitzak Exp $"
 //
 // Code for managing Style structures.
 //
@@ -53,11 +53,11 @@ static void revert(Style* s) {
   s->textfont		= HELVETICA;
   s->labeltype		= NORMAL_LABEL;
   s->color		= WHITE; // GRAY99?
-  s->buttoncolor	= GRAY75;
-  s->labelcolor		= BLACK;
   s->textcolor		= BLACK;
   s->selection_color	= WINDOWS_BLUE;
   s->selection_textcolor= WHITE;
+  s->buttoncolor	= GRAY75;
+  s->labelcolor		= BLACK;
   s->highlight_color	= NO_COLOR;
   s->highlight_labelcolor= NO_COLOR;
   s->labelsize		= 12;
@@ -118,13 +118,13 @@ style_functions(Font*,		labelfont	)
 style_functions(Font*,		textfont	)
 style_functions(LabelType*,	labeltype	)
 style_functions(Color,		color		)
-style_functions(Color,		buttoncolor	)
-style_functions(Color,		labelcolor	)
+style_functions(Color,		textcolor	)
 style_functions(Color,		selection_color	)
 style_functions(Color,		selection_textcolor)
+style_functions(Color,		buttoncolor	)
+style_functions(Color,		labelcolor	)
 style_functions(Color,		highlight_color	)
 style_functions(Color,		highlight_labelcolor)
-style_functions(Color,		textcolor	)
 style_functions(float,		labelsize	)
 style_functions(float,		textsize	)
 style_functions(float,		leading		)
@@ -338,5 +338,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.43 2003/01/22 06:21:51 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.44 2003/02/03 02:33:57 spitzak Exp $".
 //
