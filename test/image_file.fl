@@ -10,7 +10,7 @@ decl {\#include <stdio.h>} {}
 
 decl {\#include <FL/fl_file_chooser.H>} {} 
 
-Function {} {open selected private
+Function {} {open private
 } {
   code {Fl_Shared_Image::set_root_directory("images");} {}
   Fl_Window window {
@@ -79,41 +79,6 @@ image_window->show();}
       xywh {0 0 115 100} align 21
     }
   }
-  code {// Absolutly horrible code, please don't look at it !
-
-window->show();
-browser_window->show();
-
-class image : public Fl_Shared_Image {
-public:
-	ulong get_id() { return id; }
-	char* get_filename() { return (char *)name; }
-	static void check() { check_mem_usage(); }
-};
-
-ulong old_id[20];
-int just_loaded[20];
-
-for(;;) {
-	if (slider->value()) {
-		browser->clear();
-		image::check();
-		Fl_Widget* w;
-		for(int i=0; i<window->children(); i++) {
-			w = window->child(i);
-			if(w->image()) {
-				image* im = (image*) w->image();
-				ulong id = im->get_id();
-				char s[128];
-				if(id!=old_id[i]) just_loaded[i] = 20;
-				sprintf(s, "%s%s%s", just_loaded[i]? "@B15":"", !id? "@i":"", im->get_filename());
-				if(just_loaded[i]) just_loaded[i]--;
-				browser->add(s);
-				old_id[i] = id;
-			}
-		}
-	}
-	Fl::wait(0.1);
-}
-return 0;} {}
+  code {window->show();} {selected
+  }
 } 
