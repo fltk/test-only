@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.35 2005/01/25 20:11:59 matthiaswm Exp $"
+// "$Id: fl_vertex.cxx,v 1.36 2005/01/26 22:35:28 matthiaswm Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -313,7 +313,7 @@ void fltk::transform(Rectangle& R) {
 
 #if USE_CAIRO
 // Cairo has its own coordinate stack
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
 // Quartz has its own coordinate stack
 static bool first_point = true;
 namespace fltk { 
@@ -365,7 +365,7 @@ void fltk::addvertex(float X, float Y) {
 #if USE_CAIRO
   transform(X,Y);
   cairo_line_to(cc,X,Y);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   transform(X, Y);
   quartz_add_vertex(X, Y);
 #else
@@ -393,7 +393,7 @@ void fltk::addvertex(int X, int Y) {
 #if USE_CAIRO
   transform(X,Y);
   cairo_line_to(cc,X,Y);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   transform(X, Y);
   quartz_add_vertex(X, Y);
 #else
@@ -427,7 +427,7 @@ void fltk::addvertices(int n, const float array[][2]) {
     transform(X,Y);
     cairo_line_to(cc,X,Y);
   }
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   const float* a = array[0];
   const float* e = a+2*n;
   for (; a < e; a += 2) {
@@ -475,7 +475,7 @@ void fltk::addvertices(int n, const int array[][2]) {
     transform(X,Y);
     cairo_line_to(cc,X,Y);
   }
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   const int* a = array[0];
   const int* e = a+2*n;
   for (; a < e; a += 2) {
@@ -524,7 +524,7 @@ void fltk::addvertices_transformed(int n, const float array[][2]) {
   for (; a < e; a += 2) {
     cairo_line_to(cc,a[0],a[1]);
   }
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   const float* a = array[0];
   const float* e = a+2*n;
   for (; a < e; a += 2) {
@@ -560,7 +560,7 @@ void fltk::addvertices_transformed(int n, const float array[][2]) {
 void fltk::closepath() {
 #if USE_CAIRO
   cairo_close_path(cc);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   CGContextClosePath(quartz_gc);
 #else
   if (numpoints > loop_start+2) {
@@ -589,7 +589,7 @@ void fltk::closepath() {
 //
 // We keep track of exactly one "nice" circle:
 
-#if !USE_CAIRO && !defined(__APPLE__)
+#if !USE_CAIRO && !USE_QUARTZ
 static int circle_x, circle_y, circle_w, circle_h;
 #endif
 
@@ -606,7 +606,7 @@ void fltk::addcircle(float x, float y, float r) {
   closepath();
   cairo_arc(cc,x,y,r,0,M_PI*2);
   closepath();
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   closepath();
   //+++ CGContextAddArc(quartz_gc, x, y, r, 0.0, 2*M_PI, 1);
   addarc(x, y, r, r, 0, 360);
@@ -635,7 +635,7 @@ void fltk::addellipse(float x, float y, float w, float h) {
   closepath();
   addarc(x, y, w, h, 0, 360);
   closepath();
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   /* //+++
   closepath();
   CGContextSaveGState(quartz_gc);
@@ -666,7 +666,7 @@ void fltk::addellipse(float x, float y, float w, float h) {
 static inline void inline_newpath() {
 #if USE_CAIRO
   cairo_new_path(cc);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   first_point = true;
   CGContextBeginPath(quartz_gc);
 #else
@@ -687,7 +687,7 @@ void fltk::newpath() {inline_newpath();}
 void fltk::drawpoints() {
 #if USE_CAIRO
   // Not implemented!
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   // Not implemented!
 #elif USE_X11
   if (numpoints > 0) XDrawPoints(xdisplay, xwindow, gc, xpoint, numpoints, 0);
@@ -706,7 +706,7 @@ void fltk::drawpoints() {
 void fltk::strokepath() {
 #if USE_CAIRO
   cairo_stroke(cc);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   CGContextStrokePath(quartz_gc);
   first_point = true;
 #elif USE_X11
@@ -757,7 +757,7 @@ void fltk::strokepath() {
 void fltk::fillpath() {
 #if USE_CAIRO
   cairo_fill(cc);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   CGContextFillPath(quartz_gc);
   first_point = true;
 #elif USE_X11
@@ -809,7 +809,7 @@ void fltk::fillstrokepath(Color color) {
   cairo_restore(cc);
   setcolor(color);
   cairo_stroke(cc);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   closepath();
   uchar r, g, b; 
   split_color(color, r, g, b);
@@ -859,5 +859,5 @@ void fltk::fillstrokepath(Color color) {
 /** \} */
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.35 2005/01/25 20:11:59 matthiaswm Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.36 2005/01/26 22:35:28 matthiaswm Exp $".
 //

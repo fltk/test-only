@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.36 2004/01/25 06:55:05 spitzak Exp $"
+// "$Id: fl_color.cxx,v 1.37 2005/01/26 22:35:27 matthiaswm Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -141,7 +141,7 @@ Color fltk::contrast(Color fg, Color bg) {
 # include "fl_color_x.cxx"
 #elif defined(_WIN32)
 # include "fl_color_win32.cxx"
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
 # include "fl_color_mac.cxx"
 #else
 #error
@@ -172,5 +172,5 @@ Color fltk::get_color_index(Color color) {
   done by multiplying \a gray by 0x1010100. */
 
 //
-// End of "$Id: fl_color.cxx,v 1.36 2004/01/25 06:55:05 spitzak Exp $".
+// End of "$Id: fl_color.cxx,v 1.37 2005/01/26 22:35:27 matthiaswm Exp $".
 //

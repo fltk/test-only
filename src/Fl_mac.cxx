@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.22 2005/01/25 20:11:39 matthiaswm Exp $"
+// "$Id: Fl_mac.cxx,v 1.23 2005/01/26 22:35:27 matthiaswm Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -1484,7 +1484,6 @@ void Window::make_current() const
 
 // helper function to manage the current CGContext fl_gc
 /* //+++
-extern Fl_Color fl_color_;
 extern class Fl_FontSize *fl_fontsize;
 extern void fl_font(class Fl_FontSize*);
 extern void fl_quartz_restore_line_style_();
@@ -1695,6 +1694,6 @@ bool fltk::dnd()
 }
 
 //
-// End of "$Id: Fl_mac.cxx,v 1.22 2005/01/25 20:11:39 matthiaswm Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.23 2005/01/26 22:35:27 matthiaswm Exp $".
 //
 

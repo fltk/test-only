@@ -1,4 +1,4 @@
-/* "$Id: configh.in,v 1.66 2004/12/30 11:38:52 spitzak Exp $"
+/* "$Id: configh.in,v 1.67 2005/01/26 22:35:25 matthiaswm Exp $"
  *
  * Configuration file for compiling the Fast Light Tool Kit (FLTK).
  *
@@ -40,6 +40,12 @@
 #undef USE_X11
 #if !defined(USE_X11) && !defined(_WIN32) && !defined(__APPLE__)
 # define USE_X11 1
+#endif
+
+/* Set this to 1 to compile using Quartz drawing instead of X11
+   on Apple OS X */
+#if !defined(USE_X11) && defined(__APPLE__)
+# define USE_QUARTZ 1
 #endif
 
 /* Setting this to zero will delete code to handle X and WIN32
@@ -230,4 +236,4 @@
    program to actually use the keypad, and is recommended. */
 #define IGNORE_NUMLOCK		1
 
-/* End of "$Id: configh.in,v 1.66 2004/12/30 11:38:52 spitzak Exp $". */
+/* End of "$Id: configh.in,v 1.67 2005/01/26 22:35:25 matthiaswm Exp $". */

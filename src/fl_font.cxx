@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.45 2004/12/16 18:40:42 spitzak Exp $"
+// "$Id: fl_font.cxx,v 1.46 2005/01/26 22:35:27 matthiaswm Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -105,7 +105,7 @@ const char *fltk::encoding_ = "iso10646-1";
 # endif
 #elif defined(_WIN32)
 # include "fl_font_win32.cxx"
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
 # include "fl_font_mac.cxx"
 #else
 #error
@@ -197,5 +197,5 @@ void fltk::set_encoding(const char* f) {encoding_ = f;}
 */
 
 //
-// End of "$Id: fl_font.cxx,v 1.45 2004/12/16 18:40:42 spitzak Exp $".
+// End of "$Id: fl_font.cxx,v 1.46 2005/01/26 22:35:27 matthiaswm Exp $".
 //

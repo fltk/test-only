@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.31 2005/01/25 20:11:46 matthiaswm Exp $"
+// "$Id: fl_clip.cxx,v 1.32 2005/01/26 22:35:27 matthiaswm Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -53,7 +53,7 @@ using namespace fltk;
 // Region == Region
 #elif defined(_WIN32)
 # define Region HRGN
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
 # define Region RgnHandle
 #endif
 
@@ -109,7 +109,7 @@ void fl_restore_clip() {
   else XSetClipMask(xdisplay, gc, 0);
 #elif defined(_WIN32)
   SelectClipRgn(dc, r); //if r is NULL, clip is automatically cleared
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   /* //+++
   // We must intersect with the clip region for child windows:
   GrafPtr port; GDHandle GD; GetGWorld(&port, &GD);
@@ -152,7 +152,7 @@ void fltk::clip_region(Region r) {
   if (oldr) XDestroyRegion(oldr);
 #elif defined(_WIN32)
   if (oldr) DeleteObject(oldr);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   if (oldr) DisposeRgn(oldr);
 #endif
   rstack[rstackptr] = r;
@@ -170,7 +170,7 @@ void fltk::push_clip(const Rectangle& r1) {
     region = XCreateRegion();
 #elif defined(_WIN32)
     region = CreateRectRgn(0,0,0,0);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
     region = NewRgn(); 
     SetEmptyRgn(region);
 #else
@@ -189,7 +189,7 @@ void fltk::push_clip(const Rectangle& r1) {
 #elif defined(_WIN32)
     region = CreateRectRgn(r.x(), r.y(), r.r(), r.b());
     if (current) CombineRgn(region, region, current, RGN_AND);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
     region = NewRgn();
     SetRectRgn(region, r.x(), r.y(), r.r(), r.b());
     if (current) SectRgn(region, current, region);
@@ -227,7 +227,7 @@ void fltk::clipout(const Rectangle& r1) {
   Region region = CreateRectRgn(r.x(), r.y(), r.r(), r.b());
   CombineRgn(current, current, region, RGN_DIFF);
   DeleteObject(region);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   Region current = rstack[rstackptr];
   if (!current) {current = NewRgn(); SetRectRgn(current, 0,0,16383,16383);}
   Region region = NewRgn();
@@ -260,7 +260,7 @@ void fltk::pop_clip() {
     if (oldr) XDestroyRegion(oldr);
 #elif defined(_WIN32)
     if (oldr) DeleteObject(oldr);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
     if (oldr) DisposeRgn(oldr);
 #endif
     fl_restore_clip();
@@ -287,7 +287,7 @@ bool fltk::not_clipped(const Rectangle& r1) {
   RECT rect;
   rect.left = r.x(); rect.top = r.y(); rect.right = r.r(); rect.bottom = r.b();
   return RectInRegion(region,&rect);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   Rect rect;
   rect.left = r.x(); rect.top = r.y(); rect.right = r.r(); rect.bottom = r.b();
   return RectInRgn(&rect, region);
@@ -363,7 +363,7 @@ int fltk::intersect_with_clip(Rectangle& r) {
   DeleteObject(temp);
   DeleteObject(rr);
   return ret;
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   RgnHandle rr = NewRgn();
   SetRectRgn(rr, r.x(), r.y(), r.r(), r.b());
   SectRgn(region, rr, rr);
@@ -379,5 +379,5 @@ int fltk::intersect_with_clip(Rectangle& r) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.31 2005/01/25 20:11:46 matthiaswm Exp $"
+// End of "$Id: fl_clip.cxx,v 1.32 2005/01/26 22:35:27 matthiaswm Exp $"
 //

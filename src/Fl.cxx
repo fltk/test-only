@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.190 2005/01/24 08:07:10 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.191 2005/01/26 22:35:25 matthiaswm Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -135,7 +135,7 @@ static void fix_focus() {
 # include "Fl_x.cxx"
 #elif defined(_WIN32)
 # include "Fl_win32.cxx"
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
 # include "Fl_mac.cxx"
 #else
 # error
@@ -518,7 +518,7 @@ CreatedWindow* CreatedWindow::first;
 Window* fltk::find(XWindow xid)
 #elif defined(_WIN32)
 Window* fltk::find(HWND xid)
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
 Window* fltk::find(WindowPtr xid)
 #endif
 {
@@ -643,7 +643,7 @@ void fltk::flush() {
 	XDestroyRegion(x->region);
 #elif defined(_WIN32)
 	DeleteObject(x->region);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
 	DisposeRgn(x->region);
 #endif
 	x->region = 0;
@@ -661,8 +661,8 @@ void fltk::flush() {
   XFlush(xdisplay);
 #elif defined(_WIN32)
   GdiFlush();
-#elif defined(__APPLE__)
-  //QDFlushPortBuffer( GetWindowPort(xid), 0 ); // \todo do we need this?
+#elif USE_QUARTZ
+  //+++ QDFlushPortBuffer( GetWindowPort(xid), 0 ); // \todo do we need this?
 #endif
 }
 
@@ -881,7 +881,7 @@ void fltk::modal(Widget* widget, bool grab) {
 #elif defined(_WIN32)
     ReleaseCapture();
     // if (event() == PUSH) repost_the_push_event(); NYI
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
     // dunno what to do here
 #else
 # error
@@ -932,7 +932,7 @@ void fltk::modal(Widget* widget, bool grab) {
       SetCapture(xid(window));
       grab_ = true;
     }
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
     // dunno what to do here
 #else
 # error
@@ -1206,5 +1206,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.190 2005/01/24 08:07:10 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.191 2005/01/26 22:35:25 matthiaswm Exp $".
 //

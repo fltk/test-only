@@ -1,5 +1,5 @@
 //
-// "$Id: fl_scroll_area.cxx,v 1.20 2005/01/24 08:07:56 spitzak Exp $"
+// "$Id: fl_scroll_area.cxx,v 1.21 2005/01/26 22:35:28 matthiaswm Exp $"
 //
 // Scrolling routines for the Fast Light Tool Kit (FLTK).
 //
@@ -154,7 +154,9 @@ void fltk::scrollrect(const Rectangle& r, int dx, int dy,
     draw_area(data, r);
     return;
   }
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
+  //+++ Quartz can not scroll an area! You must redraw from scratch or 
+  //+++ store the content inside an image!
   Rect src = { src_y, src_x, src_y+src_h, src_x+src_w };
   Rect dst = { dest_y, dest_x, dest_y+src_h, dest_x+src_w };
   static RGBColor bg = { 0xffff, 0xffff, 0xffff }; RGBBackColor( &bg );
@@ -172,5 +174,5 @@ void fltk::scrollrect(const Rectangle& r, int dx, int dy,
 }
 
 //
-// End of "$Id: fl_scroll_area.cxx,v 1.20 2005/01/24 08:07:56 spitzak Exp $".
+// End of "$Id: fl_scroll_area.cxx,v 1.21 2005/01/26 22:35:28 matthiaswm Exp $".
 //

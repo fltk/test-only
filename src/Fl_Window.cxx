@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.123 2005/01/25 20:11:26 matthiaswm Exp $"
+// "$Id: Fl_Window.cxx,v 1.124 2005/01/26 22:35:27 matthiaswm Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -308,7 +308,7 @@ int Window::handle(int event) {
     XMapWindow(xdisplay, i->xid);
 #elif defined(_WIN32)
     deferred_call(SHOW_WINDOW, i->xid, SW_RESTORE);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
     if (parent()) ; // needs to update clip and redraw...
     else ShowWindow(i->xid);
 #else
@@ -325,7 +325,7 @@ int Window::handle(int event) {
       deferred_call(SHOW_WINDOW, i->xid, SW_HIDE);
       deferred_call(KEEP_ACTIVE, i->xid);
     }
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
     if (i) HideWindow(i->xid);
 #else
 #error
@@ -411,7 +411,7 @@ void Window::show() {
     if (flags()&MODAL) modal(this, false);
   }
 
-#if (defined(__APPLE__) && !USE_X11)
+#if USE_QUARTZ
   if (!parent()) {
     // bring the application to the front
     ProcessSerialNumber psn;
@@ -481,7 +481,7 @@ void Window::show() {
     else
       showtype = SW_SHOWNORMAL;
     deferred_call(SHOW_WINDOW, i->xid, showtype);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
     if (!modal() && fl_show_iconic) {
       fl_show_iconic = 0;
       CollapseWindow( i->xid, true ); // \todo Mac ; untested
@@ -504,7 +504,7 @@ void Window::show() {
 #elif defined(_WIN32)
       if (IsIconic(i->xid)) deferred_call(OPEN_ICON, i->xid);
       if (!grab() && !override()) deferred_call(RAISE_WINDOW, i->xid);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
       ShowWindow(i->xid); // does this de-iconize?
       if (!grab() && !override()) {
 	BringToFront(i->xid);
@@ -669,7 +669,7 @@ void CreatedWindow::expose(const fltk::Rectangle& r) {
     region = XRectangleRegion(r.x(), r.y(), r.w(), r.h());
 #elif defined(_WIN32)
     region = CreateRectRgn(r.x(), r.y(), r.r(), r.b());
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
     region = NewRgn();
     SetRectRgn(region, r.x(), r.y(), r.r(), r.b());
 #endif
@@ -683,7 +683,7 @@ void CreatedWindow::expose(const fltk::Rectangle& r) {
     HRGN R = CreateRectRgn(r.x(), r.y(), r.r(), r.b());
     CombineRgn(region, region, R, RGN_OR);
     DeleteObject(R);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
     RgnHandle R = NewRgn();
     SetRectRgn(R, r.x(), r.y(), r.r(), r.b());
     UnionRgn(R, region, region);
@@ -816,7 +816,7 @@ void Window::destroy() {
     if (pwnd) deferred_call(KEEP_ACTIVE, pwnd);
   }
   if (x->region) DeleteObject(x->region);
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
   if (x->region) DisposeRgn(x->region);
   DisposeWindow(x->xid);
 #endif
@@ -834,5 +834,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.123 2005/01/25 20:11:26 matthiaswm Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.124 2005/01/26 22:35:27 matthiaswm Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.24 2005/01/25 09:49:12 spitzak Exp $"
+// "$Id: fl_arci.cxx,v 1.25 2005/01/26 22:35:27 matthiaswm Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -90,7 +90,39 @@ void fltk::arci(const Rectangle& r1, float a1, float a2, int what, Color c) {
     Chord(dc, r.x(), r.y(), r.r(), r.b(), xa, ya, xb, yb);
     break;
   }
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
+//+++ port me!
+  a1 = (-a1)/180.0f*M_PI; a2 = (-a2)/180.0f*M_PI;
+  float cx = r.center_x()-0.5f, cy = r.center_y()-0.5f;
+  float w = r.w(), h = r.h();
+  if (w!=h) {
+    CGContextSaveGState(quartz_gc);
+    CGContextTranslateCTM(quartz_gc, cx, cy);
+    CGContextScaleCTM(quartz_gc, w-1.0f, h-1.0f);
+    CGContextAddArc(quartz_gc, 0, 0, 0.5, a1, a2, 1);
+    CGContextRestoreGState(quartz_gc);
+  } else {
+    float r = (w+h)*0.25f-0.5f;
+    CGContextAddArc(quartz_gc, cx, cy, r, a1, a2, 1);
+  }
+  switch (what) {
+  case FILLPIE:
+    CGContextAddLineToPoint(quartz_gc, cx, cy);
+    // fall through
+  case FILLARC:
+    CGContextFillPath(quartz_gc);
+    break;
+  case STROKEARC:
+    CGContextStrokePath(quartz_gc);
+    break;
+  case FILLSTROKEARC: {
+    uchar r, g, b; 
+    split_color(c, r, g, b);
+    CGContextSetRGBStrokeColor(quartz_gc, r/255.0f, g/255.0f, b/255.0f, 1.0);
+    CGContextDrawPath(quartz_gc, kCGPathFillStroke);
+    break; }
+  }
+/*
   Rect rect;
   rect.left=r.x(); rect.right=r.r(); rect.top=r.y(); rect.bottom=r.b();
   a1 = a2-a1; a2 = 450-a2;
@@ -107,6 +139,7 @@ void fltk::arci(const Rectangle& r1, float a1, float a2, int what, Color c) {
     setcolor(c);
     FrameArc(&rect, (short int)a2, (short int)a1);
   }
+*/
 #else
 # error
 #endif
@@ -138,5 +171,5 @@ void fltk::arci(const Rectangle& r1, float a1, float a2, int what, Color c) {
 */
 
 //
-// End of "$Id: fl_arci.cxx,v 1.24 2005/01/25 09:49:12 spitzak Exp $".
+// End of "$Id: fl_arci.cxx,v 1.25 2005/01/26 22:35:27 matthiaswm Exp $".
 //

@@ -44,7 +44,10 @@ extern "C" FL_API bool fltk_theme();
 
 # include "fltk_theme_win32.cxx"
 
-//#elif defined(__APPLE__)
+#elif USE_QUARTZ
+
+//+++ implement Quartz support for themes
+extern "C" bool fltk_theme() {return false; /* true? */}
 
 #else
 

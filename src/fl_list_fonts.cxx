@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts.cxx,v 1.21 2004/12/05 19:28:50 spitzak Exp $"
+// "$Id: fl_list_fonts.cxx,v 1.22 2005/01/26 22:35:28 matthiaswm Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -33,7 +33,7 @@
 # endif
 #elif defined(_WIN32)
 # include "fl_list_fonts_win32.cxx"
-#elif defined(__APPLE__)
+#elif USE_QUARTZ
 # include "fl_list_fonts_mac.cxx"
 #endif
 
@@ -133,5 +133,5 @@ fltk::Font* fltk::font(const char* name, int attributes /* = 0 */) {
 */
 
 //
-// End of "$Id: fl_list_fonts.cxx,v 1.21 2004/12/05 19:28:50 spitzak Exp $".
+// End of "$Id: fl_list_fonts.cxx,v 1.22 2005/01/26 22:35:28 matthiaswm Exp $".
 //

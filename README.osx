@@ -19,6 +19,14 @@ BUILDING AND INSTALLING FLTK UNDER APPLE OS X
     FLTK2 will work with Carbon and Quartz. I expect a useful version to be
     finished by the end of January 2005. Testing and bug fixing should 
     be finished by the end of February.
+  
+    incomplete todo list:
+     o image support
+     o OpenGL
+     o Window and Subwindow switching
+     o clipping
+     o TextEditor with floating point positioning
+     o text conversion to utf8
 
     - Matthias Melcher
     
