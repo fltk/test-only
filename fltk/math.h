@@ -1,5 +1,5 @@
 //
-// "$Id: math.h,v 1.9 2003/04/20 03:17:49 easysw Exp $"
+// "$Id: math.h,v 1.10 2003/07/02 07:28:13 spitzak Exp $"
 //
 // The purpose of this header file is to make math.h look the same as
 // Unix on other operating systems.
@@ -30,7 +30,7 @@
 #include <math.h>
 
 #if defined(_WIN32) && !defined(__CYGWIN__)
-// things missing from <math.h>:
+// things missing from <math.h> on Windows:
 # include <float.h>
 
 # ifndef M_PI
@@ -54,12 +54,15 @@
 # include <float.h>
 #endif
 
-#define rintf(v)	floorf((v)+.5f)
-// on some systems it may be necessary to define these:
-#if defined(__APPLE__)
+// define missing 'f' versions of functions:
+#if 1 // All systems seem to be missing rintf:
+# define rintf(v)	floorf((v)+.5f)
+#endif
+#if defined(__APPLE__) || defined(__sun__)
 # define floorf(a)	floor(a)
 # define ceilf(a)	ceil(a)
 # define fmodf(a,b)	fmod(a,b)
+# undef fabsf
 # define fabsf(a)	fabs(a)
 # define sinf(a)	sin(a)
 # define cosf(a)	cos(a)
@@ -85,5 +88,5 @@
 #endif
 
 //
-// End of "$Id: math.h,v 1.9 2003/04/20 03:17:49 easysw Exp $".
+// End of "$Id: math.h,v 1.10 2003/07/02 07:28:13 spitzak Exp $".
 //
