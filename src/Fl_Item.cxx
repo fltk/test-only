@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.33 2004/01/25 06:55:05 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.34 2004/01/27 06:32:37 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -80,6 +80,9 @@ Item::Item(const char* l) : Widget(0,0,0,0,l) {
     be deleted. This is the same as setting it to Widget::default_style.
 */
 void Item::set_style(const Style* style) {
+  // make sure we don't make a loop:
+  for (const Style* p = style; p; p = p->parent_)
+    if (p == &::style) return;
   ::style.parent_ = style;
 }
 
