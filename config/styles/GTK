@@ -11,7 +11,7 @@ version = 7
 [menu item]
   label type = 0
   label font = 0
-  label size =12
+  label size = 12
   label color = 0
   down label color = 0
   down color = 53
