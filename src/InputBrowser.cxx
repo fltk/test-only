@@ -283,7 +283,7 @@ InputBrowser::draw() {
     Flags f = current_flags_highlight();
     if (ib == this) f |= VALUE;
     // draw the little mark at the right:
-    r.x(r.w()-W1); r.w(W1);
+    r.x(r.x()+r.w()-W1); r.w(W1);
     draw_glyph(GLYPH_DOWN_BUTTON, r, f);
   }
 }
