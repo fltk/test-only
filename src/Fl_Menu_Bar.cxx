@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.42 2001/01/23 18:47:54 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.43 2001/03/09 03:45:36 clip Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -39,7 +39,7 @@ void Fl_Menu_Bar::draw() {
       // If you change how the items are drawn, you probably need to
       // change MenuTitle::draw and the functions find_selected and
       // titlex in Fl_Menu.cxx.
-      if (i == highlight_ && highlight_color() && takesevents())
+      if (i == highlight_ && highlight_color() && takesevents() && widget->active_r())
 	widget->set_flag(FL_HIGHLIGHT);
       else
 	widget->clear_flag(FL_HIGHLIGHT);
@@ -140,5 +140,5 @@ Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.42 2001/01/23 18:47:54 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.43 2001/03/09 03:45:36 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.105 2001/03/08 07:39:05 clip Exp $"
+// "$Id: Fl_Menu.cxx,v 1.106 2001/03/09 03:45:36 clip Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -139,6 +139,8 @@ void MenuTitle::draw() {
     // Windows98 style
     flags = FL_VALUE;
   }
+
+  if (!widget->active_r()) flags &= ~(FL_VALUE|FL_SELECTED|FL_HIGHLIGHT);
 
   box->draw(style_widget, 0, 0, w(), h(), flags);
 
@@ -732,5 +734,5 @@ int Fl_Menu_::pulldown(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.105 2001/03/08 07:39:05 clip Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.106 2001/03/09 03:45:36 clip Exp $".
 //
