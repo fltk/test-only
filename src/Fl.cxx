@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.186 2004/12/05 19:28:47 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.187 2004/12/05 20:00:23 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -122,8 +122,10 @@ static void fix_focus() {
   if (grab_ || w && modal_) w = modal_;
   if (w) {
     if (w->contains(focus())) return; // already has it
+    unsigned saved = e_keysym;
     e_keysym = 0; // make widgets not think a keystroke moved focus
-    if (w->take_focus()) return;
+    if (w->take_focus()) {e_keysym = saved; return;}
+    e_keysym = saved;
   }
   // give nothing the focus:
   focus(0);
@@ -704,8 +706,11 @@ void fltk::focus(Widget *o) {
     focus_ = o;
     for (; p && !p->contains(o); p = p->parent()) p->handle(UNFOCUS);
     if (o) {
+      unsigned saved = e_keysym;
+      e_keysym = 0; // make widgets not think a keystroke moved focus
       o->handle(FOCUS);
       for (; (o = o->parent()); ) o->handle(FOCUS_CHANGE);
+      e_keysym = saved;
     }
   }
 }
@@ -1142,5 +1147,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.186 2004/12/05 19:28:47 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.187 2004/12/05 20:00:23 spitzak Exp $".
 //
