@@ -1,5 +1,5 @@
 //
-// "$Id: GlChoice.h,v 1.3 2004/03/25 18:13:17 spitzak Exp $"
+// "$Id$"
 //
 // OpenGL definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -61,6 +61,11 @@
 #ifdef _WIN32
 # include <fltk/gl.h>
 # define GLContext HGLRC
+#elif defined(__APPLE__)
+// warning: the Quartz version should probably use Core GL (CGL) instead of AGL
+#  include <OpenGL/gl.h>
+#  include <AGL/agl.h>
+#  define GLContext AGLContext
 #else
 # define Window XWindow
 # include <GL/glx.h>
@@ -78,6 +83,8 @@ public:
 #ifdef _WIN32
   int pixelFormat;	// the visual to use
   PIXELFORMATDESCRIPTOR pfd; // some wgl calls need this thing
+#elif defined(__APPLE__)
+  AGLPixelFormat pixelformat;
 #else
   XVisualInfo *vis;	// the visual to use
   Colormap colormap;	// a colormap for that visual
@@ -89,6 +96,12 @@ public:
 class Window;
 
 #ifdef _WIN32
+
+GLContext create_gl_context(const Window*, const GlChoice*, int layer=0);
+
+#elif defined(__APPLE__)
+
+// warning: the Quartz version should probably use Core GL (CGL) instead of AGL
 
 GLContext create_gl_context(const Window*, const GlChoice*, int layer=0);
 
@@ -112,5 +125,5 @@ void delete_gl_context(GLContext);
 #endif
 
 //
-// End of "$Id: GlChoice.h,v 1.3 2004/03/25 18:13:17 spitzak Exp $".
+// End of "$Id$".
 //

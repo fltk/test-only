@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.cxx,v 1.25 2004/09/26 19:33:19 spitzak Exp $"
+// "$Id$"
 //
 // OpenGL visual selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -71,6 +71,54 @@ GlChoice* GlChoice::find(int mode) {
   }
   if (!pixelFormat) return 0;
 
+#elif defined(__APPLE__)
+
+  // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
+  const int *blist;
+  int list[32];
+   
+  int n = 0;
+  if (mode & INDEXED_COLOR) {
+    list[n++] = AGL_BUFFER_SIZE;
+    list[n++] = 8; // glut tries many sizes, but this should work...
+  } else {
+    list[n++] = AGL_RGBA;
+    list[n++] = AGL_GREEN_SIZE;
+    list[n++] = (mode & RGB24_COLOR) ? 8 : 1;
+    if (mode & ALPHA_BUFFER) {
+      list[n++] = AGL_ALPHA_SIZE;
+      list[n++] = (mode & RGB24_COLOR) ? 8 : 1;
+    }
+    if (mode & ACCUM_BUFFER) {
+      list[n++] = AGL_ACCUM_GREEN_SIZE;
+      list[n++] = 1;
+      if (mode & ALPHA_BUFFER) {
+        list[n++] = AGL_ACCUM_ALPHA_SIZE;
+        list[n++] = 1;
+      }
+    }
+  }
+  if (mode & DOUBLE_BUFFER) {
+    list[n++] = AGL_DOUBLEBUFFER;
+  }
+  if (mode & DEPTH_BUFFER) {
+    list[n++] = AGL_DEPTH_SIZE; list[n++] = 24;
+  }
+  if (mode & STENCIL_BUFFER) {
+    list[n++] = AGL_STENCIL_SIZE; list[n++] = 1;
+  }
+# ifdef AGL_STEREO
+  if (mode & STEREO) {
+    list[n++] = AGL_STEREO;
+  }
+# endif
+  list[n] = AGL_NONE;
+  blist = list;
+
+  open_display();
+  AGLPixelFormat fmt = aglChoosePixelFormat(NULL, 0, (GLint*)blist);
+  if (!fmt) return 0;
+
 #else
 
   int list[32];
@@ -135,6 +183,8 @@ GlChoice* GlChoice::find(int mode) {
 #ifdef _WIN32
   g->pixelFormat = pixelFormat;
   g->pfd = chosen_pfd;
+#elif defined(__APPLE__)
+  g->pixelformat = fmt;
 #else
   g->vis = vis;
 
@@ -166,6 +216,26 @@ GLContext fltk::create_gl_context(const Window* window, const GlChoice* g, int l
   return context;
 }
 
+#elif defined(__APPLE__)
+
+// warning: the Quartz version should probably use Core GL (CGL) instead of AGL
+GLContext fltk::create_gl_context(const Window* window, const GlChoice* g, int layer) {
+  GLContext context;
+  context = aglCreateContext(g->pixelformat, first_context);
+  if (!context) return 0;
+  if (!first_context) first_context = context;
+  if ( window->parent() ) {
+    Rect wrect; GetWindowPortBounds( xid(window), &wrect );
+    GLint rect[] = { 
+        window->x(), wrect.bottom-window->h()-window->y(), 
+        window->w(), window->h() };
+    aglSetInteger( (GLContext)context, AGL_BUFFER_RECT, rect );
+    aglEnable( (GLContext)context, AGL_BUFFER_RECT );
+  }
+  aglSetDrawable( context, GetWindowPort( xid(window) ) );
+  return context;
+}
+
 #else
 
 GLContext fltk::create_gl_context(XVisualInfo* vis) {
@@ -185,6 +255,16 @@ void fltk::set_gl_context(const Window* w, GLContext context) {
     cached_window = w;
 #ifdef _WIN32
     wglMakeCurrent(CreatedWindow::find(w)->dc, context);
+#elif defined(__APPLE__)
+  // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
+  if ( w->parent() ) { //: resize our GL buffer rectangle
+    Rect wrect; GetWindowPortBounds( xid(w), &wrect );
+    GLint rect[] = { w->x(), wrect.bottom-w->h()-w->y(), w->w(), w->h() };
+    aglSetInteger( context, AGL_BUFFER_RECT, rect );
+    aglEnable( context, AGL_BUFFER_RECT );
+  }
+  aglSetDrawable(context, GetWindowPort( xid(w) ) );
+  aglSetCurrentContext(context);
 #else
     glXMakeCurrent(xdisplay, xid(w), context);
 #endif
@@ -196,6 +276,9 @@ void fltk::no_gl_context() {
   cached_window = 0;
 #ifdef _WIN32
   wglMakeCurrent(0, 0);
+#elif defined(__APPLE__)
+  // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
+  aglSetCurrentContext(0);
 #else
   glXMakeCurrent(xdisplay, 0, 0);
 #endif
@@ -206,6 +289,11 @@ void fltk::delete_gl_context(GLContext context) {
   if (context != first_context) {
 #ifdef _WIN32
     wglDeleteContext(context);
+#elif defined(__APPLE__)
+    // warning: the Quartz version should probably use Core GL (CGL) instead of AGL
+    aglSetCurrentContext( NULL );
+    aglSetDrawable( context, NULL );
+    aglDestroyContext( context );
 #else
     glXDestroyContext(xdisplay, context);
 #endif
@@ -215,5 +303,5 @@ void fltk::delete_gl_context(GLContext context) {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.cxx,v 1.25 2004/09/26 19:33:19 spitzak Exp $".
+// End of "$Id$".
 //

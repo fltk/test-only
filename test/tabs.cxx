@@ -43,26 +43,42 @@ int main (int argc, char **argv) {
        {fltk::Group* o = new fltk::Group(0, 20, 300, 180, "tab3");
         o->hide();
         o->begin();
-        new fltk::Button(10, 30, 60, 80, "button2");
-        new fltk::Button(70, 30, 60, 80, "button");
-        new fltk::Button(130, 30, 60, 80, "button");
+         {fltk::Button* o = new fltk::Button(10, 30, 60, 80, "button2");
+          o->set_vertical();
+        }
+         {fltk::Button* o = new fltk::Button(70, 30, 60, 80, "button");
+          o->set_vertical();
+        }
+         {fltk::Button* o = new fltk::Button(130, 30, 60, 80, "button");
+          o->set_vertical();
+        }
         o->end();
       }
        {fltk::Group* o = new fltk::Group(0, 20, 300, 180, "tab4");
         o->labelfont(fltk::HELVETICA_ITALIC);
         o->hide();
         o->begin();
-        new fltk::Button(10, 20, 60, 110, "button2");
-        new fltk::Button(70, 20, 60, 110, "button");
-        new fltk::Button(130, 20, 60, 110, "button");
+         {fltk::Button* o = new fltk::Button(10, 20, 60, 110, "button2");
+          o->set_vertical();
+        }
+         {fltk::Button* o = new fltk::Button(70, 20, 60, 110, "button");
+          o->set_vertical();
+        }
+         {fltk::Button* o = new fltk::Button(130, 20, 60, 110, "button");
+          o->set_vertical();
+        }
         o->end();
       }
        {fltk::Group* o = new fltk::Group(0, 20, 300, 180, "     tab5      ");
         o->labeltype(fltk::ENGRAVED_LABEL);
         o->hide();
         o->begin();
-        new fltk::Button(10, 50, 60, 80, "button2");
-        new fltk::Button(80, 60, 60, 80, "button");
+         {fltk::Button* o = new fltk::Button(10, 50, 60, 80, "button2");
+          o->set_vertical();
+        }
+         {fltk::Button* o = new fltk::Button(80, 60, 60, 80, "button");
+          o->set_vertical();
+        }
          {fltk::Clock* o = new fltk::Clock(155, 13, 100, 100, "Make sure this clock does not use processor time when this tab is hidden or w\
 indow is iconized");
           o->box(fltk::OSHADOW_BOX);
