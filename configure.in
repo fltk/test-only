@@ -1,7 +1,7 @@
 dnl -*- sh -*-
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.33.2.31.2.91.2.12 2004/04/10 01:07:18 easysw Exp $"
+dnl "$Id: configure.in,v 1.33.2.31.2.91.2.13 2004/04/11 22:32:07 easysw Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -39,17 +39,21 @@ FL_RELEASE_VERSION=b1
 FL_API_VERSION=${FL_MAJOR_VERSION}.${FL_MINOR_VERSION}
 FL_FULL_VERSION=${FL_MAJOR_VERSION}.${FL_MINOR_VERSION}.${FL_PATCH_VERSION}${FL_RELEASE_VERSION}
 
-dnl The DSO version numbers are *different* than the FLTK versions...
-FL_DSO_MAJOR=3
-FL_DSO_MINOR=0
-FL_DSO_VERSION=${FL_DSO_MAJOR}.$(FL_DSO_MINOR}
-
 AC_SUBST(FL_MAJOR_VERSION)
 AC_SUBST(FL_MINOR_VERSION)
 AC_SUBST(FL_PATCH_VERSION)
 AC_SUBST(FL_RELEASE_VERSION)
 AC_SUBST(FL_API_VERSION)
 AC_SUBST(FL_FULL_VERSION)
+
+dnl The DSO version numbers are *different* than the FLTK versions...
+FL_DSO_MAJOR=3
+FL_DSO_MINOR=0
+FL_DSO_VERSION=${FL_DSO_MAJOR}.${FL_DSO_MINOR}
+
+AC_SUBST(FL_DSO_MAJOR)
+AC_SUBST(FL_DSO_MINOR)
+AC_SUBST(FL_DSO_VERSION)
 
 dnl Get the operating system and version number...
 uname=`uname`
@@ -903,5 +907,5 @@ dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.12 2004/04/10 01:07:18 easysw Exp $".
+dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.13 2004/04/11 22:32:07 easysw Exp $".
 dnl

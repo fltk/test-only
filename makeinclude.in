@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.7.2.11.2.23.2.7 2004/04/06 22:37:22 rokan Exp $"
+# "$Id: makeinclude.in,v 1.7.2.11.2.23.2.8 2004/04/11 22:32:07 easysw Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -104,6 +104,11 @@ FLUID		= @FLUID@$(EXEEXT)
 # Possible steps after linking...
 POSTBUILD	= @POSTBUILD@
 
+# DSO version information...
+FL_DSO_MAJOR	= @FL_DSO_MAJOR
+FL_DSO_MINOR	= @FL_DSO_MINOR
+FL_DSO_VERSION	= @FL_DSO_VERSION
+
 # Man page extensions...
 CAT1EXT		= @CAT1EXT@
 CAT3EXT		= @CAT3EXT@
@@ -140,5 +145,5 @@ CAT3EXT		= @CAT3EXT@
 	mv t.z $@
 
 #
-# End of "$Id: makeinclude.in,v 1.7.2.11.2.23.2.7 2004/04/06 22:37:22 rokan Exp $".
+# End of "$Id: makeinclude.in,v 1.7.2.11.2.23.2.8 2004/04/11 22:32:07 easysw Exp $".
 #
