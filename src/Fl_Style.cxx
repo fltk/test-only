@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.34 2002/03/10 23:10:23 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.35 2002/03/10 23:19:20 spitzak Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -43,6 +43,7 @@ Fl_Named_Style* Fl_Named_Style::first;
 // Do not change the contents of this ever.  The themes depend on getting
 // a known state initially.
 static void revert(Fl_Style* s) {
+  s->parent                = 0;	// this is the topmost style always
   s->box                   = FL_DOWN_BOX;
   s->button_box		   = FL_UP_BOX;
   s->focus_box		   = FL_DOTTED_FRAME;
@@ -61,7 +62,6 @@ static void revert(Fl_Style* s) {
   s->label_size		   = 12;
   s->text_size             = 12;
   s->leading		   = 0;
-  s->parent                = 0;	// this is the topmost style always
 }
 
 static Fl_Named_Style default_named_style("default", ::revert, &Fl_Widget::default_style);
@@ -333,5 +333,5 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.34 2002/03/10 23:10:23 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.35 2002/03/10 23:19:20 spitzak Exp $".
 //

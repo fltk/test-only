@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.h,v 1.8 2002/03/10 23:10:23 spitzak Exp $"
+// "$Id: Fl_Style.h,v 1.9 2002/03/10 23:19:20 spitzak Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -41,6 +41,9 @@ typedef void (*Fl_Glyph)(const Fl_Widget*, int type,
 extern "C" {typedef bool (*Fl_Theme)();}
 
 struct FL_API Fl_Style {
+  const Fl_Style* parent;
+  void  (*revertfunc)(Fl_Style*);
+
   Fl_Boxtype    box;
   Fl_Boxtype    button_box;
   Fl_Boxtype	focus_box;
@@ -66,12 +69,8 @@ struct FL_API Fl_Style {
   static Fl_Flags scrollbar_align;
   static int	wheel_scroll_lines;
 
-  const Fl_Style* parent;
-
-  void  (*revertfunc)(Fl_Style*);
-  bool dynamic() const {return !revertfunc;}
-
   Fl_Style(); // creates a dynamic() style
+  bool dynamic() const {return !revertfunc;}
 
   static Fl_Style* find(const char* name);
   static void revert();
@@ -116,5 +115,5 @@ FL_API const char* fl_find_config_file(char* out, int size, const char* name);
 #endif
 
 //
-// End of "$Id: Fl_Style.h,v 1.8 2002/03/10 23:10:23 spitzak Exp $".
+// End of "$Id: Fl_Style.h,v 1.9 2002/03/10 23:19:20 spitzak Exp $".
 //
