@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.175 2004/06/19 23:02:23 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.176 2004/06/22 08:28:57 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -985,25 +985,7 @@ bool fltk::handle()
   int event = 0;
   static XWindow xim_win = 0;
 
-  if (XFilterEvent((XEvent *)&xevent, 0)) {
-    printf("Filtered event of type %d\n", xevent.type);
-#if 0
-    if (fl_xim_ic) {
-      Status status;
-      len = Xutf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
-			      buffer, buffer_len, &keysym, &status);
-      while (status == XBufferOverflow && buffer_len < 50000) {
-	buffer_len = buffer_len * 5 + 1;
-	buffer = (char*)realloc(buffer, buffer_len);
-	len = Xutf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
-				buffer, buffer_len, &keysym, &status);
-      }
-    } else {
-      keysym = XKeycodeToKeysym(xdisplay, keycode, 0);
-    }
-#endif
-    return 1;
-  }
+  if (XFilterEvent((XEvent *)&xevent, 0)) return 1;
 
   switch (xevent.type) {
 
@@ -1299,6 +1281,33 @@ bool fltk::handle()
     break;
 
   case KeyPress:
+    if (fl_xim_ic) {
+      static char* buffer = 0;
+      static int buffer_len;
+      if (!buffer) buffer = (char*) malloc(buffer_len = 128);
+      Status status;
+      KeySym keysym;
+      int len;
+    RETRY:
+      buffer[0] = 0;
+      keysym = 0;
+      len = Xutf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
+			      buffer, buffer_len, &keysym, &status);
+      switch (status) {
+      case XBufferOverflow:
+	buffer_len = len;
+	buffer = (char*)realloc(buffer, buffer_len);
+	goto RETRY;
+      case XLookupChars:
+      case XLookupKeySym:
+      case XLookupBoth:
+	set_event_xy(true);
+	e_text = buffer;
+	e_length = len;
+	e_keysym = keysym;
+	return handle(KEY,window);
+      }
+    }
   KEYPRESS: {
     set_event_xy(true);
     //if (grab_) XAllowEvents(xdisplay, SyncKeyboard, CurrentTime);
@@ -1312,12 +1321,8 @@ bool fltk::handle()
       e_is_click = keycode+100;
     }
     fl_key_vector[keycode/8] |= (1 << (keycode%8));
-    static char* buffer = 0;
-    static int buffer_len = 0;
-    if (buffer_len == 0) {
-      buffer_len = 128;
-      buffer = (char*) malloc(buffer_len);
-    }
+    static char buffer[20];
+    const int buffer_len=20;
     KeySym keysym;
     int len = 0;
     len = XLookupString(&(xevent.xkey), buffer, buffer_len-1, &keysym, 0);
@@ -2073,5 +2078,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.175 2004/06/19 23:02:23 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.176 2004/06/22 08:28:57 spitzak Exp $".
 //

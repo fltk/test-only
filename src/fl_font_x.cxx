@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_x.cxx,v 1.20 2004/06/19 23:02:25 spitzak Exp $"
+// "$Id: fl_font_x.cxx,v 1.21 2004/06/22 08:28:57 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -113,11 +113,13 @@ FontSize::~FontSize() {
 
 // I see no sign of "FontSets" working. Instead this supposedly will
 // draw the correct letters if you happen to pick an iso10646-1 font.
-// We draw as bytes if all characters are errors or 1 byte.
-// This function will look at the string. If all characters are 1
-// byte or errors it returns null. Otherwise it converts it to 16-bit
-// and returns the allocated buffer and size:
-static XChar2b* convert_utf8(const char* text, int n, int* charcount) {
+
+// This is similar to utf8to16() but works with the big-endian-only
+// structure X seems to want, and does not bother with surrogate
+// pairs.  If all characters are 1 byte or errors it returns
+// null. Otherwise it converts it to 16-bit and returns the allocated
+// buffer and size:
+static XChar2b* utf8to2b(const char* text, int n, int* charcount) {
   const char* p = text;
   const char* e = text+n;
   bool sawutf8 = false;
@@ -147,6 +149,7 @@ static XChar2b* convert_utf8(const char* text, int n, int* charcount) {
     } else {
       int len;
       unsigned n = utf8decode(p,e,&len);
+      if (n > 0xffff) n = '?';
       p += len;
       buffer[count].byte1 = n>>8;
       buffer[count].byte2 = n;
@@ -168,7 +171,7 @@ void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
     XSetFont(xdisplay, gc, current->font->fid);
   }
   int count;
-  XChar2b* buffer = convert_utf8(text,n,&count);
+  XChar2b* buffer = utf8to2b(text,n,&count);
   if (buffer) {
     XDrawString16(xdisplay, xwindow, gc,
 		  int(floorf(x+.5f)),
@@ -193,7 +196,7 @@ float fltk::getdescent() { return current->font->descent; }
   utf8 is used!) of the text. */
 float fltk::getwidth(const char *text, int n) {
   int count;
-  XChar2b* buffer = convert_utf8(text,n,&count);
+  XChar2b* buffer = utf8to2b(text,n,&count);
   if (buffer) {
     float r = XTextWidth16(current->font, buffer, count);
     delete[] buffer;
@@ -434,5 +437,5 @@ fltk::Font* const fltk::ZAPF_DINGBATS		= &(fonts[15].f);
 fltk::Font* fltk::font(int i) {return &(fonts[i%16].f);}
 
 //
-// End of "$Id: fl_font_x.cxx,v 1.20 2004/06/19 23:02:25 spitzak Exp $"
+// End of "$Id: fl_font_x.cxx,v 1.21 2004/06/22 08:28:57 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.28 2004/02/05 07:21:20 spitzak Exp $"
+// "$Id: gl_draw.cxx,v 1.29 2004/06/22 08:28:52 spitzak Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -31,6 +31,7 @@
 
 #include <fltk/draw.h>
 #include <fltk/gl.h>
+#include <fltk/utf.h>
 #include <string.h>
 #include "GlChoice.h"
 using namespace fltk;
@@ -68,11 +69,15 @@ void fltk::glsetfont(fltk::Font* font, float size) {
     current->listbase = glGenLists(256);
 #if USE_X11
     int base = current_xfont->min_char_or_byte2;
-    int size = current_xfont->max_char_or_byte2-base+1;
+    int last = current_xfont->max_char_or_byte2;
+    if (last > 255) last = 255;
+    int size = last-base+1;
     glXUseXFont(current_xfont->fid, base, size, current->listbase+base);
 #elif defined(_WIN32)
     int base = textmetric()->tmFirstChar;
-    int size = textmetric()->tmLastChar - base + 1;
+    int last = textmetric()->tmLastChar;
+    if (last > 255) last = 255;
+    int size = last-base+1;
     HDC hdc = GetDC(0);
     HFONT oldFid = (HFONT)SelectObject(hdc, current_xfont);
     wglUseFontBitmaps(hdc, base, size, current->listbase+base); 
@@ -86,7 +91,14 @@ void fltk::glsetfont(fltk::Font* font, float size) {
 }
 
 void fltk::gldrawtext(const char* str, int n) {
-  glCallLists(n, GL_UNSIGNED_BYTE, str);
+  int count;
+  char* buffer = utf8to8(str,n,&count);
+  if (buffer) {
+    glCallLists(count, GL_UNSIGNED_BYTE, buffer);
+    utf8free(buffer);
+  } else {
+    glCallLists(n, GL_UNSIGNED_BYTE, str);
+  }
 }
 
 void fltk::gldrawtext(const char* str, int n, float x, float y, float z) {
@@ -180,5 +192,5 @@ void fltk::gldrawimage(const uchar* b, int x, int y, int w, int h, int d, int ld
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.28 2004/02/05 07:21:20 spitzak Exp $".
+// End of "$Id: gl_draw.cxx,v 1.29 2004/06/22 08:28:52 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_compose.cxx,v 1.19 2004/06/19 23:02:13 spitzak Exp $"
+// "$Id: Fl_compose.cxx,v 1.20 2004/06/22 08:28:56 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -198,6 +198,8 @@ bool fltk::compose(int& del) {
 
   static int plen;
 
+  if (e_length > 1) return true; // probably indicates InputMethod was used
+
   if (compose_state == 1) { // after the compose key
 
     plen = e_length;
@@ -247,17 +249,14 @@ bool fltk::compose(int& del) {
 
 #if USE_X11
   int i = fl_actual_keysym;
-#else
-  int i = e_keysym;
-#endif
-
-#if USE_X11 // X only
   // See if they typed a dead key.  This gets it into the same state as
   // typing prefix+accent:
   if (i >= 0xfe50 && i <= 0xfe5b) {
     compose_state = dead_keys[i-0xfe50];
     return true;
   }
+#else
+  int i = e_keysym;
 #endif
 
   // Alt+letters are reserved for shortcuts.  But alt+foreign letters

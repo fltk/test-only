@@ -1,5 +1,5 @@
 //
-// "$Id: utf.c,v 1.1 2004/06/19 23:02:26 spitzak Exp $"
+// "$Id: utf.c,v 1.2 2004/06/22 08:28:58 spitzak Exp $"
 //
 // Copyright 2004 by Bill Spitzak and others.
 //
@@ -23,6 +23,7 @@
 //
 
 #include <fltk/utf.h>
+#include <stdlib.h>
 
 #ifdef __cplusplus
 extern "C" {
@@ -286,59 +287,253 @@ int utf8encode(unsigned ucs, char* buf) {
   }
 }
 
-/*! Decode a UTF-16 character, as used on Windows, into actual Unicode.
-    The number of locations at \e p used (1 or 2) is returned. \e end
-    points at the end of the buffer, if \e p is \e end-1 then only
-    one location is read.
+/*! Convert a UTF-8 sequence into an array of 32-bit Unicode indexes.
 
-    Many programs think this transformation is the identity. Unfortunatley
-    because the number of assigned Unicode characters was obviously
-    going to exceed 65535, the standard defines a foul invention called
-    "surrogate pairs", where two 16-bit numbers encode one character.
-    This removes the only plausable reason to use 16-bit characters
-    instead of UTF-8 (the fixed size of characters) and is why we
-    don't bother with them in FLTK. This function is only provided
-    in the hopes that people will start to correctly translate this
-    crap on Windows and we can safely convert it to UTF-8.
+    If the conversion is the identity (ie every byte turns into the
+    matching 32-bit value) then null is returned. You should then
+    pass the string to the 8-bit interface, or copy it yourself.
+    \e count is still set to the length. This appears to be a useful
+    optimization, as such strings are very common.
 
-    Warning: as I don't have any real text with surrogate pairs to
-    test, I am not really sure this is doing the correct thing...
+    If conversion is needed, the return value is a pointer to a
+    malloc() buffer, and the number of words written to the buffer are
+    returned in \e count. The buffer has one more location allocated,
+    if you put a zero there you can use it as a terminated string.
+    You must call free() or utf8free() on the buffer.
+
+    Errors in the UTF-8 are converted as individual bytes, same as
+    utf8decode() does. This allows ISO-8859-1 text mistakenly identified
+    as UTF-8 to be printed correctly.
 */
-unsigned utf16decode(unsigned short* p, unsigned short* end, int* len) {
-  unsigned ucs = p[0];
-  if (ucs >= 0xd800 && ucs <= 0xdbff && p+1 < end) { // first of surrogate pair
-    unsigned ucs2 = p[1];
-    if (ucs2 >=0xdc00 && ucs2 <= 0xdfff) { // an actual pair
-      *len = 2;
-      return 0x10000U + ((ucs&0x3ff)<<10) + (ucs2&0x3ff);
+unsigned* utf8to32(const char* text, int n, int* charcount) {
+  const char* p = text;
+  const char* e = text+n;
+  char sawutf8 = 0;
+  int count = 0;
+  unsigned* buffer;
+  while (p < e) {
+    unsigned char c = *(unsigned char*)p;
+    if (c < 0xC2) p++; // ascii letter or bad code
+    else {
+      int len = utf8valid(p,e);
+      if (len > 1) sawutf8 = 1;
+      else if (!len) len = 1;
+      p += len;
     }
+    count++;
   }
-  *len = 1;
-  return ucs;
+  *charcount = count;
+  if (!sawutf8) return 0;
+  buffer = (unsigned*)(malloc((count+1)*sizeof(unsigned)));
+  count = 0;
+  p = text;
+  while (p < e) {
+    unsigned char c = *(unsigned char*)p;
+    if (c < 0xC2) { // ascii letter or bad code
+      buffer[count] = c;
+      p++;
+    } else {
+      int len;
+      buffer[count] = utf8decode(p,e,&len);
+      p += len;
+    }
+    count++;
+  }
+  return buffer;
 }
 
-/*! Write the UTF-16 encoding of the Unicode \e ucs into \e buf and
-    return the number of words written (1 or 2). This should be used
-    to convert UTF-8 strings for use by Windows API calls.
+/*! Convert a UTF-8 sequence into UTF-16 (the encoding used on Windows).
 
-    If \e ucs is greater than 0x10ffff it cannot be encoded in UTF-16.
-    The current version will write 0xfffe (an illegal character) in
-    this case, but this may change in the future.
+    If the conversion is the identity (ie every byte turns into the
+    matching 16-bit value) then null is returned. You should then
+    pass the string to the 8-bit interface, or copy it yourself.
+    \e count is still set to the length. This appears to be a useful
+    optimization, as such strings are very common.
+
+    If conversion is needed, the return value is a pointer to a
+    malloc() buffer, and the number of words written to the buffer are
+    returned in \e count. The buffer has one more location allocated,
+    if you put a zero there you can use it as a terminated string.
+    You must call free() or utf8free() on the buffer.
+ 
+    Errors in the UTF-8 are converted as individual bytes, same as
+    utf8decode() does. This allows ISO-8859-1 text mistakenly identified
+    as UTF-8 to be printed correctly.
+
+    Codes in the range 0x10000 to 0x10ffff are converted to "surrogate
+    pairs" which take two words each. Codes greater than 0x10ffff are
+    converted to 0xFFFD (REPLACEMENT CHARACTER). Because of this lossage
+    we strongly recommend you do all your work in UTF-8.
 */
-int utf16encode(unsigned ucs, unsigned short* buf) {
-  if (ucs < 0x10000U) {
-    buf[0] = (unsigned short)ucs;
-    return 1;
-  } else if (ucs > 0x10ffffU) {
-    // error!
-    buf[0] = 0xfffe;
-    return 1;
-  } else {
-    // write a surrogate pair:
-    buf[0] = (((ucs-0x10000u)>>10)&0x3ff) | 0xd800;
-    buf[1] = (ucs&0x3ff) | 0xdc00;
-    return 2;
+unsigned short* utf8to16(const char* text, int n, int* charcount) {
+  const char* p = text;
+  const char* e = text+n;
+  int sawutf8 = 0;
+  int count = 0;
+  unsigned short* buffer;
+  while (p < e) {
+    unsigned char c = *(unsigned char*)p;
+    if (c < 0xC2) p++; // ascii letter or bad code
+    else {
+      int len = utf8valid(p,e);
+      if (len > 1) {
+	sawutf8 = 1;
+	// detect a code that will turn into a surrogate pair:
+	if (len == 4 && *(unsigned char*)(p+1)<0x90) count++;
+      } else if (!len)
+	len = 1;
+      p += len;
+    }
+    count++;
   }
+  *charcount = count;
+  if (!sawutf8) return 0;
+  buffer = (unsigned short*)(malloc((count+1)*sizeof(unsigned short)));
+  count = 0;
+  p = text;
+  while (p < e) {
+    unsigned char c = *(unsigned char*)p;
+    if (c < 0xC2) { // ascii letter or bad code
+      buffer[count] = c;
+      p++;
+    } else {
+      int len;
+      unsigned ucs = utf8decode(p,e,&len);
+      p += len;
+      if (ucs < 0x10000U) {
+	buffer[count] = (unsigned short)ucs;
+      } else if (ucs > 0x10ffffU) {
+	// error!
+	buffer[count] = 0xFFFD;
+      } else {
+	// write a surrogate pair:
+	buffer[count++] = (((ucs-0x10000u)>>10)&0x3ff) | 0xd800;
+	buffer[count] = (ucs&0x3ff) | 0xdc00;
+      }
+    }
+    count++;
+  }
+  return buffer;
+}
+
+/*! Convert a UTF-8 sequence into an array of 1-byte characters.
+
+    If the conversion is the identity (ie every byte is unchanged)
+    then null is returned. You should use the original buffer in this
+    case.  \e count is still set to the length. This appears to be a
+    useful optimization, as such strings are very common.
+
+    If conversion is needed, the return value is a pointer to a
+    malloc() buffer, and the number of bytes written to the buffer are
+    returned in \e count. The buffer has one more location allocated,
+    if you put a zero there you can use it as a terminated string.
+    You must call free() or utf8free() on the buffer.
+
+    Errors in the UTF-8 are converted as individual bytes, same as
+    utf8decode() does. This allows ISO-8859-1 text mistakenly identified
+    as UTF-8 to be printed correctly.
+
+    Any UTF-8 codes greater than 0xff are turned into '?'. Obviously
+    this is lossy so you only want to use this if there is no other
+    way to send the text.
+*/
+char* utf8to8(const char* text, int n, int* charcount) {
+  const char* p = text;
+  const char* e = text+n;
+  int sawutf8 = 0;
+  int count = 0;
+  unsigned char* buffer;
+  while (p < e) {
+    unsigned char c = *(unsigned char*)p;
+    if (c < 0xC2) p++; // ascii letter or bad code
+    else {
+      int len = utf8valid(p,e);
+      if (len > 1) sawutf8 = 1;
+      else if (!len) len = 1;
+      p += len;
+    }
+    count++;
+  }
+  *charcount = count;
+  if (!sawutf8) return 0;
+  buffer = (char*)(malloc(count+1));
+  count = 0;
+  p = text;
+  while (p < e) {
+    unsigned char c = *(unsigned char*)p;
+    if (c < 0xC2) { // ascii letter or bad code
+      buffer[count] = c;
+      p++;
+    } else {
+      int len;
+      unsigned ucs = utf8decode(p,e,&len);
+      if (ucs < 0x100) buffer[count] = ucs;
+      else buffer[count] = '?';
+      p += len;
+    }
+    count++;
+  }
+  return buffer;
+}
+
+/*! Turn UTF-16 (such as Windows uses for "wide characters") into UTF-8.
+
+    The return value is a pointer to a malloc() buffer, and the number
+    of bytes written to the buffer are returned in \e count. The
+    buffer has one more location allocated, if you put a zero there
+    you can use it as a terminated string.  You must call free() or
+    utf8free() on the buffer.
+
+    Unmatched halves of "surrogate pairs" are converted directly to
+    the same Unicode value. This is supposedly the wrong thing to do,
+    but this way converting to utf8 and back is lossless.
+*/
+char* utf8from16(const unsigned short* wtext, int n, int* bytes) {
+  int count = 0;
+  int i;
+  char* buffer;
+  for (i = 0; i < n; i++) {
+    unsigned short ucs = wtext[i];
+    if (ucs < 0x80U) {
+      count++;
+    } else if (ucs < 0x800U) {
+      count += 2;
+    } else {
+      count += 3;
+      // detect and skip a surrogate pair:
+      if (ucs >= 0xd800 && ucs <= 0xdbff && i < n-1 &&
+	  wtext[i+1] >= 0xdc00 && wtext[i+1] <= 0xdfff) {
+	count++; // all surrogate pairs turn into 4-byte utf8
+	i++; // skip second half of surrogate pair
+      }
+    }
+  }
+  *bytes = count;
+  buffer = (char*)(malloc(count+1));
+  count = 0;
+  for (i = 0; i < n; i++) {
+    unsigned ucs = wtext[i];
+    if (ucs < 0x80U) {
+      buffer[count++] = (char)(ucs);
+    } else {
+      // detect and decode a surrogate pair:
+      if (ucs >= 0xd800 && ucs <= 0xdbff && i < n-1 &&
+	  wtext[i+1] >= 0xdc00 && wtext[i+1] <= 0xdfff) {
+	unsigned ucs2 = wtext[++i];
+	ucs = 0x10000U + ((ucs&0x3ff)<<10) + (ucs2&0x3ff);
+      }
+      count += utf8encode(ucs, buffer+count);
+    }
+  }
+  return buffer;
+}
+
+/*! This is a wrapper for free(p). It is provided so you can free the
+    buffers returned by the utf8 converter functions without including
+    stdlib.h.
+*/
+void utf8free(void* p) {
+  free(p);
 }
 
 #ifdef __cplusplus

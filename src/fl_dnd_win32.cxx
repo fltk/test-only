@@ -1,5 +1,5 @@
 //
-// "$Id: fl_dnd_win32.cxx,v 1.10 2003/11/04 08:11:03 spitzak Exp $"
+// "$Id: fl_dnd_win32.cxx,v 1.11 2004/06/22 08:28:57 spitzak Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 // This is code for dragging *out* of the application. Code for dragging
@@ -103,7 +103,7 @@ public:
   HRESULT STDMETHODCALLTYPE GetData( FORMATETC *pformatetcIn, STGMEDIUM *pmedium ) {
     if ((pformatetcIn->dwAspect & DVASPECT_CONTENT) &&
         (pformatetcIn->tymed & TYMED_HGLOBAL) &&
-        (pformatetcIn->cfFormat == CF_TEXT))
+        (pformatetcIn->cfFormat == CF_UNICODETEXT))
     {
       pmedium->tymed	      = TYMED_HGLOBAL;
       pmedium->hGlobal	      = fl_global_selection(0);
@@ -116,7 +116,7 @@ public:
   {
     if ((pformatetc->dwAspect & DVASPECT_CONTENT) &&
         (pformatetc->tymed & TYMED_HGLOBAL) &&
-        (pformatetc->cfFormat == CF_TEXT))
+        (pformatetc->cfFormat == CF_UNICODETEXT))
       return S_OK;
     return DV_E_FORMATETC;	
   }  
@@ -168,5 +168,5 @@ bool fltk::dnd()
 
 
 //
-// End of "$Id: fl_dnd_win32.cxx,v 1.10 2003/11/04 08:11:03 spitzak Exp $".
+// End of "$Id: fl_dnd_win32.cxx,v 1.11 2004/06/22 08:28:57 spitzak Exp $".
 //

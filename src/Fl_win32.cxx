@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.212 2004/06/19 23:02:14 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.213 2004/06/22 08:28:57 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -91,7 +91,6 @@ using namespace fltk;
 #pragma comment(lib, "imm32.lib")
 void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
 {
-#if 0
   int change = 0;
   const char *fnt = NULL;
   static fltk::Font *spotf = NULL;
@@ -128,57 +127,6 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
     ImmReleaseContext(xid(w->window()), himc);
   }
 }
-
-// THESE ARE NOT RIGHT. They do not handle the ucs16 "combining characters"
-// where 2 ucs words turn into one character. However this bug is replicated
-// in lots of Windows programs:
-
-int ucs2utf(unsigned short ucs, char *buf)
-{
-  if (ucs < 0x000080) {
-    buf[0] = ucs;
-    return 1;
-  } else if (ucs < 0x000800) {
-    buf[0] = 0xC0 | (ucs >> 6);
-    buf[1] = 0x80 | (ucs & 0x3F);
-    return 2;
-  } else { 
-    buf[0] = 0xE0 | (ucs >> 12);
-    buf[1] = 0x80 | ((ucs >> 6) & 0x3F);
-    buf[2] = 0x80 | (ucs & 0x3F);
-    return 3;
-  }
-}
-
-int utf2ucs(const char* utf, unsigned short* ucs) {
-  unsigned char v = *(unsigned char*)utf;
-  *ucs = v; // by default we return code unchanged
-  if (v < 0xc2) return 1;
-  int len = utf8valid(utf, utf+8);
-  switch (len) {
-  case 0:
-  case 1:
-    // illegal sequences return first byte unchanged
-    return 1;
-  case 2:
-    *ucs =
-      ((utf[0] & ~0xC0) << 6) +
-      (utf[1] & ~0x80);
-    return 2;
-  case 3:
-    *ucs =
-      ((utf[0] & ~0xE0) << 12) +
-      ((utf[1] & ~0x80) << 6) +
-      (utf[2] & ~0x80);
-    return 3;
-  default:
-    // Anything larger does not fit in ucs (though some would if we
-    // did combining-characters correctly). Send a question mark
-    // instead:
-    *ucs = '?';
-    return len;
-  }
-}    
 
 /**
  * returns pointer to the filename, or "" if name ends with '/' or ':'
@@ -618,15 +566,15 @@ void fltk::paste(Widget &receiver, bool clipboard) {
     HANDLE h = GetClipboardData(CF_UNICODETEXT);
     if (h) {
       unsigned short *ucs = (LPWSTR)GlobalLock(h);
-      int l = wcslen(ucs);
-      char *pbuf, *buf = new char[l*3+1];
-      pbuf = buf;
-      for(int i = 0; i < l; i++) pbuf += ucs2utf(ucs[i], pbuf);
-      *pbuf = 0;
-      e_text = buf;
-      LPSTR a,b;
-      a = b = e_text;
-      while (*a) { // strip the CRLF pairs ($%$#@^)
+      static char* previous_buffer = 0;
+      if (previous_buffer) utf8free(previous_buffer);
+      int len;
+      e_text = previous_buffer = utf8from16(ucs,wcslen(ucs),&len);
+      // strip the CRLF pairs: ($%$#@^)
+      char* a = e_text;
+      char* b = a;
+      char* e = e_text+len;
+      while (a<e) {
 	if (*a == '\r' && a[1] == '\n') a++;
 	else *b++ = *a++;
       }
@@ -643,20 +591,23 @@ void fltk::paste(Widget &receiver, bool clipboard) {
 // copies the given selection to such a block and returns it. It appears
 // this block is usually handed to Windows and Windows deletes it.
 HANDLE fl_global_selection(int clipboard) {
-  int n = 0;
-  unsigned short *ucs =
-    new unsigned short[selection_length[clipboard]+1];
-  const char* ptr = selection_buffer[clipboard];
-  const char* end = ptr+selection_length[clipboard];
-  for (; ptr<end; n++) ptr += utf2ucs(ptr, ucs+n);
-  ucs[n] = 0;
+  int n;
+  unsigned short* ucs = utf8to16(selection_buffer[clipboard],
+				 selection_length[clipboard],
+				 &n);
   HANDLE h = GlobalAlloc(GHND, sizeof(unsigned short) * (n+1));
-  if (h) {
-    LPWSTR p = (LPWSTR)GlobalLock(h);
-    memcpy(p, ucs, sizeof(unsigned short) * (n+1));
-    GlobalUnlock(h);
+  LPWSTR p = (LPWSTR)GlobalLock(h);
+  if (ucs) {
+    ucs[n] = 0;
+    memcpy(p, ucs, sizeof(unsigned short)*(n+1));
+    utf8free(ucs);
+  } else {
+    // utf8to16 returns null if conversion is raw byte values, copy them:
+    const unsigned char* q = (unsigned char*)(selection_buffer[clipboard]);
+    for (int i = 0; i < n; i++) p[i] = *q++;
+    p[n] = 0;
   }
-  delete[] ucs;
+  GlobalUnlock(h);
   return h;
 }
 
@@ -1188,35 +1139,33 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     }
     lastkeysym = e_keysym;
     // translate to text:
-    static char buffer[3];
+    static char buffer[31]; // must be big enough for fltk::compose() output
+    static char dbcsbuf[3];
     if (uMsg == WM_CHAR || uMsg == WM_SYSCHAR) {
-      if (!buffer[0]) {
-	buffer[0] = char(wParam);
-	if (IsDBCSLeadByte((unsigned char)buffer[0]))
-	  break;
-      } else {
-	buffer[1] = char(wParam);
+      if (IsDBCSLeadByte((unsigned char)wParam)) {
+	dbcsbuf[0] = (char)wParam;
+	break;
       }
-      if (e_keysym==ReturnKey || e_keysym==KeypadEnter) buffer[0] = '\r';
-      if (buffer[0] && buffer[1]) {
+      if (dbcsbuf[0] && wParam) {
+	dbcsbuf[1] = (char)wParam;
+	dbcsbuf[2] = 0;
 	unsigned short ucs[11];
 	int ucslen, len = 0;
 	ucslen = MultiByteToWideChar(GetACP(), MB_PRECOMPOSED,
 				     (char*)buffer, 2, (wchar_t*)ucs, 10);
-      	for (int i = 0; i < ucslen; i++) { 
-          int l = ucs2utf(ucs[i], buffer + len);
-          if (l > 0) len += l;
-      	}
+	// This is not doing the "surrogate characters"!!!
+     	for (int i = 0; i < ucslen; i++)
+          len += utf8encode(ucs[i], buffer + len);
       	buffer[len] = 0;
 	e_length = len;
-//    } else if (e_keysym >= Keypad && e_keysym <= KeypadLast) {
-//        buffer[0] = e_keysym-Keypad;
-//        e_length = 1;
+	dbcsbuf[0] = 0;
       } else {
+	buffer[0] = char(wParam);
+	if (e_keysym==ReturnKey || e_keysym==KeypadEnter) buffer[0] = '\r';
 	e_length = 1;
       }
     } else {
-      buffer[0] = 0;
+      dbcsbuf[0] = 0;
       e_length = 0;
     }
 
@@ -1789,5 +1738,5 @@ Cleanup::~Cleanup() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.212 2004/06/19 23:02:14 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.213 2004/06/22 08:28:57 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.23 2004/06/19 23:02:25 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.24 2004/06/22 08:28:58 spitzak Exp $"
 //
 // Copyright 2004 Bill Spitzak and others.
 //
@@ -212,29 +212,21 @@ const char* fltk::Font::current_name() {
 float fltk::getascent()  { return current->font->ascent; }
 float fltk::getdescent() { return current->font->descent; }
 
+// Unfortunatly the Xft UTF-8 interface does not do what I want, which
+// is to print something for error sequences. So instead we decode into
+// 32-bit characters and draw that. For the vast majority of text this
+// uses the 8-bit interface:
+
 float fltk::getwidth(const char *str, int n) {
   XGlyphInfo i;
-  // Unfortunately the Utf8 drawing code barfs on illegal sequences and
-  // on some fonts. I check here to see if a UTF-8 character is in the
-  // string and no errors, and only then use the Utf8 drawing code:
-  const char* p = str;
-  const char* e = str+n;
-  bool sawutf8 = false;
-  while (p < e) {
-    unsigned char c = *(unsigned char*)p;
-    if (c < 0x80) p++; // ascii letter encountered
-    else if (c < 0xC2) {sawutf8 = false; break;} // bad code encountered
-    else {
-      int len = utf8valid(p,e);
-      if (!len) {sawutf8 = false; break;}
-      if (len > 1) sawutf8 = true;
-      p += len;
-    }
-  }
-  if (sawutf8)
-    XftTextExtentsUtf8(xdisplay, current->font, (XftChar8*)str, n, &i);
-  else
+  int count;
+  unsigned* buffer = utf8to32(str,n,&count);
+  if (buffer) {
+    XftTextExtents32(xdisplay, current->font, (XftChar32*)buffer, count, &i);
+    utf8free(buffer);
+  } else {
     XftTextExtents8(xdisplay, current->font, (XftChar8*)str, n, &i);
+  }
   return i.xOff;
 }
 
@@ -280,31 +272,18 @@ void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
   color.color.blue  = b*0x101;
   color.color.alpha = 0xffff;
 
-  // Unfortunately the Utf8 drawing code barfs on illegal sequences and
-  // on some fonts. I check here to see if a UTF-8 character is in the
-  // string and no errors, and only then use the Utf8 drawing code:
-  const char* p = str;
-  const char* e = str+n;
-  bool sawutf8 = false;
-  while (p < e) {
-    unsigned char c = *(unsigned char*)p;
-    if (c < 0x80) p++; // ascii letter encountered
-    else if (c < 0xC2) {sawutf8 = false; break;} // bad code encountered
-    else {
-      int len = utf8valid(p,e);
-      if (!len) {sawutf8 = false; break;}
-      if (len > 1) sawutf8 = true;
-      p += len;
-    }
-  }
-  if (sawutf8)
-    XftDrawStringUtf8(xft_gc, &color, current->font,
-		      int(floorf(x+.5f)), int(floorf(y+.5f)),	
-		      (XftChar8*)str, n);
-  else
+  int count;
+  unsigned* buffer = utf8to32(str,n,&count);
+  if (buffer) {
+    XftDrawString32(xft_gc, &color, current->font,
+		    int(floorf(x+.5f)), int(floorf(y+.5f)),	
+		    (XftChar32*)buffer, count);
+    utf8free(buffer);
+  } else {
     XftDrawString8(xft_gc, &color, current->font,
 		   int(floorf(x+.5f)), int(floorf(y+.5f)),	
 		   (XftChar8*)str, n);
+  }
 }
 
 void fltk::stop_drawing(XWindow window) {
@@ -473,5 +452,5 @@ int fltk::Font::encodings(const char**& arrayp) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.23 2004/06/19 23:02:25 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.24 2004/06/22 08:28:58 spitzak Exp $"
 //
