@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.14 1999/08/16 07:30:47 bill Exp $"
+// "$Id: Fl.H,v 1.15 1999/08/20 18:09:58 carl Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,7 @@
 #define Fl_H
 
 #include "Enumerations.H"
+#include "Fl_Boxtype.H"
 
 // These header files are only needed for the obsolete functions:
 #include "Fl_Color.H"
@@ -170,10 +171,10 @@ public:
 
   //static void set_boxtype(Fl_Boxtype,Fl_Box_Draw_F*,uchar,uchar,uchar,uchar);
   //static void set_boxtype(Fl_Boxtype, Fl_Boxtype from);
-  //static int box_dx(Fl_Boxtype b) {return b->dx();}
-  //static int box_dy(Fl_Boxtype b) {return b->dy();}
-  //static int box_dw(Fl_Boxtype b) {return b->dw();}
-  //static int box_dh(Fl_Boxtype b) {return b->dh();}
+  static int box_dx(Fl_Boxtype b) {return b->dx();}
+  static int box_dy(Fl_Boxtype b) {return b->dy();}
+  static int box_dw(Fl_Boxtype b) {return b->dw();}
+  static int box_dh(Fl_Boxtype b) {return b->dh();}
 
   static void set_abort(void (*f)(const char*,...)) {fatal = f;}
   static int event_shift() {return e_state&FL_SHIFT;}
@@ -190,5 +191,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.14 1999/08/16 07:30:47 bill Exp $".
+// End of "$Id: Fl.H,v 1.15 1999/08/20 18:09:58 carl Exp $".
 //
