@@ -1,5 +1,5 @@
 //
-// "$Id: fl_xpm.cxx,v 1.22 2002/12/10 02:01:03 easysw Exp $"
+// "$Id: fl_xpm.cxx,v 1.23 2004/07/04 17:26:01 laza2000 Exp $"
 //
 // XPM reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -126,38 +126,44 @@ static char** read(char *name, int oneline = 0) {
   return data;
 }
 
-bool xpmImage::test(const unsigned char *data, size_t)
+#include <fltk/SharedImage.h>
+
+bool xpmFileImage::test(const unsigned char *data, size_t)
 {
   return (strstr((char*) data,"/* XPM") != 0);
 }
 
-void xpmImage::measure(int &W, int &H)
+void xpmFileImage::_measure(float &W, float &H) const
 {
-  if (w>=0) { 
-    W=w; H=h; 
+  if(w()>=0) { 
+    W=w(); H=h(); 
     return; 
   }
   int loaded=0;
-  char *const* ldata = (char *const*)data;
+  char *const* ldata = (char *const*)datas;
   if (!ldata) {
     ldata = ::read((char *)get_filename(), 1);
-    if (!ldata) {W = w = 0; return;}
+    if (!ldata) { W = H = 0; const_cast<xpmFileImage*>(this)->setsize(0,0); return; }
     loaded=1;
   }
 
-  measure_xpm(ldata, w, h);
+	int _W,_H;
+	measure_xpm(ldata,_W,_H);
+  const_cast<xpmFileImage*>(this)->setsize(_W,_H);
+
   if (loaded) {
     delete[] ldata[0];
     free((void*)ldata);
   }
-  W=w; H=h;
+  W=w(); 
+	H=h();
 }
 
-void xpmImage::read()
+void xpmFileImage::read()
 {
-  id = mask = 0;
+  //id = mask = 0;
   int loaded=0;
-  char *const* ldata = (char *const*)data;
+  char *const* ldata = (char *const*)datas;
   if (!ldata) {
     ldata = ::read((char *)get_filename());
     if (!ldata) return;
@@ -165,27 +171,27 @@ void xpmImage::read()
   }
   int w, h;
   measure_xpm(ldata, w, h);
-  Pixmap pixmap = create_offscreen(w, h);
-  id = (void*)pixmap;
-  fl_begin_offscreen(pixmap);
+
+	ImageDraw idraw(const_cast<xpmFileImage*>(this));
+
   uchar *bitmap = 0;
   set_mask_bitmap(&bitmap);
   draw_xpm(ldata, 0, 0, NO_COLOR);
   set_mask_bitmap(0);
   if (bitmap) {
-    mask = (void*)create_bitmap(bitmap, w, h);
-    delete[] bitmap;
+      (const_cast<xpmFileImage*>(this))->set_alpha_bitmap(bitmap, this->w(), this->h());
+      delete[] bitmap;
   }
-  fl_end_offscreen();
 
   if(loaded) {
     char* const* save = ldata;
     while (*ldata) delete[] *ldata++;
     free((void*)save);
   }
-  return;
+  
+	return;
 }
 
 //
-// End of "$Id: fl_xpm.cxx,v 1.22 2002/12/10 02:01:03 easysw Exp $"
+// End of "$Id: fl_xpm.cxx,v 1.23 2004/07/04 17:26:01 laza2000 Exp $"
 //
