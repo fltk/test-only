@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.158 2004/11/12 06:50:16 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.159 2004/12/16 18:40:40 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -254,6 +254,8 @@ void Menu::layout_in(Widget* widget, const int* indexes, int level) const {
     array[level] = i;
     Widget* item = child(array, level);
     if (!item->visible()) continue;
+    // force items with @ commands in label to re-layout:
+    if (item->label() && item->label()[0]=='@') item->w(0);
     int ih = item->height();
     H += ih+leading;
     int iw = item->width();
@@ -1062,5 +1064,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.158 2004/11/12 06:50:16 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.159 2004/12/16 18:40:40 spitzak Exp $".
 //

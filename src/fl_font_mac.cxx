@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_mac.cxx,v 1.6 2004/12/05 19:28:50 spitzak Exp $"
+// "$Id: fl_font_mac.cxx,v 1.7 2004/12/16 18:40:42 spitzak Exp $"
 //
 // MacOS font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -68,14 +68,6 @@ const char* fltk::Font::system_name() {
 }
 
 static FontSize* current;
-
-// Change the encoding to use for the next font selection.
-// Encodings is NYI. We need a way to translate the ISO encoding names
-// to Win32 encoding enumerations. Ie "iso8859-1" turns into ANSI_CHARSET,
-// etc.
-void fltk::set_encoding(const char* f) {
-  encoding_ = f;
-}
 
 // face = italic, bold, 0, italic|bold
 
@@ -241,5 +233,5 @@ void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
 }
 
 //
-// End of "$Id: fl_font_mac.cxx,v 1.6 2004/12/05 19:28:50 spitzak Exp $".
+// End of "$Id: fl_font_mac.cxx,v 1.7 2004/12/16 18:40:42 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.44 2004/06/19 23:02:24 spitzak Exp $"
+// "$Id: fl_font.cxx,v 1.45 2004/12/16 18:40:42 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -46,6 +46,52 @@ with constants. Don't use the undocumented fields.
    fltk::HELVETICA can be used.
 */
 
+/*! \fn fltk::Font* fltk::Font::plus(int attributes);
+  Return a font from the same family with the extra attributes turned
+  on. This may return the same font if the attributes are already on
+  or there is no font with those attributes.
+*/
+
+/*! \fn Font* Font::bold()
+  Same as plus(BOLD), returns a bold version of this font.
+*/
+
+/*! \fn Font* Font::italic()
+  Same as plus(ITALIC), returns an italic version of this font.
+*/
+
+/*! \fn const char* fltk::Font::system_name();
+  Returns the string actually passed to the operating system, which
+  may be different than name().
+
+  For Xlib this is a pattern sent to XListFonts to find all the sizes.
+  For most other systems this is the same as name() without any attributes.
+*/
+
+/*! \fn void fltk::drawtext_transformed(const char *text, int n, float x, float y);
+  Draw text starting at a point returned by fltk::transform(). This
+  is needed for complex text layout when the current transform may
+  not match the transform being used by the font.
+*/
+
+/*! \fn void fltk::setfont(Font* font, float psize);
+
+  Set the current font and font scaling so the size is size
+  pixels. The size is unaffected by the current transformation matrix
+  (you may be able to use fltk::transform() to get the size to get a
+  properly scaled font).
+
+  The size is given in pixels. Many pieces of software express sizes
+  in "points" (for mysterious reasons, since everything else is
+  measured in pixels!). To convert these point sizes to pixel sizes
+  use the following code:
+\code
+const fltk::Monitor& monitor = fltk::Monitor::all();
+float pixels_per_point = monitor.dpi_y()/72.0;
+float font_pixel_size = font_point_size*pixels_per_point;
+\endcode
+*/
+
 // Static variables containing the currently selected font, size, encoding:
 fltk::Font* fltk::current_font_;
 float fltk::current_size_;
@@ -68,10 +114,21 @@ const char *fltk::encoding_ = "iso10646-1";
 /*! \fn Font* fltk::getfont()
   Return the Font sent to the last setfont().
 */
+
 /*! \fn float fltk::getsize()
   Return the size sent to the last setfont(). You should use this as a
   minimum line spacing (using ascent()+descent() will produce oddly
   spaced lines for many fonts).
+*/
+
+/*! \fn float fltk::getascent()
+  Return the distance from the baseline to the top of letters in
+  the current font.
+*/
+
+/*! \fn float fltk::getdescent()
+  Return the distance from the baseline to the bottom of letters in
+  the current font.
 */
 
 /*! Draw a nul-terminated string. */
@@ -89,15 +146,28 @@ fltk::drawtext(const char* text, int n, float x, float y) {
   drawtext_transformed(text, n, x, y);
 }
 
-/*! Return the width of a nul-terminated string. */
-float
-fltk::getwidth(const char* text) { return getwidth(text, strlen(text)); }
+/*! \fn float fltk::getwidth(const char *text, int n)
+  Return the width of the first \a n bytes of this UTF-8 string drawn
+  in the font set by the most recent setfont().
+*/
 
-/*! Return a single string that names this font. If the attributes
-  are zero this is easy. If they are not it prints the string into
-  a static buffer and adds " bold" and/or " italic" to the end.
-  A string of this form can be sent to find() to get a font with
-  attributes.
+/*! Return the width of a nul-terminated UTF-8 string drawn in the
+  font set by the most recent setfont(). */
+float fltk::getwidth(const char* text) {
+  return getwidth(text, strlen(text));
+}
+
+/*! \fn const char* fltk::Font::name(int* attributes)
+  Return a string name for this font, and put any attributes
+  (BOLD, ITALIC) into the location pointed to by \a attributes.
+  Using the returned string and attributes as arguments to find()
+  will return the same font.
+*/
+
+/*! Return a single string that names this font. Attributes are
+  indicated by adding " bold" and/or " italic" to the end of the
+  name. Passing this string and zero for the attributes to find()
+  will return the same font.
 */
 const char* fltk::Font::name() const {
   if (!attributes_) return name_;
@@ -108,11 +178,24 @@ const char* fltk::Font::name() const {
   return buffer;
 }
 
-/*! \fn const char* fltk::Font::name(int* attributes)
-  Return a string name for this font, and put any attributes
-  (BOLD, ITALIC) into the location pointed to by \a attributes.
+/*!
+  Obsolete function to encourage FLTK to choose a 256-glyph font with
+  the given encoding. You must call setfont() after changing this for
+  it to have any effect.
+
+  Notice that this is obsolete! Only the non-Xft X version actually
+  uses it and that may be eliminated as well. In addition FLTK uses
+  UTF-8 internally, and assummes that any font it prints with is
+  using Unicode encoding (or ISO-8859-1 if there are only 256 characters).
+
+  The default is "iso10646-1"
+*/
+void fltk::set_encoding(const char* f) {encoding_ = f;}
+
+/*! \fn const char* fltk::get_encoding()
+  Returns the string sent to the most recent set_encoding().
 */
 
 //
-// End of "$Id: fl_font.cxx,v 1.44 2004/06/19 23:02:24 spitzak Exp $".
+// End of "$Id: fl_font.cxx,v 1.45 2004/12/16 18:40:42 spitzak Exp $".
 //

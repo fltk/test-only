@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.115 2004/12/12 22:23:24 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.116 2004/12/16 18:40:41 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -252,7 +252,7 @@ static void deferred_call(DeferredCallType what, HWND window, int arg=0) {
 void fl_do_deferred_calls() {
   // Notice that WndProc may be called and put *more* things on the queue.
   // Be sure to handle this. Yuck.
-  bool keep_active = false;
+  HWND keep_active = 0;
   for (int n = 0; n < deferred_queue_size; n++) {
     DeferredCall& c = deferred_queue[n];
     switch (c.what) {
@@ -260,7 +260,7 @@ void fl_do_deferred_calls() {
       ShowWindow(c.window, c.argument);
       break;
     case KEEP_ACTIVE:
-      keep_active = true;
+      keep_active = c.window;
       break;
     case OPEN_ICON:
       OpenIcon(c.window);
@@ -274,20 +274,25 @@ void fl_do_deferred_calls() {
     }
   }
   deferred_queue_size = 0;
-#if 0
   // This attemts to fix a Windoze bug where dismissing the child-of
   // a child-of window deactivates the app. This bug has been in every
   // version of Windows for years and affects IE and other Microsoft
   // programs:
   if (keep_active && !grab()) {
-    for (CreatedWindow* x = CreatedWindow::first; x; x = x->next)
-      if (!x->window->parent() && x->window->visible()) {
-	//BringWindowToTop(x->xid);
-	SetActiveWindow(x->xid);
-	break;
-      }
+    //BringWindowToTop(keep_active);
+    SetActiveWindow(keep_active);
   }
-#endif
+}
+
+void fl_prune_deferred_calls(HWND window) {
+  int m = 0;
+  for (int n = 0; n < deferred_queue_size; n++) {
+    if (deferred_queue[n].window != window) {
+      if (m < n) deferred_queue[m] = deferred_queue[n];
+      m++;
+    }
+  }
+  deferred_queue_size = m;
 }
 #endif
 
@@ -801,10 +806,11 @@ void Window::destroy() {
   if (x->region) XDestroyRegion(x->region);
   XDestroyWindow(xdisplay, x->xid);
 #elif defined(_WIN32)
-  if (x->xid) { // it is set to zero by DESTROY message from Windows
-    stop_drawing(x->xid);
-    deferred_call(DESTROY_WINDOW, x->xid);
-    deferred_call(KEEP_ACTIVE, x->xid);
+  stop_drawing(x->xid);
+  deferred_call(DESTROY_WINDOW, x->xid);
+  if (child_of() && child_of()->shown()) {
+    HWND pwnd = xid(child_of());
+    if (pwnd) deferred_call(KEEP_ACTIVE, pwnd);
   }
   if (x->region) DeleteObject(x->region);
 #elif defined(__APPLE__)
@@ -825,5 +831,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.115 2004/12/12 22:23:24 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.116 2004/12/16 18:40:41 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.47 2004/12/12 22:23:25 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.48 2004/12/16 18:40:43 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -324,12 +324,13 @@ void Symbol::_measure(float& w, float& h) const {}
     - FOCUSED: Indicates that the current object has keyboard focus.
 
     If your symbol is designed to be imbedded with an @-command into
-    drawtext() then you can examine the current color with
-    getcolor() and the current font with getfont() and
-    getsize(). If you want to draw letters that line up with
-    other text in a label you should place the baseline at
-    y+(H+getascent()-getdescent())/2) where H is the
-    height that your measure() function returns.
+    drawtext() then:
+    - text() points after the '@' sign
+    - getfont() is the current font
+    - getsize() is the current font size
+    - getcolor() is the current color
+    - y+(int(H+getascent()-getdescent()+1)>>1) is where to put the baseline
+    of the text. H is the height returned by your _measure() method.
 
     The default implementation calls the integer version of _draw()
     after rounding all coordinates to the nearest integer.
@@ -703,5 +704,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.47 2004/12/12 22:23:25 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.48 2004/12/16 18:40:43 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.62 2004/11/17 17:32:54 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.63 2004/12/16 18:40:42 spitzak Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -66,14 +66,6 @@ const char* fltk::Font::system_name() {
 }
 
 static FontSize *current;
-  
-// Change the encoding to use for the next font selection.
-// Encodings is NYI. We need a way to translate the ISO encoding names
-// to Win32 encoding enumerations. Ie "iso8859-1" turns into ANSI_CHARSET,
-// etc.
-void fltk::set_encoding(const char* f) {
-  encoding_ = f;
-}
 
 static FontSize* all_fonts;
 
@@ -284,5 +276,5 @@ void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.62 2004/11/17 17:32:54 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.63 2004/12/16 18:40:42 spitzak Exp $".
 //

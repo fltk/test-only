@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key_win32.cxx,v 1.19 2004/11/12 06:50:17 spitzak Exp $"
+// "$Id: Fl_get_key_win32.cxx,v 1.20 2004/12/16 18:40:41 spitzak Exp $"
 //
 // _WIN32 keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
@@ -93,18 +93,18 @@ static const struct {unsigned short vk, fltk, ext;} vktab[] = {
   {VK_MULTIPLY,	MultiplyKey},
   {VK_ADD,	AddKey},
   {VK_SUBTRACT,	SubtractKey},
-  {VK_DECIMAL,	DecimalKey},
+  {VK_DELETE,	DecimalKey},
   {VK_DIVIDE,	DivideKey},
-//    {VK_INSERT,	Keypad0},
-//    {VK_END,	Keypad1},
-//    {VK_DOWN,	Keypad2},
-//    {VK_NEXT,	Keypad3},
-//    {VK_LEFT,	Keypad4},
-//    {VK_CLEAR,	Keypad5},
-//    {VK_RIGHT,	Keypad6},
-//    {VK_HOME,	Keypad7},
-//    {VK_UP,	Keypad8},
-//    {VK_PRIOR,	Keypad9},
+  {VK_INSERT,	Keypad0},
+  {VK_END,	Keypad1},
+  {VK_DOWN,	Keypad2},
+  {VK_NEXT,	Keypad3},
+  {VK_LEFT,	Keypad4},
+  {VK_CLEAR,	Keypad5},
+  {VK_RIGHT,	Keypad6},
+  {VK_HOME,	Keypad7},
+  {VK_UP,	Keypad8},
+  {VK_PRIOR,	Keypad9},
   {VK_LSHIFT,	LeftShiftKey},
   {VK_RSHIFT,	RightShiftKey},
   {VK_LCONTROL,	LeftCtrlKey},
@@ -124,7 +124,12 @@ static unsigned short fltk2ms(unsigned fltk) {
   if (fltk >= 'A' && fltk <= 'Z') return fltk;
   if (fltk >= 'a' && fltk <= 'z') return fltk-('a'-'A');
   if (fltk >= F1Key && fltk <= LastFunctionKey) return fltk-F1Key+VK_F1;
-  if (fltk >= Keypad0 && fltk<=Keypad9) return fltk-Keypad0+VK_NUMPAD0;
+  if (event_state(NUMLOCK) || fl_last_was_extended) {
+    if (fltk >= Keypad0 && fltk<=Keypad9) return fltk-Keypad0+VK_NUMPAD0;
+    if (fltk == DecimalKey) return VK_DECIMAL;
+  }
+  if (fltk == KeypadEnter && fl_last_was_extended)
+    return VK_RETURN;
   int a = 0;
   int b = sizeof(vktab)/sizeof(*vktab);
   while (a < b) {
@@ -147,5 +152,5 @@ bool fltk::get_key_state(unsigned k) {
 }
 
 //
-// End of "$Id: Fl_get_key_win32.cxx,v 1.19 2004/11/12 06:50:17 spitzak Exp $".
+// End of "$Id: Fl_get_key_win32.cxx,v 1.20 2004/12/16 18:40:41 spitzak Exp $".
 //

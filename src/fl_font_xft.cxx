@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.29 2004/10/30 05:13:27 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.30 2004/12/16 18:40:43 spitzak Exp $"
 //
 // Copyright 2004 Bill Spitzak and others.
 //
@@ -91,11 +91,6 @@ const char* fltk::Font::system_name() {
 }
 
 static FontSize* current;
-
-// Change the encoding to use for the next font selection.
-void fltk::set_encoding(const char* f) {
-  encoding_ = f;
-}
 
 static XftFont* fontopen(const char* name, int attributes, bool core) {
   open_display();
@@ -474,5 +469,5 @@ int fltk::Font::encodings(const char**& arrayp) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.29 2004/10/30 05:13:27 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.30 2004/12/16 18:40:43 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.240 2004/12/12 22:23:25 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.241 2004/12/16 18:40:41 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1346,6 +1346,8 @@ static Window* resize_from_system;
 //  static Window* in_wm_paint;
 //  static PAINTSTRUCT paint;
 
+extern void fl_prune_deferred_calls(HWND);
+
 #define MakeWaitReturn() __PostMessage(hWnd, WM_MAKEWAITRETURN, 0, 0)
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
@@ -1401,12 +1403,12 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     return 1;
 
   case WM_DESTROY:
+    // Microsoft, you MORONS! Don't destroy stuff I create!
+    // Oh well, try to handle this as gracefully as possible so we
+    // don't send any commands to the now non-existent window:
     tablet_close(hWnd);
-    if (window) {
-      CreatedWindow *i = CreatedWindow::find(window);
-      i->xid = 0;
-      window->destroy();
-    }
+    if (window) window->destroy();
+    fl_prune_deferred_calls(hWnd);
     break;
 
   case WM_ACTIVATE:
@@ -2377,5 +2379,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.240 2004/12/12 22:23:25 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.241 2004/12/16 18:40:41 spitzak Exp $".
 //
