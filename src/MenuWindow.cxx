@@ -36,17 +36,32 @@ using namespace fltk;
   to indicate that the windows are temporary, won't move, and should
   not have any decorations.
 
-  On X this turns on override_redirect and save-under.
-
-  On older X servers this actually tried to draw into overlay hardware.
-  This behavior only remains when FLTK is compiled on Irix (where
-  overlays are still faster and save-under does not work):
+  On X this turns on override_redirect and save-under and thus avoids
+  the window manager.
 */
 
+static void revert(Style* s) {
+  s->box_ = UP_BOX;
+}
+static NamedStyle style("MenuWindow", revert, &MenuWindow::default_style);
+/*! The default style sets box() to UP_BOX. This box is used around all
+  popup menus. */
+NamedStyle* MenuWindow::default_style = &::style;
+
+MenuWindow::MenuWindow(int W, int H, const char *l) : Window(W,H,l) {
+  style(default_style);
+  set_override();
+}
+
+MenuWindow::MenuWindow(int X, int Y, int W, int H, const char *l) : Window(X,Y,W,H,l) {
+  style(default_style);
+  set_override();
+}
+
 /*! \fn void MenuWindow::clear_overlay()
-  Tells FLTK to use normal drawing planes instead of overlay
-  planes. This is usually necessary if your menu contains multi-color
-  images. Does nothing except on Irix.
+  Tells FLTK to not try to use the overlay hardware planes. This is
+  disabled except on Irix. On Irix you will have to call this if you
+  want to draw colored images in the popup.
 */
 
 /*! \fn void MenuWindow::set_overlay()

@@ -62,7 +62,7 @@ int MenuBar::handle(int event) {
 	// If last item had tooltip, exit from it
 	if (last_ >= 0 && child(last_)->tooltip()) Tooltip::exit();
 	// If MenuBar has tooltip, enter it
-	if (tooltip()) Tooltip::enter(this);        
+	if (tooltip()) Tooltip::enter(this);
       }
     } else {
       Tooltip::exit();
@@ -88,10 +88,10 @@ J1:
       Widget* w = child(i);
       if (w->active() && w->test_label_shortcut()) {
 	if (w->is_group()) {value(i); goto J1;} // menu title
-        focus_index(Group::find(w)); // Set focus_index, so Menu::get_item() works
-        if (checkmark(w)) { w->invert_flag(VALUE); redraw(); }
-  	execute(w); // button in the menu bar
-  	return 1;
+	focus_index(Group::find(w)); // Set focus_index, so Menu::get_item() works
+	if (checkmark(w)) { w->invert_flag(VALUE); redraw(); }
+	execute(w); // button in the menu bar
+	return 1;
       }
     }
     if (event_key()==LeftAltKey || event_key()==RightAltKey) {
@@ -118,23 +118,23 @@ J1:
       break;
     }
 
-    // We are focused, return focus to old focused widget    
-    if (focused()) {      
+    // We are focused, return focus to old focused widget
+    if (focused()) {
       if (lastfocus_) lastfocus_->take_focus();
-      lastfocus_ = 0;      
+      lastfocus_ = 0;
       highlight_ = -1; value(-1);
       redraw(DAMAGE_CHILD);
       return 1;
-    }    
+    }
 
     // okay we got the shortcut, find first menu and pop it up:
     for (i = 0; i < children; i++) {
       Widget* w = child(i);
       if (w->active()) {
-        value(i); highlight_ = i;
-        lastfocus_ = fltk::focus();
-        take_focus();        
-        return 1;
+	value(i); highlight_ = i;
+	lastfocus_ = fltk::focus();
+	take_focus();
+	return 1;
       }
     }
     break;
@@ -143,37 +143,37 @@ J1:
     case DownKey:
     case RightKey:
       if ((event_key()==RightKey && vertical()) ||
-          (event_key()==DownKey && !vertical())) {
-        /* Popup menu */
-        goto J1;
+	  (event_key()==DownKey && !vertical())) {
+	/* Popup menu */
+	goto J1;
       }
       i=value()+1;
 J3:
       for (; i < children; i++) {
-        Widget* w = child(i);
-        if (w->active()) {
-          value(i); highlight_ = i;
-          redraw(DAMAGE_CHILD);
-          return 1;
-        }        
+	Widget* w = child(i);
+	if (w->active()) {
+	  value(i); highlight_ = i;
+	  redraw(DAMAGE_CHILD);
+	  return 1;
+	}
       }
       i = 0;
       goto J3;
     case UpKey:
     case LeftKey:
       if ((event_key()==LeftKey && vertical()) ||
-          (event_key()==UpKey && !vertical())) {        
-        break;
+	  (event_key()==UpKey && !vertical())) {
+	break;
       }
       i=value()-1;
 J4:
       for (; i >= 0; i--) {
-        Widget* w = child(i);
-        if (w->active()) {
-          value(i); highlight_ = i;
-          redraw(DAMAGE_CHILD);
-          return 1;
-        }        
+	Widget* w = child(i);
+	if (w->active()) {
+	  value(i); highlight_ = i;
+	  redraw(DAMAGE_CHILD);
+	  return 1;
+	}
       }
       i = children-1;
       goto J4;
@@ -195,28 +195,14 @@ J4:
   return 0;
 }
 
-// The default style for menu bars.  The buttonbox() is used to draw
-// the boxes around the popup titles, this is done by PopupMenu.cxx, and
-// done here for highlight boxes.
-
-static void revert(Style* s) {
-  s->color_ = GRAY75;
-  s->box_ = FLAT_BOX;
-  s->leading_ = 4;
-#if 0
-  // NT 4.0 style
-  s->buttonbox_ = FLAT_BOX;
-#else
-  // Windows98 style:
-  s->buttonbox_ = HIGHLIGHT_UP_BOX;
-#endif
-}
-static NamedStyle style("MenuBar", revert, &MenuBar::default_style);
+static NamedStyle style("MenuBar", 0, &MenuBar::default_style);
 NamedStyle* MenuBar::default_style = &::style;
 
 MenuBar::MenuBar(int x,int y,int w,int h,const char *l)
   : Menu(x,y,w,h,l)
 {
+  // set the parent style to Menu::default_style, not Widget::default_style:
+  default_style->parent_ = this->style();
   style(default_style);
   shortcut(LeftAltKey);
   highlight_ = last_ = -1;

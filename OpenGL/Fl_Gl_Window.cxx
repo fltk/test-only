@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.47 2004/05/15 20:52:43 spitzak Exp $"
+// "$Id$"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -215,7 +215,7 @@ void GlWindow::flush() {
 	glViewport(0, 0, w(), h());
 	glOrtho(0, w(), 0, h(), -1, 1);
 	glRasterPos2i(0,0);
-	}
+      }
       glCopyPixels(0,0,w(),h(),GL_COLOR);
       make_current(); // set current context back to draw overlay
       damage1_ = 0;
@@ -325,5 +325,5 @@ void GlWindow::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.47 2004/05/15 20:52:43 spitzak Exp $".
+// End of "$Id$".
 //

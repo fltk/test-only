@@ -1,5 +1,5 @@
 //
-// "$Id: KDE.cxx,v 1.21 2004/06/19 23:02:27 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 2004 Bill Spitzak and others.
 //
@@ -304,8 +304,9 @@ extern "C" bool fltk_theme() {
   }
 
   INIFile f;
-  f.load(kderc);
-  // skipt the rest if it looks like kde does not exist:
+  // skip it if it looks like they are not using kde:
+  if (!f.load(kderc)) return false;
+  // skip if it looks like kde is not installed:
   if (!f.load("/usr/share/config/kdeglobals")) return false;
 
   const char* s;
@@ -471,5 +472,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: KDE.cxx,v 1.21 2004/06/19 23:02:27 spitzak Exp $".
+// End of "$Id$".
 //

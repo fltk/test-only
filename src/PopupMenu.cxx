@@ -57,6 +57,7 @@ effect to the widget.
 using namespace fltk;
 
 extern Widget* fl_did_clipping;
+static PopupMenu* pushed;
 
 /*! The little down-arrow indicator can be replaced by setting a new
   glyph() function and making it draw whatever you want.
@@ -79,6 +80,7 @@ void PopupMenu::draw() {
     draw_background();
   }
   Flags flags = current_flags_highlight();
+  if (::pushed == this) flags |= VALUE|HIGHLIGHT;
   Rectangle r(w(),h());
   box->draw(r, style(), flags);
   box->inset(r);
@@ -119,7 +121,7 @@ int PopupMenu::handle(int e) {
   case ENTER:
   case LEAVE:
     if (type()&7) return 0;
-    redraw_highlight();
+    redraw(DAMAGE_HIGHLIGHT);
   case MOVE:
     return 1;
 
@@ -135,8 +137,10 @@ int PopupMenu::handle(int e) {
       if (click_to_focus()) take_focus();
     }
   EXECUTE:
+    ::pushed = this;
     //if (!(type()&7)) value(-1); // make it pull down below the button...
     popup();
+    ::pushed = 0;
     return 1;
 
   case SHORTCUT:
@@ -154,16 +158,14 @@ int PopupMenu::handle(int e) {
   }
 }
 
-static void revert(Style* s) {
-  s->color_ = GRAY75;
-//    s->box = UP_BOX;
-}
-static NamedStyle style("PopupMenu", revert, &PopupMenu::default_style);
+static NamedStyle style("PopupMenu", 0, &PopupMenu::default_style);
 NamedStyle* PopupMenu::default_style = &::style;
 
 PopupMenu::PopupMenu(int X,int Y,int W,int H,const char *l)
   : Menu(X,Y,W,H,l)
 {
+  // set the parent style to Menu::default_style, not Widget::default_style:
+  default_style->parent_ = this->style();
   style(default_style);
   align(ALIGN_CENTER);
   //set_click_to_focus();

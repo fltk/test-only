@@ -1,5 +1,5 @@
 //
-// "$Id: color_chooser.cxx,v 1.16 2005/01/24 12:03:30 matthiaswm Exp $"
+// "$Id$"
 //
 // Color chooser test program for the Fast Light Tool Kit (fltk).
 //
@@ -24,6 +24,7 @@
 //
 
 #include <config.h>
+#undef USE_XFT // this breaks the <x.h> header file
 #include <fltk/run.h>
 #include <fltk/Window.h>
 #include <fltk/visual.h>
@@ -150,5 +151,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: color_chooser.cxx,v 1.16 2005/01/24 12:03:30 matthiaswm Exp $".
+// End of "$Id$".
 //

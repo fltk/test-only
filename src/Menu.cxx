@@ -201,43 +201,48 @@ static List default_list;
 */
 
 static void revert(Style *s) {
-  s->box_ = UP_BOX;
+  s->box_ = FLAT_BOX;
   s->color_ = GRAY75;
-  //s->textcolor_ = BLACK;
-  //s->buttonbox_ = FLAT_BOX; // was used around selected items, ignored now
+#if 0
+  // NT 4.0 style
+  s->buttonbox_ = FLAT_BOX;
+  s->highlight_color_ = WINDOWS_BLUE;
+#else
+  // Windows98 style:
+  s->buttonbox_ = HIGHLIGHT_UP_BOX;
+#endif
   s->leading_ = 4;
 }
 static NamedStyle style("Menu", revert, &Menu::default_style);
-/*! This style is assigned to Menu subclasses. It controls the
-    appearance of pop-up menu windows.
+/*! This style is assigned to Menu subclasses.
 
-    For Windows compatability this style redefines several things.  If
-    this style was not redefined, popup menus would be white, the
-    surrounding box would push in, and text would be drawn in the
-    textfont and with normal text spacing between the items. By
-    default this makes minimal changes to get Windows appearance: the
-    box() is UP_BOX, the color() is GRAY75, and the leading() is 4.
-    If you write a theme you probably need to set things here as well
-    as in the Widget::default_style.
+    Because of the need to be compatable with Windows, which has a
+    somewhat inconsistent appearance, the default is different than
+    Widget::default_style, and the usage of the fields is somewhat
+    unusual:
 
-    Also for Windows compatability, the box() is used directly from
-    this style, not from the current widget. This is because the box
-    around menubars has to be different than the box around the pulldown
-    menus.
+    - The box() around the actual popup menu windows is in
+      MenuWindow::default_style. It is not possible (or at least
+      not easy) to make popups have different borders.
+    - The box() is also used by default around any checkmarks
+      put on menu items. This is set to FLAT_BOX so that MenuBar
+      looks correct, and just happens to make checkmarks look like
+      Windows. You can change the box() on each checkmark item
+      to fix this.
+    - The color() is also used for the interior of the popup menu.
+      It defaults here to GRAY75 rather than WHITE.
+    - The textfont(), textsize(), textcolor() are used by the menu
+      items, unless they set their own values.
+    - The leading() is used to space apart the menu items unless
+      the items set their own values. It defaults to the larger
+      value of 4 here to make the menus look more like Windows.
+    - The buttonbox() is drawn around the "title" of popup menus
+      and around the titles of pull-down menus in a menubar. It
+      defaults to HIGHLIGHT_UP_BOX.
+    - buttoncolor(), labelfont(), labelsize() and labelcolor()
+      are \e not used. They can be used to draw the actual widget.
 
-    Useful fields:
-    - The box() is drawn around the popup menu. Used from this, not
-	the actual widget's style.
-    - The color() is the color of the popup menu.
-    - The buttonbox() is drawn around a "title" of the popup menu,
-	and also around the titles of pull-down menus in a menubar.
-    - The textfont(), textsize(), and textcolor() are the default
-	for how the labels in each menu item are drawn.
-    - The buttoncolor(), labelfont(), labelsize() and labelcolor()
-	are \e not used. They can be used to draw the actual widget
-	in the window (ie the menubar or button that pops up the menu)
-
-    Some subclasses such as Browser set their style back to
+    The Browser subclass sets the style back to
     Widget::default_style, so that they appear more like a text editor
     (ie they put the color and leading back to normal).
 */

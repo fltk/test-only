@@ -1,12 +1,6 @@
+// "$Id$"
 //
-// "$Id: MenuWindow.h,v 1.4 2003/04/20 03:17:47 easysw Exp $"
-//
-// A MenuWindow tries to tell the system to display it as fast as possible
-// and without any borders. On X this does override-redirect. Earlier
-// versions would also try to use overlay planes, though that is
-// disabled currently.
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2005 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -24,7 +18,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #ifndef fltk_MenuWindow_h
 #define fltk_MenuWindow_h
@@ -42,12 +35,14 @@ public:
   virtual void flush();
   virtual void destroy();
 
+  static NamedStyle* default_style;
+
   int overlay() {return !(flags()&NO_OVERLAY);}
   void set_overlay() {clear_flag(NO_OVERLAY);}
   void clear_overlay() {set_flag(NO_OVERLAY);}
   ~MenuWindow();
-  MenuWindow(int W, int H, const char *l = 0) : Window(W,H,l) {set_override();}
-  MenuWindow(int X, int Y, int W, int H, const char *l = 0) : Window(X,Y,W,H,l) {set_override();}
+  MenuWindow(int W, int H, const char *l = 0);
+  MenuWindow(int X, int Y, int W, int H, const char *l = 0);
 
 };
 
@@ -56,5 +51,5 @@ public:
 #endif
 
 //
-// End of "$Id: MenuWindow.h,v 1.4 2003/04/20 03:17:47 easysw Exp $".
+// End of "$Id$".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.40 2004/07/06 05:49:31 spitzak Exp $"
+// "$Id$"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -46,7 +46,7 @@ fltk::Window *window;
 
 fltk::Menu* menus[4];
 
-void test_cb(fltk::Widget* w, void*) 
+void test_cb(fltk::Widget* w, void*)
 {
   fltk::Menu* mw = (fltk::Menu*)w;
   fltk::Widget* m = mw->item();
@@ -184,14 +184,14 @@ Fl_Menu_Item pulldown[] = {
 #define WIDTH 600
 #define HEIGHT 22 //30 // use 25 for better Windoze look
 
-int main(int argc, char **argv) 
+int main(int argc, char **argv)
 {
   for (int i=0; i<99; i++) {
     char buf[100];
     sprintf(buf,"item %d",i);
     hugemenu[i].text = strdup(buf);
   }
-  
+
   fltk::Window window(WIDTH,400);
   window.color(fltk::WHITE);
   window.tooltip("Press right button\nfor a pop-up menu");
@@ -224,7 +224,7 @@ int main(int argc, char **argv)
   menubar.callback(test_cb);
   menubar.tooltip("This is a menu bar");
   menus[0] = &menubar;
-  
+
   fltk::PopupMenu mb1(100,100,120,25,"&menubutton"); mb1.menu(pulldown);
   mb1.callback(test_cb);
   mb1.tooltip("This is a menu button");
@@ -239,16 +239,16 @@ int main(int argc, char **argv)
   mb.type(fltk::PopupMenu::POPUP3);
   mb.menu(menutable);
   mb.callback(test_cb);
-  menus[3] = &mb;  
+  menus[3] = &mb;
 
   window.resizable(&mb);
   window.size_range(300,20);
   window.end();
   window.show(argc, argv);
-  
+
   return fltk::run();
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.40 2004/07/06 05:49:31 spitzak Exp $".
+// End of "$Id$".
 //

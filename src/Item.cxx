@@ -31,7 +31,7 @@ using namespace fltk;
 
 /*! \class fltk::Item
 
-  This widget is designed to be put into fltk::Menu and fltk::Browser widgets. 
+  This widget is designed to be put into fltk::Menu and fltk::Browser widgets.
 
   Windows is unfortunatly inconsistent about how it draws menu and
   browser items, so to duplicate this the draw() method assummes
@@ -121,7 +121,7 @@ void Item::layout() {
     w += W;
   }
   this->w(w);
-  this->h(h);
+  this->h(h+int(leading()));
   Widget::layout();
 }
 
@@ -190,7 +190,7 @@ void ItemGroup::layout() {
     w += W;
   }
   this->w(w);
-  this->h(h);
+  this->h(h+int(leading()));
   Widget::layout();
 }
 

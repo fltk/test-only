@@ -95,7 +95,7 @@ static void add_event_handler() {
     Atom kde_atom = XInternAtom(xdisplay, "KDE_DESKTOP_WINDOW", False);
     long data = 1;
     XChangeProperty(xdisplay, message_window, kde_atom, kde_atom, 32,
-                    PropModeReplace, (unsigned char *)&data, 1);
+		    PropModeReplace, (unsigned char *)&data, 1);
 
     ChangeGeneral = XInternAtom(xdisplay, "KDEChangeGeneral", False);
     //ChangeStyle = XInternAtom(xdisplay, "KDEChangeStyle", False);
@@ -321,9 +321,10 @@ extern "C" bool fltk_theme() {
   if (!f.load(kderc)) {
     snprintf(kderc, sizeof(kderc), "%s/.kderc", home);
     //kde1 = 1;
-    f.load(kderc);
+    // skip it if it looks like user is not using kde:
+    if (!f.load(kderc)) return false;
   }
-  // skipt the rest if it looks like kde does not exist:
+  // skip it if it looks like kde is not installed:
   if (!f.load("/usr/share/config/kdeglobals")) return false;
 
   const char* s;
@@ -394,11 +395,7 @@ extern "C" bool fltk_theme() {
     float fontsize; static char fontencoding[32];
     fltk::Font* font = grok_font(s, fontsize, fontencoding);
     Style* style;
-    if ((style = Style::find("MenuBar"))) {
-      if (font) style->textfont(font);
-      style->textsize(fontsize);
-    }
-    if ((style = Style::find("PopupMenu"))) {
+    if ((style = Style::find("Menu"))) {
       if (font) style->textfont(font);
       style->textsize(fontsize);
     }

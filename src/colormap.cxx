@@ -176,12 +176,12 @@ int main() {
   //for (i=16; i<32; i++) {cmap[i][0]=cmap[i][1]=cmap[i][2] = 85;}
 
   // fill in the gray ramp:
-  background(0xe1, 0xe1, 0xe1); // GRAY75 == 75% brightness
+  background(0xe0, 0xe0, 0xe0); // fltk2 new brighter default
   // background(0xc0, 0xc0, 0xc0); // fltk1.1 colors, match windows 95
+  // copy the 1/3 and 2/3 gray to the closest locations in fltk1.1:
+  //   cmap[39][0] = cmap[39][1] = cmap[39][2] = 85;
+  //   cmap[47][0] = cmap[47][1] = cmap[47][2] = 170;
   // background(170, 170, 170); // old fltk colors
-  // copy the 1/3 and 2/3 gray to the closest locations in gray ramp:
-  cmap[39][0] = cmap[39][1] = cmap[39][2] = 85;
-  cmap[47][0] = cmap[47][1] = cmap[47][2] = 170;
 
   // fill in the color cube
   i = 56;
@@ -197,8 +197,8 @@ int main() {
   cmap[215][2] = 0xe1;
 
   for (i=0; i<256; i++) {
-    printf("\t0x%02x%02x%02x00",cmap[i][0],cmap[i][1],cmap[i][2]);
-    if (i < 255) printf(",\n");
+    printf("  0x%02x%02x%02x00",cmap[i][0],cmap[i][1],cmap[i][2]);
+    if (i < 255) printf(", // 0x%02x\n", i);
   }
   printf("\n");
   return 0;

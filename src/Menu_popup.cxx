@@ -118,7 +118,7 @@ void MenuTitle::draw() {
   if (menustate->menubar) {
 
     {Rectangle r(w(),h());
-    box->draw(r, style, VALUE|OUTPUT);
+    box->draw(r, style, VALUE|OUTPUT|HIGHLIGHT);
     box->inset(r);
     push_clip(r);}
     // Get the Item directly from the menubar and draw it:
@@ -132,7 +132,7 @@ void MenuTitle::draw() {
     Flags flags = save_flags;
     if (menustate->hmenubar) flags &= ~ALIGN_MASK;
 
-    item->flags(flags);
+    item->flags(flags|HIGHLIGHT);
     item->w(w());
     item->h(h());
     item->draw();
@@ -200,24 +200,18 @@ static const Monitor* monitor;
 
 ////////////////////////////////////////////////////////////////
 
+static Box* box_from_menuwindow;
+
 // Return the box to draw around the outside edge of widget
 // Unfortunately all popups in your program need to match
 // due to the need to be compatable with Windows
 // menubars which have flatbox, and to avoid down boxes:
 static Box* menubox(Widget* widget) {
+  // If it is a real widget return it's box
   if (widget->parent()) return widget->box();
-//    Box* b = widget->box();
-//    if (b != FLAT_BOX) return b;
-  return Menu::default_style->box();
-}
-
-// Return the leading between items. Main reason to not use the default
-// is so that a theme does not have to remember to set it for every
-// widget that pops up a menu:
-static int menuleading(Widget* widget) {
-  //if (widget->style()->leading_) return int(widget->style()->leading_);
-  if (widget->parent()) return int(widget->leading());
-  return int(Menu::default_style->leading());
+  // otherwise it is a popup menu, return the value saved from
+  // MenuWindow::box():
+  return box_from_menuwindow;
 }
 
 /*! Resize the widget to contain the menu items that are the children
@@ -242,8 +236,7 @@ void Menu::layout_in(Widget* widget, const int* indexes, int level) const {
   // vertical orientation only...
   if (widget->horizontal()) return;
   Box* box = menubox(widget);
-  const int leading = menuleading(widget);
-  
+
   int W = 0;
   int hotKeysW = 0;
   int H = 0;
@@ -258,7 +251,7 @@ void Menu::layout_in(Widget* widget, const int* indexes, int level) const {
     // force items with @ commands in label to re-layout:
     if (item->label() && item->label()[0]=='@') item->w(0);
     int ih = item->height();
-    H += ih+leading;
+    H += ih;
     int iw = item->width();
     if (iw > W) W = iw;
     if (this->children(array,level+1)>=0) {
@@ -294,7 +287,6 @@ void Menu::layout_in(Widget* widget, const int* indexes, int level) const {
 void Menu::draw_in(Widget* widget, const int* indexes, int level,
 		   int selected, int drawn_selected) const {
   Box* box = menubox(widget);
-  const int leading = menuleading(widget);
   const unsigned char damage = widget->damage();
 
   Rectangle r(widget->w(), widget->h());
@@ -312,7 +304,11 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
     fl_hide_underscore = true;
 
   const bool horizontal = widget->horizontal();
-  if (horizontal) r.move(leading,0);
+  int spacing = 0;
+  if (horizontal) {
+    spacing = int(widget->leading());
+    r.move(spacing,0);
+  }
 
   Rectangle ir(r);
   for (i = 0; i < children; i++) {
@@ -320,9 +316,9 @@ void Menu::draw_in(Widget* widget, const int* indexes, int level,
     Widget* item = child(array, level);
     if (!item->visible()) continue;
     if (horizontal) {
-      ir.w(item->width() + leading);
+      ir.w(item->width() + spacing);
     } else {
-      ir.h(item->height() + leading);
+      ir.h(item->height());
     }
 
     // for minimal update, only draw the items that changed selection:
@@ -410,17 +406,16 @@ int Menu::find_selected(Widget* widget, const int* indexes, int level,
   int array[20];
   int i; for (i = 0; i < level; i++) array[i] = indexes[i];
 
-  int leading = menuleading(widget);
-
   Item::set_style(widget);
   int ret = -1;
   if (widget->horizontal()) {
-    int x = r.x()+leading;
+    int spacing = int(widget->leading());
+    int x = r.x()+spacing;
     for (i = 0; i < children; i++) {
       array[level] = i;
       Widget* item = child(array, level);
       if (!item->visible()) continue;
-      x += item->width()+leading;
+      x += item->width()+spacing;
       if (x > mx) {/*if (item->takesevents())*/ ret = i; break;}
     }
   } else {
@@ -429,7 +424,7 @@ int Menu::find_selected(Widget* widget, const int* indexes, int level,
       array[level] = i;
       Widget* item = child(array, level);
       if (!item->visible()) continue;
-      y += item->height()+leading; // find bottom edge
+      y += item->height(); // find bottom edge
       if (y > my) {/*if (item->takesevents())*/ ret = i; break;}
     }
   }
@@ -449,30 +444,29 @@ Rectangle Menu::get_location(Widget* widget, const int* indexes, int level,
   int array[20];
   int i; for (i = 0; i < level; i++) array[i] = indexes[i];
 
-  int leading = menuleading(widget);
-
   Item::set_style(widget);
   if (widget->horizontal()) {
-    r.move(leading,0);
+    int spacing = int(widget->leading());
+    r.move(spacing,0);
     for (int i = 0; i < index; i++) {
       array[level] = i;
       Widget* item = child(array, level);
       if (!item->visible()) continue;
-      r.move(item->width()+leading,0);
+      r.move(item->width()+spacing,0);
     }
     array[level] = index;
     Widget* item = child(array, level);
-    r.w(item->width()+leading);
+    r.w(item->width()+spacing);
   } else {
     for (int i = 0; i < index; i++) {
       array[level] = i;
       Widget* item = child(array, level);
       if (!item->visible()) continue;
-      r.move(0,item->height()+leading);
+      r.move(0,item->height());
     }
     array[level] = index;
     Widget* item = child(array, level);
-    r.h(item->height()+leading);
+    r.h(item->height());
   }
   Item::clear_style();
   return r;
@@ -484,6 +478,7 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
 		 const char* t, int rightedge)
   : MenuWindow(X, Y, Wp, Hp, 0), menustate(m), level(l)
 {
+  box_from_menuwindow = style()->box();
   style(menustate->widget->style());
   set_vertical();
 
@@ -500,15 +495,14 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
   }
 
   const int dh = menubox(this)->dh();
-  const int leading = menuleading(this);
   int Wtitle = 0;
   int Htitle = 0;
 
   if (menustate->menubar && level==1) {
     // Widget title
     Widget* widget = menustate->widget->child(menustate->indexes[0]);
-    Wtitle = widget->width()+leading;
-    Htitle = widget->height()+leading+dh;
+    Wtitle = widget->width()+int(this->leading());
+    Htitle = widget->height()+dh;
     title = new MenuTitle(menustate, 0, 0, Wtitle, Htitle, 0);
   } else if (t) {
     // label title
@@ -516,7 +510,7 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
     Wtitle = Htitle = 300; // rather arbitrary choice for maximum wrap width
     measure(t, Wtitle, Htitle, OUTPUT|ALIGN_WRAP);
     Wtitle += 16;
-    Htitle += leading+dh;
+    Htitle += dh;
     title = new MenuTitle(menustate, 0, 0, Wtitle, Htitle, t);
   } else {
     title = 0;
@@ -616,7 +610,7 @@ int MWindow::autoscroll(int i) {
       Y = h();
     } else {
       Widget* widget = get_widget(i);
-      Y += widget->height()+menuleading(this);
+      Y += widget->height();
     }
     if (newy+Y >= MENUAREA.b()) newy = MENUAREA.b()-Y-BORDER;
     else return 0;
@@ -743,11 +737,11 @@ int MWindow::handle(int event) {
       if (p.indexes[menu] < 0) lastkey = 0;
       for (int item = 0; item < mw.children; item++) {
 	widget = mw.get_widget(item);
-//  	if (widget->active() && widget->test_shortcut(false)) {
-//  	  setitem(p, menu, item);
-//  	  lastkey = 0;
-//  	  goto EXECUTE;
-//  	}
+//	if (widget->active() && widget->test_shortcut(false)) {
+//	  setitem(p, menu, item);
+//	  lastkey = 0;
+//	  goto EXECUTE;
+//	}
 	// continue unless this item can be picked by the keystroke:
 	if (!widget->takesevents()) continue;
 	if (widget->test_label_shortcut()) {

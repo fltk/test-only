@@ -181,44 +181,43 @@ int Choice::handle(int e) {
 }
 
 #define MOTIF_STYLE 0
+#define MAC_STYLE 0
 
 #if MOTIF_STYLE
 // Glyph erases the area and draws a long, narrow box:
-static void glyph(const Widget* widget, int,
-		  int x,int y,int w,int h, Flags)
+static void glyph(int, const Rectangle& r, const Style* s, Flags)
 {
-  color(widget->buttoncolor());
-  fillrect(x,y,w,h);
+  color(s->buttoncolor());
+  fillrect(r);
   // draw a long narrow box:
-  Widget::default_style->glyph(widget, 0, x, y+(h-h/3)/2, w-2, h/3, 0);
+  Rectangle r1(r, r.w()-2, r.h()/3, ALIGN_LEFT);
+  Widget::default_glyph(0, r1, s, 0);
 }
 #endif
 
-#define MAC_STYLE 0
 #if MAC_STYLE
 // Attempt to draw an up/down arrow like the Mac uses, since the
 // popup menu is more like how the Mac works:
-static void glyph(const Widget* widget, int,
-		  int x,int y,int w,int h, Flags flags)
+static void glyph(int, const Rectangle& r, const Style* s, Flags flags)
 {
-  Widget::default_style->glyph(widget, 0, x, y, w, h, flags);
-  x += 2;
-  w -= 4;
-  y = y+h/2;
-  h = (w+1)/2;
-  Widget::default_style->glyph(widget, GLYPH_UP, x, y-h-1, w, h, flags);
-  Widget::default_style->glyph(widget, GLYPH_DOWN, x, y+1, w, h, flags);
+  Widget::default_glyph(0, r, s, flags);
+  Rectangle r1(r);
+  r1.h(r1.h()/2);
+  r1.move_y(r1.h()/3);
+  Widget::default_glyph(GLYPH_UP, r1, s, flags);
+  r1.move(0,r1.h());
+  Widget::default_glyph(GLYPH_DOWN, r1, s, flags);
 }
 #endif
 
 static void revert(Style* s) {
 #if MOTIF_STYLE
-  s->color = GRAY75;
-  s->box = s->buttonbox = Widget::default_style->buttonbox;
-  s->glyph = ::glyph;
+  s->color_ = GRAY75;
+  s->box_ = s->buttonbox_ = Widget::default_style->buttonbox_;
+  s->glyph_ = ::glyph;
 #endif
 #if MAC_STYLE
-  s->glyph = ::glyph;
+  s->glyph_ = ::glyph;
 #endif
 }
 static NamedStyle style("Choice", revert, &Choice::default_style);
@@ -229,6 +228,8 @@ NamedStyle* Choice::default_style = &::style;
 */
 Choice::Choice(int x,int y,int w,int h, const char *l) : Menu(x,y,w,h,l) {
   value(0);
+  // copy the leading from Menu:
+  if (!default_style->leading_) default_style->leading_ = style()->leading_;
   style(default_style);
   clear_flag(ALIGN_MASK);
   set_flag(ALIGN_LEFT);
