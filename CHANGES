@@ -2509,3 +2509,12 @@ is used in its place and returns a locale-dependent multibyte-encoded
 buffer which is trancoded to UTF-8 via iconv(3). If iconv_open() does 
 not find a conversion description for multibyte to UTF-8, the 
 non-XInput method is used.
+
+////////////////////////////////////////////////////////////////
+
+Changed SharedImage::guess to fltk::guess_image. This is due to 
+fact that windows dll linker needs all exported functions to be in library.
+Cause SharedImage was declared as FL_API, linker assumes that all SharedImage 
+functions are implemented in libfltk. So I moved SharedImage::guess out of the class
+and made it FL_IMAGES_API.
+
