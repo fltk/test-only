@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Window.cxx,v 1.21 2004/03/25 18:13:18 spitzak Exp $"
+// "$Id: Fl_Menu_Window.cxx,v 1.22 2004/07/04 17:18:22 laza2000 Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -58,6 +58,10 @@ using namespace fltk;
 #define USE_OVERLAY 0
 #endif
 
+#ifdef _WIN32
+# include <windows.h>
+#endif
+
 // _WIN32 note: USE_OVERLAY is false
 #if USE_OVERLAY
 extern XVisualInfo *fl_find_overlay_visual();
@@ -78,6 +82,9 @@ void MenuWindow::create() {
   } else
 #endif
     Window::create();
+#ifdef _WIN32
+  ::SetWindowPos(xid(this), HWND_TOPMOST, 0,0,0,0, SWP_NOMOVE|SWP_NOSIZE|SWP_NOACTIVATE);
+#endif
 }
 
 void MenuWindow::flush() {
@@ -118,5 +125,5 @@ MenuWindow::~MenuWindow() {
 }
 
 //
-// End of "$Id: Fl_Menu_Window.cxx,v 1.21 2004/03/25 18:13:18 spitzak Exp $".
+// End of "$Id: Fl_Menu_Window.cxx,v 1.22 2004/07/04 17:18:22 laza2000 Exp $".
 //
