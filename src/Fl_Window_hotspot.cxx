@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_hotspot.cxx,v 1.19 2002/12/10 02:00:52 easysw Exp $"
+// "$Id: Fl_Window_hotspot.cxx,v 1.20 2003/07/02 06:51:04 spitzak Exp $"
 //
 // Move windows but keep them on-screen.
 //
@@ -27,7 +27,7 @@
 #include <fltk/Window.h>
 #include <fltk/ScreenInfo.h>
 #if defined(_WIN32)
-# include <fltk/win32.h>
+# include <fltk/x.h>
 #endif
 
 using namespace fltk;
@@ -73,5 +73,5 @@ void Window::hotspot(int cx, int cy, bool offscreen) {
 }
 
 //
-// End of "$Id: Fl_Window_hotspot.cxx,v 1.19 2002/12/10 02:00:52 easysw Exp $".
+// End of "$Id: Fl_Window_hotspot.cxx,v 1.20 2003/07/02 06:51:04 spitzak Exp $".
 //
