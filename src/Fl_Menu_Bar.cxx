@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.9 1999/03/18 22:59:07 carl Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.10 1999/04/13 20:18:40 carl Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -33,14 +33,11 @@
 class TitleBox : public Fl_Widget {
 public:
   Fl_Menu_Item* mi;
-  Fl_Menu_* bar;
+  Fl_Menu_Bar* bar;
   int active() { return (mi->active() && bar->active_r()); }
   TitleBox() : Fl_Widget(0,0,0,0) { hide(); }
   void draw();
 };
-
-static TitleBox *current = 0, *last = 0;
-static int e;
 
 extern char fl_draw_shortcut;
 
@@ -50,7 +47,7 @@ void TitleBox::draw() {
   Fl_Boxtype bt;
   Fl_Color col, lc;
   if (mi->default_style()->menu_item(Fl_Menu_Item::TITLE_FLY_BOX) &&
-      current == this && active() && !Fl::pushed() && e != FL_LEAVE)
+      bar->current_tb == this && active() && !Fl::pushed() && bar->e != FL_LEAVE)
   {
     bt = (Fl_Boxtype)mi->default_style()->menu_item(Fl_Menu_Item::TITLE_FLY_BOX);
     col = (Fl_Color)mi->default_style()->menu_item(Fl_Menu_Item::TITLE_FLY_COLOR);
@@ -96,8 +93,8 @@ void Fl_Menu_Bar::draw() {
       tx += tw;
     }
   } else {
-    if (current) current->draw();
-    if (last) last->draw();
+    if (current_tb) ((TitleBox*)current_tb)->draw();
+    if (last_tb) ((TitleBox*)last_tb)->draw();
   }
 }
 
@@ -108,7 +105,7 @@ int Fl_Menu_Bar::handle(int event) {
   case FL_PUSH:
     v = 0;
 J1:
-    last = current; current = 0; damage(FL_DAMAGE_CHILD);
+    last_tb = current_tb; current_tb = 0; damage(FL_DAMAGE_CHILD);
     v = menu()->pulldown(x(), y(), w(), h(), v, this, 0, 1);
     picked(v);
     return 1;
@@ -121,13 +118,13 @@ J1:
   case FL_LEAVE:
   case FL_MOVE:
     e = event;
-    last = current;
-    current = 0;
+    last_tb = current_tb;
+    current_tb = 0;
     for (i = 0; i < FL_MAX_MENU_TITLES && ((TitleBox*)titles[i])->mi; i++) {
       TitleBox* t = (TitleBox*)titles[i];
-      if (Fl::event_inside(t->x(), t->y(), t->w(), t->h())) {current = t; break;}
+      if (Fl::event_inside(t->x(), t->y(), t->w(), t->h())) {current_tb = t; break;}
     }
-    if (current != last) damage(FL_DAMAGE_CHILD);
+    if (current_tb != last_tb) damage(FL_DAMAGE_CHILD);
     return 1;
   }
 
@@ -172,5 +169,5 @@ Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l) : Fl_Menu_(x,y,w
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.9 1999/03/18 22:59:07 carl Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.10 1999/04/13 20:18:40 carl Exp $".
 //

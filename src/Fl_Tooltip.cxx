@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.4 1999/04/11 01:18:37 carl Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.5 1999/04/13 20:18:40 carl Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -50,13 +50,11 @@ Fl_Tooltip::Style Fl_Tooltip::default_style = {
 
 class Fl_TooltipBox : public Fl_Menu_Window {
 public:
-  
-  Fl_TooltipBox() : Fl_Menu_Window(0,0,10,10) {}
-
-  ~Fl_TooltipBox() { }
+  Fl_TooltipBox() : Fl_Menu_Window(0, 0, 0, 0) {}
+  ~Fl_TooltipBox() {}
 
   void draw() {
-            color(Fl_Tooltip::default_style.color_);
+    color(Fl_Tooltip::default_style.color_);
     labeltype(FL_NORMAL_LABEL);
     labelfont(Fl_Tooltip::default_style.textfont_);
     labelsize(Fl_Tooltip::default_style.textsize_);
@@ -67,34 +65,15 @@ public:
     draw_box(box(),0,0,w(),h(),color());
     draw_label(3,3,w()-6,h()-6, labelcolor());
   }
-
-  int handle(int event) {
-    if (event == FL_LEAVE) {
-      Fl_Tooltip::exit(Fl_Tooltip::widget);
-      return 1;
-    }
-    return Fl_Menu_Window::handle(event);
-  }
-
 };
 
 void 
 Fl_Tooltip::tooltip_timeout(Fl_Widget *v) {
   if (!v || !v->tooltip()) return;
   Fl_Window *widgetWindow = v->window();
-  if (!widgetWindow) return; // this should not happen?
-    
-  if (!window) {
-    Fl_Group* saveCurrent = Fl_Group::current();
-    Fl_Group::current(0);
-    window = new Fl_TooltipBox();
-    window->clear_border();
-    window->end();
-    Fl_Group::current(saveCurrent);
-  }
 
-  // this cast bypasses the normal Fl_Window label() code:
-  ((Fl_Widget*)window)->label(v->tooltip());
+  // this should not happen unless widget is a window itself...
+  if (!widgetWindow) return;
 
   fl_font(default_style.textfont_, default_style.textsize_);
   int ww, hh;
@@ -110,7 +89,11 @@ Fl_Tooltip::tooltip_timeout(Fl_Widget *v) {
   if (oy+hh > Fl::h()) oy = widgetWindow->y_root() + v->y() - hh - 4;
   if (oy < 0) oy = 0;
 
+  // this cast bypasses the normal Fl_Window label() code:
+  ((Fl_Widget*)window)->label(v->tooltip());
+
   window->resize(ox, oy, ww, hh);
+
   Fl::grab(*widgetWindow); // necessary to get override_redirect turned on
   window->show();
   Fl::release();
@@ -134,17 +117,19 @@ Fl_Tooltip::loadstyle() {
   }
 }
 
+
+static int cheesy_flag = 0;
 void
 Fl_Tooltip::tooltip_enter(Fl_Widget* w) {
+if (cheesy_flag) return;
+  if (w == widget || w == (Fl_Widget*)window) return;
   loadstyle();
-  if (widget && w != widget) tooltip_exit(widget);
-  if (!w || !w->tooltip() || !enabled) return;
+  tooltip_exit(widget);
   widget = w;
+  if (!w || !w->tooltip() || !enabled) return;
 
   Fl::add_timeout(default_style.delay_, (void (*)(void *))Fl_Tooltip::tooltip_timeout, w);
 }
-
-extern Fl_Window *fl_xmousewin; // which window X thinks has FL_ENTER
 
 void
 Fl_Tooltip::tooltip_exit(Fl_Widget *w) {
@@ -152,22 +137,23 @@ Fl_Tooltip::tooltip_exit(Fl_Widget *w) {
   widget = 0;
   Fl::remove_timeout((void (*)(void *))Fl_Tooltip::tooltip_timeout, w);
   if (window) {
-    // try to not make window disappear if user moves mouse into it.
-    // Unfortunately fl_xmousewin is set to zero first, then to the
-    // window, so I have to guess that this is happening:
-
-    // This is done in Fl::belowmouse() now - CET
-    //if (!fl_xmousewin || fl_xmousewin == window) return;
+    // This flag makes sure that tootip_enter() isn't executed because of
+    // this hide() which could cause unwanted recursion in tooltip_enter
+    cheesy_flag = 1;
     window->hide();
+    cheesy_flag = 0;
   }
 }
 
 // setting the tooltip on a widget also sets the function pointers:
-
 void Fl_Widget::tooltip(const char *t) {
-  static char beenhere = 0;
-  if (!beenhere) {
-    beenhere = 1;
+  if (!Fl_Tooltip::window) {
+    Fl_Group* saveCurrent = Fl_Group::current();
+    Fl_Group::current(0);
+    Fl_Tooltip::window = new Fl_TooltipBox;
+    Fl_Tooltip::window->clear_border();
+    Fl_Tooltip::window->end();
+    Fl_Group::current(saveCurrent);
     fl_tooltip_enter = Fl_Tooltip::tooltip_enter;
     fl_tooltip_exit = Fl_Tooltip::tooltip_exit;
   }
@@ -175,5 +161,5 @@ void Fl_Widget::tooltip(const char *t) {
 }
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.4 1999/04/11 01:18:37 carl Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.5 1999/04/13 20:18:40 carl Exp $".
 //

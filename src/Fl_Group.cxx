@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.14 1999/04/10 14:13:49 carl Exp $"
+// "$Id: Fl_Group.cxx,v 1.15 1999/04/13 20:18:39 carl Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -90,9 +90,6 @@ static int navkey() {
   }
   return 0;
 }
-
-// FIXME
-extern Fl_Window *fl_xmousewin; // which window X thinks has FL_ENTER
 
 int Fl_Group::handle(int event) {
 
@@ -498,5 +495,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.14 1999/04/10 14:13:49 carl Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.15 1999/04/13 20:18:39 carl Exp $".
 //

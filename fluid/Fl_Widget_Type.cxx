@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.28 1999/04/11 01:18:34 carl Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.29 1999/04/13 20:18:36 carl Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -350,6 +350,8 @@ static unsigned oldtooltiplen;
 
 void tooltip_cb(Fl_Input* i, void *v) {
   if (v == LOAD) {
+    if (current_widget->o->type() >= FL_WINDOW) { i->hide(); return; }
+    i->show();
     i->static_value(current_widget->tooltip());
     if (strlen(i->value()) >= oldtooltiplen) {
       oldtooltiplen = strlen(i->value())+128;
@@ -2496,5 +2498,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.28 1999/04/11 01:18:34 carl Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.29 1999/04/13 20:18:36 carl Exp $".
 //
