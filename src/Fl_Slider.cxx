@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.17 1999/06/20 15:24:30 mike Exp $"
+// "$Id: Fl_Slider.cxx,v 1.18 1999/06/25 18:23:50 carl Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -119,15 +119,13 @@ int Fl_Slider::scrollvalue(int p, int w, int t, int l) {
 // actually it ranges from 0 to 1/(1-size).
 
 void Fl_Slider::draw_bg(int x, int y, int w, int h) {
-  if (!(damage()&FL_DAMAGE_ALL)) { // not a complete redraw
-    fl_color(color());
-    fl_rectf(x, y, w, h);
-  }
+  draw_box(box(), x, y, w, h, color());
+  int BW = Fl::box_dx(box());
   Fl_Color black = active_r() ? FL_BLACK : FL_INACTIVE_COLOR;
   if (type() == FL_VERT_NICE_SLIDER) {
-    draw_box(FL_THIN_DOWN_BOX, x+w/2-2, y, 4, h, black);
+    draw_box(FL_THIN_DOWN_BOX, x+w/2-2, y+BW, 4, h-2*BW, black);
   } else if (type() == FL_HOR_NICE_SLIDER) {
-    draw_box(FL_THIN_DOWN_BOX, x, y+h/2-2, w, 4, black);
+    draw_box(FL_THIN_DOWN_BOX, x+BW, y+h/2-2, w-2*BW, 4, black);
   }
 }
 
@@ -152,40 +150,40 @@ void Fl_Slider::draw(int x, int y, int w, int h) {
   int X, S;
   if (type()==FL_HOR_FILL_SLIDER || type() == FL_VERT_FILL_SLIDER) {
     S = int(val*W+.5);
-    if (minimum()>maximum()) {S = W-S; X = W-S;}
-    else X = 0;
+    if (minimum()>maximum()) {S = W-S; X = W-S+BW;}
+    else X = BW;
   } else {
     S = int(slider_size_*W+.5);
-    int T = (horizontal() ? h : w)/2+1;
+    int T = (horizontal() ? h : w)/2-BW+1;
     if (type()==FL_VERT_NICE_SLIDER || type()==FL_HOR_NICE_SLIDER) T += 4;
     if (S < T) S = T;
-    X = int(val*(W-S)+.5);
+    X = BW+int(val*(W-S)+.5);
   }
   int xsl, ysl, wsl, hsl;
   if (horizontal()) {
     xsl = x+X;
     wsl = S;
-    ysl = y;
-    hsl = h;
+    ysl = y+BW;
+    hsl = h-2*BW;
   } else {
     ysl = y+X;
     hsl = S;
-    xsl = x;
-    wsl = w;
+    xsl = x+BW;
+    wsl = w-2*BW;
   }
 
   if (damage()&FL_DAMAGE_ALL) { // complete redraw
     draw_bg(x, y, w, h);
   } else { // partial redraw, clip off new position of slider
-    if (X > 0) {
+    if (X > BW) {
       if (horizontal()) fl_clip(x, ysl, X, hsl);
       else fl_clip(xsl, y, wsl, X);
       draw_bg(x, y, w, h);
       fl_pop_clip();
     }
-    if (X+S < W) {
-      if (horizontal()) fl_clip(xsl+wsl, ysl, x+w-xsl-wsl, hsl);
-      else fl_clip(xsl, ysl+hsl, wsl, y+h-ysl-hsl);
+    if (X+S < W+BW) {
+      if (horizontal()) fl_clip(xsl+wsl, ysl, x+w-BW-xsl-wsl, hsl);
+      else fl_clip(xsl, ysl+hsl, wsl, y+h-BW-ysl-hsl);
       draw_bg(x, y, w, h);
       fl_pop_clip();
     }
@@ -252,11 +250,7 @@ void Fl_Slider::draw(int x, int y, int w, int h) {
 }
 
 void Fl_Slider::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_box();
-  draw(x()+Fl::box_dx(box()),
-       y()+Fl::box_dy(box()),
-       w()-Fl::box_dw(box()),
-       h()-Fl::box_dh(box()));
+  draw(x(), y(), w(), h());
 }
 
 int Fl_Slider::handle(int event, int x, int y, int w, int h) {
@@ -271,10 +265,11 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
     handle_push();
   case FL_DRAG: {
     if (slider_size() >= 1 || minimum()==maximum()) return 1;
-    int W = (horizontal() ? w : h);
-    int X = (horizontal() ? Fl::event_x()-x : Fl::event_y()-y);
+    int BW = Fl::box_dx(box());
+    int W = (horizontal() ? w : h) - 2*BW;
+    int X = (horizontal() ? Fl::event_x()-x : Fl::event_y()-y) - BW;
     int S = int(slider_size_*W+.5);
-    int T = (horizontal() ? h : w)/2+1;
+    int T = (horizontal() ? h : w)/2-BW+1;
     if (type()==FL_VERT_NICE_SLIDER || type()==FL_HOR_NICE_SLIDER) T += 4;
     if (type()!=FL_HOR_FILL_SLIDER && type()!=FL_VERT_FILL_SLIDER) {
       if (S < T) S = T;
@@ -334,5 +329,5 @@ Fl_Boxtype Fl_Slider::slider() const { return (Fl_Boxtype)attr(SLIDER_BOX); }
 Fl_Color Fl_Slider::fly_color() const { return (Fl_Color)attr(FLY_COLOR); }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.17 1999/06/20 15:24:30 mike Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.18 1999/06/25 18:23:50 carl Exp $".
 //
