@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.78 1999/11/29 08:47:02 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.79 1999/12/06 18:50:09 vincent Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -60,7 +60,36 @@
 
 #ifndef WM_MOUSEWHEEL
 #  define WM_MOUSEWHEEL 0x020a
+#  define TRACKMOUSEEVENTUNDEFINED
 #endif
+// Borland 5 and VC5 are too old to have this new (post Win95) stuff
+#if defined(BORLAND5) || defined(TRACKMOUSEEVENTUNDEFINED)
+#define TME_LEAVE 2
+typedef struct tagTRACKMOUSEEVENT {
+  DWORD cbSize;
+  DWORD dwFlags;
+  HWND  hwndTrack;
+  DWORD dwHoverTime;
+} TRACKMOUSEEVENT, *LPTRACKMOUSEEVENT;
+#endif
+
+
+bool have_TrackMouseEvent = 1;
+BOOL /*WINAPI*/ (*ptTrackMouseEvent)(LPTRACKMOUSEEVENT);
+void check_TrackMouseEvent() {
+  HINSTANCE lib;
+  lib = LoadLibrary("User32");
+  if (lib) {
+    ptTrackMouseEvent = (BOOL (*)(LPTRACKMOUSEEVENT))GetProcAddress(lib, "TrackMouseEvent");
+    if (ptTrackMouseEvent) return;
+  }
+  lib = LoadLibrary("COMCTL32");
+  if (lib) {
+    ptTrackMouseEvent = (BOOL (*)(LPTRACKMOUSEEVENT))GetProcAddress(lib, "_TrackMouseEvent");
+    if (ptTrackMouseEvent) return;
+  }
+  have_TrackMouseEvent = 0;
+}
 
 ////////////////////////////////////////////////////////////////
 // interface to poll/select call:
@@ -271,18 +300,6 @@ void Fl::get_mouse(int &x, int &y) {
   y = p.y;
 }
 
-// Borland 5 and VC5 are too old to have this new (post Win95) stuff
-#if defined(BORLAND5) || defined(VC5)
-#define TME_LEAVE 2
-typedef struct tagTRACKMOUSEEVENT {
-  DWORD cbSize;
-  DWORD dwFlags;
-  HWND  hwndTrack;
-  DWORD dwHoverTime;
-} TRACKMOUSEEVENT, *LPTRACKMOUSEEVENT;
-extern "C" BOOL WINAPI TrackMouseEvent(LPTRACKMOUSEEVENT);
-#endif
-
 static TRACKMOUSEEVENT mouseevent = {
   sizeof(TRACKMOUSEEVENT),
   TME_LEAVE
@@ -343,7 +360,13 @@ static int mouse_event(Fl_Window *window, int what, int button,
 
     // look for mouse leave events
     mouseevent.hwndTrack = fl_xid(window);
-    TrackMouseEvent(&mouseevent);
+    if (have_TrackMouseEvent) {
+      if (!ptTrackMouseEvent) {
+        check_TrackMouseEvent();
+        if (!have_TrackMouseEvent) return Fl::handle(FL_MOVE,window);
+      }
+      ptTrackMouseEvent(&mouseevent);
+    }
 
     return Fl::handle(FL_MOVE,window);
   }
@@ -561,6 +584,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     Fl::e_dy = -(SHORT)(HIWORD(wParam))*14*3/120;
     if (Fl::handle(FL_VIEWCHANGE, window)) return 0;
     break;
+  }
 
   case WM_GETMINMAXINFO:
     Fl_X::i(window)->set_minmax((LPMINMAXINFO)lParam);
@@ -884,5 +908,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.78 1999/11/29 08:47:02 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.79 1999/12/06 18:50:09 vincent Exp $".
 //

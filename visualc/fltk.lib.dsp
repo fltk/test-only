@@ -173,6 +173,10 @@ SOURCE=..\FL\fl_ask.H
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\fl_background.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\Fl_Bitmap.cxx
 # End Source File
 # Begin Source File
@@ -410,10 +414,6 @@ SOURCE=..\FL\Fl_Free.H
 # Begin Source File
 
 SOURCE=..\src\Fl_get_key.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_get_system_colors.cxx
 # End Source File
 # Begin Source File
 
@@ -678,6 +678,10 @@ SOURCE=..\src\Fl_Return_Button.cxx
 # Begin Source File
 
 SOURCE=..\FL\Fl_Return_Button.H
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_rgb.cxx
 # End Source File
 # Begin Source File
 
@@ -1033,7 +1037,7 @@ SOURCE=..\src\conf_strcnt.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\conf_trim.c
+SOURCE=..\src\conf_util.c
 # End Source File
 # Begin Source File
 
@@ -1042,13 +1046,6 @@ SOURCE=..\src\fl_motif.cxx
 # Begin Source File
 
 SOURCE=..\src\fl_options.cxx
-
-!IF  "$(CFG)" == "fltk - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltk - Win32 Debug"
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.12 1999/11/05 00:35:47 vincent Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.13 1999/12/06 18:50:09 vincent Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -38,7 +38,7 @@
 #include <string.h>
 
 
-char *fl_shared_image_root=0;
+FL_API char *fl_shared_image_root=0;
 
 static Fl_Shared_Image  *first_image = 0;
 
@@ -232,5 +232,5 @@ void Fl_Shared_Image::draw(int X, int Y, int W, int H,
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.12 1999/11/05 00:35:47 vincent Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.13 1999/12/06 18:50:09 vincent Exp $"
 //

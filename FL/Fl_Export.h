@@ -8,6 +8,13 @@
 #  else
 #    define FL_API	__declspec(dllimport)
 #  endif /* FL_LIBRARY */
+#  ifdef FL_IMAGES_LIBRARY
+#    define FL_IMAGES_API	__declspec(dllexport)
+#  else
+#    define FL_IMAGES_API	__declspec(dllimport)
+#  endif /* FL_LIBRARY */
 #else
 #  define FL_API
+#  define FL_IMAGES_API
 #endif /* FL_DLL */
+
