@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.38 2003/11/11 07:36:31 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.39 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -409,7 +409,9 @@ public:
   void _measure(float& w, float& h) const {} // returns size unchanged
 };
 
-/** Define a (hidden) subclass of Symbol that will draw a square icon.
+/*! \ingroup symbols
+
+    Define a (hidden) subclass of Symbol that will draw a square icon.
     All the predefined displaying symbols in fltk use this.
 
     This is called by "@name;" in a label. By default the square is
@@ -495,7 +497,14 @@ void SymbolSymbol::_draw(float x, float y, float w, float h, const Style*, Flags
 
 /******************** THE DEFAULT SYMBOLS ****************************/
 
-/* Some help stuff */
+/** \defgroup symbols @-commands
+    When calling drawtext() (or assigning labels or tooltips or any
+    other strings that call drawtext()) you can imbed @-commands
+    into the text. These actually look up instances of fltk::Symbol
+    which then can modify the drawing.
+
+    \image html symbols.gif
+*/
 
 #define BP
 #define EP fillpath()
@@ -672,5 +681,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.38 2003/11/11 07:36:31 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.39 2004/01/06 06:43:02 spitzak Exp $".
 //

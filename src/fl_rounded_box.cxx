@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rounded_box.cxx,v 1.22 2003/11/04 08:11:04 spitzak Exp $"
+// "$Id: fl_rounded_box.cxx,v 1.23 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Rounded box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -59,6 +59,9 @@ public:
   RoundedBox(const char* n) : Box(n) {}
 };
 static RoundedBox roundedBox("rounded");
+/*! \ingroup boxes
+  Round-cornered rectangle with a black border.
+*/
 Box* const fltk::ROUNDED_BOX = &roundedBox;
 
 class RShadowBox : public Box {
@@ -77,6 +80,9 @@ public:
   RShadowBox(const char* n) : Box(n) {}
 };
 static RShadowBox rshadowBox("rshadow");
+/*! \ingroup boxes
+  Round-cornered rectangle with a black border and gray shadow.
+*/
 Box* const fltk::RSHADOW_BOX = &rshadowBox;
 
 class RFlatBox : public Box {
@@ -92,8 +98,11 @@ public:
   RFlatBox(const char* n) : Box(n) {}
 };
 static RFlatBox rflatBox("rflat");
+/*! \ingroup boxes
+  Round-cornered rectangle with no border.
+*/
 Box* const fltk::RFLAT_BOX = &rflatBox;
 
 //
-// End of "$Id: fl_rounded_box.cxx,v 1.22 2003/11/04 08:11:04 spitzak Exp $".
+// End of "$Id: fl_rounded_box.cxx,v 1.23 2004/01/06 06:43:02 spitzak Exp $".
 //

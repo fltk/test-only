@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.cxx,v 1.52 2003/11/04 08:11:02 spitzak Exp $"
-//
-// Value slider widget for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Value_Slider.cxx,v 1.53 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -28,6 +26,14 @@
 #include <fltk/draw.h>
 #include <fltk/Box.h>
 using namespace fltk;
+
+/*! \class fltk::ValueSlider
+
+  The fltk::ValueSlider widget is a fltk::Slider widget with an area
+  to the left or bottom displaying the current value.
+
+  \image html value_slider.gif
+*/
 
 void ValueSlider::draw() {
 
@@ -157,5 +163,5 @@ ValueSlider::ValueSlider(int x, int y, int w, int h, const char*l)
 }
 
 //
-// End of "$Id: Fl_Value_Slider.cxx,v 1.52 2003/11/04 08:11:02 spitzak Exp $".
+// End of "$Id: Fl_Value_Slider.cxx,v 1.53 2004/01/06 06:43:02 spitzak Exp $".
 //

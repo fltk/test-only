@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.32 2003/12/13 11:06:53 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.33 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -62,8 +62,9 @@ static float line_ascent;
 static float dx, dy;
 bool fl_drawing_shadow; // true for engraved labels
 
-/** "@n" in a label resets the font, color, and postioning offset to
-    the settings they were when the label started. */
+/*! \addtogroup symbols
+  "@n" in a label resets the font, color, and postioning offset to
+  the settings they were when the label started. */
 class NormalSymbol : public Symbol {
 public:
   NormalSymbol() : Symbol("n") {}
@@ -79,7 +80,8 @@ public:
 };
 static const NormalSymbol normalsymbol;
 
-/** "@b" in a label changes the font to bold. */
+/*! \addtogroup symbols
+  "@b" in a label changes the font to bold. */
 class BoldSymbol : public Symbol {
 public:
   BoldSymbol() : Symbol("b") {}
@@ -93,7 +95,8 @@ public:
 };
 static const BoldSymbol boldsymbol;
 
-/** "@i" in a label changes the font to italic. */
+/*! \addtogroup symbols
+  "@i" in a label changes the font to italic. */
 class ItalicSymbol : public Symbol {
 public:
   ItalicSymbol() : Symbol("i") {}
@@ -107,7 +110,8 @@ public:
 };
 static const ItalicSymbol italicsymbol;
 
-/** "@f" or "@t" in a label changes the font to fixed fltk::COURIER */
+/*! \addtogroup symbols
+  "@f" or "@t" in a label changes the font to fixed fltk::COURIER */
 class FixedSymbol : public Symbol {
 public:
   FixedSymbol(const char* n) : Symbol(n) {}
@@ -122,8 +126,9 @@ public:
 static const FixedSymbol fixedsymbolf("f");
 static const FixedSymbol fixedsymbolt("t");
 
-/** "@Cxyz" will change the color to xyz, which is a color number. It
-    is easiest to specify it in hex, such as 0xff000000 for red. */
+/*! \addtogroup symbols
+  "@Cxyz" will change the color to xyz, which is a color number. It
+  is easiest to specify it in hex, such as 0xff000000 for red. */
 class ColorSymbol : public Symbol {
 public:
   ColorSymbol() : Symbol("C") {}
@@ -136,11 +141,16 @@ public:
 };
 static const ColorSymbol colorsymbol;
 
-/** "@snumber" will set the font size directly to the number.
-    "@s+number" will set it to (12+n)/12 times the current size.
-    "@s-number" will set it to 12/(12+n) times the current size.
-    "@s0" will restore the initial size.
-    Capital S works as well for back-compatability.
+/*! \addtogroup symbols
+  "@snumber" will set the font size directly to the number.
+
+  "@s+number" will set it to (12+n)/12 times the current size.
+
+  "@s-number" will set it to 12/(12+n) times the current size.
+
+  "@s0" will restore the initial size.
+
+  Capital S works as well for back-compatability.
 */
 class SizeSymbol : public Symbol {
 public:
@@ -160,10 +170,11 @@ public:
 static const SizeSymbol sizesymbols("s");
 static const SizeSymbol sizesymbolS("S");
 
-/** "@." does nothing. This is for back-compatability with fltk1.1,
-    but in that it caused all further @-commands to be ignored. This
-    is not implemented, all @-commands are interpreted unless you
-    set RAW_LABEL in the flags pased to fltk::draw().
+/*! \addtogroup symbols
+  "@." does nothing. This is for back-compatability with fltk1.1,
+  but in that it caused all further @-commands to be ignored. This
+  is not implemented, all @-commands are interpreted unless you
+  set RAW_LABEL in the flags pased to fltk::draw().
 */
 class NothingSymbol : public Symbol {
 public:
@@ -173,12 +184,14 @@ public:
 };
 static const NothingSymbol nothingsymbol;
 
-/** "@xnumber" will move the x origin to the right by
-    n*(fontsize/12) pixels.
-    This is ignored in width calculations, but can be used to adjust
-    the position of a label to line up exactly. You should start
-    positive numbers with '+' for compatability with possible
-    future versions of fltk.
+/*! \addtogroup symbols
+
+  "@xnumber" will move the x origin to the right by n*(fontsize/12) pixels.
+
+  This is ignored in width calculations, but can be used to adjust
+  the position of a label to line up exactly. You should start
+  positive numbers with '+' for compatability with possible
+  future versions of fltk.
 */
 class DxSymbol : public Symbol {
 public:
@@ -191,12 +204,13 @@ public:
 };
 static const DxSymbol dxsymbol;
 
-/** "@ynumber" will move the y origin \e up (not down) by
-    n*(fontsize/12) pixels.
-    This is ignored in width calculations, but can be used to adjust
-    the position of a label to line up exactly. You should start
-    positive numbers with '+' for compatability with possible
-    future versions of fltk.
+/*! \addtogroup symbols
+  "@ynumber" will move the y origin \e up (not down) by n*(fontsize/12) pixels.
+
+  This is ignored in width calculations, but can be used to adjust
+  the position of a label to line up exactly. You should start
+  positive numbers with '+' for compatability with possible
+  future versions of fltk.
 */
 class DySymbol : public Symbol {
 public:
@@ -211,8 +225,9 @@ static const DySymbol dysymbol;
 
 static Color bgboxcolor;
 
-/** "@Bcolor" draws a solid box of the given color behind the text. Not
-    sure if this is compatable with fltk1.1. */
+/*! \addtogroup symbols
+  "@Bcolor" draws a solid box of the given color behind the text. Not
+  sure if this is compatable with fltk1.1. */
 class BgBox : public Symbol {
 public:
   BgBox() : Symbol("B") {}
@@ -507,5 +522,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.32 2003/12/13 11:06:53 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.33 2004/01/06 06:43:02 spitzak Exp $".
 //

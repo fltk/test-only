@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.33 2003/11/04 08:10:59 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.34 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -72,7 +72,19 @@ void Image::draw_cache(int Xi, int Yi, int Wi, int Hi, const Style* style, Flags
   if (mask) {
     if (id) {
       // both color and mask:
-#ifdef _WIN32
+#if USE_X11
+      // I can't figure out how to combine a mask with existing region,
+      // so the mask replaces the region instead. This can draw some of
+      // the image outside the current clip region if it is not rectangular.
+      XSetClipMask(xdisplay, gc, (Pixmap)mask);
+      int ox = X-cx; if (ox < 0) ox += w();
+      int oy = Y-cy; if (oy < 0) oy += h();
+      XSetClipOrigin(xdisplay, gc, X-cx, Y-cy);
+      fl_copy_offscreen(X, Y, W, H, (Pixmap)id, cx, cy);
+      // put the old clip region back
+      XSetClipOrigin(xdisplay, gc, 0, 0);
+      fl_restore_clip();
+#elif defined(_WIN32)
 # if 0
       HDC new_gc = CreateCompatibleDC(gc);
       SelectObject(new_gc, mask);
@@ -96,20 +108,10 @@ void Image::draw_cache(int Xi, int Yi, int Wi, int Hi, const Style* style, Flags
       DeleteDC(new_gc);
       DeleteDC(new_gc2);
 # endif
-#elif (defined(__APPLE__) && !USE_X11)
+#elif defined(__APPLE__)
       // OSX version nyi
 #else
-      // I can't figure out how to combine a mask with existing region,
-      // so the mask replaces the region instead. This can draw some of
-      // the image outside the current clip region if it is not rectangular.
-      XSetClipMask(xdisplay, gc, (Pixmap)mask);
-      int ox = X-cx; if (ox < 0) ox += w();
-      int oy = Y-cy; if (oy < 0) oy += h();
-      XSetClipOrigin(xdisplay, gc, X-cx, Y-cy);
-      fl_copy_offscreen(X, Y, W, H, (Pixmap)id, cx, cy);
-      // put the old clip region back
-      XSetClipOrigin(xdisplay, gc, 0, 0);
-      fl_restore_clip();
+#error
 #endif
     } else {
       Color bg, fg; style->boxcolors(flags, bg, fg);
@@ -134,7 +136,15 @@ void Image::draw_cache(int Xi, int Yi, int Wi, int Hi, const Style* style, Flags
 */
 void Image::fill(int X, int Y, int W, int H, int cx, int cy) const
 {
-#ifdef _WIN32
+#if USE_X11
+  XSetStipple(xdisplay, gc, (Pixmap)mask);
+  int ox = X-cx; if (ox < 0) ox += w();
+  int oy = Y-cy; if (oy < 0) oy += h();
+  XSetTSOrigin(xdisplay, gc, ox, oy);
+  XSetFillStyle(xdisplay, gc, FillStippled);
+  XFillRectangle(xdisplay, xwindow, gc, X, Y, W, H);
+  XSetFillStyle(xdisplay, gc, FillSolid);
+#elif defined(_WIN32)
   HDC tempdc = CreateCompatibleDC(gc);
   SelectObject(tempdc, (HGDIOBJ)mask);
   SetTextColor(gc, 0); // VP : seems necessary at least under win95
@@ -143,16 +153,10 @@ void Image::fill(int X, int Y, int W, int H, int cx, int cy) const
   // secret bitblt code found in old MSWindows reference manual:
   BitBlt(gc, X, Y, W, H, tempdc, cx, cy, 0xE20746L);
   DeleteDC(tempdc);
-#elif (defined(__APPLE__) && !USE_X11)
+#elif defined(__APPLE__)
   // OSX version nyi
 #else
-  XSetStipple(xdisplay, gc, (Pixmap)mask);
-  int ox = X-cx; if (ox < 0) ox += w();
-  int oy = Y-cy; if (oy < 0) oy += h();
-  XSetTSOrigin(xdisplay, gc, ox, oy);
-  XSetFillStyle(xdisplay, gc, FillStippled);
-  XFillRectangle(xdisplay, xwindow, gc, X, Y, W, H);
-  XSetFillStyle(xdisplay, gc, FillSolid);
+#error
 #endif
 }
 
@@ -170,15 +174,17 @@ void Image::_measure(float& W, float& H) const { W=w(); H=h(); }
 /*! Get rid of the cached image (the mask and id objects) that
   were created by _draw(). */
 void Image::destroy_cache() {
-#ifdef _WIN32
+#if USE_X11
+  if (mask) XFreePixmap(xdisplay, (Pixmap)mask);
+  if (id) fl_delete_offscreen((Pixmap)id);
+#elif defined(_WIN32)
   if (mask) DeleteObject((Pixmap)mask);
   if (id) fl_delete_offscreen((Pixmap)id);
-#elif (defined(__APPLE__) && !USE_X11)
+#elif defined(__APPLE__)
   if (mask) DisposeGWorld((Pixmap)mask);
   if (id) fl_delete_offscreen((Pixmap)id);
 #else
-  if (mask) XFreePixmap(xdisplay, (Pixmap)mask);
-  if (id) fl_delete_offscreen((Pixmap)id);
+#error
 #endif
   mask = 0;
   id = 0;
@@ -200,5 +206,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.33 2003/11/04 08:10:59 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.34 2004/01/06 06:43:02 spitzak Exp $".
 //

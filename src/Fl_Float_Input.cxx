@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Float_Input.cxx,v 1.10 2002/12/10 02:00:40 easysw Exp $"
-//
-// Input widget for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Float_Input.cxx,v 1.11 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -30,6 +28,31 @@
 
 using namespace fltk;
 
+/*! \class fltk::FloatInput
+
+  A subclass of NumericInput that only allows the user to type
+  floating point numbers (sign, digits, decimal point, more digits,
+  'E' or 'e', sign, digits), or hex constants that start with
+  "0x". This is done by overriding the replace() method. Besides
+  editing the text the user can use the up/down arrow keys to change
+  the digits.
+
+  You may want a ValueInput widget instead. It has value() methods
+  that take and return double values rather than strings, and has
+  up/down buttons on it.
+
+  If you change when() to fltk::WHEN_ENTER_KEY the callback is only
+  done when the user hits the up/down arrow keys or when the user
+  types the Enter key. This may be more useful than the default
+  setting of fltk::WHEN_CHANGED which can make the callback happen
+  when partially-edited numbers are in the field.
+
+  The type() can either be either FloatInput::FLOAT or
+  FloatInput::INT. Setting it to INT makes this act like the IntInput
+  subclass.
+
+*/
+
 bool FloatInput::replace(int b, int e, const char* text, int ilen) {
   for (int n = 0; n < ilen; n++) {
     char ascii = text[n];
@@ -47,6 +70,11 @@ bool FloatInput::replace(int b, int e, const char* text, int ilen) {
   return Input::replace(b,e,text,ilen);
 }
 
+/*! \class fltk::IntInput
+  NumericInput modified to only allow integers (in decimal, or in hex
+  if preceeded by "0x") to by typed. Currently this is implemented by
+  FloatInput by checking type() but this may change in the future.  */
+
 //
-// End of "$Id: Fl_Float_Input.cxx,v 1.10 2002/12/10 02:00:40 easysw Exp $"
+// End of "$Id: Fl_Float_Input.cxx,v 1.11 2004/01/06 06:43:02 spitzak Exp $"
 //

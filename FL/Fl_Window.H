@@ -13,6 +13,9 @@ public:
   Fl_Window(int x, int y, const char*l = 0)
     : fltk::Window(x,y,l) {begin();}
 
+  void border(bool v) {
+    if (!v) clear_border(); // set_border does not work
+  }
 };
 
 #endif

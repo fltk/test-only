@@ -1,5 +1,5 @@
 //
-// "$Id: fl_oval_box.cxx,v 1.24 2003/11/04 08:11:04 spitzak Exp $"
+// "$Id: fl_oval_box.cxx,v 1.25 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Oval box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -47,6 +47,9 @@ public:
   OvalBox(const char* n) : Box(n) {}
 };
 static OvalBox ovalBox("oval");
+/*! \ingroup boxes
+  Ellipse with a black border.
+*/
 Box* const fltk::OVAL_BOX = &ovalBox;
 
 class OvalShadowBox : public Box {
@@ -65,6 +68,9 @@ public:
   OvalShadowBox(const char* n) : Box(n) {}
 };
 static OvalShadowBox ovalShadowBox("oval_shadow");
+/*! \ingroup boxes
+  Ellipse with a black border and gray shadow.
+*/
 Box* const fltk::OSHADOW_BOX = &ovalShadowBox;
 
 class OvalFlatBox : public Box {
@@ -78,9 +84,12 @@ public:
   OvalFlatBox(const char* n) : Box(n) {}
 };
 static OvalFlatBox ovalFlatBox(0);
+/*! \ingroup boxes
+  Ellipse with no border.
+*/
 Box* const fltk::OFLAT_BOX = &ovalFlatBox;
 
 
 //
-// End of "$Id: fl_oval_box.cxx,v 1.24 2003/11/04 08:11:04 spitzak Exp $".
+// End of "$Id: fl_oval_box.cxx,v 1.25 2004/01/06 06:43:02 spitzak Exp $".
 //

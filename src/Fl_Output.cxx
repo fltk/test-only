@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Output.cxx,v 1.36 2002/12/10 02:00:44 easysw Exp $"
-//
-// Output widget for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Output.cxx,v 1.37 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -29,8 +27,26 @@
 
 using namespace fltk;
 
+/*! \class fltk::Output
+
+  \image html text.gif
+
+  This widget displays a piece of text. When you set the value(), it
+  does a strcpy() to it's own storage, which is useful for
+  program-generated values. You can also call static_value() if
+  you know the original text will not be deleted.
+  The text may contain any characters except nul. Any control characters
+  less than 32 will display in ^X notation. Other characters are
+  drawn without any changes.
+
+  The user may select portions of the text
+  using the mouse and paste the contents into other fields or
+  programs.
+
+*/
+
+/*! Always returns false, thus disallowing all editing. */
 bool Output::replace(int, int, const char*, int) {
-  // By making this function return false, all editing is disallowed:
   return false;
 }
 
@@ -48,9 +64,9 @@ int Output::handle(int event) {
   return 0;
 }
 
-// Output has it's own style so the color can be set to gray like
-// some themes want:
 static NamedStyle style("Output", 0, &Output::default_style);
+/*! Output has it's own style so the color can be set to gray like
+  Motif-style programs want. */
 NamedStyle* Output::default_style = &::style;
 
 Output::Output(int x, int y, int w, int h, const char *l)
@@ -59,6 +75,27 @@ Output::Output(int x, int y, int w, int h, const char *l)
   style(default_style);
 }
 
+/*! \class fltk::MultiLineOutput
+
+  \image html text.gif
+
+  Displays multiple lines of text. It will interpret ^J for line
+  breaks and ^I for tabs.
+
+  There are no scrollbars, so this is for short pieces of text only.
+*/
+
+/*! \class fltk::WordwrapOutput
+
+  \image html text.gif
+
+  Similar to MultiLineOutput this displays multiple lines of text. It
+  will interpret ^J for line breaks and ^I for tabs. It will also wrap
+  lines at spaces so long lines fit in the widget.
+
+  There are no scrollbars, so this is for short pieces of text only.
+*/
+
 //
-// End of "$Id: Fl_Output.cxx,v 1.36 2002/12/10 02:00:44 easysw Exp $".
+// End of "$Id: Fl_Output.cxx,v 1.37 2004/01/06 06:43:02 spitzak Exp $".
 //

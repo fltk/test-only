@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.69 2003/05/20 16:41:50 spitzak Exp $"
+# "$Id: Makefile,v 1.70 2004/01/06 06:43:03 spitzak Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -123,14 +123,22 @@ TARGETS = \
 	label$(EXEEXT) \
 	line_style$(EXEEXT) \
 	list_visuals$(EXEEXT) \
+	logslider$(EXEEXT) \
 	menu$(EXEEXT) \
 	pack$(EXEEXT) \
 	resizable$(EXEEXT) \
 	shape$(EXEEXT) \
 	sizes$(EXEEXT) \
+	slider$(EXEEXT) \
 	threads$(EXEEXT) \
 	tile$(EXEEXT) \
 	valuators$(EXEEXT)
+
+# other programs that are minimally changed from fltk1.1:
+TARGETS += \
+	symbols$(EXEEXT) \
+	fullscreen$(EXEEXT) \
+	mandelbrot$(EXEEXT)
 
 #
 # Make everything...
@@ -209,7 +217,7 @@ keyboard$(EXEEXT): keyboard.o keyboard_ui.o
 
 mandelbrot$(EXEEXT): mandelbrot.o mandelbrot_ui.o
 	echo Linking $@...
-	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTK) $(LDLIBS) -o $@
+	$(CXX) -I.. $(CXXFLAGS) mandelbrot.o mandelbrot_ui.o $(LINKFLTK) $(LDLIBS) -o $@
 	$(POSTBUILD) $@ ../FL/mac.r
 
 shape$(EXEEXT): shape.o ../lib/$(LIBPREFIX)fltk_gl$(LIBSUFFIX)
@@ -233,5 +241,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.69 2003/05/20 16:41:50 spitzak Exp $".
+# End of "$Id: Makefile,v 1.70 2004/01/06 06:43:03 spitzak Exp $".
 #

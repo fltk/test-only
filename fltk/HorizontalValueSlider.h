@@ -1,7 +1,5 @@
 //
-// "$Id: HorizontalValueSlider.h,v 1.3 2003/04/20 03:17:47 easysw Exp $"
-//
-// Horizontal slider with number at left end.
+// "$Id: HorizontalValueSlider.h,v 1.4 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -30,6 +28,7 @@
 
 namespace fltk {
 
+/*! Horizontal slider with number at left end. See ValueSlider for picture. */
 class FL_API HorizontalValueSlider : public ValueSlider {
 public:
     HorizontalValueSlider(int x,int y,int w,int h,const char *l=0)
@@ -40,5 +39,5 @@ public:
 #endif
 
 //
-// End of "$Id: HorizontalValueSlider.h,v 1.3 2003/04/20 03:17:47 easysw Exp $".
+// End of "$Id: HorizontalValueSlider.h,v 1.4 2004/01/06 06:43:02 spitzak Exp $".
 //

@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.69 2003/11/04 08:11:01 spitzak Exp $"
-//
-// Slider widget for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Slider.cxx,v 1.70 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -34,8 +32,81 @@
 
 using namespace fltk;
 
-// Return the location of the left/top edge of a box of slider_size() would
-// be if the area the slider can move in is of width/height w.
+/*! \class fltk::Slider
+
+  This widget contains a sliding "knob" that controls a
+  single floating-point value. Moving the box all the way to the left
+  or bottom sets it to the minimum(), and to the top/right to the
+  maximum() value. The minimum() may be greater than the maximum()
+  in case you want the larger number at the opposite end.
+
+  See Valuator for how to set or get the value or handle callbacks
+  when the value changes.
+
+  \image html slider.gif
+
+  The appearance of the base class may be changed in several ways:
+
+  Setting the box() to any value other than the default of FLAT_BOX,
+  as shown in the example on the bottom-left, will remove the "slot"
+  and draw a box around the slider and the tick marks. The color()
+  (which defaults to GRAY75) is used to fill in the area behind the
+  slider and tick marks.
+
+  The following bits may be or'd together and given to type():
+  - fltk::Slider::VERTICAL : Slider moves vertically (this is the default)
+  - fltk::Slider::HORIZONTAL : Slider moves horizontally.
+  - fltk::Slider::TICK_ABOVE : Put tick marks above the horizontal slider.
+  - fltk::Slider::TICK_LEFT : Put tick marks to the left of a vertical slider, same value as TICK_ABOVE
+  - fltk::Slider::TICK_BELOW : Put tick marks below the horizontal slider.
+  - fltk::Slider::TICK_RIGHT : Put tick marks to the right of a vertical slider, same value as TICK_BELOW
+  - fltk::Slider::TICK_BOTH : Put tick marks on both sides of the slider.
+  - fltk::Slider::LOG : Use a logarithimic or power scale for the slider.
+
+  The tick marks are placed the slider_size() or more apart (they are
+  also no closer than the step() value). The color of the tick marks
+  is controlled by textcolor(), and the font used to draw the numbers
+  is textfont() and textsize() (which defaults to 8).
+
+  You can change the glyph() function to change how the moving part is
+  drawn. The number 16 is passed to draw the horizontal slider, the
+  number 17 is passed to draw the vertical slider. Other numbers are
+  passed by the ScrollBar subclass to draw the arrows at the end. The
+  glyph() defaults to a function that draws the buttonbox() in the
+  buttoncolor() and then draws a divider line across it.
+
+  \image html logslider.gif
+  "Log" sliders have a non-uniform scale. This diagram shows some
+  examples. The scale is truly logarithmic if both the minimum() and
+  the maximum() are non-zero and have the same sign. Otherwise the
+  slider position is the square root of the value (or -sqrt(-value)
+  for negative values).
+
+*/
+
+/*! \fn void Slider::slider_size(int)
+
+  Set the dimensions of the moving piece of slider. This is measured
+  in pixels in a direction parallel to the slider's movement. The
+  default value is 12.
+
+  Setting slider_size() to zero will make the slider into a "fill"
+  slider that draws a solid bar from the left/bottom to the current
+  value. This is useful for indicating progress or as a output
+  indicator.
+*/
+
+/*! \fn void Slider::tick_size(int)
+  The slider is shrunk this many pixels from the widget's width so
+  that the tick marks are visible next to it. The default value is 4.
+*/
+
+/*! This is used by subclasses to draw the slider correctly.
+  Return the location of the left/top edge of a box of slider_size() would
+  be if the slider is set to \a value and can move in an area
+  of \a w pixels. The range() and log() settings are taken into
+  account.
+*/
 int Slider::slider_position(double value, int w) {
   double A = minimum();
   double B = maximum();
@@ -69,8 +140,14 @@ int Slider::slider_position(double value, int w) {
   else return int(fraction*w+.5);
 }
 
-// Return the value if the left/top edge of a box of slider_size() is placed
-// at this location in an area of width/height w:
+/*! This is used by subclasses to handle events correctly:
+  Return the value if the left/top edge of a box of slider_size() is placed
+  at \a X pixels from the edge of an area of size \a w pixels. The range()
+  and log() settings are taken into account, and it also rounds the value
+  to multiples of step(), using powers of 10 larger and multiples of 2 or
+  5 to get the steps close to 1 pixel so the user is presented with nice
+  numerical values.
+*/
 double Slider::position_value(int X, int w) {
   w -= slider_size_; if (w <= 0) return minimum();
   double A = minimum();
@@ -122,9 +199,9 @@ double Slider::position_value(int X, int w) {
   return value;
 }
 
-// Draw tick marks. These lines cross the passed rectangle perpendicular to
-// the slider direction. In the direction parallel to the slider direction
-// the box should have the same size as the area the slider moves in.
+/*! Draw tick marks. These lines cross the passed rectangle perpendicular to
+  the slider direction. In the direction parallel to the slider direction
+  the box should have the same size as the area the slider moves in. */
 void Slider::draw_ticks(int x, int y, int w, int h, int min_spacing)
 {
   int x1, y1, x2, y2, dx, dy;
@@ -261,11 +338,37 @@ void Slider::draw()
   }
 }
 
-// Do minimal-update redraw of the moving part of the slider. If this returnes
-// true then it has done an push_clip() and you must fill in the remaining
-// area with the background that goes behind the slider. The clipped area
-// will either be the entire widget or the area the slider used to be in,
-// with the area of the new slider and the slot removed from it.
+/*! This call is provied so subclasses can draw the moving part inside
+  an arbitrary rectangle and then draw arbitrary backgrounds behind
+  the moving part.
+
+  Do minimal-update redraw of the moving part of the slider and also
+  draw the "slot" if \a slot is true. If this returns true then it has
+  done an fltk::push_clip() and you must fill in the remaining area
+  with the background that goes behind the slider. The clipped area
+  will either be the entire widget or the area the slider used to be
+  in, with the area of the new slider and the slot removed from it.
+
+  Typical usage in a Slider subclass:
+
+  \code
+void MySlider::draw() {
+  // figure out inset box to hold moving part of slider:
+  int ix = 10;
+  int iy = 10;
+  int iw = w()-20;
+  int ih = h()-20;
+  // draw the moving part:
+  if (draw(ix, iy, iw, ih, 0, false)) {
+    // we must draw the background:
+    draw_spiffy_background(0,0,w(),h());
+    // draw the tick marks across whole widget:
+    draw_ticks(ix, 0, iw, h());
+    fltk::pop_clip();
+  }
+}
+  \endcode
+*/
 
 bool Slider::draw(int ix, int iy, int iw, int ih, Flags flags, bool slot)
 {
@@ -347,6 +450,8 @@ bool Slider::draw(int ix, int iy, int iw, int ih, Flags flags, bool slot)
   return true;
 }
 
+/*! This call is provied so subclasses can draw the moving part inside
+  an arbitrary rectangle. */
 int Slider::handle(int event, int x, int y, int w, int h) {
 
   switch (event) {
@@ -466,5 +571,5 @@ Slider::Slider(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.69 2003/11/04 08:11:01 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.70 2004/01/06 06:43:02 spitzak Exp $".
 //

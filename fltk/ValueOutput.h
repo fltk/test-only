@@ -1,7 +1,7 @@
 //
-// "$Id: ValueOutput.h,v 1.1 2002/12/15 10:42:49 spitzak Exp $"
+// "$Id: ValueOutput.h,v 1.2 2004/01/06 06:43:02 spitzak Exp $"
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,12 +20,6 @@
 //
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
-
-// A ValueOutput is a valuator that displays the number like a text
-// box. This is indended for showing the user a number, there is no
-// way for the user to change the number. It is much lighter weight
-// than using an Output widget for this.  If the user clicks on it
-// they select the text.
 
 #ifndef fltk_ValueOutput_h
 #define fltk_ValueOutput_h
@@ -47,5 +41,5 @@ public:
 #endif
 
 //
-// End of "$Id: ValueOutput.h,v 1.1 2002/12/15 10:42:49 spitzak Exp $".
+// End of "$Id: ValueOutput.h,v 1.2 2004/01/06 06:43:02 spitzak Exp $".
 //

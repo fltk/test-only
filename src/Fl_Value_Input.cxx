@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.43 2003/11/04 08:11:02 spitzak Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.44 2004/01/06 06:43:02 spitzak Exp $"
 //
-// Copyright 1998-2002 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,14 +21,6 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// Fltk widget for input of a floating-point value. Contains an inner
-// Input widget and two buttons to increment/decrement the value.
-//
-// This is *not* an Group even though it has a "child"
-// widget, this appears to be a good idea and fltk should support it.
-// However Widget::parent() returns an Group, not an Widget
-// like it did in fltk 1.1 so this may not be proper C++.
-
 #include <fltk/ValueInput.h>
 #include <fltk/Group.h>
 #include <fltk/events.h>
@@ -37,6 +29,43 @@
 #include <fltk/math.h>
 #include <stdlib.h>
 using namespace fltk;
+
+/*! \class fltk::ValueInput
+
+  Controls a single floating point value through a combination of a
+  FloatInput and two buttons. Other toolkits call this a "Spin
+  Box".
+
+  \image html Fl_Value_Input.gif
+
+  Clicking the buttons increments/decrements by the
+  linesize(). Holding down any shift key and clicking
+  increments/decrements by the pagesize().
+
+  If step() is greater or equal to 1.0 an IntInput is used
+  instead. This prevents the user from typing anything other than
+  digits. If step() is less than one then the user can type floating
+  point values with decimal points and exponents.
+
+  If you change when() to fltk::WHEN_ENTER_KEY the callback is only
+  done when the user hits the up/down arrow keys or when the user
+  types the Enter key. This may be more useful than the default
+  setting of fltk::WHEN_CHANGED which can make the callback happen
+  when partially-edited numbers are in the field.
+
+  You can get at the input field by using the public "input" instance
+  variable. For instance you can clobber the text to a word with
+  value_input->input.static_value("word").
+
+*/
+
+/* IMPLEMENTATION NOTE:
+
+  This is *not* an Group even though it has a "child" widget, this
+  appears to be a good idea and fltk should support it.  However
+  Widget::parent() returns an Group, not an Widget like it did in fltk
+  1.1 so this may not be proper C++.
+*/
 
 void ValueInput::input_cb(Widget*, void* v) {
   ValueInput& t = *(ValueInput*)v;
@@ -223,5 +252,5 @@ ValueInput::~ValueInput() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.43 2003/11/04 08:11:02 spitzak Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.44 2004/01/06 06:43:02 spitzak Exp $".
 //

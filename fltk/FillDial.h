@@ -1,7 +1,5 @@
 //
-// "$Id: FillDial.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
-//
-// Dial but the value draws as a pie slice
+// "$Id: FillDial.h,v 1.3 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Copyright 2002 by Bill Spitzak and others.
 //
@@ -30,6 +28,7 @@
 
 namespace fltk {
 
+/*! Dial but the constructor sets type() to FILL, so it draws a pie slice. */
 class FL_API FillDial : public Dial {
 public:
     Fill_Dial(int x,int y,int w,int h, const char *l = 0)
@@ -41,5 +40,5 @@ public:
 #endif
 
 //
-// End of "$Id: FillDial.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: FillDial.h,v 1.3 2004/01/06 06:43:02 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Box.cxx,v 1.31 2003/11/11 07:36:31 spitzak Exp $"
+// "$Id: Fl_Box.cxx,v 1.32 2004/01/06 06:43:02 spitzak Exp $"
 //
 
 /*! \class fltk::InvisibleBox
@@ -18,8 +18,8 @@ static void revert(Style* s) {
 }
 // this is unnamed as there is no need for themes to alter this:
 static NamedStyle style(0, revert, &InvisibleBox::default_style);
-/*! Sets box() to \c NO_BOX, sets color() to \a GRAY75 for compatability
-  with fltk1's Fl_Box widget. */
+/*! Sets box() to \c fltk::NO_BOX, sets color() to \c fltk::GRAY75 for
+  compatability with fltk1's Fl_Box widget. */
 NamedStyle* InvisibleBox::default_style = &::style;
 
 InvisibleBox::InvisibleBox(int x, int y, int w, int h, const char *l)
@@ -44,5 +44,5 @@ void InvisibleBox::draw() {
 }
 
 //
-// End of "$Id: Fl_Box.cxx,v 1.31 2003/11/11 07:36:31 spitzak Exp $".
+// End of "$Id: Fl_Box.cxx,v 1.32 2004/01/06 06:43:02 spitzak Exp $".
 //

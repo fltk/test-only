@@ -2,6 +2,20 @@
 #include <fltk/Item.h>
 using namespace fltk;
 
+/*! \class fltk::StringList
+
+  A very simple type of List that allows a menu to display an
+  array of C strings, or a nul-seperated single string:
+
+  \code
+  const char* names[] = {"alpha", "beta", "gamma", 0}
+  StringList* list = new StringList(names);
+  // Identical result can be made with this:
+  // StringList* list = new StringList("alpha\0beta\0gamma\0");
+  menu->list(list);
+  \endcode
+*/
+
 int StringList::children(const Menu* group, const int* indexes, int level) {
   // Get number of widget children:
   int n = List::children(group, 0,0);	
@@ -34,11 +48,25 @@ Widget* StringList::child(const Menu* group, const int* indexes, int level) {
   return widget;
 }
 
+/*! \fn StringList::StringList(const char*const* a,int n)
+  Sets the string list to return \a n items, where the labels are
+  from the array \a a. Warning: the array is not copied, it should
+  be in static memory!
+*/
+
+/*! Sets the string list to return items who's labels are from the
+  array \a a. The number of items is determined by the first null
+  pointer in the array. Warning: the array is not copied, it should
+  be in static memory! */
 StringList::StringList(const char*const* a) {
   array = a;
   for (children_ = 0; a && a[children_]; children_++);
 }
 
+/*! Sets the string list to return the nul-seperated list of strings.
+  The list is terminated by two nul characters. Warning: the string
+  is not copied! Also the current implementation leaks the created
+  array when the StringList is deleted. */
 StringList::StringList(const char* s) {
   if (!s || !*s) {children_ = 0; return;}
   const char* temp[256];

@@ -1,5 +1,5 @@
 //
-// "$Id: HorizontalSlider.h,v 1.3 2003/04/20 03:17:47 easysw Exp $"
+// "$Id: HorizontalSlider.h,v 1.4 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Slider that moves horizontally (rather than the default of vertical)
 //
@@ -30,6 +30,7 @@
 
 namespace fltk {
 
+/*! Horizontal slider, the constructor does type(HORIZONTAL). */
 class FL_API HorizontalSlider : public Slider {
 public:
     HorizontalSlider(int x,int y,int w,int h,const char *l=0)
@@ -41,5 +42,5 @@ public:
 #endif
 
 //
-// End of "$Id: HorizontalSlider.h,v 1.3 2003/04/20 03:17:47 easysw Exp $".
+// End of "$Id: HorizontalSlider.h,v 1.4 2004/01/06 06:43:02 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.107 2003/11/14 07:15:11 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.108 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -149,32 +149,25 @@ Window::Window(int W, int H, const char *l)
   clear_visible();
 }
 
-/*! \fn void Window::size_range(int minw, int minh, int maxw, int maxh, int dw, int dh, int aspect)
+/*! \fn void Window::size_range(int minw, int minh, int maxw, int maxh, int dw, int dh)
 
   Set the allowable range the user can resize this window to. This
   only works for top-level windows.
-
-  - minw and minh are the smallest the window can be. 
-  - maxw and maxh are the largest the window can be. If either is
+  - \a minw and \a minh are the smallest the window can be. 
+  - \a maxw and \a maxh are the largest the window can be. If either is
   equal to the minimum then you cannot resize in that direction. If
   either is zero then FLTK picks a maximum size in that direction such
   that the window will fill the screen.
-  - dw and dh are size increments. The window will be constrained to
-  widths of minw + N * dw, where N is any non-negative integer. If
+  - \a dw and \a dh are size increments. The window will be constrained to
+  widths of minw+N*dw, where N is any non-negative integer. If
   these are less or equal to 1 they are ignored. (this is ignored on
   WIN32)
-
-  - aspect is a flag that indicates that the window should preserve
-  it's aspect ratio. This is ignored by WIN32 and by most X window
-  managers (in addition X does not describe what to do if the minimum
-  and maximum sizes have different aspect ratios...)
 
   It is undefined what happens if the current size does not fit in the
   constraints passed to size_range().
 
   If this function is not called, FLTK tries to figure out the range
   from the setting of resizeable():
-
   - If resizeable() is NULL (this is the default) then the window
   cannot be resized.
   - If either dimension of resizeable() is less than 100, then that is
@@ -220,9 +213,9 @@ const char* Window::xclass_ = "fltk";
 
 bool fl_show_iconic; // set by iconize() or by -i arg switch
 
-#ifdef _WIN32
+#if defined(_WIN32)
+// activate some other window so the active app does not change!
 static void keep_app_active() {
-  // activate some other window so the active app does not change!
   if (grab()) return;
   for (CreatedWindow* x = CreatedWindow::first; x; x = x->next)
     if (!x->window->parent() && x->window->visible()) {
@@ -241,20 +234,22 @@ int Window::handle(int event) {
     // create the window, which will recursively call this:
     if (!shown()) {show(); return 1;}
     Group::handle(event); // make the child windows map first
-#ifdef _WIN32
+#if USE_X11
+    XMapWindow(xdisplay, i->xid);
+#elif defined(_WIN32)
     ShowWindow(i->xid, SW_RESTORE);
-#elif (defined(__APPLE__) && !USE_X11)
+#elif defined(__APPLE__)
     if (parent()) ; // needs to update clip and redraw...
     else ShowWindow(i->xid);
 #else
-    XMapWindow(xdisplay, i->xid);
+#error
 #endif
     return 1;
 
   case HIDE:
     if (flags()&MODAL) modal(0, false);
     if (i) XUnmapWindow(xdisplay, i->xid);
-#ifdef _WIN32
+#if defined(_WIN32)
     keep_app_active();
 #endif
     break;
@@ -292,10 +287,6 @@ int Window::handle(int event) {
   return 0;
 }
 
-/*! \fn void Window::hide()
-  Remove the window from the screen. If the window is already hidden
-  or show() has not been called then this does nothing and is harmless.  */
-  
 /*! Cause the window to become visible. It is harmless to call this
     multiple times.
 
@@ -328,7 +319,8 @@ int Window::handle(int event) {
     already called them. This allows these expensive operations to be
     deferred as long as possible, and allows fltk programs to be
     written that will run without an X server as long as they don't
-    actually show a window.  */
+    actually show a window.
+*/
 void Window::show() {
   // get rid of very common user bug: forgot end():
   Group::current(0);
@@ -391,7 +383,10 @@ void Window::show() {
     set_visible();
 
     // map the window, making it iconized if fl_show_iconic is on:
-#ifdef _WIN32
+#if USE_X11
+    // for X, iconic stuff was done by create()
+    XMapRaised(xdisplay, i->xid);
+#elif defined(_WIN32)
     int showtype;
     if (parent())
       showtype = SW_RESTORE;
@@ -405,7 +400,7 @@ void Window::show() {
     else
       showtype = SW_SHOWNORMAL;
     ShowWindow(i->xid, showtype);
-#elif (defined(__APPLE__) && !USE_X11)
+#elif defined(__APPLE__)
     if (!modal() && fl_show_iconic) {
       fl_show_iconic = 0;
       CollapseWindow( i->xid, true ); // \todo Mac ; untested
@@ -413,8 +408,7 @@ void Window::show() {
       ShowWindow(i->xid);
     }
 #else
-    // for X, iconic stuff was done by create()
-    XMapRaised(xdisplay, i->xid);
+#error
 #endif
 
   } else {
@@ -424,17 +418,19 @@ void Window::show() {
       // Raise any parent windows, to get around stupid window managers
       // that think "child of" means "next to" rather than "above":
       //if (child_of() && !override()) ((Window*)child_of())->show();
-#ifdef _WIN32
+#if USE_X11
+      XMapRaised(xdisplay, i->xid);
+#elif defined(_WIN32)
       if (IsIconic(i->xid)) OpenIcon(i->xid);
       if (!grab() && !override()) BringWindowToTop(i->xid);
-#elif (defined(__APPLE__) && !USE_X11)
+#elif defined(__APPLE__)
       ShowWindow(i->xid); // does this de-iconize?
       if (!grab() && !override()) {
 	BringToFront(i->xid);
 	SelectWindow(i->xid);
       }
 #else
-      XMapRaised(xdisplay, i->xid);
+#error
 #endif
     }
 
@@ -590,19 +586,21 @@ void CreatedWindow::expose(int X, int Y, int W, int H) {
     region = XRectangleRegion(X,Y,W,H);
   } else {
     // merge with the region:
-#ifdef WIN32
+#if USE_X11
+    XRectangle R;
+    R.x = X; R.y = Y; R.width = W; R.height = H;
+    XUnionRectWithRegion(&R, region, region);
+#elif defined(WIN32)
     Region R = XRectangleRegion(X, Y, W, H);
     CombineRgn(region, region, R, RGN_OR);
     XDestroyRegion(R);
-#elif (defined(__APPLE__) && !USE_X11)
+#elif defined(__APPLE__)
     Region R = NewRgn(); 
     SetRectRgn(R, X, Y, X+W, Y+H);
     UnionRgn(R, region, region);
     DisposeRgn(R);
 #else
-    XRectangle R;
-    R.x = X; R.y = Y; R.width = W; R.height = H;
-    XUnionRectWithRegion(&R, region, region);
+#error
 #endif
   }
   // make flush() search for this window:
@@ -678,5 +676,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.107 2003/11/14 07:15:11 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.108 2004/01/06 06:43:02 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.33 2003/11/04 08:11:03 spitzak Exp $"
+// "$Id: fl_color.cxx,v 1.34 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -46,7 +46,10 @@ static unsigned cmap[256] = {
 #include "fl_cmap.h" // this is a file produced by "cmap.cxx":
 };
 
-void fltk::split_color(Color i, uchar& r, uchar& g, uchar& b) {
+void fltk::split_color(Color i,
+		       unsigned char& r,
+		       unsigned char& g,
+		       unsigned char& b) {
   if (!(i & 0xFFFFFF00)) i = Color(cmap[i]);
   r = uchar(i>>24);
   g = uchar(i>>16);
@@ -97,12 +100,14 @@ Color fltk::contrast(Color fg, Color bg) {
 // Include the code for setting colors on the system and for managing
 // system colormaps:
 
-#ifdef _WIN32
+#if USE_X11
+# include "fl_color_x.cxx"
+#elif defined(_WIN32)
 # include "fl_color_win32.cxx"
-#elif (defined(__APPLE__) && !USE_X11)
+#elif defined(__APPLE__)
 # include "fl_color_mac.cxx"
 #else
-# include "fl_color_x.cxx"
+#error
 #endif
 
 void fltk::set_color_index(Color i, Color c) {
@@ -118,5 +123,5 @@ Color fltk::get_color_index(Color i) {
 }
 
 //
-// End of "$Id: fl_color.cxx,v 1.33 2003/11/04 08:11:03 spitzak Exp $".
+// End of "$Id: fl_color.cxx,v 1.34 2004/01/06 06:43:02 spitzak Exp $".
 //

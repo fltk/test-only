@@ -1,12 +1,13 @@
 //
-// "$Id: fullscreen.cxx,v 1.11 2002/12/10 02:01:05 easysw Exp $"
+// "$Id: fullscreen.cxx,v 1.12 2004/01/06 06:43:03 spitzak Exp $"
 //
 // Fullscreen test program for the Fast Light Tool Kit (FLTK).
 //
-// This demo shows how to do many of the window manipulations that are
-// popular on SGI programs, even though X does not really like them.
-// You can change the visual to switch between single/double buffer,
-// and make the window take over the screen.
+// This demo shows how to do many of the window manipulations that
+// are popular on SGI programs, even though X does not really like
+// them.  You can toggle the border on/off, change the visual to
+// switch between single/double buffer, and make the window take
+// over the screen.
 //
 // Normally the program makes a single window with a child GL window.
 // This simulates a program where the 3D display is surrounded by
@@ -22,6 +23,8 @@
 // code arranged here seems to be keeping that to a minimu.
 //
 // Apparently unavoidable bugs:
+//
+// Turning the border on causes an unnecessary redraw.
 //
 // Turning off full screen when the border is on causes an unnecessary
 // resize and redraw when the program turns the border on.
@@ -52,16 +55,16 @@
 //
 
 #include <config.h>
-#include <fltk/Fl.h>
-#include <fltk/Fl_Single_Window.h>
-#include <fltk/Fl_Hor_Slider.h>
-#include <fltk/Fl_Toggle_Light_Button.h>
-#include <fltk/math.h>
+#include <FL/Fl.H>
+#include <FL/Fl_Single_Window.H>
+#include <FL/Fl_Hor_Slider.H>
+#include <FL/Fl_Toggle_Light_Button.H>
+#include <FL/math.h>
 #include <stdio.h>
 
 #if HAVE_GL
-#include <fltk/gl.h>
-#include <fltk/Fl_Gl_Window.h>
+#include <FL/gl.h>
+#include <FL/Fl_Gl_Window.H>
 
 class shape_window : public Fl_Gl_Window {
   void draw();
@@ -95,7 +98,7 @@ void shape_window::draw() {
 
 #else
 
-#include <fltk/fl_draw.h>
+#include <FL/fl_draw.H>
 
 class shape_window : public Fl_Window {
   void draw();
@@ -129,14 +132,20 @@ void sides_cb(Fl_Widget *o, void *p) {
 void double_cb(Fl_Widget *o, void *p) {
   shape_window *sw = (shape_window *)p;
   int d = ((Fl_Button *)o)->value();
-  sw->mode(d ? FL_DOUBLE|FL_RGB : FL_RGB);
+  sw->mode(d ? Fl_Mode(FL_DOUBLE|FL_RGB) : FL_RGB);
 }
 #else
 void double_cb(Fl_Widget *, void *) {}
 #endif
 
-int px,py,pw,ph;
+void border_cb(Fl_Widget *o, void *p) {
+  Fl_Window *w = (Fl_Window *)p;
+  int d = ((Fl_Button *)o)->value();
+  w->border(d);
+}
 
+int px,py,pw,ph;
+Fl_Button *border_button;
 void fullscreen_cb(Fl_Widget *o, void *p) {
   Fl_Window *w = (Fl_Window *)p;
   int d = ((Fl_Button *)o)->value();
@@ -183,7 +192,7 @@ int main(int argc, char **argv) {
   Fl_Window *w;
   if (twowindow) {	// make it's own window
     sw.resizable(&sw);
-    w = &sw;
+    w = (Fl_Window*)(&sw); // cast added for fltk2.0
     window.set_modal();	// makes controls stay on top when fullscreen pushed
     argc--;
     sw.show();
@@ -197,16 +206,21 @@ int main(int argc, char **argv) {
 
   int y = window.h()-30*NUMB-5;
   Fl_Hor_Slider slider(50,y,window.w()-60,30,"Sides:");
-  slider.clear_flag(FL_ALIGN_MASK);
-  slider.set_flag(FL_ALIGN_LEFT);
+  slider.align(FL_ALIGN_LEFT);
   slider.callback(sides_cb,&sw);
   slider.value(sw.sides);
   slider.step(1);
-  slider.range(3,40);
+  slider.bounds(3,40);
   y+=30;
 
   Fl_Toggle_Light_Button b1(50,y,window.w()-60,30,"Double Buffered");
   b1.callback(double_cb,&sw);
+  y+=30;
+
+  Fl_Toggle_Light_Button b2(50,y,window.w()-60,30,"Border");
+  b2.callback(border_cb,w);
+  b2.set();
+  border_button = &b2;
   y+=30;
 
   Fl_Toggle_Light_Button b3(50,y,window.w()-60,30,"FullScreen");
@@ -226,5 +240,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fullscreen.cxx,v 1.11 2002/12/10 02:01:05 easysw Exp $".
+// End of "$Id: fullscreen.cxx,v 1.12 2004/01/06 06:43:03 spitzak Exp $".
 //

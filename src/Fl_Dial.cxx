@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.45 2003/11/04 08:10:59 spitzak Exp $"
+// "$Id: Fl_Dial.cxx,v 1.46 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,36 @@
 #include <fltk/math.h>
 using namespace fltk;
 
-// All angles are measured with 0 to the right and counter-clockwise
+/*! \class fltk::Dial
+
+  The fltk::Dial widget provides a circular dial to control a single
+  floating point value.
+
+  \image html Fl_Dial.gif
+  Use type() to change how it draws:
+  - Dial::NORMAL : Draws a normal dial with a knob.
+  - Dial::LINE : Draws a dial with a line.
+  - Dial::FILL : Draws a dial with a filled arc.
+
+  You can change the box() from the default of OVAL_BOX to draw
+  different borders. The box() is filled with color(), the moving part
+  is filled with selection_color(), and the border around the movint
+  part is set by textcolor().
+*/
+
+/*! \fn void Dial::angle1(short a)
+  See angles()
+*/
+/*! \fn void Dial::angle2(short a)
+  See angles()
+*/
+
+/*! \fn void Dial::angles(short a, short b)
+  Sets the angles used for the minimum and maximum values. The default
+  values are 45 and 315 (0 degrees is straight down and the angles
+  progress clockwise). Normally angle1 is less than angle2, but if you
+  reverse them the dial moves counter-clockwise.
+*/
 
 void Dial::draw() {
   int X = 0; int Y = 0; int W = w(); int H = h();
@@ -138,5 +167,5 @@ Dial::Dial(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.45 2003/11/04 08:10:59 spitzak Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.46 2004/01/06 06:43:02 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: mandelbrot.cxx,v 1.14 2002/12/10 02:01:05 easysw Exp $"
+// "$Id: mandelbrot.cxx,v 1.15 2004/01/06 06:43:03 spitzak Exp $"
 //
 // Mandelbrot set demo for the Fast Light Tool Kit (FLTK).
 //
@@ -23,8 +23,8 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include "mandelbrot_ui.cxx"
-#include <fltk/fl_draw.h>
+#include "mandelbrot_ui.h"
+#include <FL/fl_draw.H>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -71,10 +71,10 @@ void Drawing_Area::draw() {
 int Drawing_Area::idle() {
   if (!window()->visible()) return 0;
   if (drawn < nextline) {
-    make_current();
-    int yy = drawn+box()->dy();
-    if (yy >= sy && yy <= sy+sh) fl_overlay_clear();
-    fl_draw_image_mono(buffer+drawn*W, box()->dx(), yy, W, 1, 1, W);
+    make_current(); // deleted window-> from this for fltk2.0
+    int yy = drawn+4;
+    if (yy >= sy && yy <= sy+sh) erase_box();
+    fl_draw_image_mono(buffer+drawn*W, 3,yy,W,1,1,W);
     drawn++;
     return 1;
   }
@@ -88,16 +88,16 @@ int Drawing_Area::idle() {
       double wx = xx; double wy = yi;
       if (julia) xx = jX;
       for (int i=0; ; i++) {
-        if (i >= iterations) {*p = 0; break;}
-        double t = wx*wx - wy*wy + xx;
-        wy = 2*wx*wy + yy;
-        wx = t;
-        if (wx*wx + wy*wy > 4) {
-          wx = t = 1-double(i)/(1<<10);
-          if (t <= 0) t = 0; else for (i=brightness; i--;) t*=wx;
-          *p = 255-int(254*t);
-          break;
-        }
+	if (i >= iterations) {*p = 0; break;}
+	double t = wx*wx - wy*wy + xx;
+	wy = 2*wx*wy + yy;
+	wx = t;
+	if (wx*wx + wy*wy > 4) {
+	  wx = t = 1-double(i)/(1<<10);
+	  if (t <= 0) t = 0; else for (i=brightness; i--;) t*=wx;
+	  *p = 255-int(254*t);
+	  break;
+	}
       }
       p++;
     }
@@ -112,10 +112,12 @@ void Drawing_Area::erase_box() {
   fl_overlay_clear();
 }
 
+// For fltk2.0, all the occurances of x() and y() were replaced by 0:
+
 int Drawing_Area::handle(int event) {
   static int ix, iy;
   static int dragged;
-  static bool julia_picker;
+  static int button;
   int x2,y2;
   switch (event) {
   case FL_PUSH:
@@ -123,15 +125,44 @@ int Drawing_Area::handle(int event) {
     ix = Fl::event_x(); if (ix<0) ix=0; if (ix>=w()) ix=w()-1;
     iy = Fl::event_y(); if (iy<0) iy=0; if (iy>=h()) iy=h()-1;
     dragged = 0;
-    julia_picker = (!julia && Fl::event_button() != 1);
-    if (!julia_picker) return 1;
-    // else fall through...
+    button = Fl::event_button();
+    return 1;
   case FL_DRAG:
     dragged = 1;
     erase_box();
     x2 = Fl::event_x(); if (x2<0) x2=0; if (x2>=w()) x2=w()-1;
     y2 = Fl::event_y(); if (y2<0) y2=0; if (y2>=h()) y2=h()-1;
-    if (julia_picker) {
+    if (button != 1) {ix = x2; iy = y2; return 1;}
+    if (ix < x2) {sx = ix; sw = x2-ix;} else {sx = x2; sw = ix-x2;}
+    if (iy < y2) {sy = iy; sh = y2-iy;} else {sy = y2; sh = iy-y2;}
+    make_current();
+    fl_overlay_rect(sx,sy,sw,sh);
+    return 1;
+  case FL_RELEASE:
+    if (button == 1) {
+      erase_box();
+      if (dragged && sw > 3 && sh > 3) {
+	X = X + (sx+sw/2-W/2)*scale/W;
+	Y = Y + (-sy-sh/2+H/2)*scale/W;
+	scale = sw*scale/W;
+      } else if (!dragged) {
+	scale = 2*scale;
+	if (julia) {
+	  if (scale >= 4) {
+	    scale = 4;
+	    X = Y = 0;
+	  }
+	} else {
+	  if (scale >= 2.5) {
+	    scale = 2.5;
+	    X = -.75;
+	    Y = 0;
+	  }
+	}
+      } else return 1;
+      ((Drawing_Window*)(user_data()))->update_label();
+      new_display();
+    } else if (!julia) {
       if (!jbrot.d) {
 	jbrot.make_window();
 	jbrot.d->julia = 1;
@@ -140,44 +171,14 @@ int Drawing_Area::handle(int event) {
 	jbrot.d->scale = 4;
 	jbrot.update_label();
       }
-      jbrot.d->jX = X + (x2-W/2)*scale/W;
-      jbrot.d->jY = Y + (H/2-y2)*scale/W;
-      static char buffer[128];
-      sprintf(buffer, "Julia %.7f %.7f",jbrot.d->jX,jbrot.d->jY);
-      jbrot.window->label(buffer);
+      jbrot.d->jX = X + (ix-W/2)*scale/W;
+      jbrot.d->jY = Y + (H/2-iy)*scale/W;
+      static char s[128];
+      sprintf(s, "Julia %.7f %.7f",jbrot.d->jX,jbrot.d->jY);
+      jbrot.window->label(s);
       jbrot.window->show();
       jbrot.d->new_display();
-      return 1;
     }
-    if (ix < x2) {sx = ix; sw = x2-ix;} else {sx = x2; sw = ix-x2;}
-    if (iy < y2) {sy = iy; sh = y2-iy;} else {sy = y2; sh = iy-y2;}
-    make_current();
-    fl_overlay_rect(sx,sy,sw,sh);
-    return 1;
-  case FL_RELEASE:
-    if (julia_picker) return 1;
-    erase_box();
-    if (dragged && sw > 3 && sh > 3) {
-      X = X + (sx+sw/2-W/2)*scale/W;
-      Y = Y + (-sy-sh/2+H/2)*scale/W;
-      scale = sw*scale/W;
-    } else if (!dragged) {
-      scale = 2*scale;
-      if (julia) {
-	if (scale >= 4) {
-	  scale = 4;
-	  X = Y = 0;
-	}
-      } else {
-	if (scale >= 2.5) {
-	  scale = 2.5;
-	  X = -.75;
-	  Y = 0;
-	}
-      }
-    } else return 1;
-    ((Drawing_Window*)(user_data()))->update_label();
-    new_display();
     return 1;
   }
   return 0;
@@ -188,17 +189,17 @@ void Drawing_Area::new_display() {
   set_idle();
 }
 
+#include <fltk/layout.h> // added for fltk2.0
+
 void Drawing_Area::layout() {
-  int W = w()-box()->dw();
-  int H = h()-box()->dh();
-  if (this->W != W || this->H != H) {
-    this->W = W;
-    this->H = H;
+  if (layout_damage()&fltk::LAYOUT_WH) {
+    W = w()-6;
+    H = h()-8;
     if (buffer) {delete[] buffer; buffer = 0; new_display();}
   }
-  Fl_Widget::layout();
+  Fl_Box::layout();
 }
 
 //
-// End of "$Id: mandelbrot.cxx,v 1.14 2002/12/10 02:01:05 easysw Exp $".
+// End of "$Id: mandelbrot.cxx,v 1.15 2004/01/06 06:43:03 spitzak Exp $".
 //

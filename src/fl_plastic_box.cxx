@@ -1,5 +1,5 @@
 //
-// "$Id: fl_plastic_box.cxx,v 1.5 2003/11/04 08:11:04 spitzak Exp $"
+// "$Id: fl_plastic_box.cxx,v 1.6 2004/01/06 06:43:02 spitzak Exp $"
 //
 // "Plastic" drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -150,13 +150,19 @@ void PlasticBox::_draw(int x, int y, int w, int h, const Style* style, Flags f) 
 }
 
 static PlasticBox plasticDownBox(0, "STUVWWWVT");
+/*! \ingroup boxes
+  Pushed in version of PLASTIC_UP_BOX
+*/
 Box* const fltk::PLASTIC_DOWN_BOX = &plasticDownBox;
 static PlasticBox plasticUpBox(0, "TXSPPQQRSSTTUVS", &plasticDownBox);
+/*! \ingroup boxes
+  Box designed to vaguely resemble a certain fruit-themed operating system.
+*/
 Box* const fltk::PLASTIC_UP_BOX = &plasticUpBox;
 
 // up_frame =  "MNFKKLNO"
 // down_frame = "LLRRTTLL"
 
 //
-// End of "$Id: fl_plastic_box.cxx,v 1.5 2003/11/04 08:11:04 spitzak Exp $".
+// End of "$Id: fl_plastic_box.cxx,v 1.6 2004/01/06 06:43:02 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.22 2003/12/16 18:27:18 spitzak Exp $"
+// "$Id: x.h,v 1.23 2004/01/06 06:43:02 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -72,7 +72,7 @@
 
 # undef Window
 
-#ifdef __APPLE__
+#ifdef __FreeBSD__
 typedef unsigned long	ulong;
 typedef unsigned int	uint;
 typedef unsigned char	uchar;
@@ -185,7 +185,8 @@ class FL_API Drawable {
 #define fl_delete_offscreen(id) XFreePixmap(::fltk::xdisplay, id)
 
 ////////////////////////////////////////////////////////////////
-#ifdef fltk_Window_h // only include this if <fltk/Window.h> was included
+// only include this if <fltk/Window.h> was included:
+#if defined(fltk_Window_h) || defined(DOXYGEN)
 
 // When fltk tells X about a window, one of these objects is created.
 // Warning: this object is highly subject to change!  It's definition
@@ -224,5 +225,5 @@ Window* find(XWindow xid);
 #endif
 
 //
-// End of "$Id: x.h,v 1.22 2003/12/16 18:27:18 spitzak Exp $".
+// End of "$Id: x.h,v 1.23 2004/01/06 06:43:02 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_diamond_box.cxx,v 1.29 2003/12/13 11:06:53 spitzak Exp $"
+// "$Id: fl_diamond_box.cxx,v 1.30 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Diamond box code for the Fast Light Tool Kit (FLTK).
 //
@@ -90,10 +90,16 @@ void DiamondBox::_draw(int x, int y, int w, int h,
 }
 
 static DiamondBox diamondDownBox("diamond_down", "2WWMMPPAA");
+/*! \ingroup boxes
+  Diamond shape used to draw Motif-style checkboxes.
+*/
 Box* const fltk::DIAMOND_DOWN_BOX = &diamondDownBox;
 static DiamondBox diamondUpBox("diamond_up", "2AAWWMMTT", &diamondDownBox);
+/*! \ingroup boxes
+  Raised diamond shape used to draw Motif-style checkboxes.
+*/
 Box* const fltk::DIAMOND_UP_BOX = &diamondUpBox;
 
 //
-// End of "$Id: fl_diamond_box.cxx,v 1.29 2003/12/13 11:06:53 spitzak Exp $".
+// End of "$Id: fl_diamond_box.cxx,v 1.30 2004/01/06 06:43:02 spitzak Exp $".
 //

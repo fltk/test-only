@@ -1,5 +1,5 @@
 //
-// "$Id: fl_round_box.cxx,v 1.33 2003/12/13 11:06:53 spitzak Exp $"
+// "$Id: fl_round_box.cxx,v 1.34 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Round box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -110,10 +110,16 @@ void RoundBox::_draw(int x, int y, int w, int h,
 }
 
 static RoundBox roundDownBox("round_down", "WWMMPPAA");
+/*! \ingroup boxes
+  Inset oval or circle.
+*/
 Box* const fltk::ROUND_DOWN_BOX = &roundDownBox;
 static RoundBox roundUpBox("round_up", "AAWWMMTT", &roundDownBox);
+/*! \ingroup boxes
+  Raised oval or circle.
+*/
 Box* const fltk::ROUND_UP_BOX = &roundUpBox;
 
 //
-// End of "$Id: fl_round_box.cxx,v 1.33 2003/12/13 11:06:53 spitzak Exp $".
+// End of "$Id: fl_round_box.cxx,v 1.34 2004/01/06 06:43:02 spitzak Exp $".
 //

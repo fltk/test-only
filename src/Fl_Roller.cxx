@@ -1,7 +1,5 @@
 //
-// "$Id: Fl_Roller.cxx,v 1.35 2003/11/04 08:11:01 spitzak Exp $"
-//
-// Roller widget for the Fast Light Tool Kit (FLTK).
+// "$Id: Fl_Roller.cxx,v 1.36 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -32,6 +30,16 @@
 #include <fltk/draw.h>
 #include <fltk/math.h>
 using namespace fltk;
+
+/*! \class fltk::ThumbWheel
+
+  A control similar to SGI's Inventor toolkit, commonly used to move 3D
+  objects or control zoom.
+
+  \image html Fl_Roller.gif
+  Set type() to ThumbWheel::HORIZONTAL or ThumbWheel::VERTICAL (the default)
+  to change what direction it goes in.
+*/
 
 int ThumbWheel::handle(int event) {
   static int ipos;
@@ -163,5 +171,5 @@ ThumbWheel::ThumbWheel(int X,int Y,int W,int H,const char* L) : Valuator(X,Y,W,H
 }
 
 //
-// End of "$Id: Fl_Roller.cxx,v 1.35 2003/11/04 08:11:01 spitzak Exp $".
+// End of "$Id: Fl_Roller.cxx,v 1.36 2004/01/06 06:43:02 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.84 2003/12/15 03:03:13 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.85 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -227,13 +227,17 @@ void Input::draw(int X, int Y, int W, int H)
   const float leading = this->leading();
   int height = line_spacing(leading);
   float desc = line_ascent(leading);
+
+  Color background, textcolor;
+  style()->boxcolors(current_flags_highlight()|OUTPUT,background,textcolor);
+
   if (damage() & DAMAGE_ALL) {
     // draw and measure the inside label:
     if (label() && label()[0] && (!(flags()&15)||(flags()&ALIGN_INSIDE))) {
       fltk::setfont(labelfont(), labelsize());
       float width = getwidth(label());
       label_width = int(width+getwidth(":")+2.5);
-      setcolor(color());
+      setcolor(background);
       fillrect(X, Y, label_width, H);
       Color color = labelcolor();
       if (!active_r()) color = inactive(color);
@@ -248,7 +252,6 @@ void Input::draw(int X, int Y, int W, int H)
   }
   X += label_width; W -= label_width;
 
-  Color background = color();
   bool erase_cursor_only =
     this == ::erase_cursor_only &&
     !(damage() & (DAMAGE_ALL|DAMAGE_EXPOSE));
@@ -333,9 +336,6 @@ void Input::draw(int X, int Y, int W, int H)
 
   push_clip(X, Y, W, H);
 
-  Color textcolor = this->textcolor();
-  if (!active_r()) textcolor = inactive(textcolor);
-
   // I leave a small border on the edge which shrinks as the input field
   // gets smaller than 12:
   int xpos = W-9; if (xpos > 3) xpos = 3; else if (xpos < 1) xpos = 1;
@@ -392,9 +392,10 @@ void Input::draw(int X, int Y, int W, int H)
       int offset2;
       if (pp <= e) x2 = xpos+expandpos(p, pp, buf, &offset2);
       else offset2 = strlen(buf);
-      setcolor(selection_color());
+      Color bg, fg; style()->boxcolors(OUTPUT|SELECTED, bg, fg);
+      setcolor(bg);
       int xx = int(x1); fillrect(xx, Y+ypos, int(x2+.5)-xx, height);
-      setcolor(selection_textcolor());
+      setcolor(fg);
       drawtext(buf+offset1, offset2-offset1, x1, Y+ypos+desc);
       // draw unselected text after the selection:
       if (pp < e) {
@@ -1594,5 +1595,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.84 2003/12/15 03:03:13 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.85 2004/01/06 06:43:02 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: HorizontalFillSlider.h,v 1.3 2003/04/20 03:17:47 easysw Exp $"
+// "$Id: HorizontalFillSlider.h,v 1.4 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Horizontal slider with a solid bar, like a progress report bar
 //
@@ -25,14 +25,15 @@
 #ifndef fltk_HorizontalFillSlider_h
 #define fltk_HorizontalFillSlider_h
 
-#include "Slider.h"
+#include "FillSlider.h"
 
 namespace fltk {
 
-class FL_API HorizontalFillSlider : public Slider {
+/*! Slider that is filled from the end (like a progress bar) */
+class FL_API HorizontalFillSlider : public FillSlider {
 public:
     HorizontalFillSlider(int x,int y,int w,int h,const char *l=0)
-      : Slider(x,y,w,h,l) {type(HORIZONTAL); slider_size(0);}
+      : FillSlider(x,y,w,h,l) {type(HORIZONTAL);}
 };
 
 }
@@ -40,5 +41,5 @@ public:
 #endif
 
 //
-// End of "$Id: HorizontalFillSlider.h,v 1.3 2003/04/20 03:17:47 easysw Exp $".
+// End of "$Id: HorizontalFillSlider.h,v 1.4 2004/01/06 06:43:02 spitzak Exp $".
 //

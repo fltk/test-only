@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.27 2003/03/26 22:05:25 easysw Exp $"
+// "$Id: checkers.cxx,v 1.28 2004/01/06 06:43:03 spitzak Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -138,7 +138,7 @@ int nodes;		// count of nodes
 
 */
 
-typedef char piece;
+typedef unsigned char piece;
 
 // Piece values so that BLACK and WHITE are bit flags:
 enum {
@@ -1376,5 +1376,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.27 2003/03/26 22:05:25 easysw Exp $".
+// End of "$Id: checkers.cxx,v 1.28 2004/01/06 06:43:03 spitzak Exp $".
 //

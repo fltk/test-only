@@ -1,9 +1,7 @@
 //
-// "$Id: Fl_Item.cxx,v 1.31 2003/11/04 08:10:59 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.32 2004/01/06 06:43:02 spitzak Exp $"
 //
-// Widget designed to be an item in a menu or browser.
-//
-// Copyright 1998-2000 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -32,24 +30,36 @@
 
 using namespace fltk;
 
-// Style used to draw menu items.  This controls the font and label color,
-// how the toggle/radio buttons are drawn, and other "contents" of the
-// menu item that can also be drawn into a browser, even though the
-// browser has different selection drawing rules.  The background color,
-// selected color and box drawn around selected items is controlled
-// by the Menu style in PopupMenu.cxx.
+/*! \class fltk::Item
 
-static void revert(Style* s) {
-  //s->buttonbox = NO_BOX;
-  //s->color = GRAY75;
-  //s->box = DOWN_BOX;
-  // s->buttonbox = NO_BOX; // makes it look more like Windows
-  //s->buttoncolor = WHITE;
-  //s->glyph = CheckButton::default_glyph;
-}
-static NamedStyle style("Item", revert, &Item::default_style);
+  This widget is designed to be put into fltk::Menu and fltk::Browser widgets. 
+
+  Windows is unfortunatly inconsistent about how it draws menu and
+  browser items, so to duplicate this the draw() method assummes
+  the background has already been drawn by the caller. It does not
+  erase it, but draws the text atop it. More inconsistencies have
+  forced us to add the set_style() call so this may change...
+
+  The browser draws the focus dotted box and the hierarchy indicators,
+  and the shortcut key assigments in menus is drawn by the menu
+  code. You cannot turn these off or modify them, unfortunately I was
+  unable to get these into the child widgets and still replicate the
+  standard Windows UI appearance.
+
+  In a MultiBrowser, selected() indicates if the widget is
+  currently turned on in the browser.
+*/
+
+static NamedStyle style("Item", 0, &Item::default_style);
+/*! The default style is entirely blank and interits from whatever
+  the parent is. Normally this is Widget::default_style, but if
+  you call set_style() it will be that style. */
 NamedStyle* Item::default_style = &::style;
 
+/*! Unlike other widgets the constructor does not take any dimensions,
+  since it is assummed the container widget will size this
+  correctly.
+*/
 Item::Item(const char* l) : Widget(0,0,0,0,l) {
   // we need to defer setting the glyph to here because C++ has no way
   // to make sure the check button style is constructed before this style:
@@ -118,16 +128,41 @@ void Item::layout() {
   Widget::layout();
 }
 
-// Items do not accept ANY events.
+/*! Returns 0 always. Items do not accept \e any events. Any results
+  of clicking on them is handled by the parent Menu or Browser. */
 int Item::handle(int) {return 0;}
 
 ////////////////////////////////////////////////////////////////
 
+/*! \class fltk::ItemGroup
+
+  This widget describes a set of items that are to be put inside a
+  fltk::Menu or fltk::Browser widget. It indicates the title of a
+  submenu, or a level of hierarchy in the browser. Any child widgets
+  are the items in that submenu, or the items under this parent in the
+  browser.
+
+  If this widget is told to draw, it draws just like fltk::Item
+  draws. See that for more details. The triangle indicating a submenu
+  is not drawn by this, it is drawn by the parent menu.
+
+  Because this is an fltk::Menu subclass, you can also call popup()
+  and add() and other methods to manipulate the items inside it.
+
+  In a Browser, the value() indicates if the widget is open or not. In
+  a MultiBrowser, the selected() indicates if the widget is currently
+  selected.
+
+*/
+
 #include <fltk/ItemGroup.h>
 #include <fltk/damage.h>
 
+/*! Unlike other widgets the constructor does not take any dimensions,
+  since it is assummed the container widget will size this
+  correctly. */
 ItemGroup::ItemGroup(const char* l) : Menu(0,0,0,0,l) {
-  style(::style);
+  style(Item::default_style);
   align(ALIGN_LEFT|ALIGN_INSIDE);
 }
 
@@ -146,8 +181,7 @@ void ItemGroup::layout() {
   if (w() && h()) return; // already at the correct size
   //int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
   setfont(textfont(), textsize());
-  int h; int w = 0; 
-  measure(label(), w, h, flags());
+  int w = 250, h = 250; measure(label(), w, h, flags());
   if (image()) {
     float W, H;
     image()->measure(W, H);
@@ -159,16 +193,25 @@ void ItemGroup::layout() {
   Widget::layout();
 }
 
-// Items do not accept ANY events.
+/*! Returns 0 always. Items do not accept \e any events. Any results
+  of clicking on them is handled by the parent Menu or Browser. */
 int ItemGroup::handle(int) {return 0;}
 
 ////////////////////////////////////////////////////////////////
-// Divider, does not share any code, but closely related:
+
+/*! \class fltk::Divider
+  This widget is designed to go into Menu and Browser widgets and draw
+  an inset horizontal line across them. It has the OUTPUT flag set
+  so the user cannot choose it.
+*/
 
 #include <fltk/Divider.h>
 
+/*! Unlike other widgets the constructor does not take any dimensions,
+  since it is assummed the container widget will size this
+  correctly. */
 Divider::Divider() : Widget(0,0,0,0) {
-  style(::style);
+  style(Item::default_style);
   set_flag(ALIGN_LEFT|ALIGN_INSIDE|OUTPUT);
 }
 
@@ -185,10 +228,12 @@ void Divider::draw() {
   }
 }
 
+/*! Resizes to a 2x2 square */
 void Divider::layout() {
   if (!w()) w(2);
   if (!h()) h(2);
 }
 
-// Items do not accept ANY events.
+/*! Returns 0 always. Items do not accept \e any events. Any results
+  of clicking on them is handled by the parent Menu or Browser. */
 int Divider::handle(int) {return 0;}

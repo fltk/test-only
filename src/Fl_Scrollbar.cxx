@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.67 2003/11/04 08:11:01 spitzak Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.68 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,13 +32,53 @@
 #include <stdlib.h>
 using namespace fltk;
 
+/*! \class fltk::Scrollbar
+
+  \image html scrollbar.gif
+
+  The Scrollbar widget displays a slider with arrow buttons at the
+  ends of the scrollbar. Clicking on the arrows move up/left and
+  down/right by linesize(). Scrollbars also accept fltk::SHORTCUT
+  events: the arrows move by linesize(), and vertical scrollbars take
+  Page Up/Down (they move by the page size minus linesize()) and
+  Home/End (they jump to the top or bottom).
+*/
+
 #define vertical() (!(type()&1))
 
+/*! \fn void Scrollbar::linesize(int)
+ This number controls how big the steps are that the arrow keys do. In
+ addition page up/down move by the size last sent to value() minus one
+ linesize(). The default is 16.
+*/
+
+/*! \fn void Scrollbar::pagesize(int)
+  How much the pageup/down keys and clicking in the empty area move by.
+  If you call value() this is set to 1 linesize() less than the window.
+*/
+
+/*! \fn int Scrollbar::value()
+  Return the current position of the scrollbar as an integer.
+
+  Scrollbars have step(1) preset (they always return integers). If
+  desired you can set the step() to non-integer values. You will then
+  have to use casts to get at the floating-point versions of value()
+  from the Slider baseclass.
+*/
+
+/*! Set the current position, the range, the pagesize, and the
+  slider_size() all at once in a useful way.
+
+  /a p = the position in the data of the first pixel in the window
+
+  /a w = the size of the window
+
+  /a t = the position of the top of your data (typically zero)
+
+  /a l = the total size of your data.
+
+*/
 int Scrollbar::value(int p, int w, int t, int l) {
-//	p = position, first line displayed
-//	w = window, number of lines displayed
-//	t = top, number of first line
-//	l = length, total number of lines
   if (p+w > t+l) l = p+w-t;
   if (l <= 0) l = 1;
   int b = l-w+t;
@@ -267,5 +307,5 @@ Scrollbar::Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.67 2003/11/04 08:11:01 spitzak Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.68 2004/01/06 06:43:02 spitzak Exp $".
 //

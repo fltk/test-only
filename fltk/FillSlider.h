@@ -1,9 +1,7 @@
 //
-// "$Id: FillSlider.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: FillSlider.h,v 1.3 2004/01/06 06:43:02 spitzak Exp $"
 //
-// Slider that is filled from the end (like a progress bar)
-//
-// Copyright 2002 by Bill Spitzak and others.
+// Copyright 2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -30,14 +28,17 @@
 
 namespace fltk {
 
+/*! Vertical Slider that is filled from the end (like a progress bar) */
 class FL_API FillSlider : public Slider {
 public:
   FillSlider(int x,int y,int w,int h,const char *l=0)
     : Slider(x,y,w,h,l) {slider_size(0);}
 };
 
+}
+
 #endif
 
 //
-// End of "$Id: FillSlider.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: FillSlider.h,v 1.3 2004/01/06 06:43:02 spitzak Exp $".
 //

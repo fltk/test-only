@@ -1,9 +1,5 @@
 //
-// "$Id: IntInput.h,v 1.3 2003/04/20 03:17:47 easysw Exp $"
-//
-// NumericInput modified to only allow integers to by typed. Currently
-// this is implemented by the base class by checking type() but this
-// may change in the future.
+// "$Id: IntInput.h,v 1.4 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -42,5 +38,5 @@ public:
 #endif
 
 //
-// End of "$Id: IntInput.h,v 1.3 2003/04/20 03:17:47 easysw Exp $".
+// End of "$Id: IntInput.h,v 1.4 2004/01/06 06:43:02 spitzak Exp $".
 //

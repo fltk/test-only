@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.80 2003/12/31 16:30:58 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.81 2004/01/06 06:43:02 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -1356,12 +1356,6 @@ Widget* Browser::goto_index(int a, int b, int c, int d, int e) {
   return goto_index(indexes,i);
 }
 
-/*! \fn Widget* Browser::item() const
-  This is in fact a method on the base fltk::Menu class. This returns
-  the widget that was jumped to by the last goto_index() or other
-  similar call.
-*/
-
 /*!  Sets the horizontal locations that each '\\t' character in an item
   should start printing text at. These are measured from the left edge
   of the browser, including any area for the open/close + glyphs.  */
@@ -1572,5 +1566,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.80 2003/12/31 16:30:58 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.81 2004/01/06 06:43:02 spitzak Exp $".
 //
