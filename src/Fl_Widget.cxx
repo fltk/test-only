@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.12 1999/05/06 05:52:22 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.13 1999/06/14 16:55:46 carl Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -154,7 +154,8 @@ extern void fl_throw_focus(Fl_Widget*); // in Fl_x.C
 // and automatic destructors may be called.
 Fl_Widget::~Fl_Widget() {
   if (_style && !_style->not_dynamic) delete _style;
-  parent_ = 0; // kludge to prevent ~Fl_Group from destroying again
+  if (parent_) ((Fl_Group*)parent_)->remove(this);
+//   parent_ = 0; // kludge to prevent ~Fl_Group from destroying again - done in remove()
   Fl_Tooltip::exit(this);
   fl_throw_focus(this);
 }
@@ -273,5 +274,5 @@ uchar Fl_Widget::labelsize() const { return attr(LABELSIZE); }
 Fl_Color Fl_Widget::color2() const {return selection_color();}
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.12 1999/05/06 05:52:22 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.13 1999/06/14 16:55:46 carl Exp $".
 //
