@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.H,v 1.1 2000/03/18 10:13:27 bill Exp $"
+// "$Id: Fl_Gl_Choice.H,v 1.3 2000/04/24 05:09:41 carl Exp $"
 //
 // OpenGL definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -81,5 +81,5 @@ void fl_no_gl_context();
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.H,v 1.1 2000/03/18 10:13:27 bill Exp $".
+// End of "$Id: Fl_Gl_Choice.H,v 1.3 2000/04/24 05:09:41 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Overlay.cxx,v 1.4 2000/04/07 17:10:05 bill Exp $"
+// "$Id: Fl_Gl_Overlay.cxx,v 1.5 2000/04/24 05:09:42 carl Exp $"
 //
 // OpenGL overlay code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Gl_Window.H>
 #include <FL/x.H>
-#include "Fl_Gl_Choice.H"
+#include <FL/Fl_Gl_Choice.H>
 #include <stdlib.h>
 
 #if HAVE_GL_OVERLAY
@@ -202,5 +202,5 @@ void Fl_Gl_Window::hide_overlay() {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Overlay.cxx,v 1.4 2000/04/07 17:10:05 bill Exp $".
+// End of "$Id: Fl_Gl_Overlay.cxx,v 1.5 2000/04/24 05:09:42 carl Exp $".
 //
