@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.37 2005/01/27 08:50:40 spitzak Exp $"
+// "$Id$"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -375,7 +375,7 @@ static void add_n_points(int n) {
 }
 
 // The path also contins one dummy pie/chord piece:
-static Rectangle circle;
+static fltk::Rectangle circle;
 static float circle_start, circle_end;
 enum {NONE=0, PIE, CHORD} circle_type;
 
@@ -922,5 +922,5 @@ void fltk::fillstrokepath(Color color) {
 /** \} */
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.37 2005/01/27 08:50:40 spitzak Exp $".
+// End of "$Id$".
 //
