@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.21 2000/02/14 11:33:02 bill Exp $"
+// "$Id: Alternative.cxx,v 1.22 2000/04/03 17:09:23 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -264,7 +264,7 @@ int fltk_theme(int, char**) {
 
   if ((s = Fl_Style::find("item"))) {
     s->glyph = alt_glyph;
-    s->glyph_box = FL_NO_BOX;
+    s->window_box = FL_NO_BOX;
   }
 
   if ((s = Fl_Style::find("menu button"))) {
@@ -273,7 +273,6 @@ int fltk_theme(int, char**) {
 
   if ((s = Fl_Style::find("choice"))) {
     s->glyph = choice_glyph;
-    s->glyph_box = FL_UP_BOX;
   }
 
   if ((s = Fl_Style::find("check button"))) {
@@ -303,5 +302,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.21 2000/02/14 11:33:02 bill Exp $".
+// End of "$Id: Alternative.cxx,v 1.22 2000/04/03 17:09:23 bill Exp $".
 //

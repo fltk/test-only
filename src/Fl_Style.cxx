@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.10 2000/01/10 06:31:24 bill Exp $"
+// "$Id: Fl_Style.cxx,v 1.11 2000/04/03 17:09:20 bill Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -33,16 +33,16 @@ Fl_Named_Style* Fl_Named_Style::first;
 // a known state initially.
 static void revert(Fl_Style* s) {
   s->box                   = FL_NORMAL_BOX;
-  s->glyph_box             = FL_NORMAL_BOX;
+  s->window_box            = FL_DOWN_BOX;
   s->glyph                 = fl_glyph;
   s->label_font            = FL_HELVETICA;
   s->text_font             = FL_HELVETICA;
   s->label_type            = FL_NORMAL_LABEL;
   s->color                 = FL_GRAY;
   s->label_color           = FL_BLACK;
-  s->selection_color       = FL_NO_COLOR;
-  s->selection_text_color  = FL_NO_COLOR;
-  s->off_color             = FL_GRAY;
+  s->selection_color	   = FL_BLUE_SELECTION_COLOR;
+  s->selection_text_color  = FL_WHITE;
+  s->window_color          = FL_LIGHT2;
   s->highlight_color       = FL_NO_COLOR;
   s->highlight_label_color = FL_NO_COLOR;
   s->text_color            = FL_BLACK;
@@ -95,7 +95,7 @@ void Fl_Widget::FIELD(TYPE v) {		\
 }
 
 style_functions(Fl_Boxtype,box);
-style_functions(Fl_Boxtype,glyph_box);
+style_functions(Fl_Boxtype,window_box);
 style_functions(Fl_Glyph,glyph);
 style_functions(Fl_Font,label_font);
 style_functions(Fl_Font,text_font);
@@ -104,7 +104,7 @@ style_functions(Fl_Color,color);
 style_functions(Fl_Color,label_color);
 style_functions(Fl_Color,selection_color);
 style_functions(Fl_Color,selection_text_color);
-style_functions(Fl_Color,off_color);
+style_functions(Fl_Color,window_color);
 style_functions(Fl_Color,highlight_color);
 style_functions(Fl_Color,highlight_label_color);
 style_functions(Fl_Color,text_color);
@@ -142,8 +142,6 @@ Fl_Style::Fl_Style() {
 }
 
 int Fl_Style::draw_boxes_inactive = 1;
-int Fl_Style::inactive_menu_hack = 0;
-double Fl_Style::inactive_color_weight = 0.33f;
 
 #include <ctype.h>
 Fl_Named_Style* Fl_Style::find(const char* name) {
@@ -165,5 +163,5 @@ Fl_Named_Style* Fl_Style::find(const char* name) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.10 2000/01/10 06:31:24 bill Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.11 2000/04/03 17:09:20 bill Exp $".
 //

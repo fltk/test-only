@@ -1,5 +1,5 @@
 //
-// "$Id: forms_compatability.cxx,v 1.5 2000/02/14 11:32:44 bill Exp $"
+// "$Id: forms_compatability.cxx,v 1.6 2000/04/03 17:09:17 bill Exp $"
 //
 // Forms compatibility functions for the Fast Light Tool Kit (FLTK).
 //
@@ -140,8 +140,9 @@ void fl_show_form(Fl_Window *f,int place,int b,const char *n) {
 // this is not yet implemented
 // it can be done by setting size_range().
 
-  if (place == FL_PLACE_FREE || place == FL_PLACE_SIZE)
-    f->free_position();
+  if (place == FL_PLACE_FREE || place == FL_PLACE_SIZE) {
+    f->x(FL_USEDEFAULT); f->y(FL_USEDEFAULT);
+  }
 
   if (place == FL_PLACE_FREE || place & FL_FREE_SIZE)
     if (!f->resizable()) f->resizable(f);
@@ -254,5 +255,5 @@ char *fl_show_simple_input(const char *str1, const char *defstr) {
 }
 
 //
-// End of "$Id: forms_compatability.cxx,v 1.5 2000/02/14 11:32:44 bill Exp $".
+// End of "$Id: forms_compatability.cxx,v 1.6 2000/04/03 17:09:17 bill Exp $".
 //

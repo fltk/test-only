@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.1 2000/03/03 18:59:12 carl Exp $"
+// "$Id: fl_windows.cxx,v 1.2 2000/04/03 17:09:24 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -139,8 +139,6 @@ my_counter_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
 
 int fl_windows() {
   Fl_Style::draw_boxes_inactive = 0;
-  Fl_Style::inactive_color_weight = 0.30f;
-  Fl_Style::inactive_menu_hack = 1;
 
   // More accurate copy of the colors on the edges of boxes, from Win98
   // Fltk by default uses colors picked by Bill for aestetic reasons:
@@ -156,51 +154,26 @@ int fl_windows() {
     s->leading = 6;
   }
 
-#if 0 // this is no longer necessary, it is the default
-  if ((s = Fl_Style::find("menu title"))) {
-    s->box = FL_HIGHLIGHT_BOX;
-    s->selection_color = 0;
-    s->selection_text_color = 0;
-  }
-#endif
-
   if ((s = Fl_Style::find("item"))) {
     s->glyph = windows_glyph;
-    s->glyph_box = FL_NO_BOX;
+    s->window_box = FL_NO_BOX; // no box around checkmarks
   }
 
   if ((s = Fl_Style::find("menu bar"))) {
     s->highlight_color = FL_GRAY; // needed for title highlighting
   }
 
-  if ((s = Fl_Style::find("input"))) {
-    s->box = FL_DOWN_BOX;
-  }
+  // this may be needed if fltk's default is the thin box:
+  Fl_Widget::default_style->window_box = FL_DOWN_BOX;
 
-  if ((s = Fl_Style::find("slider"))) {
-//    s->glyph_box = &win98_menu_window_box;
-    s->box = FL_DOWN_BOX;
-  }
-
-  if ((s = Fl_Style::find("value slider"))) {
-//    s->glyph_box = &win98_menu_window_box;
-    s->box = FL_DOWN_BOX;
-  }
-
+  // The default is white, but setting this will overwrite any
+  // value read from Windows, so I leave it as the slight gray we default to:
+  //Fl_Widget::default_style->window_color = FL_WHITE;
+  
   if ((s = Fl_Style::find("scrollbar"))) {
     s->glyph = windows_glyph;
-    s->glyph_box = &win98_menu_window_box;
-    s->color = 52;
-  }
-
-  if ((s = Fl_Style::find("output"))) {
-    s->color = FL_WHITE;
-    s->box = FL_DOWN_BOX;
-  }
-
-  if ((s = Fl_Style::find("counter"))) {
-    s->color = FL_WHITE;
-    s->box = FL_DOWN_BOX;
+    s->box = &win98_menu_window_box;
+    s->window_color = 52;
   }
 
   if ((s = Fl_Style::find("highlight button"))) {
@@ -234,5 +207,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.1 2000/03/03 18:59:12 carl Exp $"
+// End of "$Id: fl_windows.cxx,v 1.2 2000/04/03 17:09:24 bill Exp $"
 //

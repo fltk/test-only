@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.cxx,v 1.22 2000/02/14 11:32:56 bill Exp $"
+// "$Id: Fl_Value_Slider.cxx,v 1.23 2000/04/03 17:09:21 bill Exp $"
 //
 // Value slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -38,15 +38,17 @@ void Fl_Value_Slider::draw() {
   }
   Fl_Flags f = active_r() ? FL_NO_FLAGS : FL_INACTIVE;
   if (damage()&(~FL_DAMAGE_HIGHLIGHT))
-    box()->draw(sxx, syy, sww, shh, color(), f|FL_FRAME_ONLY);
+    window_box()->draw(sxx, syy, sww, shh, window_color(), f|FL_FRAME_ONLY);
   if (!active_r()) f = FL_INACTIVE;
   else if (belowmouse() && highlight_color()) f = FL_HIGHLIGHT;
   else f = 0;
-  box()->inset(sxx, syy, sww, shh);
+  window_box()->inset(sxx, syy, sww, shh);
   Fl_Slider::draw(sxx, syy, sww, shh, f);
   if (damage()&(~FL_DAMAGE_HIGHLIGHT)) {
-    Fl_Output::default_style->box->draw(bxx, byy, bww, bhh,
-         fl_inactive(Fl_Output::default_style->color, f), f);
+    const Fl_Style* saved = style();
+    style(Fl_Output::default_style);
+    window_box()->draw(bxx, byy, bww, bhh, window_color(), f);
+    style(saved);
     char buf[128];
     format(buf);
     fl_font(text_font(), text_size());
@@ -62,14 +64,13 @@ int Fl_Value_Slider::handle(int event) {
   } else {
     syy += 25; shh -= 25;
   }
-  box()->inset(sxx, syy, sww, shh);
+  window_box()->inset(sxx, syy, sww, shh);
   if (event == FL_PUSH) take_focus();
   return Fl_Slider::handle(event, sxx, syy, sww, shh);
 }
 
 static void revert(Fl_Style* s) {
-  s->box = FL_THIN_DOWN_BOX;
-  s->color = FL_DARK2;
+  s->window_color = FL_DARK2;
   s->text_size = 10;
 }
 
@@ -82,5 +83,5 @@ Fl_Value_Slider::Fl_Value_Slider(int x, int y, int w, int h, const char*l)
 }
 
 //
-// End of "$Id: Fl_Value_Slider.cxx,v 1.22 2000/02/14 11:32:56 bill Exp $".
+// End of "$Id: Fl_Value_Slider.cxx,v 1.23 2000/04/03 17:09:21 bill Exp $".
 //

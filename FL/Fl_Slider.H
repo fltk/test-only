@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.H,v 1.24 2000/01/10 06:31:03 bill Exp $"
+// "$Id: Fl_Slider.H,v 1.25 2000/04/03 17:09:12 bill Exp $"
 //
 // Slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -50,8 +50,8 @@ public:
   void slider_size(int n) {slider_size_ = n;}
 #ifndef FLTK_2
   // back comptability:
-  Fl_Boxtype slider() const {return FL_UP_BOX;}
-  void slider(Fl_Boxtype b) {glyph_box(b);}
+  Fl_Boxtype slider() const {return box();}
+  void slider(Fl_Boxtype b) {box(b);}
   void slider_size(double v) {slider_size(int(v*w()));}
 #endif
 
@@ -71,5 +71,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Slider.H,v 1.24 2000/01/10 06:31:03 bill Exp $".
+// End of "$Id: Fl_Slider.H,v 1.25 2000/04/03 17:09:12 bill Exp $".
 //

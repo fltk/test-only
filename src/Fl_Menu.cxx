@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.82 2000/03/20 08:40:23 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.83 2000/04/03 17:09:19 bill Exp $"
 //
 // Implementation of the Fl_Menu_ class, which includes most of the
 // code needed to do popup menus and menubars.
@@ -42,13 +42,11 @@
 // Styles used by parts of the menu:
 
 // The style used by the actual pull-down windows created for menus.
-// The glyph_box is used to draw the box around an item!
+// The window_box is used to draw the box around an item!
 
 static void mw_revert(Fl_Style* s) {
   s->box = FL_UP_BOX;
-  s->glyph_box = FL_FLAT_BOX;
-  s->selection_color = FL_BLUE_SELECTION_COLOR;
-  s->selection_text_color = FL_WHITE;
+  s->window_box = FL_FLAT_BOX;
   s->leading = 4;
 }
 
@@ -62,11 +60,11 @@ static void mt_revert(Fl_Style* s) {
 #if 0
   // NT 4.0 style
   s->box = FL_FLAT_BOX;
-  s->selection_color = FL_BLUE_SELECTION_COLOR;
-  s->selection_text_color = FL_WHITE;
 #else
   // Windows98 style:
   s->box = FL_HIGHLIGHT_BOX;
+  s->selection_color = FL_GRAY;
+  s->selection_text_color = FL_BLACK;
 #endif
 }
 
@@ -96,11 +94,8 @@ MenuTitle::MenuTitle(int X, int Y, int W, int H, Fl_Widget* L) :
 }
 
 void MenuTitle::draw() {
-  Fl_Color bgcolor = color();
-  Fl_Color label_color = item->label_color();
-  Fl_Color c;
-  c = selection_color(); if (c) bgcolor = c;
-  c = selection_text_color(); if (c) label_color = c;
+  Fl_Color bgcolor = selection_color();
+  Fl_Color label_color = selection_text_color();
   box()->draw(0, 0, w(), h(), bgcolor, FL_VALUE);
   // this allow a toggle or other widget to preview it's state:
   if (Fl::pushed()) Fl::pushed_ = item;
@@ -119,7 +114,7 @@ class MenuWindow : public Fl_Menu_Window {
   void draw();
 public:
   int which_item;	// which item in parent's menu this is
-  int real_leading;	// includes the size of the glyph_box()+leading()
+  int real_leading;	// includes the size of the window_box()+leading()
   MenuTitle* title;
   int handle(int);
   int is_menubar;
@@ -166,7 +161,7 @@ MenuWindow::MenuWindow(Fl_Group* m, int X, int Y, int Wp, int Hp,
       Wp = Hp = 0;
   }
 
-  int dx=0; int dy=0; int dw=0; int dh=0; glyph_box()->inset(dx,dy,dw,dh);
+  int dx=0; int dy=0; int dw=0; int dh=0; window_box()->inset(dx,dy,dw,dh);
   real_leading = leading()-dh;
 
   int Wtitle = 0;
@@ -261,16 +256,15 @@ void MenuWindow::draw() {
       Fl_Color label_color = o->label_color();
       if (i == selected && !(flags & FL_OUTPUT)) {
 	flags |= FL_VALUE;
-	Fl_Color c;
-	c = selection_color(); if (c) bgcolor = c;
-	c = selection_text_color(); if (c) label_color = c;
+	bgcolor = selection_color();
+	label_color = selection_text_color();
 	// this allow a toggle or other widget to preview it's state:
 	if (Fl::pushed() && o->takesevents()) Fl::pushed_ = o;
       }
 
       int X = x; int Y = y; int W = w; int H = o->h()+real_leading;
-      glyph_box()->draw(X, Y, W, H, bgcolor, flags);
-      glyph_box()->inset(X, Y, W, H);
+      window_box()->draw(X, Y, W, H, bgcolor, flags);
+      window_box()->inset(X, Y, W, H);
       o->x(X);
       o->y(Y+leading()/2);
       int save_w = o->w(); o->w(W);
@@ -805,5 +799,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.82 2000/03/20 08:40:23 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.83 2000/04/03 17:09:19 bill Exp $".
 //

@@ -169,40 +169,42 @@ either widget may be destroyed without deleting the style used by the
 other one.
 
 <h4>Fl_Boxtype Fl_Widget::box();<br>
+Fl_Boxtype Fl_Widget::window_box();<br>
 Fl_Glyph Fl_Widget::glyph();<br>
 Fl_Font Fl_Widget::label_font();<br>
 Fl_Font Fl_Widget::text_font();<br>
 Fl_Labeltype Fl_Widget::label_type();<br>
 Fl_Color Fl_Widget::color();<br>
 Fl_Color Fl_Widget::label_color();<br>
-Fl_Color Fl_Widget::selection_color();<br>
-Fl_Color Fl_Widget::selection_text_color();<br>
-Fl_Color Fl_Widget::down_color();<br>
-Fl_Color Fl_Widget::up_color();<br>
 Fl_Color Fl_Widget::highlight_color();<br>
 Fl_Color Fl_Widget::highlight_label_color();<br>
+Fl_Color Fl_Widget::window_color();<br>
 Fl_Color Fl_Widget::text_color();<br>
+Fl_Color Fl_Widget::selection_color();<br>
+Fl_Color Fl_Widget::selection_text_color();<br>
 unsigned Fl_Widget::label_size();<br>
-unsigned Fl_Widget::text_size();</h4>
+unsigned Fl_Widget::text_size();<br>
+unsigned Fl_Widget::leading();</h4>
 
 Return the given field out of the <a href=#style>style()</a>.
 
 <h4>void Fl_Widget::box(Fl_Boxtype);<br>
+void Fl_Widget::window_box(Fl_Boxtype);<br>
 void Fl_Widget::glyph(Fl_Glyph);<br>
 void Fl_Widget::label_font(Fl_Font);<br>
 void Fl_Widget::text_font(Fl_Font);<br>
 void Fl_Widget::label_type(Fl_Labeltype);<br>
 void Fl_Widget::color(Fl_Color);<br>
 void Fl_Widget::label_color(Fl_Color);<br>
-void Fl_Widget::selection_color(Fl_Color);<br>
-void Fl_Widget::selection_text_color(Fl_Color);<br>
-void Fl_Widget::down_color(Fl_Color);<br>
-void Fl_Widget::up_color(Fl_Color);<br>
 void Fl_Widget::highlight_color(Fl_Color);<br>
 void Fl_Widget::highlight_label_color(Fl_Color);<br>
+void Fl_Widget::window_color(Fl_Color);<br>
 void Fl_Widget::text_color(Fl_Color);<br>
+void Fl_Widget::selection_color(Fl_Color);<br>
+void Fl_Widget::selection_text_color(Fl_Color);<br>
 void Fl_Widget::label_size(unsigned);<br>
-void Fl_Widget::text_size(unsigned);</h4>
+void Fl_Widget::text_size(unsigned);<br>
+void Fl_Widget::leading(unsigned);</h4>
 
 These all create a writable <a href=Fl_Style.html>Fl_Style</a> with <a
 href=#wstyle>wstyle()</a> and set the given field in it.

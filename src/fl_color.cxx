@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.19 2000/01/10 06:31:26 bill Exp $"
+// "$Id: fl_color.cxx,v 1.20 2000/04/03 17:09:21 bill Exp $"
 //
 // Color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -300,7 +300,7 @@ Fl_Color fl_color_average(Fl_Color color1, Fl_Color color2, double weight) {
 }
 
 Fl_Color fl_inactive(Fl_Color c) {
-  return fl_color_average(c, FL_GRAY, Fl_Style::inactive_color_weight);
+  return fl_color_average(c, FL_GRAY, 0.30);
 }
 
 Fl_Color fl_inactive(Fl_Color c, Fl_Flags f) {
@@ -320,5 +320,5 @@ Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg) {
 }
 
 //
-// End of "$Id: fl_color.cxx,v 1.19 2000/01/10 06:31:26 bill Exp $".
+// End of "$Id: fl_color.cxx,v 1.20 2000/04/03 17:09:21 bill Exp $".
 //

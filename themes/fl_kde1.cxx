@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1.cxx,v 1.2 2000/03/03 21:21:45 carl Exp $"
+// "$Id: fl_kde1.cxx,v 1.3 2000/04/03 17:09:24 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -148,63 +148,28 @@ int fl_kde1(int co) {
     if (font && fontitalic) font = font->italic;
   }
 
-  Fl_Widget::default_style->highlight_color = 0; // turn off widget highlighting
+  // turn off highlighting:
+  Fl_Widget::default_style->highlight_color = 0;
+  Fl_Widget::default_style->highlight_label_color = 0;
 
-  Fl_Style* style;
-  if (background) {
-    fl_background(background);
-    Fl_Widget::default_style->off_color = background;
-  }
+  Fl_Style* style = Fl_Widget::default_style;
+  if (background) fl_background(background);
 
   if (foreground) {
-    Fl_Widget::default_style->label_color = foreground;
-    Fl_Widget::default_style->highlight_label_color = foreground;
-    Fl_Widget::default_style->text_color = foreground;
-    Fl_Widget::default_style->selection_text_color = foreground;
+    style->label_color = foreground;
+    style->text_color = foreground;
+    style->selection_text_color = foreground;
   }
 
-  if ((style = Fl_Style::find("input"))) {
-    if (foreground) style->off_color = foreground;
-    if (window_background) style->color = window_background;
-    if (select_background) style->selection_color = select_background;
-    if (select_foreground) style->selection_text_color = select_foreground;
-  }
+  if (window_background) style->window_color = window_background;
 
-  if ((style = Fl_Style::find("output"))) {
-    if (window_background) style->color = window_background;
-    if (select_background) style->selection_color = select_background;
-    if (select_foreground) style->selection_text_color = select_foreground;
-  }
+  if (select_background) style->selection_color = select_background;
 
-  if ((style = Fl_Style::find("counter"))) {
-    if (window_background) style->color = window_background;
-  }
-
-  if ((style = Fl_Style::find("browser"))) {
-    if (window_background) style->color = window_background;
-    if (select_background) style->selection_color = select_background;
-    if (select_foreground) style->selection_text_color = select_foreground;
-  }
+  if (select_foreground) style->selection_text_color = select_foreground;
 
   if ((style = Fl_Style::find("check button"))) {
     // this should be only on round and not check...
     if (foreground) style->selection_color = foreground;
-    if (window_background) style->off_color = window_background;
-  }
-
-  if ((style = Fl_Style::find("menu"))) {
-    if (select_background) style->selection_color = select_background;
-    if (select_foreground) style->selection_text_color = select_foreground;
-  }
-
-  if ((style = Fl_Style::find("menu title"))) {
-    if (select_background) style->selection_color = background;
-    if (select_foreground) style->selection_text_color = foreground;
-  }
-
-  if ((style = Fl_Style::find("menu bar"))) {
-    if (select_background) style->highlight_color = background;
-    if (select_foreground) style->highlight_label_color = foreground;
   }
 
 // Don't bother.  KDE gets it wrong.
@@ -243,10 +208,9 @@ int fl_kde1(int co) {
       }
       if ((style = Fl_Style::find("check button"))) {
 	style->selection_color = FL_DARK1;
-	style->off_color = background;
+	style->window_color = FL_GRAY;
       }
     } else {
-      Fl_Style::inactive_color_weight = 0.15f;
 
       if ((style = Fl_Style::find("menu"))) {
 	style->leading = 8;
@@ -254,7 +218,7 @@ int fl_kde1(int co) {
       }
 
       if ((style = Fl_Style::find("scrollbar"))) {
-	style->glyph_box = &kdewin_menu_window_box;
+	style->box = &kdewin_menu_window_box;
       }
     }
   }
@@ -269,5 +233,5 @@ int fl_kde1(int co) {
 }
 
 //
-// End of "$Id: fl_kde1.cxx,v 1.2 2000/03/03 21:21:45 carl Exp $".
+// End of "$Id: fl_kde1.cxx,v 1.3 2000/04/03 17:09:24 bill Exp $".
 //

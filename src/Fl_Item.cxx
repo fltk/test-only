@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.1 2000/02/14 11:32:52 bill Exp $"
+// "$Id: Fl_Item.cxx,v 1.2 2000/04/03 17:09:19 bill Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -37,8 +37,6 @@ extern char fl_draw_shortcut;
 
 static void mi_revert(Fl_Style* s) {
   s->box = FL_NO_BOX;
-  s->glyph_box = FL_DOWN_BOX;
-  s->off_color = FL_WHITE;
 }
 
 static Fl_Named_Style* style =
@@ -67,10 +65,10 @@ void Fl_Item::draw() {
     }
     glyph()(type()==FL_RADIO_ITEM ? FL_GLYPH_RADIO : FL_GLYPH_CHECK,
 	    x+3, y+(h-13)/2, 13, 13,
-	    off_color(),
-	    glyph_box()==FL_NO_BOX ? label_color : selection_color(),
+	    window_color(),
+	    window_box()==FL_NO_BOX ? label_color : selection_color(),
 	    lflags,
-	    glyph_box());
+	    window_box());
     x += 15; w -= 15;
   }
 

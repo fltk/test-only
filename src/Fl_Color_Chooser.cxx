@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.18 2000/02/14 11:32:48 bill Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.19 2000/04/03 17:09:18 bill Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -214,7 +214,7 @@ static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
 }
 
 void Flcc_HueBox::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_frame();
+  if (damage()&FL_DAMAGE_ALL) draw_window_frame();
   int x1 = x(); int y1 = y(); int w1 = w(); int h1 = h();
   box()->inset(x1,y1,w1,h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_clip(x1+px,y1+py,6,6);
@@ -271,7 +271,7 @@ static void generate_vimage(void* vv, int X, int Y, int W, uchar* buf) {
 }
 
 void Flcc_ValueBox::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_frame();
+  if (damage()&FL_DAMAGE_ALL) draw_window_frame();
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
   c->hsv2rgb(c->h(),c->s(),1.0,tr,tg,tb);
   int x1 = x(); int y1 = y(); int w1 = w(); int h1 = h();
@@ -339,8 +339,6 @@ Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
   hue_ = 0.0;
   saturation_ = 0.0;
   value_ = 0.0;
-  huebox.box(FL_DOWN_BOX);
-  valuebox.box(FL_DOWN_BOX);
   set_valuators();
   rvalue.callback(rgb_cb);
   gvalue.callback(rgb_cb);
@@ -506,5 +504,5 @@ int fl_color_chooser(const char* name, Fl_Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.18 2000/02/14 11:32:48 bill Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.19 2000/04/03 17:09:18 bill Exp $".
 //

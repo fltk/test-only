@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_theme.cxx,v 1.6 2000/02/18 08:39:19 bill Exp $"
+// "$Id: Fl_theme.cxx,v 1.7 2000/04/03 17:09:21 bill Exp $"
 //
 // Theme loading code for the Fast Light Tool Kit (FLTK).
 //
@@ -164,8 +164,6 @@ int Fl::reloadtheme() {
   fl_up_box.data = fl_up_box_revert;
   fl_down_box.data = fl_down_box_revert;
   Fl_Style::draw_boxes_inactive = 1;
-  Fl_Style::inactive_menu_hack = 0;
-  Fl_Style::inactive_color_weight = 0.33f;
 
   // revert all the styles:
   for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
@@ -216,6 +214,6 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: Fl_theme.cxx,v 1.6 2000/02/18 08:39:19 bill Exp $".
+// End of "$Id: Fl_theme.cxx,v 1.7 2000/04/03 17:09:21 bill Exp $".
 //
 

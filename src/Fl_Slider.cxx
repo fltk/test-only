@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.39 2000/03/17 09:50:08 bill Exp $"
+// "$Id: Fl_Slider.cxx,v 1.40 2000/04/03 17:09:20 bill Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,7 @@
 // Draw the background behind the slider, draw() calls this more than
 // once with different clipping so the slider does not blink:
 void Fl_Slider::draw_bg(int x, int y, int w, int h, Fl_Flags f) {
-  fl_color(color());
+  fl_color(window_color());
   fl_rectf(x, y, w, h);
   if (type() == FL_VERT_NICE_SLIDER) {
     FL_THIN_DOWN_BOX->draw(x+w/2-2, y, 4, h, fl_inactive(FL_BLACK, f), f);
@@ -63,6 +63,7 @@ int Fl_Slider::slider_size(int W, int H) {
 int Fl_Slider::slider_position(int W, int S) {
   if (minimum() == maximum()) return 0;
   double val = (value()-minimum())/(maximum()-minimum());
+  if (!horizontal()) val = 1-val;
   if (val >= 1.0) return W-S;
   else if (val <= 0.0) return 0;
   else return int(val*(W-S)+.5);
@@ -75,7 +76,7 @@ void Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags f) {
   int X,S;
   if (type()==FL_HOR_FILL_SLIDER || type() == FL_VERT_FILL_SLIDER) {
     S = slider_position(W, 0);
-    if (minimum()>maximum()) {S = W-S; X = W-S;}
+    if (!(minimum()>maximum()) == !horizontal()) {S = W-S; X = W-S;}
     else X = 0;
   } else {
     S = slider_size(W, horizontal() ? h : w);
@@ -92,15 +93,14 @@ void Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags f) {
     else draw_bg(x, y+X+S, w, h-X-S, f);
   }
 
-  // For compatability reasons the color is used for the background under
-  // the slider and the selection_color is used for the slider itself.
-  // It would be much better to use other arrangements, such as the
-  // color for the slider, the off_color for the background, and the
-  // selection_color for the handle of the nice-slider.
+  // Fltk 2.0 is incompatable with the use of color:
+  // use:			1.0:		2.0:
+  // background behind slider	color		window_color
+  // normal slider, arrows	selection_color	color
+  // nice slider slider		FL_GRAY		color
+  // nice slider color mark	selection_color	selection_color
 
-  Fl_Color bc = selection_color();
-  if (!bc || type() == FL_VERT_NICE_SLIDER || type() == FL_HOR_NICE_SLIDER)
-    bc = off_color();
+  Fl_Color bc = color();
   Fl_Color fc = selection_color();
 
   if (!active_r()) {
@@ -113,21 +113,21 @@ void Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags f) {
     if (type() == FL_HOR_NICE_SLIDER) g = FL_GLYPH_HNSLIDER;
     else if (type() == FL_HOR_FILL_SLIDER) g = 0;
     else g = FL_GLYPH_HSLIDER;
-    glyph()(g, x+X, y, S, h, bc, fc, f, glyph_box());
+    glyph()(g, x+X, y, S, h, bc, fc, f, box());
     draw_button_label(x+X, y, S, h, label_color());
   } else {
     int g;
     if (type() == FL_VERT_NICE_SLIDER) g = FL_GLYPH_VNSLIDER;
     else if (type() == FL_VERT_FILL_SLIDER) g = 0;
     else g = FL_GLYPH_VSLIDER;
-    glyph()(g, x, y+X, w, S, bc, fc, f, glyph_box());
+    glyph()(g, x, y+X, w, S, bc, fc, f, box());
     draw_button_label(x, y+X, w, S, label_color());
   }
 }
 
 void Fl_Slider::draw() {
-  if (damage()&(~FL_DAMAGE_HIGHLIGHT)) draw_frame();
-  int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
+  if (damage()&(~FL_DAMAGE_HIGHLIGHT)) draw_window_frame();
+  int X=x(); int Y=y(); int W=w(); int H=h(); window_box()->inset(X,Y,W,H);
   Fl_Flags f = 0;
   if (belowmouse()) f = FL_HIGHLIGHT;
   draw(X,Y,W,H, f);
@@ -175,6 +175,7 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
       X = W-S;
       offcenter = mx-X; if (offcenter > S) offcenter = S;
     }
+    if (!horizontal()) X = (W-S)-X;
     v = round(X*(maximum()-minimum())/(W-S) + minimum());
     // make sure a click outside the sliderbar moves it:
     if (event == FL_PUSH && v == value()) {
@@ -188,40 +189,32 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
     damage(FL_DAMAGE_EXPOSE);
     handle_release();
     return 1;
-  case FL_KEYBOARD: {
-    // Only arrows in the correct direction are used.  Also the up/down
-    // keystrokes are reversed from the default for Fl_Valuator.
-    // This is due to back-compatability with scrollbars.
-    int i = linesize();
-    if (Fl::event_state()&(FL_SHIFT|FL_CTRL|FL_ALT)) i = pagesize();
+  case FL_KEYBOARD:
+    // Only arrows in the correct direction are used.  This allows the
+    // opposite arrows to be used to navigate between a set of parellel
+    // sliders.
     switch (Fl::event_key()) {
-    case FL_Down: if (!horizontal()) goto UP; else return 0;
-    case FL_Left: if (horizontal()) goto DOWN; else return 0;
-    case FL_Up: if (!horizontal()) goto DOWN; else return 0;
-    case FL_Right: if (horizontal()) goto UP; else return 0;
-    case FL_BackSpace:
-    DOWN:
-      i = -i;
-    case ' ':
-    UP:
-      handle_drag(clamp(increment(value(), i)));
-      return 1;
-    }}
-    // else fall through to the default case:
+    case FL_Up:
+    case FL_Down:
+      if (horizontal()) return 0;
+      break;
+    case FL_Left:
+    case FL_Right:
+      if (!horizontal()) return 0;
+    }
   default:
     return Fl_Valuator::handle(event);
   }
 }
 
 int Fl_Slider::handle(int event) {
-  int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
+  int X=x(); int Y=y(); int W=w(); int H=h(); window_box()->inset(X,Y,W,H);
   if (event == FL_PUSH) take_focus();
   return handle(event,X,Y,W,H);
 }
 
 static void revert(Fl_Style *s) {
-  s->box = FL_THIN_DOWN_BOX;
-  s->color = FL_DARK2;
+  s->window_color = FL_DARK2;
 }
 
 static Fl_Named_Style* style = new Fl_Named_Style("Slider", revert, &style);
@@ -242,5 +235,5 @@ Fl_Slider::Fl_Slider(uchar t, int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.39 2000/03/17 09:50:08 bill Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.40 2000/04/03 17:09:20 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: classic.cxx,v 1.18 2000/02/14 11:33:02 bill Exp $"
+// "$Id: classic.cxx,v 1.19 2000/04/03 17:09:23 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -52,57 +52,44 @@ int fltk_theme(int, char**) {
 
   fl_up_box.data = always_up_box.data = "AAAAWUJJUTNN";
   fl_down_box.data = "NNTUJJUWAAAA";
-  Fl_Style* s;
-  if ((s = Fl_Style::find("menu_item"))) {
-    s->box = FL_FLAT_BOX;
-    s->selection_color = FL_WHITE;
-    s->selection_text_color = 0;
-    s->off_color = FL_GRAY;
-  }
-  if ((s = Fl_Style::find("menu_title"))) {
-    s->box = &menu_title_box;
-    s->selection_color = 0;
-    s->selection_text_color = 0;
-    s->off_color = FL_GRAY;
-  }
-  if ((s = Fl_Style::find("check_button"))) {
-    s->selection_color = FL_BLACK;
-    s->off_color = FL_GRAY;
-  }
+
   Fl_Widget::default_style->highlight_color = 0;
   Fl_Widget::default_style->label_size = 15;
   Fl_Widget::default_style->text_size = 15;
-  if ((s = Fl_Style::find("scrollbar"))) {
-    s->box = FL_FLAT_BOX;
+  Fl_Widget::default_style->window_box = FL_DOWN_BOX;
+  Fl_Widget::default_style->selection_color = FL_DARK2;
+  Fl_Widget::default_style->selection_text_color = 0;
+
+  Fl_Style* s;
+  if ((s = Fl_Style::find("menu"))) {
+    s->selection_color = FL_WHITE;
+    s->selection_text_color = 0;
+    s->window_color = FL_GRAY;
   }
-  if ((s = Fl_Style::find("slider"))) {
-    //s->box = FL_DOWN_BOX;
-    s->glyph_box = FL_UP_BOX;
+  if ((s = Fl_Style::find("item"))) {
+    s->selection_color = FL_BLACK;
   }
-  if ((s = Fl_Style::find("input"))) {
-    s->box = FL_DOWN_BOX;
-    s->selection_color = FL_DARK2;
-    s->selection_text_color = FL_BLACK;
+  if ((s = Fl_Style::find("menu_title"))) {
+    s->box = &menu_title_box;
+    s->selection_color = FL_GRAY;
+    s->window_color = FL_GRAY;
   }
-  if ((s = Fl_Style::find("browser"))) {
-    s->box = FL_DOWN_BOX;
-    s->selection_color = FL_DARK2;
-    s->selection_text_color = FL_BLACK;
+  if ((s = Fl_Style::find("check_button"))) {
+    s->selection_color = FL_BLACK;
+    //s->window_color = FL_GRAY;
   }
   if ((s = Fl_Style::find("output"))) {
-    s->box = FL_DOWN_BOX;
-    s->color = FL_GRAY;
-    s->selection_color = FL_DARK2;
-    s->selection_text_color = FL_BLACK;
+    s->window_color = FL_GRAY;
   }
   if ((s = Fl_Style::find("choice"))) {
-    s->box = FL_UP_BOX;
-    s->color = FL_GRAY;
+    s->window_color = FL_GRAY;
+    s->box = FL_NO_BOX;
+    s->window_box = FL_UP_BOX;
     s->glyph = choice_glyph;
   }
   return 0;
 }
 
 //
-// End of "$Id: classic.cxx,v 1.18 2000/02/14 11:33:02 bill Exp $".
+// End of "$Id: classic.cxx,v 1.19 2000/04/03 17:09:23 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Style.cxx,v 1.10 2000/01/10 06:31:22 bill Exp $"
+// "$Id: Fl_Input_Style.cxx,v 1.11 2000/04/03 17:09:19 bill Exp $"
 //
 // Style of Fl_Input for the Fast Light Tool Kit (FLTK).
 //
@@ -34,20 +34,12 @@
 #include <FL/Fl_Input.H>
 #include <FL/Fl_Output.H>
 
-static void revert(Fl_Style* s) {
-  s->box = FL_THIN_DOWN_BOX;
-  s->color = FL_WHITE;
-  s->selection_color = FL_BLUE_SELECTION_COLOR;
-  s->selection_text_color = FL_WHITE;
-  s->off_color = FL_BLACK; // used for cursor_color()
-}
-
 Fl_Named_Style* Fl_Input::default_style = 
-  new Fl_Named_Style("Input", revert, &Fl_Input::default_style);
+  new Fl_Named_Style("Input", 0, &Fl_Input::default_style);
 
 Fl_Named_Style* Fl_Output::default_style =
-  new Fl_Named_Style("Output", revert, &Fl_Input::default_style);
+  new Fl_Named_Style("Output", 0, &Fl_Input::default_style);
 
 //
-// End of "$Id: Fl_Input_Style.cxx,v 1.10 2000/01/10 06:31:22 bill Exp $".
+// End of "$Id: Fl_Input_Style.cxx,v 1.11 2000/04/03 17:09:19 bill Exp $".
 //

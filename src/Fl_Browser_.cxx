@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.43 2000/03/20 08:40:23 bill Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.44 2000/04/03 17:09:17 bill Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -66,7 +66,7 @@ int Fl_Browser_::scrollbar_width_ = 17;
 // return where to draw the actual box:
 void Fl_Browser_::bbox(int& X, int& Y, int& W, int& H) const {
   X = x(); Y = y(); W = w(); H = h();
-  box()->inset(X,Y,W,H);
+  window_box()->inset(X,Y,W,H);
   if (scrollbar.visible()) {
     W -= scrollbar_width_;
     if (scrollbar.flags() & FL_ALIGN_LEFT) X += scrollbar_width_;
@@ -232,7 +232,7 @@ void Fl_Browser_::display(void* x) {
 void Fl_Browser_::draw() {
   int drawsquare = 0;
   if (damage() & FL_DAMAGE_ALL) { // redraw the box if full redraw
-    draw_frame();
+    draw_window_frame();
     drawsquare = 1;
   }
 
@@ -293,7 +293,7 @@ J1:
 	fl_color(selection_color());
 	fl_rectf(X, yy+Y, W, hh);
       } else {
-	fl_color(color());
+	fl_color(window_color());
 	fl_rectf(X, yy+Y, W, hh);
       }
       if (l == focus_line) {
@@ -310,7 +310,7 @@ J1:
   }
   // erase the area below last line:
   if (yy < H) {
-    fl_color(color());
+    fl_color(window_color());
     fl_rectf(X, yy+Y, W, H-yy);
   }
   fl_pop_clip();
@@ -678,14 +678,7 @@ void Fl_Browser_::item_select(void*, int) {}
 
 int Fl_Browser_::item_selected(void* l) const {return l==selection_;}
 
-static void revert(Fl_Style* s) {
-  s->selection_color = FL_BLUE_SELECTION_COLOR;
-  s->selection_text_color = FL_WHITE;
-  s->box = FL_THIN_DOWN_BOX;
-  s->color = FL_LIGHT2;
-}
-
-static Fl_Named_Style* style = new Fl_Named_Style("Browser", revert, &style);
+static Fl_Named_Style* style = new Fl_Named_Style("Browser", 0, &style);
 
 Fl_Browser_::Fl_Browser_(int x, int y, int w, int h, const char* l)
   : Fl_Group(x, y, w, h, l),
@@ -713,5 +706,5 @@ Fl_Browser_::Fl_Browser_(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.43 2000/03/20 08:40:23 bill Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.44 2000/04/03 17:09:17 bill Exp $".
 //

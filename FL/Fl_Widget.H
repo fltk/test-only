@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.44 2000/02/14 11:32:36 bill Exp $"
+// "$Id: Fl_Widget.H,v 1.45 2000/04/03 17:09:12 bill Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -167,6 +167,8 @@ public:
 
   void	draw_box() const	;
   void	draw_frame() const	;
+  void	draw_window_box() const	;
+  void	draw_window_frame() const ;
   void	draw_label() const	;
   void	draw_label(Fl_Color) const;
   void	draw_glyph(int, int,int,int,int, Fl_Flags) const;
@@ -177,7 +179,7 @@ public:
   void	measure_label(int&, int&) const;
 
   Fl_Boxtype	box()			const;
-  Fl_Boxtype	glyph_box()		const;
+  Fl_Boxtype	window_box()		const;
   Fl_Glyph	glyph()			const;
   Fl_Font	label_font()		const;
   Fl_Font	text_font()		const;
@@ -186,7 +188,7 @@ public:
   Fl_Color	label_color()		const;
   Fl_Color	selection_color()	const;
   Fl_Color	selection_text_color()	const;
-  Fl_Color	off_color()		const;
+  Fl_Color	window_color()		const;
   Fl_Color	highlight_color()	const;
   Fl_Color	highlight_label_color()	const;
   Fl_Color	text_color()		const;
@@ -195,7 +197,7 @@ public:
   unsigned	leading()		const;
 
   void	box(Fl_Boxtype)		;
-  void	glyph_box(Fl_Boxtype)	;
+  void	window_box(Fl_Boxtype)	;
   void	glyph(Fl_Glyph)		;
   void	label_font(Fl_Font)	;
   void	text_font(Fl_Font)	;
@@ -204,7 +206,7 @@ public:
   void	label_color(Fl_Color)	;
   void	selection_color(Fl_Color);
   void	selection_text_color(Fl_Color);
-  void	off_color(Fl_Color)	;
+  void	window_color(Fl_Color)	;
   void	highlight_color(Fl_Color);
   void	highlight_label_color(Fl_Color);
   void	text_color(Fl_Color a)	;
@@ -216,12 +218,12 @@ public:
 
   Fl_Flags align() const	{return flags_;}
 
-  Fl_Boxtype	down_box()		const {return glyph_box();}
-  Fl_Boxtype	slider()		const {return glyph_box();}
-  Fl_Boxtype	box2()			const {return glyph_box();}
+  Fl_Boxtype	down_box()		const {return window_box();}
+  Fl_Boxtype	slider()		const {return box();}
+  Fl_Boxtype	box2()			const {return window_box();}
   Fl_Boxtype	fly_box()		const {return box();}
   Fl_Color	color2()		const {return selection_color();}
-  Fl_Color	color3()		const {return off_color();}
+  Fl_Color	color3()		const {return window_color();}
   Fl_Labeltype	labeltype()		const {return label_type();}
   Fl_Color	labelcolor()		const {return label_color();}
   Fl_Color	down_labelcolor()	const {return selection_text_color();}
@@ -232,12 +234,13 @@ public:
   unsigned	textsize()		const {return text_size();}
   Fl_Color	textcolor()		const {return text_color();}
   Fl_Color	selected_textcolor()	const {return selection_text_color();}
-  Fl_Color	cursor_color()		const {return off_color();}
+  Fl_Color	cursor_color()		const {return selection_color();}
 
-  void down_box(Fl_Boxtype a)           {glyph_box(a);}
-  void slider(Fl_Boxtype a)             {glyph_box(a);}
+  void down_box(Fl_Boxtype a)           {window_box(a);}
+  void slider(Fl_Boxtype a)             {box(a);}
   void fly_box(Fl_Boxtype)              {}
   void color2(Fl_Color a)               {selection_color(a);}
+  void color3(Fl_Color a)               {window_color(a);}
   void labeltype(Fl_Labeltype a)        {label_type(a);}
   void labelcolor(Fl_Color a)           {label_color(a);}
   void down_labelcolor(Fl_Color a)      {selection_text_color(a);}
@@ -250,7 +253,7 @@ public:
   void textsize(unsigned a)             {text_size(a);}
   void textcolor(Fl_Color a)            {text_color(a);}
   void selected_textcolor(Fl_Color a)   {selection_text_color(a);}
-  void cursor_color(Fl_Color a)         {off_color(a);}
+  void cursor_color(Fl_Color a)         {selection_color(a);}
 
 #endif
 
@@ -279,5 +282,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.44 2000/02/14 11:32:36 bill Exp $".
+// End of "$Id: Fl_Widget.H,v 1.45 2000/04/03 17:09:12 bill Exp $".
 //

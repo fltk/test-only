@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.31 2000/02/14 11:32:48 bill Exp $"
+// "$Id: Fl_Counter.cxx,v 1.32 2000/04/03 17:09:18 bill Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -73,7 +73,7 @@ void Fl_Counter::draw() {
   }
 
   Fl_Flags f = active_r() ? FL_NO_FLAGS : FL_INACTIVE;
-  box()->draw(xx[0], y(), ww[0], h(), fl_inactive(color(), f), f);
+  window_box()->draw(xx[0], y(), ww[0], h(), window_color(), f);
 
   char str[128]; format(str);
   fl_font(text_font(), text_size());
@@ -84,7 +84,7 @@ void Fl_Counter::draw() {
     fl_rectf(xx[0]+(ww[0]-w)/2,y()+(this->h()-h)/2,w,h);
     fl_color(selection_text_color());
   } else {
-	  fl_color(fl_inactive(text_color(), f));
+    fl_color(fl_inactive(text_color(), f));
   }
   fl_draw(str, xx[0], y(), ww[0], h(), FL_ALIGN_CENTER);
 
@@ -179,9 +179,7 @@ Fl_Counter::~Fl_Counter() {
   Fl::remove_timeout(repeat_callback, this);
 }
 
-static void revert(Fl_Style *s) {
-  s->box = FL_THIN_DOWN_BOX;
-  s->color = FL_LIGHT2;
+static void revert(Fl_Style* s) {
   s->glyph = glyph;
 }
 
@@ -198,5 +196,5 @@ Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(
 }
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.31 2000/02/14 11:32:48 bill Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.32 2000/04/03 17:09:18 bill Exp $".
 //

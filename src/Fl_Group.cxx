@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.62 2000/03/20 08:40:23 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.63 2000/04/03 17:09:18 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -175,56 +175,63 @@ int Fl_Group::handle_i(int event, int i_take_focus) {
     return 1;
 
   case FL_SHORTCUT: {
-    int key = navkey();
-    if (key) {
-      if (focused()) {
-	if (key == FL_Right || key == FL_Down)
-	  for (i = 0; i < numchildren; ++i) if (try_focus(this, i)) return 1;
-	return 0;
-      }
-      i = focus_;
-      if (i < 0 || i >= numchildren) return 0;
-      int previous = i;
-      Fl_Widget* o = child(i);
-      int old_x = o->x();
-      int old_r = o->x()+o->w();
-      for (;;) {
-	switch (key) {
-	case FL_Right:
-	case FL_Down:
-	  ++i;
-	  if (i >= children_) {
-	    if (parent()) return 0;
-	    i = 0;
-	  }
-	  break;
-	case FL_Left:
-	case FL_Up:
-	  if (i) --i;
-	  else {
-	    if (i_take_focus) {Fl::focus(this); focus_ = -1; return 1;}
-	    if (parent()) return 0;
-	    i = children_-1;
-	  }
-	  break;
-	default:
-	  return 0;
-	}
-	if (i == previous) return 0;
-	switch (key) {
-	case FL_Down:
-	case FL_Up:
-	  // for up/down, the widgets have to overlap horizontally:
-	  o = child(i);
-	  if (o->x() >= old_r || o->x()+o->w() <= old_x) continue;
-	}
-	if (try_focus(this, i)) return 1;
-      }
-    }
+    // see if any child widgets want the shortcut:
     for (i = 0; i < numchildren; ++i) {
       Fl_Widget* o = child(i);
       if (o->takesevents() && send(o,event)) return 1;
+      // if they have shortcut() and don't otherwise use it, give them focus:
       if (o->test_shortcut() && try_focus(this, i)) return 1;
+    }
+    // If we don't have focus we don't do any keyboard navigation:
+    if (!contains(Fl::focus())) return 0;
+
+    int key = navkey(); if (!key) return 0;
+
+    i = focus_;
+    // handle focus on the Fl_Tabs tabs:
+    if (focused() || i < 0 || i >= numchildren) {
+      if (key == FL_Right || key == FL_Down)
+	for (i = 0; i < numchildren; ++i) if (try_focus(this, i)) return 1;
+      return 0;
+    }
+
+    // loop from the current focus looking for a new focus, quit when
+    // we reach the original again:
+    int previous = i;
+    Fl_Widget* o = child(i);
+    int old_x = o->x();
+    int old_r = o->x()+o->w();
+    for (;;) {
+      switch (key) {
+      case FL_Right:
+      case FL_Down:
+	++i;
+	if (i >= children_) {
+	  if (parent()) return 0;
+	  i = 0;
+	}
+	break;
+      case FL_Left:
+      case FL_Up:
+	if (i) --i;
+	else {
+	  if (i_take_focus) {Fl::focus(this); focus_ = -1; return 1;}
+	  if (parent()) return 0;
+	  i = children_-1;
+	}
+	break;
+      default:
+	return 0;
+      }
+      if (i == previous) return 0;
+      switch (key) {
+      case FL_Down:
+      case FL_Up:
+	// for up/down, the widgets have to overlap horizontally:
+	o = child(i);
+	if (o->x() >= old_r || o->x()+o->w() <= old_x) continue;
+      }
+      if (try_focus(this, i)) return 1;
     }
     return 0;}
 
@@ -489,10 +496,15 @@ void Fl_Group::draw_n_clip()
 // Draw the box and possibly some of the parent's box so that this
 // fills a rectangle:
 void Fl_Group::draw_group_box() const {
-  if (!is_window() && !(box()->fills_rectangle() ||
-			image() && (flags()&FL_ALIGN_TILED) &&
-			(!(flags()&15) || (flags() & FL_ALIGN_INSIDE))))
-    parent()->draw_group_box();
+  if (!(box()->fills_rectangle() ||
+	image() && (flags()&FL_ALIGN_TILED) &&
+	(!(flags()&15) || (flags() & FL_ALIGN_INSIDE)))) {
+    if (parent()) parent()->draw_group_box();
+    else {
+      fl_color(color());	
+      fl_rectf(x(),y(),w(),h());
+    }
+  }
   draw_box();
   draw_label();
 }
@@ -549,5 +561,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.62 2000/03/20 08:40:23 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.63 2000/04/03 17:09:18 bill Exp $".
 //

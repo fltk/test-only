@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.H,v 1.13 1999/11/16 07:36:04 bill Exp $"
+// "$Id: Fl_Browser.H,v 1.14 2000/04/03 17:09:12 bill Exp $"
 //
 // Browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -112,10 +112,16 @@ public:
   // for back compatability only:
   void replace(int a, const char* b) {text(a, b);}
   void display(int, int=1);
+#ifndef FLTK_2
+  Fl_Boxtype box() const {return window_box();}
+  void box(Fl_Boxtype b) {window_box(b);}
+  Fl_Color color() const {return window_color();}
+  void color(Fl_Color c) {window_color(c);}
+#endif
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Browser.H,v 1.13 1999/11/16 07:36:04 bill Exp $".
+// End of "$Id: Fl_Browser.H,v 1.14 2000/04/03 17:09:12 bill Exp $".
 //

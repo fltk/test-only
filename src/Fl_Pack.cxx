@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pack.cxx,v 1.12 2000/03/20 08:40:24 bill Exp $"
+// "$Id: Fl_Pack.cxx,v 1.13 2000/04/03 17:09:20 bill Exp $"
 //
 // Packing widget for the Fast Light Tool Kit (FLTK).
 //
@@ -40,7 +40,7 @@ Fl_Pack::Fl_Pack(int x,int y,int w ,int h,const char *l)
 }
 
 void Fl_Pack::draw() {
-  int tx=x(); int ty=y(); int tw=w(); int th=h(); box()->inset(tx,ty,tw,th);
+  int tx=x(); int ty=y(); int tw=w(); int th=h(); window_box()->inset(tx,ty,tw,th);
   int current_position = horizontal() ? tx : ty;
   int maximum_position = current_position;
   uchar d = damage();
@@ -96,13 +96,13 @@ void Fl_Pack::draw() {
     th = maximum_position-ty;
   }
 
-  int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
+  int dx=0; int dy=0; int dw=0; int dh=0; window_box()->inset(dx,dy,dw,dh);
   tw -= dw; if (tw <= 0) tw = 1;
   th -= dh; if (th <= 0) th = 1;
   if (tw != w() || th != h()) {Fl_Widget::resize(x(),y(),tw,th); d = FL_DAMAGE_ALL;}
-  if (d&FL_DAMAGE_ALL) draw_frame();
+  if (d&FL_DAMAGE_ALL) draw_window_frame();
 }
 
 //
-// End of "$Id: Fl_Pack.cxx,v 1.12 2000/03/20 08:40:24 bill Exp $".
+// End of "$Id: Fl_Pack.cxx,v 1.13 2000/04/03 17:09:20 bill Exp $".
 //

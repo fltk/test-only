@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_start.cxx,v 1.5 2000/01/10 06:31:24 bill Exp $"
+// "$Id: Fl_Style_start.cxx,v 1.6 2000/04/03 17:09:20 bill Exp $"
 //
 // Code for switching between named classes of style
 //
@@ -34,7 +34,6 @@ struct Fl_Style_Class {
   Fl_Named_Style* first_style;
   Fl_Style_Class* next;
   int draw_boxes_inactive; // should boxes ever be drawn inactive?
-  double inactive_color_weight; // how much weight to FL_GRAY for inactive colors
   
   static Fl_Style_Class *first;
   static Fl_Style_Class *current;
@@ -53,13 +52,11 @@ char* Fl_Style_Class::current_name = "style1";
 void Fl_Style_Class::store_global()
 {
   draw_boxes_inactive = Fl_Style::draw_boxes_inactive;
-  inactive_color_weight = Fl_Style::inactive_color_weight;
 }
 
 void Fl_Style_Class::get_global()
 {
   Fl_Style::draw_boxes_inactive = draw_boxes_inactive;
-  Fl_Style::inactive_color_weight = inactive_color_weight;
 }
 
 void Fl_Style::start(char* name)
@@ -117,5 +114,5 @@ void Fl_Style::start(char* name)
 }
 
 //
-// End of "$Id: Fl_Style_start.cxx,v 1.5 2000/01/10 06:31:24 bill Exp $".
+// End of "$Id: Fl_Style_start.cxx,v 1.6 2000/04/03 17:09:20 bill Exp $".
 //

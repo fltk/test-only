@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.11 2000/02/14 11:32:55 bill Exp $"
+// "$Id: Fl_Valuator.cxx,v 1.12 2000/04/03 17:09:20 bill Exp $"
 //
 // Valuator widget for the Fast Light Tool Kit (FLTK).
 //
@@ -141,6 +141,8 @@ int Fl_Valuator::handle(int event) {
     int i = linesize();
     if (Fl::event_state()&(FL_SHIFT|FL_CTRL|FL_ALT)) i = pagesize();
     switch (Fl::event_key()) {
+    case FL_Page_Up: i = pagesize(); goto MOVE_BY_i;
+    case FL_Page_Down: i = -pagesize(); goto MOVE_BY_i;
     case FL_Down:
     case FL_Left:
     case FL_BackSpace:
@@ -148,6 +150,7 @@ int Fl_Valuator::handle(int event) {
     case FL_Up:
     case FL_Right:
     case ' ':
+    MOVE_BY_i:
       handle_drag(clamp(increment(value(), i)));
       return 1;
     case FL_Home:
@@ -162,5 +165,5 @@ int Fl_Valuator::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.11 2000/02/14 11:32:55 bill Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.12 2000/04/03 17:09:20 bill Exp $".
 //

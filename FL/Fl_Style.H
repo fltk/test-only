@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.25 2000/03/02 20:47:07 carl Exp $"
+// "$Id: Fl_Style.H,v 1.26 2000/04/03 17:09:12 bill Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -38,16 +38,16 @@ struct Fl_Named_Style;
 
 struct FL_API Fl_Style {
   Fl_Boxtype	box;
-  Fl_Boxtype	glyph_box; // needed for all Light Buttons & sliders
+  Fl_Boxtype	window_box;
   Fl_Glyph	glyph;
   Fl_Font	label_font;
   Fl_Font	text_font;
   Fl_Labeltype	label_type;
   Fl_Color	color;
+  Fl_Color	window_color;
   Fl_Color	label_color;
   Fl_Color	selection_color;
   Fl_Color	selection_text_color;
-  Fl_Color	off_color;
   Fl_Color	highlight_color;
   Fl_Color	highlight_label_color;
   Fl_Color	text_color;
@@ -55,8 +55,6 @@ struct FL_API Fl_Style {
   unsigned	text_size;
   unsigned	leading;
   static int draw_boxes_inactive; // should boxes ever be drawn inactive?
-  static int inactive_menu_hack; // Microsoft sucks
-  static double inactive_color_weight; // how much weight to FL_GRAY for inactive colors
 
   Fl_Style* parent;
 
@@ -100,5 +98,5 @@ FL_API const char* fl_find_config_file(const char*);
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.25 2000/03/02 20:47:07 carl Exp $".
+// End of "$Id: Fl_Style.H,v 1.26 2000/04/03 17:09:12 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.94 2000/03/20 08:40:25 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.95 2000/04/03 17:09:21 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1013,50 +1013,18 @@ void fl_windows_colors() {
 // Fl_Color slider_background = win_color(GetSysColor(COLOR_SCROLLBAR));
 
   fl_background(background);
-  Fl_Widget::default_style->off_color = background;
-
   Fl_Widget::default_style->label_color = foreground;
   Fl_Widget::default_style->highlight_label_color = foreground;
-  Fl_Widget::default_style->selection_text_color = foreground;
-
+  Fl_Widget::default_style->window_color = window_background;
   Fl_Widget::default_style->text_color = window_foreground;
+  Fl_Widget::default_style->selection_color = select_background;
+  Fl_Widget::default_style->selection_text_color = select_foreground;
 
   Fl_Style* style;
-  if ((style = Fl_Style::find("input"))) {
-    style->off_color = foreground; // cursor
-    style->color = window_background;
-    style->text_color = window_foreground;
-    style->selection_color = select_background;
-    style->selection_text_color = select_foreground;
-  }
-
-  if ((style = Fl_Style::find("output"))) {
-    style->color = window_background;
-    style->text_color = window_foreground;
-    style->selection_color = select_background;
-    style->selection_text_color = select_foreground;
-  }
-
-  if ((style = Fl_Style::find("counter"))) {
-    style->color = window_background;
-    style->text_color = window_foreground;
-  }
-
-  if ((style = Fl_Style::find("browser"))) {
-    style->color = window_background;
-    style->text_color = window_foreground;
-    style->selection_color = select_background;
-    style->selection_text_color = select_foreground;
-  }
-
-  if ((style = Fl_Style::find("check button"))) {
-    style->selection_color = window_foreground;
-    style->off_color = window_background;
-  }
 
   if ((style = Fl_Style::find("scrollbar"))) {
-//    style->color = fl_color_average(slider_background, window_background, .5);
-    style->color = fl_color_average(background, window_background, .5);
+//    style->window_color = fl_color_average(slider_background, window_background, .5);
+    style->window_color = fl_color_average(background, window_background, .5);
   }
 
   if ((style = Fl_Style::find("menu item"))) {
@@ -1066,20 +1034,6 @@ void fl_windows_colors() {
     style->selection_text_color = select_foreground;
   }
 
-/* CET - FIXME
-  if ((style = Fl_Style::find("menu title"))) {
-    style->set_box(FL_HIGHLIGHT_BOX);
-    style->set_highlight_color(background);
-    style->set_highlight_label_color(foreground);
-    style->set_selection_color(background);
-    style->set_selection_text_color(foreground);
-  }
-
-  if ((style = Fl_Style::find("menu bar"))) {
-    style->set_highlight_color(background); // for title highlighting
-  }
-
-*/
   if ((style = Fl_Style::find("menu title"))) {
     style->box = FL_HIGHLIGHT_BOX;
     style->highlight_color = FL_GRAY;
@@ -1121,5 +1075,5 @@ void fl_windows_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.94 2000/03/20 08:40:25 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.95 2000/04/03 17:09:21 bill Exp $".
 //

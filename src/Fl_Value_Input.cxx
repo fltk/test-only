@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.21 2000/02/14 11:32:55 bill Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.22 2000/04/03 17:09:20 bill Exp $"
 //
 // Value input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -83,6 +83,7 @@ int Fl_Value_Input::handle(int event) {
   switch (event) {
   case FL_PUSH:
     if (!step()) goto DEFAULT;
+    take_focus();
     ix = mx;
     drag = Fl::event_button();
     handle_push();
@@ -96,6 +97,7 @@ int Fl_Value_Input::handle(int event) {
     if (drag == 3) delta *= 100; else if (drag == 2) delta *= 10;
     v = round(increment(previous_value(), delta));
     handle_drag(soft()?softclamp(v):clamp(v));;
+    input.position(input.size(),0);
     return 1;
   case FL_RELEASE:
     if (!step()) goto DEFAULT;
@@ -137,5 +139,5 @@ Fl_Value_Input::~Fl_Value_Input() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.21 2000/02/14 11:32:55 bill Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.22 2000/04/03 17:09:20 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.49 2000/03/08 05:20:33 carl Exp $"
+// "$Id: fl_options.cxx,v 1.50 2000/04/03 17:09:21 bill Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -288,9 +288,9 @@ int loadscheme(int b) {
 
 
       // glyph box type
-      snprintf(temp, sizeof(temp), "%swidgets/%s/glyph box", ssection, cent->data);
+      snprintf(temp, sizeof(temp), "%swidgets/%s/window box", ssection, cent->data);
       if (!getconf(sfile, temp, valstr, sizeof(valstr)))
-        if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->glyph_box = boxtype;
+        if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->window_box = boxtype;
 
       // color
       snprintf(temp, sizeof(temp), "%swidgets/%s/color", ssection, cent->data);
@@ -313,9 +313,9 @@ int loadscheme(int b) {
         style->selection_text_color = grok_color(sfile, ssection, valstr);
 
       // off color
-      snprintf(temp, sizeof(temp), "%swidgets/%s/off color", ssection, cent->data);
+      snprintf(temp, sizeof(temp), "%swidgets/%s/window color", ssection, cent->data);
       if (!getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->off_color = grok_color(sfile, ssection, valstr);
+        style->window_color = grok_color(sfile, ssection, valstr);
 
       // highlight color
       snprintf(temp, sizeof(temp), "%swidgets/%s/highlight color", ssection, cent->data);
@@ -464,8 +464,6 @@ static void revert_styles() {
   fl_up_box.data = fl_up_box_revert;
   fl_down_box.data = fl_down_box_revert;
   Fl_Style::draw_boxes_inactive = 1;
-  Fl_Style::inactive_menu_hack = 0;
-  Fl_Style::inactive_color_weight = 0.33f;
 
   for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
     if (p->name) {
@@ -501,7 +499,7 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.49 2000/03/08 05:20:33 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.50 2000/04/03 17:09:21 bill Exp $".
 //
 
 

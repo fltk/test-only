@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.24 2000/02/14 11:32:47 bill Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.25 2000/04/03 17:09:18 bill Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -35,10 +35,10 @@ void Fl_Check_Button::draw() {
   Fl_Color lc = label_color();
   if (!active_r()) {
     f |= FL_INACTIVE;
-  } else if (belowmouse() && highlight_color()) {
-    c = highlight_color();
-    lc = highlight_label_color();
+  } else if (belowmouse()) {
     f |= FL_HIGHLIGHT;
+    Fl_Color c1 = highlight_color(); if (c1) c = c1;
+    c1 = highlight_label_color(); if (c1) lc = c1;
   }
   if (focused()) f |= FL_FOCUSED;
   // We need to erase the focus rectangle for FL_NO_BOX buttons, such
@@ -55,8 +55,9 @@ void Fl_Check_Button::draw() {
   int W = (w()<h() ? w() : h()) - 2*d - 2;
   glyph()(type()==FL_RADIO_BUTTON ? FL_GLYPH_RADIO : FL_GLYPH_CHECK,
 	  x()+d, y()+d+1, W, W,
-	  off_color(), (f&FL_VALUE) ? selection_color() : off_color(),
-	  f, glyph_box());
+	  window_color(),
+	  selection_color(),
+	  f, window_box());
 
   draw_button_label(x()+W+d, y(), w()-W-d, h(), lc);
 }
@@ -68,10 +69,7 @@ int Fl_Check_Button::handle(int event) {
 
 static void revert(Fl_Style* s) {
   s->box = FL_NO_BOX;
-  s->glyph_box = FL_DOWN_BOX;
   s->selection_color = FL_BLACK;
-  s->off_color = FL_WHITE;
-  s->glyph = fl_glyph;
 }
 
 static Fl_Named_Style* style = new Fl_Named_Style("Check_Button", revert, &style);

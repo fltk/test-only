@@ -16,7 +16,7 @@ Function {} {open
 } {
   Fl_Window {} {
     label {Valuator classes, showing values for type()} open
-    xywh {221 201 567 506} labelsize 10
+    xywh {634 95 567 506} labelsize 10
     code0 {\#include <stdio.h>} visible
   } {
     Fl_Box {} {
@@ -26,32 +26,32 @@ Function {} {open
     Fl_Slider {} {
       label 0
       callback callback
-      xywh {30 45 20 145} align 1 off_color 1 labelsize 8
+      xywh {30 45 20 145} align 1 color 1959162112 window_color 2442184192 labelsize 8
     }
     Fl_Slider {} {
       label FL_VERT_FILL_SLIDER
       callback callback
-      xywh {70 55 20 145} type {Vert Fill} off_color 1 labelsize 8
+      xywh {70 55 20 145} type {Vert Fill} color 1959162112 window_color 2442184192 labelsize 8
     }
     Fl_Slider {} {
       label FL_VERT_NICE_SLIDER
       callback callback
-      xywh {105 45 20 145} type {Vert Knob} align 1 box FLAT_BOX color 10 selection_color 1 labelsize 8
+      xywh {105 45 20 145} type {Vert Knob} align 1 window_box FLAT_BOX color 1959162112 selection_color 1 window_color 2442184192 labelsize 8
     }
     Fl_Slider {} {
       label FL_HORIZONTAL
       callback callback
-      xywh {140 80 130 20} type Horizontal off_color 1 labelsize 8
+      xywh {140 80 130 20} type Horizontal color 1959162112 window_color 2442184192 labelsize 8
     }
     Fl_Slider {} {
       label FL_HOR_FILL_SLIDER
       callback callback
-      xywh {140 120 130 20} type {Horz Fill} off_color 1 labelsize 8
+      xywh {140 120 130 20} type {Horz Fill} color 1959162112 window_color 2442184192 labelsize 8
     }
     Fl_Slider {} {
       label FL_HOR_NICE_SLIDER
       callback callback
-      xywh {140 160 130 20} type {Horz Knob} box FLAT_BOX color 10 selection_color 1 labelsize 8
+      xywh {140 160 130 20} type {Horz Knob} window_box FLAT_BOX color 1959162112 selection_color 1 window_color 2442184192 labelsize 8
     }
     Fl_Box {} {
       label Fl_Value_Slider
@@ -60,32 +60,32 @@ Function {} {open
     Fl_Value_Slider {} {
       label 0
       callback callback
-      xywh {30 260 30 145} align 1 off_color 1 labelsize 8
+      xywh {30 260 30 145} align 1 color 1959162112 window_color 2442184192 labelsize 8
     }
     Fl_Value_Slider {} {
       label FL_VERT_FILL_SLIDER
       callback callback
-      xywh {70 275 30 140} type {Vert Fill} off_color 1 labelsize 8
+      xywh {70 275 30 140} type {Vert Fill} color 1959162112 window_color 2442184192 labelsize 8
     }
     Fl_Value_Slider {} {
       label FL_VERT_NICE_SLIDER
       callback callback
-      xywh {110 260 20 145} type {Vert Knob} align 1 box FLAT_BOX color 10 selection_color 1 labelsize 8
+      xywh {110 260 20 145} type {Vert Knob} align 1 window_box FLAT_BOX color 1959162112 selection_color 1 window_color 2442184192 labelsize 8
     }
     Fl_Value_Slider {} {
       label FL_HOR_SLIDER
       callback callback
-      xywh {140 290 130 20} type Horizontal off_color 1 labelsize 8
+      xywh {140 290 130 20} type Horizontal color 1959162112 window_color 2442184192 labelsize 8
     }
     Fl_Value_Slider {} {
       label FL_HOR_FILL_SLIDER
       callback callback
-      xywh {140 330 130 20} type {Horz Fill} off_color 1 labelsize 8
+      xywh {140 330 130 20} type {Horz Fill} color 1959162112 window_color 2442184192 labelsize 8
     }
     Fl_Value_Slider {} {
       label FL_HOR_NICE_SLIDER
       callback callback
-      xywh {140 370 130 20} type {Horz Knob} box FLAT_BOX color 10 selection_color 1 labelsize 8
+      xywh {140 370 130 20} type {Horz Knob} window_box FLAT_BOX color 1959162112 selection_color 1 window_color 2442184192 labelsize 8
     }
     Fl_Box {} {
       label Fl_Value_Input
@@ -97,7 +97,7 @@ Function {} {open
       xywh {30 460 110 30} labelsize 8 maximum 100 step 0.1
     }
     Fl_Box {} {
-      label Fl_Value_Output selected
+      label Fl_Value_Output
       xywh {155 445 135 50} align 17 box ENGRAVED_BOX labelfont 1
     }
     Fl_Value_Output {} {
@@ -154,18 +154,18 @@ Function {} {open
       Fl_Dial {} {
         label 0
         callback callback
-        xywh {315 280 65 65} color 10 selection_color 1 labelsize 8 value 0.5
+        xywh {315 280 65 65} color 1959162112 selection_color 1 window_color 2442184192 labelsize 8 value 0.5
         code0 {o->angles(0,315);}
       }
       Fl_Dial {} {
         label FL_LINE_DIAL
         callback callback
-        xywh {395 280 65 65} type Line color 10 selection_color 1 labelsize 8 value 0.5
+        xywh {395 280 65 65} type Line color 1959162112 selection_color 1 window_color 2442184192 labelsize 8 value 0.5
       }
       Fl_Dial {} {
         label FL_FILL_DIAL
-        callback callback
-        xywh {475 280 65 65} type Fill color 10 selection_color 1 labelsize 8 value 1
+        callback callback selected
+        xywh {475 280 65 65} type Fill color 1959162112 selection_color 1 window_color 2442184192 labelsize 8 value 0.75
         code0 {o->angles(0,360);}
       }
     }
@@ -184,7 +184,7 @@ Function {} {open
       xywh {340 430 90 20} type Horizontal labelsize 8
     }
     Fl_Box {} {
-      label {Some widgets have color(FL_GREEN) and color2(FL_RED) to show the areas these effect.}
+      label {Several widgets have color(green), window_color(purple), and selection_color(red) to show the areas these colors affect.}
       xywh {455 375 100 120} align 128 box ENGRAVED_BOX labelsize 10
     }
   }

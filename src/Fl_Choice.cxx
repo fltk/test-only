@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.40 2000/03/17 09:50:06 bill Exp $"
+// "$Id: Fl_Choice.cxx,v 1.41 2000/04/03 17:09:18 bill Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,21 +32,20 @@
 
 void Fl_Choice::draw() {
   Fl_Widget* o = children() ? item() : 0;
-  int motif = (box()==FL_UP_BOX);
-  if (motif || !o) draw_button(); else draw_box();
-  int X=x(); int Y=y(); int W=w(); int H=h(); box()->inset(X,Y,W,H);
+  draw_window_box();
+  int X=x(); int Y=y(); int W=w(); int H=h(); window_box()->inset(X,Y,W,H);
   int w1 = H*4/5;
+  Fl_Color label_color = o ? o->label_color() : text_color();
+  if (focused()) {
+    Fl_Color c = selection_color();
+    if (c) {
+      fl_color(c);
+      fl_rectf(X+2, Y+2, W-w1-4, H-4);
+      c = selection_text_color(); if (c) label_color = c;
+    }
+  }
   if (o) {
     if (!o->h() || o->damage() & FL_DAMAGE_LAYOUT) o->layout();
-    Fl_Color label_color = o->label_color();
-    if (!motif && focused()) {
-      Fl_Color c = selection_color();
-      if (c) {
-	fl_color(c);
-	fl_rectf(X+2, Y+2, W-w1-2, H-4);
-	c = selection_text_color(); if (c) label_color = c;
-      }
-    }
     fl_clip(X+2, Y+2, W-w1-2, H-4);
     int save_flags = o->flags();
     if (active_r()) o->clear_flag(FL_INACTIVE);
@@ -125,14 +124,7 @@ int Fl_Choice::handle(int e) {
   }
 }
 
-static void revert(Fl_Style* s) {
-  s->selection_color = FL_BLUE_SELECTION_COLOR;
-  s->selection_text_color = FL_WHITE;
-  s->box = FL_DOWN_BOX;
-  s->color = FL_WHITE;
-}
-
-static Fl_Named_Style* style = new Fl_Named_Style("Choice", revert, &style);
+static Fl_Named_Style* style = new Fl_Named_Style("Choice", 0, &style);
 
 Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,l) {
   value(0);
@@ -143,5 +135,5 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.40 2000/03/17 09:50:06 bill Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.41 2000/04/03 17:09:18 bill Exp $".
 //

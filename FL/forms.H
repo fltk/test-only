@@ -1,5 +1,5 @@
 //
-// "$Id: forms.H,v 1.17 2000/03/17 09:49:56 bill Exp $"
+// "$Id: forms.H,v 1.18 2000/04/03 17:09:13 bill Exp $"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -695,10 +695,9 @@ inline void fl_set_input(Fl_Widget* o, const char* v) {
     ((Fl_Input*)o)->value(v);}
 inline void fl_set_input_return(Fl_Widget* o, int x) {
     ((Fl_Input*)o)->when((Fl_When)(x | FL_WHEN_RELEASE));}
-inline void fl_set_input_color(Fl_Widget* o, unsigned a, unsigned b) {
+inline void fl_set_input_color(Fl_Widget* o, unsigned a, unsigned /*b*/) {
     ((Fl_Input*)o)->text_color((Fl_Color)a);
-//    ((Fl_Input*)o)->cursor_color((Fl_Color)b);
-    ((Fl_Input*)o)->off_color((Fl_Color)b);
+//  ((Fl_Input*)o)->cursor_color((Fl_Color)b);
 }
 // inline void fl_set_input_scroll(Fl_Widget*, int);
 inline void fl_set_input_cursorpos(Fl_Widget* o, int x, int /*y*/) {
@@ -852,5 +851,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.H,v 1.17 2000/03/17 09:49:56 bill Exp $".
+// End of "$Id: forms.H,v 1.18 2000/04/03 17:09:13 bill Exp $".
 //

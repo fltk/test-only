@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.31 2000/03/17 09:50:07 bill Exp $"
+// "$Id: Fl_Input.cxx,v 1.32 2000/04/03 17:09:18 bill Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -35,8 +35,8 @@
 #include <string.h>
 
 void Fl_Input::draw() {
-  if (damage() & FL_DAMAGE_ALL) draw_frame();
-  int X = x(); int Y = y(); int W = w(); int H = h(); box()->inset(X,Y,W,H);
+  if (damage() & FL_DAMAGE_ALL) draw_window_frame();
+  int X=x(); int Y=y(); int W=w(); int H=h(); window_box()->inset(X,Y,W,H);
   Fl_Input_::drawtext(X,Y,W,H);
 }
 
@@ -110,7 +110,7 @@ int Fl_Input::handle_key() {
     else 
       return 0;	// reserved for shortcuts
   case FL_Tab:
-    if (Fl::event_state(FL_CTRL) || type()!=FL_MULTILINE_INPUT) return 0;
+    if (Fl::event_state(FL_CTRL|FL_SHIFT) || type()!=FL_MULTILINE_INPUT) return 0;
     return replace(position(), mark(), &ascii, 1);
   case FL_Control_R:
   case 0xff20: // Multi-Key
@@ -258,7 +258,7 @@ int Fl_Input::handle(int event) {
     return 1;
 
   }
-  int X = x(); int Y = y(); int W = w(); int H = h(); box()->inset(X,Y,W,H);
+  int X=x(); int Y=y(); int W=w(); int H=h(); window_box()->inset(X,Y,W,H);
   return Fl_Input_::handletext(event,X,Y,W,H);
 }
 
@@ -269,5 +269,5 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.31 2000/03/17 09:50:07 bill Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.32 2000/04/03 17:09:18 bill Exp $".
 //

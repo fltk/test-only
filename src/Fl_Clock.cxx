@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.19 2000/01/16 07:44:32 robertk Exp $"
+// "$Id: Fl_Clock.cxx,v 1.20 2000/04/03 17:09:18 bill Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -81,7 +81,8 @@ void Fl_Clock_Output::draw(int x, int y, int w, int h) {
   // draw the shadows:
   fl_push_matrix();
   fl_translate(0.60, 0.60);
-  drawhands(off_color(), off_color());
+  Fl_Color c = fl_color_average(color(), FL_BLACK, .3);
+  drawhands(c, c);
   fl_pop_matrix();
   // draw the tick marks:
   fl_push_matrix();
@@ -94,7 +95,7 @@ void Fl_Clock_Output::draw(int x, int y, int w, int h) {
   }
   fl_pop_matrix();
   // draw the hands:
-  drawhands(selection_color(), FL_NO_COLOR); // color was 54
+  drawhands(selection_color(), text_color()); // color was 54
   fl_pop_matrix();
 }
 
@@ -159,7 +160,7 @@ Fl_Clock::~Fl_Clock() {
 
 static void revert(Fl_Style* s) {
   s->selection_color = FL_LIGHT1;
-  s->off_color = FL_DARK3;
+  s->window_color = FL_DARK3;
   s->text_color = FL_BLACK;
 }
 
@@ -179,5 +180,5 @@ Fl_Clock_Output::Fl_Clock_Output(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Clock.cxx,v 1.19 2000/01/16 07:44:32 robertk Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.20 2000/04/03 17:09:18 bill Exp $".
 //

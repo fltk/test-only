@@ -1,5 +1,8 @@
-# data file for the Fltk User Interface Designer (fluid)
-version 0.99 
+# data file for the FLTK User Interface Designer (FLUID)
+version 2.0000 
+images_dir ./ 
+header_name {.h} 
+code_name {.cxx} 
 gridx 10 
 gridy 10 
 snap 3
@@ -17,8 +20,8 @@ class Drawing_Window {open
       code0 {o->size_range(220,220);} visible
     } {
       Fl_Box d {
-        user_data this user_data_type {void*} selected
-        xywh {20 80 410 430} box DOWN_BOX resizable
+        user_data this user_data_type {void*}
+        xywh {20 80 410 430} resizable box DOWN_BOX
         class Drawing_Area
       }
       Fl_Input x_input {
@@ -46,24 +49,22 @@ d->new_display();}
         label {brightness:}
         callback {d->brightness = int(o->value());
 d->new_display();}
-        xywh {80 50 160 15} type Horizontal align 4 step 1 slider_size 0.1
+        xywh {80 50 160 15} type Horizontal align 4 step 1 slider_size 16
         code0 {o->range(0,d->MAX_BRIGHTNESS);}
         code2 {o->value(d->DEFAULT_BRIGHTNESS);}
-        code3 {o->glyph_box(FL_UP_BOX);}
       }
       Fl_Box {} {
         label {left: click = zoom out, drag = zoom in
 right click: Julia set}
-        xywh {240 50 190 30} labelsize 10 align 24 deactivate
+        xywh {240 50 190 30} align 280 deactivate labelsize 10
       }
       Fl_Slider {} {
         label {iterations:}
         callback {d->iterations = 1<<int(o->value());
-d->new_display();}
-        xywh {80 65 160 15} type Horizontal align 4 step 1 slider_size 0.1
+d->new_display();} selected
+        xywh {80 65 160 15} type Horizontal align 4 step 1 slider_size 16
         code0 {o->range(1,d->MAX_ITERATIONS);}
         code2 {o->value(d->DEFAULT_ITERATIONS);}
-        code3 {o->glyph_box(FL_UP_BOX);}
       }
     }
   }
