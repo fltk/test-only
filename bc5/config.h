@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.5 1999/11/01 22:51:34 carl Exp $"
+ * "$Id: config.h,v 1.6 1999/11/15 04:02:33 carl Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -151,6 +151,7 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define HAVE_POLL 0
 
 #define strcasecmp(a,b) stricmp(a,b)
+#define strncasecmp(a,b,c) strnicmp(a,b,c)
 
 /*
  * HAVE_PNG
@@ -190,5 +191,5 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define HAVE_PTHREAD_SETSCHEDPARAM 0
 
 /*
- * End of "$Id: config.h,v 1.5 1999/11/01 22:51:34 carl Exp $".
+ * End of "$Id: config.h,v 1.6 1999/11/15 04:02:33 carl Exp $".
  */

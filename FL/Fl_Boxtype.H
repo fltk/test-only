@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.H,v 1.11 1999/11/14 08:42:40 bill Exp $"
+// "$Id: Fl_Boxtype.H,v 1.12 1999/11/15 04:02:31 carl Exp $"
 //
 // Boxes used by FLTK styles.
 //
@@ -71,6 +71,7 @@ extern FL_API const Fl_Boxtype_ fl_flat_down_box;
 #define FL_FLAT_DOWN_BOX (&fl_flat_down_box)
 extern FL_API const Fl_Boxtype_ fl_highlight_up_box;
 #define FL_HIGHLIGHT_UP_BOX (&fl_highlight_up_box)
+#define FL_HIGHLIGHT_BOX (&fl_highlight_up_box)
 extern FL_API const Fl_Boxtype_ fl_highlight_down_box;
 #define FL_HIGHLIGHT_DOWN_BOX (&fl_highlight_down_box)
 extern FL_API Fl_Boxtype_ fl_up_box;
@@ -136,5 +137,5 @@ extern FL_API const Fl_Boxtype_ fl_border_frame;
 #endif
 
 //
-// End of "$Id: Fl_Boxtype.H,v 1.11 1999/11/14 08:42:40 bill Exp $".
+// End of "$Id: Fl_Boxtype.H,v 1.12 1999/11/15 04:02:31 carl Exp $".
 //

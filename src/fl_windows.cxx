@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.9 1999/11/14 08:42:52 bill Exp $"
+// "$Id: fl_windows.cxx,v 1.10 1999/11/15 04:02:45 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -54,17 +54,12 @@ extern void fl_highlightx(Fl_Boxtype b, int x, int y, int w, int h,
 			  Fl_Color c, Fl_Flags f);
 
 // some new boxtypes (look familiar?)
-
-const Fl_Boxtype_ win98_menu_title_box = {
+static const Fl_Boxtype_ win98_menu_title_box = {
   fl_highlightx, 0, FL_THIN_UP_BOX, 1,1,2,2,1
 };
 
 static const Fl_Boxtype_ win98_menu_window_box = {
-#ifndef WIN32
-  fl_frame, "2AAUUIIXX", &win98_menu_window_box, 2,2,4,4, 1
-#else
-  fl_frame, "2AARRMMUU", &win98_menu_window_box, 2,2,4,4, 1
-#endif
+  fl_frame, "2AARRMMUU", FL_DOWN_BOX, 2,2,4,4, 1
 };
 
 #ifdef WIN32
@@ -81,27 +76,13 @@ static Fl_Color what_color(int wincol) {
 int fl_windows() {
   Fl_Style::revert(); // revert to FLTK default styles
 
-// Matches KDE, but not Windows!
-#ifndef WIN32
-  fl_up_box.data = "2AAXXIIUU";
-  fl_up_box.dx_ = 2;
-  fl_up_box.dy_ = 2;
-  fl_up_box.dw_ = 4;
-  fl_up_box.dh_ = 4;
-  fl_down_box.data = "2XXIIUUAA";
-  fl_down_box.dx_ = 2;
-  fl_down_box.dy_ = 2;
-  fl_down_box.dw_ = 4;
-  fl_down_box.dh_ = 4;
-#endif
-
   Fl_Widget::default_style.set_selection_color(FL_GRAY);
   Fl_Widget::default_style.set_label_size(12);
 
   Fl_Style* s;
   if ((s = Fl_Style::find("menu window"))) {
     s->set_box(&win98_menu_window_box);
-    s->set_leading(4);
+    s->set_leading(6);
   }
 
   if ((s = Fl_Style::find("menu title"))) {
@@ -123,12 +104,12 @@ int fl_windows() {
   }
 
   if ((s = Fl_Style::find("slider"))) {
-    s->set_glyph_box(&win98_menu_window_box);
+//    s->set_glyph_box(&win98_menu_window_box);
     s->set_box(FL_DOWN_BOX);
   }
 
   if ((s = Fl_Style::find("value slider"))) {
-    s->set_glyph_box(&win98_menu_window_box);
+//    s->set_glyph_box(&win98_menu_window_box);
     s->set_box(FL_DOWN_BOX);
   }
 
@@ -233,8 +214,8 @@ int fl_windows() {
   if ((style = Fl_Style::find("menu item"))) {
     style->set_color(menuitem_background);
     style->set_label_color(menuitem_foreground);
-    style->set_highlight_color(select_background);
-    style->set_highlight_label_color(select_foreground);
+    style->set_selection_color(select_background);
+    style->set_selection_text_color(select_foreground);
   }
 
   if ((style = Fl_Style::find("menu title"))) {
@@ -281,5 +262,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.9 1999/11/14 08:42:52 bill Exp $".
+// End of "$Id: fl_windows.cxx,v 1.10 1999/11/15 04:02:45 carl Exp $".
 //

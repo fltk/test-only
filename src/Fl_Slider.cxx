@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.28 1999/11/10 18:06:06 carl Exp $"
+// "$Id: Fl_Slider.cxx,v 1.29 1999/11/15 04:02:42 carl Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -121,7 +121,7 @@ void Fl_Slider::draw() {
   if (damage()&(~FL_DAMAGE_HIGHLIGHT)) draw_frame();
   Fl_Flags f;
   if (!active_r()) f = FL_INACTIVE;
-  else if (Fl::belowmouse() == this) f = FL_HIGHLIGHT;
+  else if (Fl::belowmouse() == this && highlight_color()) f = FL_HIGHLIGHT;
   else f = 0;
   draw(x()+box()->dx(),
        y()+box()->dy(),
@@ -210,5 +210,5 @@ static void revert(Fl_Style *s) {
 Fl_Style Fl_Slider::default_style("Slider", revert);
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.28 1999/11/10 18:06:06 carl Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.29 1999/11/15 04:02:42 carl Exp $".
 //

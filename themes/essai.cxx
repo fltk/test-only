@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.8 1999/11/10 12:21:57 bill Exp $"
+// "$Id: essai.cxx,v 1.9 1999/11/15 04:02:48 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -70,7 +70,6 @@ static void image_box_draw(const Fl_Boxtype_* bt, int x, int y, int w, int h,
 Fl_Image_Box::Fl_Image_Box(char* normal_b, char* down_b, char* highlight_b) {
   draw_ = image_box_draw;
   down = this;
-  highlight = this;
   normal_img = Fl_JPEG_Image::get(fl_find_config_file(normal_b));
   down_img = Fl_JPEG_Image::get(fl_find_config_file(down_b));
   highlight_img = Fl_JPEG_Image::get(fl_find_config_file(highlight_b));
@@ -116,12 +115,13 @@ int fltk_theme(int, char** argv) {
   Fl_Boxtype box2 = new Fl_Image_Box("themes/bg.jpeg", "themes/bg.jpeg", "themes/bg.jpeg");
   Fl_Widget::default_style.set_box(box1);
   Fl_Widget::default_style.set_glyph_box(box1);
+  Fl_Widget::default_style.set_highlight_color(FL_GRAY);
   Fl_Style* s;
   if ((s = Fl_Style::find("window"))) {
     s->set_box(flat1);
   }
   if ((s = Fl_Style::find("menu item"))) {
-    s->set_highlight_label_color(FL_BLACK);
+    s->set_selection_text_color(FL_BLACK);
     s->set_box(flat2);
   }
   if ((s = Fl_Style::find("menu bar"))) {
@@ -147,5 +147,5 @@ int fltk_theme(int, char** argv) {
 }
 
 //
-// End of "$Id: essai.cxx,v 1.8 1999/11/10 12:21:57 bill Exp $".
+// End of "$Id: essai.cxx,v 1.9 1999/11/15 04:02:48 carl Exp $".
 //

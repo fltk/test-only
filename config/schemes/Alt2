@@ -29,6 +29,9 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
   [widgets/chart]                                 # chart attributes
     box = border                                  # boxtype for chart
 
+  [widgets/check button]                          # check button attributes
+   selection color = red
+
   [widgets/return button]                         # return button attributes
     box = alternative up                          # boxtype of button
 

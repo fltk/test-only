@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.63 1999/11/14 04:36:58 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.64 1999/11/15 04:02:43 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -271,6 +271,23 @@ void Fl::get_mouse(int &x, int &y) {
   y = p.y;
 }
 
+// Borland 5 is too old to have this new (post Win95) stuff
+#ifdef BORLAND5
+#define TME_LEAVE 2
+typedef struct tagTRACKMOUSEEVENT {
+  DWORD cbSize;
+  DWORD dwFlags;
+  HWND  hwndTrack;
+  DWORD dwHoverTime;
+} TRACKMOUSEEVENT, *LPTRACKMOUSEEVENT;
+extern "C" BOOL WINAPI TrackMouseEvent(LPTRACKMOUSEEVENT);
+#endif
+
+static TRACKMOUSEEVENT mouseevent = {
+  sizeof(TRACKMOUSEEVENT),
+  TME_LEAVE
+};
+
 ////////////////////////////////////////////////////////////////
 
 static int mouse_event(Fl_Window *window, int what, int button,
@@ -323,8 +340,12 @@ static int mouse_event(Fl_Window *window, int what, int button,
     if (Fl::e_x_root == pmx && Fl::e_y_root == pmy) return 1;
     pmx = Fl::e_x_root; pmy = Fl::e_y_root;
     if (abs(Fl::e_x_root-px)>5 || abs(Fl::e_y_root-py)>5) Fl::e_is_click = 0;
-    return Fl::handle(FL_MOVE,window);
 
+    // look for mouse leave events
+    mouseevent.hwndTrack = fl_xid(window);
+    TrackMouseEvent(&mouseevent);
+
+    return Fl::handle(FL_MOVE,window);
   }
 }
 
@@ -723,6 +744,8 @@ Fl_X* Fl_X::create(Fl_Window* w) {
   } else {
     style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | borders(w, dx, dy, dw, dh);
     styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
+    // we don't want an entry in the task list for menuwindows or tooltips!
+    if (style&WS_POPUP) styleEx |= WS_EX_TOOLWINDOW;
     if (!(w->flags() & Fl_Window::FL_FORCE_POSITION)) {
       xp = yp = CW_USEDEFAULT;
     } else {
@@ -760,8 +783,10 @@ Fl_X* Fl_X::create(Fl_Window* w) {
   w->redraw(); // force draw to happen
   // If we've captured the mouse, we dont want do activate any
   // other windows from the code, or we loose the capture.
+  // Also, we don't want to activate the window for tooltips.
   ShowWindow(x->xid, fl_show_iconic ? SW_SHOWMINNOACTIVE :
-	     Fl::grab() ? SW_SHOWNOACTIVATE : SW_SHOWNORMAL);
+	     (Fl::grab() || style&WS_POPUP) ? SW_SHOWNOACTIVATE :
+	     SW_SHOWNORMAL);
   fl_show_iconic = 0;
   return x;
 }
@@ -871,5 +896,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.63 1999/11/14 04:36:58 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.64 1999/11/15 04:02:43 carl Exp $".
 //

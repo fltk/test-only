@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.39 1999/11/14 08:42:48 bill Exp $"
+// "$Id: Fl_Widget.cxx,v 1.40 1999/11/15 04:02:43 carl Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -279,12 +279,12 @@ static void revert(Fl_Style* s) {
   s->text_color            = FL_BLACK;
   s->label_size		   = FL_NORMAL_SIZE;
   s->text_size             = FL_NORMAL_SIZE;
-  s->leading		   = 0;
+  s->leading		   = 2;
   s->parent                = 0;	// this is the topmost style always
 }
 
 Fl_Style Fl_Widget::default_style("default", revert);
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.39 1999/11/14 08:42:48 bill Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.40 1999/11/15 04:02:43 carl Exp $".
 //

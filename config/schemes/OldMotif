@@ -42,7 +42,7 @@ FLTK version = 2.0.0
     box = motif thick
 
   [widgets/menu item]
-    box = motif thick highlight
+    box = motif thick title
 
   [widgets/menu title]
     box = motif thick title

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1_colors.cxx,v 1.3 1999/11/10 20:52:38 carl Exp $"
+// "$Id: fl_kde1_colors.cxx,v 1.4 1999/11/15 04:02:44 carl Exp $"
 //
 // Make FLTK do the KDE thing!
 //
@@ -170,16 +170,22 @@ int fl_kde1_colors() {
   }
 
   if ((style = Fl_Style::find("menu item"))) {
-    if (select_background) style->set_highlight_color(select_background);
-    if (select_foreground) style->set_highlight_label_color(select_foreground);
-  }
-
-  if ((style = Fl_Style::find("menu title"))) {
-    if (select_background) style->set_highlight_color(select_background);
-    if (select_foreground) style->set_highlight_label_color(select_foreground);
     if (select_background) style->set_selection_color(select_background);
     if (select_foreground) style->set_selection_text_color(select_foreground);
   }
+
+  if ((style = Fl_Style::find("menu title"))) {
+    if (select_background) style->set_highlight_color(background);
+    if (select_foreground) style->set_highlight_label_color(foreground);
+    if (select_background) style->set_selection_color(background);
+    if (select_foreground) style->set_selection_text_color(foreground);
+  }
+
+// Don't bother.  KDE gets it wrong.
+//  if ((style = Fl_Style::find("scrollbar"))) {
+//    if (background && window_background)
+//      style->set_color(fl_color_average(background, window_background, 0.5));
+//  }
 
 /* looks better for dark backgrounds
   if ((style = Fl_Style::find("scrollbar"))) {
@@ -208,5 +214,5 @@ int fl_kde1_colors() {
 }
 
 //
-// End of "$Id: fl_kde1_colors.cxx,v 1.3 1999/11/10 20:52:38 carl Exp $".
+// End of "$Id: fl_kde1_colors.cxx,v 1.4 1999/11/15 04:02:44 carl Exp $".
 //

@@ -41,14 +41,15 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     text size = 12                                # color of text
 
   [widgets/menu item]                             # menu item attributes
-    highlight color = puke green                  # color of menu item background when selected
+    selection color = puke green                  # color of menu item background when selected
+    selection text color = white                  # color of menu item text when selected
     box = alternative menu                        # boxtype of menu items
-    selection color = red                         # color of light when selected
     off color = gray                              # color of light when not selected
 
   [widgets/menu title]
     selection color = puke green                  # color of menu title box when its submenu selected
     selection text color = white                  # color of menu title label when its submenu selected
+    highlight color = light1                      # color of menu title box when it's highlighted
     box = alternative menu title                  # boxtype of menu titles
     off color = gray                              # color of light when not selected
 

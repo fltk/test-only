@@ -1,5 +1,5 @@
 //
-// "$Id: win32.H,v 1.25 1999/11/02 20:55:33 carl Exp $"
+// "$Id: win32.H,v 1.26 1999/11/15 04:02:32 carl Exp $"
 //
 // WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,6 +32,7 @@
 #define FL_WIN32_H
 
 #include <windows.h>
+#include <winuser.h>
 // In some of the distributions, the gcc header files are missing some stuff:
 #ifndef LPMINMAXINFO
 #define LPMINMAXINFO MINMAXINFO*
@@ -130,5 +131,5 @@ extern FL_API ulong fl_create_bitmap(const uchar* bitmap, int w, int h);
 #endif
 
 //
-// End of "$Id: win32.H,v 1.25 1999/11/02 20:55:33 carl Exp $".
+// End of "$Id: win32.H,v 1.26 1999/11/15 04:02:32 carl Exp $".
 //

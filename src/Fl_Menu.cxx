@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.57 1999/11/14 08:42:46 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.58 1999/11/15 04:02:41 carl Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -199,10 +199,13 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_*,
     break;
   case 1: // selected menu item
     lflags = FL_VALUE | FL_ALIGN_LEFT;
-    if (default_style.selection_color) 
-      lcolor = default_style.selection_color;
-    if (default_style.selection_text_color) 
-      llabel_color = default_style.selection_text_color;
+// Why?!
+//    if (default_style.selection_color)
+//      lcolor = default_style.selection_color;
+//    if (default_style.selection_text_color)
+//      llabel_color = default_style.selection_text_color;
+      lcolor = selection_color();
+      if (!(flags()&FL_MENU_INACTIVE)) llabel_color = selection_text_color();
     break;
   case 2: // title or menubar item when menu popped up
     lflags = FL_VALUE | FL_ALIGN_CENTER;
@@ -229,7 +232,7 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_*,
     break;
   }
   if (flags() & FL_MENU_INACTIVE) {
-    llabel_color = fl_inactive(llabel_color);
+//    llabel_color = fl_inactive(llabel_color); done in labeltype()->draw()
     lflags |= FL_INACTIVE;
   }    
   lbox->draw(x, y, w, h, lcolor, lflags);
@@ -325,7 +328,7 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
     if (m->image_) clear_overlay();
   }
 
-  itemheight += leading();
+  itemheight += (itemheight/8 + leading());
   W += itemheight; // More extra spacing
 
   if (selected >= 0 && !Wp) X -= W/2;
@@ -412,9 +415,9 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int /*erase*/) {
   }
 
   if (m->submenu()) {
-    int dx = m->box()->down->dx();
-    int dy = m->box()->down->dy();
-    int dh = m->box()->down->dh();
+    int dx = m->box()->down->dx() + leading()/2;
+    int dy = m->box()->down->dy() + leading()/2;
+    int dh = m->box()->down->dh() + leading();
     glyph()(FL_GLYPH_RIGHT, x+w-h+dx, y+dy, h-dh, h-dh, bc, fc,f, FL_NO_BOX);
   } else if (m->shortcut_) {
     fl_font(label_font(), label_size());
@@ -848,5 +851,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.57 1999/11/14 08:42:46 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.58 1999/11/15 04:02:41 carl Exp $".
 //

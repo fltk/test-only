@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde1.cxx,v 1.4 1999/11/14 08:42:50 bill Exp $"
+// "$Id: fl_kde1.cxx,v 1.5 1999/11/15 04:02:44 carl Exp $"
 //
 // Make FLTK do the KDE thing!
 //
@@ -79,21 +79,16 @@ int fl_kde1() {
   fl_kde1_colors(); // figure out the colors and fonts for KDE1
 
   Fl_Style* style;
-  if ((style = Fl_Style::find("menu title"))) {
-    style->set_selection_color(background);
-    style->set_selection_text_color(foreground);
-    if (motif_style)
-      style->set_highlight_color(0);
-    else {
-      style->set_highlight_color(background);
-      style->set_highlight_label_color(foreground);
-    }
+  // for title highlighting
+  if ((style = Fl_Style::find("menu bar"))) {
+    if (motif_style) style->set_highlight_color(0);
+    else style->set_highlight_label_color(foreground);
   }
   if (motif_style) {
-//    fl_set_color(FL_LIGHT2, FL_LIGHT1); // looks better for dar backgrounds
+//    fl_set_color(FL_LIGHT2, FL_LIGHT1); // looks better for dark backgrounds
     if ((style = Fl_Style::find("menu item"))) {
-      style->set_highlight_color(background);
-      style->set_highlight_label_color(foreground);
+      style->set_selection_color(background);
+      style->set_selection_text_color(foreground);
     }
     if ((style = Fl_Style::find("check button"))) {
       style->set_selection_color(FL_DARK1);
@@ -101,7 +96,7 @@ int fl_kde1() {
     }
   }
   if ((style = Fl_Style::find("menu window"))) {
-    style->set_leading(motif_style ? 2 : 5);
+    style->set_leading(motif_style ? 4 : 8);
   }
 
   Fl::redraw();
@@ -110,5 +105,5 @@ int fl_kde1() {
 }
 
 //
-// End of "$Id: fl_kde1.cxx,v 1.4 1999/11/14 08:42:50 bill Exp $".
+// End of "$Id: fl_kde1.cxx,v 1.5 1999/11/15 04:02:44 carl Exp $".
 //
