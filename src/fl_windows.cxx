@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.19 1999/11/22 19:46:17 carl Exp $"
+// "$Id: fl_windows.cxx,v 1.20 1999/11/23 11:28:05 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -231,11 +231,13 @@ int fl_windows() {
     s->set_glyph(my_counter_glyph);
   }
 
+  fl_windows_colors();
+
   Fl::redraw();
 
   return 0;
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.19 1999/11/22 19:46:17 carl Exp $".
+// End of "$Id: fl_windows.cxx,v 1.20 1999/11/23 11:28:05 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.34 1999/11/23 09:22:48 vincent Exp $"
+// "$Id: fl_options.cxx,v 1.35 1999/11/23 11:28:04 carl Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -446,10 +446,15 @@ int fl_windows_colors() {
   }
 
   if ((style = Fl_Style::find("menu title"))) {
+    style->set_box(FL_HIGHLIGHT_BOX);
     style->set_highlight_color(background);
     style->set_highlight_label_color(foreground);
     style->set_selection_color(background);
     style->set_selection_text_color(foreground);
+  }
+
+  if ((style = Fl_Style::find("menu bar"))) {
+    style->set_highlight_color(background); // for title highlighting
   }
 
   if ((style = Fl_Style::find("tooltip"))) {
@@ -540,7 +545,7 @@ void Fl_Style::revert() {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.34 1999/11/23 09:22:48 vincent Exp $".
+// End of "$Id: fl_options.cxx,v 1.35 1999/11/23 11:28:04 carl Exp $".
 //
 
 
