@@ -1,7 +1,7 @@
 # data file for the Fltk User Interface Designer (fluid)
 version 2.00 
 do_not_include_H_from_C 
-header_name {.H} 
+header_name {.h} 
 code_name {.cxx} 
 gridx 10 
 gridy 5 
