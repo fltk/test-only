@@ -1,5 +1,5 @@
 //
-// "$Id: scandir_win32.c,v 1.24 2004/07/31 10:25:39 laza2000 Exp $"
+// "$Id: scandir_win32.c,v 1.25 2004/08/06 16:43:48 laza2000 Exp $"
 //
 // _WIN32 scandir function for the Fast Light Tool Kit (FLTK).
 //
@@ -68,7 +68,7 @@ int scandir(const char *dirname, struct dirent ***namelist,
     strcpy(selectDir->d_name, find.cFileName);
     if (!select || (*select)(selectDir)) {
       if (nDir==NDir) {
-	struct dirent **tempDir = calloc(sizeof(struct dirent*), NDir+33);
+	struct dirent **tempDir = (struct dirent **)calloc(sizeof(struct dirent*), NDir+33);
 	if (NDir) memcpy(tempDir, dir, sizeof(struct dirent*)*NDir);
 	if (dir) free(dir);
 	dir = tempDir;
@@ -95,5 +95,5 @@ int scandir(const char *dirname, struct dirent ***namelist,
 }
 
 //
-// End of "$Id: scandir_win32.c,v 1.24 2004/07/31 10:25:39 laza2000 Exp $".
+// End of "$Id: scandir_win32.c,v 1.25 2004/08/06 16:43:48 laza2000 Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: utf.c,v 1.14 2004/08/02 07:35:18 spitzak Exp $"
+// "$Id: utf.c,v 1.15 2004/08/06 16:43:49 laza2000 Exp $"
 //
 // Copyright 2004 by Bill Spitzak and others.
 //
@@ -639,7 +639,7 @@ unsigned utf8tomb(const char* src, unsigned srclen,
 {
   if (!utf8locale()) {
 #ifdef _WIN32
-    unsigned short lbuf[1024];
+    wchar_t lbuf[1024];
     wchar_t* buf = lbuf;
     unsigned length = utf8towc(src, srclen, buf, 1024);
     unsigned ret;
@@ -723,7 +723,7 @@ unsigned utf8frommb(char* dst, unsigned dstlen,
       MultiByteToWideChar(GetACP(), 0, src, srclen, buf, 1024);
     if (length >= 1024) {
       length = MultiByteToWideChar(GetACP(), 0, src, srclen, 0, 0);
-      buf = (unsigned short*)(malloc(length*sizeof(unsigned short)));
+      buf = (wchar_t*)(malloc(length*sizeof(wchar_t)));
       MultiByteToWideChar(GetACP(), 0, src, srclen, buf, length);
     }
     ret = utf8fromwc(dst, dstlen, buf, length);
