@@ -15,6 +15,8 @@ extern fltk::Input* f_return_type_input;
 extern fltk::ReturnButton* f_panel_ok;
 #include <fltk/Button.h>
 extern fltk::Button* f_panel_cancel;
+#include <fltk/Choice.h>
+#include <fltk/Item.h>
 fltk::Window* make_function_panel();
 extern fltk::Window* code_panel;
 #include <fltk/MultiLineInput.h>

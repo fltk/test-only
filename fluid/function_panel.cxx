@@ -18,33 +18,113 @@ fltk::ReturnButton* f_panel_ok;
 
 fltk::Button* f_panel_cancel;
 
+static void cb___declspec(fltk::Item*, void*) {
+  f_attributes_input->value("__declspec(dllexport)");
+}
+
+static void cb___declspec1(fltk::Item*, void*) {
+  f_attributes_input->value("__declspec(dllimport)");
+}
+
+static void cb___stdcall(fltk::Item*, void*) {
+  f_attributes_input->value("__stdcall");
+}
+
+static void cb_static(fltk::Item*, void*) {
+  f_attributes_input->value("static");
+}
+
+static void cb_virtual(fltk::Item*, void*) {
+  f_attributes_input->value("virtual");
+}
+
+static void cb_const(fltk::Item*, void*) {
+  f_attributes_input->value("const");
+}
+
+static void cb_inline(fltk::Item*, void*) {
+  f_attributes_input->value("inline");
+}
+
+static void cb_Set(fltk::Button*, void*) {
+  f_name_input->value("");
+  f_attributes_input->value("");
+  f_return_type_input->value("");
+  f_public_button->value(1);
+  f_c_button->value(0);
+}
+
 fltk::Window* make_function_panel() {
   fltk::Window* w;
-   {fltk::Window* o = function_panel = new fltk::Window(320, 208, "function/method");
+   {fltk::Window* o = function_panel = new fltk::Window(409, 208, "function/method");
     w = o;
     o->begin();
-     {fltk::CheckButton* o = f_public_button = new fltk::CheckButton(10, 15, 74, 25, "public");
+     {fltk::CheckButton* o = f_public_button = new fltk::CheckButton(13, 15, 95, 25, "public");
+      o->box(fltk::THIN_DOWN_BOX);
       o->when(fltk::WHEN_NEVER);
     }
-    f_c_button = new fltk::CheckButton(101, 15, 104, 25, "C declaration");
-     {fltk::Input* o = f_name_input = new fltk::Input(10, 55, 300, 22, "Name(args): (blank for main())");
+     {fltk::CheckButton* o = f_c_button = new fltk::CheckButton(129, 15, 133, 25, "C declaration");
+      o->box(fltk::THIN_DOWN_BOX);
+    }
+     {fltk::Input* o = f_name_input = new fltk::Input(13, 55, 237, 22, "Name(args): (blank for main())");
+      o->box(fltk::THIN_DOWN_BOX);
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
       o->when(fltk::WHEN_NEVER);
     }
-     {fltk::Input* o = f_attributes_input = new fltk::Input(10, 99, 300, 22, "Attributes (virtual, static, __declspec, ...)");
+     {fltk::Input* o = f_attributes_input = new fltk::Input(13, 99, 237, 22, "Attributes (virtual, static, __declspec, ...)");
+      o->box(fltk::THIN_DOWN_BOX);
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
       o->when(fltk::WHEN_NEVER);
     }
-     {fltk::Input* o = f_return_type_input = new fltk::Input(10, 143, 300, 22, "Return Type: (blank to return outermost widget)");
+     {fltk::Input* o = f_return_type_input = new fltk::Input(13, 143, 383, 22, "Return Type: (blank to return outermost widget)");
+      o->box(fltk::THIN_DOWN_BOX);
       o->align(fltk::ALIGN_TOP|fltk::ALIGN_LEFT);
       o->when(fltk::WHEN_NEVER);
     }
-     {fltk::ReturnButton* o = f_panel_ok = new fltk::ReturnButton(120, 176, 92, 22, "OK");
+     {fltk::ReturnButton* o = f_panel_ok = new fltk::ReturnButton(153, 176, 118, 22, "OK");
+      o->buttonbox(fltk::THIN_UP_BOX);
       o->shortcut(0xff0d);
       ((fltk::Window*)(o->parent()))->hotspot(o);
     }
-     {fltk::Button* o = f_panel_cancel = new fltk::Button(220, 176, 90, 22, "Cancel");
+     {fltk::Button* o = f_panel_cancel = new fltk::Button(281, 176, 115, 22, "Cancel");
+      o->box(fltk::THIN_UP_BOX);
+      o->buttonbox(fltk::DOWN_BOX);
       o->shortcut(0xff1b);
+    }
+     {fltk::Choice* o = new fltk::Choice(278, 99, 111, 22, "attr:");
+      o->box(fltk::THIN_DOWN_BOX);
+      o->begin();
+       {fltk::Item* o = new fltk::Item("__declspec(dllexport)");
+        o->buttonbox(fltk::THIN_UP_BOX);
+        o->callback((fltk::Callback*)cb___declspec);
+      }
+       {fltk::Item* o = new fltk::Item("__declspec(dllimport)");
+        o->buttonbox(fltk::THIN_UP_BOX);
+        o->callback((fltk::Callback*)cb___declspec1);
+      }
+       {fltk::Item* o = new fltk::Item("__stdcall");
+        o->buttonbox(fltk::THIN_UP_BOX);
+        o->callback((fltk::Callback*)cb___stdcall);
+      }
+       {fltk::Item* o = new fltk::Item("static");
+        o->callback((fltk::Callback*)cb_static);
+      }
+       {fltk::Item* o = new fltk::Item("virtual");
+        o->callback((fltk::Callback*)cb_virtual);
+      }
+       {fltk::Item* o = new fltk::Item("const");
+        o->callback((fltk::Callback*)cb_const);
+      }
+       {fltk::Item* o = new fltk::Item("inline");
+        o->buttonbox(fltk::THIN_UP_BOX);
+        o->callback((fltk::Callback*)cb_inline);
+      }
+      o->end();
+    }
+     {fltk::Button* o = new fltk::Button(269, 55, 120, 22, "Set main()");
+      o->box(fltk::THIN_UP_BOX);
+      o->buttonbox(fltk::DOWN_BOX);
+      o->callback((fltk::Callback*)cb_Set);
     }
     o->end();
     o->set_modal();
@@ -70,6 +150,7 @@ fltk::Window* make_code_panel() {
       o->type(4);
       o->align(fltk::ALIGN_CENTER);
       o->when(fltk::WHEN_NEVER);
+      fltk::Group::current()->resizable(o);
     }
      {fltk::ReturnButton* o = code_panel_ok = new fltk::ReturnButton(115, 148, 80, 22, "OK");
       o->shortcut(0xff0d);
@@ -80,7 +161,6 @@ fltk::Window* make_code_panel() {
     }
     o->end();
     o->set_modal();
-    o->resizable(o);
   }
   return  w;
 }

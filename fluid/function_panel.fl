@@ -9,36 +9,82 @@ snap 3
 Function {make_function_panel()} {open
 } {
   {fltk::Window} function_panel {
-    label {function/method}
-    xywh {155 391 320 208} resizable modal visible
+    label {function/method} open
+    xywh {373 189 409 208} resizable modal visible
   } {
     {fltk::CheckButton} f_public_button {
       label public
-      xywh {10 15 74 25} when NEVER
+      xywh {13 15 95 25} when NEVER box THIN_DOWN_BOX
     }
     {fltk::CheckButton} f_c_button {
       label {C declaration}
-      xywh {101 15 104 25}
+      xywh {129 15 133 25} box THIN_DOWN_BOX
     }
     {fltk::Input} f_name_input {
       label {Name(args): (blank for main())}
-      xywh {10 55 300 22} align 5 when NEVER
+      xywh {13 55 237 22} align 5 when NEVER box THIN_DOWN_BOX
     }
     {fltk::Input} f_attributes_input {
       label {Attributes (virtual, static, __declspec, ...)}
-      xywh {10 99 300 22} align 5 when NEVER
+      xywh {13 99 237 22} align 5 when NEVER box THIN_DOWN_BOX
     }
     {fltk::Input} f_return_type_input {
       label {Return Type: (blank to return outermost widget)}
-      xywh {10 143 300 22} align 5 when NEVER
+      xywh {13 143 383 22} align 5 when NEVER box THIN_DOWN_BOX
     }
     {fltk::ReturnButton} f_panel_ok {
       label OK
-      xywh {120 176 92 22} hotspot shortcut 0xff0d
+      xywh {153 176 118 22} hotspot buttonbox THIN_UP_BOX shortcut 0xff0d
     }
     {fltk::Button} f_panel_cancel {
       label Cancel
-      xywh {220 176 90 22} shortcut 0xff1b
+      xywh {281 176 115 22} box THIN_UP_BOX buttonbox DOWN_BOX shortcut 0xff1b
+    }
+    {fltk::Choice} {} {
+      label {attr:} open selected
+      xywh {278 99 111 22} box THIN_DOWN_BOX
+    } {
+      {fltk::Item} {} {
+        label {__declspec(dllexport)}
+        callback {f_attributes_input->value("__declspec(dllexport)");}
+        buttonbox THIN_UP_BOX
+      }
+      {fltk::Item} {} {
+        label {__declspec(dllimport)}
+        callback {f_attributes_input->value("__declspec(dllimport)");}
+        buttonbox THIN_UP_BOX
+      }
+      {fltk::Item} {} {
+        label __stdcall
+        callback {f_attributes_input->value("__stdcall");}
+        buttonbox THIN_UP_BOX
+      }
+      {fltk::Item} {} {
+        label static
+        callback {f_attributes_input->value("static");}
+        }
+      {fltk::Item} {} {
+        label virtual
+        callback {f_attributes_input->value("virtual");}
+        }
+      {fltk::Item} {} {
+        label const
+        callback {f_attributes_input->value("const");}
+        }
+      {fltk::Item} {} {
+        label inline
+        callback {f_attributes_input->value("inline");}
+        buttonbox THIN_UP_BOX
+      }
+    }
+    {fltk::Button} {} {
+      label {Set main()}
+      callback {f_name_input->value("");
+f_attributes_input->value("");
+f_return_type_input->value("");
+f_public_button->value(1);
+f_c_button->value(0);}
+      xywh {269 55 120 22} box THIN_UP_BOX buttonbox DOWN_BOX
     }
   }
 } 
@@ -46,11 +92,11 @@ Function {make_function_panel()} {open
 Function {make_code_panel()} {open
 } {
   {fltk::Window} code_panel {
-    label code
-    xywh {171 177 290 175} resizable modal visible
+    label code open
+    xywh {171 177 290 175} hide resizable modal
   } {
     {fltk::Input} code_input {
-      xywh {6 5 280 138} type Multiline align 0 when NEVER
+      xywh {6 5 280 138} type Multiline align 0 when NEVER resizable
     }
     {fltk::ReturnButton} code_panel_ok {
       label OK
@@ -67,7 +113,7 @@ Function {make_codeblock_panel()} {open
 } {
   {fltk::Window} codeblock_panel {
     label codeblock open
-    xywh {539 470 290 131} resizable modal visible
+    xywh {539 470 290 131} hide resizable modal
   } {
     {fltk::Input} code_before_input {
       xywh {10 11 270 22} align 5 when NEVER
@@ -94,13 +140,13 @@ Function {make_declblock_panel()} {open
 } {
   {fltk::Window} declblock_panel {
     label {declaration block} open
-    xywh {540 629 290 131} resizable modal visible
+    xywh {371 299 290 131} hide resizable modal
   } {
     {fltk::Input} decl_before_input {
       xywh {10 11 270 22} align 5 when NEVER
     }
     {fltk::Widget} {} {
-      label {"\\n...child code...\\n" is inserted here} selected
+      label {"\\n...child code...\\n" is inserted here}
       xywh {10 33 270 33} align 20 box NO_BOX
     }
     {fltk::Input} decl_after_input {
@@ -120,7 +166,7 @@ Function {make_declblock_panel()} {open
 Function {make_decl_panel()} {open
 } {
   {fltk::Window} decl_panel {
-    label declaration
+    label declaration open
     xywh {152 819 290 175} resizable visible
   } {
     {fltk::CheckButton} decl_public_button {
@@ -149,7 +195,7 @@ Function {make_class_panel()} {open
 } {
   {fltk::Window} class_panel {
     label class
-    xywh {838 630 280 164} resizable modal visible
+    xywh {356 324 280 164} hide resizable modal
   } {
     {fltk::CheckButton} c_public_button {
       label public
