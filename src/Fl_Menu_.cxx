@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.46 2002/12/10 02:00:43 easysw Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.47 2003/01/21 07:53:39 spitzak Exp $"
 //
 // The Menu base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Group
@@ -103,6 +103,9 @@ void Menu::execute(Widget* widget) {
   item(widget);
   if (fl_dont_execute) return;
   if (!widget) return; // never do callback when no widget is picked
+#if 0
+  // This is removed, hopefully we can put *real* buttons into the menus
+  // and it breaks the ability to put real ones into browsers.
   if (widget->type() == Item::RADIO) {
     widget->set_value();
     Group* g = widget->parent();
@@ -121,7 +124,7 @@ void Menu::execute(Widget* widget) {
   } else if (checkmark(widget)) {
     if (widget->value()) widget->clear_value(); else widget->set_value();
   }
-
+#endif
   do_callback();
 }
 
@@ -228,5 +231,5 @@ int Menu::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.46 2002/12/10 02:00:43 easysw Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.47 2003/01/21 07:53:39 spitzak Exp $"
 //

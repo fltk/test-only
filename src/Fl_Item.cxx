@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.22 2002/12/10 02:00:43 easysw Exp $"
+// "$Id: Fl_Item.cxx,v 1.23 2003/01/21 07:53:39 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -60,10 +60,9 @@ Item::Item(const char* l) : Widget(0,0,0,0,l) {
 }
 
 void Item::draw() {
-  draw_box();
-
+  //if (box() != NO_BOX) draw_box();
   int x = 0; int y = 0; int w = this->w(); int h = this->h();
-  box()->inset(x,y,w,h);
+  //box()->inset(x,y,w,h);
 
   if (type()) {
     // if pushed, preview the resulting state:
@@ -98,6 +97,9 @@ void Item::layout() {
   Widget::layout();
 }
 
+// Items do not accept ANY events.
+int Item::handle(int) {return 0;}
+
 ////////////////////////////////////////////////////////////////
 
 #include <fltk/ItemGroup.h>
@@ -111,9 +113,9 @@ ItemGroup::ItemGroup(const char* l) : Menu(0,0,0,0,l) {
 // implementation of draw & layout should be identical to Item type()==0
 
 void ItemGroup::draw() {
-  draw_box();
+  //if (box() != NO_BOX) draw_box();
   int x = 0; int y = 0; int w = this->w(); int h = this->h();
-  box()->inset(x,y,w,h);
+  //box()->inset(x,y,w,h);
   draw_label(x+3, y, w-6, h, flags());
 }
 
@@ -133,6 +135,9 @@ void ItemGroup::layout() {
   this->h(h-dh);
   Widget::layout();
 }
+
+// Items do not accept ANY events.
+int ItemGroup::handle(int) {return 0;}
 
 ////////////////////////////////////////////////////////////////
 // Divider, does not share any code, but closely related:
@@ -161,3 +166,6 @@ void Divider::layout() {
   if (!w()) w(2);
   if (!h()) h(2);
 }
+
+// Items do not accept ANY events.
+int Divider::handle(int) {return 0;}

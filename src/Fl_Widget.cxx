@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.97 2003/01/19 07:55:00 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.98 2003/01/21 07:53:39 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -235,16 +235,15 @@ int Widget::handle(int event) {
 // 3. If handle returns true it sets the belowmouse or focus widget
 // to reflect this.
 
+int fl_pushed_dx;
+int fl_pushed_dy;
+
 int Widget::send(int event) {
 
-  // Figure out the mouse position in this widget from the root mouse position:
-  int ex = e_x_root;
-  int ey = e_y_root;
-  {for (Widget *t=this; t; t = t->parent()) {ex -= t->x(); ey -= t->y();}}
   int save_x = e_x;
-  e_x = ex;
+  e_x -= x();
   int save_y = e_y;
-  e_y = ey;
+  e_y -= y();
 
   int ret = 0;
   switch (event) {
@@ -299,6 +298,9 @@ int Widget::send(int event) {
       if (event_state(0x0f000000) && !contains(fltk::pushed())) {
 	fltk::pushed(this);
 	if (click_to_focus()) take_focus();
+	// remember the mouse offset so we can send DRAG/RELEASE directly:
+	fl_pushed_dx = e_x-e_x_root;
+	fl_pushed_dy = e_y-e_y_root;
       }
     }
     break;
@@ -507,5 +509,5 @@ void Widget::draw()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.97 2003/01/19 07:55:00 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.98 2003/01/21 07:53:39 spitzak Exp $".
 //

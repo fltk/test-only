@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.158 2002/12/15 10:42:53 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.159 2003/01/21 07:53:39 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -563,6 +563,18 @@ void fltk::add_event_handler(int (*h)(int, Window*)) {
 
 bool (*fl_local_grab)(int); // used by fl_dnd_x.cxx
 
+static int send_from_root(Widget* widget, int event) {
+  // get the mouse coordinates relative to the parent of widget:
+  e_x = e_x_root;
+  e_y = e_y_root;
+  for (Widget *t= widget->parent(); t; t = t->parent()) {
+    e_x -= t->x(); e_y -= t->y();
+  }
+  return widget->send(event);
+}
+
+extern int fl_pushed_dx, fl_pushed_dy;
+
 bool fltk::handle(int event, Window* window)
 {
   e_type = event;
@@ -585,21 +597,29 @@ bool fltk::handle(int event, Window* window)
     if (to->contains(belowmouse())) return 0;
   case MOVE:
 //case DRAG: // does not happen
-    if (pushed()) {to = pushed_; event = DRAG; break;}
+    if (pushed()) {
+      e_x = e_x_root+fl_pushed_dx;
+      e_y = e_y_root+fl_pushed_dy;
+      return pushed()->handle(DRAG);
+    }
     {Widget* pbm = belowmouse();
     if (modal_ && !modal_->contains(to)) to = modal_;
-    bool ret = to && to->send(MOVE);
+    bool ret = to && send_from_root(to,MOVE);
     if (pbm != belowmouse()) Tooltip::enter(belowmouse());
     return ret;}
-
-  case LEAVE:
-    if (!pushed_) {belowmouse(0); Tooltip::exit();}
-    return true;
 
   case RELEASE:
     to = pushed();
     if (!event_state(ANY_BUTTON)) pushed_=0;
+    if (!to) return false;
+    e_x = e_x_root+fl_pushed_dx;
+    e_y = e_y_root+fl_pushed_dy;
+    return to->handle(RELEASE);
     break;
+
+  case LEAVE:
+    if (!pushed_) {belowmouse(0); Tooltip::exit();}
+    return true;
 
   case DND_ENTER:
   case DND_DRAG:
@@ -623,7 +643,7 @@ bool fltk::handle(int event, Window* window)
     to = focus();
     if (modal_ && !modal_->contains(to)) to = modal_;
     while (to) {
-      if (to->send(event)) return true;
+      if (send_from_root(to,event)) return true;
       to = to->parent();
     }
     // try sending a shortcut to the window:
@@ -643,7 +663,7 @@ bool fltk::handle(int event, Window* window)
   // restrict to modal widgets:
   if (modal_ && !modal_->contains(to)) to = modal_;
 
-  bool ret = to && to->send(event);
+  bool ret = to && send_from_root(to,event);
   if (!ret) {
     // try the chain of global event handlers:
     for (const handler_link *h = handlers; h; h = h->next)
@@ -663,5 +683,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.158 2002/12/15 10:42:53 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.159 2003/01/21 07:53:39 spitzak Exp $".
 //

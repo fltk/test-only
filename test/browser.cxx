@@ -4,12 +4,13 @@
 #include <fltk/Browser.h>
 #include <fltk/Window.h>
 #include <fltk/Button.h>
+#include <fltk/CheckButton.h>
+#include <fltk/Input.h>
 #include <fltk/run.h>
 #include <fltk/events.h>
 #include <fltk/xpmImage.h>
 #include <fltk/Item.h>
 #include <fltk/ItemGroup.h>
-#include <fltk/CheckButton.h>
 
 #include "folder_small.xpm"
 #include "file_small.xpm"
@@ -133,6 +134,10 @@ void cb_when_enter_key(fltk::Widget* b, void* ptr) {
     tree->when(tree->when()&~fltk::WHEN_ENTER_KEY);
 }
 
+void button_cb(fltk::Widget* b, void *) {
+  printf("Button pushed\n");
+}
+
 #define USE_STRING_LIST 0
 #if USE_STRING_LIST
 #include <fltk/fltk::String_List.h>
@@ -233,6 +238,17 @@ int main(int argc,char** argv) {
   add_paper(&tree, "xxx", 0, fileSmall);
   add_paper(&tree, "yyy", 0, fileSmall);
   add_paper(&tree, "zzz", 0, fileSmall);
+
+  // add some widgets:
+  g->begin();
+  fltk::Button * b = new fltk::Button(0,0,100,23,"button");
+  b->callback(button_cb);
+  b = new fltk::CheckButton(0,0,100,23,"CheckButton");
+  printf("b->type = %d, group = %d, is_group = %d\n",
+	 b->type(), fltk::Widget::GROUP_TYPE, b->is_group());
+  b->callback(button_cb);
+  new fltk::Input(0,0,200,23,"Input:");
+  tree.end();
 
 #if 0
   // Examples of removing items (successfully, and unsuccessfully)

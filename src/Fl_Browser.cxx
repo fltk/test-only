@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.70 2002/12/15 10:42:53 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.71 2003/01/21 07:53:39 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -425,11 +425,13 @@ void Browser::draw_item() {
   for (int j = indented() ? 0 : 1; j <= item_level[HERE]; j++) {
     int g = item_index[HERE][j] < children(item_index[HERE],j) - 1;
     if (j == item_level[HERE]) {
-      g += ELL;
-      if (widget->flags() & VALUE)
-	g += OPEN_ELL-ELL;
-      else if (children(item_index[HERE],j+1)>=0)
-	g += CLOSED_ELL-ELL;
+      if (children(item_index[HERE],j+1)>=0)
+	if (widget->flags() & VALUE)
+	  g += OPEN_ELL;
+	else
+	  g += CLOSED_ELL;
+      else
+	g += ELL;
     }
     draw_glyph(g, x, y, arrow_size, h, flags);
     x += arrow_size;
@@ -441,10 +443,15 @@ void Browser::draw_item() {
 		      : widget->textcolor(), INVISIBLE);
   }
   push_matrix();
-  translate(x, y+(int(leading())+1)/2-1);
-  int save_w = widget->w(); widget->w(X+W-x);
+  y += (int(leading())-1)/2;
+  widget->x(x);
+  widget->y(y);
+  translate(x, y);
+  //int save_w = widget->w(); widget->w(X+W-x);
+  widget->set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
   widget->draw();
-  widget->w(save_w);
+  widget->set_damage(0);
+  //widget->w(save_w);
   pop_matrix();
 
   widget->invert_flag(preview_open);
@@ -495,6 +502,23 @@ void Browser::draw() {
       if (goto_mark(n)) {
 	if (!clipped) {push_clip(X,Y,W,H); clipped = 1;}
 	draw_item();
+      }
+    }
+    if (d & DAMAGE_CHILD) {
+      if (goto_mark(FIRST_VISIBLE)) for (;;) {
+	int y = Y+item_position[HERE]-yposition_+(int(leading())-1)/2;
+	if (y >= Y+H) break;
+	if (item()->damage()) {
+	  if (!clipped) {push_clip(X,Y,W,H); clipped = 1;}
+	  int arrow_size = int(textsize())|1;
+	  int x = (item_level[HERE]+indented())*arrow_size+X-xposition_;
+	  push_matrix();
+	  translate(x, y);
+	  item()->draw();
+	  item()->set_damage(0);
+	  pop_matrix();
+	}
+	if (!next_visible()) break;
       }
     }
     if (clipped) pop_clip();
@@ -552,7 +576,7 @@ bool Browser::set_item_visible(bool value)
 }
 
 void Browser::layout() {
-  // clear the flags first so the other things know it is ok to measure
+  // clear the flags first so the other methods know it is ok to measure
   // the widgets:
   Widget::layout();
 
@@ -673,6 +697,11 @@ bool Browser::set_focus() {
     damage_item(FOCUS); // so focus box around old focus item will be removed
     set_mark(FOCUS, HERE); // current item is new focus item
   }
+  // make the item do it's own focus highlighting:
+  if (item() && item()->take_focus());
+  // otherwise take the focus from any other child:
+  else if (contains(fltk::focus())) fltk::focus(this);
+  // scroll to show the item:
   make_item_visible();
   return ret;
 }
@@ -788,13 +817,14 @@ int Browser::handle(int event) {
 
   switch (event) {
   case fltk::FOCUS:
+    if (goto_mark(FOCUS) && item()) item()->take_focus();
   case UNFOCUS:
     damage_item(FOCUS);
     return 1;
 
   case PUSH:
   case ENTER:
-  case MOVE:
+  case MOVE: {
     // For all mouse events check to see if we are in the scrollbar
     // areas and send to them:
     if (scrollbar.visible() &&
@@ -807,42 +837,55 @@ int Browser::handle(int event) {
 	 (event_y() < hscrollbar.y()+hscrollbar.h()) :
 	 (event_y() >= hscrollbar.y())))
       return hscrollbar.send(event);
-    if (event != PUSH) return 1; // return true for enter/move
-    //take_focus();
-    openclose_drag = 0;
-  case DRAG: {
-    if (!goto_position(event_y()-Y+yposition_) && !item()) break;
-
-    // see if they clicked the open/close box
+    // find the item we are pointing at:
+    if (!goto_position(event_y()-Y+yposition_) && !item()) return 0;
+    // set xx to how far to left of widget they clicked:
     int arrow_size = int(textsize())|1;
     int xx = (item_level[HERE]+indented())*arrow_size+X-xposition_-event_x();
-    if ((event==PUSH || openclose_drag) && xx > 0 && xx < arrow_size &&
-	item_is_parent()) {
+    // see if they are inside the widget and it takes the event:
+    if (xx <= 0) item()->send(event);
+    // accept enter/move events so the browser's tooltip appears:
+    if (event != PUSH) return 1;
+    // drag must start & end in open/close box for it to work:
+    openclose_drag = (xx > 0 && xx < arrow_size && item_is_parent());
+    //take_focus();
+    if (multi()) {
+      if (event_state(CTRL)) {
+	// start a new selection block without changing state
+	drag_type = !item()->selected();
+	if (openclose_drag) drag_type = !drag_type; // don't change it
+	set_item_selected(drag_type, WHEN_CHANGED);
+	set_focus();
+	event_clicks(0); // make it not be a double-click for callback
+	return 1;
+      } else if (event_state(SHIFT)) {
+	// extend the current focus
+	drag_type = !item()->selected();
+	event_clicks(0); // make it not be a double-click for callback
+      } else {
+	select_only_this(WHEN_CHANGED);
+	drag_type = true;
+	return 1;
+      }
+    }
+    goto MOUSE_TO_ITEM;}
+
+  case DRAG: {
+    // find the item they are now pointing at:
+    if (!goto_position(event_y()-Y+yposition_) && !item()) break;
+    // set xx to how far to left of widget they clicked:
+    int arrow_size = int(textsize())|1;
+    int xx = (item_level[HERE]+indented())*arrow_size+X-xposition_-event_x();
+    // openclose_drag will be 1 only if they started on a open/close box
+    // and they ended on one. I use the value 2 to indicate that they
+    // were on one and moved off, but can still move back:
+    if (openclose_drag && xx > 0 && xx < arrow_size && item_is_parent()) {
       if (openclose_drag != 1) {openclose_drag = 1; damage_item(HERE);}
     } else {
       if (openclose_drag == 1) {openclose_drag = 2; damage_item(HERE);}
-    }
-
+    }}
+  MOUSE_TO_ITEM:
     if (multi()) {
-      if (event == PUSH) {
-	if (event_state(CTRL)) {
-	  // start a new selection block without changing state
-	  drag_type = !item()->selected();
-	  if (openclose_drag) drag_type = !drag_type; // don't change it
-	  set_item_selected(drag_type, WHEN_CHANGED);
-	  set_focus();
-	  event_clicks(0); // make it not be a double-click for callback
-	  return 1;
-	} else if (event_state(SHIFT)) {
-	  // extend the current focus
-	  drag_type = !item()->selected();
-	  event_clicks(0); // make it not be a double-click for callback
-	} else {
-	  select_only_this(WHEN_CHANGED);
-	  drag_type = true;
-	  return 1;
-	}
-      }
       // set everything from old focus to current to drag_type:
       int direction = compare_marks(HERE,FOCUS);
       set_mark(TEMP, HERE);
@@ -856,7 +899,7 @@ int Browser::handle(int event) {
     } else {
       select_only_this(WHEN_CHANGED);
     }
-    return 1;}
+    return 1;
 
   case RELEASE:
     goto_mark(FOCUS);
@@ -1090,5 +1133,5 @@ Browser::~Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.70 2002/12/15 10:42:53 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.71 2003/01/21 07:53:39 spitzak Exp $".
 //

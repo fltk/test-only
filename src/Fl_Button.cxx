@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.59 2002/12/10 02:00:39 easysw Exp $"
+// "$Id: Fl_Button.cxx,v 1.60 2003/01/21 07:53:39 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -177,6 +177,8 @@ void Button::draw(int glyph, int glyph_width) const
       // Don't draw the label unnecessarily:
       draw_label = false;
     }
+    // use the text_color for the labels if we are in a browser and selected:
+    if (selected()) flags |= SELECTED;
   } else {
     if ((damage()&DAMAGE_EXPOSE) && !box->fills_rectangle()) {
       // Erase the area behind non-square boxes
@@ -230,5 +232,5 @@ Button::Button(int x,int y,int w,int h, const char *l) : Widget(x,y,w,h,l) {
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.59 2002/12/10 02:00:39 easysw Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.60 2003/01/21 07:53:39 spitzak Exp $".
 //

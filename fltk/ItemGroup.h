@@ -1,5 +1,5 @@
 //
-// "$Id: ItemGroup.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: ItemGroup.h,v 1.3 2003/01/21 07:53:38 spitzak Exp $"
 //
 // Widget designed to be a nested list in a menu or browser. This
 // copies the drawing and style code from Item. I did not modify the
@@ -37,6 +37,7 @@ class FL_API ItemGroup : public Menu {
 public:
   void draw();
   void layout();
+  int handle(int);
   ItemGroup(const char* label = 0);
 };
 

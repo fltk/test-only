@@ -1,5 +1,5 @@
 //
-// "$Id: Divider.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: Divider.h,v 1.3 2003/01/21 07:53:38 spitzak Exp $"
 //
 // Widget to draw a divider line in a menu
 //
@@ -36,6 +36,7 @@ class FL_API Divider : public Widget {
 public:
   void draw();
   void layout();
+  int handle(int);
   Divider();
 };
 
