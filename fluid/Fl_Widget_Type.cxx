@@ -569,7 +569,7 @@ Fl_Menu_Item boxmenu[] = {
 {0}};
 
 const char *boxname(int i) {
-  if (!i) i = ZERO_ENTRY;
+  if (!i) return boxmenu[0].label();
   for (int j = 0; j < int(sizeof(boxmenu)/sizeof(*boxmenu)); j++)
     if (Fl::box_index((Fl_Symbol *)(boxmenu[j].user_data())) == i) return boxmenu[j].label();
   return 0;

@@ -91,6 +91,14 @@ LINK32=link.exe
 # Name "CubeView - Win32 Debug"
 # Begin Source File
 
+SOURCE=..\src\psprinter\arci.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\psprinter\color.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\test\CubeMain.cxx
 # End Source File
 # Begin Source File
@@ -131,6 +139,34 @@ InputPath=..\test\CubeViewUI.fl
 
 !ENDIF 
 
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\psprinter\draw.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\psprinter\Fl_PS_Printer.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\psprinter\font.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\psprinter\image.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\psprinter\line_style.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\psprinter\rect.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\psprinter\vertex.cxx
 # End Source File
 # End Target
 # End Project

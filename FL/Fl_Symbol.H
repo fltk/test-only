@@ -56,7 +56,7 @@ public:
   int dh() const {return dh_;}
 
   Fl_Symbol & square(bool s){ if(s) type_ |=0x80; else  type_ &= ~((uchar)0x80); return  * this;}
-  bool square(){return type_ & 0x80;}
+  bool square(){ return (type_ & 0x80) ?  1: 0;}
  
 
   
