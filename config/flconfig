@@ -12,4 +12,4 @@
     #   Alternative, Alt2, Classic, Essai, KDE1, Motif, OldMotif, Windows
     # (scheme info can be put directly in this file instead of using include)
 
-    include schemes/Alternative
+    include schemes/Essai

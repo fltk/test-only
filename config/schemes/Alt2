@@ -17,11 +17,11 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
   [widgets/default]
     highlight color = light1
 
-  [widgets/menu]				  # menu attributes
-    glyph box = alternative menu		  # boxtype of menu items
+  [widgets/menu]                                  # menu attributes
+    window box = alternative menu                 # boxtype of menu items
 
   [widgets/menu bar]
-    window box = alternative menu title		  # boxtype of menu titles
+    window box = alternative menu title           # boxtype of menu titles
 
   [widgets/browser]                               # browser attributes
     box = up                                      # boxtype of browser
@@ -30,16 +30,19 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     box = border                                  # boxtype for chart
 
   [widgets/check button]                          # check button attributes
-   selection color = red
+   text color = red
+
+  [widgets/light button]                          # check button attributes
+   text color = red
 
   [widgets/return button]                         # return button attributes
     box = alternative up                          # boxtype of button
 
   [widgets/slider]                                # slider attributes
-    box = down                                    # boxtype of the slider background area
+    window box = down
 
   [widgets/scrollbar]                             # scroll bar attributes
-    box = down                                    # boxtype of the scroll bar background area
+    window box = down
 
   [widgets/input]                                 # input and output widget attributes
     box = down                                    # boxtype of the input / output area
@@ -48,7 +51,7 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     box = down                                    # boxtype of the input / output area
 
   [widgets/counter]                               # counter attributes
-    box = border                                  # boxtype of the counter's text area
+    box = up                                      # boxtype of the counter's text area
 
   [widgets/tooltip]
     box = engraved                                # box around tooltips

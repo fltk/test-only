@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.5 2000/04/15 04:47:25 carl Exp $"
+// "$Id: fl_motif.cxx,v 1.6 2000/04/15 07:36:28 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -232,7 +232,6 @@ int fl_motif()
   }
 
   if ((s = Fl_Style::find("choice"))) {
-    s->box = FL_NO_BOX;
     s->window_box = &thin_motif_up_box;
     s->glyph = choice_glyph;
   }
@@ -241,5 +240,5 @@ int fl_motif()
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.5 2000/04/15 04:47:25 carl Exp $"
+// End of "$Id: fl_motif.cxx,v 1.6 2000/04/15 07:36:28 carl Exp $"
 //
