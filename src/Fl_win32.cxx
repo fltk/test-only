@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.232 2004/08/25 17:10:37 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.233 2004/10/09 07:33:35 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -154,6 +154,10 @@ bool fl_load_imm32()
 
 void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
 {
+  HWND hwnd;
+  {Window* flwindow = w->window();
+  if (!flwindow || !flwindow->shown()) return;
+  hwnd = xid(flwindow);}
   int change = 0;
   //const char *fnt = NULL;
   static fltk::Font *spotf = NULL;
@@ -182,10 +186,10 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
 
   static HIMC himcold = 0;
   if (f != NULL) {
-    HIMC himc = pfnImmGetContext(xid(w->window()));
+    HIMC himc = pfnImmGetContext(hwnd);
     if (himc == 0) {
       himc = himcold;
-      pfnImmAssociateContext(xid(w->window()), himc);
+      pfnImmAssociateContext(hwnd, himc);
     }
     if (himc) {
       COMPOSITIONFORM	cfs;
@@ -196,15 +200,15 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
       pfnImmSetCompositionWindow(himc, &cfs);
       GetObject(fltk::xfont(), sizeof(LOGFONTW), &lf);
       pfnImmSetCompositionFontW(himc, &lf);
-      pfnImmReleaseContext(xid(w->window()), himc);
+      pfnImmReleaseContext(hwnd, himc);
       himcold = 0;
     }
   } else {
     if (!himcold) {
-      HIMC himc = pfnImmGetContext(xid(w->window()));
-      pfnImmAssociateContext(xid(w->window()), 0);//NULL); MinGW has problems with NULL
+      HIMC himc = pfnImmGetContext(hwnd);
+      pfnImmAssociateContext(hwnd, 0);//NULL); MinGW has problems with NULL
       himcold = himc;
-      pfnImmReleaseContext(xid(w->window()), himc);
+      pfnImmReleaseContext(hwnd, himc);
     }
   }
 }
@@ -1715,7 +1719,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     return 1;
 
   case WT_PROXIMITY: // stylus proximity packet
-    stylus_data_valid = LOWORD(lParam);
+    stylus_data_valid = LOWORD(lParam)!=0;
     return 1;
 
   default:
@@ -2337,5 +2341,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.232 2004/08/25 17:10:37 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.233 2004/10/09 07:33:35 spitzak Exp $".
 //

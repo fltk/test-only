@@ -1,5 +1,5 @@
 //
-// "$Id: Style.h,v 1.16 2004/08/03 07:26:32 spitzak Exp $"
+// "$Id: Style.h,v 1.17 2004/10/09 07:33:35 spitzak Exp $"
 //
 // Style structure used by Widgets
 //
@@ -144,7 +144,7 @@ class FL_API Style {
   float		leading_;
   unsigned char	scrollbar_align_;
   unsigned char	scrollbar_width_;
-  unsigned char dynamic_;
+  bool		dynamic_;
   // global settings:
   static bool	hide_shortcut_;
   static bool   draw_boxes_inactive_;
@@ -241,5 +241,5 @@ extern "C" FL_API bool fltk_theme();
 #endif
 
 //
-// End of "$Id: Style.h,v 1.16 2004/08/03 07:26:32 spitzak Exp $".
+// End of "$Id: Style.h,v 1.17 2004/10/09 07:33:35 spitzak Exp $".
 //
