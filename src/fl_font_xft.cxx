@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.13 2002/12/10 09:43:26 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.14 2003/03/02 03:38:14 nafees Exp $"
 //
 // Copyright 2001 Bill Spitzak and others.
 //
@@ -213,10 +213,10 @@ void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
 
   if (!draw) {
 #if USE_OVERLAY
-    if (overlay)
+    if (fl_overlay)
       draw =
 	XftDrawCreate(xdisplay, drawable->xid,
-		      overlay_visual->visual, overlay_colormap);
+		      fl_overlay_visual->visual, fl_overlay_colormap);
     else
 #endif
     draw =
@@ -400,5 +400,5 @@ int fltk::Font::encodings(const char**& arrayp) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.13 2002/12/10 09:43:26 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.14 2003/03/02 03:38:14 nafees Exp $"
 //
