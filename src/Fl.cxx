@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.81 2000/02/16 07:30:04 bill Exp $"
+// "$Id: Fl.cxx,v 1.82 2000/02/18 08:39:16 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -277,15 +277,12 @@ void fl_fix_focus(int sendmove) {
     while (w->parent()) w = w->parent();
     if (Fl::modal()) w = Fl::modal();
     if (!w->contains(Fl::focus())) {
-      // make sure widget does not think it got called by a navigation key:
-      int save = Fl::e_keysym;
-      Fl::e_keysym = 0;
+      Fl::e_keysym = 0; // make sure it does not look like navigation keystroke
       if (w->takesevents() &&
 	  w->handle(FL_FOCUS) &&
 	  w->contains(Fl::focus()))
 	;
       else Fl::focus(w); // give it focus even if it does not want it
-      Fl::e_keysym = save;
     }
   } else
     Fl::focus(0);
@@ -447,7 +444,7 @@ int Fl::handle(int event, Fl_Window* window)
 
     Fl_Tooltip::enter((Fl_Widget*)0);
     fl_xfocus = window; // this should already be set, but just in case.
-    fl_fix_focus(0);
+    // fl_fix_focus(0); clobbers e_keysym, so do not call this, or save it
 
     // Try sending keystroke to the focus, if any:
     w = grab(); if (!w) w = focus();
@@ -744,5 +741,5 @@ void Fl_Window::flush() {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.81 2000/02/16 07:30:04 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.82 2000/02/18 08:39:16 bill Exp $".
 //

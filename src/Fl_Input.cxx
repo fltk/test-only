@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.28 2000/02/16 07:30:04 bill Exp $"
+// "$Id: Fl_Input.cxx,v 1.29 2000/02/18 08:39:18 bill Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -116,6 +116,31 @@ int fl_compose(int state, char c, int& del, char* buffer, int& ins) {
   }
 }
 
+#ifndef _WIN32 // X only
+// X dead-key lookup table.  This turns a dead-key keysym into the
+// first of two characters for one of the compose sequences.  These
+// keysyms start at 0xFE50.  (0 does nothing)
+static char dead_keys[] = {
+  '`', // XK_dead_grave
+  '\'',        // XK_dead_acute
+  '^', // XK_dead_circumflex
+  '~', // XK_dead_tilde
+  '_', // XK_dead_macron
+  0,   // XK_dead_breve
+  '.', // XK_dead_abovedot
+  ':', // XK_dead_diaeresis
+  '*', // XK_dead_abovering
+  0,   // XK_dead_doubleacute
+  'v', // XK_dead_caron
+  ','  // XK_dead_cedilla
+//   0,        // XK_dead_ogonek
+//   0,        // XK_dead_iota
+//   0,        // XK_dead_voiced_sound
+//   0,        // XK_dead_semivoiced_sound
+//   0 // XK_dead_belowdot
+};
+#endif
+
 ////////////////////////////////////////////////////////////////
 
 static int compose; // compose state (# of characters so far + 1)
@@ -146,6 +171,21 @@ int Fl_Input::handle_key() {
 	return replace(position(),mark(),Fl::event_text(),Fl::event_length());
     }
   }
+
+#ifndef _WIN32 // X only
+  // detect and translate X dead keys by acting just like you typed
+  // compose and then the key:
+  i = Fl::event_key();
+  if (i >= 0xfe50 && i <= 0xfe5b) {
+    char buf[20]; int ins; int del;
+    compose = fl_compose(0, dead_keys[i-0xfe50], del, buf, ins);
+    if (compose) {
+      replace(position(), del ? position()-del : mark(), buf, ins);
+      compose++; // store value+1 so 1 can initialize compose state
+      return 1;
+    }
+  }
+#endif
 
   if (Fl::event_state(FL_ALT|FL_META)
       && !(Fl::event_length() && (ascii&128))) { // reserved for shortcuts
@@ -349,5 +389,5 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.28 2000/02/16 07:30:04 bill Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.29 2000/02/18 08:39:18 bill Exp $".
 //

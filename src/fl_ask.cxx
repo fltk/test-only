@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.13 2000/02/14 11:32:58 bill Exp $"
+// "$Id: fl_ask.cxx,v 1.14 2000/02/18 08:39:20 bill Exp $"
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
@@ -115,6 +115,7 @@ static int innards(const char* fmt, va_list ap,
   else button[2]->hide();
   const char* prev_icon_label = icon->label();
   if (!prev_icon_label) icon->label(iconlabel);
+  input->h(input->text_size()*2);
   window->focus(input->visible() ? input : button[1]);
   window->hotspot(button[0]);
   window->show();
@@ -206,5 +207,5 @@ const char *fl_password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.13 2000/02/14 11:32:58 bill Exp $".
+// End of "$Id: fl_ask.cxx,v 1.14 2000/02/18 08:39:20 bill Exp $".
 //

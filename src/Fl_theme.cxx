@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_theme.cxx,v 1.5 2000/02/16 07:30:05 bill Exp $"
+// "$Id: Fl_theme.cxx,v 1.6 2000/02/18 08:39:19 bill Exp $"
 //
 // Theme loading code for the Fast Light Tool Kit (FLTK).
 //
@@ -51,6 +51,7 @@
 static const char DEFAULT[] = "default";
 const char* Fl::theme_ = DEFAULT;
 const char* Fl::scheme_ = 0;
+Fl_Color fl_bg_switch = 0; // set by -bg in Fl_arg.cxx
 
 ////////////////////////////////////////////////////////////////
 // loadtheme():
@@ -120,30 +121,68 @@ int Fl::loadtheme(const char* theme, const char* scheme) {
   return fl_load_plugin(tfile, "fltk_theme", scheme ? 2 : 1, argv);
 }
 
+////////////////////////////////////////////////////////////////
+
 static int theme_loaded; // indicates that themes have been started
-static void unloadtheme();
+
+extern void fl_windows_colors();
 
 // Warning: this is called by every Fl_Window::show so it must be fast on
 // multiple calls:
-#ifndef WIN32
-extern void fl_open_display();
-#endif
-extern void fl_windows_colors();
 
 int Fl::loadtheme() {
   if (theme_loaded) return 0;
   theme_loaded = 1;
-#ifndef WIN32
-  fl_open_display();
-#endif
   fl_windows_colors();
   if (!theme()) return 0;
-  return loadtheme(theme(), scheme());
+  int r = loadtheme(theme(), scheme());
+  if (fl_bg_switch) fl_background(fl_bg_switch);
+  return r;
 }
 
 // string comparison, except NULL==NULL and does not crash if either is null
 static int nullstrequ(const char* a, const char* b) {
   return a ? b && !strcmp(a,b) : !b;
+}
+
+// Right now only a single theme_unload function is remembered:
+static void (*theme_unload)() = 0;
+void Fl::add_theme_unloader(void (*f)()) {theme_unload = f;}
+
+extern const char* fl_up_box_revert;
+extern const char* fl_down_box_revert;
+
+int Fl::reloadtheme() {
+  // we don't do anything until themes are started up:
+  if (!theme_loaded) return 0;
+
+  // get rid of current theme:
+  if (theme_unload) {theme_unload(); theme_unload = 0;}
+
+  // revert global settings:
+  fl_background((Fl_Color)0xc0c0c000);
+  fl_up_box.data = fl_up_box_revert;
+  fl_down_box.data = fl_down_box_revert;
+  Fl_Style::draw_boxes_inactive = 1;
+  Fl_Style::inactive_menu_hack = 0;
+  Fl_Style::inactive_color_weight = 0.33f;
+
+  // revert all the styles:
+  for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
+    if (p->name) {
+      Fl_Style temp = *p;
+      memset((void*)p, 0, sizeof(Fl_Style));
+      p->parent = temp.parent;
+      p->revertfunc = temp.revertfunc;
+      p->revertfunc(p);
+    }
+  }
+
+  // force it to load the new theme:
+  theme_loaded = 0;
+  int r = loadtheme();
+  redraw();
+  return r;
 }
 
 int Fl::theme(const char* t, const char* s) {
@@ -152,56 +191,31 @@ int Fl::theme(const char* t, const char* s) {
   return reloadtheme();
 }
 
-int Fl::reloadtheme() {
-  if (!theme_loaded) return 0;
-  unloadtheme();
-  int r = loadtheme();
-  redraw();
-  return r;
-}
-
 ////////////////////////////////////////////////////////////////
-// unloadtheme():
 
-// This is a lame version of Fl::theme_unloader(), it can only be called once!
-static void (*theme_unload)() = 0;
+#include <FL/math.h>
 
-void Fl::add_theme_unloader(void (*f)()) {
-  if (theme_unload) theme_unload();
-  theme_unload = f;
-}
-
-static void style_clear(Fl_Style *s) {
-  Fl_Style temp = *s;
-  memset((void*)s, 0, sizeof(*s));
-
-  s->parent = temp.parent;
-  s->revertfunc = temp.revertfunc;
-}
-
-extern const char* fl_up_box_revert;
-extern const char* fl_down_box_revert;
-
-static void unloadtheme() {
-  if (theme_unload) {theme_unload(); theme_unload = 0;}
-
-  fl_background((Fl_Color)0xc0c0c000);
-  fl_up_box.data = fl_up_box_revert;
-  fl_down_box.data = fl_down_box_revert;
-  Fl_Style::draw_boxes_inactive = 1;
-  Fl_Style::inactive_menu_hack = 0;
-  Fl_Style::inactive_color_weight = 0.33f;
-
-  for (Fl_Named_Style* p = Fl_Named_Style::first; p; p = p->next) {
-    if (p->name) {
-      style_clear(p);
-      p->revertfunc(p);
-    }
+void fl_background(Fl_Color c) {
+  // replace the gray ramp so that FL_GRAY is this color
+  int r = (c>>24)&255;
+  if (!r) r = 1; else if (r==255) r = 254;
+  double powr = log(r/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
+  int g = (c>>16)&255;
+  if (!g) g = 1; else if (g==255) g = 254;
+  double powg = log(g/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
+  int b = (c>>8)&255;
+  if (!b) b = 1; else if (b==255) b = 254;
+  double powb = log(b/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
+  for (int i = 0; i < FL_NUM_GRAY; i++) {
+    double gray = i/(FL_NUM_GRAY-1.0);
+    fl_set_color(fl_gray_ramp(i),
+		 fl_rgb(uchar(pow(gray,powr)*255+.5),
+			uchar(pow(gray,powg)*255+.5),
+			uchar(pow(gray,powb)*255+.5)));
   }
-  theme_loaded = 0;
 }
 
 //
-// End of "$Id: Fl_theme.cxx,v 1.5 2000/02/16 07:30:05 bill Exp $".
+// End of "$Id: Fl_theme.cxx,v 1.6 2000/02/18 08:39:19 bill Exp $".
 //
 

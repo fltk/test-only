@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.63 2000/02/16 07:30:05 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.64 2000/02/18 08:39:19 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -864,9 +864,10 @@ void Fl_Window::make_current() {
 // Perhaps use KDE's XGetDefault() settings?
 
 void fl_windows_colors() {
+  fl_open_display();
   // NYI
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.63 2000/02/16 07:30:05 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.64 2000/02/18 08:39:19 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.21 1999/12/08 17:40:33 bill Exp $"
+// "$Id: Fl_arg.cxx,v 1.22 2000/02/18 08:39:19 bill Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -60,7 +60,7 @@ static char arg_called;
 static char return_i;
 static const char* name;
 static const char* geometry;
-static const char* bg = 0;
+extern Fl_Color fl_bg_switch;	// in Fl_theme.cxx
 
 // consume a switch from argv.  Returns number of words eaten, 0 on error:
 int Fl::arg(int argc, char **argv, int &i) {
@@ -104,7 +104,8 @@ int Fl::arg(int argc, char **argv, int &i) {
     name = v;
 
   } else if (match(s, "bg") || match(s, "background")) {
-    bg = v;
+    fl_bg_switch = fl_rgb(v);
+    if (!fl_bg_switch) Fl::error("Unknown color: %s", v);
 
   } else if (match(s, "theme")) {
     Fl::theme_ = v;
@@ -165,14 +166,6 @@ void Fl_Window::show(int argc, char **argv) {
   else if (!label()) label(xclass());
 
   show();
-
-  // wait until the display is open (and WIN32 reads system colors) to
-  // interpret the color switches:
-  if (bg) {
-    Fl_Color c = fl_rgb(bg);
-    if (!c) Fl::error("Unknown color: %s", bg);
-    else fl_background(c);
-  }
 
 #ifndef WIN32
   // set the command string, used by state-saving window managers:
@@ -352,5 +345,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.21 1999/12/08 17:40:33 bill Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.22 2000/02/18 08:39:19 bill Exp $".
 //
