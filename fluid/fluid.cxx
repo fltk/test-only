@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.63 2002/12/15 10:42:50 spitzak Exp $"
+// "$Id: fluid.cxx,v 1.64 2003/01/19 07:55:00 spitzak Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -396,7 +396,7 @@ void theme_cb(fltk::Widget *, void *) {
 }
 
 ////////////////////////////////////////////////////////////////
-#include <FL/Fl_Menu_Item.h>
+#include <FL/Fl_Menu_Item.H>
 
 extern Fl_Menu_Item New_Menu[];
 
@@ -560,5 +560,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.63 2002/12/15 10:42:50 spitzak Exp $".
+// End of "$Id: fluid.cxx,v 1.64 2003/01/19 07:55:00 spitzak Exp $".
 //

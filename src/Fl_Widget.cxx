@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.96 2002/12/10 02:00:52 easysw Exp $"
+// "$Id: Fl_Widget.cxx,v 1.97 2003/01/19 07:55:00 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -484,13 +484,28 @@ int Widget::test_shortcut() const {
 
 ////////////////////////////////////////////////////////////////
 
+extern Widget* fl_did_clipping;
+
 // This should eventually do all of the button->draw stuff:
 void Widget::draw()
 {
-  draw_box();
+  if (box() == NO_BOX) {
+    // check for completely blank widgets. We must not clip to their
+    // area because it will break lots of programs that assumme these
+    // can overlap any other widgets:
+    if (!label() && !image() ||
+	align() != ALIGN_CENTER && !(align()&ALIGN_INSIDE)) {
+      fl_did_clipping = this;
+      return;
+    }
+    // draw the background behind the invisible widget:
+    draw_background();
+  } else {
+    draw_box();
+  }
   draw_inside_label();
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.96 2002/12/10 02:00:52 easysw Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.97 2003/01/19 07:55:00 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.24 2002/12/10 02:01:04 easysw Exp $"
+// "$Id: checkers.cxx,v 1.25 2003/01/19 07:55:01 spitzak Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -864,7 +864,7 @@ int VT100main() {
 #include <fltk/DoubleBufferWindow.h>
 #include <fltk/xbmImage.h>
 #include <fltk/draw.h>
-#include <FL/Fl_Menu_Item.h>
+#include <FL/Fl_Menu_Item.H>
 #include <fltk/ask.h>
 #include <fltk/Cursor.h>
 
@@ -1376,5 +1376,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.24 2002/12/10 02:01:04 easysw Exp $".
+// End of "$Id: checkers.cxx,v 1.25 2003/01/19 07:55:01 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.30 2002/12/15 10:42:50 spitzak Exp $"
+// "$Id: factory.cxx,v 1.31 2003/01/19 07:55:00 spitzak Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -382,7 +382,7 @@ static void cb(fltk::Widget *, void *v) {
   if (t) {select_only(t); modflag = 1; t->open();}
 }
 
-#include <FL/Fl_Menu_Item.h>
+#include <FL/Fl_Menu_Item.H>
 
 Fl_Menu_Item New_Menu[] = {
 {"code",0,0,0,FL_SUBMENU},
@@ -669,5 +669,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.30 2002/12/15 10:42:50 spitzak Exp $".
+// End of "$Id: factory.cxx,v 1.31 2003/01/19 07:55:00 spitzak Exp $".
 //

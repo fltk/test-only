@@ -1,0 +1,53 @@
+#ifndef Fl_H
+#  define Fl_H
+
+#include "Enumerations.H"
+#include <fltk/run.h>
+#include <fltk/events.h>
+#include <fltk/ScreenInfo.h>
+#include <fltk/Color.h>
+#include <fltk/Font.h>
+#include <fltk/Box.h>
+#include <fltk/error.h>
+
+namespace Fl = fltk;
+
+typedef fltk::TimeoutHandler Fl_Timeout_Handler;
+
+namespace fltk {
+
+  inline int x() {return screenInfo().x;}
+  inline int y() {return screenInfo().y;}
+  inline int w() {return screenInfo().w;}
+  inline int h() {return screenInfo().h;}
+
+  inline void set_color(Color c, uchar r, uchar g, uchar b) {
+    set_color_index(c,color(r,g,b));
+  }
+  inline void set_color(Color c, Color d) {set_color_index(c,d);}
+  inline Color get_color(Color c) {return get_color_index(c);}
+  inline void get_color(Color c, uchar&r, uchar&g, uchar&b) {split_color(c,r,g,b);}
+  //inline void free_color(Color, bool overlay=false);
+
+  inline const char* get_font(Font* f) {return f->system_name();}
+  inline const char* get_font_name(Font* f, int* attributes = 0) {
+    if (attributes) return f->name(attributes);
+    else return f->name();
+  }
+  inline int get_font_sizes(Font* f, int*& sizep) {return f->sizes(sizep);}
+
+  inline int box_dx(const Box* b) {return b->dx();}
+  inline int box_dy(const Box* b) {return b->dy();}
+  inline int box_dw(const Box* b) {return b->dw();}
+  inline int box_dh(const Box* b) {return b->dh();}
+
+  inline int event_key(int k) {return event_key_state(k);}
+
+  inline void add_handler(int (*h)(int)) {
+    // rather unsafe typecast of function:
+    add_event_handler((int(*)(int,Window*))(h));
+  }
+
+}
+
+#endif

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.44 2002/12/15 10:42:50 spitzak Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.45 2003/01/19 07:55:00 spitzak Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -416,7 +416,7 @@ void WindowType::moveallchildren()
   dx = dy = 0;
 }
 
-#include <FL/Fl_Menu_Item.h>
+#include <FL/Fl_Menu_Item.H>
 
 extern Fl_Menu_Item Main_Menu[];
 extern Fl_Menu_Item New_Menu[];
@@ -694,5 +694,5 @@ int WindowType::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.44 2002/12/15 10:42:50 spitzak Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.45 2003/01/19 07:55:00 spitzak Exp $".
 //

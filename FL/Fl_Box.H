@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Box.h,v 1.2 2002/12/15 10:42:48 spitzak Exp $"
+// "$Id: Fl_Box.H,v 1.16 2003/01/19 07:54:59 spitzak Exp $"
 //
 // Back-compatability widget.
 
@@ -12,5 +12,5 @@ typedef fltk::InvisibleBox Fl_Box;
 #endif
 
 //
-// End of "$Id: Fl_Box.h,v 1.2 2002/12/15 10:42:48 spitzak Exp $".
+// End of "$Id: Fl_Box.H,v 1.16 2003/01/19 07:54:59 spitzak Exp $".
 //

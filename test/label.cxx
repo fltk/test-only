@@ -1,5 +1,5 @@
 //
-// "$Id: label.cxx,v 1.15 2002/12/10 02:01:05 easysw Exp $"
+// "$Id: label.cxx,v 1.16 2003/01/19 07:55:01 spitzak Exp $"
 //
 // Label test program for the Fast Light Tool Kit (FLTK).
 //
@@ -23,7 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#include <FL/Fl_Menu_Item.h>
+#include <FL/Fl_Menu_Item.H>
 #include <fltk/run.h>
 #include <fltk/DoubleBufferWindow.h>
 #include <fltk/Box.h>
@@ -166,5 +166,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: label.cxx,v 1.15 2002/12/10 02:01:05 easysw Exp $".
+// End of "$Id: label.cxx,v 1.16 2003/01/19 07:55:01 spitzak Exp $".
 //

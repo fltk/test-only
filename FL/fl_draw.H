@@ -1,0 +1,194 @@
+#ifndef fl_draw_H
+#define fl_draw_H
+
+#include <fltk/draw.h>
+
+inline void fl_color(fltk::Color c) {fltk::setcolor(c);}
+inline void fl_color(uchar r, uchar g, uchar b) {fltk::setcolor(fltk::color(r,g,b));}
+inline fltk::Color fl_color() {return fltk::getcolor();}
+
+// clip:
+#define fl_push_clip	fltk::push_clip
+#define	fl_clip		fltk::push_clip
+#define fl_pop_clip	fltk::pop_clip
+#define	fl_not_clipped	fltk::not_clipped
+#define fl_clip_box	fltk::clip_box
+
+// points:
+inline void fl_point(int x, int y) {fltk::addvertex(x,y); fltk::drawpoints();}
+
+// line type:
+#define fl_line_style	fltk::line_style
+enum {
+  FL_SOLID	= fltk::SOLID,
+  FL_DASH	= fltk::DASH,
+  FL_DOT	= fltk::DOT,
+  FL_DASHDOT	= fltk::DASHDOT,
+  FL_DASHDOTDOT	= fltk::DASHDOTDOT,
+  FL_CAP_FLAT	= fltk::CAP_FLAT,
+  FL_CAP_ROUND	= fltk::CAP_ROUND,
+  FL_CAP_SQUARE	= fltk::CAP_SQUARE,
+  FL_JOIN_MITER	= fltk::JOIN_MITER,
+  FL_JOIN_ROUND	= fltk::JOIN_ROUND,
+  FL_JOIN_BEVEL	= fltk::JOIN_BEVEL
+};
+
+// rectangles tweaked to exactly fill the pixel rectangle:
+inline void fl_rect(int x, int y, int w, int h) {fltk::strokerect(x,y,w,h);}
+inline void fl_rect(int x, int y, int w, int h, fltk::Color c) {fltk::setcolor(c); fltk::strokerect(x,y,w,h);}
+inline void fl_rectf(int x, int y, int w, int h) {fltk::fillrect(x,y,w,h);}
+inline void fl_rectf(int x, int y, int w, int h, fltk::Color c) {fltk::setcolor(c); fltk::fillrect(x,y,w,h);}
+
+// line segments:
+inline void fl_line(int x0,int y0, int x1,int y1) {fltk::drawline(x0,y0,x1,y1);}
+inline void fl_line(int x0,int y0, int x1,int y1, int x2,int y2) {
+  fltk::addvertex(x0,y0);
+  fltk::addvertex(x1,y1);
+  fltk::addvertex(x2,y2);
+  fltk::strokepath();
+}
+
+// closed line segments:
+inline void fl_loop(int x0,int y0, int x1,int y1, int x2,int y2) {
+  fltk::addvertex(x0,y0);
+  fltk::addvertex(x1,y1);
+  fltk::addvertex(x2,y2);
+  fltk::closepath();
+  fltk::strokepath();
+}
+inline void fl_loop(int x0,int y0, int x1,int y1, int x2,int y2, int x3,int y3) {
+  fltk::addvertex(x0,y0);
+  fltk::addvertex(x1,y1);
+  fltk::addvertex(x2,y2);
+  fltk::addvertex(x3,y3);
+  fltk::closepath();
+  fltk::strokepath();
+}
+
+// filled polygons
+inline void fl_polygon(int x0,int y0, int x1,int y1, int x2,int y2) {
+  fltk::addvertex(x0,y0);
+  fltk::addvertex(x1,y1);
+  fltk::addvertex(x2,y2);
+  fltk::closepath();
+  fltk::fillpath();
+}
+inline void fl_polygon(int x0,int y0, int x1,int y1, int x2,int y2, int x3,int y3) {
+  fltk::addvertex(x0,y0);
+  fltk::addvertex(x1,y1);
+  fltk::addvertex(x2,y2);
+  fltk::addvertex(x3,y3);
+  fltk::closepath();
+  fltk::fillpath();
+}
+
+// draw rectilinear lines, horizontal segment first:
+inline void fl_xyline(int x, int y, int x1) {
+  fltk::drawline(x,y,x1,y);
+}
+inline void fl_xyline(int x, int y, int x1, int y2) {
+  fltk::addvertex(x,y);
+  fltk::addvertex(x1,y);
+  fltk::addvertex(x1,y2);
+  fltk::strokepath();
+}
+inline void fl_xyline(int x, int y, int x1, int y2, int x3) {
+  fltk::addvertex(x,y);
+  fltk::addvertex(x1,y);
+  fltk::addvertex(x1,y2);
+  fltk::addvertex(x3,y2);
+  fltk::strokepath();
+}
+
+// draw rectilinear lines, vertical segment first:
+inline void fl_yxline(int x, int y, int y1) {
+  fltk::drawline(x,y,x,y1);
+}
+inline void fl_yxline(int x, int y, int y1, int x2) {
+  fltk::addvertex(x,y);
+  fltk::addvertex(x,y1);
+  fltk::addvertex(x2,y1);
+  fltk::strokepath();
+}
+inline void fl_yxline(int x, int y, int y1, int x2, int y3) {
+  fltk::addvertex(x,y);
+  fltk::addvertex(x,y1);
+  fltk::addvertex(x2,y1);
+  fltk::addvertex(x2,y3);
+  fltk::strokepath();
+}
+
+// circular lines and pie slices (code in fl_arci.C):
+inline void fl_arc(int x,int y,int w,int h,float a,float a2) {fltk::fillarc(x,y,w,h,a,a2);}
+#define fl_pie		fltk::fillpie
+#define fl_chord	fltk::fillarc
+
+// scalable drawing code (code in fl_vertex.C and fl_arc.C):
+#define fl_push_matrix	fltk::push_matrix
+#define fl_pop_matrix	fltk::pop_matrix
+#define fl_scale	fltk::scale
+#define fl_translate	fltk::translate
+#define fl_rotate	fltk::rotate
+#define fl_mult_matrix	fltk::concat
+#define fl_begin_points	fltk::newpath
+#define fl_begin_line	fltk::newpath
+#define fl_begin_loop	fltk::newpath
+#define fl_begin_polygon fltk::newpath
+#define fl_vertex	fltk::addvertex
+#define fl_curve	fltk::addcurve
+inline void fl_arc(float x,float y,float r, float a1, float a2) {fltk::addarc(x-r,y-r,2*r,2*r,a1,a2);}
+#define fl_circle	fltk::addcircle
+#define fl_end_points	fltk::drawpoints
+#define fl_end_line	fltk::strokepath
+inline void fl_end_loop() {fltk::closepath();fltk::strokepath();}
+#define fl_end_polygon	fltk::fillpath
+#define fl_begin_complex_polygon fltk::newpath
+#define fl_gap		fltk::closepath
+#define fl_end_complex_polygon	fltk::fillpath
+
+// current font: (size was an int in fltk1.1)
+inline void fl_font(fltk::Font* f, float size) {fltk::setfont(f,size);}
+inline fltk::Font* fl_font() {return fltk::getfont();}
+inline float fl_size() {return fltk::getsize();}
+
+// information you can get about the current font:
+inline float fl_height() {return fltk::getascent()+fltk::getdescent();}
+inline float fl_height(int, float size) {return size;}
+inline float fl_descent() {return fltk::getdescent();}
+inline float fl_width(const char* c) {return fltk::getwidth(c);}
+inline float fl_width(const char* c, int n) {return fltk::getwidth(c,n);}
+inline float fl_width(char c) {return fltk::getwidth(&c,1);}
+
+// draw using current font:
+inline void fl_draw(const char* s, int x, int y) {fltk::drawtext(s,x,y);}
+inline void fl_draw(const char* s, int n, int x, int y) {fltk::drawtext(s,n,x,y);}
+inline void fl_measure(const char* s, int& x, int& y) {fltk::measure(s,x,y);}
+inline void fl_draw(const char* s, int x,int y,int w,int h, fltk::Flags f) {fltk::drawtext(s,x,y,w,h,f);}
+
+// boxtypes:
+//void fl_frame(const char* s, int x, int y, int w, int h);
+//void fl_frame2(const char* s, int x, int y, int w, int h);
+#include <fltk/Box.h>
+inline void fl_draw_box(fltk::Box* b, int x, int y, int w, int h, fltk::Color c) {b->draw(x,y,w,h,c);}
+
+// images:
+#define fl_draw_image fltk::drawimage
+#define fl_draw_iamge_mono fltk::drawimagemono
+typedef fltk::DrawImageCallback Fl_Draw_Image_Cb;
+inline void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {fltk::setcolor(fltk::color(r,g,b)); fltk::fillrect(x,y,w,h);}
+
+#define fl_read_image		fltk::readimage
+#define fl_draw_pixmap		fltk::draw_xpm
+#define fl_measure_pixmap	fltk::measure_xpm
+#define fl_scroll		fltk::scrollrect
+#define fl_shortcut_label	fltk::key_name
+#define fl_overlay_rect		fltk::overlay_rect
+#define fl_overlay_clear	fltk::overlay_clear
+#define fl_draw_symbol		fltk::draw_symbol
+#define fl_add_symbol		fltk::add_symbol
+
+#endif
+
+//
+// End of "$Id: fl_draw.H,v 1.30 2003/01/19 07:54:59 spitzak Exp $".
+//

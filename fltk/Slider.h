@@ -1,5 +1,5 @@
 //
-// "$Id: Slider.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: Slider.h,v 1.3 2003/01/19 07:55:00 spitzak Exp $"
 //
 // Slider value control. By default it moves vertically with the
 // minimum number at the bottom. See HorizontalSlider for one that
@@ -71,8 +71,8 @@ public:
   
 #ifdef FLTK_1_SLIDER
   // back comptability:
-  Boxtype slider() const {return button_box();}
-  void slider(Boxtype b) {button_box(b);}
+  Box* slider() const {return buttonbox();}
+  void slider(Box* b) {buttonbox(b);}
   void slider_size(double v) {slider_size(int(v*w()));}
 #endif
 
@@ -90,5 +90,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Slider.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: Slider.h,v 1.3 2003/01/19 07:55:00 spitzak Exp $".
 //

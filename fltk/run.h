@@ -1,5 +1,5 @@
 //
-// "$Id: run.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: run.h,v 1.3 2003/01/19 07:55:00 spitzak Exp $"
 //
 // The basic fltk runtime. Every program needs to call this somewhere.
 //
@@ -27,6 +27,9 @@
 #define fltk_run_h
 
 #include "FL_API.h"
+#ifdef check
+# undef check
+#endif
 
 namespace fltk {
 

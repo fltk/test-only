@@ -1,5 +1,5 @@
 //
-// "$Id: Widget.h,v 1.3 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: Widget.h,v 1.4 2003/01/19 07:55:00 spitzak Exp $"
 //
 // The base class of all widgets.
 //
@@ -258,7 +258,7 @@ public:
   void color2(Color a)		{ selection_color(a); }
   void color3(Color a)		{ buttoncolor(a); }
   void down_labelcolor(Color a)	{ selection_textcolor(a); }
-  void labelfont(unsigned a)	{ label_font(font(a)); }
+  void labelfont(unsigned a)	{ labelfont(font(a)); }
   void fly_color(Color a)	{ highlight_color(a); }
   void textfont(unsigned a)	{ textfont(font(a)); }
   void selected_textcolor(Color a) { selection_textcolor(a); }
@@ -301,5 +301,5 @@ enum { // Widget::when() values
 #endif
 
 //
-// End of "$Id: Widget.h,v 1.3 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: Widget.h,v 1.4 2003/01/19 07:55:00 spitzak Exp $".
 //

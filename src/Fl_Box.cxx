@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Box.cxx,v 1.27 2002/12/15 10:42:53 spitzak Exp $"
+// "$Id: Fl_Box.cxx,v 1.28 2003/01/19 07:55:00 spitzak Exp $"
 //
 // This is a box that is invisible due to not having a box. The
 // label still prints so it can be used to position labels. Also
@@ -29,20 +29,10 @@ InvisibleBox::InvisibleBox(Box* b, int x, int y, int w, int h, const char *l)
   box(b);
 }
 
-extern Widget* fl_did_clipping;
-
 void InvisibleBox::draw() {
-  // check for completely blank widgets. We must not clip to their
-  // area because it will break lots of programs that assumme these
-  // can overlap any other widgets:
-  if (box() == NO_BOX
-      /* && (!label() && !image() ||
-	    align() != ALIGN_CENTER && !(align()&ALIGN_INSIDE))*/) {
-    fl_did_clipping = this;
-  }
   Widget::draw();
 }
 
 //
-// End of "$Id: Fl_Box.cxx,v 1.27 2002/12/15 10:42:53 spitzak Exp $".
+// End of "$Id: Fl_Box.cxx,v 1.28 2003/01/19 07:55:00 spitzak Exp $".
 //

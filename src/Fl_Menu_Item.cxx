@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.cxx,v 1.7 2002/12/10 02:00:44 easysw Exp $"
+// "$Id: Fl_Menu_Item.cxx,v 1.8 2003/01/19 07:55:00 spitzak Exp $"
 //
 // The obsolete MenuItem structure.  This code should not be used
 // in new fltk programs.
@@ -23,7 +23,7 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 
-#include <FL/Fl_Menu_Item.h>
+#include <FL/Fl_Menu_Item.H>
 #include <fltk/Menu.h>
 #include <fltk/Item.h>
 #include <fltk/ItemGroup.h>
