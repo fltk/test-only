@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image.cxx,v 1.21 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id: fl_draw_image.cxx,v 1.22 2004/06/04 08:34:25 spitzak Exp $"
 //
 // Image drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -24,9 +24,13 @@
 //
 
 #include <config.h>
+#if defined(_WIN32) && WINVER<0x0500
+# undef WINVER
+# define WINVER 0x0500
+#endif
+#include <fltk/x.h>
 #include <fltk/events.h>
 #include <fltk/draw.h>
-#include <fltk/x.h>
 
 // I hope a simple and portable method of drawing color and monochrome
 // images.  To keep this simple, only a single storage type is
@@ -164,5 +168,5 @@ void fltk::fill_color_rect(int x, int y, int w, int h, Color C) {
 #endif
 
 //
-// End of "$Id: fl_draw_image.cxx,v 1.21 2004/01/20 07:27:28 spitzak Exp $".
+// End of "$Id: fl_draw_image.cxx,v 1.22 2004/06/04 08:34:25 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.39 2004/05/15 20:52:45 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.40 2004/06/04 08:34:24 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -352,6 +352,16 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
   BitBlt(gc, x, y, w, h, new_gc, src_x, src_y, SRCPAINT);
   DeleteDC(new_gc);
 # else
+# if 0
+  // I found this in the documentation. It works, but (unbelivable!) it
+  // blinks worse than the more complicated code below. Darn you, Gates!
+  HDC new_gc = CreateCompatibleDC(gc);
+  SelectObject(new_gc, (Pixmap)rgb);
+  MaskBlt(gc, x, y, w, h, new_gc, src_x, src_y,
+	  (HBITMAP)alpha, src_x, src_y,
+	  MAKEROP4(SRCCOPY,0xEE0000));
+  DeleteDC(new_gc);
+# else
   // VP : new code to draw masked image under windows.
   // Maybe not optimal, but works for win2k/95 and probably 98
   // WAS: This can probably be fixed by having set_bitmap_alpha mangle
@@ -370,6 +380,7 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
   BitBlt(gc, x, y, w, h, new_gc2, src_x, src_y, SRCPAINT);
   DeleteDC(new_gc2);
   DeleteDC(new_gc);
+# endif
 # endif
 #elif defined(__APPLE__)
   // OSX version nyi
@@ -469,5 +480,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.39 2004/05/15 20:52:45 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.40 2004/06/04 08:34:24 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_win32.cxx,v 1.15 2003/02/21 18:16:56 spitzak Exp $"
+// "$Id: fl_draw_image_win32.cxx,v 1.16 2004/06/04 08:34:25 spitzak Exp $"
 //
 // _WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -43,10 +43,13 @@
 ////////////////////////////////////////////////////////////////
 
 #include <fltk/Color.h>
+#include <stdio.h>
 using namespace fltk;
 
 #define MAXBUFFER 0x40000 // 256k
 
+#undef USE_COLORMAP
+#define USE_COLORMAP 0
 #if USE_COLORMAP
 
 // error-diffusion dither into the fltk colormap
@@ -115,6 +118,53 @@ static void monodither(uchar* to, const uchar* from, int w, int delta) {
 
 #endif // USE_COLORMAP
 
+// compatabilty stuff copied from wingdi.h. This is done so that win32 
+// compilers without a modern SDK can still compile this stuff
+#if 0 //(WINVER < 0x0500)
+typedef struct {
+        DWORD        bV5Size;
+        LONG         bV5Width;
+        LONG         bV5Height;
+        WORD         bV5Planes;
+        WORD         bV5BitCount;
+        DWORD        bV5Compression;
+        DWORD        bV5SizeImage;
+        LONG         bV5XPelsPerMeter;
+        LONG         bV5YPelsPerMeter;
+        DWORD        bV5ClrUsed;
+        DWORD        bV5ClrImportant;
+        DWORD        bV5RedMask;
+        DWORD        bV5GreenMask;
+        DWORD        bV5BlueMask;
+        DWORD        bV5AlphaMask;
+        DWORD        bV5CSType;
+        CIEXYZTRIPLE bV5Endpoints;
+        DWORD        bV5GammaRed;
+        DWORD        bV5GammaGreen;
+        DWORD        bV5GammaBlue;
+        DWORD        bV5Intent;
+        DWORD        bV5ProfileData;
+        DWORD        bV5ProfileSize;
+        DWORD        bV5Reserved;
+} BITMAPV5HEADER, FAR *LPBITMAPV5HEADER, *PBITMAPV5HEADER;
+
+// Values for bV5CSType
+#define PROFILE_LINKED          'LINK'
+#define PROFILE_EMBEDDED        'MBED'
+#endif
+
+
+inline int getOSVersion() {
+  static int osVersion = 0;
+  if (osVersion == 0) {
+    OSVERSIONINFO os;
+    os.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
+    GetVersionEx(&os);
+    osVersion = os.dwMajorVersion;
+  }
+  return osVersion;
+}
+
 static void innards(const uchar *buf, int X, int Y, int W, int H,
 		    int delta, int linedelta, int mono,
 		    DrawImageCallback cb, void* userdata)
@@ -132,42 +182,42 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   transform(x,y);
   transform(X,Y);
 
-  static U32 bmibuffer[256+12] = {0};
-  BITMAPINFO &bmi = *((BITMAPINFO*)bmibuffer);
-  if (!bmi.bmiHeader.biSize) {
-    bmi.bmiHeader.biSize = sizeof(bmi)-4; // does it use this to determine type?
-    bmi.bmiHeader.biPlanes = 1;
-    bmi.bmiHeader.biCompression = BI_RGB;
-    bmi.bmiHeader.biXPelsPerMeter = 0;
-    bmi.bmiHeader.biYPelsPerMeter = 0;
-    bmi.bmiHeader.biClrUsed = 0;
-    bmi.bmiHeader.biClrImportant = 0;
-  }
 #if USE_COLORMAP
-  if (indexed) {
-    for (int i=0; i<256; i++) {
-      *((short*)(bmi.bmiColors)+i) = i;
-    }
-  } else
-#endif
-  if (mono) {
-    for (int i=0; i<256; i++) {
-      bmi.bmiColors[i].rgbBlue = i;
-      bmi.bmiColors[i].rgbGreen = i;
-      bmi.bmiColors[i].rgbRed = i;
-      bmi.bmiColors[i].rgbReserved = i;
-    }
-  }
-  bmi.bmiHeader.biWidth = w;
-#if USE_COLORMAP
-  bmi.bmiHeader.biBitCount = mono|indexed ? 8 : 24;
-  int pixelsize = mono|indexed ? 1 : 3;
+fkjlkasdjf
+  int pixelsize = mono|indexed ? 1 : 4;
 #else
-  bmi.bmiHeader.biBitCount = mono ? 8 : 24;
-  int pixelsize = mono ? 1 : 3;
+  int pixelsize = mono ? 1 : 4;
 #endif
-  int linesize = (pixelsize*w+3)&~3;
-  
+  int linesize = pixelsize * w;
+  if ((linesize % 4) != 0) {
+    linesize += 4 - (linesize % 4);
+  }
+  int oldlinesize = (pixelsize*(w+1))&~pixelsize;
+
+  BITMAPV5HEADER head;
+
+  // we adjust the size of the bitmap header to account for different abilities in the windows version.
+//    if (getOSVersion() <= 3)
+//      head.bV5Size = sizeof(BITMAPINFOHEADER);
+//    else if (getOSVersion() == 4)
+//      head.bV5Size = sizeof(BITMAPV4HEADER);
+//    else
+  head.bV5Size = sizeof(BITMAPV5HEADER);
+  head.bV5Width = w;
+  head.bV5Height = h;
+  head.bV5Planes = 1;
+  head.bV5BitCount = pixelsize*8;
+  head.bV5Compression = BI_BITFIELDS;
+  head.bV5SizeImage = w*h*pixelsize;
+  head.bV5XPelsPerMeter = 72;
+  head.bV5YPelsPerMeter = 72;
+  head.bV5ClrUsed = 0;
+  head.bV5ClrImportant = 0;
+  head.bV5RedMask   = 0x000000FF;
+  head.bV5GreenMask = 0x0000FF00;
+  head.bV5BlueMask  = 0x00FF0000;
+  head.bV5AlphaMask = 0xFF000000;
+
   static U32* buffer;
   int blocking = h;
   {int size = linesize*h;
@@ -181,7 +231,8 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
     buffer_size = size;
     buffer = new U32[(size+3)/4];
   }}
-  bmi.bmiHeader.biHeight = blocking;
+
+  head.bV5Height = h;
   static U32* line_buffer;
   if (!buf) {
     int size = W*delta;
@@ -194,45 +245,81 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   }
   for (int j=0; j<h; ) {
     int k;
+    uchar* bottomline;
     for (k = 0; j<h && k<blocking; k++, j++) {
       const uchar* from;
       if (!buf) { // run the converter:
-	cb(userdata, x-X, y-Y+j, w, (uchar*)line_buffer);
-	from = (uchar*)line_buffer;
+        cb(userdata, x-X, y-Y+j, w, (uchar*)line_buffer);
+        from = (uchar*)line_buffer;
       } else {
-	from = buf;
-	buf += linedelta;
+        from = buf;
+        buf += linedelta;
       }
       uchar *to = (uchar*)buffer+(blocking-k-1)*linesize;
+      bottomline = to;
 #if USE_COLORMAP
       if (indexed) {
-	if (mono)
-	  monodither(to, from, w, delta);
-	else 
-	  dither(to, from, w, delta);
-	to += w;
+        if (mono)
+          monodither(to, from, w, delta);
+        else 
+          dither(to, from, w, delta);
+        to += w;
       } else
 #endif
-      if (mono) {
-	for (int i=w; i--; from += delta) *to++ = *from;
-      } else {
-	for (int i=w; i--; from += delta, to += 3) {
-	  uchar r = from[0];
-	  to[0] = from[2];
-	  to[1] = from[1];
-	  to[2] = r;
+        if (mono) {
+          for (int i=w; i--; from += delta) *to++ = *from;
+        } else {
+          for (int i=w; i--; from += delta, to += pixelsize) {
+	    to[0] = from[0];
+	    to[1] = from[1];
+	    to[2] = from[2];
+	    to[3] = from[3];
+          }
         }
-      }
     }
+#if 1
     SetDIBitsToDevice(gc, x, y+j-k, w, k, 0, 0, 0, k,
-		      (LPSTR)((uchar*)buffer+(blocking-k)*linesize),
-		      &bmi,
+		      (LPSTR)bottomline,
+		      (BITMAPINFO*)&head,
 #if USE_COLORMAP
 		      indexed ? DIB_PAL_COLORS : DIB_RGB_COLORS
 #else
 		      DIB_RGB_COLORS
 #endif
 		      );
+#else
+    // We have to do all this conversion stuff because SetDIBitsToDevice does 
+    // not do alpha blending. The easiest way to use the win32 alpha blending 
+    // is to use the DrawIconEx function. It does all the things necessary to 
+    // draw alpha blended images.
+      // This code was contributed to fltk but I have not seen it do any
+      // actual alpha compositing. Maybe somebody can figure out what is
+      // wrong?
+    HBITMAP b = CreateDIBitmap(gc,
+			       (BITMAPINFOHEADER*)&head,
+			       CBM_INIT,
+			       (LPSTR)bottomline,
+			       (BITMAPINFO*)&head,
+			       DIB_RGB_COLORS); 
+
+    // we must create a temporary single bit bitmap to satisfy the icon 
+    // creating constraints, even though it isn't used.
+    HBITMAP hMonoBitmap = CreateBitmap(w,h,1,1,NULL);
+
+    ICONINFO ii;
+    ii.fIcon = FALSE;
+    ii.xHotspot = 0;
+    ii.yHotspot = 0;
+    ii.hbmMask = b; //hMonoBitmap;
+    ii.hbmColor = b;
+    HICON imageIcon = ::CreateIconIndirect(&ii);
+    DrawIconEx(gc, x, y+j-k, imageIcon, w, k, 0, NULL, DI_NORMAL);
+
+    // Clean up all the mess
+    ::DestroyIcon(imageIcon);
+    ::DeleteObject(hMonoBitmap);
+    ::DeleteObject(b);
+#endif
   }
 }
 
@@ -243,5 +330,5 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 #endif
 
 //
-// End of "$Id: fl_draw_image_win32.cxx,v 1.15 2003/02/21 18:16:56 spitzak Exp $".
+// End of "$Id: fl_draw_image_win32.cxx,v 1.16 2004/06/04 08:34:25 spitzak Exp $".
 //
