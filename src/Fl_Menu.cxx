@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.83 2000/04/03 17:09:19 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.84 2000/04/11 08:16:44 bill Exp $"
 //
 // Implementation of the Fl_Menu_ class, which includes most of the
 // code needed to do popup menus and menubars.
@@ -180,7 +180,7 @@ MenuWindow::MenuWindow(Fl_Group* m, int X, int Y, int Wp, int Hp,
     Fl_Widget* o = list->child(i);
     if (!o->visible()) continue;
     if (!o->h() || o->damage() & FL_DAMAGE_LAYOUT) o->layout();
-    if (i == selected) selected_y = H+(o->h()+real_leading)/2+1;
+    if (i == selected) selected_y = H+(o->h()+real_leading)/2;
     H += o->h()+real_leading;
     if (o->w() > W) W = o->w();
     if (o->is_group()) {
@@ -207,11 +207,11 @@ MenuWindow::MenuWindow(Fl_Group* m, int X, int Y, int Wp, int Hp,
   }
 
   x(X); w(W); h(H-dh);
-  if (selected >= 0) Y += Hp/2-selected_y; else Y += Hp;
-  if (list) y(Y-1); else {y(Y-3); w(1); h(1);}
+  if (selected >= 0) Y += Hp/2-selected_y-dy; else Y += Hp;
+  if (list) y(Y); else {y(Y-2); w(1); h(1);}
 
   if (t) {
-    title = new MenuTitle(X, Y-Htitle-3, Wtitle, Htitle, t);
+    title = new MenuTitle(X, Y-Htitle-2, Wtitle, Htitle, t);
   } else
     title = 0;
 }
@@ -593,7 +593,7 @@ int Fl_Menu_::pulldown(
       Fl_Group* g = (Fl_Group*)m;
       if (g->focus() < 0) break;
       int nX = mw->x() + mw->w();
-      int nY = mw->y() + 1 + mw->ypos(p.item_number)-mw->ypos(0);
+      int nY = mw->y() + mw->ypos(p.item_number)-mw->ypos(0);
       MenuWindow* n = new MenuWindow(g, X,Y,W,H, 0);
       n->which_item = p.item_number;
       p.menus[p.nummenus++] = n;
@@ -604,7 +604,7 @@ int Fl_Menu_::pulldown(
 	for (int menu = 0; menu <= p.menu_number; menu++) {
 	  MenuWindow* t = p.menus[menu];
 	  int nx = t->x()+dx; if (nx < 0) {nx = 0; dx = -t->x();}
-	  int ny = t->y()+dy+1; if (ny < 0) {ny = 0; dy = -t->y()-1;}
+	  int ny = t->y()+dy; if (ny < 0) {ny = 0; dy = -t->y();}
 	  t->position(nx, ny);
 	}
       }
@@ -660,7 +660,7 @@ int Fl_Menu_::pulldown(
 	title = m;
       } else {
 	nX = mw->x() + mw->w();
-	nY = mw->y() + 1 + mw->ypos(p.item_number)-mw->ypos(0);
+	nY = mw->y() + mw->ypos(p.item_number)-mw->ypos(0);
 	title = 0;
       }
       ((Fl_Group*)m)->focus(-1); // don't preselect anything on this menu
@@ -683,8 +683,9 @@ int Fl_Menu_::pulldown(
 	mw = fakemenu;
       SHOW_MENUBAR_TITLE:
 	// fix the title box size to match menubar thickness:
-	int nh = this->h()-6;
-	mw->title->y(mw->title->y()+mw->title->h()-nh);
+	int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
+	int nh = this->h()-dh-2;
+	mw->title->y(Y+dh/2+1);
 	mw->title->h(nh);
 	mw->title->show();
 	if (mw != fakemenu) mw->show();
@@ -799,5 +800,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.83 2000/04/03 17:09:19 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.84 2000/04/11 08:16:44 bill Exp $".
 //

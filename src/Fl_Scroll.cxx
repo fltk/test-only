@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.19 2000/04/10 06:45:44 bill Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.20 2000/04/11 08:16:44 bill Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -183,7 +183,7 @@ void Fl_Scroll::scrollbar_cb(Fl_Widget* o, void*) {
   s->position(s->xposition(), int(((Fl_Scrollbar*)o)->value()));
 }
 
-#define SLIDER_WIDTH 17
+#define SLIDER_WIDTH 16
 
 Fl_Scroll::Fl_Scroll(int X,int Y,int W,int H,const char* L)
   : Fl_Group(X,Y,W,H,L), endgroup(0),
@@ -229,5 +229,5 @@ int Fl_Scroll::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.19 2000/04/10 06:45:44 bill Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.20 2000/04/11 08:16:44 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.11 2000/04/03 17:09:20 bill Exp $"
+// "$Id: Fl_Style.cxx,v 1.12 2000/04/11 08:16:44 bill Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -46,8 +46,8 @@ static void revert(Fl_Style* s) {
   s->highlight_color       = FL_NO_COLOR;
   s->highlight_label_color = FL_NO_COLOR;
   s->text_color            = FL_BLACK;
-  s->label_size		   = FL_NORMAL_SIZE;
-  s->text_size             = FL_NORMAL_SIZE;
+  s->label_size		   = 12;
+  s->text_size             = 12;
   s->leading		   = 2;
   s->parent                = 0;	// this is the topmost style always
 }
@@ -163,5 +163,5 @@ Fl_Named_Style* Fl_Style::find(const char* name) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.11 2000/04/03 17:09:20 bill Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.12 2000/04/11 08:16:44 bill Exp $".
 //

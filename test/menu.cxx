@@ -16,7 +16,7 @@
 #include <FL/Fl_Hor_Slider.H>
 
 #define WIDTH 600
-#define HEIGHT 24 //30 // use 25 for better Windoze look
+#define HEIGHT 23
 
 void callback(Fl_Widget* w, void*) {
   printf("Callback for %s\n", w->label());
