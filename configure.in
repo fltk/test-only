@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.72 2000/01/07 08:50:10 bill Exp $"
+dnl# "$Id: configure.in,v 1.73 2000/03/08 06:17:25 carl Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -68,6 +68,17 @@ case $uname in
 	LDLIBS="-lX11 -lXext"
 	;;
 esac
+
+dnl# Sometimes uname command doesn't work under Cygwin!?
+if test "$OSTYPE" = "cygwin32"
+then
+	CFLAGS="$CFLAGS -DWIN32 -mno-cygwin"
+	CXXFLAGS="$CXXFLAGS -DWIN32 -mno-cygwin"
+	uname="CYGWIN"
+	LDLIBS="-lgdi32 -luser32 -lmsvcrt -lwsock32 -mno-cygwin -mwindows"
+ 	LDDLLLIBS="-lgdi32 -luser32 -lmsvcrt -lwsock32 -lopengl32 -lglu32"
+        EXPORTCOMMAND="dlltool"
+fi
 
 AC_SUBST(LDLIBS)
 AC_SUBST(LDDLLLIBS)
@@ -351,5 +362,5 @@ AC_OUTPUT(makeinclude fltk-config)
 chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.72 2000/01/07 08:50:10 bill Exp $".
+dnl# End of "$Id: configure.in,v 1.73 2000/03/08 06:17:25 carl Exp $".
 dnl#
