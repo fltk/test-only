@@ -47,8 +47,8 @@ public:
 
   int width() const {return width_;}
   int height() const {return height_;}
-//int box_width() const {return W;}
-//int box_height() const {return H;}
+  int box_width() const {return interior.w();}
+  int box_height() const {return interior.h();}
   int xposition() const {return xposition_;}
   void xposition(int);
   int yposition() const {return yposition_;}

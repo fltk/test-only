@@ -58,11 +58,11 @@ with constants. Don't use the undocumented fields.
   or there is no font with those attributes.
 */
 
-/*! \fn Font* Font::bold()
+/*! \fn fltk::Font* fltk::Font::bold()
   Same as plus(BOLD), returns a bold version of this font.
 */
 
-/*! \fn Font* Font::italic()
+/*! \fn fltk::Font* fltk::Font::italic()
   Same as plus(ITALIC), returns an italic version of this font.
 */
 
@@ -80,7 +80,7 @@ with constants. Don't use the undocumented fields.
   not match the transform being used by the font.
 */
 
-/*! \fn void fltk::setfont(Font* font, float psize);
+/*! \fn void fltk::setfont(fltk::Font* font, float psize);
 
   Set the current font and font scaling so the size is size
   pixels. The size is unaffected by the current transformation matrix

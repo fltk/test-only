@@ -23,6 +23,7 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 
+#ifndef DOXYGEN
 #include <FL/Fl_Menu_Item.H>
 #include <fltk/Menu.h>
 #include <fltk/Item.h>
@@ -133,3 +134,5 @@ Fl_Menu_Item::test_shortcut() const
   if (menu.handle_shortcut()) return this + menu.value();
   return 0;
 }
+
+#endif // !DOXYGEN

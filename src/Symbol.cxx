@@ -368,8 +368,9 @@ const BoxInfo* Symbol::boxinfo() const {
 /** \fn int Symbol::dh() const;
     Returns boxinfo()->dh
 */
-/** \fn int Symbol::inset(int& x,int& y,int& w,int& h) const;
-    Adds dx,dy,dw,dh from boxinfo() to the passed box size.
+/** \fn void Symbol::inset(Rectangle& r) const {
+    Move the edges of \a r to be the inside of the symbol, as determined
+    by the contents of boxinfo().
 */
 
 /**************** The routines seen by the user *************************/

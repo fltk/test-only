@@ -2297,12 +2297,14 @@ void Window::layout() {
     int w = this->w(); if (w <= 0) w = 1;
     int h = this->h(); if (h <= 0) h = 1;
     if (w != i->current_size.w() || h != i->current_size.h()) {
-      // Some window managers refuse to allow resizes unless the resize
-      // information allows it:
-      if (!parent() && minw == maxw && minh == maxh) size_range(w,h,w,h);
+      if (!parent()) {
+	// Some window managers refuse to allow resizes unless the resize
+	// information allows it:
+	if (minw == maxw && minh == maxh) size_range(w,h,w,h);
+	// Wait for echo (relies on window having StaticGravity!!!)
+	i->wait_for_expose = true;
+      }
       XMoveResizeWindow(xdisplay, i->xid, x, y, w, h);
-      // Wait for echo (relies on window having StaticGravity!!!)
-      if (!parent()) i->wait_for_expose = true;
     } else if (x != i->current_size.x() || y != i->current_size.y()) {
       XMoveWindow(xdisplay, i->xid, x, y);
     }

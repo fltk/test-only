@@ -228,26 +228,6 @@ void Widget::copy_label(const char* s) {
 /*! \fn void Widget::do_callback(Widget*, long)
   You can also call the callback function with arbitrary arguments. */
 
-/*! \fn int Widget::x() const
-  Left edge of the widget, relative to the x() of its enclosing
-  Widget. If this is an outer fltk::Window than this is the position of
-  the left edge of the \e contents (not the frame) on the screen.
-*/
-
-/*! \fn int Widget::y() const
-  Top edge of the widget, relative to the y() of its enclosing
-  Widget. If this is an outer fltk::Window than this is the position of
-  the top edge of the \e contents (not the frame) on the screen.
-*/
-
-/*! \fn int Widget::w() const
-  Width of the widget in pixels.
-*/
-
-/*! \fn int Widget::h() const
-  Height of the widget in pixels.
-*/
-
 /*! \fn uchar Widget::type() const
 
   8-bit identifier that controls how widget works.

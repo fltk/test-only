@@ -24,7 +24,7 @@ int create_thread(Thread& t, void *(*f) (void *), void* p) {
   return pthread_create((pthread_t*)&t, 0, f, p);
 }
 
-/*!
+/**
   "Mutual-exclusion lock" for simple multithreaded programs.  Calling
   lock() will wait until nobody else has the lock and then will
   return. <i>Calling lock() more than once will "deadlock"!</i>
@@ -45,7 +45,7 @@ public:
   ~Mutex() {pthread_mutex_destroy(&mutex);}
 };
 
-/*!
+/**
   A portable "semaphore". A thread that holds this lock() can call
   wait(), which will unlock it, then wait for another thread to
   call signal(), then lock() it again.
@@ -87,7 +87,7 @@ public:
 
 #else // standard pthread mutexes need a bit of work to be recursive:
 
-/*!
+/**
   "Mutual exclusion lock" to protect data in multithreaded programs.
   This is a "recursive lock". Calling lock() will wait until nobody
   else has the lock and then will take it. Calling lock() multiple
@@ -119,8 +119,6 @@ public:
 };
 
 #endif
-
-}
 
 #else // _WIN32:
 
@@ -175,7 +173,7 @@ public:
 
 typedef Mutex RecursiveMutex;
 
-/*! \} */
+#endif
 
 /**
    C++ convienence object for locking a Mutex.
@@ -198,13 +196,13 @@ typedef Mutex RecursiveMutex;
 class FL_API Guard {
   Mutex& lock;
  public:
-  Guard(Lock& m) : lock(m) {lock.lock();}
-  Guard(Lock* m) : lock(*m) {lock.lock();}
+  Guard(Mutex& m) : lock(m) {lock.lock();}
+  Guard(Mutex* m) : lock(*m) {lock.lock();}
   ~Guard() {lock.unlock();}
 };
 
+/*! \} */
 
 }
 
-#endif
 #endif
