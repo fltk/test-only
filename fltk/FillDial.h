@@ -1,5 +1,5 @@
 //
-// "$Id: FillDial.h,v 1.3 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id: FillDial.h,v 1.4 2004/08/21 19:33:02 leka Exp $"
 //
 // Copyright 2002 by Bill Spitzak and others.
 //
@@ -31,7 +31,7 @@ namespace fltk {
 /*! Dial but the constructor sets type() to FILL, so it draws a pie slice. */
 class FL_API FillDial : public Dial {
 public:
-    Fill_Dial(int x,int y,int w,int h, const char *l = 0)
+    FillDial(int x,int y,int w,int h, const char *l = 0)
       : Dial(x,y,w,h,l) {type(FILL);}
 };
 
@@ -40,5 +40,5 @@ public:
 #endif
 
 //
-// End of "$Id: FillDial.h,v 1.3 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id: FillDial.h,v 1.4 2004/08/21 19:33:02 leka Exp $".
 //
