@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.H,v 1.28 2000/10/17 07:50:07 spitzak Exp $"
+// "$Id: Fl_Menu_.H,v 1.29 2000/10/18 17:01:48 spitzak Exp $"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -84,6 +84,7 @@ public:
 
 // add() in fltk 1 returned the index, this returns the new widget:
   Fl_Widget* add(const char*, int shortcut, Fl_Callback*, void* = 0, int = 0);
+  Fl_Widget* replace(const char*, int scut, Fl_Callback*, void* = 0, int = 0);
   Fl_Widget* add(const char*, void*);
   Fl_Widget* add(const char*);
   Fl_Widget* insert(int n, const char* s, void* data = 0);
@@ -133,5 +134,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Menu_.H,v 1.28 2000/10/17 07:50:07 spitzak Exp $".
+// End of "$Id: Fl_Menu_.H,v 1.29 2000/10/18 17:01:48 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.22 2000/10/17 07:50:08 spitzak Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.23 2000/10/18 17:01:48 spitzak Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -25,14 +25,14 @@
 
 // Methods to create/destroy the items in an Fl_Menu_ widget.  Used to
 // emulate XForms and to provide convienence functions for building
-// menus.  It may make sense to move these functions to Fl_Group.
+// menus.
 
-// This is greatly simplified compared to fltk 1.0 due to the rewrite
-// of Fl_Menu_ to use child widgets.  Adding an item just creates the
-// new Fl_Item.
+// These functions are provided for fltk 1.0 compatability and probably
+// should be avoided in new programs. For new programs either create the
+// widgets directly, or use Fl_List to return menu or browser items out
+// of your own data.
 
-// Not at all guaranteed to be Forms compatable, especially with any
-// string with a % sign in it!
+// Compatability with fltk 1.0 and with XForms is only partial!
 
 #include <FL/Fl_Menu_.H>
 #include <FL/Fl_Item.H>
@@ -70,8 +70,6 @@ static Fl_Widget* append(
   return o;
 }
 
-static int find_flag; // lame-o attempt to reuse the code
-
 // Comparison that does not care about deleted '&' signs:
 static int compare(const char* a, const char* b) {
   for (;;) {
@@ -87,9 +85,15 @@ static int compare(const char* a, const char* b) {
     }
   }
 }
+
+static bool find_flag; // lame-o attempt to reuse the code
+static bool replace_flag;
+
 // Add an item.  The text is split at '/' characters to automatically
 // produce submenus (actually a totally unnecessary feature as you can
-// now add submenu titles directly by setting SUBMENU in the flags):
+// now add submenu titles directly by setting SUBMENU in the flags).
+// The replace flag allows the item to be replaced if it already exists.
+
 Fl_Widget* Fl_Menu_::add(
   const char *text,
   int shortcut,
@@ -136,27 +140,39 @@ Fl_Widget* Fl_Menu_::add(
   }
 
   /* find a matching menu item: */
-  Fl_Widget* o;
-  for (int n = group->children();;) {
-    if (!n) { // create a new item
-      if (find_flag) return 0;
-      o = append(group, item, flags|flags1);
-      break;
-    }
+  Fl_Widget* o = 0;
+  if (replace_flag | find_flag) for (int n = group->children(); n--;) {
     Fl_Widget* w = group->child(--n);
     if (w->label() && !compare(w->label(), item)) {
       if (find_flag) return w;
       o = w;
-      break;
+      goto REPLACED;
     }
   }
-
+  if (find_flag) return 0;
+  o = append(group, item, flags|flags1);
+ REPLACED:
   /* fill it in */
   o->shortcut(shortcut);
   if (cb) o->callback(cb);
   o->user_data(data);
 
   return o;
+}
+
+// This is what menu::add() did in fltk 1.0, matching items were changed
+// to the new value. Browser::add() always added new items.
+Fl_Widget* Fl_Menu_::replace(
+  const char *text,
+  int shortcut,
+  Fl_Callback *cb,	
+  void *data,
+  int flags
+) {
+  replace_flag = true;
+  Fl_Widget* ret = add(text, shortcut, cb, data, flags);
+  replace_flag = false;
+  return ret;
 }
 
 // This is a method from the old Fl_Browser:
@@ -173,9 +189,9 @@ Fl_Widget* Fl_Menu_::insert(int n, const char* text, void* data) {
 // Does the exact same parsing as add() and return a pointer to the item,
 // or return null if none:
 Fl_Widget* Fl_Menu_::find(const char* label) const {
-  find_flag = 1;
+  find_flag = true;
   Fl_Widget* r = ((Fl_Menu_*)this)->add(label,0,0,0,0);
-  find_flag = 0;
+  find_flag = false;
   return r;
 }
 
@@ -206,5 +222,5 @@ Fl_Widget* Fl_Menu_::add(const char *str) {
 }
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.22 2000/10/17 07:50:08 spitzak Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.23 2000/10/18 17:01:48 spitzak Exp $".
 //
