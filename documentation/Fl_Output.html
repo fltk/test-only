@@ -10,7 +10,7 @@
    |
    +----<B>fltk::Output</B>
            |
-           +----<A href=Fl_MultilineOutput.html#MultilineOutput>fltk::MultilineOutput</A>
+           +----<A href=Fl_Multiline_Output.html#MultilineOutput>fltk::MultilineOutput</A>
 </PRE>
 <H3>Include Files</H3>
 <PRE>
@@ -23,7 +23,7 @@ which is useful for program-generated values.  The user may select
 portions of the text using the mouse and paste the contents into other 
 fields or programs. 
 <CENTER><IMG src=./text.gif></CENTER>
-<P>There is a single subclass, <A href=Fl_MultilineOutput.html#MultilineOutput>
+<P>There is a single subclass, <A href=Fl_Multiline_Output.html#MultilineOutput>
 fltk::MultilineOutput</A>, which allows you to display multiple lines of 
 text. </P>
 <P>The text may contain any characters except \0, and will correctly 
@@ -34,7 +34,7 @@ set. </P>
 <H3>Methods</H3>
 <UL>
 <LI><A href=#Output>fltk::Output</A></LI>
-<LI><A href=#~fltk::Output>~fltk::Output</A></LI>
+<LI><A href=#~Output>~Output</A></LI>
 <LI><A href=#cursor_color>cursor_color</A></LI>
 <LI><A href=#index>index</A></LI>
 <LI><A href=#size>size</A></LI>
@@ -44,7 +44,7 @@ set. </P>
 w, int h, const char *label = 0)</A></H4>
  Creates a new <TT>fltk::Output</TT> widget using the given position, 
 size, and label string. The default boxtype is <TT>fltk::DOWN_BOX</TT>. 
-<H4><A name=~Output>virtual fltk::Output::~fltk::Output()</A></H4>
+<H4><A name=~Output>virtual fltk::Output::~Output()</A></H4>
  Destroys the widget and any value associated with it. 
 <H4><A name=value>const char *fltk::Output::value() const
 <BR> int fltk::Output::value(const char*)

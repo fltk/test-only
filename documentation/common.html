@@ -39,8 +39,8 @@ button-&gt;when(fltk::WHEN_CHANGED | fltk::WHEN_NOT_CHANGED);
 <LI><TT>fltk::Button</TT> - A standard button. </LI>
 <LI><TT>fltk::CheckButton</TT> - A toggle button with a check box. </LI>
 <LI><TT>fltk::LightButton</TT> - A push button with a light. </LI>
-<LI><TT>fltk::Repeat_Button</TT> - A push button that repeats it's callback when held. </LI>
-<LI><TT>fltk::Return_Button</TT> - A push button that is activated by the 
+<LI><TT>fltk::RepeatButton</TT> - A push button that repeats it's callback when held. </LI>
+<LI><TT>fltk::ReturnButton</TT> - A push button that is activated by the 
 Enter key. </LI>
 <LI><TT>fltk::Radio_Button</TT> - A button with a circular mark. </LI>
 </UL>
@@ -51,7 +51,7 @@ bounding box of the button and optionally a label string:
 <PRE>
 fltk::Button *button = new fltk::Button(x, y, width, height, &quot;label&quot;);
 fltk::LightButton *lbutton = new fltk::LightButton(x, y, width, height);
-fltk::Round_Button *rbutton = new fltk::Round_Button(x, y, width, height, &quot;label&quot;);
+fltk::RoundButton *rbutton = new fltk::RoundButton(x, y, width, height, &quot;label&quot;);
 </PRE>
 Each button has an associated <A
 href=Fl_Button.html#type><TT>type()</TT></A> which allows it to behave

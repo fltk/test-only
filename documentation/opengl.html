@@ -5,9 +5,9 @@
 
 This chapter discusses using FLTK for your OpenGL applications. 
 
-<a name=glusing><H2>Using OpenGL in FLTK</H2></a>
+<h2><a name=glusing>Using OpenGL in FLTK</a></H2>
 
-The easiest way to make an OpenGL display is to subclass <A href=Fl_GlWindow.html#GlWindow>
+The easiest way to make an OpenGL display is to subclass <A href=Fl_Gl_Window.html#GlWindow>
 <TT>fltk::GlWindow</TT></A>. Your subclass must implement a <TT>draw()</TT>
 method which uses OpenGL calls to draw the display.  Your main program 
 should call <TT>redraw()</TT> when the display needs to change, and 
@@ -22,7 +22,7 @@ include the file <TT>&lt;GL/gl.h&gt;</TT>, define some extra drawing
 functions provided by FLTK, and include the <TT>&lt;windows.h&gt;</TT> header 
 file needed by WIN32 applications. </P>
 
-<a name=glsubclass><H2>Making a Subclass of fltk::GlWindow</H2></a>
+<h2><a name=glsubclass>Making a Subclass of fltk::GlWindow</a></H2>
 
 To make a subclass of fltk::GlWindow, you must provide: 
 <UL>
@@ -141,7 +141,7 @@ the FLUID output file will compile. </LI>
 You must put <TT>glwindow-&gt;show()</TT> in your main code after calling <TT>
 show()</TT> on the window containing the OpenGL window. 
 
-<a name=glnormal><H2>Using OpenGL in Normal FLTK Windows</H2></a>
+<h2><a name=glnormal>Using OpenGL in Normal FLTK Windows</a></H2>
 
 You can put OpenGL code into an <A href=#draw><TT>fltk::Widget::draw()</TT>
 </A> method or into the code for a <A href=common.html#boxtypes>boxtype</A>
@@ -149,7 +149,7 @@ or other places with some care.
 <P>Most importantly, before you show <I>any</I> windows (including those 
 that don't have OpenGL drawing) you <B>must</B> initialize FLTK so that it 
 knows it is going to use OpenGL.  You may use any of the symbols 
-described for <A href=Fl_GlWindow.html#mode><TT>
+described for <A href=Fl_Gl_Window.html#mode><TT>
 fltk::GlWindow::mode()</TT></A> to describe how you intend to use OpenGL: </P>
 <PRE>
 fltk::gl_visual(fltk::RGB);
@@ -179,13 +179,13 @@ for maximum portability: </P>
 <LI>You must choose a default visual with <A href=Fl.html#gl_visual>
 <TT>fltk::gl_visual()</TT></A>. </LI>
 <LI>You cannot pass <TT>fltk::DOUBLE</TT> to <TT>fltk::gl_visual()</TT>.</LI>
-<LI>You cannot use <TT>fltk::DoubleBufferWindow</TT> or <TT>fltk::Overlay_Window</TT>.</LI>
+<LI>You cannot use <TT>fltk::DoubleBufferWindow</TT> or <TT>fltk::OverlayWindow</TT>.</LI>
 </UL>
 Do <I>not</I> call <TT>gl_start()</TT> or <TT>gl_finish()</TT> when 
 drawing into an <TT>fltk::GlWindow</TT>!
 <a name=drawing>
 
-<a name=glfunc><H2>OpenGL Drawing Functions</H2></a>
+<h2><a name=glfunc>OpenGL Drawing Functions</a></H2>
 
 FLTK provides some useful OpenGL drawing functions.  They can be 
 freely mixed with any OpenGL calls, and are defined by including <TT>
@@ -198,7 +198,7 @@ uses the default colormap!</I>
 <H4>void gl_rect(int x, int y, int w, int h)
 <BR> void gl_rectf(int x, int y, int w, int h)</H4>
 Outline or fill a rectangle with the current color.  If
-<A HREF="Fl_GlWindow.html#ortho"><TT>fltk::GlWindow::ortho()</TT></A>
+<A HREF="Fl_Gl_Window.html#ortho"><TT>fltk::GlWindow::ortho()</TT></A>
 has been called, then the rectangle will exactly fill the pixel 
 rectangle passed. 
 <H4>void gl_font(fltk::Font fontid, int size)</H4>
@@ -226,7 +226,7 @@ other control characters changed to ^X, and aligned with the edges or
 center.  Exactly the same output as <A href=#draw><TT>fltk::draw()</TT></A>
 . 
 
-<a name=glspeed><h2>Speeding up OpenGL</h2></a>
+<h2><a name=glspeed>Speeding up OpenGL</a></h2>
 
 Performance of fltk::GlWindow may be improved on some types of OpenGL
 implementations (in particular MESA or other software emulators) by
@@ -263,7 +263,7 @@ it or if you drag the window off the screen and back on. You have to
 exit and run the program again for it to see any changes to the
 environment variable.
 
-<a name=gloptimizer><H2>Using OpenGL Optimizer with FLTK</H2></a>
+<h2><a name=gloptimizer>Using OpenGL Optimizer with FLTK</a></H2>
 
 <A href=http://www.sgi.com/software/optimizer>OpenGL Optimizer</A> is a 
 scene graph toolkit for OpenGL available from Silicon Graphics for IRIX 
@@ -365,7 +365,11 @@ void OptimizerWindow::draw() {
     draw_action_-&gt;apply(scene_);
 }
 </PRE>
-<H4>The scene() Method</H4>
- The <TT>scene()</TT> method sets the scene to be drawn.  The scene is 
+
+<h4>The scene() Method</h4>
+
+The <TT>scene()</TT> method sets the scene to be drawn.  The scene is 
 a collection of 3D objects in a <TT>csGroup</TT>.  The scene is redrawn 
-after this call. </BODY></HTML>
+after this call.
+
+</body></html>

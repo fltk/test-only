@@ -26,7 +26,7 @@ can call <tt>_draw()</tt> to draw them, and all subsequent calls they
 can just call <tt>_draw()</tt>. To test if this is the first call to
 <tt>draw()</tt> a subclass can check if <tt>id</tt> is zero.
 
-<a name=measure><h4>virtual void fltk::Image::measure(int& w, int& h);</h4></a>
+<h4><a name=measure>virtual void fltk::Image::measure(int& w, int& h);</a></h4>
 
 The two parameters are set to the size the image will occupy when
 drawn. For image types that can scale these are also input parameters:
@@ -35,7 +35,7 @@ they must be preset to the rectangle the caller intends to pass to
 the "natural" size of a scaling image, preset w and h to zero before
 calling this.
 
-<a name=draw><h4>virtual void fltk::Image::draw(int x,int y,int w,int h, fltk::Flags);</h4></a>
+<h4><a name=draw>virtual void fltk::Image::draw(int x,int y,int w,int h, fltk::Flags);</a></h4>
 
 Draw the image with the upper-left corner at <i>x,y</i>. If the image
 can scale or tile or otherwise uses a size, the <i>w,h</i> describe
@@ -43,7 +43,7 @@ the size of the box it is wanted to fill. The <i>flags</i> can be used
 by subclasses to draw differently if <tt>fltk::INACTIVE</tt> or any other
 flags are set.
 
-<h4>virtual fltk::Image::~fltk::Image();</h4>
+<h4>virtual fltk::Image::~Image();</h4>
 
 The destructor throws away temporary data created to draw the image,
 but in most cases does not destroy the local data passed to a

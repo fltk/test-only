@@ -3,7 +3,7 @@
 
 <h1>Themes</h1>
 
-<a name=tplugins><h2>Theme plugins</h2></a>
+<h2><a name=tplugins>Theme plugins</a></h2>
 
 Just before the first window is shown, fltk calls the "theme"
 function, which is used to initialize the styles to the user's and
@@ -42,13 +42,13 @@ problems.
 
 <h2><a name=tcontrol>Controlling themes</a></h2>
 
-<a name=theme><h4>static fltk::Theme fltk::Style::theme();
-<br>static void theme(fltk::Theme f);</h4></a>
+<h4><a name=theme>static fltk::Theme fltk::Style::theme();
+<br>static void theme(fltk::Theme f);</a></h4>
 
 Get or set the function that will be called when the theme is loaded.
 
-<a name=scheme><h4>static const char* fltk::Style::scheme();
-<br>static void fltk::Style::scheme(const char* f);</h4></a>
+<h4><a name=scheme>static const char* fltk::Style::scheme();
+<br>static void fltk::Style::scheme(const char* f);</a></h4>
 
 Fltk also keeps track of a single string pointer that can be used as
 an "argument" to the theme function, perhaps to identify a file it
@@ -56,7 +56,7 @@ should read. The default value is null. If you use <a
 href="Fl.html#args">fltk::args()</a> then the "-scheme" switch sets
 this.
 
-<a name=load_theme><h4>static fltk::Theme fltk::Style::load_theme(const char* name);</h4></a>
+<h4><a name=load_theme>static fltk::Theme fltk::Style::load_theme(const char* name);</a></h4>
 
 Locate a theme plugin by name, load it into memory, and return the
 fltk_theme() function. Returns null if the plugin is not found or
@@ -78,7 +78,7 @@ href=#get_system_colors>fltk::get_system_colors()</a>.
 "default" return the built-in fltk_theme(), otherwise an error is
 printed and null is returned.
 
-<a name=load_theme2><h4>static void fltk::Style::load_theme();</h4></a>
+<h4><a name=load_theme2>static void fltk::Style::load_theme();</a></h4>
 
 If this <i>has not</i> been called before, it loads the current theme
 by running the fltk::Style::theme() function. If that has not been set it
@@ -87,7 +87,7 @@ Progams can call this before showing the first window to force the
 theme to be loaded, otherwise fltk waits until the first window is
 shown to call this.
 
-<a name=reload_theme><h4>static void fltk::Style::reload_theme();</h4></a>
+<h4><a name=reload_theme>static void fltk::Style::reload_theme();</a></h4>
 
 If <a href=#load_theme2>fltk::Style::load_theme(void)</a> <i>has</i> been
 called before, this calls <a href=#revert>fltk::Style::revert()</a> and
@@ -103,7 +103,7 @@ event handler to call this, see the KDE theme source code for an example.
 href=#theme>fltk::Style::theme()</a> or <a
 href=#scheme>fltk::Style::scheme()</a>.
 
-<a name=revert><h4>static void fltk::Style::revert();</h4></a>
+<h4><a name=revert>static void fltk::Style::revert();</a></h4>
 
 Return all the styles to their default settings (by calling the
 revert() function on each of them) and also undo some global settings
@@ -111,7 +111,7 @@ such as <a href=Fl_Color.html#background>fltk::background</a>. This is
 done by <a href=#reload_theme>reload_theme()</a> before loading the
 theme again.
 
-<a name=timplement><h2>Implementing a Theme</h2></a>
+<h2><a name=timplement>Implementing a Theme</a></h2>
 
 To implement "themes" the theme code needs to write a number of static
 locations, primarily the default style of several classes. You
@@ -121,7 +121,7 @@ themselves.
 
 <p>The following functions are useful when writing a theme.
 
-<a name=get_system_colors><h4>bool fltk::get_system_colors();</h4></a>
+<h4><a name=get_system_colors>bool fltk::get_system_colors();</a></h4>
 
 Read system configuration (GetSysColor() and similar functions on
 Win32, on X it reads a <i>few</i> entries from the xrdb database) and
@@ -129,7 +129,7 @@ retrieve information such as colors and fonts and put them into the
 styles. This is what the default theme does, many other themes will
 find this useful.
 
-<a name=find_config_file><h4>const char* fltk::find_config_file(char* out, int size, const char* name);</h4></a>
+<h4><a name=find_config_file>const char* fltk::find_config_file(char* out, int size, const char* name);</a></h4>
 
 Search for a file in fltk's configuration directories, and return the
 found filename. If necessary the <i>out</i> buffer is used to printf
@@ -156,7 +156,7 @@ by a configuration option when fltk is compiled)
 
 </ul>
 
-<a name=load_plugin><h4>void* fltk::load_plugin(const char* name, const char* symbol);</h4></a>
+<h4><a name=load_plugin>void* fltk::load_plugin(const char* name, const char* symbol);</a></h4>
 
 Loads a shared object (DLL) in a portable way. <i>name</i> is a
 complete filename (such as one located by <a

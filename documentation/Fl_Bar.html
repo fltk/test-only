@@ -49,7 +49,7 @@ between them.
 <tr><td align=left valign=top>
 <ul>
 <li><a href=#Bar>fltk::Bar</a></li>
-<li><a href=#~fltk::Bar>~fltk::Bar</a></li>
+<li><a href=#~Bar>~Bar</a></li>
 <li><a href=#opened>opened</a></li>
 <li><a href=#open>open</a></li>
 <li><a href=#close>close</a></li>
@@ -59,32 +59,32 @@ between them.
 </table>
 </center>
 
-<a name=Bar><h4>fltk::Bar::Bar(int x, int y, int w, int h, const char *label = 0)</h4></a>
+<h4><a name=Bar>fltk::Bar::Bar(int x, int y, int w, int h, const char *label = 0)</a></h4>
 
 Creates a new empty fltk::Bar.
 
-<a name=~Bar><h4>virtual fltk::Bar::~fltk::Bar()</h4></a>
+<h4><a name=~Bar>virtual fltk::Bar::~Bar()</a></h4>
 
 Like all groups, the destructor <I>also deletes all the
 children</I>. This allows a whole tree to be deleted at once, without
 having to keep a pointer to all the children in the user code.
 
-<a name=opened><h4>bool fltk::Bar::opened() const
-<br>bool fltk::Bar::opened(bool)</h4></a>
+<h4><a name=opened>bool fltk::Bar::opened() const
+<br>bool fltk::Bar::opened(bool)</a></h4>
 
 True if the bar is opened, false if it is closed. Setting this value
 returns true if the new value is different than the old one.
 
-<a name=open><h4>bool fltk::Bar::open()</h4></a>
+<h4><a name=open>bool fltk::Bar::open()</a></h4>
 
 Same as <tt>opened(true)</tt>
 
-<a name=close><h4>bool fltk::Bar::close()</h4></a>
+<h4><a name=close>bool fltk::Bar::close()</a></h4>
 
 Same as <tt>opened(false)</tt>
 
-<a name=glyph_size><h4>int fltk::Bar::glyph_size() const
-<br>void fltk::Bar::glyph_size(int)</h4></a>
+<h4><a name=glyph_size>int fltk::Bar::glyph_size() const
+<br>void fltk::Bar::glyph_size(int)</a></h4>
 
 Get or set the width of the box (or the height if this is a vertical
 bar), this is also the thickness the bar resizes to when closed.

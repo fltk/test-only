@@ -48,8 +48,8 @@ with future versions of fltk.
 
 <h3>Methods</h3>
 
-<h4><a name=bold>fltk::Font_* fltk::Font_::bold();
-<br><a name=italic>fltk::Font_* fltk::Font_::italic();</h4>
+<h4><a name=bold>fltk::Font_* fltk::Font_::bold();</a>
+<br><a name=italic>fltk::Font_* fltk::Font_::italic();</a></h4>
 
 Pointers to the bold and italic versions of this font.
 <tt>fltk::HELVETICA->bold()</tt> is the same as
@@ -61,7 +61,7 @@ then these are circular pointers.  Thus <tt>fltk::TIMES_BOLD->bold()</tt>
 is the same as <tt>fltk::TIMES_BOLD</tt> and <tt>fltk::SYMBOL->bold()</tt>
 is the same as <tt>fltk::SYMBOL</tt>.
 
-<h4><a name=system_name>const char* fltk::Font_::system_name()</h4>
+<h4><a name=system_name>const char* fltk::Font_::system_name()</a></h4>
 
 Returns a string that identifies the font in a system-specific
 manner.  About all that can be said about it is that it is different
@@ -69,7 +69,7 @@ for every font (two different fonts may return the same name()).  This
 string is not portable, even between different machines running the
 same operating system.
 
-<h4><a name=name>const char* fltk::Font_::name(int* attributes = 0)</h4>
+<h4><a name=name>const char* fltk::Font_::name(int* attributes = 0)</a></h4>
 
 Returns the name of the font.  The return value points to a static
 buffer that is overwritten each call (so copy the string if you want
@@ -80,7 +80,7 @@ to keep it).
 If this pointer is null then the attributes are indicated by adding
 a space and "bold" or "italic" to the name.
 
-<h4><a name=encodings>int fltk::Font_::encodings(const char** &amp;array) const;</h4>
+<h4><a name=encodings>int fltk::Font_::encodings(const char** &amp;array) const;</a></h4>
 
 Sets <i>array</i> to point at a list of encoding names.  The return
 value is the length of this array.  Each string identifies an
@@ -90,7 +90,7 @@ select what characters the first 256 codes print. A zero length array
 may be returned, this indicates that the font will print the same no
 matter what encoding is set.
 
-<h4><a name=sizes>int fltk::Font_::sizes(int *&amp;array) const;</h4>
+<h4><a name=sizes>int fltk::Font_::sizes(int *&amp;array) const;</a></h4>
 
 Sets <i>array</i> to point at a list of sizes.  The return value is
 the length of this array.  The sizes are sorted from smallest to
@@ -103,7 +103,7 @@ that work "better" than others.  The returned array points at a static
 buffer that is overwritten each call, so you want to copy it if you
 plan to keep it.
 
-<h4><a name=find_font>fltk::Font fltk::find_font(const char* name, int attributes = 0);</h4>
+<h4><a name=find_font>fltk::Font fltk::find_font(const char* name, int attributes = 0);</a></h4>
 
 Find a font with the given "nice" name.  You can get bold and italic
 by adding a space and "bold" or "italic" (or both) to the name, or by
@@ -114,7 +114,7 @@ some variations in the font name.
 does a binary search for the font in it.  This can make the first call
 pretty slow, especially on X.
 
-<h4><a name=list_fonts>int fltk::list_fonts(fltk::Font*& arrayp);</h4>
+<h4><a name=list_fonts>int fltk::list_fonts(fltk::Font*& arrayp);</a></h4>
 
 This allocates and fills in an array containing every font on the
 server.  The location <i>arrayp</i> is set to a pointer to this array,

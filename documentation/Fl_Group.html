@@ -51,7 +51,7 @@ behavior (such as from <a href="Fl_Pack.html">fltk::Pack</a>) for your
 window you should make the window have that as a single resizable
 child that fills it.
 
-<p><a href="Fl_Menu.html">fltk::Menu</a> is a subclass and
+<p><a href="Fl_Menu_.html">fltk::Menu</a> is a subclass and
 thus all menus and browsers are groups and the items in them are
 widgets.
 
@@ -62,7 +62,7 @@ widgets.
 <tr><td align=left valign=top>
 <ul>
 <li><a href="#Group">fltk::Group</a></li>
-<li><a href="#~fltk::Group">~fltk::Group</a></li>
+<li><a href="#~Group">~Group</a></li>
 <li><a href="#add">add</a></li>
 <li><a href="#add_resizable">add_resizable</a></li>
 <li><a href="#begin">begin</a></li>
@@ -92,12 +92,12 @@ widgets.
 </table>
 </center>
 
-<a name="FlGroup"><h4>fltk::Group::Group(int x, int y, int w, int h, const char *label = 0)</h4></a>
+<h4><a name="Group">fltk::Group::Group(int x, int y, int w, int h, const char *label = 0)</a></h4>
 
 Creates a new <tt>fltk::Group</tt> widget using the given position, size, 
 and label string. The default boxtype is <tt>fltk::NO_BOX</tt>. 
 
-<a name="~fltk::Group"><h4>virtual fltk::Group::~fltk::Group()</h4></a>
+<h4><a name="~Group">virtual fltk::Group::~Group()</a></h4>
 
 The destructor <I>also deletes all the children</I>. This allows a 
 whole tree to be deleted at once, without having to keep a pointer to 
@@ -106,13 +106,13 @@ fltk::Group</tt> and all of it's children can be automatic (local)
 variables, but you must declare the <tt>fltk::Group</tt> <I>first</I>, so 
 that it is destroyed last. 
 
-<a name="add"><h4>void fltk::Group::add(fltk::Widget &amp;w)
-<br>void fltk::Group::add(fltk::Widget *w)</h4></a>
+<h4><a name="add">void fltk::Group::add(fltk::Widget &amp;w)
+<br>void fltk::Group::add(fltk::Widget *w)</a></h4>
 
 The widget is removed from it's current group (if any) and then added
 to the end of this group.
 
-<a name="insert"><h4>void fltk::Group::insert(fltk::Widget &amp;w, int n)</h4></a>
+<h4><a name="insert">void fltk::Group::insert(fltk::Widget &amp;w, int n)</a></h4>
 
 The widget is removed from it's current group (if any) and then
 inserted into this group. It is put at index <tt>n</tt> (or at the end
@@ -124,7 +124,7 @@ the windgets inside a group.
 This does <tt>insert(w, find(beforethis))</tt>.  This will append the
 widget if <tt>beforethis</tt> is not in the group.
 
-<a name="remove"><h4>void fltk::Group::remove(int index)</h4></a>
+<h4><a name="remove">void fltk::Group::remove(int index)</a></h4>
 
 Remove the indexed widget from the group.
 
@@ -133,7 +133,7 @@ Remove the indexed widget from the group.
 Removes a widget from the group. This does nothing if the widget is 
 not currently a child of this group. 
 
-<a name="replace"><h4>void fltk::Group::replace(int index, fltk::Widget&amp;)</h4></a>
+<h4><a name="replace">void fltk::Group::replace(int index, fltk::Widget&amp;)</a></h4>
 
 Remove the indexed widget and insert the passed widget in it's place.
 
@@ -143,19 +143,19 @@ Find the old widget and remove it and insert the new one. If the
 widget is not a child, the new widget is appended to the end of the
 list.
 
-<a name="clear"><h4>void clear();</h4></a>
+<h4><a name="clear">void clear();</a></h4>
 
 <i>Deletes</i> all children from the group and makes it empty.
 
-<a name="current"><h4>static fltk::Group *fltk::Group::current()
-<br>static void fltk::Group::current(fltk::Group *w)</h4></a>
+<h4><a name="current">static fltk::Group *fltk::Group::current()
+<br>static void fltk::Group::current(fltk::Group *w)</a></h4>
 
 <tt>current()</tt> returns the currently active group.  The fltk::Widget
 constructor automatically does <tt>current()->add(widget)</tt> if this
 is not null.  To prevent new widgets from being added to a group, call
 <tt>fltk::Group::current(0)</tt>.
 
-<a name="begin"><h4>void fltk::Group::begin()</h4></a>
+<h4><a name="begin">void fltk::Group::begin()</a></h4>
 
 <tt>begin()</tt> sets the current group so you can build the widget
 tree by just constructing the widgets. <tt>begin()</tt> is
@@ -165,48 +165,48 @@ fltk::Window as well). <tt>begin()</tt> <i>is exactly the same as</i>
 
 <P><I>Don't forget to <tt>end()</tt> the group or window!</I>
 
-<a name="end"><h4>void fltk::Group::end()</h4></a>
+<h4><a name="end">void fltk::Group::end()</a></h4>
 
 <tt>end()</tt> <i>is exactly the same as</i>
 <tt>current(this-&gt;parent())</tt>. Any new widgets added to the
 widget tree will be added to the parent of the group.
 
-<a name="init_sizes"><h4>void fltk::Group::init_sizes() const</h4></a>
+<h4><a name="init_sizes">void fltk::Group::init_sizes() const</a></h4>
 
 If you call this immediately after a resize() it disables any
 automatic repositioning or resizing of the children (it acts as though
 resizable() is null). This is useful when the program wants to resize
 things.
 
-<a name="focus"><h4>void fltk::Group::focus(int i);
+<h4><a name="focus">void fltk::Group::focus(int i);
 <br>void fltk::Group::focus(fltk::Widget*);
-<br>int fltk::Group::focus() const;</h4></a>
+<br>int fltk::Group::focus() const;</a></h4>
 
 The index of the widget that contains the focus. You can initialize
 this before the group is displayed. Changing it while it is displayed
 does not work, use <a
 href="Fl_Widget.html#take_focus">widget->take_focus()</a> instead.
 
-<a name="child"><h4>fltk::Widget *fltk::Group::child(int n) const</h4></a>
+<h4><a name="child">fltk::Widget *fltk::Group::child(int n) const</a></h4>
 
 Returns a child, <tt>n >= 0 && n < children()</tt>. <i>No range
 checking is done!</i>
 
-<a name="children"><h4>int fltk::Group::children() const</h4></a>
+<h4><a name="children">int fltk::Group::children() const</a></h4>
 
 Returns how many child widgets the group has. 
 
-<a name="find"><h4>int fltk::Group::find(const fltk::Widget *w) const
-<br>int fltk::Group::find(const fltk::Widget &amp;w) const</h4></a>
+<h4><a name="find">int fltk::Group::find(const fltk::Widget *w) const
+<br>int fltk::Group::find(const fltk::Widget &amp;w) const</a></h4>
 
 Searches the children for <i>w</i>, returns the index of <i>w</i> or
 of a parent of <i>w</i> that is a child of this. Returns <a
 href="#children"><tt>children()</tt></a> if the widget is <tt>
 NULL</tt> or not found. 
 
-<a name="resizable"><h4>void fltk::Group::resizable(fltk::Widget *box)
+<h4><a name="resizable">void fltk::Group::resizable(fltk::Widget *box)
 <br>void fltk::Group::resizable(fltk::Widget &amp;box)
-<br>fltk::Widget *fltk::Group::resizable() const</h4></a>
+<br>fltk::Widget *fltk::Group::resizable() const</a></h4>
 
 The resizable widget defines the resizing box for the group. When the 
 group is resized it calculates a new size and position for all of its 
@@ -228,8 +228,8 @@ corner.
 invisible <tt>fltk::InvisibleBox</tt> as the resizable and/or by using a hierarchy 
 of child <tt>fltk::Group</tt>'s. 
 
-<a name="add_resizable"><h4>fltk::Group&amp; fltk::Group::add_resizable(fltk::Widget &amp;box)</h4></a>
+<h4><a name="add_resizable">fltk::Group&amp; fltk::Group::add_resizable(fltk::Widget &amp;box)</a></h4>
 
 Adds a widget to the group and makes it the resizable widget. 
 
-</tt></body></html>
+</body></html>

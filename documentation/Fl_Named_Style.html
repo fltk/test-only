@@ -1,9 +1,9 @@
-<html><head><title>class fltk::Named_Style</title></head><body bgcolor=white>
+<html><head><title>class fltk::NamedStyle</title></head><body bgcolor=white>
 <!-- NEW PAGE -->
-<h2>class fltk::Named_Style</h2>
+<h2>class fltk::NamedStyle</h2>
 <hr>
 
-<h4>fltk::Named_Style(const char* name, void (*revert)(fltk::Style*), fltk::Style** pointer);</h4>
+<h4>fltk::NamedStyle(const char* name, void (*revert)(fltk::Style*), fltk::Style** pointer);</h4>
 
 This subclass of <a href="Fl_Style.html"><tt>fltk::Style</tt></a> creates
 a style that can be returned by <a
@@ -35,7 +35,7 @@ fltk::ROUND_BOX:
 <ul><pre><code>static void revert(fltk::Style* s) {
   s->box = fltk::ROUND_BOX;
 }
-static fltk::Named_Style* style = new fltk::Named_Style("MyWidget", revert, &style);
+static fltk::NamedStyle* style = new fltk::NamedStyle("MyWidget", revert, &style);
 
 MyWidget::MyWidget(int x, int y, int w, int h, const char *l)
   : fltk::Widget(x,y,w,h,l)

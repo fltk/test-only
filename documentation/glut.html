@@ -6,7 +6,7 @@
 This appendix describes the GLUT compatibility header file supplied 
 with FLTK. 
 
-<a name=gusing><h2>Using the GLUT Compatibility Header File</h2></a>
+<h2><a name=gusing>Using the GLUT Compatibility Header File</a></h2>
 
 You should be able to compile existing GLUT source code by including
 <tt> &lt;fltk/glut.h&gt;</tt> instead of <tt>&lt;GL/glut.h&gt;</tt>.
@@ -32,7 +32,7 @@ you are having trouble porting your GLUT program.</p>
 <p>This has been tested with most of the demo programs that come with 
 the GLUT 3.3 distribution.</p>
 
-<a name=gbugs><h2>Known Problems</h2></a>
+<h2><a name=gbugs>Known Problems</a></h2>
 
 The following functions and/or arguments to functions are missing, and 
 you will have to replace them or comment them out for your code to 
@@ -93,7 +93,7 @@ href=Fl.html#args> <tt>fltk::args()</tt></A>, and will accept any
 abbreviation of these switches (such as &quot;-di&quot; for
 &quot;-display&quot;).</p>
 
-<a name=gmixing><h2>Mixing GLUT and FLTK Code</h2></a>
+<h2><a name=gmixing>Mixing GLUT and FLTK Code</a></h2>
 
 <p>You can make your GLUT window a child of a <tt>fltk::Window</tt> with the 
 following scheme.  The biggest trick is that GLUT insists on <tt>show()</tt>
@@ -126,13 +126,13 @@ loop calling <tt>fltk::wait()</tt> to run  the program.</li>
 </UL>
 
 <hR break>
-<a name=Glut_Window><h2>class fltk::Glut_Window</h2></a>
+<h2><a name=Glut_Window>class fltk::Glut_Window</a></h2>
 <hR>
 
 <h3>Class Hierarchy</h3>
 
 <pre>
-<a href=Fl_GlWindow.html#GlWindow>fltk::GlWindow</a>
+<a href=Fl_Gl_Window.html#GlWindow>fltk::GlWindow</a>
    |
    +----<B>fltk::Glut_Window</B>
 </pre>
@@ -163,14 +163,14 @@ called on it yet, some functions that assumme an OpenGL context will
 not work.  If you do <tt>show()</tt> the window, call
 <tt>make_current()</tt> again to set the context.</p>
 
-<p><tt>~fltk::Glut_Window()</tt> is the same as
+<p><tt>~Glut_Window()</tt> is the same as
 <tt>glutDestroyWindow()</tt>.</p>
 
 <h3>Methods</h3>
 
 <ul>
 <li><A href=#Glut_Window>fltk::Glut_Window</A></li>
-<li><A href=#~fltk::Glut_Window>~fltk::Glut_Window</A></li>
+<li><A href=#~Glut_Window>~Glut_Window</A></li>
 </ul>
 
 <h4>fltk::Glut_Window::Glut_Window(int x, int y, int w, int h, const char 
@@ -183,7 +183,7 @@ will create the window with a preset size, but the window manager will
 choose the position according to it's own whims. 
 
 <h4><A name=~Glut_Window>
-virtual fltk::Glut_Window::~fltk::Glut_Window()</A></h4>
+virtual fltk::Glut_Window::~Glut_Window()</A></h4>
 
 Destroys the GLUT window.
 

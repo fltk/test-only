@@ -11,8 +11,8 @@
    |
    +----<B>fltk::Button</B>
            |
-           +----<A href=Fl_CheckButton.html>fltk::CheckButton</A>, <A href=Fl_LightButton.html>fltk::LightButton</A>, <A href=Fl_RepeatButton.html>fltk::RepeatButton</A>,
-                <A href=Fl_ReturnButton.html>fltk::ReturnButton</A>, <A href=Fl_RoundButton.html>fltk::RoundButton</A>
+           +----<A href=Fl_Check_Button.html>fltk::CheckButton</A>, <A href=Fl_Light_Button.html>fltk::LightButton</A>, <A href=Fl_Repeat_Button.html>fltk::RepeatButton</A>,
+                <A href=Fl_Return_Button.html>fltk::ReturnButton</A>, <A href=Fl_Round_Button.html>fltk::RoundButton</A>
 </pre>
 
 <h3>Include Files</h3>
@@ -44,7 +44,7 @@ the input field does not eat the event first as an
 <TR><TD align=left valign=top>
 <UL>
 <LI><A href=#Button>fltk::Button</A></LI>
-<LI><A href=#~fltk::Button>~fltk::Button</A></LI>
+<LI><A href=#~Button>~Button</A></LI>
 </UL>
 </TD><TD align=left valign=top>
 <UL>
@@ -69,21 +69,21 @@ the input field does not eat the event first as an
 </TABLE>
 </CENTER>
 
-<a name=FlButton><h4>fltk::Button::Button(int x, int y, int w, int h, const char *label = 0)</h4></a>
+<h4><a name=FlButton>fltk::Button::Button(int x, int y, int w, int h, const char *label = 0)</a></h4>
 
 The constructor creates the button using the position, size, and 
 label. 
 
-<a name=~Button><h4>fltk::Button::~fltk::Button(void)</h4></a>
+<h4><a name=~Button>fltk::Button::~Button(void)</a></h4>
 
 The destructor removed the button. 
 
-<a name=clear><h4>int fltk::Button::clear()</h4></a>
+<h4><a name=clear>int fltk::Button::clear()</a></h4>
 
 Same as <TT>value(0)</TT>. 
 
-<A name=down_box><h4>fltk::Box fltk::Button::down_box() const
-<BR>void fltk::Button::down_box(fltk::Box bt)</h4></a>
+<h4><A name=down_box>fltk::Box fltk::Button::down_box() const
+<BR>void fltk::Button::down_box(fltk::Box bt)</a></h4>
 
 The first form returns the current down box type, which is drawn when <TT>
 value()</TT> is non-zero. 
@@ -92,17 +92,17 @@ value()</TT> is non-zero.
 causes FLTK to figure out the correct matching down version of
 <TT>box()</TT>.
 
-<a name=set><h4>int fltk::Button::set()</h4></a>
+<h4><a name=set>int fltk::Button::set()</a></h4>
 
 Same as <TT>value(1)</TT>. 
 
-<a name=setonly><h4>void fltk::Button::setonly()</h4></a>
+<h4><a name=setonly>void fltk::Button::setonly()</a></h4>
 
 Turns on this button and turns off all other radio buttons in the 
 group (calling <TT>value(1)</TT> or <TT>set()</TT> does not do this). 
 
-<a name=type><h4>uchar fltk::Button::type() const
-<BR>void fltk::Button::type(uchar t)</h4></a>
+<h4><a name=type>uchar fltk::Button::type() const
+<BR>void fltk::Button::type(uchar t)</a></h4>
 
 The first form of <TT>type()</TT> returns the current button type, 
 which can be one of: 
@@ -117,14 +117,14 @@ buttons in the current group with <CODE>type() == fltk::RADIO</CODE>
 
 The second form sets the button type to <TT>t</TT>. 
 
-<a name=value><h4>char fltk::Button::value() const
-<BR>int fltk::Button::value(int)</h4></a>
+<h4><a name=value>char fltk::Button::value() const
+<BR>int fltk::Button::value(int)</a></h4>
 
 The first form returns the current value (0 or 1).  The second form 
 sets the current value. 
 
-<a name=when><h4>fltk::When fltk::Widget::when() const
-<BR>void fltk::Widget::when(fltk::When w)</h4></a>
+<h4><a name=when>fltk::When fltk::Widget::when() const
+<BR>void fltk::Widget::when(fltk::When w)</a></h4>
 
 Controls when callbacks are done.  The following values are useful, 
 the default value is <CODE>fltk::WHEN_RELEASE</CODE>: 

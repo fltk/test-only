@@ -14,7 +14,7 @@
 
 Allows an <a href=Fl_Browser.html>fltk::Browser</a> or <a
 href=Fl_Choice.html>fltk::Choice</a> or other subclass of <a
-href=Fl_Menu.html>fltk::Menu</a> to display a hierarchy of data that is
+href=Fl_Menu_.html>fltk::Menu</a> to display a hierarchy of data that is
 managed by the application rather than FLTK. This is done by creating
 a "dummy" widget, typically a subclass of <a
 href="Fl_Item.html">fltk::Item</a>, that describes a particular item that
@@ -51,7 +51,7 @@ and must implement the <a href="#flags_changed">flags_changed()</a> method.
 </table>
 </center>
 
-<a name=children><h4>virtual int children(const fltk::Menu* group, const int* indexes, int level);</h4></a>
+<h4><a name=children>virtual int children(const fltk::Menu* group, const int* indexes, int level);</a></h4>
 
 Return how many children are under a given item. If <i>level</i> is
 zero, this should return how many items are at the top
@@ -80,7 +80,7 @@ int My_fltk::List::children(const fltk::Menu*, const int* indexes, int level) {
 }
 </ul></pre>
 
-<a name=child><h4>virtual fltk::Widget* child(const fltk::Menu* group, const int* indexes, int level);</h4></a>
+<h4><a name=child>virtual fltk::Widget* child(const fltk::Menu* group, const int* indexes, int level);</a></h4>
 
 Return a given child as a widget. draw() and measure() will be called
 on this widget to figure out where to place it and to draw it.
@@ -115,7 +115,7 @@ fltk::Widget* My_fltk::List::child(const fltk::Menu*, const int* indexes, int le
 }
 </pre>
 
-<a name=flags_changed><h4>virtual void flags_changed(const fltk::Menu* group, fltk::Widget* widget);</h4></a>
+<h4><a name=flags_changed>virtual void flags_changed(const fltk::Menu* group, fltk::Widget* widget);</a></h4>
 
 This is called if the browser changes any flags on a widget, so that
 you can copy the values to permanent storage, and perhaps change other
@@ -134,4 +134,4 @@ void My_fltk::List::flags_changed(const fltk::Menu*, fltk::Widget* widget) {
 }
 </pre>
 
-</BODY></HTML>
+</body></html>

@@ -13,7 +13,7 @@
            |
            +----<b>fltk::Menu</b>
                    |
-                   +----<a href=Fl_Browser.html>fltk::Browser</a>, <a href=Fl_Choice.html>fltk::Choice</a>, <a href=Fl_MenuBar.html>fltk::MenuBar</a>, <a href=Fl_MenuButton.html>fltk::MenuButton</a>
+                   +----<a href=Fl_Browser.html>fltk::Browser</a>, <a href=Fl_Choice.html>fltk::Choice</a>, <a href=Fl_Menu_Bar.html>fltk::MenuBar</a>, <a href=Fl_Menu_Button.html>fltk::MenuButton</a>
 </pre>
 
 <h3>Include Files</h3>
@@ -31,7 +31,7 @@ Windows-style "combo box".
 
 <p>This is a subclass of <tt>fltk::Group</tt> and each item is a child
 <tt>fltk::Widget</tt>, usually <a href=Fl_Item.html>fltk::Item</a> widgets,
-or <a href=Fl_ItemGroup.html>fltk::ItemGroup</a> widgets to make a
+or <a href=Fl_Item_Group.html>fltk::ItemGroup</a> widgets to make a
 hierarchy.
 
 <p>An <tt>fltk::Menu</tt> can take a pointer to an <a
@@ -42,7 +42,7 @@ parallel with your own data structures.
 
 <p>It also provides several convienence functions for creating,
 rearranging, and deleteing <a href=Fl_Item.html>fltk::Item</a>
-and <a href=Fl_ItemGroup.html>fltk::ItemGroup</a> widgets.
+and <a href=Fl_Item_Group.html>fltk::ItemGroup</a> widgets.
 
 <h3>Methods</h3>
 
@@ -51,7 +51,7 @@ and <a href=Fl_ItemGroup.html>fltk::ItemGroup</a> widgets.
 <tr><td align=left valign=top>
 <ul>
 <li><a href="#Menu">fltk::Menu</a></li>
-<li><a href="#~fltk::Menu">~fltk::Menu</a></li>
+<li><a href="#~Menu">~Menu</a></li>
 <li><a href="#list">list</a></li>
 <li><a href="#children">children</a></li>
 <li><a href="#children">children</a></li>
@@ -85,26 +85,26 @@ and <a href=Fl_ItemGroup.html>fltk::ItemGroup</a> widgets.
 </table>
 </center>
 
-<a name=Menu><h4>fltk::Menu::Menu(int x, int y, int w, int h, const char *label = 0)</h4></a>
+<h4><a name=Menu>fltk::Menu::Menu(int x, int y, int w, int h, const char *label = 0)</a></h4>
 
 Creates a new <tt>fltk::Menu</tt> widget using the given position, size,
 and label string. It is created with no child items.
 
-<a name=~Menu><h4>fltk::Menu::~fltk::Menu()</h4></a>
+<h4><a name=~Menu>fltk::Menu::~Menu()</a></h4>
 
 Like all groups, the child widgets are deleted. <i>Any fltk::List is not
 deleted</i>.
 
-<a name=list><h4><a href=Fl_List.html>fltk::List</a>* fltk::Menu::list() const;
+<h4><a name=list><a href=Fl_List.html>fltk::List</a>* fltk::Menu::list() const;
 <br>void fltk::Menu::list(<a href=Fl_List.html>fltk::List</a>*
-list)</h4></a>
+list)</a></h4>
 
 Get or set the <a href=Fl_List.html>fltk::List</a> that generates widgets
 for the menu. If this is set it hides any child widgets (though an
 fltk::List implementation may retrieve them in order to combine them with
 it's own widgets).
 
-<a name=children><h4>int fltk::Menu::children(const int* indexes, int level) const</h4></a>
+<h4><a name=children>int fltk::Menu::children(const int* indexes, int level) const</a></h4>
 
 Return how many children are under a given item. If <i>level</i> is
 zero, this returns how many items are at the top
@@ -128,7 +128,7 @@ is so that an fltk::List can be used. However if no fltk::List is specified
 the action is identical to <a
 href=FlGroup.html#children><tt>fltk::Group::children()</tt></a>.
 
-<a name=child><h4>fltk::Widget* fltk::Menu::child(const int* indexes, int level) const</h4></a>
+<h4><a name=child>fltk::Widget* fltk::Menu::child(const int* indexes, int level) const</a></h4>
 
 Return a given child from somewhere in the hierarchy. <i>indexes</i>
 is an array of indexes into each parent and contains <i>level</i>+1
@@ -148,8 +148,8 @@ is so that an fltk::List can be used. However if no fltk::List is specified
 the action is identical to <a
 href=FlGroup.html#child><tt>fltk::Group::child(index)</tt></a>.
 
-<a name=item><h4>fltk::Widget* fltk::Menu::item() const
-<br>void fltk::Menu::item(fltk::Widget*)</h4></a>
+<h4><a name=item>fltk::Widget* fltk::Menu::item() const
+<br>void fltk::Menu::item(fltk::Widget*)</a></h4>
 
 The "current item". In callbacks this is the item the user clicked
 on. Otherwise you probably can't make any assumptions about it's value.
@@ -165,7 +165,7 @@ short-lived if an fltk::List is used.
 <p>You can set the item with the second call, useful for outwitting
 the callback.
 
-<a name=focus><h4>bool fltk::Menu::focus(const int* indexes, int level);</h4></a>
+<h4><a name=focus>bool fltk::Menu::focus(const int* indexes, int level);</a></h4>
 
 The current item is remembered in the <a
 href=FlGroup.html#focus><tt>focus()</tt></a> of each parent at each
@@ -182,24 +182,24 @@ own code (with the insert/delete broken) to get around this.
 <p><a href=#item><tt>item()</tt></a> is set to the located widget.
 True is returned if the indexes differ from last time.
 
-<a name=get_focus><h4>fltk::Widget* fltk::Menu::get_focus()</h4></a>
+<h4><a name=get_focus>fltk::Widget* fltk::Menu::get_focus()</a></h4>
 
 Return the widget identified by the focus fields (or NULL if it is
 illegal). This also sets <a href=#item><tt>item()</tt></a> to the same
 value.
 
-<a name="value"><h4>int fltk::Menu::value() const
-<br>void fltk::Menu::value(int v)</h4></a>
+<h4><a name="value">int fltk::Menu::value() const
+<br>void fltk::Menu::value(int v)</a></h4>
 
 For a non-hierarchial menu this does the same thing as <a
 href=#focus><tt>focus()</tt></a>. The items are numbered from zero.
 
-<a name="size"><h4>int fltk::Menu::size() const</h4></a>
+<h4><a name="size">int fltk::Menu::size() const</a></h4>
 
 Returns <a href=#children>children()</a> (for back compatability with
 older versions of fltk).
 
-<a name=popup><h4>int fltk::Menu::popup(int x,int y,int w=0,int h=0,fltk::Widget* title=0,bool menubar=false);</h4></a>
+<h4><a name=popup>int fltk::Menu::popup(int x,int y,int w=0,int h=0,fltk::Widget* title=0,bool menubar=false);</a></h4>
 
 Create and display a pop-up menu (or hierarchy of menus) showing the
 children widgets, and waits until the user picks an item or dismisses
@@ -217,9 +217,9 @@ href=Fl_Item.html>fltk::Item</a>) that is used to make a title atop the
 menu, in the style of SGI's popup menus.
 
 <p><i>menubar</i> is for internal use by menubars and should be left
-false.
+false.</p>
 
-<a name="handle_shortcut"><h4>int fltk::Menu::handle_shortcut();</h4></a>
+<h4><a name="handle_shortcut">int fltk::Menu::handle_shortcut();</a></h4>
 
 Respond to the current <tt>fltk::SHORTCUT</tt> or <tt>fltk::KEY</tt> event
 by finding a menu item it matches and calling <a
@@ -228,7 +228,7 @@ found, false if none. Items are searched for a matching <a
 href=Fl_Widget.html#shortcut><tt>shortcut()</tt></a> or for '&amp;'
 characters in the label.
 
-<a name="execute"><h4>void fltk::Menu::execute(fltk::Widget*);</h4></a>
+<h4><a name="execute">void fltk::Menu::execute(fltk::Widget*);</a></h4>
 
 Standard action when the user picks an item. <a
 href=#item><tt>item()</tt></a> is set to it (so the callback can find
@@ -239,7 +239,7 @@ so by default the callback for each menu item is done.
 <p>This function also handles toggle/radio menu items, but that might
 change in the future.
 
-<a name="global"><h4>void fltk::Menu::global();</h4></a>
+<h4><a name="global">void fltk::Menu::global();</a></h4>
 
 Make the shortcuts for this menu work no matter what window has the
 focus when you type it (as long as <a
@@ -251,10 +251,10 @@ all).
 
 <P>Currently there can be only one <tt>global()</tt>menu.  Setting a new 
 one will replace the old one.  There is no way to remove the <tt>
-global()</tt> setting (so don't destroy the widget!)</P>
+global()</tt> setting (so don't destroy the widget!)
 
-<a name="add"><h4>fltk::Widget* fltk::Menu::add(const char* label, int shortcut, fltk::Callback*, void* user_data = 0, int flags = 0);
-<br>fltk::Widget* fltk::Menu::add(const char* label, void* user_data);</h4></a>
+<h4><a name="add">fltk::Widget* fltk::Menu::add(const char* label, int shortcut, fltk::Callback*, void* user_data = 0, int flags = 0);
+<br>fltk::Widget* fltk::Menu::add(const char* label, void* user_data);</a></h4>
 
 Convienece function for populating your menu. This creates a new <a
 href=Fl_Item.html>fltk::Item</a> with the given fields filled in. The
@@ -275,27 +275,27 @@ instance <tt>menu->add("red|green|blue")</tt> will add three
 items. This is compatable with XForms and many other GL-based
 programs.
 
-<a name="replace"><h4>fltk::Widget* fltk::Menu::replace(const char* label, int shortcut, fltk::Callback*, void* user_data = 0, int flags = 0);</h4></a>
+<h4><a name="replace">fltk::Widget* fltk::Menu::replace(const char* label, int shortcut, fltk::Callback*, void* user_data = 0, int flags = 0);</a></h4>
 
 Same as <a href=#add><tt>add()</tt></a> but if an item with that name
 (and in the same submenu) already exists, that widget is altered to
 these new values. This is what add() on menus did in fltk 1.0.
 
-<a name="find"><h4>fltk::Widget* fltk::Menu::find(const char* label) const;</h4></a>
+<h4><a name="find">fltk::Widget* fltk::Menu::find(const char* label) const;</a></h4>
 
 Does the same search as <a href=#add><tt>add()</tt></a> or <a
 href="#replace"><tt>replace()</tt></a> for an item with that name
 (including using '/' for submenus) and returns that item if it exists,
 or <tt>NULL</tt> if it does not.
 
-<a name="insert"><h4>fltk::Widget* fltk::Menu::insert(int n, const char* insert, void* user_data = 0);</h4></a>
+<h4><a name="insert">fltk::Widget* fltk::Menu::insert(int n, const char* insert, void* user_data = 0);</a></h4>
 
 Same as <a href=#add><tt>add()</tt></a> but the new item is inserted
 before item <i>n</i> in the top level. If this is a new submenu the
 whole submenu is inserted before that item. However if this is an
 existing submenu the item is added to it and it is not moved.
 
-<a name="remove"><h4>void fltk::Menu::remove(const char* label)</h4></a>
+<h4><a name="remove">void fltk::Menu::remove(const char* label)</a></h4>
 
 Does <tt>delete find(label)</tt>, thus destroying the matching item,
 if it exists.

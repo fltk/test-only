@@ -1,24 +1,24 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class fltk::Overlay_Window</title></head><body>
+<title>class fltk::OverlayWindow</title></head><body>
 <!-- NEW PAGE -->
-<h2>class fltk::Overlay_Window</h2>
+<h2>class fltk::OverlayWindow</h2>
 <hr>
 
 <H3>Class Hierarchy</H3>
 <PRE>
-<A href=Fl_DoubleBufferWindow.html#DoubleBufferWindow>fltk::DoubleBufferWindow</A>
+<A href=Fl_Double_Window.html>fltk::DoubleBufferWindow</A>
    |
-   +----<B>fltk::Overlay_Window</B>
+   +----<B>fltk::OverlayWindow</B>
 </PRE>
 <H3>Include Files</H3>
 <PRE>
-#include &lt;fltk/Overlay_Window.h&gt;
+#include &lt;fltk/OverlayWindow.h&gt;
 </PRE>
 <H3>Description</H3>
  This window provides double buffering and also the ability to draw the 
 &quot;overlay&quot; which is another picture placed on top of the main image. The 
 overlay is designed to be a rapidly-changing but simple graphic such as 
-a mouse selection box. <TT>fltk::Overlay_Window</TT> uses the overlay 
+a mouse selection box. <TT>fltk::OverlayWindow</TT> uses the overlay 
 planes provided by your graphics hardware if they are available. 
 <P>If no hardware support is found the overlay is simulated by drawing 
 directly into the on-screen copy of the double-buffered window, and 
@@ -26,30 +26,30 @@ directly into the on-screen copy of the double-buffered window, and
 overlay will blink if you change the image in the window. </P>
 <H3>Methods</H3>
 <UL>
-<LI><A href=#Overlay_Window>fltk::Overlay_Window</A></LI>
-<LI><A href=#~fltk::Overlay_Window>~fltk::Overlay_Window</A></LI>
+<LI><A href=#OverlayWindow>fltk::OverlayWindow</A></LI>
+<LI><A href=#~OverlayWindow>~OverlayWindow</A></LI>
 <LI><A href=#draw_overlay>draw_overlay</A></LI>
 <LI><A href=#redraw_overlay>redraw_overlay</A></LI>
 </UL>
 
-<a name=Overlay_Window><h4>fltk::Overlay_Window::Overlay_Window(int x, int y, int w, int h, const char *label = 0)</h4></a>
+<h4><a name=OverlayWindow>fltk::OverlayWindow::OverlayWindow(int x, int y, int w, int h, const char *label = 0)</a></h4>
 
-Creates a new <TT>fltk::Overlay_Window</TT> widget using the given
+Creates a new <TT>fltk::OverlayWindow</TT> widget using the given
 position, size, and label (title) string.
 
-<a name=~Overlay_Window><h4>virtual fltk::Overlay_Window::~fltk::Overlay_Window()</h4></a>
+<h4><a name=~OverlayWindow>virtual fltk::OverlayWindow::~OverlayWindow()</a></h4>
 
 Destroys the window and all child widgets. 
 
-<a name=draw_overlay><h4>virtual void fltk::Overlay_Window::draw_overlay() = 0</h4></a>
+<h4><a name=draw_overlay>virtual void fltk::OverlayWindow::draw_overlay() = 0</a></h4>
 
-You must subclass <TT>fltk::Overlay_Window</TT> and provide this method.
+You must subclass <TT>fltk::OverlayWindow</TT> and provide this method.
 It is just like a <TT>draw()</TT> method, except it draws the overlay.
 The overlay will have already been &quot;cleared&quot; when this is
 called.  You can use any of the routines described in <A
 href=drawing.html>&lt;fltk/draw.h&gt;</A>.
 
-<a name=redraw_overlay><h4>void fltk::Overlay_Window::redraw_overlay()</h4></a>
+<h4><a name=redraw_overlay>void fltk::OverlayWindow::redraw_overlay()</a></h4>
 
 Call this to indicate that the overlay data has changed and needs to 
 be redrawn.  The overlay will be clear until the first time this is 

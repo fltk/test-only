@@ -3,7 +3,7 @@
 
 <h1>Making Your Own Widgets</h1>
 
-<a name=swidget><H2>Making a Subclass of fltk::Widget</H2></a>
+<h2><a name=swidget>Making a Subclass of fltk::Widget</a></H2>
 
 New widgets are created by <I>subclassing</I> an existing FLTK
 widget.
@@ -62,7 +62,7 @@ layout_damage(fltk::LAYOUT_DAMAGE);
 when(fltk::WHEN_RELEASE);
 </PRE>
 
-<a name=handle><h3>Handling Events</h3>
+<h3><a name=handle>Handling Events</a></h3>
 
 <p>The virtual method <TT>int fltk::Widget::handle(int event)</TT> is called 
 to handle each event passed to the widget. It can:</p>
@@ -135,7 +135,7 @@ int MyClass::handle(int event) {
 event. If you return zero it indicates to the parent widget that it can 
 try sending the event to another widget. 
 
-<a name=draw><h3>Drawing the Widget</h3>
+<h3><a name=draw>Drawing the Widget</a></h3>
 
 The <TT>draw()</TT> virtual method is called when FLTK wants you to 
 redraw your widget.  It will be called if and only if <TT>damage()</TT>
@@ -186,7 +186,7 @@ turned on to indicate that a child widget needs to have
 <p><tt>layout()</tt> should call <tt>redraw()</tt> if it determines
 that the display needs to be redrawn.
 
-<a name=sgroup><h2>Making a Composite Widget</H2></a>
+<h2><a name=sgroup>Making a Composite Widget</a></H2>
 
 <p>A "composite" widget contains a set of child widgets and makes it
 look like a single large widget. <a href="Fl_Group.html">fltk::Group</a>
@@ -280,7 +280,7 @@ easier:
 <LI><A href=#update_child>update_child</A></LI>
 </UL>
 
-<A name=draw_child><h4>void fltk::Group::draw_child(fltk::Widget&amp;)</h4></a>
+<h4><A name=draw_child>void fltk::Group::draw_child(fltk::Widget&amp;)</a></h4>
 
 This will force the child's <TT>damage()</TT> bits all to one and call
 <TT>draw()</TT> on it, then clear the <TT>damage()</TT>.  You should
@@ -289,21 +289,21 @@ requested, or if you draw something (like a background box) that
 damages the child.  Nothing is done if the child is not
 <TT>visible()</TT> or if it is clipped.
 
-<a name=draw_outside_label><h4>void fltk::Group::draw_outside_label(fltk::Widget&amp;) const</h4></a>
+<h4><a name=draw_outside_label>void fltk::Group::draw_outside_label(fltk::Widget&amp;) const</a></h4>
 
 Draw the labels that are <I>not</I> drawn by <A
 href=#draw_inside_label><TT> draw_inside_label()</TT></A>.  If you
 want more control over the label positions you might want to call
 <TT>child-&gt;draw_label(x,y,w,h,a)</TT>.
 
-<a name=update_child><h4>void fltk::Group::update_child(fltk::Widget&amp;)</h4></a>
+<h4><a name=update_child>void fltk::Group::update_child(fltk::Widget&amp;)</a></h4>
 
 Draws the child only if its <TT>damage()</TT> is non-zero.  You should
 call this on all the children if your own damage is equal to
 fltk::DAMAGE_CHILD.  Nothing is done if the child is not
 <TT>visible()</TT> or if it is clipped.
 
-<a name=swindow><h2>Making a subclass of fltk::Window</h2></a>
+<h2><a name=swindow>Making a subclass of fltk::Window</a></h2>
 
 You may want your widget to be a subclass of <TT>fltk::Window</TT>.  This 
 can be useful if your widget wants to occupy an entire window, and can 

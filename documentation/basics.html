@@ -1,12 +1,12 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
 <title>FLTK Basics</title></head><body>
 
-<a name=basics><h1>FLTK Basics</h1>
+<h1><a name=basics>FLTK Basics</a></h1>
 
-This chapter will show you how to write and compile a very simple FLTK
+<p>This chapter will show you how to write and compile a very simple FLTK
 program.
 
-<a name=sample><h2>A sample FLTK program</h2>
+<h2><a name=sample>A sample FLTK program</a></h2>
 
 <pre>
 #include &lt;fltk/Window.h&gt;
@@ -28,14 +28,14 @@ int main(int argc, char **argv) {
 }
 </pre>
 
-The resulting program will display the window below. You can quit the 
+<p>The resulting program will display the window below. You can quit the 
 program by closing the window or pressing the ESCape key. 
 
-<P ALIGN=CENTER><IMG src=./hello.C.gif>
+<p align=center><img src=./hello.C.gif></p>
 
 <h3>Header Files</h3>
 
-The proper way to include FLTK header files is: 
+<p>The proper way to include FLTK header files is: 
 
 <pre>
 #include &lt;fltk/Xyz.h&gt;
@@ -103,7 +103,7 @@ method that has more traditional behavior).
 
 <h3>Get/Set Methods</h3>
 
-Next we set several "attributes" of the box:
+<p>Next we set several "attributes" of the box:
 
 <pre>
 box-&gt;box(fltk::UP_BOX);
@@ -112,7 +112,7 @@ box-&gt;<A href=Fl_Widget.html#label_size>label_size</A>(36);
 box-&gt;<A href=Fl_Widget.html#label_type>label_type</A>(fltk::SHADOW_LABEL);
 </pre>
 
-<tt>box-&gt;box(fltk::UP_BOX)</tt> sets the type of box the box widget
+<p><tt>box-&gt;box(fltk::UP_BOX)</tt> sets the type of box the box widget
 draws, changing it from the default of <tt>fltk::DOWN_BOX</tt>. In our
 "Hello, World!" example we use <TT>fltk::UP_BOX</TT>, which means that a
 raised button border will be drawn around the widget.  You can see the
@@ -132,7 +132,7 @@ reduces code size and execution time.  The only common exception is
 
 <h3>Begin/End of groups and windows</h3>
 
-Then we indicate we are done adding widgets to the window:
+<p>Then we indicate we are done adding widgets to the window:
 
 <pre>
 window-&gt;<A href=Fl_Group.html#end>end</A>();
@@ -146,7 +146,7 @@ this off completely.
 
 <h3>Showing the Window</h3>
 
-Then we cause the window to appear on the screen:
+<p>Then we cause the window to appear on the screen:
 
 <pre>
 window-&gt;<A href=Fl_Window.html#show>show</A>(argc, argv);
@@ -168,7 +168,7 @@ the window server).
 return <A href=Fl.html#run>fltk::run</A>();
 </pre>
 
-This will repeatedly wait for and then process events from the user.
+<p>This will repeatedly wait for and then process events from the user.
 <TT>fltk::run()</TT> does not return until all of the windows under FLTK 
 control are closed (either by the user or your program).
 
@@ -196,9 +196,9 @@ while (fltk::first_window()) fltk::wait();
 return 0;
 </pre>
 
-<a name=compiling><h2>Compiling your program</h2>
+<h2><a name=compiling>Compiling your program</a></h2>
 
-You will probably need to tell the compiler where to find the
+<p>You will probably need to tell the compiler where to find the
 directory "fltk" with all the header files. This is usually done using
 the <TT>-I</TT> option added to the compiler line:
 
@@ -206,7 +206,7 @@ the <TT>-I</TT> option added to the compiler line:
 c++ -I/usr/local/include ...
 </pre>
 
-(In Visual C++ this can be done by selecting "Settings" from the
+<p>(In Visual C++ this can be done by selecting "Settings" from the
 "Project" menu and then changing the "Preprocessor" settings under the
 "C/C++" tab)
 
@@ -217,7 +217,7 @@ compiler to use the FLTK library and where to find it:
 c++ ... -L/usr/local/lib -lfltk -lXext -lX11 -lm
 </pre>
 
-(In Visual C++ you need to add the FLTK library to the "Link"
+<p>(In Visual C++ you need to add the FLTK library to the "Link"
 settings).
 
 </body></html>

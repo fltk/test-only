@@ -6,7 +6,7 @@
 This chapter takes you through the design of a simple FLTK-based text 
 editor.
 
-<a name=egoals><H2>Determining the Goals of the Text Editor</H2></a>
+<h2><a name=egoals>Determining the Goals of the Text Editor</a></h2>
 
  Since this will be the first big project you'll be doing with FLTK, 
 lets define what we want our text editor to do: 
@@ -19,7 +19,7 @@ lets define what we want our text editor to do:
 <LI>Search and replace functions. </LI>
 <LI>Keep track of when the file has been changed. </LI>
 </OL>
-<a name=edesign><H2>Designing the Main Window</H2></a>
+<h2><a name=edesign>Designing the Main Window</a></h2>
  Now that we've outlined the goals for our editor, we can begin with 
 the design of our GUI.  Obviously the first thing that we need is a 
 window: 
@@ -28,7 +28,8 @@ fltk::Window *window;
 
 window = new fltk::Window(640, 480, &quot;Text Editor&quot;);
 </PRE>
-<a name=evariables><H2>Variables</H2></a>
+
+<h2><a name=evariables>Variables</a></h2>
  Our text editor will need some global variables to keep track of 
 things: 
 <PRE>
@@ -39,7 +40,7 @@ fltk::Window          *replace_dlg;
 fltk::Input           *replace_find;
 fltk::Input           *replace_with;
 fltk::Button          *replace_all;
-fltk::Return_Button   *replace_next;
+fltk::ReturnButton   *replace_next;
 fltk::Button          *replace_cancel;
 
 int                changed = 0;
@@ -50,14 +51,14 @@ char               search[256] = &quot;&quot;;
 previously. We'll cover the other variables as we build the 
 application. 
 
-<a name=emenus><H2>Menubars and Menus</H2></a>
+<h2><a name=emenus>Menubars and Menus</a></h2>
 
 The first goal requires us to use a menubar and menus that define each 
-function the editor needs to perform.  The <A href=Fl_MenuItem.html>
-<TT>fltk::MenuItem</TT></A> structure is used to define the menus and 
+function the editor needs to perform.  The <A href=Fl_Menu_Item.html>
+<TT>Fl_Menu_Item</TT></A> structure is used to define the menus and 
 items in a menubar: 
 <PRE>
-fltk::MenuItem menuitems[] = {
+Fl_Menu_Item menuitems[] = {
   { "&amp;File", 0, 0, 0, fltk::SUBMENU },
     { "&amp;New",        fltk::ALT + 'n', (fltk::Callback *)new_cb },
     { "&amp;Open...",    fltk::ALT + 'o', (fltk::Callback *)open_cb, 0, fltk::MENU_DIVIDER },
@@ -92,9 +93,9 @@ menubar-&gt;menu(menuitems);
 </PRE>
  We'll define the callback functions later. 
 
-<a name=eediting><H2>Editing the Text</H2></a>
+<h2><a name=eediting>Editing the Text</a></h2>
 
- To keep things simple our text editor will use the <A href=Fl_MultilineInput.html#MultilineInput>
+ To keep things simple our text editor will use the <A href=Fl_Multiline_Input.html#MultilineInput>
 <TT>fltk::MultilineInput</TT></A> widget to edit the text: 
 <PRE>
 fltk::MultilineInput *input = new fltk::MultilineInput(0, 30, 640, 450);
@@ -110,7 +111,7 @@ input-&gt;when(fltk::WHEN_CHANGED);
 input-&gt;textfont(fltk::COURIER);
 </PRE>
 
-<a name=ereplace><H2>The Replace Dialog</H2></a>
+<h2><a name=ereplace>The Replace Dialog</a></h2>
 
 We can use the FLTK convenience functions for many of the editor's 
 dialogs, however the replace dialog needs its own custom window.  To 
@@ -118,7 +119,7 @@ keep things simple we will have a &quot;find&quot; string, a &quot;replace&quot;
 and &quot;replace all&quot;, &quot;replace next&quot;, and &quot;cancel&quot; buttons.  The strings 
 are just <TT>fltk::Input</TT> widgets, the &quot;replace all&quot; and &quot;cancel&quot; 
 buttons are <TT>fltk::Button</TT> widgets, and the &quot;replace next &quot; button 
-is a <TT>fltk::Return_Button</TT> widget: 
+is a <TT>fltk::ReturnButton</TT> widget: 
 <P ALIGN=CENTER><IMG src=./editor-replace.gif></P>
 <PRE>
 fltk::Window *replace_dlg = new fltk::Window(300, 105, &quot;Replace&quot;);
@@ -129,7 +130,7 @@ fltk::Button *replace_next = new fltk::Button(105, 70, 120, 25, &quot;Replace Ne
 fltk::Button *replace_cancel = new fltk::Button(230, 70, 60, 25, &quot;Cancel&quot;);
 </PRE>
 
-<a name=ecallbacks><H2>Callbacks</H2></a>
+<h2><a name=ecallbacks>Callbacks</a></h2>
 
  Now that we've defined the GUI components of our editor, we need to 
 define our callback functions. 
@@ -391,7 +392,7 @@ void undo_cb(void) {
 }
 </PRE>
 
-<a name=eother><H2>Other Functions</H2></a>
+<h2><a name=eother>Other Functions</a></h2>
 
 Now that we've defined the callback functions, we need our support 
 functions to make it all work: 
@@ -499,7 +500,7 @@ void set_changed(int c) {
 }
 </PRE>
 
-<a name=ecompiling><H2>Compiling the Editor</H2></a>
+<h2><a name=ecompiling>Compiling the Editor</a></h2>
 
 The complete source for our text editor can be found in the <TT>
 test/editor.cxx</TT> source file.  Both the Makefile and Visual C++ 
@@ -515,7 +516,7 @@ library. Also, the <TT>CC</TT> command may also be called <TT>gcc</TT>
  or <TT>c++</TT> on your system. 
 <P>Congratulations, you've just built your own text editor! </P>
 
-<a name=efinal><H2>The Final Product</H2></a>
+<h2><a name=efinal>The Final Product</a></h2>
 
 The final editor window should look like the image below: 
 <P ALIGN=CENTER><IMG src=./editor.gif></P>

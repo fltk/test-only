@@ -1,18 +1,34 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>struct fltk::MenuItem</title></head><body>
+<title>struct Fl_Menu_Item</title></head><body>
 <!-- NEW PAGE -->
-<h2>struct fltk::MenuItem</h2>
+<h2>struct Fl_Menu_Item</h2>
 <hr>
 
 <H3>Class Hierarchy</H3>
 <PRE>
-<B>struct fltk::MenuItem</B>
+<B>struct Fl_Menu_Item</B>
 </PRE>
 <H3>Include Files</H3>
 <PRE>
-#include &lt;fltk/MenuItem.h&gt;
+#include &lt;FL/Fl_Menu_Item.h&gt;
 </PRE>
 <H3>Description</H3>
 
 This class is provided for back compatability with fltk 1.0 and should
 not be used in new programs.
+
+<p>In fltk 1.0 menu items were an array of these structures and the
+array was managed by the user program, and a pointer to this array was
+stored in the menu bar or button.
+
+<p>In fltk 2.0 menu items are child widgets. This allows the same code
+that adds, removes, or modifies widgets to be used to manage menu
+items.
+
+<p>Fltk 1.0 is emulated by replacing the methods that set the pointer
+to the array with a method that reads the array and creates identical
+menu items as widgets. The compatability is not exact, as attempts to
+modify the menu entries by changing the array are ignored (since they
+were copied at assignment time).
+
+</body></html>

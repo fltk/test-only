@@ -11,21 +11,21 @@ user dismisses them and then return the result.
 of the core of fltk.  If you don't like the way they look, copy the
 code and modify to to what you want.
 
-<a name=ucolor><h2>Color Choosers</h2></a>
+<h2><a name=ucolor>Color Choosers</a></h2>
 
 <H4><A name=color_chooser>int fltk::color_chooser(const char*, double 
 &amp;r, double &amp;g, double &amp;b)
 <BR> int fltk::color_chooser(const char *, uchar &amp;r, uchar &amp;g, uchar &amp;b)</A>
 </H4>
 
-<P ALIGN=CENTER><IMG src=./color_chooser.jpg></p>
+<P ALIGN=CENTER><IMG src=./fl_color_chooser.jpg></p>
 
 <p><tt>fltk::color_chooser()</tt> pops up a window to let the user pick
 an arbitrary RGB color.  They can pick the hue and saturation in the
 &quot;hue box&quot; on the left (hold down CTRL to just change the
 saturation), and the brighness using the vertical slider.  Or they can
 type the 8-bit numbers into the RGB <A
-href=Fl_ValueInput.html><tt>fltk::ValueInput</tt></A> fields, or drag
+href=Fl_Value_Input.html><tt>fltk::ValueInput</tt></A> fields, or drag
 the mouse across them to adjust them.  The pull-down menu lets the
 user set the input fields to show RGB, HSV, or 8-bit RGB (0 to
 255).</p>
@@ -50,9 +50,9 @@ access with "indexed" <A href=Fl_Color.html><tt>fltk::Color</tt></A>
 values and lets the user pick one of them.  It returns the new color
 index, or the old one if the user types ESC or clicks outside the window. 
 
-<P ALIGN=CENTER><IMG src=./show_colormap.gif></p>
+<P ALIGN=CENTER><IMG src=./fl_show_colormap.gif></p>
 
-<a name=upopup><h2>Popup messages and questions</h2></a>
+<h2><a name=upopup>Popup messages and questions</a></h2>
 
 <H4><A name=message>void fltk::message(const char *, ...)</A></H4>
 
@@ -61,13 +61,13 @@ waits for the user to hit the button.  The message will wrap to fit the
 window, or may be many lines by putting <tt>\n</tt> characters into it. 
 The enter key is a shortcut for the OK button. 
 
-<P ALIGN=CENTER><IMG src=./message.gif border=1></p>
+<P ALIGN=CENTER><IMG src=./fl_message.gif></p>
 
 <H4><A name=alert>void fltk::alert(const char *, ...)</A></H4>
 
 Same as <tt>fltk::message()</tt> except for the &quot;!&quot; symbol. 
 
-<P ALIGN=CENTER><IMG src=./alert.gif border=1></p>
+<P ALIGN=CENTER><IMG src=./fl_alert.gif></p>
 
 <H4><A name=ask>int fltk::ask(const char *, ...)</A></H4>
 
@@ -77,7 +77,7 @@ hit a button.  The return value is 1 if the user hits Yes, 0 if they
 pick No.  The enter key is a shortcut for Yes and ESC is a shortcut
 for No.
 
-<P ALIGN=CENTER><IMG src=./ask.gif border=1></p>
+<P ALIGN=CENTER><IMG src=./fl_ask.gif></p>
 
 <H4><A name=choice>int fltk::choice(const char *q, const char *b0, 
 const char *b1, const char *b2, ...)</A></H4>
@@ -90,7 +90,7 @@ which is selected when the enter key is pressed.  ESC is a shortcut for
 button 0.  Notice the buttons are positioned &quot;backwards&quot; You
 can hide buttons by passing <tt>NULL</tt> as their labels.
 
-<P ALIGN=CENTER><IMG src=./choice.gif border=1></p>
+<P ALIGN=CENTER><IMG src=./fl_choice.gif></p>
 
 <H4><A name=input>const char *fltk::input(const char *label, const char 
 *deflt = 0, ...)</A></H4>
@@ -101,15 +101,15 @@ returned pointer is only valid until the next time <tt>fltk::input()</tt>
 is called</I>.  Due to back-compatability, the arguments to any printf 
 commands in the label are after the default value. 
 
-<P ALIGN=CENTER><IMG src=./input.gif border=1></p>
+<P ALIGN=CENTER><IMG src=./fl_input.gif></p>
 
 <H4><A name=password>const char *fltk::password(const char *label, 
 const char *deflt = 0, ...)</A></H4>
 
 Same as <tt>fltk::input()</tt> except an <A href=Fl_Secret_Input.html>
-<tt>fltk::Secret_Input</tt></A> field is used.
+<tt>fltk::SecretInput</tt></A> field is used.
 
-<P ALIGN=CENTER><IMG src=./password.gif border=1></p>
+<P ALIGN=CENTER><IMG src=./fl_password.gif></p>
 
 <H4><A name=message_font>void fltk::message_font(fltk::Font, int size)</A></H4>
 
@@ -122,10 +122,10 @@ widget with any label can be created and used as the icon, including widgets
 with callbacks! Calling this function with <tt>NULL</tt> will reset the
 icons to the FLTK default.
 
-<a name=ufilechooser><h2>File Chooser</h2></a>
+<h2><a name=ufilechooser>File Chooser</a></h2>
  
-<H4><A name=file_chooser>char *fltk::file_chooser(const char * message, 
-const char *pattern, const char *fname)</A></H4>
+<h4><a name=file_chooser>char *fltk::file_chooser(const char * message, 
+const char *pattern, const char *fname)</a></h4>
 
 FLTK provides a &quot;tab completion&quot; file chooser that makes it easy to 
 choose files from large directories.  This file chooser has several 

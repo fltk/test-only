@@ -30,7 +30,7 @@ href=Fl.html#flush><tt>fltk::flush()</tt></a> to be called
 regularily so that widgets are updated. Timeouts, the idle function,
 and file descriptor callbacks will not work in this case.
 
-<a name=add_handler><h4>void fltk::add_handler(int (*f)(int))</h4></a>
+<h4><a name=add_handler>void fltk::add_handler(int (*f)(int))</a></h4>
 
 Install a function to parse unrecognized messages sent to FLTK 
 windows.  If FLTK cannot figure out what to do with a message, it calls 
@@ -38,7 +38,7 @@ each of these functions (most recent first) until one of them returns
 non-zero.  The argument passed to the fuctions is zero.  If all the 
 handlers return zero then FLTK calls <tt>DefWindowProc()</tt>. 
 
-<a name=msg><h4>extern MSG fltk::msg</h4></a>
+<h4><a name=msg>extern MSG fltk::msg</a></h4>
 
 The most recent message read by <tt>GetMessage</tt> (which is called 
 by <a href=Fl.html#wait><tt>fltk::wait()</tt></a>.  This may not 
@@ -46,18 +46,18 @@ be the most recent message sent to an FLTK window (because our
 fun-loving friends at MicroSoft decided that calling the handle
 procedures directly would be a good idea sometimes...)
 
-<a name=WIN32.xid><h4>HWND fltk::xid(const fltk::Window*)</h4></a>
+<h4><a name=WIN32.xid>HWND fltk::xid(const fltk::Window*)</a></h4>
 
 Returns the window handle for a <tt>fltk::Window</tt>, or zero if not
 <tt>shown()</tt>.
 
-<a name=WIN32.find><h4>fltk::Window* fltk::find(HWND xid)</h4></a>
+<h4><a name=WIN32.find>fltk::Window* fltk::find(HWND xid)</a></h4>
 
 Return the <tt>fltk::Window</tt> that corresponds to the given window 
 handle, or <tt>NULL</tt> if not found.  This uses a cache so it is 
 slightly faster than iterating through the windows yourself. 
 
-<a name=display><h4>extern HINSTANCE fltk::display;</h4></a>
+<h4><a name=display>extern HINSTANCE fltk::display;</a></h4>
 
 This is set on program initialization to <tt>GetModuleHandle(0)</tt>
 and can be used to identify this application.
@@ -73,7 +73,7 @@ found by looking at <a href=Fl_Window.html#make_current><tt>
 fltk::Window::current()</tt></a>, which returns a pointer to the <tt>
 fltk::Window</tt> being drawn.
 
-<a name=wincolor><h4>COLORREF fltk::wincolor(fltk::Color i);</h4></a>
+<h4><a name=wincolor>COLORREF fltk::wincolor(fltk::Color i);</a></h4>
 
 Returns the <tt>COLORREF</tt> fltk will use for the given fltk color,
 typically this is <tt>RGB(r,g,b)</tt> of the color, or
@@ -88,14 +88,14 @@ and by <a href=drawing.html#line_style><tt>fltk::line_style()</tt></a>,
 by using these in your drawing calls you can provide the illusion that
 GDI has a color in it's graphics state.
 
-<a name=palette><h4>extern HPALETTE fltk::palette;</h4></a>
+<h4><a name=palette>extern HPALETTE fltk::palette;</a></h4>
 
 If non-zero this is the palette alloced by fltk on an 8-bit
 screen. Hopefully you can ignore this, they managed to find a way to
 make it <i>more</i> ugly than the X system, which is truly a triumph
 of software engineering!
 
-<a name=clip_region><h4>HRGN fltk::clip_region();</h4></a>
+<h4><a name=clip_region>HRGN fltk::clip_region();</a></h4>
 
 Return the current clip region, or <tt>NULL</tt> if we are currently
 clipping to the entire window. Notice that this will be destroyed by
@@ -106,7 +106,7 @@ the next change to the clipping, copy it if you want to keep it.
 Replace the current clip region with this one, or make there be no
 clipping if <tt>NULL</tt> is passed. The old clip region is destroyed.
 
-<a name=icon><h4>void fltk::Window::icon(char*)</h4></a>
+<h4><a name=icon>void fltk::Window::icon(char*)</a></h4>
 
 Sets the icon for the window to the passed pointer.  You will need to 
 cast the <tt>HICON</tt> handle to a <tt>char*</tt> when calling this 

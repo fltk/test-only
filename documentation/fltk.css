@@ -1,6 +1,6 @@
-body { background-color: white; margin-left: 30 }
-H1 { background-color: #a0c0c0; margin-left: -20 }
-H2 { background-color: #a0c0c0; margin-left: -20 }
-H3 { background-color: #a0c0c0; margin-left: -15 }
-H4 { background-color: #c0d0d0; font-weight: normal; margin-left: -10 }
-pre { background-color: #e0e0e0; margin-left: 25; width: 90% }
+body { margin-left: 25; }
+h1,h2,h3 { background-color: #c0c0c0; margin-left: -20; padding: 1 5;
+border: 2 outset; }
+h4 { background-color: #e0e0e0; font-weight: normal; margin-left: -20;
+padding: 2 6 }
+pre { margin-left: 25; width: 90%; border: 1 solid; padding: 2 4 }

@@ -6,7 +6,7 @@
 
 <H3>Class Hierarchy</H3>
 <PRE>
-<A href=Fl_Menu.html#Menu>fltk::Menu</A>
+<A href=Fl_Menu_.html#Menu>fltk::Menu</A>
    |
    +----<B>fltk::MenuBar</B>
 </PRE>
@@ -21,7 +21,7 @@ widget should be 30 for the menu titles to draw correctly with the
 default font. 
 
 <p>Each child widget (typically an <a
-href=Fl_ItemGroup.html><tt>fltk::ItemGroup</tt></a> puts a single item
+href=Fl_Item_Group.html><tt>fltk::ItemGroup</tt></a> puts a single item
 into the menu bar. If the child is a group, the pressing on it will
 bring up a pull-down menu of the children of it. Sub-sub menus and
 lower pop up to the right of the submenus.</p>
@@ -46,13 +46,13 @@ callbacks exactly the same as when you pick the item with the mouse. </P>
 <H3>Methods</H3>
 <UL>
 <LI><A href=#MenuBar.MenuBar>fltk::MenuBar</A></LI>
-<LI><A href=#MenuBar.~MenuBar>~fltk::MenuBar</A></LI>
+<LI><A href=#MenuBar.~MenuBar>~MenuBar</A></LI>
 </UL>
 <H4><A name=MenuBar.MenuBar>fltk::MenuBar::MenuBar(int x, int 
 y, int w, int h, const char *label = 0)</A></H4>
  Creates a new <TT>fltk::MenuBar</TT> widget using the given position, 
 size, and label string. The default boxtype is <TT>fltk::UP_BOX</TT>. 
-<P>The constructor sets <TT>menu()</TT> to <TT>NULL</TT>.  See <A href=Fl_Menu.html#Menu>
+<P>The constructor sets <TT>menu()</TT> to <TT>NULL</TT>.  See <A href=Fl_Menu_.html#Menu>
 <TT>fltk::Menu</TT></A> for the methods to set or change the menu. </P>
 <P><TT>labelsize()</TT>, <TT>labelfont()</TT>, and <TT>labelcolor()</TT>
  are used to control how the menubar items are drawn.  They are 
@@ -60,7 +60,7 @@ initialized from the <TT>fltk::Menu</TT> static variables, but you can
 change them if desired. </P>
 <P><TT>label()</TT> is ignored unless you change <TT>align()</TT> to 
 put it outside the menubar. </P>
-<H4><A name=MenuBar.~MenuBar>virtual fltk::MenuBar::~fltk::MenuBar()</A>
+<H4><A name=MenuBar.~MenuBar>virtual fltk::MenuBar::~MenuBar()</A>
 </H4>
  The destructor removes the <TT>fltk::MenuBar</TT> widget and all of its 
 menu items. </BODY></HTML>

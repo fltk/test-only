@@ -24,25 +24,25 @@ is deleted.
 
 <h3>Member variables</h3>
 
-<a name=box><h4><a href=Fl_Boxtype.html>fltk::Box</a> box;</h4>
+<h4><a name=box><a href=Fl_Boxtype.html>fltk::Box</a> box;</a></h4>
 
 The type of box to draw around the outer edge of the widget (for the
 majority of widgets, some classes ignore this or use it to draw only
 text fields inside the widget). The default is <code>fltk::DOWN_BOX</code>.
 
-<a name=button_box><h4><a href=Fl_Boxtype.html>fltk::Box</a> button_box;</h4>
+<h4><a name=button_box><a href=Fl_Boxtype.html>fltk::Box</a> button_box;</a></h4>
 
 The type of box to draw buttons internal the widget (notice that <a
-href="FlButton.html">fltk::Button</a> uses <tt>box</tt>, however). The
+href="Fl_Button.html">fltk::Button</a> uses <tt>box</tt>, however). The
 default is <code>fltk::UP_BOX</code>.
 
-<a name=focus_box><h4><a href=Fl_Boxtype.html>fltk::Box</a> focus_box;</h4>
+<h4><a name=focus_box><a href=Fl_Boxtype.html>fltk::Box</a> focus_box;</a></h4>
 
 Type of box to draw to indicate focus. This is always called with the
 <tt>fltk::INVISIBLE</tt> flag as only the border should be drawn. The
 default is <tt>fltk::DOTTED_FRAME</tt>.
 
-<a name=glyph><h4>void (*glyph)(const <a href="Fl_Widget.html">fltk::Widget</a>*, int glyph, int x, int y, int w, int h, fltk::Flags);</h4>
+<h4><a name=glyph>void (*glyph)(const <a href="Fl_Widget.html">fltk::Widget</a>*, int glyph, int x, int y, int w, int h, fltk::Flags);</a></h4>
 
 Draw part of a widget, called a "glyph". Examples are the up and down
 arrows on sliders, the slider itself, and check boxes. The base class
@@ -73,34 +73,34 @@ scrollbar
 ones in the fltk source code and in the sample theme plugins to see
 how the arguments are interpreted.
 
-<a name=label_font><h4><a href=Fl_Font.html>fltk::Font</a> label_font;</h4>
+<h4><a name=label_font><a href=Fl_Font.html>fltk::Font</a> label_font;</a></h4>
 
 The font used to draw the label.  Default is <code>fltk::HELVETICA</code>.
 
-<a name=label_size><h4>unsigned int label_size;</h4>
+<h4><a name=label_size>unsigned int label_size;</a></h4>
 
 Size of <code>label_font</code>.  Default is 12.
 
-<a name=text_font><h4><a href=Fl_Font.html>fltk::Font</a> text_font;</h4>
+<h4><a name=text_font><a href=Fl_Font.html>fltk::Font</a> text_font;</a></h4>
 
 Provides a font for text displays.  Default is <code>fltk::HELVETICA</code>.
 
-<a name=text_size><h4>unsigned int text_size;</h4>
+<h4><a name=text_size>unsigned int text_size;</a></h4>
 
 Size of <code>text_font</code>.  Checkboxes and some other widgets use
 this to control the size of the glyph. Default is 12.
 
-<a name=leading><h4>unsigned int leading;</h4>
+<h4><a name=leading>unsigned int leading;</a></h4>
 
 Extra spacing added between text lines or other things that are
 stacked vertically.  The default is 0 (menus have a default of 4).
 
-<a name=label_type><h4><a href=Fl_Labeltype.html>fltk::Labeltype</a> label_type;</h4>
+<h4><a name=label_type><a href=Fl_Labeltype.html>fltk::Labeltype</a> label_type;</a></h4>
 
 How to draw the label.  This provides things like inset, shadow, and
 the symbols.  <code>fltk::NORMAL_LABEL</code>.
 
-<a name=color><h4><a href=Fl_Color.html>fltk::Color</a> color;</h4>
+<h4><a name=color><a href=Fl_Color.html>fltk::Color</a> color;</a></h4>
 
 Color of the widgets. The default is <code>fltk::WHITE</code>. This color
 is inherited by text displays and browsers, most of the "gray" you see
@@ -114,42 +114,42 @@ href="Fl_Color.html#background"><tt>fltk::background(color)</tt></a>
 instead, as this will set the entry for <code>fltk::GRAY</code> and also
 set the "gray ramp" so that the edges of buttons are the same color.
 
-<a name=label_color><h4><a href=Fl_Color.html>fltk::Color</a> label_color;</h4>
+<h4><a name=label_color><a href=Fl_Color.html>fltk::Color</a> label_color;</a></h4>
 
 Color used to draw labels and glyphs.  Default is <code>fltk::BLACK</code>.
 
-<a name=highlight_color><h4><a href=Fl_Color.html>fltk::Color</a> highlight_color;</h4>
+<h4><a name=highlight_color><a href=Fl_Color.html>fltk::Color</a> highlight_color;</a></h4>
 
 The color to draw the widget when the mouse is over it (for scrollbars
 and sliders this is used to color the buttons).  The default of
 zero disables highlighting.
 
-<a name=highlight_label_color><h4><a href=Fl_Color.html>fltk::Color</a> highlight_label_color;</h4>
+<h4><a name=highlight_label_color><a href=Fl_Color.html>fltk::Color</a> highlight_label_color;</a></h4>
 
 Color to draw labels atop the <code>highlight_color</code>.  The
 default of zero leaves the <code>label_color</code> unchanged.
 
-<a name=button_color><h4><a href=Fl_Color.html>fltk::Color</a> button_color;</h4>
+<h4><a name=button_color><a href=Fl_Color.html>fltk::Color</a> button_color;</a></h4>
 
 Color used when drawing internal buttons. Default is <code>fltk::GRAY</code>.
 Check and radio buttons use this to color in the glyph.
 
-<a name=text_color><h4><a href=Fl_Color.html>fltk::Color</a> text_color;</h4>
+<h4><a name=text_color><a href=Fl_Color.html>fltk::Color</a> text_color;</a></h4>
 
 Color to draw text inside the widget.  Default is black. Check and
 radio buttons use this to control the color of the checkmark.
 
-<a name=selection_color><h4><a href=Fl_Color.html>fltk::Color</a> selection_color;</h4>
+<h4><a name=selection_color><a href=Fl_Color.html>fltk::Color</a> selection_color;</a></h4>
 
 Color drawn behind selected text in inputs, or selected browser or
 menu items, or lit light buttons.  The default is Windows 95 blue.
 
-<a name=selection_text_color><h4><a href=Fl_Color.html>fltk::Color</a> selection_text_color;</h4>
+<h4><a name=selection_text_color><a href=Fl_Color.html>fltk::Color</a> selection_text_color;</a></h4>
 
 The color to draw text atop the <code>selection_color</code>.  The
 default is <code>fltk::WHITE</code>.
 
-<a name=find><h4><a href="Fl_Named_Style.html">fltk::Named_Style</a>* fltk::Style::find(const char* name);</h4>
+<h4><a name=find><a href="Fl_Named_Style.html">fltk::NamedStyle</a>* fltk::Style::find(const char* name);</a></h4>
 
 <p>This is a <i>static</i> method on fltk::Style. It returns the first
 style found that matches the name.  Case is ignored and spaces and

@@ -1,27 +1,27 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class fltk::Numeric_Input</title></head><body>
+<title>class fltk::NumericInput</title></head><body>
 <!-- NEW PAGE -->
-<h2>class fltk::Numeric_Input</h2>
+<h2>class fltk::NumericInput</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
 
 <pre><a href=Fl_Input.html>fltk::Input</A>
    |
-   +----<b>fltk::Numeric_Input</b>
+   +----<b>fltk::NumericInput</b>
            |
-           +----<a href="Fl_FloatInput.html">fltk::FloatInput</a>, <a href="Fl_IntInput.html">fltk::IntInput</a>
+           +----<a href="Fl_Float_Input.html">fltk::FloatInput</a>, <a href="Fl_Int_Input.html">fltk::IntInput</a>
 </pre>
 
 <h3>Include Files</h3>
 
 <pre>
-#include &lt;fltk/Numeric_Input.h&gt;
+#include &lt;fltk/NumericInput.h&gt;
 </pre>
 
 <h3>Description</h3>
 
-The <tt>fltk::Numeric_Input</tt> class is a subclass of <tt>fltk::Input</tt>
+The <tt>fltk::NumericInput</tt> class is a subclass of <tt>fltk::Input</tt>
 that redefines the up and down arrow keys to increment and decrement
 the digit of the number to the right of the cursor. This makes it very
 easy to edit numbers.
@@ -37,8 +37,8 @@ partially-edited numbers are in the field.
 useful if you run the text through an expression parser so the user
 can type in math expressions. However if you want to limit the input
 to text that can be run through strtol() or strtod() you should use
-the subclasses <a href="Fl_IntInput.html">fltk::IntInput</a> or <a
-href="Fl_FloatInput.html">fltk::FloatInput</a>.
+the subclasses <a href="Fl_Int_Input.html">fltk::IntInput</a> or <a
+href="Fl_Float_Input.html">fltk::FloatInput</a>.
 
 <p><i>This user interface design is Copyright (C) 2000-2002 Digital
 Domain.  Patent Pending!  License is ONLY granted to implement this
@@ -54,37 +54,37 @@ code may be available:</i></p>
 <h3>Methods</h3>
 
 <ul>
-<li><a href="#Numeric_Input">fltk::Numeric_Input</a></li>
-<li><a href="#~fltk::Numeric_Input">~fltk::Numeric_Input</a></li>
+<li><a href="#NumericInput">fltk::NumericInput</a></li>
+<li><a href="#~NumericInput">~NumericInput</a></li>
 <li><a href="#handle">handle</a></li>
 <li><a href="#handle_arrow">handle_arrow</a></li>
 <li><a href="#value">value</a></li>
 </ul>
 
-<a name=Numeric_Input><h4>fltk::Numeric_Input::Numeric_Input(int x, int y, int w, int h, const char *label = 0)</h4></a>
+<h4><a name=NumericInput>fltk::NumericInput::NumericInput(int x, int y, int w, int h, const char *label = 0)</a></h4>
 
-Creates a new <TT>fltk::Numeric_Input</TT> widget using the given position, 
+Creates a new <TT>fltk::NumericInput</TT> widget using the given position, 
 size, and label string. The text starts out blank (you may want to set
 it to "0").
 
-<a name=~Numeric_Input><h4>virtual fltk::Numeric_Input::~fltk::Numeric_Input()</h4></a>
+<h4><a name=~NumericInput>virtual fltk::NumericInput::~NumericInput()</a></h4>
 
 Destroys the widget and any value associated with it.
 
-<a name="handle"><h4>virtual int handle(int event)</h4></a>
+<h4><a name="handle">virtual int handle(int event)</a></h4>
 
 The event handler checks for <tt>fltk::Up</tt> and <tt>fltk::Down</tt>
 keystrokes and calls <a href="#handle_arrow">handle_arrow()</a> with
 them, otherwise it passes the events to the base class.
 
-<a name="handle_arrow"><h4>int handle_arrow(int direction)</h4></a>
+<h4><a name="handle_arrow">int handle_arrow(int direction)</a></h4>
 
 Do the work of up-arrow (if direction is greater than zero) or
 down-arrow if direction is less than zero. This protected method is
 available so subclasses can change what keys do this, or invert the
 direction of the arrows.
 
-<a name="value"><h4>void value(double);</h4></a>
+<h4><a name="value">void value(double);</a></h4>
 
 Does a %g sprintf of the value and uses the result to set the string
 value. Notice that there is no inverse function, you will have to call

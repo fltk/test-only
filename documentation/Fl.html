@@ -105,9 +105,9 @@ href="drawing.html">Drawing</a> appendix. The others are a set of
 modal popup utility functions for asking questions described in the <a
 href="utility.html">Utility</a> appendix.
 
-<a name=startup><h2>Startup functions</h2></a>
+<h2><a name=startup>Startup functions</a></h2>
 
-<a name="version"><h4>float fltk::version()</h4></a>
+<h4><a name="version">float fltk::version()</a></h4>
 
 Returns the version number of fltk. This can be compared to the value
 of the <tt>fltk::VERSION</tt> macro to see if the shared library of fltk your
@@ -125,7 +125,7 @@ of the form M.mmpp where M is the major number, mm is the minor
 number, and pp is the patch number, currently 2.0001. </li>
 </ul>
 
-<a name="args"><h4>int fltk::args(int argc, char **argv, int &amp;i, int (*callback)(int, char**,int &amp;)=0)</h4></a>
+<h4><a name="args">int fltk::args(int argc, char **argv, int &amp;i, int (*callback)(int, char**,int &amp;)=0)</a></h4>
 
 FLTK provides an <I>entirely optional</I> command-line switch parser. 
 You don't have to call it if you don't like them! Everything it can do 
@@ -212,7 +212,7 @@ not have command line switches of its own.  It parses all the
 switches, and if any are not recognized it calls <a
 href="#fatal"><tt>fltk::fatal(fltk::help)</tt></a>.
 
-<a name="arg"><h4>int fltk::arg(int argc, char **argv, int &amp;i)</h4></a>
+<h4><a name="arg">int fltk::arg(int argc, char **argv, int &amp;i)</a></h4>
 
 Consume a single switch from <tt>argv</tt>, starting at word i. 
 Returns the number of words eaten (1 or 2, or 0 if it is not 
@@ -220,7 +220,7 @@ recognized) and adds the same value to <tt>i</tt>.  You can use this
 function if you prefer to control the incrementing through the 
 arguments yourself. 
 
-<a name="help"><h4>const char* const fltk::help;</h4></a>
+<h4><a name="help">const char* const fltk::help;</a></h4>
 
 This is the usage string that is displayed if <a
 href="#args"><tt>fltk::args()</tt></a> detects an invalid argument on
@@ -235,14 +235,14 @@ the command-line. It's value is:
 " -bg color";
 </pre>
 
-<a name="display"><h4>void fltk::display(const char *)</h4></a>
+<h4><a name="display">void fltk::display(const char *)</a></h4>
 
 Sets the X display to use for all windows.  Actually this just sets
 the environment variable $DISPLAY to the passed string, so this only
 works before you show() the first window or otherwise open the display,
 and does nothing useful under WIN32. 
 
-<a name="visual"><h4>int fltk::visual(int)</h4></a>
+<h4><a name="visual">int fltk::visual(int)</a></h4>
 
 This call may be useful on multi-visual X servers to change from the
 default to a more useful color mode. You must call this before you
@@ -262,7 +262,7 @@ colors").
 
 <li><tt>fltk::DOUBLE</tt> indicates that hardware accelerated double
 buffering is wanted. This will make <a
-href="Fl_DoubleBufferWindow.html">fltk::DoubleBufferWindow</a> work better.
+href="Fl_Double_Window.html">fltk::DoubleBufferWindow</a> work better.
 
 </ul>
 
@@ -272,20 +272,20 @@ this returns false (it just won't look as good). On non-X systems
 this just returns true or false indicating if the system supports the
 passed values.
 
-<a name="gl_visual"><h4>int fltk::gl_visual(int)</h4></a>
+<h4><a name="gl_visual">int fltk::gl_visual(int)</a></h4>
 
 This does the same thing as <a
 href="#visual"><tt>fltk::visual(int)</tt></a> but also requires OpenGL
 drawing to work. Doing this on X will reduce colormap flashing at the
-edges of <a href="Fl_GlWindow.html"><tt>fltk::GlWindow</tt></a>s when
+edges of <a href="Fl_Gl_Window.html"><tt>fltk::GlWindow</tt></a>s when
 they are inside regular windows.
 
-<p>See <a href="Fl_GlWindow.html#mode"><tt>fltk::GlWindow</tt></a>
+<p>See <a href="Fl_Gl_Window.html#mode"><tt>fltk::GlWindow</tt></a>
 for a list of additional values for the argument.</p>
 
 <p><i>This function seems to have been renamed</i> <tt>fltk::gl_visual(int)</tt>.
 
-<a name="own_colormap"><h4>void fltk::own_colormap()</h4></a>
+<h4><a name="own_colormap">void fltk::own_colormap()</a></h4>
 
 Makes FLTK use its own colormap.  This may make FLTK display better 
 and will reduce conflicts with other programs that want lots of colors. 
@@ -293,7 +293,7 @@ However the colors may flash as you move the cursor between windows.
 
 <p>This does nothing if the current visual is not colormapped.</p>
 
-<a name="info"><h4>const fltk::Screen_Info& fltk::info()</h4></a>
+<h4><a name="info">const fltk::Screen_Info& fltk::info()</a></h4>
 
 Return a structure of information describing the current state of the
 screen. Currently this structure contains the following (this may be
@@ -311,9 +311,9 @@ added to in the future):
 <li><tt>int height_mm</tt> screen height in millimeters
 </ul>
 
-<a name=waiting><h2>Waiting for events</h2></a>
+<h2><a name=waiting>Waiting for events</a></h2>
 
-<a name="wait"><h4>int fltk::wait()</h4></a>
+<h4><a name="wait">int fltk::wait()</a></h4>
 
 Same as <a href="#wait"><tt>fltk::wait(infinity)</tt></a>.  Call this repeatedly to "run"
 your program.  You can also check what happened each time after this
@@ -342,7 +342,7 @@ any events or fd's came in.
 <p>On Win32 the return value is zero if nothing happened and
 <i>time</i> is 0.0.  Otherwise 1 is returned.
 
-<a name="check"><h4>int fltk::check()</h4></a>
+<h4><a name="check">int fltk::check()</a></h4>
 
 Same as <a href="#wait"><tt>fltk::wait(0)</tt></a>.  Calling this during a big calculation
 will keep the screen up to date and the interface responsive:
@@ -353,7 +353,7 @@ will keep the screen up to date and the interface responsive:
  if (user_hit_abort_button()) break;
 }</pre>
 
-<a name="ready"><h4>int fltk::ready()</h4></a>
+<h4><a name="ready">int fltk::ready()</a></h4>
 
 This is similar to <a href="#check"><tt>fltk::check()</tt></a> except this does <I>not</I>
 call <a href="#flush"><tt>fltk::flush()</tt></a> and thus does not draw anything, and does
@@ -375,7 +375,7 @@ greater than the expense of your calculation.
  }
 }</pre>
 
-<a name="run"><h4>int fltk::run()</h4></a>
+<h4><a name="run">int fltk::run()</a></h4>
 
 Calls <a href="#wait"><tt>fltk::wait()</tt></a> as long as any windows are
 not closed. When all the windows are hidden by <a
@@ -387,12 +387,12 @@ return with zero. A program can also exit by having a callback call
 <p>Most fltk programs will end
 <tt>main()</tt> with <tt>return fltk::run();</tt>.
 
-<a name="modal"><h4>void fltk::modal(fltk::Widget*, bool grab=false);
+<h4><a name="modal">void fltk::modal(fltk::Widget*, bool grab=false);
 <br>fltk::Widget* fltk::modal();
 <br>bool fltk::grab();
 <br>void fltk::exit_modal();
 <br>bool fltk::exit_modal_flag();
-</h4></a>
+</a></h4>
 
 First thing: much of the time <a
 href="Fl_Window.html#exec"><tt>fltk::Window::exec()</tt></a> will do what
@@ -435,13 +435,13 @@ visible window because the system interface needs a visible window id.
 On X be careful that your program does not enter an infinite loop 
 while <tt>grab()</tt> is on, it will lock up your screen!</i>
 
-<a name="add_timeout"><h4>void fltk::add_timeout(float t, void (*cb)(void*),void*v=0)</h4></a>
+<h4><a name="add_timeout">void fltk::add_timeout(float t, void (*cb)(void*),void*v=0)</a></h4>
 
 Add a one-shot timeout callback.  The function will be called by
 <a href="#wait"><tt>fltk::wait()</tt></a> at <i>t</i> seconds after this function is called.
 The optional <tt>void*</tt> argument is passed to the callback.
 
-<a name="repeat_timeout"><h4>void fltk::repeat_timeout(float t, void (*cb)(void*),void*v=0)</h4></a>
+<h4><a name="repeat_timeout">void fltk::repeat_timeout(float t, void (*cb)(void*),void*v=0)</a></h4>
 
 Inside a timeout callback you can call this to add another timeout.
 Rather than the time being measured from "now", it is measured from
@@ -467,16 +467,16 @@ main() {
   for (;;) fltk::wait();
 }</pre>
 
-<a name="has_timeout"><h4>int fltk::has_timeout(void (*cb)(void*), void* = 0)</h4></a>
+<h4><a name="has_timeout">int fltk::has_timeout(void (*cb)(void*), void* = 0)</a></h4>
 
 Returns true if the timeout exists and has not been called yet.
 
-<a name="remove_timeout"><h4>void fltk::remove_timeout(void (*cb)(void*), void* = 0)</h4></a>
+<h4><a name="remove_timeout">void fltk::remove_timeout(void (*cb)(void*), void* = 0)</a></h4>
 
 Removes a timeout callback. It is harmless to remove a timeout
 callback that no longer exists.
 
-<a name="add_check"><h4>void fltk::add_check(void (*cb)(void*),void*v=0)</h4></a>
+<h4><a name="add_check">void fltk::add_check(void (*cb)(void*),void*v=0)</a></h4>
 
 Fltk will call this callback just before it flushes the display and
 waits for events.  This is different than an idle callback because it
@@ -506,17 +506,17 @@ main() {
   return fltk::run();
 }</pre>
 
-<a name="has_check"><h4>int fltk::has_check(void (*cb)(void*), void* = 0)</h4></a>
+<h4><a name="has_check">int fltk::has_check(void (*cb)(void*), void* = 0)</a></h4>
 
 Returns true if the check exists and has not been called yet.
 
-<a name="remove_check"><h4>void fltk::remove_check(void (*cb)(void*), void* = 0)</h4></a>
+<h4><a name="remove_check">void fltk::remove_check(void (*cb)(void*), void* = 0)</a></h4>
 
 Removes a check callback. It is harmless to remove a check
 callback that does not exist.
 
-<a name="add_fd"><h4>void fltk::add_fd(int fd, void (*cb)(int, void*), void* = 0)
-<br>void fltk::add_fd(int fd, int when, void (*cb)(int, void*), void* = 0)</h4></a>
+<h4><a name="add_fd">void fltk::add_fd(int fd, void (*cb)(int, void*), void* = 0)
+<br>void fltk::add_fd(int fd, int when, void (*cb)(int, void*), void* = 0)</a></h4>
 
 Add file descriptor <tt>fd</tt> to listen to.  When the <tt>fd</tt>
 becomes ready for reading <a href="#wait"><tt>fltk::wait()</tt></a> will
@@ -538,7 +538,7 @@ devices, pipes, sockets, etc.) Due to limitations in Microsoft
 Windows, WIN32 applications can only monitor sockets (? and is the
 <i>when</i> value ignored?)
 
-<a name="remove_fd"><h4>void fltk::remove_fd(int fd, int when = -1)</h4></a>
+<h4><a name="remove_fd">void fltk::remove_fd(int fd, int when = -1)</a></h4>
 
 Remove <i>all</i> the callbacks (ie for all different <i>when</i>
 values) for the given file descriptor. It is harmless to call this if
@@ -546,7 +546,7 @@ there are no callbacks for the file descriptor. If <i>when</i> is
 given then those bits are removed from each callback for the file
 descriptor, and the callback removed only if all of the bits turn off.
 
-<a name="add_idle"><h4>fltk::add_idle(void (*cb)(void*), void*)</h4></a>
+<h4><a name="add_idle">fltk::add_idle(void (*cb)(void*), void*)</a></h4>
 
 Adds a callback function that is called every time by
 <a href="#wait"><tt>fltk::wait()</tt></a> and also makes it act as though the timeout is
@@ -568,34 +568,34 @@ href="#check"><tt>fltk::check()</tt></a>, and <a
 href="#ready"><tt>fltk::ready()</tt></a>.  Fltk will not recursively call
 the idle callback.
 
-<a name="has_idle"><h4>int fltk::has_idle(void (*cb)(void*), void* = 0)</h4></a>
+<h4><a name="has_idle">int fltk::has_idle(void (*cb)(void*), void* = 0)</a></h4>
 
 Returns true if the specified idle callback is currently installed.
 
-<a name="remove_idle"><h4>void fltk::remove_idle(void (*cb)(void*), void* = 0)</h4></a>
+<h4><a name="remove_idle">void fltk::remove_idle(void (*cb)(void*), void* = 0)</a></h4>
 
 Removes the specified idle callback, if it is installed.
 
-<a name=flredraw><h2>Redrawing</h2></a>
+<h2><a name=flredraw>Redrawing</a></h2>
 
-<a name="damage"><h4>int fltk::damage()</h4></a>
+<h4><a name="damage">int fltk::damage()</a></h4>
 
 True if any <a
 href="Fl_Widget.html#redraw"><tt>fltk::Widget::redraw()</tt></a> calls have
 been done since the last <a href="#flush"><tt>flush()</tt></a>.
 
-<a name="redraw"><h4>void fltk::redraw()</h4></a>
+<h4><a name="redraw">void fltk::redraw()</a></h4>
 
 Redraws all widgets. This is a good idea if you have made global
 changes to the styles.
 
-<a name="flush"><h4>void fltk::flush()</h4></a>
+<h4><a name="flush">void fltk::flush()</a></h4>
 
 Causes all the windows that need it to be redrawn and graphics forced 
 out through the pipes.  This is what <tt>wait()</tt> does before 
 looking for events. 
 
-<a name="first_window"><h4>fltk::Window *fltk::first_window()</h4></a>
+<h4><a name="first_window">fltk::Window *fltk::first_window()</a></h4>
 
 Returns the id of some visible() window. If there is more than one,
 the last one to receive an event is returned. This is useful for
@@ -604,7 +604,7 @@ for dialog boxes that are used in multiple places in your program, and
 is used by <a href="Fl_Window.html#exec">fltk::Window::exec()</a> if no
 other parent is specified.
 
-<a name="first_window_a"><h4>void fltk::first_window(fltk::Window*)</h4></a>
+<h4><a name="first_window_a">void fltk::first_window(fltk::Window*)</a></h4>
 
 If this window is visible, this removes it from wherever it is in the
 list and inserts it at the top, as though it received an event. This
@@ -612,15 +612,15 @@ can be used to change the parent of dialog boxes run by <a
 href="Fl_Window.html#exec">fltk::Window::exec()</a> or <a
 href="utility.html#ask">fltk::ask()</a>.
 
-<a name="next_window"><h4>fltk::Window *fltk::next_window(fltk::Window *)</h4></a>
+<h4><a name="next_window">fltk::Window *fltk::next_window(fltk::Window *)</a></h4>
 
 Returns the next visible() top-level window, returns NULL after the
 last one.  You can use this and first_window() to iterate through all
 the visible windows.
 
-<a name=events><h2>Events</h2></a>
+<h2><a name=events>Events</a></h2>
 
-<a name="event"><h4>int fltk::event()</h4></a>
+<h4><a name="event">int fltk::event()</a></h4>
 
 Returns the most recent event handled, such as <tt>fltk::PUSH</tt> or
 <tt>fltk::KEY</tt>. This is useful so callbacks can find out why
@@ -646,8 +646,8 @@ absolute position of an <tt>fltk::Window</tt> on the screen, use the
 difference between <tt>event_x_root(),event_y_root()</tt> and <tt>
 event_x(),event_y()</tt>. 
 
-<a name="event_clicks"><h4>int fltk::event_clicks()
-<br>void fltk::event_clicks(int)</h4></a>
+<h4><a name="event_clicks">int fltk::event_clicks()
+<br>void fltk::event_clicks(int)</a></h4>
 
 Returns the number of times the last mouse button or keyboard key
 was pushed while <a href="#event_is_click">fltk::event_is_click()</a>
@@ -662,8 +662,8 @@ non-zero, and is N-1 for N repeats of the key.
 <p>Setting this value with <tt>fltk::event_clicks(n)</tt> can be used to
 make callbacks think things were (or were not) double-clicked.
 
-<a name="event_is_click"><h4>int fltk::event_is_click()
-<br>void fltk::event_is_click(0)</h4></a>
+<h4><a name="event_is_click">int fltk::event_is_click()
+<br>void fltk::event_is_click(0)</a></h4>
 
 This is true if the time and mouse movement since the last
 <tt>fltk::PUSH</tt> or <tt>fltk::KEY</tt> is short enough that the user is
@@ -681,7 +681,7 @@ can be used to prevent the next mouse click from being considered a
 double click. It is not possible to set this true because the saved
 time and position are inaccessible.
 
-<a name="event_button"><h4>int fltk::event_button()</h4></a>
+<h4><a name="event_button">int fltk::event_button()</a></h4>
 
 Returns which mouse button was last pushed or released. You can use
 numerical constants or these values:
@@ -692,8 +692,8 @@ numerical constants or these values:
 <li><tt>fltk::RIGHT_MOUSE</tt> 3</li>
 </ul>
 
-<a name="event_state"><h4>ulong fltk::event_state()
-<br>bool fltk::event_state(ulong)</h4></a>
+<h4><a name="event_state">ulong fltk::event_state()
+<br>bool fltk::event_state(ulong)</a></h4>
 
 This is a bitfield of what shift states were on and what mouse buttons 
 were held down during the most recent event.  The second version 
@@ -721,7 +721,7 @@ XFree86 server on Linux.  In addition there is a bug in the way X
 works so that the shift state is not correctly reported until the
 first event <I>after</I> the shift key is pressed or released.
 
-<a name="event_key"><h4>int fltk::event_key()</h4></a>
+<h4><a name="event_key">int fltk::event_key()</a></h4>
 
 Returns which key on the keyboard was last pushed. <tt>fltk::FOCUS</tt>
 events produced by the system, and mouse button events, set this to
@@ -792,7 +792,7 @@ ctrl, and caps lock were not on).
 value.</li>
 </ul>
 
-<a name="event_key_state"><h4>bool fltk::event_key_state(int key)</h4></a>
+<h4><a name="event_key_state">bool fltk::event_key_state(int key)</a></h4>
 
 <p>Returns true if the given key was held down (or pressed)
 <I>during</I> the last event.  This is constant until the next event
@@ -801,7 +801,7 @@ above.
 
 <p>On Win32 <tt>fltk::event_key_state(fltk::KP_Enter)</tt> does not work.
 
-<a name="event_text"><h4>char *fltk::event_text()</h4></a>
+<h4><a name="event_text">char *fltk::event_text()</a></h4>
 
 Returns the ASCII text (in the future this may be UTF-8) produced by 
 the last <tt>fltk::KEY</tt> or <tt>fltk::PASTE</tt> or possibly other 
@@ -811,7 +811,7 @@ only valid until the next event is processed.
 
 <p>Under X this is the result of calling <tt>XLookupString()</tt>.</p>
 
-<a name="event_length"><h4>char *fltk::event_length()</h4></a>
+<h4><a name="event_length">char *fltk::event_length()</a></h4>
 
 Returns the length of the text in <a
 href="#event_text"><tt>fltk::event_text()</tt></a>.  There will always be
@@ -819,7 +819,7 @@ a nul at this position in the text.  However there may be a nul before
 that if the keystroke translates to a nul character or you paste a nul
 character.
 
-<a name="event_inside"><h4>int fltk::event_inside(int x, int y, int w, int h)</h4></a>
+<h4><a name="event_inside">int fltk::event_inside(int x, int y, int w, int h)</a></h4>
 
 Returns non-zero if the current <a
 href="#event_x"><tt>fltk::event_x()</tt></a>
@@ -827,7 +827,7 @@ and <a href="#event_y"><tt>fltk::event_y()</tt></a>
 put it inside the passed box.  You should always call this rather than
 doing your own comparison so you are consistent about edge effects.
 
-<a name="test_shortcut"><h4>int fltk::test_shortcut(int shortcut)</h4></a>
+<h4><a name="test_shortcut">int fltk::test_shortcut(int shortcut)</a></h4>
 
 Test the current event, which must be an <tt>fltk::KEY</tt> or <tt>
 fltk::SHORTCUT</tt>, against a shortcut value (described in <a
@@ -835,17 +835,17 @@ href="Fl_Widget.html#shortcut"><tt>fltk::Button</tt></a>).
 Returns non-zero if there is a match.  Not to be confused with <a
 href="Fl_Widget.html#test_shortcut"><tt>fltk::Widget::test_shortcut()</tt></a>.
 
-<a name="key_name"><h4>const char* fltk::key_name(int shortcut)</h4></a>
+<h4><a name="key_name">const char* fltk::key_name(int shortcut)</a></h4>
 
 Unparse a key name (as returned by <a
 href="#event_key"><tt>fltk::event_key()</tt></a>) or a shortcut value
 (as used by <a href="Fl_Widget.html#shortcut"><tt>fltk::Button</tt></a>
-or <a href="Fl_MenuItem.html"><tt>fltk::MenuItem</tt></a>) into a
+or <a href="Fl_Menu_Item.html"><tt>Fl_Menu_Item</tt></a>) into a
 human-readable string like "Alt+N".  If the shortcut is zero an empty
 string is returned. <i>The return value points at a static buffer that
 is overwritten with each call.</i>
 
-<a name="compose"><h4>int fltk::compose(int&amp; del)</h4></a>
+<h4><a name="compose">int fltk::compose(int&amp; del)</a></h4>
 
 <p>Use of this function is very simple.  Any text editing widget should
 call this for each <tt>fltk::KEY</tt> event.
@@ -869,14 +869,14 @@ length is zero for any function keys.
 versions may take quite awhile, as they may pop up a window or do
 other user-interface things to allow characters to be selected.
 
-<a name="compose_reset"><h4>int fltk::compose_reset()</h4></a>
+<h4><a name="compose_reset">int fltk::compose_reset()</a></h4>
 
 <p>If the user moves the cursor, be sure to call fltk::compose_reset().
 The next call to fltk::compose() will start out in an initial state.  In
 particular it will not set "del" to non-zero.  This call is very fast
 so it is ok to call it many times and in many places.
 
-<a name="get_key_state"><h4>int fltk::get_key_state(int)</h4></a>
+<h4><a name="get_key_state">int fltk::get_key_state(int)</a></h4>
 
 <p>Returns true if the given key is held down <I> now</I>.  Under X
 this requires a round-trip to the server and is <I> much</I> slower
@@ -884,7 +884,7 @@ than <a href="#event_key_state"><tt>fltk::event_key_state(int)</tt></a>.</p>
 
 <p>On Win32 <tt>fltk::get_key_state(fltk::KP_Enter)</tt> does not work.
 
-<a name="get_mouse"><h4>void fltk::get_mouse(int &amp;x, int &amp;y)</h4></a>
+<h4><a name="get_mouse">void fltk::get_mouse(int &amp;x, int &amp;y)</a></h4>
 
 Return where the mouse is on the screen by doing a round-trip query to
 the server.  You should use <a
@@ -894,7 +894,7 @@ this is necessary if you are not sure if a mouse event has been
 processed recently (such as to position your first window).  If the
 display is not open, this will open it.
 
-<a name="add_handler"><h4>void fltk::add_handler(int (*f)(int))</h4></a>
+<h4><a name="add_handler">void fltk::add_handler(int (*f)(int))</a></h4>
 
 Install a function to parse unrecognized events.  If FLTK cannot 
 figure out what to do with an event, it calls each of these functions 
@@ -917,7 +917,7 @@ search the handler list for every one).
 <p>Ignore any other values this is called with. We have not figured
 out what the rules for these are yet.
 
-<a name="belowmouse"><h4>fltk::Widget* fltk::belowmouse() const</h4></a>
+<h4><a name="belowmouse">fltk::Widget* fltk::belowmouse() const</a></h4>
 
 Get the widget that is below the mouse. This is the last widget to
 respond to an <tt>fltk::ENTER</tt> event as long as the mouse is still
@@ -935,7 +935,7 @@ widget) are sent <tt>fltk::LEAVE</tt> events.  Changing this does
 sending <tt>fltk::ENTER</tt> is supposed to <I>test</I> if the widget
 wants the mouse (by it returning non-zero from <tt>handle()</tt>).</p>
 
-<a name="pushed"><h4>fltk::Widget* fltk::pushed() const;</h4></a>
+<h4><a name="pushed">fltk::Widget* fltk::pushed() const;</a></h4>
 
 Get the widget that is being pushed. <tt>fltk::DRAG</tt> or <tt>
 fltk::RELEASE</tt> (and any more <tt>fltk::PUSH</tt>) events will be sent to 
@@ -951,7 +951,7 @@ sent <tt>fltk::RELEASE</tt> events.  Changing this does <I>not</I> send
 <tt>fltk::PUSH</tt> is supposed to <I>test</I> if the widget wants the
 mouse (by it returning non-zero from <tt> handle()</tt>).</p>
 
-<a name="focus"><h4>fltk::Widget* fltk::focus() const;</h4></a>
+<h4><a name="focus">fltk::Widget* fltk::focus() const;</a></h4>
 
 Returns the widgets that will receive <tt>fltk::KEY</tt>
 events. This is NULL if the application does not have focus now, or if
@@ -968,9 +968,9 @@ focus or if the widgets accept the focus. You may want to use <a
 href="Fl_Widget.html#take_focus">fltk::Widget::take_focus()</a> instead, it
 will test first.
 
-<a name=copypaste><h2>Copy, Paste, and Drag &amp; Drop</h2></a>
+<h2><a name=copypaste>Copy, Paste, and Drag &amp; Drop</a></h2>
 
-<a name="copy"><h4>void fltk::copy(const char *stuff, int len, bool clipboard=false)</h4></a>
+<h4><a name="copy">void fltk::copy(const char *stuff, int len, bool clipboard=false)</a></h4>
 
 Change the current selection.  The block of text is 
 copied to an internal buffer by FLTK (be careful if doing this in 
@@ -993,7 +993,7 @@ probably be added in a future version to allow the selection to be made
 by a callback function.  The current interface will be emulated on top 
 of this.</I>
 
-<a name="paste"><h4>void fltk::paste(fltk::Widget *receiver, bool clipboard = false)</h4></a>
+<h4><a name="paste">void fltk::paste(fltk::Widget *receiver, bool clipboard = false)</a></h4>
 
 This is what a widget does when a "paste" command (like Ctrl+V or the
 middle mouse click) is done to it.  Cause an <a
@@ -1015,7 +1015,7 @@ This allows the window system to take as long as necessary to retrieve
 the paste buffer (or even to screw up completely) without complex and
 error-prone synchronization code most toolkits require.
 
-<a name="dnd"><h4>bool fltk::dnd()</h4></a>
+<h4><a name="dnd">bool fltk::dnd()</a></h4>
 
 Drag and drop the data set by the most recent <a
 href="#copy"><tt>fltk::copy()</tt></a> (with the <i>clipboard</i>
@@ -1028,7 +1028,7 @@ data.
 
 <h2><a name=fmultithread>Multithreading</a></h2>
 
-<a name="lock"><h4>void fltk::lock();</h4></a>
+<h4><a name="lock">void fltk::lock();</a></h4>
 
 Blocks the current thread until it can safely access FLTK widgets and
 data. Child threads should call this method prior to updating any
@@ -1060,7 +1060,7 @@ locking other objects. However there is no requirement that you use
 this, you can use pthreads or any other library that is compatable
 with your system.
 
-<a name="unlock"><h4>void fltk::unlock();</h4></a>
+<h4><a name="unlock">void fltk::unlock();</a></h4>
 
 Releases the lock that was set using the <a
 href="#lock"><tt>fltk::lock()</tt></a> method. Child threads should call
@@ -1068,7 +1068,7 @@ this method as soon as they are finished accessing FLTK. If some other
 thread is waiting for <tt>fltk::lock()</tt> to return, it will get
 control.
 
-<a name="awake"><h4>void fltk::awake(void* message = 0);</h4></a>
+<h4><a name="awake">void fltk::awake(void* message = 0);</a></h4>
 
 Make the main thread (the one that is calling <a
 href="#wait"><tt>fltk::wait()</tt></a>) wake up. The main purpose of
@@ -1083,13 +1083,13 @@ while things are locked both the X and Win32 implementations can deadlock.
 <p>The <i>message</i> argument can be retrieved by the other thread
 using <a href="#thread_message"><tt>fltk::thread_message()</tt></a>.
 
-<a name="thread_message"><h4>void* thread_message();</h4></a>
+<h4><a name="thread_message">void* thread_message();</a></h4>
 
 Returns an argument sent to an <a href="#awake"><tt>fltk::awake()</tt></a>
 call, or returns null if none. <i>The current implementation
 only has a one-entry queue and only returns the most recent value!</i>
 
-<a name=errors><h2>Errors</h2></a>
+<h2><a name=errors>Errors</a></h2>
 
 <h4><a name="warning">void (*fltk::warning)(const char *, ...)</a>
 <br><a name="error">void (*fltk::error)(const char *, ...)</a>

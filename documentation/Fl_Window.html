@@ -11,8 +11,8 @@
    |
    +----<b>fltk::Window</b>
            |
-           +----<a href=Fl_DoubleBufferWindow.html>fltk::DoubleBufferWindow</A>, <a href=Fl_GlWindow.html>fltk::GlWindow</A>,
-                <a href=Fl_Overlay_Window.html>fltk::Overlay_Window</A>, <a href=Fl_Single_Window.html>fltk::Single_Window</A>
+           +----<a href=Fl_Double_Window.html>fltk::DoubleBufferWindow</A>, <a href=Fl_Gl_Window.html>fltk::GlWindow</A>,
+                <a href=Fl_Overlay_Window.html>fltk::OverlayWindow</A>, <a href=Fl_Single_Window.html>fltk::Single_Window</A>
 </pre>
 
 <h3>Include Files</h3>
@@ -51,7 +51,7 @@ last top-level window.
 <tr><td align=left valign=top>
 <ul>
 <li><a href=#Window>fltk::Window</A></li>
-<li><a href=#~fltk::Window>~fltk::Window</A></li>
+<li><a href=#~Window>~Window</A></li>
 <li><a href=#border>border</A></li>
 <li><a href=#child_of>child_of</A></li>
 <li><a href=#clear_border>clear_border</A></li>
@@ -94,7 +94,7 @@ last top-level window.
 </table>
 </center>
 
-<a name=Window><h4>fltk::Window::Window(int w, int h, const char *title = 0)</h4></a>
+<h4><a name=Window>fltk::Window::Window(int w, int h, const char *title = 0)</a></h4>
 
 The first form of the constructor should be used for a "top-level"
 window (that is, one that is not inside another window).  It correctly
@@ -115,7 +115,7 @@ you may want to change this to <tt>fltk::UP_BOX</tt>.
 <p>The second form of the constructor is for creating child windows.  It
 leaves <tt>visible()</tt> set to true.
 
-<a name=~Window><h4>virtual fltk::Window::~fltk::Window()</h4></a>
+<h4><a name=~Window>virtual fltk::Window::~Window()</a></h4>
 
 Calls destroy().  The destructor <i>also deletes all the
 children</i>. This allows a whole tree to be deleted at once, without
@@ -124,7 +124,7 @@ kludge has been done so the <tt>fltk::Window</tt> and all of it's
 children can be automatic (local) variables, but you must declare the
 <tt>fltk::Window</tt> <i>first</i> so that it is destroyed last.
 
-<a name=size_range><h4>void fltk::Window::size_range(int minw, int minh, int maxw=0, int maxh=0, int dw=0, int dh=0, int aspect=0)</h4></a>
+<h4><a name=size_range>void fltk::Window::size_range(int minw, int minh, int maxw=0, int maxh=0, int dw=0, int dh=0, int aspect=0)</a></h4>
 
 Set the allowable range the user can resize this window to.  This only 
 works for top-level windows. 
@@ -170,7 +170,7 @@ also the maximum size (so the window cannot resize in  that direction). </li>
 
 </UL>
 
-<a name=show><h4>void fltk::Window::show()</h4></a>
+<h4><a name=show>void fltk::Window::show()</a></h4>
 
 Put the window on the screen.  Usually this has the side effect of 
 opening the display.
@@ -187,8 +187,8 @@ window, this indicates which window should be affected by any
 called yet this does so, this is a useful shortcut for the main window
 in a small program.
 
-<a name=child_of><h4>void fltk::Window::child_of(const fltk::Window* parent);
-<br>const fltk::Window* child_of() const;</h4></a>
+<h4><a name=child_of>void fltk::Window::child_of(const fltk::Window* parent);
+<br>const fltk::Window* child_of() const;</a></h4>
 
 Tell the system that this window will not have an icon, it will
 dissappear and reappear when the parent window is iconized or shown,
@@ -216,7 +216,7 @@ href=Fl.html#modal><tt>fltk::modal()</tt></A>
 
 Same as <tt>child_of(parent),show()</tt>.
 
-<a name=exec><h4>bool fltk::Window::exec(const fltk::Window* parent = 0, bool grab = false);</h4></a>
+<h4><a name=exec>bool fltk::Window::exec(const fltk::Window* parent = 0, bool grab = false);</a></h4>
 
 Simple description: the window is popped up and this function waits
 until the user closes it, this then returns a true if the user hit ok,
@@ -226,9 +226,9 @@ either thrown away or redirected to this window.
 
 <p>This does <a href=#child_of><tt>child_of(parent)</tt></a> (using <a
 href=Fl.html#first_window><tt>fltk::first_window()</tt></a> if
-<i>parent</i> is null. It then does <a href=#show><tt>show()</tt></a>
+<i>parent</i> is null). It then does <a href=#show><tt>show()</tt></a>
 to make the window visible and raise it. It then uses <a
-href=Fl.html#modal><tt>fltk::modal(this,grab)</tt> to make all
+href=Fl.html#modal><tt>fltk::modal(this,grab)</tt></a> to make all
 events go to this window, and waits until <a
 href=Fl.html#modal><tt>fltk::exit_modal()</tt></a> is called
 (typically by the window being hidden or destroyed).
@@ -245,7 +245,7 @@ a mouse or key click.
 <p>See <a href=Fl.html#modal><tt>fltk::modal()</tt></a> for what
 <i>grab</i> does. This is useful for popup menus.
 
-<a name=show_inside><h4>bool fltk::Window::show_inside(const fltk::Window* frame);</h4></a>
+<h4><a name=show_inside>bool fltk::Window::show_inside(const fltk::Window* frame);</a></h4>
 
 Make the window with a normal system border and behavior, but place it
 inside the <i>frame</i> as though that was the desktop.  This is what
@@ -262,12 +262,12 @@ the system is managing the window.
 is tied to remain atop and iconize with the frame window (IMHO this is
 a great improvement over MDI!).
 
-<a name=hide><h4>virtual void fltk::Window::hide()</h4></a>
+<h4><a name=hide>virtual void fltk::Window::hide()</a></h4>
 
 Remove the window from the screen.  If the window is already hidden or 
 has not been shown then this does nothing and is harmless.
 
-<a name=destroy><h4>virtual void fltk::Window::destroy();</h4></a>
+<h4><a name=destroy>virtual void fltk::Window::destroy();</a></h4>
 
 Hides the window and also deletes all window system information about
 the window, and thus returns if back to the state it was in before the
@@ -277,19 +277,19 @@ destroyed.
 <p>Subclasses can override this, if you do this you must also override
 the destructor and make it call destroy().
 
-<a name=shown><h4>int fltk::Window::shown() const</h4></a>
+<h4><a name=shown>int fltk::Window::shown() const</a></h4>
 
 Returns non-zero if <tt>show()</tt> has been called, but
 <tt>destroy()</tt> has not been called.
 
-<a name=iconic><h4>int fltk::Window::iconic() const</h4></a>
+<h4><a name=iconic>int fltk::Window::iconic() const</a></h4>
 
 Returns true if the window is currently displayed as an icon.  Returns
 false if the window is not shown() or hide() has been called.  <i>On X
 this will return true for a short time after show() is called the
 first time.</i>
 
-<a name=iconize><h4>void fltk::Window::iconize()</h4></a>
+<h4><a name=iconize>void fltk::Window::iconize()</a></h4>
 
  Iconifies the window.  If you call this when <tt>shown()</tt> is false 
 it will <tt>show()</tt> it as an icon.  If the window is already 
@@ -302,7 +302,7 @@ href=win32.html#icon>Win32</a> system-specific
 ways to control what is drawn in the icon.  You should not rely on 
 window managers displaying the icons.
 
-<a name=resize><h4>void fltk::Window::resize(int,int,int,int)</h4></a>
+<h4><a name=resize>void fltk::Window::resize(int,int,int,int)</a></h4>
 
 Change the size and position of the window.  If <tt>shown()</tt> is 
 true, these changes are communicated to the window server (which may 
@@ -318,17 +318,17 @@ function.
 <p>The special value <tt>fltk::USEDEFAULT</tt> may be used for x and y
 indicate that the system should choose the window's position.
 
-<a name=hotspot><h4>void fltk::Window::hotspot(int x, int y, int 
+<h4><a name=hotspot>void fltk::Window::hotspot(int x, int y, int 
 offscreen = 0)
 <br> void fltk::Window::hotspot(const fltk::Widget*, bool offscreen = false)
-<br> void fltk::Window::hotspot(const fltk::Widgetp, bool offscreen = false)</h4></a>
+<br> void fltk::Window::hotspot(const fltk::Widgetp, bool offscreen = false)</a></h4>
 
 <tt>position()</tt> the window so that the mouse is pointing at the 
 given position, or at the center of the given widget, which may be the 
 window itself.  If <tt>offscreen</tt> is true then the window is
 allowed to extend off the screen (some X window managers do not allow this).
 
-<a name=fullscreen><h4>void fltk::Window::fullscreen()</h4></a>
+<h4><a name=fullscreen>void fltk::Window::fullscreen()</a></h4>
 
 Makes the window completely fill the screen, without any window
 manager border or taskbar or anything else visible (at least that is
@@ -341,22 +341,22 @@ to contribute code to do so).
 work with all X window managers (and currently it is not successful at
 hiding the Windows taskbar).
 
-<a name=fullscreen_off><h4>int fltk::Window::fullscreen_off(int x, int y, int w, int h)</h4></a>
+<h4><a name=fullscreen_off>int fltk::Window::fullscreen_off(int x, int y, int w, int h)</a></h4>
 
 Turns off any side effects of <tt>fullscreen()</tt> and does <tt>
 resize(x,y,w,h)</tt>. 
 
-<a name=clear_border><h4>void fltk::Window::clear_border()</h4></a>
+<h4><a name=clear_border>void fltk::Window::clear_border()</a></h4>
 
 You may turn off the window manager border before calling show() on
 the window the first time. On most window managers this means the user
 cannot move, iconize, or resize the window (unless your program does it).
 
-<a name=border><h4>bool fltk::Window::border() const</h4></a>
+<h4><a name=border>bool fltk::Window::border() const</a></h4>
 
 Returns false if clear_border() has been called.
 
-<a name=set_override><h4>bool fltk::Window::set_override()</h4></a>
+<h4><a name=set_override>bool fltk::Window::set_override()</a></h4>
 
 Windows with this property set will use the exact position and size
 set by the programmer (will not be handled by the window manager) and
@@ -370,21 +370,21 @@ is the only reliable and fast way to do it. This also turns on "save
 under" which on many X servers (like XFree86) can make the window
 disappear much faster by having the server rememeber what was behind it.
 
-<a name=override><h4>bool fltk::Window::override() const</h4></a>
+<h4><a name=override>bool fltk::Window::override() const</a></h4>
 
 Returns true if set_override() has been called.
 
-<a name=label><h4>void fltk::Window::label(const char*)
-<br>const char* fltk::Window::label() const</h4></a>
+<h4><a name=label>void fltk::Window::label(const char*)
+<br>const char* fltk::Window::label() const</a></h4>
 
 Gets or sets the window title bar label.
 
-<a name=iconlabel><h4>void fltk::Window::iconlabel(const char*)
-<br>const char* fltk::Window::iconlabel() const</h4></a>
+<h4><a name=iconlabel>void fltk::Window::iconlabel(const char*)
+<br>const char* fltk::Window::iconlabel() const</a></h4>
 
 Gets or sets the icon label.
 
-<a name=make_current><h4>void fltk::Window::make_current()</h4></a>
+<h4><a name=make_current>void fltk::Window::make_current()</a></h4>
 
 <tt>make_current()</tt> sets things up so that the drawing functions in <a
 href=drawing.html><tt>&lt;fltk/draw.h&gt;</tt></A> will go into this
@@ -392,11 +392,11 @@ window. This is useful for incremental update of windows, such as in an
 idle callback, which will make your program behave much better if it
 draws a slow graphic.  <i>This call does not work for fltk::DoubleBufferWindow!</i>.
 
-<a name=current><h4>static fltk::Window* fltk::Window::current()</h4></a>
+<h4><a name=current>static fltk::Window* fltk::Window::current()</a></h4>
 
 Returns the last window that was made current.
 
-<a name=cursor><h4>void fltk::Window::cursor(fltk::Cursor, fltk::Color = fltk::WHITE, fltk::Color = fltk::BLACK)</h4></a>
+<h4><a name=cursor>void fltk::Window::cursor(fltk::Cursor, fltk::Color = fltk::WHITE, fltk::Color = fltk::BLACK)</a></h4>
 
 Change the cursor for this window.  This always calls the system, if
 you are changing the cursor a lot you may want to keep track of how

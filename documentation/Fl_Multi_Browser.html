@@ -29,7 +29,7 @@ you can change this with <TT>when()</TT>.
 
 <p>See <A href=Fl_Browser.html#Browser><TT>fltk::Browser</TT></A> for
 methods to control the display and "current item", and <a
-href=Fl_Menu.html><tt>fltk::Menu</tt></a> for methods to add and remove
+href=Fl_Menu_.html><tt>fltk::Menu</tt></a> for methods to add and remove
 lines from the browser. </P>
 
 <p>The methods on <A href=Fl_Browser.html><TT>fltk::Browser</TT></A> for
@@ -48,11 +48,11 @@ change what items are turned on.
 <li><a href="#selected">selected</a></li>
 </ul>
 
-<a name=MultiBrowser><h4>fltk::MultiBrowser::MultiBrowser(int x, int y, int w, int h, const char *label = 0)</h4></a>
+<h4><a name=MultiBrowser>fltk::MultiBrowser::MultiBrowser(int x, int y, int w, int h, const char *label = 0)</a></h4>
 
 Creates a new, empty <tt>fltk::MultiBrowser</tt>.
 
-<a name=set_item_selected><h4>bool set_item_selected(bool value = true, int do_callback = 0);</h4></a>
+<h4><a name=set_item_selected>bool set_item_selected(bool value = true, int do_callback = 0);</a></h4>
 
 Turn the <tt>fltk::VALUE</tt> flag on or off in the current item (use <a
 href="Fl_Browser.html#goto_index"><tt>goto_index()</tt></a> to set the
@@ -62,7 +62,7 @@ current item before calling this).
 href=Fl_Widget.html#when><tt>when()</tt></a> then the callback is done
 for each item that changes selected state.
 
-<a name=select_only_this><h4>bool select_only_this(int do_callback = 0);</h4></a>
+<h4><a name=select_only_this>bool select_only_this(int do_callback = 0);</a></h4>
 
 Make the current item be the only selected one.  If <i>do_callback</i>
 has some bits that are also in <a
@@ -72,23 +72,23 @@ for each item that changes selected state.
 <p>If you did <tt>goto_index(-1)</tt> before this it does <a
 href=#deselect><tt>deselect()</tt></a>.
 
-<a name=deselect><h4>bool deselect(int do_callback = 0);</h4></a>
+<h4><a name=deselect>bool deselect(int do_callback = 0);</a></h4>
 
 Make no items be selected.  If <i>do_callback</i>
 has some bits that are also in <a
 href=Fl_Widget.html#when><tt>when()</tt></a> then the callback is done
 for each item that changes selected state.
 
-<a name=select><h4>bool select(int line, bool value = true);</h4></a>
+<h4><a name=select>bool select(int line, bool value = true);</a></h4>
 
 Same as <tt><a href=#goto_index>goto_index(line)</a>,<a
 href=#set_focus>set_item_selected(value)</a>;</tt>, to change the selected
 state of an item in a non-hierarchial fltk::MultiBrowser. If <i>line</i>
 is negative nothing is selected.
 
-<a name=selected><h4>bool selected(int line);</h4></a>
+<h4><a name=selected>bool selected(int line);</a></h4>
 
 Returns the value of the <tt><a
-href=#goto_index>goto_index(line)</a></tt> item.
+href="#goto_index">goto_index(line)</a></tt> item.
 
 </body></html>

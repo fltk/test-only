@@ -34,7 +34,7 @@ fltk::ALL_FREE does both.  fltk::SLEEPING_FREE are deactivated. </P>
 <H3>Methods</H3>
 <UL>
 <LI><A href=#Free.Free>fltk::Free</A></LI>
-<LI><A href=#Free.~Free>~fltk::Free</A></LI>
+<LI><A href=#Free.~Free>~Free</A></LI>
 </UL>
 <H4><A name=Free.Free>fltk::Free(uchar type, int, int, int, int, 
 const char*l, fltk::HANDLEPTR hdl)</A></H4>
@@ -60,6 +60,6 @@ The <TT>event</TT> argument contains the event type:
 #define fltk::FREEZE		fltk::HIDE
 #define fltk::THAW			fltk::SHOW
 </PRE>
-<H4><A name=Free.~Free>virtual fltk::Free::~fltk::Free()</A></H4>
+<H4><A name=Free.~Free>virtual fltk::Free::~Free()</A></H4>
  The destructor will call the handle function with the event <TT>
 fltk::FREE_MEM</TT>. </BODY></HTML>

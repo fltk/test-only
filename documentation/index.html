@@ -1,26 +1,18 @@
-<html>
- <head>
+<html><head><link href="fltk.css" rel="stylesheet" type="text/css">
   <meta name="robots" content="noindex" />
   <meta content="Written by Michael Sweet, Craig P. Earls, and Bill Spitzak" name=Author />
-  <meta content="Copyright 1998-2000 by Bill Spitzak and Others."
+  <meta content="Copyright 1998-2003 by Bill Spitzak and Others."
 name=Copyright />
-  <meta content="Revision 11" name=DocNumber />
+  <meta content="Revision 12" name=DocNumber />
   <title>FLTK 2.0.0 Programming Manual</title>
  </head>
 <body bgcolor=white>
 
-<center><table width=100% bgcolor=#b0d0d0 cellpadding=8 cellspacing=0>
-<tr><td align=center colspan=2 bgcolor=#a0c0c0>&nbsp;</td></tr>
-<tr>
-<td align=center valign=middle><img src=FL.gif align=absmiddle></td>
-<td align=center valign=middle>
-<h1>FLTK 2.0.0 Programming Manual</h1>
-Revision 0 by Michael Sweet, Craig P. Earls, and Bill Spitzak<br>
-All contents &copy;1998-2002 by Bill Spitzak and others.<br>
-</td>
-</tr>
-<tr><td align=center colspan=2 bgcolor=#a0c0c0>&nbsp;</td></tr>
-</table></center>
+<center><h1>
+<img src="fltk.gif" alt = "FLTK"><br>FLTK 2.0.0 Programming Manual</h1>
+Revision 12 by Michael Sweet, Craig P. Earls, and Bill Spitzak<br>
+All contents &copy;1998-2003 by Bill Spitzak and others.<br>
+</center>
 
 <!-- Paste the contents of fltk.d/toc.html here -->
 <!-- Then delete \#[0-9].. to get rid of htmldoc generated tags -->
@@ -85,7 +77,7 @@ All contents &copy;1998-2002 by Bill Spitzak and others.<br>
 <LI><A HREF="fluid.html#ftutorial">A Short Tutorial</A></LI>
 <LI><A HREF="fluid.html#freference">FLUID Reference</A></LI>
 </UL>
-<B><A HREF="Fl.html">class Fl</A></B>
+<B><A HREF="Fl.html">fltk functions</A></B>
 <UL>
 <LI><A HREF="Fl.html">Startup functions</A></LI>
 <LI><A HREF="Fl.html#waiting">Waiting for events</A></LI>
@@ -105,66 +97,64 @@ All contents &copy;1998-2002 by Bill Spitzak and others.<br>
 <LI><A HREF="Fl_Browser.html">class fltk::Browser</A></LI>
 <LI><A HREF="Fl_Button.html">class fltk::Button</A></LI>
 <LI><A HREF="Fl_Chart.html">class fltk::Chart</A></LI>
-<LI><A HREF="Fl_CheckButton.html">class fltk::CheckButton</A></LI>
+<LI><A HREF="Fl_Check_Button.html">class fltk::CheckButton</A></LI>
 <LI><A HREF="Fl_Choice.html">class fltk::Choice</A></LI>
 <LI><A HREF="Fl_Clock.html">class fltk::Clock</A></LI>
 <LI><A HREF="Fl_Color.html">typedef fltk::Color</A></LI>
-<LI><A HREF="Fl_ColorChooser.html">class fltk::ColorChooser</A></LI>
+<LI><A HREF="Fl_Color_Chooser.html">class fltk::ColorChooser</A></LI>
 <LI><A HREF="Fl_Dial.html">class fltk::Dial</A></LI>
-<LI><A HREF="Fl_DoubleBufferWindow.html">class fltk::DoubleBufferWindow</A></LI>
+<LI><A HREF="Fl_Double_Window.html">class fltk::DoubleBufferWindow</A></LI>
 <LI><A HREF="Fl_End.html">class fltk::End</A></LI>
-<LI><A HREF="Fl_FloatInput.html">class fltk::FloatInput</A></LI>
+<LI><A HREF="Fl_Float_Input.html">class fltk::FloatInput</A></LI>
 <LI><A HREF="Fl_Font.html">typedef fltk::Font</A></LI>
-<LI><A HREF="Fl_GlWindow.html">class fltk::GlWindow</A></LI>
+<LI><A HREF="Fl_Gl_Window.html">class fltk::GlWindow</A></LI>
 <LI><A HREF="Fl_Group.html">class fltk::Group</A></LI>
 <LI><A HREF="Fl_Image.html">class fltk::Image</A></LI>
 <LI><A HREF="Fl_Input.html">class fltk::Input</A></LI>
-<LI><A HREF="Fl_IntInput.html">class fltk::IntInput</A></LI>
+<LI><A HREF="Fl_Int_Input.html">class fltk::IntInput</A></LI>
 <LI><A HREF="Fl_Item.html">class fltk::Item</A></LI>
 <LI><A HREF="Fl_Item_Group.html">class fltk::ItemGroup</A></LI>
 <LI><A HREF="Fl_Labeltype.html">typedef fltk::Labeltype</A></LI>
-<LI><A HREF="Fl_LightButton.html">class fltk::LightButton</A></LI>
+<LI><A HREF="Fl_Light_Button.html">class fltk::LightButton</A></LI>
 <LI><A HREF="Fl_List.html">class fltk::List</A></LI>
-<LI><A HREF="Fl_Menu.html">class fltk::Menu</A></LI>
-<LI><A HREF="Fl_MenuBar.html">class fltk::MenuBar</A></LI>
-<LI><A HREF="Fl_MenuButton.html">class fltk::MenuButton</A></LI>
-<LI><A HREF="Fl_MenuItem.html">struct fltk::MenuItem</A></LI>
-<LI><A HREF="Fl_MenuWindow.html">class fltk::MenuWindow</A></LI>
-<LI><A HREF="Fl_MultiBrowser.html">class fltk::MultiBrowser</A></LI>
-<LI><A HREF="Fl_MultiImage.html">class fltk::MultiImage</A></LI>
-<LI><A HREF="Fl_MultilineInput.html">class fltk::MultilineInput</A></LI>
-<LI><A HREF="Fl_MultilineOutput.html">class fltk::MultilineOutput</A>
+<LI><A HREF="Fl_Menu_.html">class fltk::Menu</A></LI>
+<LI><A HREF="Fl_Menu_Bar.html">class fltk::MenuBar</A></LI>
+<LI><A HREF="Fl_Menu_Button.html">class fltk::MenuButton</A></LI>
+<LI><A HREF="Fl_Menu_Window.html">class fltk::MenuWindow</A></LI>
+<LI><A HREF="Fl_Multi_Browser.html">class fltk::MultiBrowser</A></LI>
+<LI><A HREF="Fl_Multi_Image.html">class fltk::MultiImage</A></LI>
+<LI><A HREF="Fl_Multiline_Input.html">class fltk::MultilineInput</A></LI>
+<LI><A HREF="Fl_Multiline_Output.html">class fltk::MultilineOutput</A>
 </LI>
-<LI><A HREF="Fl_Named_Style.html">class fltk::Named_Style</A></LI>
-<LI><A HREF="Fl_Numeric_Input.html">class fltk::Numeric_Input</A></LI>
+<LI><A HREF="Fl_Named_Style.html">class fltk::NamedStyle</A></LI>
+<LI><A HREF="Fl_Numeric_Input.html">class fltk::NumericInput</A></LI>
 <LI><A HREF="Fl_Output.html">class fltk::Output</A></LI>
-<LI><A HREF="Fl_Overlay_Window.html">class fltk::Overlay_Window</A></LI>
+<LI><A HREF="Fl_Overlay_Window.html">class fltk::OverlayWindow</A></LI>
 <LI><A HREF="Fl_Pack.html">class fltk::Pack</A></LI>
 <LI><A HREF="Fl_Pixmap.html">class fltk::Pixmap</A></LI>
 <LI><A HREF="Fl_Positioner.html">class fltk::Positioner</A></LI>
-<LI><A HREF="Fl_Repeat_Button.html">class fltk::Repeat_Button</A></LI>
+<LI><A HREF="Fl_Repeat_Button.html">class fltk::RepeatButton</A></LI>
 <LI><A HREF="Fl_RGB_Image.html">class fltk::RGB_Image</A></LI>
-<LI><A HREF="Fl_Return_Button.html">class fltk::Return_Button</A></LI>
+<LI><A HREF="Fl_Return_Button.html">class fltk::ReturnButton</A></LI>
 <LI><A HREF="Fl_Roller.html">class fltk::Roller</A></LI>
-<LI><A HREF="Fl_Round_Button.html">class fltk::Round_Button</A></LI>
+<LI><A HREF="Fl_Round_Button.html">class fltk::RoundButton</A></LI>
 <LI><A HREF="Fl_Scroll.html">class fltk::Scroll</A></LI>
 <LI><A HREF="Fl_Scrollbar.html">class fltk::Scrollbar</A></LI>
-<LI><A HREF="Fl_Secret_Input.html">class fltk::Secret_Input</A></LI>
-<LI><A HREF="Fl_Single_Window.html">class fltk::Single_Window</A></LI>
+<LI><A HREF="Fl_Secret_Input.html">class fltk::SecretInput</A></LI>
 <LI><A HREF="Fl_Slider.html">class fltk::Slider</A></LI>
 <LI><A HREF="Fl_Style.html">struct fltk::Style</A></LI>
-<LI><A HREF="Fl_Style_Set.html">class fltk::Style_Set</A></LI>
+<LI><A HREF="Fl_Style_Set.html">class fltk::StyleSet</A></LI>
 <LI><A HREF="Fl_Tabs.html">class fltk::Tabs</A></LI>
-<LI><A HREF="Fl_TextBuffer.html">class fltk::TextBuffer</A></LI>
-<LI><A HREF="Fl_TextDisplay.html">class fltk::TextDisplay</A></LI>
-<LI><A HREF="Fl_TextEditor.html">class fltk::TextEditor</A></LI>
+<LI><A HREF="Fl_Text_Buffer.html">class fltk::TextBuffer</A></LI>
+<LI><A HREF="Fl_Text_Display.html">class fltk::TextDisplay</A></LI>
+<LI><A HREF="Fl_Text_Editor.html">class fltk::TextEditor</A></LI>
 <LI><A HREF="Fl_Tile.html">class fltk::Tile</A></LI>
 <LI><A HREF="Fl_Valuator.html">class fltk::Valuator</A></LI>
-<LI><A HREF="Fl_ValueInput.html">class fltk::ValueInput</A></LI>
-<LI><A HREF="Fl_ValueSlider.html">class fltk::ValueSlider</A></LI>
+<LI><A HREF="Fl_Value_Input.html">class fltk::ValueInput</A></LI>
+<LI><A HREF="Fl_Value_Slider.html">class fltk::ValueSlider</A></LI>
 <LI><A HREF="Fl_Widget.html">class fltk::Widget</A></LI>
 <LI><A HREF="Fl_Window.html">class fltk::Window</A></LI>
-<LI><A HREF="Fl_WordwrapInput.html">class fltk::WordwrapInput</A></LI>
+<LI><A HREF="Fl_Wordwrap_Input.html">class fltk::WordwrapInput</A></LI>
 </UL>
 <B><A HREF="utility.html">Utility Function Reference</A></B>
 <UL>
@@ -201,7 +191,7 @@ All contents &copy;1998-2002 by Bill Spitzak and others.<br>
 <LI><A HREF="drawing.html#dtext">Text</A></LI>
 <LI><A HREF="drawing.html#dimages">Images</A></LI>
 </UL>
-<B><A HREF="opengl.html">7 - Using OpenGL</A></B>
+<B><A HREF="opengl.html">Using OpenGL</A></B>
 <UL>
 <LI><A HREF="opengl.html#glusing">Using OpenGL in FLTK</A></LI>
 <LI><A HREF="opengl.html#glsubclass">Making a Subclass of fltk::GlWindow</A>
@@ -246,8 +236,5 @@ All contents &copy;1998-2002 by Bill Spitzak and others.<br>
 <LI><A HREF="license.html#lgpl">GNU Library General Public License
  (LGPL)</A></LI>
 </UL>
-<center><table width=100% bgcolor=#c0c0c0 cellpadding=8 cellspacing=0>
-<tr><td align=center colspan=2 bgcolor=#a0c0c0>&nbsp;</td></tr>
-</table></center>
 
 </body></html>

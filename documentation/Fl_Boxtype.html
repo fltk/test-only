@@ -19,7 +19,7 @@ href=Fl_Style.html>fltk::Style</a> structure, and typically used by the
 
 <h3>Members</h3>
 
-<a name=draw><h4>virtual void fltk::Box_::draw(int x, int y, int w, int h, fltk::Color fill, fltk::Flags) const;</h4></a>
+<h4><a name=draw>virtual void fltk::Box_::draw(int x, int y, int w, int h, fltk::Color fill, fltk::Flags) const;</a></h4>
 
 This is the function that draws the box. The four integers are the
 x,y,w,h of the rectangle to fill with the box.  The color is used to
@@ -63,7 +63,7 @@ void MyBoxtype::draw(int x, int y, int w, int h, fltk::Color c, fltk::Flags f) c
 }
 </pre>
 
-<a name=fills_rectangle><h4>int fltk::Box_::fills_rectangle() const;</h4></a>
+<h4><a name=fills_rectangle>int fltk::Box_::fills_rectangle() const;</a></h4>
 
 Returns true if the draw function completely fills all the pixels in
 the rectangle passed to it (ignoring any <tt>fltk::INVISIBLE</tt>
@@ -91,14 +91,14 @@ and dh() is two times dy(), and usually dx() and dy() are equal.
 constructor should set the protected members <tt>dx_, dy_, dw_</tt>,
 and <tt>dh_</tt> to initialize the return value.
 
-<a name=inset><h4>void fltk::Box::inset(int& x, int& y, int& w, int& h) const;</h4></a>
+<h4><a name=inset>void fltk::Box::inset(int& x, int& y, int& w, int& h) const;</a></h4>
 
 Changes the passed rectangle into a rectangle that matches the
 "interior" of the box. This is an inline function that just adds or
 subtracts <a href=#dx>dx()</a>, <a href=#dy>dy()</a>, <a
 href=#dw>dw()</a>, and <a href=#dh>dh()</a> from the passed values.
 
-<a name=Boxtype_><h4>fltk::Box_::Boxtype_()</h4></a>
+<h4><a name=Boxtype_>fltk::Box_::Boxtype_()</a></h4>
 
 Default constructor.
 
@@ -109,7 +109,7 @@ named boxtypes. This list may be searched by the <a
 href=#find>find()</a> function to find a boxtype by name. This is
 useful for themes that want to parse a text file describing the theme.
 
-<a name=find><h4>static const fltk::Box_* fltk::Box_::find(const char* name);</h4></a>
+<h4><a name=find>static const fltk::Box_* fltk::Box_::find(const char* name);</a></h4>
 
 Locate the first boxtype with the given name. Case is ignored when
 doing the comparison. Returns NULL if no matching name is found.

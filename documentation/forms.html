@@ -16,7 +16,7 @@ Forms it was not distributed as Open Source. Much of FLTK's
 terminology and widget design is based on and directly descended from
 Forms.
 
-<a name=fimport><h2>Importing Forms Layout Files</h2></a>
+<h2><a name=fimport>Importing Forms Layout Files</a></h2>
 
 <a href=fluid.html>Fluid</A> can read the .fd files put out by 
 all versions of Forms and XForms fdesign.  However, it will mangle them 
@@ -29,7 +29,7 @@ with the output from FLUID.  If you are not interested in this you may
 have more immediate luck with the forms compatibility header, <tt>
 &lt;fltk/forms.h&gt;</tt>. </P>
 
-<a name=fheader><h2>Using the Compatibility Header File</h2></a>
+<h2><a name=fheader>Using the Compatibility Header File</a></h2>
 
 You should be able to compile existing Forms or XForms source code by 
 changing the include directory switch to your compiler so that the <tt>
@@ -55,7 +55,7 @@ to call the FLTK functions.  Unfortunately this conversion is harder
 than expected and even Digital Domain's inhouse code still uses
 <tt>forms.H</tt> a lot. </P>
 
-<a name=fwidgets><h2>Forms-specific Widget classes</h2></a>
+<h2><a name=fwidgets>Forms-specific Widget classes</a></h2>
 
 The following widget classes are provided to allow direct porting of
 Forms programs. They should not be used in normal FLTK programs.
@@ -67,7 +67,7 @@ Forms programs. They should not be used in normal FLTK programs.
 <li><a href=Fl_Timer.html>fltk::Timer</a></li>
 </ul>
 
-<a name=fbugs><h2>Problems You Will Encounter</h2></a>
+<h2><a name=fbugs>Problems You Will Encounter</a></h2>
 
 <p>Many parts of XForms use X-specific structures like <tt>XEvent</tt>
  in their interface.  I did not emulate these!  Unfortunately these 
@@ -164,7 +164,7 @@ all occurances of &quot;-&gt;fdui&quot; and edit to use &quot;-&gt;user_data()&q
 <LI>xyplot object </LI>
 </UL>
 
-<a name=fnotes><h2>Additional Notes</h2></a>
+<h2><a name=fnotes>Additional Notes</a></h2>
 
 These notes were written for porting programs written with the older 
 IRISGL version of Forms.  Most of these problems are the same ones 
@@ -188,7 +188,7 @@ this out by having the value fltk::EVENT returned from the call to Forms.
 <p>None of this works with FLTK.  Nor will it compile, the necessary 
 calls are not in the interface. </P>
 
-<p>You have to make a subclass of <A href=Fl_GlWindow.html#GlWindow>
+<p>You have to make a subclass of <A href=Fl_Gl_Window.html#GlWindow>
 <tt>fltk::GlWindow</tt></A> and write a <tt>draw()</tt> method and <tt>
 handle()</tt> method.  This may require anywhere from a trivial to a 
 major rewrite. </P>

@@ -1,6 +1,6 @@
-<html><head><title>class fltk::Style_Set</title></head><body bgcolor=white>
+<html><head><title>class fltk::StyleSet</title></head><body bgcolor=white>
 <!-- NEW PAGE -->
-<h2>class fltk::Style_Set</h2>
+<h2>class fltk::StyleSet</h2>
 <hr>
 
 Fltk can manage "sets" of styles. This is useful for making a program
@@ -23,19 +23,19 @@ instance pop-up menus) and may not inherit the expected theme unless
 you are careful. Also some global things such as the background color
 cannot be seperated into sets.
 
-<a name=Style_Set><h4>fltk::Style_Set::Style_Set()</h4></a>
+<h4><a name=StyleSet>fltk::StyleSet::StyleSet()</a></h4>
 
-The <i>first</i> fltk::Style_Set you create is made into the current one
+The <i>first</i> fltk::StyleSet you create is made into the current one
 and is made equal to the current settings of the styles. All other
 style sets you create are set to a <a href=#revert>revert</a> form of
 all the styles and  you must call <a
 href=#make_current>make_current</a> on them to make them useful.
 
-<a name=~Style_Set><h4>fltk::Style_Set::~fltk::Style_Set()</h4></a>
+<h4><a name=~StyleSet>fltk::StyleSet::~StyleSet()</a></h4>
 
 Currently this does nothing.
 
-<a name=make_current><h4>void fltk::Style_Set::make_current();</h4></a>
+<h4><a name=make_current>void fltk::StyleSet::make_current();</a></h4>
 
 <p>Make this set be current. All widgets created after this use this
 set, and calling <a href=#reload_theme>fltk::Style::reload_theme()</a>

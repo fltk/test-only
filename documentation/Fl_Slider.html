@@ -11,7 +11,7 @@
    |
    +----<b>fltk::Slider</b>
            |
-           +----<a href=Fl_Scrollbar.html>fltk::Scrollbar</a>, <a href=Fl_ValueSlider.html>fltk::ValueSlider</a>
+           +----<a href=Fl_Scrollbar.html>fltk::Scrollbar</a>, <a href=Fl_Value_Slider.html>fltk::ValueSlider</a>
 </pre>
 
 <H3>Include Files</H3>
@@ -66,7 +66,7 @@ href="Fl_Widget.html#button_color">button_color()</a> colors it.
 <h3>Methods</h3>
 <ul>
 <li><a href=#Slider>fltk::Slider</a></li>
-<li><a href=#~fltk::Slider>~fltk::Slider</a></li>
+<li><a href=#~Slider>~Slider</a></li>
 <li><a href=#draw>draw</a></li>
 <li><a href=#draw_ticks>draw_ticks</a></li>
 <li><a href=#handle>handle</a></li>
@@ -77,8 +77,8 @@ href="Fl_Widget.html#button_color">button_color()</a> colors it.
 <li><a href=#type>type</a></li>
 </ul>
 
-<a name=Slider><h4>fltk::Slider::Slider(int x, int y, int w, int h,
-const char *label = 0)</h4></a>
+<h4><a name=Slider>fltk::Slider::Slider(int x, int y, int w, int h,
+const char *label = 0)</a></h4>
 
 Creates a new <TT>fltk::Slider</TT> widget using the given position,
 size, and label string. The default <a
@@ -87,7 +87,7 @@ href="Fl_Widget.html#type">type()</a> is <tt>fltk::Slider::VERTICAL</tt>
 
 The default boxtype is <TT>fltk::DOWN_BOX</TT>. 
 
-<a name=~Slider><h4>virtual fltk::Slider::~fltk::Slider()</h4></a>
+<h4><a name=~Slider>virtual fltk::Slider::~Slider()</a></h4>
 
 Destroys the valuator. 
 
@@ -123,8 +123,8 @@ the slider.
 
 </ul>
 
-<a name=slider_size><h4>unsigned char fltk::Slider::slider_size() const
-<br>void fltk::Slider::slider_size(unsigned char)</h4></a>
+<h4><a name=slider_size>unsigned char fltk::Slider::slider_size() const
+<br>void fltk::Slider::slider_size(unsigned char)</a></h4>
 
 Get or set the dimensions of the moving piece of slider. This is
 measured in pixels in a direction parallel to the slider's movement.
@@ -135,33 +135,33 @@ slider that draws a solid bar from the left/bottom to the current
 value. This is useful for indicating progress or as a output
 indicator.
 
-<a name=tick_size><h4>unsigned char fltk::Slider::tick_size() const
-<br>void fltk::Slider::tick_size(unsigned char)</h4></a>
+<h4><a name=tick_size>unsigned char fltk::Slider::tick_size() const
+<br>void fltk::Slider::tick_size(unsigned char)</a></h4>
 
 The slider is shrunk this many pixels from the widget's width so that
 the tick marks are visible next to it. The default value is 4.
 
-<a name=slider_position><h4>int fltk::Slider::slider_position(double value, int w); (protected)</h4></a>
+<h4><a name=slider_position>int fltk::Slider::slider_position(double value, int w); (protected)</a></h4>
 
 Return the location in pixels of the left/top edge of a box of
 slider_size() should be drawn at if it is positioned at the value
 <i>value</i> in an area the slider can move in of width/height
 <i>w</i>.
 
-<a name=position_value><h4>double fltk::Slider::position_value(int x, int w); (protected)</h4></a>
+<h4><a name=position_value>double fltk::Slider::position_value(int x, int w); (protected)</a></h4>
 
 Return the value that would place the left/top edge of a box of
 slider_size() at pixel <i>x</i> in an area the slider can move in of
 width/height <i>w</i>.
 
-<a name=draw_ticks><h4>void fltk::Slider::draw_ticks(int x, int y, int w, int h); (protected)</h4></a>
+<h4><a name=draw_ticks>void fltk::Slider::draw_ticks(int x, int y, int w, int h); (protected)</a></h4>
 
 Draw tick marks to fill the passed rectangle. These lines cross the
 passed rectangle perpendicular to the slider direction. In the
 direction parallel to the slider direction the box should have the
 same size as the area the slider moves in.
 
-<a name=draw><h4>bool fltk::Slider::draw(int x, int y, int w, int h, fltk::Flags flags, bool slot); (protected)</h4></a>
+<h4><a name=draw>bool fltk::Slider::draw(int x, int y, int w, int h, fltk::Flags flags, bool slot); (protected)</a></h4>
 
 Do minimal-update redraw of the moving part of the slider that fits in
 the passed rectangle. Also draw the black slot if <i>slot</i> is
@@ -189,7 +189,7 @@ void MySlider::draw() {
   }
 }</ul></pre>
 
-<a name=handle><h4>int fltk::Slider::handle(int event, int x, int y, int w, int h); (protected)</h4></a>
+<h4><a name=handle>int fltk::Slider::handle(int event, int x, int y, int w, int h); (protected)</a></h4>
 
 Handle events for a slider where the moving part is in the passed box.
 

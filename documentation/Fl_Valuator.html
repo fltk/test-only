@@ -12,7 +12,7 @@
    +----<B>fltk::Valuator</B>
            |
            +----<A href=Fl_Dial.html>fltk::Dial</A>, <A href=Fl_Roller.html>fltk::Roller</A>,
-                <A href=Fl_Slider.html>fltk::Slider</A>, <A href=Fl_ValueInput.html>fltk::ValueInput</A>
+                <A href=Fl_Slider.html>fltk::Slider</A>, <A href=Fl_Value_Input.html>fltk::ValueInput</A>
 </pre>
 
 <h3>Include Files</h3>
@@ -47,7 +47,7 @@ defined as zero.</P>
 <tr><td align=left valign=top>
 <ul>
 <li><a href=#Valuator>fltk::Valuator</a></li>
-<li><a href=#~fltk::Valuator>~fltk::Valuator</a></li>
+<li><a href=#~Valuator>~Valuator</a></li>
 <li><a href=#format>format</a></li>
 </ul>
 </TD><TD align=left valign=top>
@@ -77,7 +77,7 @@ y, int w, int h, const char *label = 0)</a></h4>
 Creates a new <TT>fltk::Valuator</TT> widget using the given position, 
 size, and label string. The default boxtype is <TT>fltk::NO_BOX</TT>. 
 
-<h4><a name=~Valuator>virtual fltk::Valuator::~fltk::Valuator()</a>
+<h4><a name=~Valuator>virtual fltk::Valuator::~Valuator()</a>
 </h4>
 
 Destroys the valuator. 
@@ -160,15 +160,15 @@ movements of the mouse wheel, into movements of the value. It is up to
 the subclass to filter out events it does not want to respond to
 before calling this.
 
-<a name=previous_value><h4>double fltk::Valuator::previous_value() const (static,protected) </h4></a>
+<h4><a name=previous_value>double fltk::Valuator::previous_value() const (static,protected) </a></h4>
 
 Value saved when <a href=#handle_push>handle_push()</a> was last called.
 
-<a name=handle_push><h4>void fltk::Valuator::handle_push() (protected)</h4></a>
+<h4><a name=handle_push>void fltk::Valuator::handle_push() (protected)</a></h4>
 
 Subclasses should call this when the user starts to change the value.
 
-<a name=handle_drag><h4>void fltk::Valuator::handle_drag(double newvalue); (protected)</h4></a>
+<h4><a name=handle_drag>void fltk::Valuator::handle_drag(double newvalue); (protected)</a></h4>
 
 Subclasses should call this as the user moves the value. The passed
 value is clamped to the range if previous_value() is inside the range,
@@ -176,16 +176,16 @@ and then it is rounded to the nearest multiple of step(), and then
 stored. This may call the callback if the new value is different than
 the old one.
 
-<a name=handle_release><h4>void fltk::Valuator::handle_release(); (protected)</h4></a>
+<h4><a name=handle_release>void fltk::Valuator::handle_release(); (protected)</a></h4>
 
 Subclasses should call this when the user stops moving the value. It may call
 the callback.
 
-<a name=value_damage><h4>void fltk::Valuator::value_damage(); (virtual, protected)</h4></a>
+<h4><a name=value_damage>void fltk::Valuator::value_damage(); (virtual, protected)</a></h4>
 
 Callback whenever value changes.
 
-<a name=set_value><h4>void fltk::Valuator::set_value(double v) (protected) </h4></a>
+<h4><a name=set_value>void fltk::Valuator::set_value(double v) (protected) </a></h4>
 
 Change the value() without calling <a href=#value_damage>value_damage()</a>.
 

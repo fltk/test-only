@@ -6,7 +6,7 @@
 
 <h3>Class Hierarchy</h3>
 
-<pre><a href=Fl_Numeric_Input.html>fltk::Numeric_Input</A>
+<pre><a href=Fl_Numeric_Input.html>fltk::NumericInput</A>
    |
    +----<B>fltk::FloatInput</B>
 </pre>
@@ -27,7 +27,7 @@ href="Fl_Input.html#replace">replace()</a> method on
 <tt>fltk::Input</tt>. Besides editing the text the user can use the
 up/down arrow keys to change the digits.
 
-<p>You may want a <a href="Fl_ValueInput.html">fltk::ValueInput</a>
+<p>You may want a <a href="Fl_Value_Input.html">fltk::ValueInput</a>
 widget instead. It has value() methods that take and return double
 values rather than strings.
 
@@ -42,15 +42,15 @@ partially-edited numbers are in the field.
 
 <ul>
 <li><a href=#FloatInput>fltk::FloatInput</a></li>
-<li><a href=#~fltk::FloatInput>~fltk::FloatInput</a></li>
+<li><a href=#~FloatInput>~FloatInput</a></li>
 </ul>
 
-<a name=FloatInput><h4>fltk::FloatInput::FloatInput(int x, int y, int w, int h, const char *label = 0)</h4></a>
+<h4><a name=FloatInput>fltk::FloatInput::FloatInput(int x, int y, int w, int h, const char *label = 0)</a></h4>
 
 Creates a new <TT>fltk::FloatInput</TT> widget using the given position, 
 size, and label string.
 
-<a name=~FloatInput><h4>virtual fltk::FloatInput::~fltk::FloatInput()</h4></a>
+<h4><a name=~FloatInput>virtual fltk::FloatInput::~FloatInput()</a></h4>
 
 Destroys the widget and any value associated with it.
 
@@ -59,8 +59,6 @@ Destroys the widget and any value associated with it.
 <p>The <a href="Fl_Widget.html#type">type()</a> can either be either
 <tt>fltk::FloatInput::FLOAT</tt> or
 <tt>fltk::FloatInput::INT</tt>. Setting it to <tt>INT</tt> makes this
-act like the <a href="Fl_IntInput.html">fltk::IntInput</a> subclass.
-
-
+act like the <a href="Fl_Int_Input.html">fltk::IntInput</a> subclass.
 
 </body></html>
