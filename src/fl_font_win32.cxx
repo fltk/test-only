@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.58 2004/07/27 07:03:07 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.59 2004/07/27 10:41:26 laza2000 Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -78,6 +78,10 @@ void fltk::set_encoding(const char* f) {
 static FontSize* all_fonts;
 
 FontSize::FontSize(const char* name, int attr, int size, int charset) {
+
+  // Open display, if not opened yet. So function pointers are set correctly
+  open_display();
+
   current = this;
 
   HDC dc = getDC();
@@ -285,5 +289,5 @@ void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.58 2004/07/27 07:03:07 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.59 2004/07/27 10:41:26 laza2000 Exp $".
 //
