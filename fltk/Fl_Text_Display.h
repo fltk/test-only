@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.h,v 1.3 2002/08/11 04:49:54 spitzak Exp $"
+// "$Id: Fl_Text_Display.h,v 1.4 2002/10/29 00:37:23 easysw Exp $"
 //
 // Header file for Fl_Text_Display class.
 //
@@ -33,6 +33,14 @@
 #include <fltk/Fl_Scrollbar.h>
 #include <fltk/Fl_Text_Buffer.h>
 
+/**
+
+   This is the FLTK text display widget. It allows the user to view 
+   multiple lines of text and supports highlighting and scrolling. 
+   The buffer that is displayed in the widget is managed by the 
+   Fl_Text_Buffer class. 
+
+*/
 class FL_API Fl_Text_Display: public Fl_Group {
   public:
     enum {
@@ -209,5 +217,5 @@ class FL_API Fl_Text_Display: public Fl_Group {
 #endif
 
 //
-// End of "$Id: Fl_Text_Display.h,v 1.3 2002/08/11 04:49:54 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.h,v 1.4 2002/10/29 00:37:23 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.h,v 1.3 2002/06/21 06:17:09 spitzak Exp $"
+// "$Id: Fl_Value_Input.h,v 1.4 2002/10/29 00:37:23 easysw Exp $"
 //
 // Value input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -29,13 +29,45 @@
 #include "Fl_Valuator.h"
 #include "Fl_Float_Input.h"
 
+/**
+
+   Controls a single floating point value through a combination of a 
+   Fl_Float_Input and two buttons. Other toolkits call this a "Spin Box". 
+
+   \image Fl_Value_Input.gif
+
+   Clicking the buttons increments/decrements by the linesize(). Holding
+   down shift (or ctrl or alt) and clicking increments/decrements by the
+   pagesize(). 
+
+   If step() is greater or equal to 1.0 an Fl_Int_Input is used instead. 
+   This prevents the user from typing anything other than digits. 
+   If step() is less than one then the user can type floating point
+   values with decimal points and exponents. 
+
+   If you change when() to FL_WHEN_ENTER_KEY the callback is only done 
+   when the user hits the up/down arrow keys or when the user types the
+   Enter key. This may be more useful than the default setting of 
+   FL_WHEN_CHANGED which can make the callback happen when partially-edited
+   numbers are in the field. 
+
+   You can get at the input field by using the public "input" 
+   instance variable. For instance you can clobber the text to a 
+   word with value_input->input.static_value("word"). 
+
+*/
 class FL_API Fl_Value_Input : public Fl_Valuator {
 public:
   Fl_Float_Input input;
 
   int handle(int);
   void draw();
+  /**
+   Creates a new Fl_Value_Input widget using the given position, size, 
+   and label string. The default boxtype is FL_DOWN_BOX.
+  */
   Fl_Value_Input(int x,int y,int w,int h,const char *l=0);
+  /** Destroys the valuator. */
   ~Fl_Value_Input();
 
 protected:
@@ -51,5 +83,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Value_Input.h,v 1.3 2002/06/21 06:17:09 spitzak Exp $".
+// End of "$Id: Fl_Value_Input.h,v 1.4 2002/10/29 00:37:23 easysw Exp $".
 //

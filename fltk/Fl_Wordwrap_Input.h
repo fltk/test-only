@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Wordwrap_Input.h,v 1.3 2002/01/31 22:54:49 robertk Exp $"
+// "$Id: Fl_Wordwrap_Input.h,v 1.4 2002/10/29 00:37:23 easysw Exp $"
 //
 // Wordwrap input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -29,8 +29,21 @@
 #include "Fl_Input.h"
 
 // This class is entirely inline.  If that changes, add FL_API to its declaration
+/**
+
+   This input field displays '\n' characters as new lines rather
+   than ^J, and accepts the Return, Tab, and up and down arrow keys,
+   and wraps long lines to fit into paragraphs that fit in the window.
+   This is useful for editing small blocks of text, but you may want 
+   Fl_Text_Editor instead.
+
+*/
 class Fl_Wordwrap_Input : public Fl_Input {
 public:
+   /**
+      Creates a new Fl_Wordwrap_Input widget using the 
+      given position, size, and label string. 
+   */
     Fl_Wordwrap_Input(int x,int y,int w,int h,const char *l = 0)
 	: Fl_Input(x,y,w,h,l) {type(WORDWRAP);}
 };
@@ -38,5 +51,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Wordwrap_Input.h,v 1.3 2002/01/31 22:54:49 robertk Exp $".
+// End of "$Id: Fl_Wordwrap_Input.h,v 1.4 2002/10/29 00:37:23 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Menu_Item.h,v 1.3 2002/10/29 00:37:23 easysw Exp $"
 //
 // Back-compatability menu items for FLTK.  The new Fl_Menu_ class
 // converts these tables into child Fl_Item and Fl_Group_Item widgets.
@@ -47,6 +47,12 @@ enum { // values for flags:
 
 class FL_API Fl_Menu_;
 
+/**
+
+   This class is provided for back compatability with fltk 1.0 
+   and should not be used in new programs.
+
+*/
 struct FL_API Fl_Menu_Item {
   const char *text;
   int shortcut_;
@@ -160,5 +166,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Menu_Item.h,v 1.3 2002/10/29 00:37:23 easysw Exp $".
 //

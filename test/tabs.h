@@ -4,10 +4,11 @@
 #define tabs_h
 #include <fltk/Fl.h>
 #include <fltk/Fl_Window.h>
-extern Fl_Window *foo_window;
+extern Fl_Window* foo_window;
 #include <fltk/Fl_Tabs.h>
 #include <fltk/Fl_Group.h>
 #include <fltk/Fl_Input.h>
+#include <fltk/Fl_Wordwrap_Input.h>
 #include <fltk/Fl_Button.h>
 #include <fltk/Fl_Clock.h>
 #include <stdlib.h>

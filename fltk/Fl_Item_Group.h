@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item_Group.h,v 1.2 2002/09/23 07:15:22 spitzak Exp $"
+// "$Id: Fl_Item_Group.h,v 1.3 2002/10/29 00:37:23 easysw Exp $"
 //
 // Widget designed to be a nested list in a menu or browser.
 // Code is in Fl_Item.cxx
@@ -29,10 +29,33 @@
 
 #include "Fl_Menu_.h"
 
+/**
+
+   This widget describes a set of items that are to be put inside a Fl_Menu or
+   Fl_Browser widget. It indicates the title of a submenu, or a level of 
+   hierarchy in the browser. Any child widgets are the items in that submenu, 
+   or the items under this parent in the browser. 
+
+   If this widget is told to draw, it draws just like Fl_Item draws. See that
+   for more details. The triangle indicating a submenu is not drawn by this, 
+   it is drawn by the parent menu. 
+
+   Because this is an Fl_Menu_ subclass, you can also call popup() and add() 
+   and other methods to manipulate the items inside it. 
+
+   In a browser, the value() indicates if the widget is open or not. In a 
+   multi-browser, the selected() indicates if the widget is currently 
+   selected. 
+
+*/
 class FL_API Fl_Item_Group : public Fl_Menu_ {
 public:
   void draw();
   void layout();
+  /**
+   Unlike other widgets the constructor does not take any dimensions, 
+   since it is assummed the container widget will size this correctly. 
+  */
   Fl_Item_Group(const char* label = 0);
 };
 

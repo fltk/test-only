@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Single_Window.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Single_Window.h,v 1.2 2002/10/29 00:37:23 easysw Exp $"
 //
 // Single-buffered window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,16 +28,32 @@
 
 #include "Fl_Window.h"
 
+/**
+
+   This is the same as Fl_Window. However, it is possible that some 
+   implementations will provide double-buffered windows by default. 
+   This subclass can be used to force single-buffering. This may be 
+   useful for modifying existing programs that use incremental update, 
+   or for some types of image data, such as a movie flipbook. 
+
+*/
 class FL_API Fl_Single_Window : public Fl_Window {
 public:
+  /*@{*/
+  /**
+   Creates a new Fl_Single_Window widget using the given position,
+   size, and label (title) string.
+  */
+
   Fl_Single_Window(int W, int H, const char *l=0)
     : Fl_Window(W,H,l) {}
   Fl_Single_Window(int X, int Y, int W, int H, const char *l=0)
     : Fl_Window(X,Y,W,H,l) {}
+  /*@}*/
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Single_Window.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Single_Window.h,v 1.2 2002/10/29 00:37:23 easysw Exp $".
 //

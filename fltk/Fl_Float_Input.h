@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Float_Input.h,v 1.3 2002/01/23 08:46:00 spitzak Exp $"
+// "$Id: Fl_Float_Input.h,v 1.4 2002/10/29 00:37:23 easysw Exp $"
 //
 // Floating point input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,11 +27,34 @@
 #define Fl_Float_Input_H
 
 #include "Fl_Numeric_Input.h"
+/**
+   The Fl_Float_Input class is a subclass of Fl_Input that only allows the 
+   user to type floating point numbers (sign, digits, decimal point, more 
+   digits, 'E' or 'e', sign, digits). This is done by overriding the 
+   replace() method on Fl_Input. Besides editing the text the user can 
+   use the up/down arrow keys to change the digits. 
 
+   You may want a Fl_Value_Input widget instead. It has value() methods that
+   take and return double values rather than strings. 
+
+   If you change when() to FL_WHEN_ENTER_KEY the callback is only done when 
+   the user hits the up/down arrow keys or when the user types the Enter key.
+   This may be more useful than the default setting of FL_WHEN_CHANGED which
+   can make the callback happen when partially-edited numbers are in the field. 
+*/
 class FL_API Fl_Float_Input : public Fl_Numeric_Input {
   virtual bool replace(int, int, const char*, int);
 public:
+  /**
+  The type() can either be either Fl_Float_Input::FLOAT or 
+  Fl_Float_Input::INT. 
+  Setting it to INT makes this act like the Fl_Int_Input subclass. 
+  */
   enum {FLOAT = 0, INT = 1};
+  /**
+   Creates a new Fl_Float_Input widget using the given position,
+   size, and label string. 
+  */
   Fl_Float_Input(int x,int y,int w,int h,const char *l = 0)
     : Fl_Numeric_Input(x,y,w,h,l) {}
 };
@@ -39,5 +62,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Float_Input.h,v 1.3 2002/01/23 08:46:00 spitzak Exp $".
+// End of "$Id: Fl_Float_Input.h,v 1.4 2002/10/29 00:37:23 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pixmap.h,v 1.4 2002/05/06 06:31:26 spitzak Exp $"
+// "$Id: Fl_Pixmap.h,v 1.5 2002/10/29 00:37:23 easysw Exp $"
 //
 // Pixmap header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,16 +28,47 @@
 
 #include "Fl_Image.h"
 
+/**
+
+   This subclass of Fl_Image encapsulates the data from an XPM image, 
+   and allows you to make an Fl_Widget use a pixmap as a label, or to 
+   just draw the pixmap directly. 
+
+*/
 class FL_API Fl_Pixmap : public Fl_Image {
 public:
   const char * const * data;
+  /**
+
+   Construct using XPM data. The data pointer is simply copied to 
+   the object, so it must point at persistent storage. To use an XPM file do:
+
+   \code 
+
+   #include <fltk/Fl_Pixmap.h>
+   #include "foo.xpm"
+   ...
+   Fl_Pixmap pixmap = new Fl_Pixmap(foo);
+
+   \end code
+
+  */
   Fl_Pixmap(const char * const * d) : data(d) {w = -1;}
   Fl_Pixmap(const unsigned char* const * d) : data((char**)d) {w = -1;}
   // some compilers with bugs may need this one: (?)
   Fl_Pixmap(char ** d)		    : data(d) {w = -1;}
 
   void measure(int&,int&);
-  void draw(int, int, int, int, Fl_Flags = 0);
+  /**
+   The image is drawn with the top-left corner at x,y. 
+   The w and h are ignored. The flags are ignored (although 
+   really it should use FL_INACTIVE to gray out the image). 
+  */
+  void draw(int x, int y, int w, int h, Fl_Flags = 0);
+  /**
+   Draws the image with the upper-left corner at x,y. 
+   This is the same as doing draw(x, y, this->w, this->h, flags). 
+  */
   void draw(int x, int y, Fl_Flags f = 0) {draw(x,y,w,h,f);}
 
 };
@@ -45,5 +76,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Pixmap.h,v 1.4 2002/05/06 06:31:26 spitzak Exp $".
+// End of "$Id: Fl_Pixmap.h,v 1.5 2002/10/29 00:37:23 easysw Exp $".
 //

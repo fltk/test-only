@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Positioner.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Positioner.h,v 1.2 2002/10/29 00:37:23 easysw Exp $"
 //
 // Positioner header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,16 @@
 #include <fltk/Fl_Widget.h>
 #endif
 
+/**
+
+  This class is provided for Forms compatibility. It provides 2D input. 
+  It would be useful if this could be put atop another widget so that 
+  the crosshairs are on top, but this is not implemented. The color of
+  the crosshairs is selection_color(). 
+
+   \image positioner.gif
+
+*/
 class FL_FORMS_API Fl_Positioner : public Fl_Widget {
 
   double xmin, ymin;
@@ -47,23 +57,37 @@ protected:
 public:
 
   int handle(int);
+  /**
+   Creates a new Fl_Positioner widget using the given position,
+   size, and label string. The default boxtype is FL_NO_BOX. 
+  */
   Fl_Positioner(int x,int y,int w,int h, const char *l=0);
+  /*@{*/
+  /** Gets or sets the X axis coordinate. */
   double xvalue() const {return xvalue_;}
-  double yvalue() const {return yvalue_;}
   int xvalue(double);
+  /*@}*/
+  /*@{*/
+  /** Gets or sets the Y axis coordinate. */
+  double yvalue() const {return yvalue_;}
   int yvalue(double);
+  /*@}*/
   int value(double,double);
+  /** Sets the X axis bounds. */
   void xbounds(double, double);
   double xminimum() const {return xmin;}
   void xminimum(double a) {xbounds(a,xmax);}
   double xmaximum() const {return xmax;}
   void xmaximum(double a) {xbounds(xmin,a);}
+  /** Sets the Y axis bounds. */
   void ybounds(double, double);
   double yminimum() const {return ymin;}
   void yminimum(double a) {ybounds(a,ymax);}
   double ymaximum() const {return ymax;}
   void ymaximum(double a) {ybounds(ymin,a);}
+  /** Sets the stepping value for the X axis. */
   void xstep(double a) {xstep_ = a;}
+  /** Sets the stepping value for the Y axis. */
   void ystep(double a) {ystep_ = a;}
 
 };
@@ -71,5 +95,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Positioner.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Positioner.h,v 1.2 2002/10/29 00:37:23 easysw Exp $".
 //

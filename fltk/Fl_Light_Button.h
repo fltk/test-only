@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.h,v 1.2 2002/01/28 08:02:59 spitzak Exp $"
+// "$Id: Fl_Light_Button.h,v 1.3 2002/10/29 00:37:23 easysw Exp $"
 //
 // Lighted button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,8 +28,26 @@
 
 #include "Fl_Check_Button.h"
 
+/**
+
+   Buttons generate callbacks when they are clicked by the user. 
+   You control exactly when and how by changing the values 
+   for type() and when(). 
+
+   \image Fl_Light_Button.gif
+
+   The Fl_Light_Button subclass display the "on" state by turning on a
+   light, rather than drawing pushed in. The shape of the "light" is 
+   initially set to FL_DOWN_BOX. The color of the light when on is 
+   controlled with selection_color(), which defaults to FL_YELLOW. 
+
+*/
 class FL_API Fl_Light_Button : public Fl_Check_Button {
 public:
+  /**
+    Creates a new Fl_Light_Button widget using the given 
+    position, size, and label string. 
+  */
   Fl_Light_Button(int x,int y,int w,int h,const char *l = 0);
   static Fl_Named_Style* default_style;
   static void default_glyph(const Fl_Widget*,int,int,int,int,int,Fl_Flags);
@@ -38,5 +56,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Light_Button.h,v 1.2 2002/01/28 08:02:59 spitzak Exp $".
+// End of "$Id: Fl_Light_Button.h,v 1.3 2002/10/29 00:37:23 easysw Exp $".
 //

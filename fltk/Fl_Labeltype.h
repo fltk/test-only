@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Labeltype.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Labeltype.h,v 1.2 2002/10/29 00:37:23 easysw Exp $"
 //
 // Labeltypes used by FLTK styles.
 //
@@ -32,6 +32,39 @@
 // the abstract base class:
 class FL_API Fl_Labeltype_ {
 public:
+   /**
+      The first argument is the Fl_Labeltype_ itself, this allows access to 
+      the data value. Next is the text string. The next four integers are 
+      the x,y,w,h to fit the label into. The next is the color to fill the 
+      interior of the letters with. The last argument is a set of bitflags.
+      The following values are of use to the labeltypes, ignore any other 
+      bits that are on: 
+
+      - FL_ALIGN_TOP - align the label at the top of the widget. 
+      - FL_ALIGN_BOTTOM - align the label at the bottom of the widget. 
+      - FL_ALIGN_LEFT - align the label to the left of the widget. 
+      - FL_ALIGN_RIGHT - align the label to the right of the widget. 
+      - FL_ALIGN_CLIP - clip the label to the widget's bounding box. 
+      - FL_ALIGN_WRAP - wrap the label text as needed. 
+      - FL_SHORTCUT_LABEL - interpret &x to underscore under the next letter. 
+      - FL_INACTIVE - gray out the widget. 
+      - FL_VALUE - 
+         draw the label atop a pushed-in box (usually you can ignore this). 
+      - FL_SELECTED - 
+         draw the label atop a box with keyboard focus 
+         (usually you can ignore this). 
+      - FL_HIGHLIGHT - 
+         draw the label atop a highlighted box (usually you can ignore this).
+      
+      The label should be drawn inside this bounding box. Ignore the setting 
+      of FL_ALIGN_INSIDE. Outside labels are handled by the Fl_Group code by
+      modifying the bounding box before this is called.
+      
+      If none of the align flags are on you should center the label 
+      in the widget. 
+
+      The function is not called if the label value is NULL. 
+   */
   virtual void draw(const char*, int,int,int,int, Fl_Color, Fl_Flags) const;
   const char* name;
   const Fl_Labeltype_* next;
@@ -40,6 +73,11 @@ public:
   static const Fl_Labeltype_* find(const char* name);
 };
 
+/**
+   Fl_Labeltype is a pointer to the structure Fl_Labeltype_, 
+   which contains the information needed to draw text labels. 
+   This is used by Fl_Widget::label_type(). 
+*/
 typedef const Fl_Labeltype_* Fl_Labeltype;
 
 extern FL_API Fl_Labeltype_ fl_normal_label;

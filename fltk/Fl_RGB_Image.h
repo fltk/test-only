@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_RGB_Image.h,v 1.3 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: Fl_RGB_Image.h,v 1.4 2002/10/29 00:37:23 easysw Exp $"
 //
 // RGB_Image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,18 +28,44 @@
 
 #include "Fl_Image.h"
 
+/**
+
+   This subclass of Fl_Image encapsulates a full-color RGB image, 
+   and allows you to make an Fl_Widget use an image as a label, or 
+   to just draw the image directly. This is more efficient than 
+   using fl_draw_image() if you want to draw the same image more than once. 
+
+*/
 class FL_API Fl_RGB_Image : public Fl_Image {
   int depth;
   const uchar* data;
 public:
+  /**
+   Construct using a pointer to RGB data. W and H are the size of 
+   the image in pixels. D is the delta between pixels (it may be
+   more than 3 to skip alpha or other data, or negative to flip 
+   the image left/right). LD is the delta between lines (it may 
+   be more than D * W to crop images, or negative to flip the 
+   image vertically). The data pointer is simply copied to the 
+   object, so it must point at persistent storage. 
+  */
   Fl_RGB_Image(const uchar* d, int W, int H, int D=3)
     : data(d) {w = W; h = H; depth = D;}
-  void draw(int, int, int, int, Fl_Flags = 0);
+  /**
+   The image is drawn with the top-left corner at x,y. 
+   The w and h are ignored. The flags are ignored
+   (although really it should use FL_INACTIVE to gray out the image). 
+  */
+  void draw(int x, int y, int w, int h, Fl_Flags = 0);
+  /**
+   Draws the image with the upper-left corner at x,y. 
+   This is the same as doing draw(x, y, this->w, this->h, flags). 
+  */
   void draw(int x, int y, Fl_Flags f = 0) {draw(x,y,w,h,f);}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_RGB_Image.h,v 1.3 2001/12/10 06:25:42 spitzak Exp $".
+// End of "$Id: Fl_RGB_Image.h,v 1.4 2002/10/29 00:37:23 easysw Exp $".
 //

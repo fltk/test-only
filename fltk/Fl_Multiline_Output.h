@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Multiline_Output.h,v 1.3 2002/01/31 22:54:49 robertk Exp $"
+// "$Id: Fl_Multiline_Output.h,v 1.4 2002/10/29 00:37:23 easysw Exp $"
 //
 // Multi line output header file for the Fast Light Tool Kit (FLTK).
 //
@@ -29,8 +29,28 @@
 #include "Fl_Output.h"
 
 // This class is entirely inline.  If that changes, add FL_API to its declaration
+/**
+
+   This widget is a subclass of Fl_Output that displays multiple lines of 
+   text. It also displays Tab ('\t') characters as whitespace to the
+   next column rather than as ^I. 
+   
+   Long lines of text will have to be horizontally scrolled, currently 
+   the only way to do this is to drag the mouse or move the cursor. 
+   You may want Fl_Wordwrap_Output instead. 
+
+   Because there are no scrollbars, this is probably only good for 
+   small bits of text, 10 lines at most. More powerful editing is 
+   available from the Fl_Text_Editor widget. 
+
+
+*/
 class Fl_Multiline_Output : public Fl_Output {
 public:
+   /**
+      Creates a new Fl_Multiline_Output widget using the given
+      position, size, and label string.
+   */
     Fl_Multiline_Output(int x,int y,int w,int h,const char *l = 0)
 	: Fl_Output(x,y,w,h,l) {type(MULTILINE);}
 };
@@ -38,5 +58,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Multiline_Output.h,v 1.3 2002/01/31 22:54:49 robertk Exp $".
+// End of "$Id: Fl_Multiline_Output.h,v 1.4 2002/10/29 00:37:23 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Editor.h,v 1.2 2002/03/06 08:50:45 spitzak Exp $"
+// "$Id: Fl_Text_Editor.h,v 1.3 2002/10/29 00:37:23 easysw Exp $"
 //
 // Header file for Fl_Text_Editor class.
 //
@@ -33,6 +33,13 @@
 // key will match in any state
 #define FL_TEXT_EDITOR_ANY_STATE  (-1L)
 
+/**
+
+   This is the FLTK text editor widget. It allows the user to edit multiple 
+   lines of text and supports highlighting and scrolling. The buffer that is
+   displayed in the widget is managed by the Fl_Text_Buffer class. 
+
+*/
 class FL_API Fl_Text_Editor : public Fl_Text_Display {
   public:
     typedef int (*Key_Func)(int key, Fl_Text_Editor* editor);
@@ -100,6 +107,6 @@ class FL_API Fl_Text_Editor : public Fl_Text_Display {
 #endif
 
 //
-// End of "$Id: Fl_Text_Editor.h,v 1.2 2002/03/06 08:50:45 spitzak Exp $".
+// End of "$Id: Fl_Text_Editor.h,v 1.3 2002/10/29 00:37:23 easysw Exp $".
 //
 

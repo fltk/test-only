@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.h,v 1.3 2002/03/10 23:10:23 spitzak Exp $"
+// "$Id: Fl_Boxtype.h,v 1.4 2002/10/29 00:37:22 easysw Exp $"
 //
 // Boxes used by FLTK styles.
 //
@@ -30,26 +30,115 @@
 #include "Fl_Flags.h"
 
 // the abstract base class:
+
 class FL_API Fl_Boxtype_ {
 protected:
   int dx_, dy_, dw_, dh_;
   int fills_rectangle_;
 public:
+   /**
+   This is the function that draws the box. 
+   The four integers are the x,y,w,h of the rectangle to 
+   fill with the box. The color is used to fill the interior of 
+   the box with (except for FRAME types which use it to draw the edge). 
+   The last argument is a set of bitflags, the following ones are 
+   useful (ignore any other bits that are on): 
+
+   - FL_INACTIVE  - gray out the widget. 
+   - FL_VALUE     - draw the box pushed in. Typically this is implemented 
+                    by calling another boxtype to do the drawing. 
+   - FL_HIGHLIGHT - draw the box highlighted. Usually you can ignore 
+                    this because the fill color will also be changed. 
+   - FL_SELECTED  - the widget has the focus. 
+   - FL_INVISIBLE - you should only draw the outer edge of the box and 
+                    not fill it in. This is used to draw the boxes around 
+                    browsers and text widgets, and to draw the focus box. 
+                    You can ignore this and things will still draw ok, 
+                    but they may flicker more than necessary. 
+   
+   A simple drawing function might fill a rectangle with the 
+   given color and then draw a black outline: 
+
+   \code
+   void MyBoxtype::draw(int x, int y, int w, int h, Fl_Color c, Fl_Flags f) const
+   {
+     // draw the interior:
+     if (!(f&FL_INVISIBLE)) {
+       fl_color(c);
+       fl_rectf(x+1, y+1, w-2, h-2);
+     }
+     // draw the edge:
+     fl_color(FL_BLACK);
+     fl_rect(x, y, w, h);
+   }
+   \endcode
+   */
   virtual void draw(int,int,int,int, Fl_Color, Fl_Flags=0) const = 0;
+  /**
+   Returns true if the draw function completely fills all the pixels 
+   in the rectangle passed to it (ignoring any FL_INVISIBLE flag). 
+   Many parts of fltk will take advantage of this to speed up drawing 
+   and eliminate blinking. 
+   This is an inline funcion, if you are making a subclass your 
+   constructor should set the protected member variable fills_rectangle_ 
+   with the value you want returned. 
+  */
   int fills_rectangle() const {return fills_rectangle_;}
+  /*@{*/
+  /**
+   Return the offsets for the bounding box that should be subtracted when 
+   drawing the label inside the box. These are all positive numbers, 
+   so dx() and dy() are added to the x and y, while dw() and dh() 
+   are subtracted from the width and height. Usually dw() is two 
+   times dx(), and dh() is two times dy(), and usually dx() 
+   and dy() are equal. 
+   These are inline functions, if you are making a subclass your 
+   constructor should set the protected members dx_, dy_, dw_, 
+   and dh_ to initialize the return value. 
+  */
   int dx() const {return dx_;}
   int dy() const {return dy_;}
   int dw() const {return dw_;}
   int dh() const {return dh_;}
+  /*@}*/
+  /**
+   Changes the passed rectangle into a rectangle that matches 
+   the "interior" of the box. This is an inline function that 
+   just adds or subtracts dx(), dy(), dw(), and dh() from the passed values.
+  */
   void inset(int&X,int&Y,int&W,int&H) const {X+=dx_; Y+=dy_; W-=dw_; H-=dh_;}
   const char* name;
   const Fl_Boxtype_* next;
   static const Fl_Boxtype_* first;
+  /** Default constructor. */
   Fl_Boxtype_() : name(0) {}
+  /**
+   This constructs a "named" boxtype. It is added to a linked 
+   list of all named boxtypes. This list may be searched by 
+   the find() function to find a boxtype by name. This is 
+   useful for themes that want to parse a text file describing the theme. 
+  */
   Fl_Boxtype_(const char* n) : name(n), next(first) {first = this;}
+  /**
+   Locate the first boxtype with the given name. 
+   Case is ignored when doing the comparison. 
+   Returns NULL if no matching name is found.
+  */
   static const Fl_Boxtype_* find(const char* name);
 };
 
+/**
+
+   Fl_Boxtype is a pointer to the structure Fl_Boxtype_, which contains the 
+   information needed to draw the rectangles around and inside widgets. 
+   
+   \image boxtypes.gif
+
+   Boxtypes are stored in the box, button_box, and focus_box fields 
+   of the Fl_Style structure, and typically used by the draw() methods of 
+   Fl_Widgets. 
+
+*/
 typedef const Fl_Boxtype_* Fl_Boxtype;
 
 // draw a pattern of lines around a box, pattern is from the data string
@@ -239,5 +328,5 @@ extern FL_API const Fl_Dotted_Frame fl_dotted_frame;
 #endif
 
 //
-// End of "$Id: Fl_Boxtype.h,v 1.3 2002/03/10 23:10:23 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.h,v 1.4 2002/10/29 00:37:22 easysw Exp $".
 //

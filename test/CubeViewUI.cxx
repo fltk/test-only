@@ -104,6 +104,7 @@ CubeViewUI::CubeViewUI() {
         o->type(Fl_Value_Slider::HORIZONTAL);
         o->label_font(fl_fonts+1);
         o->label_color((Fl_Color)136);
+        o->minimum(1);
         o->maximum(50);
         o->step(0.1);
         o->value(10);

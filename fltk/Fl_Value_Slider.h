@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Value_Slider.h,v 1.2 2002/10/29 00:37:23 easysw Exp $"
 //
 // Value slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,10 +28,22 @@
 
 #include "Fl_Slider.h"
 
+/**
+
+   The Fl_Value_Slider widget is a Fl_Slider widget with a
+   box displaying the current value. 
+
+   \image value_slider.gif
+
+*/
 class FL_API Fl_Value_Slider : public Fl_Slider {
 public:
   void draw();
   int handle(int);
+  /**
+   Creates a new Fl_Value_Slider widget using the given position, size,
+   and label string. The default boxtype is FL_DOWN_BOX . 
+  */
   Fl_Value_Slider(int x,int y,int w,int h, const char *l = 0);
   static Fl_Named_Style* default_style;
 };
@@ -39,5 +51,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Value_Slider.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Value_Slider.h,v 1.2 2002/10/29 00:37:23 easysw Exp $".
 //

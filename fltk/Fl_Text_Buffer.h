@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Buffer.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Text_Buffer.h,v 1.2 2002/10/29 00:37:23 easysw Exp $"
 //
 // Header file for Fl_Text_Buffer class.
 //
@@ -65,6 +65,13 @@ typedef void (*Fl_Text_Modify_Cb)(int pos, int nInserted, int nDeleted,
                                   int nRestyled, const char* deletedText,
                                   void* cbArg);
 
+/**
+
+   The Fl_Text_Buffer class is used by the Fl_Text_Display and
+   Fl_Text_Editor to manage complex text data and is based upon
+   the excellent NEdit text editor engine - see http://www.nedit.org/.
+
+*/
 class FL_API Fl_Text_Buffer {
   public:
     Fl_Text_Buffer(int requestedSize = 0);
@@ -237,5 +244,5 @@ class FL_API Fl_Text_Buffer {
 #endif
 
 //
-// End of "$Id: Fl_Text_Buffer.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Text_Buffer.h,v 1.2 2002/10/29 00:37:23 easysw Exp $".
 //

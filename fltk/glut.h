@@ -1,5 +1,5 @@
 //
-// "$Id: glut.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $"
+// "$Id: glut.h,v 1.3 2002/10/29 00:37:23 easysw Exp $"
 //
 // GLUT emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -53,6 +53,26 @@
 // Glut is emulated using this window class and these static variables
 // (plus several more static variables hidden in glut.C):
 
+/**
+
+   Each GLUT window is an instance of this class. You may find it useful to 
+   manipulate instances directly rather than use GLUT window id's. These may
+   be created without opening the display, and thus can fit better into 
+   FLTK's method of creating windows. 
+
+   The current GLUT window is available in the global variable glut_window.
+
+   new Fl_Glut_Window(...) is the same as glutCreateWindow() except it does
+   not show() the window or make the window current.
+
+   window->make_current() is the same as glutSetWindow(number). If the window
+   has not had show() called on it yet, some functions that assumme an OpenGL
+   context will not work. If you do show() the window, call make_current() 
+   again to set the context.
+
+   ~Fl_Glut_Window() is the same as glutDestroyWindow().
+
+*/
 class FL_GLUT_API Fl_Glut_Window : public Fl_Gl_Window {
   void _init();
   int mouse_down;
@@ -74,8 +94,17 @@ public: // so the inline functions work
   void (*entry)(int);
   void (*visibility)(int);
   void (*special)(int, int x, int y);
+  /*@{*/
+  /**
+   The first constructor takes 4 int arguments to create the window
+   with a preset position and size. The second constructor with 2 arguments
+   will create the window with a preset size, but the window manager will 
+   choose the position according to it's own whims.
+  */
   Fl_Glut_Window(int w, int h, const char *);
   Fl_Glut_Window(int x, int y, int w, int h, const char *);
+  /*@}*/
+  /** Destroys the GLUT window. */
   ~Fl_Glut_Window();
 };
 
@@ -469,5 +498,5 @@ extern void APIENTRY glutSolidIcosahedron();
 #endif                  /* __glut_h__ */
 
 //
-// End of "$Id: glut.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $".
+// End of "$Id: glut.h,v 1.3 2002/10/29 00:37:23 easysw Exp $".
 //

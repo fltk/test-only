@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.h,v 1.2 2001/12/16 22:32:02 spitzak Exp $"
+// "$Id: Fl_Double_Window.h,v 1.3 2002/10/29 00:37:23 easysw Exp $"
 //
 // Double-buffered window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,15 +28,41 @@
 
 #include "Fl_Window.h"
 
+/**
+   The Fl_Double_Window class provides a double-buffered window. If possible 
+   this will use the X double buffering extension (Xdbe). If not, it will 
+   draw the window data into an off-screen pixmap, and then copy it to the 
+   on-screen window. 
+
+   It is highly recommended that you put the following code before the 
+   first show() of any window in your program: 
+
+   Fl::visual(FL_DOUBLE|FL_INDEX)
+
+   This makes sure you can use Xdbe on servers where double buffering does
+   not exist for every visual. 
+*/
 class FL_API Fl_Double_Window : public Fl_Window {
 
 public:
 
   virtual void layout();
+  /**
+   The destructor also deletes all the children. This allows a whole 
+   tree to be deleted at once, without having to keep a pointer to 
+   all the children in the user code.
+  */
   ~Fl_Double_Window();
+
+  /*@{*/
+  /**
+   Creates a new Fl_Double_Window widget using the given position, size,
+   and label (title) string.
+  */
   Fl_Double_Window(int W, int H, const char *l = 0) : Fl_Window(W,H,l) {}
   Fl_Double_Window(int X, int Y, int W, int H, const char *l = 0)
     : Fl_Window(X,Y,W,H,l) {}
+  /*@}*/
 
 protected:
 
@@ -54,5 +80,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Double_Window.h,v 1.2 2001/12/16 22:32:02 spitzak Exp $".
+// End of "$Id: Fl_Double_Window.h,v 1.3 2002/10/29 00:37:23 easysw Exp $".
 //

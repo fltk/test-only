@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Item.h,v 1.3 2002/10/29 00:37:23 easysw Exp $"
 //
 // Widget designed to be a menu or browser item.
 //
@@ -30,6 +30,33 @@
 #include "Fl_Widget.h"
 #endif
 
+/**
+
+   This widget is designed to be put into Fl_Menu and Fl_Browser widgets.
+   
+   It's draw() method is designed to appear correctly inside menus and 
+   browsers, despite inconsistencies in the designs of these things on 
+   Windows. By default it does not erase it's background and assumes that 
+   if FL_SELECTED is set in the flags it should use the 
+   selected_label_color(). You can change this by setting box() or the 
+   colors in the style, or by overriding the draw() method, but if you do
+   so you will probably have to limit your widget to either menus or 
+   browsers, but not both. 
+
+   The browser draws the focus dotted box and the hierarchy indicators, 
+   and the shortcut key assigments in menus is drawn by the menu code. 
+   You cannot turn these off or modify them, unfortunately I was unable 
+   to get these into the child widgets and still replicate the standard 
+   Windows UI appearance. 
+
+   Currently you can set type() to Fl_Item::TOGGLE to get a checkmark on 
+   the left and Fl_Item::RADIO to make it a radio button. This may change
+   in future versions however and you may need to use a subclass for this. 
+
+   In a multi-browser, the selected() indicates if the widget is
+   currently selected. 
+
+*/
 class FL_API Fl_Item : public Fl_Widget {
 public:
   enum { // values for type(), should match Fl_Button
@@ -39,6 +66,11 @@ public:
   };
   void draw();
   void layout();
+
+  /**
+   Unlike other widgets the constructor does not take any dimensions, 
+   since it is assummed the container widget will size this correctly. 
+  */
   Fl_Item(const char* label = 0);
   static Fl_Named_Style* default_style;
 };
