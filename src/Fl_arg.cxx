@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.16 1999/11/10 19:27:32 carl Exp $"
+// "$Id: Fl_arg.cxx,v 1.17 1999/11/15 15:40:41 carl Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -72,19 +72,10 @@ static const char* bg2 = 0;
 
 static void
 getsyscolor(int what, const char *arg, void (*func)(Fl_Color)) {
-  if (arg) {
-    Fl_Color c = fl_rgb(arg);
-    if (!c) Fl::error("Unknown color: %s", arg);
-    else func(c);
-  } else {
-#ifdef WIN32
-    DWORD x = GetSysColor(what);
-    func(fl_rgb(uchar(x&255), uchar(x>>8), uchar(x>>16)));
-#else
-    // For X we should do something. KDE and Gnome store these colors in
-    // some standard places, where?
-#endif
-  }
+  if (!arg) return;
+  Fl_Color c = fl_rgb(arg);
+  if (!c) Fl::error("Unknown color: %s", arg);
+  else func(c);
 }
 
 // consume a switch from argv.  Returns number of words eaten, 0 on error:
@@ -227,7 +218,9 @@ void Fl_Window::show(int argc, char **argv) {
 
 static const char * const helpmsg =
 "options are:\n"
+#ifndef WIN32
 " -d[isplay] host:n.n\n"
+#endif
 " -g[eometry] WxH+X+Y\n"
 " -s[cheme] scheme\n"
 " -t[heme] theme\n"
@@ -382,5 +375,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.16 1999/11/10 19:27:32 carl Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.17 1999/11/15 15:40:41 carl Exp $".
 //
