@@ -22,8 +22,7 @@ USA.  */
 
 #include <config.h>
 
-#if HAVE_SCANDIR
-#else
+#if ! HAVE_SCANDIR
 
 #include <ctype.h>
 #include <stdlib.h>

@@ -1,10 +1,10 @@
 /*
-   "$Id: conf_keys.c,v 1.9 2000/05/27 01:17:30 carl Exp $"
+   "$Id: conf_keys.c,v 1.10 2000/07/20 05:28:32 clip Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
-    Carl Thompson's config file routines version 0.3
-    Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
+    Carl Thompson's conig file routines version 0.5
+    Copyright 1995-2000 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -32,7 +32,8 @@ extern const char* conf_dirname(const char *);
         int getconf_keys(const char *configfile, const char *section,
                          conf_list *list)
         description:
-                gets the list of keys that are in the specified section
+                gets the list of key / value pairs that are in the specified
+                section
         arguments:
                 configfile: path of config file
                 section: section in config file (must be unique in file)
@@ -100,15 +101,15 @@ getconf_keys(const char *configfile, const char *sec, conf_list *list)
     if (strncasecmp(current_section, section, strlen(current_section)))
       continue;                                                                 /* not wanted section or parent */
 
-    if ( (p = strchr(line, conf_sep)) ) *p++ = '\0';                            /* if there is a separator character */
-    else {                                                                      /* no separator? could be command */
-      p = strtok(line, CONF_WHITESPACE);                                        /* get the command */
+    if ( !(p = strchr(line, conf_sep)) ) {                                      /* if there is no separator character */
+      char* sv;                                                                 /* to save strtok_r() state */
+      p = strtok_r(line, CONF_WHITESPACE, &sv);                                 /* get the command */
       if (!strcasecmp(p, "include")) {                                          /* it is include command */
         char fn[CONF_MAXPATHLEN];                                               /* filename of include file */
         char s[CONF_MAX_SECT_LEN];                                              /* what to look for in included file */
         int r;
 
-        p = strtok(0, "");                                                      /* get the name of file to be included */
+        p = strtok_r(0, "", &sv);                                               /* get the name of file to be included */
         conf_trim(p);                                                           /* kill unecessary whitespace */
         if (conf_is_path_rooted(p)) strncpy(fn, p, sizeof(fn));                 /* fully qualified path */
         else snprintf(fn, sizeof(fn), "%s%s", conf_dirname(configfile), p);     /* figure out pathname */
@@ -126,16 +127,21 @@ getconf_keys(const char *configfile, const char *sec, conf_list *list)
       }
       continue;                                                                 /* go to next line */
     }
+    *p++ = '\0';                                                                /* separate value from key */
 
-    /* line is now just key */
+    /* line is now just key, p is value */
     if (!in_correct_section) continue;                                          /* section not found yet, keep looking for it */
     section_found = 1;                                                          /* must be in right section */
 
     conf_trim(line);                                                            /* kill unnecessary whitespace */
+    conf_trim(p);                                                               /* kill unnecessary whitespace */
 
     (*current) = (conf_entry *)malloc(sizeof(conf_entry));                      /* allocate memory for this entry */
-    if (*current) (*current)->data = strdup(line);                              /* duplicate the key for this entry */
-    if ((*current == 0) || ((*current)->data == 0)) {                           /* if we had a memory allocation problem */
+    if (*current) {
+      (*current)->key = strdup(line);                                           /* duplicate the key for this entry */
+      (*current)->value = strdup(p);                                            /* duplicate the value for this entry */
+    }
+    if ((*current == 0) || ((*current)->key == 0) || ((*current)->value == 0)) {/* if we had a memory allocation problem */
       fclose(ifp);                                                              /* close data file */
       return CONF_ERR_MEMORY;                                                   /* and bail out */
     }
@@ -149,6 +155,41 @@ getconf_keys(const char *configfile, const char *sec, conf_list *list)
   return CONF_SUCCESS;                                                          /* it worked? */
 } /* getconf_keys() */
 
+
 /*
-    End of "$Id: conf_keys.c,v 1.9 2000/05/27 01:17:30 carl Exp $".
+        int getconf_list(const conf_list list, const char *key, char *svalue,
+                         int slen)
+
+        description:
+                gets the string associated with a key in a list returned by
+                getconf_keys()
+        arguments:
+                list: list returned by getconf_keys()
+                key: key to look for
+                slen: length of passed string buffer
+        return values:
+                returns 0 for OK or error code defined in conf.h
+                svalue: string associated with key
+*/
+int
+getconf_list(const conf_list list, const char *k, char *svalue, int slen)
+{
+  char key[CONF_MAX_LINE_LEN];
+  conf_entry* cent;
+
+  strncpy(key, k, sizeof(key));
+  conf_trim(key);
+  for (cent = list; cent; cent = cent->next) {
+    if (!strcasecmp(key, cent->key)) {
+      if (!cent->value) return CONF_ERR_NOVALUE;
+      strncpy(svalue, cent->value, slen);
+      return CONF_SUCCESS;
+    }
+  }
+
+  return CONF_ERR_KEY;
+} /* getconf_list() */
+
+/*
+    End of "$Id: conf_keys.c,v 1.10 2000/07/20 05:28:32 clip Exp $".
 */

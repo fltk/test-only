@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde.cxx,v 1.6 2000/07/14 10:09:17 spitzak Exp $"
+// "$Id: fl_kde.cxx,v 1.7 2000/07/20 05:28:33 clip Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -81,25 +81,28 @@ static int x_event_handler(int) {
   if (colors_only && cm->message_type == Style)
     return 0;
   // Geez, really need to work on that logic...
-  //fl_kde(colors_only);
-  Fl::reload_scheme();
+
+  fl_kde(colors_only);
+
   return 1;
 }
 
 static void add_event_handler() {
-  if (General) return; // we have already don this
+  static int done = 0;
+  if (!done) {
+    done = 1;
+    Atom kde_atom = XInternAtom(fl_display, "KDE_DESKTOP_WINDOW", False);
+    long data = 1;
+    XChangeProperty(fl_display, fl_message_window, kde_atom, kde_atom, 32,
+                    PropModeReplace, (unsigned char *)&data, 1);
 
-  Atom kde_atom = XInternAtom(fl_display, "KDE_DESKTOP_WINDOW", False);
-  long data = 1;
-  XChangeProperty(fl_display, fl_message_window, kde_atom, kde_atom, 32,
-		  PropModeReplace, (unsigned char *)&data, 1);
+    General = XInternAtom(fl_display, "KDEChangeGeneral", False);
+    Style = XInternAtom(fl_display, "KDEChangeStyle", False);
+    Palette = XInternAtom(fl_display, "KDEChangePalette", False);
+    KIPC = XInternAtom(fl_display, "KIPC_COMM_ATOM", False);
+  }
 
-  General	= XInternAtom(fl_display, "KDEChangeGeneral", False);
-  Style		= XInternAtom(fl_display, "KDEChangeStyle", False);
-  Palette	= XInternAtom(fl_display, "KDEChangePalette", False);
-  KIPC		= XInternAtom(fl_display, "KIPC_COMM_ATOM", False);
-
-  Fl::add_handler(x_event_handler);
+  Fl::theme_handler(x_event_handler);
 }
 
 #endif
@@ -126,10 +129,10 @@ int fl_kde(int co) {
   int motif_style = 0;
   if (!kderc.get("KDE/widgetStyle", s, sizeof(s)) && !strcasecmp(s, "Motif"))
     motif_style = 1;
-//   if (!colors_only) {
-//     Fl::theme(motif_style ? "motif" : "windows");
-//     // see below for modifications to the motif/windows themes
-//   }
+  if (!colors_only) {
+    Fl::theme(motif_style ? "motif" : "windows");
+    // see below for modifications to the motif/windows themes
+  }
 
   Fl_Color foreground = FL_NO_COLOR;
   if (!kderc.get("General/foreground", s, sizeof(s)))
@@ -167,20 +170,21 @@ int fl_kde(int co) {
   Fl_Font font = 0;
   int fontsize = FL_NORMAL_SIZE;
   static char fontencoding[32] = "";
+  char* sv; // to save strtok_r() state
   if (!kderc.get("General/font", s, sizeof(s))) {
     char fontname[64] = "";
     int fontbold = 0, fontitalic = 0;
 
-    if ( (p = strtok(s, ",")) ) strncpy(fontname, p, sizeof(fontname));
-    if ( (p = strtok(NULL, ",")) ) fontsize = atoi(p);
-    strtok(NULL, ","); // I have no idea what this is
-    if ( (p = strtok(NULL, ",")) ) {
+    if ( (p = strtok_r(s, ",", &sv)) ) strncpy(fontname, p, sizeof(fontname));
+    if ( (p = strtok_r(0, ",", &sv)) ) fontsize = atoi(p);
+    strtok_r(0, ",", &sv); // I have no idea what this is
+    if ( (p = strtok_r(0, ",", &sv)) ) {
       strncpy(fontencoding, p, sizeof(fontencoding));
       if (!strncasecmp(fontencoding, "iso-", 4))
         memmove(fontencoding+3,fontencoding+4, strlen(fontencoding+4)+1); // hack!
     }
-    if ( (p = strtok(NULL, ",")) && !strcmp(p, "75") ) fontbold = 1;
-    if ( (p = strtok(NULL, ",")) && !strcmp(p, "1") ) fontitalic = 1;
+    if ( (p = strtok_r(0, ",", &sv)) && !strcmp(p, "75") ) fontbold = 1;
+    if ( (p = strtok_r(0, ",", &sv)) && !strcmp(p, "1") ) fontitalic = 1;
     font = fl_font(fontname);
     if (font && fontbold) font = font->bold();
     if (font && fontitalic) font = font->italic();
@@ -193,16 +197,16 @@ int fl_kde(int co) {
     char fontname[64] = "";
     int fontbold = 0, fontitalic = 0;
 
-    if ( (p = strtok(s, ",")) ) strncpy(fontname, p, sizeof(fontname));
-    if ( (p = strtok(NULL, ",")) ) menufontsize = atoi(p);
-    strtok(NULL, ","); // I have no idea what this is
-    if ( (p = strtok(NULL, ",")) ) {
+    if ( (p = strtok_r(s, ",", &sv)) ) strncpy(fontname, p, sizeof(fontname));
+    if ( (p = strtok_r(0, ",", &sv)) ) menufontsize = atoi(p);
+    strtok_r(0, ",", &sv); // I have no idea what this is
+    if ( (p = strtok_r(0, ",", &sv)) ) {
       strncpy(menufontencoding, p, sizeof(menufontencoding));
       if (!strncasecmp(menufontencoding, "iso-", 4))
         memmove(menufontencoding+3,menufontencoding+4, strlen(menufontencoding+4)+1); // hack!
     }
-    if ( (p = strtok(NULL, ",")) && !strcmp(p, "75") ) fontbold = 1;
-    if ( (p = strtok(NULL, ",")) && !strcmp(p, "1") ) fontitalic = 1;
+    if ( (p = strtok_r(0, ",", &sv)) && !strcmp(p, "75") ) fontbold = 1;
+    if ( (p = strtok_r(0, ",", &sv)) && !strcmp(p, "1") ) fontitalic = 1;
     menufont = fl_font(fontname);
     if (menufont && fontbold) menufont = font->bold();
     if (menufont && fontitalic) menufont = font->italic();
@@ -362,5 +366,5 @@ int fl_kde(int co) {
 }
 
 //
-// End of "$Id: fl_kde.cxx,v 1.6 2000/07/14 10:09:17 spitzak Exp $".
+// End of "$Id: fl_kde.cxx,v 1.7 2000/07/20 05:28:33 clip Exp $".
 //

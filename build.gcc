@@ -2,6 +2,10 @@
 
 autoconf
 
+# CXX is set to gcc instead of g++ so that libstdc++ is not linked
+# under Linux.  Linking libstdc++ is a good way to make binaries
+# that are not able to work under all distributions.
+
 CC=gcc
 CXX=gcc
 export CC CXX

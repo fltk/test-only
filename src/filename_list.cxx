@@ -1,5 +1,5 @@
 //
-// "$Id: filename_list.cxx,v 1.12 2000/03/17 09:50:09 bill Exp $"
+// "$Id: filename_list.cxx,v 1.13 2000/07/20 05:28:32 clip Exp $"
 //
 // Filename list routines for the Fast Light Tool Kit (FLTK).
 //
@@ -30,8 +30,7 @@
 
 extern "C" {
   int numericsort(dirent **, dirent **);
-#if HAVE_SCANDIR
-#else
+#if ! HAVE_SCANDIR
   int alphasort(dirent **, dirent **);
   int scandir (const char *dir, dirent ***namelist,
 	       int (*select)(dirent *),
@@ -59,5 +58,5 @@ int filename_list(const char *d, dirent ***list) {
 }
 
 //
-// End of "$Id: filename_list.cxx,v 1.12 2000/03/17 09:50:09 bill Exp $".
+// End of "$Id: filename_list.cxx,v 1.13 2000/07/20 05:28:32 clip Exp $".
 //

@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.16 2000/01/11 00:20:16 mike Exp $"
+ * "$Id: config.h,v 1.17 2000/07/20 05:28:33 clip Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -184,7 +184,18 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 
 #define strcasecmp(a,b) stricmp(a,b)
 #define strncasecmp(a,b,c) strnicmp(a,b,c)
+#define strtok_r(a,b,c) strtok(a,b)
 
 /*
- * End of "$Id: config.h,v 1.16 2000/01/11 00:20:16 mike Exp $".
+ * CONF_CACHED
+ *
+ * define this to give reading config files a serious speed boost
+ * but you will need to call conf_clear_cache() to see changes
+ *
+*/
+
+#define CONF_CACHED
+
+/*
+ * End of "$Id: config.h,v 1.17 2000/07/20 05:28:33 clip Exp $".
  */

@@ -1,5 +1,5 @@
 //
-// "$Id: filename_absolute.cxx,v 1.6 2000/04/10 06:45:45 bill Exp $"
+// "$Id: filename_absolute.cxx,v 1.7 2000/07/20 05:28:32 clip Exp $"
 //
 // Filename expansion routines for the Fast Light Tool Kit (FLTK).
 //
@@ -43,7 +43,7 @@
 #endif
 
 #if defined(WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
-inline int isdirsep(char c) {return c=='/' || c=='\\';}
+static inline int isdirsep(char c) {return c=='/' || c=='\\';}
 #else
 #define isdirsep(c) ((c)=='/')
 #endif
@@ -92,5 +92,5 @@ int filename_absolute(char *to,const char *from) {
 }
 
 //
-// End of "$Id: filename_absolute.cxx,v 1.6 2000/04/10 06:45:45 bill Exp $".
+// End of "$Id: filename_absolute.cxx,v 1.7 2000/07/20 05:28:32 clip Exp $".
 //

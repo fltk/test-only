@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.39 2000/06/18 07:57:23 bill Exp $"
+ * "$Id: configh.in,v 1.40 2000/07/20 05:28:31 clip Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -136,6 +136,12 @@
 #  define strcasecmp(a,b) conf_strcasecmp(a,b)
 #endif
 
+#define HAVE_STRTOK_R 0
+
+#if ! HAVE_STRTOK_R
+#  define strtok_r(a,b,c) strtok(a,b)
+#endif
+
 /*
  * HAVE_SYS_SELECT_H:
  *
@@ -196,5 +202,15 @@
 #define CONFIGDIR "."
 
 /*
- * End of "$Id: configh.in,v 1.39 2000/06/18 07:57:23 bill Exp $".
+ * CONF_CACHED
+ *
+ * define this to give reading config files a serious speed boost
+ * but you will need to call conf_clear_cache() to see changes
+ *
+*/
+
+#define CONF_CACHED
+
+/*
+ * End of "$Id: configh.in,v 1.40 2000/07/20 05:28:31 clip Exp $".
  */

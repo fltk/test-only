@@ -1,10 +1,10 @@
 /*
-   "$Id: conf_del.c,v 1.13 2000/05/27 01:17:30 carl Exp $"
+   "$Id: conf_del.c,v 1.14 2000/07/20 05:28:32 clip Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
-    Carl Thompson's config file routines version 0.3
-    Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
+    Carl Thompson's config file routines version 0.5
+    Copyright 1995-2000 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -57,6 +57,8 @@ delconf(const char *configfile, const char *k)
         int             i;                                                      /* generic integer */
         char		*comment = 0;                                           /* comment found on line */
         char            keysect[CONF_MAX_SECT_LEN], *key, *section;             /* key, section, and both */
+
+        conf_clear_cached();
 
         if (!configfile || !k)
                 return CONF_ERR_ARGUMENT;                                       /* NULL pointer was passed */
@@ -290,5 +292,5 @@ delconf(const char *configfile, const char *k)
 } /* delconf() */
 
 /*
-    End of "$Id: conf_del.c,v 1.13 2000/05/27 01:17:30 carl Exp $".
+    End of "$Id: conf_del.c,v 1.14 2000/07/20 05:28:32 clip Exp $".
 */

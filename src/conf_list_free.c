@@ -1,10 +1,10 @@
 /*
-   "$Id: conf_list_free.c,v 1.7 2000/03/02 20:47:17 carl Exp $"
+   "$Id: conf_list_free.c,v 1.8 2000/07/20 05:28:32 clip Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
-    Carl Thompson's config file routines version 0.3
-    Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
+    Carl Thompson's config file routines version 0.5
+    Copyright 1995-2000 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -44,14 +44,16 @@ conf_list_free(conf_list *list)
 
         for (current = *list; current; current = next)                          /* while there are more entries */
         {
-                free(current->data);                                            /* free space used by data element */
+                free(current->key);                                             /* free space used by key element */
+                if (current->value) free(current->value);                       /* free space used by value element */
                 next = current->next;                                           /* pointer to next in list */
                 free(current);                                                  /* free this entry */
         }
 
+        *list = 0;
         return CONF_SUCCESS;                                                    /* successful completion */
 } /* conf_list_free() */
 
 /*
-    End of "$Id: conf_list_free.c,v 1.7 2000/03/02 20:47:17 carl Exp $".
+    End of "$Id: conf_list_free.c,v 1.8 2000/07/20 05:28:32 clip Exp $".
 */

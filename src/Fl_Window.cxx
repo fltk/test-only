@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.48 2000/06/19 06:01:30 bill Exp $"
+// "$Id: Fl_Window.cxx,v 1.49 2000/07/20 05:28:32 clip Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -197,7 +197,7 @@ void Fl_Window::show() {
 #ifndef WIN32
 	fl_open_display();
 #endif
-	fl_startup(); // loads the scheme
+	fl_startup(); // checks flconfig options and loads themes / schemes
       }
 
       layout();
@@ -331,5 +331,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.48 2000/06/19 06:01:30 bill Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.49 2000/07/20 05:28:32 clip Exp $".
 //

@@ -1,10 +1,10 @@
 /*
-   "$Id: conf_sections.c,v 1.8 2000/05/27 01:17:32 carl Exp $"
+   "$Id: conf_sections.c,v 1.9 2000/07/20 05:28:32 clip Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
-    Carl Thompson's config file routines version 0.3
-    Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
+    Carl Thompson's config file routines version 0.5
+    Copyright 1995-2000 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -53,6 +53,7 @@ getconf_sections(const char *configfile, const char *sec, conf_list *list)
   int        section_found;                                                     /* did we ever find the right section? */
   conf_entry **current;                                                         /* pointer to pointer to current entry */
   static int depth = 0;                                                         /* don't go too deep */
+  char       *sv;                                                               /* saved state for strtok_r() */
 
   if (!configfile || !list) return CONF_ERR_ARGUMENT;                           /* NULL pointer was passed */
   if (!sec) sec = "";                                                           /* toplevel section */
@@ -88,8 +89,11 @@ getconf_sections(const char *configfile, const char *sec, conf_list *list)
         if (*p != ']') continue;                                                /* No ']' ?  This shouldn't happen! */
         *p = (char)0;                                                           /* lose the ']' */
         (*current) = (conf_entry *)malloc(sizeof(conf_entry));                  /* allocate memory for this entry */
-        if (*current) (*current)->data = strdup(found);                         /* duplicate the key for this entry */
-        if ((*current == 0) || ((*current)->data == 0)) {                       /* if we had a memory allocation problem */
+        if (*current) {
+          (*current)->key = strdup(found);                                      /* duplicate the key for this entry */
+          (*current)->value = 0;                                                /* no values for section list */
+        }
+        if ((*current == 0) || ((*current)->key == 0)) {                        /* if we had a memory allocation problem */
           fclose(ifp);                                                          /* close data file */
           return CONF_ERR_MEMORY;                                               /* and bail out */
         }
@@ -105,13 +109,13 @@ getconf_sections(const char *configfile, const char *sec, conf_list *list)
       continue;                                                                 /* not wanted section or parent */
 
     if ( (p = strchr(line, conf_sep)) ) continue;                               /* if there is a separator go to next line */
-    p = strtok(line, CONF_WHITESPACE);                                          /* get the command */
+    p = strtok_r(line, CONF_WHITESPACE, &sv);                                   /* get the command */
     if (!strcasecmp(p, "include")) {                                            /* it is include command */
       char fn[CONF_MAXPATHLEN];                                                 /* filename of include file */
       char s[CONF_MAX_SECT_LEN];                                                /* what to look for in included file */
       int r;
 
-      p = strtok(0, "");                                                        /* get the name of file to be included */
+      p = strtok_r(0, "", &sv);                                                 /* get the name of file to be included */
       conf_trim(p);                                                             /* kill unecessary whitespace */
       if (conf_is_path_rooted(p)) strncpy(fn, p, sizeof(fn));                   /* fully qualified path */
       else snprintf(fn, sizeof(fn), "%s%s", conf_dirname(configfile), p);       /* figure out pathname */
@@ -136,5 +140,5 @@ getconf_sections(const char *configfile, const char *sec, conf_list *list)
 } /* getconf_keys() */
 
 /*
-    End of "$Id: conf_sections.c,v 1.8 2000/05/27 01:17:32 carl Exp $".
+    End of "$Id: conf_sections.c,v 1.9 2000/07/20 05:28:32 clip Exp $".
 */

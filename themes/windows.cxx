@@ -1,5 +1,5 @@
 //
-// "$Id: windows.cxx,v 1.12 2000/05/15 21:33:31 carl Exp $"
+// "$Id: windows.cxx,v 1.13 2000/07/20 05:28:33 clip Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -26,10 +26,10 @@
 #include <FL/Fl.H>
 #include <FL/fl_theme.H>
 
-extern "C" int fltk_theme(int, char**) {
+extern "C" int fltk_theme() {
   return fl_windows();
 }
 
 //
-// End of "$Id: windows.cxx,v 1.12 2000/05/15 21:33:31 carl Exp $".
+// End of "$Id: windows.cxx,v 1.13 2000/07/20 05:28:33 clip Exp $".
 //

@@ -1,10 +1,12 @@
+// CET - FIXME - This function is currently semi-broken :-(
+
 /*
-   "$Id: conf_set.c,v 1.12 2000/05/27 01:17:32 carl Exp $"
+   "$Id: conf_set.c,v 1.13 2000/07/20 05:28:32 clip Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
-    Carl Thompson's config file routines version 0.3
-    Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
+    Carl Thompson's config file routines version 0.5
+    Copyright 1995-2000 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -57,6 +59,7 @@ static const char* level_indent(int l) {
                 Please excuse the ugliness of this function.  I will
                 rewrite it eventually, but it seems to work for now...
 */
+
 int setconf(const char *configfile, const char *k, const char *svalue) {
         int             done_flag;                                              /* has entry already been written? */
         int             newsec_flag = 0;                                        /* are we in a new section? */
@@ -76,6 +79,8 @@ int setconf(const char *configfile, const char *k, const char *svalue) {
         int             i, level = 0, current_level = 0, last_level;
 	char            *comment = 0;                                           /* the comment found on the line */
         char            keysect[CONF_MAX_SECT_LEN], *key, *section;             /* key, section, and both */
+
+        conf_clear_cached();
 
         if (!configfile || !k)
                 return CONF_ERR_ARGUMENT;                                       /* NULL pointer was passed */
@@ -684,6 +689,7 @@ printf("4c: %s\n", comment);
         return CONF_SUCCESS;                                                    /* key was not found */
 } /* setconf() */
 
+
 /*
-    End of "$Id: conf_set.c,v 1.12 2000/05/27 01:17:32 carl Exp $".
+    End of "$Id: conf_set.c,v 1.13 2000/07/20 05:28:32 clip Exp $".
 */

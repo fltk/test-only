@@ -1,10 +1,10 @@
 /*
-   "$Id: conf_get.c,v 1.11 2000/05/27 01:17:30 carl Exp $"
+   "$Id: conf_get.c,v 1.12 2000/07/20 05:28:32 clip Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
-    Carl Thompson's config file routines version 0.21
-    Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
+    Carl Thompson's config file routines version 0.5
+    Copyright 1995-2000 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -24,6 +24,8 @@
 
 #include <FL/conf.h>
 #include <config.h>
+
+#ifndef CONF_CACHED
 
 extern int conf_is_path_rooted(const char *);
 extern const char* conf_dirname(const char *);
@@ -103,13 +105,14 @@ getconf(const char *configfile, const char *k, char *svalue, int slen)
 
     if ( (p = strchr(line, conf_sep)) ) *p++ = '\0';                            /* if there is a separator character */
     else {                                                                      /* no separator? could be command */
-      p = strtok(line, CONF_WHITESPACE);                                        /* get the command */
+      char* sv;                                                                 /* to save strtok_r state */
+      p = strtok_r(line, CONF_WHITESPACE, &sv);                                 /* get the command */
       if (!strcasecmp(p, "include")) {                                          /* it is include command */
         char fn[CONF_MAXPATHLEN];                                               /* filename of include file */
         char sk[CONF_MAX_LINE_LEN];                                             /* what to look for in included file */
         int r;
 
-        p = strtok(0, "");                                                      /* get the name of file to be included */
+        p = strtok_r(0, "", &sv);                                               /* get the name of file to be included */
         conf_trim(p);                                                           /* kill unecessary whitespace */
         if (conf_is_path_rooted(p)) strncpy(fn, p, sizeof(fn));                 /* fully qualified path */
         else snprintf(fn, sizeof(fn), "%s%s", conf_dirname(configfile), p);     /* figure out pathname */
@@ -148,6 +151,122 @@ getconf(const char *configfile, const char *k, char *svalue, int slen)
   return CONF_SUCCESS;                                                          /* it worked? */
 } /* getconf() */
 
+
 /*
-    End of "$Id: conf_get.c,v 1.11 2000/05/27 01:17:30 carl Exp $".
+        void conf_clear_cache()
+
+        description:
+                clears all cached config file data so it will be reread
+                from disk
+*/
+
+void conf_clear_cached() {}
+
+#else
+
+#define NUM_CACHED 5
+
+#include <time.h>
+
+static struct {
+  const char    *file;
+  const char    *section;
+  time_t        last_used;
+  conf_list     list;
+} cached[NUM_CACHED];
+
+/*
+        int getconf(const char *configfile, const char *key, char *svalue,
+                    int slen)
+
+        description:
+                gets the string associated with a key in a config file
+        arguments:
+                configfile: path of config file
+                key: section/key to look for
+                slen: length of passed string buffer
+        return values:
+                returns 0 for OK or error code defined in conf.h
+                svalue: string associated with key
+*/
+
+int
+getconf(const char *configfile, const char *k, char *svalue, int slen)
+{
+  char    key[CONF_MAX_LINE_LEN], section[CONF_MAX_LINE_LEN];                   /* key and section to look for */
+  int     use_this;                                                             /* which cached section */
+  int     found;                                                                /* found section already cached */
+  char    *p;                                                                   /* misc char pointer */
+  int     i;                                                                    /* counter */
+
+  if (!configfile || !k || !svalue) return CONF_ERR_ARGUMENT;                   /* NULL pointer was passed */
+
+  strncpy(section, k, sizeof(section));                                         /* copy key and section to buffer */
+  if ((p = strrchr(section, conf_level_sep))) {                                 /* if a level separator found */
+    strncpy(key,  p + 1, sizeof(key));                                          /* set key */
+    *(p) = (char)0;                                                             /* remove key from section */
+  } else {                                                                      /* no level separator found */
+    strcpy(key, section);                                                       /* set key */
+    *section = (char)0;                                                         /* set toplevel section */
+  }
+  conf_trim(section); conf_trim(key);
+
+  use_this = 0; found = 0;
+  for (i = 0; i < NUM_CACHED; i++) {                                            /* loop through all cached sections */
+    if (!cached[i].file) { use_this = i; break; }                               /* if not used yet */
+    if (!strcasecmp(configfile, cached[i].file) &&                              /* if section already cached */
+        !strcasecmp(section, cached[i].section))
+    {
+      found = 1;
+      use_this = i;
+      break;
+    }
+    if (cached[use_this].last_used > cached[i].last_used) use_this = i;
+  }
+
+  if (!found) {
+    int r;
+    if (cached[use_this].file) {
+      free((void *)cached[use_this].file); cached[use_this].file = 0;
+      free((void *)cached[use_this].section);
+      conf_list_free(&cached[use_this].list);
+    }
+    r = getconf_keys(configfile, section, &cached[use_this].list);
+    if (r) return r;
+    cached[use_this].file = strdup(configfile);
+    cached[use_this].section = strdup(section);
+    if (!cached[use_this].file || !cached[use_this].section) {
+      conf_list_free(&cached[use_this].list);
+      return CONF_ERR_MEMORY;
+    }
+  }
+
+  cached[use_this].last_used = time(0);
+  return getconf_list(cached[use_this].list, key, svalue, slen);
+}
+
+/*
+        void conf_clear_cache()
+
+        description:
+                clears all cached config file data so it will be reread
+                from disk
+*/
+
+void
+conf_clear_cached() {
+  int i;                                                                        /* counter */
+
+  for (i = 0; i < NUM_CACHED; i++) {                                            /* loop through all cached sections */
+    if (cached[i].file) {
+      free((void *)cached[i].file); cached[i].file = 0;
+      free((void *)cached[i].section);
+      conf_list_free(&cached[i].list);
+    }
+  }
+}
+#endif
+
+/*
+    End of "$Id: conf_get.c,v 1.12 2000/07/20 05:28:32 clip Exp $".
 */

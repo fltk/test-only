@@ -1,10 +1,10 @@
 /*
-   "$Id: conf_util.c,v 1.5 2000/05/27 01:17:32 carl Exp $"
+   "$Id: conf_util.c,v 1.6 2000/07/20 05:28:32 clip Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
-    Carl Thompson's config file routines version 0.3
-    Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
+    Carl Thompson's config file routines version 0.5
+    Copyright 1995-2000 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -90,5 +90,5 @@ const char *conf_dirname(char *fn)
 }
 
 /*
-    End of "$Id: conf_util.c,v 1.5 2000/05/27 01:17:32 carl Exp $".
+    End of "$Id: conf_util.c,v 1.6 2000/07/20 05:28:32 clip Exp $".
 */

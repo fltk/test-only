@@ -1,10 +1,10 @@
 /*
-   "$Id: conf.h,v 1.14 2000/05/27 01:17:23 carl Exp $"
+   "$Id: conf.h,v 1.15 2000/07/20 05:28:32 clip Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
-    Carl Thompson's config file routines version 0.3
-    Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
+    Carl Thompson's config file routines version 0.5
+    Copyright 1995-2000 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -24,9 +24,7 @@
 /*
         file:           conf.h
         author:         Carl Thompson (clip@home.net)
-        source type:    Ansi C
-        start date:     16 Dec 1995
-        last modified:  26 Nov 1999
+        creation date:  16 Dec 1995
 
         Typical config file format:
 
@@ -63,7 +61,6 @@
 
 #ifndef CONF_H
 #  define CONF_H
-
 
 /* includes */
 #  include <sys/types.h>
@@ -115,17 +112,19 @@ extern "C" {
   /* data types */
   typedef struct _conf_entry
   {
-        char *data;
+        char *key;
+        char *value;
         struct _conf_entry *next;
   } conf_entry;
 
   typedef conf_entry* conf_list;
 
   /* global variables */
-  extern FL_API char   conf_sep;                                                /* seperator charactor used in config files */
-  extern FL_API char   conf_level_sep;                                          /* seperator used to denote nested sections */
-  extern FL_API char	conf_comment_sep;					/* denotes comments */
-  extern FL_API int	conf_comment_column;					/* the column comments start in */
+  extern FL_API char   conf_sep;                  /* seperator charactor used in config files */
+  extern FL_API char   conf_level_sep;            /* seperator used to denote nested sections */
+  extern FL_API char   conf_comment_sep;          /* denotes comments */
+  extern FL_API int    conf_comment_column;       /* the column comments start in */
+
 
 
   /* function declarations */
@@ -145,7 +144,21 @@ extern "C" {
                 svalue: string associated with key
   */
   FL_API int getconf(const char *configfile, const char *key, char *svalue,
-                     int slen);                                                 /* get the string associated with key */
+                     int slen);
+
+
+
+
+  /*
+        void conf_clear_cache()
+
+        description:
+                clears all cached config file data so it will be reread
+                from disk
+  */
+
+  FL_API void conf_clear_cached();
+
 
 
 
@@ -154,18 +167,39 @@ extern "C" {
                          conf_list *list)
 
         description:
-                gets the list of keys that are in the specified section
+                gets the list of key / value pairs that are in the specified
+                section
         arguments:
                 configfile: path of config file
                 section: section in config file (must be unique in file)
                 list: pointer to a conf_list (same as pointer to pointer
-                      to conf_entry) of keys
+                      to conf_entry) of key / value pairs
         return values:
                 returns 0 for OK or error code defined in conf.h
                 returns a pointer to first in list of entries in "list"
   */
   FL_API int getconf_keys(const char *configfile, const char *section,
                           conf_list *list);
+
+
+
+  /*
+        int getconf_list(const conf_list list, const char *key, char *svalue,
+                           int slen)
+
+        description:
+                gets the string associated with a key in a list returned by
+                getconf_keys()
+        arguments:
+                list: list returned by getconf_keys()
+                key: key to look for
+                slen: length of passed string buffer
+        return values:
+                returns 0 for OK or error code defined in conf.h
+                svalue: string associated with key
+  */
+  FL_API int getconf_list(const conf_list list, const char *key, char *svalue,
+                         int slen);
 
 
 
@@ -185,7 +219,7 @@ extern "C" {
                 returns a pointer to first in list of entries in "list"
   */
   FL_API int getconf_sections(const char *configfile, const char *section,
-                             conf_list *list);
+                              conf_list *list);
 
 
 
@@ -216,8 +250,46 @@ extern "C" {
         return values:
                 returns 0 for OK or error code defined in conf.h
   */
-  FL_API int setconf(const char *configfile, const char *key,                   /* set the string associated with key */
+  FL_API int setconf(const char *configfile, const char *key,
                      const char *svalue);
+
+
+
+  /*
+        int setconf_keys(const char *configfile, const char *section,
+                         conf_list list)
+
+        description:
+                sets the list of key / value pairs that are in the specified
+                section from list
+        arguments:
+                configfile: path of config file
+                section: section in config file (must be unique in file)
+                list: a conf_list (same as a pointer to conf_entry) of
+                key / value pairs
+        return values:
+                returns 0 for OK or error code defined in conf.h
+  */
+  FL_API int setconf_keys(const char *configfile, const char *section,
+                          conf_list list);
+
+
+
+  /*
+        int setconf_list(conf_list list, const char *key, const char *svalue)
+
+        description:
+                sets the string associated with a key in a list returned by
+                getconf_keys()
+        arguments:
+                list: list returned by getconf_keys()
+                key: key to look for
+                slen: length of passed string buffer
+                svalue: string associated with key
+        return values:
+                returns 0 for OK or error code defined in conf.h
+  */
+  FL_API int setconf_list(conf_list list, const char *key, const char *svalue);
 
 
 
@@ -232,7 +304,7 @@ extern "C" {
         return values:
                 returns 0 for OK or error code defined in conf.h
   */
-  FL_API int delconf(const char *configfile, const char *key);                  /* delete an entry from section in config file */
+  FL_API int delconf(const char *configfile, const char *key);
 
 
 
@@ -249,7 +321,7 @@ extern "C" {
                 returns 0 for OK or error code defined in conf.h
                 lvalue: the long integer associated with key in section
   */
-  FL_API int getconf_long(const char *configfile, const char *key,              /* get the long value associated with key */
+  FL_API int getconf_long(const char *configfile, const char *key,
                           long *lvalue);
 
 
@@ -266,7 +338,7 @@ extern "C" {
         return values:
                 returns 0 for OK or error code defined in conf.h
   */
-  FL_API int setconf_long(const char *configfile, const char *key,              /* set the long value associated with key */
+  FL_API int setconf_long(const char *configfile, const char *key,
                           long lvalue);
 
 
@@ -284,7 +356,7 @@ extern "C" {
                 returns 0 for OK or error code defined in conf.h
                 bvalue: boolean value associated with key (ON = 1, OFF = 0)
   */
-  FL_API int getconf_boolean(const char *configfile, const char *key,           /* get the boolean value associated with key */
+  FL_API int getconf_boolean(const char *configfile, const char *key,
                              int *bvalue);
 
 
@@ -301,7 +373,7 @@ extern "C" {
         return values:
                 returns 0 for OK or error code defined in conf.h
   */
-  FL_API int setconf_boolean(const char *configfile, const char *key,           /* set the boolean value associated with key */
+  FL_API int setconf_boolean(const char *configfile, const char *key,
                              int bvalue);
 
 
@@ -316,7 +388,7 @@ extern "C" {
         return value:
                 returns pointer to a static error message string
   */
-  FL_API const char *getconf_error(int error);                                  /* get error string associated with error number */
+  FL_API const char *getconf_error(int error);
 
 
 
@@ -398,7 +470,6 @@ extern "C" {
 
   FL_API int conf_is_path_rooted(const char *path);
 
-
 #  ifdef __cplusplus
 }
 #  endif
@@ -406,5 +477,5 @@ extern "C" {
 #endif /* !CONF_H */
 
 /*
- * End of "$Id: conf.h,v 1.14 2000/05/27 01:17:23 carl Exp $".
+ * End of "$Id: conf.h,v 1.15 2000/07/20 05:28:32 clip Exp $".
  */

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.117 2000/07/14 10:09:17 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.118 2000/07/20 05:28:32 clip Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -735,7 +735,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
   case WM_SYSCOLORCHANGE:
   case WM_SETTINGCHANGE:
-    Fl::reload_scheme();
+    // reload windows colors only if we haven't forced a scheme
+    if (!Fl::scheme()) { fl_get_system_colors(); window->redraw(); }
     break;
 
   default:
@@ -1158,5 +1159,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.117 2000/07/14 10:09:17 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.118 2000/07/20 05:28:32 clip Exp $".
 //

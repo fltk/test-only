@@ -1,5 +1,5 @@
 //
-// "$Id: classic.cxx,v 1.22 2000/05/30 10:37:52 carl Exp $"
+// "$Id: classic.cxx,v 1.23 2000/07/20 05:28:33 clip Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -48,7 +48,7 @@ static const Fl_Highlight_Box menu_title_box(0, &always_up_box);
 
 extern "C" int fltk_theme(int, char**);
 
-int fltk_theme(int, char**) {
+int fltk_theme() {
 
   fl_up_box.data = always_up_box.data = "AAAAWUJJUTNN";
   fl_down_box.data = "NNTUJJUWAAAA";
@@ -90,5 +90,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: classic.cxx,v 1.22 2000/05/30 10:37:52 carl Exp $".
+// End of "$Id: classic.cxx,v 1.23 2000/07/20 05:28:33 clip Exp $".
 //

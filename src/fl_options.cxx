@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.66 2000/07/14 10:09:17 spitzak Exp $"
+// "$Id: fl_options.cxx,v 1.67 2000/07/20 05:28:32 clip Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -21,7 +21,7 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
-//                                   Shell No 2
+//
 
 #include <stdio.h>
 #include <string.h>
@@ -35,6 +35,7 @@
 #include <FL/Fl_Labeltype.H>
 #include <FL/Fl_Style.H>
 #include <FL/Fl_Widget.H>
+#include <FL/fl_theme.H>
 #include <config.h>
 #if defined(WIN32) || defined(__EMX__)
 #  include <windows.h>
@@ -56,44 +57,52 @@ extern "C" int access(const char *, int);
 const char* Fl::scheme_ = 0;
 Fl_Color fl_bg_switch = 0; // set by -bg in Fl_arg.cxx
 
+// startup theme and scheme
+const char* fl_startup_theme = 0;
+const char* fl_startup_scheme = 0;
+
 static const char* flconfig = 0;
-static char beenhere = 0;
 extern void fl_get_system_colors();
 
-static int load_scheme(const char*);
+// This is necessary so that only one theme will process events at a time
+static Fl_Theme_Handler _theme_handler = 0;
+
+void Fl::theme_handler(Fl_Theme_Handler handler) {
+  _theme_handler = handler;
+}
+
+static int theme_handler(int e) {
+  return _theme_handler ? _theme_handler(e) : 0;
+}
+
+// this is necessary for future compatibility
+static const char* flconfig_section = "default";
 
 // one-time startup stuff
 void fl_startup() {
-  beenhere = 1;
   if (!flconfig) {
     const char* p = fl_find_config_file("flconfig");
     if (p) flconfig = strdup(p);
   }
-  fl_get_system_colors();
-  const char* s = Fl::scheme();
-  char temp[PATH_MAX];
-  if (!s && !getconf(flconfig, "default/scheme", temp, sizeof(temp))) s = temp;
-  load_scheme(s);
-  if (fl_bg_switch) fl_background(fl_bg_switch);
-}
-
-// After it is opened it can call this to redo everything:
-int Fl::reload_scheme() {
   Fl_Style::revert();
-  fl_startup();
-  return 0;
-}
 
-// When we change the scheme we automatically call reload_scheme if needed:
-int Fl::scheme(const char* s) {
-  if (scheme_ == s) return 0;
-  if (s && scheme_ && !strcmp(s,scheme_)) return 0;
-  scheme_ = s;
-  if (beenhere) reload_scheme();
-  return 1;
-}
+  char temp[PATH_MAX];
+  const char* s = fl_startup_scheme;
+  if (!s && !Fl::getconf("scheme", temp, sizeof(temp))) s = temp;
+  if (s) Fl::scheme(s);
+  else fl_get_system_colors();
+  const char *t = fl_startup_theme;
+  if (!t && !Fl::getconf("theme", temp, sizeof(temp))) t = temp;
+  if (t) Fl::theme(t);
+  if (fl_bg_switch) fl_background(fl_bg_switch);
 
-// The rest of this is Carl's config file reader:
+  // do this only once
+  static int theme_handler_added = 0;
+  if (!theme_handler_added) {
+    theme_handler_added = 1;
+    Fl::add_handler(theme_handler);
+  }
+}
 
 static Fl_Color grok_color(const char* cf, const char *colstr) {
   char key[80], val[32];
@@ -119,9 +128,15 @@ static Fl_Font grok_font(const char* cf, const char* fontstr) {
   return fl_font(p);
 }
 
-static int load_theme(const char*);
-
-static int load_scheme(const char* s) {
+int Fl::scheme(const char *s) {
+  Fl_Style::revert();
+  if (s) {
+    if (!strcasecmp(s, "none")) s = 0;
+    else s = strdup(s);
+  }
+  if (Fl::scheme_) free((void*)Fl::scheme_);
+  Fl::scheme_ = s;
+  if (!s) return 0;
 
   char temp[PATH_MAX];
   strncpy(temp, s, sizeof(temp));
@@ -138,9 +153,7 @@ static int load_scheme(const char* s) {
 
   char sfile[PATH_MAX];
   strncpy(sfile, p, sizeof(sfile));
-  if (!::getconf(sfile, "general/themes", temp, sizeof(temp)))
-    for (p = strtok(temp, CONF_WHITESPACE); p; p = strtok(NULL, CONF_WHITESPACE))
-      load_theme(p);
+  if (!::getconf(sfile, "general/themes", temp, sizeof(temp))) theme(temp);
   char valstr[80];
   Fl_Color col;
 
@@ -168,89 +181,85 @@ static int load_scheme(const char* s) {
     }
   }
 
-  for (Fl_Named_Style* style = Fl_Named_Style::first; style; style = style->next) {
-    int namepos = snprintf(temp, sizeof(temp), "widgets/%s/", style->name);
-    int namelen = sizeof(temp)-namepos;
+  conf_list section_list = 0, key_list = 0;
+  conf_entry* cent;
 
-    // box type
-    Fl_Boxtype boxtype;
-    strncpy(temp+namepos, "box", namelen);
-    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-      if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->box = boxtype;
+  Fl_Font font;
+  Fl_Labeltype labeltype;
+  Fl_Boxtype boxtype;
 
-    // glyph box type
-    strncpy(temp+namepos, "text box", namelen);
-    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-      if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->text_box = boxtype;
+  if (!getconf_sections(sfile, "widgets", &section_list)) {
+    for (cent = section_list; cent; cent = cent->next) {
+      Fl_Style* style = Fl_Style::find(cent->key);
+      if (!style) continue;
 
-    // color
-    strncpy(temp+namepos, "color", namelen);
-    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-      style->color = grok_color(sfile, valstr);
+      snprintf(temp, sizeof(temp), "widgets/%s", cent->key);
+      getconf_keys(sfile, temp, &key_list);
 
-    // label color
-    strncpy(temp+namepos, "label color", namelen);
-    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-      style->label_color = grok_color(sfile, valstr);
+      // box type
+      if (!getconf_list(key_list, "box", valstr, sizeof(valstr)))
+        if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->box = boxtype;
 
-    // selection color
-    strncpy(temp+namepos, "selection color", namelen);
-    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-      style->selection_color = grok_color(sfile, valstr);
 
-    // selection text color
-    strncpy(temp+namepos, "selection text color", namelen);
-    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-      style->selection_text_color = grok_color(sfile, valstr);
+      // glyph box type
+      if (!getconf_list(key_list, "text box", valstr, sizeof(valstr)))
+        if ( (boxtype = Fl_Boxtype_::find(valstr)) ) style->text_box = boxtype;
 
-    // off color
-    strncpy(temp+namepos, "text background", namelen);
-    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-      style->text_background = grok_color(sfile, valstr);
+      // color
+      if (!getconf_list(key_list, "color", valstr, sizeof(valstr)))
+        style->color = grok_color(sfile, valstr);
 
-    // highlight color
-    strncpy(temp+namepos, "highlight color", namelen);
-    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-      style->highlight_color = grok_color(sfile, valstr);
+      // label color
+      if (!getconf_list(key_list, "label color", valstr, sizeof(valstr)))
+        style->label_color = grok_color(sfile, valstr);
 
-    // highlight label color
-    strncpy(temp+namepos, "highlight label color", namelen);
-    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-      style->highlight_label_color = grok_color(sfile, valstr);
+      // selection color
+      if (!getconf_list(key_list, "selection color", valstr, sizeof(valstr)))
+        style->selection_color = grok_color(sfile, valstr);
 
-    // color
-    strncpy(temp+namepos, "text color", namelen);
-    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-      style->text_color = grok_color(sfile, valstr);
+      // selection text color
+      if (!getconf_list(key_list, "selection text color", valstr, sizeof(valstr)))
+        style->selection_text_color = grok_color(sfile, valstr);
 
-    Fl_Font font;
+      // off color
+      if (!getconf_list(key_list, "text background", valstr, sizeof(valstr)))
+        style->text_background = grok_color(sfile, valstr);
 
-    // label font
-    strncpy(temp+namepos, "label font", namelen);
-    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-      if ( (font = grok_font(sfile, valstr)) ) style->label_font = font;
+      // highlight color
+      if (!getconf_list(key_list, "highlight color", valstr, sizeof(valstr)))
+        style->highlight_color = grok_color(sfile, valstr);
 
-    // text font
-    strncpy(temp+namepos, "text font", namelen);
-    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-      if ( (font = grok_font(sfile, valstr)) ) style->text_font = font;
+      // highlight label color
+      if (!getconf_list(key_list, "highlight label color", valstr, sizeof(valstr)))
+        style->highlight_label_color = grok_color(sfile, valstr);
 
-    // label type
-    Fl_Labeltype labeltype;
-    strncpy(temp+namepos, "label type", namelen);
-    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-      if ( (labeltype = Fl_Labeltype_::find(valstr)) ) style->label_type = labeltype;
+      // color
+      if (!getconf_list(key_list, "text color", valstr, sizeof(valstr)))
+        style->text_color = grok_color(sfile, valstr);
 
-    // label size
-    strncpy(temp+namepos, "label size", namelen);
-    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-      style->label_size = (int)strtol(valstr,0,0);
+      // label font
+      if (!getconf_list(key_list, "label font", valstr, sizeof(valstr)))
+        if ( (font = grok_font(sfile, valstr)) ) style->label_font = font;
 
-    // text size
-    strncpy(temp+namepos, "text size", namelen);
-    if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-      style->text_size = (int)strtol(valstr,0,0);
+      // text font
+      if (!getconf_list(key_list, "text font", valstr, sizeof(valstr)))
+        if ( (font = grok_font(sfile, valstr)) ) style->text_font = font;
 
+      // label type
+      if (!getconf_list(key_list, "label type", valstr, sizeof(valstr)))
+        if ( (labeltype = Fl_Labeltype_::find(valstr)) ) style->label_type = labeltype;
+
+      // label size
+      if (!getconf_list(key_list, "label size", valstr, sizeof(valstr)))
+        style->label_size = (int)strtol(valstr,0,0);
+
+      // text size
+      if (!getconf_list(key_list, "text size", valstr, sizeof(valstr)))
+        style->text_size = (int)strtol(valstr,0,0);
+
+      conf_list_free(&key_list);
+    }
+    conf_list_free(&section_list);
   }
 
   Fl::redraw();
@@ -258,9 +267,9 @@ static int load_scheme(const char* s) {
 }
 
 static int load_theme(const char *t) {
+  if (!t) return 0;
 // don't try to load themes if not linked to shared libraries
-  //#ifdef FL_SHARED
-  if (!t) { Fl_Style::revert(); return 0; }
+#ifdef FL_SHARED
   char temp[PATH_MAX];
   strncpy(temp, t, sizeof(temp));
   if (strlen(temp)<6 || strcasecmp(temp+strlen(temp)-6, ".theme"))
@@ -278,14 +287,32 @@ static int load_theme(const char *t) {
   }
 
   strncpy(temp, tfile, sizeof(temp));
-  int r = fl_load_plugin(temp, "fltk_theme");
-  if (r) {
-    fprintf(stderr, "Cannot load theme \"%s\": %d\n", temp, r);
-    return r;
+  Fl_Theme_Function f = (Fl_Theme_Function)fl_load_plugin(temp, "fltk_theme");
+  if (!f) {
+    fprintf(stderr, "Cannot load theme \"%s\"\n", temp);
+    return -2;
+  }
+
+  if ( f() ) {
+    fprintf(stderr, "Cannot start theme \"%s\"\n", temp);
+    return -3;
   }
 
   Fl::redraw();
-  //#endif
+#endif
+  return 0;
+}
+
+int Fl::theme(const char* t) {
+  char temp[PATH_MAX], *p, *s;
+  strncpy(temp, t, sizeof(temp));
+  p = strtok_r(temp, CONF_WHITESPACE, &s);
+  while (p) {
+    int r;
+    if ( (r = load_theme(p)) ) return r;
+    p = strtok_r(0, CONF_WHITESPACE, &s);
+  }
+
   return 0;
 }
 
@@ -325,8 +352,14 @@ const char* fl_find_config_file(const char* fn, int cflag) {
   return (cflag || !access(path, R_OK)) ? path : 0;
 }
 
+int Fl::getconf(const char *key, char *value, int value_length) {
+  char temp[80];
+  snprintf(temp, sizeof(temp), "%s/%s", flconfig_section, key);
+  return ::getconf(flconfig, temp, value, value_length);
+}
+
 //
-// End of "$Id: fl_options.cxx,v 1.66 2000/07/14 10:09:17 spitzak Exp $".
+// End of "$Id: fl_options.cxx,v 1.67 2000/07/20 05:28:32 clip Exp $".
 //
 
 

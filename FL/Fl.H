@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.54 2000/07/14 10:09:17 spitzak Exp $"
+// "$Id: Fl.H,v 1.55 2000/07/20 05:28:31 clip Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -218,10 +218,13 @@ public:
   static void awake(void* message = 0);
   static void* thread_message();
 
-  // styles:
-  static const char* scheme() {return scheme_;}
+  // themes & schemes:
+  static void theme_handler(Fl_Theme_Handler);
+  static int theme(const char*);
   static int scheme(const char*);
-  static int reload_scheme();
+  static const char* scheme() {return scheme_;}
+  static int reload_scheme() { return scheme(scheme()); }
+  static int getconf(const char *key, char *value, int value_length);
 
 private:
   static const char* scheme_;
@@ -232,5 +235,5 @@ FL_API const char* fl_find_config_file(const char*, int = 0);
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.54 2000/07/14 10:09:17 spitzak Exp $".
+// End of "$Id: Fl.H,v 1.55 2000/07/20 05:28:31 clip Exp $".
 //

@@ -1,10 +1,10 @@
 /*
-   "$Id: conf.c,v 1.7 2000/03/02 20:47:15 carl Exp $"
+   "$Id: conf.c,v 1.8 2000/07/20 05:28:32 clip Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
-    Carl Thompson's config file routines version 0.3
-    Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
+    Carl Thompson's config file routines version 0.5
+    Copyright 1995-2000 Carl Everard Thompson (clip@home.net)
 
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public
@@ -24,9 +24,7 @@
 /*
         file:           conf.c
         author:         Carl Thompson (clip@home.net)
-        source type:    Ansi C
         start date:     16 Dec 1995
-        last modified:  26 Nov 1999
 
         Typical config file format:
 
@@ -67,5 +65,5 @@ char	    conf_comment_sep = '#';						/* this denotes comments */
 int         conf_comment_column = 51;						/* what column comments start in */
 
 /*
-    End of "$Id: conf.c,v 1.7 2000/03/02 20:47:15 carl Exp $".
+    End of "$Id: conf.c,v 1.8 2000/07/20 05:28:32 clip Exp $".
 */

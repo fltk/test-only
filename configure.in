@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.84 2000/07/14 08:34:59 clip Exp $"
+dnl# "$Id: configure.in,v 1.85 2000/07/20 05:28:31 clip Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -200,6 +200,7 @@ AC_CHECK_FUNCS(snprintf,
     fi)
 AC_CHECK_FUNCS(strcasecmp)
 AC_CHECK_FUNCS(vsprintf)
+AC_CHECK_FUNCS(strtok_r)
 
 AC_PATH_XTRA
 dnl# echo "Ignoring libraries \"$X_PRE_LIBS\" requested by configure."
@@ -412,5 +413,5 @@ AC_OUTPUT(makeinclude fltk-config Makefile)
 chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.84 2000/07/14 08:34:59 clip Exp $".
+dnl# End of "$Id: configure.in,v 1.85 2000/07/20 05:28:31 clip Exp $".
 dnl#
