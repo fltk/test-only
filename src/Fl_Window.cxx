@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.51 2000/08/08 21:32:58 clip Exp $"
+// "$Id: Fl_Window.cxx,v 1.52 2000/08/10 02:26:36 clip Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -117,46 +117,40 @@ extern void fl_fix_focus();
 
 char fl_show_iconic; // set by iconize() or by -i Fl::arg switch
 
+#include <stdio.h>
 int Fl_Window::handle(int event) {
-
   switch (event) {
-
-  case FL_SHOW: {
-
-    if (!i) create();
-    Fl_Group::handle(event); // make the child windows map first
+    case FL_SHOW: {
+      if (!i) create();
+      Fl_Group::handle(event); // make the child windows map first
 #ifdef WIN32
-    int showtype;
-    if (parent())
-      showtype = SW_RESTORE;
-    // See if the window should be invisible initially:
-    else if (fl_show_iconic || modal_for_ && !modal_for_->visible())
-      showtype = SW_SHOWMINNOACTIVE;
-    // If we've captured the mouse, we dont want do activate any
-    // other windows from the code, or we loose the capture.
-    // Also, we don't want to activate the window for tooltips.
-    else if (Fl::grab() || !border())
-      showtype = SW_SHOWNOACTIVATE;
-    else
-      showtype = SW_SHOWNORMAL;
-    ShowWindow(i->xid, showtype);
-#else
-    if (parent())
-      XMapWindow(fl_display, i->xid);
-    else
-      XMapRaised(fl_display, i->xid);
-#endif
-    return 0;}
-    
-  case FL_HIDE:
-    if (i) {
-      if (modal())
-	destroy(); // needed so modal can change next time
+      int showtype;
+      if (parent())
+        showtype = SW_RESTORE;
+      // If we've captured the mouse, we dont want do activate any
+      // other windows from the code, or we loose the capture.
+      // Also, we don't want to activate the window for tooltips.
+      else if (Fl::grab() || !border())
+        showtype = SW_SHOWNOACTIVATE;
       else
-	XUnmapWindow(fl_display, i->xid);
+        showtype = SW_SHOWNORMAL;
+      ShowWindow(i->xid, showtype);
+#else
+      if (parent())
+        XMapWindow(fl_display, i->xid);
+      else
+        XMapRaised(fl_display, i->xid);
+#endif
+      return 0; // why is this returning 0?
     }
-    break;
 
+    case FL_HIDE: {
+      if (i) {
+        if (modal()) destroy(); // needed so modal can change next time
+        else XUnmapWindow(fl_display, i->xid);
+      }
+      break;
+    }
   }
 
   if (Fl_Group::handle(event)) return 1;
@@ -175,10 +169,19 @@ int Fl_Window::handle(int event) {
   return 0;
 }
 
+const Fl_Window* Fl_Window::modal_for() const {
+  const Fl_Window* w = modal_for_;
+  while (w && w->parent()) w = w->window();
+  if (w && w->shown()) return w;
+  return 0;
+}
+
 void Fl_Window::show() {
   if (!parent()) {
-
     if (modal()) {Fl::modal_ = this; fl_fix_focus();}
+    // if this is a modal or non modal window, recreate each time to make
+    // sure that modal_for is handled properly.
+    if (modal() || non_modal()) destroy();
 
     if (!shown()) {
       // Create a new top-level window
@@ -211,13 +214,6 @@ void Fl_Window::show() {
 	  size_range(w(), h(), w(), h());
 	}
       }
-
-      // back compatability with older modal() and non_modal() flags:
-      if (non_modal() && !modal_for_) {
-	modal_for_ = Fl::first_window();
-	while (modal_for_ && modal_for_->parent())
-	  modal_for_ = modal_for_->window();
-      }
     } else if (visible()) {
       // raise/deiconize windows
 #ifdef WIN32
@@ -231,17 +227,15 @@ void Fl_Window::show() {
   Fl_Widget::show();
 }
 
-void Fl_Window::show(const Fl_Window* modal_for) {
-  // find the outermost window and make sure it has been shown():
-  while (modal_for && modal_for->parent()) modal_for = modal_for->window();
-  if (modal_for && modal_for->shown()) modal_for_ = modal_for;
+void Fl_Window::show(const Fl_Window* w) {
+  modal_for(w);
   show();
 }
 
-int Fl_Window::exec(const Fl_Window* modal_for) {
+int Fl_Window::exec(const Fl_Window* w) {
   clear_value();
   set_modal();
-  show(modal_for);
+  show(w);
   while (visible()) Fl::wait();
   return value();
 }
@@ -268,7 +262,6 @@ void Fl_Window::flush() {
 }
 
 void Fl_Window::destroy() {
-
   Fl_X* x = i;
   if (!x) return;
   i = 0;
@@ -329,5 +322,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.51 2000/08/08 21:32:58 clip Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.52 2000/08/10 02:26:36 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.88 2000/08/08 23:17:42 clip Exp $"
+// "$Id: Fl_x.cxx,v 1.89 2000/08/10 02:26:36 clip Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1071,6 +1071,9 @@ void Fl_X::create(Fl_Window* w,
     mask |= CWBackPixel;
   }
 
+  // save the current first window in case we need it for modal_for
+  Fl_Window* top = Fl::first_window();
+
   int W = w->w();
   if (W <= 0) W = 1; // X don't like zero...
   int H = w->h();
@@ -1115,8 +1118,14 @@ void Fl_X::create(Fl_Window* w,
 		    XA_ATOM, sizeof(int)*8, 0, (unsigned char*)&version, 1);
 
     // Send child window information:
-    if (w->modal_for())
-      XSetTransientForHint(fl_display, x->xid, w->modal_for()->i->xid);
+
+    // back compatability with older modal() and non_modal() flags:
+    Window modal_for;
+    if (w->modal() || w->non_modal()) {
+      if (w->modal_for()) modal_for = w->modal_for()->i->xid;
+      else modal_for = top->i->xid;
+      XSetTransientForHint(fl_display, x->xid, modal_for);
+    }
 
     // Set up the icon and initial icon state:
     XWMHints hints;
@@ -1292,5 +1301,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.88 2000/08/08 23:17:42 clip Exp $".
+// End of "$Id: Fl_x.cxx,v 1.89 2000/08/10 02:26:36 clip Exp $".
 //

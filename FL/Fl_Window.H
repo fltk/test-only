@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.39 2000/08/08 21:32:59 clip Exp $"
+// "$Id: Fl_Window.H,v 1.40 2000/08/10 02:26:36 clip Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -86,7 +86,7 @@ public:
   void cursor(Fl_Cursor, Fl_Color=FL_BLACK, Fl_Color=FL_WHITE);
   static void default_callback(Fl_Window*, void* v);
 
-  const Fl_Window* modal_for() { return modal_for_; }
+  const Fl_Window* modal_for() const;
   void modal_for(const Fl_Window* w) { modal_for_ = w; }
 
   virtual void layout();
@@ -122,5 +122,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.39 2000/08/08 21:32:59 clip Exp $".
+// End of "$Id: Fl_Window.H,v 1.40 2000/08/10 02:26:36 clip Exp $".
 //

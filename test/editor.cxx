@@ -1,5 +1,5 @@
 //
-// "$Id: editor.cxx,v 1.5 2000/08/09 04:45:26 clip Exp $"
+// "$Id: editor.cxx,v 1.6 2000/08/10 02:26:36 clip Exp $"
 //
 // A simple text editor program for the Fast Light Tool Kit (FLTK).
 //
@@ -62,6 +62,7 @@ void replcan_cb(Fl_Widget*, void*);
 class EditorWindow : public Fl_Double_Window {
   public:
     EditorWindow(int w, int h, const char* t);
+    ~EditorWindow();
 
     Fl_Window          *replace_dlg;
     Fl_Input           *replace_find;
@@ -69,6 +70,7 @@ class EditorWindow : public Fl_Double_Window {
     Fl_Button          *replace_all;
     Fl_Return_Button   *replace_next;
     Fl_Button          *replace_cancel;
+
     Fl_Text_Editor     *editor;
     char               search[256];
 };
@@ -92,9 +94,13 @@ EditorWindow::EditorWindow(int w, int h, const char* t) : Fl_Double_Window(w, h,
     replace_cancel = new Fl_Button(230, 70, 60, 25, "Cancel");
     replace_cancel->callback((Fl_Callback *)replcan_cb, this);
   replace_dlg->end();
-  replace_dlg->set_modal();
+  replace_dlg->set_non_modal();
   editor = 0;
   *search = (char)0;
+}
+
+EditorWindow::~EditorWindow() {
+  delete replace_dlg;
 }
 
 int check_save(void) {
@@ -279,7 +285,7 @@ void quit_cb(Fl_Widget*, void*) {
 
 void replace_cb(Fl_Widget*, void* v) {
   EditorWindow* e = (EditorWindow*)v;
-  e->replace_dlg->show();
+  e->replace_dlg->show(e);
 }
 
 void replace2_cb(Fl_Widget*, void* v) {
@@ -444,5 +450,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: editor.cxx,v 1.5 2000/08/09 04:45:26 clip Exp $".
+// End of "$Id: editor.cxx,v 1.6 2000/08/10 02:26:36 clip Exp $".
 //
