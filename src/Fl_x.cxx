@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.144 2003/04/19 21:45:29 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.145 2003/05/25 18:07:35 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1249,7 +1249,7 @@ const char *filename_name(const char *name) {
   return q;
 }
 
-void Window::label(const char *name,const char *iname) {
+void Window::label(const char *name, const char *iname) {
   Widget::label(name);
   iconlabel_ = iname;
   if (i && !parent()) {
@@ -1444,5 +1444,5 @@ bool fltk::get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.144 2003/04/19 21:45:29 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.145 2003/05/25 18:07:35 spitzak Exp $".
 //

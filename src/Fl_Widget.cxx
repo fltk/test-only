@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.100 2003/03/09 07:51:36 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.101 2003/05/25 18:07:35 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -69,15 +69,17 @@ Widget::~Widget() {
   if (flags_&COPIED_LABEL) free((void*)label_);
 }
 
-void Widget::label(const char* a) {
+void Widget::label(const char* s) {
+  if (label_ == s) return; // Avoid problems if label(label()) is called
   if (flags_&COPIED_LABEL) {
     free((void*)label_);
     flags_ &= ~COPIED_LABEL;
   }
-  label_ = a;
+  label_ = s;
 }
 
 void Widget::copy_label(const char* s) {
+  if (label_ == s) return; // Avoid problems if label(label()) is called
   if (flags_&COPIED_LABEL) free((void*)label_);
   if (s) {
     label_ = strdup(s);
@@ -544,5 +546,5 @@ void Widget::draw()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.100 2003/03/09 07:51:36 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.101 2003/05/25 18:07:35 spitzak Exp $".
 //
