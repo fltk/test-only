@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.140 2003/01/26 06:06:31 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.141 2003/02/21 18:16:51 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -254,6 +254,7 @@ Atom XdndStatus;
 Atom XdndActionCopy;
 Atom XdndFinished;
 Atom textplain;
+Atom textplain2;
 Atom texturilist;
 //Atom XdndProxy;
 
@@ -303,6 +304,7 @@ void fltk::open_display(Display* d) {
   XdndActionCopy	= XInternAtom(d, "XdndActionCopy",	0);
   XdndFinished		= XInternAtom(d, "XdndFinished",	0);
   textplain		= XInternAtom(d, "text/plain",		0);
+  textplain2		= XInternAtom(d, "TEXT",		0);
   texturilist		= XInternAtom(d, "text/uri-list",	0);
   //XdndProxy		= XInternAtom(d, "XdndProxy",		0);
 
@@ -520,6 +522,7 @@ bool fltk::handle()
 {
   Window* window = find(xevent.xany.window);
   int event = 0;
+  static unsigned lastkeycode;
 
   switch (xevent.type) {
 
@@ -589,6 +592,7 @@ bool fltk::handle()
 	XFree(x);
 #else
 	if (type == textplain) {dnd_type = type; break;} // our favorite
+	if (type == textplain2) {dnd_type = type; break;} // ok
 	if (type == texturilist) dnd_type = type; // ok
 #endif
       }
@@ -793,50 +797,56 @@ bool fltk::handle()
     break;
 
   case KeyPress:
-  case KeyRelease: {
-  KEYPRESS:
+  KEYPRESS: {
     //if (grab_) XAllowEvents(xdisplay, SyncKeyboard, CurrentTime);
     unsigned keycode = xevent.xkey.keycode;
-    static unsigned lastkeycode;
-    if (xevent.type == KeyPress) {
-      event = KEY;
-      fl_key_vector[keycode/8] |= (1 << (keycode%8));
-      // Make repeating keys increment the click counter:
-      if (keycode == lastkeycode) {
-	e_clicks++;
-	e_is_click = 0;
-      } else {
-	e_clicks = 0;
-	e_is_click = 1;
-	lastkeycode = keycode;
-      }
-      static char buffer[21];
-      KeySym keysym;
-      int len = XLookupString(&(xevent.xkey), buffer, 20, &keysym, 0);
-      // Make ctrl+dash produce ^_ like it used to:
-      if (xevent.xbutton.state&4 && keysym == '-') buffer[0] = 0x1f;
-      // Any keys producing foreign letters produces the bottom 8 bits:
-      if (!len && keysym < 0xf00) {buffer[0]=(char)keysym; len = 1;}
-      buffer[len] = 0;
-      e_text = buffer;
-      e_length = len;
+    // Make repeating keys increment the click counter:
+    if (fl_key_vector[keycode/8]&(1<<(keycode%8))) {
+      //printf("Repeating key %x\n", keycode);
+      e_clicks++;
+      e_is_click = 0;
     } else {
-      // Stupid X sends fake key-up events when a repeating key is held
-      // down, probably due to some back compatability problem. Fortunatley
-      // we can detect this because the repeating KeyPress event is in
-      // the queue, get it and execute it instead:
-      XEvent temp;
-      if (XCheckIfEvent(xdisplay,&temp,fake_keyup_test,(char*)(&xevent))){
-	xevent = temp;
-	goto KEYPRESS;
-      }
-      event = KEYUP;
-      fl_key_vector[keycode/8] &= ~(1 << (keycode%8));
-      // event_is_click is left on if they press & release the key quickly:
-      e_is_click = (keycode == lastkeycode);
-      // make next keypress not be a repeating one:
-      lastkeycode = 0;
+      //printf("Non-repeating key %x\n", keycode);
+      e_clicks = 0;
+      e_is_click = 1;
     }
+    lastkeycode = keycode;
+    fl_key_vector[keycode/8] |= (1 << (keycode%8));
+    static char buffer[21];
+    KeySym keysym;
+    int len = XLookupString(&(xevent.xkey), buffer, 20, &keysym, 0);
+    // Make ctrl+dash produce ^_ like it used to:
+    if (xevent.xbutton.state&4 && keysym == '-') buffer[0] = 0x1f;
+    // Any keys producing foreign letters produces the bottom 8 bits:
+    if (!len && keysym < 0xf00) {buffer[0]=(char)keysym; len = 1;}
+    buffer[len] = 0;
+    e_text = buffer;
+    e_length = len;
+    event = KEY;
+    goto GET_KEYSYM;}
+
+  case KeyRelease: {
+    // Stupid X sends fake key-up events when a repeating key is held
+    // down, probably due to some back compatability problem. Fortunatley
+    // we can detect this because the repeating KeyPress event is in
+    // the queue, get it and execute it instead:
+    XEvent temp;
+    if (XCheckIfEvent(xdisplay,&temp,fake_keyup_test,(char*)(&xevent))){
+      xevent = temp;
+      goto KEYPRESS;
+    }
+    unsigned keycode = xevent.xkey.keycode;
+    fl_key_vector[keycode/8] &= ~(1 << (keycode%8));
+    // event_is_click is left on if they press & release the key quickly:
+    //printf("Keyup %x\n", keycode);
+    e_is_click = (keycode == lastkeycode);
+    // make next keypress not be a repeating one:
+    lastkeycode = 0;
+    event = KEYUP;
+    goto GET_KEYSYM;}
+
+  GET_KEYSYM: { // code for both KeyPress and KeyRelease:
+    unsigned keycode = xevent.xkey.keycode;
     // Use the unshifted keysym! This matches the symbols that the Win32
     // version produces. However this will defeat older keyboard layouts
     // that use shifted values for function keys.
@@ -1402,5 +1412,5 @@ bool fltk::get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.140 2003/01/26 06:06:31 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.141 2003/02/21 18:16:51 spitzak Exp $".
 //

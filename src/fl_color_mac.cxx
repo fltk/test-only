@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_mac.cxx,v 1.4 2003/01/05 07:40:29 spitzak Exp $"
+// "$Id: fl_color_mac.cxx,v 1.5 2003/02/21 18:16:54 spitzak Exp $"
 //
 // MacOS color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -23,35 +23,22 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// The fltk "colormap".  This allows ui colors to be stored in 8-bit
-// locations, and provides a level of indirection so that global color
-// changes can be made.  Not to be confused with the X colormap, which
-// I try to hide completely.
-
-// MacOS - matt: the macintosh port does not support colormaps
+// Because carbon has a 'current color' in the drawing context this
+// is really simple.
 
 Color fltk::current_color_;
 
-void fltk::color(Color i) {
+void fltk::setcolor(Color i) {
   current_color_ = i;
-  int index;
-  uchar r, g, b;
-  if (i & 0xFFFFFF00) {
-    // translate rgb colors into color index
-    r = i>>24;
-    g = i>>16;
-    b = i>> 8;
-  } else {
-    // translate index into rgb:
-    index = i;
-    unsigned c = cmap[i];
-    r = c>>24;
-    g = c>>16;
-    b = c>> 8;
-  }
+  // get fltk indexed color:
+  if (!(i & 0xFFFFFF00)) i = cmap[i];
+  // get the individual colors and put into Mac color structure:
   RGBColor rgb; 
+  uchar r = i>>24;
   rgb.red   = (r<<8)|r;
+  uchar g = i>>16;
   rgb.green = (g<<8)|g;
+  uchar b = i>> 8;
   rgb.blue  = (b<<8)|b;
   RGBForeColor(&rgb);
 }
@@ -60,5 +47,5 @@ void fltk::color(Color i) {
 static void free_color(Color) {}
 
 //
-// End of "$Id: fl_color_mac.cxx,v 1.4 2003/01/05 07:40:29 spitzak Exp $".
+// End of "$Id: fl_color_mac.cxx,v 1.5 2003/02/21 18:16:54 spitzak Exp $".
 //

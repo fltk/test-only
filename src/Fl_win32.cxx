@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.184 2003/02/02 10:39:23 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.185 2003/02/21 18:16:44 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1022,10 +1022,10 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       if (window->resize(wul.x, wul.y, wr.right, wr.bottom))
 	resize_from_system = window;
 
+      MakeWaitReturn();
     } else { // Unmap event
       CreatedWindow::find(window)->wait_for_expose = true;
     }
-    MakeWaitReturn();
     break;
 
   case WM_SIZE:
@@ -1600,5 +1600,5 @@ bool fltk::get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.184 2003/02/02 10:39:23 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.185 2003/02/21 18:16:44 spitzak Exp $".
 //

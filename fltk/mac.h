@@ -1,5 +1,5 @@
 //
-// "$Id: mac.h,v 1.3 2003/01/05 07:40:29 spitzak Exp $"
+// "$Id: mac.h,v 1.4 2003/02/21 18:16:32 spitzak Exp $"
 //
 // Mac header file for the Fast Light Tool Kit (FLTK).
 //
@@ -144,7 +144,7 @@ static inline void delete_bitmap(Pixmap id) {DisposeGWorld(id);}
 
 // When fltk tells X about a window, one of these objects is created.
 // Warning: this object is highly subject to change!  It's definition
-// is only here so that fl_xid can be declared inline:
+// is only here so that fltk::xid(Window) can be declared inline:
 
 class FL_API CreatedWindow {
 public:
@@ -162,6 +162,7 @@ public:
   static CreatedWindow* first;
   static CreatedWindow* find(const Window* window) {return window->i;}
   static int borders(const Window* w, int& dx, int& dy, int& dw, int& dh);
+  void free_gc() {}
 };
 
 // convert xid <-> Window:
@@ -178,6 +179,6 @@ extern CursHandle default_cursor;
 #endif
 
 //
-// End of "$Id: mac.h,v 1.3 2003/01/05 07:40:29 spitzak Exp $".
+// End of "$Id: mac.h,v 1.4 2003/02/21 18:16:32 spitzak Exp $".
 //
 

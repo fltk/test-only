@@ -30,11 +30,11 @@
 #include <fltk/events.h>
 #include <fltk/x.h>
 #include <fltk/Window.h>
+using namespace fltk;
 
 extern EventRef fl_os_event;
 extern char *fl_selection_buffer;
 extern int fl_selection_length;
-
 
 /**
  * drag and drop whatever is in the cut-copy-paste buffer

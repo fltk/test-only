@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.93 2002/12/10 02:00:52 easysw Exp $"
+// "$Id: Fl_Window.cxx,v 1.94 2003/02/21 18:16:38 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -57,7 +57,7 @@ void Window::default_callback(Window* window, void*) {
   // if (!first()) exit(0);
 }
 
-static void revert(Style* s) {
+static void revert(fltk::Style* s) {
   s->color = GRAY75;
   s->box = FLAT_BOX;
 }
@@ -101,6 +101,19 @@ Window::Window(int W, int H, const char *l)
 const char* Window::xclass_ = "fltk";
 
 bool fl_show_iconic; // set by iconize() or by -i arg switch
+
+#ifdef _WIN32
+static void keep_app_active() {
+  // activate some other window so the active app does not change!
+  if (grab()) return;
+  for (CreatedWindow* x = CreatedWindow::first; x; x = x->next)
+    if (!x->window->parent() && x->window->visible()) {
+      //BringWindowToTop(x->xid);
+      SetActiveWindow(x->xid);
+      break;
+    }
+}
+#endif
 
 int Window::handle(int event) {
   switch (event) {
@@ -156,24 +169,10 @@ int Window::handle(int event) {
     if (fl_show_iconic) {
       fl_show_iconic = 0;
       CollapseWindow( i->xid, true ); // \todo Mac ; untested
-      ShowWindow(x->xid); // ???
-    } else if (grab() || override()) {
-      // If we've captured the mouse, we don't want do activate any
-      // other windows from the code, or we lose the capture.
-      // Also, we don't want to activate the window for tooltips.
-      ShowWindow(x->xid);
-      BringToFront(i->xid);
+      //ShowWindow(i->xid); // ???
     } else {
-      if ( !x->next ) {
-	// if this is the first window, bring the application to the front
-	// WAS: perhaps it should always do this?
-	ProcessSerialNumber psn;
-	OSErr err = GetCurrentProcess( &psn );
-	if ( err==noErr ) SetFrontProcess( &psn );
-      }
-      ShowWindow(x->xid);
-      BringToFront(i->xid);
-      SelectWindow(i->xid);
+      // need way to de-iconize?
+      ShowWindow(i->xid);
     }
 #else
     XMapWindow(xdisplay, i->xid);
@@ -183,6 +182,9 @@ int Window::handle(int event) {
   case HIDE:
     if (flags()&MODAL) modal(0, false);
     if (i) XUnmapWindow(xdisplay, i->xid);
+#ifdef _WIN32
+    keep_app_active();
+#endif
     break;
 
   }
@@ -193,8 +195,11 @@ int Window::handle(int event) {
   if (!parent()) switch (event) {
   case KEY:
   case SHORTCUT:
-    if (event_clicks()) break; // make repeating key not close everything
-    if (test_shortcut()) {do_callback(); return 1;}
+    if (test_shortcut()) {
+      if (!event_clicks())// make repeating key not close everything
+	do_callback();
+      return 1;
+    }
     break;
   case PUSH:
     // clicks outside windows exit the modal state. I give a bit of border
@@ -230,8 +235,18 @@ void Window::show() {
     if (!grab() && !override()) BringWindowToTop(i->xid);
 #elif (defined(__APPLE__) && !USE_X11)
     // is some call needed to deiconize?
-    BringToFront(i->xid);
-    if (!grab() && !override()) SelectWindow(i->xid);
+    ShowWindow(i->xid); // does this de-iconize?
+    if (!grab() && !override()) {
+      BringToFront(i->xid);
+      SelectWindow(i->xid);
+      if (i == CreatedWindow::first && !i->next) {
+	// if this is the only window, bring the application to the front
+	// WAS: perhaps it should always do this?
+	ProcessSerialNumber psn;
+	OSErr err = GetCurrentProcess( &psn );
+	if ( err==noErr ) SetFrontProcess( &psn );
+      }
+    }
 #else
     XMapRaised(xdisplay, i->xid);
 #endif
@@ -316,14 +331,19 @@ void CreatedWindow::expose(int X, int Y, int W, int H) {
     region = XRectangleRegion(X,Y,W,H);
   } else {
     // merge with the region:
-#ifndef _WIN32
-    XRectangle R;
-    R.x = X; R.y = Y; R.width = W; R.height = H;
-    XUnionRectWithRegion(&R, region, region);
-#else
+#ifdef WIN32
     Region R = XRectangleRegion(X, Y, W, H);
     CombineRgn(region, region, R, RGN_OR);
     XDestroyRegion(R);
+#elif (defined(__APPLE__) && !USE_X11)
+    Region R = NewRgn(); 
+    SetRectRgn(R, X, Y, X+W, Y+H);
+    UnionRgn(R, region, region);
+    DisposeRgn(R);
+#else
+    XRectangle R;
+    R.x = X; R.y = Y; R.width = W; R.height = H;
+    XUnionRectWithRegion(&R, region, region);
 #endif
   }
   // make flush() search for this window:
@@ -373,6 +393,9 @@ void Window::destroy() {
   if (x->region) XDestroyRegion(x->region);
   XDestroyWindow(xdisplay, x->xid);
   delete x;
+#ifdef _WIN32
+  keep_app_active();
+#endif
 }
 
 Window::~Window() {
@@ -380,5 +403,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.93 2002/12/10 02:00:52 easysw Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.94 2003/02/21 18:16:38 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_key_mac.cxx,v 1.3 2002/12/09 04:52:27 spitzak Exp $"
+// "$Id: Fl_get_key_mac.cxx,v 1.4 2003/02/21 18:16:40 spitzak Exp $"
 //
 // MacOS keyboard state routines for the Fast Light Tool Kit (FLTK).
 //
@@ -29,13 +29,15 @@
 
 #include <fltk/events.h>
 #include <fltk/x.h>
+using namespace fltk;
 
 // convert an FLTK (X) keysym to a MacOS symbol:
 // See also the inverse converter in mac.cxx
 // This table is in numeric order by FLTK symbol order for binary search:
 
 static const struct {unsigned short vk, fltk;} vktab[] = {
-  { 49, ' ' }, { 39, '\'' }, { 43, ',' }, { 27, '-' }, { 47, '.' }, { 44, '/' }, 
+  { 49, ' ' }, { 39, '\'' }, { 43, ',' }, { 27, '-' },
+  { 47, '.' }, { 44, '/' }, 
   { 29, '0' }, { 18, '1'  }, { 19, '2'  }, { 20, '3'  }, 
   { 21, '4' }, { 23, '5'  }, { 22, '6'  }, { 26, '7'  }, 
   { 28, '8' }, { 25, '9'  }, { 41, ';'  }, { 24, '='  },
@@ -47,24 +49,27 @@ static const struct {unsigned short vk, fltk;} vktab[] = {
   { 32, 'U' }, {  9, 'V'  }, { 13, 'W'  }, {  7, 'X'  }, 
   { 16, 'Y' }, {  6, 'Z'  }, 
   { 33, '[' }, { 30, ']' }, { 50, '`' },  { 42, '|' },
-  { 51, BackSpace }, { 48, Tab }, { 36, Enter }, { 127, Pause },
-  { 107, ScrollLockKey }, { 53, Escape }, { 0x73, Home }, { 123, Left },
-  { 126, Up }, { 124, Right }, { 125, Down }, { 0x74, Page_Up },
-  { 0x79, Page_Down },  { 119, End }, { 0x71, Print }, { 127, Insert },
-  { 127, MenuKey }, { 114, Help }, { 0x47, Num_Lock }, 
-  { 76, Keypad_Enter }, { 67, Keypad+'*' }, { 69, Keypad+'+'}, { 78, Keypad+'-' }, { 65, Keypad+'.' }, { 75, Keypad+'/' }, 
-  { 82, Keypad+'0' }, { 83, Keypad+'1' }, { 84, Keypad+'2' }, { 85, Keypad+'3' }, 
-  { 86, Keypad+'4' }, { 87, Keypad+'5' }, { 88, Keypad+'6' }, { 89, Keypad+'7' }, 
-  { 91, Keypad+'8' }, { 92, Keypad+'9' }, { 81, Keypad+'=' }, 
-  { 0x7a, F+1 }, { 0x78, F+2  }, { 0x63, F+3  }, { 0x76, F+4  }, 
-  { 0x60, F+5 }, { 0x61, F+6  }, { 0x62, F+7  }, { 0x64, F+8  }, 
-  { 0x65, F+9 }, { 0x6D, F+10 }, { 0x67, F+11 }, { 0x6f, F+12 }, 
-  { 56, Shift_L }, { 56, Shift_R }, { 55, Control_L }, { 55, Control_R }, 
-  { 57, Caps_Lock }, { 59, Meta_L }, { 59, Meta_R },
-  { 58, Alt_L }, { 58, Alt_R },
+  { 51, BackSpaceKey }, { 48, TabKey }, { 36, ReturnKey }, { 127, PauseKey },
+  { 107, ScrollLockKey }, { 53, EscapeKey }, { 115, HomeKey }, {123, LeftKey},
+  { 126, UpKey }, { 124, RightKey }, { 125, DownKey }, { 116, PageUpKey },
+  { 121, PageDownKey },  { 119, EndKey }, { 113, PrintKey}, {127, InsertKey},
+  { 127, fltk::MenuKey }, { 114, HelpKey }, { 71, NumLockKey }, 
+  { 76, KeypadEnter }, { 67, MultiplyKey }, { 69, AddKey}, { 78, SubtractKey},
+  { 65, DecimalKey }, { 75, DivideKey }, 
+  { 82, Keypad0 }, { 83, Keypad1 }, { 84, Keypad2 }, { 85, Keypad3 }, 
+  { 86, Keypad4 }, { 87, Keypad5 }, { 88, Keypad6 }, { 89, Keypad7 }, 
+  { 91, Keypad8 }, { 92, Keypad9 }, { 81, Keypad+'=' }, 
+  { 122, F1Key }, { 120, F2Key }, { 99, F3Key }, { 118, F4Key }, 
+  { 96, F5Key }, { 97, F6Key }, { 98, F7Key }, { 100, F8Key }, 
+  { 101, F9Key }, { 109, F10Key }, { 103, F11Key }, { 111, F12Key }, 
+  { 56, LeftShiftKey }, { 56, RightShiftKey },
+  { 55, LeftControlKey }, { 55, RightControlKey }, 
+  { 57, CapsLockKey }, { 59, LeftCommandKey }, { 59, RightCommandKey },
+  { 58, LeftAltKey }, { 58, RightAltKey },
 };
 
 static int fltk2mac(int fltk) {
+  if (fltk >= 'a' && fltk <= 'z') fltk-=('a'-'A');
   int a = 0;
   int b = sizeof(vktab)/sizeof(*vktab);
   while (a < b) {
@@ -76,14 +81,14 @@ static int fltk2mac(int fltk) {
 }
 
 //: returns true, if that key was pressed during the last event
-int event_key(int k) {
-  return get_key(k);
+bool fltk::event_key_state(int k) {
+  return get_key_state(k);
 }
 
-#include <stdio.h>
+//#include <stdio.h>
 
 //: returns true, if that key is pressed right now
-int get_key(int k) {
+bool fltk::get_key_state(int k) {
   KeyMap foo;
   GetKeys(foo);
 #ifdef MAC_TEST_FOR_KEYCODES
@@ -99,5 +104,5 @@ int get_key(int k) {
 }
 
 //
-// End of "$Id: Fl_get_key_mac.cxx,v 1.3 2002/12/09 04:52:27 spitzak Exp $".
+// End of "$Id: Fl_get_key_mac.cxx,v 1.4 2003/02/21 18:16:40 spitzak Exp $".
 //

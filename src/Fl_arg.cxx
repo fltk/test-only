@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.40 2002/12/10 02:00:53 easysw Exp $"
+// "$Id: Fl_arg.cxx,v 1.41 2003/02/21 18:16:40 spitzak Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,7 @@
 #include <limits.h>
 
 #include <fltk/x.h>
-#ifdef _WIN32
+#if defined(_WIN32) || (defined(__APPLE__) && !USE_X11)
 int XParseGeometry(const char*, int*, int*, unsigned int*, unsigned int*);
 #define NoValue		0x0000
 #define XValue  	0x0001
@@ -173,7 +173,7 @@ void Window::show(int argc, char **argv) {
 
   show();
 
-#ifndef _WIN32
+#if !defined(_WIN32) && !(defined(__APPLE__) && !USE_X11)
   // set the command string, used by state-saving window managers:
   int i;
   int n=0; for (i=0; i<argc; i++) n += strlen(argv[i])+1;
@@ -190,7 +190,7 @@ void Window::show(int argc, char **argv) {
 
 static const char * const helpmsg =
 "options are:\n"
-#ifndef _WIN32
+#if !defined(_WIN32) && !(defined(__APPLE__) && !USE_X11)
 " -d[isplay] host:n.n\n"
 #endif
 " -g[eometry] WxH+X+Y\n"
@@ -206,7 +206,7 @@ void fltk::args(int argc, char **argv) {
   int i; if (args(argc,argv,i) < argc) error(helpmsg);
 }
 
-#ifdef _WIN32
+#if defined(_WIN32) || (defined(__APPLE__) && !USE_X11)
 
 /* the following function was stolen from the X sources as indicated. */
 
@@ -345,5 +345,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef _WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.40 2002/12/10 02:00:53 easysw Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.41 2003/02/21 18:16:40 spitzak Exp $".
 //

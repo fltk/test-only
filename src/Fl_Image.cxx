@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.28 2003/01/15 07:55:20 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.29 2003/02/21 18:16:34 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -86,6 +86,8 @@ void Image::_draw(int XP, int YP, Flags)
       DeleteDC(new_gc);
       DeleteDC(new_gc2);
 # endif
+#elif (defined(__APPLE__) && !USE_X11)
+      // OSX version nyi
 #else
       // I can't figure out how to combine a mask with existing region,
       // so the mask replaces the region instead. This can draw some of
@@ -109,6 +111,8 @@ void Image::_draw(int XP, int YP, Flags)
       // secret bitblt code found in old MSWindows reference manual:
       BitBlt(gc, X, Y, W, H, tempdc, cx, cy, 0xE20746L);
       DeleteDC(tempdc);
+#elif (defined(__APPLE__) && !USE_X11)
+      // OSX version nyi
 #else
       XSetStipple(xdisplay, gc, (Pixmap)mask);
       int ox = X-cx; if (ox < 0) ox += w;
@@ -144,5 +148,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.28 2003/01/15 07:55:20 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.29 2003/02/21 18:16:34 spitzak Exp $".
 //

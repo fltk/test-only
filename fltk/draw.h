@@ -1,5 +1,5 @@
 //
-// "$Id: draw.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: draw.h,v 1.3 2003/02/21 18:16:30 spitzak Exp $"
 //
 // The fltk drawing library
 //
@@ -155,6 +155,7 @@ FL_API void drawimagemono(const uchar*, int,int,int,int, int delta=1, int ld=0);
 typedef void (*DrawImageCallback)(void*,int,int,int,uchar*);
 FL_API void drawimage(DrawImageCallback, void*, int,int,int,int, int delta=3);
 FL_API void drawimagemono(DrawImageCallback, void*, int,int,int,int, int delta=1);
+FL_API uchar *readimage(uchar *p, int x,int y, int w, int h, int alpha=0);
 
 // depreciated:
 FL_API int draw_xpm(const char*const* data, int x, int y, Color=GRAY75);
@@ -170,5 +171,5 @@ FL_API void overlay_clear();
 #endif
 
 //
-// End of "$Id: draw.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: draw.h,v 1.3 2003/02/21 18:16:30 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.14 2002/12/10 02:00:56 easysw Exp $"
+// "$Id: fl_arci.cxx,v 1.15 2003/02/21 18:16:53 spitzak Exp $"
 //
 // Arc (integer) drawing functions for the Fast Light Tool Kit (FLTK).
 //
@@ -60,6 +60,19 @@ void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
     Arc(gc, x, y, x+w, y+h, xa, ya, xb, yb); 
     break;
   }
+#elif (defined(__APPLE__) && !USE_X11)
+  Rect r; r.left=x; r.right=x+w; r.top=y; r.bottom=y+h;
+  a1 = a2-a1; a2 = 450-a2;
+  switch (what) {
+  case FILLPIE:
+  case FILLARC: // not correct, should fill chord
+    PaintArc(&r, (short int)a2, (short int)a1);
+    break;
+  case STROKEPIE: // not correct, should draw lines to center
+  case STROKEARC:
+    FrameArc(&r, (short int)a2, (short int)a1);
+    break;
+  }
 #else
   int A = int(a1*64);
   int B = int(a2*64)-A;
@@ -81,5 +94,5 @@ void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
 }
 
 //
-// End of "$Id: fl_arci.cxx,v 1.14 2002/12/10 02:00:56 easysw Exp $".
+// End of "$Id: fl_arci.cxx,v 1.15 2003/02/21 18:16:53 spitzak Exp $".
 //

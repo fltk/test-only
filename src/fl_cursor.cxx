@@ -1,5 +1,5 @@
 //
-// "$Id: fl_cursor.cxx,v 1.18 2002/12/10 02:00:57 easysw Exp $"
+// "$Id: fl_cursor.cxx,v 1.19 2003/02/21 18:16:55 spitzak Exp $"
 //
 // Mouse cursor support for the Fast Light Tool Kit (FLTK).
 //
@@ -97,7 +97,7 @@ void Widget::cursor(fltk::Cursor* c) const {
 
 struct fltk::Cursor {
   ::Cursor* cursor;
-  TYPE? resource;
+  int resource;
 };
 
 static ::Cursor crsrHAND =
@@ -110,7 +110,7 @@ static ::Cursor crsrHAND =
 };
 static fltk::Cursor hand = {&crsrHAND};
 
-static Cursor crsrHELP =
+static ::Cursor crsrHELP =
 {
   { 0x0000, 0x4000, 0x6000, 0x7000, 0x783C, 0x7C7E, 0x7E66, 0x7F06,
     0x7F8C, 0x7C18, 0x6C18, 0x4600, 0x0618, 0x0318, 0x0300, 0x0000 },
@@ -120,7 +120,7 @@ static Cursor crsrHELP =
 };
 static fltk::Cursor help = {&crsrHELP};
 
-static Cursor crsrMOVE =
+static ::Cursor crsrMOVE =
 {
   { 0x0000, 0x0180, 0x03C0, 0x07E0, 0x07E0, 0x1998, 0x399C, 0x7FFE,
     0x7FFE, 0x399C, 0x1998, 0x07E0, 0x07E0, 0x03C0, 0x0180, 0x0000 },
@@ -130,7 +130,7 @@ static Cursor crsrMOVE =
 };
 static fltk::Cursor move = {&crsrMOVE};
 
-static Cursor crsrNS =
+static ::Cursor crsrNS =
 {
   { 0x0000, 0x0180, 0x03C0, 0x07E0, 0x0FF0, 0x0180, 0x0180, 0x0180,
     0x0180, 0x0180, 0x0180, 0x0FF0, 0x07E0, 0x03C0, 0x0180, 0x0000 },
@@ -140,7 +140,7 @@ static Cursor crsrNS =
 };
 static fltk::Cursor ns = {&crsrNS};
 
-static Cursor crsrWE =
+static ::Cursor crsrWE =
 {
   { 0x0000, 0x0000, 0x0000, 0x0000, 0x0810, 0x1818, 0x381C, 0x7FFE,
     0x7FFE, 0x381C, 0x1818, 0x0810, 0x0000, 0x0000, 0x0000, 0x0000 },
@@ -150,7 +150,7 @@ static Cursor crsrWE =
 };
 static fltk::Cursor we = {&crsrWE};
 
-static Cursor crsrNWSE =
+static ::Cursor crsrNWSE =
 {
   { 0x0000, 0x7E00, 0x7C00, 0x7800, 0x7C00, 0x6E00, 0x4710, 0x03B0,
     0x01F0, 0x00F0, 0x01F0, 0x03F0, 0x0000, 0x0000, 0x0000, 0x0000 },
@@ -160,7 +160,7 @@ static Cursor crsrNWSE =
 };
 static fltk::Cursor nwse = {&crsrNWSE};
 
-static Cursor crsrNESW =
+static ::Cursor crsrNESW =
 {
   { 0x0000, 0x03F0, 0x01F0, 0x00F0, 0x01F0, 0x03B0, 0x4710, 0x6E00,
     0x7C00, 0x7800, 0x7C00, 0x7E00, 0x0000, 0x0000, 0x0000, 0x0000 },
@@ -170,7 +170,7 @@ static Cursor crsrNESW =
 };
 static fltk::Cursor nesw = {&crsrNESW};
 
-static Cursor crsrNONE =
+static ::Cursor crsrNONE =
 {
   { 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000,
     0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000, 0x0000 },
@@ -180,7 +180,7 @@ static Cursor crsrNONE =
 };
 static fltk::Cursor none = {&crsrNONE};
 
-static Cursor crsrARROW =
+static ::Cursor crsrARROW =
 {
   { 0x0000, 0x4000, 0x6000, 0x7000, 0x7800, 0x7C00, 0x7E00, 0x7F00,
     0x7F80, 0x7C00, 0x6C00, 0x4600, 0x0600, 0x0300, 0x0300, 0x0000 },
@@ -193,7 +193,7 @@ static fltk::Cursor arrow = {&crsrARROW};
 static fltk::Cursor cross = {0, crossCursor};
 static fltk::Cursor wait = {0,watchCursor};
 static fltk::Cursor insert = {0, iBeamCursor};
-static fltk::Cursor no = {???};
+static fltk::Cursor no = {0, crossCursor}; // not right!
 
 void Widget::cursor(fltk::Cursor* c) const {
   Window* window = is_window() ? (Window*)this : this->window();
@@ -205,13 +205,13 @@ void Widget::cursor(fltk::Cursor* c) const {
   if (!c) {
     xcursor = default_cursor;
   } else {
-    if (!c->cursor) c->cursor = GetCursor(c->resource);
+    if (!c->cursor) c->cursor = *GetCursor(c->resource);
     xcursor = &c->cursor;
   }
   i->cursor_for = this;
   if (xcursor != i->cursor) {
     i->cursor = xcursor;
-    SetCursor(xcursor);
+    SetCursor(*xcursor);
   }
 }
 
@@ -357,5 +357,5 @@ fltk::Cursor* const fltk::CURSOR_NO	= &no;
 fltk::Cursor* const fltk::CURSOR_NONE	= &none;
 
 //
-// End of "$Id: fl_cursor.cxx,v 1.18 2002/12/10 02:00:57 easysw Exp $".
+// End of "$Id: fl_cursor.cxx,v 1.19 2003/02/21 18:16:55 spitzak Exp $".
 //

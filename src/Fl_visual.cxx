@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_visual.cxx,v 1.16 2002/12/10 02:00:54 easysw Exp $"
+// "$Id: Fl_visual.cxx,v 1.17 2003/02/21 18:16:44 spitzak Exp $"
 //
 // Visual support for the Fast Light Tool Kit (FLTK).
 //
@@ -39,6 +39,14 @@ bool fltk::visual(int flags) {
   ReleaseDC(0, screen);
   return ret;
 }
+
+#elif (defined(__APPLE__) && !USE_X11)
+
+bool fltk::visual(int flags) {
+  // INDEXED_COLOR probably should return false, but who really cares...
+  return true;
+}
+
 #else
 
 #if USE_XDBE
@@ -112,5 +120,5 @@ bool fltk::visual(int flags) {
 #endif
 
 //
-// End of "$Id: Fl_visual.cxx,v 1.16 2002/12/10 02:00:54 easysw Exp $".
+// End of "$Id: Fl_visual.cxx,v 1.17 2003/02/21 18:16:44 spitzak Exp $".
 //

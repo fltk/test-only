@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_win32.cxx,v 1.14 2002/12/10 02:00:59 easysw Exp $"
+// "$Id: fl_draw_image_win32.cxx,v 1.15 2003/02/21 18:16:56 spitzak Exp $"
 //
 // _WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -237,11 +237,11 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 }
 
 #if USE_COLORMAP
-#define DITHER_FILLRECT !xpalette
+#define DITHER_FILLRECT (xpalette!=0)
 #else
-#define DITHER_FILLRECT true
+#define DITHER_FILLRECT false
 #endif
 
 //
-// End of "$Id: fl_draw_image_win32.cxx,v 1.14 2002/12/10 02:00:59 easysw Exp $".
+// End of "$Id: fl_draw_image_win32.cxx,v 1.15 2003/02/21 18:16:56 spitzak Exp $".
 //

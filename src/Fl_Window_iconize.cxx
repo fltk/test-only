@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_iconize.cxx,v 1.17 2002/12/10 02:00:52 easysw Exp $"
+// "$Id: Fl_Window_iconize.cxx,v 1.18 2003/02/21 18:16:39 spitzak Exp $"
 //
 // Window minification code for the Fast Light Tool Kit (FLTK).
 //
@@ -36,6 +36,8 @@ void Window::iconize() {
   } else {
 #ifdef _WIN32
     ShowWindow(i->xid, SW_SHOWMINNOACTIVE);
+#elif (defined(__APPLE__) && !USE_X11)
+    CollapseWindow(i->xid, true);
 #else
     XIconifyWindow(xdisplay, i->xid, xscreen);
     i->wait_for_expose = true;
@@ -45,5 +47,5 @@ void Window::iconize() {
 }
 
 //
-// End of "$Id: Fl_Window_iconize.cxx,v 1.17 2002/12/10 02:00:52 easysw Exp $".
+// End of "$Id: Fl_Window_iconize.cxx,v 1.18 2003/02/21 18:16:39 spitzak Exp $".
 //

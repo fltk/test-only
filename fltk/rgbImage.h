@@ -1,5 +1,5 @@
 //
-// "$Id: rgbImage.h,v 1.4 2003/02/07 08:21:16 spitzak Exp $"
+// "$Id: rgbImage.h,v 1.5 2003/02/21 18:16:33 spitzak Exp $"
 //
 // Image subclass that draws uncompressed 8-bit rgb data from memory.
 //
@@ -38,6 +38,7 @@ public:
     : data(d) {w = W; h = H; depth = D;}
   void draw(int, int, int, int, Flags = 0);
   void draw(int x, int y, Flags f = 0) {draw(x,y,w,h,f);}
+  bool write_jpeg(const char *filename, int quality=75, int dpi=150);
 };
 
 }
@@ -45,5 +46,5 @@ public:
 #endif
 
 //
-// End of "$Id: rgbImage.h,v 1.4 2003/02/07 08:21:16 spitzak Exp $".
+// End of "$Id: rgbImage.h,v 1.5 2003/02/21 18:16:33 spitzak Exp $".
 //

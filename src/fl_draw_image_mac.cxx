@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_mac.cxx,v 1.3 2002/12/09 04:52:29 spitzak Exp $"
+// "$Id: fl_draw_image_mac.cxx,v 1.4 2003/02/21 18:16:56 spitzak Exp $"
 //
 // MacOS image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,7 @@
 #include <fltk/events.h>
 #include <fltk/draw.h>
 #include <fltk/x.h>
+using namespace fltk;
 
 #define MAXBUFFER 0x40000 // 256k
 
@@ -49,7 +50,7 @@
  */
 static void innards(const uchar *buf, int X, int Y, int W, int H,
 		    int delta, int linedelta, int mono,
-		    DrawImageCb cb, void* userdata)
+		    DrawImageCallback cb, void* userdata)
 {
   if (!linedelta) linedelta = W*delta;
 
@@ -124,7 +125,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
   if ( direct )
     return;
 
-  // following the very save (and very slow) way to write the image into the give port
+  // following the very safe (and very slow) way to write the image into the give port
   if ( cb )
   {
     uchar *tmpBuf = new uchar[ W*3 ];
@@ -139,7 +140,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
         else
           { color( src[0], src[1], src[2] ); src+=3; }
         MoveTo( X+j, Y+i );
-        Drawline( 0, 0 );
+        Line( 0, 0 );
       }
     }
     delete[] tmpBuf;
@@ -156,7 +157,7 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
         else
           color( src[0], src[1], src[2] );
         MoveTo( X+j, Y+i );
-        Drawline( 0, 0 );
+        Line( 0, 0 );
         src += delta;
       }
     }
@@ -252,26 +253,8 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 #endif
 }
 
-void drawimage(const uchar* buf, int x, int y, int w, int h, int d, int l){
-  innards(buf,x,y,w,h,d,l,(d<3&&d>-3),0,0);
-}
-void drawimage(DrawImageCb cb, void* data,
-		   int x, int y, int w, int h,int d) {
-  innards(0,x,y,w,h,d,0,(d<3&&d>-3),cb,data);
-}
-void drawimagemono(const uchar* buf, int x, int y, int w, int h, int d, int l){
-  innards(buf,x,y,w,h,d,l,1,0,0);
-}
-void drawimagemono(DrawImageCb cb, void* data,
-		   int x, int y, int w, int h,int d) {
-  innards(0,x,y,w,h,d,0,1,cb,data);
-}
-
-void fillrect(int x, int y, int w, int h, uchar r, uchar g, uchar b) {
-  color(r,g,b);
-  fillrect(x,y,w,h);
-}
+#define DITHER_FILLRECT false
 
 //
-// End of "$Id: fl_draw_image_mac.cxx,v 1.3 2002/12/09 04:52:29 spitzak Exp $".
+// End of "$Id: fl_draw_image_mac.cxx,v 1.4 2003/02/21 18:16:56 spitzak Exp $".
 //

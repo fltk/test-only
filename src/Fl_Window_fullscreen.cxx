@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_fullscreen.cxx,v 1.17 2002/12/10 02:00:52 easysw Exp $"
+// "$Id: Fl_Window_fullscreen.cxx,v 1.18 2003/02/21 18:16:39 spitzak Exp $"
 //
 // Fullscreen window support for the Fast Light Tool Kit (FLTK).
 //
@@ -35,7 +35,13 @@ using namespace fltk;
 
 void Window::fullscreen() {
   const ScreenInfo& info = screenInfo();
-#ifndef _WIN32
+#ifdef _WIN32
+  resize(info.x, info.y, info.w, info.h);
+  // Still missing: we need to tell Windows that this window can go atop
+  // the taskbar.
+#elif (defined(__APPLE__) && !USE_X11)
+  resize(info.x, info.y, info.w, info.h);
+#else
   // Most X window managers will not place the window where we want it unless
   // the border is turned off. And most (all except Irix 4DWM, as far as I
   // can tell) will ignore attempts to change the border unless the window
@@ -45,18 +51,25 @@ void Window::fullscreen() {
   // (KDE) ignore the positioning information:
   clear_border();
   if (shown()) i->sendxjunk();
-#endif
   resize(info.x, info.y, info.w, info.h);
+  // Still missing: we need to tell KDE/Gnome that this window can go atop
+  // the taskbar.
+#endif
 }
 
 void Window::fullscreen_off(int X,int Y,int W,int H) {
-#ifndef _WIN32
+  // This function must exactly undo whatever fullscreen() did
+#ifdef _WIN32
+  resize(X, Y, W, H);
+#elif (defined(__APPLE__) && !USE_X11)
+  resize(X, Y, W, H);
+#else
   clear_flag(Window::NOBORDER);
   if (shown()) i->sendxjunk();
-#endif
   resize(X, Y, W, H);
+#endif
 }
 
 //
-// End of "$Id: Fl_Window_fullscreen.cxx,v 1.17 2002/12/10 02:00:52 easysw Exp $".
+// End of "$Id: Fl_Window_fullscreen.cxx,v 1.18 2003/02/21 18:16:39 spitzak Exp $".
 //

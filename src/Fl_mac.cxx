@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.4 2003/01/05 07:40:29 spitzak Exp $"
+// "$Id: Fl_mac.cxx,v 1.5 2003/02/21 18:16:42 spitzak Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -1338,6 +1338,21 @@ void Window::label(const char *name, const char * iname) {
 
 const Window *Window::current_;
 
+void fltk::make_current(GWorldPtr gWorld) {
+  if ( gWorld ) {
+    SetGWorld( gWorld, 0 ); // sets the correct port
+    PixMapHandle pm = GetGWorldPixMap(gWorld);
+    Boolean ret = LockPixels(pm);
+    if ( ret == false ) {
+      Rect rect;
+      GetPortBounds( gWorld, &rect );
+      UpdateGWorld( &gWorld, 0, &rect, 0, 0, 0 );
+      pm = GetGWorldPixMap( gWorld );
+      LockPixels( pm );
+    }
+  }
+}
+
 /**
  * make all drawing go into this window (called by subclass flush() impl.)
  */
@@ -1449,6 +1464,6 @@ void fltk::paste(Widget &receiver, bool clipboard) {
 }
 
 //
-// End of "$Id: Fl_mac.cxx,v 1.4 2003/01/05 07:40:29 spitzak Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.5 2003/02/21 18:16:42 spitzak Exp $".
 //
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_key_name.cxx,v 1.9 2002/12/10 02:00:54 easysw Exp $"
+// "$Id: Fl_key_name.cxx,v 1.10 2003/02/21 18:16:41 spitzak Exp $"
 //
 // Turn a fltk (X) keysym + fltk shift flags into a human-readable string.
 //
@@ -33,18 +33,22 @@
 #endif
 using namespace fltk;
 
+#if !defined(_WIN32) && !defined(__APPLE__)
+# define USE_X11 1
+#endif
+
 // This table must be in numeric order by fltk (X) keysym number.
 // On X the table is much shorter as it is only the names that
 // are not returned correctly by XKeysymToString().
 struct Keyname {int key; const char* name;};
 static Keyname table[] = {
-#ifdef _WIN32 // if not X
+#if !USE_X11
   {BackSpaceKey, "Backspace"},
   {TabKey,	"Tab"},
   {ClearKey,	"Clear"},
+  {ReturnKey,	"Return"}, // older fltk said "Enter"
 #endif
-  {ReturnKey,	"Enter"}, // X says "Return"
-#ifdef _WIN32 // if not X
+#if !USE_X11
   {PauseKey,	"Pause"},
   {ScrollLockKey,"ScrollLock"},
   {EscapeKey,	"Escape"},
@@ -56,11 +60,11 @@ static Keyname table[] = {
 #endif
   {PageUpKey,	"PageUp"}, // X says "Prior"
   {PageDownKey,	"PageDown"}, // X says "Next"
-#ifdef _WIN32 // if not X
+#if !USE_X11
   {EndKey,	"End"},
   {PrintKey,	"Print"},
   {InsertKey,	"Insert"},
-  {MenuKey,	"Menu"},
+  {fltk::MenuKey,"Menu"},
   {NumLockKey,	"NumLock"},
   {KeypadEnter,	"KeypadEnter"},
   {LeftShiftKey,"LeftShift"},
@@ -73,7 +77,7 @@ static Keyname table[] = {
 #endif
   {LeftCommandKey,	"LeftCommand"}, // X says "Super_L"
   {RightCommandKey,	"RightCommand"}, // X says "Super_R"
-#ifdef _WIN32 // if not X
+#if !USE_X11
   {DeleteKey,	"Delete"}
 #endif
 };
@@ -99,7 +103,9 @@ const char* fltk::key_name(int shortcut) {
     else b = c;
   }
   if (!q) {
-#ifdef _WIN32 // if not X
+#if USE_X11
+    if (key <= 32 || key >= 0x100) q = XKeysymToString(key);
+#else
     if (key >= F0Key && key <= LastFunctionKey) {
       *p++ = 'F';
       if (key > F9Key) *p++ = (key-F0Key)/10+'0';
@@ -114,8 +120,6 @@ const char* fltk::key_name(int shortcut) {
       *p = 0;
       return buf;
     }
-#else
-    if (key <= 32 || key >= 0x100) q = XKeysymToString(key);
 #endif
   }
   if (q) {
@@ -130,5 +134,5 @@ const char* fltk::key_name(int shortcut) {
 }
 
 //
-// End of "$Id: Fl_key_name.cxx,v 1.9 2002/12/10 02:00:54 easysw Exp $"
+// End of "$Id: Fl_key_name.cxx,v 1.10 2003/02/21 18:16:41 spitzak Exp $"
 //

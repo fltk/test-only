@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_own_colormap.cxx,v 1.9 2002/12/10 02:00:54 easysw Exp $"
+// "$Id: Fl_own_colormap.cxx,v 1.10 2003/02/21 18:16:43 spitzak Exp $"
 //
 // Private colormap support for the Fast Light Tool Kit (FLTK).
 //
@@ -35,13 +35,14 @@
 #include <fltk/x.h>
 #include <config.h>
 
-#ifdef _WIN32
+#if defined(_WIN32) || (defined(__APPLE__) && !USE_X11)
+
 // There is probably something relevant to do on MSWindows 8-bit displays
 // but I don't know what it is
-
 void fltk::own_colormap() {}
 
 #else
+
 // X version
 
 void fltk::own_colormap() {
@@ -73,5 +74,5 @@ void fltk::own_colormap() {
 #endif
 
 //
-// End of "$Id: Fl_own_colormap.cxx,v 1.9 2002/12/10 02:00:54 easysw Exp $".
+// End of "$Id: Fl_own_colormap.cxx,v 1.10 2003/02/21 18:16:43 spitzak Exp $".
 //
