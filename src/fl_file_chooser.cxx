@@ -1,5 +1,5 @@
 //
-// "$Id: fl_file_chooser.cxx,v 1.17 1999/10/25 21:12:12 mike Exp $"
+// "$Id: fl_file_chooser.cxx,v 1.18 1999/10/26 15:43:12 mike Exp $"
 //
 // File chooser widget for the Fast Light Tool Kit (FLTK).
 //
@@ -51,16 +51,11 @@ char* fl_file_chooser(const char* message, const char* pat, const char* fname)
 
   fc->show();
   while (fc->visible())
-  {
-    printf("fc->visible() = %d\n", fc->visible());
-    printf("fc->window->visible() = %d\n", fc->window->visible());
-    printf("fc->window->flags() = %x\n", fc->window->flags());
     Fl::wait();
-  }
 
   return ((char *)fc->value());
 }
 
 //
-// End of "$Id: fl_file_chooser.cxx,v 1.17 1999/10/25 21:12:12 mike Exp $".
+// End of "$Id: fl_file_chooser.cxx,v 1.18 1999/10/26 15:43:12 mike Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Threads.cxx,v 1.4 1999/10/26 00:56:55 vincent Exp $"
+// "$Id: Fl_Threads.cxx,v 1.5 1999/10/26 15:43:11 mike Exp $"
 //
 // Threads support Fast Light Tool Kit (FLTK).
 //
@@ -86,16 +86,16 @@ int Fl::create_thread(Fl_Thread& t, void *(*f) (void *), void* p)
 
 int Fl::set_thread_priority(Fl_Thread t, float pri)
 {
-  //#if !defined(__FreeBSD__)
+#if HAVE_PTHREAD_GETSCHEDPARAM
   struct sched_param sp;
   int policy;
   if (pthread_getschedparam(t, &policy, &sp)) return -1;
   sp.sched_priority = int(PRI_OTHER_MIN + 
 			  (PRI_OTHER_MAX - PRI_OTHER_MIN) * pri);
   return pthread_setschedparam(t, policy, &sp);
-/*#else
+#else
   return -1;
-#endif*/
+#endif // HAVE_PTHREAD_GETSCHEDPARAM
 }
 
 #include <sys/time.h>
@@ -296,5 +296,5 @@ int Fl::awake(void* msg)
 #endif
 
 //
-// End of "$Id: Fl_Threads.cxx,v 1.4 1999/10/26 00:56:55 vincent Exp $".
+// End of "$Id: Fl_Threads.cxx,v 1.5 1999/10/26 15:43:11 mike Exp $".
 //

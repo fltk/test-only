@@ -17,11 +17,8 @@ extern void align_cb(Fl_Button*, void*);
 extern Fl_Box *image_label;
 extern void image_cb(Fl_Button*, void*);
 #include <FL/Fl_Light_Button.H>
-extern void non_modal_cb(Fl_Light_Button*, void*);
 extern void visible_cb(Fl_Light_Button*, void*);
-extern void modal_cb(Fl_Light_Button*, void*);
 extern void active_cb(Fl_Light_Button*, void*);
-extern void border_cb(Fl_Light_Button*, void*);
 extern void resizable_cb(Fl_Light_Button*, void*);
 extern void hotspot_cb(Fl_Light_Button*, void*);
 #include "Shortcut_Button.h"
@@ -36,6 +33,9 @@ extern void step_cb(Fl_Value_Input*, void*);
 extern void value_cb(Fl_Value_Input*, void*);
 extern void image_inlined_cb(Fl_Light_Button*, void*);
 extern Fl_Light_Button *include_image_button;
+extern void non_modal_cb(Fl_Light_Button*, void*);
+extern void modal_cb(Fl_Light_Button*, void*);
+extern void border_cb(Fl_Light_Button*, void*);
 #include <FL/Fl_Choice.H>
 extern Fl_Menu_Item labeltypemenu[];
 extern void labeltype_cb(Fl_Choice*, void*);
@@ -75,10 +75,4 @@ extern void cancel_cb(Fl_Button*, void*);
 #include <FL/Fl_Return_Button.H>
 extern void ok_cb(Fl_Return_Button*, void*);
 Fl_Window* make_widget_panel();
-extern Fl_Tabs *panel_tabs;
-extern Fl_Box *image_label;
-extern Fl_Light_Button *include_image_button;
-extern Fl_Input *v_input[4];
-extern Fl_Box *callback_label;
-extern Fl_Light_Button *overlaybutton;
 #endif

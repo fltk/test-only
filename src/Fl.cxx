@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.47 1999/10/25 21:12:09 mike Exp $"
+// "$Id: Fl.cxx,v 1.48 1999/10/26 15:43:11 mike Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -687,6 +687,7 @@ void Fl_Window::show_inside(const Fl_Window* w) {
 
 void Fl_Window::hide() {
   destroy();
+  clear_visible();
 }
 
 // Fl_Widget::show()/hide() call this:
@@ -695,11 +696,9 @@ int Fl_Window::handle(int event) {
   case FL_SHOW:
     if (!i) create();
     else XMapWindow(fl_display, i->xid);
-    set_visible();
     break;
   case FL_HIDE:
     if (i && !visible()) XUnmapWindow(fl_display, i->xid);
-    clear_visible();
     break;
   }
   return Fl_Group::handle(event);
@@ -805,5 +804,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.47 1999/10/25 21:12:09 mike Exp $".
+// End of "$Id: Fl.cxx,v 1.48 1999/10/26 15:43:11 mike Exp $".
 //
