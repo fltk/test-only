@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.43 2000/06/11 07:31:08 bill Exp $"
+// "$Id: Fl_Window.cxx,v 1.44 2000/06/11 21:17:28 bill Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -120,17 +120,66 @@ char fl_show_iconic; // set by iconize() or by -i Fl::arg switch
 int Fl_Window::handle(int event) {
 
   switch (event) {
-  case FL_SHOW:
 
-    if (parent()) {
-      // A child window
-      if (!i) create();
-      XMapWindow(fl_display, fl_xid(this)); // extra map calls are harmless
+  case FL_SHOW: {
 
-    } else if (!i) {
-      Fl_Group::current(0); // get rid of very common user bug: forgot end()
+    if (!i) create();
+    Fl_Group::handle(event); // make the child windows map first
+#ifdef WIN32
+    int showtype;
+    if (parent())
+      swowtype = SW_RESTORE;
+    // See if the window should be invisible initially:
+    else if (fl_show_iconic || fl_modal_for && !fl_modal_for->visible())
+      showtype = SW_SHOWMINNOACTIVE;
+    // If we've captured the mouse, we dont want do activate any
+    // other windows from the code, or we loose the capture.
+    // Also, we don't want to activate the window for tooltips.
+    else if (Fl::grab() || !border())
+      showtype = SW_SHOWNOACTIVATE;
+    else
+      showtype = SW_SHOWNORMAL;
+    ShowWindow(i->xid, showtype);
+#else
+    XMapWindow(fl_display, i->xid);
+#endif
+    return 1;}
+    
+  case FL_HIDE:
+    if (i) XUnmapWindow(fl_display, i->xid);
+    break;
+
+  }
+
+  if (Fl_Group::handle(event)) return 1;
+
+  // Make the Escape key close windows:
+  if (event == FL_SHORTCUT && !parent() && test_shortcut()) {
+    do_callback();
+    return 1;
+  }
+  // Raise windows that are clicked on, but don't raise when the
+  // user hits buttons.  Unfortunately stupid ol' Win32 does this
+  // all the time so there is not much I can do here...
+#ifndef WIN32
+  if (event == FL_PUSH && !parent()) XMapRaised(fl_display, i->xid);
+#endif
+  return 0;
+}
+
+void Fl_Window::show() {
+      
+  if (!parent()) {
+    if (!shown()) {
+      // Create a new top-level window
+
+      // This should not be needed but it is because sometimes outer windows
+      // are created with the visible flag on, which prevents the FL_SHOW
+      // event from going through:
+      clear_visible();
 
       // this is the secret place where the world is initialized:
+      Fl_Group::current(0); // get rid of very common user bug: forgot end()
       static char started = 0;
       if (!started) {
 	started = 1;
@@ -159,87 +208,18 @@ int Fl_Window::handle(int event) {
 	while (fl_modal_for && fl_modal_for->parent())
 	  fl_modal_for = fl_modal_for->window();
       }
-
-      create();
-
+    } else if (visible()) {
+      // raise/deiconize windows
 #ifdef WIN32
-      // If we've captured the mouse, we dont want do activate any
-      // other windows from the code, or we loose the capture.
-      // Also, we don't want to activate the window for tooltips.
-      int showtype =
-	(Fl::grab() || !border()) ? SW_SHOWNOACTIVATE : SW_SHOWNORMAL;
-#endif
-
-      if (fl_show_iconic || fl_modal_for && !fl_modal_for->visible()) {
-	// the window will be invisible initially
-#ifdef WIN32
-	showtype = SW_SHOWMINNOACTIVE;
-#endif
-	// We want to turn off visible and not handle FL_SHOW!
-      }
-
-#ifdef WIN32
-      ShowWindow(fl_xid(this), showtype);
+      if (IsIconic(i->xid)) OpenIcon(i->xid);
+      if (!Fl::grab() && border()) BringWindowToTop(i->xid);
 #else
-      XMapWindow(fl_display, fl_xid(this));
+      XMapRaised(fl_display, i->xid);
 #endif
-
-      fl_modal_for = 0;
-      fl_show_iconic = 0;
-
-      if (modal()) {Fl::modal_ = this; fl_fix_focus();}
-
-    } else {
-      XMapWindow(fl_display, fl_xid(this));
+      return;
     }
-    break;
-
-  case FL_HIDE:
-    if (shown()) {
-#ifndef WIN32
-      if (!parent())
-	XWithdrawWindow(fl_display, i->xid, fl_screen);
-      else
-#endif
-	XUnmapWindow(fl_display, fl_xid(this));
-    }
-    break;
   }
-
-  if (Fl_Group::handle(event)) return 1;
-
-  // Make the Escape key close windows:
-  if (event == FL_SHORTCUT && !parent() && test_shortcut()) {
-    do_callback();
-    return 1;
-  }
-  // Raise windows that are clicked on, but don't raise when the
-  // user hits buttons.  Unfortunately stupid ol' Win32 does this
-  // all the time so there is not much I can do here...
-#ifndef WIN32
-  if (event == FL_PUSH && !parent()) XMapRaised(fl_display, i->xid);
-#endif
-  return 0;
-}
-
-void Fl_Window::show() {
-  // This should not be needed but it is because sometimes outer windows
-  // are created with the visible flag on, which prevents the FL_SHOW
-  // event from going through:
-  if (!shown()) clear_visible();
-
-  if (!visible()) {
-    Fl_Widget::show();
-  } else if (!parent()) {
-    // deiconize/raise windows:
-#ifdef WIN32
-    if (IsIconic(i->xid)) OpenIcon(i->xid);
-    if (!Fl::grab()) // we would lose the capture if we activated the window
-      BringWindowToTop(i->xid);
-#else
-    XMapRaised(fl_display, i->xid);
-#endif
-  }
+  Fl_Widget::show();
 }
 
 void Fl_Window::show(const Fl_Window* modal_for) {
@@ -340,5 +320,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.43 2000/06/11 07:31:08 bill Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.44 2000/06/11 21:17:28 bill Exp $".
 //

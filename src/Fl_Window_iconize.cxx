@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_iconize.cxx,v 1.11 2000/06/11 07:31:08 bill Exp $"
+// "$Id: Fl_Window_iconize.cxx,v 1.12 2000/06/11 21:17:28 bill Exp $"
 //
 // Window minification code for the Fast Light Tool Kit (FLTK).
 //
@@ -39,9 +39,10 @@ void Fl_Window::iconize() {
     XIconifyWindow(fl_display, i->xid, fl_screen);
     i->wait_for_expose = 1;
 #endif
+    set_visible();
   }
 }
 
 //
-// End of "$Id: Fl_Window_iconize.cxx,v 1.11 2000/06/11 07:31:08 bill Exp $".
+// End of "$Id: Fl_Window_iconize.cxx,v 1.12 2000/06/11 21:17:28 bill Exp $".
 //
