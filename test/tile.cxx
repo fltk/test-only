@@ -1,5 +1,5 @@
 //
-// "$Id: tile.cxx,v 1.4 1999/01/07 19:18:01 mike Exp $"
+// "$Id: tile.cxx,v 1.5 1999/11/10 16:39:33 vincent Exp $"
 //
 // Tile test program for the Fast Light Tool Kit (FLTK).
 //
@@ -27,17 +27,22 @@
 #include <FL/Fl_Double_Window.H>
 #include <FL/Fl_Tile.H>
 #include <FL/Fl_Box.H>
+#include <FL/Fl_Button.H>
 
 int main(int argc, char** argv) {
   Fl_Window window(300,300);
   window.box(FL_NO_BOX);
   window.resizable(window);
   Fl_Tile tile(0,0,300,300);
-  Fl_Box box0(0,0,150,150,"0");
+  Fl_Group box0(0,0,150,150,"0");
   box0.box(FL_DOWN_BOX);
   box0.color(9);
   box0.labelsize(36);
   box0.align(FL_ALIGN_CLIP);
+
+  Fl_Button but(20, 20, 100, 30, "Button");
+  box0.end();
+
   Fl_Window w1(150,0,150,150,"1");
   w1.box(FL_NO_BOX);
   Fl_Box box1(0,0,150,150,"1\nThis is a\nchild\nX window");
@@ -76,7 +81,7 @@ int main(int argc, char** argv) {
   
   Fl_Box r(10,0,300-10,300-10);
   tile.resizable(r);
-  // r.box(FL_BORDER_FRAME);
+  //  r.box(FL_BORDER_FRAME);
 
   tile.end();
   window.end();
@@ -86,5 +91,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: tile.cxx,v 1.4 1999/01/07 19:18:01 mike Exp $".
+// End of "$Id: tile.cxx,v 1.5 1999/11/10 16:39:33 vincent Exp $".
 //

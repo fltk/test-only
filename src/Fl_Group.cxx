@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.39 1999/11/10 12:21:51 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.40 1999/11/10 16:39:30 vincent Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -394,9 +394,9 @@ void Fl_Group::old_size(const Fl_Widget* o,int* r) {
 }
 #endif
 
+
 void Fl_Group::layout() {
 
-  Fl_Widget::layout();
   // get changes from previous position:
   if (!resizable() || ow()==w() && oh()==h()) {
     if (type() < FL_WINDOW) {
@@ -449,6 +449,7 @@ void Fl_Group::layout() {
       o->layout();
     }
   }
+  Fl_Widget::layout();
   set_old_size();
 }
 
@@ -507,7 +508,7 @@ void Fl_Group::update_child(Fl_Widget& w) const {
   }
 }
 
-// Call the draw method, handle the clip out (nothing for groups)
+// Call the draw method, handle the clip out
 void Fl_Group::draw_n_clip()
 {
   clear_damage(FL_DAMAGE_ALL);
@@ -561,5 +562,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.39 1999/11/10 12:21:51 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.40 1999/11/10 16:39:30 vincent Exp $".
 //

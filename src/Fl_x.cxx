@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.45 1999/11/10 12:21:54 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.46 1999/11/10 16:39:31 vincent Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -562,6 +562,12 @@ void Fl_Window::layout() {
     if (this == resize_from_system) resize_from_system = 0;
     else if (i && (ox() != x() || oy() != y()))
       XMoveWindow(fl_display, i->xid, x(), y());
+    Fl_Widget*const* a = array();
+    Fl_Widget*const* e = a+children();
+    while (a < e) {
+      Fl_Widget* o = *a++;
+      if (o->damage() & FL_DAMAGE_LAYOUT) o->layout();
+    }
     Fl_Widget::layout();
     set_old_size();
   } else {
@@ -816,5 +822,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.45 1999/11/10 12:21:54 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.46 1999/11/10 16:39:31 vincent Exp $".
 //
