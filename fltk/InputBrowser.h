@@ -1,5 +1,5 @@
 //
-// "$Id: InputBrowser.h,v 1.3 2003/04/20 03:17:47 easysw Exp $"
+// "$Id$"
 //
 // MicroSoft style "ComboBox" with the menu appearing below with a
 // scrollbar. I would like to use the name "ComboBox" or "InputChoice"
@@ -62,6 +62,8 @@ public:
 
 protected:
   virtual void draw();
+  static void input_cb(Input *w, InputBrowser *ib);
+
   Input input;
   int minw_, minh_, maxw_, maxh_;
   int over_now, over_last;
@@ -72,5 +74,5 @@ protected:
 #endif
 
 //
-// End of "$Id: InputBrowser.h,v 1.3 2003/04/20 03:17:47 easysw Exp $".
+// End of "$Id$".
 //

@@ -47,10 +47,19 @@ InputBrowser::InputBrowser(int x, int y, int w, int h, const char *l)
   style(default_style);
   if (input.parent()) input.parent()->remove(input);
   input.parent(this);
+  input.callback((Callback_p)input_cb, this);
+  input.when(fltk::WHEN_ENTER_KEY_CHANGED | fltk::WHEN_RELEASE);
   minh_ = 10;
   maxw_ = 600;
   maxh_ = 400;
 }
+
+void
+InputBrowser::input_cb(Input *w, InputBrowser *ib)
+{
+  ib->do_callback();
+}
+
 
 // these are only used when in grabbed state so only one exists at once
 static MenuWindow *mw;
@@ -159,6 +168,7 @@ static void ComboBrowser_cb(Widget*, void*) {
   ib->item(item);
   ib->value(item->label());
   ib->redraw(DAMAGE_VALUE);
+  ib->do_callback();
   mw->hide();
 }
 

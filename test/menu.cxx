@@ -29,8 +29,8 @@ void callback(Widget* w, void*) {
   Widget* item = menu->get_item();
   printf("Callback for %s, item is %s\n",
 	 menu->label() ? menu->label() : "menu bar",
-	 item->label() ? item->label() : "unnamed");
-  item->do_callback();
+	 item ? item->label() ? item->label() : "unnamed" : "none");
+  if (item) item->do_callback();
 }
 
 const char* const strings[] = {
@@ -165,6 +165,7 @@ int main(int argc, char **argv) {
   InputBrowser ib(x,y,100,25,"Input&Browser:");
   ib.type(InputBrowser::INDENTED);
   ib.callback(callback);
+  ib.when(fltk::WHEN_CHANGED);
   ib.begin();
   build_hierarchy();
   ib.end();
