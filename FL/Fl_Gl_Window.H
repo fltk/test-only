@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.H,v 1.16 2001/03/14 18:02:49 spitzak Exp $"
+// "$Id: Fl_Gl_Window.H,v 1.17 2001/07/10 19:26:53 clip Exp $"
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,7 +38,7 @@ enum {
   FL_NO_ERASE_OVERLAY = 2048
 };
 
-class FL_API Fl_Gl_Window : public Fl_Window {
+class FL_GL_API Fl_Gl_Window : public Fl_Window {
 
 public:
 
@@ -92,5 +92,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.H,v 1.16 2001/03/14 18:02:49 spitzak Exp $".
+// End of "$Id: Fl_Gl_Window.H,v 1.17 2001/07/10 19:26:53 clip Exp $".
 //
