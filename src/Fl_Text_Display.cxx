@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.3 2000/08/08 06:29:18 clip Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.4 2000/08/09 04:34:37 clip Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -221,6 +221,7 @@ void Fl_Text_Display::layout() {
       calc_last_char();
     }
 
+    // figure the scrollbars
     if (scrollbar_width()) {
       /* Decide if the vertical scroll bar needs to be visible */
       if (scrollbar_align() & (FL_ALIGN_LEFT|FL_ALIGN_RIGHT) &&
@@ -280,9 +281,11 @@ void Fl_Text_Display::layout() {
     }
   }
 
+  // user request to change viewport
   if (mTopLineNumHint != mTopLineNum || mHorizOffsetHint != mHorizOffset)
     scroll_(mTopLineNumHint, mHorizOffsetHint);
 
+  // everything will fit in the viewport
   if (mNBufferLines < mNVisibleLines)
     scroll_(1, mHorizOffset);
   /* if empty lines become visible, there may be an opportunity to
@@ -290,8 +293,14 @@ void Fl_Text_Display::layout() {
   else while (mLineStarts[mNVisibleLines-2] == -1)
     scroll_(mTopLineNum-1, mHorizOffset);
 
+  // user request to display insert position
   if (display_insert_position_hint)
     display_insert();
+
+  // in case horizontal offset is now greater than longest line
+  int maxhoffset = max(0, longest_vline()-text_area.w);
+  if (mHorizOffset > maxhoffset)
+    scroll_(mTopLineNumHint, maxhoffset);
 
   mTopLineNumHint = mTopLineNum;
   mHorizOffsetHint = mHorizOffset;
@@ -1557,12 +1566,6 @@ void Fl_Text_Display::scroll_(int topLineNum, int horizOffset) {
     horizOffset = longest_vline() - text_area.w;
   if (horizOffset < 0) horizOffset = 0;
 
-  int fontHeight = mMaxsize;
-  int origHOffset = mHorizOffset;
-  int lineDelta = mTopLineNum - topLineNum;
-  int xOffset, yOffset, srcX, srcY, dstX, dstY, width, height;
-  int exactHeight = text_area.h - text_area.h % mMaxsize;
-
   /* Do nothing if scroll position hasn't actually changed or there's no
      window to draw in yet */
   if (mHorizOffset == horizOffset && mTopLineNum == topLineNum)
@@ -1575,39 +1578,8 @@ void Fl_Text_Display::scroll_(int topLineNum, int horizOffset) {
   /* Just setting mHorizOffset is enough information for redisplay */
   mHorizOffset = horizOffset;
 
-  /* Redisplay everything if the window is partially obscured (since
-     it's too hard to tell what displayed areas are salvageable) or
-     if there's nothing to recover because the scroll distance is large */
-  xOffset = origHOffset - mHorizOffset;
-  yOffset = lineDelta * fontHeight;
-  if ( abs( xOffset ) > text_area.w || abs( yOffset ) > exactHeight ) {
-    damage(FL_DAMAGE_EXPOSE);
-    /* If the window is not obscured, paint most of the window using XCopyArea
-       from existing displayed text, and redraw only what's necessary */
-  } else {
-    /* Recover the useable window areas by moving to the proper location */
-    srcX = text_area.x + ( xOffset >= 0 ? 0 : -xOffset );
-    dstX = text_area.x + ( xOffset >= 0 ? xOffset : 0 );
-    width = text_area.w - abs( xOffset );
-    srcY = text_area.y + ( yOffset >= 0 ? 0 : -yOffset );
-    dstY = text_area.y + ( yOffset >= 0 ? yOffset : 0 );
-    height = exactHeight - abs( yOffset );
-    //!!!       XCopyArea(XtDisplay(mW), XtWindow(mW), XtWindow(mW),
-    //!!!               mGc, srcX, srcY, width, height, dstX, dstY);
-    /* redraw the un-recoverable parts */
-    if ( yOffset > 0 )
-      damage(FL_DAMAGE_EXPOSE, text_area.x, text_area.y,
-             text_area.w, yOffset);
-    else if ( yOffset < 0 )
-      damage(FL_DAMAGE_EXPOSE, text_area.x, text_area.y +
-             text_area.h + yOffset, text_area.w, -yOffset);
-    if ( xOffset > 0 )
-      damage(FL_DAMAGE_EXPOSE, text_area.x, text_area.y,
-             xOffset, text_area.h );
-    else if ( xOffset < 0 )
-      damage(FL_DAMAGE_EXPOSE, text_area.x + text_area.w + xOffset,
-             text_area.y, -xOffset, text_area.h);
-  }
+  // redraw all text
+  damage(FL_DAMAGE_EXPOSE);
 }
 
 /*
@@ -1624,36 +1596,11 @@ void Fl_Text_Display::update_v_scrollbar() {
 
 /*
 ** Update the minimum, maximum, slider size, page increment, and value
-** for the horizontal scroll bar.  If scroll position is such that there
-** is blank space to the right of all lines of text, scroll back (adjust
-** horizOffset but don't redraw) to take up the slack and position the
-** right edge of the text at the right edge of the display.
-**
-** Note, there is some cost to this routine, since it scans the whole range
-** of displayed text, particularly since it's usually called for each typed
-** character!
+** for the horizontal scroll bar.
 */
-int Fl_Text_Display::update_h_scrollbar() {
-  int sliderMax, sliderWidth;
-  int origHOffset = mHorizOffset;
-
-  /* Scan all the displayed lines to find the width of the longest line */
-  int maxWidth = longest_vline();
-
-  /* If the scroll position is beyond what's necessary to keep all lines
-     in view, scroll to the left to bring the end of the longest line to
-     the right margin */
-  if ( maxWidth < text_area.w + mHorizOffset && mHorizOffset > 0 )
-    mHorizOffset = max( 0, maxWidth - text_area.w );
-
-  /* Readjust the scroll bar */
-  sliderWidth = text_area.w;
-  sliderMax = max( maxWidth, sliderWidth + mHorizOffset );
-
-  mHScrollBar->value( mHorizOffset, sliderWidth, 0, sliderMax );
-
-  /* Return 1 if scroll position was changed */
-  return origHOffset != mHorizOffset;
+void Fl_Text_Display::update_h_scrollbar() {
+  int sliderMax = max(longest_vline(), text_area.w + mHorizOffset);
+  mHScrollBar->value( mHorizOffset, text_area.w, 0, sliderMax );
 }
 
 /*
@@ -1987,5 +1934,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.3 2000/08/08 06:29:18 clip Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.4 2000/08/09 04:34:37 clip Exp $".
 //

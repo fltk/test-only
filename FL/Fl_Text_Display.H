@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.H,v 1.2 2000/08/08 06:29:18 clip Exp $"
+// "$Id: Fl_Text_Display.H,v 1.3 2000/08/09 04:34:37 clip Exp $"
 //
 // Header file for Fl_Text_Display class.
 //
@@ -140,7 +140,7 @@ class FL_API Fl_Text_Display: public Fl_Group {
     static void h_scrollbar_cb(Fl_Scrollbar* w, Fl_Text_Display* d);
     static void v_scrollbar_cb( Fl_Scrollbar* w, Fl_Text_Display* d);
     void update_v_scrollbar();
-    int update_h_scrollbar();
+    void update_h_scrollbar();
     int measure_vline(int visLineNum);
     int longest_vline();
     int empty_vlines();
@@ -213,5 +213,5 @@ class FL_API Fl_Text_Display: public Fl_Group {
 #endif
 
 //
-// End of "$Id: Fl_Text_Display.H,v 1.2 2000/08/08 06:29:18 clip Exp $".
+// End of "$Id: Fl_Text_Display.H,v 1.3 2000/08/09 04:34:37 clip Exp $".
 //
