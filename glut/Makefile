@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.3 1999/11/21 05:55:42 vincent Exp $"
+# "$Id: Makefile,v 1.4 1999/11/27 15:45:08 carl Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -34,7 +34,7 @@ DEMOS = \
 
 include ../makeinclude
 
-LIBRARY = $(LIBNAME)_glut
+LIBRARY = ../lib/$(LIBNAME)_glut
 DSONAME = $(DSOLIBglutNAME)$(DSOEXT)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
@@ -88,9 +88,8 @@ install: $(LIBRARY).a
 	fi
 	@echo "Installing include files..."
 	@-mkdir -p $(includedir)
-	@-cp -r ./glut.H $(includedir)
 	@-chmod 644 $(includedir)/FL/*
 
 #
-# End of "$Id: Makefile,v 1.3 1999/11/21 05:55:42 vincent Exp $".
+# End of "$Id: Makefile,v 1.4 1999/11/27 15:45:08 carl Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: forms_compatability.cxx,v 1.2 1999/11/08 22:21:50 carl Exp $"
+// "$Id: forms_compatability.cxx,v 1.3 1999/11/27 15:45:04 carl Exp $"
 //
 // Forms compatibility functions for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 // Forms library compatability functions.
 // Many more functions are defined as inlines in forms.h!
 
-#include "forms.H"
+#include <FL/forms.H>
 #include <stdlib.h>
 
 void fl_set_object_lstyle(Fl_Widget* o,int a) {
@@ -229,5 +229,5 @@ char *fl_show_simple_input(const char *str1, const char *defstr) {
 }
 
 //
-// End of "$Id: forms_compatability.cxx,v 1.2 1999/11/08 22:21:50 carl Exp $".
+// End of "$Id: forms_compatability.cxx,v 1.3 1999/11/27 15:45:04 carl Exp $".
 //

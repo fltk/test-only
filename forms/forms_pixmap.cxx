@@ -1,5 +1,5 @@
 //
-// "$Id: forms_pixmap.cxx,v 1.1 1999/11/07 08:11:31 bill Exp $"
+// "$Id: forms_pixmap.cxx,v 1.2 1999/11/27 15:45:04 carl Exp $"
 //
 // Forms pixmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -23,7 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include "forms.H"
+#include <FL/forms.H>
 
 Fl_FormsPixmap::Fl_FormsPixmap(
   Fl_Boxtype t, int x, int y, int w, int h, const char* l)
@@ -46,5 +46,5 @@ void Fl_FormsPixmap::draw() {
 }
 
 //
-// End of "$Id: forms_pixmap.cxx,v 1.1 1999/11/07 08:11:31 bill Exp $".
+// End of "$Id: forms_pixmap.cxx,v 1.2 1999/11/27 15:45:04 carl Exp $".
 //

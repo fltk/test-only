@@ -2,7 +2,7 @@
 
 #include <FL/Fl.H>
 #include <FL/fl_load_plugin.H>
-#include "config.h"
+#include <config.h>
 
 #ifndef _WIN32
 

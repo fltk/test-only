@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.cxx,v 1.4 1999/11/20 04:42:35 vincent Exp $"
+// "$Id: Fl_Chart.cxx,v 1.5 1999/11/27 15:45:00 carl Exp $"
 //
 // Forms-compatible chart widget for the Fast Light Tool Kit (FLTK).
 //
@@ -25,7 +25,7 @@
 
 #include <FL/math.h>
 #include <FL/Fl.H>
-#include "Fl_Chart.H"
+#include <FL/Fl_Chart.H>
 #include <FL/fl_draw.H>
 #include <string.h>
 #include <stdlib.h>
@@ -385,5 +385,5 @@ Fl_Style* Fl_Chart::default_style = new Fl_Named_Style("Chart", 0, &Fl_Chart::de
 
 
 //
-// End of "$Id: Fl_Chart.cxx,v 1.4 1999/11/20 04:42:35 vincent Exp $".
+// End of "$Id: Fl_Chart.cxx,v 1.5 1999/11/27 15:45:00 carl Exp $".
 //

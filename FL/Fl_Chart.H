@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.H,v 1.4 1999/11/20 04:42:35 vincent Exp $"
+// "$Id: Fl_Chart.H,v 1.17 1999/11/27 15:44:45 carl Exp $"
 //
 // Forms chart header file for the Fast Light Tool Kit (FLTK).
 //
@@ -81,5 +81,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Chart.H,v 1.4 1999/11/20 04:42:35 vincent Exp $".
+// End of "$Id: Fl_Chart.H,v 1.17 1999/11/27 15:44:45 carl Exp $".
 //

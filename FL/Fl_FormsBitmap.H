@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_Free.H,v 1.1 1999/11/07 08:11:27 bill Exp $"
+// "$Id: Fl_FormsBitmap.H,v 1.8 1999/11/27 15:44:45 carl Exp $"
 //
-// Forms free header file for the Fast Light Tool Kit (FLTK).
+// Forms bitmap header file for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,41 +23,24 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#ifndef Fl_Free_H
-#define Fl_Free_H
+#ifndef Fl_FormsBitmap_H
+#define Fl_FormsBitmap_H
 
-#ifndef Fl_Widget_H
-#include <FL/Fl_Widget.H>
-#endif
+#include <FL/Fl_Bitmap.H>
 
-#define FL_NORMAL_FREE		1
-#define FL_SLEEPING_FREE	2
-#define FL_INPUT_FREE		3
-#define FL_CONTINUOUS_FREE	4
-#define FL_ALL_FREE		5
-
-typedef int (*FL_HANDLEPTR)(Fl_Widget *, int , float, float, char);
-
-class FL_API Fl_Free : public Fl_Widget {
-    FL_HANDLEPTR hfunc;
-    static void step(void *);
+class FL_API Fl_FormsBitmap : public Fl_Widget {
+    Fl_Bitmap *b;
+protected:
     void draw();
-    int handle(int);
 public:
-    Fl_Free(uchar t,int x,int y,int w,int h,const char *l,FL_HANDLEPTR hdl);
-    ~Fl_Free();
+    Fl_FormsBitmap(Fl_Boxtype, int, int, int, int, const char * = 0);
+    void set(int W, int H, const uchar *bits);
+    void bitmap(Fl_Bitmap *B) {b = B;}
+    Fl_Bitmap *bitmap() const {return b;}
 };
-
-// old event names for compatability:
-#define FL_MOUSE		FL_DRAG
-#define FL_DRAW			0
-#define FL_STEP			9
-#define FL_FREEMEM		12
-#define FL_FREEZE		FL_UNMAP
-#define FL_THAW			FL_MAP
 
 #endif
 
 //
-// End of "$Id: Fl_Free.H,v 1.1 1999/11/07 08:11:27 bill Exp $".
+// End of "$Id: Fl_FormsBitmap.H,v 1.8 1999/11/27 15:44:45 carl Exp $".
 //

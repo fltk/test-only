@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.2 1999/11/21 05:55:40 vincent Exp $"
+# "$Id: Makefile,v 1.1 1999/11/27 15:44:51 carl Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -38,7 +38,7 @@ DEMOS = \
 
 include ../makeinclude
 
-LIBRARY = $(LIBNAME)_gl
+LIBRARY = ../lib/$(LIBNAME)_gl
 DSONAME = $(DSOLIBglNAME)$(DSOEXT)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
@@ -92,5 +92,5 @@ install: $(LIBRARY).a
 	fi
 
 #
-# End of "$Id: Makefile,v 1.2 1999/11/21 05:55:40 vincent Exp $".
+# End of "$Id: Makefile,v 1.1 1999/11/27 15:44:51 carl Exp $".
 #

@@ -29,7 +29,7 @@ ON-LINE DOCUMENTATION
         http://fltk.easysw.com/documentation.html
 
 
-BUILDING AND INSTALLING FLTK UNDER UNIX
+BUILDING AND INSTALLING FLTK UNDER LINUX AND UNIX
 
     In most cases you can just type "make".  This will run configure
     with the default (no) options and then compile everything.

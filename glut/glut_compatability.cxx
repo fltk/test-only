@@ -1,5 +1,5 @@
 //
-// "$Id: glut_compatability.cxx,v 1.1 1999/11/07 08:11:35 bill Exp $"
+// "$Id: glut_compatability.cxx,v 1.2 1999/11/27 15:45:10 carl Exp $"
 //
 // GLUT emulation routines for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@
 #include <config.h>
 #if HAVE_GL
 
-#include "glut.H"
+#include <FL/glut.H>
 
 #define MAXWINDOWS 32
 static Fl_Glut_Window *windows[MAXWINDOWS+1];
@@ -399,5 +399,5 @@ int glutLayerGet(GLenum type) {
 #endif
 
 //
-// End of "$Id: glut_compatability.cxx,v 1.1 1999/11/07 08:11:35 bill Exp $".
+// End of "$Id: glut_compatability.cxx,v 1.2 1999/11/27 15:45:10 carl Exp $".
 //

@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_strcasecmp.c,v 1.4 1999/11/27 00:58:25 carl Exp $"
+   "$Id: conf_strcasecmp.c,v 1.5 1999/11/27 15:45:17 carl Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -26,7 +26,7 @@
 #include <config.h>
 
 /*
-        long conf_strcascmp(const char *s1, const char *s2)
+        long conf_strcasecmp(const char *s1, const char *s2)
 
         description:
                 this function compares the strings s1 and s2 ignoring case
@@ -46,5 +46,5 @@ conf_strcasecmp(const char *s1, const char *s2)
 }
 
 /*
-    End of "$Id: conf_strcasecmp.c,v 1.4 1999/11/27 00:58:25 carl Exp $".
+    End of "$Id: conf_strcasecmp.c,v 1.5 1999/11/27 15:45:17 carl Exp $".
 */

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Positioner.H,v 1.4 1999/11/20 04:42:36 vincent Exp $"
+// "$Id: Fl_Positioner.H,v 1.9 1999/11/27 15:44:47 carl Exp $"
 //
 // Positioner header file for the Fast Light Tool Kit (FLTK).
 //
@@ -72,5 +72,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Positioner.H,v 1.4 1999/11/20 04:42:36 vincent Exp $".
+// End of "$Id: Fl_Positioner.H,v 1.9 1999/11/27 15:44:47 carl Exp $".
 //

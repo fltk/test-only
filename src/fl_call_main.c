@@ -1,5 +1,5 @@
 /*
- * "$Id: fl_call_main.c,v 1.7 1999/11/07 08:11:46 bill Exp $"
+ * "$Id: fl_call_main.c,v 1.8 1999/11/27 15:45:17 carl Exp $"
  *
  * Copyright 1998-1999 by Bill Spitzak and others.
  *
@@ -44,7 +44,7 @@
  * Microsoft(r) Windows(r) that allows for it.
  */
 
-#if defined(WIN32) && !defined(FL_DLL)
+#if defined(WIN32) && !defined(FL_LIBRARY) && !defined (__GNUC__)
 
 #include <windows.h>
 #include <stdio.h>
@@ -78,9 +78,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   return main(__argc, __argv);
 }
 
-#endif /* WIN32 && !FL_DLL */
+#endif /* WIN32 && !FL_LIBRARY && !__GNUC__ */
 
 /*
- * End of "$Id: fl_call_main.c,v 1.7 1999/11/07 08:11:46 bill Exp $".
+ * End of "$Id: fl_call_main.c,v 1.8 1999/11/27 15:45:17 carl Exp $".
  */
 

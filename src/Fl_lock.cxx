@@ -22,7 +22,7 @@
 */
 
 #include <FL/Fl.H>
-#include "config.h"
+#include <config.h>
 
 ////////////////////////////////////////////////////////////////
 #if HAVE_PTHREAD

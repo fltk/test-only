@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.26 1999/11/22 08:42:27 vincent Exp $"
+# "$Id: Makefile,v 1.27 1999/11/27 15:44:59 carl Exp $"
 #
 # Fluid makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -82,10 +82,15 @@ include makedepend
 
 install: $(PROGRAM)
 	@echo "Installing FLUID..."
-	@strip $(PROGRAM)
 	@-mkdir -p $(bindir)
-	@cp $(PROGRAM) $(bindir)/$(PROGRAM)
-	@chmod 755 $(bindir)/$(PROGRAM)
+	@if [ ! "$(OSTYPE)" = "cygwin32" ]; then \
+		cp $(PROGRAM) $(bindir)/; \
+		strip $(bindir)/$(PROGRAM); \
+		chmod 755 $(bindir)/$(PROGRAM); \
+	else \
+		cp $(PROGRAM).exe $(bindir)/; \
+		strip $(bindir)/$(PROGRAM).exe; \
+	fi
 
 uninstall:
 	-@ rm -f $(bindir)/$(PROGRAM)
@@ -102,5 +107,5 @@ rebuild:
 	./fluid -c widget_panel.fl
 
 #
-# End of "$Id: Makefile,v 1.26 1999/11/22 08:42:27 vincent Exp $".
+# End of "$Id: Makefile,v 1.27 1999/11/27 15:44:59 carl Exp $".
 #

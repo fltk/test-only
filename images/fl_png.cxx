@@ -1,5 +1,5 @@
 //
-// "$Id: fl_png.cxx,v 1.1 1999/11/21 04:22:59 vincent Exp $"
+// "$Id: fl_png.cxx,v 1.2 1999/11/27 15:45:12 carl Exp $"
 //
 // PNG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 #include <FL/fl_draw.H>
 #include <FL/x.H>
 #include <FL/Fl_Shared_Image.H>
-#include "config.h"
+#include <config.h>
 #if HAVE_PNG
 #include <png.h>
 #include <stdlib.h>
@@ -252,5 +252,5 @@ void Fl_PNG_Image::read()
 }
 
 //
-// End of "$Id: fl_png.cxx,v 1.1 1999/11/21 04:22:59 vincent Exp $"
+// End of "$Id: fl_png.cxx,v 1.2 1999/11/27 15:45:12 carl Exp $"
 //

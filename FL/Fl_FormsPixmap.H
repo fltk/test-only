@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_FormsBitmap.H,v 1.1 1999/11/07 08:11:26 bill Exp $"
+// "$Id: Fl_FormsPixmap.H,v 1.9 1999/11/27 15:44:45 carl Exp $"
 //
-// Forms bitmap header file for the Fast Light Tool Kit (FLTK).
+// Forms pixmap header file for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,24 +23,24 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#ifndef Fl_FormsBitmap_H
-#define Fl_FormsBitmap_H
+#ifndef Fl_FormsPixmap_H
+#define Fl_FormsPixmap_H
 
-#include <FL/Fl_Bitmap.H>
+#include <FL/Fl_Pixmap.H>
 
-class FL_API Fl_FormsBitmap : public Fl_Widget {
-    Fl_Bitmap *b;
+class FL_API Fl_FormsPixmap : public Fl_Widget {
+    Fl_Pixmap *b;
 protected:
     void draw();
 public:
-    Fl_FormsBitmap(Fl_Boxtype, int, int, int, int, const char * = 0);
-    void set(int W, int H, const uchar *bits);
-    void bitmap(Fl_Bitmap *B) {b = B;}
-    Fl_Bitmap *bitmap() const {return b;}
+    Fl_FormsPixmap(Fl_Boxtype, int, int, int, int, const char * = 0);
+    void set(const char * const * bits);
+    void Pixmap(Fl_Pixmap *B) {b = B;}
+    Fl_Pixmap *Pixmap() const {return b;}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_FormsBitmap.H,v 1.1 1999/11/07 08:11:26 bill Exp $".
+// End of "$Id: Fl_FormsPixmap.H,v 1.9 1999/11/27 15:44:45 carl Exp $".
 //

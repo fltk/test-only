@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.55 1999/11/27 00:58:22 carl Exp $"
+# "$Id: Makefile,v 1.56 1999/11/27 15:45:17 carl Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -254,15 +254,16 @@ install: $(LIBRARY).a $(DSONAME)
 	@echo "Installing include files..."
 	@-mkdir -p $(includedir)
 	@rm -rf $(includedir)/FL $(includedir)/Fl
-	@-cp -r ../FL $(includedir)
+	@-mkdir -p $(includedir)/FL
+	@-cp ../FL/*.[Hh]  $(includedir)/FL
 	@-chmod 755 $(includedir)/FL
 	@-chmod 644 $(includedir)/FL/*
-	@for file in $(includedir)/FL/*.H; do\
+	@if [ ! "$(OSTYPE)" = "cygwin32" ]; then for file in $(includedir)/FL/*.H; do\
 		newfile="`basename $$file H`h";\
 		ln -s $$file $(includedir)/FL/$$newfile;\
-	done
-	@-ln -s FL $(includedir)/Fl
+	done; fi
+	@if [ ! "$(OSTYPE)" = "cygwin32" ]; then ln -sf FL $(includedir)/Fl; fi
 
 #
-# End of "$Id: Makefile,v 1.55 1999/11/27 00:58:22 carl Exp $".
+# End of "$Id: Makefile,v 1.56 1999/11/27 15:45:17 carl Exp $".
 #

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.19 1999/11/21 04:22:47 vincent Exp $"
+# "$Id: Makefile,v 1.20 1999/11/27 15:44:41 carl Exp $"
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -25,7 +25,11 @@
 
 SHELL=/bin/sh
 
-DIRS	=	src images fluid forms gl glut test themes test/plugins
+SUBDIRS	=	src images fluid forms OpenGL glut test
+PLUGINS	=	themes test/plugins
+
+# Does this require GNU make?
+DIRS	=	$(SUBDIRS) `if [ ! "$(OSTYPE)" = "cygwin32" ]; then echo $(PLUGINS); fi`
 
 all: makeinclude
 	@for dir in $(DIRS); do\
@@ -62,7 +66,7 @@ clean:
 	done
 
 distclean: clean
-	rm -f config.log config.h config.status makeinclude
+	rm -f config.log config.h config.status makeinclude fltk-config
 
 makeinclude: configure configh.in makeinclude.in
 	./configure
@@ -72,5 +76,5 @@ configure: configure.in
 
 
 #
-# End of "$Id: Makefile,v 1.19 1999/11/21 04:22:47 vincent Exp $".
+# End of "$Id: Makefile,v 1.20 1999/11/27 15:44:41 carl Exp $".
 #

@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_FormsPixmap.H,v 1.1 1999/11/07 08:11:26 bill Exp $"
+// "$Id: Fl_Timer.H,v 1.9 1999/11/27 15:44:48 carl Exp $"
 //
-// Forms pixmap header file for the Fast Light Tool Kit (FLTK).
+// Timer header file for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,24 +23,41 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#ifndef Fl_FormsPixmap_H
-#define Fl_FormsPixmap_H
+#ifndef Fl_Timer_H
+#define Fl_Timer_H
 
-#include <FL/Fl_Pixmap.H>
+#ifndef Fl_Widget_H
+#include <FL/Fl_Widget.H>
+#endif
 
-class FL_API Fl_FormsPixmap : public Fl_Widget {
-    Fl_Pixmap *b;
+// values for type():
+#define FL_NORMAL_TIMER		0
+#define FL_VALUE_TIMER		1
+#define FL_HIDDEN_TIMER		2
+
+class FL_API Fl_Timer : public Fl_Widget {
+  static void stepcb(void *);
+  void step();
+  char on, direction_;
+  double delay, total;
+  long lastsec,lastusec;
 protected:
-    void draw();
+  void draw();
 public:
-    Fl_FormsPixmap(Fl_Boxtype, int, int, int, int, const char * = 0);
-    void set(const char * const * bits);
-    void Pixmap(Fl_Pixmap *B) {b = B;}
-    Fl_Pixmap *Pixmap() const {return b;}
+  int handle(int);
+  Fl_Timer(uchar t,int x,int y,int w,int h, const char *l);
+  ~Fl_Timer();
+  void value(double);
+  double value() const {return delay>0.0?delay:0.0;}
+  char direction() const {return direction_;}
+  void direction(char d) {direction_ = d;}
+  char suspended() const {return !on;}
+  void suspended(char d);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_FormsPixmap.H,v 1.1 1999/11/07 08:11:26 bill Exp $".
+// End of "$Id: Fl_Timer.H,v 1.9 1999/11/27 15:44:48 carl Exp $".
 //
+

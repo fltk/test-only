@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_Timer.H,v 1.1 1999/11/07 08:11:27 bill Exp $"
+// "$Id: Fl_Free.H,v 1.9 1999/11/27 15:44:46 carl Exp $"
 //
-// Timer header file for the Fast Light Tool Kit (FLTK).
+// Forms free header file for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,41 +23,41 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#ifndef Fl_Timer_H
-#define Fl_Timer_H
+#ifndef Fl_Free_H
+#define Fl_Free_H
 
 #ifndef Fl_Widget_H
 #include <FL/Fl_Widget.H>
 #endif
 
-// values for type():
-#define FL_NORMAL_TIMER		0
-#define FL_VALUE_TIMER		1
-#define FL_HIDDEN_TIMER		2
+#define FL_NORMAL_FREE		1
+#define FL_SLEEPING_FREE	2
+#define FL_INPUT_FREE		3
+#define FL_CONTINUOUS_FREE	4
+#define FL_ALL_FREE		5
 
-class FL_API Fl_Timer : public Fl_Widget {
-  static void stepcb(void *);
-  void step();
-  char on, direction_;
-  double delay, total;
-  long lastsec,lastusec;
-protected:
-  void draw();
+typedef int (*FL_HANDLEPTR)(Fl_Widget *, int , float, float, char);
+
+class FL_API Fl_Free : public Fl_Widget {
+    FL_HANDLEPTR hfunc;
+    static void step(void *);
+    void draw();
+    int handle(int);
 public:
-  int handle(int);
-  Fl_Timer(uchar t,int x,int y,int w,int h, const char *l);
-  ~Fl_Timer();
-  void value(double);
-  double value() const {return delay>0.0?delay:0.0;}
-  char direction() const {return direction_;}
-  void direction(char d) {direction_ = d;}
-  char suspended() const {return !on;}
-  void suspended(char d);
+    Fl_Free(uchar t,int x,int y,int w,int h,const char *l,FL_HANDLEPTR hdl);
+    ~Fl_Free();
 };
+
+// old event names for compatability:
+#define FL_MOUSE		FL_DRAG
+#define FL_DRAW			0
+#define FL_STEP			9
+#define FL_FREEMEM		12
+#define FL_FREEZE		FL_UNMAP
+#define FL_THAW			FL_MAP
 
 #endif
 
 //
-// End of "$Id: Fl_Timer.H,v 1.1 1999/11/07 08:11:27 bill Exp $".
+// End of "$Id: Fl_Free.H,v 1.9 1999/11/27 15:44:46 carl Exp $".
 //
-
