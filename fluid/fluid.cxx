@@ -240,7 +240,7 @@ void write_cb(fltk::Widget *, void *) {
   }
   if (header_file_name[0] == '.' && isalpha(header_file_name[1])) {
     strcpy(hname,filename_name(filename));
-    strcpy((char*)filename_ext(cname), header_file_name);
+    strcpy((char*)filename_ext(hname), header_file_name);
   } else {
     strcpy(hname, header_file_name);
   }
