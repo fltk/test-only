@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.34 2000/02/14 11:32:53 bill Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.35 2000/04/12 08:05:41 bill Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,8 +27,6 @@
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/fl_draw.H>
 
-extern Fl_Named_Style* fl_title_style; // in Fl_Menu.cxx
-
 void Fl_Menu_Bar::draw() {
   if (damage()&(~FL_DAMAGE_HIGHLIGHT)) draw_box();
   if (!children()) { last_ = -1; return; }
@@ -50,7 +48,9 @@ void Fl_Menu_Bar::draw() {
 	bgcolor = highlight_color();
 	Fl_Color c = highlight_label_color(); if (c) label_color = c;
       }
-      fl_title_style->box->draw(X, y()+3, W, this->h()-6, bgcolor, flags);
+      int x1 = X; int y1 = y(); int w1 = W; int h1 = this->h();
+      box()->inset(x1,y1,w1,h1);
+      window_box()->draw(X, y1+1, W, h1-2, bgcolor, flags);
       o->x(X+5);
       o->y(y()+(h()-o->h())/2);
       int save_w = o->w(); o->w(W-10);
@@ -73,7 +73,7 @@ int Fl_Menu_Bar::handle(int event) {
     if (!m->visible()) continue;
     if (!m->h() || m->damage() & FL_DAMAGE_LAYOUT) m->layout();
     int W = m->w() + 10;
-    if (Fl::event_inside(X, y() + 3, W, h() - 6)) {
+    if (Fl::event_inside(X, y(), W, h())) {
       highlight_ = i;
       break;
     }
@@ -117,8 +117,20 @@ int Fl_Menu_Bar::handle(int event) {
   return 0;
 }
 
+// The default style for menu bars.  The window_box is used to draw
+// the boxes around the popup titles, this is done by Fl_Menu.cxx.
+
 static void revert(Fl_Style* s) {
   s->box = FL_FLAT_BOX;
+#if 0
+  // NT 4.0 style
+  s->window_box = FL_FLAT_BOX;
+#else
+  // Windows98 style:
+  s->window_box = FL_HIGHLIGHT_BOX;
+  s->selection_color = FL_GRAY;
+  s->selection_text_color = FL_BLACK;
+#endif
 }
 
 static Fl_Named_Style* style = new Fl_Named_Style("Menu_Bar", revert, &style);
@@ -130,5 +142,5 @@ Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.34 2000/02/14 11:32:53 bill Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.35 2000/04/12 08:05:41 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.41 2000/04/03 17:09:18 bill Exp $"
+// "$Id: Fl_Choice.cxx,v 1.42 2000/04/12 08:05:40 bill Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,8 @@
 // The dimensions for the glyph in this and the Fl_Menu_Button are exactly
 // the same, so that glyphs may be shared between them.
 
+extern char fl_draw_shortcut;
+
 void Fl_Choice::draw() {
   Fl_Widget* o = children() ? item() : 0;
   draw_window_box();
@@ -53,7 +55,10 @@ void Fl_Choice::draw() {
     o->x(X);
     o->y(Y+(H-o->h())/2);
     int save_w = o->w(); o->w(W-w1);
-    fl_color(label_color); o->draw();
+    fl_color(label_color);
+    if (!(flags() & FL_NO_SHORTCUT_LABEL)) fl_draw_shortcut = 2;
+    o->draw();
+    fl_draw_shortcut = 0;
     o->w(save_w);
     if (save_flags & FL_INACTIVE) o->set_flag(FL_INACTIVE);
     else o->clear_flag(FL_INACTIVE);
@@ -135,5 +140,5 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.41 2000/04/03 17:09:18 bill Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.42 2000/04/12 08:05:40 bill Exp $".
 //

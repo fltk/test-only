@@ -50,11 +50,9 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
 
   [widgets/menu bar]
     highlight color = light1                      # color of menu title box when it's highlighted
-
-  [widgets/menu title]
     selection color = puke green                  # color of menu title box when its submenu selected
     selection text color = white                  # color of menu title label when its submenu selected
-    box = highlight				  # boxtype of menu titles
+    window box = highlight			  # boxtype of menu titles
 
   [widgets/browser]                               # browser attributes
     selection color = puke green                  # color of selections in browser

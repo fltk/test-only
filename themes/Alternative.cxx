@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.23 2000/04/10 06:45:47 bill Exp $"
+// "$Id: Alternative.cxx,v 1.24 2000/04/12 08:05:43 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -269,8 +269,8 @@ extern "C"
 int fltk_theme(int, char**) {
 
   Fl_Style* s;
-  if ((s = Fl_Style::find("menu title"))) {
-    s->box = FL_HIGHLIGHT_BOX;
+  if ((s = Fl_Style::find("menu bar"))) {
+    s->window_box = FL_HIGHLIGHT_BOX;
   }
 
   if ((s = Fl_Style::find("item"))) {
@@ -314,5 +314,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.23 2000/04/10 06:45:47 bill Exp $".
+// End of "$Id: Alternative.cxx,v 1.24 2000/04/12 08:05:43 bill Exp $".
 //

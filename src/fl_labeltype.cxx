@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.16 2000/03/19 01:38:31 bill Exp $"
+// "$Id: fl_labeltype.cxx,v 1.17 2000/04/12 08:05:41 bill Exp $"
 //
 // Label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -129,7 +129,8 @@ void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Color c, Fl_Flags f) c
 
   if (label_ && *label_) {
     fl_font(label_font(), label_size());
-    if (!(flags() & FL_NO_SHORTCUT_LABEL)) fl_draw_shortcut = 1;
+    if (!(flags() & FL_NO_SHORTCUT_LABEL) && !fl_draw_shortcut)
+      fl_draw_shortcut = 1;
     label_type()->draw(label_, X, Y, W, H, c, f);
     fl_draw_shortcut = 0;
   }
@@ -155,5 +156,5 @@ const Fl_Labeltype_* Fl_Labeltype_::find(const char* name) {
 const Fl_Labeltype_* Fl_Labeltype_::first = 0;
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.16 2000/03/19 01:38:31 bill Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.17 2000/04/12 08:05:41 bill Exp $".
 //

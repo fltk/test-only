@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.84 2000/04/11 08:16:44 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.85 2000/04/12 08:05:40 bill Exp $"
 //
 // Implementation of the Fl_Menu_ class, which includes most of the
 // code needed to do popup menus and menubars.
@@ -39,53 +39,32 @@
 #include <FL/fl_draw.H>
 
 ////////////////////////////////////////////////////////////////
-// Styles used by parts of the menu:
+// This style is used by the actual windows created for menus.
+// The window_box is used to draw the box around selected items.
 
-// The style used by the actual pull-down windows created for menus.
-// The window_box is used to draw the box around an item!
-
-static void mw_revert(Fl_Style* s) {
+static void revert(Fl_Style* s) {
   s->box = FL_UP_BOX;
   s->window_box = FL_FLAT_BOX;
   s->leading = 4;
 }
 
-static Fl_Named_Style* menu_style =
-  new Fl_Named_Style("Menu", mw_revert, &menu_style);
-
-// Style used by the little windows that serve as menu titles.  
-// This style is also referred to by Fl_Menu_Bar.cxx:
-
-static void mt_revert(Fl_Style* s) {
-#if 0
-  // NT 4.0 style
-  s->box = FL_FLAT_BOX;
-#else
-  // Windows98 style:
-  s->box = FL_HIGHLIGHT_BOX;
-  s->selection_color = FL_GRAY;
-  s->selection_text_color = FL_BLACK;
-#endif
-}
-
-Fl_Named_Style* fl_title_style =
-  new Fl_Named_Style("Menu_Title", mt_revert, &fl_title_style);
+static Fl_Named_Style* style = new Fl_Named_Style("Menu", revert, &style);
 
 ////////////////////////////////////////////////////////////////
-
 // tiny window for title of menu:
+
 class MenuTitle : public Fl_Menu_Window {
   void draw();
 public:
   Fl_Widget* item;
-  MenuTitle(int X, int Y, int W, int H, Fl_Widget*);
+  MenuTitle(int X, int Y, int W, int H, Fl_Widget*, Fl_Group*);
 };
 
-MenuTitle::MenuTitle(int X, int Y, int W, int H, Fl_Widget* L) :
-  Fl_Menu_Window(X, Y, W, H, 0)
+MenuTitle::MenuTitle(int X, int Y, int W, int H, Fl_Widget* L, Fl_Group* button)
+  : Fl_Menu_Window(X, Y, W, H, 0)
 {
   end();
-  style(fl_title_style);
+  copy_style(button->style());
   set_modal();
   clear_border();
   item = L;
@@ -96,7 +75,7 @@ MenuTitle::MenuTitle(int X, int Y, int W, int H, Fl_Widget* L) :
 void MenuTitle::draw() {
   Fl_Color bgcolor = selection_color();
   Fl_Color label_color = selection_text_color();
-  box()->draw(0, 0, w(), h(), bgcolor, FL_VALUE);
+  window_box()->draw(0, 0, w(), h(), bgcolor, FL_VALUE);
   // this allow a toggle or other widget to preview it's state:
   if (Fl::pushed()) Fl::pushed_ = item;
   item->x(5);
@@ -108,8 +87,8 @@ void MenuTitle::draw() {
 }
 
 ////////////////////////////////////////////////////////////////
+// Class for the main part of the popup menu:
 
-// each vertical menu has one of these:
 class MenuWindow : public Fl_Menu_Window {
   void draw();
 public:
@@ -123,7 +102,7 @@ public:
   int drawn_selected;	// last redraw has this selected
   Fl_Group* list;
   MenuWindow(Fl_Group*, int X, int Y, int W, int H,
-	     Fl_Widget* title, int menubar=0);
+	     Fl_Widget* title, Fl_Menu_* button);
   ~MenuWindow();
   int find_selected(int mx, int my);
   int titlex(int);
@@ -133,13 +112,13 @@ public:
 };
 
 MenuWindow::MenuWindow(Fl_Group* m, int X, int Y, int Wp, int Hp,
-		       Fl_Widget* t, int menubar)
+		       Fl_Widget* t, Fl_Menu_* button)
   : Fl_Menu_Window(X, Y, Wp, Hp, 0)
 {
   end();
   set_modal();
   clear_border();
-  style(menu_style);
+  style(::style);
 
   list = m;
   numitems = m ? m->children() : 0;
@@ -147,8 +126,8 @@ MenuWindow::MenuWindow(Fl_Group* m, int X, int Y, int Wp, int Hp,
 
   drawn_selected = -1;
 
-  is_menubar = menubar;
-  if (menubar) {
+  is_menubar = !button;
+  if (is_menubar) {
     title = 0;
     return;
   }
@@ -211,7 +190,7 @@ MenuWindow::MenuWindow(Fl_Group* m, int X, int Y, int Wp, int Hp,
   if (list) y(Y); else {y(Y-2); w(1); h(1);}
 
   if (t) {
-    title = new MenuTitle(X, Y-Htitle-2, Wtitle, Htitle, t);
+    title = new MenuTitle(X, Y-Htitle-2+dh, Wtitle, Htitle-dh, t, button);
   } else
     title = 0;
 }
@@ -566,7 +545,7 @@ int Fl_Menu_::pulldown(
     Y += Fl::event_y_root()-Fl::event_y();
   }
 
-  MenuWindow mw(this, X, Y, W, H, t, menubar);
+  MenuWindow mw(this, X, Y, W, H, t, menubar ? 0 : this);
   Fl::grab(mw);
   menustate p; ::p = &p;
   p.menus[0] = &mw;
@@ -594,7 +573,7 @@ int Fl_Menu_::pulldown(
       if (g->focus() < 0) break;
       int nX = mw->x() + mw->w();
       int nY = mw->y() + mw->ypos(p.item_number)-mw->ypos(0);
-      MenuWindow* n = new MenuWindow(g, X,Y,W,H, 0);
+      MenuWindow* n = new MenuWindow(g, X,Y,W,H, 0, this);
       n->which_item = p.item_number;
       p.menus[p.nummenus++] = n;
       // move all earlier menus to line up with this new one:
@@ -665,7 +644,7 @@ int Fl_Menu_::pulldown(
       }
       ((Fl_Group*)m)->focus(-1); // don't preselect anything on this menu
       p.menus[p.nummenus++] = mw =
-	new MenuWindow((Fl_Group*)m, nX, nY, 0, 0, title);
+	new MenuWindow((Fl_Group*)m, nX, nY, 0, 0, title, this);
       mw->which_item = p.item_number;
       if (title) goto SHOW_MENUBAR_TITLE;
       mw->show();
@@ -679,14 +658,14 @@ int Fl_Menu_::pulldown(
       if (!p.menu_number && p.menubar) {
 	fakemenu = new MenuWindow(0,
 			mw->x() + mw->titlex(p.item_number),
-			mw->y() + mw->h(), 0, 0, m);
+			mw->y() + mw->h(), 0, 0, m, this);
 	mw = fakemenu;
       SHOW_MENUBAR_TITLE:
 	// fix the title box size to match menubar thickness:
-	int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
-	int nh = this->h()-dh-2;
-	mw->title->y(Y+dh/2+1);
-	mw->title->h(nh);
+	int dx=0; int y1=Y; int dw=0; int h1=this->h();
+	box()->inset(dx,y1,dw,h1);
+	mw->title->y(y1+1);
+	mw->title->h(h1-2);
 	mw->title->show();
 	if (mw != fakemenu) mw->show();
       }
@@ -800,5 +779,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.84 2000/04/11 08:16:44 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.85 2000/04/12 08:05:40 bill Exp $".
 //

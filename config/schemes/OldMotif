@@ -36,9 +36,6 @@ FLTK version = 2.0.0
   [widgets/choice]
     box = motif thick
 
-  [widgets/menu bar]
-    box = motif thick
-
   [widgets/menu button]
     box = motif thick
 
@@ -46,8 +43,9 @@ FLTK version = 2.0.0
     box = motif thick
     glyph box = motif thick menu
 
-  [widgets/menu title]
-    box = motif thick menu
+  [widgets/menu bar]
+    box = motif thick
+    window box = motif thick menu
 
 #  [widgets/scrollbar]
 #    box = motif thick down

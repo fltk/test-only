@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.3 2000/04/10 06:45:47 bill Exp $"
+// "$Id: fl_motif.cxx,v 1.4 2000/04/12 08:05:44 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -194,8 +194,8 @@ int fl_motif()
     s->leading = 0;
   }
 
-  if ((s = Fl_Style::find("menu title"))) {
-    s->box = &thin_motif_menu_box;
+  if ((s = Fl_Style::find("menu bar"))) {
+    s->window_box = &thin_motif_menu_box;
     s->selection_color = FL_GRAY;
     s->selection_text_color = FL_BLACK;
   }
@@ -241,5 +241,5 @@ int fl_motif()
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.3 2000/04/10 06:45:47 bill Exp $"
+// End of "$Id: fl_motif.cxx,v 1.4 2000/04/12 08:05:44 bill Exp $"
 //

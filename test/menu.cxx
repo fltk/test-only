@@ -34,7 +34,7 @@ void build_hierarchy() {
   (new Fl_Item("Item &2"))->label_size(14);
   (new Fl_Item("Item &3"))->label_size(18);
   (new Fl_Item("Item &4"))->label_size(22);
-  g->deactivate();
+  //g->deactivate();
   Fl_Group* g1 = new Fl_Item_Group("&nested menu");
   new Fl_Item("Item &1");
   new Fl_Item("Item &2");
