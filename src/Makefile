@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.33 1999/09/17 16:23:56 vincent Exp $"
+# "$Id: Makefile,v 1.34 1999/09/19 04:43:08 vincent Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -148,6 +148,7 @@ CPPglFILES = \
 	glut_font.cxx
 
 CPPimagesFILES = \
+	Fl_Guess_Image.cxx \
 	fl_jpeg.cxx\
 	fl_png.cxx
 
@@ -220,33 +221,40 @@ libfltk.so.2 libfltk.sl.2: $(OBJECTS) $(DSOglNAME) $(DSOimagesNAME)
 	@echo $(DSOCOMMAND) $@ ...
 	@$(DSOCOMMAND) $@ $(OBJECTS)
 
-libfltk.2.a: $(OBJECTS) # $(DSOglNAME) $(DSOimagesNAME)  $(OBJECTSimages)
-	@echo $(LIBCOMMAND) $@ ...
+fltk.2.dll: $(OBJECTS) #fltkgl.2.dll fltkimages.2.dll
+	@echo $(DSOCOMMAND) $@ ...
 	@rm -f $@
-	@$(LIBCOMMAND) $@ $(OBJECTS) $(OBJECTSimages)
-	@$(RANLIB) $@
+	@$(DSOCOMMAND) --export-all --output-def ../lib/libfltkdll.2.def \
+	--implib ../lib/libfltkdll.2.a \
+	--driver-name $(CXX) \
+	 -o $@ \
+	    $(OBJECTS) $(OBJECTSimages) $(OBJECTSgl) $(CXXFLAGS) $(GLDLIBS)
 
 libfltkgl.so.2 libfltkgl.sl.2: $(OBJECTSgl)
 	@echo $(DSOCOMMAND) $@ ...
 	@$(DSOCOMMAND) $@ $(OBJECTSgl)
 
-libfltkgl.2.a: $(OBJECTSgl)
-	@echo $(LIBCOMMAND) $@ ...
+fltkgl.2.dll: $(OBJECTSgl)
+	@echo $(DSOCOMMAND) $@ ...
 	@rm -f $@
-	@$(LIBCOMMAND) $@ $(OBJECTSgl)
-	@$(RANLIB) $@
+	@$(DSOCOMMAND) --export-all --output-def ../lib/libfltkgldll.2.def \
+	--implib ../lib/libfltkgldll.2.a \
+	--driver-name $(CXX) \
+	 -o $@ \
+	    $(OBJECTSgl) $(CXXFLAGS) $(LDLIBS)
 
 libfltkimages.so.2 libfltkimages.sl.2: $(OBJECTSimages)
 	@echo $(DSOCOMMAND) $@ ...
 	@$(DSOCOMMAND) $@ $(OBJECTSimages)
 
-libfltkimages.2.a: $(OBJECTSimages)
-	@echo $(LIBCOMMAND) $@ ...
+fltkimages.2.dll: $(OBJECTSimages)
+	@echo $(DSOCOMMAND) $@ ...
 	@rm -f $@
-	@$(LIBCOMMAND) $@ $(OBJECTSimages)
-	@$(RANLIB) $@
-
-include Makefile.Mingw32DLLs
+	@$(DSOCOMMAND) --export-all --output-def ../lib/libfltkimagesdll.2.def \
+	--implib ../lib/libfltkimagesdll.2.a \
+	--driver-name $(CXX) \
+	 -o $@ \
+	    $(OBJECTSimages) $(CXXFLAGS) $(LDLIBS)
 
 .SUFFIXES:	.cxx .h .o
 
@@ -294,5 +302,5 @@ install: $(LIBRARY) $(DSONAME)
 	@-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.33 1999/09/17 16:23:56 vincent Exp $".
+# End of "$Id: Makefile,v 1.34 1999/09/19 04:43:08 vincent Exp $".
 #
