@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Type.cxx,v 1.39 2001/02/20 06:59:49 spitzak Exp $"
+// "$Id: Fl_Menu_Type.cxx,v 1.40 2001/02/23 15:53:54 robertk Exp $"
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
@@ -54,6 +54,15 @@ public:
   Fl_Widget_Type *_make() {return new Fl_Menu_Item_Type();}
 };
 
+class Fl_Menu_Divider_Type : public Fl_Widget_Type {
+public:
+  Fl_Menu_Item* subtypes() {return 0;}
+  const char* type_name() {return "Fl_Divider";}
+  int is_menu_item() const {return 1;}
+  Fl_Widget *widget(int x,int y,int w,int h) { return new Fl_Divider; }
+  Fl_Widget_Type *_make() {return new Fl_Menu_Divider_Type();}
+};
+
 class Fl_Submenu_Type : public Fl_Group_Type {
 public:
   Fl_Menu_Item* subtypes() {return 0;}
@@ -76,6 +85,7 @@ Fl_Widget *Fl_Submenu_Type::widget(int,int,int,int) {
 }
 
 Fl_Menu_Item_Type Fl_Menu_Item_type;
+Fl_Menu_Divider_Type Fl_Menu_Divider_type;
 Fl_Submenu_Type Fl_Submenu_type;
 
 ////////////////////////////////////////////////////////////////
@@ -228,5 +238,5 @@ void shortcut_in_cb(Shortcut_Button* i, void* v) {
 }
 
 //
-// End of "$Id: Fl_Menu_Type.cxx,v 1.39 2001/02/20 06:59:49 spitzak Exp $".
+// End of "$Id: Fl_Menu_Type.cxx,v 1.40 2001/02/23 15:53:54 robertk Exp $".
 //
