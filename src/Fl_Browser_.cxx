@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.10 1999/03/09 06:46:36 bill Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.11 1999/03/14 06:46:26 carl Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,8 @@
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Browser_.H>
 #include <FL/fl_draw.H>
+
+#define DEFAULT_STYLE ((Style*)default_style())
 
 // This is the base class for browsers.  To be useful it must be
 // subclassed and several virtual functions defined.  The
@@ -62,6 +64,34 @@ static void hscrollbar_callback(Fl_Widget* s, void*) {
 }
 
 int Fl_Browser_::scrollbar_width_ = 17;
+
+
+void Fl_Browser_::loadstyle() {
+  if (!Fl::s_browser) {
+    Fl::s_browser = 1;
+
+    static Fl::Attribute widget_attributes[] = {
+      { "label color", LABELCOLOR },
+      { "label size", LABELSIZE },
+      { "label type", LABELTYPE },
+      { "label font", LABELFONT },
+      { "color", COLOR },
+      { "selected color", COLOR2 },
+      { "box", BOX },
+      { 0 }
+    };
+    Fl::load_attributes("browser", DEFAULT_STYLE->widget_, widget_attributes);
+
+    static Fl::Attribute browser_attributes[] = {
+      { "text font", TEXTFONT },
+      { "text size", TEXTSIZE },
+      { "text color", TEXTCOLOR },
+      { "selected text color", SELECTED_TEXTCOLOR },
+      { 0 }
+    };
+    Fl::load_attributes("browser", DEFAULT_STYLE->browser_, browser_attributes);
+  }
+}
 
 // return where to draw the actual box:
 void Fl_Browser_::bbox(int& X, int& Y, int& W, int& H) const {
@@ -223,6 +253,7 @@ void Fl_Browser_::display(void* x) {
 // redraw, has side effect of updating top and setting scrollbar:
 
 void Fl_Browser_::draw() {
+  loadstyle();
   int drawsquare = 0;
   if (damage() & FL_DAMAGE_ALL) { // redraw the box if full redraw
     Fl_Boxtype b = box() ? box() : FL_DOWN_BOX;
@@ -579,12 +610,26 @@ int Fl_Browser_::handle(int event) {
   return 0;
 }
 
+Fl_Browser_::Style Fl_Browser_::_default_style;
+
+Fl_Browser_::Style::Style() : Fl_Widget::Style() {
+  sbf = 0;
+
+  widget(COLOR) = FL_WHITE;
+  widget(COLOR2) = 15;
+  widget(BOX) = FL_MEDIUM_DOWN_BOX;
+
+  browser(TEXTFONT) = FL_COURIER;
+  browser(TEXTSIZE) = 14;
+  browser(TEXTCOLOR) = FL_BLACK;
+  browser(SELECTED_TEXTCOLOR) = FL_BLACK;
+}
+
 Fl_Browser_::Fl_Browser_(int x, int y, int w, int h, const char* l)
   : Fl_Group(x, y, w, h, l),
     scrollbar(0, 0, 0, 0, 0), // they will be resized by draw()
     hscrollbar(0, 0, 0, 0, 0)
 {
-  box(FL_NO_BOX);
   align(FL_ALIGN_BOTTOM);
   position_ = real_position_ = 0;
   hposition_ = real_hposition_ = 0;
@@ -592,16 +637,11 @@ Fl_Browser_::Fl_Browser_(int x, int y, int w, int h, const char* l)
   top_ = 0;
   when(FL_WHEN_RELEASE_ALWAYS);
   selection_ = 0;
-  color(FL_WHITE);
-  selection_color(FL_SELECTION_COLOR);
   scrollbar.callback(scrollbar_callback);
 //scrollbar.align(FL_ALIGN_LEFT|FL_ALIGN_BOTTOM); // back compatability?
   hscrollbar.callback(hscrollbar_callback);
   hscrollbar.type(FL_HORIZONTAL);
-  textfont_ = FL_HELVETICA;
-  textsize_ = FL_NORMAL_SIZE;
-  textcolor_ = FL_BLACK;
-  has_scrollbar_ = BOTH;
+  has_scrollbar(BOTH);
   max_width = 0;
   max_width_item = 0;
   redraw1 = redraw2 = 0;
@@ -633,6 +673,29 @@ void Fl_Browser_::item_select(void*, int) {}
 
 int Fl_Browser_::item_selected(void* l) const {return l==selection_;}
 
+Fl_Font Fl_Browser_::textfont() const {
+  if (!style || !(BROWSER_STYLE->sbf & bf(TEXTFONT)))
+    return (Fl_Font)DEFAULT_STYLE->browser(TEXTFONT);
+  return (Fl_Font)BROWSER_STYLE->browser(TEXTFONT);
+}
+
+uchar Fl_Browser_::textsize() const {
+  if (!style || !(BROWSER_STYLE->sbf & bf(TEXTSIZE)))
+    return DEFAULT_STYLE->browser(TEXTSIZE);
+  return BROWSER_STYLE->browser(TEXTSIZE);
+}
+
+Fl_Color Fl_Browser_::textcolor() const {
+  if (!style || !(BROWSER_STYLE->sbf & bf(TEXTCOLOR)))
+    return (Fl_Color)DEFAULT_STYLE->browser(TEXTCOLOR);
+  return (Fl_Color)BROWSER_STYLE->browser(TEXTCOLOR);
+}
+
+Fl_Color Fl_Browser_::selected_textcolor() const {
+  if (!style || !(BROWSER_STYLE->sbf & bf(TEXTCOLOR)))
+    return (Fl_Color)DEFAULT_STYLE->browser(SELECTED_TEXTCOLOR);
+  return (Fl_Color)BROWSER_STYLE->browser(SELECTED_TEXTCOLOR);
+}
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.10 1999/03/09 06:46:36 bill Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.11 1999/03/14 06:46:26 carl Exp $".
 //

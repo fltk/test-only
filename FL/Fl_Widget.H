@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.6 1999/02/16 21:59:46 mike Exp $"
+// "$Id: Fl_Widget.H,v 1.7 1999/03/14 06:46:19 carl Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,8 @@
 
 #include "Enumerations.H"
 
+#define WIDGET_STYLE ((Fl_Widget::Style*)style)
+
 class Fl_Widget;
 class Fl_Window;
 
@@ -41,145 +43,188 @@ struct Fl_Label {
   uchar font;
   uchar size;
   uchar color;
-  FL_EXPORT void draw(int,int,int,int, Fl_Align) const ;
-  FL_EXPORT void measure(int&, int&) const ;
+  void draw(int,int,int,int, Fl_Align) const ;
+  void measure(int&, int&) const ;
 };
 
 class Fl_Widget {
   friend class Fl_Group;
 
-  Fl_Widget* parent_;
-  Fl_Callback* callback_;
-  void* user_data_;
-  short x_,y_,w_,h_;
-  Fl_Label label_;
-  uchar type_;
-  uchar flags_;
-  uchar damage_;
-  uchar box_;
-  uchar color_;
-  uchar color2_;
-  uchar align_;
-  uchar when_;
+public:
+  enum Widget_Attribute {
+    LABELCOLOR = 0,
+    LABELSIZE,
+    LABELTYPE,
+    LABELFONT,
+    COLOR,
+    COLOR2,
+    COLOR3,
+    BOX,
+    WA_END
+  };
 
-  // "de-implement" the copy constructors:
-  Fl_Widget & operator=(const Fl_Widget &);
-  FL_EXPORT Fl_Widget(const Fl_Widget &);
+  struct Style {
+    uchar widget_[WA_END];
+    uchar sbf;
+    
+    // This is just a kludge used for one particular situation--
+    // generally determined by whether Fl_Widget::style == 0
+    uchar not_dynamic;
+
+    Style();
+    uchar& widget(Widget_Attribute a) { return widget_[a]; }
+  };
+
+  enum {INACTIVE=1, INVISIBLE=2, OUTPUT=4, SHORTCUT_LABEL=64, CHANGED=128 };
+
+  virtual ~Fl_Widget();
+
+  virtual void loadstyle();
+
+  void use_default_style() { style = default_style(); style->not_dynamic = 1; }
+
+  const char *tooltip() const { return tooltip_; }
+  void tooltip(const char *t);
+  uchar bf(uchar a) const {return (uchar)1 << a;}
+  unsigned short flags() const {return flags_;}
+  virtual void draw() = 0;
+  virtual int handle(int);
+  Fl_Widget* parent() const {return parent_;}
+  void parent(Fl_Widget* w) {parent_ = w;} // for hacks only
+
+  uchar type() const {return type_;}
+  void type(uchar t) {type_ = t;}
+
+  int x() const {return x_;}
+  int y() const {return y_;}
+  int w() const {return w_;}
+  int h() const {return h_;}
+  virtual void resize(int,int,int,int);
+  int damage_resize(int,int,int,int);
+  void position(int X,int Y) {resize(X,Y,w_,h_);}
+  void size(int W,int H) {resize(x_,y_,W,H);}
+
+  Fl_Align align() const {return (Fl_Align)align_;}
+
+  void align(uchar a) {align_ = a;}
+
+  Fl_Boxtype box() const;
+  Fl_Color color() const;
+  Fl_Color selection_color() const;
+  Fl_Color color3() const;
+  Fl_Labeltype labeltype() const;
+  Fl_Color labelcolor() const;
+  Fl_Font labelfont() const;
+  uchar labelsize() const;
+
+  void box(Fl_Boxtype a);
+  void color(uchar a);
+  void selection_color(uchar a);
+  void color3(uchar a);
+  void color(uchar a, uchar b);
+  void labeltype(Fl_Labeltype a);
+  void labelcolor(uchar a);
+  void labelfont(uchar a);
+  void labelsize(uchar a);
+
+  const char* label() const {return label_;}
+  void label(const char* a) {label_=a;}
+  void label(Fl_Labeltype a,const char* b);
+
+  Fl_Callback* callback() const {return callback_;}
+  void callback(Fl_Callback* c, void* p) {callback_=c; user_data_=p;}
+  void callback(Fl_Callback* c) {callback_=c;}
+  void callback(Fl_Callback0*c) {callback_=(Fl_Callback*)c;}
+  void callback(Fl_Callback1*c, long p=0) {callback_=(Fl_Callback*)c; user_data_=(void*)p;}
+  void* user_data() const {return user_data_;}
+  void user_data(void* v) {user_data_ = v;}
+  long argument() const {return (long)user_data_;}
+  void argument(long v) {user_data_ = (void*)v;}
+  Fl_When when() const {return (Fl_When)when_;}
+  void when(uchar i) {when_ = i;}
+
+  int visible() const {return !(flags_&INVISIBLE);}
+  int visible_r() const;
+  void show();
+  void hide();
+  void set_visible() {flags_ &= ~INVISIBLE;}
+  void clear_visible() {flags_ |= INVISIBLE;}
+  int active() const {return !(flags_&INACTIVE);}
+  int active_r() const;
+  void activate();
+  void deactivate();
+  int output() const {return (flags_&OUTPUT);}
+  void set_output() {flags_ |= OUTPUT;}
+  void clear_output() {flags_ &= ~OUTPUT;}
+  int takesevents() const {return !(flags_&(INACTIVE|INVISIBLE|OUTPUT));}
+  int changed() const {return flags_&CHANGED;}
+  void set_changed() {flags_ |= CHANGED;}
+  void clear_changed() {flags_ &= ~CHANGED;}
+  int take_focus();
+
+  static void default_callback(Fl_Widget*, void*);
+  void do_callback() {callback_(this,user_data_);}
+  void do_callback(Fl_Widget* o,void* arg=0) {callback_(o,arg);}
+  void do_callback(Fl_Widget* o,long arg) {callback_(o,(void*)arg);}
+  int test_shortcut();
+  static int test_shortcut(const char*);
+  int contains(const Fl_Widget*) const ;
+  int inside(const Fl_Widget* o) const {return o ? o->contains(this) : 0;}
+
+  void redraw();
+  uchar damage() const {return damage_;}
+  void clear_damage(uchar c = 0) {damage_ = c;}
+  void damage(uchar c);
+  void damage(uchar c,int,int,int,int);
+  void measure_label(int&, int&);
+  void draw_label(int, int, int, int, Fl_Color, Fl_Align) const;
+
+  Fl_Window* window() const ;
+
+  // back compatability only:
+  Fl_Color color2() const;
+  void color2(uchar a);
 
 protected:
+  static Style _default_style;
+  Style* style;
 
-  FL_EXPORT Fl_Widget(int,int,int,int,const char* =0);
+  Fl_Widget(int,int,int,int,const char* =0);
+
+  virtual Fl_Widget::Style* default_style() const { return &_default_style; }
+  virtual void wstyle() { if (!style) style = new Style; }
 
   void x(int v) {x_ = v;}
   void y(int v) {y_ = v;}
   void w(int v) {w_ = v;}
   void h(int v) {h_ = v;}
 
-  uchar flags() const {return flags_;}
-  void set_flag(int c) {flags_ |= c;}
-  void clear_flag(int c) {flags_ &= ~c;}
-  enum {INACTIVE=1, INVISIBLE=2, OUTPUT=4, SHORTCUT_LABEL=64, CHANGED=128};
+  void set_flag(unsigned short c) {flags_ |= c;}
+  void clear_flag(unsigned c) {flags_ &= ~c;}
 
-  FL_EXPORT void draw_box() const;
-  FL_EXPORT void draw_box(Fl_Boxtype, Fl_Color) const;
-  FL_EXPORT void draw_box(Fl_Boxtype, int,int,int,int, Fl_Color) const;
-  FL_EXPORT void draw_label() const;
-  FL_EXPORT void draw_label(int, int, int, int) const;
+  void draw_box() const;
+  void draw_box(Fl_Boxtype, Fl_Color) const;
+  void draw_box(Fl_Boxtype, int,int,int,int, Fl_Color) const;
+  void draw_label() const;
+  void draw_label(Fl_Color) const;
+  void draw_label(int, int, int, int, Fl_Color) const;
 
-public:
+private:
+  Fl_Widget* parent_;
+  Fl_Callback* callback_;
+  const char* label_;
+  void* user_data_;
+  const char *tooltip_;
+  short x_,y_,w_,h_;
+  uchar flags_;
+  uchar type_;
+  uchar damage_;
+  uchar align_;
+  uchar when_;
 
-  virtual FL_EXPORT ~Fl_Widget();
-
-  virtual FL_EXPORT void draw() = 0;
-  virtual FL_EXPORT int handle(int);
-  FL_EXPORT Fl_Widget* parent() const {return parent_;}
-  FL_EXPORT void parent(Fl_Widget* w) {parent_ = w;} // for hacks only
-
-  FL_EXPORT uchar type() const {return type_;}
-  FL_EXPORT void type(uchar t) {type_ = t;}
-
-  FL_EXPORT int x() const {return x_;}
-  FL_EXPORT int y() const {return y_;}
-  FL_EXPORT int w() const {return w_;}
-  FL_EXPORT int h() const {return h_;}
-  virtual FL_EXPORT void resize(int,int,int,int);
-  FL_EXPORT int damage_resize(int,int,int,int);
-  FL_EXPORT void position(int X,int Y) {resize(X,Y,w_,h_);}
-  FL_EXPORT void size(int W,int H) {resize(x_,y_,W,H);}
-
-  FL_EXPORT Fl_Align align() const {return (Fl_Align)align_;}
-  FL_EXPORT void align(uchar a) {align_ = a;}
-  FL_EXPORT Fl_Boxtype box() const {return (Fl_Boxtype)box_;}
-  FL_EXPORT void box(Fl_Boxtype a) {box_ = a;}
-  FL_EXPORT Fl_Color color() const {return (Fl_Color)color_;}
-  FL_EXPORT void color(uchar a) {color_ = a;}
-  FL_EXPORT Fl_Color selection_color() const {return (Fl_Color)color2_;}
-  FL_EXPORT void selection_color(uchar a) {color2_ = a;}
-  FL_EXPORT void color(uchar a, uchar b) {color_=a; color2_=b;}
-  FL_EXPORT const char* label() const {return label_.value;}
-  FL_EXPORT void label(const char* a) {label_.value=a;}
-  FL_EXPORT void label(Fl_Labeltype a,const char* b) {label_.type = a; label_.value = b;}
-  FL_EXPORT Fl_Labeltype labeltype() const {return (Fl_Labeltype)label_.type;}
-  FL_EXPORT void labeltype(Fl_Labeltype a) {label_.type = a;}
-  FL_EXPORT Fl_Color labelcolor() const {return (Fl_Color)label_.color;}
-  FL_EXPORT void labelcolor(uchar a) {label_.color=a;}
-  FL_EXPORT Fl_Font labelfont() const {return (Fl_Font)label_.font;}
-  FL_EXPORT void labelfont(uchar a) {label_.font=a;}
-  FL_EXPORT uchar labelsize() const {return label_.size;}
-  FL_EXPORT void labelsize(uchar a) {label_.size=a;}
-  FL_EXPORT Fl_Callback* callback() const {return callback_;}
-  FL_EXPORT void callback(Fl_Callback* c, void* p) {callback_=c; user_data_=p;}
-  FL_EXPORT void callback(Fl_Callback* c) {callback_=c;}
-  FL_EXPORT void callback(Fl_Callback0*c) {callback_=(Fl_Callback*)c;}
-  FL_EXPORT void callback(Fl_Callback1*c, long p=0) {callback_=(Fl_Callback*)c; user_data_=(void*)p;}
-  FL_EXPORT void* user_data() const {return user_data_;}
-  FL_EXPORT void user_data(void* v) {user_data_ = v;}
-  FL_EXPORT long argument() const {return (long)user_data_;}
-  FL_EXPORT void argument(long v) {user_data_ = (void*)v;}
-  FL_EXPORT Fl_When when() const {return (Fl_When)when_;}
-  FL_EXPORT void when(uchar i) {when_ = i;}
-
-  FL_EXPORT int visible() const {return !(flags_&INVISIBLE);}
-  FL_EXPORT int visible_r() const;
-  FL_EXPORT void show();
-  FL_EXPORT void hide();
-  FL_EXPORT void set_visible() {flags_ &= ~INVISIBLE;}
-  FL_EXPORT void clear_visible() {flags_ |= INVISIBLE;}
-  FL_EXPORT int active() const {return !(flags_&INACTIVE);}
-  FL_EXPORT int active_r() const;
-  FL_EXPORT void activate();
-  FL_EXPORT void deactivate();
-  FL_EXPORT int output() const {return (flags_&OUTPUT);}
-  FL_EXPORT void set_output() {flags_ |= OUTPUT;}
-  FL_EXPORT void clear_output() {flags_ &= ~OUTPUT;}
-  FL_EXPORT int takesevents() const {return !(flags_&(INACTIVE|INVISIBLE|OUTPUT));}
-  FL_EXPORT int changed() const {return flags_&CHANGED;}
-  FL_EXPORT void set_changed() {flags_ |= CHANGED;}
-  FL_EXPORT void clear_changed() {flags_ &= ~CHANGED;}
-  FL_EXPORT int take_focus();
-
-  static FL_EXPORT void default_callback(Fl_Widget*, void*);
-  FL_EXPORT void do_callback() {callback_(this,user_data_);}
-  FL_EXPORT void do_callback(Fl_Widget* o,void* arg=0) {callback_(o,arg);}
-  FL_EXPORT void do_callback(Fl_Widget* o,long arg) {callback_(o,(void*)arg);}
-  FL_EXPORT int test_shortcut();
-  static FL_EXPORT int test_shortcut(const char*);
-  FL_EXPORT int contains(const Fl_Widget*) const ;
-  FL_EXPORT int inside(const Fl_Widget* o) const {return o ? o->contains(this) : 0;}
-
-  FL_EXPORT void redraw();
-  FL_EXPORT uchar damage() const {return damage_;}
-  FL_EXPORT void clear_damage(uchar c = 0) {damage_ = c;}
-  FL_EXPORT void damage(uchar c);
-  FL_EXPORT void damage(uchar c,int,int,int,int);
-  FL_EXPORT void draw_label(int, int, int, int, Fl_Align) const;
-  FL_EXPORT void measure_label(int& x, int& y) {label_.measure(x,y);}
-
-  FL_EXPORT Fl_Window* window() const ;
-
-  // back compatability only:
-  FL_EXPORT Fl_Color color2() const {return (Fl_Color)color2_;}
-  FL_EXPORT void color2(uchar a) {color2_ = a;}
+  // "de-implement" the copy constructors:
+  Fl_Widget & operator=(const Fl_Widget &);
+  Fl_Widget(const Fl_Widget &);
 };
 
 // reserved type numbers (necessary for my cheapo RTTI) start here.
@@ -190,5 +235,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.6 1999/02/16 21:59:46 mike Exp $".
+// End of "$Id: Fl_Widget.H,v 1.7 1999/03/14 06:46:19 carl Exp $".
 //

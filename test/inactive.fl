@@ -1,12 +1,14 @@
 # data file for the Fltk User Interface Designer (fluid)
-version 0.99 
+version 1.00 
+header_name {.h} 
+code_name {.cxx} 
 gridx 5 
 gridy 5 
 snap 3
 Function {} {open
 } {
   Fl_Window {} {open
-    xywh {470 454 420 295} visible
+    xywh {478 486 420 295} visible
   } {
     Fl_Group the_group {
       label {activate()/deactivate() called on this Fl_Group} open
@@ -22,7 +24,7 @@ Function {} {open
       } {
         Fl_Check_Button {} {
           label red
-          xywh {50 100 105 25} type Radio down_box DIAMOND_DOWN_BOX labelcolor 1
+          xywh {50 100 105 25} type Radio down_box DIAMOND_DOWN_BOX selection_color 1 labelcolor 1
         }
         Fl_Check_Button {} {
           label green
@@ -46,8 +48,8 @@ Function {} {open
         code0 {o->static_value("Fl_Input");}
       }
       Fl_Menu_Button {} {
-        label menu open
-        xywh {235 105 110 30}
+        label menu open selected
+        xywh {235 105 110 30} box MEDIUM_UP_BOX down_box MEDIUM_UP_BOX
       } {
         menuitem {} {
           label item
@@ -79,7 +81,7 @@ Function {} {open
         xywh {255 165 130 30} maximum 10000 step 1 textfont 5 textsize 24 textcolor 4
       }
       Fl_Scrollbar {} {
-        label scrollbar selected
+        label scrollbar
         xywh {40 220 180 20} type Horizontal maximum 100
       }
     }

@@ -1,21 +1,26 @@
-# data file for FL User Interface Designer (fluid)
-version 0.97
+# data file for the Fltk User Interface Designer (fluid)
+version 1.00 
+header_name {.h} 
+code_name {.cxx} 
+gridx 5 
+gridy 5 
+snap 3
 Function {make_panels()} {open
 } {
   Fl_Window {} {open
-    xywh {594 419 452 320}
+    xywh {594 419 452 320} hide resizable
   } {
     Fl_Box {test_box[0]} {
-      label label open
-      xywh {130 80 180 30} box 2
+      label label
+      xywh {130 80 180 30} box UP_BOX
     }
     Fl_Box {test_box[1]} {
-      label label open
-      xywh {130 120 180 30} box 2
+      label label
+      xywh {130 120 180 30} box UP_BOX
     }
     Fl_Box {test_box[2]} {
-      label label open
-      xywh {130 150 180 70} box 2 resizable
+      label label
+      xywh {130 150 180 70} box UP_BOX resizable
     }
     Fl_Group {} {open
       xywh {10 70 80 80}
@@ -23,74 +28,79 @@ Function {make_panels()} {open
       Fl_Button {} {
         label {@7->}
         user_data 3 user_data_type long
-        callback which_cb open
-        xywh {10 70 40 40} type 102 labeltype 2
+        callback which_cb
+        xywh {10 70 40 40} type Radio box UP_BOX down_box DOWN_BOX selection_color 49 labeltype SYMBOL_LABEL
       }
       Fl_Button {} {
         label {@9->}
         user_data 2 user_data_type long
-        callback which_cb open
-        xywh {50 70 40 40} type 102 labeltype 2
+        callback which_cb
+        xywh {50 70 40 40} type Radio box UP_BOX down_box DOWN_BOX selection_color 49 labeltype SYMBOL_LABEL
       }
       Fl_Button {} {
         label {@1->}
         user_data 0 user_data_type long
-        callback which_cb open
-        xywh {10 110 40 40} type 102 labeltype 2
+        callback which_cb
+        xywh {10 110 40 40} type Radio box UP_BOX down_box DOWN_BOX selection_color 49 labeltype SYMBOL_LABEL
         code0 {o->set();}
       }
       Fl_Button {} {
         label {@3->}
         user_data 1 user_data_type long
-        callback which_cb open
-        xywh {50 110 40 40} type 102 labeltype 2
+        callback which_cb
+        xywh {50 110 40 40} type Radio box UP_BOX down_box DOWN_BOX selection_color 49 labeltype SYMBOL_LABEL
       }
     }
     Fl_Button {} {
       label INSIDE
-      callback inside_cb open
-      xywh {10 150 80 40} type 1
+      callback inside_cb
+      xywh {10 150 80 40} type Toggle box UP_BOX down_box DOWN_BOX selection_color 49
     }
     Fl_Value_Slider {color_slider[0]} {
       user_data 0 user_data_type long
-      callback color_slider_cb open
-      xywh {320 0 30 320} type 4 box 1 color {7 47}
+      callback color_slider_cb
+      xywh {320 0 30 320} type {Vert Knob} box FLAT_BOX color 7 selection_color 47 step 0.01
       code0 {o->minimum(255); o->maximum(0);;}
       code1 {o->precision(0);}
+      code2 {o->slider(FL_UP_BOX);}
     }
     Fl_Value_Slider {color_slider[1]} {
       user_data 1 user_data_type long
-      callback color_slider_cb open
-      xywh {350 0 30 320} type 4 box 1 color {9 47}
+      callback color_slider_cb
+      xywh {350 0 30 320} type {Vert Knob} box FLAT_BOX color 9 selection_color 47 step 0.01
       code0 {o->minimum(255); o->maximum(0);;}
       code1 {o->precision(0);}
+      code2 {o->slider(FL_UP_BOX);}
     }
     Fl_Value_Slider {color_slider[2]} {
       user_data 2 user_data_type long
-      callback color_slider_cb open
-      xywh {380 0 30 320} type 4 box 1 color {10 47}
+      callback color_slider_cb
+      xywh {380 0 30 320} type {Vert Knob} box FLAT_BOX color 10 selection_color 47 step 0.01
       code0 {o->minimum(255); o->maximum(0);;}
       code1 {o->precision(0);}
+      code2 {o->slider(FL_UP_BOX);}
     }
     Fl_Value_Slider {color_slider[3]} {
       user_data 3 user_data_type long
-      callback color_slider_cb open
-      xywh {410 0 30 320} type 4 box 1 color {12 47}
+      callback color_slider_cb
+      xywh {410 0 30 320} type {Vert Knob} box FLAT_BOX color 12 selection_color 47 step 0.01
       code0 {o->minimum(255); o->maximum(0);;}
       code1 {o->precision(0);}
+      code2 {o->slider(FL_UP_BOX);}
     }
     Fl_Slider thickness_slider {
       label thickness
-      callback thickness_cb open
-      xywh {130 240 180 30} type 5 box 1
+      callback thickness_cb selected
+      xywh {130 240 180 30} type {Horz Knob} box FLAT_BOX
       code0 {o->minimum(1);}
       code1 {o->maximum(10);}
       code2 {o->step(1);}
+      code3 {o->slider(FL_UP_BOX);}
     }
     Fl_Button {} {
       label dump
-      callback dump_cb open selected
-      xywh {10 230 80 30}
+      callback dump_cb
+      xywh {10 230 80 30} box UP_BOX down_box DOWN_BOX selection_color 49
     }
   }
 } 

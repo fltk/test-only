@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Output.cxx,v 1.6 1999/01/07 19:17:24 mike Exp $"
+// "$Id: Fl_Output.cxx,v 1.7 1999/03/14 06:46:33 carl Exp $"
 //
 // Output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,44 @@
 #include <FL/Fl_Output.H>
 #include <FL/fl_draw.H>
 
+#define DEFAULT_STYLE ((Style*)default_style())
+
+Fl_Output::Style Fl_Output::_default_style;
+
+Fl_Output::Style::Style() : Fl_Input_::Style() {
+  widget(COLOR) = 51;
+}
+
+void Fl_Output::loadstyle() {
+  if (!Fl::s_output) {
+    Fl::s_output = 1;
+
+    static Fl::Attribute widget_attributes[] = {
+      { "label color", LABELCOLOR },
+      { "label size", LABELSIZE },
+      { "label type", LABELTYPE },
+      { "label font", LABELFONT },
+      { "output color", COLOR },
+      { "selected color", COLOR2 },
+      { "box", BOX },
+      { 0 }
+    };
+    Fl::load_attributes("text input output", DEFAULT_STYLE->widget_, widget_attributes);
+
+    static Fl::Attribute input_attributes[] = {
+      { "text font", TEXTFONT },
+      { "text size", TEXTSIZE },
+      { "text color", TEXTCOLOR },
+      { "selected text color", SELECTED_TEXTCOLOR },
+      { "cursor color", CURSOR_COLOR },
+      { 0 }
+    };
+    Fl::load_attributes("text input output", DEFAULT_STYLE->input_, input_attributes);
+  }
+}
+
 void Fl_Output::draw() {
+  loadstyle();
   Fl_Boxtype b = box() ? box() : FL_DOWN_BOX;
   if (damage() & FL_DAMAGE_ALL) draw_box(b, color());
   Fl_Input_::drawtext(x()+Fl::box_dx(b)+3, y()+Fl::box_dy(b),
@@ -46,5 +83,5 @@ int Fl_Output::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Output.cxx,v 1.6 1999/01/07 19:17:24 mike Exp $".
+// End of "$Id: Fl_Output.cxx,v 1.7 1999/03/14 06:46:33 carl Exp $".
 //

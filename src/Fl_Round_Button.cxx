@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Round_Button.cxx,v 1.4 1999/01/07 19:17:26 mike Exp $"
+// "$Id: Fl_Round_Button.cxx,v 1.5 1999/03/14 06:46:34 carl Exp $"
 //
 // Round button for the Fast Light Tool Kit (FLTK).
 //
@@ -30,13 +30,45 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Round_Button.H>
 
-Fl_Round_Button::Fl_Round_Button(int x,int y,int w,int h, const char *l)
-: Fl_Light_Button(x,y,w,h,l) {
-  box(FL_NO_BOX);
-  down_box(FL_ROUND_DOWN_BOX);
-  selection_color(FL_RED);
+#define DEFAULT_STYLE ((Style*)default_style())
+
+Fl_Round_Button::Style Fl_Round_Button::_default_style;
+
+Fl_Round_Button::Style::Style() : Fl_Light_Button::Style() {
+  widget(COLOR2) = FL_RED;
+
+  button(DOWN_BOX) = FL_ROUND_DOWN_BOX;
 }
 
+void Fl_Round_Button::loadstyle() {
+  if (!Fl::s_round_button) {
+    Fl::s_round_button = 1;
+
+    static Fl::Attribute widget_attributes[] = {
+      { "label color", LABELCOLOR },
+      { "label size", LABELSIZE },
+      { "label type", LABELTYPE },
+      { "label font", LABELFONT },
+      { "color", COLOR },
+      { "selected light color", COLOR2 },
+      { "unselected light color", COLOR3 },
+      { "box", BOX },
+      { 0 }
+    };
+    Fl::load_attributes("round button", DEFAULT_STYLE->widget_, widget_attributes);
+
+    static Fl::Attribute button_attributes[] = {
+      { "highlight color", FLY_COLOR },
+      { "highlight box", FLY_BOX },
+      { "down label color", DOWN_LABELCOLOR },
+      { 0 }
+    };
+    Fl::load_attributes("round button", DEFAULT_STYLE->button_, button_attributes);
+  }
+}
+
+Fl_Round_Button::Fl_Round_Button(int x,int y,int w,int h, const char *l) : Fl_Light_Button(x,y,w,h,l) {}
+
 //
-// End of "$Id: Fl_Round_Button.cxx,v 1.4 1999/01/07 19:17:26 mike Exp $".
+// End of "$Id: Fl_Round_Button.cxx,v 1.5 1999/03/14 06:46:34 carl Exp $".
 //

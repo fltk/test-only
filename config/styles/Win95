@@ -1,0 +1,276 @@
+description = Win95 Style
+author = Carl Thompson (clip@home.net)
+version = 7
+
+[global]
+  background red = 192
+  background green = 192
+  background blue = 192
+  widget style = Windows
+
+[menu item]
+  label type = 0
+  label font = 0
+  label size = 14
+  label color = 0
+  down label color = 7
+  down color = 136
+  down box = 1
+  menu title down color = 136
+  menu title down label color = 7
+  menu title down box = 1
+  menu title highlight color = 49
+  menu title highlight box = 0
+  menu title highlight label color = 0
+
+[browser]
+  label color = 0
+  label size = 14
+  label type = 0
+  label font = 0
+  color = 7
+  selected color = 136
+  box = 14
+  text font = 0
+  text size = 14
+  text color = 0
+  selected text color = 7
+
+[chart]
+  label color = 0
+  label size = 14
+  label type = 0
+  label font = 0
+  color = 7
+  color2 = 49
+  box = 14
+  text font = 0
+  text size = 10
+  text color = 0
+
+[button]
+  label color = 0
+  label size = 14
+  label type = 0
+  label font = 0
+  color = 49
+  down color = 49
+  highlight color = 49
+  box = 30
+  down box = 31
+  highlight box = 0
+  down label color = 0
+
+[check button]
+  label color = 0
+  label size = 14
+  label type = 0
+  label font = 0
+  color = 49
+  selected light color = 136
+  unselected light color = 49
+  highlight color = 49
+  box = 0
+  highlight box = 0
+  down label color = 0
+
+[round button]
+  label color = 0
+  label size = 14
+  label type = 0
+  label font = 0
+  color = 49
+  selected light color = 136
+  unselected light color = 49
+  highlight color = 49
+  box = 0
+  highlight box = 0
+  down label color = 0
+
+[light button]
+  label color = 0
+  label size = 14
+  label type = 0
+  label font = 0
+  color = 49
+  unselected light color = 49
+  selected light color = 1
+  highlight color = 49
+  box = 30
+  down box = 0
+  highlight box = 0
+  down label color = 0
+
+[return button]
+  label color = 0
+  label size = 14
+  label type = 0
+  label font = 0
+  color = 49
+  down color = 49
+  highlight color = 49
+  box = 2
+  down box = 3
+  highlight box = 0
+  down label color = 0
+
+[highlight button]
+  label color = 0
+  label size = 14
+  label type = 0
+  label font = 0
+  color = 49
+  down color = 49
+  highlight color = 49
+  down box = 30
+  highlight box = 0
+  down label color = 0
+
+[choice]
+  label color = 0
+  label size = 14
+  label type = 0
+  label font = 0
+  color = 49
+  down color = 49
+  highlight color = 49
+  box = 30
+  highlight box = 0
+  down box = 42
+  text font = 0
+  text size = 14
+  text color = 0
+
+[menu bar]
+  label color = 0
+  label size = 14
+  label type = 0
+  label font = 0
+  color = 49
+  down color = 49
+  box = 30
+  down box = 42
+  text font = 0
+  text size = 14
+  text color = 0
+
+[menu button]
+  label color = 0
+  label size = 14
+  label type = 0
+  label font = 0
+  color = 49
+  down color = 49
+  highlight color = 49
+  box = 30
+  highlight box = 0
+  down box = 42
+  text font = 0
+  text size = 14
+  text color = 0
+
+[popup menu]
+  box = 42
+  color = 49
+  shortcut font = 0
+  shortcut size = 14
+
+[widget]
+  label color = 0
+  label size = 14
+  label type = 0
+  label font = 0
+  color = 49
+  color2 = 49
+  color3 = 49
+  box = 0
+
+[window]
+  label color = 0
+  label size = 14
+  label type = 0
+  label font = 0
+  color = 49
+  box = 1
+
+[slider]
+  label color = 0
+  label size = 14
+  label type = 0
+  label font = 0
+  color = 49
+  color2 = 49
+  color3 = 49
+  highlight color = 49
+  box = 31
+  slider box = 42
+
+[scroll bar]
+  label color = 0
+  label size = 14
+  label type = 0
+  label font = 0
+  color = 52
+  color2 = 49
+  arrow color = 0
+  highlight color = 49
+  box = 1
+  slider box = 42
+
+[text input output]
+  box = 31
+  color = 7
+  output color = 49
+  text font = 0
+  text size = 14
+  text color = 0
+  selected color = 136
+  selected text color = 7
+  cursor color = 0
+  label font = 0
+  label size = 14
+  label color = 0
+  label type = 0
+
+[adjuster]
+  label color = 0
+  label size = 14
+  label type = 0
+  label font = 0
+  color = 49
+  arrow color = 0
+  highlight color = 49
+  box = 30
+  highlight box = 0
+
+[counter]
+  label color = 0
+  label size = 14
+  label type = 0
+  label font = 0
+  color = 49
+  text area color = 49
+  arrow color = 0
+  highlight color = 49
+  box = 30
+  highlight box = 0
+  box2 = 1
+  text font = 0
+  text size = 14
+  text color = 0
+
+[roller]
+  label color = 0
+  label size = 14
+  label type = 0
+  label font = 0
+  color = 49
+  box = 30
+
+[tooltip]
+  delay = 500
+  box = 14
+  color = 215
+  text color = 0
+  text font = 0
+  text size = 12

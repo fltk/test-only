@@ -1,5 +1,5 @@
 //
-// "$Id: output.cxx,v 1.4 1999/01/07 19:17:59 mike Exp $"
+// "$Id: output.cxx,v 1.5 1999/03/14 06:46:46 carl Exp $"
 //
 // Output test program for the Fast Light Tool Kit (FLTK).
 //
@@ -64,7 +64,7 @@ int main(int argc, char **argv) {
   window = new Fl_Window(400,400);
 
   input = new Fl_Input(50,0,350,25);
-  input->static_value("The quick brown fox\njumped over\nthe lazy dog.");
+  input->static_value("The quick brown fox\njumps over\nthe lazy dog.");
   input->when(FL_WHEN_CHANGED);
   input->callback(input_cb);
 
@@ -90,12 +90,11 @@ int main(int argc, char **argv) {
   text = new Fl_Output(100,280,200,30,"Fl_Output");
   text->value(input->value());
   text->align(FL_ALIGN_BOTTOM);
-
   window->forms_end();
   window->show(argc,argv);
   return Fl::run();
 }
 
 //
-// End of "$Id: output.cxx,v 1.4 1999/01/07 19:17:59 mike Exp $".
+// End of "$Id: output.cxx,v 1.5 1999/03/14 06:46:46 carl Exp $".
 //

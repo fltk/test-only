@@ -1,5 +1,5 @@
 //
-// "$Id: subwindow.cxx,v 1.5 1999/02/03 08:43:35 bill Exp $"
+// "$Id: subwindow.cxx,v 1.6 1999/03/14 06:46:48 carl Exp $"
 //
 // Nested window test program for the Fast Light Tool Kit (FLTK).
 //
@@ -55,14 +55,15 @@ void testwindow::draw() {
 }
 
 class EnterExit : public Fl_Box {
+  uchar oldcolor;
   int handle(int);
 public:
   EnterExit(int x, int y, int w, int h, const char *l) : Fl_Box(FL_BORDER_BOX,x,y,w,h,l) {}
 };
 
 int EnterExit::handle(int e) {
-  if (e == FL_ENTER) {color(FL_RED); redraw(); return 1;}
-  else if (e == FL_LEAVE) {color(FL_GRAY); redraw(); return 1;}
+  if (e == FL_ENTER) {oldcolor = color(); color(FL_RED); redraw(); return 1;}
+  else if (e == FL_LEAVE) {color(oldcolor); redraw(); return 1;}
   else return 0;
 }
 
@@ -142,16 +143,16 @@ const char* bigmess =
 int main(int, char **) {
   testwindow *window =
     new testwindow(FL_UP_BOX,400,400,"outer");
-  new Fl_Toggle_Button(310,310,80,80,"&outer");
-  new EnterExit(10,310,80,80,"enterexit");
-  new Fl_Input(150,310,150,25,"input:");
+  (void) new Fl_Toggle_Button(310,310,80,80,"&outer");
+  (void) new EnterExit(10,310,80,80,"enterexit");
+  (void) new Fl_Input(150,310,150,25,"input:");
   (new Fl_Menu_Button(5,150,80,25,"menu&1"))->add(bigmess);
   testwindow *subwindow =
     new testwindow(FL_DOWN_BOX,100,100,200,200,"inner");
-  new Fl_Toggle_Button(110,110,80,80,"&inner");
-  new EnterExit(10,110,80,80,"enterexit");
+  (void) new Fl_Toggle_Button(110,110,80,80,"&inner");
+  (void) new EnterExit(10,110,80,80,"enterexit");
   (new Fl_Menu_Button(50,50,80,25,"menu&2"))->add(bigmess);
-  new Fl_Input(45,80,150,25,"input:");
+  (void) new Fl_Input(45,80,150,25,"input:");
   subwindow->resizable(subwindow);
   window->resizable(subwindow);
   subwindow->end();
@@ -170,5 +171,5 @@ int main(int, char **) {
 }
 
 //
-// End of "$Id: subwindow.cxx,v 1.5 1999/02/03 08:43:35 bill Exp $".
+// End of "$Id: subwindow.cxx,v 1.6 1999/03/14 06:46:48 carl Exp $".
 //

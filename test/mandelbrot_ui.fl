@@ -18,35 +18,35 @@ class Drawing_Window {open
     } {
       Fl_Box d {
         user_data this user_data_type {void*} selected
-        xywh {20 80 410 430} box DOWN_BOX color 0 selection_color 47 resizable
+        xywh {20 80 410 430} box DOWN_BOX resizable
         class Drawing_Area
       }
       Fl_Input x_input {
         label {x:}
         callback {d->X = atof(o->value());;
 d->new_display();}
-        xywh {30 15 125 30} type Float box THIN_DOWN_BOX color 8 selection_color 7 labelfont 11 labelsize 20 textfont 11 textsize 20
+        xywh {30 15 125 30} type Float
         code0 {o->when(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE);}
       }
       Fl_Input y_input {
         label {y:}
         callback {d->Y = atof(o->value());
 d->new_display();}
-        xywh {175 15 125 30} type Float box THIN_DOWN_BOX color 8 selection_color 7 labelfont 11 labelsize 20 textfont 11 textsize 20
+        xywh {175 15 125 30} type Float
         code0 {o->when(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE);}
       }
       Fl_Input w_input {
         label {w:}
         callback {d->scale = atof(o->value());
 d->new_display();}
-        xywh {325 15 105 30} type Float box THIN_DOWN_BOX color 8 selection_color 7 labelfont 11 labelsize 20 textfont 11 textsize 20
+        xywh {325 15 105 30} type Float
         code0 {o->when(FL_WHEN_ENTER_KEY|FL_WHEN_RELEASE);}
       }
       Fl_Slider {} {
         label {brightness:}
         callback {d->brightness = int(o->value());
 d->new_display();}
-        xywh {80 50 160 15} type Horizontal box THIN_DOWN_BOX labelsize 10 align 4 step 1 slider_size 0.1
+        xywh {80 50 160 15} type Horizontal align 4 step 1 slider_size 0.1
         code0 {o->bounds(0,d->MAX_BRIGHTNESS);}
         code2 {o->value(d->DEFAULT_BRIGHTNESS);}
         code3 {o->slider(FL_UP_BOX);}
@@ -60,7 +60,7 @@ right click: Julia set}
         label {iterations:}
         callback {d->iterations = 1<<int(o->value());
 d->new_display();}
-        xywh {80 65 160 15} type Horizontal box THIN_DOWN_BOX labelsize 10 align 4 step 1 slider_size 0.1
+        xywh {80 65 160 15} type Horizontal align 4 step 1 slider_size 0.1
         code0 {o->bounds(1,d->MAX_ITERATIONS);}
         code2 {o->value(d->DEFAULT_ITERATIONS);}
         code3 {o->slider(FL_UP_BOX);}

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.H,v 1.6 1999/02/16 21:59:35 mike Exp $"
+// "$Id: Fl_Chart.H,v 1.7 1999/03/14 06:46:13 carl Exp $"
 //
 // Forms chart header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,8 @@
 #include "Fl_Widget.H"
 #endif
 
+#define CHART_STYLE ((Fl_Chart::Style*)style)
+
 // values for type()
 #define FL_BAR_CHART		0
 #define FL_HORBAR_CHART		1
@@ -51,38 +53,66 @@ struct FL_CHART_ENTRY {
 };
 
 class Fl_Chart : public Fl_Widget {
-    int numb;
-    int maxnumb;
-    int sizenumb;
-    FL_CHART_ENTRY *entries;
-    double min,max;
-    uchar autosize_;
-    uchar textfont_,textsize_,textcolor_;
-protected:
-    FL_EXPORT void draw();
 public:
-    FL_EXPORT Fl_Chart(int,int,int,int,const char * = 0);
-    FL_EXPORT void clear();
-    FL_EXPORT void add(double, const char * =0, uchar=0);
-    FL_EXPORT void insert(int, double, const char * =0, uchar=0);
-    FL_EXPORT void replace(int, double, const char * =0, uchar=0);
-    void bounds(double *a,double *b) const {*a = min; *b = max;}
-    FL_EXPORT void bounds(double a,double b);
-    int size() const {return numb;}
-    int maxsize() const {return maxnumb;}
-    FL_EXPORT void maxsize(int);
-    Fl_Font textfont() const {return (Fl_Font)textfont_;}
-    void textfont(uchar s) {textfont_ = s;}
-    uchar textsize() const {return textsize_;}
-    void textsize(uchar s) {textsize_ = s;}
-    Fl_Color textcolor() const {return (Fl_Color)textcolor_;}
-    void textcolor(uchar n) {textcolor_ = n;}
+  enum Chart_Attribute {
+    TEXTFONT = 0,
+    TEXTSIZE,
+    TEXTCOLOR,
+    CA_END
+  };
+
+  struct Style : public Fl_Widget::Style {
+    uchar chart_[CA_END];
+    uchar sbf;
+
+    Style();
+    uchar& chart(Chart_Attribute a) { return chart_[a]; }
+  };
+
+  Fl_Chart(int,int,int,int,const char * = 0);
+
+  virtual void loadstyle();
+  void clear();
+  void add(double, const char * =0, uchar=0);
+  void insert(int, double, const char * =0, uchar=0);
+  void replace(int, double, const char * =0, uchar=0);
+  void bounds(double *a,double *b) const {*a = min; *b = max;}
+  void bounds(double a,double b);
+  int size() const {return numb;}
+  int maxsize() const {return maxnumb;}
+  void maxsize(int);
+
+  Fl_Font textfont() const;
+  void textfont(uchar s);
+
+  uchar textsize() const;
+  void textsize(uchar s);
+
+  Fl_Color textcolor() const;
+  void textcolor(uchar n);
+
     uchar autosize() const {return autosize_;}
     void autosize(uchar n) {autosize_ = n;}
+
+protected:
+  static Style _default_style;
+
+  virtual Fl_Widget::Style* default_style() const { return &_default_style; }
+  virtual void wstyle() { if (!style) style = new Style; }
+
+  void draw();
+
+private:
+  uchar autosize_;
+  int numb;
+  int maxnumb;
+  int sizenumb;
+  FL_CHART_ENTRY *entries;
+  double min,max;
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Chart.H,v 1.6 1999/02/16 21:59:35 mike Exp $".
+// End of "$Id: Fl_Chart.H,v 1.7 1999/03/14 06:46:13 carl Exp $".
 //

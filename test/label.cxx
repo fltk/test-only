@@ -1,5 +1,5 @@
 //
-// "$Id: label.cxx,v 1.4 1999/01/07 19:17:57 mike Exp $"
+// "$Id: label.cxx,v 1.5 1999/03/14 06:46:45 carl Exp $"
 //
 // Label test program for the Fast Light Tool Kit (FLTK).
 //
@@ -108,7 +108,7 @@ int main(int argc, char **argv) {
   window = new Fl_Double_Window(400,400);
 
   input = new Fl_Input(50,0,350,25);
-  input->static_value("The quick brown fox jumped over the lazy dog.");
+  input->static_value("The quick brown fox jumps over the lazy dog.");
   input->when(FL_WHEN_CHANGED);
   input->callback(input_cb);
 
@@ -156,5 +156,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: label.cxx,v 1.4 1999/01/07 19:17:57 mike Exp $".
+// End of "$Id: label.cxx,v 1.5 1999/03/14 06:46:45 carl Exp $".
 //

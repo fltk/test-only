@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.H,v 1.5 1999/02/16 21:59:45 mike Exp $"
+// "$Id: Fl_Valuator.H,v 1.6 1999/03/14 06:46:18 carl Exp $"
 //
 // Valuator header file for the Fast Light Tool Kit (FLTK).
 //
@@ -54,7 +54,6 @@ protected:
   virtual FL_EXPORT void value_damage(); // cause damage() due to value() changing
 
 public:
-
   void bounds(double a, double b) {min=a; max=b;}
   double minimum() const {return min;}
   void minimum(double a) {min = a;}
@@ -79,5 +78,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Valuator.H,v 1.5 1999/02/16 21:59:45 mike Exp $".
+// End of "$Id: Fl_Valuator.H,v 1.6 1999/03/14 06:46:18 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fractals.cxx,v 1.5 1999/01/19 19:10:39 mike Exp $"
+// "$Id: fractals.cxx,v 1.6 1999/03/14 06:46:45 carl Exp $"
 //
 // Fractal drawing demo for the Fast Light Tool Kit (FLTK).
 //
@@ -748,7 +748,7 @@ int main(int argc, char** argv)
 //  glutInit(&argc, argv); // this line removed for fltk
 
   // create fltk window:
-  Fl_Window window(512+20, 512+100);
+  Fl_Window window(512+20, 512+110);
   window.resizable(window);
 
   // create a bunch of buttons:
@@ -778,7 +778,7 @@ int main(int argc, char** argv)
   window.show(argc,argv); // glut will die unless parent window visible
   window.begin(); // this will cause Glut window to be a child
   glutInitWindowSize(512, 512);
-  glutInitWindowPosition(10,90); // place it inside parent window
+  glutInitWindowPosition(10,100); // place it inside parent window
   glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGBA | GLUT_DEPTH | GLUT_MULTISAMPLE);
   glutCreateWindow("Fractal Planet?");
   window.end();
@@ -803,5 +803,5 @@ int main(int argc, char** argv)
 #endif
 
 //
-// End of "$Id: fractals.cxx,v 1.5 1999/01/19 19:10:39 mike Exp $".
+// End of "$Id: fractals.cxx,v 1.6 1999/03/14 06:46:45 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.15 1999/02/19 16:21:50 mike Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.16 1999/03/14 06:46:24 carl Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -320,10 +320,16 @@ Fl_Menu_Item boxmenu[] = {
 {"boxes",0,0,0,FL_SUBMENU},
 {"UP_BOX",0,0,(void *)FL_UP_BOX},
 {"DOWN_BOX",0,0,(void *)FL_DOWN_BOX},
-{"FLAT_BOX",0,0,(void *)FL_FLAT_BOX},
-{"BORDER_BOX",0,0,(void *)FL_BORDER_BOX},
+{"MEDIUM_UP_BOX",0,0,(void *)FL_MEDIUM_UP_BOX},
+{"MEDIUM_DOWN_BOX",0,0,(void *)FL_MEDIUM_DOWN_BOX},
 {"THIN_UP_BOX",0,0,(void *)FL_THIN_UP_BOX},
 {"THIN_DOWN_BOX",0,0,(void *)FL_THIN_DOWN_BOX},
+{"MOTIF_UP_BOX",0,0,(void *)FL_MOTIF_UP_BOX},
+{"MOTIF_DOWN_BOX",0,0,(void *)FL_MOTIF_DOWN_BOX},
+{"THIN_MOTIF_UP_BOX",0,0,(void *)FL_THIN_MOTIF_UP_BOX},
+{"THIN_MOTIF_DOWN_BOX",0,0,(void *)FL_THIN_MOTIF_DOWN_BOX},
+{"FLAT_BOX",0,0,(void *)FL_FLAT_BOX},
+{"BORDER_BOX",0,0,(void *)FL_BORDER_BOX},
 {"ENGRAVED_BOX",0,0,(void *)FL_ENGRAVED_BOX},
 {"EMBOSSED_BOX",0,0,(void *)FL_EMBOSSED_BOX},
 {"ROUND_UP_BOX",0,0,(void *)FL_ROUND_UP_BOX},
@@ -341,8 +347,14 @@ Fl_Menu_Item boxmenu[] = {
 {"frames",0,0,0,FL_SUBMENU},
 {"UP_FRAME",0,0,(void *)FL_UP_FRAME},
 {"DOWN_FRAME",0,0,(void *)FL_DOWN_FRAME},
+{"MEDIUM_UP_FRAME",0,0,(void *)FL_MEDIUM_UP_FRAME},
+{"MEDIUM_DOWN_FRAME",0,0,(void *)FL_MEDIUM_DOWN_FRAME},
 {"THIN_UP_FRAME",0,0,(void *)FL_THIN_UP_FRAME},
 {"THIN_DOWN_FRAME",0,0,(void *)FL_THIN_DOWN_FRAME},
+{"MOTIF_UP_FRAME",0,0,(void *)FL_MOTIF_UP_FRAME},
+{"MOTIF_DOWN_FRAME",0,0,(void *)FL_MOTIF_DOWN_FRAME},
+{"THIN_MOTIF_UP_FRAME",0,0,(void *)FL_THIN_MOTIF_UP_FRAME},
+{"THIN_MOTIF_DOWN_FRAME",0,0,(void *)FL_THIN_MOTIF_DOWN_FRAME},
 {"ENGRAVED_FRAME",0,0,(void *)FL_ENGRAVED_FRAME},
 {"EMBOSSED_FRAME",0,0,(void *)FL_EMBOSSED_FRAME},
 {"BORDER_FRAME",0,0,(void *)FL_BORDER_FRAME},
@@ -679,7 +691,7 @@ void color_cb(Fl_Button* i, void *v) {
 	q->o->color(c); q->o->redraw();
     }
   }
-  i->color(c); i->labelcolor(contrast(FL_BLACK,c)); i->redraw();
+  i->color(c); i->fly_color(c); i->redraw();
 }
 
 void color2_cb(Fl_Button* i, void *v) {
@@ -696,7 +708,7 @@ void color2_cb(Fl_Button* i, void *v) {
 	q->o->selection_color(c); q->o->redraw();
     }
   }
-  i->color(c); i->labelcolor(contrast(FL_BLACK,c)); i->redraw();
+  i->color(c); i->fly_color(c); i->redraw();
 }
 
 void labelcolor_cb(Fl_Button* i, void *v) {
@@ -1705,5 +1717,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.15 1999/02/19 16:21:50 mike Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.16 1999/03/14 06:46:24 carl Exp $".
 //

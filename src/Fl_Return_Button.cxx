@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Return_Button.cxx,v 1.5 1999/01/19 19:26:46 mike Exp $"
+// "$Id: Fl_Return_Button.cxx,v 1.6 1999/03/14 06:46:33 carl Exp $"
 //
 // Return button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,46 @@
 #include <FL/Fl_Return_Button.H>
 #include <FL/fl_draw.H>
 
+#define DEFAULT_STYLE ((Style*)default_style())
+
+Fl_Return_Button::Style Fl_Return_Button::_default_style;
+
+Fl_Return_Button::Style::Style() : Fl_Button::Style() {
+  widget(BOX) = FL_UP_BOX;
+
+  button(DOWN_BOX) = FL_DOWN_BOX;
+  button(FLY_BOX) = FL_UP_BOX;
+}
+
+void Fl_Return_Button::loadstyle() {
+  if (!Fl::s_return_button) {
+    Fl::s_return_button = 1;
+
+    static Fl::Attribute widget_attributes[] = {
+      { "label color", LABELCOLOR },
+      { "label size", LABELSIZE },
+      { "label type", LABELTYPE },
+      { "label font", LABELFONT },
+      { "color", COLOR },
+      { "down color", COLOR2 },
+      { "box", BOX },
+      { 0 }
+    };
+    Fl::load_attributes("return button", DEFAULT_STYLE->widget_, widget_attributes);
+
+    static Fl::Attribute button_attributes[] = {
+      { "highlight color", FLY_COLOR },
+      { "highlight box", FLY_BOX },
+      { "down box", DOWN_BOX },
+      { "down label color", DOWN_LABELCOLOR },
+      { 0 }
+    };
+    Fl::load_attributes("return button", DEFAULT_STYLE->button_, button_attributes);
+  }
+}
+
+Fl_Return_Button::Fl_Return_Button(int x,int y,int w,int h,const char *l) : Fl_Button(x,y,w,h,l) {}
+
 int fl_return_arrow(int x, int y, int w, int h) {
   int size = w; if (h<size) size = h;
   int d = (size+2)/4; if (d<3) d = 3;
@@ -41,18 +81,24 @@ int fl_return_arrow(int x, int y, int w, int h) {
   fl_color(fl_gray_ramp(0));
   fl_line(x0, y0, x1, y0-d);
   fl_color(FL_DARK3);
-  fl_xyline(x1+1, y0-t, x1+d, y0-d, x1+d+2*t);
+  fl_xyline(x1+1,y0-t,x1+d,y0-d,x1+d+2*t);
   return 1;
 }
 
 void Fl_Return_Button::draw() {
+  loadstyle();
   if (type() == FL_HIDDEN_BUTTON) return;
-  draw_box(value() ? (down_box()?down_box():down(box())) : box(),
-	   value() ? selection_color() : color());
+  Fl_Color col = value() ? selection_color() : color();
+  Fl_Boxtype bt = value() ? (down_box()?down_box():down(box())) : box();
+  if (fly_box() && Fl::belowmouse() == this && !value())
+    { bt = fly_box(); col = fly_color(); }
+  draw_box(bt, col);
   int W = h();
   if (w()/3 < W) W = w()/3;
   fl_return_arrow(x()+w()-W-4, y(), W, h());
-  draw_label(x(), y(), w()-W+4, h());
+
+  Fl_Color lc = value() ? down_labelcolor() : labelcolor();
+  draw_label(x(), y(), w()-W+4, h(), lc);
 }
 
 int Fl_Return_Button::handle(int event) {
@@ -65,5 +111,5 @@ int Fl_Return_Button::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Return_Button.cxx,v 1.5 1999/01/19 19:26:46 mike Exp $".
+// End of "$Id: Fl_Return_Button.cxx,v 1.6 1999/03/14 06:46:33 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.10 1999/01/24 15:28:59 mike Exp $"
+// "$Id: Fl_Input.cxx,v 1.11 1999/03/14 06:46:30 carl Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -37,6 +37,7 @@
 #include <ctype.h>
 
 void Fl_Input::draw() {
+  loadstyle();
   if (type() == FL_HIDDEN_INPUT) return;
   Fl_Boxtype b = box();
   if (damage() & FL_DAMAGE_ALL) draw_box(b, color());
@@ -330,5 +331,5 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.10 1999/01/24 15:28:59 mike Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.11 1999/03/14 06:46:30 carl Exp $".
 //

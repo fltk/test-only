@@ -1,5 +1,5 @@
 //
-// "$Id: boxtype.cxx,v 1.4 1999/01/07 19:17:49 mike Exp $"
+// "$Id: boxtype.cxx,v 1.5 1999/03/14 06:46:44 carl Exp $"
 //
 // Boxtype test program for the Fast Light Tool Kit (FLTK).
 //
@@ -30,9 +30,9 @@
 #include <FL/Fl_Box.H>
 
 int N = 0;
-#define W 150
+#define W 200
 #define H 50
-#define ROWS 8
+#define ROWS 11
 
 Fl_Window *window;
 
@@ -58,10 +58,22 @@ int main(int argc, char ** argv) {
   bt("FL_DOWN_BOX",FL_DOWN_BOX);
   bt("FL_UP_FRAME",FL_UP_FRAME);
   bt("FL_DOWN_FRAME",FL_DOWN_FRAME);
+  bt("FL_MEDIUM_UP_BOX",FL_MEDIUM_UP_BOX);
+  bt("FL_MEDIUM_DOWN_BOX",FL_MEDIUM_DOWN_BOX);
+  bt("FL_MEDIUM_UP_FRAME",FL_MEDIUM_UP_FRAME);
+  bt("FL_MEDIUM_DOWN_FRAME",FL_MEDIUM_DOWN_FRAME);
   bt("FL_THIN_UP_BOX",FL_THIN_UP_BOX);
   bt("FL_THIN_DOWN_BOX",FL_THIN_DOWN_BOX);
   bt("FL_THIN_UP_FRAME",FL_THIN_UP_FRAME);
   bt("FL_THIN_DOWN_FRAME",FL_THIN_DOWN_FRAME);
+  bt("FL_MOTIF_UP_BOX", FL_MOTIF_UP_BOX);
+  bt("FL_MOTIF_DOWN_BOX", FL_MOTIF_DOWN_BOX);
+  bt("FL_MOTIF_UP_FRAME", FL_MOTIF_UP_FRAME);
+  bt("FL_MOTIF_DOWN_FRAME", FL_MOTIF_DOWN_FRAME);
+  bt("FL_THIN_MOTIF_UP_BOX", FL_THIN_MOTIF_UP_BOX);
+  bt("FL_THIN_MOTIF_DOWN_BOX", FL_THIN_MOTIF_DOWN_BOX);
+  bt("FL_THIN_MOTIF_UP_FRAME", FL_THIN_MOTIF_UP_FRAME);
+  bt("FL_THIN_MOTIF_DOWN_FRAME", FL_THIN_MOTIF_DOWN_FRAME);
   bt("FL_ENGRAVED_BOX",FL_ENGRAVED_BOX);
   bt("FL_EMBOSSED_BOX",FL_EMBOSSED_BOX);
   bt("FL_ENGRAVED_FRAME",FL_ENGRAVED_FRAME);
@@ -89,5 +101,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: boxtype.cxx,v 1.4 1999/01/07 19:17:49 mike Exp $".
+// End of "$Id: boxtype.cxx,v 1.5 1999/03/14 06:46:44 carl Exp $".
 //

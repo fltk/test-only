@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.4 1999/01/07 19:17:18 mike Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.5 1999/03/14 06:46:28 carl Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -26,13 +26,47 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Check_Button.H>
 
+#define DEFAULT_STYLE ((Style*)default_style())
+
 // A subclass of Fl_Button that always draws as a diamond box.  This
 // diamond is smaller than the widget size and can be surchecked by
 // another box type, for compatability with Forms.
 
-Fl_Check_Button::Fl_Check_Button(int x, int y, int w, int h, const char *l)
-: Fl_Light_Button(x, y, w, h, l) {
-  box(FL_NO_BOX);
-  down_box(FL_DIAMOND_DOWN_BOX);
-  selection_color(FL_RED);
+Fl_Check_Button::Style Fl_Check_Button::_default_style;
+
+
+Fl_Check_Button::Style::Style() : Fl_Light_Button::Style() {
+  widget(COLOR2) = FL_RED;
+  widget(BOX) = FL_NO_BOX;
+  button(DOWN_BOX) = FL_DIAMOND_DOWN_BOX;
+  button(DOWN_LABELCOLOR) = FL_BLACK;
 }
+
+void Fl_Check_Button::loadstyle() {
+  if (!Fl::s_check_button) {
+    Fl::s_check_button = 1;
+
+    static Fl::Attribute widget_attributes[] = {
+      { "label color", LABELCOLOR },
+      { "label size", LABELSIZE },
+      { "label type", LABELTYPE },
+      { "label font", LABELFONT },
+      { "color", COLOR },
+      { "selected light color", COLOR2 },
+      { "unselected light color", COLOR3 },
+      { "box", BOX },
+      { 0 }
+    };
+    Fl::load_attributes("check button", DEFAULT_STYLE->widget_, widget_attributes);
+
+    static Fl::Attribute button_attributes[] = {
+      { "highlight color", FLY_COLOR },
+      { "highlight box", FLY_BOX },
+      { "down label color", DOWN_LABELCOLOR },
+      { 0 }
+    };
+    Fl::load_attributes("check button", DEFAULT_STYLE->button_, button_attributes);
+  }
+}
+
+Fl_Check_Button::Fl_Check_Button(int x, int y, int w, int h, const char *l) : Fl_Light_Button(x, y, w, h, l) {}

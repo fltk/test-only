@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.4 1999/01/07 19:17:17 mike Exp $"
+// "$Id: Fl_Button.cxx,v 1.5 1999/03/14 06:46:27 carl Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,37 @@
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Group.H>
 
+#define DEFAULT_STYLE ((Style*)default_style())
+
+void Fl_Button::loadstyle() {
+  if (!Fl::s_button) {
+    Fl::s_button = 1;
+
+    static Fl::Attribute widget_attributes[] = {
+      { "label color", LABELCOLOR },
+      { "label size", LABELSIZE },
+      { "label type", LABELTYPE },
+      { "label font", LABELFONT },
+      { "color", COLOR },
+      { "down color", COLOR2 },
+      { "box", BOX },
+      { 0 }
+    };
+    Fl::load_attributes("button", DEFAULT_STYLE->widget_, widget_attributes);
+
+    static Fl::Attribute button_attributes[] = {
+      { "highlight color", FLY_COLOR },
+      { "highlight box", FLY_BOX },
+      { "down box", DOWN_BOX },
+      { "down label color", DOWN_LABELCOLOR },
+      { 0 }
+    };
+    Fl::load_attributes("button", DEFAULT_STYLE->button_, button_attributes);
+  }
+}
+
+#include <FL/Fl_Tooltip.H>
+
 // There are a lot of subclasses, named Fl_*_Button.  Some of
 // them are implemented by setting the type() value and testing it
 // here.  This includes Fl_Radio_Button and Fl_Toggle_Button
@@ -50,21 +81,33 @@ void Fl_Button::setonly() { // set this radio button on, turn others off
 }
 
 void Fl_Button::draw() {
+  loadstyle();
   if (type() == FL_HIDDEN_BUTTON) return;
   Fl_Color col = value() ? selection_color() : color();
-//if (col == FL_GRAY && Fl::belowmouse()==this) col = FL_LIGHT1;
-  draw_box(value() ? (down_box()?down_box():down(box())) : box(), col);
-  draw_label();
+  Fl_Boxtype bt = value() ? (down_box()?down_box():down(box())) : box();
+  if (fly_box() && Fl::belowmouse() == this && !value())
+    { bt = fly_box(); col = fly_color(); }
+
+  draw_box(bt, col);
+
+  Fl_Color lc = value() ? down_labelcolor() : labelcolor();
+  draw_label(lc);
 }
+
 int Fl_Button::handle(int event) {
   int newval;
   switch (event) {
   case FL_ENTER:
+    Fl_Tooltip::enter(this);
+    if (fly_box()) redraw();
+    return 1;
   case FL_LEAVE:
-//  if ((value_?selection_color():color())==FL_GRAY) redraw();
+    Fl_Tooltip::exit(this);
+    if (fly_box()) redraw();
     return 1;
   case FL_PUSH:
   case FL_DRAG:
+    Fl_Tooltip::exit(this);
     if (Fl::event_inside(this)) {
       if (type() == FL_RADIO_BUTTON) newval = 1;
       else newval = !oldval;
@@ -77,6 +120,7 @@ int Fl_Button::handle(int event) {
     }
     return 1;
   case FL_RELEASE:
+    Fl_Tooltip::exit(this);
     if (value_ == oldval) return 1;
     if (type() == FL_RADIO_BUTTON)
       setonly();
@@ -105,15 +149,52 @@ int Fl_Button::handle(int event) {
   }
 }
 
-Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l)
-: Fl_Widget(x,y,w,h,l) {
-  box(FL_UP_BOX);
-  down_box(FL_NO_BOX);
+Fl_Button::Style Fl_Button::_default_style;
+
+Fl_Button::Style::Style() : Fl_Widget::Style() {
+  widget(BOX) = FL_MEDIUM_UP_BOX;
+  sbf = 0;
+
+  button(FLY_COLOR) = 51;
+  button(DOWN_BOX) = FL_MEDIUM_DOWN_BOX;
+  button(FLY_BOX) = FL_MEDIUM_UP_BOX;
+  button(DOWN_LABELCOLOR) = FL_BLACK;
+}
+
+Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h,l) {
   value_ = oldval = 0;
   shortcut_ = 0;
   set_flag(SHORTCUT_LABEL);
 }
 
+Fl_Boxtype Fl_Button::fly_box() const {
+  if (style && (WIDGET_STYLE->sbf & bf(BOX)) && !(BUTTON_STYLE->sbf & bf(FLY_BOX)))
+    return (Fl_Boxtype)WIDGET_STYLE->widget(BOX);
+  if (!style || !(BUTTON_STYLE->sbf & bf(FLY_BOX)))
+    return (Fl_Boxtype)DEFAULT_STYLE->button(FLY_BOX);
+  return (Fl_Boxtype)BUTTON_STYLE->button(FLY_BOX);
+}
+
+Fl_Color Fl_Button::fly_color() const {
+  if (!style || !(BUTTON_STYLE->sbf & bf(FLY_COLOR)))
+    return (Fl_Color)DEFAULT_STYLE->button(FLY_COLOR);
+  return (Fl_Color)BUTTON_STYLE->button(FLY_COLOR);
+}
+
+Fl_Boxtype Fl_Button::down_box() const {
+  if (!style || !(BUTTON_STYLE->sbf & bf(DOWN_BOX)))
+    return (Fl_Boxtype)DEFAULT_STYLE->button(DOWN_BOX);
+  return (Fl_Boxtype)BUTTON_STYLE->button(DOWN_BOX);
+}
+
+Fl_Color Fl_Button::down_labelcolor() const {
+  if (!style || !(BUTTON_STYLE->sbf & bf(DOWN_LABELCOLOR)))
+    return (Fl_Color)DEFAULT_STYLE->button(DOWN_LABELCOLOR);
+  return (Fl_Color)BUTTON_STYLE->button(DOWN_LABELCOLOR);
+}
+
+Fl_Color Fl_Button::down_color() const {return selection_color();}
+
 //
-// End of "$Id: Fl_Button.cxx,v 1.4 1999/01/07 19:17:17 mike Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.5 1999/03/14 06:46:27 carl Exp $".
 //

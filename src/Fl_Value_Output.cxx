@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Output.cxx,v 1.6 1999/01/07 19:17:28 mike Exp $"
+// "$Id: Fl_Value_Output.cxx,v 1.7 1999/03/14 06:46:36 carl Exp $"
 //
 // Value output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -30,39 +30,49 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Value_Output.H>
 #include <FL/fl_draw.H>
+#include <FL/Fl_Group.H>
+#include <stdio.h>
+#include <config.h>
 
-void Fl_Value_Output::draw() {
-  Fl_Boxtype b = box() ? box() : FL_DOWN_BOX;
-  int X = x()+Fl::box_dx(b);
-  int Y = y()+Fl::box_dy(b);
-  int W = w()-Fl::box_dw(b);
-  int H = h()-Fl::box_dh(b);
-  if (damage()&~FL_DAMAGE_CHILD)
-    draw_box(b, color());
-  else {
-    fl_color(color());
-    fl_rectf(X, Y, W, H);
-  }
+void Fl_Value_Output::output_cb(Fl_Widget*, void* v) {
+  Fl_Value_Output& t = *(Fl_Value_Output*)v;
+  double nv;
+  if (t.step()>=1.0) nv = strtol(t.output.value(), 0, 0);
+  else nv = strtod(t.output.value(), 0);
+  t.handle_push();
+  t.handle_drag(nv);
+  t.handle_release();
+}
+
+void Fl_Value_Output::value_damage() {
   char buf[128];
   format(buf);
-  fl_color(active_r() ? textcolor() : inactive(textcolor()));
-  fl_font(textfont(), textsize());
-  fl_draw(buf,X+3,Y,W-6,H,FL_ALIGN_LEFT);
+  output.value(buf);
+//  output.mark(output.position()); // turn off selection highlight
+}
+
+void Fl_Value_Output::draw() {
+  loadstyle();
+  if (damage()&~FL_DAMAGE_CHILD) output.clear_damage(FL_DAMAGE_ALL);
+  output.draw();
+  output.clear_damage();
 }
 
 int Fl_Value_Output::handle(int event) {
-  if (!step()) return 0;
+//  if (!step()) return 0;
   double v;
   int delta;
   int mx = Fl::event_x();
   static int ix, drag;
   switch (event) {
   case FL_PUSH:
+  if (!step()) goto DEFAULT;
     ix = mx;
     drag = Fl::event_button();
     handle_push();
     return 1;
   case FL_DRAG:
+  if (!step()) goto DEFAULT;
     delta = Fl::event_x()-ix;
     if (delta > 5) delta -= 5;
     else if (delta < -5) delta += 5;
@@ -76,23 +86,36 @@ int Fl_Value_Output::handle(int event) {
     handle_drag(soft()?softclamp(v):clamp(v));;
     return 1;
   case FL_RELEASE:
-    handle_release();
+  if (!step()) goto DEFAULT;
+    if (value() != previous_value() || !Fl::event_is_click())
+      handle_release();
+    else {
+      output.handle(FL_PUSH);
+      output.handle(FL_RELEASE);
+    }
     return 1;
   default:
-    return 0;
+  DEFAULT:
+    output.type(step()>=1.0 ? FL_INT_INPUT : FL_FLOAT_INPUT);
+    return output.handle(event);
   }
 }
 
 Fl_Value_Output::Fl_Value_Output(int x,int y,int w,int h,const char *l)
-: Fl_Valuator(x,y,w,h,l) {
-  box(FL_NO_BOX);
+: Fl_Valuator(x,y,w,h,l), output(x, y, w, h, 0) {
   align(FL_ALIGN_LEFT);
-  textfont_ = FL_HELVETICA;
-  textsize_ = FL_NORMAL_SIZE;
-  textcolor_ = FL_BLACK;
   soft_ = 0;
+  if (output.parent())  // defeat automatic-add
+    ((Fl_Group*)output.parent())->remove(output);
+  output.parent(this); // kludge!
+  output.callback(output_cb, this);
+  output.when((Fl_When)(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY));
+  value_damage();
+
+  output.wstyle();
+  style = output.style;
 }
 
 //
-// End of "$Id: Fl_Value_Output.cxx,v 1.6 1999/01/07 19:17:28 mike Exp $".
+// End of "$Id: Fl_Value_Output.cxx,v 1.7 1999/03/14 06:46:36 carl Exp $".
 //

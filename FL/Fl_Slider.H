@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.H,v 1.5 1999/02/16 21:59:44 mike Exp $"
+// "$Id: Fl_Slider.H,v 1.6 1999/03/14 06:46:17 carl Exp $"
 //
 // Slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,8 @@
 #include "Fl_Valuator.H"
 #endif
 
+#define SLIDER_STYLE ((Fl_Slider::Style*)style)
+
 // values for type(), lowest bit indicate horizontal:
 #define FL_VERT_SLIDER		0
 #define FL_HOR_SLIDER		1
@@ -39,35 +41,57 @@
 #define FL_HOR_NICE_SLIDER	5
 
 class Fl_Slider : public Fl_Valuator {
+public:
+  enum Slider_Attribute {
+    FLY_COLOR = 0,
+    SLIDER_BOX,
+    SA_END
+  };
 
-  float slider_size_;
-  uchar slider_;
-  FL_EXPORT void _Fl_Slider();
-  FL_EXPORT void draw_bg(int, int, int, int);
+  struct Style : public Fl_Widget::Style {
+    uchar slider_[SA_END];
+    uchar sbf;
+
+    Style();
+    uchar& slider(Slider_Attribute a) { return slider_[a]; }
+  };
+
+  virtual void loadstyle();
+
+  void draw();
+  int handle(int);
+  Fl_Slider(int x,int y,int w,int h, const char *l = 0);
+  Fl_Slider(uchar t,int x,int y,int w,int h, const char *l);
+
+  int scrollvalue(int windowtop,int windowsize,int first,int totalsize);
+  void bounds(double a, double b);
+  float slider_size() const {return slider_size_;}
+  void slider_size(double v);
+
+  Fl_Boxtype slider() const;
+  void slider(Fl_Boxtype b);
+
+  Fl_Color fly_color() const;
+  void fly_color(uchar c);
 
 protected:
+  static Style _default_style;
+
+  virtual Fl_Widget::Style* default_style() const { return &_default_style; }
+  virtual void wstyle() { if (!style) style = new Style; }
 
   // these allow subclasses to put the slider in a smaller area:
-  FL_EXPORT void draw(int, int, int, int);
-  FL_EXPORT int handle(int, int, int, int, int);
+  void draw(int, int, int, int);
+  int handle(int, int, int, int, int);
 
-public:
-
-  FL_EXPORT void draw();
-  FL_EXPORT int handle(int);
-  FL_EXPORT Fl_Slider(int x,int y,int w,int h, const char *l = 0);
-  FL_EXPORT Fl_Slider(uchar t,int x,int y,int w,int h, const char *l);
-
-  FL_EXPORT int scrollvalue(int windowtop,int windowsize,int first,int totalsize);
-  FL_EXPORT void bounds(double a, double b);
-  float slider_size() const {return slider_size_;}
-  FL_EXPORT void slider_size(double v);
-  Fl_Boxtype slider() const {return (Fl_Boxtype)slider_;}
-  void slider(Fl_Boxtype c) {slider_ = c;}
+private:
+  float slider_size_;
+  void _Fl_Slider();
+  void draw_bg(int, int, int, int);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Slider.H,v 1.5 1999/02/16 21:59:44 mike Exp $".
+// End of "$Id: Fl_Slider.H,v 1.6 1999/03/14 06:46:17 carl Exp $".
 //

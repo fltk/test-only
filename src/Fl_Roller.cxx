@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Roller.cxx,v 1.6 1999/01/07 19:17:26 mike Exp $"
+// "$Id: Fl_Roller.cxx,v 1.7 1999/03/14 06:46:33 carl Exp $"
 //
 // Roller widget for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,8 @@
 #include <FL/fl_draw.H>
 #include <math.h>
 
+#define DEFAULT_STYLE ((Style*)default_style())
+
 int Fl_Roller::handle(int event) {
   static int ipos;
   int newpos = horizontal() ? Fl::event_x() : Fl::event_y();
@@ -50,6 +52,7 @@ int Fl_Roller::handle(int event) {
 }
 
 void Fl_Roller::draw() {
+  loadstyle();
   if (damage()&FL_DAMAGE_ALL) draw_box();
   int X = x()+Fl::box_dx(box());
   int Y = y()+Fl::box_dy(box());
@@ -129,12 +132,34 @@ void Fl_Roller::draw() {
   }
 }
 
-Fl_Roller::Fl_Roller(int X,int Y,int W,int H,const char* L)
-  : Fl_Valuator(X,Y,W,H,L) {
-  box(FL_UP_FRAME);
+Fl_Roller::Style Fl_Roller::_default_style;
+
+Fl_Roller::Style::Style() : Fl_Widget::Style() {
+  widget(BOX) = FL_MEDIUM_UP_BOX;
+}
+
+
+void Fl_Roller::loadstyle() {
+  if (!Fl::s_roller) {
+    Fl::s_roller = 1;
+
+    static Fl::Attribute widget_attributes[] = {
+      { "label color", LABELCOLOR },
+      { "label size", LABELSIZE },
+      { "label type", LABELTYPE },
+      { "label font", LABELFONT },
+      { "color", COLOR },
+      { "box", BOX },
+      { 0 }
+    };
+    Fl::load_attributes("roller", DEFAULT_STYLE->widget_, widget_attributes);
+  }
+}
+
+Fl_Roller::Fl_Roller(int X,int Y,int W,int H,const char* L) : Fl_Valuator(X,Y,W,H,L) {
   step(1,1000);
 }
 
 //
-// End of "$Id: Fl_Roller.cxx,v 1.6 1999/01/07 19:17:26 mike Exp $".
+// End of "$Id: Fl_Roller.cxx,v 1.7 1999/03/14 06:46:33 carl Exp $".
 //

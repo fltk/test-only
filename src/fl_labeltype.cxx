@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.6 1999/01/07 19:17:40 mike Exp $"
+// "$Id: fl_labeltype.cxx,v 1.7 1999/03/14 06:46:41 carl Exp $"
 //
 // Label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -92,21 +92,34 @@ void Fl_Widget::draw_label() const {
   int X = x_+Fl::box_dx(box());
   int W = w_-Fl::box_dw(box());
   if (W > 11 && align()&(FL_ALIGN_LEFT|FL_ALIGN_RIGHT)) {X += 3; W -= 6;}
-  draw_label(X, y_+Fl::box_dy(box()), W, h_-Fl::box_dh(box()));
+  draw_label(X, y_+Fl::box_dy(box()), W, h_-Fl::box_dh(box()), labelcolor());
+}
+
+void Fl_Widget::draw_label(Fl_Color col) const {
+  int X = x_+Fl::box_dx(box());
+  int W = w_-Fl::box_dw(box());
+  if (W > 11 && align()&(FL_ALIGN_LEFT|FL_ALIGN_RIGHT)) {X += 3; W -= 6;}
+  draw_label(X, y_+Fl::box_dy(box()), W, h_-Fl::box_dh(box()), col);
 }
 
 // draw() can use this instead to change the bounding box:
-void Fl_Widget::draw_label(int X, int Y, int W, int H) const {
+void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Color col) const {
   // quit if we are not drawing a label inside the widget:
   if ((align()&15) && !(align() & FL_ALIGN_INSIDE)) return;
-  draw_label(X,Y,W,H,align());
+  draw_label(X,Y,W,H,col,align());
 }
 
 // Anybody can call this to force the label to draw anywhere:
 extern char fl_draw_shortcut;
-void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Align a) const {
+void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Color col, Fl_Align a) const {
+  Fl_Label l1;
+  l1.value = label();
+  l1.type = labeltype();
+  l1.size = labelsize();
+  l1.font = labelfont();
+  l1.color = col;
+
   if (flags()&SHORTCUT_LABEL) fl_draw_shortcut = 1;
-  Fl_Label l1 = label_;
   if (!active_r()) l1.color = inactive((Fl_Color)l1.color);
   l1.draw(X,Y,W,H,a);
   fl_draw_shortcut = 0;
@@ -117,5 +130,5 @@ void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Align a) const {
 #include <FL/Fl_Input_.H>
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.6 1999/01/07 19:17:40 mike Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.7 1999/03/14 06:46:41 carl Exp $".
 //

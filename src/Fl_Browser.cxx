@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.9 1999/03/10 20:06:37 mike Exp $"
+// "$Id: Fl_Browser.cxx,v 1.10 1999/03/14 06:46:26 carl Exp $"
 //
 // Browser widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,7 @@
 #include <FL/fl_draw.H>
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
 #include <math.h>
 
 // I modified this from the original Forms data to use a linked list
@@ -314,6 +315,7 @@ void Fl_Browser::item_draw(void* v, int x, int y, int w, int h) const {
     int size = textsize();
     Fl_Font font = textfont();
     Fl_Color lcol = textcolor();
+    int slcol = selected_textcolor();
     Fl_Align align = FL_ALIGN_LEFT;
     // check for all the @-lines recognized by XForms:
     while (*str == format_char() && *++str && *str != format_char()) {
@@ -362,9 +364,7 @@ void Fl_Browser::item_draw(void* v, int x, int y, int w, int h) const {
   BREAK:
     fl_font(font, size);
     if (!active_r()) lcol = inactive(lcol);
-    if (((FL_BLINE*)v)->flags & SELECTED)
-      lcol = contrast(lcol, selection_color());
-    fl_color(lcol);
+    fl_color(item_selected(v) ? slcol : lcol);
     fl_draw(str, x+3, y, w1-6, h, e ? Fl_Align(align|FL_ALIGN_CLIP) : align);
     if (!e) break; // no more fields...
     *e = column_char(); // put the seperator back
@@ -482,5 +482,5 @@ int Fl_Browser::value() const {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.9 1999/03/10 20:06:37 mike Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.10 1999/03/14 06:46:26 carl Exp $".
 //

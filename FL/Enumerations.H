@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.18 1999/03/10 16:25:02 mike Exp $"
+// "$Id: Enumerations.H,v 1.19 1999/03/14 06:46:12 carl Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -144,7 +144,6 @@ enum Fl_When { // Fl_Widget::when():
 
 enum Fl_Boxtype { // boxtypes (if you change these you must fix fl_boxtype.C):
   FL_NO_BOX = 0,	FL_FLAT_BOX,
-
   FL_UP_BOX,		FL_DOWN_BOX,
   FL_UP_FRAME,		FL_DOWN_FRAME,
   FL_THIN_UP_BOX,	FL_THIN_DOWN_BOX,
@@ -159,6 +158,14 @@ enum Fl_Boxtype { // boxtypes (if you change these you must fix fl_boxtype.C):
   _FL_DIAMOND_UP_BOX,	_FL_DIAMOND_DOWN_BOX,
   _FL_OVAL_BOX,		_FL_OSHADOW_BOX,
   _FL_OVAL_FRAME,	_FL_OFLAT_BOX,
+  FL_MEDIUM_UP_BOX,	FL_MEDIUM_DOWN_BOX,
+  FL_MEDIUM_UP_FRAME,	FL_MEDIUM_DOWN_FRAME,
+  FL_MOTIF_UP_BOX,	FL_MOTIF_DOWN_BOX,
+  FL_MOTIF_UP_FRAME,	FL_MOTIF_DOWN_FRAME,
+  FL_THIN_MOTIF_UP_BOX,		FL_THIN_MOTIF_DOWN_BOX,
+  FL_THIN_MOTIF_UP_FRAME,	FL_THIN_MOTIF_DOWN_FRAME,
+  FL_MEDIUM_UP_BOX2,	FL_MEDIUM_DOWN_BOX2,
+  FL_MEDIUM_UP_FRAME2,	FL_MEDIUM_DOWN_FRAME2,
   FL_FREE_BOXTYPE
 };
 extern FL_EXPORT Fl_Boxtype define_FL_ROUND_UP_BOX();
@@ -361,8 +368,13 @@ enum Fl_Damage {
   FL_DAMAGE_ALL      = 0x80
 };
 
+enum Fl_Widget_Style {
+  FL_SGI_STYLE,
+  FL_WINDOWS_STYLE
+};
+
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.18 1999/03/10 16:25:02 mike Exp $".
+// End of "$Id: Enumerations.H,v 1.19 1999/03/14 06:46:12 carl Exp $".
 //

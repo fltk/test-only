@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.8 1999/03/03 07:21:28 bill Exp $"
+// "$Id: Fl_Slider.cxx,v 1.9 1999/03/14 06:46:34 carl Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,14 +28,50 @@
 #include <FL/fl_draw.H>
 #include <math.h>
 
+#define DEFAULT_STYLE ((Style*)default_style())
+
+Fl_Slider::Style Fl_Slider::_default_style;
+
+Fl_Slider::Style::Style() : Fl_Widget::Style() {
+  sbf = 0;
+
+  widget(BOX) = FL_MEDIUM_DOWN_BOX;
+  slider(FLY_COLOR) = 51;
+  slider(SLIDER_BOX) = FL_MEDIUM_UP_BOX2;
+}
+
+void Fl_Slider::loadstyle() {
+  if (!Fl::s_slider) {
+    Fl::s_slider = 1;
+
+    static Fl::Attribute widget_attributes[] = {
+      { "label color", LABELCOLOR },
+      { "label size", LABELSIZE },
+      { "label type", LABELTYPE },
+      { "label font", LABELFONT },
+      { "color", COLOR },
+      { "color2", COLOR2 },
+      { "color3", COLOR3 },
+      { "box", BOX },
+      { 0 }
+    };
+    Fl::load_attributes("slider", DEFAULT_STYLE->widget_, widget_attributes);
+
+    static Fl::Attribute slider_attributes[] = {
+     { "highlight color", FLY_COLOR },
+     { "slider box", SLIDER_BOX },
+     { 0 }
+    };
+    Fl::load_attributes("scroll bar", DEFAULT_STYLE->slider_, slider_attributes);
+  }
+}
+
 void Fl_Slider::_Fl_Slider() {
   slider_size_ = 0;
-  slider_ = 0; // FL_UP_BOX;
 }
 
 Fl_Slider::Fl_Slider(int x, int y, int w, int h, const char* l)
 : Fl_Valuator(x, y, w, h, l) {
-  box(FL_DOWN_BOX);
   _Fl_Slider();
 }
 
@@ -51,14 +87,14 @@ void Fl_Slider::slider_size(double v) {
   if (v <  0) v = 0;
   if (v > 1) v = 1;
   if (slider_size_ != float(v)) {
-    slider_size_ = float(v); 
+    slider_size_ = float(v);
     damage(FL_DAMAGE_EXPOSE);
   }
 }
 
 void Fl_Slider::bounds(double a, double b) {
   if (minimum() != a || maximum() != b) {
-    Fl_Valuator::bounds(a, b); 
+    Fl_Valuator::bounds(a, b);
     damage(FL_DAMAGE_EXPOSE);
   }
 }
@@ -94,6 +130,7 @@ void Fl_Slider::draw_bg(int x, int y, int w, int h) {
 }
 
 void Fl_Slider::draw(int x, int y, int w, int h) {
+  loadstyle();
   double val;
 
   if (minimum() == maximum())
@@ -105,6 +142,10 @@ void Fl_Slider::draw(int x, int y, int w, int h) {
   }
 
   int BW = Fl::box_dx(box());
+
+  // CET - I think this looks better...
+  if (type() != FL_HOR_FILL_SLIDER && type() != FL_VERT_FILL_SLIDER)
+    BW = 0;
   int W = (horizontal() ? w : h) - 2*BW;
   int X, S;
   if (type()==FL_HOR_FILL_SLIDER || type() == FL_VERT_FILL_SLIDER) {
@@ -149,20 +190,62 @@ void Fl_Slider::draw(int x, int y, int w, int h) {
   }
 
   Fl_Boxtype box1 = slider();
-  if (!box1) {box1 = (Fl_Boxtype)(box()&-2); if (!box1) box1 = FL_UP_BOX;}
-  if (type() == FL_VERT_NICE_SLIDER) {
-    draw_box(box1, xsl, ysl, wsl, hsl, FL_GRAY);
-    int d = (hsl-4)/2;
-    draw_box(FL_THIN_DOWN_BOX, xsl+2, ysl+d, wsl-4, hsl-2*d,selection_color());
-  } else if (type() == FL_HOR_NICE_SLIDER) {
-    draw_box(box1, xsl, ysl, wsl, hsl, FL_GRAY);
-    int d = (wsl-4)/2;
-    draw_box(FL_THIN_DOWN_BOX, xsl+d, ysl+2, wsl-2*d, hsl-4,selection_color());
-  } else {
-    if (wsl>0 && hsl>0) draw_box(box1, xsl, ysl, wsl, hsl, selection_color());
-  }
 
-  draw_label(xsl, ysl, wsl, hsl);
+  Fl_Color col = // Used for regular sliders
+    (Fl::belowmouse() == this && color2() == DEFAULT_STYLE->widget(COLOR2))
+    ? fly_color() : color2();
+  col = active_r() ? col : inactive(col);
+  if (!box1) {box1 = (Fl_Boxtype)(box()&-2); if (!box1) box1 = FL_MEDIUM_UP_BOX;}
+  Fl_Color col3 = // Used for "nice" sliders
+    (Fl::belowmouse() == this && color3() == DEFAULT_STYLE->widget(COLOR3))
+    ? fly_color() : color3();
+  col3 = active_r() ? col3 : inactive(col3);
+  Fl_Color selcol = active_r() ? selection_color() : inactive(selection_color());
+  if (type() == FL_VERT_NICE_SLIDER) {
+    draw_box(box1, xsl, ysl, wsl, hsl, col3);
+    int d = (hsl-4)/2;
+    draw_box(FL_THIN_DOWN_BOX, xsl+2, ysl+d, wsl-4, hsl-2*d, selcol);
+  } else if (type() == FL_HOR_NICE_SLIDER) {
+    draw_box(box1, xsl, ysl, wsl, hsl, col3);
+    int d = (wsl-4)/2;
+    draw_box(FL_THIN_DOWN_BOX, xsl+d, ysl+2, wsl-2*d, hsl-4, selcol);
+  } else {
+    if (wsl>0 && hsl>0) draw_box(box1, xsl, ysl, wsl, hsl, col);
+
+// CET - Draws the little stripes on the scroll thumb.
+// CET - This code could be smaller...
+    if (Fl::widget_style() == FL_SGI_STYLE) {
+      int X1 = xsl + Fl::box_dx(box1);
+      int X2 = xsl + wsl - Fl::box_dx(box1) - 1;
+      int Y1 = ysl + Fl::box_dy(box1);
+      int Y2 = ysl + hsl - Fl::box_dy(box1) - 1;
+      fl_clip(X1, Y1, X2 - X1 + 1, Y2 - Y1 + 1);
+      if (type() == FL_HOR_SLIDER) {
+        int XM = xsl + wsl/2;
+        int XF = (wsl > 24) ? XM - 4 : XM;
+        int XL = (wsl > 24) ? XM + 4 : XM;
+        for (int X = XF; X <= XL; X += 4) {
+          fl_color(active_r() ? FL_LIGHT3 : inactive(FL_LIGHT3));
+          fl_yxline(X - 1, Y1, Y2);
+          fl_color(active_r() ? FL_BLACK : inactive(FL_BLACK));
+          fl_yxline(X, Y1, Y2);
+        }
+      } else if(type() == FL_VERT_SLIDER) {
+        int YM = ysl + hsl/2;
+        int YF = (hsl > 24) ? YM - 4 : YM;
+        int YL = (hsl > 24) ? YM + 4 : YM;
+        for (int Y = YF; Y <= YL; Y += 4) {
+          fl_color(active_r() ? FL_LIGHT3 : inactive(FL_LIGHT3));
+          fl_xyline(X1, Y - 1, X2);
+          fl_color(active_r() ? FL_BLACK : inactive(FL_BLACK));
+          fl_xyline(X1, Y, X2);
+        }
+      }
+      fl_pop_clip();
+    }
+
+  }
+  draw_label(xsl, ysl, wsl, hsl, labelcolor());
 }
 
 void Fl_Slider::draw() {
@@ -171,6 +254,11 @@ void Fl_Slider::draw() {
 
 int Fl_Slider::handle(int event, int x, int y, int w, int h) {
   switch (event) {
+  case FL_ENTER:
+  case FL_LEAVE:
+    if (type()==FL_HOR_FILL_SLIDER || type() == FL_VERT_FILL_SLIDER) return 1;
+    redraw();
+    return 1;
   case FL_PUSH:
     if (!Fl::event_inside(x, y, w, h)) return 0;
     handle_push();
@@ -229,6 +317,18 @@ int Fl_Slider::handle(int event) {
   return handle(event, x(), y(), w(), h());
 }
 
+Fl_Boxtype Fl_Slider::slider() const {
+  if (!style || !(SLIDER_STYLE->sbf & bf(SLIDER_BOX)))
+    return (Fl_Boxtype)DEFAULT_STYLE->slider(SLIDER_BOX);
+  return (Fl_Boxtype)SLIDER_STYLE->slider(SLIDER_BOX);
+}
+
+Fl_Color Fl_Slider::fly_color() const {
+  if (!style || !(SLIDER_STYLE->sbf & bf(FLY_COLOR)))
+    return (Fl_Color)DEFAULT_STYLE->slider(FLY_COLOR);
+  return (Fl_Color)SLIDER_STYLE->slider(FLY_COLOR);
+}
+
 //
-// End of "$Id: Fl_Slider.cxx,v 1.8 1999/03/03 07:21:28 bill Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.9 1999/03/14 06:46:34 carl Exp $".
 //

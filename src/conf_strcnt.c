@@ -1,0 +1,45 @@
+/*
+    Carl Thompson's config file routines version 0.11
+    Copyright 1995-1998 Carl Everard Thompson (clip@home.net)
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+    USA.
+*/
+
+#include <FL/conf.h>
+
+/*
+        int *strcnt(const char *s, char c)
+
+        description:
+                counts the number of instances of char c in string s
+        arguments:
+                s: string in which to look for c
+                c: character to look for in s
+        return value:
+                returns the number of instances of c in s
+*/
+int
+strcnt(const char *s, char c)
+{
+        int count;
+        const char *p;
+
+        for (count = 0, p = s; *p != (char)0; p++)
+                if (*p == c) count++;
+
+        return count;
+}
+

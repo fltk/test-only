@@ -1,0 +1,51 @@
+/*
+    Carl Thompson's config file routines version 0.11
+    Copyright 1995-1998 Carl Everard Thompson (clip@home.net)
+
+    This library is free software; you can redistribute it and/or
+    modify it under the terms of the GNU Library General Public
+    License as published by the Free Software Foundation; either
+    version 2 of the License, or (at your option) any later version.
+
+    This library is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+    Library General Public License for more details.
+
+    You should have received a copy of the GNU Library General Public
+    License along with this library; if not, write to the Free Software
+    Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+    USA.
+*/
+
+#include <FL/conf.h>
+
+/*
+        char *trim(char *s)
+
+        description:
+                removes leading and trailing whitespace from a string
+                whitespace is any character in literal string WHITESPACE
+        arguments:
+                s: string to be modified
+        return value:
+                returns s
+*/
+char *
+trim(char *s)
+{
+        int     i;                                                              /* temporary int */
+        char    *p;                                                             /* temporary pointer */
+
+        if (!s)                                                                 /* if null pointer passed */
+                return s;
+
+        i = strspn(s, WHITESPACE);
+        memmove(s, s + i, strlen(s + i) + 1);                                   /* kill leading whitespace */
+
+        p = s + strlen(s) - 1;
+        while ((p >= s) && strchr(WHITESPACE, *p))                              /* kill trailing whitespace */
+                *p-- = '\0';
+        return s;
+}
+

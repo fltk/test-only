@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.5 1999/02/16 21:59:40 mike Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.6 1999/03/14 06:46:16 carl Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,6 +31,8 @@
 #include "Fl_Widget.H"
 #endif
 
+#define MENU_ITEM_STYLE ((Fl_Menu_Item::Style*)style)
+
 enum { // values for flags:
   FL_MENU_INACTIVE = 1,
   FL_MENU_TOGGLE= 2,
@@ -40,41 +42,88 @@ enum { // values for flags:
   FL_SUBMENU_POINTER = 0x20,
   FL_SUBMENU = 0x40,
   FL_MENU_DIVIDER = 0x80,
-  FL_MENU_HORIZONTAL = 0x100
+  FL_MENU_HORIZONTAL = 0x100,
+  FL_MENU_STYLES_LOADED = 0x200
 };
 
-extern FL_EXPORT int fl_old_shortcut(const char*);
+extern int fl_old_shortcut(const char*);
 
 class Fl_Menu_;
 
 struct Fl_Menu_Item {
+  enum Menu_Item_Attribute {
+    LABELCOLOR = 0,
+    LABELSIZE,
+    LABELTYPE,
+    LABELFONT,
+    DOWN_LABELCOLOR,
+    DOWN_COLOR,
+    DOWN_BOX,
+    TITLE_DOWN_COLOR,
+    TITLE_DOWN_LABELCOLOR,
+    TITLE_DOWN_BOX,
+    TITLE_FLY_COLOR,
+    TITLE_FLY_BOX,
+    TITLE_FLY_LABELCOLOR,
+    MIA_END
+  };
+
+  struct Style {
+    uchar menu_item_[MIA_END];
+    uchar sbf;
+
+    Style();
+    uchar& menu_item(Menu_Item_Attribute a) { return menu_item_[a]; }
+  };
+
+  static Style default_style;
+
   const char *text;	// label()
   int shortcut_;
   Fl_Callback *callback_;
   void *user_data_;
   int flags;
-  uchar labeltype_;
-  uchar labelfont_;
-  uchar labelsize_;
-  uchar labelcolor_;
+
+  // Dummy variables to handle static initializers.  These are not used--
+  // you can't initialize style information with the initializers.
+  uchar clobberMe1;
+  uchar clobberMe2;
+  uchar clobberMe3;
+  uchar clobberMe4;
+
+  Style* style;
+
+  ~Fl_Menu_Item() {};
+
+  static void loadstyle();
+  uchar bf(uchar a) const {return (uchar)1 << a;}
 
   // advance N items, skipping submenus:
-  FL_EXPORT const Fl_Menu_Item *next(int=1) const;
+  const Fl_Menu_Item *next(int=1) const;
   Fl_Menu_Item *next(int i=1) {
     return (Fl_Menu_Item*)(((const Fl_Menu_Item*)this)->next(i));}
 
   // methods on menu items:
   const char* label() const {return text;}
   void label(const char* a) {text=a;}
-  void label(Fl_Labeltype a,const char* b) {labeltype_ = a; text = b;}
-  Fl_Labeltype labeltype() const {return (Fl_Labeltype)labeltype_;}
-  void labeltype(Fl_Labeltype a) {labeltype_ = a;}
-  Fl_Color labelcolor() const {return (Fl_Color)labelcolor_;}
-  void labelcolor(uchar a) {labelcolor_ = a;}
-  Fl_Font labelfont() const {return (Fl_Font)labelfont_;}
-  void labelfont(uchar a) {labelfont_ = a;}
-  uchar labelsize() const {return labelsize_;}
-  void labelsize(uchar a) {labelsize_ = a;}
+
+  Fl_Labeltype labeltype() const;
+  Fl_Color labelcolor() const;
+  Fl_Font labelfont() const;
+  uchar labelsize() const;
+  Fl_Boxtype down_box() const;
+  Fl_Color down_color() const;
+  Fl_Color down_labelcolor() const;
+
+  void label(Fl_Labeltype a,const char* b);
+  void labeltype(Fl_Labeltype a);
+  void labelcolor(uchar a);
+  void labelfont(uchar a);
+  void labelsize(uchar a);
+  void down_box(uchar b);
+  void down_color(uchar c);
+  void down_labelcolor(uchar c);
+
   Fl_Callback* callback() const {return callback_;}
   void callback(Fl_Callback* c, void* p) {callback_=c; user_data_=p;}
   void callback(Fl_Callback* c) {callback_=c;}
@@ -92,7 +141,7 @@ struct Fl_Menu_Item {
   int value() const {return flags&FL_MENU_VALUE;}
   void set() {flags |= FL_MENU_VALUE;}
   void clear() {flags &= ~FL_MENU_VALUE;}
-  FL_EXPORT void setonly();
+  void setonly();
   int visible() const {return !(flags&FL_MENU_INVISIBLE);}
   void show() {flags &= ~FL_MENU_INVISIBLE;}
   void hide() {flags |= FL_MENU_INVISIBLE;}
@@ -102,23 +151,23 @@ struct Fl_Menu_Item {
   int activevisible() const {return !(flags&0x11);}
 
   // used by menubar:
-  FL_EXPORT int measure(int* h, const Fl_Menu_*) const;
-  FL_EXPORT void draw(int x, int y, int w, int h, const Fl_Menu_*, int t=0) const;
+  int measure(int* h, const Fl_Menu_*) const;
+  void draw(int x, int y, int w, int h, const Fl_Menu_*, int t=0) const;
 
   // popup menus without using an Fl_Menu_ widget:
-  FL_EXPORT const Fl_Menu_Item* popup(
+  const Fl_Menu_Item* popup(
     int X, int Y,
     const char *title = 0,
     const Fl_Menu_Item* picked=0,
-    const Fl_Menu_* = 0) const;
-  FL_EXPORT const Fl_Menu_Item* pulldown(
+    const Fl_Menu_* = 0);
+  const Fl_Menu_Item* pulldown(
     int X, int Y, int W, int H,
     const Fl_Menu_Item* picked = 0,
     const Fl_Menu_* = 0,
     const Fl_Menu_Item* title = 0,
-    int menubar=0) const;
-  FL_EXPORT const Fl_Menu_Item* test_shortcut() const;
-  FL_EXPORT const Fl_Menu_Item* find_shortcut(int *ip=0) const;
+    int menubar=0);
+  const Fl_Menu_Item* test_shortcut() const;
+  const Fl_Menu_Item* find_shortcut(int *ip=0) const;
 
   void do_callback(Fl_Widget* o) const {callback_(o, user_data_);}
   void do_callback(Fl_Widget* o,void* arg) const {callback_(o, arg);}
@@ -128,11 +177,13 @@ struct Fl_Menu_Item {
   int checked() const {return flags&FL_MENU_VALUE;}
   void check() {flags |= FL_MENU_VALUE;}
   void uncheck() {flags &= ~FL_MENU_VALUE;}
-  FL_EXPORT int add(const char*, int shortcut, Fl_Callback*, void* =0, int = 0);
+  int add(const char*, int shortcut, Fl_Callback*, void* =0, int = 0);
   int add(const char*a, const char* b, Fl_Callback* c,
 	  void* d = 0, int e = 0) {
     return add(a,fl_old_shortcut(b),c,d,e);}
-  FL_EXPORT int size() const ;
+  int size() const ;
+
+  void wstyle() { if (!style) style = new Style; }
 };
 
 typedef Fl_Menu_Item Fl_Menu; // back compatability
@@ -153,5 +204,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.5 1999/02/16 21:59:40 mike Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.6 1999/03/14 06:46:16 carl Exp $".
 //

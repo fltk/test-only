@@ -1,5 +1,5 @@
 //
-// "$Id: input.cxx,v 1.5 1999/01/07 19:17:56 mike Exp $"
+// "$Id: input.cxx,v 1.6 1999/03/14 06:46:45 carl Exp $"
 //
 // Input field test program for the Fast Light Tool Kit (FLTK).
 //
@@ -33,7 +33,7 @@
 #include <FL/Fl_Multiline_Input.H>
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Toggle_Button.H>
-#include <FL/Fl_Color_Chooser.H>
+#include <FL/fl_show_colormap.H>
 
 void cb(Fl_Widget *ob) {
   printf("Callback for %s '%s'\n",ob->label(),((Fl_Input*)ob)->value());
@@ -58,18 +58,25 @@ void button_cb(Fl_Widget *,void *) {
 }
 
 void color_cb(Fl_Widget* button, void* v) {
+  Fl_Input def(0,0,0,0);
   Fl_Color c;
+  
+  def.use_default_style();
+  
   switch ((int)v) {
-  case 0: c = FL_WHITE; break;
-  case 1: c = FL_SELECTION_COLOR; break;
-  default: c = FL_BLACK; break;
+    case 0: c = def.color(); break;
+    case 1: c = def.selection_color(); break;
+    default: c = def.textcolor(); break;
   }
-  uchar r,g,b; Fl::get_color(c, r,g,b);
-  if (fl_color_chooser(0,r,g,b)) {
-    Fl::set_color(c,r,g,b); Fl::redraw();
-    button->labelcolor(contrast(FL_BLACK,c));
-    button->redraw();
+  c = fl_show_colormap(c);
+  switch ((int)v) {
+    case 0: def.color(c); break;
+    case 1: def.selection_color(c); break;
+    default: def.textcolor(c); break;
   }
+  button->color(c);
+  button->labelcolor(contrast(FL_BLACK,(Fl_Color)c));
+  Fl::redraw();
 }
 
 int main(int argc, char **argv) {
@@ -104,10 +111,15 @@ int main(int argc, char **argv) {
   b->callback(button_cb);
 
   b = new Fl_Button(220,y1,100,25,"color"); y1 += 25;
+  b->fly_box(FL_NO_BOX);
   b->color(input[0]->color()); b->callback(color_cb, (void*)0);
+  b->labelcolor(contrast(FL_BLACK,b->color()));
   b = new Fl_Button(220,y1,100,25,"selection_color"); y1 += 25;
+  b->fly_box(FL_NO_BOX);
   b->color(input[0]->selection_color()); b->callback(color_cb, (void*)1);
+  b->labelcolor(contrast(FL_BLACK,b->color()));
   b = new Fl_Button(220,y1,100,25,"textcolor"); y1 += 25;
+  b->fly_box(FL_NO_BOX);
   b->color(input[0]->textcolor()); b->callback(color_cb, (void*)2);
   b->labelcolor(contrast(FL_BLACK,b->color()));
 
@@ -117,5 +129,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: input.cxx,v 1.5 1999/01/07 19:17:56 mike Exp $".
+// End of "$Id: input.cxx,v 1.6 1999/03/14 06:46:45 carl Exp $".
 //

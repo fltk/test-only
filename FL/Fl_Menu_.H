@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.H,v 1.7 1999/02/16 21:59:39 mike Exp $"
+// "$Id: Fl_Menu_.H,v 1.8 1999/03/14 06:46:15 carl Exp $"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,67 +31,88 @@
 #endif
 #include "Fl_Menu_Item.H"
 
+#define MENU_STYLE ((Fl_Menu_::Style*)style)
+
 class Fl_Menu_ : public Fl_Widget {
-
-  Fl_Menu_Item *menu_;
-  const Fl_Menu_Item *value_;
-
-protected:
-
-  FL_EXPORT const Fl_Menu_Item* picked(const Fl_Menu_Item*);
-  uchar down_box_;
-  uchar textfont_;
-  uchar textsize_;
-  uchar textcolor_;
-  uchar alloc;
-
 public:
+  enum Menu_Attribute {
+    TEXTFONT = 0,
+    TEXTSIZE,
+    TEXTCOLOR,
+    DOWN_BOX,
+    MA_END
+  };
 
-  FL_EXPORT Fl_Menu_(int,int,int,int,const char * =0);
-  FL_EXPORT ~Fl_Menu_();
+  struct Style : public Fl_Widget::Style {
+    uchar menu_[MA_END];
+    uchar sbf;
 
+    Style();
+    uchar& menu(Menu_Attribute a) { return menu_[a]; }
+  };
+
+  Fl_Menu_(int,int,int,int,const char * =0);
+  ~Fl_Menu_();
+
+  virtual void loadstyle();
   const Fl_Menu_Item* test_shortcut() {return picked(menu()->test_shortcut());}
-  FL_EXPORT void global();
+  void global();
 
-  const Fl_Menu_Item *menu() const {return menu_;}
-  FL_EXPORT void menu(const Fl_Menu_Item *m);
-  FL_EXPORT void copy(const Fl_Menu_Item *m, void* user_data = 0);
-  FL_EXPORT int  add(const char*, int shortcut, Fl_Callback*, void* = 0, int = 0);
+  Fl_Menu_Item* menu() const {return menu_;}
+  void menu(const Fl_Menu_Item* m);
+  Fl_Menu_Item* find(const char* label);
+  void copy(const Fl_Menu_Item *m, void* user_data = 0);
+  int  add(const char*, int shortcut, Fl_Callback*, void* = 0, int = 0);
   int  add(const char* a, const char* b, Fl_Callback* c,
 	  void* d = 0, int e = 0) {return add(a,fl_old_shortcut(b),c,d,e);}
-  FL_EXPORT int  size() const ;
-  FL_EXPORT void clear();
-  FL_EXPORT int  add(const char *);
-  FL_EXPORT void replace(int,const char *);
-  FL_EXPORT void remove(int);
+  int  size() const ;
+  void clear();
+  int  add(const char *);
+  void replace(int,const char *);
+  void remove(int);
   void shortcut(int i, int s) {menu_[i].shortcut(s);}
   void mode(int i,int x) {menu_[i].flags = x;}
   int  mode(int i) const {return menu_[i].flags;}
 
   const Fl_Menu_Item *mvalue() const {return value_;}
   int value() const {return value_-menu_;}
-  FL_EXPORT int value(const Fl_Menu_Item*);
+  int value(const Fl_Menu_Item*);
   int value(int i) {return value(menu_+i);}
   const char *text() const {return value_ ? value_->text : 0;}
   const char *text(int i) const {return menu_[i].text;}
 
-  Fl_Font textfont() const {return (Fl_Font)textfont_;}
-  void textfont(uchar c) {textfont_=c;}
-  uchar textsize() const {return textsize_;}
-  void textsize(uchar c) {textsize_=c;}
-  Fl_Color textcolor() const {return (Fl_Color)textcolor_;}
-  void textcolor(uchar c) {textcolor_=c;}
+  Fl_Font textfont() const;
+  void textfont(uchar s);
 
-  Fl_Boxtype down_box() const {return (Fl_Boxtype)down_box_;}
-  void down_box(Fl_Boxtype b) {down_box_ = b;}
+  uchar textsize() const;
+  void textsize(uchar s);
+
+  Fl_Color textcolor() const;
+  void textcolor(uchar n);
+
+  Fl_Boxtype down_box() const;
+  void down_box(Fl_Boxtype b);
 
   // back compatability:
-  Fl_Color down_color() const {return selection_color();}
-  void down_color(uchar c) {selection_color(c);}
+  Fl_Color down_color() const;
+  void down_color(uchar c);
+
+protected:
+  uchar alloc;
+  static Style _default_style;
+
+  virtual Fl_Widget::Style* default_style() const { return &_default_style; }
+  virtual void wstyle() { if (!style) style = new Style; }
+
+  const Fl_Menu_Item* picked(const Fl_Menu_Item*);
+
+private:
+  Fl_Menu_Item *menu_;
+  const Fl_Menu_Item *value_;
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Menu_.H,v 1.7 1999/02/16 21:59:39 mike Exp $".
+// End of "$Id: Fl_Menu_.H,v 1.8 1999/03/14 06:46:15 carl Exp $".
 //

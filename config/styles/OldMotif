@@ -1,0 +1,276 @@
+description = Ancient Motif Style
+author = Carl Thompson (clip@home.net)
+version = 7
+
+[global]
+  background red = 98
+  background green = 133
+  background blue = 210
+  widget style = SGI
+
+[menu item]
+  label type = 0
+  label font = 13
+  label size = 12
+  label color = 0
+  down label color = 0
+  down color = 228
+  down box = 34
+  menu title down color = 228
+  menu title down label color = 0
+  menu title down box = 34
+  menu title highlight color = 51
+  menu title highlight box = 0
+  menu title highlight label color = 0
+
+[browser]
+  label color = 0
+  label size = 12
+  label type = 0
+  label font = 13
+  color = 228
+  selected color = 0
+  box = 14
+  text font = 13
+  text size = 12
+  text color = 0
+  selected text color = 228
+
+[chart]
+  label color = 0
+  label size = 12
+  label type = 0
+  label font = 13
+  color = 228
+  color2 = 7
+  box = 14
+  text font = 13
+  text size = 10
+  text color = 0
+
+[button]
+  label color = 0
+  label size = 12
+  label type = 0
+  label font = 13
+  color = 228
+  down color = 228
+  highlight color = 228
+  box = 34
+  down box = 35
+  highlight box = 0
+  down label color = 0
+
+[check button]
+  label color = 0
+  label size = 12
+  label type = 0
+  label font = 13
+  color = 228
+  selected light color = 1
+  unselected light color = 228
+  highlight color = 228
+  box = 0
+  highlight box = 0
+  down label color = 0
+
+[round button]
+  label color = 0
+  label size = 12
+  label type = 0
+  label font = 13
+  color = 228
+  selected light color = 1
+  unselected light color = 228
+  highlight color = 228
+  box = 34
+  highlight box = 0
+  down label color = 0
+
+[light button]
+  label color = 0
+  label size = 12
+  label type = 0
+  label font = 13
+  color = 228
+  unselected light color = 0
+  selected light color = 1
+  highlight color = 228
+  box = 34
+  down box = 0
+  highlight box = 0
+  down label color = 0
+
+[return button]
+  label color = 0
+  label size = 12
+  label type = 0
+  label font = 13
+  color = 228
+  down color = 228
+  highlight color = 228
+  box = 34
+  down box = 35
+  highlight box = 0
+  down label color = 0
+
+[highlight button]
+  label color = 0
+  label size = 12
+  label type = 0
+  label font = 13
+  color = 228
+  down color = 228
+  highlight color = 228
+  down box = 35
+  highlight box = 34
+  down label color = 0
+
+[choice]
+  label color = 0
+  label size = 12
+  label type = 0
+  label font = 13
+  color = 228
+  down color = 228
+  highlight color = 51
+  box = 34
+  highlight box = 0
+  down box = 34
+  text font = 13
+  text size = 12
+  text color = 0
+
+[menu bar]
+  label color = 0
+  label size = 12
+  label type = 0
+  label font = 13
+  color = 228
+  down color = 228
+  box = 34
+  down box = 34
+  text font = 13
+  text size = 12
+  text color = 0
+
+[menu button]
+  label color = 0
+  label size = 12
+  label type = 0
+  label font = 13
+  color = 228
+  down color = 228
+  highlight color = 51
+  box = 34
+  highlight box = 0
+  down box = 34
+  text font = 13
+  text size = 12
+  text color = 0
+
+[popup menu]
+  box = 34
+  color = 228
+  shortcut font = 0
+  shortcut size = 12
+
+[widget]
+  label color = 0
+  label size = 12
+  label type = 0
+  label font = 13
+  color = 228
+  color2 = 228
+  color3 = 228
+  box = 0
+
+[window]
+  label color = 0
+  label size = 12
+  label type = 0
+  label font = 13
+  color = 228
+  box = 38
+
+[slider]
+  label color = 0
+  label size = 12
+  label type = 0
+  label font = 13
+  color = 228
+  color2 = 228
+  color3 = 228
+  highlight color = 228
+  box = 35
+  slider box = 34
+
+[scroll bar]
+  label color = 0
+  label size = 12
+  label type = 0
+  label font = 13
+  color = 228
+  color2 = 228
+  arrow color = 0
+  highlight color = 228
+  box = 35
+  slider box = 34
+
+[text input output]
+  box = 35
+  color = 228
+  output color = 228
+  text font = 13
+  text size = 12
+  text color = 0
+  selected color = 0
+  selected text color = 228
+  cursor color = 0
+  label font = 13
+  label size = 12
+  label color = 0
+  label type = 0
+
+[adjuster]
+  label color = 0
+  label size = 12
+  label type = 0
+  label font = 13
+  color = 228
+  arrow color = 0
+  highlight color = 51
+  box = 34
+  highlight box = 0
+
+[counter]
+  label color = 0
+  label size = 12
+  label type = 0
+  label font = 13
+  color = 228
+  text area color = 228
+  arrow color = 0
+  highlight color = 51
+  box = 34
+  highlight box = 0
+  box2 = 1
+  text font = 13
+  text size = 12
+  text color = 0
+
+[roller]
+  label color = 0
+  label size = 12
+  label type = 0
+  label font = 13
+  color = 228
+  box = 34
+
+[tooltip]
+  delay = 500
+  box = 14
+  color = 215
+  text color = 0
+  text font = 0
+  text size = 12

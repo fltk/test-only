@@ -1,5 +1,5 @@
 //
-// "$Id: minimum.cxx,v 1.4 1999/01/07 19:17:58 mike Exp $"
+// "$Id: minimum.cxx,v 1.5 1999/03/14 06:46:46 carl Exp $"
 //
 // Minimal update test program for the Fast Light Tool Kit (FLTK).
 //
@@ -66,13 +66,13 @@ int main(int argc, char **argv) {
   s = new Fl_Slider(320,10,20,300,"Too_Big_Label");
   s->align(0);
 
-  new Fl_Button(20,270,100,30,"Button");
-  new Fl_Return_Button(200,270,100,30,"Button");
+  (void) new Fl_Button(20,270,100,30,"Button");
+  (void) new Fl_Return_Button(200,270,100,30,"Button");
 
   window->show(argc, argv);
   return Fl::run();
 }
 
 //
-// End of "$Id: minimum.cxx,v 1.4 1999/01/07 19:17:58 mike Exp $".
+// End of "$Id: minimum.cxx,v 1.5 1999/03/14 06:46:46 carl Exp $".
 //

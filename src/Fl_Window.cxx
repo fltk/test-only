@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.6 1999/01/13 15:45:49 mike Exp $"
+// "$Id: Fl_Window.cxx,v 1.7 1999/03/14 06:46:36 carl Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -30,11 +30,69 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
+#include <FL/conf.h>
+
+#define DEFAULT_STYLE ((Style*)default_style())
+
+Fl_Window::Style Fl_Window::_default_style;
+
+Fl_Window::Style::Style() : Fl_Widget::Style() {
+  widget(LABELTYPE) = FL_NO_LABEL;
+  widget(BOX) = FL_FLAT_BOX;
+}
+
+// CET - for testing only-- will be removed
+#ifndef WIN32
+#include <signal.h>
+static void stylechange(int) {
+  if (Fl::style()) Fl::load_styles(1);
+  signal(SIGUSR1, stylechange);
+}
+#endif
+
+void Fl_Window::loadstyle() {
+  if (!Fl::s_background) {
+    Fl::s_background = 1;
+
+    uchar r = 0xc0, g=0xc0, b=0xc0;
+
+    int res = Fl::find("global/background red", r, 1);
+    if (res == CONF_ERR_FILE) { Fl::load_styles(0); return; }
+    Fl::find("global/background green", g, 1);
+    Fl::find("global/background blue", b, 1);
+
+    Fl::background(r, g, b);
+
+    char s[32];
+    if (!Fl::find("global/widget style", s, sizeof(s), 1)) {
+      if (!strcasecmp(s, "sgi")) Fl::widget_style(FL_SGI_STYLE);
+      else Fl::widget_style(FL_WINDOWS_STYLE);
+    }
+  }
+
+  if (!Fl::s_window) {
+    Fl::s_window = 1;
+
+    static Fl::Attribute widget_attributes[] = {
+      { "label color", LABELCOLOR },
+      { "label size", LABELSIZE },
+      { "label type", LABELTYPE },
+      { "label font", LABELFONT },
+      { "color", COLOR },
+      { "box", BOX },
+      { 0 }
+    };
+    Fl::load_attributes("window", DEFAULT_STYLE->widget_, widget_attributes);
+  }
+
+// CET - for testing only-- will be removed
+#ifndef WIN32
+  signal(SIGUSR1, stylechange);
+#endif
+}
 
 void Fl_Window::_Fl_Window() {
   type(FL_WINDOW);
-  box(FL_FLAT_BOX);
-  labeltype(FL_NO_LABEL);
   i = 0;
   xclass_ = 0;
   icon_ = 0;
@@ -76,6 +134,7 @@ int Fl_Window::y_root() const {
 }
 
 void Fl_Window::draw() {
+  loadstyle();
   int savex = x(); x(0);
   int savey = y(); y(0);
   Fl_Group::draw();
@@ -102,5 +161,5 @@ void Fl_Window::default_callback(Fl_Window* window, void* v) {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.6 1999/01/13 15:45:49 mike Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.7 1999/03/14 06:46:36 carl Exp $".
 //

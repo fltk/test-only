@@ -11,6 +11,7 @@ Function {} {open
     Fl_Button {} {
       label Fl_Button open
       xywh {20 10 160 30}
+      code0 {o->tooltip("This is a Button");}
     }
     Fl_Return_Button {} {
       label Fl_Return_Button open
@@ -19,14 +20,15 @@ Function {} {open
     Fl_Light_Button {} {
       label Fl_Light_Button open
       xywh {20 90 160 30}
+      code0 {o->tooltip("This is a light button!  This particular light button has a really long Tooltip.  Hopefully, this tooltip will be wrapped across more than one line.");}
     }
     Fl_Check_Button {} {
       label Fl_Check_Button open
-      xywh {20 130 160 30} box 2
+      xywh {20 130 160 30}
     }
     Fl_Round_Button {} {
       label Fl_Round_Button open
-      xywh {20 170 160 30} box 2
+      xywh {20 170 160 30}
     }
     Fl_Group {} {
       xywh {190 10 70 120} box 8
@@ -50,22 +52,24 @@ Function {} {open
     }
     Fl_Group {} {open
       xywh {270 10 90 115} box 6
+      code0 {o->tooltip("This is a group !");}
     } {
       Fl_Button {} {
         label radio open
-        xywh {280 20 20 20} type 102 color {47 1} align 8
+        xywh {280 20 20 20} type 102 align 8
+        code0 {o->tooltip("This the first button of the group");}
       }
       Fl_Button {} {
         label radio open
-        xywh {280 45 20 20} type 102 color {47 1} align 8
+        xywh {280 45 20 20} type 102 align 8
       }
       Fl_Button {} {
         label radio open
-        xywh {280 70 20 20} type 102 color {47 1} align 8
+        xywh {280 70 20 20} type 102 align 8
       }
       Fl_Button {} {
         label radio open
-        xywh {280 95 20 20} type 102 color {47 1} align 8
+        xywh {280 95 20 20} type 102 align 8
       }
     }
   }

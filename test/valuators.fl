@@ -9,7 +9,7 @@ Function {} {open
 } {
   Fl_Window {} {
     label {Valuator classes, showing values for type()} open
-    xywh {414 83 567 506} color 43 selection_color 43
+    xywh {414 83 567 506}
     code0 {\#include <stdio.h>} visible
   } {
     Fl_Box {} {

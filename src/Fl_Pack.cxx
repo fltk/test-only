@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pack.cxx,v 1.6 1999/01/07 19:17:24 mike Exp $"
+// "$Id: Fl_Pack.cxx,v 1.7 1999/03/14 06:46:33 carl Exp $"
 //
 // Packing widget for the Fast Light Tool Kit (FLTK).
 //
@@ -40,6 +40,7 @@ Fl_Pack::Fl_Pack(int x,int y,int w ,int h,const char *l)
 }
 
 void Fl_Pack::draw() {
+  loadstyle();
   int tx = x()+Fl::box_dx(box());
   int ty = y()+Fl::box_dy(box());
   int tw = w()-Fl::box_dw(box());
@@ -105,5 +106,5 @@ void Fl_Pack::draw() {
 }
 
 //
-// End of "$Id: Fl_Pack.cxx,v 1.6 1999/01/07 19:17:24 mike Exp $".
+// End of "$Id: Fl_Pack.cxx,v 1.7 1999/03/14 06:46:33 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Round_Button.H,v 1.5 1999/02/16 21:59:43 mike Exp $"
+// "$Id: Fl_Round_Button.H,v 1.6 1999/03/14 06:46:17 carl Exp $"
 //
 // Round button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,11 +30,24 @@
 
 class Fl_Round_Button : public Fl_Light_Button {
 public:
-  FL_EXPORT Fl_Round_Button(int x,int y,int w,int h,const char *l = 0);
+  Fl_Round_Button(int x,int y,int w,int h,const char *l = 0);
+
+  virtual void loadstyle();
+
+protected:
+  struct Style : public Fl_Light_Button::Style {
+    Style();
+  };
+
+  static Style _default_style;
+
+  virtual Fl_Widget::Style* default_style() const { return &_default_style; }
+  virtual void wstyle() { if (!style) style = new Style; }
+
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Round_Button.H,v 1.5 1999/02/16 21:59:43 mike Exp $".
+// End of "$Id: Fl_Round_Button.H,v 1.6 1999/03/14 06:46:17 carl Exp $".
 //

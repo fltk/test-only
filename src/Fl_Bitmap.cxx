@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.cxx,v 1.5 1999/01/07 19:17:16 mike Exp $"
+// "$Id: Fl_Bitmap.cxx,v 1.6 1999/03/14 06:46:26 carl Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -92,7 +92,7 @@ Fl_Bitmap::~Fl_Bitmap() {
 #endif
 }
 
-static void bitmap_labeltype(
+void fl_bitmap_labeltype(
     const Fl_Label* o, int x, int y, int w, int h, Fl_Align a)
 {
   Fl_Bitmap* b = (Fl_Bitmap*)(o->value);
@@ -108,22 +108,17 @@ static void bitmap_labeltype(
   b->draw(x,y,w,h,cx,cy);
 }
 
-static void bitmap_measure(const Fl_Label* o, int& w, int& h) {
+void fl_bitmap_measure(const Fl_Label* o, int& w, int& h) {
   Fl_Bitmap* b = (Fl_Bitmap*)(o->value);
   w = b->w;
   h = b->h;
 }
 
 void Fl_Bitmap::label(Fl_Widget* o) {
-  Fl::set_labeltype(_FL_BITMAP_LABEL, bitmap_labeltype, bitmap_measure);
-  o->label(_FL_BITMAP_LABEL, (const char*)this);
-}
-
-void Fl_Bitmap::label(Fl_Menu_Item* o) {
-  Fl::set_labeltype(_FL_BITMAP_LABEL, bitmap_labeltype, bitmap_measure);
+  Fl::set_labeltype(_FL_BITMAP_LABEL, fl_bitmap_labeltype, fl_bitmap_measure);
   o->label(_FL_BITMAP_LABEL, (const char*)this);
 }
 
 //
-// End of "$Id: Fl_Bitmap.cxx,v 1.5 1999/01/07 19:17:16 mike Exp $".
+// End of "$Id: Fl_Bitmap.cxx,v 1.6 1999/03/14 06:46:26 carl Exp $".
 //

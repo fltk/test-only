@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.H,v 1.5 1999/02/16 21:59:39 mike Exp $"
+// "$Id: Fl_Menu_Bar.H,v 1.6 1999/03/14 06:46:16 carl Exp $"
 //
 // Menu bar header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,17 +28,32 @@
 
 #include "Fl_Menu_.H"
 
+#define FL_MAX_MENU_TITLES 20
+
 class Fl_Menu_Bar : public Fl_Menu_ {
-protected:
-    FL_EXPORT int handle(int);
-    FL_EXPORT void draw();
 public:
-    Fl_Menu_Bar(int x,int y,int w,int h,const char *l=0)
-      : Fl_Menu_(x,y,w,h,l) {}
+  struct Style : public Fl_Menu_::Style {
+    Style();
+  };
+
+  Fl_Menu_Bar(int x,int y,int w,int h,const char *l=0);
+  ~Fl_Menu_Bar() { for(int i=0; i<FL_MAX_MENU_TITLES; i++) delete titles[i]; }
+
+  virtual void loadstyle();
+
+protected:
+  void* titles[FL_MAX_MENU_TITLES];
+  static Style _default_style;
+
+  virtual Fl_Widget::Style* default_style() const { return &_default_style; }
+  virtual void wstyle() { if (!style) style = new Style; }
+
+  int handle(int);
+  void draw();
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Menu_Bar.H,v 1.5 1999/02/16 21:59:39 mike Exp $".
+// End of "$Id: Fl_Menu_Bar.H,v 1.6 1999/03/14 06:46:16 carl Exp $".
 //

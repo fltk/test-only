@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.5 1999/01/07 19:17:29 mike Exp $"
+// "$Id: Fl_Widget.cxx,v 1.6 1999/03/14 06:46:36 carl Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -26,6 +26,8 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Group.H>
+
+#define DEFAULT_STYLE ((Style*)default_style())
 
 ////////////////////////////////////////////////////////////////
 // for compatability with Forms, all widgets without callbacks are
@@ -67,27 +69,59 @@ Fl_Widget *Fl::readqueue() {
 
 int Fl_Widget::handle(int) {return 0;}
 
+Fl_Widget::Style Fl_Widget::_default_style;
+
+Fl_Widget::Style::Style() {
+  sbf = 0;
+  not_dynamic = 0;
+
+  widget(LABELCOLOR) = FL_BLACK;
+  widget(LABELSIZE) = 12;
+  widget(LABELTYPE) = FL_NORMAL_LABEL;
+  widget(LABELFONT) = FL_HELVETICA;
+  widget(COLOR) = FL_GRAY;
+  widget(COLOR2) = FL_GRAY;
+  widget(COLOR3) = FL_GRAY;
+  widget(BOX) = FL_NO_BOX;
+}
+
+void Fl_Widget::loadstyle() {
+  if (!Fl::s_widget) {
+    Fl::s_widget = 1;
+
+    static Fl::Attribute widget_attributes[] = {
+      { "label color", LABELCOLOR },
+      { "label size", LABELSIZE },
+      { "label type", LABELTYPE },
+      { "label font", LABELFONT },
+      { "color", COLOR },
+      { "color2", COLOR2 },
+      { "color3", COLOR3 },
+      { "box", BOX },
+      { 0 }
+    };
+    Fl::load_attributes("widget", DEFAULT_STYLE->widget_, widget_attributes);
+  }
+}
+
 Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
+  style = 0;
 
   x_ = X; y_ = Y; w_ = W; h_ = H;
 
-  label_.value	= L;
-  label_.type	= FL_NORMAL_LABEL;
-  label_.font	= FL_HELVETICA;
-  label_.size	= FL_NORMAL_SIZE;
-  label_.color	= FL_BLACK;
+  label_	= L;
   callback_	= default_callback;
   user_data_ 	= 0;
   type_		= 0;
   flags_	= 0;
   damage_	= 0;
-  box_		= FL_NO_BOX;
-  color_	= FL_GRAY;
-  color2_	= FL_GRAY;
   align_	= FL_ALIGN_CENTER;
   when_		= FL_WHEN_RELEASE;
 
+  tooltip_ = 0;
+
   parent_ = 0;
+
   if (Fl_Group::current()) Fl_Group::current()->add(this);
 }
 
@@ -118,6 +152,7 @@ extern void fl_throw_focus(Fl_Widget*); // in Fl_x.C
 // However, it is only legal to destroy a "root" such as an Fl_Window,
 // and automatic destructors may be called.
 Fl_Widget::~Fl_Widget() {
+  if (style && !style->not_dynamic) delete style;
   parent_ = 0; // kludge to prevent ~Fl_Group from destroying again
   fl_throw_focus(this);
 }
@@ -195,6 +230,67 @@ int Fl_Widget::contains(const Fl_Widget *o) const {
   return 0;
 }
 
+void Fl_Widget::measure_label(int& x, int& y) {
+  loadstyle();
+  Fl_Label l1;
+  l1.value = label();
+  l1.type = labeltype();
+  l1.size = labelsize();
+  l1.font = labelfont();
+  l1.color = labelcolor();
+  l1.measure(x, y);
+}
+
+Fl_Boxtype Fl_Widget::box() const {
+  if (!style || !(WIDGET_STYLE->sbf & bf(BOX)))
+    return (Fl_Boxtype)DEFAULT_STYLE->widget(BOX);
+  return (Fl_Boxtype)WIDGET_STYLE->widget(BOX);
+}
+
+Fl_Color Fl_Widget::color() const {
+  if (!style || !(WIDGET_STYLE->sbf & bf(COLOR)))
+    return (Fl_Color)DEFAULT_STYLE->widget(COLOR);
+  return (Fl_Color)WIDGET_STYLE->widget(COLOR);
+}
+
+Fl_Color Fl_Widget::selection_color() const {
+  if (!style || !(WIDGET_STYLE->sbf & bf(COLOR2)))
+    return (Fl_Color)DEFAULT_STYLE->widget(COLOR2);
+  return (Fl_Color)WIDGET_STYLE->widget(COLOR2);
+}
+
+Fl_Color Fl_Widget::color3() const {
+  if (!style || !(WIDGET_STYLE->sbf & bf(COLOR3)))
+    return (Fl_Color)DEFAULT_STYLE->widget(COLOR3);
+  return (Fl_Color)WIDGET_STYLE->widget(COLOR3);
+}
+
+Fl_Labeltype Fl_Widget::labeltype() const {
+  if (!style || !(WIDGET_STYLE->sbf & bf(LABELTYPE)))
+    return (Fl_Labeltype)DEFAULT_STYLE->widget(LABELTYPE);
+  return (Fl_Labeltype)WIDGET_STYLE->widget(LABELTYPE);
+}
+
+Fl_Color Fl_Widget::labelcolor() const {
+  if (!style || !(WIDGET_STYLE->sbf & bf(LABELCOLOR)))
+    return (Fl_Color)DEFAULT_STYLE->widget(LABELCOLOR);
+  return (Fl_Color)WIDGET_STYLE->widget(LABELCOLOR);
+}
+
+Fl_Font Fl_Widget::labelfont() const {
+  if (!style || !(WIDGET_STYLE->sbf & bf(LABELFONT)))
+    return (Fl_Font)DEFAULT_STYLE->widget(LABELFONT);
+  return (Fl_Font)WIDGET_STYLE->widget(LABELFONT);
+}
+
+uchar Fl_Widget::labelsize() const {
+  if (!style || !(WIDGET_STYLE->sbf & bf(LABELSIZE)))
+    return DEFAULT_STYLE->widget(LABELSIZE);
+  return WIDGET_STYLE->widget(LABELSIZE);
+}
+
+Fl_Color Fl_Widget::color2() const {return selection_color();}
+
 //
-// End of "$Id: Fl_Widget.cxx,v 1.5 1999/01/07 19:17:29 mike Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.6 1999/03/14 06:46:36 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.H,v 1.5 1999/02/16 21:59:36 mike Exp $"
+// "$Id: Fl_Counter.H,v 1.6 1999/03/14 06:46:14 carl Exp $"
 //
 // Counter header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,42 +32,77 @@
 #include "Fl_Valuator.H"
 #endif
 
+#define COUNTER_STYLE ((Fl_Counter::Style*)style)
+
 // values for type():
 #define FL_NORMAL_COUNTER	0
 #define FL_SIMPLE_COUNTER	1
 
 class Fl_Counter : public Fl_Valuator {
-
-  uchar textfont_, textsize_, textcolor_;
-  double lstep_;
-  uchar mouseobj;
-  static FL_EXPORT void repeat_callback(void *);
-  FL_EXPORT int calc_mouseobj();
-  FL_EXPORT void increment_cb();
-
-protected:
-
-  FL_EXPORT void draw();
-
 public:
+  enum Counter_Attribute {
+    FLY_COLOR = 0,
+    FLY_BOX,
+    DOWN_BOX,
+    TEXTFONT,
+    TEXTSIZE,
+    TEXTCOLOR,
+    CA_END
+  };
 
-  FL_EXPORT int handle(int);
-  FL_EXPORT Fl_Counter(int,int,int,int,const char * = 0);
-  FL_EXPORT ~Fl_Counter();
+  struct Style : public Fl_Widget::Style {
+    uchar counter_[CA_END];
+    uchar sbf;
+
+    Style();
+    uchar& counter(Counter_Attribute a) { return counter_[a]; }
+  };
+
+  virtual void loadstyle();
+
+  int handle(int);
+  Fl_Counter(int,int,int,int,const char * = 0);
+  ~Fl_Counter();
   void lstep(double a) {lstep_ = a;}
   void step(double a,double b) {Fl_Valuator::step(a); lstep_ = b;}
   void step(double a) {Fl_Valuator::step(a);}
-  Fl_Font textfont() const {return (Fl_Font)textfont_;}
-  void textfont(uchar s) {textfont_ = s;}
-  uchar textsize() const {return textsize_;}
-  void textsize(uchar s) {textsize_ = s;}
-  Fl_Color textcolor() const {return (Fl_Color)textcolor_;}
-  void textcolor(uchar s) {textcolor_ = s;}
 
+  Fl_Font textfont() const;
+  void textfont(uchar s);
+
+  uchar textsize() const;
+  void textsize(uchar s);
+
+  Fl_Color textcolor() const;
+  void textcolor(uchar n);
+
+  Fl_Boxtype down_box() const;
+  void down_box(Fl_Boxtype b);
+
+  Fl_Boxtype fly_box() const;
+  void fly_box(Fl_Boxtype b);
+
+  Fl_Color fly_color() const;
+  void fly_color(uchar c);
+
+protected:
+  static Style _default_style;
+
+  virtual Fl_Widget::Style* default_style() const { return &_default_style; }
+  virtual void wstyle() { if (!style) style = new Style; }
+
+  void draw();
+
+private:
+  double lstep_;
+  uchar mouseobj;
+  static void repeat_callback(void *);
+  int calc_mouseobj();
+  void increment_cb();
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Counter.H,v 1.5 1999/02/16 21:59:36 mike Exp $".
+// End of "$Id: Fl_Counter.H,v 1.6 1999/03/14 06:46:14 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.H,v 1.6 1999/02/16 21:59:35 mike Exp $"
+// "$Id: Fl_Browser_.H,v 1.7 1999/03/14 06:46:13 carl Exp $"
 //
 // Common browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,82 +38,45 @@
 #endif
 #include "Fl_Scrollbar.H"
 
+#define BROWSER_STYLE ((Fl_Browser_::Style*)style)
+
 #define FL_NORMAL_BROWSER	0
 #define FL_SELECT_BROWSER	1
 #define FL_HOLD_BROWSER		2
 #define FL_MULTI_BROWSER	3
 
 class Fl_Browser_ : public Fl_Group {
-  int position_;	// where user wants it scrolled to
-  int real_position_;	// the current vertical scrolling position
-  int hposition_;	// where user wants it panned to
-  int real_hposition_;	// the current horizontal scrolling position
-  int offset_;		// how far down top_ item the real_position is
-  int max_width;	// widest object seen so far
-  uchar textfont_, textsize_, textcolor_;
-  uchar has_scrollbar_;	// which scrollbars are enabled
-  void* top_;		// which item scrolling position is in
-  void* selection_;	// which is selected (except for FL_MULTI_BROWSER)
-  void *redraw1,*redraw2; // minimal update pointers
-  void* max_width_item;	// which item has max_width_
-
-  static int scrollbar_width_;
-
-  FL_EXPORT void update_top();
-
-protected:
-
-  // All of the following must be supplied by the subclass:
-  virtual FL_EXPORT void *item_first() const = 0;
-  virtual FL_EXPORT void *item_next(void *) const = 0;
-  virtual FL_EXPORT void *item_prev(void *) const = 0;
-  virtual FL_EXPORT int item_height(void *) const = 0;
-  virtual FL_EXPORT int item_width(void *) const = 0;
-  virtual FL_EXPORT int item_quick_height(void *) const ;
-  virtual FL_EXPORT void item_draw(void *,int,int,int,int) const = 0;
-  // you don't have to provide these but it may help speed it up:
-  virtual FL_EXPORT int full_width() const ;	// current width of all items
-  virtual FL_EXPORT int full_height() const ;	// current height of all items
-  virtual FL_EXPORT int incr_height() const ;	// average height of an item
-  // These only need to be done by subclass if you want a multi-browser:
-  virtual FL_EXPORT void item_select(void *,int=1);
-  virtual FL_EXPORT int item_selected(void *) const ;
-
-  // things the subclass may want to call:
-  FL_EXPORT void *top() const {return top_;}
-  FL_EXPORT void *selection() const {return selection_;}
-  FL_EXPORT void new_list(); // completely clobber all data, as though list replaced
-  FL_EXPORT void deleting(void *a); // get rid of any pointers to a
-  FL_EXPORT void replacing(void *a,void *b); // change a pointers to b
-  FL_EXPORT void inserting(void *a,void *b); // insert a before b
-  FL_EXPORT int displayed(void *) const ; // true if this line is visible
-  FL_EXPORT void redraw_line(void *); // minimal update, no change in size
-  FL_EXPORT void redraw_lines() {damage(FL_DAMAGE_SCROLL);} // redraw all of them
-  FL_EXPORT void bbox(int&,int&,int&,int&) const;
-  FL_EXPORT int leftedge() const;	// x position after scrollbar & border
-  FL_EXPORT void *find_item(int my); // item under mouse
-  FL_EXPORT void draw(int,int,int,int);
-  FL_EXPORT int handle(int,int,int,int,int);
-
-  FL_EXPORT void draw();
-  FL_EXPORT int handle(int);
-  FL_EXPORT Fl_Browser_(int,int,int,int,const char * = 0);
-
 public:
+  enum Browser_Attribute {
+    TEXTFONT = 0,
+    TEXTSIZE,
+    TEXTCOLOR,
+    SELECTED_TEXTCOLOR,
+    BA_END
+  };
+
+  struct Style : public Fl_Widget::Style {
+    uchar browser_[BA_END];
+    uchar sbf;
+
+    Style();
+    uchar& browser(Browser_Attribute a) { return browser_[a]; }
+  };
 
   Fl_Scrollbar scrollbar;		// Vertical scrollbar
   Fl_Scrollbar hscrollbar;		// Horizontal scrollbar
 
-  FL_EXPORT void resize(int,int,int,int);
+  virtual void loadstyle();
+  void resize(int,int,int,int);
 
-  FL_EXPORT int select(void *,int=1,int docallbacks=0);
-  FL_EXPORT int select_only(void *,int docallbacks=0);
-  FL_EXPORT int deselect(int docallbacks=0);
+  int select(void *,int=1,int docallbacks=0);
+  int select_only(void *,int docallbacks=0);
+  int deselect(int docallbacks=0);
   int position() const {return position_;}
   int hposition() const {return hposition_;}
-  FL_EXPORT void position(int); // scroll to here
-  FL_EXPORT void hposition(int); // pan to here
-  FL_EXPORT void display(void*); // scroll so this item is shown
+  void position(int); // scroll to here
+  void hposition(int); // pan to here
+  void display(void*); // scroll so this item is shown
 
   uchar has_scrollbar() const {return has_scrollbar_;}
   void has_scrollbar(uchar i) {has_scrollbar_ = i;}
@@ -127,12 +90,17 @@ public:
     BOTH_ALWAYS = 7
   };
 
-  Fl_Font textfont() const {return (Fl_Font)textfont_;}
-  void textfont(uchar s) {textfont_ = s;}
-  uchar textsize() const {return textsize_;}
-  void textsize(uchar s) {textsize_ = s;}
-  Fl_Color textcolor() const {return (Fl_Color)textcolor_;}
-  void textcolor(uchar n) {textcolor_ = n;}
+  Fl_Font textfont() const;
+  void textfont(uchar s);
+
+  uchar textsize() const;
+  void textsize(uchar s);
+
+  Fl_Color textcolor() const;
+  void textcolor(uchar n);
+
+  Fl_Color selected_textcolor() const;
+  void selected_textcolor(uchar n);
 
   static void scrollbar_width(int b) {scrollbar_width_ = b;}
   static int scrollbar_width() {return scrollbar_width_;}
@@ -141,10 +109,67 @@ public:
   void scrollbar_right() {scrollbar.align(FL_ALIGN_RIGHT);}
   void scrollbar_left() {scrollbar.align(FL_ALIGN_LEFT);}
 
+private:
+  void* top_;		// which item scrolling position is in
+  void* selection_;	// which is selected (except for FL_MULTI_BROWSER)
+  void *redraw1,*redraw2; // minimal update pointers
+  void* max_width_item;	// which item has max_width_
+  int position_;	// where user wants it scrolled to
+  int real_position_;	// the current vertical scrolling position
+  int hposition_;	// where user wants it panned to
+  int real_hposition_;	// the current horizontal scrolling position
+  int offset_;		// how far down top_ item the real_position is
+  int max_width;	// widest object seen so far
+  static int scrollbar_width_;
+  uchar has_scrollbar_;	// which scrollbars are enabled
+
+  void update_top();
+
+protected:
+  static Style _default_style;
+
+  virtual Fl_Widget::Style* default_style() const { return &_default_style; }
+  virtual void wstyle() { if (!style) style = new Style; }
+
+  // All of the following must be supplied by the subclass:
+  virtual void *item_first() const = 0;
+  virtual void *item_next(void *) const = 0;
+  virtual void *item_prev(void *) const = 0;
+  virtual int item_height(void *) const = 0;
+  virtual int item_width(void *) const = 0;
+  virtual int item_quick_height(void *) const ;
+  virtual void item_draw(void *,int,int,int,int) const = 0;
+  // you don't have to provide these but it may help speed it up:
+  virtual int full_width() const ;	// current width of all items
+  virtual int full_height() const ;	// current height of all items
+  virtual int incr_height() const ;	// average height of an item
+  // These only need to be done by subclass if you want a multi-browser:
+  virtual void item_select(void *,int=1);
+  virtual int item_selected(void *) const ;
+
+  // things the subclass may want to call:
+  void *top() const {return top_;}
+  void *selection() const {return selection_;}
+  void new_list(); // completely clobber all data, as though list replaced
+  void deleting(void *a); // get rid of any pointers to a
+  void replacing(void *a,void *b); // change a pointers to b
+  void inserting(void *a,void *b); // insert a before b
+  int displayed(void *) const ; // true if this line is visible
+  void redraw_line(void *); // minimal update, no change in size
+  void redraw_lines() {damage(FL_DAMAGE_SCROLL);} // redraw all of them
+  void bbox(int&,int&,int&,int&) const;
+  int leftedge() const;	// x position after scrollbar & border
+  void *find_item(int my); // item under mouse
+  void draw(int,int,int,int);
+  int handle(int,int,int,int,int);
+
+  void draw();
+  int handle(int);
+  Fl_Browser_(int,int,int,int,const char * = 0);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Browser_.H,v 1.6 1999/02/16 21:59:35 mike Exp $".
+// End of "$Id: Fl_Browser_.H,v 1.7 1999/03/14 06:46:13 carl Exp $".
 //

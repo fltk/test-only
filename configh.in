@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.11 1999/03/04 18:11:34 mike Exp $"
+ * "$Id: configh.in,v 1.12 1999/03/14 06:46:11 carl Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -38,7 +38,7 @@
  * using Fl::set_boxtype().
  */
 
-#define BORDER_WIDTH 2
+#define BORDER_WIDTH 3
 
 /*
  * HAVE_GL:
@@ -151,5 +151,5 @@
 #define HAVE_POLL 0
 
 /*
- * End of "$Id: configh.in,v 1.11 1999/03/04 18:11:34 mike Exp $".
+ * End of "$Id: configh.in,v 1.12 1999/03/14 06:46:11 carl Exp $".
  */

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.18 1999/03/09 18:33:46 mike Exp $"
+# "$Id: Makefile,v 1.19 1999/03/14 06:46:37 carl Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -26,20 +26,27 @@
 CPPFILES = \
 	Fl.cxx \
 	Fl_Adjuster.cxx \
+	Fl_Adjuster_SW.cxx \
 	Fl_Bitmap.cxx \
 	Fl_Browser.cxx \
 	Fl_Browser_.cxx \
+	Fl_Browser_SW.cxx \
 	Fl_Browser_load.cxx \
 	Fl_Box.cxx \
 	Fl_Button.cxx \
+	Fl_Button_SW.cxx \
 	Fl_Chart.cxx \
+	Fl_Chart_SW.cxx \
 	Fl_Check_Button.cxx \
 	Fl_Choice.cxx \
+	Fl_Choice_SW.cxx \
 	Fl_Clock.cxx \
 	Fl_Color_Chooser.cxx \
 	Fl_Counter.cxx \
+	Fl_Counter_SW.cxx \
 	Fl_Dial.cxx \
 	Fl_Double_Window.cxx \
+	Fl_Fly_Button.cxx \
 	Fl_Gl_Choice.cxx \
 	Fl_Gl_Overlay.cxx \
 	Fl_Gl_Window.cxx \
@@ -47,11 +54,15 @@ CPPFILES = \
 	Fl_Image.cxx \
 	Fl_Input.cxx \
 	Fl_Input_.cxx \
+	Fl_Input_SW.cxx \
 	Fl_Light_Button.cxx \
 	Fl_Menu.cxx \
 	Fl_Menu_.cxx \
+	Fl_Menu_Item_SW.cxx \
 	Fl_Menu_Bar.cxx \
 	Fl_Menu_Button.cxx \
+	Fl_Menu_Button_SW.cxx \
+	Fl_Menu_SW.cxx \
 	Fl_Menu_Window.cxx \
 	Fl_Menu_add.cxx \
 	Fl_Menu_global.cxx \
@@ -69,13 +80,17 @@ CPPFILES = \
 	Fl_Scrollbar.cxx \
 	Fl_Single_Window.cxx \
 	Fl_Slider.cxx \
+	Fl_Slider_SW.cxx \
 	Fl_Tabs.cxx \
 	Fl_Tile.cxx \
+	Fl_Tooltip.cxx  \
+	Fl_Tooltip_.cxx  \
 	Fl_Valuator.cxx \
 	Fl_Value_Input.cxx \
 	Fl_Value_Output.cxx \
 	Fl_Value_Slider.cxx \
 	Fl_Widget.cxx \
+	Fl_Widget_SW.cxx \
 	Fl_Window.cxx \
 	Fl_Window_fullscreen.cxx \
 	Fl_Window_hotspot.cxx \
@@ -113,6 +128,7 @@ CPPFILES = \
 	fl_file_chooser.cxx \
 	fl_font.cxx \
 	fl_labeltype.cxx \
+	fl_options.cxx \
 	fl_oval_box.cxx \
 	fl_overlay.cxx \
 	fl_overlay_visual.cxx \
@@ -138,7 +154,26 @@ CPPFILES = \
 	glut_compatability.cxx \
 	glut_font.cxx
 
-CFILES = scandir.c numericsort.c vsnprintf.c
+CFILES = scandir.c \
+	 numericsort.c \
+	 vsnprintf.c \
+	 conf.c \
+	 conf_atol.c \
+	 conf_del.c \
+	 conf_endtrim.c \
+	 conf_error.c \
+	 conf_get.c \
+	 conf_getboolean.c \
+	 conf_getlong.c \
+	 conf_keys.c \
+	 conf_level_indent.c \
+	 conf_list_free.c \
+	 conf_sections.c \
+	 conf_set.c \
+	 conf_setboolean.c \
+	 conf_setlong.c \
+	 conf_strcnt.c \
+	 conf_trim.c
 
 CLEAN =
 
@@ -202,5 +237,5 @@ install: ../lib/$(LIBNAME)
 	-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.18 1999/03/09 18:33:46 mike Exp $".
+# End of "$Id: Makefile,v 1.19 1999/03/14 06:46:37 carl Exp $".
 #

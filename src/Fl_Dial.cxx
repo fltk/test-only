@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.12 1999/03/10 08:17:42 bill Exp $"
+// "$Id: Fl_Dial.cxx,v 1.13 1999/03/14 06:46:29 carl Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,6 +32,7 @@
 // All angles are measured with 0 to the right and counter-clockwise
 
 void Fl_Dial::draw(int x, int y, int w, int h) {
+  loadstyle();
   if (damage()&FL_DAMAGE_ALL) draw_box(box(), x, y, w, h, color());
   x += Fl::box_dx(box());
   y += Fl::box_dy(box());
@@ -131,5 +132,5 @@ Fl_Dial::Fl_Dial(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.12 1999/03/10 08:17:42 bill Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.13 1999/03/14 06:46:29 carl Exp $".
 //

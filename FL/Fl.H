@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.8 1999/02/23 22:12:38 mike Exp $"
+// "$Id: Fl.H,v 1.9 1999/03/14 06:46:12 carl Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -25,6 +25,11 @@
 
 #ifndef Fl_H
 #define Fl_H
+
+#define HAVE_STYLES 1
+
+#include <stdlib.h>
+#include <string.h>
 
 #include "Enumerations.H"
 #ifndef Fl_Object
@@ -199,10 +204,75 @@ public:
   static FL_EXPORT void grab(Fl_Window&w) {grab(&w);}
   static FL_EXPORT void release() {grab(0);}
 
+  // current style
+  static FL_EXPORT const char *_style;
+  static FL_EXPORT Fl_Widget_Style _widget_style;
+
+  // get and set style
+  static FL_EXPORT const char *style();
+  static FL_EXPORT void style(const char *s);
+  static FL_EXPORT Fl_Widget_Style widget_style() { return _widget_style; }
+  static FL_EXPORT void widget_style(Fl_Widget_Style s) { _widget_style = s; }
+
+  // This defines current style options for FLTK.
+
+  struct Attribute {
+    const char* key;
+    int which;
+  };
+
+  // Widget drawing style
+
+  // styles loaded
+  static FL_EXPORT int s_menu_item;
+  static FL_EXPORT int s_browser;
+  static FL_EXPORT int s_button;
+  static FL_EXPORT int s_chart;
+  static FL_EXPORT int s_light_button;
+  static FL_EXPORT int s_check_button;
+  static FL_EXPORT int s_choice;
+  static FL_EXPORT int s_menu_;
+  static FL_EXPORT int s_menu_bar;
+  static FL_EXPORT int s_menu_button;
+  static FL_EXPORT int s_widget;
+  static FL_EXPORT int s_window;
+  static FL_EXPORT int s_slider;
+  static FL_EXPORT int s_return_button;
+  static FL_EXPORT int s_round_button;
+  static FL_EXPORT int s_fly_button;
+  static FL_EXPORT int s_scrollbar;
+  static FL_EXPORT int s_input;
+  static FL_EXPORT int s_output;
+  static FL_EXPORT int s_adjuster;
+  static FL_EXPORT int s_counter;
+  static FL_EXPORT int s_roller;
+  static FL_EXPORT int s_tooltip;
+  static FL_EXPORT int s_background;
+
+  // force reloading of styles from config file
+  static FL_EXPORT void load_styles(int);
+
+  // load a bunch of attributes
+  static FL_EXPORT void load_attributes(const char *section, uchar array[], Attribute *attrib);
+
+  // get the string value of a key from the global or user's config file
+  static FL_EXPORT int find(const char *key, char *value, int value_length, int sf = 0);
+
+  // get the long value of a key from the global or user's config file
+  static FL_EXPORT int find(const char *key, long &lvalue, int sf = 0);
+
+  // get the int value of a key from the global or user's config file
+  static FL_EXPORT int find(const char *key, int &ivalue, int sf = 0);
+
+  // get the uchar value of a key from the global or user's config file
+  static FL_EXPORT int find(const char *key, uchar &ucvalue, int sf = 0);
+
+  // get the boolean value of a key from the global or user's config file
+  static FL_EXPORT int find_boolean(const char *key, int &bvalue, int sf = 0);
 };
 
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.8 1999/02/23 22:12:38 mike Exp $".
+// End of "$Id: Fl.H,v 1.9 1999/03/14 06:46:12 carl Exp $".
 //

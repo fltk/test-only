@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.8 1999/01/26 21:37:14 mike Exp $"
+// "$Id: Fl_Group.cxx,v 1.9 1999/03/14 06:46:30 carl Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,8 @@
 #include <FL/Fl_Window.H>
 #include <FL/fl_draw.H>
 #include <stdlib.h>
+
+#include <FL/Fl_Tooltip.H>
 
 Fl_Group* Fl_Group::current_;
 
@@ -118,9 +120,11 @@ int Fl_Group::handle(int event) {
     return 0;
 
   case FL_KEYBOARD:
+    Fl_Tooltip::exit(this);
     return navigation(navkey());
 
   case FL_SHORTCUT:
+    Fl_Tooltip::exit(this);
     for (i = children(); i--;) {
       o = a[i];
       if (o->takesevents() && Fl::event_inside(o) && send(o,FL_SHORTCUT))
@@ -135,6 +139,7 @@ int Fl_Group::handle(int event) {
     return 0;
 
   case FL_ENTER:
+    Fl_Tooltip::enter(this);
   case FL_MOVE:
     for (i = children(); i--;) {
       o = a[i];
@@ -151,6 +156,7 @@ int Fl_Group::handle(int event) {
     return 1;
 
   case FL_PUSH:
+    Fl_Tooltip::exit(this);
     for (i = children(); i--;) {
       o = a[i];
       if (o->takesevents() && Fl::event_inside(o)) {
@@ -177,6 +183,9 @@ int Fl_Group::handle(int event) {
       if (o->visible()) o->handle(event);
     }
     return 1;
+
+  case FL_LEAVE:
+    Fl_Tooltip::exit(this);
 
   default:
     return 0;
@@ -418,6 +427,7 @@ void Fl_Group::resize(int X, int Y, int W, int H) {
 }
 
 void Fl_Group::draw() {
+  loadstyle();
   Fl_Widget*const* a = array();
   if (damage() & ~FL_DAMAGE_CHILD) { // redraw the entire thing:
     draw_box();
@@ -454,7 +464,7 @@ void Fl_Group::draw_child(Fl_Widget& w) const {
 extern char fl_draw_shortcut;
 
 // Parents normally call this to draw outside labels:
-void Fl_Group::draw_outside_label(const Fl_Widget& w) const {
+void Fl_Group::draw_outside_label(Fl_Widget& w) const {
   if (!w.visible()) return;
   // skip any labels that are inside the widget:
   if (!(w.align()&15) || (w.align() & FL_ALIGN_INSIDE)) return;
@@ -481,9 +491,9 @@ void Fl_Group::draw_outside_label(const Fl_Widget& w) const {
     X = X+W+3;
     W = x()+this->w()-X;
   }
-  w.draw_label(X,Y,W,H,(Fl_Align)align);
+  w.draw_label(X,Y,W,H,w.labelcolor(),(Fl_Align)align);
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.8 1999/01/26 21:37:14 mike Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.9 1999/03/14 06:46:30 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.6 1999/03/07 08:51:44 bill Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.7 1999/03/14 06:46:35 carl Exp $"
 //
 // Value input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -47,9 +47,8 @@ void Fl_Value_Input::input_cb(Fl_Widget*, void* v) {
 }
 
 void Fl_Value_Input::draw() {
+  loadstyle();
   if (damage()&~FL_DAMAGE_CHILD) input.clear_damage(FL_DAMAGE_ALL);
-  input.box(box());
-  input.color(color(), selection_color());
   input.draw();
   input.clear_damage();
 }
@@ -114,18 +113,18 @@ int Fl_Value_Input::handle(int event) {
 Fl_Value_Input::Fl_Value_Input(int x, int y, int w, int h, const char* l)
 : Fl_Valuator(x, y, w, h, l), input(x, y, w, h, 0) {
   soft_ = 0;
+  input.wstyle();
+  style = input.style;
+
   if (input.parent())  // defeat automatic-add
     ((Fl_Group*)input.parent())->remove(input);
   input.parent(this); // kludge!
   input.callback(input_cb, this);
   input.when(FL_WHEN_CHANGED);
-  box(input.box());
-  color(input.color());
-  selection_color(input.selection_color());
   align(FL_ALIGN_LEFT);
   value_damage();
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.6 1999/03/07 08:51:44 bill Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.7 1999/03/14 06:46:35 carl Exp $".
 //

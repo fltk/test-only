@@ -1,5 +1,5 @@
 //
-// "$Id: glut_compatability.cxx,v 1.4 1999/01/07 19:17:46 mike Exp $"
+// "$Id: glut_compatability.cxx,v 1.5 1999/03/14 06:46:42 carl Exp $"
 //
 // GLUT emulation routines for the Fast Light Tool Kit (FLTK).
 //
@@ -298,7 +298,6 @@ static Fl_Menu_Item* additem(menu *m) {
   Fl_Menu_Item* i = &(m->m[n]);
   i->shortcut_ = 0;
   i->flags = 0;
-  i->labeltype_ = i->labelfont_ = i->labelsize_ = i->labelcolor_ = 0;
   return i;
 }
 
@@ -399,5 +398,5 @@ int glutLayerGet(GLenum type) {
 #endif
 
 //
-// End of "$Id: glut_compatability.cxx,v 1.4 1999/01/07 19:17:46 mike Exp $".
+// End of "$Id: glut_compatability.cxx,v 1.5 1999/03/14 06:46:42 carl Exp $".
 //

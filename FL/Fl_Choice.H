@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.H,v 1.5 1999/02/16 21:59:36 mike Exp $"
+// "$Id: Fl_Choice.H,v 1.6 1999/03/14 06:46:14 carl Exp $"
 //
 // Choice header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,18 +28,48 @@
 
 #include "Fl_Menu_.H"
 
+#define CHOICE_STYLE ((Fl_Choice::Style*)style)
+
 class Fl_Choice : public Fl_Menu_ {
-protected:
-  FL_EXPORT void draw();
 public:
-  FL_EXPORT int handle(int);
-  FL_EXPORT Fl_Choice(int,int,int,int,const char * = 0);
-  FL_EXPORT int value(int i);
-  FL_EXPORT int value() const {return Fl_Menu_::value();}
+  enum Choice_Attribute {
+    FLY_COLOR = 0,
+    FLY_BOX,
+    CA_END
+  };
+
+  struct Style : public Fl_Menu_::Style {
+    uchar choice_[CA_END];
+    uchar sbf;
+
+    Style();
+    uchar& choice(Choice_Attribute a) { return choice_[a]; }
+  };
+
+  virtual void loadstyle();
+
+  int handle(int);
+  Fl_Choice(int,int,int,int,const char * = 0);
+  int value(int i);
+  int value() const {return Fl_Menu_::value();}
+
+  Fl_Boxtype fly_box() const;
+  void fly_box(Fl_Boxtype b);
+
+  Fl_Color fly_color() const;
+  void fly_color(uchar c);
+
+protected:
+  static Style _default_style;
+
+  virtual Fl_Widget::Style* default_style() const { return &_default_style; }
+  virtual void wstyle() { if (!style) style = new Style; }
+
+  void draw();
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Choice.H,v 1.5 1999/02/16 21:59:36 mike Exp $".
+// End of "$Id: Fl_Choice.H,v 1.6 1999/03/14 06:46:14 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_file_chooser.cxx,v 1.10 1999/01/07 21:22:28 mike Exp $"
+// "$Id: fl_file_chooser.cxx,v 1.11 1999/03/14 06:46:41 carl Exp $"
 //
 // File chooser widget for the Fast Light Tool Kit (FLTK).
 //
@@ -190,10 +190,10 @@ void FCB::item_draw(void* v, int x, int y, int, int h) const {
   const dirent* p = *(const dirent**)v;
   const char* e = end_of_name(p);
   if (checkdir(p, (char*)e)) e++;
-  if (v == selection()) fl_color(contrast(textcolor(), selection_color()));
+  if (v == selection()) fl_color(selected_textcolor());
   else fl_color(textcolor());
   fl_font(textfont(), textsize());
-  fl_draw(p->d_name, e-p->d_name, x+4, y+h-3);
+  fl_draw(p->d_name, e-p->d_name, x+4, y+h*3/4);
 }
 
 int FCB::item_width(const dirent* p) const {
@@ -344,6 +344,7 @@ void FCB::set(const char* buf) {
 }
 
 void FCB::draw() {
+  loadstyle();
   if (!message) {
     Fl_Browser_::draw();
     if (full_height() > 0) return;
@@ -353,7 +354,7 @@ void FCB::draw() {
   draw_box(b,color());
   fl_color(FL_INACTIVE_COLOR);
   fl_font(textfont(), textsize());
-  fl_draw(message, x()+7, y()+3, w(), h()-3, FL_ALIGN_TOP_LEFT);
+  fl_draw(message, x()+7, y()+3, w(), h()*3/4, FL_ALIGN_TOP_LEFT);
   // insure scrollbars are redrawn if error message goes away:
   scrollbar.redraw();
   hscrollbar.redraw();
@@ -622,5 +623,5 @@ char* fl_file_chooser(const char* message, const char* pat, const char* fname)
 }
 
 //
-// End of "$Id: fl_file_chooser.cxx,v 1.10 1999/01/07 21:22:28 mike Exp $".
+// End of "$Id: fl_file_chooser.cxx,v 1.11 1999/03/14 06:46:41 carl Exp $".
 //

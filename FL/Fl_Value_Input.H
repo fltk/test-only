@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.H,v 1.5 1999/02/16 21:59:46 mike Exp $"
+// "$Id: Fl_Value_Input.H,v 1.6 1999/03/14 06:46:18 carl Exp $"
 //
 // Value input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,32 +32,37 @@
 class Fl_Value_Input : public Fl_Valuator {
 public:
   Fl_Input input;
-private:
-  char soft_;
-  static FL_EXPORT void input_cb(Fl_Widget*,void*);
-  virtual FL_EXPORT void value_damage(); // cause damage() due to value() changing
-public:
-  FL_EXPORT int handle(int);
-  FL_EXPORT void draw();
-  FL_EXPORT void resize(int,int,int,int);
-  FL_EXPORT Fl_Value_Input(int x,int y,int w,int h,const char *l=0);
+
+  virtual void loadstyle() { input.loadstyle(); }
+  int handle(int);
+  void draw();
+  void resize(int,int,int,int);
+  Fl_Value_Input(int x,int y,int w,int h,const char *l=0);
+  ~Fl_Value_Input() { style = 0; } // so that it doesn't get free()ed twice!
 
   void soft(char x) {soft_ = x;}
   char soft() const {return soft_;}
 
   Fl_Font textfont() const {return input.textfont();}
   void textfont(uchar s) {input.textfont(s);}
+
   uchar textsize() const {return input.textsize();}
   void textsize(uchar s) {input.textsize(s);}
+
   Fl_Color textcolor() const {return input.textcolor();}
   void textcolor(uchar n) {input.textcolor(n);}
+
   Fl_Color cursor_color() const {return input.cursor_color();}
   void cursor_color(uchar n) {input.cursor_color(n);}
 
+private:
+  char soft_;
+  static void input_cb(Fl_Widget*,void*);
+  virtual void value_damage(); // cause damage() due to value() changing
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Value_Input.H,v 1.5 1999/02/16 21:59:46 mike Exp $".
+// End of "$Id: Fl_Value_Input.H,v 1.6 1999/03/14 06:46:18 carl Exp $".
 //

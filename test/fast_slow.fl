@@ -30,7 +30,7 @@ redraw}
       label {The left slider has changed( FL_WHEN_CHANGED | FL_WHEN_RELEASE | FL_WHEN_NOT_CHANGED) so it produces a callback on both drag and release mouse events.
 The middle slider (representing a widget with low overhead) is changed on every mouse movement.
 The right slider (representing a widget with high overhead) is only updated when the mouse is released, by checking if Fl::pushed() is zero.} selected
-      xywh {10 10 300 180} box DOWN_BOX color {53 47} labelfont 4 labelsize 12 align 148
+      xywh {10 10 300 180} box BORDER_BOX align 148
     }
   }
 } 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.H,v 1.5 1999/02/16 21:59:40 mike Exp $"
+// "$Id: Fl_Menu_Button.H,v 1.6 1999/03/14 06:46:16 carl Exp $"
 //
 // Menu button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,19 +28,49 @@
 
 #include "Fl_Menu_.H"
 
+#define MENU_BUTTON_STYLE ((Fl_Menu_Button::Style*)style)
+
 class Fl_Menu_Button : public Fl_Menu_ {
-protected:
-  FL_EXPORT void draw();
 public:
+  enum Menu_Button_Attribute {
+    FLY_COLOR = 0,
+    FLY_BOX,
+    MBA_END
+  };
+
+  struct Style : public Fl_Menu_::Style {
+    uchar menu_button_[MBA_END];
+    uchar sbf;
+
+    Style();
+    uchar& menu_button(Menu_Button_Attribute a) { return menu_button_[a]; }
+  };
+
+  virtual void loadstyle();
+
+  Fl_Boxtype fly_box() const;
+  void fly_box(Fl_Boxtype b);
+
+  Fl_Color fly_color() const;
+  void fly_color(uchar c);
+
   // values for type:
   enum {POPUP1 = 1, POPUP2, POPUP12, POPUP3, POPUP13, POPUP23, POPUP123};
-  FL_EXPORT int handle(int);
-  FL_EXPORT const Fl_Menu_Item* popup();
-  FL_EXPORT Fl_Menu_Button(int,int,int,int,const char * =0);
+  int handle(int);
+  const Fl_Menu_Item* popup();
+  Fl_Menu_Button(int,int,int,int,const char * =0);
+
+protected:
+  static Style _default_style;
+
+  virtual Fl_Widget::Style* default_style() const { return &_default_style; }
+  virtual void wstyle() { if (!style) style = new Style; }
+
+  void draw();
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Menu_Button.H,v 1.5 1999/02/16 21:59:40 mike Exp $".
+// End of "$Id: Fl_Menu_Button.H,v 1.6 1999/03/14 06:46:16 carl Exp $".
 //

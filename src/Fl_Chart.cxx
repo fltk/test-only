@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.cxx,v 1.5 1999/02/01 20:15:00 mike Exp $"
+// "$Id: Fl_Chart.cxx,v 1.6 1999/03/14 06:46:27 carl Exp $"
 //
 // Forms-compatible chart widget for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,8 @@
 #include <FL/fl_draw.H>
 #include <string.h>
 #include <stdlib.h>
+
+#define DEFAULT_STYLE ((Style*)default_style())
 
 #define ARCINC	(2.0*M_PI/360.0)
 
@@ -221,7 +223,34 @@ static void draw_piechart(int x,int y,int w,int h,
     }
 }
 
+void Fl_Chart::loadstyle() {
+  if (!Fl::s_chart) {
+    Fl::s_chart = 1;
+
+    static Fl::Attribute widget_attributes[] = {
+      { "label color", LABELCOLOR },
+      { "label size", LABELSIZE },
+      { "label type", LABELTYPE },
+      { "label font", LABELFONT },
+      { "color", COLOR },
+      { "color2", COLOR2 },
+      { "box", BOX },
+      { 0 }
+    };
+    Fl::load_attributes("chart", DEFAULT_STYLE->widget_, widget_attributes);
+
+    static Fl::Attribute chart_attributes[] = {
+      { "text font", TEXTFONT },
+      { "text size", TEXTSIZE },
+      { "text color", TEXTCOLOR },
+      { 0 }
+    };
+    Fl::load_attributes("chart", DEFAULT_STYLE->chart_, chart_attributes);
+  }
+}
+
 void Fl_Chart::draw() {
+    loadstyle();
     int xx,yy,ww,hh;
     int i;
 
@@ -271,18 +300,27 @@ void Fl_Chart::draw() {
 #define FL_CHART_LCOL		FL_LCOL
 #define FL_CHART_ALIGN		FL_ALIGN_BOTTOM
 
+Fl_Chart::Style Fl_Chart::_default_style;
+
+Fl_Chart::Style::Style() : Fl_Widget::Style() {
+  sbf = 0;
+
+  widget(COLOR2) = FL_WHITE;
+  widget(BOX) = FL_MEDIUM_DOWN_BOX;
+
+  chart(TEXTFONT) = FL_HELVETICA;
+  chart(TEXTSIZE) = 12;
+  chart(TEXTCOLOR) = FL_BLACK;
+}
+
 Fl_Chart::Fl_Chart(int x,int y,int w,int h,const char *l) :
 Fl_Widget(x,y,w,h,l) {
-  box(FL_BORDER_BOX);
   align(FL_ALIGN_BOTTOM);
   numb       = 0;
   maxnumb    = 0;
   sizenumb   = FL_CHART_MAX;
   autosize_  = 1;
   min = max  = 0;
-  textfont_  = FL_HELVETICA;
-  textsize_  = 10;
-  textcolor_ = FL_BLACK;
   entries    = (FL_CHART_ENTRY *)calloc(sizeof(FL_CHART_ENTRY), FL_CHART_MAX + 1);
 }
 
@@ -370,6 +408,24 @@ void Fl_Chart::maxsize(int m) {
   }
 }
 
+Fl_Font Fl_Chart::textfont() const {
+  if (!style || !(CHART_STYLE->sbf & bf(TEXTFONT)))
+    return (Fl_Font)DEFAULT_STYLE->chart(TEXTFONT);
+  return (Fl_Font)CHART_STYLE->chart(TEXTFONT);
+}
+
+uchar Fl_Chart::textsize() const {
+  if (!style || !(CHART_STYLE->sbf & bf(TEXTSIZE)))
+    return DEFAULT_STYLE->chart(TEXTSIZE);
+  return CHART_STYLE->chart(TEXTSIZE);
+}
+
+Fl_Color Fl_Chart::textcolor() const {
+  if (!style || !(CHART_STYLE->sbf & bf(TEXTCOLOR)))
+    return (Fl_Color)DEFAULT_STYLE->chart(TEXTCOLOR);
+  return (Fl_Color)CHART_STYLE->chart(TEXTCOLOR);
+}
+
 //
-// End of "$Id: Fl_Chart.cxx,v 1.5 1999/02/01 20:15:00 mike Exp $".
+// End of "$Id: Fl_Chart.cxx,v 1.6 1999/03/14 06:46:27 carl Exp $".
 //

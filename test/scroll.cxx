@@ -1,5 +1,5 @@
 //
-// "$Id: scroll.cxx,v 1.4 1999/01/07 19:18:00 mike Exp $"
+// "$Id: scroll.cxx,v 1.5 1999/03/14 06:46:47 carl Exp $"
 //
 // Fl_Scroll test program for the Fast Light Tool Kit (FLTK).
 //
@@ -107,7 +107,10 @@ int main(int argc, char** argv) {
     char buf[20]; sprintf(buf,"%d",n++);
     Fl_Button* b = new Fl_Button(x*75,y*25+(y>=8?5*75:0),75,25,strdup(buf));
     b->color(n);
+    b->down_color(n);
+    b->fly_box(FL_NO_BOX);
     b->labelcolor(FL_WHITE);
+    b->down_labelcolor(FL_WHITE);
   }
   Drawing drawing(0,8*25,5*75,5*75,0);
   scroll.end();
@@ -137,5 +140,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: scroll.cxx,v 1.4 1999/01/07 19:18:00 mike Exp $".
+// End of "$Id: scroll.cxx,v 1.5 1999/03/14 06:46:47 carl Exp $".
 //

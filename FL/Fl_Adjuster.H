@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.H,v 1.5 1999/02/16 21:59:34 mike Exp $"
+// "$Id: Fl_Adjuster.H,v 1.6 1999/03/14 06:46:12 carl Exp $"
 //
 // Adjuster widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,22 +32,54 @@
 #include "Fl_Valuator.H"
 #endif
 
+#define ADJUSTER_STYLE ((Fl_Adjuster::Style*)style)
+
 class Fl_Adjuster : public Fl_Valuator {
+public:
+  enum Adjuster_Attribute {
+    FLY_COLOR = 0,
+    FLY_BOX,
+    AA_END
+  };
+
+  struct Style : public Fl_Widget::Style {
+    uchar adjuster_[AA_END];
+    uchar sbf;
+
+    Style();
+    uchar& adjuster(Adjuster_Attribute a) { return adjuster_[a]; }
+  };
+
+  Fl_Adjuster(int x,int y,int w,int h,const char *l=0);
+
+  virtual void loadstyle();
+  void soft(int x) {soft_ = x;}
+  int soft() const {return soft_;}
+
+  Fl_Color fly_color() const;
+  void fly_color(uchar c);
+
+  Fl_Boxtype fly_box() const;
+  void fly_box(uchar b);
+
+protected:
+  static Style _default_style;
+
+  virtual Fl_Widget::Style* default_style() const { return &_default_style; }
+  virtual void wstyle() {if ( !style) style = new Style; }
+
+  void draw();
+  int handle(int);
+  void value_damage();
+
+private:
   int drag;
   int ix;
   int soft_;
-protected:
-  FL_EXPORT void draw();
-  FL_EXPORT int handle(int);
-  FL_EXPORT void value_damage();
-public:
-  FL_EXPORT Fl_Adjuster(int x,int y,int w,int h,const char *l=0);
-  FL_EXPORT void soft(int x) {soft_ = x;}
-  FL_EXPORT int soft() const {return soft_;}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Adjuster.H,v 1.5 1999/02/16 21:59:34 mike Exp $".
+// End of "$Id: Fl_Adjuster.H,v 1.6 1999/03/14 06:46:12 carl Exp $".
 //

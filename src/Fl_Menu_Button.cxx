@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.4 1999/01/07 19:17:23 mike Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.5 1999/03/14 06:46:32 carl Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,16 +27,30 @@
 #include <FL/Fl_Menu_Button.H>
 #include <FL/fl_draw.H>
 
+#define DEFAULT_STYLE ((Style*)default_style())
+
 void Fl_Menu_Button::draw() {
+  loadstyle();
   if (!box() || type()) return;
-  draw_box(box(), color());
+  Fl_Color col;
+  Fl_Boxtype bt;
+  if (fly_box() && Fl::belowmouse() == this)
+    { bt = fly_box(); col = fly_color(); }
+  else
+    { bt = box(); col = color(); }
+  draw_box(bt, col);
   draw_label();
   if (box() == FL_FLAT_BOX) return; // for XForms compatability
   int H = (labelsize()-3)&-2;
   int X = x()+w()-H*2;
   int Y = y()+(h()-H)/2;
-  fl_color(FL_DARK3); fl_line(X+H/2, Y+H, X, Y, X+H, Y);
-  fl_color(FL_LIGHT3); fl_line(X+H, Y, X+H/2, Y+H);
+  if (active_r()) {
+    fl_color(FL_DARK3); fl_line(X+H/2, Y+H, X, Y, X+H, Y);
+    fl_color(FL_LIGHT3); fl_line(X+H, Y, X+H/2, Y+H);
+  } else {
+    fl_color((Fl_Color)44); fl_line(X+H/2, Y+H, X, Y, X+H, Y);
+    fl_color((Fl_Color)52); fl_line(X+H, Y, X+H/2, Y+H);
+  }
 }
 
 const Fl_Menu_Item* Fl_Menu_Button::popup() {
@@ -55,6 +69,7 @@ int Fl_Menu_Button::handle(int e) {
   switch (e) {
   case FL_ENTER:
   case FL_LEAVE:
+    if (box() && fly_box()) redraw();
     return (box() && !type()) ? 1 : 0;
   case FL_PUSH:
     if (!box()) {
@@ -72,11 +87,68 @@ int Fl_Menu_Button::handle(int e) {
   }
 }
 
-Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l)
-: Fl_Menu_(X,Y,W,H,l) {
-  down_box(FL_NO_BOX);
+Fl_Menu_Button::Style Fl_Menu_Button::_default_style;
+
+Fl_Menu_Button::Style::Style() : Fl_Menu_::Style() {
+  sbf = 0;
+
+  widget(BOX) = FL_MEDIUM_UP_BOX;
+
+  menu_button(FLY_COLOR) = 51;
+  menu_button(FLY_BOX) = FL_MEDIUM_UP_BOX;
+}
+
+void Fl_Menu_Button::loadstyle() {
+  if (!Fl::s_menu_button) {
+    Fl::s_menu_button = 1;
+
+    static Fl::Attribute widget_attributes[] = {
+      { "label color", LABELCOLOR },
+      { "label size", LABELSIZE },
+      { "label type", LABELTYPE },
+      { "label font", LABELFONT },
+      { "color", COLOR },
+      { "down color", COLOR2 },
+      { "box", BOX },
+      { 0 }
+    };
+    Fl::load_attributes("menu button", DEFAULT_STYLE->widget_, widget_attributes);
+
+    static Fl::Attribute menu_attributes[] = {
+      { "down box", DOWN_BOX },
+      { "text font", TEXTFONT },
+      { "text size", TEXTSIZE },
+      { "text color", TEXTCOLOR },
+      { 0 }
+    };
+    Fl::load_attributes("menu button", DEFAULT_STYLE->menu_, menu_attributes);
+
+    static Fl::Attribute menu_button_attributes[] = {
+      { "highlight color", FLY_COLOR },
+      { "highlight box", FLY_BOX },
+      { 0 }
+    };
+    Fl::load_attributes("menu button", DEFAULT_STYLE->menu_button_,
+                                 menu_button_attributes);
+  }
+}
+
+Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l) : Fl_Menu_(X,Y,W,H,l) {}
+
+Fl_Boxtype Fl_Menu_Button::fly_box() const {
+  if (style && (WIDGET_STYLE->sbf & bf(BOX)) && !(MENU_BUTTON_STYLE->sbf & bf(FLY_BOX)))
+    return (Fl_Boxtype)WIDGET_STYLE->widget(BOX);
+  if (!style || !(MENU_BUTTON_STYLE->sbf & bf(FLY_BOX)))
+    return (Fl_Boxtype)DEFAULT_STYLE->menu_button(FLY_BOX);
+  return (Fl_Boxtype)MENU_BUTTON_STYLE->menu_button(FLY_BOX);
+}
+
+Fl_Color Fl_Menu_Button::fly_color() const {
+  if (!style || !(MENU_BUTTON_STYLE->sbf & bf(FLY_COLOR)))
+    return (Fl_Color)DEFAULT_STYLE->menu_button(FLY_COLOR);
+  return (Fl_Color)MENU_BUTTON_STYLE->menu_button(FLY_COLOR);
 }
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.4 1999/01/07 19:17:23 mike Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.5 1999/03/14 06:46:32 carl Exp $".
 //

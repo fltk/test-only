@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Return_Button.H,v 1.5 1999/02/16 21:59:43 mike Exp $"
+// "$Id: Fl_Return_Button.H,v 1.6 1999/03/14 06:46:17 carl Exp $"
 //
 // Return button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,16 +28,27 @@
 #include "Fl_Button.H"
 
 class Fl_Return_Button : public Fl_Button {
-protected:
-  FL_EXPORT void draw();
 public:
-  FL_EXPORT int handle(int);
-  Fl_Return_Button(int x,int y,int w,int h,const char *l=0)
-    : Fl_Button(x,y,w,h,l) {}
+  virtual void loadstyle();
+
+  int handle(int);
+  Fl_Return_Button(int x,int y,int w,int h,const char *l=0);
+
+protected:
+  struct Style : public Fl_Button::Style {
+    Style();
+  };
+
+  static Style _default_style;
+
+  virtual Fl_Widget::Style* default_style() const { return &_default_style; }
+  virtual void wstyle() { if (!style) style = new Style; }
+
+  void draw();
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Return_Button.H,v 1.5 1999/02/16 21:59:43 mike Exp $".
+// End of "$Id: Fl_Return_Button.H,v 1.6 1999/03/14 06:46:17 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.8 1999/01/07 19:17:36 mike Exp $"
+// "$Id: fl_boxtype.cxx,v 1.9 1999/03/14 06:46:41 carl Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -116,40 +116,84 @@ void fl_thin_up_box(int x, int y, int w, int h, Fl_Color c) {
 }
 
 void fl_up_frame(int x, int y, int w, int h, Fl_Color) {
-#if BORDER_WIDTH == 1
-  fl_frame2("HHWW",x,y,w,h);
-#else
-#if BORDER_WIDTH == 2
-  fl_frame2("AAUWMMTT",x,y,w,h);
-#else
   fl_frame("AAAAWUJJUTNN",x,y,w,h);
-#endif
-#endif
 }
-
-#define D1 BORDER_WIDTH
-#define D2 (BORDER_WIDTH+BORDER_WIDTH)
 
 void fl_up_box(int x, int y, int w, int h, Fl_Color c) {
   fl_up_frame(x,y,w,h,c);
-  fl_color(c); fl_rectf(x+D1, y+D1, w-D2, h-D2);
+  fl_color(c); fl_rectf(x+3, y+3, w-6, h-6);
 }
 
 void fl_down_frame(int x, int y, int w, int h, Fl_Color) {
-#if BORDER_WIDTH == 1
-  fl_frame2("WWHH",x,y,w,h);
-#else
-#if BORDER_WIDTH == 2
-  fl_frame2("UWMMPPAA",x,y,w,h);
-#else
   fl_frame("NNTUJJUWAAAA",x,y,w,h);
-#endif
-#endif
 }
 
 void fl_down_box(int x, int y, int w, int h, Fl_Color c) {
   fl_down_frame(x,y,w,h,c);
-  fl_color(c); fl_rectf(x+D1, y+D1, w-D2, h-D2);
+  fl_color(c); fl_rectf(x+3, y+3, w-6, h-6);
+}
+
+void fl_medium_down_frame(int x, int y, int w, int h, Fl_Color) {
+  fl_frame("LLWWAASS",x,y,w,h);
+}
+
+void fl_medium_up_frame(int x, int y, int w, int h, Fl_Color) {
+  fl_frame("WWAASSLL",x,y,w,h);
+}
+
+void fl_medium_up_frame2(int x, int y, int w, int h, Fl_Color) {
+  fl_frame("SSAAWWLL",x,y,w,h);
+}
+
+void fl_motif_down_frame(int x, int y, int w, int h, Fl_Color) {
+  fl_frame("KKVVKKVVKKVV",x,y,w,h);
+}
+
+void fl_motif_up_frame(int x, int y, int w, int h, Fl_Color) {
+  fl_frame("VVKKVVKKVVKK",x,y,w,h);
+}
+
+void fl_thin_motif_down_frame(int x, int y, int w, int h, Fl_Color) {
+  fl_frame("KKVVKKVV",x,y,w,h);
+}
+
+void fl_thin_motif_up_frame(int x, int y, int w, int h, Fl_Color) {
+  fl_frame("VVKKVVKK",x,y,w,h);
+}
+
+void fl_medium_up_box(int x, int y, int w, int h, Fl_Color c) {
+  fl_medium_up_frame(x,y,w,h,c);
+  fl_color(c); fl_rectf(x+2,y+2,w-4,h-4);
+}
+
+void fl_medium_up_box2(int x, int y, int w, int h, Fl_Color c) {
+  fl_medium_up_frame2(x,y,w,h,c);
+  fl_color(c); fl_rectf(x+2,y+2,w-4,h-4);
+}
+
+void fl_medium_down_box(int x, int y, int w, int h, Fl_Color c) {
+  fl_medium_down_frame(x,y,w,h,c);
+  fl_color(c); fl_rectf(x+2,y+2,w-4,h-4);
+}
+
+void fl_motif_up_box(int x, int y, int w, int h, Fl_Color c) {
+  fl_motif_up_frame(x,y,w,h,c);
+  fl_color(c); fl_rectf(x+3,y+3,w-6,h-6);
+}
+
+void fl_motif_down_box(int x, int y, int w, int h, Fl_Color c) {
+  fl_motif_down_frame(x,y,w,h,c);
+  fl_color(c); fl_rectf(x+3,y+3,w-6,h-6);
+}
+
+void fl_thin_motif_up_box(int x, int y, int w, int h, Fl_Color c) {
+  fl_thin_motif_up_frame(x,y,w,h,c);
+  fl_color(c); fl_rectf(x+2,y+2,w-4,h-4);
+}
+
+void fl_thin_motif_down_box(int x, int y, int w, int h, Fl_Color c) {
+  fl_thin_motif_down_frame(x,y,w,h,c);
+  fl_color(c); fl_rectf(x+2,y+2,w-4,h-4);
 }
 
 void fl_engraved_frame(int x, int y, int w, int h, Fl_Color) {
@@ -171,7 +215,7 @@ void fl_embossed_box(int x, int y, int w, int h, Fl_Color c) {
 }
 
 void fl_rectbound(int x, int y, int w, int h, Fl_Color bgcolor) {
-  fl_color(FL_BLACK); fl_rect(x, y, w, h);
+  fl_color(FL_DARK3); fl_rect(x, y, w, h);
   fl_color(bgcolor); fl_rectf(x+1, y+1, w-2, h-2);
 }
 #define fl_border_box fl_rectbound
@@ -195,10 +239,10 @@ static struct {
 // must match list in Enumerations.H!!!
   {fl_no_box,		0,0,0,0},		
   {fl_rectf,		0,0,0,0}, // FL_FLAT_BOX
-  {fl_up_box,		D1,D1,D2,D2},
-  {fl_down_box,		D1,D1,D2,D2},
-  {fl_up_frame,		D1,D1,D2,D2},
-  {fl_down_frame,	D1,D1,D2,D2},
+  {fl_up_box,		3,3,6,6},
+  {fl_down_box,		3,3,6,6},
+  {fl_up_frame,		3,3,6,6},
+  {fl_down_frame,	3,3,6,6},
   {fl_thin_up_box,	1,1,2,2},
   {fl_thin_down_box,	1,1,2,2},
   {fl_thin_up_frame,	1,1,2,2},
@@ -223,6 +267,22 @@ static struct {
   {fl_border_box,	1,1,2,2}, // _FL_OVAL_SHADOW_BOX,
   {fl_border_frame,	1,1,2,2}, // _FL_OVAL_FRAME
   {fl_rectf,		0,0,0,0}, // _FL_OVAL_FLAT_BOX,
+  {fl_medium_up_box,	2,2,4,4}, // FL_MEDIUM_UP_BOX
+  {fl_medium_down_box,	2,2,4,4}, // FL_MEDIUM_DOWN_BOX
+  {fl_medium_up_frame,	2,2,4,4}, // FL_MEDIUM_UP_FRAME
+  {fl_medium_down_frame,2,2,4,4}, // FL_MEDIUM_DOWN_FRAME
+  {fl_motif_up_box,	3,3,6,6}, // FL_MOTIF_UP_BOX
+  {fl_motif_down_box,	3,3,6,6}, // FL_MOTIF_DOWN_BOX
+  {fl_motif_up_frame,	3,3,6,6}, // FL_MOTIF_UP_FRAME
+  {fl_motif_down_frame,	3,3,6,6}, // FL_MOTIF_DOWN_FRAME
+  {fl_thin_motif_up_box,	2,2,4,4}, // FL_THIN_MOTIF_UP_BOX
+  {fl_thin_motif_down_box,	2,2,4,4}, // FL_THIN_MOTIF_DOWN_BOX
+  {fl_thin_motif_up_frame,	2,2,4,4}, // FL_THIN_MOTIF_UP_FRAME
+  {fl_thin_motif_down_frame,	2,2,4,4}, // FL_THIN_MOTIF_DOWN_FRAME
+  {fl_medium_up_box2,		2,2,4,4}, // FL_MEDIUM_UP_BOX2
+  {fl_medium_down_box,		2,2,4,4}, // FL_MEDIUM_DOWN_BOX2
+  {fl_medium_up_frame2,		2,2,4,4}, // FL_MEDIUM_UP_FRAME2
+  {fl_medium_down_frame,	2,2,4,4}, // FL_MEDIUM_DOWN_FRAME2
   {fl_up_box,		3,3,6,6}, // FL_FREE_BOX+0
   {fl_down_box,		3,3,6,6}, // FL_FREE_BOX+1
   {fl_up_box,		3,3,6,6}, // FL_FREE_BOX+2
@@ -260,14 +320,14 @@ void fl_draw_box(Fl_Boxtype t, int x, int y, int w, int h, Fl_Color c) {
 //extern Fl_Widget *fl_boxcheat; // hack set by Fl_Window.C
 
 void Fl_Widget::draw_box() const {
-  int t = box_;
+  int t = box();
   if (!t) return;
 //   if (this == fl_boxcheat) {
 //     fl_boxcheat = 0;
 //     if (t == FL_FLAT_BOX) return;
 //     t += 2; // convert box to frame
 //   }
-  draw_box((Fl_Boxtype)t, x_, y_, w_, h_, (Fl_Color)color_);
+  draw_box((Fl_Boxtype)t, x_, y_, w_, h_, (Fl_Color)color());
 }
 
 void Fl_Widget::draw_box(Fl_Boxtype b, Fl_Color c) const {
@@ -282,5 +342,5 @@ const {
 }
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.8 1999/01/07 19:17:36 mike Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.9 1999/03/14 06:46:41 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.cxx,v 1.21 1999/03/04 18:09:18 mike Exp $"
+// "$Id: Fl_Input_.cxx,v 1.22 1999/03/14 06:46:30 carl Exp $"
 //
 // Common input widget routines for the Fast Light Tool Kit (FLTK).
 //
@@ -35,6 +35,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
+
+#define DEFAULT_STYLE ((Style*)default_style())
 
 #define MAXBUF 1024
 
@@ -246,15 +248,15 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
     if (do_mu) {	// for minimal update:
       const char* pp = value()+mu_p; // pointer to where minimal update starts
       if (e >= pp && (!erase_cursor_only || p <= pp)) { // we must erase this
-	// calculate area to erase:
-	int x1 = -xscroll_;
-	if (p < pp) x1 += int(expandpos(p, pp, buf, 0));
-	// erase it:
-	fl_color(this->color());
-	fl_rectf(X+x1, Y+ypos, erase_cursor_only?2:W-x1, height);
-	// it now draws entire line over it
-	// this should not draw letters to left of erased area, but
-	// that is nyi.
+      // calculate area to erase:
+      int x1 = -xscroll_;
+      if (p < pp) x1 += int(expandpos(p, pp, buf, 0));
+      // erase it:
+      fl_color(this->color());
+      fl_rectf(X+x1, Y+ypos, erase_cursor_only?2:W-x1, height);
+      // it now draws entire line over it
+      // this should not draw letters to left of erased area, but
+      // that is nyi.
       }
     }
 
@@ -275,8 +277,13 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
       else offset2 = strlen(buf);
       fl_color(selection_color());
       fl_rectf(X+int(x1+.5), Y+ypos, int(x2-x1), height);
-      fl_color(contrast(textcolor(), selection_color()));
+      fl_color(active_r() ? textcolor() : inactive(textcolor()));
       fl_draw(buf+offset1, offset2-offset1, X+x1, Y+ypos+desc);
+      
+      fl_clip(X+int(x1+.5), Y+ypos, int(x2-x1), height);
+      fl_color(active_r() ? selected_textcolor() : inactive(selected_textcolor()));
+      fl_draw(buf+offset1, offset2-offset1, X+x1, Y+ypos+desc);
+      fl_pop_clip();
       if (pp < e) {
 	fl_color(color);
 	fl_draw(buf+offset2, X+x2, Y+ypos+desc);
@@ -635,15 +642,52 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
 
 /*------------------------------*/
 
-Fl_Input_::Fl_Input_(int x, int y, int w, int h, const char* l)
-: Fl_Widget(x, y, w, h, l) {
-  box(FL_DOWN_BOX);
-  color(FL_WHITE, FL_SELECTION_COLOR);
+Fl_Input_::Style Fl_Input_::_default_style;
+
+Fl_Input_::Style::Style() : Fl_Widget::Style() {
+  sbf = 0;
+
+  widget(COLOR) = FL_WHITE;
+  widget(COLOR2) = 15;
+  widget(BOX) = FL_MEDIUM_DOWN_BOX;
+
+  input(TEXTFONT) = FL_HELVETICA;
+  input(TEXTSIZE) = 14;
+  input(TEXTCOLOR) = FL_BLACK;
+  input(CURSOR_COLOR) = FL_BLACK;
+  input(SELECTED_TEXTCOLOR) = FL_BLACK;
+}
+
+void Fl_Input_::loadstyle() {
+  if (!Fl::s_input) {
+    Fl::s_input = 1;
+
+    static Fl::Attribute widget_attributes[] = {
+      { "label color", LABELCOLOR },
+      { "label size", LABELSIZE },
+      { "label type", LABELTYPE },
+      { "label font", LABELFONT },
+      { "color", COLOR },
+      { "selected color", COLOR2 },
+      { "box", BOX },
+      { 0 }
+    };
+    Fl::load_attributes("text input output", DEFAULT_STYLE->widget_, widget_attributes);
+
+    static Fl::Attribute input_attributes[] = {
+      { "text font", TEXTFONT },
+      { "text size", TEXTSIZE },
+      { "text color", TEXTCOLOR },
+      { "selected text color", SELECTED_TEXTCOLOR },
+      { "cursor color", CURSOR_COLOR },
+      { 0 }
+    };
+    Fl::load_attributes("text input output", DEFAULT_STYLE->input_, input_attributes);
+  }
+}
+
+Fl_Input_::Fl_Input_(int x, int y, int w, int h, const char* l) : Fl_Widget(x, y, w, h, l) {
   align(FL_ALIGN_LEFT);
-  textsize_ = FL_NORMAL_SIZE;
-  textfont_ = FL_HELVETICA;
-  textcolor_ = FL_BLACK;
-  cursor_color_ = FL_BLACK; // was FL_BLUE
   mark_ = position_ = size_ = 0;
   bufsize = 0;
   buffer  = 0;
@@ -659,7 +703,7 @@ void Fl_Input_::put_in_buffer(int len) {
   }
   if (!bufsize) {
     if (len > size_) len += 9; // let a few characters insert before realloc
-    bufsize = len+1; 
+    bufsize = len+1;
     buffer = (char*)malloc(bufsize);
   } else if (bufsize <= len) {
     // we may need to move old value in case it points into buffer:
@@ -733,6 +777,36 @@ Fl_Input_::~Fl_Input_() {
   if (bufsize) free((void*)buffer);
 }
 
+Fl_Font Fl_Input_::textfont() const {
+  if (!style || !(INPUT_STYLE->sbf & bf(TEXTFONT)))
+    return (Fl_Font)DEFAULT_STYLE->input(TEXTFONT);
+  return (Fl_Font)INPUT_STYLE->input(TEXTFONT);
+}
+
+uchar Fl_Input_::textsize() const {
+  if (!style || !(INPUT_STYLE->sbf & bf(TEXTSIZE)))
+    return DEFAULT_STYLE->input(TEXTSIZE);
+  return INPUT_STYLE->input(TEXTSIZE);
+}
+
+Fl_Color Fl_Input_::textcolor() const {
+  if (!style || !(INPUT_STYLE->sbf & bf(TEXTCOLOR)))
+    return (Fl_Color)DEFAULT_STYLE->input(TEXTCOLOR);
+  return (Fl_Color)INPUT_STYLE->input(TEXTCOLOR);
+}
+
+Fl_Color Fl_Input_::cursor_color() const {
+  if (!style || !(INPUT_STYLE->sbf & bf(CURSOR_COLOR)))
+    return (Fl_Color)DEFAULT_STYLE->input(CURSOR_COLOR);
+  return (Fl_Color)INPUT_STYLE->input(CURSOR_COLOR);
+}
+
+Fl_Color Fl_Input_::selected_textcolor() const {
+  if (!style || !(INPUT_STYLE->sbf & bf(SELECTED_TEXTCOLOR)))
+    return (Fl_Color)DEFAULT_STYLE->input(SELECTED_TEXTCOLOR);
+  return (Fl_Color)INPUT_STYLE->input(SELECTED_TEXTCOLOR);
+}
+
 //
-// End of "$Id: Fl_Input_.cxx,v 1.21 1999/03/04 18:09:18 mike Exp $".
+// End of "$Id: Fl_Input_.cxx,v 1.22 1999/03/14 06:46:30 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.7 1999/01/07 19:17:26 mike Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.8 1999/03/14 06:46:34 carl Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,8 @@
 #include <FL/Fl_Scrollbar.H>
 #include <FL/fl_draw.H>
 #include <math.h>
+
+#define DEFAULT_STYLE ((Style*)default_style())
 
 #define INITIALREPEAT .5
 #define REPEAT .05
@@ -132,60 +134,108 @@ int Fl_Scrollbar::handle(int event) {
 }
 
 void Fl_Scrollbar::draw() {
+  loadstyle();
+  Fl_Color col = (Fl::belowmouse()==this &&
+                  selection_color() == DEFAULT_STYLE->widget(COLOR2))
+                 ? fly_color() : selection_color();
   if (horizontal()) {
     if (w() < 3*h()) {Fl_Slider::draw(); return;}
     Fl_Slider::draw(x()+h(), y(), w()-2*h(), h());
     if (damage()&FL_DAMAGE_ALL) {
       draw_box((pushed_&1) ? down(slider()) : slider(),
-	       x(), y(), h(), h(), selection_color());
+	       x(), y(), h(), h(), col);
       draw_box((pushed_&2) ? down(slider()) : slider(),
-		  x()+w()-h(), y(), h(), h(), selection_color());
+	       x()+w()-h(), y(), h(), h(), col);
       if (active_r())
-        fl_color(labelcolor());
+        fl_color(color3());
       else
-        fl_color(inactive(labelcolor()));
+        fl_color(inactive(color3()));
       int w1 = (h()-1)|1; // use odd sizes only
       int Y = y()+w1/2;
-      int W = w1/3;
-      int X = x()+w1/2+W/2;
-      fl_polygon(X-W, Y, X, Y-W, X, Y+W);
+      // I have no idea what I'm doing, but this looks OK - CET
+      int WX, WY;
+      if (Fl::widget_style() == FL_SGI_STYLE) {
+        WX = ((w1/2)-1)|1;
+        WY = (w1/4);
+      } else {
+        WX = w1/3;
+        WY = w1/3;
+      }
+      int X = x()+w1/2+WX/2;
+      fl_polygon(X-WX, Y, X, Y-WY, X, Y+WY);
       X = x()+w()-(X-x())-1;
-      fl_polygon(X+W, Y, X, Y+W, X, Y-W);
+      fl_polygon(X+WX, Y, X, Y+WY, X, Y-WY);
     }
   } else { // vertical
     if (h() < 3*w()) {Fl_Slider::draw(); return;}
     Fl_Slider::draw(x(), y()+w(), w(), h()-2*w());
     if (damage()&FL_DAMAGE_ALL) {
       draw_box((pushed_&1) ? down(slider()) : slider(),
-	       x(), y(), w(), w(), selection_color());
+	       x(), y(), w(), w(), col);
       draw_box((pushed_&2) ? down(slider()) : slider(),
-	       x(), y()+h()-w(), w(), w(), selection_color());
+	       x(), y()+h()-w(), w(), w(), col);
       if (active_r())
-        fl_color(labelcolor());
+        fl_color(color3());
       else
-        fl_color(labelcolor() | 8);
+        fl_color(inactive(color3()));
       int w1 = (w()-1)|1; // use odd sizes only
       int X = x()+w1/2;
-      int W = w1/3;
-      int Y = y()+w1/2+W/2;
-      fl_polygon(X, Y-W, X+W, Y, X-W, Y);
+      // I have no idea what I'm doing, but this looks OK - CET
+      int WX, WY;
+      if (Fl::widget_style() == FL_SGI_STYLE) {
+        WY = ((w1/2)-1)|1;
+        WX = (w1/4);
+      } else {
+        WY = w1/3;
+        WX = w1/3;
+      }
+      int Y = y()+w1/2+WY/2;
+      fl_polygon(X, Y-WY, X+WX, Y, X-WX, Y);
       Y = y()+h()-(Y-y())-1;
-      fl_polygon(X, Y+W, X-W, Y, X+W, Y);
+      fl_polygon(X, Y+WY, X-WX, Y, X+WX, Y);
     }
   }
 }
+Fl_Scrollbar::Style Fl_Scrollbar::_default_style;
 
-Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
-  : Fl_Slider(X, Y, W, H, L)
-{
-  box(FL_FLAT_BOX);
-  color(FL_DARK2);
-  slider(FL_UP_BOX);
+Fl_Scrollbar::Style::Style() : Fl_Slider::Style() {
+  widget(COLOR) = 43;
+  widget(COLOR3) = 0;
+  widget(BOX) = FL_FLAT_BOX;
+}
+
+void Fl_Scrollbar::loadstyle() {
+  if (!Fl::s_scrollbar) {
+    Fl::s_scrollbar = 1;
+
+    static Fl::Attribute widget_attributes[] = {
+      { "label color", LABELCOLOR },
+      { "label size", LABELSIZE },
+      { "label type", LABELTYPE },
+      { "label font", LABELFONT },
+      { "color", COLOR },
+      { "color2", COLOR2 },
+      { "arrow color", COLOR3 },
+      { "box", BOX },
+      { 0 }
+    };
+    Fl::load_attributes("scroll bar", DEFAULT_STYLE->widget_, widget_attributes);
+
+    static Fl::Attribute slider_attributes[] = {
+     { "highlight color", FLY_COLOR },
+     { "slider box", SLIDER_BOX },
+     { 0 }
+    };
+    Fl::load_attributes("scroll bar", DEFAULT_STYLE->slider_, slider_attributes);
+  }
+}
+
+Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L) : Fl_Slider(X, Y, W, H, L) {
   linesize_ = 16;
   pushed_ = 0;
   step(1);
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.7 1999/01/07 19:17:26 mike Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.8 1999/03/14 06:46:34 carl Exp $".
 //

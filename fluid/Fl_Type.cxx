@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.6 1999/02/17 16:31:47 mike Exp $"
+// "$Id: Fl_Type.cxx,v 1.7 1999/03/14 06:46:23 carl Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -127,10 +127,10 @@ const char* Fl_Type::title() {
 
 extern const char* subclassname(Fl_Type*);
 
-void Widget_Browser::item_draw(void *v, int x, int y, int, int) const {
+void Widget_Browser::item_draw(void *v, int x, int y, int w, int h) const {
   Fl_Type *l = (Fl_Type *)v;
   x += 3 + l->level * 10;
-  fl_color(FL_BLACK);
+  fl_color(item_selected(v) ? selected_textcolor() : textcolor());
   if (l->is_parent()) {
     if (!l->next || l->next->level <= l->level) {
       if (l->open_!=(l==pushedtitle)) {
@@ -151,12 +151,12 @@ void Widget_Browser::item_draw(void *v, int x, int y, int, int) const {
     const char* c = subclassname(l);
     if (!strncmp(c,"Fl_",3)) c += 3;
     fl_font(textfont(), textsize());
-    fl_draw(c, x, y+13);
+    fl_draw(c, x, y+h*3/4);
     x += int(fl_width(c)+fl_width('n'));
     c = l->name();
     if (c) {
       fl_font(textfont()|FL_BOLD, textsize());
-      fl_draw(c, x, y+13);
+      fl_draw(c, x, y+h*3/4);
     } else if ((c=l->label())) {
       char buf[50]; char* p = buf;
       *p++ = '"';
@@ -167,7 +167,7 @@ void Widget_Browser::item_draw(void *v, int x, int y, int, int) const {
       if (*c) {strcpy(p,"..."); p+=3;}
       *p++ = '"';
       *p = 0;
-      fl_draw(buf, x, y+13);
+      fl_draw(buf, x, y+h*3/4);
     }
   } else {
     const char* c = l->title();
@@ -179,7 +179,7 @@ void Widget_Browser::item_draw(void *v, int x, int y, int, int) const {
     if (*c) {strcpy(p,"..."); p+=3;}
     *p = 0;
     fl_font(textfont() | (l->is_code_block() && (l->level==0 || l->parent->is_class())?0:FL_BOLD), textsize());
-    fl_draw(buf, x, y+13);
+    fl_draw(buf, x, y+h*3/4);
   }
 }
 
@@ -465,12 +465,12 @@ void Fl_Type::open() {
 void Fl_Type::setlabel(const char *) {}
 
 Fl_Type::~Fl_Type() {
-  if (parent) parent->remove_child(this);
   // warning: destructor only works for widgets that have been add()ed.
   if (widget_browser) widget_browser->deleting(this);
   if (prev) prev->next = next; else first = next;
   if (next) next->prev = prev; else last = prev;
   if (current == this) current = 0;
+  if (parent) parent->remove_child(this);
   modflag = 1;
 }
 
@@ -648,5 +648,5 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.6 1999/02/17 16:31:47 mike Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.7 1999/03/14 06:46:23 carl Exp $".
 //

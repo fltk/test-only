@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.5 1999/01/07 19:17:53 mike Exp $"
+// "$Id: fonts.cxx,v 1.6 1999/03/14 06:46:45 carl Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -115,15 +115,10 @@ void create_the_forms() {
 
   textobj = new FontDisplay(FL_FRAME_BOX,10,10,530,170,label);
   textobj->align(FL_ALIGN_TOP|FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_CLIP);
-  textobj->color(9,47);
   fontobj = new Fl_Hold_Browser(10, 190, 390, 170);
-  fontobj->box(FL_FRAME_BOX);
-  fontobj->color(53,3);
   fontobj->callback(font_cb);
   form->resizable(fontobj);
   sizeobj = new Fl_Hold_Browser(410, 190, 130, 170);
-  sizeobj->box(FL_FRAME_BOX);
-  sizeobj->color(53,3);
   sizeobj->callback(size_cb);
   form->end();
 }
@@ -164,5 +159,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.5 1999/01/07 19:17:53 mike Exp $".
+// End of "$Id: fonts.cxx,v 1.6 1999/03/14 06:46:45 carl Exp $".
 //

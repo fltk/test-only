@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.6 1999/02/25 19:09:11 bill Exp $"
+// "$Id: menubar.cxx,v 1.7 1999/03/14 06:46:46 carl Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -34,6 +34,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <FL/fl_draw.H>
+
+Fl_Window *window;
 
 void test_cb(Fl_Widget* w, void*) {
   Fl_Menu_* mw = (Fl_Menu_*)w;
@@ -98,14 +100,14 @@ Fl_Menu_Item menutable[] = {
     {"Size",	0,	0},
     {0},
   {"&Checkbox",0,0,0,FL_SUBMENU},
-    {"&Alpha",	0,	0, (void *)1, FL_MENU_TOGGLE},
+    {"&Alpha",	0,	0, (void *)1, FL_MENU_TOGGLE|FL_MENU_VALUE},
     {"&Beta",	0,	0, (void *)2, FL_MENU_TOGGLE},
     {"&Gamma",	0,	0, (void *)3, FL_MENU_TOGGLE},
     {"&Delta",	0,	0, (void *)4, FL_MENU_TOGGLE|FL_MENU_VALUE},
     {"&Epsilon",0,	0, (void *)5, FL_MENU_TOGGLE},
     {"&Pi",	0,	0, (void *)6, FL_MENU_TOGGLE},
     {"&Mu",	0,	0, (void *)7, FL_MENU_TOGGLE|FL_MENU_DIVIDER},
-    {"Red",	0,	0, (void *)1, FL_MENU_TOGGLE, 0, 0, 0, 1},
+    {"Red",	0,	0, (void *)1, FL_MENU_TOGGLE},
     {"Black",	0,	0, (void *)1, FL_MENU_TOGGLE|FL_MENU_DIVIDER},
     {"00",	0,	0, (void *)1, FL_MENU_TOGGLE},
     {"000",	0,	0, (void *)1, FL_MENU_TOGGLE},
@@ -123,16 +125,16 @@ Fl_Menu_Item menutable[] = {
     {"00",	0,	0, (void *)1, FL_MENU_RADIO},
     {"000",	0,	0, (void *)1, FL_MENU_RADIO},
     {0},
-  {"&Font",0,0,0,FL_SUBMENU /*, 0, FL_BOLD, 20*/},
-    {"Normal",	0, 0, 0, 0, 0, 0, 14},
-    {"Bold",	0, 0, 0, 0, 0, FL_BOLD, 14},
-    {"Italic",	0, 0, 0, 0, 0, FL_ITALIC, 14},
-    {"BoldItalic",0,0,0, 0, 0, FL_BOLD+FL_ITALIC, 14},
-    {"Small",	0, 0, 0, 0, 0, FL_BOLD+FL_ITALIC, 10},
-    {"Emboss",	0, 0, 0, 0, FL_EMBOSSED_LABEL},
-    {"Engrave",	0, 0, 0, 0, FL_ENGRAVED_LABEL},
-    {"Shadow",	0, 0, 0, 0, FL_SHADOW_LABEL},
-    {"@->",	0, 0, 0, 0, FL_SYMBOL_LABEL},
+  {"&Font",0,0,0,FL_SUBMENU},
+    {"Normal",	0, 0},
+    {"Bold",	0, 0},
+    {"Italic",	0, 0},
+    {"BoldItalic",0,0},
+    {"Small",	0, 0},
+    {"Emboss",	0, 0},
+    {"Engrave",	0, 0},
+    {"Shadow",	0, 0},
+    {"@->",	0, 0},
     {0},
   {"E&mpty",0,0,0,FL_SUBMENU},
     {0},
@@ -145,7 +147,7 @@ Fl_Menu_Item menutable[] = {
     {"A very long menu item"},
     {0},
   {"&Huge", 0, 0, (void*)hugemenu, FL_SUBMENU_POINTER},
-  {"button",0, 0, 0, FL_MENU_TOGGLE},
+  {"button",0, 0},
   {0}
 };
 
@@ -164,55 +166,54 @@ Fl_Menu_Item pulldown[] = {
 
 Fl_Menu_* menus[4];
 
-// turn MicroSoft style on/off
-void button_cb(Fl_Widget* w, void*) {
-  if (((Fl_Button*)w)->value()) {
-    for (int i = 0; i < 4; i++) {
-      menus[i]->down_box(FL_FLAT_BOX);
-      menus[i]->selection_color(137);
-      menus[i]->textfont(FL_HELVETICA);
-    }
-  } else {
-    for (int i = 0; i < 4; i++) {
-      menus[i]->down_box(FL_NO_BOX);
-      menus[i]->selection_color(FL_WHITE);
-      menus[i]->textfont(FL_BOLD|FL_ITALIC);
-    }
-  }
-  menus[0]->parent()->redraw();
-}
-
 int main(int argc, char **argv) {
   for (int i=0; i<99; i++) {
     char buf[100];
     sprintf(buf,"item %d",i);
     hugemenu[i].text = strdup(buf);
   }
-  Fl_Window window(WIDTH,400);
+  
+  window = new Fl_Window(WIDTH,400);
   Fl_Menu_Bar menubar(0,0,WIDTH,30); menubar.menu(menutable);
+  menubar.find("&Font/Normal")->labelfont(FL_HELVETICA);
+  menubar.find("&Font/Bold")->labelfont(FL_BOLD);
+  menubar.find("&Font/Italic")->labelfont(FL_ITALIC);
+  menubar.find("&Font/BoldItalic")->labelfont(FL_BOLD|FL_ITALIC);
+  menubar.find("&Font/Small")->labelsize(10);
+  menubar.find("&Font/Emboss")->labeltype(FL_EMBOSSED_LABEL);
+  menubar.find("&Font/Engrave")->labeltype(FL_ENGRAVED_LABEL);
+  menubar.find("&Font/Shadow")->labeltype(FL_SHADOW_LABEL);
+  menubar.find("&Font/@->")->labeltype(FL_SYMBOL_LABEL);
+  menubar.find("&Checkbox/Red")->labelcolor(FL_RED);
+  menubar.find("&Checkbox/Red")->down_labelcolor(FL_RED);
+  menubar.find("&Checkbox/Black")->labelcolor(FL_BLACK);
+  menubar.find("&Checkbox/Black")->down_labelcolor(FL_BLACK);
+  menubar.find("&Radio/Red")->labelcolor(FL_RED);
+  menubar.find("&Radio/Red")->down_labelcolor(FL_RED);
+  menubar.find("&Radio/Black")->labelcolor(FL_BLACK);
+  menubar.find("&Radio/Black")->down_labelcolor(FL_BLACK);
+  menubar.find("&Huge/item 69")->deactivate(); // No 69ing allowed!
   menubar.callback(test_cb);
   menus[0] = &menubar;
   Fl_Menu_Button mb1(100,100,120,25,"&menubutton"); mb1.menu(pulldown);
   mb1.callback(test_cb);
   menus[1] = &mb1;
-  Fl_Choice ch(300,100,80,25,"&choice:"); ch.menu(pulldown);
+  Fl_Choice ch(300,100,90,25,"&choice:"); ch.menu(pulldown);
   ch.callback(test_cb);
   menus[2] = &ch;
-  Fl_Menu_Button mb(0,0,WIDTH,400,"&popup");
+  Fl_Menu_Button mb(0,30,WIDTH,370,"&popup");
   mb.type(Fl_Menu_Button::POPUP3);
   mb.menu(menutable);
   mb.callback(test_cb);
   menus[3] = &mb;
   Fl_Box b(200,200,200,100,"Press right button\nfor a pop-up menu");
-  Fl_Toggle_Button t(250,50,150,25,"MicroSoft Style");
-  t.callback(button_cb);
-  window.resizable(&mb);
-  window.size_range(300,20);
-  window.end();
-  window.show(argc, argv);
+  window->resizable(&mb);
+  window->size_range(300,20);
+  window->end();
+  window->show(argc, argv);
   return Fl::run();
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.6 1999/02/25 19:09:11 bill Exp $".
+// End of "$Id: menubar.cxx,v 1.7 1999/03/14 06:46:46 carl Exp $".
 //
