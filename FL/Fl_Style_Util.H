@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_Util.H,v 1.1 1999/09/25 18:29:04 vincent Exp $"
+// "$Id: Fl_Style_Util.H,v 1.2 1999/09/25 22:27:05 vincent Exp $"
 //
 // Style definition and plugin support
 //
@@ -39,6 +39,7 @@ struct Fl_Style_D {
   Fl_Style* style;
 };
 
+
 typedef bool (Fl_Style_Entry_Parser)(Fl_Style& style, char* s);
 typedef void (Fl_Style_Plugin_Entry)();
 
@@ -56,5 +57,5 @@ Fl_Color fl_parse_color(char*&s);
 #endif
 
 //
-// End of "$Id: Fl_Style_Util.H,v 1.1 1999/09/25 18:29:04 vincent Exp $".
+// End of "$Id: Fl_Style_Util.H,v 1.2 1999/09/25 22:27:05 vincent Exp $".
 //

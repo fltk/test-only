@@ -1,6 +1,7 @@
 #include <FL/Fl_Plugins.H>
 #include <FL/Fl_Style.H>
 #include <FL/Fl_Style_Util.H>
+#include <FL/Fl_Boxtype.H>
 
 extern "C" void style_plugin();
 
@@ -14,24 +15,51 @@ struct Fl_Image_Box : Fl_Boxtype_ {
 };
 
 static void image_box_draw(const Fl_Boxtype_* bt, int x, int y, int w, int h,
-		      Fl_Color fill, Fl_Flags)
+		      Fl_Color fill, Fl_Flags flags)
 {
-  ((Fl_Image_Box*)bt)->img->draw_tiled(x, y, w, h, -w/2, -h/2);
+  if (!(flags&FL_FRAME_ONLY))
+    ((Fl_Image_Box*)bt)->img->draw_tiled(x, y, w, h, -w/2, -h/2);
+  FL_NORMAL_BOX->draw(x,y,w,h,fill,flags|FL_FRAME_ONLY);
 }
 
 Fl_Image_Box::Fl_Image_Box(char* f)
 {
   draw_ = image_box_draw;
   img = Fl_Shared_Image::guess(f)->get(f);
+  dx_=dy_=2; dw_=dh_=4;
+}
+
+
+struct Fl_Image_NoBorderBox : Fl_Boxtype_ {
+  Fl_Shared_Image* img;
+
+  Fl_Image_NoBorderBox(char* f);
+};
+
+static void image_noborderbox_draw(const Fl_Boxtype_* bt, int x, int y, int w, int h,
+		      Fl_Color fill, Fl_Flags flags)
+{
+  if (!(flags&FL_FRAME_ONLY))
+    ((Fl_Image_Box*)bt)->img->draw_tiled(x, y, w, h, -w/2, -h/2);
+  FL_FLAT_BOX->draw(x,y,w,h,fill,flags|FL_FRAME_ONLY);
+}
+
+Fl_Image_NoBorderBox::Fl_Image_NoBorderBox(char* f)
+{
+  draw_ = image_noborderbox_draw;
+  img = Fl_Shared_Image::guess(f)->get(f);
+  dx_=dy_=2; dw_=dh_=4;
 }
 
 
 static bool parse_imagebox(Fl_Style& style, char* s)
 {
   char* w = fl_parse_word(s);
-  if (strcmp(w, "imagebox")) return 0; // Give the hand to another parser
+  bool flat = 0;
+  if ( (flat = strcmp(w, "image_box")) && strcmp(w, "image_flat_box")) 
+    return 0; // Give the hand to another parser
   w = fl_parse_word(s);
-  style.set_box(new Fl_Image_Box(w));
+  style.set_box(flat? new Fl_Image_NoBorderBox(w) : new Fl_Image_Box(w));
   return 1;
 }
 

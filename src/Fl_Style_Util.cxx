@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_Util.cxx,v 1.1 1999/09/25 18:29:05 vincent Exp $"
+// "$Id: Fl_Style_Util.cxx,v 1.2 1999/09/25 22:27:09 vincent Exp $"
 //
 // Style definition and plugin support
 //
@@ -26,8 +26,6 @@
 #include <FL/Fl_Style.H>
 #include <FL/Fl_Style_Util.H>
 #include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
 
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Input.H>
@@ -36,9 +34,6 @@
 
 static Fl_Style_D default_styles[] = {
   { "global", &Fl_Widget::default_style },
-  { "window", &Fl_Window::default_style },
-  { "input",  &Fl_Input::default_style },
-  { "output", &Fl_Output::default_style },
   { 0, 0 }
 };
 static int nb_styles = sizeof(default_styles)/sizeof(default_styles[0]) - 1;
@@ -48,6 +43,11 @@ static Fl_Style_D* styles = default_styles;
 static int compare_style(const void* a, const void* b)
 {
   return strcmp(((const Fl_Style_D*)a)->name, ((const Fl_Style_D*)b)->name);
+}
+
+Fl_Style_Definer::Fl_Style_Definer(char* name, Fl_Style& style)
+{
+  fl_add_style_def(name, &style);
 }
 
 bool fl_add_style_def(char* name, Fl_Style* style)
@@ -134,7 +134,7 @@ bool fl_parse_style_entry(char* name, Fl_Style& style, char* s)
   Fl_Style_Entry_D *e = fl_search_style_entry(name);
   if (e == 0 || e->parsers == 0) return 0;
   for(Fl_Style_Entry_Parser** p = e->parsers ; *p ; p++)
-    if((*p)(style, s)) return 1;
+    if ((*p)(style, s)) return 1;
   return 0;
 }
 
@@ -150,6 +150,8 @@ inline is(char* sep, char c)
   return 0;
 }
 
+#include <string.h>
+#include <ctype.h>
 char* fl_parse_word(char*&s)
 {
   static char* word;
@@ -182,10 +184,10 @@ Fl_Color fl_parse_color(char*&s)
     char* w2 = fl_parse_word(s);
     if (*w2 == ',') {
       uchar r, g, b;
-      r = atoi(w);
-      g = atoi(fl_parse_word(s));
+      r = uchar(strtod(w,0)*255);
+      g = uchar(strtod(fl_parse_word(s),0)*255);
       fl_parse_word(s);
-      b = atoi(fl_parse_word(s));
+      b = uchar(strtod(fl_parse_word(s),0)*255);
       return fl_rgb(r, g, b);
     } else
       return Fl_Color(atoi(w));
@@ -319,6 +321,7 @@ void fl_read_style_plugins()
     fl_add_style_entry_def("highlight_color", parse_highlight_color);
     fl_add_style_entry_def("highlight_label_color", parse_highlight_label_color);
     fl_add_style_entry_def("text_color", parse_text_color);
+    default_set = 1;
   }
 
   // Priority order in case of duplicate plugin name is from the most local to the most global
@@ -346,5 +349,5 @@ void fl_read_style_plugins() {}
 #endif
 
 //
-// End of "$Id: Fl_Style_Util.cxx,v 1.1 1999/09/25 18:29:05 vincent Exp $".
+// End of "$Id: Fl_Style_Util.cxx,v 1.2 1999/09/25 22:27:09 vincent Exp $".
 //

@@ -3,11 +3,19 @@
 #
 
 [window]
-box		= imagebox images/coucou.png	# This is an example 
+#box		= image_box images/bg2.png	# This is an example 
 						# of boxtype plugin
 
 [global]
-box		= thin_up_box			# Normal box
-color		= #80c0c0			# Color in hex
-highlight_color	= #80c0c0
-label_color	= 255, 255, 255			# Color in r, g, b
+box		= image_box images/bg.png	# This is an example 
+						# of boxtype plugin
+#box		= round_box			# Normal box
+color		= #d0d0e0			# Color in hex
+label_color	= 0, 0, 0			# Color in r, g, b
+
+[check_button]
+box		= image_flat_box images/bg.png	# This is an example 
+						# of boxtype plugin
+[menu_item]
+box		= image_flat_box images/bg.png	# This is an example 
+						# of boxtype plugin

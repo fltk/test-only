@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Output.cxx,v 1.12 1999/09/20 16:36:48 vincent Exp $"
+// "$Id: Fl_Output.cxx,v 1.13 1999/09/25 22:27:08 vincent Exp $"
 //
 // Output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -62,6 +62,9 @@ Fl_Output::Fl_Output(int x, int y, int w, int h, const char *l)
 Fl_Input fl_init_input_style(0,0,0,0,0); 
 Fl_Output fl_init_output_style(0,0,0,0,0);
 
+Fl_Style_Definer fl_output_style_definer("output", Fl_Output::default_style);
+
+
 //
-// End of "$Id: Fl_Output.cxx,v 1.12 1999/09/20 16:36:48 vincent Exp $".
+// End of "$Id: Fl_Output.cxx,v 1.13 1999/09/25 22:27:08 vincent Exp $".
 //

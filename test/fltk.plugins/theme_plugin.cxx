@@ -27,8 +27,7 @@ static bool read_conf(char* f)
       s++;
       w = fl_parse_word(s);
       style = fl_search_style(w);
-      if (!style) style = &Fl_Widget::default_style;
-    } else {
+    } else if (style) {
       w = strdup(fl_parse_word(s));
       if (*fl_parse_word(s) == '=') {
 	fl_parse_style_entry(w, *style, s);

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Plugins.H,v 1.4 1999/09/23 18:15:51 vincent Exp $"
+// "$Id: Fl_Plugins.H,v 1.5 1999/09/25 22:27:05 vincent Exp $"
 //
 // Plug-ins support for ELF and WIN32 for the Fast Light Tool Kit (FLTK).
 //
@@ -58,7 +58,7 @@ typedef HINSTANCE FLDLhandle;
 
 #include <dlfcn.h>
 typedef void* FLDLhandle;
-#define FLDLopen(a) dlopen(a, RTLD_LAZY)
+#define FLDLopen(a) dlopen(a, RTLD_NOW)
 #define FLDLclose(a) dlclose(a)
 #define FLDLsym(handle, sym) dlsym(handle, sym)
 #define FLDLerror() dlerror()
@@ -72,5 +72,5 @@ typedef void* FLDLhandle;
 #endif // FL_Plugins_H
 
 //
-// End of "$Id: Fl_Plugins.H,v 1.4 1999/09/23 18:15:51 vincent Exp $"
+// End of "$Id: Fl_Plugins.H,v 1.5 1999/09/25 22:27:05 vincent Exp $"
 //

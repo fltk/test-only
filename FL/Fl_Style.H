@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.3 1999/09/25 18:29:03 vincent Exp $"
+// "$Id: Fl_Style.H,v 1.4 1999/09/25 22:27:05 vincent Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -85,6 +85,14 @@ FL_EXPORT struct Fl_Style {
   void add_child(Fl_Style* s) const;
 };
 
+// Create a global object of this type with correct parameter to define
+// a new style class. See example at the end in Fl_Input.cxx.
+class Fl_Style_Definer {
+public:
+  Fl_Style_Definer(char* name, Fl_Style& style);
+};
+
+
 FL_EXPORT void fl_glyph(int, int,int,int,int, Fl_Color, Fl_Flags);
 
 enum {	// glyph types
@@ -102,5 +110,5 @@ enum {	// glyph types
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.3 1999/09/25 18:29:03 vincent Exp $".
+// End of "$Id: Fl_Style.H,v 1.4 1999/09/25 22:27:05 vincent Exp $".
 //
