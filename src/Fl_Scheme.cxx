@@ -1,33 +1,33 @@
-/
-// "$Id$
-/
-// Style header file for the Fast Light Tool Kit (FLTK)
-/
-// Copyright 1998-2004 by Bill Spitzak and others
-/
-// This library is free software; you can redistribute it and/o
-// modify it under the terms of the GNU Library General Publi
-// License as published by the Free Software Foundation; eithe
-// version 2 of the License, or (at your option) any later version
-/
-// This library is distributed in the hope that it will be useful
-// but WITHOUT ANY WARRANTY; without even the implied warranty o
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GN
-// Library General Public License for more details
-/
-// You should have received a copy of the GNU Library General Publi
-// License along with this library; if not, write to the Free Softwar
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-130
-// USA
-/
-// Please report all bugs and problems to "fltk-bugs@fltk.org"
-/
+//
+// "$Id$"
+//
+// Style header file for the Fast Light Tool Kit (FLTK).
+//
+// Copyright 1998-2004 by Bill Spitzak and others.
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Library General Public
+// License as published by the Free Software Foundation; either
+// version 2 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Library General Public License for more details.
+//
+// You should have received a copy of the GNU Library General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+// USA.
+//
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
+//
 
 
-#include <FL/Fl_Scheme.H
-#include <FL/Fl_Widget.H
-#include <FL/Fl_Tool_Button.H
-#include <FL/Fl_Light_Button.H
+#include <FL/Fl_Scheme.H>
+#include <FL/Fl_Widget.H>
+#include <FL/Fl_Tool_Button.H>
+#include <FL/Fl_Light_Button.H>
 #include <FL/Fl_Browser_.H>
 
 ////////////////////////Basic handle finction for highlighting /////////////////
@@ -189,15 +189,15 @@ int Fl_Widget_Style::compare_flags(){
 };
 
 
-void Fl_Widget_Style::apply(Fl_Widget * w)
-  w->try_color(color())
-  w->try_selection_color(selection_color())
-  w->try_box(box())
-  w->try_labeltype(labeltype())
-  w->try_labelcolor(labelcolor())
-  w->try_labelfont(labelfont())
-  w->try_labelsize(labelsize())
-}
+void Fl_Widget_Style::apply(Fl_Widget * w){
+  w->try_color(color());
+  w->try_selection_color(selection_color());
+  w->try_box(box());
+  w->try_labeltype(labeltype());
+  w->try_labelcolor(labelcolor());
+  w->try_labelfont(labelfont());
+  w->try_labelsize(labelsize());
+};
 
 
 Fl_Widget_Style::Fl_Widget_Style(Fl_Widget_Style * parent):
@@ -247,12 +247,12 @@ int Fl_Button_Style::compare_flags(){
   int flags = Fl_Widget_Style::compare_flags();
   if(((Fl_Button_Style *)parent_)->down_box() != down_box()) flags |= DOWN_BOX;
   return flags;
-}
+};
 
-void Fl_Button_Style::apply(Fl_Widget * w)
-  Fl_Widget_Style::apply(w)
-  ((Fl_Button *)w)->try_down_box(0);
-}
+void Fl_Button_Style::apply(Fl_Widget * w){
+  Fl_Widget_Style::apply(w);
+  ((Fl_Button *)w)->try_down_box(0); 
+};
 
 
 
@@ -261,20 +261,20 @@ void Fl_Button_Style::update(){
   Fl_Widget_Style::update();
   if (!(DOWN_BOX & set_flags_)) down_box_ = ((Fl_Button_Style *)parent_)->down_box();
 };
-///////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////
 
 
 
 
 
 void Fl_Browser_Style::update(){
-  if(!parent_) return
+  if(!parent_) return;
 
   Fl_Widget_Style::update();
-  if (!(TEXTCOLOR & set_flags_)) labelcolor_ =  ((Fl_Browser_Style *)parent_)->labelcolor()
-  if (!(TEXTFONT & set_flags_)) textfont_ = ((Fl_Browser_Style *)parent_)->textfont()
+  if (!(TEXTCOLOR & set_flags_)) labelcolor_ =  ((Fl_Browser_Style *)parent_)->labelcolor();
+  if (!(TEXTFONT & set_flags_)) textfont_ = ((Fl_Browser_Style *)parent_)->textfont();
   if (!(TEXTSIZE & set_flags_)) textsize_ = ((Fl_Browser_Style *)parent_)->textsize();
-}
+};
 
 
 
@@ -286,6 +286,6 @@ void Fl_Browser_Style::update(){
 
 
 
-/
-// End of "$Id$"
-/
+//
+// End of "$Id$".
+//

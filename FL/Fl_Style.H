@@ -1,29 +1,29 @@
-/
-// "$Id$
-/
-// Style header file for the Fast Light Tool Kit (FLTK)
-/
-// Copyright 1998-2004 by Bill Spitzak and others
-/
-// This library is free software; you can redistribute it and/o
-// modify it under the terms of the GNU Library General Publi
-// License as published by the Free Software Foundation; eithe
-// version 2 of the License, or (at your option) any later version
-/
-// This library is distributed in the hope that it will be useful
-// but WITHOUT ANY WARRANTY; without even the implied warranty o
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GN
-// Library General Public License for more details
-/
-// You should have received a copy of the GNU Library General Publi
-// License along with this library; if not, write to the Free Softwar
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-130
-// USA
-/
-// Please report all bugs and problems to "fltk-bugs@fltk.org"
-/
+//
+// "$Id$"
+//
+// Style header file for the Fast Light Tool Kit (FLTK).
+//
+// Copyright 1998-2004 by Bill Spitzak and others.
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Library General Public
+// License as published by the Free Software Foundation; either
+// version 2 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Library General Public License for more details.
+//
+// You should have received a copy of the GNU Library General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+// USA.
+//
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
+//
 
-#ifndef Fl_Style_
+#ifndef Fl_Style_H
   #define Fl_Style_H
   class Fl_Style_List;
 #endif
@@ -234,13 +234,13 @@ typedef Fl_Button::Style Fl_Button_Style;
 /** \name Style functions 
 * @{ */
 
-// Following macros can be used as a first comamd within widget's draw() and handle() methods. They allow modification of class draw() method for
-// complicated widgets (like Fl_Scroll) and allow to execute  alternative draw() and handle implementation supplied by particular style/theme. When used, you probably want to us
-// also  FL_HANDLE_STYLE( ...) macro (see below)to match the widget response to its appereance. See also description of Fl_Style::draw membe
-// NOTE: these macros do not use style_handle() and and style_draw() getter functions but directly access style_ pointer which is private
-// This is SECURITY feature: subclasses should NOT use parents't styling functions directly because they can never know how styling engine will modify/mess up with them
-// style-specific handle and draw should always be associated with pariticular class, although many classes can use the same function (like highlighting button
-// as long as each class class style sets the pointer EXPLICITLY - no inheritance here
+// Following macros can be used as a first comamd within widget's draw() and handle() methods. They allow modification of class draw() method for 
+// complicated widgets (like Fl_Scroll) and allow to execute  alternative draw() and handle implementation supplied by particular style/theme. When used, you probably want to use
+// also  FL_HANDLE_STYLE( ...) macro (see below)to match the widget response to its appereance. See also description of Fl_Style::draw member
+// NOTE: these macros do not use style_handle() and and style_draw() getter functions but directly access style_ pointer which is private.
+// This is SECURITY feature: subclasses should NOT use parents't styling functions directly because they can never know how styling engine will modify/mess up with them.
+// style-specific handle and draw should always be associated with pariticular class, although many classes can use the same function (like highlighting button)
+// as long as each class class style sets the pointer EXPLICITLY - no inheritance here.
 
 
 
@@ -270,13 +270,13 @@ typedef Fl_Button::Style Fl_Button_Style;
 * \endcode
 * Depending on particular style draw function it may return from encapsulating draw() function
 * without execution of other drawing code.*/
-// #define fl_draw_style() { if(style_ && style_->draw(this)) return;
+// #define fl_draw_style() { if(style_ && style_->draw(this)) return;}
 
 
 //@}
 
 
 
-/
-// End of "$Id$"
-/
+//
+// End of "$Id$".
+//
