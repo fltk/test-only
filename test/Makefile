@@ -105,7 +105,7 @@ CPPFILES = \
 	line_style.cxx \
 	utf.cxx \
 	valuators.cxx
-
+	
 CFILES	=
 
 # only some of the demos have been changed to use namespaces:
@@ -146,7 +146,8 @@ TARGETS = \
 	tile$(EXEEXT) \
 	utf$(EXEEXT) \
 	fullscreen$(EXEEXT) \
-	valuators$(EXEEXT)
+	valuators$(EXEEXT) \
+	list$(EXEEXT)
 
 # other programs that are minimally changed from fltk1.1:
 TARGETS += \
