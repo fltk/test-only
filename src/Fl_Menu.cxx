@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.55 1999/11/12 19:22:23 carl Exp $"
+// "$Id: Fl_Menu.cxx,v 1.56 1999/11/12 19:55:29 carl Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -335,19 +335,8 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
   if (m) y(Y-1); else {y(Y-3); w(1); h(1);}
 
   if (t) {
-    int tpos;
-    if (menubar_title) {
-      int ddh = t->box()->down->dh(); int hdh = t->box()->highlight->dh();
-      Htitle += (ddh > hdh) ? ddh : hdh;
-      if (Htitle > button->h() - button->box()->dh())
-        Htitle = button->h() - button->box()->dh();
-      tpos = Y - Htitle - (button->h()-Htitle)/2;
-      y(tpos + Htitle);
-    } else {
-      Htitle += box()->dh() + 3;
-      tpos = Y-Htitle - 3;
-    }
-    title = new menutitle(X, tpos, Wtitle, Htitle, t);
+    int ht = menubar_title ? button->h()-6 : Htitle + box()->dw() + 3;
+    title = new menutitle(X, Y-ht-3, Wtitle, ht, t);
   } else
     title = 0;
 }
@@ -850,5 +839,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.55 1999/11/12 19:22:23 carl Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.56 1999/11/12 19:55:29 carl Exp $".
 //
