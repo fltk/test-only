@@ -1,17 +1,20 @@
-#
 # FLTK toolkit configuration file
-#
-# Which scheme should we use?
+
+# Which scheme should we use?  (Loads the themes too)
 # FLTK comes with:
 #   Alternative, Alt2, Classic, Essai, KDE1, Motif, OldMotif, Windows
-#
-#default scheme = KDE1
-#
-#
-#
-# Which theme should we use?
-# FLTK comes with:
-#   Alternative, KDE1, KDE1_colors, classic, essai, motif, windows
-# (They are loaded by the schemes automatically.)
-#
-# default theme = KDE1
+
+default scheme = Alternative
+
+[mouse wheel]                 # using mode = 0 won't touch your button events (X)
+  # scroll forward 1 page
+  mode = 2                    # 0 = off 1 = scroll by lines 2 = scroll by pages
+  delta = 1                   # how much to scroll by
+
+  # scroll backwards 3.5 lines
+  # mode = 1
+  # delta = -3.5
+
+  # button assignments - used under X only
+  # up button = 5             # default is 4
+  # down button = 4           # default is 5

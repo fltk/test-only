@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.48 1999/11/18 04:33:21 carl Exp $"
+// "$Id: Fl_x.cxx,v 1.49 1999/11/24 00:58:01 carl Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -375,6 +375,8 @@ static inline void checkdouble() {
 
 static Fl_Window* resize_from_system;
 
+unsigned fl_mousewheel_up = 4, fl_mousewheel_down = 5;
+
 int fl_handle(const XEvent& xevent)
 {
   fl_xevent = &xevent;
@@ -440,6 +442,15 @@ int fl_handle(const XEvent& xevent)
     return 1;
 
   case ButtonPress:
+    if ((xevent.xbutton.button == fl_mousewheel_up ||
+         xevent.xbutton.button == fl_mousewheel_down) &&
+         Fl::mousewheel_mode())
+    {
+      int direction = (xevent.xbutton.button == fl_mousewheel_up) ? -1 : 1;
+      Fl::e_mousewheel = Fl::mousewheel_sdelta()*direction;
+      event = FL_MOUSEWHEEL;
+      break;
+    }
     Fl::e_keysym = FL_Button + xevent.xbutton.button;
     set_event_xy(); checkdouble();
     Fl::e_state |= (FL_BUTTON1 << (xevent.xbutton.button-1));
@@ -457,6 +468,12 @@ int fl_handle(const XEvent& xevent)
 #endif
 
   case ButtonRelease:
+    if ((xevent.xbutton.button == fl_mousewheel_up ||
+         xevent.xbutton.button == fl_mousewheel_down) &&
+         Fl::mousewheel_mode())
+    {
+      break;
+    }
     Fl::e_keysym = FL_Button + xevent.xbutton.button;
     set_event_xy();
     Fl::e_state &= ~(FL_BUTTON1 << (xevent.xbutton.button-1));
@@ -845,5 +862,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.48 1999/11/18 04:33:21 carl Exp $".
+// End of "$Id: Fl_x.cxx,v 1.49 1999/11/24 00:58:01 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.70 1999/11/23 07:28:33 vincent Exp $"
+// "$Id: Fl_win32.cxx,v 1.71 1999/11/24 00:58:01 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -560,22 +560,10 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     if (Fl::handle(FL_KEYBOARD,window)) return 0;
     break;
 
-  case WM_MOUSEWHEEL :
-    // This just maps the mouse wheel to the up/down arrow keys.  For lists
-    // and menus you'll be able to use it to scroll through things; it also
-    // will do navigation through widgets...
-    if (((short) HIWORD(wParam)) < 0)
-      Fl::e_keysym = FL_Down;
-    else
-      Fl::e_keysym = FL_Up;
-
-    buffer[0] = 0;
-
-    Fl::e_length = 0;
-    Fl::e_text   = buffer;
-
-    while (window->parent()) window = window->window();
-    if (Fl::handle(FL_KEYBOARD,window)) return 0;
+  case WM_MOUSEWHEEL:
+    if (!Fl::mousewheel_mode()) break;
+    Fl::e_mousewheel = -1*(SHORT)(HIWORD(wParam))*Fl::mousewheel_sdelta()/120.0;
+    if (Fl::handle(FL_MOUSEWHEEL, window)) return 0;
     break;
 
   case WM_GETMINMAXINFO:
@@ -900,5 +888,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.70 1999/11/23 07:28:33 vincent Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.71 1999/11/24 00:58:01 carl Exp $".
 //

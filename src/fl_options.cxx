@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.36 1999/11/23 14:07:28 carl Exp $"
+// "$Id: fl_options.cxx,v 1.37 1999/11/24 00:58:02 carl Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -58,8 +58,6 @@ int Fl::use_schemes = 1;
 
 const char* Fl::theme_ = 0;
 int Fl::use_themes = 1;
-
-int fl_scheme_loaded = 0;
 
 static int handler_added = 0;
 static Fl_Theme_Handler _theme_handler = 0;
@@ -545,7 +543,7 @@ void Fl_Style::revert() {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.36 1999/11/23 14:07:28 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.37 1999/11/24 00:58:02 carl Exp $".
 //
 
 
