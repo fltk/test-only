@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.cxx,v 1.8 1999/03/18 22:59:03 carl Exp $"
+// "$Id: Fl_Chart.cxx,v 1.9 1999/05/06 05:52:13 carl Exp $"
 //
 // Forms-compatible chart widget for the Fast Light Tool Kit (FLTK).
 //
@@ -250,7 +250,6 @@ void Fl_Chart::loadstyle() const {
 }
 
 void Fl_Chart::draw() {
-    loadstyle();
     int xx,yy,ww,hh;
     int i;
 
@@ -408,24 +407,17 @@ void Fl_Chart::maxsize(int m) {
   }
 }
 
-Fl_Font Fl_Chart::textfont() const {
-  if (!_style || !(CHART_STYLE->sbf & bf(TEXTFONT)))
-    return (Fl_Font)DEFAULT_STYLE->chart(TEXTFONT);
-  return (Fl_Font)CHART_STYLE->chart(TEXTFONT);
+uchar Fl_Chart::attr(Attribute a) const {
+  loadstyle();
+  if (!_style || !(CHART_STYLE->sbf & bf(a)))
+    return DEFAULT_STYLE->chart(a);
+  return CHART_STYLE->chart(a);
 }
 
-uchar Fl_Chart::textsize() const {
-  if (!_style || !(CHART_STYLE->sbf & bf(TEXTSIZE)))
-    return DEFAULT_STYLE->chart(TEXTSIZE);
-  return CHART_STYLE->chart(TEXTSIZE);
-}
-
-Fl_Color Fl_Chart::textcolor() const {
-  if (!_style || !(CHART_STYLE->sbf & bf(TEXTCOLOR)))
-    return (Fl_Color)DEFAULT_STYLE->chart(TEXTCOLOR);
-  return (Fl_Color)CHART_STYLE->chart(TEXTCOLOR);
-}
+Fl_Font Fl_Chart::textfont() const { return (Fl_Font)attr(TEXTFONT); }
+uchar Fl_Chart::textsize() const { return attr(TEXTSIZE); }
+Fl_Color Fl_Chart::textcolor() const { return (Fl_Color)attr(TEXTCOLOR); }
 
 //
-// End of "$Id: Fl_Chart.cxx,v 1.8 1999/03/18 22:59:03 carl Exp $".
+// End of "$Id: Fl_Chart.cxx,v 1.9 1999/05/06 05:52:13 carl Exp $".
 //

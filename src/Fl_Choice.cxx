@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.16 1999/05/04 22:54:21 carl Exp $"
+// "$Id: Fl_Choice.cxx,v 1.17 1999/05/06 05:52:14 carl Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -70,7 +70,6 @@ void Fl_Choice::loadstyle() const {
 }
 
 void Fl_Choice::draw() {
-  loadstyle();
   Fl_Color col;
   Fl_Boxtype bt;
   if (fly_box() && Fl::belowmouse() == this)
@@ -148,20 +147,21 @@ int Fl_Choice::handle(int e) {
   }
 }
 
+uchar Fl_Choice::attr(Attribute a) const {
+  loadstyle();
+  if (!_style || !(CHOICE_STYLE->sbf & bf(a)))
+    return DEFAULT_STYLE->choice(a);
+  return CHOICE_STYLE->choice(a);
+}
+
 Fl_Boxtype Fl_Choice::fly_box() const {
   if (_style && (WIDGET_STYLE->sbf & bf(BOX)) && !(CHOICE_STYLE->sbf & bf(FLY_BOX)))
     return (Fl_Boxtype)WIDGET_STYLE->widget(BOX);
-  if (!_style || !(CHOICE_STYLE->sbf & bf(FLY_BOX)))
-    return (Fl_Boxtype)DEFAULT_STYLE->choice(FLY_BOX);
-  return (Fl_Boxtype)CHOICE_STYLE->choice(FLY_BOX);
+  return (Fl_Boxtype)attr(FLY_BOX);
 }
 
-Fl_Color Fl_Choice::fly_color() const {
-  if (!_style || !(CHOICE_STYLE->sbf & bf(FLY_COLOR)))
-    return (Fl_Color)DEFAULT_STYLE->choice(FLY_COLOR);
-  return (Fl_Color)CHOICE_STYLE->choice(FLY_COLOR);
-}
+Fl_Color Fl_Choice::fly_color() const {  return (Fl_Color)attr(FLY_COLOR); }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.16 1999/05/04 22:54:21 carl Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.17 1999/05/06 05:52:14 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.8 1999/05/04 22:54:22 carl Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.9 1999/05/06 05:52:17 carl Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,6 @@
 #define DEFAULT_STYLE ((Style*)default_style())
 
 void Fl_Menu_Button::draw() {
-  loadstyle();
   if (!box() || type()) return;
   Fl_Color col;
   Fl_Boxtype bt;
@@ -135,20 +134,21 @@ void Fl_Menu_Button::loadstyle() const {
 
 Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l) : Fl_Menu_(X,Y,W,H,l) {}
 
+uchar Fl_Menu_Button::attr(Attribute a) const {
+  loadstyle();
+  if (!_style || !(MENU_BUTTON_STYLE->sbf & bf(a)))
+    return DEFAULT_STYLE->menu_button(a);
+  return MENU_BUTTON_STYLE->menu_button(a);
+}
+
 Fl_Boxtype Fl_Menu_Button::fly_box() const {
   if (_style && (WIDGET_STYLE->sbf & bf(BOX)) && !(MENU_BUTTON_STYLE->sbf & bf(FLY_BOX)))
     return (Fl_Boxtype)WIDGET_STYLE->widget(BOX);
-  if (!_style || !(MENU_BUTTON_STYLE->sbf & bf(FLY_BOX)))
-    return (Fl_Boxtype)DEFAULT_STYLE->menu_button(FLY_BOX);
-  return (Fl_Boxtype)MENU_BUTTON_STYLE->menu_button(FLY_BOX);
+  return (Fl_Boxtype)attr(FLY_BOX);
 }
 
-Fl_Color Fl_Menu_Button::fly_color() const {
-  if (!_style || !(MENU_BUTTON_STYLE->sbf & bf(FLY_COLOR)))
-    return (Fl_Color)DEFAULT_STYLE->menu_button(FLY_COLOR);
-  return (Fl_Color)MENU_BUTTON_STYLE->menu_button(FLY_COLOR);
-}
+Fl_Color Fl_Menu_Button::fly_color() const { return (Fl_Color)attr(FLY_COLOR); }
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.8 1999/05/04 22:54:22 carl Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.9 1999/05/06 05:52:17 carl Exp $".
 //

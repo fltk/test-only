@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.13 1999/05/04 22:54:21 carl Exp $"
+// "$Id: Fl_Counter.cxx,v 1.14 1999/05/06 05:52:15 carl Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,6 @@
 #define DEFAULT_STYLE ((Style*)default_style())
 
 void Fl_Counter::draw() {
-  loadstyle();
   int i; Fl_Boxtype boxtype[5];
   Fl_Color selcolor;
 
@@ -219,44 +218,24 @@ Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(
   mouseobj = 0;
 }
 
-Fl_Font Fl_Counter::textfont() const {
-  if (!_style || !(COUNTER_STYLE->sbf & bf(TEXTFONT)))
-    return (Fl_Font)DEFAULT_STYLE->counter(TEXTFONT);
-  return (Fl_Font)COUNTER_STYLE->counter(TEXTFONT);
+uchar Fl_Counter::attr(Attribute a) const {
+  loadstyle();
+  if (!_style || !(COUNTER_STYLE->sbf & bf(a)))
+    return DEFAULT_STYLE->counter(a);
+  return COUNTER_STYLE->counter(a);
 }
 
-uchar Fl_Counter::textsize() const {
-  if (!_style || !(COUNTER_STYLE->sbf & bf(TEXTSIZE)))
-    return DEFAULT_STYLE->counter(TEXTSIZE);
-  return COUNTER_STYLE->counter(TEXTSIZE);
-}
-
-Fl_Color Fl_Counter::textcolor() const {
-  if (!_style || !(COUNTER_STYLE->sbf & bf(TEXTCOLOR)))
-    return (Fl_Color)DEFAULT_STYLE->counter(TEXTCOLOR);
-  return (Fl_Color)COUNTER_STYLE->counter(TEXTCOLOR);
-}
-
-Fl_Boxtype Fl_Counter::down_box() const {
-  if (!_style || !(COUNTER_STYLE->sbf & bf(DOWN_BOX)))
-    return (Fl_Boxtype)DEFAULT_STYLE->counter(DOWN_BOX);
-  return (Fl_Boxtype)COUNTER_STYLE->counter(DOWN_BOX);
-}
-
+Fl_Font Fl_Counter::textfont() const { return (Fl_Font)attr(TEXTFONT); }
+uchar Fl_Counter::textsize() const { return attr(TEXTSIZE); }
+Fl_Color Fl_Counter::textcolor() const { return (Fl_Color)attr(TEXTCOLOR); }
+Fl_Boxtype Fl_Counter::down_box() const { return (Fl_Boxtype)attr(DOWN_BOX); }
+Fl_Color Fl_Counter::fly_color() const { return (Fl_Color)attr(FLY_COLOR); }
 Fl_Boxtype Fl_Counter::fly_box() const {
   if (_style && (WIDGET_STYLE->sbf & bf(BOX)) && !(COUNTER_STYLE->sbf & bf(FLY_BOX)))
     return (Fl_Boxtype)WIDGET_STYLE->widget(BOX);
-  if (!_style || !(COUNTER_STYLE->sbf & bf(FLY_BOX)))
-    return (Fl_Boxtype)DEFAULT_STYLE->counter(FLY_BOX);
-  return (Fl_Boxtype)COUNTER_STYLE->counter(FLY_BOX);
-}
-
-Fl_Color Fl_Counter::fly_color() const {
-  if (!_style || !(COUNTER_STYLE->sbf & bf(FLY_COLOR)))
-    return (Fl_Color)DEFAULT_STYLE->counter(FLY_COLOR);
-  return (Fl_Color)COUNTER_STYLE->counter(FLY_COLOR);
+  return (Fl_Boxtype)attr(FLY_BOX);
 }
 
 //
-// End of "$Id: Fl_Counter.cxx,v 1.13 1999/05/04 22:54:21 carl Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.14 1999/05/06 05:52:15 carl Exp $".
 //

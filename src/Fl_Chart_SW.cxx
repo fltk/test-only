@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart_SW.cxx,v 1.2 1999/03/18 22:59:03 carl Exp $"
+// "$Id: Fl_Chart_SW.cxx,v 1.3 1999/05/06 05:52:13 carl Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,20 +23,12 @@
 
 #include <FL/Fl_Chart.H>
 
-void Fl_Chart::textfont(uchar s) {
+void Fl_Chart::attr(Attribute a, uchar c) {
   mstyle(&_style);
-  CHART_STYLE->sbf |= bf(TEXTFONT);
-  CHART_STYLE->chart(TEXTFONT)=s;
+  CHART_STYLE->sbf |= bf(a);
+  CHART_STYLE->chart(a)=c;
 }
 
-void Fl_Chart::textsize(uchar s) {
-  mstyle(&_style);
-  CHART_STYLE->sbf |= bf(TEXTSIZE);
-  CHART_STYLE->chart(TEXTSIZE)=s;
-}
-
-void Fl_Chart::textcolor(uchar n) {
-  mstyle(&_style);
-  CHART_STYLE->sbf |= bf(TEXTCOLOR);
-  CHART_STYLE->chart(TEXTCOLOR)=n;
-}
+void Fl_Chart::textfont(uchar s) { attr(TEXTFONT, s); }
+void Fl_Chart::textsize(uchar s) { attr(TEXTSIZE, s); }
+void Fl_Chart::textcolor(uchar n) { attr(TEXTCOLOR, n); }

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.14 1999/04/04 03:45:25 gustavo Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.15 1999/05/06 05:52:17 carl Exp $"
 //
 // Common menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -185,32 +185,6 @@ void Fl_Menu_::clear() {
   }
 }
 
-Fl_Font Fl_Menu_::textfont() const {
-  if (!_style || !(MENU_STYLE->sbf & bf(TEXTFONT)))
-    return (Fl_Font)DEFAULT_STYLE->menu(TEXTFONT);
-  return (Fl_Font)MENU_STYLE->menu(TEXTFONT);
-}
-
-uchar Fl_Menu_::textsize() const {
-  if (!_style || !(MENU_STYLE->sbf & bf(TEXTSIZE)))
-    return DEFAULT_STYLE->menu(TEXTSIZE);
-  return MENU_STYLE->menu(TEXTSIZE);
-}
-
-Fl_Color Fl_Menu_::textcolor() const {
-  if (!_style || !(MENU_STYLE->sbf & bf(TEXTCOLOR)))
-    return (Fl_Color)DEFAULT_STYLE->menu(TEXTCOLOR);
-  return (Fl_Color)MENU_STYLE->menu(TEXTCOLOR);
-}
-
-Fl_Boxtype Fl_Menu_::down_box() const {
-  if (!_style || !(MENU_STYLE->sbf & bf(DOWN_BOX)))
-    return (Fl_Boxtype)DEFAULT_STYLE->menu(DOWN_BOX);
-  return (Fl_Boxtype)MENU_STYLE->menu(DOWN_BOX);
-}
-
-Fl_Color Fl_Menu_::down_color() const {return selection_color();}
-
 void Fl_Menu_::copy(const Fl_Menu_Item* m, void* user_data) {
   int n = m->size()+1;
   Fl_Menu_Item* newMenu = new Fl_Menu_Item[n];
@@ -224,6 +198,19 @@ void Fl_Menu_::copy(const Fl_Menu_Item* m, void* user_data) {
   }
 }
 
+uchar Fl_Menu_::attr(Attribute a) const {
+  loadstyle();
+  if (!_style || !(MENU_STYLE->sbf & bf(a)))
+    return DEFAULT_STYLE->menu(a);
+  return MENU_STYLE->menu(a);
+}
+
+Fl_Font Fl_Menu_::textfont() const { return (Fl_Font)attr(TEXTFONT); }
+uchar Fl_Menu_::textsize() const { return attr(TEXTSIZE); }
+Fl_Color Fl_Menu_::textcolor() const { return (Fl_Color)attr(TEXTCOLOR); }
+Fl_Boxtype Fl_Menu_::down_box() const { return (Fl_Boxtype)attr(DOWN_BOX); }
+Fl_Color Fl_Menu_::down_color() const {return selection_color();}
+
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.14 1999/04/04 03:45:25 gustavo Exp $".
+// End of "$Id: Fl_Menu_.cxx,v 1.15 1999/05/06 05:52:17 carl Exp $".
 //

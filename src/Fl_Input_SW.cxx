@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_SW.cxx,v 1.2 1999/03/18 22:59:06 carl Exp $"
+// "$Id: Fl_Input_SW.cxx,v 1.3 1999/05/06 05:52:16 carl Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,33 +23,14 @@
 
 #include <FL/Fl_Input_.H>
 
-void Fl_Input_::textfont(uchar s) {
+void Fl_Input_::attr(Attribute a, uchar c) {
   mstyle(&_style);
-  INPUT_STYLE->sbf |= bf(TEXTFONT);
-  INPUT_STYLE->input(TEXTFONT)=s;
+  INPUT_STYLE->sbf |= bf(a);
+  INPUT_STYLE->input(a)=c;
 }
 
-void Fl_Input_::textsize(uchar s) {
-  mstyle(&_style);
-  INPUT_STYLE->sbf |= bf(TEXTSIZE);
-  INPUT_STYLE->input(TEXTSIZE)=s;
-}
-
-void Fl_Input_::textcolor(uchar n) {
-  mstyle(&_style);
-  INPUT_STYLE->sbf |= bf(TEXTCOLOR);
-  INPUT_STYLE->input(TEXTCOLOR)=n;
-}
-
-void Fl_Input_::cursor_color(uchar n) {
-  mstyle(&_style);
-  INPUT_STYLE->sbf |= bf(CURSOR_COLOR);
-  INPUT_STYLE->input(CURSOR_COLOR)=n;
-}
-
-void Fl_Input_::selected_textcolor(uchar n) {
-  mstyle(&_style);
-  INPUT_STYLE->sbf |= bf(SELECTED_TEXTCOLOR);
-  INPUT_STYLE->input(SELECTED_TEXTCOLOR)=n;
-}
-
+void Fl_Input_::textfont(uchar s) { attr(TEXTFONT, s); }
+void Fl_Input_::textsize(uchar s) { attr(TEXTSIZE, s); }
+void Fl_Input_::textcolor(uchar n) { attr(TEXTCOLOR, n); }
+void Fl_Input_::cursor_color(uchar n) { attr(CURSOR_COLOR, n); }
+void Fl_Input_::selected_textcolor(uchar n) { attr(SELECTED_TEXTCOLOR, n); }

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.10 1999/04/10 19:29:48 gustavo Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.11 1999/05/06 05:52:21 carl Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -185,8 +185,6 @@ int Fl_Tabs::value(Fl_Widget *o) {
 enum {LEFT, RIGHT, SELECTED};
 
 void Fl_Tabs::draw() {
-  loadstyle();
-
   Fl_Widget *v = value();
 
   // Make sure the tab's label isn't drawn normally
@@ -270,5 +268,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l) :
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.10 1999/04/10 19:29:48 gustavo Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.11 1999/05/06 05:52:21 carl Exp $".
 //

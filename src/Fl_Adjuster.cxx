@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.10 1999/05/04 22:54:20 carl Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.11 1999/05/06 05:52:11 carl Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -67,7 +67,6 @@ void Fl_Adjuster::loadstyle() const {
 void Fl_Adjuster::value_damage() {}
 
 void Fl_Adjuster::draw() {
-  loadstyle();
   int dx, dy, W, H;
   if (w()>=h()) {
     dx = W = w()/3;
@@ -183,20 +182,21 @@ Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,
   soft_ = 1;
 }
 
-Fl_Color Fl_Adjuster::fly_color() const {
-  if (!_style || !(ADJUSTER_STYLE->sbf & bf(FLY_COLOR)))
-    return (Fl_Color)DEFAULT_STYLE->adjuster(FLY_COLOR);
-  return (Fl_Color)ADJUSTER_STYLE->adjuster(FLY_COLOR);
+uchar Fl_Adjuster::attr(Attribute a) const {
+  loadstyle();
+  if (!_style || !(ADJUSTER_STYLE->sbf & bf(a)))
+    return DEFAULT_STYLE->adjuster(a);
+  return ADJUSTER_STYLE->adjuster(a);
 }
+
+Fl_Color Fl_Adjuster::fly_color() const {return (Fl_Color)attr(FLY_COLOR);}
 
 Fl_Boxtype Fl_Adjuster::fly_box() const {
   if (_style && (WIDGET_STYLE->sbf & bf(BOX)) && !(ADJUSTER_STYLE->sbf & bf(FLY_BOX)))
     return (Fl_Boxtype)WIDGET_STYLE->widget(BOX);
-  if (!_style || !(ADJUSTER_STYLE->sbf & bf(FLY_BOX)))
-    return (Fl_Boxtype)DEFAULT_STYLE->adjuster(FLY_BOX);
-  return (Fl_Boxtype)ADJUSTER_STYLE->adjuster(FLY_BOX);
+  return (Fl_Boxtype)attr(FLY_BOX);
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.10 1999/05/04 22:54:20 carl Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.11 1999/05/06 05:52:11 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.11 1999/05/04 22:54:20 carl Exp $"
+// "$Id: Fl_Button.cxx,v 1.12 1999/05/06 05:52:13 carl Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -160,38 +160,24 @@ Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h
   set_flag(SHORTCUT_LABEL);
 }
 
-Fl_Boxtype Fl_Button::fly_box() const {
+uchar Fl_Button::attr(Attribute a) const {
   loadstyle();
+  if (!_style || !(BUTTON_STYLE->sbf & bf(a)))
+    return DEFAULT_STYLE->button(a);
+  return BUTTON_STYLE->button(a);
+}
+
+Fl_Boxtype Fl_Button::fly_box() const {
   if (_style && (WIDGET_STYLE->sbf & bf(BOX)) && !(BUTTON_STYLE->sbf & bf(FLY_BOX)))
     return (Fl_Boxtype)WIDGET_STYLE->widget(BOX);
-  if (!_style || !(BUTTON_STYLE->sbf & bf(FLY_BOX)))
-    return (Fl_Boxtype)DEFAULT_STYLE->button(FLY_BOX);
-  return (Fl_Boxtype)BUTTON_STYLE->button(FLY_BOX);
+  return (Fl_Boxtype)attr(FLY_BOX);
 }
 
-Fl_Color Fl_Button::fly_color() const {
-  loadstyle();
-  if (!_style || !(BUTTON_STYLE->sbf & bf(FLY_COLOR)))
-    return (Fl_Color)DEFAULT_STYLE->button(FLY_COLOR);
-  return (Fl_Color)BUTTON_STYLE->button(FLY_COLOR);
-}
-
-Fl_Boxtype Fl_Button::down_box() const {
-  loadstyle();
-  if (!_style || !(BUTTON_STYLE->sbf & bf(DOWN_BOX)))
-    return (Fl_Boxtype)DEFAULT_STYLE->button(DOWN_BOX);
-  return (Fl_Boxtype)BUTTON_STYLE->button(DOWN_BOX);
-}
-
-Fl_Color Fl_Button::down_labelcolor() const {
-  loadstyle();
-  if (!_style || !(BUTTON_STYLE->sbf & bf(DOWN_LABELCOLOR)))
-    return (Fl_Color)DEFAULT_STYLE->button(DOWN_LABELCOLOR);
-  return (Fl_Color)BUTTON_STYLE->button(DOWN_LABELCOLOR);
-}
-
+Fl_Color Fl_Button::fly_color() const { return (Fl_Color)attr(FLY_COLOR); }
+Fl_Boxtype Fl_Button::down_box() const { return (Fl_Boxtype)attr(DOWN_BOX); }
+Fl_Color Fl_Button::down_labelcolor() const { return (Fl_Color)attr(DOWN_LABELCOLOR); }
 Fl_Color Fl_Button::down_color() const {return selection_color();}
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.11 1999/05/04 22:54:20 carl Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.12 1999/05/06 05:52:13 carl Exp $".
 //

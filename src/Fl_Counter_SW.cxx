@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter_SW.cxx,v 1.2 1999/03/18 22:59:04 carl Exp $"
+// "$Id: Fl_Counter_SW.cxx,v 1.3 1999/05/06 05:52:15 carl Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,39 +23,15 @@
 
 #include <FL/Fl_Counter.H>
 
-void Fl_Counter::textfont(uchar s) {
+void Fl_Counter::attr(Attribute a, uchar c) {
   mstyle(&_style);
-  COUNTER_STYLE->sbf |= bf(TEXTFONT);
-  COUNTER_STYLE->counter(TEXTFONT)=s;
+  COUNTER_STYLE->sbf |= bf(a);
+  COUNTER_STYLE->counter(a)=c;
 }
 
-void Fl_Counter::textsize(uchar s) {
-  mstyle(&_style);
-  COUNTER_STYLE->sbf |= bf(TEXTSIZE);
-  COUNTER_STYLE->counter(TEXTSIZE)=s;
-}
-
-void Fl_Counter::textcolor(uchar n) {
-  mstyle(&_style);
-  COUNTER_STYLE->sbf |= bf(TEXTCOLOR);
-  COUNTER_STYLE->counter(TEXTCOLOR)=n;
-}
-
-void Fl_Counter::down_box(Fl_Boxtype b) {
-  mstyle(&_style);
-  COUNTER_STYLE->sbf |= bf(DOWN_BOX);
-  COUNTER_STYLE->counter(DOWN_BOX)=b;
-}
-
-void Fl_Counter::fly_box(Fl_Boxtype b) {
-  mstyle(&_style);
-  COUNTER_STYLE->sbf |= bf(FLY_BOX);
-  COUNTER_STYLE->counter(FLY_BOX)=b;
-}
-
-void Fl_Counter::fly_color(uchar c) {
-  mstyle(&_style);
-  COUNTER_STYLE->sbf |= bf(FLY_COLOR);
-  COUNTER_STYLE->counter(FLY_COLOR)=c;
-}
-
+void Fl_Counter::textfont(uchar s) { attr(TEXTFONT, s); }
+void Fl_Counter::textsize(uchar s) { attr(TEXTSIZE, s); }
+void Fl_Counter::textcolor(uchar n) { attr(TEXTCOLOR, n); }
+void Fl_Counter::down_box(Fl_Boxtype b) { attr(DOWN_BOX, b); }
+void Fl_Counter::fly_box(Fl_Boxtype b) { attr(FLY_BOX, b); }
+void Fl_Counter::fly_color(uchar c) { attr(FLY_COLOR, c); }

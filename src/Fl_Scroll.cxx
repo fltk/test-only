@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.8 1999/03/14 06:46:34 carl Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.9 1999/05/06 05:52:20 carl Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -84,7 +84,6 @@ void Fl_Scroll::bbox(int& X, int& Y, int& W, int& H) {
 }
 
 void Fl_Scroll::draw() {
-  loadstyle();
   fix_scrollbar_order();
   int X,Y,W,H; bbox(X,Y,W,H);
 
@@ -232,5 +231,5 @@ int Fl_Scroll::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.8 1999/03/14 06:46:34 carl Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.9 1999/05/06 05:52:20 carl Exp $".
 //

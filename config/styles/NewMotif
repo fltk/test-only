@@ -1,6 +1,6 @@
 description = Modern Motif Style
 author = Carl Thompson (clip@home.net)
-version = 8
+version = 9
 
 [global]
   widget style = Motif
@@ -16,6 +16,7 @@ version = 8
   down label color = 0
   down color = 49
   down box = 38
+  light color = 43
   menu title down color = 49
   menu title down label color = 0
   menu title down box = 38

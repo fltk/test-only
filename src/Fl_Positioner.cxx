@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Positioner.cxx,v 1.6 1999/04/04 03:45:25 gustavo Exp $"
+// "$Id: Fl_Positioner.cxx,v 1.7 1999/05/06 05:52:19 carl Exp $"
 //
 // Positioner widget for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,6 @@ static double flinear(double val, double smin, double smax, double gmin, double 
 }
 
 void Fl_Positioner::draw(int x, int y, int w, int h) {
-  loadstyle();
   int x1 = x + 4;
   int y1 = y + 4;
   int w1 = w - 2 * 4;
@@ -132,5 +131,5 @@ void Fl_Positioner::ybounds(double a, double b) {
 }
 
 //
-// End of "$Id: Fl_Positioner.cxx,v 1.6 1999/04/04 03:45:25 gustavo Exp $".
+// End of "$Id: Fl_Positioner.cxx,v 1.7 1999/05/06 05:52:19 carl Exp $".
 //

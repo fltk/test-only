@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.15 1999/05/04 22:54:22 carl Exp $"
+// "$Id: Fl_Slider.cxx,v 1.16 1999/05/06 05:52:20 carl Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -130,7 +130,6 @@ void Fl_Slider::draw_bg(int x, int y, int w, int h) {
 }
 
 void Fl_Slider::draw(int x, int y, int w, int h) {
-  loadstyle();
   double val;
 
   if (minimum() == maximum())
@@ -319,18 +318,16 @@ int Fl_Slider::handle(int event) {
   return handle(event, x(), y(), w(), h());
 }
 
-Fl_Boxtype Fl_Slider::slider() const {
-  if (!_style || !(SLIDER_STYLE->sbf & bf(SLIDER_BOX)))
-    return (Fl_Boxtype)DEFAULT_STYLE->slider(SLIDER_BOX);
-  return (Fl_Boxtype)SLIDER_STYLE->slider(SLIDER_BOX);
+uchar Fl_Slider::attr(Attribute a) const {
+  loadstyle();
+  if (!_style || !(SLIDER_STYLE->sbf & bf(a)))
+    return DEFAULT_STYLE->slider(a);
+  return SLIDER_STYLE->slider(a);
 }
 
-Fl_Color Fl_Slider::fly_color() const {
-  if (!_style || !(SLIDER_STYLE->sbf & bf(FLY_COLOR)))
-    return (Fl_Color)DEFAULT_STYLE->slider(FLY_COLOR);
-  return (Fl_Color)SLIDER_STYLE->slider(FLY_COLOR);
-}
+Fl_Boxtype Fl_Slider::slider() const { return (Fl_Boxtype)attr(SLIDER_BOX); }
+Fl_Color Fl_Slider::fly_color() const { return (Fl_Color)attr(FLY_COLOR); }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.15 1999/05/04 22:54:22 carl Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.16 1999/05/06 05:52:20 carl Exp $".
 //

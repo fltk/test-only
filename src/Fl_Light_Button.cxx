@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.cxx,v 1.7 1999/04/04 03:45:25 gustavo Exp $"
+// "$Id: Fl_Light_Button.cxx,v 1.8 1999/05/06 05:52:16 carl Exp $"
 //
 // Lighted button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,6 @@
 #define DEFAULT_STYLE ((Style*)default_style())
 
 void Fl_Light_Button::draw() {
-  loadstyle();
   Fl_Color col;
   Fl_Boxtype bt;
   if (fly_box() && Fl::belowmouse() == this)
@@ -123,5 +122,5 @@ Fl_Light_Button::Fl_Light_Button(int x, int y, int w, int h, const char *l) : Fl
 }
 
 //
-// End of "$Id: Fl_Light_Button.cxx,v 1.7 1999/04/04 03:45:25 gustavo Exp $".
+// End of "$Id: Fl_Light_Button.cxx,v 1.8 1999/05/06 05:52:16 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_SW.cxx,v 1.2 1999/03/18 22:59:11 carl Exp $"
+// "$Id: Fl_Widget_SW.cxx,v 1.3 1999/05/06 05:52:22 carl Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,66 +23,20 @@
 
 #include <FL/Fl_Widget.H>
 
-void Fl_Widget::box(Fl_Boxtype a) {
+void Fl_Widget::attr(Attribute a, uchar c) {
   mstyle(&_style);
-  WIDGET_STYLE->sbf |= bf(BOX);
-  WIDGET_STYLE->widget(BOX)=a;
+  WIDGET_STYLE->sbf |= bf(a);
+  WIDGET_STYLE->widget(a)=c;
 }
 
-void Fl_Widget::color(uchar a) {
-  mstyle(&_style);
-  WIDGET_STYLE->sbf |= bf(COLOR);
-  WIDGET_STYLE->widget(COLOR)=a;
-}
-
-void Fl_Widget::selection_color(uchar a) {
-  mstyle(&_style);
-  WIDGET_STYLE->sbf |= bf(COLOR2);
-  WIDGET_STYLE->widget(COLOR2)=a;
-}
-
-void Fl_Widget::color3(uchar a) {
-  mstyle(&_style);
-  WIDGET_STYLE->sbf |= bf(COLOR3);
-  WIDGET_STYLE->widget(COLOR3)=a;
-}
-
-void Fl_Widget::color(uchar a, uchar b) {
-  mstyle(&_style);
-  WIDGET_STYLE->sbf |= (bf(COLOR) | bf(COLOR2));
-  WIDGET_STYLE->widget(COLOR)=a;
-  WIDGET_STYLE->widget(COLOR2)=b;
-}
-
-void Fl_Widget::label(Fl_Labeltype a,const char* b) {
-  mstyle(&_style);
-  WIDGET_STYLE->sbf |= bf(LABELTYPE);
-  WIDGET_STYLE->widget(LABELTYPE)=a;
-  label_=b;
-}
-
-void Fl_Widget::labeltype(Fl_Labeltype a) {
-  mstyle(&_style);
-  WIDGET_STYLE->sbf |= bf(LABELTYPE);
-  WIDGET_STYLE->widget(LABELTYPE)=a;
-}
-
-void Fl_Widget::labelcolor(uchar a) {
-  mstyle(&_style);
-  WIDGET_STYLE->sbf |= bf(LABELCOLOR);
-  WIDGET_STYLE->widget(LABELCOLOR)=a;
-}
-
-void Fl_Widget::labelfont(uchar a) {
-  mstyle(&_style);
-  WIDGET_STYLE->sbf |= bf(LABELFONT);
-  WIDGET_STYLE->widget(LABELFONT)=a;
-}
-
-void Fl_Widget::labelsize(uchar a) {
-  mstyle(&_style);
-  WIDGET_STYLE->sbf |= bf(LABELSIZE);
-  WIDGET_STYLE->widget(LABELSIZE)=a;
-}
-
+void Fl_Widget::box(Fl_Boxtype a) { attr(BOX, a); }
+void Fl_Widget::color(uchar a) { attr(COLOR, a); }
+void Fl_Widget::selection_color(uchar a) { attr(COLOR2, a); }
+void Fl_Widget::color3(uchar a) { attr(COLOR3, a); }
+void Fl_Widget::color(uchar a, uchar b) { attr(COLOR, a); attr(COLOR2, b); }
+void Fl_Widget::label(Fl_Labeltype a, const char* b) { attr(LABELTYPE, a); label_ = b; }
+void Fl_Widget::labeltype(Fl_Labeltype a) { attr(LABELTYPE, a); }
+void Fl_Widget::labelcolor(uchar a) { attr(LABELCOLOR, a); }
+void Fl_Widget::labelfont(uchar a) { attr(LABELFONT, a); }
+void Fl_Widget::labelsize(uchar a) { attr(LABELSIZE, a); }
 void Fl_Widget::color2(uchar a) {selection_color(a);}

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.H,v 1.11 1999/03/18 22:58:52 carl Exp $"
+// "$Id: Fl_Browser_.H,v 1.12 1999/05/06 05:52:07 carl Exp $"
 //
 // Common browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -117,22 +117,6 @@ public:
   void scrollbar_right() {scrollbar.align(FL_ALIGN_RIGHT);}
   void scrollbar_left() {scrollbar.align(FL_ALIGN_LEFT);}
 
-private:
-  void* top_;		// which item scrolling position is in
-  void* selection_;	// which is selected (except for FL_MULTI_BROWSER)
-  void *redraw1,*redraw2; // minimal update pointers
-  void* max_width_item;	// which item has max_width_
-  int position_;	// where user wants it scrolled to
-  int real_position_;	// the current vertical scrolling position
-  int hposition_;	// where user wants it panned to
-  int real_hposition_;	// the current horizontal scrolling position
-  int offset_;		// how far down top_ item the real_position is
-  int max_width;	// widest object seen so far
-  static int scrollbar_width_;
-  uchar has_scrollbar_;	// which scrollbars are enabled
-
-  void update_top();
-
 protected:
   static Fl_Widget::Style* _default_style;
 
@@ -174,10 +158,29 @@ protected:
   void draw();
   int handle(int);
   Fl_Browser_(int,int,int,int,const char * = 0);
+
+private:
+  void* top_;		// which item scrolling position is in
+  void* selection_;	// which is selected (except for FL_MULTI_BROWSER)
+  void *redraw1,*redraw2; // minimal update pointers
+  void* max_width_item;	// which item has max_width_
+  int position_;	// where user wants it scrolled to
+  int real_position_;	// the current vertical scrolling position
+  int hposition_;	// where user wants it panned to
+  int real_hposition_;	// the current horizontal scrolling position
+  int offset_;		// how far down top_ item the real_position is
+  int max_width;	// widest object seen so far
+  static int scrollbar_width_;
+  uchar has_scrollbar_;	// which scrollbars are enabled
+
+  void update_top();
+
+  uchar attr(Attribute) const;
+  void attr(Attribute, uchar);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Browser_.H,v 1.11 1999/03/18 22:58:52 carl Exp $".
+// End of "$Id: Fl_Browser_.H,v 1.12 1999/05/06 05:52:07 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button_SW.cxx,v 1.2 1999/03/18 22:59:03 carl Exp $"
+// "$Id: Fl_Button_SW.cxx,v 1.3 1999/05/06 05:52:13 carl Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,29 +23,15 @@
 
 #include <FL/Fl_Button.H>
 
-void Fl_Button::down_box(Fl_Boxtype b) {
+void Fl_Button::attr(Attribute a, uchar c) {
   mstyle(&_style);
-  BUTTON_STYLE->sbf |= bf(DOWN_BOX);
-  BUTTON_STYLE->button(DOWN_BOX)=b;
+  BUTTON_STYLE->sbf |= bf(a);
+  BUTTON_STYLE->button(a)=c;
 }
 
-void Fl_Button::fly_box(Fl_Boxtype b) {
-  mstyle(&_style);
-  BUTTON_STYLE->sbf |= bf(FLY_BOX);
-  BUTTON_STYLE->button(FLY_BOX)=b;
-}
-
-void Fl_Button::down_labelcolor(uchar c) {
-  mstyle(&_style);
-  BUTTON_STYLE->sbf |= bf(DOWN_LABELCOLOR);
-  BUTTON_STYLE->button(DOWN_LABELCOLOR)=c;
-}
-
-void Fl_Button::fly_color(uchar c) {
-  mstyle(&_style);
-  BUTTON_STYLE->sbf |= bf(FLY_COLOR);
-  BUTTON_STYLE->button(FLY_COLOR)=c;
-}
-
+void Fl_Button::down_box(Fl_Boxtype b) { attr(DOWN_BOX, b); }
+void Fl_Button::down_labelcolor(uchar c) { attr(DOWN_LABELCOLOR, c); }
+void Fl_Button::fly_box(Fl_Boxtype b) { attr(FLY_BOX, b); }
+void Fl_Button::fly_color(uchar c) { attr(FLY_COLOR, c); }
 void Fl_Button::down_color(uchar c) {selection_color(c);}
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.11 1999/04/11 02:39:17 carl Exp $"
+// "$Id: Fl_Widget.cxx,v 1.12 1999/05/06 05:52:22 carl Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -242,64 +242,36 @@ void Fl_Widget::measure_label(int& x, int& y) {
   l1.measure(x, y);
 }
 
-Fl_Boxtype Fl_Widget::box() const {
+// This file contains the parts of Fl_Tooltip.H that are always linked
+// in.  Calling Fl_Widget::tooltip(const char*) will change the function
+// pointers below and link in the tooltip popup code.
+
+// It is also possible to change the function pointers to your own code
+// if you want to display tooltips in your own way such as in a field
+// in your main window.
+
+static void nada(Fl_Widget*) {} // dummy place-holder function
+
+void (*fl_tooltip_enter)(Fl_Widget *) = nada;
+void (*fl_tooltip_exit)(Fl_Widget *) = nada;
+
+uchar Fl_Widget::attr(Attribute a) const {
   loadstyle();
-  if (!_style || !(WIDGET_STYLE->sbf & bf(BOX)))
-    return (Fl_Boxtype)DEFAULT_STYLE->widget(BOX);
-  return (Fl_Boxtype)WIDGET_STYLE->widget(BOX);
+  if (!_style || !(WIDGET_STYLE->sbf & bf(a)))
+    return DEFAULT_STYLE->widget(a);
+  return WIDGET_STYLE->widget(a);
 }
 
-Fl_Color Fl_Widget::color() const {
-  loadstyle();
-  if (!_style || !(WIDGET_STYLE->sbf & bf(COLOR)))
-    return (Fl_Color)DEFAULT_STYLE->widget(COLOR);
-  return (Fl_Color)WIDGET_STYLE->widget(COLOR);
-}
-
-Fl_Color Fl_Widget::selection_color() const {
-  loadstyle();
-  if (!_style || !(WIDGET_STYLE->sbf & bf(COLOR2)))
-    return (Fl_Color)DEFAULT_STYLE->widget(COLOR2);
-  return (Fl_Color)WIDGET_STYLE->widget(COLOR2);
-}
-
-Fl_Color Fl_Widget::color3() const {
-  loadstyle();
-  if (!_style || !(WIDGET_STYLE->sbf & bf(COLOR3)))
-    return (Fl_Color)DEFAULT_STYLE->widget(COLOR3);
-  return (Fl_Color)WIDGET_STYLE->widget(COLOR3);
-}
-
-Fl_Labeltype Fl_Widget::labeltype() const {
-  loadstyle();
-  if (!_style || !(WIDGET_STYLE->sbf & bf(LABELTYPE)))
-    return (Fl_Labeltype)DEFAULT_STYLE->widget(LABELTYPE);
-  return (Fl_Labeltype)WIDGET_STYLE->widget(LABELTYPE);
-}
-
-Fl_Color Fl_Widget::labelcolor() const {
-  loadstyle();
-  if (!_style || !(WIDGET_STYLE->sbf & bf(LABELCOLOR)))
-    return (Fl_Color)DEFAULT_STYLE->widget(LABELCOLOR);
-  return (Fl_Color)WIDGET_STYLE->widget(LABELCOLOR);
-}
-
-Fl_Font Fl_Widget::labelfont() const {
-  loadstyle();
-  if (!_style || !(WIDGET_STYLE->sbf & bf(LABELFONT)))
-    return (Fl_Font)DEFAULT_STYLE->widget(LABELFONT);
-  return (Fl_Font)WIDGET_STYLE->widget(LABELFONT);
-}
-
-uchar Fl_Widget::labelsize() const {
-  loadstyle();
-  if (!_style || !(WIDGET_STYLE->sbf & bf(LABELSIZE)))
-    return DEFAULT_STYLE->widget(LABELSIZE);
-  return WIDGET_STYLE->widget(LABELSIZE);
-}
-
+Fl_Boxtype Fl_Widget::box() const { return (Fl_Boxtype)attr(BOX); }
+Fl_Color Fl_Widget::color() const { return (Fl_Color)attr(COLOR); }
+Fl_Color Fl_Widget::selection_color() const { return (Fl_Color)attr(COLOR2); }
+Fl_Color Fl_Widget::color3() const { return (Fl_Color)attr(COLOR3); }
+Fl_Labeltype Fl_Widget::labeltype() const { return (Fl_Labeltype)attr(LABELTYPE); }
+Fl_Color Fl_Widget::labelcolor() const { return (Fl_Color)attr(LABELCOLOR); }
+Fl_Font Fl_Widget::labelfont() const { return (Fl_Font)attr(LABELFONT); }
+uchar Fl_Widget::labelsize() const { return attr(LABELSIZE); }
 Fl_Color Fl_Widget::color2() const {return selection_color();}
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.11 1999/04/11 02:39:17 carl Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.12 1999/05/06 05:52:22 carl Exp $".
 //

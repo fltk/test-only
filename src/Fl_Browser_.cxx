@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.14 1999/04/04 03:45:23 gustavo Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.15 1999/05/06 05:52:12 carl Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -253,7 +253,6 @@ void Fl_Browser_::display(void* x) {
 // redraw, has side effect of updating top and setting scrollbar:
 
 void Fl_Browser_::draw() {
-  loadstyle();
   int drawsquare = 0;
   if (damage() & FL_DAMAGE_ALL) { // redraw the box if full redraw
     Fl_Boxtype b = box() ? box() : FL_DOWN_BOX;
@@ -673,29 +672,18 @@ void Fl_Browser_::item_select(void*, int) {}
 
 int Fl_Browser_::item_selected(void* l) const {return l==selection_;}
 
-Fl_Font Fl_Browser_::textfont() const {
-  if (!_style || !(BROWSER_STYLE->sbf & bf(TEXTFONT)))
-    return (Fl_Font)DEFAULT_STYLE->browser(TEXTFONT);
-  return (Fl_Font)BROWSER_STYLE->browser(TEXTFONT);
+uchar Fl_Browser_::attr(Attribute a) const {
+  loadstyle();
+  if (!_style || !(BROWSER_STYLE->sbf & bf(a)))
+    return DEFAULT_STYLE->browser(a);
+  return BROWSER_STYLE->browser(a);
 }
 
-uchar Fl_Browser_::textsize() const {
-  if (!_style || !(BROWSER_STYLE->sbf & bf(TEXTSIZE)))
-    return DEFAULT_STYLE->browser(TEXTSIZE);
-  return BROWSER_STYLE->browser(TEXTSIZE);
-}
+Fl_Font Fl_Browser_::textfont() const { return (Fl_Font)attr(TEXTFONT); }
+uchar Fl_Browser_::textsize() const { return attr(TEXTSIZE); }
+Fl_Color Fl_Browser_::textcolor() const { return (Fl_Color)attr(TEXTCOLOR); }
+Fl_Color Fl_Browser_::selected_textcolor() const { return (Fl_Color)attr(SELECTED_TEXTCOLOR); }
 
-Fl_Color Fl_Browser_::textcolor() const {
-  if (!_style || !(BROWSER_STYLE->sbf & bf(TEXTCOLOR)))
-    return (Fl_Color)DEFAULT_STYLE->browser(TEXTCOLOR);
-  return (Fl_Color)BROWSER_STYLE->browser(TEXTCOLOR);
-}
-
-Fl_Color Fl_Browser_::selected_textcolor() const {
-  if (!_style || !(BROWSER_STYLE->sbf & bf(TEXTCOLOR)))
-    return (Fl_Color)DEFAULT_STYLE->browser(SELECTED_TEXTCOLOR);
-  return (Fl_Color)BROWSER_STYLE->browser(SELECTED_TEXTCOLOR);
-}
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.14 1999/04/04 03:45:23 gustavo Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.15 1999/05/06 05:52:12 carl Exp $".
 //

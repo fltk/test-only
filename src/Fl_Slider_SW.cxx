@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider_SW.cxx,v 1.2 1999/03/18 22:59:10 carl Exp $"
+// "$Id: Fl_Slider_SW.cxx,v 1.3 1999/05/06 05:52:20 carl Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,15 +23,11 @@
 
 #include <FL/Fl_Slider.H>
 
-void Fl_Slider::slider(Fl_Boxtype b) {
+void Fl_Slider::attr(Attribute a, uchar c) {
   mstyle(&_style);
-  SLIDER_STYLE->sbf |= bf(SLIDER_BOX);
-  SLIDER_STYLE->slider(SLIDER_BOX)=b;
+  SLIDER_STYLE->sbf |= bf(a);
+  SLIDER_STYLE->slider(a)=c;
 }
 
-void Fl_Slider::fly_color(uchar c) {
-  mstyle(&_style);
-  SLIDER_STYLE->sbf |= bf(FLY_COLOR);
-  SLIDER_STYLE->slider(FLY_COLOR)=c;
-}
-
+void Fl_Slider::slider(Fl_Boxtype b) { attr(SLIDER_BOX, b); }
+void Fl_Slider::fly_color(uchar c) { attr(FLY_COLOR, c); }

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.H,v 1.11 1999/03/18 22:58:54 carl Exp $"
+// "$Id: Fl_Input_.H,v 1.12 1999/05/06 05:52:08 carl Exp $"
 //
 // Input base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -151,10 +151,13 @@ private:
   void put_in_buffer(int newsize);
 
   void setfont() const;
+
+  uchar attr(Attribute) const;
+  void attr(Attribute, uchar);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Input_.H,v 1.11 1999/03/18 22:58:54 carl Exp $".
+// End of "$Id: Fl_Input_.H,v 1.12 1999/05/06 05:52:08 carl Exp $".
 //

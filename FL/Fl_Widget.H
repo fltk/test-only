@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.19 1999/05/04 22:54:18 carl Exp $"
+// "$Id: Fl_Widget.H,v 1.20 1999/05/06 05:52:09 carl Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -263,6 +263,10 @@ private:
   // "de-implement" the copy constructors:
   Fl_Widget & operator=(const Fl_Widget &);
   Fl_Widget(const Fl_Widget &);
+
+  uchar attr(Attribute) const;
+  void attr(Attribute, uchar);
+
 };
 
 // reserved type numbers (necessary for my cheapo RTTI) start here.
@@ -273,5 +277,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.19 1999/05/04 22:54:18 carl Exp $".
+// End of "$Id: Fl_Widget.H,v 1.20 1999/05/06 05:52:09 carl Exp $".
 //

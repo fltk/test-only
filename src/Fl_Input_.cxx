@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.cxx,v 1.25 1999/04/04 03:45:24 gustavo Exp $"
+// "$Id: Fl_Input_.cxx,v 1.26 1999/05/06 05:52:16 carl Exp $"
 //
 // Common input widget routines for the Fast Light Tool Kit (FLTK).
 //
@@ -777,36 +777,19 @@ Fl_Input_::~Fl_Input_() {
   if (bufsize) free((void*)buffer);
 }
 
-Fl_Font Fl_Input_::textfont() const {
-  if (!_style || !(INPUT_STYLE->sbf & bf(TEXTFONT)))
-    return (Fl_Font)DEFAULT_STYLE->input(TEXTFONT);
-  return (Fl_Font)INPUT_STYLE->input(TEXTFONT);
+uchar Fl_Input_::attr(Attribute a) const {
+  loadstyle();
+  if (!_style || !(INPUT_STYLE->sbf & bf(a)))
+    return DEFAULT_STYLE->input(a);
+  return INPUT_STYLE->input(a);
 }
 
-uchar Fl_Input_::textsize() const {
-  if (!_style || !(INPUT_STYLE->sbf & bf(TEXTSIZE)))
-    return DEFAULT_STYLE->input(TEXTSIZE);
-  return INPUT_STYLE->input(TEXTSIZE);
-}
-
-Fl_Color Fl_Input_::textcolor() const {
-  if (!_style || !(INPUT_STYLE->sbf & bf(TEXTCOLOR)))
-    return (Fl_Color)DEFAULT_STYLE->input(TEXTCOLOR);
-  return (Fl_Color)INPUT_STYLE->input(TEXTCOLOR);
-}
-
-Fl_Color Fl_Input_::cursor_color() const {
-  if (!_style || !(INPUT_STYLE->sbf & bf(CURSOR_COLOR)))
-    return (Fl_Color)DEFAULT_STYLE->input(CURSOR_COLOR);
-  return (Fl_Color)INPUT_STYLE->input(CURSOR_COLOR);
-}
-
-Fl_Color Fl_Input_::selected_textcolor() const {
-  if (!_style || !(INPUT_STYLE->sbf & bf(SELECTED_TEXTCOLOR)))
-    return (Fl_Color)DEFAULT_STYLE->input(SELECTED_TEXTCOLOR);
-  return (Fl_Color)INPUT_STYLE->input(SELECTED_TEXTCOLOR);
-}
+Fl_Font Fl_Input_::textfont() const { return (Fl_Font)attr(TEXTFONT); }
+uchar Fl_Input_::textsize() const { return attr(TEXTSIZE); }
+Fl_Color Fl_Input_::textcolor() const { return (Fl_Color)attr(TEXTCOLOR); }
+Fl_Color Fl_Input_::cursor_color() const { return (Fl_Color)attr(CURSOR_COLOR); }
+Fl_Color Fl_Input_::selected_textcolor() const { return (Fl_Color)attr(SELECTED_TEXTCOLOR); }
 
 //
-// End of "$Id: Fl_Input_.cxx,v 1.25 1999/04/04 03:45:24 gustavo Exp $".
+// End of "$Id: Fl_Input_.cxx,v 1.26 1999/05/06 05:52:16 carl Exp $".
 //

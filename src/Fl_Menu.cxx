@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.31 1999/05/06 01:27:27 carl Exp $"
+// "$Id: Fl_Menu.cxx,v 1.32 1999/05/06 05:52:17 carl Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -825,62 +825,22 @@ void Fl_Bitmap::label(Fl_Menu_Item* o) {
 */
 
 
-Fl_Labeltype Fl_Menu_Item::labeltype() const {
+uchar Fl_Menu_Item::attr(Attribute a) const {
   loadstyle();
-  if (!_style || !(MENU_ITEM_STYLE->sbf & bf(LABELTYPE)))
-    return (Fl_Labeltype)default_style()->menu_item(LABELTYPE);
-  return (Fl_Labeltype)MENU_ITEM_STYLE->menu_item(LABELTYPE);
+  if (!_style || !(MENU_ITEM_STYLE->sbf & bf(a)))
+    return default_style()->menu_item(a);
+  return MENU_ITEM_STYLE->menu_item(a);
 }
 
-Fl_Color Fl_Menu_Item::labelcolor() const {
-  loadstyle();
-  if (!_style || !(MENU_ITEM_STYLE->sbf & bf(LABELCOLOR)))
-    return (Fl_Color)default_style()->menu_item(LABELCOLOR);
-  return (Fl_Color)MENU_ITEM_STYLE->menu_item(LABELCOLOR);
-}
-
-Fl_Font Fl_Menu_Item::labelfont() const {
-  loadstyle();
-  if (!_style || !(MENU_ITEM_STYLE->sbf & bf(LABELFONT)))
-    return (Fl_Font)default_style()->menu_item(LABELFONT);
-  return (Fl_Font)MENU_ITEM_STYLE->menu_item(LABELFONT);
-}
-
-uchar Fl_Menu_Item::labelsize() const {
-  loadstyle();
-  if (!_style || !(MENU_ITEM_STYLE->sbf & bf(LABELSIZE)))
-    return default_style()->menu_item(LABELSIZE);
-  return MENU_ITEM_STYLE->menu_item(LABELSIZE);
-}
-
-Fl_Boxtype Fl_Menu_Item::down_box() const {
-  loadstyle();
-  if (!_style || !(MENU_ITEM_STYLE->sbf & bf(DOWN_BOX)))
-    return (Fl_Boxtype)default_style()->menu_item(DOWN_BOX);
-  return (Fl_Boxtype)MENU_ITEM_STYLE->menu_item(DOWN_BOX);
-}
-
-Fl_Color Fl_Menu_Item::down_color() const {
-  loadstyle();
-  if (!_style || !(MENU_ITEM_STYLE->sbf & bf(DOWN_COLOR)))
-    return (Fl_Color)default_style()->menu_item(DOWN_COLOR);
-  return (Fl_Color)MENU_ITEM_STYLE->menu_item(DOWN_COLOR);
-}
-
-Fl_Color Fl_Menu_Item::light_color() const {
-  loadstyle();
-  if (!_style || !(MENU_ITEM_STYLE->sbf & bf(LIGHT_COLOR)))
-    return (Fl_Color)default_style()->menu_item(LIGHT_COLOR);
-  return (Fl_Color)MENU_ITEM_STYLE->menu_item(LIGHT_COLOR);
-}
-
-Fl_Color Fl_Menu_Item::down_labelcolor() const {
-  loadstyle();
-  if (!_style || !(MENU_ITEM_STYLE->sbf & bf(DOWN_LABELCOLOR)))
-    return (Fl_Color)default_style()->menu_item(DOWN_LABELCOLOR);
-  return (Fl_Color)MENU_ITEM_STYLE->menu_item(DOWN_LABELCOLOR);
-}
+Fl_Labeltype Fl_Menu_Item::labeltype() const { return (Fl_Labeltype)attr(LABELTYPE); }
+Fl_Color Fl_Menu_Item::labelcolor() const { return (Fl_Color)attr(LABELCOLOR); }
+Fl_Font Fl_Menu_Item::labelfont() const { return (Fl_Font)attr(LABELFONT); }
+uchar Fl_Menu_Item::labelsize() const { return attr(LABELSIZE); }
+Fl_Boxtype Fl_Menu_Item::down_box() const { return (Fl_Boxtype)attr(DOWN_BOX); }
+Fl_Color Fl_Menu_Item::down_color() const { return (Fl_Color)attr(DOWN_COLOR); }
+Fl_Color Fl_Menu_Item::light_color() const { return (Fl_Color)attr(LIGHT_COLOR); }
+Fl_Color Fl_Menu_Item::down_labelcolor() const { return (Fl_Color)attr(DOWN_LABELCOLOR); }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.31 1999/05/06 01:27:27 carl Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.32 1999/05/06 05:52:17 carl Exp $".
 //

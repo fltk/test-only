@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item_SW.cxx,v 1.3 1999/05/05 20:48:36 carl Exp $"
+// "$Id: Fl_Menu_Item_SW.cxx,v 1.4 1999/05/06 05:52:18 carl Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,57 +23,18 @@
 
 #include <FL/Fl_Menu_Item.H>
 
-void Fl_Menu_Item::label(Fl_Labeltype a, const char* b) {
+void Fl_Menu_Item::attr(Attribute a, uchar c) {
   mstyle(&_style);
-  MENU_ITEM_STYLE->sbf |= bf(LABELTYPE);
-  MENU_ITEM_STYLE->menu_item(LABELTYPE)=a;
-  text = b;
+  MENU_ITEM_STYLE->sbf |= bf(a);
+  MENU_ITEM_STYLE->menu_item(a)=c;
 }
 
-void Fl_Menu_Item::labeltype(Fl_Labeltype a) {
-  mstyle(&_style);
-  MENU_ITEM_STYLE->sbf |= bf(LABELTYPE);
-  MENU_ITEM_STYLE->menu_item(LABELTYPE)=a;
-}
-
-void Fl_Menu_Item::labelcolor(uchar a) {
-  mstyle(&_style);
-  MENU_ITEM_STYLE->sbf |= bf(LABELCOLOR);
-  MENU_ITEM_STYLE->menu_item(LABELCOLOR)=a;
-}
-
-void Fl_Menu_Item::labelfont(uchar a) {
-  mstyle(&_style);
-  MENU_ITEM_STYLE->sbf |= bf(LABELFONT);
-  MENU_ITEM_STYLE->menu_item(LABELFONT)=a;
-}
-
-void Fl_Menu_Item::labelsize(uchar a) {
-  mstyle(&_style);
-  MENU_ITEM_STYLE->sbf |= bf(LABELSIZE);
-  MENU_ITEM_STYLE->menu_item(LABELSIZE)=a;
-}
-
-void Fl_Menu_Item::down_box(uchar b) {
-  mstyle(&_style);
-  MENU_ITEM_STYLE->sbf |= bf(DOWN_BOX);
-  MENU_ITEM_STYLE->menu_item(DOWN_BOX)=b;
-}
-
-void Fl_Menu_Item::down_color(uchar c) {
-  mstyle(&_style);
-  MENU_ITEM_STYLE->sbf |= bf(DOWN_COLOR);
-  MENU_ITEM_STYLE->menu_item(DOWN_COLOR)=c;
-}
-
-void Fl_Menu_Item::light_color(uchar c) {
-  mstyle(&_style);
-  MENU_ITEM_STYLE->sbf |= bf(LIGHT_COLOR);
-  MENU_ITEM_STYLE->menu_item(LIGHT_COLOR)=c;
-}
-
-void Fl_Menu_Item::down_labelcolor(uchar c) {
-  mstyle(&_style);
-  MENU_ITEM_STYLE->sbf |= bf(DOWN_LABELCOLOR);
-  MENU_ITEM_STYLE->menu_item(DOWN_LABELCOLOR)=c;
-}
+void Fl_Menu_Item::label(Fl_Labeltype a, const char* b) { attr(LABELTYPE, a); text = b; }
+void Fl_Menu_Item::labeltype(Fl_Labeltype a) { attr(LABELTYPE, a); }
+void Fl_Menu_Item::labelcolor(uchar a) { attr(LABELCOLOR, a); }
+void Fl_Menu_Item::labelfont(uchar a) { attr(LABELFONT, a); }
+void Fl_Menu_Item::labelsize(uchar a) { attr(LABELSIZE, a); }
+void Fl_Menu_Item::down_box(uchar b) { attr(DOWN_BOX, b); }
+void Fl_Menu_Item::down_color(uchar c) { attr(DOWN_COLOR, c); }
+void Fl_Menu_Item::light_color(uchar c) { attr(LIGHT_COLOR, c); }
+void Fl_Menu_Item::down_labelcolor(uchar c) { attr(DOWN_LABELCOLOR, c); }

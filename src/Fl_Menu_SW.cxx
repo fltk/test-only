@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_SW.cxx,v 1.2 1999/03/18 22:59:08 carl Exp $"
+// "$Id: Fl_Menu_SW.cxx,v 1.3 1999/05/06 05:52:18 carl Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,29 +23,14 @@
 
 #include <FL/Fl_Menu_.H>
 
-void Fl_Menu_::textfont(uchar s) {
+void Fl_Menu_::attr(Attribute a, uchar c) {
   mstyle(&_style);
-  MENU_STYLE->sbf |= bf(TEXTFONT);
-  MENU_STYLE->menu(TEXTFONT)=s;
+  MENU_STYLE->sbf |= bf(a);
+  MENU_STYLE->menu(a)=c;
 }
 
-void Fl_Menu_::textsize(uchar s) {
-  mstyle(&_style);
-  MENU_STYLE->sbf |= bf(TEXTSIZE);
-  MENU_STYLE->menu(TEXTSIZE)=s;
-}
-
-void Fl_Menu_::textcolor(uchar n) {
-  mstyle(&_style);
-  MENU_STYLE->sbf |= bf(TEXTCOLOR);
-  MENU_STYLE->menu(TEXTCOLOR)=n;
-}
-
-void Fl_Menu_::down_box(Fl_Boxtype b) {
-  mstyle(&_style);
-  MENU_STYLE->sbf |= bf(DOWN_BOX);
-  MENU_STYLE->menu(DOWN_BOX)=b;
-}
-
+void Fl_Menu_::textfont(uchar s) { attr(TEXTFONT, s); }
+void Fl_Menu_::textsize(uchar s) { attr(TEXTSIZE, s); }
+void Fl_Menu_::textcolor(uchar n) { attr(TEXTCOLOR, n); }
+void Fl_Menu_::down_box(Fl_Boxtype b) { attr(DOWN_BOX, b); }
 void Fl_Menu_::down_color(uchar c) {selection_color(c);}
-

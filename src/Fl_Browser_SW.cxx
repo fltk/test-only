@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_SW.cxx,v 1.2 1999/03/18 22:59:02 carl Exp $"
+// "$Id: Fl_Browser_SW.cxx,v 1.3 1999/05/06 05:52:12 carl Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,27 +23,14 @@
 
 #include <FL/Fl_Browser_.H>
 
-void Fl_Browser_::textfont(uchar s) {
+void Fl_Browser_::attr(Attribute a, uchar c) {
   mstyle(&_style);
-  BROWSER_STYLE->sbf |= bf(TEXTFONT);
-  BROWSER_STYLE->browser(TEXTFONT)=s;
+  BROWSER_STYLE->sbf |= bf(a);
+  BROWSER_STYLE->browser(a)=c;
 }
 
-void Fl_Browser_::textsize(uchar s) {
-  mstyle(&_style);
-  BROWSER_STYLE->sbf |= bf(TEXTSIZE);
-  BROWSER_STYLE->browser(TEXTSIZE)=s;
-}
-
-void Fl_Browser_::textcolor(uchar n) {
-  mstyle(&_style);
-  BROWSER_STYLE->sbf |= bf(TEXTCOLOR);
-  BROWSER_STYLE->browser(TEXTCOLOR)=n;
-}
-
-void Fl_Browser_::selected_textcolor(uchar n) {
-  mstyle(&_style);
-  BROWSER_STYLE->sbf |= bf(SELECTED_TEXTCOLOR);
-  BROWSER_STYLE->browser(SELECTED_TEXTCOLOR)=n;
-}
+void Fl_Browser_::textfont(uchar s) { attr(TEXTFONT, s); }
+void Fl_Browser_::textsize(uchar s) { attr(TEXTSIZE, s); }
+void Fl_Browser_::textcolor(uchar n) { attr(TEXTCOLOR, n); }
+void Fl_Browser_::selected_textcolor(uchar n) { attr(SELECTED_TEXTCOLOR, n); }
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Output.cxx,v 1.8 1999/03/18 22:59:08 carl Exp $"
+// "$Id: Fl_Output.cxx,v 1.9 1999/05/06 05:52:18 carl Exp $"
 //
 // Output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -67,7 +67,6 @@ void Fl_Output::loadstyle() const {
 }
 
 void Fl_Output::draw() {
-  loadstyle();
   Fl_Boxtype b = box() ? box() : FL_DOWN_BOX;
   if (damage() & FL_DAMAGE_ALL) draw_box(b, color());
   Fl_Input_::drawtext(x()+Fl::box_dx(b)+3, y()+Fl::box_dy(b),
@@ -83,5 +82,5 @@ int Fl_Output::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Output.cxx,v 1.8 1999/03/18 22:59:08 carl Exp $".
+// End of "$Id: Fl_Output.cxx,v 1.9 1999/05/06 05:52:18 carl Exp $".
 //

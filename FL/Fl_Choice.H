@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.H,v 1.10 1999/03/18 22:58:53 carl Exp $"
+// "$Id: Fl_Choice.H,v 1.11 1999/05/06 05:52:08 carl Exp $"
 //
 // Choice header file for the Fast Light Tool Kit (FLTK).
 //
@@ -76,10 +76,14 @@ protected:
   virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
 
   void draw();
+
+private:
+  uchar attr(Attribute) const;
+  void attr(Attribute, uchar);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Choice.H,v 1.10 1999/03/18 22:58:53 carl Exp $".
+// End of "$Id: Fl_Choice.H,v 1.11 1999/05/06 05:52:08 carl Exp $".
 //
