@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_endtrim.c,v 1.10 2001/07/23 09:50:05 spitzak Exp $"
+   "$Id: conf_strcnt.c,v 1.3 2002/02/10 22:57:50 spitzak Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -22,33 +22,31 @@
     USA.
 */
 
-#include <fltk/conf.h>
+#include "conf.h"
 
 /*
-        char *conf_endtrim(char *s)
+        int *conf_strcnt(const char *s, char c)
 
         description:
-                removes just trailing whitespace from a string
-                whitespace is any character in literal string CONF_WHITESPACE
+                counts the number of instances of char c in string s
         arguments:
-                s: string to be modified
+                s: string in which to look for c
+                c: character to look for in s
         return value:
-                returns s
+                returns the number of instances of c in s
 */
-char *
-conf_endtrim(char *s)
+int
+conf_strcnt(const char *s, char c)
 {
-        char    *p;                                                             /* temporary pointers */
+        int count;
+        const char *p;
 
-        if (!s)                                                                 /* if null pointer passed */
-                return s;
+        for (count = 0, p = s; *p != (char)0; p++)
+                if (*p == c) count++;
 
-        p = s + strlen(s) - 1;
-        while ((p >= s) && strchr(CONF_WHITESPACE, *p))                         /* kill trailing whitespace */
-                *p-- = '\0';
-        return s;
+        return count;
 }
 
 /*
-    End of "$Id: conf_endtrim.c,v 1.10 2001/07/23 09:50:05 spitzak Exp $".
+    End of "$Id: conf_strcnt.c,v 1.3 2002/02/10 22:57:50 spitzak Exp $".
 */

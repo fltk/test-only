@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.h,v 1.10 2002/01/28 08:02:59 spitzak Exp $"
+// "$Id: Fl.h,v 1.11 2002/02/10 22:57:47 spitzak Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,11 +27,12 @@
 #define Fl_H
 
 #include "Enumerations.h"
-#include "Fl_Boxtype.h"
-#include "Fl_Style.h"
 
+#ifndef FLTK_2
 // These header files are only needed for the obsolete functions:
 #include "Fl_Color.h"
+#include "Fl_Boxtype.h"
+#endif
 
 class FL_API Fl_Widget;
 class FL_API Fl_Window;
@@ -72,12 +73,8 @@ public: // should be private!
   static Fl_Widget* modal_;
   static bool grab_;
   static bool exit_modal_;
-
   static void damage(int x) {damage_ = x;}
-
   static void (*idle)();
-
-  static const char* scheme_;
 
 public:
 
@@ -88,15 +85,6 @@ public:
   static int args(int, char**, int&, int (*)(int,char**,int&) = 0);
   static const char* const help;
   static void args(int, char**);
-
-  // themes & schemes:
-  static void enable_themes(int);
-  static int theme(const char*);
-  static void enable_schemes(int);
-  static int scheme(const char*);
-  static const char* scheme() {return scheme_;}
-  static int reload_scheme();
-  static void startup();
 
   // things called by initialization:
   static void display(const char*);
@@ -192,6 +180,12 @@ public:
   // screen size (any any other static information from system):
   static const Fl_Screen_Info& info();
 
+  // Multithreading support:
+  static void lock();
+  static void unlock();
+  static void awake(void* message = 0);
+  static void* thread_message();
+
 #ifndef FLTK_2  // back-compatability section:
   // commented-out functions could not be emulated in fltk 2.0
   static int x() {return info().x;}
@@ -238,20 +232,10 @@ public:
 
 #endif
 
-  // Multithreading support:
-  static void lock();
-  static void unlock();
-  static void awake(void* message = 0);
-  static void* thread_message();
-
 };
-
-
-FL_API const char* fl_find_config_file(const char* filename, bool create = false);
-FL_API int fl_getconf(const char *key, char *value, int value_length);
 
 #endif
 
 //
-// End of "$Id: Fl.h,v 1.10 2002/01/28 08:02:59 spitzak Exp $".
+// End of "$Id: Fl.h,v 1.11 2002/02/10 22:57:47 spitzak Exp $".
 //

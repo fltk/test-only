@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.31 2001/11/14 09:21:43 spitzak Exp $"
+# "$Id: Makefile,v 1.32 2002/02/10 22:57:50 spitzak Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -25,29 +25,18 @@
 
 # * essai.theme removed from default list because it requires -ljpeg
 #   and breaks the build on some platforms
-# * xft.plugin is not in default list because it requires XFree86 4,
-#   the "render" extension, the Xft library, and the freetype2 library.
-THEMES = motif.theme classic.theme windows.theme Alternative.theme \
-	KDE.theme KDE_colors.theme syscolors.theme
-SCHEMES = Alternative KDE Classic Motif OldMotif Windows
+THEMES = \
+	Alternative.theme \
+	classic.theme \
+	KDE.theme \
+	motif.theme \
+	none.theme \
+	scheme.theme \
+	windows.theme
 
 ################################################################
 
 include ../makeinclude
-
-%.shared.o : %.cxx
-	$(CXX) -I.. $(DSOCFLAGS) $(CXXFLAGS) -c $< -o $@
-%.shared.o : %.c
-	$(CC) -I.. $(DSOCFLAGS) $(CFLAGS) -c $< -o $@
-
-LIBRARY = ../lib/$(LIBNAME)_themes
-
-CPPFILES = \
-	fl_kde.cxx \
-	fl_windows.cxx \
-	fl_motif.cxx
-
-OBJECTS = $(CPPFILES:.cxx=.shared.o) $(CFILES:.c=.shared.o)
 
 all : $(BUILDTARGETS)
 
@@ -55,83 +44,60 @@ static: $(LIBRARY)$(LIBEXT)
 
 shared: $(THEMES)
 
-demos:
-
-programs: demos
+programs:
 
 $(LIBRARY).a: $(OBJECTS)
 	@rm -f $@
 	$(LIBCOMMAND) $@ $(OBJECTS)
 	$(RANLIB) $@
 
-XFT_OBJ = xft.shared.o fl_xft.shared.o
-xft.plugin : $(XFT_OBJ)
-	$(THEMECOMMAND) $@ $(XFT_OBJ) $(DSOLIBS) -L/usr/X11R6/lib -lXft
-	cp $@ ../config/plugins
-	ar r $(LIBRARY).a fl_xft.shared.o
-
 ESSAI_OBJ = essai.shared.o
 essai.theme : $(ESSAI_OBJ)
-	$(THEMECOMMAND) $@ $(ESSAI_OBJ) -ljpeg -L../lib -lfltk_images $(DSOLIBS)
-	cp $@ ../config/themes
-	cp bg*.jpeg ../config/themes
+	$(THEMECOMMAND) $@ $(ESSAI_OBJ) ../lib/libfltk_images.so.2 -ljpeg -lpng $(DSOLIBS)
 
-MOTIF_OBJ = motif.shared.o fl_motif.shared.o
+MOTIF_OBJ = motif.shared.o
 motif.theme : $(MOTIF_OBJ)
 	$(THEMECOMMAND) $@ $(MOTIF_OBJ) $(DSOLIBS) $(THEMELIBS)
-	cp $@ ../config/themes
 
 CLASSIC_OBJ = classic.shared.o
 classic.theme : $(CLASSIC_OBJ)
 	$(THEMECOMMAND) $@ $(CLASSIC_OBJ) $(DSOLIBS) $(THEMELIBS)
-	cp $@ ../config/themes
 
-WINDOWS_OBJ = windows.shared.o fl_windows.shared.o
+WINDOWS_OBJ = windows.shared.o
 windows.theme : $(WINDOWS_OBJ)
 	$(THEMECOMMAND) $@ $(WINDOWS_OBJ) $(DSOLIBS) $(THEMELIBS)
-	cp $@ ../config/themes
 
 ALT_OBJ = Alternative.shared.o
 Alternative.theme : $(ALT_OBJ)
 	$(THEMECOMMAND) $@ $(ALT_OBJ) $(DSOLIBS) $(THEMELIBS)
-	cp $@ ../config/themes
 
-KDE_OBJ = KDE.shared.o fl_kde.shared.o
+KDE_OBJ = KDE.shared.o conf.shared.o conf_get.shared.o conf_util.shared.o conf_list_free.shared.o conf_keys.shared.o
 KDE.theme : $(KDE_OBJ)
 	$(THEMECOMMAND) $@ $(KDE_OBJ) $(DSOLIBS) $(THEMELIBS)
-	cp $@ ../config/themes
 
-KDEC_OBJ = KDE_colors.shared.o fl_kde.shared.o
-KDE_colors.theme : $(KDEC_OBJ)
-	$(THEMECOMMAND) $@ $(KDEC_OBJ) $(DSOLIBS) $(THEMELIBS)
-	cp $@ ../config/themes
+SCHEME_OBJ = scheme.shared.o conf.shared.o conf_get.shared.o conf_util.shared.o conf_list_free.shared.o conf_keys.shared.o conf_sections.shared.o
+scheme.theme : $(SCHEME_OBJ)
+	$(THEMECOMMAND) $@ $(SCHEME_OBJ) $(DSOLIBS) $(THEMELIBS)
 
-SYSC_OBJ = syscolors.shared.o
-syscolors.theme : $(SYSC_OBJ)
-	$(THEMECOMMAND) $@ $(SYSC_OBJ) $(DSOLIBS) $(THEMELIBS)
-	cp $@ ../config/themes
+NONE_OBJ = none.shared.o
+none.theme : $(NONE_OBJ)
+	$(THEMECOMMAND) $@ $(NONE_OBJ) $(DSOLIBS) $(THEMELIBS)
 
 clean :
-	-@ rm -f *.shared.o $(LIBRARY)$(LIBEXT) *.theme *.plugin ../config/themes/*.theme ../config/plugins/*.plugin core *~ makedepend
+	-@ rm -f *.shared.o $(LIBRARY)$(LIBEXT) *.theme *.plugin core *~ makedepend
 	@touch makedepend
 
 install : $(INSTALLTARGETS)
 
 install_static:
-	@echo "Installing static library..."
-	@-mkdir -p $(libdir)
-	@rm -f $(libdir)/$(LIBNAME)_themes$(LIBEXT)
-	@-cp $(LIBRARY)$(LIBEXT) $(libdir)
-	@-chmod 644 $(libdir)/$(LIBNAME)_themes$(LIBEXT)
+# it would be nice if this built .o versions of the themes
 
 install_shared:
 	@echo "Installing themes..."
-	@-mkdir -p $(libdir)/fltk/schemes
-	@-mkdir -p $(libdir)/fltk/themes
-	@-mkdir -p $(libdir)/fltk/plugins
-	@(cd ../config/schemes; cp -f $(SCHEMES) $(libdir)/fltk/schemes)
-	@cp -f *.theme $(libdir)/fltk/themes
-	@cp -f *.plugin $(libdir)/fltk/plugins
+	@-mkdir -p $(libdir)/fltk
+	@cp -f *.scheme $(libdir)/fltk
+	@cp -f *.theme $(libdir)/fltk
+	@cp -f *.plugin $(libdir)/fltk
 
 install_programs:
 
@@ -144,5 +110,5 @@ depend:
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.31 2001/11/14 09:21:43 spitzak Exp $".
+# End of "$Id: Makefile,v 1.32 2002/02/10 22:57:50 spitzak Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.38 2002/01/28 08:02:59 spitzak Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.39 2002/02/10 22:57:47 spitzak Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -130,6 +130,10 @@ int Overlay_Window::handle(int e) {
   return window->handle(e);
 }
 
+#include <fltk/Fl_Style_Set.h>
+extern Fl_Style_Set* fluid_style_set;
+extern Fl_Style_Set* style_set;
+
 Fl_Type *Fl_Window_Type::make() {
   Fl_Type *p = Fl_Type::current;
   while (p && !p->is_code_block()) p = p->parent;
@@ -137,7 +141,7 @@ Fl_Type *Fl_Window_Type::make() {
     fl_message("Please select a function");
     return 0;
   }
-  Fl_Style::start("style1");
+  style_set->make_current();
   Fl_Window_Type *o = new Fl_Window_Type();
   if (!this->o) {// template widget
     this->o = new Fl_Window(100,100);
@@ -147,7 +151,7 @@ Fl_Type *Fl_Window_Type::make() {
   o->drag = 0;
   o->numselected = 0;
   Overlay_Window *w = new Overlay_Window(100,100);
-  Fl_Style::start("fluid_style");
+  fluid_style_set->make_current();
   w->window = o;
   o->o = w;
   o->add(p);
@@ -682,5 +686,5 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.38 2002/01/28 08:02:59 spitzak Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.39 2002/02/10 22:57:47 spitzak Exp $".
 //

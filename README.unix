@@ -1,0 +1,66 @@
+BUILDING AND INSTALLING FLTK UNDER LINUX AND UNIX
+
+    In most cases where the GCC compilers are available you can just
+    type
+
+       ./build.gcc
+
+    This will run configure with the default (no) options and then
+    compile everything.  The build scripts call autoconf, configure,
+    and make.  You can specify arguments to be sent to the configure
+    script on the command line to the build script, for example:
+
+       ./build.gcc --enable-shared --prefix=/usr/local2
+
+    FLTK uses GNU autoconf to configure itself for your UNIX or Cygwin
+    platform.  The main things that the configure script will look for
+    are the X11, OpenGL (or Mesa), and JPEG header and library files.
+    Make sure that they are in the standard include/library locations.
+    If they aren't you need to define the CFLAGS, CXXFLAGS, and LDFLAGS
+    environment variables.
+
+    If you aren't using the GNU compilers or a compiler / platform
+    supported by one of the build scripts, you will need to run
+    autoconf, configure and make manually.  (Or better yet write and
+    send us a build script for your platform.)  You will need to set
+    the "CC" and "CXX" environment variables to your C and C++
+    compilers respectively before running the configure script.
+
+    You can get the exact setup you need. Options that you can pass to
+    the build scripts or configure include:
+
+	--enable-debug          - Enable debugging code & symbols
+	--enable-shared         - Enable generation of shared libraries
+
+	--prefix=/dir           - Set the directory prefix for files
+                        	  [default = /usr/local]
+	--bindir=/path          - Set the location for executables
+                        	  [default = /usr/local/bin]
+	--libdir=/path          - Set the location for libraries
+                        	  [default = /usr/local/lib]
+	--includedir=/path      - Set the location for include files.
+                        	  [default = /usr/local/include]
+
+    Building using one of the build scripts or manually by calling make
+    yourself will build the library, FLUID tool, and all of the test
+    programs.
+
+    To install the library, become root and type "make install".  This
+    will copy the "fluid" executable to "bindir", the header files to
+    "includedir", and the library files to "libdir".
+
+
+MESA
+
+    On older Linux systems the best way to get OpenGL is to use Mesa.
+    FLTK has been tested with Mesa on several machines (and also with
+    "real" OpenGL on SGI machines).
+
+    Mesa is available at "http://www.mesa3d.org".
+
+    The configure script will not see Mesa unless it is installed as
+    either libGL or libMesaGL.  If you don't want to do this you will
+    have to edit config.h (set HAVE_GL to 1) and makeinclude (add the
+    libraries).
+
+

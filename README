@@ -12,10 +12,13 @@ WHAT IS FLTK?
 
 LICENSING
 
-    FLTK comes with complete free source code. FLTK is available under
-    the terms of the GNU Library General Public License. Contrary to
-    popular belief, it can be used in commercial software! (Even Bill
-    Gates could use it.) 
+    FLTK comes with complete free source code. FLTK is (C)1998-2002 by
+    Bill Spitzak and others.  Use and distribution of FLTK is governed
+    by the FLTK LIBRARY LICENSE (which is the GNU Library General
+    Public License with an exception added that allows you to
+    distribute statically-linked programs using the library without
+    providing source code to the program or the library).  You can use
+    it in commercial software!
 
 
 ON-LINE DOCUMENTATION
@@ -28,83 +31,16 @@ ON-LINE DOCUMENTATION
         http://www.fltk.org/documentation.html
 
 
-BUILDING AND INSTALLING FLTK UNDER LINUX AND UNIX
+BUILDING AND INSTALLING FLTK
 
-    In most cases where the GCC compilers are available you can just
-    type
+    Specific directions for various systems are provided in seperate
+    README files:
 
-       ./build.gcc
-
-    This will run configure with the default (no) options and then
-    compile everything.  The build scripts call autoconf, configure,
-    and make.  You can specify arguments to be sent to the configure
-    script on the command line to the build script, for example:
-
-       ./build.gcc --enable-shared --prefix=/usr/local2
-
-    FLTK uses GNU autoconf to configure itself for your UNIX or Cygwin
-    platform.  The main things that the configure script will look for
-    are the X11, OpenGL (or Mesa), and JPEG header and library files.
-    Make sure that they are in the standard include/library locations.
-    If they aren't you need to define the CFLAGS, CXXFLAGS, and LDFLAGS
-    environment variables.
-
-    If you aren't using the GNU compilers or a compiler / platform
-    supported by one of the build scripts, you will need to run
-    autoconf, configure and make manually.  (Or better yet write and
-    send us a build script for your platform.)  You will need to set
-    the "CC" and "CXX" environment variables to your C and C++
-    compilers respectively before running the configure script.
-
-    You can get the exact setup you need. Options that you can pass to
-    the build scripts or configure include:
-
-	--enable-debug          - Enable debugging code & symbols
-	--enable-shared         - Enable generation of shared libraries
-
-	--prefix=/dir           - Set the directory prefix for files
-                        	  [default = /usr/local]
-	--bindir=/path          - Set the location for executables
-                        	  [default = /usr/local/bin]
-	--libdir=/path          - Set the location for libraries
-                        	  [default = /usr/local/lib]
-	--includedir=/path      - Set the location for include files.
-                        	  [default = /usr/local/include]
-
-    Building using one of the build scripts or manually by calling make
-    yourself will build the library, FLUID tool, and all of the test
-    programs.
-
-    To install the library, become root and type "make install".  This
-    will copy the "fluid" executable to "bindir", the header files to
-    "includedir", and the library files to "libdir".
-
-
-BUILDING FLTK UNDER MICROSOFT WINDOWS
-
-    There are three ways to build FLTK under Microsoft Windows.  The
-    first is to use the Microsoft Visual C++ 5.0 project files under the
-    "visualc" directory.  Just open (or double-click on) the "fltk.dsw"
-    file to get the whole shebang.
-
-    The second method is to use the Borland C++ 5 project file in the
-    "bc5" directory.  Just open the "fltk.ide" file in the Borland IDE.
-    
-    The third method is to use the Cygwin or MinGW GNU-based development
-    tools. For information on how to build in this environment, please
-    read the README.cygwin file.
-
-BUILDING FLTK UNDER OS/2
-
-    The current OS/2 build requires XFree86 for OS/2 to work.  A native
-    Presentation Manager version has not been implemented yet
-    (volunteers are welcome!).
-
-    To build the XFree86 version of FLTK for OS/2, copy the appropriate
-    makeinclude and config files to the main directory and do a make:
-
-        copy makefiles\Makefile.os2x Makefile
-	make
+	README.unix (linux as well)
+	README.windows (MicroSoft Visual C++)
+	README.bc5 (Borland C++)
+	README.cygwin (Cygwin/GCC on Windows)
+	README.os2
 
 
 INTERNET RESOURCES
@@ -112,6 +48,8 @@ INTERNET RESOURCES
     FLTK is available on the 'net in a bunch of locations:
 
 	- WWW:   http://www.fltk.org
+
+	- CVS:	 http://fltk.sourceforge.net
 
 	- FTP:   ftp://ftp.easysw.com/pub/fltk
                  ftp://ftp2.easysw.com/pub/fltk
@@ -141,20 +79,6 @@ REPORTING BUGS
     list at "fltk@fltk.org".
 
 
-MESA
-
-    Currently the best way to get OpenGL on your Linux system is to use
-    Mesa.  FLTK has been tested with Mesa on several machines (and also
-    with "real" OpenGL on SGI machines).
-
-    Mesa is available at "http://www.mesa3d.org".
-
-    The configure script will not see Mesa unless it is installed as
-    either libGL or libMesaGL.  If you don't want to do this you will
-    have to edit config.h (set HAVE_GL to 1) and makeinclude (add the
-    libraries).
-
-
 TRADEMARKS
 
     Microsoft and Windows are registered trademarks of Microsoft
@@ -164,9 +88,9 @@ TRADEMARKS
 
 COPYRIGHT
 
-    FLTK is copyright 1998-2001 by Bill Spitzak <spitzak@cinenet.net>
-    and others, including:
+    FLTK is copyright (C) 1998-2002 by the following individuals:
 
+	Bill Spitzak <spitzak@cinenet.net>
         Craig P. Earls <cpearls@mit.edu>
 	Curtis Edwards <curtise@fa.disney.com>
 	Gustavo Hime <hime@centroin.com.br>
@@ -179,7 +103,10 @@ COPYRIGHT
     This library is free software; you can redistribute it and/or
     modify it under the terms of the GNU Library General Public License
     as published by the Free Software Foundation; either version 2 of
-    the License, or (at your option) any later version.
+    the License, or (at your option) any later version. You may also
+    release programs that use the unmodified FLTK library without any
+    restrictions according to the LPGL exceptions granted in the FLTK
+    LIBRARY LICENSE.
 
     This library is distributed in the hope that it will be useful, but
     WITHOUT ANY WARRANTY; without even the implied warranty of

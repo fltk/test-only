@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.h,v 1.10 2002/01/28 08:02:59 spitzak Exp $"
+// "$Id: Fl_Widget.h,v 1.11 2002/02/10 22:57:47 spitzak Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -200,6 +200,8 @@ public:
   unsigned	label_size()		const;
   unsigned	text_size()		const;
   unsigned	leading()		const;
+  Fl_Flags	scrollbar_align() const {return style()->scrollbar_align;}
+  unsigned	scrollbar_width() const {return style()->scrollbar_width;}
 
   void box(Fl_Boxtype)		;
   void button_box(Fl_Boxtype)	;
@@ -287,5 +289,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.h,v 1.10 2002/01/28 08:02:59 spitzak Exp $".
+// End of "$Id: Fl_Widget.h,v 1.11 2002/02/10 22:57:47 spitzak Exp $".
 //

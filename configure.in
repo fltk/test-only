@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.94 2001/08/05 10:48:38 spitzak Exp $"
+dnl# "$Id: configure.in,v 1.95 2002/02/10 22:57:47 spitzak Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -77,10 +77,14 @@ DEBUGFLAG=""
 CFLAGS="${CFLAGS:=}"
 CXXFLAGS="${CXXFLAGS:=}"
 SYSTYPE="UNIX"
-EXEFLAGS=""
 DSOCOMMAND=""
 THEMECOMMAND=""
 DSOCFLAGS=""
+
+AC_ARG_ENABLE(debug, [  --enable-debug          compile with debug rather than optimized],[if eval "test x$enable_debug = xyes"; then
+    DEBUGFLAG="-g "
+fi])
+
 case $uname in
     SunOS* | UNIX_S*)
 	  DSOCOMMAND="\${CXX} -Wl,-h,\${DSONAME} -G $DEBUGFLAG -o"
@@ -99,7 +103,6 @@ case $uname in
 	  CXXFLAGS="$CXXFLAGS -D_WIN32"
 	  LDLIBS="-lgdi32 -luser32 -lmsvcrt -lwsock32 -lws2_32 -lcomdlg32"
 	  SYSTYPE="WIN32"
-          DSOCFLAGS="-DFL_SHARED"
           DSOCOMMAND="\${CXX} -Wl,--out-implib,\$@.import -shared $DEBUGFLAG -o"
           THEMECOMMAND="\${CXX} -shared $DEBUGFLAG -o"
 	  DSOLIBS="-lgdi32 -luser32 -lmsvcrt -lwsock32 -lws2_32 -lopengl32 -lglu32 -lcomdlg32"
@@ -114,22 +117,15 @@ case $uname in
 	  ;;
 
     OSF1)
-          echo Using OSF
           DSOCOMMAND="\${CXX} $DEBUGFLAG -o"
           THEMECOMMAND="\${CXX} $DEBUGFLAG -o"
-          DSOCFLAGS="-DFL_SHARED"
 	  ;;
     *)
-          echo Using GNU GCC style shared libraries
           DSOCOMMAND="\${CXX} -Wl,-soname,\${DSONAME} -shared $DEBUGFLAG -o"
           THEMECOMMAND="\${CXX} -shared $DEBUGFLAG -o"
-          DSOCFLAGS="-fPIC -DFL_SHARED"
+          DSOCFLAGS="-fPIC"
 	  ;;
 esac
-
-AC_ARG_ENABLE(debug, [  --enable-debug          compile with debug rather than optimized],[if eval "test x$enable_debug = xyes"; then
-    DEBUGFLAG="-g "
-fi])
 
 AC_ARG_ENABLE(shared, [  --enable-shared         created shared libraries])
 if test x$enable_shared != xno; then
@@ -140,7 +136,8 @@ if test x$enable_shared != xno; then
     FLGLUTLIB="../lib/libfltk_glut${DSOEXT}"
     FLFORMSLIB="../lib/libfltk_forms${DSOEXT}"
     FLIMAGESLIB="../lib/libfltk_images${DSOEXT}"
-    EXEFLAGS="-DFL_SHARED"
+    CFLAGS="-DFL_SHARED $CFLAGS"
+    CXXFLAGS="-DFL_SHARED $CXXFLAGS"
     case $uname in
 	WIN32)
 	    FLLIB="../lib/libfltk.2.dll.a"
@@ -165,7 +162,6 @@ AC_SUBST(DSOLIBS)
 AC_SUBST(BUILDTARGETS)
 AC_SUBST(INSTALLTARGETS)
 AC_SUBST(THEMELIBS)
-AC_SUBST(EXEFLAGS)
 
 AC_PROG_CC
 AC_PROG_CXX
@@ -456,5 +452,5 @@ AC_OUTPUT(makeinclude fltk-config)
 chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.94 2001/08/05 10:48:38 spitzak Exp $".
+dnl# End of "$Id: configure.in,v 1.95 2002/02/10 22:57:47 spitzak Exp $".
 dnl#

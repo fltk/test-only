@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_setlong.c,v 1.9 2001/07/23 09:50:05 spitzak Exp $"
+   "$Id: conf_getlong.c,v 1.3 2002/02/10 22:57:50 spitzak Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -22,33 +22,38 @@
     USA.
 */
 
-#include <fltk/conf.h>
+#include "conf.h"
+#include <config.h>
 
 /*
-        int setconf_long(const char *configfile, const char *key, long lvalue)
+        int getconf_long(const char *configfile, const char *key,
+                         long *lvalue)
 
         description:
-                sets the long value associated with a key in a config file
+                gets the long value associated with a key in a config file
         arguments:
                 configfile: path of config file
-                key: section/key field to set
-                lvalue: the long integer associated with key in section
+                key: section/key to look for
         return values:
                 returns 0 for OK or error code defined in conf.h
+                lvalue: the long integer associated with key in section
 */
 int
-setconf_long(const char *configfile, const char *key, long lvalue)
+getconf_long(const char *configfile, const char *key, long *lvalue)
 {
         char    svalue[CONF_MAX_LINE_LEN];                                      /* tempory storage for string value */
         int     result;                                                         /* result of called functions */
 
-        sprintf(svalue, "%ld", lvalue);                                         /* put long in string */
-        if ((result = setconf(configfile, key, svalue)))                        /* set string value in config file */
+        if (!lvalue)                                                            /* NULL pointer was passed */
+                return CONF_ERR_ARGUMENT;
+
+        if ((result = getconf(configfile, key, svalue, sizeof(svalue))))        /* get string value from config file */
                 return result;
-        else
-                return CONF_SUCCESS;
-} /* setconf_long() */
+
+        *lvalue = strtol(svalue,0,0);                                                 /* convert to long */
+        return CONF_SUCCESS;
+} /* getconf_long() */
 
 /*
-    End of "$Id: conf_setlong.c,v 1.9 2001/07/23 09:50:05 spitzak Exp $".
+    End of "$Id: conf_getlong.c,v 1.3 2002/02/10 22:57:50 spitzak Exp $".
 */

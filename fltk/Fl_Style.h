@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.h,v 1.6 2002/01/28 08:02:59 spitzak Exp $"
+// "$Id: Fl_Style.h,v 1.7 2002/02/10 22:57:47 spitzak Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -38,6 +38,8 @@ typedef void (*Fl_Glyph)(const Fl_Widget*, int type,
 			 int,int,int,int,
 			 Fl_Flags);
 
+extern "C" {typedef bool (*Fl_Theme)();}
+
 struct FL_API Fl_Style {
   Fl_Boxtype    box;
   Fl_Boxtype    button_box;
@@ -70,10 +72,27 @@ struct FL_API Fl_Style {
 
   Fl_Style(); // creates a dynamic() style
 
-  // find a default style by its string ID
   static Fl_Style* find(const char* name);
-  static void revert();                 // use FLTK default style
-  static void start(const char* name);	// start a new class of style or use a previously started one
+  static void revert();
+  static Fl_Theme theme() {return theme_;}
+  static void theme(Fl_Theme f) {theme_ = f;}
+  static Fl_Theme load_theme(const char*);
+  static void load_theme();
+  static void reload_theme();
+  static const char* scheme() {return scheme_;}
+  static void scheme(const char* f) {scheme_ = f;}
+
+private:
+  static Fl_Theme theme_;
+  static const char* scheme_;
+};
+
+struct FL_API Fl_Named_Style : public Fl_Style {
+  const char* name;
+  Fl_Named_Style* next;
+  static Fl_Named_Style* first;
+  Fl_Named_Style** back_pointer; // used by Fl_Style_Set
+  Fl_Named_Style(const char* name, void (*revert)(Fl_Style*), Fl_Named_Style**);
 };
 
 enum Fl_Glyphtype {	// glyph types understood by Fl_Widget::default_glyph()
@@ -89,18 +108,12 @@ enum Fl_Glyphtype {	// glyph types understood by Fl_Widget::default_glyph()
   FL_GLYPH_RIGHT_BUTTON
 };
 
-struct FL_API Fl_Named_Style : public Fl_Style {
-  const char* name;
-  Fl_Named_Style* next;
-  static Fl_Named_Style* first;
-  Fl_Named_Style** back_pointer; // used by Fl_Style::start
-  Fl_Named_Style(const char* name, void (*revert)(Fl_Style*), Fl_Named_Style**);
-};
-
-FL_API void fl_get_system_colors();
+extern "C" FL_API bool fltk_theme();
+FL_API bool fl_get_system_colors();
+FL_API const char* fl_find_config_file(char* out, int size, const char* name);
 
 #endif
 
 //
-// End of "$Id: Fl_Style.h,v 1.6 2002/01/28 08:02:59 spitzak Exp $".
+// End of "$Id: Fl_Style.h,v 1.7 2002/02/10 22:57:47 spitzak Exp $".
 //

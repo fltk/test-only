@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.100 2002/01/23 08:46:01 spitzak Exp $"
+# "$Id: Makefile,v 1.101 2002/02/10 22:57:49 spitzak Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -70,6 +70,7 @@ CPPFILES = \
 	Fl_Pack.cxx \
 	Fl_Pixmap.cxx \
 	Fl_ProgressBar.cxx \
+	Fl_Radio_Button.cxx \
 	Fl_Repeat_Button.cxx \
 	Fl_Return_Button.cxx \
 	Fl_RGB_Image.cxx \
@@ -81,7 +82,7 @@ CPPFILES = \
 	Fl_Slider.cxx \
 	Fl_String_List.cxx \
 	Fl_Style.cxx \
-	Fl_Style_start.cxx \
+	Fl_Style_Set.cxx \
 	Fl_Tabs.cxx \
 	Fl_Text_Buffer.cxx \
 	Fl_Text_Display.cxx \
@@ -107,7 +108,6 @@ CPPFILES = \
 	Fl_key_name.cxx \
 	Fl_lock.cxx \
 	Fl_own_colormap.cxx \
-	Fl_startup.cxx \
 	Fl_visual.cxx \
 	filename_absolute.cxx \
 	filename_expand.cxx \
@@ -121,7 +121,6 @@ CPPFILES = \
 	fl_ask.cxx \
 	fl_clip.cxx \
 	fl_color.cxx \
-	fl_conf.cxx \
 	fl_cursor.cxx \
 	fl_curve.cxx \
 	fl_diamond_box.cxx \
@@ -139,6 +138,7 @@ CPPFILES = \
 	fl_oval_box.cxx \
 	fl_overlay.cxx \
 	fl_overlay_visual.cxx \
+	fl_plastic_box.cxx \
 	fl_rect.cxx \
 	fl_round_box.cxx \
 	fl_rounded_box.cxx \
@@ -149,65 +149,18 @@ CPPFILES = \
 	fl_show_colormap.cxx \
 	fl_symbols.cxx \
 	fl_vertex.cxx \
-	fl_xpm.cxx
+	fl_xpm.cxx \
+	fltk_theme.cxx
 
 CFILES = \
 	scandir.c \
-	vsnprintf.c \
-	conf.c \
-	conf_endtrim.c \
-	conf_get.c \
-	conf_keys.c \
-	conf_strcnt.c \
-	conf_list_free.c \
-	conf_util.c \
-	conf_del.c \
-	conf_error.c \
-	conf_getboolean.c \
-	conf_getlong.c \
-	conf_sections.c \
-	conf_set.c \
-	conf_setboolean.c \
-	conf_setlong.c
-
-# files that were deleted:
-
-#	Fl_theme.cxx \
-#	fl_background.cxx \
-#	fl_set_font.cxx \
-#	fl_set_fonts.cxx \
-#	Fl_Threads.cxx \
-#	Fl_Style_Plugins.cxx \
-#	Fl_Style_Util.cxx \
-#	Fl_Adjuster_SW.cxx \
-#	Fl_Browser_SW.cxx \
-#	Fl_Button_SW.cxx \
-#	Fl_Chart_SW.cxx \
-#	Fl_Choice_SW.cxx \
-#	Fl_Counter_SW.cxx \
-#	Fl_Input_SW.cxx \
-#	Fl_Menu_Item_SW.cxx \
-#	Fl_Menu_Button_SW.cxx \
-#	Fl_Menu_SW.cxx \
-#	Fl_Slider_SW.cxx \
-#	Fl_Widget_SW.cxx \
+	vsnprintf.c
 
 ################################################################
 
-XTRAFLAGS = -DFL_LIBRARY
-
 include ../makeinclude
-
-.c.o:
-	$(CC) -I.. $(XTRAFLAGS) $(CFLAGS) $< -c
-
-.cxx.o:
-	$(CXX) -I.. $(XTRAFLAGS) $(CXXFLAGS) $< -c
-
-%.shared.o : %.cxx
-	$(CXX) -I.. $(XTRAFLAGS) $(DSOCFLAGS) $(CXXFLAGS) -c $< -o $@
-%.shared.o : %.c
-	$(CC) -I.. $(XTRAFLAGS) $(DSOCFLAGS) $(CFLAGS) -c $< -o $@
+DSOCFLAGS += -DFL_LIBRARY
+DSOCXXFLAGS += -DFL_LIBRARY
 
 LIBRARY = ../lib/$(LIBNAME)
 DSO = ../lib/$(DSOLIBNAME)
@@ -294,5 +247,5 @@ install_shared: shared
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.100 2002/01/23 08:46:01 spitzak Exp $".
+# End of "$Id: Makefile,v 1.101 2002/02/10 22:57:49 spitzak Exp $".
 #

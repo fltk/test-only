@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.57 2002/01/27 04:59:47 spitzak Exp $"
+// "$Id: fluid.cxx,v 1.58 2002/02/10 22:57:47 spitzak Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -353,18 +353,39 @@ void tt_cb(Fl_Widget *w, void *) {
 
 #include <string.h>
 #include <fltk/fl_ask.h>
-char* scheme;
-void scheme_cb(Fl_Widget *, void *) {
-  const char* s = fl_input("Enter the name of a scheme:", scheme);
+
+#include <fltk/Fl_Style_Set.h>
+Fl_Style_Set* fluid_style_set;
+Fl_Style_Set* style_set;
+char* theme;
+
+void set_theme(const char* s) {
+  if (!s || !*s) {
+    if (!theme) return;
+    free((void*)theme);
+    theme = 0;
+  } else {
+    if (theme) {
+      if (!strcmp(theme, s)) return;
+      free((void*)theme);
+    }
+    theme = strdup(s);
+  }
+  style_set->make_current();
+  Fl_Theme f = Fl_Style::load_theme(theme);
+  Fl_Style::theme(f);
+  // set the scheme...
+  Fl_Style::reload_theme();
+  fluid_style_set->make_current();
+  Fl::redraw();
+  if (!f) fl_alert("Error loading theme \"%s\" (plugin not found?)",
+		   theme ? theme : "");
+}
+
+void theme_cb(Fl_Widget *, void *) {
+  const char* s = fl_input("Enter the theme name:", theme);
   if (!s) return;
-  // I copy this first so it is not in the same memory as old value so
-  // that fltk's comparison works:
-  char* newscheme = *s ? strdup(s) : 0;
-  Fl_Style::start("style1");
-  Fl::scheme(newscheme);
-  Fl_Style::start("fluid_style");
-  if (scheme) free(scheme);
-  scheme = newscheme;
+  set_theme(s);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -401,7 +422,7 @@ Fl_Menu_Item Main_Menu[] = {
   {"Show Overlays",FL_ALT+'o',toggle_overlays,0,FL_MENU_TOGGLE|FL_MENU_VALUE},
   {"Preferences",FL_CTRL+'p',show_alignment_cb},
   {"Coding Style", 0, show_coding_style_cb},
-  {"Scheme", 0, scheme_cb},
+  {"Theme", 0, theme_cb},
   {"Set images root directory", FL_CTRL+'d', set_images_dir_cb},
   {0},
 {"&New", 0, 0, (void *)New_Menu, FL_SUBMENU_POINTER},
@@ -488,8 +509,7 @@ static void sigint(SIGARG) {
 }
 #endif
 
-int main(int argc,char **argv) {  
-  Fl_Style::start("fluid_style");
+int main(int argc,char **argv) {
   int i = 1;
   if (!Fl::args(argc,argv,i,arg) || i < argc-1) {
     fprintf(stderr,"usage: %s <switches> name.fl\n"
@@ -501,9 +521,13 @@ int main(int argc,char **argv) {
   }
   const char *c = argv[i];
 
+  fluid_style_set = new Fl_Style_Set();
+  style_set = new Fl_Style_Set();
+
   read_plugins();
   make_main_window();
   load_coding_style();
+
   if (c) set_filename(c);
   if (!compile_only) {
     Fl::visual(FL_DOUBLE|FL_INDEX);
@@ -528,5 +552,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.57 2002/01/27 04:59:47 spitzak Exp $".
+// End of "$Id: fluid.cxx,v 1.58 2002/02/10 22:57:47 spitzak Exp $".
 //

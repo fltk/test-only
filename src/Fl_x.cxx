@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.121 2002/01/27 04:59:48 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.122 2002/02/10 22:57:49 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -534,7 +534,7 @@ bool fl_handle()
       return true;
 
     } else if (message == FLTKChangeScheme) {
-      Fl::reload_scheme();
+      Fl_Style::reload_theme();
       return true;
 
     } else if (message == fl_XdndEnter) {
@@ -1252,7 +1252,7 @@ static Fl_Color to_color(const char* p) {
   return p ? fl_rgb(p) : 0;
 }
 
-void fl_get_system_colors() {
+bool fl_get_system_colors() {
   fl_open_display();
 
   Fl_Color color;
@@ -1314,8 +1314,9 @@ void fl_get_system_colors() {
   if (clobbered) {*clobbered = clobbered_value; clobbered = 0;}
 #endif
 
+  return true;
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.121 2002/01/27 04:59:48 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.122 2002/02/10 22:57:49 spitzak Exp $".
 //

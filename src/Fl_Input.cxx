@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.57 2002/01/27 04:59:47 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.58 2002/02/10 22:57:48 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -1008,6 +1008,7 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
     return 1; // For tooltips
 
   case FL_FOCUS:
+#if 0
     switch (Fl::event_key()) {
     case FL_Right:
       position(0);
@@ -1028,6 +1029,13 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
       position(position(),mark());// turns off the saved up/down arrow position
       break;
     }
+#else
+    if (Fl::event() == FL_KEY || Fl::event() == FL_SHORTCUT) {
+      position(size(),0);
+    } else {
+      position(position(), mark());
+    }
+#endif
     update_cursor(true);
     return 2; // returns 2 to make Fl_Group think it really important
 
@@ -1201,5 +1209,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.57 2002/01/27 04:59:47 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.58 2002/02/10 22:57:48 spitzak Exp $".
 //

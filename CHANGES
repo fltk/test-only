@@ -2028,3 +2028,30 @@ Checked in 1/27/02
 
 Redrawing of Check buttons fixed to not overdraw the label, which was
 visible when Xft or other antialiasing was used.
+
+////////////////////////////////////////////////////////////////
+
+Major simplification of the themes, moving "conf" out of fltk and into
+the themes that use it. Added "scheme" theme that emulates the older
+system, making this the default theme will emulate it exactly. This
+now works pretty much the way I intend fltk2.0 to work. Notice that
+this has caused the addition, deletion, and renaming of a number of
+source files.
+
+Added FL_PLASTIC_BOX, copied from fltk1.1.
+
+Seperated the Fl_Radio_Button drawing from the Fl_Check_Button.
+
+Fixed (sort of) the essai theme. It compiles and runs but needs work.
+
+Win32 uses Fl_Window::xclass() as the name of the window class it
+creates.
+
+New fl_arc drawing code by Jim Wilson.
+
+Replaced Fl_Style::start() with new object called Fl_Style_Set. Not
+sure if this is any better but it seems more object-oriented. This is
+not going to work right unless I get rid of fl_background(), but fluid
+loads themes pretty well now.
+
+Checked in 2/10/02

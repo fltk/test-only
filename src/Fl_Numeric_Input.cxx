@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Numeric_Input.cxx,v 1.2 2002/01/28 08:03:00 spitzak Exp $"
+// "$Id: Fl_Numeric_Input.cxx,v 1.3 2002/02/10 22:57:48 spitzak Exp $"
 //
 // Copyright 2002 by Bill Spitzak, Digital Domain, and others.
 //
@@ -58,8 +58,16 @@ void Fl_Numeric_Input::value(int v) {
 
 int Fl_Numeric_Input::handle(int event) {
   if (event == FL_KEY) switch (Fl::event_key()) {
-  case FL_Up: return handle_arrow(1);
-  case FL_Down: return handle_arrow(-1);
+  case FL_Up:
+    if (Fl::event_state(FL_CTRL)) return 0;
+    return handle_arrow(1);
+  case FL_Down:
+    if (Fl::event_state(FL_CTRL)) return 0;
+    return handle_arrow(-1);
+  case FL_Left:
+  case FL_Right:
+    if (Fl::event_state(FL_CTRL)) return 0;
+    break;
   }
   return Fl_Input::handle(event);
 }

@@ -1,5 +1,5 @@
-/*
- * "$Id: configh.in,v 1.49 2001/12/16 22:32:02 spitzak Exp $"
+/* -*- mode: C++ -*-
+ * "$Id: configh.in,v 1.50 2002/02/10 22:57:47 spitzak Exp $"
  *
  * This file is used to compile fltk. It should not be necessary for
  * programs that use fltk to refer to this file, and this file is not
@@ -7,6 +7,13 @@
  *
  * If this file is "configh.in" it is the input to ./configure.
  */
+
+/* The fltk libraries are compiled as shared libraries ("dlls"). Due
+   to stupid Windoze stuff, this is passed as a compile-time option,
+   to avoid having *every* file depend on config.h, and because the
+   programs linked with fltk *also* need to know this.
+*/
+/* #define FL_SHARED 0 */
 
 /* Set this to 0 if your system does not have OpenGL. This will
    disable all the code in libfltk_gl and disable the demo programs
@@ -124,44 +131,23 @@
 #  define strtok_r(a,b,c) strtok(a,b)
 #endif
 
-/* Use the Posix poll() call instead of select() ?
-*/
+/* Use the Posix poll() call instead of select() ? */
 #define USE_POLL 0
 
-/* Do we have libpng ? (for reading .png images)
-*/
+/* Do we have libpng ? (for reading .png images) */
 #define HAVE_PNG 0
 
-/* Do we have libjpeg ? (for reading .jpg images)
-*/
+/* Do we have libjpeg ? (for reading .jpg images) */
 #define HAVE_JPEG 0
 
-/* Enables Fl::lock() and Fl::unlock() on Unix
-*/
+/* Enables Fl::lock() and Fl::unlock() on Unix */
 #define HAVE_PTHREAD 0
 
-/* Enables fl_load_plugin() on Unix
-*/
+/* Enables fl_load_plugin() on Unix */
 #define HAVE_DLOPEN 0
 
-/* Load plugins. This makes it understand -theme and also load plugins
-   named in conf files (if conf files are enabled). Requies HAVE_DLOPEN
-*/
-#define USE_PLUGINS HAVE_DLOPEN
-
-/* Read the conf files (flconfig and scheme/schemename). If you turn
-   this off you can delete all the conf_*.c source files from the library.
-*/
-#define USE_CONF 1
-
-/* Where, after ~/.fltk, to look for conf and plugin files
-*/
+/* Where, after ~/.fltk, to look for plugin files */
 #define CONFIGDIR "/usr/local/lib/fltk"
-
-/* define this to give reading config files a serious speed boost
-   but you will need to call conf_clear_cache() to see changes
-*/
-#define CONF_CACHED
 
 /* The BoXX machines (and possibly other Linux machines) have bugs in
    the X/OpenGL driver for FireGL for handling hardware overlays. Turn
@@ -190,5 +176,5 @@
 #define ALT_GOES_TO_MENUBAR 0
 
 /*
- * End of "$Id: configh.in,v 1.49 2001/12/16 22:32:02 spitzak Exp $".
+ * End of "$Id: configh.in,v 1.50 2002/02/10 22:57:47 spitzak Exp $".
  */

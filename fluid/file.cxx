@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.25 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: file.cxx,v 1.26 2002/02/10 22:57:47 spitzak Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -317,7 +317,7 @@ extern int header_file_set;
 extern int code_file_set;
 extern const char* header_file_name;
 extern const char* code_file_name;
-extern char* scheme;
+extern char* theme;
 
 int write_file(const char *filename, int selected_only) {
   if (!open_write(filename)) return 0;
@@ -332,7 +332,7 @@ int write_file(const char *filename, int selected_only) {
     for (unsigned int i=0; i<sizeof(inttable)/sizeof(*inttable); i++)
       write_string("\n%s %d",inttable[i].name, *inttable[i].value);
   }
-  if (scheme && *scheme) { write_string("\nscheme "); write_word(scheme); }
+  if (theme && *theme) { write_string("\ntheme "); write_word(theme); }
   for (Fl_Type *p = Fl_Type::first; p;) {
     if (!selected_only || p->selected) {
       p->write();
@@ -353,6 +353,7 @@ void read_fdesign();
 double read_version;
 
 extern Fl_Type *Fl_Type_make(const char *tn);
+extern void set_theme(const char* s);
 
 static void read_children(Fl_Type *p, int paste) {
   Fl_Type::current = p;
@@ -415,9 +416,8 @@ static void read_children(Fl_Type *p, int paste) {
       goto CONTINUE;
     }
 
-    if (!strcmp(c, "scheme") || !strcmp(c, "scheme")) {
-      if (scheme) free(scheme);
-      scheme = strdup(read_word());
+    if (!strcmp(c, "theme") || !strcmp(c, "scheme")) {
+      set_theme(read_word());
       goto CONTINUE;
     }
 
@@ -467,20 +467,11 @@ int read_file(const char *filename, int merge) {
   read_version = 0.0;
   if (!open_read(filename)) return 0;
   if (merge) deselect(); 
-  else {
-    delete_all();
-    if (scheme) {
-      free(scheme);
-      scheme = 0;
-    }
-  }
+  else delete_all();
   read_children(Fl_Type::current, merge);
   Fl_Type::current = 0;
   for (Fl_Type *o = Fl_Type::first; o; o = o->walk())
     if (o->selected) {Fl_Type::current = o; break;}
-  Fl_Style::start("style1");
-  if (scheme) Fl::scheme(scheme);
-  Fl_Style::start("fluid_style");
   return close_read();
 }
 
@@ -656,5 +647,5 @@ void fl_end_group() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.25 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: file.cxx,v 1.26 2002/02/10 22:57:47 spitzak Exp $".
 //

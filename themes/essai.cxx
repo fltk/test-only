@@ -1,5 +1,5 @@
 //
-// "$Id: essai.cxx,v 1.32 2001/07/24 04:44:26 clip Exp $"
+// "$Id: essai.cxx,v 1.33 2002/02/10 22:57:50 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -43,30 +43,31 @@
 
 #include <fltk/Fl_Boxtype.h>
 #include <fltk/Fl_Shared_Image.h>
+#include <fltk/Fl_Tiled_Image.h>
 
 class Fl_Image_Box : public Fl_Boxtype_ {
   Fl_Flags mask;
 public:
   void draw(const int,int,int,int, Fl_Color, Fl_Flags) const;
-  Fl_Shared_Image* normal_img;
-  Fl_Shared_Image* down_img;
-  Fl_Shared_Image* highlight_img;
+  Fl_Tiled_Image* normal_img;
+  Fl_Tiled_Image* down_img;
+  Fl_Tiled_Image* highlight_img;
   Fl_Image_Box(const char*, const char*, const char*, Fl_Flags = 0);
 };
 
 void Fl_Image_Box::draw(int x, int y, int w, int h,
 			Fl_Color color, Fl_Flags flags) const
 {
-  Fl_Shared_Image* img;
+  Fl_Tiled_Image* img;
 
   if (flags&FL_VALUE) img = down_img;
   else if (flags&FL_HIGHLIGHT) img = highlight_img;
   else img = normal_img;
 
-  fl_up_box.draw(x,y,w,h,0,(flags|FL_FRAME_ONLY)&(~mask));
-  if (!(flags&FL_FRAME_ONLY)) {
+  fl_up_box.draw(x,y,w,h,0,(flags|FL_INACTIVE)&(~mask));
+  if (!(flags&FL_INACTIVE)) {
     fl_up_box.inset(x,y,w,h);
-    img->draw_tiled(x,y,w,h, -w/2, -h/2);
+    img->draw(x,y,w,h);
   }
 }
 
@@ -77,9 +78,13 @@ Fl_Boxtype_(0), mask(m) {
   dw_ = fl_up_box.dw();
   dh_ = fl_up_box.dh();
   fills_rectangle_ = true;
-  normal_img = Fl_JPEG_Image::get(fl_find_config_file(normal_b));
-  down_img = Fl_JPEG_Image::get(fl_find_config_file(down_b));
-  highlight_img = Fl_JPEG_Image::get(fl_find_config_file(highlight_b));
+  char buffer[256];
+  normal_img =
+    new Fl_Tiled_Image(Fl_JPEG_Image::get(fl_find_config_file(buffer,256,normal_b)));
+  down_img =
+    new Fl_Tiled_Image(Fl_JPEG_Image::get(fl_find_config_file(buffer,256,down_b)));
+  highlight_img =
+    new Fl_Tiled_Image(Fl_JPEG_Image::get(fl_find_config_file(buffer,256,highlight_b)));
 }
 
 class Fl_Image_NoBorderBox : public Fl_Image_Box {
@@ -95,42 +100,48 @@ void Fl_Image_NoBorderBox::draw(int x, int y, int w, int h,
     Fl_Image_Box::draw(x,y,w,h, color, flags);
     return;
   }
-  if (!(flags&FL_FRAME_ONLY)) {
-    normal_img->draw_tiled(x, y, w, h, -w/2, -h/2);
+  if (!(flags&FL_INACTIVE)) {
+    normal_img->draw(x, y, w, h);
   }
 }
 
-extern "C"
-int fltk_plugin() {
+extern "C" bool fltk_theme()
+{
 
   //  fl_background(0xD0D0E000); // it would be nice to figure out color from image
-  Fl_Boxtype flat1 = new Fl_Image_NoBorderBox("themes/bg.jpeg", "themes/bg2.jpeg", "themes/bg3.jpeg");
-  Fl_Boxtype flat2 = new Fl_Image_NoBorderBox("themes/bg2.jpeg", "themes/bg3.jpeg", "themes/bg3.jpeg", FL_VALUE);
-  Fl_Boxtype box1 = new Fl_Image_Box("themes/bg2.jpeg", "themes/bg3.jpeg", "themes/bg3.jpeg");
-  //Fl_Boxtype box2 = new Fl_Image_Box("themes/bg.jpeg", "themes/bg.jpeg", "themes/bg.jpeg");
-  Fl_Boxtype box3 = new Fl_Image_Box("themes/bg2.jpeg", "themes/bg3.jpeg", "themes/bg3.jpeg", FL_VALUE);
+  Fl_Boxtype flat1 = new Fl_Image_NoBorderBox("bg.jpeg", "bg2.jpeg", "bg3.jpeg");
+  Fl_Boxtype flat2 = new Fl_Image_NoBorderBox("bg2.jpeg", "bg3.jpeg", "bg3.jpeg", FL_VALUE);
+  Fl_Boxtype box1 = new Fl_Image_Box("bg2.jpeg", "bg3.jpeg", "bg3.jpeg");
+  //Fl_Boxtype box2 = new Fl_Image_Box("bg.jpeg", "bg.jpeg", "bg.jpeg");
+  Fl_Boxtype box3 = new Fl_Image_Box("bg2.jpeg", "bg3.jpeg", "bg3.jpeg", FL_VALUE);
   Fl_Widget::default_style->box = box1;
+  Fl_Widget::default_style->button_box = box3;
   Fl_Widget::default_style->highlight_color = FL_LIGHT2;
   Fl_Style* s;
   if ((s = Fl_Style::find("window"))) {
     s->box = flat1;
   }
+  if ((s = Fl_Style::find("group"))) {
+    s->box = FL_NO_BOX;
+  }
   if ((s = Fl_Style::find("menu"))) {
     s->selection_text_color = FL_BLACK;
-    s->text_box = flat2;
+    s->box = flat1;
+    s->button_box = flat2;
   }
   if ((s = Fl_Style::find("menu bar"))) {
     s->highlight_color = FL_GRAY;
     s->highlight_label_color = FL_BLACK;
     s->box = flat2;
     s->selection_text_color = FL_BLACK;
-    s->text_box = flat2;
+    s->button_box = flat2;
   }
   if ((s = Fl_Style::find("highlight button"))) {
-    s->box = flat1;
+    s->box = flat2;
   }
   if ((s = Fl_Style::find("button"))) {
     s->selection_text_color = FL_BLACK;
+    s->box = box3;
   }
   if ((s = Fl_Style::find("tabs"))) {
     s->box = box1;
@@ -138,9 +149,9 @@ int fltk_plugin() {
   if ((s = Fl_Style::find("light button"))) {
     s->box = box3;
   }
-  return 0;
+  return true;
 }
 
 //
-// End of "$Id: essai.cxx,v 1.32 2001/07/24 04:44:26 clip Exp $".
+// End of "$Id: essai.cxx,v 1.33 2002/02/10 22:57:50 spitzak Exp $".
 //

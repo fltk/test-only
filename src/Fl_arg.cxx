@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.35 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: Fl_arg.cxx,v 1.36 2002/02/10 22:57:49 spitzak Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -60,9 +60,7 @@ static bool arg_called;
 static bool return_i;
 static const char* name;
 static const char* geometry;
-extern Fl_Color fl_bg_switch;	// in fl_options.cxx
-// startup theme and scheme
-extern const char* fl_startup_theme;
+extern Fl_Color fl_bg_switch;	// in Fl_Style.cxx
 
 // consume a switch from argv.  Returns number of words eaten, 0 on error:
 int Fl::arg(int argc, char **argv, int &i) {
@@ -107,13 +105,15 @@ int Fl::arg(int argc, char **argv, int &i) {
 
   } else if (match(s, "bg") || match(s, "background")) {
     fl_bg_switch = fl_rgb(v);
-    if (!fl_bg_switch) Fl::error("Unknown color: %s", v);
-
-  } else if (match(s, "scheme")) {
-    Fl::scheme(v);
+    if (!fl_bg_switch) Fl::error("Unknown color \"%s\"", v);
 
   } else if (match(s, "theme")) {
-    fl_startup_theme = v;
+    Fl_Theme f = Fl_Style::load_theme(v);
+    if (!f) Fl::error("Unable to load theme \"%s\"", v);
+    else Fl_Style::theme(f);
+
+  } else if (match(s, "scheme")) {
+    Fl_Style::scheme(v);
 
   } else return 0; // unrecognized
 
@@ -190,11 +190,11 @@ static const char * const helpmsg =
 " -d[isplay] host:n.n\n"
 #endif
 " -g[eometry] WxH+X+Y\n"
-" -s[cheme] scheme\n"
 " -t[heme] theme\n"
+//" -s[cheme] scheme (argument to theme)\n"
+" -bg color\n"
 " -n[ame] windowname\n"
-" -i[conic]\n"
-" -bg color";
+" -i[conic]";
 
 const char * const Fl::help = helpmsg+13;
 
@@ -341,5 +341,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef _WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.35 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.36 2002/02/10 22:57:49 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.34 2002/01/28 08:03:00 spitzak Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.35 2002/02/10 22:57:48 spitzak Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -129,6 +129,8 @@ void Fl_Scroll::layout() {
     if (o->y()+o->h() > b) b = o->y()+o->h();
   }
 
+  const int sw = scrollbar_width();
+
   // See if children would fit if we had no scrollbars...
   int X=0; int Y=0; int W=w(); int H=h(); box()->inset(X,Y,W,H);
   int vneeded = 0;
@@ -136,22 +138,22 @@ void Fl_Scroll::layout() {
   if (type() & VERTICAL) {
     if ((type() & ALWAYS_ON) || t < Y || b > Y+H) {
       vneeded = 1;
-      W -= scrollbar.w();
-      if (scrollbar.flags() & FL_ALIGN_LEFT) X += scrollbar.w();
+      W -= sw;
+      if (scrollbar_align() & FL_ALIGN_LEFT) X += sw;
     }
   }
 
   if (type() & HORIZONTAL) {
     if ((type() & ALWAYS_ON) || l < X || r > X+W) {
       hneeded = 1;
-      H -= hscrollbar.h();
-      if (scrollbar.flags() & FL_ALIGN_TOP) Y += hscrollbar.h();
+      H -= sw;
+      if (scrollbar_align() & FL_ALIGN_TOP) Y += sw;
       // recheck vertical since we added a horizontal scrollbar
       if (!vneeded && (type() & VERTICAL)) {
 	if (t < Y || b > Y+H) {
 	  vneeded = 1;
-	  W -= scrollbar.w();
-	  if (scrollbar.flags() & FL_ALIGN_LEFT) X += scrollbar.w();
+	  W -= sw;
+	  if (scrollbar_align() & FL_ALIGN_LEFT) X += sw;
 	}
       }
     }
@@ -180,14 +182,11 @@ void Fl_Scroll::layout() {
     }
   }
 
-  scrollbar.resize(scrollbar.flags()&FL_ALIGN_LEFT ? X-scrollbar.w() : X+W,
-		   Y, scrollbar.w(), H);
+  scrollbar.resize(scrollbar_align()&FL_ALIGN_LEFT ? X-sw : X+W, Y, sw, H);
   scrollbar.value(yposition_ = (Y-t), H, 0, b-t);
-
-  hscrollbar.resize(X,
-		    scrollbar.flags()&FL_ALIGN_TOP ? Y-hscrollbar.h() : Y+H,
-		    W, hscrollbar.h());
+  hscrollbar.resize(X, scrollbar_align()&FL_ALIGN_TOP ? Y-sw : Y+H, W, sw);
   hscrollbar.value(xposition_ = (X-l), W, 0, r-l);
+
   set_old_size();
   Fl_Widget::layout();
   redraw(FL_DAMAGE_SCROLL);
@@ -263,11 +262,11 @@ int Fl_Scroll::handle(int event) {
   case FL_PUSH:
   case FL_MOVE:
   case FL_ENTER:
-    if (scrollbar.flags()&FL_ALIGN_LEFT ?
+    if (scrollbar_align()&FL_ALIGN_LEFT ?
 	(Fl::event_x() < scrollbar.x()+scrollbar.w()) :
 	(Fl::event_x() >= scrollbar.x()))
       if (send(event,scrollbar)) return 1;
-    if (scrollbar.flags()&FL_ALIGN_TOP ?
+    if (scrollbar_align()&FL_ALIGN_TOP ?
 	(Fl::event_y() < hscrollbar.y()+hscrollbar.h()) :
 	(Fl::event_y() >= hscrollbar.y()))
       if (send(event,hscrollbar)) return 1;
@@ -287,5 +286,5 @@ int Fl_Scroll::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.34 2002/01/28 08:03:00 spitzak Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.35 2002/02/10 22:57:48 spitzak Exp $".
 //

@@ -1,3 +1,18 @@
-Current versions of FLTK may require the winsock2 DLL (WS2_32.DLL).  If you
-have an older version of Windows 95, you may not have this DLL and you will
-to get it from the Microsoft web site.
+BUILDING FLTK UNDER MICROSOFT WINDOWS
+
+    There are three ways to build FLTK under Microsoft Windows.  The
+    first is to use the Microsoft Visual C++ 5.0 project files under
+    the "visualc" directory.  Just open (or double-click on) the
+    "fltk.dsw" file to get the whole shebang.
+
+    The second method is to use Borland C++. Please read the
+    README.bc5 for details.
+    
+    The third method is to use the Cygwin or MinGW GNU-based development
+    tools. For information on how to build in this environment, please
+    read the README.cygwin file.
+
+    Current versions of FLTK may require the winsock2 DLL
+    (WS2_32.DLL).  If you have an older version of Windows 95, you may
+    not have this DLL and you will to get it from the Microsoft web
+    site.

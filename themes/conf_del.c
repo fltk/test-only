@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_del.c,v 1.18 2001/07/29 22:04:43 spitzak Exp $"
+   "$Id: conf_del.c,v 1.3 2002/02/10 22:57:50 spitzak Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -22,7 +22,7 @@
     USA.
 */
 
-#include <fltk/conf.h>
+#include "conf.h"
 #include <config.h>
 
 #ifndef F_OK
@@ -293,5 +293,5 @@ delconf(const char *configfile, const char *k)
 } /* delconf() */
 
 /*
-    End of "$Id: conf_del.c,v 1.18 2001/07/29 22:04:43 spitzak Exp $".
+    End of "$Id: conf_del.c,v 1.3 2002/02/10 22:57:50 spitzak Exp $".
 */

@@ -1,7 +1,7 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.37 2002/02/10 22:57:48 spitzak Exp $"
+// "$Id: Fl_Radio_Button.cxx,v 1.1 2002/02/10 22:57:48 spitzak Exp $"
 //
-// Check button widget for the Fast Light Tool Kit (FLTK).
+// Radio button widget for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -24,13 +24,14 @@
 //
 
 #include <fltk/Fl.h>
-#include <fltk/Fl_Check_Button.h>
+#include <fltk/Fl_Radio_Button.h>
 #include <fltk/fl_draw.h>
 #include <fltk/Fl_Group.h>
 
 static void default_glyph(const Fl_Widget* widget, int glyph,
 			  int x,int y,int w,int h, Fl_Flags flags)
 {
+  // h = (h+1)&(~1); // even only
   Fl_Boxtype box = widget->button_box();
   box->draw(x, y, w, h, widget->button_color(), flags);
   box->inset(x, y, w, h);
@@ -38,36 +39,25 @@ static void default_glyph(const Fl_Widget* widget, int glyph,
     Fl_Color color = (box == FL_NO_BOX && (flags&FL_SELECTED)) ?
       widget->selection_text_color() : widget->text_color();
     fl_color(fl_inactive(color, flags));
-    x += 1;
-    w = h - 2;
-    int d1 = w/3;
-    int d2 = w-d1;
-    y += (h+d2)/2-d1-2;
-    for (int n = 0; n < 3; n++, y++) {
-      fl_line(x, y, x+d1, y+d1);
-      fl_line(x+d1, y+d1, x+w-1, y+d1-d2+1);
-    }
+    int d = h/6;
+    fl_ellipse(x+d, y+d, h-d-d-1, h-d-d-1);
+    fl_fill();
   }
-}
-
-void Fl_Check_Button::draw() {
-  Fl_Button::draw(0, text_size()+2);
 }
 
 static void revert(Fl_Style* s) {
   s->box = FL_NO_BOX;
   s->color = FL_GRAY;
-  s->button_box = FL_DOWN_BOX;
+  s->button_box = FL_ROUND_DOWN_BOX;
   s->button_color = FL_WHITE;
   s->glyph = ::default_glyph;
 }
-static Fl_Named_Style style("Check_Button", revert, &Fl_Check_Button::default_style);
-Fl_Named_Style* Fl_Check_Button::default_style = &::style;
+static Fl_Named_Style style("Radio_Button", revert, &Fl_Radio_Button::default_style);
+Fl_Named_Style* Fl_Radio_Button::default_style = &::style;
 
-Fl_Check_Button::Fl_Check_Button(int x, int y, int w, int h, const char *l)
-  : Fl_Button(x, y, w, h, l)
+Fl_Radio_Button::Fl_Radio_Button(int x, int y, int w, int h, const char *l)
+  : Fl_Check_Button(x, y, w, h, l)
 {
   style(default_style);
-  type(TOGGLE);
-  set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+  type(RADIO);
 }

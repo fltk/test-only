@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.32 2002/01/28 08:03:00 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.33 2002/02/10 22:57:48 spitzak Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -25,8 +25,18 @@
 
 #include <fltk/Fl.h>
 #include <fltk/Fl_Widget.h>
-#include <fltk/fl_theme.h>
+#include <fltk/fl_load_plugin.h>
+#include <fltk/vsnprintf.h>
 #include <string.h>
+#include <stdlib.h>
+#include <config.h>
+#if defined(_WIN32)
+# include <io.h>
+# define access(a,b) _access(a,b)
+# define R_OK 4
+#else
+# include <unistd.h>
+#endif
 
 Fl_Named_Style* Fl_Named_Style::first;
 
@@ -162,8 +172,11 @@ unsigned Fl_Style::scrollbar_width = 15;
 Fl_Flags Fl_Style::scrollbar_align = FL_ALIGN_RIGHT|FL_ALIGN_BOTTOM;
 int Fl_Style::wheel_scroll_lines = 3;
 
+////////////////////////////////////////////////////////////////
+// Themes:
+
 void Fl_Style::revert() {
-  fl_background((Fl_Color)0xc0c0c000);
+  // fl_background((Fl_Color)0xc0c0c000); // not necessary?
   draw_boxes_inactive = 1;
   scrollbar_width = 15;
   scrollbar_align = FL_ALIGN_RIGHT|FL_ALIGN_BOTTOM;
@@ -178,7 +191,122 @@ void Fl_Style::revert() {
   }
   Fl::redraw();
 }
+
+Fl_Color fl_bg_switch = 0; // set by -bg in Fl_arg.cxx
+
+static bool theme_loaded;
+
+// Force the theme to be reloaded, if it already has been loaded.
+// This does nothing if load_theme() has not been called before (when
+// load_theme() is called this same actions will be done). Otherwise
+// this will call revert() on the styles and run the current theme
+// procedure.
+void Fl_Style::reload_theme() {
+  if (theme_loaded) {
+    theme_loaded = false;
+    revert();
+    load_theme();
+  }
+}
+
+// Force the theme to be loaded. This does nothing if this has already
+// been called. Normally this is called when the first window is shown()
+// but you can call this if you want your program to be able to use any
+// settings the theme made.
+void Fl_Style::load_theme() {
+  if (theme_loaded) return;
+  theme_loaded = true;
+  if (!theme_) theme_ = load_theme("default");
+  theme_();
+  if (fl_bg_switch) fl_background(fl_bg_switch);
+}
+
+Fl_Theme Fl_Style::theme_;
+const char* Fl_Style::scheme_;
+
 ////////////////////////////////////////////////////////////////
+// Theme plugin finder & loader
+
+#ifndef FL_SHARED
+
+Fl_Theme Fl_Style::load_theme(const char* name) {
+  // no name leaves the built-in default:
+  if (!name || !*name) return fltk_theme;
+  // "default" works:
+  if (!strcmp(name, "default")) return fltk_theme;
+  // otherwise we can't do anything
+  fprintf(stderr, "%s : FLTK linked statically, cannot load plugins\n", name);
+  return 0;
+}
+
+#else
+
+#ifndef PATH_MAX
+# define PATH_MAX 256
+#endif
+
+Fl_Theme Fl_Style::load_theme(const char* name) {
+  // no name leaves the built-in default:
+  if (!name || !*name) return fltk_theme;
+
+  // add ".theme" if it is not there:
+  char name_buf[PATH_MAX];
+  int n = strlen(name);
+  if (n < 6 || strcasecmp(name+n-6, ".theme")) {
+    snprintf(name_buf, PATH_MAX, "%s.theme", name);
+    name = name_buf;
+  }
+
+  // search for the file:
+  char path_buf[PATH_MAX];
+  const char *path = fl_find_config_file(path_buf, PATH_MAX, name);
+
+  if (!path) {
+    // If they said "default" it is ok if the plugin is not found:
+    if (!strncmp(name, "default.", 8)) return fltk_theme;
+    return 0;
+  }
+
+  return (Fl_Theme)fl_load_plugin(path, "fltk_theme");
+}
+
+const char* fl_find_config_file(char* path, int size, const char* name)
+{
+  // See if the user typed in an "absolute" path name
+  if (name[0] == '/' || name[0] == '.'
+#ifdef _WIN32
+      || name[0] == '\\' || name[1] == ':'
+#endif
+      ) {
+    return name;
+  }
+  // Look in the ~/.fltk directory:
+  char *cptr = getenv("HOME");
+  if (cptr) {
+    snprintf(path, size, "%s/.fltk/%s", cptr, name);
+    if (access(path, R_OK) == 0) return path;
+  }
+#ifdef _WIN32
+  cptr = getenv("HOMEPATH");
+  if (cptr) {
+    snprintf(path, size, "%s/fltk/%s", cptr, name);
+    if (access(path, R_OK) == 0) return path;
+  }
+  cptr = getenv("USERPROFILE");
+  if (cptr) {
+    snprintf(path,sizeof(path), "%s/Application Data/fltk/%s", cptr, name);
+    if (access(path, R_OK) == 0) return path;
+  }
+#endif
+  // try the default /usr/local/lib/fltk:
+  snprintf(path, sizeof(path), CONFIGDIR "/%s", name);
+  if (access(path, R_OK) == 0) return path;
+  return 0;
+}
+
+#endif
+
+///////////////////////////////////////////////////////////////
 
 #include <fltk/math.h>
 
@@ -203,5 +331,5 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.32 2002/01/28 08:03:00 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.33 2002/02/10 22:57:48 spitzak Exp $".
 //

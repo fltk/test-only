@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.85 2002/01/25 10:10:00 spitzak Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.86 2002/02/10 22:57:47 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -64,6 +64,10 @@ int force_parent;
 extern int gridx;
 extern int gridy;
 
+#include <fltk/Fl_Style_Set.h>
+extern Fl_Style_Set* fluid_style_set;
+extern Fl_Style_Set* style_set;
+
 Fl_Type *Fl_Widget_Type::make() {
   // Find the current widget, or widget to copy:
   Fl_Type *qq = Fl_Type::current;
@@ -116,13 +120,13 @@ Fl_Type *Fl_Widget_Type::make() {
   }
 
   // Construct the Fl_Type:
-  Fl_Style::start("style1");
+  style_set->make_current();
   Fl_Widget_Type *t = _make();
   if (!o) o = widget(0,0,100,100); // create template widget
   t->factory = this;
   // Construct the Fl_Widget:
   t->o = widget(X,Y,W,H);
-  Fl_Style::start("fluid_style");
+  fluid_style_set->make_current();
   if (reading_file) t->o->label(0);
   else if (t->o->label()) t->label(t->o->label()); // allow editing
   t->o->user_data((void*)t);
@@ -2106,5 +2110,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.85 2002/01/25 10:10:00 spitzak Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.86 2002/02/10 22:57:47 spitzak Exp $".
 //

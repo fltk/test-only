@@ -1,5 +1,5 @@
 //
-// "$Id: classic.cxx,v 1.31 2002/01/23 08:46:02 spitzak Exp $"
+// "$Id: classic.cxx,v 1.32 2002/02/10 22:57:50 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -66,7 +66,9 @@ extern const Fl_Frame_Box classic_down_box;
 static const Fl_Frame_Box classic_up_box(0, "AAAAWUJJUTNN",&classic_down_box);
 const Fl_Frame_Box classic_down_box(0, "NNTUJJUWAAAA",&classic_up_box);
 
-extern "C" int fltk_plugin() {
+extern "C" bool fltk_theme() {
+
+  fl_get_system_colors();
 
   Fl_Widget::default_style->button_box = &classic_up_box;
   Fl_Widget::default_style->box = &classic_down_box;
@@ -102,9 +104,9 @@ extern "C" int fltk_plugin() {
   if ((s = Fl_Style::find("choice"))) {
     s->glyph = choice_glyph;
   }
-  return 0;
+  return true;
 }
 
 //
-// End of "$Id: classic.cxx,v 1.31 2002/01/23 08:46:02 spitzak Exp $".
+// End of "$Id: classic.cxx,v 1.32 2002/02/10 22:57:50 spitzak Exp $".
 //

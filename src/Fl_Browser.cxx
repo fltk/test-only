@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.58 2002/01/27 04:59:47 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.59 2002/02/10 22:57:48 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -547,17 +547,12 @@ bool Fl_Browser::set_item_visible(bool value)
 
 void Fl_Browser::layout() {
   // figure out the visible area:
+  const int sw = scrollbar_width();
 
   X = 0; Y = 0; W = w(); H = h();
   box()->inset(X,Y,W,H);
-  if (scrollbar.visible()) {
-    W -= scrollbar.w();
-    if (scrollbar.flags() & FL_ALIGN_LEFT) X += scrollbar.w();
-  }
-  if (hscrollbar.visible()) {
-    H -= hscrollbar.h();
-    if (scrollbar.flags() & FL_ALIGN_TOP) Y += hscrollbar.h();
-  }
+  if (scrollbar.visible()) W -= sw;
+  if (hscrollbar.visible()) H -= sw;
 
   // Measure the height of all items and find widest one
   width_ = 0;
@@ -591,40 +586,42 @@ void Fl_Browser::layout() {
     if (height_ > H || yposition_) {
       if (!scrollbar.visible()) {
 	scrollbar.set_visible();
-	W -= scrollbar.w();
+	W -= sw;
 	redraw(FL_DAMAGE_ALL);
       }
     } else {
       if (scrollbar.visible()) {
 	scrollbar.clear_visible();
-	W += scrollbar.w();
+	W += sw;
 	redraw(FL_DAMAGE_ALL);
       }
     }
     if (width_ > W || xposition_) {
       if (!hscrollbar.visible()) {
 	hscrollbar.set_visible();
-	H -= hscrollbar.h();
+	H -= sw;
 	redraw(FL_DAMAGE_ALL);
       }
     } else {
       if (hscrollbar.visible()) {
 	hscrollbar.clear_visible();
-	H += hscrollbar.h();
+	H += sw;
 	redraw(FL_DAMAGE_ALL);
       }
     }
   }
 
-  scrollbar.resize(scrollbar.flags()&FL_ALIGN_LEFT ? X-scrollbar.w() : X+W,
-		   Y, scrollbar.w(), H);
+  if (scrollbar.visible() && scrollbar_align()&FL_ALIGN_LEFT) X += sw;
+  if (hscrollbar.visible() && scrollbar_align()&FL_ALIGN_TOP) Y += sw;
+
+  scrollbar.resize(scrollbar_align()&FL_ALIGN_LEFT ? X-sw : X+W, Y, sw, H);
   scrollbar.value(yposition_, H, 0, height_);
   scrollbar.linesize(fl_height(text_font(), text_size())+leading());
-  hscrollbar.resize(X,
-		    scrollbar.flags()&FL_ALIGN_TOP ? Y-hscrollbar.h() : Y+H,
-		    W, hscrollbar.h());
+
+  hscrollbar.resize(X, scrollbar_align()&FL_ALIGN_TOP ? Y-sw : Y+H, W, sw);
   hscrollbar.value(xposition_, W, 0, width_);
   hscrollbar.linesize(fl_height(text_font(), text_size()));
+
   Fl_Widget::layout();
   redraw(FL_DAMAGE_CONTENTS); // assumme we need to redraw
 }
@@ -1034,7 +1031,6 @@ bool Fl_Browser::display(int line, bool value) {
 #define SLIDER_WIDTH 16
 
 static void revert(Fl_Style* s) {
-  s->color = FL_LIGHT3-1;
   s->glyph = ::glyph;
 }
 static Fl_Named_Style style("Browser", revert, &Fl_Browser::default_style);
@@ -1073,5 +1069,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.58 2002/01/27 04:59:47 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.59 2002/02/10 22:57:48 spitzak Exp $".
 //

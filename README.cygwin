@@ -20,6 +20,7 @@ please consider licensing the Cygwin DLL from Cygnus (www.cygnus.com).
 To compile FLTK using Cygwin, you will need to:
 
 1a. Install the Cywin tools (of course).
+
 1b. Update the Cygwin Tools with a recent development snapshot.
 
 2.  Create a C:\TMP directory.

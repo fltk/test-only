@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.55 2002/01/11 08:49:08 spitzak Exp $"
+# "$Id: Makefile,v 1.56 2002/02/10 22:57:49 spitzak Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -58,22 +58,7 @@ programs: demos
 
 include ../makeinclude
 
-#.cxx:
-#	$(CXX) $< `../fltk-config --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
-#
-#.cxx.o:
-#	$(CXX) `../fltk-config --cxxflags` $(DEBUGFLAGS) $< -c
-
-.c.o:
-	$(CC) -I.. $(EXEFLAGS) $(CFLAGS) $< -c
-
-.cxx.o:
-	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< -c
-
-.cxx:
-	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(LDLIBS) -o $@
-
-$(ALL): $(FLLIB)
+# $(ALL): $(FLLIB) # only true for static library
 
 # FLUID file rules
 .fl.cxx .fl.h:
@@ -81,28 +66,28 @@ $(ALL): $(FLLIB)
 
 # Other programs needing special "help"...
 CubeView: CubeMain.o CubeView.o CubeViewUI.o $(FLGLLIB) $(FLLIB)
-	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) CubeMain.o CubeView.o CubeViewUI.o $(GLDLIBS) $(LDLIBS) -o $@
+	$(CXX) -I.. $(CXXFLAGS) CubeMain.o CubeView.o CubeViewUI.o $(GLDLIBS) $(LDLIBS) -o $@
 CubeMain.o: CubeViewUI.h CubeView.h
 CubeView.o: CubeView.h
 
 glpuzzle: glpuzzle.cxx $(FLGLLIB) $(FLLIB)
-	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(GLDLIBS) $(LDLIBS) -o $@
+	$(CXX) -I.. $(CXXFLAGS) $< $(GLDLIBS) $(LDLIBS) -o $@
 cube: cube.cxx $(FLGLLIB) $(FLLIB)
-	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(GLDLIBS) $(LDLIBS) -o $@
+	$(CXX) -I.. $(CXXFLAGS) $< $(GLDLIBS) $(LDLIBS) -o $@
 fullscreen: fullscreen.cxx $(FLGLLIB) $(FLLIB)
-	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(GLDLIBS) $(LDLIBS) -o $@
+	$(CXX) -I.. $(CXXFLAGS) $< $(GLDLIBS) $(LDLIBS) -o $@
 gl_overlay: gl_overlay.cxx $(FLGLLIB) $(FLLIB)
-	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(GLDLIBS) $(LDLIBS) -o $@
+	$(CXX) -I.. $(CXXFLAGS) $< $(GLDLIBS) $(LDLIBS) -o $@
 keyboard: keyboard.cxx keyboard_ui.cxx
 mandelbrot: mandelbrot.cxx mandelbrot_ui.cxx
 shape: shape.cxx $(FLGLLIB) $(FLLIB)
-	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(GLDLIBS) $(LDLIBS) -o $@
+	$(CXX) -I.. $(CXXFLAGS) $< $(GLDLIBS) $(LDLIBS) -o $@
 image_file: image_file.cxx $(FLIMAGESLIB) $(FLLIB)
-	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(IMAGELIBS) $(PNGLIBS) $(JPEGLIBS) $(LDLIBS) -o $@
+	$(CXX) -I.. $(CXXFLAGS) $< $(IMAGELIBS) $(PNGLIBS) $(JPEGLIBS) $(LDLIBS) -o $@
 threads: threads.cxx $(FLLIB)
-	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(LDLIBS) $(THREADSLIBS) -o $@
+	$(CXX) -I.. $(CXXFLAGS) $< $(LDLIBS) $(THREADSLIBS) -o $@
 thread_test: thread_test.cxx $(FLLIB)
-	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(LDLIBS) $(THREADSLIBS) -o $@
+	$(CXX) -I.. $(CXXFLAGS) $< $(LDLIBS) $(THREADSLIBS) -o $@
 
 # If you have libjpeg installed, you might want to try this test program:
 
@@ -111,6 +96,8 @@ jpeg_image: jpeg_image.cxx
 
 depend:
 	$(MAKEDEPEND) -I.. $(CXXFLAGS) $(CPPFILES) > makedepend
+
+include makedepend
 
 clean:
 	-@ rm -f $(ALL) *.exe jpeg_image *.o core *~
@@ -124,5 +111,5 @@ install_shared:
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.55 2002/01/11 08:49:08 spitzak Exp $".
+# End of "$Id: Makefile,v 1.56 2002/02/10 22:57:49 spitzak Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.104 2002/01/31 07:29:05 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.105 2002/02/10 22:57:48 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -307,15 +307,15 @@ int Fl_Group::handle(int event) {
     }
   }
 
-  if (event == FL_SHORTCUT && !focused() &&
-      (!Fl::focus() && children() || contains(Fl::focus()))) {
+  if (event == FL_SHORTCUT && !focused() && children() && 
+      (!Fl::focus() || contains(Fl::focus()))) {
     // Try to do keyboard navigation for unused shortcut keys:
     int key = navigation_key();
 
     // loop from the current focus looking for a new focus, quit when
     // we reach the original again:
     i = focus_;
-    if (i < 0 || i >= children()) i = 0;
+    if (i < 0 || i >= children_) i = 0;
     int previous = i;
     Fl_Widget* o = child(i);
     int old_x = o->x();
@@ -661,5 +661,5 @@ void Fl_Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.104 2002/01/31 07:29:05 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.105 2002/02/10 22:57:48 spitzak Exp $".
 //

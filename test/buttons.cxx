@@ -1,5 +1,5 @@
 //
-// "$Id: buttons.cxx,v 1.15 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: buttons.cxx,v 1.16 2002/02/10 22:57:50 spitzak Exp $"
 //
 // Another button test program for the Fast Light Tool Kit (FLTK).
 //
@@ -56,9 +56,11 @@ int main(int argc, char ** argv) {
   window->resizable(window);
   window->end();
   window->show(argc,argv);
+  Fl_Button::default_style->box = FL_PLASTIC_BOX;
+  Fl_Button::default_style->color = 256-36;
   return Fl::run();
 }
 
 //
-// End of "$Id: buttons.cxx,v 1.15 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: buttons.cxx,v 1.16 2002/02/10 22:57:50 spitzak Exp $".
 //

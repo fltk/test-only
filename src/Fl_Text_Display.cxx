@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.17 2002/01/27 04:59:47 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.18 2002/02/10 22:57:49 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -87,9 +87,6 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H,  const char* l)
   mHScrollBar->type(Fl_Scrollbar::HORIZONTAL);
 
   Fl_Group::current(current);
-
-  scrollbar_width(Fl_Style::scrollbar_width);
-  scrollbar_align(Fl_Style::scrollbar_align);
 
   mCursorOn = 0;
   mCursorPos = 0;
@@ -1957,5 +1954,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.17 2002/01/27 04:59:47 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.18 2002/02/10 22:57:49 spitzak Exp $".
 //

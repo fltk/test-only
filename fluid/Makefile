@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.39 2001/07/23 09:50:04 spitzak Exp $"
+# "$Id: Makefile,v 1.40 2002/02/10 22:57:47 spitzak Exp $"
 #
 # Fluid makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -51,12 +51,6 @@ OBJECTS = $(CPPFILES:.cxx=.o)
 OBJECTSDLL = $(CPPFILES:.cxx=.dll.o)
 
 include ../makeinclude
-
-.c.o:
-	$(CC) -I.. $(EXEFLAGS) $(XTRAFLAGS) $(CFLAGS) $< -c
-
-.cxx.o:
-	$(CXX) -I.. $(EXEFLAGS) $(XTRAFLAGS) $(CXXFLAGS) $< -c
 
 all: $(BUILDTARGETS)
 
@@ -111,5 +105,5 @@ rebuild:
 	./fluid -c coding_style.fl
 
 #
-# End of "$Id: Makefile,v 1.39 2001/07/23 09:50:04 spitzak Exp $".
+# End of "$Id: Makefile,v 1.40 2002/02/10 22:57:47 spitzak Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.39 2002/01/28 08:03:00 spitzak Exp $"
+// "$Id: Alternative.cxx,v 1.40 2002/02/10 22:57:50 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -160,6 +160,8 @@ alt_glyph(const Fl_Widget* widget, int t,
       fl_color(widget->color());
       fl_rectf(x,y,w,h);
       t -= (FL_GLYPH_RIGHT_BUTTON-FL_GLYPH_RIGHT);
+      // make it square:
+      if (w > h) {x += (w-h)/2; w = h;} else {y += (h-w)/2; h = w;}
       goto JUMP1;
     case FL_GLYPH_RIGHT:
     case FL_GLYPH_LEFT:
@@ -257,13 +259,6 @@ slider_glyph(const Fl_Widget* widget, int t,
   }
 }
 
-static void
-square_alt_glyph(const Fl_Widget* widget, int t,
-          int x, int y, int w, int h, Fl_Flags f)
-{
-  alt_glyph(widget, t, x, y+(h-w)/2, w, w, f);
-}
-
 static void choice_glyph(const Fl_Widget* widget, int,
                          int x,int y,int w, int h, Fl_Flags f)
 {
@@ -304,8 +299,7 @@ static void return_glyph(const Fl_Widget*, int,
   fl_line(x1+d, y0-d, x1+d+2*t, y0-d);
 }
 
-extern "C"
-int fltk_plugin() {
+extern "C" bool fltk_theme() {
   //Fl_Style::draw_sliders_pushed = 1;
 
   Fl_Widget::default_style->glyph = alt_glyph;
@@ -322,7 +316,7 @@ int fltk_plugin() {
   }
 
   if ((s = Fl_Style::find("menu button"))) {
-    s->glyph = square_alt_glyph;
+    s->glyph = alt_glyph;
   }
 
   if ((s = Fl_Style::find("choice"))) {
@@ -356,12 +350,12 @@ int fltk_plugin() {
   }
 
   if ((s = Fl_Style::find("input browser"))) {
-    s->glyph = square_alt_glyph;
+    s->glyph = alt_glyph;
   }
 
-  return 0;
+  return true;
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.39 2002/01/28 08:03:00 spitzak Exp $".
+// End of "$Id: Alternative.cxx,v 1.40 2002/02/10 22:57:50 spitzak Exp $".
 //

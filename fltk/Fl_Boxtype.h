@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Boxtype.h,v 1.2 2002/02/10 22:57:47 spitzak Exp $"
 //
 // Boxes used by FLTK styles.
 //
@@ -134,6 +134,18 @@ extern FL_API const Fl_Diamond_Box fl_diamond_up_box;
 extern FL_API const Fl_Diamond_Box fl_diamond_down_box;
 #define FL_DIAMOND_DOWN_BOX (&fl_diamond_down_box)
 
+// Plastic/Aqua shading:
+class FL_API Fl_Plastic_Box : public Fl_Frame_Box {
+public:
+  void draw(int,int,int,int, Fl_Color, Fl_Flags=0) const;
+  Fl_Plastic_Box(const char* n, const char* c, const Fl_Frame_Box* d=0);
+};
+extern FL_API const Fl_Plastic_Box fl_plastic_up_box;
+#define FL_PLASTIC_UP_BOX (&fl_plastic_up_box)
+#define FL_PLASTIC_BOX (&fl_plastic_up_box)
+extern FL_API const Fl_Plastic_Box fl_plastic_down_box;
+#define FL_PLASTIC_DOWN_BOX (&fl_plastic_down_box)
+
 // a bunch of "one-of" types:
 
 class FL_API Fl_No_Box : public Fl_Boxtype_ {
@@ -225,5 +237,5 @@ extern FL_API const Fl_Border_Frame fl_border_frame;
 #endif
 
 //
-// End of "$Id: Fl_Boxtype.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.h,v 1.2 2002/02/10 22:57:47 spitzak Exp $".
 //

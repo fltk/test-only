@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Text_Display.h,v 1.2 2002/02/10 22:57:47 spitzak Exp $"
 //
 // Header file for Fl_Text_Display class.
 //
@@ -85,10 +85,6 @@ class FL_API Fl_Text_Display: public Fl_Group {
     void show_cursor(int b = 1);
     void hide_cursor() { show_cursor(0); }
     void cursor_style(int style);
-    int scrollbar_width() { return scrollbar_width_; }
-    Fl_Flags scrollbar_align() { return scrollbar_align_; }
-    void scrollbar_width(int w) { scrollbar_width_ = w; }
-    void scrollbar_align(Fl_Flags a) { scrollbar_align_ = a; }
     int word_start(int pos) { return buffer()->word_start(pos); }
     int word_end(int pos) { return buffer()->word_end(pos); }
 
@@ -204,8 +200,6 @@ class FL_API Fl_Text_Display: public Fl_Group {
 
     Fl_Scrollbar* mHScrollBar;
     Fl_Scrollbar* mVScrollBar;
-    int scrollbar_width_;
-    Fl_Flags scrollbar_align_;
     int dragPos, dragType, dragging;
     int display_insert_position_hint;
     struct { int x, y, w, h; } text_area;
@@ -214,5 +208,5 @@ class FL_API Fl_Text_Display: public Fl_Group {
 #endif
 
 //
-// End of "$Id: Fl_Text_Display.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.h,v 1.2 2002/02/10 22:57:47 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.16 2002/01/28 08:02:59 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.17 2002/02/10 22:57:48 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -42,12 +42,16 @@ static void revert(Fl_Style* s) {
   s->button_box = FL_DOWN_BOX;
   // s->button_box = FL_NO_BOX; // makes it look more like Windows
   s->button_color = FL_WHITE;
-  s->glyph = Fl_Check_Button::default_glyph;
+  //s->glyph = Fl_Check_Button::default_glyph;
 }
 static Fl_Named_Style style("Item", revert, &Fl_Item::default_style);
 Fl_Named_Style* Fl_Item::default_style = &::style;
 
 Fl_Item::Fl_Item(const char* l) : Fl_Widget(0,0,0,0,l) {
+  // we need to defer setting the glyph to here because C++ has no way
+  // to make sure the check button style is constructed before this style:
+  if (!default_style->glyph)
+    default_style->glyph = Fl_Check_Button::default_style->glyph;
   style(default_style);
   set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
 }

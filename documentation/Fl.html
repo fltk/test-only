@@ -75,7 +75,6 @@ older C++ compilers that do not handle namespaces.
 <li><a href="#pushed">pushed</a></li>
 <li><a href="#ready">ready</a></li>
 <li><a href="#redraw">redraw</a></li>
-<li><a href="#reload_scheme">reload_scheme</a></li>
 <li><a href="#remove_check">remove_check</a></li>
 <li><a href="#remove_fd">remove_fd</a></li>
 </ul>
@@ -85,10 +84,7 @@ older C++ compilers that do not handle namespaces.
 <li><a href="#remove_timeout">remove_timeout</a></li>
 <li><a href="#repeat_timeout">repeat_timeout</a></li>
 <li><a href="#run">run</a></li>
-<li><a href="#scheme">scheme</a></li>
-<li><a href="#startup">startup</a></li>
 <li><a href="#test_shortcut">test_shortcut</a></li>
-<li><a href="#theme">theme</a></li>
 <li><a href="#thread_message">thread_message</a></li>
 <li><a href="#unlock">unlock</a></li>
 <li><a href="#version">version</a></li>
@@ -193,6 +189,18 @@ and then <a href="Fl_Color.html#fl_background">fl_background()</a> is
 done.  Under WIN32 only color names of the form &quot;#xxxxxx&quot;
 are understood.</li>
 
+<li><tt>-theme name</tt> Calls <a
+href="Fl_Style.html#load_theme2">Fl_Style::load_theme(name)</a> and if
+found it calls <a href="Fl_Style.html#theme">Fl_Style::theme(x)</a>
+with it. If the theme plugin is not found it exits with an error. The
+plugin is looked for in <tt>~/.fltk/name.theme</tt> and
+<tt>/usr/local/lib/name.theme</tt>.
+
+<li><tt>-scheme name</tt> Calls
+<a href="Fl_Style.html#scheme">Fl_Style::scheme(name)</a>. Some theme
+plugins may do something with this argument, typically it is used to
+name a file the theme reads.
+
 </ul>
 
 The second form of <tt>Fl::args()</tt> is useful if your program does 
@@ -208,19 +216,11 @@ the command-line. It's value is:
 <pre>
 " -d[isplay] host:n.n\n"
 " -g[eometry] WxH+X+Y\n"
-" -s[cheme] scheme\n"
 " -t[heme] theme\n"
 " -n[ame] windowname\n"
 " -i[conic]\n"
 " -bg color";
 </pre>
-
-<h4><a name="theme">bool Fl::theme(const char*)</a>
-<br><a name="scheme">bool Fl::scheme(const char*)</a>
-<br><a name="reload_scheme">void Fl::reload_scheme()</a>
-<br><a name="startup">void startup();</h4>
-
-These are not documented yet and will probably be changed considerably.
 
 <a name="display"><h4>void Fl::display(const char *)</h4></a>
 

@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.6 2001/12/16 22:32:02 spitzak Exp $"
+// "$Id: win32.h,v 1.7 2002/02/10 22:57:47 spitzak Exp $"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -42,6 +42,8 @@
 #define VK_RWIN 0x5C
 #define VK_APPS 0x5D
 #endif
+
+#define fl_open_display()
 
 // some random X equivalents
 typedef HWND Window;
@@ -142,5 +144,5 @@ FL_API Fl_Window* fl_find(Window xid);
 #endif
 
 //
-// End of "$Id: win32.h,v 1.6 2001/12/16 22:32:02 spitzak Exp $".
+// End of "$Id: win32.h,v 1.7 2002/02/10 22:57:47 spitzak Exp $".
 //

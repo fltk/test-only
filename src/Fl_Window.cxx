@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.80 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.81 2002/02/10 22:57:49 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -110,7 +110,8 @@ int Fl_Window::handle(int event) {
 	if (flags()&FL_MODAL) Fl::modal(this, false);
       }
       if (!shown()) {
-	Fl::startup();
+	Fl_Style::load_theme();
+	fl_open_display();
 	layout();
 	// back-compatability automatic size_range() based on resizable():
 	if (!parent() && !size_range_set) {
@@ -355,5 +356,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.80 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.81 2002/02/10 22:57:49 spitzak Exp $".
 //

@@ -1,4 +1,4 @@
-# "$Id: Makefile,v 1.25 2001/11/11 20:22:04 spitzak Exp $"
+# "$Id: Makefile,v 1.26 2002/02/10 22:57:47 spitzak Exp $"
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -33,7 +33,7 @@ all: $(GENERATED)
 		if test ! -f $$dir/makedepend; then\
 			touch $$dir/makedepend;\
 		fi;\
-		(cd $$dir; $(MAKE)) || break;\
+		(cd $$dir; $(MAKE) $(MFLAGS)) || break;\
 	done
 
 static: $(GENERATED)
@@ -41,7 +41,7 @@ static: $(GENERATED)
 		if test ! -f $$dir/makedepend; then\
 			touch $$dir/makedepend;\
 		fi;\
-		(cd $$dir; $(MAKE) static) || break;\
+		(cd $$dir; $(MAKE) $(MFLAGS) static) || break;\
 	done
 
 shared: $(GENERATED)
@@ -49,7 +49,7 @@ shared: $(GENERATED)
 		if test ! -f $$dir/makedepend; then\
 			touch $$dir/makedepend;\
 		fi;\
-		(cd $$dir; $(MAKE) shared) || break;\
+		(cd $$dir; $(MAKE) $(MFLAGS) shared) || break;\
 	done
 
 install: $(GENERATED)
@@ -57,7 +57,7 @@ install: $(GENERATED)
 		if test ! -f $$dir/makedepend; then\
 			touch $$dir/makedepend;\
 		fi;\
-		(cd $$dir; $(MAKE) install) || break;\
+		(cd $$dir; $(MAKE) $(MFLAGS) install) || break;\
 	done
 
 install_static: $(GENERATED)
@@ -65,7 +65,7 @@ install_static: $(GENERATED)
 		if test ! -f $$dir/makedepend; then\
 			touch $$dir/makedepend;\
 		fi;\
-		(cd $$dir; $(MAKE) install_static) || break;\
+		(cd $$dir; $(MAKE) $(MFLAGS) install_static) || break;\
 	done
 
 install_shared: $(GENERATED)
@@ -73,7 +73,7 @@ install_shared: $(GENERATED)
 		if test ! -f $$dir/makedepend; then\
 			touch $$dir/makedepend;\
 		fi;\
-		(cd $$dir; $(MAKE) install_shared) || break;\
+		(cd $$dir; $(MAKE) $(MFLAGS) install_shared) || break;\
 	done
 
 install_programs: $(GENERATED)
@@ -81,7 +81,7 @@ install_programs: $(GENERATED)
 		if test ! -f $$dir/makedepend; then\
 			touch $$dir/makedepend;\
 		fi;\
-		(cd $$dir; $(MAKE) install_programs) || break;\
+		(cd $$dir; $(MAKE) $(MFLAGS) install_programs) || break;\
 	done
 
 depend: $(GENERATED)
@@ -89,24 +89,30 @@ depend: $(GENERATED)
 		if test ! -f $$dir/makedepend; then\
 			touch $$dir/makedepend;\
 		fi;\
-		(cd $$dir;$(MAKE) depend) || break;\
+		(cd $$dir;$(MAKE) $(MFLAGS) depend) || break;\
 	done
 
 clean:
 	-@ rm -f core *~ *.o *.bck
 	@for dir in $(DIRS); do\
-		(cd $$dir;$(MAKE) clean) || break;\
+		(cd $$dir;$(MAKE) $(MFLAGS) clean) || break;\
 	done
 
 distclean: clean
-	rm -f config.cache config.h config.log config.status makeinclude fltk-config
-
-configure: configure.in
-	autoconf
+	rm -f config.* makeinclude fltk-config
 
 $(GENERATED) : configure configh.in makeinclude.in fltk-config.in
 	./configure
 
+configure: configure.in
+	autoconf
+
+portable-dist:
+	epm -v fltk
+
+native-dist:
+	epm -v -f native fltk
+
 #
-# End of "$Id: Makefile,v 1.25 2001/11/11 20:22:04 spitzak Exp $".
+# End of "$Id: Makefile,v 1.26 2002/02/10 22:57:47 spitzak Exp $".
 #

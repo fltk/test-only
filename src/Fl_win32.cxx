@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.164 2002/01/31 22:54:49 robertk Exp $"
+// "$Id: Fl_win32.cxx,v 1.165 2002/02/10 22:57:49 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -829,7 +829,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_SETTINGCHANGE:
     reload_info = true;
   case WM_SYSCOLORCHANGE:
-    Fl::reload_scheme();
+    Fl_Style::reload_theme();
     break;
 
   case WM_DESTROYCLIPBOARD:
@@ -927,7 +927,6 @@ HCURSOR fl_default_cursor;
 
 Fl_X* Fl_X::create(Fl_Window* window) {
 
-  const char* class_name = "FLTK"; // create a "FLTK" WNDCLASS
   static bool registered = false;
   if (!registered) {
     registered = true;
@@ -944,7 +943,7 @@ Fl_X* Fl_X::create(Fl_Window* window) {
     //wc.hbrBackground = (HBRUSH)CreateSolidBrush(RGB(r,g,b));
     wc.hbrBackground = NULL;
     wc.lpszMenuName = NULL;
-    wc.lpszClassName = class_name;
+    wc.lpszClassName = Fl_Window::xclass();
     wc.cbSize = sizeof(WNDCLASSEX);
     RegisterClassEx(&wc);
   }
@@ -996,7 +995,7 @@ Fl_X* Fl_X::create(Fl_Window* window) {
   x->cursor = fl_default_cursor;
   x->xid = CreateWindowEx(
     styleEx,
-    class_name, window->label(), style,
+    Fl_Window::xclass(), window->label(), style,
     xp, yp, window->w()+dw, window->h()+dh,
     parent,
     NULL, // menu
@@ -1173,7 +1172,7 @@ static int win_fontsize(int winsize) {
   return winsize*3/4; // cellsize: convert to charsize
 }
 
-void fl_get_system_colors() {
+bool fl_get_system_colors() {
 
   Fl_Color background = win_color(GetSysColor(COLOR_BTNFACE));
   Fl_Color foreground = win_color(GetSysColor(COLOR_BTNTEXT));
@@ -1311,8 +1310,9 @@ void fl_get_system_colors() {
   else Fl_Style::wheel_scroll_lines = (int)delta;
 
   // CET - FIXME - do encoding stuff
+  return true;
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.164 2002/01/31 22:54:49 robertk Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.165 2002/02/10 22:57:49 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.10 2001/11/14 09:21:42 spitzak Exp $"
+# "$Id: Makefile,v 1.11 2002/02/10 22:57:47 spitzak Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -35,23 +35,11 @@ DEMOS =
 
 ################################################################
 
-XTRAFLAGS = -DFL_GL_LIBRARY
-
 include ../makeinclude
 
-.c.o:
-	$(CC) -I.. $(XTRAFLAGS) $(CFLAGS) $< -c
-
-.cxx.o:
-	$(CXX) -I.. $(XTRAFLAGS) $(CXXFLAGS) $< -c
-
-.cxx:
-	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(GLLIBS) $(LDLIBS) -o $@
-
-%.shared.o : %.cxx
-	$(CXX) -I.. $(XTRAFLAGS) $(DSOCFLAGS) $(CXXFLAGS) -c $< -o $@
-%.shared.o : %.c
-	$(CC) -I.. $(XTRAFLAGS) $(DSOCFLAGS) $(CFLAGS) -c $< -o $@
+DSOCFLAGS += -DFL_GL_LIBRARY
+DSOCXXFLAGS += -DFL_GL_LIBRARY
+LDLIBS = $(GLLIBS) $(LDLIBS)
 
 LIBRARY = ../lib/$(LIBNAME)_gl
 DSO = ../lib/$(DSOLIBglNAME)
@@ -130,5 +118,5 @@ install_shared: shared
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.10 2001/11/14 09:21:42 spitzak Exp $".
+# End of "$Id: Makefile,v 1.11 2002/02/10 22:57:47 spitzak Exp $".
 #
