@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.15 1999/04/01 05:15:14 carl Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.16 1999/04/01 21:32:39 carl Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -85,7 +85,7 @@ struct Fl_Menu_Item {
   int flags;
 
   // Dummy variables to handle static initializers.  These are not used--
-  // you can't initialize style information with the initializers.
+  // you can't initialize style information with the initializers anymore.
   uchar clobberMe1;
   uchar clobberMe2;
   uchar clobberMe3;
@@ -93,7 +93,11 @@ struct Fl_Menu_Item {
 
   Style* _style;
 
+#ifdef BROKEN_SGI_COMPILER
+  Fl_Menu_Item::Style _dynamic_style;
+#else
   ~Fl_Menu_Item();
+#endif
 
   Style* style() const { if (_style) return _style; return default_style(); }
 
@@ -198,7 +202,11 @@ struct Fl_Menu_Item {
   }
 
   Fl_Menu_Item::Style* default_style() const { mstyle(&_default_style); return _default_style; }
+#ifndef BROKEN_SGI_COMPILER
   void mstyle(Fl_Menu_Item::Style** s) const { if (!(*s)) (*s) = new Style; }
+#else
+  void mstyle(Fl_Menu_Item::Style** s) const { if (!(*s)) (*s) = (Style*)&_dynamic_style; }
+#endif
 };
 
 typedef Fl_Menu_Item Fl_Menu; // back compatability
@@ -219,5 +227,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.15 1999/04/01 05:15:14 carl Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.16 1999/04/01 21:32:39 carl Exp $".
 //
