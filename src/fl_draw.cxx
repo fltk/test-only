@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.45 2004/07/21 07:16:01 laza2000 Exp $"
+// "$Id: fl_draw.cxx,v 1.46 2004/07/29 08:08:58 laza2000 Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -183,6 +183,29 @@ public:
   }
 };
 static const NothingSymbol nothingsymbol;
+
+
+/*! \addtogroup symbols
+
+  "@mxnumber" will move the x origin to the right by exactly n pixels.
+
+  This is included in width calculations, unlike "@xnumber" symbol.
+  This symbol is good for example moving text right in menu items,
+  which don't have image, so they are lined up same as items with image.
+  You should start positive numbers with '+' for compatability with possible
+  future versions of fltk.
+*/
+class MxSymbol : public Symbol {
+public:
+  MxSymbol() : Symbol("mx") {}
+  void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
+  void _measure(float& w, float& h) const {
+    float W = (float)strtod(text()+1,0);
+    ::dx += W;
+    w += W;
+  }
+};
+static const MxSymbol mxsymbol;
 
 /*! \addtogroup symbols
 
@@ -698,5 +721,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.45 2004/07/21 07:16:01 laza2000 Exp $".
+// End of "$Id: fl_draw.cxx,v 1.46 2004/07/29 08:08:58 laza2000 Exp $".
 //
