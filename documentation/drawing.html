@@ -46,34 +46,65 @@ drawing functions:
 <LI><A href=#overlay>Overlay</A></LI>
 </UL>
 <H3><A name=clipping>Clipping</A></H3>
- You can limit all your drawing to a rectangular region by calling <TT>
-fl_clip</TT>, and put the drawings back by using <TT>fl_pop_clip</TT>. 
- This rectangle is measured in pixels (it is unaffected by the current 
+
+You can limit all your drawing to a region by calling <TT>
+fl_clip</TT>, and put the drawings back by using <TT>fl_pop_clip</TT>.
+Fltk may also set up clipping before draw() is called to limit the
+drawing to the region of the window that is damaged.
+
+<p>When drawing you can also test the current clip region with
+<tt>fl_not_clipped()</tt> and <tt>fl_clip_box()</tt>.  By using these
+to skip over complex drawings that are clipped you can greatly speed
+up your program's redisplay.
+
+<p>The clip region is measured in pixels (it is unaffected by the current 
 transformation matrix). 
-<P>In addition, the system may provide clipping when updating windows, 
-this clip region may be more complex than a simple rectangle. </P>
-<H4>void fl_push_clip(int x, int y, int w, int h)</H4>
-Intersect the current clip region with a rectangle and push this new 
-region onto the stack. 
+
+<H4>void fl_clip(int x, int y, int w, int h)</H4>
+
+Pushes the <i>intersection</i> of the current region and this
+rectangle onto the clip stack.
+
+<H4>void fl_clip_out(int x, int y, int w, int h)</H4>
+
+Remove the rectangle from the current clip region, thus making it a
+more complex shape.  This does not push the stack, it just replaces
+the top of it.  <i>This does not work on X or Win32 unless
+<tt>fl_clip()</tt> has been called at least once.</i>
+
 <H4>void fl_push_no_clip()</H4>
+
 Pushes an empty clip region on the stack so nothing will be clipped.
+This lets you draw outside the current clip region.  <i>You should not
+use this :-)</i>
+
 <H4>void fl_pop_clip()</H4>
-Restore the previous clip region. <I>You must call <TT>fl_pop_clip()</TT>
-once for every time you call <TT>fl_clip()</TT>.  If you return to 
-FLTK with the clip stack not empty unpredictable results occur.</I>
+
+Restore the previous clip region. <I>You must call
+<TT>fl_pop_clip()</TT> exactly once for every time you call
+<TT>fl_clip()</TT>.  If you return to FLTK with the clip stack not
+empty unpredictable results occur.</I>
+
 <H4>int fl_not_clipped(int x, int y, int w, int h)</H4>
- Returns true if any of the rectangle intersects the current clip 
-region.  If this returns false you don't have to draw the object. <I>
-Under X this returns 2 if the rectangle is partially clipped, and 1 if 
-it is entirely inside the clip region</I>. 
-<H4>int fl_clip_box(int x, int y, int w, int h, int &amp;X, int &amp;Y, int &amp;W, 
-int &amp;H)</H4>
-Intersect the rectangle <TT>x,y,w,h</TT> with the current clip region 
-and returns the bounding box of the result in <TT>X,Y,W,H</TT>. 
-Returns non-zero if the resulting rectangle is different than the 
-original.  This can be used to limit the necessary drawing to a 
-rectangle. <TT>W</TT> and <TT>H</TT> are set to zero if the rectangle 
-is completely outside the region. 
+
+Return non-zero if the intersection of the rectangle and the current
+clip region is non-zero.  If this returns zero you don't have to draw
+anything in that rectangle.  <I>Under X this returns 1 if the
+interesection is equal to the rectangle, and 2 if the intersection is
+only part of the rectangle.</i>
+
+<H4>int fl_clip_box(int x, int y, int w, int h, int &amp;X, int
+&amp;Y, int &amp;W, int &amp;H)</H4>
+
+Find the smallest rectangle that surrounds the intersection of the
+rectangle <TT>x,y,w,h</TT> with the current clip region.  This
+"bounding box" is returned in <TT>X,Y,W,H</TT>.  The return value is
+non-zero if the bounding box is different than the rectangle.  If the
+intersection is empty then <TT>W</TT> and <TT>H</TT> are set to zero.
+
+<p>This can be used to limit complex pixel operations (like drawing
+images) to the smallest rectangle needed to update the visible area.
+
 <H3><A name=colors>Colors</A></H3>
 
 <H4>void fl_color(<a href=Fl_Color.html>Fl_Color</a>)</H4>

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.H,v 1.4 1999/09/25 18:29:03 vincent Exp $"
+// "$Id: Fl_Boxtype.H,v 1.5 1999/10/07 07:04:52 bill Exp $"
 //
 // Boxes used by FLTK styles.
 //
@@ -36,6 +36,7 @@ struct Fl_Boxtype_ {
   const void* data;
   const Fl_Boxtype_* down;
   int dx_, dy_, dw_, dh_;
+  bool rectangular;
 // public:
   void draw(int x, int y, int w, int h, Fl_Color c, Fl_Flags f=0) const
     {draw_(this, x, y, w, h, c, f);}
@@ -117,5 +118,5 @@ FL_EXPORT FL_IMPORT extern const Fl_Boxtype_ fl_border_frame;
 #endif
 
 //
-// End of "$Id: Fl_Boxtype.H,v 1.4 1999/09/25 18:29:03 vincent Exp $".
+// End of "$Id: Fl_Boxtype.H,v 1.5 1999/10/07 07:04:52 bill Exp $".
 //

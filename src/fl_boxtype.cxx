@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.12 1999/08/16 07:31:25 bill Exp $"
+// "$Id: fl_boxtype.cxx,v 1.13 1999/10/07 07:04:59 bill Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@ static void no_draw(Fl_Boxtype, int, int, int, int,
 		    Fl_Color, Fl_Flags)
 {}
 const Fl_Boxtype_ fl_no_box = {
-  no_draw, 0, &fl_no_box, 0,0,0,0
+  no_draw, 0, &fl_no_box, 0,0,0,0, false
 };
 
 static void flat_draw(Fl_Boxtype, int x, int y, int w, int h,
@@ -48,7 +48,7 @@ static void flat_draw(Fl_Boxtype, int x, int y, int w, int h,
   }
 }
 const Fl_Boxtype_ fl_flat_box = {
-  flat_draw, 0, &fl_flat_box, 0,0,0,0
+  flat_draw, 0, &fl_flat_box, 0,0,0,0, true
 };
 
 ////////////////////////////////////////////////////////////////
@@ -98,39 +98,39 @@ FL_EXPORT void fl_frame(Fl_Boxtype b, int x, int y, int w, int h,
 #if 1 // Windoze style:
 
 Fl_Boxtype_ fl_normal_box = {
-  fl_frame, "2AAUWMMTT", &fl_down_box, 2,2,4,4
+  fl_frame, "2AAUWMMTT", &fl_down_box, 2,2,4,4, true
 };
 
 Fl_Boxtype_ fl_down_box = {
-  fl_frame, "2UWMMPPAA", &fl_down_box, 2,2,4,4
+  fl_frame, "2UWMMPPAA", &fl_down_box, 2,2,4,4, true
 };
 
 #else // classic fltk look:
 
 Fl_Boxtype_ fl_normal_box = {
-  fl_frame, "AAAAWUJJUTNN", &fl_down_box, 3,3,6,6
+  fl_frame, "AAAAWUJJUTNN", &fl_down_box, 3,3,6,6, true
 };
 
 Fl_Boxtype_ fl_down_box = {
-  fl_frame, "NNTUJJUWAAAA", &fl_down_box, 3,3,6,6
+  fl_frame, "NNTUJJUWAAAA", &fl_down_box, 3,3,6,6, true
 };
 
 #endif
 
 const Fl_Boxtype_ fl_thin_box = {
-  fl_frame, "2HHWW", &fl_thin_down_box, 1,1,2,2
+  fl_frame, "2HHWW", &fl_thin_down_box, 1,1,2,2, true
 };
 
 const Fl_Boxtype_ fl_thin_down_box = {
-  fl_frame, "2WWHH", &fl_thin_down_box, 1,1,2,2
+  fl_frame, "2WWHH", &fl_thin_down_box, 1,1,2,2, true
 };
 
 const Fl_Boxtype_ fl_engraved_box = {
-  fl_frame, "HHWWWWHH", &fl_engraved_box, 2,2,4,4
+  fl_frame, "HHWWWWHH", &fl_engraved_box, 2,2,4,4, true
 };
 
 const Fl_Boxtype_ fl_embossed_box = {
-  fl_frame, "WWHHHHWW", &fl_engraved_box, 2,2,4,4
+  fl_frame, "WWHHHHWW", &fl_engraved_box, 2,2,4,4, true
 };
 
 ////////////////////////////////////////////////////////////////
@@ -143,7 +143,7 @@ static void border_draw(Fl_Boxtype, int x, int y, int w, int h,
   fl_color(c); fl_rectf(x+1, y+1, w-2, h-2);
 }
 const Fl_Boxtype_ fl_border_box = {
-  border_draw, 0, &fl_border_box, 1,1,2,2
+  border_draw, 0, &fl_border_box, 1,1,2,2, true
 };
 
 ////////////////////////////////////////////////////////////////
@@ -155,7 +155,7 @@ static void bf_draw(Fl_Boxtype, int x, int y, int w, int h,
   fl_color(c); fl_rect(x, y, w, h);
 }
 const Fl_Boxtype_ fl_border_frame = {
-  bf_draw, 0, &fl_border_frame, 1,1,2,2
+  bf_draw, 0, &fl_border_frame, 1,1,2,2, false
 };
 
 #if 0
@@ -168,27 +168,27 @@ static void frammitz(Fl_Boxtype b, int x, int y, int w, int h,
 }
 
 const Fl_Boxtype_ fl_up_frame = {
-  frammitz, &fl_normal_box, 0, 2,2,4,4
+  frammitz, &fl_normal_box, 0, 2,2,4,4, false
 };
 
 const Fl_Boxtype_ fl_down_frame = {
-  frammitz, &fl_down_box, 0, 2,2,4,4
+  frammitz, &fl_down_box, 0, 2,2,4,4, false
 };
 
 const Fl_Boxtype_ fl_thin_up_frame = {
-  frammitz, &fl_thin_box, 0, 2,2,4,4
+  frammitz, &fl_thin_box, 0, 2,2,4,4, false
 };
 
 const Fl_Boxtype_ fl_thin_down_frame = {
-  frammitz, &fl_thin_down_box, 0, 2,2,4,4
+  frammitz, &fl_thin_down_box, 0, 2,2,4,4, false
 };
 
 const Fl_Boxtype_ fl_engraved_frame = {
-  frammitz, &fl_engraved_box, 0, 2,2,4,4
+  frammitz, &fl_engraved_box, 0, 2,2,4,4, false
 };
 
 const Fl_Boxtype_ fl_embossed_frame = {
-  frammitz, &fl_embossed_box, 0, 2,2,4,4
+  frammitz, &fl_embossed_box, 0, 2,2,4,4, false
 };
 
 #endif
@@ -206,13 +206,13 @@ static void flatx(Fl_Boxtype b, int x, int y, int w, int h,
 }
 
 const Fl_Boxtype_ fl_flat_up_box = {
-  flatx, FL_NORMAL_BOX, 0, 2,2,4,4
+  flatx, FL_NORMAL_BOX, 0, 2,2,4,4, true
 };
 
 const Fl_Boxtype_ fl_flat_down_box = {
-  flatx, FL_DOWN_BOX, 0, 2,2,4,4
+  flatx, FL_DOWN_BOX, 0, 2,2,4,4, true
 };
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.12 1999/08/16 07:31:25 bill Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.13 1999/10/07 07:04:59 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.10 1999/03/04 18:32:14 mike Exp $"
+// "$Id: fl_rect.cxx,v 1.11 1999/10/07 07:04:59 bill Exp $"
 //
 // Rectangle drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -242,9 +242,10 @@ void fl_point(int x, int y) {
 }
 
 ////////////////////////////////////////////////////////////////
+// The clipping stack:
 
-#define STACK_SIZE 10
-#define STACK_MAX (STACK_SIZE - 1)
+#define STACK_SIZE 11
+#define STACK_MAX (STACK_SIZE - 2)
 static Region rstack[STACK_SIZE];
 static int rstackptr=0;
 int fl_clip_state_number=0; // used by gl_begin.C to update GL clip
@@ -261,7 +262,9 @@ Region XRectangleRegion(int x, int y, int w, int h) {
 }
 #endif
 
-// undo any clobbering of clip done by your program:
+// Make the system's clip match the top of the clip stack.  This can
+// be used after changing the stack, or to undo any clobbering of clip
+// done by your program:
 void fl_restore_clip() {
   fl_clip_state_number++;
   Region r = rstack[rstackptr];
@@ -308,9 +311,31 @@ void fl_clip(int x, int y, int w, int h) {
   fl_restore_clip();
 }
 
+// Replace top of stack with top of stack minus this rectangle:
+void fl_clip_out(int x, int y, int w, int h) {
+  if (w <= 0 || h <= 0) return;
+  Region r = XRectangleRegion(x,y,w,h);
+  Region current = rstack[rstackptr];
+// This is not needed as caller must do push of a clip beforehand.
+//if (!current) current = rstack[rstackptr] =
+//  XRectangleRegion(0,0,Fl_Window::current()->w(),Fl_Window::current()->h());
+#ifndef WIN32
+  Region temp = XCreateRegion();
+  XSubtractRegion(current, r, temp);
+  XDestroyRegion(r);
+  XDestroyRegion(current);
+  rstack[rstackptr] = temp;
+#else
+  CombineRgn(current,current,r,RGN_DIFF);
+#endif
+  fl_restore_clip();
+}
+
 // make there be no clip (used by fl_begin_offscreen() only!)
 void fl_push_no_clip() {
-  if (rstackptr < STACK_MAX) rstack[++rstackptr] = 0;
+  // this does not test maximum so that this is guaranteed to work,
+  // there is one extra slot at the top of the stack.
+  /*if (rstackptr < STACK_MAX)*/ rstack[++rstackptr] = 0;
   fl_restore_clip();
 }
 
@@ -319,9 +344,12 @@ void fl_pop_clip() {
   if (rstackptr > 0) {
     Region oldr = rstack[rstackptr--];
     if (oldr) XDestroyRegion(oldr);
+    fl_restore_clip();
   }
-  fl_restore_clip();
 }
+
+////////////////////////////////////////////////////////////////
+// clipping tests:
 
 // does this rectangle intersect current clip?
 int fl_not_clipped(int x, int y, int w, int h) {
@@ -386,5 +414,5 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H){
 }
 
 //
-// End of "$Id: fl_rect.cxx,v 1.10 1999/03/04 18:32:14 mike Exp $".
+// End of "$Id: fl_rect.cxx,v 1.11 1999/10/07 07:04:59 bill Exp $".
 //

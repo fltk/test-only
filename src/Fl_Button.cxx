@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.14 1999/09/14 17:52:38 carl Exp $"
+// "$Id: Fl_Button.cxx,v 1.15 1999/10/07 07:04:56 bill Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -54,7 +54,7 @@ void Fl_Widget::setonly() { // set this radio button on, turn others off
 }
 
 void Fl_Button::draw() {
-  if (type() == FL_HIDDEN_BUTTON) return;
+  if (type() == FL_HIDDEN_BUTTON) {box(FL_NO_BOX); return;}
   Fl_Color lc = draw_button();
   draw_label(lc);
 }
@@ -114,5 +114,5 @@ Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.14 1999/09/14 17:52:38 carl Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.15 1999/10/07 07:04:56 bill Exp $".
 //

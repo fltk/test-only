@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.34 1999/10/03 06:31:41 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.35 1999/10/07 07:04:58 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -782,8 +782,7 @@ void Fl_Window::label(const char *name,const char *iname) {
 // cleared to background color.  So I had to give up on this...
 
 void Fl_Window::create() {
-  Fl_X::create(this, fl_visual, fl_colormap,
-	       box() != FL_NO_BOX ? int(fl_xpixel(color())) : -1);
+  Fl_X::create(this, fl_visual, fl_colormap, -1);
 }
 
 Window fl_window;
@@ -803,5 +802,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.34 1999/10/03 06:31:41 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.35 1999/10/07 07:04:58 bill Exp $".
 //

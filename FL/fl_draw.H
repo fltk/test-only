@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.H,v 1.14 1999/09/19 04:58:58 vincent Exp $"
+// "$Id: fl_draw.H,v 1.15 1999/10/07 07:04:53 bill Exp $"
 //
 // Portable drawing function header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,7 +38,7 @@ inline Fl_Color fl_color() {return fl_color_;}
 
 // clip:
 FL_EXPORT void fl_clip(int x, int y, int w, int h);
-#define fl_push_clip fl_clip
+FL_EXPORT void fl_clip_out(int x, int y, int w, int h);
 FL_EXPORT void fl_push_no_clip();
 FL_EXPORT void fl_pop_clip();
 FL_EXPORT int fl_not_clipped(int x, int y, int w, int h);
@@ -183,5 +183,5 @@ FL_EXPORT int fl_add_symbol(const char* name, void (*drawit)(Fl_Color), int scal
 #endif
 
 //
-// End of "$Id: fl_draw.H,v 1.14 1999/09/19 04:58:58 vincent Exp $".
+// End of "$Id: fl_draw.H,v 1.15 1999/10/07 07:04:53 bill Exp $".
 //

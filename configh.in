@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.21 1999/08/27 17:45:19 vincent Exp $"
+ * "$Id: configh.in,v 1.22 1999/10/07 07:04:50 bill Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -96,9 +96,14 @@
  *
  * Actually try to use the double-buffer extension?  Set this to zero
  * disable use of XDBE without breaking the list_visuals program.
+ * This is now zero by default, as XDBE is broken on pretty much 
+ * every system, with the newest versions of Irix having broken it
+ * as well.  I think it is suffering from software rot, since nobody
+ * uses it...  Reliable hardware double buffering can only be had by
+ * using OpenGL, same as Windoze.
  */
 
-#define USE_XDBE HAVE_XDBE
+#define USE_XDBE 0
 
 /*
  * HAVE_OVERLAY:
@@ -233,5 +238,5 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define HAVE_DLOPEN 0
 
 /*
- * End of "$Id: configh.in,v 1.21 1999/08/27 17:45:19 vincent Exp $".
+ * End of "$Id: configh.in,v 1.22 1999/10/07 07:04:50 bill Exp $".
  */

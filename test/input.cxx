@@ -1,5 +1,5 @@
 //
-// "$Id: input.cxx,v 1.10 1999/09/20 16:36:48 vincent Exp $"
+// "$Id: input.cxx,v 1.11 1999/10/07 07:05:02 bill Exp $"
 //
 // Input field test program for the Fast Light Tool Kit (FLTK).
 //
@@ -122,11 +122,12 @@ int main(int argc, char **argv) {
   b->color(input[0]->textcolor()); b->callback(color_cb, (void*)2);
   b->labelcolor(fl_contrast(FL_BLACK,b->color()));
 
+  window->resizable(window);
   window->end();
   window->show(argc,argv);
   return Fl::run();
 }
 
 //
-// End of "$Id: input.cxx,v 1.10 1999/09/20 16:36:48 vincent Exp $".
+// End of "$Id: input.cxx,v 1.11 1999/10/07 07:05:02 bill Exp $".
 //

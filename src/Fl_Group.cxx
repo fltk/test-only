@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.28 1999/10/04 09:12:47 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.29 1999/10/07 07:04:57 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -460,9 +460,36 @@ void Fl_Group::draw() {
   Fl_Widget*const* a = array();
   Fl_Widget*const* e = a+children_;
   if (damage() & ~FL_DAMAGE_CHILD) { // redraw the entire thing:
+    bool clipped = false;
+    while (e > a) {
+      Fl_Widget& w = **--e;
+      if (w.visible() && w.type() < FL_WINDOW && w.box()->rectangular &&
+	  fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
+	w.clear_damage(FL_DAMAGE_ALL);
+	w.draw();
+	w.clear_damage();
+	if (w.box() != FL_NO_BOX) {
+	  if (!clipped) {fl_clip(x(), y(), this->w(), h()); clipped = true;}
+	  fl_clip_out(w.x(), w.y(), w.w(), w.h());
+	}
+      }
+    }
     draw_box();
     draw_label();
-    while (a < e) draw_child(**a++);
+    if (clipped) fl_pop_clip();
+    e = a+children_;
+    while (a < e) {
+      Fl_Widget& w = **a++;
+      if (w.visible()) {
+	draw_outside_label(w);
+	if (w.type() < FL_WINDOW && !w.box()->rectangular &&
+	    fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
+	  w.clear_damage(FL_DAMAGE_ALL);
+	  w.draw();
+	  w.clear_damage();
+	}
+      }
+    }
   } else {	// only redraw the children that need it:
     while (a < e) update_child(**a++);
   }
@@ -470,11 +497,12 @@ void Fl_Group::draw() {
 
 // Draw a child only if it needs it:
 void Fl_Group::update_child(Fl_Widget& w) const {
+  if (!w.visible()) return;
   if (w.damage() & FL_DAMAGE_CHILD_LABEL) {
     draw_outside_label(w);
     w.clear_damage(w.damage() & ~FL_DAMAGE_CHILD_LABEL);
   }
-  if (w.damage() && w.visible() && w.type() < FL_WINDOW &&
+  if (w.damage() && w.type() < FL_WINDOW &&
       fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
     w.draw();	
     w.clear_damage();
@@ -483,9 +511,9 @@ void Fl_Group::update_child(Fl_Widget& w) const {
 
 // Force a child to redraw:
 void Fl_Group::draw_child(Fl_Widget& w) const {
+  if (!w.visible()) return;
   draw_outside_label(w);
-  if (w.visible() && w.type() < FL_WINDOW &&
-      fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
+  if (w.type() < FL_WINDOW && fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
     w.clear_damage(FL_DAMAGE_ALL);
     w.draw();
     w.clear_damage();
@@ -526,5 +554,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.28 1999/10/04 09:12:47 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.29 1999/10/07 07:04:57 bill Exp $".
 //

@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.50 1999/09/27 16:24:51 vincent Exp $"
+dnl# "$Id: configure.in,v 1.51 1999/10/07 07:04:51 bill Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -200,7 +200,6 @@ LIBJPEG=
         ,,)
 AC_SUBST(LIBJPEG)
  
-
 AC_CHECK_HEADER(X11/extensions/Xdbe.h, \
     if test "$uname" != "SunOS"; then
         AC_DEFINE(HAVE_XDBE)
@@ -320,5 +319,5 @@ AC_OUTPUT(makeinclude)
 cp config.h FL/
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.50 1999/09/27 16:24:51 vincent Exp $".
+dnl# End of "$Id: configure.in,v 1.51 1999/10/07 07:04:51 bill Exp $".
 dnl#

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rounded_box.cxx,v 1.5 1999/08/16 07:31:29 bill Exp $"
+// "$Id: fl_rounded_box.cxx,v 1.6 1999/10/07 07:05:00 bill Exp $"
 //
 // Rounded box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -58,7 +58,7 @@ static void rflat_draw(Fl_Boxtype, int x, int y, int w, int h,
   fl_color(c); rbox(1, x, y, w, h); rbox(0, x, y, w, h);
 }
 const Fl_Boxtype_ fl_rflat_box = {
-  rflat_draw, 0, 0, 7,7,14,14
+  rflat_draw, 0, 0, 7,7,14,14,
 };
 
 static void rounded_draw(Fl_Boxtype, int x, int y, int w, int h,
@@ -69,7 +69,7 @@ static void rounded_draw(Fl_Boxtype, int x, int y, int w, int h,
   rbox(0, x, y, w, h);
 }
 const Fl_Boxtype_ fl_rounded_box = {
-  rounded_draw, 0, 0, 1,1,2,2
+  rounded_draw, 0, 0, 1,1,2,2,
 };
 
 static void rshadow_draw(Fl_Boxtype b, int x, int y, int w, int h,
@@ -83,9 +83,9 @@ static void rshadow_draw(Fl_Boxtype b, int x, int y, int w, int h,
   rounded_draw(b, x, y, w, h, c, f);
 }
 const Fl_Boxtype_ fl_rshadow_box = {
-  rshadow_draw, 0, 0, 1,1,2,2
+  rshadow_draw, 0, 0, 1,1,2,2,
 };
 
 //
-// End of "$Id: fl_rounded_box.cxx,v 1.5 1999/08/16 07:31:29 bill Exp $".
+// End of "$Id: fl_rounded_box.cxx,v 1.6 1999/10/07 07:05:00 bill Exp $".
 //
