@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.35 1999/04/01 13:41:17 gustavo Exp $"
+// "$Id: Fl_win32.cxx,v 1.36 1999/04/11 02:17:32 gustavo Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -733,7 +733,7 @@ Fl_X* Fl_X::make(Fl_Window* w) {
   ShowWindow(x->xid, fl_show_iconic ? SW_SHOWMINNOACTIVE :
              fl_capture? SW_SHOWNOACTIVATE : SW_SHOWNORMAL);
   fl_show_iconic = 0;
-  fl_fix_focus();
+  if (w->modal()) {Fl::modal_ = w; fl_fix_focus();}
   return x;
 }
 
@@ -905,5 +905,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.35 1999/04/01 13:41:17 gustavo Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.36 1999/04/11 02:17:32 gustavo Exp $".
 //

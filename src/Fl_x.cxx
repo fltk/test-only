@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.25 1999/03/31 14:52:46 mike Exp $"
+// "$Id: Fl_x.cxx,v 1.26 1999/04/11 02:17:31 gustavo Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -543,6 +543,7 @@ Fl_X* Fl_X::set_xid(Fl_Window* w, Window xid) {
   x->region = 0;
   x->wait_for_expose = 1;
   Fl_X::first = x;
+  if (w->modal()) {Fl::modal_ = w; fl_fix_focus();}
   return x;
 }
 
@@ -628,8 +629,6 @@ void Fl_X::make_xid(Fl_Window* w, XVisualInfo *visual, Colormap colormap)
   w->set_visible();
   w->handle(FL_SHOW); // get child windows to appear
   w->redraw();
-  fl_fix_focus(); // if this is modal we must fix focus now
-  //XInstallColormap(fl_display, colormap);
 
   if (!w->parent() && !attr.override_redirect) {
     // Communicate all kinds 'o junk to the X Window Manager:
@@ -824,5 +823,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.25 1999/03/31 14:52:46 mike Exp $".
+// End of "$Id: Fl_x.cxx,v 1.26 1999/04/11 02:17:31 gustavo Exp $".
 //
