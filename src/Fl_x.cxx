@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.95 2000/09/27 16:25:51 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.96 2000/10/18 07:18:24 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -277,7 +277,7 @@ static Atom XdndDrop;
 static Atom XdndStatus;
 static Atom XdndActionCopy;
 static Atom XdndFinished;
-static Atom XdndProxy;
+//static Atom XdndProxy;
 
 static void fd_callback(int,void *) {do_queued_events();}
 
@@ -325,7 +325,7 @@ void fl_open_display(Display* d) {
   XdndStatus		= XInternAtom(d, "XdndStatus",		0);
   XdndActionCopy	= XInternAtom(d, "XdndActionCopy",	0);
   XdndFinished		= XInternAtom(d, "XdndFinished",	0);
-  XdndProxy		= XInternAtom(d, "XdndProxy",		0);
+  //XdndProxy		= XInternAtom(d, "XdndProxy",		0);
 
   fl_screen = DefaultScreen(fl_display);
   // construct an XVisualInfo that matches the default Visual:
@@ -434,7 +434,11 @@ Atom fl_dnd_source_action;
 Atom fl_dnd_action;
 
 static void sendClientMessage(Window window, Atom message,
-	long d0, long d1=0, long d2=0, long d3=0, long d4=0)
+                              unsigned long d0,
+                              unsigned long d1=0,
+                              unsigned long d2=0,
+                              unsigned long d3=0,
+                              unsigned long d4=0)
 {
   XClientMessageEvent e;
   e.type = ClientMessage;
@@ -444,11 +448,11 @@ static void sendClientMessage(Window window, Atom message,
   e.window = window;
   e.message_type = message;
   e.format = 32;
-  e.data.l[0] = d0;
-  e.data.l[1] = d1;
-  e.data.l[2] = d2;
-  e.data.l[3] = d3;
-  e.data.l[4] = d4;
+  e.data.l[0] = (long)d0;
+  e.data.l[1] = (long)d1;
+  e.data.l[2] = (long)d2;
+  e.data.l[3] = (long)d3;
+  e.data.l[4] = (long)d4;
   XSendEvent(fl_display, window, 0, 0, (XEvent*)&e);
 }
 
@@ -483,10 +487,8 @@ static int dnd_aware(Window& window) {
 		     0, 4, False, XA_ATOM, 
 		     &actual, &format, 
 		     &count, &remaining, &data);
-  if (actual == XA_ATOM && format==32 && count && data) {
-    int version = *(Atom*)data; if (version > 4) version = 4;
-    return version;
-  }
+  if (actual == XA_ATOM && format==32 && count && data)
+    return int(*(Atom*)data);
   return 0;
 }
 
@@ -925,7 +927,7 @@ int fl_handle(const XEvent& xevent)
     if (!fl_selection_requestor) return 0;
     static unsigned char* buffer;
     if (buffer) XFree(buffer);
-    unsigned long read = 0;
+    long read = 0;
     if (fl_xevent->xselection.property) for (;;) {
       // The Xdnd code pastes 64K chunks together, possibly to avoid
       // bugs in X servers, or maybe to avoid an extra round-trip to
@@ -1292,5 +1294,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.95 2000/09/27 16:25:51 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.96 2000/10/18 07:18:24 spitzak Exp $".
 //

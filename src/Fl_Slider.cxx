@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.44 2000/08/10 09:24:32 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.45 2000/10/18 07:18:24 spitzak Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -103,12 +103,7 @@ void Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags f) {
     else draw_bg(x, y+X+S, w, h-X-S, f);
   }
 
-  Fl_Color bc = color();
-  Fl_Color fc = text_color();
   // Sigh. Special case for "nice" sliders
-  if (type() == FL_HOR_NICE_SLIDER || type() == FL_VERT_NICE_SLIDER)
-    fc = selection_color();
-  if ((f&FL_HIGHLIGHT) && highlight_color()) bc = highlight_color();
   if (horizontal()) {
     int g;
     if (type() == FL_HOR_NICE_SLIDER) g = FL_GLYPH_HNSLIDER;
@@ -235,5 +230,5 @@ Fl_Slider::Fl_Slider(uchar t, int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.44 2000/08/10 09:24:32 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.45 2000/10/18 07:18:24 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.97 2000/09/27 16:25:51 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.98 2000/10/18 07:18:24 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -420,7 +420,6 @@ static int forward(MenuState& p, int menu) {
     if (!widget) return 0;
     if (widget->takesevents()) {setitem(p, menu, item); return 1;}
   }
-  return 0;
 }
 
 static int backward(MenuState& p, int menu) {
@@ -738,5 +737,5 @@ int Fl_Menu_::pulldown(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.97 2000/09/27 16:25:51 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.98 2000/10/18 07:18:24 spitzak Exp $".
 //

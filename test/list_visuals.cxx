@@ -1,5 +1,5 @@
 //
-// "$Id: list_visuals.cxx,v 1.5 1999/01/07 19:17:57 mike Exp $"
+// "$Id: list_visuals.cxx,v 1.6 2000/10/18 07:18:24 spitzak Exp $"
 //
 // Visual list utility for the Fast Light Tool Kit (FLTK).
 //
@@ -46,9 +46,7 @@ int main(int, char**) {
 
 #ifndef Fl_H
 
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#include <X11/Xatom.h>
+#include <FL/x.H>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -235,5 +233,5 @@ int main(int argc, char **argv) {
 #endif
 
 //
-// End of "$Id: list_visuals.cxx,v 1.5 1999/01/07 19:17:57 mike Exp $".
+// End of "$Id: list_visuals.cxx,v 1.6 2000/10/18 07:18:24 spitzak Exp $".
 //

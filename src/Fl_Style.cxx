@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.23 2000/08/10 09:24:32 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.24 2000/10/18 07:18:24 spitzak Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -95,23 +95,23 @@ void Fl_Widget::FIELD(TYPE v) {		\
   fl_unique_style(style_)->FIELD = v;	\
 }
 
-style_functions(Fl_Boxtype,box);
-style_functions(Fl_Boxtype,text_box);
-style_functions(Fl_Glyph,glyph);
-style_functions(Fl_Font,label_font);
-style_functions(Fl_Font,text_font);
-style_functions(Fl_Labeltype,label_type);
-style_functions(Fl_Color,color);
-style_functions(Fl_Color,label_color);
-style_functions(Fl_Color,selection_color);
-style_functions(Fl_Color,selection_text_color);
-style_functions(Fl_Color,text_background);
-style_functions(Fl_Color,highlight_color);
-style_functions(Fl_Color,highlight_label_color);
-style_functions(Fl_Color,text_color);
-style_functions(unsigned,label_size);
-style_functions(unsigned,text_size);
-style_functions(unsigned,leading);
+style_functions(Fl_Boxtype,box)
+style_functions(Fl_Boxtype,text_box)
+style_functions(Fl_Glyph,glyph)
+style_functions(Fl_Font,label_font)
+style_functions(Fl_Font,text_font)
+style_functions(Fl_Labeltype,label_type)
+style_functions(Fl_Color,color)
+style_functions(Fl_Color,label_color)
+style_functions(Fl_Color,selection_color)
+style_functions(Fl_Color,selection_text_color)
+style_functions(Fl_Color,text_background)
+style_functions(Fl_Color,highlight_color)
+style_functions(Fl_Color,highlight_label_color)
+style_functions(Fl_Color,text_color)
+style_functions(unsigned,label_size)
+style_functions(unsigned,text_size)
+style_functions(unsigned,leading)
 
 // Named styles provide a list that can be searched by theme plugins.
 // The "revert" function is mostly provided to make it easy to initialize
@@ -207,5 +207,5 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.23 2000/08/10 09:24:32 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.24 2000/10/18 07:18:24 spitzak Exp $".
 //

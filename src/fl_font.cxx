@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.23 2000/03/17 09:50:10 bill Exp $"
+// "$Id: fl_font.cxx,v 1.24 2000/10/18 07:18:24 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -162,7 +162,8 @@ void fl_font(Fl_Font font, unsigned size) {
 
 void fl_font(Fl_Font font, unsigned size, const char* encoding) {
   if (font == fl_font_ && size == fl_size_ &&
-      !strcmp(fl_fontsize->encoding, encoding)) return;
+      (!fl_fontsize->encoding || !strcmp(fl_fontsize->encoding, encoding)))
+    return;
   fl_font_ = font; fl_size_ = size;
 
   Fl_FontSize* f;
@@ -280,5 +281,5 @@ Fl_Font_ fl_fonts[] = {
 #endif
 
 //
-// End of "$Id: fl_font.cxx,v 1.23 2000/03/17 09:50:10 bill Exp $".
+// End of "$Id: fl_font.cxx,v 1.24 2000/10/18 07:18:24 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.111 2000/09/27 16:25:50 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.112 2000/10/18 07:18:24 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -101,7 +101,6 @@ void fl_fix_focus();
 
 void (*Fl::idle)();
 static char in_idle;
-static char in_timeout;
 
 int Fl::wait(double time_to_wait) {
   if (numtimeouts) {
@@ -117,9 +116,7 @@ int Fl::wait(double time_to_wait) {
       if (numtimeouts)
 	memmove(timeout, timeout+1, numtimeouts*sizeof(Timeout));
       // Now it is safe for the callback to do add_timeout:
-      in_timeout = 1;
       cb(arg);
-      in_timeout = 0;
     }
   } else {
     reset_clock = 1; // we are not going to check the clock
@@ -571,5 +568,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.111 2000/09/27 16:25:50 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.112 2000/10/18 07:18:24 spitzak Exp $".
 //
