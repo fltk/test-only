@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.10 1999/03/15 19:18:30 carl Exp $"
+// "$Id: Fl_Widget.H,v 1.11 1999/03/16 16:34:41 carl Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -68,7 +68,7 @@ public:
     uchar sbf;
     
     // This is just a kludge used for one particular situation--
-    // generally determined by whether Fl_Widget::_style == 0
+    // generally determined by whether style() == 0
     uchar not_dynamic;
 
     Style();
@@ -86,6 +86,9 @@ public:
     _style = default_style();
     _style->not_dynamic = 1;
   }
+  
+  void copy_style(Fl_Widget* o)
+    { wstyle(); *((Style*)_style) = *((Style*)o->style()); }
 
   const char *tooltip() const { return tooltip_; }
   void tooltip(const char *t);
@@ -196,6 +199,7 @@ protected:
   Fl_Widget(int,int,int,int,const char* =0);
 
   virtual Fl_Widget::Style* default_style() const { return &_default_style; }
+  Style* style() { if (_style) return _style; return default_style(); }
   virtual void wstyle() { if (!_style) _style = new Style; }
 
   void x(int v) {x_ = v;}
@@ -239,5 +243,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.10 1999/03/15 19:18:30 carl Exp $".
+// End of "$Id: Fl_Widget.H,v 1.11 1999/03/16 16:34:41 carl Exp $".
 //

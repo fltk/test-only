@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.H,v 1.7 1999/03/15 18:19:00 carl Exp $"
+// "$Id: Fl_Counter.H,v 1.8 1999/03/16 16:34:39 carl Exp $"
 //
 // Counter header file for the Fast Light Tool Kit (FLTK).
 //
@@ -58,6 +58,9 @@ public:
     uchar& counter(Counter_Attribute a) { return counter_[a]; }
   };
 
+  void copy_style(Fl_Counter* o)
+    { wstyle(); *((Style*)_style) = *((Style*)o->style()); }
+
   virtual void loadstyle();
 
   int handle(int);
@@ -104,5 +107,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Counter.H,v 1.7 1999/03/15 18:19:00 carl Exp $".
+// End of "$Id: Fl_Counter.H,v 1.8 1999/03/16 16:34:39 carl Exp $".
 //

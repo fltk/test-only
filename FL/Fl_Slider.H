@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.H,v 1.7 1999/03/15 18:19:03 carl Exp $"
+// "$Id: Fl_Slider.H,v 1.8 1999/03/16 16:34:41 carl Exp $"
 //
 // Slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -56,6 +56,9 @@ public:
     uchar& slider(Slider_Attribute a) { return slider_[a]; }
   };
 
+  void copy_style(Fl_Slider* o)
+    { wstyle(); *((Style*)_style) = *((Style*)o->style()); }
+
   virtual void loadstyle();
 
   void draw();
@@ -93,5 +96,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Slider.H,v 1.7 1999/03/15 18:19:03 carl Exp $".
+// End of "$Id: Fl_Slider.H,v 1.8 1999/03/16 16:34:41 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.H,v 1.8 1999/03/15 18:18:59 carl Exp $"
+// "$Id: Fl_Chart.H,v 1.9 1999/03/16 16:34:39 carl Exp $"
 //
 // Forms chart header file for the Fast Light Tool Kit (FLTK).
 //
@@ -69,6 +69,9 @@ public:
     uchar& chart(Chart_Attribute a) { return chart_[a]; }
   };
 
+  void copy_style(Fl_Chart* o)
+    { wstyle(); *((Style*)_style) = *((Style*)o->style()); }
+
   Fl_Chart(int,int,int,int,const char * = 0);
 
   virtual void loadstyle();
@@ -114,5 +117,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Chart.H,v 1.8 1999/03/15 18:18:59 carl Exp $".
+// End of "$Id: Fl_Chart.H,v 1.9 1999/03/16 16:34:39 carl Exp $".
 //
