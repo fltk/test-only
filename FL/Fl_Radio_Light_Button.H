@@ -1,40 +1,40 @@
-//
-// "$Id: Fl_Radio_Light_Button.H,v 1.4.2.3.2.2.2.3 2004/03/18 08:00:35 matthiaswm Exp $"
-//
-// Radio light button header file for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2004 by Bill Spitzak and others.
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
-//
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
-#ifndef Fl_Radio_Light_Button_H
-#define Fl_Radio_Light_Button_H
+/
+// "$Id$
+/
+// Radio light button header file for the Fast Light Tool Kit (FLTK)
+/
+// Copyright 1998-2004 by Bill Spitzak and others
+/
+// This library is free software; you can redistribute it and/o
+// modify it under the terms of the GNU Library General Publi
+// License as published by the Free Software Foundation; eithe
+// version 2 of the License, or (at your option) any later version
+/
+// This library is distributed in the hope that it will be useful
+// but WITHOUT ANY WARRANTY; without even the implied warranty o
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GN
+// Library General Public License for more details
+/
+// You should have received a copy of the GNU Library General Publi
+// License along with this library; if not, write to the Free Softwar
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-130
+// USA
+/
+// Please report all bugs and problems to "fltk-bugs@fltk.org"
+/
+#ifndef Fl_Radio_Light_Button_
+#define Fl_Radio_Light_Button_
 
-#include "Fl_Light_Button.H"
+#include "Fl_Light_Button.H
 
-class Fl_Radio_Light_Button : public Fl_Light_Button {
-public:
-    Fl_Radio_Light_Button(int X,int Y,int W,int H,const char *l=0)
-	: Fl_Light_Button(X,Y,W,H,l) {type(FL_RADIO_BUTTON);}
-};
+class Fl_Radio_Light_Button : public Fl_Light_Button 
+public
+    Fl_Radio_Light_Button(int X,int Y,int W,int H,const char *l=0
+	: Fl_Light_Button(X,Y,W,H,l) {type(FL_RADIO_BUTTON);
+}
 
-#endif
+#endi
 
-//
-// End of "$Id: Fl_Radio_Light_Button.H,v 1.4.2.3.2.2.2.3 2004/03/18 08:00:35 matthiaswm Exp $".
-//
+/
+// End of "$Id$"
+/

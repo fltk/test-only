@@ -1,80 +1,80 @@
-//
-// "$Id: Fl_Menu_Bar.H,v 1.5.2.4.2.3.2.4 2004/03/18 08:00:34 matthiaswm Exp $"
-//
-// Menu bar header file for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2004 by Bill Spitzak and others.
-//
-// This library is free software; you can redistribute it and/or
-// modify it under the terms of the GNU Library General Public
-// License as published by the Free Software Foundation; either
-// version 2 of the License, or (at your option) any later version.
-//
-// This library is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-// Library General Public License for more details.
-//
-// You should have received a copy of the GNU Library General Public
-// License along with this library; if not, write to the Free Software
-// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-// USA.
-//
-// Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
+/
+// "$Id$
+/
+// Menu bar header file for the Fast Light Tool Kit (FLTK)
+/
+// Copyright 1998-2004 by Bill Spitzak and others
+/
+// This library is free software; you can redistribute it and/o
+// modify it under the terms of the GNU Library General Publi
+// License as published by the Free Software Foundation; eithe
+// version 2 of the License, or (at your option) any later version
+/
+// This library is distributed in the hope that it will be useful
+// but WITHOUT ANY WARRANTY; without even the implied warranty o
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GN
+// Library General Public License for more details
+/
+// You should have received a copy of the GNU Library General Publi
+// License along with this library; if not, write to the Free Softwar
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-130
+// USA
+/
+// Please report all bugs and problems to "fltk-bugs@fltk.org"
+/
 
-#ifndef Fl_Menu_Bar_H
-#define Fl_Menu_Bar_H
+#ifndef Fl_Menu_Bar_
+#define Fl_Menu_Bar_
 
-#include "Fl_Menu_.H"
+#include "Fl_Menu_.H
 
-/** This widget provides a standard menubar interface. Usually you will put this widget along
- * the top edge of your window. The height of the widget should be 30 for the menu titles to
- * draw correctly with the default font.
+/** This widget provides a standard menubar interface. Usually you will put this widget alon
+ * the top edge of your window. The height of the widget should be 30 for the menu titles t
+ * draw correctly with the default font
+ 
+ * The items on the bar and the menus they bring up are defined by a single Fl_Menu_Item
+ * array. Because a Fl_Menu_Item array defines a hierarchy, the top level menu defines
+ * the items in the menubar, while the submenus define the pull-down menus. Sub-sub menu
+ * and lower pop up to the right of the submenus
+ *  \image html menubar.gi
  *
- * The items on the bar and the menus they bring up are defined by a single Fl_Menu_Item 
- * array. Because a Fl_Menu_Item array defines a hierarchy, the top level menu defines 
- * the items in the menubar, while the submenus define the pull-down menus. Sub-sub menus
- * and lower pop up to the right of the submenus.
- *  \image html menubar.gif
- * 
- * If there is an item in the top menu that is not a title of a submenu, then it acts like 
- * a "button" in the menubar. Clicking on it will pick it.
- * 
- * When the user picks an item off the menu, the item's callback is done with the menubar 
- * as the Fl_Widget* argument. If the item does not have a callback the menubar's callback
- * is done instead.
+ * If there is an item in the top menu that is not a title of a submenu, then it acts like
+ * a "button" in the menubar. Clicking on it will pick it
  *
- * Submenus will also pop up in response to shortcuts indicated by putting a '&' character 
- * in the name field of the menu item. If you put a '&' character in a top-level "button" 
- * then the shortcut picks it. The '&' character in submenus is ignored until the menu is
- * popped up.
- * 
- * Typing the shortcut() of any of the menu items will cause callbacks exactly the same as
- * when you pick the item with the mouse. 
- */
-class FL_EXPORT Fl_Menu_Bar : public Fl_Menu_ {
-protected:
-    void draw();
-public:
-    int handle(int);
-      /** Creates a new Fl_Menu_Bar widget using the given position, size, and label string. 
-       * The default boxtype is FL_UP_BOX.
-       *
-       * The constructor sets menu() to \c NULL. See Fl_Menu_ for the methods to set or 
-       * change the menu.
-       *
-       * labelsize(), labelfont(), and labelcolor() are used to control how the menubar items
-       * are drawn. They are initialized from theFl_Menu static variables, but you can change
-       * them if desired.
-       *
-       * label() is ignored unless you change align() to put it outside the menubar. */
-    Fl_Menu_Bar(int X, int Y, int W, int H,const char *l=0)
-      : Fl_Menu_(X,Y,W,H,l) {}
-};
+ * When the user picks an item off the menu, the item's callback is done with the menubar
+ * as the Fl_Widget* argument. If the item does not have a callback the menubar's callbac
+ * is done instead
+ 
+ * Submenus will also pop up in response to shortcuts indicated by putting a '&' character
+ * in the name field of the menu item. If you put a '&' character in a top-level "button"
+ * then the shortcut picks it. The '&' character in submenus is ignored until the menu i
+ * popped up
+ *
+ * Typing the shortcut() of any of the menu items will cause callbacks exactly the same a
+ * when you pick the item with the mouse.
+ *
+class FL_EXPORT Fl_Menu_Bar : public Fl_Menu_ 
+protected
+    void draw()
+public
+    int handle(int)
+      /** Creates a new Fl_Menu_Bar widget using the given position, size, and label string.
+       * The default boxtype is FL_UP_BOX
+       
+       * The constructor sets menu() to \c NULL. See Fl_Menu_ for the methods to set or
+       * change the menu
+       
+       * labelsize(), labelfont(), and labelcolor() are used to control how the menubar item
+       * are drawn. They are initialized from theFl_Menu static variables, but you can chang
+       * them if desired
+       
+       * label() is ignored unless you change align() to put it outside the menubar. *
+    Fl_Menu_Bar(int X, int Y, int W, int H,const char *l=0
+      : Fl_Menu_(X,Y,W,H,l) {
+}
 
-#endif
+#endi
 
-//
-// End of "$Id: Fl_Menu_Bar.H,v 1.5.2.4.2.3.2.4 2004/03/18 08:00:34 matthiaswm Exp $".
-//
+/
+// End of "$Id$"
+/

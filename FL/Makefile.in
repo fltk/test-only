@@ -1,58 +1,58 @@
-#
-# "$Id: Makefile.in,v 1.1.2.6.2.3 2004/11/09 01:52:30 rokan Exp $"
-#
-# Header makefile for the Fast Light Tool Kit (FLTK).
-#
-# Copyright 1998-2003 by Bill Spitzak and others.
-#
-# This library is free software; you can redistribute it and/or
-# modify it under the terms of the GNU Library General Public
-# License as published by the Free Software Foundation; either
-# version 2 of the License, or (at your option) any later version.
-#
-# This library is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-# Library General Public License for more details.
-#
-# You should have received a copy of the GNU Library General Public
-# License along with this library; if not, write to the Free Software
-# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
-# USA.
-#
-# Please report all bugs and problems to "fltk-bugs@fltk.org".
-#
 
-include ../makeinclude
+# "$Id$
 
-all:
+# Header makefile for the Fast Light Tool Kit (FLTK)
 
-install:
-	echo "Installing include files in $(DESTDIR)$(includedir)..."
-	-$(MKDIR) -p $(DESTDIR)$(includedir)
-	$(RMDIR) $(DESTDIR)$(includedir)/FL
-	$(MKDIR) $(DESTDIR)$(includedir)/FL
-	$(CHMOD) 755 $(DESTDIR)$(includedir)/FL
-	$(CP) ../FL/*.[hHr] $(DESTDIR)$(includedir)/FL
-	$(CHMOD) 644 $(DESTDIR)$(includedir)/FL/*.[hHr]
-@HLINKS@	cd $(DESTDIR)$(includedir)/FL;\
-@HLINKS@	for file in *.H; do\
-@HLINKS@		$(RM) "`basename $$file H`h";\
-@HLINKS@		$(LN) $$file "`basename $$file H`h";\
-@HLINKS@	done
-@HLINKS@	$(RM) $(DESTDIR)$(includedir)/FL/fl_file_chooser.H
-@HLINKS@	$(LN) Fl_File_Chooser.H $(DESTDIR)$(includedir)/FL/fl_file_chooser.H
-@HLINKS@	$(RM) $(DESTDIR)$(includedir)/FL/fl_file_chooser.h
-@HLINKS@	$(LN) Fl_File_Chooser.H $(DESTDIR)$(includedir)/FL/fl_file_chooser.h
-@HLINKS@	$(RM) $(DESTDIR)$(includedir)/Fl
-@HLINKS@	$(LN) FL $(DESTDIR)$(includedir)/Fl
+# Copyright 1998-2003 by Bill Spitzak and others
 
-uninstall:
-	echo "Uninstalling include files..."
-	$(RMDIR) $(DESTDIR)$(includedir)/FL
-@HLINKS@	$(RM) $(DESTDIR)$(includedir)/Fl
+# This library is free software; you can redistribute it and/o
+# modify it under the terms of the GNU Library General Publi
+# License as published by the Free Software Foundation; eithe
+# version 2 of the License, or (at your option) any later version
+
+# This library is distributed in the hope that it will be useful
+# but WITHOUT ANY WARRANTY; without even the implied warranty o
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GN
+# Library General Public License for more details
+
+# You should have received a copy of the GNU Library General Publi
+# License along with this library; if not, write to the Free Softwar
+# Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-130
+# USA
+
+# Please report all bugs and problems to "fltk-bugs@fltk.org"
 
 
-#
-# End of "$Id: Makefile.in,v 1.1.2.6.2.3 2004/11/09 01:52:30 rokan Exp $".
-#
+include ../makeinclud
+
+all
+
+install
+	echo "Installing include files in $(DESTDIR)$(includedir)...
+	-$(MKDIR) -p $(DESTDIR)$(includedir
+	$(RMDIR) $(DESTDIR)$(includedir)/F
+	$(MKDIR) $(DESTDIR)$(includedir)/F
+	$(CHMOD) 755 $(DESTDIR)$(includedir)/F
+	$(CP) ../FL/*.[hHr] $(DESTDIR)$(includedir)/F
+	$(CHMOD) 644 $(DESTDIR)$(includedir)/FL/*.[hHr
+@HLINKS@	cd $(DESTDIR)$(includedir)/FL;
+@HLINKS@	for file in *.H; do
+@HLINKS@		$(RM) "`basename $$file H`h";
+@HLINKS@		$(LN) $$file "`basename $$file H`h";
+@HLINKS@	don
+@HLINKS@	$(RM) $(DESTDIR)$(includedir)/FL/fl_file_chooser.
+@HLINKS@	$(LN) Fl_File_Chooser.H $(DESTDIR)$(includedir)/FL/fl_file_chooser.
+@HLINKS@	$(RM) $(DESTDIR)$(includedir)/FL/fl_file_chooser.
+@HLINKS@	$(LN) Fl_File_Chooser.H $(DESTDIR)$(includedir)/FL/fl_file_chooser.
+@HLINKS@	$(RM) $(DESTDIR)$(includedir)/F
+@HLINKS@	$(LN) FL $(DESTDIR)$(includedir)/F
+
+uninstall
+	echo "Uninstalling include files...
+	$(RMDIR) $(DESTDIR)$(includedir)/F
+@HLINKS@	$(RM) $(DESTDIR)$(includedir)/F
+
+
+
+# End of "$Id$"
+
