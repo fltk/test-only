@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.59 2004/05/18 15:53:41 spitzak Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.60 2004/07/04 17:21:45 laza2000 Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -38,6 +38,8 @@ bool		Tooltip::enabled_ = true;
 
 #define MAX_WIDTH 400
 
+static bool recent_tooltip;
+
 class TooltipBox : public MenuWindow {
 public:
   TooltipBox() : MenuWindow(0, 0) {
@@ -50,6 +52,13 @@ public:
   // You have to destroy the window or it will not raise next time:
   void hide() {destroy();}
 #endif
+	int handle(int ev) {
+		if(ev==ENTER) {
+			recent_tooltip = 0;
+			Tooltip::exit();
+		}
+		return MenuWindow::handle(ev);
+	}
 };
 
 static Tooltip::Generator generator;
@@ -93,8 +102,6 @@ void TooltipBox::draw() {
   int X=0; int Y=0; int W=w(); int H=h(); //box()->inset(X,Y,W,H);
   draw_label(X, Y, W, H, style(), flags()|OUTPUT);
 }
-
-static bool recent_tooltip;
 
 static void recent_timeout(void*) {
   recent_tooltip = false;
@@ -221,5 +228,5 @@ static NamedStyle style("Tooltip", revert, &Tooltip::default_style);
 NamedStyle* Tooltip::default_style = &::style;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.59 2004/05/18 15:53:41 spitzak Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.60 2004/07/04 17:21:45 laza2000 Exp $".
 //
