@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.99 2004/08/25 17:10:36 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.100 2004/10/19 06:18:14 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -67,31 +67,36 @@ using namespace fltk;
   The subclass fltk::MultiBrowser lets the user select more than one
   item at the same time.
 
+  The callback() is done when the user changes the selected items or
+  when they open/close parents. In addition, if the user double-clicks
+  a non-parent item, then it is "executed" which usually means that
+  the callback() on the item itself is run. However if that is the
+  default callback, the callback() of this widget is called with the
+  user_data() of the item.
+
   You can control when callbacks are done with the when() method. The
-  following values are useful, the default value is
-  fltk::WHEN_RELEASE.
+  following values are useful, the default value is fltk::WHEN_CHANGED.
 
   - fltk::WHEN_NEVER - Callback is never done. changed() can be used
     to see if the user has modified the browser.
 
-  - fltk::WHEN_CHANGED - Callback is done whenever the user changes
-    the current item. If they drag the mouse through items the
-    callback is done for each one, and the callback is done for each
-    keystroke that changes the selected item.
+  - fltk::WHEN_CHANGED - Callback is called on every change to each
+    item as it happens. The method item() will return the one that
+    is being changed. Notice that selecting large numbers in a mulit
+    browser will produce large numbers of callbacks.
 
   - fltk::WHEN_RELEASE - Callback is done when the user releases the
-    mouse and the selected item has changed, and on any keystroke that
-    changes the item.
+    mouse after some changes, and on any keystroke that
+    changes the item. For a multi browser you will only be able
+    to find out all the changes by scanning all the items in the callback.
 
   - fltk::WHEN_RELEASE_ALWAYS - Callback is done when the user
     releases the mouse even if the current item has not changed, and
     on any arrow keystroke even when at the top or bottom of the
-    browser. You must use this if you want to detect the user
-    double-clicking an item.
+    browser.
 
-  - fltk::WHEN_ENTER_KEY - Callback is only done if the user hits the
-    Enter key and some item is selected. In the current version the
-    callback is also done if the user double-clicks a non-parent item.
+  - fltk::WHEN_ENTER_KEY - If you turn this on then the enter key is
+    a shortcut and executes the current item like double-click.
 
 */
 
@@ -1124,7 +1129,7 @@ bool Browser::set_item_selected(bool value, int do_callback) {
     damage_item(HERE);
     if (when() & do_callback) {
       clear_changed();
-      execute(item());
+      this->do_callback();
     } else if (do_callback) {
       set_changed();
     }
@@ -1175,7 +1180,7 @@ bool Browser::select_only_this(int do_callback) {
     if (!set_focus()) return false;
     if (when() & do_callback) {
       clear_changed();
-      execute(item());
+      this->do_callback();
     } else if (do_callback) {
       set_changed();
     }
@@ -1228,6 +1233,11 @@ int Browser::handle(int event) {
     if (event != PUSH) return 1;
     // drag must start & end in open/close box for it to work:
     openclose_drag = (xx > 0 && xx < arrow_size && item_is_parent());
+    if (openclose_drag) {
+      set_focus();
+      damage_item(HERE);
+      return 1;
+    }
     //take_focus();
     if (multi()) {
       if (event_state(CTRL)) {
@@ -1250,20 +1260,21 @@ int Browser::handle(int event) {
     }
     goto MOUSE_TO_ITEM;}
 
-  case DRAG: {
+  case DRAG:
     // find the item they are now pointing at:
     if (!goto_position(event_y()-Y+yposition_) && !item()) break;
-    // set xx to how far to left of widget they clicked:
-    int arrow_size = int(textsize())|1;
-    int xx = (item_level[HERE]+indented())*arrow_size+X-xposition_-event_x();
-    // openclose_drag will be 1 only if they started on a open/close box
-    // and they ended on one. I use the value 2 to indicate that they
-    // were on one and moved off, but can still move back:
-    if (openclose_drag && xx > 0 && xx < arrow_size && item_is_parent()) {
-      if (openclose_drag != 1) {openclose_drag = 1; damage_item(HERE);}
-    } else {
-      if (openclose_drag == 1) {openclose_drag = 2; damage_item(HERE);}
-    }}
+    if (openclose_drag) {
+      set_focus();
+      // set xx to how far to left of widget they clicked:
+      int arrow_size = int(textsize())|1;
+      int xx = (item_level[HERE]+indented())*arrow_size+X-xposition_-event_x();
+      if (xx > 0 && xx < arrow_size && item_is_parent()) {
+	if (openclose_drag != 1) {openclose_drag = 1; damage_item(HERE);}
+      } else {
+	if (openclose_drag == 1) {openclose_drag = 2; damage_item(HERE);}
+      }
+      return 1;
+    }
   MOUSE_TO_ITEM:
     if (multi()) {
       // set everything from old focus to current to drag_type:
@@ -1284,10 +1295,13 @@ int Browser::handle(int event) {
   case RELEASE:
     goto_mark(FOCUS);
     if (openclose_drag == 1 || event_clicks() && item_is_parent()) {
-      // toggle the open/close state of this item
+      // toggle the open/close state of this item:
       set_item_opened(!(item()->flags()&VALUE));
       event_is_click(0); // make next click not be double
-    } else if (event_clicks() && (when()&WHEN_ENTER_KEY)) {
+      if (when()&WHEN_CHANGED) do_callback();
+      return 1;
+    } else if (openclose_drag) return 1;
+    if (event_clicks()) {
       // double clicks act like ReturnKey
       e_keysym = ReturnKey;
       clear_changed();
@@ -1331,7 +1345,7 @@ int Browser::handle(int event) {
       if ((when()&WHEN_RELEASE) &&
 	  (changed() || (when()&WHEN_NOT_CHANGED))) {
 	clear_changed();
-	execute(item());
+	do_callback();
       }
       return 1;
     case ReturnKey:
@@ -1809,5 +1823,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.99 2004/08/25 17:10:36 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.100 2004/10/19 06:18:14 spitzak Exp $".
 //
