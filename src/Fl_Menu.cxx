@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.119 2002/01/23 08:46:01 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.120 2002/01/27 04:59:47 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -491,7 +491,7 @@ int MenuWindow::handle(int event) {
   switch (event) {
 
   case FL_KEYBOARD:
-  case FL_SHORTCUT: {
+  case FL_SHORTCUT:
     switch (Fl::event_key()) {
     case FL_Up:
       if (p.menubar && p.level == 0) ;
@@ -519,7 +519,7 @@ int MenuWindow::handle(int event) {
       Fl::exit_modal();
       return 1;
     }
-    for (int menu = p.nummenus; menu--;) {
+    {for (int menu = p.nummenus; menu--;) {
       MenuWindow &mw = *(p.menus[menu]);
       for (int item = 0; ; item++) {
 	widget = mw.get_widget(item);
@@ -529,11 +529,12 @@ int MenuWindow::handle(int event) {
 	  goto EXECUTE;
 	}
       }
-    }} break;
+    }}
+    return 1; // always eat all the keystrokes
 
   case FL_KEYUP:
     if ((Fl::event_key() == FL_Alt_L || Fl::event_key() == FL_Alt_R)
-	&& Fl::event_clicks()) {
+	&& Fl::event_is_click()) {
       // checking for event_clicks insures that the keyup matches the
       // keydown that preceeded it, so Alt was pressed & released without
       // any intermediate values.
@@ -548,22 +549,30 @@ int MenuWindow::handle(int event) {
     int mx = Fl::event_x_root();
     int my = Fl::event_y_root();
     int item=0; int menu;
+    // find the menu and item they are pointing at:
     for (menu = p.nummenus-1; ; menu--) {
       item = p.menus[menu]->find_selected(mx, my);
       if (item >= 0) break;
-      if (menu <= 0) {menu = p.nummenus-1; item = -1; break;}
+      if (menu <= 0) {
+	// drags to nothing do not change the first pulldown in menubar:
+	if (event != FL_PUSH && p.menubar && p.nummenus<2) return 1;
+	// otherwise point at the parent of lowest visible menu:
+	menu = p.nummenus-1;
+	item = -1;
+	break;
       }
+    }
     if (event == FL_PUSH) {
       p.state = PUSH_STATE;
       // quit if they clicked off the menus:
       if (item < 0) {Fl::exit_modal(); return 0;}
-  	if (p.menus[menu]->is_parent(item) // this is a submenu title
-  	    && item != p.indexes[menu]) // and it is not already on
-  	  p.state = INITIAL_STATE;
-	// redraw checkboxes so they preview the state they will be in:
-	Fl_Widget* widget = p.menus[menu]->get_widget(item);
-	if (checkmark(widget)) p.menus[menu]->redraw(FL_DAMAGE_CHILD);
-      }
+      if (p.menus[menu]->is_parent(item) // this is a submenu title
+	  && item != p.indexes[menu]) // and it is not already on
+	p.state = INITIAL_STATE;
+      // redraw checkboxes so they preview the state they will be in:
+      Fl_Widget* widget = p.menus[menu]->get_widget(item);
+      if (checkmark(widget)) p.menus[menu]->redraw(FL_DAMAGE_CHILD);
+    }
     setitem(p, menu, item);
     return 1;}
 
@@ -641,6 +650,11 @@ int Fl_Menu_::popup(
   if (menubar) {
     if (value() < 0)
       toplevel.handle(FL_PUSH); // get menu mouse points at to appear
+    else {
+      p.indexes[0] = value();
+      p.indexes[1] = -1;
+      p.level = 0;
+    }
     p.changed = true; // make it create the pulldown menu
   } else {
     // create submenus until we locate the one with selected item
@@ -755,5 +769,5 @@ int Fl_Menu_::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.119 2002/01/23 08:46:01 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.120 2002/01/27 04:59:47 spitzak Exp $".
 //

@@ -104,7 +104,7 @@ the symbols.  <code>FL_NORMAL_LABEL</code>.
 
 Color passed to <code>box</code>.  Default is <code>FL_GRAY</code>.
 If you wish to change the general color of fltk you probably want to
-call <a href=#fl_background><code>fl_background(color)</code></a>
+call <a href=Fl_Color#fl_background><code>fl_background(color)</code></a>
 instead, as this will set the entry for <code>FL_GRAY</code> and also
 set the "gray ramp" so that the edges of buttons are the same color.
 
@@ -260,14 +260,6 @@ The box and color of this controls the appearance of the tooltips.
 This is always linked in, so you don't need find().  Tooltips also
 have some other static fields to set the timeout and position, see the
 Fl_Tooltip documentation.
-
-<a name=fl_background>
-<h4>void fl_background(<a href=Fl_Color.html>Fl_Color</a>)</h4>
-
-This global function changes the "gray ramp" in the fltk color map so
-that the color <code>FL_GRAY</code> is set the the rgb values of the
-passed color.  This is the best way to change the overall color of
-your application, because it sets all the shaded borders.
 
 </body></html>
 

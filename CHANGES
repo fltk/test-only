@@ -1997,3 +1997,20 @@ The new browser is distinctly less painful to program than the older
 ones, please read the documentation!
 
 Fixes to documentation so it goes through htmldoc better.
+
+Checked in 1/24/02
+////////////////////////////////////////////////////////////////
+
+X sent fake keyup events when you hold down a repeating key, made fltk
+ignore these.
+
+Typing a key while a menu was up that did not match a menu item shortcut
+crashed.
+
+Fl_Input and Fl_Text_Editor now do a bunch of Emacs Alt+letter
+combinations. These (and Emacs ctrl+letter keys) are only done if the
+program does not use them for a shortcut such as a menu item. The
+implementation of this cleaned up and removed from Fl.cxx.
+
+Checked in 1/26/02
+////////////////////////////////////////////////////////////////

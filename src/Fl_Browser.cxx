@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.57 2002/01/25 10:10:00 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.58 2002/01/27 04:59:47 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -701,6 +701,8 @@ bool Fl_Browser::make_item_visible(linepos where) {
     p += h-H; break;
   case MIDDLE:
     p += h-H/2; break;
+  case TOP:
+    break;
   }
   // clip scrolling to the useful range:
   if (p > height_-H) p = height_-H;
@@ -1071,5 +1073,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.57 2002/01/25 10:10:00 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.58 2002/01/27 04:59:47 spitzak Exp $".
 //

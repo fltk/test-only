@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.56 2002/01/23 08:46:00 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.57 2002/01/27 04:59:47 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -794,104 +794,120 @@ void Fl_Input::shift_up_down_position(int p) {
   up_down_position(p, Fl::event_state(FL_SHIFT));
 }
 
-#define ctrl(x) (x^0x40)
-
 bool Fl_Input::handle_key() {
 
   int i;
+
+  // insert any text:
   if (Fl::compose(i)) {
     if (!i && !Fl::event_length()) return 1;
     return replace(position(), i ? position()-i : mark(),
 		   Fl::event_text(), Fl::event_length());
   }
 
+  bool ctrl = Fl::event_state(FL_CTRL);
+  bool shift = Fl::event_state(FL_SHIFT);
+  bool alt = Fl::event_state(FL_ALT|FL_META);
+
   switch (Fl::event_key()) {
+
+  case 'b':
+    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    ctrl = alt;
   case FL_Left:
-    if (Fl::event_state(FL_CTRL)) shift_position(word_start(position()-1));
-    else shift_position(position()-1);
+    shift_position(ctrl ? word_start(position()-1) : position()-1);
     return true;
+
+  case 'f':
+    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    ctrl = alt;
   case FL_Right:
-    if (Fl::event_state(FL_CTRL)) shift_position(word_end(position()+1));
-    else shift_position(position()+1);
+    shift_position(ctrl ? word_end(position()+1) : position()+1);
     return true;
+
+  case 'p':
+    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    ctrl = alt;
   case FL_Up:
     if (type() < MULTILINE) return false;
     i = line_start(position());
     if (!i) shift_position(0);
-    else shift_up_down_position(line_start(i-1));
+    else up_down_position(line_start(i-1), shift);
     return true;
+
+  case 'n':
+    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    ctrl = alt;
   case FL_Down:
     if (type() < MULTILINE) return false;
     i = line_end(position());
     if (i >= size()) shift_position(i);
-    else shift_up_down_position(i+1);
+    else up_down_position(i+1, shift);
     return true;
+
   case FL_Page_Up: {
     if (type() < MULTILINE) return false;
     i = line_start(position());
-    // CET - FIXME - this widget should keep track of the line heights
-    // internally.  Using the style accessor functions is not guaranteed
-    // to give correct results for what is actually displayed!  They
-    // should _only_ be used in layout() and draw().
     setfont();
-    for (int n = h()/line_height(); n--;)
-      i = line_start(i-1);
+    for (int n = h()/line_height(); n--;) i = line_start(i-1);
     shift_position(i);
     return true;}
+
   case FL_Page_Down: {
     if (type() < MULTILINE) return false;
     i = line_end(position());
-    // CET - FIXME - this widget should keep track of the line heights
-    // internally.  Using the style accessor functions is not guaranteed
-    // to give correct results for what is actually displayed!  They
-    // should _only_ be used in layout() and draw().
     setfont();
-    for (int n = h()/line_height(); n--;)
-      i = line_end(i)+1;
+    for (int n = h()/line_height(); n--;) i = line_end(i)+1;
     shift_position(i+1);
     return true;}
-  case FL_Home:
-    if (Fl::event_state(FL_CTRL))
-      shift_position(0);
-    else {
+
+  case 'a':
+    if (ctrl) {
       // if already at start of line, select the entire buffer. This
       // makes two ^A's do a select-all for both Emacs & Win32 compatability
-      int x = line_start(position());
-      if (x == position()) position(0, size());
-      else shift_position(x);
+      i = line_start(position());
+      if (i == position() && i == mark()) position(0, size());
+      else shift_position(i);
+      return true;
     }
+    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    ctrl = alt;
+  case FL_Home:
+    shift_position(ctrl ? 0 : line_start(position()));
     return true;
+
+  case 'e':
+    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    ctrl = alt;
   case FL_End:
-    if (Fl::event_state(FL_CTRL))
-      shift_position(size());
-    else
-      shift_position(line_end(position()));
+    shift_position(ctrl ? size() : line_end(position()));
     return true;
+
   case FL_Insert:
-    if (Fl::event_state(FL_CTRL))
-      copy();
-    else if (Fl::event_state(FL_SHIFT))
-      Fl::paste(*this,true);
-    else
-      return false; // CUA toggles insert mode on/off, we don't support that!
+    if (ctrl) copy();
+    else if (shift) Fl::paste(*this, true);
+    else return false; // CUA toggles insert mode on/off
     return true;
+
+  case 'd':
+    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    ctrl = alt;
   case FL_Delete:
-    //if (Fl::event_state(FL_CTRL))
-    //	 what does CUA do with Ctrl+Delete?
-    if (Fl::event_state(FL_SHIFT)) copy();
-    if (mark() != position()) cut(); else cut(1);
+    // I don't know what CUA does with ctrl+delete, I made it delete words
+    if (shift) copy();
+    if (mark() != position()) cut();
+    else cut(ctrl ? word_end(position()+1)-position() : 1);
     return true;
+
+  case 'h': // retro-Emacs, modern versions do "help"
+    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    ctrl = alt;
   case FL_BackSpace:
-    if (mark() != position()) cut(); else cut(-1);
+    // I don't know what CUA does with ctrl+backspace, I made it delete words
+    if (mark() != position()) cut();
+    else cut(ctrl ? word_start(position()-1)-position() : -1);
     return true;
-  case FL_Clear:
-    // used for clear-to-end-of line, like ^K in Emacs
-    i = line_end(position());
-    if (i == position() && i < size()) i++;
-    if (cut(position(), i))
-      // Make all the adjacent ^K's go into the clipboard, like Emacs:
-      Fl::copy(undobuffer, yankcut, true);
-    return true;
+
   case FL_Enter:
   case FL_KP_Enter:
     if (when() & FL_WHEN_ENTER_KEY) {
@@ -899,26 +915,69 @@ bool Fl_Input::handle_key() {
       maybe_do_callback();
       return true;
     }
-    if (type() >= MULTILINE && !Fl::event_state(FL_CTRL|FL_SHIFT))
-      return replace(position(), mark(), '\n');
-    break;
+    if (type() < MULTILINE || ctrl || shift) return false;
+    return replace(position(), mark(), '\n');
+
   case FL_Tab:
-    if (type() >= MULTILINE && !Fl::event_state(FL_CTRL|FL_SHIFT))
-      return replace(position(), mark(), Fl::event_text(), 1);
-    break;
-  case 'z':
-  case '/': // Emacs undo, I doubt any programs want this as a menu item.
-    if (Fl::event_state(FL_CTRL)) return undo();
-    break;
-  case 'x':
-    if (Fl::event_state(FL_CTRL)) {copy(); return cut();}
-    break;
+    if (type() < MULTILINE || ctrl || shift) return false;
+    return replace(position(), mark(), Fl::event_text(), 1);
+
+  case 'k': // Emacs clear-to-end-of-line
+    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    // alt should clear to end of paragraph, nyi
+    i = line_end(position());
+    if (i == position() && i < size()) i++;
+    if (cut(position(), i))
+      // Make all the adjacent ^K's go into the clipboard, like Emacs:
+      Fl::copy(undobuffer, yankcut, true);
+    return true;
+
   case 'c':
-    if (Fl::event_state(FL_CTRL)) return copy();
-    break;
+    if (!ctrl && Fl::handle(FL_SHORTCUT,window())) return true;
+    return copy();
+
   case 'v':
-    if (Fl::event_state(FL_CTRL)) {Fl::paste(*this,true); return true;}
-    break;
+    if (!ctrl && Fl::handle(FL_SHORTCUT,window())) return true;
+    Fl::paste(*this,true);
+    return true;
+
+  case 'w': // Emacs cut
+    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    copy();
+    return cut();
+
+  case 'x':
+    if (!ctrl && Fl::handle(FL_SHORTCUT,window())) return true;
+    copy();
+    return cut();
+
+  case 'y': // Emacs paste
+    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    Fl::paste(*this,true);
+    return true;
+
+  case 'z':
+    if (!ctrl && Fl::handle(FL_SHORTCUT,window())) return true;
+    return undo();
+
+  case '/': // Emacs undo
+    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    return undo();
+
+    // Other interesting Emacs characters:
+    // 'o' inserts newline and moves before it
+    // 'q' quotes next character
+    // 'r' backward incremental search
+    // 's' incremental search
+    // 't' swaps 2 characters around cursor and moves right 1
+    // 'u' repeat count prefix
+
+  }
+
+  // Insert any other keys (like ^J) into the text, if no shortcuts eat them:
+  if (Fl::event_length()) {
+    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    return replace(position(), mark(), Fl::event_text(), Fl::event_length());
   }
 
   return false;
@@ -1142,5 +1201,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.56 2002/01/23 08:46:00 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.57 2002/01/27 04:59:47 spitzak Exp $".
 //

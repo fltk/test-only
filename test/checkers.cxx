@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.20 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: checkers.cxx,v 1.21 2002/01/27 04:59:48 spitzak Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -1124,7 +1124,10 @@ int Board::handle(int e) {
   switch (e) {
   case FL_PUSH:
     if (Fl::event_button() > 1) {
-      menu->popup(Fl::event_x(), Fl::event_y());
+      static const Fl_Menu_Item* previous;
+      const Fl_Menu_Item* i =
+	menu->popup(Fl::event_x(), Fl::event_y(), 0, previous);
+      if (i) previous = i;
       return 1;
     }
     if (playing) {
@@ -1363,5 +1366,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.20 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: checkers.cxx,v 1.21 2002/01/27 04:59:48 spitzak Exp $".
 //

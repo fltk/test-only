@@ -107,6 +107,8 @@ href="drawing.html">Drawing</a> appendix. The others are a set of modal
 popup utility functions for asking questions described in 
 the <a href="utility.html">Utility</a> appendix.
 
+<h2>Startup functions</h2>
+
 <a name="version"><h4>double Fl::version()</h4></a>
 
 Returns the version number of fltk. This can be compared to the value
@@ -163,22 +165,34 @@ in which case it is zero.  If your program takes no arguments other
 than switches you should produce an error if the return value is less 
 than <tt>argc</tt>. 
 
-<p>All switches except -bg2 may be abbreviated one letter and case is
-ignored:
+<p>All switches may be abbreviated one letter and case is ignored:
 
 <ul>
+
 <li><tt>-display host:n.n</tt> The X display to use (ignored  under 
 WIN32).</li>
-<li><tt>-geometry WxH+X+Y</tt> The window position and size  will be 
-modified according the the standard X geometry string.</li>
-<li><tt>-name string</tt> Fl_Window::xclass(string) will be  done to 
-the window, possibly changing its icon.</li>
-<li><tt>-title string</tt> Fl_Window::label(string) will be  done to 
-the window, changing both its title and the icontitle.</li>
-<li><tt>-iconic</tt> Fl_Window::iconize() will be done to  the window.</li>
-<li><tt>-bg color</tt> XParseColor is used to lookup the  passed color 
-and then Fl::background() is done.  Under WIN32  only color names of 
-the form &quot;#xxxxxx&quot; are understood.</li>
+
+<li><tt>-geometry WxH</tt> Window is resized to this width & height</li>
+<li><tt>-geometry +X+Y</tt> Initial window position</li>
+<li><tt>-geometry WxH+X+Y</tt> Window is resized and positioned.</li>
+
+<li><tt>-name string</tt> <a
+href="Fl_Window.html#xclass">Fl_Window::xclass(string)</a> will be
+done to the window, possibly changing its icon.</li>
+
+<li><tt>-title string</tt> <a
+href="Fl_Window.html#label">Fl_Window::label(string)</a> will be done
+to the window, changing both its title and the icontitle.</li>
+
+<li><tt>-iconic</tt> <a
+href="Fl_Window.html#iconize">Fl_Window::iconize()</a> will be done to
+the window.</li>
+
+<li><tt>-bg color</tt> XParseColor is used to lookup the passed color
+and then <a href="Fl_Color.html#fl_background">fl_background()</a> is
+done.  Under WIN32 only color names of the form &quot;#xxxxxx&quot;
+are understood.</li>
+
 </ul>
 
 The second form of <tt>Fl::args()</tt> is useful if your program does 
@@ -265,6 +279,26 @@ and will reduce conflicts with other programs that want lots of colors.
 However the colors may flash as you move the cursor between windows. 
 
 <p>This does nothing if the current visual is not colormapped.</p>
+
+<a name="info"><h4>const Fl_Screen_Info& Fl::info()</h4></a>
+
+Return a structure of information describing the current state of the
+screen. Currently this structure contains the following (this may be
+added to in the future):
+
+<ul>
+<li><tt>int x</tt> left edge of work area
+<li><tt>int y</tt> top edge of work area
+<li><tt>int w</tt> width of work area
+<li><tt>int h</tt> height of work area
+<li><tt>int width</tt> full screen width in pixels
+<li><tt>int height</tt> full screen height in pixels
+<li><tt>int depth</tt> bits per pixel
+<li><tt>int width_mm</tt> screen width in millimeters
+<li><tt>int height_mm</tt> screen height in millimeters
+</ul>
+
+<h2>Waiting for events</h2>
 
 <a name="wait"><h4>int Fl::wait()</h4></a>
 
@@ -526,6 +560,8 @@ Returns true if the specified idle callback is currently installed.
 
 Removes the specified idle callback, if it is installed.
 
+<h2>Redrawing</h2>
+
 <a name="damage"><h4>int Fl::damage()</h4></a>
 
 True if any <a
@@ -542,30 +578,6 @@ changes to the styles.
 Causes all the windows that need it to be redrawn and graphics forced 
 out through the pipes.  This is what <tt>wait()</tt> does before 
 looking for events. 
-
-<h4><a name="warning">void (*Fl::warning)(const char *, ...)</a>
-<br><a name="error">void (*Fl::error)(const char *, ...)</a>
-<br><a name="fatal">void (*Fl::fatal)(const char *, ...)</a></h4>
-
-FLTK will call these to print messages when unexpected conditions 
-occur.
-
-<p><tt>Fl::warning</tt> means that there was a recoverable problem,
-the display may be messed up but the user can probably keep working.
-(all X protocol errors call this).
-
-<p><tt>Fl::error</tt> means there is a recoverable error, but the
-display is so messed up it is unlikely the user can continue (very
-little calls this now).
-
-<p><tt>Fl::fatal</tt> must not return, as FLTK is in an unusable
-state, however your version may be able to use <tt>longjmp</tt> or an
-exception to continue, as long as it does not call FLTK again.</p>
-
-<p>The default versions on Unix print messages to stderr, while on
-Windows they use <tt>MessageBox()</tt>. <tt>Fl::error</tt> and
-<tt>Fl::fatal</tt> call <tt>abort()</tt>. You can override the
-behavior by setting the function pointers to your own routines.
 
 <a name="first_window"><h4>Fl_Window *Fl::first_window()</h4></a>
 
@@ -589,6 +601,8 @@ href="utility.html#fl_ask">fl_ask()</a>.
 Returns the next visible() top-level window, returns NULL after the
 last one.  You can use this and first_window() to iterate through all
 the visible windows.
+
+<h2>Events</h2>
 
 <a name="event"><h4>int Fl::event()</h4></a>
 
@@ -619,42 +633,50 @@ event_x(),event_y()</tt>.
 <a name="event_clicks"><h4>int Fl::event_clicks()
 <br>void Fl::event_clicks(int)</h4></a>
 
-The first form returns non-zero if the most recent <tt>FL_PUSH</tt>
-was a "double click", or if the most recent <tt>FL_KEYBOARD</tt> was
-caused by a repeating key being held down. Returns N-1 for N repeats
-of the key.
+Returns the number of times the last mouse button or keyboard key
+was pushed while <a href="#event_is_click">Fl::event_is_click()</a>
+was true.
 
-<p>The second form directly sets the number returned by <tt>
-Fl::event_clicks()</tt>.  This can be used to set it to zero so that 
-later code does not think an item was double-clicked.</p>
+<p>For a normal <tt>FL_PUSH</tt> this is zero, if the user
+"double-clicks" this is one, and it is N-1 for each subsequent
+click. This is also used to see if the keyboard is repeating, if the
+most recent <tt>FL_KEY</tt> was caused by a repeating key this is
+non-zero, and is N-1 for N repeats of the key.
+
+<p>Setting this value with <tt>Fl::event_clicks(n)</tt> can be used to
+make callbacks think things were (or were not) double-clicked.
 
 <a name="event_is_click"><h4>int Fl::event_is_click()
 <br>void Fl::event_is_click(0)</h4></a>
 
-This is non-zero if the mouse has not moved far enough and not enough
-time has passed since the last <tt>FL_PUSH</tt> event for it to be
-considered a "drag" rather than a "click".  You can test this on
-<tt>FL_DRAG</tt>, <tt>FL_RELEASE</tt>, and <tt>FL_MOVE</tt> events.
+This is true if the time and mouse movement since the last
+<tt>FL_PUSH</tt> or <tt>FL_KEY</tt> is short enough that the user is
+intending to "click". After enough time or after enough mouse movement
+this turns off.
 
-<p>The second form clears the value returned by
-<a href="#event_is_click"><tt>Fl::event_is_click()</tt></a>. This can be used to fool code that
-treats click and drag differently, such as the popup menus. On X
-turning this off will also prevent the next click from being
-understood as a double click. Only a value of zero is allowed as an
-argument.
+<p>The main use of this is to decide whether to increment <a
+href="#event_clicks">Fl::event_clicks()</a> when the user
+clicks the mouse. But you can also test this on a <tt>FL_RELEASE</tt>
+or <tt>FL_KEYUP</tt> event to decide if the user clicked quickly,
+versus holding the mouse or key down.
+
+<p>You can set this to zero with <tt>Fl::event_is_click(0)</tt>, this
+can be used to prevent the next mouse click from being considered a
+double click. It is not possible to set this true because the saved
+time and position are inaccessible.
 
 <a name="event_button"><h4>int Fl::event_button()</h4></a>
 
-Returns which mouse button was pressed.  This returns garbage if the 
-most recent event was not a <tt>FL_PUSH</tt> or <tt>FL_RELEASE</tt>
-event. 
+Returns which mouse button was last pushed. The left button is 1, the
+middle is 2, the right is 3. <tt>FL_KEY</tt> events set this to other
+other values.
 
 <a name="event_state"><h4>ulong Fl::event_state()
-<br>unsigned int Fl::event_state(ulong)</h4></a>
+<br>bool Fl::event_state(ulong)</h4></a>
 
 This is a bitfield of what shift states were on and what mouse buttons 
 were held down during the most recent event.  The second version 
-returns non-zero if any of the passed bits are turned on.  The legal 
+returns true if any of the passed bits are turned on.  The legal 
 bits are: 
 
 <ul>
@@ -699,14 +721,13 @@ bar is 32.</li>
 character produce <tt>FL_KP(c)</tt> where c is the character. This is
 the same as <tt>FL_KP(0)+c</tt> so you can retrieve the ascii
 character by subtracting <tt>FL_KP(0)</tt>. To see if a key is on the
-keypad check <tt>key&gt;=FL_KP(0) &amp;&amp; key
-&lt;;FL_KP_Last</tt>.
+keypad check <tt>key&gt;=FL_KP(0) &amp;&amp; key&lt;=FL_KP_Last</tt>.
 
 <li>All numbered function keys produce <tt>FL_F(n)</tt> where n is the
 number of the key. This is the same as <tt>FL_F(0)+n</tt> so you can
 get the function key number by subtracting <tt>FL_F(0)</tt>. To see if
-a key is a function key, check <tt>key&gt;=FL_F(0) &amp;&amp; key
-&lt;;FL_F_Last</tt>.
+a key is a function key, check <tt>key&gt;=FL_F(0) &amp;&amp;
+key&lt;=FL_F_Last</tt>.
 
 <li>All other keys on a US 101-keyboard have a symbol.  Be
 careful not to confuse these with the very similar, but all-caps, 
@@ -944,23 +965,7 @@ This allows the window system to take as long as necessary to retrieve
 the paste buffer (or even to screw up completely) without complex and
 error-prone synchronization code most toolkits require.
 
-<a name="info"><h4>const Fl_Screen_Info& Fl::info()</h4></a>
-
-Return a structure of information describing the current state of the
-screen. Currently this structure contains the following (this may be
-added to in the future):
-
-<ul>
-<li><tt>int x</tt> left edge of work area
-<li><tt>int y</tt> top edge of work area
-<li><tt>int w</tt> width of work area
-<li><tt>int h</tt> height of work area
-<li><tt>int width</tt> full screen width in pixels
-<li><tt>int height</tt> full screen height in pixels
-<li><tt>int depth</tt> bits per pixel
-<li><tt>int width_mm</tt> screen width in millimeters
-<li><tt>int height_mm</tt> screen height in millimeters
-</ul>
+<h2>Multithreading</h2>
 
 <a name="lock"><h4>void Fl::lock();</h4></a>
 
@@ -1004,12 +1009,15 @@ control.
 
 <a name="awake"><h4>void Fl::awake(void* message = 0);</h4></a>
 
-A parallel thread calling this will cause the thread that is calling
-<a href="#wait"><tt>Fl::wait()</tt></a> to return (with the lock locked)
-even if there are no events ready.  Like all other FLTK calls you must
-aquire the lock with <a href="#lock"><tt>Fl::lock()</tt></a> before
-calling this, then call <a href="#unlock"><tt>Fl::unlock()</tt></a>
-afterwards.
+Make the main thread (the one that is calling <a
+href="#wait"><tt>Fl::wait()</tt></a>) wake up. The main purpose of
+this is to get the main thread to redraw the screen, but it will
+also cause <a href="#wait"><tt>Fl::wait()</tt></a> to return so the
+program's code can do something.
+
+<p>Due to obscure race problems you must call this <i>after</i> you
+call <a href="#unlock"><tt>Fl::unlock()</tt></a>. If you call this
+while things are locked both the X and Win32 implementations can deadlock.
 
 <p>The <i>message</i> argument can be retrieved by the other thread
 using <a href="#thread_message"><tt>Fl::thread_message()</tt></a>.
@@ -1019,5 +1027,31 @@ using <a href="#thread_message"><tt>Fl::thread_message()</tt></a>.
 Returns an argument sent to an <a href="#awake"><tt>Fl::awake()</tt></a>
 call, or returns null if none. <i>The current implementation
 only has a one-entry queue and only returns the most recent value!</i>
+
+<h2>Errors</h2>
+
+<h4><a name="warning">void (*Fl::warning)(const char *, ...)</a>
+<br><a name="error">void (*Fl::error)(const char *, ...)</a>
+<br><a name="fatal">void (*Fl::fatal)(const char *, ...)</a></h4>
+
+FLTK will call these to print messages when unexpected conditions 
+occur.
+
+<p><tt>Fl::warning</tt> means that there was a recoverable problem,
+the display may be messed up but the user can probably keep working.
+(all X protocol errors call this).
+
+<p><tt>Fl::error</tt> means there is a recoverable error, but the
+display is so messed up it is unlikely the user can continue (very
+little calls this now).
+
+<p><tt>Fl::fatal</tt> must not return, as FLTK is in an unusable
+state, however your version may be able to use <tt>longjmp</tt> or an
+exception to continue, as long as it does not call FLTK again.</p>
+
+<p>The default versions on Unix print messages to stderr, while on
+Windows they use <tt>MessageBox()</tt>. <tt>Fl::error</tt> and
+<tt>Fl::fatal</tt> call <tt>abort()</tt>. You can override the
+behavior by setting the function pointers to your own routines.
 
 </body></html>

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.16 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.17 2002/01/27 04:59:47 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -320,7 +320,7 @@ void Fl_Text_Display::layout() {
 
   update_v_scrollbar();
   update_h_scrollbar();
-  redraw(FL_DAMAGE_CHILD);
+  redraw(FL_DAMAGE_ALL);
 
   // clear the layout flag
   Fl_Widget::layout();
@@ -1957,5 +1957,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.16 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.17 2002/01/27 04:59:47 spitzak Exp $".
 //

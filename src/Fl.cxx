@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.136 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.137 2002/01/27 04:59:47 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -631,27 +631,13 @@ bool Fl::handle(int event, Fl_Window* window)
   } else {
     switch (event) {
     case FL_KEY:
-      // If keyboard is ignored and this is not a repeat key, try shortcut:
-      if (handle(FL_SHORTCUT, window)) return true;
-      // Try flipping the case of letter shortcuts:
-      if (isalpha(Fl::e_text[0])) {
+      // If there is no focus or it ignores the key, try a shortcut:
+      return handle(FL_SHORTCUT, window);
+    case FL_SHORTCUT:
+      // Try using upper-case instead of lower-case for letter shortcuts:
+      if (islower(Fl::e_text[0])) {
 	Fl::e_text[0] ^= 0x20;
-	if (handle(FL_SHORTCUT, window)) return true;
-      }
-      // Substitute function keys for Emacs control characters:
-#define ctrl(x) (x^0x40)
-      else switch (Fl::e_text[0]) {
-      case ctrl('A') : e_keysym = FL_Home; goto K;
-      case ctrl('B') : e_keysym = FL_Left; goto K;
-      case ctrl('D') : e_keysym = FL_Delete; goto K;
-      case ctrl('E') : e_keysym = FL_End; goto K;
-      case ctrl('F') : e_keysym = FL_Right; goto K;
-      case ctrl('H') : e_keysym = FL_BackSpace; goto K;
-      case ctrl('K') : e_keysym = FL_Clear; goto K;
-      case ctrl('N') : e_keysym = FL_Down; goto K;
-      case ctrl('P') : e_keysym = FL_Up; goto K;
-      K: Fl::e_state &= ~FL_CTRL; Fl::e_text[0] = 0;
-      if (handle(FL_KEY, window)) return true;
+	return handle(FL_SHORTCUT, window);
       }
       return false;
       // rejected mouse events produce FL_LEAVE events:
@@ -678,5 +664,5 @@ bool Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.136 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.137 2002/01/27 04:59:47 spitzak Exp $".
 //

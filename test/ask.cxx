@@ -1,5 +1,5 @@
 //
-// "$Id: ask.cxx,v 1.8 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: ask.cxx,v 1.9 2002/01/27 04:59:48 spitzak Exp $"
 //
 // Standard dialog test program for the Fast Light Tool Kit (FLTK).
 //
@@ -77,8 +77,14 @@ void rename_me(Fl_Widget*o) {
 #include <fltk/fl_ask.h>
 #include <stdlib.h>
 
+//  int recurse;
+
 void window_callback(Fl_Widget*, void*) {
-  if (!fl_ask("Are you sure you want to quit?")) return;
+//    printf("window_callback entered, level %d\n", recurse++);
+  if (!fl_ask("Are you sure you want to quit?")) {
+//      printf("window_callback exited, level %d\n", --recurse);
+    return;
+  }
   exit(0);
 }
 #endif
@@ -117,5 +123,5 @@ int main(int argc, char **argv) {
 }
     
 //
-// End of "$Id: ask.cxx,v 1.8 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: ask.cxx,v 1.9 2002/01/27 04:59:48 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Editor.cxx,v 1.11 2001/11/29 17:39:29 spitzak Exp $"
+// "$Id: Fl_Text_Editor.cxx,v 1.12 2002/01/27 04:59:47 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -96,13 +96,11 @@ static struct {
   { FL_Down,      FL_CTRL|FL_SHIFT,         Fl_Text_Editor::kf_c_s_move   },
   { FL_Page_Up,   FL_CTRL|FL_SHIFT,         Fl_Text_Editor::kf_c_s_move   },
   { FL_Page_Down, FL_CTRL|FL_SHIFT,         Fl_Text_Editor::kf_c_s_move   },
-//{ FL_Clear,	  0,                        Fl_Text_Editor::delete_to_eol },
+  { 'a',          FL_CTRL,                  ctrl_a                        },
 //{ 'z',          FL_CTRL,                  Fl_Text_Editor::undo	  },
-//{ '/',          FL_CTRL,                  Fl_Text_Editor::undo	  },
   { 'x',          FL_CTRL,                  Fl_Text_Editor::kf_cut        },
   { 'c',          FL_CTRL,                  Fl_Text_Editor::kf_copy       },
   { 'v',          FL_CTRL,                  Fl_Text_Editor::kf_paste      },
-  { 'a',          FL_CTRL,                  ctrl_a                        },
   { 0,            0,                        0                             }
 };
 
@@ -113,6 +111,73 @@ void Fl_Text_Editor::add_default_key_bindings(Key_Binding** list) {
                     default_key_bindings[i].func,
                     list);
   }
+}
+
+static void kill_selection(Fl_Text_Editor* e) {
+  if (e->buffer()->selected()) {
+    e->insert_position(e->buffer()->primary_selection()->start());
+    e->buffer()->remove_selection();
+  }
+}
+
+// Any keys not in above table go to this, which emulates Emacs after
+// making sure the programmer did not want the key to do anything else
+// such as a menu item or button shortcut:
+int Fl_Text_Editor::kf_default(int c, Fl_Text_Editor* e) {
+  if (Fl::handle(FL_SHORTCUT, e->window())) return 1;
+  int key = 0;
+  switch (c) {
+  case 'b': key = FL_Left; goto MOVE;
+  case 'f': key = FL_Right; goto MOVE;
+  case 'p': key = FL_Up; goto MOVE;
+  case 'n': key = FL_Down; goto MOVE;
+  case 'e': key = FL_End; goto MOVE;
+  MOVE:
+  if (Fl::event_state(FL_ALT)) {
+    if (Fl::event_state(FL_SHIFT))
+      return Fl_Text_Editor::kf_c_s_move(key,e);
+    else
+      return Fl_Text_Editor::kf_ctrl_move(key,e);
+  } else {
+    if (Fl::event_state(FL_SHIFT))
+      return Fl_Text_Editor::kf_shift_move(key,e);
+    else
+      return Fl_Text_Editor::kf_move(key,e);
+  }
+  case 'd':
+    return Fl_Text_Editor::kf_delete(c,e);
+  case 'h':
+    return Fl_Text_Editor::kf_backspace(c,e);
+//case 'k':
+//  return Fl_Text_Editor::delete_to_eol(c,e);
+//case 'o':  
+//  return Fl_Text_Editor::open_line(c,e);
+//case 'q':  
+//  return Fl_Text_Editor::quote_next(c,e);
+//case 'r':  
+//  return Fl_Text_Editor::reverse_search(c,e);
+//case 's':  
+//  return Fl_Text_Editor::search(c,e);
+//case 't':  
+//  return Fl_Text_Editor::transpose_chars(c,e);
+//case 'u':  
+//  return Fl_Text_Editor::repeat prefix(c,e);
+  case 'w':  
+    return Fl_Text_Editor::kf_cut(c,e);
+  case 'y':  
+    return Fl_Text_Editor::kf_paste(c,e);
+//case '/':  
+//  return Fl_Text_Editor::undo(c,e);
+  }
+  // insert other control characters into the text:
+  if (Fl::event_length()) {
+    kill_selection(e);
+    if (e->insert_mode()) e->insert(Fl::event_text());
+    else e->overstrike(Fl::event_text());
+    e->show_insert_position();
+    return 1;
+  }
+  return 0;
 }
 
 Fl_Text_Editor::Key_Func
@@ -161,24 +226,6 @@ Fl_Text_Editor::add_key_binding(int key, int state, Key_Func function,
 ////////////////////////////////////////////////////////////////
 
 #define NORMAL_INPUT_MOVE 0
-
-static void kill_selection(Fl_Text_Editor* e) {
-  if (e->buffer()->selected()) {
-    e->insert_position(e->buffer()->primary_selection()->start());
-    e->buffer()->remove_selection();
-  }
-}
-
-int Fl_Text_Editor::kf_default(int c, Fl_Text_Editor* e) {
-  if (!c || (!isprint(c) && c != '\t')) return 0;
-  char s[2] = "\0";
-  s[0] = (char)c;
-  kill_selection(e);
-  if (e->insert_mode()) e->insert(s);
-  else e->overstrike(s);
-  e->show_insert_position();
-  return 1;
-}
 
 int Fl_Text_Editor::kf_ignore(int, Fl_Text_Editor*) {
   return 0; // don't handle
@@ -390,15 +437,13 @@ int Fl_Text_Editor::handle_key() {
     return 1;
   }
 
-  int key = Fl::event_key(), state = Fl::event_state(), c = Fl::event_text()[0];
-  state &= FL_SHIFT|FL_CTRL|FL_ALT|FL_WIN; // only care about these states
-  Key_Func f;
-  f = bound_key_function(key, state, global_key_bindings);
+  int key = Fl::event_key();
+  int state = Fl::event_state() & (FL_SHIFT|FL_CTRL|FL_ALT|FL_WIN);
+  Key_Func f = bound_key_function(key, state, global_key_bindings);
   if (!f) f = bound_key_function(key, state, key_bindings);
-
-  if (f) return f(key, this);
-  if (default_key_function_ && !state) return default_key_function_(c, this);
-  return 0;
+  if (!f) f = default_key_function_;
+  if (!f) f = kf_default;
+  return f(key, this);
 }
 
 int Fl_Text_Editor::handle(int event) {
@@ -442,5 +487,5 @@ int Fl_Text_Editor::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Text_Editor.cxx,v 1.11 2001/11/29 17:39:29 spitzak Exp $".
+// End of "$Id: Fl_Text_Editor.cxx,v 1.12 2002/01/27 04:59:47 spitzak Exp $".
 //

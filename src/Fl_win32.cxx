@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.161 2002/01/20 07:37:16 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.162 2002/01/27 04:59:47 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -676,7 +676,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_SYSKEYUP:
     // save the keysym until we figure out the characters:
     Fl::e_keysym = ms2fltk(wParam,lParam&(1<<24));
-    if (lParam & (1<<30)) Fl::e_clicks++; else Fl::e_clicks = 0;
     // See if TranslateMessage turned it into a WM_*CHAR message:
     if (PeekMessage(&fl_msg, hWnd, WM_CHAR, WM_SYSDEADCHAR, 1)) {
       uMsg = fl_msg.message;
@@ -688,6 +687,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_SYSDEADCHAR:
   case WM_CHAR:
   case WM_SYSCHAR: {
+    static int lastkeysym;
     ulong state = Fl::e_state & 0xff000000; // keep the mouse button state
     // if GetKeyState is expensive we might want to comment some of these out:
     if (GetKeyState(VK_SHIFT)&~1) state |= FL_SHIFT;
@@ -700,16 +700,28 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     if (GetKeyState(VK_NUMLOCK)) state |= FL_NUM_LOCK;
     if (GetKeyState(VK_LWIN)&~1 || GetKeyState(VK_RWIN)&~1) {
       // _WIN32 bug?  GetKeyState returns garbage if the user hit the
-      // WIndows key to pop up start menu.  Sigh.
+      // Windows key to pop up start menu.  Sigh.
       if ((GetAsyncKeyState(VK_LWIN)|GetAsyncKeyState(VK_RWIN))&~1)
 	state |= FL_WIN;
     }
     if (GetKeyState(VK_SCROLL)) state |= FL_SCROLL_LOCK;
     Fl::e_state = state;
     if (lParam & (1<<31)) { // key up events.
+      Fl::e_is_click = (Fl::e_keysym == lastkeysym);
+      lastkeysym = 0;
       if (Fl::handle(FL_KEYUP, window)) return 0;
       break;
     }
+    // if same as last key, increment repeat count:
+    if (lParam & (1<<30)) {
+      Fl::e_clicks++;
+      Fl::e_is_click = 0;
+    } else {
+      Fl::e_clicks = 0;
+      Fl::e_is_click = 1;
+    }
+    lastkeysym = Fl::e_keysym;
+    // translate to text:
     static char buffer[2];
     if (uMsg == WM_CHAR || uMsg == WM_SYSCHAR) {
       buffer[0] = char(wParam);
@@ -1302,5 +1314,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.161 2002/01/20 07:37:16 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.162 2002/01/27 04:59:47 spitzak Exp $".
 //

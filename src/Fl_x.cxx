@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.120 2002/01/20 07:37:16 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.121 2002/01/27 04:59:48 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -466,10 +466,7 @@ char fl_key_vector[32]; // used by Fl::get_key()
 
 // Record event mouse position and state from an XEvent:
 
-static int px, py;
-static ulong ptime;
-
-static void set_event_xy() {
+static void set_event_xy(bool push) {
 #if CONSOLIDATE_MOTION
   send_motion = 0;
 #endif
@@ -484,9 +481,16 @@ static void set_event_xy() {
   if (fl_key_vector[18]&0x18) Fl::e_state |= FL_WIN;
 #endif
   // turn off is_click if enough time or mouse movement has passed:
+  static int px, py;
+  static ulong ptime;
   if (abs(Fl::e_x_root-px)+abs(Fl::e_y_root-py) > 3 
-      || fl_event_time >= ptime+(Fl::pushed()?200:1000))
+      || fl_event_time >= ptime+(push?1000:200))
     Fl::e_is_click = 0;
+  if (push) {
+    px = Fl::e_x_root;
+    py = Fl::e_y_root;
+    ptime = fl_event_time;
+  }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -495,6 +499,15 @@ static Fl_Window* resize_from_system;
 
 static unsigned wheel_up_button = 4;
 static unsigned wheel_down_button = 5;
+
+extern "C" {
+  static Bool fake_keyup_test(Display*, XEvent* event, char* previous) {
+     return
+      event->type == KeyPress &&
+      event->xkey.keycode == ((XKeyEvent*)previous)->keycode &&
+      event->xkey.time == ((XKeyEvent*)previous)->time;
+  }
+}
 
 bool fl_handle()
 {
@@ -651,7 +664,7 @@ bool fl_handle()
   case ButtonPress: {
     unsigned n = fl_xevent.xbutton.button;
     Fl::e_keysym = FL_Button(n);
-    set_event_xy();
+    set_event_xy(true);
     // turn off is_click if enough time or mouse movement has passed:
     if (Fl::e_is_click == Fl::e_keysym) {
       Fl::e_clicks++;
@@ -659,9 +672,6 @@ bool fl_handle()
       Fl::e_clicks = 0;
       Fl::e_is_click = Fl::e_keysym;
     }
-    px = Fl::e_x_root;
-    py = Fl::e_y_root;
-    ptime = fl_event_time;
     if (n == wheel_up_button) {
       Fl::e_dy = +1;
       event = FL_MOUSEWHEEL;
@@ -675,7 +685,7 @@ bool fl_handle()
     goto J1;
 
   case MotionNotify:
-    set_event_xy();
+    set_event_xy(false);
 #if CONSOLIDATE_MOTION
     send_motion = fl_xmousewin = window;
     return false;
@@ -687,7 +697,7 @@ bool fl_handle()
   case ButtonRelease: {
     unsigned n = fl_xevent.xbutton.button;
     Fl::e_keysym = FL_Button(n);
-    set_event_xy();
+    set_event_xy(false);
     //if (n == wheel_up_button || n == wheel_down_button) break;
     Fl::e_state &= ~(FL_BUTTON1 << (n-1));
     event = FL_RELEASE;}
@@ -696,7 +706,7 @@ bool fl_handle()
   case EnterNotify:
     if (fl_xevent.xcrossing.detail == NotifyInferior) break;
     // XInstallColormap(fl_display, Fl_X::i(window)->colormap);
-    set_event_xy();
+    set_event_xy(false);
     Fl::e_state = fl_xevent.xcrossing.state << 16;
     xmousewin = window;
     event = FL_ENTER;
@@ -704,7 +714,7 @@ bool fl_handle()
 
   case LeaveNotify:
     if (fl_xevent.xcrossing.detail == NotifyInferior) break;
-    set_event_xy();
+    set_event_xy(false);
     Fl::e_state = fl_xevent.xcrossing.state << 16;
     if (window != xmousewin) xmousewin = 0;
     event = FL_LEAVE;
@@ -731,24 +741,24 @@ bool fl_handle()
 
   case KeyPress:
   case KeyRelease: {
+  KEYPRESS:
     //if (Fl::grab_) XAllowEvents(fl_display, SyncKeyboard, CurrentTime);
-    int keycode = fl_xevent.xkey.keycode;
-    static int lastkeycode;
+    unsigned keycode = fl_xevent.xkey.keycode;
+    static unsigned lastkeycode;
     // Use the unshifted keysym! This matches the symbols that the Win32
     // version produces. However this will defeat older keyboard layouts
     // that use shifted values for function keys.
     KeySym keysym = XKeycodeToKeysym(fl_display, keycode, 0);
     if (fl_xevent.type == KeyPress) {
-      event = FL_KEYBOARD;
+      event = FL_KEY;
       fl_key_vector[keycode/8] |= (1 << (keycode%8));
       // Make repeating keys increment the click counter:
-      // Unfortunately some (all?) x servers seem to send fake key-up
-      // codes but these can be detected by having the same event time:
-      if (keycode == lastkeycode
-	  || !lastkeycode && fl_event_time == fl_xevent.xkey.time) {
+      if (keycode == lastkeycode) {
 	Fl::e_clicks++;
+	Fl::e_is_click = 0;
       } else {
 	Fl::e_clicks = 0;
+	Fl::e_is_click = 1;
 	lastkeycode = keycode;
       }
       static char buffer[21];
@@ -759,12 +769,22 @@ bool fl_handle()
       Fl::e_text = buffer;
       Fl::e_length = len;
     } else {
+      // Stupid X sends fake key-up events when a repeating key is held
+      // down, probably due to some back compatability problem. Fortunatley
+      // we can detect this because the repeating KeyPress event is in
+      // the queue, get it and execute it instead:
+      XEvent temp;
+      if (XCheckIfEvent(fl_display,&temp,fake_keyup_test,(char*)(&fl_xevent))){
+	fl_xevent = temp;
+	goto KEYPRESS;
+      }
       event = FL_KEYUP;
       fl_key_vector[keycode/8] &= ~(1 << (keycode%8));
-      // keyup events just get the unshifted keysym:
+      // event_is_click is left on if they press & release the key quickly:
+      Fl::e_is_click = (keycode == lastkeycode);
+      // make next keypress not be a repeating one:
       lastkeycode = 0;
     }
-    Fl::e_is_click = 0;
     if (keysym >= 0xff95 && keysym <= 0xff9f) { // XK_KP_*
       // Make all keypad keys act like NumLock is on all the time. This
       // is nicer (imho), but more importantly this gets rid of a range of
@@ -782,9 +802,9 @@ bool fl_handle()
     } else if (!keysym) { // X did not map this key
       keysym = keycode|0x8000;
 #ifdef __sgi
-      // You can plug a microsoft keyboard into an sgi but the extra shift
+      // You can plug a microsoft keyboard into an Irix box but these
       // keys are not translated.  Make them translate like XFree86 does:
-      switch(keycode) {
+      switch (keycode) {
       case 147: keysym = FL_Win_L; break;
       case 148: keysym = FL_Win_R; break;
       case 149: keysym = FL_Menu; break;
@@ -792,7 +812,7 @@ bool fl_handle()
 #endif
     }
     Fl::e_keysym = int(keysym);
-    set_event_xy();
+    set_event_xy(true);
     break;}
 
   case SelectionNotify: {
@@ -1297,5 +1317,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.120 2002/01/20 07:37:16 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.121 2002/01/27 04:59:48 spitzak Exp $".
 //
