@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.H,v 1.1 2000/02/14 11:32:35 bill Exp $"
+// "$Id: Fl_Item.H,v 1.2 2001/03/22 20:18:27 robertk Exp $"
 //
 // Widget designed to be a menu or browser item.
 //
@@ -39,6 +39,14 @@ public:
   void draw();
   void layout();
   Fl_Item(const char* label = 0);
+  char column_char() const {return column_char_;}
+  void column_char(char c) {column_char_ = c;}
+  const int *column_widths() {  return (mcolumns); }
+  void column_widths(const int *cols)  { mcolumns = cols; }
+protected:
+  static const int *one_column_;
+  const int *mcolumns;
+  char column_char_;
 };
 
 #endif

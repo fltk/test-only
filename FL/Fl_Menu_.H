@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.H,v 1.30 2001/02/21 06:15:44 clip Exp $"
+// "$Id: Fl_Menu_.H,v 1.31 2001/03/22 20:18:27 robertk Exp $"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -124,15 +124,22 @@ public:
 
   const char *text(int i) const {return i >= 0 ? child(i)->label() : 0;}
   const char *text() const {return item_ ? item_->label() : 0;}
+  char column_char() const {return column_char_;}
+  void column_char(char c);
+  const int *column_widths() const { return mcolumns; }
+  void column_widths(const int *w);
 
 #endif
 private:
   Fl_List* list_;
   Fl_Widget* item_;
+  char column_char_;
+  static const int *one_column_;
+  const int *mcolumns;
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Menu_.H,v 1.30 2001/02/21 06:15:44 clip Exp $".
+// End of "$Id: Fl_Menu_.H,v 1.31 2001/03/22 20:18:27 robertk Exp $".
 //

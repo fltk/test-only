@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.32 2000/10/17 07:50:08 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.33 2001/03/22 20:18:27 robertk Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -29,6 +29,9 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Menu_.H>
 #include <FL/Fl_Item.H> // for FL_TOGGLE_ITEM, FL_RADIO_ITEM
+
+static const int _default_column[1] = { 0 };
+const int *Fl_Menu_::one_column_ = _default_column;
 
 ////////////////////////////////////////////////////////////////
 
@@ -72,6 +75,8 @@ Fl_Menu_::Fl_Menu_(int x,int y,int w, int h,const char* l)
   : Fl_Group(x,y,w,h,l), list_(&default_list) {
   item_ = 0;
   end();
+  mcolumns = one_column_;
+  column_char_ = '|';
 }
 
 int Fl_Menu_::children(const int* indexes, int level) const {
@@ -169,6 +174,29 @@ int Fl_Menu_::handle_shortcut() {
   return 0;
 }
 
+void Fl_Menu_::column_widths(const int *w)
+{
+	mcolumns = w;
+  	for(int i = 0; i < children(); i++) {
+	  Fl_Item *pItem = dynamic_cast<Fl_Item *>(child(i));
+	  if(pItem) {
+	    pItem->column_widths(w);		  
+	  }
+	}
+}
+
+void Fl_Menu_::column_char(char c)
+{
+	column_char_ = c;
+  	for(int i = 0; i < children(); i++) {
+	  Fl_Item *pItem = dynamic_cast<Fl_Item *>(child(i));
+	  if(pItem) {
+	    pItem->column_char(c);		  
+	  }
+	}
+}
+
+
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.32 2000/10/17 07:50:08 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.33 2001/03/22 20:18:27 robertk Exp $"
 //

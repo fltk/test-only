@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.H,v 1.24 2001/03/08 07:39:05 clip Exp $"
+// "$Id: Fl_Browser.H,v 1.25 2001/03/22 20:18:26 robertk Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -109,8 +109,6 @@ public:
   void middleline(int line) {goto_number(line); set_middle();}
   char format_char() const {return format_char_;}
   void format_char(char c) {format_char_ = c;}
-  char column_char() const {return column_char_;}
-  void column_char(char c) {column_char_ = c;}
   int displayed(int line);
   void display(int line, int value = 1);
   int topline() const {return item_number[FIRST_VISIBLE];}
@@ -121,7 +119,6 @@ private:
   friend class Fl_Input_Browser;
   char indented_;
   char format_char_;
-  char column_char_;
   int xposition_, yposition_;
   int scrolldx, scrolldy;
   int last_height, last_max_width, last_num_lines;
@@ -153,5 +150,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser.H,v 1.24 2001/03/08 07:39:05 clip Exp $".
+// End of "$Id: Fl_Browser.H,v 1.25 2001/03/22 20:18:26 robertk Exp $".
 //

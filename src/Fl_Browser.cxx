@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.41 2001/03/12 00:49:03 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.42 2001/03/22 20:18:27 robertk Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -940,7 +940,7 @@ Fl_Browser::Fl_Browser(int X,int Y,int W,int H,const char* L)
   scrollbar.callback(scrollbar_cb);
   indented_ = 0;
   format_char_ = '@';
-  column_char_ = '\t';
+  column_char('\t');
   // set all the marks to the top:
   levels = 0;
   for (int i = 0; i < NUMMARKS; i++) {
@@ -959,5 +959,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.41 2001/03/12 00:49:03 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.42 2001/03/22 20:18:27 robertk Exp $".
 //
