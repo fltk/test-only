@@ -33,7 +33,10 @@ parts of fltk is a typedef for a ponter to the structure
 <h4>Fl_Font_* Fl_Font_::bold;
 <br>Fl_Font_* Fl_Font_::italic;</h4>
 
-Pointers to the bold and italic versions of this font.
+Pointers to the bold and italic versions of this font.  If this font
+has no bold or italic version (usually because it aready is bold or
+italic, but possibly because the other font is missing from the
+server), then these are circular pointers to this.
 
 <h4>const char* Fl_Font_::system_name()</h4>
 
@@ -75,11 +78,11 @@ variations in the font name.  Not yet implemented...
 
 <h4>int fl_list_fonts(Fl_Font*& arrayp, bool everything = false);</h4>
 
-FLTK will open the display and find every font on the server.  It
-creates an array of these and returns that array in <i>arrayp</i>, and
-the length as the return value.  It will attempt to put
-&quot;families&quot; of faces together, so that the normal one is
-first, followed by bold, italic, and bold italic.
+Open the display and find every font on the server.  It creates an
+array of these and returns that array in <i>arrayp</i>, and the length
+as the return value.  Each entry is a "base" font, you can get the
+bold, italic, and bold+italic version of each font by following the
+<code>bold</code> or <code>italic</code> pointers in them.
 
 <P>The optional argument <i>everything</i> will cause fltk to list
 every single font on an X server.  Normally it ignores fonts whose X

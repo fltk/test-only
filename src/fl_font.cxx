@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.13 1999/08/16 14:05:52 carl Exp $"
+// "$Id: fl_font.cxx,v 1.14 1999/08/18 08:02:19 bill Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -105,7 +105,6 @@ char* fl_find_fontsize(char* name) {
   if (*c == '-') {
     c = (char*)fl_font_word(c,7);
     if (*c++ && isdigit(*c)) return c;
-    return 0; // malformed x font name?
   }
   char* r = 0;
   // find last set of digits:
@@ -291,5 +290,5 @@ void fl_draw(const char* str, int x, int y) {
 #endif
 
 //
-// End of "$Id: fl_font.cxx,v 1.13 1999/08/16 14:05:52 carl Exp $".
+// End of "$Id: fl_font.cxx,v 1.14 1999/08/18 08:02:19 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.7 1999/08/16 07:31:35 bill Exp $"
+// "$Id: fonts.cxx,v 1.8 1999/08/18 08:02:21 bill Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -26,6 +26,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Hold_Browser.H>
+#include <FL/Fl_Check_Button.H>
 #include <FL/fl_draw.H>
 #include <FL/Fl_Box.H>
 #include <stdio.h>
@@ -48,6 +49,8 @@ void FontDisplay::draw() {
   fl_font(font, size);
   fl_color(FL_BLACK);
   fl_draw(label(), x()+3, y()+3, w()-6, h()-6, align());
+  fl_font(FL_HELVETICA,10);
+  fl_draw(font->system_name(), x()+3, y()+3, w()-6, h()-6, FL_ALIGN_BOTTOM_LEFT);
 }
 
 FontDisplay *textobj;
@@ -58,11 +61,21 @@ int *sizes[1000];
 int numsizes[1000];
 int pickedsize = 14;
 
+Fl_Check_Button* bold_button, *italic_button;
+
 void font_cb(Fl_Widget *, long) {
   int fn = fontobj->value();
   if (!fn) return;
   fn--;
-  textobj->font = fonts[fn];
+  Fl_Font f = fonts[fn];
+  if (f->bold == f) bold_button->deactivate();
+  else bold_button->activate();
+  if (f->italic == f) italic_button->deactivate();
+  else italic_button->activate();
+  if (bold_button->value()) f = f->bold;
+  if (italic_button->value()) f = f->italic;
+  textobj->font = f;
+
   sizeobj->clear();
   int n = numsizes[fn];
   int *s = sizes[fn];
@@ -115,8 +128,12 @@ void create_the_forms() {
   for (c = 0xA1; c; c++) {if (!(c&0x1f)) label[i++]='\n'; label[i++]=c;}
   label[i] = 0;
 
-  textobj = new FontDisplay(FL_FRAME_BOX,10,10,530,170,label);
+  textobj = new FontDisplay(FL_FRAME_BOX,10,10,530,160,label);
   textobj->align(FL_ALIGN_TOP|FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_CLIP);
+  bold_button = new Fl_Check_Button(10, 170, 70, 20, "Bold");
+  bold_button->callback(font_cb);
+  italic_button = new Fl_Check_Button(80, 170, 70, 20, "Italic");
+  italic_button->callback(font_cb);
   fontobj = new Fl_Hold_Browser(10, 190, 390, 170);
   fontobj->callback(font_cb);
   form->resizable(fontobj);
@@ -132,6 +149,7 @@ int main(int argc, char **argv) {
   bool everything = fl_ask("Get everything? (if no, only gets text fonts)");
   int numfonts = fl_list_fonts(fonts, everything);
   for (int i = 0; i < numfonts; i++) {
+#if 0
     int t; const char *name = fonts[i]->name(&t);
     char buffer[128];
     if (t) {
@@ -142,6 +160,9 @@ int main(int argc, char **argv) {
       name = buffer;
     }
     fontobj->add(name);
+#else
+    fontobj->add(fonts[i]->name());
+#endif
     int *s; int n = fonts[i]->sizes(s);
     numsizes[i] = n;
     if (n) {
@@ -156,5 +177,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.7 1999/08/16 07:31:35 bill Exp $".
+// End of "$Id: fonts.cxx,v 1.8 1999/08/18 08:02:21 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_set_fonts.cxx,v 1.8 1999/08/16 07:31:29 bill Exp $"
+// "$Id: fl_set_fonts.cxx,v 1.9 1999/08/18 08:02:20 bill Exp $"
 //
 // More font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -30,37 +30,34 @@
 // This horrible mess is to to provide fltk with a friendly font-naming
 // interface, despite the incredible stupidity in the X font mechanism.
 
+// There are three font names of interest:
+
+// The "X font name" is a long string without any '*' characters in it.
+// This is the name accepted by X.  For "standard" font names this is
+// something like:
+
+// -foundry-family-weight-slant-width1-style-8-180-75-75-p-104-iso8859-1
+
 // Internally fonts are stored with a "system name", which is a string
 // that is different for every font and can be used to quickly locate
-// the font on the system.  On X this is a string that can be passed
-// to XListFonts to cause it to return all sizes of that font.
-
-// A function is provided to turn the "system name" into a "nice" name
-// and a set of attribute flags.  This is a straght-forward
-// translation of the name to compress it to a readable form.  However
-// there is no guarantee that all system names are unique.
-
-// An inverse function is turn a "nice" name and attribute flags into
-// a font.  Unfortunatly X fonts are such a mess that I see no way to
-// do this other than to list every font known and compare the nice
-// names.  So that is what this does.  A direct call to function to
-// list every font is also provided here.
-
-// Fltk assummes that all fonts whose names start with '-' are of this
-// form, this is what is used as the "system name":
+// the font on the system.  For X this is a string that when passed to
+// XListFonts returns all sizes of that font, and is of the form:
 
 // "-*-family-weight-slant-width1-style-*-registry-encoding"
+// or
+// "-*-family-weight-slant-width1-style-*"
+// when the registry-encoding matches fl_encoding.
 
-// If the registry-encoding matches fl_encoding then a * is stored to
-// make the names shorter.
+// The fltk interface, and much of the innards of this, uses "nice" names.
+// This is a straght-forward translation of the name to compress it to
+// a readable form.  However there is no guarantee that all nice names
+// are unique, this makes some fonts unaccessible from fltk.
 
-// Fltk can also locate non-standard names that don't start with '-'.
-// The system name for this will be "prefix*suffix", where the '*' is
-// where fltk thinks the point size is, or by the actual font name if
-// no point size is found.
+// This file has converters between all three of these forms.
 
-// You can outwit this by defining your own Fl_Font_ with any string
-// desired as the system name.  Fltk will pass it to XListFonts.
+// Fltk can also handle fonts with names that don't start with '-'.  There
+// have a system name of prefix*suffix, where the * is any point size
+// identified by fltk.
 
 #include "Fl_FontSize.H"
 #include <ctype.h>
@@ -89,57 +86,59 @@ static int attribute(int n, const char *p) {
   return -1;
 }
 
-// turn a stored (with *'s) X font name into a pretty name:
-const char* Fl_Font_::name(int* ap) const {
-  const char* p = name_;
-  static char *buffer; if (!buffer) buffer = new char[128];
-  char *o = buffer;
+// turn the system name into a nice name, write it to output buffer,
+// and return the accumulated attribute values:
 
-  if (*p != '-') { // non-standard font, just replace * with spaces:
-    if (ap) {
-      int type = 0;
-      if (strstr(p,"bold")) type = FL_BOLD;
-      if (strstr(p,"ital")) type |= FL_ITALIC;
-      *ap = type;
-    }
-    for (;*p; p++) {
-      if (*p == '*' || *p == ' ' || *p == '-') {
-	do p++; while (*p == '*' || *p == ' ' || *p == '-');
-	if (!*p) break;
-	*o++ = ' ';
-      }
-      *o++ = *p;
-    }
-    *o = 0;
-    return buffer;
-  }
+static int to_nice(char* o, const char* p) {
 
-  // get the family:
-  const char *x = fl_font_word(p,2); if (*x) x++; if (*x=='*') x++;
-  if (!*x) return p;
-  const char *e = fl_font_word(x,1);
-  strncpy(o,x,e-x); o += e-x;
-
-  // collect all the attribute words:
   int type = 0;
-  for (int n = 3; n <= 6; n++) {
-    // get the next word:
-    if (*e) e++; x = e; e = fl_font_word(x,1);
-    int t = attribute(n,x);
-    if (t < 0) {*o++ = ' '; strncpy(o,x,e-x); o += e-x;}
-    else type |= t;
-  }
 
-  // skip over the '*' for the size and get the registry-encoding:
-  x = fl_font_word(e,2);
-  if (*x) {x++; *o++ = '('; while (*x) *o++ = *x++; *o++ = ')';}
+  if (*p == '-') {
+    // get the family:
+    const char *x = fl_font_word(p,2); if (*x) x++; if (*x=='*') x++;
+    const char *e = fl_font_word(x,1);
+    strncpy(o,x,e-x); o += e-x;
+
+    // collect all the attribute words:
+    for (int n = 3; n <= 6; n++) {
+      // get the next word:
+      if (*e) e++; x = e; e = fl_font_word(x,1);
+      int t = attribute(n,x);
+      if (t < 0) {*o++ = ' '; strncpy(o,x,e-x); o += e-x;}
+      else type |= t;
+    }
+
+    // skip over the '*' for the size and get the registry-encoding:
+    x = fl_font_word(e,2);
+    if (*x) {x++; *o++ = '('; while (*x) *o++ = *x++; *o++ = ')';}
+
+  } else {
+    // non standard font name, I look for the words bold & italic and
+    // strip them out.  Also strip out all *, -, and spaces and replace
+    // them with spaces.
+
+    for (;*p; p++) {
+      if (!strncmp(p,"bold",4)) {type |= FL_BOLD; p += 3; continue;}
+      if (!strncmp(p,"italic",6)) {type |= FL_ITALIC; p += 5; continue;}
+      if (*p == '*' || *p == ' ' || *p == '-');
+      else *o++ = *p;
+    }
+  }
 
   *o = 0;
-  if (type & FL_BOLD) {strcpy(o, " bold"); o += 5;}
-  if (type & FL_ITALIC) {strcpy(o, " italic"); o += 7;}
+  return type;
+}
 
+// public function that calls the converter.  If ap is null it will also
+// add bold/italic words to the end of the nice name:
+const char* Fl_Font_::name(int* ap) const {
+  static char *buffer; if (!buffer) buffer = new char[128];
+  int type = to_nice(buffer, name_);
   if (ap) *ap = type;
-
+  else {
+    if (type & FL_BOLD) strcat(buffer," bold");
+    if (type & FL_ITALIC) strcat(buffer, " italic");
+  }
   return buffer;
 }
 
@@ -151,7 +150,7 @@ static int use_registry(const char *p) {
   return *p && *p!='*' && strcmp(p, fl_encoding);
 }
 
-// converts a X font name to a standard starname, returns point size:
+// converts an X font name to a system name, returns point size:
 static int to_canonical(char *to, const char *from) {
   char* c = fl_find_fontsize((char*)from);
   if (!c) return -1; // no point size found...
@@ -173,73 +172,55 @@ static int to_canonical(char *to, const char *from) {
 }
 
 // sort raw (non-'*') X font names into perfect order:
+// This is horrendously slow, but only needs to be done once....
+
+static int numericsort(const char* a, const char *b) {
+  for (;;) {
+    if (isdigit(*a) && isdigit(*b)) {
+      int na = strtol(a, (char **)&a, 10);
+      int nb = strtol(b, (char **)&b, 10);
+      if (na != nb) return na-nb;
+    } else if (*a != *b) {
+      return (*a-*b);
+    } else if (!*a) {
+      return 0;
+    } else {
+      a++; b++;
+    }
+  }
+}
 
 static int ultrasort(const void *aa, const void *bb) {
   const char *a = *(char **)aa;
   const char *b = *(char **)bb;
 
-  // sort all non x-fonts at the end:
-  if (*a != '-') {
-    if (*b == '-') return 1;
-    // 2 non-x fonts are matched by "numeric sort"
-    int ret = 0;
-    for (;;) {
-      if (isdigit(*a) && isdigit(*b)) {
-	int na = strtol(a, (char **)&a, 10);
-	int nb = strtol(b, (char **)&b, 10);
-	if (!ret) ret = na-nb;
-      } else if (*a != *b) {
-	return (*a-*b);
-      } else if (!*a) {
-	return ret;
-      } else {
-	a++; b++;
-      }
-    }
-  } else {
-    if (*b != '-') return -1;
-  }
+  // all standard fonts go first:
+  if (*a == '-') {if (*b != '-') return -1;}
+  else if (*b == '-') return 1;
 
-  // skip the foundry (assumme equal):
-  for (a++; *a && *a++!='-';);
-  for (b++; *b && *b++!='-';);
+  char acanon_buf[128];
+  int asize = to_canonical(acanon_buf, a);
+  const char* acanon = acanon_buf;
+  if (asize < 0) acanon = a;
 
-  // compare the family and all the attribute words:
-  int atype = 0;
-  int btype = 0;
-  for (int n = 2; n <= 6; n++) {
-    int at = attribute(n,a);
-    int bt = attribute(n,b);
-    if (at < 0) {
-      if (bt >= 0) return 1;
-      for (;;) {if (*a!=*b) return *a-*b; b++; if (!*a || *a++=='-') break;}
-    } else {
-      if (bt < 0) return -1;
-      a = fl_font_word(a,1); if (*a) a++;
-      b = fl_font_word(b,1); if (*b) b++;
-      atype |= at; btype |= bt;
-    }
-  }
+  char aname[128];
+  int aattrib = to_nice(aname, acanon);
 
-  // remember the pixel size:
-  int asize = atoi(a);
-  int bsize = atoi(b);
+  char bcanon_buf[128];
+  int bsize = to_canonical(bcanon_buf, b);
+  const char* bcanon = bcanon_buf;
+  if (bsize < 0) bcanon = b;
 
-  // compare the registry/encoding:
-  a = fl_font_word(a,6); if (*a) a++;
-  b = fl_font_word(b,6); if (*b) b++;
-  if (use_registry(a)) {
-    if (!use_registry(b)) return 1;
-    int r = strcmp(a,b); if (r) return r;
-  } else {
-    if (use_registry(b)) return -1;
-  }
+  char bname[128];
+  int battrib = to_nice(bname, bcanon);
 
-  if (atype != btype) return atype-btype;
-  if (asize != bsize) return asize-bsize;
+  int ret = numericsort(aname, bname); if (ret) return ret;
 
-  // something wrong, just do a string compare...
-  return strcmp(*(char**)aa, *(char**)bb);
+  if (aattrib != battrib) return (aattrib-battrib);
+
+  ret = numericsort(acanon, bcanon); if (ret) return ret;
+
+  return (asize - bsize);
 }
 
 int fl_list_fonts(Fl_Font*& arrayp, bool everything) {
@@ -253,6 +234,10 @@ int fl_list_fonts(Fl_Font*& arrayp, bool everything) {
 			    10000, &xlistsize);
   if (!xlist) return 0; // ???
   qsort(xlist, xlistsize, sizeof(*xlist), ultrasort);
+
+  Fl_Font_* family = 0; // current family
+  char family_name[128]; family_name[0] = 0; // nice name of current family
+
   int array_size = 0;
   for (int i=0; i<xlistsize;) {
     int first_xlist = i;
@@ -293,11 +278,25 @@ int fl_list_fonts(Fl_Font*& arrayp, bool everything) {
 	break;
       }
     }
-    if (num_fonts >= array_size) {
-      array_size = 2*array_size+128;
-      array = (Fl_Font*)realloc(array, array_size*sizeof(Fl_Font));
+    char newname[128];
+    int a = to_nice(newname, newfont->name_);
+    if (a && !strcmp(newname, family_name)) {
+      switch (a) {
+      case FL_BOLD: family->bold = newfont; break;
+      case FL_ITALIC: family->italic = newfont; break;
+      case FL_BOLD|FL_ITALIC:
+	family->bold->italic = family->italic->bold = newfont;
+	break;
+      }
+    } else {
+      family = newfont;
+      strcpy(family_name, newname);
+      if (num_fonts >= array_size) {
+	array_size = 2*array_size+128;
+	array = (Fl_Font*)realloc(array, array_size*sizeof(Fl_Font));
+      }
+      array[num_fonts++] = newfont;
     }
-    array[num_fonts++] = newfont;
   }
   arrayp = array;
   return num_fonts;
@@ -343,5 +342,5 @@ int Fl_Font_::sizes(int*& sizep) const {
 #endif
 
 //
-// End of "$Id: fl_set_fonts.cxx,v 1.8 1999/08/16 07:31:29 bill Exp $".
+// End of "$Id: fl_set_fonts.cxx,v 1.9 1999/08/18 08:02:20 bill Exp $".
 //
