@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.24 2000/08/10 09:24:32 spitzak Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.25 2000/08/12 08:43:53 spitzak Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -57,7 +57,7 @@ void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
 }
 
 void Fl_Scroll::bbox(int& X, int& Y, int& W, int& H) {
-  X = x(); Y = y(); W = w(); H = h(); box()->inset(X,Y,W,H);
+  X = x(); Y = y(); W = w(); H = h(); text_box()->inset(X,Y,W,H);
   if (scrollbar.visible()) {
     W -= scrollbar.w();
     if (scrollbar.flags() & FL_ALIGN_LEFT) X += scrollbar.w();
@@ -73,7 +73,7 @@ void Fl_Scroll::draw() {
 
   uchar d = damage();
   if (d & FL_DAMAGE_ALL) { // full redraw
-    draw_box(x(), y(), w(), h(), FL_FRAME_ONLY);
+    draw_text_frame();
     draw_clip(this, X, Y, W, H);
   } else {
     if (scrolldx || scrolldy) {
@@ -110,15 +110,16 @@ void Fl_Scroll::draw() {
 
 void Fl_Scroll::layout() {
 
-  int X,Y,W,H; bbox(X,Y,W,H);
-
   // move all the children and accumulate their bounding boxes:
-  int l = X; int r = X; int t = Y; int b = Y;
   int dx = layoutdx + ox() - x();
   int dy = layoutdy + oy() - y();
   layoutdx = layoutdy = 0;
   scrolldx += dx;
   scrolldy += dy;
+  int l=x()+w();
+  int r=x();
+  int t=y()+h();
+  int b=y();
   int numchildren = children();
   for (int i=0; i < numchildren; i++) {
     Fl_Widget* o = child(i);
@@ -130,33 +131,54 @@ void Fl_Scroll::layout() {
     if (o->y()+o->h() > b) b = o->y()+o->h();
   }
 
-  // turn the scrollbars on and off as necessary:
-  for (int z = 0; z<2; z++) {
-    if ((type()&VERTICAL) && (type()&ALWAYS_ON || t < Y || b > Y+H)) {
-      if (!scrollbar.visible()) {
-	scrollbar.set_visible();
-	W -= scrollbar.w();
-	damage(FL_DAMAGE_ALL);
-      }
-    } else {
-      if (scrollbar.visible()) {
-	scrollbar.clear_visible();
-	W += scrollbar.w();
-	damage(FL_DAMAGE_ALL);
+  // See if children would fit if we had no scrollbars...
+  int X=x(); int Y=y(); int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
+  int vneeded = 0;
+  int hneeded = 0;
+  if (type() & VERTICAL) {
+    if ((type() & ALWAYS_ON) || t < Y || b > Y+H) {
+      vneeded = 1;
+      W -= scrollbar.w();
+      if (scrollbar.flags() & FL_ALIGN_LEFT) X += scrollbar.w();
+    }
+  }
+
+  if (type() & HORIZONTAL) {
+    if ((type() & ALWAYS_ON) || l < X || r > X+W) {
+      hneeded = 1;
+      H -= hscrollbar.h();
+      if (scrollbar.flags() & FL_ALIGN_TOP) Y += hscrollbar.h();
+      // recheck vertical since we added a horizontal scrollbar
+      if (!vneeded && (type() & VERTICAL)) {
+	if (t < Y || b > Y+H) {
+	  vneeded = 1;
+	  W -= scrollbar.w();
+	  if (scrollbar.flags() & FL_ALIGN_LEFT) X += scrollbar.w();
+	}
       }
     }
-    if ((type()&HORIZONTAL) && (type()&ALWAYS_ON || l < X || r > X+W)) {
-      if (!hscrollbar.visible()) {
-	hscrollbar.set_visible();
-	H -= hscrollbar.h();
-	damage(FL_DAMAGE_ALL);
-      }
-    } else {
-      if (hscrollbar.visible()) {
-	hscrollbar.clear_visible();
-	H += hscrollbar.h();
-	damage(FL_DAMAGE_ALL);
-      }
+  }
+  // Now that we know what's needed, make it so.
+  if (vneeded) {
+    if (!scrollbar.visible()) {
+      scrollbar.set_visible();
+      damage(FL_DAMAGE_ALL);
+    }
+  } else {
+    if (scrollbar.visible()) {
+      scrollbar.clear_visible();
+      damage(FL_DAMAGE_ALL);
+    }
+  }
+  if (hneeded) {
+    if (!hscrollbar.visible()) {
+      hscrollbar.set_visible();
+      damage(FL_DAMAGE_ALL);
+    }
+  } else {
+    if (hscrollbar.visible()) {
+      hscrollbar.clear_visible();
+      damage(FL_DAMAGE_ALL);
     }
   }
 
@@ -238,11 +260,11 @@ int Fl_Scroll::handle(int event) {
   case FL_PUSH:
   case FL_MOVE:
   case FL_ENTER:
-    if (scrollbar.align()&FL_ALIGN_LEFT ?
+    if (scrollbar.flags()&FL_ALIGN_LEFT ?
 	(Fl::event_x() < scrollbar.x()+scrollbar.w()) :
 	(Fl::event_x() >= scrollbar.x()))
       if (send(event,scrollbar)) return 1;
-    if (hscrollbar.align()&FL_ALIGN_TOP ?
+    if (scrollbar.flags()&FL_ALIGN_TOP ?
 	(Fl::event_y() < hscrollbar.y()+hscrollbar.h()) :
 	(Fl::event_y() >= hscrollbar.y()))
       if (send(event,hscrollbar)) return 1;
@@ -260,5 +282,5 @@ int Fl_Scroll::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.24 2000/08/10 09:24:32 spitzak Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.25 2000/08/12 08:43:53 spitzak Exp $".
 //
