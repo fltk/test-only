@@ -17,8 +17,8 @@ BUILDING AND INSTALLING FLTK UNDER APPLE OS X
     Not all demo applications will be compiled. A few test will fail and abort.
     
     FLTK2 will work with Carbon and Quartz. I expect a useful version to be
-    finished by the first week of February 2005. Testing and bug fixing should 
-    be finished by the end of February.
+    finished by the middle of March 2005. Testing and bug fixing should 
+    be finished by the end of April.
   
     incomplete todo list:
      o image support
