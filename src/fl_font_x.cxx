@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_x.cxx,v 1.12 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: fl_font_x.cxx,v 1.13 2002/09/09 01:39:58 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -87,7 +87,9 @@ void fl_transformed_draw(const char *str, int n, double x, double y) {
     font_gc = fl_gc;
     XSetFont(fl_display, fl_gc, current_font->fid);
   }
-  XDrawString(fl_display, fl_window, fl_gc, int(rint(x)),int(rint(y)), str, n);
+  XDrawString(fl_display, fl_window, fl_gc,
+	      int(floor(x+.5)),
+	      int(floor(y+.5)), str, n);
 }
 
 double fl_height() {
@@ -133,7 +135,7 @@ void fl_font(Fl_Font font, double psize) {
   Fl_FontSize* f = fl_fontsize;
 
   // only integers supported right now (this can be improved):
-  psize = rint(psize);
+  psize = int(psize+.5);
   unsigned size = unsigned(psize);
 
   // See if the current font is correct:
@@ -268,5 +270,5 @@ fl_fonts[] = {
 };
 
 //
-// End of "$Id: fl_font_x.cxx,v 1.12 2002/07/01 15:28:19 spitzak Exp $"
+// End of "$Id: fl_font_x.cxx,v 1.13 2002/09/09 01:39:58 spitzak Exp $"
 //

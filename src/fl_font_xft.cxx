@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.8 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.9 2002/09/09 01:39:58 spitzak Exp $"
 //
 // Copyright 2001 Bill Spitzak and others.
 //
@@ -233,7 +233,8 @@ void fl_transformed_draw(const char *str, int n, double x, double y) {
   color.color.alpha = 0xffff;
 
   XftDrawString8(draw, &color, current_font,
-		 int(rint(x)), int(rint(y)), (XftChar8 *)str, n);
+		 int(floor(x+.5)), int(floor(y+.5)),	
+		 (XftChar8 *)str, n);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -397,5 +398,5 @@ int Fl_Font_::encodings(const char**& arrayp) const {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.8 2002/07/01 15:28:19 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.9 2002/09/09 01:39:58 spitzak Exp $"
 //

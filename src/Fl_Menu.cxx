@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.127 2002/08/11 04:49:54 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.128 2002/09/09 01:39:57 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -141,7 +141,7 @@ void MenuTitle::draw() {
   // this allow a toggle or other widget to preview it's state:
   if (Fl::event_state(FL_BUTTONS)) Fl::pushed_ = widget;
   fl_push_matrix();
-  fl_translate(5, (h()-widget->height())/2);
+  fl_translate(5, (h()-widget->height())>>1);
   int save_w = widget->w(); widget->w(w()-10);
   widget->draw();
   widget->w(save_w);
@@ -346,7 +346,7 @@ void MenuWindow::draw() {
       if (is_parent(i)) {
 	// Use the item's fontsize for the size of the arrow, rather than h:
 	int nh = widget->text_size();
-	draw_glyph(FL_GLYPH_RIGHT, x+w-nh, y+(ih-nh)/2, nh, nh, flags);
+	draw_glyph(FL_GLYPH_RIGHT, x+w-nh, y+((ih-nh)>>1), nh, nh, flags);
       } else if (widget->shortcut()) {
 	fl_font(widget->text_font(), widget->text_size());
 	widget->label_type()->draw(Fl::key_name(widget->shortcut()),
@@ -772,5 +772,5 @@ int Fl_Menu_::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.127 2002/08/11 04:49:54 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.128 2002/09/09 01:39:57 spitzak Exp $".
 //

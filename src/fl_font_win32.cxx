@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.42 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.43 2002/09/09 01:39:58 spitzak Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -141,7 +141,7 @@ void fl_font(Fl_Font font, double psize) {
 
   // only integers supported right now, I think there is a newer
   // interface that takes arbitrary sizes, though...
-  psize = rint(psize);
+  psize = int(psize+.5);
   unsigned size = unsigned(psize);
 
   if (font == fl_font_ && psize == fl_size_ &&
@@ -178,7 +178,7 @@ double fl_width(const char* c, int n) {
 void fl_transformed_draw(const char *str, int n, double x, double y) {
   SetTextColor(fl_gc, fl_colorref);
   HGDIOBJ oldfont = SelectObject(fl_gc, current_font);
-  TextOut(fl_gc, int(rint(x)), int(rint(y)), str, n);
+  TextOut(fl_gc, int(floor(x+.5)), int(floor(y+.5)), str, n);
   SelectObject(fl_gc, oldfont);
 }
 
@@ -194,5 +194,5 @@ void fl_encoding(const char* f) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.42 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.43 2002/09/09 01:39:58 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.17 2002/02/10 22:57:48 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.18 2002/09/09 01:39:57 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -70,7 +70,7 @@ void Fl_Item::draw() {
       else lflags |= FL_VALUE;
     }
     int gw = text_size()+2;
-    draw_glyph(0, x+3, y+(h-gw)/2, gw, gw, lflags);
+    draw_glyph(0, x+3, y+((h-gw)>>1), gw, gw, lflags);
     x += gw+3; w -= gw+3;
   }
   draw_label(x+3, y, w-6, h, flags());

@@ -2358,3 +2358,25 @@ Added Fl_Window::copy_label()
 ////////////////////////////////////////////////////////////////
 
 Added EXEEXT to configure.in and makeinclude.in
+
+Fl_Input sets an internal left margin that gets smoothly smaller as
+the widget gets narrower than 12 pixels.
+
+More work on the OS/X port.
+
+Changes suggested by Matt Morrise for fltk1.1. Fix bugs in Tabs, added
+Fl_Chart destructor, changed Fluid to write xywh constructor for a
+window if the class does not contain the word "Window".
+
+Replaced most occurrences in widget drawing of (A-B)/2 with (A-B)>>1
+because this rounds down always and that will preserve the alignment
+of this position whether B is greater or less than A.
+
+Replaced most of the rint(x) with int(floor(x+.5)) (or int(x+.5) when
+the value is known to be positive). This avoids misalignment (most
+visible with engraved labels) when A+B/2 is calculated and rounded and
+A varies between even and odd integers and B is an integer.
+
+Fl_Valuator::step() values that are not integers or 1/integers work.
+
+

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.69 2002/08/06 07:20:47 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.70 2002/09/09 01:39:57 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -163,7 +163,7 @@ void Fl_Input::draw() {
 }
 
 #if 1
-#define line_height() int(rint(fl_height()+leading()))
+#define line_height() int(fl_height()+leading()+.5)
 #else
 #define line_height() (text_size()+leading())
 #endif
@@ -185,7 +185,7 @@ void Fl_Input::draw(int X, int Y, int W, int H)
       Fl_Color color = label_color();
       if (!active_r()) color = fl_inactive(color);
       fl_color(color);
-      double y = Y+(H+height+1)/2-height+desc;
+      double y = Y+((H-height)>>1)+desc;
       fl_draw(label(), X+2, y);
       fl_draw(":", X+2+width, y);
       setfont();
@@ -268,7 +268,7 @@ void Fl_Input::draw(int X, int Y, int W, int H)
       erase_cursor_only = false;
     }
   } else {
-    yscroll_ = -((H+height+1)/2-height);
+    yscroll_ = -((H-height)>>1);
   }
 
   // if we are not doing minimal update a single erase is done,
@@ -1281,5 +1281,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.69 2002/08/06 07:20:47 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.70 2002/09/09 01:39:57 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.20 2002/07/15 05:55:38 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.21 2002/09/09 01:39:58 spitzak Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -90,7 +90,7 @@ static /*inline*/ void set(int index,
     if (flags & FL_ALIGN_LEFT && s.x > x) s.x = x;
   }
   else if (flags & FL_ALIGN_LEFT) s.x = x;
-  else s.x = x+w/2-width/2;
+  else s.x = x+(w-width)/2;
   s.y = y+fl_height()-fl_descent();
 }
 
@@ -229,7 +229,7 @@ void fl_draw(
   if (!str || !*str) return;
   char tempbuf[MAX_LENGTH_FOR_UNDERSCORE];
   int index = 0;
-  int h = int(rint(split(str, W, H, flags, index, tempbuf)));
+  int h = int(split(str, W, H, flags, index, tempbuf)+.5);
   fl_transform(X,Y);
   int dy;
   if (flags & FL_ALIGN_BOTTOM) {
@@ -238,7 +238,7 @@ void fl_draw(
   } else if (flags & FL_ALIGN_TOP) {
     dy = Y;
   } else {
-    dy = Y+(H+h+1)/2-h;
+    dy = Y+((H-h)>>1);
   }
   for (int i = 0; i < index; i++) {
     Segment& s = segments[i];
@@ -250,7 +250,7 @@ void fl_measure(const char* str, int& w, int& h, Fl_Flags flags) {
   if (!str || !*str) {w = 0; h = int(fl_height()); return;}
   char tempbuf[MAX_LENGTH_FOR_UNDERSCORE];
   int index = 0;
-  h = int(rint(split(str, w, h, flags, index, tempbuf)));
+  h = int(split(str, w, h, flags, index, tempbuf)+.5);
   w = int(max_x+.5);
 }
 
@@ -260,5 +260,5 @@ void fl_measure(const char* str, int& w, int& h, Fl_Flags flags) {
 //  }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.20 2002/07/15 05:55:38 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.21 2002/09/09 01:39:58 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.132 2002/09/02 06:33:47 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.133 2002/09/09 01:39:58 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1008,8 +1008,8 @@ void Fl_X::create(Fl_Window* window,
     }
     attr.event_mask = ExposureMask;
   } else {
-    if (X == FL_USEDEFAULT) X = (DisplayWidth(fl_display,fl_screen)-W)/2;
-    if (Y == FL_USEDEFAULT) Y = (DisplayHeight(fl_display,fl_screen)-H)/2;
+    if (X == FL_USEDEFAULT) X = (DisplayWidth(fl_display,fl_screen)-W)>>1;
+    if (Y == FL_USEDEFAULT) Y = (DisplayHeight(fl_display,fl_screen)-H)>>1;
     root = RootWindow(fl_display, fl_screen);
     attr.event_mask =
       ExposureMask | StructureNotifyMask
@@ -1374,5 +1374,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.132 2002/09/02 06:33:47 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.133 2002/09/09 01:39:58 spitzak Exp $".
 //

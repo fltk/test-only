@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.29 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.30 2002/09/09 01:39:58 spitzak Exp $"
 //
 // Label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -108,7 +108,7 @@ void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Flags flags) const
     // by measuring their total size and centering that rectangle:
     if (!(flags & (FL_ALIGN_LEFT|FL_ALIGN_RIGHT|FL_ALIGN_TOP|FL_ALIGN_BOTTOM|
 		   FL_ALIGN_INSIDE)) && label_) {
-      int d = (H-int(h+fl_height()))/2;
+      int d = (H-int(h+fl_height()))>>1;
       if (d >= 0) {
 	// put the image atop the text
 	Y += d; H -= d; flags |= FL_ALIGN_TOP;
@@ -116,7 +116,7 @@ void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Flags flags) const
 	// put image to left
 	int text_w = W; int text_h = H;
 	fl_measure(label_, text_w, text_h, flags);
-	int d = (W-(h+text_w))/2;
+	int d = (W-(h+text_w))>>1;
 	if (d > 0) {X += d; W -= d;}
 	flags |= FL_ALIGN_LEFT;
       }
@@ -169,5 +169,5 @@ const Fl_Labeltype_* Fl_Labeltype_::find(const char* name) {
 const Fl_Labeltype_* Fl_Labeltype_::first = 0;
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.29 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.30 2002/09/09 01:39:58 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.24 2001/09/10 07:38:06 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.25 2002/09/09 01:39:58 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -360,10 +360,10 @@ void Fl_Symbol_Label::draw(const char* label,
     if (w1 < h1) h1 = w1; else w1 = h1;
     if (align & FL_ALIGN_LEFT) ;
     else if (align & FL_ALIGN_RIGHT) x1 = X+W-w1;
-    else x1 = X+(W-w1)/2;
+    else x1 = X+((W-w1)>>1);
     if (align & FL_ALIGN_TOP) ;
     else if (align & FL_ALIGN_BOTTOM) y1 = Y+H-h1;
-    else y1 = Y+(H-h1)/2;
+    else y1 = Y+((H-h1)>>1);
   }
   if (!fl_draw_symbol(label, x1, y1, w1, h1, fill)) {
     fl_color(fill);
@@ -383,5 +383,5 @@ void Fl::enable_symbols() {
 #endif
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.24 2001/09/10 07:38:06 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.25 2002/09/09 01:39:58 spitzak Exp $".
 //

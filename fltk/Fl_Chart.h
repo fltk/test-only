@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Chart.h,v 1.2 2002/09/09 01:39:56 spitzak Exp $"
 //
 // Forms chart header file for the Fast Light Tool Kit (FLTK).
 //
@@ -51,7 +51,7 @@ struct FL_FORMS_API FL_CHART_ENTRY {
 class FL_FORMS_API Fl_Chart : public Fl_Widget {
 public:
   Fl_Chart(int,int,int,int,const char * = 0);
-
+  ~Fl_Chart();
   void clear();
   void add(double, const char * =0, uchar=0);
   void insert(int, double, const char * =0, uchar=0);
@@ -79,5 +79,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Chart.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Chart.h,v 1.2 2002/09/09 01:39:56 spitzak Exp $".
 //

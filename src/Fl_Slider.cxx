@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.62 2002/07/15 05:55:38 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.63 2002/09/09 01:39:58 spitzak Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -112,7 +112,7 @@ double Fl_Slider::position_value(int X, int w) {
     for (i = -1; i >= l; i--) denom *= 10;
     if (l-w > 0.69897) denom *= 5;
     else if (l-w > 0.30103) denom *= 2;
-    return rint(value*denom/num)*num/denom;
+    return floor(value*denom/num+.5)*num/denom;
   }
   return value;
 }
@@ -465,5 +465,5 @@ Fl_Slider::Fl_Slider(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.62 2002/07/15 05:55:38 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.63 2002/09/09 01:39:58 spitzak Exp $".
 //

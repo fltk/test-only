@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.15 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: fl_vertex.cxx,v 1.16 2002/09/09 01:39:58 spitzak Exp $"
 //
 // Path construction and filling. I think this file is always linked
 // into any fltk program, so try to keep it reasonably small.
@@ -50,8 +50,8 @@ void fl_pop_matrix() {m = stack[--sptr];}
 void fl_mult_matrix(double a, double b, double c, double d, double x, double y) {
   if (m.trivial) {
     m.a = a; m.b = b; m.c = c; m.d = d;
-    m.x += x; m.ix = int(rint(m.x));
-    m.y += y; m.iy = int(rint(m.y));
+    m.x += x; m.ix = int(floor(m.x+.5));
+    m.y += y; m.iy = int(floor(m.y+.5));
     m.trivial = false;
   } else {
     Matrix o;
@@ -59,8 +59,8 @@ void fl_mult_matrix(double a, double b, double c, double d, double x, double y) 
     o.b = a*m.b + b*m.d;
     o.c = c*m.a + d*m.c;
     o.d = c*m.b + d*m.d;
-    o.x = x*m.a + y*m.c + m.x; o.ix = int(rint(o.x));
-    o.y = x*m.b + y*m.d + m.y; o.iy = int(rint(o.y));
+    o.x = x*m.a + y*m.c + m.x; o.ix = int(floor(o.x+.5));
+    o.y = x*m.b + y*m.d + m.y; o.iy = int(floor(o.y+.5));
     o.trivial = false;
     m = o;
   }
@@ -76,8 +76,8 @@ void fl_scale(double x) {
 
 void fl_translate(double x,double y) {
   if (m.trivial) {
-    m.x += x; m.ix = int(rint(m.x));
-    m.y += y; m.iy = int(rint(m.y));
+    m.x += x; m.ix = int(floor(m.x+.5));
+    m.y += y; m.iy = int(floor(m.y+.5));
     m.trivial = m.ix==m.x && m.iy==m.y;
   } else {
     fl_mult_matrix(1,0,0,1,x,y);
@@ -136,8 +136,8 @@ void fl_transform_distance(double& x, double& y) {
 
 void fl_transform(int& x, int& y) {
   if (!m.trivial) {
-    int t = int(rint(x*m.a + y*m.c + m.x));
-    y = int(rint(x*m.b + y*m.d + m.y));
+    int t = int(floor(x*m.a + y*m.c + m.x + .5));
+    y = int(floor(x*m.b + y*m.d + m.y + .5));
     x = t;
   } else {
     x += m.ix;
@@ -171,8 +171,8 @@ static void add_n_points(int n) {
 }
 
 void fl_vertex(double X, double Y) {
-  COORD_T x = COORD_T(int(rint(X*m.a + Y*m.c + m.x)));
-  COORD_T y = COORD_T(int(rint(X*m.b + Y*m.d + m.y)));
+  COORD_T x = COORD_T(floor(X*m.a + Y*m.c + m.x + .5));
+  COORD_T y = COORD_T(floor(X*m.b + Y*m.d + m.y + .5));
   if (!points || x != point[points-1].x || y != point[points-1].y) {
     if (points+1 >= point_array_size) add_n_points(1);
     point[points].x = x;
@@ -187,8 +187,8 @@ void fl_vertex(int X, int Y) {
     x = COORD_T(X+m.ix);
     y = COORD_T(Y+m.iy);
   } else {
-    x = COORD_T(int(rint(X*m.a + Y*m.c + m.x)));
-    y = COORD_T(int(rint(X*m.b + Y*m.d + m.y)));
+    x = COORD_T(floor(X*m.a + Y*m.c + m.x + .5));
+    y = COORD_T(floor(X*m.b + Y*m.d + m.y + .5));
   }
   if (!points || x != point[points-1].x || y != point[points-1].y) {
     if (points+1 >= point_array_size) add_n_points(1);
@@ -205,8 +205,8 @@ void fl_vertices(int n, const float array[][2]) {
   int pn = points;
   if (m.trivial) {
     for (; a < e; a += 2) {
-      COORD_T x = COORD_T(int(rint(a[0]+m.x)));
-      COORD_T y = COORD_T(int(rint(a[1]+m.y)));
+      COORD_T x = COORD_T(floor(a[0] + m.x + .5));
+      COORD_T y = COORD_T(floor(a[1] + m.y + .5));
       if (!pn || x != point[pn-1].x || y != point[pn-1].y) {
 	point[pn].x = x;
 	point[pn].y = y;
@@ -215,8 +215,8 @@ void fl_vertices(int n, const float array[][2]) {
     }
   } else {
     for (; a < e; a += 2) {
-      COORD_T x = COORD_T(int(rint(a[0]*m.a + a[1]*m.c + m.x)));
-      COORD_T y = COORD_T(int(rint(a[0]*m.b + a[1]*m.d + m.y)));
+      COORD_T x = COORD_T(floor(a[0]*m.a + a[1]*m.c + m.x + .5));
+      COORD_T y = COORD_T(floor(a[0]*m.b + a[1]*m.d + m.y + .5));
       if (!pn || x != point[pn-1].x || y != point[pn-1].y) {
 	point[pn].x = x;
 	point[pn].y = y;
@@ -244,8 +244,8 @@ void fl_vertices(int n, const int array[][2]) {
     }
   } else {
     for (; a < e; a += 2) {
-      COORD_T x = COORD_T(int(rint(a[0]*m.a + a[1]*m.c + m.x)));
-      COORD_T y = COORD_T(int(rint(a[0]*m.b + a[1]*m.d + m.y)));
+      COORD_T x = COORD_T(floor(a[0]*m.a + a[1]*m.c + m.x + .5));
+      COORD_T y = COORD_T(floor(a[0]*m.b + a[1]*m.d + m.y + .5));
       if (!pn || x != point[pn-1].x || y != point[pn-1].y) {
 	point[pn].x = x;
 	point[pn].y = y;
@@ -262,8 +262,8 @@ void fl_transformed_vertices(int n, const float array[][2]) {
   const float* e = a+2*n;
   int pn = points;
   for (; a < e; a += 2) {
-    COORD_T x = COORD_T(int(rintf(a[0])));
-    COORD_T y = COORD_T(int(rintf(a[1])));
+    COORD_T x = COORD_T(floorf(a[0] + .5f));
+    COORD_T y = COORD_T(floorf(a[1] + .5f));
     if (!pn || x != point[pn-1].x || y != point[pn-1].y) {
       point[pn].x = x;
       point[pn].y = y;
@@ -308,9 +308,9 @@ static int circle_x, circle_y, circle_w, circle_h;
 void fl_circle(double x, double y, double r) {
   fl_transform(x,y);
   double rt = r * sqrt(fabs(m.a*m.d-m.b*m.c));
-  circle_w = circle_h = int(rint(rt*2));
-  circle_x = int(rint(x-circle_w*.5));
-  circle_y = int(rint(y-circle_h*.5));
+  circle_w = circle_h = int(rt*2 + .5);
+  circle_x = int(floor(x - circle_w*.5 + .5));
+  circle_y = int(floor(y - circle_h*.5 + .5));
 }
 
 // Add an ellipse to the path. On X/Win32 this only works for 90 degree
@@ -326,10 +326,10 @@ void fl_ellipse(double x, double y, double w, double h) {
   double d2x,d2y; d2x = 0; d2y = h; fl_transform_distance(d2x, d2y);
   double rx = sqrt(d1x*d1x+d2x*d2x)/2;
   double ry = sqrt(d1y*d1y+d2y*d2y)/2;
-  circle_w = int(rint(rx*2));
-  circle_x = int(rint(x-circle_w*.5));
-  circle_h = int(rint(ry*2));
-  circle_y = int(rint(y-circle_h*.5));
+  circle_w = int(rx*2 + .5);
+  circle_x = int(floor(x - circle_w*.5 + .5));
+  circle_h = int(ry*2 + .5);
+  circle_y = int(floor(y - circle_h*.5 + .5));
 #else
   // This produces the correct image, but not as nice as using circles
   // produced by the server:
@@ -473,5 +473,5 @@ void fl_fill_stroke(Fl_Color color) {
 }
 
 //
-// End of "$Id: fl_vertex.cxx,v 1.15 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.16 2002/09/09 01:39:58 spitzak Exp $".
 //

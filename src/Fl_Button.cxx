@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.54 2002/06/09 23:20:18 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.55 2002/09/09 01:39:56 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -190,11 +190,11 @@ void Fl_Button::draw(int glyph, int glyph_width) const
 
   if (glyph_width < 0) {
     int g = -glyph_width;
-    draw_glyph(glyph, x+w-g-3, y+(h-g)/2, g, g, glyph_flags);
+    draw_glyph(glyph, x+w-g-3, y+((h-g)>>1), g, g, glyph_flags);
     if (draw_label) draw_inside_label(x, y, w-g-3, h, flags);
   } else if (glyph_width > 0) {
     int g = glyph_width;
-    draw_glyph(glyph, x+3, y+(h-g)/2, g, g, glyph_flags);
+    draw_glyph(glyph, x+3, y+((h-g)>>1), g, g, glyph_flags);
     if (draw_label) draw_inside_label(x+g+3, y, w-g-3, h, flags);
   } else {
     if (draw_label) draw_inside_label(x, y, w, h, flags);
@@ -231,5 +231,5 @@ Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.54 2002/06/09 23:20:18 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.55 2002/09/09 01:39:56 spitzak Exp $".
 //

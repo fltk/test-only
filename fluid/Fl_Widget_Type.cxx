@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.88 2002/07/15 05:55:37 spitzak Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.89 2002/09/09 01:39:56 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -160,7 +160,7 @@ Fl_Widget_Type::Fl_Widget_Type() {
   image = 0;
   o = 0;
   public_ = 1;
-  set_xy = 0;
+  set_xy = true;
 }
 
 Fl_Widget_Type::~Fl_Widget_Type() {
@@ -386,12 +386,12 @@ void set_xy_cb(Fl_Check_Button* i, void *v) {
     if (current_widget->is_window())
       i->show();
     else i->hide();
-    i->value(!current_widget->set_xy);
+    i->value(current_widget->set_xy);
   } else {
     modflag = 1;
-    current_widget->set_xy = !i->value();  
+    current_widget->set_xy = i->value();  
   }
-  if (current_widget->set_xy) {
+  if (!current_widget->set_xy) {
     widget_x->deactivate ();
     widget_y->deactivate ();  
   } else {
@@ -1616,10 +1616,14 @@ void Fl_Widget_Type::write_code1() {
   if (varused) write_c("%s%s* o = ", get_opening_brace(0), subclass);
   if (name()) write_c("%s = ", name());
   if (is_window()) {
-    if (set_xy && strcmp(subclass,"Fl_Group")!=0)
+    // Handle special case where user is faking a Fl_Group type as a window,
+    // there is no 2-argument constructor in that case:
+    if (set_xy)
+      write_c("new %s(%d, %d, %d, %d", subclass, o->x(),o->y(),o->w(),o->h());
+    else if (strstr(subclass, "Window"))
       write_c("new %s(%d, %d", subclass, o->w(), o->h());
     else
-      write_c("new %s(%d, %d, %d, %d", subclass, o->x(), o->y(), o->w(), o->h());
+      write_c("new %s(0, 0, %d, %d", subclass, o->w(), o->h());
   } else if (is_menu_item()) {
     write_c("new %s(", subclass);
   } else {
@@ -1789,7 +1793,7 @@ void Fl_Widget_Type::write_properties() {
     write_string("type");
     write_word(number_to_text(o->type(), subtypes()));
   }
-  if ((!set_xy) && (is_window())) {
+  if (set_xy && is_window()) {
     write_string("set_xy");  
   }
   if (o->align() != tplate->align())
@@ -1894,7 +1898,7 @@ void Fl_Widget_Type::read_property(const char *c) {
   } else if (!strcmp(c,"type")) {
     o->type(number_from_text(read_word(), subtypes()));
   } else if (!strcmp(c,"set_xy")) {
-    set_xy = 0;
+    set_xy = true;
   } else if (!strcmp(c,"align")) {
     o->align((int)strtoul(read_word(),0,0));
   } else if (!strcmp(c,"when")) {
@@ -2137,5 +2141,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.88 2002/07/15 05:55:37 spitzak Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.89 2002/09/09 01:39:56 spitzak Exp $".
 //

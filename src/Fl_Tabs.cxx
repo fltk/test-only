@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.55 2002/06/09 23:20:19 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.56 2002/09/09 01:39:58 spitzak Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -45,7 +45,7 @@
 // Return value is the index of the selected item.
 
 int Fl_Tabs::tab_positions(int* p, int* w) {
-  int selected = -1;
+  int selected = 0;
   int i;
   p[0] = 0;
   int numchildren = children();
@@ -418,5 +418,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.55 2002/06/09 23:20:19 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.56 2002/09/09 01:39:58 spitzak Exp $".
 //

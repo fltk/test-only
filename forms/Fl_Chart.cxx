@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.cxx,v 1.14 2002/06/09 23:20:15 spitzak Exp $"
+// "$Id: Fl_Chart.cxx,v 1.15 2002/09/09 01:39:56 spitzak Exp $"
 //
 // Forms-compatible chart widget for the Fast Light Tool Kit (FLTK).
 //
@@ -310,6 +310,10 @@ void Fl_Chart::clear() {
   redraw();
 }
 
+Fl_Chart::~Fl_Chart() {
+  free(entries);
+}
+
 void Fl_Chart::add(double val, const char *str, uchar col) {
   /* Allocate more entries if required */
   if (numb >= sizenumb) {
@@ -390,5 +394,5 @@ void Fl_Chart::maxsize(int m) {
 }
 
 //
-// End of "$Id: Fl_Chart.cxx,v 1.14 2002/06/09 23:20:15 spitzak Exp $".
+// End of "$Id: Fl_Chart.cxx,v 1.15 2002/09/09 01:39:56 spitzak Exp $".
 //
