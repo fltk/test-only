@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.231 2004/08/07 20:48:35 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.232 2004/08/25 17:10:37 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1919,10 +1919,9 @@ void CreatedWindow::create(Window* window) {
   x->cursor_for = 0;
   const char *name = window->label();
 
-  int ucslen = 0;
-  static wchar_t ucs_name[1024];
-  if (name && *name) ucslen = utf8towc(name, strlen(name), ucs_name, 1024);
-	else ucs_name[0] = 0;
+  wchar_t ucs_name[1024];
+  if (name && *name) utf8towc(name, strlen(name), ucs_name, 1024);
+  else ucs_name[0] = 0;
 
   x->xid = __CreateWindowExW(styleEx,
                              L"fltk", ucs_name, style,
@@ -2036,11 +2035,10 @@ void Window::label(const char *name,const char *iname) {
   Widget::label(name);
   iconlabel_ = iname;
   if (i && !parent()) {
-    if (!name) name = "";
-    int ucslen;
-    static wchar_t ucs[1024];
-    ucslen = utf8towc(name, strlen(name), ucs, 1024);
-    __SetWindowTextW(i->xid, ucs);
+    wchar_t ucs_name[1024];
+    if (name && *name) utf8towc(name, strlen(name), ucs_name, 1024);
+    else ucs_name[0] = 0;
+    __SetWindowTextW(i->xid, ucs_name);
     // if (!iname) iname = filename_name(name);
     // should do something with iname here, it should label the taskbar icon
   }
@@ -2339,5 +2337,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.231 2004/08/07 20:48:35 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.232 2004/08/25 17:10:37 spitzak Exp $".
 //

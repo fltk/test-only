@@ -1,14 +1,6 @@
+// "$Id: SharedImage.h,v 1.12 2004/08/25 17:10:35 spitzak Exp $"
 //
-// "$Id: SharedImage.h,v 1.11 2004/07/04 17:36:02 laza2000 Exp $"
-//
-// Images that are all put in a tree by "name" (usually a filename)
-// so that if the same name is used more than once the same instance
-// is used.
-//
-// Also a bunch of image types that read files. Maybe they should be
-// in their own header files.
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,7 +18,18 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
+
+/*! \class fltk::SharedImage
+
+Images that are all put in a tree by "name" (usually a filename)
+so that if the same name is used more than once the same instance
+is used.
+
+This is probably obsolete and will be deleted. The base Symbol class
+now has a lookup-by-name function, and the Image class could have
+methods added to it to throw away the pixmaps of lru images.
+
+*/
 
 #ifndef fltk_SharedImage_h
 #define fltk_SharedImage_h
@@ -37,7 +40,6 @@ namespace fltk {
 
 struct FL_IMAGES_API ImageType;
 
-// Shared images class. 
 class FL_API SharedImage : public Image {
 protected:
   static const char* shared_image_root;
@@ -61,14 +63,15 @@ protected:
   void find_less_used();
   static void check_mem_usage();
 
-  const char* get_filename() const;// Return the filename obtained from the concatenation
-                          // of the image root directory and this image name
-                          // WARNING : the returned pointer will be
-                          // available only until next call to get_filename
+  /*! Return the filename obtained from the concatenation
+    of the image root directory and this image name
+    WARNING : the returned pointer will be
+    available only until next call to get_filename */
+  const char* get_filename() const;
 
   static const char* get_filename(const char*);
 
-  virtual void read() = 0;// decompress the image and create its pixmap
+  virtual void read() = 0;/*!< decompress the image and create its pixmap */
 
   static void insert(SharedImage*& p, SharedImage* image);
   static SharedImage* find(SharedImage* image, const char* name);
@@ -78,39 +81,39 @@ protected:
 public:
   static SharedImage  *first_image;
 
-  // Return an SharedImage, using the create function if an image with
-  // the given name doesn't already exist. Use datas, or read from the
-  // file with filename name if datas==0.
+  /*! Return an SharedImage, using the create function if an image with
+    the given name doesn't already exist. Use datas, or read from the
+    file with filename name if datas==0. */
   static SharedImage* get(SharedImage* (*create)(),
 			  const char* name, const uchar* datas=0);
 
-  // Reload the image, useful if it has changed on disk, or if the datas
-  // in memory have changed (you can also give a new pointer on datas)
+  /*! Reload the image, useful if it has changed on disk, or if the datas
+    / in memory have changed (you can also give a new pointer on datas) */
   void reload(const uchar* datas=0);
   static void reload(const char* name, const uchar* datas=0);
 
-  // Remove an image from the database and delete it if its refcount has
-  // fallen to zero
-  // Each remove decrement the refcount, each get increment it
-  // Return 1 if it has been really deleted.
+  /*! Remove an image from the database and delete it if its refcount has
+    fallen to zero
+    Each remove() decrements the refcount, each get() increments it
+    Return 1 if it has been really deleted. */
   int remove();
   static int remove(const char* name);
 
-  // Clear the cache for this image and all of its children in the binary tree
+  /*! Clear the cache for this image and all of its children in the binary tree */
   void clear_cache();
 
-  // Set the position where images are looked for on disk
+  /*! Set the position where images are looked for on disk */
   static void set_root_directory(const char* d);
 
-  // Set the size of the cache (0 = unlimited is the default)
+  /*! Set the size of the cache (0 = unlimited is the default) */
   static void set_cache_size(unsigned l);
 
   void _draw(int, int, int, int, const Style*, Flags = 0) const;
 };
 
 ////////////////////////////////////////////////////////////////
-// Description of a file format:
 
+/*! Description of an Image file format */
 struct FL_IMAGES_API ImageType {
   // Name of the filetype as it appear in the source code LOWERCASE!!!
   const char* name;
@@ -121,8 +124,8 @@ struct FL_IMAGES_API ImageType {
 };
 extern FL_IMAGES_API ImageType image_filetypes[];
 
-// Try to guess the filetype
-// Beware that calling this force you to link in all image types !
+/*! Try to guess the filetype
+  Beware that calling this force you to link in all image types ! */
 FL_IMAGES_API ImageType* guess_image(const char* name, const uchar* datas=0);
 
 ////////////////////////////////////////////////////////////////
@@ -201,6 +204,4 @@ public:
 
 #endif
 
-//
-// End of "$Id: SharedImage.h,v 1.11 2004/07/04 17:36:02 laza2000 Exp $"
-//
+// End of "$Id: SharedImage.h,v 1.12 2004/08/25 17:10:35 spitzak Exp $"

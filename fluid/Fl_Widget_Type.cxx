@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.100 2004/08/01 22:28:20 spitzak Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.101 2004/08/25 17:10:36 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -1383,19 +1383,19 @@ static void load_panel() {
     propagate_group(the_panel, LOAD);
     for(pp = next_panel(plugins, p); pp-plugins<nbplugins; pp = next_panel(pp+1, p))
     {
-      if(p->panel_is_orphan) {
+      if (p->panel_is_orphan) {
 	propagate_group(p->panel, LOAD);
-	if(p->please_show_panel) {
+	if (p->please_show_panel) {
 	  p->panel_is_orphan = 0;
 	  panel_tabs->add(*p->panel);
-	  if(p->was_visible) panel_tabs->value(p->panel);
+	  if (p->was_visible) panel_tabs->selected_child(p->panel);
 	  the_panel->redraw();
 	  p->panel->redraw();
 	}
       } else {
-	if(!p->please_show_panel) {
-	  if(panel_tabs->value() == p->panel) {
-	    panel_tabs->value(panel_tabs->child(0));
+	if (!p->please_show_panel) {
+	  if (panel_tabs->selected_child() == p->panel) {
+	    panel_tabs->value(0);
 	    p->was_visible = 1;
 	  } else
 	    p->was_visible = 0;
@@ -2170,5 +2170,5 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.100 2004/08/01 22:28:20 spitzak Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.101 2004/08/25 17:10:36 spitzak Exp $".
 //

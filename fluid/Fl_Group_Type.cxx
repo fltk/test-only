@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group_Type.cxx,v 1.19 2004/05/15 20:52:44 spitzak Exp $"
+// "$Id: Fl_Group_Type.cxx,v 1.20 2004/08/25 17:10:36 spitzak Exp $"
 //
 // fltk::Group object code for the Fast Light Tool Kit (FLTK).
 //
@@ -220,13 +220,13 @@ TabsType Tabstype;	// the "factory"
 
 FluidType* TabsType::click_test(int x, int y) {
   fltk::TabGroup *t = (fltk::TabGroup*)o;
-  fltk::Widget *a = t->which(x,y);
-  if (!a) return 0; // didn't click on tab
+  int i = t->which(x,y);
+  if (i < 0) return 0; // didn't click on tab
   // okay, run the tabs ui until they let go of mouse:
   t->handle(fltk::PUSH);
   fltk::pushed(t);
   while (fltk::pushed()==t) fltk::wait();
-  return (FluidType*)(t->value()->user_data());
+  return (FluidType*)(t->selected_child()->user_data());
 }
 
 // This is called when o is created.  If it is in the tab group make
@@ -255,7 +255,7 @@ void GroupType::remove_child(FluidType* cc) {
 void TabsType::remove_child(FluidType* cc) {
   WidgetType* c = (WidgetType*)cc;
   fltk::TabGroup *t = (fltk::TabGroup*)o;
-  if (t->value() == c->o) t->value(0);
+  if (t->selected_child() == c->o) t->value(0);
   GroupType::remove_child(c);
 }
 
@@ -303,5 +303,5 @@ public:
 TileType Tiletype;	// the "factory"
 
 //
-// End of "$Id: Fl_Group_Type.cxx,v 1.19 2004/05/15 20:52:44 spitzak Exp $".
+// End of "$Id: Fl_Group_Type.cxx,v 1.20 2004/08/25 17:10:36 spitzak Exp $".
 //

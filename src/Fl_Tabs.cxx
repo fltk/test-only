@@ -1,9 +1,6 @@
+// "$Id: Fl_Tabs.cxx,v 1.72 2004/08/25 17:10:37 spitzak Exp $"
 //
-// "$Id: Fl_Tabs.cxx,v 1.71 2004/08/01 22:28:23 spitzak Exp $"
-//
-// Tab widget for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,13 +18,39 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
-// This is the "file card tabs" interface to allow you to put lots and lots
-// of buttons and switches in a panel, as popularized by many toolkits.
+/*! \class fltk::TabGroup
 
-// Each child widget is a card, and it's label() is printed on the card tab.
-// Clicking the tab makes that card visible.
+This is the "file card tabs" interface to allow you to put lots and
+lots of buttons and switches in a panel. This first appeared in
+NeXTStep, but is best known from Windows control panesl. FLTK's
+version draws in a style more reminiscent of NeXT or PageMaker, and
+avoids the confusing multiple-lines of Windows by drawing overlapping
+tabs.
+
+\image html tabs.gif
+
+Each child widget is a card, and it's label() is printed on the card
+tab (including the label font and style).  The color() of the child is
+used to color the tab as well.
+
+The size of the tabs is controlled by the bounding box of the children
+(there should be some space between the children and the edge of this
+widget). If there is a larger gap on the bottom than the top, the tabs
+are placed "inverted" along the bottom. It is easiest to lay this out
+in fluid, using the fluid browser to select each child group and
+resize them until the tabs look the way you want them to.
+
+Clicking the tab makes that child visible() and hides all the
+other children. If the widget with the focus does not consume them,
+the ctrl+tab and ctrl+shift+tab keys will also switch tabs. The
+user can also navigate the focus to the tabs and change them with
+the arrow keys.
+
+The callback() of the TabGroup widget is called when
+the user changes the visible tab, and SHOW and HIDE events are passed
+to the children.
+*/
 
 #include <config.h>
 #include <fltk/TabGroup.h>
@@ -52,42 +75,63 @@ using namespace fltk;
 int TabGroup::tab_positions(int* p, int* w) {
   int selected = 0;
   int i;
-  p[0] = 0;
   int numchildren = children();
+  int width = 0;
+  p[0] = w[0] = 0;
   for (i=0; i<numchildren; i++) {
     Widget* o = child(i);
     if (o->visible()) selected = i;
-    if (o->label()) {
-      int wt = 300; int ht = 300; // rather arbitrary choice for max size
-      o->measure_label(wt, ht);
-      w[i] = wt+TABSLOPE+EXTRASPACE;
-      //if (2*TABSLOPE > w[i]) w[i] = 2*TABSLOPE;
-    } else 
-      w[i] = 2*TABSLOPE;
-    p[i+1] = p[i]+w[i];
+    int wt = 300; int ht = 300; // rather arbitrary choice for max size
+    o->measure_label(wt, ht);
+    w[i] = wt+TABSLOPE+EXTRASPACE;
+    //if (2*TABSLOPE > w[i]) w[i] = 2*TABSLOPE;
+    width += w[i];
+    p[i+1] = width;
   }
   int r = this->w()-TABSLOPE-1;
-  if (p[i] <= r) return selected;
-  // uh oh, they are too big:
-  // pack them against right edge:
-  p[i] = r;
-  for (i = children(); i--;) {
-    int l = r-w[i];
-    if (p[i+1]-TABSLOPE < l) l = p[i+1]-TABSLOPE;
-    if (p[i] <= l) break;
-    p[i] = l;
-    r -= TABSLOPE;
+  if (width <= r) return selected;
+  // uh oh, they are too big, we must move them:
+  // special case when the selected tab itself is too big, make it fill width:
+  if (w[selected] >= r) {
+    w[selected] = r;
+    for (i = 0; i <= selected; i++) p[i] = 0;
+    for (i = selected+1; i <= numchildren; i++) p[i] = r;
+    return selected;
   }
-  // pack them against left edge and truncate width if they still don't fit:
-  for (i = 0; i<children(); i++) {
-    if (p[i] >= i*TABSLOPE) break;
-    p[i] = i*TABSLOPE;
-    int W = this->w()-1-TABSLOPE*(children()-i) - p[i];
-    if (w[i] > W) w[i] = W;
+  int w2[128];
+  for (int i = 0; i < numchildren; i++) w2[i] = w[i];
+  i = numchildren-1;
+  int j = 0;
+  int minsize = TABSLOPE;
+  bool right = true;
+  while (width > r) {
+    int n; // which one to shrink
+    if (j < selected && (!right || i <= selected)) { // shrink a left one
+      n = j++;
+      right = true;
+    } else if (i > selected) { // shrink a right one
+      n = i--;
+      right = false;
+    } else { // no more space, start making them zero
+      minsize = 0;
+      i = numchildren-1;
+      j = 0;
+      right = true;
+      continue;
+    }
+    width -= w2[n]-minsize;
+    w2[n] = minsize;
+    if (width < r) {
+      w2[n] = r-width+minsize;
+      width = r;
+      break;
+    }
   }
-  // adjust edges according to visiblity:
-  for (i = children(); i > selected; i--) {
-    p[i] = p[i-1]+w[i-1];
+  // re-sum the positions:
+  width = 0;
+  for (i = 0; i < numchildren; i++) {
+    width += w2[i];
+    p[i+1] = width;
   }
   return selected;
 }
@@ -113,28 +157,31 @@ int TabGroup::tab_height() {
   }
 }
 
-// this is used by fluid to pick tabs:
-Widget *TabGroup::which(int event_x, int event_y) {
+/*! Return the child index that would be selected by a click at the
+  given mouse position. Returns -1 if the mouse position is not
+  in a tab.
+*/
+int TabGroup::which(int event_x, int event_y) {
   int H = tab_height();
   if (H < 0) {
-    if (event_y > h() || event_y < h()+H) return 0;
+    if (event_y > h() || event_y < h()+H) return -1;
   } else {
-    if (event_y > H || event_y < 0) return 0;
+    if (event_y > H || event_y < 0) return -1;
   }
-  if (event_x < 0) return 0;
+  if (event_x < 0) return -1;
   int p[128], w[128];
   int selected = tab_positions(p, w);
   int d = (event_y-(H>=0?0:h()))*TABSLOPE/H;
   for (int i=0; i<children(); i++) {
-    if (event_x < p[i+1]+(i<selected ? TABSLOPE-d : d)) return child(i);
+    if (event_x < p[i+1]+(i<selected ? TABSLOPE-d : d)) return i;
   }
-  return 0;
+  return -1;
 }
 
 int TabGroup::handle(int event) {
 
-  Widget *selected = this->value();
-  int i;
+  int i = value();
+  Widget* selected = i >= 0 ? child(i) : 0;
   int backwards = 0;
 
   switch (event) {
@@ -157,11 +204,6 @@ int TabGroup::handle(int event) {
     default:
       if (focus() < 0) goto GOTO_TABS;
     GOTO_CONTENTS:
-      // find first visible if selected not picked:
-      if (!selected) for (i=0; i<children(); i++) {
-	Widget* o = child(i);
-	if (o->visible()) {selected = o; break;}
-      }
       // Try to give the contents the focus. Also preserve a return value
       // of 2 (which indicates the contents have a text field):
       if (selected) {
@@ -191,12 +233,12 @@ int TabGroup::handle(int event) {
     }}
   case DRAG:
   case RELEASE:
-    selected = which(event_x(), event_y());
+    i = which(event_x(), event_y());
     if (event == RELEASE && !pushed()) {
       push(0);
-      if (selected && value(selected)) do_callback();
+      if (i >= 0 && value(i)) do_callback();
     } else {
-      push(selected);
+      push(i >= 0 ? child(i) : 0);
     }
     return 1;
 
@@ -209,10 +251,10 @@ int TabGroup::handle(int event) {
     } else {
       if (event_y() < h()+H) break;
     }
-    Widget* item = which(event_x(), event_y());
-    //belowmouse(this);
-    if (item) Tooltip::enter(this, 0, H<0?h()+H:0, w(), H<0?-H:H,
-			     item->tooltip());
+    i = which(event_x(), event_y());
+    if (i >= 0)
+      Tooltip::enter(this, 0, H<0?h()+H:0, w(), H<0?-H:H,
+		     child(i)->tooltip());
     return 1;}
 
   case KEY:
@@ -225,10 +267,9 @@ int TabGroup::handle(int event) {
       case LeftKey:
 	backwards = 1;
       MOVE:
-	for (i = children()-1; i>0; i--) if (child(i)->visible()) break;
 	if (backwards) {i = i ? i-1 : children()-1;}
 	else {i++; if (i >= children()) i = 0;}
-	value(child(i)); do_callback();
+	if (value(i)) do_callback();
 	return 1;
       }
     }      
@@ -263,6 +304,8 @@ int TabGroup::handle(int event) {
   return 0;
 }
 
+static Widget* push_ = 0;
+
 int TabGroup::push(Widget *o) {
   if (push_ == o) return 0;
   if (push_ && !push_->visible() || o && !o->visible())
@@ -271,25 +314,58 @@ int TabGroup::push(Widget *o) {
   return 1;
 }
 
-// The value() is the first visible child (or the last child if none
-// are visible) and this also hides any other children.
-// This allows the tabs to be deleted, moved to other groups, and
-// show()/hide() called without it screwing up.
-Widget* TabGroup::value() {
-  Widget* v = 0;
+/*! Return the index of the first visible() child, which is normally
+  the one the user selected.
+
+  This will automatically force a single child to be visible() if
+  more than one is, or if none are. If more than one is visible all
+  except the first is hidden. If none are, the last one is made
+  visible. The resulting visible child's index is returned. This behavior
+  allows new TabGroups to be created with all children visible, and
+  allows children to be deleted, moved to other groups, and
+  show()/hide() called on them without the display ever looking wrong
+  to the user.
+
+  If there are no children then -1 is returned.
+*/
+int TabGroup::value() {
+  int ret = -1;;
   int numchildren = children();
   for (int i=0; i < numchildren; i++) {
     Widget* o = child(i);
-    if (v) o->hide();
-    else if (o->visible()) v = o;
-    else if (i==numchildren-1) {o->show(); v = o;}
+    if (ret >= 0) o->hide();
+    else if (o->visible()) ret = i;
+    else if (i==numchildren-1) {o->show(); ret = i;}
   }
-  return v;
+  return ret;
 }
 
-// Setting the value hides all other children, and makes this one
-// visible, iff it is really a child:
-int TabGroup::value(Widget *newvalue) {
+/*! Return child(value()), or return null if no children. */
+Widget* TabGroup::selected_child() {
+  int i = value();
+  return i >= 0 ? child(i) : 0;
+}
+
+/*! Switch so index n is selected. If n is less than zero selects
+  zero, if n is greater than the children it selects the last one.
+  Returns true if this is a different child than last time. Does
+  not do the callback().
+*/
+bool TabGroup::value(int n) {
+  if (n < 0) n = 0;
+  if (n >= children()) {
+    if (!children()) return false;
+    n = children()-1;
+  }
+  return selected_child(child(n));
+}
+
+/*! Switch to this child widget, or to a child that contains() this
+  widget.  Returns true if this is a different selection than
+  before. Does not do the callback(). If the widget is null or not a
+  descendent of this, the last child is selected.
+*/
+bool TabGroup::selected_child(Widget *newvalue) {
   int setfocus = !focused() && contains(fltk::focus());
   int numchildren = children();
   for (int i=0; i < numchildren; i++) {
@@ -312,7 +388,7 @@ extern Widget* fl_did_clipping;
 static int H;
 static int p[128];
 void TabGroup::draw() {
-  Widget *v = value();
+  Widget *v = selected_child();
 
   H = tab_height();
   if (damage() & DAMAGE_ALL) { // redraw the entire thing:
@@ -324,8 +400,6 @@ void TabGroup::draw() {
 #if !NO_CLIP_OUT
     draw_background();
 #endif
-/*  setcolor(color());
-    fillrect(0, H>=0 ? 0 : h()+H, w(), H>=0?H:-H);*/
     pop_clip();
   } else { // redraw the child
     if (v) update_child(*v);
@@ -362,7 +436,10 @@ void TabGroup::draw() {
 }
 
 void TabGroup::draw_tab(int x1, int x2, int W, int H, Widget* o, int what) {
+  if (x2 <= x1) return; // ignore ones shrunk to zero width
+  bool drawlabel = true;
   if (x2 < x1+W) {
+    if (x2 <= x1+TABSLOPE) drawlabel = false;
     if (what == LEFT) {
       if (x1+W < x2+TABSLOPE) x2 = x1+W;
       else x2 += TABSLOPE;
@@ -409,7 +486,7 @@ void TabGroup::draw_tab(int x1, int x2, int W, int H, Widget* o, int what) {
     setcolor(!sel && o==push_ ? GRAY33 : GRAY99);
     drawline(x1, h()+H, x1+TABSLOPE, h()-1);
   }
-  if (W > TABSLOPE+EXTRASPACE/2) {
+  if (drawlabel) {
     int x = (what==LEFT ? x1 : x2-W)+(TABSLOPE+EXTRASPACE/2);
     int w = W-(TABSLOPE+EXTRASPACE/2);
     int y,h;
@@ -430,16 +507,26 @@ static void revert(Style* s) {
   s->color_ = GRAY75;
 }
 static NamedStyle style("Tabs", revert, &TabGroup::default_style);
+/*! The default style has a gray color() and the box() is set to 
+  THIN_UP_BOX. The box() is used to draw the edge around the cards,
+  including the top edge, but the tab itself is designed only to
+  match THIN_UP_BOX. You can also use FLAT_BOX and it will look
+  correct if the tabs fill the entire width of a window or parent
+  box.
+*/
 NamedStyle* TabGroup::default_style = &::style;
 
+/*! Creates a new TabGroup widget using the given position, size, and
+label string. Use add(widget) to add each child. Each child is
+probably an fltk::Group widget containing the actual widgets the user
+sees. The children should be sized to stay away from the top or bottom
+edge of the <TT>fltk::Tabs</TT>, which is where the tabs are drawn.
+*/
 TabGroup::TabGroup(int X,int Y,int W, int H, const char *l)
   : Group(X,Y,W,H,l)
 {
   style(default_style);
-  push_ = 0;
   focus(0);
 }
 
-//
-// End of "$Id: Fl_Tabs.cxx,v 1.71 2004/08/01 22:28:23 spitzak Exp $".
-//
+// End of "$Id: Fl_Tabs.cxx,v 1.72 2004/08/25 17:10:37 spitzak Exp $".

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.45 2004/07/27 07:03:08 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.46 2004/08/25 17:10:37 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -287,40 +287,41 @@ void Symbol::measure(int& w, int& h) const {
 void Symbol::_measure(float& w, float& h) const {}
 
 /** \fn void Symbol::draw(float x, float y, float w, float h, const Style*, Flags=0) const;
-    Draw the symbol in a box.
-
-    Calls the _draw() virtual function with the same arguements. The
-    \a style may be used to figure out colors to draw things, and the
-    \a flags may be used to further modify the appearance of the symbol
-    to indicate if it is pushed, highlighted, etc.
+    Draw the symbol in a box. See _draw().
 */
 
 /** \fn void Symbol::draw(int x, int y, int w, int h, const Style*, Flags=0) const;
-
-    Draw the symbol in an integer box.
-
-    Call the integer version of _draw() with the same arguments. The
-    \a style may be used to figure out colors to draw things, and the
-    \a flags may be used to further modify the appearance of the symbol
-    to indicate if it is pushed, highlighted, etc.
+    Draw the symbol in an integer box. See _draw().
 */
 
 /** Virtual function to draw the symbol. This is named with an
     underscore so that subclasses can define various draw() functions
     with different arguments without breaking subclasses below them.
-    You should call draw(), which is an inline link to this function.
+    Users of Symbols should call draw(), which is an inline link to
+    this function.
 
     \a xywh is the bounding box (in the current coordinate system)
     that the symbol should be fit into. If you can't do anything
     else you should center your image and use fltk::push_clip() and
-    fltk::pop_clip() to not draw outside this area.
+    fltk::pop_clip() to limit your drawing to this area.
 
     The \a Style can be used to color in your symbol. The main fields
     you want from it is color() for blank areas and textcolor() for
     labels (don't use labelcolor()).
 
-    The \a Flags can be used to control how the symbol is drawn.
-    INACTIVE, OUTPUT, VALUE, SELECTED, HIGHLIGHT are useful.
+    The \a Flags can be used to control how the symbol is drawn. Useful
+    flags are:
+
+    - INACTIVE : Draw the image in inactive version of the colors from
+    the \a style.
+    - OUTPUT: Instead of color() and textcolor(), use boxcolor() and
+    labelcolor() from the \a style.
+    - VALUE: Draw turned on or checked
+    - SELECTED: Draw as though selected in a browser or menu.
+    - HIGHLIGHT: Draw with highlight colors from \a style.
+    - PUSHED: Indicates that the mouse is pushing this button. This also
+    inverts VALUE.
+    - FOCUSED: Indicates that the current object has keyboard focus.
 
     If your symbol is designed to be imbedded with an @-command into
     fltk::drawtext() then you can examine the current color with
@@ -347,12 +348,12 @@ void Symbol::_draw(float x, float y, float w, float h, const Style* style, Flags
 }
 
 /** Your subclass can implement the integer version of _draw() instead
-    of the floating-point version, if wanted. This is probably a good
-    idea for boxes and fixed-size images that are expected to be drawn
-    as parts of the GUI. This also allows you to call some of the
-    integer-coordinate fltk drawing functions without
+    of the floating-point version. This is a good idea if your image
+    can't draw anything other than an integer size.
 
-    The default version calls the float version of _draw().
+    The default version calls the float version of _draw().  Notice
+    that the default float version of _draw() calls this, so you must
+    implement one or the other or you will get an infinite loop.
 */
 void Symbol::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
 {
@@ -702,5 +703,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.45 2004/07/27 07:03:08 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.46 2004/08/25 17:10:37 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: TabGroup.h,v 1.3 2003/04/20 03:17:49 easysw Exp $"
+// "$Id: TabGroup.h,v 1.4 2004/08/25 17:10:35 spitzak Exp $"
 //
 // For making a "tabbed dialog box". Each child widget creates a tab.
 // Only one is visible at a time. This works best if all the children
@@ -41,18 +41,17 @@ public:
   TabGroup(int,int,int,int,const char * = 0);
   static NamedStyle* default_style;
 
-  Widget *value();
-  int value(Widget *);
-  Widget *push() const {return push_;}
-  int push(Widget *);
-  Widget *which(int event_x, int event_y);
+  int value();
+  bool value(int);
+  int which(int event_x, int event_y);
+  Widget *selected_child();
+  bool selected_child(Widget *);
 
 protected:
   void draw();
 
 private:
-  // friend class Group; // why is this here?
-  Widget *push_;
+  int push(Widget *);
   int tab_positions(int*, int*);
   int tab_height();
   void draw_tab(int x1, int x2, int W, int H, Widget* o, int sel=0);
@@ -63,5 +62,5 @@ private:
 #endif
 
 //
-// End of "$Id: TabGroup.h,v 1.3 2003/04/20 03:17:49 easysw Exp $".
+// End of "$Id: TabGroup.h,v 1.4 2004/08/25 17:10:35 spitzak Exp $".
 //

@@ -1,9 +1,6 @@
+// "$Id: Fl_Shared_Image.cxx,v 1.35 2004/08/25 17:10:37 spitzak Exp $"
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.34 2004/07/04 17:28:31 laza2000 Exp $"
-//
-// Image drawing code for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,10 +18,10 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 // Draw an image that is stored compressed in a file or in memory. 
 // Keep uncompressed images in memory for later use. 
+// WAS: why? it's already in the Pixmap, ready for drawing!
 
 #include <config.h>
 #include <fltk/events.h>
@@ -75,7 +72,8 @@ void SharedImage::check_mem_usage()
   } while(mem_used >= mem_usage_limit);
 }
 
-
+// WAS: this is probably a waste of time! No modern system requires these
+// to be deleted.
 class shared_image_destructor_class {
   int dummy;
 public:
@@ -124,6 +122,8 @@ const char* SharedImage::get_filename() const {
   return get_filename(name);
 }
 
+/*! Prepends the shared_image_root to the name. This is what get_filename()
+  would return for a SharedImage with this name. */
 const char* SharedImage::get_filename(const char* name)
 {
   if (name[0] == '/' || !shared_image_root || !*shared_image_root)
@@ -225,5 +225,5 @@ void SharedImage::_draw(int x, int y, int w, int h, const Style* style, Flags fl
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.34 2004/07/04 17:28:31 laza2000 Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.35 2004/08/25 17:10:37 spitzak Exp $"
 //

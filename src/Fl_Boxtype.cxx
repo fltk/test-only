@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.23 2004/08/12 17:32:09 laza2000 Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.24 2004/08/25 17:10:36 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -50,6 +50,9 @@ public:
   void _draw(int x, int y, int w, int h,const Style* s, Flags flags) const {
     // ML: Imho FOCUSED test should not be here, it would be impossible 
     //     to set DottedFrame to ordinal Widget (see test/boxtype)
+    // WAS: The intention was to reuse this same box to draw "overlays"
+    // to make buttons that look like the text is imbedded in transparent
+    // plastic.
     if (!(flags & FOCUSED)) return;
 
     if (w <= 1 || h <= 1) return;
@@ -109,7 +112,7 @@ public:
     // Draw using bitmap patterns (like X11) and PatBlt
     static const WORD pattern[] = { 0xAAAA, 0x5555, 0xAAAA, 0x5555, 0xAAAA, 0x5555, 0xAAAA, 0x5555, 0xAAAA };
     static HBRUSH evenbrush, oddbrush;
-    if(!evenbrush) {
+    if (!evenbrush) {
       // Init stipple brushes
       BITMAP bm;
       bm.bmType = 0;
@@ -394,5 +397,5 @@ static HighlightBox highlightDownBox("highlight_down", THIN_DOWN_BOX);
 Box* const fltk::HIGHLIGHT_DOWN_BOX = &highlightDownBox;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.23 2004/08/12 17:32:09 laza2000 Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.24 2004/08/25 17:10:36 spitzak Exp $".
 //

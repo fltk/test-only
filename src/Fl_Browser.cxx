@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.98 2004/08/23 14:36:54 laza2000 Exp $"
+// "$Id: Fl_Browser.cxx,v 1.99 2004/08/25 17:10:36 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -1773,7 +1773,7 @@ Browser::Browser(int X,int Y,int W,int H,const char* L)
 /*! The destructor deletes all the list items (because they are child
   fltk::Widgets of an fltk::Group) and destroys the browser. */
 Browser::~Browser() {
-  for (int i = 0; i < NUMMARKS; i++) free(item_index[i]);
+  int i; for (i = 0; i < NUMMARKS; i++) free(item_index[i]);
   if (column_widths_p) free(column_widths_p);
   if (column_widths_i) free(column_widths_i);
   if (header_) {
@@ -1809,5 +1809,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.98 2004/08/23 14:36:54 laza2000 Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.99 2004/08/25 17:10:36 spitzak Exp $".
 //
