@@ -137,6 +137,7 @@ TARGETS = \
 	logslider$(EXEEXT) \
 	menu$(EXEEXT) \
 	pack$(EXEEXT) \
+	progress$(EXEEXT) \
 	resizable$(EXEEXT) \
 	resizealign$(EXEEXT) \
 	shape$(EXEEXT) \
