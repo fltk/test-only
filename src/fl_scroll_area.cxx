@@ -1,5 +1,5 @@
 //
-// "$Id: fl_scroll_area.cxx,v 1.17 2004/07/11 20:06:25 laza2000 Exp $"
+// "$Id: fl_scroll_area.cxx,v 1.18 2004/07/15 16:27:27 spitzak Exp $"
 //
 // Scrolling routines for the Fast Light Tool Kit (FLTK).
 //
@@ -40,9 +40,9 @@
 // However, GDI32.dll exports this function since Windows 95
 extern "C" {
   WINGDIAPI int WINAPI GetRandomRgn(HDC  hdc,    // handle to DC
-		                    HRGN hrgn,   // handle to region
-		                    INT  iNum    // must be SYSRGN
-	                           );
+				    HRGN hrgn,   // handle to region
+				    INT  iNum    // must be SYSRGN
+				    );
 }
 #define SYSRGN 4
 
@@ -59,7 +59,7 @@ static bool is_visible(int x, int y, int w, int h)
   // Copy system clipping region from fltk::dc
   GetRandomRgn (fltk::dc, rgn0, SYSRGN);
 
-  if(is_w9x==-1) {
+  if (is_w9x==-1) {
     // Figure out OS
     OSVERSIONINFOA os;
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
@@ -67,7 +67,7 @@ static bool is_visible(int x, int y, int w, int h)
     is_w9x = (os.dwPlatformId!=VER_PLATFORM_WIN32_NT);
   }
 
-  if(!is_w9x) {
+  if (!is_w9x) {
     // Windows 9x operating systems the region is returned in window coordinates, 
     // and on Windows XP/2k machines the region is in screen coordinates.. SIGH!
     POINT pt = { 0, 0 };
@@ -153,7 +153,7 @@ void fltk::scrollrect(int X, int Y, int W, int H, int dx, int dy,
 #elif defined(_WIN32)
   if(is_visible(src_x+ox, src_y+oy, src_w, src_h)) {
     BitBlt(dc, dest_x+ox, dest_y+oy, src_w, src_h,
-           dc, src_x+ox, src_y+oy, SRCCOPY);
+	   dc, src_x+ox, src_y+oy, SRCCOPY);
   } else {
     // Window overlapping scroll area.
     // Best we can do right now, is just redraw whole scroll area.
@@ -167,7 +167,7 @@ void fltk::scrollrect(int X, int Y, int W, int H, int dx, int dy,
   static RGBColor fg = { 0x0000, 0x0000, 0x0000 }; RGBForeColor( &fg );
   GrafPtr port; GetPort( &port );
   CopyBits( GetPortBitMapForCopyBits(port),
-            GetPortBitMapForCopyBits(port),
+	    GetPortBitMapForCopyBits(port),
 	    &src, &dst, srcCopy, 0L);
   // NYI: need to redraw areas that the source of BitBlt was bad due to
   // overlapped windows, somehow similar to what X does.
@@ -178,5 +178,5 @@ void fltk::scrollrect(int X, int Y, int W, int H, int dx, int dy,
 }
 
 //
-// End of "$Id: fl_scroll_area.cxx,v 1.17 2004/07/11 20:06:25 laza2000 Exp $".
+// End of "$Id: fl_scroll_area.cxx,v 1.18 2004/07/15 16:27:27 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.94 2004/07/11 17:49:35 laza2000 Exp $"
+// "$Id: Fl_Input.cxx,v 1.95 2004/07/15 16:27:26 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -243,11 +243,12 @@ void Input::draw(int X, int Y, int W, int H)
   float desc = line_ascent(leading);
 
   Color background, textcolor;
-  style()->boxcolors(current_flags()|OUTPUT,background,textcolor);
+  Flags flags = current_flags()|OUTPUT;
+  style()->boxcolors(flags, background,textcolor);
 
   if (damage() & DAMAGE_ALL) {
     // draw and measure the inside label:
-    if (label() && label()[0] && (!(flags()&15)||(flags()&ALIGN_INSIDE))) {
+    if (label() && label()[0] && (!(flags&15)||(flags&ALIGN_INSIDE))) {
       fltk::setfont(labelfont(), labelsize());
       float width = getwidth(label());
       label_width = int(width+getwidth(":")+2.5);
@@ -408,7 +409,7 @@ void Input::draw(int X, int Y, int W, int H)
       int offset2;
       if (pp <= e) x2 = xpos+expandpos(p, pp, buf, &offset2);
       else offset2 = strlen(buf);
-      Color bg, fg; style()->boxcolors(OUTPUT|SELECTED, bg, fg);
+      Color bg, fg; style()->boxcolors(flags ^ SELECTED, bg, fg);
       setcolor(bg);
       int xx = int(x1); fillrect(xx, Y+ypos, int(x2+.5)-xx, height);
       setcolor(fg);
@@ -1648,5 +1649,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.94 2004/07/11 17:49:35 laza2000 Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.95 2004/07/15 16:27:26 spitzak Exp $".
 //

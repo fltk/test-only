@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_win32.cxx,v 1.19 2004/07/06 05:49:31 spitzak Exp $"
+// "$Id: fl_draw_image_win32.cxx,v 1.20 2004/07/15 16:27:27 spitzak Exp $"
 //
 // _WIN32 image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -243,7 +243,7 @@ fkjlkasdjf
     }
   }
 
-  int ypos = h+y;
+  int ypos = y;
   for (int j=0; j<h; ) {
     int k;
     uchar *to = (uchar*)buffer;
@@ -278,7 +278,6 @@ fkjlkasdjf
     }
     head.bV5Height = -k;
     head.bV5SizeImage = k*linesize;
-    ypos -= k;
 #if 1
     SetDIBitsToDevice(dc, x, ypos, w, k, 0, 0, 0, k,
 		      (LPSTR)buffer,
@@ -321,6 +320,7 @@ fkjlkasdjf
     ::DeleteObject(hMonoBitmap);
     ::DeleteObject(b);
 #endif
+    ypos += k;
   }
 }
 
@@ -331,5 +331,5 @@ fkjlkasdjf
 #endif
 
 //
-// End of "$Id: fl_draw_image_win32.cxx,v 1.19 2004/07/06 05:49:31 spitzak Exp $".
+// End of "$Id: fl_draw_image_win32.cxx,v 1.20 2004/07/15 16:27:27 spitzak Exp $".
 //

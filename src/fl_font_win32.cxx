@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.55 2004/06/24 07:05:22 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.56 2004/07/15 16:27:27 spitzak Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -86,7 +86,6 @@ FontSize::FontSize(const char* name, int attr, int size, int charset) {
   int ucslen;
   unsigned short* ucs = utf8to16(name, strlen(name), &ucslen);
   if (ucs) {
-    ucs[ucslen] = 0;
     font = CreateFontW(
 	-size,		// use "char size"
 	0,		// logical average character width
@@ -262,7 +261,7 @@ float fltk::getwidth(const char* text, int n) {
   HDC dc = getDC();
   SelectObject(dc, current->font);
   // I think win32 has a fractional version of this:
-  int count; U16* buffer = utf8to16(text,n,&count);
+  int count; unsigned short* buffer = utf8to16(text,n,&count);
   if (buffer) {
     GetTextExtentPointW(dc, buffer, count, &size);
     utf8free(buffer);
@@ -275,7 +274,7 @@ float fltk::getwidth(const char* text, int n) {
 void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
   SetTextColor(dc, current_xpixel);
   HGDIOBJ oldfont = SelectObject(dc, current->font);
-  int count; U16* buffer = utf8to16(text,n,&count);
+  int count; unsigned short* buffer = utf8to16(text,n,&count);
   if (buffer) {
     TextOutW(dc, int(floorf(x+.5f)), int(floorf(y+.5f)), buffer, count);
     utf8free(buffer);
@@ -286,5 +285,5 @@ void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.55 2004/06/24 07:05:22 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.56 2004/07/15 16:27:27 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.217 2004/07/07 05:11:02 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.218 2004/07/15 16:27:26 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -671,7 +671,6 @@ HANDLE fl_global_selection(int clipboard) {
   HANDLE h = GlobalAlloc(GHND, sizeof(unsigned short) * (n+1));
   LPWSTR p = (LPWSTR)GlobalLock(h);
   if (ucs) {
-    ucs[n] = 0;
     memcpy(p, ucs, sizeof(unsigned short)*(n+1));
     utf8free(ucs);
   } else {
@@ -1560,7 +1559,6 @@ void CreatedWindow::create(Window* window) {
   unsigned short* ucs =
     name && *name ? utf8to16(name, strlen(name), &ucslen) : 0;
   if (ucs) {
-    ucs[ucslen] = 0;
     x->xid = CreateWindowExW(
 	styleEx,
 	L"fltk", ucs, style,
@@ -1644,7 +1642,6 @@ void Window::label(const char *name,const char *iname) {
     int ucslen;
     unsigned short* ucs = utf8to16(name, strlen(name), &ucslen);
     if (ucs) {
-      ucs[ucslen] = 0;
       SetWindowTextW(i->xid, ucs);
       utf8free(ucs);
     } else {
@@ -1834,5 +1831,5 @@ Cleanup::~Cleanup() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.217 2004/07/07 05:11:02 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.218 2004/07/15 16:27:26 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: filename_isdir.cxx,v 1.16 2004/07/10 23:48:11 laza2000 Exp $"
+// "$Id: filename_isdir.cxx,v 1.17 2004/07/15 16:27:27 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -39,15 +39,18 @@ static int last_op = 0;
 // This function makes sure that 'stat' is only called once if the users
 // queries different aspects on the same file. 'stat' can be relatively slow.
 static bool fill_stat(const char *name, int new_op) {
+  if (!last_statname) last_statname = (char*)malloc(FL_PATH_MAX);
+  if (last_op!=new_op && strcmp(last_statname, name)==0) return last_result;
+  strncpy(last_statname, name, FL_PATH_MAX-1);
+  last_statname[FL_PATH_MAX-1] = 0;
 #if defined(_WIN32) || defined(__EMX__)
   int n;
   char namebuf[FL_PATH_MAX];
-  unsigned short* ucs = utf8to16(name,
-				 strlen(name),
- 				 &n);
+  unsigned short* ucs = utf8to16(name, strlen(name), &n);
   if (ucs) {
+    memset(namebuf, 0, sizeof(namebuf));
     WideCharToMultiByte(GetACP(), 0, (wchar_t*)ucs, n,
- 			namebuf, sizeof(namebuf), NULL, 0);
+			namebuf, sizeof(namebuf), NULL, 0);
     name = namebuf;
     utf8free(ucs);
   }
@@ -61,13 +64,6 @@ static bool fill_stat(const char *name, int new_op) {
     name = buffer;
   }
 #endif // _WIN32 || __EMX__
-  if (!last_statname) {
-    last_statname = (char*)malloc(FL_PATH_MAX);
-  }
-  if (last_op!=new_op && strcmp(last_statname, name)==0)
-    return last_result;
-  strncpy(last_statname, name, FL_PATH_MAX-1);
-  last_statname[FL_PATH_MAX-1] = 0;
   last_result = (stat(name, &last_stat)==0);
   return last_result;
 }
@@ -95,5 +91,5 @@ long int filename_mtime(const char *name) {
 }
 
 //
-// End of "$Id: filename_isdir.cxx,v 1.16 2004/07/10 23:48:11 laza2000 Exp $".
+// End of "$Id: filename_isdir.cxx,v 1.17 2004/07/15 16:27:27 spitzak Exp $".
 //

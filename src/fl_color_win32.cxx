@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.43 2004/07/11 20:10:31 laza2000 Exp $"
+// "$Id: fl_color_win32.cxx,v 1.44 2004/07/15 16:27:27 spitzak Exp $"
 //
 // _WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -30,14 +30,13 @@ Color		fltk::current_color_;
 COLORREF	fltk::current_xpixel;
 HPALETTE	fltk::xpalette;
 
-static HBRUSH		current_brush;
+static HBRUSH	current_brush;
 static COLORREF	brush_for_color;
-static HDC			brush_for_dc;
+static HDC	brush_for_dc;
 
-static HPEN			current_pen;
+static HPEN	current_pen;
 static COLORREF	pen_for_color;
-static HDC			pen_for_dc;
-static bool			update_pen = true;
+static HDC	pen_for_dc;
 
 #undef USE_STOCK_BRUSH
 #define USE_STOCK_BRUSH 1
@@ -68,6 +67,13 @@ static DWORD dash_pattern[16];
 static int dash_pattern_size = 0;
 static int line_width = 0;
 
+static void free_pen()
+{
+  SelectObject(pen_for_dc, GetStockObject(WHITE_PEN)); // Release our pen from dc
+  DeleteObject(current_pen);
+  current_pen = 0;
+}
+
 void fltk::line_style(int style, int width, char* dashes) {
   static DWORD Cap[4]= {PS_ENDCAP_ROUND, PS_ENDCAP_FLAT, PS_ENDCAP_ROUND, PS_ENDCAP_SQUARE};
   static DWORD Join[4]={PS_JOIN_ROUND, PS_JOIN_MITER, PS_JOIN_ROUND, PS_JOIN_BEVEL};
@@ -85,7 +91,7 @@ void fltk::line_style(int style, int width, char* dashes) {
   // for some reason zero width does not work at all:
   if (!width) width = 1;
   line_width = width;
-	update_pen = true;
+  if (current_pen) free_pen();
 }
 
 #if USE_STOCK_BRUSH
@@ -122,13 +128,6 @@ static void load_dc_funcs()
 
 #endif /* USE_STOCK_BRUSH */
 
-static void free_pen()
-{
-	SelectObject(pen_for_dc, GetStockObject(WHITE_PEN)); // Release our pen from dc
-	DeleteObject(current_pen);
-	current_pen = 0;
-}
-
 HPEN fltk::setpen() {
 #if USE_STOCK_BRUSH
   if (!lstyle && line_width <= 1) {
@@ -136,37 +135,37 @@ HPEN fltk::setpen() {
     if (__SetDCPenColor) {
       SelectObject(dc, stockpen);
       (*__SetDCPenColor)(dc, current_xpixel);
-			if (current_pen) free_pen();
+      if (current_pen) free_pen();
       return stockpen;
     }
   }
 #endif
 
   if (!current_pen) goto J1;
-  if (update_pen || pen_for_color != current_xpixel || pen_for_dc != dc) {
-		free_pen();
+  if (pen_for_color != current_xpixel || pen_for_dc != dc) {
+    free_pen();
   J1:
     if (lstyle) {
       LOGBRUSH penbrush = {BS_SOLID, current_xpixel, 0};
-      current_pen = ExtCreatePen(	lstyle|PS_GEOMETRIC, line_width, &penbrush,
-																	dash_pattern_size, dash_pattern_size?dash_pattern:0);
+      current_pen = ExtCreatePen(lstyle|PS_GEOMETRIC, line_width, &penbrush,
+				 dash_pattern_size,
+				 dash_pattern_size ? dash_pattern : 0);
     } else {
       current_pen = CreatePen(PS_SOLID, line_width, current_xpixel);
     }
-		pen_for_dc = dc;
+    pen_for_dc = dc;
     pen_for_color = current_xpixel;
-		update_pen = false;
   }
-  
-	SelectObject(dc, current_pen);	
+
+  SelectObject(dc, current_pen);	
   return current_pen;
 }
 
 static void free_brush()
 {
-	SelectObject(brush_for_dc, GetStockObject(WHITE_BRUSH)); // Release our brush from dc	
-	DeleteObject(current_brush);
-	current_brush = 0;
+  SelectObject(brush_for_dc, GetStockObject(WHITE_BRUSH)); // Release our brush from dc	
+  DeleteObject(current_brush);
+  current_brush = 0;
 }
 
 HBRUSH fltk::setbrush() {
@@ -175,7 +174,7 @@ HBRUSH fltk::setbrush() {
   if (__SetDCBrushColor) {
     SelectObject(dc, stockbrush);
     (*__SetDCBrushColor)(dc, current_xpixel); 
-		if (current_brush) free_brush();
+    if (current_brush) free_brush();
     return current_brush;
   }
 #endif
@@ -186,10 +185,10 @@ HBRUSH fltk::setbrush() {
   J1:
     current_brush = CreateSolidBrush(current_xpixel);
     brush_for_color = current_xpixel;
-		brush_for_dc = dc;
+    brush_for_dc = dc;
   }
 
-	SelectObject(dc, current_brush);
+  SelectObject(dc, current_brush);
   return current_brush;
 }
 
@@ -253,5 +252,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.43 2004/07/11 20:10:31 laza2000 Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.44 2004/07/15 16:27:27 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: scandir_win32.c,v 1.19 2004/06/24 07:05:22 spitzak Exp $"
+// "$Id: scandir_win32.c,v 1.20 2004/07/15 16:27:27 spitzak Exp $"
 //
 // _WIN32 scandir function for the Fast Light Tool Kit (FLTK).
 //
@@ -44,10 +44,21 @@ int scandir(const char *dirname, struct dirent ***namelist,
   int nDir = 0, NDir = 0;
   struct dirent **dir = 0, *selectDir;
   unsigned long ret;
+  wchar_t	*ucs;
+  char	utf[MAX_PATH*6];
+  int n;
 
   len    = strlen(dirname);
   findIn = malloc(len+5);
   strcpy(findIn, dirname);
+
+  ucs = utf8to16(dirname, len, &n);
+  if (ucs) {
+	memset(findIn, 0, len+5);
+	WideCharToMultiByte(GetACP(), 0, ucs, n,
+			findIn, len+5, NULL, 0);
+	utf8free(ucs);
+  }
   for (d = findIn; *d; d++) if (*d=='/') *d='\\';
   if ((len==0)) { strcpy(findIn, ".\\*"); }
   if ((len==1)&& (d[-1]=='.')) { strcpy(findIn, ".\\*"); }
@@ -113,5 +124,5 @@ int scandir(const char *dirname, struct dirent ***namelist,
 }
 
 //
-// End of "$Id: scandir_win32.c,v 1.19 2004/06/24 07:05:22 spitzak Exp $".
+// End of "$Id: scandir_win32.c,v 1.20 2004/07/15 16:27:27 spitzak Exp $".
 //
