@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.cxx,v 1.10 2003/04/27 01:54:53 spitzak Exp $"
+// "$Id: Fl_Menu_Item.cxx,v 1.11 2004/01/18 07:34:37 spitzak Exp $"
 //
 // The obsolete MenuItem structure.  This code should not be used
 // in new fltk programs.
@@ -112,12 +112,11 @@ Fl_Menu_Item::pulldown(int X, int Y, int W, int H,
 		       const char* title) const
 {
   Group::current(0);
-  Item dummy(title);
   PopupMenu menu(0,0,0,0);
   add_to(&menu);
   //menu.user_data(data);
   if (picked) menu.value(picked-this);
-  if (menu.Menu::popup(X, Y, W, H, title ? &dummy : 0))
+  if (menu.Menu::popup(X, Y, W, H, title))
     return this + menu.value();
   return 0;
 }

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.52 2003/12/15 03:03:13 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.53 2004/01/18 07:34:37 spitzak Exp $"
 //
 // The Menu base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Group
@@ -296,10 +296,11 @@ void Menu::execute(Widget* widget) {
       if (o->type() != Item::RADIO) break;
       o->clear_value();
     }
-  } else if (checkmark(widget)) {
-    if (widget->value()) widget->clear_value(); else widget->set_value();
   }
 #endif
+  if (checkmark(widget)) {
+    if (widget->value()) widget->clear_value(); else widget->set_value();
+  }
   do_callback();
 }
 
@@ -445,5 +446,5 @@ int Menu::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.52 2003/12/15 03:03:13 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.53 2004/01/18 07:34:37 spitzak Exp $"
 //

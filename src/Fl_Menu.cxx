@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.148 2003/12/15 03:03:13 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.149 2004/01/18 07:34:37 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -96,57 +96,46 @@ class MenuTitle : public MenuWindow {
   void draw();
   MenuState* menustate;
 public:
-  Widget* widget;
-  MenuTitle(MenuState* m, int X, int Y, int W, int H, Widget*);
+  MenuTitle(MenuState* m, int X, int Y, int W, int H, const char* L)
+    : MenuWindow(X, Y, W, H, L), menustate(m)
+  {
+    // can't use sgi overlay for images:
+    //if (L->image()) clear_overlay();
+  }
 };
 
-MenuTitle::MenuTitle(MenuState* m, int X, int Y, int W, int H, Widget* L)
-  : MenuWindow(X, Y, W, H, 0), menustate(m)
-{
-  widget = L;
-  // can't use sgi overlay for images:
-  if (L->image()) clear_overlay();
-}
-
-// In order to draw the rather inconsistant Windows-style menubars, the
-// buttonbox() of the menubar is only used to draw the selected menu
-// titles. The single static PopupMenu::style->buttonbox is used for drawing
-// the selected items in the menus. If Windows was consistent (like NT4 was)
-// then we could have used the buttonbox of the menu widget to control
-// the popup items so menus in the same program could appear different. Sigh!
+extern bool fl_hide_shortcut;
 
 void MenuTitle::draw() {
 
-  Widget* style_widget = menustate->widget;
-  Box* box = style_widget->buttonbox();
+  const Style* style = menustate->widget->style();
+  if (style->hide_shortcut()) fl_hide_shortcut = true;
+  Box* box = style->buttonbox();
   // popup menus may have no box set:
   if (box == NO_BOX) box = Widget::default_style->buttonbox();
 
-  Flags flags;
-  if (!menustate->menubar) {
-    // a title on a popup menu is drawn like a button
-    flags = OUTPUT;
-  } else if (box == FLAT_BOX) {
-    // NT 4 style, drawn using selection_color()
-    flags = OUTPUT|SELECTED;
-    if (widget->active()) widget->set_flag(SELECTED);
+  if (menustate->menubar) {
+
+    box->draw(0, 0, w(), h(), style, VALUE|OUTPUT);
+    // Get the Item directly from the menubar and draw it:
+    Item::set_style(menustate->widget);
+    Widget* widget = menustate->widget->child(menustate->indexes[0]);
+    if (event_state(ANY_BUTTON)) pushed_ = widget;
+    push_matrix();
+    translate(5, (h()-widget->height())>>1);
+    int save_w = widget->w(); widget->w(w()-10);
+    widget->draw();
+    widget->w(save_w);
+    widget->clear_flag(SELECTED);
+    pushed_ = 0;
+    pop_matrix();
+
   } else {
-    // Windows98 style, draw as pushed box
-    flags = VALUE|OUTPUT;
+    // a title on a popup menu is drawn like a button
+    box->draw(0, 0, w(), h(), style, OUTPUT);
+    draw_label(0, 0, w(), h(), style, OUTPUT);
   }
-
-  box->draw(0, 0, w(), h(), style_widget->style(), flags);
-
-  // this allow a toggle or other widget to preview it's state:
-  if (event_state(ANY_BUTTON)) pushed_ = widget;
-  push_matrix();
-  translate(5, (h()-widget->height())>>1);
-  int save_w = widget->w(); widget->w(w()-10);
-  widget->draw();
-  widget->w(save_w);
-  widget->clear_flag(SELECTED);
-  pushed_ = 0;
-  pop_matrix();
+  fl_hide_shortcut = false;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -160,7 +149,7 @@ public:
   MenuTitle* title;
   bool is_menubar;
   int drawn_selected;	// last redraw has this selected
-  MWindow(MenuState*, int level, int X,int Y,int W,int H, Widget* title);
+  MWindow(MenuState*, int level, int X,int Y,int W,int H, const char* title);
   ~MWindow();
   int find_selected(int mx, int my);
   int titlex(int);
@@ -179,10 +168,15 @@ static void revert(Style *s) {
   s->leading_ = 4;
 }
 static NamedStyle style("Menu", revert, &MWindow::default_style);
-/** For compatability with random inconsistencies in the Windows
-    interface, the box drawn around the popup menu and the spacing
-    between the menu items is taken from this style rather than
-    from the Menu widget. This probably should be fixed somehow...
+/*! Because the Windows interface style is inconsistent, this
+    extra style is used. The box() from this style is drawn
+    around the actual pop up windows used for menus, and the
+    leading() is used to space items vertically. This allows
+    most Menu classes to use the Widget::default_style and
+    still popup in a Windows-compatable way. Unfortunatly this
+    also means that all popup menus in your program share these
+    same settings, you cannot make them different for different
+    Menu widgets.
 */
 NamedStyle* MWindow::default_style = &::style;
 
@@ -206,7 +200,8 @@ int MWindow::is_parent(int index) {
 
 static const Monitor* monitor;
 
-MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp, Widget* t)
+MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
+		 const char* t)
   : MenuWindow(X, Y, Wp, Hp, 0), menustate(m), level(l)
 {
   style(default_style);
@@ -224,12 +219,29 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp, Widget* t)
     return;
   }
 
-  int leading = int(this->leading());
+  Box* box = this->box();
+  const int dh = box->dh();
+  const int leading = int(this->leading());
   int Wtitle = 0;
   int Htitle = 0;
-  if (t) {
-    Wtitle = t->width()+10;
-    Htitle = t->height()+leading;
+
+  if (menustate->menubar && level==1) {
+    // Widget title
+    Widget* widget = menustate->widget->child(menustate->indexes[0]);
+    Wtitle = widget->width()+10;
+    Htitle = widget->height()+leading+dh;
+    title = new MenuTitle(menustate, 0, 0, Wtitle, Htitle, 0);
+  } else if (t) {
+    // label title
+    const Style* style = menustate->widget->style();
+    setfont(style->labelfont(), style->labelsize());
+    Wtitle = Htitle = 300; // rather arbitrary choice for maximum wrap width
+    measure(t, Wtitle, Htitle, OUTPUT|ALIGN_WRAP);
+    Wtitle += 16;
+    Htitle += leading+dh;
+    title = new MenuTitle(menustate, 0, 0, Wtitle, Htitle, t);
+  } else {
+    title = 0;
   }
 
   int W = 0;
@@ -254,8 +266,6 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp, Widget* t)
     if (widget->image()) clear_overlay();
   }
 
-  Box* box = this->box();
-
   W += hotKeysW + box->dw();
   if (Wp > W) W = Wp;
   if (Wtitle > W) W = Wtitle;
@@ -266,16 +276,10 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp, Widget* t)
     if (X > monitor->r()-W) X = monitor->r()-W;
   }
 
-  int dh = box->dh();
   x(X); w(W); h(H + dh);
   if (selected >= 0) Y += Hp/2-selected_y-box->dy(); else Y += Hp;
   y(Y); // if !group: else {y(Y-2); w(1); h(1);}
-
-  if (t) {
-    title = new MenuTitle(menustate, X, Y-Htitle-2-dh, Wtitle, Htitle+dh, t);
-    title->style(default_style);
-  } else
-    title = 0;
+  if (title) title->position(X,Y-title->h()-dh/2);
 }
 
 MWindow::~MWindow() {
@@ -299,8 +303,6 @@ int MWindow::ypos(int index) {
   }
   return y;
 }
-
-extern bool fl_hide_shortcut;
 
 void MWindow::draw() {
   if (damage() != DAMAGE_CHILD) box()->draw(0, 0, w(), h(), style(), OUTPUT);
@@ -665,18 +667,20 @@ int MWindow::handle(int event) {
 */
 Widget* Menu::try_popup(
     int X, int Y, int W, int H,
-    Widget* title,
+    const char* title,
     bool menubar)
 {
   Group::current(0); // fix possible programmer error...
 
-  // Incredible kludge! Menus are inconsistent, they should default to
-  // white to match browsers and other widgets. Unfortunately standard
-  // design is to make them gray. But then users expect the labelcolor/font
-  // to be used for the menu items. So I directly detect settings to gray
-  // and copy the label font in that case:
+  // Incredible kludge!
+  // Fltk wants Browsers and Menus to look alike, and it makes sense
+  // when you try it, too. Unfortunatley Windows does not make them
+  // look alike: menus and menubars look more like buttons, using
+  // the window gray color and the labelfont(). I try to detect
+  // that here and shuffle around the colors in the style used by
+  // the menu windows:
   MWindow::default_style->color_ = color();
-  if (MWindow::default_style->color_ == GRAY75)
+  if (menubar || MWindow::default_style->color_ == GRAY75)
     MWindow::default_style->textcolor_ = labelcolor();
   else
     MWindow::default_style->textcolor_ = textcolor();
@@ -789,7 +793,7 @@ Widget* Menu::try_popup(
       // create a submenu off a menubar with a title box:
       int nX = mw->x() + mw->titlex(index);
       int nY = mw->y() + mw->h();
-      mw = new MWindow(&p, 1, nX, nY, 0, 0, widget);
+      mw = new MWindow(&p, 1, nX, nY, 0, 0, widget->label());
       // fix the title box to match menubar thickness:
       int dx=0; int y1=p.menus[0]->y(); int dw=0; int h1=p.widget->h();
       p.widget->box()->inset(dx,y1,dw,h1);
@@ -859,13 +863,15 @@ Widget* Menu::try_popup(
   handle() method is being executed now.
 
   \a title is a widget (usually an fltk::Item) that is used to make a
-  title atop the menu, in the style of SGI's popup menus.
+  title atop the menu, in the style of SGI's popup menus. You cannot
+  use a List child, as the drawing of the menu may navigate that list
+  to other children, overwriting the original widget.
 
   \a menubar is for internal use by menubars and should be left false.
 */
 int Menu::popup(
     int X, int Y, int W, int H,
-    Widget* title,
+    const char* title,
     bool menubar)
 {
   Widget *selected = try_popup(X, Y, W, H, title, menubar);
@@ -877,5 +883,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.148 2003/12/15 03:03:13 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.149 2004/01/18 07:34:37 spitzak Exp $".
 //

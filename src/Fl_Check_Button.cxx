@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.45 2003/12/15 03:03:13 spitzak Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.46 2004/01/18 07:34:37 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -49,7 +49,8 @@ static void default_glyph(int glyph,
   box->draw(x, y, w, h, style, flags|OUTPUT);
   box->inset(x, y, w, h);
   if (flags & VALUE) {
-    setcolor(inactive(style->textcolor(), flags));
+    Color bg, fg; style->boxcolors(flags|OUTPUT, bg, fg);
+    setcolor(fg);
     if (h < 4) {fillrect(x+w/2-1,y+h/2-1,2,2); return;}
     x += 1;
     w = h - 2;

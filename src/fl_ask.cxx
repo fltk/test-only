@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.31 2003/11/04 08:11:03 spitzak Exp $"
+// "$Id: fl_ask.cxx,v 1.32 2004/01/18 07:34:37 spitzak Exp $"
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
@@ -82,6 +82,7 @@ static int innards(
   const char *b1,
   const char *b2)
 {
+  Group* saved_current_group = Group::current();
   load_theme();
   Window window(3*BORDER_W+ICON_W+INPUT_W, 3*BORDER_H+ICON_H+BUTTON_H);
   window.begin();
@@ -169,6 +170,7 @@ static int innards(
   window.exec();
   if (istr)
     window.remove(textfield); // don't destroy it yet
+  Group::current(saved_current_group);
   return button_number;
 }
 
@@ -232,5 +234,5 @@ const char *fltk::password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.31 2003/11/04 08:11:03 spitzak Exp $".
+// End of "$Id: fl_ask.cxx,v 1.32 2004/01/18 07:34:37 spitzak Exp $".
 //
