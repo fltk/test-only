@@ -144,8 +144,9 @@ int main(int argc,char** argv) {
   colors_button.set();
   tree.callback(cb_test);
 
-  tree.list(new Fl_String_List("alpha\0beta\0ceta\0delta\0red\0green\0blue\0"));
 #if 0
+  tree.list(new Fl_String_List("alpha\0beta\0ceta\0delta\0red\0green\0blue\0"));
+#else
   //int w[3] = {150, 200, 0};
   //tree.column_widths(w);
 

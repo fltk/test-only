@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.20 2000/05/17 07:08:07 bill Exp $"
+// "$Id: Fl_Browser.cxx,v 1.21 2000/05/17 07:14:20 bill Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -423,7 +423,6 @@ void Fl_Browser::draw_clip(int x, int y, int w, int h) {
 }
 
 void Fl_Browser::draw() {
-  layout();
   uchar d = damage();
   if (d & FL_DAMAGE_ALL) { // full redraw
     draw_window_frame();
@@ -877,5 +876,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.20 2000/05/17 07:08:07 bill Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.21 2000/05/17 07:14:20 bill Exp $".
 //
