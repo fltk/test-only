@@ -53,7 +53,7 @@ this to be called are:
 This lets you provide global shortcut keys.</LI>
 
 <LI>System events that FLTK does not recognize.  See <A
-href=osissues.html#fl_xevent><tt>fl_xevent</tt></A>.</LI>
+href=x.html#fl_xevent><tt>fl_xevent</tt></A> or <a href=win32.html#fl_msg><tt>fl_msg</tt></a>.</LI>
 
 <LI><I>Some</I> other events when the widget FLTK selected  returns 
 zero from its <tt>handle()</tt> method.  Exactly which  ones may change 
@@ -499,25 +499,34 @@ not sure if a mouse event has been processed recently (such as to
 position your first window).  If the display is not open, this will 
 open it. 
 
-<h3><A name=grab><a name=release>void grab(int (*)(int, void*), void*);
-<BR>void release();
-<BR>int (*Fl::grab())(int, void*);</A></h3>
+<h3><a name=grab><a name=local_grab><a name=release>void Fl::grab(Fl_Widget*);
+<br>void Fl::local_grab(Fl_Widget *w);
+<br>Fl_Widget* Fl::grab();
+<br>void Fl::release();</h3>
 
-This is used when pop-up menu systems are active.  All user events are
-sent to the passed function, rather than going to widgets.  The
-<tt>void*</tt> argument can be used to pass arbitrary data to this
-function.
+This is used when pop-up menu systems are active.
+
+<p>When a "grab" is done all events are passed to the widget given to
+<tt>Fl::grab(Fl_Widget*)</tt>. The results of <tt>Fl::pushed</tt>,
+<tt>Fl::focus</tt>, and other such methods are ignored unless they
+refer to this widget or a child of this widget. This enables a click
+anywhere on the screen to dismiss the menu.
 
 <p>This messes with the window system so you get the events no matter
 where the cursor is on the screen.  <i>Under both X and WIN32 some
 window must be mapped because the system interface needs a window id.
 Be careful that your program does not enter an infinite loop 
-while <tt>grab()</tt> is on.  On X this will lock up your screen!</I></p>
+while <tt>grab()</tt> is on.  On X this will lock up your screen!</i>
+
+<p>The function <tt>Fl::local_grab(Fl_Widget *w)</tt> does a grab
+without messing with the window system. This means that only events
+that would go to the program (ie clicks in other windows it owns) are
+redirected to the grab widget.
 
 <p>To turn off grabbing do <tt>Fl::release()</tt>.
 
-<p><tt>Fl::grab()</tt> returns the current function, this is useful for
-checking if a grab is active.
+<p><tt>Fl::grab()</tt> returns the current grab widget, or null if
+release was called. This is useful for checking if a grab is active.
 
 <h3><A name=h>int Fl::h()</A></h3>
 

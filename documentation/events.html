@@ -1,53 +1,53 @@
 <html><head><title>FLTK Events</title></head><body bgcolor = white>
 
-<H1 ALIGN=RIGHT><A NAME=events>6 - Handling Events</A></H1>
+<h1 align=right><a name=events>E - Handling Events</a></h1>
 
 FLTK Events are identified by the integer argument passed to the <A
-href="subclassing.html#handle"><TT>Fl_Widget::handle()</TT></A> virtual
+href="subclassing.html#handle"><tt>Fl_Widget::handle()</tt></A> virtual
 method.
 
 <p>All other information about the most recent event is stored in
 static locations and acquired by calling these functions.  This static
 information remains valid until the next event is read from window
-system (i.e. it is ok to look at it outside of the <TT>handle()</TT>
+system (i.e. it is ok to look at it outside of the <tt>handle()</tt>
 method). This allows the data to be accessed by callbacks and other
 functions without having to pass an event argument to them, and allows
 more fields to be added to events without breaking binary compatability.
 These are all trivial inline functions and thus very fast and small:
 
 <UL>
-<LI><A href=functions.html#event><TT>Fl::event</TT></A></LI>
-<LI><A href=functions.html#event_button><TT>Fl::event_button</TT></A></LI>
-<LI><A href=functions.html#event_clicks><TT>Fl::event_clicks</TT></A></LI>
-<LI><A href=functions.html#event_inside><TT>Fl::event_inside</TT></A></LI>
-<LI><A href=functions.html#event_is_click><TT>Fl::event_is_click</TT></A></LI>
-<LI><A href=functions.html#event_key><TT>Fl::event_key</TT></A></LI>
-<LI><A href=functions.html#event_length><TT>Fl::event_length</TT></A></LI>
-<LI><A href=functions.html#event_state><TT>Fl::event_state</TT></A></LI>
-<LI><A href=functions.html#event_text><TT>Fl::event_text</TT></A></LI>
-<LI><A href=functions.html#event_x><TT>Fl::event_x</TT></A></LI>
-<LI><A href=functions.html#event_x_root><TT>Fl::event_x_root</TT></A></LI>
-<LI><A href=functions.html#event_dx><TT>Fl::event_dx</TT></A></LI>
-<LI><A href=functions.html#event_y><TT>Fl::event_y</TT></A></LI>
-<LI><A href=functions.html#event_y_root><TT>Fl::event_y_root</TT></A></LI>
-<LI><A href=functions.html#event_dy><TT>Fl::event_dy</TT></A></LI>
+<LI><A href=functions.html#event><tt>Fl::event</tt></A></LI>
+<LI><A href=functions.html#event_button><tt>Fl::event_button</tt></A></LI>
+<LI><A href=functions.html#event_clicks><tt>Fl::event_clicks</tt></A></LI>
+<LI><A href=functions.html#event_inside><tt>Fl::event_inside</tt></A></LI>
+<LI><A href=functions.html#event_is_click><tt>Fl::event_is_click</tt></A></LI>
+<LI><A href=functions.html#event_key><tt>Fl::event_key</tt></A></LI>
+<LI><A href=functions.html#event_length><tt>Fl::event_length</tt></A></LI>
+<LI><A href=functions.html#event_state><tt>Fl::event_state</tt></A></LI>
+<LI><A href=functions.html#event_text><tt>Fl::event_text</tt></A></LI>
+<LI><A href=functions.html#event_x><tt>Fl::event_x</tt></A></LI>
+<LI><A href=functions.html#event_x_root><tt>Fl::event_x_root</tt></A></LI>
+<LI><A href=functions.html#event_dx><tt>Fl::event_dx</tt></A></LI>
+<LI><A href=functions.html#event_y><tt>Fl::event_y</tt></A></LI>
+<LI><A href=functions.html#event_y_root><tt>Fl::event_y_root</tt></A></LI>
+<LI><A href=functions.html#event_dy><tt>Fl::event_dy</tt></A></LI>
 </UL>
 
 <p>The following functions do not return current event state, but are
 often used when processing events as well:
 
 <ul>
-<LI><A href=functions.html#get_key><TT>Fl::get_key</TT></A></LI>
-<LI><A href=functions.html#get_mouse><TT>Fl::get_mouse</TT></A></LI>
-<LI><A href=functions.html#test_shortcut><TT>Fl::test_shortcut</TT></A></LI>
+<LI><A href=functions.html#get_key><tt>Fl::get_key</tt></A></LI>
+<LI><A href=functions.html#get_mouse><tt>Fl::get_mouse</tt></A></LI>
+<LI><A href=functions.html#test_shortcut><tt>Fl::test_shortcut</tt></A></LI>
 </ul>
 
 FLTK follows very simple and unchangeable rules for sending events.
 The major innovation is that widgets can indicate (by returning 0 from
-the <TT>handle()</TT> method) that they are not interested in an
+the <tt>handle()</tt> method) that they are not interested in an
 event, and FLTK can then send that event elsewhere.  This eliminates
-the need for &quot;interests&quot; (event masks or tables), and this
-is probably the main reason FLTK is much smaller than other toolkits.
+the need for "interests" (event masks or tables), and this is probably
+the main reason FLTK is much smaller than other toolkits.
 
 <p>Some events are sent directly to widgets by fltk, but others are
 always sent to the outermost <tt>Fl_Window</tt> and fltk relies on the
@@ -57,13 +57,13 @@ the correct child than the simple linear search fltk uses. The
 following functions control where events are sent:
 
 <UL>
-<LI><A href=osissues.html#add_handler><TT>Fl::add_handler</TT></A></LI>
-<LI><A href=functions.html#belowmouse><TT>Fl::belowmouse</TT></A></LI>
-<LI><A href=functions.html#focus><TT>Fl::focus</TT></A></LI>
-<LI><A href=functions.html#grab><TT>Fl::grab</TT></A></LI>
-<LI><A href=functions.html#modal><TT>Fl::modal</TT></A></LI>
-<LI><A href=functions.html#pushed><TT>Fl::pushed</TT></A></LI>
-<LI><A href=Fl_Widget.html#take_focus><TT>Fl_Widget::take_focus</TT></A></LI>
+<LI><A href=functions.html#add_handler><tt>Fl::add_handler</tt></A></LI>
+<LI><A href=functions.html#belowmouse><tt>Fl::belowmouse</tt></A></LI>
+<LI><A href=functions.html#focus><tt>Fl::focus</tt></A></LI>
+<LI><A href=functions.html#grab><tt>Fl::grab</tt></A></LI>
+<LI><A href=functions.html#modal><tt>Fl::modal</tt></A></LI>
+<LI><A href=functions.html#pushed><tt>Fl::pushed</tt></A></LI>
+<LI><A href=Fl_Widget.html#take_focus><tt>Fl_Widget::take_focus</tt></A></LI>
 </UL>
 
 <p>This is a list of all the events currently defined.
@@ -74,18 +74,18 @@ following functions control where events are sent:
 
 A mouse button has gone down with the mouse pointing at this widget.
 You can find out what button by calling <A
-href=fl_functions.html#event_button><TT>Fl::event_button()</TT></A>.
+href=fl_functions.html#event_button><tt>Fl::event_button()</tt></A>.
 You find out the mouse position by calling <A
-href=fl_functions.html#event_x><TT>Fl::event_x()</TT></A> and <A
-href=functions.html#event_y><TT>Fl::event_y()</TT></A>.
+href=fl_functions.html#event_x><tt>Fl::event_x()</tt></A> and <A
+href=functions.html#event_y><tt>Fl::event_y()</tt></A>.
 
 <P>A widget indicates that it &quot;wants&quot; the mouse click by
 returning non-zero from its <A
-href=functions.html#handle><TT>handle()</TT></A> method. It will then
-become the <A href=functions.html#pushed><TT> Fl::pushed()</TT></A>
-widget and will get <TT>FL_DRAG</TT> and the matching
-<TT>FL_RELEASE</TT> events.  If <TT>handle()</TT> returns zero then
-FLTK will try sending the <TT>FL_PUSH</TT> to another widget. </P>
+href=functions.html#handle><tt>handle()</tt></A> method. It will then
+become the <A href=functions.html#pushed><tt> Fl::pushed()</tt></A>
+widget and will get <tt>FL_DRAG</tt> and the matching
+<tt>FL_RELEASE</tt> events.  If <tt>handle()</tt> returns zero then
+FLTK will try sending the <tt>FL_PUSH</tt> to another widget. </P>
 
 <a name="FL_DRAG"><H3>FL_DRAG</H3>
 
@@ -102,7 +102,7 @@ href="functions.html#event_y"><tt>Fl::event_y()</tt></a>.
 <a name="FL_RELEASE"><H3>FL_RELEASE</H3>
 
 A mouse button has been released.  You can find out what button by 
-calling <A href="functions.html#event_button"><TT>Fl::event_button()</TT></A>. 
+calling <A href="functions.html#event_button"><tt>Fl::event_button()</tt></A>. 
 
 <P>To receive <tt>FL_RELEASE</tt> events you must return 1 when passed a
 <tt>FL_PUSH</tt> event.
@@ -111,7 +111,7 @@ calling <A href="functions.html#event_button"><TT>Fl::event_button()</TT></A>.
 
 The mouse has moved without any mouse buttons held down.  This event
 is sent to the <A
-href="functions.html#belowmouse"><TT>Fl::belowmouse()</TT></A> widget.
+href="functions.html#belowmouse"><tt>Fl::belowmouse()</tt></A> widget.
 
 <a name="FL_MOUSEWHEEL"><H3>FL_MOUSEWHEEL</H3>
 
@@ -133,10 +133,10 @@ are used for this.
 The mouse has been moved to point at this widget.  This can be used
 for highlighting feedback.  If a widget wants to highlight or
 otherwise track the mouse, it indicates this by returning non-zero
-from its <A href="functions.html#handle"> <TT>handle()</TT></A>
+from its <A href="functions.html#handle"> <tt>handle()</tt></A>
 method. It then becomes the <A href="functions.html#belowmouse">
-<TT>Fl::belowmouse()</TT></A> widget and will receive <TT>FL_MOVE</TT>
-and <TT>FL_LEAVE</TT> events.
+<tt>Fl::belowmouse()</tt></A> widget and will receive <tt>FL_MOVE</tt>
+and <tt>FL_LEAVE</tt> events.
 
 <a name="FL_LEAVE"><H3>FL_LEAVE</H3>
 
@@ -150,61 +150,61 @@ return 1 in response to a <tt>FL_ENTER</tt> event.
 This indicates an <I>attempt</I> to give a widget the keyboard focus.
 <P>If a widget wants the focus, it should change itself to display the
 fact that it has the focus, and return non-zero from its <A
-href=functions.html#handle> <TT>handle()</TT></A> method.  It then
-becomes the <A href=functions.html#focus><TT>Fl::focus()</TT></A>
-widget and gets <TT>FL_KEY</TT>, <tt>FL_KEYUP</tt> and <TT>FL_UNFOCUS</TT>
+href=functions.html#handle> <tt>handle()</tt></A> method.  It then
+becomes the <A href=functions.html#focus><tt>Fl::focus()</tt></A>
+widget and gets <tt>FL_KEY</tt>, <tt>FL_KEYUP</tt> and <tt>FL_UNFOCUS</tt>
 events.
 
 <P>The focus will change either because the window manager changed
 which window gets the focus, or because the user tried to navigate
 using tab, arrows, or other keys.  You can check <A
-href=functions.html#event_key> <TT>Fl::event_key()</TT></A> to figure
+href=functions.html#event_key> <tt>Fl::event_key()</tt></A> to figure
 out why it moved.  For navigation it will be the key pressed and for
 instructions from the window manager it will be zero.
 
 <a name="FL_UNFOCUS"><H3>FL_UNFOCUS</H3>
 
-Sent to the previous <A href=functions.html#focus><TT>Fl::focus()</TT></A>
+Sent to the previous <A href=functions.html#focus><tt>Fl::focus()</tt></A>
 widget when another widget gets the focus. 
 
 <a name="FL_KEY"><H3>FL_KEY</H3>
 
 A key press event. Fltk sends these directly to the
-<A href=functions.html#focus><TT>Fl::focus()</TT></A> widget. If it
+<A href=functions.html#focus><tt>Fl::focus()</tt></A> widget. If it
 does not return 1 then fltk will change the event into a
 <tt>FL_SHORTCUT</tt> event and try the widgets under the mouse.
 
 <p>The key pressed can be found in <A
-href=functions.html#event_key><TT>Fl::event_key()</TT></A>. The text
+href=functions.html#event_key><tt>Fl::event_key()</tt></A>. The text
 that the key should insert can be found with <A
-href=functions.html#event_text><TT>Fl::event_text()</TT> </A> and its
+href=functions.html#event_text><tt>Fl::event_text()</tt> </A> and its
 length is in <A
-href=functions.html#event_length><TT>Fl::event_length()</TT></A>.
+href=functions.html#event_length><tt>Fl::event_length()</tt></A>.
 
 <P>To receive <tt>FL_KEYBOARD</tt> events you must return 1 in
 response to a <tt>FL_FOCUS</tt> event.
 
 <a name="FL_KEYUP"><H3>FL_KEYUP</H3>
 
-Sent to the <A href=functions.html#focus><TT>Fl::focus()</TT></A>
+Sent to the <A href=functions.html#focus><tt>Fl::focus()</tt></A>
 widget. The key that was released can be found in <A
-href=functions.html#event_key><TT>Fl::event_key()</TT></A>. Don't rely
+href=functions.html#event_key><tt>Fl::event_key()</tt></A>. Don't rely
 on anything being in <A
-href=functions.html#event_text><TT>Fl::event_text()</TT></A>.
+href=functions.html#event_text><tt>Fl::event_text()</tt></A>.
 
 <a name="FL_SHORTCUT"><H3>FL_SHORTCUT</H3>
 
-If the <A href=functions.html#focus><TT>Fl::focus()</TT></A> widget is
-zero or ignores an <TT>FL_KEY</TT> event then FLTK tries sending this
+If the <A href=functions.html#focus><tt>Fl::focus()</tt></A> widget is
+zero or ignores an <tt>FL_KEY</tt> event then FLTK tries sending this
 event to every widget it can, until one of them returns
-non-zero. <TT>FL_SHORTCUT</TT> is first sent to the
-<TT>belowmouse()</TT> widget, then its parents and siblings, and
+non-zero. <tt>FL_SHORTCUT</tt> is first sent to the
+<tt>belowmouse()</tt> widget, then its parents and siblings, and
 eventually to every widget in the window, trying to find an object
 that returns non-zero.  FLTK tries really hard to not to ignore any
 keystrokes!
 
 <P>You can also make "global" shortcuts by using <A
-href=osissues.html#add_handler><TT>Fl::add_handler()</TT></A>.  A
+href=functions.html#add_handler><tt>Fl::add_handler()</tt></A>.  A
 global shortcut will work no matter what windows are displayed or
 which one has the focus.
 
@@ -213,15 +213,15 @@ which one has the focus.
 <a name="FL_DEACTIVATE"><H3>FL_DEACTIVATE</H3>
 
 This widget is no longer active, due to <A
-href=Fl_Widget.html#deactivate> <TT>deactivate()</TT></A> being called
-on it or one of its parents. <TT> active()</TT> may still be true
-after this, the widget is only active if <TT>active()</TT> is true on
-it and all its parents (use <TT> active_r()</TT> to check this).
+href=Fl_Widget.html#deactivate> <tt>deactivate()</tt></A> being called
+on it or one of its parents. <tt> active()</tt> may still be true
+after this, the widget is only active if <tt>active()</tt> is true on
+it and all its parents (use <tt> active_r()</tt> to check this).
 
 <a name="FL_ACTIVATE"><H3>FL_ACTIVATE</H3>
 
 This widget is now active, due to <A href=Fl_Widget.html#activate>
-<TT>activate()</TT></A> being called on it or one of its parents.
+<tt>activate()</tt></A> being called on it or one of its parents.
 
 <a name="FL_HIDE"><H3>FL_HIDE</H3>
 
@@ -235,22 +235,22 @@ visible only if <tt>visible()</tt> is true for it and all its parents
 <a name="FL_SHOW"><h3>FL_SHOW</h3>
 
 This widget is visible again, due to <a href=Fl_Widget.html#show>
-<TT>show()</TT></A> being called on it or one of its parents, or due to 
-a parent window being restored. <I>Child <TT>Fl_Window</TT>s respond to 
+<tt>show()</tt></A> being called on it or one of its parents, or due to 
+a parent window being restored. <I>Child <tt>Fl_Window</tt>s respond to 
 this by actually creating the window if not done already, so if you 
-subclass a window, be sure to pass <TT>FL_SHOW</TT> to the base class <TT>
-handle()</TT> method!</I>
+subclass a window, be sure to pass <tt>FL_SHOW</tt> to the base class <tt>
+handle()</tt> method!</I>
 
 <H2>Clipboard Events</H2>
 
 <a name="FL_PASTE"><H3>FL_PASTE</H3>
 
 You should get this event some time after you call <A
-href=functions.html#paste><TT>Fl::paste()</TT></A> or you return true
+href=functions.html#paste><tt>Fl::paste()</tt></A> or you return true
 for <tt>FL_DND_RELEASE</tt>.  The contents of
-<A href=functions.html#event_text> <TT>Fl::event_text()</TT></A> is
+<A href=functions.html#event_text> <tt>Fl::event_text()</tt></A> is
 the text to insert and the number of characters is in <A
-href=functions.html#event_length><TT> Fl::event_length()</TT></A>.
+href=functions.html#event_length><tt> Fl::event_length()</tt></A>.
 
 <a name="FL_DND_ENTER"><H3>FL_DND_ENTER</h3>
 
