@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.98 2005/01/24 08:07:20 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.99 2005/01/24 08:34:29 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -55,7 +55,7 @@ extern void fl_set_spot(fltk::Font *f, Widget *w, int x, int y);
   items for changed() when the OK button on a panel is pressed. Other
   value for when():
 
-  - fltk::WHEN_NEVER: The callback is not done, but changed() is turned on. 
+  - fltk::WHEN_NEVER: The callback is not done, but changed() is turned on.
   - fltk::WHEN_CHANGED: The callback is done each time the text is
     changed by the user.
   - fltk::WHEN_RELEASE: This is the default. The callback is done when
@@ -1242,7 +1242,18 @@ bool Input::handle_key() {
     // if (try_shortcut()) return true;
     if (ctrl || shift) return false;
     if (when() & WHEN_ENTER_KEY) {
+#if 1
       position(size(), 0);
+#else
+      // Throw away the focus so the user won't accidentally change the
+      // value when they think they are typing shortcuts. Suggested by
+      // the behavior of Shake:
+      // redraw the highlight area:
+      if (mark_ != position_) minimal_update(mark_, position_);
+      // else make the cursor disappear:
+      else erase_cursor_at(position_);
+      throw_focus();
+#endif
       maybe_do_callback();
       return true;
     }
@@ -1644,5 +1655,5 @@ int Input::handle(int event, const Rectangle& r) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.98 2005/01/24 08:07:20 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.99 2005/01/24 08:34:29 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Numeric_Input.cxx,v 1.12 2004/12/12 22:23:23 spitzak Exp $"
+// "$Id: Fl_Numeric_Input.cxx,v 1.13 2005/01/24 08:34:31 spitzak Exp $"
 //
 // Copyright 2002 by Bill Spitzak, Digital Domain, and others.
 //
@@ -22,7 +22,8 @@
 
 #include <fltk/events.h>
 #include <fltk/NumericInput.h>
-#include <stdio.h>
+#include <fltk/math.h>
+#include <fltk/string.h>
 
 using namespace fltk;
 
@@ -64,15 +65,25 @@ using namespace fltk;
 /*!  Does a %%g sprintf of the value and uses the result to set the
   string value. Notice that there is no inverse function, you will
   have to call strtod(widget->value(),0,0) yourself.  */
-void NumericInput::value(double v) {
-  char buf[100];
-  sprintf(buf, "%g", v);
-#if 0
-  if (v > 1 || v < -1)
-    sprintf(buf, "%.4g", v);
-  else
-    sprintf(buf, "%.3g", v);
-#endif
+void NumericInput::value(double A) {
+  char buf[32];
+  if (int(A)==A) {
+    snprintf(buf, 32, "%d", int(A));
+  } else {
+    // this is a very brute force way to allow 6 digits to the right instead
+    // of the %g default of 4:
+    int n = (int)ceil(log10(fabs(A)));
+    if (n>0 || n<-6) {
+      snprintf(buf, 32, "%g", A);
+    } else {
+      snprintf(buf, 32, "%.7f", A);
+      // strip trailing 0's and the period:
+      char *s = buf; while (*s) s++; s--;
+      while (s>buf && *s=='0') s--;
+      if (*s=='.') s--;
+      s[1] = 0;
+    }
+  }
   Input::value(buf);
 }
 
@@ -238,4 +249,3 @@ int NumericInput::handle_arrow(int dir)
   }
   return 1;
 }
-

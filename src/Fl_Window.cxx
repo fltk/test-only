@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.120 2005/01/24 08:07:50 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.121 2005/01/24 08:34:32 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -157,7 +157,7 @@ Window::Window(int W, int H, const char *l)
 
   Set the allowable range the user can resize this window to. This
   only works for top-level windows.
-  - \a minw and \a minh are the smallest the window can be. 
+  - \a minw and \a minh are the smallest the window can be.
   - \a maxw and \a maxh are the largest the window can be. If either is
   equal to the minimum then you cannot resize in that direction. If
   either is zero then FLTK picks a maximum size in that direction such
@@ -681,7 +681,7 @@ void CreatedWindow::expose(const Rectangle& r) {
     CombineRgn(region, region, R, RGN_OR);
     DeleteObject(R);
 #elif defined(__APPLE__)
-    RgnHandle R = NewRgn(); 
+    RgnHandle R = NewRgn();
     SetRectRgn(R, r.x(), r.y(), r.r(), r.b());
     UnionRgn(R, region, region);
     DisposeRgn(R);
@@ -831,5 +831,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.120 2005/01/24 08:07:50 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.121 2005/01/24 08:34:32 spitzak Exp $".
 //

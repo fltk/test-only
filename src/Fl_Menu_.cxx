@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.59 2004/11/17 17:32:35 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.60 2005/01/24 08:34:31 spitzak Exp $"
 //
 // The Menu base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Group
@@ -162,7 +162,7 @@ Widget* List::child(const Menu* menu, const int* indexes,int level) {
   you can copy the values to permanent storage, and perhaps change
   other displays of the selection.
 
-  Currently only the fltk::VALUE and fltk::SELECTED flags are ever changed. 
+  Currently only the fltk::VALUE and fltk::SELECTED flags are ever changed.
 
   Here is a sample implementation, where Node is a data type that you
   have defined:
@@ -229,7 +229,7 @@ static NamedStyle style("Menu", revert, &Menu::default_style);
 	the actual widget's style.
     - The color() is the color of the popup menu.
     - The buttonbox() is drawn around a "title" of the popup menu,
-    	and also around the titles of pull-down menus in a menubar.
+	and also around the titles of pull-down menus in a menubar.
     - The textfont(), textsize(), and textcolor() are the default
 	for how the labels in each menu item are drawn.
     - The buttoncolor(), labelfont(), labelsize() and labelcolor()
@@ -259,7 +259,7 @@ int Menu::children(const int* indexes, int level) const {
 }
 
 /*!
-  Returns the number of children at the top level. Same as children(0,0). 
+  Returns the number of children at the top level. Same as children(0,0).
 
   <i>This Overrides the method of the same name on fltk::Group</i>. This is
   so that an fltk::List can be used. However if no fltk::List is
@@ -274,7 +274,7 @@ int Menu::children(int i) const {
   return list_->children(this, &i, 1);
 }
 
-/*! Calls list()->child(this, indexes, level). 
+/*! Calls list()->child(this, indexes, level).
   If an fltk::List is used, the returned widget may be a temporary data
   structure and may be overwritten by another call to child() in this
   <i>or any other Menu</i>!
@@ -283,7 +283,7 @@ Widget* Menu::child(const int* indexes, int level) const {
   return list_->child(this, indexes, level);
 }
 
-/*! Returns the given top-level child. Same as child(&index,0). 
+/*! Returns the given top-level child. Same as child(&index,0).
 
   <i>This Overrides the method of the same name on fltk::Group</i>. This is
   so that an fltk::List can be used. However if no fltk::List is
@@ -339,7 +339,7 @@ void Menu::default_callback(Widget* widget, void* data) {
 }
 
 /*! Does nothing. This avoids wasting time measuring all the menu items. */
-void Menu::layout() {}
+void Menu::layout() {layout_damage(0);}
 
 ////////////////////////////////////////////////////////////////
 
@@ -478,5 +478,5 @@ int Menu::handle_shortcut() {
 */
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.59 2004/11/17 17:32:35 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.60 2005/01/24 08:34:31 spitzak Exp $"
 //

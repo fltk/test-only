@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.141 2005/01/24 08:07:19 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.142 2005/01/24 08:34:28 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -96,7 +96,7 @@ Group::Group(int X,int Y,int W,int H,const char *l,bool begin)
   if (begin) this->begin();
 }
 
-/*! \e Deletes all children from the group and makes it empty. 
+/*! \e Deletes all children from the group and makes it empty.
   This calls the destructor on all the children!!! */
 void Group::clear() {
   init_sizes();
@@ -577,14 +577,19 @@ void Group::layout() {
 	case 3: B = B + dh*(B-IY)/(IB-IY); break; //both;
 	}
       }
-      /*if (*/o->resize(X, Y, R-X, B-Y)/*) redraw()*/;
+      int flags = o->layout_damage();
+      if (X != o->x()) {flags |= LAYOUT_X; o->x(X);}
+      if (Y != o->y()) {flags |= LAYOUT_Y; o->y(Y);}
+      if (R-X != o->w()) {flags |= LAYOUT_W; o->w(R-X);}
+      if (B-Y != o->h()) {flags |= LAYOUT_H; o->h(B-Y);}
+      o->layout_damage(flags);
     }
   }
 
   Widget*const* a = array_;
   Widget*const* e = a+children_;
   if ((layout_damage & LAYOUT_XY) && !is_window()) {
-    // If this is not an Window and the xy position is changed, we must
+    // If this is not a Window and the xy position is changed, we must
     // call layout() on every child. This is necessary so that child
     // Windows will move to their new positions.
     while (a < e) {
@@ -715,7 +720,7 @@ void Group::update_child(Widget& w) const {
     if (!not_clipped(w)) return;
     push_matrix();
     translate(w.x(), w.y());
-    w.draw();	
+    w.draw();
     w.set_damage(0);
     pop_matrix();
   }
@@ -735,5 +740,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.141 2005/01/24 08:07:19 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.142 2005/01/24 08:34:28 spitzak Exp $".
 //

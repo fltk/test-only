@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.160 2005/01/24 08:07:25 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.161 2005/01/24 08:34:30 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -171,7 +171,7 @@ public:
   MenuTitle* title;
   bool is_menubar;
   int drawn_selected;	// last redraw has this selected
-  MWindow(MenuState*, int level, int X,int Y,int W,int H, const char* title);
+  MWindow(MenuState*, int level, int X,int Y,int W,int H, const char* title, int rightedge);
   ~MWindow();
   int find_selected(int mx, int my);
   int titlex(int);
@@ -481,7 +481,7 @@ Rectangle Menu::get_location(Widget* widget, const int* indexes, int level,
 ////////////////////////////////////////////////////////////////
 
 MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
-		 const char* t)
+		 const char* t, int rightedge)
   : MenuWindow(X, Y, Wp, Hp, 0), menustate(m), level(l)
 {
   style(menustate->widget->style());
@@ -530,7 +530,10 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp,
   if (!Wp) {
     if (selected >= 0) X -= w()/2;
     if (X < MENUAREA.x()) X = MENUAREA.x();
-    if (X > MENUAREA.r()-w()) X = MENUAREA.r()-w();
+    if (X > MENUAREA.r()-w()) {
+      if (rightedge) X = rightedge-w();
+      else X = MENUAREA.r()-w();
+    }
   }
 
   x(X);
@@ -599,35 +602,43 @@ enum {INITIAL_STATE = 0,// no mouse up or down since popup() called
 };
 
 // scroll so item i is visible on screen, return true if it moves
-#define BORDER 2
+#define BORDER 0
 int MWindow::autoscroll(int i) {
   if (is_menubar || i < 0) return 0;
   // figure out where the item is on the screen:
-  int Y = ypos(i);
+  int Y = i ? ypos(i) : 0;
+  int newy = y();
   // figure out where new top of menu should be:
-  if (y()+Y <= MENUAREA.y()) {
-    Y = MENUAREA.y()-Y+BORDER;
+  if (newy+Y <= MENUAREA.y()) {
+    newy = MENUAREA.y()-Y+BORDER;
   } else {
-    Widget* widget = get_widget(i);
-    Y += widget->height()+menuleading(this);
-    if (y()+Y >= MENUAREA.b()) Y = MENUAREA.b()-Y-BORDER;
+    if (i >= children-1) {
+      Y = h();
+    } else {
+      Widget* widget = get_widget(i);
+      Y += widget->height()+menuleading(this);
+    }
+    if (newy+Y >= MENUAREA.b()) newy = MENUAREA.b()-Y-BORDER;
     else return 0;
   }
+  if (newy == y()) return false;
   // move it to that new position:
-  MWindow::position(x(), Y);
-  return 1;
+  MWindow::position(x(), newy);
+  return true;
 }
 
+#if 0
 static void autoscroll_timeout(void*) {
   // this will call MWindow::handle(MOVE) but also set event()
   // so that the timeout gets repeated.
   handle(MOVE, 0);
 }
+#endif
 
-static inline void setitem(MenuState& p, int level, int index) {
+static bool setitem(MenuState& p, int level, int index) {
 
-  if (p.level == level && p.indexes[level] == index) return;
-  if (level < 0) return; // this should not happen!
+  if (level < 0) return false; // this should not happen!
+  if (p.level == level && p.indexes[level] == index) return false;
 
   if (level < p.nummenus && p.indexes[level] != index)
     p.menus[level]->redraw(DAMAGE_CHILD);
@@ -651,31 +662,28 @@ static inline void setitem(MenuState& p, int level, int index) {
   // set flag so new menus are created by the main idle loop:
   p.changed = true;
 
-  // If we scroll to show this item and the user dragged to it, we should
-  // continue scrolling after a timeout:
-  fltk::remove_timeout(autoscroll_timeout, &p);
-  if (p.menus[level]->autoscroll(index))
-    fltk::repeat_timeout(.05f, autoscroll_timeout, &p);
+  p.menus[level]->autoscroll(index);
+  return true;
 }
 
-static int forward(MenuState& p, int menu) {
+static bool forward(MenuState& p, int menu) {
   // go to next item in menu menu if possible
   MWindow &m = *(p.menus[menu]);
   for (int item = p.indexes[menu]+1; item < m.children; item++) {
     Widget* widget = m.get_widget(item);
-    if (widget->takesevents()) {setitem(p, menu, item); return 1;}
+    if (widget->takesevents()) return setitem(p, menu, item);
   }
-  return 0;
+  return false;
 }
 
-static int backward(MenuState& p, int menu) {
+static bool backward(MenuState& p, int menu) {
   // previous item in menu menu if possible
   MWindow &m = *(p.menus[menu]);
   for (int item = p.indexes[menu]-1; item >= 0; item--) {
     Widget* widget = m.get_widget(item);
-    if (widget->takesevents()) {setitem(p, menu, item); return 1;}
+    if (widget->takesevents()) return setitem(p, menu, item);
   }
-  return 0;
+  return false;
 }
 
 static bool track_mouse;
@@ -778,11 +786,12 @@ int MWindow::handle(int event) {
     }
     return 0;
 
+  case PUSH:
+    track_mouse = true;
+    p.state = PUSH_STATE;
   case ENTER:
   case MOVE:
     if (!track_mouse) return 1;
-  case PUSH:
-    track_mouse = true;
   case DRAG: {
     int mx = event_x_root();
     int my = event_y_root();
@@ -800,13 +809,20 @@ int MWindow::handle(int event) {
       item = p.menus[menu]->find_selected(mx, my);
       if (item >= 0) break;
     }
+    if (setitem(p, menu,item)) return 1;
+    if (item < 0) return 1;
     if (event == PUSH) {
-      p.state = PUSH_STATE;
       // redraw checkboxes so they preview the state they will be in:
       Widget* widget = p.menus[menu]->get_widget(item);
       if (checkmark(widget)) p.menus[menu]->redraw(DAMAGE_CHILD);
+    } else if (p.level || !p.hmenubar) {
+      // item didn't change on drag/move, check for autoscroll:
+      if (event_y_root() <= MENUAREA.y()) {
+	if (!p.menus[menu]->autoscroll(item)) backward(p, p.level);
+      } else if (event_y_root() >= MENUAREA.b()-1) {
+	if (!p.menus[menu]->autoscroll(item)) forward(p, p.level);
+      }
     }
-    setitem(p, menu, item);
     return 1;}
 
   case RELEASE:
@@ -880,7 +896,7 @@ Widget* Menu::try_popup(
   p.indexes[0] = value();
   p.indexes[1] = -1;
 
-  MWindow toplevel(&p, 0, X, Y, W, H, title);
+  MWindow toplevel(&p, 0, X, Y, W, H, title, 0);
   toplevel.child_of(Window::first());
   p.menus[0] = &toplevel;
   p.fakemenu = 0;
@@ -911,7 +927,7 @@ Widget* Menu::try_popup(
       p.level++;
       p.indexes[p.level] = item;
       p.indexes[p.level+1] = -1;
-      mw = new MWindow(&p, p.level, X,Y,W,H, 0);
+      mw = new MWindow(&p, p.level, X,Y,W,H, 0,0);
       p.menus[p.nummenus++] = mw;
       // move all earlier menus to line up with this new one:
       int dy = mw->y()-nY;
@@ -969,7 +985,7 @@ Widget* Menu::try_popup(
       int my = r.y();
       if (p.hmenubar) {my += r.h(); r.move_y(1); r.move_b(-1);}
       else mx += r.w();
-      mw = new MWindow(&p, 1, mx, my, 0, 0, 0);
+      mw = new MWindow(&p, 1, mx, my, 0, 0, 0, 0);
       *(Rectangle*)(mw->title) = r;
       mw->title->show(p.menus[0]->child_of());
       if (widget->takesevents() && p.current_children()>=0) {
@@ -986,14 +1002,15 @@ Widget* Menu::try_popup(
       // Create a normal submenu:
       int nX = mw->x() + mw->w();
       int nY = mw->y() + mw->ypos(index) - mw->ypos(0);
-      mw = new MWindow(&p, p.nummenus, nX, nY, 0, 0, 0);
+      mw = new MWindow(&p, p.nummenus, nX, nY, 0, 0, 0,
+		       p.nummenus ? p.menus[p.nummenus-1]->x() : 0);
       p.menus[p.nummenus++] = mw;
       mw->show(p.menus[0]->child_of());
 
     }
   }
 
-  fltk::remove_timeout(autoscroll_timeout, &p);
+  //fltk::remove_timeout(autoscroll_timeout, &p);
   Item::clear_style();
 
   // destroy all the submenus we created:
@@ -1056,5 +1073,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.160 2005/01/24 08:07:25 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.161 2005/01/24 08:34:30 spitzak Exp $".
 //

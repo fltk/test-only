@@ -1,4 +1,4 @@
-// "$Id: Fl_Choice.cxx,v 1.80 2005/01/24 08:07:17 spitzak Exp $"
+// "$Id: Fl_Choice.cxx,v 1.81 2005/01/24 08:34:28 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -122,7 +122,7 @@ static bool try_item(Choice* choice, int i) {
   choice->value(i);
   choice->execute(w);
   return true;
-}  
+}
 
 int Choice::handle(int e) {
   int children = this->children(0,0);
@@ -237,5 +237,5 @@ Choice::Choice(int x,int y,int w,int h, const char *l) : Menu(x,y,w,h,l) {
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.80 2005/01/24 08:07:17 spitzak Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.81 2005/01/24 08:34:28 spitzak Exp $".
 //

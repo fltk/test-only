@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.26 2005/01/24 08:07:53 spitzak Exp $"
+// "$Id: fl_bmp.cxx,v 1.27 2005/01/24 08:34:34 spitzak Exp $"
 //
 // bmpImage routines.
 //
@@ -60,7 +60,7 @@ static int FREAD(void *buf, int size)
 
 static int FSEEK(int offset)
 {
-  if (bmpDatas) {    
+  if (bmpDatas) {
     bmpDatas = bmpDatasStart + offset;
     return offset;
   }
@@ -94,10 +94,10 @@ bool bmpImage::test(const uchar* buffer, unsigned size)
 
 void bmpImage::_measure(int &W, int &H) const
 {
-  if (w() >= 0) { 
-    W = w(); 
-    H = h(); 
-    return; 
+  if (w() >= 0) {
+    W = w();
+    H = h();
+    return;
   }
 
   bmpDatas = (uchar*)datas;
@@ -140,7 +140,7 @@ void bmpImage::_measure(int &W, int &H) const
   }
 
   if (!datas) fclose(bmpFile);
-  
+
   return;
 }
 
@@ -176,7 +176,7 @@ void bmpImage::read()
       return;
     }
   }
-  
+
   // Get the header...
   byte = (uchar)GETC();	// Check "BM" sync chars
   bit  = (uchar)GETC();
@@ -226,7 +226,7 @@ void bmpImage::read()
       int Bpp = depth/8;
       int maskSize = (((w()*Bpp+3)&~3)*h()) + (((((w()+7)/8)+3)&~3)*h());
       if (maskSize==2*dataSize) {
-        mask = 1;        
+	mask = 1;
 	h_ = (h_/2);
 	bDepth = 4;
       }
@@ -280,7 +280,7 @@ void bmpImage::read()
     switch (depth)
     {
       case 1 : // Bitmap
-          for (x = w(), bit = 128; x > 0; x --) {
+	  for (x = w(), bit = 128; x > 0; x --) {
 	    if (bit == 128) byte = (uchar)GETC();
 
 	    if (byte & bit) {
@@ -299,32 +299,32 @@ void bmpImage::read()
 	      bit = 128;
 	  }
 
-          // Read remaining bytes to align to 32 bits...
+	  // Read remaining bytes to align to 32 bits...
 	  for (temp = (w() + 7) / 8; temp & 3; temp ++) {
 	    GETC();
 	  }
-          break;
+	  break;
 
       case 4 : // 16-color
-          for (x = w(), bit = 0xf0; x > 0; x --) {
+	  for (x = w(), bit = 0xf0; x > 0; x --) {
 	    // Get a new repcount as needed...
 	    if (repcount == 0) {
-              if (compression != BI_RLE4) {
+	      if (compression != BI_RLE4) {
 		repcount = 2;
 		color = -1;
-              } else {
+	      } else {
 		while (align > 0) {
-	          align --;
+		  align --;
 		  GETC();
-        	}
+		}
 
 		if ((repcount = GETC()) == 0) {
 		  if ((repcount = GETC()) == 0) {
 		    // End of line...
-                    x ++;
+		    x ++;
 		    continue;
 		  } else if (repcount == 1) {
-                    // End of image...
+		    // End of image...
 		    break;
 		  } else if (repcount == 2) {
 		    // Delta...
@@ -336,21 +336,21 @@ void bmpImage::read()
 		    align = ((4 - (repcount & 3)) / 2) & 1;
 		  }
 		} else {
-	          color = GETC();
+		  color = GETC();
 		}
 	      }
 	    }
 
-            // Get a new color as needed...
+	    // Get a new color as needed...
 	    repcount --;
 
 	    // Extract the next pixel...
-            if (bit == 0xf0) {
+	    if (bit == 0xf0) {
 	      // Get the next color byte as needed...
-              if (color < 0) temp = GETC();
+	      if (color < 0) temp = GETC();
 	      else temp = color;
 
-              // Copy the color value...
+	      // Copy the color value...
 	      *ptr++ = colormap[(temp >> 4) & 15][2];
 	      *ptr++ = colormap[(temp >> 4) & 15][1];
 	      *ptr++ = colormap[(temp >> 4) & 15][0];
@@ -359,7 +359,7 @@ void bmpImage::read()
 	    } else {
 	      bit  = 0xf0;
 
-              // Copy the color value...
+	      // Copy the color value...
 	      *ptr++ = colormap[temp & 15][2];
 	      *ptr++ = colormap[temp & 15][1];
 	      *ptr++ = colormap[temp & 15][0];
@@ -368,31 +368,31 @@ void bmpImage::read()
 	  }
 
 	  if (!compression) {
-            // Read remaining bytes to align to 32 bits...
+	    // Read remaining bytes to align to 32 bits...
 	    for (temp = (w() + 1) / 2; temp & 3; temp ++) {
 	      GETC();
 	    }
 	  }
-          break;
+	  break;
 
       case 8 : // 256-color
-          for (x = w(); x > 0; x --) {
+	  for (x = w(); x > 0; x --) {
 	    // Get a new repcount as needed...
-            if (compression != BI_RLE8) {
+	    if (compression != BI_RLE8) {
 	      repcount = 1;
 	      color = -1;
-            }
+	    }
 
 	    if (repcount == 0) {
 	      while (align > 0) {
-	        align --;
+		align --;
 		GETC();
-              }
+	      }
 
 	      if ((repcount = GETC()) == 0) {
 		if ((repcount = GETC()) == 0) {
 		  // End of line...
-                  x ++;
+		  x ++;
 		  continue;
 		} else if (repcount == 1) {
 		  // End of image...
@@ -407,17 +407,17 @@ void bmpImage::read()
 		  align = (2 - (repcount & 1)) & 1;
 		}
 	      } else {
-	        color = GETC();
-              }
-            }
+		color = GETC();
+	      }
+	    }
 
-            // Get a new color as needed...
-            if (color < 0) temp = GETC();
+	    // Get a new color as needed...
+	    if (color < 0) temp = GETC();
 	    else temp = color;
 
-            repcount --;
+	    repcount --;
 
-            // Copy the color value...
+	    // Copy the color value...
 	    *ptr++ = colormap[temp][2];
 	    *ptr++ = colormap[temp][1];
 	    *ptr++ = colormap[temp][0];
@@ -425,15 +425,15 @@ void bmpImage::read()
 	  }
 
 	  if (!compression) {
-            // Read remaining bytes to align to 32 bits...
+	    // Read remaining bytes to align to 32 bits...
 	    for (temp = w(); temp & 3; temp ++) {
 	      GETC();
 	    }
 	  }
-          break;
+	  break;
 
       case 16 : // 16-bit 5:5:5 RGB
-          for (x = w(); x > 0; x --, ptr += bDepth) {
+	  for (x = w(); x > 0; x --, ptr += bDepth) {
 	    uchar b = GETC(), a = GETC() ;
 #ifdef USE_5_6_5 // Green as the brightest color should have one bit more 5:6:5
 	    ptr[0] = (uchar)(( b << 3 ) & 0xf8);
@@ -446,27 +446,27 @@ void bmpImage::read()
 #endif
 	  }
 
-          // Read remaining bytes to align to 32 bits...
+	  // Read remaining bytes to align to 32 bits...
 	  for (temp = w() * 3; temp & 3; temp ++) {
 	    GETC();
 	  }
-          break;
+	  break;
 
       case 24 : // 24-bit RGB
-          for (x = w(); x > 0; x --, ptr += bDepth) {
+	  for (x = w(); x > 0; x --, ptr += bDepth) {
 	    ptr[2] = (uchar)GETC();
 	    ptr[1] = (uchar)GETC();
 	    ptr[0] = (uchar)GETC();
 	  }
 
-          // Read remaining bytes to align to 32 bits...
+	  // Read remaining bytes to align to 32 bits...
 	  for (temp = w() * 3; temp & 3; temp ++) {
 	    GETC();
 	  }
-          break;
+	  break;
     }
   }
-  
+
   if (mask) {
     for (y = h() - 1; y >= 0; y --) {
       ptr = (uchar *)array + y * w() * bDepth + 3;
@@ -546,5 +546,5 @@ read_long() {
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.26 2005/01/24 08:07:53 spitzak Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.27 2005/01/24 08:34:34 spitzak Exp $"
 //

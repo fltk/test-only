@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.203 2005/01/24 08:07:51 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.204 2005/01/24 08:34:33 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -132,7 +132,7 @@ static void fl_new_ic()
 				    XNAreaNeeded, &status_area,
 				    XNFontSet, fl_xim_fs, NULL);
 
-  if (!XGetIMValues (fl_xim_im, XNQueryInputStyle, 
+  if (!XGetIMValues (fl_xim_im, XNQueryInputStyle,
 		     &xim_styles, NULL, NULL)) {
     int i;
     XIMStyle *style;
@@ -183,7 +183,7 @@ static void fl_new_ic()
 }
 
 static void fl_init_xim()
-{	
+{
   XIMStyles *xim_styles;
   if (!xdisplay) return;
   if (fl_xim_im) return;
@@ -776,8 +776,8 @@ int Monitor::list(const Monitor** p) {
     for (int i=0; i < num_monitors; i++) {
       const Monitor& m = monitors[i];
       printf(" %d %d %d %d, work %d %d %d %d\n",
-  	     m.x(), m.y(), m.w(), m.h(),
-  	     m.work.x(), m.work.y(), m.work.w(), m.work.h());
+	     m.x(), m.y(), m.w(), m.h(),
+	     m.work.x(), m.work.y(), m.work.w(), m.work.h());
     }
 #endif
   }
@@ -843,8 +843,8 @@ void fltk::get_mouse(int &x, int &y) {
 const int n_stylus_device = 2;
 static XID stylus_device_id[n_stylus_device] = { 0, 0 };
 static XDevice *stylus_device[n_stylus_device] = { 0, 0 };
-static int stylus_motion_event, 
-           stylus_proximity_in_event, stylus_proximity_out_event;
+static int stylus_motion_event,
+	   stylus_proximity_in_event, stylus_proximity_out_event;
 static float pressure_mul[n_stylus_device];
 static float x_tilt_add, x_tilt_mul;
 static float y_tilt_add, y_tilt_mul;
@@ -864,19 +864,19 @@ static bool open_stylus_device(XDeviceInfo *list, int i, int n) {
       XValuatorInfoPtr v = (XValuatorInfoPtr)any;
       XAxisInfoPtr a = (XAxisInfoPtr)((char *)v+sizeof(XValuatorInfo));
       int k; for (k=0; k<v->num_axes; k++, a++) {
-        switch (k) {
-          case tablet_pressure_ix: // pressure
-            pressure_mul[n] = 1.0f/a->max_value;
-            break;
-          case tablet_x_tilt_ix: // x-tilt
-            x_tilt_add = 0.0f;
-            x_tilt_mul = 1.0f/(FLTK_T_MAX(a->max_value, -a->min_value));
-            break;
-          case tablet_y_tilt_ix: // y-tilt
-            y_tilt_add = 0.0f;
-            y_tilt_mul = 1.0f/(FLTK_T_MAX(a->max_value, -a->min_value));
-            break;
-        }
+	switch (k) {
+	  case tablet_pressure_ix: // pressure
+	    pressure_mul[n] = 1.0f/a->max_value;
+	    break;
+	  case tablet_x_tilt_ix: // x-tilt
+	    x_tilt_add = 0.0f;
+	    x_tilt_mul = 1.0f/(FLTK_T_MAX(a->max_value, -a->min_value));
+	    break;
+	  case tablet_y_tilt_ix: // y-tilt
+	    y_tilt_add = 0.0f;
+	    y_tilt_mul = 1.0f/(FLTK_T_MAX(a->max_value, -a->min_value));
+	    break;
+	}
       }
     }
     any = XAnyClassPtr((char*)any + any->length);
@@ -886,15 +886,15 @@ static bool open_stylus_device(XDeviceInfo *list, int i, int n) {
   if ( !stylus_device[n] ) {
 #if DEBUG_TABLET
     printf("fltk: could not open stylus device %d\n", n);
-#endif    
+#endif
     return false;
   }
-  // list and request events 
+  // list and request events
   XEventClass xec[20];
   int nxec = 0;
   for (i=0; i<stylus_device[n]->num_classes; i++) {
     if (stylus_device[n]->classes[i].input_class == ProximityClass) {
-	  ProximityIn(stylus_device[n], stylus_proximity_in_event, xec[nxec]); 
+	  ProximityIn(stylus_device[n], stylus_proximity_in_event, xec[nxec]);
       nxec++;
 	  ProximityOut(stylus_device[n], stylus_proximity_out_event, xec[nxec]);
       nxec++;
@@ -918,7 +918,7 @@ bool fltk::enable_tablet_events() {
   if (!version || (version==(XExtensionVersion*)NoSuchExtension)) {
 #if DEBUG_TABLET
     printf("fltk: no XInput extension found\n");
-#endif    
+#endif
     return false;
   }
   XFree(version);
@@ -1068,7 +1068,7 @@ static void set_event_xy(bool push) {
   // turn off is_click if enough time or mouse movement has passed:
   static int px, py;
   static ulong ptime;
-  if (abs(e_x_root-px)+abs(e_y_root-py) > 3 
+  if (abs(e_x_root-px)+abs(e_y_root-py) > 3
       || event_time >= ptime+(push?1000:200))
     e_is_click = 0;
   if (push) {
@@ -1097,7 +1097,7 @@ extern "C" {
 }
 
 // this little function makes sure that the styleus related event data
-// is useful, even if no tablet was discovered, or the mouse was used to 
+// is useful, even if no tablet was discovered, or the mouse was used to
 // generate a PUSH, RELEASE, MOVE or DRAG event
 static void set_stylus_data() {
   if (e_device==0) {
@@ -1179,11 +1179,11 @@ bool fltk::handle()
       printf("dnd source types:\n");
 #endif
       for (int i = 0; ; i++) {
- 	Atom type = dnd_source_types[i]; if (!type) break;
+	Atom type = dnd_source_types[i]; if (!type) break;
 #if DEBUG_SELECTIONS
- 	char* x = XGetAtomName(xdisplay, type);
- 	printf(" %s\n",x);
- 	XFree(x);
+	char* x = XGetAtomName(xdisplay, type);
+	printf(" %s\n",x);
+	XFree(x);
 #endif
 	if (type == textplainutf ||
 	    type == textplain ||
@@ -1363,8 +1363,8 @@ bool fltk::handle()
     e_state = xevent.xcrossing.state << 16;
     if (xevent.xcrossing.detail == NotifyInferior) break;
 //      printf("EnterNotify window %s, xmousewin %s\n",
-//  	   window ? window->label() : "NULL",
-//  	   xmousewin ? xmousewin->label() : "NULL");
+//	   window ? window->label() : "NULL",
+//	   xmousewin ? xmousewin->label() : "NULL");
     // XInstallColormap(xdisplay, CreatedWindow::find(window)->colormap);
     event = ENTER;
   J1:
@@ -1384,8 +1384,8 @@ bool fltk::handle()
     e_state = xevent.xcrossing.state << 16;
     if (xevent.xcrossing.detail == NotifyInferior) break;
 //      printf("LeaveNotify window %s, xmousewin %s\n",
-//  	   window ? window->label() : "NULL",
-//  	   xmousewin ? xmousewin->label() : "NULL");
+//	   window ? window->label() : "NULL",
+//	   xmousewin ? xmousewin->label() : "NULL");
     xmousewin = 0;
     in_a_window = false; // make do_queued_events produce LEAVE event
     return false;
@@ -1591,14 +1591,14 @@ bool fltk::handle()
 #if DEBUG_SELECTIONS
 	printf("selection source types:\n");
 	for (unsigned i = 0; i<count; i++) {
- 	  Atom t = ((Atom*)portion)[i];
-   	  char* x = XGetAtomName(xdisplay, t);
-   	  printf(" %s\n",x);
-   	  XFree(x);
+	  Atom t = ((Atom*)portion)[i];
+	  char* x = XGetAtomName(xdisplay, t);
+	  printf(" %s\n",x);
+	  XFree(x);
 	}
 #endif
 	for (unsigned i = 0; i<count; i++) {
- 	  Atom t = ((Atom*)portion)[i];
+	  Atom t = ((Atom*)portion)[i];
 	  if (t == textplainutf ||
 	      t == textplain ||
 	      t == UTF8_STRING) {type = t; break;}
@@ -1675,9 +1675,9 @@ bool fltk::handle()
 	       e.target == textplainutf) {
       /*if (e.target == XA_TEXT)*/ e.target = UTF8_STRING;
       XChangeProperty(xdisplay, e.requestor, e.property,
-  		      e.target, 8, 0,
-  		      (unsigned char *)selection_buffer[clipboard],
-  		      selection_length[clipboard]);
+		      e.target, 8, 0,
+		      (unsigned char *)selection_buffer[clipboard],
+		      selection_length[clipboard]);
     } else {
       e.property = 0;
     }
@@ -1691,9 +1691,9 @@ bool fltk::handle()
       || xevent.type == stylus_proximity_in_event
       || xevent.type == stylus_proximity_out_event) {
     XDeviceMotionEvent *me = (XDeviceMotionEvent*)&xevent;
-    int n, axis; 
+    int n, axis;
     // find the device that sent this event (pen or eraser)
-    for (n = 0; n < n_stylus_device; n++) 
+    for (n = 0; n < n_stylus_device; n++)
       if (me->deviceid == stylus_device_id[n]) break;
     if (n == n_stylus_device) goto unknown_device;
     // if the stylus gets into proximity, set the new device
@@ -1838,7 +1838,7 @@ void CreatedWindow::create(Window* window,
 
     // Makes the close button produce an event:
     XChangeProperty(xdisplay, x->xid, WM_PROTOCOLS,
- 		    XA_ATOM, 32, 0, (uchar*)&WM_DELETE_WINDOW, 1);
+		    XA_ATOM, 32, 0, (uchar*)&WM_DELETE_WINDOW, 1);
 
     // send size limits and border:
     x->sendxjunk();
@@ -2026,7 +2026,7 @@ void Window::label(const char *name, const char *iname) {
     //if (is_utf8(iname,iname+l)>=0)
       XChangeProperty(xdisplay, i->xid, _NET_WM_ICON_NAME,
 		      UTF8_STRING, 8, 0, (uchar*)iname, l);
-    XChangeProperty(xdisplay, i->xid, XA_WM_ICON_NAME, 
+    XChangeProperty(xdisplay, i->xid, XA_WM_ICON_NAME,
 		    XA_STRING, 8, 0, (uchar*)iname, l);
   }
 }
@@ -2251,7 +2251,7 @@ void Window::flush() {
       set_damage(DAMAGE_EXPOSE); draw();
       clip_region(0);
     }
-  }  
+  }
 }
 
 /*! Get rid of extra storage created by drawing when double_buffer() was
@@ -2313,5 +2313,5 @@ void Window::layout() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.203 2005/01/24 08:07:51 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.204 2005/01/24 08:34:33 spitzak Exp $".
 //

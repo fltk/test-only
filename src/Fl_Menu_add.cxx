@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.40 2004/11/12 06:50:16 spitzak Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.41 2005/01/24 08:34:31 spitzak Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -104,7 +104,7 @@ static Widget* innards(
   Group* top,
   const char *label,
   unsigned shortcut,
-  Callback *callback,	
+  Callback *callback,
   void *data,
   int flags,
   int what,
@@ -238,7 +238,7 @@ static Widget* innards(
 Widget* Menu::add(
   const char *label,
   unsigned shortcut,
-  Callback *callback,	
+  Callback *callback,
   void *data,
   int flags
 ) {
@@ -361,5 +361,5 @@ Widget* Menu::add(const char *str) {
 #endif
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.40 2004/11/12 06:50:16 spitzak Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.41 2005/01/24 08:34:31 spitzak Exp $".
 //

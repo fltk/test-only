@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.118 2005/01/24 08:07:48 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.119 2005/01/24 08:34:32 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -65,7 +65,7 @@ Widget::Widget(int X, int Y, int W, int H, const char* L) :
   style_	= default_style;
   parent_	= 0;
   callback_	= default_callback;
-  user_data_ 	= 0;
+  user_data_	= 0;
   label_	= L;
   image_	= 0;
   tooltip_	= 0;
@@ -166,7 +166,7 @@ void Widget::copy_label(const char* s) {
 */
 
 /*! \fn void Widget::callback(fltk::Callback*, void*)
-  Each widget has a single callback.  You can set it or examine it with 
+  Each widget has a single callback.  You can set it or examine it with
   these methods. The callback is called with the widget as the first
   argument and the void* as the second argument. It is called in response
   to user events, but exactly whe depends on the widget. For instance a
@@ -207,13 +207,13 @@ void Widget::copy_label(const char* s) {
   You can also call the callback function with arbitrary arguments. */
 
 /*! \fn int Widget::x() const
-  Left edge of the widget, relative to the x() of its enclosing 
+  Left edge of the widget, relative to the x() of its enclosing
   Widget. If this is an outer fltk::Window than this is the position of
   the left edge of the \e contents (not the frame) on the screen.
 */
 
 /*! \fn int Widget::y() const
-  Top edge of the widget, relative to the y() of its enclosing 
+  Top edge of the widget, relative to the y() of its enclosing
   Widget. If this is an outer fltk::Window than this is the position of
   the top edge of the \e contents (not the frame) on the screen.
 */
@@ -288,7 +288,7 @@ void Widget::copy_label(const char* s) {
 
   The following constants can be used, their exact meaning depends on
   the widget's implementation:
-  - fltk::WHEN_NEVER - Never call the callback (0). 
+  - fltk::WHEN_NEVER - Never call the callback (0).
   - fltk::WHEN_CHANGED - Do the callback each time the widget's value
   is changed by the user (many callbacks may be done as the user drags
   the mouse)
@@ -1042,5 +1042,5 @@ bool Widget::focused() const {return this == fltk::focus();}
 bool Widget::belowmouse() const {return this == fltk::belowmouse();}
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.118 2005/01/24 08:07:48 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.119 2005/01/24 08:34:32 spitzak Exp $".
 //

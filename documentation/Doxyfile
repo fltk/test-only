@@ -475,6 +475,7 @@ EXCLUDE_SYMLINKS       = NO
 # If the value of the INPUT tag contains directories, you can use the 
 # EXCLUDE_PATTERNS tag to specify one or more wildcard patterns to exclude 
 # certain files from those directories.
+# For FLTK this pattern excludes the machine-specific files:
 
 EXCLUDE_PATTERNS       =
 
