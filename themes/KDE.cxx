@@ -1,5 +1,5 @@
 //
-// "$Id: KDE.cxx,v 1.12 2003/06/24 07:10:48 spitzak Exp $"
+// "$Id: KDE.cxx,v 1.13 2003/06/25 06:11:43 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -72,7 +72,7 @@ static int x_event_handler(int,Window*) {
   else if (cm->message_type == ChangePalette) ;
   //else if (cm->message_type == ChangeStyle) ;
   else return 0;
-  Style::reload_theme();
+  fltk::reload_theme();
 
   return 1;
 }
@@ -332,5 +332,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: KDE.cxx,v 1.12 2003/06/24 07:10:48 spitzak Exp $".
+// End of "$Id: KDE.cxx,v 1.13 2003/06/25 06:11:43 spitzak Exp $".
 //

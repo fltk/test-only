@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_RGB_Image.cxx,v 1.15 2003/04/20 03:17:51 easysw Exp $"
+// "$Id: Fl_RGB_Image.cxx,v 1.16 2003/06/25 06:11:43 spitzak Exp $"
 //
 // RGB_Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -43,21 +43,19 @@ void rgbImage::draw(int x, int y, int, int, Flags flags)
   _draw(x, y, flags);
 }
 
+#if WRITE_JPEG
+
 // This function should be somewhere else!
 // For temporary purposes it is conditiallly compiled here for use in
 // Digital Domain's programs, but not in the public fltk version:
-#if WRITE_JPEG
+
 extern "C" {
 #  include <stdio.h>
 #  include <jpeglib.h>
 }
-#endif
 
-#if 0 // NO JPEG writing in the RGB image class; this belongs someplace
-      // else entirely!!!
 bool rgbImage::write_jpeg(const char *filename, int quality, int dpi)
 {
-#if WRITE_JPEG
   int wdt, hgt;
   measure( wdt, hgt );
   if (!w || !h || !data ) return false;
@@ -113,13 +111,10 @@ bool rgbImage::write_jpeg(const char *filename, int quality, int dpi)
   jpeg_destroy_compress(&cinfo);
 
   return true;
-
-#else // WRITE_JPEG
-  return false;
-#endif // WRITE_JPEG
 }
-#endif // 0
+
+#endif // WRITE_JPEG
 
 //
-// End of "$Id: Fl_RGB_Image.cxx,v 1.15 2003/04/20 03:17:51 easysw Exp $".
+// End of "$Id: Fl_RGB_Image.cxx,v 1.16 2003/06/25 06:11:43 spitzak Exp $".
 //

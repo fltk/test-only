@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.146 2003/06/24 07:10:48 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.147 2003/06/25 06:11:43 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -287,26 +287,35 @@ void fltk::open_display(Display* d) {
   xdisplay = d;
   add_fd(ConnectionNumber(d), POLLIN, do_queued_events);
 
-  WM_DELETE_WINDOW	= XInternAtom(d, "WM_DELETE_WINDOW",	0);
-  WM_PROTOCOLS		= XInternAtom(d, "WM_PROTOCOLS",	0);
-  MOTIF_WM_HINTS	= XInternAtom(d, "_MOTIF_WM_HINTS",	0);
-  FLTKChangeScheme	= XInternAtom(d, "FLTKChangeScheme",	0);
-  TARGETS		= XInternAtom(d, "TARGETS",		0);
-  CLIPBOARD		= XInternAtom(d, "CLIPBOARD",		0);
-  XdndAware		= XInternAtom(d, "XdndAware",		0);
-  XdndSelection		= XInternAtom(d, "XdndSelection",	0);
-  XdndEnter		= XInternAtom(d, "XdndEnter",		0);
-  XdndTypeList		= XInternAtom(d, "XdndTypeList",	0);
-  XdndPosition		= XInternAtom(d, "XdndPosition",	0);
-  XdndLeave		= XInternAtom(d, "XdndLeave",		0);
-  XdndDrop		= XInternAtom(d, "XdndDrop",		0);
-  XdndStatus		= XInternAtom(d, "XdndStatus",		0);
-  XdndActionCopy	= XInternAtom(d, "XdndActionCopy",	0);
-  XdndFinished		= XInternAtom(d, "XdndFinished",	0);
-  textplain		= XInternAtom(d, "text/plain",		0);
-  textplain2		= XInternAtom(d, "TEXT",		0);
-  texturilist		= XInternAtom(d, "text/uri-list",	0);
-  //XdndProxy		= XInternAtom(d, "XdndProxy",		0);
+#define MAX_ATOMS 30
+  Atom* atom_ptr[MAX_ATOMS];
+  char* names[MAX_ATOMS];
+  int i = 0;
+#define atom(a,b) atom_ptr[i] = &a; names[i] = b; i++
+  atom(	WM_DELETE_WINDOW	, "WM_DELETE_WINDOW");
+  atom(	WM_PROTOCOLS		, "WM_PROTOCOLS");
+  atom(	MOTIF_WM_HINTS		, "_MOTIF_WM_HINTS");
+  atom(	FLTKChangeScheme	, "FLTKChangeScheme");
+  atom(	TARGETS			, "TARGETS");
+  atom(	CLIPBOARD		, "CLIPBOARD");
+  atom(	XdndAware		, "XdndAware");
+  atom(	XdndSelection		, "XdndSelection");
+  atom(	XdndEnter		, "XdndEnter");
+  atom(	XdndTypeList		, "XdndTypeList");
+  atom(	XdndPosition		, "XdndPosition");
+  atom(	XdndLeave		, "XdndLeave");
+  atom(	XdndDrop		, "XdndDrop");
+  atom(	XdndStatus		, "XdndStatus");
+  atom(	XdndActionCopy		, "XdndActionCopy");
+  atom(	XdndFinished		, "XdndFinished");
+  atom(	textplain		, "text/plain");
+  atom(	textplain2		, "TEXT");
+  atom(	texturilist		, "text/uri-list");
+  //atom(XdndProxy		, "XdndProxy");
+#undef atom
+  Atom atoms[MAX_ATOMS];
+  XInternAtoms(d, names, i, 0, atoms);
+  for (; i--;) *atom_ptr[i] = atoms[i];
 
   xscreen = DefaultScreen(d);
 
@@ -1415,5 +1424,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.146 2003/06/24 07:10:48 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.147 2003/06/25 06:11:43 spitzak Exp $".
 //
