@@ -1,5 +1,5 @@
 //
-// "$Id: Bitmap.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// "$Id: Bitmap.cxx,v 1.1.2.2 2004/04/06 23:52:58 rokan Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -28,8 +28,6 @@
 
 // 'fl_create_bitmap()' - Create a 1-bit bitmap for drawing...
 
-// RK:  RK: seems that windows do not use folowing function at all,  commenting out
-/* 
 static Fl_Bitmask fl_create_bitmap(int w, int h, const uchar *data) {
   // we need to pad the lines out to words & swap the bits
   // in each byte.
@@ -56,7 +54,7 @@ static Fl_Bitmask fl_create_bitmap(int w, int h, const uchar *data) {
 
   return id;
 }
-*/
+
 // 'fl_create_bitmask()' - Create an N-bit bitmap for masking...
 Fl_Bitmask fl_create_bitmask(int w, int h, const uchar *data) {
   // this won't work when the user changes display mode during run or
@@ -136,7 +134,7 @@ void Fl_Win_Display::draw(Fl_Bitmap * img, int X, int Y, int W, int H, int cx, i
   Fl_Bitmap_Cache *cache = (Fl_Bitmap_Cache *) check_image_cache(img);
   if (!cache){ // building one
     cache = new Fl_Bitmap_Cache(img,this);
-    cache->id = fl_create_bitmask(img->w(), img->h(), img->array);
+    cache->id = fl_create_bitmap(img->w(), img->h(), img->array);
   }
   HDC tempdc = CreateCompatibleDC(fl_gc);
   SelectObject(tempdc, (HGDIOBJ)(cache->id));
@@ -149,5 +147,5 @@ void Fl_Win_Display::draw(Fl_Bitmap * img, int X, int Y, int W, int H, int cx, i
 
 
 //
-// End of "$Id: Bitmap.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $".
+// End of "$Id: Bitmap.cxx,v 1.1.2.2 2004/04/06 23:52:58 rokan Exp $".
 //
