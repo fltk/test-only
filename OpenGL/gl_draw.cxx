@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.9 2001/03/11 16:14:28 spitzak Exp $"
+// "$Id: gl_draw.cxx,v 1.10 2001/03/12 14:54:19 robertk Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -44,8 +44,8 @@ int gl_width(const char* s) {return fl_width(s);}
 int gl_width(const char* s, int n) {return fl_width(s,n);}
 int gl_width(uchar c) {return fl_width(c);}
 
-void  gl_font(int fontid, int size) {
-  fl_font(fontid, size);
+void  gl_font(Fl_Font pFont, int size) {
+  fl_font(pFont, size);
   if (!fl_fontsize->listbase) {
 #ifdef WIN32
     int base = fl_fontsize->metr.tmFirstChar;
@@ -65,6 +65,12 @@ void  gl_font(int fontid, int size) {
   }
   glListBase(fl_fontsize->listbase);
 }
+
+void  gl_font(int fontid, int size) {
+	Fl_Font pFont = fl_fonts + (fontid % 16);
+	gl_font(pFont,size);
+}
+
 
 void gl_draw(const char* str, int n) {
   glCallLists(n, GL_UNSIGNED_BYTE, str);
@@ -158,5 +164,5 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.9 2001/03/11 16:14:28 spitzak Exp $".
+// End of "$Id: gl_draw.cxx,v 1.10 2001/03/12 14:54:19 robertk Exp $".
 //
