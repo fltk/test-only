@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.41 2003/08/25 15:28:47 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.42 2003/08/26 14:49:47 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -301,6 +301,21 @@ void Group::draw_outside_label(Widget& w) const {
   //pop_clip();
 }
 
+/** Replace \a w and \a h with the size of the area the label will
+    take up. This is the size of the draw_outside_label() and thus
+    does not include any image() and always uses the labelfont even
+    if the OUTPUT flag is set.
+
+    If the ALIGN_WRAP flag is set this chooses the rather arbitrary
+    width of 300 to wrap the label at. Ideally this should have been
+    passed in \a w but is not for back-compatability reasons.
+*/
+void Widget::measure_label(int& w, int& h) const {
+  setfont(labelfont(), labelsize());
+  w = h = 300; // rather arbitrary choice for maximum wrap width
+  measure(label(), w, h, flags());
+}
+
 //
-// End of "$Id: fl_labeltype.cxx,v 1.41 2003/08/25 15:28:47 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.42 2003/08/26 14:49:47 spitzak Exp $".
 //
