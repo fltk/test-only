@@ -1,5 +1,5 @@
 //
-// "$Id: 
+// "$Id: Fluid_Plugins.cxx,v 1.7 1999/08/26 19:30:04 vincent Exp $"
 //
 // Plugins code for the Fast Light Tool Kit (FLTK).
 //
@@ -134,3 +134,7 @@ void read_plugins()
 void read_plugins() {}
 
 #endif
+
+//
+// End of "$Id: Fluid_Plugins.cxx,v 1.7 1999/08/26 19:30:04 vincent Exp $"
+//

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.39 1999/08/25 14:49:13 carl Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.40 1999/08/26 19:30:04 vincent Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -1945,7 +1945,8 @@ void Fl_Widget_Type::read_property(const char *c) {
     if (sscanf(read_word(),"%d",&x) == 1) o->textfont(fl_fonts+x);
   } else if (!strcmp(c,"labeltype")) {
     c = read_word();
-    if (!strcmp(c,"image")) { // back compatability with 1.0
+    // back compatability with 1.0 and Vincent's original graphical patch
+    if (!strcmp(c,"image") || !strcmp(c, "image_file")) { 
       Fluid_Image *i = Fluid_Image::find(label());
       if (!i) read_error("Image file '%s' not found", label());
       setimage(i); label(0);
@@ -2126,5 +2127,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.39 1999/08/25 14:49:13 carl Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.40 1999/08/26 19:30:04 vincent Exp $".
 //

@@ -1,3 +1,6 @@
+//
+// "$Id: fl_gif.cxx,v 1.3 1999/08/26 19:30:06 vincent Exp $"
+//
 // fl_gif.cxx
 //
 // Convert GIF to Fl_Offscreen. Currently, do GIF-->XPM-->Fl_Offscreen !!
@@ -395,3 +398,7 @@ Fl_Offscreen fl_read_gif(
   if(!datas) fclose(GifFile);
   return id;
 }
+
+//
+// End of "$Id: fl_gif.cxx,v 1.3 1999/08/26 19:30:06 vincent Exp $"
+//

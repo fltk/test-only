@@ -1,4 +1,6 @@
 //
+// "$Id: Fl_Image_File.cxx,v 1.4 1999/08/26 19:30:05 vincent Exp $"
+//
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
@@ -53,3 +55,7 @@ void Fl_Image_File::measure(int& W, int& H) {
   W = ifs->w;
   H = ifs->h;
 }
+
+//
+// End of "$Id: Fl_Image_File.cxx,v 1.4 1999/08/26 19:30:05 vincent Exp $"
+//

@@ -1,4 +1,6 @@
 //
+// "$Id: fl_draw_image_file.cxx,v 1.6 1999/08/26 19:30:06 vincent Exp $"
+//
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
@@ -176,3 +178,7 @@ void fl_image_file_struct::draw(int X, int Y, int W, int H,
   prepare_image_file();
   _draw(X, Y, W, H, cx, cy);
 }
+
+//
+// End of "$Id: fl_draw_image_file.cxx,v 1.6 1999/08/26 19:30:06 vincent Exp $"
+//

@@ -1,4 +1,6 @@
-
+//
+// "$Id: fl_bmp.cxx,v 1.3 1999/08/26 19:30:06 vincent Exp $"
+//
 // Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
 //
 // Copyright 1997-1999 by Distributed Simulation Technology Inc.
@@ -85,7 +87,7 @@ bool fl_is_bmp(uchar* buffer, size_t size)
 
 inline void SetError(char* s)
 {
-  fprintf(stderr, s);
+  //  fprintf(stderr, s);
 }
 
 static uchar GETC()
@@ -806,3 +808,6 @@ error:
   return 0;
 }
 
+//
+// End of "$Id: fl_bmp.cxx,v 1.3 1999/08/26 19:30:06 vincent Exp $"
+//

@@ -1,4 +1,6 @@
 //
+// "$Id: Fl_Image_File.H,v 1.3 1999/08/26 19:30:03 vincent Exp $"
+//
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
@@ -66,3 +68,7 @@ struct Fl_BMP_Image : Fl_Image_File {
 };
 
 #endif
+
+//
+// End of "$Id: Fl_Image_File.H,v 1.3 1999/08/26 19:30:03 vincent Exp $".
+//

@@ -1,4 +1,6 @@
 //
+// "$Id: fl_draw_image_file.H,v 1.4 1999/08/26 19:30:03 vincent Exp $"
+//
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
@@ -35,12 +37,13 @@ typedef Fl_Offscreen (Fl_Image_File_Read_F)(char* filename,
 
 // The class fl_image_file_struct is used to maintain a binary tree of all
 // images used in FLTK. There is one and only one fl_image_file_struct object
-// per image, thus one should never try to create or destroy such an object !
+// per image, thus one should never try to create or destroy such an object
+// by himself, use fl_get_image_file_struct instead !
 
 class fl_image_file_struct : public Fl_Image {
   friend class Fl_Image_File;
 
-private:
+protected:
   fl_image_file_struct() { }; // Constructor is private on purpose
 
   size_t count();
@@ -55,7 +58,7 @@ private:
   Fl_Image_File_Measure_F* measure;
   Fl_Image_File_Read_F* read;
   size_t mem; // Currently the memory taken by the image is calculted in unit 
-              // pixel, and not in byte ! (used to limit amount of memory used)
+              // pixel, and not in byte !
 
   void prepare_image_file();
   static void fl_image_file_struct::insert(fl_image_file_struct*& p, fl_image_file_struct* ifs);
@@ -86,8 +89,6 @@ int fl_measure_png(char *file, unsigned char *datas, int &w, int &h);
 
 // Create the image in OS dependent format from the given datas
 // If datas == 0, then get datas from the given file name.
-// In any case the file name need to be provided  for image cache 
-// handling purposes.
 Fl_Offscreen fl_read_png(char *file, unsigned char *datas, Fl_Offscreen& mask);
 
 bool fl_is_xpm(unsigned char *datas=0, size_t size=0);
@@ -104,4 +105,6 @@ Fl_Offscreen fl_read_bmp(char *file, uchar* datas, Fl_Offscreen &mask);
 
 #endif
 
-
+//
+// End of "$Id: fl_draw_image_file.H,v 1.4 1999/08/26 19:30:03 vincent Exp $"
+//

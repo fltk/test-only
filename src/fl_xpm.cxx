@@ -1,4 +1,6 @@
 //
+// "$Id: fl_xpm.cxx,v 1.6 1999/08/26 19:30:06 vincent Exp $"
+//
 // XPM reading code for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
@@ -157,3 +159,6 @@ Fl_Offscreen fl_read_xpm(char *filename, uchar *pdatas, Fl_Offscreen &mask)
   return id;
 }
 
+//
+// End of "$Id: fl_xpm.cxx,v 1.6 1999/08/26 19:30:06 vincent Exp $"
+//

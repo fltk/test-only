@@ -1,5 +1,5 @@
 //
-// "$Id: 
+// "$Id: Fluid_Plugins.h,v 1.6 1999/08/26 19:30:05 vincent Exp $"
 //
 // Plugins headers for the Fast Light Tool Kit (FLTK).
 //
@@ -82,3 +82,7 @@ void read_plugins();
 
 
 #endif
+
+//
+// End of "$Id: Fluid_Plugins.h,v 1.6 1999/08/26 19:30:05 vincent Exp $"
+//

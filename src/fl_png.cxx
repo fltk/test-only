@@ -1,4 +1,6 @@
 //
+// "$Id: fl_png.cxx,v 1.3 1999/08/26 19:30:06 vincent Exp $"
+//
 // PNG reading code for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
@@ -237,3 +239,7 @@ Fl_Offscreen fl_read_png(char *filename, uchar *pdatas, Fl_Offscreen &mask)
   return id;
 #endif
 }
+
+//
+// End of "$Id: fl_png.cxx,v 1.3 1999/08/26 19:30:06 vincent Exp $"
+//
