@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.34 2002/02/18 04:58:15 spitzak Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.35 2002/03/26 18:00:34 spitzak Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -97,20 +97,13 @@ bool Fl_Gl_Window::mode(int m) {
 #define NON_LOCAL_CONTEXT 0x80000000
 
 void Fl_Gl_Window::make_current() {
+  current_ = this;
   if (!context_) {
     mode_ &= ~NON_LOCAL_CONTEXT;
     context_ = fl_create_gl_context(this, gl_choice);
     valid(0);
   }
   fl_set_gl_context(this, context_);
-#if defined(_WIN32) && USE_COLORMAP
-  if (fl_palette) {
-    fl_window = fl_xid(this); fl_gc = GetDC(fl_window);
-    SelectPalette(fl_gc, fl_palette, FALSE);
-    RealizePalette(fl_gc);
-  }
-#endif // USE_COLORMAP
-  current_ = this;
 }
 
 void Fl_Gl_Window::ortho() {
@@ -132,9 +125,9 @@ void Fl_Gl_Window::swap_buffers() {
 #ifdef _WIN32
 #if USE_GL_OVERLAY
   // Do not swap the overlay, to match GLX:
-  wglSwapLayerBuffers(Fl_X::i(this)->private_dc, WGL_SWAP_MAIN_PLANE);
+  wglSwapLayerBuffers(Fl_X::i(this)->dc, WGL_SWAP_MAIN_PLANE);
 #else
-  SwapBuffers(Fl_X::i(this)->private_dc);
+  SwapBuffers(Fl_X::i(this)->dc);
 #endif
 #else
   glXSwapBuffers(fl_display, fl_xid(this));
@@ -172,14 +165,14 @@ void Fl_Gl_Window::flush() {
 #endif
     fl_set_gl_context(this, (GLContext)overlay);
     if (fl_overlay_depth)
-      wglRealizeLayerPalette(Fl_X::i(this)->private_dc, 1, TRUE);
+      wglRealizeLayerPalette(Fl_X::i(this)->dc, 1, TRUE);
     glDisable(GL_SCISSOR_TEST);
     if (!(mode_ & FL_NO_ERASE_OVERLAY)) glClear(GL_COLOR_BUFFER_BIT);
     fl_overlay = true;
     draw_overlay();
     fl_overlay = false;
     valid(save_valid);
-    wglSwapLayerBuffers(Fl_X::i(this)->private_dc, WGL_SWAP_OVERLAY1);
+    wglSwapLayerBuffers(Fl_X::i(this)->dc, WGL_SWAP_OVERLAY1);
     // if only the overlay was damaged we are done, leave main layer alone:
     if (damage() == FL_DAMAGE_OVERLAY) {
 #if SGI320_BUG
@@ -324,5 +317,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.34 2002/02/18 04:58:15 spitzak Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.35 2002/03/26 18:00:34 spitzak Exp $".
 //

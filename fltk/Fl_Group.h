@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.h,v 1.3 2001/12/16 22:32:02 spitzak Exp $"
+// "$Id: Fl_Group.h,v 1.4 2002/03/26 18:00:34 spitzak Exp $"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
@@ -83,11 +83,6 @@ protected:
   void update_child(Fl_Widget&) const;
   void draw_outside_label(Fl_Widget&) const ;
   int* sizes();
-  int ox() const {return ox_;}
-  int oy() const {return oy_;}
-  int ow() const {return ow_;}
-  int oh() const {return oh_;}
-  void set_old_size() {ox_=x();oy_=y();ow_=w();oh_=h();}
   int send(int, Fl_Widget&);
 
 private:
@@ -98,7 +93,6 @@ private:
 
   Fl_Widget* resizable_;
   int *sizes_; // remembered initial sizes of children
-  int ox_,oy_,ow_,oh_; // old size, used by layout
 
   static Fl_Group *current_;
 
@@ -115,5 +109,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Group.h,v 1.3 2001/12/16 22:32:02 spitzak Exp $".
+// End of "$Id: Fl_Group.h,v 1.4 2002/03/26 18:00:34 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.106 2002/02/18 04:58:15 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.107 2002/03/26 18:00:34 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -53,11 +53,7 @@ Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
   focus_(-1),
   array_(0),
   resizable_(0), // fltk 1.0 used (this)
-  sizes_(0), // this is allocated when the group is end()ed.
-  ox_(X),
-  oy_(Y),
-  ow_(W),
-  oh_(H)
+  sizes_(0)
 {
   type(GROUP_TYPE);
   style(::group_style);
@@ -364,19 +360,21 @@ int Fl_Group::handle(int event) {
 ////////////////////////////////////////////////////////////////
 // Layout
 
-// The effect of "init_sizes()" is that layout() is prevented from
-// changing the current positions of anything and thus the resizing
-// starts up from the state it is in when layout() is called (which
-// is hopefully the same state that it was in when init_sizes() was
-// called). This is useful when
-// a program assembles a resizable group and wants to fix up it's
-// size to surround the children or fit into a surrounding group,
-// without the automatic resize messing things up. This is much 
-// easier than the old fltk kludge of removing the resizable(),
-// fixing things, and restoring it.
+// So that resizing a window and then returing it to it's original
+// size results in the original layout, the initial size and position
+// of all children are stored in the sizes() array.
 //
-// The implementation is such that init_sizes() is inexpensive and
-// can thus be called many times during the construction of a group.
+// Though this makes sense it often results in unexpected behavior
+// when a program wants to rearrange the child widgets or change the
+// size of a group to surround a new arrangement of child widgets.
+//
+// The solution fltk provides is the init_sizes() method, which resets
+// thins so that the current state is considered the
+// "initial" state the next time layout() is called. Because resize()
+// does not directly call layout() you can use resize() on the group
+// and all children to get exactly the layout you want, and then call
+// init_sizes() to indicate that nothing should move when layout is
+// called.
 //
 // The sizes() array stores the initial positions of widgets as
 // left,right,top,bottom quads.  The first quad is the group, the
@@ -394,7 +392,6 @@ int Fl_Group::handle(int event) {
 
 void Fl_Group::init_sizes() {
   delete[] sizes_; sizes_ = 0;
-  set_old_size();
   relayout();
 }
 
@@ -441,69 +438,68 @@ void Fl_Group::layout() {
   int layout_damage = this->layout_damage();
   Fl_Widget::layout();
 
-  if (resizable() && children_ && (!sizes_ || layout_damage&FL_LAYOUT_WH)) {
+  if (resizable() && children_) {
+    int* p = sizes(); // initialize the size array
 
-    // get changes in size from the initial size:
-    // If this is the first call assumme this is the initial size.
-    int* p = sizes();
-    int dw = w()-p[1];
-    int dh = h()-p[3];
+    if (layout_damage&FL_LAYOUT_WH) {
 
-    p+=4;
+      // get changes in size from the initial size:
+      int dw = w()-p[1];
+      int dh = h()-p[3];
 
-    // Calculate a new size & position for every child widget:
-    // get initial size of resizable():
-    int IX = *p++;
-    int IR = *p++;
-    int IY = *p++;
-    int IB = *p++;
+      p+=4;
 
-    Fl_Widget*const* a = array_;
-    Fl_Widget*const* e = a+children_;
-    while (a < e) {
-      Fl_Widget* o = *a++;
-      int X = *p++;
-      if (X >= IR) X += dw;
-      else if (X > IX) X = X + dw * (X-IX)/(IR-IX);
-      int R = *p++;
-      if (R >= IR) R += dw;
-      else if (R > IX) R = R + dw * (R-IX)/(IR-IX);
+      // Calculate a new size & position for every child widget:
+      // get initial size of resizable():
+      int IX = *p++;
+      int IR = *p++;
+      int IY = *p++;
+      int IB = *p++;
 
-      int Y = *p++;
-      if (Y >= IB) Y += dh;
-      else if (Y > IY) Y = Y + dh*(Y-IY)/(IB-IY);
-      int B = *p++;
-      if (B >= IB) B += dh;
-      else if (B > IY) B = B + dh*(B-IY)/(IB-IY);
-
-      o->resize(X, Y, R-X, B-Y);
-      o->layout();
-    }
-
-  } else {
-
-    // propagate layout() calls to all the children. The main purpose of
-    // this is so that moving a widget will move any Fl_Windows that
-    // are inside of it. This is not necessary for Fl_Windows themselves
-    // on X and Win32 as the system has already done the work but we
-    // still need to call inner things that need layout:
-    Fl_Widget*const* a = array_;
-    Fl_Widget*const* e = a+children_;
-    if ((layout_damage & FL_LAYOUT_XY) && !is_window()) {
+      Fl_Widget*const* a = array_;
+      Fl_Widget*const* e = a+children_;
       while (a < e) {
-	Fl_Widget* widget = *a++;
-	widget->layout_damage(widget->layout_damage()|FL_LAYOUT_XY);
-	widget->layout();
-      }
-    } else {
-      while (a < e) {
-	Fl_Widget* widget = *a++;
-	if (widget->layout_damage()) widget->layout();
+	Fl_Widget* o = *a++;
+	int X = *p++;
+	if (X >= IR) X += dw;
+	else if (X > IX) X = X + dw * (X-IX)/(IR-IX);
+	int R = *p++;
+	if (R >= IR) R += dw;
+	else if (R > IX) R = R + dw * (R-IX)/(IR-IX);
+
+	int Y = *p++;
+	if (Y >= IB) Y += dh;
+	else if (Y > IY) Y = Y + dh*(Y-IY)/(IB-IY);
+	int B = *p++;
+	if (B >= IB) B += dh;
+	else if (B > IY) B = B + dh*(B-IY)/(IB-IY);
+
+	o->resize(X, Y, R-X, B-Y);
       }
     }
   }
+
+  Fl_Widget*const* a = array_;
+  Fl_Widget*const* e = a+children_;
+  if ((layout_damage & FL_LAYOUT_XY) && !is_window()) {
+    // If this is not an Fl_Window and the xy position is changed, we must
+    // call layout() on every child. This is necessary so that child
+    // Fl_Windows will move to their new positions.
+    while (a < e) {
+      Fl_Widget* widget = *a++;
+      widget->layout_damage(widget->layout_damage()|FL_LAYOUT_XY);
+      widget->layout();
+    }
+  } else {
+    // Otherwise we only need to call layout on children with the
+    // layout bit set:
+    while (a < e) {
+      Fl_Widget* widget = *a++;
+      if (widget->layout_damage()) widget->layout();
+    }
+  }
+
   if (layout_damage & FL_LAYOUT_WH) redraw();
-  set_old_size();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -666,5 +662,5 @@ void Fl_Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.106 2002/02/18 04:58:15 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.107 2002/03/26 18:00:34 spitzak Exp $".
 //

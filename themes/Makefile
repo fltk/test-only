@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.32 2002/02/10 22:57:50 spitzak Exp $"
+# "$Id: Makefile,v 1.33 2002/03/26 18:00:35 spitzak Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -84,7 +84,7 @@ none.theme : $(NONE_OBJ)
 	$(THEMECOMMAND) $@ $(NONE_OBJ) $(DSOLIBS) $(THEMELIBS)
 
 clean :
-	-@ rm -f *.shared.o $(LIBRARY)$(LIBEXT) *.theme *.plugin core *~ makedepend
+	-@ rm -f *.shared.o $(LIBRARY)$(LIBEXT) $(THEMES) core *~ makedepend
 	@touch makedepend
 
 install : $(INSTALLTARGETS)
@@ -95,9 +95,7 @@ install_static:
 install_shared:
 	@echo "Installing themes..."
 	@-mkdir -p $(libdir)/fltk
-	@cp -f *.scheme $(libdir)/fltk
-	@cp -f *.theme $(libdir)/fltk
-	@cp -f *.plugin $(libdir)/fltk
+	@cp -f $(THEMES) $(libdir)/fltk
 
 install_programs:
 
@@ -110,5 +108,5 @@ depend:
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.32 2002/02/10 22:57:50 spitzak Exp $".
+# End of "$Id: Makefile,v 1.33 2002/03/26 18:00:35 spitzak Exp $".
 #

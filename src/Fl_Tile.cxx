@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tile.cxx,v 1.17 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: Fl_Tile.cxx,v 1.18 2002/03/26 18:00:34 spitzak Exp $"
 //
 // Tile widget for the Fast Light Tool Kit (FLTK).
 //
@@ -41,7 +41,7 @@ void Fl_Tile::position(int oix, int oiy, int newx, int newy) {
   int numchildren = children();
   for (int i=0; i < numchildren; p += 4, i++) {
     Fl_Widget* o = child(i);
-    if (o == resizable()) continue;
+    //if (o == resizable()) continue;
     int X = o->x();
     int R = X+o->w();
     if (oix) {
@@ -58,39 +58,22 @@ void Fl_Tile::position(int oix, int oiy, int newx, int newy) {
       t = p[3];
       if (t == oiy || t>oiy && B<newy || t<oiy && B>newy) B = newy;
     }
-    o->resize(X,Y,R-X,B-Y);
+    if (o->resize(X,Y,R-X,B-Y)) o->redraw();
   }
 }
 
 // resizing is equivalent to moving  the lower-right corner (sort of):
 void Fl_Tile::layout() {
-  //clear layout flag, skip Fl_Group::layout()
-  Fl_Widget::layout();
-  // remember how much to move the child widgets:
-  int dw = w() - ow();
-  int dh = h() - oh();
-  // find bottom-right of resizable:
-  int* p = sizes();
-  int OR = p[5];
-  int NR = w()-(p[1]-OR);
-  int OB = p[7];
-  int NB = h()-(p[3]-OB);
-  // move everything to be on correct side of new resizable:
-  p += 8;
-  int numchildren = children();
-  for (int i=0; i < numchildren; i++) {
-    Fl_Widget* o = child(i);
-    int X = o->x();
-    int R = X+o->w();
-    if (*p++ >= OR) X += dw; else if (X > NR) X = NR;
-    if (*p++ >= OR) R += dw; else if (R > NR) R = NR;
-    int Y = o->y();
-    int B = Y+o->h();
-    if (*p++ >= OB) Y += dh; else if (Y > NB) Y = NB;
-    if (*p++ >= OB) B += dh; else if (B > NB) B = NB;
-    o->resize(X,Y,R-X,B-Y); o->layout(); o->redraw();
+  if (layout_damage() & FL_LAYOUT_WH) {
+    layout_damage(layout_damage() & ~FL_LAYOUT_WH);
+    int* p = sizes();
+    // drag the corner of the group to the new position:
+    position(p[1], p[3], w(), h());
+    // drag the corner of the resizable() to the new position:
+    if (p[5] != p[1] || p[7] != p[3])
+      position(p[5], p[7], p[5]+w()-p[1], p[7]+h()-p[3]);
   }
-  set_old_size();
+  Fl_Group::layout();
 }
 
 static void set_cursor(Fl_Tile*t, Fl_Cursor c) {
@@ -195,5 +178,5 @@ int Fl_Tile::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Tile.cxx,v 1.17 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: Fl_Tile.cxx,v 1.18 2002/03/26 18:00:34 spitzak Exp $".
 //

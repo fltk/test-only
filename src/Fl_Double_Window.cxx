@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.cxx,v 1.22 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: Fl_Double_Window.cxx,v 1.23 2002/03/26 18:00:34 spitzak Exp $"
 //
 // Double-buffered window code for the Fast Light Tool Kit (FLTK).
 //
@@ -83,13 +83,14 @@ void Fl_Double_Window::flush(bool eraseoverlay) {
   make_current(); // make sure fl_gc is non-zero
   Fl_X *i = Fl_X::i(this);
   // create the offscreen window:
-  if (!i->other_xid) {
+  if (!i->backbuffer.xid) {
 #if USE_XDBE
     if (can_xdbe())
-      i->other_xid = XdbeAllocateBackBufferName(fl_display, fl_xid(this), XdbeUndefined);
+      i->backbuffer.xid =
+	XdbeAllocateBackBufferName(fl_display, i->xid, XdbeUndefined);
     else
 #endif
-      i->other_xid = fl_create_offscreen(w(), h());
+      i->backbuffer.create(w(), h());
     set_damage(FL_DAMAGE_ALL);
   }
 
@@ -108,12 +109,8 @@ void Fl_Double_Window::flush(bool eraseoverlay) {
   // draw the back buffer if it needs anything:
   if (damage()) {
     // set the graphics context to draw into back buffer:
-#ifdef _WIN32
-    HDC _sgc = fl_gc;
-    fl_gc = fl_makeDC(i->other_xid);
-#else // X:
-    fl_window = i->other_xid;
-#endif
+    i->backbuffer.make_current();
+
     // draw all the changed widgets:
     if (damage() & ~FL_DAMAGE_EXPOSE) {
       set_damage(damage() & ~FL_DAMAGE_EXPOSE);
@@ -127,14 +124,9 @@ void Fl_Double_Window::flush(bool eraseoverlay) {
       if (eraseoverlay || !expose_only) fl_clip_region(0);
     }
     // restore the graphics context:
+    i->make_current();
 #ifdef _WIN32
-    DeleteDC(fl_gc);
-    DeleteObject(fl_pen);
-    DeleteObject(fl_brush);
-    fl_gc = _sgc;
     fl_restore_clip(); // duplicate region into new gc
-#else // X:
-    fl_window = i->xid;
 #endif
 #if USE_XDBE
     // use the faster Xdbe swap command for all normal redraw():
@@ -156,17 +148,16 @@ void Fl_Double_Window::flush(bool eraseoverlay) {
   // it is much faster if I clip the rectangle requested down:
   int X,Y,W,H; fl_clip_box(0,0,w(),h(),X,Y,W,H);
   // Copy the backbuffer to the window:
-  fl_copy_offscreen(X, Y, W, H, i->other_xid, X, Y);
+  i->backbuffer.copy(X, Y, W, H, X, Y);
 }
 
 void Fl_Double_Window::free_backbuffer() {
-#if USE_XDBE
-  if (use_xdbe) return;
-#endif
   Fl_X* i = Fl_X::i(this);
-  if (i && i->other_xid) {
-    fl_delete_offscreen(i->other_xid);
-    i->other_xid = 0;
+  if (i) {
+#if USE_XDBE
+    if (use_xdbe) i->backbuffer.free_gc(); else
+#endif
+    i->backbuffer.destroy();
   }
 }
 
@@ -185,5 +176,5 @@ Fl_Double_Window::~Fl_Double_Window() {
 }
 
 //
-// End of "$Id: Fl_Double_Window.cxx,v 1.22 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: Fl_Double_Window.cxx,v 1.23 2002/03/26 18:00:34 spitzak Exp $".
 //

@@ -61,16 +61,14 @@ slightly faster than iterating through the windows yourself.
 This is set on program initialization to <tt>GetModuleHandle(0)</tt>
 and can be used to identify this application.
 
-<h4><a name=fl_window>extern HWND fl_window;</a>
-<br><a name=fl_gc>extern HDC fl_gc;</a></h4>
+<h4><a name=fl_gc>extern HDC fl_gc;</a></h4>
 
-These are set before <tt>draw()</tt> is called, or by <a
+This is set before <tt>draw()</tt> is called, or by <a
 href=Fl_Window.html#make_current><tt>Fl_Window::make_current()</tt></a>,
-and can be used as arguments to GDI32 calls.
+and can be used as an argument to GDI32 calls.
 
-<p>Notice that <tt>fl_window</tt> is the window handle.  Other
-information such as the position or size of the window can be found
-by looking at <a href=Fl_Window.html#make_current><tt>
+<p>You may also want the position and size of the window, these can be
+found by looking at <a href=Fl_Window.html#make_current><tt>
 Fl_Window::current()</tt></a>, which returns a pointer to the <tt>
 Fl_Window</tt> being drawn.
 

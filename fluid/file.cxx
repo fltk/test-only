@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.26 2002/02/10 22:57:47 spitzak Exp $"
+// "$Id: file.cxx,v 1.27 2002/03/26 18:00:34 spitzak Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -625,10 +625,10 @@ void fl_end_group() {
       if (o->x()+o->w() > rw) rw = o->x()+o->w();
       if (o->y()+o->h() > rh) rh = o->y()+o->h();
     }
-    g->x(g->ox_ = rx);
-    g->y(g->oy_ = ry);
-    g->w(g->ow_ = rw-rx);
-    g->h(g->oh_ = rh-ry);
+    g->x(rx);
+    g->y(ry);
+    g->w(rw-rx);
+    g->h(rh-ry);
   }
   // flip all the children's coordinate systems:
   //if (fl_flip) {
@@ -640,12 +640,12 @@ void fl_end_group() {
       // I think this is equivalent?
       o->position(o->x(), Y-o->y()-o->h());
     }
-    g->oy_ = Y-g->oy_-g->h();
+    //g->oy_ = Y-g->oy_-g->h();
     //}
   g->fix_old_positions();
   g->end();
 }
 
 //
-// End of "$Id: file.cxx,v 1.26 2002/02/10 22:57:47 spitzak Exp $".
+// End of "$Id: file.cxx,v 1.27 2002/03/26 18:00:34 spitzak Exp $".
 //

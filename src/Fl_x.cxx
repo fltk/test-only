@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.123 2002/03/09 21:25:36 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.124 2002/03/26 18:00:34 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -140,17 +140,18 @@ void Fl::remove_fd(int n, int events) {
 
 #if CONSOLIDATE_MOTION
 static Fl_Window* send_motion;
-extern Fl_Window* fl_xmousewin;
 #endif
 static void do_queued_events(int, void*) {
   while (!Fl::exit_modal_ && XEventsQueued(fl_display,QueuedAfterReading)) {
     XNextEvent(fl_display, &fl_xevent);
     fl_handle();
   }
+  // we send FL_LEAVE only if the mouse did not enter some other window:
+  if (!xmousewin) Fl::handle(FL_LEAVE, 0);
 #if CONSOLIDATE_MOTION
-  if (send_motion && send_motion == fl_xmousewin) {
+  else if (send_motion == xmousewin) {
     send_motion = 0;
-    Fl::handle(FL_MOVE, fl_xmousewin);
+    Fl::handle(FL_MOVE, xmousewin);
   }
 #endif
 }
@@ -688,7 +689,7 @@ bool fl_handle()
   case MotionNotify:
     set_event_xy(false);
 #if CONSOLIDATE_MOTION
-    send_motion = fl_xmousewin = window;
+    send_motion = window;
     return false;
 #else
     event = FL_MOVE;
@@ -709,19 +710,9 @@ bool fl_handle()
     // XInstallColormap(fl_display, Fl_X::i(window)->colormap);
     set_event_xy(false);
     Fl::e_state = fl_xevent.xcrossing.state << 16;
-    xmousewin = window;
     event = FL_ENTER;
-    goto J1;
-
-  case LeaveNotify:
-    if (fl_xevent.xcrossing.detail == NotifyInferior) break;
-    set_event_xy(false);
-    Fl::e_state = fl_xevent.xcrossing.state << 16;
-    if (window != xmousewin) xmousewin = 0;
-    event = FL_LEAVE;
-    goto J1;
-
   J1:
+    xmousewin = window;
     // send a mouse event, with cruft so the grab around modal things works:
     if (Fl::grab_) {
       Fl::handle(event, window);
@@ -729,6 +720,13 @@ bool fl_handle()
 	XAllowEvents(fl_display, SyncPointer, CurrentTime);
       return true;
     }
+    break;
+
+  case LeaveNotify:
+    if (fl_xevent.xcrossing.detail == NotifyInferior) break;
+    set_event_xy(false);
+    Fl::e_state = fl_xevent.xcrossing.state << 16;
+    xmousewin = 0;
     break;
 
   case FocusIn:
@@ -911,7 +909,7 @@ void Fl_Window::layout() {
     if (layout_damage() & FL_LAYOUT_WH) {
       // Some window managers refuse to allow resizes unless the resize
       // information allows it:
-      if (!resizable()) size_range(w(), h(), w(), h());
+      if (minw == maxw && minh == maxh) size_range(w(), h(), w(), h());
       XMoveResizeWindow(fl_display, i->xid, x, y,
 			w()>0 ? w() : 1, h()>0 ? h() : 1);
       // Wait for echo (relies on window having StaticGravity!!!)
@@ -993,7 +991,7 @@ void Fl_X::create(Fl_Window* window,
 			 visual->visual,
 			 mask, &attr);
 
-  x->other_xid = 0;
+  x->backbuffer.xid = 0;
   x->window = window; window->i = x;
   x->region = 0;
   x->wait_for_expose = true;
@@ -1138,6 +1136,7 @@ void Fl_Window::label(const char *name,const char *iname) {
 ////////////////////////////////////////////////////////////////
 // Drawing context
 
+Fl_Drawable* fl_drawable;
 Window fl_window;
 const Fl_Window *Fl_Window::current_;
 GC fl_gc;
@@ -1145,12 +1144,12 @@ GC fl_gc;
 int fl_x_, fl_y_;
 
 void Fl_Window::make_current() const {
+  current_ = this;
+  i->make_current();
   static GC gc;	// the GC used by all X windows with fl_visual
   if (!gc) gc = XCreateGC(fl_display, i->xid, 0, 0);
-  fl_window = i->xid;
   fl_gc = gc;
   fl_x_ = fl_y_ = 0;
-  current_ = this;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1319,5 +1318,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.123 2002/03/09 21:25:36 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.124 2002/03/26 18:00:34 spitzak Exp $".
 //

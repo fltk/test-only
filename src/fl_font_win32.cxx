@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.40 2001/11/14 09:21:42 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.41 2002/03/26 18:00:35 spitzak Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -75,12 +75,12 @@ Fl_FontSize::Fl_FontSize(const char* name, int size, int charset) {
     name		// pointer to typeface name string
   );
 
-  if (!fl_gc) fl_gc = GetDC(0);
-  SelectObject(fl_gc, font);
-  GetTextMetrics(fl_gc, &fl_fontsize->metr);
-  //BOOL ret = GetCharWidthFloat(fl_gc, metr.tmFirstChar, metr.tmLastChar, font->width+metr.tmFirstChar);
+  HDC dc = fl_getDC();
+  SelectObject(dc, font);
+  GetTextMetrics(dc, &fl_fontsize->metr);
+  //BOOL ret = GetCharWidthFloat(dc, metr.tmFirstChar, metr.tmLastChar, font->width+metr.tmFirstChar);
   //...would be the right call, but is not implemented into Window95! (WinNT?)
-  //GetCharWidth(fl_gc, 0, 255, fl_fontsize->width);
+  //GetCharWidth(dc, 0, 255, fl_fontsize->width);
 
   this->font = font;
   this->size = size;
@@ -161,9 +161,9 @@ int fl_descent() { return fl_fontsize->metr.tmDescent; }
   
 int fl_width(const char* c, int n) {
   SIZE size;
-  if (!fl_gc) fl_gc = GetDC(0);
-  SelectObject(fl_gc, current_font);
-  GetTextExtentPoint(fl_gc, c, n, &size);
+  HDC dc = fl_getDC();
+  SelectObject(dc, current_font);
+  GetTextExtentPoint(dc, c, n, &size);
   return size.cx;
 }
 
@@ -186,5 +186,5 @@ void fl_encoding(const char* f) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.40 2001/11/14 09:21:42 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.41 2002/03/26 18:00:35 spitzak Exp $".
 //

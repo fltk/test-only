@@ -2131,4 +2131,23 @@ know how to get it.
 
 Fixed the documentation for Fl_Boxtype.
 
+////////////////////////////////////////////////////////////////
+
+Updated all the diagrams in the manual to new ones from an Xft
+display. Several other documentation fixes.
+
+Fullscreen fixed yet again to try to get it reliable under Gnome and
+KDE.
+
+////////////////////////////////////////////////////////////////
+
+Xft support changed to manage an XftDraw structure for each
+window, as Keith Packard (author of Xft) requested. This also matches
+how Windows handles "DC"s so I changed the Windows implementation to
+match, I suspect it is more efficient now as it does not
+create/destroy dc's as much as before.
+
+On X, if you use size_range() on a window but don't set resizable(),
+calling resize() would destroy the size_range() settings. This no
+longer does this, it only messes with it for non-resizable windows.
 

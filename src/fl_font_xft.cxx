@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.5 2002/03/09 21:25:36 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.6 2002/03/26 18:00:35 spitzak Exp $"
 //
 // Copyright 2001 Bill Spitzak and others.
 //
@@ -163,6 +163,8 @@ int fl_width(const char *str, int n) {
   return i.xOff;
 }
 
+////////////////////////////////////////////////////////////////
+
 #if USE_OVERLAY
 // Currently Xft does not work with colormapped visuals, so this probably
 // does not work unless you have a true-color overlay.
@@ -171,47 +173,40 @@ extern Colormap fl_overlay_colormap;
 extern XVisualInfo* fl_overlay_visual;
 #endif
 
-// For some reason Xft produces errors if you destroy a window whose id
-// still exists in an XftDraw structure. It would be nice if this is not
-// true, a lot of junk is needed to try to stop this:
+extern int fl_clip_state_number;
+static int clip_state_number = 0; // which clip we did last
+static XftDraw* clipped_draw = 0;  // the XftDraw we did it to
 
-static XftDraw* draw;
-static Window draw_window;
-#if USE_OVERLAY
-static XftDraw* draw_overlay;
-static Window draw_overlay_window;
-#endif
-
-void fl_destroy_xft_draw(Window id) {
-  if (id == draw_window)
-    XftDrawChange(draw, draw_window = fl_message_window);
-#if USE_OVERLAY
-  if (id == draw_overlay_window)
-    XftDrawChange(draw_overlay, draw_overlay_window = fl_message_window);
-#endif
-}
+void Fl_Drawable::free_gc() {
+  if (draw) {
+    XftDrawDestroy(draw);
+    draw = 0;
+    clipped_draw = 0;
+  }
+};
 
 void fl_draw(const char *str, int n, int x, int y) {
-#if USE_OVERLAY
-  XftDraw*& draw = fl_overlay ? draw_overlay : ::draw;
-  if (fl_overlay) {
-    if (!draw) 
-      draw = XftDrawCreate(fl_display, draw_overlay_window = fl_window,
-			   fl_overlay_visual->visual, fl_overlay_colormap);
-    else //if (draw_overlay_window != fl_window)
-      XftDrawChange(draw, draw_overlay_window = fl_window);
-  } else
-#endif
-  if (!draw)
-    draw = XftDrawCreate(fl_display, draw_window = fl_window,
-			 fl_visual->visual, fl_colormap);
-  else //if (draw_window != fl_window)
-    XftDrawChange(draw, draw_window = fl_window);
+  XftDraw* draw = fl_drawable->draw;
 
-  Region region = fl_clip_region();
-  if (region) {
-    if (XEmptyRegion(region)) return;
-    XftDrawSetClip(draw, region);
+  if (!draw) {
+#if USE_OVERLAY
+    if (fl_overlay)
+      draw =
+	XftDrawCreate(fl_display, fl_drawable->xid,
+		      fl_overlay_visual->visual, fl_overlay_colormap);
+    else
+#endif
+    draw =
+      XftDrawCreate(fl_display, fl_drawable->xid,
+		    fl_visual->visual, fl_colormap);
+    Region region = fl_clip_region();
+    if (region) XftDrawSetClip(draw, region);
+    clip_state_number = fl_clip_state_number;
+    clipped_draw = fl_drawable->draw = draw;
+  } else if (clip_state_number!=fl_clip_state_number || draw!=clipped_draw) {
+    clip_state_number = fl_clip_state_number;
+    clipped_draw = draw;
+    XftDrawSetClip(draw, fl_clip_region());
   }
 
   // Use fltk's color allocator, copy the results to match what
@@ -225,8 +220,7 @@ void fl_draw(const char *str, int n, int x, int y) {
   color.color.alpha = 0xffff;
 
   XftDrawString8(draw, &color, current_font, x+fl_x_, y+fl_y_,
-                    (XftChar8 *)str, n);
-
+		 (XftChar8 *)str, n);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -390,5 +384,5 @@ int Fl_Font_::encodings(const char**& arrayp) const {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.5 2002/03/09 21:25:36 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.6 2002/03/26 18:00:35 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_x.cxx,v 1.10 2002/02/25 09:00:22 spitzak Exp $"
+// "$Id: fl_font_x.cxx,v 1.11 2002/03/26 18:00:35 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -75,6 +75,9 @@ Fl_FontSize::~Fl_FontSize() {
 
 ////////////////////////////////////////////////////////////////
 // Things you can do once the font+size has been selected:
+
+// Placeholder function, Xft version needs to free something:
+void Fl_Drawable::free_gc() {draw = 0;}
 
 void fl_draw(const char *str, int n, int x, int y) {
   if (font_gc != fl_gc) {
@@ -260,5 +263,5 @@ fl_fonts[] = {
 };
 
 //
-// End of "$Id: fl_font_x.cxx,v 1.10 2002/02/25 09:00:22 spitzak Exp $"
+// End of "$Id: fl_font_x.cxx,v 1.11 2002/03/26 18:00:35 spitzak Exp $"
 //

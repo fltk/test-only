@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.167 2002/03/09 21:25:36 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.168 2002/03/26 18:00:34 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -78,6 +78,10 @@
 #  define WHEEL_DELTA 120	// according to MSDN.
 #endif
 
+#ifndef ENUM_CURRENT_SETTINGS
+#  define ENUM_CURRENT_SETTINGS       ((DWORD)-1)
+#endif
+
 //
 // WM_FLSELECT is the user-defined message that we get when one of
 // the sockets has pending data, etc.
@@ -131,7 +135,7 @@ void Fl::add_fd(int n, int events, void (*cb)(int, void*), void *v) {
   if (events & POLLIN) mask |= FD_READ;
   if (events & POLLOUT) mask |= FD_WRITE;
   if (events & POLLERR) mask |= FD_CLOSE;
-  WSAAsyncSelect(n, fl_window, WM_FLSELECT, mask);
+  WSAAsyncSelect(n, 0/*fl_window*/, WM_FLSELECT, mask);
 #else
   if (events & POLLIN) FD_SET(n, &fdsets[0]);
   if (events & POLLOUT) FD_SET(n, &fdsets[1]);
@@ -670,8 +674,11 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     return 0;
 
   case WM_MOUSELEAVE:
-    if (window == xmousewin) xmousewin = 0;
-    Fl::handle(FL_LEAVE, window);
+    // In fltk2 we should only call Fl::handle(FL_LEAVE) if the mouse is
+    // not pointing at a window belonging to the application. This seems
+    // to work, probably because the enter event has already been done
+    // and has changed xmousewin to some other window:
+    if (window == xmousewin) {xmousewin = 0; Fl::handle(FL_LEAVE, window);}
     break;
 
   case WM_SETFOCUS:
@@ -829,19 +836,25 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
 #if USE_COLORMAP
   case WM_QUERYNEWPALETTE :
-    fl_GetDC(hWnd);
+    window->make_current();
     if (fl_select_palette()) InvalidateRect(hWnd, NULL, FALSE);
     break;
 
   case WM_PALETTECHANGED:
-    fl_GetDC(hWnd);
-    if ((HWND)wParam != hWnd && fl_select_palette()) UpdateColors(fl_gc);
+    if ((HWND)wParam != hWnd) {
+      window->make_current();
+      if (fl_select_palette()) UpdateColors(fl_gc);
+    }
     break;
 
+#if 0
+    // This seems to be called directly by CreateWindowEx so I can't
+    // have stored the windowid yet and thus cannot find the Fl_Window!
   case WM_CREATE :
-    fl_GetDC(hWnd);
+    window->make_current();
     fl_select_palette();
     break;
+#endif
 #endif
 
   case WM_DISPLAYCHANGE:
@@ -949,7 +962,7 @@ void Fl_Window::create() {
 const Fl_Window* fl_mdi_window = 0; // set by show_inside()
 HCURSOR fl_default_cursor;
 
-Fl_X* Fl_X::create(Fl_Window* window) {
+void Fl_X::create(Fl_Window* window) {
 
   static bool registered = false;
   if (!registered) {
@@ -994,10 +1007,11 @@ Fl_X* Fl_X::create(Fl_Window* window) {
     styleEx = WS_EX_LEFT | WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
     // we don't want an entry in the task list for menuwindows or tooltips!
     // This seems to have no effect on NT, maybe for Win2K?
-    if (window->override())
+    if (window->override()) {
       styleEx |= WS_EX_TOOLWINDOW;
-    else if (!window->contains(Fl::modal()))
+    } else if (!window->contains(Fl::modal())) {
       style |= WS_SYSMENU | WS_MINIMIZEBOX;
+    }
 
     xp = window->x(); if (xp != FL_USEDEFAULT) xp -= dx;
     yp = window->y(); if (yp != FL_USEDEFAULT) yp -= dy;
@@ -1012,10 +1026,10 @@ Fl_X* Fl_X::create(Fl_Window* window) {
   }
 
   Fl_X* x = new Fl_X;
-  x->other_xid = 0;
+  x->backbuffer.xid = 0;
+  x->backbuffer.dc = 0;
   x->window = window; window->i = x;
   x->region = 0;
-  x->private_dc = 0;
   x->cursor = fl_default_cursor;
   x->xid = CreateWindowEx(
     styleEx,
@@ -1026,6 +1040,9 @@ Fl_X* Fl_X::create(Fl_Window* window) {
     fl_display,
     NULL // creation parameters
     );
+  x->dc = GetDC(x->xid);
+  SetTextAlign(x->dc, TA_BASELINE|TA_LEFT);
+  SetBkMode(x->dc, TRANSPARENT);
 
 #if 0 // WAS: Doing this completely breaks NT, the title bar loses highlight:
   if (window->override()) {
@@ -1040,7 +1057,6 @@ Fl_X* Fl_X::create(Fl_Window* window) {
   x->next = Fl_X::first;
   Fl_X::first = x;
 
-  return x;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1099,26 +1115,8 @@ void Fl_Window::label(const char *name,const char *iname) {
 // Drawing context
 
 const Fl_Window *Fl_Window::current_;
-// the current context
-HDC fl_gc = 0;
-// the current window handle
-HWND fl_window = 0;
-// the current drawing origin
-int FL_API fl_x_, fl_y_;
-
-// Here we ensure only one GetDC is ever in place.
-HDC fl_GetDC(HWND w) {
-  if (!w) return 0;
-  HDC dc = GetDC(w);
-  if (fl_window) ReleaseDC(fl_window, fl_gc);
-  fl_window = w;
-  fl_gc = dc;
-  // calling GetDC seems to always reset these: (?)
-  // shouldn't when using private DCs, I think?
-  SetTextAlign(fl_gc, TA_BASELINE|TA_LEFT);
-  SetBkMode(fl_gc, TRANSPARENT);
-  return dc;
-}
+HDC fl_gc; // the current context
+int FL_API fl_x_, fl_y_; // the current drawing origin
 
 extern void fl_font_rid();
 
@@ -1135,17 +1133,14 @@ Cleanup::~Cleanup() {
 
 // make X drawing go into this window (called by subclass flush() impl.)
 void Fl_Window::make_current() const {
-  fl_GetDC(fl_xid(this));
-
+  i->make_current();
 #if USE_COLORMAP
   // Windows maintains a hardware and software color palette; the
   // SelectPalette() call updates the current soft->hard mapping
   // for all drawing calls, so we must select it here before any
   // code does any drawing...
-
   fl_select_palette();
 #endif // USE_COLORMAP
-
   fl_x_ = fl_y_ = 0;
   current_ = this;
 }
@@ -1338,5 +1333,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.167 2002/03/09 21:25:36 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.168 2002/03/26 18:00:34 spitzak Exp $".
 //

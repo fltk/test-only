@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.137 2002/01/27 04:59:47 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.138 2002/03/26 18:00:34 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -66,10 +66,7 @@ static Fl_Window *xmousewin;// which window X thinks has FL_ENTER
 void fl_fix_focus();
 
 static void nothing(Fl_Widget *) {}
-static void nothing2(Fl_Widget *, int, int, int, int, const char *) {}
-
 FL_API void (*Fl_Tooltip::enter)(Fl_Widget *) = nothing;
-FL_API void (*Fl_Tooltip::enter_area)(Fl_Widget *, int, int, int, int, const char *) = nothing2;
 FL_API void (*Fl_Tooltip::exit)(Fl_Widget *) = nothing;
 
 #ifdef _WIN32
@@ -390,10 +387,10 @@ void Fl::focus(Fl_Widget *o) {
 static char dnd_flag = 0; // makes belowmouse send DND_LEAVE instead of LEAVE
 
 void Fl::belowmouse(Fl_Widget *o) {
-  if (!dnd_flag) Fl_Tooltip::enter(o);
   Fl_Widget *p = belowmouse_;
   if (o != p) {
     belowmouse_ = o;
+    if (!dnd_flag) Fl_Tooltip::enter(o);
     for (; p && !p->contains(o); p = p->parent())
       p->handle(dnd_flag ? FL_DND_LEAVE : FL_LEAVE);
   }
@@ -563,7 +560,6 @@ bool Fl::handle(int event, Fl_Window* window)
   case FL_ENTER:
   case FL_MOVE:
 //case FL_DRAG: // does not happen
-    xmousewin = window; // this should already be set, but just in case.
     if (pushed()) {to = pushed_; event = FL_DRAG;}
     break;
 
@@ -655,14 +651,15 @@ bool Fl::handle(int event, Fl_Window* window)
   }
   dnd_flag = 0;
 
-  if (event == FL_RELEASE && !pushed_ && xmousewin) {
+  if (event == FL_RELEASE && !pushed_) {
     // send a dummy move event when the user releases the mouse:
-    handle(FL_MOVE, xmousewin);
+    if (xmousewin) handle(FL_MOVE, xmousewin);
+    else belowmouse(0);
   }
 
   return ret;
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.137 2002/01/27 04:59:47 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.138 2002/03/26 18:00:34 spitzak Exp $".
 //

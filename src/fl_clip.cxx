@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.9 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: fl_clip.cxx,v 1.10 2002/03/26 18:00:35 spitzak Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -31,6 +31,7 @@
 #define STACK_MAX (STACK_SIZE - 2)
 static Region rstack[STACK_SIZE];
 static int rstackptr=0;
+int fl_clip_state_number = 0; // used by code that needs to update clip regions
 
 // Return the current region (for Xft and Xrender use), return null if
 // no clipping.
@@ -50,11 +51,14 @@ Region XRectangleRegion(int x, int y, int w, int h) {
 }
 #endif
 
+int fl_clip_version;
+
 // Make the system's clip match the top of the clip stack.  This can
 // be used after changing the stack, or to undo any clobbering of clip
 // done by your program:
 void fl_restore_clip() {
   Region r = rstack[rstackptr];
+  fl_clip_state_number++;
 #ifdef _WIN32
   SelectClipRgn(fl_gc, r); //if r is NULL, clip is automatically cleared
 #else
@@ -240,5 +244,5 @@ int fl_clip_box(int x, int y, int w, int h, int& X, int& Y, int& W, int& H) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.9 2001/12/16 22:32:03 spitzak Exp $"
+// End of "$Id: fl_clip.cxx,v 1.10 2002/03/26 18:00:35 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.cxx,v 1.18 2001/07/30 14:49:28 robertk Exp $"
+// "$Id: Fl_Gl_Choice.cxx,v 1.19 2002/03/26 18:00:34 spitzak Exp $"
 //
 // OpenGL visual selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -43,12 +43,12 @@ Fl_Gl_Choice* Fl_Gl_Choice::find(int mode) {
 
   // Replacement for ChoosePixelFormat() that finds one with an overlay
   // if possible:
-  if (!fl_gc) fl_gc = GetDC(0); fl_window = 0; // Why are we messing with the root window?
+  HDC dc = fl_getDC();
   int pixelFormat = 0;
   PIXELFORMATDESCRIPTOR chosen_pfd;
   for (int i = 1; ; i++) {
     PIXELFORMATDESCRIPTOR pfd;
-    if (!DescribePixelFormat(fl_gc, i, sizeof(pfd), &pfd)) break;
+    if (!DescribePixelFormat(dc, i, sizeof(pfd), &pfd)) break;
     // continue if it does not satisfy our requirements:
     if (~pfd.dwFlags & (PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL)) continue;
     if (pfd.iPixelType != ((mode&FL_INDEX)?1:0)) continue;
@@ -155,20 +155,9 @@ static GLContext first_context;
 
 GLContext fl_create_gl_context(const Fl_Window* window, const Fl_Gl_Choice* g, int layer) {
   Fl_X* i = Fl_X::i(window);
-  HDC hdc = i->private_dc;
-  if (!hdc) {
-    // Hmmm.  This seems wrong.  I believe this will actually do the opposite
-    // of what is intended and use a common DC.  FLTK now uses private DCs by
-    // default for all windows anyway.
-    // i->private_dc = GetDCEx(i->xid, 0, DCX_CACHE);
-    hdc = i->private_dc = GetDC(i->xid);
-    SetPixelFormat(hdc, g->pixelFormat, &g->pfd);
-#if USE_COLORMAP
-    if (fl_palette) SelectPalette(hdc, fl_palette, FALSE);
-#endif
-  }
+  SetPixelFormat(i->dc, g->pixelFormat, &g->pfd);
   GLContext context =
-    layer ? wglCreateLayerContext(hdc, layer) : wglCreateContext(hdc);
+    layer ? wglCreateLayerContext(i->dc, layer) : wglCreateContext(i->dc);
   if (context) {
     if (first_context) wglShareLists(first_context, context);
     else first_context = context;
@@ -194,7 +183,7 @@ void fl_set_gl_context(const Fl_Window* w, GLContext context) {
     cached_context = context;
     cached_window = w;
 #ifdef _WIN32
-    wglMakeCurrent(Fl_X::i(w)->private_dc, context);
+    wglMakeCurrent(Fl_X::i(w)->dc, context);
 #else
     glXMakeCurrent(fl_display, fl_xid(w), context);
 #endif
@@ -225,5 +214,5 @@ void fl_delete_gl_context(GLContext context) {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.cxx,v 1.18 2001/07/30 14:49:28 robertk Exp $".
+// End of "$Id: Fl_Gl_Choice.cxx,v 1.19 2002/03/26 18:00:34 spitzak Exp $".
 //

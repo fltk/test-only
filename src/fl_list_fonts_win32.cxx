@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.21 2001/12/10 06:25:42 spitzak Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.22 2002/03/26 18:00:35 spitzak Exp $"
 //
 // _WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -97,10 +97,10 @@ static int CALLBACK EnumSizeCb(CONST LOGFONT* lpelf,
 
 int Fl_Font_::sizes(int*& sizep) const {
   nbSize = 0;
-  if (!fl_gc) fl_GetDC(0);
-  //cyPerInch = GetDeviceCaps(fl_gc, LOGPIXELSY);
+  HDC dc = fl_getDC();
+  //cyPerInch = GetDeviceCaps(dc, LOGPIXELSY);
   //if (cyPerInch < 1) cyPerInch = 1;
-  EnumFontFamilies(fl_gc, name_+1, EnumSizeCb, 0);
+  EnumFontFamilies(dc, name_+1, EnumSizeCb, 0);
   sizep = ::sizes;
   return nbSize;
 }
@@ -183,7 +183,7 @@ static int sort_function(const void *aa, const void *bb) {
 
 int fl_list_fonts(Fl_Font*& arrayp) {
   if (font_array) {arrayp = font_array; return num_fonts;}
-  HDC dc = GetDC(0);
+  HDC dc = fl_getDC();
   LOGFONT lf;
   memset(&lf, 0, sizeof(lf));
   lf.lfCharSet = ANSI_CHARSET;
@@ -196,5 +196,5 @@ int fl_list_fonts(Fl_Font*& arrayp) {
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.21 2001/12/10 06:25:42 spitzak Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.22 2002/03/26 18:00:35 spitzak Exp $"
 //
