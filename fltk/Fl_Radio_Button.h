@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Radio_Button.h,v 1.3 2002/01/28 08:02:59 spitzak Exp $"
+// "$Id: Fl_Radio_Button.h,v 1.4 2002/01/31 22:54:49 robertk Exp $"
 //
 // Radio button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,8 @@
 
 #include "Fl_Check_Button.h"
 
-class FL_API Fl_Radio_Button : public Fl_Check_Button {
+// This class is entirely inline.  If that changes, add FL_API to its declaration
+class Fl_Radio_Button : public Fl_Check_Button {
 public:
   Fl_Radio_Button(int x,int y,int w,int h,const char *l=0)
     : Fl_Check_Button(x,y,w,h,l) { type(RADIO); }
@@ -37,5 +38,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Radio_Button.h,v 1.3 2002/01/28 08:02:59 spitzak Exp $".
+// End of "$Id: Fl_Radio_Button.h,v 1.4 2002/01/31 22:54:49 robertk Exp $".
 //

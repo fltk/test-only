@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.163 2002/01/28 08:03:00 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.164 2002/01/31 22:54:49 robertk Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1081,7 +1081,7 @@ HDC fl_gc = 0;
 // the current window handle
 HWND fl_window = 0;
 // the current drawing origin
-int fl_x_, fl_y_;
+int FL_API fl_x_, fl_y_;
 
 // Here we ensure only one GetDC is ever in place.
 HDC fl_GetDC(HWND w) {
@@ -1314,5 +1314,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.163 2002/01/28 08:03:00 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.164 2002/01/31 22:54:49 robertk Exp $".
 //

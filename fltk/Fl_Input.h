@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.h,v 1.3 2002/01/23 08:46:00 spitzak Exp $"
+// "$Id: Fl_Input.h,v 1.4 2002/01/31 22:54:49 robertk Exp $"
 //
 // Input base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -64,7 +64,7 @@ public:
   void position(int p, int m);
   void position(int p) {position(p, p);}
   void up_down_position(int position, bool extend);
-  void mark(int m) {return position(position(), m);}
+  void mark(int m) { position(position(), m);}
 
   virtual bool replace(int, int, const char*, int);
   bool cut() {return replace(position(), mark(), 0, 0);}
@@ -123,5 +123,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Input.h,v 1.3 2002/01/23 08:46:00 spitzak Exp $".
+// End of "$Id: Fl_Input.h,v 1.4 2002/01/31 22:54:49 robertk Exp $".
 //

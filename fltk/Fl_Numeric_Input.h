@@ -1,6 +1,6 @@
 #include <fltk/Fl_Input.h>
 
-class Fl_Numeric_Input : public Fl_Input {
+class FL_API Fl_Numeric_Input : public Fl_Input {
  protected:
   int handle_arrow(int);
  public:

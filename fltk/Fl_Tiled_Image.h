@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tiled_Image.h,v 1.1 2001/12/11 05:48:44 spitzak Exp $"
+// "$Id: Fl_Tiled_Image.h,v 1.2 2002/01/31 22:54:49 robertk Exp $"
 //
 // Tiled image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 #include "Fl_Image.h"
 
 // Tiled image class. 
-class Fl_Tiled_Image : public Fl_Image {
+class FL_API Fl_Tiled_Image : public Fl_Image {
 protected:
   Fl_Image* image_;
 public:
@@ -43,5 +43,5 @@ public:
 #endif // !Fl_Tiled_Image_H
 
 //
-// End of "$Id: Fl_Tiled_Image.h,v 1.1 2001/12/11 05:48:44 spitzak Exp $"
+// End of "$Id: Fl_Tiled_Image.h,v 1.2 2002/01/31 22:54:49 robertk Exp $"
 //

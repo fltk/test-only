@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Round_Button.h,v 1.3 2002/01/28 08:02:59 spitzak Exp $"
+// "$Id: Fl_Round_Button.h,v 1.4 2002/01/31 22:54:49 robertk Exp $"
 //
 // Round button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,8 @@
 
 // Back-compatability, this is a radio button with check-button behavior
 
-class FL_API Fl_Round_Button : public Fl_Radio_Button {
+// This class is entirely inline.  If that changes, add FL_API to its declaration
+class Fl_Round_Button : public Fl_Radio_Button {
 public:
   Fl_Round_Button(int x,int y,int w,int h,const char *l)
     : Fl_Radio_Button(x,y,w,h,l) { type(TOGGLE); }
@@ -39,5 +40,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Round_Button.h,v 1.3 2002/01/28 08:02:59 spitzak Exp $".
+// End of "$Id: Fl_Round_Button.h,v 1.4 2002/01/31 22:54:49 robertk Exp $".
 //

@@ -260,6 +260,10 @@ SOURCE=..\src\fl_ask.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\Fl_Bar.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\Fl_Bitmap.cxx
 # End Source File
 # Begin Source File
@@ -524,6 +528,10 @@ SOURCE=..\src\Fl_Menu_Window.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\Fl_Numeric_Input.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\Fl_Output.cxx
 # End Source File
 # Begin Source File
@@ -665,6 +673,10 @@ SOURCE=..\src\Fl_Text_Editor.cxx
 # Begin Source File
 
 SOURCE=..\src\Fl_Tile.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Tiled_Image.cxx
 # End Source File
 # Begin Source File
 

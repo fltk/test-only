@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Multi_Browser.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Multi_Browser.h,v 1.3 2002/01/31 22:54:49 robertk Exp $"
 //
 // Multi browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,8 @@
 
 #include "Fl_Browser.h"
 
-class FL_API Fl_Multi_Browser : public Fl_Browser {
+// This class is entirely inline.  If that changes, add FL_API to its declaration
+class Fl_Multi_Browser : public Fl_Browser {
 public:
     Fl_Multi_Browser(int x,int y,int w,int h,const char *l=0)
 	: Fl_Browser(x,y,w,h,l) {type(MULTI);}
@@ -37,5 +38,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Multi_Browser.h,v 1.2 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Multi_Browser.h,v 1.3 2002/01/31 22:54:49 robertk Exp $".
 //
