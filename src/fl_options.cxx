@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.50 2000/04/03 17:09:21 bill Exp $"
+// "$Id: fl_options.cxx,v 1.51 2000/04/18 00:45:42 carl Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -202,7 +202,6 @@ static Fl_Font grok_font(const char* cf, const char* sec, const char* fontstr) {
 }
 
 extern "C" int conf_is_path_rooted(const char *);
-static void revert_styles();
 
 extern void fl_windows_colors();
 
@@ -219,7 +218,8 @@ int loadscheme(int b) {
   const char *p = fl_find_config_file(temp);
   if (!p) {
 #ifndef WIN32
-    fprintf(stderr, "Cannot load scheme: %s\n", temp);
+    if (strcmp(temp, flconfig))
+      fprintf(stderr, "Cannot load scheme: %s\n", temp);
     return -1;
 #else
   // use the real Windows colors
@@ -227,7 +227,7 @@ int loadscheme(int b) {
   return 0;
 #endif
   }
-  revert_styles();
+  Fl_Style::revert();
 
   char sfile[PATH_MAX];
   strncpy(sfile, p, sizeof(sfile));
@@ -377,11 +377,11 @@ static int loadtheme(int b) {
   if (conf_is_path_rooted(Fl::theme())) strncpy(temp, Fl::theme(), sizeof(temp));
   else snprintf(temp, sizeof(temp), "themes/%s", Fl::theme());
 
-  if (strlen(temp)<5 || strcasecmp(temp+strlen(temp)-5, ".fltp"))
-    strncat(temp, ".fltp", sizeof(temp)-strlen(temp)-1);
+  if (strlen(temp)<6 || strcasecmp(temp+strlen(temp)-6, ".theme"))
+    strncat(temp, ".theme", sizeof(temp)-strlen(temp)-1);
   const char *tfile = fl_find_config_file(temp);
   if (!tfile) {
-    if (strcasecmp(temp, "themes/default.fltp"))
+    if (strcasecmp(temp, "themes/default.theme"))
       fprintf(stderr, "Cannot load theme: %s\n", temp);
     return -1;
   }
@@ -457,7 +457,7 @@ static void style_clear(Fl_Style *s) {
 extern const char* fl_up_box_revert;
 extern const char* fl_down_box_revert;
 
-static void revert_styles() {
+void Fl_Style::revert() {
   Fl::theme_handler(0);
 
   fl_background((Fl_Color)0xc0c0c000);
@@ -499,7 +499,7 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.50 2000/04/03 17:09:21 bill Exp $".
+// End of "$Id: fl_options.cxx,v 1.51 2000/04/18 00:45:42 carl Exp $".
 //
 
 

@@ -1,5 +1,5 @@
 //
-// "$Id: buttons.cxx,v 1.11 2000/01/09 15:42:04 mike Exp $"
+// "$Id: buttons.cxx,v 1.12 2000/04/18 00:45:42 carl Exp $"
 //
 // Another button test program for the Fast Light Tool Kit (FLTK).
 //
@@ -38,7 +38,7 @@
 
 void rb_cb(Fl_Widget*, void*) {
 //  Fl::theme("essai");
-//  Fl_Style::revert();
+  Fl_Style::revert();
 }
 
 int main(int argc, char ** argv) {
@@ -60,5 +60,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: buttons.cxx,v 1.11 2000/01/09 15:42:04 mike Exp $".
+// End of "$Id: buttons.cxx,v 1.12 2000/04/18 00:45:42 carl Exp $".
 //

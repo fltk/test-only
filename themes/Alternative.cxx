@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.25 2000/04/15 04:47:24 carl Exp $"
+// "$Id: Alternative.cxx,v 1.26 2000/04/18 00:45:43 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -247,8 +247,8 @@ static void light_glyph(int/*t*/, int x,int y,int w,int h, Fl_Color bc,
 {
   int on = f&FL_VALUE;
   f &= ~FL_VALUE;
-  FL_DOWN_BOX->draw(x, y, w, h, bc, f);
-  FL_THIN_UP_BOX->draw(x+2, y+2, w-4, h-4, on ? fc : bc, f);
+  FL_DOWN_BOX->draw(x+2, y, w-4, h, bc, f);
+  FL_THIN_UP_BOX->draw(x+4, y+2, w-8, h-4, on ? fc : bc, f);
 }
 
 static void return_glyph(int/*t*/, int x,int y,int w,int h, Fl_Color, Fl_Color,
@@ -319,5 +319,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.25 2000/04/15 04:47:24 carl Exp $".
+// End of "$Id: Alternative.cxx,v 1.26 2000/04/18 00:45:43 carl Exp $".
 //

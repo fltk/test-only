@@ -83,12 +83,12 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
   [widgets/check button]                          # check button attributes
     off color = gray                              # color of light when not selected
     text color = red                              # color of light when selected
-    window color = black                          # color of light when not selected
+    window color = white                          # color of light when not selected
     box = none                                    # boxtype of button
 
 # I don't think this section does anything now!
   [widgets/round button]                          # round button attributes
-    window color = black                          # color of light when not selected
+    window color = white                          # color of light when not selected
     text color = red                              # color of light when selected
     box = none                                    # boxtype of button
 
