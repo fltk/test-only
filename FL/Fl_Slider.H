@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.H,v 1.5.2.3.2.2.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Slider.H,v 1.5.2.3.2.2.2.2 2003/11/17 07:15:16 matthiaswm Exp $"
 //
 // Slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,6 +38,24 @@
 #define FL_VERT_NICE_SLIDER	4
 #define FL_HOR_NICE_SLIDER	5
 
+/** The Fl_Slider widget contains a sliding knob inside a box. It if often
+ * used as a scrollbar. Moving the box all the way to the top/left sets it
+ * to the minimum(), and to the bottom/right to the maximum(). 
+ * The minimum() may be greater than the maximum() to reverse the slider
+ * direction. 
+ *   \image html slider.gif
+ * Fl_Slider supports the following types:
+ * \arg \c FL_VERTICAL - Draws a vertical slider (this is the default).
+ * \arg \c FL_HORIZONTAL - Draws a horizontal slider.
+ * \arg \c FL_VERT_FILL_SLIDER - Draws a filled vertical slider, useful 
+ *      as a progress or value meter.
+ * \arg \c FL_HOR_FILL_SLIDER - Draws a filled horizontal slider, useful
+ *      as a progress or value meter.
+ * \arg \c FL_VERT_NICE_SLIDER - Draws a vertical slider with a nice looking
+ *      control knob.
+ * \arg \c FL_HOR_NICE_SLIDER - Draws a horizontal slider with a nice
+ *      looking control knob.
+ */
 class FL_EXPORT Fl_Slider : public Fl_Valuator {
 
   float slider_size_;
@@ -55,19 +73,34 @@ public:
 
   void draw();
   int handle(int);
+    /** Creates a new Fl_Slider widget using the given position, size, 
+     * and label string. The default boxtype is \c FL_DOWN_BOX. */
   Fl_Slider(int x,int y,int w,int h, const char *l = 0);
-  Fl_Slider(uchar t,int x,int y,int w,int h, const char *l);
+  Fl_Slider(uchar boxtype,int x,int y,int w,int h, const char *l);
 
+    /** Returns Fl_Scrollbar::value(). */
   int scrollvalue(int windowtop,int windowsize,int first,int totalsize);
   void bounds(double a, double b);
+    /** Get the dimensions of the moving piece of slider. */
   float slider_size() const {return slider_size_;}
+    /** Set the dimensions of the moving piece of slider. This is the
+     * fraction of the size of the entire widget. If you set this to 1 then
+     * the slider cannot move. The default value is .08.
+     *
+     * For the "fill" sliders this is the size of the area around the end
+     * that causes a drag effect rather than causing the slider to jump to
+     * the mouse. */
   void slider_size(double v);
   Fl_Boxtype slider() const {return (Fl_Boxtype)slider_;}
+    /** Set the type of box to draw for the moving part of the slider. The
+     * color of the moving part (or of the notch in it for the nice sliders)
+     * is controlled by selection_color(). The default value of zero causes
+     * the slider to figure out what to draw from box(). */
   void slider(Fl_Boxtype c) {slider_ = c;}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Slider.H,v 1.5.2.3.2.2.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Slider.H,v 1.5.2.3.2.2.2.2 2003/11/17 07:15:16 matthiaswm Exp $".
 //

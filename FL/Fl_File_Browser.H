@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_File_Browser.H,v 1.1.2.4.2.2 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_File_Browser.H,v 1.1.2.4.2.3 2003/11/17 07:15:13 matthiaswm Exp $"
 //
 // FileBrowser definitions.
 //
@@ -39,6 +39,10 @@
 // Fl_File_Browser class...
 //
 
+/** 
+ * The Fl_File_Browser widget displays a list of filenames, optionally 
+ * with file-specific icons.
+ */
 class FL_EXPORT Fl_File_Browser : public Fl_Browser
 {
   int		filetype_;
@@ -54,26 +58,43 @@ class FL_EXPORT Fl_File_Browser : public Fl_Browser
 
 public:
   enum { FILES, DIRECTORIES };
+ 
+    /** The constructor creates the Fl_File_Browser widget at the
+     * specified position and size. */
+  Fl_File_Browser(int x, int y, int width, int height, const char *label = 0);
 
-  Fl_File_Browser(int, int, int, int, const char * = 0);
-
+    /** Gets the size of the icons. */
   uchar		iconsize() const { return (iconsize_); };
-  void		iconsize(uchar s) { iconsize_ = s; redraw(); };
+    /** Sets the size of the icons. The default size is 20 pixels. */
+  void		iconsize(uchar pixels) { iconsize_ = s; redraw(); };
 
+    /** Sets the filename filter. The pattern matching uses the 
+     * fl_filename_match() function in FLTK. */
   void	filter(const char *pattern);
+    /** Gets the filename filter. */
   const char	*filter() const { return (pattern_); };
 
+    /** Loads the specified directory into the browser. If icons have been
+     * loaded then the correct icon is associated with each file in 
+     * the list.
+     *
+     * The \a sort argument specifies a sort function to be used with 
+     * fl_filename_list().  */
   int		load(const char *directory, Fl_File_Sort_F *sort = fl_numericsort);
 
   uchar		textsize() const { return (Fl_Browser::textsize()); };
   void		textsize(uchar s) { Fl_Browser::textsize(s); iconsize_ = (uchar)(3 * s / 2); };
 
+    /** Gets the file browser type, \c FILES or \c DIRECTORIES. */
   int		filetype() const { return (filetype_); };
+    /** Sets the file browser type, \c FILES or \c DIRECTORIES. When set to
+     * \c FILES, both files and directories are shown. Otherwise only
+     * directories are shown. */
   void		filetype(int t) { filetype_ = t; load(directory_); };
 };
 
 #endif // !_Fl_File_Browser_H_
 
 //
-// End of "$Id: Fl_File_Browser.H,v 1.1.2.4.2.2 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_File_Browser.H,v 1.1.2.4.2.3 2003/11/17 07:15:13 matthiaswm Exp $".
 //

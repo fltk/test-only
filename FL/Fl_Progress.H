@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Progress.H,v 1.1.2.4.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Progress.H,v 1.1.2.4.2.2 2003/11/17 07:15:16 matthiaswm Exp $"
 //
 // Progress bar widget definitions.
 //
@@ -37,32 +37,42 @@
 // Progress class...
 //
 
+/** The Fl_Progress widget displays a progress bar for the user.
+ */
 class FL_EXPORT Fl_Progress : public Fl_Widget
 {
   float	value_,
 	minimum_,
 	maximum_;
 
-  protected:
+protected:
 
   virtual void draw();
 
-  public:
+public:
 
+    /** The constructor creates the progress bar using the position,
+     * size, and label. */
   Fl_Progress(int x, int y, int w, int h, const char *l = 0);
 
+    /** Sets the maximum value in the progress widget. */
   void	maximum(float v) { maximum_ = v; redraw(); }
+    /** Gets the maximum value in the progress widget. */
   float	maximum() const { return (maximum_); }
 
+    /** Sets the minimum value in the progress widget. */
   void	minimum(float v) { minimum_ = v; redraw(); }
+    /** Gets the minimum value in the progress widget. */
   float	minimum() const { return (minimum_); }
 
+    /** Sets the current value in the progress widget. */
   void	value(float v) { value_ = v; redraw(); }
+    /** Gets the current value in the progress widget. */
   float	value() const { return (value_); }
 };
 
 #endif // !_Fl_Progress_H_
 
 //
-// End of "$Id: Fl_Progress.H,v 1.1.2.4.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Progress.H,v 1.1.2.4.2.2 2003/11/17 07:15:16 matthiaswm Exp $".
 //

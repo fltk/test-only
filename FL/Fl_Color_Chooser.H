@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.H,v 1.5.2.4.2.3.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Color_Chooser.H,v 1.5.2.4.2.3.2.2 2003/11/17 07:15:13 matthiaswm Exp $"
 //
 // Color chooser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -64,6 +64,14 @@ public:
   Flcc_Value_Input(int X, int Y, int W, int H) : Fl_Value_Input(X,Y,W,H) {}
 };
 
+/** The Fl_Color_Chooser widget provides a standard RGB color chooser. 
+ * You can place any number of these into a panel of your own design. 
+ * This widget contains the hue box, value slider, and rgb input fields 
+ * from the above diagram (it does not have the color chips or the Cancel
+ * or OK buttons). The callback is done every time the user changes the
+ * rgb value. It is not done if they move the hue control in a way that 
+ * produces the same rgb value, such as when saturation or value is zero. 
+ */
 class FL_EXPORT Fl_Color_Chooser : public Fl_Group {
   Flcc_HueBox huebox;
   Flcc_ValueBox valuebox;
@@ -79,17 +87,36 @@ class FL_EXPORT Fl_Color_Chooser : public Fl_Group {
   static void mode_cb(Fl_Widget*, void*);
 public:
   int mode() {return choice.value();}
+    /** Return the current hue. 0 <= hue < 6. Zero is red, one is yellow, 
+     * two is green, etc. This value is convienent for the internal 
+     * calculations - some other systems consider hue to run from zero to 
+     * one, or from 0 to 360.*/
   double hue() const {return hue_;}
+    /** Returns the saturation. 0 <= saturation <= 1. */
   double saturation() const {return saturation_;}
+    /** Returns the value/brightness. 0 <= value <= 1. */
   double value() const {return value_;}
+    /** Returns the current red value. 0 <= r <= 1. */
   double r() const {return r_;}
+    /** Returns the current green value. 0 <= r <= 1. */
   double g() const {return g_;}
+    /** Returns the current blue value. 0 <= r <= 1. */
   double b() const {return b_;}
-  int hsv(double,double,double);
-  int rgb(double,double,double);
-  static void hsv2rgb(double, double, double,double&,double&,double&);
-  static void rgb2hsv(double, double, double,double&,double&,double&);
-  Fl_Color_Chooser(int,int,int,int,const char* = 0);
+    /** Set the hsv values. The passed values are clamped (or for hue, 
+     * modulus 6 is used) to get legal values. Does not do the callback. */
+  int hsv(double hue,double saturation,double value);
+    /** Sets the current rgb color values. Does not do the callback. Does
+     * not clamp (but out of range values will produce psychedelic effects
+     * in the hue selector). */
+  int rgb(double red,double green,double blue);
+    /** This \a static method converts HSV colors to RGB colorspace. */
+  static void hsv2rgb(double h, double s, double v,double &r,double &g,double &b);
+    /** This \a static method converts RGB colors to HSV colorspace. */
+  static void rgb2hsv(double r, double g, double b,double &h,double &s,double &v);
+    /** Creates a new Fl_Color_Chooser widget using the given position, 
+     * size, and label string. The recommended dimensions are 200x95. The
+     * color is initialized to black. */
+  Fl_Color_Chooser(int x,int y,int width,int height,const char *label = 0);
 };
 
 FL_EXPORT int fl_color_chooser(const char* name, double& r, double& g, double& b);
@@ -98,5 +125,5 @@ FL_EXPORT int fl_color_chooser(const char* name, uchar& r, uchar& g, uchar& b);
 #endif
 
 //
-// End of "$Id: Fl_Color_Chooser.H,v 1.5.2.4.2.3.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Color_Chooser.H,v 1.5.2.4.2.3.2.2 2003/11/17 07:15:13 matthiaswm Exp $".
 //

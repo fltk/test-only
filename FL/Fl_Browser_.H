@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.H,v 1.6.2.4.2.3.2.3 2003/11/11 04:13:26 easysw Exp $"
+// "$Id: Fl_Browser_.H,v 1.6.2.4.2.3.2.4 2003/11/17 07:15:11 matthiaswm Exp $"
 //
 // Common browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -234,7 +234,7 @@ public:
   static void scrollbar_width(int b) {scrollbar_width_ = b;}
   static int scrollbar_width() {return scrollbar_width_;}
 
-    /** \deprectaed This method moves the vertical scrollbar to the righthand side of the list. */
+    /** \deprecated This method moves the vertical scrollbar to the righthand side of the list. */
   void scrollbar_right() {scrollbar.align(FL_ALIGN_RIGHT);}
     /** \deprecated This method moves the vertical scrollbar to the lefthand side of the list. */
   void scrollbar_left() {scrollbar.align(FL_ALIGN_LEFT);}
@@ -244,5 +244,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Browser_.H,v 1.6.2.4.2.3.2.3 2003/11/11 04:13:26 easysw Exp $".
+// End of "$Id: Fl_Browser_.H,v 1.6.2.4.2.3.2.4 2003/11/17 07:15:11 matthiaswm Exp $".
 //

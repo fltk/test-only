@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.H,v 1.6.2.4.2.6.2.4 2003/11/10 01:32:58 matthiaswm Exp $"
+// "$Id: Fl_Group.H,v 1.6.2.4.2.6.2.5 2003/11/17 07:15:16 matthiaswm Exp $"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
@@ -148,15 +148,32 @@ public:
   void forms_end();
 };
 
-// dummy class used to end child groups in constructors for complex
-// subclasses of Fl_Group:
+/** This is a dummy class that allows you to end a Fl_Group in a 
+ * constructor list of a class:
+ * \code
+    class MyClass {
+      Fl_Group group;
+      Fl_Button button_in_group;
+      Fl_End end;
+      Fl_Button button_outside_group;
+      MyClass();
+    };
+    MyClass::MyClass() :
+      group(10,10,100,100),
+      button_in_group(20,20,60,30),
+      end(),
+      button_outside_group(10,120,60,30)
+    { }
+ * \endcode
+ */
 class FL_EXPORT Fl_End {
 public:
+    /** The constructor does <tt>Fl_Group::current()->end()</tt>. */
   Fl_End() {Fl_Group::current()->end();}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Group.H,v 1.6.2.4.2.6.2.4 2003/11/10 01:32:58 matthiaswm Exp $".
+// End of "$Id: Fl_Group.H,v 1.6.2.4.2.6.2.5 2003/11/17 07:15:16 matthiaswm Exp $".
 //

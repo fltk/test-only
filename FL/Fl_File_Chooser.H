@@ -20,6 +20,38 @@
 #include <FL/Fl_Return_Button.H>
 #include <FL/fl_ask.H>
 
+/** The Fl_File_Chooser widget displays a standard file selection dialog 
+ * that supports various selection modes.
+ *   \image html Fl_File_Chooser.jpg
+ *
+ * The Fl_File_Chooser class also exports several static values that may
+ * be used to localize or customize the appearance of all file 
+ * chooser dialogs:
+ *
+ * <CENTER><TABLE BORDER="1">
+ * <TR><TH>Member</TH><TH>Default value</TH></TR>
+ * <TR><TD><TT>add_favorites_label</TT></TD><TD>"Add to Favorites"</TD></TR>
+ * <TR><TD><TT>all_files_label</TT></TD><TD>"All Files (*)"</TD></TR>
+ * <TR><TD><TT>custom_filter_label</TT></TD><TD>"Custom Filter"</TD></TR>
+ * <TR><TD><TT>existing_file_label</TT></TD><TD>"Please choose an existing file!"</TD></TR>
+ * <TR><TD><TT>favorites_label</TT></TD><TD>"Favorites"</TD></TR>
+ * <TR><TD><TT>filename_label</TT></TD><TD>"Filename:"</TD></TR>
+ * <TR><TD><TT>filesystems_label</TT></TD><TD>"My Computer" (WIN32)<BR>
+ *	"File Systems" (all others)</TD></TR>
+ * <TR><TD><TT>manage_favorites_label</TT></TD><TD>"Manage Favorites"</TD></TR>
+ * <TR><TD><TT>preview_label</TT></TD><TD>"Preview"</TD></TR>
+ * <TR><TD><TT>show_label</TT></TD><TD>"Show:"</TD></TR>
+ * <TR><TD><TT>sort</TT></TD><TD>fl_numericsort</TD></TR>
+ * </TABLE></CENTER>
+ * 
+ * The sort member specifies the sort function that is used when loading the
+ * contents of a directory.
+ * 
+ * The Fl_File_Chooser class exports the "new directory" (newButton) and 
+ * "preview" (previewButton) widgets so that application developers can
+ * control their appearance and use. For more complex customization, 
+ * consider copying the FLTK file chooser code and changing it accordingly.
+ */
 class FL_EXPORT Fl_File_Chooser {
 public:
   enum { SINGLE = 0, MULTI = 1, CREATE = 2, DIRECTORY = 4 };
@@ -41,6 +73,36 @@ private:
   void update_favorites();
   void update_preview();
 public:
+    /** The constructor creates the Fl_File_Chooser dialog pictured above. 
+     * The pathname argument can be a directory name or a complete file 
+     * name (in which case the corresponding file is highlighted in the list
+     * and in the filename input field.)
+     *
+     * The pattern argument can be a \c NULL string or "*" to list all 
+     * files, or it can be a series of descriptions and filter strings 
+     * separated by tab characters (<tt>\\t</tt>). The format of filters is
+     * either "Description text (patterns)" or just "patterns". A file
+     * chooser that provides filters for HTML and image files might 
+     * look like:<br>
+     * <tt>  "HTML Files (*.html)\tImage Files (*.{bmp,gif,jpg,png})"</tt>
+     * 
+     * The file chooser will automatically add the "All Files (*)" pattern 
+     * to the end of the string you pass if you do not provide one. The 
+     * first filter in the string is the default filter.
+     * 
+     * See the FLTK documentation on fl_filename_match() for the kinds of
+     * pattern strings that are supported.
+     *
+     * The type argument can be one of the following:
+     * \arg \c SINGLE - allows the user to select a single, existing file.
+     * \arg \c MULTI - allows the user to select one or more existing files.
+     * \arg \c CREATE - allows the user to select a single, existing file or
+     *      specify a new filename.
+     * \arg \c DIRECTORY - allows the user to select a single, 
+     *      existing directory.
+     *
+     * The title argument is used to set the title bar text for the 
+     * Fl_File_Chooser window. */
   Fl_File_Chooser(const char *d, const char *p, int t, const char *title);
 private:
   Fl_Double_Window *window;
@@ -98,35 +160,66 @@ private:
 public:
   ~Fl_File_Chooser();
   void callback(void (*cb)(Fl_File_Chooser *, void *), void *d = 0);
+    /** Sets the background color of the Fl_File_Browser list. */
   void color(Fl_Color c);
+    /** Gets the background color of the Fl_File_Browser list. */
   Fl_Color color();
+    /** Returns the number of selected files. */
   int count();
-  void directory(const char *d);
+    /** Sets the current directory. */
+  void directory(const char *new_directory);
+    /** Gets the current directory. */
   char * directory();
-  void filter(const char *p);
+    /** Sets the current filename filter pattern. */
+  void filter(const char *new_pattern);
+    /** Gets the current filename filter pattern. */
   const char * filter();
+    /** Gets the current filename filter selection. */
   int filter_value();
-  void filter_value(int f);
+    /** Sets the current filename filter selection. */
+  void filter_value(int index);
+    /** Hides the Fl_File_Chooser window. */
   void hide();
+    /** Sets the size of the icons in the Fl_File_Browser. By default the
+     * icon size is set to 1.5 times the textsize(). */
   void iconsize(uchar s);
+    /** Gets the size of the icons in the Fl_File_Browser. */
   uchar iconsize();
-  void label(const char *l);
+    /** Gets the title bar text for the Fl_File_Chooser. */
+  void label(const char *new_label);
+    /** Gets the title bar text for the Fl_File_Chooser. */
   const char * label();
-  void preview(int e);
+    /** Enables or disables the preview box in the file chooser. */
+  void preview(int on_off);
+    /** Returns the current state of the preview box. */
   int preview() const { return previewButton->value(); };
+    /** Reloads the current directory in the Fl_File_Browser. */
   void rescan();
+    /** Shows the Fl_File_Chooser window. */
   void show();
   int shown();
-  void textcolor(Fl_Color c);
+    /** Sets the current Fl_File_Browser text color. */
+  void textcolor(Fl_Color new_color);
+    /** ets the current Fl_File_Browser text color. */
   Fl_Color textcolor();
-  void textfont(uchar f);
+    /** Sets the current Fl_File_Browser text font. */
+  void textfont(uchar myfont);
+    /** Gets the current Fl_File_Browser text font. */
   uchar textfont();
-  void textsize(uchar s);
+    /** Sets the current Fl_File_Browser text size. */
+  void textsize(uchar pixels);
+    /** Gets the current Fl_File_Browser text size. */
   uchar textsize();
+    /** Gets the current type of Fl_File_Chooser. */
   void type(int t);
+    /** Sets the current type of Fl_File_Chooser. */
   int type();
-  const char *value(int f = 1);
+    /** Gets the name of one of the the currently selected files. 
+     * \see count() */
+  const char *value(int index = 1);
+    /** Sets the current value of the selected file. */
   void value(const char *filename);
+    /** Returns 1 if the Fl_File_Chooser window is visible. */
   int visible();
   static const char *add_favorites_label;
   static const char *all_files_label;

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Positioner.H,v 1.5.2.3.2.2.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Positioner.H,v 1.5.2.3.2.2.2.2 2003/11/17 07:15:16 matthiaswm Exp $"
 //
 // Positioner header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,12 @@
 #include "Fl_Widget.H"
 #endif
 
+/** This class is provided for Forms compatibility. It provides 2D input. 
+ * It would be useful if this could be put atop another widget so that the
+ * crosshairs are on top, but this is not implemented. The color of the
+ * crosshairs is selection_color().
+ *   \image html positioner.gif
+ */
 class FL_EXPORT Fl_Positioner : public Fl_Widget {
 
   double xmin, ymin;
@@ -46,24 +52,43 @@ protected:
 
 public:
 
-  int handle(int);
+  int handle(int event);
+    /** Creates a new Fl_Positioner widget using the given position, 
+     * size, and label string. The default boxtype is \c FL_NO_BOX. */
   Fl_Positioner(int x,int y,int w,int h, const char *l=0);
+    /** Returns the X axis coordinate */
   double xvalue() const {return xvalue_;}
+    /** Returns the Y axis coordinate */
   double yvalue() const {return yvalue_;}
-  int xvalue(double);
-  int yvalue(double);
-  int value(double,double);
-  void xbounds(double, double);
+    /** Sets the X axis coordinate */
+  int xvalue(double x); 
+    /** Sets the Y axis coordinate */
+  int yvalue(double y);
+    /** Sets the X an Y axis vaules */
+  int value(double x,double y);
+    /** Sets the X axis bounds */
+  void xbounds(double min, double max);
+    /** Returns the X axis minimum bound */
   double xminimum() const {return xmin;}
+    /** Sets the X axis minimum bound */
   void xminimum(double a) {xbounds(a,xmax);}
+    /** Returns the X axis maximum bound */
   double xmaximum() const {return xmax;}
+    /** Sets the X axis maximum bound */
   void xmaximum(double a) {xbounds(xmin,a);}
+    /** Sets the Y axis bounds */
   void ybounds(double, double);
+    /** Returns the Y axis minimum bound */
   double yminimum() const {return ymin;}
+    /** Sets the Y axis minimum bound */
   void yminimum(double a) {ybounds(a,ymax);}
+    /** Returns the Y axis maximum bound */
   double ymaximum() const {return ymax;}
+    /** Sets the Y axis maximum bound */
   void ymaximum(double a) {ybounds(ymin,a);}
+    /** Sets teh stepping value for the X axis */
   void xstep(double a) {xstep_ = a;}
+    /** Sets teh stepping value for the Y axis */
   void ystep(double a) {ystep_ = a;}
 
 };
@@ -71,5 +96,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Positioner.H,v 1.5.2.3.2.2.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Positioner.H,v 1.5.2.3.2.2.2.2 2003/11/17 07:15:16 matthiaswm Exp $".
 //
