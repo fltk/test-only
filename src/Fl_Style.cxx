@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.55 2004/03/07 20:40:31 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.56 2004/03/14 07:29:41 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -27,13 +27,6 @@
 #include <fltk/run.h>
 #include <stdlib.h>
 #include <config.h>
-#if defined(_WIN32)
-# include <io.h>
-# define access(a,b) _access(a,b)
-# define R_OK 4
-#else
-# include <unistd.h>
-#endif
 #include <ctype.h>
 
 using namespace fltk;
@@ -612,5 +605,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.55 2004/03/07 20:40:31 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.56 2004/03/14 07:29:41 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.23 2003/11/09 02:48:21 spitzak Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.24 2004/03/14 07:29:41 spitzak Exp $"
 //
 // More FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -48,12 +48,11 @@
 #include <errno.h>
 #include <sys/types.h>
 #include <sys/stat.h>
-#if defined(_WIN32)
-# ifndef __CYGWIN__
-#  include <direct.h>
-#  include <io.h>
-#  define access(a,b) _access(a,b)
-# endif
+#if defined(_WIN32) && !defined(__CYGWIN__)
+# undef _POSIX_
+# include <direct.h>
+# include <io.h>
+# define access(a,b) _access(a,b)
 # define R_OK 4
 #else
 # include <unistd.h>
@@ -671,5 +670,5 @@ FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.23 2003/11/09 02:48:21 spitzak Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.24 2004/03/14 07:29:41 spitzak Exp $".
 //
