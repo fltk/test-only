@@ -89,25 +89,25 @@ glutBitmapWidth()</tt> may be different.</p>
 
 <p><tt>glutInit(argc,argv)</tt> will consume different switches than
 GLUT does.  It accepts the switches recognized by <A
-href=Fl.html#args> <tt>Fl::args()</tt></A>, and will accept any
+href=Fl.html#args> <tt>fltk::args()</tt></A>, and will accept any
 abbreviation of these switches (such as &quot;-di&quot; for
 &quot;-display&quot;).</p>
 
 <a name=gmixing><h2>Mixing GLUT and FLTK Code</h2></a>
 
-<p>You can make your GLUT window a child of a <tt>Fl_Window</tt> with the 
+<p>You can make your GLUT window a child of a <tt>fltk::Window</tt> with the 
 following scheme.  The biggest trick is that GLUT insists on <tt>show()</tt>
 'ing the window at the point it is created, which means the <tt>
-Fl_Window</tt> parent window must already be shown.</p>
+fltk::Window</tt> parent window must already be shown.</p>
 
 <UL>
 
 <li>Don't call <tt>glutInit()</tt>.</li>
 
-<li>Create your <tt>Fl_Window</tt>, and any FLTK widgets.  Leave a 
+<li>Create your <tt>fltk::Window</tt>, and any FLTK widgets.  Leave a 
 blank area in the window for your GLUT window.</li>
 
-<li><tt>show()</tt> the <tt>Fl_Window</tt>.  Perhaps call <tt>
+<li><tt>show()</tt> the <tt>fltk::Window</tt>.  Perhaps call <tt>
 show(argc,argv)</tt>.</li>
 
 <li>Call <tt>window-&gt;begin()</tt> so that the GLUT window will  be 
@@ -120,21 +120,21 @@ to set the location in the  parent window to put the GLUT window.</li>
 Call <tt>window-&gt;end()</tt> immediately after the <tt>
 glutCreateWindow()</tt>!</li>
 
-<li>You can call either <tt>glutMainLoop()</tt>, <tt>Fl::run()</tt>, or 
-loop calling <tt>Fl::wait()</tt> to run  the program.</li>
+<li>You can call either <tt>glutMainLoop()</tt>, <tt>fltk::run()</tt>, or 
+loop calling <tt>fltk::wait()</tt> to run  the program.</li>
 
 </UL>
 
 <hR break>
-<a name=Fl_Glut_Window><h2>class Fl_Glut_Window</h2></a>
+<a name=Glut_Window><h2>class fltk::Glut_Window</h2></a>
 <hR>
 
 <h3>Class Hierarchy</h3>
 
 <pre>
-<a href=Fl_Gl_Window.html#Fl_Gl_Window>Fl_Gl_Window</a>
+<a href=Fl_GlWindow.html#GlWindow>fltk::GlWindow</a>
    |
-   +----<B>Fl_Glut_Window</B>
+   +----<B>fltk::Glut_Window</B>
 </pre>
 
 <h3>Include Files</h3>
@@ -153,7 +153,7 @@ better into FLTK's method of creating windows.
 <p>The current GLUT window is available in the global variable <tt>
 glut_window</tt>.</p>
 
-<p><tt>new Fl_Glut_Window(...)</tt> is the same as <tt>
+<p><tt>new fltk::Glut_Window(...)</tt> is the same as <tt>
 glutCreateWindow()</tt> except it does not <tt>show()</tt> the window 
 or make the window current.</p>
 
@@ -163,27 +163,27 @@ called on it yet, some functions that assumme an OpenGL context will
 not work.  If you do <tt>show()</tt> the window, call
 <tt>make_current()</tt> again to set the context.</p>
 
-<p><tt>~Fl_Glut_Window()</tt> is the same as
+<p><tt>~fltk::Glut_Window()</tt> is the same as
 <tt>glutDestroyWindow()</tt>.</p>
 
 <h3>Methods</h3>
 
 <ul>
-<li><A href=#Fl_Glut_Window>Fl_Glut_Window</A></li>
-<li><A href=#~Fl_Glut_Window>~Fl_Glut_Window</A></li>
+<li><A href=#Glut_Window>fltk::Glut_Window</A></li>
+<li><A href=#~fltk::Glut_Window>~fltk::Glut_Window</A></li>
 </ul>
 
-<h4>Fl_Glut_Window::Fl_Glut_Window(int x, int y, int w, int h, const char 
+<h4>fltk::Glut_Window::Glut_Window(int x, int y, int w, int h, const char 
 *title = 0)
-<BR>Fl_Glut_Window::Fl_Glut_Window(int w, int h, const char *title = 0)</h4>
+<BR>fltk::Glut_Window::Glut_Window(int w, int h, const char *title = 0)</h4>
 
 <p>The first constructor takes 4 int arguments to create the window with 
 a preset position and size.  The second constructor with 2 arguments 
 will create the window with a preset size, but the window manager will 
 choose the position according to it's own whims. 
 
-<h4><A name=~Fl_Glut_Window>
-virtual Fl_Glut_Window::~Fl_Glut_Window()</A></h4>
+<h4><A name=~Glut_Window>
+virtual fltk::Glut_Window::~fltk::Glut_Window()</A></h4>
 
 Destroys the GLUT window.
 

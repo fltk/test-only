@@ -1,33 +1,33 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Slider</title></head><body>
+<title>class fltk::Slider</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Slider</h2>
+<h2>class fltk::Slider</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
 
 <pre>
-<a href=Fl_Valuator.html>Fl_Valuator</a>
+<a href=Fl_Valuator.html>fltk::Valuator</a>
    |
-   +----<b>Fl_Slider</b>
+   +----<b>fltk::Slider</b>
            |
-           +----<a href=Fl_Scrollbar.html>Fl_Scrollbar</a>, <a href=Fl_Value_Slider.html>Fl_Value_Slider</a>
+           +----<a href=Fl_Scrollbar.html>fltk::Scrollbar</a>, <a href=Fl_ValueSlider.html>fltk::ValueSlider</a>
 </pre>
 
 <H3>Include Files</H3>
 
-<pre>#include &lt;fltk/Fl_Slider.h&gt;</pre>
+<pre>#include &lt;fltk/Slider.h&gt;</pre>
 
 <h3>Description</h3>
 
-The <TT>Fl_Slider</TT> widget contains a sliding "knob" that controls
+The <TT>fltk::Slider</TT> widget contains a sliding "knob" that controls
 a single floating-point value. Moving the box all the way to the left
 or bottom sets it to the <a
 href="Fl_Valuator.html#minimum">minimum()</a>, and to the top/right
 to the <a href="Fl_Valuator.html#maximum">maximum()</a> value.  The <a
 href="Fl_Valuator.html#minimum">minimum()</a> may be set greater than
 the <a href="Fl_Valuator.html#maximum">maximum()</a> to reverse the
-slider direction. See <a href="Fl_Valuator.html">Fl_Valuator</a> for
+slider direction. See <a href="Fl_Valuator.html">fltk::Valuator</a> for
 how to set or get the value or handle callbacks when the value changes.
 
 <p><img src=slider.gif> <img src=logslider.gif>
@@ -65,8 +65,8 @@ href="Fl_Widget.html#button_color">button_color()</a> colors it.
 
 <h3>Methods</h3>
 <ul>
-<li><a href=#Fl_Slider>Fl_Slider</a></li>
-<li><a href=#~Fl_Slider>~Fl_Slider</a></li>
+<li><a href=#Slider>fltk::Slider</a></li>
+<li><a href=#~fltk::Slider>~fltk::Slider</a></li>
 <li><a href=#draw>draw</a></li>
 <li><a href=#draw_ticks>draw_ticks</a></li>
 <li><a href=#handle>handle</a></li>
@@ -77,54 +77,54 @@ href="Fl_Widget.html#button_color">button_color()</a> colors it.
 <li><a href=#type>type</a></li>
 </ul>
 
-<a name=Fl_Slider><h4>Fl_Slider::Fl_Slider(int x, int y, int w, int h,
+<a name=Slider><h4>fltk::Slider::Slider(int x, int y, int w, int h,
 const char *label = 0)</h4></a>
 
-Creates a new <TT>Fl_Slider</TT> widget using the given position,
+Creates a new <TT>fltk::Slider</TT> widget using the given position,
 size, and label string. The default <a
-href="Fl_Widget.html#type">type()</a> is <tt>Fl_Slider::VERTICAL</tt>
+href="Fl_Widget.html#type">type()</a> is <tt>fltk::Slider::VERTICAL</tt>
 (0).
 
-The default boxtype is <TT>FL_DOWN_BOX</TT>. 
+The default boxtype is <TT>fltk::DOWN_BOX</TT>. 
 
-<a name=~Fl_Slider><h4>virtual Fl_Slider::~Fl_Slider()</h4></a>
+<a name=~Slider><h4>virtual fltk::Slider::~fltk::Slider()</h4></a>
 
 Destroys the valuator. 
 
-<h4><A name=type>uchar Fl_Widget::type() const
-<br>void Fl_Widget::type(uchar t)</A></h4>
+<h4><A name=type>uchar fltk::Widget::type() const
+<br>void fltk::Widget::type(uchar t)</A></h4>
 
 <p>Any of these values may be "or'd" together to produce the type(),
 the default value is <tt>VERTICAL</tt>.
 
 <ul>
 
-<li><tt>Fl_Slider::VERTICAL</tt> - Slider moves vertically.
+<li><tt>fltk::Slider::VERTICAL</tt> - Slider moves vertically.
 
-<li><tt>Fl_Slider::HORIZONTAL</tt> - Slider moves horizontally.
+<li><tt>fltk::Slider::HORIZONTAL</tt> - Slider moves horizontally.
 
-<li><tt>Fl_Slider::TICK_ABOVE</tt> - Put tick marks above the
+<li><tt>fltk::Slider::TICK_ABOVE</tt> - Put tick marks above the
 horizontal slider.
 
-<li><tt>Fl_Slider::TICK_LEFT</tt> - Put tick marks to the left of a
+<li><tt>fltk::Slider::TICK_LEFT</tt> - Put tick marks to the left of a
 vertical slider, same value as <tt>TICK_ABOVE</tt>
 
-<li><tt>Fl_Slider::TICK_BELOW</tt> - Put tick marks below the
+<li><tt>fltk::Slider::TICK_BELOW</tt> - Put tick marks below the
 horizontal slider.
 
-<li><tt>Fl_Slider::TICK_RIGHT</tt> - Put tick marks to the right of a
+<li><tt>fltk::Slider::TICK_RIGHT</tt> - Put tick marks to the right of a
 vertical slider, same value as <tt>TICK_BELOW</tt>
 
-<li><tt>Fl_Slider::TICK_BOTH</tt> - Put tick marks on both sides of
+<li><tt>fltk::Slider::TICK_BOTH</tt> - Put tick marks on both sides of
 the slider.
 
-<li><tt>Fl_Slider::LOG</tt> - Use a logarithimic or power scale for
+<li><tt>fltk::Slider::LOG</tt> - Use a logarithimic or power scale for
 the slider.
 
 </ul>
 
-<a name=slider_size><h4>unsigned char Fl_Slider::slider_size() const
-<br>void Fl_Slider::slider_size(unsigned char)</h4></a>
+<a name=slider_size><h4>unsigned char fltk::Slider::slider_size() const
+<br>void fltk::Slider::slider_size(unsigned char)</h4></a>
 
 Get or set the dimensions of the moving piece of slider. This is
 measured in pixels in a direction parallel to the slider's movement.
@@ -135,38 +135,38 @@ slider that draws a solid bar from the left/bottom to the current
 value. This is useful for indicating progress or as a output
 indicator.
 
-<a name=tick_size><h4>unsigned char Fl_Slider::tick_size() const
-<br>void Fl_Slider::tick_size(unsigned char)</h4></a>
+<a name=tick_size><h4>unsigned char fltk::Slider::tick_size() const
+<br>void fltk::Slider::tick_size(unsigned char)</h4></a>
 
 The slider is shrunk this many pixels from the widget's width so that
 the tick marks are visible next to it. The default value is 4.
 
-<a name=slider_position><h4>int Fl_Slider::slider_position(double value, int w); (protected)</h4></a>
+<a name=slider_position><h4>int fltk::Slider::slider_position(double value, int w); (protected)</h4></a>
 
 Return the location in pixels of the left/top edge of a box of
 slider_size() should be drawn at if it is positioned at the value
 <i>value</i> in an area the slider can move in of width/height
 <i>w</i>.
 
-<a name=position_value><h4>double Fl_Slider::position_value(int x, int w); (protected)</h4></a>
+<a name=position_value><h4>double fltk::Slider::position_value(int x, int w); (protected)</h4></a>
 
 Return the value that would place the left/top edge of a box of
 slider_size() at pixel <i>x</i> in an area the slider can move in of
 width/height <i>w</i>.
 
-<a name=draw_ticks><h4>void Fl_Slider::draw_ticks(int x, int y, int w, int h); (protected)</h4></a>
+<a name=draw_ticks><h4>void fltk::Slider::draw_ticks(int x, int y, int w, int h); (protected)</h4></a>
 
 Draw tick marks to fill the passed rectangle. These lines cross the
 passed rectangle perpendicular to the slider direction. In the
 direction parallel to the slider direction the box should have the
 same size as the area the slider moves in.
 
-<a name=draw><h4>bool Fl_Slider::draw(int x, int y, int w, int h, Fl_Flags flags, bool slot); (protected)</h4></a>
+<a name=draw><h4>bool fltk::Slider::draw(int x, int y, int w, int h, fltk::Flags flags, bool slot); (protected)</h4></a>
 
 Do minimal-update redraw of the moving part of the slider that fits in
 the passed rectangle. Also draw the black slot if <i>slot</i> is
 true. If this returnes true then it has done an <a
-href="drawing.html#fl_push_clip">fl_push_clip()</a> and you must fill
+href="drawing.html#push_clip">fltk::push_clip()</a> and you must fill
 in the remaining area with the background that goes behind the
 slider. The clipped area will either be the entire widget or the area
 the slider used to be in, with the area of the new slider and the slot
@@ -185,11 +185,11 @@ void MySlider::draw() {
     draw_spiffy_background(0,0,w(),h());
     // draw the tick marks across whole widget:
     draw_ticks(ix, 0, iw, h());
-    fl_pop_clip();
+    fltk::pop_clip();
   }
 }</ul></pre>
 
-<a name=handle><h4>int Fl_Slider::handle(int event, int x, int y, int w, int h); (protected)</h4></a>
+<a name=handle><h4>int fltk::Slider::handle(int event, int x, int y, int w, int h); (protected)</h4></a>
 
 Handle events for a slider where the moving part is in the passed box.
 

@@ -1,69 +1,69 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>Fl_Tooltip</title></head><body>
+<title>fltk::Tooltip</title></head><body>
 
-<H2>class Fl_Tooltip</H2>
+<H2>class fltk::Tooltip</H2>
 
 <H3>Class Hierarchy</H3>
 
 <PRE>
-<B>Fl_Tooltip</B>
+<B>fltk::Tooltip</B>
 </PRE>
 
 <H3>Include Files</H3>
 
 <PRE>
-#include &amp;lt;FL/Fl_Tooltip.H&amp;gt;
+#include &amp;lt;FL/Tooltip.H&amp;gt;
 </PRE>
 
 <H3>Description</H3>
 
-<P>The <TT>Fl_Tooltip</TT> class provides tooltip support for
+<P>The <TT>fltk::Tooltip</TT> class provides tooltip support for
 all FLTK widgets.</P>
 
 <H3>Methods</H3>
 
 <UL>
 
-	<LI><A HREF="#Fl_Tooltip.color">color</A></LI>
-	<LI><A HREF="#Fl_Tooltip.delay">delay</A></LI>
-	<LI><A HREF="#Fl_Tooltip.disable">disable</A></LI>
-	<LI><A HREF="#Fl_Tooltip.enabled">enabled</A></LI>
-	<LI><A HREF="#Fl_Tooltip.enable">enable</A></LI>
-	<LI><A HREF="#Fl_Tooltip.enter">enter</A></LI>
-	<LI><A HREF="#Fl_Tooltip.enter_area">enter_area</A></LI>
-	<LI><A HREF="#Fl_Tooltip.exit">exit</A></LI>
-	<LI><A HREF="#Fl_Tooltip.font">font</A></LI>
-	<LI><A HREF="#Fl_Tooltip.size">size</A></LI>
-	<LI><A HREF="#Fl_Tooltip.textcolor">textcolor</A></LI>
+	<LI><A HREF="#Tooltip.color">color</A></LI>
+	<LI><A HREF="#Tooltip.delay">delay</A></LI>
+	<LI><A HREF="#Tooltip.disable">disable</A></LI>
+	<LI><A HREF="#Tooltip.enabled">enabled</A></LI>
+	<LI><A HREF="#Tooltip.enable">enable</A></LI>
+	<LI><A HREF="#Tooltip.enter">enter</A></LI>
+	<LI><A HREF="#Tooltip.enter_area">enter_area</A></LI>
+	<LI><A HREF="#Tooltip.exit">exit</A></LI>
+	<LI><A HREF="#Tooltip.font">font</A></LI>
+	<LI><A HREF="#Tooltip.size">size</A></LI>
+	<LI><A HREF="#Tooltip.textcolor">textcolor</A></LI>
 
 </UL>
 
-<H4><A NAME="Fl_Tooltip.delay">void delay(float f);<BR>
+<H4><A name="Tooltip.delay">void delay(float f);<BR>
 float delay();</A></H4>
 
 <P>Gets or sets the tooltip delay. The default delay is 1.0 seconds.
 
-<H4><A NAME="Fl_Tooltip.enabled">int enabled();</A></H4>
+<H4><A name="Tooltip.enabled">int enabled();</A></H4>
 
 <P>Returns non-zero if tooltips are enabled.
 
-<H4><A NAME="Fl_Tooltip.enable">void enable(int b = 1);</A></H4>
+<H4><A name="Tooltip.enable">void enable(int b = 1);</A></H4>
 
 <P>Enables tooltips on all widgets (or disables if <i>b</i> is false).
 
-<H4><A NAME="Fl_Tooltip.disable">void disable();</A></H4>
+<H4><A name="Tooltip.disable">void disable();</A></H4>
 
 <P>Same as <tt>enable(0)</tt>, disables tooltips on all widgets.
 
-<H4><A NAME="Fl_Tooltip.enter">void enter(Fl_Widget *w);</A></H4>
+<H4><A name="Tooltip.enter">void enter(fltk::Widget *w);</A></H4>
 
 <P>This method is called when the mouse pointer enters a
 widget.
 
-<h4><a name="Fl_Tooltip.enter_area">void enter_area(Fl_Widget* widget, int x,int y,int w,int h, const char* tip)</a></h4>
+<h4><a name="Tooltip.enter_area">void enter_area(fltk::Widget* widget, int x,int y,int w,int h, const char* tip)</a></h4>
 
 <p>You may be able to use this to provide tooltips for internal pieces
-of your widget. Call this after setting <tt>Fl::belowmouse()</tt> to
+of your widget. Call this after setting <tt>fltk::belowmouse()</tt> to
 your widget (because that calls the above enter() method). Then figure
 out what thing the mouse is pointing at, and call this with the widget
 (this pointer is used to remove the tooltip if the widget is deleted
@@ -72,29 +72,29 @@ area, relative to the top-left corner of the widget (used to calculate
 where to put the tooltip), and the text of the tooltip (which must be
 a pointer to static data as it is not copied).
 
-<H4><A NAME="Fl_Tooltip.exit">void exit(Fl_Widget *w);</A></H4>
+<H4><A name="Tooltip.exit">void exit(fltk::Widget *w);</A></H4>
 
 <P>This method is called when the mouse pointer leaves a
 widget.
 
-<H4><A NAME="Fl_Tooltip.color">void color(unsigned c);<BR>
-Fl_Color color();</A></H4>
+<H4><A name="Tooltip.color">void color(unsigned c);<BR>
+fltk::Color color();</A></H4>
 
 <P>Gets or sets the background color for tooltips. The default
 background color is a pale yellow.
 
-<H4><A NAME="Fl_Tooltip.textcolor">void textcolor(unsigned c);<BR>
-Fl_Color textcolor();</A></H4>
+<H4><A name="Tooltip.textcolor">void textcolor(unsigned c);<BR>
+fltk::Color textcolor();</A></H4>
 
 <P>Gets or sets the color of the text in the tooltip. The default is
 black.
 
-<H4><A NAME="Fl_Tooltip.font">void font(int i);<BR>
+<H4><A name="Tooltip.font">void font(int i);<BR>
 int font();</A></H4>
 
 <P>Gets or sets the typeface for the tooltip text.
 
-<H4><A NAME="Fl_Tooltip.size">void size(int s);<BR>
+<H4><A name="Tooltip.size">void size(int s);<BR>
 int size();</A></H4>
 
 <P>Gets or sets the size of the tooltip text.

@@ -9,20 +9,22 @@ program.
 <a name=sample><h2>A sample FLTK program</h2>
 
 <pre>
-#include &lt;fltk/Fl.h&gt;
-#include &lt;fltk/Fl_Window.h&gt;
-#include &lt;fltk/Fl_Box.h&gt;
+#include &lt;fltk/Window.h&gt;
+#include &lt;fltk/Widget.h&gt;
+#include &lt;fltk/run.h&gt;
+using namespace fltk;
 
 int main(int argc, char **argv) {
-  Fl_Window *window = new Fl_Window(300,180);
-  Fl_Box *box = new Fl_Box(20,40,260,100,"Hello, World!");
-  box->box(FL_UP_BOX);
-  box->label_font(FL_HELVETICA_BOLD_ITALIC);
-  box->label_size(36);
-  box->label_type(FL_SHADOW_LABEL);
+  Window *window = new Window(300, 180);
+  window->begin();
+  Widget *box = new Widget(20, 40, 260, 100, "Hello, World!");
+  box->box(UP_BOX);
+  box->labelfont(HELVETICA_BOLD_ITALIC);
+  box->labelsize(36);
+  box->labeltype(SHADOW_LABEL);
   window->end();
   window->show(argc, argv);
-  return Fl::run();
+  return run();
 }
 </pre>
 
@@ -36,16 +38,24 @@ program by closing the window or pressing the ESCape key.
 The proper way to include FLTK header files is: 
 
 <pre>
-#include &lt;fltk/Fl_xyz.h&gt;
+#include &lt;fltk/Xyz.h&gt;
 </pre>
 
-<p>All programs must include the file <TT>&lt;fltk/Fl.h&gt;</TT>. In
-addition the program must include a header file for each FLTK class it
-uses. This sample program uses <a href=Fl_Window.html>Fl_Window</a>
-and <a href=Fl_Box.html>Fl_Box</a>.
+<p>Each class in fltk has it's own header file. This sample program
+uses <a href=Fl_Window.html>Window</a> and <a
+href=Fl_Widget.html>Widget</a>. Often one header file includes another (for
+instance Widget.h is not needed here as Window.h included it),
+so you don't always need all of them, but it is usually good practice
+to do so.
 
-<p>Programs that call FLTK <a href=drawing.html>drawing functions</a>
-must include <tt>&lt;fltk/fl_draw.h&gt;</tt>
+<p>In addition several non-class functions and symbols are provided,
+they are grouped into header files with lower-case names. You should
+only include the ones you need. In this case "run.h" is included, it
+has functions needed by the main part of a program to get fltk to run.
+
+<p>"using namespace fltk" makes it unnecessary to type "fltk::" in
+front of all the symbols. Depending on how much you are using fltk in
+your program, you may want to do this.
 
 <h3>Creating the Widgets</h3>
 
@@ -53,20 +63,27 @@ must include <tt>&lt;fltk/fl_draw.h&gt;</tt>
 window: 
 
 <pre>
-Fl_Window *window = new <A href=Fl_Window.html#Fl_Window>Fl_Window</A>(300,180);
+fltk::Window *window = new <A href=Fl_Window.html#Window>fltk::Window</A>(300,180);
 </pre>
 
-It then creates a box with the "Hello, World!" string in it, this new
+<p>It then calls "begin" on it, which indicates that all widgets
+constructed after this should be "children" of this window:
+
+<pre>
+window->begin();
+</pre>
+
+<p>It then creates a box with the "Hello, World!" string in it, this new
 widget is made a "child" of the window we just created:
 
 <pre>
-Fl_Box *box = new <A href=Fl_Box.html#Fl_Box>Fl_Box</A>(20,40,260,100,"Hello, World!");
+fltk::Widget *box = new <A href=Fl_Widget.html#Widget>fltk::Widget</A>(20,40,260,100,"Hello, World!");
 </pre>
 
 <p>For most widgets the arguments to the constructor are:
 
 <pre>
-Fl_Widget(x, y, width, height, label)
+fltk::Widget(x, y, width, height, label)
 </pre>
 
 <P><i>x</i> and <i>y</i> are the location of the upper-left corner of
@@ -81,7 +98,7 @@ widget with or <tt>NULL</tt>. If not given it defaults to
 <tt>NULL</tt>. The string is not copied, FLTK assummes it resides in
 static storage. This is true of almost all interfaces in FLTK that
 take string constants, and greatly speeds up FLTK. (see <a
-href=Fl_Widget.html#copy_label>Fl_Widget::copy_label()</a> for a
+href=Fl_Widget.html#copy_label>Widget::copy_label()</a> for a
 method that has more traditional behavior).
 
 <h3>Get/Set Methods</h3>
@@ -89,18 +106,17 @@ method that has more traditional behavior).
 Next we set several "attributes" of the box:
 
 <pre>
-box-&gt;box(FL_UP_BOX);
-box-&gt;<A href=Fl_Widget.html#label_font>label_font</A>(FL_HELVETICA_BOLD_ITALIC);
+box-&gt;box(fltk::UP_BOX);
+box-&gt;<A href=Fl_Widget.html#label_font>label_font</A>(fltk::HELVETICA_BOLD_ITALIC);
 box-&gt;<A href=Fl_Widget.html#label_size>label_size</A>(36);
-box-&gt;<A href=Fl_Widget.html#label_type>label_type</A>(FL_SHADOW_LABEL);
+box-&gt;<A href=Fl_Widget.html#label_type>label_type</A>(fltk::SHADOW_LABEL);
 </pre>
 
-<tt>box-&gt;box(FL_UP_BOX)</tt> sets the type of box the Fl_Box draws,
-changing it from the default of <tt>FL_NO_BOX</tt>, which means that
-no box is drawn. In our "Hello, World!" example we use <TT>
-FL_UP_BOX</TT>, which means that a raised button border will be drawn
-around the widget.  You can see the available boxtypes in <A
-href=common.html#boxtypes> Chapter 3</A>
+<tt>box-&gt;box(fltk::UP_BOX)</tt> sets the type of box the box widget
+draws, changing it from the default of <tt>fltk::DOWN_BOX</tt>. In our
+"Hello, World!" example we use <TT>fltk::UP_BOX</TT>, which means that a
+raised button border will be drawn around the widget.  You can see the
+available boxtypes in <A href=common.html#boxtypes> Chapter 3</A>
 
 <p>You can examine the boxtype in by doing
 <tt>box->box()</tt>.  Fltk uses method name overloading to make
@@ -122,16 +138,11 @@ Then we indicate we are done adding widgets to the window:
 window-&gt;<A href=Fl_Group.html#end>end</A>();
 </pre>
 
-<p>To simplify the code you have to write, the constructor for all
-widgets automatically adds them as children of the most recent <a
-href=Fl_Group.html>Fl_Group</a> or <a
-href=Fl_Window.html>Fl_Window</a> that was created. Though convienent,
-this is also a big source of errors in FLTK programming. The method <A
-href=Fl_Group.html#end>Fl_Group::end()</A> restores the
-"current group" to the parent of itself, in this case it is set to
+<p>The method <A href=Fl_Group.html#end>Group::end()</A> restores
+the "current group" to the parent of itself, in this case it is set to
 null because the window has no parent.  You may also find it useful to
-call <a href=Fl_Group.html#current>Fl_Group::current(0)</a>
-to turn this off completely.
+call <a href=Fl_Group.html#current>fltk::Group::current(0)</a> to turn
+this off completely.
 
 <h3>Showing the Window</h3>
 
@@ -141,24 +152,24 @@ Then we cause the window to appear on the screen:
 window-&gt;<A href=Fl_Window.html#show>show</A>(argc, argv);
 </pre>
 
-<p>For the first Fl_Window you can provide the command-line arguments,
+<p>For the first Window you can provide the command-line arguments,
 this runs a rather simple default argument parser that lets the user
 customize the appearance, size, and position of your windows (you are
 not required to use this argument parser, and just calling
 <tt>show()</tt> with no arguments does not do this).
 
 <p>(On some systems the window does not <i>actually</i> appear until
-<tt>Fl::run()</tt> is called, which flushes the cached instructions to
+<tt>fltk::run()</tt> is called, which flushes the cached instructions to
 the window server).
 
 <h3>The Main Event Loop</h3>
 
 <pre>
-return <A href=Fl.html#run>Fl::run</A>();
+return <A href=Fl.html#run>fltk::run</A>();
 </pre>
 
 This will repeatedly wait for and then process events from the user.
-<TT>Fl::run()</TT> does not return until all of the windows under FLTK 
+<TT>fltk::run()</TT> does not return until all of the windows under FLTK 
 control are closed (either by the user or your program).
 
 <p>When the user attempts to close the window, the <a
@@ -173,15 +184,15 @@ when the user closes the "main" window even if other windows are still
 open.
 
 <p>FLTK was designed to not take over the main event loop. Instead a
-program can call <A href=Fl.html#wait><TT>Fl::wait()</TT></A>,
+program can call <A href=Fl.html#wait><TT>fltk::wait()</TT></A>,
 which will pause until "something happens" and then return. A program
-can call <tt>Fl::wait()</tt> repeatedly or mix it with other
+can call <tt>fltk::wait()</tt> repeatedly or mix it with other
 calculations. You can do this if there are no windows displayed
-(useful if you used <a href=Fl.html#add_fd><TT>Fl::add_fd()</tt></a>).
-The <tt>Fl::run()</tt> method is equivalent to:
+(useful if you used <a href=Fl.html#add_fd><TT>fltk::add_fd()</tt></a>).
+The <tt>fltk::run()</tt> method is equivalent to:
 
 <pre>
-while (Fl::first_window()) Fl::wait();
+while (fltk::first_window()) fltk::wait();
 return 0;
 </pre>
 

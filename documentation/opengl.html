@@ -7,8 +7,8 @@ This chapter discusses using FLTK for your OpenGL applications.
 
 <a name=glusing><H2>Using OpenGL in FLTK</H2></a>
 
-The easiest way to make an OpenGL display is to subclass <A href=Fl_Gl_Window.html#Fl_Gl_Window>
-<TT>Fl_Gl_Window</TT></A>. Your subclass must implement a <TT>draw()</TT>
+The easiest way to make an OpenGL display is to subclass <A href=Fl_GlWindow.html#GlWindow>
+<TT>fltk::GlWindow</TT></A>. Your subclass must implement a <TT>draw()</TT>
 method which uses OpenGL calls to draw the display.  Your main program 
 should call <TT>redraw()</TT> when the display needs to change, and 
 (somewhat later) FLTK will call <TT>draw()</TT>. 
@@ -22,9 +22,9 @@ include the file <TT>&lt;GL/gl.h&gt;</TT>, define some extra drawing
 functions provided by FLTK, and include the <TT>&lt;windows.h&gt;</TT> header 
 file needed by WIN32 applications. </P>
 
-<a name=glsubclass><H2>Making a Subclass of Fl_Gl_Window</H2></a>
+<a name=glsubclass><H2>Making a Subclass of fltk::GlWindow</H2></a>
 
-To make a subclass of Fl_Gl_Window, you must provide: 
+To make a subclass of fltk::GlWindow, you must provide: 
 <UL>
 <LI>A class definition. </LI>
 <LI>A <TT>draw()</TT> method. </LI>
@@ -32,7 +32,7 @@ To make a subclass of Fl_Gl_Window, you must provide:
 user). </LI>
 </UL>
 If your subclass provides static controls in the window, they must be
-redrawn whenever the <tt>FL_DAMAGE_ALL</tt> bit is set in the value
+redrawn whenever the <tt>fltk::DAMAGE_ALL</tt> bit is set in the value
 returned by <tt>damage()</tt>.  For double-buffered windows you will
 need to surround the drawing code with the following code to make sure
 that both buffers are redrawn:
@@ -50,15 +50,15 @@ glDrawBuffer(GL_BACK);
 considerably. The preprocessor instructions shown above will optimize
 your code based upon the graphics library used.
 <H3>Defining the Subclass</H3>
-To define the subclass you just subclass the <TT>Fl_Gl_Window</TT> class: 
+To define the subclass you just subclass the <TT>fltk::GlWindow</TT> class: 
 <PRE>
-class MyWindow : public Fl_Gl_Window {
+class MyWindow : public fltk::GlWindow {
   void draw();
   int handle(int);
 
 public:
   MyWindow(int X, int Y, int W, int H, const char *L)
-    : Fl_Gl_Window(X, Y, W, H, L) {}
+    : fltk::GlWindow(X, Y, W, H, L) {}
 };
 </PRE>
  The <TT>draw()</TT> and <TT>handle()</TT> methods are described below. 
@@ -83,31 +83,31 @@ window:
 <PRE>
 int MyWindow::handle(int event) {
   switch(event) {
-  case FL_PUSH:
+  case fltk::PUSH:
     ... mouse down event ...
-    ... position in Fl::event_x() and Fl::event_y()
+    ... position in fltk::event_x() and fltk::event_y()
     return 1;
-  case FL_DRAG:
+  case fltk::DRAG:
     ... mouse moved while down event ...
     return 1;
-  case FL_RELEASE:    
+  case fltk::RELEASE:    
     ... mouse up event ...
     return 1;
-  case FL_FOCUS :
-  case FL_UNFOCUS :
+  case fltk::FOCUS :
+  case fltk::UNFOCUS :
     ... Return 1 if you want keyboard events, 0 otherwise
     return 1;
-  case FL_KEY:
-    ... keypress, key is in Fl::event_key(), ascii in Fl::event_text()
+  case fltk::KEY:
+    ... keypress, key is in fltk::event_key(), ascii in fltk::event_text()
     ... Return 1 if you understand/use the keyboard event, 0 otherwise...
     return 1;
-  case FL_SHORTCUT:
-    ... shortcut, key is in Fl::event_key(), ascii in Fl::event_text()
+  case fltk::SHORTCUT:
+    ... shortcut, key is in fltk::event_key(), ascii in fltk::event_text()
     ... Return 1 if you understand/use the shortcut event, 0 otherwise...
     return 1;
   default:
     // let the base class handle all other events:
-    return Fl_Gl_Window::handle(event);
+    return fltk::GlWindow::handle(event);
   }
 }
 </PRE>
@@ -118,7 +118,7 @@ inside <TT>handle()</TT>!
 <P>You can call <I>some</I> OpenGL stuff like hit detection and texture 
 loading functions by doing: </P>
 <PRE>
-  case FL_PUSH:
+  case fltk::PUSH:
     make_current(); // make OpenGL context current
     if (!valid()) {
       ... set up projection exactly the same as draw ...
@@ -132,7 +132,7 @@ MyWindow(...)</TT>.  You can also use <A href=fluid.html>FLUID</A>
 by: 
 <OL>
 <LI>Putting your class definition in a <tt>MyWindow.H</tt> file. </LI>
-<LI>Creating a <tt>Fl_Box</tt> widget in FLUID.</LI>
+<LI>Creating a <tt>fltk::InvisibleBox</tt> widget in FLUID.</LI>
 <LI>In the widget panel fill in the &quot;class&quot; field with <tt>MyWindow</tt>. 
 This will make FLUID produce constructors for your new class. </LI>
 <LI>In the &quot;Extra Code&quot; field put <TT>#include &quot;MyWindow.H&quot;</TT>, so  that 
@@ -143,16 +143,16 @@ show()</TT> on the window containing the OpenGL window.
 
 <a name=glnormal><H2>Using OpenGL in Normal FLTK Windows</H2></a>
 
-You can put OpenGL code into an <A href=#draw><TT>Fl_Widget::draw()</TT>
+You can put OpenGL code into an <A href=#draw><TT>fltk::Widget::draw()</TT>
 </A> method or into the code for a <A href=common.html#boxtypes>boxtype</A>
 or other places with some care. 
 <P>Most importantly, before you show <I>any</I> windows (including those 
 that don't have OpenGL drawing) you <B>must</B> initialize FLTK so that it 
 knows it is going to use OpenGL.  You may use any of the symbols 
-described for <A href=Fl_Gl_Window.html#mode><TT>
-Fl_Gl_Window::mode()</TT></A> to describe how you intend to use OpenGL: </P>
+described for <A href=Fl_GlWindow.html#mode><TT>
+fltk::GlWindow::mode()</TT></A> to describe how you intend to use OpenGL: </P>
 <PRE>
-Fl::gl_visual(FL_RGB);
+fltk::gl_visual(fltk::RGB);
 </PRE>
 You can then put OpenGL drawing code anywhere you can draw normally by 
 surrounding it with: 
@@ -171,18 +171,18 @@ stream with the drawing done by other X, WIN32, or FLTK functions.
 projection transformation or anything else you should use <TT>
 glPushMatrix()</TT> and <TT>glPopMatrix()</TT> functions to put the 
 state back before calling <TT>gl_finish()</TT>. </P>
-<P>You may want to use <TT>Fl_Window::current()-&gt;h()</TT> to get the 
+<P>You may want to use <TT>fltk::Window::current()-&gt;h()</TT> to get the 
 drawable height so that you can flip the Y coordinates. </P>
 <P>Unfortunately, there are a bunch of limitations you must adhere to 
 for maximum portability: </P>
 <UL>
 <LI>You must choose a default visual with <A href=Fl.html#gl_visual>
-<TT>Fl::gl_visual()</TT></A>. </LI>
-<LI>You cannot pass <TT>FL_DOUBLE</TT> to <TT>Fl::gl_visual()</TT>.</LI>
-<LI>You cannot use <TT>Fl_Double_Window</TT> or <TT>Fl_Overlay_Window</TT>.</LI>
+<TT>fltk::gl_visual()</TT></A>. </LI>
+<LI>You cannot pass <TT>fltk::DOUBLE</TT> to <TT>fltk::gl_visual()</TT>.</LI>
+<LI>You cannot use <TT>fltk::DoubleBufferWindow</TT> or <TT>fltk::Overlay_Window</TT>.</LI>
 </UL>
 Do <I>not</I> call <TT>gl_start()</TT> or <TT>gl_finish()</TT> when 
-drawing into an <TT>Fl_Gl_Window</TT>!
+drawing into an <TT>fltk::GlWindow</TT>!
 <a name=drawing>
 
 <a name=glfunc><H2>OpenGL Drawing Functions</H2></a>
@@ -191,19 +191,19 @@ FLTK provides some useful OpenGL drawing functions.  They can be
 freely mixed with any OpenGL calls, and are defined by including <TT>
 &lt;fltk/gl.h&gt;</TT> (which you should include instead of the OpenGL header <TT>
 &lt;GL/gl.h&gt;</TT>). 
-<H4>void gl_color(Fl_Color)</H4>
+<H4>void gl_color(fltk::Color)</H4>
 Set the current color to a FLTK color. <I>For color-index modes 
-it will use <TT>fl_xpixel(c)</TT>, which is only right if this window 
+it will use <TT>fltk::xpixel(c)</TT>, which is only right if this window 
 uses the default colormap!</I>
 <H4>void gl_rect(int x, int y, int w, int h)
 <BR> void gl_rectf(int x, int y, int w, int h)</H4>
 Outline or fill a rectangle with the current color.  If
-<A HREF="Fl_Gl_Window.html#ortho"><TT>Fl_Gl_Window::ortho()</TT></A>
+<A HREF="Fl_GlWindow.html#ortho"><TT>fltk::GlWindow::ortho()</TT></A>
 has been called, then the rectangle will exactly fill the pixel 
 rectangle passed. 
-<H4>void gl_font(Fl_Font fontid, int size)</H4>
-Set the current OpenGL font to the same font you get by calling <A href=drawing.html#fl_font>
-<TT>fl_font()</TT></A>. 
+<H4>void gl_font(fltk::Font fontid, int size)</H4>
+Set the current OpenGL font to the same font you get by calling <A href=drawing.html#font>
+<TT>fltk::font()</TT></A>. 
 <H4>int gl_height()
 <BR> int gl_descent()
 <BR> float gl_width(const char *)
@@ -220,15 +220,15 @@ the current OpenGL font at the current raster position.
 <BR> void gl_draw(const char *, int n, float x, float y)</H4>
  Draw a nul-terminated string or an array of <TT>n</TT> characters in 
 the current OpenGL font at the given position. 
-<H4>void gl_draw(const char *, int x, int y, int w, int h, Fl_Align)</H4>
+<H4>void gl_draw(const char *, int x, int y, int w, int h, fltk::Align)</H4>
  Draw a string formatted into a box, with newlines and tabs expanded, 
 other control characters changed to ^X, and aligned with the edges or 
-center.  Exactly the same output as <A href=#fl_draw><TT>fl_draw()</TT></A>
+center.  Exactly the same output as <A href=#draw><TT>fltk::draw()</TT></A>
 . 
 
 <a name=glspeed><h2>Speeding up OpenGL</h2></a>
 
-Performance of Fl_Gl_Window may be improved on some types of OpenGL
+Performance of fltk::GlWindow may be improved on some types of OpenGL
 implementations (in particular MESA or other software emulators) by
 setting the <tt>GL_SWAP_TYPE</tt> environment variable.  This variable
 declares what is in the back buffer after you do a swapbuffers.
@@ -272,9 +272,9 @@ HP-UX.  It allows you to view large scenes without writing a lot of
 OpenGL code. 
 <H4>OptimizerWindow Class Definition</H4>
  To use OpenGL Optimizer with FLTK you'll need to create a subclass of <TT>
-Fl_Gl_Widget</TT> that includes several state variables: 
+fltk::Gl_Widget</TT> that includes several state variables: 
 <PRE>
-class OptimizerWindow : public Fl_Gl_Window {
+class OptimizerWindow : public fltk::GlWindow {
   csContext *context_; // Initialized to 0 and set by draw()...
   csDrawAction *draw_action_; // Draw action...
   csGroup *scene_; // Scene to draw...
@@ -284,7 +284,7 @@ class OptimizerWindow : public Fl_Gl_Window {
 
 public:
   OptimizerWindow(int X, int Y, int W, int H, const char *L)
-    : Fl_Gl_Window(X, Y, W, H, L) {
+    : fltk::GlWindow(X, Y, W, H, L) {
       context_ = (csContext *)0;
       draw_action_ = (csDrawAction *)0;
       scene_ = (csGroup *)0;
@@ -320,13 +320,13 @@ void OptimizerWindow::draw() {
     // Optimizer context for the scene...
 
 #ifdef WIN32
-    context_ = new csContext((HDC)fl_getHDC());
+    context_ = new csContext((HDC)fltk::getHDC());
     context_-&gt;ref();
-    context_-&gt;makeCurrent((HDC)fl_getHDC());
+    context_-&gt;makeCurrent((HDC)fltk::getHDC());
 #else
-    context_ = new csContext(fl_display, fl_visual);
+    context_ = new csContext(fltk::display, fltk::visual);
     context_-&gt;ref();
-    context_-&gt;makeCurrent(fl_display, fl_window);
+    context_-&gt;makeCurrent(fltk::display, fltk::window);
 #endif // WIN32
 
     ... perform other context setup as desired ...    
@@ -340,9 +340,9 @@ void OptimizerWindow::draw() {
     }
   } else {
 #ifdef WIN32
-    context_-&gt;makeCurrent((HDC)fl_getHDC());
+    context_-&gt;makeCurrent((HDC)fltk::getHDC());
 #else
-    context_-&gt;makeCurrent(fl_display, fl_window);
+    context_-&gt;makeCurrent(fltk::display, fltk::window);
 #endif // WIN32
   }
 

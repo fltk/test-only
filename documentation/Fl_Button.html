@@ -1,24 +1,24 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Button</title></head><body>
+<title>class fltk::Button</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Button</h2>
+<h2>class fltk::Button</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
 
 <pre>
-<A href=Fl_Widget.html>Fl_Widget</A>
+<A href=Fl_Widget.html>fltk::Widget</A>
    |
-   +----<B>Fl_Button</B>
+   +----<B>fltk::Button</B>
            |
-           +----<A href=Fl_Check_Button.html>Fl_Check_Button</A>, <A href=Fl_Light_Button.html>Fl_Light_Button</A>, <A href=Fl_Repeat_Button.html>Fl_Repeat_Button</A>,
-                <A href=Fl_Return_Button.html>Fl_Return_Button</A>, <A href=Fl_Round_Button.html>Fl_Round_Button</A>
+           +----<A href=Fl_CheckButton.html>fltk::CheckButton</A>, <A href=Fl_LightButton.html>fltk::LightButton</A>, <A href=Fl_RepeatButton.html>fltk::RepeatButton</A>,
+                <A href=Fl_ReturnButton.html>fltk::ReturnButton</A>, <A href=Fl_RoundButton.html>fltk::RoundButton</A>
 </pre>
 
 <h3>Include Files</h3>
 
 <pre>
-#include &lt;fltk/Fl_Button.h&gt;
+#include &lt;fltk/Button.h&gt;
 </pre>
 
 <h3>Description</h3>
@@ -28,14 +28,14 @@ control exactly when and how by changing the values for
 <TT>type()</TT> and <TT>when()</TT>.
 
 <P>Buttons can also generate callbacks in response to
-<TT>FL_SHORTCUT</TT> events.  The button can either have an explicit
+<TT>fltk::SHORTCUT</TT> events.  The button can either have an explicit
 <A href=Fl_Widget.html#shortcut><TT>shortcut()</TT></A> value or a letter
 shortcut can be indicated in the <TT>label()</TT> with an '&amp;'
 character before it. For the label shortcut it does not matter if
 <I>Alt</I> is held down, but if you have an input field in the same
 window, the user will have to hold down the <I>Alt</I> key so that
 the input field does not eat the event first as an
-<TT>FL_KEY</TT> event.
+<TT>fltk::KEY</TT> event.
 
 <H3>Methods</H3>
 
@@ -43,8 +43,8 @@ the input field does not eat the event first as an
 <TABLE width=90%>
 <TR><TD align=left valign=top>
 <UL>
-<LI><A href=#Fl_Button>Fl_Button</A></LI>
-<LI><A href=#~Fl_Button>~Fl_Button</A></LI>
+<LI><A href=#Button>fltk::Button</A></LI>
+<LI><A href=#~fltk::Button>~fltk::Button</A></LI>
 </UL>
 </TD><TD align=left valign=top>
 <UL>
@@ -69,21 +69,21 @@ the input field does not eat the event first as an
 </TABLE>
 </CENTER>
 
-<a name=Fl_Button><h4>Fl_Button::Fl_Button(int x, int y, int w, int h, const char *label = 0)</h4></a>
+<a name=FlButton><h4>fltk::Button::Button(int x, int y, int w, int h, const char *label = 0)</h4></a>
 
 The constructor creates the button using the position, size, and 
 label. 
 
-<a name=~Fl_Button><h4>Fl_Button::~Fl_Button(void)</h4></a>
+<a name=~Button><h4>fltk::Button::~fltk::Button(void)</h4></a>
 
 The destructor removed the button. 
 
-<a name=clear><h4>int Fl_Button::clear()</h4></a>
+<a name=clear><h4>int fltk::Button::clear()</h4></a>
 
 Same as <TT>value(0)</TT>. 
 
-<A name=down_box><h4>Fl_Boxtype Fl_Button::down_box() const
-<BR>void Fl_Button::down_box(Fl_Boxtype bt)</h4></a>
+<A name=down_box><h4>fltk::Box fltk::Button::down_box() const
+<BR>void fltk::Button::down_box(fltk::Box bt)</h4></a>
 
 The first form returns the current down box type, which is drawn when <TT>
 value()</TT> is non-zero. 
@@ -92,49 +92,49 @@ value()</TT> is non-zero.
 causes FLTK to figure out the correct matching down version of
 <TT>box()</TT>.
 
-<a name=set><h4>int Fl_Button::set()</h4></a>
+<a name=set><h4>int fltk::Button::set()</h4></a>
 
 Same as <TT>value(1)</TT>. 
 
-<a name=setonly><h4>void Fl_Button::setonly()</h4></a>
+<a name=setonly><h4>void fltk::Button::setonly()</h4></a>
 
 Turns on this button and turns off all other radio buttons in the 
 group (calling <TT>value(1)</TT> or <TT>set()</TT> does not do this). 
 
-<a name=type><h4>uchar Fl_Button::type() const
-<BR>void Fl_Button::type(uchar t)</h4></a>
+<a name=type><h4>uchar fltk::Button::type() const
+<BR>void fltk::Button::type(uchar t)</h4></a>
 
 The first form of <TT>type()</TT> returns the current button type, 
 which can be one of: 
 
 <UL>
 <LI><CODE>0</CODE>: The value is unchanged. </LI>
-<LI><CODE>FL_TOGGLE_BUTTON</CODE>: The value is inverted. </LI>
-<LI><CODE>FL_RADIO_BUTTON</CODE>: The value is set to 1, and all  other 
-buttons in the current group with <CODE>type() == FL_RADIO_BUTTON</CODE>
+<LI><CODE>fltk::TOGGLE</CODE>: The value is inverted. </LI>
+<LI><CODE>fltk::RADIO</CODE>: The value is set to 1, and all  other 
+buttons in the current group with <CODE>type() == fltk::RADIO</CODE>
  are set to zero. </LI>
 </UL>
 
 The second form sets the button type to <TT>t</TT>. 
 
-<a name=value><h4>char Fl_Button::value() const
-<BR>int Fl_Button::value(int)</h4></a>
+<a name=value><h4>char fltk::Button::value() const
+<BR>int fltk::Button::value(int)</h4></a>
 
 The first form returns the current value (0 or 1).  The second form 
 sets the current value. 
 
-<a name=when><h4>Fl_When Fl_Widget::when() const
-<BR>void Fl_Widget::when(Fl_When w)</h4></a>
+<a name=when><h4>fltk::When fltk::Widget::when() const
+<BR>void fltk::Widget::when(fltk::When w)</h4></a>
 
 Controls when callbacks are done.  The following values are useful, 
-the default value is <CODE>FL_WHEN_RELEASE</CODE>: 
+the default value is <CODE>fltk::WHEN_RELEASE</CODE>: 
 
 <UL>
 <LI><CODE>0</CODE>: The callback is not done, instead changed() is 
  turned on. </LI>
-<LI><CODE>FL_WHEN_RELEASE</CODE>: The callback is done after the user 
+<LI><CODE>fltk::WHEN_RELEASE</CODE>: The callback is done after the user 
  successfully clicks the button, or when a shortcut is typed. </LI>
-<LI><CODE>FL_WHEN_CHANGED </CODE>: The callback is done each time the 
+<LI><CODE>fltk::WHEN_CHANGED </CODE>: The callback is done each time the 
  value() changes (when the user pushes and releases the button, and as 
  the mouse is dragged around in and out of the button). </LI>
 </UL>

@@ -1,26 +1,26 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Menu_Window</title></head><body>
+<title>class fltk::MenuWindow</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Menu_Window</h2>
+<h2>class fltk::MenuWindow</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
 
 <pre>
-<a href=Fl_Single_Window.html>Fl_Single_Window</a>
+<a href=Fl_Single_Window.html>fltk::Single_Window</a>
    |
-   +----<b>Fl_Menu_Window</b>
+   +----<b>fltk::MenuWindow</b>
 </pre>
 
 <h3>Include Files</h3>
 
 <pre>
-#include &lt;fltk/Fl_Menu_Window.h&gt;
+#include &lt;fltk/MenuWindow.h&gt;
 </pre>
 
 <h3>Description</h3>
 
-The <tt>Fl_Menu_Window</tt> widget is a window type used for menus and
+The <tt>fltk::MenuWindow</tt> widget is a window type used for menus and
 tooltips. In earlier versions of fltk it used hardware overlay planes
 if possible, but this is currently disabled because it does not work
 with Xft anti-aliased fonts. It also turns on the <a
@@ -30,27 +30,27 @@ borders.
 <h3>Methods</h3>
 
 <ul>
-<li><a href=#Fl_Menu_Window>Fl_Menu_Window</a></li>
-<li><a href=#~Fl_Menu_Window>~Fl_Menu_Window</a></li>
+<li><a href=#MenuWindow>fltk::MenuWindow</a></li>
+<li><a href=#~fltk::MenuWindow>~fltk::MenuWindow</a></li>
 <li><a href=#clear_overlay>clear_overlay</a></li>
 <li><a href=#set_overlay>set_overlay</a></li>
 </ul>
 
-<a name=Fl_Menu_Window><h4>Fl_Menu_Window::Fl_Menu_Window(int x, int y, int w, int h, const char *label = 0)</h4></a>
+<a name=MenuWindow><h4>fltk::MenuWindow::MenuWindow(int x, int y, int w, int h, const char *label = 0)</h4></a>
 
-Creates a new <tt>Fl_Menu_Window</tt> widget using the given position, 
+Creates a new <tt>fltk::MenuWindow</tt> widget using the given position, 
 size, and label string. 
 
-<a name=~Fl_Menu_Window><h4>virtual Fl_Menu_Window::~Fl_Menu_Window()</h4></a>
+<a name=~MenuWindow><h4>virtual fltk::MenuWindow::~fltk::MenuWindow()</h4></a>
 
 Destroys the window and all of its children. 
 
-<a name=clear_overlay><h4>Fl_Menu_Window::clear_overlay();</h4></a>
+<a name=clear_overlay><h4>fltk::MenuWindow::clear_overlay();</h4></a>
 
 Tells FLTK to use normal drawing planes instead of overlay planes. 
 This is usually necessary if your menu contains multi-color pixmaps. 
 
-<a name=set_overlay><h4>Fl_Menu_Window::set_overlay()</h4></a>
+<a name=set_overlay><h4>fltk::MenuWindow::set_overlay()</h4></a>
 
 Tells FLTK to use hardware overlay planes if they are available.
 

@@ -1,55 +1,55 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Clock</title></head><body>
+<title>class fltk::Clock</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Clock</h2>
+<h2>class fltk::Clock</h2>
 <hr>
 
 <H3>Class Hierarchy</H3>
 <PRE>
-<A href=Fl_Widget.html#Fl_Widget>Fl_Widget</A>
+<A href=Fl_Widget.html#Widget>fltk::Widget</A>
    |
-   +----<B>Fl_Clock</B>
+   +----<B>fltk::Clock</B>
 </PRE>
 <H3>Include Files</H3>
 <PRE>
-#include &lt;fltk/Fl_Clock.h&gt;
+#include &lt;fltk/Clock.h&gt;
 </PRE>
 <H3>Description</H3>
 This widget provides a round analog clock display and is provided for 
 Forms compatibility.  It installs a 1-second timeout callback using <a
-href=Fl.html#add_timeout><tt>Fl::add_timeout()</tt></a>.
+href=Fl.html#add_timeout><tt>fltk::add_timeout()</tt></a>.
 
 <p><center><img src=clock.gif><img src=round_clock.gif></center>
 
 <H3>Methods</H3>
 <UL>
-<LI><A href=#Fl_Clock.Fl_Clock>Fl_Clock</A></LI>
-<LI><A href=#Fl_Clock.~Fl_Clock>~Fl_Clock</A></LI>
-<LI><A href=#Fl_Clock.hour>hour</A></LI>
-<LI><A href=#Fl_Clock.minute>minute</A></LI>
-<LI><A href=#Fl_Clock.second>second</A></LI>
-<LI><A href=#Fl_Clock.value>value</A></LI>
+<LI><A href=#Clock.Clock>fltk::Clock</A></LI>
+<LI><A href=#Clock.~Clock>~fltk::Clock</A></LI>
+<LI><A href=#Clock.hour>hour</A></LI>
+<LI><A href=#Clock.minute>minute</A></LI>
+<LI><A href=#Clock.second>second</A></LI>
+<LI><A href=#Clock.value>value</A></LI>
 </UL>
-<H4><A name=Fl_Clock.Fl_Clock>Fl_Clock::Fl_Clock(int x, int y, int w, 
+<H4><A name=Clock.Clock>fltk::Clock::Clock(int x, int y, int w, 
 int h, const char *label = 0)</A></H4>
- Creates a new <TT>Fl_Clock</TT> widget using the given position, size, 
-and label string. The default boxtype is <TT>FL_NO_BOX</TT>. 
-<H4><A name=Fl_Clock.~Fl_Clock>virtual Fl_Clock::~Fl_Clock()</A></H4>
+ Creates a new <TT>fltk::Clock</TT> widget using the given position, size, 
+and label string. The default boxtype is <TT>fltk::NO_BOX</TT>. 
+<H4><A name=Clock.~Clock>virtual fltk::Clock::~fltk::Clock()</A></H4>
  The destructor <I>also deletes all the children</I>. This allows a 
 whole tree to be deleted at once, without having to keep a pointer to 
 all the children in the user code. A kludge has been done so the <TT>
-Fl_Clock</TT> and all of it's children can be automatic (local) 
-variables, but you must declare the <TT>Fl_Clock</TT><I>first</I>, so 
+fltk::Clock</TT> and all of it's children can be automatic (local) 
+variables, but you must declare the <TT>fltk::Clock</TT><I>first</I>, so 
 that it is destroyed last. 
-<H4><A name=Fl_Clock.hour>int Fl_Clock::hour() const</A></H4>
+<H4><A name=Clock.hour>int fltk::Clock::hour() const</A></H4>
  Returns the current hour (0 to 23). 
-<H4><A name=Fl_Clock.minute>int Fl_Clock::minute() const</A></H4>
+<H4><A name=Clock.minute>int fltk::Clock::minute() const</A></H4>
  Returns the current minute (0 to 59). 
-<H4><A name=Fl_Clock.second>int Fl_Clock::second() const</A></H4>
+<H4><A name=Clock.second>int fltk::Clock::second() const</A></H4>
  Returns the current second (0 to 60, 60 = leap second). 
-<H4><A name=Fl_Clock.value>void Fl_Clock::value(ulong v)
-<BR> void Fl_Clock::value(int h, int m, int s)
-<BR> ulong Fl_Clock::value(void)</A></H4>
+<H4><A name=Clock.value>void fltk::Clock::value(ulong v)
+<BR> void fltk::Clock::value(int h, int m, int s)
+<BR> ulong fltk::Clock::value(void)</A></H4>
  The first two forms of <TT>value</TT> set the displayed time to the 
 given UNIX time value or specific hours, minutes, and seconds. 
 <P>The third form of <TT>value</TT> returns the displayed time in 

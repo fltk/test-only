@@ -1,40 +1,40 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Item_Group</title></head><body>
+<title>class fltk::ItemGroup</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Item_Group</h2>
+<h2>class fltk::ItemGroup</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
 
 <pre>
-<a href="Fl_Menu_.html">Fl_Menu_</a>
+<a href="Fl_Menu.html">fltk::Menu</a>
    |
-   +----<b>Fl_Item_Group</b>
+   +----<b>fltk::ItemGroup</b>
 </pre>
 
 <h3>Include Files</h3>
 
 <pre>
-#include &lt;fltk/Fl_Item_Group.h&gt;
+#include &lt;fltk/ItemGroup.h&gt;
 </pre>
 
 <h3>Description</h3>
 
 This widget describes a set of items that are to be put inside a
-<a href="Fl_Menu_.html">Fl_Menu</a> or <a
-href="Fl_Browser.html">Fl_Browser</a> widget. It indicates the title
+<a href="Fl_Menu.html">fltk::Menu</a> or <a
+href="Fl_Browser.html">fltk::Browser</a> widget. It indicates the title
 of a submenu, or a level of hierarchy in the browser. Any child
 widgets are the items in that submenu, or the items under this parent
 in the browser.
 
 <p>If this widget is told to draw, it draws just like <a
-href="Fl_Item.html">Fl_Item</a> draws. See that for more details. The
+href="Fl_Item.html">fltk::Item</a> draws. See that for more details. The
 triangle indicating a submenu is not drawn by this, it is drawn by the
 parent menu.
 
-<p>Because this is an Fl_Menu_ subclass, you can also call <a
-href="Fl_Menu_.html#popup">popup()</a> and <a
-href="Fl_Menu_.html#add">add()</a> and other methods to manipulate the
+<p>Because this is an fltk::Menu subclass, you can also call <a
+href="Fl_Menu.html#popup">popup()</a> and <a
+href="Fl_Menu.html#add">add()</a> and other methods to manipulate the
 items inside it.
 
 <p>In a browser, the <a href="Fl_Widget.html#value">value()</a>
@@ -45,15 +45,15 @@ is currently selected.
 <h3>Methods</h3>
 
 <ul>
-<li><a href=#Fl_Item_Group>Fl_Item_Group</a></li>
-<li><a href=#~Fl_Item_Group>~Fl_Item_Group</a></li>
+<li><a href=#ItemGroup>fltk::ItemGroup</a></li>
+<li><a href=#~fltk::ItemGroup>~fltk::ItemGroup</a></li>
 </ul>
 
-<a name=Fl_Item_Group><h4>Fl_Item_Group::Fl_Item_Group(const char * = 0)</h4></a>
+<a name=ItemGroup><h4>fltk::ItemGroup::ItemGroup(const char * = 0)</h4></a>
 
 Unlike other widgets the constructor does not take any dimensions,
 since it is assummed the container widget will size this correctly.
 
-<h4><A name="~Fl_Item_Group">Fl_Item_Group::~Fl_Item_Group(void)</a></h4>
+<h4><A name="~fltk::ItemGroup">fltk::ItemGroup::~fltk::ItemGroup(void)</a></h4>
 
 </body></html>

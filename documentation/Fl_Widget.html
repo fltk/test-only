@@ -1,25 +1,25 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Widget</title></head><body>
+<title>class fltk::Widget</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Widget</h2>
+<h2>class fltk::Widget</h2>
 
 <h3>Class Hierarchy</h3>
 
 <pre>
-<B>Fl_Widget</B>
+<B>fltk::Widget</B>
    |
-   +----<a href=Fl_Box.html>Fl_Box</a>, <a href=Fl_Button.html>Fl_Button</a>, <a href=Fl_Chart.html>Fl_Chart</a>, <a href=Fl_Clock.html>Fl_Clock</a>,
-        <a href=Fl_Group.html>Fl_Group</a>, <a href=Fl_Input.html>Fl_Input</a>, <a href=Fl_Positioner.html>Fl_Positioner</a>,
-        <a href=Fl_Valuator.html>Fl_Valuator</a>
+   +----<a href=Fl_Box.html>fltk::InvisibleBox</a>, <a href=Fl_Button.html>fltk::Button</a>, <a href=Fl_Chart.html>fltk::Chart</a>, <a href=Fl_Clock.html>fltk::Clock</a>,
+        <a href=Fl_Group.html>fltk::Group</a>, <a href=Fl_Input.html>fltk::Input</a>, <a href=Fl_Positioner.html>fltk::Positioner</a>,
+        <a href=Fl_Valuator.html>fltk::Valuator</a>
 </pre>
 
 <h3>Include Files</h3>
 
-<pre>#include &lt;fltk/Fl_Widget.h&gt;</pre>
+<pre>#include &lt;fltk/Widget.h&gt;</pre>
 
 <h3>Description</h3>
 
-<tt>Fl_Widget</tt> is the base class for all widgets in FLTK. You can't 
+<tt>fltk::Widget</tt> is the base class for all widgets in FLTK. You can't 
 create one of these because the constructor is not public.  However you 
 can <a href="subclassing.html">subclass</a> it. 
 
@@ -37,8 +37,8 @@ after changing any visible properties.
 <center><table width=90%>
 <tr><td align=left valign=top>
 <ul>
-<li><a href=#Fl_Widget>Fl_Widget</a></li>
-<li><a href=#~Fl_Widget>~Fl_Widget</a></li>
+<li><a href=#Widget>fltk::Widget</a></li>
+<li><a href=#~fltk::Widget>~fltk::Widget</a></li>
 <li><a href=#activate>activate</a></li>
 <li><a href=#active>active</a></li>
 <li><a href=#active_r>active_r</a></li>
@@ -145,9 +145,9 @@ The constructor and these 5 virtual functions are usually rewritten by
 any subclass. This is described in more detail under <a
 href=subclassing.html>subclassing</a>.
 
-<a name=Fl_Widget><h4>Fl_Widget::Fl_Widget(int x, int y, int w, int h, const char* label=0);</h4></a>
+<a name=Widget><h4>fltk::Widget::Widget(int x, int y, int w, int h, const char* label=0);</h4></a>
 
-This is the protected constructor for an Fl_Widget, but all derived 
+This is the protected constructor for an fltk::Widget, but all derived 
 widgets have a matching public constructor.  It takes a value for
 <a href=#x><tt>x()</tt></a>, 
 <a href=#y><tt>y()</tt></a>, 
@@ -165,7 +165,7 @@ version is <a href=subclassing.html#draw>here</a>.
 
 Handle an <a href=events.html>event</a>, and return non-zero if the
 widget understood and used the event. The default version returns true for
-<tt>FL_ENTER, FL_LEAVE</tt> and <tt>FL_MOVE</tt>. Information on how
+<tt>fltk::ENTER, fltk::LEAVE</tt> and <tt>fltk::MOVE</tt>. Information on how
 to write your own version is <a href=subclassing.html#handle>here</a>.
 If you want to send an event to a widget you probably want to use <a
 href=#send>send()</a> which will do some extra processing before and
@@ -179,7 +179,7 @@ different size will cause this to be called later (after all pending
 events are handled and just before <a href=#draw>draw()</a> is
 called).
 
-<a name=~Fl_Widget><h4>virtual Fl_Widget::~Fl_Widget();</h4></a>
+<a name=~Widget><h4>virtual fltk::Widget::~fltk::Widget();</h4></a>
 
 The destructor is virtual. The base class removes itself from the
 parent widget (if any), and destroys any label made with <a
@@ -187,7 +187,7 @@ href=#copy_label>copy_label()</a>.
 
 <h3>Static methods</h3>
 
-<a name=send><h4>int Fl_Widget::send(int event)</h4></a>
+<a name=send><h4>int fltk::Widget::send(int event)</h4></a>
 
 Call the <a href=#handle>handle()</a> method on the widget and return
 the result, but also does some processing of events:
@@ -197,160 +197,160 @@ the result, but also does some processing of events:
 <li>It makes sure the widget is active and/or visible if the event
 requres this. 
 
-<li>It adjusts Fl::event_x/y to be relative to the widget (It is the
+<li>It adjusts fltk::event_x/y to be relative to the widget (It is the
 caller's responsibility to see if the mouse is pointing at the
 widget).
 
-<li>If this is not the <a href=Fl.html#belowmouse>Fl::belowmouse()</a>
-widget then it changes <tt>FL_MOVE</tt> into <tt>FL_ENTER</tt> and
-turns <tt>FL_DND_DRAG</tt> into <tt>FL_DND_ENTER</tt>. If this
-<i>is</i> the <a href=Fl.html#belowmouse>Fl::belowmouse()</a> widget
+<li>If this is not the <a href=Fl.html#belowmouse>fltk::belowmouse()</a>
+widget then it changes <tt>fltk::MOVE</tt> into <tt>fltk::ENTER</tt> and
+turns <tt>fltk::DND_DRAG</tt> into <tt>fltk::DND_ENTER</tt>. If this
+<i>is</i> the <a href=Fl.html#belowmouse>fltk::belowmouse()</a> widget
 then the opposite conversion is done.
 
 <li>For move, focus, and push events if <a href=#handle>handle()</a>
 returns true it sets the <a
-href=Fl.html#belowmouse>Fl::belowmouse()</a> or <a
-href=Fl.html#focus>Fl::focus()</a> or <a
-href=Fl.html#pushed>Fl::pushed()</a> widget to reflect this.
+href=Fl.html#belowmouse>fltk::belowmouse()</a> or <a
+href=Fl.html#focus>fltk::focus()</a> or <a
+href=Fl.html#pushed>fltk::pushed()</a> widget to reflect this.
 
 </ul>
 
-<a name=style><h4>const <a href=Fl_Style.html>Fl_Style</a>* Fl_Widget::style() const</h4></a>
+<a name=style><h4>const <a href=Fl_Style.html>fltk::Style</a>* fltk::Widget::style() const</h4></a>
 
-Return the <a href=Fl_Style.html>Fl_Style</a> structure used by this
+Return the <a href=Fl_Style.html>fltk::Style</a> structure used by this
 widget.  Normally this structure is shared with many other widgets.
 
-<h4>bool Fl_Widget::style(<a href=Fl_Style.html>Fl_Style</a>* s);
-<br>bool Fl_Widget::style(<a href=Fl_Style.html>Fl_Style</a>& s);</h4>
+<h4>bool fltk::Widget::style(<a href=Fl_Style.html>fltk::Style</a>* s);
+<br>bool fltk::Widget::style(<a href=Fl_Style.html>fltk::Style</a>& s);</h4>
 
 Set the style to this <i>shared</i> style.  If this style has never
 been used before fltk adds it as a child of the current style and
 returns true (this allows the calling code to initialize it).
 
-<a name=copy_style><h4>bool copy_style(const <a href=Fl_Style.html>Fl_Style</a>* s);</h4></a>
+<a name=copy_style><h4>bool copy_style(const <a href=Fl_Style.html>fltk::Style</a>* s);</h4></a>
 
 Copy the style from another widget.  If it is not shared then a copy
 is made, otherwise the pointer is just copied.  This is done so that
 either widget may be destroyed without deleting the style used by the
 other one.
 
-<a name=wstyle><h4><a href=Fl_Style.html>Fl_Style</a>* Fl_Widget::wstyle();</h4></a>
+<a name=wstyle><h4><a href=Fl_Style.html>fltk::Style</a>* fltk::Widget::wstyle();</h4></a>
 
 Returns a "writable" style.  If the current value of <a
 href=#style>style()</a> is shared then a unique copy is made and
 returned.  This may be modified without changing other widgets.
 
 <h4>
-<a name=box>Fl_Boxtype Fl_Widget::box();</a><br>
-<a name=button_box>Fl_Boxtype Fl_Widget::button_box();</a><br>
-<a name=focus_box>Fl_Boxtype Fl_Widget::focus_box();</a><br>
-<a name=glyph>Fl_Glyph Fl_Widget::glyph();</a><br>
-<a name=label_font>Fl_Font Fl_Widget::label_font();</a><br>
-<a name=text_font>Fl_Font Fl_Widget::text_font();</a><br>
-<a name=label_type>Fl_Labeltype Fl_Widget::label_type();</a><br>
-<a name=color>Fl_Color Fl_Widget::color();</a><br>
-<a name=label_color>Fl_Color Fl_Widget::label_color();</a><br>
-<a name=highlight_color>Fl_Color Fl_Widget::highlight_color();</a><br>
-<a name=highlight_label_color>Fl_Color Fl_Widget::highlight_label_color();</a><br>
-<a name=button_color>Fl_Color Fl_Widget::button_color();</a><br>
-<a name=text_color>Fl_Color Fl_Widget::text_color();</a><br>
-<a name=selection_color>Fl_Color Fl_Widget::selection_color();</a><br>
-<a name=selection_text_color>Fl_Color Fl_Widget::selection_text_color();</a><br>
-<a name=label_size>unsigned Fl_Widget::label_size();</a><br>
-<a name=text_size>unsigned Fl_Widget::text_size();</a><br>
-<a name=leading>unsigned Fl_Widget::leading();</a></h4>
+<a name=box>fltk::Box fltk::Widget::box();</a><br>
+<a name=button_box>fltk::Box fltk::Widget::button_box();</a><br>
+<a name=focus_box>fltk::Box fltk::Widget::focus_box();</a><br>
+<a name=glyph>fltk::Glyph fltk::Widget::glyph();</a><br>
+<a name=label_font>fltk::Font fltk::Widget::label_font();</a><br>
+<a name=text_font>fltk::Font fltk::Widget::text_font();</a><br>
+<a name=label_type>fltk::Labeltype fltk::Widget::label_type();</a><br>
+<a name=color>fltk::Color fltk::Widget::color();</a><br>
+<a name=label_color>fltk::Color fltk::Widget::label_color();</a><br>
+<a name=highlight_color>fltk::Color fltk::Widget::highlight_color();</a><br>
+<a name=highlight_label_color>fltk::Color fltk::Widget::highlight_label_color();</a><br>
+<a name=button_color>fltk::Color fltk::Widget::button_color();</a><br>
+<a name=text_color>fltk::Color fltk::Widget::text_color();</a><br>
+<a name=selection_color>fltk::Color fltk::Widget::selection_color();</a><br>
+<a name=selection_text_color>fltk::Color fltk::Widget::selection_text_color();</a><br>
+<a name=label_size>unsigned fltk::Widget::label_size();</a><br>
+<a name=text_size>unsigned fltk::Widget::text_size();</a><br>
+<a name=leading>unsigned fltk::Widget::leading();</a></h4>
 
 Return the given field out of the <a href=#style>style()</a>.
 
-<h4>void Fl_Widget::box(Fl_Boxtype);<br>
-void Fl_Widget::button_box(Fl_Boxtype);<br>
-void Fl_Widget::focus_box(Fl_Boxtype);<br>
-void Fl_Widget::glyph(Fl_Glyph);<br>
-void Fl_Widget::label_font(Fl_Font);<br>
-void Fl_Widget::text_font(Fl_Font);<br>
-void Fl_Widget::label_type(Fl_Labeltype);<br>
-void Fl_Widget::color(Fl_Color);<br>
-void Fl_Widget::label_color(Fl_Color);<br>
-void Fl_Widget::highlight_color(Fl_Color);<br>
-void Fl_Widget::highlight_label_color(Fl_Color);<br>
-void Fl_Widget::button_color(Fl_Color);<br>
-void Fl_Widget::text_color(Fl_Color);<br>
-void Fl_Widget::selection_color(Fl_Color);<br>
-void Fl_Widget::selection_text_color(Fl_Color);<br>
-void Fl_Widget::label_size(unsigned);<br>
-void Fl_Widget::text_size(unsigned);<br>
-void Fl_Widget::leading(unsigned);</h4>
+<h4>void fltk::Widget::box(fltk::Box);<br>
+void fltk::Widget::button_box(fltk::Box);<br>
+void fltk::Widget::focus_box(fltk::Box);<br>
+void fltk::Widget::glyph(fltk::Glyph);<br>
+void fltk::Widget::label_font(fltk::Font);<br>
+void fltk::Widget::text_font(fltk::Font);<br>
+void fltk::Widget::label_type(fltk::Labeltype);<br>
+void fltk::Widget::color(fltk::Color);<br>
+void fltk::Widget::label_color(fltk::Color);<br>
+void fltk::Widget::highlight_color(fltk::Color);<br>
+void fltk::Widget::highlight_label_color(fltk::Color);<br>
+void fltk::Widget::button_color(fltk::Color);<br>
+void fltk::Widget::text_color(fltk::Color);<br>
+void fltk::Widget::selection_color(fltk::Color);<br>
+void fltk::Widget::selection_text_color(fltk::Color);<br>
+void fltk::Widget::label_size(unsigned);<br>
+void fltk::Widget::text_size(unsigned);<br>
+void fltk::Widget::leading(unsigned);</h4>
 
-These all create a writable <a href=Fl_Style.html>Fl_Style</a> with <a
+These all create a writable <a href=Fl_Style.html>fltk::Style</a> with <a
 href=#wstyle>wstyle()</a> and set the given field in it.
 
-<a name=parent><h4>Fl_Widget* Fl_Widget::parent() const</h4></a>
+<a name=parent><h4>fltk::Widget* fltk::Widget::parent() const</h4></a>
 
 Returns a pointer to the parent widget.  Usually this is a <a
-href=Fl_Group.html#Fl_Group> <tt>Fl_Group</tt></a> or <a
-HREF="Fl_Window.html#Fl_Window"><tt>Fl_Window</tt></a>.  Returns
+href=Fl_Group.html#Group> <tt>fltk::Group</tt></a> or <a
+HREF="Fl_Window.html#Window"><tt>fltk::Window</tt></a>.  Returns
 <tt>NULL</tt> if none.
 
-<a name=window><h4>Fl_Window* Fl_Widget::window() const;</h4></a>
+<a name=window><h4>fltk::Window* fltk::Widget::window() const;</h4></a>
 
 Return a pointer to the <a
-href="Fl_Window.html#Fl_Window"><tt>Fl_Window</tt></a> that this
+href="Fl_Window.html#Window"><tt>fltk::Window</tt></a> that this
 widget is in (it will skip any and all parent widgets between this and
 the window).  Returns <tt>NULL</tt> if none.  Note: for an
-<tt>Fl_Window</tt>, this returns the <I>parent</I> window (if any),
+<tt>fltk::Window</tt>, this returns the <I>parent</I> window (if any),
 not <I>this</I> window.
 
-<a name=type><h4>uchar Fl_Widget::type() const;
+<a name=type><h4>uchar fltk::Widget::type() const;
 <br>void type(uchar t)</h4></a>
 
-The property <TT>Fl_Widget::type()</TT> can return an arbitrary 8-bit
+The property <TT>fltk::Widget::type()</TT> can return an arbitrary 8-bit
 identifier, and can be set with the protected method <TT>type(uchar
 t)</TT>. This value had to be provided for Forms compatibility, but
 you can use it for any purpose you want (mostly for "bad object
 oriented programming" where you insert some subclass functionality
-into the base class). Fl_Widget subclasses may store values in the
+into the base class). fltk::Widget subclasses may store values in the
 range 0-99 here (larger values are reserved for use by FLTK).
 
 <p>For portability FLTK does not use RTTI (Run Time Typing Infomation)
 internally (you are free to use it, though). If you don't have RTTI you can
 use the clumsy FLTK mechanisim, by having <TT>type()</TT> use a unique
 value.  These unique values must be greater than the symbol
-<TT>Fl_Widget::RESERVED_TYPE</TT> (which is 100).  Look through the header
-files for <TT>Fl_Widget::RESERVED_TYPE</TT> to find an unused number.  If you
-make a subclass of <TT>Fl_Window</TT> you must use <TT>Fl_Widget::WINDOW_TYPE +
+<TT>fltk::Widget::RESERVED_TYPE</TT> (which is 100).  Look through the header
+files for <TT>fltk::Widget::RESERVED_TYPE</TT> to find an unused number.  If you
+make a subclass of <TT>fltk::Window</TT> you must use <TT>fltk::Widget::WINDOW_TYPE +
 n</TT> (<TT>n</tt> must be in the range 1 to 7), if you
-make a subclass of <TT>Fl_Group</TT> you must use <TT>Fl_Widget::GROUP_TYPE +
+make a subclass of <TT>fltk::Group</TT> you must use <TT>fltk::Widget::GROUP_TYPE +
 n</TT> (<TT>n</tt> must be in the range 1 to 7) (fltk needs to be able
-to identify Fl_Window and Fl_Group subclasses internally).
+to identify fltk::Window and fltk::Group subclasses internally).
 
-<a name=is_group><h4>bool Fl_Widget::is_group() const</h4></a>
+<a name=is_group><h4>bool fltk::Widget::is_group() const</h4></a>
 
-Returns true if this Fl_Widget's class is a subclass of <a
-href=Fl_Group.html>Fl_Group</a>. If so you can cast it to a group with
-<tt>(Fl_Group*)(widget)</tt>. This is done by using <a
+Returns true if this fltk::Widget's class is a subclass of <a
+href=Fl_Group.html>fltk::Group</a>. If so you can cast it to a group with
+<tt>(fltk::Group*)(widget)</tt>. This is done by using <a
 href=#type><tt>type()</tt></a>, but if your compiler supports RTTI you
-may want to safer <tt>dynamic_cast&lt;Fl_Group*&gt;(widget)</tt>.
+may want to safer <tt>dynamic_cast&lt;fltk::Group*&gt;(widget)</tt>.
 
-<a name=is_window><h4>bool Fl_Widget::is_window() const</h4></a>
+<a name=is_window><h4>bool fltk::Widget::is_window() const</h4></a>
 
-Returns true if this Fl_Widget's class is a subclass of <a
-href=Fl_Window.html>Fl_Window</a>. If so you can cast it to a window with
-<tt>(Fl_Window*)(widget)</tt>. This is done by using <a
+Returns true if this fltk::Widget's class is a subclass of <a
+href=Fl_Window.html>fltk::Window</a>. If so you can cast it to a window with
+<tt>(fltk::Window*)(widget)</tt>. This is done by using <a
 href=#type><tt>type()</tt></a>, but if your compiler supports RTTI you
-may want to safer <tt>dynamic_cast&lt;Fl_Window*&gt;(widget)</tt>. If
+may want to safer <tt>dynamic_cast&lt;fltk::Window*&gt;(widget)</tt>. If
 this is true, <a href=#is_group><tt>is_group()</tt></a> is also true.
 
-<h4><a name=x>int Fl_Widget::x() const</a>
-<BR><a name=y>int Fl_Widget::y() const</a>
-<BR><a name=w>int Fl_Widget::w() const</a>
-<BR><a name=h>int Fl_Widget::h() const</a></h4>
+<h4><a name=x>int fltk::Widget::x() const</a>
+<BR><a name=y>int fltk::Widget::y() const</a>
+<BR><a name=w>int fltk::Widget::w() const</a>
+<BR><a name=h>int fltk::Widget::h() const</a></h4>
 
 The position of the upper-left corner of the widget in its enclosing 
-Fl_Widget. If this is an outer Fl_Window than this is the position of
+fltk::Widget. If this is an outer fltk::Window than this is the position of
 th upper-left corner of the <i>contents</i> (not the frame) on the screen.
 
-<h4><a name=height>int Fl_Widget::height()</a>
-<br><a name=width>int Fl_Widget::width()</a></h4>
+<h4><a name=height>int fltk::Widget::height()</a>
+<br><a name=width>int fltk::Widget::width()</a></h4>
 
 Returns <a href=#w><tt>w()</tt></a> or <a href=#h><tt>h()</tt></a>,
 but if the current value is zero it calls <a
@@ -358,7 +358,7 @@ href=#layout><tt>layout()</tt></a> before returning the value.  Using
 these calls allows a widget to delay the calculation of size until it
 is needed.
 
-<a name=resize><h4>void Fl_Widget::resize(int x, int y, int w, int h)</h4></a>
+<a name=resize><h4>void fltk::Widget::resize(int x, int y, int w, int h)</h4></a>
 
 Change the size or position of the widget. Nothing is done if the
 passed size and position are the same as before. If there is a change
@@ -366,23 +366,23 @@ then <a href=#relayout><tt>relayout()</tt></a> is called so that the
 virtual function <a href=#layout><tt>layout()</tt></a> is called
 before the next draw().
 
-<a name=position><h4>void Fl_Widget::position(short x, short y)</h4></a>
+<a name=position><h4>void fltk::Widget::position(short x, short y)</h4></a>
 
 Inline equivalent to <tt>resize(x,y,w(),h())</tt>.
 
-<a name=size><h4>void Fl_Widget::size(short w, short h)</h4></a>
+<a name=size><h4>void fltk::Widget::size(short w, short h)</h4></a>
 
 Inline equivalent to <tt>resize(x(),y(),w,h)</tt>.
 
-<a name=label><h4>const char* Fl_Widget::label() const
-<br>void Fl_Widget::label(const char*)</h4></a>
+<a name=label><h4>const char* fltk::Widget::label() const
+<br>void fltk::Widget::label(const char*)</h4></a>
 
 The label is printed somewhere on the widget or next to it. The
 string passed to label() is <I>not</I> copied, instead the pointer to
 the string is stored. If <a href=#copy_label><tt>copy_label()</tt></a>
 was called earlier the old string's memory is freed.
 
-<a name=copy_label><h4>void Fl_Widget::copy_label(const char*)</h4></a>
+<a name=copy_label><h4>void fltk::Widget::copy_label(const char*)</h4></a>
 
 The passed string is copied to private storage and used to set the
 label. The memory will be freed when the widget is destroyed or when
@@ -391,13 +391,13 @@ is called.
 
 <p>Passing <tt>NULL</tt> will set <tt>label()</tt> to <tt>NULL</tt>.
 
-<a name=image><h4>Fl_Image* Fl_Widget::image() const
-<br>void Fl_Widget::image(Fl_Image*)</h4></a>
+<a name=image><h4>fltk::Image* fltk::Widget::image() const
+<br>void fltk::Widget::image(fltk::Image*)</h4></a>
 
-<a href=Fl_Image.html>Fl_Image</a> to draw as part of the label.
+<a href=Fl_Image.html>fltk::Image</a> to draw as part of the label.
 
-<a name=tooltip><h4>const char* Fl_Widget::tooltip() const;
-<br>void Fl_Widget::tooltip(const char*)</h4></a>
+<a name=tooltip><h4>const char* fltk::Widget::tooltip() const;
+<br>void fltk::Widget::tooltip(const char*)</h4></a>
 
 Set the string used as the pop-up tooltip. The pointer to the passed string
 is stored, it is not copied! Passing null indicates that the tooltip
@@ -406,25 +406,25 @@ tooltip if no parent has one). If you want to disable the tooltip but
 let the parent have one, set this tooltip to <tt>""</tt>.
 
 <p>This is used as the label of the <a
-href=Fl_Tooltip.html>Fl_Tooltip</a> widget that pops up when the user
+href=Fl_Tooltip.html>fltk::Tooltip</a> widget that pops up when the user
 points at the window. You can probably get some interesting formatting
 and symbols in there with the symbol drawing code.
 
-<a name=shortcut><h4>ulong Fl_Widget::shortcut() const
-<br>void Fl_Widget::shortcut(ulong key)</h4></a>
+<a name=shortcut><h4>ulong fltk::Widget::shortcut() const
+<br>void fltk::Widget::shortcut(ulong key)</h4></a>
 
 Buttons and menu items use the shortcut to identify a keystroke
 that will activate them. The value is a bitwise OR of a key and a set
-of shift flags, for example <CODE>FL_ALT | 'a'</CODE> , <CODE>FL_ALT |
-(FL_F + 10)</CODE>, or just <CODE>'a'</CODE>.  A value of 0 disables
+of shift flags, for example <CODE>fltk::ALT | 'a'</CODE> , <CODE>fltk::ALT |
+(fltk::F + 10)</CODE>, or just <CODE>'a'</CODE>.  A value of 0 disables
 the shortcut.
 
 <p>The key can be any value returned by <a href="Fl.html#event_key">
-<TT>Fl::event_key()</TT></a>, but will usually be an ASCII letter. Use 
+<TT>fltk::event_key()</TT></a>, but will usually be an ASCII letter. Use 
 a lower-case letter unless you require the shift key to be held down.
 
 <p>The shift flags can be any set of values accepted by <a
-href="Fl.html#event_state"><TT>Fl::event_state()</TT></a>. If
+href="Fl.html#event_state"><TT>fltk::event_state()</TT></a>. If
 the bit is on that shift key must be pushed.  Win, Alt, Ctrl, and
 Shift must be off if they are not in the shift flags (zero for the
 other bits indicates a "don't care" setting).
@@ -432,41 +432,41 @@ other bits indicates a "don't care" setting).
 <p>Shortcuts can also be done in the MS Windows way
 by putting an '&amp;' in front of a letter in the <a
 href=#label><tt>label()</tt></a>. This is equivalent to
-<tt>FL_ALT</tt> and the letter.
+<tt>fltk::ALT</tt> and the letter.
 
-<a name=callback><h4>Fl_Callback* Fl_Widget::callback() const
-<br>void Fl_Widget::callback(Fl_Callback*, void* = 0)</h4></a>
+<a name=callback><h4>fltk::Callback* fltk::Widget::callback() const
+<br>void fltk::Widget::callback(fltk::Callback*, void* = 0)</h4></a>
 
 Each widget has a single callback.  You can set it or examine it with 
 these methods. 
 
-<a name=user_data><h4>void* Fl_Widget::user_data() const
-<br>void Fl_Widget::user_data(void*)</h4></a>
+<a name=user_data><h4>void* fltk::Widget::user_data() const
+<br>void fltk::Widget::user_data(void*)</h4></a>
 
 You can also just change the <tt>void*</tt> second argument to the 
 callback with the <tt>user_data</tt> methods. 
 
-<a name=argument><h4>void Fl_Widget::callback(void 
-(*)(Fl_Widget*, long), long = 0)
-<br>long Fl_Widget::argument() const
-<br>void Fl_Widget::argument(long)</h4></a>
+<a name=argument><h4>void fltk::Widget::callback(void 
+(*)(fltk::Widget*, long), long = 0)
+<br>long fltk::Widget::argument() const
+<br>void fltk::Widget::argument(long)</h4></a>
 
 For convenience you can also define the callback as taking a long
 integer argument.  This is implemented by casting the function to a
-<tt>Fl_Callback</tt> and casting the <tt>long</tt> to a <tt>void
+<tt>fltk::Callback</tt> and casting the <tt>long</tt> to a <tt>void
 *</tt> and may not be portable to some machines.
 
-<h4>void Fl_Widget::callback(void (*)(Fl_Widget*))</h4>
+<h4>void fltk::Widget::callback(void (*)(fltk::Widget*))</h4>
 
 For convenience you can also define the callback as taking only one 
-argument.  This is implemented by casting this to a <tt>Fl_Callback</tt>
+argument.  This is implemented by casting this to a <tt>fltk::Callback</tt>
 and may not be portable to some machines. 
 
-<a name=when><h4>Fl_When Fl_Widget::when() const
-<br>void Fl_Widget::when(Fl_When)</h4></a>
+<a name=when><h4>fltk::When fltk::Widget::when() const
+<br>void fltk::Widget::when(fltk::When)</h4></a>
 
-<tt>Fl_Widget::when()</tt> is a set of bitflags used by subclasses of
-<tt> Fl_Widget</tt> to decide when to do the callback. This field is
+<tt>fltk::Widget::when()</tt> is a set of bitflags used by subclasses of
+<tt> fltk::Widget</tt> to decide when to do the callback. This field is
 in the base class so that you can scan a panel and
 <tt>do_callback()</tt> on all the ones that don't do their own
 callbacks in response to an &quot;OK&quot; button.
@@ -476,213 +476,213 @@ the widget's implementation:
 
 <UL>
 
-<LI><TT>FL_WHEN_NEVER</TT> - Never call the callback (0). </LI>
+<LI><TT>fltk::WHEN_NEVER</TT> - Never call the callback (0). </LI>
 
-<LI><TT>FL_WHEN_CHANGED</TT> - Do the callback each time the widget's
+<LI><TT>fltk::WHEN_CHANGED</TT> - Do the callback each time the widget's
 value is changed by the user (many callbacks may be done as the user
 drags the mouse)</LI>
 
-<LI><TT>FL_WHEN_RELEASE</TT> - Each keystroke that modifies the value,
+<LI><TT>fltk::WHEN_RELEASE</TT> - Each keystroke that modifies the value,
 or when the mouse is released and the value has changed, causes the
 callback (some widgets do not implement this and act like
-<tt>FL_WHEN_CHANGED</tt>)</li>
+<tt>fltk::WHEN_CHANGED</tt>)</li>
 
-<LI><TT>FL_WHEN_RELEASE_ALWAYS</TT> - Each recognized keystroke and the mouse
+<LI><TT>fltk::WHEN_RELEASE_ALWAYS</TT> - Each recognized keystroke and the mouse
 being released will cause the callback, even if the value did not
 change. (some widgets do not implement this and act like
-<tt>FL_WHEN_RELEASE</tt>)</li>
+<tt>fltk::WHEN_RELEASE</tt>)</li>
 
-<LI><TT>FL_WHEN_ENTER_KEY</TT> - Do the callback when the user presses
+<LI><TT>fltk::WHEN_ENTER_KEY</TT> - Do the callback when the user presses
 the ENTER key and the value has chagned (used by <a
-href="Fl_Input.html">Fl_Input</a> and <a
-href="Fl_Browser.html">Fl_Browser</a>.</LI>
+href="Fl_Input.html">fltk::Input</a> and <a
+href="Fl_Browser.html">fltk::Browser</a>.</LI>
 
-<LI><TT>FL_WHEN_ENTER_KEY_ALWAYS</TT> - Do the callback when the user 
+<LI><TT>fltk::WHEN_ENTER_KEY_ALWAYS</TT> - Do the callback when the user 
 presses the ENTER key, even if the value has not changed.</LI>
 
-<LI><TT>FL_WHEN_ENTER_KEY_CHANGED</TT> - Do the callback when the user 
+<LI><TT>fltk::WHEN_ENTER_KEY_CHANGED</TT> - Do the callback when the user 
 presses the ENTER key and each time the value changes.</li>
 
 </UL>
 
-<a name=default_callback><h4>static void Fl_Widget::default_callback(Fl_Widget*, void*)</h4></a>
+<a name=default_callback><h4>static void fltk::Widget::default_callback(fltk::Widget*, void*)</h4></a>
 
 The default callback does nothing.  <a href=#callback>callback()</a>
 is initialized to this.
 
-<a name=do_callback><h4>void Fl_Widget::do_callback()
-<br>void Fl_Widget::do_callback(Fl_Widget*, void* = 0)
-<br>void Fl_Widget::do_callback(Fl_Widget*, long)</h4></a>
+<a name=do_callback><h4>void fltk::Widget::do_callback()
+<br>void fltk::Widget::do_callback(fltk::Widget*, void* = 0)
+<br>void fltk::Widget::do_callback(fltk::Widget*, long)</h4></a>
 
 You can cause a widget to do its callback at any time, and even pass 
 arbitrary arguments. 
 
-<a name=test_shortcut><h4>int Fl_Widget::test_shortcut() const </h4></a>
+<a name=test_shortcut><h4>int fltk::Widget::test_shortcut() const </h4></a>
 
 Tests the value of <tt>shortcut()</tt> and the value of
-<tt>label()</tt> (if <tt>FL_NO_SHORTCUT_LABEL</tt> is not set) against
-the current event (which must be a <TT>FL_SHORTCUT</TT> or <TT>FL_KEY</TT>
+<tt>label()</tt> (if <tt>fltk::NO_SHORTCUT_LABEL</tt> is not set) against
+the current event (which must be a <TT>fltk::SHORTCUT</TT> or <TT>fltk::KEY</TT>
 event). Returns 1 if it matches shortcut(), returns 2 if it matches
 the label(), and returns 0 if there is no match.
 
-<a name=contains><h4>int Fl_Widget::contains(Fl_Widget* b) const</h4></a>
+<a name=contains><h4>int fltk::Widget::contains(fltk::Widget* b) const</h4></a>
 
 Returns true if <tt>b</tt> is a child of this widget, or is equal to
 this widget.  Returns false  if <tt>b</tt> is <tt>NULL</tt>. 
 
-<a name=inside><h4>int Fl_Widget::inside(const Fl_Widget* a) const</h4></a>
+<a name=inside><h4>int fltk::Widget::inside(const fltk::Widget* a) const</h4></a>
 
 Returns true if this is a child of <i>a</i>, or is equal to
 <i>a</i>. Returns false if <i>a</i> is <tt>NULL</tt>.
 
-<a name=pushed><h4>bool Fl_Widget::pushed() const</h4></a>
+<a name=pushed><h4>bool fltk::Widget::pushed() const</h4></a>
 
 Returns true if this is equal to <a
-href=Fl.html#pushed><tt>Fl::pushed()</tt></a>, meaning it has
-responded to an <a href=events.html#FL_PUSH><tt>FL_PUSH</tt></a>
+href=Fl.html#pushed><tt>fltk::pushed()</tt></a>, meaning it has
+responded to an <a href=events.html#PUSH><tt>fltk::PUSH</tt></a>
 event and the mouse is still held down. Using this function avoids the
 need to include the <tt>&lt;fltk/Fl.h&gt;</tt> header file.
 
-<a name=focused><h4>bool Fl_Widget::focused() const</h4></a>
+<a name=focused><h4>bool fltk::Widget::focused() const</h4></a>
 
 Returns true if this is equal to <a
-href=Fl.html#focus><tt>Fl::focus()</tt></a>, meaning it has the
+href=Fl.html#focus><tt>fltk::focus()</tt></a>, meaning it has the
 keyboard focus and <a
-href=events.html#FL_KEY><tt>FL_KEY</tt></a> events will be
+href=events.html#KEY><tt>fltk::KEY</tt></a> events will be
 sent to this widget. Using this function avoids the need to include
 the <tt>&lt;fltk/Fl.h&gt;</tt> header file.
 
-<a name=belowmouse><h4>bool Fl_Widget::belowmouse() const</h4></a>
+<a name=belowmouse><h4>bool fltk::Widget::belowmouse() const</h4></a>
 
 Returns true if this is equal to <a
-href=Fl.html#belowmouse><tt>Fl::belowmouse()</tt></a>, meaning
+href=Fl.html#belowmouse><tt>fltk::belowmouse()</tt></a>, meaning
 it has the keyboard focus and <a
-href=events.html#FL_MOVE><tt>FL_MOVE</tt></a> or <tt>FL_PUSH</tt>
+href=events.html#MOVE><tt>fltk::MOVE</tt></a> or <tt>fltk::PUSH</tt>
 events will be sent to this widget. Using this function avoids the
 need to include the <tt>&lt;fltk/Fl.h&gt;</tt> header file.
 
-<h4><a name=flags>Fl_Flags Fl_Widget::flags() const;</a>
-<br><a name=set_flag>void Fl_Widget::set_flag(Fl_Flags);</a>
-<br><a name=clear_flag>void Fl_Widget::clear_flag(Fl_Flags);</a>
-<br><a name=invert_flag>void Fl_Widget::invert_flag(Fl_Flags);</a></h4>
+<h4><a name=flags>fltk::Flags fltk::Widget::flags() const;</a>
+<br><a name=set_flag>void fltk::Widget::set_flag(fltk::Flags);</a>
+<br><a name=clear_flag>void fltk::Widget::clear_flag(fltk::Flags);</a>
+<br><a name=invert_flag>void fltk::Widget::invert_flag(fltk::Flags);</a></h4>
 
 Each widget, and many of the drawing functions, take a bitmask of
 flags that indicate the current state and exactly how to draw
 things. The following flags are defined:
 
 <ul>
-<li><tt>FL_INVISIBLE</tt> - !<a href="#visible">visible()</a>
-<li><tt>FL_INACTIVE</tt> - !<a href="#active">active()</a>
-<li><tt>FL_OUTPUT</tt> - <a href="#output">output()</a>
-<li><tt>FL_VALUE</tt> - <a href="#value">value()</a>
-<li><tt>FL_SELECTED</tt> - <a href="#selected">selected()</a>
-<li><tt>FL_HIGHLIGHT</tt> - draw highlighted
-<li><tt>FL_CHANGED</tt> - <a href="#changed">changed()</a>
-<li><tt>FL_COPIED_LABEL</tt> - indicates <a href="#copy_label">copy_label()</a> was called
-<li><tt>FL_RAW_LABEL</tt> - prevents interpretation of '&amp;' and '@' in labels
-<li><tt>FL_ALIGN_*</tt> - label alignment, see below.
-<li><tt>FL_PACK_VERTICAL</tt> - <a href="Fl_Pack.html">Fl_Pack</a>
+<li><tt>fltk::INVISIBLE</tt> - !<a href="#visible">visible()</a>
+<li><tt>fltk::INACTIVE</tt> - !<a href="#active">active()</a>
+<li><tt>fltk::OUTPUT</tt> - <a href="#output">output()</a>
+<li><tt>fltk::VALUE</tt> - <a href="#value">value()</a>
+<li><tt>fltk::SELECTED</tt> - <a href="#selected">selected()</a>
+<li><tt>fltk::HIGHLIGHT</tt> - draw highlighted
+<li><tt>fltk::CHANGED</tt> - <a href="#changed">changed()</a>
+<li><tt>fltk::COPIED_LABEL</tt> - indicates <a href="#copy_label">copy_label()</a> was called
+<li><tt>fltk::RAW_LABEL</tt> - prevents interpretation of '&amp;' and '@' in labels
+<li><tt>fltk::ALIGN_*</tt> - label alignment, see below.
+<li><tt>fltk::PACK_VERTICAL</tt> - <a href="Fl_Pack.html">fltk::Pack</a>
 puts this widget vertical
-<li><tt>FL_CLICK_TO_FOCUS</tt> - <a href="#click_to_focus">click_to_focus()</a>
+<li><tt>fltk::CLICK_TO_FOCUS</tt> - <a href="#click_to_focus">click_to_focus()</a>
 </ul>
 
-<a name=align><h4>void Fl_Widget::align(Fl_Flags);</h4></a>
+<a name=align><h4>void fltk::Widget::align(fltk::Flags);</h4></a>
 
-Forces the values of all the <tt>FL_ALIGN_*</tt> flags to the passed
+Forces the values of all the <tt>fltk::ALIGN_*</tt> flags to the passed
 value.  This determines how the label is printed next to or inside the
-widget.  The default value is <tt>FL_ALIGN_CENTER</tt>, which centers
+widget.  The default value is <tt>fltk::ALIGN_CENTER</tt>, which centers
 the label.  The value can be any of these constants or'd together:
 
 <UL>
-<LI><TT>FL_ALIGN_CENTER</TT> - The label is centered (0). </LI>
-<LI><TT>FL_ALIGN_TOP</TT> - The label is top-aligned. </LI>
-<LI><TT>FL_ALIGN_BOTTOM</TT> - The label is bottom-aligned. </LI>
-<LI><TT>FL_ALIGN_LEFT</TT> - The label is left-aligned. </LI>
-<LI><TT>FL_ALIGN_RIGHT</TT> - The label is right-aligned. </LI>
-<LI><TT>FL_ALIGN_CLIP</TT> - The label is clipped to the widget. </LI>
-<LI><TT>FL_ALIGN_WRAP</TT> - The label text is wrapped as needed. </LI>
-<LI><TT>FL_ALIGN_TOP_LEFT</TT></LI>
-<LI><TT>FL_ALIGN_TOP_RIGHT</TT></LI>
-<LI><TT>FL_ALIGN_BOTTOM_LEFT</TT></LI>
-<LI><TT>FL_ALIGN_BOTTOM_RIGHT</TT></LI>
-<LI><TT>FL_ALIGN_LEFT_TOP</TT></LI>
-<LI><TT>FL_ALIGN_RIGHT_TOP</TT></LI>
-<LI><TT>FL_ALIGN_LEFT_BOTTOM</TT></LI>
-<LI><TT>FL_ALIGN_RIGHT_BOTTOM</TT></LI>
-<LI><TT>FL_ALIGN_INSIDE</TT> - 'or' this with other values to put
+<LI><TT>fltk::ALIGN_CENTER</TT> - The label is centered (0). </LI>
+<LI><TT>fltk::ALIGN_TOP</TT> - The label is top-aligned. </LI>
+<LI><TT>fltk::ALIGN_BOTTOM</TT> - The label is bottom-aligned. </LI>
+<LI><TT>fltk::ALIGN_LEFT</TT> - The label is left-aligned. </LI>
+<LI><TT>fltk::ALIGN_RIGHT</TT> - The label is right-aligned. </LI>
+<LI><TT>fltk::ALIGN_CLIP</TT> - The label is clipped to the widget. </LI>
+<LI><TT>fltk::ALIGN_WRAP</TT> - The label text is wrapped as needed. </LI>
+<LI><TT>fltk::ALIGN_TOP_LEFT</TT></LI>
+<LI><TT>fltk::ALIGN_TOP_RIGHT</TT></LI>
+<LI><TT>fltk::ALIGN_BOTTOM_LEFT</TT></LI>
+<LI><TT>fltk::ALIGN_BOTTOM_RIGHT</TT></LI>
+<LI><TT>fltk::ALIGN_LEFT_TOP</TT></LI>
+<LI><TT>fltk::ALIGN_RIGHT_TOP</TT></LI>
+<LI><TT>fltk::ALIGN_LEFT_BOTTOM</TT></LI>
+<LI><TT>fltk::ALIGN_RIGHT_BOTTOM</TT></LI>
+<LI><TT>fltk::ALIGN_INSIDE</TT> - 'or' this with other values to put
 label inside the widget. </LI>
 </ul>
 
-<h4><a name=visible>int Fl_Widget::visible() const</a>
-<br><a name=visible_r>int Fl_Widget::visible_r() const</a>
-<br><a name=show>void Fl_Widget::show()</a>
-<br><a name=hide>void Fl_Widget::hide()</a></h4>
+<h4><a name=visible>int fltk::Widget::visible() const</a>
+<br><a name=visible_r>int fltk::Widget::visible_r() const</a>
+<br><a name=show>void fltk::Widget::show()</a>
+<br><a name=hide>void fltk::Widget::hide()</a></h4>
 
 An invisible widget never gets redrawn and does not get events.  The
 <tt>visible()</tt> method returns true if the widget is set to be
 visible.The <tt>visible_r()</tt> method returns true if the widget and
 all of its parents are visible. A widget is only visible if
 <tt>visible()</tt> is true on it <I>and all of its parents</I>.  
-<p>Changing it will send <tt>FL_SHOW</tt> or <tt>FL_HIDE</tt>
+<p>Changing it will send <tt>fltk::SHOW</tt> or <tt>fltk::HIDE</tt>
 events to the widget. <I>Do not change it if the parent is not 
-visible, as this will send false <tt>FL_SHOW</tt> or <tt>FL_HIDE</tt>
+visible, as this will send false <tt>fltk::SHOW</tt> or <tt>fltk::HIDE</tt>
  events to the widget</I>. <tt>redraw()</tt> is called if necessary on 
 this or the parent. 
 
-<h4><a name=set_visible>void Fl_Widget::set_visible()</a>
-<br><a name=clear_visible>void Fl_Widget::clear_visible()</a></h4>
+<h4><a name=set_visible>void fltk::Widget::set_visible()</a>
+<br><a name=clear_visible>void fltk::Widget::clear_visible()</a></h4>
 
-Fast inline versions of <TT>Fl_Widget::hide()</TT> and
-<TT>Fl_Widget::show()</TT>. These do not send the <TT>FL_HIDE</TT> and
-<TT>FL_SHOW</TT> events to the widget.
+Fast inline versions of <TT>fltk::Widget::hide()</TT> and
+<TT>fltk::Widget::show()</TT>. These do not send the <TT>fltk::HIDE</TT> and
+<TT>fltk::SHOW</TT> events to the widget.
 
-<h4><a name=active>int Fl_Widget::active() const</a>
-<br><a name=active_r>int Fl_Widget::active_r() const</a>
-<br><a name=activate>void Fl_Widget::activate()</a>
-<br><a name=deactivate>void Fl_Widget::deactivate()</a></h4>
+<h4><a name=active>int fltk::Widget::active() const</a>
+<br><a name=active_r>int fltk::Widget::active_r() const</a>
+<br><a name=activate>void fltk::Widget::activate()</a>
+<br><a name=deactivate>void fltk::Widget::deactivate()</a></h4>
 
-<tt>Fl_Widget::active()</tt> returns whether the widget is active.
-<tt>Fl_Widget::active_r()</tt> returns whether the widget and all of
+<tt>fltk::Widget::active()</tt> returns whether the widget is active.
+<tt>fltk::Widget::active_r()</tt> returns whether the widget and all of
 its parents are active.  An inactive widget does not get any events,
 but it does get redrawn.  A widget is only active if <tt>active()</tt> is
 true on it <I>and all of its parents</I>.
-<p>Changing this value will send <tt>FL_ACTIVATE</tt> or <tt>
-FL_DEACTIVATE</tt> to the widget if <tt>active_r()</tt> is true.
-<p>Currently you cannot deactivate <tt>Fl_Window</tt> widgets. </p>
+<p>Changing this value will send <tt>fltk::ACTIVATE</tt> or <tt>
+fltk::DEACTIVATE</tt> to the widget if <tt>active_r()</tt> is true.
+<p>Currently you cannot deactivate <tt>fltk::Window</tt> widgets. </p>
 
-<h4><a name=output>int Fl_Widget::output() const</a>
-<br><a name=set_output>void Fl_Widget::set_output()</a>
-<br><a name=clear_output>void Fl_Widget::clear_output()</a></h4>
+<h4><a name=output>int fltk::Widget::output() const</a>
+<br><a name=set_output>void fltk::Widget::set_output()</a>
+<br><a name=clear_output>void fltk::Widget::clear_output()</a></h4>
 
 <tt>output()</tt> means the same as <tt>!active()</tt> except it does
 not change how the widget is drawn.  The widget will not recieve any
 events.  This is useful for making scrollbars or buttons that work as
 displays rather than input devices.
 
-<a name=takesevents><h4>int Fl_Widget::takesevents() const</h4></a>
+<a name=takesevents><h4>int fltk::Widget::takesevents() const</h4></a>
 
 This is the same as <tt>(active() &amp;&amp; visible() &amp;&amp;
 !output())</tt> but is faster.
 
-<h4><a name=click_to_focus>int Fl_Widget::click_to_focus() const</a>
-<br><a name=set_click_to_focus>void Fl_Widget::set_click_to_focus()</a>
-<br><a name=clear_click_to_focus>void Fl_Widget::clear_click_to_focus()</a></h4>
+<h4><a name=click_to_focus>int fltk::Widget::click_to_focus() const</a>
+<br><a name=set_click_to_focus>void fltk::Widget::set_click_to_focus()</a>
+<br><a name=clear_click_to_focus>void fltk::Widget::clear_click_to_focus()</a></h4>
 
 If this flag is set then if this widget returns true for an
-<tt>FL_PUSH</tt> event then fltk will attempt to give it the focus (by
+<tt>fltk::PUSH</tt> event then fltk will attempt to give it the focus (by
 calling <a href=#take_focus>take_focus()</a>, so it will work if this
-widget also returns true for <tt>FL_FOCUS</tt> events). By default
+widget also returns true for <tt>fltk::FOCUS</tt> events). By default
 fltk only turns this on on certain widgets such as <a
-href=Fl_Input.html>Fl_Input</a>. Turning this on on <i>all</i> widgets
+href=Fl_Input.html>fltk::Input</a>. Turning this on on <i>all</i> widgets
 will make the user interface match Windows more closely.
 
-<h4><a name=changed>int Fl_Widget::changed() const</a>
-<br><a name=set_changed>void Fl_Widget::set_changed()</a>
-<br><a name=clear_changed>void Fl_Widget::clear_changed()</a></h4>
+<h4><a name=changed>int fltk::Widget::changed() const</a>
+<br><a name=set_changed>void fltk::Widget::set_changed()</a>
+<br><a name=clear_changed>void fltk::Widget::clear_changed()</a></h4>
 
-<tt>Fl_Widget::changed()</tt> is a flag that is turned on when the user 
+<tt>fltk::Widget::changed()</tt> is a flag that is turned on when the user 
 changes the value stored in the widget.  This is only used by 
-subclasses of <tt>Fl_Widget</tt> that store values, but is in the base 
+subclasses of <tt>fltk::Widget</tt> that store values, but is in the base 
 class so it is easier to scan all the widgets in a panel and <tt>
 do_callback()</tt> on the changed ones in response to an &quot;OK&quot; button. 
 <p>Most widgets turn this flag off when they do the callback, and when 
@@ -692,9 +692,9 @@ the program sets the stored value. </p>
 <br><a name=set_value>void set_value()</a>
 <br><a name=clear_value>void clear_value()</a></h4>
 
-A true/false flag used by <a href="Fl_Button.html">Fl_Button</a> to
+A true/false flag used by <a href="Fl_Button.html">fltk::Button</a> to
 indicate the current state and by "parent" items in a hierarchial <a
-href="Fl_Browser.html">Fl_Browser</a> to indicate if they are
+href="Fl_Browser.html">fltk::Browser</a> to indicate if they are
 open. Many widgets will draw pushed-in or otherwise indicate that this
 flag is on.
 
@@ -703,51 +703,51 @@ flag is on.
 <br><a name=clear_selected>void clear_selected()</a></h4>
 
 A true/false flag used to mark widgets currently selected in
-<a href="Fl_Menu_.html">Fl_Menu</a> and
-<a href="Fl_Browser.html">Fl_Browser</a> widgets. Some widgets will
+<a href="Fl_Menu.html">fltk::Menu</a> and
+<a href="Fl_Browser.html">fltk::Browser</a> widgets. Some widgets will
 draw with much different colors if this is on.
 
-<a name=take_focus><h4>int Fl_Widget::take_focus()</h4></a>
+<a name=take_focus><h4>int fltk::Widget::take_focus()</h4></a>
 
 Tries to make this widget be the keyboard focus widget, by first
-sending it an <a href=events.html#FL_FOCUS><tt>FL_FOCUS</tt></a>
+sending it an <a href=events.html#FOCUS><tt>fltk::FOCUS</tt></a>
 event, and if it returns non-zero, setting <a
-href=Fl.html#focus><tt>Fl::focus()</tt></a> to this widget.
+href=Fl.html#focus><tt>fltk::focus()</tt></a> to this widget.
 You should use this method to assign the focus to an widget.  Returns
 true if the widget accepted the focus.
 
-<a name=throw_focus><h4>int Fl_Widget::throw_focus()</h4></a>
+<a name=throw_focus><h4>int fltk::Widget::throw_focus()</h4></a>
 
-This function is called by ~Fl_Widget() and by <a
-href=#deactivate><tt>Fl_Widget::deactivate()</tt></a> and by <a
-href=#hide><tt>Fl_Widget::hide()</tt></a>.  It indicates that the widget
+This function is called by ~fltk::Widget() and by <a
+href=#deactivate><tt>fltk::Widget::deactivate()</tt></a> and by <a
+href=#hide><tt>fltk::Widget::hide()</tt></a>.  It indicates that the widget
 does not want to receive any more events, and also removes all global
 variables that point at the widget (not just the <a
-href=Fl.html#focus><tt>Fl::focus()</tt></a>, but the <a
-href=Fl.html#belowmouse><tt>Fl::belowmouse()</tt></a>, <a
-href=Fl.html#modal><tt>Fl::modal()</tt></a>, and some internal
+href=Fl.html#focus><tt>fltk::focus()</tt></a>, but the <a
+href=Fl.html#belowmouse><tt>fltk::belowmouse()</tt></a>, <a
+href=Fl.html#modal><tt>fltk::modal()</tt></a>, and some internal
 pointers). Unlike older versions of fltk, no events (i.e.
-<tt>FL_LEAVE</tt> or <tt>FL_UNFOCUS</tt>) are sent to the widget.
+<tt>fltk::LEAVE</tt> or <tt>fltk::UNFOCUS</tt>) are sent to the widget.
 
-<a name=redraw><h4>void Fl_Widget::redraw(uchar bits = FL_DAMAGE_ALL)</h4></a>
+<a name=redraw><h4>void fltk::Widget::redraw(uchar bits = fltk::DAMAGE_ALL)</h4></a>
 
 Indicates that <a href=#draw><tt>draw()</tt></a> should be called, and
 turns on the given bits in <a href=#damage><tt>damage()</tt></a>. At
 least these bits, and possibly others, will still be on when <a
 href=#draw><tt>draw()</tt></a> is called.
 
-<a name=redraw_label><h4>void Fl_Widget::redraw_label()</h4></a>
+<a name=redraw_label><h4>void fltk::Widget::redraw_label()</h4></a>
 
 Indicate that an <i>outside</i> label needs to be redrawn. This does
 nothing if the label is inside the widget or there is no label. If the
 label is outside, the enclosing group is flagged to redraw it.
 
-<h4>void Fl_Widget::redraw(int x, int y, int w, int h)</h4></a>
+<h4>void fltk::Widget::redraw(int x, int y, int w, int h)</h4></a>
 
 <p>Indicates that a rectangular region is damaged. <a
 href=#draw><tt>draw()</tt></a> will be called later with <a
 href=#damage><tt>damage()</tt></a> set to
-<tt>FL_DAMAGE_ALL|FL_DAMAGE_EXPOSE</tt> and with FLTK's <a
+<tt>fltk::DAMAGE_ALL|fltk::DAMAGE_EXPOSE</tt> and with FLTK's <a
 href=drawing.html#dclipping>clipping</a> set to <i>at least</i> the given
 rectangle. Normally this is called more than once and the clip region
 will be the <i>union</i> of all these calls. In addition damage from
@@ -759,14 +759,14 @@ many overlapping and changing objects. Even if you do nothing else
 about it, it is usually faster to do a drawing operation that is
 clipped than one that appears, so display will be faster. You can also
 check to see if anything by testing <a
-href=drawing.html#fl_not_clipped><TT>fl_not_clipped(x,y,w,h)</TT></a>
-or <a href=drawing.html#fl_clip_box><TT>fl_clip_box(...)</TT></a> and
+href=drawing.html#not_clipped><TT>fltk::not_clipped(x,y,w,h)</TT></a>
+or <a href=drawing.html#clip_box><TT>fltk::clip_box(...)</TT></a> and
 skipping unnecessary drawing calls completely. Also if your normal
 drawing causes blinking (due to overlapping objects) this can make the
 display look much better by limiting the blinking to the small area
 that is actually changing.
 
-<a name=damage><h4>uchar Fl_Widget::damage() const</h4></a>
+<a name=damage><h4>uchar fltk::Widget::damage() const</h4></a>
 
 The 'or' of all the calls to <a href=#redraw><tt>redraw()</tt></a>
 done since the last <tt>draw()</tt>. Cleared to zero after
@@ -786,28 +786,28 @@ MyClass::handle(int event) {
 }
 
 MyClass::draw() {
-  if (damage() & FL_DAMAGE_ALL) {
+  if (damage() & fltk::DAMAGE_ALL) {
     ... draw frame/box and other static stuff ...
   }
-  if (damage() & (FL_DAMAGE_ALL | 1)) draw_part1();
-  if (damage() & (FL_DAMAGE_ALL | 2)) draw_part2();
-  if (damage() & (FL_DAMAGE_ALL | 4)) draw_part3();
+  if (damage() & (fltk::DAMAGE_ALL | 1)) draw_part1();
+  if (damage() & (fltk::DAMAGE_ALL | 2)) draw_part2();
+  if (damage() & (fltk::DAMAGE_ALL | 4)) draw_part3();
 }
 </pre>
 
 <p>Fltk assigns meaning to the following bits in the damage:
 
 <ul>
-<li><tt>FL_DAMAGE_CHILD</tt> - A child of this group widget needs to
+<li><tt>fltk::DAMAGE_CHILD</tt> - A child of this group widget needs to
 be redrawn (non-group widgets can use this bit for their own purposes).</li>
-<li><tt>FL_DAMAGE_CHILD_LABEL</tt> - An outside label of this widget
+<li><tt>fltk::DAMAGE_CHILD_LABEL</tt> - An outside label of this widget
 needs to be redrawn. This is handled (and this bit is cleared) by the
 parent group.</li>
-<li><tt>FL_DAMAGE_EXPOSE</tt> - Damage caused by <a
+<li><tt>fltk::DAMAGE_EXPOSE</tt> - Damage caused by <a
 href=Fl_Widget.html#damage><tt>damage()</tt></a> or by expose events
-from the operating system. If this and <tt>FL_DAMAGE_ALL</tt> is on
+from the operating system. If this and <tt>fltk::DAMAGE_ALL</tt> is on
 the widget should draw every pixel inside it's region.
-<li><tt>FL_DAMAGE_ALL</tt> - This bit is set by <a
+<li><tt>fltk::DAMAGE_ALL</tt> - This bit is set by <a
 href=Fl_Widget.html#redraw><tt>redraw()</tt></a> and indicates that
 all of the widget (but not "holes" where the background shows through)
 needs to be redraw.</li>
@@ -819,40 +819,40 @@ managing their own damage. You can use the names if they are
 appropriate, or define your own symbols with the same values:
 
 <ul>
-<li><tt>FL_DAMAGE_VALUE</tt></li>
-<li><tt>FL_DAMAGE_PUSHED</tt></li>
-<li><tt>FL_DAMAGE_SCROLL</tt></li>
-<li><tt>FL_DAMAGE_OVERLAY</tt> Same value as <tt>FL_DAMAGE_SCROLL</tt>.
-<li><tt>FL_DAMAGE_HIGHLIGHT</tt></li>
-<li><tt>FL_DAMAGE_CONTENTS</tt> Same as <tt>FL_DAMAGE_EXPOSE</tt> but
-if <tt>FL_DAMAGE_ALL</tt> is off you can use this for your own
+<li><tt>fltk::DAMAGE_VALUE</tt></li>
+<li><tt>fltk::DAMAGE_PUSHED</tt></li>
+<li><tt>fltk::DAMAGE_SCROLL</tt></li>
+<li><tt>fltk::DAMAGE_OVERLAY</tt> Same value as <tt>fltk::DAMAGE_SCROLL</tt>.
+<li><tt>fltk::DAMAGE_HIGHLIGHT</tt></li>
+<li><tt>fltk::DAMAGE_CONTENTS</tt> Same as <tt>fltk::DAMAGE_EXPOSE</tt> but
+if <tt>fltk::DAMAGE_ALL</tt> is off you can use this for your own
 purposes.</li>
 </ul>
 
-<a name=set_damage><h4>void Fl_Widget::set_damage(uchar c)</h4></a>
+<a name=set_damage><h4>void fltk::Widget::set_damage(uchar c)</h4></a>
 
 Directly change the value returned by <a
 href="#damage"><tt>damage()</tt></a>.
 
-<a name=relayout><h4>void Fl_Widget::relayout(uchar = FL_LAYOUT_DAMAGE)</h4></a>
+<a name=relayout><h4>void fltk::Widget::relayout(uchar = fltk::LAYOUT_DAMAGE)</h4></a>
 
 Cause <a href=#layout><tt>layout()</tt></a> to be called later (before
 the next draw() is called). A subclass may want to use this to defer
 expensive display calculations until the next time the system is idle.
 
-<a name=layout_damage><h4>uchar Fl_Widget::layout_damage() const</h4></a>
+<a name=layout_damage><h4>uchar fltk::Widget::layout_damage() const</h4></a>
 
 The 'or' of all the calls to <a href=#relayout><tt>relayout()</tt></a>
 or <a href=#resize><tt>resize()</tt></a> done since the last time
 <tt>layout()</tt> was called. Cleared to zero by
-<tt>Fl_Widget::layout()</tt>.
+<tt>fltk::Widget::layout()</tt>.
 
 <p>A typical layout function does not care about the widget moving, an
 easy way to skip it is as follows:
 
 <pre>
 MyClass::layout() {
-  if (!(layout_damage() & ~FL_LAYOUT_XY)) return;
+  if (!(layout_damage() & ~fltk::LAYOUT_XY)) return;
   do_expensive_layout();
   redraw();
 }
@@ -861,62 +861,62 @@ MyClass::layout() {
 The following bit values are defined:
 
 <ul>
-<li><tt>FL_LAYOUT_X</tt> - x() changed by resize()</li>
-<li><tt>FL_LAYOUT_Y</tt> - y() changed by resize()</li>
-<li><tt>FL_LAYOUT_XY</tt> - same as <tt>FL_LAYOUT_X|FL_LAYOUT_Y</tt></li>
-<li><tt>FL_LAYOUT_W</tt> - w() changed by resize()</li>
-<li><tt>FL_LAYOUT_H</tt> - h() changed by resize()</li>
-<li><tt>FL_LAYOUT_WH</tt> - same as <tt>FL_LAYOUT_W|FL_LAYOUT_H</tt></li>
-<li><tt>FL_LAYOUT_XYWH</tt> - same as <tt>FL_LAYOUT_XY|FL_LAYOUT_WH</tt></li>
-<li><tt>FL_LAYOUT_CHILD</tt> - layout() needs to be called on a child
+<li><tt>fltk::LAYOUT_X</tt> - x() changed by resize()</li>
+<li><tt>fltk::LAYOUT_Y</tt> - y() changed by resize()</li>
+<li><tt>fltk::LAYOUT_XY</tt> - same as <tt>fltk::LAYOUT_X|fltk::LAYOUT_Y</tt></li>
+<li><tt>fltk::LAYOUT_W</tt> - w() changed by resize()</li>
+<li><tt>fltk::LAYOUT_H</tt> - h() changed by resize()</li>
+<li><tt>fltk::LAYOUT_WH</tt> - same as <tt>fltk::LAYOUT_W|fltk::LAYOUT_H</tt></li>
+<li><tt>fltk::LAYOUT_XYWH</tt> - same as <tt>fltk::LAYOUT_XY|fltk::LAYOUT_WH</tt></li>
+<li><tt>fltk::LAYOUT_CHILD</tt> - layout() needs to be called on a child
 of this group widget.</li>
-<li><tt>FL_LAYOUT_DAMAGE</tt> - relayout() was called.</li>
+<li><tt>fltk::LAYOUT_DAMAGE</tt> - relayout() was called.</li>
 </ul>
 
-<h4>void Fl_Widget::layout_damage(uchar c)</h4></a>
+<h4>void fltk::Widget::layout_damage(uchar c)</h4></a>
 
 Directly change the value returned by <a
 href="#layout_damage"><tt>layout_damage()</tt></a>.
 
-<a name=make_current><h4>void Fl_Widget::make_current() const</h4></a>
+<a name=make_current><h4>void fltk::Widget::make_current() const</h4></a>
 
 Adjust the x and y offsets and current window of the drawing functions
 to draw into this widget. You only need to call this if you want to
 incrementally update your widget. When <a href=#draw>draw()</a> is
 called this will already have been done.
 
-<a name=draw_frame><h4>Fl_Flags Fl_Widget::draw_frame() const;</h4></a>
+<a name=draw_frame><h4>fltk::Flags fltk::Widget::draw_frame() const;</h4></a>
 
 Draws only the edge of the <tt>box()</tt> (by or'ing
-<tt>FL_INVISIBLE</tt> into the flags to it). If <tt>!active_r()</tt>
-then it also or's in <tt>FL_INACTIVE</tt>. This will only work for
+<tt>fltk::INVISIBLE</tt> into the flags to it). If <tt>!active_r()</tt>
+then it also or's in <tt>fltk::INACTIVE</tt>. This will only work for
 rectangular boxtypes.
 
-<a name=draw_box><h4>Fl_Flags Fl_Widget::draw_box() const;</h4></a>
+<a name=draw_box><h4>fltk::Flags fltk::Widget::draw_box() const;</h4></a>
 
 Fills the entire widget with it's <a href="#box">box()</a> and <a
 href="#color">color()</a>. If the box is not rectangular and <a
-href="#damage">damage()</a> contains <tt>FL_DAMAGE_EXPOSE</tt> then
+href="#damage">damage()</a> contains <tt>fltk::DAMAGE_EXPOSE</tt> then
 the parent group's box is drawn to fill in the missing areas. If the
 widget is inactive or if any bits are turned on in <a
 href="#flags">flags()</a> then the box may draw differently to show this.
 
-<a name=draw_glyph><h4>void Fl_Widget::draw_glyph(int type, int x,int y,int w,int h, Fl_Flags f) const</h4></a>
+<a name=draw_glyph><h4>void fltk::Widget::draw_glyph(int type, int x,int y,int w,int h, fltk::Flags f) const</h4></a>
 
 Calls the <a href=#glyph><tt>glyph()</tt></a> function with the given
 arguments (the caller must figure out inactive and selected, this is
 best done by using the return value from <tt>draw_box()</tt>).
 
-<a name=draw_label><h4>void Fl_Widget::draw_label(int x, int y, int w, int h, Fl_Flags f) const</h4></a>
+<a name=draw_label><h4>void fltk::Widget::draw_label(int x, int y, int w, int h, fltk::Flags f) const</h4></a>
 
-<p>Draws the label anywhere. This ignores the <TT>FL_ALIGN_INSIDE</TT>
+<p>Draws the label anywhere. This ignores the <TT>fltk::ALIGN_INSIDE</TT>
 and always draws the label inside the passed bounding box.
-This is used by <a href=Fl_Group.html>Fl_Group</a> and <a
-href=Fl_Tabs.html>Fl_Tabs</a> to draw the outside labels of their
+This is used by <a href=Fl_Group.html>fltk::Group</a> and <a
+href=Fl_Tabs.html>fltk::Tabs</a> to draw the outside labels of their
 child widgets.
 
-<a name=draw_inside_label><h4>void Fl_Widget::draw_inside_label() const
-<br>void Fl_Widget::draw_inside_label(int x, int y, int w, int h, Fl_Flags f) const</h4></a>
+<a name=draw_inside_label><h4>void fltk::Widget::draw_inside_label() const
+<br>void fltk::Widget::draw_inside_label(int x, int y, int w, int h, fltk::Flags f) const</h4></a>
 
 This is the usual function for a <TT>draw()</TT> method to call to 
 draw the widget's label.  It does not draw the label if it is supposed 
@@ -932,11 +932,11 @@ highlight_label_color()</tt> of this widget.
 
 <p>The second form uses the passed bounding box instead of the widget's 
 bounding box. This allows the widget to draw the label somewhere other
-than centered on itself, and lets you force <tt>FL_VALUE</tt> or
-<tt>FL_SELECTED</tt> on or off (passed alignment flags are 'or'd with
+than centered on itself, and lets you force <tt>fltk::VALUE</tt> or
+<tt>fltk::SELECTED</tt> on or off (passed alignment flags are 'or'd with
 the widget's flags).
 
-<a name=measure_label><h4>void Fl_Widget::measure_label(int& w, int& h) const ;</h4></a>
+<a name=measure_label><h4>void fltk::Widget::measure_label(int& w, int& h) const ;</h4></a>
 
 Return in w and h the size that the widget's <tt>label()</tt> and
 <tt>image()</tt> will take.

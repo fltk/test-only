@@ -1,18 +1,18 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>typedef Fl_Labeltype</title></head><body>
+<title>typedef fltk::Labeltype</title></head><body>
 <!-- NEW PAGE -->
-<h2>typedef Fl_Labeltype</h2>
+<h2>typedef fltk::Labeltype</h2>
 <hr>
 
-<tt>Fl_Labeltype</tt> is a pointer to the structure
-<tt>Fl_Labeltype_</tt>, which contains the information needed to draw
+<tt>fltk::Labeltype</tt> is a pointer to the structure
+<tt>fltk::Labeltype_</tt>, which contains the information needed to draw
 text labels.  This is used by <A
-href=Fl_Widget.html#label_type><TT>Fl_Widget::label_type()</TT></A>.
+href=Fl_Widget.html#label_type><TT>fltk::Widget::label_type()</TT></A>.
 
-<h4>void (*Fl_Labeltype_::draw_)(const Fl_Labeltype_* this, const char* label, int,int,int,int, Fl_Color fill, Fl_Flags);</h4>
+<h4>void (*fltk::Labeltype_::draw_)(const fltk::Labeltype_* this, const char* label, int,int,int,int, fltk::Color fill, fltk::Flags);</h4>
 
 Pointer to the function that draws the text.  The first argument is
-the Fl_Labeltype_ itself, this allows access to the <tt>data</tt>
+the fltk::Labeltype_ itself, this allows access to the <tt>data</tt>
 value.  Next is the text string.  The next four integers are the
 x,y,w,h to fit the label into.  The next is the color to fill the
 interior of the letters with.  The last argument is a set of bitflags.
@@ -21,47 +21,47 @@ bits that are on:
 
 <p><ul>
 
-<LI><TT>FL_ALIGN_TOP</TT> - align the label at the top of the widget. </LI>
-<LI><TT>FL_ALIGN_BOTTOM</TT> - align the label at the bottom of the 
+<LI><TT>fltk::ALIGN_TOP</TT> - align the label at the top of the widget. </LI>
+<LI><TT>fltk::ALIGN_BOTTOM</TT> - align the label at the bottom of the 
 widget. </LI>
-<LI><TT>FL_ALIGN_LEFT</TT> - align the label to the left of the widget. </LI>
-<LI><TT>FL_ALIGN_RIGHT</TT> - align the label to the right of the 
+<LI><TT>fltk::ALIGN_LEFT</TT> - align the label to the left of the widget. </LI>
+<LI><TT>fltk::ALIGN_RIGHT</TT> - align the label to the right of the 
 widget. </LI>
-<LI><TT>FL_ALIGN_CLIP</TT> - clip the label to the widget's bounding 
+<LI><TT>fltk::ALIGN_CLIP</TT> - clip the label to the widget's bounding 
 box. </LI>
-<LI><TT>FL_ALIGN_WRAP</TT> - wrap the label text as needed. </LI>
+<LI><TT>fltk::ALIGN_WRAP</TT> - wrap the label text as needed. </LI>
 
-<li><tt>FL_SHORTCUT_LABEL</tt> - interpret <tt>&x</tt> to
+<li><tt>fltk::SHORTCUT_LABEL</tt> - interpret <tt>&x</tt> to
 underscore under the next letter.
 
-<li><tt>FL_INACTIVE</tt> - gray out the widget.
+<li><tt>fltk::INACTIVE</tt> - gray out the widget.
 
-<li><tt>FL_VALUE</tt> - draw the label atop a pushed-in box (usually
+<li><tt>fltk::VALUE</tt> - draw the label atop a pushed-in box (usually
 you can ignore this).
 
-<li><tt>FL_SELECTED</tt> - draw the label atop a box with keyboard
+<li><tt>fltk::SELECTED</tt> - draw the label atop a box with keyboard
 focus (usually you can ignore this).
 
-<li><tt>FL_HIGHLIGHT</tt> - draw the label atop a highlighted box
+<li><tt>fltk::HIGHLIGHT</tt> - draw the label atop a highlighted box
 (usually you can ignore this).
 
 </ul>
 
 The label should be drawn <I>inside</I> this bounding box.  Ignore the
-setting of <TT> FL_ALIGN_INSIDE</TT>.  Outside labels are handled by
-the Fl_Group code by modifying the bounding box before this is called.
+setting of <TT> fltk::ALIGN_INSIDE</TT>.  Outside labels are handled by
+the fltk::Group code by modifying the bounding box before this is called.
 
 <p>If none of the align flags are on you should center the label in
 the widget.
 
 <p>The function is not called if the label value is <TT>NULL</TT>. 
 
-<h4>const void* Fl_Labeltype_::data;</h4>
+<h4>const void* fltk::Labeltype_::data;</h4>
 
 This is a pointer to arbitrary data used by <tt>draw_()</tt>.  Often
 several labeltypes use the same <tt>draw_()</tt> but different data.
 
-<h4>void Fl_Labeltype_::draw(const char* m, int x,int y,int w,int h,Fl_Color c, Fl_Flags f=0) const</h4>
+<h4>void fltk::Labeltype_::draw(const char* m, int x,int y,int w,int h,fltk::Color c, fltk::Flags f=0) const</h4>
 
 This is the public method to draw the label. It is simply an inline
 function to call <tt>draw_</tt> with this labeltype as the first

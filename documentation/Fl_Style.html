@@ -1,11 +1,11 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>struct Fl_Style</title></head><body>
+<title>struct fltk::Style</title></head><body>
 <!-- NEW PAGE -->
-<h2>struct Fl_Style</h2>
+<h2>struct fltk::Style</h2>
 <hr>
 
-<p>Each widget has a pointer to an instance of Fl_Style.  Usually many
-widgets share pointers to the same Fl_Style.  All the Fl_Styles are
+<p>Each widget has a pointer to an instance of fltk::Style.  Usually many
+widgets share pointers to the same fltk::Style.  All the fltk::Styles are
 linked into a hierarchy of parents & child styles, so that it is
 possible to change an item in a parent style and propagate all the
 changes to the children.
@@ -16,7 +16,7 @@ there are no more parents, in which case zero is used.  Thus changing
 a parent style can make global changes as long as widgets do not have
 local values set.
 
-<p>In normal usage "set" methods like Fl_Widget::box(n) will create a
+<p>In normal usage "set" methods like fltk::Widget::box(n) will create a
 "unique" style for that widget, which is a child of the original
 style, and set the box in that style.  This "unique" style is reused
 for any other changes to that widget and it is deleted when the widget
@@ -24,25 +24,25 @@ is deleted.
 
 <h3>Member variables</h3>
 
-<a name=box><h4><a href=Fl_Boxtype.html>Fl_Boxtype</a> box;</h4>
+<a name=box><h4><a href=Fl_Boxtype.html>fltk::Box</a> box;</h4>
 
 The type of box to draw around the outer edge of the widget (for the
 majority of widgets, some classes ignore this or use it to draw only
-text fields inside the widget). The default is <code>FL_DOWN_BOX</code>.
+text fields inside the widget). The default is <code>fltk::DOWN_BOX</code>.
 
-<a name=button_box><h4><a href=Fl_Boxtype.html>Fl_Boxtype</a> button_box;</h4>
+<a name=button_box><h4><a href=Fl_Boxtype.html>fltk::Box</a> button_box;</h4>
 
 The type of box to draw buttons internal the widget (notice that <a
-href="Fl_Button.html">Fl_Button</a> uses <tt>box</tt>, however). The
-default is <code>FL_UP_BOX</code>.
+href="FlButton.html">fltk::Button</a> uses <tt>box</tt>, however). The
+default is <code>fltk::UP_BOX</code>.
 
-<a name=focus_box><h4><a href=Fl_Boxtype.html>Fl_Boxtype</a> focus_box;</h4>
+<a name=focus_box><h4><a href=Fl_Boxtype.html>fltk::Box</a> focus_box;</h4>
 
 Type of box to draw to indicate focus. This is always called with the
-<tt>FL_INVISIBLE</tt> flag as only the border should be drawn. The
-default is <tt>FL_DOTTED_FRAME</tt>.
+<tt>fltk::INVISIBLE</tt> flag as only the border should be drawn. The
+default is <tt>fltk::DOTTED_FRAME</tt>.
 
-<a name=glyph><h4>void (*glyph)(const <a href="Fl_Widget.html">Fl_Widget</a>*, int glyph, int x, int y, int w, int h, Fl_Flags);</h4>
+<a name=glyph><h4>void (*glyph)(const <a href="Fl_Widget.html">fltk::Widget</a>*, int glyph, int x, int y, int w, int h, fltk::Flags);</h4>
 
 Draw part of a widget, called a "glyph". Examples are the up and down
 arrows on sliders, the slider itself, and check boxes. The base class
@@ -56,14 +56,14 @@ appearance of widgets quite a bit.
 <p><ul>
 
 <li>Zero is reserved to draw an empty box
-<li><code>FL_GLYPH_UP</code> - draw an up arrow
-<li><code>FL_GLYPH_UP_BUTTON</code> - draw an up arrow in a box
-<li><code>FL_GLYPH_DOWN</code> - draw a down arrow
-<li><code>FL_GLYPH_DOWN_BUTTON</code> - draw a down arrow in a box
-<li><code>FL_GLYPH_LEFT</code> - draw a left arrow
-<li><code>FL_GLYPH_LEFT_BUTTON</code> - draw a left arrow in a box
-<li><code>FL_GLYPH_RIGHT</code> - draw a right arrow
-<li><code>FL_GLYPH_RIGHT_BUTTON</code> - draw a right arrow in a box
+<li><code>fltk::GLYPH_UP</code> - draw an up arrow
+<li><code>fltk::GLYPH_UP_BUTTON</code> - draw an up arrow in a box
+<li><code>fltk::GLYPH_DOWN</code> - draw a down arrow
+<li><code>fltk::GLYPH_DOWN_BUTTON</code> - draw a down arrow in a box
+<li><code>fltk::GLYPH_LEFT</code> - draw a left arrow
+<li><code>fltk::GLYPH_LEFT_BUTTON</code> - draw a left arrow in a box
+<li><code>fltk::GLYPH_RIGHT</code> - draw a right arrow
+<li><code>fltk::GLYPH_RIGHT_BUTTON</code> - draw a right arrow in a box
 scrollbar
 <li>All other values draw an empty box.
 
@@ -73,17 +73,17 @@ scrollbar
 ones in the fltk source code and in the sample theme plugins to see
 how the arguments are interpreted.
 
-<a name=label_font><h4><a href=Fl_Font.html>Fl_Font</a> label_font;</h4>
+<a name=label_font><h4><a href=Fl_Font.html>fltk::Font</a> label_font;</h4>
 
-The font used to draw the label.  Default is <code>FL_HELVETICA</code>.
+The font used to draw the label.  Default is <code>fltk::HELVETICA</code>.
 
 <a name=label_size><h4>unsigned int label_size;</h4>
 
 Size of <code>label_font</code>.  Default is 12.
 
-<a name=text_font><h4><a href=Fl_Font.html>Fl_Font</a> text_font;</h4>
+<a name=text_font><h4><a href=Fl_Font.html>fltk::Font</a> text_font;</h4>
 
-Provides a font for text displays.  Default is <code>FL_HELVETICA</code>.
+Provides a font for text displays.  Default is <code>fltk::HELVETICA</code>.
 
 <a name=text_size><h4>unsigned int text_size;</h4>
 
@@ -95,63 +95,63 @@ this to control the size of the glyph. Default is 12.
 Extra spacing added between text lines or other things that are
 stacked vertically.  The default is 0 (menus have a default of 4).
 
-<a name=label_type><h4><a href=Fl_Labeltype.html>Fl_Labeltype</a> label_type;</h4>
+<a name=label_type><h4><a href=Fl_Labeltype.html>fltk::Labeltype</a> label_type;</h4>
 
 How to draw the label.  This provides things like inset, shadow, and
-the symbols.  <code>FL_NORMAL_LABEL</code>.
+the symbols.  <code>fltk::NORMAL_LABEL</code>.
 
-<a name=color><h4><a href=Fl_Color.html>Fl_Color</a> color;</h4>
+<a name=color><h4><a href=Fl_Color.html>fltk::Color</a> color;</h4>
 
-Color of the widgets. The default is <code>FL_WHITE</code>. This color
+Color of the widgets. The default is <code>fltk::WHITE</code>. This color
 is inherited by text displays and browsers, most of the "gray" you see
-is due to widgets like Fl_Group that default the color to gray, and
+is due to widgets like fltk::Group that default the color to gray, and
 the fact that many parts of the interface are drawn with the
 button_color described below.
 
 <p>If you want to change the overall color of all the gray parts of
 the interface you want to call <a
-href="Fl_Color.html#fl_background"><tt>fl_background(color)</tt></a>
-instead, as this will set the entry for <code>FL_GRAY</code> and also
+href="Fl_Color.html#background"><tt>fltk::background(color)</tt></a>
+instead, as this will set the entry for <code>fltk::GRAY</code> and also
 set the "gray ramp" so that the edges of buttons are the same color.
 
-<a name=label_color><h4><a href=Fl_Color.html>Fl_Color</a> label_color;</h4>
+<a name=label_color><h4><a href=Fl_Color.html>fltk::Color</a> label_color;</h4>
 
-Color used to draw labels and glyphs.  Default is <code>FL_BLACK</code>.
+Color used to draw labels and glyphs.  Default is <code>fltk::BLACK</code>.
 
-<a name=highlight_color><h4><a href=Fl_Color.html>Fl_Color</a> highlight_color;</h4>
+<a name=highlight_color><h4><a href=Fl_Color.html>fltk::Color</a> highlight_color;</h4>
 
 The color to draw the widget when the mouse is over it (for scrollbars
 and sliders this is used to color the buttons).  The default of
 zero disables highlighting.
 
-<a name=highlight_label_color><h4><a href=Fl_Color.html>Fl_Color</a> highlight_label_color;</h4>
+<a name=highlight_label_color><h4><a href=Fl_Color.html>fltk::Color</a> highlight_label_color;</h4>
 
 Color to draw labels atop the <code>highlight_color</code>.  The
 default of zero leaves the <code>label_color</code> unchanged.
 
-<a name=button_color><h4><a href=Fl_Color.html>Fl_Color</a> button_color;</h4>
+<a name=button_color><h4><a href=Fl_Color.html>fltk::Color</a> button_color;</h4>
 
-Color used when drawing internal buttons. Default is <code>FL_GRAY</code>.
+Color used when drawing internal buttons. Default is <code>fltk::GRAY</code>.
 Check and radio buttons use this to color in the glyph.
 
-<a name=text_color><h4><a href=Fl_Color.html>Fl_Color</a> text_color;</h4>
+<a name=text_color><h4><a href=Fl_Color.html>fltk::Color</a> text_color;</h4>
 
 Color to draw text inside the widget.  Default is black. Check and
 radio buttons use this to control the color of the checkmark.
 
-<a name=selection_color><h4><a href=Fl_Color.html>Fl_Color</a> selection_color;</h4>
+<a name=selection_color><h4><a href=Fl_Color.html>fltk::Color</a> selection_color;</h4>
 
 Color drawn behind selected text in inputs, or selected browser or
 menu items, or lit light buttons.  The default is Windows 95 blue.
 
-<a name=selection_text_color><h4><a href=Fl_Color.html>Fl_Color</a> selection_text_color;</h4>
+<a name=selection_text_color><h4><a href=Fl_Color.html>fltk::Color</a> selection_text_color;</h4>
 
 The color to draw text atop the <code>selection_color</code>.  The
-default is <code>FL_WHITE</code>.
+default is <code>fltk::WHITE</code>.
 
-<a name=find><h4><a href="Fl_Named_Style.html">Fl_Named_Style</a>* Fl_Style::find(const char* name);</h4>
+<a name=find><h4><a href="Fl_Named_Style.html">fltk::Named_Style</a>* fltk::Style::find(const char* name);</h4>
 
-<p>This is a <i>static</i> method on Fl_Style. It returns the first
+<p>This is a <i>static</i> method on fltk::Style. It returns the first
 style found that matches the name.  Case is ignored and spaces and
 underscores are considered equivalent. If nothing matches
 <tt>NULL</tt> is returned.

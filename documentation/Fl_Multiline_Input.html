@@ -1,20 +1,20 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Multiline_Input</title></head><body>
+<title>class fltk::MultilineInput</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Multiline_Input</h2>
+<h2>class fltk::MultilineInput</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
 
-<pre><a href=Fl_Input.html>Fl_Input</a>
+<pre><a href=Fl_Input.html>fltk::Input</a>
    |
-   +----<b>Fl_Multiline_Input</b>
+   +----<b>fltk::MultilineInput</b>
 </pre>
 
 <h3>Include Files</h3>
 
 <pre>
-#include &lt;fltk/Fl_Multiline_Input.h&gt;
+#include &lt;fltk/MultilineInput.h&gt;
 </pre>
 
 <h3>Description</h3>
@@ -22,26 +22,26 @@
 This input field displays <tt>'\n'</tt> characters as new lines rather
 than <tt>^J</tt>, and accepts the Return, Tab, and up and down arrow
 keys. Long lines of text scroll horizontally, you may want <a
-href="Fl_Wordwrap_Input.html">Fl_Wordwrap_Input</a> instead.
+href="Fl_WordwrapInput.html">fltk::WordwrapInput</a> instead.
 
 <P>Because there are no scrollbars, this is probably only good for
 small bits of text, 10 lines at most. More powerful editing is
-available from the <a href="Fl_Text_Editor.html">Fl_Text_Editor</a>
+available from the <a href="Fl_TextEditor.html">fltk::TextEditor</a>
 widget.
 
 <h3>Methods</h3>
 
 <ul>
-<li><a href="#Fl_Multiline_Input">Fl_Multiline_Input</a></li>
-<li><a href="#~Fl_Multiline_Input">~Fl_Multiline_Input</a></li>
+<li><a href="#MultilineInput">fltk::MultilineInput</a></li>
+<li><a href="#~fltk::MultilineInput">~fltk::MultilineInput</a></li>
 </ul>
 
-<a name=Fl_Multiline_Input><h4>Fl_Multiline_Input::Fl_Multiline_Input(int x, int y, int w, int h, const char *label = 0)</h4></a>
+<a name=MultilineInput><h4>fltk::MultilineInput::MultilineInput(int x, int y, int w, int h, const char *label = 0)</h4></a>
 
-Creates a new <tt>Fl_Multiline_Input</tt> widget using the given 
+Creates a new <tt>fltk::MultilineInput</tt> widget using the given 
 position, size, and label string.
 
-<a name=~Fl_Multiline_Input><h4>virtual Fl_Multiline_Input::~Fl_Multiline_Input()</h4></a>
+<a name=~MultilineInput><h4>virtual fltk::MultilineInput::~fltk::MultilineInput()</h4></a>
 
 Destroys the widget and any value associated with it.
 

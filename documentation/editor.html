@@ -24,23 +24,23 @@ lets define what we want our text editor to do:
 the design of our GUI.  Obviously the first thing that we need is a 
 window: 
 <PRE>
-Fl_Window *window;
+fltk::Window *window;
 
-window = new Fl_Window(640, 480, &quot;Text Editor&quot;);
+window = new fltk::Window(640, 480, &quot;Text Editor&quot;);
 </PRE>
 <a name=evariables><H2>Variables</H2></a>
  Our text editor will need some global variables to keep track of 
 things: 
 <PRE>
-Fl_Window          *window;
-Fl_Menu_Bar        *menubar;
-Fl_Multiline_Input *input;
-Fl_Window          *replace_dlg;
-Fl_Input           *replace_find;
-Fl_Input           *replace_with;
-Fl_Button          *replace_all;
-Fl_Return_Button   *replace_next;
-Fl_Button          *replace_cancel;
+fltk::Window          *window;
+fltk::MenuBar        *menubar;
+fltk::MultilineInput *input;
+fltk::Window          *replace_dlg;
+fltk::Input           *replace_find;
+fltk::Input           *replace_with;
+fltk::Button          *replace_all;
+fltk::Return_Button   *replace_next;
+fltk::Button          *replace_cancel;
 
 int                changed = 0;
 char               filename[1024] = &quot;&quot;;
@@ -53,61 +53,61 @@ application.
 <a name=emenus><H2>Menubars and Menus</H2></a>
 
 The first goal requires us to use a menubar and menus that define each 
-function the editor needs to perform.  The <A href=Fl_Menu_Item.html>
-<TT>Fl_Menu_Item</TT></A> structure is used to define the menus and 
+function the editor needs to perform.  The <A href=Fl_MenuItem.html>
+<TT>fltk::MenuItem</TT></A> structure is used to define the menus and 
 items in a menubar: 
 <PRE>
-Fl_Menu_Item menuitems[] = {
-  { "&amp;File", 0, 0, 0, FL_SUBMENU },
-    { "&amp;New",        FL_ALT + 'n', (Fl_Callback *)new_cb },
-    { "&amp;Open...",    FL_ALT + 'o', (Fl_Callback *)open_cb, 0, FL_MENU_DIVIDER },
-    { "&amp;Save",       FL_ALT + 's', (Fl_Callback *)save_cb },
-    { "Save &amp;As...", FL_ALT + FL_SHIFT + 's', (Fl_Callback *)saveas_cb, 0, FL_MENU_DIVIDER },
-    { "&amp;Quit", FL_ALT + 'q', (Fl_Callback *)quit_cb },
+fltk::MenuItem menuitems[] = {
+  { "&amp;File", 0, 0, 0, fltk::SUBMENU },
+    { "&amp;New",        fltk::ALT + 'n', (fltk::Callback *)new_cb },
+    { "&amp;Open...",    fltk::ALT + 'o', (fltk::Callback *)open_cb, 0, fltk::MENU_DIVIDER },
+    { "&amp;Save",       fltk::ALT + 's', (fltk::Callback *)save_cb },
+    { "Save &amp;As...", fltk::ALT + fltk::SHIFT + 's', (fltk::Callback *)saveas_cb, 0, fltk::MENU_DIVIDER },
+    { "&amp;Quit", fltk::ALT + 'q', (fltk::Callback *)quit_cb },
     { 0 },
 
-  { "&amp;Edit", 0, 0, 0, FL_SUBMENU },
-    { "&amp;Undo",       FL_ALT + 'z', (Fl_Callback *)undo_cb, 0, FL_MENU_DIVIDER },
-    { "Cu&amp;t",        FL_ALT + 'x', (Fl_Callback *)cut_cb },
-    { "&amp;Copy",       FL_ALT + 'c', (Fl_Callback *)copy_cb },
-    { "&amp;Paste",      FL_ALT + 'v', (Fl_Callback *)paste_cb },
-    { "&amp;Delete",     0, (Fl_Callback *)delete_cb },
+  { "&amp;Edit", 0, 0, 0, fltk::SUBMENU },
+    { "&amp;Undo",       fltk::ALT + 'z', (fltk::Callback *)undo_cb, 0, fltk::MENU_DIVIDER },
+    { "Cu&amp;t",        fltk::ALT + 'x', (fltk::Callback *)cut_cb },
+    { "&amp;Copy",       fltk::ALT + 'c', (fltk::Callback *)copy_cb },
+    { "&amp;Paste",      fltk::ALT + 'v', (fltk::Callback *)paste_cb },
+    { "&amp;Delete",     0, (fltk::Callback *)delete_cb },
     { 0 },
 
-  { "&amp;Search", 0, 0, 0, FL_SUBMENU },
-    { "&amp;Find...",       FL_ALT + 'f', (Fl_Callback *)find_cb },
-    { "F&amp;ind Again",    FL_ALT + 'g', (Fl_Callback *)find2_cb },
-    { "&amp;Replace...",    FL_ALT + 'r', (Fl_Callback *)replace_cb },
-    { "Re&amp;place Again", FL_ALT + 't', (Fl_Callback *)replace2_cb },
+  { "&amp;Search", 0, 0, 0, fltk::SUBMENU },
+    { "&amp;Find...",       fltk::ALT + 'f', (fltk::Callback *)find_cb },
+    { "F&amp;ind Again",    fltk::ALT + 'g', (fltk::Callback *)find2_cb },
+    { "&amp;Replace...",    fltk::ALT + 'r', (fltk::Callback *)replace_cb },
+    { "Re&amp;place Again", fltk::ALT + 't', (fltk::Callback *)replace2_cb },
     { 0 },
 
   { 0 }
 };
 </PRE>
-Once we have the menus defined we can create the <TT>Fl_Menu_Bar</TT>
+Once we have the menus defined we can create the <TT>fltk::MenuBar</TT>
  widget and assign the menus to it with: 
 <PRE>
-Fl_Menu_Bar *menubar = new Fl_Menu_Bar(0, 0, 640, 30);
+fltk::MenuBar *menubar = new fltk::MenuBar(0, 0, 640, 30);
 menubar-&gt;menu(menuitems);
 </PRE>
  We'll define the callback functions later. 
 
 <a name=eediting><H2>Editing the Text</H2></a>
 
- To keep things simple our text editor will use the <A href=Fl_Multiline_Input.html#Fl_Multiline_Input>
-<TT>Fl_Multiline_Input</TT></A> widget to edit the text: 
+ To keep things simple our text editor will use the <A href=Fl_MultilineInput.html#MultilineInput>
+<TT>fltk::MultilineInput</TT></A> widget to edit the text: 
 <PRE>
-Fl_Multiline_Input *input = new Fl_Multiline_Input(0, 30, 640, 450);
+fltk::MultilineInput *input = new fltk::MultilineInput(0, 30, 640, 450);
 </PRE>
  So that we can keep track of changes to the file, we also want to add 
 a &quot;changed&quot; callback: 
 <PRE>
 input-&gt;callback(changed_cb);
-input-&gt;when(FL_WHEN_CHANGED);
+input-&gt;when(fltk::WHEN_CHANGED);
 </PRE>
- Finally, we want to use a mono-spaced font like <TT>FL_COURIER</TT>: 
+ Finally, we want to use a mono-spaced font like <TT>fltk::COURIER</TT>: 
 <PRE>
-input-&gt;textfont(FL_COURIER);
+input-&gt;textfont(fltk::COURIER);
 </PRE>
 
 <a name=ereplace><H2>The Replace Dialog</H2></a>
@@ -116,17 +116,17 @@ We can use the FLTK convenience functions for many of the editor's
 dialogs, however the replace dialog needs its own custom window.  To 
 keep things simple we will have a &quot;find&quot; string, a &quot;replace&quot; string, 
 and &quot;replace all&quot;, &quot;replace next&quot;, and &quot;cancel&quot; buttons.  The strings 
-are just <TT>Fl_Input</TT> widgets, the &quot;replace all&quot; and &quot;cancel&quot; 
-buttons are <TT>Fl_Button</TT> widgets, and the &quot;replace next &quot; button 
-is a <TT>Fl_Return_Button</TT> widget: 
+are just <TT>fltk::Input</TT> widgets, the &quot;replace all&quot; and &quot;cancel&quot; 
+buttons are <TT>fltk::Button</TT> widgets, and the &quot;replace next &quot; button 
+is a <TT>fltk::Return_Button</TT> widget: 
 <P ALIGN=CENTER><IMG src=./editor-replace.gif></P>
 <PRE>
-Fl_Window *replace_dlg = new Fl_Window(300, 105, &quot;Replace&quot;);
-Fl_Input *replace_find = new Fl_Input(70, 10, 200, 25, &quot;Find:&quot;);
-Fl_Input *replace_with = new Fl_Input(70, 40, 200, 25, &quot;Replace:&quot;);
-Fl_Button *replace_all = new Fl_Button(10, 70, 90, 25, &quot;Replace All&quot;);
-Fl_Button *replace_next = new Fl_Button(105, 70, 120, 25, &quot;Replace Next&quot;);
-Fl_Button *replace_cancel = new Fl_Button(230, 70, 60, 25, &quot;Cancel&quot;);
+fltk::Window *replace_dlg = new fltk::Window(300, 105, &quot;Replace&quot;);
+fltk::Input *replace_find = new fltk::Input(70, 10, 200, 25, &quot;Find:&quot;);
+fltk::Input *replace_with = new fltk::Input(70, 40, 200, 25, &quot;Replace:&quot;);
+fltk::Button *replace_all = new fltk::Button(10, 70, 90, 25, &quot;Replace All&quot;);
+fltk::Button *replace_next = new fltk::Button(105, 70, 120, 25, &quot;Replace Next&quot;);
+fltk::Button *replace_cancel = new fltk::Button(230, 70, 60, 25, &quot;Cancel&quot;);
 </PRE>
 
 <a name=ecallbacks><H2>Callbacks</H2></a>
@@ -177,7 +177,7 @@ void delete_cb(void) {
 <H3>find_cb()</H3>
 
 This callback function asks for a search string using the <A
-href=utility.html#fl_input> <TT>fl_input()</TT></A> convenience
+href=utility.html#input> <TT>fltk::input()</TT></A> convenience
 function and then calls the <TT> find2_cb()</TT> function to find the
 string:
 
@@ -185,7 +185,7 @@ string:
 void find_cb(void) {
   const char *val;
 
-  val = fl_input(&quot;Search String:&quot;, search);
+  val = fltk::input(&quot;Search String:&quot;, search);
   if (val != NULL) {
     // User entered a string - go find it!
     strcpy(search, val);
@@ -215,12 +215,12 @@ void find2_cb(void) {
     pos = input-&gt;mark() + found - val;
     input-&gt;position(pos, pos + strlen(search));
   }
-  else fl_alert(&quot;No occurrences of \'%s\' found!&quot;, search);
+  else fltk::alert(&quot;No occurrences of \'%s\' found!&quot;, search);
 }
 </PRE>
 
  If the search string cannot be found we use the <A
-href=utility.html#fl_alert><TT> fl_alert()</TT></A> convenience
+href=utility.html#alert><TT> fltk::alert()</TT></A> convenience
 function to display a message to that effect.
 
 <H3>new_cb()</H3>
@@ -249,18 +249,18 @@ void open_cb(void) {
   if (changed)
     if (!check_save()) return;
 
-  newfile = fl_file_chooser(&quot;Open File?&quot;, &quot;*&quot;, filename);
+  newfile = fltk::file_chooser(&quot;Open File?&quot;, &quot;*&quot;, filename);
   if (newfile != NULL) load_file(newfile);
 }
 </PRE>
  We call the <TT>load_file()</TT> function to actually load the file. 
 <H3>paste_cb()</H3>
- This callback function will send a FL_PASTE message to the <TT>input</TT>
- widget using the <A href=Fl.html#paste><TT>Fl::paste()</TT></A>
+ This callback function will send a fltk::PASTE message to the <TT>input</TT>
+ widget using the <A href=Fl.html#paste><TT>fltk::paste()</TT></A>
  method: 
 <PRE>
 void paste_cb(void) {
-  Fl::paste(*input);
+  fltk::paste(*input);
 }
 </PRE>
 <H3>quit_cb()</H3>
@@ -308,7 +308,7 @@ void replace2_cb() {
     input-&gt;replace(pos, pos + strlen(find), replace_with-&gt;value());
     input-&gt;position(pos + strlen(replace_with-&gt;value()));
   }
-  else fl_alert(&quot;No occurrences of \'%s\' found!&quot;, find);
+  else fltk::alert(&quot;No occurrences of \'%s\' found!&quot;, find);
 }
 </PRE>
 <H3>replall_cb()</H3>
@@ -344,8 +344,8 @@ void replall_cb() {
     }
   } while (found != NULL);
 
-  if (times &gt; 0) fl_message(&quot;Replaced %d occurrences.&quot;, times);
-  else fl_alert(&quot;No occurrences of \'%s\' found!&quot;, find);
+  if (times &gt; 0) fltk::message(&quot;Replaced %d occurrences.&quot;, times);
+  else fltk::alert(&quot;No occurrences of \'%s\' found!&quot;, find);
 }
 </PRE>
 <H3>replcan_cb()</H3>
@@ -376,7 +376,7 @@ specified filename.
 void saveas_cb(void) {
   char *newfile;
 
-  newfile = fl_file_chooser(&quot;Save File As?&quot;, &quot;*&quot;, filename);
+  newfile = fltk::file_chooser(&quot;Save File As?&quot;, &quot;*&quot;, filename);
   if (newfile != NULL) save_file(newfile);
 }
 </PRE>
@@ -402,7 +402,7 @@ so, it asks the user if they want to save it:
 int check_save(void) {
   if (!changed) return 1;
 
-  if (fl_ask(&quot;The current file has not been saved.\n&quot;
+  if (fltk::ask(&quot;The current file has not been saved.\n&quot;
              &quot;Would you like to save it now?&quot;)) {
     // Save the file...
     save_cb();
@@ -439,7 +439,7 @@ void load_file(char *newfile) {
     set_changed(0);
   } else {
     // Couldn't open file - say so...
-    fl_alert(&quot;Unable to open \'%s\' for reading!&quot;);
+    fltk::alert(&quot;Unable to open \'%s\' for reading!&quot;);
   }
 }
 </PRE>
@@ -459,7 +459,7 @@ void save_file(char *newfile) {
     strcpy(filename, newfile);
 
     if (fwrite(input-&gt;value(), 1, input-&gt;size(), fp) &lt; 1) {
-      fl_alert(&quot;Unable to write file!&quot;);
+      fltk::alert(&quot;Unable to write file!&quot;);
       fclose(fp);
       return;
     }
@@ -468,7 +468,7 @@ void save_file(char *newfile) {
     set_changed(0);
   } else {
     // Couldn't open file - say so...
-    fl_alert(&quot;Unable to create \'%s\' for writing!&quot;);
+    fltk::alert(&quot;Unable to create \'%s\' for writing!&quot;);
   }
 }
 </PRE>

@@ -1,25 +1,25 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Tile</title></head><body>
+<title>class fltk::Tile</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Tile</h2>
+<h2>class fltk::Tile</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
 <pre>
-<a href=Fl_Group.html>Fl_Group</a>
+<a href=Fl_Group.html>fltk::Group</a>
    |
-   +----<b>Fl_Tile</b>
+   +----<b>fltk::Tile</b>
 </pre>
 
 <h3>Include Files</h3>
 
 <pre>
-#include &lt;fltk/Fl_Tile.h&gt;
+#include &lt;fltk/Tile.h&gt;
 </pre>
 
 <h3>Description</h3>
 
-<p><tt>Fl_Tile</tt> makes it possible for the user to dynamically drag
+<p><tt>fltk::Tile</tt> makes it possible for the user to dynamically drag
 the edges of child widgets. If two adjoining widgets are created such
 that their edges touch, eg. 2a and 2b, the user can drag the common
 edge, affecting <i>both</i> widgets.</p>
@@ -27,19 +27,19 @@ edge, affecting <i>both</i> widgets.</p>
 <p>In the example program, all neighboring widgets share the same
 edge, so that the user can drag any edge, and affect all widgets
 sharing that edge. All the widgets in this example have
-<tt>box(FL_DOWN_BOX)</tt>, and the widget's thick borders make it
+<tt>box(fltk::DOWN_BOX)</tt>, and the widget's thick borders make it
 appear as though the widgets aren't actually touching, but they
 are:</p>
 
 <p align=center><img src="Fl_Tile.gif" border=1></p>
 
-<p><tt>Fl_Tile</tt> allows objects to be resized to zero dimensions.
+<p><tt>fltk::Tile</tt> allows objects to be resized to zero dimensions.
 To prevent this you can use the <a
 href="Fl_Group.html#resizable">resizable()</a> to limit where corners
 can be dragged to.</p>
 
 <p>Even though objects can be resized to zero sizes, they must 
-initially have non-zero sizes so the <tt>Fl_Tile</tt> can figure out 
+initially have non-zero sizes so the <tt>fltk::Tile</tt> can figure out 
 their layout.  If desired, call <tt>position()</tt> after creating the 
 children but before displaying the window to set the borders where you 
 want.</p>
@@ -47,34 +47,34 @@ want.</p>
 <h3>Methods</h3>
 
 <ul>
-<li><a href=#Fl_Tile.Fl_Tile>Fl_Tile</a></li>
-<li><a href=#Fl_Tile.~Fl_Tile>~Fl_Tile</a></li>
-<li><a href=#Fl_Tile.position>position</a></li>
-<li><a href=#Fl_Tile.resizeable>resizeable</a></li>
+<li><a href=#Tile.Tile>fltk::Tile</a></li>
+<li><a href=#Tile.~Tile>~fltk::Tile</a></li>
+<li><a href=#Tile.position>position</a></li>
+<li><a href=#Tile.resizeable>resizeable</a></li>
 </ul>
 
-<h4><A name=Fl_Tile.Fl_Tile>Fl_Tile::Fl_Tile(int x, int y, int w, int 
+<h4><A name=Tile.Tile>fltk::Tile::Tile(int x, int y, int w, int 
 h, const char *label = 0)</A></h4>
 
-Creates a new <tt>Fl_Tile</tt> widget using the given position, size, 
-and label string. The default boxtype is <tt>FL_NO_BOX</tt>. 
+Creates a new <tt>fltk::Tile</tt> widget using the given position, size, 
+and label string. The default boxtype is <tt>fltk::NO_BOX</tt>. 
 
-<h4><A name=Fl_Tile.~Fl_Tile>virtual Fl_Tile::~Fl_Tile()</A></h4>
+<h4><A name=Tile.~Tile>virtual fltk::Tile::~fltk::Tile()</A></h4>
 
 The destructor <I>also deletes all the children</I>. This allows a 
 whole tree to be deleted at once, without having to keep a pointer to 
 all the children in the user code. A kludge has been done so the <tt>
-Fl_Tile</tt> and all of it's children can be automatic (local) 
-variables, but you must declare the <tt>Fl_Tile</tt> <I>first</I>, so 
+fltk::Tile</tt> and all of it's children can be automatic (local) 
+variables, but you must declare the <tt>fltk::Tile</tt> <I>first</I>, so 
 that it is destroyed last. 
 
-<h4><A name=Fl_Tile.position>void Fl_Tile::position(from_x, from_y, to_x, to_y)</A></h4>
+<h4><A name=Tile.position>void fltk::Tile::position(from_x, from_y, to_x, to_y)</A></h4>
 
 Drag the intersection at <i>from_x, from_y</i> to
 <i>to_x,to_y</i>. This redraws all the necessary children.
 
-<h4><A name=Fl_Tile.resizeable>void Fl_Tile::resizable(Fl_Widget &amp;w)<BR>
-void Fl_Tile::resizable(Fl_Widget *w)</A></h4>
+<h4><A name=Tile.resizeable>void fltk::Tile::resizable(fltk::Widget &amp;w)<BR>
+void fltk::Tile::resizable(fltk::Widget *w)</A></h4>
 
 The <a href="Fl_Group.html#resizable">resizable()</a> child widget
 (which should be invisible) limits where the border can be dragged to.

@@ -1,53 +1,53 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Browser</title></head><body>
+<title>class fltk::Browser</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Browser</h2>
+<h2>class fltk::Browser</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
 
 <pre>
 
-<A href=Fl_Widget.html>Fl_Widget</A>
+<A href=Fl_Widget.html>fltk::Widget</A>
    |
-   +----<a href=Fl_Group.html>Fl_Group</a>
+   +----<a href=Fl_Group.html>fltk::Group</a>
            |
-           +----<a href=Fl_Menu_.html>Fl_Menu_</A>
+           +----<a href=Fl_Menu.html>fltk::Menu</A>
                    |
-                   +----<B>Fl_Browser</B>
+                   +----<B>fltk::Browser</B>
                            |
-                           +----<A href=Fl_Multi_Browser.html>Fl_Multi_Browser</A>
+                           +----<A href=Fl_MultiBrowser.html>fltk::MultiBrowser</A>
 </pre>
 
 <h3>Include Files</h3>
 
 <pre>
-#include &lt;fltk/Fl_Browser.h&gt;
+#include &lt;fltk/Browser.h&gt;
 </pre>
 
 <h3>Description</h3>
 
-The <tt>Fl_Browser</tt> widget displays a scrolling vertical list of text
+The <tt>fltk::Browser</tt> widget displays a scrolling vertical list of text
 widgets, possibly with a hierachial arrangement.
 
 <p><center><img src=browser.gif></center>
 
 <p>The items may be created as child widgets (usually the same widgets
-as are used to create menus: <a href=Fl_Item.html>Fl_Item</a> widgets,
-or <a href=Fl_Item_Group.html>Fl_Item_Group</a> widgets to make a
+as are used to create menus: <a href=Fl_Item.html>fltk::Item</a> widgets,
+or <a href=Fl_ItemGroup.html>fltk::ItemGroup</a> widgets to make a
 hierarchy). Alternatively you can build simple text lists by using the
-<a href=Fl_Menu_.html#add>add()</a> method, which will create the
+<a href=Fl_Menu.html#add>add()</a> method, which will create the
 child widgets for you (and even create a hierarchy if you put slashes
-in the text). You can also us an <a href=Fl_List.html>Fl_List</a>
+in the text). You can also us an <a href=Fl_List.html>fltk::List</a>
 which allows you to control the storage by dynamically creating a
 "fake" widget for the browser to use to draw each item.
 
 <p>All the functions used to add, remove, or modify items in the list
-are defined by the base class <a href=Fl_Menu_.html>Fl_Menu_</a>. See
+are defined by the base class <a href=Fl_Menu.html>fltk::Menu</a>. See
 that for much more information.
 
 <p>For a simple constant list you can populate the list by calling
-<tt>browser-><a href=Fl_Menu_.html#add>add</a>("text of item")</tt>
+<tt>browser-><a href=Fl_Menu.html#add>add</a>("text of item")</tt>
 once for each item.  If you give the browser a callback you can find
 out what item was selected with <tt>browser-><a
 href=#value>value()</a>;</tt>, the first item is zero (this is
@@ -56,36 +56,36 @@ negative if no item is selected. You can
 change the selected item with <tt>browser-><a
 href=#value>value(n)</a></tt>.
 
-<p>The subclass <a href=Fl_Multi_Browser.html>Fl_Multi_Browser</a>
+<p>The subclass <a href=Fl_MultiBrowser.html>fltk::MultiBrowser</a>
 lets the user select more than one item at the same time.
 
 <h4>Callbacks</h4>
 
 You can control when callbacks are done with the <a
 href="Fl_Widget.html#when"><tt>when()</tt></a> method. The following
-values are useful, the default value is <tt>FL_WHEN_RELEASE</tt>.
+values are useful, the default value is <tt>fltk::WHEN_RELEASE</tt>.
 
 <ul>
 
-<li><tt>FL_WHEN_NEVER</tt> - Callback is never done. <a
+<li><tt>fltk::WHEN_NEVER</tt> - Callback is never done. <a
 href="Fl_Widget.html#changed"><tt>changed()</tt></a> can be used to
 see if the user has modified the browser.</li>
 
-<li><tt>FL_WHEN_CHANGED</tt> - Callback is done whenever the user
+<li><tt>fltk::WHEN_CHANGED</tt> - Callback is done whenever the user
 changes the current item. If they drag the mouse through items the
 callback is done for each one, and the callback is done for each
 keystroke that changes the selected item.</li>
 
-<li><tt>FL_WHEN_RELEASE</tt> - Callback is done when the user releases
+<li><tt>fltk::WHEN_RELEASE</tt> - Callback is done when the user releases
 the mouse and the selected item has changed, and on any keystroke that
 changes the item.</li>
 
-<li><tt>FL_WHEN_RELEASE_ALWAYS</tt> - Callback is done when the user
+<li><tt>fltk::WHEN_RELEASE_ALWAYS</tt> - Callback is done when the user
 releases the mouse even if the current item has not changed, and on
 any arrow keystroke even when at the top or bottom of the browser. You
 must use this if you want to detect the user double-clicking an item.</li>
 
-<li><tt>FL_WHEN_ENTER_KEY</tt> - Callback is only done if the user
+<li><tt>fltk::WHEN_ENTER_KEY</tt> - Callback is only done if the user
 hits the Enter key and some item is selected. In the current version
 the callback is also done if the user double-clicks a non-parent item.</li>
 
@@ -97,8 +97,8 @@ the callback is also done if the user double-clicks a non-parent item.</li>
 <table width=90%>
 <tr><td align=left valign=top>
 
-<li><a href="#Fl_Browser">Fl_Browser</a></li>
-<li><a href="#~Fl_Browser">~Fl_Browser</a></li>
+<li><a href="#Browser">fltk::Browser</a></li>
+<li><a href="#~fltk::Browser">~fltk::Browser</a></li>
 <li><a href="#box_height">box_height</a></li>
 <li><a href="#box_width">box_width</a></li>
 <li><a href="#column_widths">column_widths</a></li>
@@ -146,14 +146,14 @@ the callback is also done if the user double-clicks a non-parent item.</li>
 </table>
 </center>
 
-<a name=Fl_Browser><h4>Fl_Browser::Fl_Browser(int, int, int, int, const char * = 0)</h4></a>
+<a name=Browser><h4>fltk::Browser::Browser(int, int, int, int, const char * = 0)</h4></a>
 
 The constructor makes an empty browser. 
 
-<a name=~Fl_Browser><h4>Fl_Browser::~Fl_Browser(void)</h4></a>
+<a name=~Browser><h4>fltk::Browser::~fltk::Browser(void)</h4></a>
 
 The destructor deletes all the list items (because they are child
-Fl_Widgets of an Fl_Group) and destroys the browser. 
+fltk::Widgets of an fltk::Group) and destroys the browser. 
 
 <a name=width><h4>int width() const</h4></a>
 
@@ -219,13 +219,13 @@ browser. This should be off for a flat browser, or to emulate Windows
 Explorer where "my computer" does not have an open/close to the left
 of it. The default value is <tt>false</tt>.
 
-<h4><a name=scrollbar>Fl_Scrollbar scrollbar;</a>
-<br><a name=hscrollbar>Fl_Scrollbar hscrollbar;</a></h4>
+<h4><a name=scrollbar>fltk::Scrollbar scrollbar;</a>
+<br><a name=hscrollbar>fltk::Scrollbar hscrollbar;</a></h4>
 
 The scrollbars are accessable as instance variables. You can alter
 their width or other attributes to customize the browser to your liking.
 
-<a name=goto_top><h4>Fl_Widget* goto_top();</h4></a>
+<a name=goto_top><h4>fltk::Widget* goto_top();</h4></a>
 
 Because of the hierarchial structure it is difficult to identify an
 item in the browser. Instead of passing an identifier to all the calls
@@ -240,18 +240,18 @@ the browser is empty.
 href="#goto_index"><tt>goto_index(0)</tt></a> if you want to go to the
 first item even if it is invisible.
 
-<a name=goto_focus><h4>Fl_Widget* goto_focus()</h4></a>
+<a name=goto_focus><h4>fltk::Widget* goto_focus()</h4></a>
 
 <p>Set the current item to the "focus" (the item with the dotted square
-in an <tt>Fl_Multi_Browser</tt>, and the selected item in a normal
-<tt>Fl_Browser</tt>.
+in an <tt>fltk::MultiBrowser</tt>, and the selected item in a normal
+<tt>fltk::Browser</tt>.
 
-<a name=goto_position><h4>Fl_Widget* goto_position(int y);</h4></a>
+<a name=goto_position><h4>fltk::Widget* goto_position(int y);</h4></a>
 
 <p>Set the current item to one at or before <i>y</i> pixels from top
 of the first item.
 
-<a name=goto_index><h4>Fl_Widget* goto_index(const int* indexes, int level);</h4></a>
+<a name=goto_index><h4>fltk::Widget* goto_index(const int* indexes, int level);</h4></a>
 
 <p>Go to a nested item. <i>indexes</i> must contain <i>level</i>+1
 index numbers. The first number indicates the top-level item number,
@@ -259,11 +259,11 @@ the second indicates the child number of that parent, and so on. This
 sets the current item to the given item. If the values are out of
 range then null is returned, otherwise the widget for that item.
 
-<h4>Fl_Widget* goto_index(int);
-<br>Fl_Widget* goto_index(int,int);
-<br>Fl_Widget* goto_index(int,int,int);
-<br>Fl_Widget* goto_index(int,int,int,int);
-<br>Fl_Widget* goto_index(int,int,int,int,int);</a></h4>
+<h4>fltk::Widget* goto_index(int);
+<br>fltk::Widget* goto_index(int,int);
+<br>fltk::Widget* goto_index(int,int,int);
+<br>fltk::Widget* goto_index(int,int,int,int);
+<br>fltk::Widget* goto_index(int,int,int,int,int);</a></h4>
 
 These are the same as passing the number of arguments minus one as the
 <i>level</i> and the arguments as the index array to <a
@@ -271,10 +271,10 @@ href="#goto_index"><tt>goto_index()</tt></a>. Passing a negative number
 as the first argument will set it to a special "no item" state where
 <tt>select_only_this()</tt> will do <tt>deselect()</tt>
 
-<a name=item><h4>Fl_Widget* item();</h4></a>
+<a name=item><h4>fltk::Widget* item();</h4></a>
 
 This is in fact a method on the base <a
-href="Fl_Menu_.html">Fl_Menu_</a> class. This returns the widget that
+href="Fl_Menu.html">fltk::Menu</a> class. This returns the widget that
 was jumped to by the last <a href="#goto_index">goto_index()</a> or
 other similar call.
 
@@ -282,7 +282,7 @@ other similar call.
 
 Return true if the item would be visible to the user if the browser
 was scrolled to the correct location. This means that the
-<tt>FL_INVISIBLE</tt> flag is not set on it, and all parents of it are
+<tt>fltk::INVISIBLE</tt> flag is not set on it, and all parents of it are
 open and visible as well.
 
 <a name=item_is_parent><h4>bool item_is_parent() const;</h4></a>
@@ -290,7 +290,7 @@ open and visible as well.
 Return true if the current item is a parent. Notice that it may have
 zero children.
   
-<a name=next><h4>Fl_Widget* next();</h4></a>
+<a name=next><h4>fltk::Widget* next();</h4></a>
 
 Move the current item to the next item. If if is a parent it moves to
 the first child. If not a parent, it moves to the next child of it's
@@ -299,13 +299,13 @@ brother. Repeatedly calling this will visit every child of the browser.
 This returns the widget. If the current widget is the last one this
 returns null, but the current widget remains on the last one.
 
-<a name=next_visible><h4>Fl_Widget* next_visible();</h4></a>
+<a name=next_visible><h4>fltk::Widget* next_visible();</h4></a>
 
 Move the current item to the next visible item. Invisible items are
 either hidden because their parent is closed or because they had <a
 href=Fl_Widget.html#hide><tt>hide()</tt></a> called on them.
 
-<a name=previous_visible><h4>Fl_Widget* previous_visible();</h4></a>
+<a name=previous_visible><h4>fltk::Widget* previous_visible();</h4></a>
 
 Move the current item to the previous visible item. Invisible items are
 either hidden because their parent is closed or because they had <a
@@ -314,7 +314,7 @@ href=Fl_Widget.html#hide><tt>hide()</tt></a> called on them.
 <a name=set_focus><h4>bool set_focus();</h4></a>
 
 Change the focus (the selected item, or in an <a
-href="Fl_Multi_Browser.html">Fl_Multi_Browser</a> the item that has a
+href="Fl_MultiBrowser.html">fltk::MultiBrowser</a> the item that has a
 dotted box around it, and the current item selected with <a
 href="#goto_index"><tt>goto_index()</tt></a>. This calls <a
 href="#make_item_visible">make_item_visible()</a>.
@@ -323,22 +323,22 @@ href="#make_item_visible">make_item_visible()</a>.
 
 <p>This makes the current item visible to the user.
 
-<p>First it turns off the <tt>FL_INVISIBLE</tt> flag on the current
-item, and turns off the <tt>FL_INVISIBLE</tt> flag and opens (turning
-on the <tt>FL_VALUE</tt> flag) all parent items. These flag changes
+<p>First it turns off the <tt>fltk::INVISIBLE</tt> flag on the current
+item, and turns off the <tt>fltk::INVISIBLE</tt> flag and opens (turning
+on the <tt>fltk::VALUE</tt> flag) all parent items. These flag changes
 cause <a href="Fl_List.html#flags_changed">flags_changed()</a> to be
-called on any <a href="Fl_List.html">Fl_List</a> that you have
+called on any <a href="Fl_List.html">fltk::List</a> that you have
 assigned to the browser.
 
 <p>The browser is then scrolled by calling <a
 href="#yposition"><tt>yposition()</tt></a> so the item is visible. The
 optional argument tells how to scroll. If not specified (or the
-default value of <tt>Fl_Browser::NOSCROLL</tt> is given) then the
+default value of <tt>fltk::Browser::NOSCROLL</tt> is given) then the
 browser is scrolled as little as possible to show the item. If it is
-<tt>Fl_Browser::TOP</tt> then the item is put at the top of the
-browser. If it is <tt>Fl_Browser::MIDDLE</tt> then the item is
+<tt>fltk::Browser::TOP</tt> then the item is put at the top of the
+browser. If it is <tt>fltk::Browser::MIDDLE</tt> then the item is
 centered vertically in the browser. If it is
-<tt>Fl_Browser::BOTTOM</tt> then the item is put at the bottom of the
+<tt>fltk::Browser::BOTTOM</tt> then the item is put at the bottom of the
 browser.
 
 <p>This does nothing if the current item is null.
@@ -352,13 +352,13 @@ browser because it will blink a lot less.
 <a name=set_item_opened><h4>bool set_item_opened(bool value);</h4></a>
 
 If the current item is a parent, set the open state (the
-<tt>FL_VALUE</tt> flags) to the given <i>value</i> and redraw the
+<tt>fltk::VALUE</tt> flags) to the given <i>value</i> and redraw the
 browser correctly. Returns true if the state was actually changed,
 returns false if it was already in that state.
 
 <a name=set_item_visible><h4>bool set_item_visible(bool value);</h4></a>
 
-Turn off or on the <tt>FL_INVISIBLE</tt> flag on the given item and
+Turn off or on the <tt>fltk::INVISIBLE</tt> flag on the given item and
 redraw the browser if necessary. Returns true if the state was
 actually changed, returns false if it was already in that state.
 
@@ -405,7 +405,7 @@ get the current item in a non-hierarchial browser.
 <a name=format_char><h4>char format_char() const;
 <br>void format_char(char c);</h4></a>
 
-Sent to the <a href=drawing.html><tt>fl_draw()</tt></a> function to
+Sent to the <a href=drawing.html><tt>fltk::draw()</tt></a> function to
 control the interpretation of leading symbol characters. This defaults
 to <tt>'@'</tt>.
 
@@ -428,7 +428,7 @@ href=#make_item_visible>make_item_visible(TOP)</a>;</tt>.
 <hr>
 
 <p>This is the description of '@' commands, it should be moved to the
-fl_draw() documentation:
+fltk::draw() documentation:
 
 <p>A string of formatting codes at the start of 
 each column are stripped off and used to modify how the rest of the 
@@ -440,16 +440,16 @@ line is printed:
 <li><code>@l</code> Use a <BIG>large</BIG> (24 point) font </li>
 <li><code>@m</code> Use a <BIG>medium large</BIG> (18 point) font </li>
 <li><code>@s</code> Use a <SMALL>small</SMALL> (11 point) font </li>
-<li><code>@b</code> Use a <B>bold</B> font (adds FL_BOLD to font) </li>
-<li><code>@i</code> Use an <I>italic</I> font (adds FL_ITALIC to font) </li>
+<li><code>@b</code> Use a <B>bold</B> font (adds fltk::BOLD to font) </li>
+<li><code>@i</code> Use an <I>italic</I> font (adds fltk::ITALIC to font) </li>
 <li><code>@f</code> or <code>@t</code> Use a <code>fixed-pitch</code>
- font (sets font to FL_COURIER) </li>
+ font (sets font to fltk::COURIER) </li>
 <li><code>@c</code> Center the line horizontally </li>
 <li><code>@r</code> Right-justify the text </li>
 <li><code>@B0, @B1, ... @B255</code> Fill the backgound with 
-fl_color(n) </li>
-<li><code>@C0, @C1, ... @C255</code> Use fl_color(n) to draw the text </li>
-<li><code>@F0, @F1, ... </code> Use fl_font(n) to draw the text </li>
+fltk::color(n) </li>
+<li><code>@C0, @C1, ... @C255</code> Use fltk::color(n) to draw the text </li>
+<li><code>@F0, @F1, ... </code> Use fltk::font(n) to draw the text </li>
 <li><code>@S1, @S2, ... </code> Use point size n to draw the text </li>
 <li><code>@u</code> or <code>@_</code> Underline the text. </li>
 <li><code>@-</code> draw an engraved line through the middle. </li>

@@ -1,33 +1,33 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Item</title></head><body>
+<title>class fltk::Item</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Item</h2>
+<h2>class fltk::Item</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
 
 <pre>
-<a href="Fl_Widget.html">Fl_Widget</a>
+<a href="Fl_Widget.html">fltk::Widget</a>
    |
-   +----<b>Fl_Item</b>
+   +----<b>fltk::Item</b>
 </pre>
 
 <h3>Include Files</h3>
 
 <pre>
-#include &lt;fltk/Fl_Item.h&gt;
+#include &lt;fltk/Item.h&gt;
 </pre>
 
 <h3>Description</h3>
 
 This widget is designed to be put into <a
-href="Fl_Menu_.html">Fl_Menu</a> and <a
-href="Fl_Browser.html">Fl_Browser</a> widgets.
+href="Fl_Menu.html">fltk::Menu</a> and <a
+href="Fl_Browser.html">fltk::Browser</a> widgets.
 
 <p>It's draw() method is designed to appear correctly inside menus and
 browsers, despite inconsistencies in the designs of these things on
 Windows. By default it does not erase it's background and assumes that
-if <tt>FL_SELECTED</tt> is set in the flags it should use the
+if <tt>fltk::SELECTED</tt> is set in the flags it should use the
 selected_label_color(). You can change this by setting box() or the
 colors in the style, or by overriding the draw() method, but if you do
 so you will probably have to limit your widget to either menus or
@@ -40,8 +40,8 @@ was unable to get these into the child widgets and still replicate the
 standard Windows UI appearance.
 
 <p>Currently you can set <a href="Fl_Widget.html#type">type()</a> to
-<tt>Fl_Item::TOGGLE</tt> to get a checkmark on the left and
-<tt>Fl_Item::RADIO</tt> to make it a radio button. This may change in
+<tt>fltk::Item::TOGGLE</tt> to get a checkmark on the left and
+<tt>fltk::Item::RADIO</tt> to make it a radio button. This may change in
 future versions however and you may need to use a subclass for this.
 
 <p>In a multi-browser, the <a href="Fl_Widget.html#selected">selected()</a>
@@ -50,15 +50,15 @@ indicates if the widget is currently selected.
 <h3>Methods</h3>
 
 <ul>
-<li><a href=#Fl_Item>Fl_Item</a></li>
-<li><a href=#~Fl_Item>~Fl_Item</a></li>
+<li><a href=#Item>fltk::Item</a></li>
+<li><a href=#~fltk::Item>~fltk::Item</a></li>
 </ul>
 
-<a name=Fl_Item><h4>Fl_Item::Fl_Item(const char * = 0)</h4></a>
+<a name=Item><h4>fltk::Item::Item(const char * = 0)</h4></a>
 
 Unlike other widgets the constructor does not take any dimensions,
 since it is assummed the container widget will size this correctly.
 
-<h4><A name="~Fl_Item">Fl_Item::~Fl_Item(void)</a></h4>
+<h4><A name="~fltk::Item">fltk::Item::~fltk::Item(void)</a></h4>
 
 </body></html>

@@ -1,25 +1,25 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>typedef Fl_Boxtype</title></head><body>
+<title>typedef fltk::Box</title></head><body>
 <!-- NEW PAGE -->
-<h2>typedef Fl_Boxtype</h2>
+<h2>typedef fltk::Box</h2>
 <hr>
 
-<tt>Fl_Boxtype</tt> is a pointer to the structure
-<tt>Fl_Boxtype_</tt>, which contains the information needed to draw
+<tt>fltk::Box</tt> is a pointer to the structure
+<tt>fltk::Box_</tt>, which contains the information needed to draw
 the rectangles around and inside widgets.
 
 <p>Boxtypes are stored in the <a href=Fl_Style.html#box>box</a>, <a
 href=Fl_Style.html#button_box>button_box</a>, and <a
 href=Fl_Style.html#focus_box>focus_box</a> fields of the <a
-href=Fl_Style.html>Fl_Style</a> structure, and typically used by the
+href=Fl_Style.html>fltk::Style</a> structure, and typically used by the
 <a href=Fl_Widget.html#draw>draw()</a> methods of
-<a href=Fl_Widget.html>Fl_Widget</a>s.
+<a href=Fl_Widget.html>fltk::Widget</a>s.
 
 <P ALIGN=CENTER><IMG src="boxtypes.gif"></P>
 
 <h3>Members</h3>
 
-<a name=draw><h4>virtual void Fl_Boxtype_::draw(int x, int y, int w, int h, Fl_Color fill, Fl_Flags) const;</h4></a>
+<a name=draw><h4>virtual void fltk::Box_::draw(int x, int y, int w, int h, fltk::Color fill, fltk::Flags) const;</h4></a>
 
 This is the function that draws the box. The four integers are the
 x,y,w,h of the rectangle to fill with the box.  The color is used to
@@ -29,17 +29,17 @@ following ones are useful (ignore any other bits that are on):
 
 <p><ul>
 
-<li><tt>FL_INACTIVE</tt> - gray out the widget.
+<li><tt>fltk::INACTIVE</tt> - gray out the widget.
 
-<li><tt>FL_VALUE</tt> - draw the box pushed in. Typically this is
+<li><tt>fltk::VALUE</tt> - draw the box pushed in. Typically this is
 implemented by calling another boxtype to do the drawing.
 
-<li><tt>FL_HIGHLIGHT</tt> - draw the box highlighted.  Usually you can
+<li><tt>fltk::HIGHLIGHT</tt> - draw the box highlighted.  Usually you can
 ignore this because the fill color will also be changed.
 
-<li><tt>FL_SELECTED</tt> - the widget has the focus.
+<li><tt>fltk::SELECTED</tt> - the widget has the focus.
 
-<li><tt>FL_INVISIBLE</tt> - you should only draw the outer edge of the
+<li><tt>fltk::INVISIBLE</tt> - you should only draw the outer edge of the
 box and not fill it in. This is used to draw the boxes around browsers
 and text widgets, and to draw the focus box. You can ignore this and
 things will still draw ok, but they may flicker more than necessary.
@@ -50,23 +50,23 @@ things will still draw ok, but they may flicker more than necessary.
 and then draw a black outline: 
 
 <PRE>
-void MyBoxtype::draw(int x, int y, int w, int h, Fl_Color c, Fl_Flags f) const
+void MyBoxtype::draw(int x, int y, int w, int h, fltk::Color c, fltk::Flags f) const
 {
   // draw the interior:
-  if (!(f&FL_INVISIBLE)) {
-    fl_color(c);
-    fl_rectf(x+1, y+1, w-2, h-2);
+  if (!(f&fltk::INVISIBLE)) {
+    fltk::color(c);
+    fltk::rectf(x+1, y+1, w-2, h-2);
   }
   // draw the edge:
-  fl_color(FL_BLACK);
-  fl_rect(x, y, w, h);
+  fltk::color(fltk::BLACK);
+  fltk::rect(x, y, w, h);
 }
 </pre>
 
-<a name=fills_rectangle><h4>int Fl_Boxtype_::fills_rectangle() const;</h4></a>
+<a name=fills_rectangle><h4>int fltk::Box_::fills_rectangle() const;</h4></a>
 
 Returns true if the draw function completely fills all the pixels in
-the rectangle passed to it (ignoring any <tt>FL_INVISIBLE</tt>
+the rectangle passed to it (ignoring any <tt>fltk::INVISIBLE</tt>
 flag). Many parts of fltk will take advantage of this to speed up
 drawing and eliminate blinking.
 
@@ -75,10 +75,10 @@ constructor should set the protected member variable
 <tt>fills_rectangle_</tt> with the value you want returned.
 
 <h4>
-<a name=dx>int Fl_Boxtype::dx() const;</a><br>
-<a name=dy>int Fl_Boxtype::dy() const;</a><br>
-<a name=dw>int Fl_Boxtype::dw() const;</a><br>
-<a name=dh>int Fl_Boxtype::dh() const;</a><br>
+<a name=dx>int fltk::Box::dx() const;</a><br>
+<a name=dy>int fltk::Box::dy() const;</a><br>
+<a name=dw>int fltk::Box::dw() const;</a><br>
+<a name=dh>int fltk::Box::dh() const;</a><br>
 </h4>
 
 Return the offsets for the bounding box that should be subtracted when
@@ -91,25 +91,25 @@ and dh() is two times dy(), and usually dx() and dy() are equal.
 constructor should set the protected members <tt>dx_, dy_, dw_</tt>,
 and <tt>dh_</tt> to initialize the return value.
 
-<a name=inset><h4>void Fl_Boxtype::inset(int& x, int& y, int& w, int& h) const;</h4></a>
+<a name=inset><h4>void fltk::Box::inset(int& x, int& y, int& w, int& h) const;</h4></a>
 
 Changes the passed rectangle into a rectangle that matches the
 "interior" of the box. This is an inline function that just adds or
 subtracts <a href=#dx>dx()</a>, <a href=#dy>dy()</a>, <a
 href=#dw>dw()</a>, and <a href=#dh>dh()</a> from the passed values.
 
-<a name=Fl_Boxtype_><h4>Fl_Boxtype_::Fl_Boxtype_()</h4></a>
+<a name=Boxtype_><h4>fltk::Box_::Boxtype_()</h4></a>
 
 Default constructor.
 
-<h4>Fl_Boxtype_::Fl_Boxtype_(const char* name)</h4>
+<h4>fltk::Box_::Boxtype_(const char* name)</h4>
 
 This constructs a "named" boxtype. It is added to a linked list of all
 named boxtypes. This list may be searched by the <a
 href=#find>find()</a> function to find a boxtype by name. This is
 useful for themes that want to parse a text file describing the theme.
 
-<a name=find><h4>static const Fl_Boxtype_* Fl_Boxtype_::find(const char* name);</h4></a>
+<a name=find><h4>static const fltk::Box_* fltk::Box_::find(const char* name);</h4></a>
 
 Locate the first boxtype with the given name. Case is ignored when
 doing the comparison. Returns NULL if no matching name is found.

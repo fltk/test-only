@@ -1,127 +1,127 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>typedef Fl_Color</title></head><body>
+<title>typedef fltk::Color</title></head><body>
 <!-- NEW PAGE -->
-<h2>typedef Fl_Color</h2>
+<h2>typedef fltk::Color</h2>
 <hr>
 
-Fl_Color is an unsigned integer.
+fltk::Color is an unsigned integer.
 
 <p>The (low) 4 bytes of the color are <b>rgbN</b>.  (<b>r</b> is the
 byte with the highest <i>value</i>, not the first in memory.  On an
 Intel or other little-endian machine the first byte in memory is
 <b>N</b>, while on a big-endian machine such as a MIPS it is <b>r</b>)
 
-<p><img src=fl_show_colormap.gif align=right>If the <b>rgb</b> is
+<p><img src=Fl_show_colormap.gif align=right>If the <b>rgb</b> is
 zero, the <b>N</b> is the color "index".  This index is used to look
-up an Fl_Color in an internal table of 255 colors, called the "fltk
+up an fltk::Color in an internal table of 255 colors, called the "fltk
 colormap", shown here.  Thus using any integer in the range 1-255 as
-an Fl_Color will index the colormap.  If <b>rgb</b> is not zero the
+an fltk::Color will index the colormap.  If <b>rgb</b> is not zero the
 index value is ignored (future code may treat the last byte as an
 "alpha" value).
 
-<p>An Fl_Color of zero (<code>FL_NO_COLOR</code>) will draw black but
+<p>An fltk::Color of zero (<code>fltk::NO_COLOR</code>) will draw black but
 is ambiguous.  It is returned as an error value or to indicate
-portions of a Fl_Style that should be inherited, and it is also used
+portions of a fltk::Style that should be inherited, and it is also used
 as the default label color for everything so that changing color zero
-can be used by the -fg switch.  You should use <code>FL_BLACK</code> (56)
+can be used by the -fg switch.  You should use <code>fltk::BLACK</code> (56)
 to get black.
 
 <p>The entries 1-31 in the colormap are settable by the user program.
-The advantage of using these over <a href=#fl_rgb>fl_rgb(r,g,b)</a> is
+The advantage of using these over <a href=#rgb>fltk::rgb(r,g,b)</a> is
 that they are reproduced <i>exactly</i> on 8-bit screens (normal rgb
 colors are selected on 8-bit screens by using <a
-href=#fl_nearest_color>fl_nearest_color()</a>).  Colors 1-15 are preset
+href=#nearest_color>fltk::nearest_color()</a>).  Colors 1-15 are preset
 for back compatability but fltk no longer uses these so you can change
 them.
 
 <p>Entries 32-55 of the colormap are a 24-entry "gray ramp".  This
 ramp is modified by the -bg switch or by other code that calls <a
-href="#fl_background">fl_background()</a> so that the color
-<tt>FL_GRAY</tt> (49) is the background color, and the others are a
+href="#background">fltk::background()</a> so that the color
+<tt>fltk::GRAY</tt> (49) is the background color, and the others are a
 nice range from black to white. These are used to draw box edges.
 
 <p>The remiander of the colormap is a 5x8x5 color cube.  This cube is
-used to dither images or <a href=drawing.html#fl_rectf>fl_rectf()</a>
-on 8-bit screens.  In addition the symbols <code>FL_BLACK, FL_RED,
-FL_GREEN, FL_YELLOW, FL_BLUE, FL_MAGENTA, FL_CYAN, FL_WHITE, and
-FL_BLUE_SELECTION_COLOR</code> index the corners of the cube (these
+used to dither images or <a href=drawing.html#rectf>fltk::rectf()</a>
+on 8-bit screens.  In addition the symbols <code>fltk::BLACK, fltk::RED,
+fltk::GREEN, fltk::YELLOW, fltk::BLUE, fltk::MAGENTA, fltk::CYAN, fltk::WHITE, and
+fltk::BLUE_SELECTION_COLOR</code> index the corners of the cube (these
 have different values than fltk1.0!).
 
 <h3>Methods and functions</h3>
 
-<a name=fl_rgb>
-<h4>Fl_Color fl_rgb(unsigned char r, unsigned char g, unsigned char
+<a name=rgb>
+<h4>fltk::Color fltk::rgb(unsigned char r, unsigned char g, unsigned char
 b)</h4>
 
 Inline function to build a color out of individual bytes.  The index
 is set to zero.
 
-<h4>Fl_Color fl_rgb(const char*);</h4>
+<h4>fltk::Color fltk::rgb(const char*);</h4>
 
 Return a named color, returns 0 if the name is not found (on X this
 does Xlookupcolor, on Windows it can only do colors of the form #123456).
 
-<h4>Fl_Color fl_color_average(Fl_Color A, Fl_Color B, double
+<h4>fltk::Color fltk::color_average(fltk::Color A, fltk::Color B, double
 weight);</h4>
 
 Returns a color that is <code>weight*A+(1-weight)*B</code>.
 
-<a name=fl_inactive><h4>Fl_Color fl_inactive(Fl_Color c);</h4></a>
+<a name=inactive><h4>fltk::Color fltk::inactive(fltk::Color c);</h4></a>
 
-Returns some color between c and FL_GRAY.
+Returns some color between c and fltk::GRAY.
 
-<h4>Fl_Color fl_inactive(Fl_Color c, Fl_Flags f);</h4>
+<h4>fltk::Color fltk::inactive(fltk::Color c, fltk::Flags f);</h4>
 
-This returns <code>fl_inactive(c)</code> if the bit
-<code>FL_INACTIVE</code> is turned on in <i>f</i>, otherwise <i>c</i>
+This returns <code>fltk::inactive(c)</code> if the bit
+<code>fltk::INACTIVE</code> is turned on in <i>f</i>, otherwise <i>c</i>
 is returned unchanged.
 
-<a name=fl_contrast>
-<h4>Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg);</h4>
+<a name=contrast>
+<h4>fltk::Color fltk::contrast(fltk::Color fg, fltk::Color bg);</h4>
 
 Decides if <i>fg</i> can be seen agains <i>bg</i> and returns
-<i>fg</i> if so.  If not this returns either <code>FL_NO_COLOR</code>
-or <code>FL_WHITE</code>, whichever one is more different than
+<i>fg</i> if so.  If not this returns either <code>fltk::NO_COLOR</code>
+or <code>fltk::WHITE</code>, whichever one is more different than
 <i>bg</i>.  This function is often used by fltk for labels and text
 when no color is specified in the style.
 
-<a name=fl_get_color>
-<h4>Fl_Color fl_get_color(Fl_Color c);</h4>
+<a name=get_color>
+<h4>fltk::Color fltk::get_color(fltk::Color c);</h4>
 
 Turns an indexed color into an rgb color by looking it up in the
 colormap.  If <i>c</i> is not an indexed color it is returned
 unchanged.
 
-<h4>void fl_get_color(Fl_Color c, uchar& r, uchar& g, uchar& b);</h4>
+<h4>void fltk::get_color(fltk::Color c, uchar& r, uchar& g, uchar& b);</h4>
 
 Turns an indexed color into an rgb color if necessary, and then
 the rgb portions of the color are extracted and put in the passed
 variables.
 
-<a name=fl_nearest_color>
-<h4>Fl_Color fl_nearest_color(Fl_Color c);</h4>
+<a name=nearest_color>
+<h4>fltk::Color fltk::nearest_color(fltk::Color c);</h4>
 
 Turns an rgb color into an indexed color.  If <i>c</i> is already an
 indexed color it is returned unchanged.  Otherwise, the closest color
 from the color cube is returned.
 
-<a name=fl_set_color>
-<h4>void fl_set_color(Fl_Color index, Fl_Color v);</h4>
+<a name=set_color>
+<h4>void fltk::set_color(fltk::Color index, fltk::Color v);</h4>
 
 Set entry <i>index</i> in the fltk colormap to the rgb values of
 <i>v</i>.  <i>index</i> must be in the range 1-31.
 
-<a name=fl_free_color>
-<h4>void fl_free_color(Fl_Color index);</h4>
+<a name=free_color>
+<h4>void fltk::free_color(fltk::Color index);</h4>
 
 Tell a colormapped-display that we don't need this indexed color
 anymore.  Fltk will free any hardware colormap it allocated so that it
 can be reused by this or another program.
 
-<a name=fl_background><h4>void fl_background(Fl_Color)</h4>
+<a name=background><h4>void fltk::background(fltk::Color)</h4>
 
 Modifies the "gray ramp" in the fltk color map so that the color
-<code>FL_GRAY</code> is set the the rgb values of the passed color.
+<code>fltk::GRAY</code> is set the the rgb values of the passed color.
 This is the best way to change the overall color of your application,
 because it sets all the shaded borders and works on 8-bit screens.
 

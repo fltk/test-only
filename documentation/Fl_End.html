@@ -1,34 +1,34 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_End</title></head><body>
+<title>class fltk::End</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_End</h2>
+<h2>class fltk::End</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
 
 <pre>
-<b>Fl_End</b>
+<b>fltk::End</b>
 </pre>
 
 <h3>Include Files</h3>
 
 <pre>
-#include &lt;fltk/Fl_Group.h&gt;
+#include &lt;fltk/Group.h&gt;
 </pre>
 
 <h3>Description</h3>
 
-Since the constructor of all <a href=Fl_Widget.html>Fl_Widgets</a>
+Since the constructor of all <a href=Fl_Widget.html>fltk::Widgets</a>
 adds the new widget as a child of the "current" <a
-href=Fl_Group.html#current>Fl_Group</a>, this dummy class allows you
+href=FlGroup.html#current>fltk::Group</a>, this dummy class allows you
 to stop this in the constructor list of a class:
 
 <pre>
 class MyClass {
-  Fl_Group group;
-  Fl_Button button_in_group;
-  Fl_End end;
-  Fl_Button button_outside_group;
+  fltk::Group group;
+  fltk::Button button_in_group;
+  fltk::End end;
+  fltk::Button button_outside_group;
   MyClass();
 };
 
@@ -42,14 +42,14 @@ MyClass::MyClass() :
 <h3>Methods</h3>
 
 <ul>
-<li><a href=#Fl_End>Fl_End</a></li>
+<li><a href=#End>fltk::End</a></li>
 </ul>
 
-<h4><a name=Fl_End>Fl_End::Fl_End</a></h4>
+<h4><a name=End>fltk::End::End</a></h4>
 
 The constructor does <a <tt><a
-href=Fl_Group.html#current>Fl_Group::current</a>()-><a
-href=Fl_Group.html#end>end()</a></tt>. The only purpose of this class
+href=FlGroup.html#current>fltk::Group::current</a>()-><a
+href=FlGroup.html#end>end()</a></tt>. The only purpose of this class
 is to have the constructor do this.
 
 </body></html>

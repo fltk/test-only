@@ -17,20 +17,20 @@ different argument) you can write interesting "portable" system
 specific code.
 
 <p>Fltk creates a single WNDCLASSEX called &quot;FLTK&quot;.  The
-window class is created the first time <tt>Fl_Window::show()</tt> is
+window class is created the first time <tt>fltk::Window::show()</tt> is
 called.
 
 <P>You can probably combine FLTK with other libraries that make their
 own WIN32 window classes.  The easiest way is to call
-<tt>Fl::wait()</tt>, it will call <tt>DispatchMessage</tt> for all
+<tt>fltk::wait()</tt>, it will call <tt>DispatchMessage</tt> for all
 messages to the other windows.  If necessary you can let the other
 library take over (as long as it calls <tt>DispatchMessage()</tt>),
 but you will have to arrange for the function <a
-href=Fl.html#flush><tt>Fl::flush()</tt></a> to be called
+href=Fl.html#flush><tt>fltk::flush()</tt></a> to be called
 regularily so that widgets are updated. Timeouts, the idle function,
 and file descriptor callbacks will not work in this case.
 
-<a name=add_handler><h4>void Fl::add_handler(int (*f)(int))</h4></a>
+<a name=add_handler><h4>void fltk::add_handler(int (*f)(int))</h4></a>
 
 Install a function to parse unrecognized messages sent to FLTK 
 windows.  If FLTK cannot figure out what to do with a message, it calls 
@@ -38,75 +38,75 @@ each of these functions (most recent first) until one of them returns
 non-zero.  The argument passed to the fuctions is zero.  If all the 
 handlers return zero then FLTK calls <tt>DefWindowProc()</tt>. 
 
-<a name=fl_msg><h4>extern MSG fl_msg</h4></a>
+<a name=msg><h4>extern MSG fltk::msg</h4></a>
 
 The most recent message read by <tt>GetMessage</tt> (which is called 
-by <a href=Fl.html#wait><tt>Fl::wait()</tt></a>.  This may not 
+by <a href=Fl.html#wait><tt>fltk::wait()</tt></a>.  This may not 
 be the most recent message sent to an FLTK window (because our
 fun-loving friends at MicroSoft decided that calling the handle
 procedures directly would be a good idea sometimes...)
 
-<a name=WIN32.fl_xid><h4>HWND fl_xid(const Fl_Window*)</h4></a>
+<a name=WIN32.xid><h4>HWND fltk::xid(const fltk::Window*)</h4></a>
 
-Returns the window handle for a <tt>Fl_Window</tt>, or zero if not
+Returns the window handle for a <tt>fltk::Window</tt>, or zero if not
 <tt>shown()</tt>.
 
-<a name=WIN32.fl_find><h4>Fl_Window* fl_find(HWND xid)</h4></a>
+<a name=WIN32.find><h4>fltk::Window* fltk::find(HWND xid)</h4></a>
 
-Return the <tt>Fl_Window</tt> that corresponds to the given window 
+Return the <tt>fltk::Window</tt> that corresponds to the given window 
 handle, or <tt>NULL</tt> if not found.  This uses a cache so it is 
 slightly faster than iterating through the windows yourself. 
 
-<a name=fl_display><h4>extern HINSTANCE fl_display;</h4></a>
+<a name=display><h4>extern HINSTANCE fltk::display;</h4></a>
 
 This is set on program initialization to <tt>GetModuleHandle(0)</tt>
 and can be used to identify this application.
 
-<h4><a name=fl_gc>extern HDC fl_gc;</a></h4>
+<h4><a name=gc>extern HDC fltk::gc;</a></h4>
 
 This is set before <tt>draw()</tt> is called, or by <a
-href=Fl_Window.html#make_current><tt>Fl_Window::make_current()</tt></a>,
+href=Fl_Window.html#make_current><tt>fltk::Window::make_current()</tt></a>,
 and can be used as an argument to GDI32 calls.
 
 <p>You may also want the position and size of the window, these can be
 found by looking at <a href=Fl_Window.html#make_current><tt>
-Fl_Window::current()</tt></a>, which returns a pointer to the <tt>
-Fl_Window</tt> being drawn.
+fltk::Window::current()</tt></a>, which returns a pointer to the <tt>
+fltk::Window</tt> being drawn.
 
-<a name=fl_wincolor><h4>COLORREF fl_wincolor(Fl_Color i);</h4></a>
+<a name=wincolor><h4>COLORREF fltk::wincolor(fltk::Color i);</h4></a>
 
 Returns the <tt>COLORREF</tt> fltk will use for the given fltk color,
 typically this is <tt>RGB(r,g,b)</tt> of the color, or
 <tt>PALETTEINDEX(RGB(r,g,b))</tt> if there is a palette.
 
-<h4><a name=fl_colorref>extern COLORREF fl_colorref;
-<br><a name=fl_pen>extern HPEN fl_pen;
-<br><a name=fl_brush>extern HBRUSH fl_brush;</h4>
+<h4><a name=colorref>extern COLORREF fltk::colorref;
+<br><a name=pen>extern HPEN fltk::pen;
+<br><a name=brush>extern HBRUSH fltk::brush;</h4>
 
-These are set by <a href=drawing.html#fl_color><tt>fl_color()</tt></a>
-and by <a href=drawing.html#fl_line_style><tt>fl_line_style()</tt></a>,
+These are set by <a href=drawing.html#color><tt>fltk::color()</tt></a>
+and by <a href=drawing.html#line_style><tt>fltk::line_style()</tt></a>,
 by using these in your drawing calls you can provide the illusion that
 GDI has a color in it's graphics state.
 
-<a name=fl_palette><h4>extern HPALETTE fl_palette;</h4></a>
+<a name=palette><h4>extern HPALETTE fltk::palette;</h4></a>
 
 If non-zero this is the palette alloced by fltk on an 8-bit
 screen. Hopefully you can ignore this, they managed to find a way to
 make it <i>more</i> ugly than the X system, which is truly a triumph
 of software engineering!
 
-<a name=fl_clip_region><h4>HRGN fl_clip_region();</h4></a>
+<a name=clip_region><h4>HRGN fltk::clip_region();</h4></a>
 
 Return the current clip region, or <tt>NULL</tt> if we are currently
 clipping to the entire window. Notice that this will be destroyed by
 the next change to the clipping, copy it if you want to keep it.
 
-<h4>void fl_clip_region(HRGN);</h4>
+<h4>void fltk::clip_region(HRGN);</h4>
 
 Replace the current clip region with this one, or make there be no
 clipping if <tt>NULL</tt> is passed. The old clip region is destroyed.
 
-<a name=icon><h4>void Fl_Window::icon(char*)</h4></a>
+<a name=icon><h4>void fltk::Window::icon(char*)</h4></a>
 
 Sets the icon for the window to the passed pointer.  You will need to 
 cast the <tt>HICON</tt> handle to a <tt>char*</tt> when calling this 
@@ -114,11 +114,11 @@ method. To set the icon using an icon resource compiled with your
 application use: 
 
 <PRE>
-window-&gt;icon((char*)LoadIcon(fl_display, MAKEINTRESOURCE(IDI_ICON)));
+window-&gt;icon((char*)LoadIcon(fltk::display, MAKEINTRESOURCE(IDI_ICON)));
 </PRE>
 
 <p>This only works if called <i>before</i> it is shown using the
-<tt>Fl_Window::show()</tt> method.
+<tt>fltk::Window::show()</tt> method.
 
 <h3>How to Not Get a MSDOS Console Window</h3>
 
@@ -142,7 +142,7 @@ without having to change your source files.
 and/or compiler, you cannot have a WinMain function in a DLL.
 I don't know why.  Thus, this nifty feature is only available
 if you link to the static library. You may want to compile the souce
-file <tt>fl_call_main.c</tt> to a .obj and link it with your program
+file <tt>fltk::call_main.c</tt> to a .obj and link it with your program
 when using the DLL version of fltk.
 
 <P>WIN32 applications without a console cannot write to <tt>stdout</tt>
@@ -155,7 +155,7 @@ statements for debugging or informational purposes.
 
 <h3>Known Bugs</h3>
 
-If a program is deactivated, <tt>Fl::wait()</tt> does not return until 
+If a program is deactivated, <tt>fltk::wait()</tt> does not return until 
 it is activated again, even though many events are delivered to the 
 program. This can cause idle background processes to stop unexpectedly. 
 This also happens while the user is dragging or resizing windows or 

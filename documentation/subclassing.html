@@ -3,25 +3,25 @@
 
 <h1>Making Your Own Widgets</h1>
 
-<a name=swidget><H2>Making a Subclass of Fl_Widget</H2></a>
+<a name=swidget><H2>Making a Subclass of fltk::Widget</H2></a>
 
 New widgets are created by <I>subclassing</I> an existing FLTK
 widget.
 
-<p>Most commonly the <a href="Fl_Widget.html">Fl_Widget</a> class is
+<p>Most commonly the <a href="Fl_Widget.html">fltk::Widget</a> class is
 subclassed to make new types of controls.
 
 <p>You can also subclass other existing widgets to make a similar
 control with a different look or user-interface. For example, the
 check button widgets are all subclasses of <a
-href="Fl_Button.html">Fl_Button</a> since they all interact with the
+href="Fl_Button.html">fltk::Button</a> since they all interact with the
 user via a mouse button click.  The only difference is the code that
 draws the face of the button. The class <a
-href="Fl_Valuator.html">Fl_Valuator</a> provides useful methods for
+href="Fl_Valuator.html">fltk::Valuator</a> provides useful methods for
 storing a single floating-point "value" and is subclassed for a number
 of control widgets.
 
-<p><TT>Fl_Widget</TT> has only four virtual methods, and overriding
+<p><TT>fltk::Widget</TT> has only four virtual methods, and overriding
 some or all of these may be necessary.
 
 <h3>The Constructor</h3>
@@ -40,12 +40,12 @@ pass the same arguments:</p>
 
 <pre>
 MyClass::MyClass(int x, int y, int w, int h, const char *label)
-: Fl_Widget(x, y, w, h, label) {
+: fltk::Widget(x, y, w, h, label) {
 // do initialization stuff...
 }
 </pre>
 
-<p><TT>Fl_Widget</TT>'s protected constructor sets <TT>x()</TT>, <TT>y()</TT>,
+<p><TT>fltk::Widget</TT>'s protected constructor sets <TT>x()</TT>, <TT>y()</TT>,
 <TT>w()</TT>, <TT>h()</TT>, and <TT>label()</TT> to the passed values 
 and initializes the other instance variables to:</p>
 
@@ -55,40 +55,40 @@ callback(default_callback,0);
 image(0);
 tooltip(0);
 shortcut(0);
-flags(0); // active, visible, FL_ALIGN_CENTER
+flags(0); // active, visible, fltk::ALIGN_CENTER
 type(0);
-set_damage(FL_DAMAGE_ALL);
-layout_damage(FL_LAYOUT_DAMAGE);
-when(FL_WHEN_RELEASE);
+set_damage(fltk::DAMAGE_ALL);
+layout_damage(fltk::LAYOUT_DAMAGE);
+when(fltk::WHEN_RELEASE);
 </PRE>
 
 <a name=handle><h3>Handling Events</h3>
 
-<p>The virtual method <TT>int Fl_Widget::handle(int event)</TT> is called 
+<p>The virtual method <TT>int fltk::Widget::handle(int event)</TT> is called 
 to handle each event passed to the widget. It can:</p>
 
 <UL>
 
 <LI>Change the state of the widget.
 
-<LI>Call <A href=Fl_Widget.html#redraw><TT>Fl_Widget::redraw()</TT>
+<LI>Call <A href=Fl_Widget.html#redraw><TT>fltk::Widget::redraw()</TT>
 </A> if the widget needs to be redisplayed.
 
 <LI>Call <A href=Fl_Widget.html#redraw><TT>
-Fl_Widget::redraw(n)</TT></A> if the widget needs a partial-update
+fltk::Widget::redraw(n)</TT></A> if the widget needs a partial-update
 (assumming you provide support for this in your
-<TT>Fl_Widget::draw()</TT> method).
+<TT>fltk::Widget::draw()</TT> method).
 
 <LI>Call <A href=Fl_Widget.html#do_callback><TT>
-Fl_Widget::do_callback()</TT></A> if a callback should be generated.
+fltk::Widget::do_callback()</TT></A> if a callback should be generated.
 
-<LI>Call <TT>Fl_Widget::handle()</TT> on child widgets.
+<LI>Call <TT>fltk::Widget::handle()</TT> on child widgets.
 
 </UL>
 
 Events are identified by the integer argument.  Other information
 about the most recent event is stored in static locations and aquired
-by calling the <A href=Fl.html#event><TT>Fl::event_*()</TT></A>
+by calling the <A href=Fl.html#event><TT>fltk::event_*()</TT></A>
 functions. This information remains valid until another event is
 handled.
 
@@ -98,19 +98,19 @@ a pushbutton and also accepts the keystroke 'x' to cause the callback: </P>
 <PRE>
 int MyClass::handle(int event) {
   switch(event) {
-    case FL_PUSH:
+    case fltk::PUSH:
       highlight = 1;
       redraw();
       return 1;
-    case FL_DRAG: {
-        int t = Fl::event_inside(this);
+    case fltk::DRAG: {
+        int t = fltk::event_inside(this);
         if (t != highlight) {
           highlight = t;
 	  redraw();
 	}
       }
       return 1;
-    case FL_RELEASE:
+    case fltk::RELEASE:
       if (highlight) {
 	highlight = 0;
 	redraw();
@@ -119,8 +119,8 @@ int MyClass::handle(int event) {
 	// may delete the widget!
       }
       return 1;
-    case FL_SHORTCUT:
-      if (Fl::event_key() == 'x') {
+    case fltk::SHORTCUT:
+      if (fltk::event_key() == 'x') {
         do_callback();
 	return 1;
       }
@@ -146,23 +146,23 @@ be called from non-drawing code.
 <P><TT>damage()</TT> contains the bitwise-OR of all the
 <TT>redraw(n)</TT> calls to this widget since it was last drawn.  This
 can be used for minimal update, by only redrawing the parts whose bits
-are set.  If the flag <tt>FL_DAMAGE_EXPOSE</tt> is on in
+are set.  If the flag <tt>fltk::DAMAGE_EXPOSE</tt> is on in
 <tt>damage()</tt> then the widget is expected to draw every pixel
 inside it's bounding box. If you wish to simulate a non-square widget,
 you should call <a
-href=Fl_Group.html#draw_group_box><tt>Fl_Group::draw_group_box()</tt></a>
+href=Fl_Group.html#draw_group_box><tt>fltk::Group::draw_group_box()</tt></a>
 with appropriate <a href=drawing.html#dclipping>clipping</a>.
 
 <P>Expose events (and the method <TT>expose(x,y,w,h)</TT>) will cause
 <TT>draw()</TT> to be called with FLTK's <A
 href=drawing.html#dclipping>clipping</A> turned on.  You can greatly
 speed up redrawing in some cases by testing
-<a href=drawing.html#fl_not_clipped><TT>fl_not_clipped(x,y,w,h)</TT></a>
-or <a href=drawing.html#fl_clip_box><TT>fl_clip_box(...)</TT></a> and
+<a href=drawing.html#not_clipped><TT>fltk::not_clipped(x,y,w,h)</TT></a>
+or <a href=drawing.html#clip_box><TT>fltk::clip_box(...)</TT></a> and
 skipping invisible parts. </P>
 
 <P>FLTK provides a <a href=drawing.html>large number of basic drawing
-functions</a>. And Fl_Widget provides several convienent <a
+functions</a>. And fltk::Widget provides several convienent <a
 href=Fl_Widget.html#draw_box>drawing methods</a>.
 
 <h3>Resizing the Widget</h3>
@@ -171,15 +171,15 @@ The <TT>layout()</TT> method is called after the widget is resized or
 moved or if <tt>relayout()</tt> has been called.
 
 <p><tt>layout_damage()</tt> will have the reason that
-<tt>layout()</tt> is being called. This can be <tt>FL_LAYOUT_X,
-FL_LAYOUT_Y, FL_LAYOUT_W, FL_LAYOUT_H</tt> or
-<tt>FL_LAYOUT_DAMAGE</tt> if <tt>relayout()</tt> was called, or any
+<tt>layout()</tt> is being called. This can be <tt>fltk::LAYOUT_X,
+fltk::LAYOUT_Y, fltk::LAYOUT_W, fltk::LAYOUT_H</tt> or
+<tt>fltk::LAYOUT_DAMAGE</tt> if <tt>relayout()</tt> was called, or any
 combination of these.
 
 <p>You <i>must</i> call the base class implementation to get the
 <tt>layout_damage()</tt> bits turned off.
 
-<p>For composite widgets the bit <tt>FL_LAYOUT_CHILD</tt> will be
+<p>For composite widgets the bit <tt>fltk::LAYOUT_CHILD</tt> will be
 turned on to indicate that a child widget needs to have
 <tt>layout()</tt> called. Your implementation must call this.
 
@@ -189,32 +189,32 @@ that the display needs to be redrawn.
 <a name=sgroup><h2>Making a Composite Widget</H2></a>
 
 <p>A "composite" widget contains a set of child widgets and makes it
-look like a single large widget. <a href="Fl_Group.html">Fl_Group</a>
+look like a single large widget. <a href="Fl_Group.html">fltk::Group</a>
 is the main composite widget widget class in FLTK, and all of the
-other composite widgets (<a href=Fl_Pack.html>Fl_Pack</a>, <a
-href=Fl_Scroll.html>Fl_Scroll</a>, <a href=Fl_Tabs.html>Fl_Tabs</a>,
-<a href=Fl_Tile.html>Fl_Tile</a>, and <a
-href=Fl_Window.html>Fl_Window</a>) are subclasses of it.
+other composite widgets (<a href=Fl_Pack.html>fltk::Pack</a>, <a
+href=Fl_Scroll.html>fltk::Scroll</a>, <a href=Fl_Tabs.html>fltk::Tabs</a>,
+<a href=Fl_Tile.html>fltk::Tile</a>, and <a
+href=Fl_Window.html>fltk::Window</a>) are subclasses of it.
 
 <p>For most uses the set of child widgets is fixed by the composite
 widget. Instances of the child widgets may be included in the parent:
 
 <pre>
-class MyClass : public Fl_Group {
-  Fl_Button the_button;
-  Fl_Slider the_slider;
+class MyClass : public fltk::Group {
+  fltk::Button the_button;
+  fltk::Slider the_slider;
   ...
 };
 </pre>
 
 The constructor has to initialize these instances.  They are 
-automatically <TT>add()</TT>ed to the group, since the <TT>Fl_Group</TT>
+automatically <TT>add()</TT>ed to the group, since the <TT>fltk::Group</TT>
 constructor does <TT>begin()</TT>. <I>Don't forget to call <TT>end()</TT>
-or use the <A href=Fl_End.html#Fl_End><TT>Fl_End</TT></A> pseudo-class:</I>
+or use the <A href=Fl_End.html#End><TT>fltk::End</TT></A> pseudo-class:</I>
 
 <pre>
 MyClass::MyClass(int x, int y, int w, int h) :
-  Fl_Group(x, y, w, h),
+  fltk::Group(x, y, w, h),
   the_button(x + 5, y + 5, 100, 20),
   the_slider(x, y + 50, w, 20)
 {
@@ -229,7 +229,7 @@ to the children, but the widget itself may be found in the
 be static private methods, with a matching private method:
 
 <pre>
-void MyClass::slider_cb(Fl_Widget* v, void *) { // static method
+void MyClass::slider_cb(fltk::Widget* v, void *) { // static method
   ((MyClass*)(v-&gt;parent())-&gt;slider_cb();
 }
 void MyClass::slider_cb() { // normal method
@@ -238,27 +238,27 @@ void MyClass::slider_cb() { // normal method
 </pre>
 
 If you make the <TT>handle()</TT> method, you can quickly pass all the 
-events to the children using the <TT>Fl_Group::handle()</TT> method. 
+events to the children using the <TT>fltk::Group::handle()</TT> method. 
 You don't need to override <TT>handle()</TT> if your composite widget
 does nothing other than pass events to the children: 
 
 <pre>
 int MyClass::handle(int event) {
-  if (Fl_Group::handle(event)) return 1;
+  if (fltk::Group::handle(event)) return 1;
   ... handle events that children don't want ...
 }
 </pre>
 
  If you override <TT>draw()</TT> you need to draw all the children.  If <TT>
 redraw()</TT> or <TT>damage()</TT> is called on a child, <TT>
-damage(FL_DAMAGE_CHILD)</TT> is done to the group, so this bit of <TT>
+damage(fltk::DAMAGE_CHILD)</TT> is done to the group, so this bit of <TT>
 damage()</TT> can be used to indicate that a child needs to be drawn. 
 It is fastest if you avoid drawing anything else in this case: 
 
 <pre>
 int MyClass::draw() {
-  Fl_Widget *const*a = array();
-  if (damage() == FL_DAMAGE_CHILD) { // only redraw some children
+  fltk::Widget *const*a = array();
+  if (damage() == fltk::DAMAGE_CHILD) { // only redraw some children
     for (int i = children(); i --; a ++) update_child(**a);
   } else { // total redraw
     ... draw background graphics ...
@@ -271,7 +271,7 @@ int MyClass::draw() {
 }
 </pre>
 
-<TT>Fl_Group</TT> provides some protected methods to make drawing 
+<TT>fltk::Group</TT> provides some protected methods to make drawing 
 easier: 
 
 <UL>
@@ -280,7 +280,7 @@ easier:
 <LI><A href=#update_child>update_child</A></LI>
 </UL>
 
-<A name=draw_child><h4>void Fl_Group::draw_child(Fl_Widget&amp;)</h4></a>
+<A name=draw_child><h4>void fltk::Group::draw_child(fltk::Widget&amp;)</h4></a>
 
 This will force the child's <TT>damage()</TT> bits all to one and call
 <TT>draw()</TT> on it, then clear the <TT>damage()</TT>.  You should
@@ -289,36 +289,36 @@ requested, or if you draw something (like a background box) that
 damages the child.  Nothing is done if the child is not
 <TT>visible()</TT> or if it is clipped.
 
-<a name=draw_outside_label><h4>void Fl_Group::draw_outside_label(Fl_Widget&amp;) const</h4></a>
+<a name=draw_outside_label><h4>void fltk::Group::draw_outside_label(fltk::Widget&amp;) const</h4></a>
 
 Draw the labels that are <I>not</I> drawn by <A
 href=#draw_inside_label><TT> draw_inside_label()</TT></A>.  If you
 want more control over the label positions you might want to call
 <TT>child-&gt;draw_label(x,y,w,h,a)</TT>.
 
-<a name=update_child><h4>void Fl_Group::update_child(Fl_Widget&amp;)</h4></a>
+<a name=update_child><h4>void fltk::Group::update_child(fltk::Widget&amp;)</h4></a>
 
 Draws the child only if its <TT>damage()</TT> is non-zero.  You should
 call this on all the children if your own damage is equal to
-FL_DAMAGE_CHILD.  Nothing is done if the child is not
+fltk::DAMAGE_CHILD.  Nothing is done if the child is not
 <TT>visible()</TT> or if it is clipped.
 
-<a name=swindow><h2>Making a subclass of Fl_Window</h2></a>
+<a name=swindow><h2>Making a subclass of fltk::Window</h2></a>
 
-You may want your widget to be a subclass of <TT>Fl_Window</TT>.  This 
+You may want your widget to be a subclass of <TT>fltk::Window</TT>.  This 
 can be useful if your widget wants to occupy an entire window, and can 
 also be used to take advantage of system-provided clipping, or to work 
 with a library that expects a system window ID to indicate where to 
 draw. 
 
-<P>Subclassing <TT>Fl_Window</TT>is almost exactly like subclassing
-<TT>Fl_Widget</TT>, and in fact you can easily switch a subclass back
-and forth.  <i>Warning: <TT>Fl_Window</TT> is a subclass of
-<TT>Fl_Group</TT> so <I>make sure your constructor calls
+<P>Subclassing <TT>fltk::Window</TT>is almost exactly like subclassing
+<TT>fltk::Widget</TT>, and in fact you can easily switch a subclass back
+and forth.  <i>Warning: <TT>fltk::Window</TT> is a subclass of
+<TT>fltk::Group</TT> so <I>make sure your constructor calls
 <TT>end()</TT></I> (unless you actually want children added to your
 window).</i>
 
-<p>You may also want to subclass <TT>Fl_Window</TT> in order to get
+<p>You may also want to subclass <TT>fltk::Window</TT> in order to get
 access to different visuals or to change other attributes of the
 windows. See <a href=x.html#windows>the X-specific documentation</a>
 for more information.

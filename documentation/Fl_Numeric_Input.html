@@ -1,44 +1,44 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Numeric_Input</title></head><body>
+<title>class fltk::Numeric_Input</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Numeric_Input</h2>
+<h2>class fltk::Numeric_Input</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
 
-<pre><a href=Fl_Input.html>Fl_Input</A>
+<pre><a href=Fl_Input.html>fltk::Input</A>
    |
-   +----<b>Fl_Numeric_Input</b>
+   +----<b>fltk::Numeric_Input</b>
            |
-           +----<a href="Fl_Float_Input.html">Fl_Float_Input</a>, <a href="Fl_Int_Input.html">Fl_Int_Input</a>
+           +----<a href="Fl_FloatInput.html">fltk::FloatInput</a>, <a href="Fl_IntInput.html">fltk::IntInput</a>
 </pre>
 
 <h3>Include Files</h3>
 
 <pre>
-#include &lt;fltk/Fl_Numeric_Input.h&gt;
+#include &lt;fltk/Numeric_Input.h&gt;
 </pre>
 
 <h3>Description</h3>
 
-The <tt>Fl_Numeric_Input</tt> class is a subclass of <tt>Fl_Input</tt>
+The <tt>fltk::Numeric_Input</tt> class is a subclass of <tt>fltk::Input</tt>
 that redefines the up and down arrow keys to increment and decrement
 the digit of the number to the right of the cursor. This makes it very
 easy to edit numbers.
 
 <p>If you change <a href="Fl_Widget.html#when">when()</a> to
-<tt>FL_WHEN_ENTER_KEY</tt> the callback is only done when the user
+<tt>fltk::WHEN_ENTER_KEY</tt> the callback is only done when the user
 hits the up/down arrow keys or when the user types the Enter key. This
 may be more useful than the default setting of
-<tt>FL_WHEN_CHANGED</tt> which can make the callback happen when
+<tt>fltk::WHEN_CHANGED</tt> which can make the callback happen when
 partially-edited numbers are in the field.
 
 <p>This version lets the user type any text into the field. This is
 useful if you run the text through an expression parser so the user
 can type in math expressions. However if you want to limit the input
 to text that can be run through strtol() or strtod() you should use
-the subclasses <a href="Fl_Int_Input.html">Fl_Int_Input</a> or <a
-href="Fl_Float_Input.html">Fl_Float_Input</a>.
+the subclasses <a href="Fl_IntInput.html">fltk::IntInput</a> or <a
+href="Fl_FloatInput.html">fltk::FloatInput</a>.
 
 <p><i>This user interface design is Copyright (C) 2000-2002 Digital
 Domain.  Patent Pending!  License is ONLY granted to implement this
@@ -54,26 +54,26 @@ code may be available:</i></p>
 <h3>Methods</h3>
 
 <ul>
-<li><a href="#Fl_Numeric_Input">Fl_Numeric_Input</a></li>
-<li><a href="#~Fl_Numeric_Input">~Fl_Numeric_Input</a></li>
+<li><a href="#Numeric_Input">fltk::Numeric_Input</a></li>
+<li><a href="#~fltk::Numeric_Input">~fltk::Numeric_Input</a></li>
 <li><a href="#handle">handle</a></li>
 <li><a href="#handle_arrow">handle_arrow</a></li>
 <li><a href="#value">value</a></li>
 </ul>
 
-<a name=Fl_Numeric_Input><h4>Fl_Numeric_Input::Fl_Numeric_Input(int x, int y, int w, int h, const char *label = 0)</h4></a>
+<a name=Numeric_Input><h4>fltk::Numeric_Input::Numeric_Input(int x, int y, int w, int h, const char *label = 0)</h4></a>
 
-Creates a new <TT>Fl_Numeric_Input</TT> widget using the given position, 
+Creates a new <TT>fltk::Numeric_Input</TT> widget using the given position, 
 size, and label string. The text starts out blank (you may want to set
 it to "0").
 
-<a name=~Fl_Numeric_Input><h4>virtual Fl_Numeric_Input::~Fl_Numeric_Input()</h4></a>
+<a name=~Numeric_Input><h4>virtual fltk::Numeric_Input::~fltk::Numeric_Input()</h4></a>
 
 Destroys the widget and any value associated with it.
 
 <a name="handle"><h4>virtual int handle(int event)</h4></a>
 
-The event handler checks for <tt>Fl_Up</tt> and <tt>Fl_Down</tt>
+The event handler checks for <tt>fltk::Up</tt> and <tt>fltk::Down</tt>
 keystrokes and calls <a href="#handle_arrow">handle_arrow()</a> with
 them, otherwise it passes the events to the base class.
 
@@ -99,7 +99,7 @@ value. Notice that there is no inverse function, you will have to call
 <h4>void value(const char* s);
 <br>const char* value() const;</h4>
 
-Same as the methods from Fl_Input, these let you set or get the string
+Same as the methods from fltk::Input, these let you set or get the string
 value in the widget. You may also want <a
 href="Fl_Input.html#static_value">static_value()</a> if you have a
 string in static memory.

@@ -1,21 +1,21 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Text_Editor</title></head><body>
+<title>class fltk::TextEditor</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Text_Editor</h2>
+<h2>class fltk::TextEditor</h2>
 <hr>
 
 <H3>Class Hierarchy</H3>
 
 <PRE>
-<A href="Fl_Text_Display.html">Fl_Text_Display</A>
+<A href="Fl_TextDisplay.html">fltk::TextDisplay</A>
    |
-   +----<B>Fl_Text_Editor</B>
+   +----<B>fltk::TextEditor</B>
 </PRE>
 
 <H3>Include Files</H3>
 
 <PRE>
-#include &lt;FL/Fl_Text_Editor.H&gt;
+#include &lt;FL/TextEditor.H&gt;
 </PRE>
 
 <H3>Description</H3>
@@ -23,142 +23,142 @@
 <P>This is the FLTK text editor widget. It allows the user to
 edit multiple lines of text and supports highlighting and
 scrolling. The buffer that is displayed in the widget is managed
-by the <A HREF="Fl_Text_Buffer.html"><TT>Fl_Text_Buffer</TT></A>
+by the <A HREF="Fl_TextBuffer.html"><TT>fltk::TextBuffer</TT></A>
 class.
 
 <H3>Methods</H3>
 
 <UL>
 
-	<LI><A HREF="#Fl_Text_Editor.Fl_Text_Editor">Fl_Text_Editor</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.~Fl_Text_Editor">~Fl_Text_Editor</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.add_default_key_bindings">add_default_key_bindings</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.add_key_binding">add_key_binding</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.bound_key_function">bound_key_function</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.default_key_function">default_key_function</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.insert_mode">insert_mode</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_backspace">kf_backspace</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_copy">kf_copy</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_c_s_move">kf_c_s_move</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_ctrl_move">kf_ctrl_move</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_cut">kf_cut</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_default">kf_default</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_delete">kf_delete</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_down">kf_down</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_end">kf_end</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_enter">kf_enter</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_home">kf_home</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_ignore">kf_ignore</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_insert">kf_insert</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_left">kf_left</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_move">kf_move</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_page_down">kf_page_down</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_page_up">kf_page_up</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_paste">kf_paste</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_right">kf_right</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_select_all">kf_select_all</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_shift_move">kf_shift_move</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.kf_up">kf_up</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.remove_all_key_bindings">remove_all_key_bindings</A></LI>
-	<LI><A HREF="#Fl_Text_Editor.remove_key_binding">remove_key_binding</A></LI>
+	<LI><A HREF="#TextEditor.TextEditor">fltk::TextEditor</A></LI>
+	<LI><A HREF="#TextEditor.~TextEditor">~fltk::TextEditor</A></LI>
+	<LI><A HREF="#TextEditor.add_default_key_bindings">add_default_key_bindings</A></LI>
+	<LI><A HREF="#TextEditor.add_key_binding">add_key_binding</A></LI>
+	<LI><A HREF="#TextEditor.bound_key_function">bound_key_function</A></LI>
+	<LI><A HREF="#TextEditor.default_key_function">default_key_function</A></LI>
+	<LI><A HREF="#TextEditor.insert_mode">insert_mode</A></LI>
+	<LI><A HREF="#TextEditor.kf_backspace">kf_backspace</A></LI>
+	<LI><A HREF="#TextEditor.kf_copy">kf_copy</A></LI>
+	<LI><A HREF="#TextEditor.kf_c_s_move">kf_c_s_move</A></LI>
+	<LI><A HREF="#TextEditor.kf_ctrl_move">kf_ctrl_move</A></LI>
+	<LI><A HREF="#TextEditor.kf_cut">kf_cut</A></LI>
+	<LI><A HREF="#TextEditor.kf_default">kf_default</A></LI>
+	<LI><A HREF="#TextEditor.kf_delete">kf_delete</A></LI>
+	<LI><A HREF="#TextEditor.kf_down">kf_down</A></LI>
+	<LI><A HREF="#TextEditor.kf_end">kf_end</A></LI>
+	<LI><A HREF="#TextEditor.kf_enter">kf_enter</A></LI>
+	<LI><A HREF="#TextEditor.kf_home">kf_home</A></LI>
+	<LI><A HREF="#TextEditor.kf_ignore">kf_ignore</A></LI>
+	<LI><A HREF="#TextEditor.kf_insert">kf_insert</A></LI>
+	<LI><A HREF="#TextEditor.kf_left">kf_left</A></LI>
+	<LI><A HREF="#TextEditor.kf_move">kf_move</A></LI>
+	<LI><A HREF="#TextEditor.kf_page_down">kf_page_down</A></LI>
+	<LI><A HREF="#TextEditor.kf_page_up">kf_page_up</A></LI>
+	<LI><A HREF="#TextEditor.kf_paste">kf_paste</A></LI>
+	<LI><A HREF="#TextEditor.kf_right">kf_right</A></LI>
+	<LI><A HREF="#TextEditor.kf_select_all">kf_select_all</A></LI>
+	<LI><A HREF="#TextEditor.kf_shift_move">kf_shift_move</A></LI>
+	<LI><A HREF="#TextEditor.kf_up">kf_up</A></LI>
+	<LI><A HREF="#TextEditor.remove_all_key_bindings">remove_all_key_bindings</A></LI>
+	<LI><A HREF="#TextEditor.remove_key_binding">remove_key_binding</A></LI>
 
 </UL>
 
-<H4><A NAME="Fl_Text_Editor.Fl_Text_Editor">Fl_Text_Editor(int X, int Y, int W, int H, const char* l = 0);</A></H4>
+<H4><A name="TextEditor.TextEditor">fltk::TextEditor(int X, int Y, int W, int H, const char* l = 0);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.~Fl_Text_Editor">~Fl_Text_Editor();</A></H4>
+<H4><A name="TextEditor.~TextEditor">~fltk::TextEditor();</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.add_default_key_bindings">void add_default_key_bindings(Key_Binding** list);</A></H4>
+<H4><A name="TextEditor.add_default_key_bindings">void add_default_key_bindings(Key_Binding** list);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.add_key_binding">void add_key_binding(int key, int state, Key_Func f, Key_Binding** list);<BR>
+<H4><A name="TextEditor.add_key_binding">void add_key_binding(int key, int state, Key_Func f, Key_Binding** list);<BR>
 void add_key_binding(int key, int state, Key_Func f);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.bound_key_function">Key_Func bound_key_function(int key, int state, Key_Binding* list);<BR>
+<H4><A name="TextEditor.bound_key_function">Key_Func bound_key_function(int key, int state, Key_Binding* list);<BR>
 Key_Func bound_key_function(int key, int state);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.default_key_function">void default_key_function(Key_Func f);</A></H4>
+<H4><A name="TextEditor.default_key_function">void default_key_function(Key_Func f);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.insert_mode">void insert_mode(int b);<BR>
+<H4><A name="TextEditor.insert_mode">void insert_mode(int b);<BR>
 int insert_mode();</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_backspace">int kf_backspace(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_backspace">int kf_backspace(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_copy">int kf_copy(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_copy">int kf_copy(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_c_s_move">int kf_c_s_move(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_c_s_move">int kf_c_s_move(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_ctrl_move">int kf_ctrl_move(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_ctrl_move">int kf_ctrl_move(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_cut">int kf_cut(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_cut">int kf_cut(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_default">int kf_default(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_default">int kf_default(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_delete">int kf_delete(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_delete">int kf_delete(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_down">int kf_down(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_down">int kf_down(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_end">int kf_end(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_end">int kf_end(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_enter">int kf_enter(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_enter">int kf_enter(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_home">int kf_home(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_home">int kf_home(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_ignore">int kf_ignore(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_ignore">int kf_ignore(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_insert">int kf_insert(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_insert">int kf_insert(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_left">int kf_left(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_left">int kf_left(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_move">int kf_move(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_move">int kf_move(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_page_down">int kf_page_down(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_page_down">int kf_page_down(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_page_up">int kf_page_up(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_page_up">int kf_page_up(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_paste">int kf_paste(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_paste">int kf_paste(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_right">int kf_right(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_right">int kf_right(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_select_all">int kf_select_all(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_select_all">int kf_select_all(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_shift_move">int kf_shift_move(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_shift_move">int kf_shift_move(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.kf_up">int kf_up(int c, Fl_Text_Editor* e);</A></H4>
+<H4><A name="TextEditor.kf_up">int kf_up(int c, fltk::TextEditor* e);</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.remove_all_key_bindings">void remove_all_key_bindings(Key_Binding** list);<BR>
+<H4><A name="TextEditor.remove_all_key_bindings">void remove_all_key_bindings(Key_Binding** list);<BR>
 void remove_all_key_bindings();</A></H4>
 
 
-<H4><A NAME="Fl_Text_Editor.remove_key_binding">void remove_key_binding(int key, int state, Key_Binding** list);<BR>
+<H4><A name="TextEditor.remove_key_binding">void remove_key_binding(int key, int state, Key_Binding** list);<BR>
 void remove_key_binding(int key, int state);</A></H4>
 
 

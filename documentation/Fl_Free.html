@@ -1,17 +1,17 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>Fl_Free</title></head><body>
+<title>fltk::Free</title></head><body>
 
-<H2>class Fl_Free</H2>
+<H2>class fltk::Free</H2>
 
 <H3>Class Hierarchy</H3>
 <PRE>
-<A href=Fl_Widget.html#Fl_Widget>Fl_Widget</A>
+<A href=Fl_Widget.html#Widget>fltk::Widget</A>
    |
-   +----<B>Fl_Free</B>
+   +----<B>fltk::Free</B>
 </PRE>
 <H3>Include Files</H3>
 <PRE>
-#include &lt;fltk/Fl_Free.h&gt;
+#include &lt;fltk/Free.h&gt;
 </PRE>
 <H3>Description</H3>
  Emulation of the Forms &quot;free&quot; widget.  This emulation allows the free 
@@ -21,28 +21,28 @@ widgets.
 <P>There are five types of free, which determine when the handle 
 function is called: </P>
 <PRE>
-#define FL_NORMAL_FREE		1
-#define FL_SLEEPING_FREE	2
-#define FL_INPUT_FREE		3
-#define FL_CONTINUOUS_FREE	4
-#define FL_ALL_FREE		5
+#define fltk::NORMAL_FREE		1
+#define fltk::SLEEPING_FREE	2
+#define fltk::INPUT_FREE		3
+#define fltk::CONTINUOUS_FREE	4
+#define fltk::ALL_FREE		5
 </PRE>
-<P>An FL_INPUT_FREE accepts FL_FOCUS events.  A FL_CONTINUOUS_FREE sets 
-a timeout callback 100 times a second and provides a FL_STEP event, 
+<P>An fltk::INPUT_FREE accepts fltk::FOCUS events.  A fltk::CONTINUOUS_FREE sets 
+a timeout callback 100 times a second and provides a fltk::STEP event, 
 this has obvious detrimental effects on machine performance. 
-FL_ALL_FREE does both.  FL_SLEEPING_FREE are deactivated. </P>
+fltk::ALL_FREE does both.  fltk::SLEEPING_FREE are deactivated. </P>
 <H3>Methods</H3>
 <UL>
-<LI><A href=#Fl_Free.Fl_Free>Fl_Free</A></LI>
-<LI><A href=#Fl_Free.~Fl_Free>~Fl_Free</A></LI>
+<LI><A href=#Free.Free>fltk::Free</A></LI>
+<LI><A href=#Free.~Free>~fltk::Free</A></LI>
 </UL>
-<H4><A name=Fl_Free.Fl_Free>Fl_Free(uchar type, int, int, int, int, 
-const char*l, FL_HANDLEPTR hdl)</A></H4>
+<H4><A name=Free.Free>fltk::Free(uchar type, int, int, int, int, 
+const char*l, fltk::HANDLEPTR hdl)</A></H4>
  The constructor takes both the <TT>type</TT> and the <TT>handle</TT>
  function. The handle function should be declared as follows: 
 <PRE>
 int
-handle_function(Fl_Widget *w,
+handle_function(fltk::Widget *w,
                 int       event,
 	        float     event_x,
 		float     event_y,
@@ -53,13 +53,13 @@ response to most events, and is called by the <TT>draw()</TT> method.
 The <TT>event</TT> argument contains the event type: 
 <PRE>
 // old event names for compatability:
-#define FL_MOUSE		FL_DRAG
-#define FL_DRAW			0
-#define FL_STEP			9
-#define FL_FREEMEM		12
-#define FL_FREEZE		FL_HIDE
-#define FL_THAW			FL_SHOW
+#define fltk::MOUSE		fltk::DRAG
+#define fltk::DRAW			0
+#define fltk::STEP			9
+#define fltk::FREEMEM		12
+#define fltk::FREEZE		fltk::HIDE
+#define fltk::THAW			fltk::SHOW
 </PRE>
-<H4><A name=Fl_Free.~Fl_Free>virtual Fl_Free::~Fl_Free()</A></H4>
+<H4><A name=Free.~Free>virtual fltk::Free::~fltk::Free()</A></H4>
  The destructor will call the handle function with the event <TT>
-FL_FREE_MEM</TT>. </BODY></HTML>
+fltk::FREE_MEM</TT>. </BODY></HTML>

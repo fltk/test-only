@@ -22,7 +22,7 @@ library, though, and has started being included on Linux distributions.
 <P>Here are some of the core features unique to FLTK: </P>
 
 <UL>
-<LI>sizeof(Fl_Widget) == 60.</LI>
+<LI>sizeof(fltk::Widget) == 60.</LI>
 <LI>The &quot;core&quot; (the &quot;hello&quot; program compiled &amp; linked with a static 
 FLTK  library using gcc on a 486 and then stripped) is 82K.</LI>
 <LI>The FLUID program (which includes every widget) is 352k.
@@ -60,7 +60,7 @@ in commercial software!
 
 FLTK was originally designed to be compatible with the Forms Library
 written for SGI machines. In that library all the functions and
-structures started with &quot;fl_&quot;. This naming was extended to
+structures started with &quot;fltk::&quot;. This naming was extended to
 all new methods and widgets in the C++ library, and this prefix was
 taken as the name of the library. It is almost impossible to search
 for &quot;FL&quot; on the Internet, due to the fact that it is also
@@ -216,7 +216,7 @@ between different versions of Visual C++!) you can only use the DLL that
 is generated with the same version compiler that you built it with.
 
 <P>When compiling an application or DLL that uses the FLTK DLL, you will need
-to define the <tt>FL_SHARED</tt> preprocessor symbol to get the correct linkage
+to define the <tt>fltk::SHARED</tt> preprocessor symbol to get the correct linkage
 commands embedded within the FLTK header files.
 
 <h2><a name=iinstall_os2>Building FLTK Under OS/2</a></h2>

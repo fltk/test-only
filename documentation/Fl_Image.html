@@ -1,7 +1,7 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Image</title></head><body>
+<title>class fltk::Image</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Image</h2>
+<h2>class fltk::Image</h2>
 <hr>
 
 This class holds an image, normally used to label a widget.  The
@@ -14,7 +14,7 @@ graphics, can be defined.
 
 <h4>void* id, mask;
 <br>int w,h;
-<br>void _draw(int x, int y, Fl_Flags flags)</h4>
+<br>void _draw(int x, int y, fltk::Flags flags)</h4>
 
 Subclasses that draw a fixed-size and unchanging image can use these
 protected methods that use system-specific code to cache images in a
@@ -26,7 +26,7 @@ can call <tt>_draw()</tt> to draw them, and all subsequent calls they
 can just call <tt>_draw()</tt>. To test if this is the first call to
 <tt>draw()</tt> a subclass can check if <tt>id</tt> is zero.
 
-<a name=measure><h4>virtual void Fl_Image::measure(int& w, int& h);</h4></a>
+<a name=measure><h4>virtual void fltk::Image::measure(int& w, int& h);</h4></a>
 
 The two parameters are set to the size the image will occupy when
 drawn. For image types that can scale these are also input parameters:
@@ -35,21 +35,21 @@ they must be preset to the rectangle the caller intends to pass to
 the "natural" size of a scaling image, preset w and h to zero before
 calling this.
 
-<a name=draw><h4>virtual void Fl_Image::draw(int x,int y,int w,int h, Fl_Flags);</h4></a>
+<a name=draw><h4>virtual void fltk::Image::draw(int x,int y,int w,int h, fltk::Flags);</h4></a>
 
 Draw the image with the upper-left corner at <i>x,y</i>. If the image
 can scale or tile or otherwise uses a size, the <i>w,h</i> describe
 the size of the box it is wanted to fill. The <i>flags</i> can be used
-by subclasses to draw differently if <tt>FL_INACTIVE</tt> or any other
+by subclasses to draw differently if <tt>fltk::INACTIVE</tt> or any other
 flags are set.
 
-<h4>virtual Fl_Image::~Fl_Image();</h4>
+<h4>virtual fltk::Image::~fltk::Image();</h4>
 
 The destructor throws away temporary data created to draw the image,
 but in most cases does not destroy the local data passed to a
 constructor.
 
-<h4>void draw(int x, int y, Fl_Flags = 0)</h4>
+<h4>void draw(int x, int y, fltk::Flags = 0)</h4>
 
 Draws the image with the upper-left corner at <tt>x,y</tt>.  This is 
 the same as doing <tt>draw(x, y, this-&gt;w, this-&gt;h, flags)</tt>.

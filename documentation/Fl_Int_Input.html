@@ -1,53 +1,53 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Int_Input</title></head><body>
+<title>class fltk::IntInput</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Int_Input</h2>
+<h2>class fltk::IntInput</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
 
-<pre><a href=Fl_Float_Input.html>Fl_Float_Input</A>
+<pre><a href=Fl_FloatInput.html>fltk::FloatInput</A>
    |
-   +----<B>Fl_Int_Input</B>
+   +----<B>fltk::IntInput</B>
 </pre>
 
 <h3>Include Files</h3>
 
 <pre>
-#include &lt;fltk/Fl_Int_Input.h&gt;
+#include &lt;fltk/IntInput.h&gt;
 </pre>
 
 <h3>Description</h3>
 
-The <tt>Fl_Int_Input</tt> class is a subclass of <tt>Fl_Input</tt>
+The <tt>fltk::IntInput</tt> class is a subclass of <tt>fltk::Input</tt>
 that only allows the user to type decimal digits (or hex numbers of
 the form <tt>0xaef</tt>). Besides editing the text the user can use
 the up/down arrow keys to change the digits.
 
-<p>You may want a <a href="Fl_Value_Input.html">Fl_Value_Input</a>
+<p>You may want a <a href="Fl_ValueInput.html">fltk::ValueInput</a>
 widget instead. It has value() methods that take and return double
 values rather than strings.
 
 <p>If you change <a href="Fl_Widget.html#when">when()</a> to
-<tt>FL_WHEN_ENTER_KEY</tt> the callback is only done when the user
+<tt>fltk::WHEN_ENTER_KEY</tt> the callback is only done when the user
 hits the up/down arrow keys or when the user types the Enter key. This
 may be more useful than the default setting of
-<tt>FL_WHEN_CHANGED</tt> which can make the callback happen when
+<tt>fltk::WHEN_CHANGED</tt> which can make the callback happen when
 partially-edited numbers are in the field.
 
 <h3>Methods</h3>
 
 <ul>
-<li><a href=#Fl_Int_Input>Fl_Int_Input</a></li>
-<li><a href=#~Fl_Int_Input>~Fl_Int_Input</a></li>
+<li><a href=#IntInput>fltk::IntInput</a></li>
+<li><a href=#~fltk::IntInput>~fltk::IntInput</a></li>
 </ul>
 
-<a name=Fl_Int_Input><h4>Fl_Int_Input::Fl_Int_Input(int x, int y, int w, int h, const char *label = 0)</h4></a>
+<a name=IntInput><h4>fltk::IntInput::IntInput(int x, int y, int w, int h, const char *label = 0)</h4></a>
 
-Creates a new <TT>Fl_Int_Input</TT> widget using the given position, 
+Creates a new <TT>fltk::IntInput</TT> widget using the given position, 
 size, and label string.
 
-<a name=~Fl_Int_Input><h4>virtual Fl_Int_Input::~Fl_Int_Input()</h4></a>
+<a name=~IntInput><h4>virtual fltk::IntInput::~fltk::IntInput()</h4></a>
 
 Destroys the widget and any value associated with it.
 

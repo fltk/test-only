@@ -1,16 +1,16 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Bitmap</title></head><body>
+<title>class fltk::Bitmap</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Bitmap</h2>
+<h2>class fltk::Bitmap</h2>
 <hr>
 
-This subclass of <a href="Fl_Image.html"><tt>Fl_Image</tt></a>
+This subclass of <a href="Fl_Image.html"><tt>fltk::Image</tt></a>
 encapsulates the width, height, and bits of an X bitmap (XBM), and
-allows you to make an <TT>Fl_Widget</TT> use a bitmap as a label, or
+allows you to make an <TT>fltk::Widget</TT> use a bitmap as a label, or
 to just draw the bitmap directly.
 
-<h4>Fl_Bitmap(const char *bits, int W, int H)
-<br>Fl_Bitmap(const unsigned char *bits, int W, int H)</h4>
+<h4>fltk::Bitmap(const char *bits, int W, int H)
+<br>fltk::Bitmap(const unsigned char *bits, int W, int H)</h4>
 
 Construct using an X bitmap.  The bits pointer is simply copied to the 
 object, so it must point at persistent storage.  The two constructors 
@@ -19,23 +19,23 @@ of bitmap data.  To use an XBM file use:
 
 <pre>#include &quot;foo.xbm&quot;
 ...
-Fl_Bitmap bitmap = new Fl_Bitmap(foo_bits, foo_width, foo_height);
+fltk::Bitmap bitmap = new fltk::Bitmap(foo_bits, foo_width, foo_height);
 </pre>
 
-<h4>~Fl_Bitmap()</h4>
+<h4>~fltk::Bitmap()</h4>
 
 The destructor will destroy any X pixmap created.  It does not do 
 anything to the bits data. 
 
-<h4>void draw(int x, int y, int w, int h, Fl_Flags = 0)</h4>
+<h4>void draw(int x, int y, int w, int h, fltk::Flags = 0)</h4>
 
 The image is drawn with the top-left corner at <i>x,y</i>. The
 <i>w</i> and <i>h</i> are ignored.  1 bits are drawn with the current
 color, 0 bits are unchanged. The flags are ignored
-(<tt>FL_INACTIVE</tt> can be done by selecting a gray version of the
+(<tt>fltk::INACTIVE</tt> can be done by selecting a gray version of the
 color).
 
-<h4>void draw(int x, int y, Fl_Flags = 0)</h4>
+<h4>void draw(int x, int y, fltk::Flags = 0)</h4>
 
 Draws the image with the upper-left corner at <tt>x,y</tt>.  This is 
 the same as doing <tt>draw(x, y, this-&gt;w, this-&gt;h, flags)</tt>.

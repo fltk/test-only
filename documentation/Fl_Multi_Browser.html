@@ -1,38 +1,38 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Multi_Browser</title></head><body>
+<title>class fltk::MultiBrowser</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Multi_Browser</h2>
+<h2>class fltk::MultiBrowser</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
 
 <pre>
-<a href=Fl_Browser.html#Fl_Browser>Fl_Browser</a>
+<a href=Fl_Browser.html#Browser>fltk::Browser</a>
    |
-   +----<B>Fl_Multi_Browser</B>
+   +----<B>fltk::MultiBrowser</B>
 </pre>
 
 <h3>Include Files</h3>
 
 <pre>
-#include &lt;fltk/Fl_Multi_Browser.h&gt;
+#include &lt;fltk/MultiBrowser.h&gt;
 </pre>
 
 <h3>Description</h3>
 
-The <TT>Fl_Multi_Browser</TT> class is a subclass of
-<TT>Fl_Browser</TT> which lets the user select any set of the
+The <TT>fltk::MultiBrowser</TT> class is a subclass of
+<TT>fltk::Browser</TT> which lets the user select any set of the
 lines. Clicking on an item selects only that one. Ctrl+click toggles
 items on/off. Shift+drag (or shift+arrows) will extend selections.
 Normally the callback is done when any item changes it's state, but
 you can change this with <TT>when()</TT>.
 
-<p>See <A href=Fl_Browser.html#Fl_Browser><TT>Fl_Browser</TT></A> for
+<p>See <A href=Fl_Browser.html#Browser><TT>fltk::Browser</TT></A> for
 methods to control the display and "current item", and <a
-href=Fl_Menu_.html><tt>Fl_Menu_</tt></a> for methods to add and remove
+href=Fl_Menu.html><tt>fltk::Menu</tt></a> for methods to add and remove
 lines from the browser. </P>
 
-<p>The methods on <A href=Fl_Browser.html><TT>Fl_Browser</TT></A> for
+<p>The methods on <A href=Fl_Browser.html><TT>fltk::Browser</TT></A> for
 controlling the "value" control item with the keyboard focus in a
 multi-browser. You must use the "select" methods described here to
 change what items are turned on.
@@ -40,7 +40,7 @@ change what items are turned on.
 <h3>Methods</h3>
 
 <ul>
-<li><a href="#Fl_Multi_Browser">Fl_Multi_Browser</a></li>
+<li><a href="#MultiBrowser">fltk::MultiBrowser</a></li>
 <li><a href="#set_item_selected">set_item_selected</a></li>
 <li><a href="#select_only_this">select_only_this</a></li>
 <li><a href="#deselect">deselect</a></li>
@@ -48,13 +48,13 @@ change what items are turned on.
 <li><a href="#selected">selected</a></li>
 </ul>
 
-<a name=Fl_Multi_Browser><h4>Fl_Multi_Browser::Fl_Multi_Browser(int x, int y, int w, int h, const char *label = 0)</h4></a>
+<a name=MultiBrowser><h4>fltk::MultiBrowser::MultiBrowser(int x, int y, int w, int h, const char *label = 0)</h4></a>
 
-Creates a new, empty <tt>Fl_Multi_Browser</tt>.
+Creates a new, empty <tt>fltk::MultiBrowser</tt>.
 
 <a name=set_item_selected><h4>bool set_item_selected(bool value = true, int do_callback = 0);</h4></a>
 
-Turn the <tt>FL_VALUE</tt> flag on or off in the current item (use <a
+Turn the <tt>fltk::VALUE</tt> flag on or off in the current item (use <a
 href="Fl_Browser.html#goto_index"><tt>goto_index()</tt></a> to set the
 current item before calling this).
 
@@ -83,7 +83,7 @@ for each item that changes selected state.
 
 Same as <tt><a href=#goto_index>goto_index(line)</a>,<a
 href=#set_focus>set_item_selected(value)</a>;</tt>, to change the selected
-state of an item in a non-hierarchial Fl_Multi_Browser. If <i>line</i>
+state of an item in a non-hierarchial fltk::MultiBrowser. If <i>line</i>
 is negative nothing is selected.
 
 <a name=selected><h4>bool selected(int line);</h4></a>

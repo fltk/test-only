@@ -1,53 +1,53 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Box</title></head><body>
+<title>class fltk::InvisibleBox</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Box</h2>
+<h2>class fltk::InvisibleBox</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
 
 <pre>
-<a href=Fl_Widget.html#Fl_Widget>Fl_Widget</a>
+<a href=Fl_Widget.html#Widget>fltk::Widget</a>
    |
-   +----<b>Fl_Box</b>
+   +----<b>fltk::InvisibleBox</b>
 </pre>
 
 <h3>Include Files</h3>
 
 <pre>
-#include &lt;fltk/Fl_Box.h&gt;
+#include &lt;fltk/Box.h&gt;
 </pre>
 
 <h3>Description</h3>
 
 This widget is the same as an plain <a
-href=Fl_Widget.html>Fl_Widget</a> except if the box is set to
-<tt>FL_NO_BOX</tt> it is completely invisible and attemps to draw it
+href=Fl_Widget.html>fltk::Widget</a> except if the box is set to
+<tt>fltk::NO_BOX</tt> it is completely invisible and attemps to draw it
 do absolutely nothing. This can be used as the <a
 href="Fl_Group.html#resizable">resizable()</a> of a group or window to
 get more complex resize effects.
 
 <p>You can also set the box to provide decorations, but you can use
-the plain <a href=Fl_Widget.html>Fl_Widget</a> for that, too.
+the plain <a href=Fl_Widget.html>fltk::Widget</a> for that, too.
 
 <h3>Methods</h3>
 
 <ul>
-<li><a href=#Fl_Box>Fl_Box</a></li>
-<li><a href=#~Fl_Box>~Fl_Box</a></li>
+<li><a href=#Box>fltk::InvisibleBox</a></li>
+<li><a href=#~fltk::InvisibleBox>~fltk::InvisibleBox</a></li>
 </ul>
 
-<A name=Fl_Box><h4>Fl_Box::Fl_Box(int x, int y, int w, int h, const char * = 0)
-<br> Fl_Box::Fl_Box(Fl_Boxtype b, int x, int y, int w, int h, const char *)</h4></a>
+<A name=Box><h4>fltk::InvisibleBox::Box(int x, int y, int w, int h, const char * = 0)
+<br> fltk::InvisibleBox::Box(fltk::Box b, int x, int y, int w, int h, const char *)</h4></a>
 
-The first constructor sets <tt>box()</tt> to <tt>FL_NO_BOX</tt>, which 
+The first constructor sets <tt>box()</tt> to <tt>fltk::NO_BOX</tt>, which 
 means it is invisible. However such widgets are useful as placeholders 
-or <a href="Fl_Group.html#resizable"><tt>Fl_Group::resizable()</tt></a>
+or <a href="Fl_Group.html#resizable"><tt>fltk::Group::resizable()</tt></a>
 values.  To change the box to something visible, use <TT>box(n)</TT>. 
 
 <p>The second form of the constructor sets the box to the specified box 
 type. </p>
 
-<h4><A name="~Fl_Box">Fl_Box::~Fl_Box(void)</a></h4>
+<h4><A name="~fltk::InvisibleBox">fltk::InvisibleBox::~fltk::InvisibleBox(void)</a></h4>
 
 </body></html>

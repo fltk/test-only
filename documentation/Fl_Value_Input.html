@@ -1,26 +1,26 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Value_Input</title></head><body>
+<title>class fltk::ValueInput</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Value_Input</h2>
+<h2>class fltk::ValueInput</h2>
 <hr>
 
 <H3>Class Hierarchy</H3>
 <PRE>
-<A href="Fl_Valuator.html">Fl_Valuator</A>
+<A href="Fl_Valuator.html">fltk::Valuator</A>
    |
-   +----<B>Fl_Value_Input</B>
+   +----<B>fltk::ValueInput</B>
 </PRE>
 <H3>Include Files</H3>
 <PRE>
-#include &lt;fltk/Fl_Value_Input.h&gt;
+#include &lt;fltk/ValueInput.h&gt;
 </PRE>
 <H3>Description</H3>
 
 Controls a single floating point value through a combination of a <a
-href="Fl_Float_Input.html">Fl_Float_Input</a> and two buttons. Other
+href="Fl_FloatInput.html">fltk::FloatInput</a> and two buttons. Other
 toolkits call this a "Spin Box".
 
-<p><center><img src=Fl_Value_Input.gif></center>
+<p><center><img src=Fl_ValueInput.gif></center>
 
 <p>Clicking the buttons increments/decrements by the <a
 href="Fl_Valuator.html#linesize">linesize()</a>. Holding down shift
@@ -28,16 +28,16 @@ href="Fl_Valuator.html#linesize">linesize()</a>. Holding down shift
 href="Fl_Valuator.html#pagesize">pagesize()</a>.
 
 <p>If <a href="Fl_Valuator.html#step">step()</a> is greater or equal
-to 1.0 an <a href="Fl_Int_Input.html">Fl_Int_Input</a> is used
+to 1.0 an <a href="Fl_IntInput.html">fltk::IntInput</a> is used
 instead. This prevents the user from typing anything other than
 digits. If step() is less than one then the user can type floating
 point values with decimal points and exponents.
 
 <p>If you change <a href="Fl_Widget.html#when">when()</a> to
-<tt>FL_WHEN_ENTER_KEY</tt> the callback is only done when the user
+<tt>fltk::WHEN_ENTER_KEY</tt> the callback is only done when the user
 hits the up/down arrow keys or when the user types the Enter key. This
 may be more useful than the default setting of
-<tt>FL_WHEN_CHANGED</tt> which can make the callback happen when
+<tt>fltk::WHEN_CHANGED</tt> which can make the callback happen when
 partially-edited numbers are in the field.
 
 <p>You can get at the input field by using the public "input" instance
@@ -46,16 +46,16 @@ variable. For instance you can clobber the text to a word with
 
 <H3>Methods</H3>
 <UL>
-<LI><A href=#Fl_Value_Input.Fl_Value_Input>Fl_Value_Input</A></LI>
-<LI><A href=#Fl_Value_Input.~Fl_Value_Input>~Fl_Value_Input</A></LI>
+<LI><A href=#ValueInput.ValueInput>fltk::ValueInput</A></LI>
+<LI><A href=#ValueInput.~ValueInput>~fltk::ValueInput</A></LI>
 </UL>
-<H4><A name=Fl_Value_Input.Fl_Value_Input>
-Fl_Value_Input::Fl_Value_Input(int x, int y, int w, int h, const char 
+<H4><A name=ValueInput.ValueInput>
+fltk::ValueInput::ValueInput(int x, int y, int w, int h, const char 
 *label = 0)</A></H4>
- Creates a new <TT>Fl_Value_Input</TT> widget using the given position, 
-size, and label string. The default boxtype is <TT>FL_DOWN_BOX</TT>. 
-<H4><A name=Fl_Value_Input.~Fl_Value_Input>virtual 
-Fl_Value_Input::~Fl_Value_Input()</A></H4>
+ Creates a new <TT>fltk::ValueInput</TT> widget using the given position, 
+size, and label string. The default boxtype is <TT>fltk::DOWN_BOX</TT>. 
+<H4><A name=ValueInput.~ValueInput>virtual 
+fltk::ValueInput::~fltk::ValueInput()</A></H4>
 Destroys the valuator. 
 
 </body></html>

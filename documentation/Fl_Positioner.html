@@ -1,18 +1,18 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Positioner</title></head><body>
+<title>class fltk::Positioner</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Positioner</h2>
+<h2>class fltk::Positioner</h2>
 <hr>
 
 <H3>Class Hierarchy</H3>
 <PRE>
-<A href=Fl_Widget.html#Fl_Widget>Fl_Widget</A>
+<A href=Fl_Widget.html#Widget>fltk::Widget</A>
    |
-   +----<B>Fl_Positioner</B>
+   +----<B>fltk::Positioner</B>
 </PRE>
 <H3>Include Files</H3>
 <PRE>
-#include &lt;fltk/Fl_Positioner.h&gt;
+#include &lt;fltk/Positioner.h&gt;
 </PRE>
 <H3>Description</H3>
  This class is provided for Forms compatibility.  It provides 2D input. 
@@ -25,43 +25,43 @@ crosshairs is <TT>selection_color()</TT>.
 <TABLE width=90%>
 <TR><TD align=left valign=top>
 <UL>
-<LI><A href=#Fl_Positioner.Fl_Positioner>Fl_Positioner</A></LI>
-<LI><A href=#Fl_Positioner.~Fl_Positioner>~Fl_Positioner</A></LI>
-<LI><A href=#Fl_Positioner.value>value</A></LI>
-<LI><A href=#Fl_Positioner.xbounds>xbounds</A></LI>
-<LI><A href=#Fl_Positioner.xstep>xstep</A></LI>
-<LI><A href=#Fl_Positioner.xvalue>xvalue</A></LI>
-<LI><A href=#Fl_Positioner.ybounds>ybounds</A></LI>
-<LI><A href=#Fl_Positioner.ystep>ystep</A></LI>
-<LI><A href=#Fl_Positioner.yvalue>yvalue</A></LI>
+<LI><A href=#Positioner.Positioner>fltk::Positioner</A></LI>
+<LI><A href=#Positioner.~Positioner>~fltk::Positioner</A></LI>
+<LI><A href=#Positioner.value>value</A></LI>
+<LI><A href=#Positioner.xbounds>xbounds</A></LI>
+<LI><A href=#Positioner.xstep>xstep</A></LI>
+<LI><A href=#Positioner.xvalue>xvalue</A></LI>
+<LI><A href=#Positioner.ybounds>ybounds</A></LI>
+<LI><A href=#Positioner.ystep>ystep</A></LI>
+<LI><A href=#Positioner.yvalue>yvalue</A></LI>
 </UL>
 </TD></TR>
 </TABLE>
 </CENTER>
-<H4><A name=Fl_Positioner.Fl_Positioner>
-Fl_Positioner::Fl_Positioner(int x, int y, int w, int h, const char 
+<H4><A name=Positioner.Positioner>
+fltk::Positioner::Positioner(int x, int y, int w, int h, const char 
 *label = 0)</A></H4>
- Creates a new <TT>Fl_Positioner</TT> widget using the given position, 
-size, and label string. The default boxtype is <TT>FL_NO_BOX</TT>. 
-<H4><A name=Fl_Positioner.~Fl_Positioner>virtual 
-Fl_Positioner::~Fl_Positioner()</A></H4>
+ Creates a new <TT>fltk::Positioner</TT> widget using the given position, 
+size, and label string. The default boxtype is <TT>fltk::NO_BOX</TT>. 
+<H4><A name=Positioner.~Positioner>virtual 
+fltk::Positioner::~fltk::Positioner()</A></H4>
  Deletes the widget. 
-<H4><A name=Fl_Positioner.value>void Fl_Positioner::value(float *x, 
+<H4><A name=Positioner.value>void fltk::Positioner::value(float *x, 
 float *y) const</A></H4>
  Returns the current position in <TT>x</TT> and <TT>y</TT>. 
-<H4><A name=Fl_Positioner.xbounds>void xbounds(float *xmin, float *xmax)
+<H4><A name=Positioner.xbounds>void xbounds(float *xmin, float *xmax)
 <BR> void xbounds(float xmin, float xmax)</A></H4>
  Gets or sets the X axis bounds. 
-<H4><A name=Fl_Positioner.xstep>void xstep(float x)</A></H4>
+<H4><A name=Positioner.xstep>void xstep(float x)</A></H4>
  Sets the stepping value for the X axis. 
-<H4><A name=Fl_Positioner.xvalue>float Fl_Positioner::xvalue(void) const
-<BR> void Fl_Positioner::xvalue(float x)</A></H4>
+<H4><A name=Positioner.xvalue>float fltk::Positioner::xvalue(void) const
+<BR> void fltk::Positioner::xvalue(float x)</A></H4>
  Gets or sets the X axis coordinate. 
-<H4><A name=Fl_Positioner.ybounds>void ybounds(float *ymin, float *ymay)
+<H4><A name=Positioner.ybounds>void ybounds(float *ymin, float *ymay)
 <BR> void ybounds(float ymin, float ymay)</A></H4>
  Gets or sets the Y axis bounds. 
-<H4><A name=Fl_Positioner.ystep>void ystep(float y)</A></H4>
+<H4><A name=Positioner.ystep>void ystep(float y)</A></H4>
  Sets the stepping value for the Y axis. 
-<H4><A name=Fl_Positioner.yvalue>float Fl_Positioner::yvalue(void) const
-<BR> void Fl_Positioner::yvalue(float y)</A></H4>
+<H4><A name=Positioner.yvalue>float fltk::Positioner::yvalue(void) const
+<BR> void fltk::Positioner::yvalue(float y)</A></H4>
  Gets or sets the Y axis coordinate. </BODY></HTML>

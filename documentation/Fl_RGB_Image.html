@@ -1,17 +1,17 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_RGB_Image</title></head><body>
+<title>class fltk::RGB_Image</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_RGB_Image</h2>
+<h2>class fltk::RGB_Image</h2>
 <hr>
 
-This subclass of <a href="Fl_Image.html"><tt>Fl_Image</tt></a>
+This subclass of <a href="Fl_Image.html"><tt>fltk::Image</tt></a>
 encapsulates a full-color RGB image, and allows you to 
-make an <TT>Fl_Widget</TT> use an image as a label, or to just draw the 
+make an <TT>fltk::Widget</TT> use an image as a label, or to just draw the 
 image directly. This is more efficient than using <a
-href="draw.html#fl_draw_image">fl_draw_image()</a> if you want to draw
+href="draw.html#draw_image">fltk::draw_image()</a> if you want to draw
 the same image more than once.
 
-<h4>Fl_RGB_Image(const unsigned char *data, int W, int H, int D = 3, int LD = 0)</h4>
+<h4>fltk::RGB_Image(const unsigned char *data, int W, int H, int D = 3, int LD = 0)</h4>
 
 Construct using a pointer to RGB data. <TT>W</TT> and <TT>H</TT> are 
 the size of the image in pixels. <TT>D</TT> is the delta between pixels 
@@ -21,19 +21,19 @@ be more than <TT>D * W</TT> to crop images, or negative to flip the
 image vertically).  The data pointer is simply copied to the object, so 
 it must point at persistent storage. 
 
-<h4>~Fl_RGB_Image()</h4>
+<h4>~fltk::RGB_Image()</h4>
 
 The destructor will destroy any X pixmap created.  It does not do 
 anything to the data.
 
-<h4>void draw(int x, int y, int w, int h, Fl_Flags = 0)</h4>
+<h4>void draw(int x, int y, int w, int h, fltk::Flags = 0)</h4>
 
 The image is drawn with the top-left corner at <i>x,y</i>. The
 <i>w</i> and <i>h</i> are ignored. The <i>flags</i> are ignored
-(although really it should use <tt>FL_INACTIVE</tt> to gray out the
+(although really it should use <tt>fltk::INACTIVE</tt> to gray out the
 image).
 
-<h4>void draw(int x, int y, Fl_Flags = 0)</h4>
+<h4>void draw(int x, int y, fltk::Flags = 0)</h4>
 
 Draws the image with the upper-left corner at <tt>x,y</tt>.  This is 
 the same as doing <tt>draw(x, y, this-&gt;w, this-&gt;h, flags)</tt>.

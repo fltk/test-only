@@ -1,67 +1,67 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>typedef Fl_Font</title></head><body>
+<title>typedef fltk::Font</title></head><body>
 <!-- NEW PAGE -->
-<h2>typedef Fl_Font</h2>
+<h2>typedef fltk::Font</h2>
 <hr>
 
 The type passed to <a
-href=Fl_Widget.html#label_font>Fl_Widget::label_font()</a> and other
+href=Fl_Widget.html#label_font>fltk::Widget::label_font()</a> and other
 parts of fltk is a typedef defined like this, pointing at a structure
-<tt>Fl_Font_</tt>:
+<tt>fltk::Font_</tt>:
 
-<pre><tt>typedef Fl_Font_* Fl_Font;</tt></pre>
+<pre><tt>typedef fltk::Font_* fltk::Font;</tt></pre>
 
 <p>To draw text in a font you use <a
-href="drawing.html#fl_font"><tt>fl_font(Fl_Font,size)</tt></a> to select
+href="drawing.html#font"><tt>fltk::font(fltk::Font,size)</tt></a> to select
 a font and scale, and then <a
-href="drawing.html#fl_draw"><tt>fl_draw(const char*)</tt></a> to draw
+href="drawing.html#draw"><tt>fltk::draw(const char*)</tt></a> to draw
 letters. See the documentaion on <a href="drawing.html">drawing
 functions</a>.
 
-<p>The following Fl_Font values are predefined. These names are
-historical, actually <tt>FL_HELVETICA</tt> will give the system's
-sans-serif font, <tt>FL_TIMES</tt> will give the system's serif font,
-and <tt>FL_COURIER</tt> will give the system's fixed-pitch
-font. <tt>FL_SCREEN</tt> will give a fixed-pitch font designed for
-computer i/o, it may match <tt>FL_COURIER</tt>. Avoid
-<tt>FL_SYMBOL</tt> and <tt>FL_ZAPF_DINGBATS</tt> for compatability
+<p>The following fltk::Font values are predefined. These names are
+historical, actually <tt>fltk::HELVETICA</tt> will give the system's
+sans-serif font, <tt>fltk::TIMES</tt> will give the system's serif font,
+and <tt>fltk::COURIER</tt> will give the system's fixed-pitch
+font. <tt>fltk::SCREEN</tt> will give a fixed-pitch font designed for
+computer i/o, it may match <tt>fltk::COURIER</tt>. Avoid
+<tt>fltk::SYMBOL</tt> and <tt>fltk::ZAPF_DINGBATS</tt> for compatability
 with future versions of fltk.
 
 <ul>
-<li><tt>FL_HELVETICA</tt> (Ariel on Win32)
-<li><tt>FL_HELVETICA_BOLD</tt>
-<li><tt>FL_HELVETICA_ITALIC</tt>
-<li><tt>FL_HELVETICA_BOLD_ITALIC</tt>
-<li><tt>FL_COURIER</tt>
-<li><tt>FL_COURIER_BOLD</tt>
-<li><tt>FL_COURIER_ITALIC</tt>
-<li><tt>FL_COURIER_BOLD_ITALIC</tt>
-<li><tt>FL_TIMES</tt>
-<li><tt>FL_TIMES_BOLD</tt>
-<li><tt>FL_TIMES_ITALIC</tt>
-<li><tt>FL_TIMES_BOLD_ITALIC</tt>
-<li><tt>FL_SCREEN</tt> (Terminal style font)
-<li><tt>FL_SCREEN_BOLD</tt>
-<li><tt>FL_SYMBOL</tt>
-<li><tt>FL_ZAPF_DINGBATS</tt> (Wingdings font on Win32!)
+<li><tt>fltk::HELVETICA</tt> (Ariel on Win32)
+<li><tt>fltk::HELVETICA_BOLD</tt>
+<li><tt>fltk::HELVETICA_ITALIC</tt>
+<li><tt>fltk::HELVETICA_BOLD_ITALIC</tt>
+<li><tt>fltk::COURIER</tt>
+<li><tt>fltk::COURIER_BOLD</tt>
+<li><tt>fltk::COURIER_ITALIC</tt>
+<li><tt>fltk::COURIER_BOLD_ITALIC</tt>
+<li><tt>fltk::TIMES</tt>
+<li><tt>fltk::TIMES_BOLD</tt>
+<li><tt>fltk::TIMES_ITALIC</tt>
+<li><tt>fltk::TIMES_BOLD_ITALIC</tt>
+<li><tt>fltk::SCREEN</tt> (Terminal style font)
+<li><tt>fltk::SCREEN_BOLD</tt>
+<li><tt>fltk::SYMBOL</tt>
+<li><tt>fltk::ZAPF_DINGBATS</tt> (Wingdings font on Win32!)
 </ul>
 
 <h3>Methods</h3>
 
-<h4><a name=bold>Fl_Font_* Fl_Font_::bold();
-<br><a name=italic>Fl_Font_* Fl_Font_::italic();</h4>
+<h4><a name=bold>fltk::Font_* fltk::Font_::bold();
+<br><a name=italic>fltk::Font_* fltk::Font_::italic();</h4>
 
 Pointers to the bold and italic versions of this font.
-<tt>FL_HELVETICA->bold()</tt> is the same as
-<tt>FL_HELVETICA_BOLD</tt>, <tt>FL_TIMES->bold()->italic()</tt> is the
-same as <tt>FL_TIMES_BOLD_ITALIC</tt>.
+<tt>fltk::HELVETICA->bold()</tt> is the same as
+<tt>fltk::HELVETICA_BOLD</tt>, <tt>fltk::TIMES->bold()->italic()</tt> is the
+same as <tt>fltk::TIMES_BOLD_ITALIC</tt>.
 
 <p>These are never null. If this font has no bold or italic version
-then these are circular pointers.  Thus <tt>FL_TIMES_BOLD->bold()</tt>
-is the same as <tt>FL_TIMES_BOLD</tt> and <tt>FL_SYMBOL->bold()</tt>
-is the same as <tt>FL_SYMBOL</tt>.
+then these are circular pointers.  Thus <tt>fltk::TIMES_BOLD->bold()</tt>
+is the same as <tt>fltk::TIMES_BOLD</tt> and <tt>fltk::SYMBOL->bold()</tt>
+is the same as <tt>fltk::SYMBOL</tt>.
 
-<h4><a name=system_name>const char* Fl_Font_::system_name()</h4>
+<h4><a name=system_name>const char* fltk::Font_::system_name()</h4>
 
 Returns a string that identifies the font in a system-specific
 manner.  About all that can be said about it is that it is different
@@ -69,52 +69,52 @@ for every font (two different fonts may return the same name()).  This
 string is not portable, even between different machines running the
 same operating system.
 
-<h4><a name=name>const char* Fl_Font_::name(int* attributes = 0)</h4>
+<h4><a name=name>const char* fltk::Font_::name(int* attributes = 0)</h4>
 
 Returns the name of the font.  The return value points to a static
 buffer that is overwritten each call (so copy the string if you want
 to keep it).
 
 <P>The integer pointed to by <tt>attributes</tt> is set to zero,
-<tt>FL_BOLD</tt> or <tt>FL_ITALIC</tt> or <tt>FL_BOLD|FL_ITALIC</tt>.
+<tt>fltk::BOLD</tt> or <tt>fltk::ITALIC</tt> or <tt>fltk::BOLD|fltk::ITALIC</tt>.
 If this pointer is null then the attributes are indicated by adding
 a space and "bold" or "italic" to the name.
 
-<h4><a name=encodings>int Fl_Font_::encodings(const char** &amp;array) const;</h4>
+<h4><a name=encodings>int fltk::Font_::encodings(const char** &amp;array) const;</h4>
 
 Sets <i>array</i> to point at a list of encoding names.  The return
 value is the length of this array.  Each string identifies an
 "encoding" that is supported by this font.  These strings may be
-passed to the <a href=drawing.html#fl_encoding><TT>fl_encoding()</TT></a> to
+passed to the <a href=drawing.html#encoding><TT>fltk::encoding()</TT></a> to
 select what characters the first 256 codes print. A zero length array
 may be returned, this indicates that the font will print the same no
 matter what encoding is set.
 
-<h4><a name=sizes>int Fl_Font_::sizes(int *&amp;array) const;</h4>
+<h4><a name=sizes>int fltk::Font_::sizes(int *&amp;array) const;</h4>
 
 Sets <i>array</i> to point at a list of sizes.  The return value is
 the length of this array.  The sizes are sorted from smallest to
 largest and indicate what sizes can be given to <a
-href="drawing.html#fl_font"><TT>fl_font()</TT></a> that will be matched
-exactly (<TT>fl_font()</TT> will pick the closest size for other
+href="drawing.html#font"><TT>fltk::font()</TT></a> that will be matched
+exactly (<TT>fltk::font()</TT> will pick the closest size for other
 sizes).  A zero in the first location of the array indicates a
 scalable font, where any size works, although the array may list sizes
 that work "better" than others.  The returned array points at a static
 buffer that is overwritten each call, so you want to copy it if you
 plan to keep it.
 
-<h4><a name=fl_find_font>Fl_Font fl_find_font(const char* name, int attributes = 0);</h4>
+<h4><a name=find_font>fltk::Font fltk::find_font(const char* name, int attributes = 0);</h4>
 
 Find a font with the given "nice" name.  You can get bold and italic
 by adding a space and "bold" or "italic" (or both) to the name, or by
 passing them as the attributes.  Case is ignored and fltk will accept
 some variations in the font name.
 
-<p>The current implementation calls <tt>fl_list_fonts()</tt> and then
+<p>The current implementation calls <tt>fltk::list_fonts()</tt> and then
 does a binary search for the font in it.  This can make the first call
 pretty slow, especially on X.
 
-<h4><a name=fl_list_fonts>int fl_list_fonts(Fl_Font*& arrayp);</h4>
+<h4><a name=list_fonts>int fltk::list_fonts(fltk::Font*& arrayp);</h4>
 
 This allocates and fills in an array containing every font on the
 server.  The location <i>arrayp</i> is set to a pointer to this array,

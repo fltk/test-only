@@ -1,21 +1,21 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Pack</title></head><body>
+<title>class fltk::Pack</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Pack</h2>
+<h2>class fltk::Pack</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
 
 <pre>
-<A href=Fl_Group.html>Fl_Group</A>
+<A href=FlGroup.html>fltk::Group</A>
    |
-   +----<B>Fl_Pack</B>
+   +----<B>fltk::Pack</B>
 </pre>
 
 <h3>Include Files</h3>
 
 <pre>
-#include &lt;fltk/Fl_Pack.h&gt;
+#include &lt;fltk/Pack.h&gt;
 </pre>
 
 <h3>Description</h3>
@@ -27,7 +27,7 @@ similar to layout widgets used by TK and some other toolkits.
 <p><center><img src="Fl_Pack.gif"></center>
 
 <p>In the above image the widgets 1,4,7, and 8 have the
-<tt>FL_PACK_VERTICAL</tt> bit on in their <a
+<tt>fltk::PACK_VERTICAL</tt> bit on in their <a
 href="Fl_Widget.html#flags">flags()</a>. The widgets are
 numbered with the order they were added to the pack.
 
@@ -36,20 +36,20 @@ changed and the other left alone) to completely fill the remaining
 space on one edge of the pack and placed against all the previous
 widgets on that edge.
 
-<p>Any widget with the <tt>FL_PACK_VERTICAL</tt> bit (8) set in the <a
+<p>Any widget with the <tt>fltk::PACK_VERTICAL</tt> bit (8) set in the <a
 href="Fl_Widget.html#flags">flags()</a> are placed against the left or
 right edge, otherwise against the top or bottom edge.  (If <a
 href="Fl_Widget.html#type">type()</a> of the pack is set to
-<tt>Fl_Pack::HORIZONTAL</tt> then it will "pack horzontally" which
+<tt>fltk::Pack::HORIZONTAL</tt> then it will "pack horzontally" which
 means that all widgets are packed against the left or right edges,
-whether or not they have <tt>FL_PACK_VERTICAL</tt> turned on)
+whether or not they have <tt>fltk::PACK_VERTICAL</tt> turned on)
 
 <p>All widgets before the <a
-href="Fl_Group.html#resizable">resizable()</a> widget are placed
+href="FlGroup.html#resizable">resizable()</a> widget are placed
 against the top and left edge, all widgets after the <a
-href="Fl_Group.html#resizable">resizable()</a> widget are placed
+href="FlGroup.html#resizable">resizable()</a> widget are placed
 against the bottom and right edge in backwards order.  If the <a
-href="Fl_Group.html#resizable">resizable()</a> is not set, all widgets
+href="FlGroup.html#resizable">resizable()</a> is not set, all widgets
 are placed against the top and left edge, and the pack itself resizes
 to surround them. Such a pack must be imbedded in another pack or be
 the only child of a window so that this resizing can be used to layout
@@ -58,10 +58,10 @@ the parent widget.
 <p>If any child changes size the pack automatically re-layouts and
 possibly changes it's own size to accomodate it. If you add, move,
 remove, hide, or show a child widget, or change the
-<tt>FL_PACK_VERTICAL</tt> flag, you should call <a
+<tt>fltk::PACK_VERTICAL</tt> flag, you should call <a
 href="Fl_Widget.html#relayout">relayout()</a> on the pack yourself.
 
-<p>The default box is <tt>FL_FLAT_BOX</tt>. If you set it to
+<p>The default box is <tt>fltk::FLAT_BOX</tt>. If you set it to
 something else the border of the box is drawn and the widgets are
 packed against the inside of this border.
 
@@ -71,26 +71,26 @@ packed against the inside of this border.
 <table width=90%>
 <tr><td align=left valign=top>
 <ul>
-<li><a href=#Fl_Pack>Fl_Pack</a></li>
-<li><a href=#~Fl_Pack>~Fl_Pack</a></li>
+<li><a href=#Pack>fltk::Pack</a></li>
+<li><a href=#~fltk::Pack>~fltk::Pack</a></li>
 <li><a href=#spacing>spacing</a></li>
 </ul>
 </td></tr>
 </table>
 </center>
 
-<a name=Fl_Pack><h4>Fl_Pack::Fl_Pack(int x, int y, int w, int h, const char *label = 0)</h4></a>
+<a name=Pack><h4>fltk::Pack::Pack(int x, int y, int w, int h, const char *label = 0)</h4></a>
 
-Creates a new empty Fl_Pack.
+Creates a new empty fltk::Pack.
 
-<a name=~Fl_Pack><h4>virtual Fl_Pack::~Fl_Pack()</h4></a>
+<a name=~Pack><h4>virtual fltk::Pack::~fltk::Pack()</h4></a>
 
 Like all groups, the destructor <I>also deletes all the
 children</I>. This allows a whole tree to be deleted at once, without
 having to keep a pointer to all the children in the user code.
 
-<a name=spacing><h4>int Fl_Pack::spacing() const
-<br>void Fl_Pack::spacing(int)</h4></a>
+<a name=spacing><h4>int fltk::Pack::spacing() const
+<br>void fltk::Pack::spacing(int)</h4></a>
 
 Gets or sets the number of extra pixels of blank space that are added
 between each child widget.

@@ -1,29 +1,29 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Valuator</title></head><body>
+<title>class fltk::Valuator</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Valuator</h2>
+<h2>class fltk::Valuator</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
 
 <pre>
-<A href=Fl_Widget.html>Fl_Widget</A>
+<A href=Fl_Widget.html>fltk::Widget</A>
    |
-   +----<B>Fl_Valuator</B>
+   +----<B>fltk::Valuator</B>
            |
-           +----<A href=Fl_Dial.html>Fl_Dial</A>, <A href=Fl_Roller.html>Fl_Roller</A>,
-                <A href=Fl_Slider.html>Fl_Slider</A>, <A href=Fl_Value_Input.html>Fl_Value_Input</A>
+           +----<A href=Fl_Dial.html>fltk::Dial</A>, <A href=Fl_Roller.html>fltk::Roller</A>,
+                <A href=Fl_Slider.html>fltk::Slider</A>, <A href=Fl_ValueInput.html>fltk::ValueInput</A>
 </pre>
 
 <h3>Include Files</h3>
 
 <pre>
-#include &lt;fltk/Fl_Valuator.h&gt;
+#include &lt;fltk/Valuator.h&gt;
 </pre>
 
 <h3>Description</h3>
 
-The <TT>Fl_Valuator</TT> class controls a single floating-point value 
+The <TT>fltk::Valuator</TT> class controls a single floating-point value 
 and provides a consistent interface to set the <a
 href=#value>value()</a>, <a
 href=#range>range()</a>, and <a href=#step>step()</a>, 
@@ -37,7 +37,7 @@ and insures that callbacks are done the same for every object.
 are further differentiated by setting the <A href=Fl_Widget.html#type><TT>
 type()</TT></a> of the widget to the symbolic value labeling the 
 widget.  The ones labelled &quot;0&quot; are the default versions with a <TT>
-type(0)</TT>.  For consistency the symbol <TT>FL_VERTICAL</TT> is 
+type(0)</TT>.  For consistency the symbol <TT>fltk::VERTICAL</TT> is 
 defined as zero.</P>
 
 <h3>Methods</h3>
@@ -46,8 +46,8 @@ defined as zero.</P>
 <table width=90%>
 <tr><td align=left valign=top>
 <ul>
-<li><a href=#Fl_Valuator>Fl_Valuator</a></li>
-<li><a href=#~Fl_Valuator>~Fl_Valuator</a></li>
+<li><a href=#Valuator>fltk::Valuator</a></li>
+<li><a href=#~fltk::Valuator>~fltk::Valuator</a></li>
 <li><a href=#format>format</a></li>
 </ul>
 </TD><TD align=left valign=top>
@@ -71,29 +71,29 @@ defined as zero.</P>
 </table>
 </center>
 
-<h4><a name=Fl_Valuator>Fl_Valuator::Fl_Valuator(int x, int 
+<h4><a name=Valuator>fltk::Valuator::Valuator(int x, int 
 y, int w, int h, const char *label = 0)</a></h4>
 
-Creates a new <TT>Fl_Valuator</TT> widget using the given position, 
-size, and label string. The default boxtype is <TT>FL_NO_BOX</TT>. 
+Creates a new <TT>fltk::Valuator</TT> widget using the given position, 
+size, and label string. The default boxtype is <TT>fltk::NO_BOX</TT>. 
 
-<h4><a name=~Fl_Valuator>virtual Fl_Valuator::~Fl_Valuator()</a>
+<h4><a name=~Valuator>virtual fltk::Valuator::~fltk::Valuator()</a>
 </h4>
 
 Destroys the valuator. 
 
-<h4><a name=value>double Fl_Valuator::value() const
-<BR> int Fl_Valuator::value(double)</a></h4>
+<h4><a name=value>double fltk::Valuator::value() const
+<BR> int fltk::Valuator::value(double)</a></h4>
 
 Get or set the current value.  The new value is stored
 <i>unchanged</i>, even if it is outside the range or not a multiple of
 step().
 
-<h4><a name=minimum>float Fl_Valuator::minimum() const
-<BR> void Fl_Valuator::minimum(double)</a>
-<br><a name=maximum>double Fl_Valuator::maximum() const
-<BR> void Fl_Valuator::maximum(double)</a>
-<br><a name=range>void Fl_Valuator::range(double min, double max);</a></h4>
+<h4><a name=minimum>float fltk::Valuator::minimum() const
+<BR> void fltk::Valuator::minimum(double)</a>
+<br><a name=maximum>double fltk::Valuator::maximum() const
+<BR> void fltk::Valuator::maximum(double)</a>
+<br><a name=range>void fltk::Valuator::range(double min, double max);</a></h4>
 
 Sets the minimum and maximum values for the valuator. For most
 subclasses the user cannot move the value outside this range if it
@@ -110,11 +110,11 @@ the filled sliders is filled.</p>
 <P>You probably need to <tt>redraw()</tt> the widget after changing
 the range.</p>
 
-<h4><a name=step>float Fl_Valuator::step() const
-<BR>void Fl_Valuator::step(double)</a></h4>
+<h4><a name=step>float fltk::Valuator::step() const
+<BR>void fltk::Valuator::step(double)</a></h4>
 
 Get or set the step value. As the user moves the mouse the value is
-rounded to a multiple of this. Fl_Slider is very intelligent and tries
+rounded to a multiple of this. fltk::Slider is very intelligent and tries
 to round to a power of 10 times 1, 2, or 5 times this, so you may want
 to try setting a very small step like .0001.
 
@@ -123,29 +123,29 @@ results in the smoothest controller movement but this is not
 recommended if you want to present the resulting numbers to the user
 as text, because they will have useless extra digits of precision.
 
-<p>For some widgets like Fl_Roller this is also the distance the value
+<p>For some widgets like fltk::Roller this is also the distance the value
 moves when the user drags the mouse 1 pixel. In these cases if step()
 is zero then it acts like it is .01.
 
 <p>Negative values produce undocumented results.
 
-<h4><a name=linesize>float Fl_Valuator::linesize() const
-<BR>void Fl_Valuator::linesize(double)</a></h4>
+<h4><a name=linesize>float fltk::Valuator::linesize() const
+<BR>void fltk::Valuator::linesize(double)</a></h4>
 
 The linesize is the amount the valuator moves in response to an arrow
 key, or the user clicking an up/down button.  The default value is 1.
 Negative values and values that are not a multiple of step() produce
 undocumented results.
 
-<h4><a name=pagesize>float Fl_Valuator::pagesize() const
-<BR>void Fl_Valuator::pagesize(double)</a></h4>
+<h4><a name=pagesize>float fltk::Valuator::pagesize() const
+<BR>void fltk::Valuator::pagesize(double)</a></h4>
 
 The pagesize is the amount the valuator moves in response to a page
 up/down key, or shift-arrow key, or shift+clicking an up/down
 button. The default value is 10.  Negative values and values that are
 not a multiple of linesize() produce undocumented results.
 
-<h4><a name=format>int Fl_Valuator::format(char*)</a></h4>
+<h4><a name=format>int fltk::Valuator::format(char*)</a></h4>
 
 Format the passed value to show enough digits for the current <a
 href="#step">step</a> value.  If the step has been set to zero then it
@@ -153,22 +153,22 @@ does a <TT>%g</TT> format. If step is greater or equal to 1 it does
 <tt>%d</tt> format. The characters are written into the passed buffer
 (which must be long enough, 40 characters is safe).
 
-<h4><a name=handle>int Fl_Valuator::handle(int event)</a></h4>
+<h4><a name=handle>int fltk::Valuator::handle(int event)</a></h4>
 
 The default handler turns arrow and page up/down keystrokes, and
 movements of the mouse wheel, into movements of the value. It is up to
 the subclass to filter out events it does not want to respond to
 before calling this.
 
-<a name=previous_value><h4>double Fl_Valuator::previous_value() const (static,protected) </h4></a>
+<a name=previous_value><h4>double fltk::Valuator::previous_value() const (static,protected) </h4></a>
 
 Value saved when <a href=#handle_push>handle_push()</a> was last called.
 
-<a name=handle_push><h4>void Fl_Valuator::handle_push() (protected)</h4></a>
+<a name=handle_push><h4>void fltk::Valuator::handle_push() (protected)</h4></a>
 
 Subclasses should call this when the user starts to change the value.
 
-<a name=handle_drag><h4>void Fl_Valuator::handle_drag(double newvalue); (protected)</h4></a>
+<a name=handle_drag><h4>void fltk::Valuator::handle_drag(double newvalue); (protected)</h4></a>
 
 Subclasses should call this as the user moves the value. The passed
 value is clamped to the range if previous_value() is inside the range,
@@ -176,16 +176,16 @@ and then it is rounded to the nearest multiple of step(), and then
 stored. This may call the callback if the new value is different than
 the old one.
 
-<a name=handle_release><h4>void Fl_Valuator::handle_release(); (protected)</h4></a>
+<a name=handle_release><h4>void fltk::Valuator::handle_release(); (protected)</h4></a>
 
 Subclasses should call this when the user stops moving the value. It may call
 the callback.
 
-<a name=value_damage><h4>void Fl_Valuator::value_damage(); (virtual, protected)</h4></a>
+<a name=value_damage><h4>void fltk::Valuator::value_damage(); (virtual, protected)</h4></a>
 
 Callback whenever value changes.
 
-<a name=set_value><h4>void Fl_Valuator::set_value(double v) (protected) </h4></a>
+<a name=set_value><h4>void fltk::Valuator::set_value(double v) (protected) </h4></a>
 
 Change the value() without calling <a href=#value_damage>value_damage()</a>.
 

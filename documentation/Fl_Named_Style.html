@@ -1,13 +1,13 @@
-<html><head><title>class Fl_Named_Style</title></head><body bgcolor=white>
+<html><head><title>class fltk::Named_Style</title></head><body bgcolor=white>
 <!-- NEW PAGE -->
-<h2>class Fl_Named_Style</h2>
+<h2>class fltk::Named_Style</h2>
 <hr>
 
-<h4>Fl_Named_Style(const char* name, void (*revert)(Fl_Style*), Fl_Style** pointer);</h4>
+<h4>fltk::Named_Style(const char* name, void (*revert)(fltk::Style*), fltk::Style** pointer);</h4>
 
-This subclass of <a href="Fl_Style.html"><tt>Fl_Style</tt></a> creates
+This subclass of <a href="Fl_Style.html"><tt>fltk::Style</tt></a> creates
 a style that can be returned by <a
-href="Fl_Style.html#find">Fl_Style::find()</a>. It also provides a
+href="Fl_Style.html#find">fltk::Style::find()</a>. It also provides a
 "revert" method that is used to restore the initial state so that
 themes can be switched.
 
@@ -30,15 +30,15 @@ program you can make a static instance of your style (rather than
 using new) and pass null as this pointer.
 
 <p>Here is an example of a class that wants the box to default to
-FL_ROUND_BOX:
+fltk::ROUND_BOX:
 
-<ul><pre><code>static void revert(Fl_Style* s) {
-  s->box = FL_ROUND_BOX;
+<ul><pre><code>static void revert(fltk::Style* s) {
+  s->box = fltk::ROUND_BOX;
 }
-static Fl_Named_Style* style = new Fl_Named_Style("MyWidget", revert, &style);
+static fltk::Named_Style* style = new fltk::Named_Style("MyWidget", revert, &style);
 
 MyWidget::MyWidget(int x, int y, int w, int h, const char *l)
-  : Fl_Widget(x,y,w,h,l)
+  : fltk::Widget(x,y,w,h,l)
 {
   style(::style);
 }</code></pre></ul>

@@ -1,21 +1,21 @@
 <html><head><link href="fltk.css" rel="stylesheet" type="text/css">
-<title>class Fl_Bar</title></head><body>
+<title>class fltk::Bar</title></head><body>
 <!-- NEW PAGE -->
-<h2>class Fl_Bar</h2>
+<h2>class fltk::Bar</h2>
 <hr>
 
 <h3>Class Hierarchy</h3>
 
 <pre>
-<A href=Fl_Group.html>Fl_Group</A>
+<A href=Fl_Group.html>fltk::Group</A>
    |
-   +----<B>Fl_Bar</B>
+   +----<B>fltk::Bar</B>
 </pre>
 
 <h3>Include Files</h3>
 
 <pre>
-#include &lt;fltk/Fl_Bar.h&gt;
+#include &lt;fltk/Bar.h&gt;
 </pre>
 
 <h3>Description</h3>
@@ -27,7 +27,7 @@ href="Fl_Widget.html#label">label()</a> (if any), and all child
 widgets are hidden and do not get any events. When opened the label
 disappears and all child widgets reappear.
 
-<p>This must be made a child of an <a href="Fl_Pack.html">Fl_Pack</a>
+<p>This must be made a child of an <a href="Fl_Pack.html">fltk::Pack</a>
 for the resizing to be useful.
 
 <p><center><img src="Fl_Bar.gif"></center>
@@ -35,10 +35,10 @@ for the resizing to be useful.
 
 <p>If <a
 href="Fl_Widget.html#type">type()</a> of the bar is set to
-<tt>Fl_Bar::VERTICAL</tt> then it will be a vertical strip with the
+<tt>fltk::Bar::VERTICAL</tt> then it will be a vertical strip with the
 control box at the top.
 
-<p>The default box is <tt>FL_FLAT_BOX</tt>. If there are several bars
+<p>The default box is <tt>fltk::FLAT_BOX</tt>. If there are several bars
 you probably need to change this in order to see the dividing lines
 between them.
 
@@ -48,8 +48,8 @@ between them.
 <table width=90%>
 <tr><td align=left valign=top>
 <ul>
-<li><a href=#Fl_Bar>Fl_Bar</a></li>
-<li><a href=#~Fl_Bar>~Fl_Bar</a></li>
+<li><a href=#Bar>fltk::Bar</a></li>
+<li><a href=#~fltk::Bar>~fltk::Bar</a></li>
 <li><a href=#opened>opened</a></li>
 <li><a href=#open>open</a></li>
 <li><a href=#close>close</a></li>
@@ -59,32 +59,32 @@ between them.
 </table>
 </center>
 
-<a name=Fl_Bar><h4>Fl_Bar::Fl_Bar(int x, int y, int w, int h, const char *label = 0)</h4></a>
+<a name=Bar><h4>fltk::Bar::Bar(int x, int y, int w, int h, const char *label = 0)</h4></a>
 
-Creates a new empty Fl_Bar.
+Creates a new empty fltk::Bar.
 
-<a name=~Fl_Bar><h4>virtual Fl_Bar::~Fl_Bar()</h4></a>
+<a name=~Bar><h4>virtual fltk::Bar::~fltk::Bar()</h4></a>
 
 Like all groups, the destructor <I>also deletes all the
 children</I>. This allows a whole tree to be deleted at once, without
 having to keep a pointer to all the children in the user code.
 
-<a name=opened><h4>bool Fl_Bar::opened() const
-<br>bool Fl_Bar::opened(bool)</h4></a>
+<a name=opened><h4>bool fltk::Bar::opened() const
+<br>bool fltk::Bar::opened(bool)</h4></a>
 
 True if the bar is opened, false if it is closed. Setting this value
 returns true if the new value is different than the old one.
 
-<a name=open><h4>bool Fl_Bar::open()</h4></a>
+<a name=open><h4>bool fltk::Bar::open()</h4></a>
 
 Same as <tt>opened(true)</tt>
 
-<a name=close><h4>bool Fl_Bar::close()</h4></a>
+<a name=close><h4>bool fltk::Bar::close()</h4></a>
 
 Same as <tt>opened(false)</tt>
 
-<a name=glyph_size><h4>int Fl_Bar::glyph_size() const
-<br>void Fl_Bar::glyph_size(int)</h4></a>
+<a name=glyph_size><h4>int fltk::Bar::glyph_size() const
+<br>void fltk::Bar::glyph_size(int)</h4></a>
 
 Get or set the width of the box (or the height if this is a vertical
 bar), this is also the thickness the bar resizes to when closed.
