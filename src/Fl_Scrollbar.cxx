@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.70 2004/06/11 08:07:18 spitzak Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.71 2004/06/24 21:22:30 xpxqx Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -220,9 +220,9 @@ int Scrollbar::handle(int event) {
     which_pushed = NOTHING;
     return 1;
   case MOUSEWHEEL: {
-    float n = (vertical() ? -event_dy() : event_dx())
+    double n = (vertical() ? -event_dy() : event_dx())
       * style()->wheel_scroll_lines() * linesize();
-    if (fabsf(n) > pagesize()) n = (n<0)?-pagesize():pagesize();
+    if (fabs(n) > pagesize()) n = (n<0)?-pagesize():pagesize();
     handle_drag(value()+n);
     return 1;
   }
@@ -313,5 +313,5 @@ Scrollbar::Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.70 2004/06/11 08:07:18 spitzak Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.71 2004/06/24 21:22:30 xpxqx Exp $".
 //
