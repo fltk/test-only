@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_fullscreen.cxx,v 1.25 2004/07/29 09:07:53 spitzak Exp $"
+// "$Id: Fl_Window_fullscreen.cxx,v 1.26 2004/10/19 06:17:11 spitzak Exp $"
 //
 // Fullscreen window support for the Fast Light Tool Kit (FLTK).
 //
@@ -30,180 +30,175 @@
 #include <fltk/x.h>
 using namespace fltk;
 
-#if USE_X11
-#if 0
-// Supposedly this tells the new X window managers to put this atop 
-// the taskbar. In our experiments there is no indication that this
-// produces any different behavior so I don't bother. New X window
-// managers seem to recognize attempts to resize to fullscreen size
-// and do the right thing.
-static void fsonoff(XWindow xwindow, bool onoff) {
-  static Atom _NET_WM_STATE;
-  static Atom _NET_WM_STATE_REMOVE;
-  static Atom _NET_WM_STATE_ADD;
-  static Atom _NET_WM_STATE_FULLSCREEN;
-  if (!_NET_WM_STATE) {
-#define MAX_ATOMS 30
-    Atom* atom_ptr[MAX_ATOMS];
-    char* names[MAX_ATOMS];
-    int i = 0;
-#define atom(a,b) atom_ptr[i] = &a; names[i] = b; i++
-    atom(_NET_WM_STATE		, "_NET_WM_STATE");
-    atom(_NET_WM_STATE_REMOVE	, "_NET_WM_STATE_REMOVE");
-    atom(_NET_WM_STATE_ADD	, "_NET_WM_STATE_ADD");
-    atom(_NET_WM_STATE_FULLSCREEN, "_NET_WM_STATE_FULLSCREEN");
-#undef atom
-    Atom atoms[MAX_ATOMS];
-    XInternAtoms(xdisplay, names, i, 0, atoms);
-    for (; i--;) *atom_ptr[i] = atoms[i];
-  }
-  XEvent e;
-  e.xany.type = ClientMessage;
-  e.xany.window = xwindow;
-  e.xclient.message_type = _NET_WM_STATE;
-  e.xclient.format = 32;
-  e.xclient.data.l[0] = onoff ? _NET_WM_STATE_ADD : _NET_WM_STATE_REMOVE;
-  e.xclient.data.l[1] = (long)_NET_WM_STATE_FULLSCREEN;
-  e.xclient.data.l[2] = (long)0;
-  e.xclient.data.l[3] = (long)0;
-  e.xclient.data.l[4] = (long)0;
-  XSendEvent(xdisplay, RootWindow(xdisplay, xscreen), 0,
-	     SubstructureNotifyMask|SubstructureRedirectMask, &e);
+static void innards(Window*, bool fullscreen, int X, int Y, int W, int H);
+
+/*! Make the window completely fill the \a monitor, without any window
+  manager border or taskbar or anything else visible. Use
+  fullscreen_off() to undo this.
+
+  Known bugs:
+
+  - Older versions of both Linux and Windows will refuse to hide the
+  taskbar. Proposed solutions for this tend to have detrimental
+  effects, such as making it impossible to switch tasks or to put
+  another window atop this one. It appears that newer versions of both
+  Linux and Windows work correctly, so we will not fix this.
+
+  - Many older X window managers will refuse to position the window
+  correctly and instead place them so the top-left of the border
+  in the screen corner. You may be able to fix this by calling
+  hide() first, then fullscreen(), then show(). We don't do this
+  because it causes newer window systems to blink unnecessarily.
+
+  - Some X window managers will raise the window when you change the size.
+
+  - Calling resize() before calling fullscreen_off() will result in
+  unpredictable effects, and should be avoided.
+
+*/
+void Window::fullscreen(const Monitor& monitor) {
+  set_flag(NOBORDER);
+  innards(this, true, monitor.x(), monitor.y(), monitor.w(), monitor.h());
 }
-#endif
+
+/*! Chooses the Monitor that the center of the window is on to be
+  the one to resize to. */
+void Window::fullscreen() {
+  fullscreen(Monitor::find(x()+w()/2, y()+h()/2));
+}
+
+/*! Turns off any side effects of fullscreen(), then does resize(x,y,w,h). */
+void Window::fullscreen_off(int X,int Y,int W,int H) {
+  clear_flag(Window::NOBORDER);
+  innards(this, false, X, Y, W, H);
+}
+
+// Does a resize(x,y,w,h) but also does other crap necessary to convince
+// the system that the window is full-screen:
+static void innards(Window* window, bool fullscreen, int X, int Y, int W, int H) {
+  if (window->shown()) {
+
+#if USE_X11
+    // This will make some window managers obey the border being turned on/off.
+    // Most other modern window managers will allow the border to be placed
+    // off-screen:
+    CreatedWindow::find(window)->sendxjunk();
+
+# if 0
+    // Supposedly this tells the new X window managers to put this atop 
+    // the taskbar. My tests have shown absolutly zero effect, so this is
+    // either wrong or the window managers are ignoreing it. Newer X
+    // window managers seem to work without this, they probably recognize
+    // attempts to make the window the size of the screen
+    static Atom _NET_WM_STATE;
+    static Atom _NET_WM_STATE_REMOVE;
+    static Atom _NET_WM_STATE_ADD;
+    static Atom _NET_WM_STATE_FULLSCREEN;
+    if (!_NET_WM_STATE) {
+# define MAX_ATOMS 30
+      Atom* atom_ptr[MAX_ATOMS];
+      char* names[MAX_ATOMS];
+      int i = 0;
+# define atom(a,b) atom_ptr[i] = &a; names[i] = b; i++
+      atom(_NET_WM_STATE		, "_NET_WM_STATE");
+      atom(_NET_WM_STATE_REMOVE	, "_NET_WM_STATE_REMOVE");
+      atom(_NET_WM_STATE_ADD	, "_NET_WM_STATE_ADD");
+      atom(_NET_WM_STATE_FULLSCREEN, "_NET_WM_STATE_FULLSCREEN");
+# undef atom
+      Atom atoms[MAX_ATOMS];
+      XInternAtoms(xdisplay, names, i, 0, atoms);
+      for (; i--;) *atom_ptr[i] = atoms[i];
+    }
+    XEvent e;
+    e.xany.type = ClientMessage;
+    e.xany.window = xid(window);
+    e.xclient.message_type = _NET_WM_STATE;
+    e.xclient.format = 32;
+    e.xclient.data.l[0] = fullscreen ? _NET_WM_STATE_ADD : _NET_WM_STATE_REMOVE;
+    e.xclient.data.l[1] = (long)_NET_WM_STATE_FULLSCREEN;
+    e.xclient.data.l[2] = (long)0;
+    e.xclient.data.l[3] = (long)0;
+    e.xclient.data.l[4] = (long)0;
+    XSendEvent(xdisplay, RootWindow(xdisplay, xscreen), 0,
+	       SubstructureNotifyMask|SubstructureRedirectMask, &e);
+# endif
 
 #elif defined(_WIN32)
 
-# define HIDE_TASKBAR 1
+# if 1
+    // Disable caption & borders
+    LONG flags = GetWindowLong(xid(window), GWL_STYLE);
+    if (fullscreen)
+      flags &= ~(WS_BORDER | WS_CAPTION | WS_THICKFRAME);
+    else
+      flags |= (WS_BORDER | WS_CAPTION | WS_THICKFRAME);
+    SetWindowLong(xid(window), GWL_STYLE, flags);
+    // This appears to be necessary on WinXP:
+    if (fullscreen) SetWindowPos(xid(window), 0, X,Y,W,H, 0);
+# endif
 
-# if HIDE_TASKBAR
+# if 0
+    // Hide the taskbar window. This really screws things up if your
+    // program hangs, and appears unncessary on W2K and XP.
 #  ifdef _WIN32_WCE
-// Windows CE taskbar
+    // Windows CE taskbar
 #   define TASKBAR_CLASS TEXT("HHTaskBar")
 #  elif _WIN32
-// Desktop windows taskbar
+    // Desktop windows taskbar
 #   define TASKBAR_CLASS TEXT("Shell_TrayWnd")
 #  endif
+    // Find taskbar and hide it
+    HWND taskbar = FindWindow(TASKBAR_CLASS, NULL);
+    if (taskbar) ShowWindow(taskbar, fullscreen ? SW_HIDE : SW_RESTORE);
 # endif
-#endif
 
-/*! Makes the window completely fill the Monitor, without any window
-  manager border or taskbar or anything else visible.
-
-  You must use fullscreen_off() to undo this. resize() may appear to
-  work but it may not turn off the necessary flags!
-
-  Many older X window managers will not work and insist the border be
-  visible.  You may be able to avoid this bug by calling destroy()
-  first, then fullscreen(), and then show(). You will probably also
-  have to do the same thing when calling fullscreen_off().
-
-  Older versions of KDE, Gnome, and Windows would not hide the
-  taskbar. It appears newer versions recognize attempts to make
-  full-screen windows and do hide the taskbar. (I tried the
-  _NET_WM_STATE_FULLSCREEN that is supposed to hide the taskbar on
-  older KDE and Gnome, but saw no sign that it worked. On older
-  Windows it is apparently impossible to hide the taskbar without
-  using DirectX, which would require all drawing code to change)
-*/
-void Window::fullscreen() {
-  const Monitor& monitor = Monitor::find(x()+w()/2, y()+h()/2);
-
-#if USE_X11
-  // Most X window managers will not place the window where we want it unless
-  // the border is turned off. And most (all except Irix 4DWM, as far as I
-  // can tell) will ignore attempts to change the border unless the window
-  // is unmapped. Telling the window manager about the border changing
-  // is done by i->sendxjunk(). Order is somewhat peculiar, we need to
-  // have the window mapped before calling resize or some window managers
-  // (KDE) ignore the positioning information:
-  clear_border();
-  if (shown()) i->sendxjunk();
-  resize(monitor.x(), monitor.y(), monitor.w(), monitor.h());
-  //if (shown()) fsonoff(i->xid, true);
-
-#elif defined(_WIN32)
-  // Disable caption & borders
-  LONG flags = GetWindowLong(xid(this), GWL_STYLE);
-  flags &= ~(WS_BORDER | WS_CAPTION | WS_THICKFRAME);
-  SetWindowLong(xid(this), GWL_STYLE, flags);
-# if HIDE_TASKBAR
-  // Find taskbar and hide it
-  HWND taskbar = FindWindow(TASKBAR_CLASS, NULL);
-  if (taskbar) ShowWindow(taskbar, SW_HIDE);
-# else
-  // Make window topmost, so it goes top of taskbar
-  // This will still keep modal and child_of windows top of this.
-  SetWindowPos(xid(this), HWND_TOPMOST, 0,0,0,0,SWP_NOSIZE|SWP_NOMOVE);
+# if 0
+    // Make window topmost, so it goes top of taskbar
+    // This will still keep modal and child_of windows top of this.
+    // WAS: not according to my tests. Already-existing child windows
+    // do not raise. Also makes it impossible to get out if your program
+    // wedges, alt+tab will "switch" but this window remains on top.
+    SetWindowPos(xid(window), HWND_TOPMOST, X,Y,W,H,0);
+    // Used to do 0,0,0,0,SWP_NOSIZE|SWP_NOMOVE)
 # endif
-  clear_border(); // Necessary to make CreatedWindow::borders return dx,dy,dw,dh 0
-  resize(monitor.x(), monitor.y(), monitor.w(), monitor.h());
 
-#else
-  resize(monitor.x(), monitor.y(), monitor.w(), monitor.h());
 #endif
-}
+  }
 
-/*! Turns off any side effects of fullscreen() and does resize(x,y,w,h). */
-void Window::fullscreen_off(int X,int Y,int W,int H) {
-  // This function must exactly undo whatever fullscreen() did
-
-#if USE_X11
-  clear_flag(Window::NOBORDER);
-  //if (shown()) fsonoff(i->xid, false);
-  if (shown()) i->sendxjunk();
-  resize(X, Y, W, H);
-
-#elif defined(_WIN32)
-  // Restore window flags
-  LONG flags = GetWindowLong(xid(this), GWL_STYLE);
-  flags |= (WS_BORDER | WS_CAPTION | WS_THICKFRAME);
-  SetWindowLong(xid(this), GWL_STYLE, flags);
-# if HIDE_TASKBAR
-  // Find taskbar and show it again
-  HWND taskbar = FindWindow(TASKBAR_CLASS, NULL);
-  if (taskbar) ShowWindow(taskbar, SW_RESTORE);
-# else
-  // We are not topmost anymore
-  SetWindowPos(xid(this), HWND_NOTOPMOST, 0,0,0,0,SWP_NOSIZE|SWP_NOMOVE);
-# endif
-  clear_flag(Window::NOBORDER); //Borders are back
-  resize(X, Y, W, H);
-
-#else
-  resize(X, Y, W, H);
-#endif
+  window->resize(X, Y, W, H);
 }
 
 /*! void Window::clear_border()
-  You may turn off the window manager border before calling show() on
-  the window the first time. On most window managers this means the
-  user cannot move, iconize, or resize the window (unless your program
-  does it).
+  This may only be called on a newly constructed window before the
+  first call to show().  There will not be any visible border around
+  the window, the drawable area extends right to the edge. On most
+  systems this means the user cannot move, iconize, or resize the
+  window (unless your program does it).
 */
 
 /*! bool Window::border() const
-  Returns false if clear_border() has been called. */
+  Returns false if clear_border() has been called.
+*/
 
 /*! bool Window::set_override()
 
-  Windows with this property set will use the exact position and size
-  set by the programmer (will not be handled by the window manager)
-  and will not have an entry in the task list. This will also clear
-  the window's border like clear_border() above. This is used by the
-  fltk menus and tooltips.
+  This may only be called on a newly constructed window before the
+  first call to show(). There will be no border, similar to
+  clear_border(). In addition, the window will get the exact position
+  and size set by the program and will not have an entry in the task
+  bar. This is used by the fltk menus and tooltips.
 
-  On X this causes "override redirect". This is only good for
-  short-lived windows as it can confuse X window managers, however
-  this is the only reliable and fast way to do it. This also turns on
-  "save under" which on many X servers (like XFree86) can make the
-  window disappear much faster by having the server rememeber what was
-  behind it.
+  On X this causes "override redirect". On most X systems this is
+  only a good idea for short-lived windows such as menus and tooltips,
+  and it forces the window to be atop all other windows. It also turns
+  on "save under" on the assumption that the window is short-lived.
+
 */
 
 /*! bool Window::override() const
-  Returns true if set_override() has been called. */
+  Returns true if set_override() has been called.
+*/
 
 //
-// End of "$Id: Fl_Window_fullscreen.cxx,v 1.25 2004/07/29 09:07:53 spitzak Exp $".
+// End of "$Id: Fl_Window_fullscreen.cxx,v 1.26 2004/10/19 06:17:11 spitzak Exp $".
 //

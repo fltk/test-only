@@ -1,5 +1,5 @@
 //
-// "$Id: Window.h,v 1.5 2004/06/04 08:58:03 spitzak Exp $"
+// "$Id: Window.h,v 1.6 2004/10/19 06:17:10 spitzak Exp $"
 //
 // Window widget. This must be the outermost group. You can also put
 // them inside other widgets to use the system's window hierarchy.
@@ -35,6 +35,7 @@ namespace fltk {
 const int USEDEFAULT = ((int)0x80000000); // same as Win32 value
 
 class CreatedWindow;
+class Monitor;
 
 class FL_API Window : public Group {
 public:
@@ -90,6 +91,7 @@ public:
   virtual void destroy();
 
   void fullscreen();
+  void fullscreen(const Monitor&);
   void fullscreen_off(int,int,int,int);
 
   static const Window *current() {return current_;}
@@ -138,5 +140,5 @@ private:
 #endif
 
 //
-// End of "$Id: Window.h,v 1.5 2004/06/04 08:58:03 spitzak Exp $".
+// End of "$Id: Window.h,v 1.6 2004/10/19 06:17:10 spitzak Exp $".
 //
