@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.22 1999/05/06 05:52:23 carl Exp $"
+# "$Id: Makefile,v 1.23 1999/06/20 15:24:32 mike Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -191,10 +191,11 @@ all:	$(LIBRARY) $(DSONAME)
 
 $(LIBRARY): $(OBJECTS)
 	@echo $(LIBCOMMAND) $@ ...
+	@/bin/rm -f $@
 	@$(LIBCOMMAND) $@ $(OBJECTS)
 	@$(RANLIB) $@
 
-$(DSONAME): $(OBJECTS)
+libfltk.so.2 libfltk.sl.2: $(OBJECTS)
 	@echo $(DSOCOMMAND) $@ ...
 	@$(DSOCOMMAND) $@ $(OBJECTS)
 
@@ -221,17 +222,19 @@ install: $(LIBRARY) $(DSONAME)
 	@rm -f $(libdir)/$(LIBNAME)
 	@-cp $(LIBRARY) $(libdir)
 	@-chmod 644 $(libdir)/$(LIBNAME)
-	@if test "$(DSONAME)" = libfltk.so.1; then\
-		rm -f $(libdir)/libfltk.so*;\
-		cp libfltk.so.1 $(libdir); \
-		chmod 755 $(libdir)/libfltk.so.1; \
-		ln -s $(libdir)/libfltk.so.1 $(libdir)/libfltk.so;\
+	@if test "$(DSONAME)" = libfltk.so.2; then\
+		rm -f $(libdir)/libfltk.so.2;\
+		rm -f $(libdir)/libfltk.so;\
+		cp libfltk.so.2 $(libdir); \
+		chmod 755 $(libdir)/libfltk.so.2; \
+		ln -s $(libdir)/libfltk.so.2 $(libdir)/libfltk.so;\
 	fi
-	@if test "$(DSONAME)" = libfltk.sl.1; then\
-		rm -f $(libdir)/libfltk.sl*;\
-		cp libfltk.sl.1 $(libdir); \
-		chmod 755 $(libdir)/libfltk.sl.1; \
-		ln -s $(libdir)/libfltk.sl.1 $(libdir)/libfltk.sl;\
+	@if test "$(DSONAME)" = libfltk.sl.2; then\
+		rm -f $(libdir)/libfltk.sl.2;\
+		rm -f $(libdir)/libfltk.sl;\
+		cp libfltk.sl.2 $(libdir); \
+		chmod 755 $(libdir)/libfltk.sl.2; \
+		ln -s $(libdir)/libfltk.sl.2 $(libdir)/libfltk.sl;\
 	fi
 	@echo "Installing include files..."
 	@-mkdir -p $(includedir)
@@ -246,5 +249,5 @@ install: $(LIBRARY) $(DSONAME)
 	@-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.22 1999/05/06 05:52:23 carl Exp $".
+# End of "$Id: Makefile,v 1.23 1999/06/20 15:24:32 mike Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.33 1999/05/07 21:04:56 carl Exp $"
+// "$Id: Fl_Menu.cxx,v 1.34 1999/06/20 15:24:30 mike Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -507,7 +507,7 @@ const Fl_Menu_Item* Fl_Menu_Item::find_shortcut(int* ip) const {
 struct menustate {
   const Fl_Menu_Item* current_item; // what mouse is pointing at
   int menu_number; // which menu it is in
-  int item_number; // which item in that menu
+  int item_number; // which item in that menu, -1 if none
   menuwindow* p[20]; // pointers to menus
   int nummenus;
   int menubar; // if true p[0] is a menubar
@@ -524,8 +524,7 @@ static inline void setitem(const Fl_Menu_Item* i, int m, int n) {
 
 static void setitem(int m, int n) {
   menustate &p = *(::p);
-  p.current_item = (m >= 0 && n >= 0) ?
-    p.current_item = p.p[m]->menu->next(n) : 0;
+  p.current_item = (n >= 0) ? p.p[m]->menu->next(n) : 0;
   p.menu_number = m;
   p.item_number = n;
 }
@@ -545,6 +544,7 @@ static int backward(int menu) { // previous item in menu menu if possible
   menustate &p = *(::p);
   menuwindow &m = *(p.p[menu]);
   int item = (menu == p.menu_number) ? p.item_number : m.selected;
+  if (item < 0) item = m.numitems;
   while (--item >= 0) {
     const Fl_Menu_Item* m1 = m.menu->next(item);
     if (m1->activevisible()) {setitem(m1, menu, item); return 1;}
@@ -557,15 +557,23 @@ int menuwindow::handle(int e) {
   switch (e) {
   case FL_KEYBOARD:
     switch (Fl::event_key()) {
+    case FL_Tab:
+      if (Fl::event_shift()&FL_SHIFT) goto BACKTAB;
+    case ' ':
+      if (!forward(p.menu_number)) {p.item_number = -1; forward(p.menu_number);}
+      return 1;
+    case FL_BackSpace:
+    case 0xFE20: // backtab
+    BACKTAB:
+      if (!backward(p.menu_number)) {p.item_number = -1;backward(p.menu_number);}
+      return 1;
     case FL_Up:
-      if (p.menu_number < 0) setitem(0, 0);
       if (p.menubar && p.menu_number == 0) ;
       else if (backward(p.menu_number));
       else if (p.menubar && p.menu_number==1) setitem(0, p.p[0]->selected);
       return 1;
     case FL_Down:
-      if (p.menu_number < 0) setitem(0, 0);
-      else if (p.menu_number || !p.menubar) forward(p.menu_number);
+      if (p.menu_number || !p.menubar) forward(p.menu_number);
       else if (p.menu_number < p.nummenus-1) forward(p.menu_number+1);
       return 1;
     case FL_Right:
@@ -605,9 +613,10 @@ int menuwindow::handle(int e) {
     int mx = Fl::event_x_root();
     int my = Fl::event_y_root();
     int item=0; int menu;
-    for (menu = p.nummenus-1; menu >= 0; menu--) {
+    for (menu = p.nummenus-1; ; menu--) {
       item = p.p[menu]->find_selected(mx, my);
       if (item >= 0) break;
+      if (menu <= 0) break;
     }
     setitem(menu, item);
     if (e == FL_PUSH) {
@@ -667,7 +676,7 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
     goto STARTUP;
   }
 
-  p.current_item = 0; p.menu_number = -1; p.item_number = -1;
+  p.current_item = 0; p.menu_number = 0; p.item_number = -1;
   if (menubar) mw.handle(FL_DRAG); // find the initial menu
   initial_item = p.current_item;
   if (initial_item) goto STARTUP;
@@ -847,5 +856,5 @@ Fl_Color Fl_Menu_Item::light_color() const { return (Fl_Color)attr(LIGHT_COLOR);
 Fl_Color Fl_Menu_Item::down_labelcolor() const { return (Fl_Color)attr(DOWN_LABELCOLOR); }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.33 1999/05/07 21:04:56 carl Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.34 1999/06/20 15:24:30 mike Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.25 1999/06/15 17:02:24 gustavo Exp $"
+// "$Id: Enumerations.H,v 1.26 1999/06/20 15:24:24 mike Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -56,7 +56,7 @@
 
 #define FL_MAJOR_VERSION	2
 #define FL_MINOR_VERSION	0
-#define FL_PATCH_VERSION	1
+#define FL_PATCH_VERSION	0
 #define FL_VERSION		((double)FL_MAJOR_VERSION + \
 				 (double)FL_MINOR_VERSION * 0.01)
 
@@ -91,6 +91,7 @@ enum Fl_When { // Fl_Widget::when():
   FL_WHEN_RELEASE_ALWAYS= 6,
   FL_WHEN_ENTER_KEY	= 8,
   FL_WHEN_ENTER_KEY_ALWAYS=10,
+  FL_WHEN_ENTER_KEY_CHANGED=11,
   FL_WHEN_NOT_CHANGED	= 2 // modifier bit to disable changed() test
 };
 
@@ -380,5 +381,5 @@ enum Fl_Widget_Style {
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.25 1999/06/15 17:02:24 gustavo Exp $".
+// End of "$Id: Enumerations.H,v 1.26 1999/06/20 15:24:24 mike Exp $".
 //

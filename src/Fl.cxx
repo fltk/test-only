@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.31 1999/06/15 17:02:28 gustavo Exp $"
+// "$Id: Fl.cxx,v 1.32 1999/06/20 15:24:28 mike Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,8 @@
 #include <FL/x.H>
 #include <FL/Fl_Tooltip.H>
 #include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
 
 //
 // Globals...
@@ -69,31 +71,36 @@ int Fl::event_inside(const Fl_Widget *o) /*const*/ {
 // Timeouts are insert-sorted into order.  This works good if there
 // are only a small number:
 
-#define MAXTIMEOUT 8
-
-static struct {
+static struct Timeout {
   double time;
   void (*cb)(void*);
   void* arg;
-} timeout[MAXTIMEOUT+1];
+} * timeout;
 static int numtimeouts;
+static int timeout_array_size;
 
 void Fl::add_timeout(double t, void (*cb)(void *), void *v) {
-  int i;
 
   fl_elapsed();
 
-  if (numtimeouts<MAXTIMEOUT) numtimeouts++;
-  for (i=0; i<(numtimeouts-1); i++) {
+  if (numtimeouts >= timeout_array_size) {
+    timeout_array_size = 2*timeout_array_size+1;
+    timeout = (Timeout*)realloc(timeout, timeout_array_size*sizeof(Timeout));
+  }
+
+  // insert-sort the new timeout:
+  int i;
+  for (i=0; i<numtimeouts; i++) {
     if (timeout[i].time > t) {
-      for (int j=numtimeouts-1; j>i; j--) timeout[j] = timeout[j-1];
+      for (int j=numtimeouts; j>i; j--) timeout[j] = timeout[j-1];
       break;
     }
   }
-
   timeout[i].time = t;
   timeout[i].cb = cb;
   timeout[i].arg = v;
+
+  numtimeouts++;
 }
 
 void Fl::remove_timeout(void (*cb)(void *), void *v) {
@@ -106,22 +113,16 @@ void Fl::remove_timeout(void (*cb)(void *), void *v) {
 }
 
 static void call_timeouts() {
-  if (timeout[0].time > 0) return;
-  struct {
-    void (*cb)(void *);
-    void *arg;
-  } temp[MAXTIMEOUT];
-  int i,j,k;
-  // copy all expired timeouts to temp array:
-  for (i=j=0; j<numtimeouts && timeout[j].time <= 0; i++,j++) {
-    temp[i].cb = timeout[j].cb;
-    temp[i].arg= timeout[j].arg;
+  while (numtimeouts) {
+    if (timeout[0].time > 0) break;
+    // we must remove timeout from array before doing the callback:
+    void (*cb)(void*) = timeout[0].cb;
+    void *arg = timeout[0].arg;
+    numtimeouts--;
+    if (numtimeouts) memmove(timeout, timeout+1, numtimeouts*sizeof(Timeout));
+    // now it is safe for the callback to do add_timeout:
+    cb(arg);
   }
-  // remove them from source array:
-  for (k=0; j<numtimeouts;) timeout[k++] = timeout[j++];
-  numtimeouts = k;
-  // and then call them:
-  for (k=0; k<i; k++) temp[k].cb(temp[k].arg);
 }
 
 void Fl::flush() {
@@ -162,10 +163,12 @@ static double fl_elapsed() {
 
 #ifdef WIN32
 
-  unsigned long newclock = fl_msg.time; // NOT YET IMPLEMENTED!
+  unsigned long newclock = GetTickCount();
   const int TICKS_PER_SECOND = 1000; // divisor of the value to get seconds
   static unsigned long prevclock;
   if (!initclock) {prevclock = newclock; initclock = 1; return 0.0;}
+  else if (newclock < prevclock) return 0.0;
+
   double t = double(newclock-prevclock)/TICKS_PER_SECOND;
   prevclock = newclock;
 
@@ -343,9 +346,9 @@ void Fl::pushed(Fl_Widget *o) {
 }
 
 Fl_Window *fl_xfocus;	// which window X thinks has focus
-Fl_Window *fl_xmousewin; // which window X thinks has FL_ENTER
+Fl_Window *fl_xmousewin;// which window X thinks has FL_ENTER
 Fl_Window *Fl::grab_;	// most recent Fl::grab()
-Fl_Window *Fl::modal_;
+Fl_Window *Fl::modal_;	// topmost modal() window
 
 // Update modal(), focus() and other state according to system state,
 // and send FL_ENTER, FL_LEAVE, FL_FOCUS, and/or FL_UNFOCUS events.
@@ -409,8 +412,12 @@ void fl_throw_focus(Fl_Widget *o) {
 #endif
   if (o->contains(Fl::belowmouse())) Fl::belowmouse_ = 0;
   if (o->contains(Fl::focus())) Fl::focus_ = 0;
+  if (o == fl_xfocus) fl_xfocus = 0;
+  if (o == fl_xmousewin) fl_xmousewin = 0;
   fl_fix_focus();
 }
+
+////////////////////////////////////////////////////////////////
 
 int Fl::handle(int event, Fl_Window* window)
 {
@@ -532,6 +539,9 @@ int Fl::handle(int event, Fl_Window* window)
   return send_handlers(event);
 }
 
+////////////////////////////////////////////////////////////////
+// hide() destroys the X window, it does not do unmap!
+
 void Fl_Window::hide() {
   clear_visible();
   if (!shown()) return;
@@ -561,8 +571,6 @@ void Fl_Window::hide() {
   }
 
   // Make sure no events are sent to this window:
-  if (this == fl_xmousewin) fl_xmousewin = 0;
-  if (this == fl_xfocus) fl_xfocus = 0;
   fl_throw_focus(this);
   handle(FL_HIDE);
 
@@ -700,5 +708,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.31 1999/06/15 17:02:28 gustavo Exp $".
+// End of "$Id: Fl.cxx,v 1.32 1999/06/20 15:24:28 mike Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.14 1999/06/18 14:34:38 carl Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.15 1999/06/20 15:24:31 mike Exp $"
 //
 // Value input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,14 +32,14 @@
 #include <FL/Fl_Group.H>
 #include <stdlib.h>
 
-static char hack_o_rama;
+static Fl_Value_Input* hack_o_rama;
 
 void Fl_Value_Input::input_cb(Fl_Widget*, void* v) {
   Fl_Value_Input& t = *(Fl_Value_Input*)v;
   double nv;
   if (t.step()>=1.0) nv = strtol(t.input.value(), 0, 0);
   else nv = strtod(t.input.value(), 0);
-  hack_o_rama = 1;
+  hack_o_rama = &t;
   t.handle_push();
   t.handle_drag(nv);
   t.handle_release();
@@ -58,7 +58,7 @@ void Fl_Value_Input::resize(int X, int Y, int W, int H) {
 }
 
 void Fl_Value_Input::value_damage() {
-  if (hack_o_rama) return;
+  if (hack_o_rama==this) return;
   char buf[128];
   format(buf);
   input.value(buf);
@@ -127,5 +127,5 @@ Fl_Value_Input::Fl_Value_Input(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.14 1999/06/18 14:34:38 carl Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.15 1999/06/20 15:24:31 mike Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.11 1999/03/31 14:52:44 mike Exp $"
+// "$Id: Fl_Browser.cxx,v 1.12 1999/06/20 15:24:29 mike Exp $"
 //
 // Browser widget for the Fast Light Tool Kit (FLTK).
 //
@@ -209,31 +209,41 @@ int Fl_Browser::item_height(void* lv) const {
   if (l->flags & NOTDISPLAYED) return 0;
 
   int hmax = 2; // use 2 to insure we don't return a zero!
-  // do each column sepeartely as they may all set different fonts:
-  for (char* str = l->txt; *str; str++) {
-    Fl_Font font = Fl_Font(0); // default font
-    int size = textsize(); // default size
-    while (*str==format_char()) {
-      str++;
-      switch (*str++) {
-      case 'l': case 'L': size = 24; break;
-      case 'm': case 'M': size = 18; break;
-      case 's': size = 11; break;
-      case 'b': font = (Fl_Font)(font|FL_BOLD); break;
-      case 'i': font = (Fl_Font)(font|FL_ITALIC); break;
-      case 'f': case 't': font = FL_COURIER; break;
-      case 'S': size = strtol(str,&str,10); break;
-      case 'F': font = (Fl_Font)strtol(str,&str,10); break;
-      case 0: case '@': str--;
-      case '.': goto END_FORMAT;
+
+  if (!l->txt[0]) {
+    // For blank lines set the height to exactly 1 line!
+    fl_font(textfont(), textsize());
+    int h = fl_height();
+    if (h > hmax) hmax = h;
+  }
+  else {
+    // do each column separately as they may all set different fonts:
+    for (char* str = l->txt; *str; str++) {
+      Fl_Font font = textfont(); // default font
+      int size = textsize(); // default size
+      while (*str==format_char()) {
+	str++;
+	switch (*str++) {
+	case 'l': case 'L': size = 24; break;
+	case 'm': case 'M': size = 18; break;
+	case 's': size = 11; break;
+	case 'b': font = (Fl_Font)(font|FL_BOLD); break;
+	case 'i': font = (Fl_Font)(font|FL_ITALIC); break;
+	case 'f': case 't': font = FL_COURIER; break;
+	case 'S': size = strtol(str,&str,10); break;
+	case 'F': font = (Fl_Font)strtol(str,&str,10); break;
+	case 0: case '@': str--;
+	case '.': goto END_FORMAT;
+	}
       }
-    }
-    END_FORMAT:
-    char* ptr = str;
-    for(;*str && (*str!=column_char()); str++) ;
-    if (ptr < str) {
-      fl_font(font, size); int h = fl_height();
-      if (h > hmax) hmax = h;
+      END_FORMAT:
+      char* ptr = str;
+      for(;*str && (*str!=column_char()); str++) ;
+      if (ptr < str) {
+	fl_font(font, size); int h = fl_height();
+	if (h > hmax) hmax = h;
+      }
+      if (!*str) str --;
     }
   }
 
@@ -384,9 +394,12 @@ void Fl_Browser::lineposition(int line, Fl_Line_Position pos) {
   if (line<1) line = 1;
   if (line>lines) line = lines;
   int p = 0;
-  for (FL_BLINE* l=first; l&& line>1; l = l->next) {
+
+  FL_BLINE* l;
+  for (l=first; l && line>1; l = l->next) {
     line--; p += item_height(l);
   }
+  if (l && (pos == BOTTOM)) p += item_height (l);
 
   int final = p, X, Y, W, H;
   bbox(X, Y, W, H);
@@ -475,5 +488,5 @@ int Fl_Browser::value() const {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.11 1999/03/31 14:52:44 mike Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.12 1999/06/20 15:24:29 mike Exp $".
 //

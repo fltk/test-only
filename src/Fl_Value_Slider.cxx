@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.cxx,v 1.7 1999/05/06 05:52:22 carl Exp $"
+// "$Id: Fl_Value_Slider.cxx,v 1.8 1999/06/20 15:24:31 mike Exp $"
 //
 // Value slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -44,7 +44,11 @@ void Fl_Value_Slider::draw() {
   } else {
     syy += 25; bhh = 25; shh -= 25;
   }
-  Fl_Slider::draw(sxx,syy,sww,shh);
+  if (damage()&FL_DAMAGE_ALL) draw_box(box(),sxx,syy,sww,shh,color());
+  Fl_Slider::draw(sxx+Fl::box_dx(box()),
+		  syy+Fl::box_dy(box()),
+		  sww-Fl::box_dw(box()),
+		  shh-Fl::box_dh(box()));
   draw_box(box(),bxx,byy,bww,bhh,color());
   char buf[128];
   format(buf);
@@ -60,9 +64,13 @@ int Fl_Value_Slider::handle(int event) {
   } else {
     syy += 25; shh -= 25;
   }
-  return Fl_Slider::handle(event,sxx,syy,sww,shh);
+  return Fl_Slider::handle(event,
+			   sxx+Fl::box_dx(box()),
+			   syy+Fl::box_dy(box()),
+			   sww-Fl::box_dw(box()),
+			   shh-Fl::box_dh(box()));
 }
 
 //
-// End of "$Id: Fl_Value_Slider.cxx,v 1.7 1999/05/06 05:52:22 carl Exp $".
+// End of "$Id: Fl_Value_Slider.cxx,v 1.8 1999/06/20 15:24:31 mike Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.15 1999/05/06 05:52:17 carl Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.16 1999/06/20 15:24:30 mike Exp $"
 //
 // Common menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -174,11 +174,18 @@ Fl_Menu_::~Fl_Menu_() {
   clear();
 }
 
+// Fl_Menu::add() uses this to indicate the owner of the dynamically-
+// expanding array.  We must not free this array:
+Fl_Menu_* fl_menu_array_owner = 0;
+
 void Fl_Menu_::clear() {
   if (alloc) {
     if (alloc>1) for (int i = size(); i--;)
       if (menu_[i].text) free((void*)menu_[i].text);
-    delete[] menu_;
+    if (this == fl_menu_array_owner)
+      fl_menu_array_owner = 0;
+    else
+      delete[] menu_;
     menu_ = 0;
     value_ = 0;
     alloc = 0;
@@ -212,5 +219,5 @@ Fl_Boxtype Fl_Menu_::down_box() const { return (Fl_Boxtype)attr(DOWN_BOX); }
 Fl_Color Fl_Menu_::down_color() const {return selection_color();}
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.15 1999/05/06 05:52:17 carl Exp $".
+// End of "$Id: Fl_Menu_.cxx,v 1.16 1999/06/20 15:24:30 mike Exp $".
 //

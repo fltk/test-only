@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.H,v 1.9 1999/03/14 06:46:13 carl Exp $"
+// "$Id: Fl_Browser.H,v 1.10 1999/06/20 15:24:24 mike Exp $"
 //
 // Browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -93,7 +93,8 @@ public:
   void* data(int) const ;
   void data(int, void* v);
 
-  Fl_Browser(int, int, int, int, const char* = 0);
+  FL_EXPORT Fl_Browser(int, int, int, int, const char* = 0);
+  ~Fl_Browser() { clear(); }
 
   char format_char() const {return format_char_;}
   void format_char(char c) {format_char_ = c;}
@@ -112,5 +113,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Browser.H,v 1.9 1999/03/14 06:46:13 carl Exp $".
+// End of "$Id: Fl_Browser.H,v 1.10 1999/06/20 15:24:24 mike Exp $".
 //

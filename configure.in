@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.38 1999/06/20 14:25:19 mike Exp $"
+dnl# "$Id: configure.in,v 1.39 1999/06/20 15:24:23 mike Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -172,10 +172,7 @@ fi
 AC_SUBST(GLLIB)
 
 AC_CHECK_HEADER(X11/extensions/Xdbe.h, \
-    if test "$uname" != "SunOS" -a "$uname" != "IRIX"; then
-        AC_DEFINE(HAVE_XDBE)
-    fi
-    if test "$uname" = "IRIX" -a "$uversion" -gt 63; then
+    if test "$uname" != "SunOS"; then
         AC_DEFINE(HAVE_XDBE)
     fi)
 
@@ -220,9 +217,10 @@ else
 		#     LD="ld -n32"
 		#     MAKEDEPEND="CC -M"
 
+		echo "FOR BEST RESULTS BEFORE COMPILING: setenv SGI_ABI -n32"
         	# -woff 3322 is necessary due to errors in Xlib headers on IRIX
         	CFLAGS="-fullwarn $CFLAGS"
-        	CXXFLAGS="-fullwarn -woff 1685 -woff 3322 $CXXFLAGS"
+        	CXXFLAGS="-fullwarn -woff 1685,3322 $CXXFLAGS"
 	    else
         	CXXFLAGS="+w +pp $CXXFLAGS"
 	    fi
@@ -236,6 +234,17 @@ else
 	    if test -z "$DEBUGFLAG"; then
 		CFLAGS="+O2 $CFLAGS"
 		CXXFLAGS="+O2 +W336,501,736,740,749,829 $CXXFLAGS"
+	    fi
+	    ;;
+	SunOS*)
+	    # Solaris
+	    if test -z "$DEBUGFLAG"; then
+		CFLAGS="-O"
+		CXXFLAGS="-O"
+	    fi
+	    if test $PICFLAG = 1; then
+		CFLAGS="-KPIC $CFLAGS"
+		CXXFLAGS="-PIC $CXXFLAGS"
 	    fi
 	    ;;
 	*)
@@ -261,5 +270,5 @@ AC_CONFIG_HEADER(config.h:configh.in)
 AC_OUTPUT(makeinclude)
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.38 1999/06/20 14:25:19 mike Exp $".
+dnl# End of "$Id: configure.in,v 1.39 1999/06/20 15:24:23 mike Exp $".
 dnl#
