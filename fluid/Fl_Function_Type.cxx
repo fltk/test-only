@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Function_Type.cxx,v 1.39 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Function_Type.cxx,v 1.40 2002/02/05 14:23:58 robertk Exp $"
 //
 // C function type code for the Fast Light Tool Kit (FLTK).
 //
@@ -255,6 +255,8 @@ void Fl_Function_Type::open() {
     cdecl_ = f_c_button->value();
     break;
   }
+  delete function_panel;
+  function_panel = NULL;
 }
 
 Fl_Function_Type Fl_Function_type;
@@ -414,6 +416,8 @@ void Fl_Code_Type::open() {
     break;
   }
   code_panel->hide();
+  delete code_panel;
+  code_panel = NULL;
 }
 
 Fl_Code_Type Fl_Code_type;
@@ -500,6 +504,8 @@ void Fl_CodeBlock_Type::open() {
     break;
   }
   codeblock_panel->hide();
+  delete codeblock_panel;
+  codeblock_panel = NULL;
 }
 
 Fl_CodeBlock_Type Fl_CodeBlock_type;
@@ -572,6 +578,8 @@ void Fl_Decl_Type::open() {
     break;
   }
   decl_panel->hide();
+  delete decl_panel;
+  decl_panel = NULL;
 }
 
 Fl_Decl_Type Fl_Decl_type;
@@ -675,6 +683,8 @@ void Fl_DeclBlock_Type::open() {
     break;
   }
   declblock_panel->hide();
+  delete declblock_panel;
+  declblock_panel = NULL;
 }
 
 Fl_DeclBlock_Type Fl_DeclBlock_type;
@@ -789,6 +799,8 @@ void Fl_Class_Type::open() {
     break;
   }
   class_panel->hide();
+  delete class_panel;
+  class_panel = NULL;
 }
 
 Fl_Class_Type Fl_Class_type;
@@ -815,5 +827,5 @@ void Fl_Class_Type::write_code() {
 }
 
 //
-// End of "$Id: Fl_Function_Type.cxx,v 1.39 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Function_Type.cxx,v 1.40 2002/02/05 14:23:58 robertk Exp $".
 //
