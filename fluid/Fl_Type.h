@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.h,v 1.25 2000/09/05 17:36:20 spitzak Exp $"
+// "$Id: Fl_Type.h,v 1.26 2000/09/30 23:41:59 vincentp Exp $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -289,6 +289,7 @@ FLUID_API int write_code(const char *cfile, const char *hfile);
 FLUID_API int write_declare(const char *, ...);
 FLUID_API int is_id(char);
 FLUID_API const char* unique_id(void* o, const char*, const char*, const char*);
+FLUID_API void write_craw(const char* string);
 FLUID_API void write_c(const char*, ...);
 FLUID_API void write_h(const char*, ...);
 FLUID_API void write_cstring(const char *);
@@ -316,5 +317,5 @@ FLUID_API int storestring(const char *n, const char * & p, int nostrip=0);
 FLUID_API extern int include_H_from_C;
 
 //
-// End of "$Id: Fl_Type.h,v 1.25 2000/09/05 17:36:20 spitzak Exp $".
+// End of "$Id: Fl_Type.h,v 1.26 2000/09/30 23:41:59 vincentp Exp $".
 //

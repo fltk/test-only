@@ -1,5 +1,5 @@
 //
-// "$Id: code.cxx,v 1.14 2000/09/05 17:36:20 spitzak Exp $"
+// "$Id: code.cxx,v 1.15 2000/09/30 23:41:59 vincentp Exp $"
 //
 // Code output routines for the Fast Light Tool Kit (FLTK).
 //
@@ -239,6 +239,11 @@ void write_carray(const char *w, int length) {
 void write_cstring(const char *w) {write_cstring(w,strlen(w));}
 void write_carray(const char *w) {write_carray(w,strlen(w));}
 
+// write some raw data in the code file (used to write inlined XPM)
+void write_craw(const char* str) {
+  fputs(str, code_file);
+}
+
 void write_c(const char* format,...) {
   if (varused_test) {varused = 1; return;}
   va_list args;
@@ -323,5 +328,5 @@ void Fl_Type::write_code() {
 }
 
 //
-// End of "$Id: code.cxx,v 1.14 2000/09/05 17:36:20 spitzak Exp $".
+// End of "$Id: code.cxx,v 1.15 2000/09/30 23:41:59 vincentp Exp $".
 //
