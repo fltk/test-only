@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.24 2004/07/04 17:44:11 laza2000 Exp $"
+ * "$Id: config.h,v 1.25 2004/07/31 10:13:24 laza2000 Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -197,6 +197,11 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define HAVE_LIBJPEG 0
 
 /*
+ * Do we use exceptions?
+ */
+#define HAVE_EXCEPTIONS 1
+
+/*
  * CONFIGDIR
  *
  * Global configuration to look for files not in ~/.fltk
@@ -215,5 +220,5 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define CONF_CACHED
 
 /*
- * End of "$Id: config.h,v 1.24 2004/07/04 17:44:11 laza2000 Exp $".
+ * End of "$Id: config.h,v 1.25 2004/07/31 10:13:24 laza2000 Exp $".
  */
