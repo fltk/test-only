@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.25 1999/11/07 08:11:42 bill Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.26 1999/11/08 22:21:55 carl Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -94,20 +94,25 @@ int Fl_Scrollbar::handle(int event) {
       // Carl: I did this on purpose so the highlighting will work
       // when you point at the trough!  I don't understand why you
       // don't want the highlighting in this case
-      /* int sliderx = slider_position(W, slider_size(W, H));
+
+      // Because commenting this code out breaks the page up/down
+      // functionality of clicking on the trough.  Besides, no other
+      // toolkit highlights when pointing at the trough so it doesn't
+      // look "right" and makes emulation themes less correct.
+      int sliderx = slider_position(W, slider_size(W, H));
       if (mx < X+sliderx) highlight_ = 3;
       else if (mx >= X+sliderx+slider_size(W, H)) highlight_ = 4;
-      else */ highlight_ = 5;
+      else highlight_ = 5;
     }
   } else {
     if (mx < X || mx >= X+W) highlight_ = 0;
     else if (my < Y) highlight_ = 1;
     else if (my >= Y+H) highlight_ = 2;
     else {
-      /* int slidery = slider_position(H, slider_size(H, W));
+      int slidery = slider_position(H, slider_size(H, W));
       if (my < Y+slidery) highlight_ = 3;
       else if (my >= Y+slidery+slider_size(H, W)) highlight_ = 4;
-      else */ highlight_ = 5;
+      else highlight_ = 5;
     }
   }
   switch (event) {
@@ -257,5 +262,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.25 1999/11/07 08:11:42 bill Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.26 1999/11/08 22:21:55 carl Exp $".
 //

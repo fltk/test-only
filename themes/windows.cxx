@@ -1,64 +1,37 @@
-// Windows-95 style (this is also the fltk default)
+//
+// "$Id: windows.cxx,v 1.5 1999/11/08 22:22:04 carl Exp $"
+//
+// Theme plugin file for FLTK
+//
+// Copyright 1999 Bill Spitzak and others.
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Library General Public
+// License as published by the Free Software Foundation; either
+// version 2 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Library General Public License for more details.
+//
+// You should have received a copy of the GNU Library General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+// USA.
+//
+// Please report all bugs and problems to "fltk-bugs@easysw.com".
+//
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Menu_Item.H>
-#include <FL/Fl_Check_Button.H>
-#include <FL/Fl_Scrollbar.H>
-#include <FL/Fl_Input.H>
-#include <FL/Fl_Output.H>
-#include <FL/Fl_Style.H>
-#include <stdio.h>
-#include <string.h>
+// motif.cxx
+
+// fltk plugin for Motif appearance, including ugly blue color!
+
+#include "../src/fl_windows.cxx"
 
 extern "C" fltk_theme(int, char**);
-int fltk_theme(int, char**) {
-  Fl_Style::revert(); // revert to FLTK default styles
+int fltk_theme(int, char**) { return fl_windows(); }
 
-#warning Please do not modify the default boxtypes directly like this.
-#warning It will screw up other themes loaded later.  better to create
-#warning a new boxtype.  Please fix.
-  fl_normal_box.data = "2AAUWMMTT";
-  fl_normal_box.dx_ = 2;
-  fl_normal_box.dy_ = 2;
-  fl_normal_box.dw_ = 4;
-  fl_normal_box.dh_ = 4;
-  fl_down_box.data = "2UWMMPPAA";
-  fl_down_box.dx_ = 2;
-  fl_down_box.dy_ = 2;
-  fl_down_box.dw_ = 4;
-  fl_down_box.dh_ = 4;
-  Fl_Style* s;
-  if ((s = Fl_Style::find("menu_item"))) {
-    s->set_box(FL_FLAT_BOX);
-    s->set_highlight_color(FL_BLUE_SELECTION_COLOR);
-    s->set_highlight_label_color(FL_WHITE);
-    s->set_on_color(FL_WHITE);
-    s->set_off_color(FL_WHITE);
-  }
-  if ((s = Fl_Style::find("check_button"))) {
-    s->set_on_color(FL_WHITE);
-    s->set_off_color(FL_WHITE);
-  }
-  Fl_Widget::default_style.set_highlight_color(FL_NO_COLOR);
-  Fl_Widget::default_style.set_glyph(fl_glyph);
-  if ((s = Fl_Style::find("scrollbar"))) {
-    s->set_box(FL_FLAT_BOX);
-    s->set_highlight_color(FL_NO_COLOR);
-  }
-  if ((s = Fl_Style::find("slider"))) {
-    s->set_highlight_color(FL_NO_COLOR);
-  }
-  if ((s = Fl_Style::find("button"))) {
-    s->set_highlight_color(FL_NO_COLOR);
-  }
-  if ((s = Fl_Style::find("input"))) {
-    s->set_box(FL_DOWN_BOX);
-    s->set_selection_color(FL_BLUE_SELECTION_COLOR);
-    s->set_selection_text_color(FL_WHITE);
-  }
-  if ((s = Fl_Style::find("output"))) {
-    s->set_color(FL_WHITE);
-  }
-  return 0;
-}
+//
+// End of "$Id: windows.cxx,v 1.5 1999/11/08 22:22:04 carl Exp $".
+//

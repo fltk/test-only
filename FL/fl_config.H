@@ -1,5 +1,5 @@
 //
-//  "$Id: fl_config.H,v 1.3 1999/03/23 14:30:53 carl Exp $"
+//  "$Id: fl_config.H,v 1.4 1999/11/08 22:21:44 carl Exp $"
 //
 //  Configuration file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -75,36 +75,21 @@ class Fl_Config
     int get(const char *key, char *value, int value_length)
         { return getconf(_configFile, key, value, value_length); }
 
-    // get the string value of a key from the global or user's config file
-    int find(const char *key, char *value, int value_length);
-
     // get the long value of a key from the config file
     int get(const char *key, long &lvalue)
         { return getconf_long(_configFile, key, &lvalue); }
-
-    // get the long value of a key from the global or user's config file
-    int find(const char *key, long &lvalue);
 
     // get the int value of a key from the config file
     int get(const char *key, int &ivalue)
         { int r; long l; r = getconf_long(_configFile, key, &l); ivalue = (int)l; return r; }
 
-    // get the int value of a key from the global or user's config file
-    int find(const char *key, int &ivalue);
-
     // get the uchar value of a key from the config file
     int get(const char *key, uchar &ucvalue)
         { int r; long l; r = getconf_long(_configFile, key, &l); ucvalue = (uchar)l; return r; }
 
-    // get the uchar value of a key from the global or user's config file
-    int find(const char *key, uchar &ucvalue);
-
     // get the boolean value of a key from the config file
     int get_boolean(const char *key, int &bvalue)
         { return getconf_boolean(_configFile, key, &bvalue); }
-
-    // get the boolean value of a key from the global or user's config file
-    int find_boolean(const char *key, int &bvalue);
 
     // set the string value of a key in the config file
     int set(const char *key, const char *value = "")
@@ -138,5 +123,5 @@ class Fl_Config
 #endif
 
 //
-// End of "$Id: fl_config.H,v 1.3 1999/03/23 14:30:53 carl Exp $".
+// End of "$Id: fl_config.H,v 1.4 1999/11/08 22:21:44 carl Exp $".
 //

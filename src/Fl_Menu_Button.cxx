@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.16 1999/11/05 21:43:52 carl Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.17 1999/11/08 22:21:54 carl Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -52,12 +52,15 @@ void Fl_Menu_Button::draw_n_clip() {
     box(FL_NO_BOX); 
 }
 
+
+extern Fl_Boxtype fl_popup_box;
+
 const Fl_Menu_Item* Fl_Menu_Button::popup() {
   const Fl_Menu_Item* m;
 
 // back compatibility hack
   if (box() == FL_NO_BOX) {
-    box(FL_UP_BOX);
+    box(fl_popup_box);
     type(POPUP3);
   }
 
@@ -103,8 +106,13 @@ Fl_Menu_Button::Fl_Menu_Button(int X,int Y,int W,int H,const char *l)
 }
 
 Fl_Style Fl_Menu_Button::default_style;
-static Fl_Style_Definer x("menu button", Fl_Menu_Button::default_style);
+
+static void revert(Fl_Style* s) {
+  s->box = FL_UP_BOX;
+}
+
+static Fl_Style_Definer x("menu button", Fl_Menu_Button::default_style, revert);
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.16 1999/11/05 21:43:52 carl Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.17 1999/11/08 22:21:54 carl Exp $".
 //

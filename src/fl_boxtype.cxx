@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.15 1999/11/05 00:35:49 vincent Exp $"
+// "$Id: fl_boxtype.cxx,v 1.16 1999/11/08 22:21:56 carl Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -103,14 +103,19 @@ FL_EXPORT void fl_frame(Fl_Boxtype b, int x, int y, int w, int h,
 }
 
 Fl_Boxtype_ fl_normal_box = {
-  fl_frame, "2AAUWMMTT", &fl_down_box, &fl_normal_box, 2,2,4,4, true
+  fl_frame, "2AAXXHHTT", &fl_down_box, &fl_normal_box, 2,2,4,4, true
 };
 static Fl_Boxtype_Definer normal("normal", fl_normal_box);
 
 Fl_Boxtype_ fl_down_box = {
-  fl_frame, "2UWMMPPAA", &fl_down_box, &fl_down_box, 2,2,4,4, true
+  fl_frame, "2XXHHTTAA", &fl_down_box, &fl_down_box, 2,2,4,4, true
 };
 static Fl_Boxtype_Definer down("down", fl_down_box);
+
+Fl_Boxtype_ fl_up_box = {
+  fl_frame, "2AAXXHHTT", &fl_up_box, &fl_up_box, 2,2,4,4, true
+};
+static Fl_Boxtype_Definer up("up", fl_down_box);
 
 const Fl_Boxtype_ fl_thin_box = {
   fl_frame, "2HHWW", &fl_thin_down_box, &fl_thin_box, 1,1,2,2,true
@@ -207,5 +212,5 @@ const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
 Fl_Boxtype_Definer* Fl_Boxtype_Definer::first = 0;
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.15 1999/11/05 00:35:49 vincent Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.16 1999/11/08 22:21:56 carl Exp $".
 //

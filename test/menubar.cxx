@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.16 1999/11/01 02:21:42 carl Exp $"
+// "$Id: menubar.cxx,v 1.17 1999/11/08 22:21:58 carl Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -24,6 +24,7 @@
 //
 
 #include <FL/Fl.H>
+#include <FL/Fl_Output.H>
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Menu_Bar.H>
@@ -208,6 +209,8 @@ int main(int argc, char **argv) {
   menubar.callback(test_cb);
   menubar.tooltip("This is a menu bar");
   menus[0] = &menubar;
+  Fl_Box box(0,30,WIDTH,370, "Press right button\nfor a pop-up menu");
+  box.copy_style(&Fl_Output::default_style);
   Fl_Menu_Button mb1(100,100,120,25,"&menubutton"); mb1.menu(pulldown);
   mb1.callback(test_cb);
   mb1.tooltip("This is a menu button");
@@ -216,20 +219,18 @@ int main(int argc, char **argv) {
   ch.callback(test_cb);
   ch.tooltip("This is a choice");
   menus[2] = &ch;
-  Fl_Menu_Button mb(0,30,WIDTH,370,"&popup");
+  Fl_Menu_Button mb(0,30,WIDTH,370/*,"&popup"*/);
   mb.type(Fl_Menu_Button::POPUP3);
   mb.menu(menutable);
   mb.callback(test_cb);
   menus[3] = &mb;
-  Fl_Box b(200,200,200,100,"Press right button\nfor a pop-up menu");
   window->resizable(&mb);
   window->size_range(300,20);
   window->end();
   window->show(argc, argv);
-
   return Fl::run();
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.16 1999/11/01 02:21:42 carl Exp $".
+// End of "$Id: menubar.cxx,v 1.17 1999/11/08 22:21:58 carl Exp $".
 //

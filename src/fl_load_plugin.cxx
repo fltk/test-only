@@ -36,7 +36,7 @@ typedef int (*Function)(int, const char * const *);
 // returns -2 if plugin file couldn't be opened
 // returns -3 if couldn't find plugin_main()
 // returns -4 if uid != euid (setuid program?)
-// otherwise, returns result of plugin_main() (should be 0)
+// otherwise, returns result of func() (should be 0)
 int fl_load_plugin(const char* name, const char* func) {
 #ifndef WIN32
   if (getuid() != geteuid()) {

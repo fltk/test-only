@@ -18,6 +18,7 @@ void fl_glyph(int t, int x,int y,int w,int h,
 
   switch (t) {
   case FL_GLYPH_CHECK:
+    if (box != FL_NO_BOX) { x += 2; y += 2; w -= 4; h -= 4; } // non-menu fudge factor
     box->draw(x,y,w,h, bc, f);
     if (f & FL_VALUE) {
       fl_color(fc);
@@ -45,11 +46,12 @@ void fl_glyph(int t, int x,int y,int w,int h,
     }
     break;
   case FL_GLYPH_RADIO:
+    if (box != FL_NO_BOX) { x += 2; y += 2; w -= 4; h -= 4; } // non-menu fudge factor
     //h = (h+1)&-2; // even only
-    FL_ROUND_DOWN_BOX->draw(x,y,h,h, bc, f);
+    if (box != FL_NO_BOX) FL_ROUND_DOWN_BOX->draw(x,y,h,h, bc, f);
     if (f & FL_VALUE) {
       fl_color(fc);
-      int d = h/5;
+      int d = box != FL_NO_BOX ? h/4 : h/5; // menu vs. button fudge factor
       fl_pie(x+d,y+d,h-d-d-1,h-d-d-1,0,360);
     }
     break;
@@ -58,6 +60,7 @@ void fl_glyph(int t, int x,int y,int w,int h,
     break;}
   case FL_GLYPH_UP: {
     box->draw(x,y,w,h, bc, f);
+    x += 2; y += 2; w -= 4; h -= 4;
     int w1 = (w-1)|1; // use odd sizes only
     int X1 = x+w1/2;
     int W1 = w1/3;
@@ -67,6 +70,7 @@ void fl_glyph(int t, int x,int y,int w,int h,
     break;}
   case FL_GLYPH_DOWN: {
     box->draw(x,y,w,h, bc, f);
+    x += 2; y += 2; w -= 4; h -= 4;
     int w1 = (w-1)|1; // use odd sizes only
     int X1 = x+w1/2;
     int W1 = w1/3;
@@ -76,6 +80,7 @@ void fl_glyph(int t, int x,int y,int w,int h,
     break;}
   case FL_GLYPH_LEFT: {
     box->draw(x,y,w,h, bc, f);
+    x += 2; y += 2; w -= 4; h -= 4;
     int w1 = (h-1)|1; // use odd sizes only
     int Y1 = y+w1/2;
     int W1 = w1/3;
@@ -84,7 +89,8 @@ void fl_glyph(int t, int x,int y,int w,int h,
     fl_polygon(X1-W1, Y1, X1, Y1-W1, X1, Y1+W1);
     break;}
   case FL_GLYPH_RIGHT: {
-    if (box) box->draw(x,y,w,h, bc, f); // menu passes zero! (sigh)
+    box->draw(x,y,w,h, bc, f);
+    x += 2; y += 2; w -= 4; h -= 4;
     int w1 = (h-1)|1; // use odd sizes only
     int Y1 = y+w1/2;
     int W1 = w1/3;

@@ -42,14 +42,14 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
 
   [widgets/menu item]                             # menu item attributes
     highlight color = puke green                  # color of menu item background when selected
-    box = demo menu                               # boxtype of menu items
+    box = alternative menu                        # boxtype of menu items
     selection color = red                         # color of light when selected
     off color = gray                              # color of light when not selected
 
   [widgets/menu title]
     selection color = puke green                  # color of menu title box when its submenu selected
     selection text color = white                  # color of menu title label when its submenu selected
-    box = demo menu title                         # boxtype of menu titles
+    box = alternative menu title                  # boxtype of menu titles
     off color = gray                              # color of light when not selected
 
   [widgets/browser]                               # browser attributes
@@ -63,7 +63,7 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     text size = 10                                # size of chart text?
 
   [widgets/return button]                         # return button attributes
-    box = demo up                                 # boxtype of button
+    box = alternative up                          # boxtype of button
 
   [widgets/check button]                          # check button attributes
     off color = gray                              # color of light when not selected

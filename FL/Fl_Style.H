@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.9 1999/11/07 08:11:23 bill Exp $"
+// "$Id: Fl_Style.H,v 1.10 1999/11/08 22:21:44 carl Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -55,15 +55,14 @@ struct FL_API Fl_Style {
   Fl_Color	text_color;
   unsigned	label_size;
   unsigned	text_size;
-  Fl_Style*	child;
-  Fl_Style*	next;
-  Fl_Style**	previous;
-  int		mbf;	// Which entries are different from the parent's ones
 
-  void setp(const void**, const void*);
-  void setp(const void**, const void*, int mask);
-  void seti(unsigned*, unsigned);
-  void seti(unsigned*, unsigned, int mask);
+  // if you add more non-attributes, be sure to fix style_clear() in fl_options.cxx
+  Fl_Style*     parent;
+  uchar         dynamic; // is this a modifiable style?
+
+  void setp(const void** p, const void* v) { *p = v; }
+  void seti(unsigned* p, unsigned v) { *p = v; }
+
   void set_box(Fl_Boxtype v)		{setp((const void**)&box, v);}
   void set_glyph_box(Fl_Boxtype v)	{setp((const void**)&glyph_box, v);}
   void set_box2(Fl_Boxtype v)		{setp((const void**)&glyph_box, v);}
@@ -85,8 +84,6 @@ struct FL_API Fl_Style {
   void set_label_size(unsigned v)	{seti(&label_size, v);}
   void set_text_size(unsigned v)	{seti(&text_size, v);}
 
-  void add_child(Fl_Style* s) const;
-
   // find a default style by its string ID
   static Fl_Style* find(const char* name);
 
@@ -106,8 +103,8 @@ public:
   Fl_Style_Reverter revert;
   Fl_Style_Definer* next;
   static Fl_Style_Definer* first;
-  Fl_Style_Definer(char* n, Fl_Style& s, Fl_Style_Reverter r = 0) : name(n), style(&s), revert(r), next(first) {
-    first = this; if (r) r(&s);}
+
+  Fl_Style_Definer(char*, Fl_Style&, Fl_Style_Reverter = 0);
 };
 
 FL_API void fl_glyph(int, int,int,int,int, Fl_Color, Fl_Color, Fl_Flags, Fl_Boxtype = FL_NORMAL_BOX);
@@ -130,8 +127,12 @@ enum Fl_Glyphtype {	// glyph types
   FL_GLYPH_HNSLIDER
 };
 
+FL_API int fl_kde1();
+FL_API int fl_motif();
+FL_API int fl_windows();
+
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.9 1999/11/07 08:11:23 bill Exp $".
+// End of "$Id: Fl_Style.H,v 1.10 1999/11/08 22:21:44 carl Exp $".
 //

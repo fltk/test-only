@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.12 1999/10/26 18:55:42 mike Exp $"
+// "$Id: file.cxx,v 1.13 1999/11/08 22:21:48 carl Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -575,7 +575,8 @@ void read_fdesign() {
 	if (group) {
 	  Fl_Group* g = (Fl_Group*)(group->o);
 	  g->begin();
-	  g->forms_end();
+	  // g->forms_end();
+	  fl_end_group(); // how 'bout this instead?
 	  Fl_Group::current(0);
 	}
 	group = widget = 0;
@@ -599,5 +600,5 @@ void read_fdesign() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.12 1999/10/26 18:55:42 mike Exp $".
+// End of "$Id: file.cxx,v 1.13 1999/11/08 22:21:48 carl Exp $".
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.6 1999/11/05 21:43:59 carl Exp $"
+# "$Id: Makefile,v 1.7 1999/11/08 22:22:03 carl Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -23,7 +23,7 @@
 # Please report all bugs and problems to "fltk-bugs@easysw.com".
 #
 
-THEMES=essai motif classic windows Alternative KDE
+THEMES=essai motif classic windows Alternative KDE1
 STYLES=Alternative
 
 all : $(THEMES)
@@ -45,20 +45,23 @@ include ../makeinclude
 essai : essai.o fl_jpeg.po Fl_Shared_Image.po fl_draw_image.po
 	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $< fl_jpeg.po Fl_Shared_Image.po fl_draw_image.po -ljpeg
 
+motif.o : ../src/fl_motif.cxx
 motif : motif.o ../lib/$(LIBNAME)
 	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $<
 
 classic : classic.o ../lib/$(LIBNAME)
 	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $<
 
+windows.o : ../src/fl_windows.cxx
 windows : windows.o ../lib/$(LIBNAME)
 	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $<
 
 Alternative : Alternative.o ../lib/$(LIBNAME)
 	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $<
 
-KDE : KDE.o ../lib/$(LIBNAME)
-	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $<
+KDE1.o : ../src/fl_kde1.cxx 
+KDE1 : KDE1.o fl_set_fonts.po fl_motif.po fl_windows.po ../lib/$(LIBNAME)
+	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $@ $< fl_set_fonts.po fl_motif.po fl_windows.po
 
 win32 : $(OBJECTS) $(OBJECTS2) ../lib/$(LIBNAME)
 	dllwrap $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS) -L../lib -lfltkdll.2 $(GLDLIBS)
@@ -72,9 +75,9 @@ clean :
 install :
 	@echo "Installing themes..."
 	@-mkdir -p $(libdir)/fltk
-	@-mkdir -p $(libdir)/fltk/styles
+	@-mkdir -p $(libdir)/fltk/schemes
 	@-mkdir -p $(libdir)/fltk/themes
-	(cd ../config/styles; cp -f $(STYLES) $(libdir)/fltk/styles)
+	(cd ../config/schemes; cp -f $(STYLES) $(libdir)/fltk/schemes)
 	cp -f $(THEMES) $(libdir)/fltk/themes
 
 #depend:
@@ -82,5 +85,5 @@ install :
 #include makedepend
 
 #
-# End of "$Id: Makefile,v 1.6 1999/11/05 21:43:59 carl Exp $".
+# End of "$Id: Makefile,v 1.7 1999/11/08 22:22:03 carl Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: motif.cxx,v 1.6 1999/11/08 22:22:04 carl Exp $"
+// "$Id: KDE1.cxx,v 1.1 1999/11/08 22:22:03 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -23,15 +23,19 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// motif.cxx
+// KDE theme
 
-// fltk plugin for Motif appearance, including ugly blue color!
-
-#include "../src/fl_motif.cxx"
+#include "../src/fl_kde1.cxx"
 
 extern "C" fltk_theme(int, char**);
-int fltk_theme(int, char**) { return fl_motif(); }
+int fltk_theme(int, char**) {
+  int r = fl_kde1();
+
+  Fl::use_themes = 1; // turn themes back on, but not schemes
+
+  return r;
+}
 
 //
-// End of "$Id: motif.cxx,v 1.6 1999/11/08 22:22:04 carl Exp $".
+// End of "$Id: KDE1.cxx,v 1.1 1999/11/08 22:22:03 carl Exp $".
 //

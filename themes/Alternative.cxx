@@ -1,3 +1,28 @@
+//
+// "$Id: Alternative.cxx,v 1.2 1999/11/08 22:22:02 carl Exp $"
+//
+// Theme plugin file for FLTK
+//
+// Copyright 1999 Bill Spitzak and others.
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Library General Public
+// License as published by the Free Software Foundation; either
+// version 2 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Library General Public License for more details.
+//
+// You should have received a copy of the GNU Library General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+// USA.
+//
+// Please report all bugs and problems to "fltk-bugs@easysw.com".
+//
+
 #include <FL/Fl.H>
 #include <FL/Fl_Boxtype.H>
 #include <FL/Fl_Style.H>
@@ -13,37 +38,23 @@ extern void fl_flatx(Fl_Boxtype b, int x, int y, int w, int h,
                      Fl_Color c, Fl_Flags f);
 
 // a couple of of new boxtypes (look familiar?)
-const Fl_Boxtype_ demo_down_box = {
-  fl_frame, "NNTUJJUWAAAA", &demo_down_box, &demo_down_box, 3,3,6,6, true
+const Fl_Boxtype_ alt_down_box = {
+  fl_frame, "NNTUJJUWAAAA", &alt_down_box, &alt_down_box, 3,3,6,6, true
 };
 
-const Fl_Boxtype_ demo_up_box = {
-  fl_frame, "AAAAWUJJUTNN", &demo_down_box, &demo_up_box, 3,3,6,6, true
+const Fl_Boxtype_ alt_up_box = {
+  fl_frame, "AAAAWUJJUTNN", &alt_down_box, &alt_up_box, 3,3,6,6, true
 };
 
-const Fl_Boxtype_ demo_menu_box = {
+const Fl_Boxtype_ alt_menu_box = {
   fl_flatx, 0, FL_THIN_DOWN_BOX, FL_THIN_DOWN_BOX, 1,1,2,2, true
 };
 
-const Fl_Boxtype_ demo_menu_title_box = {
+const Fl_Boxtype_ alt_menu_title_box = {
   fl_flatx, 0, FL_THIN_DOWN_BOX, FL_NORMAL_BOX, 1,1,2,2, true
 };
 
 // some old stuff for boxtype drawing
-static Fl_Color active_ramp[24] = {
-  FL_GRAY_RAMP+0, FL_GRAY_RAMP+1, FL_GRAY_RAMP+2, FL_GRAY_RAMP+3,
-  FL_GRAY_RAMP+4, FL_GRAY_RAMP+5, FL_GRAY_RAMP+6, FL_GRAY_RAMP+7,
-  FL_GRAY_RAMP+8, FL_GRAY_RAMP+9, FL_GRAY_RAMP+10,FL_GRAY_RAMP+11,
-  FL_GRAY_RAMP+12,FL_GRAY_RAMP+13,FL_GRAY_RAMP+14,FL_GRAY_RAMP+15,
-  FL_GRAY_RAMP+16,FL_GRAY_RAMP+17,FL_GRAY_RAMP+18,FL_GRAY_RAMP+19,
-  FL_GRAY_RAMP+20,FL_GRAY_RAMP+21,FL_GRAY_RAMP+22,FL_GRAY_RAMP+23};
-static Fl_Color inactive_ramp[24];
-static Fl_Color *gray_ramp(int inactive) {
-  if (!inactive) return active_ramp-'A';
-  for (int i = 0; i < 24; i++) inactive_ramp[i] = fl_inactive(fl_get_color(active_ramp[i]));
-  return inactive_ramp-'A';
-}
-
 enum {UPPER_LEFT, LOWER_RIGHT, CLOSED, FILL};
 
 static void draw(int which, int x,int y,int w,int h, int inset, Fl_Color color)
@@ -94,7 +105,7 @@ static void draw(int which, int x,int y,int w,int h, int inset, Fl_Color color)
 }
 
 // a new glyph function
-void demo_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
+void alt_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
                 Fl_Flags f, Fl_Boxtype box)
 {
   switch (t) {
@@ -103,39 +114,43 @@ void demo_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
       FL_THIN_UP_BOX->draw(x+2, y+2, w-4, h-4, fc, f);
       break;
     case FL_GLYPH_CHECK: {
-      w &= -2;
-      h &= -2;
+      if (box == FL_NO_BOX) { fl_glyph(t, x, y, w, h, bc, fc, f, box); break; }
+      x =(x-1)|1; y = (y-1)|1;
       int x1 = x+w/2;
       int y1 = y+h/2;
-      Fl_Color *g = gray_ramp(f&FL_INACTIVE);
+      Fl_Color light = 54, dark = 32;
 
-      if (f&FL_INACTIVE) fc = fl_inactive(fc);
-      fl_color((f&FL_VALUE) ? fc : bc); fl_polygon(x+2, y1, x1,y+2, x+w-4,y1, x1,y+h-4);
+      if (f&FL_INACTIVE)
+        { fc = fl_inactive(fc); light = fl_inactive(light); dark = fl_inactive(dark); }
+      fl_color((f&FL_VALUE) ? fc : bc); fl_polygon(x+3,y1, x1,y+3, x+w-3,y1, x1,y+h-3);
 
-      fl_color(g['A']); fl_line(x, y1, x1, y, x+w, y1);
-      fl_color(g['A']); fl_line(x+1, y1, x1, y+1, x+w-1, y1);
-      fl_color(g['W']); fl_line(x+3, y1, x1, y+3, x+w-3, y1);
+      fl_color(dark); fl_line(x, y1, x1, y, x+w, y1);
+      fl_color(dark); fl_line(x+1, y1, x1, y+1, x+w-1, y1);
+      fl_color(light); fl_line(x+3, y1, x1, y+3, x+w-3, y1);
 
-      fl_color(g['W']); fl_line(x, y1, x1, y+h, x+w, y1);
-      fl_color(g['W']); fl_line(x+1, y1, x1, y+h-1, x+w-1, y1);
-      fl_color(g['A']); fl_line(x+3, y1, x1, y+h-3, x+w-3, y1);
+      fl_color(light); fl_line(x, y1, x1, y+h, x+w, y1);
+      fl_color(light); fl_line(x+1, y1, x1, y+h-1, x+w-1, y1);
+      fl_color(dark); fl_line(x+3, y1, x1, y+h-3, x+w-3, y1);
       break;
     }
     case FL_GLYPH_RADIO: {
-      Fl_Color *g = gray_ramp(f&FL_INACTIVE);
+      if (box == FL_NO_BOX) { fl_glyph(t, x, y, w, h, bc, fc, f, box); break; }
+      Fl_Color light = 54, dark = 32;
 
-      if (f&FL_INACTIVE) fc = fl_inactive(fc);
+      if (box == FL_NO_BOX) fc = FL_RED; // Hack!
+      if (f&FL_INACTIVE)
+        { fc = fl_inactive(fc); light = fl_inactive(light); dark = fl_inactive(dark); }
       draw(FILL, x+2, y+2, w-4, h-4, 0, (f&FL_VALUE) ? fc : bc);
 
-      draw(UPPER_LEFT, x+1, y, w-2, h, 0, g['A']);
-      draw(UPPER_LEFT, x, y, w, h, 0, g['A']);
-      draw(UPPER_LEFT, x+1, y+1, w-2, h-2, 0, g['A']);
-      draw(UPPER_LEFT, x+2, y+2, w-4, h-4, 0, g['W']);
+      draw(UPPER_LEFT, x+1, y, w-2, h, 0, dark);
+      draw(UPPER_LEFT, x, y, w, h, 0, dark);
+      draw(UPPER_LEFT, x+1, y+1, w-2, h-2, 0, dark);
+      draw(UPPER_LEFT, x+2, y+2, w-4, h-4, 0, light);
 
-      draw(LOWER_RIGHT, x+1, y, w-2, h, 0, g['W']);
-      draw(LOWER_RIGHT, x, y, w, h, 0, g['W']);
-      draw(LOWER_RIGHT, x+1, y+1, w-2, h-2, 0, g['W']);
-      draw(LOWER_RIGHT, x+2, y+2, w-4, h-4, 0, g['A']);
+      draw(LOWER_RIGHT, x+1, y, w-2, h, 0, light);
+      draw(LOWER_RIGHT, x, y, w, h, 0, light);
+      draw(LOWER_RIGHT, x+1, y+1, w-2, h-2, 0, light);
+      draw(LOWER_RIGHT, x+2, y+2, w-4, h-4, 0, dark);
       break;
     }
     case FL_GLYPH_HSLIDER: {
@@ -209,12 +224,16 @@ void demo_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
 extern "C" fltk_theme(int, char**);
 
 int fltk_theme(int, char** argv) {
-  static Fl_Boxtype_Definer demo_down("demo down", demo_down_box);
-  static Fl_Boxtype_Definer demo_up("demo up", demo_up_box);
-  static Fl_Boxtype_Definer demo_menu("demo menu", demo_menu_box);
-  static Fl_Boxtype_Definer demo_menu_title("demo menu title", demo_menu_title_box);
+  static Fl_Boxtype_Definer alt_down("alternative down", alt_down_box);
+  static Fl_Boxtype_Definer alt_up("alternative up", alt_up_box);
+  static Fl_Boxtype_Definer alt_menu("alternative menu", alt_menu_box);
+  static Fl_Boxtype_Definer alt_menu_title("alternative menu title", alt_menu_title_box);
 
-  Fl_Widget::default_style.set_glyph(demo_glyph);
+  Fl_Widget::default_style.set_glyph(alt_glyph);
 
   return 0;
 }
+
+//
+// End of "$Id: Alternative.cxx,v 1.2 1999/11/08 22:22:02 carl Exp $".
+//

@@ -1,5 +1,5 @@
 //
-// "$Id: forms_compatability.cxx,v 1.1 1999/11/07 08:11:30 bill Exp $"
+// "$Id: forms_compatability.cxx,v 1.2 1999/11/08 22:21:50 carl Exp $"
 //
 // Forms compatibility functions for the Fast Light Tool Kit (FLTK).
 //
@@ -82,7 +82,9 @@ void fl_end_group() {
     Fl_Widget*const* a = g->array();
     for (int i=g->children(); i--;) {
       Fl_Widget* o = *a++;
-      o->y(Y-o->y()-o->h());
+//      o->y(Y-o->y()-o->h());
+      // I think this is equivalent?
+      o->position(o->x(), Y-o->y()-o->h());
     }
     g->oy_ = Y-g->oy_-g->h();
   }
@@ -227,5 +229,5 @@ char *fl_show_simple_input(const char *str1, const char *defstr) {
 }
 
 //
-// End of "$Id: forms_compatability.cxx,v 1.1 1999/11/07 08:11:30 bill Exp $".
+// End of "$Id: forms_compatability.cxx,v 1.2 1999/11/08 22:21:50 carl Exp $".
 //

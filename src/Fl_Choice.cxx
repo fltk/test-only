@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.21 1999/11/05 21:43:50 carl Exp $"
+// "$Id: Fl_Choice.cxx,v 1.22 1999/11/08 22:21:53 carl Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -93,8 +93,13 @@ int Fl_Choice::handle(int e) {
 }
 
 Fl_Style Fl_Choice::default_style;
-static Fl_Style_Definer x("choice", Fl_Choice::default_style);
+
+static void revert(Fl_Style* s) {
+  s->box = FL_UP_BOX;
+}
+
+static Fl_Style_Definer x("choice", Fl_Choice::default_style, revert);
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.21 1999/11/05 21:43:50 carl Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.22 1999/11/08 22:21:53 carl Exp $".
 //

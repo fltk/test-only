@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.15 1999/11/07 08:11:47 bill Exp $"
+// "$Id: fl_options.cxx,v 1.16 1999/11/08 22:21:57 carl Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -304,6 +304,8 @@ int Fl::loadtheme(int b) {
     return -1;
   }
 
+  use_schemes = 1;
+
   int r;
   if ( (r = fl_load_plugin(tfile, "fltk_theme")) ) {
     fprintf(stderr, "Can't load theme \"%s\": %d\n", tfile, r);
@@ -370,30 +372,53 @@ Fl_Style* Fl_Style::find(const char* name) {
   return 0;
 }
 
-// static void style_clear(Fl_Style *s) {
-//   Fl_Style *p = s->parent;
-//   memset(s, 0, sizeof(*s));
-//   s->parent = p;
-// }
+static void style_clear(Fl_Style *s) {
+  Fl_Style *p = s->parent;
+  memset(s, 0, sizeof(*s));
+  s->parent = p;
+}
+
+extern Fl_Boxtype fl_popup_box;
+extern int fl_extra_menu_spacing;
 
 void Fl_Style::revert() {
   fl_background((Fl_Color)0xc0c0c000);
-//   for (Fl_Style_Definer* p = Fl_Style_Definer::first; p; p = p->next) {
-//     style_clear(p->style);
-//     if (p->revert) p->revert(p->style);
-//   }
+
+  fl_popup_box = FL_UP_BOX;
+  fl_extra_menu_spacing = 0;
+
+  fl_normal_box.data = "2AAXXHHTT";
+  fl_normal_box.dx_ = 2;
+  fl_normal_box.dy_ = 2;
+  fl_normal_box.dw_ = 4;
+  fl_normal_box.dh_ = 4;
+  fl_up_box.data = "2AAXXHHTT";
+  fl_up_box.dx_ = 2;
+  fl_up_box.dy_ = 2;
+  fl_up_box.dw_ = 4;
+  fl_up_box.dh_ = 4;
+  fl_down_box.data = "2XXHHTTAA";
+  fl_down_box.dx_ = 2;
+  fl_down_box.dy_ = 2;
+  fl_down_box.dw_ = 4;
+  fl_down_box.dh_ = 4;
+
+  for (Fl_Style_Definer* p = Fl_Style_Definer::first; p; p = p->next) {
+    style_clear(p->style);
+    if (p->revert) p->revert(p->style);
+  }
   Fl::redraw();
 }
 
-// Fl_Style_Definer::Fl_Style_Definer(char* n, Fl_Style& s, Fl_Style_Reverter rf)
-//   : name(n), style(&s), revert(rf), next(first)
-// {
-//   if (revert) revert(style);
-//   first = this;
-// }
+Fl_Style_Definer::Fl_Style_Definer(char* n, Fl_Style& s, Fl_Style_Reverter rf)
+  : name(n), style(&s), revert(rf), next(first)
+{
+  if (revert) revert(style);
+  first = this;
+}
 
 //
-// End of "$Id: fl_options.cxx,v 1.15 1999/11/07 08:11:47 bill Exp $".
+// End of "$Id: fl_options.cxx,v 1.16 1999/11/08 22:21:57 carl Exp $".
 //
 
 
