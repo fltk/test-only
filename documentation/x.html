@@ -1,11 +1,8 @@
-<html><head><title>FLTK Operating System Issues</title></head><body bgcolor=white>
+<html><head><title>FLTK X-Specific Interface</title></head><body bgcolor=white>
 
-<h1 align=right><a name=osissues>F - Operating System Issues</A></h1>
+<h1 align=right>G - X-Specific Interface</A></h1>
 
-<hr>
-<h1>X-Specific Interface</h1>
-
-<UL><PRE>#include &lt;FL/x.H&gt;</PRE></UL>
+<h1><tt>#include &lt;FL/x.H&gt;</tt></h1>
 
 On X you can include this file to access FLTK's X-specific functions. 
 Be warned that some of the structures and calls in it are subject to 
@@ -14,19 +11,18 @@ is portable.
 
 <h4><A name=add_handler>void Fl::add_handler(int (*f)(int))</A></h4>
 
-Installs a function to parse unrecognized events.  If FLTK cannot 
-figure out what to do with an event, it calls each of these functions 
-(most recent first) until one of them returns non-zero.  If none of 
-them returns non-zero then the event is ignored. 
+Installs a function to parse unrecognized events.  If FLTK cannot
+figure out what to do with an event, it calls each of these functions
+(most recent first) until one of them returns non-zero.  If none of
+them returns non-zero then the event is ignored.  The argument is the
+event number (like <tt>FL_PUSH</tt>).  For keystrokes it will be
+<tt>FL_SHORTCUT</tt>.
 
-<P>FLTK calls this for any X events it does not recognize, or X events
-with a window id that FLTK does not recognize, or for events when the
-widget's handle function returns zero.  You can look at the X event
-with the <A href=#fl_xevent><TT>fl_xevent</TT></A> variable.
-
-<P>The argument is the event number (like <tt>FL_PUSH</tt>).  For X
-events that fltk does not understand, it is zero.  For keystrokes it
-will be <tt>FL_SHORTCUT</tt>.
+<p>Besides events that all widgets ignored, FLTK calls this for X
+events that it does not recognize, or that contain a window id that
+FLTK does not know about. In this case the argument is zero.  You can
+look at the X event with the <A href=#fl_xevent><TT>fl_xevent</TT></A>
+variable.
 
 <h4><A name=fl_xevent>extern XEvent* fl_xvent</A></h4>
 
@@ -39,19 +35,21 @@ This is the time stamp from the most recent X event that reported it
 
 <h4><A name=fl_handle>int fl_handle(const XEvent &amp;)</A></h4>
 
-This call allows you to supply the X events to FLTK, which may allow 
-FLTK to cooperate with another toolkit or library.  The return value is 
-true if FLTK understood the event (if the window does not belong to 
-FLTK and the <TT>add_handler()</TT> functions all ignore it this 
-returns false). 
+This allows you to "feed" X events to fltk, in cases where you cannot
+give fltk control over any file descriptors. Fltk will figure out what
+the event is and call widgets normally and also the
+<tt>Fl::add_handler()</tt> functions. The return value is true if a
+widget accepted the event or one of the <TT>add_handler()</TT>
+function returned true.
 
 <P>Besides feeding events your code should call <A href=functions.html#flush>
-<TT>Fl::flush()</TT></A> periodically so that FLTK redraws its windows. </P>
+<TT>Fl::flush()</TT></A> periodically so that FLTK redraws its
+windows.
 
-<P>This function will call the callback functions.  It will not return 
-until they complete.  In particular if a callback pops up a modal 
-window (by calling <A href=functions.html#fl_ask><TT>fl_ask()</TT></A>, 
-for instance) it will not return until the modal function returns. </P>
+<P>This function will call any widget callbacks from the widget code.
+It will not return until they complete, for instance if it pops up a
+modal window with <A href=utility.html#fl_ask><TT>fl_ask()</TT></A>,
+it will not return until the user clicks yes or no.
 
 <h4><A name=display>int Fl::display(const char*)</A></h4>
 
@@ -76,7 +74,7 @@ display.
 You can make fltk "open" a display that has already been opened,
 perhaps by another GUI library.  Calling this will set
 <tt>fl_display</tt> to the passed display and also read information
-fltk needs from it.  You can only call this once.
+fltk needs from it. <i>Don't call this if the display is already open!</i>
 
 <h4><A name=fl_display>extern Display* fl_display</A></h4>
 
@@ -175,7 +173,7 @@ the name of the program.
 <p>This call is provided on WIN32 for compatability, but the value is
 ignored.
 
-<h4>void Fl_Window::icon(char*)</h4>
+<h4><a name=icon>void Fl_Window::icon(char*)</h4>
 
 Sets the icon for the window to the passed pointer.  You will need to 
 cast the icon <TT>Pixmap</TT> to a <TT>char*</TT> when calling this 
@@ -294,129 +292,5 @@ class <TT>destroy()</TT> is called):
 <UL><PRE>MyWindow::~MyWindow() {
   destroy();
 }</PRE></UL>
-
-<hr>
-<h1>WIN32-Specific Interface</h1>
-
-<UL><PRE>#include &lt;FL/x.H&gt;</PRE></UL>
-
-The <TT>&lt;FL/x.H&gt;</TT> header file defines the interface to FLTK's 
-WIN32-specific functions.  Be warned that some of the structures and 
-calls in it are subject to change in future version of FLTK.  Try to 
-avoid doing this so your code is portable. 
-
-<p>Fltk creates a single WNDCLASSEX called &quot;FLTK&quot;.  The
-window class is created the first time <TT>Fl_Window::show()</TT> is
-called.
-
-<P>You can probably combine FLTK with other libraries that make their
-own WIN32 window classes.  The easiest way is to call
-<TT>Fl::wait()</TT>, it will call <TT>DispatchMessage</TT> for all
-messages to the other windows.  If necessary you can let the other
-library take over (as long as it calls <TT>DispatchMessage()</TT>),
-but you will have to arrange for the function <TT>Fl::flush()</TT> to
-be called regularily so that widgets are updated, timeouts are
-handled, and the idle functions are called.
-
-<h4><A name=WIN32.add_handler>void Fl::add_handler(int (*f)(int))</A></h4>
-
-Install a function to parse unrecognized messages sent to FLTK 
-windows.  If FLTK cannot figure out what to do with a message, it calls 
-each of these functions (most recent first) until one of them returns 
-non-zero.  The argument passed to the fuctions is zero.  If all the 
-handlers return zero then FLTK calls <TT>DefWindowProc()</TT>. 
-
-<h4><A name=fl_msg>extern MSG fl_msg</A></h4>
-
-The most recent message read by <TT>GetMessage</TT> (which is called 
-by <A href=functions.html#wait><TT>Fl::wait()</TT></A>.  This may not 
-be the most recent message sent to an FLTK window (because our
-fun-loving friends at MicroSoft decided that calling the handle
-procedures directly would be a good idea sometimes...)
-
-<h4><A name=WIN32.fl_xid>HWND fl_xid(const Fl_Window*)</A></h4>
-
-Returns the window handle for a <TT>Fl_Window</TT>, or zero if not
-<TT>shown()</TT>.
-
-<h4><A name=WIN32.fl_find>Fl_Window* fl_find(HWND xid)</A></h4>
-
-Return the <TT>Fl_Window</TT> that corresponds to the given window 
-handle, or <TT>NULL</TT> if not found.  This uses a cache so it is 
-slightly faster than iterating through the windows yourself. 
-
-<h4><A name=fl_display>extern HINSTANCE fl_display;</h4>
-
-This is set on program initialization to <tt>GetModuleHandle(0)</tt>
-and can be used to identify this application.
-
-<h4><a name=fl_window>extern HWND fl_window;
-<br><a name=fl_gc>extern HDC fl_gc;</h4>
-
-These are set before <tt>draw()</tt> is called, or by <a
-href=Fl_Window.html#make_current><tt>Fl_Window::make_current()</tt></a>,
-and can be used as arguments to GDI32 calls.
-
-<p>Notice that <tt>fl_window</tt> is the window handle.  Other
-information such as the position or size of the window can be found
-by looking at <A href=Fl_Window.html#make_current><TT>
-Fl_Window::current()</TT></A>, which returns a pointer to the <TT>
-Fl_Window</TT> being drawn.
-
-<h4><a name=fl_rgb>extern COLORREF fl_rgb;
-<br><a name=fl_pen>extern HPEN fl_pen;
-<br><a name=fl_brush>extern HBRUSH fl_brush;</h4>
-
-These are set by <a href=drawing.html#fl_color><tt>fl_color()</tt></a>
-and by <a href=drawing.html#fl_line_style><tt>fl_line_style()</tt></a>,
-by using these in your drawing calls you can provide the illusion that
-GDI has a color in it's graphics state.
-
-<h4>void Fl_Window::icon(char*)</h4>
-
-Sets the icon for the window to the passed pointer.  You will need to 
-cast the <TT>HICON</TT> handle to a <TT>char*</TT> when calling this 
-method. To set the icon using an icon resource compiled with your 
-application use: 
-
-<UL><PRE>
-window-&gt;icon((char*)LoadIcon(fl_display, MAKEINTRESOURCE(IDI_ICON)));
-</PRE></UL>
-
-<p>This only works if called <i>before</i> it is shown using the
-<TT>Fl_Window::show()</TT> method.
-
-<h3>How to Not Get a MSDOS Console Window</h3>
-
-WIN32 has a really stupid mode switch stored in the executables that 
-controls whether or not to make a console window. 
-
-<P>To always get a console window you simply create a console 
-application (the &quot;/SUBSYSTEM:CONSOLE&quot; option for the linker).  For a 
-GUI-only application create a WIN32 application (the 
-&quot;/SUBSYSTEM:WINDOWS&quot; option for the linker). </P>
-
-<P>FLTK includes a <TT>WinMain()</TT> function that calls the ANSI 
-standard <TT>main()</TT> entry point for you. <i>This function creates 
-a console window when you use the debug version of the library.</i>
-
-<P>WIN32 applications without a console cannot write to <TT>stdout</TT>
-or <TT>stderr</TT>, <i>even if they are run from a console window</i>.  Any 
-output is silently thrown away. We are not sure why, but we do
-question the sanity of the software engineers there sometimes.
-
-<h3>Known Bugs</h3>
-
-If a program is deactivated, <TT>Fl::wait()</TT> does not return until 
-it is activated again, even though many events are delivered to the 
-program. This can cause idle background processes to stop unexpectedly. 
-This also happens while the user is dragging or resizing windows or 
-otherwise holding the mouse down.  I was forced to remove most of the 
-efficiency FLTK uses for redrawing in order to get windows to update 
-while being moved.  This is a design error in WIN32 and probably 
-impossible to get around. 
-
-<P>Cut text contains ^J rather than ^M^J to break lines.  This is a 
-feature, not a bug.
 
 </body></html>
