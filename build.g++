@@ -1,0 +1,11 @@
+#!/bin/sh
+
+autoconf
+
+CC=gcc
+CXX=g++
+export CC CXX
+
+./configure $*
+
+make clean all

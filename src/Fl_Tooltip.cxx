@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.28 2001/02/23 05:14:18 clip Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.29 2001/02/25 01:41:19 clip Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -31,6 +31,11 @@ float Fl_Tooltip::delay_ = 0.5f;
 int Fl_Tooltip::enabled_ = 1;
 
 #define MAX_WIDTH 400
+
+extern FL_API void (*Fl_Tooltip::enter)(Fl_Widget *);
+extern FL_API void (*Fl_Tooltip::enter_area)(Fl_Widget *, int, int, int, int, const char *);
+extern FL_API void (*Fl_Tooltip::exit)(Fl_Widget *);
+
 
 class Fl_TooltipBox : public Fl_Menu_Window {
 public:
@@ -100,28 +105,8 @@ static void tooltip_timeout(void*) {
 
 static int cheesy_flag = 0;
 
-void
-Fl_Tooltip::enter(Fl_Widget* w) {
-  if (cheesy_flag  || w == widget) return;
-  if (!w || w == window) { exit(widget); widget = 0; return; }
-  enter(w, 0, 0, w->w(), w->h(), w->tooltip());
-}
-
-void
-Fl_Tooltip::enter(Fl_Widget* w, int X, int Y, int W, int H, const char* t) {
-  if (cheesy_flag) return;
-  if (w == widget && X == ::X && Y == ::Y && W == ::W && H == ::H && t == tip)
-    return;
-  exit(widget);
-  widget = w; ::X = X; ::Y = Y; ::W = W; ::H = H; tip = t;
-  if (!t || !enabled_) return;
-  float d = Fl_Tooltip::delay();
-  if (d < .01) d = .01;
-  Fl::add_timeout(d, (Fl_Timeout_Handler)tooltip_timeout);
-}
-
-void
-Fl_Tooltip::exit(Fl_Widget *w) {
+static void
+tt_exit(Fl_Widget *w) {
   if (!w || w != widget) return;
   widget = 0;
   Fl::remove_timeout((Fl_Timeout_Handler)tooltip_timeout);
@@ -134,6 +119,37 @@ Fl_Tooltip::exit(Fl_Widget *w) {
   }
 }
 
+static void
+tt_enter_area(Fl_Widget* w, int X, int Y, int W, int H, const char* t) {
+  if (cheesy_flag) return;
+  if (w == widget && X == ::X && Y == ::Y && W == ::W && H == ::H && t == tip)
+    return;
+  tt_exit(widget);
+  widget = w; ::X = X; ::Y = Y; ::W = W; ::H = H; tip = t;
+  if (!t || !Fl_Tooltip::enabled()) return;
+  float d = Fl_Tooltip::delay();
+  if (d < .01) d = .01;
+  Fl::add_timeout(d, (Fl_Timeout_Handler)tooltip_timeout);
+}
+
+static void
+tt_enter(Fl_Widget* w) {
+  if (cheesy_flag  || w == widget) return;
+  if (!w || w == window) { tt_exit(widget); widget = 0; return; }
+  tt_enter_area(w, 0, 0, w->w(), w->h(), w->tooltip());
+}
+
+void Fl_Widget::tooltip(const char *tt) {
+  static int do_once = 0;
+  if (!do_once) {
+    do_once = 1;
+    Fl_Tooltip::enter = tt_enter;
+    Fl_Tooltip::enter_area = tt_enter_area;
+    Fl_Tooltip::exit = tt_exit;
+  }
+  tooltip_ = tt;
+}
+
 static void revert(Fl_Style* s) {
   s->box = FL_BORDER_BOX;
   s->color = (Fl_Color)215;
@@ -144,5 +160,5 @@ Fl_Named_Style* Fl_Tooltip::default_style =
   new Fl_Named_Style("Tooltip", revert, &Fl_Tooltip::default_style);
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.28 2001/02/23 05:14:18 clip Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.29 2001/02/25 01:41:19 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.22 2001/02/21 06:15:45 clip Exp $"
+// "$Id: fl_labeltype.cxx,v 1.23 2001/02/25 01:41:19 clip Exp $"
 //
 // Label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -29,8 +29,17 @@
 
 #include <FL/Fl_Labeltype.H>
 #include <FL/fl_draw.H>
+#include <FL/Fl_Widget.H>
+#include <FL/Fl_Image.H>
 #include <string.h>
 #include <config.h>
+
+// Don't link in image code!
+static void nothing(Fl_Image *, int, int, int, int, int, int) {}
+static void nothing2(Fl_Image *, int &, int &) {}
+FL_API void (*fl_image_draw)(Fl_Image *, int, int, int, int, int, int) = nothing;
+FL_API void (*fl_image_draw_tiled)(Fl_Image *, int, int, int, int, int, int) = nothing;
+FL_API void (*fl_image_measure)(Fl_Image *, int &, int &) = nothing2;
 
 void Fl_No_Label::draw(const char*, int, int, int, int, Fl_Color, Fl_Flags)
 const {}
@@ -55,8 +64,6 @@ Fl_Labeltype_ fl_normal_label("normal");
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Image.H>
 extern char fl_draw_shortcut;
 
 // The normal call for a draw() method, this draws inside labels but
@@ -99,7 +106,7 @@ void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Flags flags) const
 
   if (image_) {
 
-    int w, h; image_->measure(w, h);
+    int w, h; fl_image_measure(image_, w, h);
 
     // If all the flags are off, draw the image and label centered "nicely"
     // by measuring their total size and centering that rectangle:
@@ -135,9 +142,9 @@ void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Flags flags) const
 
     fl_color((flags&FL_INACTIVE) ? fl_inactive(color) : color);
     if (flags & FL_ALIGN_TILED)
-      image_->draw_tiled(X, Y, W, H, cx, cy);
+      fl_image_draw_tiled(image_, X, Y, W, H, cx, cy);
     else
-      image_->draw(X, Y, W, H, cx, cy);
+      fl_image_draw(image_, X, Y, W, H, cx, cy);
 
     // figure out the rectangle that remains for text:
     if (flags & FL_ALIGN_LEFT) {X += w; W -= w;}
@@ -171,5 +178,5 @@ const Fl_Labeltype_* Fl_Labeltype_::find(const char* name) {
 const Fl_Labeltype_* Fl_Labeltype_::first = 0;
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.22 2001/02/21 06:15:45 clip Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.23 2001/02/25 01:41:19 clip Exp $".
 //

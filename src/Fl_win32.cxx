@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.139 2001/02/22 15:50:57 robertk Exp $"
+// "$Id: Fl_win32.cxx,v 1.140 2001/02/25 01:41:19 clip Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -365,27 +365,6 @@ void Fl::paste(Fl_Widget &receiver) {
     }
     CloseClipboard();
   }
-}
-
-// Dummy version of dnd for now, it waits until the FL_RELEASE and
-// then does nothing.  The real version should drag the ascii text stored
-// in selection_buffer (length = selection_length) and drop it on the
-// target. It should either not return until the mouse is released
-// or it should cause the DRAG+RELEASE events to not be passed to the
-// program somehow. I'm pretty sure this is a simple call in WIN32:
-
-static int grabfunc(int event, void*) {
-  if (event == FL_RELEASE) Fl::pushed(0);
-  return 0;
-}
-
-int Fl::dnd() {
-  Fl::first_window()->cursor(FL_CURSOR_HAND);
-  Fl::local_grab(grabfunc);
-  while (Fl::pushed()) Fl::wait();
-  Fl::first_window()->cursor(FL_CURSOR_DEFAULT);
-  Fl::release();
-  return 1;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1274,5 +1253,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.139 2001/02/22 15:50:57 robertk Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.140 2001/02/25 01:41:19 clip Exp $".
 //

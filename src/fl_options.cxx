@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.74 2001/02/21 06:15:45 clip Exp $"
+// "$Id: fl_options.cxx,v 1.75 2001/02/25 01:41:19 clip Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -152,12 +152,18 @@ static int load_scheme(const char *s) {
 
   if (!p) {
     fprintf(stderr, "Cannot find scheme \"%s\"\n", temp);
+    fl_get_system_colors();
     return -1;
   }
 
   char sfile[PATH_MAX];
   strncpy(sfile, p, sizeof(sfile));
-  if (!::getconf(sfile, "general/themes", temp, sizeof(temp))) Fl::theme(temp);
+  if (!::getconf(sfile, "general/themes", temp, sizeof(temp)))
+    if (Fl::theme(temp)) {
+      fprintf(stderr, "Could not load theme(s).  Will not load scheme!\n");
+      fl_get_system_colors();
+      return -2;
+    }
   char valstr[80];
   Fl_Color col;
 
@@ -298,8 +304,8 @@ void Fl::reload_scheme() {
 
 static int load_theme(const char *t) {
 // don't try to load themes if not linked to shared libraries
-//#ifdef FL_SHARED
-#if 1
+#ifdef FL_SHARED
+//#if 1
 // WAS - I temporarily enabled this for testing.
 // CET - OK, but we should let people know that all themes will  not
 // necessarily work when not linked dynamically to to save ourselves
@@ -344,8 +350,11 @@ static int load_theme(const char *t) {
   }
 
   Fl::redraw();
-#endif
   return 0;
+#else
+  fprintf(stderr, "FLTK linked statically, cannot load plugin or theme: %s\n", t);
+  return 1;
+#endif
 }
 
 int Fl::plugin(const char* t) {
@@ -406,7 +415,7 @@ int fl_getconf(const char *key, char *value, int value_length) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.74 2001/02/21 06:15:45 clip Exp $".
+// End of "$Id: fl_options.cxx,v 1.75 2001/02/25 01:41:19 clip Exp $".
 //
 
 

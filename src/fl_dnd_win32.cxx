@@ -1,7 +1,7 @@
 //
-// "$Id: hello.cxx,v 1.7 2001/02/25 01:41:19 clip Exp $"
+// "$Id: fl_dnd_win32.cxx,v 1.1 2001/02/25 01:41:19 clip Exp $"
 //
-// Demo program from the fltk documentation.
+// Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -23,21 +23,32 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
+
+// Dummy version of dnd for now, it waits until the FL_RELEASE and
+// then does nothing.  The real version should drag the ascii text stored
+// in selection_buffer (length = selection_length) and drop it on the
+// target. It should either not return until the mouse is released
+// or it should cause the DRAG+RELEASE events to not be passed to the
+// program somehow. I'm pretty sure this is a simple call in WIN32:
+
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
-#include <FL/Fl_Box.H>
 
-int main(int argc, char **argv) {
-  Fl_Window *window = new Fl_Window(300,180);
-  Fl_Box *box = new Fl_Box(20,40,260,100,"Hello, World!");
-  box->box(FL_UP_BOX);
-  box->label_font(FL_HELVETICA_BOLD_ITALIC);
-  box->label_size(36);
-  window->end();
-  window->show(argc, argv);
-  return Fl::run();
+static int grabfunc(int event, void*) {
+  if (event == FL_RELEASE) Fl::pushed(0);
+  return 0;
 }
 
+int Fl::dnd() {
+  Fl::first_window()->cursor(FL_CURSOR_HAND);
+  Fl::local_grab(grabfunc);
+  while (Fl::pushed()) Fl::wait();
+  Fl::first_window()->cursor(FL_CURSOR_DEFAULT);
+  Fl::release();
+  return 1;
+}
+
+
 //
-// End of "$Id: hello.cxx,v 1.7 2001/02/25 01:41:19 clip Exp $".
+// End of "$Id: fl_dnd_win32.cxx,v 1.1 2001/02/25 01:41:19 clip Exp $".
 //

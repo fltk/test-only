@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.17 2001/02/20 06:59:49 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.18 2001/02/25 01:41:19 clip Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,35 @@
 #include <FL/fl_draw.H>
 #include <FL/x.H>
 #include <FL/Fl_Image.H>
+#include <FL/Fl_Widget.H>
+
+extern FL_API void (*fl_image_draw)(Fl_Image *, int, int, int, int, int, int);
+extern FL_API void (*fl_image_draw_tiled)(Fl_Image *, int, int, int, int, int, int);
+extern FL_API void (*fl_image_measure)(Fl_Image *, int &, int &);
+
+static void i_draw(Fl_Image *i, int x, int y, int w, int h, int cx, int cy) {
+  i->draw(x, y, w, h, cx, cy);
+}
+
+static void i_draw_tiled(Fl_Image *i, int x, int y, int w, int h, int cx, int cy) {
+  i->draw_tiled(x, y, w, h, cx, cy);
+}
+
+static void i_measure(Fl_Image *i, int &w, int &h) {
+  i->measure(w, h);
+}
+
+void Fl_Widget::image(Fl_Image *i) {
+  static int do_once = 0;
+  if (!do_once) {
+    fl_image_draw = i_draw;
+    fl_image_draw_tiled = i_draw_tiled;
+    fl_image_measure = i_measure;
+  }
+  image_ = i;
+}
+
+void Fl_Widget::image(Fl_Image &i) { image(&i); }
 
 // tiled image with minimal redraw
 void Fl_Image::draw_tiled(int x, int y, int pw, int ph, int cx, int cy) {
@@ -52,7 +81,7 @@ void Fl_Image::draw_tiled(int x, int y, int pw, int ph, int cx, int cy) {
     cx = ccx;
   }
 }
-  
+
 // Most subclasses have draw() create the "mask" and "id" and then
 // call this method:
 
@@ -164,5 +193,5 @@ void Fl_Image::label(Fl_Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.17 2001/02/20 06:59:49 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.18 2001/02/25 01:41:19 clip Exp $".
 //

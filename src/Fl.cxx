@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.120 2001/02/20 06:59:49 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.121 2001/02/25 01:41:19 clip Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -66,13 +66,20 @@ Fl_Shared_Image  *Fl_Shared_Image::first_image = 0;
 int Fl_Shared_Image::image_used=0;
 size_t Fl_Shared_Image::mem_usage_limit=0;
 
-size_t Fl_Shared_Image::mem_used=0; 
+size_t Fl_Shared_Image::mem_used=0;
 int Fl_Shared_Image::forbid_delete = 1;
 
 static Fl_Window *xfocus;	// which window X thinks has focus
 static Fl_Window *xmousewin;// which window X thinks has FL_ENTER
 
 void fl_fix_focus();
+
+static void nothing(Fl_Widget *) {}
+static void nothing2(Fl_Widget *, int, int, int, int, const char *) {}
+
+FL_API void (*Fl_Tooltip::enter)(Fl_Widget *) = nothing;
+FL_API void (*Fl_Tooltip::enter_area)(Fl_Widget *, int, int, int, int, const char *) = nothing2;
+FL_API void (*Fl_Tooltip::exit)(Fl_Widget *) = nothing;
 
 #ifdef WIN32
 #include "Fl_win32.cxx"
@@ -83,7 +90,7 @@ void fl_fix_focus();
 ////////////////////////////////////////////////////////////////
 // Timeouts are stored in a sorted list, so only the first one needs
 // to be checked to see if any should be called.
-  
+
 struct Timeout {
   double time;
   void (*cb)(void*);
@@ -676,5 +683,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.120 2001/02/20 06:59:49 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.121 2001/02/25 01:41:19 clip Exp $".
 //

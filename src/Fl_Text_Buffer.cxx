@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Buffer.cxx,v 1.6 2001/02/22 19:44:21 clip Exp $"
+// "$Id: Fl_Text_Buffer.cxx,v 1.7 2001/02/25 01:41:19 clip Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -362,7 +362,7 @@ void Fl_Text_Buffer::replace_rectangular( int start, int end, int rectStart,
     int rectEnd, const char *text ) {
   char *insPtr;
   const char *deletedText;
-  char *insText;
+  char *insText = "";
   const char *constInsText;
   int i, nInsertedLines, nDeletedLines, insLen, hint;
   int insertDeleted, insertInserted, deleteInserted;
@@ -2287,5 +2287,5 @@ Fl_Text_Buffer::outputfile(const char *file, int start, int end, int buflen) {
 
 
 //
-// End of "$Id: Fl_Text_Buffer.cxx,v 1.6 2001/02/22 19:44:21 clip Exp $".
+// End of "$Id: Fl_Text_Buffer.cxx,v 1.7 2001/02/25 01:41:19 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.61 2001/02/20 06:59:48 spitzak Exp $"
+// "$Id: Fl_Widget.H,v 1.62 2001/02/25 01:41:19 clip Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -91,11 +91,11 @@ public:
   void	copy_label(const char* a);
 
   Fl_Image* image() const	{return image_;}
-  void	image(Fl_Image* a)	{image_ = a;}
-  void	image(Fl_Image& a)	{image_ = &a;}
+  void	image(Fl_Image* a);
+  void	image(Fl_Image& a);
 
   const char *tooltip() const	{return tooltip_; }
-  void	tooltip(const char *t)	{tooltip_ = t;}
+  void	tooltip(const char *t);
 
   int shortcut() const		{return shortcut_;}
   void shortcut(int s)		{shortcut_ = s;}
@@ -310,5 +310,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.61 2001/02/20 06:59:48 spitzak Exp $".
+// End of "$Id: Fl_Widget.H,v 1.62 2001/02/25 01:41:19 clip Exp $".
 //

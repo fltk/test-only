@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.H,v 1.15 2000/08/20 04:31:36 spitzak Exp $"
+// "$Id: Fl_Tooltip.H,v 1.16 2001/02/25 01:41:19 clip Exp $"
 //
 // Tooltip definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -39,13 +39,13 @@ public:
 
   // This is called when the pointer enters a widget,
   // Also enter(0) gets rid of any displayed or pending tooltip:
-  static void enter(Fl_Widget* w);
+  static void (*enter)(Fl_Widget* w);
 
   // A widget may also pop up tooltips for internal parts by calling this:
-  static void enter(Fl_Widget* w, int X, int Y, int W, int H, const char* tip);
+  static void (*enter_area)(Fl_Widget* w, int X, int Y, int W, int H, const char* tip);
 
   // This is called when a widget is destroyed or hidden:
-  static void exit(Fl_Widget *w);
+  static void (*exit)(Fl_Widget *w);
 
   static Fl_Style* style()	{ return default_style; }
   static Fl_Font font()		{ return style()->label_font; }
@@ -68,5 +68,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Tooltip.H,v 1.15 2000/08/20 04:31:36 spitzak Exp $".
+// End of "$Id: Fl_Tooltip.H,v 1.16 2001/02/25 01:41:19 clip Exp $".
 //
