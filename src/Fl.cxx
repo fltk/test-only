@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.114 2000/11/15 18:20:23 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.115 2000/11/20 03:01:13 easysw Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -295,7 +295,6 @@ void Fl::belowmouse(Fl_Widget *o) {
   if (!dnd_flag) Fl_Tooltip::enter(o);
   Fl_Widget *p = belowmouse_;
   if (o != p) {
-    event_is_click(0);
     belowmouse_ = o;
     for (; p && !p->contains(o); p = p->parent())
       p->handle(dnd_flag ? FL_DND_LEAVE : FL_LEAVE);
@@ -587,5 +586,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.114 2000/11/15 18:20:23 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.115 2000/11/20 03:01:13 easysw Exp $".
 //
