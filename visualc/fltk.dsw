@@ -3,7 +3,7 @@ Microsoft Developer Studio Workspace File, Format Version 6.00
 
 ###############################################################################
 
-Project: "adjuster"=".\adjuster.dsp" - Package Owner=<4>
+Project: "adjuster"=.\adjuster.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -18,7 +18,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "arc"=".\arc.dsp" - Package Owner=<4>
+Project: "arc"=.\arc.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -33,7 +33,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "ask"=".\ask.dsp" - Package Owner=<4>
+Project: "ask"=.\ask.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -48,7 +48,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "bitmap"=".\bitmap.dsp" - Package Owner=<4>
+Project: "bitmap"=.\bitmap.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -63,7 +63,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "boxtype"=".\boxtype.dsp" - Package Owner=<4>
+Project: "boxtype"=.\boxtype.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -78,7 +78,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "browser"=".\browser.dsp" - Package Owner=<4>
+Project: "browser"=.\browser.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -93,7 +93,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "button"=".\button.dsp" - Package Owner=<4>
+Project: "button"=.\button.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -108,7 +108,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "buttons"=".\buttons.dsp" - Package Owner=<4>
+Project: "buttons"=.\buttons.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -123,7 +123,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "checkers"=".\checkers.dsp" - Package Owner=<4>
+Project: "checkers"=.\checkers.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -138,7 +138,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "clock"=".\clock.dsp" - Package Owner=<4>
+Project: "clock"=.\clock.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -153,7 +153,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "color_chooser"=".\color_chooser.dsp" - Package Owner=<4>
+Project: "color_chooser"=.\color_chooser.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -168,7 +168,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "cursor"=".\cursor.dsp" - Package Owner=<4>
+Project: "cursor"=.\cursor.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -183,7 +183,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "curve"=".\curve.dsp" - Package Owner=<4>
+Project: "curve"=.\curve.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -198,7 +198,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "demo"=".\demo.dsp" - Package Owner=<4>
+Project: "demo"=.\demo.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -315,7 +315,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "doublebuffer"=".\doublebuffer.dsp" - Package Owner=<4>
+Project: "doublebuffer"=.\doublebuffer.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -330,7 +330,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "editor"=".\editor.dsp" - Package Owner=<4>
+Project: "editor"=.\editor.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -345,7 +345,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "file_chooser"=".\file_chooser.dsp" - Package Owner=<4>
+Project: "file_chooser"=.\file_chooser.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -360,7 +360,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fltk"=".\fltk.lib.dsp" - Package Owner=<4>
+Project: "fltk"=.\fltk.lib.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -372,7 +372,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fltkdll"=".\fltkdll.dsp" - Package Owner=<4>
+Project: "fltkdll"=.\fltkdll.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -384,7 +384,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fluid"=".\fluid.dsp" - Package Owner=<4>
+Project: "fluid"=.\fluid.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -402,7 +402,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "fonts"=".\fonts.dsp" - Package Owner=<4>
+Project: "fonts"=.\fonts.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -417,22 +417,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "hello"=".\hello.dsp" - Package Owner=<4>
-
-Package=<5>
-{{{
-}}}
-
-Package=<4>
-{{{
-    Begin Project Dependency
-    Project_Dep_Name fltkdll
-    End Project Dependency
-}}}
-
-###############################################################################
-
-Project: "iconize"=".\iconize.dsp" - Package Owner=<4>
+Project: "hello"=.\hello.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -447,7 +432,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "input"=".\input.dsp" - Package Owner=<4>
+Project: "iconize"=.\iconize.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -462,7 +447,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "label"=".\label.dsp" - Package Owner=<4>
+Project: "input"=.\input.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -477,7 +462,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "menubar"=".\menubar.dsp" - Package Owner=<4>
+Project: "label"=.\label.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -492,7 +477,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "message"=".\message.dsp" - Package Owner=<4>
+Project: "menubar"=.\menubar.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -507,7 +492,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "navigation"=".\navigation.dsp" - Package Owner=<4>
+Project: "message"=.\message.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -522,7 +507,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "output"=".\output.dsp" - Package Owner=<4>
+Project: "navigation"=.\navigation.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -537,7 +522,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "overlay"=".\overlay.dsp" - Package Owner=<4>
+Project: "output"=.\output.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -552,7 +537,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "pack"=".\pack.dsp" - Package Owner=<4>
+Project: "overlay"=.\overlay.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -567,7 +552,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "pixmap"=".\pixmap.dsp" - Package Owner=<4>
+Project: "pack"=.\pack.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -582,7 +567,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "pixmap_browser"=".\pixmap_browser.dsp" - Package Owner=<4>
+Project: "pixmap"=.\pixmap.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -597,7 +582,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "scroll"=".\scroll.dsp" - Package Owner=<4>
+Project: "pixmap_browser"=.\pixmap_browser.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -612,7 +597,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "subwindow"=".\subwindow.dsp" - Package Owner=<4>
+Project: "scroll"=.\scroll.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -627,7 +612,7 @@ Package=<4>
 
 ###############################################################################
 
-Project: "symbols"=".\symbols.dsp" - Package Owner=<4>
+Project: "subwindow"=.\subwindow.dsp - Package Owner=<4>
 
 Package=<5>
 {{{
@@ -642,7 +627,22 @@ Package=<4>
 
 ###############################################################################
 
-Project: "tile"=".\tile.dsp" - Package Owner=<4>
+Project: "symbols"=.\symbols.dsp - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+}}}
+
+###############################################################################
+
+Project: "tile"=.\tile.dsp - Package Owner=<4>
 
 Package=<5>
 {{{

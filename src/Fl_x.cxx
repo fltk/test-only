@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.100 2001/01/23 18:47:55 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.101 2001/02/18 07:17:09 robertk Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -985,7 +985,8 @@ void Fl_Window::layout() {
   }
   if (ow() == w() && oh() == h()) {
     if (this == resize_from_system) resize_from_system = 0;
-    else if (i && (ox() != this->x() || oy() != this->y()))
+//    else if (i && (ox() != this->x() || oy() != this->y()))
+    else if (i && (ox() != x || oy() != y))
       XMoveWindow(fl_display, i->xid, x, y);
     for (int n = children(); n--;) {
       Fl_Widget* o = child(n);
@@ -1277,5 +1278,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.100 2001/01/23 18:47:55 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.101 2001/02/18 07:17:09 robertk Exp $".
 //

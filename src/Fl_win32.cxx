@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.135 2001/02/16 22:55:45 robertk Exp $"
+// "$Id: Fl_win32.cxx,v 1.136 2001/02/18 07:17:09 robertk Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -848,7 +848,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 // is also the value to put in the window style.
 
 int Fl_X::borders(const Fl_Window* w, int& dx, int& dy, int& dw, int& dh) {
-  if (!w->border()) {
+  if (!w->border() || w->parent()) {
     dx = dy = dw = dh = 0;
     return WS_POPUP;
   } else if (w->maxw != w->minw || w->maxh != w->minh) { // resizable
@@ -875,20 +875,20 @@ int Fl_X::borders(const Fl_Window* w, int& dx, int& dy, int& dw, int& dh) {
 void Fl_Window::layout() {
   int x = this->x(); int y = this->y();
   for (Fl_Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
-    x += p->x(); y += p->y();
+	x += p->x(); y += p->y();
   }
   UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER;
   if (ox() == this->x() && oy() == this->y()) flags |= SWP_NOMOVE;
   if (ow() == w() && oh() == h()) {
-    for (int i = 0; i < children(); i++) {
-      Fl_Widget* o = child(i);
+    for (int k = 0; k < children(); k++) {
+      Fl_Widget* o = child(k);
       if (o->damage() & FL_DAMAGE_LAYOUT) o->layout();
     }
     Fl_Widget::layout();
-    set_old_size();
+	set_old_size();
     if (flags & SWP_NOMOVE) return;
     flags |= SWP_NOSIZE;
-  } else {
+    } else {
     Fl_Group::layout();
     if (i) {redraw(); /*i->wait_for_expose = 1;*/}
   }
@@ -947,6 +947,9 @@ Fl_X* Fl_X::create(Fl_Window* w) {
   int xp = w->x();
   int yp = w->y();
 
+  for (Fl_Widget* p = w->parent(); p && !p->is_window(); p = p->parent()) {
+   	xp += p->x(); yp += p->y();
+  }
   int dx, dy, dw, dh;
 
   if (w->parent()) {
@@ -1260,5 +1263,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.135 2001/02/16 22:55:45 robertk Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.136 2001/02/18 07:17:09 robertk Exp $".
 //

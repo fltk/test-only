@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.61 2000/11/29 21:43:22 vincentp Exp $"
+// "$Id: Fl_Window.cxx,v 1.62 2001/02/18 07:17:09 robertk Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -53,8 +53,8 @@ int Fl_Window::y_root() const {
 }
 
 void Fl_Window::draw() {
-  int savex = x(); x(0);
-  int savey = y(); y(0);
+  int savex = x(); x(0); 
+  int savey = y(); y(0); 
   Fl_Group::draw();
   y(savey);
   x(savex);
@@ -152,6 +152,10 @@ int Fl_Window::handle(int event) {
 	  }
 	}
 	create();
+	// if this window is embedded in another widget, the layout 
+	// doesn't position things right until after create() is called.
+	if(parent()) 
+		layout();	
       }
 
       Fl_Group::handle(event); // make the child windows map first
@@ -350,5 +354,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.61 2000/11/29 21:43:22 vincentp Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.62 2001/02/18 07:17:09 robertk Exp $".
 //
