@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.57 2000/06/10 04:10:32 carl Exp $"
+// "$Id: fl_options.cxx,v 1.58 2000/06/11 06:56:27 carl Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -382,6 +382,10 @@ int Fl::theme(const char *t) {
 #define HOMEFLTKDIR "\\fltk\\"
 #endif
 
+#ifndef CONFIGDIR
+#define CONFIGDIR "/fltk"
+#endif
+
 const char* fl_find_config_file(const char* fn, int cflag) {
   static char path[PATH_MAX];
 
@@ -414,7 +418,7 @@ int Fl::getconf(const char *key, char *value, int value_length) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.57 2000/06/10 04:10:32 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.58 2000/06/11 06:56:27 carl Exp $".
 //
 
 
