@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.h,v 1.2 2002/02/10 22:57:47 spitzak Exp $"
+// "$Id: Fl_Text_Display.h,v 1.3 2002/08/11 04:49:54 spitzak Exp $"
 //
 // Header file for Fl_Text_Display class.
 //
@@ -97,14 +97,15 @@ class FL_API Fl_Text_Display: public Fl_Group {
     int position_style(int lineStartPos, int lineLen, int lineIndex,
                        int dispIndex);
     
+    virtual void layout();
+    virtual void draw();
+
   protected:
     // Most (all?) of this stuff should only be called from layout() or
     // draw().
     // Anything with "vline" indicates thats it deals with currently
     // visible lines.
-    virtual void layout();
 
-    virtual void draw();
     void draw_text(int X, int Y, int W, int H);
     void draw_range(int start, int end);
     void draw_cursor(int, int);
@@ -208,5 +209,5 @@ class FL_API Fl_Text_Display: public Fl_Group {
 #endif
 
 //
-// End of "$Id: Fl_Text_Display.h,v 1.2 2002/02/10 22:57:47 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.h,v 1.3 2002/08/11 04:49:54 spitzak Exp $".
 //

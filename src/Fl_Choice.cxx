@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.65 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: Fl_Choice.cxx,v 1.66 2002/08/11 04:49:54 spitzak Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,9 +27,6 @@
 #include <fltk/Fl_Choice.h>
 #include <fltk/fl_draw.h>
 
-// Set this to 1 for "classic fltk" rather than Windows style:
-#define MOTIF_STYLE 0
-
 // The dimensions for the glyph in this and the Fl_Menu_Button are exactly
 // the same, so that glyphs may be shared between them.
 
@@ -37,31 +34,30 @@ extern bool fl_hide_shortcut;
 
 void Fl_Choice::draw() {
   int X=0; int Y=0; int W=w(); int H=h();
-#if MOTIF_STYLE
-  draw_button(flags());
   box()->inset(X,Y,W,H);
   int w1 = H*4/5;
-#else
-  draw_frame();
-  box()->inset(X,Y,W,H);
-  int w1 = H*4/5;
+  if (damage() & FL_DAMAGE_ALL) {
+    draw_frame();
+    // draw the little mark at the right:
+    Fl_Flags flags = this->flags();
+    if (!active_r())
+      flags |= FL_INACTIVE;
+    else if (belowmouse())
+      flags |= FL_HIGHLIGHT;
+    draw_glyph(FL_GLYPH_DOWN_BUTTON, X+W-w1, Y, w1, H, flags);
+  }
   fl_color(color());
   fl_rectf(X,Y,W-w1,H);
   if (focused()) {
     fl_color(selection_color());
     fl_rectf(X+2, Y+2, W-w1-4, H-4);
   }
-#endif
   Fl_Widget* o = get_focus();
   if (!o) o = child(0);
   if (o) {
-#if MOTIF_STYLE
-    o->clear_flag(FL_SELECTED);
-#else
     if (focused()) o->set_flag(FL_SELECTED);
     else o->clear_flag(FL_SELECTED);
-#endif
-    fl_push_clip(X+2, Y+2, W-w1-2, H-4);
+    fl_push_clip(X+2, Y, W-w1-2, H);
     fl_push_matrix();
     fl_translate(X, Y+(H-o->height())/2);
     int save_w = o->w(); o->w(W-w1);
@@ -72,36 +68,10 @@ void Fl_Choice::draw() {
     fl_pop_matrix();
     fl_pop_clip();
   }
-  // draw the little mark at the right:
-  Fl_Flags flags = this->flags();
-  if (!active_r())
-    flags |= FL_INACTIVE;
-  else if (belowmouse())
-    flags |= FL_HIGHLIGHT;
-#if MOTIF_STYLE
-  // draw the little mark at the right:
-  draw_glyph(0, X+W-w1-2, Y+(H/3-H)/2, w1, H/3, flags);
-#else
-#if 1
-  draw_glyph(FL_GLYPH_DOWN_BUTTON, X+W-w1, Y, w1, H, flags);
-#else
-  // attempt to draw an up/down arrow like the Mac uses, since the
-  // popup menu is more like how the Mac works:
-  draw_glyph(0, X+W-w1, Y, w1, H, flags);
-  int x = X+W-w1+2;
-  int w = w1-4;
-  int h = (w+1)/2;
-  int y = Y+H/2;
-  draw_glyph(FL_GLYPH_UP, x, y-h-1, w, h, flags);
-  draw_glyph(FL_GLYPH_DOWN, x, y+1, w, h, flags);
-#endif
-#endif
 }
 
 int Fl_Choice::value(int v) {
-  if (focus(&v, 0)) {
-    redraw(); return true;
-  }
+  if (focus(&v, 0)) {redraw(FL_DAMAGE_VALUE); return true;}
   return false;
 }
 
@@ -132,7 +102,7 @@ static bool try_item(Fl_Choice* choice, int i) {
   if (!w->takesevents()) return false;
   choice->value(i);
   choice->execute(w);
-  choice->redraw();
+  choice->redraw(FL_DAMAGE_VALUE);
   return true;
 }  
 
@@ -161,12 +131,12 @@ int Fl_Choice::handle(int e) {
 //  Fl::event_is_click(0);
     if (click_to_focus()) take_focus();
   EXECUTE:
-    if (popup(0, 0, w(), h(), 0)) redraw();
+    if (popup(0, 0, w(), h(), 0)) redraw(FL_DAMAGE_VALUE);
     return 1;
 
   case FL_SHORTCUT:
     if (test_shortcut()) goto EXECUTE;
-    if (handle_shortcut()) {redraw(); return 1;}
+    if (handle_shortcut()) {redraw(FL_DAMAGE_VALUE); return 1;}
     return 0;
 
   case FL_KEY:
@@ -192,9 +162,45 @@ int Fl_Choice::handle(int e) {
   }
 }
 
+#define MOTIF_STYLE 0
+
+#if MOTIF_STYLE
+// Glyph erases the area and draws a long, narrow box:
+static void glyph(const Fl_Widget* widget, int,
+		  int x,int y,int w,int h, Fl_Flags)
+{
+  fl_color(widget->button_color());
+  fl_rectf(x,y,w,h);
+  // draw a long narrow box:
+  Fl_Widget::default_style->glyph(widget, 0, x, y+(h-h/3)/2, w-2, h/3, 0);
+}
+#endif
+
+#define MAC_STYLE 0
+#if MAC_STYLE
+// Attempt to draw an up/down arrow like the Mac uses, since the
+// popup menu is more like how the Mac works:
+static void glyph(const Fl_Widget* widget, int,
+		  int x,int y,int w,int h, Fl_Flags flags)
+{
+  Fl_Widget::default_style->glyph(widget, 0, x, y, w, h, flags);
+  x += 2;
+  w -= 4;
+  y = y+h/2;
+  h = (w+1)/2;
+  Fl_Widget::default_style->glyph(widget, FL_GLYPH_UP, x, y-h-1, w, h, flags);
+  Fl_Widget::default_style->glyph(widget, FL_GLYPH_DOWN, x, y+1, w, h, flags);
+}
+#endif
+
 static void revert(Fl_Style* s) {
 #if MOTIF_STYLE
   s->color = FL_GRAY;
+  s->box = s->button_box = Fl_Widget::default_style->button_box;
+  s->glyph = ::glyph;
+#endif
+#if MAC_STYLE
+  s->glyph = ::glyph;
 #endif
 }
 static Fl_Named_Style style("Choice", revert, &Fl_Choice::default_style);
@@ -210,5 +216,5 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.65 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.66 2002/08/11 04:49:54 spitzak Exp $".
 //

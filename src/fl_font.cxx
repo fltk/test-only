@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.35 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: fl_font.cxx,v 1.36 2002/08/11 04:49:54 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -52,12 +52,12 @@ fl_draw(const char* str, double x, double y) {
 void
 fl_draw(const char* str, int n, double x, double y) {
   fl_transform(x,y);
-  fl_transformed_draw(str, strlen(str), x, y);
+  fl_transformed_draw(str, n, x, y);
 }
 
 double
 fl_width(const char* c) { return fl_width(c, strlen(c)); }
 
 //
-// End of "$Id: fl_font.cxx,v 1.35 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: fl_font.cxx,v 1.36 2002/08/11 04:49:54 spitzak Exp $".
 //

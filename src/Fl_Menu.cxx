@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.126 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.127 2002/08/11 04:49:54 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -581,14 +581,15 @@ int MenuWindow::handle(int event) {
     if (p.state == INITIAL_STATE && Fl::event_is_click()) {
       // don't do this for checkboxes as it is confusing to the user
       // as to whether or not they turned it on.
+      if (p.indexes[p.level]<0) return 1;
       widget = p.current_widget();
-      if (!widget || !checkmark(widget)) return 1;
+      if (!checkmark(widget)) return 1;
     }
   EXECUTE: // execute the item pointed to by w and current item
     // If they click outside menu we quit:
-    widget = p.current_widget();
-    if (!widget) {Fl::exit_modal(); return 1;}
+    if (p.indexes[p.level]<0) {Fl::exit_modal(); return 1;}
     // ignore clicks on inactive items:
+    widget = p.current_widget();
     if (!widget->takesevents()) return 1;
 #if 0
     if ((widget->flags() & FL_MENU_STAYS_UP) && (!p.menubar || p.level)) {
@@ -694,7 +695,12 @@ int Fl_Menu_::popup(
   Fl_Widget* saved_modal = Fl::modal(); bool saved_grab = Fl::grab();
   p.state = INITIAL_STATE;
 
-  for (Fl::modal(&toplevel, true); !Fl::exit_modal_flag(); Fl::wait()) {
+#ifdef DEBUG
+#define MODAL false
+#else
+#define MODAL true
+#endif
+  for (Fl::modal(&toplevel, MODAL); !Fl::exit_modal_flag(); Fl::wait()) {
 
     if (!p.changed) continue;
 
@@ -747,13 +753,14 @@ int Fl_Menu_::popup(
   }
 
   Fl::modal(saved_modal, saved_grab);
-
   Fl::remove_timeout(autoscroll_timeout, &p);
 
   // destroy all the submenus we created:
   delete p.fakemenu;
   while (--p.nummenus) delete p.menus[p.nummenus];
   toplevel.hide();
+
+  Fl::first_window((Fl_Window*)(toplevel.child_of()));
 
   if (p.state != DONE_STATE) return 0; // user did not pick anything
 
@@ -765,5 +772,5 @@ int Fl_Menu_::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.126 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.127 2002/08/11 04:49:54 spitzak Exp $".
 //
