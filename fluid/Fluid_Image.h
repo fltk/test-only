@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Image.h,v 1.5 1999/03/31 19:14:21 carl Exp $"
+// "$Id: Fluid_Image.h,v 1.6 1999/08/16 07:31:07 bill Exp $"
 //
 // Pixmap image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -51,10 +51,10 @@ public:
 
 // pop up file chooser and return a legal image selected by user,
 // or zero for any errors:
-Fluid_Image *ui_find_image(const char *);
+Fluid_Image *ui_find_image(Fluid_Image* old);
 
 #endif
 
 //
-// End of "$Id: Fluid_Image.h,v 1.5 1999/03/31 19:14:21 carl Exp $".
+// End of "$Id: Fluid_Image.h,v 1.6 1999/08/16 07:31:07 bill Exp $".
 //

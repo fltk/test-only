@@ -1,8 +1,16 @@
 <HTML><BODY>
 <H1 ALIGN=RIGHT><A NAME=functions>B - Function Reference</A></H1>
- This appendix describes all of the <TT>fl_</TT> functions and <TT>Fl::</TT>
- methods. For a description of the FLTK widgets, see <A href=widgets.html#widgets>
-Appendix A</A>. 
+
+This appendix describes all of the <TT>fl_</TT> functions and <TT>Fl::</TT>
+methods. For a description of the FLTK classes, widgets, and the
+methods on those widgets, see <A href=widgets.html#widgets> Appendix
+A</A>.
+
+<p>Fltk also provides it's own drawing library.  These functions are
+described in <A HREF=drawing.html>5 - Drawing Things in FLTK</A>.
+There is also a set of OpenGL drawing functions described in 
+<A HREF=opengl.html#drawing>9 - Using OpenGL</A>.
+
 <H2>Functions</H2>
 <H3><A name=fl_color_chooser>int fl_color_chooser(const char*, double 
 &amp;r, double &amp;g, double &amp;b)
@@ -29,9 +37,9 @@ fl_rectf()</TT></A> to fill a region with a simulated color using
 dithering. </P>
 <H3><A name=fl_show_colormap>int fl_show_colormap(int oldcol)</A></H3>
 <TT>fl_show_colormap()</TT> pops up a panel of the 256 colors you can 
-access with <A href=#fl_color><TT>fl_color()</TT></A> and lets the user 
-pick one of them.  It returns the new color index, or the old one if 
-the user types ESC or clicks outside the window. 
+access with "indexed" <A href=Fl_Color.html><TT>Fl_Color</TT></A>
+values and lets the user pick one of them.  It returns the new color
+index, or the old one if the user types ESC or clicks outside the window. 
 <P ALIGN=CENTER><IMG src=./fl_show_colormap.gif></P>
 <H3><A name=fl_message>void fl_message(const char *, ...)</A></H3>
  Displays a printf-style message in a pop-up box with an &quot;OK&quot; button, 
@@ -72,8 +80,7 @@ const char *deflt = 0, ...)</A></H3>
  Same as <TT>fl_input()</TT> except an <A href=Fl_Secret_Input.html#Fl_Secret_Input>
 <TT>Fl_Secret_Input</TT></A> field is used. 
 <P ALIGN=CENTER><IMG src=./fl_password.gif border=1></P>
-<H3><A name=fl_message_font>void fl_message_font(Fl_Font fontid, uchar 
-size)</A></H3>
+<H3><A name=fl_message_font>void fl_message_font(Fl_Font, int size)</A></H3>
  Change the font and font size used for the messages in all the popups. 
 <H3><A name=fl_message_icon>Fl_Widget *fl_message_icon()</A></H3>
  Returns a pointer to the box at the left edge of all the popups.  You 
@@ -307,17 +314,6 @@ and then Fl::foreground() is done. </LI>
  The second form of <TT>Fl::args()</TT> is useful if your program does 
 not have command line switches of its own.  It parses all the switches, 
 and if any are not recognized it calls <TT>Fl::abort(Fl::help)</TT>. 
-<H3><A name=background>static void Fl::background(uchar, uchar, uchar)</A>
-</H3>
- Changes <TT>fl_color(FL_GRAY)</TT> to the given color, and changes the 
-gray ramp from 32 to 56 to black to white.  These are the colors used 
-as backgrounds by almost all widgets and used to draw the edges of all 
-the boxtypes. 
-<H3><A name=background2>static void Fl::background2(uchar, uchar, uchar)</A>
-</H3>
- Changes <TT>fl_color(FL_WHITE)</TT> and the same colors as <TT>
-Fl::foreground()</TT>.  This color is used as a background by <TT>
-Fl_Input</TT> and other text widgets. 
 <H3><A name=belowmouse>static Fl_Widget *Fl::belowmouse() const
 <BR> static void Fl::belowmouse(Fl_Widget *)</A></H3>
  Get or set the widget that is below the mouse.  This is for 
@@ -331,14 +327,6 @@ parents (that don't contain the new widget) are sent <TT>FL_LEAVE</TT>
 or any widget, because sending <TT>FL_ENTER</TT> is supposed to <I>test</I>
  if the widget wants the mouse (by it returning non-zero from <TT>
 handle()</TT>). </P>
-<H3><A name=box_dh>static int Fl::box_dh(Fl_Boxtype)</A></H3>
- Returns the height offset for the given boxtype. 
-<H3><A name=box_dw>static int Fl::box_dw(Fl_Boxtype)</A></H3>
- Returns the width offset for the given boxtype. 
-<H3><A name=box_dx>static int Fl::box_dx(Fl_Boxtype)</A></H3>
- Returns the X offset for the given boxtype. 
-<H3><A name=box_dy>static int Fl::box_dy(Fl_Boxtype)</A></H3>
- Returns the Y offset for the given boxtype. 
 <H3><A name=check>static int Fl::check()</A></H3>
  This does the same thing as <TT>Fl::wait(0)</TT>, except because it 
 does not have to return the elapsed time value it can be implemented 
@@ -492,45 +480,7 @@ parents (that don't contain the new widget) are sent <TT>FL_UNFOCUS</TT>
 this or any widget, because sending <TT>FL_FOCUS</TT> is supposed to <I>
 test</I> if the widget wants the focus (by it returning non-zero from <TT>
 handle()</TT>). </P>
-<H3><A name=foreground>static void Fl::foreground(uchar, uchar, uchar)</A>
-</H3>
- Changes <TT>fl_color(FL_BLACK)</TT>.  Also changes <TT>
-FL_INACTIVE_COLOR</TT> and <TT>FL_SELECTION_COLOR</TT> to be a ramp 
-between this and <TT>FL_WHITE</TT>. 
-<H3><A name=free_color>static void Fl::free_color(Fl_Color, int overlay 
-= 0)</A></H3>
- Frees the specified color from the colormap, if applicable.  If <TT>
-overlay</TT> is non-zero then the color is freed from the overlay 
-colormap. 
-<H3><A name=get_color>static unsigned Fl::get_color(Fl_Color)
-<BR> static void Fl::get_color(Fl_Color, uchar &amp;r, uchar &amp;g, uchar &amp;b)</A>
-</H3>
- Returns the color index or RGB value for the given FLTK color index. 
-<H3><A name=get_font>static const char *Fl::get_font(int face)</H3> Get the 
-string for this face.  This string is different for each face. Under X 
-this value is passed to XListFonts to get all the sizes of this face. </A>
 
-<H3><A name=get_font_name>static const char *Fl::get_font_name(int 
-face, int *attributes = 0)</A></H3>
- Get a human-readable string describing the family of this face.  This 
-is useful if you are presenting a choice to the user.  There is no 
-guarantee that each face has a different name.  The return value points 
-to a static buffer that is overwritten each call. 
-<P>The integer pointed to by <TT>attributes</TT> (if the pointer is not 
-zero) is set to zero, <TT>FL_BOLD</TT> or <TT>FL_ITALIC</TT> or <TT>
-FL_BOLD | FL_ITALIC</TT>.  To locate a &quot;family&quot; of fonts, search 
-forward and back for a set with non-zero attributes, these faces along 
-with the face with a zero attribute before them constitute a family. </P>
-<H3><A name=get_font_sizes>int get_font_sizes(int face, int *&amp;sizep)</A></H3>
- Return an array of sizes in <TT>sizep</TT>.  The return value is the 
-length of this array.  The sizes are sorted from smallest to largest 
-and indicate what sizes can be given to <TT>fl_font()</TT> that will be 
-matched exactly (<TT>fl_font()</TT> will pick the closest size for 
-other sizes).  A zero in the first location of the array indicates a 
-scalable font, where any size works, although the array may list sizes 
-that work &quot;better&quot; than others.  Warning: the returned array points at 
-a static buffer that is overwritten each call.  Under X this will open 
-the display. 
 <H3><A name=get_mouse>static void Fl::get_mouse(int &amp;x, int &amp;y)</A></H3>
  Return where the mouse is on the screen by doing a round-trip query to 
 the server.  You should use <TT>Fl::event_x_root()</TT> and <TT>
@@ -538,13 +488,6 @@ Fl::event_y_root()</TT> if possible, but this is necessary if you are
 not sure if a mouse event has been processed recently (such as to 
 position your first window).  If the display is not open, this will 
 open it. 
-<H3><A name=get_system_colors>static void Fl::get_system_colors()</A></H3>
- Read the user preference colors from the system and use them to call <TT>
-Fl::foreground()</TT>, <TT>Fl::background()</TT>, and <TT>
-Fl::background2()</TT>.  This is done by <TT>Fl_Window::show(argc,argv)</TT>
- before applying the -fg and -bg switches. 
-<P>Currently this only does something on WIN32.  In future versions for 
-X it may read the window manager (KDE, Gnome, etc.) setup as well. </P>
 <H3><A name=gl_visual>static int Fl::gl_visual(int)</A></H3>
  This does the same thing as <A href=#visual><TT>Fl::visual(int)</TT></A>
  but also requires OpenGL drawing to work.  This <I>must</I> be done if 
@@ -681,43 +624,6 @@ obviously wasteful, especially for large selections.  An interface will
 probably be added in a future version to allow the selection to be made 
 by a callback function.  The current interface will be emulated on top 
 of this.</I></P>
-<H3><A name=set_boxtype>static void Fl::set_boxtype(Fl_Boxtype, 
-Fl_Box_Draw_F *, uchar, uchar, uchar, uchar)
-<BR> static void Fl::set_boxtype(Fl_Boxtype, Fl_Boxtype from)</A></H3>
- The first form sets the function to call to draw a specific boxtype. 
-<P>The second form copies the <TT>from</TT> boxtype. </P>
-<H3><A name=set_color>static void Fl::set_color(Fl_Color, uchar r, 
-uchar g, uchar b)</A></H3>
- Sets an entry in the <TT>fl_color</TT> index table.  You can set it to 
-any 8-bit RGB color.  The color is not allocated until <TT>fl_color(i)</TT>
- is used. 
-<H3><A name=set_font>static int Fl::set_font(int face, const char *)
-<BR> static int Fl::set_font(int face, int from)</A></H3>
- The first form changes a face.  The string pointer is simply stored, 
-the string is not copied, so the string must be in static memory. 
-<P>The second form copies one face to another. </P>
-<H3><A name=set_fonts>int Fl::set_fonts(const char * = 0)</A></H3>
- FLTK will open the display, and add every font on the server to the 
-face table.  It will attempt to put &quot;families&quot; of faces together, so 
-that the normal one is first, followed by bold, italic, and bold 
-italic. 
-<P>The optional argument is a string to describe the set of fonts to 
-add.  Passing <TT>NULL</TT> will select only fonts that have the 
-ISO8859-1 character set (and are thus usable by normal text).  Passing 
-&quot;-*&quot; will select all fonts with any encoding as long as they have 
-normal X font names with dashes in them.  Passing &quot;*&quot; will list every 
-font that exists (on X this may produce some strange output).  Other 
-values may be useful but are system dependent.  With WIN32 <TT>NULL</TT>
- selects fonts with ISO8859-1 encoding and non-<TT>NULL</TT> selects 
-all fonts. </P>
-<P>The return value is how many faces are in the table after this is 
-done. </P>
-<H3><A name=set_labeltype>static void Fl::set_labeltype(Fl_Labeltype, 
-Fl_Label_Draw_F *, Fl_Label_Measure_F *)
-<BR> static void Fl:set_labeltype(Fl_Labeltype, Fl_Labeltype from)</A></H3>
- The first form sets the functions to call to draw and measure a 
-specific labeltype. 
-<P>The second form copies the <TT>from</TT> labeltype. </P>
 <H3><A name=test_shortcut>int Fl::test_shortcut(ulong) const</A></H3>
  Test the current event, which must be an <TT>FL_KEYBOARD</TT> or <TT>
 FL_SHORTCUT</TT>, against a shortcut value (described in <A href=Fl_Button.html#Fl_Button.shortcut>

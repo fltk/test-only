@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.6 1999/06/18 23:49:58 gustavo Exp $"
+// "$Id: Fl_arg.cxx,v 1.7 1999/08/16 07:31:23 bill Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -59,14 +59,37 @@ static char return_i;
 static const char *name;
 static const char *geometry;
 static const char *title;
-// these are in Fl_get_system_colors and are set by the switches:
-extern const char *fl_fg;
-extern const char *fl_bg;
-extern const char *fl_bg2;
+static const char *fg = 0;
+static const char *bg = 0;
+static const char *bg2 = 0;
+
+#ifndef WIN32
+#define COLOR_WINDOW 0
+#define COLOR_WINDOWTEXT 1
+#define COLOR_BTNFACE 2
+#endif
+
+static void
+getsyscolor(int, const char *arg, void (*func)(Fl_Color)) {
+  if (arg) {
+    Fl_Color c = fl_rgb(arg);
+    if (!c) Fl::error("Unknown color: %s", arg);
+    else func(c);
+  } else {
+#ifdef WIN32
+    DWORD x = GetSysColor(what);
+    func(fl_rgb(uchar(x&255), uchar(x>>8), uchar(x>>16)));
+#else
+    // For X we should do something. KDE and Gnome store these colors in
+    // some standard places, where?
+#endif
+  }
+}
 
 // consume a switch from argv.  Returns number of words eaten, 0 on error:
 int Fl::arg(int argc, char **argv, int &i) {
   arg_called = 1;
+
   const char *s = argv[i];
 
   if (!s) {i++; return 1;}	// something removed by calling program?
@@ -108,13 +131,13 @@ int Fl::arg(int argc, char **argv, int &i) {
     name = v;
 
   } else if (match(s, "bg2", 3) || match(s, "background2", 11)) {
-    fl_bg2 = v;
+    bg2 = v;
 
   } else if (match(s, "bg") || match(s, "background")) {
-    fl_bg = v;
+    bg = v;
 
   } else if (match(s, "fg") || match(s, "foreground")) {
-    fl_fg = v;
+    fg = v;
 
   } else return 0; // unrecognized
 
@@ -135,9 +158,11 @@ int Fl::args(int argc, char** argv, int& i, int (*cb)(int,char**,int&)) {
     if (cb && cb(argc,argv,i)) continue;
     if (!arg(argc,argv,i)) return return_i ? i : 0;
   }
+  getsyscolor(COLOR_BTNFACE,	bg, fl_background);
+  getsyscolor(COLOR_WINDOW,	bg2,fl_text_background);
+  getsyscolor(COLOR_WINDOWTEXT,	fg, fl_foreground);
   return i;
 }
-
 
 // show a main window, use any parsed arguments
 void Fl_Window::show(int argc, char **argv) {
@@ -148,7 +173,6 @@ void Fl_Window::show(int argc, char **argv) {
   static char beenhere;
   if (!beenhere) {
     beenhere = 1;
-    Fl::get_system_colors(); // opens display!  May call Fl::fatal()
     if (geometry) {
       int flags = 0, gx = x(), gy = y(); unsigned int gw = w(), gh = h();
       flags = XParseGeometry(geometry, &gx, &gy, &gw, &gh);
@@ -353,5 +377,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.6 1999/06/18 23:49:58 gustavo Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.7 1999/08/16 07:31:23 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_round_box.cxx,v 1.7 1999/03/14 06:46:42 carl Exp $"
+// "$Id: fl_round_box.cxx,v 1.8 1999/08/16 07:31:29 bill Exp $"
 //
 // Round box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -27,26 +27,24 @@
 // These box types are in seperate files so they are not linked
 // in if not used.
 
-#include <FL/Fl.H>
+#include <FL/Fl_Boxtype.H>
 #include <FL/fl_draw.H>
 
 // A compiler from a certain very large software company will not compile
 // the function pointer assignment due to the name conflict with fl_arc.
 // This function is to fix that:
+#ifdef WIN32
 void fl_arc_i(int x,int y,int w,int h,double a1,double a2) {
   fl_arc(x,y,w,h,a1,a2);
 }
+#else
+#define fl_arc_i fl_arc
+#endif
 
 enum {UPPER_LEFT, LOWER_RIGHT, CLOSED, FILL};
 
-static void draw(int which, int x,int y,int w,int h, int inset, uchar color)
+static void draw(int which, int x,int y,int w,int h, uchar color)
 {
-  if (inset*2 >= w) inset = (w-1)/2;
-  if (inset*2 >= h) inset = (h-1)/2;
-  x += inset;
-  y += inset;
-  w -= 2*inset;
-  h -= 2*inset;
   int d = w <= h ? w : h;
   if (d <= 1) return;
   fl_color((Fl_Color)color);
@@ -78,47 +76,49 @@ static void draw(int which, int x,int y,int w,int h, int inset, uchar color)
   }
 }
 
-extern uchar* fl_gray_ramp();
+FL_EXPORT extern uchar fl_active_ramp[24];
+FL_EXPORT extern uchar fl_inactive_ramp[24];
+FL_EXPORT void fl_to_inactive(const char* s, char* to);
 
-static void fl_round_up_box(int x, int y, int w, int h, Fl_Color bgcolor) {
-  uchar *g = fl_gray_ramp();
-
-  draw(FILL, x+2, y+2, w-4, h-4, 0, bgcolor);
-
-  draw(UPPER_LEFT, x+1, y, w-2, h, 0, g['W']);
-  draw(UPPER_LEFT, x, y, w, h, 0, g['W']);
-  draw(UPPER_LEFT, x+1, y+1, w-2, h-2, 0, g['W']);
-  draw(UPPER_LEFT, x+2, y+2, w-4, h-4, 0, g['A']);
-
-  draw(LOWER_RIGHT, x+1, y, w-2, h, 0, g['A']);
-  draw(LOWER_RIGHT, x, y, w, h, 0, g['A']);
-  draw(LOWER_RIGHT, x+1, y+1, w-2, h-2, 0, g['A']);
-  draw(LOWER_RIGHT, x+2, y+2, w-4, h-4, 0, g['W']);
+static void round_draw(Fl_Boxtype b, int x, int y, int w, int h,
+		       Fl_Color c, Fl_Flags f)
+{
+  if (f & FL_VALUE) b = b->down;
+  if (!(f & FL_FRAME_ONLY)) {
+    // draw the interior, assumming the edges are the same thickness
+    // as the normal square box:
+    int d = b->dx();
+    if (w > 2*d && h > 2*(d-1)) draw(FILL, x+d, y+d-1, w-2*d, h-2*(d-1), c);
+  }
+  const char* s = (const char*)(b->data);
+  char buf[26]; if (f&FL_INACTIVE) {fl_to_inactive(s, buf); s = buf;}
+  const char* t;
+  if (*s == '2') {t = s+1; s += 3;} else {t = s+2;}
+  while (*s && *t && w > 0 && h > 0) {
+    Fl_Color c1 = *s + (FL_GRAY_RAMP-'A'); s += 4;
+    Fl_Color c2 = *t + (FL_GRAY_RAMP-'A'); t += 4;
+    draw(UPPER_LEFT,  x+1, y,   w-2, h, *s&&*t ? c1 : c);
+    draw(UPPER_LEFT,  x,   y,   w,   h, c1);
+    draw(LOWER_RIGHT, x+1, y,   w-2, h, *s&&*t ? c2 : c);
+    draw(LOWER_RIGHT, x,   y,   w,   h, c2);
+    x++; y++; w -= 2; h -= 2;
+  }
 }
 
-static void fl_round_down_box(int x, int y, int w, int h, Fl_Color bgcolor) {
-  uchar *g = fl_gray_ramp();
-
-  draw(FILL, x+2, y+2, w-4, h-4, 0, bgcolor);
-
-  draw(UPPER_LEFT, x+1, y, w-2, h, 0, g['A']);
-  draw(UPPER_LEFT, x, y, w, h, 0, g['A']);
-  draw(UPPER_LEFT, x+1, y+1, w-2, h-2, 0, g['A']);
-  draw(UPPER_LEFT, x+2, y+2, w-4, h-4, 0, g['W']);
-
-  draw(LOWER_RIGHT, x+1, y, w-2, h, 0, g['W']);
-  draw(LOWER_RIGHT, x, y, w, h, 0, g['W']);
-  draw(LOWER_RIGHT, x+1, y+1, w-2, h-2, 0, g['W']);
-  draw(LOWER_RIGHT, x+2, y+2, w-4, h-4, 0, g['A']);
+static void wrapper(Fl_Boxtype b, int x, int y, int w, int h,
+		    Fl_Color c, Fl_Flags f)
+{
+  round_draw((Fl_Boxtype)(b->data),x,y,w,h,c,f);
 }
 
-extern void fl_internal_boxtype(Fl_Boxtype, Fl_Box_Draw_F*);
-Fl_Boxtype define_FL_ROUND_UP_BOX() {
-  fl_internal_boxtype(_FL_ROUND_DOWN_BOX, fl_round_down_box);
-  fl_internal_boxtype(_FL_ROUND_UP_BOX, fl_round_up_box);
-  return _FL_ROUND_UP_BOX;
-}
+const Fl_Boxtype_ fl_round_box = {
+  wrapper, FL_UP_BOX, 0, 3,3,6,6
+};
+
+const Fl_Boxtype_ fl_round_down_box = {
+  wrapper, FL_DOWN_BOX, 0, 3,3,6,6
+};
 
 //
-// End of "$Id: fl_round_box.cxx,v 1.7 1999/03/14 06:46:42 carl Exp $".
+// End of "$Id: fl_round_box.cxx,v 1.8 1999/08/16 07:31:29 bill Exp $".
 //

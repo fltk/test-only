@@ -1,0 +1,102 @@
+<head><title>Fl_Font</title></head><body>
+
+<h1>typedef Fl_Font</h1>
+
+The font used by <a
+href=Fl_Widget.html#labelfont>Fl_Widget::label_font()</a> and other
+parts of fltk is a typedef for a ponter to the structure
+<tt>Fl_Font_</tt>.
+
+<p>The following Fl_Font values are predefined:</p>
+
+<ul>
+<li><tt>FL_HELVETICA</tt>
+<li><tt>FL_HELVETICA_BOLD</tt>
+<li><tt>FL_HELVETICA_ITALIC</tt>
+<li><tt>FL_HELVETICA_BOLD_ITALIC</tt>
+<li><tt>FL_COURIER</tt>
+<li><tt>FL_COURIER_BOLD</tt>
+<li><tt>FL_COURIER_ITALIC</tt>
+<li><tt>FL_COURIER_BOLD_ITALIC</tt>
+<li><tt>FL_TIMES</tt>
+<li><tt>FL_TIMES_BOLD</tt>
+<li><tt>FL_TIMES_ITALIC</tt>
+<li><tt>FL_TIMES_BOLD_ITALIC</tt>
+<li><tt>FL_SYMBOL</tt>
+<li><tt>FL_SCREEN</tt>
+<li><tt>FL_SCREEN_BOLD</tt>
+<li><tt>FL_ZAPF_DINGBATS</tt> (different between X and Windows!)
+</ul>
+
+<h2>Methods</h2>
+
+<h4>Fl_Font_* Fl_Font_::bold;
+<br>Fl_Font_* Fl_Font_::italic;</h4>
+
+Pointers to the bold and italic versions of this font.
+
+<h4>const char* Fl_Font_::system_name()</h4>
+
+Returns a string that identifies the font in a system-specific manner.
+This string is guaranteed to be different for each font but it is not
+portable.  Under X this value is passed to XListFonts to get all the
+sizes of this font.
+
+<h4>const char* Fl_Font_::name(int* attributes = 0)</h4>
+
+Returns a "nice" name for the font.  This is useful if you are
+presenting a choice to the user.  There is no guarantee that each face
+has a different name.  The return value points to a static buffer that
+is overwritten each call.
+
+<P>The integer pointed to by <TT>attributes</TT> is set to zero,
+<TT>FL_BOLD</TT> or <TT>FL_ITALIC</TT> or <TT> FL_BOLD |
+FL_ITALIC</TT>.  If this pointer is zero then the attributes are
+indicated by adding "Bold" or "Italic" to the name.
+
+<h4>int Fl_Font_::sizes(int *&amp;sizep) const;</h4>
+
+Return an array of sizes in <TT>sizep</TT>.  The return value is the
+length of this array.  The sizes are sorted from smallest to largest
+and indicate what sizes can be given to <TT>fl_font()</TT> that will
+be matched exactly (<TT>fl_font()</TT> will pick the closest size for
+other sizes).  A zero in the first location of the array indicates a
+scalable font, where any size works, although the array may list sizes
+that work &quot;better&quot; than others.  Warning: the returned array
+points at a static buffer that is overwritten each call.  Under X this
+will open the display.
+
+<h4>Fl_Font fl_font(const char* name, int attributes = 0);</h4>
+
+Find a font with the given "nice" name.  You can get bold and italic
+by either putting "Bold" or "Italic" in the name, or by passing them
+as the attributes.  Case is ignored and fltk will accept some
+variations in the font name.  Not yet implemented...
+
+<h4>int fl_list_fonts(Fl_Font*& arrayp, bool everything = false);</h4>
+
+FLTK will open the display and find every font on the server.  It
+creates an array of these and returns that array in <i>arrayp</i>, and
+the length as the return value.  It will attempt to put
+&quot;families&quot; of faces together, so that the normal one is
+first, followed by bold, italic, and bold italic.
+
+<P>The optional argument <i>everything</i> will cause fltk to list
+every single font on an X server.  Normally it ignores fonts whose X
+names don't start with '-'.  This can be used to get the bitmap fonts
+that are useful for terminal emulators.  This flag does nothing on
+Windows.
+
+<p>Subsequent calls always return the same array, and the value for
+<i>everything</i> is ignored.
+
+<h4>extern const char* fl_encoding;</h4>
+
+You can change this string to change the "preferred" encoding.  If a
+given font is available in multiple encodings this one is returned.
+Unlike other drawing toolkits this does not prevent the font from
+being found if the given encoding is not available, it will just
+return some random encoding (in my opinion this behavior is what the
+user wants).
+
+</body></html>

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.9 1999/05/06 05:52:14 carl Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.10 1999/08/16 07:31:14 bill Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -184,8 +184,8 @@ int Flcc_HueBox::handle(int e) {
     is = c->saturation();
   case FL_DRAG: {
     double Xf, Yf, H, S;
-    Xf = (Fl::event_x()-x()-Fl::box_dx(box()))/double(w()-Fl::box_dw(box()));
-    Yf = (Fl::event_y()-y()-Fl::box_dy(box()))/double(h()-Fl::box_dh(box()));
+    Xf = (Fl::event_x()-x()-box()->dx())/double(w()-box()->dw());
+    Yf = (Fl::event_y()-y()-box()->dy())/double(h()-box()->dh());
     tohs(Xf, Yf, H, S);
     if (fabs(H-ih) < 3*6.0/w()) H = ih;
     if (fabs(S-is) < 3*1.0/h()) S = is;
@@ -199,8 +199,8 @@ int Flcc_HueBox::handle(int e) {
 
 static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
   Flcc_HueBox* v = (Flcc_HueBox*)vv;
-  int iw = v->w()-Fl::box_dw(v->box());
-  double Yf = double(Y)/(v->h()-Fl::box_dh(v->box()));
+  int iw = v->w()-v->box()->dw();
+  double Yf = double(Y)/(v->h()-v->box()->dh());
 #ifdef UPDATE_HUE_BOX
   const double V = ((Fl_Color_Chooser*)(v->parent()))->value();
 #else
@@ -218,11 +218,11 @@ static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
 }
 
 void Flcc_HueBox::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_box();
-  int x1 = x()+Fl::box_dx(box());
-  int y1 = y()+Fl::box_dy(box());
-  int w1 = w()-Fl::box_dw(box());
-  int h1 = h()-Fl::box_dh(box());
+  if (damage()&FL_DAMAGE_ALL) draw_frame();
+  int x1 = x()+box()->dx();
+  int y1 = y()+box()->dy();
+  int w1 = w()-box()->dw();
+  int h1 = h()-box()->dh();
   if (damage() == FL_DAMAGE_EXPOSE) fl_clip(x1+px,y1+py,6,6);
   fl_draw_image(generate_image, this, x1, y1, w1, h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
@@ -237,7 +237,7 @@ void Flcc_HueBox::draw() {
   if (X < 0) X = 0; else if (X > w1-6) X = w1-6;
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
   //  fl_color(c->value()>.75 ? FL_BLACK : FL_WHITE);
-  draw_box(FL_UP_BOX,x1+X,y1+Y,6,6,FL_GRAY);
+  FL_UP_BOX->draw(x1+X, y1+Y, 6, 6, FL_GRAY);
   px = X; py = Y;
 }
 
@@ -251,7 +251,7 @@ int Flcc_ValueBox::handle(int e) {
     iv = c->value();
   case FL_DRAG: {
     double Yf;
-    Yf = 1-(Fl::event_y()-y()-Fl::box_dy(box()))/double(h()-Fl::box_dh(box()));
+    Yf = 1-(Fl::event_y()-y()-box()->dy())/double(h()-box()->dh());
     if (fabs(Yf-iv)<(3*1.0/h())) Yf = iv;
     if (c->hsv(c->hue(),c->saturation(),Yf)) c->do_callback();
     } return 1;
@@ -263,7 +263,7 @@ int Flcc_ValueBox::handle(int e) {
 static double tr, tg, tb;
 static void generate_vimage(void* vv, int X, int Y, int W, uchar* buf) {
   Flcc_ValueBox* v = (Flcc_ValueBox*)vv;
-  double Yf = 255*(1.0-double(Y)/(v->h()-Fl::box_dh(v->box())));
+  double Yf = 255*(1.0-double(Y)/(v->h()-v->box()->dh()));
   uchar r = uchar(tr*Yf+.5);
   uchar g = uchar(tg*Yf+.5);
   uchar b = uchar(tb*Yf+.5);
@@ -273,19 +273,19 @@ static void generate_vimage(void* vv, int X, int Y, int W, uchar* buf) {
 }
 
 void Flcc_ValueBox::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_box();
+  if (damage()&FL_DAMAGE_ALL) draw_frame();
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
   c->hsv2rgb(c->hue(),c->saturation(),1.0,tr,tg,tb);
-  int x1 = x()+Fl::box_dx(box());
-  int y1 = y()+Fl::box_dy(box());
-  int w1 = w()-Fl::box_dw(box());
-  int h1 = h()-Fl::box_dh(box());
+  int x1 = x()+box()->dx();
+  int y1 = y()+box()->dy();
+  int w1 = w()-box()->dw();
+  int h1 = h()-box()->dh();
   if (damage() == FL_DAMAGE_EXPOSE) fl_clip(x1,y1+py,w1,6);
   fl_draw_image(generate_vimage, this, x1, y1, w1, h1);
   if (damage() == FL_DAMAGE_EXPOSE) fl_pop_clip();
   int Y = int((1-c->value()) * (h1-6));
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
-  draw_box(FL_UP_BOX,x1,y1+Y,w1,6,FL_GRAY);
+  FL_UP_BOX->draw(x1, y1+Y, w1, 6, FL_GRAY);
   py = Y;
 }
 
@@ -332,6 +332,7 @@ Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
   end();
   resizable(resize_box);
   resize(X,Y,W,H);
+  layout();
   r_ = g_ = b_ = 0;
   hue_ = 0.0;
   saturation_ = 0.0;
@@ -357,19 +358,18 @@ class ColorChip : public Fl_Widget {
   void draw();
 public:
   uchar r,g,b;
-  ColorChip(int X, int Y, int W, int H) : Fl_Widget(X,Y,W,H) {
-    box(FL_ENGRAVED_FRAME);}
+  ColorChip(int X, int Y, int W, int H) : Fl_Widget(X,Y,W,H) {}
 };
 
 void ColorChip::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_box();
-  fl_rectf(x()+Fl::box_dx(box()),
-	   y()+Fl::box_dy(box()),
-	   w()-Fl::box_dw(box()),
-	   h()-Fl::box_dh(box()),r,g,b);
+  if (damage()&FL_DAMAGE_ALL) draw_frame();
+  fl_rectf(x()+box()->dx(),
+	   y()+box()->dy(),
+	   w()-box()->dw(),
+	   h()-box()->dh(),r,g,b);
 }
 
-static void chooser_cb(Fl_Object* o, void* vv) {
+static void chooser_cb(Fl_Widget* o, void* vv) {
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)o;
   ColorChip* v = (ColorChip*)vv;
   v->r = uchar(255*c->r()+.5);
@@ -429,5 +429,5 @@ int fl_color_chooser(const char* name, uchar& r, uchar& g, uchar& b) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.9 1999/05/06 05:52:14 carl Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.10 1999/08/16 07:31:14 bill Exp $".
 //

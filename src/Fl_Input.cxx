@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.14 1999/06/20 15:24:29 mike Exp $"
+// "$Id: Fl_Input.cxx,v 1.15 1999/08/16 07:31:17 bill Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -37,11 +37,9 @@
 #include <ctype.h>
 
 void Fl_Input::draw() {
-  if (type() == FL_HIDDEN_INPUT) return;
-  Fl_Boxtype b = box();
-  if (damage() & FL_DAMAGE_ALL) draw_box(b, color());
-  Fl_Input_::drawtext(x()+Fl::box_dx(b)+3, y()+Fl::box_dy(b),
-		      w()-Fl::box_dw(b)-6, h()-Fl::box_dh(b));
+  if (damage() & FL_DAMAGE_ALL) draw_frame();
+  Fl_Input_::drawtext(x()+box()->dx(), y()+box()->dy(),
+		      w()-box()->dw(), h()-box()->dh());
 }
 
 // kludge so shift causes selection to extend:
@@ -327,16 +325,15 @@ int Fl_Input::handle(int event) {
     if (Fl::event_button() == 2) return 0;
     break;
   }
-  Fl_Boxtype b = box();
   return Fl_Input_::handletext(event,
-	x()+Fl::box_dx(b)+3, y()+Fl::box_dy(b),
-	w()-Fl::box_dw(b)-6, h()-Fl::box_dh(b));
+			       x()+box()->dx(), y()+box()->dy(),
+			       w()-box()->dw(), h()-box()->dh());
 }
 
 Fl_Input::Fl_Input(int x, int y, int w, int h, const char *l)
-: Fl_Input_(x, y, w, h, l) {
-}
+  : Fl_Input_(x, y, w, h, l)
+{}
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.14 1999/06/20 15:24:29 mike Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.15 1999/08/16 07:31:17 bill Exp $".
 //

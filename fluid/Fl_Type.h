@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.h,v 1.11 1999/07/21 17:28:20 carl Exp $"
+// "$Id: Fl_Type.h,v 1.12 1999/08/16 07:31:03 bill Exp $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -109,7 +109,6 @@ public:
   virtual int read_fdesign(const char*, const char*);
 
   // write code, these are called in order:
-  virtual void write_declare(); // write #include and #define to .h file
   virtual void write_static(); // write static stuff to .c file
   virtual void write_code1(); // code and .h before children
   virtual void write_code2(); // code and .h after children
@@ -134,7 +133,6 @@ public:
   virtual int is_class() const;
   virtual int is_browser() const;
   virtual int is_input() const;
-  virtual int is_menu() const;
   virtual int is_value_input() const;
   virtual int is_value_output() const;
   virtual int is_value_slider() const;
@@ -145,10 +143,9 @@ public:
 
 class Fl_Function_Type : public Fl_Type {
   const char* return_type;
-  char public_, constructor, havewidgets;
+  char public_, cdecl_, constructor, havewidgets;
 public:
   Fl_Type *make();
-  void write_declare();
   void write_code1();
   void write_code2();
   void open();
@@ -166,7 +163,6 @@ public:
 class Fl_Code_Type : public Fl_Type {
 public:
   Fl_Type *make();
-  void write_declare();
   void write_code1();
   void write_code2();
   void open();
@@ -178,7 +174,6 @@ class Fl_CodeBlock_Type : public Fl_Type {
   const char* after;
 public:
   Fl_Type *make();
-  void write_declare();
   void write_code1();
   void write_code2();
   void open();
@@ -193,7 +188,6 @@ class Fl_Decl_Type : public Fl_Type {
   char public_;
 public:
   Fl_Type *make();
-  void write_declare();
   void write_code1();
   void write_code2();
   void open();
@@ -206,7 +200,6 @@ class Fl_DeclBlock_Type : public Fl_Type {
   const char* after;
 public:
   Fl_Type *make();
-  void write_declare();
   void write_code1();
   void write_code2();
   void open();
@@ -226,7 +219,6 @@ public:
   Fl_Class_Type* parent_class; // save class if nested
 //
   Fl_Type *make();
-  void write_declare();
   void write_code1();
   void write_code2();
   void open();
@@ -251,7 +243,6 @@ class Fl_Widget_Type : public Fl_Type {
 
 protected:
 
-  void write_declare();
   void write_static();
   void write_code1();
   void write_widget_code();
@@ -265,8 +256,8 @@ public:
   Fl_Widget *o;
   int public_;
 
-  Fluid_Image *image;
-  void setimage(Fluid_Image *);
+  Fluid_Image* image;
+  void setimage(Fluid_Image*);
 
   Fl_Widget_Type();
   Fl_Type *make();
@@ -281,7 +272,6 @@ public:
   uchar resizable() const;
   void resizable(uchar v);
 
-  virtual int textstuff(int what, Fl_Font &, int &, Fl_Color &, Fl_Color &);
   virtual Fl_Menu_Item *subtypes();
 
   virtual int is_widget() const;
@@ -298,17 +288,22 @@ void* const LOAD = (void *)9831;
 extern Fl_Widget_Type *current_widget; // one of the selected ones
 
 #include <FL/Fl_Tabs.H>
+#include <FL/Fl_Pack.H>
 
 class igroup : public Fl_Group {
 public:
-  void resize(int,int,int,int);
-  igroup(int x,int y,int w,int h) : Fl_Group(x,y,w,h) {Fl_Group::current(0);}
+  igroup(int x,int y,int w,int h) : Fl_Group(x,y,w,h) {
+    Fl_Group::current(0);
+    resizable(0);
+  }
 };
 
 class itabs : public Fl_Tabs {
 public:
-  void resize(int,int,int,int);
-  itabs(int x,int y,int w,int h) : Fl_Tabs(x,y,w,h) {}
+  itabs(int x,int y,int w,int h) : Fl_Tabs(x,y,w,h) {
+    Fl_Group::current(0);
+    resizable(0);
+  }
 };
 
 class Fl_Group_Type : public Fl_Widget_Type {
@@ -325,6 +320,16 @@ public:
   void remove_child(Fl_Type*);
   int is_parent() const {return 1;}
   int is_group() const {return 1;}
+};
+
+extern const char pack_type_name[];
+extern Fl_Menu_Item pack_type_menu[];
+
+class Fl_Pack_Type : public Fl_Group_Type {
+  Fl_Menu_Item *subtypes() {return pack_type_menu;}
+public:
+  virtual const char *type_name() {return pack_type_name;}
+  Fl_Widget_Type *_make() {return new Fl_Pack_Type();}
 };
 
 extern const char tabs_type_name[];
@@ -417,7 +422,6 @@ public:
   int is_button() const {return 1;} // this gets shortcut to work
   Fl_Widget* widget(int,int,int,int) {return 0;}
   Fl_Widget_Type* _make() {return 0;}
-  void write_declare();
   const char* menu_name(int& i);
   int flags();
   void write_static();
@@ -450,18 +454,8 @@ public:
 // with the child objects and updated as they change.
 
 class Fl_Menu_Type : public Fl_Widget_Type {
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&) {
-    Fl_Menu_ *o = (Fl_Menu_*)(this->o);
-    switch (w) {
-    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); break;
-    case 1: o->textfont(f); break;
-    case 2: o->textsize(s); break;
-    case 3: o->textcolor(tc); break;
-    }
-    return 1;
-  }
 public:
-  int is_menu() const {return 1;}
+  int is_menu_button() const {return 1;}
   int is_parent() const {return 1;}
   int menusize;
   void build_menu();
@@ -551,5 +545,5 @@ int storestring(const char *n, const char * & p, int nostrip=0);
 extern int include_H_from_C;
 
 //
-// End of "$Id: Fl_Type.h,v 1.11 1999/07/21 17:28:20 carl Exp $".
+// End of "$Id: Fl_Type.h,v 1.12 1999/08/16 07:31:03 bill Exp $".
 //

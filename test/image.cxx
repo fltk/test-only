@@ -1,5 +1,5 @@
 //
-// "$Id: image.cxx,v 1.6 1999/01/07 19:17:55 mike Exp $"
+// "$Id: image.cxx,v 1.7 1999/08/16 07:31:35 bill Exp $"
 //
 // Fl_Image test program for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Button.H>
-#include <FL/Fl_Image.H>
+#include <FL/Fl_RGB_Image.H>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -113,9 +113,9 @@ int main(int argc, char **argv) {
 #endif
 
   Fl_Window window(400,400); ::w = &window;
-  Fl_Button b(140,160,120,120,0); ::b = &b;
+  Fl_Button b(140,160,120,120,"Fl_RGB_Image"); ::b = &b;
   make_image();
-  (new Fl_Image(image, width, height))->label(&b);
+  b.image(new Fl_RGB_Image(image, width, height));
   leftb = new Fl_Toggle_Button(50,75,50,25,"left");
   leftb->callback(button_cb);
   rightb = new Fl_Toggle_Button(100,75,50,25,"right");
@@ -133,5 +133,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: image.cxx,v 1.6 1999/01/07 19:17:55 mike Exp $".
+// End of "$Id: image.cxx,v 1.7 1999/08/16 07:31:35 bill Exp $".
 //

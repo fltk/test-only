@@ -1,0 +1,336 @@
+<head><title>Fl_Style</title></head><body>
+
+<h1>struct Fl_Style</h1>
+
+<p>Each widget has a pointer to an instance of Fl_Style.  Usually many
+widgets share pointers to the same Fl_Style.  All the Fl_Styles are
+linked into a hierarchy of parents & child styles, so that it is
+possible to change an item in a parent style and propagate all the
+changes to the children.
+
+<p>Fl_Style is a normal structure, to make it easier to make static
+constants and for tricks in the themes code.  However you should avoid
+modifying any fields directly in normal program code.
+
+<p>In normal usage methods like Fl_Widget::box(n) will create a
+"unique" style for that widget, which is a child of the original
+style, and set the box in that style.  This "unique" style is reused
+for any other changes to that widget and it is deleted when the widget
+is deleted.
+
+<p>Widget classes that want a default style that is different than
+their parent's class would define a static style structure containing
+all the differences between their default and the parent's default.
+They would then do this->style(default_style) in the constructor.
+This will add the default style as a child of the parent's default
+style and assign it to the widget.
+
+<h2>Member variables</h2>
+
+<h4><a href=Fl_Boxtype.html>Fl_Boxtype</a> box;</h4>
+
+Box drawn around the exterior of the widget.  Default is
+<code>FL_UP_BOX</code>.
+
+<h4>void (*glyph)(int type, int x,int y,int w,int h, <a href=Fl_Color.html>Fl_Color</a>, Fl_Flags);</h4>
+
+Draw a widget part, called a "glyph", such as a checkbox or arrow
+button.  You should use the <code>FL_VALUE</code> of the flags to
+determine if the glyph is pushed in or turned on.  If you write your
+own function call the default of fl_glyph() for any symbols you don't
+recognize.  Currently defined glyphs:
+
+<p><ul>
+
+<li>Zero is reserved to draw an empty box
+
+<li><code>FL_GLYPH_CHECK</code> - draw a checkbox indicator
+
+<li><code>FL_GLYPH_RADIO</code> - draw a radio button indicator
+
+<li><code>FL_GLYPH_UP</code> - draw an up arrow at the top of a scrollbar
+
+<li><code>FL_GLYPH_DOWN</code> - draw a down arrow at the botom of a scrollbar
+
+<li><code>FL_GLYPH_LEFT</code> - draw a left arrow at the left of a scrollbar
+
+<li><code>FL_GLYPH_RIGHT</code> - draw a right arrow at the right of a
+scrollbar
+
+<li><code>FL_GLYPH_VSLIDER</code> - draw a vertical slider/scrollbar handle
+
+<li><code>FL_GLYPH_HSLIDER</code> - draw a horizontal slider/scrollbar handle
+
+</ul>
+
+<h4><a href=Fl_Font.html>Fl_Font</a> label_font;</h4>
+
+The font used to draw the label.  Default is <code>FL_HELVETICA</code>.
+
+<h4><a href=Fl_Font.html>Fl_Font</a> text_font;</h4>
+
+Provides a font for text displays.  Default is <code>FL_HELVETICA</code>.
+
+<h4><a href=Fl_Labeltype.html>Fl_Labeltype</a> label_type;</h4>
+
+How to draw the label.  This provides things like inset, shadow, and
+the symbols.  <code>FL_NORMAL_LABEL</code>.
+
+<h4><a href=Fl_Color.html>Fl_Color</a> color;</h4>
+
+Color passed to box.  Default is <code>FL_GRAY</code>.  Fl_Input and
+Fl_Browser change this to white.
+
+<h4><a href=Fl_Color.html>Fl_Color</a> label_color;</h4>
+
+Color used to draw labels.  Default <code>FL_NO_COLOR</code>.
+
+<h4><a href=Fl_Color.html>Fl_Color</a> selection_color;</h4>
+
+For historical reasons this is used for different purposes by
+different widgets:
+
+<ul>
+
+<li>Text and browser widgets use this to draw the background behind
+selected text.  They default this color to Windoze blue.
+
+<li>Normal buttons use this to color themselves when pushed in.
+
+<li>Check buttons, radio buttons, menu items, and light buttons use
+this to color in the glyph that indicates check/radio state when the
+button is turned on.
+
+<li>Scrollbars, sliders, dials, and most other valuators use this to
+color the moving part, while <code>color</code> is used to color in the
+background.  For scrollbars this is also the color of the arrow
+glyphs.
+
+</ul>
+
+The default of zero means to use <code>color</code>.
+
+<h4><a href=Fl_Color.html>Fl_Color</a> selection_text_color;</h4>
+
+The color to draw text atop the <code>selection_color</code>.  The
+default of zero causes <code>fl_contrast(text/label_color,
+selection_color)</code> to be used.
+
+<h4><a href=Fl_Color.html>Fl_Color</a> up_color;</h4>
+
+Check buttons, radio buttons, menu items, and light buttons use this
+to color the glyph when the button is turned off.  The default of zero
+means use <code>color</code>.  For historical reasons the
+<code>selection_color</code> is used to color the items when they are
+turned on, the method <code>Fl_Widget::down_color()</code> is an alias
+for <code>selection_color()</code>.
+
+<h4><a href=Fl_Color.html>Fl_Color</a> highlight_color;</h4>
+
+The color to draw the widget when the mouse is over it (for scrollbars
+and sliders this is used to color the moving parts).  The default of
+zero disables highlighting.
+
+<p>Menu items use this color to indicate that they are selected (since
+the mouse is pointing at them).  They default it to Windoze blue.
+
+<h4><a href=Fl_Color.html>Fl_Color</a> highlight_label_color;</h4>
+
+Color to draw labels atop the <code>highlight_color</code>.  The
+default of zero causes <code>fl_contrast(label_color,
+highlight_color)</code> to be used.
+
+<h4><a href=Fl_Color.html>Fl_Color</a> text_color;</h4>
+
+Color to draw text.  Default is black.
+
+<h4>unsigned int label_size;</h4>
+
+Size of <code>label_font</code>.  Default is 14.
+
+<h4>unsigned int text_size;</h4>
+
+Size of <code>text_font</code>.  Default is 14.
+
+<h2>Methods</h2>
+
+<h4>void Fl_Style::set_box(Fl_Boxtype);<br>
+void Fl_Style::set_glyph(Fl_Glyph);<br>
+void Fl_Style::set_label_font(Fl_Font);<br>
+void Fl_Style::set_text_font(Fl_Font);<br>
+void Fl_Style::set_label_type(Fl_Labeltype);<br>
+void Fl_Style::set_color(Fl_Color);<br>
+void Fl_Style::set_label_color(Fl_Color);<br>
+void Fl_Style::set_selection_color(Fl_Color);<br>
+void Fl_Style::set_selection_text_color(Fl_Color);<br>
+void Fl_Style::set_down_color(Fl_Color);<br>
+void Fl_Style::set_up_color(Fl_Color);<br>
+void Fl_Style::set_highlight_color(Fl_Color);<br>
+void Fl_Style::set_highlight_label_color(Fl_Color);<br>
+void Fl_Style::set_text_color(Fl_Color);<br>
+void Fl_Style::set_label_size(unsigned);<br>
+void Fl_Style::set_text_size(unsigned);</h4>
+
+You can directly set any member (by doing <code>style->box=foo</code>)
+but that only changes it in that style.  These methods also propagate
+the change to any child styles that have the same value as
+this used to have.  This allows "themes" to affect all the widgets
+that have been created.
+
+<h4>void Fl_Style::add_child(Fl_Style* s) const;</h4>
+
+Add <i>s</i> as a child style of this one, unless it already is a
+child of this or some other style.  All fields with a value of zero in
+are set to the values in this.  This is used by Fl_Widget::style(Fl_Style*).
+
+<h2>Default Styles</h2>
+
+If you define your own widget class you may want it to have a default
+style that is different than the parent class.  To do this you should
+declare a static style structure, initialized with the values that are
+different than the parent, and with zero (or <code>FL_NO_COLOR</code>)
+in all other locations.  It is easiest to copy the one out of
+Fl_Widget and edit it.  Make this public so that theme code can modify
+it.  Do <i>not</i> make it const:
+
+<p><pre><code>Fl_Style Fl_Slider::default_style = {
+  FL_THIN_DOWN_BOX, // box
+  0,		// glyphs
+  0,		// label_font
+  0,		// text_font
+  0,		// label_type
+  FL_DARK2,	// color
+  FL_NO_COLOR,	// label_color
+  FL_GRAY	// selection_color
+  // rest is zero
+};
+</pre></code>
+
+<p>Then in your constructor put <code>style(default_style)</code>.
+This will add the new style as a child of the parent class style
+(which was set by the parent class constructor).
+
+<h2>Setting a Theme</h2>
+
+To implement "themes" the theme code needs to write a number of static
+locations, primarily the default style of several classes.  If you
+change the theme after windows are displayed, use Fl::redraw() to
+cause everything to redraw.
+
+<p>Your theme code should use the set_xyz() methods on the styles so
+that any changes are propagated to children.  Since the styles are
+already arranged into an inheritance hierarchy, you usually don't need
+to write them all, just a few.
+
+<p>Note that truly arbitrary themes would require adding code to the
+constructors of every widget so that a different style may be chosen
+for every widget, this was not done because it was unnecessary for
+any themes we were intersted in.
+
+<h4>Fl_Widget::default_style</h4>
+
+Provides all the defaults described above.  This is the only style
+that does not have a parent.  Highlighting is disabled by default, to
+turn it on you should set highlight color.
+
+<h4>Fl_Input::default_style</h4>
+
+This style is used by Fl_Input, but also by several other widgets that
+directly reference it, such as Fl_Browser and Fl_Value_Slider, to
+indicate areas that display data and that the user can type into.  The
+default version sets <code>color</code> to white, the
+<code>selection_color</code> to blue, and the box to
+<code>FL_THIN_DOWN_BOX</code>.
+
+<h4>Fl_Output::default_style</h4>
+
+This style is used by Fl_Output and also by other widgets to indicate
+an area that displays data and the user cannot type into.  This is a
+child style of <code>Fl_Input::default_style</code> and by default is
+exactly the same.  You can change it to make output text look
+different than input text.
+
+<h4>Fl_Check_Button::default_style</h4>
+
+Sets the selection_color to white (this color is used to color the
+glyph box for the check mark).  Sets the box the <code>FL_FLAT_BOX</code>.
+
+<h4>Fl_Menu_Item::default_style</h4>
+
+Sets the selection_color to white (this color is used to color the
+glyph box for the check mark).  Sets the box the
+<code>FL_FLAT_BOX</code>.  Sets the highlight_color to blue and the
+highlight_text_color to white.  The highlight is used, along with the
+down version of the box, to indicate the picked item.  If you don't
+want the color to change you can set them to zero.
+
+<h4>Fl_Menu_Item::title_style</h4>
+
+This is the default style for items in menubars, and is also used for
+the titles of popup menus (ie. it is used to draw the label of an
+Fl_Menu_Button whose type is POPUP).  This sets the selection color to
+white (this color is for any checkmarks), and sets the box to
+<code>FL_FLAT_UP_BOX</code>.
+
+<h4>Fl_Light_Button::default_style</h4>
+
+Sets the selection_color to yellow (this color is used to color the
+light when on, the regular color is used in the light when off).
+
+<h4>Fl_Scrollbar::default_style
+<br>Fl_Slider::default_style</h4>
+
+Unfortunatly for compatability reasons the scrollbars and sliders have
+the color and selection_color "swapped", so that they are not used in
+a way that makes inheritance work.  These set selection_color to
+<code>FL_GRAY</code> and set color to a darker gray for the
+background.  These also set the boxtype to
+<code>FL_THIN_DOWN_BOX</code> for the sliders and
+<code>FL_FLAT_BOX</code> for the scrollbars.  You may also want to
+directly set the glyph function on the scrollbars so that the handle
+may be drawn differently than the sliders.
+
+<h4>Fl_Tooltip::default_style</h4>
+
+Sets the color to yellow and the box to <code>FL_BORDER_BOX</code>.
+Tooltips also have some other static fields to set the timeout and
+position, see the Fl_Tooltip documentation.
+
+<h4>void fl_background(<a href=Fl_Color.html>Fl_Color</a>)</h4>
+
+This global function changes the "gray ramp" in the fltk color map so
+that the color <code>FL_GRAY</code> is set the the rgb values of the
+passed color.  This is the best way to change the overall color of
+your application, because it sets all the shaded borders.
+
+<h4>void fl_foreground(<a href=Fl_Color.html>Fl_Color</a>)</h4>
+
+This global function changes entry zero (<code>FL_NO_COLOR</code>) in
+the colormap to the given color.  This value is used by default for
+<code>label_color</code> and many parts of fltk use it directly when
+they want a black color to draw labels with.
+
+<h4>void fl_text_background(<a href=Fl_Color.html>Fl_Color</a>)</h4>
+
+This global function modifies the <code>Fl_Input::default_style</code>
+so that the background color is the given color.  It will change the
+text and selection colors so they are visible.
+
+<h4>fl_normal_box.data
+<br>fl_down_box.data</h4>
+
+These are pointers to string constants.  Changing these pointers can
+globally modify how the edges of all the thick boxes are drawn.  They
+are used not only for the normal box, but also by the
+<code>FL_DIAMOND_BOX</code> and <code>FL_ROUND_BOX</code>, and also by
+the glyphs.
+
+<p>The string contains one letter for each edge of the box, drawn
+counter-clockwise from the outside in in a spiral.  The letter 'A' is
+black, the letter 'X' is white, and the letter 'R' is
+<code>FL_GRAY</code>.  It starts in the lower-left corner, or if you
+put a leading '2' it starts in the upper-right corner.
+
+<p>You will also want to change the <code>dx_, dy_, dw_</code>, and
+<code>dh_</code> fields of the boxtypes to match how thick the
+resulting edges will be.

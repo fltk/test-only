@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tile.cxx,v 1.8 1999/06/20 15:24:30 mike Exp $"
+// "$Id: Fl_Tile.cxx,v 1.9 1999/08/16 07:31:21 bill Exp $"
 //
 // Tile widget for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,7 @@
 
 void Fl_Tile::position(int oix, int oiy, int newx, int newy) {
   Fl_Widget*const* a = array();
-  short* p = sizes();
+  int* p = sizes();
   p += 8; // skip group & resizable's saved size
   for (int i=children(); i--; p += 4) {
     Fl_Widget* o = *a++;
@@ -72,7 +72,7 @@ void Fl_Tile::layout() {
   int dy = y() - oy();
   int dh = h() - oh();
   // find bottom-right of resizable:
-  short* p = sizes();
+  int* p = sizes();
   int OR = p[5];
   int NR = x()+w()-(p[1]-OR);
   int OB = p[7];
@@ -127,15 +127,14 @@ int Fl_Tile::handle(int event) {
 
   case FL_MOVE:
   case FL_ENTER:
-    if (!takesevents()) break;
   case FL_PUSH: {
     int mindx = 100;
     int mindy = 100;
     int oldx = 0;
     int oldy = 0;
     Fl_Widget*const* a = array();
-    short* q = sizes();
-    short* p = q+8;
+    int* q = sizes();
+    int* p = q+8;
     for (int i=children(); i--; p += 4) {
       Fl_Widget* o = *a++;
       if (o == resizable()) continue;
@@ -165,7 +164,7 @@ int Fl_Tile::handle(int event) {
   }
 
   case FL_LEAVE:
-    if (takesevents()) set_cursor(this, FL_CURSOR_DEFAULT);
+    set_cursor(this, FL_CURSOR_DEFAULT);
     break;
 
   case FL_DRAG:
@@ -197,5 +196,5 @@ int Fl_Tile::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Tile.cxx,v 1.8 1999/06/20 15:24:30 mike Exp $".
+// End of "$Id: Fl_Tile.cxx,v 1.9 1999/08/16 07:31:21 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.H,v 1.10 1999/06/20 15:24:25 mike Exp $"
+// "$Id: fl_draw.H,v 1.11 1999/08/16 07:30:54 bill Exp $"
 //
 // Portable drawing function header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,12 +26,13 @@
 #ifndef fl_draw_H
 #define fl_draw_H
 
-#include "Enumerations.H"  // for the color names
+#include "Fl_Flags.H" // for alignment values
+#include "Fl_Color.H"
+#include "Fl_Font.H"
 
 // Colors:
-FL_EXPORT void	fl_color(Fl_Color); // select indexed color
-inline void fl_color(int c) {fl_color((Fl_Color)c);} // for back compatability
-FL_EXPORT void	fl_color(uchar, uchar, uchar); // select actual color
+FL_EXPORT void fl_color(Fl_Color);
+inline void fl_color(uchar r, uchar g, uchar b) {fl_color(fl_rgb(r,g,b));}
 extern FL_EXPORT Fl_Color fl_color_;
 inline Fl_Color fl_color() {return fl_color_;}
 
@@ -42,6 +43,24 @@ FL_EXPORT void fl_push_no_clip();
 FL_EXPORT void fl_pop_clip();
 FL_EXPORT int fl_not_clipped(int x, int y, int w, int h);
 FL_EXPORT int fl_clip_box(int, int, int, int, int& x, int& y, int& w, int& h);
+
+// line type:
+FL_EXPORT void fl_line_style(int style, int width=0, char* dashes=0);
+enum {
+  FL_SOLID	= 0,
+  FL_DASH	= 1,
+  FL_DOT	= 2,
+  FL_DASHDOT	= 3,
+  FL_DASHDOTDOT	= 4,
+
+  FL_CAP_FLAT	= 0x100,
+  FL_CAP_ROUND	= 0x200,
+  FL_CAP_SQUARE	= 0x300,
+
+  FL_JOIN_MITER	= 0x1000,
+  FL_JOIN_ROUND	= 0x2000,
+  FL_JOIN_BEVEL	= 0x3000
+};
 
 // points:
 FL_EXPORT void fl_point(int x, int y);
@@ -108,11 +127,11 @@ FL_EXPORT double fl_transform_dy(double x, double y);
 FL_EXPORT void fl_transformed_vertex(double x, double y);
 
 // current font:
-FL_EXPORT void fl_font(int face, int size);
-extern FL_EXPORT int fl_font_;
-inline int fl_font() {return fl_font_;}
-extern FL_EXPORT int fl_size_;
-inline int fl_size() {return fl_size_;}
+FL_EXPORT void fl_font(const Fl_Font, unsigned size);
+extern FL_EXPORT Fl_Font fl_font_;
+inline Fl_Font fl_font() {return fl_font_;}
+extern FL_EXPORT unsigned fl_size_;
+inline unsigned fl_size() {return fl_size_;}
 
 // information you can get about the current font:
 FL_EXPORT int   fl_height();	// using "size" should work ok
@@ -125,14 +144,9 @@ FL_EXPORT double fl_width(uchar);
 FL_EXPORT void fl_draw(const char*, int x, int y);
 FL_EXPORT void fl_draw(const char*, int n, int x, int y);
 FL_EXPORT void fl_measure(const char*, int& x, int& y);
-FL_EXPORT void fl_draw(const char*, int,int,int,int, Fl_Align);
-FL_EXPORT void fl_draw(const char*, int,int,int,int, Fl_Align,
+FL_EXPORT void fl_draw(const char*, int,int,int,int, Fl_Flags);
+FL_EXPORT void fl_draw(const char*, int,int,int,int, Fl_Flags,
 	               void (*callthis)(const char *, int n, int x, int y));
-
-// boxtypes:
-FL_EXPORT void fl_frame(const char* s, int x, int y, int w, int h);
-FL_EXPORT void fl_frame2(const char* s, int x, int y, int w, int h);
-FL_EXPORT void fl_draw_box(Fl_Boxtype, int x, int y, int w, int h, Fl_Color);
 
 // images:
 FL_EXPORT void fl_draw_image(const uchar*, int,int,int,int, int delta=3, int ldelta=0);
@@ -140,7 +154,9 @@ FL_EXPORT void fl_draw_image_mono(const uchar*, int,int,int,int, int delta=1, in
 typedef void (*Fl_Draw_Image_Cb)(void*,int,int,int,uchar*);
 FL_EXPORT void fl_draw_image(Fl_Draw_Image_Cb, void*, int,int,int,int, int delta=3);
 FL_EXPORT void fl_draw_image_mono(Fl_Draw_Image_Cb, void*, int,int,int,int, int delta=1);
-FL_EXPORT void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b);
+FL_EXPORT void fl_rectf(int x, int y, int w, int h, Fl_Color);
+inline void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {
+  fl_rectf(x,y,w,h,fl_rgb(r,g,b));}
 
 // pixmaps:
 FL_EXPORT int fl_draw_pixmap(/*const*/ char* const* data, int x,int y,Fl_Color=FL_GRAY);
@@ -158,8 +174,13 @@ FL_EXPORT void fl_cursor(Fl_Cursor, Fl_Color=FL_BLACK, Fl_Color=FL_WHITE);
 FL_EXPORT int fl_draw_symbol(const char* label,int x,int y,int w,int h, Fl_Color);
 FL_EXPORT int fl_add_symbol(const char* name, void (*drawit)(Fl_Color), int scalable);
 
+// back compatability only:
+//FL_EXPORT void fl_frame(const char* s, int x, int y, int w, int h);
+//FL_EXPORT void fl_frame2(const char* s, int x, int y, int w, int h);
+#define fl_draw_box(b,x,y,w,h,c) ((b)->draw(x,y,w,h,c))
+
 #endif
 
 //
-// End of "$Id: fl_draw.H,v 1.10 1999/06/20 15:24:25 mike Exp $".
+// End of "$Id: fl_draw.H,v 1.11 1999/08/16 07:30:54 bill Exp $".
 //

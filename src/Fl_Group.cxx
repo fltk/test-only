@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.21 1999/06/20 14:25:20 mike Exp $"
+// "$Id: Fl_Group.cxx,v 1.22 1999/08/16 07:31:16 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -141,12 +141,12 @@ int Fl_Group::handle(int event) {
   case FL_MOVE:
     for (i = children(); i--;) {
       o = a[i];
-      if (o->visible() && Fl::event_inside(o)) {
+      if (o->takesevents() && Fl::event_inside(o)) {
         if (o->contains(Fl::belowmouse())) {
-          return send(o,FL_MOVE);
+	  return send(o,FL_MOVE);
         } else if (send(o,FL_ENTER)) {
-          Fl::belowmouse(o);
-          return 1;
+	  if (!o->contains(Fl::belowmouse())) Fl::belowmouse(o);
+	  return 1;
         }
       }
     }
@@ -244,6 +244,12 @@ int Fl_Group::navigation(int key) {
 
 ////////////////////////////////////////////////////////////////
 
+// this is private as there is no need for themes to alter this:
+static Fl_Style group_style = {
+  FL_NO_BOX // box
+  // rest is zero and inherited from parent's style
+};
+
 Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
 : Fl_Widget(X,Y,W,H,l),
   children_(0),
@@ -251,53 +257,24 @@ Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
   savedfocus_(0),
   resizable_(this),
   sizes_(0), // this is allocated when the group is end()ed.
-  // Subclasses may want to construct child objects as part of their
-  // constructor, so make sure they are add()'d to this object.
-  // But you must end() the object!
   ox_(X),
   oy_(Y),
   ow_(W),
   oh_(H) {
+  style(group_style);
   align(FL_ALIGN_TOP);
+  // Subclasses may want to construct child objects as part of their
+  // constructor, so make sure they are add()'d to this object.
+  // But you must end() the object!
   begin();
 }
 
-/*
-
-// Original clear()
-void Fl_Group::clear() {
-  Fl_Widget*const* a = array();
-  for (int i=children(); i--;) {
-    Fl_Widget* o = *a++;
-    // test the parent to see if child already destructed:
-    if (o->parent() == this) delete o;
-  }
-  if (children() > 1) free((void*)array_);
-  children_ = 0;
-  array_ = 0;
-  savedfocus_ = 0;
-  resizable_ = this;
-  init_sizes();
-}
-
-// Carl's clear()
-void Fl_Group::clear() {
-  while (children()) {
-    remove(child(0));
-    if (child(0)->parent() == this) delete child(0);
-  }
-  resizable_ = this;
-}
-
-*/
-
-// Bill's new clear()
 void Fl_Group::clear() {
   Fl_Widget*const* old_array = array();
   int old_children = children();
   // clear everything now, in case fl_fix_focus recursively calls us:
   children_ = 0;
-  array_ = 0;
+  // array_ = 0; dont do this, it will clobber old_array if only one child
   savedfocus_ = 0;
   resizable_ = this;
   init_sizes();
@@ -305,7 +282,9 @@ void Fl_Group::clear() {
   Fl_Widget*const* a = old_array;
   for (int i=old_children; i--;) {
     Fl_Widget* o = *a++;
-    // test the parent to see if child already destructed:
+    // This test is to detect if ~Fl_Widget was already called on the
+    // child (it set parent to zero).  This is a hack but it makes
+    // destruction of composite objects faster:
     if (o->parent() == this) delete o;
   }
   if (old_children > 1) free((void*)old_array);
@@ -314,7 +293,7 @@ void Fl_Group::clear() {
 Fl_Group::~Fl_Group() {clear();}
 
 void Fl_Group::insert(Fl_Widget &o, int i) {
-  if (o.parent()) ((Fl_Group*)(o.parent()))->remove(o);
+  if (o.parent()) o.parent()->remove(o);
   o.parent_ = this;
   if (children_ == 0) { // use array pointer to point at single child
     array_ = (Fl_Widget**)&o;
@@ -339,6 +318,11 @@ void Fl_Group::add(Fl_Widget &o) {insert(o, children_);}
 void Fl_Group::remove(Fl_Widget &o) {
   int i = find(o);
   if (i >= children_) return;
+  if (o.visible_r()) {
+    // we must redraw the enclosing group that has an opaque box:
+    for (Fl_Group *p = this; p; p = p->parent())
+      if (p->box() != FL_NO_BOX || !p->parent()) {p->redraw(); break;}
+  }
   if (&o == savedfocus_) savedfocus_ = 0;
   o.parent_ = 0;
   children_--;
@@ -354,27 +338,27 @@ void Fl_Group::remove(Fl_Widget &o) {
 
 ////////////////////////////////////////////////////////////////
 
-// Rather lame kludge here, I need to detect windows and ignore the
-// changes to X,Y, since all children are relative to X,Y.  That
-// is why I check type():
-
-// sizes array stores the initial positions of widgets as
+// sizes() array stores the initial positions of widgets as
 // left,right,top,bottom quads.  The first quad is the group, the
 // second is the resizable (clipped to the group), and the
 // rest are the children.  This is a convienent order for the
 // algorithim.  If you change this be sure to fix Fl_Tile which
 // also uses this array!
+// Calling init_sizes() "resets" the sizes array to the current group
+// and children positions.  Actually it just deletes the sizes array,
+// and it is not recreated until the next time layout is called.
 
 void Fl_Group::init_sizes() {
   delete[] sizes_; sizes_ = 0;
+  set_old_size();
 }
 
-short* Fl_Group::sizes() {
+int* Fl_Group::sizes() {
   if (!sizes_) {
-    short* p = sizes_ = new short[4*(children_+2)];
+    int* p = sizes_ = new int[4*(children_+2)];
     // first thing in sizes array is the group's size:
-    if (type() < FL_WINDOW) {p[0] = x(); p[2] = y();} else {p[0] = p[2] = 0;}
-    p[1] = p[0]+w(); p[3] = p[2]+h();
+    if (type() < FL_WINDOW) {p[0] = ox(); p[2] = oy();} else {p[0] = p[2] = 0;}
+    p[1] = p[0]+ow(); p[3] = p[2]+oh();
     // next is the resizable's size:
     p[4] = p[0]; // init to the group's size
     p[5] = p[1];
@@ -402,9 +386,14 @@ short* Fl_Group::sizes() {
   return sizes_;
 }
 
+#if 0
+// A child widget can use this inside layout() to figure out their
+// previous size and position.  This does not seem to be working
+// correctly, I removed the only call to it.  To fix this we need to
+// duplicate exactly the code in layout()...
 void Fl_Group::old_size(const Fl_Widget* o,int* r) {
   // get changes in size from the initial size:
-  short *p = sizes();
+  int* p = sizes();
   int dw = w()-(p[1]-p[0]);
   int dh = h()-(p[3]-p[2]);
   p+=4;
@@ -423,20 +412,21 @@ void Fl_Group::old_size(const Fl_Widget* o,int* r) {
   }
   int X = *p++;
   if (X >= IR) X += dw;
-  else if (X > IX) X = IX+((X-IX)*(IR+dw-IX)+(IR-IX)/2)/(IR-IX);
+  else if (X > IX) X = X + dw * (X-IX)/(IR-IX);
   int R = *p++;
   if (R >= IR) R += dw;
-  else if (R > IX) R = IX+((R-IX)*(IR+dw-IX)+(IR-IX)/2)/(IR-IX);
+  else if (R > IX) R = R + dw * (R-IX)/(IR-IX);
 
   int Y = *p++;
   if (Y >= IB) Y += dh;
-  else if (Y > IY) Y = IY+((Y-IY)*(IB+dh-IY)+(IB-IY)/2)/(IB-IY);
+  else if (Y > IY) Y = Y + dh*(Y-IY)/(IB-IY);
   int B = *p++;
   if (B >= IB) B += dh;
-  else if (B > IY) B = IY+((B-IY)*(IB+dh-IY)+(IB-IY)/2)/(IB-IY);
+  else if (B > IY) B = B + dh*(B-IY)/(IB-IY);
 
   r[0]=X;r[1]=R-X;r[2]=Y;r[3]=B-Y;
 }
+#endif
 
 void Fl_Group::layout() {
 
@@ -455,7 +445,7 @@ void Fl_Group::layout() {
     }
   } else if (children_) {
     // get changes in size from the initial size:
-    short *p = sizes();
+    int* p = sizes();
     int dx = x()-p[0];
     int dy = y()-p[2];
     if (type() >= FL_WINDOW) dx = dy = 0;
@@ -475,17 +465,17 @@ void Fl_Group::layout() {
 
       int X = *p++;
       if (X >= IR) X += dw;
-      else if (X > IX) X = IX+((X-IX)*(IR+dw-IX)+(IR-IX)/2)/(IR-IX);
+      else if (X > IX) X = X + dw * (X-IX)/(IR-IX);
       int R = *p++;
       if (R >= IR) R += dw;
-      else if (R > IX) R = IX+((R-IX)*(IR+dw-IX)+(IR-IX)/2)/(IR-IX);
+      else if (R > IX) R = R + dw * (R-IX)/(IR-IX);
 
       int Y = *p++;
       if (Y >= IB) Y += dh;
-      else if (Y > IY) Y = IY+((Y-IY)*(IB+dh-IY)+(IB-IY)/2)/(IB-IY);
+      else if (Y > IY) Y = Y + dh*(Y-IY)/(IB-IY);
       int B = *p++;
       if (B >= IB) B += dh;
-      else if (B > IY) B = IY+((B-IY)*(IB+dh-IY)+(IB-IY)/2)/(IB-IY);
+      else if (B > IY) B = B + dh*(B-IY)/(IB-IY);
 
       o->resize(X+dx, Y+dy, R-X, B-Y);
       while (o->damage()&FL_DAMAGE_LAYOUT) layout(o);
@@ -532,15 +522,13 @@ void Fl_Group::draw_child(Fl_Widget& w) const {
   }
 }
 
-extern char fl_draw_shortcut;
-
 // Parents normally call this to draw outside labels:
 void Fl_Group::draw_outside_label(Fl_Widget& w) const {
   if (!w.visible()) return;
   // skip any labels that are inside the widget:
   if (!(w.align()&15) || (w.align() & FL_ALIGN_INSIDE)) return;
   // invent a box that is outside the widget:
-  int align = w.align();
+  unsigned align = w.flags();
   int X = w.x();
   int Y = w.y();
   int W = w.w();
@@ -562,9 +550,9 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
     X = X+W+3;
     W = x()+this->w()-X;
   }
-  w.draw_label(X,Y,W,H,w.labelcolor(),(Fl_Align)align);
+  w.draw_label(X,Y,W,H,(Fl_Flags)align);
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.21 1999/06/20 14:25:20 mike Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.22 1999/08/16 07:31:16 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.15 1999/05/06 05:52:20 carl Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.16 1999/08/16 07:31:21 bill Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,8 +28,6 @@
 #include <FL/fl_draw.H>
 #include <math.h>
 
-#define DEFAULT_STYLE ((Style*)default_style())
-
 #define INITIALREPEAT .5
 #define REPEAT .05
 
@@ -55,25 +53,25 @@ int Fl_Scrollbar::handle(int event) {
     }
   }
   switch (event) {
+  case FL_ENTER:
+  case FL_LEAVE:
+    if (highlight_color() && active_r()) redraw();
+    return 1;
   case FL_RELEASE:
-    if (!Fl::pushed()) {
-      if (pushed_) {
-        Fl::remove_timeout(timeout_cb, this);
-        pushed_ = 0;
-        redraw();
-      }
-      handle_release();
+    if (pushed_) {
+      Fl::remove_timeout(timeout_cb, this);
+      pushed_ = 0;
+      redraw();
     }
+    handle_release();
     return 1;
   case FL_PUSH:
     if (horizontal()) {
-      int delta = (Fl::widget_style() == FL_MOTIF_STYLE) ? Fl::box_dx(box()) : 0;
-      if (Fl::event_inside(x(), y(), h()-delta, h())) pushed_ = 1;
-      if (Fl::event_inside(x()+w()-h()+delta, y(), h()-delta, h())) pushed_ = 2;
+      if (Fl::event_inside(x(), y(), h(), h())) pushed_ = 1;
+      if (Fl::event_inside(x()+w()-h(), y(), h(), h())) pushed_ = 2;
     } else {
-      int delta = (Fl::widget_style() == FL_MOTIF_STYLE) ? Fl::box_dy(box()) : 0;
-      if (Fl::event_inside(x(), y(), w()-delta, w())) pushed_ = 1;
-      if (Fl::event_inside(x(), y()+h()-w()+delta, w()-delta, w())) pushed_ = 2;
+      if (Fl::event_inside(x(), y(), w(), w())) pushed_ = 1;
+      if (Fl::event_inside(x(), y()+h()-w(), w(), w())) pushed_ = 2;
     }
     if (pushed_) {
       handle_push();
@@ -138,207 +136,57 @@ int Fl_Scrollbar::handle(int event) {
 }
 
 void Fl_Scrollbar::draw() {
-  Fl_Color col = (Fl::belowmouse()==this &&
-                  selection_color() == DEFAULT_STYLE->widget(COLOR2))
-                 ? fly_color() : selection_color();
-
-  Fl_Color dc1, dc2, lc1, lc2;
-  if (slider() == FL_MOTIF_UP_BOX || slider() == FL_THIN_MOTIF_UP_BOX)
-    { dc1 = FL_DARK3; dc2 = FL_DARK3; lc1 = FL_LIGHT2; lc2 = FL_LIGHT2; }
-  else
-    { dc1 = FL_BLACK; dc2 = FL_DARK2; lc1 = FL_WHITE; lc2 = FL_LIGHT2; }
-  if (!active_r())
-    { dc1 = inactive(dc1); dc2 = inactive(dc2); lc1 = inactive(lc1); lc2 = inactive(lc2); }
-  int bdx = Fl::box_dx(box()), bdy = Fl::box_dy(box());
-
+  if (damage()&FL_DAMAGE_ALL) draw_box();
+  int X = x()+box()->dx();
+  int Y = y()+box()->dy();
+  int W = w()-box()->dw();
+  int H = h()-box()->dh();
+  Fl_Color c = color2(); // not color()!  Different from all other widgets...
+  Fl_Flags f = 0;
+  if (!active_r()) {
+    f = FL_INACTIVE;
+  } else if (Fl::belowmouse() == this && highlight_color()) {
+    f = FL_HIGHLIGHT;
+    c = highlight_color();
+  }
   if (horizontal()) {
-    if (w() < 3*h()) {Fl_Slider::draw(); return;}
-    if (Fl::widget_style() == FL_MOTIF_STYLE) {
-      fl_clip(x()+h()-1, y(), w()-2*h()+2, h());
-      Fl_Slider::draw(x()+h()-bdx-1, y(), w()-2*h()+2*bdx+2, h());
-      fl_pop_clip();
-    } else {
-      Fl_Slider::draw(x()+h(), y(), w()-2*h(), h());
-    }
+    if (W < 3*H) {Fl_Slider::draw(X,Y,W,H); return;}
+    Fl_Slider::draw(X+H,Y,W-2*H,H);
     if (damage()&FL_DAMAGE_ALL) {
-      if (Fl::widget_style() == FL_MOTIF_STYLE) {
-        fl_clip(x(), y(), h()-1, h());
-        draw_box(box(), x(), y(), h()+2*bdx, h(), color());
-        fl_pop_clip();
-        fl_clip(x()+w()-h()+1, y(), h()-1, h());
-        draw_box(box(), x()+w()-h()-2*bdx, y(), h()+2*bdx, h(), color());
-        fl_pop_clip();
-      } else {
-        draw_box((pushed_&1) ? down(slider()) : slider(),
-                 x(), y(), h(), h(), col);
-        draw_box((pushed_&2) ? down(slider()) : slider(),
-                 x()+w()-h(), y(), h(), h(), col);
-      }
-
-      if (active_r()) fl_color(color3());
-      else fl_color(inactive(color3()));
-      int w1 = (h()-1)|1; // use odd sizes only
-      int Y = y()+w1/2;
-      // I have no idea what I'm doing, but this looks OK - CET
-      int WX, WY, DX;
-      if (Fl::widget_style() == FL_SGI_STYLE) {
-        WX = ((w1/2)-1)|1;
-        WY = (w1/4);
-        DX = 0;
-      } else if (Fl::widget_style() == FL_MOTIF_STYLE) {
-        WX = (w1 - 2*bdx - 1)|1;
-        WY = (w1/2 - bdx);
-        DX = bdx-1;
-      } else {
-        WX = w1/3;
-        WY = w1/3;
-        DX = 0;
-      }
-      int X = x()+w1/2+WX/2;
-      if (Fl::widget_style() == FL_MOTIF_STYLE)
-        fl_color((pushed_&1) ? color() : col);
-      fl_polygon(X-WX+DX, Y, X+DX, Y-WY, X+DX, Y+WY);
-      X = x()+w()-(X-x())-1;
-      if (Fl::widget_style() == FL_MOTIF_STYLE)
-        fl_color((pushed_&2) ? color() : col);
-      fl_polygon(X+WX-DX, Y, X-DX, Y+WY, X-DX, Y-WY);
-      if (Fl::widget_style() == FL_MOTIF_STYLE) {
-        X = x()+w1/2+WX/2;
-        fl_color((pushed_&1) ? lc2 : dc2);
-        fl_line(X-WX+DX+1, Y, X+DX-1, Y+WY-1, X+DX-1, Y-WY+1);
-        fl_color((pushed_&1) ? dc2 : lc2);
-        fl_line(X-WX+DX+1, Y, X+DX-1, Y-WY+1);
-        fl_color((pushed_&1) ? lc1 : dc1);
-        fl_line(X-WX+DX, Y, X+DX, Y+WY, X+DX, Y-WY);
-        fl_color((pushed_&1) ? dc1 : lc1);
-        fl_line(X-WX+DX, Y, X+DX, Y-WY);
-
-        X = x()+w()-(X-x())-1;
-        fl_color((pushed_&2) ? dc2 : lc2);
-        fl_line(X+WX-DX-1, Y, X-DX+1, Y-WY+1, X-DX+1, Y+WY-1);
-        fl_color((pushed_&2) ? lc2 : dc2);
-        fl_line(X+WX-DX-1, Y, X-DX+1, Y+WY-1);
-        fl_color((pushed_&2) ? dc1 : lc1);
-        fl_line(X+WX-DX, Y, X-DX, Y-WY, X-DX, Y+WY);
-        fl_color((pushed_&2) ? lc1 : dc1);
-        fl_line(X+WX-DX, Y, X-DX, Y+WY);
-      }
+      glyph()(FL_GLYPH_LEFT, X, Y, H, H, c, f|((pushed_&1)?FL_VALUE:0));
+      glyph()(FL_GLYPH_RIGHT, X+W-H, Y, H, H, c, f|((pushed_&2)?FL_VALUE:0));
     }
   } else { // vertical
-    if (h() < 3*w()) {Fl_Slider::draw(); return;}
-    if (Fl::widget_style() == FL_MOTIF_STYLE) {
-      fl_clip(x(), y()+w()-1, w(), h()-2*w()+2);
-      Fl_Slider::draw(x(), y()+w()-bdy-1, w(), h()-2*w()+2*bdy+2);
-      fl_pop_clip();
-    } else {
-      Fl_Slider::draw(x(), y()+w(), w(), h()-2*w());
-    }
+    if (H < 3*W) {Fl_Slider::draw(X,Y,W,H); return;}
+    Fl_Slider::draw(X,Y+W,W,H-2*W);
     if (damage()&FL_DAMAGE_ALL) {
-      if (Fl::widget_style() == FL_MOTIF_STYLE) {
-        fl_clip(x(), y(), w(), w()-1);
-        draw_box(box(), x(), y(), w(), w()+2*bdy, color());
-        fl_pop_clip();
-        fl_clip(x(), y()+h()-w()+1, w(), w()-1);
-        draw_box(box(), x(), y()+h()-w()-2*bdy, w(), w()+2*bdy, color());
-        fl_pop_clip();
-      } else {
-        draw_box((pushed_&1) ? down(slider()) : slider(),
-                 x(), y(), w(), w(), col);
-        draw_box((pushed_&2) ? down(slider()) : slider(),
-                 x(), y()+h()-w(), w(), w(), col);
-      }
-
-      if (active_r()) fl_color(color3());
-      else fl_color(inactive(color3()));
-      int w1 = (w()-1)|1; // use odd sizes only
-      int X = x()+w1/2;
-      // I have no idea what I'm doing, but this looks OK - CET
-      int WX, WY, DY;
-      if (Fl::widget_style() == FL_SGI_STYLE) {
-        WY = ((w1/2)-1)|1;
-        WX = (w1/4);
-        DY = 0;
-      } else if (Fl::widget_style() == FL_MOTIF_STYLE) {
-        WY = (w1 - 2*bdy - 1)|1;
-        WX = (w1/2 - bdy);
-        DY = bdy-1;
-      } else {
-        WY = w1/3;
-        WX = w1/3;
-        DY = 0;
-      }
-      int Y = y()+w1/2+WY/2;
-      if (Fl::widget_style() == FL_MOTIF_STYLE)
-        fl_color((pushed_&1) ? color() : col);
-      fl_polygon(X, Y-WY+DY, X+WX, Y+DY, X-WX, Y+DY);
-      Y = y()+h()-(Y-y())-1;
-      if (Fl::widget_style() == FL_MOTIF_STYLE)
-        fl_color((pushed_&2) ? color() : col);
-      fl_polygon(X, Y+WY-DY, X-WX, Y-DY, X+WX, Y-DY);
-      if (Fl::widget_style() == FL_MOTIF_STYLE) {
-        Y = y()+w1/2+WY/2;
-        fl_color((pushed_&1) ? lc2 : dc2);
-        fl_line(X, Y-WY+DY+1, X+WX-1, Y+DY-1, X-WX+1, Y+DY-1);
-        fl_color((pushed_&1) ? dc2 : lc2);
-        fl_line(X, Y-WY+DY+1, X-WX+1, Y+DY-1);
-        fl_color((pushed_&1) ? lc1 : dc1);
-        fl_line(X, Y-WY+DY, X+WX, Y+DY, X-WX, Y+DY);
-        fl_color((pushed_&1) ? dc1 : lc1);
-        fl_line(X, Y-WY+DY, X-WX, Y+DY);
-
-        Y = y()+h()-(Y-y())-1;
-        fl_color((pushed_&2) ? dc2 : lc2);
-        fl_line(X, Y+WY-DY-1, X-WX+1, Y-DY+1, X+WX-1, Y-DY+1);
-        fl_color((pushed_&2) ? lc2 : dc2);
-        fl_line(X, Y+WY-DY-1, X+WX-1, Y-DY+1);
-        fl_color((pushed_&2) ? dc1 : lc1);
-        fl_line(X, Y+WY-DY, X-WX, Y-DY, X+WX, Y-DY);
-        fl_color((pushed_&2) ? lc1 : dc1);
-        fl_line(X, Y+WY-DY, X+WX, Y-DY);
-      }
+      glyph()(FL_GLYPH_UP, X, Y, W, W, c, f|((pushed_&1)?FL_VALUE :0));
+      glyph()(FL_GLYPH_DOWN, X, Y+H-W, W, W, c, f|((pushed_&2)?FL_VALUE:0));
     }
   }
 }
-Fl_Widget::Style* Fl_Scrollbar::_default_style = 0;
 
-Fl_Scrollbar::Style::Style() : Fl_Slider::Style() {
-  widget(COLOR) = 43;
-  widget(COLOR3) = 0;
-  widget(BOX) = FL_FLAT_BOX;
-}
+Fl_Style Fl_Scrollbar::default_style = {
+  FL_FLAT_BOX,	// box
+  0,		// glyphs
+  0,		// label_font
+  0,		// text_font
+  0,		// label_type
+  FL_DARK2,	// color
+  0,		// label_color
+  FL_GRAY	// color2
+  // rest is zero
+};
 
-void Fl_Scrollbar::loadstyle() const {
-  if (!Fl::s_scrollbar) {
-    Fl::s_scrollbar = 1;
-
-    static Fl::Attribute widget_attributes[] = {
-      { "label color", LABELCOLOR },
-      { "label size", LABELSIZE },
-      { "label type", LABELTYPE },
-      { "label font", LABELFONT },
-      { "color", COLOR },
-      { "color2", COLOR2 },
-      { "arrow color", COLOR3 },
-      { "box", BOX },
-      { 0 }
-    };
-    Fl::load_attributes("scroll bar", DEFAULT_STYLE->widget_, widget_attributes);
-
-    static Fl::Attribute slider_attributes[] = {
-     { "highlight color", FLY_COLOR },
-     { "slider box", SLIDER_BOX },
-     { 0 }
-    };
-    Fl::load_attributes("scroll bar", DEFAULT_STYLE->slider_, slider_attributes);
-  }
-}
-
-Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L) : Fl_Slider(X, Y, W, H, L) {
+Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
+  : Fl_Slider(X, Y, W, H, L)
+{
+  style(default_style);
   linesize_ = 16;
   pushed_ = 0;
   step(1);
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.15 1999/05/06 05:52:20 carl Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.16 1999/08/16 07:31:21 bill Exp $".
 //

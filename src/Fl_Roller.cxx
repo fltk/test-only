@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Roller.cxx,v 1.10 1999/05/06 05:52:19 carl Exp $"
+// "$Id: Fl_Roller.cxx,v 1.11 1999/08/16 07:31:20 bill Exp $"
 //
 // Roller widget for the Fast Light Tool Kit (FLTK).
 //
@@ -30,8 +30,6 @@
 #include <FL/fl_draw.H>
 #include <math.h>
 
-#define DEFAULT_STYLE ((Style*)default_style())
-
 int Fl_Roller::handle(int event) {
   static int ipos;
   int newpos = horizontal() ? Fl::event_x() : Fl::event_y();
@@ -53,11 +51,11 @@ int Fl_Roller::handle(int event) {
 }
 
 void Fl_Roller::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_box();
-  int X = x()+Fl::box_dx(box());
-  int Y = y()+Fl::box_dy(box());
-  int W = w()-Fl::box_dw(box())-1;
-  int H = h()-Fl::box_dh(box())-1;
+  if (damage()&FL_DAMAGE_ALL) draw_frame();
+  int X = x()+box()->dx();
+  int Y = y()+box()->dy();
+  int W = w()-box()->dw()-1;
+  int H = h()-box()->dh()-1;
   int offset = step() ? int(value()/step()) : 0;
   const double ARC = 1.5; // 1/2 the number of radians visible
   const double delta = .2; // radians per knurl
@@ -132,34 +130,10 @@ void Fl_Roller::draw() {
   }
 }
 
-Fl_Widget::Style* Fl_Roller::_default_style = 0;
-
-Fl_Roller::Style::Style() : Fl_Widget::Style() {
-  widget(BOX) = FL_MEDIUM_UP_BOX;
-}
-
-
-void Fl_Roller::loadstyle() const {
-  if (!Fl::s_roller) {
-    Fl::s_roller = 1;
-
-    static Fl::Attribute widget_attributes[] = {
-      { "label color", LABELCOLOR },
-      { "label size", LABELSIZE },
-      { "label type", LABELTYPE },
-      { "label font", LABELFONT },
-      { "color", COLOR },
-      { "box", BOX },
-      { 0 }
-    };
-    Fl::load_attributes("roller", DEFAULT_STYLE->widget_, widget_attributes);
-  }
-}
-
 Fl_Roller::Fl_Roller(int X,int Y,int W,int H,const char* L) : Fl_Valuator(X,Y,W,H,L) {
   step(1,1000);
 }
 
 //
-// End of "$Id: Fl_Roller.cxx,v 1.10 1999/05/06 05:52:19 carl Exp $".
+// End of "$Id: Fl_Roller.cxx,v 1.11 1999/08/16 07:31:20 bill Exp $".
 //

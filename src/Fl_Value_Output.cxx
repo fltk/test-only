@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Output.cxx,v 1.16 1999/06/18 14:34:39 carl Exp $"
+// "$Id: Fl_Value_Output.cxx,v 1.17 1999/08/16 07:31:22 bill Exp $"
 //
 // Value output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -30,54 +30,35 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Value_Output.H>
 #include <FL/fl_draw.H>
-#include <FL/Fl_Group.H>
-#include <stdio.h>
-#include <config.h>
-
-void Fl_Value_Output::output_cb(Fl_Widget*, void* v) {
-  Fl_Value_Output& t = *(Fl_Value_Output*)v;
-  double nv;
-  if (t.step()>=1.0) nv = strtol(t.output.value(), 0, 0);
-  else nv = strtod(t.output.value(), 0);
-  t.handle_push();
-  t.handle_drag(nv);
-  t.handle_release();
-}
-
-void Fl_Value_Output::value_damage() {
-  char buf[128];
-  format(buf);
-  output.value(buf);
-//  output.mark(output.position()); // turn off selection highlight
-}
 
 void Fl_Value_Output::draw() {
-  if (damage()&~FL_DAMAGE_CHILD) output.clear_damage(FL_DAMAGE_ALL);
-  output.draw();
-  output.clear_damage();
-}
-
-void Fl_Value_Output::resize(int X, int Y, int W, int H) {
-  Fl_Valuator::resize(X, Y, W, H);
-  output.resize(X, Y, W, H);
+  if (damage()&~FL_DAMAGE_CHILD) draw_frame();
+  int X = x()+box()->dx();
+  int Y = y()+box()->dy();
+  int W = w()-box()->dw();
+  int H = h()-box()->dh();
+  fl_color(color());
+  fl_rectf(X, Y, W, H);
+  char buf[128];
+  format(buf);
+  fl_color(active_r() ? textcolor() : fl_inactive(textcolor()));
+  fl_font(textfont(), textsize());
+  fl_draw(buf,X+3,Y,W-6,H,FL_ALIGN_LEFT);
 }
 
 int Fl_Value_Output::handle(int event) {
-//  if (!step()) return 0;
+  if (!step()) return 0;
   double v;
   int delta;
   int mx = Fl::event_x();
   static int ix, drag;
   switch (event) {
-  case FL_ENTER: return 1; // For tooltips
   case FL_PUSH:
-  if (!step()) goto DEFAULT;
     ix = mx;
     drag = Fl::event_button();
     handle_push();
     return 1;
   case FL_DRAG:
-  if (!step()) goto DEFAULT;
     delta = Fl::event_x()-ix;
     if (delta > 5) delta -= 5;
     else if (delta < -5) delta += 5;
@@ -91,38 +72,22 @@ int Fl_Value_Output::handle(int event) {
     handle_drag(soft()?softclamp(v):clamp(v));;
     return 1;
   case FL_RELEASE:
-    if (!step()) goto DEFAULT;
-    if (!Fl::pushed()) {
-      if (value() != previous_value() || !Fl::event_is_click())
-        handle_release();
-      else {
-        output.handle(FL_PUSH);
-        output.handle(FL_RELEASE);
-      }
-    }
+    handle_release();
     return 1;
   default:
-  DEFAULT:
-    output.type(step()>=1.0 ? FL_INT_INPUT : FL_FLOAT_INPUT);
-    return output.handle(event);
+    return 0;
   }
 }
 
+#include <FL/Fl_Output.H>
+
 Fl_Value_Output::Fl_Value_Output(int x,int y,int w,int h,const char *l)
-: Fl_Valuator(x,y,w,h,l), output(x, y, w, h, 0) {
+: Fl_Valuator(x,y,w,h,l) {
+  style(Fl_Output::default_style);
   align(FL_ALIGN_LEFT);
   soft_ = 0;
-  if (output.parent())  // defeat automatic-add
-    ((Fl_Group*)output.parent())->remove(output);
-  output.parent(this); // kludge!
-  output.callback(output_cb, this);
-  output.when((Fl_When)(FL_WHEN_RELEASE|FL_WHEN_ENTER_KEY));
-  value_damage();
-
-  output.mstyle(&output._style);
-  _style = output._style;
 }
 
 //
-// End of "$Id: Fl_Value_Output.cxx,v 1.16 1999/06/18 14:34:39 carl Exp $".
+// End of "$Id: Fl_Value_Output.cxx,v 1.17 1999/08/16 07:31:22 bill Exp $".
 //

@@ -1,0 +1,120 @@
+<head><title>Fl_Color</title></head><body>
+
+<h1>typedef Fl_Color</h1>
+
+Fl_Color is an unsigned integer.
+
+<p>The (low) 4 bytes of the color are <b>rgbN</b>.  (<b>r</b> is the
+byte with the highest <i>value</i>, not the first in memory.  On an
+Intel or other little-endian machine the first byte in memory is
+<b>N</b>, while on a big-endian machine such as a MIPS it is <b>r</b>)
+
+<p><img src=fl_show_colormap.gif align=right>If the <b>rgb</b> is
+zero, the <b>N</b> is the color "index".  This index is used to look
+up an Fl_Color in an internal table of 256 colors, called the "fltk
+color map", shown here.  Thus using any integer in the range 0-255 as
+an Fl_Color will index the color map.  If <b>rgb</b> is not zero the
+index value is ignored (future code may treat the last byte as an
+"alpha" value).
+
+<p>An Fl_Color of zero (<code>FL_NO_COLOR</code>) will draw black but
+is ambiguous.  It is returned as an error value or to indicate
+portions of a Fl_Style that should be inherited, and it is also used
+as the default label color for everything so that changing color zero
+can be used by the -fg switch.  You should use <code>FL_BLACK</code> (56)
+to get black.
+
+<p>The entries 1-31 in the color map are settable by the user program.
+The advantage of using these over <a href=#fl_rgb>fl_rgb(r,g,b)</a> is
+that they are reproduced exactly on 8-bit screens.  Normal rgb colors
+are selected on 8-bit screens by using the nearest color from the
+color cube.  Colors 1-15 are preset for back compatability but fltk no
+longer uses these so you can change them.
+
+<p>Entries 32-55 of the color map are a 24-entry "gray" ramp.  This
+ramp is modified by the -bg switch or other user preferences so that
+the entry <tt>FL_GRAY</tt> (49) is the background color, and the
+others are a nice range from black to white.  These are used to draw
+box edges.
+
+<p>The remiander of the color map is a 5x8x5 color cube.  This cube is
+used to dither images or <a href=drawing.html#fl_rectf>fl_rectf()</a>
+on 8-bit screens.  In addition the symbols <code>FL_BLACK, FL_RED,
+FL_GREEN, FL_YELLOW, FL_BLUE, FL_MAGENTA, FL_CYAN, FL_WHITE, and
+FL_BLUE_SELECTION_COLOR</code> index the corners of the cube (these
+have different values than fltk1.0!).
+
+<h2>Methods and functions</h2>
+
+<h4>Fl_Color fl_rgb(unsigned char r, unsigned char g, unsigned char
+b)</h4>
+
+Inline function to build a color out of individual bytes.  The index
+is set to zero.
+
+<a name=fl_rgb>
+<h4>Fl_Color fl_rgb(const char*);</h4>
+
+Return a named color, returns 0 if the name is not found (on X this
+does Xlookupcolor, on Windows it can only do colors of the form #123456).
+
+<h4>Fl_Color fl_color_average(Fl_Color A, Fl_Color B, double
+weight);</h4>
+
+Returns a color that is <code>weight*A+(1-weight)*B</code>.
+
+<a name=fl_inactive>
+<h4>Fl_Color fl_inactive(Fl_Color c);</h4>
+
+Returns some color between c and FL_GRAY.
+
+<a name=fl_contrast>
+<h4>Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg);</h4>
+
+Decides if <i>fg</i> can be seen agains <i>bg</i> and returns
+<i>fg</i> if so.  If not this returns either <code>FL_NO_COLOR</code>
+or <code>FL_WHITE</code>, whichever one is more different than
+<i>bg</i>.  This function is often used by fltk for labels and text
+when no color is specified in the style.
+
+<a name=fl_get_color>
+<h4>Fl_Color fl_get_color(Fl_Color c);</h4>
+
+If c is an indexed color, this returns the full rgb color from the
+color map.  This returns c unchanged if it is not an indexed color.
+
+<a name=fl_get_color>
+<h4>void fl_get_color(Fl_Color c, uchar& r, uchar& g, uchar& b);</h4>
+
+If c is an indexed color, this returns the full rgb color from the
+color map.  This returns c unchanged if it is not an indexed color.
+The rgb portions of the color are extracted and put in the passed
+variables.
+
+<a name=fl_set_color>
+<h4>void fl_set_color(Fl_Color i, Fl_Color v);</h4>
+
+Set entry <i>i</i> in the fltk color map to <i>v</i>.  <i>i</i> should
+be in the range 1-31, and <i>v</i> should be an rgb color.
+
+<a name=fl_free_color>
+<h4>void fl_free_color(Fl_Color i);</h4>
+
+Tell colormapped-display that we don't need this indexed color anymore.
+
+<a name=fl_gray_ramp>
+<h4>Fl_Color fl_gray_ramp(int i)</h4>
+
+Return indexed color <i>i</i> from the gray ramp (this is a simple
+inline function).  There are <code>FL_NUM_GRAY</code> (24) shades in
+the gray ramp, with zero being black and 23 being white.
+
+<a name=fl_color_cube>
+<h4>Fl_Color fl_color_cube(int r, int g, int b)</h4>
+
+Return a indexed color from the color cube.  Unless you really need
+exact colors on an 8-bit screen you are better off using
+<code>fl_rgb(r,g,b)</code>, which takes 8-bit numbers.  The three
+arguments are indexes into the cube (not 8 bit numbers!), the number
+of values in each index is <code>FL_NUM_RED</code>(5),
+<code>FL_NUM_GREEN</code>(8) and <code>FL_NUM_BLUE</code>(5).

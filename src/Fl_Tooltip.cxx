@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.8 1999/05/12 23:20:30 carl Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.9 1999/08/16 07:31:22 bill Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,120 +23,107 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
-#include <FL/Fl_Menu_Window.H>
-#include <FL/Fl_Box.H>
-#include <FL/fl_draw.H>
 #include <FL/Fl_Tooltip.H>
+#include <FL/fl_draw.H>
+#include <FL/Fl_Menu_Window.H>
 
-#include <stdio.h>
+float Fl_Tooltip::delay_ = 0.5f;
+bool Fl_Tooltip::enabled_ = 1;
 
-Fl_TooltipBox *Fl_Tooltip::box = 0;
-Fl_Menu_Window *Fl_Tooltip::window = 0;
-Fl_Widget *Fl_Tooltip::widget = 0;
-int Fl_Tooltip::shown = 0;
-int Fl_Tooltip::_enabled = 1;
-
-Fl_Tooltip::Style Fl_Tooltip::default_style = {
-  0.5f,
-  215,
-  FL_BORDER_BOX,
-  FL_HELVETICA,
-  FL_NORMAL_SIZE,
-  FL_BLACK
+Fl_Style Fl_Tooltip::default_style = {
+  FL_BORDER_BOX,// box
+  0,		// glyphs
+  FL_HELVETICA,	// label_font (this is the one that is used)
+  0,		// text_font
+  FL_NORMAL_LABEL, // label_type
+  Fl_Color(215) // color
+  // rest is zero
 };
 
 #define MAX_WIDTH 400
 
 class Fl_TooltipBox : public Fl_Menu_Window {
 public:
-  Fl_TooltipBox() : Fl_Menu_Window(0, 0, 0, 0) {}
-  ~Fl_TooltipBox() {}
-
+  Fl_TooltipBox() : Fl_Menu_Window(0, 0, 0, 0) {
+    style(Fl_Tooltip::default_style);}
   void draw() {
-    Fl_Tooltip::loadstyle();
-    color(Fl_Tooltip::default_style.color_);
-    labeltype(FL_NORMAL_LABEL);
-    labelfont(Fl_Tooltip::default_style.textfont_);
-    labelsize(Fl_Tooltip::default_style.textsize_);
-    labelcolor(Fl_Tooltip::default_style.textcolor_);
-    align(FL_ALIGN_LEFT|FL_ALIGN_WRAP|FL_ALIGN_INSIDE);
-    box((Fl_Boxtype)Fl_Tooltip::default_style.box_);
-    draw_box(box(),0,0,w(),h(),color());
-    draw_label(3,3,w()-6,h()-6, labelcolor());
+    box()->draw(0,0,w(),h(),color(),0);
+    draw_label(3, 3, w()-6, h()-6,
+	       Fl_Flags(FL_ALIGN_LEFT|FL_ALIGN_WRAP|FL_ALIGN_INSIDE));
   }
 };
 
-void 
-Fl_Tooltip::tooltip_timeout(Fl_Widget *v) {
-  if (!v || !v->tooltip()) return;
-  Fl_Window *widgetWindow = v->window();
+static Fl_TooltipBox *window = 0;
 
-  // this should not happen unless widget is a window itself...
-  if (!widgetWindow) return;
+static void tooltip_timeout(Fl_Widget *v) {
+  if (!v || !v->tooltip() || Fl::grab()) return;
 
-  fl_font(default_style.textfont_, default_style.textsize_);
+  fl_font(Fl_Tooltip::default_style.label_font,
+	  Fl_Tooltip::default_style.label_size);
   int ww, hh;
   ww = MAX_WIDTH;
   fl_measure(v->tooltip(), ww, hh);
   ww += 6; hh += 6;
 
-  int ox = widgetWindow->x_root() + v->x() + v->w()/2;
-//  int ox = Fl::event_x_root();
+  // find position on the screen of the widget:
+  int ox = Fl::event_x_root()+5;
+  //int ox = v->x()+v->w()/2;
+  int oy = v->y()+v->h()+2;
+  for (Fl_Window* p = v->window(); p; p = p->window()) {
+    //ox += p->x();
+    oy += p->y();
+  }
   if (ox+ww > Fl::w()) ox = Fl::w() - ww;
   if (ox < 0) ox = 0;
-
-  int oy = widgetWindow->y_root() + v->y() + v->h() + 4;
-  if (oy+hh > Fl::h()) oy = widgetWindow->y_root() + v->y() - hh - 4;
+  if (v->h() > 30) {
+    oy = Fl::event_y_root()+13;
+    if (oy+hh > Fl::h()) oy -= 23+hh;
+  } else {
+    if (oy+hh > Fl::h()) oy -= (4+hh+v->h());
+  }
   if (oy < 0) oy = 0;
+
+  if (!window) { // create the reusable X window
+    Fl_Group* saveCurrent = Fl_Group::current();
+    Fl_Group::current(0);
+    window = new Fl_TooltipBox;
+    window->clear_border();
+    window->end();
+    Fl_Group::current(saveCurrent);
+  }
 
   // this cast bypasses the normal Fl_Window label() code:
   ((Fl_Widget*)window)->label(v->tooltip());
 
   window->resize(ox, oy, ww, hh);
 
-  Fl::grab(*widgetWindow); // necessary to get override_redirect turned on
+  Fl::grab(Fl::first_window()); // necessary to get override_redirect turned on
   window->show();
-  Fl::release();
+  Fl::grab(0);
 }
-
-// Load styles stuff
-void
-Fl_Tooltip::loadstyle() {
-  if (!Fl::s_tooltip) {
-    Fl::s_tooltip = 1;
-
-    Fl::find("tooltip/box", default_style.box_, 1);
-    Fl::find("tooltip/color", default_style.color_, 1);
-    Fl::find("tooltip/text color", default_style.textcolor_, 1);
-    Fl::find("tooltip/text font", default_style.textfont_, 1);
-    Fl::find("tooltip/text size", default_style.textsize_, 1);
-
-    int i;
-    if (!Fl::find("tooltip/delay", i, 1))
-      delay(((float)i)/1000.0f);
-  }
-}
-
 
 static int cheesy_flag = 0;
+
+static Fl_Widget* widget = 0;
+
 void
 Fl_Tooltip::tooltip_enter(Fl_Widget* w) {
-if (cheesy_flag) return;
-  if (w == widget || w == (Fl_Widget*)window) return;
+  if (cheesy_flag) return;
+  if (w == widget || w == window) return;
   tooltip_exit(widget);
   widget = w;
-  if (!w || !w->tooltip() || !_enabled) return;
-
-  loadstyle();
-  Fl::add_timeout(default_style.delay_, (void (*)(void *))Fl_Tooltip::tooltip_timeout, w);
+  if (!w || !w->tooltip() || !enabled_) return;
+  Fl::add_timeout(Fl_Tooltip::delay(),
+		  (void (*)(void *))tooltip_timeout, w);
 }
+
+void (*fl_tooltip_enter)(Fl_Widget *) = Fl_Tooltip::tooltip_enter;
 
 void
 Fl_Tooltip::tooltip_exit(Fl_Widget *w) {
   if (!w || w != widget) return;
   widget = 0;
-  Fl::remove_timeout((void (*)(void *))Fl_Tooltip::tooltip_timeout, w);
+  Fl::remove_timeout((void (*)(void *))tooltip_timeout, w);
   if (window) {
     // This flag makes sure that tootip_enter() isn't executed because of
     // this hide() which could cause unwanted recursion in tooltip_enter
@@ -146,21 +133,8 @@ Fl_Tooltip::tooltip_exit(Fl_Widget *w) {
   }
 }
 
-// setting the tooltip on a widget also sets the function pointers:
-void Fl_Widget::tooltip(const char *t) {
-  if (!Fl_Tooltip::window) {
-    Fl_Group* saveCurrent = Fl_Group::current();
-    Fl_Group::current(0);
-    Fl_Tooltip::window = new Fl_TooltipBox;
-    Fl_Tooltip::window->clear_border();
-    Fl_Tooltip::window->end();
-    Fl_Group::current(saveCurrent);
-    fl_tooltip_enter = Fl_Tooltip::tooltip_enter;
-    fl_tooltip_exit = Fl_Tooltip::tooltip_exit;
-  }
-  tooltip_ = t;
-}
+void (*fl_tooltip_exit)(Fl_Widget *) = Fl_Tooltip::tooltip_exit;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.8 1999/05/12 23:20:30 carl Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.9 1999/08/16 07:31:22 bill Exp $".
 //

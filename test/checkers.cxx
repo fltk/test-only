@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.11 1999/06/20 15:24:34 mike Exp $"
+// "$Id: checkers.cxx,v 1.12 1999/08/16 07:31:33 bill Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -989,7 +989,7 @@ void Board::draw() {
     }
     int num = 1;
     fl_color(FL_BLACK);
-    fl_font(FL_BOLD,10);
+    fl_font(FL_HELVETICA_BOLD,10);
     for (n = root->son; n; n = showlegal==2 ? n->son : n->brother) {
       int x1 = squarex(n->from)+BOXSIZE/2-5;
       int y1 = squarey(n->from)+BOXSIZE/2-5;
@@ -1200,13 +1200,13 @@ void copyright_cb(Fl_Widget*, void*) {
 
 void debug_cb(Fl_Widget*, void*v) {
   debug = !debug;
-  ((Fl_Menu_Item*)v)->flags =
+  ((Fl_Menu_Item*)v)->flags_ =
     debug ? FL_MENU_TOGGLE|FL_MENU_VALUE : FL_MENU_TOGGLE;
 }
 
 void forced_cb(Fl_Widget*b, void*v) {
   forcejumps = !forcejumps;
-  ((Fl_Menu_Item*)v)->flags =
+  ((Fl_Menu_Item*)v)->flags_ =
     forcejumps ? FL_MENU_TOGGLE|FL_MENU_VALUE : FL_MENU_TOGGLE;
   killnode(root->son); root->son = 0;
   if (showlegal) {expandnode(root); b->redraw();}
@@ -1365,5 +1365,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.11 1999/06/20 15:24:34 mike Exp $".
+// End of "$Id: checkers.cxx,v 1.12 1999/08/16 07:31:33 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.16 1999/06/20 15:24:30 mike Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.17 1999/08/16 07:31:18 bill Exp $"
 //
 // Common menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -36,35 +36,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define DEFAULT_STYLE ((Style*)default_style())
-
-void Fl_Menu_::loadstyle() const {
-  if (!Fl::s_menu_) {
-    Fl::s_menu_ = 1;
-
-    static Fl::Attribute widget_attributes[] = {
-      { "label color", LABELCOLOR },
-      { "label size", LABELSIZE },
-      { "label type", LABELTYPE },
-      { "label font", LABELFONT },
-      { "color", COLOR },
-      { "down color", COLOR2 },
-      { "box", BOX },
-      { 0 }
-    };
-    Fl::load_attributes("menu", DEFAULT_STYLE->widget_, widget_attributes);
-
-    static Fl::Attribute menu_attributes[] = {
-      { "down box", DOWN_BOX },
-      { "text font", TEXTFONT },
-      { "text size", TEXTSIZE },
-      { "text color", TEXTCOLOR },
-      { 0 }
-    };
-    Fl::load_attributes("menu", DEFAULT_STYLE->menu_, menu_attributes);
-  }
-}
-
 static Fl_Menu_Item* _find(const char *label, Fl_Menu_Item *menu) {
   char *p, l[128];
   Fl_Menu_Item *m;
@@ -77,7 +48,7 @@ static Fl_Menu_Item* _find(const char *label, Fl_Menu_Item *menu) {
   for (m = menu; m && m->label() && strcmp(m->label(), l); m = m->next()) ;
   if (!m || !m->label()) return 0;
   if (p) {
-    if (m->flags&FL_SUBMENU_POINTER)
+    if (m->flags() & FL_SUBMENU_POINTER)
       return _find(p, (Fl_Menu_Item *)m->user_data());
     else
       return _find(p, ++m);
@@ -104,11 +75,9 @@ const Fl_Menu_Item* Fl_Menu_::picked(const Fl_Menu_Item* v) {
 	set_changed();
 	((Fl_Menu_Item*)v)->setonly();
       }
-      redraw();
-    } else if (v->flags & FL_MENU_TOGGLE) {
+    } else if (v->flags() & FL_MENU_TOGGLE) {
       set_changed();
-      ((Fl_Menu_Item*)v)->flags ^= FL_MENU_VALUE;
-      redraw();
+      ((Fl_Menu_Item*)v)->flags_ ^= FL_MENU_VALUE;
     } else if ((when()&FL_WHEN_RELEASE && !Fl::pushed()) || v != value_) { // normal item
       set_changed();
     }
@@ -126,35 +95,22 @@ const Fl_Menu_Item* Fl_Menu_::picked(const Fl_Menu_Item* v) {
 
 // turn on one of a set of radio buttons
 void Fl_Menu_Item::setonly() {
-  flags |= FL_MENU_RADIO | FL_MENU_VALUE;
+  flags_ |= FL_MENU_RADIO | FL_MENU_VALUE;
   Fl_Menu_Item* j;
   for (j = this; ; ) {	// go down
-    if (j->flags & FL_MENU_DIVIDER) break; // stop on divider lines
+    if (j->flags() & FL_MENU_DIVIDER) break; // stop on divider lines
     j++;
     if (!j->text || !j->radio()) break; // stop after group
     j->clear();
   }
   for (j = this-1; ; j--) { // go up
-    if (!j->text || (j->flags&FL_MENU_DIVIDER) || !j->radio()) break;
+    if (!j->text || (j->flags()&FL_MENU_DIVIDER) || !j->radio()) break;
     j->clear();
   }
 }
 
-Fl_Widget::Style* Fl_Menu_::_default_style = 0;
-
-Fl_Menu_::Style::Style() : Fl_Widget::Style() {
-  sbf = 0;
-
-  widget(BOX) = FL_MEDIUM_UP_BOX;
-
-  menu(DOWN_BOX) = FL_MEDIUM_UP_BOX2;
-  menu(TEXTFONT) = FL_HELVETICA;
-  menu(TEXTSIZE) = 10;
-  menu(TEXTCOLOR) = FL_BLACK;
-}
-
 Fl_Menu_::Fl_Menu_(int X,int Y,int W,int H,const char* l) : Fl_Widget(X,Y,W,H,l) {
-  set_flag(SHORTCUT_LABEL);
+  set_flag(FL_SHORTCUT_LABEL);
   when(FL_WHEN_RELEASE_ALWAYS);
   value_ = menu_ = 0;
   alloc = 0;
@@ -205,19 +161,6 @@ void Fl_Menu_::copy(const Fl_Menu_Item* m, void* user_data) {
   }
 }
 
-uchar Fl_Menu_::attr(Attribute a) const {
-  loadstyle();
-  if (!_style || !(MENU_STYLE->sbf & bf(a)))
-    return DEFAULT_STYLE->menu(a);
-  return MENU_STYLE->menu(a);
-}
-
-Fl_Font Fl_Menu_::textfont() const { return (Fl_Font)attr(TEXTFONT); }
-uchar Fl_Menu_::textsize() const { return attr(TEXTSIZE); }
-Fl_Color Fl_Menu_::textcolor() const { return (Fl_Color)attr(TEXTCOLOR); }
-Fl_Boxtype Fl_Menu_::down_box() const { return (Fl_Boxtype)attr(DOWN_BOX); }
-Fl_Color Fl_Menu_::down_color() const {return selection_color();}
-
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.16 1999/06/20 15:24:30 mike Exp $".
+// End of "$Id: Fl_Menu_.cxx,v 1.17 1999/08/16 07:31:18 bill Exp $".
 //

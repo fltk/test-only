@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.cxx,v 1.10 1999/06/20 15:24:29 mike Exp $"
+// "$Id: Fl_Chart.cxx,v 1.11 1999/08/16 07:31:13 bill Exp $"
 //
 // Forms-compatible chart widget for the Fast Light Tool Kit (FLTK).
 //
@@ -30,12 +30,12 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define DEFAULT_STYLE ((Style*)default_style())
-
 #define ARCINC	(2.0*M_PI/360.0)
 
-// this function is in fl_boxtype.C:
-void fl_rectbound(int x,int y,int w,int h, Fl_Color color);
+static void fl_rectbound(int x, int y, int w, int h, Fl_Color c, Fl_Color l) {
+  fl_color(l); fl_rect(x, y, w, h);
+  fl_color(c); fl_rectf(x+1, y+1, w-2, h-2);
+}
 
 /* Widget specific information */
 
@@ -67,9 +67,11 @@ static void draw_barchart(int x,int y,int w,int h,
   for (i=0; i<numb; i++) {
       int h = int(entries[i].val*incr+.5);
       if (h < 0)
-	fl_rectbound(x+i*bwidth,zeroh,bwidth+1,-h+1, (Fl_Color)entries[i].col);
+	fl_rectbound(x+i*bwidth,zeroh,bwidth+1,-h+1, (Fl_Color)entries[i].col,
+		     textcolor);
       else if (h > 0)
-	fl_rectbound(x+i*bwidth,zeroh-h,bwidth+1,h+1,(Fl_Color)entries[i].col);
+	fl_rectbound(x+i*bwidth,zeroh-h,bwidth+1,h+1,(Fl_Color)entries[i].col,
+		     textcolor);
   }
   /* Draw the labels */
   fl_color(textcolor);
@@ -113,9 +115,11 @@ static void draw_horbarchart(int x,int y,int w,int h,
   for (i=0; i<numb; i++) {
       int w = int(entries[i].val*incr+.5);
       if (w > 0)
-	fl_rectbound(zeroh,y+i*bwidth,w+1,bwidth+1, (Fl_Color)entries[i].col);
+	fl_rectbound(zeroh,y+i*bwidth,w+1,bwidth+1, (Fl_Color)entries[i].col,
+		     textcolor);
       else if (w < 0)
-	fl_rectbound(zeroh+w,y+i*bwidth,-w+1,bwidth+1,(Fl_Color)entries[i].col);
+	fl_rectbound(zeroh+w,y+i*bwidth,-w+1,bwidth+1,(Fl_Color)entries[i].col,
+		     textcolor);
   }
   /* Draw the labels */
   for (i=0; i<numb; i++)
@@ -229,32 +233,6 @@ static void draw_piechart(int x,int y,int w,int h,
     }
 }
 
-void Fl_Chart::loadstyle() const {
-  if (!Fl::s_chart) {
-    Fl::s_chart = 1;
-
-    static Fl::Attribute widget_attributes[] = {
-      { "label color", LABELCOLOR },
-      { "label size", LABELSIZE },
-      { "label type", LABELTYPE },
-      { "label font", LABELFONT },
-      { "color", COLOR },
-      { "color2", COLOR2 },
-      { "box", BOX },
-      { 0 }
-    };
-    Fl::load_attributes("chart", DEFAULT_STYLE->widget_, widget_attributes);
-
-    static Fl::Attribute chart_attributes[] = {
-      { "text font", TEXTFONT },
-      { "text size", TEXTSIZE },
-      { "text color", TEXTCOLOR },
-      { 0 }
-    };
-    Fl::load_attributes("chart", DEFAULT_STYLE->chart_, chart_attributes);
-  }
-}
-
 void Fl_Chart::draw() {
     int xx,yy,ww,hh;
     int i;
@@ -305,21 +283,11 @@ void Fl_Chart::draw() {
 #define FL_CHART_LCOL		FL_LCOL
 #define FL_CHART_ALIGN		FL_ALIGN_BOTTOM
 
-Fl_Widget::Style* Fl_Chart::_default_style = 0;
-
-Fl_Chart::Style::Style() : Fl_Widget::Style() {
-  sbf = 0;
-
-  widget(COLOR2) = FL_WHITE;
-  widget(BOX) = FL_MEDIUM_DOWN_BOX;
-
-  chart(TEXTFONT) = FL_HELVETICA;
-  chart(TEXTSIZE) = 12;
-  chart(TEXTCOLOR) = FL_BLACK;
-}
+#include <FL/Fl_Output.H>
 
 Fl_Chart::Fl_Chart(int x,int y,int w,int h,const char *l) :
 Fl_Widget(x,y,w,h,l) {
+  style(Fl_Output::default_style);
   align(FL_ALIGN_BOTTOM);
   numb       = 0;
   maxnumb    = 0;
@@ -413,17 +381,6 @@ void Fl_Chart::maxsize(int m) {
   }
 }
 
-uchar Fl_Chart::attr(Attribute a) const {
-  loadstyle();
-  if (!_style || !(CHART_STYLE->sbf & bf(a)))
-    return DEFAULT_STYLE->chart(a);
-  return CHART_STYLE->chart(a);
-}
-
-Fl_Font Fl_Chart::textfont() const { return (Fl_Font)attr(TEXTFONT); }
-uchar Fl_Chart::textsize() const { return attr(TEXTSIZE); }
-Fl_Color Fl_Chart::textcolor() const { return (Fl_Color)attr(TEXTCOLOR); }
-
 //
-// End of "$Id: Fl_Chart.cxx,v 1.10 1999/06/20 15:24:29 mike Exp $".
+// End of "$Id: Fl_Chart.cxx,v 1.11 1999/08/16 07:31:13 bill Exp $".
 //

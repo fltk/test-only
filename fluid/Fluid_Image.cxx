@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Image.cxx,v 1.7 1999/03/04 18:45:31 mike Exp $"
+// "$Id: Fluid_Image.cxx,v 1.8 1999/08/16 07:31:06 bill Exp $"
 //
 // Pixmap label support for the Fast Light Tool Kit (FLTK).
 //
@@ -58,7 +58,7 @@ int pixmap_image::test_file(char *buffer) {
 }
 
 void pixmap_image::label(Fl_Widget *o) {
-  if (p) p->label(o);
+  o->image(p);
 }
 
 static int pixmap_header_written;
@@ -75,7 +75,7 @@ void pixmap_image::write_static() {
   int l;
   for (l = 0; p->data[l]; l++) {
     if (l) write_c(",\n");
-    write_c("(unsigned char *)");
+    write_c("(unsigned char*)\n");
     write_cstring(p->data[l],linelength[l]);
   }
   write_c("\n};\n");
@@ -86,7 +86,7 @@ void pixmap_image::write_static() {
 
 void pixmap_image::write_code() {
   if (!p) return;
-  write_c("%s%s.label(o);\n", indent(),
+  write_c("%so->image(%s);\n", indent(),
 	  unique_id(this, "pixmap", filename_name(name()), 0));
 }
 
@@ -227,7 +227,7 @@ int bitmap_image::test_file(char *buffer) {
 }
 
 void bitmap_image::label(Fl_Widget *o) {
-  if (p) p->label(o); else o->labeltype(FL_NORMAL_LABEL);
+  o->image(p);
 }
 
 static int bitmap_header_written;
@@ -239,14 +239,26 @@ void bitmap_image::write_static() {
     write_c("#include <FL/Fl_Bitmap.H>\n");
     bitmap_header_written = write_number;
   }
+#if 0 // older one
   write_c("static unsigned char %s[] = {  \n",
 	  unique_id(this, "bits", filename_name(name()), 0));
   int n = ((p->w+7)/8)*p->h;
+  int linelength = 0;
   for (int i = 0; i < n; i++) {
-    if (i) write_c(", ");
-    write_c("%d",p->array[i]);
+    if (i) {write_c(","); linelength++;}
+    if (linelength > 75) {write_c("\n"); linelength=0;}
+    int v = p->array[i];
+    write_c("%d",v);
+    linelength++; if (v>9) linelength++; if (v>99) linelength++;
   }
   write_c("\n};\n");
+#else // this seems to produce slightly shorter c++ files
+  write_c("static unsigned char %s[] =\n",
+	  unique_id(this, "bits", filename_name(name()), 0));
+  int n = ((p->w+7)/8)*p->h;
+  write_cstring((const char*)(p->array), n);
+  write_c(";\n");
+#endif
   write_c("static Fl_Bitmap %s(%s, %d, %d);\n",
 	  unique_id(this, "bitmap", filename_name(name()), 0),
 	  unique_id(this, "bits", filename_name(name()), 0),
@@ -255,12 +267,21 @@ void bitmap_image::write_static() {
 
 void bitmap_image::write_code() {
   if (!p) return;
-  write_c("%s%s.label(o);\n", indent(),
+  write_c("%so->image(%s);\n", indent(),
 	  unique_id(this, "bitmap", filename_name(name()), 0));
 }
 
+#define nosuch_width 16
+#define nosuch_height 16
+static unsigned char nosuch_bits[] = {
+   0xff, 0xf0, 0x81, 0x88, 0xd5, 0x90, 0x69, 0xa8, 0x55, 0x94, 0x69, 0xaa,
+   0x55, 0x94, 0x69, 0xaa, 0xd5, 0x94, 0xa9, 0xa8, 0x55, 0x95, 0xa9, 0xa9,
+   0x55, 0x95, 0xa9, 0xab, 0x01, 0x81, 0xff, 0xff};
+static Fl_Bitmap nosuch_bitmap(nosuch_bits, nosuch_width, nosuch_height);
+
 bitmap_image::bitmap_image(const char *name, FILE *f) : Fluid_Image(name) {
-  p = 0; // if any problems with parse we exit with this zero
+  p = &nosuch_bitmap; // if any problems with parse we exit with this
+  if (!f) return;
   char buffer[1024];
   char junk[1024];
   int wh[2]; // width and height
@@ -294,7 +315,7 @@ bitmap_image::bitmap_image(const char *name, FILE *f) : Fluid_Image(name) {
 }
 
 bitmap_image::~bitmap_image() {
-  if (p) {
+  if (p && p != &nosuch_bitmap) {
     delete[] (uchar*)(p->array);
     delete p;
   }
@@ -322,37 +343,35 @@ Fluid_Image* Fluid_Image::find(const char *name) {
 
   // no, so now see if the file exists:
 
+  Fluid_Image *ret = 0;
+
   goto_source_dir();
   FILE *f = fopen(name,"rb");
+
   if (!f) {
     read_error("%s : %s",name,strerror(errno));
     leave_source_dir();
-    return 0;
-  }
-
-  Fluid_Image *ret;
-
-  // now see if we can identify the type, by reading in some data
-  // and asking all the types we know about:
-
-  char buffer[1025];
-  fread(buffer, 1, 1024, f);
-  rewind(f);
-  buffer[1024] = 0; // null-terminate so strstr() works
-
-  if (pixmap_image::test_file(buffer)) {
-    ret = new pixmap_image(name,f);
-  } else if (gif_image::test_file(buffer)) {
-    ret = new gif_image(name,f);
-  } else if (bitmap_image::test_file(buffer)) {
-    ret = new bitmap_image(name,f);
   } else {
-    ret = 0;
-    read_error("%s : unrecognized image format", name);
+    // now see if we can identify the type, by reading in some data
+    // and asking all the types we know about:
+    char buffer[1025];
+    fread(buffer, 1, 1024, f);
+    rewind(f);
+    buffer[1024] = 0; // null-terminate so strstr() works
+    if (pixmap_image::test_file(buffer)) {
+      ret = new pixmap_image(name,f);
+    } else if (gif_image::test_file(buffer)) {
+      ret = new gif_image(name,f);
+    } else if (bitmap_image::test_file(buffer)) {
+      ret = new bitmap_image(name,f);
+    } else {
+      ret = 0;
+      read_error("%s : unrecognized image format", name);
+    }
+    fclose(f);
   }
-  fclose(f);
   leave_source_dir();
-  if (!ret) return 0;
+  if (!ret) ret = new bitmap_image(name, 0);
 
   // make a new entry in the table:
   numimages++;
@@ -394,16 +413,15 @@ Fluid_Image::~Fluid_Image() {
 
 #include <FL/fl_file_chooser.H>
 
-const char *ui_find_image_name;
-Fluid_Image *ui_find_image(const char *oldname) {
+Fluid_Image *ui_find_image(Fluid_Image *old) {
   goto_source_dir();
-  const char *name = fl_file_chooser("Image","*.{bm|xbm|xpm|gif}",oldname);
-  ui_find_image_name = name;
+  const char *name = fl_file_chooser("Image", "*.{bm|xbm|xpm|gif}",
+				     old ? old->name() : 0);
   Fluid_Image *ret = (name && *name) ? Fluid_Image::find(name) : 0;
   leave_source_dir();
   return ret;
 }
 
 //
-// End of "$Id: Fluid_Image.cxx,v 1.7 1999/03/04 18:45:31 mike Exp $".
+// End of "$Id: Fluid_Image.cxx,v 1.8 1999/08/16 07:31:06 bill Exp $".
 //

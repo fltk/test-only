@@ -43,7 +43,6 @@ be "private": a dynamically allocated array managed by the Fl_Menu_.
 </TD><TD align=left valign=top>
 <UL>
 <LI><A href=#Fl_Menu_.copy>copy</A></LI>
-<LI><A href=#Fl_Menu_.down_box>down_box</A></LI>
 <LI><A href=#Fl_Menu_.global>global</A></LI>
 <LI><A href=#Fl_Menu_.menu>menu</A></LI>
 </UL>
@@ -59,12 +58,6 @@ be "private": a dynamically allocated array managed by the Fl_Menu_.
 <LI><A href=#Fl_Menu_.size>size</A></LI>
 <LI><A href=#Fl_Menu_.test_shortcut>test_shortcut</A></LI>
 <LI><A href=#Fl_Menu_.text>text</A></LI>
-<LI><A href=#Fl_Menu_.textcolor>textcolor</A></LI>
-</UL>
-</TD><TD align=left valign=top>
-<UL>
-<LI><A href=#Fl_Menu_.textfont>textfont</A></LI>
-<LI><A href=#Fl_Menu_.textsize>textsize</A></LI>
 <LI><A href=#Fl_Menu_.value>value</A></LI>
 </UL>
 </TD></TR>
@@ -187,18 +180,4 @@ global()</TT> setting (so don't destroy the widget!)</P>
 <BR> const char* Fl_Menu_::text(int i) const</A></H4>
  Returns the title of the last item chosen, or of item <TT>i</TT>. 
 
-<H4><A name=Fl_Menu_.textcolor>Fl_Color Fl_Menu_::textcolor() const
-<BR> void Fl_Menu_::textcolor(Fl_Color)</A></H4>
- Get or set the current color of menu item labels. 
-<H4><A name=Fl_Menu_.textfont>Fl_Font Fl_Menu_::textfont() const
-<BR> void Fl_Menu_::textfont(Fl_Font)</A></H4>
- Get or set the current font of menu item labels. 
-<H4><A name=Fl_Menu_.textsize>uchar Fl_Menu_::textsize() const
-<BR> void Fl_Menu_::textsize(uchar)</A></H4>
- Get or set the font size of menu item labels. 
-<H4><A name=Fl_Menu_.down_box>Fl_Boxtype Fl_Menu_::down_box() const
-<BR> void Fl_Menu_::down_box(Fl_Boxtype)</A></H4>
- This box type is used to surround the currently-selected items in the 
-menus.  If this is <TT>FL_NO_BOX</TT> then it acts like <TT>
-FL_THIN_UP_BOX</TT> and <TT>selection_color()</TT> acts like <TT>
-FL_WHITE</TT>, for back compatability. </BODY></HTML>
+</BODY></HTML>

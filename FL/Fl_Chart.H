@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.H,v 1.12 1999/05/06 05:52:08 carl Exp $"
+// "$Id: Fl_Chart.H,v 1.13 1999/08/16 07:30:48 bill Exp $"
 //
 // Forms chart header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,8 +30,6 @@
 #include "Fl_Widget.H"
 #endif
 
-#define CHART_STYLE ((Fl_Chart::Style*)_style)
-
 // values for type()
 #define FL_BAR_CHART		0
 #define FL_HORBAR_CHART		1
@@ -54,32 +52,8 @@ struct FL_CHART_ENTRY {
 
 class Fl_Chart : public Fl_Widget {
 public:
-  enum Attribute {
-    TEXTFONT = 0,
-    TEXTSIZE,
-    TEXTCOLOR,
-    CA_END
-  };
-
-  struct Style : public Fl_Widget::Style {
-    uchar chart_[CA_END];
-    uchar sbf;
-
-    Style();
-    uchar& chart(Attribute a) { return chart_[a]; }
-  };
-
-  int is_style_forced(Fl_Widget::Attribute a) const
-    { return Fl_Widget::is_style_forced(a); }
-  int is_style_forced(Attribute a) const
-    { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
-
-  void copy_style(Fl_Chart* o)
-    { mstyle(&_style); *((Style*)_style) = *((Style*)o->style()); }
-
   Fl_Chart(int,int,int,int,const char * = 0);
 
-  virtual void loadstyle() const;
   void clear();
   void add(double, const char * =0, uchar=0);
   void insert(int, double, const char * =0, uchar=0);
@@ -89,25 +63,10 @@ public:
   int size() const {return numb;}
   int maxsize() const {return maxnumb;}
   void maxsize(int);
-
-  Fl_Font textfont() const;
-  void textfont(uchar s);
-
-  uchar textsize() const;
-  void textsize(uchar s);
-
-  Fl_Color textcolor() const;
-  void textcolor(uchar n);
-
-    uchar autosize() const {return autosize_;}
-    void autosize(uchar n) {autosize_ = n;}
+  uchar autosize() const {return autosize_;}
+  void autosize(uchar n) {autosize_ = n;}
 
 protected:
-  static Fl_Widget::Style* _default_style;
-
-  virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
-  virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
-
   void draw();
 
 private:
@@ -117,13 +76,10 @@ private:
   int sizenumb;
   FL_CHART_ENTRY *entries;
   double min,max;
-
-  uchar attr(Attribute) const;
-  void attr(Attribute, uchar);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Chart.H,v 1.12 1999/05/06 05:52:08 carl Exp $".
+// End of "$Id: Fl_Chart.H,v 1.13 1999/08/16 07:30:48 bill Exp $".
 //

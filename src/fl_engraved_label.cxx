@@ -1,5 +1,5 @@
 //
-// "$Id: fl_engraved_label.cxx,v 1.4 1999/01/07 19:17:39 mike Exp $"
+// "$Id: fl_engraved_label.cxx,v 1.5 1999/08/16 07:31:27 bill Exp $"
 //
 // Engraved label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -25,67 +25,44 @@
 
 // Drawing code for XForms style engraved & embossed labels
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
+#include <FL/Fl_Labeltype.H>
 #include <FL/fl_draw.H>
 
-// data[] is dx, dy, color triples
+// data is dx, dy, color triples
 
-static void innards(
-    const Fl_Label* o, int X, int Y, int W, int H, Fl_Align align,
-    int data[][3], int n)
+void fl_pattern_label(Fl_Labeltype l, const char* label,
+		      int X, int Y, int W, int H,
+		      Fl_Color fill, Fl_Flags f)
 {
-  Fl_Align a1 = align;
+  Fl_Flags a1 = f;
   if (a1 & FL_ALIGN_CLIP) {
-    fl_clip(X, Y, W, H); a1 = (Fl_Align)(a1&~FL_ALIGN_CLIP);}
-  fl_font((Fl_Font)o->font, o->size);
-  for (int i = 0; i < n; i++) {
-    fl_color((Fl_Color)(i < n-1 ? data[i][2] : o->color));
-    fl_draw(o->value, X+data[i][0], Y+data[i][1], W, H, a1);
+    fl_clip(X, Y, W, H);
+    a1 = (Fl_Flags)(a1&~FL_ALIGN_CLIP);
   }
-  if (align & FL_ALIGN_CLIP) fl_pop_clip();
+  for (int *data = (int*)(l->data); ; data += 3) {
+    Fl_Color c = (Fl_Color)(data[2]);
+    fl_color(c ? c : (f&FL_INACTIVE) ? Fl_Color(FL_GRAY) : fill);
+    fl_draw(label, X+data[0], Y+data[1], W, H, a1);
+    if (!c) break;
+  }
+  if (f & FL_ALIGN_CLIP) fl_pop_clip();
 }
 
-static void fl_shadow_label(
-    const Fl_Label* o, int X, int Y, int W, int H, Fl_Align align)
-{
-  static int data[2][3] = {{2,2,FL_DARK3},{0,0,0}};
-  innards(o, X, Y, W, H, align, data, 2);
-}
+static int shadow_data[2][3] = {{2,2,FL_DARK3},{0,0,0}};
+const Fl_Labeltype_ fl_shadow_label = {fl_pattern_label, shadow_data};
 
-static void fl_engraved_label(
-    const Fl_Label* o, int X, int Y, int W, int H, Fl_Align align)
-{
-  static int data[7][3] = {
-    {1,0,FL_LIGHT3},{1,1,FL_LIGHT3},{0,1,FL_LIGHT3},
-    {-1,0,FL_DARK3},{-1,-1,FL_DARK3},{0,-1,FL_DARK3},
-    {0,0,0}};
-  innards(o, X, Y, W, H, align, data, 7);
-}
+static int engraved_data[7][3] = {
+  {1,0,FL_LIGHT3},{1,1,FL_LIGHT3},{0,1,FL_LIGHT3},
+  {-1,0,FL_DARK3},{-1,-1,FL_DARK3},{0,-1,FL_DARK3},
+  {0,0,0}};
+const Fl_Labeltype_ fl_engraved_label = {fl_pattern_label, engraved_data};
 
-static void fl_embossed_label(
-    const Fl_Label* o, int X, int Y, int W, int H, Fl_Align align)
-{
-  static int data[7][3] = {
-    {-1,0,FL_LIGHT3},{-1,-1,FL_LIGHT3},{0,-1,FL_LIGHT3},
-    {1,0,FL_DARK3},{1,1,FL_DARK3},{0,1,FL_DARK3},
-    {0,0,0}};
-  innards(o, X, Y, W, H, align, data, 7);
-}
-
-Fl_Labeltype define_FL_SHADOW_LABEL() {
-  Fl::set_labeltype(_FL_SHADOW_LABEL, fl_shadow_label, 0);
-  return _FL_SHADOW_LABEL;
-}
-Fl_Labeltype define_FL_ENGRAVED_LABEL() {
-  Fl::set_labeltype(_FL_ENGRAVED_LABEL, fl_engraved_label, 0);
-  return _FL_ENGRAVED_LABEL;
-}
-Fl_Labeltype define_FL_EMBOSSED_LABEL() {
-  Fl::set_labeltype(_FL_EMBOSSED_LABEL, fl_embossed_label, 0);
-  return _FL_EMBOSSED_LABEL;
-}
+static int embossed_data[7][3] = {
+  {-1,0,FL_LIGHT3},{-1,-1,FL_LIGHT3},{0,-1,FL_LIGHT3},
+  {1,0,FL_DARK3},{1,1,FL_DARK3},{0,1,FL_DARK3},
+  {0,0,0}};
+const Fl_Labeltype_ fl_embossed_label = {fl_pattern_label, embossed_data};
 
 //
-// End of "$Id: fl_engraved_label.cxx,v 1.4 1999/01/07 19:17:39 mike Exp $".
+// End of "$Id: fl_engraved_label.cxx,v 1.5 1999/08/16 07:31:27 bill Exp $".
 //

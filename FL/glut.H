@@ -1,5 +1,5 @@
 //
-// "$Id: glut.H,v 1.6 1999/02/16 21:59:49 mike Exp $"
+// "$Id: glut.H,v 1.7 1999/08/16 07:30:55 bill Exp $"
 //
 // GLUT emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -405,7 +405,7 @@ int glutLayerGet(GLenum);
 // Emulated Glut drawing functions:
 
 // Font argument must be a void* for compatability, so...
-extern struct Glut_Bitmap_Font {uchar font; int size;}
+extern struct Glut_Bitmap_Font {Fl_Font font; int size;}
   glutBitmap9By15, glutBitmap8By13, glutBitmapTimesRoman10,
   glutBitmapTimesRoman24, glutBitmapHelvetica10, glutBitmapHelvetica12,
   glutBitmapHelvetica18;
@@ -467,5 +467,5 @@ extern void glutSolidIcosahedron();
 #endif                  /* __glut_h__ */
 
 //
-// End of "$Id: glut.H,v 1.6 1999/02/16 21:59:49 mike Exp $".
+// End of "$Id: glut.H,v 1.7 1999/08/16 07:30:55 bill Exp $".
 //

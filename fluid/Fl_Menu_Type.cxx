@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Type.cxx,v 1.23 1999/07/21 17:28:20 carl Exp $"
+// "$Id: Fl_Menu_Type.cxx,v 1.24 1999/08/16 07:31:03 bill Exp $"
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
@@ -52,54 +52,9 @@ static char submenuflag;
 // Have to subclass & hack Fl_Button to get menu item styles right
 class Fl_Menu_Item_Button : public Fl_Button {
 public:
-  Fl_Menu_Item_Button(int x,int y,int w,int h,const char *l=0);
-  virtual void loadstyle() const;
-protected:
-  struct Style : public Fl_Button::Style {
-    Style();
-  };
-  static Fl_Widget::Style* _default_style;
-  virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
-  virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
+  Fl_Menu_Item_Button(int x,int y,int w,int h,const char *l=0)
+    : Fl_Button(x,y,w,h,l) {style(Fl_Menu_Item::default_style);}
 };
-
-#define DEFAULT_MIB_STYLE ((Style*)default_style())
-
-Fl_Widget::Style* Fl_Menu_Item_Button::_default_style = 0;
-
-Fl_Menu_Item_Button::Fl_Menu_Item_Button(int x,int y,int w,int h,const char *l) :
-    Fl_Button(x,y,w,h,l) {}
-
-Fl_Menu_Item_Button::Style::Style() : Fl_Button::Style() {
-  widget(LABELCOLOR) = FL_BLACK;
-  widget(LABELSIZE) = FL_NORMAL_SIZE;
-  widget(LABELFONT) = FL_HELVETICA;
-  widget(LABELTYPE) = FL_NORMAL_LABEL;
-  widget(COLOR2) = FL_WHITE;
-  button(DOWN_LABELCOLOR) = FL_BLACK;
-  button(DOWN_BOX) = FL_MEDIUM_UP_BOX;
-}
-
-void Fl_Menu_Item_Button::loadstyle() const {
-  if (!Fl::s_mi_button) {
-    Fl::s_mi_button = 1;
-    static Fl::Attribute widget_attributes[] = {
-      { "label color", LABELCOLOR },
-      { "label size", LABELSIZE },
-      { "label type", LABELTYPE },
-      { "label font", LABELFONT },
-      { "down color", COLOR2 },
-      { 0 }
-    };
-    Fl::load_attributes("menu item", DEFAULT_MIB_STYLE->widget_, widget_attributes);
-    static Fl::Attribute button_attributes[] = {
-      { "down box", DOWN_BOX },
-      { "down label color", DOWN_LABELCOLOR },
-      { 0 }
-    };
-    Fl::load_attributes("menu item", DEFAULT_MIB_STYLE->button_, button_attributes);
-  }
-}
 
 Fl_Type *Fl_Menu_Item_Type::make() {
   // Find the current menu item:
@@ -109,7 +64,7 @@ Fl_Type *Fl_Menu_Item_Type::make() {
     if (force_parent && q->is_menu_item() || !q->is_parent()) p = p->parent;
   }
   force_parent = 0;
-  if (!p || !(p->is_menu() || p->is_menu_item() && p->is_parent())) {
+  if (!p || !(p->is_menu_button() || p->is_menu_item() && p->is_parent())) {
     fl_message("Please select a menu to add to");
     return 0;
   }
@@ -119,7 +74,6 @@ Fl_Type *Fl_Menu_Item_Type::make() {
 
   Fl_Menu_Item_Type* t = submenuflag ? new Fl_Submenu_Type() : new Fl_Menu_Item_Type();
   t->o = new Fl_Menu_Item_Button(0,0,100,20);
-
   t->factory = this;
   t->add(p);
   if (!reading_file) t->label(submenuflag ? "submenu" : "item");
@@ -146,16 +100,6 @@ int is_name(const char *c);
 const char *array_name(Fl_Widget_Type *o);
 int isdeclare(const char *c);
 
-void Fl_Menu_Item_Type::write_declare() {
-  if (callback() && is_name(callback()))
-    ::write_declare("extern void %s(Fl_Menu_*, %s);", callback(),
-		    user_data_type() ? user_data_type() : "void*");
-  for (int n=0; n < NUM_EXTRA_CODE; n++) {
-    if (extra_code(n) && isdeclare(extra_code(n)))
-      ::write_declare("%s", extra_code(n));
-  }
-}
-
 // Search backwards to find the parent menu button and return it's name.
 // Also put in i the index into the button's menu item array belonging
 // to this menu item.
@@ -176,6 +120,13 @@ const char* Fl_Menu_Item_Type::menu_name(int& i) {
 #include "Fluid_Image.h"
 
 void Fl_Menu_Item_Type::write_static() {
+  if (callback() && is_name(callback()))
+    ::write_declare("extern void %s(Fl_Menu_*, %s);", callback(),
+		    user_data_type() ? user_data_type() : "void*");
+  for (int n=0; n < NUM_EXTRA_CODE; n++) {
+    if (extra_code(n) && isdeclare(extra_code(n)))
+      ::write_declare("%s", extra_code(n));
+  }
   if (callback() && !is_name(callback())) {
     // see if 'o' or 'v' used, to prevent unused argument warnings:
     int use_o = 0;
@@ -264,8 +215,7 @@ int Fl_Menu_Item_Type::flags() {
 
 void Fl_Menu_Item_Type::write_item() {
   write_c(" {");
-  if (image) write_c("0");
-  else if (label()) write_cstring(label());
+  if (label()) write_cstring(label());
   else write_c("\"\"");
   if (((Fl_Button*)o)->shortcut())
     write_c(", 0x%x, ", ((Fl_Button*)o)->shortcut());
@@ -281,7 +231,7 @@ void Fl_Menu_Item_Type::write_item() {
   } else
     write_c(" 0,");
   if (user_data())
-    write_c(" (void*)(%s)", user_data());
+    write_c(" (void*)(%s),", user_data());
   else
     write_c(" 0,");
   write_c(" %d", flags());
@@ -334,43 +284,37 @@ void Fl_Menu_Item_Type::write_code1() {
   if (init) write_c("%s}\n",indent());
 }
 
-const char* boxname(int);
-const char* labeltypename(int);
+const char* boxname(Fl_Boxtype);
+const char* labeltypename(Fl_Labeltype);
 
 void Fl_Menu_Item_Type::write_code2() {
   int i; const char* name = menu_name(i);
+  const Fl_Style* dstyle = &Fl_Menu_Item::default_style;
 
-  if (o->is_style_forced(Fl_Widget::LABELCOLOR))
-    write_c("%s%s[%d].labelcolor((Fl_Color)%d);\n", indent(), name, i,
-            o->labelcolor());
+  if (o->label_color() != dstyle->label_color)
+    write_c("%s%s[%d].label_color((Fl_Color)%d);\n", indent(), name, i,
+            o->label_color());
 
-  if (o->is_style_forced(Fl_Widget::LABELFONT))
-    write_c("%s%s[%d].labelfont((Fl_Font)%d);\n", indent(), name, i,
-            o->labelfont());
+  if (o->label_font() != dstyle->label_font)
+    write_c("%s%s[%d].label_font((Fl_Font)%d);\n", indent(), name, i,
+            o->label_font()-fl_fonts);
 
-  if (o->is_style_forced(Fl_Widget::LABELSIZE))
-    write_c("%s%s[%d].labelsize(%d);\n", indent(), name, i, o->labelsize());
+  if (o->label_size() != dstyle->label_size)
+    write_c("%s%s[%d].label_size(%d);\n", indent(), name, i, o->label_size());
 
-  if (o->is_style_forced(Fl_Widget::LABELTYPE)) {
-    if (labeltypename(o->labeltype()))
-      write_c("%s%s[%d].labeltype(FL_%s);\n", indent(), name, i,
-              labeltypename(o->labeltype()));
+  if (o->label_type() != dstyle->label_type) {
+    if (labeltypename(o->label_type()))
+      write_c("%s%s[%d].label_type(FL_%s);\n", indent(), name, i,
+              labeltypename(o->label_type()));
     else
       write_c("%s%s[%d].labeltype((Fl_Labeltype)%d);\n", indent(), name, i,
-              o->labeltype());
+              o->label_type());
   }
 
-  if (o->is_style_forced(Fl_Widget::COLOR2))
+  if (o->selection_color() != dstyle->selection_color)
     write_c("%s%s[%d].down_color((Fl_Color)%d);\n", indent(), name, i,
             o->selection_color());
 
-  if (((Fl_Button*)o)->is_style_forced(Fl_Button::DOWN_LABELCOLOR))
-    write_c("%s%s[%d].down_labelcolor((Fl_Color)%d);\n", indent(), name, i,
-            ((Fl_Button*)o)->down_labelcolor());
-
-  if (((Fl_Button*)o)->is_style_forced(Fl_Button::DOWN_BOX))
-    write_c("%s%s[%d].down_box(FL_%s);\n", indent(), name, i,
-            boxname(((Fl_Button*)o)->down_box()));
 }
 
 
@@ -401,17 +345,12 @@ void Fl_Menu_Type::build_menu() {
       Fl_Menu_Item_Type* i = (Fl_Menu_Item_Type*)q;
       memset(m, 0, sizeof(Fl_Menu_Item));
       m->label(i->o->label());
+      m->image(i->o->image());
       m->shortcut(((Fl_Button*)(i->o))->shortcut());
       m->callback(0,(void*)i);
-      m->flags = i->flags();
-      m->labeltype(i->o->labeltype());
-      m->labelfont(i->o->labelfont());
-      m->labelsize(i->o->labelsize());
-      m->labelcolor(i->o->labelcolor());
-      m->down_color(i->o->selection_color());
-      m->down_labelcolor(((Fl_Button*)i->o)->down_labelcolor());
-      m->down_box(((Fl_Button*)i->o)->down_box());
-      if (q->is_parent()) {lvl++; m->flags |= FL_SUBMENU;}
+      m->flags_ = i->flags();
+      m->style_ = i->o->style();
+      if (q->is_parent()) {lvl++; m->flags_ |= FL_SUBMENU;}
       m++;
       int l1 =
 	(q->next && q->next->is_menu_item()) ? q->next->level : level;
@@ -433,7 +372,7 @@ Fl_Type* Fl_Menu_Type::click_test(int, int) {
   const Fl_Menu_Item* m = w->mvalue();
   if (m) {
     // restore the settings of toggles & radio items:
-    if (m->flags & (FL_MENU_RADIO | FL_MENU_TOGGLE)) build_menu();
+    if (m->flags() & (FL_MENU_RADIO | FL_MENU_TOGGLE)) build_menu();
     return (Fl_Type*)(m->user_data());
   }
   w->value(save);
@@ -475,13 +414,10 @@ Fl_Menu_Item dummymenu[] = {{"CHOICE"},{0}};
 #include <FL/fl_draw.H>
 
 void Shortcut_Button::draw() {
-  if (value()) draw_box(FL_THIN_DOWN_BOX, (Fl_Color)9);
-  else draw_box(FL_THIN_UP_BOX, FL_WHITE);
+  FL_THIN_UP_BOX->draw(x(),y(),w(),h(),value() ? 9 : FL_WHITE, flags());
   fl_font(FL_HELVETICA,14); fl_color(FL_BLACK);
   fl_draw(fl_shortcut_label(svalue),x()+6,y(),w(),h(),FL_ALIGN_LEFT);
 }
-
-#include "widget_panel.h"
 
 int Shortcut_Button::handle(int e) {
   when(0); type(FL_TOGGLE_BUTTON);
@@ -504,11 +440,30 @@ int Shortcut_Button::handle(int e) {
   } else {
     int r = Fl_Button::handle(e);
     if (e == FL_RELEASE && value() && Fl::focus() != this) take_focus();
-    if (e == FL_RELEASE && !value()) shortcut_in_cb(this, 0);
     return r;
   }
 }
   
+void shortcut_in_cb(Shortcut_Button* i, void* v) {
+  if (v == LOAD) {
+    if (!current_widget->is_button()) {i->hide(); return;}
+    i->show();
+    i->svalue = ((Fl_Button*)(current_widget->o))->shortcut();
+    i->redraw();
+  } else {
+    for (Fl_Type *o = Fl_Type::first; o; o = o->next)
+      if (o->selected && o->is_button()) {
+	Fl_Button* b = (Fl_Button*)(((Fl_Widget_Type*)o)->o);
+	b->shortcut(i->svalue);
+	if (o->is_menu_item()) ((Fl_Widget_Type*)o)->redraw();
+      }
+  }
+  Fl_Color tc = FL_BLACK;
+  if (i->svalue) tc = FL_RED;
+  if (i->labelcolor() != tc)
+    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
+}
+
 //
-// End of "$Id: Fl_Menu_Type.cxx,v 1.23 1999/07/21 17:28:20 carl Exp $".
+// End of "$Id: Fl_Menu_Type.cxx,v 1.24 1999/08/16 07:31:03 bill Exp $".
 //

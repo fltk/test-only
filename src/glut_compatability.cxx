@@ -1,5 +1,5 @@
 //
-// "$Id: glut_compatability.cxx,v 1.6 1999/03/31 14:52:47 mike Exp $"
+// "$Id: glut_compatability.cxx,v 1.7 1999/08/16 07:31:31 bill Exp $"
 //
 // GLUT emulation routines for the Fast Light Tool Kit (FLTK).
 //
@@ -297,7 +297,9 @@ static Fl_Menu_Item* additem(menu *m) {
   m->m[n+1].text = 0;
   Fl_Menu_Item* i = &(m->m[n]);
   i->shortcut_ = 0;
-  i->flags = 0;
+  i->flags_ = 0;
+  i->style_ = 0;
+  i->image_ = 0;
   return i;
 }
 
@@ -315,7 +317,7 @@ void glutAddSubMenu(char *label, int submenu) {
   i->text = label;
   i->callback_ = 0;
   i->user_data_ = (void *)(menus[submenu].m);
-  i->flags = FL_PUP_SUBMENU;
+  i->flags_ = FL_PUP_SUBMENU;
 }
 
 void glutChangeToMenuEntry(int item, char *label, int value) {
@@ -324,7 +326,7 @@ void glutChangeToMenuEntry(int item, char *label, int value) {
   i->text = label;
   i->callback_ = (Fl_Callback*)(m->cb);
   i->user_data_ = (void *)value;
-  i->flags = 0;
+  i->flags_ = 0;
 }
 
 void glutChangeToSubMenu(int item, char *label, int submenu) {
@@ -333,7 +335,7 @@ void glutChangeToSubMenu(int item, char *label, int submenu) {
   i->text = label;
   i->callback_ = 0;
   i->user_data_ = (void *)(menus[submenu].m);
-  i->flags = FL_PUP_SUBMENU;
+  i->flags_ = FL_PUP_SUBMENU;
 }
 
 void glutRemoveMenuItem(int item) {
@@ -398,5 +400,5 @@ int glutLayerGet(GLenum type) {
 #endif
 
 //
-// End of "$Id: glut_compatability.cxx,v 1.6 1999/03/31 14:52:47 mike Exp $".
+// End of "$Id: glut_compatability.cxx,v 1.7 1999/08/16 07:31:31 bill Exp $".
 //

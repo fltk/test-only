@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.H,v 1.13 1999/06/15 17:02:24 gustavo Exp $"
+// "$Id: Fl_Browser_.H,v 1.14 1999/08/16 07:30:48 bill Exp $"
 //
 // Common browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,8 +38,6 @@
 #endif
 #include "Fl_Scrollbar.H"
 
-#define BROWSER_STYLE ((Fl_Browser_::Style*)_style)
-
 #define FL_NORMAL_BROWSER	0
 #define FL_SELECT_BROWSER	1
 #define FL_HOLD_BROWSER		2
@@ -47,35 +45,8 @@
 
 class Fl_Browser_ : public Fl_Group {
 public:
-  enum Attribute {
-    TEXTFONT = 0,
-    TEXTSIZE,
-    TEXTCOLOR,
-    SELECTED_TEXTCOLOR,
-    BA_END
-  };
-
-  struct Style : public Fl_Widget::Style {
-    uchar browser_[BA_END];
-    uchar sbf;
-
-    Style();
-    uchar& browser(Attribute a) { return browser_[a]; }
-  };
-
   Fl_Scrollbar scrollbar;		// Vertical scrollbar
   Fl_Scrollbar hscrollbar;		// Horizontal scrollbar
-
-  int is_style_forced(Fl_Widget::Attribute a) const
-    { return Fl_Widget::is_style_forced(a); }
-  int is_style_forced(Attribute a) const
-    { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
-
-  void copy_style(Fl_Browser_* o)
-    { mstyle(&_style); *((Style*)_style) = *((Style*)o->style()); }
-
-  virtual void loadstyle() const;
-
   int select(void *,int=1,int docallbacks=0);
   int select_only(void *,int docallbacks=0);
   int deselect(int docallbacks=0);
@@ -97,18 +68,6 @@ public:
     BOTH_ALWAYS = 7
   };
 
-  Fl_Font textfont() const;
-  void textfont(uchar s);
-
-  uchar textsize() const;
-  void textsize(uchar s);
-
-  Fl_Color textcolor() const;
-  void textcolor(uchar n);
-
-  Fl_Color selected_textcolor() const;
-  void selected_textcolor(uchar n);
-
   static void scrollbar_width(int b) {scrollbar_width_ = b;}
   static int scrollbar_width() {return scrollbar_width_;}
 
@@ -117,10 +76,6 @@ public:
   void scrollbar_left() {scrollbar.align(FL_ALIGN_LEFT);}
 
 protected:
-  static Fl_Widget::Style* _default_style;
-
-  virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
-  virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
 
   // All of the following must be supplied by the subclass:
   virtual void *item_first() const = 0;
@@ -174,13 +129,10 @@ private:
   uchar has_scrollbar_;	// which scrollbars are enabled
 
   void update_top();
-
-  uchar attr(Attribute) const;
-  void attr(Attribute, uchar);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Browser_.H,v 1.13 1999/06/15 17:02:24 gustavo Exp $".
+// End of "$Id: Fl_Browser_.H,v 1.14 1999/08/16 07:30:48 bill Exp $".
 //

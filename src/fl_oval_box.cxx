@@ -1,5 +1,5 @@
 //
-// "$Id: fl_oval_box.cxx,v 1.4 1999/01/07 19:17:40 mike Exp $"
+// "$Id: fl_oval_box.cxx,v 1.5 1999/08/16 07:31:29 bill Exp $"
 //
 // Oval box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,38 +27,41 @@
 // Less-used box types are in seperate files so they are not linked
 // in if not used.
 
-#include <FL/Fl.H>
+#include <FL/Fl_Boxtype.H>
 #include <FL/fl_draw.H>
 
-static void fl_oval_flat_box(int x, int y, int w, int h, Fl_Color c) {
+static void oval_flat_draw(Fl_Boxtype, int x, int y, int w, int h,
+			   Fl_Color c, Fl_Flags)
+{
   fl_color(c);
   fl_pie(x, y, w, h, 0, 360);
 }
+const Fl_Boxtype_ fl_oval_flat_box = {
+  oval_flat_draw, 0, 0, 0,0,0,0
+};
 
-static void fl_oval_frame(int x, int y, int w, int h, Fl_Color c) {
+static void oval_draw(Fl_Boxtype, int x, int y, int w, int h,
+		      Fl_Color c, Fl_Flags f)
+{
   fl_color(c);
+  fl_pie(x, y, w-1, h-1, 0, 360);
+  fl_color((f&FL_INACTIVE) ? FL_INACTIVE_COLOR : FL_NO_COLOR);
   fl_arc(x, y, w, h, 0, 360);
 }
+const Fl_Boxtype_ fl_oval_box = {
+  oval_draw, 0, 0, 1,1,2,2
+};
 
-static void fl_oval_box(int x, int y, int w, int h, Fl_Color c) {
-  fl_oval_flat_box(x,y,w-1,h-1,c);
-  fl_oval_frame(x,y,w,h,FL_BLACK);
+static void oval_shadow_draw(Fl_Boxtype b, int x, int y, int w, int h,
+			     Fl_Color c, Fl_Flags f)
+{
+  oval_flat_draw(b, x+3, y+3, w, h, FL_DARK3, FL_NO_FLAGS);
+  oval_draw(b, x, y, w, h, c, f);
 }
-
-static void fl_oval_shadow_box(int x, int y, int w, int h, Fl_Color c) {
-  fl_oval_flat_box(x+3,y+3,w,h,FL_DARK3);
-  fl_oval_box(x,y,w,h,c);
-}
-
-extern void fl_internal_boxtype(Fl_Boxtype, Fl_Box_Draw_F*);
-Fl_Boxtype define_FL_OVAL_BOX() {
-  fl_internal_boxtype(_FL_OSHADOW_BOX,fl_oval_shadow_box);
-  fl_internal_boxtype(_FL_OVAL_FRAME,fl_oval_frame);
-  fl_internal_boxtype(_FL_OFLAT_BOX,fl_oval_flat_box);
-  fl_internal_boxtype(_FL_OVAL_BOX,fl_oval_box);
-  return _FL_OVAL_BOX;
-}
+const Fl_Boxtype_ fl_oval_shadow_box = {
+  oval_shadow_draw, 0, 0, 1,1,2,2
+};
 
 //
-// End of "$Id: fl_oval_box.cxx,v 1.4 1999/01/07 19:17:40 mike Exp $".
+// End of "$Id: fl_oval_box.cxx,v 1.5 1999/08/16 07:31:29 bill Exp $".
 //

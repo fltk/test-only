@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.16 1999/06/15 17:02:27 gustavo Exp $"
+// "$Id: Fl_Window.H,v 1.17 1999/08/16 07:30:54 bill Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,15 +32,12 @@
 
 class Fl_Window : public Fl_Group {
 public:
-  struct Style : public Fl_Widget::Style {
-    Style();
-  };
+  static Fl_Style default_style;
 
   Fl_Window(int,int,int,int, const char* = 0);
   Fl_Window(int,int, const char* = 0);
   virtual ~Fl_Window();
 
-  virtual void loadstyle() const;
   virtual int handle(int);
 
   void border(int b);
@@ -86,11 +83,9 @@ public:
   void cursor(Fl_Cursor, Fl_Color=FL_BLACK, Fl_Color=FL_WHITE);
   static void default_callback(Fl_Window*, void* v);
 
-protected:
-  static Fl_Widget::Style* _default_style;
+  void resize_from_system(int,int,int,int);
 
-  virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
-  virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
+protected:
 
   virtual void layout();
   virtual void draw();
@@ -108,10 +103,10 @@ private:
   void size_range_();
   // values for flags():
   enum {
-    FL_MODAL = 64,
-    FL_NOBORDER = 8,
-    FL_FORCE_POSITION = 16,
-    FL_NON_MODAL = 32
+    FL_MODAL		= 0x80000000,
+    FL_NOBORDER 	= 0x40000000,
+    FL_FORCE_POSITION	= 0x20000000,
+    FL_NON_MODAL 	= 0x10000000
   };
   static Fl_Window *current_;
   void _Fl_Window(); // constructor innards
@@ -120,5 +115,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.16 1999/06/15 17:02:27 gustavo Exp $".
+// End of "$Id: Fl_Window.H,v 1.17 1999/08/16 07:30:54 bill Exp $".
 //

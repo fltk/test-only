@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.12 1999/07/21 17:28:23 carl Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.13 1999/08/16 07:31:21 bill Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -95,10 +95,10 @@ int Fl_Tabs::tab_height() {
   }
   H2 = y()+h()-H2;
   if (H2 > H) {
-    H = H2-Fl::box_dy(box());
+    H = H2-box()->dy();
     return (H <= 0) ? 0 : -H;
   } else {
-    H = H-Fl::box_dy(box());
+    H = H-box()->dy();
     return (H <= 0) ? 0 : H;
   }
 }
@@ -174,8 +174,10 @@ Fl_Widget* Fl_Tabs::value() {
 
 int Fl_Tabs::value(Fl_Widget *o) {
   if (value_ == o) return 0;
-  if (value_) value_->hide();
+  Fl_Widget* oldvalue = value_;
+  value_ = o;
   if (o) o->show();
+  if (oldvalue) oldvalue->hide();
   value_ = o;
   redraw();
   do_callback();
@@ -187,26 +189,18 @@ enum {LEFT, RIGHT, SELECTED};
 void Fl_Tabs::draw() {
   Fl_Widget *v = value();
 
-  // Make sure the tab's label isn't drawn normally
-  const char* l=0;
-  if (v) {l=v->label();v->label(0);}
-
   int H = tab_height();
   if (damage() & FL_DAMAGE_ALL) { // redraw the entire thing:
     fl_clip(x(), y()+(H>=0?H:0), w(), h()-(H>=0?H:-H));
-    draw_box(box(), x(), y(), w(), h(), v ? v->color() : color());
+    draw_box();
     fl_pop_clip();
     if (v) draw_child(*v);
   } else { // redraw the child
     if (v) update_child(*v);
   }
 
-  // restore the tab's label
-  if (v) v->label(l);
-
-  if (!v) return;
-
-  if (damage() & (FL_DAMAGE_EXPOSE|FL_DAMAGE_ALL)) {
+  // draw the tabs if needed:
+  if (v && (damage() & (FL_DAMAGE_EXPOSE|FL_DAMAGE_ALL))) {
     int p[128]; int w[128];
     int selected = tab_positions(p,w);
     int i;
@@ -255,18 +249,25 @@ void Fl_Tabs::draw_tab(int x1, int x2, int W, int H, Fl_Widget* o, int what) {
     fl_color(!sel && o==push_ ? FL_DARK3 : FL_LIGHT3);
     fl_line(x1, y()+h()+H, x1+TABSLOPE, y()+h()-1);
   }
-  if (x2-x1 > 2*TABSLOPE)
+  if (W > TABSLOPE)
     o->draw_label(what==LEFT ? x1+TABSLOPE : x2-W+TABSLOPE,
 		  y()+(H<0?h()+H-3:0), W-TABSLOPE,
-		  (H<0?-H:H)+3, o->labelcolor(), FL_ALIGN_CENTER);
+		  (H<0?-H:H)+3, FL_ALIGN_CENTER);
 }
 
-Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l) :
-  Fl_Group(X,Y,W,H,l) {
-    box(FL_THIN_UP_BOX);
-    value_ = push_ = 0;
+// this is private as there is no need for themes to alter this:
+static Fl_Style tabs_style = {
+  FL_THIN_UP_BOX // box
+  // rest is zero and inherited from parent's style
+};
+
+Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
+  : Fl_Group(X,Y,W,H,l)
+{
+  style(tabs_style);
+  value_ = push_ = 0;
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.12 1999/07/21 17:28:23 carl Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.13 1999/08/16 07:31:21 bill Exp $".
 //

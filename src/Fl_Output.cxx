@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Output.cxx,v 1.10 1999/05/20 01:19:03 carl Exp $"
+// "$Id: Fl_Output.cxx,v 1.11 1999/08/16 07:31:19 bill Exp $"
 //
 // Output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -30,58 +30,26 @@
 #include <FL/Fl_Output.H>
 #include <FL/fl_draw.H>
 
-#define DEFAULT_STYLE ((Style*)default_style())
-
-Fl_Widget::Style* Fl_Output::_default_style = 0;
-
-Fl_Output::Style::Style() : Fl_Input_::Style() {
-  widget(COLOR) = 51;
-}
-
-void Fl_Output::loadstyle() const {
-  if (!Fl::s_output) {
-    Fl::s_output = 1;
-
-    static Fl::Attribute widget_attributes[] = {
-      { "label color", LABELCOLOR },
-      { "label size", LABELSIZE },
-      { "label type", LABELTYPE },
-      { "label font", LABELFONT },
-      { "output color", COLOR },
-      { "selected color", COLOR2 },
-      { "box", BOX },
-      { 0 }
-    };
-    Fl::load_attributes("text input output", DEFAULT_STYLE->widget_, widget_attributes);
-
-    static Fl::Attribute input_attributes[] = {
-      { "text font", TEXTFONT },
-      { "text size", TEXTSIZE },
-      { "text color", TEXTCOLOR },
-      { "selected text color", SELECTED_TEXTCOLOR },
-      { "cursor color", CURSOR_COLOR },
-      { 0 }
-    };
-    Fl::load_attributes("text input output", DEFAULT_STYLE->input_, input_attributes);
-  }
-}
-
 void Fl_Output::draw() {
-  Fl_Boxtype b = box() ? box() : FL_DOWN_BOX;
-  if (damage() & FL_DAMAGE_ALL) draw_box(b, color());
-  Fl_Input_::drawtext(x()+Fl::box_dx(b)+3, y()+Fl::box_dy(b),
-		      w()-Fl::box_dw(b)-6, h()-Fl::box_dh(b));
+  if (damage() & FL_DAMAGE_ALL) draw_frame();
+  Fl_Input_::drawtext(x()+box()->dx(), y()+box()->dy(),
+		      w()-box()->dw(), h()-box()->dh());
 }
 
 int Fl_Output::handle(int event) {
   if (event == FL_ENTER) return 1;
   if (event == FL_FOCUS) return 0;
-  Fl_Boxtype b = box() ? box() : FL_DOWN_BOX;
   return Fl_Input_::handletext(event,
-	x()+Fl::box_dx(b)+3, y()+Fl::box_dy(b),
-	w()-Fl::box_dw(b)-6, h()-Fl::box_dh(b));
+			       x()+box()->dx(), y()+box()->dy(),
+			       w()-box()->dw(), h()-box()->dh());
+}
+
+Fl_Output::Fl_Output(int x, int y, int w, int h, const char *l)
+  : Fl_Input_(x, y, w, h, l)
+{
+  style(default_style);
 }
 
 //
-// End of "$Id: Fl_Output.cxx,v 1.10 1999/05/20 01:19:03 carl Exp $".
+// End of "$Id: Fl_Output.cxx,v 1.11 1999/08/16 07:31:19 bill Exp $".
 //

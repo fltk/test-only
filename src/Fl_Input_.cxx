@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.cxx,v 1.27 1999/06/15 17:02:30 gustavo Exp $"
+// "$Id: Fl_Input_.cxx,v 1.28 1999/08/16 07:31:17 bill Exp $"
 //
 // Common input widget routines for the Fast Light Tool Kit (FLTK).
 //
@@ -29,15 +29,12 @@
 // to the input field.
 
 #include <FL/Fl.H>
-#include <FL/Fl_Group.H>
 #include <FL/Fl_Input_.H>
 #include <FL/fl_draw.H>
 #include <math.h>
 #include <string.h>
 #include <stdlib.h>
 #include <ctype.h>
-
-#define DEFAULT_STYLE ((Style*)default_style())
 
 #define MAXBUF 1024
 
@@ -163,14 +160,19 @@ void Fl_Input_::setfont() const {
 
 void Fl_Input_::drawtext(int X, int Y, int W, int H) {
 
-  int do_mu = !(damage()&FL_DAMAGE_ALL);
   if (Fl::focus()!=this && !size()) {
-    if (do_mu) { // we have to erase it if cursor was there
-      fl_color(color());
-      fl_rectf(X, Y, W, H);
-    }
+    // we have to erase it if cursor was there
+    fl_color(color());
+    fl_rectf(X, Y, W, H);
     return;
   }
+
+  if (damage() & FL_DAMAGE_ALL) {
+    // erase background
+    fl_color(color());
+    fl_rectf(X, Y, W, H);
+  }
+  if (W > 12) {X += 3; W -= 6;} // add a left/right border
 
   int selstart, selend;
   if (Fl::focus()!=this && Fl::selection_owner()!=this && Fl::pushed()!=this)
@@ -233,7 +235,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
   }
 
   fl_clip(X, Y, W, H);
-  Fl_Color color = active_r() ? textcolor() : inactive(textcolor());
+  Fl_Color textcolor = active_r() ? text_color() : fl_inactive(text_color());
 
   p = value();
   // visit each line and draw it:
@@ -246,14 +248,14 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
 
     if (ypos <= -height) goto CONTINUE; // clipped off top
 
-    if (do_mu) {	// for minimal update:
+    if (!(damage()&FL_DAMAGE_ALL)) {	// for minimal update:
       const char* pp = value()+mu_p; // pointer to where minimal update starts
       if (e >= pp && (!erase_cursor_only || p <= pp)) { // we must erase this
       // calculate area to erase:
       int x1 = -xscroll_;
       if (p < pp) x1 += int(expandpos(p, pp, buf, 0));
       // erase it:
-      fl_color(this->color());
+      fl_color(color());
       fl_rectf(X+x1, Y+ypos, erase_cursor_only?2:W-x1, height);
       // it now draws entire line over it
       // this should not draw letters to left of erased area, but
@@ -267,7 +269,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
       int x1 = -xscroll_;
       int offset1 = 0;
       if (pp > p) {
-	fl_color(color);
+	fl_color(textcolor);
 	x1 += int(expandpos(p, pp, buf, &offset1));
 	fl_draw(buf, offset1, X-xscroll_, Y+ypos+desc);
       }
@@ -278,15 +280,13 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
       else offset2 = strlen(buf);
       fl_color(selection_color());
       fl_rectf(X+int(x1+.5), Y+ypos, int(x2-x1), height);
-      fl_color(active_r() ? textcolor() : inactive(textcolor()));
-      fl_draw(buf+offset1, offset2-offset1, X+x1, Y+ypos+desc);
       
-      fl_clip(X+int(x1+.5), Y+ypos, int(x2-x1), height);
-      fl_color(active_r() ? selected_textcolor() : inactive(selected_textcolor()));
+      //fl_clip(X+int(x1+.5), Y+ypos, int(x2-x1), height);
+      fl_color(selection_text_color());
       fl_draw(buf+offset1, offset2-offset1, X+x1, Y+ypos+desc);
-      fl_pop_clip();
+      //fl_pop_clip();
       if (pp < e) {
-	fl_color(color);
+	fl_color(textcolor);
 	fl_draw(buf+offset2, X+x2, Y+ypos+desc);
       }
     } else {
@@ -296,7 +296,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
 	fl_color(cursor_color());
 	fl_rectf(X+curx-xscroll_, Y+ypos, 2, height);
       }
-      fl_color(color);
+      fl_color(textcolor);
       fl_draw(buf, X-xscroll_, Y+ypos+desc);
     }
   CONTINUE:
@@ -307,10 +307,10 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
   }
 
   // for minimal update, erase all lines below last one if necessary:
-  if (type()==FL_MULTILINE_INPUT && do_mu && ypos<H
+  if (!(damage()&FL_DAMAGE_ALL) && type()==FL_MULTILINE_INPUT && ypos<H
       && (!erase_cursor_only || p <= value()+mu_p)) {
     if (ypos < 0) ypos = 0;
-    fl_color(this->color());
+    fl_color(color());
     fl_rectf(X, Y+ypos, W, H-ypos);
   }
 
@@ -333,12 +333,7 @@ int Fl_Input_::lineboundary(int i) const {
 }
 
 void Fl_Input_::handle_mouse(int X, int Y,
-#ifdef WORDWRAP
-			     int W,
-#else
-			     int /*W*/,
-#endif
-			     int /*H*/, int drag) {
+			     int W, int /*H*/, int drag) {
   was_up_down = 0;
   if (!size()) return;
   setfont();
@@ -348,6 +343,8 @@ void Fl_Input_::handle_mouse(int X, int Y,
 
   int theline = (type()==FL_MULTILINE_INPUT) ?
     (Fl::event_y()-Y+yscroll_)/fl_height() : 0;
+
+  if (W > 12) {X += 3; W -= 6;} // add a left/right border
 
   int newpos = 0;
 #ifdef WORDWRAP
@@ -643,51 +640,11 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
 
 /*------------------------------*/
 
-Fl_Widget::Style* Fl_Input_::_default_style = 0;
+#include <FL/Fl_Input.H>
 
-Fl_Input_::Style::Style() : Fl_Widget::Style() {
-  sbf = 0;
-
-  widget(COLOR) = FL_WHITE;
-  widget(COLOR2) = 15;
-  widget(BOX) = FL_MEDIUM_DOWN_BOX;
-
-  input(TEXTFONT) = FL_HELVETICA;
-  input(TEXTSIZE) = 14;
-  input(TEXTCOLOR) = FL_BLACK;
-  input(CURSOR_COLOR) = FL_BLACK;
-  input(SELECTED_TEXTCOLOR) = FL_BLACK;
-}
-
-void Fl_Input_::loadstyle() const {
-  if (!Fl::s_input) {
-    Fl::s_input = 1;
-
-    static Fl::Attribute widget_attributes[] = {
-      { "label color", LABELCOLOR },
-      { "label size", LABELSIZE },
-      { "label type", LABELTYPE },
-      { "label font", LABELFONT },
-      { "color", COLOR },
-      { "selected color", COLOR2 },
-      { "box", BOX },
-      { 0 }
-    };
-    Fl::load_attributes("text input output", DEFAULT_STYLE->widget_, widget_attributes);
-
-    static Fl::Attribute input_attributes[] = {
-      { "text font", TEXTFONT },
-      { "text size", TEXTSIZE },
-      { "text color", TEXTCOLOR },
-      { "selected text color", SELECTED_TEXTCOLOR },
-      { "cursor color", CURSOR_COLOR },
-      { 0 }
-    };
-    Fl::load_attributes("text input output", DEFAULT_STYLE->input_, input_attributes);
-  }
-}
-
-Fl_Input_::Fl_Input_(int x, int y, int w, int h, const char* l) : Fl_Widget(x, y, w, h, l) {
+Fl_Input_::Fl_Input_(int x, int y, int w, int h, const char* l)
+  : Fl_Widget(x, y, w, h, l)
+{
   align(FL_ALIGN_LEFT);
   mark_ = position_ = size_ = 0;
   bufsize = 0;
@@ -695,6 +652,7 @@ Fl_Input_::Fl_Input_(int x, int y, int w, int h, const char* l) : Fl_Widget(x, y
   value_ = "";
   xscroll_ = yscroll_ = 0;
   maximum_size_ = 32767;
+  style(Fl_Input::default_style);
 }
 
 void Fl_Input_::put_in_buffer(int len) {
@@ -768,10 +726,10 @@ int Fl_Input_::value(const char* str) {
 }
 
 void Fl_Input_::layout() {
-  int o[4];
-  ((Fl_Group*)parent())->old_size(this,o);
-  if (o[2] != w()) xscroll_ = 0;
-  if (o[3] != h()) yscroll_ = 0;
+//   int o[4];
+//   if (parent()) parent()->old_size(this,o);
+//   if (o[2] != w()) xscroll_ = 0;
+//   if (o[3] != h()) yscroll_ = 0;
   Fl_Widget::layout();
 }
 
@@ -780,19 +738,6 @@ Fl_Input_::~Fl_Input_() {
   if (bufsize) free((void*)buffer);
 }
 
-uchar Fl_Input_::attr(Attribute a) const {
-  loadstyle();
-  if (!_style || !(INPUT_STYLE->sbf & bf(a)))
-    return DEFAULT_STYLE->input(a);
-  return INPUT_STYLE->input(a);
-}
-
-Fl_Font Fl_Input_::textfont() const { return (Fl_Font)attr(TEXTFONT); }
-uchar Fl_Input_::textsize() const { return attr(TEXTSIZE); }
-Fl_Color Fl_Input_::textcolor() const { return (Fl_Color)attr(TEXTCOLOR); }
-Fl_Color Fl_Input_::cursor_color() const { return (Fl_Color)attr(CURSOR_COLOR); }
-Fl_Color Fl_Input_::selected_textcolor() const { return (Fl_Color)attr(SELECTED_TEXTCOLOR); }
-
 //
-// End of "$Id: Fl_Input_.cxx,v 1.27 1999/06/15 17:02:30 gustavo Exp $".
+// End of "$Id: Fl_Input_.cxx,v 1.28 1999/08/16 07:31:17 bill Exp $".
 //

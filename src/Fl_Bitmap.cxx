@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.cxx,v 1.6 1999/03/14 06:46:26 carl Exp $"
+// "$Id: Fl_Bitmap.cxx,v 1.7 1999/08/16 07:31:12 bill Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -26,99 +26,68 @@
 #include <FL/Fl.H>
 #include <FL/x.H>
 #include <FL/fl_draw.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Menu_Item.H>
 #include <FL/Fl_Bitmap.H>
 
-void Fl_Bitmap::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
-  // account for current clip region (faster on Irix):
-  int X,Y,W,H; fl_clip_box(XP,YP,WP,HP,X,Y,W,H);
-  cx += X-XP; cy += Y-YP;
-  // clip the box down to the size of image, quit if empty:
-  if (cx < 0) {W += cx; X -= cx; cx = 0;}
-  if ((cx+W) > w) W = w-cx;
-  if (W <= 0) return;
-  if (cy < 0) {H += cy; Y -= cy; cy = 0;}
-  if ((cy+H) > h) H = h-cy;
-  if (H <= 0) return;
 #ifdef WIN32
-  if (!id) {
-    // we need to pad the lines out to words & swap the bits
-    // in each byte.
-    int w1 = (w+7)/8;
-    int w2 = ((w+15)/16)*2;
-    uchar* newarray = new uchar[w2*h];
-    const uchar* src = array;
-    uchar* dest = newarray;
-    static uchar reverse[16] =	/* Bit reversal lookup table */
-  		{ 0x00, 0x88, 0x44, 0xcc, 0x22, 0xaa, 0x66, 0xee,
-		  0x11, 0x99, 0x55, 0xdd, 0x22, 0xbb, 0x77, 0xff };
-    for (int y=0; y < h; y++) {
-      for (int n = 0; n < w1; n++, src++)
-	*dest++ = (reverse[*src & 0x0f] & 0xf0) |
-	          (reverse[(*src >> 4) & 0x0f] & 0x0f);
-      dest += w2-w1;
+// replicate XCreateBitmapFromData:
+// Written by Matt
+ulong fl_create_bitmap(const uchar* bitmap, int w, int h) {
+  // this won't work ehen the user changes display mode during run or
+  // has two screens with differnet depths
+  static uchar hiNibble[16] =
+  { 0x00, 0x80, 0x40, 0xc0, 0x20, 0xa0, 0x60, 0xe0,
+    0x10, 0x90, 0x50, 0xd0, 0x20, 0xb0, 0x70, 0xf0 };
+  static uchar loNibble[16] =
+  { 0x00, 0x08, 0x04, 0x0c, 0x02, 0x0a, 0x06, 0x0e,
+    0x01, 0x09, 0x05, 0x0d, 0x02, 0x0b, 0x07, 0x0f };
+  int np  = GetDeviceCaps(fl_gc, PLANES);//: was always one on sample machines
+  int bpp = GetDeviceCaps(fl_gc, BITSPIXEL);//: 1,4,8,16,24,32 and more?
+  int Bpr = (bpp*w+7)/8;			//: bytes per row
+  int pad = Bpr&1, w1 = (w+7)/8, shr = ((w-1)&7)+1;
+  if (bpp==4) shr = (shr+1)/2;
+  uchar *newarray = new uchar[(Bpr+pad)*h], *dst = newarray, *src = bitmap;
+  for (int i=0; i<h; i++) {
+    //: this is slooow, but we do it only once per pixmap
+    for (int j=w1; j>0; j--) {
+      uchar b = *src++;
+      if (bpp==1) {
+	*dst++ = ( hiNibble[b&15] ) | ( loNibble[(b>>4)&15] );
+      } else if (bpp==4) {
+	for (int k=(j==1)?shr:4; k>0; k--) {
+	  *dst++ = "\377\360\017\000"[b&3];
+	  b = b >> 2;
+	}
+      } else {
+	for (int k=(j==1)?shr:8; k>0; k--) {
+	  if (b&1) {
+	    *dst++=0;
+	    if (bpp>8) *dst++=0;
+	    if (bpp>16) *dst++=0;
+	    if (bpp>24) *dst++=0;
+	  } else {
+	    *dst++=0xff;
+	    if (bpp>8) *dst++=0xff;
+	    if (bpp>16) *dst++=0xff;
+	    if (bpp>24) *dst++=0xff;
+	  }
+	  b = b >> 1;
+	}
+      }
     }
-    id = (ulong)CreateBitmap(w, h, 1, 1, newarray);
-    array = newarray; // keep the pointer so I can free it later
+    dst += pad;
   }
-  HDC tempdc = CreateCompatibleDC(fl_gc);
-  SelectObject(tempdc, (HGDIOBJ)id);
-  SelectObject(fl_gc, fl_brush());
-  // secret bitblt code found in old MSWindows reference manual:
-  BitBlt(fl_gc, X, Y, W, H, tempdc, cx, cy, 0xE20746L);
-  DeleteDC(tempdc);
-#else
-  if (!id) id = XCreateBitmapFromData(fl_display, fl_window,
-				      (const char*)array, (w+7)&-8, h);
-  XSetStipple(fl_display, fl_gc, id);
-  int ox = X-cx; if (ox < 0) ox += w;
-  int oy = Y-cy; if (oy < 0) oy += h;
-  XSetTSOrigin(fl_display, fl_gc, ox, oy);
-  XSetFillStyle(fl_display, fl_gc, FillStippled);
-  XFillRectangle(fl_display, fl_window, fl_gc, X, Y, W, H);
-  XSetFillStyle(fl_display, fl_gc, FillSolid);
-#endif
+  ulong r = (ulong)CreateBitmap(w, h, np, bpp, newarray);
+  delete[] newarray;
+  return r;
 }
-
-Fl_Bitmap::~Fl_Bitmap() {
-#ifdef WIN32
-  if (id) {
-    DeleteObject((HGDIOBJ)id);
-    delete[] (uchar*)array;
-  }
-#else
-  if (id) fl_delete_offscreen((Fl_Offscreen)id);
 #endif
-}
 
-void fl_bitmap_labeltype(
-    const Fl_Label* o, int x, int y, int w, int h, Fl_Align a)
+void Fl_Bitmap::draw(int X, int Y, int W, int H, int cx, int cy)
 {
-  Fl_Bitmap* b = (Fl_Bitmap*)(o->value);
-  int cx;
-  if (a & FL_ALIGN_LEFT) cx = 0;
-  else if (a & FL_ALIGN_RIGHT) cx = b->w-w;
-  else cx = (b->w-w)/2;
-  int cy;
-  if (a & FL_ALIGN_TOP) cy = 0;
-  else if (a & FL_ALIGN_BOTTOM) cy = b->h-h;
-  else cy = (b->h-h)/2;
-  fl_color((Fl_Color)o->color);
-  b->draw(x,y,w,h,cx,cy);
-}
-
-void fl_bitmap_measure(const Fl_Label* o, int& w, int& h) {
-  Fl_Bitmap* b = (Fl_Bitmap*)(o->value);
-  w = b->w;
-  h = b->h;
-}
-
-void Fl_Bitmap::label(Fl_Widget* o) {
-  Fl::set_labeltype(_FL_BITMAP_LABEL, fl_bitmap_labeltype, fl_bitmap_measure);
-  o->label(_FL_BITMAP_LABEL, (const char*)this);
+  if (!mask) mask = fl_create_bitmap(array, w, h);
+  _draw(X, Y, W, H, cx, cy);
 }
 
 //
-// End of "$Id: Fl_Bitmap.cxx,v 1.6 1999/03/14 06:46:26 carl Exp $".
+// End of "$Id: Fl_Bitmap.cxx,v 1.7 1999/08/16 07:31:12 bill Exp $".
 //

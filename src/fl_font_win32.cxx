@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.10 1999/04/11 15:34:23 mike Exp $"
+// "$Id: fl_font_win32.cxx,v 1.11 1999/08/16 07:31:28 bill Exp $"
 //
 // WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -27,7 +27,7 @@
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
 #include <FL/win32.H>
-#include "Fl_Font.H"
+#include "Fl_FontSize.h"
 
 #include <ctype.h>
 #include <stdlib.h>
@@ -94,25 +94,24 @@ Fl_FontSize::~Fl_FontSize() {
 
 ////////////////////////////////////////////////////////////////
 
-// WARNING: if you add to this table, you must redefine FL_FREE_FONT
-// in Enumerations.H & recompile!!
+// The predefined fonts that fltk has:  bold:       italic:
 static Fl_Fontdesc built_in_table[] = {
-{" Arial"},
-{"BArial"},
-{"IArial"},
-{"PArial"},
-{" Courier New"},
-{"BCourier New"},
-{"ICourier New"},
-{"PCourier New"},
-{" Times New Roman"},
-{"BTimes New Roman"},
-{"ITimes New Roman"},
-{"PTimes New Roman"},
-{" Symbol"},
-{" Terminal"},
-{"BTerminal"},
-{" Wingdings"},
+{" Arial",				fl_fonts+1, fl_fonts+2},
+{"BArial", 				fl_fonts+1, fl_fonts+3},
+{"IArial",				fl_fonts+3, fl_fonts+2},
+{"PArial",				fl_fonts+3, fl_fonts+3},
+{" Courier New",			fl_fonts+5, fl_fonts+6},
+{"BCourier New",			fl_fonts+5, fl_fonts+7},
+{"ICourier New",			fl_fonts+7, fl_fonts+6},
+{"PCourier New",			fl_fonts+7, fl_fonts+7},
+{" Times New Roman",			fl_fonts+9, fl_fonts+10},
+{"BTimes New Roman",			fl_fonts+9, fl_fonts+11},
+{"ITimes New Roman",			fl_fonts+11,fl_fonts+10},
+{"PTimes New Roman",			fl_fonts+11,fl_fonts+11},
+{" Symbol",				fl_fonts+12,fl_fonts+12},
+{" Terminal",				fl_fonts+14,fl_fonts+14},
+{"BTerminal",				fl_fonts+14,fl_fonts+14},
+{" Wingdings",				fl_fonts+15,fl_fonts+15},
 };
 
 Fl_Fontdesc* fl_fonts = built_in_table;
@@ -177,5 +176,5 @@ void fl_draw(const char* str, int x, int y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.10 1999/04/11 15:34:23 mike Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.11 1999/08/16 07:31:28 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: bitmap.cxx,v 1.4 1999/01/07 19:17:49 mike Exp $"
+// "$Id: bitmap.cxx,v 1.5 1999/08/16 07:31:32 bill Exp $"
 //
 // Bitmap label test program for the Fast Light Tool Kit (FLTK).
 //
@@ -117,9 +117,9 @@ void button_cb(Fl_Widget *,void *) {
 
 int main(int argc, char **argv) {
   Fl_Window window(400,400); ::w = &window;
-  Fl_Button b(140,160,120,120,0); ::b = &b;
+  Fl_Button b(140,160,120,120, "bitmap"); ::b = &b;
   //(new Fl_Bitmap(sorceress_bits,sorceress_width,sorceress_height))->label(&b);
-  fl_bitmap.label(&b);
+  b.image(&fl_bitmap);
   leftb = new Fl_Toggle_Button(50,75,50,25,"left");
   leftb->callback(button_cb);
   rightb = new Fl_Toggle_Button(100,75,50,25,"right");
@@ -137,5 +137,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: bitmap.cxx,v 1.4 1999/01/07 19:17:49 mike Exp $".
+// End of "$Id: bitmap.cxx,v 1.5 1999/08/16 07:31:32 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.9 1999/04/03 15:50:51 carl Exp $"
+// "$Id: factory.cxx,v 1.10 1999/08/16 07:31:08 bill Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -149,7 +149,6 @@ static Fl_Menu_Item browser_type_menu[] = {
 class Fl_Browser_Type : public Fl_Widget_Type {
   int is_browser() const {return 1;}
   Fl_Menu_Item *subtypes() {return browser_type_menu;}
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color& stc);
 public:
   virtual const char *type_name() {return "Fl_Browser";}
   Fl_Widget *widget(int x,int y,int w,int h) {
@@ -165,18 +164,6 @@ public:
 };
 static Fl_Browser_Type Fl_Browser_type;
 
-int Fl_Browser_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color& stc) {
-  Fl_Browser *o = (Fl_Browser*)(this->o);
-  switch (w) {
-    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); stc = o->selected_textcolor(); break;
-    case 1: o->textfont(f); break;
-    case 2: o->textsize(s); break;
-    case 3: o->textcolor(tc); break;
-    case 4: o->selected_textcolor(stc); break;
-  }
-  return 1;
-}
-
 ////////////////////////////////////////////////////////////////
 
 #include <FL/Fl_Counter.H>
@@ -186,7 +173,6 @@ static Fl_Menu_Item counter_type_menu[] = {
   {0}};
 class Fl_Counter_Type : public Fl_Widget_Type {
   Fl_Menu_Item *subtypes() {return counter_type_menu;}
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&);
   int is_valuator() const {return 1;}
   int is_counter() const {return 1;}
 public:
@@ -196,17 +182,6 @@ public:
   Fl_Widget_Type *_make() {return new Fl_Counter_Type();}
 };
 static Fl_Counter_Type Fl_Counter_type;
-
-int Fl_Counter_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&) {
-  Fl_Counter *o = (Fl_Counter*)(this->o);
-  switch (w) {
-    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); break;
-    case 1: o->textfont(f); break;
-    case 2: o->textsize(s); break;
-    case 3: o->textcolor(tc); break;
-  }
-  return 1;
-}
 
 ////////////////////////////////////////////////////////////////
 
@@ -221,7 +196,6 @@ static Fl_Menu_Item input_type_menu[] = {
 class Fl_Input_Type : public Fl_Widget_Type {
   int is_input() const {return 1;}
   Fl_Menu_Item *subtypes() {return input_type_menu;}
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color& stc);
 public:
   virtual const char *type_name() {return "Fl_Input";}
   Fl_Widget *widget(int x,int y,int w,int h) {
@@ -232,18 +206,6 @@ public:
   Fl_Widget_Type *_make() {return new Fl_Input_Type();}
 };
 static Fl_Input_Type Fl_Input_type;
-
-int Fl_Input_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color& stc) {
-  Fl_Input_ *o = (Fl_Input_*)(this->o);
-  switch (w) {
-    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); stc = o->selected_textcolor(); break;
-    case 1: o->textfont(f); break;
-    case 2: o->textsize(s); break;
-    case 3: o->textcolor(tc); break;
-    case 4: o->selected_textcolor(stc); break;
-  }
-  return 1;
-}
 
 ////////////////////////////////////////////////////////////////
 
@@ -373,7 +335,6 @@ class Fl_Value_Input_Type : public Fl_Widget_Type {
 public:
   int is_value_input() const {return 1;}
   virtual const char *type_name() {return "Fl_Value_Input";}
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&);
   int is_valuator() const {return 1;}
   Fl_Widget *widget(int x,int y,int w,int h) {
     Fl_Value_Input *o = new Fl_Value_Input(x,y,w,h,"value:");
@@ -383,17 +344,6 @@ public:
 };
 static Fl_Value_Input_Type Fl_Value_Input_type;
 
-int Fl_Value_Input_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&) {
-  Fl_Value_Input *o = (Fl_Value_Input*)(this->o);
-  switch (w) {
-    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); break;
-    case 1: o->textfont(f); break;
-    case 2: o->textsize(s); break;
-    case 3: o->textcolor(tc); break;
-  }
-  return 1;
-}
-
 ////////////////////////////////////////////////////////////////
 
 #include <FL/Fl_Value_Output.H>
@@ -401,7 +351,6 @@ class Fl_Value_Output_Type : public Fl_Widget_Type {
 public:
   int is_value_output() const {return 1;}
   virtual const char *type_name() {return "Fl_Value_Output";}
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&);
   int is_valuator() const {return 1;}
   Fl_Widget *widget(int x,int y,int w,int h) {
     Fl_Value_Output *o = new Fl_Value_Output(x,y,w,h,"value:");
@@ -411,22 +360,10 @@ public:
 };
 static Fl_Value_Output_Type Fl_Value_Output_type;
 
-int Fl_Value_Output_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&) {
-  Fl_Value_Output *o = (Fl_Value_Output*)(this->o);
-  switch (w) {
-    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); break;
-    case 1: o->textfont(f); break;
-    case 2: o->textsize(s); break;
-    case 3: o->textcolor(tc); break;
-  }
-  return 1;
-}
-
 ////////////////////////////////////////////////////////////////
 
 #include <FL/Fl_Value_Slider.H>
 class Fl_Value_Slider_Type : public Fl_Slider_Type {
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&);
 public:
   int is_value_slider() const {return 1;}
   virtual const char *type_name() {return "Fl_Value_Slider";}
@@ -435,17 +372,6 @@ public:
   Fl_Widget_Type *_make() {return new Fl_Value_Slider_Type();}
 };
 static Fl_Value_Slider_Type Fl_Value_Slider_type;
-
-int Fl_Value_Slider_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&) {
-  Fl_Value_Slider *o = (Fl_Value_Slider*)(this->o);
-  switch (w) {
-    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); break;
-    case 1: o->textfont(f); break;
-    case 2: o->textsize(s); break;
-    case 3: o->textcolor(tc); break;
-  }
-  return 1;
-}
 
 ////////////////////////////////////////////////////////////////
 
@@ -457,6 +383,7 @@ extern class Fl_DeclBlock_Type Fl_DeclBlock_type;
 extern class Fl_Class_Type Fl_Class_type;
 extern class Fl_Window_Type Fl_Window_type;
 extern class Fl_Group_Type Fl_Group_type;
+extern class Fl_Pack_Type Fl_Pack_type;
 extern class Fl_Tabs_Type Fl_Tabs_type;
 extern class Fl_Scroll_Type Fl_Scroll_type;
 extern class Fl_Tile_Type Fl_Tile_type;
@@ -486,6 +413,7 @@ Fl_Menu_Item New_Menu[] = {
 {"group",0,0,0,FL_SUBMENU},
   {0,0,cb,(void*)&Fl_Window_type},
   {0,0,cb,(void*)&Fl_Group_type},
+  {0,0,cb,(void*)&Fl_Pack_type},
   {0,0,cb,(void*)&Fl_Tabs_type},
   {0,0,cb,(void*)&Fl_Scroll_type},
   {0,0,cb,(void*)&Fl_Tile_type},
@@ -630,41 +558,41 @@ static symbol table[] = {
   {"ALIGN_LEFT_BOTTOM",	 FL_ALIGN_BOTTOM | FL_ALIGN_LEFT},
   {"ALIGN_RIGHT_BOTTOM", FL_ALIGN_BOTTOM | FL_ALIGN_RIGHT},
   {"INVALID_STYLE",	 255},
-  {"NORMAL_STYLE",	 FL_HELVETICA},
-  {"BOLD_STYLE",		 FL_HELVETICA|FL_BOLD},
-  {"ITALIC_STYLE",	 FL_HELVETICA|FL_ITALIC},
-  {"BOLDITALIC_STYLE",	 FL_HELVETICA|FL_BOLD|FL_ITALIC},
-  {"FIXED_STYLE",	 FL_COURIER},
-  {"FIXEDBOLD_STYLE",	 FL_COURIER|FL_BOLD},
-  {"FIXEDITALIC_STYLE",	 FL_COURIER|FL_ITALIC},
-  {"FIXEDBOLDITALIC_STYLE",  FL_COURIER|FL_BOLD|FL_ITALIC},
-  {"TIMES_STYLE",	 FL_TIMES},
-  {"TIMESBOLD_STYLE",	 FL_TIMES|FL_BOLD},
-  {"TIMESITALIC_STYLE",	 FL_TIMES|FL_ITALIC},
-  {"TIMESBOLDITALIC_STYLE",  FL_TIMES|FL_BOLD|FL_ITALIC},
-  {"SHADOW_STYLE",	(_FL_SHADOW_LABEL<<8)},
-  {"ENGRAVED_STYLE",	(_FL_ENGRAVED_LABEL<<8)},
-  {"EMBOSSED_STYLE",	(_FL_EMBOSSED_LABEL<<0)},
-  {"TINY_SIZE",		 8},
-  {"SMALL_SIZE",		 11},
-  {"NORMAL_SIZE",	 FL_NORMAL_SIZE},
-  {"MEDIUM_SIZE",	 18},
-  {"LARGE_SIZE",		 24},
-  {"HUGE_SIZE",		 32},
-  {"DEFAULT_SIZE",	 FL_NORMAL_SIZE},
-  {"TINY_FONT",		 8},
-  {"SMALL_FONT",		 11},
-  {"NORMAL_FONT",	 FL_NORMAL_SIZE},
-  {"MEDIUM_FONT",	 18},
-  {"LARGE_FONT",		 24},
-  {"HUGE_FONT",		 32},
-  {"NORMAL_FONT1",	 11},
-  {"NORMAL_FONT2",	 FL_NORMAL_SIZE},
-  {"DEFAULT_FONT",	 11},
-  {"RETURN_END_CHANGED",  0},
-  {"RETURN_CHANGED",	 1},
-  {"RETURN_END",		 2},
-  {"RETURN_ALWAYS",	 3},
+  {"NORMAL_STYLE",	 0},
+  {"BOLD_STYLE",	 1},
+  {"ITALIC_STYLE",	 2},
+  {"BOLDITALIC_STYLE",	 3},
+  {"FIXED_STYLE",	 4},
+  {"FIXEDBOLD_STYLE",	 5},
+  {"FIXEDITALIC_STYLE",	 6},
+  {"FIXEDBOLDITALIC_STYLE",  7},
+  {"TIMES_STYLE",	 8},
+  {"TIMESBOLD_STYLE",	 9},
+  {"TIMESITALIC_STYLE",	 10},
+  {"TIMESBOLDITALIC_STYLE",  11},
+//   {"SHADOW_STYLE",	0x100
+//   {"ENGRAVED_STYLE",	0x200	
+//   {"EMBOSSED_STYLE",	0x300
+  {"TINY_SIZE",		8},
+  {"SMALL_SIZE",	11},
+  {"NORMAL_SIZE",	FL_NORMAL_SIZE},
+  {"MEDIUM_SIZE",	18},
+  {"LARGE_SIZE",	24},
+  {"HUGE_SIZE",		32},
+  {"DEFAULT_SIZE",	FL_NORMAL_SIZE},
+  {"TINY_FONT",		8},
+  {"SMALL_FONT",	11},
+  {"NORMAL_FONT",	FL_NORMAL_SIZE},
+  {"MEDIUM_FONT",	18},
+  {"LARGE_FONT",	24},
+  {"HUGE_FONT",		32},
+  {"NORMAL_FONT1",	11},
+  {"NORMAL_FONT2",	FL_NORMAL_SIZE},
+  {"DEFAULT_FONT",	11},
+  {"RETURN_END_CHANGED",0},
+  {"RETURN_CHANGED",	1},
+  {"RETURN_END",	2},
+  {"RETURN_ALWAYS",	3},
   {"PUSH_BUTTON",	FL_TOGGLE_BUTTON},
   {"RADIO_BUTTON",	FL_RADIO_BUTTON},
   {"HIDDEN_BUTTON",	FL_HIDDEN_BUTTON},
@@ -693,5 +621,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.9 1999/04/03 15:50:51 carl Exp $".
+// End of "$Id: factory.cxx,v 1.10 1999/08/16 07:31:08 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: input.cxx,v 1.8 1999/04/01 21:26:25 carl Exp $"
+// "$Id: input.cxx,v 1.9 1999/08/16 07:31:35 bill Exp $"
 //
 // Input field test program for the Fast Light Tool Kit (FLTK).
 //
@@ -58,24 +58,23 @@ void button_cb(Fl_Widget *,void *) {
 }
 
 void color_cb(Fl_Widget* button, void* v) {
-  Fl_Input def(0,0,0,0);
+  Fl_Style& s = Fl_Input::default_style;
   Fl_Color c;
   
-  def.modify_default_style();
-  
   switch ((long)v) {
-    case 0: c = def.color(); break;
-    case 1: c = def.selection_color(); break;
-    default: c = def.textcolor(); break;
+    case 0: c = s.color; break;
+    case 1: c = s.selection_color; break;
+    default: c = s.text_color; break;
   }
   c = fl_show_colormap(c);
   switch ((long)v) {
-    case 0: def.color(c); break;
-    case 1: def.selection_color(c); break;
-    default: def.textcolor(c); break;
+    case 0: s.color = c; break;
+    case 1: s.selection_color = c; break;
+    default: s.text_color = c; break;
   }
+  s.selection_text_color = fl_contrast(s.text_color, s.selection_color);
   button->color(c);
-  button->labelcolor(contrast(FL_BLACK,(Fl_Color)c));
+  button->labelcolor(fl_contrast(FL_BLACK,(Fl_Color)c));
   Fl::redraw();
 }
 
@@ -113,15 +112,15 @@ int main(int argc, char **argv) {
   b = new Fl_Button(220,y1,100,25,"color"); y1 += 25;
   b->fly_box(FL_NO_BOX);
   b->color(input[0]->color()); b->callback(color_cb, (void*)0);
-  b->labelcolor(contrast(FL_BLACK,b->color()));
+  b->labelcolor(fl_contrast(FL_BLACK,b->color()));
   b = new Fl_Button(220,y1,100,25,"selection_color"); y1 += 25;
   b->fly_box(FL_NO_BOX);
   b->color(input[0]->selection_color()); b->callback(color_cb, (void*)1);
-  b->labelcolor(contrast(FL_BLACK,b->color()));
+  b->labelcolor(fl_contrast(FL_BLACK,b->color()));
   b = new Fl_Button(220,y1,100,25,"textcolor"); y1 += 25;
   b->fly_box(FL_NO_BOX);
   b->color(input[0]->textcolor()); b->callback(color_cb, (void*)2);
-  b->labelcolor(contrast(FL_BLACK,b->color()));
+  b->labelcolor(fl_contrast(FL_BLACK,b->color()));
 
   window->end();
   window->show(argc,argv);
@@ -129,5 +128,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: input.cxx,v 1.8 1999/04/01 21:26:25 carl Exp $".
+// End of "$Id: input.cxx,v 1.9 1999/08/16 07:31:35 bill Exp $".
 //

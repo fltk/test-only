@@ -6,6 +6,8 @@ Fl_Window *function_panel=(Fl_Window *)0;
 
 Fl_Light_Button *f_public_button=(Fl_Light_Button *)0;
 
+Fl_Light_Button *f_c_button=(Fl_Light_Button *)0;
+
 Fl_Input *f_name_input=(Fl_Input *)0;
 
 Fl_Input *f_return_type_input=(Fl_Input *)0;
@@ -19,17 +21,20 @@ Fl_Window* make_function_panel() {
   { Fl_Window* o = function_panel = new Fl_Window(287, 173, "function/method");
     w = o;
     { Fl_Light_Button* o = f_public_button = new Fl_Light_Button(10, 15, 65, 25, "public");
-      o->labelsize(10);
+      o->label_size(10);
       o->when(FL_WHEN_NEVER);
     }
+    { Fl_Light_Button* o = f_c_button = new Fl_Light_Button(90, 15, 90, 25, "C declaration");
+      o->label_size(10);
+    }
     { Fl_Input* o = f_name_input = new Fl_Input(10, 60, 270, 25, "Name(args): (blank for main())");
-      o->labelsize(12);
+      o->label_size(12);
       o->align(FL_ALIGN_TOP_LEFT);
       o->when(FL_WHEN_NEVER);
       Fl_Group::current()->resizable(o);
     }
     { Fl_Input* o = f_return_type_input = new Fl_Input(10, 105, 270, 25, "Return Type: (blank to return outermost widget)");
-      o->labelsize(12);
+      o->label_size(12);
       o->align(FL_ALIGN_TOP_LEFT);
       o->when(FL_WHEN_NEVER);
     }
@@ -59,7 +64,7 @@ Fl_Window* make_code_panel() {
     w = o;
     { Fl_Input* o = code_input = new Fl_Input(6, 5, 280, 135);
       o->type(4);
-      o->labelsize(12);
+      o->label_size(12);
       o->align(FL_ALIGN_CENTER);
       o->when(FL_WHEN_NEVER);
       Fl_Group::current()->resizable(o);
@@ -91,7 +96,7 @@ Fl_Window* make_codeblock_panel() {
   { Fl_Window* o = codeblock_panel = new Fl_Window(293, 134, "codeblock");
     w = o;
     { Fl_Input* o = code_before_input = new Fl_Input(10, 5, 275, 25);
-      o->labelsize(12);
+      o->label_size(12);
       o->align(FL_ALIGN_TOP_LEFT);
       o->when(FL_WHEN_NEVER);
       Fl_Group::current()->resizable(o);
@@ -100,7 +105,7 @@ Fl_Window* make_codeblock_panel() {
       o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
     }
     { Fl_Input* o = code_after_input = new Fl_Input(10, 65, 275, 25);
-      o->labelsize(12);
+      o->label_size(12);
       o->align(FL_ALIGN_TOP_LEFT);
       o->when(FL_WHEN_NEVER);
     }
@@ -131,7 +136,7 @@ Fl_Window* make_declblock_panel() {
   { Fl_Window* o = declblock_panel = new Fl_Window(293, 134, "declaration block");
     w = o;
     { Fl_Input* o = decl_before_input = new Fl_Input(15, 10, 275, 25);
-      o->labelsize(12);
+      o->label_size(12);
       o->align(FL_ALIGN_TOP_LEFT);
       o->when(FL_WHEN_NEVER);
       Fl_Group::current()->resizable(o);
@@ -140,7 +145,7 @@ Fl_Window* make_declblock_panel() {
       o->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
     }
     { Fl_Input* o = decl_after_input = new Fl_Input(15, 70, 275, 25);
-      o->labelsize(12);
+      o->label_size(12);
       o->align(FL_ALIGN_TOP_LEFT);
       o->when(FL_WHEN_NEVER);
     }
@@ -171,13 +176,13 @@ Fl_Window* make_decl_panel() {
   { Fl_Window* o = decl_panel = new Fl_Window(290, 176, "declaration");
     w = o;
     { Fl_Light_Button* o = decl_public_button = new Fl_Light_Button(10, 15, 65, 25, "public");
-      o->labelsize(10);
+      o->label_size(10);
       o->when(FL_WHEN_NEVER);
     }
-    { Fl_Input* o = decl_input = new Fl_Input(10, 50, 270, 25, "can be any declartion, like \"int x;\",\nan external symbol like \"extern \
-int foo();\",\na #directive like \"#include <foo.h>\",\nor a comment like \"\
-//foo\" or \"/*foo*/\"");
-      o->labelsize(12);
+    { Fl_Input* o = decl_input = new Fl_Input(10, 50, 270, 25, "can be any declartion, like \"int x;\",\nan external symbol like \"extern int\
+ foo();\",\na #directive like \"#include <foo.h>\",\nor a comment like \"//foo\
+\" or \"/*foo*/\"");
+      o->label_size(12);
       o->align(FL_ALIGN_BOTTOM_LEFT);
       o->when(FL_WHEN_NEVER);
       Fl_Group::current()->resizable(o);
@@ -210,17 +215,17 @@ Fl_Window* make_class_panel() {
   { Fl_Window* o = class_panel = new Fl_Window(287, 173, "class");
     w = o;
     { Fl_Light_Button* o = c_public_button = new Fl_Light_Button(10, 10, 65, 25, "public");
-      o->labelsize(10);
+      o->label_size(10);
       o->when(FL_WHEN_NEVER);
     }
     { Fl_Input* o = c_name_input = new Fl_Input(10, 55, 270, 25, "name:");
-      o->labelsize(12);
+      o->label_size(12);
       o->align(FL_ALIGN_TOP_LEFT);
       o->when(FL_WHEN_NEVER);
       Fl_Group::current()->resizable(o);
     }
     { Fl_Input* o = c_subclass_input = new Fl_Input(10, 100, 270, 25, "subclass of (text between : and {)");
-      o->labelsize(12);
+      o->label_size(12);
       o->align(FL_ALIGN_TOP_LEFT);
       o->when(FL_WHEN_NEVER);
     }

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.H,v 1.11 1999/06/18 14:34:37 carl Exp $"
+// "$Id: Fl_Value_Input.H,v 1.12 1999/08/16 07:30:53 bill Exp $"
 //
 // Value input header file for the Fast Light Tool Kit (FLTK).
 //
@@ -33,34 +33,16 @@ class Fl_Value_Input : public Fl_Valuator {
 public:
   Fl_Input input;
 
-  virtual void loadstyle() const { input.loadstyle(); }
   int handle(int);
   void draw();
   Fl_Value_Input(int x,int y,int w,int h,const char *l=0);
-  ~Fl_Value_Input() { _style = 0; } // so that it doesn't get free()ed twice!
+  ~Fl_Value_Input();
 
   void soft(char x) {soft_ = x;}
   char soft() const {return soft_;}
 
-  int is_style_forced(Fl_Widget::Attribute a) const
-    { return Fl_Widget::is_style_forced(a); }
-  int is_style_forced(Fl_Input_::Attribute a) const
-    { return input.is_style_forced(a); }
-
-  Fl_Font textfont() const {return input.textfont();}
-  void textfont(uchar s) {input.textfont(s);}
-
-  uchar textsize() const {return input.textsize();}
-  void textsize(uchar s) {input.textsize(s);}
-
-  Fl_Color textcolor() const {return input.textcolor();}
-  void textcolor(uchar n) {input.textcolor(n);}
-
-  Fl_Color cursor_color() const {return input.cursor_color();}
-  void cursor_color(uchar n) {input.cursor_color(n);}
-
 protected:
-  void resize(int, int, int, int);
+  void layout();
 
 private:
   char soft_;
@@ -71,5 +53,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Value_Input.H,v 1.11 1999/06/18 14:34:37 carl Exp $".
+// End of "$Id: Fl_Value_Input.H,v 1.12 1999/08/16 07:30:53 bill Exp $".
 //

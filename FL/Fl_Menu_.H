@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.H,v 1.15 1999/07/31 21:27:53 carl Exp $"
+// "$Id: Fl_Menu_.H,v 1.16 1999/08/16 07:30:51 bill Exp $"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,38 +31,14 @@
 #endif
 #include "Fl_Menu_Item.H"
 
-#define MENU_STYLE ((Fl_Menu_::Style*)_style)
+extern int fl_old_shortcut(const char*);
 
 class Fl_Menu_ : public Fl_Widget {
 public:
-  enum Attribute {
-    TEXTFONT = 0,
-    TEXTSIZE,
-    TEXTCOLOR,
-    DOWN_BOX,
-    MA_END
-  };
-
-  struct Style : public Fl_Widget::Style {
-    uchar menu_[MA_END];
-    uchar sbf;
-
-    Style();
-    uchar& menu(Attribute a) { return menu_[a]; }
-  };
-
-  int is_style_forced(Fl_Widget::Attribute a) const
-    { return Fl_Widget::is_style_forced(a); }
-  int is_style_forced(Attribute a) const
-    { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
-
-  void copy_style(Fl_Menu_* o)
-    { mstyle(&_style); *((Style*)_style) = *((Style*)o->style()); }
 
   Fl_Menu_(int,int,int,int,const char * =0);
   ~Fl_Menu_();
 
-  virtual void loadstyle() const;
   const Fl_Menu_Item* test_shortcut() {return picked(menu()->test_shortcut());}
   void global();
 
@@ -87,12 +63,12 @@ public:
   void shortcut(int i, int s) {menu_[i].shortcut(s);}
   void shortcut(Fl_Menu_Item* m, int s) { shortcut(index(m), s); }
   void shortcut(const char* l, int s) { shortcut(index(l), s); }
-  void mode(int i,int x) {menu_[i].flags = x;}
+  void mode(int i,int x) {menu_[i].flags_ = x;}
   void mode(Fl_Menu_Item* m, int x) { mode(index(m), x); }
   void mode(const char* l, int x) { mode(index(l), x); }
-  int  mode(int i) const {return menu_[i].flags;}
-  int  mode(Fl_Menu_Item* m) const { return mode(index(m)); }
-  int  mode(const char* l) const { return mode(index(l)); }
+  unsigned mode(int i) const {return menu_[i].flags_;}
+  unsigned mode(Fl_Menu_Item* m) const { return mode(index(m)); }
+  unsigned mode(const char* l) const { return mode(index(l)); }
   const Fl_Menu_Item *mvalue() const {return value_;}
   int value() const {return value_-menu_;}
   int value(const Fl_Menu_Item*);
@@ -101,39 +77,16 @@ public:
   const char *text(int i) const {return menu_[i].text;}
   const Fl_Menu_Item* picked(const Fl_Menu_Item*);
 
-  Fl_Font textfont() const;
-  void textfont(uchar s);
-
-  uchar textsize() const;
-  void textsize(uchar s);
-
-  Fl_Color textcolor() const;
-  void textcolor(uchar n);
-
-  Fl_Boxtype down_box() const;
-  void down_box(Fl_Boxtype b);
-
-  // back compatability:
-  Fl_Color down_color() const;
-  void down_color(uchar c);
-
 protected:
   uchar alloc;
-  static Fl_Widget::Style* _default_style;
-
-  virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
-  virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
 
 private:
   Fl_Menu_Item *menu_;
   const Fl_Menu_Item *value_;
-
-  uchar attr(Attribute) const;
-  void attr(Attribute, uchar);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Menu_.H,v 1.15 1999/07/31 21:27:53 carl Exp $".
+// End of "$Id: Fl_Menu_.H,v 1.16 1999/08/16 07:30:51 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_file_chooser.cxx,v 1.12 1999/05/06 05:52:23 carl Exp $"
+// "$Id: fl_file_chooser.cxx,v 1.13 1999/08/16 07:31:27 bill Exp $"
 //
 // File chooser widget for the Fast Light Tool Kit (FLTK).
 //
@@ -190,9 +190,8 @@ void FCB::item_draw(void* v, int x, int y, int, int h) const {
   const dirent* p = *(const dirent**)v;
   const char* e = end_of_name(p);
   if (checkdir(p, (char*)e)) e++;
-  if (v == selection()) fl_color(selected_textcolor());
-  else fl_color(textcolor());
-  fl_font(textfont(), textsize());
+  fl_color((v == selection()) ? selection_text_color() : text_color());
+  fl_font(text_font(), text_size());
   fl_draw(p->d_name, e-p->d_name, x+4, y+h*3/4);
 }
 
@@ -349,8 +348,7 @@ void FCB::draw() {
     if (full_height() > 0) return;
     message = "No matching files";
   }
-  Fl_Boxtype b = box(); if (!b) b = FL_DOWN_BOX;
-  draw_box(b,color());
+  draw_box();
   fl_color(FL_INACTIVE_COLOR);
   fl_font(textfont(), textsize());
   fl_draw(message, x()+7, y()+3, w(), h()*3/4, FL_ALIGN_TOP_LEFT);
@@ -622,5 +620,5 @@ char* fl_file_chooser(const char* message, const char* pat, const char* fname)
 }
 
 //
-// End of "$Id: fl_file_chooser.cxx,v 1.12 1999/05/06 05:52:23 carl Exp $".
+// End of "$Id: fl_file_chooser.cxx,v 1.13 1999/08/16 07:31:27 bill Exp $".
 //

@@ -8,8 +8,7 @@ snap 3
 Function {callback(Fl_Widget* o, void*)} {open private return_type void
 } {
   code {printf("%g     \\r", ((Fl_Valuator*)o)->value());
-fflush(stdout);} {selected
-  }
+fflush(stdout);} {}
 } 
 
 Function {} {open
@@ -155,8 +154,8 @@ Function {} {open
       xywh {10 445 140 50} box ENGRAVED_BOX labelfont 1 align 17
     }
     Fl_Box {} {
-      label {Some widgets have color(FL_GREEN) and color2(FL_RED) to show the areas these effect.}
-      xywh {455 375 100 120} box BORDER_FRAME color 0 selection_color 0 labelsize 10 align 128
+      label {Some widgets have color(FL_GREEN) and color2(FL_RED) to show the areas these effect.} selected
+      xywh {455 375 100 120} box BORDER_FRAME color 43 labelsize 10 align 128
     }
     Fl_Box {} {
       label Fl_Value_Output

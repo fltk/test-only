@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.17 1999/06/20 15:24:29 mike Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.18 1999/08/16 07:31:13 bill Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -25,10 +25,8 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
-#include <FL/Fl_Browser_.H>
+#include <FL/Fl_Browser.H>
 #include <FL/fl_draw.H>
-
-#define DEFAULT_STYLE ((Style*)default_style())
 
 // This is the base class for browsers.  To be useful it must be
 // subclassed and several virtual functions defined.  The
@@ -65,41 +63,12 @@ static void hscrollbar_callback(Fl_Widget* s, void*) {
 
 int Fl_Browser_::scrollbar_width_ = 17;
 
-
-void Fl_Browser_::loadstyle() const {
-  if (!Fl::s_browser) {
-    Fl::s_browser = 1;
-
-    static Fl::Attribute widget_attributes[] = {
-      { "label color", LABELCOLOR },
-      { "label size", LABELSIZE },
-      { "label type", LABELTYPE },
-      { "label font", LABELFONT },
-      { "color", COLOR },
-      { "selected color", COLOR2 },
-      { "box", BOX },
-      { 0 }
-    };
-    Fl::load_attributes("browser", DEFAULT_STYLE->widget_, widget_attributes);
-
-    static Fl::Attribute browser_attributes[] = {
-      { "text font", TEXTFONT },
-      { "text size", TEXTSIZE },
-      { "text color", TEXTCOLOR },
-      { "selected text color", SELECTED_TEXTCOLOR },
-      { 0 }
-    };
-    Fl::load_attributes("browser", DEFAULT_STYLE->browser_, browser_attributes);
-  }
-}
-
 // return where to draw the actual box:
 void Fl_Browser_::bbox(int& X, int& Y, int& W, int& H) const {
-  Fl_Boxtype b = box() ? box() : FL_DOWN_BOX;
-  X = x()+Fl::box_dx(b);
-  Y = y()+Fl::box_dy(b);
-  W = w()-Fl::box_dw(b);
-  H = h()-Fl::box_dh(b);
+  X = x()+box()->dx();
+  Y = y()+box()->dy();
+  W = w()-box()->dw();
+  H = h()-box()->dh();
   if (scrollbar.visible()) {
     W -= scrollbar_width_;
     if (scrollbar.align() & FL_ALIGN_LEFT) X += scrollbar_width_;
@@ -255,8 +224,7 @@ void Fl_Browser_::display(void* x) {
 void Fl_Browser_::draw() {
   int drawsquare = 0;
   if (damage() & FL_DAMAGE_ALL) { // redraw the box if full redraw
-    Fl_Boxtype b = box() ? box() : FL_DOWN_BOX;
-    draw_box(b, x(), y(), w(), h(), color());
+    draw_box();
     drawsquare = 1;
   }
 
@@ -316,7 +284,7 @@ J1:
 	fl_rectf(X, yy+Y, W, hh);
       }
       if (type() == FL_MULTI_BROWSER && l == selection_) {
-	fl_color(textcolor());
+	fl_color(item_selected(l) ? selection_text_color() : text_color());
 	fl_rect(X+1, yy+Y, W-2, hh);
       }
       item_draw(l, X-hposition_, yy+Y, W+hposition_, hh);
@@ -621,26 +589,14 @@ int Fl_Browser_::handle(int event) {
   return 0;
 }
 
-Fl_Widget::Style* Fl_Browser_::_default_style = 0;
-
-Fl_Browser_::Style::Style() : Fl_Widget::Style() {
-  sbf = 0;
-
-  widget(COLOR) = FL_WHITE;
-  widget(COLOR2) = 15;
-  widget(BOX) = FL_MEDIUM_DOWN_BOX;
-
-  browser(TEXTFONT) = FL_COURIER;
-  browser(TEXTSIZE) = 14;
-  browser(TEXTCOLOR) = FL_BLACK;
-  browser(SELECTED_TEXTCOLOR) = FL_BLACK;
-}
+#include <FL/Fl_Output.H>
 
 Fl_Browser_::Fl_Browser_(int x, int y, int w, int h, const char* l)
   : Fl_Group(x, y, w, h, l),
     scrollbar(0, 0, 0, 0, 0), // they will be resized by draw()
     hscrollbar(0, 0, 0, 0, 0)
 {
+  style(Fl_Output::default_style);
   align(FL_ALIGN_BOTTOM);
   position_ = real_position_ = 0;
   hposition_ = real_hposition_ = 0;
@@ -684,18 +640,6 @@ void Fl_Browser_::item_select(void*, int) {}
 
 int Fl_Browser_::item_selected(void* l) const {return l==selection_;}
 
-uchar Fl_Browser_::attr(Attribute a) const {
-  loadstyle();
-  if (!_style || !(BROWSER_STYLE->sbf & bf(a)))
-    return DEFAULT_STYLE->browser(a);
-  return BROWSER_STYLE->browser(a);
-}
-
-Fl_Font Fl_Browser_::textfont() const { return (Fl_Font)attr(TEXTFONT); }
-uchar Fl_Browser_::textsize() const { return attr(TEXTSIZE); }
-Fl_Color Fl_Browser_::textcolor() const { return (Fl_Color)attr(TEXTCOLOR); }
-Fl_Color Fl_Browser_::selected_textcolor() const { return (Fl_Color)attr(SELECTED_TEXTCOLOR); }
-
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.17 1999/06/20 15:24:29 mike Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.18 1999/08/16 07:31:13 bill Exp $".
 //

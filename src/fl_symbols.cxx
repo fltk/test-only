@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.8 1999/02/22 22:09:17 mike Exp $"
+// "$Id: fl_symbols.cxx,v 1.9 1999/08/16 07:31:30 bill Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,6 @@
 // Version 2.1 a
 // Date: Oct  2, 1992
 
-#include <FL/Fl.H>
 #include <FL/fl_draw.H>
 #include <string.h>
 
@@ -157,10 +156,8 @@ int fl_draw_symbol(const char *label,int x,int y,int w,int h,Fl_Color col) {
 #define EC fl_end_loop()
 #define vv(x,y) fl_vertex(x,y)
 
-//for the outline color
-static void set_outline_color(Fl_Color c) {
-  fl_color(fl_color_average(c, FL_BLACK, .5));
-}
+// for the outline color (removed in fltk 2.0):
+#define set_outline_color(c)
 
 static void rectangle(double x,double y,double x2,double y2,Fl_Color col) {
   fl_color(col);
@@ -362,26 +359,27 @@ static void fl_init_symbols(void) {
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Widget.H>
+#include <FL/Fl_Labeltype.H>
 
-// this is the labeltype function:
-extern void fl_normal_label(const Fl_Label*, int, int, int, int, Fl_Align);
-static void fl_symbol_label(
-    const Fl_Label* o, int x, int y, int w, int h, Fl_Align align)
+static void fl_symbol_label_draw(Fl_Labeltype, const char* label,
+				 int X, int Y, int W, int H,
+				 Fl_Color fill, Fl_Flags align)
 {
-  if (!fl_draw_symbol(o->value, x, y, w, h, (Fl_Color)o->color))
-    fl_normal_label(o, x, y, w, h, align);
+  if (align & FL_INACTIVE) fill = fl_inactive(fill);
+  if (!fl_draw_symbol(label, X, Y, W, H, fill)) {
+    fl_color(fill);
+    fl_draw(label, X, Y, W, H, align);
+  }
 }
 
-Fl_Labeltype define_FL_SYMBOL_LABEL() {
-  Fl::set_labeltype(_FL_SYMBOL_LABEL, fl_symbol_label, 0);
-  return _FL_SYMBOL_LABEL;
-}
+const Fl_Labeltype_ fl_symbol_label = {fl_symbol_label_draw, 0};
+
+#include <FL/Fl.H>
 
 void Fl::enable_symbols() {
-  Fl::set_labeltype(FL_NORMAL_LABEL, fl_symbol_label, 0);
+  fl_normal_label.draw_ = fl_symbol_label_draw;
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.8 1999/02/22 22:09:17 mike Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.9 1999/08/16 07:31:30 bill Exp $".
 //

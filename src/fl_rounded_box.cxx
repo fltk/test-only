@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rounded_box.cxx,v 1.4 1999/01/07 19:17:41 mike Exp $"
+// "$Id: fl_rounded_box.cxx,v 1.5 1999/08/16 07:31:29 bill Exp $"
 //
 // Rounded box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -23,7 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
+#include <FL/Fl_Boxtype.H>
 #include <FL/fl_draw.H>
 
 #define RN	5
@@ -52,46 +52,40 @@ static void rbox(int fill, int x, int y, int w, int h) {
   if (fill) fl_end_polygon(); else fl_end_loop();
 }
 
-static void fl_rflat_box(int x, int y, int w, int h, Fl_Color c) {
+static void rflat_draw(Fl_Boxtype, int x, int y, int w, int h,
+		       Fl_Color c, Fl_Flags)
+{
   fl_color(c); rbox(1, x, y, w, h); rbox(0, x, y, w, h);
 }
+const Fl_Boxtype_ fl_rflat_box = {
+  rflat_draw, 0, 0, 7,7,14,14
+};
 
-static void fl_rounded_frame(int x, int y, int w, int h, Fl_Color c) {
-  fl_color(c); rbox(0, x, y, w, h);
-}
-
-static void fl_rounded_box(int x, int y, int w, int h, Fl_Color c) {
+static void rounded_draw(Fl_Boxtype, int x, int y, int w, int h,
+			 Fl_Color c, Fl_Flags f)
+{
   fl_color(c); rbox(1, x, y, w, h);
-  fl_color(FL_BLACK); rbox(0, x, y, w, h);
+  fl_color((f&FL_INACTIVE) ? FL_INACTIVE_COLOR : FL_NO_COLOR);
+  rbox(0, x, y, w, h);
 }
+const Fl_Boxtype_ fl_rounded_box = {
+  rounded_draw, 0, 0, 1,1,2,2
+};
 
-static void fl_rshadow_box(int x, int y, int w, int h, Fl_Color c) {
+static void rshadow_draw(Fl_Boxtype b, int x, int y, int w, int h,
+			 Fl_Color c, Fl_Flags f)
+{
   // draw shadow:
   fl_color(FL_DARK3);
   rbox(1, x+BW, y+BW, w, h);
   rbox(0, x+BW, y+BW, w, h);
   // draw the box:
-  fl_rounded_box(x, y, w, h, c);
+  rounded_draw(b, x, y, w, h, c, f);
 }
-
-extern void fl_internal_boxtype(Fl_Boxtype, Fl_Box_Draw_F*);
-
-Fl_Boxtype define_FL_ROUNDED_BOX() {
-  fl_internal_boxtype(_FL_ROUNDED_FRAME, fl_rounded_frame);
-  fl_internal_boxtype(_FL_ROUNDED_BOX, fl_rounded_box);
-  return _FL_ROUNDED_BOX;
-}
-
-Fl_Boxtype define_FL_RFLAT_BOX() {
-  fl_internal_boxtype(_FL_RFLAT_BOX, fl_rflat_box);
-  return _FL_RFLAT_BOX;
-}
-
-Fl_Boxtype define_FL_RSHADOW_BOX() {
-  fl_internal_boxtype(_FL_RSHADOW_BOX, fl_rshadow_box);
-  return _FL_RSHADOW_BOX;
-}
+const Fl_Boxtype_ fl_rshadow_box = {
+  rshadow_draw, 0, 0, 1,1,2,2
+};
 
 //
-// End of "$Id: fl_rounded_box.cxx,v 1.4 1999/01/07 19:17:41 mike Exp $".
+// End of "$Id: fl_rounded_box.cxx,v 1.5 1999/08/16 07:31:29 bill Exp $".
 //

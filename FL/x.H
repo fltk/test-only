@@ -1,5 +1,5 @@
 //
-// "$Id: x.H,v 1.11 1999/06/15 17:02:27 gustavo Exp $"
+// "$Id: x.H,v 1.12 1999/08/16 07:30:55 bill Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,7 @@
 #ifndef Fl_X_H
 #define Fl_X_H
 
-#include "Enumerations.H"
+#include "Fl_Color.H"
 
 #ifdef WIN32
 
@@ -42,7 +42,6 @@
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #include <X11/Xatom.h>
-#include "Fl_Window.H"
 
 FL_EXPORT void fl_open_display();
 FL_EXPORT void fl_close_display();
@@ -58,7 +57,6 @@ extern FL_EXPORT GC fl_gc;
 extern FL_EXPORT Window fl_window;
 extern FL_EXPORT XFontStruct* fl_xfont;
 FL_EXPORT ulong fl_xpixel(Fl_Color i);
-FL_EXPORT ulong fl_xpixel(uchar r, uchar g, uchar b);
 FL_EXPORT void fl_clip_region(Region);
 FL_EXPORT Region XRectangleRegion(int x, int y, int w, int h); // in fl_rect.cxx
 
@@ -82,6 +80,18 @@ extern FL_EXPORT ulong fl_event_time;
 #define fl_copy_offscreen(x,y,w,h,pixmap,srcx,srcy) \
   XCopyArea(fl_display, pixmap, fl_window, fl_gc, srcx, srcy, w, h, x, y)
 #define fl_delete_offscreen(pixmap) XFreePixmap(fl_display, pixmap)
+
+// binary images, created from in-memory data:
+// See Fl_Image::_draw() for code that uses these.
+static inline ulong fl_create_bitmap(const uchar* bitmap, int w, int h) {
+  return XCreateBitmapFromData(fl_display, fl_window,
+			       (const char*)bitmap, (w+7)&-8, h);
+}
+#define fl_delete_bitmap(bitmap) XFreePixmap(fl_display, bitmap)
+
+// Try to fix this so only "class Fl_Window" is needed:
+//class Fl_Window;
+#include "Fl_Window.H"
 
 // this object contains all X-specific stuff about a window:
 // Warning: this object is highly subject to change!  It's definition
@@ -119,5 +129,5 @@ extern FL_EXPORT int fl_background_pixel;  // hack into Fl_X::make_xid()
 #endif
 
 //
-// End of "$Id: x.H,v 1.11 1999/06/15 17:02:27 gustavo Exp $".
+// End of "$Id: x.H,v 1.12 1999/08/16 07:30:55 bill Exp $".
 //

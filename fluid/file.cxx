@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.8 1999/03/31 14:52:33 mike Exp $"
+// "$Id: file.cxx,v 1.9 1999/08/16 07:31:08 bill Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -155,11 +155,6 @@ int close_read() {
 void read_error(const char *format, ...) {
   va_list args;
   va_start(args, format);
-  
-    fprintf(stderr, "%s:%d: ", fname, lineno);
-    vfprintf(stderr, format, args);
-    fprintf(stderr, "\n");
-
   if (!fin) {
     char buffer[1024];
     vsprintf(buffer, format, args);
@@ -597,5 +592,5 @@ void read_fdesign() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.8 1999/03/31 14:52:33 mike Exp $".
+// End of "$Id: file.cxx,v 1.9 1999/08/16 07:31:08 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.12 1999/04/10 14:13:45 carl Exp $"
+// "$Id: Fl_Type.cxx,v 1.13 1999/08/16 07:31:03 bill Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -130,7 +130,7 @@ extern const char* subclassname(Fl_Type*);
 void Widget_Browser::item_draw(void *v, int x, int y, int, int h) const {
   Fl_Type *l = (Fl_Type *)v;
   x += 3 + l->level * 10;
-  fl_color(item_selected(v) ? selected_textcolor() : textcolor());
+  fl_color(item_selected(v) ? selection_text_color() : textcolor());
   if (l->is_parent()) {
     if (!l->next || l->next->level <= l->level) {
       if (l->open_!=(l==pushedtitle)) {
@@ -155,7 +155,7 @@ void Widget_Browser::item_draw(void *v, int x, int y, int, int h) const {
     x += int(fl_width(c)+fl_width('n'));
     c = l->name();
     if (c) {
-      fl_font(textfont()|FL_BOLD, textsize());
+      fl_font(textfont()->bold, textsize());
       fl_draw(c, x, y+h*3/4);
     } else if ((c=l->label())) {
       char buf[50]; char* p = buf;
@@ -178,7 +178,8 @@ void Widget_Browser::item_draw(void *v, int x, int y, int, int h) const {
     }
     if (*c) {strcpy(p,"..."); p+=3;}
     *p = 0;
-    fl_font(textfont() | (l->is_code_block() && (l->level==0 || l->parent->is_class())?0:FL_BOLD), textsize());
+    fl_font(l->is_code_block() && (l->level==0 || l->parent->is_class())
+	     ? textfont() : textfont()->bold, textsize());
     fl_draw(buf, x, y+h*3/4);
   }
 }
@@ -198,7 +199,7 @@ int Widget_Browser::item_width(void *v) const {
     w += int(fl_width(c) + fl_width('n'));
     c = l->name();
     if (c) {
-      fl_font(textfont()|FL_BOLD, textsize());
+      fl_font(textfont()->bold, textsize());
       w += int(fl_width(c));
     } else if ((c=l->label())) {
       char buf[50]; char* p = buf;
@@ -221,7 +222,8 @@ int Widget_Browser::item_width(void *v) const {
     }
     if (*c) {strcpy(p,"..."); p+=3;}
     *p = 0;
-    fl_font(textfont() | (l->is_code_block() && (l->level==0 || l->parent->is_class())?0:FL_BOLD), textsize());
+    fl_font(l->is_code_block() && (l->level==0 || l->parent->is_class())
+	    ? textfont() : textfont()->bold, textsize());
     w += int(fl_width(buf));
   }
 
@@ -498,7 +500,6 @@ int Fl_Type::is_scrollbar() const {return 0;}
 int Fl_Type::is_choice() const {return 0;}
 int Fl_Type::is_browser() const {return 0;}
 int Fl_Type::is_input() const {return 0;}
-int Fl_Type::is_menu() const {return 0;}
 int Fl_Type::is_value_input() const {return 0;}
 int Fl_Type::is_value_output() const {return 0;}
 int Fl_Type::is_value_slider() const {return 0;}
@@ -672,5 +673,5 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.12 1999/04/10 14:13:45 carl Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.13 1999/08/16 07:31:03 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.17 1999/05/06 05:52:14 carl Exp $"
+// "$Id: Fl_Choice.cxx,v 1.18 1999/08/16 07:31:14 bill Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,85 +27,29 @@
 #include <FL/Fl_Choice.H>
 #include <FL/fl_draw.H>
 
-#define DEFAULT_STYLE ((Style*)default_style())
-
 // Emulates the Forms choice widget.  This is almost exactly the same
 // as an Fl_Menu_Button.  The only difference is the appearance of the
 // button: it draws the text of the current pick and a down-arrow.
 
 extern char fl_draw_shortcut;
 
-void Fl_Choice::loadstyle() const {
-  if (!Fl::s_choice) {
-    Fl::s_choice = 1;
-
-    static Fl::Attribute widget_attributes[] = {
-      { "label color", LABELCOLOR },
-      { "label size", LABELSIZE },
-      { "label type", LABELTYPE },
-      { "label font", LABELFONT },
-      { "color", COLOR },
-      { "down color", COLOR2 },
-      { "box", BOX },
-      { 0 }
-    };
-    Fl::load_attributes("choice", DEFAULT_STYLE->widget_, widget_attributes);
-
-    static Fl::Attribute menu_attributes[] = {
-      { "down box", DOWN_BOX },
-      { "text font", TEXTFONT },
-      { "text size", TEXTSIZE },
-      { "text color", TEXTCOLOR },
-      { 0 }
-    };
-    Fl::load_attributes("choice", DEFAULT_STYLE->menu_, menu_attributes);
-
-    static Fl::Attribute choice_attributes[] = {
-      { "highlight color", FLY_COLOR },
-      { "highlight box", FLY_BOX },
-      { 0 }
-    };
-    Fl::load_attributes("choice", DEFAULT_STYLE->choice_, choice_attributes);
-  }
-}
-
 void Fl_Choice::draw() {
-  Fl_Color col;
-  Fl_Boxtype bt;
-  if (fly_box() && Fl::belowmouse() == this)
-    { bt = fly_box(); col = fly_color(); }
-  else
-    { bt = box(); col = color(); }
-  draw_box(bt, col);
-  if (box() == FL_FLAT_BOX) return; // for XForms compatability
+  draw_button();
+  // draw the tick mark:
   int H = labelsize()/2+1;
-  draw_box(FL_THIN_UP_BOX,x()+w()-3*H,y()+(h()-H)/2,2*H,H,col);
+  FL_THIN_UP_BOX->draw(x()+w()-3*H, y()+(h()-H)/2, 2*H, H,
+		       color(), FL_FRAME_ONLY);
   if (mvalue()) {
     // Shouldn't do this, but we can handle it
     Fl_Menu_Item m = *mvalue();
     if (active_r()) m.activate(); else m.deactivate();
-    int BW = Fl::box_dx(box());
     fl_clip(x(), y(), w()-3*H, h());
     fl_draw_shortcut = 2; // hack value to make '&' disappear
-    m.draw(x()+BW, y(), w()-2*BW-3*H, h(), this);
+    Fl_Boxtype b = box();
+    m.draw(x()+b->dx(), y()+b->dy(), w()-b->dw()-3*H, h()-b->dh(), this);
     fl_draw_shortcut = 0;
-    m._style = 0; // so that the real menu item's style doesn't get deallocated
     fl_pop_clip();
   }
-  draw_label();
-}
-
-Fl_Widget::Style* Fl_Choice::_default_style = 0;
-
-Fl_Choice::Style::Style() : Fl_Menu_::Style() {
-  sbf = 0;
-
-  widget(BOX) = FL_MEDIUM_UP_BOX;
-
-  menu(TEXTSIZE) = 14;
-
-  choice(FLY_COLOR) = 51;
-  choice(FLY_BOX) = FL_MEDIUM_UP_BOX;
 }
 
 Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,l) {
@@ -124,7 +68,7 @@ int Fl_Choice::handle(int e) {
   const Fl_Menu_Item* v;
   switch (e) {
   case FL_PUSH:
-    Fl::event_is_click(0);
+    //Fl::event_is_click(0);
   J1:
     v = menu()->pulldown(x(), y(), w(), h(), mvalue(), this);
     if (!v || v->submenu()) return 1;
@@ -140,28 +84,13 @@ int Fl_Choice::handle(int e) {
     return 1;
   case FL_ENTER:
   case FL_LEAVE:
-    if (takesevents() && fly_box()) redraw();
+    if (highlight_color() && active_r()) redraw();
     return 1;
   default:
     return 0;
   }
 }
 
-uchar Fl_Choice::attr(Attribute a) const {
-  loadstyle();
-  if (!_style || !(CHOICE_STYLE->sbf & bf(a)))
-    return DEFAULT_STYLE->choice(a);
-  return CHOICE_STYLE->choice(a);
-}
-
-Fl_Boxtype Fl_Choice::fly_box() const {
-  if (_style && (WIDGET_STYLE->sbf & bf(BOX)) && !(CHOICE_STYLE->sbf & bf(FLY_BOX)))
-    return (Fl_Boxtype)WIDGET_STYLE->widget(BOX);
-  return (Fl_Boxtype)attr(FLY_BOX);
-}
-
-Fl_Color Fl_Choice::fly_color() const {  return (Fl_Color)attr(FLY_COLOR); }
-
 //
-// End of "$Id: Fl_Choice.cxx,v 1.17 1999/05/06 05:52:14 carl Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.18 1999/08/16 07:31:14 bill Exp $".
 //

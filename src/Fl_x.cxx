@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.28 1999/06/20 15:24:32 mike Exp $"
+// "$Id: Fl_x.cxx,v 1.29 1999/08/16 07:31:24 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -278,14 +278,18 @@ void fl_close_display() {
   XCloseDisplay(fl_display);
 }
 
-int Fl::h() {
-  fl_open_display();
-  return DisplayHeight(fl_display,fl_screen);
-}
+int Fl::x() {return 0;}
+
+int Fl::y() {return 0;}
 
 int Fl::w() {
   fl_open_display();
   return DisplayWidth(fl_display,fl_screen);
+}
+
+int Fl::h() {
+  fl_open_display();
+  return DisplayHeight(fl_display,fl_screen);
 }
 
 void Fl::get_mouse(int &x, int &y) {
@@ -343,7 +347,6 @@ static inline void checkdouble() {
 }
 
 ////////////////////////////////////////////////////////////////
-static Fl_Window* resize_bug_fix;
 
 int fl_handle(const XEvent& xevent)
 {
@@ -537,10 +540,9 @@ int fl_handle(const XEvent& xevent)
     // So anyway, do a round trip to find the correct x,y:
     Window r, c; int X, Y, wX, wY; unsigned int m;
     XQueryPointer(fl_display, fl_xid(window), &r, &c, &X, &Y, &wX, &wY, &m);
-    resize_bug_fix = window;
-    window->resize(X-wX, Y-wY,
-		   xevent.xconfigure.width, xevent.xconfigure.height);
-    Fl_X::i(window)->layout();
+    window->resize_from_system(X-wX, Y-wY,
+			       xevent.xconfigure.width,
+			       xevent.xconfigure.height);
     return 1;}
   }
 
@@ -549,24 +551,29 @@ int fl_handle(const XEvent& xevent)
 
 ////////////////////////////////////////////////////////////////
 
-void Fl_Window::layout() {
-  int is_a_resize = (ow() != w() || oh() != h());
-  int resize_from_program = (this != resize_bug_fix);
-  if (!resize_from_program) resize_bug_fix = 0;
-  if (ox() != x() || oy() != y()) set_flag(FL_FORCE_POSITION);
-  else if (!is_a_resize) {Fl_Widget::layout();return;}
-  if (is_a_resize) {
+void Fl_Window::resize_from_system(int X, int Y, int W, int H) {
+  if (W == w() && H == h()) {
+    x(X); y(Y);
+    set_old_size();
+  } else {
+    resize(X, Y, W, H);
     Fl_Group::layout();
     if (shown()) {redraw(); i->wait_for_expose = 1;}
-  } else {
-    Fl_Widget::layout(); set_old_size();
   }
-  if (resize_from_program && shown()) {
-    if (is_a_resize)
+}
+
+void Fl_Window::layout() {
+  if (ox() != x() || oy() != y()) set_flag(FL_FORCE_POSITION);
+  if (ow() == w() && oh() == h()) {
+    Fl_Widget::layout(); set_old_size();
+    if (shown()) XMoveWindow(fl_display, i->xid, x(), y());
+  } else {
+    Fl_Group::layout();
+    if (shown()) {
       XMoveResizeWindow(fl_display, i->xid, x(), y(),
                         w()>0 ? w() : 1, h()>0 ? h() : 1);
-    else
-      XMoveWindow(fl_display, i->xid, x(), y());
+      redraw(); i->wait_for_expose = 1;
+    }
   }
 }
 
@@ -828,24 +835,23 @@ void Fl_Window::label(const char *name,const char *iname) {
 ////////////////////////////////////////////////////////////////
 // Implement the virtual functions for the base Fl_Window class:
 
-// If the box is a filled rectangle, we can make the redisplay *look*
-// faster by using X's background pixel erasing.  We can make it
-// actually *be* faster by drawing the frame only, this is done by
-// setting fl_boxcheat, which is seen by code in fl_drawbox.C:
+// Display can *look* faster (it isn't really faster) if X's background
+// color is used to erase the window.  In fltk 2.0 the only way to
+// prevent this is to set the box to FL_NO_BOX.
 //
-// On XFree86 (and prehaps all X's) this has a problem if the window
+// Drawing should really be faster if FL_FRAME_ONLY is passed to the
+// box drawing function, since X has already erased the interior.  But
+// on XFree86 (and prehaps all X's) this has a problem if the window
 // is resized while a save-behind window is atop it.  The previous
-// contents are restored to the area, but this assummes the area
-// is cleared to background color.  So this is disabled in this version.
-// Fl_Window *fl_boxcheat;
-static inline int can_boxcheat(uchar b) {return (b==1 || (b&2) && b<=15);}
+// contents are restored to the area, but this assummes the area is
+// cleared to background color.  So I had to give up on this...
 
 void Fl_Window::show() {
   if (!shown()) {
     fl_open_display();
-    if (can_boxcheat(box())) fl_background_pixel = int(fl_xpixel(color()));
+    if (box() != FL_NO_BOX)
+      fl_background_pixel = int(fl_xpixel(color()));
     Fl_X::make_xid(this);
-    sizes();//kludge to allocate the array if the window was not end()ed...
   } else {
     XMapRaised(fl_display, i->xid);
   }
@@ -868,5 +874,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.28 1999/06/20 15:24:32 mike Exp $".
+// End of "$Id: Fl_x.cxx,v 1.29 1999/08/16 07:31:24 bill Exp $".
 //

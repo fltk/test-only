@@ -1,5 +1,5 @@
 //
-// "$Id: win32.H,v 1.16 1999/06/17 20:10:22 gustavo Exp $"
+// "$Id: win32.H,v 1.17 1999/08/16 07:30:55 bill Exp $"
 //
 // WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -59,7 +59,7 @@ inline void XClipBox(Region r,XRectangle* rect) {
 #define XMapWindow(a,b) ShowWindow(b, SW_RESTORE)
 #define XUnmapWindow(a,b) ShowWindow(b, SW_HIDE)
 
-#include "Fl_Window.H"
+class Fl_Window;
 // this object contains all win32-specific stuff about a window:
 // Warning: this object is highly subject to change!
 class Fl_X {
@@ -121,6 +121,11 @@ extern FL_EXPORT HDC fl_makeDC(HBITMAP);
 FL_EXPORT void fl_copy_offscreen(int x,int y,int w,int h,HBITMAP pixmap,int srcx,int srcy);
 #define fl_delete_offscreen(bitmap) DeleteObject(bitmap);
 
+// binary images, created from in-memory data:
+// See Fl_Image::_draw() for code that uses these.
+extern ulong fl_create_bitmap(const uchar* bitmap, int w, int h);
+#define fl_delete_bitmap(bitmap) DeleteObject((HBITMAP)(bitmap));
+
 //
-// End of "$Id: win32.H,v 1.16 1999/06/17 20:10:22 gustavo Exp $".
+// End of "$Id: win32.H,v 1.17 1999/08/16 07:30:55 bill Exp $".
 //

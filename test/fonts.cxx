@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.6 1999/03/14 06:46:45 carl Exp $"
+// "$Id: fonts.cxx,v 1.7 1999/08/16 07:31:35 bill Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -34,16 +34,18 @@
 
 Fl_Window *form;
 
+Fl_Font* fonts;
+
 class FontDisplay : public Fl_Widget {
   void draw();
 public:
-  int font, size;
+  Fl_Font font; int size;
   FontDisplay(Fl_Boxtype B, int X, int Y, int W, int H, const char* L = 0) :
     Fl_Widget(X,Y,W,H,L) {box(B); font = 0; size = 14;}
 };
 void FontDisplay::draw() {
   draw_box();
-  fl_font((Fl_Font)font, size);
+  fl_font(font, size);
   fl_color(FL_BLACK);
   fl_draw(label(), x()+3, y()+3, w()-6, h()-6, align());
 }
@@ -60,7 +62,7 @@ void font_cb(Fl_Widget *, long) {
   int fn = fontobj->value();
   if (!fn) return;
   fn--;
-  textobj->font = fn;
+  textobj->font = fonts[fn];
   sizeobj->clear();
   int n = numsizes[fn];
   int *s = sizes[fn];
@@ -127,12 +129,11 @@ void create_the_forms() {
 
 int main(int argc, char **argv) {
   create_the_forms();
-  int i = fl_choice("Which fonts:","-*","iso8859","All");
-  int k = Fl::set_fonts(i ? (i>1 ? "*" : 0) : "-*");
-  for (i = 0; i < k; i++) {
-    int t; const char *name = Fl::get_font_name((Fl_Font)i,&t);
+  bool everything = fl_ask("Get everything? (if no, only gets text fonts)");
+  int numfonts = fl_list_fonts(fonts, everything);
+  for (int i = 0; i < numfonts; i++) {
+    int t; const char *name = fonts[i]->name(&t);
     char buffer[128];
-#if 1
     if (t) {
       char *p = buffer;
       if (t & FL_BOLD) {*p++ = '@'; *p++ = 'b';}
@@ -140,12 +141,8 @@ int main(int argc, char **argv) {
       strcpy(p,name);
       name = buffer;
     }
-#else // this is neat, but really slow on some X servers:
-    sprintf(buffer, "@F%d@.%s", i, name);
-    name = buffer;
-#endif
     fontobj->add(name);
-    int *s; int n = Fl::get_font_sizes((Fl_Font)i, s);
+    int *s; int n = fonts[i]->sizes(s);
     numsizes[i] = n;
     if (n) {
       sizes[i] = new int[n];
@@ -159,5 +156,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.6 1999/03/14 06:46:45 carl Exp $".
+// End of "$Id: fonts.cxx,v 1.7 1999/08/16 07:31:35 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.15 1999/06/15 17:02:30 gustavo Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.16 1999/08/16 07:31:16 bill Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -255,9 +255,7 @@ void Fl_Gl_Window::flush() {
 
   } else {	// single-buffered context is simpler:
 
-    // this faking of the overlay is incorrect but worked good for
-    // one in-house program:
-    if (overlay != this || damage()!=FL_DAMAGE_OVERLAY || !Fl::pushed()) draw();
+    draw();
     if (overlay == this) draw_overlay();
     glFlush();
 
@@ -314,7 +312,7 @@ Fl_Gl_Window::~Fl_Gl_Window() {
 
 void Fl_Gl_Window::init() {
   end(); // we probably don't want any children
-  box(FL_NO_BOX);
+  //box(FL_NO_BOX);
   mode_ = FL_RGB | FL_DEPTH | FL_DOUBLE;
   alist = 0;
   context = 0;
@@ -328,5 +326,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.15 1999/06/15 17:02:30 gustavo Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.16 1999/08/16 07:31:16 bill Exp $".
 //

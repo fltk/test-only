@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.11 1999/05/06 05:52:14 carl Exp $"
+// "$Id: Fl_Clock.cxx,v 1.12 1999/08/16 07:31:14 bill Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -69,14 +69,13 @@ static void rect(double x, double y, double w, double h) {
 }
 
 void Fl_Clock_Output::draw(int x, int y, int w, int h) {
-  draw_box(box(), x, y, w, h, type()==FL_ROUND_CLOCK ? FL_GRAY : color());
   fl_push_matrix();
   fl_translate(x+w/2.0-.5, y+h/2.0-.5);
   fl_scale((w-1)/28.0, (h-1)/28.0);
   if (type() == FL_ROUND_CLOCK) {
     fl_color(color());
     fl_begin_polygon(); fl_circle(0,0,14); fl_end_polygon();
-    fl_color(FL_BLACK);
+    fl_color(FL_NO_COLOR);
     fl_begin_loop(); fl_circle(0,0,14); fl_end_loop();
   }
   // draw the shadows:
@@ -86,7 +85,7 @@ void Fl_Clock_Output::draw(int x, int y, int w, int h) {
   fl_pop_matrix();
   // draw the tick marks:
   fl_push_matrix();
-  fl_color(FL_BLACK); // color was 52
+  fl_color(off_color()); // color was 52
   for (int i=0; i<12; i++) {
     if (i==6) rect(-0.5, 9, 1, 2);
     else if (i==3 || i==0 || i== 9) rect(-0.5, 9.5, 1, 1);
@@ -95,11 +94,12 @@ void Fl_Clock_Output::draw(int x, int y, int w, int h) {
   }
   fl_pop_matrix();
   // draw the hands:
-  drawhands(selection_color(), FL_GRAY0); // color was 54
+  drawhands(selection_color(), FL_NO_COLOR); // color was 54
   fl_pop_matrix();
 }
 
 void Fl_Clock_Output::draw() {
+  draw_box();
   draw(x(), y(), w(), h());
   draw_label();
 }
@@ -119,8 +119,8 @@ void Fl_Clock_Output::value(ulong v) {
 
 Fl_Clock_Output::Fl_Clock_Output(int x, int y, int w, int h, const char *l)
 : Fl_Widget(x, y, w, h, l) {
-  box(FL_UP_BOX);
-  selection_color(fl_gray_ramp(5));
+//   box(FL_UP_BOX);
+//   selection_color(fl_gray_ramp(5));
   align(FL_ALIGN_BOTTOM);
   hour_ = 0;
   minute_ = 0;
@@ -136,7 +136,6 @@ Fl_Clock::Fl_Clock(int x, int y, int w, int h, const char *l)
 Fl_Clock::Fl_Clock(uchar t, int x, int y, int w, int h, const char *l)
   : Fl_Clock_Output(x, y, w, h, l) {
   type(t);
-  box(t==FL_ROUND_CLOCK ? FL_NO_BOX : FL_UP_BOX);
 }
 
 static void tick(void *v) {
@@ -170,5 +169,5 @@ Fl_Clock::~Fl_Clock() {
 }
 
 //
-// End of "$Id: Fl_Clock.cxx,v 1.11 1999/05/06 05:52:14 carl Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.12 1999/08/16 07:31:14 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Positioner.cxx,v 1.7 1999/05/06 05:52:19 carl Exp $"
+// "$Id: Fl_Positioner.cxx,v 1.8 1999/08/16 07:31:20 bill Exp $"
 //
 // Positioner widget for the Fast Light Tool Kit (FLTK).
 //
@@ -37,20 +37,19 @@ static double flinear(double val, double smin, double smax, double gmin, double 
 }
 
 void Fl_Positioner::draw(int x, int y, int w, int h) {
-  int x1 = x + 4;
-  int y1 = y + 4;
-  int w1 = w - 2 * 4;
-  int h1 = h - 2 * 4;
-  int xx = int(flinear(xvalue(), xmin, xmax, x1, x1+w1-1)+.5);
-  int yy = int(flinear(yvalue(), ymin, ymax, y1, y1+h1-1)+.5);
-  draw_box(box(), x, y, w, h, color());
+  int xx = int(flinear(xvalue(), xmin, xmax, x, x+w-1)+.5);
+  int yy = int(flinear(yvalue(), ymin, ymax, y, y+h-1)+.5);
   fl_color(selection_color());
-  fl_xyline(x1, yy, x1+w1);
-  fl_yxline(xx, y1, y1+h1);
+  fl_xyline(x, yy, x+w);
+  fl_yxline(xx, y, y+h);
 }
 
 void Fl_Positioner::draw() {
-  draw(x(), y(), w(), h());
+  draw_box();
+  draw(x()+box()->dx(),
+       y()+box()->dy(),
+       w()-box()->dw(),
+       h()-box()->dh());
   draw_label();
 }
 
@@ -76,15 +75,11 @@ int Fl_Positioner::handle(int event, int x, int y, int w, int h) {
     if (Fl::pushed()) return 1;
   case FL_PUSH:
   case FL_DRAG: {
-    double x1 = x + 4;
-    double y1 = y + 4;
-    double w1 = w - 2 * 4;
-    double h1 = h - 2 * 4;
-    double X = flinear(Fl::event_x(), x1, x1+w1-1.0, xmin, xmax);
+    double X = flinear(Fl::event_x(), x, x+w-1.0, xmin, xmax);
     if (xstep_) X = int(X/xstep_+0.5) * xstep_;
     if (X < xmin) X = xmin;
     if (X > xmax) X = xmax;
-    double Y = flinear(Fl::event_y(), y1, y1+h1-1.0, ymin, ymax);
+    double Y = flinear(Fl::event_y(), y, y+h-1.0, ymin, ymax);
     if (ystep_) Y = int(Y/ystep_+0.5) * ystep_;
     if (Y < ymin) Y = ymin;
     if (Y > ymax) Y = ymax;
@@ -101,13 +96,30 @@ int Fl_Positioner::handle(int event, int x, int y, int w, int h) {
 }
 
 int Fl_Positioner::handle(int e) {
-  return handle(e, x(), y(), w(), h());
+  return handle(e,
+		x()+box()->dx(),
+		y()+box()->dy(),
+		w()-box()->dw(),
+		h()-box()->dh());
 }
+
+#include <FL/Fl_Input.H>
+
+static Fl_Style pos_style = {
+  FL_THIN_DOWN_BOX,	// box
+  0,		// glyphs
+  0,		// label_font
+  0,		// text_font
+  0,		// label_type
+  FL_WHITE,	// color
+  0,		// label_color
+  FL_RED	// selection_color (used to draw crosshairs)
+  // rest is zero
+};
 
 Fl_Positioner::Fl_Positioner(int x, int y, int w, int h, const char* l)
 : Fl_Widget(x, y, w, h, l) {
-  box(FL_DOWN_BOX);
-  selection_color(FL_RED);
+  style(pos_style);
   align(FL_ALIGN_BOTTOM);
   when(FL_WHEN_CHANGED);
   xmin = ymin = 0;
@@ -131,5 +143,5 @@ void Fl_Positioner::ybounds(double a, double b) {
 }
 
 //
-// End of "$Id: Fl_Positioner.cxx,v 1.7 1999/05/06 05:52:19 carl Exp $".
+// End of "$Id: Fl_Positioner.cxx,v 1.8 1999/08/16 07:31:20 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.26 1999/06/20 15:24:24 mike Exp $"
+// "$Id: Enumerations.H,v 1.27 1999/08/16 07:30:47 bill Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -143,176 +143,6 @@ enum Fl_When { // Fl_Widget::when():
 #define FL_BUTTON2	0x02000000
 #define FL_BUTTON3	0x04000000
 
-enum Fl_Boxtype { // boxtypes (if you change these you must fix fl_boxtype.C):
-  FL_NO_BOX = 0,	FL_FLAT_BOX,
-  FL_UP_BOX,		FL_DOWN_BOX,
-  FL_UP_FRAME,		FL_DOWN_FRAME,
-  FL_THIN_UP_BOX,	FL_THIN_DOWN_BOX,
-  FL_THIN_UP_FRAME,	FL_THIN_DOWN_FRAME,
-  FL_ENGRAVED_BOX,	FL_EMBOSSED_BOX,
-  FL_ENGRAVED_FRAME,	FL_EMBOSSED_FRAME,
-  FL_BORDER_BOX,	_FL_SHADOW_BOX,
-  FL_BORDER_FRAME,	_FL_SHADOW_FRAME,
-  _FL_ROUNDED_BOX,	_FL_RSHADOW_BOX,
-  _FL_ROUNDED_FRAME,	_FL_RFLAT_BOX,
-  _FL_ROUND_UP_BOX,	_FL_ROUND_DOWN_BOX,
-  _FL_DIAMOND_UP_BOX,	_FL_DIAMOND_DOWN_BOX,
-  _FL_OVAL_BOX,		_FL_OSHADOW_BOX,
-  _FL_OVAL_FRAME,	_FL_OFLAT_BOX,
-  FL_MEDIUM_UP_BOX,	FL_MEDIUM_DOWN_BOX,
-  FL_MEDIUM_UP_FRAME,	FL_MEDIUM_DOWN_FRAME,
-  FL_MOTIF_UP_BOX,	FL_MOTIF_DOWN_BOX,
-  FL_MOTIF_UP_FRAME,	FL_MOTIF_DOWN_FRAME,
-  FL_THIN_MOTIF_UP_BOX,		FL_THIN_MOTIF_DOWN_BOX,
-  FL_THIN_MOTIF_UP_FRAME,	FL_THIN_MOTIF_DOWN_FRAME,
-  FL_MEDIUM_UP_BOX2,	FL_MEDIUM_DOWN_BOX2,
-  FL_MEDIUM_UP_FRAME2,	FL_MEDIUM_DOWN_FRAME2,
-  FL_FREE_BOXTYPE
-};
-extern FL_EXPORT Fl_Boxtype define_FL_ROUND_UP_BOX();
-#define FL_ROUND_UP_BOX define_FL_ROUND_UP_BOX()
-#define FL_ROUND_DOWN_BOX (Fl_Boxtype)(define_FL_ROUND_UP_BOX()+1)
-extern FL_EXPORT Fl_Boxtype define_FL_SHADOW_BOX();
-#define FL_SHADOW_BOX define_FL_SHADOW_BOX()
-#define FL_SHADOW_FRAME (Fl_Boxtype)(define_FL_SHADOW_BOX()+2)
-extern FL_EXPORT Fl_Boxtype define_FL_ROUNDED_BOX();
-#define FL_ROUNDED_BOX define_FL_ROUNDED_BOX()
-#define FL_ROUNDED_FRAME (Fl_Boxtype)(define_FL_ROUNDED_BOX()+2)
-extern FL_EXPORT Fl_Boxtype define_FL_RFLAT_BOX();
-#define FL_RFLAT_BOX define_FL_RFLAT_BOX()
-extern FL_EXPORT Fl_Boxtype define_FL_RSHADOW_BOX();
-#define FL_RSHADOW_BOX define_FL_RSHADOW_BOX()
-extern FL_EXPORT Fl_Boxtype define_FL_DIAMOND_BOX();
-#define FL_DIAMOND_UP_BOX define_FL_DIAMOND_BOX()
-#define FL_DIAMOND_DOWN_BOX (Fl_Boxtype)(define_FL_DIAMOND_BOX()+1)
-extern FL_EXPORT Fl_Boxtype define_FL_OVAL_BOX();
-#define FL_OVAL_BOX define_FL_OVAL_BOX()
-#define FL_OSHADOW_BOX (Fl_Boxtype)(define_FL_OVAL_BOX()+1)
-#define FL_OVAL_FRAME (Fl_Boxtype)(define_FL_OVAL_BOX()+2)
-#define FL_OFLAT_BOX (Fl_Boxtype)(define_FL_OVAL_BOX()+3)
-
-// conversions of box types to other boxtypes:
-inline Fl_Boxtype down(Fl_Boxtype b) {return (Fl_Boxtype)(b|1);}
-inline Fl_Boxtype frame(Fl_Boxtype b) {return (Fl_Boxtype)(b|2);}
-
-// back-compatability box types:
-#define FL_FRAME FL_ENGRAVED_FRAME
-#define FL_FRAME_BOX FL_ENGRAVED_BOX
-#define FL_CIRCLE_BOX FL_ROUND_DOWN_BOX
-#define FL_DIAMOND_BOX FL_DIAMOND_DOWN_BOX
-
-enum Fl_Labeltype {	// labeltypes:
-  FL_NORMAL_LABEL	= 0,
-  FL_NO_LABEL,
-  _FL_SYMBOL_LABEL,
-  _FL_SHADOW_LABEL,
-  _FL_ENGRAVED_LABEL,
-  _FL_EMBOSSED_LABEL,
-  _FL_BITMAP_LABEL,
-  _FL_PIXMAP_LABEL,
-  _FL_IMAGE_LABEL,
-  _FL_MULTI_LABEL,
-  FL_FREE_LABELTYPE
-};
-extern Fl_Labeltype FL_EXPORT define_FL_SYMBOL_LABEL();
-#define FL_SYMBOL_LABEL define_FL_SYMBOL_LABEL()
-extern Fl_Labeltype FL_EXPORT define_FL_SHADOW_LABEL();
-#define FL_SHADOW_LABEL define_FL_SHADOW_LABEL()
-extern Fl_Labeltype FL_EXPORT define_FL_ENGRAVED_LABEL();
-#define FL_ENGRAVED_LABEL define_FL_ENGRAVED_LABEL()
-extern Fl_Labeltype FL_EXPORT define_FL_EMBOSSED_LABEL();
-#define FL_EMBOSSED_LABEL define_FL_EMBOSSED_LABEL()
-
-enum Fl_Align {	// align() values
-  FL_ALIGN_CENTER	= 0,
-  FL_ALIGN_TOP		= 1,
-  FL_ALIGN_BOTTOM	= 2,
-  FL_ALIGN_LEFT		= 4,
-  FL_ALIGN_RIGHT	= 8,
-  FL_ALIGN_INSIDE	= 16,
-  FL_ALIGN_CLIP		= 64,
-  FL_ALIGN_WRAP		= 128,
-  FL_ALIGN_TOP_LEFT	= FL_ALIGN_TOP | FL_ALIGN_LEFT,
-  FL_ALIGN_TOP_RIGHT	= FL_ALIGN_TOP | FL_ALIGN_RIGHT,
-  FL_ALIGN_BOTTOM_LEFT	= FL_ALIGN_BOTTOM | FL_ALIGN_LEFT,
-  FL_ALIGN_BOTTOM_RIGHT	= FL_ALIGN_BOTTOM | FL_ALIGN_RIGHT,
-  FL_ALIGN_LEFT_TOP	= FL_ALIGN_TOP_LEFT,
-  FL_ALIGN_RIGHT_TOP	= FL_ALIGN_TOP_RIGHT,
-  FL_ALIGN_LEFT_BOTTOM	= FL_ALIGN_BOTTOM_LEFT,
-  FL_ALIGN_RIGHT_BOTTOM	= FL_ALIGN_BOTTOM_RIGHT,
-  FL_ALIGN_NOWRAP	= 0 // for back compatability
-};
-
-enum Fl_Font {	// standard fonts
-  FL_HELVETICA		= 0,
-  FL_HELVETICA_BOLD,
-  FL_HELVETICA_ITALIC,
-  FL_HELVETICA_BOLD_ITALIC,
-  FL_COURIER,
-  FL_COURIER_BOLD,
-  FL_COURIER_ITALIC,
-  FL_COURIER_BOLD_ITALIC,
-  FL_TIMES,
-  FL_TIMES_BOLD,
-  FL_TIMES_ITALIC,
-  FL_TIMES_BOLD_ITALIC,
-  FL_SYMBOL,
-  FL_SCREEN,
-  FL_SCREEN_BOLD,
-  FL_ZAPF_DINGBATS,
-
-  FL_FREE_FONT		= 16,	// first one to allocate
-  FL_BOLD		= 1,	// add this to helvetica, courier, or times
-  FL_ITALIC		= 2	// add this to helvetica, courier, or times
-};
-
-#define FL_NORMAL_SIZE	14	// default size of all labels & text
-
-enum Fl_Color {	// standard colors
-  FL_BLACK		= 0,
-  FL_RED		= 1,
-  FL_GREEN		= 2,
-  FL_YELLOW		= 3,
-  FL_BLUE		= 4,
-  FL_MAGENTA		= 5,
-  FL_CYAN		= 6,
-  FL_WHITE		= 7,
-  FL_INACTIVE_COLOR	= 8,
-  FL_SELECTION_COLOR	= 15,
-
-  FL_FREE_COLOR		= 16,
-  FL_NUM_FREE_COLOR	= 16,
-
-  FL_GRAY_RAMP		= 32,
-
-  // boxtypes limit themselves to these colors so whole ramp is not allocated:
-  FL_GRAY0		= 32,	// 'A'
-  FL_DARK3		= 39,	// 'H'
-  FL_DARK2		= 45,   // 'N'
-  FL_DARK1		= 47,	// 'P'
-  FL_GRAY		= 49,	// 'R' default color
-  FL_LIGHT1		= 50,	// 'S'
-  FL_LIGHT2		= 52,	// 'U'
-  FL_LIGHT3		= 54,	// 'W'
-
-  FL_COLOR_CUBE		= 56
-};
-
-FL_EXPORT Fl_Color inactive(Fl_Color c);
-FL_EXPORT Fl_Color contrast(Fl_Color fg, Fl_Color bg);
-FL_EXPORT int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b);
-FL_EXPORT Fl_Color fl_color_average(Fl_Color c1, Fl_Color c2, float weight);
-inline Fl_Color fl_lighter(Fl_Color c) { return fl_color_average(c, FL_WHITE, .67f); }
-inline Fl_Color fl_darker(Fl_Color c) { return fl_color_average(c, FL_BLACK, .67f); }
-
-#define FL_NUM_GRAY	24
-inline Fl_Color fl_gray_ramp(int i) {return (Fl_Color)(i+FL_GRAY_RAMP);}
-#define FL_NUM_RED	5
-#define FL_NUM_GREEN	8
-#define FL_NUM_BLUE	5
-inline Fl_Color fl_color_cube(int r, int g, int b) {
-  return (Fl_Color)((b*FL_NUM_RED + r) * FL_NUM_GREEN + g + FL_COLOR_CUBE);}
-
 enum Fl_Cursor {	// standard cursors
   FL_CURSOR_DEFAULT	= 0,
   FL_CURSOR_ARROW	= 35,
@@ -372,14 +202,8 @@ enum Fl_Damage {
   FL_DAMAGE_ALL         = 0x80
 };
 
-enum Fl_Widget_Style {
-  FL_SGI_STYLE,
-  FL_WINDOWS_STYLE,
-  FL_MOTIF_STYLE
-};
-
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.26 1999/06/20 15:24:24 mike Exp $".
+// End of "$Id: Enumerations.H,v 1.27 1999/08/16 07:30:47 bill Exp $".
 //

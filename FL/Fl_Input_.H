@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.H,v 1.13 1999/06/15 17:02:25 gustavo Exp $"
+// "$Id: Fl_Input_.H,v 1.14 1999/08/16 07:30:50 bill Exp $"
 //
 // Input base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,8 +30,6 @@
 #include "Fl_Widget.H"
 #endif
 
-#define INPUT_STYLE ((Fl_Input_::Style*)_style)
-
 #define FL_NORMAL_INPUT		0
 #define FL_FLOAT_INPUT		1
 #define FL_INT_INPUT		2
@@ -40,36 +38,9 @@
 #define FL_SECRET_INPUT		5
 
 class Fl_Input_ : public Fl_Widget {
-  friend class Fl_Value_Input;
-  friend class Fl_Value_Output;
+//   friend class Fl_Value_Input;
+//   friend class Fl_Value_Output;
 public:
-  enum Attribute {
-    TEXTFONT = 0,
-    TEXTSIZE,
-    TEXTCOLOR,
-    SELECTED_TEXTCOLOR,
-    CURSOR_COLOR,
-    IA_END
-  };
-
-  struct Style : public Fl_Widget::Style {
-    uchar input_[IA_END];
-    uchar sbf;
-
-    Style();
-    uchar& input(Attribute a) { return input_[a]; }
-  };
-
-  int is_style_forced(Fl_Widget::Attribute a) const
-    { return Fl_Widget::is_style_forced(a); }
-  int is_style_forced(Attribute a) const
-    { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
-
-  void copy_style(Fl_Input_* o)
-    { mstyle(&_style); *((Style*)_style) = *((Style*)o->style()); }
-
-  virtual void loadstyle() const;
-
   Fl_Input_(int, int, int, int, const char* = 0);
   ~Fl_Input_();
 
@@ -97,29 +68,8 @@ public:
   int undo();
   int copy_cuts();
 
-  Fl_Font textfont() const;
-  void textfont(uchar s);
-
-  uchar textsize() const;
-  void textsize(uchar s);
-
-  Fl_Color textcolor() const;
-  void textcolor(uchar n);
-
-  Fl_Color cursor_color() const;
-  void cursor_color(uchar n);
-
-  Fl_Color selected_textcolor() const;
-  void selected_textcolor(uchar n);
-
 protected:
-  static Fl_Widget::Style* _default_style;
-
-  virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
-  virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
-
   void layout();
-
   int wordboundary(int i) const;
   int lineboundary(int i) const;
   void drawtext(int, int, int, int);
@@ -131,7 +81,7 @@ protected:
   int yscroll() const {return yscroll_;}
 
 private:
-  uchar erase_cursor_only;
+  bool erase_cursor_only;
 
   int size_;
   int bufsize;
@@ -152,12 +102,10 @@ private:
 
   void setfont() const;
 
-  uchar attr(Attribute) const;
-  void attr(Attribute, uchar);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Input_.H,v 1.13 1999/06/15 17:02:25 gustavo Exp $".
+// End of "$Id: Fl_Input_.H,v 1.14 1999/08/16 07:30:50 bill Exp $".
 //

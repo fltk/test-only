@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image.cxx,v 1.5 1999/01/07 19:17:38 mike Exp $"
+// "$Id: fl_draw_image.cxx,v 1.6 1999/08/16 07:31:27 bill Exp $"
 //
 // Image drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -91,7 +91,7 @@ static int calc_error(int r, int g, int b, int i) {
 
 // replace the color stored at a location with a better one:
 static void improve(uchar *p, int& e, int r, int g, int b, int i) {
-  if (i < FL_GRAY_RAMP || i > 255) return;
+  if (i < int(FL_GRAY_RAMP) || i > 255) return;
   int e1 = calc_error(r,g,b,i);
   if (e1 < e) {*p = i; e = e1;}
 }
@@ -438,7 +438,7 @@ static void figure_out_visual() {
 #endif
 
   // otherwise it is a TrueColor visual:
-  fl_xpixel(0,0,0); // setup fl_redmask, etc, in fl_color.C
+  fl_xpixel(FL_NO_COLOR); // setup fl_redmask, etc, in fl_color.C
 
   int rs = fl_redshift;
   int gs = fl_greenshift;
@@ -613,13 +613,13 @@ void fl_draw_image_mono(Fl_Draw_Image_Cb cb, void* data,
   innards(0,x,y,w,h,d,0,1,cb,data);
 }
 
-void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {
+void fl_rectf(int x, int y, int w, int h, Fl_Color C) {
   if (fl_visual->depth > 16) {
-    fl_color(r,g,b);
+    fl_color(C);
     fl_rectf(x,y,w,h);
   } else {
     uchar c[3];
-    c[0] = r; c[1] = g; c[2] = b;
+    c[0] = uchar(C>>24); c[1] = uchar(C>>16); c[2] = uchar(C>>8);
     innards(c,x,y,w,h,0,0,0,0,0);
   }
 }
@@ -627,5 +627,5 @@ void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {
 #endif
 
 //
-// End of "$Id: fl_draw_image.cxx,v 1.5 1999/01/07 19:17:38 mike Exp $".
+// End of "$Id: fl_draw_image.cxx,v 1.6 1999/08/16 07:31:27 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Fly_Button.cxx,v 1.2 1999/03/18 22:59:05 carl Exp $"
+// "$Id: Fl_Fly_Button.cxx,v 1.3 1999/08/16 07:31:15 bill Exp $"
 //
 // Fly button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,42 +27,9 @@
 #include <FL/Fl_Fly_Button.H>
 #include <FL/fl_draw.H>
 
-#define DEFAULT_STYLE ((Style*)default_style())
-
-Fl_Widget::Style* Fl_Fly_Button::_default_style = 0;
-
-Fl_Fly_Button::Style::Style() : Fl_Button::Style() {
-  widget(BOX) = FL_FLAT_BOX;
-}
-
-void Fl_Fly_Button::loadstyle() const {
-  if (!Fl::s_fly_button) {
-    Fl::s_fly_button = 1;
-
-    static Fl::Attribute widget_attributes[] = {
-      { "label color", LABELCOLOR },
-      { "label size", LABELSIZE },
-      { "label type", LABELTYPE },
-      { "label font", LABELFONT },
-      { "color", COLOR },
-      { "down color", COLOR2 },
-      { 0 }
-    };
-    Fl::load_attributes("highlight button", DEFAULT_STYLE->widget_, widget_attributes);
-
-    static Fl::Attribute button_attributes[] = {
-      { "highlight color", FLY_COLOR },
-      { "highlight box", FLY_BOX },
-      { "down box", DOWN_BOX },
-      { "down label color", DOWN_LABELCOLOR },
-      { 0 }
-    };
-    Fl::load_attributes("highlight button", DEFAULT_STYLE->button_, button_attributes);
-  }
-}
-
-Fl_Fly_Button::Fl_Fly_Button(int x,int y,int w,int h,const char *l) : Fl_Button(x,y,w,h,l) {}
+Fl_Fly_Button::Fl_Fly_Button(int x,int y,int w,int h,const char *l)
+  : Fl_Button(x,y,w,h,l) {}
 
 //
-// End of "$Id: Fl_Fly_Button.cxx,v 1.2 1999/03/18 22:59:05 carl Exp $".
+// End of "$Id: Fl_Fly_Button.cxx,v 1.3 1999/08/16 07:31:15 bill Exp $".
 //

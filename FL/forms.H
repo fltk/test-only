@@ -1,5 +1,5 @@
 //
-// "$Id: forms.H,v 1.8 1999/06/20 15:24:25 mike Exp $"
+// "$Id: forms.H,v 1.9 1999/08/16 07:30:54 bill Exp $"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -116,23 +116,23 @@ typedef Fl_Window FL_FORM;
 #define FL_MBUTTON5	5
 
 #define FL_INVALID_STYLE 255
-#define FL_NORMAL_STYLE	FL_HELVETICA
-#define FL_BOLD_STYLE	FL_HELVETICA_BOLD
-#define FL_ITALIC_STYLE	FL_HELVETICA_ITALIC
-#define FL_BOLDITALIC_STYLE FL_HELVETICA_BOLD_ITALIC
-#define FL_FIXED_STYLE	FL_COURIER
-#define FL_FIXEDBOLD_STYLE FL_COURIER_BOLD
-#define FL_FIXEDITALIC_STYLE FL_COURIER_ITALIC
-#define FL_FIXEDBOLDITALIC_STYLE FL_COURIER_BOLD_ITALIC
-#define FL_TIMES_STYLE	FL_TIMES
-#define FL_TIMESBOLD_STYLE FL_TIMES_BOLD
-#define FL_TIMESITALIC_STYLE FL_TIMES_ITALIC
-#define FL_TIMESBOLDITALIC_STYLE FL_TIMES_BOLD_ITALIC
+#define FL_NORMAL_STYLE	0
+#define FL_BOLD_STYLE	1
+#define FL_ITALIC_STYLE	2
+#define FL_BOLDITALIC_STYLE 3
+#define FL_FIXED_STYLE	4
+#define FL_FIXEDBOLD_STYLE 5
+#define FL_FIXEDITALIC_STYLE 6
+#define FL_FIXEDBOLDITALIC_STYLE 7
+#define FL_TIMES_STYLE	8
+#define FL_TIMESBOLD_STYLE 9
+#define FL_TIMESITALIC_STYLE 10
+#define FL_TIMESBOLDITALIC_STYLE 11
 
 // hacks to change the labeltype() when passed to fl_set_object_lstyle():
-#define FL_SHADOW_STYLE		(FL_SHADOW_LABEL<<8)
-#define FL_ENGRAVED_STYLE	(FL_ENGRAVED_LABEL<<8)
-#define FL_EMBOSSED_STYLE	(FL_EMBOSSED_LABEL<<0)
+#define FL_SHADOW_STYLE		0x100
+#define FL_ENGRAVED_STYLE	0x200
+#define FL_EMBOSSED_STYLE	0x300
 
 // size values are different from XForms, match older Forms:
 #define FL_TINY_SIZE	8
@@ -209,13 +209,12 @@ inline void fl_reset_focus_object(Fl_Widget* o) {Fl::focus(o);}
 
 inline void fl_set_object_boxtype(Fl_Widget* o, Fl_Boxtype a) {o->box(a);}
 inline void fl_set_object_lsize(Fl_Widget* o,int s) {o->labelsize(s);}
-inline void fl_set_object_lstyle(Fl_Widget* o,int a) {
-  o->labelfont((uchar)a); o->labeltype((Fl_Labeltype)(a>>8));}
-inline void fl_set_object_lcol(Fl_Widget* o, uchar a) {o->labelcolor(a);}
+FL_EXPORT void fl_set_object_lstyle(Fl_Widget* o,int a);
+inline void fl_set_object_lcol(Fl_Widget* o, unsigned a) {o->labelcolor((Fl_Color)a);}
 #define fl_set_object_lcolor  fl_set_object_lcol
 inline void fl_set_object_lalign(Fl_Widget* o, Fl_Align a) {o->align(a);}
 #define fl_set_object_align fl_set_object_lalign
-inline void fl_set_object_color(Fl_Widget* o,uchar a,uchar b) {o->color(a,b);}
+inline void fl_set_object_color(Fl_Widget* o,unsigned a,unsigned b) {o->color((Fl_Color)a); o->selection_color((Fl_Color)b);}
 inline void fl_set_object_label(Fl_Widget* o, const char* a) {o->label(a); o->redraw();}
 inline void fl_set_object_position(Fl_Widget*o,int x,int y) {o->position(x,y);}
 inline void fl_set_object_size(Fl_Widget* o, int w, int h) {o->size(w,h);}
@@ -350,9 +349,9 @@ inline int fl_mouse_button() {return Fl::event_button();}
 // Drawing functions.  Only usable inside an Fl_Free object?
 
 inline void fl_drw_box(Fl_Boxtype b,int x,int y,int w,int h,Fl_Color bgc,int=3) {
-    fl_draw_box(b,x,y,w,h,bgc);}
+    b->draw(x,y,w,h,bgc);}
 inline void fl_drw_frame(Fl_Boxtype b,int x,int y,int w,int h,Fl_Color bgc,int=3) {
-    fl_draw_box(b,x,y,w,h,bgc);}
+    b->draw(x,y,w,h,bgc,FL_FRAME_ONLY);}
 
 inline void fl_drw_text(Fl_Align align, int x, int y, int w, int h,
 		  Fl_Color fgcolor, int size, Fl_Font style,
@@ -371,10 +370,10 @@ inline void fl_drw_text_beside(Fl_Align align, int x, int y, int w, int h,
   fl_draw(s,x,y,w,h,align);
 }
 
-inline void fl_set_font_name(Fl_Font n,const char* s) {Fl::set_font(n,s);}
+//inline void fl_set_font_name(Fl_Font n,const char* s) {fl_set_font(n,s);}
 
-inline void fl_mapcolor(Fl_Color c, uchar r, uchar g, uchar b) {Fl::set_color(c,r,g,b);}
-
+inline void fl_mapcolor(Fl_Color c, uchar r, uchar g, uchar b) {
+  fl_set_color(c,fl_rgb(r,g,b));}
 #define fl_set_clipping(x,y,w,h) fl_clip(x,y,w,h)
 #define fl_unset_clipping() fl_pop_clip()
 
@@ -454,8 +453,8 @@ inline void fl_set_browser_topline(Fl_Widget* o, int n) {
     ((Fl_Browser*)o)->topline(n);}
 inline void fl_set_browser_fontsize(Fl_Widget* o, int s) {
     ((Fl_Browser*)o)->textsize(s);}
-inline void fl_set_browser_fontstyle(Fl_Widget* o, Fl_Font s) {
-    ((Fl_Browser*)o)->textfont(s);}
+inline void fl_set_browser_fontstyle(Fl_Widget* o, int s) {
+    ((Fl_Browser*)o)->textfont(fl_fonts+s);}
 inline void fl_set_browser_specialkey(Fl_Widget* o, char c) {
     ((Fl_Browser*)o)->format_char(c);}
 //inline void fl_set_browser_vscrollbar(Fl_Widget*, int);
@@ -475,6 +474,7 @@ inline int fl_isdisplayed_browser_line(Fl_Widget* o, int n) {
 #include "Fl_Button.H"
 
 #define FL_NORMAL_BUTTON	0
+//#define FL_HIDDEN_BUTTON
 #define FL_TOUCH_BUTTON		4
 #define FL_INOUT_BUTTON		5
 #define FL_RETURN_BUTTON	6
@@ -531,8 +531,8 @@ inline void fl_set_chart_lstyle(Fl_Widget* o, Fl_Font v) {
   ((Fl_Chart*)o)->textfont(v);}
 inline void fl_set_chart_lsize(Fl_Widget* o, int v) {
   ((Fl_Chart*)o)->textsize(v);}
-inline void fl_set_chart_lcolor(Fl_Widget* o, uchar v) {
-  ((Fl_Chart*)o)->textcolor(v);}
+inline void fl_set_chart_lcolor(Fl_Widget* o, unsigned v) {
+  ((Fl_Chart*)o)->textcolor((Fl_Color)v);}
 #define fl_set_chart_lcol   fl_set_chart_lcolor
 
 #include "Fl_Choice.H"
@@ -687,9 +687,9 @@ inline void fl_set_input(Fl_Widget* o, const char* v) {
     ((Fl_Input*)o)->value(v);}
 inline void fl_set_input_return(Fl_Widget* o, int x) {
     ((Fl_Input*)o)->when((Fl_When)(x | FL_WHEN_RELEASE));}
-inline void fl_set_input_color(Fl_Widget* o, uchar a, uchar b) {
-    ((Fl_Input*)o)->textcolor(a);
-    ((Fl_Input*)o)->cursor_color(b);
+inline void fl_set_input_color(Fl_Widget* o, unsigned a, unsigned b) {
+    ((Fl_Input*)o)->textcolor((Fl_Color)a);
+    ((Fl_Input*)o)->cursor_color((Fl_Color)b);
 }
 // inline void fl_set_input_scroll(Fl_Widget*, int);
 inline void fl_set_input_cursorpos(Fl_Widget* o, int x, int /*y*/) {
@@ -841,5 +841,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.H,v 1.8 1999/06/20 15:24:25 mike Exp $".
+// End of "$Id: forms.H,v 1.9 1999/08/16 07:30:54 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: mandelbrot.cxx,v 1.8 1999/01/13 15:45:50 mike Exp $"
+// "$Id: mandelbrot.cxx,v 1.9 1999/08/16 07:31:36 bill Exp $"
 //
 // Mandelbrot set demo for the Fast Light Tool Kit (FLTK).
 //
@@ -72,9 +72,9 @@ int Drawing_Area::idle() {
   if (!window()->visible()) return 0;
   if (drawn < nextline) {
     window()->make_current();
-    int yy = drawn+y()+4;
+    int yy = drawn+y()+box()->dy();
     if (yy >= sy && yy <= sy+sh) erase_box();
-    fl_draw_image_mono(buffer+drawn*W,x()+3,yy,W,1,1,W);
+    fl_draw_image_mono(buffer+drawn*W, x()+box()->dx(), yy, W, 1, 1, W);
     drawn++;
     return 1;
   }
@@ -187,15 +187,17 @@ void Drawing_Area::new_display() {
   set_idle();
 }
 
-void Drawing_Area::resize(int X,int Y,int W,int H) {
-  if (W != w() || H != h()) {
-    this->W = W-6;
-    this->H = H-8;
+void Drawing_Area::layout() {
+  int W = w()-box()->dw();
+  int H = h()-box()->dh();
+  if (this->W != W || this->H != H) {
+    this->W = W;
+    this->H = H;
     if (buffer) {delete[] buffer; buffer = 0; new_display();}
   }
-  Fl_Box::resize(X,Y,W,H);
+  Fl_Widget::layout();
 }
 
 //
-// End of "$Id: mandelbrot.cxx,v 1.8 1999/01/13 15:45:50 mike Exp $".
+// End of "$Id: mandelbrot.cxx,v 1.9 1999/08/16 07:31:36 bill Exp $".
 //

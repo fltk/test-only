@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.32 1999/06/20 15:24:28 mike Exp $"
+// "$Id: Fl.cxx,v 1.33 1999/08/16 07:31:11 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -58,13 +58,13 @@ static double fl_elapsed();
 //                       the given rectangle.
 //
 
-int Fl::event_inside(int x,int y,int w,int h) /*const*/ {
+bool Fl::event_inside(int x,int y,int w,int h) /*const*/ {
   int mx = event_x() - x;
   int my = event_y() - y;
   return (mx >= 0 && mx < w && my >= 0 && my < h);
 }
 
-int Fl::event_inside(const Fl_Widget *o) /*const*/ {
+bool Fl::event_inside(const Fl_Widget *o) /*const*/ {
   return event_inside(o->x(),o->y(),o->w(),o->h());
 }
 
@@ -204,7 +204,7 @@ static void callidle() {
   in_idle = 0;
 }
 
-int Fl::wait() {
+bool Fl::wait() {
   callidle();
   if (numtimeouts) {fl_elapsed(); call_timeouts();}
   flush();
@@ -230,7 +230,7 @@ double Fl::wait(double time) {
   return time - fl_elapsed();
 }
 
-int Fl::check() {
+bool Fl::check() {
   callidle();
   if (numtimeouts) {fl_elapsed(); call_timeouts();}
   fl_wait(1, 0.0);
@@ -238,13 +238,13 @@ int Fl::check() {
   return Fl_X::first != 0; // return true if there is a window
 }
 
-int Fl::ready() {
+bool Fl::ready() {
   // if (idle && !in_idle) return 1; // should it do this?
   if (numtimeouts) {fl_elapsed(); if (timeout[0].time <= 0) return 1;}
   return fl_ready();
 }
 
-int Fl::run() {
+bool Fl::run() {
   while (wait());
   return 0;
 }
@@ -330,19 +330,8 @@ void Fl::belowmouse(Fl_Widget *o) {
   }
 }
 
-// Because mouse events are posted to the outermost window we need to
-// adjust them for child windows if they are pushed().  This should also
-// be done for the focus() but that is nyi.
-static int mouse_dx;
-static int mouse_dy;
-
 void Fl::pushed(Fl_Widget *o) {
   pushed_ = o;
-  mouse_dx = 0;
-  mouse_dy = 0;
-  if (o) for (Fl_Widget* w = o; w->parent(); w = w->parent()) {
-    if (w->type()>=FL_WINDOW) {mouse_dx -= w->x(); mouse_dy -= w->y();}
-  }
 }
 
 Fl_Window *fl_xfocus;	// which window X thinks has focus
@@ -404,20 +393,37 @@ Fl_Widget *fl_selection_requestor; // from Fl_cutpaste.C
 // FL_LEAVE or FL_UNFOCUS events to the widget.  This appears to not be
 // desirable behavior and caused flwm to crash.
 
-void fl_throw_focus(Fl_Widget *o) {
-  if (o->contains(Fl::pushed())) Fl::pushed_ = 0;
-  if (o->contains(Fl::selection_owner())) Fl::selection_owner_ = 0;
+void Fl_Widget::throw_focus() {
+  if (contains(Fl::pushed())) Fl::pushed_ = 0;
+  if (contains(Fl::selection_owner())) Fl::selection_owner_ = 0;
 #ifndef WIN32
-  if (o->contains(fl_selection_requestor)) fl_selection_requestor = 0;
+  if (contains(fl_selection_requestor)) fl_selection_requestor = 0;
 #endif
-  if (o->contains(Fl::belowmouse())) Fl::belowmouse_ = 0;
-  if (o->contains(Fl::focus())) Fl::focus_ = 0;
-  if (o == fl_xfocus) fl_xfocus = 0;
-  if (o == fl_xmousewin) fl_xmousewin = 0;
+  if (contains(Fl::belowmouse())) Fl::belowmouse_ = 0;
+  if (contains(Fl::focus())) Fl::focus_ = 0;
+  if (this == fl_xfocus) fl_xfocus = 0;
+  if (this == fl_xmousewin) fl_xmousewin = 0;
+  Fl_Tooltip::exit(this);
   fl_fix_focus();
 }
 
 ////////////////////////////////////////////////////////////////
+
+// Call to->handle but first replace the mouse x/y with the correct
+// values to account for nested X windows. 'window' is the outermost
+// window the event was posted to by X:
+static int send(int event, Fl_Widget* to, Fl_Window* window) {
+  int dx = window->x();
+  int dy = window->y();
+  for (const Fl_Widget* w = to; w; w = w->parent())
+    if (w->type()>=FL_WINDOW) {dx -= w->x(); dy -= w->y();}
+  int save_x = Fl::e_x; Fl::e_x += dx;
+  int save_y = Fl::e_y; Fl::e_y += dy;
+  int ret = to->handle(event);
+  Fl::e_y = save_y;
+  Fl::e_x = save_x;
+  return ret;
+}
 
 int Fl::handle(int event, Fl_Window* window)
 {
@@ -439,26 +445,20 @@ int Fl::handle(int event, Fl_Window* window)
     return 1;
 
   case FL_PUSH:
-    if (pushed_) w = pushed_; 
-    else {pushed_ = w; mouse_dx = mouse_dy = 0;}
-    
     if (grab()) w = grab();
     else if (modal() && w != modal()) return 0;
-    if (w->handle(event)) return 1;
+    pushed_ = w;
+    if (send(event, w, window)) return 1;
     // raise windows that are clicked on:
     window->show();
     return 1;
 
   case FL_MOVE:
   case FL_DRAG:
-    // this should not happen if enter/leave events were reported
-    // correctly by the system, but just in case:
-    fl_xmousewin = window;
+    fl_xmousewin = window; // this should already be set, but just in case.
     if (pushed()) {
       w = pushed();
       event = FL_DRAG;
-      e_x += mouse_dx;
-      e_y += mouse_dy;
     } else if (modal() && w != modal()) {
       w = 0;
     }
@@ -468,12 +468,10 @@ int Fl::handle(int event, Fl_Window* window)
   case FL_RELEASE: {
     if (pushed()) {
       w = pushed();
-      e_x += mouse_dx;
-      e_y += mouse_dy;
       if (!(event_state()&(FL_BUTTON1|FL_BUTTON2|FL_BUTTON3))) pushed_=0;
     }
     if (grab()) w = grab();
-    int r = w->handle(event);
+    int r = send(event, w, window);
     fl_fix_focus();
     return r;}
 
@@ -487,20 +485,18 @@ int Fl::handle(int event, Fl_Window* window)
 
   case FL_KEYBOARD:
 
-    // this should not happen if focus/unfocus events were reported
-    // correctly by the system, but just in case:
-    fl_xfocus = window;
+    fl_xfocus = window; // this should already be set, but just in case.
+
     // Try it as keystroke, sending it to focus and all parents:
     for (w = grab() ? grab() : focus(); w; w = w->parent())
-      if (w->handle(FL_KEYBOARD)) return 1;
+      if (send(FL_KEYBOARD, w, window)) return 1;
 
     // recursive call to try shortcut:
     if (handle(FL_SHORTCUT, window)) return 1;
 
-    // and then try a shortcut with the case of the text swapped:
+    // and then try a shortcut with the case of the text swapped, by
+    // changing the text and falling through to FL_SHORTCUT case:
     if (!isalpha(event_text()[0])) return 0;
-
-    // swap the case and fall through to FL_SHORTCUT case:
     *(char*)(event_text()) ^= ('A'^'a');
     event = FL_SHORTCUT;
 
@@ -510,14 +506,15 @@ int Fl::handle(int event, Fl_Window* window)
 
     // Try it as shortcut, sending to mouse widget and all parents:
     w = belowmouse(); if (!w) {w = modal(); if (!w) w = window;}
-    for (; w; w = w->parent()) if (w->handle(FL_SHORTCUT)) return 1;
+    for (; w; w = w->parent()) if (send(FL_SHORTCUT, w, window)) return 1;
 
     // try using add_handle() functions:
     if (send_handlers(FL_SHORTCUT)) return 1;
 
     // make Escape key close windows:
     if (event_key()==FL_Escape) {
-      window->do_callback();
+      w = modal(); if (!w) w = window;
+      w->do_callback();
       return 1;
     }
 
@@ -535,7 +532,7 @@ int Fl::handle(int event, Fl_Window* window)
   default:
     break;
   }
-  if (w && w->handle(event)) return 1;
+  if (w && send(event, w, window)) return 1;
   return send_handlers(event);
 }
 
@@ -571,7 +568,7 @@ void Fl_Window::hide() {
   }
 
   // Make sure no events are sent to this window:
-  fl_throw_focus(this);
+  throw_focus();
   handle(FL_HIDE);
 
 #ifdef WIN32
@@ -623,7 +620,6 @@ void Fl::selection_owner(Fl_Widget *owner) {
 #include <FL/fl_draw.H>
 
 void Fl_Widget::redraw() {
-  damage(FL_DAMAGE_CHILD_LABEL);
   damage(FL_DAMAGE_ALL);
 }
 
@@ -638,9 +634,9 @@ void Fl_Widget::damage(uchar flags) {
     if (i->region) {XDestroyRegion(i->region); i->region = 0;}
     damage_ |= flags;
     Fl::damage(FL_DAMAGE_CHILD);
+    if ((damage()&FL_DAMAGE_CHILD_LABEL) && parent())
+      parent()->damage(FL_DAMAGE_CHILD);
   }
-  if ((damage()&FL_DAMAGE_CHILD_LABEL) && parent())
-    parent()->damage(FL_DAMAGE_CHILD);
 }
 
 void Fl_Widget::damage(uchar flags, int X, int Y, int W, int H) {
@@ -708,5 +704,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.32 1999/06/20 15:24:28 mike Exp $".
+// End of "$Id: Fl.cxx,v 1.33 1999/08/16 07:31:11 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: cursor.cxx,v 1.5 1999/04/01 21:26:25 carl Exp $"
+// "$Id: cursor.cxx,v 1.6 1999/08/16 07:31:34 bill Exp $"
 //
 // Cursor test program for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,7 @@
 #include <FL/Fl_Box.H>
 
 Fl_Color fg = FL_BLACK;
-Fl_Color bg = FL_WHITE;
+Fl_Color bg = 255;
 Fl_Cursor cursor = FL_CURSOR_DEFAULT;
 
 Fl_Hor_Value_Slider *cursor_slider;
@@ -87,15 +87,18 @@ void setbg(Fl_Widget *o, void *) {
   fl_cursor(cursor,fg,bg);
 }
 
+#if 0
 // draw the label without any ^C or \nnn conversions:
+Fl_Font_ cfont = {"cursor"};
 class CharBox : public Fl_Box {
   void draw() {
-    fl_font(FL_FREE_FONT,14);
+    fl_font(&cfont, 14);
     fl_draw(label(), x()+w()/2, y()+h()/2);
   }
 public:
   CharBox(int X, int Y, int W, int H, const char* L) : Fl_Box(X,Y,W,H,L) {}
 };
+#endif
 
 int main(int argc, char **argv) {
   Fl_Window window(400,300);
@@ -137,9 +140,8 @@ int main(int argc, char **argv) {
   // draw the manual's diagram of cursors...
   window.size(400,800);
   int y = 300;
-  Fl::set_font(FL_FREE_FONT, "cursor");
   char buf[100]; char *p = buf;
-  for (Fl_Menu* m = choices; m->label(); m++) {
+  for (Fl_Menu_Item* m = choices; m->label(); m++) {
     Fl_Box* b = new Fl_Box(35,y,150,25,m->label());
     b->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
     int n = (int)(m->argument());
@@ -159,5 +161,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: cursor.cxx,v 1.5 1999/04/01 21:26:25 carl Exp $".
+// End of "$Id: cursor.cxx,v 1.6 1999/08/16 07:31:34 bill Exp $".
 //

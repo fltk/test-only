@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.H,v 1.11 1999/05/06 05:52:09 carl Exp $"
+// "$Id: Fl_Slider.H,v 1.12 1999/08/16 07:30:53 bill Exp $"
 //
 // Slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,8 +30,6 @@
 #include "Fl_Valuator.H"
 #endif
 
-#define SLIDER_STYLE ((Fl_Slider::Style*)_style)
-
 // values for type(), lowest bit indicate horizontal:
 #define FL_VERT_SLIDER		0
 #define FL_HOR_SLIDER		1
@@ -42,30 +40,7 @@
 
 class Fl_Slider : public Fl_Valuator {
 public:
-  enum Attribute {
-    FLY_COLOR = 0,
-    SLIDER_BOX,
-    SA_END
-  };
-
-  struct Style : public Fl_Widget::Style {
-    uchar slider_[SA_END];
-    uchar sbf;
-
-    Style();
-    uchar& slider(Attribute a) { return slider_[a]; }
-  };
-
-  int is_style_forced(Fl_Widget::Attribute a) const
-    { return Fl_Widget::is_style_forced(a); }
-  int is_style_forced(Attribute a) const
-    { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
-
-  void copy_style(Fl_Slider* o)
-    { mstyle(&_style); *((Style*)_style) = *((Style*)o->style()); }
-
-  virtual void loadstyle() const;
-
+  static Fl_Style default_style;
   void draw();
   int handle(int);
   Fl_Slider(int x,int y,int w,int h, const char *l = 0);
@@ -76,18 +51,11 @@ public:
   float slider_size() const {return slider_size_;}
   void slider_size(double v);
 
-  Fl_Boxtype slider() const;
-  void slider(Fl_Boxtype b);
-
-  Fl_Color fly_color() const;
-  void fly_color(uchar c);
+  // back comptability:
+  Fl_Boxtype slider() const {return FL_UP_BOX;}
+  void slider(Fl_Boxtype) {}
 
 protected:
-  static Fl_Widget::Style* _default_style;
-
-  virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
-  virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
-
   // these allow subclasses to put the slider in a smaller area:
   void draw(int, int, int, int);
   int handle(int, int, int, int, int);
@@ -97,12 +65,10 @@ private:
   void _Fl_Slider();
   void draw_bg(int, int, int, int);
 
-  uchar attr(Attribute) const;
-  void attr(Attribute, uchar);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Slider.H,v 1.11 1999/05/06 05:52:09 carl Exp $".
+// End of "$Id: Fl_Slider.H,v 1.12 1999/08/16 07:30:53 bill Exp $".
 //

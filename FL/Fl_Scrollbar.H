@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.H,v 1.8 1999/03/18 22:58:57 carl Exp $"
+// "$Id: Fl_Scrollbar.H,v 1.9 1999/08/16 07:30:53 bill Exp $"
 //
 // Scroll bar header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,26 +30,14 @@
 
 class Fl_Scrollbar : public Fl_Slider {
 public:
-  struct Style : public Fl_Slider::Style {
-    Style();
-  };
-
+  static Fl_Style default_style;
   Fl_Scrollbar(int x,int y,int w,int h, const char *l = 0);
-
-  virtual void loadstyle() const;
-
   int value() {return int(Fl_Slider::value());}
   int value(int position, int size, int top, int total) {
     return scrollvalue(position, size, top, total);
   }
   int linesize() const {return linesize_;}
   void linesize(int i) {linesize_ = i;}
-
-protected:
-  static Fl_Widget::Style* _default_style;
-
-  virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
-  virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
 
 private:
   int linesize_;
@@ -63,5 +51,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Scrollbar.H,v 1.8 1999/03/18 22:58:57 carl Exp $".
+// End of "$Id: Fl_Scrollbar.H,v 1.9 1999/08/16 07:30:53 bill Exp $".
 //

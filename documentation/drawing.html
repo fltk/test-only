@@ -6,20 +6,31 @@
 Calling these functions at other places will result in undefined 
 behavior! 
 <UL>
+
 <LI>The most common is inside the virtual method <A href=#draw><TT>
 Fl_Widget::draw()</TT></A>.  To write code  here, you must subclass one 
 of the existing <TT>Fl_Widget</TT> classes and implement your own 
 version of <TT>draw()</TT>. </LI>
-<LI>You can also write <A href=common.html#boxtypes>boxtypes</A> and <A href=#labeltypes>
-labeltypes</A>.  These are small procedures  that can be called by 
-existing <TT>Fl_Widget</TT><TT>draw()</TT> methods.  These &quot;types&quot; are 
-identified by an  8-bit index that is stored in the widget's <TT>box()</TT>
-, <TT>labeltype()</TT>, and possibly other properties. </LI>
+
+<LI>You can also write <a href=Fl_Boxtype.html>boxtypes</A> and <A
+href=Fl_Labeltype.html> labeltypes</A>.  These are small structures
+with functions in them that rae called by existing
+<TT>Fl_Widget</TT><TT>draw()</TT> methods.  Pointers to these
+structures are stored in the widget's <TT>box()</TT> ,
+<TT>labeltype()</TT>, and possibly other properties. </LI>
+
+<li>You can write <a href=Fl_Image.html>Fl_Image</a> classes, which
+can then be put into the <a
+href=Fl_Widget.html#image>Fl_Widget::image()</a> and be called by
+existing <TT>Fl_Widget</TT><TT>draw()</TT> methods.
+
 <LI>You can call <A href=Fl_Window.html#Fl_Window.make_current><TT>
 Fl_Window::make_current()</TT></A> to do incremental update of a 
 widget. Use <A href=Fl_Widget.html#Fl_Widget.window><TT>
 Fl_Widget::window()</TT></A> to  find the window.</LI>
+
 </UL>
+
 <H2>FLTK Drawing Functions</H2>
  To use the drawing functions you must first include the <TT>
 &lt;FL/fl_draw.H&gt;</TT> header file.  FLTK provides the following types of 
@@ -27,6 +38,7 @@ drawing functions:
 <UL>
 <LI><A href=#clipping>Clipping</A></LI>
 <LI><A href=#colors>Colors</A></LI>
+<LI><A href=#lines>Line thickness & dashes</A></LI>
 <LI><A href=#fast>Fast Shapes</A></LI>
 <LI><A href=#complex>Complex Shapes</A></LI>
 <LI><A href=#text>Text</A></LI>
@@ -63,25 +75,71 @@ original.  This can be used to limit the necessary drawing to a
 rectangle. <TT>W</TT> and <TT>H</TT> are set to zero if the rectangle 
 is completely outside the region. 
 <H3><A name=colors>Colors</A></H3>
-<H4>void fl_color(Fl_Color)</H4>
- Set the color for all subsequent drawing operations. <TT>Fl_Color</TT>
- is an enumeration type, and all values are in the range 0-255.  This 
-is <I>not</I> the X or WIN32 pixel, it is an index into an internal 
-table!  The table provides several general colors, a 24-entry gray 
-ramp, and a 5x8x5 color cube. All of these are named with 
-symbols in <A href=enumerations.html#colors>
-<TT>&lt;FL/Enumerations.H&gt;</TT></A>. 
-<P>For colormapped displays, a color cell will be allocated out of <TT>
-fl_colormap</TT> the first time you use a color. If the colormap fills 
-up then a least-squares algorithm is used to find the closest color. </P>
-<H4>Fl_Color fl_color()</H4>
- Returns the last <TT>fl_color()</TT> that was set.  This can be used 
-for state save/restore. 
+
+<H4>void fl_color(<a href=Fl_Color.html>Fl_Color</a>)</H4>
+
+Set the color for all subsequent drawing operations. <TT><a
+href=Fl_Color.html>Fl_Color</a></TT> is a typedef for a 32-bit integer
+containing r,g,b bytes and an "index" byte.  The index is used if
+r,g,b is zero.
+
+<P>For 8-bit X colormapped displays, a color cell will be allocated
+out of <TT> fl_colormap</TT> the first time you use an "indexed"
+color. If the colormap fills up then a least-squares algorithm is used
+to find the closest color.  RGB colors are found by using the closest
+entry in the color cube, which may not be all that close.  (On Windows
+the system dithering is used for all colors, which looks lousy, but
+Windows does not have the defective X behavior and thus you usually
+are not forced to set the screen to 8-bit mode).
+
+<H4><a href=Fl_Color.html>Fl_Color</a> fl_color()</H4>
+
+Returns the last <TT>fl_color()</TT> that was set.  This can be used 
+for state save/restore.
+
 <H4>void fl_color(uchar r, uchar g, uchar b)</H4>
- Set the color for all subsequent drawing operations.  The closest 
-possible match to the RGB color is used.  The RGB color is used 
-directly on TrueColor displays. For colormap visuals the nearest index 
-in the gray ramp or color cube is used. 
+
+Same as <tt>fl_color(fl_rgb(r,g,b))</tt>.
+
+<h3><A name=lines>Line types and thickness</a></h3>
+
+<h4>void fl_line_style(int style, int width=0, char* dashes=0)</h4>
+
+Set how to draw lines (the "pen").  If you change this it is your
+responsibility to set it back to the default with
+<tt>fl_line_style(0)</tt>.
+
+<p><i>style</i> is a bitmask combinining the following values.  If
+you don't specify a dash type you will get a solid line.  If you don't
+specify a cap or join type you will get a system-defined default of
+whatever value is fastest.
+
+<ul>
+<li><tt>FL_SOLID&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; -------</tt>
+<li><tt>FL_DASH&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; - - - -</tt>
+<li><tt>FL_DOT&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; .......</tt>
+<li><tt>FL_DASHDOT&nbsp;&nbsp;&nbsp; - . - .</tt>
+<li><tt>FL_DASHDOTDOT - .. -</tt>
+<li><tt>FL_CAP_FLAT</tt>
+<li><tt>FL_CAP_ROUND</tt>
+<li><tt>FL_CAP_SQUARE</tt> (extends past end point 1/2 line width)
+<li><tt>FL_JOIN_MITER</tt> (pointed)
+<li><tt>FL_JOIN_ROUND</tt>
+<li><tt>FL_JOIN_BEVEL</tt> (flat)
+</ul>
+
+<p><i>width</i> is the number of pixels thick to draw the lines.  Zero
+results in the system-defined default, which on both X and Windows is
+somewhat different and nicer than 1.
+
+<p><i>dashes</i> is a pointer to an array of dash lengths, measured in
+pixels.  The first location is how long to draw a solid portion, the
+next is how long to draw the gap, then the solid, etc.  It is
+terminated with a zero-length entry.  A null pointer or a zero-length
+array results in a solid line.  Odd array sizes are not supported and
+result in undefined behavior!  You should not set both this and a dash
+type.  This does not work on Windows 95.
+
 <H3><A name=fast>Fast Shapes</A></H3>
  These are used to draw almost all the FLTK widgets.  They draw on 
 exact pixel boundaries and are as fast as possible, and their behavior 
@@ -91,11 +149,22 @@ transformation matrix</A>, so you should only call these while it is
 the identity. 
 <H4>void fl_rectf(int x, int y, int w, int h)</H4>
  Color a rectangle that exactly fills the given bounding box. 
-<H4>void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b)</H4>
- Color a rectangle with &quot;exactly&quot; the passed <TT>r,g,b</TT> color.  On 
-screens with less than 24 bits of color this is done by drawing a 
-solid-colored block using <A href=#fl_draw_image><TT>fl_draw_image()</TT>
-</A> so that dithering is produced. 
+
+
+<H4>void fl_rectf(int x, int y, int w, int h, <a
+href=Fl_Color.html>Fl_Color</a>)</h4>
+
+Color a rectangle with &quot;exactly&quot; the passed <TT>r,g,b</TT>
+color.  On screens with less than 24 bits of color this is done by
+drawing a solid-colored block using <A
+href=#fl_draw_image><TT>fl_draw_image()</TT> </A> so that dithering is
+produced.
+
+<H4>void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar
+b)</H4>
+
+Same as <tt>fl_rectf(x,y,w,h,fl_rgb(r,g,b))</tt>.
+
 <H4>void fl_rect(int x, int y, int w, int h)</H4>
  Draw a 1-pixel border <I>inside</I> this bounding box. 
 <H4>void fl_line(int x, int y, int x1, int y1)
@@ -201,26 +270,40 @@ may be faster.  It must be the <I>only</I> thing in the path: if you
 want a circle as part of a complex polygon you must use <TT>fl_arc()</TT>
 . <I>This draws incorrectly if the transformation is both rotated and 
 non-square scaled.</I>
+
 <H3><A name=text>Text</A></H3>
- All text is drawn in the <A href=#fl_font>current font</A>.  It is 
-undefined whether this location or the characters are modified by the 
-current transformation. 
+
+<H4><A name=fl_font>void fl_font(<a href=Fl_Font.html>Fl_Font</a>, int
+size)</A></H4>
+
+Set the current font.  It is scaled so that the point size is
+<i>size</i> pixels tall (other transformations are not yet supported).
+It is undefined if the font selection is affected by the current
+transformation, so keep it the identity.
+
+<p>You may call this outside a draw context if necessary to call <TT>
+fl_width()</TT>, but on X this will open the display. 
+
+<H4><a href=Fl_Font.html>Fl_Font</a> fl_font()
+<BR> int fl_size()</H4>
+
+Returns the font and size set by the most recent call to <TT>
+fl_font(a,b)</TT>.  This can be used to save/restore the font. 
+
 <H4>void fl_draw(const char *, float x, float y)
-<BR> void fl_draw(const char *, int n, float x, float y)</H4>
- Draw a nul-terminated string or an array of <TT>n</TT> characters 
+<BR>void fl_draw(const char *, int n, float x, float y)</H4>
+Draw a nul-terminated string or an array of <TT>n</TT> characters 
 starting at the given location. 
-<H4>void fl_draw(const char *, int x, int y, int w, int h, Fl_Align)</H4>
- Fancy string drawing function which is used to draw all the labels. 
-The string is formatted and aligned inside the passed box.  Handles 
-'\t' and '\n', expands all other control characters to ^X, and aligns 
-inside or against the edges of the box.  See <A href=Fl_Widget.html#Fl_Widget.align>
-<TT>Fl_Widget::align()</TT></A> for values for <TT>align</TT>.  The 
-value <TT>FL_ALIGN_INSIDE</TT> is ignored, as this function always 
-prints inside the box. 
-<H4>void fl_measure(const char *, int &amp;w, int &amp;h)</H4>
- Measure how wide and tall the string will be when printed by the <TT>
-fl_draw(...align)</TT> function.  If the incoming <TT>w</TT> is 
-non-zero it will wrap to that width. 
+
+<H4>void fl_draw(const char *, int x, int y, int w, int h, Fl_Flags)</H4>
+Fancy string drawing function which is used to draw all the labels.
+The string is formatted and aligned inside the passed box.  Handles
+'\t' and '\n', expands all other control characters to ^X, and aligns
+inside or against the edges of the box.  See <A
+href=Fl_Labeltype.html> <TT>Fl_Labeltype_::draw()</TT></A> for values
+for the flags.  The value <TT>FL_ALIGN_INSIDE</TT> is ignored, as this
+function always prints inside the box.
+
 <H4>int fl_height()</H4>
  Recommended minimum line spacing for the current font.  You can also 
 just use the value of <TT>size</TT> passed to <A href=#fl_font><TT>
@@ -233,6 +316,10 @@ box to draw the text at so it looks centered vertically in that box.
 <BR> float fl_width(uchar)</H4>
  Return the pixel width of a nul-terminated string, a sequence of <TT>n</TT>
  characters, or a single character in the current font. 
+<H4>void fl_measure(const char *, int &amp;w, int &amp;h)</H4>
+ Measure how wide and tall the string will be when printed by the <TT>
+fl_draw(...align)</TT> function.  If the incoming <TT>w</TT> is 
+non-zero it will wrap to that width. 
 <H4>const char *fl_shortcut_label(ulong)</H4>
  Unparse a shortcut value as used by <A href=Fl_Button.html#Fl_Button.shortcut>
 <TT>Fl_Button</TT></A> or <A href=Fl_Menu_Item.html#Fl_Menu_Item><TT>
@@ -240,25 +327,7 @@ Fl_Menu_Item</TT></A> into a human-readable string like &quot;Alt+N&quot;.  This
 only works if the shortcut is a character key or a numbered function 
 key.  If the shortcut is zero an empty string is returned.  The return 
 value points at a static buffer that is overwritten with each call. 
-<H3><A name=fonts>Fonts</A></H3>
-<H4><A name=fl_font>void fl_font(int face, int size)</A></H4>
- Set the current font, which is then used by the routines described 
-above.  You may call this outside a draw context if necessary to call <TT>
-fl_width()</TT>, but on X this will open the display. 
-<P>The font is identified by a <TT>face</TT> and a <TT>size</TT>.  The 
-size of the font is measured in <TT>pixels</TT> (not "points").  Lines
- should be spaced <TT>size</TT> pixels apart (or more). </P>
-<P>The <TT>face</TT> is an index into an internal table.  Initially 
-only the first 16 faces are filled in.  There are symbolic names for 
-them: <TT>FL_HELVETICA</TT>, <TT>FL_TIMES</TT>, <TT>FL_COURIER</TT>, 
-and modifier values <TT>FL_BOLD</TT> and <TT>FL_ITALIC</TT> which can 
-be added to these, and <TT>FL_SYMBOL</TT> and <TT>FL_ZAPF_DINGBATS</TT>
-.  Faces greater than 255 cannot be used in <TT>Fl_Widget</TT> labels, 
-since it stores the index as a byte. </P>
-<H4>int fl_font()
-<BR> int fl_size()</H4>
- Returns the face and size set by the most recent call to <TT>
-fl_font(a,b)</TT>.  This can be used to save/restore the font. 
+
 <H3><A name=overlay>Overlays</A></H3>
 <H4>void fl_overlay_rect(int x, int y, int w, int h)
 <BR> void fl_overlay_clear()</H4>
@@ -274,15 +343,23 @@ fl_overlay_clear()</TT> before doing anything else.  Your <TT>handle()</TT>
  method should call <TT>window()-&gt;make_current()</TT> and then <TT>
 fl_overlay_rect()</TT> after <TT>FL_DRAG</TT> events, and should call <TT>
 fl_overlay_clear()</TT> after a <TT>FL_RELEASE</TT> event. </P>
+
 <H2><A name=images>Images</A></H2>
- To draw images, you can either do it directly from data in your 
-memory, or you can create <A href=#Fl_Bitmap><TT>Fl_Bitmap</TT></A>, <A href=#Fl_Image>
-<TT>Fl_Image</TT></A>, or <A href=#Fl_Pixmap><TT>Fl_Pixmap</TT></A>
- objects.  The advantage of drawing directly is that it is more 
-intuitive, and it is faster if the image data changes more often than 
-it is redrawn.  The advantage of using the object is that FLTK will 
-cache translated forms of the image (on X it uses a server pixmap) and 
-thus redrawing is <I>much</I> faster. 
+
+To draw images, you can either do it directly from data in your
+memory, or you can create an <a
+href=Fl_Image.html><tt>Fl_Image</tt></a> subclass such as <A
+href=Fl_Image.html#Fl_Bitmap><TT>Fl_Bitmap</TT></A>, <A
+href=Fl_Image.html#Fl_RGB_Image> <TT>Fl_RGB_Image</TT></A>, or <A
+href=Fl_Image.html#Fl_Pixmap><TT>Fl_Pixmap</TT></A> and call <a
+href=Fl_Image.html#draw><tt>draw()</tt></a> on them.  The advantage of
+drawing directly is that it is more intuitive, and it is faster if the
+image data changes more often than it is redrawn.  The advantage of
+using the object is that FLTK will cache translated forms of the image
+(on X it uses a server pixmap) and thus redrawing is <I>much</I>
+faster.  In addition, on current systems, <tt>Fl_Image</tt> is the
+only way to get transparency or to draw 1-bit bitmaps.
+
 <H3>Direct Image Drawing</H3>
  It is undefined whether the location or drawing of the image is 
 affected by the current transformation, so you should only call these 
@@ -347,7 +424,7 @@ the start of the buffer. </P>
 first one may be greater than zero. </P>
 <P>If <TT>D</TT> is 4 or more, you must fill in the unused bytes with 
 zero. </P>
-<H4>int fl_draw_pixmap(char **data, int X, int Y, Fl_Color = FL_GRAY)</H4>
+<H4>int fl_draw_pixmap(char **data, int X, int Y, <a href=Fl_Color.html>Fl_Color</a> = FL_GRAY)</H4>
 Draws XPM image data, with the top-left corner at the given position. 
 The image is dithered on 8-bit displays so you won't lose color space 
 for programs displaying both images and pixmaps.  This function returns 
@@ -364,109 +441,11 @@ fl_draw_pixmap(foo, X, Y);
 and passed through <TT>fl_draw_image()</TT>.  This is obviously not the 
 most efficient way to do it, and has the same visual limitations as 
 listed above for <TT>fl_draw_image()</TT>.  Transparent colors are 
-replaced by the optional <TT>Fl_Color</TT> argument (this may change in 
+replaced by the optional <TT><a href=Fl_Color.html>Fl_Color</a></TT> argument (this may change in 
 the future). 
 <H4>int fl_measure_pixmap(char **data, int &amp;w, int &amp;h)</H4>
  An XPM image contains the dimensions in its data.  This function finds 
 and returns the width and height.  The return value is non-zero if it 
 parsed the dimensions ok, and zero if there is any problem. 
-<H3><A name=Fl_Bitmap>class Fl_Bitmap</A></H3>
- This object encapsulates the width, height, and bits of an X bitmap 
-(XBM), and allows you to make an <TT>Fl_Widget</TT> use a bitmap as a 
-label, or to just draw the bitmap directly.  Under X it will create an 
-offscreen pixmap the first time it is drawn, and copy this each 
-subsequent time it is drawn. 
-<H4>Fl_Bitmap(const char *bits, int W, int H)
-<BR> Fl_Bitmap(const uchar *bits, int W, int H)</H4>
- Construct using an X bitmap.  The bits pointer is simply copied to the 
-object, so it must point at persistent storage.  The two constructors 
-are provided because various X implementations disagree about the type 
-of bitmap data.  To use an XBM file use: 
-<UL>
-<PRE>
-#include &quot;foo.xbm&quot;
-...
-Fl_Bitmap bitmap = new Fl_Bitmap(foo_bits, foo_width, foo_height);
-</PRE>
-</UL>
-<H4>~Fl_Bitmap()</H4>
- The destructor will destroy any X pixmap created.  It does not do 
-anything to the bits data. 
-<H4>void draw(int x, int y, int w, int h, int ox = 0, int oy = 0)</H4>
-<TT>x,y,w,h</TT> indicates a destination rectangle. <TT>ox,oy,w,h</TT>
- is a source rectangle.  This source rectangle from the bitmap is drawn 
-in the destination.  1 bits are drawn with the current color, 0 bits 
-are unchanged.  The source rectangle may extend outside the bitmap 
-(i.e. <TT>ox</TT> and <TT>oy</TT> may be negative and <TT>w</TT> and <TT>
-h</TT> may be bigger than the bitmap) and this area is left unchanged. 
-<H4>void draw(int x, int y)</H4>
- Draws the bitmap with the upper-left corner at <TT>x,y</TT>.  This is 
-the same as doing <TT>draw(x,y,this-&gt;w,this-&gt;h,0,0)</TT>. 
-<H4>void label(Fl_Widget *)</H4>
- Change the <TT>label()</TT> and the <TT>labeltype()</TT> of the widget 
-to draw the bitmap.  1 bits will be drawn with the <TT>labelcolor()</TT>
-, zero bits will be unchanged.  You can use the same bitmap for many 
-widgets. 
-<H2><A name=Fl_Pixmap>class Fl_Pixmap</A></H2>
- This object encapsulates the data from an XPM image, and allows you to 
-make an <TT>Fl_Widget</TT> use a pixmap as a label, or to just draw the 
-pixmap directly. <I>Under X it will create an offscreen pixmap the 
-first time it is drawn, and copy this each subsequent time it is drawn</I>
-. 
-<P>The current implementation converts the pixmap to 24-bit RGB data 
-and uses <A href=#fl_draw_image><TT>fl_draw_image()</TT></A> to draw 
-it.  Thus you will get dithered colors on an 8 bit screen. </P>
-<H4>Fl_Pixmap(char *const* data)</H4>
- Construct using XPM data.  The data pointer is simply copied to the 
-object, so it must point at persistent storage.  To use an XPM file do: 
-<UL>
-<PRE>
-#include &lt;FL/Fl_Pixmap.H&gt;
-#include &quot;foo.xpm&quot;
-...
-Fl_Pixmap pixmap = new Fl_Pixmap(foo);
-</PRE>
-</UL>
-<H4>~Fl_Pixmap()</H4>
- The destructor will destroy any X pixmap created.  It does not do 
-anything to the data. 
-<H4>void draw(int x, int y, int w, int h, int ox = 0, int oy = 0)</H4>
-<TT>x,y,w,h</TT> indicates a destination rectangle. <TT>ox,oy,w,h</TT>
- is a source rectangle.  This source rectangle is copied to the 
-destination.  The source rectangle may extend outside the pixmap (i.e. <TT>
-ox</TT> and <TT>oy</TT> may be negative and <TT>w</TT> and <TT>h</TT>
- may be bigger than the pixmap) and this area is left unchanged. 
-<H4>void draw(int x, int y)</H4>
- Draws the image with the upper-left corner at <TT>x,y</TT>.  This is 
-the same as doing <TT>draw(x,y,this-&gt;w,this-&gt;h,0,0)</TT>. 
-<H4>void label(Fl_Widget *)</H4>
- Change the <TT>label()</TT> and the <TT>labeltype()</TT> of the widget 
-to draw the pixmap.  You can use the same pixmap for many widgets. 
-<H3><A name=Fl_Image>class Fl_Image</A></H3>
- This object encapsulates a full-color RGB image, and allows you to 
-make an <TT>Fl_Widget</TT> use an image as a label, or to just draw the 
-image directly. <I>Under X it will create an offscreen pixmap the first 
-time it is drawn, and copy this each subsequent time it is drawn</I>. 
-<H4>Fl_Image(const uchar *data, int W, int H, int D = 3, int LD = 0)</H4>
- Construct using a pointer to RGB data. <TT>W</TT> and <TT>H</TT> are 
-the size of the image in pixels. <TT>D</TT> is the delta between pixels 
-(it may be more than 3 to skip alpha or other data, or negative to flip 
-the image left/right). <TT>LD</TT> is the delta between lines (it may 
-be more than <TT>D * W</TT> to crop images, or negative to flip the 
-image vertically).  The data pointer is simply copied to the object, so 
-it must point at persistent storage. 
-<H4>~Fl_Image()</H4>
- The destructor will destroy any X pixmap created.  It does not do 
-anything to the data. 
-<H4>void draw(int x, int y, int w, int h, int ox = 0, int oy = 0)</H4>
-<TT>x,y,w,h</TT> indicates a destination rectangle. <TT>ox,oy,w,h</TT>
- is a source rectangle.  This source rectangle is copied to the 
-destination.  The source rectangle may extend outside the image (i.e. <TT>
-ox</TT> and <TT>oy</TT> may be negative and <TT>w</TT> and <TT>h</TT>
- may be bigger than the image) and this area is left unchanged. 
-<H4>void draw(int x, int y)</H4>
- Draws the image with the upper-left corner at <TT>x,y</TT>.  This is 
-the same as doing <TT>draw(x,y,this-&gt;w,this-&gt;h,0,0)</TT>. 
-<H4>void label(Fl_Widget *)</H4>
- Change the <TT>label()</TT> and the <TT>labeltype()</TT> of the widget 
-to draw the image.  You can use the same image for many widgets. </BODY></HTML>
+
+</BODY></HTML>

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_set_fonts_win32.cxx,v 1.5 1999/01/07 19:17:42 mike Exp $"
+// "$Id: fl_set_fonts_win32.cxx,v 1.6 1999/08/16 07:31:29 bill Exp $"
 //
 // WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 
 #include <FL/Fl.H>
 #include <FL/win32.H>
-#include "Fl_Font.H"
+#include "Fl_FontSize.h"
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
@@ -87,5 +87,5 @@ int Fl::get_font_sizes(Fl_Font fnum, int*& sizep) {
 }
 
 //
-// End of "$Id: fl_set_fonts_win32.cxx,v 1.5 1999/01/07 19:17:42 mike Exp $".
+// End of "$Id: fl_set_fonts_win32.cxx,v 1.6 1999/08/16 07:31:29 bill Exp $".
 //

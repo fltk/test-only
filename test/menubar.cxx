@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.13 1999/05/07 14:50:06 carl Exp $"
+// "$Id: menubar.cxx,v 1.14 1999/08/16 07:31:36 bill Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -155,7 +155,7 @@ Fl_Menu_Item menutable[] = {
     {"A very long menu item"},
     {0},
   {"&Huge", 0, 0, (void*)hugemenu, FL_SUBMENU_POINTER},
-  {"button",0, 0},
+  {"button",0, 0, 0, FL_MENU_TOGGLE},
   {0}
 };
 
@@ -181,6 +181,7 @@ int main(int argc, char **argv) {
   
   window = new Fl_Window(WIDTH,400);
   Fl_Menu_Bar menubar(0,0,WIDTH,30); menubar.menu(menutable);
+#if 1
   menubar.find("&Font/Normal")->labelfont(FL_HELVETICA);
   menubar.find("&Font/Bold")->labelfont(FL_BOLD);
   menubar.find("&Font/Italic")->labelfont(FL_ITALIC);
@@ -202,6 +203,7 @@ int main(int argc, char **argv) {
   menubar.find("&Radio/Black")->labelcolor(FL_BLACK);
   menubar.find("&Radio/Black")->down_labelcolor(FL_BLACK);
   menubar.find("&Radio/Black")->light_color(FL_BLACK);
+#endif
   menubar.find("&Huge/item 69")->deactivate(); // No 69ing allowed!
   menubar.callback(test_cb);
   menubar.tooltip("This is a menu bar");
@@ -224,9 +226,10 @@ int main(int argc, char **argv) {
   window->size_range(300,20);
   window->end();
   window->show(argc, argv);
+
   return Fl::run();
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.13 1999/05/07 14:50:06 carl Exp $".
+// End of "$Id: menubar.cxx,v 1.14 1999/08/16 07:31:36 bill Exp $".
 //

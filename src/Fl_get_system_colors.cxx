@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_system_colors.cxx,v 1.7 1999/04/07 18:45:57 carl Exp $"
+// "$Id: Fl_get_system_colors.cxx,v 1.8 1999/08/16 07:31:23 bill Exp $"
 //
 // System color support for the Fast Light Tool Kit (FLTK).
 //
@@ -23,48 +23,58 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <FL/Fl.H>
 #include <FL/x.H>
+#include <FL/Fl_Color.H>
 #include <FL/math.h>
 #include <config.h>
 
-void Fl::background(uchar r, uchar g, uchar b) {
+void fl_background(Fl_Color c) {
   // replace the gray ramp so that FL_GRAY is this color
+  int r = (c>>24)&255;
   if (!r) r = 1; else if (r==255) r = 254;
   double powr = log(r/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
+  int g = (c>>16)&255;
   if (!g) g = 1; else if (g==255) g = 254;
   double powg = log(g/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
+  int b = (c>>8)&255;
   if (!b) b = 1; else if (b==255) b = 254;
   double powb = log(b/255.0)/log((FL_GRAY-FL_GRAY_RAMP)/(FL_NUM_GRAY-1.0));
   for (int i = 0; i < FL_NUM_GRAY; i++) {
     double gray = i/(FL_NUM_GRAY-1.0);
-    Fl::set_color(fl_gray_ramp(i),
-		  uchar(pow(gray,powr)*255+.5),
-		  uchar(pow(gray,powg)*255+.5),
-		  uchar(pow(gray,powb)*255+.5));
+    fl_set_color(fl_gray_ramp(i),
+		 fl_rgb(uchar(pow(gray,powr)*255+.5),
+			uchar(pow(gray,powg)*255+.5),
+			uchar(pow(gray,powb)*255+.5)));
   }
 }
 
-void Fl::foreground(uchar r, uchar g, uchar b) {
-  Fl::set_color(FL_BLACK,r,g,b);
+void fl_foreground(Fl_Color c) {
+  fl_set_color(FL_NO_COLOR, c);
 }
 
-void Fl::background2(uchar r, uchar g, uchar b) {
-  Fl::set_color(FL_WHITE,r,g,b);
-  Fl::set_color(FL_BLACK,get_color(contrast(FL_BLACK,FL_WHITE)));
+#include <FL/Fl_Input.H>
+void fl_text_background(Fl_Color c) {
+  Fl_Style& s = Fl_Input::default_style;
+  s.set_color(c);
+  s.set_text_color(fl_contrast(s.text_color, c));
+  s.set_selection_color(fl_contrast(s.selection_color, c));
+  s.set_selection_text_color(fl_contrast(s.selection_text_color,
+					 s.selection_color));
+  s.set_off_color(fl_contrast(s.off_color, c)); // cursor color
 }
 
-// these are set by Fl::args() and override any system colors:
-const char *fl_fg;
-const char *fl_bg;
-const char *fl_bg2;
-
+// Named color parser:
+#ifdef WIN32
 #include <stdio.h>
-// simulation of XParseColor:
-int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b) {
-  if (*p == '#') p++;
-  if (!strncmp(p, "0x", 2)) p+= 2;
-  int n = strlen(p);
+#endif
+
+Fl_Color fl_rgb(const char* name) {
+  if (!name || !*name) return FL_NO_COLOR;
+#ifdef WIN32
+  // simulation of XParseColor:
+  if (*name == '#') name++;
+  if (name[0]=='0' && name[1]=='x') name += 2;
+  int n = strlen(name);
   int m = n/3;
   const char *pattern = 0;
   switch(m) {
@@ -72,62 +82,20 @@ int fl_parse_color(const char* p, uchar& r, uchar& g, uchar& b) {
   case 2: pattern = "%2x%2x%2x"; break;
   case 3: pattern = "%3x%3x%3x"; break;
   case 4: pattern = "%4x%4x%4x"; break;
-  default: return 0;
+  default: return FL_NO_COLOR;
   }
-  int R,G,B; if (sscanf(p,pattern,&R,&G,&B) != 3) return 0;
-  r = R; g = G; b = B;
-  return 1;
-}
-
-#ifdef WIN32
-
-static void
-getsyscolor(int what, const char* arg, void (*func)(uchar,uchar,uchar))
-{
-  if (arg) {
-    uchar r,g,b;
-    if (!fl_parse_color(arg, r,g,b))
-      Fl::error("Unknown color: %s", arg);
-    else
-      func(r,g,b);
-  } else {
-    DWORD x = GetSysColor(what);
-    func(uchar(x&255), uchar(x>>8), uchar(x>>16));
-  }
-}
-
-void Fl::get_system_colors() {
-  getsyscolor(COLOR_WINDOW,	fl_bg2,Fl::background2);
-  getsyscolor(COLOR_WINDOWTEXT,	fl_fg, Fl::foreground);
-  getsyscolor(COLOR_BTNFACE,	fl_bg, Fl::background);
-}
-
+  int R,G,B; if (sscanf(name, pattern, &R,&G,&B) != 3) return FL_NO_COLOR;
+  Fl_Color c = fl_rgb(R,G,B);
 #else
-
-// For X we should do something. KDE and Gnome store these colors in
-// some standard places, where?
-
-static void
-getsyscolor(const char *arg, void (*func)(uchar,uchar,uchar)) {
-  if (arg) {
-    XColor x;
-    if (!XParseColor(fl_display, fl_colormap, arg, &x))
-      Fl::error("Unknown color: %s", arg);
-    else
-      func(x.red>>8, x.green>>8, x.blue>>8);
-  }
-}
-
-void Fl::get_system_colors()
-{
+  XColor x;
   fl_open_display();
-  getsyscolor(fl_bg2,Fl::background2);
-  getsyscolor(fl_fg, Fl::foreground);
-  getsyscolor(fl_bg, Fl::background);
-}
-
+  if (!XParseColor(fl_display, fl_colormap, name, &x)) return FL_NO_COLOR;
+  Fl_Color c = fl_rgb(x.red>>8, x.green>>8, x.blue>>8);
 #endif
+  if (!c) c = FL_BLACK;
+  return c;
+}
 
 //
-// End of "$Id: Fl_get_system_colors.cxx,v 1.7 1999/04/07 18:45:57 carl Exp $".
+// End of "$Id: Fl_get_system_colors.cxx,v 1.8 1999/08/16 07:31:23 bill Exp $".
 //

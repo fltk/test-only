@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.19 1999/07/21 17:28:22 carl Exp $"
+// "$Id: fluid.cxx,v 1.20 1999/08/16 07:31:08 bill Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -352,9 +352,9 @@ void make_main_window() {
     o->box(FL_FLAT_BOX);
     main_window->resizable(o);
     menubar = new Fl_Menu_Bar(0,0,BROWSERWIDTH,MENUHEIGHT);
-    fill_in_New_Menu();
     menubar->menu(Main_Menu);
     menubar->global();
+    fill_in_New_Menu();
     main_window->end();
   }
 }
@@ -406,7 +406,6 @@ static void sigint(SIGARG) {
 
 int main(int argc,char **argv) {
   int i = 1;
-  
   if (!Fl::args(argc,argv,i,arg) || i < argc-1) {
     fprintf(stderr,"usage: %s <switches> name.fl\n"
 " -c : write .cxx and .h and exit\n"
@@ -439,5 +438,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.19 1999/07/21 17:28:22 carl Exp $".
+// End of "$Id: fluid.cxx,v 1.20 1999/08/16 07:31:08 bill Exp $".
 //

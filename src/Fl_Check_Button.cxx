@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.6 1999/03/18 22:59:04 carl Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.7 1999/08/16 07:31:14 bill Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -26,47 +26,55 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Check_Button.H>
 
-#define DEFAULT_STYLE ((Style*)default_style())
+void Fl_Check_Button::draw() {
 
-// A subclass of Fl_Button that always draws as a diamond box.  This
-// diamond is smaller than the widget size and can be surchecked by
-// another box type, for compatability with Forms.
-
-Fl_Widget::Style* Fl_Check_Button::_default_style = 0;
-
-
-Fl_Check_Button::Style::Style() : Fl_Light_Button::Style() {
-  widget(COLOR2) = FL_RED;
-  widget(BOX) = FL_NO_BOX;
-  button(DOWN_BOX) = FL_DIAMOND_DOWN_BOX;
-  button(DOWN_LABELCOLOR) = FL_BLACK;
-}
-
-void Fl_Check_Button::loadstyle() const {
-  if (!Fl::s_check_button) {
-    Fl::s_check_button = 1;
-
-    static Fl::Attribute widget_attributes[] = {
-      { "label color", LABELCOLOR },
-      { "label size", LABELSIZE },
-      { "label type", LABELTYPE },
-      { "label font", LABELFONT },
-      { "color", COLOR },
-      { "selected light color", COLOR2 },
-      { "unselected light color", COLOR3 },
-      { "box", BOX },
-      { 0 }
-    };
-    Fl::load_attributes("check button", DEFAULT_STYLE->widget_, widget_attributes);
-
-    static Fl::Attribute button_attributes[] = {
-      { "highlight color", FLY_COLOR },
-      { "highlight box", FLY_BOX },
-      { "down label color", DOWN_LABELCOLOR },
-      { 0 }
-    };
-    Fl::load_attributes("check button", DEFAULT_STYLE->button_, button_attributes);
+  // Draw the outer box as though it was a button:
+  Fl_Flags f = flags();
+  Fl_Color c = color();
+  Fl_Color lc = label_color();
+  if (!active_r()) {
+    f |= FL_INACTIVE;
+  } else if (Fl::belowmouse() == this && highlight_color()) {
+    c = highlight_color();
+    if (highlight_label_color()) lc = highlight_label_color();
+    f |= FL_HIGHLIGHT;
   }
+  box()->draw(x(), y(), w(), h(), c,
+	      Fl::pushed()==this ? (f|FL_VALUE) : (f&~FL_VALUE));
+
+  // Draw the check box:
+  int d = h()/6;
+  int W = (w()<h() ? w() : h()) - 2*d - 2;
+  glyph()(type()==FL_RADIO_BUTTON ? FL_GLYPH_RADIO : FL_GLYPH_CHECK,
+	  x()+d, y()+d+1, W, W,
+	  (f&FL_VALUE) ? on_color() : off_color(),
+	  f);
+
+  draw_button_label(x()+W+d, y(), w()-W-d, h(), lc);
 }
 
-Fl_Check_Button::Fl_Check_Button(int x, int y, int w, int h, const char *l) : Fl_Light_Button(x, y, w, h, l) {}
+int Fl_Check_Button::handle(int event) {
+  if (event == FL_RELEASE && !Fl::pushed()) redraw();
+  return Fl_Button::handle(event);
+}
+
+Fl_Style Fl_Check_Button::default_style = {
+  FL_FLAT_BOX,	// box
+  0,		// glyphs
+  0,		// label_font
+  0,		// text_font
+  0,		// label_type
+  0,		// color
+  0,		// label_color
+  FL_WHITE,	// selection_color / on_color
+  0,		// selection_text_color
+  FL_WHITE	// off_color
+};
+
+Fl_Check_Button::Fl_Check_Button(int x, int y, int w, int h, const char *l)
+  : Fl_Button(x, y, w, h, l)
+{
+  style(default_style);
+  type(FL_TOGGLE_BUTTON);
+  set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
+}

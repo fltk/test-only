@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Box.cxx,v 1.6 1999/05/06 05:52:12 carl Exp $"
+// "$Id: Fl_Box.cxx,v 1.7 1999/08/16 07:31:12 bill Exp $"
 //
 // Box widget for the Fast Light Tool Kit (FLTK).
 //
@@ -26,13 +26,23 @@
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Box.H>
 
-// MRS - shouldn't we inline this?
-
 void Fl_Box::draw() {
   draw_box();
   draw_label();
 }
 
+// this is private as there is no need for themes to alter this:
+static Fl_Style box_style = {
+  FL_NO_BOX // box
+  // rest is zero and inherited from parent's style
+};
+
+Fl_Box::Fl_Box(int x, int y, int w, int h, const char *l=0)
+  : Fl_Widget(x,y,w,h,l)
+{
+  style(box_style);
+}
+
 //
-// End of "$Id: Fl_Box.cxx,v 1.6 1999/05/06 05:52:12 carl Exp $".
+// End of "$Id: Fl_Box.cxx,v 1.7 1999/08/16 07:31:12 bill Exp $".
 //

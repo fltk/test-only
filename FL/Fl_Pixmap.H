@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pixmap.H,v 1.6 1999/02/16 21:59:41 mike Exp $"
+// "$Id: Fl_Pixmap.H,v 1.7 1999/08/16 07:30:52 bill Exp $"
 //
 // Pixmap header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,25 +26,23 @@
 #ifndef Fl_Pixmap_H
 #define Fl_Pixmap_H
 
-class Fl_Widget;
-struct Fl_Menu_Item;
+#include "Fl_Image.H"
 
-struct Fl_Pixmap {
+FL_EXPORT class Fl_Pixmap : public Fl_Image {
+public:
   /*const*/ char * const * data;
-  int w, h; // set by first draw...
-  ulong id; // for internal use (the pixmap)
-  ulong mask; // for internal use (mask bitmap)
-  Fl_Pixmap(/*const*/char * const * d) : data(d), w(-1), h(0), id(0),mask(0) {}
-  Fl_Pixmap(/*const*/uchar* const * d) : data((char**)d), w(-1), h(0), id(0),mask(0) {}
-  FL_EXPORT ~Fl_Pixmap();
-  FL_EXPORT void label(Fl_Widget*);
-  FL_EXPORT void label(Fl_Menu_Item*);
-  FL_EXPORT void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
-  void draw(int X, int Y) {draw(X, Y, w, h, 0, 0);}
+  Fl_Pixmap(/*const*/char * const * d) : data(d) {w = -1;}
+  Fl_Pixmap(/*const*/uchar* const * d) : data((char**)d) {w = -1;}
+  void measure(int,int);
+  void draw(int, int, int, int, int cx, int cy);
+  void draw(int X, int Y) {draw(X,Y,1000,1000,0,0);}
+  void draw(int X, int Y, int W, int H, Fl_Flags f=0) {
+    Fl_Image::draw(X,Y,W,H,f);
+  }
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Pixmap.H,v 1.6 1999/02/16 21:59:41 mike Exp $".
+// End of "$Id: Fl_Pixmap.H,v 1.7 1999/08/16 07:30:52 bill Exp $".
 //

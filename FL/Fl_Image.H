@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.H,v 1.5 1999/02/16 21:59:38 mike Exp $"
+// "$Id: Fl_Image.H,v 1.6 1999/08/16 07:30:50 bill Exp $"
 //
 // Image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,24 +26,31 @@
 #ifndef Fl_Image_H
 #define Fl_Image_H
 
+#include "Fl_Flags.H"
+
 class Fl_Widget;
 struct Fl_Menu_Item;
 
-struct Fl_Image {
-  const uchar *array;
-  int w, h, d, ld;
-  ulong id; // for internal use
-  FL_EXPORT Fl_Image(const uchar *bits, int W, int H, int D=3, int LD=0) :
-    array(bits), w(W), h(H), d(D), ld(LD), id(0) {}
-  FL_EXPORT ~Fl_Image();
-  FL_EXPORT void label(Fl_Widget*);
-  FL_EXPORT void label(Fl_Menu_Item*);
-  FL_EXPORT void draw(int X, int Y, int W, int H, int cx=0, int cy=0);
-  FL_EXPORT void draw(int X, int Y) {draw(X, Y, w, h, 0, 0);}
+FL_EXPORT class Fl_Image {
+protected:
+  ulong id, mask;
+  void _draw(int X, int Y, int W, int H, int cx, int cy);
+public:
+  int w, h;
+  Fl_Image() : id(0), mask(0) {}
+  virtual void measure(int W, int H);
+  virtual void draw(int,int,int,int, int cx, int cy) = 0;
+  virtual ~Fl_Image();
+
+  void draw(int X, int Y, int W, int H, Fl_Flags);
+
+  // back compatability:
+  void Fl_Image::label(Fl_Widget* o);
+  void Fl_Image::label(Fl_Menu_Item* o);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Image.H,v 1.5 1999/02/16 21:59:38 mike Exp $".
+// End of "$Id: Fl_Image.H,v 1.6 1999/08/16 07:30:50 bill Exp $".
 //

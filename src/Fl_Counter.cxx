@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Counter.cxx,v 1.14 1999/05/06 05:52:15 carl Exp $"
+// "$Id: Fl_Counter.cxx,v 1.15 1999/08/16 07:31:15 bill Exp $"
 //
 // Counter widget for the Fast Light Tool Kit (FLTK).
 //
@@ -28,26 +28,15 @@
 #include <FL/fl_draw.H>
 #include <FL/Fl_Output.H>
 
-#define DEFAULT_STYLE ((Style*)default_style())
-
 void Fl_Counter::draw() {
-  int i; Fl_Boxtype boxtype[5];
-  Fl_Color selcolor;
 
-  Fl_Color col;
-  Fl_Boxtype bt;
-  if (fly_box() && Fl::belowmouse() == this)
-    { bt = fly_box(); col = fly_color(); }
-  else
-    { bt = box(); col = color(); }
-
-  boxtype[0] = down_box();
-
-  for (i=1; i<5; i++)
-    if (mouseobj == i)
-      boxtype[i] = down(box());
-    else
-      boxtype[i] = bt;
+  Fl_Flags fl[5];
+  for (int i = 1; i < 5; i++) {
+    unsigned f = flags();	
+    if (Fl::belowmouse() == this) f |= FL_HIGHLIGHT;
+    if (mouseobj == i) f |= FL_VALUE;
+    fl[i] = (Fl_Flags)f;
+  }
 
   int xx[5], ww[5];
   if (type() == FL_NORMAL_COUNTER) {
@@ -64,28 +53,26 @@ void Fl_Counter::draw() {
     xx[3] = x()+w()-1*W; ww[3] = W;
   }
 
-  draw_box(boxtype[0], xx[0], y(), ww[0], h(), color3());
+  Fl_Output::default_style.box->draw(xx[0], y(), ww[0], h(),
+				     Fl_Output::default_style.color, 0);
   fl_font(textfont(), textsize());
-  fl_color(active_r() ? textcolor() : inactive(textcolor()));
+  fl_color(active_r() ? textcolor() : fl_inactive(textcolor()));
   char str[128]; format(str);
   fl_draw(str, xx[0], y(), ww[0], h(), FL_ALIGN_CENTER);
   if (!(damage()&FL_DAMAGE_ALL)) return; // only need to redraw text
 
-  if (active_r())
-    selcolor = selection_color();
-  else
-    selcolor = inactive(selection_color());
+  Fl_Color c = active_r() ? off_color() : Fl_Color(FL_INACTIVE_COLOR);
   if (type() == FL_NORMAL_COUNTER) {
-    draw_box(boxtype[1], xx[1], y(), ww[1], h(), col);
-    fl_draw_symbol("@-4<<", xx[1], y(), ww[1], h(), selcolor);
+    draw_glyph(0, xx[1], y(), ww[1], h(), fl[1]);
+    fl_draw_symbol("@-4<<", xx[1], y(), ww[1], h(), c);
   }
-  draw_box(boxtype[2], xx[2], y(), ww[2], h(), col);
-  fl_draw_symbol("@-4<",  xx[2], y(), ww[2], h(), selcolor);
-  draw_box(boxtype[3], xx[3], y(), ww[3], h(), col);
-  fl_draw_symbol("@-4>",  xx[3], y(), ww[3], h(), selcolor);
+  draw_glyph(0, xx[2], y(), ww[2], h(), fl[2]);
+  fl_draw_symbol("@-4<",  xx[2], y(), ww[2], h(), c);
+  draw_glyph(0, xx[3], y(), ww[3], h(), fl[3]);
+  fl_draw_symbol("@-4>",  xx[3], y(), ww[3], h(), c);
   if (type() == FL_NORMAL_COUNTER) {
-    draw_box(boxtype[4], xx[4], y(), ww[4], h(), col);
-    fl_draw_symbol("@-4>>", xx[4], y(), ww[4], h(), selcolor);
+    draw_glyph(0, xx[4], y(), ww[4], h(), fl[4]);
+    fl_draw_symbol("@-4>>", xx[4], y(), ww[4], h(), c);
   }
 }
 
@@ -154,7 +141,7 @@ int Fl_Counter::handle(int event) {
     return 1;
   case FL_ENTER:
   case FL_LEAVE:
-    if (takesevents() && fly_box()) redraw();
+    if (highlight_color() && active_r()) redraw();
     return 1;
   default:
     return 0;
@@ -165,51 +152,6 @@ Fl_Counter::~Fl_Counter() {
   Fl::remove_timeout(repeat_callback, this);
 }
 
-Fl_Widget::Style* Fl_Counter::_default_style = 0;
-
-Fl_Counter::Style::Style() : Fl_Widget::Style() {
-  sbf = 0;
-
-  widget(COLOR2) = FL_BLACK;
-  widget(COLOR3) = FL_GRAY;
-  widget(BOX) = FL_MEDIUM_UP_BOX;
-
-  counter(DOWN_BOX) = FL_ENGRAVED_BOX;
-  counter(TEXTFONT) = FL_HELVETICA;
-  counter(TEXTSIZE) = 10;
-  counter(TEXTCOLOR) = FL_BLACK;
-  counter(FLY_COLOR) = 51;
-  counter(FLY_BOX) = FL_MEDIUM_UP_BOX;
-}
-
-void Fl_Counter::loadstyle() const {
-  if (!Fl::s_counter) {
-    Fl::s_counter = 1;
-    static Fl::Attribute widget_attributes[] = {
-      { "label color", LABELCOLOR },
-      { "label size", LABELSIZE },
-      { "label type", LABELTYPE },
-      { "label font", LABELFONT },
-      { "color", COLOR },
-      { "arrow color", COLOR2 },
-      { "text area color", COLOR3 },
-      { "box", BOX },
-      { 0 }
-    };
-    Fl::load_attributes("counter", DEFAULT_STYLE->widget_, widget_attributes);
-    static Fl::Attribute counter_attributes[] = {
-      { "highlight color", FLY_COLOR },
-      { "highlight box", FLY_BOX },
-      { "box2", DOWN_BOX },
-      { "text font", TEXTFONT },
-      { "text size", TEXTSIZE },
-      { "text color", TEXTCOLOR },
-      { 0 }
-    };
-    Fl::load_attributes("counter", DEFAULT_STYLE->counter_, counter_attributes);
-  }
-}
-
 Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(x, y, w, h, l) {
   align(FL_ALIGN_BOTTOM);
   bounds(-1000000.0, 1000000.0);
@@ -218,24 +160,6 @@ Fl_Counter::Fl_Counter(int x, int y, int w, int h, const char *l) : Fl_Valuator(
   mouseobj = 0;
 }
 
-uchar Fl_Counter::attr(Attribute a) const {
-  loadstyle();
-  if (!_style || !(COUNTER_STYLE->sbf & bf(a)))
-    return DEFAULT_STYLE->counter(a);
-  return COUNTER_STYLE->counter(a);
-}
-
-Fl_Font Fl_Counter::textfont() const { return (Fl_Font)attr(TEXTFONT); }
-uchar Fl_Counter::textsize() const { return attr(TEXTSIZE); }
-Fl_Color Fl_Counter::textcolor() const { return (Fl_Color)attr(TEXTCOLOR); }
-Fl_Boxtype Fl_Counter::down_box() const { return (Fl_Boxtype)attr(DOWN_BOX); }
-Fl_Color Fl_Counter::fly_color() const { return (Fl_Color)attr(FLY_COLOR); }
-Fl_Boxtype Fl_Counter::fly_box() const {
-  if (_style && (WIDGET_STYLE->sbf & bf(BOX)) && !(COUNTER_STYLE->sbf & bf(FLY_BOX)))
-    return (Fl_Boxtype)WIDGET_STYLE->widget(BOX);
-  return (Fl_Boxtype)attr(FLY_BOX);
-}
-
 //
-// End of "$Id: Fl_Counter.cxx,v 1.14 1999/05/06 05:52:15 carl Exp $".
+// End of "$Id: Fl_Counter.cxx,v 1.15 1999/08/16 07:31:15 bill Exp $".
 //

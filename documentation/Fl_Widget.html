@@ -65,6 +65,7 @@ to call <TT>redraw()</TT> after these. </P>
 <LI><A href=#Fl_Widget.labelfont>labelfont</A></LI>
 <LI><A href=#Fl_Widget.labelsize>labelsize</A></LI>
 <LI><A href=#Fl_Widget.labeltype>labeltype</A></LI>
+<LI><A href=#Fl_Widget.layout>layout</A></LI>
 <LI><A href=#Fl_Widget.output>output</A></LI>
 <LI><A href=#Fl_Widget.parent>parent</A></LI>
 </UL>
@@ -113,59 +114,109 @@ destroy that group <I>immediately</I> after destroying the children.
  The position of the upper-left corner of the widget in its enclosing 
 Fl_Window (<I>not</I> its parent if that is not an Fl_Window), and its 
 width and height. 
-<H4><A name=Fl_Widget.resize>virtual void 
+
+<H4><A name=Fl_Widget.resize>void 
 Fl_Widget::resize(int x, int y, int w, int h)</A>
 <BR><A name=Fl_Widget.position>void Fl_Widget::position(short x, short y)</A>
 <BR><A name=Fl_Widget.size>void Fl_Widget::size(short w, short h)</A></H4>
- Change the size or position of the widget.  This is a virtual function 
+
+Change the size or position of the widget.  This sets a flag so that
+the virtual function layout() is called before the next draw().
+<P><TT>position(x,y)</TT> is a shortcut for <TT>resize(x,y,w(),h())</TT>
+, and <TT>size(w,h)</TT> is a shortcut for <TT>resize(x(),y(),w,h)</TT>
+. </P>
+
+<H4><A name=Fl_Widget.resize>virtual void 
+Fl_Widget::layout()</A></h4>
+
+This is a virtual function 
 so the widget may implement its own handling of resizing.  The default 
 version does <I>not</I> do redraw(), that is the parent widget's 
 responsibility (this is because the parent may know a faster way to 
 update the display, such as scrolling from the old position). 
-<P><TT>position(x,y)</TT> is a shortcut for <TT>resize(x,y,w(),h())</TT>
-, and <TT>size(w,h)</TT> is a shortcut for <TT>resize(x(),y(),w,h)</TT>
-. </P>
+
 <H4><A name=Fl_Widget.window>Fl_Window* Fl_Widget::window() const;</A></H4>
  Return a pointer to the <A href=Fl_Window.html#Fl_Window><TT>Fl_Window</TT>
 </A> that this widget is in (it will skip any and all parent widgets 
 between this and the window).  Returns <TT>NULL</TT> if none.  Note: 
 for an <TT>Fl_Window</TT>, this returns its <I>parent</I> window (if 
 any), not <I>this</I> window. 
-<H4><A name=Fl_Widget.box>Fl_Boxtype Fl_Widget::box() const
-<BR> void Fl_Widget::box(Fl_Boxtype)</A></H4>
- The <TT>box()</TT> identifies a routine that draws the background of 
-the widget.  See <A href=common.html#BoxTypes>Box Types</A> for the 
-available types.  The default depends on the widget, but is usually <TT>
-FL_NO_BOX</TT> or <TT>FL_UP_BOX</TT>. 
-<H4><A name=Fl_Widget.color>Fl_Color Fl_Widget::color() const
-<BR> void Fl_Widget::color(Fl_Color)</A></H4>
- This color is passed to the box routine.  Color is an index into an 
-internal table of rgb colors.  For most widgets this defaults to <TT>
-FL_GRAY</TT>.  See the <A href=enumerations.html#Enumerations>
-enumeration list</A> for predefined colors.  Use <A href=functions.html#set_color>
-<TT>Fl::set_color()</TT></A> to redefine colors. 
-<H4><A name=Fl_Widget.selection_color>Fl_Color 
-Fl_Widget::selection_color() const
-<BR> void Fl_Widget::selection_color(Fl_Color)</A>
-<BR> void Fl_Widget::color(Fl_Color, Fl_Color)</H4>
- For Forms compatibility a second color is defined.  This is usually 
-used to color the widget when it is selected, although some widgets use 
-this color for other purposes.  You can set both colors at once with <TT>
-color(a,b)</TT>. 
+
+<h4><a name=style>const Fl_Style* Fl_Widget::style() const</h4>
+
+Return the <a href=Fl_Style.html>Fl_Style</a> structure used by this
+widget.  Normally this structure is shared with many other widgets.
+
+<h4><a name=wstyle>Fl_Style* Fl_Widget::wstyle();</h4>
+
+Returns a "writable" style.  If the current value of <a
+href=#style>style()</a> is shared then a unique copy is made and
+returned.  This may be modified without changing other widgets.
+
+<h4>bool Fl_Widget::style(Fl_Style* s);
+<br>bool Fl_Widget::style(Fl_Style& s);</h4>
+
+Set the style to this <i>shared</i> style.  If this style has never
+been used before fltk adds it as a child of the current style and
+returns true (this allows the calling code to initialize it).
+
+<h4><a name=copy_style>bool copy_style(const Fl_Style* s);</h4>
+
+Copy the style from another widget.  If it is not shared then a copy
+is made, otherwise the pointer is just copied.  This is done so that
+either widget may be destroyed without deleting the style used by the
+other one.
+
+<h4>Fl_Boxtype Fl_Widget::box();<br>
+Fl_Glyph Fl_Widget::glyph();<br>
+Fl_Font Fl_Widget::label_font();<br>
+Fl_Font Fl_Widget::text_font();<br>
+Fl_Labeltype Fl_Widget::label_type();<br>
+Fl_Color Fl_Widget::color();<br>
+Fl_Color Fl_Widget::label_color();<br>
+Fl_Color Fl_Widget::selection_color();<br>
+Fl_Color Fl_Widget::selection_text_color();<br>
+Fl_Color Fl_Widget::down_color();<br>
+Fl_Color Fl_Widget::up_color();<br>
+Fl_Color Fl_Widget::highlight_color();<br>
+Fl_Color Fl_Widget::highlight_label_color();<br>
+Fl_Color Fl_Widget::text_color();<br>
+unsigned Fl_Widget::label_size();<br>
+unsigned Fl_Widget::text_size();</h4>
+
+Return the given field out of the <a href=#style>style()</a>.
+
+<h4>void Fl_Widget::box(Fl_Boxtype);<br>
+void Fl_Widget::glyph(Fl_Glyph);<br>
+void Fl_Widget::label_font(Fl_Font);<br>
+void Fl_Widget::text_font(Fl_Font);<br>
+void Fl_Widget::label_type(Fl_Labeltype);<br>
+void Fl_Widget::color(Fl_Color);<br>
+void Fl_Widget::label_color(Fl_Color);<br>
+void Fl_Widget::selection_color(Fl_Color);<br>
+void Fl_Widget::selection_text_color(Fl_Color);<br>
+void Fl_Widget::down_color(Fl_Color);<br>
+void Fl_Widget::up_color(Fl_Color);<br>
+void Fl_Widget::highlight_color(Fl_Color);<br>
+void Fl_Widget::highlight_label_color(Fl_Color);<br>
+void Fl_Widget::text_color(Fl_Color);<br>
+void Fl_Widget::label_size(unsigned);<br>
+void Fl_Widget::text_size(unsigned);</h4>
+
+These all create a writable <a href=Fl_Style.html>Fl_Style</a> with <a
+href=#wstyle>wstyle()</a> and set the given field in it.
+
 <H4><A name=Fl_Widget.label>const char* Fl_Widget::label() const
 <BR> void Fl_Widget::label(const char*)</A></H4>
  The label is printed somewhere on the widget or next to it.  The 
 string is <I>not</I> copied, the passed pointer is stored unchanged in 
 the widget. 
-<H4><A name=Fl_Widget.labeltype>void Fl_Widget::label(Fl_Labeltype, 
-const char*)
-<BR> uchar Fl_Widget::labeltype() const
-<BR> void Fl_Widget::labeltype(Fl_Labeltype)</A></H4>
- A <A href=#LabelTypes><TT>labeltype</TT></A> identifies a routine that 
-draws the label of the widget.  This can be used for special effects 
-such as emboss, or to use the <TT>label()</TT> pointer as another form 
-of data such as a bitmap.  The value <TT>FL_NORMAL_LABEL</TT> prints 
-the label as text. 
+
+<H4><A name=Fl_Widget.image>Fl_Image* Fl_Widget::image() const
+<BR> void Fl_Widget::image(Fl_Image*)</A></H4>
+
+<a href=Fl_Image.html>Fl_Image</a> to draw as part of the label.
+
 <H4><A name=Fl_Widget.align>Fl_Align Fl_Widget::align() const
 <BR> void Fl_Widget::align(Fl_Align)</A></H4>
  How the label is printed next to or inside the widget.  The default 
@@ -181,22 +232,8 @@ can be any of these constants or'd together:
 <LI><TT>FL_ALIGN_CLIP</TT></LI>
 <LI><TT>FL_ALIGN_WRAP</TT></LI>
 </UL>
-<H4><A name=Fl_Widget.labelcolor>Fl_Color Fl_Widget::labelcolor() const
-<BR> void Fl_Widget::labelcolor(Fl_Color)</A></H4>
- This color is passed to the labeltype routine, and is typically the 
-color of the label text.  This defaults to <TT>FL_BLACK</TT>. 
-<H4><A name=Fl_Widget.labelfont>Fl_Font Fl_Widget::labelfont() const
-<BR> void Fl_Widget::labelfont(Fl_Font)</A></H4>
- Fonts are identified by small 8-bit indexes into a table.  See the <A href=enumerations.html#Enumerations>
-enumeration list</A> for predefined typefaces. The default value uses a 
-Helvetica typeface (Arial for Microsoft&reg; Windows&reg;).  The function <A href=functions.html#set_font>
-<TT>Fl::set_font() </TT></A> can define new typefaces. 
-<H4><A name=Fl_Widget.labelsize>uchar Fl_Widget::labelsize() const
-<BR> void Fl_Widget::labelsize(uchar)</A></H4>
- Fonts are further identified by a point size.  The default is 14. 
-<H4><A name=Fl_Widget.callback>typedef void (Fl_Callback)(Fl_Widget*, 
-void*)
-<BR> Fl_Callback* Fl_Widget::callback() const
+
+<h4>Fl_Callback* Fl_Widget::callback() const
 <BR> void Fl_Widget::callback(Fl_Callback*, void* = 0)</A></H4>
  Each widget has a single callback.  You can set it or examine it with 
 these methods. 

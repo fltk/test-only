@@ -1,5 +1,5 @@
 //
-// "$Id: gl.h,v 1.6 1999/02/16 21:59:48 mike Exp $"
+// "$Id: gl.h,v 1.7 1999/08/16 07:30:54 bill Exp $"
 //
 // OpenGL header file for the Fast Light Tool Kit (FLTK).
 //
@@ -33,7 +33,10 @@
 #ifndef gl_draw_H
 #define gl_draw_H
 
-#include "Enumerations.H" // for color names
+#include "Fl_Color.H"
+#include "Fl_Flags.H"
+#include "Fl_Font.H"
+
 #ifdef WIN32
 # include <windows.h>
 #endif
@@ -48,7 +51,7 @@ inline void gl_color(int c) {gl_color((Fl_Color)c);} // back compatability
 FL_EXPORT void gl_rect(int x,int y,int w,int h);
 inline void gl_rectf(int x,int y,int w,int h) {glRecti(x,y,x+w,y+h);}
 
-FL_EXPORT void gl_font(int fontid, int size);
+FL_EXPORT void gl_font(Fl_Font f, int size);
 FL_EXPORT int  gl_height();
 FL_EXPORT int  gl_descent();
 FL_EXPORT double gl_width(const char *);
@@ -61,7 +64,7 @@ FL_EXPORT void gl_draw(const char*, int x, int y);
 FL_EXPORT void gl_draw(const char*, float x, float y);
 FL_EXPORT void gl_draw(const char*, int n, int x, int y);
 FL_EXPORT void gl_draw(const char*, int n, float x, float y);
-FL_EXPORT void gl_draw(const char*, int x, int y, int w, int h, Fl_Align);
+FL_EXPORT void gl_draw(const char*, int x, int y, int w, int h, Fl_Flags);
 FL_EXPORT void gl_measure(const char*, int& x, int& y);
 
 FL_EXPORT void gl_draw_image(const uchar *, int x,int y,int w,int h, int d=3, int ld=0);
@@ -69,5 +72,5 @@ FL_EXPORT void gl_draw_image(const uchar *, int x,int y,int w,int h, int d=3, in
 #endif
 
 //
-// End of "$Id: gl.h,v 1.6 1999/02/16 21:59:48 mike Exp $".
+// End of "$Id: gl.h,v 1.7 1999/08/16 07:30:54 bill Exp $".
 //

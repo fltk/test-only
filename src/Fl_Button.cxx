@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.12 1999/05/06 05:52:13 carl Exp $"
+// "$Id: Fl_Button.cxx,v 1.13 1999/08/16 07:31:13 bill Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,100 +27,66 @@
 #include <FL/Fl_Button.H>
 #include <FL/Fl_Group.H>
 
-#define DEFAULT_STYLE ((Style*)default_style())
-
-void Fl_Button::loadstyle() const {
-  if (!Fl::s_button) {
-    Fl::s_button = 1;
-
-    static Fl::Attribute widget_attributes[] = {
-      { "label color", LABELCOLOR },
-      { "label size", LABELSIZE },
-      { "label type", LABELTYPE },
-      { "label font", LABELFONT },
-      { "color", COLOR },
-      { "down color", COLOR2 },
-      { "box", BOX },
-      { 0 }
-    };
-    Fl::load_attributes("button", DEFAULT_STYLE->widget_, widget_attributes);
-
-    static Fl::Attribute button_attributes[] = {
-      { "highlight color", FLY_COLOR },
-      { "highlight box", FLY_BOX },
-      { "down box", DOWN_BOX },
-      { "down label color", DOWN_LABELCOLOR },
-      { 0 }
-    };
-    Fl::load_attributes("button", DEFAULT_STYLE->button_, button_attributes);
-  }
-}
-
-// There are a lot of subclasses, named Fl_*_Button.  Some of
-// them are implemented by setting the type() value and testing it
-// here.  This includes Fl_Radio_Button and Fl_Toggle_Button
-
-int Fl_Button::value(int v) {
-  v = v ? 1 : 0;
-  oldval = v;
+bool Fl_Widget::set() {
   clear_changed();
-  if (value_ != v) {value_ = v; redraw(); return 1;}
-  else return 0;
+  if (!value()) {set_value(); redraw(); return true;}
+  return false;
 }
 
-void Fl_Button::setonly() { // set this radio button on, turn others off
-  value(1);
-  Fl_Group* g = (Fl_Group*)parent();
-  Fl_Widget*const* a = g->array();
-  for (int i = g->children(); i--;) {
+bool Fl_Widget::clear() {
+  clear_changed();
+  if (value()) {clear_value(); redraw(); return true;}
+  return false;
+}
+
+bool Fl_Widget::value(bool v) {
+  return v ? set() : clear();
+}
+
+void Fl_Widget::setonly() { // set this radio button on, turn others off
+  value(true);
+  Fl_Widget*const* a = parent()->array();
+  for (int i = parent()->children(); i--;) {
     Fl_Widget* o = *a++;
-    if (o != this && o->type()==FL_RADIO_BUTTON) ((Fl_Button*)o)->value(0);
+    if (o != this && o->type()==FL_RADIO_BUTTON)
+      o->value(false);
   }
 }
 
 void Fl_Button::draw() {
   if (type() == FL_HIDDEN_BUTTON) return;
-  Fl_Color col = value() ? selection_color() : color();
-  Fl_Boxtype bt = value() ? (down_box()?down_box():down(box())) : box();
-  if (fly_box() && Fl::belowmouse() == this && !value())
-    { bt = fly_box(); col = fly_color(); }
-
-  draw_box(bt, col);
-
-  Fl_Color lc = value() ? down_labelcolor() : labelcolor();
+  Fl_Color lc = draw_button();
   draw_label(lc);
 }
 
 int Fl_Button::handle(int event) {
-  int newval;
+  static bool oldval;
+  bool newval;
   switch (event) {
   case FL_ENTER:
   case FL_LEAVE:
-    if (takesevents() && fly_box()) redraw();
+    if (highlight_color() && active_r()) redraw();
     return 1;
   case FL_PUSH:
+    oldval = value();
   case FL_DRAG:
     if (Fl::event_inside(this)) {
-      if (type() == FL_RADIO_BUTTON) newval = 1;
+      if (type()==FL_RADIO_BUTTON) newval = true;
       else newval = !oldval;
     } else
       newval = oldval;
-    if (newval != value_) {
-      value_ = newval;
-      redraw();
-      if (when() & FL_WHEN_CHANGED) do_callback();
-    }
+    if (value(newval) && when()&FL_WHEN_CHANGED) do_callback();
     return 1;
   case FL_RELEASE:
     if (!Fl::pushed()) {
-      if (value_ == oldval) return 1;
-      if (type() == FL_RADIO_BUTTON)
-        setonly();
+      if (value() == oldval) return 1;
+      if (type()==FL_RADIO_BUTTON)
+	setonly();
       else if (type() == FL_TOGGLE_BUTTON)
-        oldval = value_;
+	  ; // leave it as set
       else {
-        value(oldval);
-        if (when() & FL_WHEN_CHANGED) do_callback();
+	value(oldval);
+	if (when() & FL_WHEN_CHANGED) do_callback();
       }
       if (when() & FL_WHEN_RELEASE) do_callback(); else set_changed();
     }
@@ -128,7 +94,7 @@ int Fl_Button::handle(int event) {
   case FL_SHORTCUT:
     if (!(shortcut() ?
 	  Fl::test_shortcut(shortcut()) : test_shortcut())) return 0;
-    if (type() == FL_RADIO_BUTTON && !value_) {
+    if (type()==FL_RADIO_BUTTON && !value()) {
       setonly();
       if (when() & FL_WHEN_CHANGED) do_callback();
     } else if (type() == FL_TOGGLE_BUTTON) {
@@ -142,42 +108,11 @@ int Fl_Button::handle(int event) {
   }
 }
 
-Fl_Widget::Style* Fl_Button::_default_style = 0;
-
-Fl_Button::Style::Style() : Fl_Widget::Style() {
-  widget(BOX) = FL_MEDIUM_UP_BOX;
-  sbf = 0;
-
-  button(FLY_COLOR) = 51;
-  button(DOWN_BOX) = FL_MEDIUM_DOWN_BOX;
-  button(FLY_BOX) = FL_MEDIUM_UP_BOX;
-  button(DOWN_LABELCOLOR) = FL_BLACK;
-}
-
 Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h,l) {
-  value_ = oldval = 0;
   shortcut_ = 0;
-  set_flag(SHORTCUT_LABEL);
+  set_flag(FL_SHORTCUT_LABEL);
 }
-
-uchar Fl_Button::attr(Attribute a) const {
-  loadstyle();
-  if (!_style || !(BUTTON_STYLE->sbf & bf(a)))
-    return DEFAULT_STYLE->button(a);
-  return BUTTON_STYLE->button(a);
-}
-
-Fl_Boxtype Fl_Button::fly_box() const {
-  if (_style && (WIDGET_STYLE->sbf & bf(BOX)) && !(BUTTON_STYLE->sbf & bf(FLY_BOX)))
-    return (Fl_Boxtype)WIDGET_STYLE->widget(BOX);
-  return (Fl_Boxtype)attr(FLY_BOX);
-}
-
-Fl_Color Fl_Button::fly_color() const { return (Fl_Color)attr(FLY_COLOR); }
-Fl_Boxtype Fl_Button::down_box() const { return (Fl_Boxtype)attr(DOWN_BOX); }
-Fl_Color Fl_Button::down_labelcolor() const { return (Fl_Color)attr(DOWN_LABELCOLOR); }
-Fl_Color Fl_Button::down_color() const {return selection_color();}
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.12 1999/05/06 05:52:13 carl Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.13 1999/08/16 07:31:13 bill Exp $".
 //

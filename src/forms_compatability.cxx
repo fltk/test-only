@@ -1,5 +1,5 @@
 //
-// "$Id: forms_compatability.cxx,v 1.5 1999/01/07 19:17:44 mike Exp $"
+// "$Id: forms_compatability.cxx,v 1.6 1999/08/16 07:31:30 bill Exp $"
 //
 // Forms compatibility functions for the Fast Light Tool Kit (FLTK).
 //
@@ -28,6 +28,24 @@
 
 #include <FL/forms.H>
 #include <stdlib.h>
+
+void fl_set_object_lstyle(Fl_Widget* o,int a) {
+  o->labelfont(fl_fonts+(a&15));
+  switch (a >> 8) {
+  case 0:
+    o->labeltype(FL_NORMAL_LABEL);
+    break;
+  case 1:
+    o->labeltype(FL_SHADOW_LABEL);
+    break;
+  case 2:
+    o->labeltype(FL_ENGRAVED_LABEL);
+    break;
+  case 3:
+    o->labeltype(FL_EMBOSSED_LABEL);
+    break;
+  }
+}
 
 char fl_flip = 2;
 void fl_end_form() {
@@ -164,10 +182,12 @@ Fl_Button *fl_add_button(uchar t,int x,int y,int w,int h,const char *l) {
   case FL_RADIO_BUTTON:
     b->type(t);
     break;
+#if 0
   case FL_HIDDEN_BUTTON:
   case FL_HIDDEN_RET_BUTTON:
     b->type(FL_HIDDEN_BUTTON);
     break;
+#endif
   case FL_INOUT_BUTTON:
     b->when(FL_WHEN_CHANGED);
     break;
@@ -204,5 +224,5 @@ char *fl_show_simple_input(const char *str1, const char *defstr) {
 }
 
 //
-// End of "$Id: forms_compatability.cxx,v 1.5 1999/01/07 19:17:44 mike Exp $".
+// End of "$Id: forms_compatability.cxx,v 1.6 1999/08/16 07:31:30 bill Exp $".
 //

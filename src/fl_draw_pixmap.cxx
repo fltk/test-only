@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_pixmap.cxx,v 1.4 1999/01/07 19:17:38 mike Exp $"
+// "$Id: fl_draw_pixmap.cxx,v 1.5 1999/08/16 07:31:27 bill Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -34,9 +34,8 @@
 // All data needed by a program ui should be compiled in!!!
 
 #include <config.h>
-#include <FL/Fl.H>
+#include <FL/Fl_Color.H>
 #include <FL/fl_draw.H>
-#include <FL/x.H>
 #include <ctype.h>
 #include <stdio.h>
 #include <string.h>
@@ -146,7 +145,11 @@ int fl_draw_pixmap(/*const*/char*const* data, int x, int y, Fl_Color bg) {
 #endif
 #endif
       transparent_index = ' ';
-      Fl::get_color(bg, c[0], c[1], c[2]); c[3] = 0;
+      bg = fl_get_color(bg);
+      c[0] = uchar(bg>>24);
+      c[1] = uchar(bg>>16);
+      c[2] = uchar(bg>>8);
+      c[3] = 0;
       p += 4;
       ncolors--;
     }
@@ -181,9 +184,6 @@ int fl_draw_pixmap(/*const*/char*const* data, int x, int y, Fl_Color bg) {
 	previous_word = p;
 	while (*p && !isspace(*p)) p++;
       }
-      // copy the color name and look it up:
-      char name[256];
-      char *q; for (q = name; *p && !isspace(*p); *q++ = *p++); *q++ = 0;
       uchar *c = (uchar *)&d.colors[index&255];
 #ifdef U64
       *(U64*)c = 0;
@@ -191,18 +191,17 @@ int fl_draw_pixmap(/*const*/char*const* data, int x, int y, Fl_Color bg) {
       c += 4;
 #endif
 #endif
-#ifdef WIN32
-      if (fl_parse_color(name, c[0], c[1], c[2])) {;
-#else
-      XColor x;
-      if (XParseColor(fl_display, fl_colormap, name, &x)) {
-	c[0] = x.red>>8; c[1] = x.green>>8; c[2] = x.blue>>8;
-#endif
+      Fl_Color C = fl_rgb(p);
+      if (C) {
+	c[0] = uchar(C>>24);
+	c[1] = uchar(C>>16);
+	c[2] = uchar(C>>8);
       } else { // assumme "None" or "#transparent" for any errors
 	// this should be transparent...
-	Fl::get_color(bg, c[0], c[1], c[2]);
+	bg = fl_get_color(bg);
 	transparent_index = index&255;
       }
+      c[3] = 0;
     }
   }
   d.data = data;
@@ -244,5 +243,5 @@ int fl_draw_pixmap(/*const*/char*const* data, int x, int y, Fl_Color bg) {
 }
 
 //
-// End of "$Id: fl_draw_pixmap.cxx,v 1.4 1999/01/07 19:17:38 mike Exp $".
+// End of "$Id: fl_draw_pixmap.cxx,v 1.5 1999/08/16 07:31:27 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.12 1999/06/20 15:24:29 mike Exp $"
+// "$Id: Fl_Browser.cxx,v 1.13 1999/08/16 07:31:12 bill Exp $"
 //
 // Browser widget for the Fast Light Tool Kit (FLTK).
 //
@@ -227,8 +227,8 @@ int Fl_Browser::item_height(void* lv) const {
 	case 'l': case 'L': size = 24; break;
 	case 'm': case 'M': size = 18; break;
 	case 's': size = 11; break;
-	case 'b': font = (Fl_Font)(font|FL_BOLD); break;
-	case 'i': font = (Fl_Font)(font|FL_ITALIC); break;
+	case 'b': font = font->bold; break;
+	case 'i': font = font->italic; break;
 	case 'f': case 't': font = FL_COURIER; break;
 	case 'S': size = strtol(str,&str,10); break;
 	case 'F': font = (Fl_Font)strtol(str,&str,10); break;
@@ -275,8 +275,8 @@ int Fl_Browser::item_width(void* v) const {
     case 'l': case 'L': size = 24; break;
     case 'm': case 'M': size = 18; break;
     case 's': size = 11; break;
-    case 'b': font = (Fl_Font)(font|FL_BOLD); break;
-    case 'i': font = (Fl_Font)(font|FL_ITALIC); break;
+    case 'b': font = font->bold; break;
+    case 'i': font = font->italic; break;
     case 'f': case 't': font = FL_COURIER; break;
     case 'S':
       size = strtol(str, &str, 10);
@@ -315,10 +315,9 @@ void Fl_Browser::item_draw(void* v, int x, int y, int w, int h) const {
       for (e = str; *e && *e != column_char(); e++);
       if (*e) {*e = 0; w1 = *i++;} else e = 0;
     }
-    int size = textsize();
-    Fl_Font font = textfont();
-    Fl_Color lcol = textcolor();
-    int slcol = selected_textcolor();
+    int size = text_size();
+    Fl_Font font = text_font();
+    Fl_Color lcol = item_selected(v) ? selection_text_color() : text_color();
     Fl_Align align = FL_ALIGN_LEFT;
     // check for all the @-lines recognized by XForms:
     while (*str == format_char() && *++str && *str != format_char()) {
@@ -326,8 +325,8 @@ void Fl_Browser::item_draw(void* v, int x, int y, int w, int h) const {
       case 'l': case 'L': size = 24; break;
       case 'm': case 'M': size = 18; break;
       case 's': size = 11; break;
-      case 'b': font = (Fl_Font)(font|FL_BOLD); break;
-      case 'i': font = (Fl_Font)(font|FL_ITALIC); break;
+      case 'b': font = font->bold; break;
+      case 'i': font = font->italic; break;
       case 'f': case 't': font = FL_COURIER; break;
       case 'c': align = FL_ALIGN_CENTER; break;
       case 'r': align = FL_ALIGN_RIGHT; break;
@@ -366,8 +365,8 @@ void Fl_Browser::item_draw(void* v, int x, int y, int w, int h) const {
     }
   BREAK:
     fl_font(font, size);
-    if (!active_r()) lcol = inactive(lcol);
-    fl_color(item_selected(v) ? slcol : lcol);
+    if (!active_r()) lcol = fl_inactive(lcol);
+    fl_color(lcol);
     fl_draw(str, x+3, y, w1-6, h, e ? Fl_Align(align|FL_ALIGN_CLIP) : align);
     if (!e) break; // no more fields...
     *e = column_char(); // put the seperator back
@@ -488,5 +487,5 @@ int Fl_Browser::value() const {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.12 1999/06/20 15:24:29 mike Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.13 1999/08/16 07:31:12 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_show_colormap.cxx,v 1.8 1999/05/06 05:52:23 carl Exp $"
+// "$Id: fl_show_colormap.cxx,v 1.9 1999/08/16 07:31:30 bill Exp $"
 //
 // Colormap color selection dialog for the Fast Light Tool Kit (FLTK).
 //
@@ -36,8 +36,7 @@
 #define BORDER 4
 
 class ColorMenu : public Fl_Window {
-  Fl_Color initial;
-  Fl_Color which, previous;
+  Fl_Color initial, which, previous;
   int done;
   void drawbox(Fl_Color);
   void draw();
@@ -54,22 +53,17 @@ ColorMenu::ColorMenu(Fl_Color oldcol) :
   initial = which = oldcol;
 }
 
-void ColorMenu::drawbox(Fl_Color c) {
-  if (c < 0 || c > 255) return;
+void ColorMenu::drawbox(Fl_Color C) {
+  Fl_Color c = Fl_Color(C & 0xFF); // get the color index
   int x = (c%8)*BOXSIZE+BORDER;
   int y = (c/8)*BOXSIZE+BORDER;
-#if BORDER_WIDTH < 3
-  if (c == which) fl_draw_box(FL_DOWN_BOX, x+1, y+1, BOXSIZE-1, BOXSIZE-1, c);
-  else fl_draw_box(FL_BORDER_BOX, x, y, BOXSIZE+1, BOXSIZE+1, c);
-#else
-  fl_draw_box(c == which ? FL_DOWN_BOX : FL_BORDER_BOX,
-	      x, y, BOXSIZE+1, BOXSIZE+1, c);
-#endif
+  if (c == which) FL_DOWN_BOX->draw(x+1, y+1, BOXSIZE-1, BOXSIZE-1, c);
+  else FL_BORDER_BOX->draw(x, y, BOXSIZE+1, BOXSIZE+1, c);
 }
 
 void ColorMenu::draw() {
   if (damage() != FL_DAMAGE_CHILD) {
-    fl_draw_box(FL_UP_BOX,0,0,w(),h(),color());
+    FL_UP_BOX->draw(0,0,w(),h(),color());
     for (int c = 0; c < 256; c++) drawbox((Fl_Color)c);
   } else {
     drawbox(previous);
@@ -79,7 +73,7 @@ void ColorMenu::draw() {
 }
 
 int ColorMenu::handle(int e) {
-  int c = which;
+  unsigned c = which;
   switch (e) {
   case FL_PUSH:
   case FL_DRAG: {
@@ -127,17 +121,17 @@ int ColorMenu::handle(int e) {
 extern char fl_override_redirect; // hack for menus
 
 Fl_Color ColorMenu::run() {
-  if (which < 0 || which > 255) {
+  if (which > 255) {
     position(Fl::event_x_root()-w()/2, Fl::event_y_root()-y()/2);
   } else {
     position(Fl::event_x_root()-(initial%8)*BOXSIZE-BOXSIZE/2-BORDER,
 	     Fl::event_y_root()-(initial/8)*BOXSIZE-BOXSIZE/2-BORDER);
   }
-  Fl::grab(*this);
+  Fl::grab(this);
   show();
   done = 0;
   while (!done) Fl::wait();
-  Fl::release();
+  Fl::grab(0);
   return which;
 }
 
@@ -147,5 +141,5 @@ Fl_Color fl_show_colormap(Fl_Color oldcol) {
 }
 
 //
-// End of "$Id: fl_show_colormap.cxx,v 1.8 1999/05/06 05:52:23 carl Exp $".
+// End of "$Id: fl_show_colormap.cxx,v 1.9 1999/08/16 07:31:30 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: color_chooser.cxx,v 1.6 1999/01/07 19:17:51 mike Exp $"
+// "$Id: color_chooser.cxx,v 1.7 1999/08/16 07:31:34 bill Exp $"
 //
 // Color chooser test program for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 #include <FL/Fl_Button.H>
 #include <FL/fl_show_colormap.H>
 #include <FL/Fl_Color_Chooser.H>
-#include <FL/Fl_Image.H>
+#include <FL/Fl_RGB_Image.H>
 #include <FL/x.H>
 #include <FL/fl_draw.H>
 
@@ -105,7 +105,7 @@ int main(int argc, char ** argv) {
   b2.callback(cb2,&box);
   Fl_Box image_box(140,200,120,120,0);
   make_image();
-  (new Fl_Image(image, width, height))->label(&image_box);
+  (new Fl_RGB_Image(image, width, height))->label(&image_box);
   Fl_Box b(140,320,120,0,"Example of fl_draw_image()");
   Pens p(80,200,3*8,120,"lines");
   p.align(FL_ALIGN_TOP);
@@ -146,5 +146,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: color_chooser.cxx,v 1.6 1999/01/07 19:17:51 mike Exp $".
+// End of "$Id: color_chooser.cxx,v 1.7 1999/08/16 07:31:34 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Radio_Button.H,v 1.4 1999/01/07 19:17:00 mike Exp $"
+// "$Id: Fl_Radio_Button.H,v 1.5 1999/08/16 07:30:52 bill Exp $"
 //
 // Radio button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,16 +26,16 @@
 #ifndef Fl_Radio_Button_H
 #define Fl_Radio_Button_H
 
-#include "Fl_Button.H"
+#include "Fl_Check_Button.H"
 
-class Fl_Radio_Button : public Fl_Button {
+class Fl_Radio_Button : public Fl_Check_Button {
 public:
     Fl_Radio_Button(int x,int y,int w,int h,const char *l=0)
-	: Fl_Button(x,y,w,h,l) {type(FL_RADIO_BUTTON);}
+	: Fl_Check_Button(x,y,w,h,l) {type(FL_RADIO_BUTTON);}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Radio_Button.H,v 1.4 1999/01/07 19:17:00 mike Exp $".
+// End of "$Id: Fl_Radio_Button.H,v 1.5 1999/08/16 07:30:52 bill Exp $".
 //

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.23 1999/06/20 15:24:32 mike Exp $"
+# "$Id: Makefile,v 1.24 1999/08/16 07:31:25 bill Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -26,24 +26,18 @@
 CPPFILES = \
 	Fl.cxx \
 	Fl_Adjuster.cxx \
-	Fl_Adjuster_SW.cxx \
 	Fl_Bitmap.cxx \
 	Fl_Browser.cxx \
 	Fl_Browser_.cxx \
-	Fl_Browser_SW.cxx \
 	Fl_Browser_load.cxx \
 	Fl_Box.cxx \
 	Fl_Button.cxx \
-	Fl_Button_SW.cxx \
 	Fl_Chart.cxx \
-	Fl_Chart_SW.cxx \
 	Fl_Check_Button.cxx \
 	Fl_Choice.cxx \
-	Fl_Choice_SW.cxx \
 	Fl_Clock.cxx \
 	Fl_Color_Chooser.cxx \
 	Fl_Counter.cxx \
-	Fl_Counter_SW.cxx \
 	Fl_Dial.cxx \
 	Fl_Double_Window.cxx \
 	Fl_Fly_Button.cxx \
@@ -54,19 +48,14 @@ CPPFILES = \
 	Fl_Image.cxx \
 	Fl_Input.cxx \
 	Fl_Input_.cxx \
-	Fl_Input_SW.cxx \
 	Fl_Light_Button.cxx \
 	Fl_Menu.cxx \
 	Fl_Menu_.cxx \
-	Fl_Menu_Item_SW.cxx \
 	Fl_Menu_Bar.cxx \
 	Fl_Menu_Button.cxx \
-	Fl_Menu_Button_SW.cxx \
-	Fl_Menu_SW.cxx \
 	Fl_Menu_Window.cxx \
 	Fl_Menu_add.cxx \
 	Fl_Menu_global.cxx \
-	Fl_Multi_Label.cxx \
 	Fl_Output.cxx \
 	Fl_Overlay_Window.cxx \
 	Fl_Pack.cxx \
@@ -74,13 +63,12 @@ CPPFILES = \
 	Fl_Positioner.cxx \
 	Fl_Repeat_Button.cxx \
 	Fl_Return_Button.cxx \
+	Fl_RGB_Image.cxx \
 	Fl_Roller.cxx \
-	Fl_Round_Button.cxx \
 	Fl_Scroll.cxx \
 	Fl_Scrollbar.cxx \
 	Fl_Single_Window.cxx \
 	Fl_Slider.cxx \
-	Fl_Slider_SW.cxx \
 	Fl_Tabs.cxx \
 	Fl_Tile.cxx \
 	Fl_Tooltip.cxx  \
@@ -89,7 +77,6 @@ CPPFILES = \
 	Fl_Value_Output.cxx \
 	Fl_Value_Slider.cxx \
 	Fl_Widget.cxx \
-	Fl_Widget_SW.cxx \
 	Fl_Window.cxx \
 	Fl_Window_fullscreen.cxx \
 	Fl_Window_hotspot.cxx \
@@ -126,15 +113,15 @@ CPPFILES = \
 	fl_engraved_label.cxx \
 	fl_file_chooser.cxx \
 	fl_font.cxx \
+	fl_glyph.cxx \
 	fl_labeltype.cxx \
-	fl_options.cxx \
+	fl_line_style.cxx \
 	fl_oval_box.cxx \
 	fl_overlay.cxx \
 	fl_overlay_visual.cxx \
 	fl_rect.cxx \
 	fl_round_box.cxx \
 	fl_rounded_box.cxx \
-	fl_set_font.cxx \
 	fl_set_fonts.cxx \
 	fl_scroll_area.cxx \
 	fl_shadow_box.cxx \
@@ -142,14 +129,14 @@ CPPFILES = \
 	fl_show_colormap.cxx \
 	fl_symbols.cxx \
 	fl_vertex.cxx \
+	gl_draw.cxx \
+	gl_start.cxx \
 	forms_compatability.cxx \
 	forms_bitmap.cxx \
 	forms_free.cxx \
 	forms_fselect.cxx \
 	forms_pixmap.cxx \
 	forms_timer.cxx \
-	gl_draw.cxx \
-	gl_start.cxx \
 	glut_compatability.cxx \
 	glut_font.cxx
 
@@ -157,25 +144,44 @@ CFILES = \
 	fl_call_main.c \
 	scandir.c \
 	numericsort.c \
-	vsnprintf.c \
-	conf.c \
-	conf_atol.c \
-	conf_del.c \
-	conf_endtrim.c \
-	conf_error.c \
-	conf_get.c \
-	conf_getboolean.c \
-	conf_getlong.c \
-	conf_keys.c \
-	conf_level_indent.c \
-	conf_list_free.c \
-	conf_sections.c \
-	conf_set.c \
-	conf_setboolean.c \
-	conf_setlong.c \
-	conf_strcasecmp.c \
-	conf_strcnt.c \
-	conf_trim.c
+	vsnprintf.c
+
+# files that were deleted:
+#	fl_set_font.cxx \
+
+# Carl's style-reading source code:
+#	fl_options.cxx \
+#	Fl_Adjuster_SW.cxx \
+#	Fl_Browser_SW.cxx \
+#	Fl_Button_SW.cxx \
+#	Fl_Chart_SW.cxx \
+#	Fl_Choice_SW.cxx \
+#	Fl_Counter_SW.cxx \
+#	Fl_Input_SW.cxx \
+#	Fl_Menu_Item_SW.cxx \
+#	Fl_Menu_Button_SW.cxx \
+#	Fl_Menu_SW.cxx \
+#	Fl_Slider_SW.cxx \
+#	Fl_Widget_SW.cxx \
+
+#	conf.c \
+#	conf_atol.c \
+#	conf_del.c \
+#	conf_endtrim.c \
+#	conf_error.c \
+#	conf_get.c \
+#	conf_getboolean.c \
+#	conf_getlong.c \
+#	conf_keys.c \
+#	conf_level_indent.c \
+#	conf_list_free.c \
+#	conf_sections.c \
+#	conf_set.c \
+#	conf_setboolean.c \
+#	conf_setlong.c \
+#	conf_strcasecmp.c \
+#	conf_strcnt.c \
+#	conf_trim.c
 
 CLEAN =
 
@@ -249,5 +255,5 @@ install: $(LIBRARY) $(DSONAME)
 	@-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.23 1999/06/20 15:24:32 mike Exp $".
+# End of "$Id: Makefile,v 1.24 1999/08/16 07:31:25 bill Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: forms.cxx,v 1.4 1999/01/07 19:17:53 mike Exp $"
+// "$Id: forms.cxx,v 1.5 1999/08/16 07:31:35 bill Exp $"
 //
 // Another forms demo for the Fast Light Tool Kit (FLTK).
 //
@@ -34,7 +34,8 @@
 static int border = 1; // changed from FL_TRANSIENT for fltk
 // (this is so the close box and Esc work to close the window)
 
-typedef struct { int val; char *name; } VN_struct;
+// fltk: changed from int to Fl_Boxtype
+typedef struct { Fl_Boxtype val; char *name; } VN_struct;
 #define VN(a) {a,#a}
 
 // static VN_struct gmode[] =
@@ -62,7 +63,7 @@ static VN_struct btypes[]=
    {FL_OVAL3D_UPBOX,"oval3d upbox"},
    {FL_OVAL3D_DOWNBOX,"oval3d downbox"},
    /* sentinel */
-   {-1}
+   {0} // fltk: changed from -1 to zero
 };
 
 #include "srs.xbm"
@@ -83,7 +84,7 @@ boxtype_cb (Fl_Widget * ob, long)
      fl_freeze_form (form);
      fl_redraw_form (form);
      for (i = 0; i < 18; i++)
-        fl_set_object_boxtype (tobj[i], (Fl_Boxtype)btypes[req_bt].val);
+        fl_set_object_boxtype (tobj[i], btypes[req_bt].val);
      fl_unfreeze_form (form);
      lastbt = req_bt;
      fl_redraw_form(form); // added for fltk
@@ -183,7 +184,7 @@ char *browserlines[] = {
 int
 main (int argc, char *argv[])
 {
-  FL_COLOR c = FL_BLACK;
+  FL_COLOR c = 0;
   char **p;
   VN_struct *vn;
 
@@ -205,7 +206,7 @@ main (int argc, char *argv[])
   for ( p = browserlines; *p; p++)
      fl_add_browser_line (tobj[17], *p);
 
-  for ( vn = btypes; vn->val >= 0; vn++)
+  for ( vn = btypes; vn->val; vn++)
     fl_addto_choice(btypeob, vn->name);
 
 //   {
@@ -229,5 +230,5 @@ main (int argc, char *argv[])
 }
 
 //
-// End of "$Id: forms.cxx,v 1.4 1999/01/07 19:17:53 mike Exp $".
+// End of "$Id: forms.cxx,v 1.5 1999/08/16 07:31:35 bill Exp $".
 //

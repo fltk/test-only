@@ -1,5 +1,5 @@
 //
-// "$Id: pixmap.cxx,v 1.4 1999/01/07 19:17:59 mike Exp $"
+// "$Id: pixmap.cxx,v 1.5 1999/08/16 07:31:36 bill Exp $"
 //
 // Pixmap label test program for the Fast Light Tool Kit (FLTK).
 //
@@ -38,7 +38,7 @@ Fl_Button *b;
 Fl_Window *w;
 
 void button_cb(Fl_Widget *,void *) {
-  int i = 0;
+  int i = FL_ALIGN_WRAP;
   if (leftb->value()) i |= FL_ALIGN_LEFT;
   if (rightb->value()) i |= FL_ALIGN_RIGHT;
   if (topb->value()) i |= FL_ALIGN_TOP;
@@ -54,21 +54,16 @@ int arg(int, char **argv, int &i) {
   return 0;
 }
 
-#include <FL/Fl_Multi_Label.H>
-
-Fl_Multi_Label multi = {
-  0, "This is the text", 0, FL_NORMAL_LABEL
-};
-
 int main(int argc, char **argv) {
   int i = 1;
   if (Fl::args(argc,argv,i,arg) < argc)
     Fl::fatal(" -8 # : use default visual\n%s\n",Fl::help);
 
   Fl_Window window(400,400); ::w = &window;
-  Fl_Button b(140,160,120,120,0); ::b = &b;
-  (new Fl_Pixmap(porsche_xpm))->label(&b);
-  multi.labela = b.label(); multi.typea = b.labeltype(); multi.label(&b);
+  Fl_Button b(140,160,120,120,"World's fastest toolkit"); ::b = &b;
+  b.align(FL_ALIGN_WRAP);
+  b.labelsize(10);
+  b.image(new Fl_Pixmap(porsche_xpm));
   leftb = new Fl_Toggle_Button(50,75,50,25,"left");
   leftb->callback(button_cb);
   rightb = new Fl_Toggle_Button(100,75,50,25,"right");
@@ -87,5 +82,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: pixmap.cxx,v 1.4 1999/01/07 19:17:59 mike Exp $".
+// End of "$Id: pixmap.cxx,v 1.5 1999/08/16 07:31:36 bill Exp $".
 //

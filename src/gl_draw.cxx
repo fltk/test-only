@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.7 1999/01/07 19:17:46 mike Exp $"
+// "$Id: gl_draw.cxx,v 1.8 1999/08/16 07:31:31 bill Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -29,15 +29,14 @@
 #include <config.h>
 #if HAVE_GL
 
-#include <FL/Fl.H>
+#include <FL/fl_draw.H>
 #include <FL/gl.h>
 #include <FL/x.H>
-#include <FL/fl_draw.H>
 #include "Fl_Gl_Choice.H"
-#include "Fl_Font.H"
+#include "Fl_FontSize.H"
 #include <string.h>
 
-void  gl_font(int fontid, int size) {fl_font(fontid, size);}
+void  gl_font(Fl_Font f, int size) {fl_font(f, size);}
 int   gl_height() {return fl_height();}
 int   gl_descent() {return fl_descent();}
 double gl_width(const char* s) {return fl_width(s);}
@@ -127,9 +126,8 @@ void gl_color(Fl_Color i) {
   if (fl_overlay) {glIndexi(int(fl_xpixel(i))); return;}
 #endif
 #endif
-  uchar red, green, blue;
-  Fl::get_color(i, red, green, blue);
-  glColor3ub(red, green, blue);
+  Fl_Color c = fl_get_color(i);
+  glColor3ub((uchar)(c>>24), (uchar)(c>>16), (uchar)(c>>8));
 }
   
 void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
@@ -142,5 +140,5 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.7 1999/01/07 19:17:46 mike Exp $".
+// End of "$Id: gl_draw.cxx,v 1.8 1999/08/16 07:31:31 bill Exp $".
 //

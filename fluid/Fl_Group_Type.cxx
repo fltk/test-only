@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group_Type.cxx,v 1.7 1999/07/21 17:28:20 carl Exp $"
+// "$Id: Fl_Group_Type.cxx,v 1.8 1999/08/16 07:31:02 bill Exp $"
 //
 // Fl_Group object code for the Fast Light Tool Kit (FLTK).
 //
@@ -33,25 +33,22 @@
 #include <FL/fl_message.H>
 #include "Fl_Type.h"
 
-// Override group's resize behavior to do nothing to children:
-void igroup::resize(int X, int Y, int W, int H) {
-  Fl_Widget::resize(X,Y,W,H);
-  redraw();
-}
-
 Fl_Group_Type Fl_Group_type;	// the "factory"
 
 Fl_Type *Fl_Group_Type::make() {
   return Fl_Widget_Type::make();
 }
 
-void fix_group_size(Fl_Type *tt) {
-  if (!tt || !tt->is_group()) return;
-  Fl_Group_Type* t = (Fl_Group_Type*)tt;
-  int X = t->o->x();
-  int Y = t->o->y();
-  int R = X+t->o->w();
-  int B = Y+t->o->h();
+// Enlarge the group to surround all it's children.  This is done to
+// all groups whenever the user moves any widgets.
+void fix_group_size(Fl_Type *t) {
+  if (!t || !t->is_group()) return;
+  Fl_Group* g = (Fl_Group*)((Fl_Group_Type*)t)->o;
+  //if (g->resizable()) return;
+  int X = g->x();
+  int Y = g->y();
+  int R = X+g->w();
+  int B = Y+g->h();
   for (Fl_Type *nn = t->next; nn && nn->level > t->level; nn = nn->next) {
     if (!nn->is_widget() || nn->is_menu_item()) continue;
     Fl_Widget_Type* n = (Fl_Widget_Type*)nn;
@@ -60,7 +57,8 @@ void fix_group_size(Fl_Type *tt) {
     int r = x+n->o->w();if (r > R) R = r;
     int b = y+n->o->h();if (b > B) B = b;
   }
-  t->o->resize(X,Y,R-X,B-Y);
+  g->resize(X,Y,R-X,B-Y);
+  g->init_sizes();
 }
 
 extern int force_parent;
@@ -129,13 +127,18 @@ void Fl_Group_Type::write_code2() {
 
 ////////////////////////////////////////////////////////////////
 
-const char tabs_type_name[] = "Fl_Tabs";
+const char pack_type_name[] = "Fl_Pack";
 
-// Override group's resize behavior to do nothing to children:
-void itabs::resize(int X, int Y, int W, int H) {
-  Fl_Widget::resize(X,Y,W,H);
-  redraw();
-}
+Fl_Menu_Item pack_type_menu[] = {
+  {"HORIZONTAL", 0, 0, (void*)Fl_Pack::HORIZONTAL},
+  {"VERTICAL", 0, 0, (void*)Fl_Pack::VERTICAL},
+  {0}};
+
+Fl_Pack_Type Fl_Pack_type;	// the "factory"
+
+////////////////////////////////////////////////////////////////
+
+const char tabs_type_name[] = "Fl_Tabs";
 
 Fl_Tabs_Type Fl_Tabs_type;	// the "factory"
 
@@ -220,5 +223,5 @@ const char tile_type_name[] = "Fl_Tile";
 Fl_Tile_Type Fl_Tile_type;	// the "factory"
 
 //
-// End of "$Id: Fl_Group_Type.cxx,v 1.7 1999/07/21 17:28:20 carl Exp $".
+// End of "$Id: Fl_Group_Type.cxx,v 1.8 1999/08/16 07:31:02 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.9 1999/03/14 06:46:41 carl Exp $"
+// "$Id: fl_ask.cxx,v 1.10 1999/08/16 07:31:25 bill Exp $"
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
@@ -53,26 +53,26 @@ uchar fl_message_font_ = 0;
 uchar fl_message_size_ = FL_NORMAL_SIZE;
 
 static Fl_Window *makeform() {
- if (message_form) return message_form;
- Fl_Window *w = message_form = new Fl_Window(410,105);
- // w->clear_border();
- // w->box(FL_UP_BOX);
- (message = new Fl_Box(60, 25, 340, 20))
-   ->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
- (input = new Fl_Input(60,32,340,30))->hide();
- {Fl_Box* o = icon = new Fl_Box(10, 10, 50, 50);
+  if (message_form) return message_form;
+  Fl_Window *w = message_form = new Fl_Window(410,105);
+  //w->clear_border();
+  //w->box(FL_UP_BOX);
+  (message = new Fl_Box(60, 25, 340, 20))
+    ->align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_WRAP);
+  (input = new Fl_Input(60,32,340,30))->hide();
+  {Fl_Box* o = icon = new Fl_Box(10, 10, 50, 50);
   o->box(FL_THIN_UP_BOX);
-  o->labelfont(FL_HELVETICA|FL_BOLD);
+  o->labelfont(FL_TIMES_BOLD);
   o->labelsize(34);
   o->color(FL_WHITE);
   o->labelcolor(FL_BLUE);
- }
- (button[0] = new Fl_Button(310, 70, 90, 25))->shortcut("^[");
- button[1] = new Fl_Return_Button(210, 70, 90, 25);
- button[2] = new Fl_Button(110, 70, 90, 25);
- w->end();
- w->set_modal();
- return w;
+  }
+  (button[0] = new Fl_Button(310, 70, 90, 25))->shortcut("^[");
+  button[1] = new Fl_Return_Button(210, 70, 90, 25);
+  button[2] = new Fl_Button(110, 70, 90, 25);
+  w->end();
+  w->set_modal();
+  return w;
 }
 
 #if !HAVE_VSNPRINTF || defined(__hpux)
@@ -195,5 +195,5 @@ const char *fl_password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.9 1999/03/14 06:46:41 carl Exp $".
+// End of "$Id: fl_ask.cxx,v 1.10 1999/08/16 07:31:25 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: colbrowser.cxx,v 1.6 1999/03/14 06:46:44 carl Exp $"
+// "$Id: colbrowser.cxx,v 1.7 1999/08/16 07:31:33 bill Exp $"
 //
 // Forms test program for the Fast Light Tool Kit (FLTK).
 //
@@ -288,7 +288,7 @@ create_form_cl(void)
 
     cl = fl_bgn_form(FL_NO_BOX, 330, 385);
     obj = fl_add_box(FL_UP_BOX, 0, 0, 330, 385, "");
-//    fl_set_object_color(obj, FL_INDIANRED, FL_COL1);
+    fl_set_object_color(obj, FL_INDIANRED, FL_COL1);
 
     obj = fl_add_box(FL_NO_BOX, 40, 10, 250, 30, "Color Browser");
     fl_set_object_lcol(obj, FL_RED);
@@ -296,26 +296,26 @@ create_form_cl(void)
     fl_set_object_lstyle(obj, FL_BOLD_STYLE + FL_SHADOW_STYLE);
 
     dbobj = obj = fl_add_button(FL_NORMAL_BUTTON, 40, 50, 250, 25, "");
-//    fl_set_object_boxtype(obj, FL_BORDER_BOX);
-//    fl_set_object_color(obj, /*fl_get_visual_depth()==1 ? FL_WHITE:*/ FL_INDIANRED,
-//                        FL_INDIANRED);
+    fl_set_object_boxtype(obj, FL_BORDER_BOX);
+    fl_set_object_color(obj, /*fl_get_visual_depth()==1 ? FL_WHITE:*/ FL_INDIANRED,
+                        FL_INDIANRED);
     fl_set_object_callback(obj, db_cb, 0);
     rs = obj = fl_add_valslider(FL_VERT_FILL_SLIDER, 225, 130, 30, 200, "");
-    fl_set_object_color(obj, /* FL_INDIANRED */ 51, FL_RED);
+    fl_set_object_color(obj, FL_INDIANRED, FL_RED);
     fl_set_slider_bounds(obj, 0, 255);
     fl_set_slider_precision(obj, 0);
     fl_set_object_callback(obj, search_rgb, 0);
     fl_set_slider_return(obj, 0);
 
     gs = obj = fl_add_valslider(FL_VERT_FILL_SLIDER, 255, 130, 30, 200, "");
-    fl_set_object_color(obj, /* FL_INDIANRED */ 51, FL_GREEN);
+    fl_set_object_color(obj, FL_INDIANRED, FL_GREEN);
     fl_set_slider_bounds(obj, 0, 255);
     fl_set_slider_precision(obj, 0);
     fl_set_object_callback(obj, search_rgb, 1);
     fl_set_slider_return(obj, 0);
 
     bs = obj = fl_add_valslider(FL_VERT_FILL_SLIDER, 285, 130, 30, 200, "");
-    fl_set_object_color(obj, /* FL_INDIANRED */ 51, FL_BLUE);
+    fl_set_object_color(obj, FL_INDIANRED, FL_BLUE);
     fl_set_slider_bounds(obj, 0, 255);
     fl_set_slider_precision(obj, 0);
     fl_set_object_callback(obj, search_rgb, 2);
@@ -340,5 +340,5 @@ create_form_cl(void)
 }
 
 //
-// End of "$Id: colbrowser.cxx,v 1.6 1999/03/14 06:46:44 carl Exp $".
+// End of "$Id: colbrowser.cxx,v 1.7 1999/08/16 07:31:33 bill Exp $".
 //

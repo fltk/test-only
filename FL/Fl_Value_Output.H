@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Output.H,v 1.12 1999/06/18 14:34:37 carl Exp $"
+// "$Id: Fl_Value_Output.H,v 1.13 1999/08/16 07:30:53 bill Exp $"
 //
 // Value output header file for the Fast Light Tool Kit (FLTK).
 //
@@ -29,46 +29,20 @@
 #ifndef Fl_Valuator_H
 #include "Fl_Valuator.H"
 #endif
-#include "Fl_Output.H"
 
 class Fl_Value_Output : public Fl_Valuator {
+  uchar soft_;
 public:
-  Fl_Output output;
-
-  virtual void loadstyle() const { output.loadstyle(); }
-
-  int handle(int);
-  void draw();
-  Fl_Value_Output(int x,int y,int w,int h,const char *l=0);
-  ~Fl_Value_Output() { _style = 0; } // So that it doesn't get free()ed twice!
+  FL_EXPORT int handle(int);
+  FL_EXPORT void draw();
+  FL_EXPORT Fl_Value_Output(int x,int y,int w,int h,const char *l=0);
 
   void soft(uchar x) {soft_ = x;}
   uchar soft() const {return soft_;}
-
-  int is_style_forced(Fl_Widget::Attribute a) const
-    { return Fl_Widget::is_style_forced(a); }
-  int is_style_forced(Fl_Input_::Attribute a) const
-    { return output.is_style_forced(a); }
-
-  Fl_Font textfont() const {return output.textfont();}
-  void textfont(uchar s) {output.textfont(s);}
-
-  uchar textsize() const {return output.textsize();}
-  void textsize(uchar s) {output.textsize(s);}
-
-  Fl_Color textcolor() const {return output.textcolor();}
-  void textcolor(uchar n) {output.textcolor(n);}
-
-protected:
-  void resize(int, int, int, int);
-
-  uchar soft_;
-  static void output_cb(Fl_Widget*,void*);
-  virtual void value_damage(); // cause damage() due to value() changing
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Value_Output.H,v 1.12 1999/06/18 14:34:37 carl Exp $".
+// End of "$Id: Fl_Value_Output.H,v 1.13 1999/08/16 07:30:53 bill Exp $".
 //

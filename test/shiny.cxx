@@ -1,5 +1,5 @@
 //
-// "$Id: shiny.cxx,v 1.5 1999/01/07 19:18:01 mike Exp $"
+// "$Id: shiny.cxx,v 1.6 1999/08/16 07:31:37 bill Exp $"
 //
 // OpenGL "shiny buttons" test program for the Fast Light Tool Kit (FLTK).
 //
@@ -112,7 +112,14 @@ static void calc_color(Fl_Color c) {
     C[x][y] = i;
   }
 }
-void shiny_up_box(int x1, int y1, int w1, int h1, Fl_Color c) {
+
+void shiny_down_draw(Fl_Boxtype, int x1, int y1, int w1, int h1, Fl_Color c, Fl_Flags);
+
+void shiny_up_draw(Fl_Boxtype, int x1, int y1, int w1, int h1, Fl_Color c, Fl_Flags f) {
+  if (f & FL_VALUE) {
+    shiny_down_draw(0, x1, y1, w1, h1, c, f);
+    return;
+  }
   if (c != pcolor) calc_color(c);
   int x = x1+1;
   int y = Fl_Window::current()->h()-(y1+h1-1);
@@ -172,7 +179,7 @@ void shiny_up_box(int x1, int y1, int w1, int h1, Fl_Color c) {
   fl_rect(x1,y1,w1,h1);
 }
 
-void shiny_down_box(int x1, int y1, int w1, int h1, Fl_Color c) {
+void shiny_down_draw(Fl_Boxtype, int x1, int y1, int w1, int h1, Fl_Color c, Fl_Flags) {
   if (c != pcolor) calc_color(c);
   int x = x1+1;
   int y = Fl_Window::current()->h()-(y1+h1-1);
@@ -233,9 +240,16 @@ void shiny_down_box(int x1, int y1, int w1, int h1, Fl_Color c) {
   fl_rect(x1,y1,w1,h1);
 }
 
+const Fl_Boxtype_ shiny_down_box = {
+  shiny_down_draw, 0, &shiny_down_box, 3,3,6,6
+};
+const Fl_Boxtype_ shiny_up_box = {
+  shiny_up_draw, 0, &shiny_down_box, 3,3,6,6
+};
+
 // It looks interesting if you use this for the window's boxtype,
 // but it is way too slow under MESA:
-void shiny_flat_box(int x, int y1, int w, int h, Fl_Color c) {
+void shiny_flat_draw(Fl_Boxtype, int x, int y1, int w, int h, Fl_Color c, Fl_Flags) {
   if (c != pcolor) calc_color(c);
   int y = Fl_Window::current()->h()-(y1+h);
   gl_start();
@@ -251,35 +265,33 @@ void shiny_flat_box(int x, int y1, int w, int h, Fl_Color c) {
   glEnd();
   gl_finish();
 }
+
+const Fl_Boxtype_ shiny_flat_box = {
+  shiny_flat_draw, 0, &shiny_flat_box, 0,0,0,0
+};
+
 #endif
 
 // If you use a shiny box as a background, things like the sliders that
 // expect to erase a flat area will not work, as you will see the edges
 // of the area.  This "box type" clips to the area and then draws the
 // parent's box.  Perhaps sliders should be fixed to do this automatically?
-void invisible_box(int x, int y, int w, int h, Fl_Color c) {
+void invisible_draw(Fl_Boxtype, int x, int y, int w, int h, Fl_Color c, Fl_Flags) {
   fl_clip(x,y,w,h);
   Fl_Window *W = Fl_Window::current();
-  fl_draw_box(W->box(),0,0,W->w(),W->h(),c);
+  shiny_flat_box.draw(0,0,W->w(),W->h(),c);
   fl_pop_clip();
 }
-
-#define SHINY_BOX (Fl_Boxtype)30
-#define INVISIBLE_BOX (Fl_Boxtype)31
+const Fl_Boxtype_ invisible_box = {
+  invisible_draw, 0, &invisible_box, 0,0,0,0
+};
 
 int main(int argc, char **argv) {
   window = make_panels();
 #if HAVE_GL
   // This will cause all buttons to be shiny:
-  Fl::set_boxtype(FL_UP_BOX, shiny_up_box,3,3,6,6);
-  Fl::set_boxtype(FL_DOWN_BOX, shiny_down_box,3,3,6,6);
-  // replacing FL_FLAT_BOX does not work!  Fl_Window makes assumptions
-  // about what FL_FLAT_BOX does, and sets the X background pixel.
-//Fl::set_boxtype(FL_FLAT_BOX, shiny_flat_box, 0,0,0,0);
-  // Instead you must change box() on Fl_Window to a different value:
-  Fl::set_boxtype(SHINY_BOX, shiny_flat_box, 0,0,0,0);
-  window->box(SHINY_BOX);
-  Fl::set_boxtype(INVISIBLE_BOX, invisible_box, 0,0,0,0);
+  fl_normal_box.draw_ = shiny_up_draw;
+  Fl_Window::default_style.set_box(&shiny_flat_box);
 #endif
   set_sliders();
 //color_slider[0]->box(INVISIBLE_BOX);
@@ -287,7 +299,7 @@ int main(int argc, char **argv) {
 //color_slider[2]->box(INVISIBLE_BOX);
 //color_slider[3]->box(INVISIBLE_BOX);
   thickness_slider->value(thickness);
-  thickness_slider->box(INVISIBLE_BOX);
+  thickness_slider->box(&invisible_box);
   thickness_slider->slider(FL_UP_BOX);
   // we must eat the switches first so -display is done before trying
   // to set the visual:
@@ -303,5 +315,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: shiny.cxx,v 1.5 1999/01/07 19:18:01 mike Exp $".
+// End of "$Id: shiny.cxx,v 1.6 1999/08/16 07:31:37 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.40 1999/06/20 15:24:31 mike Exp $"
+// "$Id: Fl_win32.cxx,v 1.41 1999/08/16 07:31:24 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -46,6 +46,10 @@
 #ifndef WM_SYNCPAINT
 #  define WM_SYNCPAINT 0x0088
 #endif /* !WM_SYNCPAINT */
+
+ifndef WM_MOUSELEAVE
+#  define WM_MOUSE_LEAVE 0x02a3
+#endif
 
 ////////////////////////////////////////////////////////////////
 // interface to poll/select call:
@@ -367,8 +371,6 @@ static int ms2fltk(int vk, int extended) {
 extern HPALETTE fl_select_palette(void); // in fl_color_win32.C
 #endif
 
-static Fl_Window* resize_bug_fix;
-
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
   static char buffer[2];
@@ -433,6 +435,10 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_RBUTTONDBLCLK:mouse_event(window, 1, 3, wParam, lParam); return 0;
   case WM_RBUTTONUP:    mouse_event(window, 2, 3, wParam, lParam); return 0;
   case WM_MOUSEMOVE:    mouse_event(window, 3, 0, wParam, lParam); return 0;
+
+  case WM_MOUSELEAVE:
+    Fl::handle(FL_LEAVE, window);
+    break;
 
   case WM_SETFOCUS:
     Fl::handle(FL_FOCUS, window);
@@ -511,17 +517,15 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 	Fl::handle(FL_HIDE, window);
       } else {
 	Fl::handle(FL_SHOW, window);
-	resize_bug_fix = window;
-	window->size(LOWORD(lParam), HIWORD(lParam));
-        Fl_X::i(window)->layout();
+	window->resize_from_system(window->x(), window->y(),
+				   window->size(LOWORD(lParam), HIWORD(lParam));
       }
     }
     break;
 
   case WM_MOVE:
-    resize_bug_fix = window;
-    window->position(LOWORD(lParam), HIWORD(lParam));
-    Fl_X::i(window)->layout();
+    window->resize_from_system(LOWORD(lParam), HIWORD(lParam),
+			       window->w(), window->h());
     break;
 
   case WM_SETCURSOR:
@@ -617,21 +621,30 @@ int Fl_X::fake_X_wm(const Fl_Window* w,int &X,int &Y, int &bt,int &bx, int &by) 
 
 ////////////////////////////////////////////////////////////////
 
-void Fl_Window::layout() {
-  UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER;
-  int is_a_resize = (ow() != w() || oh() != h());
-  int resize_from_program = (this != resize_bug_fix);
-  if (!resize_from_program) resize_bug_fix = 0;
-  if (ox() != x() || oy() != y()) set_flag(FL_FORCE_POSITION);
-    else {if (!is_a_resize) {Fl_Widget::layout();return;} flags |= SWP_NOMOVE;}
-  if (is_a_resize) {
+void Fl_Window::resize_from_system(int X, int Y, int W, int H) {
+  if (W == w() && H == h()) {
+    x(X); y(Y);
+    set_old_size();
+  } else {
+    resize(X, Y, W, H);
     Fl_Group::layout();
     if (shown()) {redraw(); i->wait_for_expose = 1;}
-  } else {
-    Fl_Widget::layout(); set_old_size();
-    flags |= SWP_NOSIZE;
   }
-  if (resize_from_program && shown()) {
+}
+
+void Fl_Window::layout() {
+  UINT flags = SWP_NOSENDCHANGING | SWP_NOZORDER;
+  if (ox() != x() || oy() != y()) set_flag(FL_FORCE_POSITION);
+  else flags |= SWP_NOMOVE;
+  if (ow() == w() && oh() == h()) {
+    Fl_Widget::layout(); set_old_size();
+    if (flags & SWP_NOMOVE) return;
+    flags |= SWP_NOSIZE;
+  } else {
+    Fl_Group::layout();
+    if (shown()) {redraw(); i->wait_for_expose = 1;}
+  }
+  if (shown()) {
     int dummy, bt, bx, by;
     //Ignore window managing when resizing, so that windows (and more
     //specifically menus) can be moved offscreen.
@@ -939,5 +952,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.40 1999/06/20 15:24:31 mike Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.41 1999/08/16 07:31:24 bill Exp $".
 //

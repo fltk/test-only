@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.H,v 1.11 1999/05/06 05:52:09 carl Exp $"
+// "$Id: Fl_Menu_Button.H,v 1.12 1999/08/16 07:30:51 bill Exp $"
 //
 // Menu button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,42 +28,8 @@
 
 #include "Fl_Menu_.H"
 
-#define MENU_BUTTON_STYLE ((Fl_Menu_Button::Style*)_style)
-
 class Fl_Menu_Button : public Fl_Menu_ {
 public:
-  enum Attribute {
-    FLY_COLOR = 0,
-    FLY_BOX,
-    MBA_END
-  };
-
-  struct Style : public Fl_Menu_::Style {
-    uchar menu_button_[MBA_END];
-    uchar sbf;
-
-    Style();
-    uchar& menu_button(Attribute a) { return menu_button_[a]; }
-  };
-
-  int is_style_forced(Fl_Widget::Attribute a) const
-    { return Fl_Widget::is_style_forced(a); }
-  int is_style_forced(Fl_Menu_::Attribute a) const
-    { return Fl_Menu_::is_style_forced(a); }
-  int is_style_forced(Attribute a) const
-    { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
-
-  void copy_style(Fl_Menu_Button* o)
-    { mstyle(&_style); *((Style*)_style) = *((Style*)o->style()); }
-
-  virtual void loadstyle() const;
-
-  Fl_Boxtype fly_box() const;
-  void fly_box(Fl_Boxtype b);
-
-  Fl_Color fly_color() const;
-  void fly_color(uchar c);
-
   // values for type:
   enum {POPUP1 = 1, POPUP2, POPUP12, POPUP3, POPUP13, POPUP23, POPUP123};
   int handle(int);
@@ -71,20 +37,13 @@ public:
   Fl_Menu_Button(int,int,int,int,const char * =0);
 
 protected:
-  static Fl_Widget::Style* _default_style;
-
-  virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
-  virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
-
   void draw();
 
 private:
-  uchar attr(Attribute) const;
-  void attr(Attribute, uchar);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Menu_Button.H,v 1.11 1999/05/06 05:52:09 carl Exp $".
+// End of "$Id: Fl_Menu_Button.H,v 1.12 1999/08/16 07:30:51 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.7 1999/03/14 06:46:41 carl Exp $"
+// "$Id: fl_labeltype.cxx,v 1.8 1999/08/16 07:31:28 bill Exp $"
 //
 // Label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -27,108 +27,85 @@
 // Other label types (symbols) are in their own source files
 // to avoid linking if not used.
 
-#include <FL/Fl.H>
-#include <FL/Fl_Widget.H>
-#include <FL/Fl_Group.H>
+#include <FL/Fl_Labeltype.H>
 #include <FL/fl_draw.H>
 
-void
-fl_no_label(const Fl_Label*,int,int,int,int,Fl_Align) {}
+void fl_no_label_draw(Fl_Labeltype, const char*,
+		    int, int, int, int, Fl_Color, Fl_Flags)
+{}
 
-void
-fl_normal_label(const Fl_Label* o, int X, int Y, int W, int H, Fl_Align align)
+Fl_Labeltype_ fl_no_label = {fl_no_label_draw, 0};
+
+void fl_normal_label_draw(Fl_Labeltype, const char* label,
+		    int X, int Y, int W, int H,
+		    Fl_Color c, Fl_Flags f)
 {
-  fl_font(o->font, o->size);
-  fl_color((Fl_Color)o->color);
-  fl_draw(o->value, X, Y, W, H, align);
+  fl_color(f&FL_INACTIVE ? fl_inactive(c) : c);
+  fl_draw(label, X, Y, W, H, f);
 }
 
-void
-fl_normal_measure(const Fl_Label* o, int& W, int& H) {
-  fl_font(o->font, o->size);
-  fl_measure(o->value, W, H);
-}
-
-#define MAX_LABELTYPE 16
-
-static Fl_Label_Draw_F* table[MAX_LABELTYPE] = {
-  fl_normal_label,
-  fl_no_label,
-  fl_normal_label,	// _FL_SYMBOL_LABEL,
-  fl_normal_label,	// _FL_SHADOW_LABEL,
-  fl_normal_label,	// _FL_ENGRAVED_LABEL,
-  fl_normal_label,	// _FL_EMBOSSED_LABEL,
-  fl_no_label,		// _FL_BITMAP_LABEL,
-  fl_no_label,		// _FL_PIXMAP_LABEL,
-  fl_no_label,		// _FL_IMAGE_LABEL,
-  // FL_FREE_LABELTYPE+n:
-  fl_no_label, fl_no_label, fl_no_label,
-  fl_no_label, fl_no_label, fl_no_label, fl_no_label,
-};
-
-static Fl_Label_Measure_F* measure[MAX_LABELTYPE];
-
-void Fl::set_labeltype(Fl_Labeltype t,Fl_Label_Draw_F* f,Fl_Label_Measure_F*m) 
-{
-  table[t] = f; measure[t] = m;
-}
+Fl_Labeltype_ fl_normal_label = {fl_normal_label_draw, 0};
 
 ////////////////////////////////////////////////////////////////
 
-// draw label with arbitrary alignment in arbitrary box:
-void Fl_Label::draw(int X, int Y, int W, int H, Fl_Align align) const {
-  if (!value) return;
-  table[type](this, X, Y, W, H, align);
-}
-
-void Fl_Label::measure(int& W, int& H) const {
-  if (!value) return;
-  Fl_Label_Measure_F* f = ::measure[type]; if (!f) f = fl_normal_measure;
-  f(this, W, H);
-}
-
-// The normal call for a draw() method:
-void Fl_Widget::draw_label() const {
-  int X = x_+Fl::box_dx(box());
-  int W = w_-Fl::box_dw(box());
-  if (W > 11 && align()&(FL_ALIGN_LEFT|FL_ALIGN_RIGHT)) {X += 3; W -= 6;}
-  draw_label(X, y_+Fl::box_dy(box()), W, h_-Fl::box_dh(box()), labelcolor());
-}
-
-void Fl_Widget::draw_label(Fl_Color col) const {
-  int X = x_+Fl::box_dx(box());
-  int W = w_-Fl::box_dw(box());
-  if (W > 11 && align()&(FL_ALIGN_LEFT|FL_ALIGN_RIGHT)) {X += 3; W -= 6;}
-  draw_label(X, y_+Fl::box_dy(box()), W, h_-Fl::box_dh(box()), col);
-}
-
-// draw() can use this instead to change the bounding box:
-void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Color col) const {
-  // quit if we are not drawing a label inside the widget:
-  if ((align()&15) && !(align() & FL_ALIGN_INSIDE)) return;
-  draw_label(X,Y,W,H,col,align());
-}
-
-// Anybody can call this to force the label to draw anywhere:
+#include <FL/Fl_Widget.H>
+#include <FL/Fl_Image.H>
 extern char fl_draw_shortcut;
-void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Color col, Fl_Align a) const {
-  Fl_Label l1;
-  l1.value = label();
-  l1.type = labeltype();
-  l1.size = labelsize();
-  l1.font = labelfont();
-  l1.color = col;
 
-  if (flags()&SHORTCUT_LABEL) fl_draw_shortcut = 1;
-  if (!active_r()) l1.color = inactive((Fl_Color)l1.color);
-  l1.draw(X,Y,W,H,a);
-  fl_draw_shortcut = 0;
+// The normal call for a draw() method, this draws inside labels but
+// skips outside labels:
+void Fl_Widget::draw_label(Fl_Color c) const {
+  if (!(flags()&15) || (flags() & FL_ALIGN_INSIDE)) {
+    int X = x_+box()->dx();
+    int W = w_-box()->dw();
+    if (W > 11 && flags()&(FL_ALIGN_LEFT|FL_ALIGN_RIGHT)) {X += 3; W -= 6;}
+    draw_label(X, y_+box()->dy(), W, h_-box()->dh(), c, flags());
+  }
 }
 
-// include these vars here so they can be referenced without including
-// Fl_Input_ code:
-#include <FL/Fl_Input_.H>
+void Fl_Widget::draw_label() const {draw_label(labelcolor());}
+
+// draws a label on a button, you can reposition it to position it
+// around other stuff drawn on the button.  The color should be the
+// return value of draw_button().
+void Fl_Widget::draw_button_label(int X,int Y,int W,int H, Fl_Color c) const {
+  if (!(flags()&15) || (flags() & FL_ALIGN_INSIDE))
+    draw_label(X,Y,W,H,c,flags());
+}
+
+// Anybody can call this to force the label to draw anywhere, this is
+// used by Fl_Group and Fl_Tabs to draw outside labels:
+void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Color c, Fl_Flags f) const
+{
+  if (!active_r()) f |= FL_INACTIVE;
+  if (image_) {
+    fl_color((f&FL_INACTIVE) ? fl_inactive(c) : c);
+    image_->draw(X, Y, W, H, f);
+    if (f & FL_ALIGN_BOTTOM) H -= image_->h;
+    else if (f & FL_ALIGN_TOP) {Y += image_->h; H -= image_->h;}
+    else if (f & FL_ALIGN_LEFT) {X += image_->w; W -= image_->w;}
+    else if (f & FL_ALIGN_RIGHT) W -= image_->w;
+    else {int d = (H+image_->h)/2; Y += d; H -= d;}
+  }
+  if (label_ && *label_) {
+    fl_font(label_font(), label_size());
+    if (flags() & FL_SHORTCUT_LABEL) fl_draw_shortcut = 1;
+    label_type()->draw(label_, X, Y, W, H, c, f);
+    fl_draw_shortcut = 0;
+  }
+}
+
+void Fl_Widget::draw_label(int X, int Y, int W, int H, Fl_Flags f) const {
+  draw_label(X,Y,W,H, labelcolor(), f);
+}
+
+void Fl_Widget::measure_label(int& w, int& h) const {
+  if (!label_ || !*label_) {w = h = 0; return;}
+  fl_font(label_font(), label_size());
+  w = 0;
+  fl_measure(label(), w, h);
+}
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.7 1999/03/14 06:46:41 carl Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.8 1999/08/16 07:31:28 bill Exp $".
 //

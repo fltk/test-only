@@ -1,5 +1,5 @@
 //
-// "$Id: fl_cursor.cxx,v 1.6 1999/01/07 19:17:37 mike Exp $"
+// "$Id: fl_cursor.cxx,v 1.7 1999/08/16 07:31:26 bill Exp $"
 //
 // Mouse cursor support for the Fast Light Tool Kit (FLTK).
 //
@@ -152,12 +152,15 @@ void Fl_Window::cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
       deleteit = 1;
     }
     XColor fgc;
-    uchar r,g,b;
-    Fl::get_color(fg,r,g,b);
-    fgc.red = r<<8; fgc.green = g<<8; fgc.blue = b<<8;
+    fg = fl_get_color(fg);
+    fgc.red = (fg>>16)&0xFF00;
+    fgc.green = (fg>>8)&0xFF00;
+    fgc.blue = fg & 0xFF00;
     XColor bgc;
-    Fl::get_color(bg,r,g,b);
-    bgc.red = r<<8; bgc.green = g<<8; bgc.blue = b<<8;
+    bg = fl_get_color(bg);
+    bgc.red = (bg>>16)&0xFF00;
+    bgc.green = (bg>>8)&0xFF00;
+    bgc.blue = bg & 0xFF00;
     XRecolorCursor(fl_display, cursor, &fgc, &bgc);
   }
   XDefineCursor(fl_display, fl_xid(this), cursor);
@@ -167,5 +170,5 @@ void Fl_Window::cursor(Fl_Cursor c, Fl_Color fg, Fl_Color bg) {
 #endif
 
 //
-// End of "$Id: fl_cursor.cxx,v 1.6 1999/01/07 19:17:37 mike Exp $".
+// End of "$Id: fl_cursor.cxx,v 1.7 1999/08/16 07:31:26 bill Exp $".
 //

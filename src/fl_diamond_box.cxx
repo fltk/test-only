@@ -1,5 +1,5 @@
 //
-// "$Id: fl_diamond_box.cxx,v 1.6 1999/03/14 06:46:41 carl Exp $"
+// "$Id: fl_diamond_box.cxx,v 1.7 1999/08/16 07:31:26 bill Exp $"
 //
 // Diamond box code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,60 +23,72 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-// Box drawing code for an obscure box type.
-// These box types are in seperate files so they are not linked
-// in if not used.
+// A less-used boxtype, it is here so that it is not linked in if
+// not used.
 
 // The diamond box draws best if the area is square!
 
-#include <FL/Fl.H>
+#include <FL/Fl_Boxtype.H>
 #include <FL/fl_draw.H>
 
-extern uchar* fl_gray_ramp();
+FL_EXPORT extern uchar fl_active_ramp[24];
+FL_EXPORT extern uchar fl_inactive_ramp[24];
+FL_EXPORT void fl_to_inactive(const char* s, char* to);
 
-static void fl_diamond_up_box(int x,int y,int w,int h,Fl_Color bgcolor) {
+static void diamond_draw(Fl_Boxtype b, int x, int y, int w, int h,
+			 Fl_Color c, Fl_Flags f)
+{
   w &= -2;
   h &= -2;
   int x1 = x+w/2;
   int y1 = y+h/2;
-  uchar *g = fl_gray_ramp();
-
-  fl_color(bgcolor); fl_polygon(x+2, y1, x1,y+2, x+w-4,y1, x1,y+h-4);
-
-  fl_color(g['W']); fl_line(x, y1, x1, y, x+w, y1);
-  fl_color(g['W']); fl_line(x+1, y1, x1, y+1, x+w-1, y1);
-  fl_color(g['A']); fl_line(x+3, y1, x1, y+3, x+w-3, y1);
-
-  fl_color(g['A']); fl_line(x, y1, x1, y+h, x+w, y1);
-  fl_color(g['A']); fl_line(x+1, y1, x1, y+h-1, x+w-1, y1);
-  fl_color(g['W']); fl_line(x+3, y1, x1, y+h-3, x+w-3, y1);
+  if (f & FL_VALUE) b = b->down;
+  if (!(f & FL_FRAME_ONLY)) {
+    // draw the interior, assumming the edges are the same thickness
+    // as the normal square box:
+    int d = b->dx();
+    if (w > 2*d && h > 2*d) {
+      fl_color(c);
+      fl_polygon(x+d, y1, x1,y+d, x+w-d,y1, x1,y+h-d);
+    }
+  }
+  const char* s = (const char*)(b->data);
+  char buf[26]; if (f&FL_INACTIVE) {fl_to_inactive(s, buf); s = buf;}
+  const char* t;
+  if (*s == '2') {t = s+1; s += 3;} else {t = s+2;}
+  while (*s && *t && w > 0 && h > 0) {
+    // draw upper-right line:
+    fl_color(*s++ + (FL_GRAY_RAMP-'A'));
+    fl_line(x+w, y1, x1, y);
+    // draw upper-left line:
+    fl_color(*s++ + (FL_GRAY_RAMP-'A'));
+    fl_line(x1, y, x, y1);
+    s += 2;
+    // draw lower-left line:
+    fl_color(*t++ + (FL_GRAY_RAMP-'A'));
+    fl_line(x, y1, x1, y+h);
+    // draw lower-right line:
+    fl_color(*t++ + (FL_GRAY_RAMP-'A'));
+    fl_line(x1, y+h, x+w, y1);
+    t += 2;
+    x++; y++; w -= 2; h -= 2;
+  }
 }
 
-static void fl_diamond_down_box(int x,int y,int w,int h,Fl_Color bgcolor) {
-  w &= -2;
-  h &= -2;
-  int x1 = x+w/2;
-  int y1 = y+h/2;
-  uchar *g = fl_gray_ramp();
-
-  fl_color(bgcolor); fl_polygon(x+2, y1, x1,y+2, x+w-4,y1, x1,y+h-4);
-
-  fl_color(g['A']); fl_line(x, y1, x1, y, x+w, y1);
-  fl_color(g['A']); fl_line(x+1, y1, x1, y+1, x+w-1, y1);
-  fl_color(g['W']); fl_line(x+3, y1, x1, y+3, x+w-3, y1);
-
-  fl_color(g['W']); fl_line(x, y1, x1, y+h, x+w, y1);
-  fl_color(g['W']); fl_line(x+1, y1, x1, y+h-1, x+w-1, y1);
-  fl_color(g['A']); fl_line(x+3, y1, x1, y+h-3, x+w-3, y1);
+static void wrapper(Fl_Boxtype b, int x, int y, int w, int h,
+		    Fl_Color c, Fl_Flags f)
+{
+  diamond_draw((Fl_Boxtype)(b->data),x,y,w,h,c,f);
 }
 
-extern void fl_internal_boxtype(Fl_Boxtype, Fl_Box_Draw_F*);
-Fl_Boxtype define_FL_DIAMOND_BOX() {
-  fl_internal_boxtype(_FL_DIAMOND_DOWN_BOX, fl_diamond_down_box);
-  fl_internal_boxtype(_FL_DIAMOND_UP_BOX,fl_diamond_up_box);
-  return _FL_DIAMOND_UP_BOX;
-}
+const Fl_Boxtype_ fl_diamond_box = {
+  wrapper, FL_UP_BOX, 0, 0,0,0,0
+};
+
+const Fl_Boxtype_ fl_diamond_down_box = {
+  wrapper, FL_DOWN_BOX, 0, 0,0,0,0
+};
 
 //
-// End of "$Id: fl_diamond_box.cxx,v 1.6 1999/03/14 06:46:41 carl Exp $".
+// End of "$Id: fl_diamond_box.cxx,v 1.7 1999/08/16 07:31:26 bill Exp $".
 //

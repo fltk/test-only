@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.22 1999/06/18 14:34:37 carl Exp $"
+// "$Id: Fl_Widget.H,v 1.23 1999/08/16 07:30:54 bill Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -26,105 +26,37 @@
 #ifndef Fl_Widget_H
 #define Fl_Widget_H
 
-#include "Enumerations.H"
-#include <string.h>
-#include <locale.h>
-
-#define WIDGET_STYLE ((Fl_Widget::Style*)_style)
+#include "Fl_Style.H"
 
 class Fl_Widget;
 class Fl_Window;
+class Fl_Image;
 
 typedef void (Fl_Callback )(Fl_Widget*, void*);
 typedef Fl_Callback* Fl_Callback_p; // needed for BORLAND
 typedef void (Fl_Callback0)(Fl_Widget*);
 typedef void (Fl_Callback1)(Fl_Widget*, long);
 
-struct Fl_Label {
-  const char* value;
-  uchar type;
-  uchar font;
-  uchar size;
-  uchar color;
-  void draw(int,int,int,int, Fl_Align) const ;
-  void measure(int&, int&) const ;
-};
-
 class Fl_Widget {
   friend class Fl_Group;
-  friend class Fl_Tile;// must call layout() too...
 
 public:
-  enum Attribute {
-    LABELCOLOR = 0,
-    LABELSIZE,
-    LABELTYPE,
-    LABELFONT,
-    COLOR,
-    COLOR2,
-    COLOR3,
-    BOX,
-    WA_END
-  };
 
-  struct Style {
-    uchar widget_[WA_END];
-    uchar sbf;
-    
-    // This is just a kludge used for one particular situation--
-    // generally determined by whether style() == 0
-    uchar not_dynamic;
-
-    Style();
-    uchar& widget(Attribute a) { return widget_[a]; }
-  };
-
-  enum {INACTIVE=1, INVISIBLE=2, OUTPUT=4, SHORTCUT_LABEL=64, CHANGED=128 };
-
-  virtual ~Fl_Widget();
-
-  virtual void loadstyle() const;
-
-  // These next few functions are mainly used for FLUID
-
-  // returns pointer to the style structure
-  const Style* style() const { if (_style) return _style; return default_style(); }
-
-  // use the default style instead of any forced attributes
-  void use_default_style() { 
-    if (_style && !_style->not_dynamic) delete _style;
-    _style = 0;
-  }
-
-  // are we using default style?
-  int is_using_default_style() { return _style ? 0 : 1; }  
-
-  // after doing this setting attributes modifies the default style
-  void modify_default_style() {
-    if (_style && !_style->not_dynamic) delete _style;
-    _style = default_style();
-    _style->not_dynamic = 1;
-  }
-
-  // has this attribute been forced to a particular value?
-  int is_style_forced(Attribute a) const
-    { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
-
-  // copy the style of another widget
-  void copy_style(Fl_Widget* o)
-    { mstyle(&_style); *((Style*)_style) = *((Style*)o->style()); }
-
-  const char *tooltip() const { return tooltip_; }
-  void tooltip(const char *t);
-  void tooltip(const char *t, const char *loc)
-    { if (strncmp(loc, setlocale(LC_ALL, NULL), 2) == 0) tooltip(t); }
-
-  uchar bf(uchar a) const {return (uchar)1 << a;}
-  unsigned short flags() const {return flags_;}
   virtual void draw() = 0;
   virtual int handle(int);
-  Fl_Widget* parent() const {return parent_;}
-  void parent(Fl_Widget* w) {parent_ = w;} // for hacks only
+  virtual void layout();
+  virtual ~Fl_Widget();
+
+  const Fl_Style* style() const {return style_;}
+  Fl_Style* wstyle();
+  bool style(Fl_Style* s);
+  bool style(Fl_Style& s) {return style(&s);}
+  bool copy_style(const Fl_Style* s);
+  static Fl_Style default_style;
+
+  Fl_Group* parent() const {return parent_;}
+  Fl_Window* window() const ;
+  void parent(const Fl_Widget* w) {parent_=(Fl_Group*)w;} // for hacks only
 
   uchar type() const {return type_;}
   void type(uchar t) {type_ = t;}
@@ -133,41 +65,22 @@ public:
   int y() const {return y_;}
   int w() const {return w_;}
   int h() const {return h_;}
-  virtual void resize(int,int,int,int);
-  int damage_resize(int,int,int,int);
+  void resize(int,int,int,int);
+  bool damage_resize(int,int,int,int);
   void position(int X,int Y) {resize(X,Y,w_,h_);}
   void size(int W,int H) {resize(x_,y_,W,H);}
 
-  Fl_Align align() const {return (Fl_Align)align_;}
-
-  void align(uchar a) {align_ = a;}
-
-  Fl_Boxtype box() const;
-  Fl_Color color() const;
-  Fl_Color selection_color() const;
-  Fl_Color color3() const;
-  Fl_Labeltype labeltype() const;
-  Fl_Color labelcolor() const;
-  Fl_Font labelfont() const;
-  uchar labelsize() const;
-
-  void box(Fl_Boxtype a);
-  void color(uchar a);
-  void selection_color(uchar a);
-  void color3(uchar a);
-  void color(uchar a, uchar b);
-  void labeltype(Fl_Labeltype a);
-  void labelcolor(uchar a);
-  void labelfont(uchar a);
-  void labelsize(uchar a);
-
   const char* label() const {return label_;}
   void label(const char* a) {label_=a;}
-  void label(const char *a, const char *loc)
-    { if (strncmp(loc, setlocale(LC_ALL, NULL), 2) == 0) label_=a; }
-  void label(Fl_Labeltype a,const char* b);
-  void label(Fl_Labeltype a, const char *b, const char *loc)
-    { if (strncmp(loc, setlocale(LC_ALL, NULL), 2) == 0) label(a,b); }
+  void label(const char *a, const char *loc);
+
+  Fl_Image* image() const {return image_;}
+  void image(Fl_Image* a) {image_ = a;}
+  void image(Fl_Image& a) {image_ = &a;}
+
+  const char *tooltip() const {return tooltip_; }
+  void tooltip(const char *t) {tooltip_ = t;}
+  void tooltip(const char *t, const char *loc);
 
   Fl_Callback_p callback() const {return callback_;}
   void callback(Fl_Callback* c, void* p) {callback_=c; user_data_=p;}
@@ -181,93 +94,169 @@ public:
   Fl_When when() const {return (Fl_When)when_;}
   void when(uchar i) {when_ = i;}
 
-  int visible() const {return !(flags_&INVISIBLE);}
-  int visible_r() const;
-  void show();
-  void hide();
-  void set_visible() {flags_ &= ~INVISIBLE;}
-  void clear_visible() {flags_ |= INVISIBLE;}
-  int active() const {return !(flags_&INACTIVE);}
-  int active_r() const;
-  void activate();
-  void activate(int b) { if (b) activate(); else deactivate(); }
-  void deactivate();
-  int output() const {return (flags_&OUTPUT);}
-  void set_output() {flags_ |= OUTPUT;}
-  void clear_output() {flags_ &= ~OUTPUT;}
-  int takesevents() const {return (!output()&&active_r()&&visible_r()) ? 1 : 0;}
-  int changed() const {return flags_&CHANGED;}
-  void set_changed() {flags_ |= CHANGED;}
-  void clear_changed() {flags_ &= ~CHANGED;}
-  int take_focus();
-
   static void default_callback(Fl_Widget*, void*);
   void do_callback() {callback_(this,user_data_);}
   void do_callback(Fl_Widget* o,void* arg=0) {callback_(o,arg);}
   void do_callback(Fl_Widget* o,long arg) {callback_(o,(void*)arg);}
-  int test_shortcut();
-  static int test_shortcut(const char*);
-  int contains(const Fl_Widget*) const ;
-  int inside(const Fl_Widget* o) const {return o ? o->contains(this) : 0;}
+  bool test_shortcut();
+  static bool test_shortcut(const char*);
+  bool contains(const Fl_Widget*) const ;
+  bool inside(const Fl_Widget* o) const {return o ? o->contains(this) : 0;}
+
+  Fl_Flags flags() const {return flags_;}
+  Fl_Flags align() const {return flags_;}
+  void align(unsigned a) {flags_ = flags_&~FL_ALIGN_MASK|a;}
+
+  bool visible() const {return !(flags_&FL_INVISIBLE);}
+  bool visible_r() const;
+  void show();
+  void hide();
+  void set_visible() {flags_ &= ~FL_INVISIBLE;}
+  void clear_visible() {flags_ |= FL_INVISIBLE;}
+  bool active() const {return !(flags_&FL_INACTIVE);}
+  bool active_r() const;
+  void activate();
+  void activate(int b) { if (b) activate(); else deactivate(); }
+  void deactivate();
+  bool output() const {return (flags_&FL_OUTPUT);}
+  void set_output() {flags_ |= FL_OUTPUT;}
+  void clear_output() {flags_ &= ~FL_OUTPUT;}
+  bool takesevents() const {return !(flags_&(FL_OUTPUT|FL_INVISIBLE|FL_INACTIVE));}
+  bool changed() const {return flags_&FL_CHANGED;}
+  void set_changed() {flags_ |= FL_CHANGED;}
+  void clear_changed() {flags_ &= ~FL_CHANGED;}
+  bool value() const {return flags_&FL_VALUE;}
+  void set_value() {flags_ |= FL_VALUE;}
+  void clear_value() {flags_ &= ~FL_VALUE;}
+  bool value(bool);
+  bool set();
+  bool clear();
+  void setonly();
+
+  bool take_focus();
+  void throw_focus();
 
   void redraw();
   uchar damage() const {return damage_;}
   void clear_damage(uchar c = 0) {damage_ = c;}
   void damage(uchar c);
   void damage(uchar c,int,int,int,int);
-  void measure_label(int&, int&);
-  void draw_label(int, int, int, int, Fl_Color, Fl_Align) const;
 
-  Fl_Window* window() const ;
+  void draw_label(int,int,int,int, Fl_Flags) const; // draw label anywhere
+  void draw_label(int,int,int,int, Fl_Color, Fl_Flags) const;
+  void measure_label(int&, int&) const;
 
-  // back compatability only:
-  Fl_Color color2() const;
-  void color2(uchar a);
+  Fl_Boxtype box()		const {return style_->box;}
+  Fl_Glyph glyph()		const {return style_->glyph;}
+  Fl_Font label_font()		const {return style_->label_font;}
+  Fl_Font text_font()		const {return style_->text_font;}
+  Fl_Labeltype label_type()	const {return style_->label_type;}
+  Fl_Color color()		const {return style_->color;}
+  Fl_Color up_color()		const {return style_->color;}
+  Fl_Color label_color()	const {return style_->label_color;}
+  Fl_Color selection_color()	const {return style_->selection_color;}
+  Fl_Color selection_text_color() const {return style_->selection_text_color;}
+  Fl_Color on_color()		const {return style_->selection_color;}
+  Fl_Color down_color()		const {return style_->selection_color;}
+  Fl_Color off_color()		const {return style_->off_color;}
+  Fl_Color highlight_color()	const {return style_->highlight_color;}
+  Fl_Color highlight_label_color() const{return style_->highlight_label_color;}
+  Fl_Color text_color()		const {return style_->text_color;}
+  unsigned label_size()		const {return style_->label_size;}
+  unsigned text_size()		const {return style_->text_size;}
+
+  void box(Fl_Boxtype a)	{wstyle()->box = a;}
+  void glyph(Fl_Glyph a)	{wstyle()->glyph = a;}
+  void label_font(Fl_Font a)	{wstyle()->label_font = a;}
+  void text_font(Fl_Font a)	{wstyle()->text_font = a;}
+  void label_type(Fl_Labeltype a) {wstyle()->label_type = a;}
+  void color(Fl_Color a)	{wstyle()->color = a;}
+  void up_color(Fl_Color a)	{wstyle()->color = a;}
+  void label_color(Fl_Color a)	{wstyle()->label_color = a;}
+  void selection_color(Fl_Color a) {wstyle()->selection_color = a;}
+  void selection_text_color(Fl_Color a) {wstyle()->selection_text_color = a;}
+  void on_color(Fl_Color a)	{wstyle()->selection_color = a;}
+  void down_color(Fl_Color a)	{wstyle()->selection_color = a;}
+  void off_color(Fl_Color a)	{wstyle()->off_color = a;}
+  void highlight_color(Fl_Color a) {wstyle()->highlight_color = a;}
+  void highlight_label_color(Fl_Color a) {wstyle()->highlight_label_color = a;}
+  void text_color(Fl_Color a)	{wstyle()->text_color = a;}
+  void label_size(unsigned a)	{wstyle()->label_size = a;}
+  void text_size(unsigned a)	{wstyle()->text_size = a;}
+
+#ifndef FLTK_2  // back-compatability section:
+  Fl_Boxtype down_box()		const {return FL_DOWN_BOX;}
+  Fl_Boxtype fly_box()		const {return style_->box;}
+  Fl_Color color2()		const {return style_->selection_color;}
+  Fl_Color color3()		const {return style_->off_color;}
+  Fl_Labeltype labeltype()	const {return style_->label_type;}
+  Fl_Color labelcolor()		const {return style_->label_color;}
+  Fl_Color down_labelcolor()	const {return style_->selection_text_color;}
+  Fl_Font labelfont()		const {return style_->label_font;}
+  unsigned labelsize()		const {return style_->label_size;}
+  Fl_Color fly_color()		const {return style_->highlight_color;}
+  Fl_Font textfont()		const {return style_->text_font;}
+  unsigned textsize()		const {return style_->text_size;}
+  Fl_Color textcolor()		const {return style_->text_color;}
+  Fl_Color selected_textcolor()	const {return style_->selection_text_color;}
+  Fl_Color cursor_color()	const {return style_->off_color;}
+
+  void down_box(Fl_Boxtype)	{}
+  void fly_box(Fl_Boxtype)	{}
+  void color2(Fl_Color a)	{wstyle()->selection_color = a;}
+  void labeltype(Fl_Labeltype a) {wstyle()->label_type = a;}
+  void labelcolor(Fl_Color a)	{wstyle()->label_color = a;}
+  void down_labelcolor(Fl_Color a) {wstyle()->selection_text_color = a;}
+  void labelfont(Fl_Font a)	{wstyle()->label_font = a;}
+  void labelfont(unsigned a)	{wstyle()->label_font = fl_fonts+a;}
+  void labelsize(unsigned a)	{wstyle()->label_size = a;}
+  void fly_color(Fl_Color a)	{wstyle()->highlight_color = a;}
+  void textfont(Fl_Font a)	{wstyle()->text_font = a;}
+  void textfont(unsigned a)	{wstyle()->text_font = fl_fonts+a;}
+  void textsize(unsigned a)	{wstyle()->text_size = a;}
+  void textcolor(Fl_Color a)	{wstyle()->text_color = a;}
+  void selected_textcolor(Fl_Color a) {wstyle()->selection_text_color = a;}
+  void cursor_color(Fl_Color a)	{wstyle()->off_color = a;}
+#endif
 
 protected:
-  static Fl_Widget::Style* _default_style;
-  Style* _style;
 
   Fl_Widget(int,int,int,int,const char* =0);
-
-  virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
-  virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
 
   void x(int v) {x_ = v;}
   void y(int v) {y_ = v;}
   void w(int v) {w_ = v;}
   void h(int v) {h_ = v;}
-  virtual void layout();
 
-  void set_flag(unsigned short c) {flags_ |= c;}
+  void set_flag(unsigned c) {flags_ |= c;}
   void clear_flag(unsigned c) {flags_ &= ~c;}
 
-  void draw_box() const;
-  void draw_box(Fl_Boxtype, Fl_Color) const;
-  void draw_box(Fl_Boxtype, int,int,int,int, Fl_Color) const;
-  void draw_label() const;
+  void draw_box() const; // draws the style's box around widget and fills
+  void draw_frame() const; // just draws the edge of the box if possible
+  void draw_label() const; // draw inside labels only
   void draw_label(Fl_Color) const;
-  void draw_label(int, int, int, int, Fl_Color) const;
+  void draw_glyph(int, int,int,int,int, Fl_Flags) const;
+  Fl_Color draw_button() const; // special messy one for button style widgets
+  void draw_button_label(int,int,int,int,Fl_Color) const;
 
 private:
-  Fl_Widget* parent_;
+
+  const Fl_Style* style_;
+  Fl_Group* parent_;
   Fl_Callback* callback_;
-  const char* label_;
   void* user_data_;
-  const char *tooltip_;
-  short x_,y_,w_,h_;
-  uchar flags_;
+  const char* label_;
+  Fl_Image* image_;
+  const char* tooltip_;
+  unsigned flags_;
+  int x_,y_,w_,h_;
   uchar type_;
   uchar damage_;
-  uchar align_;
   uchar when_;
 
   // "de-implement" the copy constructors:
   Fl_Widget & operator=(const Fl_Widget &);
   Fl_Widget(const Fl_Widget &);
-
-  uchar attr(Attribute) const;
-  void attr(Attribute, uchar);
 
 };
 
@@ -279,5 +268,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.22 1999/06/18 14:34:37 carl Exp $".
+// End of "$Id: Fl_Widget.H,v 1.23 1999/08/16 07:30:54 bill Exp $".
 //

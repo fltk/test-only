@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.H,v 1.8 1999/03/18 22:58:54 carl Exp $"
+// "$Id: Fl_Light_Button.H,v 1.9 1999/08/16 07:30:51 bill Exp $"
 //
 // Lighted button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,24 +30,15 @@
 
 class Fl_Light_Button : public Fl_Button {
 public:
-  struct Style : public Fl_Button::Style {
-    Style();
-  };
-
-  virtual void loadstyle() const;
+  static Fl_Style default_style;
   virtual int handle(int);
   Fl_Light_Button(int x,int y,int w,int h,const char *l = 0);
-
 protected:
-  static Fl_Widget::Style* _default_style;
-
-  virtual Fl_Widget::Style* default_style() const { mstyle(&_default_style); return _default_style; }
-  virtual void mstyle(Fl_Widget::Style** s) const { if (!(*s)) (*s) = new Style; }
   virtual void draw();
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Light_Button.H,v 1.8 1999/03/18 22:58:54 carl Exp $".
+// End of "$Id: Fl_Light_Button.H,v 1.9 1999/08/16 07:30:51 bill Exp $".
 //

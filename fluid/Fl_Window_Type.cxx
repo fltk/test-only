@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.18 1999/07/21 17:28:21 carl Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.19 1999/08/16 07:31:05 bill Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -99,13 +99,16 @@ public:
   Fl_Window_Type *window;
   int handle(int);
   Overlay_Window(int w,int h) : Fl_Overlay_Window(w,h) {Fl_Group::current(0);}
-  void resize(int,int,int,int);
 };
 void Overlay_Window::draw() {
   const int CHECKSIZE = 8;
   // see if box is clear or a frame or rounded:
   if ((damage()&FL_DAMAGE_ALL) &&
-      (!box() || (box()>=4&&!(box()&2)) || box()>=_FL_ROUNDED_BOX)) {
+      box() != FL_FLAT_BOX &&
+      box() != FL_UP_BOX &&
+      box() != FL_DOWN_BOX &&
+      box() != FL_THIN_UP_BOX &&
+      box() != FL_THIN_DOWN_BOX) {
     // if so, draw checkerboard so user can see what areas are clear:
     for (int y = 0; y < h(); y += CHECKSIZE) 
       for (int x = 0; x < w(); x += CHECKSIZE) {
@@ -179,10 +182,8 @@ void Fl_Window_Type::open() {
     w->show();
     Fl_Widget_Type::open();
   } else {
-    Fl_Widget *p = w->resizable();
-    if (!p) w->resizable(w);
+    w->size_range(10, 10, 0, 0, gridx, gridy);
     w->show();
-    w->resizable(p);
   }
 }
 
@@ -219,6 +220,27 @@ void border_cb(Fl_Light_Button* i, void* v) {
   }
 }
 
+void xclass_cb(Fl_Input* i, void* v) {
+  if (v == LOAD) {
+    if (!current_widget->is_window()) {i->hide(); return;}
+    i->show();
+    i->value(((Fl_Widget_Type *)current_widget)->xclass);
+  } else {
+    for (Fl_Type *o = Fl_Type::first; o; o = o->next)
+      if (o->selected && o->is_widget()) {
+	Fl_Widget_Type* w = (Fl_Widget_Type*)o;
+	if (w->is_window() || w->is_button())
+	  storestring(i->value(),w->xclass);
+	if (w->is_window()) ((Fl_Window*)(w->o))->xclass(w->xclass);
+	else if (w->is_menu_item()) w->redraw();
+      }
+  }
+  Fl_Color tc = FL_BLACK;
+  if (i->value() && *i->value()) tc = FL_RED;
+  if (i->labelcolor() != tc)
+    { i->labelcolor(tc); i->damage(FL_DAMAGE_CHILD_LABEL); }
+}
+
 ////////////////////////////////////////////////////////////////
 
 void Fl_Window_Type::setlabel(const char *n) {
@@ -227,34 +249,6 @@ void Fl_Window_Type::setlabel(const char *n) {
 
 // make() is called on this widget when user picks window off New menu:
 Fl_Window_Type Fl_Window_type;
-
-// Resize from window manager, try to resize it back to a legal size.
-// This is not proper X behavior, but works on 4DWM and fvwm
-void Overlay_Window::resize(int X,int Y,int W,int H) {
-//   if (!visible() || W==w() && H==h()) {
-//     Fl_Overlay_Window::resize(X,Y,W,H);
-//     return;
-//   }
-//   int nw = gridx&&W!=w() ? ((W+gridx/2)/gridx)*gridx : W;
-//   int nh = gridy&&H!=h() ? ((H+gridy/2)/gridy)*gridy : H;
-  Fl_Widget* t = resizable(); resizable(0);
-  Fl_Overlay_Window::resize(X,Y,W,H);
-  resizable(t);
-//   // make sure new window size surrounds the widgets:
-//   int b = 0;
-//   int r = 0;
-//   for (Fl_Type *o=window->next; o && o->level>window->level; o=o->next)
-//     if (o->is_widget() && !o->is_menu_item()) {
-//       Fl_Widget* w = ((Fl_Widget_Type*)o)->o;
-//       if (w->x()+w->w() > r) r = w->x()+w->w();
-//       if (w->y()+w->h() > b) b = w->y()+w->h();
-//     }
-//   if (nh < b) nh = b;
-//   if (nw < r) nw = r;
-//   // If changed, tell the window manager.  Skip really big windows
-//   // that might be bigger than screen:
-//   if (nw != W && nw < Fl::w()-100 || nh != H && nh < Fl::h()-100) size(nw,nh);
-}
 
 // calculate actual move by moving mouse position (mx,my) to
 // nearest multiple of gridsize, and snap to original position
@@ -372,10 +366,7 @@ extern Fl_Menu_Bar* menubar;
 
 void toggle_overlays(Fl_Widget *,void *) {
   menubar->find("&Edit/Show Overlays")->value(overlays_invisible);
-  if (overlaybutton) {
-    overlaybutton->value(overlays_invisible);
-    overlaybutton->redraw();
-  }
+  if (overlaybutton) overlaybutton->value(overlays_invisible);
   overlays_invisible = !overlays_invisible;
   for (Fl_Type *o=Fl_Type::first; o; o=o->next)
     if (o->is_window()) {
@@ -464,23 +455,23 @@ int Fl_Window_Type::handle(int event) {
       if (dx || dy) {
 	Fl_Type *i;
 	for (i=next; i && i->level>level;) {
-	  if (i->selected && i->is_widget() && !i->is_menu_item()) {
-	    Fl_Widget_Type* o = (Fl_Widget_Type*)i;
-	    int x,y,r,t;
-	    newposition(o,x,y,r,t);
-	    o->o->resize(x,y,r-x,t-y);
+	  if (!i->selected || !i->is_widget() || i->is_menu_item()) {
+	    i = i->next;
+	    continue;
+	  }
+	  Fl_Widget_Type* o = (Fl_Widget_Type*)i; i = i->next;
+	  int x,y,r,t;
+	  newposition(o,x,y,r,t);
+	  o->o->resize(x,y,r-x,t-y);
+	  if (drag&DRAG) {
 	    // move all the children, whether selected or not:
-	    Fl_Type* p;
-	    for (p = o->next; p && p->level>o->level; p = p->next)
-	      if (p->is_widget() && !p->is_menu_item()) {
-		Fl_Widget_Type* o = (Fl_Widget_Type*)p;
-		int x,y,r,t;
+	    for (; i && i->level>o->level; i = i->next) {
+	      if (i->is_widget() && !i->is_menu_item()) {
+		Fl_Widget_Type* o = (Fl_Widget_Type*)i;
 		newposition(o,x,y,r,t);
 		o->o->resize(x,y,r-x,t-y);
 	      }
-	    i = p;
-	  } else {
-	    i = i->next;
+	    }
 	  }
 	}
 	for (i=next; i && i->level>level; i=i->next) fix_group_size(i);
@@ -515,6 +506,7 @@ int Fl_Window_Type::handle(int event) {
       if (!n) {
 	select(selection, toggle ? !selection->selected : 1);
       }
+      if (overlays_invisible) toggle_overlays(0,0);
     }
     drag = 0;
     return 1;
@@ -642,5 +634,5 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.18 1999/07/21 17:28:21 carl Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.19 1999/08/16 07:31:05 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.11 1999/05/06 05:52:11 carl Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.12 1999/08/16 07:31:12 bill Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -36,33 +36,6 @@ static Fl_Bitmap mediumarrow(mediumarrow_bits, mediumarrow_width, mediumarrow_he
 #include "slowarrow.h"
 static Fl_Bitmap slowarrow(slowarrow_bits, slowarrow_width, slowarrow_height);
 
-#define DEFAULT_STYLE ((Style*)default_style())
-
-void Fl_Adjuster::loadstyle() const {
-  if (!Fl::s_adjuster) {
-    Fl::s_adjuster = 1;
-
-    static Fl::Attribute widget_attributes[] = {
-      { "label color", LABELCOLOR },
-      { "label size", LABELSIZE },
-      { "label type", LABELTYPE },
-      { "label font", LABELFONT },
-      { "color", COLOR },
-      { "arrow color", COLOR2 },
-      { "box", BOX },
-      { 0 }
-    };
-    Fl::load_attributes("adjuster", DEFAULT_STYLE->widget_, widget_attributes);
-
-    static Fl::Attribute adjuster_attributes[] = {
-      { "highlight color", FLY_COLOR },
-      { "highlight box", FLY_BOX },
-      { 0 }
-    };
-    Fl::load_attributes("adjuster", DEFAULT_STYLE->adjuster_, adjuster_attributes);
-  }
-}
-
 // changing the value does not change the appearance:
 void Fl_Adjuster::value_damage() {}
 
@@ -76,26 +49,14 @@ void Fl_Adjuster::draw() {
     dy = H = h()/3;
   }
 
-  Fl_Color col;
-  Fl_Boxtype bt;
-  if (fly_box() && Fl::belowmouse() == this)
-    { bt = fly_box(); col = fly_color(); }
-  else
-    { bt = box(); col = color(); }
-  fl_draw_box(drag==1?down(bt):bt, x(), y()+2*dy, W, H, col);
-  fl_draw_box(drag==2?down(bt):bt, x()+dx, y()+dy, W, H, col);
-  fl_draw_box(drag==3?down(bt):bt, x()+2*dx, y(), W, H, col);
+  draw_glyph(0, x(), y()+2*dy,  W, H, drag==1?FL_VALUE:0);
+  draw_glyph(0, x()+dx, y()+dy, W, H, drag==2?FL_VALUE:0);
+  draw_glyph(0, x()+2*dx, y(),  W, H, drag==3?FL_VALUE:0);
 
-  if (active_r())
-    fl_color(selection_color());
-  else
-    fl_color(inactive(selection_color()));
-  fastarrow.draw(x()+(W-fastarrow_width)/2,
-		 y()+2*dy+(H-fastarrow_height)/2, W, H);
-  mediumarrow.draw(x()+dx+(W-mediumarrow_width)/2,
-		   y()+dy+(H-mediumarrow_height)/2, W, H);
-  slowarrow.draw(x()+2*dx+(W-slowarrow_width)/2,
-		 y()+(H-slowarrow_width)/2, W, H);
+  fl_color(active_r() ? off_color() : Fl_Color(FL_INACTIVE_COLOR));
+  fastarrow.draw(  x(),     y()+2*dy, W, H, FL_ALIGN_CENTER);
+  mediumarrow.draw(x()+dx,  y()+dy,   W, H, FL_ALIGN_CENTER);
+  slowarrow.draw(  x()+2*dx,y(),      W, H, FL_ALIGN_CENTER);
 }
 
 int Fl_Adjuster::handle(int event) {
@@ -158,22 +119,10 @@ int Fl_Adjuster::handle(int event) {
     return 1;
   case FL_ENTER:
   case FL_LEAVE:
-    if (takesevents() && fly_box()) redraw();
+    if (takesevents() && highlight_color()) redraw();
     return 1;
   }
   return 0;
-}
-
-Fl_Widget::Style* Fl_Adjuster::_default_style = 0;
-
-Fl_Adjuster::Style::Style() : Fl_Widget::Style() {
-  sbf = 0;
-
-  widget(BOX) = FL_MEDIUM_UP_BOX;
-  widget(COLOR2) = FL_BLACK;
-
-  adjuster(FLY_COLOR) = 51;
-  adjuster(FLY_BOX) = FL_MEDIUM_UP_BOX;
 }
 
 Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,y,w,h,l) {
@@ -182,21 +131,6 @@ Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,
   soft_ = 1;
 }
 
-uchar Fl_Adjuster::attr(Attribute a) const {
-  loadstyle();
-  if (!_style || !(ADJUSTER_STYLE->sbf & bf(a)))
-    return DEFAULT_STYLE->adjuster(a);
-  return ADJUSTER_STYLE->adjuster(a);
-}
-
-Fl_Color Fl_Adjuster::fly_color() const {return (Fl_Color)attr(FLY_COLOR);}
-
-Fl_Boxtype Fl_Adjuster::fly_box() const {
-  if (_style && (WIDGET_STYLE->sbf & bf(BOX)) && !(ADJUSTER_STYLE->sbf & bf(FLY_BOX)))
-    return (Fl_Boxtype)WIDGET_STYLE->widget(BOX);
-  return (Fl_Boxtype)attr(FLY_BOX);
-}
-
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.11 1999/05/06 05:52:11 carl Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.12 1999/08/16 07:31:12 bill Exp $".
 //

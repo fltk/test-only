@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.15 1999/06/20 15:24:31 mike Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.16 1999/08/16 07:31:22 bill Exp $"
 //
 // Value input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -48,13 +48,15 @@ void Fl_Value_Input::input_cb(Fl_Widget*, void* v) {
 
 void Fl_Value_Input::draw() {
   if (damage()&~FL_DAMAGE_CHILD) input.clear_damage(FL_DAMAGE_ALL);
+  input.style((Fl_Style*)(style())); // force it to use this style
   input.draw();
   input.clear_damage();
 }
 
-void Fl_Value_Input::resize(int X, int Y, int W, int H) {
-  Fl_Valuator::resize(X, Y, W, H);
-  input.resize(X, Y, W, H);
+void Fl_Value_Input::layout() {
+  Fl_Valuator::layout();
+  input.resize(x(), y(), w(), h());
+  input.layout();
 }
 
 void Fl_Value_Input::value_damage() {
@@ -114,18 +116,21 @@ int Fl_Value_Input::handle(int event) {
 Fl_Value_Input::Fl_Value_Input(int x, int y, int w, int h, const char* l)
 : Fl_Valuator(x, y, w, h, l), input(x, y, w, h, 0) {
   soft_ = 0;
-  input.mstyle(&input._style);
-  _style = input._style;
-
+  copy_style(input.style());
   if (input.parent())  // defeat automatic-add
-    ((Fl_Group*)input.parent())->remove(input);
-  input.parent(this); // kludge!
+    input.parent()->remove(input);
+  input.parent((Fl_Group*)this); // kludge!
   input.callback(input_cb, this);
   input.when(FL_WHEN_CHANGED);
   align(FL_ALIGN_LEFT);
   value_damage();
 }
 
+Fl_Value_Input::~Fl_Value_Input() {
+  input.parent(0); // kludge!
+  input.style(Fl_Input::default_style); // don't double-delete the style
+}
+
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.15 1999/06/20 15:24:31 mike Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.16 1999/08/16 07:31:22 bill Exp $".
 //

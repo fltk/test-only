@@ -1,5 +1,5 @@
 //
-// "$Id: forms_timer.cxx,v 1.4 1999/01/07 19:17:45 mike Exp $"
+// "$Id: forms_timer.cxx,v 1.5 1999/08/16 07:31:31 bill Exp $"
 //
 // Forms timer object for the Fast Light Tool Kit (FLTK).
 //
@@ -65,7 +65,7 @@ void Fl_Timer::draw() {
     col = color();
   else
     col = selection_color();
-  draw_box(box(), col);
+  box()->draw(x(),y(),w(),h(),col);
   if (type() == FL_VALUE_TIMER && delay>0.0) {
     double d = direction_ ? total-delay : delay;
     if (d < 60.0)
@@ -150,5 +150,5 @@ void Fl_Timer::suspended(char d) {
 }
 
 //
-// End of "$Id: forms_timer.cxx,v 1.4 1999/01/07 19:17:45 mike Exp $".
+// End of "$Id: forms_timer.cxx,v 1.5 1999/08/16 07:31:31 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.10 1999/06/15 17:02:31 gustavo Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.11 1999/08/16 07:31:20 bill Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -69,10 +69,10 @@ void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
 }
 
 void Fl_Scroll::bbox(int& X, int& Y, int& W, int& H) {
-  X = x()+Fl::box_dx(box());
-  Y = y()+Fl::box_dy(box());
-  W = w()-Fl::box_dw(box());
-  H = h()-Fl::box_dh(box());
+  X = x()+box()->dx();
+  Y = y()+box()->dy();
+  W = w()-box()->dw();
+  H = h()-box()->dh();
   if (scrollbar.visible()) {
     W -= scrollbar.w();
     if (scrollbar.align() & FL_ALIGN_LEFT) X += scrollbar.w();
@@ -90,7 +90,7 @@ void Fl_Scroll::draw() {
   uchar d = damage();
 
   if (d & FL_DAMAGE_ALL) { // full redraw
-    draw_box(box(),x(),y(),w(),h(),color());
+    draw_frame();
     draw_clip(this, X, Y, W, H);
   } else {
     if (d & FL_DAMAGE_SCROLL) { // scroll the contents:
@@ -108,7 +108,7 @@ void Fl_Scroll::draw() {
   int l = X; int r = X; int t = Y; int b = Y;
   Fl_Widget*const* a = array();
   for (int i=children()-2; i--;) {
-    Fl_Object* o = *a++;
+    Fl_Widget* o = *a++;
     if (o->x() < l) l = o->x();
     if (o->y() < t) t = o->y();
     if (o->x()+o->w() > r) r = o->x()+o->w();
@@ -182,7 +182,7 @@ void Fl_Scroll::layout() {
   int dx=ox()-x();
   int dy=oy()-y();
   for (int i=children()-2; i--;) {
-    Fl_Object* o = *a++;
+    Fl_Widget* o = *a++;
     o->position(o->x()+dx, o->y()+dy);
     layout(o);
   }
@@ -234,5 +234,5 @@ int Fl_Scroll::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.10 1999/06/15 17:02:31 gustavo Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.11 1999/08/16 07:31:20 bill Exp $".
 //

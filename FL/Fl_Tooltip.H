@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.H,v 1.5 1999/05/12 23:20:27 carl Exp $"
+// "$Id: Fl_Tooltip.H,v 1.6 1999/08/16 07:30:53 bill Exp $"
 //
 // Tooltip definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -26,33 +26,19 @@
 #ifndef _FL_TOOLTIP_H_
 #define _FL_TOOLTIP_H_
 
-extern void (*fl_tooltip_enter)(Fl_Widget *);
-extern void (*fl_tooltip_exit)(Fl_Widget *);
-
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
 
-class Fl_TooltipBox;
-class Fl_Menu_Window;
+FL_EXPORT extern void (*fl_tooltip_enter)(Fl_Widget *);
+FL_EXPORT extern void (*fl_tooltip_exit)(Fl_Widget *);
 
-class Fl_Tooltip {
+FL_EXPORT class Fl_Tooltip {
 public:
-  // These functions are user-called functions
-  static float delay() { return default_style.delay_; }
-  static void delay(float f) { default_style.delay_ = (f < 0.1) ? 0.1 : f; }
-  static int font() { return default_style.textfont_; }
-  static int size() { return default_style.textsize_; }
-  static void font(int i) { default_style.textfont_ = i; }
-  static void size(int s) { default_style.textsize_ = s; }
-  static void color(uchar c) { default_style.color_ = c; }
-  static uchar color() { return default_style.color_; }
-  static void textcolor(uchar c) { default_style.textcolor_ = c; }
-  static uchar textcolor() { return default_style.textcolor_; }
-  static void boxtype(uchar b) { default_style.box_ = b; }
-  static uchar boxtype() { return default_style.box_; }
-  static int enabled() { return _enabled; }
-  static void enable(int b = 1) { _enabled = b; }
-  static void disable() { enable(0); }
+  static float delay() { return delay_; }
+  static void delay(float f) { delay_ = (f < 0.1) ? 0.1 : f; }
+  static bool enabled() { return enabled_; }
+  static void enable(bool b = true) { enabled_ = b; }
+  static void disable() { enable(false); }
 
   // This function is called by widgets
   // when the pointer enters them
@@ -63,40 +49,28 @@ public:
   // the widget
   static inline void exit(Fl_Widget *w) {fl_tooltip_exit(w);}
 
-  static void loadstyle();
-
-  friend class Fl_TooltipBox;
-  friend class Fl_Widget;
-  friend class Fl_Group;
-  friend class Fl;
-
-  struct Style {
-    float delay_;
-    uchar color_;
-    uchar box_;
-    uchar textfont_;
-    uchar textsize_;
-    uchar textcolor_;
-  };
-
-  static Style default_style;
-
-private:
-  static Fl_TooltipBox *box;
-  static Fl_Menu_Window *window;
-  static Fl_Widget *widget;
-  static int shown;
-  static int _enabled;
-
-  static void tooltip_timeout(Fl_Widget *);
   static void tooltip_enter(Fl_Widget *);
   static void tooltip_exit(Fl_Widget *);
 
-};
+  static Fl_Style default_style;
+  static Fl_Font font() { return default_style.label_font; }
+  static unsigned size() { return default_style.label_size; }
+  static void font(Fl_Font i) { default_style.label_font = i; }
+  static void size(unsigned s) { default_style.label_size = s; }
+  static void color(Fl_Color c) { default_style.color = c; }
+  static Fl_Color color() { return default_style.color; }
+  static void textcolor(Fl_Color c) { default_style.label_color = c; }
+  static Fl_Color textcolor() { return default_style.label_color; }
+  static void boxtype(Fl_Boxtype b) { default_style.box = b; }
+  static Fl_Boxtype boxtype() { return default_style.box; }
 
+private:
+  static float delay_;
+  static bool enabled_;
+};
 
 #endif
 
 //
-// End of "$Id: Fl_Tooltip.H,v 1.5 1999/05/12 23:20:27 carl Exp $".
+// End of "$Id: Fl_Tooltip.H,v 1.6 1999/08/16 07:30:53 bill Exp $".
 //
