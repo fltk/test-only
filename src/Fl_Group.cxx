@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.55 1999/12/20 08:33:11 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.56 2000/01/04 22:20:08 mike Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -84,7 +84,7 @@ static int navkey() {
   return 0;
 }
 
-int Fl_Group::handle(int event) {handle_i(event, 0);}
+int Fl_Group::handle(int event) {return handle_i(event, 0);}
 
 // Fl_Tabs (and perhaps others) set the i_take_focus flag:
 int Fl_Group::handle_i(int event, int i_take_focus) {
@@ -574,5 +574,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.55 1999/12/20 08:33:11 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.56 2000/01/04 22:20:08 mike Exp $".
 //

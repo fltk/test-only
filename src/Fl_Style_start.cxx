@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_start.cxx,v 1.1 1999/11/22 09:16:41 vincent Exp $"
+// "$Id: Fl_Style_start.cxx,v 1.2 2000/01/04 22:20:09 mike Exp $"
 //
 // Code for switching between named classes of style
 //
@@ -26,6 +26,8 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
 #include <FL/Fl_Style.H>
+#include <string.h>
+
 
 struct Fl_Style_Class {
   char* name;
@@ -120,5 +122,5 @@ void Fl_Style::start(char* name)
 }
 
 //
-// End of "$Id: Fl_Style_start.cxx,v 1.1 1999/11/22 09:16:41 vincent Exp $".
+// End of "$Id: Fl_Style_start.cxx,v 1.2 2000/01/04 22:20:09 mike Exp $".
 //
