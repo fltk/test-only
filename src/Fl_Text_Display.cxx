@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.14 2001/12/17 15:01:54 easysw Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.15 2001/12/17 15:15:17 easysw Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -75,6 +75,11 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H,  const char* l)
   Fl_Group* current = Fl_Group::current();
   Fl_Group::current(this);
 
+  text_area.x = 0;
+  text_area.y = 0;
+  text_area.w = 0;
+  text_area.h = 0;
+
   mVScrollBar = new Fl_Scrollbar(0,0,0,0);
   mVScrollBar->callback((Fl_Callback*)v_scrollbar_cb, this);
   mHScrollBar = new Fl_Scrollbar(0,0,0,0);
@@ -108,6 +113,10 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H,  const char* l)
   mNVisibleLines = 1;
   mLineStarts = new int[mNVisibleLines];
   mLineStarts[0] = 0;
+
+  mUnfinishedStyle = 0;
+  mUnfinishedHighlightCB = 0;
+  mHighlightCBArg = 0;
 }
 
 /*
@@ -1947,5 +1956,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.14 2001/12/17 15:01:54 easysw Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.15 2001/12/17 15:15:17 easysw Exp $".
 //
