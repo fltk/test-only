@@ -10,7 +10,7 @@ version = 7                                       # version number of style
   background red = 192                            # background gray ramp - red
   background green = 192                          # background gray ramp - green
   background blue = 192                           # background gray ramp - blue
-  widget style = SGI                              # widget style - SGI or Windows
+  widget style = Motif                            # widget style - SGI or Windows
 
 [menu item]                                       # menu item attributes
   label type = 0                                  # type number for label font

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.7 1999/04/01 05:15:17 carl Exp $"
+// "$Id: fl_options.cxx,v 1.8 1999/04/05 06:38:06 carl Exp $"
 //
 // Style option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -45,7 +45,7 @@ const char* Fl::_style = "default";
 #if (defined(WIN32) && !defined(FL_SGI_STYLE)) || defined(FL_WINDOWS_STYLE)
 Fl_Widget_Style Fl::_widget_style = FL_WINDOWS_STYLE;
 #else
-Fl_Widget_Style Fl::_widget_style = FL_SGI_STYLE;
+Fl_Widget_Style Fl::_widget_style = FL_MOTIF_STYLE;
 #endif
 
 // styles loaded
@@ -244,5 +244,5 @@ int Fl::find_boolean(const char *key, int &bvalue, int sf)
 */
 
 //
-// End of "$Id: fl_options.cxx,v 1.7 1999/04/01 05:15:17 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.8 1999/04/05 06:38:06 carl Exp $".
 //

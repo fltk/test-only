@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.22 1999/03/31 14:52:23 mike Exp $"
+// "$Id: Enumerations.H,v 1.23 1999/04/05 06:38:01 carl Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -371,11 +371,12 @@ enum Fl_Damage {
 
 enum Fl_Widget_Style {
   FL_SGI_STYLE,
-  FL_WINDOWS_STYLE
+  FL_WINDOWS_STYLE,
+  FL_MOTIF_STYLE
 };
 
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.22 1999/03/31 14:52:23 mike Exp $".
+// End of "$Id: Enumerations.H,v 1.23 1999/04/05 06:38:01 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.12 1999/04/04 03:45:26 gustavo Exp $"
+// "$Id: Fl_Slider.cxx,v 1.13 1999/04/05 06:38:06 carl Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -144,7 +144,8 @@ void Fl_Slider::draw(int x, int y, int w, int h) {
   int BW = Fl::box_dx(box());
 
   // CET - I think this looks better...
-  if (type() != FL_HOR_FILL_SLIDER && type() != FL_VERT_FILL_SLIDER)
+  if (type() != FL_HOR_FILL_SLIDER && type() != FL_VERT_FILL_SLIDER &&
+      Fl::widget_style() != FL_MOTIF_STYLE)
     BW = 0;
   int W = (horizontal() ? w : h) - 2*BW;
   int X, S;
@@ -330,5 +331,5 @@ Fl_Color Fl_Slider::fly_color() const {
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.12 1999/04/04 03:45:26 gustavo Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.13 1999/04/05 06:38:06 carl Exp $".
 //

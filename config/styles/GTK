@@ -6,7 +6,7 @@ version = 7
   background red = 192
   background green = 192
   background blue = 192
-  widget style = SGI
+  widget style = Motif
 
 [menu item]
   label type = 0

@@ -1,8 +1,8 @@
-default style = GTK
+#default style = GTK
 #default style = Alternative
 #default style = SGIMotif
 #default style = NewMotif
-#default style = OldMotif
+default style = OldMotif
 #default style = Win98
 #default style = Win95
 

@@ -6,7 +6,7 @@ version = 7
   background red = 98
   background green = 133
   background blue = 210
-  widget style = SGI
+  widget style = Motif
 
 [menu item]
   label type = 0
@@ -215,7 +215,7 @@ version = 7
   arrow color = 0
   highlight color = 228
   box = 35
-  slider box = 34
+  slider box = 38
 
 [text input output]
   box = 35
