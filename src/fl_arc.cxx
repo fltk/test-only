@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arc.cxx,v 1.15 2004/06/11 08:07:20 spitzak Exp $"
+// "$Id: fl_arc.cxx,v 1.16 2005/01/25 20:11:45 matthiaswm Exp $"
 //
 // Arc functions for the Fast Light Tool Kit (FLTK).
 //
@@ -52,6 +52,7 @@ void fltk::addarc(float l, float t, float w, float h, float start, float end)
     cairo_arc(cc,x,y,w/2,start*(-M_PI/180),end*(-M_PI/180));
   else
     cairo_arc_negative(cc,x,y,w/2,start*(-M_PI/180),end*(-M_PI/180));
+//+++ add code for Quartz on Mac here
 #else
   const float x = l+w/2;
   const float y = t+h/2;
@@ -113,5 +114,5 @@ void fltk::addcircle(float x,float y,float r) {
 #endif
 
 //
-// End of "$Id: fl_arc.cxx,v 1.15 2004/06/11 08:07:20 spitzak Exp $".
+// End of "$Id: fl_arc.cxx,v 1.16 2005/01/25 20:11:45 matthiaswm Exp $".
 //

@@ -6,8 +6,8 @@ BUILDING AND INSTALLING FLTK UNDER APPLE OS X
     a flag to compile a somewhat experimental Carbon/Quartz version of 
     FLTK1.1.6.
     
-    Currently, and experimental port of FLTK2 compiles successfully by running 
-    the following commands from a shell window:
+    Currently, and experimental port of FLTK2 compiles successfully using
+    Quartz by running the following commands from a shell window:
     
       > autoconf
       > ./configure --enable-debug --disable-gl

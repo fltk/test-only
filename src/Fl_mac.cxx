@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.21 2005/01/24 17:25:14 spitzak Exp $"
+// "$Id: Fl_mac.cxx,v 1.22 2005/01/25 20:11:39 matthiaswm Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -87,6 +87,7 @@ static struct FD {
 static int G_pipe[2] = { 0,0 };		// work around pthread_cancel() problem
 static pthread_mutex_t select_mutex;	// lock for above data
 
+//+++ verify port to FLTK2
 void fltk::add_fd(int n, int events, FileHandler cb, void *v) {
   remove_fd(n, events);
   pthread_mutex_lock(&select_mutex);
@@ -106,10 +107,12 @@ void fltk::add_fd(int n, int events, FileHandler cb, void *v) {
   pthread_mutex_unlock(&select_mutex);
 }
 
+//+++ verify port to FLTK2
 void fltk::add_fd(int fd, FileHandler cb, void* v) {
   add_fd(fd, POLLIN, cb, v);
 }
 
+//+++ verify port to FLTK2
 void fltk::remove_fd(int n, int events) {
   pthread_mutex_lock(&select_mutex);
   int i,j;
@@ -139,6 +142,7 @@ enum { kEventFLTKBreakLoop = 1, kEventFLTKDataReady };
 // DATA READY THREAD
 //    Separate thread, watches for changes in user's file descriptors.
 //    Sends a 'data ready event' to the main thread if any change.
+//+++ verify port to FLTK2
 static void *dataready_thread(void *userdata)
 {
   EventRef drEvent;
@@ -186,6 +190,7 @@ static void *dataready_thread(void *userdata)
 
 // Main thread calls this when it gets the above data-ready message:
 // Check to see what's ready, and invoke user's cb's
+//+++ verify port to FLTK2
 static void HandleDataReady()
 {
   DEBUGMSG("DATA READY EVENT: RECEIVED\n");
@@ -241,10 +246,14 @@ CursHandle fltk::default_cursor;
 CursHandle fltk::current_cursor;
 const Widget* fltk::cursor_for;
 
+WindowPtr fltk::quartz_window;
+CGContextRef fltk::quartz_gc;
+
 /**
  * handle Apple Menu items (can be created using the Sys_Menu_Bar
  * returns eventNotHandledErr if the menu item could not be handled
  */
+//+++ verify port to FLTK2
 OSStatus HandleMenu( HICommand *cmd )
 {
   OSStatus ret = eventNotHandledErr;
@@ -296,6 +305,7 @@ OSStatus HandleMenu( HICommand *cmd )
  * - keyboard, mouse and some window events need to quit the Apple Event Loop
  *   so FLTK can continue its own management
  */
+//+++ verify port to FLTK2
 static pascal OSStatus carbonDispatchHandler( EventHandlerCallRef nextHandler, EventRef event, void *userData )
 {
   OSStatus ret = eventNotHandledErr;
@@ -367,6 +377,7 @@ static pascal void timerProcCB( EventLoopTimerRef, void* )
  * Break the current event loop so that wait() returns, hopefully
  * after any events that already exist.
  */
+//+++ verify port to FLTK2
 static void breakMacEventLoop()
 {
   EventRef breakEvent;
@@ -384,6 +395,7 @@ static void breakMacEventLoop()
  * do the callbacks for the events and sockets. Returns non-zero if
  * anything happened during the time period.
  */
+//+++ verify port to FLTK2
 static inline int fl_wait(double time) 
 {
   OSStatus ret;
@@ -478,6 +490,7 @@ static inline int fl_wait(double time)
  * ready() is just like wait(0.0) except no callbacks are done.
  * \todo nyi, check if there is actually a message pending!
  */
+//+++ verify port to FLTK2
 static inline int fl_ready() {
   return 1;
 }
@@ -489,6 +502,7 @@ static inline int fl_ready() {
  * This attempts to close all the windows. If that succeeds hopefully
  * run() will return and then the application will exit.
  */
+//+++ verify port to FLTK2
 static OSErr QuitAppleEventHandler( const AppleEvent *appleEvt, AppleEvent* reply, UInt32 refcon )
 {
   fl_lock_function();
@@ -510,6 +524,7 @@ static void handleUpdateEvent( WindowPtr xid );
  * Carbon Window handler
  * This needs to be linked into all new window event handlers
  */
+//+++ verify port to FLTK2
 static pascal OSStatus carbonWindowHandler( EventHandlerCallRef nextHandler, EventRef event, void *userData )
 {
   UInt32 kind = GetEventKind( event );
@@ -587,16 +602,20 @@ static pascal OSStatus carbonMousewheelHandler( EventHandlerCallRef nextHandler,
 
   fl_lock_function();
   
-  GetEventParameter( event, kEventParamMouseWheelAxis, typeMouseWheelAxis, NULL, sizeof(EventMouseWheelAxis), NULL, &axis );
+  GetEventParameter( event, kEventParamMouseWheelAxis, typeMouseWheelAxis, 
+                     NULL, sizeof(EventMouseWheelAxis), NULL, &axis );
   long delta;
-  GetEventParameter( event, kEventParamMouseWheelDelta, typeLongInteger, NULL, sizeof(long), NULL, &delta );
+  GetEventParameter( event, kEventParamMouseWheelDelta, typeLongInteger, 
+                     NULL, sizeof(long), NULL, &delta );
   if ( axis == kEventMouseWheelAxisX )
   {
     e_dx = delta;
+    e_dy = 0;
     if ( e_dx) handle( MOUSEWHEEL, window );
   }
   else if ( axis == kEventMouseWheelAxisY )
   {
+    e_dx = 0;
     e_dy = -delta;
     if ( e_dy) handle( MOUSEWHEEL, window );
   }
@@ -630,6 +649,7 @@ EventRef os_event;		// last (mouse) event
 /**
  * Carbon Mouse Button Handler
  */
+//+++ verify port to FLTK2
 static pascal OSStatus carbonMouseHandler( EventHandlerCallRef nextHandler, EventRef event, void *userData )
 {
   static int keysym[] = { 0, 1, 3, 2};
@@ -758,7 +778,7 @@ static unsigned short macKeyLookUp[128] =
     'u', '[', 'i', 'p', ReturnKey, 'l', 'j', '\'',
     'k', ';', '\\', ',', '/', 'n', 'm', '.',
 
-    TabKey, SpaceKey, '`', BackSpaceKey, 0, EscapeKey, 0, 0,
+    TabKey, SpaceKey, '`', BackSpaceKey, 0/*kp_enter on powerbook G4*/, EscapeKey, 0, 0,
     0, 0, 0, 0, 0, 0, 0, 0,
 
     0, DecimalKey, RightKey, MultiplyKey, 0, AddKey, LeftKey, NumLockKey,
@@ -768,7 +788,7 @@ static unsigned short macKeyLookUp[128] =
     Keypad6, Keypad7, 0, Keypad8, Keypad9, 0, 0, 0,
 
     F5Key, F6Key, F7Key, F3Key, F8Key, F9Key, 0, F11Key,
-    0, 0, PrintKey, ScrollLockKey, 0, F10Key, 0, F12Key,
+    0, 0, PrintKey, ScrollLockKey, 0, F10Key, fltk::MenuKey, F12Key,
 
     0, PauseKey, HelpKey, HomeKey, PageUpKey, DeleteKey, F4Key, EndKey,
     F2Key, PageDownKey, F1Key, LeftKey, RightKey, DownKey, UpKey, 0,
@@ -777,6 +797,7 @@ static unsigned short macKeyLookUp[128] =
 /**
  * handle carbon keyboard events
  */
+//+++ verify port to FLTK2
 pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef event, void *userData )
 {
   static char buffer[5];
@@ -856,6 +877,7 @@ pascal OSStatus carbonKeyboardHandler( EventHandlerCallRef nextHandler, EventRef
 // Text editors tell the system where the insertion point is by using
 // this function, so the system can move any Input Method widgets to
 // that position:
+//+++ verify port to FLTK2
 void fl_set_spot(fltk::Font *f, Widget *w, int x, int y) {}
 
 /**
@@ -882,14 +904,6 @@ void fltk::open_display() {
     ClearMenuBar();
     AppendResMenu( GetMenuHandle( 1 ), 'DRVR' );
     DrawMenuBar();
-
-    // initialize events and a region that enables mouse move events
-    static RgnHandle rgn;
-    rgn = NewRgn();
-    Point mp;
-    GetMouse(&mp);
-    SetRectRgn(rgn, mp.h, mp.v, mp.h, mp.v);
-    SetEventMask(everyEvent);
   }
 }
 
@@ -902,6 +916,7 @@ static bool reload_info = true;
     defines it. If you have multiple monitors this returns a fake monitor
     that surrounds all of them.
 */
+//+++ verify port to FLTK2
 const Monitor& Monitor::all() {
   static Monitor monitor;
   if (reload_info) {
@@ -930,6 +945,7 @@ const Monitor& Monitor::all() {
     return the same array, but if a signal comes in indicating a change
     it will probably delete the old array and return a new one.
 */
+//+++ verify port to FLTK2
 int Monitor::list(const Monitor** p) {
   *p = &all();
   return 1;
@@ -938,6 +954,7 @@ int Monitor::list(const Monitor** p) {
 /** Return a pointer to a Monitor structure describing the monitor
     that contains or is closest to the given x,y, position.
 */
+//+++ verify port to FLTK2
 const Monitor& Monitor::find(int x, int y) {
   const Monitor* monitors;
   int count = list(&monitors);
@@ -974,6 +991,7 @@ const Monitor& Monitor::find(int x, int y) {
 /**
  * get the current mouse pointer world coordinates
  */
+//+++ verify port to FLTK2
 void fltk::get_mouse(int &x, int &y) 
 {
   open_display();
@@ -985,6 +1003,7 @@ void fltk::get_mouse(int &x, int &y)
 }
 
 // Damage all the child windows as well as this one...
+//+++ verify port to FLTK2
 static void recursive_expose(CreatedWindow* i) {
   i->wait_for_expose = false;
   i->expose(Rectangle(i->window->w(), i->window->h()));
@@ -1001,6 +1020,7 @@ static void recursive_expose(CreatedWindow* i) {
  * that region as though an expose() event came in, then get wait()
  * to return so flush() will get called.
  */
+//+++ verify port to FLTK2
 void handleUpdateEvent( WindowPtr xid ) 
 {
   Window *window = find( xid );
@@ -1020,33 +1040,6 @@ static int FSSpec2UnixPath( FSSpec *fs, char *dst )
   FSpMakeFSRef( fs, &fsRef );
   FSRefMakePath( &fsRef, (UInt8*)dst, 1024 );
   return strlen(dst);
-/* keep the code below. The above function is only implemented in OS X, so we might need the other code for OS 9 and friends
-  short offset = 0;
-  if ( fs->parID != fsRtParID )
-  {
-    FSSpec parent;
-    OSErr ret = FSMakeFSSpec( fs->vRefNum, fs->parID, 0, &parent );
-    if ( ret != noErr ) return 0;
-    offset = FSSpec2UnixPath( &parent, dst );
-  }
-
-  if ( fs->parID == fsRtParID && fs->vRefNum == -100 ) //+ bad hack: we assume that volume -100 is mounted as root
-  {
-    memcpy( dst, "/", 2 );
-    return 1; // don't add anything to the filename - we are fine already
-  }
-
-  short len = fs->name[0];
-  if ( fs->parID == fsRtParID ) { // assume tat all other volumes are in this directory (international name WILL vary!)
-    memcpy( dst, "/Volumes", 8 );
-    offset = 8;
-  }
-  
-  if ( offset!=1 ) dst[ offset++ ] = '/'; // avoid double '/'
-  memcpy( dst+offset, fs->name+1, len );
-  dst[ len+offset ] = 0;
-  return len+offset;
-*/
 }
  
 Window *dnd_target_window = 0;
@@ -1054,6 +1047,7 @@ Window *dnd_target_window = 0;
 /**
  * Drag'n'drop tracking handler
  */
+//+++ verify port to FLTK2
 static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, void *userData, DragReference dragRef )
 {
   Window *target = (Window*)userData;
@@ -1114,6 +1108,7 @@ static pascal OSErr dndTrackingHandler( DragTrackingMessage msg, WindowPtr w, vo
 /**
  * Drag'n'drop receive handler
  */
+//+++ verify port to FLTK2
 static pascal OSErr dndReceiveHandler( WindowPtr w, void *userData, DragReference dragRef )
 {
   Point mp;
@@ -1196,6 +1191,7 @@ static pascal OSErr dndReceiveHandler( WindowPtr w, void *userData, DragReferenc
  * Resizes the actual system window in response to a resize() call from
  * the program.
  */
+//+++ verify port to FLTK2
 void Window::layout() {
   if (parent()) {
     // child windows are done entirely by us
@@ -1220,6 +1216,7 @@ void Window::layout() {
  * go ahead, create that (sub)window
  * \todo we should make menu windows slightly transparent for the new Mac look
  */
+//+++ verify port to FLTK2
 void Window::create()
 {
   // Create structure to hold the rectangle, initialize the parts that
@@ -1358,6 +1355,7 @@ void Window::create()
   }
 }
 
+//+++ verify port to FLTK2
 void fltk::close_display() {}
 
 /**
@@ -1370,6 +1368,7 @@ void Window::size_range_() {
 /**
  * Returns true if the window is shown but is iconized.
  */
+//+++ verify port to FLTK2
 bool Window::iconic() const {
   return i && IsWindowCollapsed(i->xid);
 }
@@ -1389,6 +1388,7 @@ const char *filename_name(const char *name) {
  * set the window title bar
  * \todo make the dock icon work!
  */
+//+++ verify port to FLTK2
 void Window::label(const char *name, const char * iname) {
   Widget::label(name);
   iconlabel_ = iname;
@@ -1407,6 +1407,7 @@ void Window::label(const char *name, const char * iname) {
 
 const Window *Window::current_;
 
+//+++ verify port to FLTK2
 void fltk::draw_into(GWorldPtr gWorld) {
   if ( gWorld ) {
     SetGWorld( gWorld, 0 ); // sets the correct port
@@ -1422,6 +1423,7 @@ void fltk::draw_into(GWorldPtr gWorld) {
   }
 }
 
+//+++ verify port to FLTK2
 void fltk::stop_drawing(GWorldPtr gWorld) {
   // ?
 }
@@ -1429,9 +1431,12 @@ void fltk::stop_drawing(GWorldPtr gWorld) {
 /**
  * make all drawing go into this window (called by subclass flush() impl.)
  */
+//+++ verify port to FLTK2
 void Window::make_current() const
 {
+  CreatedWindow::release_quartz_context();
   current_ = this;
+  quartz_window = i->xid;
   // Find the root window and our position in it:
   int X = 0;
   int Y = 0;
@@ -1471,6 +1476,79 @@ void Window::make_current() const
     }
   }
   SetPortClipRegion( GetWindowPort(root->i->xid), i->subRegion );
+  QDBeginCGContext(GetWindowPort(i->xid), &i->gc);
+  quartz_gc = i->gc;
+  CGContextSaveGState(quartz_gc);
+  CreatedWindow::fill_quartz_context();
+}
+
+// helper function to manage the current CGContext fl_gc
+/* //+++
+extern Fl_Color fl_color_;
+extern class Fl_FontSize *fl_fontsize;
+extern void fl_font(class Fl_FontSize*);
+extern void fl_quartz_restore_line_style_();
+*/
+
+// FLTK has only on global graphics state. This function copies the FLTK state into the
+// current Quartz context
+void CreatedWindow::fill_quartz_context() {
+  if (!quartz_gc) return;
+  int hgt = 0;
+  if (quartz_window) {
+    Rect portRect; 
+    GetPortBounds(GetWindowPort(quartz_window), &portRect);
+    hgt = portRect.bottom-portRect.top;
+  } else {
+    hgt = CGBitmapContextGetHeight(quartz_gc);
+  }
+  CGContextTranslateCTM(quartz_gc, 0.5, hgt-0.5f);
+  CGContextScaleCTM(quartz_gc, 1.0f, -1.0f);
+  static CGAffineTransform font_mx = { 1, 0, 0, -1, 0, 0 };
+  CGContextSetTextMatrix(quartz_gc, font_mx);
+  //+++ fl_font(fl_fontsize);
+  setcolor(current_color_);
+  //+++ fl_quartz_restore_line_style_();
+}
+
+// The only way to reste clipping to its original state is to pop the current graphics
+// state and restore the global state.
+void CreatedWindow::clear_quartz_clipping() {
+  if (!quartz_gc) return;
+  CGContextRestoreGState(quartz_gc);
+  CGContextSaveGState(quartz_gc);
+}
+
+// Give the Quartz context back to the system
+void CreatedWindow::release_quartz_context(CreatedWindow *x) {
+  if (x && x->gc!=quartz_gc) return;
+  if (!quartz_gc) return;
+  CGContextRestoreGState(quartz_gc);
+  if (quartz_window) QDEndCGContext(GetWindowPort(quartz_window), &quartz_gc);
+  quartz_gc = 0;
+}
+
+void CreatedWindow::begin_quartz_image(CGRect &rect, const Rectangle &) {
+  /* //+++
+  CGContextSaveGState(fl_gc);
+  CGAffineTransform mx = CGContextGetCTM(fl_gc);
+  CGRect r2 = rect;
+  r2.origin.x -= 0.5f;
+  r2.origin.y -= 0.5f;
+  CGContextClipToRect(fl_gc, r2);
+  mx.d = -1.0; mx.tx = -mx.tx;
+  CGContextConcatCTM(fl_gc, mx);
+  rect.origin.x = rect.origin.x - cx;
+  rect.origin.y = (mx.ty+0.5f) - rect.origin.y - h + cy;
+  rect.size.width = w;
+  rect.size.height = h;
+  */
+}
+
+void CreatedWindow::end_quartz_image() {
+  /* //+++
+  CGContextRestoreGState(fl_gc);
+  */
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1478,6 +1556,7 @@ void Window::make_current() const
 // Windows are effectively double-buffered at all times. So this
 // is much simpler than the X11 and Win32 implementations.
 
+//+++ verify port to FLTK2
 void Window::flush() {
   unsigned char damage = this->damage();
   make_current();
@@ -1492,8 +1571,12 @@ void Window::flush() {
     set_damage(DAMAGE_EXPOSE); draw();
     clip_region(0);
   }
+  if (i->gc) {
+    CGContextFlush(i->gc);
+  }
 }
 
+//+++ verify port to FLTK2
 void Window::free_backbuffer() {}
 
 ////////////////////////////////////////////////////////////////
@@ -1510,6 +1593,7 @@ static ScrapRef myScrap = 0;
  * stuff: pointer to selected data
  * size of selected data
  */
+//+++ verify port to FLTK2
 void fltk::copy(const char *stuff, int len, bool clipboard) {
   if (!stuff || len<0) return;
   if (len+1 > selection_buffer_length[clipboard]) {
@@ -1535,6 +1619,7 @@ void fltk::copy(const char *stuff, int len, bool clipboard) {
 }
 
 // Call this when a "paste" operation happens:
+//+++ verify port to FLTK2
 void fltk::paste(Widget &receiver, bool clipboard) {
   if (clipboard) {
     // see if we own the selection, if not go get it:
@@ -1570,6 +1655,7 @@ void fltk::paste(Widget &receiver, bool clipboard) {
  * - create a selection first using: 
  *     copy(const char *stuff, int len, 0)
  */
+//+++ verify port to FLTK2
 bool fltk::dnd()
 {
   OSErr result;
@@ -1609,6 +1695,6 @@ bool fltk::dnd()
 }
 
 //
-// End of "$Id: Fl_mac.cxx,v 1.21 2005/01/24 17:25:14 spitzak Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.22 2005/01/25 20:11:39 matthiaswm Exp $".
 //
 

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_mac.cxx,v 1.7 2003/08/25 15:28:47 spitzak Exp $"
+// "$Id: fl_color_mac.cxx,v 1.8 2005/01/25 20:11:46 matthiaswm Exp $"
 //
 // MacOS color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -23,6 +23,24 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+// we need to remember some settings for the current context
+
+namespace fltk {
+  float quartz_line_width_ = 1.0f;
+}
+/* //+++
+static enum CGLineCap fl_quartz_line_cap_ = kCGLineCapButt;
+static enum CGLineJoin fl_quartz_line_join_ = kCGLineJoinMiter;
+static float *fl_quartz_line_pattern = 0;
+static int fl_quartz_line_pattern_size = 0;
+void fl_quartz_restore_line_style_() {
+  CGContextSetLineWidth(fl_gc, fl_quartz_line_width_);
+  CGContextSetLineCap(fl_gc, fl_quartz_line_cap_);
+  CGContextSetLineJoin(fl_gc, fl_quartz_line_join_);
+  CGContextSetLineDash(fl_gc, 0, fl_quartz_line_pattern, fl_quartz_line_pattern_size);
+}
+*/
+
 // Because carbon has a 'current color' in the drawing context this
 // is really simple.
 
@@ -33,14 +51,16 @@ void fltk::setcolor(Color i) {
   // get fltk indexed color:
   if (!(i & 0xFFFFFF00)) i = cmap[i];
   // get the individual colors and put into Mac color structure:
-  RGBColor rgb; 
-  uchar r = i>>24;
-  rgb.red   = (r<<8)|r;
-  uchar g = i>>16;
-  rgb.green = (g<<8)|g;
-  uchar b = i>> 8;
-  rgb.blue  = (b<<8)|b;
-  RGBForeColor(&rgb);
+  if (!quartz_gc) return; // no context yet? We will assign the color later.
+  uchar r, g, b;
+  r = i>>24;
+  g = i>>16;
+  b = i>> 8;
+  float fr = r/255.0f;
+  float fg = g/255.0f;
+  float fb = b/255.0f;
+  CGContextSetRGBFillColor(quartz_gc, fr, fg, fb, 1.0f);
+  CGContextSetRGBStrokeColor(quartz_gc, fr, fg, fb, 1.0f);
 }
 
 // Used by setcolor_index
@@ -66,5 +86,5 @@ void fltk::line_style(int style, int width, char* dashes) {
 }
 
 //
-// End of "$Id: fl_color_mac.cxx,v 1.7 2003/08/25 15:28:47 spitzak Exp $".
+// End of "$Id: fl_color_mac.cxx,v 1.8 2005/01/25 20:11:46 matthiaswm Exp $".
 //

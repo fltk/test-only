@@ -1,5 +1,5 @@
 //
-// "$Id: mac.h,v 1.12 2005/01/24 12:03:28 matthiaswm Exp $"
+// "$Id: mac.h,v 1.13 2005/01/25 20:11:21 matthiaswm Exp $"
 //
 // Mac header file for the Fast Light Tool Kit (FLTK).
 //
@@ -46,10 +46,12 @@ namespace fltk {
 ////////////////////////////////////////////////////////////////
 // constant information about the display:
 
+//extern FL_API void    *qdisplay;
 extern FL_API void	open_display();
 extern FL_API void	close_display();
-//extern FL_API void	xdisplay;
-extern FL_API Handle	system_menu;
+extern FL_API WindowPtr  quartz_window;
+extern FL_API CGContextRef quartz_gc;
+extern FL_API Handle    system_menu;
 extern FL_API class Fl_Sys_Menu_Bar *sys_menu_bar;
 
 ////////////////////////////////////////////////////////////////
@@ -88,6 +90,15 @@ public:
   static CreatedWindow* find(const Window* window) {return window->i;}
   static int borders(const Window* w, int& dx, int& dy, int& dw, int& dh);
   void free_gc() {}
+  // Quartz additions:
+  CGContextRef gc;
+  static ATSUTextLayout atsu_layout;
+  static ATSUStyle      atsu_style;
+  static void fill_quartz_context(); 
+  static void clear_quartz_clipping();
+  static void release_quartz_context(CreatedWindow *x=0);
+  static void begin_quartz_image(CGRect&, const Rectangle&);
+  static void end_quartz_image();
 };
 
 // convert xid <-> Window:
@@ -106,6 +117,6 @@ extern const Widget* cursor_for;
 #endif
 
 //
-// End of "$Id: mac.h,v 1.12 2005/01/24 12:03:28 matthiaswm Exp $".
+// End of "$Id: mac.h,v 1.13 2005/01/25 20:11:21 matthiaswm Exp $".
 //
 

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.30 2005/01/25 09:49:12 spitzak Exp $"
+// "$Id: fl_clip.cxx,v 1.31 2005/01/25 20:11:46 matthiaswm Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -110,6 +110,7 @@ void fl_restore_clip() {
 #elif defined(_WIN32)
   SelectClipRgn(dc, r); //if r is NULL, clip is automatically cleared
 #elif defined(__APPLE__)
+  /* //+++
   // We must intersect with the clip region for child windows:
   GrafPtr port; GDHandle GD; GetGWorld(&port, &GD);
   if ( port ) { // appaently this is zero for offscreen drawables
@@ -122,6 +123,21 @@ void fl_restore_clip() {
     } else {
       SetPortClipRegion( port,
 			 CreatedWindow::find(Window::current())->subRegion);
+    }
+  }*/
+  if ( quartz_window )
+  {
+    GrafPtr port = GetWindowPort( quartz_window );
+    if ( port ) { 
+      RgnHandle portClip = NewRgn();
+      CopyRgn( CreatedWindow::find(Window::current())->subRegion, portClip );
+      if ( r )
+        SectRgn( portClip, r, portClip );
+      Rect portRect; GetPortBounds(port, &portRect);
+      CreatedWindow::clear_quartz_clipping();
+      ClipCGContextToRegion(quartz_gc, &portRect, portClip );
+      CreatedWindow::fill_quartz_context();
+      DisposeRgn( portClip );
     }
   }
 #else
@@ -363,5 +379,5 @@ int fltk::intersect_with_clip(Rectangle& r) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.30 2005/01/25 09:49:12 spitzak Exp $"
+// End of "$Id: fl_clip.cxx,v 1.31 2005/01/25 20:11:46 matthiaswm Exp $"
 //

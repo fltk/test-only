@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_mac.cxx,v 1.7 2004/12/16 18:40:42 spitzak Exp $"
+// "$Id: fl_font_mac.cxx,v 1.8 2005/01/25 20:11:46 matthiaswm Exp $"
 //
 // MacOS font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -30,22 +30,20 @@
 #include <fltk/utf.h>
 #include <fltk/math.h>
 #include <fltk/string.h>
+#include <fltk/Window.h>
+
+#include <Carbon/Carbon.h>
 
 using namespace fltk;
-
-//: MeasureText, FontMetrics, WidthTabHandle, GetSysFont, SysFontSize
-//: TextSize, TextFont
-//: GetFNum (theName: Str255; VAR familyID: Integer);
-//: FUNCTION FMSwapFont (inRec: FMInput): FMOutPtr;
 
 // One of these is made for each combination of size + encoding:
 struct FontSize {
   FontSize *next;	// linked list for a single Font
-  short font, face, size;
-  FontInfo fi;
-  //FMetricRec mr;
-  short width[256];
-  FontSize(const char* fontname, int attr, int size);
+  char *q_name;
+  int size, minsize, maxsize;
+  short ascent, descent, q_width;
+  FontSize(const char* xfontname, int size);
+  ~FontSize();
 };
 
 // The public-visible fltk::Font structures are actually imbedded in
@@ -71,21 +69,32 @@ static FontSize* current;
 
 // face = italic, bold, 0, italic|bold
 
-FontSize::FontSize(const char* name, int attr, int size) {
+FontSize::FontSize(const char* name, int Size) {
   current = this;
+  next = 0;
+  q_name = strdup(name);
+  size = Size;
+  ascent = Size*3/4;
+  descent = Size-ascent;
+  q_width = Size*2/3;
+  minsize = maxsize = Size;
+  // Using ATS to get the genral Glyph size information
+  CFStringRef cfname = CFStringCreateWithCString(0L, q_name, kCFStringEncodingASCII);
+  ATSFontRef font = ATSFontFindFromName(cfname, kATSOptionFlagsDefault);
+  if (font) {
+    ATSFontMetrics m = { 0 };
+    ATSFontGetHorizontalMetrics(font, kATSOptionFlagsDefault, &m);
+    if (m.avgAdvanceWidth) q_width = int(m.avgAdvanceWidth*size);
+    // playing with the offsets a little to make standard sizes fit
+    if (m.ascent) ascent  = int(m.ascent*size-0.5f);
+    if (m.descent) descent = -int(m.descent*size-1.5f);
+  }
+  CFRelease(cfname);
+}
 
-  int n = strlen(name); if (n > 79) n = 79;
-  unsigned char fn[80]; fn[0] = n; memcpy(fn+1, name, n);
-  GetFNum(fn, &font);
-
-  this->size = size;
-
-  face = 0;
-  if (attr&BOLD) face = bold;
-  if (attr&ITALIC) face |= italic;
-
-//   FMInput fIn = { font, size, face, 0, 0, { 1, 1}, { 1, 1} };
-//   FMOutput *fOut = FMSwapFont(&fIn);
+FontSize::~FontSize() {
+  if (current == this) current = 0;
+  free(q_name);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -93,20 +102,20 @@ FontSize::FontSize(const char* name, int attr, int size) {
 // The predefined fonts that fltk has:
 static IFont fonts [] = {
   {{"Arial",	0},	3,	0},
-  {{"Arial",	1},	3,	0},
-  {{"Arial",	2},	3,	0},
-  {{"Arial",	3},	3,	0},
+  {{"Arial Bold",	1},	3,	0},
+  {{"Arial Italic",	2},	3,	0},
+  {{"Arial Bold Italic",	3},	3,	0},
   {{"Courier New",0},	3,	0},
-  {{"Courier New",1},	3,	0},
-  {{"Courier New",2},	3,	0},
-  {{"Courier New",3},	3,	0},
+  {{"Courier New Bold",1},	3,	0},
+  {{"Courier New Italic",2},	3,	0},
+  {{"Courier New Bold Italic",3},	3,	0},
   {{"Times New Roman",	0},	3,	0},
-  {{"Times New Roman",	1},	3,	0},
-  {{"Times New Roman",	2},	3,	0},
-  {{"Times New Roman",	3},	3,	0},
+  {{"Times New Roman Bold",	1},	3,	0},
+  {{"Times New Roman Italic",	2},	3,	0},
+  {{"Times New Roman Bold Italic",	3},	3,	0},
   {{"Symbol",	0},	0,	0},
-  {{"Chicago",	0},	1,	0},
-  {{"Chicago",	1},	1,	0},
+  {{"Monaco",	0},	1,	0},
+  {{"Andale Mono",	1},	1,	0},
   {{"Webdings",	0},	0,	0}
 };
 
@@ -180,13 +189,14 @@ void fltk::setfont(Font* font, float psize) {
     for (f = ((IFont*)font)->first; f; f = f->next)
       if (f->size == (int)size /*&& f->charset == charset*/) break;
     if (!f) {
-      f = new FontSize(font->name_, font->attributes_, size);
+      f = new FontSize(font->name_, size);
       f->next = ((IFont*)font)->first;
       ((IFont*)font)->first = f;
       getmetrics = true;
     }
     current = f;
   }
+  /* //+++
   TextFont(f->font);	//: select font into current QuickDraw GC
   TextFace(f->face);
   TextSize(f->size);
@@ -196,42 +206,34 @@ void fltk::setfont(Font* font, float psize) {
     // we should be selecting font sizes by pixels, not points!
     GetFontInfo(&(f->fi));
     //FontMetrics(&(f->mr));
-  }
+  } */
+  CGContextSelectFont(quartz_gc, f->q_name, (float)f->size, kCGEncodingMacRoman);
 }
 
-float fltk::getascent()  { return current->fi.ascent; }
-float fltk::getdescent() { return current->fi.descent; }
+float fltk::getascent()  { return current->ascent; }
+float fltk::getdescent() { return current->descent; }
 
 #define WCBUFLEN 256
 
 float fltk::getwidth(const char* text, int n) {
-  char localbuffer[WCBUFLEN];
-  char* buffer = localbuffer;
-  char* mallocbuffer = 0;
-  int count = utf8toa(text, n, buffer, WCBUFLEN);
-  if (count >= WCBUFLEN) {
-    buffer = mallocbuffer = new char[count+1];
-    count = utf8toa(text, n, buffer, count+1);
+  if (!quartz_gc) {
+    Window *w = Window::first();
+    if (w) w->make_current();
+    if (!quartz_gc) return -1;
   }
-  float r = float(TextWidth( buffer, 0, count ));
-  delete[] mallocbuffer;
-  return r;
+  CGContextSetTextPosition(quartz_gc, 0, 0);
+  CGContextSetTextDrawingMode(quartz_gc, kCGTextInvisible);
+  CGContextShowText(quartz_gc, text, n);
+  CGContextSetTextDrawingMode(quartz_gc, kCGTextFill);
+  CGPoint p = CGContextGetTextPosition(quartz_gc);
+  return p.x;
 }
 
 void fltk::drawtext_transformed(const char *text, int n, float x, float y) {
-  char localbuffer[WCBUFLEN];
-  char* buffer = localbuffer;
-  char* mallocbuffer = 0;
-  int count = utf8toa(text, n, buffer, WCBUFLEN);
-  if (count >= WCBUFLEN) {
-    buffer = mallocbuffer = new char[count+1];
-    count = utf8toa(text, n, buffer, count+1);
-  }
-  MoveTo(int(floorf(x+.5f)), int(floorf(y+.5f)));
-  DrawText(buffer, 0, count);
-  delete[] mallocbuffer;
+  //+++ convert into Mac text
+  CGContextShowTextAtPoint(quartz_gc, x, y, text, n);
 }
 
 //
-// End of "$Id: fl_font_mac.cxx,v 1.7 2004/12/16 18:40:42 spitzak Exp $".
+// End of "$Id: fl_font_mac.cxx,v 1.8 2005/01/25 20:11:46 matthiaswm Exp $".
 //

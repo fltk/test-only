@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.122 2005/01/25 09:49:12 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.123 2005/01/25 20:11:26 matthiaswm Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -297,6 +297,7 @@ void fl_prune_deferred_calls(HWND window) {
 
 extern Window* fl_actual_window; // in Fl.cxx
 
+//+++ verify port to FLTK2
 int Window::handle(int event) {
   switch (event) {
   case SHOW:
@@ -400,6 +401,7 @@ int Window::handle(int event) {
     written that will run without an X server as long as they don't
     actually show a window.
 */
+//+++ verify port to FLTK2
 void Window::show() {
   // get rid of very common user bug: forgot end():
   Group::current(0);
@@ -654,6 +656,7 @@ void Widget::redraw(const fltk::Rectangle& r1) {
 // Merge a rectangle into a window's expose region. If the entire
 // window is damaged we switch to a DAMAGE_ALL mode which will
 // avoid drawing it twice:
+//+++ verify port to FLTK2
 void CreatedWindow::expose(const fltk::Rectangle& r) {
   // Ignore if window already marked as completely damaged:
   if (window->damage() & DAMAGE_ALL) ;
@@ -831,5 +834,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.122 2005/01/25 09:49:12 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.123 2005/01/25 20:11:26 matthiaswm Exp $".
 //

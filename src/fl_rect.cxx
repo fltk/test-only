@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.42 2005/01/24 08:07:55 spitzak Exp $"
+// "$Id: fl_rect.cxx,v 1.43 2005/01/25 20:11:47 matthiaswm Exp $"
 //
 // Non-path routines from draw.h that are used by the standard boxtypes
 // and thus are always linked into an fltk program.
@@ -29,6 +29,12 @@
 #include <fltk/x.h>
 #include <fltk/math.h>
 using namespace fltk;
+
+#if defined(__APPLE__)
+namespace fltk {
+  extern float quartz_line_width_;
+}
+#endif
 
 /** \defgroup rectangle Simple Drawing
     \ingroup drawing
@@ -61,9 +67,10 @@ void fltk::strokerect(const Rectangle& r) {
   LineTo(dc, x, y+r.h()-1);
   LineTo(dc, x, y);
 #elif defined(__APPLE__)
-  Rect rect;
-  SetRect(&rect, x, y, x+r.w(), y+r.h());
-  FrameRect(&rect);
+  if (quartz_line_width_==1.0f) CGContextSetShouldAntialias(quartz_gc, false);
+  CGRect rect = CGRectMake(x, y, r.w()-1, r.h()-1);
+  CGContextStrokeRect(quartz_gc, rect);
+  if (quartz_line_width_==1.0f) CGContextSetShouldAntialias(quartz_gc, true);
 #else
 # error
 #endif
@@ -85,9 +92,10 @@ void fltk::fillrect(const Rectangle& r) {
   SetBkColor(dc, current_xpixel);
   ExtTextOut(dc, 0, 0, ETO_OPAQUE, &rect, NULL, 0, NULL);
 #elif defined(__APPLE__)
-  Rect rect;
-  SetRect(&rect, x, y, x+r.w(), y+r.h());
-  PaintRect(&rect);
+  if (quartz_line_width_==1.0f) CGContextSetShouldAntialias(quartz_gc, false);
+  CGRect rect = CGRectMake(x, y, r.w()-1, r.h()-1);
+  CGContextFillRect(quartz_gc, rect);
+  if (quartz_line_width_==1.0f) CGContextSetShouldAntialias(quartz_gc, true);
 #else
 # error
 #endif
@@ -112,8 +120,12 @@ void fltk::drawline(int x, int y, int x1, int y1) {
   // fltk is supposed to act like there is a 1-pixel pen.
   SetPixel(dc, x1, y1, current_xpixel);
 #elif defined(__APPLE__)
-  MoveTo(x, y); 
-  LineTo(x1, y1);
+  if (( x==x1 || y==y1 ) && quartz_line_width_==1.0f )  
+    CGContextSetShouldAntialias(quartz_gc, false);
+  CGContextMoveToPoint(quartz_gc, x, y);
+  CGContextAddLineToPoint(quartz_gc, x1, y1);
+  CGContextStrokePath(quartz_gc);
+  if (quartz_line_width_==1.0f) CGContextSetShouldAntialias(quartz_gc, true);
 #else
 # error
 #endif
@@ -137,8 +149,12 @@ void fltk::drawline(float X, float Y, float X1, float Y1) {
   // functions will not draw the last point ("it's a feature!"...)
   // fltk is supposed to act like there is a 1-pixel pen.
 #elif defined(__APPLE__)
-  MoveTo(x, y); 
-  LineTo(x1, y1);
+  if (( x==x1 || y==y1 ) && quartz_line_width_==1.0f )  
+    CGContextSetShouldAntialias(quartz_gc, false);
+  CGContextMoveToPoint(quartz_gc, x, y);
+  CGContextAddLineToPoint(quartz_gc, x1, y1);
+  CGContextStrokePath(quartz_gc);
+  if (quartz_line_width_==1.0f) CGContextSetShouldAntialias(quartz_gc, true);
 #else
 # error
 #endif
@@ -156,7 +172,11 @@ void fltk::drawpoint(int x, int y) {
 #elif defined(_WIN32)
   SetPixel(dc, x, y, current_xpixel);
 #elif defined(__APPLE__)
-  MoveTo(x, y); Line(0, 0);
+  if (quartz_line_width_==1.0f) CGContextSetShouldAntialias(quartz_gc, false);
+  CGContextMoveToPoint(quartz_gc, x, y);
+  CGContextAddLineToPoint(quartz_gc, x, y);
+  CGContextStrokePath(quartz_gc);
+  if (quartz_line_width_==1.0f) CGContextSetShouldAntialias(quartz_gc, true);
 #else
 # error
 #endif
@@ -174,7 +194,11 @@ void fltk::drawpoint(float X, float Y) {
 #elif defined(_WIN32)
   SetPixel(dc, x, y, current_xpixel);
 #elif defined(__APPLE__)
-  MoveTo(x, y); Line(0, 0);
+  if (quartz_line_width_==1.0f) CGContextSetShouldAntialias(quartz_gc, false);
+  CGContextMoveToPoint(quartz_gc, x, y);
+  CGContextAddLineToPoint(quartz_gc, x, y);
+  CGContextStrokePath(quartz_gc);
+  if (quartz_line_width_==1.0f) CGContextSetShouldAntialias(quartz_gc, true);
 #else
 # error
 #endif
@@ -183,5 +207,5 @@ void fltk::drawpoint(float X, float Y) {
 /** \} */
 
 //
-// End of "$Id: fl_rect.cxx,v 1.42 2005/01/24 08:07:55 spitzak Exp $".
+// End of "$Id: fl_rect.cxx,v 1.43 2005/01/25 20:11:47 matthiaswm Exp $".
 //
