@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.1 1999/11/07 08:11:32 bill Exp $"
+# "$Id: Makefile,v 1.2 1999/11/21 04:22:56 vincent Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -34,17 +34,23 @@ DEMOS = \
 
 include ../makeinclude
 
-LIBRARY = libfltk_glut.a
+LIBRARY = $(LIBNAME)_glut
+DSONAME = $(LIBRARY)$(DSOEXT)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
-all:	$(LIBRARY) $(DEMOS)
+all:	$(LIBRARY).a $(DSOEXT) $(DEMOS)
 
-$(LIBRARY): $(OBJECTS)
+$(LIBRARY).a: $(OBJECTS)
 	@echo $(LIBCOMMAND) $@ ...
 	@rm -f $@
 	@$(LIBCOMMAND) $@ $(OBJECTS)
 	@$(RANLIB) $@
+
+$(LIBRARY).so.2 $(LIBRARY)_forms.sl.2: $(OBJECTS)
+	@echo $(DSOCOMMAND) $@ ...
+	@$(DSOCOMMAND) $@ $(OBJECTS)
+	@touch $(DSOEXT)
 
 .SUFFIXES:	.cxx .h .o
 
@@ -54,10 +60,10 @@ $(LIBRARY): $(OBJECTS)
 	$(CC) -I.. $(CFLAGS) -c $<
 
 .cxx :
-	$(CXX) -I.. $(CXXFLAGS) $< $(LIBRARY) -L../lib -lfltk $(GLDLIBS) -o $@
+	$(CXX) -I.. $(CXXFLAGS) $< $(LIBRARY).a -L../lib -lfltk $(GLDLIBS) -o $@
 
 clean :
-	-@ rm -f *.o *.do $(LIBRARY) $(DEMOS) core *~ makedepend
+	-@ rm -f *.o *.do $(LIBRARY).a $(DEMOS) core *~ makedepend
 	@touch makedepend
 
 depend:
@@ -66,17 +72,25 @@ include makedepend
 
 ################################################################
 
-install: $(LIBRARY)
+install: $(LIBRARY).a
 	@echo "Installing libraries..."
 	@-mkdir -p $(libdir)
-	@rm -f $(libdir)/$(LIBRARY)
-	@-cp $(LIBRARY) $(libdir)
-	@-chmod 644 $(libdir)/$(LIBRARY)
+	@rm -f $(libdir)/$(LIBRARY).a
+	@-cp $(LIBRARY).a $(libdir)
+	@-chmod 644 $(libdir)/$(LIBRARY).a
+	@if test -n "$(DSOEXT)"; then \
+		if test "$(DSONAME)" = $(LIBRARY).so.2; then ext=.so; else ext=.s1; fi; \
+		rm -f $(libdir)/$(LIBRARY)$$ext.2;\
+		rm -f $(libdir)/$(LIBRARY)$$ext;\
+		cp $(LIBRARY)$$ext.2 $(libdir); \
+		chmod 755 $(libdir)/$(LIBRARY)$$ext.2; \
+		ln -s $(libdir)/$(LIBRARY)$$ext.2 $(libdir)/$(LIBRARY)$$ext;\
+	fi
 	@echo "Installing include files..."
 	@-mkdir -p $(includedir)
 	@-cp -r ./glut.H $(includedir)
 	@-chmod 644 $(includedir)/FL/*
 
 #
-# End of "$Id: Makefile,v 1.1 1999/11/07 08:11:32 bill Exp $".
+# End of "$Id: Makefile,v 1.2 1999/11/21 04:22:56 vincent Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg.cxx,v 1.11 1999/10/18 06:11:09 bill Exp $"
+// "$Id: fl_jpeg.cxx,v 1.1 1999/11/21 04:22:59 vincent Exp $"
 //
 // JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -404,5 +404,5 @@ int Fl_JPEG_Image::test(uchar* datas, size_t size)
 }
 
 //
-// End of "$Id: fl_jpeg.cxx,v 1.11 1999/10/18 06:11:09 bill Exp $"
+// End of "$Id: fl_jpeg.cxx,v 1.1 1999/11/21 04:22:59 vincent Exp $"
 //

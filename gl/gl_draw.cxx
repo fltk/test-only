@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.11 1999/11/16 07:36:11 bill Exp $"
+// "$Id: gl_draw.cxx,v 1.1 1999/11/21 04:22:55 vincent Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -140,5 +140,5 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.11 1999/11/16 07:36:11 bill Exp $".
+// End of "$Id: gl_draw.cxx,v 1.1 1999/11/21 04:22:55 vincent Exp $".
 //

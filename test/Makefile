@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.34 1999/11/18 04:33:24 carl Exp $"
+# "$Id: Makefile,v 1.35 1999/11/21 04:23:05 vincent Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -50,7 +50,7 @@ all:	$(ALL)
 
 include ../makeinclude
 
-$(ALL):  ../lib/$(LIBNAME)
+$(ALL):  ../lib/$(LIBNAME).a
 
 .SUFFIXES: .cxx .c .o .fl .h
 
@@ -89,7 +89,7 @@ mandelbrot: mandelbrot.cxx mandelbrot_ui.cxx
 shape: shape.cxx
 	$(CXX) -I.. $(CXXFLAGS) shape.cxx -L../lib -lfltk $(GLDLIBS) -o $@
 image_file: image_file.cxx
-	$(CXX) -I.. $(CXXFLAGS) image_file.cxx -L../lib -lfltk $(LDLIBS) $(IMAGELIBS) -o $@
+	$(CXX) -I.. $(CXXFLAGS) image_file.cxx -L../lib -lfltk -lfltk_images $(LDLIBS) $(IMAGELIBS) -o $@
 
 # If you have libjpeg installed, you might want to try this test program:
 
@@ -106,5 +106,5 @@ install:
 	@echo Nothing to install in test directory.
 
 #
-# End of "$Id: Makefile,v 1.34 1999/11/18 04:33:24 carl Exp $".
+# End of "$Id: Makefile,v 1.35 1999/11/21 04:23:05 vincent Exp $".
 #

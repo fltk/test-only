@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Guess_Image.cxx,v 1.3 1999/11/01 02:21:32 carl Exp $"
+// "$Id: Fl_Guess_Image.cxx,v 1.1 1999/11/21 04:22:58 vincent Exp $"
 //
 // Guessing image type code for the Fast Light Tool Kit (FLTK).
 //
@@ -86,5 +86,5 @@ Fl_Image_Type* Fl_Shared_Image::guess(const char* name, unsigned char *datas)
 }
 
 //
-// End of "$Id: Fl_Guess_Image.cxx,v 1.3 1999/11/01 02:21:32 carl Exp $"
+// End of "$Id: Fl_Guess_Image.cxx,v 1.1 1999/11/21 04:22:58 vincent Exp $"
 //

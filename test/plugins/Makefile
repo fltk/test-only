@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.12 1999/11/19 15:12:02 carl Exp $"
+# "$Id: Makefile,v 1.13 1999/11/21 04:23:07 vincent Exp $"
 #
 # Fluid plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -43,10 +43,10 @@ all: $(PROGRAM) Fl_NSlider.o
 .cxx.o :
 	$(CXX) -DFL_DLL -DFLUID_PLUGIN $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $<
 
-$(PROGRAM) : $(OBJECTS) ../../lib/$(LIBNAME)
-	$(CXX) $(LD_DLL_FLAGS) $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS)
+$(PROGRAM) : $(OBJECTS) ../../lib/$(LIBNAME).a
+	$(CXX) $(LD_PLUGIN_FLAGS) $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS)
 
-win32 : $(OBJECTS) ../../lib/$(LIBNAME)
+win32 : $(OBJECTS) ../../lib/$(LIBNAME).a
 	dllwrap $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS) -L../../lib -lfltkdll.2 -lfluid $(GLDLIBS) --output-def essai_plugin.def
 
 clean :
@@ -61,5 +61,5 @@ install:
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.12 1999/11/19 15:12:02 carl Exp $".
+# End of "$Id: Makefile,v 1.13 1999/11/21 04:23:07 vincent Exp $".
 #

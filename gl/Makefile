@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.2 1999/11/21 04:22:51 vincent Exp $"
+# "$Id: Makefile,v 1.1 1999/11/21 04:22:54 vincent Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -24,23 +24,21 @@
 #
 
 CPPFILES = \
-	Fl_Chart.cxx \
-	Fl_Positioner.cxx \
-	forms_bitmap.cxx \
-	forms_compatability.cxx \
-	forms_free.cxx \
-	forms_fselect.cxx \
-	forms_pixmap.cxx \
-	forms_timer.cxx
+	Fl_Gl_Choice.cxx \
+	Fl_Gl_Overlay.cxx \
+	Fl_Gl_Window.cxx \
+	gl_draw.cxx \
+	gl_start.cxx
+
 
 DEMOS = \
-	forms colbrowser
+	
 
 ################################################################
 
 include ../makeinclude
 
-LIBRARY = $(LIBNAME)_forms
+LIBRARY = $(LIBNAME)_gl
 DSONAME = $(LIBRARY)$(DSOEXT)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
@@ -61,12 +59,12 @@ $(LIBRARY).so.2 $(LIBRARY)_forms.sl.2: $(OBJECTS)
 .SUFFIXES:	.cxx .h .o
 
 .cxx.o :
-	$(CXX) -I.. $(CXXFLAGS) -c $<
+	$(CXX) -I.. -I../src $(CXXFLAGS) -c $<
 .c.o :
 	$(CC) -I.. $(CFLAGS) -c $<
 
 .cxx :
-	$(CXX) -I.. $(CXXFLAGS) $< $(LIBRARY).a -L../lib -lfltk $(LDLIBS) -o $@
+	$(CXX) -I.. $(CXXFLAGS) $< $(LIBRARY).a -L../lib -lfltk $(GLDLIBS) -o $@
 
 clean :
 	-@ rm -f *.o *.do $(LIBRARY).a $(DEMOS) core *~ makedepend
@@ -92,11 +90,7 @@ install: $(LIBRARY).a
 		chmod 755 $(libdir)/$(LIBRARY)$$ext.2; \
 		ln -s $(libdir)/$(LIBRARY)$$ext.2 $(libdir)/$(LIBRARY)$$ext;\
 	fi
-	@echo "Installing include files..."
-	@-mkdir -p $(includedir)
-	@-cp -r ./*.H $(includedir)
-	@-chmod 644 $(includedir)/FL/*
 
 #
-# End of "$Id: Makefile,v 1.2 1999/11/21 04:22:51 vincent Exp $".
+# End of "$Id: Makefile,v 1.1 1999/11/21 04:22:54 vincent Exp $".
 #

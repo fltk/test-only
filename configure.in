@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.64 1999/11/17 01:39:42 vincent Exp $"
+dnl# "$Id: configure.in,v 1.65 1999/11/21 04:22:48 vincent Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -29,7 +29,7 @@ AC_INIT(src/Fl.cxx)
 
 AC_PROG_RANLIB
 
-LIBNAME="libfltk.a"
+LIBNAME="libfltk"
 if test "$RANLIB" != ":"; then
   LIBCOMMAND="ar cr"
 else
@@ -80,28 +80,23 @@ if eval "test x$enable_shared = xyes"; then
   PICFLAG=1
   case $uname in
       SunOS* | UNIX_S*)
-	  DSOLIBNAME="libfltk"
 	  DSOEXT=".so.2"
 	  DSOCOMMAND="\$(CXX) -Wl,-h,\$@ \$(LDLIBS) -G $DEBUGFLAG -o"
 	  ;;
       HP-UX*)
-	  DSOLIBNAME="libfltk"
 	  DSOEXT=".s1.2"
 	  DSOCOMMAND="ld -b -z +h \$@ $DEBUGFLAG -o"
 	  ;;
       OSF1*)
-	  DSOLIBNAME="libfltk"
 	  DSOEXT=".so.2"
           DSOCOMMAND="\$(CXX) -Wl,-soname,\$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
 cd 	  ;;
       IRIX*)
-	  DSOLIBNAME="libfltk"
 	  DSOEXT=".so.2"
           DSOCOMMAND="\$(CXX) -soname \$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
 	  ;;
       CYGWIN*)
 	  DLLCFLAGS="-DFL_DLL -DFL_LIBRARY"
-	  DSOLIBNAME="fltk.2"
 	  DSOEXT=".dll"
           DSOCOMMAND="dllwrap --export-all --target i386-mingw32 \
 	--implib ../lib/libfltkdll.2.a \
@@ -112,7 +107,6 @@ cd 	  ;;
       *)
           echo "Warning: shared libraries may not be supported.  Trying -shared"
 	  echo "         option with compiler."
-	  DSOLIBNAME="libfltk"
 	  DSOEXT=".so.2"
           DSOCOMMAND="\$(CXX) -Wl,-soname,\$@ -shared $DEBUGFLAG -o"
 	  ;;
@@ -230,14 +224,14 @@ AC_CHECK_LIB(c, dlopen, \
 
 if test $have_dlopen = yes; then
     AC_DEFINE(HAVE_DLOPEN)
-    LD_DLL_FLAGS="-shared"
+    LD_PLUGIN_FLAGS="-shared"
     if test "$uname" = "Linux"; then
         LDLIBS="${LDLIBS} -rdynamic"
     fi
 fi
 
 AC_SUBST(LD_DLOPEN_FLAGS)
-AC_SUBST(LD_DLL_FLAGS)
+AC_SUBST(LD_PLUGIN_FLAGS)
 
 have_pthread=no
 AC_CHECK_LIB(c, pthread_create, \
@@ -335,7 +329,6 @@ else
     AC_DEFINE_UNQUOTED(FLTK_LIBDIR, "${prefix}")
 fi
 
-AC_SUBST(DSOLIBNAME)
 AC_SUBST(DSOEXT)
 AC_SUBST(DSOCOMMAND)
 AC_SUBST(EXPORTCOMMAND)
@@ -347,7 +340,14 @@ AC_CONFIG_HEADER(config.h:configh.in)
 AC_OUTPUT(makeinclude)
 
 cp config.h FL/
+cd lib
+rm -f libfltk_forms.a libfltk_gl.a libfltk_glut.a libfltk_images.a
+ln -s ../forms/libfltk_forms.a .
+ln -s ../gl/libfltk_gl.a .
+ln -s ../glut/libfltk_glut.a .
+ln -s ../images/libfltk_images.a .
+cd ..
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.64 1999/11/17 01:39:42 vincent Exp $".
+dnl# End of "$Id: configure.in,v 1.65 1999/11/21 04:22:48 vincent Exp $".
 dnl#

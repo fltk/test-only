@@ -57,4 +57,3 @@ int fl_load_plugin(const char* name, const char* func) {
   if (handle) { dlclose(handle); return -3; }
   return -2;
 }
-

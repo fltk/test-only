@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.18 1999/11/12 05:00:18 vincent Exp $"
+# "$Id: makeinclude.in,v 1.19 1999/11/21 04:22:48 vincent Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -43,24 +43,22 @@ CXXFLAGS	=@CXXFLAGS@ @X_CFLAGS@
 DLLCFLAGS	=@DLLCFLAGS@	# used for WIN32 dlls only
 
 # flags for the linker
-LD_DLOPEN_FLAGS	=@LD_DLOPEN_FLAGS@	# for program that load some PLUGIN
-LD_DLL_FLAGS	=@LD_DLL_FLAGS@		# to build some PLUGIN
+LD_PLUGIN_FLAGS	=@LD_PLUGIN_FLAGS@	# to build some plugin
 
 # program to make the archive:
 LIBNAME		=@LIBNAME@
 LIBCOMMAND	=@LIBCOMMAND@
 RANLIB		=@RANLIB@
 DSOEXT		=@DSOEXT@
-DSOLIBNAME	=@DSOLIBNAME@
 DSOCOMMAND	=@DSOCOMMAND@
 EXPORTCOMMAND	=@EXPORTCOMMAND@
 
 # libraries to link with:
 LDLIBS		=@LDFLAGS@ @LIBS@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
 LDDLLLIBS	=@LDFLAGS@ @LIBS@ @LDDLLLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
-GLDLIBS		=@LDFLAGS@ @LIBS@ @GLLIB@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
+GLDLIBS		=@LDFLAGS@ -lfltk_gl @LIBS@ @GLLIB@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@
 IMAGELIBS	=@LIBPNG@ @LIBJPEG@
 
 #
-# End of "$Id: makeinclude.in,v 1.18 1999/11/12 05:00:18 vincent Exp $".
+# End of "$Id: makeinclude.in,v 1.19 1999/11/21 04:22:48 vincent Exp $".
 #

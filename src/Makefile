@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.50 1999/11/20 04:47:21 vincent Exp $"
+# "$Id: Makefile,v 1.51 1999/11/21 04:23:02 vincent Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -144,18 +144,6 @@ CPPFILES = \
 	fl_motif.cxx \
 	fl_windows.cxx
 
-CPPglFILES = \
-	Fl_Gl_Choice.cxx \
-	Fl_Gl_Overlay.cxx \
-	Fl_Gl_Window.cxx \
-	gl_draw.cxx \
-	gl_start.cxx
-
-CPPimagesFILES = \
-	Fl_Guess_Image.cxx \
-	fl_jpeg.cxx\
-	fl_png.cxx
-
 CFILES = \
 	scandir.c \
 	numericsort.c \
@@ -205,85 +193,64 @@ CLEAN =
 include ../makeinclude
 
 LIBRARY = ../lib/$(LIBNAME)
-DSONAME = $(DSOLIBNAME)$(DSOEXT)
-DSOglNAME = $(DSOLIBNAME)gl$(DSOEXT)
-DSOimagesNAME = $(DSOLIBNAME)images$(DSOEXT)
+DSONAME = $(LIBNAME)$(DSOEXT)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
-OBJECTSgl = $(CPPglFILES:.cxx=.o)
-OBJECTSimages = $(CPPimagesFILES:.cxx=.o)
 
-all:	$(LIBRARY) $(DSONAME)
+all:	$(LIBRARY).a $(DSOEXT)
 
-$(LIBRARY): $(OBJECTS) $(OBJECTSgl) $(OBJECTSimages) fl_call_main.o
+$(LIBRARY).a: $(OBJECTS) fl_call_main.o
 	@echo $(LIBCOMMAND) $@ ...
 	@rm -f $@
-	@$(LIBCOMMAND) $@ $(OBJECTS) $(OBJECTSgl) $(OBJECTSimages) fl_call_main.o
+	@$(LIBCOMMAND) $@ $(OBJECTS) fl_call_main.o
 	@$(RANLIB) $@
 
-libfltk.so.2 libfltk.sl.2: $(OBJECTS) $(DSOglNAME) $(DSOimagesNAME)
+libfltk.so.2 libfltk.sl.2: $(OBJECTS) $(DSOEXT)
 	@echo $(DSOCOMMAND) $@ ...
 	@$(DSOCOMMAND) $@ $(OBJECTS)
+	@touch $(DSOEXT)	# Create a dummy file to satisfy dependencies
 
-fltk.2.dll: $(OBJECTS:.o=.dllo) $(OBJECTSimages:.o=.dllo) $(OBJECTSgl:.o=.dllo)
+fltk.2.dll: $(OBJECTS:.o=.dll.o) $(DSOEXT)
 	@echo $(DSOCOMMAND) $@ ...
 	@rm -f $@
-	@mkdir -p dllobjects
-	@rm -f dlllist
-	@touch dlllist
-	@for i in $(OBJECTS) $(OBJECTSimages) $(OBJECTSgl); do \
-		cp $$(echo $$i | sed s/\\.o/.dllo/) dllobjects/$$i;	\
-		echo dllobjects/$$i" " >> dlllist;	\
-	done
 	@$(DSOCOMMAND) -o $@ \
-	    $$(cat dlllist) $(CXXFLAGS) $(GLDLIBS)
-	@rm -r dllobjects dlllist
+	    $(OBJECTS:.o=.dll.o) $(CXXFLAGS) $(GLDLIBS)
 
-libfltkgl.so.2 libfltkgl.sl.2: $(OBJECTSgl)
-	@echo $(DSOCOMMAND) $@ ...
-	@$(DSOCOMMAND) $@ $(OBJECTSgl)
-
-libfltkimages.so.2 libfltkimages.sl.2: $(OBJECTSimages)
-	@echo $(DSOCOMMAND) $@ ...
-	@$(DSOCOMMAND) $@ $(OBJECTSimages)
-
-.SUFFIXES:	.cxx .h .o .dllo
+.SUFFIXES:	.cxx .h .o
 
 .cxx.o :
 	$(CXX) -I.. $(CXXFLAGS) -c $<
 .c.o :
 	$(CC) -I.. $(CFLAGS) -c $<
 
-.cxx.dllo :
+%.dll.o : %.cxx
 	$(CXX) -I.. $(CXXFLAGS) $(DLLCFLAGS) -c $< -o $@
-.c.dllo :
+%.dll.o : %.x
 	$(CC) -I.. $(CFLAGS) $(DLLCFLAGS) -c $< -o $@
 
 clean :
-	-@ rm -f *.o *.do $(DSONAME) $(DSOglNAME) $(DSOimagesNAME) $(LIBRARY) $(CLEAN) core *~ ../include/*~ makedepend cmap
+	-@ rm -f *.o *.do $(DSONAME) $(LIBRARY).a $(CLEAN) core *~ ../include/*~ makedepend cmap
 	@touch makedepend
 
 depend:
-	$(MAKEDEPEND) -I.. $(CXXFLAGS) $(CPPFILES) $(CPPglFILES) $(CPPimagesFILES) $(CFILES) > makedepend
+	$(MAKEDEPEND) -I.. $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
 include makedepend
 
 ################################################################
 
-install: $(LIBRARY) $(DSONAME)
+install: $(LIBRARY).a $(DSOEXT)
 	@echo "Installing libraries..."
 	@-mkdir -p $(libdir)
 	@rm -f $(libdir)/$(LIBNAME)
-	@-cp $(LIBRARY) $(libdir)
-	@-chmod 644 $(libdir)/$(LIBNAME)
-	@if test -n "$(DSONAME)"; then \
-		if test "$(DSONAME)" = libfltk.so.2; then ext=.so; else ext=.s1; fi; \
-		for lib in libfltk libfltkgl libfltkimages; do \
-			rm -f $(libdir)/$$lib$$ext.2;\
-			rm -f $(libdir)/$$lib$$ext;\
-			cp $$lib$$ext.2 $(libdir); \
-			chmod 755 $(libdir)/$$lib$$ext.2; \
-			ln -s $(libdir)/$$lib$$ext.2 $(libdir)/$$lib$$ext;\
-		done \
+	@-cp $(LIBRARY).a $(libdir)
+	@-chmod 644 $(libdir)/$(LIBNAME).a
+	@if test -n "$(DSOEXT)"; then \
+		if test "$(DSONAME)" = $(LIBRARY).so.2; then ext=.so; else ext=.s1; fi; \
+		rm -f $(libdir)/$(LIBRARY)$$ext.2;\
+		rm -f $(libdir)/$(LIBRARY)$$ext;\
+		cp $(LIBRARY)$$ext.2 $(libdir); \
+		chmod 755 $(libdir)/$(LIBRARY)$$ext.2; \
+		ln -s $(libdir)/$(LIBRARY)$$ext.2 $(libdir)/$(LIBRARY)$$ext;\
 	fi
 	@echo "Installing include files..."
 	@-mkdir -p $(includedir)
@@ -298,5 +265,5 @@ install: $(LIBRARY) $(DSONAME)
 	@-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.50 1999/11/20 04:47:21 vincent Exp $".
+# End of "$Id: Makefile,v 1.51 1999/11/21 04:23:02 vincent Exp $".
 #

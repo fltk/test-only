@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.2 1999/11/21 04:22:51 vincent Exp $"
+# "$Id: Makefile,v 1.1 1999/11/21 04:22:58 vincent Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -24,28 +24,21 @@
 #
 
 CPPFILES = \
-	Fl_Chart.cxx \
-	Fl_Positioner.cxx \
-	forms_bitmap.cxx \
-	forms_compatability.cxx \
-	forms_free.cxx \
-	forms_fselect.cxx \
-	forms_pixmap.cxx \
-	forms_timer.cxx
+	Fl_Guess_Image.cxx \
+	fl_jpeg.cxx\
+	fl_png.cxx
 
-DEMOS = \
-	forms colbrowser
 
 ################################################################
 
 include ../makeinclude
 
-LIBRARY = $(LIBNAME)_forms
+LIBRARY = $(LIBNAME)_images
 DSONAME = $(LIBRARY)$(DSOEXT)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
-all:	$(LIBRARY).a $(DSOEXT) $(DEMOS)
+all:	$(LIBRARY).a $(DSOEXT)
 
 $(LIBRARY).a: $(OBJECTS)
 	@echo $(LIBCOMMAND) $@ ...
@@ -58,7 +51,7 @@ $(LIBRARY).so.2 $(LIBRARY)_forms.sl.2: $(OBJECTS)
 	@$(DSOCOMMAND) $@ $(OBJECTS)
 	@touch $(DSOEXT)
 
-.SUFFIXES:	.cxx .h .o
+.SUFFIXES:	.cxx .h .o .fl
 
 .cxx.o :
 	$(CXX) -I.. $(CXXFLAGS) -c $<
@@ -66,7 +59,10 @@ $(LIBRARY).so.2 $(LIBRARY)_forms.sl.2: $(OBJECTS)
 	$(CC) -I.. $(CFLAGS) -c $<
 
 .cxx :
-	$(CXX) -I.. $(CXXFLAGS) $< $(LIBRARY).a -L../lib -lfltk $(LDLIBS) -o $@
+	$(CXX) -I.. $(CXXFLAGS) $< $(LIBRARY).a -L../lib -lfltk $(IMAGESLIBS) -o $@
+
+.fl.cxx .fl.h:
+	../fluid/fluid -c $<
 
 clean :
 	-@ rm -f *.o *.do $(LIBRARY).a $(DEMOS) core *~ makedepend
@@ -92,11 +88,7 @@ install: $(LIBRARY).a
 		chmod 755 $(libdir)/$(LIBRARY)$$ext.2; \
 		ln -s $(libdir)/$(LIBRARY)$$ext.2 $(libdir)/$(LIBRARY)$$ext;\
 	fi
-	@echo "Installing include files..."
-	@-mkdir -p $(includedir)
-	@-cp -r ./*.H $(includedir)
-	@-chmod 644 $(includedir)/FL/*
 
 #
-# End of "$Id: Makefile,v 1.2 1999/11/21 04:22:51 vincent Exp $".
+# End of "$Id: Makefile,v 1.1 1999/11/21 04:22:58 vincent Exp $".
 #
