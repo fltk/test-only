@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.185 2004/07/07 05:11:03 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.186 2004/07/15 16:23:20 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -242,14 +242,14 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
     if (f) {
       fnt = f->system_name();
       if (fnt)
-        fs = XCreateFontSet(xdisplay, fnt, &missing_list,
+	fs = XCreateFontSet(xdisplay, fnt, &missing_list,
 			    &missing_count, &def_string);
       else
-        return;
+	return;
       if (fs) {
-        XFreeFontSet(xdisplay, fl_xim_fs);
-        fl_xim_fs = fs;
-        change = 1;
+	XFreeFontSet(xdisplay, fl_xim_fs);
+	fl_xim_fs = fs;
+	change = 1;
       }
     } else {
       change = 1;
@@ -806,13 +806,15 @@ int Monitor::list(const Monitor** p) {
 #else
   DONE:;
 #endif
-//      printf("Got %d monitors:\n", num_monitors);
-//      for (int i=0; i < num_monitors; i++) {
-//        const Monitor& m = monitors[i];
-//        printf(" %d %d %d %d, work %d %d %d %d\n",
-//  	     m.x(), m.y(), m.w(), m.h(),
-//  	     m.work.x(), m.work.y(), m.work.w(), m.work.h());
-//      }
+#if 0
+    printf("Got %d monitors:\n", num_monitors);
+    for (int i=0; i < num_monitors; i++) {
+      const Monitor& m = monitors[i];
+      printf(" %d %d %d %d, work %d %d %d %d\n",
+  	     m.x(), m.y(), m.w(), m.h(),
+  	     m.work.x(), m.work.y(), m.work.w(), m.work.h());
+    }
+#endif
   }
   *p = monitors;
   return num_monitors;
@@ -1110,8 +1112,6 @@ bool fltk::handle()
 	if (type == textplainutf ||
 	    type == textplain ||
 	    type == UTF8_STRING) {dnd_type = type; break;} // ok
-	if (type == XA_TEXT) {dnd_type = UTF8_STRING; break;}
-	if (type == texturilist) dnd_type = type; // only used if no text
       }
       event = DND_ENTER;
       break;
@@ -1355,6 +1355,9 @@ bool fltk::handle()
     RETRY:
       buffer[0] = 0;
       keysym = 0;
+#ifdef __sgi
+#define Xutf8LookupString XmbLookupString
+#endif
       len = Xutf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
 			      buffer, buffer_len-1, &keysym, &status);
       switch (status) {
@@ -1511,7 +1514,11 @@ bool fltk::handle()
 #endif
 	for (unsigned i = 0; i<count; i++) {
  	  Atom t = ((Atom*)portion)[i];
-	  if (t == textplainutf || t == UTF8_STRING) {type = t; break;}
+	  if (t == textplainutf ||
+	      t == textplain ||
+	      t == UTF8_STRING) {type = t; break;}
+	  // rest are only used if no utf-8 available:
+	  if (t == XA_TEXT || t == texturilist) type = t;
 	}
 	XFree(portion);
 	Atom property = xevent.xselection.property;
@@ -1569,17 +1576,23 @@ bool fltk::handle()
     fprintf(stderr,"selection request for %s\n",x);
     XFree(x);
 #endif
-    if (e.target == TARGETS) {
-      Atom a[3] = {XA_STRING, UTF8_STRING, XA_TEXT};
+    if (!selection_length[clipboard]) {
+      e.property = 0;
+    } else if (e.target == TARGETS) {
+      Atom a[3] = {UTF8_STRING, XA_STRING, XA_TEXT};
       XChangeProperty(xdisplay, e.requestor, e.property,
 		      XA_ATOM, sizeof(Atom)*8, 0, (unsigned char*)a,
-		      3);
-    } else if (selection_length[clipboard]) {
-      if (e.target == XA_TEXT) e.target = UTF8_STRING;
+		      sizeof(a)/sizeof(Atom));
+    } else if (e.target == UTF8_STRING ||
+	       e.target == XA_STRING ||
+	       e.target == XA_TEXT ||
+	       e.target == textplain ||
+	       e.target == textplainutf) {
+      /*if (e.target == XA_TEXT)*/ e.target = UTF8_STRING;
       XChangeProperty(xdisplay, e.requestor, e.property,
-		      e.target, 8, 0,
-		      (unsigned char *)selection_buffer[clipboard],
-		      selection_length[clipboard]);
+  		      e.target, 8, 0,
+  		      (unsigned char *)selection_buffer[clipboard],
+  		      selection_length[clipboard]);
     } else {
       e.property = 0;
     }
@@ -2165,5 +2178,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.185 2004/07/07 05:11:03 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.186 2004/07/15 16:23:20 spitzak Exp $".
 //
