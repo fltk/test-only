@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.86 2004/05/15 20:52:45 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.87 2004/06/04 08:30:46 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -30,6 +30,7 @@
 #include <fltk/Item.h>
 #include <fltk/draw.h>
 #include <fltk/error.h>
+#include <fltk/Cursor.h>
 #include <stdlib.h>
 #include <string.h>
 #include <stdio.h>
@@ -707,6 +708,8 @@ void Browser::draw() {
     }
     if (clipped) pop_clip();
   }
+  fltk::column_widths(last_columns);
+  //fltk::column_widths(0);
   scrolldx = scrolldy = 0;
   unset_mark(REDRAW_0);
   unset_mark(REDRAW_1);
@@ -738,9 +741,7 @@ void Browser::draw() {
 	for (int i=0; i<nHeader; i++) {
 	  update_child(*header[i]);
 	}
-  }
-  
-  fltk::column_widths(last_columns);
+  }  
   Item::clear_style();
 }
 
@@ -874,7 +875,7 @@ void Browser::layout() {
     // first, calculate the combined column width    
     int width = 0, nflex = 0, i;
     for (i=0; i<nHeader; i++) {
-      int itemwidth = (i<nColumn)?column_widths_[i]:0;
+      int itemwidth = (i<nColumn)?column_widths_i[i]:0;
       if (itemwidth==0) itemwidth = -1;
       if (itemwidth<0)
         nflex -= itemwidth;
@@ -886,13 +887,17 @@ void Browser::layout() {
     // now set the actual column widths
 	for (i=0; i<nHeader; i++) {
 	  Widget *hi = header[i];
-      int itemwidth = (i<nColumn)?column_widths_[i]:0;
+      int itemwidth = (i<nColumn)?column_widths_i[i]:0;
       if (itemwidth==0) itemwidth = -1;
       if (itemwidth<0)
         itemwidth = -itemwidth*space/nflex;
+      int xx = hx-xposition_, ww = itemwidth;
+      if (xx<0) { ww+=xx; xx = 0; }
+      if (i==nHeader-1) { ww += xposition_; itemwidth += xposition_; }
+      if (ww<0) ww = 0;
 	  if (column_widths_p)
 		column_widths_p[i] = itemwidth;
-      hi->resize(hx, Y-sw, itemwidth, sw);
+      hi->resize(xx, Y-sw, ww, sw);
       hi->layout();
 	  hx += itemwidth;
 	}
@@ -903,6 +908,7 @@ void Browser::layout() {
   // Now that we got the sizes of everything, scroll to show current item:
   goto_mark(FOCUS); make_item_visible(NOSCROLL);
 
+  
   redraw(DAMAGE_CONTENTS); // assumme we need to redraw
   fltk::column_widths(last_columns);
   Item::clear_style();
@@ -916,7 +922,12 @@ void Browser::hscrollbar_cb(Widget* o, void*) {
   the normal position where the left edge of the child widgets is visible. */
 void Browser::xposition(int X) {
   int dx = xposition_-X;
-  if (dx) {xposition_ = X; scrolldx += dx; redraw(DAMAGE_VALUE);}
+  if (dx) {
+    xposition_ = X; 
+    scrolldx += dx; 
+    if (nHeader) relayout();
+    redraw(DAMAGE_VALUE);
+  }
 }
 
 void Browser::scrollbar_cb(Widget* o, void*) {
@@ -1381,17 +1392,56 @@ void Browser::column_widths(const int *t) {
 	// free the column memory
 	if (column_widths_p) free(column_widths_p);
 	column_widths_p = 0;
+	if (column_widths_i) free(column_widths_i);
+	column_widths_i = 0;
   } else {
 	// reallocate the column storage if needed
-	if (nColumn>pnc)
+	if (nColumn>pnc) {
 	  column_widths_p = (int*)realloc(column_widths_p, (nColumn+1)*sizeof(int));
+	  column_widths_i = (int*)realloc(column_widths_i, (nColumn+1)*sizeof(int));
+        }
 	// copy the widths over into the new array
 	memcpy(column_widths_p, column_widths_, (nColumn+1)*sizeof(int));
+	memcpy(column_widths_i, column_widths_, (nColumn+1)*sizeof(int));
   }
   // now recalculate the layout
-  if (header)
-	layout();
+  relayout();
   redraw();
+}
+
+int Browser::set_column_start(int col, int x) {
+  // so the user gives the left edge of a column a new x
+  // we must adjust all this column and the column to the left so that the
+  // resulting edge ends at x
+  if (col<=0) return -1; // we don't adjust the first column
+  if (col>=nColumn) return -1; // out of bounds
+  // find the current column x and calculate the desired delta
+  int ox = 0;
+  for (int i=0; i<col; i++) ox += column_widths_p[i];
+  int dx = x + xposition_ - ox;
+  // make sure that no column is smaller than 4 pixels (to the left)
+  if (column_widths_p[col-1]+dx<4) {
+    if (col>1)
+      dx = -column_widths_p[col-1]+4+set_column_start(col-1, x-4);
+    else
+      dx = -column_widths_p[col-1]+4;
+  }
+  // make sure that no column is smaller than 4 pixels (to the right)
+  int cwp = column_widths_p[col], cwi = column_widths_i[col];
+  if (cwi>0 && cwi<cwp) cwp = cwi;
+  if (cwp-dx<4) {
+    if (col<nColumn-1)
+      dx = cwp-4+set_column_start(col+1, x+4);
+    else
+      dx = cwp-4;
+  }
+  // now adjust the columns in the interactive field
+  if (column_widths_i[col-1]>0) column_widths_i[col-1] += dx;
+  if (column_widths_i[col]>0) column_widths_i[col] -= dx;
+  // finally recalculate the layout
+  relayout();
+  redraw();
+  return dx;
 }
 
 void Browser::column_click_cb_(Widget *ww, void *d) {
@@ -1400,6 +1450,66 @@ void Browser::column_click_cb_(Widget *ww, void *d) {
   w->do_callback();
   w->selected_column_ = -1;
 }
+
+class BButton : public Button {
+  uchar sides; // bit 0 set: user can drag left side, bit 1: right side
+public:
+  BButton(int x, int y, int w, int h, uchar s, const char *l=0) 
+  : Button(x, y, w, h, l) 
+  { 
+    sides = s;
+    align(ALIGN_INSIDE|ALIGN_CLIP);
+  }
+  int handle(int event) {
+    static int ox = -1;
+    static bool left = true;
+    static bool enter_before_leave = false;
+    switch (event) {
+      case fltk::LEAVE: 
+        if (!enter_before_leave) cursor(fltk::CURSOR_DEFAULT);
+        enter_before_leave = false;
+        break;
+      case fltk::ENTER:
+        enter_before_leave = true;
+        // fall through
+      case fltk::MOVE:
+        if (sides&1 && fltk::event_x()<=2) {
+          cursor(fltk::CURSOR_WE);
+        } else if (sides&2 && fltk::event_x()>=w()-2) {
+          cursor(fltk::CURSOR_WE);
+        } else {
+          cursor(fltk::CURSOR_DEFAULT);
+        }
+        if (event==fltk::ENTER) { Button::handle(event); return 1; }
+        break;
+      case fltk::PUSH:
+        if (sides&1 && fltk::event_x()<=2) {
+          left = true;
+          ox = fltk::event_x_root() - x();
+          return 1;
+        } else if (sides&2 && fltk::event_x()>=w()-2) {
+          left = false;
+          ox = fltk::event_x_root() - x() - w();
+          return 1;
+        }
+        break;
+      case fltk::DRAG: {
+        if (ox==-1) break;
+        Browser *w = (Browser*)(parent());
+        int col = (int)user_data();
+        if (left)
+          w->set_column_start(col, fltk::event_x_root()-ox);
+        else
+          w->set_column_start(col+1, fltk::event_x_root()-ox);
+        return 1; }
+      case fltk::RELEASE:
+        if (ox==-1) break;
+        ox = -1;
+        return 1;
+    }
+    return Button::handle(event);
+  }
+};
 
 /*! Set an array of labels to put at the top of the browser. The initial
   sizes of them are set with column_widths(). Items in the browser can
@@ -1416,16 +1526,19 @@ void Browser::column_labels(const char **t) {
   delete[] header;
   nHeader = 0; header = 0;
   if (t) { // create new header widgets
-	Group *g = Group::current();
-	Group::current(0);
-	while (*t++) nHeader++;
-	header = new Widget*[nHeader];
-	for (i=0; i<nHeader; i++) {
-	  header[i] = new Button(0, 0, 1, 1, column_labels_[i]);
-	  header[i]->parent(this);
-	  header[i]->callback(column_click_cb_, (void*)i);
-	}
-	Group::current(g);
+    Group *g = Group::current();
+    Group::current(0);
+    while (*t++) nHeader++;
+    header = new Widget*[nHeader];
+    for (i=0; i<nHeader; i++) {
+      uchar sides = 0;
+      if (i>0) sides |= 1;
+      if (i<nHeader-1) sides |= 2;
+      header[i] = new BButton(0, 0, 1, 1, sides, column_labels_[i]);
+      header[i]->parent(this);
+      header[i]->callback(column_click_cb_, (void*)i);
+    }
+    Group::current(g);
   }
   layout();
 }
@@ -1533,6 +1646,7 @@ Browser::Browser(int X,int Y,int W,int H,const char* L)
   indented_ = 0;
   column_widths_ = 0;
   column_widths_p = 0;
+  column_widths_i = 0;
   column_labels_ = 0;
   selected_column_ = -1;
   nColumn = 0;
@@ -1554,6 +1668,7 @@ Browser::Browser(int X,int Y,int W,int H,const char* L)
 Browser::~Browser() {
   for (int i = 0; i < NUMMARKS; i++) free(item_index[i]);
   if (column_widths_p) free(column_widths_p);
+  if (column_widths_i) free(column_widths_i);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1583,5 +1698,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.86 2004/05/15 20:52:45 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.87 2004/06/04 08:30:46 spitzak Exp $".
 //

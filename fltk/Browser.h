@@ -1,5 +1,5 @@
 //
-// "$Id: Browser.h,v 1.3 2003/12/13 11:06:53 spitzak Exp $"
+// "$Id: Browser.h,v 1.4 2004/06/04 08:30:31 spitzak Exp $"
 //
 // Copyright 2002 by Bill Spitzak and others.
 //
@@ -97,6 +97,7 @@ public:
   const char **column_labels() const { return column_labels_; }
   void column_labels(const char **pLabels);
   int selected_column() { return selected_column_; }
+  int set_column_start(int column, int x);
 
   // Convienence functions for flat browsers:
   bool select(int line, bool value = true);
@@ -111,8 +112,9 @@ public:
 private:
 
   bool indented_;
-  const int *column_widths_;
-  int *column_widths_p;
+  const int *column_widths_; // original column widths
+  int *column_widths_i;      // original column widths after user interaction
+  int *column_widths_p;      // actual column widths
   const char **column_labels_;
   int xposition_, yposition_;
   int width_, height_;
@@ -167,5 +169,5 @@ private:
 #endif
 
 //
-// End of "$Id: Browser.h,v 1.3 2003/12/13 11:06:53 spitzak Exp $".
+// End of "$Id: Browser.h,v 1.4 2004/06/04 08:30:31 spitzak Exp $".
 //

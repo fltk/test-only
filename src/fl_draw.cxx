@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.42 2004/05/15 20:52:46 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.43 2004/06/04 08:30:47 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -307,12 +307,14 @@ struct Segment {
   const char* end; // points after last character
   float x,y,w,h; // Arguments to symbol command
   int ascent, height; // used to calculate vertical alignment
+  int column; // used to allow per-column clipping
 };
 
 // The current set of segments. Call add() to add a new one:
 static Segment* segments;
 static int segment_count;
 static int segment_array_size;
+static int current_column;
 
 // Create and append a new segment:
 static /*inline*/ void add(const Symbol* symbol,
@@ -340,6 +342,7 @@ static /*inline*/ void add(const Symbol* symbol,
   s.h = h;
   s.ascent = ascent;
   s.height = height;
+  s.column = current_column;
 }
 
 // As we build the segments we keep track of the bottom-right corner:
@@ -405,6 +408,7 @@ static void wrap(
   int first_segment = segment_count;
 
   int spacing, ascent; setsa(spacing,ascent);
+  dx = dy = 0;
 
   for (const char* p = start; ;) {
     // figure out what we have next:
@@ -520,10 +524,10 @@ static float split(
   normal_font = getfont();
   normal_size = getsize();
   ::flags = flags;
-  dx = dy = 0;
   const int* column = column_widths_;
 
   segment_count = 0;
+  current_column = 0;
   float x = 0;
   float y = 0;
   max_x = max_y = 0;
@@ -534,8 +538,10 @@ static float split(
     if (!*p || *p == '\n') {
       w = W-x;
     } else if (*p == '\t') {
-      if (column && *column) w = *column++;
-      else w = ((p-str+8)&-8)*getwidth("2",1);
+      if (column && *column) {
+        w = *column++;
+      }
+      else w = ((p-str+4)&-4)*getwidth("2",1);
     } else {
       p++;
       continue;
@@ -544,10 +550,13 @@ static float split(
     if (!*p) {
       return max_y;
     } else if (*p == '\n') {
-      x = 0; y = max_y; column = column_widths_;
+      x = 0; y = max_y; 
+      column = column_widths_;
+      current_column = 0;
       ::flags = flags;
     } else { // tab
       x += w;
+      current_column++;
     }
     // add symbol to reset fonts to normal:
     //float a,b; normalsymbol._measure(a,b);
@@ -572,7 +581,7 @@ static void _drawtext(
   } else if (flags & ALIGN_TOP) {
     dy = Y;
   } else {
-    dy = Y+(H>>1)-(h>>1);
+    dy = Y+((H-h)>>1);
   }
   setfont(normal_font, normal_size);
   push_matrix();
@@ -591,13 +600,35 @@ static void _drawtext(
     if (fl_drawing_shadow) goto DONE;
     setcolor(normal_color);
   }
-  for (h = 0; h < segment_count; h++) {
-    Segment& s = segments[h];
-    if (s.symbol) {
-      Symbol::text(s.start);
-      s.symbol->draw(s.x+X, s.y+dy, s.w, s.h, Widget::default_style, 0);
-    } else {
-      drawtext_transformed(s.start, s.end-s.start, s.x+X, s.y+dy);
+  if (column_widths_) {
+    current_column = -1;
+    push_clip(X, Y, W, H);
+    for (h = 0; h < segment_count; h++) {
+      Segment& s = segments[h];
+      if (s.column != current_column) {
+        current_column = s.column;
+        int i, xx = X;
+        for (i=0; i<current_column; i++) xx += column_widths_[i];
+        pop_clip();
+        push_clip(xx, Y, column_widths_[current_column], H);
+      }
+      if (s.symbol) {
+        Symbol::text(s.start);
+        s.symbol->draw(s.x+X, s.y+dy, s.w, s.h, Widget::default_style, 0);
+      } else {
+        drawtext_transformed(s.start, s.end-s.start, s.x+X, s.y+dy);
+      }
+    }
+    pop_clip();
+  } else {
+    for (h = 0; h < segment_count; h++) {
+      Segment& s = segments[h];
+      if (s.symbol) {
+        Symbol::text(s.start);
+        s.symbol->draw(s.x+X, s.y+dy, s.w, s.h, Widget::default_style, 0);
+      } else {
+        drawtext_transformed(s.start, s.end-s.start, s.x+X, s.y+dy);
+      }
     }
   }
   Symbol::text("");
@@ -667,5 +698,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.42 2004/05/15 20:52:46 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.43 2004/06/04 08:30:47 spitzak Exp $".
 //
