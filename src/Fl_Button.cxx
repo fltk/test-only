@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.8 1999/03/31 02:53:03 carl Exp $"
+// "$Id: Fl_Button.cxx,v 1.9 1999/04/04 03:45:24 gustavo Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -119,17 +119,19 @@ int Fl_Button::handle(int event) {
     }
     return 1;
   case FL_RELEASE:
-    Fl_Tooltip::exit(this);
-    if (value_ == oldval) return 1;
-    if (type() == FL_RADIO_BUTTON)
-      setonly();
-    else if (type() == FL_TOGGLE_BUTTON)
-      oldval = value_;
-    else {
-      value(oldval);
-      if (when() & FL_WHEN_CHANGED) do_callback();
+    if (!Fl::pushed()) {
+      Fl_Tooltip::exit(this);
+      if (value_ == oldval) return 1;
+      if (type() == FL_RADIO_BUTTON)
+        setonly();
+      else if (type() == FL_TOGGLE_BUTTON)
+        oldval = value_;
+      else {
+        value(oldval);
+        if (when() & FL_WHEN_CHANGED) do_callback();
+      }
+      if (when() & FL_WHEN_RELEASE) do_callback(); else set_changed();
     }
-    if (when() & FL_WHEN_RELEASE) do_callback(); else set_changed();
     return 1;
   case FL_SHORTCUT:
     if (!(shortcut() ?
@@ -199,5 +201,5 @@ Fl_Color Fl_Button::down_labelcolor() const {
 Fl_Color Fl_Button::down_color() const {return selection_color();}
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.8 1999/03/31 02:53:03 carl Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.9 1999/04/04 03:45:24 gustavo Exp $".
 //

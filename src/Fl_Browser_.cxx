@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.13 1999/03/18 22:59:01 carl Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.14 1999/04/04 03:45:23 gustavo Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -599,7 +599,7 @@ int Fl_Browser_::handle(int event) {
       void* t = selection_; deselect(); selection_ = t;
     }
     if (change) {
-      if (when() & FL_WHEN_RELEASE) do_callback();
+      if (when() & FL_WHEN_RELEASE && !Fl::pushed()) do_callback();
       else if (!(when()&FL_WHEN_CHANGED)) set_changed();
     } else {
       if (when() & FL_WHEN_NOT_CHANGED) do_callback();
@@ -697,5 +697,5 @@ Fl_Color Fl_Browser_::selected_textcolor() const {
   return (Fl_Color)BROWSER_STYLE->browser(SELECTED_TEXTCOLOR);
 }
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.13 1999/03/18 22:59:01 carl Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.14 1999/04/04 03:45:23 gustavo Exp $".
 //

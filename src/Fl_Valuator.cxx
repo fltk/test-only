@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.5 1999/01/07 19:17:27 mike Exp $"
+// "$Id: Fl_Valuator.cxx,v 1.6 1999/04/04 03:45:26 gustavo Exp $"
 //
 // Valuator widget for the Fast Light Tool Kit (FLTK).
 //
@@ -85,7 +85,7 @@ void Fl_Valuator::handle_drag(double v) {
 }
 
 void Fl_Valuator::handle_release() {
-  if (when()&FL_WHEN_RELEASE) {
+  if (when()&FL_WHEN_RELEASE && !Fl::pushed()) {
     // insure changed() is off even if no callback is done.  It may have
     // been turned on by the drag, and then the slider returned to it's
     // initial position:
@@ -123,5 +123,5 @@ int Fl_Valuator::format(char* buffer) {
 }
 
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.5 1999/01/07 19:17:27 mike Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.6 1999/04/04 03:45:26 gustavo Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.13 1999/03/31 14:52:45 mike Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.14 1999/04/04 03:45:25 gustavo Exp $"
 //
 // Common menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -109,7 +109,7 @@ const Fl_Menu_Item* Fl_Menu_::picked(const Fl_Menu_Item* v) {
       set_changed();
       ((Fl_Menu_Item*)v)->flags ^= FL_MENU_VALUE;
       redraw();
-    } else if ((when()&FL_WHEN_RELEASE) || v != value_) { // normal item
+    } else if ((when()&FL_WHEN_RELEASE && !Fl::pushed()) || v != value_) { // normal item
       set_changed();
     }
     value_ = v;
@@ -225,5 +225,5 @@ void Fl_Menu_::copy(const Fl_Menu_Item* m, void* user_data) {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.13 1999/03/31 14:52:45 mike Exp $".
+// End of "$Id: Fl_Menu_.cxx,v 1.14 1999/04/04 03:45:25 gustavo Exp $".
 //

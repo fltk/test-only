@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.8 1999/03/18 22:59:01 carl Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.9 1999/04/04 03:45:23 gustavo Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -106,12 +106,14 @@ int Fl_Adjuster::handle(int event) {
   switch (event) {
   case FL_PUSH:
     ix = mx;
-    if (w()>=h())
-      drag = 3*(mx-x())/w() + 1;
-    else
-      drag = 3-3*(Fl::event_y()-y()-1)/h();
-    handle_push();
-    redraw();
+    if (!drag) {
+      if (w()>=h())
+        drag = 3*(mx-x())/w() + 1;
+      else
+        drag = 3-3*(Fl::event_y()-y()-1)/h();
+      handle_push();
+      redraw();
+    }
     return 1;
   case FL_DRAG:
     if (w() >= h()) {
@@ -139,8 +141,9 @@ int Fl_Adjuster::handle(int event) {
     return 1;
   case FL_RELEASE:
     if (Fl::event_is_click()) { // detect click but no drag
-      if (Fl::event_state()&0xF0000) delta = -10;
-      else delta = 10;
+      if (Fl::event_state()& (FL_SHIFT|FL_CAPS_LOCK|FL_CTRL|FL_ALT) ) 
+	delta = -10;
+	else delta = 10;
       switch (drag) {
       case 3: v = increment(previous_value(), delta); break;
       case 2: v = increment(previous_value(), delta*10); break;
@@ -148,9 +151,11 @@ int Fl_Adjuster::handle(int event) {
       }
       handle_drag(soft() ? softclamp(v) : clamp(v));
     }
-    drag = 0;
-    redraw();
-    handle_release();
+    if (!Fl::pushed()) {
+      drag = 0;
+      redraw();
+      handle_release();
+    }
     return 1;
   case FL_ENTER:
   case FL_LEAVE:
@@ -193,5 +198,5 @@ Fl_Boxtype Fl_Adjuster::fly_box() const {
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.8 1999/03/18 22:59:01 carl Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.9 1999/04/04 03:45:23 gustavo Exp $".
 //
