@@ -154,7 +154,9 @@ void fltk::awake(void* msg) {
 #elif HAVE_PTHREAD
 #include <unistd.h>
 #include <fcntl.h>
+#ifndef __USE_GNU
 #define __USE_GNU // makes the RECURSIVE stuff appear on Linux
+#endif
 #include <pthread.h>
 
 #ifdef PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP

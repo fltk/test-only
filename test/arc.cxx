@@ -1,5 +1,5 @@
 //
-// "$Id: arc.cxx,v 1.15 2003/07/23 00:05:59 spitzak Exp $"
+// "$Id: arc.cxx,v 1.16 2004/03/10 07:41:46 spitzak Exp $"
 //
 // Arc drawing test program for the Fast Light Tool Kit (FLTK).
 //
@@ -50,9 +50,9 @@ class Drawing : public fltk::Widget {
     fltk::fillstrokepath(fltk::WHITE);
     fltk::pop_matrix();
     fltk::setcolor(fltk::GRAY66);
-    fltk::fillrect(10,270-args[3],args[2],args[3]);
+    fltk::fillrect(10,270-(int) args[3],(int) args[2],(int) args[3]);
     fltk::setcolor(fltk::GRAY10);
-    fltk::fillarc(10,270-args[3],args[2],args[3],args[4],args[5]);
+    fltk::fillarc(10,270-(int) args[3],(int) args[2],(int) args[3],(int) args[4],(int) args[5]);
     fltk::pop_clip();
   }
 public:
@@ -96,6 +96,6 @@ int main(int argc, char** argv) {
 
 
 //
-// End of "$Id: arc.cxx,v 1.15 2003/07/23 00:05:59 spitzak Exp $".
+// End of "$Id: arc.cxx,v 1.16 2004/03/10 07:41:46 spitzak Exp $".
 //
 

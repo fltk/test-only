@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.36 2002/12/10 02:01:07 easysw Exp $"
+# "$Id: Makefile,v 1.37 2004/03/10 07:41:46 spitzak Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -25,13 +25,16 @@
 
 # * essai.theme removed from default list because it requires -ljpeg
 #   and breaks the build on some platforms
+
+# * These themes wont compile either
+# 	Alternative.theme \
+#	classic.theme \
+#	motif.theme \
+#	scheme.theme \
+
 THEMES = \
-	Alternative.theme \
-	classic.theme \
 	KDE.theme \
-	motif.theme \
 	none.theme \
-	scheme.theme \
 	windows.theme
 
 ################################################################
@@ -51,40 +54,40 @@ $(LIBRARY).a: $(OBJECTS)
 	$(LIBCOMMAND) $@ $(OBJECTS)
 	$(RANLIB) $@
 
-ESSAI_OBJ = essai.shared.o
+ESSAI_OBJ = essai.o
 essai.theme : $(ESSAI_OBJ)
 	$(THEMECOMMAND) $@ $(ESSAI_OBJ) ../lib/libfltk_images.so.2 -ljpeg -lpng $(DSOLIBS)
 
-MOTIF_OBJ = motif.shared.o
+MOTIF_OBJ = motif.o
 motif.theme : $(MOTIF_OBJ)
 	$(THEMECOMMAND) $@ $(MOTIF_OBJ) $(DSOLIBS) $(THEMELIBS)
 
-CLASSIC_OBJ = classic.shared.o
+CLASSIC_OBJ = classic.o
 classic.theme : $(CLASSIC_OBJ)
 	$(THEMECOMMAND) $@ $(CLASSIC_OBJ) $(DSOLIBS) $(THEMELIBS)
 
-WINDOWS_OBJ = windows.shared.o
+WINDOWS_OBJ = windows.o
 windows.theme : $(WINDOWS_OBJ)
 	$(THEMECOMMAND) $@ $(WINDOWS_OBJ) $(DSOLIBS) $(THEMELIBS)
 
-ALT_OBJ = Alternative.shared.o
+ALT_OBJ = Alternative.o
 Alternative.theme : $(ALT_OBJ)
 	$(THEMECOMMAND) $@ $(ALT_OBJ) $(DSOLIBS) $(THEMELIBS)
 
-KDE_OBJ = KDE.shared.o conf.shared.o conf_get.shared.o conf_util.shared.o conf_list_free.shared.o conf_keys.shared.o
+KDE_OBJ = KDE.o conf.o conf_get.o conf_util.o conf_list_free.o conf_keys.o
 KDE.theme : $(KDE_OBJ)
 	$(THEMECOMMAND) $@ $(KDE_OBJ) $(DSOLIBS) $(THEMELIBS)
 
-SCHEME_OBJ = scheme.shared.o conf.shared.o conf_get.shared.o conf_util.shared.o conf_list_free.shared.o conf_keys.shared.o conf_sections.shared.o
+SCHEME_OBJ = scheme.o conf.o conf_get.o conf_util.o conf_list_free.o conf_keys.o conf_sections.o
 scheme.theme : $(SCHEME_OBJ)
 	$(THEMECOMMAND) $@ $(SCHEME_OBJ) $(DSOLIBS) $(THEMELIBS)
 
-NONE_OBJ = none.shared.o
+NONE_OBJ = none.o
 none.theme : $(NONE_OBJ)
 	$(THEMECOMMAND) $@ $(NONE_OBJ) $(DSOLIBS) $(THEMELIBS)
 
 clean :
-	-@ rm -f *.shared.o $(LIBRARY)$(LIBEXT) $(THEMES) core *~ makedepend
+	-@ rm -f *.o $(LIBRARY)$(LIBEXT) $(THEMES) core *~ makedepend
 	@touch makedepend
 
 install : $(INSTALLTARGETS)
@@ -101,12 +104,12 @@ install_programs:
 
 depend:
 	$(MAKEDEPEND) -I.. $(CXXFLAGS) *.cxx *.c > makedepend
-	sed -e "s'\.o'\.shared\.o'" makedepend > foo
+	sed -e "s'\.o'\\.o'" makedepend > foo
 	cat foo >> makedepend
 	rm foo
 
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.36 2002/12/10 02:01:07 easysw Exp $".
+# End of "$Id: Makefile,v 1.37 2004/03/10 07:41:46 spitzak Exp $".
 #

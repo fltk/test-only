@@ -1,5 +1,5 @@
 //
-// "$Id: windows.cxx,v 1.18 2002/12/10 02:01:07 easysw Exp $"
+// "$Id: windows.cxx,v 1.19 2004/03/10 07:41:46 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -45,9 +45,8 @@
 
 extern "C" bool fltk_theme()
 {
-  fltk::get_system_colors();
+//  fltk::get_system_colors();
 
-  fltk::Style::draw_boxes_inactive = 0;
 
 // newer versions of Windows & KDE look closer to FLTK default
 //  fltk::Widget::default_style->buttonbox = &win98_up_box;
@@ -56,31 +55,33 @@ extern "C" bool fltk_theme()
 
   fltk::Style* s;
 
+  s->draw_boxes_inactive(0);
+
   if ((s = fltk::Style::find("menu"))) {
 //    s->buttonbox = &win98_menu_window_box;
-    s->leading = 6;
+    s->leading(6);
   }
 
   if ((s = fltk::Style::find("item"))) {
-    s->buttonbox = fltk::NO_BOX; // no box around checkmarks
+    s->buttonbox(fltk::NO_BOX); // no box around checkmarks
   }
 
   if ((s = fltk::Style::find("menu bar"))) {
-    s->highlight_color = fltk::GRAY75; // needed for title highlighting
+    s->highlight_color(fltk::GRAY75); // needed for title highlighting
   }
 
   if ((s = fltk::Style::find("scrollbar"))) {
 //    s->box = &win98_menu_window_box;
-    s->color = 52;
+    s->color(52);
   }
 
   if ((s = fltk::Style::find("highlight button"))) {
-    s->highlight_color = fltk::GRAY75;
+    s->highlight_color(fltk::GRAY75);
   }
 
   return true;
 }
 
 //
-// End of "$Id: windows.cxx,v 1.18 2002/12/10 02:01:07 easysw Exp $"
+// End of "$Id: windows.cxx,v 1.19 2004/03/10 07:41:46 spitzak Exp $"
 //

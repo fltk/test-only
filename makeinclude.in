@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.46 2003/01/15 02:27:19 easysw Exp $"
+# "$Id: makeinclude.in,v 1.47 2004/03/10 07:41:45 spitzak Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -82,8 +82,15 @@ LINKFLTKIMG	= -L../lib -lfltk_images @LINKFLTK@ $(IMAGELIBS)
 LINKSHARED	= @DSOLINK@ @LINKSHARED@ $(IMAGELIBS)
 IMAGELIBS	= @IMAGELIBS@
 
+# program to build themes with
+THEMECOMMAND	= @THEMECOMMAND@
+
 # The extension to use for executables...
 EXEEXT		= @EXEEXT@
+
+# Which targets should be built?
+BUILDTARGETS	= @BUILDTARGETS@
+INSTALLTARGETS	= @INSTALLTARGETS@
 
 # Do we build the OpenGL demos?
 GLDEMOS		= @GLDEMOS@
@@ -134,5 +141,5 @@ CAT3EXT		= @CAT3EXT@
 	mv t.z $@
 
 #
-# End of "$Id: makeinclude.in,v 1.46 2003/01/15 02:27:19 easysw Exp $".
+# End of "$Id: makeinclude.in,v 1.47 2004/03/10 07:41:45 spitzak Exp $".
 #

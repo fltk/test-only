@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.65 2003/06/24 07:10:48 spitzak Exp $"
+// "$Id: fluid.cxx,v 1.66 2004/03/10 07:41:46 spitzak Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -93,8 +93,10 @@ static const char *filename;
 void set_filename(const char *c);
 int modflag;
 
+#if 0
 static char* pwd;
 static char in_source_dir;
+#endif
 void goto_source_dir() {
 #if 0
   if (in_source_dir) return;
@@ -562,5 +564,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.65 2003/06/24 07:10:48 spitzak Exp $".
+// End of "$Id: fluid.cxx,v 1.66 2004/03/10 07:41:46 spitzak Exp $".
 //
