@@ -199,9 +199,9 @@ const char * Fl_FileChooser::label() {
   return (window->label());
 }
 
-void Fl_FileChooser::show() {
-  window->show();
-fileList->deselect();
+void Fl_FileChooser::exec() {
+  window->exec();
+  fileList->deselect();
 }
 
 void Fl_FileChooser::textcolor(Fl_Color c) {

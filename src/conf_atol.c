@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_atol.c,v 1.7 2000/03/02 20:47:16 carl Exp $"
+   "$Id: conf_atol.c,v 1.8 2000/06/12 06:35:38 bill Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -22,7 +22,8 @@
     USA.
 */
 
-#include <FL/conf.h>
+#include <config.h>
+#if !HAVE_ATOL
 
 /*
         long conf_atol(const char *decstr)
@@ -69,6 +70,8 @@ conf_atol(const char *decstr)
         return (10 * conf_atol(dec) + r) * sign;                                /* recursive funtion call to compute result */
 }
 
+#endif
+
 /*
-    End of "$Id: conf_atol.c,v 1.7 2000/03/02 20:47:16 carl Exp $".
+    End of "$Id: conf_atol.c,v 1.8 2000/06/12 06:35:38 bill Exp $".
 */

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.73 2000/06/12 02:05:59 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.74 2000/06/12 06:35:37 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -139,7 +139,11 @@ void Fl_Group::replace(int index, Fl_Widget& o) {
 }
 
 int Fl_Group::find(const Fl_Widget* o) const {
-  //while (o && o->parent() != this) o = o->parent();
+  for (;;) {
+    if (!o) return children_;
+    if (o->parent() == this) break;
+    o = o->parent();
+  }
   // Search backwards so if children are deleted in backwards order
   // they are found quickly:
   for (int index = children_; index--;)
@@ -567,5 +571,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.73 2000/06/12 02:05:59 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.74 2000/06/12 06:35:37 bill Exp $".
 //

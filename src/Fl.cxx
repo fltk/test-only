@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.98 2000/06/11 07:31:06 bill Exp $"
+// "$Id: Fl.cxx,v 1.99 2000/06/12 06:35:36 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -170,7 +170,7 @@ int Fl::wait() {
     fl_wait(0,0);
   }
   // return true if any windows are visible:
-  for (Fl_X* x = Fl_X::first; x; x = x->next) if (x->w->visible()) return 1;
+  for (Fl_X* x = Fl_X::first; x; x = x->next) if (x->w->visible_r()) return 1;
   return 0;
 }
 
@@ -191,7 +191,7 @@ int Fl::check() {
   fl_wait(1, 0.0);
   flush();
   // return true if any windows are visible:
-  for (Fl_X* x = Fl_X::first; x; x = x->next) if (x->w->visible()) return 1;
+  for (Fl_X* x = Fl_X::first; x; x = x->next) if (x->w->visible_r()) return 1;
   return 0;
 }
 
@@ -511,5 +511,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.98 2000/06/11 07:31:06 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.99 2000/06/12 06:35:36 bill Exp $".
 //

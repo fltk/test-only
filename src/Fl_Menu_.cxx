@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.23 2000/05/30 07:42:13 bill Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.24 2000/06/12 06:35:38 bill Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -35,20 +35,20 @@ int fl_dont_execute = 0; // hack for fluid
 void Fl_Menu_::execute(Fl_Widget* w) {
   if (fl_dont_execute) return;
   if (w->type() == FL_TOGGLE_ITEM) {
-    if (w->value()) w->clear(); else w->set();
+    if (w->value()) w->clear_value(); else w->set_value();
   } else if (w->type() == FL_RADIO_ITEM) {
-    w->set();
+    w->set_value();
     Fl_Group* g = w->parent();
     int i = g->find(w);
     int j;
     for (j = i-1; j >= 0; j--) {
       Fl_Widget* o = g->child(j);
-      if (o->type() == FL_RADIO_ITEM) o->clear();
+      if (o->type() == FL_RADIO_ITEM) o->clear_value();
       else break;
     }
     for (j = i+1; j < g->children(); j++) {
       Fl_Widget* o = g->child(j);
-      if (o->type() == FL_RADIO_ITEM) o->clear();
+      if (o->type() == FL_RADIO_ITEM) o->clear_value();
       else break;
     }
   }
@@ -109,5 +109,5 @@ int Fl_Menu_::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.23 2000/05/30 07:42:13 bill Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.24 2000/06/12 06:35:38 bill Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.H,v 1.21 2000/02/14 11:32:33 bill Exp $"
+// "$Id: Fl_Button.H,v 1.22 2000/06/12 06:35:34 bill Exp $"
 //
 // Button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -37,6 +37,11 @@
 
 class FL_API Fl_Button : public Fl_Widget {
 public:
+  int   value() const {return Fl_Widget::value();}
+  int	value(int)		;
+  int	set()			;
+  int	clear()			;
+  void	setonly()		;
   virtual int handle(int);
   Fl_Button(int,int,int,int,const char * = 0);
 
@@ -48,5 +53,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Fl_Button.H,v 1.21 2000/02/14 11:32:33 bill Exp $".
+// End of "$Id: Fl_Button.H,v 1.22 2000/06/12 06:35:34 bill Exp $".
 //

@@ -13,7 +13,7 @@ Fl_Widget* Fl_String_List::child(const Fl_Group* group, int i) {
     widget = new Fl_Item();
   }
   widget->label(array[i]);
-  widget->clear();
+  widget->clear_value();
   widget->w(0);
   return widget;
 }

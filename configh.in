@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.37 2000/06/10 04:10:14 carl Exp $"
+ * "$Id: configh.in,v 1.38 2000/06/12 06:35:33 bill Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -23,9 +23,6 @@
  *
  * Please report all bugs and problems to "FLTK-bugs@easysw.com".
  */
-
-#include <stdarg.h>
-#include <sys/types.h>
 
 /*
  * HAVE_GL:
@@ -116,30 +113,21 @@
 #define HAVE_NDIR_H 0
 #define HAVE_SCANDIR 0
 
-/*
- * Length-limited sprintf functions to prevent buffer overflows.  These
- * names are used by glibc and some other Unix systems.  For most
- * other systems fltk will provide an equivalent function, this file
- * also declares those functions.
- */
+/* Possibly missing functions, and replacements: */
 
-#define HAVE_VSNPRINTF 0
 #define HAVE_SNPRINTF 0
-#define HAVE_VSPRINTF 0
 
-#if !HAVE_SNPRINTF
+#if ! HAVE_SNPRINTF
 #  include <FL/vsnprintf.h>
 #  define snprintf fl_snprintf
 #endif /* !HAVE_SNPRINTF */
 
-#if !HAVE_VSNPRINTF
+#define HAVE_VSNPRINTF 0
+
+#if ! HAVE_VSNPRINTF
 #  include <FL/vsnprintf.h>
 #  define vsnprintf fl_vsnprintf
 #endif /* !HAVE_VSNPRINTF */
-
-/*
- * Possibly missing other functions
- */
 
 #define HAVE_ATOL 0
 
@@ -215,5 +203,5 @@
 #define CONFIGDIR "."
 
 /*
- * End of "$Id: configh.in,v 1.37 2000/06/10 04:10:14 carl Exp $".
+ * End of "$Id: configh.in,v 1.38 2000/06/12 06:35:33 bill Exp $".
  */

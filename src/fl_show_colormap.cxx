@@ -1,5 +1,5 @@
 //
-// "$Id: fl_show_colormap.cxx,v 1.14 2000/06/03 08:49:17 bill Exp $"
+// "$Id: fl_show_colormap.cxx,v 1.15 2000/06/12 06:35:38 bill Exp $"
 //
 // Colormap color selection dialog for the Fast Light Tool Kit (FLTK).
 //
@@ -102,9 +102,9 @@ int ColorMenu::handle(int e) {
     }
     break;
   default:
-    return 0;
+    return Fl_Window::handle(e);
   }
-  if (c != which) {
+  if (!done && c != which) {
     which = (Fl_Color)c; damage(FL_DAMAGE_CHILD);
     int bx = (c%8)*BOXSIZE+BORDER;
     int by = (c/8)*BOXSIZE+BORDER;
@@ -119,10 +119,6 @@ int ColorMenu::handle(int e) {
   return 1;
 }
 
-static int handle(int e, void* data) {
-  return ((ColorMenu*)data)->handle(e);
-}
-
 #ifdef _MSC_VER
 #pragma optimize("a",off) // needed to get the done check to work
 #endif
@@ -133,7 +129,7 @@ Fl_Color ColorMenu::run() {
     position(Fl::event_x_root()-(initial%8)*BOXSIZE-BOXSIZE/2-BORDER,
 	     Fl::event_y_root()-(initial/8)*BOXSIZE-BOXSIZE/2-BORDER);
   }
-  Fl::grab(::handle, this);
+  Fl::grab(this);
   show();
   done = 0;
   while (!done) Fl::wait();
@@ -147,5 +143,5 @@ Fl_Color fl_show_colormap(Fl_Color oldcol) {
 }
 
 //
-// End of "$Id: fl_show_colormap.cxx,v 1.14 2000/06/03 08:49:17 bill Exp $".
+// End of "$Id: fl_show_colormap.cxx,v 1.15 2000/06/12 06:35:38 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.45 2000/06/12 02:06:00 bill Exp $"
+// "$Id: Fl_Window.cxx,v 1.46 2000/06/12 06:35:38 bill Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -66,7 +66,7 @@ void Fl_Window::label(const char *name) {label(name, iconlabel());}
 void Fl_Window::iconlabel(const char *iname) {label(label(), iname);}
 
 void Fl_Window::default_callback(Fl_Window* window, void* v) {
-  window->destroy();
+  window->hide();
   Fl_Widget::default_callback(window, v); // put on Fl::read_queue()
 }
 
@@ -149,7 +149,12 @@ int Fl_Window::handle(int event) {
     return 1;}
     
   case FL_HIDE:
-    if (i) XUnmapWindow(fl_display, i->xid);
+    if (i) {
+      if (modal())
+	destroy(); // needed so modal can change next time
+      else
+	XUnmapWindow(fl_display, i->xid);
+    }
     break;
 
   }
@@ -237,7 +242,7 @@ void Fl_Window::show(const Fl_Window* modal_for) {
 }
 
 int Fl_Window::exec(const Fl_Window* modal_for) {
-  clear(); // clear the value()
+  clear_value();
   set_modal();
   show(modal_for);
   while (visible()) Fl::wait();
@@ -293,7 +298,7 @@ void Fl_Window::destroy() {
 
   // Make sure no events are sent to this window:
   throw_focus();
-  hide();
+  clear_visible();
 
 #ifdef WIN32
   // we need to delete the pen and brush objects in the dc
@@ -326,5 +331,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.45 2000/06/12 02:06:00 bill Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.46 2000/06/12 06:35:38 bill Exp $".
 //

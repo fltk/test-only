@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.23 2000/06/10 04:10:30 carl Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.24 2000/06/12 06:35:37 bill Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -440,6 +440,15 @@ int CellBox::handle(int e) {
   return Fl_Widget::handle(e);
 }
 
+static void ok_cb(Fl_Widget* w, void*) {
+  w->window()->set_value();
+  w->window()->hide();
+}
+
+static void cancel_cb(Fl_Widget* w, void*) {
+  w->window()->hide();
+}
+
 static void make_it() {
   if (window) return;
   window = new Fl_Window(210,240);
@@ -449,13 +458,14 @@ static void make_it() {
   ok_color = new Fl_Box(5, 175, 95, 30);
   ok_color->box(FL_ENGRAVED_BOX);
   ok_button = new Fl_Return_Button(5, 210, 95, 25, fl_ok);
+  ok_button->callback(ok_cb);
   cancel_color = new Fl_Box(110, 175, 95, 30);
   cancel_color->box(FL_ENGRAVED_BOX);
   cancel_button = new Fl_Button(110, 210, 95, 25, fl_cancel);
+  cancel_button->callback(cancel_cb);
   // window->size_range(210, 240); // minimum usable size?
   window->resizable(chooser);
   window->end();
-  window->set_modal();
 }
 
 static int run_it(const char* name) {
@@ -463,17 +473,7 @@ static int run_it(const char* name) {
   ok_color->color(chooser->value());
   cancel_color->color(chooser->value());
   window->hotspot(window);
-  window->show();
-  while (window->visible()) {
-    Fl::wait();
-    for (;;) {
-      Fl_Widget* o = Fl::readqueue();
-      if (!o) break;
-      if (o == ok_button) {window->hide(); return 1;}
-      if (o == window || o == cancel_button) {window->hide(); return 0;}
-    }
-  }
-  return 0;
+  return window->exec();
 }
 
 int fl_color_chooser(const char* name, double& r, double& g, double& b) {
@@ -506,5 +506,5 @@ int fl_color_chooser(const char* name, Fl_Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.23 2000/06/10 04:10:30 carl Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.24 2000/06/12 06:35:37 bill Exp $".
 //

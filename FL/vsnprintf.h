@@ -1,5 +1,5 @@
 /*
- * "$Id: vsnprintf.h,v 1.1 2000/06/10 04:10:22 carl Exp $"
+ * "$Id: vsnprintf.h,v 1.2 2000/06/12 06:35:35 bill Exp $"
  *
  * vsnprintf() function for the Fast Light Tool Kit (FLTK).
  *
@@ -37,11 +37,13 @@
  * Please report all bugs and problems to "fltk-bugs@easysw.com".
  */
 
-#include <FL/Enumerations.H>
-
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+#include <stdio.h>
+#include <stdarg.h>
+#include <sys/types.h>
 
 FL_API int fl_vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 FL_API int fl_snprintf(char* str, size_t size, const char* fmt, ...);
@@ -51,6 +53,6 @@ FL_API int fl_snprintf(char* str, size_t size, const char* fmt, ...);
 #endif
 
 /*
- * End of "$Id: vsnprintf.h,v 1.1 2000/06/10 04:10:22 carl Exp $".
+ * End of "$Id: vsnprintf.h,v 1.2 2000/06/12 06:35:35 bill Exp $".
  */
 
