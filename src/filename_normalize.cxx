@@ -111,8 +111,8 @@ filename_normalize(const char* from, char* buffer, int length, const char* pwd)
   if (!prefix) return from;
   if (prefixlen > length-2) prefixlen = length-2;
   if (prefix != buffer) memcpy(buffer, prefix, prefixlen);
-  buffer[prefixlen] = '/';
-  strlcpy(buffer+prefixlen+1, from, length-prefixlen-1);
+  if (!prefixlen || !isdirsep(prefix[prefixlen-1])) buffer[prefixlen++] = '/';
+  strlcpy(buffer+prefixlen, from, length-prefixlen);
   return buffer;
 }
 

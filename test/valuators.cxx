@@ -11,7 +11,7 @@ static void callback(fltk::Widget* o, void*) {
 
 int main (int argc, char **argv) {
 
-  fltk::Window* w;
+  fltk::Window* w; 
    {fltk::Window* o = new fltk::Window(565, 490, "Valuator classes, showing values for the type()");
     w = o;
     o->labelsize(10);

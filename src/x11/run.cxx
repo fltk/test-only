@@ -1257,6 +1257,7 @@ bool fltk::handle()
     //window = find(xevent.xmapping.window);
     if (!window) break;
     if (window->parent()) break; // ignore child windows
+    if (xevent.xconfigure.window != xid(window)) break; // ignore frontbuffer
 
     // figure out where OS really put window
     XWindowAttributes actual;
@@ -1265,7 +1266,7 @@ bool fltk::handle()
     XTranslateCoordinates(xdisplay, xid(window), actual.root,
 			  0, 0, &X, &Y, &junk);
     // We don't want to override any pending changes from the user:
-    if (window->layout_damage() & LAYOUT_XYWH) {
+    if (window != resize_from_system && (window->layout_damage() & LAYOUT_XYWH)) {
       if (window->layout_damage() & LAYOUT_XY) {X=window->x(); Y=window->y();}
       if (window->layout_damage() & LAYOUT_WH) {W=window->w(); H=window->h();}
       window->resize(X, Y, W, H);
@@ -1279,13 +1280,19 @@ bool fltk::handle()
   case ReparentNotify: {
     if (!window) break;
     if (window->parent()) break; // ignore child windows
-    int X, Y; XWindow junk;
-    //ReparentNotify gives the new position of the window relative to
-    //the new parent. FLTK cares about the position on the root window.
-    XTranslateCoordinates(xdisplay, xid(window), XRootWindow(xdisplay,xscreen),
-			  0, 0, &X, &Y, &junk);
-    window->x(X);
-    window->y(Y);
+    if (xevent.xreparent.window != xid(window)) break; // ignore frontbuffer
+    XWindow root = XRootWindow(xdisplay, xscreen);
+    if (xevent.xreparent.parent != root) {
+      int X, Y; XWindow junk;
+      //ReparentNotify gives the new position of the window relative to
+      //the new parent. FLTK cares about the position on the root window.
+      XTranslateCoordinates(xdisplay, xid(window), root, 0, 0, &X, &Y, &junk);
+      window->x(X);
+      window->y(Y);
+    } else {
+      window->x(xevent.xreparent.x);
+      window->y(xevent.xreparent.y);
+    }
     break;}
 
   case UnmapNotify:
