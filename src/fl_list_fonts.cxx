@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts.cxx,v 1.5 2000/05/31 00:04:43 carl Exp $"
+// "$Id: fl_list_fonts.cxx,v 1.6 2000/06/18 11:05:39 vincent Exp $"
 //
 // Less-used font functions
 //
@@ -131,9 +131,7 @@ static int sort_function(const void *aa, const void *bb) {
 }
 
 int fl_list_fonts(Fl_Font*& arrayp) {
-  static Fl_Font* array = 0;
-  static int num_fonts = 0;
-  if (array) {arrayp = array; return num_fonts;}
+  if (Fl_Font_::array) {arrayp = Fl_Font_::array; return Fl_Font_::num_fonts;}
 
   fl_open_display();
   int xlistsize;
@@ -191,15 +189,15 @@ int fl_list_fonts(Fl_Font*& arrayp) {
     } else {
       family = newfont;
       strcpy(family_name, newname);
-      if (num_fonts >= array_size) {
+      if (Fl_Font_::num_fonts >= array_size) {
 	array_size = 2*array_size+128;
-	array = (Fl_Font*)realloc(array, array_size*sizeof(Fl_Font));
+	Fl_Font_::array = (Fl_Font*)realloc(Fl_Font_::array, array_size*sizeof(Fl_Font));
       }
-      array[num_fonts++] = newfont;
+      Fl_Font_::array[Fl_Font_::num_fonts++] = newfont;
     }
   }
-  arrayp = array;
-  return num_fonts;
+  arrayp = Fl_Font_::array;
+  return Fl_Font_::num_fonts;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -316,5 +314,5 @@ Fl_Font fl_font(const char* name) {
 }
 
 //
-// End of "$Id: fl_list_fonts.cxx,v 1.5 2000/05/31 00:04:43 carl Exp $".
+// End of "$Id: fl_list_fonts.cxx,v 1.6 2000/06/18 11:05:39 vincent Exp $".
 //

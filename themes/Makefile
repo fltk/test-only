@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.22 2000/06/12 09:02:00 carl Exp $"
+# "$Id: Makefile,v 1.23 2000/06/18 11:05:42 vincent Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -35,6 +35,13 @@ XTRAFLAGS =
 
 include ../makeinclude
 
+%.po : ../src/%.cxx
+	$(CXX) -DFL_DLL -DFL_INPLUGIN -I../$(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $< -o $@
+%.po : ../images/%.cxx
+	$(CXX) -DFL_DLL -DFL_INPLUGIN -I../ $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $< -o $@
+%.po : ../src/%.c
+	$(CC) -DFL_DLL -DFL_INPLUGIN -I../ $(INCLUDES) $(CFLAGS) $(SUPFLAGS) -c $< -o $@
+
 LIBRARY = ../lib/$(LIBNAME)_themes
 
 CPPFILES = \
@@ -51,39 +58,39 @@ $(LIBRARY).a: $(OBJECTS)
 	$(LIBCOMMAND) $@ $(OBJECTS)
 	$(RANLIB) $@
 
-ESSAI_OBJ = essai.shared.o
+ESSAI_OBJ = essai.shared.o  fl_jpeg.po Fl_Shared_Image.po fl_draw_image.po
 essai.theme : $(ESSAI_OBJ)
-	$(THEMECOMMAND) $@ $(ESSAI_OBJ) -ljpeg $(DSOLIBS) $(THEMELIBS)
+	$(THEMECOMMAND) $@ $(ESSAI_OBJ) -ljpeg $(DSOLIBS)
 	cp $@ ../config/themes
 	cp bg*.jpeg ../config/themes
 
 
-MOTIF_OBJ = motif.shared.o fl_motif.shared.o
+MOTIF_OBJ = motif.shared.o fl_motif.shared.o fl_list_fonts.po
 motif.theme : $(MOTIF_OBJ)
 	$(THEMECOMMAND) $@ $(MOTIF_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-CLASSIC_OBJ = classic.shared.o
+CLASSIC_OBJ = classic.shared.o fl_list_fonts.po
 classic.theme : $(CLASSIC_OBJ)
 	$(THEMECOMMAND) $@ $(CLASSIC_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-WINDOWS_OBJ = windows.shared.o fl_windows.shared.o
+WINDOWS_OBJ = windows.shared.o fl_windows.shared.o fl_list_fonts.po
 windows.theme : $(WINDOWS_OBJ)
 	$(THEMECOMMAND) $@ $(WINDOWS_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-ALT_OBJ = Alternative.shared.o
+ALT_OBJ = Alternative.shared.o fl_list_fonts.po
 Alternative.theme : $(ALT_OBJ)
 	$(THEMECOMMAND) $@ $(ALT_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-KDE_OBJ = KDE.shared.o fl_kde.shared.o
+KDE_OBJ = KDE.shared.o fl_kde.shared.o fl_list_fonts.po
 KDE.theme : $(KDE_OBJ)
 	$(THEMECOMMAND) $@ $(KDE_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
 
-KDEC_OBJ = KDE_colors.shared.o fl_kde.shared.o
+KDEC_OBJ = KDE_colors.shared.o fl_kde.shared.o fl_list_fonts.po
 KDE_colors.theme : $(KDEC_OBJ)
 	$(THEMECOMMAND) $@ $(KDEC_OBJ) $(DSOLIBS) $(THEMELIBS)
 	cp $@ ../config/themes
@@ -109,5 +116,5 @@ install : all
 #include makedepend
 
 #
-# End of "$Id: Makefile,v 1.22 2000/06/12 09:02:00 carl Exp $".
+# End of "$Id: Makefile,v 1.23 2000/06/18 11:05:42 vincent Exp $".
 #

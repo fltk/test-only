@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.H,v 1.15 2000/06/10 04:10:19 carl Exp $"
+// "$Id: Fl_Shared_Image.H,v 1.16 2000/06/18 11:05:29 vincent Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -34,6 +34,14 @@ struct FL_IMAGES_API Fl_Image_Type;
 // Shared images class. 
 class Fl_Shared_Image : public Fl_Image {
 protected:
+  static char *fl_shared_image_root;
+
+  static int image_used;
+  static size_t mem_usage_limit;
+
+  static size_t mem_used; 
+  static int forbid_delete;
+
   Fl_Shared_Image* l1;    // Left leaf in the binary tree
   Fl_Shared_Image* l2;    // Right leaf in the binary tree
   const char* 	   name;  // Used to indentify the image, and as filename
@@ -62,6 +70,8 @@ protected:
 
 
 public:
+  static Fl_Shared_Image  *first_image;
+
   // Return an Fl_Shared_Image, using the create function if an image with
   // the given name doesn't already exist. Use datas, or read from the
   // file with filename name if datas==0.
@@ -187,5 +197,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Shared_Image.H,v 1.15 2000/06/10 04:10:19 carl Exp $"
+// End of "$Id: Fl_Shared_Image.H,v 1.16 2000/06/18 11:05:29 vincent Exp $"
 //

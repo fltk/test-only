@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.81 2000/06/18 07:57:32 bill Exp $"
+# "$Id: Makefile,v 1.82 2000/06/18 11:05:39 vincent Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -195,6 +195,12 @@ XTRAFLAGS = -DFL_LIBRARY
 
 include ../makeinclude
 
+.c.o:
+	$(CC) -I.. $(XTRAFLAGS) $(CFLAGS) $< -c
+
+.cxx.o:
+	$(CXX) -I.. $(XTRAFLAGS) $(CXXFLAGS) $< -c
+
 LIBRARY = ../lib/$(LIBNAME)
 DSO = ../lib/$(DSOLIBNAME)
 DSONAME = $(DSOLIBNAME)$(DSOEXT)
@@ -264,5 +270,5 @@ install: $(LIBRARY)$(LIBEXT) $(DSO)$(DSOEXT)
 	@cp ../fltk-config $(bindir)
 
 #
-# End of "$Id: Makefile,v 1.81 2000/06/18 07:57:32 bill Exp $".
+# End of "$Id: Makefile,v 1.82 2000/06/18 11:05:39 vincent Exp $".
 #

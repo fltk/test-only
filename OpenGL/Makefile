@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.5 2000/06/12 09:01:36 carl Exp $"
+# "$Id: Makefile,v 1.6 2000/06/18 11:05:31 vincent Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -39,6 +39,12 @@ DEMOS =
 XTRAFLAGS = -DFL_GL_LIBRARY
 
 include ../makeinclude
+
+.c.o:
+	$(CC) -I.. $(XTRAFLAGS) $(CFLAGS) $< -c
+
+.cxx.o:
+	$(CXX) -I.. $(XTRAFLAGS) $(CXXFLAGS) $< -c
 
 .cxx:
 	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(GLLIBS) -o $@
@@ -105,5 +111,5 @@ install: $(LIBRARIES)
 	@if [ -f "../lib/$(DLLIMPORTNAME)" ]; then cp ../lib/$(DLLIMPORTNAME) $(libdir); fi
 
 #
-# End of "$Id: Makefile,v 1.5 2000/06/12 09:01:36 carl Exp $".
+# End of "$Id: Makefile,v 1.6 2000/06/18 11:05:31 vincent Exp $".
 #

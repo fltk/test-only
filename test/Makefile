@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.47 2000/06/12 09:01:58 carl Exp $"
+# "$Id: Makefile,v 1.48 2000/06/18 11:05:40 vincent Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -51,7 +51,13 @@ all:	$(ALL)
 include ../makeinclude
 
 .cxx:
-	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(LDLIBS) -o $@
+	$(CXX) $< `../fltk-config --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
+
+.cxx.o:
+	$(CXX) `../fltk-config --cxxflags` $(DEBUGFLAGS) $< -c
+
+#.cxx:
+#	$(CXX) -I.. $(EXEFLAGS) $(CXXFLAGS) $< $(LDLIBS) -o $@
 
 $(ALL):  ../lib/$(LIBNAME).a
 
@@ -97,5 +103,5 @@ install:
 	@echo Nothing to install in test directory.
 
 #
-# End of "$Id: Makefile,v 1.47 2000/06/12 09:01:58 carl Exp $".
+# End of "$Id: Makefile,v 1.48 2000/06/18 11:05:40 vincent Exp $".
 #

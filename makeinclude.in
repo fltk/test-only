@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.29 2000/06/12 09:01:28 carl Exp $"
+# "$Id: makeinclude.in,v 1.30 2000/06/18 11:05:26 vincent Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -76,17 +76,11 @@ THREADSLIBS	=@THREADSLIBS@
 # Build commands and filename extensions...
 .SUFFIXES:	.c .cxx .h .fl .o
 
-.c.o:
-	$(CC) -I.. $(XTRAFLAGS) $(CFLAGS) $< -c
-
-.cxx.o:
-	$(CXX) -I.. $(XTRAFLAGS) $(CXXFLAGS) $< -c
-
 %.shared.o : %.cxx
 	$(CXX) -I.. $(XTRAFLAGS) $(DSOCFLAGS) $(CXXFLAGS) -c $< -o $@
 %.shared.o : %.c
 	$(CC) -I.. $(XTRAFLAGS) $(DSOCFLAGS) $(CFLAGS) -c $< -o $@
 
 #
-# End of "$Id: makeinclude.in,v 1.29 2000/06/12 09:01:28 carl Exp $".
+# End of "$Id: makeinclude.in,v 1.30 2000/06/18 11:05:26 vincent Exp $".
 #

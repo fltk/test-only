@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.15 2000/05/17 07:08:09 bill Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.16 2000/06/18 11:05:39 vincent Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -38,19 +38,10 @@
 #include <string.h>
 
 
-FL_API char *fl_shared_image_root=0;
-
-static Fl_Shared_Image  *first_image = 0;
-
-static int image_used=0;
-static size_t mem_usage_limit=0;
-
+//      static size_t mem_used=0; (now moved to Fl.cxx !)
 // This contains the total number of pixmap pixels in the cache
 // WARNING : this is updated incrementally, so beware that it keeps balanced
 // when deleting or creating pixmaps !
-static size_t mem_used=0; 
-static int forbid_delete = 1;
-
 
 Fl_Shared_Image::~Fl_Shared_Image()
 {
@@ -97,7 +88,7 @@ class fl_shared_image_destructor_class {
 public:
   fl_shared_image_destructor_class() { dummy = 0; }
   ~fl_shared_image_destructor_class() {
-    if (first_image) first_image->clear_cache();
+    if (Fl_Shared_Image::first_image) Fl_Shared_Image::first_image->clear_cache();
   }
 };
 
@@ -259,5 +250,5 @@ void Fl_Shared_Image::draw(int X, int Y, int W, int H,
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.15 2000/05/17 07:08:09 bill Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.16 2000/06/18 11:05:39 vincent Exp $"
 //
