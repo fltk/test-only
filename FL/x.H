@@ -1,5 +1,5 @@
 //
-// "$Id: x.H,v 1.20 1999/10/17 20:40:16 vincent Exp $"
+// "$Id: x.H,v 1.21 2000/02/23 09:27:17 bill Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -50,6 +50,7 @@
 #include <X11/Xatom.h>
 
 void fl_open_display();
+void fl_open_display(Display*);
 void fl_close_display();
 
 // constant info about the X server connection:
@@ -126,5 +127,5 @@ Fl_Window* fl_find(Window xid);
 #endif
 
 //
-// End of "$Id: x.H,v 1.20 1999/10/17 20:40:16 vincent Exp $".
+// End of "$Id: x.H,v 1.21 2000/02/23 09:27:17 bill Exp $".
 //
