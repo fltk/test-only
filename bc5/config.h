@@ -1,5 +1,5 @@
 /*
- * "$Id: config.cygnus,v 1.5 1999/03/31 14:52:34 mike Exp $"
+ * "$Id: config.h,v 1.2 1999/03/31 14:52:26 mike Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -131,7 +131,7 @@
 
 #define HAVE_VSNPRINTF 0
 #define HAVE_SNPRINTF 0
-#define HAVE_VSPRINTF 0
+#define HAVE_VSPRINTF 1
 
 /*
  * HAVE_SYS_SELECT_H:
@@ -150,5 +150,5 @@
 #define HAVE_POLL 0
 
 /*
- * End of "$Id: config.cygnus,v 1.5 1999/03/31 14:52:34 mike Exp $".
+ * End of "$Id: config.h,v 1.2 1999/03/31 14:52:26 mike Exp $".
  */

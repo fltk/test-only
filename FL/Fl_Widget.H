@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.14 1999/03/31 02:53:00 carl Exp $"
+// "$Id: Fl_Widget.H,v 1.15 1999/03/31 14:52:24 mike Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -34,6 +34,7 @@ class Fl_Widget;
 class Fl_Window;
 
 typedef void (Fl_Callback )(Fl_Widget*, void*);
+typedef Fl_Callback* Fl_Callback_p; // needed for BORLAND
 typedef void (Fl_Callback0)(Fl_Widget*);
 typedef void (Fl_Callback1)(Fl_Widget*, long);
 
@@ -262,5 +263,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.14 1999/03/31 02:53:00 carl Exp $".
+// End of "$Id: Fl_Widget.H,v 1.15 1999/03/31 14:52:24 mike Exp $".
 //

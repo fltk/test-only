@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.7 1999/03/04 18:10:00 mike Exp $"
+// "$Id: file.cxx,v 1.8 1999/03/31 14:52:33 mike Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -155,6 +155,11 @@ int close_read() {
 void read_error(const char *format, ...) {
   va_list args;
   va_start(args, format);
+  
+    fprintf(stderr, "%s:%d: ", fname, lineno);
+    vfprintf(stderr, format, args);
+    fprintf(stderr, "\n");
+
   if (!fin) {
     char buffer[1024];
     vsprintf(buffer, format, args);
@@ -301,7 +306,7 @@ const char *read_word(int wantbrace) {
 ////////////////////////////////////////////////////////////////
 
 #include <FL/Fl.H>
-#include "Fl_Widget_Type.h"
+#include "Fl_Type.h"
 
 // global int variables:
 extern int gridx, gridy, snap;
@@ -592,5 +597,5 @@ void read_fdesign() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.7 1999/03/04 18:10:00 mike Exp $".
+// End of "$Id: file.cxx,v 1.8 1999/03/31 14:52:33 mike Exp $".
 //

@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.13 1999/03/23 05:11:50 carl Exp $"
+ * "$Id: configh.in,v 1.14 1999/03/31 14:52:21 mike Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -152,7 +152,7 @@
  * Whether or not select() call has its own header file.
  */
 
-#define HAVE_SYS_SELECT 0
+#define HAVE_SYS_SELECT_H 0
 
 /*
  * HAVE_POLL:
@@ -163,5 +163,5 @@
 #define HAVE_POLL 0
 
 /*
- * End of "$Id: configh.in,v 1.13 1999/03/23 05:11:50 carl Exp $".
+ * End of "$Id: configh.in,v 1.14 1999/03/31 14:52:21 mike Exp $".
  */

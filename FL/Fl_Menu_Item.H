@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.13 1999/03/18 22:58:55 carl Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.14 1999/03/31 14:52:24 mike Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -133,6 +133,7 @@ struct Fl_Menu_Item {
   void down_labelcolor(uchar c);
 
   Fl_Callback* callback() const {return callback_;}
+
   void callback(Fl_Callback* c, void* p) {callback_=c; user_data_=p;}
   void callback(Fl_Callback* c) {callback_=c;}
   void callback(Fl_Callback0*c) {callback_=(Fl_Callback*)c;}
@@ -218,5 +219,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.13 1999/03/18 22:58:55 carl Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.14 1999/03/31 14:52:24 mike Exp $".
 //

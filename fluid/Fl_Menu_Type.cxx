@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Type.cxx,v 1.19 1999/03/31 02:53:02 carl Exp $"
+// "$Id: Fl_Menu_Type.cxx,v 1.20 1999/03/31 14:52:30 mike Exp $"
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 //
 
 #include <FL/Fl.H>
-#include "Fl_Widget_Type.h"
+#include "Fl_Type.h"
 #include <FL/fl_message.H>
 #include <FL/Fl_Menu_.H>
 #include <FL/Fl_Button.H>
@@ -38,43 +38,11 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-static Fl_Menu_Item menu_item_type_menu[] = {
+Fl_Menu_Item menu_item_type_menu[] = {
   {"Normal",0,0,(void*)0},
   {"Toggle",0,0,(void*)FL_MENU_BOX},
   {"Radio",0,0,(void*)FL_MENU_RADIO},
   {0}};
-
-class Fl_Menu_Item_Type : public Fl_Widget_Type {
-public:
-  Fl_Menu_Item* subtypes() {return menu_item_type_menu;}
-  const char* type_name() {return "menuitem";}
-  Fl_Type* make();
-  int is_menu_item() const {return 1;}
-  int is_button() const {return 1;} // this gets shortcut to work
-  Fl_Widget* widget(int,int,int,int) {return 0;}
-  Fl_Widget_Type* _make() {return 0;}
-  void write_declare();
-  const char* menu_name(int& i);
-  int flags();
-  void write_static();
-  void write_item();
-  void write_code1();
-  void write_code2();
-};
-
-class Fl_Submenu_Type : public Fl_Menu_Item_Type {
-public:
-  Fl_Menu_Item* subtypes() {return 0;}
-  const char* type_name() {return "submenu";}
-  int is_parent() const {return 1;}
-  int is_button() const {return 0;} // disable shortcut
-  Fl_Type* make();
-  // changes to submenu must propagate up so build_menu is called
-  // on the parent Fl_Menu_Type:
-  void add_child(Fl_Type*a, Fl_Type*b) {parent->add_child(a,b);}
-  void move_child(Fl_Type*a, Fl_Type*b) {parent->move_child(a,b);}
-  void remove_child(Fl_Type*a) {parent->remove_child(a);}
-};
 
 extern int reading_file;
 extern int force_parent;
@@ -400,40 +368,6 @@ void Fl_Menu_Item_Type::write_code2() {
             boxname(((Fl_Button*)o)->down_box()));
 }
 
-////////////////////////////////////////////////////////////////
-// This is the base class for widgets that contain a menu (ie
-// subclasses of Fl_Menu_.
-// This is a parent widget and menu items can be added as
-// children.  An actual array of Fl_Menu_Items is kept parallel
-// with the child objects and updated as they change.
-
-class Fl_Menu_Type : public Fl_Widget_Type {
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&) {
-    Fl_Menu_ *o = (Fl_Menu_*)(this->o);
-    switch (w) {
-    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); break;
-    case 1: o->textfont(f); break;
-    case 2: o->textsize(s); break;
-    case 3: o->textcolor(tc); break;
-    }
-    return 1;
-  }
-public:
-  int is_menu() const {return 1;}
-  int is_parent() const {return 1;}
-  int menusize;
-  void build_menu();
-  Fl_Menu_Type() : Fl_Widget_Type() {menusize = 0;}
-  ~Fl_Menu_Type() {
-    if (menusize) delete[] (Fl_Menu_Item*)(((Fl_Menu_*)o)->menu());
-  }
-  void add_child(Fl_Type*, Fl_Type*) {build_menu();}
-  void move_child(Fl_Type*, Fl_Type*) {build_menu();}
-  void remove_child(Fl_Type*) {build_menu();}
-  Fl_Type* click_test(int x, int y);
-  void write_code2();
-};
-
 void Fl_Menu_Type::build_menu() {
   Fl_Menu_* w = (Fl_Menu_*)o;
   // count how many Fl_Menu_Item structures needed:
@@ -510,7 +444,7 @@ void Fl_Menu_Type::write_code2() {
 ////////////////////////////////////////////////////////////////
 
 #include <FL/Fl_Menu_Button.H>
-static Fl_Menu_Item button_type_menu[] = {
+Fl_Menu_Item button_type_menu[] = {
   {"normal",0,0,(void*)0},
   {"popup1",0,0,(void*)Fl_Menu_Button::POPUP1},
   {"popup2",0,0,(void*)Fl_Menu_Button::POPUP2},
@@ -520,46 +454,17 @@ static Fl_Menu_Item button_type_menu[] = {
   {"popup13",0,0,(void*)Fl_Menu_Button::POPUP13},
   {"popup123",0,0,(void*)Fl_Menu_Button::POPUP123},
   {0}};
-class Fl_Menu_Button_Type : public Fl_Menu_Type {
-  Fl_Menu_Item *subtypes() {return button_type_menu;}
-public:
-  int is_menu_button() const {return 1;}
-  virtual const char *type_name() {return "Fl_Menu_Button";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Menu_Button(x,y,w,h,"menu");}
-  Fl_Widget_Type *_make() {return new Fl_Menu_Button_Type();}
-};
+
 Fl_Menu_Button_Type Fl_Menu_Button_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Choice.H>
+Fl_Menu_Item dummymenu[] = {{"CHOICE"},{0}};
 
-static Fl_Menu_Item dummymenu[] = {{"CHOICE"},{0}};
-
-class Fl_Choice_Type : public Fl_Menu_Type {
-public:
-  int is_choice() const {return 1;}
-  virtual const char *type_name() {return "Fl_Choice";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    Fl_Choice *o = new Fl_Choice(x,y,w,h,"choice:");
-    o->menu(dummymenu);
-    return o;
-  }
-  Fl_Widget_Type *_make() {return new Fl_Choice_Type();}
-};
 Fl_Choice_Type Fl_Choice_type;
 
 ////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Menu_Bar.H>
-class Fl_Menu_Bar_Type : public Fl_Menu_Type {
-public:
-  virtual const char *type_name() {return "Fl_Menu_Bar";}
-  Fl_Widget *widget(int x,int y,int w,int h) {
-    return new Fl_Menu_Bar(x,y,w,h);}
-  Fl_Widget_Type *_make() {return new Fl_Menu_Bar_Type();}
-};
 Fl_Menu_Bar_Type Fl_Menu_Bar_type;
 
 ////////////////////////////////////////////////////////////////
@@ -605,5 +510,5 @@ int Shortcut_Button::handle(int e) {
 }
   
 //
-// End of "$Id: Fl_Menu_Type.cxx,v 1.19 1999/03/31 02:53:02 carl Exp $".
+// End of "$Id: Fl_Menu_Type.cxx,v 1.20 1999/03/31 14:52:30 mike Exp $".
 //

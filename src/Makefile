@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.20 1999/03/23 05:11:52 carl Exp $"
+# "$Id: Makefile,v 1.21 1999/03/31 14:52:47 mike Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -154,27 +154,29 @@ CPPFILES = \
 	glut_compatability.cxx \
 	glut_font.cxx
 
-CFILES = scandir.c \
-	 numericsort.c \
-	 vsnprintf.c \
-	 conf.c \
-	 conf_atol.c \
-	 conf_del.c \
-	 conf_endtrim.c \
-	 conf_error.c \
-	 conf_get.c \
-	 conf_getboolean.c \
-	 conf_getlong.c \
-	 conf_keys.c \
-	 conf_level_indent.c \
-	 conf_list_free.c \
-	 conf_sections.c \
-	 conf_set.c \
-	 conf_setboolean.c \
-	 conf_setlong.c \
-	 conf_strcasecmp.c \
-	 conf_strcnt.c \
-	 conf_trim.c
+CFILES = \
+	fl_call_main.c \
+	scandir.c \
+	numericsort.c \
+	vsnprintf.c \
+	conf.c \
+	conf_atol.c \
+	conf_del.c \
+	conf_endtrim.c \
+	conf_error.c \
+	conf_get.c \
+	conf_getboolean.c \
+	conf_getlong.c \
+	conf_keys.c \
+	conf_level_indent.c \
+	conf_list_free.c \
+	conf_sections.c \
+	conf_set.c \
+	conf_setboolean.c \
+	conf_setlong.c \
+	conf_strcasecmp.c \
+	conf_strcnt.c \
+	conf_trim.c
 
 CLEAN =
 
@@ -186,26 +188,26 @@ LIBRARY = ../lib/$(LIBNAME)
 
 OBJECTS = $(CPPFILES:.cxx=.o) $(CFILES:.c=.o)
 
-all:	$(LIBRARY) ../lib/libfltk.a
+all:	$(LIBRARY) $(DSONAME)
 
-../lib/libfltk.a: $(OBJECTS)
-	@echo $(LIBCOMMAND) ../lib/libfltk.a ...
-	@$(LIBCOMMAND) ../lib/libfltk.a $(OBJECTS)
-	@$(RANLIB) ../lib/libfltk.a
+$(LIBRARY): $(OBJECTS)
+	@echo $(LIBCOMMAND) $@ ...
+	@$(LIBCOMMAND) $@ $(OBJECTS)
+	@$(RANLIB) $@
 
-../lib/libfltk.sl.1 ../lib/libfltk.so.1: $(OBJECTS)
-	@echo $(DSOCOMMAND) $(LIBRARY) ...
-	@$(DSOCOMMAND) $(LIBRARY) $(OBJECTS)
+$(DSONAME): $(OBJECTS)
+	@echo $(DSOCOMMAND) $@ ...
+	@$(DSOCOMMAND) $@ $(OBJECTS)
 
 .SUFFIXES:	.cxx .h .o
 
 .cxx.o :
 	$(CXX) -I.. $(CXXFLAGS) -c $<
 .c.o :
-	$(CC) -I.. $(CFLAGS) -c -o $@ $<
+	$(CC) -I.. $(CFLAGS) -c $<
 
 clean :
-	-@ rm -f *.o *.do $(LIBRARY) $(CLEAN) core *~ ../include/*~ makedepend cmap
+	-@ rm -f *.o *.do $(DSONAME) $(LIBRARY) $(CLEAN) core *~ ../include/*~ makedepend cmap
 	@touch makedepend
 
 depend:
@@ -214,29 +216,36 @@ include makedepend
 
 ################################################################
 
-install: ../lib/$(LIBNAME)
-	-mkdir -p $(libdir)
-	-cp ../lib/$(LIBNAME)* $(libdir)
-	-cp ../lib/libfltk.a $(libdir)
-	if test $(LIBNAME) = libfltk.so.1; then\
-		rm -f $(libdir)/libfltk.so;\
+install: $(LIBRARY) $(DSONAME)
+	@echo "Installing libraries..."
+	@-mkdir -p $(libdir)
+	@rm -f $(libdir)/$(LIBNAME)
+	@-cp $(LIBRARY) $(libdir)
+	@-chmod 644 $(libdir)/$(LIBNAME)
+	@if test "$(DSONAME)" = libfltk.so.1; then\
+		rm -f $(libdir)/libfltk.so*;\
+		cp libfltk.so.1 $(libdir); \
+		chmod 755 $(libdir)/libfltk.so.1; \
 		ln -s $(libdir)/libfltk.so.1 $(libdir)/libfltk.so;\
 	fi
-	if test $(LIBNAME) = libfltk.sl.1; then\
-		rm -f $(libdir)/libfltk.sl;\
+	@if test "$(DSONAME)" = libfltk.sl.1; then\
+		rm -f $(libdir)/libfltk.sl*;\
+		cp libfltk.sl.1 $(libdir); \
+		chmod 755 $(libdir)/libfltk.sl.1; \
 		ln -s $(libdir)/libfltk.sl.1 $(libdir)/libfltk.sl;\
 	fi
-	@-chmod a+r,u+w,g-w,o-w $(libdir)/$(LIBNAME)*
-	-mkdir -p $(includedir)
-	-rm -rf $(includedir)/FL $(includedir)/Fl
-	-cp -r ../FL $(includedir)
-	@-chmod -R a+r,u+w,g-w,o-w $(includedir)/FL
-	for file in $(includedir)/FL/*.H; do\
+	@echo "Installing include files..."
+	@-mkdir -p $(includedir)
+	@rm -rf $(includedir)/FL $(includedir)/Fl
+	@-cp -r ../FL $(includedir)
+	@-chmod 755 $(includedir)/FL
+	@-chmod 644 $(includedir)/FL/*
+	@for file in $(includedir)/FL/*.H; do\
 		newfile="`basename $$file H`h";\
 		ln -s $$file $(includedir)/FL/$$newfile;\
 	done
-	-ln -s FL $(includedir)/Fl
+	@-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.20 1999/03/23 05:11:52 carl Exp $".
+# End of "$Id: Makefile,v 1.21 1999/03/31 14:52:47 mike Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.10 1999/03/14 06:46:26 carl Exp $"
+// "$Id: Fl_Browser.cxx,v 1.11 1999/03/31 14:52:44 mike Exp $"
 //
 // Browser widget for the Fast Light Tool Kit (FLTK).
 //
@@ -207,19 +207,13 @@ void Fl_Browser::data(int line, void* data) {
 int Fl_Browser::item_height(void* lv) const {
   FL_BLINE* l = (FL_BLINE*)lv;
   if (l->flags & NOTDISPLAYED) return 0;
-  char* str = l->txt;
-  Fl_Font font;
-  int size;
-  int w, h;
-  int hmax = 0;
 
-  for(;*str;str++)
-  {
-    w = 0; // no wrap
-    font = Fl_Font(0); // default font
-    size = textsize(); // default size
-    while(*str==format_char())
-    {
+  int hmax = 2; // use 2 to insure we don't return a zero!
+  // do each column sepeartely as they may all set different fonts:
+  for (char* str = l->txt; *str; str++) {
+    Fl_Font font = Fl_Font(0); // default font
+    int size = textsize(); // default size
+    while (*str==format_char()) {
       str++;
       switch (*str++) {
       case 'l': case 'L': size = 24; break;
@@ -230,21 +224,20 @@ int Fl_Browser::item_height(void* lv) const {
       case 'f': case 't': font = FL_COURIER; break;
       case 'S': size = strtol(str,&str,10); break;
       case 'F': font = (Fl_Font)strtol(str,&str,10); break;
-      case 0: case '@': str--; 
+      case 0: case '@': str--;
       case '.': goto END_FORMAT;
-      } 
+      }
     }
     END_FORMAT:
     char* ptr = str;
-    for(;*str && (*str!=column_char());str++) ;
-    char prev = *str;
-    *str = 0;
-    fl_font(font,size);
-    fl_measure(ptr,w,h);
-    *str = prev;
-    if(h>hmax) hmax=h;
+    for(;*str && (*str!=column_char()); str++) ;
+    if (ptr < str) {
+      fl_font(font, size); int h = fl_height();
+      if (h > hmax) hmax = h;
+    }
   }
-  return hmax+2;
+
+  return hmax; // previous version returned hmax+2!
 }
 
 int Fl_Browser::item_width(void* v) const {
@@ -482,5 +475,5 @@ int Fl_Browser::value() const {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.10 1999/03/14 06:46:26 carl Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.11 1999/03/31 14:52:44 mike Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.6 1999/03/24 23:12:20 carl Exp $"
+// "$Id: factory.cxx,v 1.7 1999/03/31 14:52:33 mike Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -41,7 +41,7 @@
 #define strcasecmp stricmp
 #endif
 
-#include "Fl_Widget_Type.h"
+#include "Fl_Type.h"
 
 ////////////////////////////////////////////////////////////////
 
@@ -58,13 +58,13 @@ static Fl_Box_Type Fl_Box_type;
 ////////////////////////////////////////////////////////////////
 
 #include <FL/Fl_Button.H>
-static Fl_Menu_Item button_type_menu[] = {
+static Fl_Menu_Item buttontype_menu[] = {
   {"Normal",0,0,(void*)0},
   {"Toggle",0,0,(void*)FL_TOGGLE_BUTTON},
   {"Radio",0,0,(void*)FL_RADIO_BUTTON},
   {0}};
 class Fl_Button_Type : public Fl_Widget_Type {
-  Fl_Menu_Item *subtypes() {return button_type_menu;}
+  Fl_Menu_Item *subtypes() {return buttontype_menu;}
 public:
   virtual const char *type_name() {return "Fl_Button";}
   Fl_Widget *widget(int x,int y,int w,int h) {
@@ -681,5 +681,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.6 1999/03/24 23:12:20 carl Exp $".
+// End of "$Id: factory.cxx,v 1.7 1999/03/31 14:52:33 mike Exp $".
 //
