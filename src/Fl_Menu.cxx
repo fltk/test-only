@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.18.2.12.2.19 2002/10/11 17:03:47 easysw Exp $"
+// "$Id: Fl_Menu.cxx,v 1.18.2.12.2.19.2.1 2002/11/25 19:34:11 easysw Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -114,7 +114,7 @@ int Fl_Menu_Item::measure(int* hp, const Fl_Menu_* m) const {
   l.deimage = 0;
   l.type    = labeltype_;
   l.font    = labelsize_ ? labelfont_ : uchar(m ? m->textfont() : FL_HELVETICA);
-  l.size    = labelsize_ ? labelsize_ : m ? m->textsize() : FL_NORMAL_SIZE;
+  l.size    = labelsize_ ? labelsize_ : m ? m->textsize() : (uchar)FL_NORMAL_SIZE;
   l.color   = FL_BLACK; // this makes no difference?
   fl_draw_shortcut = 1;
   int w = 0; int h = 0; l.measure(w, hp ? *hp : h);
@@ -131,7 +131,7 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_* m,
   l.deimage = 0;
   l.type    = labeltype_;
   l.font    = labelsize_ ? labelfont_ : uchar(m ? m->textfont() : FL_HELVETICA);
-  l.size    = labelsize_ ? labelsize_ : m ? m->textsize() : FL_NORMAL_SIZE;
+  l.size    = labelsize_ ? labelsize_ : m ? m->textsize() : (uchar)FL_NORMAL_SIZE;
   l.color   = labelcolor_ ? labelcolor_ : m ? m->textcolor() : int(FL_BLACK);
   if (!active()) l.color = fl_inactive((Fl_Color)l.color);
   Fl_Color color = m ? m->color() : FL_GRAY;
@@ -496,18 +496,22 @@ int menuwindow::handle(int e) {
   switch (e) {
   case FL_KEYBOARD:
     switch (Fl::event_key()) {
-    case FL_Tab:
-      if (Fl::event_shift()&FL_SHIFT) goto BACKTAB;
     case FL_BackSpace:
     case 0xFE20: // backtab
     BACKTAB:
       if (!backward(pp.menu_number)) {pp.item_number = -1;backward(pp.menu_number);}
       return 1;
     case FL_Up:
-      if (pp.menubar && pp.menu_number == 0) ;
-      else if (backward(pp.menu_number));
-      else if (pp.menubar && pp.menu_number==1) setitem(0, pp.p[0]->selected);
+      if (pp.menubar && pp.menu_number == 0) {
+        // Do nothing...
+      } else if (backward(pp.menu_number)) {
+        // Do nothing...
+      } else if (pp.menubar && pp.menu_number==1) {
+        setitem(0, pp.p[0]->selected);
+      }
       return 1;
+    case FL_Tab:
+      if (Fl::event_shift()) goto BACKTAB;
     case FL_Down:
       if (pp.menu_number || !pp.menubar) forward(pp.menu_number);
       else if (pp.menu_number < pp.nummenus-1) forward(pp.menu_number+1);
@@ -780,5 +784,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.18.2.12.2.19 2002/10/11 17:03:47 easysw Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.18.2.12.2.19.2.1 2002/11/25 19:34:11 easysw Exp $".
 //

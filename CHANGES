@@ -1,5 +1,51 @@
 CHANGES IN FLTK 1.1.2
 
+	- Fl_Menu_Bar now supports drawing vertical dividers
+	  between menu items and submenus in the menu bar.
+	- Fl_File_Chooser::value() didn't return NULL when the
+	  user clicked Cancel while selecting a directory.  This
+	  bug also affected fl_dir_chooser().
+	- Fl_Menu_::add(const char *) used too small a menu item
+	  label buffer and didn't do bounds checking.
+	- Eliminate some compiler warnings with CodeWarrier
+	  under WIN32 (Paul Chambers)
+	- Fl_Gl_Window widgets did not resize properly under
+	  MacOS X.
+	- The cursor could be set for the wrong window in the
+	  text widgets.
+	- Fl_Check_Browser didn't provide const char * add
+	  methods as documented.
+	- Fl_Check_Browser didn't draw the same style of check
+	  marks at the other widgets.
+	- Fl_Button, Fl_Choice, and Fl_Menu_Button incorrectly
+	  activated the button/menu when the spacebar was
+	  pressed in conjunction with shift, control, alt, or
+	  meta.
+	- FLTK should now compile with Xft 2.0.
+	- Some versions of Tru64 4.0 have snprintf and
+	  vnsprintf, but don't have the prototypes for those
+	  functions.
+	- FLTK had trouble doing character composition with some
+	  keyboard layouts under X11 (in particular, Belgian).
+	- Fl_Text_Editor would cause a segfault if the user
+	  pressed CTRL-V (paste) without having any data in the
+	  clipboard...
+	- The tab key moved backwards in menus instead of
+	  forwards.  Shift-tab still moves backwards.
+	- The redraw_label() method didn't damage the parent
+	  window when the label was outside the widget's
+	  bounding box.
+	- Added a "draw_children()" method to Fl_Group to make
+	  subclassing Fl_Group with a custom draw() function
+	  easier.
+	- Fl_Text_Editor now supports basic undo functionality.
+	- FLUID now uses Fl_Text_Editor widgets for all
+	  multi-line code fields.
+	- Added new widget bin and icons to FLUID.
+	- FLUID would try running multiple commands in parallel,
+	  even though it wasn't capable of handling it.
+	- FLUID didn't generate code for some attributes when
+	  using custom/named widget classes.
 	- Added a new FL_COMMAND state bit which maps to FL_CTRL
 	  on X11 and WIN32 and FL_META on MacOS.
 	- MacOS keyboard modifiers mapping corrections. Cmd and

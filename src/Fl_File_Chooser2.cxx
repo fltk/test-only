@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_File_Chooser2.cxx,v 1.1.2.24.2.2 2002/10/29 20:12:45 easysw Exp $"
+// "$Id: Fl_File_Chooser2.cxx,v 1.1.2.24.2.3 2002/11/25 19:34:10 easysw Exp $"
 //
 // More Fl_File_Chooser routines.
 //
@@ -119,6 +119,9 @@ Fl_File_Chooser::count()
   {
     // Check to see if the file name input field is blank...
     filename = fileName->value();
+
+//    printf("Fl_File_Chooser::count(): filename=\"%s\"\n", filename);
+
     if (filename == NULL || filename[0] == '\0')
       return (0);
 
@@ -413,6 +416,7 @@ Fl_File_Chooser::fileListCB()
     filename = pathname + strlen(pathname) - 1;
     if (*filename == '/') *filename = '\0';
 
+//    puts("Setting fileName from fileListCB...");
     fileName->value(pathname);
 
     // Update the preview box...
@@ -447,6 +451,8 @@ Fl_File_Chooser::fileNameCB()
 		first_line;	// First matching line
   const char	*file;		// File from directory
 
+
+//  puts("fileNameCB()");
 
   // Get the filename from the text field...
   filename = (char *)fileName->value();
@@ -785,6 +791,7 @@ Fl_File_Chooser::rescan()
   if (pathname[0] && pathname[strlen(pathname) - 1] != '/') {
     strlcat(pathname, "/", sizeof(pathname));
   }
+//  puts("Setting fileName in rescan()");
   fileName->value(pathname);
 
   if (type_ & DIRECTORY)
@@ -949,7 +956,7 @@ Fl_File_Chooser::update_preview()
       previewBox->label(preview_text_);
       previewBox->align((Fl_Align)(FL_ALIGN_CLIP | FL_ALIGN_INSIDE |
                                    FL_ALIGN_LEFT | FL_ALIGN_TOP));
-      previewBox->labelsize(size);
+      previewBox->labelsize((uchar)size);
       previewBox->labelfont(FL_COURIER);
     }
   } else {
@@ -1152,5 +1159,5 @@ unquote_pathname(char       *dst,	// O - Destination string
 
 
 //
-// End of "$Id: Fl_File_Chooser2.cxx,v 1.1.2.24.2.2 2002/10/29 20:12:45 easysw Exp $".
+// End of "$Id: Fl_File_Chooser2.cxx,v 1.1.2.24.2.3 2002/11/25 19:34:10 easysw Exp $".
 //

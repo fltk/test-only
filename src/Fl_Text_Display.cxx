@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.12.2.34.2.1 2002/10/29 17:35:01 easysw Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.12.2.34.2.2 2002/11/25 19:34:12 easysw Exp $"
 //
 // Copyright 2001-2002 by Bill Spitzak and others.
 // Original code Copyright Mark Edel.  Permission to distribute under
@@ -31,6 +31,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Text_Buffer.H>
 #include <FL/Fl_Text_Display.H>
+#include <FL/Fl_Window.H>
 
 #undef min
 #undef max
@@ -76,7 +77,7 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H,  const char* l)
 
   color(FL_BACKGROUND2_COLOR, FL_SELECTION_COLOR);
   box(FL_DOWN_FRAME);
-  textsize(FL_NORMAL_SIZE);
+  textsize((uchar)FL_NORMAL_SIZE);
   textcolor(FL_FOREGROUND_COLOR);
   textfont(FL_HELVETICA);
 
@@ -197,6 +198,7 @@ Fl_Text_Display::highlight_data(Fl_Text_Buffer *styleBuffer,
   mUnfinishedHighlightCB = unfinishedHighlightCB;
   mHighlightCBArg = cbArg;
 
+  mStyleBuffer->canUndo(0);
 #if 0
   // FIXME: this is in nedit code -- is it needed?	
     /* Call TextDSetFont to combine font information from style table and
@@ -2276,7 +2278,12 @@ int Fl_Text_Display::empty_vlines() {
 ** entries in the line starts array rather than by scanning for newlines
 */
 int Fl_Text_Display::vline_length( int visLineNum ) {
-  int nextLineStart, lineStartPos = mLineStarts[ visLineNum ];
+  int nextLineStart, lineStartPos;
+
+  if (visLineNum < 0 || visLineNum >= mNVisibleLines)
+    return (0);
+
+  lineStartPos = mLineStarts[ visLineNum ];
 
   if ( lineStartPos == -1 )
     return 0;
@@ -2573,7 +2580,7 @@ void Fl_Text_Display::wrapped_line_counter(Fl_Text_Buffer *buf, int startPos,
     colNum = 0;
     width = 0;
     for (p=lineStart; p<buf->length(); p++) {
-    	c = buf->character(p);
+    	c = (unsigned char)buf->character(p);
 
     	/* If the character was a newline, count the line and start over,
     	   otherwise, add it to the width and column counts */
@@ -2607,7 +2614,7 @@ void Fl_Text_Display::wrapped_line_counter(Fl_Text_Buffer *buf, int startPos,
     	if (colNum > wrapMargin || width > maxWidth) {
     	    foundBreak = false;
     	    for (b=p; b>=lineStart; b--) {
-    	    	c = buf->character(b);
+    	    	c = (unsigned char)buf->character(b);
     	    	if (c == '\t' || c == ' ') {
     	    	    newLineStart = b + 1;
     	    	    if (countPixels) {
@@ -2948,8 +2955,8 @@ int Fl_Text_Display::handle(int event) {
     case FL_ENTER:
     case FL_MOVE:
       if (active_r()) {
-        if (Fl::event_inside(text_area.x, text_area.y, text_area.w, text_area.h)) fl_cursor(FL_CURSOR_INSERT);
-	else fl_cursor(FL_CURSOR_DEFAULT);
+        if (Fl::event_inside(text_area.x, text_area.y, text_area.w, text_area.h)) window()->cursor(FL_CURSOR_INSERT);
+	else window()->cursor(FL_CURSOR_DEFAULT);
 	return 1;
       } else {
         return 0;
@@ -2958,7 +2965,7 @@ int Fl_Text_Display::handle(int event) {
     case FL_LEAVE:
     case FL_HIDE:
       if (active_r()) {
-        fl_cursor(FL_CURSOR_DEFAULT);
+        window()->cursor(FL_CURSOR_DEFAULT);
 
 	return 1;
       } else {
@@ -3028,5 +3035,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.12.2.34.2.1 2002/10/29 17:35:01 easysw Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.12.2.34.2.2 2002/11/25 19:34:12 easysw Exp $".
 //
