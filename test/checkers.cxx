@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.15 2000/02/14 11:32:59 bill Exp $"
+// "$Id: checkers.cxx,v 1.16 2000/05/02 06:09:16 carl Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -909,6 +909,12 @@ void make_bitmaps() {
   bm[3][3] = new Fl_Bitmap(whiteking_4_bits, black_1_width, black_1_height);
 }
 
+// Unfortunately, this is necessary on Windows 'cause GDI resources aren't
+// automatically released at program exit
+void destroy_bitmaps() {
+  for (int i = 0; i < 4; i++) for (int j = 0; j < 4; j++) delete bm[i][j];
+}
+
 #define ISIZE black_1_width
 
 void draw_piece(int which, int x, int y) {
@@ -1156,7 +1162,7 @@ int Board::handle(int e) {
   }
 }
 
-void quit_cb(Fl_Widget*, void*) {exit(0);}
+void quit_cb(Fl_Widget*, void*) { destroy_bitmaps(); exit(0); }
 
 int FLTKmain(int argc, char** argv) {
   Fl::visual(FL_DOUBLE|FL_INDEX);
@@ -1354,5 +1360,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.15 2000/02/14 11:32:59 bill Exp $".
+// End of "$Id: checkers.cxx,v 1.16 2000/05/02 06:09:16 carl Exp $".
 //

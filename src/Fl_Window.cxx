@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.39 2000/05/01 17:25:16 carl Exp $"
+// "$Id: Fl_Window.cxx,v 1.40 2000/05/02 06:09:14 carl Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -154,8 +154,7 @@ void Fl_Window::destroy() {
 #else
   if (x->region) XDestroyRegion(x->region);
   XDestroyWindow(fl_display, x->xid);
-#endif                                                                    2
-
+#endif
   delete x;
 }
 
@@ -300,5 +299,5 @@ void Fl_Window::flush() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.39 2000/05/01 17:25:16 carl Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.40 2000/05/02 06:09:14 carl Exp $".
 //

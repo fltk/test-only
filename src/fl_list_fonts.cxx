@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts.cxx,v 1.2 2000/01/17 21:36:18 bill Exp $"
+// "$Id: fl_list_fonts.cxx,v 1.3 2000/05/02 06:09:15 carl Exp $"
 //
 // Less-used font functions
 //
@@ -48,6 +48,7 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
+#include <config.h>
 
 // return dash number N, or pointer to ending null if none:
 static const char* font_word(const char* p, int n) {
@@ -276,21 +277,16 @@ int Fl_Font_::sizes(int*& sizep) const {
 
 ////////////////////////////////////////////////////////////////
 
-#if defined(WIN32) || defined(__EMX__)
-#  define strcasecmp stricmp
-#  define strncasecmp strnicmp
-#endif // WIN32 || __EMX__
-
 Fl_Font fl_font(const char* name) {
   if (!name || !*name) return 0;
   // find out if the " bold" or " italic" are on the end:
   int attrib = 0;
   int length = strlen(name);
   if (length > 7 && !strncasecmp(name+length-7, " italic", 7)) {
-    length -= 7; attrib = FL_ITALIC;
+    length -= 7; attrib |= FL_ITALIC;
   }
   if (length > 5 && !strncasecmp(name+length-5, " bold", 5)) {
-    length -= 5; attrib = FL_BOLD;
+    length -= 5; attrib |= FL_BOLD;
   }
   Fl_Font font = 0;
   // always try the built-in fonts first, becasue fl_list_fonts is *slow*...
@@ -318,5 +314,5 @@ Fl_Font fl_font(const char* name) {
 }
 
 //
-// End of "$Id: fl_list_fonts.cxx,v 1.2 2000/01/17 21:36:18 bill Exp $".
+// End of "$Id: fl_list_fonts.cxx,v 1.3 2000/05/02 06:09:15 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.18 2000/02/14 11:32:53 bill Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.19 2000/05/02 06:09:14 carl Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -98,7 +98,7 @@ Fl_Widget* Fl_Menu_::add(
 
     /* fill in the buf with name, changing \x to x: */
     q = buf;
-    if (*q == '_') {q++; flags1 = FL_MENU_DIVIDER;}
+    if (*text == '_') {text++; flags1 = FL_MENU_DIVIDER;}
     for (p=text; *p && *p != '/' && q < buf+1023; *q++ = *p++)
       if (*p=='\\') {p++; item = buf;}
     *q = 0;
@@ -184,5 +184,5 @@ Fl_Widget* Fl_Menu_::add(const char *str) {
 }
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.18 2000/02/14 11:32:53 bill Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.19 2000/05/02 06:09:14 carl Exp $".
 //

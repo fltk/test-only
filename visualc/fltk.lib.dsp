@@ -82,6 +82,78 @@ LIB32=link.exe -lib
 # Name "fltk - Win32 Debug"
 # Begin Source File
 
+SOURCE=..\src\conf.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_atol.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_del.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_endtrim.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_error.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_get.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_getboolean.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_getlong.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_keys.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_level_indent.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_list_free.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_sections.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_set.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_setboolean.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_setlong.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_strcasecmp.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_strcnt.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\conf_util.c
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\filename_absolute.cxx
 # End Source File
 # Begin Source File
@@ -126,7 +198,7 @@ SOURCE=..\src\Fl_Adjuster.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Align_Layout.cxx
+SOURCE=..\src\Fl_Align_Group.cxx
 # End Source File
 # Begin Source File
 
@@ -143,10 +215,6 @@ SOURCE=..\src\Fl_arg.cxx
 # Begin Source File
 
 SOURCE=..\src\fl_ask.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\fl_background.cxx
 # End Source File
 # Begin Source File
 
@@ -203,6 +271,10 @@ SOURCE=..\src\fl_color.cxx
 # Begin Source File
 
 SOURCE=..\src\Fl_Color_Chooser.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_compose.cxx
 # End Source File
 # Begin Source File
 
@@ -298,10 +370,6 @@ SOURCE=..\src\fl_glyph.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_grab.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\Fl_Group.cxx
 # End Source File
 # Begin Source File
@@ -326,6 +394,10 @@ SOURCE=..\src\Fl_Input_Style.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\Fl_Item.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\fl_labeltype.cxx
 # End Source File
 # Begin Source File
@@ -335,6 +407,10 @@ SOURCE=..\src\Fl_Light_Button.cxx
 # Begin Source File
 
 SOURCE=..\src\fl_line_style.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_list_fonts.cxx
 # End Source File
 # Begin Source File
 
@@ -370,7 +446,15 @@ SOURCE=..\src\Fl_Menu_global.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\Fl_Menu_Item.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\Fl_Menu_Window.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_options.cxx
 # End Source File
 # Begin Source File
 
@@ -490,10 +574,6 @@ SOURCE=..\src\Fl_Tabs.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_theme.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\Fl_Tile.cxx
 # End Source File
 # Begin Source File
@@ -546,10 +626,6 @@ SOURCE=..\src\Fl_Window_iconize.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_x.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\fl_xpm.cxx
 # End Source File
 # Begin Source File
@@ -563,10 +639,6 @@ SOURCE=..\src\scandir.c
 # Begin Source File
 
 SOURCE=..\src\vsnprintf.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\themes\windows.cxx
 # End Source File
 # End Target
 # End Project

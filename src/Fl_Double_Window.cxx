@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.cxx,v 1.18 2000/04/10 06:45:44 bill Exp $"
+// "$Id: Fl_Double_Window.cxx,v 1.19 2000/05/02 06:09:14 carl Exp $"
 //
 // Double-buffered window code for the Fast Light Tool Kit (FLTK).
 //
@@ -145,7 +145,17 @@ void Fl_Double_Window::flush(int eraseoverlay) {
     fl_gc = fl_makeDC(i->other_xid);
     fl_restore_clip(); // duplicate region into new gc
     draw();
+    // Delete any allocated pen & brush
+    COLORREF rgb = RGB(0, 0, 0);
+    HPEN newpen = CreatePen(PS_SOLID, 1, rgb);
+    HBRUSH newbrush = CreateSolidBrush(rgb);
+    HPEN oldpen = (HPEN)SelectObject(fl_gc, newpen); // this returns the old pen
+    if (oldpen) DeleteObject(oldpen);
+    HBRUSH oldbrush = (HBRUSH)SelectObject(fl_gc, newbrush); // this returns the old brush
+    if (oldbrush) DeleteObject(oldbrush);
     DeleteDC(fl_gc);
+    DeleteObject(newpen);
+    DeleteObject(newbrush);
     fl_gc = _sgc;
 #else // X:
     fl_window = i->other_xid;
@@ -195,5 +205,5 @@ Fl_Double_Window::~Fl_Double_Window() {
 }
 
 //
-// End of "$Id: Fl_Double_Window.cxx,v 1.18 2000/04/10 06:45:44 bill Exp $".
+// End of "$Id: Fl_Double_Window.cxx,v 1.19 2000/05/02 06:09:14 carl Exp $".
 //

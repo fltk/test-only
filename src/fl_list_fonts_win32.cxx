@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.3 2000/03/03 21:21:44 carl Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.4 2000/05/02 06:09:15 carl Exp $"
 //
 // WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -108,6 +108,8 @@ static int CALLBACK enumcb(ENUMLOGFONT FAR *lpelf,
     array = (Fl_Font*)realloc(array, array_size*sizeof(Fl_Font));
   }
   array[num_fonts++] = base;
+
+  return 1;
 }
 
 // Sort fonts by their "nice" name (it is possible Win32 always returns
@@ -121,12 +123,32 @@ static int sort_function(const void *aa, const void *bb) {
 
 int fl_list_fonts(Fl_Font*& arrayp) {
   if (array) {arrayp = array; return num_fonts;}
-  EnumFontFamilies(fl_gc, NULL, (FONTENUMPROC)enumcb, 0);
+  HDC dc = GetDC(0);
+  EnumFontFamilies(dc, NULL, (FONTENUMPROC)enumcb, 0);
+  ReleaseDC(0, dc);
   qsort(array, num_fonts, sizeof(*array), sort_function);
-  arrayp = array; return num_fonts;
+  arrayp = array;
+
+  return num_fonts;
 }
 
+// deallocate Win32 fonts
+void fl_font_rid() {
+  Fl_FontSize* fs;
+  for (int i = 0; i < 16; i++) {
+    while ( (fs = fl_fonts[i].first) ) {
+      fl_fonts[i].first = fs->next;
+      delete fs;
+    }
+  }
+  for (int j = 0; j < num_fonts; j++) {
+    while ( (fs = array[j]->first) ) {
+      ((Fl_Font_*)(array[i]))->first = fs->next;
+      delete fs;
+    }
+  }
+}
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.3 2000/03/03 21:21:44 carl Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.4 2000/05/02 06:09:15 carl Exp $"
 //

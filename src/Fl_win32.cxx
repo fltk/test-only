@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.101 2000/05/01 17:25:16 carl Exp $"
+// "$Id: Fl_win32.cxx,v 1.102 2000/05/02 06:09:15 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -993,11 +993,17 @@ HDC fl_GetDC(HWND w) {
   return dc;
 }
 
+extern void fl_font_rid();
+
 // clean up after Windows
 static struct Cleanup { ~Cleanup(); } cleanup;
 
 Cleanup::~Cleanup() {
-  // CET - FIXME
+  // nasty but works (I think) - deallocates GDI resources in windows
+  while (Fl_X* x = Fl_X::first) x->w->destroy();
+
+  // get rid of allocated font resources
+  fl_font_rid();
 }
 
 // make X drawing go into this window (called by subclass flush() impl.)
@@ -1105,5 +1111,5 @@ void fl_windows_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.101 2000/05/01 17:25:16 carl Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.102 2000/05/02 06:09:15 carl Exp $".
 //
