@@ -42,6 +42,8 @@
 #ifndef PATH_MAX
 # define PATH_MAX 1024
 #endif
+#include <cstdlib>            // atoi()
+#include <ctype.h>            // isspace()
 
 using namespace fltk;
 
@@ -268,7 +270,7 @@ const char* INIFile::get(const char* section, const char* name) {
 	if (strcasecmp(e->name, name)) break;
 	e = e1;
       }
-      return e.value;
+      return e->value;
     }
   }
   return 0;
