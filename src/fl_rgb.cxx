@@ -18,7 +18,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/x.h>
@@ -66,5 +66,5 @@ fltk::Color fltk::color(const char* name) {
 }
 
 //
-// End of "$Id: fl_rgb.cxx,v 1.5 2002/12/09 04:52:30 spitzak Exp $".
+// End of "$Id: fl_rgb.cxx,v 1.6 2002/12/10 02:01:02 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Guess_Image.cxx,v 1.9 2002/12/10 01:46:16 easysw Exp $"
+// "$Id: Fl_Guess_Image.cxx,v 1.10 2002/12/10 02:00:37 easysw Exp $"
 //
 // Guessing image type code for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Draw an image that is stored compressed in a file or in memory. 
@@ -79,5 +79,5 @@ FL_IMAGES_API ImageType* SharedImage::guess(const char* name, const uchar* datas
 }
 
 //
-// End of "$Id: Fl_Guess_Image.cxx,v 1.9 2002/12/10 01:46:16 easysw Exp $"
+// End of "$Id: Fl_Guess_Image.cxx,v 1.10 2002/12/10 02:00:37 easysw Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.45 2002/12/10 01:46:16 easysw Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.46 2002/12/10 02:00:37 easysw Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 
@@ -190,5 +190,5 @@ Adjuster::Adjuster(int x,int y,int w,int h,const char *l) : Valuator(x,y,w,h,l) 
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.45 2002/12/10 01:46:16 easysw Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.46 2002/12/10 02:00:37 easysw Exp $".
 //

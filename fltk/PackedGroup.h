@@ -1,5 +1,5 @@
 //
-// "$Id: PackedGroup.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: PackedGroup.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //
 // Group that places all it's child widgets packed against the
 // edges. The edge is decided by the PACK_VERTICAL flag stored on
@@ -23,7 +23,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_PackedGroup_h
@@ -52,5 +52,5 @@ public:
 #endif
 
 //
-// End of "$Id: PackedGroup.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: PackedGroup.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
 //

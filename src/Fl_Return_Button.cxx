@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Return_Button.cxx,v 1.37 2002/12/10 01:46:17 easysw Exp $"
+// "$Id: Fl_Return_Button.cxx,v 1.38 2002/12/10 02:00:47 easysw Exp $"
 //
 // Return button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/ReturnButton.h>
@@ -84,5 +84,5 @@ ReturnButton::ReturnButton(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Return_Button.cxx,v 1.37 2002/12/10 01:46:17 easysw Exp $".
+// End of "$Id: Fl_Return_Button.cxx,v 1.38 2002/12/10 02:00:47 easysw Exp $".
 //

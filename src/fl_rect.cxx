@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rect.cxx,v 1.29 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: fl_rect.cxx,v 1.30 2002/12/10 02:01:02 easysw Exp $"
 //
 // Non-path routines from draw.h that are used by the standard boxtypes
 // and thus are always linked into an fltk program.
@@ -21,7 +21,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/draw.h>
@@ -79,5 +79,5 @@ void fltk::drawpoint(int x, int y) {
 }
 
 //
-// End of "$Id: fl_rect.cxx,v 1.29 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: fl_rect.cxx,v 1.30 2002/12/10 02:01:02 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_compose.cxx,v 1.14 2002/12/09 04:52:27 spitzak Exp $"
+// "$Id: Fl_compose.cxx,v 1.15 2002/12/10 02:00:53 easysw Exp $"
 //
 // Character compose processing for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/events.h>

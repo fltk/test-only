@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.cxx,v 1.50 2002/12/10 01:46:17 easysw Exp $"
+// "$Id: Fl_Value_Slider.cxx,v 1.51 2002/12/10 02:00:51 easysw Exp $"
 //
 // Value slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/ValueSlider.h>
@@ -161,5 +161,5 @@ ValueSlider::ValueSlider(int x, int y, int w, int h, const char*l)
 }
 
 //
-// End of "$Id: Fl_Value_Slider.cxx,v 1.50 2002/12/10 01:46:17 easysw Exp $".
+// End of "$Id: Fl_Value_Slider.cxx,v 1.51 2002/12/10 02:00:51 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pack.cxx,v 1.23 2002/12/10 01:46:17 easysw Exp $"
+// "$Id: Fl_Pack.cxx,v 1.24 2002/12/10 02:00:45 easysw Exp $"
 //
 // Packing widget for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/PackedGroup.h>
@@ -133,5 +133,5 @@ void PackedGroup::layout() {
 }
 
 //
-// End of "$Id: Fl_Pack.cxx,v 1.23 2002/12/10 01:46:17 easysw Exp $".
+// End of "$Id: Fl_Pack.cxx,v 1.24 2002/12/10 02:00:45 easysw Exp $".
 //

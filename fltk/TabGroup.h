@@ -1,5 +1,5 @@
 //
-// "$Id: TabGroup.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: TabGroup.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //
 // For making a "tabbed dialog box". Each child widget creates a tab.
 // Only one is visible at a time. This works best if all the children
@@ -23,7 +23,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_TabGroup_h
@@ -63,5 +63,5 @@ private:
 #endif
 
 //
-// End of "$Id: TabGroup.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: TabGroup.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
 //

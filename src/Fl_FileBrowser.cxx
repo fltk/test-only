@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileBrowser.cxx,v 1.15 2002/12/09 04:52:25 spitzak Exp $"
+// "$Id: Fl_FileBrowser.cxx,v 1.16 2002/12/10 02:00:40 easysw Exp $"
 //
 // FileBrowser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 // Contents:
 //
@@ -438,5 +438,5 @@ FileBrowser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_FileBrowser.cxx,v 1.15 2002/12/09 04:52:25 spitzak Exp $".
+// End of "$Id: Fl_FileBrowser.cxx,v 1.16 2002/12/10 02:00:40 easysw Exp $".
 //

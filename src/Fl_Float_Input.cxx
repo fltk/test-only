@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Float_Input.cxx,v 1.9 2002/12/10 01:46:17 easysw Exp $"
+// "$Id: Fl_Float_Input.cxx,v 1.10 2002/12/10 02:00:40 easysw Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/events.h>
@@ -48,5 +48,5 @@ bool FloatInput::replace(int b, int e, const char* text, int ilen) {
 }
 
 //
-// End of "$Id: Fl_Float_Input.cxx,v 1.9 2002/12/10 01:46:17 easysw Exp $"
+// End of "$Id: Fl_Float_Input.cxx,v 1.10 2002/12/10 02:00:40 easysw Exp $"
 //

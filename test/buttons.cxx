@@ -1,5 +1,5 @@
 //
-// "$Id: buttons.cxx,v 1.17 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: buttons.cxx,v 1.18 2002/12/10 02:01:04 easysw Exp $"
 //
 // Another button test program for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <stdlib.h>
@@ -62,5 +62,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: buttons.cxx,v 1.17 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: buttons.cxx,v 1.18 2002/12/10 02:01:04 easysw Exp $".
 //

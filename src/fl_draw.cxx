@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.24 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: fl_draw.cxx,v 1.25 2002/12/10 02:00:58 easysw Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Implementation of draw(const char*,int,int,int,int,Align)
@@ -267,5 +267,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.24 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: fl_draw.cxx,v 1.25 2002/12/10 02:00:58 easysw Exp $".
 //

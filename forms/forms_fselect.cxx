@@ -1,5 +1,5 @@
 //
-// "$Id: forms_fselect.cxx,v 1.5 2002/12/10 01:46:16 easysw Exp $"
+// "$Id: forms_fselect.cxx,v 1.6 2002/12/10 02:00:35 easysw Exp $"
 //
 // Forms file selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Emulate the Forms file chooser using the fltk file chooser.
@@ -61,5 +61,5 @@ char*	fl_get_pattern() {return (char *)fl_pattern;}
 char*	fl_get_filename() {return fl_filename;}
 
 //
-// End of "$Id: forms_fselect.cxx,v 1.5 2002/12/10 01:46:16 easysw Exp $".
+// End of "$Id: forms_fselect.cxx,v 1.6 2002/12/10 02:00:35 easysw Exp $".
 //

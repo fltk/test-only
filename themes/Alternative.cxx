@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.41 2002/12/09 04:52:31 spitzak Exp $"
+// "$Id: Alternative.cxx,v 1.42 2002/12/10 02:01:06 easysw Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/Box.h>
@@ -356,5 +356,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.41 2002/12/09 04:52:31 spitzak Exp $".
+// End of "$Id: Alternative.cxx,v 1.42 2002/12/10 02:01:06 easysw Exp $".
 //

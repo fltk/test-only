@@ -1,5 +1,5 @@
 //
-// "$Id: filename_ext.cxx,v 1.8 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: filename_ext.cxx,v 1.9 2002/12/10 02:00:56 easysw Exp $"
 //
 // Filename extension routines for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // returns pointer to the last '.' or to the null if none:
@@ -41,5 +41,5 @@ const char *filename_ext(const char *buf) {
 }
 
 //
-// End of "$Id: filename_ext.cxx,v 1.8 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: filename_ext.cxx,v 1.9 2002/12/10 02:00:56 easysw Exp $".
 //

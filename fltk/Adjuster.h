@@ -1,5 +1,5 @@
 //
-// "$Id: Adjuster.h,v 1.2 2002/12/10 01:46:15 easysw Exp $"
+// "$Id: Adjuster.h,v 1.3 2002/12/10 02:00:29 easysw Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -18,7 +18,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Undocumented valuator provided for back-compatability.
@@ -54,5 +54,5 @@ private:
 #endif
 
 //
-// End of "$Id: Adjuster.h,v 1.2 2002/12/10 01:46:15 easysw Exp $".
+// End of "$Id: Adjuster.h,v 1.3 2002/12/10 02:00:29 easysw Exp $".
 //

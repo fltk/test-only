@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg.cxx,v 1.10 2002/12/10 01:46:16 easysw Exp $"
+// "$Id: fl_jpeg.cxx,v 1.11 2002/12/10 02:00:37 easysw Exp $"
 //
 // JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // JPEG image decompression. From example code in libjpeg distribution.
@@ -406,5 +406,5 @@ bool fltk::jpegImage::test(const uchar* datas, size_t size)
 }
 
 //
-// End of "$Id: fl_jpeg.cxx,v 1.10 2002/12/10 01:46:16 easysw Exp $"
+// End of "$Id: fl_jpeg.cxx,v 1.11 2002/12/10 02:00:37 easysw Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: SecretInput.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: SecretInput.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //
 // One-line text input field that draws asterisks instead of the
 // letters. It also prevents the user from cutting or copying the
@@ -22,7 +22,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_SecretInput_h
@@ -43,5 +43,5 @@ public:
 #endif
 
 //
-// End of "$Id: SecretInput.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: SecretInput.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
 //

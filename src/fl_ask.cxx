@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.26 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: fl_ask.cxx,v 1.27 2002/12/10 02:00:56 easysw Exp $"
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Implementation of message, ask, choice, input
@@ -229,5 +229,5 @@ const char *fltk::password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.26 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: fl_ask.cxx,v 1.27 2002/12/10 02:00:56 easysw Exp $".
 //

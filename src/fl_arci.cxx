@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.13 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: fl_arci.cxx,v 1.14 2002/12/10 02:00:56 easysw Exp $"
 //
 // Arc (integer) drawing functions for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Draw pie slices, chord shapes, and curved lines, using the facilities
@@ -81,5 +81,5 @@ void fltk::fillpie(int x,int y,int w,int h,float a1,float a2, int what) {
 }
 
 //
-// End of "$Id: fl_arci.cxx,v 1.13 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: fl_arci.cxx,v 1.14 2002/12/10 02:00:56 easysw Exp $".
 //

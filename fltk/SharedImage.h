@@ -1,5 +1,5 @@
 //
-// "$Id: SharedImage.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: SharedImage.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //
 // Images that are all put in a tree by "name" (usually a filename)
 // so that if the same name is used more than once the same instance
@@ -25,7 +25,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_SharedImage_h
@@ -196,5 +196,5 @@ public:
 #endif
 
 //
-// End of "$Id: SharedImage.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// End of "$Id: SharedImage.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: forms.h,v 1.2 2002/12/10 01:46:15 easysw Exp $"
+// "$Id: forms.h,v 1.3 2002/12/10 02:00:28 easysw Exp $"
 //
 // Forms emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef __FORMS_H__
@@ -853,5 +853,5 @@ inline void fl_draw() {Fl::flush();}
 #endif	/* define __FORMS_H__ */
 
 //
-// End of "$Id: forms.h,v 1.2 2002/12/10 01:46:15 easysw Exp $".
+// End of "$Id: forms.h,v 1.3 2002/12/10 02:00:28 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: GlChoice.h,v 1.1 2002/12/09 16:33:18 spitzak Exp $"
+// "$Id: GlChoice.h,v 1.2 2002/12/10 02:00:28 easysw Exp $"
 //
 // OpenGL definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Internal interface to set up OpenGL.
@@ -111,5 +111,5 @@ void delete_gl_context(GLContext);
 #endif
 
 //
-// End of "$Id: GlChoice.h,v 1.1 2002/12/09 16:33:18 spitzak Exp $".
+// End of "$Id: GlChoice.h,v 1.2 2002/12/10 02:00:28 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: glut.h,v 1.6 2002/12/10 01:46:15 easysw Exp $"
+// "$Id: glut.h,v 1.7 2002/12/10 02:00:29 easysw Exp $"
 //
 // GLUT emulation header file for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Emulation of Glut using fltk.
@@ -469,5 +469,5 @@ extern void APIENTRY glutSolidIcosahedron();
 #endif                  /* __glut_h__ */
 
 //
-// End of "$Id: glut.h,v 1.6 2002/12/10 01:46:15 easysw Exp $".
+// End of "$Id: glut.h,v 1.7 2002/12/10 02:00:29 easysw Exp $".
 //

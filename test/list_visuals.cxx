@@ -1,5 +1,5 @@
 //
-// "$Id: list_visuals.cxx,v 1.11 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: list_visuals.cxx,v 1.12 2002/12/10 02:01:05 easysw Exp $"
 //
 // Visual list utility for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifdef _WIN32
@@ -222,5 +222,5 @@ int main(int argc, char **argv) {
 #endif
 
 //
-// End of "$Id: list_visuals.cxx,v 1.11 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: list_visuals.cxx,v 1.12 2002/12/10 02:01:05 easysw Exp $".
 //

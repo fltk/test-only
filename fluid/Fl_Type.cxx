@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.34 2002/12/10 01:46:15 easysw Exp $"
+// "$Id: Fl_Type.cxx,v 1.35 2002/12/10 02:00:30 easysw Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Each object created by Fluid is a subclass of FluidType. The majority
@@ -643,5 +643,5 @@ void FluidType::read_property(const char *c) {
 int FluidType::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.34 2002/12/10 01:46:15 easysw Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.35 2002/12/10 02:00:30 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.11 2002/12/09 04:52:29 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.12 2002/12/10 02:01:01 easysw Exp $"
 //
 // Copyright 2001 Bill Spitzak and others.
 //
@@ -18,7 +18,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Draw fonts using Keith Packard's Xft and Xrender extension. Yow!
@@ -400,5 +400,5 @@ int fltk::Font::encodings(const char**& arrayp) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.11 2002/12/09 04:52:29 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.12 2002/12/10 02:01:01 easysw Exp $"
 //

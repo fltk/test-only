@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.cxx,v 1.34 2002/12/10 01:46:17 easysw Exp $"
+// "$Id: Fl_Light_Button.cxx,v 1.35 2002/12/10 02:00:43 easysw Exp $"
 //
 // Lighted button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // The LightButton draws the indicator as a rectangle in the
@@ -65,5 +65,5 @@ LightButton::LightButton(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Light_Button.cxx,v 1.34 2002/12/10 01:46:17 easysw Exp $".
+// End of "$Id: Fl_Light_Button.cxx,v 1.35 2002/12/10 02:00:43 easysw Exp $".
 //

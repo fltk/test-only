@@ -1,5 +1,5 @@
 //
-// "$Id: Widget.h,v 1.2 2002/12/10 01:46:15 easysw Exp $"
+// "$Id: Widget.h,v 1.3 2002/12/10 02:00:29 easysw Exp $"
 //
 // The base class of all widgets.
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_Widget_h
@@ -301,5 +301,5 @@ enum { // Widget::when() values
 #endif
 
 //
-// End of "$Id: Widget.h,v 1.2 2002/12/10 01:46:15 easysw Exp $".
+// End of "$Id: Widget.h,v 1.3 2002/12/10 02:00:29 easysw Exp $".
 //

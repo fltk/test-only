@@ -1,5 +1,5 @@
 //
-// "$Id: fl_engraved_label.cxx,v 1.14 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: fl_engraved_label.cxx,v 1.15 2002/12/10 02:00:59 easysw Exp $"
 //
 // Engraved label drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Drawing code for XForms style engraved & embossed labels
@@ -65,5 +65,5 @@ static EngravedLabel embossedLabel("embossed", embossed_data);
 LabelType* const fltk::EMBOSSED_LABEL = &embossedLabel;
 
 //
-// End of "$Id: fl_engraved_label.cxx,v 1.14 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: fl_engraved_label.cxx,v 1.15 2002/12/10 02:00:59 easysw Exp $".
 //

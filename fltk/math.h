@@ -1,5 +1,5 @@
 //
-// "$Id: math.h,v 1.6 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: math.h,v 1.7 2002/12/10 02:00:29 easysw Exp $"
 //
 // The purpose of this header file is to make math.h look the same as
 // Unix on other operating systems.
@@ -21,7 +21,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fl_math_h
@@ -85,5 +85,5 @@
 #endif
 
 //
-// End of "$Id: math.h,v 1.6 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: math.h,v 1.7 2002/12/10 02:00:29 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_overlay.cxx,v 1.10 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: fl_overlay.cxx,v 1.11 2002/12/10 02:01:02 easysw Exp $"
 //
 // Overlay support for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Extremely limited "overlay" support.  You can use this to drag out
@@ -64,5 +64,5 @@ void fltk::overlay_rect(int x, int y, int w, int h) {
 }
 
 //
-// End of "$Id: fl_overlay.cxx,v 1.10 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: fl_overlay.cxx,v 1.11 2002/12/10 02:01:02 easysw Exp $".
 //

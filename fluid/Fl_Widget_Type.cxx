@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.91 2002/12/10 01:46:15 easysw Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.92 2002/12/10 02:00:30 easysw Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/run.h>
@@ -2143,5 +2143,5 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.91 2002/12/10 01:46:15 easysw Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.92 2002/12/10 02:00:30 easysw Exp $".
 //

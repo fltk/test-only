@@ -1,5 +1,5 @@
 //
-// "$Id: xpmImage.h,v 1.1 2002/12/09 04:48:00 spitzak Exp $"
+// "$Id: xpmImage.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //
 // Image subclass that draws the data from an xpm format file.
 // XPM is a file format designed for small icons in X, it can
@@ -23,7 +23,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_xpmImage_h
@@ -52,5 +52,5 @@ public:
 #endif
 
 //
-// End of "$Id: xpmImage.h,v 1.1 2002/12/09 04:48:00 spitzak Exp $".
+// End of "$Id: xpmImage.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
 //

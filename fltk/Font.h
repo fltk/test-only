@@ -1,5 +1,5 @@
 //
-// "$Id: Font.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: Font.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //
 // When you get a font by name, it returns one of these.
 // Do not attempt to create your own or modify it.
@@ -21,7 +21,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 
 #ifndef fltk_Font_h
 #define fltk_Font_h

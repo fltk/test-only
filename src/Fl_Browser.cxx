@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.68 2002/12/10 01:46:16 easysw Exp $"
+// "$Id: Fl_Browser.cxx,v 1.69 2002/12/10 02:00:39 easysw Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -18,7 +18,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/Browser.h>
@@ -1087,5 +1087,5 @@ Browser::~Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.68 2002/12/10 01:46:16 easysw Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.69 2002/12/10 02:00:39 easysw Exp $".
 //

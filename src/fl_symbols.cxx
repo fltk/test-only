@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.28 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: fl_symbols.cxx,v 1.29 2002/12/10 02:01:03 easysw Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // These are small graphics drawn by the normal label-drawing
@@ -346,5 +346,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.28 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.29 2002/12/10 02:01:03 easysw Exp $".
 //

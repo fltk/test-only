@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Window.cxx,v 1.18 2002/12/10 01:46:17 easysw Exp $"
+// "$Id: Fl_Menu_Window.cxx,v 1.19 2002/12/10 02:00:44 easysw Exp $"
 //
 // Menu window code for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/damage.h>
@@ -103,5 +103,5 @@ MenuWindow::~MenuWindow() {
 }
 
 //
-// End of "$Id: Fl_Menu_Window.cxx,v 1.18 2002/12/10 01:46:17 easysw Exp $".
+// End of "$Id: Fl_Menu_Window.cxx,v 1.19 2002/12/10 02:00:44 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 /*
- * "$Id: fl_call_main.c,v 1.14 2002/12/10 01:46:18 easysw Exp $"
+ * "$Id: fl_call_main.c,v 1.15 2002/12/10 02:00:57 easysw Exp $"
  *
  * Copyright 1998-2003 by Bill Spitzak and others.
  *
@@ -21,7 +21,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA.
  *
- * Please report all bugs and problems to "fltk-bugs@easysw.com".
+ * Please report all bugs and problems to "fltk-bugs@fltk.org".
  */
 
 /*
@@ -88,6 +88,6 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif /* _WIN32 && !FL_LIBRARY && !__GNUC__ */
 
 /*
- * End of "$Id: fl_call_main.c,v 1.14 2002/12/10 01:46:18 easysw Exp $".
+ * End of "$Id: fl_call_main.c,v 1.15 2002/12/10 02:00:57 easysw Exp $".
  */
 

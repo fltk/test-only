@@ -1,5 +1,5 @@
 //
-// "$Id: hello.cxx,v 1.11 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: hello.cxx,v 1.12 2002/12/10 02:01:05 easysw Exp $"
 //
 // The first demo program from the fltk documentation.
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/Window.h>
@@ -42,5 +42,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: hello.cxx,v 1.11 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: hello.cxx,v 1.12 2002/12/10 02:01:05 easysw Exp $".
 //

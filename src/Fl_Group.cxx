@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.118 2002/12/10 01:46:17 easysw Exp $"
+// "$Id: Fl_Group.cxx,v 1.119 2002/12/10 02:00:40 easysw Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Window itself is a subclass of this, and most of the event
@@ -572,5 +572,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.118 2002/12/10 01:46:17 easysw Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.119 2002/12/10 02:00:40 easysw Exp $".
 //

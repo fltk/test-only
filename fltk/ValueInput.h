@@ -1,5 +1,5 @@
 //
-// "$Id: ValueInput.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: ValueInput.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //
 // Text field for inputing a floating-point number
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_ValueInput_h
@@ -54,5 +54,5 @@ private:
 #endif
 
 //
-// End of "$Id: ValueInput.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: ValueInput.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
 //

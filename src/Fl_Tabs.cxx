@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.60 2002/12/10 01:46:17 easysw Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.61 2002/12/10 02:00:51 easysw Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // This is the "file card tabs" interface to allow you to put lots and lots
@@ -427,5 +427,5 @@ TabGroup::TabGroup(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.60 2002/12/10 01:46:17 easysw Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.61 2002/12/10 02:00:51 easysw Exp $".
 //

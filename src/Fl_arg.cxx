@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.39 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: Fl_arg.cxx,v 1.40 2002/12/10 02:00:53 easysw Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // OPTIONAL initialization code for a program using fltk.
@@ -345,5 +345,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef _WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.39 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.40 2002/12/10 02:00:53 easysw Exp $".
 //

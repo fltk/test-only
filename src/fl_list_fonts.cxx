@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts.cxx,v 1.17 2002/12/09 04:52:30 spitzak Exp $"
+// "$Id: fl_list_fonts.cxx,v 1.18 2002/12/10 02:01:02 easysw Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -18,7 +18,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <config.h>
@@ -84,5 +84,5 @@ fltk::Font* fltk::font(const char* name, int attributes /* = 0 */) {
 }
 
 //
-// End of "$Id: fl_list_fonts.cxx,v 1.17 2002/12/09 04:52:30 spitzak Exp $".
+// End of "$Id: fl_list_fonts.cxx,v 1.18 2002/12/10 02:01:02 easysw Exp $".
 //

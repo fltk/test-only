@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_add_idle.cxx,v 1.11 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: Fl_add_idle.cxx,v 1.12 2002/12/10 02:00:52 easysw Exp $"
 //
 // Idle routine support for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Allows you to manage an arbitrary set of idle() callbacks.
@@ -92,5 +92,5 @@ void remove_idle(void (*cb)(void*), void* data) {
 }
 
 //
-// End of "$Id: Fl_add_idle.cxx,v 1.11 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: Fl_add_idle.cxx,v 1.12 2002/12/10 02:00:52 easysw Exp $".
 //

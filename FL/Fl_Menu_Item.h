@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.h,v 1.1 2002/12/09 04:49:44 spitzak Exp $"
+// "$Id: Fl_Menu_Item.h,v 1.2 2002/12/10 02:00:28 easysw Exp $"
 //
 // Back-compatability menu items for FLTK.  The new fltk::Menu class
 // converts these tables into child fltk::Item and fltk::ItemGroup widgets.
@@ -22,7 +22,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef Fl_Menu_Item_h
@@ -159,5 +159,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.h,v 1.1 2002/12/09 04:49:44 spitzak Exp $".
+// End of "$Id: Fl_Menu_Item.h,v 1.2 2002/12/10 02:00:28 easysw Exp $".
 //

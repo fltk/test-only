@@ -1,5 +1,5 @@
 //
-// "$Id: forms_free.cxx,v 1.4 2002/12/10 01:46:15 easysw Exp $"
+// "$Id: forms_free.cxx,v 1.5 2002/12/10 02:00:35 easysw Exp $"
 //
 // Forms free widget routines for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Emulation of the Forms "free" widget.
@@ -73,5 +73,5 @@ int Fl_Free::handle(int e) {
 }
 
 //
-// End of "$Id: forms_free.cxx,v 1.4 2002/12/10 01:46:15 easysw Exp $".
+// End of "$Id: forms_free.cxx,v 1.5 2002/12/10 02:00:35 easysw Exp $".
 //

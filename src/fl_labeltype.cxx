@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.32 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: fl_labeltype.cxx,v 1.33 2002/12/10 02:01:01 easysw Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -18,7 +18,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Originally this contained the definition of LabelType. It now
@@ -230,5 +230,5 @@ void Widget::measure_label(int& w, int& h) const {
 }
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.32 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.33 2002/12/10 02:01:01 easysw Exp $".
 //

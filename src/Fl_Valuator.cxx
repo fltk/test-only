@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.29 2002/12/10 01:46:17 easysw Exp $"
+// "$Id: Fl_Valuator.cxx,v 1.30 2002/12/10 02:00:51 easysw Exp $"
 //
 // Valuator widget for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Base class for sliders and all other one-value "knobs"
@@ -156,5 +156,5 @@ int Valuator::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.29 2002/12/10 01:46:17 easysw Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.30 2002/12/10 02:00:51 easysw Exp $".
 //

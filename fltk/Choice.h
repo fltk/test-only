@@ -1,5 +1,5 @@
 //
-// "$Id: Choice.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: Choice.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //
 // Popup list of items that the user can choose one of. Based on Motif
 // but modern equivalent is the OS/X popup choices.
@@ -24,7 +24,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_Choice_h
@@ -50,5 +50,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Choice.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: Choice.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Color.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: Color.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //
 // Color value. These are 32-bit unsigned numbers with RGB as the
 // upper 3 bytes. The lowest-order byte is treated as an "index"
@@ -22,7 +22,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_Color_h
@@ -107,5 +107,5 @@ FL_API Color nearest_index(Color);
 #endif
 
 //
-// End of "$Id: Color.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: Color.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
 //

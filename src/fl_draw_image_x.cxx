@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image_x.cxx,v 1.6 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: fl_draw_image_x.cxx,v 1.7 2002/12/10 02:00:59 easysw Exp $"
 //
 // Image drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // This file is not independently compiled, it is included by drawimage.cxx
@@ -533,5 +533,5 @@ static void innards(const uchar *buf, int X, int Y, int W, int H,
 #define DITHER_FILLRECT (xvisual->depth <= 16)
 
 //
-// End of "$Id: fl_draw_image_x.cxx,v 1.6 2002/12/10 01:46:18 easysw Exp $"
+// End of "$Id: fl_draw_image_x.cxx,v 1.7 2002/12/10 02:00:59 easysw Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_shadow_box.cxx,v 1.17 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: fl_shadow_box.cxx,v 1.18 2002/12/10 02:01:02 easysw Exp $"
 //
 // Shadow box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/Box.h>
@@ -54,5 +54,5 @@ static ShadowBox shadowBox(0);
 Box* const fltk::SHADOW_BOX = &shadowBox;
 
 //
-// End of "$Id: fl_shadow_box.cxx,v 1.17 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: fl_shadow_box.cxx,v 1.18 2002/12/10 02:01:02 easysw Exp $".
 //

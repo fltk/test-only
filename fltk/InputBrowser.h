@@ -1,5 +1,5 @@
 //
-// "$Id: InputBrowser.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: InputBrowser.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //
 // MicroSoft style "ComboBox" with the menu appearing below with a
 // scrollbar. I would like to use the name "ComboBox" or "InputChoice"
@@ -26,7 +26,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_InputBrowser_h
@@ -72,5 +72,5 @@ protected:
 #endif
 
 //
-// End of "$Id: InputBrowser.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: InputBrowser.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
 //

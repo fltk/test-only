@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.30 2002/12/09 04:52:29 spitzak Exp $"
+// "$Id: fl_color.cxx,v 1.31 2002/12/10 02:00:57 easysw Exp $"
 //
 // Color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/Color.h>
@@ -114,5 +114,5 @@ Color fltk::get_color_index(Color i) {
 }
 
 //
-// End of "$Id: fl_color.cxx,v 1.30 2002/12/09 04:52:29 spitzak Exp $".
+// End of "$Id: fl_color.cxx,v 1.31 2002/12/10 02:00:57 easysw Exp $".
 //

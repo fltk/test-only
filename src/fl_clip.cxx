@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.13 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: fl_clip.cxx,v 1.14 2002/12/10 02:00:57 easysw Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -21,7 +21,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/x.h>
@@ -242,5 +242,5 @@ int fltk::clip_box(int x,int y,int w,int h, int& X,int& Y,int& W,int& H) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.13 2002/12/10 01:46:18 easysw Exp $"
+// End of "$Id: fl_clip.cxx,v 1.14 2002/12/10 02:00:57 easysw Exp $"
 //

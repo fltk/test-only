@@ -1,5 +1,5 @@
 //
-// "$Id: TiledGroup.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: TiledGroup.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //
 // The child widgets are expected to be all laid out to touch each other
 // and fill this group. The user can then move the boundaries between
@@ -22,7 +22,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_TiledGroup_h
@@ -45,5 +45,5 @@ public:
 #endif
 
 //
-// End of "$Id: TiledGroup.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: TiledGroup.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
 //

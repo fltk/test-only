@@ -1,5 +1,5 @@
 //
-// "$Id: Tooltip.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: Tooltip.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //
 // Code used to control the appearance of tooltips, and to pop them
 // up in response to events other than the mouse entering and exiting
@@ -22,7 +22,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_Tooltip_h
@@ -72,5 +72,5 @@ private:
 #endif
 
 //
-// End of "$Id: Tooltip.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: Tooltip.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
 //

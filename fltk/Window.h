@@ -1,5 +1,5 @@
 //
-// "$Id: Window.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: Window.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //
 // Window widget. This must be the outermost group. You can also put
 // them inside other widgets to use the system's window hierarchy.
@@ -21,7 +21,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_Window_h
@@ -128,5 +128,5 @@ private:
 #endif
 
 //
-// End of "$Id: Window.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: Window.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
 //

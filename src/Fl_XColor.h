@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_XColor.h,v 1.3 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: Fl_XColor.h,v 1.4 2002/12/10 02:00:52 easysw Exp $"
 //
 // X-specific color definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <config.h>
@@ -43,5 +43,5 @@ extern unsigned char fl_redmask, fl_greenmask, fl_bluemask;
 extern int fl_redshift, fl_greenshift, fl_blueshift, fl_extrashift;
 
 //
-// End of "$Id: Fl_XColor.h,v 1.3 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: Fl_XColor.h,v 1.4 2002/12/10 02:00:52 easysw Exp $".
 //

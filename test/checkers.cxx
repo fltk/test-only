@@ -1,5 +1,5 @@
 //
-// "$Id: checkers.cxx,v 1.23 2002/12/09 04:52:31 spitzak Exp $"
+// "$Id: checkers.cxx,v 1.24 2002/12/10 02:01:04 easysw Exp $"
 //
 // Checkers game for the Fast Light Tool Kit (FLTK).
 //
@@ -23,7 +23,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 const char* copyright = 
@@ -1376,5 +1376,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: checkers.cxx,v 1.23 2002/12/09 04:52:31 spitzak Exp $".
+// End of "$Id: checkers.cxx,v 1.24 2002/12/10 02:01:04 easysw Exp $".
 //

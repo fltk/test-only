@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.33 2002/12/10 01:46:16 easysw Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.34 2002/12/10 02:00:40 easysw Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/events.h>
@@ -504,5 +504,5 @@ int fltk::color_chooser(const char* name, Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.33 2002/12/10 01:46:16 easysw Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.34 2002/12/10 02:00:40 easysw Exp $".
 //

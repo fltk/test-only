@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_visual.cxx,v 1.15 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: Fl_visual.cxx,v 1.16 2002/12/10 02:00:54 easysw Exp $"
 //
 // Visual support for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Set the default visual according to passed switches:
@@ -112,5 +112,5 @@ bool fltk::visual(int flags) {
 #endif
 
 //
-// End of "$Id: Fl_visual.cxx,v 1.15 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: Fl_visual.cxx,v 1.16 2002/12/10 02:00:54 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: StringList.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: StringList.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //
 // List that can be used in a Menu (and Browser) where each item
 // displays one string from an array.  It is pretty much impossible to
@@ -22,7 +22,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_StringList_h

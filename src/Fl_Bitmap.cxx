@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.cxx,v 1.18 2002/12/10 01:46:16 easysw Exp $"
+// "$Id: Fl_Bitmap.cxx,v 1.19 2002/12/10 02:00:38 easysw Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/events.h>
@@ -69,5 +69,5 @@ void xbmImage::draw(int x, int y, int, int, Flags flags)
 }
 
 //
-// End of "$Id: Fl_Bitmap.cxx,v 1.18 2002/12/10 01:46:16 easysw Exp $".
+// End of "$Id: Fl_Bitmap.cxx,v 1.19 2002/12/10 02:00:38 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: doublebuffer.cxx,v 1.11 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: doublebuffer.cxx,v 1.12 2002/12/10 02:01:04 easysw Exp $"
 //
 // Double-buffering test program for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/Fl.h>
@@ -124,5 +124,5 @@ int main() {
 }
 
 //
-// End of "$Id: doublebuffer.cxx,v 1.11 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: doublebuffer.cxx,v 1.12 2002/12/10 02:01:04 easysw Exp $".
 //

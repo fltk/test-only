@@ -1,5 +1,5 @@
 //
-// "$Id: filename_isdir.cxx,v 1.10 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: filename_isdir.cxx,v 1.11 2002/12/10 02:00:56 easysw Exp $"
 //
 // Directory detection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Used by file_chooser
@@ -48,5 +48,5 @@ bool filename_isdir(const char* name) {
 }
 
 //
-// End of "$Id: filename_isdir.cxx,v 1.10 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: filename_isdir.cxx,v 1.11 2002/12/10 02:00:56 easysw Exp $".
 //

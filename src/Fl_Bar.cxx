@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bar.cxx,v 1.4 2002/12/10 01:46:16 easysw Exp $"
+// "$Id: Fl_Bar.cxx,v 1.5 2002/12/10 02:00:38 easysw Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -18,7 +18,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Based on Frametab V2 contributed by Curtis Edwards (curt1@trilec.com)

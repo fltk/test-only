@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.12 2002/12/10 01:46:15 easysw Exp $"
+ * "$Id: config.h,v 1.13 2002/12/10 02:00:29 easysw Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -20,7 +20,7 @@
  * Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
  * USA.
  *
- * Please report all bugs and problems to "FLTK-bugs@easysw.com".
+ * Please report all bugs and problems to "FLTK-bugs@fltk.org".
  */
 
 #include <stdarg.h>
@@ -191,5 +191,5 @@
 #define CONF_CACHED
 
 /*
- * End of "$Id: config.h,v 1.12 2002/12/10 01:46:15 easysw Exp $".
+ * End of "$Id: config.h,v 1.13 2002/12/10 02:00:29 easysw Exp $".
  */

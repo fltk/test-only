@@ -1,5 +1,5 @@
 //
-// "$Id: fl_oval_box.cxx,v 1.22 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: fl_oval_box.cxx,v 1.23 2002/12/10 02:01:02 easysw Exp $"
 //
 // Oval box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 
@@ -81,5 +81,5 @@ Box* const fltk::OFLAT_BOX = &ovalFlatBox;
 
 
 //
-// End of "$Id: fl_oval_box.cxx,v 1.22 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: fl_oval_box.cxx,v 1.23 2002/12/10 02:01:02 easysw Exp $".
 //

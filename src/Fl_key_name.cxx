@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_key_name.cxx,v 1.8 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: Fl_key_name.cxx,v 1.9 2002/12/10 02:00:54 easysw Exp $"
 //
 // Turn a fltk (X) keysym + fltk shift flags into a human-readable string.
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/events.h>
@@ -130,5 +130,5 @@ const char* fltk::key_name(int shortcut) {
 }
 
 //
-// End of "$Id: Fl_key_name.cxx,v 1.8 2002/12/10 01:46:18 easysw Exp $"
+// End of "$Id: Fl_key_name.cxx,v 1.9 2002/12/10 02:00:54 easysw Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: PopupMenu.h,v 1.2 2002/12/10 01:46:15 easysw Exp $"
+// "$Id: PopupMenu.h,v 1.3 2002/12/10 02:00:29 easysw Exp $"
 //
 // Setting the type to POPUP* will make an invisible widget that can
 // overlap any other widgets and provides a popup menu. The default
@@ -23,7 +23,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_PopupMenu_h
@@ -52,5 +52,5 @@ protected:
 #endif
 
 //
-// End of "$Id: PopupMenu.h,v 1.2 2002/12/10 01:46:15 easysw Exp $".
+// End of "$Id: PopupMenu.h,v 1.3 2002/12/10 02:00:29 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: HighlightButton.h,v 1.2 2002/12/10 01:46:15 easysw Exp $"
+// "$Id: HighlightButton.h,v 1.3 2002/12/10 02:00:29 easysw Exp $"
 //
 // This button highlights even if the default style does not do so.
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_HighlightButton_h
@@ -41,5 +41,5 @@ public:
 #endif
 
 //
-// End of "$Id: HighlightButton.h,v 1.2 2002/12/10 01:46:15 easysw Exp $".
+// End of "$Id: HighlightButton.h,v 1.3 2002/12/10 02:00:29 easysw Exp $".
 //

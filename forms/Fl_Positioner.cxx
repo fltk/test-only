@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Positioner.cxx,v 1.14 2002/12/10 01:46:15 easysw Exp $"
+// "$Id: Fl_Positioner.cxx,v 1.15 2002/12/10 02:00:34 easysw Exp $"
 //
 // Positioner widget for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // The positioner widget from Forms, gives 2D input
@@ -135,5 +135,5 @@ Fl_Positioner::Fl_Positioner(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Positioner.cxx,v 1.14 2002/12/10 01:46:15 easysw Exp $".
+// End of "$Id: Fl_Positioner.cxx,v 1.15 2002/12/10 02:00:34 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.33 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: fl_glyph.cxx,v 1.34 2002/12/10 02:01:01 easysw Exp $"
 //
 // Glyph drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/Widget.h>
@@ -115,5 +115,5 @@ void Widget::default_glyph(const Widget* widget, int glyph,
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.33 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.34 2002/12/10 02:01:01 easysw Exp $".
 //

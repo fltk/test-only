@@ -1,5 +1,5 @@
 //
-// "$Id: fl_scroll_area.cxx,v 1.11 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: fl_scroll_area.cxx,v 1.12 2002/12/10 02:01:02 easysw Exp $"
 //
 // Scrolling routines for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Drawing function to move the contents of a rectangle.  This is passed
@@ -93,5 +93,5 @@ void fltk::scrollrect(int X, int Y, int W, int H, int dx, int dy,
 }
 
 //
-// End of "$Id: fl_scroll_area.cxx,v 1.11 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: fl_scroll_area.cxx,v 1.12 2002/12/10 02:01:02 easysw Exp $".
 //

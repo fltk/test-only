@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.12 2002/12/10 01:46:15 easysw Exp $"
+// "$Id: win32.h,v 1.13 2002/12/10 02:00:29 easysw Exp $"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Do not directly include this file, instead use <fltk/x.h>.  It will
@@ -202,5 +202,5 @@ extern FL_API HCURSOR default_cursor;
 #endif
 
 //
-// End of "$Id: win32.h,v 1.12 2002/12/10 01:46:15 easysw Exp $".
+// End of "$Id: win32.h,v 1.13 2002/12/10 02:00:29 easysw Exp $".
 //

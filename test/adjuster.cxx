@@ -1,5 +1,5 @@
 //
-// "$Id: adjuster.cxx,v 1.6 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: adjuster.cxx,v 1.7 2002/12/10 02:01:04 easysw Exp $"
 //
 // Adjuster test program for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <stdlib.h>
@@ -60,5 +60,5 @@ int main(int, char ** argv) {
 }
 
 //
-// End of "$Id: adjuster.cxx,v 1.6 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: adjuster.cxx,v 1.7 2002/12/10 02:01:04 easysw Exp $".
 //

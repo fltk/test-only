@@ -1,5 +1,5 @@
 //
-// "$Id: LightButton.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: LightButton.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //
 // Forms/XForms/Flame style button with indicator light on left
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_Light_Button_h
@@ -41,5 +41,5 @@ public:
 #endif
 
 //
-// End of "$Id: LightButton.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: LightButton.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
 //

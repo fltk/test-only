@@ -1,5 +1,5 @@
 //
-// "$Id: fl_diamond_box.cxx,v 1.26 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: fl_diamond_box.cxx,v 1.27 2002/12/10 02:00:58 easysw Exp $"
 //
 // Diamond box code for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // A less-used boxtype, it is here so that it is not linked in if
@@ -94,5 +94,5 @@ static DiamondBox diamondUpBox(0, "2AAWWMMTT", &diamondDownBox);
 Box* const fltk::DIAMOND_UP_BOX = &diamondUpBox;
 
 //
-// End of "$Id: fl_diamond_box.cxx,v 1.26 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: fl_diamond_box.cxx,v 1.27 2002/12/10 02:00:58 easysw Exp $".
 //

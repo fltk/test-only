@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.9 2002/12/10 01:46:16 easysw Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.10 2002/12/10 02:00:38 easysw Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // These are the most common, square box types, which are always
@@ -242,5 +242,5 @@ Box* Box::find(const char* name) {
 Box* Box::first = 0;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.9 2002/12/10 01:46:16 easysw Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.10 2002/12/10 02:00:38 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: dirent.h,v 1.3 2002/12/10 01:46:15 easysw Exp $"
+// "$Id: dirent.h,v 1.4 2002/12/10 02:00:29 easysw Exp $"
 //
 // Directory header file for the Fast Light Tool Kit (FLTK).
 //
@@ -20,12 +20,12 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // this file is for back-compatability only
 #include "filename.h"
 
 //
-// End of "$Id: dirent.h,v 1.3 2002/12/10 01:46:15 easysw Exp $".
+// End of "$Id: dirent.h,v 1.4 2002/12/10 02:00:29 easysw Exp $".
 //

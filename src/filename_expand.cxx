@@ -1,5 +1,5 @@
 //
-// "$Id: filename_expand.cxx,v 1.10 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: filename_expand.cxx,v 1.11 2002/12/10 02:00:56 easysw Exp $"
 //
 // Filename expansion routines for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 /* expand a file name by substuting environment variables and
@@ -104,5 +104,5 @@ bool filename_expand(char *to, const char *from) {
 }
 
 //
-// End of "$Id: filename_expand.cxx,v 1.10 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: filename_expand.cxx,v 1.11 2002/12/10 02:00:56 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tile.cxx,v 1.21 2002/12/10 01:46:17 easysw Exp $"
+// "$Id: Fl_Tile.cxx,v 1.22 2002/12/10 02:00:51 easysw Exp $"
 //
 // Tile widget for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Group of 2 or 4 "tiles" that can be resized by dragging border
@@ -166,5 +166,5 @@ int TiledGroup::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Tile.cxx,v 1.21 2002/12/10 01:46:17 easysw Exp $".
+// End of "$Id: Fl_Tile.cxx,v 1.22 2002/12/10 02:00:51 easysw Exp $".
 //

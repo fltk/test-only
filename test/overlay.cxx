@@ -1,5 +1,5 @@
 //
-// "$Id: overlay.cxx,v 1.8 2002/12/10 01:46:19 easysw Exp $"
+// "$Id: overlay.cxx,v 1.9 2002/12/10 02:01:06 easysw Exp $"
 //
 // Overlay window test program for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <stdlib.h>
@@ -80,5 +80,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: overlay.cxx,v 1.8 2002/12/10 01:46:19 easysw Exp $".
+// End of "$Id: overlay.cxx,v 1.9 2002/12/10 02:01:06 easysw Exp $".
 //

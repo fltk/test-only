@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Numeric_Input.cxx,v 1.7 2002/12/09 04:52:26 spitzak Exp $"
+// "$Id: Fl_Numeric_Input.cxx,v 1.8 2002/12/10 02:00:44 easysw Exp $"
 //
 // Copyright 2002 by Bill Spitzak, Digital Domain, and others.
 //
@@ -18,7 +18,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 
 // This user interface design is Copyright (C) 2000-2002 Digital Domain.
 // Patent Pending!

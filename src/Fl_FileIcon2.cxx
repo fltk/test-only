@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileIcon2.cxx,v 1.13 2002/12/09 04:52:25 spitzak Exp $"
+// "$Id: Fl_FileIcon2.cxx,v 1.14 2002/12/10 02:00:40 easysw Exp $"
 //
 // FileIcon loading routines for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 // Contents:
 //
@@ -803,5 +803,5 @@ get_kde_val(char       *str,
 
 
 //
-// End of "$Id: Fl_FileIcon2.cxx,v 1.13 2002/12/09 04:52:25 spitzak Exp $".
+// End of "$Id: Fl_FileIcon2.cxx,v 1.14 2002/12/10 02:00:40 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.45 2002/12/09 04:52:26 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.46 2002/12/10 02:00:43 easysw Exp $"
 //
 // The Menu base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Group
@@ -23,7 +23,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/events.h>
@@ -228,5 +228,5 @@ int Menu::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.45 2002/12/09 04:52:26 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.46 2002/12/10 02:00:43 easysw Exp $"
 //

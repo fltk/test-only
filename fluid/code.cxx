@@ -1,5 +1,5 @@
 //
-// "$Id: code.cxx,v 1.19 2002/12/10 01:46:15 easysw Exp $"
+// "$Id: code.cxx,v 1.20 2002/12/10 02:00:32 easysw Exp $"
 //
 // Code output routines for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <ctype.h>
@@ -326,5 +326,5 @@ void FluidType::write_code() {
 }
 
 //
-// End of "$Id: code.cxx,v 1.19 2002/12/10 01:46:15 easysw Exp $".
+// End of "$Id: code.cxx,v 1.20 2002/12/10 02:00:32 easysw Exp $".
 //

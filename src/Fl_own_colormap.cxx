@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_own_colormap.cxx,v 1.8 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: Fl_own_colormap.cxx,v 1.9 2002/12/10 02:00:54 easysw Exp $"
 //
 // Private colormap support for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Using the default system colormap can be a bad idea on PseudoColor
@@ -73,5 +73,5 @@ void fltk::own_colormap() {
 #endif
 
 //
-// End of "$Id: Fl_own_colormap.cxx,v 1.8 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: Fl_own_colormap.cxx,v 1.9 2002/12/10 02:00:54 easysw Exp $".
 //

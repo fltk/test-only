@@ -1,5 +1,5 @@
 //
-// "$Id: scandir_win32.c,v 1.17 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: scandir_win32.c,v 1.18 2002/12/10 02:01:03 easysw Exp $"
 //
 // _WIN32 scandir function for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Emulation of posix scandir() call
@@ -95,5 +95,5 @@ int scandir(const char *dirname, struct dirent ***namelist,
 }
 
 //
-// End of "$Id: scandir_win32.c,v 1.17 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: scandir_win32.c,v 1.18 2002/12/10 02:01:03 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: ValueSlider.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: ValueSlider.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //
 // Copyright 1998-2002 by Bill Spitzak and others.
 //
@@ -18,7 +18,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_Value_Slider_h
@@ -40,5 +40,5 @@ public:
 #endif
 
 //
-// End of "$Id: ValueSlider.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $".
+// End of "$Id: ValueSlider.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
 //

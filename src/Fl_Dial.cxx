@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.42 2002/12/10 01:46:17 easysw Exp $"
+// "$Id: Fl_Dial.cxx,v 1.43 2002/12/10 02:00:40 easysw Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/Dial.h>
@@ -138,5 +138,5 @@ Dial::Dial(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.42 2002/12/10 01:46:17 easysw Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.43 2002/12/10 02:00:40 easysw Exp $".
 //

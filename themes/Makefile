@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.35 2002/12/10 01:46:19 easysw Exp $"
+# "$Id: Makefile,v 1.36 2002/12/10 02:01:07 easysw Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -20,7 +20,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA.
 #
-# Please report all bugs and problems to "fltk-bugs@easysw.com".
+# Please report all bugs and problems to "fltk-bugs@fltk.org".
 #
 
 # * essai.theme removed from default list because it requires -ljpeg
@@ -108,5 +108,5 @@ depend:
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.35 2002/12/10 01:46:19 easysw Exp $".
+# End of "$Id: Makefile,v 1.36 2002/12/10 02:01:07 easysw Exp $".
 #

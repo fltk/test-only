@@ -1,5 +1,5 @@
 //
-// "$Id: ShapedWindow.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: ShapedWindow.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //
 // Window that can have a shape other than a rectangle. Right now the
 // shape is controlled by a bitmap, which matches X, but we really could
@@ -22,7 +22,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_ShapedWindow_h
@@ -53,5 +53,5 @@ class FL_API ShapedWindow : public DoubleBufferWindow {
 #endif
 
 //
-// End of "$Id: ShapedWindow.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// End of "$Id: ShapedWindow.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: run.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: run.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //
 // The basic fltk runtime. Every program needs to call this somewhere.
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_run_h

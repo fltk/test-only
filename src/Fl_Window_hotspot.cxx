@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_hotspot.cxx,v 1.18 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: Fl_Window_hotspot.cxx,v 1.19 2002/12/10 02:00:52 easysw Exp $"
 //
 // Move windows but keep them on-screen.
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/events.h>
@@ -73,5 +73,5 @@ void Window::hotspot(int cx, int cy, bool offscreen) {
 }
 
 //
-// End of "$Id: Fl_Window_hotspot.cxx,v 1.18 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: Fl_Window_hotspot.cxx,v 1.19 2002/12/10 02:00:52 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.21 2002/12/09 04:52:25 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.22 2002/12/10 02:00:43 easysw Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/Item.h>

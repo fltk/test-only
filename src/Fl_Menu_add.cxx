@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.34 2002/12/10 01:46:17 easysw Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.35 2002/12/10 02:00:44 easysw Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Methods to create/destroy the items in an Menu widget.  Used to
@@ -249,5 +249,5 @@ Widget* Menu::add(const char *str) {
 }
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.34 2002/12/10 01:46:17 easysw Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.35 2002/12/10 02:00:44 easysw Exp $".
 //

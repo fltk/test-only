@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.138 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: Fl_x.cxx,v 1.139 2002/12/10 02:00:54 easysw Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -21,7 +21,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #define CONSOLIDATE_MOTION 0 // this was 1 in fltk 1.0
@@ -1388,5 +1388,5 @@ bool fltk::get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.138 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: Fl_x.cxx,v 1.139 2002/12/10 02:00:54 easysw Exp $".
 //

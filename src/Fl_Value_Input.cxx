@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.36 2002/12/09 04:52:26 spitzak Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.37 2002/12/10 02:00:51 easysw Exp $"
 //
 // Copyright 1998-2002 by Bill Spitzak and others.
 //
@@ -18,7 +18,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Fltk widget for input of a floating-point value. Contains an inner
@@ -213,5 +213,5 @@ ValueInput::~ValueInput() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.36 2002/12/09 04:52:26 spitzak Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.37 2002/12/10 02:00:51 easysw Exp $".
 //

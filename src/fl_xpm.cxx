@@ -1,5 +1,5 @@
 //
-// "$Id: fl_xpm.cxx,v 1.21 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: fl_xpm.cxx,v 1.22 2002/12/10 02:01:03 easysw Exp $"
 //
 // XPM reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Image type that reads an xpm file in from disk.  Normal use of xpm
@@ -187,5 +187,5 @@ void xpmImage::read()
 }
 
 //
-// End of "$Id: fl_xpm.cxx,v 1.21 2002/12/10 01:46:18 easysw Exp $"
+// End of "$Id: fl_xpm.cxx,v 1.22 2002/12/10 02:01:03 easysw Exp $"
 //

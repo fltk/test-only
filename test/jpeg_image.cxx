@@ -1,5 +1,5 @@
 //
-// "$Id: jpeg_image.cxx,v 1.8 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: jpeg_image.cxx,v 1.9 2002/12/10 02:01:05 easysw Exp $"
 //
 // fl_draw_image test program for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/Fl.h>
@@ -198,5 +198,5 @@ void readtheimage(const char *name) {
 #endif
 
 //
-// End of "$Id: jpeg_image.cxx,v 1.8 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: jpeg_image.cxx,v 1.9 2002/12/10 02:01:05 easysw Exp $".
 //

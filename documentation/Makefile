@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.21 2002/12/10 01:46:15 easysw Exp $"
+# "$Id: Makefile,v 1.22 2002/12/10 02:00:29 easysw Exp $"
 #
 # Documentation makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -20,7 +20,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA.
 #
-# Please report all bugs and problems to "fltk-bugs@easysw.com".
+# Please report all bugs and problems to "fltk-bugs@fltk.org".
 #
 
 # Where to find HTMLDOC...
@@ -180,5 +180,5 @@ fltk.pdf: $(HTMLFILES)
 	@$(HTMLDOC) -f fltk.pdf $(MEDIA) --jpeg --compression=9 --duplex --verbose --toclevels 2 --titleimage FL.gif $(HTMLFILES)
 
 #
-# End of "$Id: Makefile,v 1.21 2002/12/10 01:46:15 easysw Exp $".
+# End of "$Id: Makefile,v 1.22 2002/12/10 02:00:29 easysw Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_show_colormap.cxx,v 1.25 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: fl_show_colormap.cxx,v 1.26 2002/12/10 02:01:02 easysw Exp $"
 //
 // Colormap color selection dialog for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Select a color from the colormap.
@@ -135,5 +135,5 @@ Color fltk::show_colormap(Color oldcol) {
 }
 
 //
-// End of "$Id: fl_show_colormap.cxx,v 1.25 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: fl_show_colormap.cxx,v 1.26 2002/12/10 02:01:02 easysw Exp $".
 //

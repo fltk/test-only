@@ -1,5 +1,5 @@
 //
-// "$Id: KDE_colors.cxx,v 1.4 2001/07/23 09:50:06 spitzak Exp $"
+// "$Id: KDE_colors.cxx,v 1.5 2002/12/10 02:01:07 easysw Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // Just colors and fonts for KDE -- no boxtypes
@@ -38,5 +38,5 @@ extern "C" int fltk_plugin() {
 }
 
 //
-// End of "$Id: KDE_colors.cxx,v 1.4 2001/07/23 09:50:06 spitzak Exp $".
+// End of "$Id: KDE_colors.cxx,v 1.5 2002/12/10 02:01:07 easysw Exp $".
 //

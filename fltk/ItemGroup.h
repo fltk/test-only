@@ -1,5 +1,5 @@
 //
-// "$Id: ItemGroup.h,v 1.1 2002/12/09 04:47:59 spitzak Exp $"
+// "$Id: ItemGroup.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
 //
 // Widget designed to be a nested list in a menu or browser. This
 // copies the drawing and style code from Item. I did not modify the
@@ -23,7 +23,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #ifndef fltk_ItemGroup_h

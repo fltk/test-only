@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.59 2002/12/10 01:46:18 easysw Exp $"
+# "$Id: Makefile,v 1.60 2002/12/10 02:01:03 easysw Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -20,7 +20,7 @@
 # Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 # USA.
 #
-# Please report all bugs and problems to "fltk-bugs@easysw.com".
+# Please report all bugs and problems to "fltk-bugs@fltk.org".
 #
 
 CPPFILES =\
@@ -125,5 +125,5 @@ install_shared:
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.59 2002/12/10 01:46:18 easysw Exp $".
+# End of "$Id: Makefile,v 1.60 2002/12/10 02:01:03 easysw Exp $".
 #

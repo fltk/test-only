@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.46 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: fl_font_win32.cxx,v 1.47 2002/12/10 02:01:01 easysw Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 #include <fltk/x.h>
@@ -254,5 +254,5 @@ void fltk::set_encoding(const char* f) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.46 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.47 2002/12/10 02:01:01 easysw Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.92 2002/12/10 01:46:18 easysw Exp $"
+// "$Id: Fl_Window.cxx,v 1.93 2002/12/10 02:00:52 easysw Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
 // The Window is a window in the fltk library.
@@ -380,5 +380,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.92 2002/12/10 01:46:18 easysw Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.93 2002/12/10 02:00:52 easysw Exp $".
 //
