@@ -17,16 +17,21 @@
 </PRE>
 </UL>
 <H3>Description</H3>
- The <TT>Fl_Scrollbar</TT> widget displays a slider with arrow buttons 
+
+<img src=scrollbar.gif>
+
+<p>The <TT>Fl_Scrollbar</TT> widget displays a slider with arrow buttons 
 at the ends of the scrollbar. Clicking on the arrows move up/left and 
 down/right by <TT>linesize()</TT>.  Scrollbars also accept <TT>
 FL_SHORTCUT</TT> events: the arrows move by <TT>linesize()</TT>, and 
 vertical scrollbars take Page Up/Down (they move by the page size minus <TT>
 linesize()</TT>) and Home/End (they jump to the top or bottom). 
+
 <P>Scrollbars have <TT>step(1)</TT> preset (they always return 
 integers). If desired you can set the <TT>step()</TT> to non-integer 
 values.  You will then have to use casts to get at the floating-point 
 versions of <TT>value()</TT> from <TT>Fl_Slider</TT>. </P>
+
 <H3>Methods</H3>
 <UL>
 <LI><A href=#Fl_Scrollbar.Fl_Scrollbar>Fl_Scrollbar</A></LI>

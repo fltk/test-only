@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_fullscreen.cxx,v 1.13 2002/03/09 21:25:36 spitzak Exp $"
+// "$Id: Fl_Window_fullscreen.cxx,v 1.14 2002/03/11 08:22:35 spitzak Exp $"
 //
 // Fullscreen window support for the Fast Light Tool Kit (FLTK).
 //
@@ -38,35 +38,23 @@ void Fl_Window::fullscreen() {
   // the border is turned off. And most (all except Irix 4DWM, as far as I
   // can tell) will ignore attempts to change the border unless the window
   // is unmapped. Telling the window manager about the border changing
-  // is done by i->sendxjunk().
-  if (shown()) XUnmapWindow(fl_display,i->xid);
+  // is done by i->sendxjunk(). Order is somewhat peculiar, we need to
+  // have the window mapped before calling resize or some window managers
+  // (KDE) ignore the positioning information:
   clear_border();
+  if (shown()) i->sendxjunk();
 #endif
   resize(info.x, info.y, info.w, info.h);
-#ifndef _WIN32
-  if (shown()) {
-    layout();
-    i->sendxjunk();
-    XMapWindow(fl_display,i->xid);
-  }
-#endif
 }
 
 void Fl_Window::fullscreen_off(int X,int Y,int W,int H) {
 #ifndef _WIN32
-  if (shown()) XUnmapWindow(fl_display,i->xid);
   clear_flag(Fl_Window::FL_NOBORDER);
+  if (shown()) i->sendxjunk();
 #endif
   resize(X, Y, W, H);
-#ifndef _WIN32
-  if (shown()) {
-    layout();
-    i->sendxjunk();
-    XMapWindow(fl_display,i->xid);
-  }
-#endif
 }
 
 //
-// End of "$Id: Fl_Window_fullscreen.cxx,v 1.13 2002/03/09 21:25:36 spitzak Exp $".
+// End of "$Id: Fl_Window_fullscreen.cxx,v 1.14 2002/03/11 08:22:35 spitzak Exp $".
 //

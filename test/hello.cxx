@@ -1,5 +1,5 @@
 //
-// "$Id: hello.cxx,v 1.8 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: hello.cxx,v 1.9 2002/03/11 08:22:35 spitzak Exp $"
 //
 // Demo program from the fltk documentation.
 //
@@ -33,11 +33,12 @@ int main(int argc, char **argv) {
   box->box(FL_UP_BOX);
   box->label_font(FL_HELVETICA_BOLD_ITALIC);
   box->label_size(36);
+  box->label_type(FL_SHADOW_LABEL);
   window->end();
   window->show(argc, argv);
   return Fl::run();
 }
 
 //
-// End of "$Id: hello.cxx,v 1.8 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: hello.cxx,v 1.9 2002/03/11 08:22:35 spitzak Exp $".
 //

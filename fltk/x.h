@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.5 2001/12/16 22:32:02 spitzak Exp $"
+// "$Id: x.h,v 1.6 2002/03/11 08:22:35 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -40,14 +40,19 @@
 #else
 
 #if defined(_ABIN32) || defined(_ABI64) // fix for broken SGI Irix X .h files
-#pragma set woff 3322
+# pragma set woff 3322
 #endif
 #include <X11/Xlib.h>
 #include <X11/Xutil.h>
 #if defined(_ABIN32) || defined(_ABI64)
-#pragma reset woff 3322
+# pragma reset woff 3322
 #endif
 #include <X11/Xatom.h>
+#if USE_XFT
+# include <X11/Xft/Xft.h>
+#else
+ typedef struct _XftDraw XftDraw;
+#endif
 
 void fl_open_display();
 void fl_open_display(Display*);
@@ -134,5 +139,5 @@ Fl_Window* fl_find(Window xid);
 #endif	//Fl_X_H
 
 //
-// End of "$Id: x.h,v 1.5 2001/12/16 22:32:02 spitzak Exp $".
+// End of "$Id: x.h,v 1.6 2002/03/11 08:22:35 spitzak Exp $".
 //

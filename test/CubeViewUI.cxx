@@ -44,7 +44,7 @@ void CubeViewUI::cb_zoom(Fl_Value_Slider* o, void* v) {
 
 CubeViewUI::CubeViewUI() {
   Fl_Window* w;
-   {Fl_Window* o = mainWindow = new Fl_Window(419, 406, "CubeView");
+   {Fl_Window* o = mainWindow = new Fl_Window(418, 406, "CubeView");
     w = o;
     o->user_data((void*)(this));
      {Fl_Group* o = new Fl_Group(5, 3, 374, 399);
@@ -58,7 +58,6 @@ CubeViewUI::CubeViewUI() {
           o->align(FL_ALIGN_WRAP);
         }
          {Fl_Slider* o = ypan = new Fl_Slider(20, 0, 17, 186);
-          o->type(Fl_Slider::VERTICAL_NICE);
           o->label_type(FL_NO_LABEL);
           o->label_color((Fl_Color)136);
           o->minimum(-25);
@@ -71,7 +70,7 @@ CubeViewUI::CubeViewUI() {
       }
        {Fl_Group* o = HChange = new Fl_Group(115, 359, 190, 40);
          {Fl_Slider* o = xpan = new Fl_Slider(2, 2, 186, 17);
-          o->type(Fl_Slider::HORIZONTAL_NICE);
+          o->type(Fl_Slider::HORIZONTAL);
           o->label_type(FL_NO_LABEL);
           o->label_color((Fl_Color)136);
           o->minimum(25);
@@ -102,10 +101,9 @@ CubeViewUI::CubeViewUI() {
         o->end();
       }
        {Fl_Value_Slider* o = zoom = new Fl_Value_Slider(101, 0, 227, 19, "Zoom");
-        o->type(Fl_Value_Slider::HORIZONTAL_NICE);
+        o->type(Fl_Value_Slider::HORIZONTAL);
         o->label_font(fl_fonts+1);
         o->label_color((Fl_Color)136);
-        o->minimum(1);
         o->maximum(50);
         o->step(0.1);
         o->value(10);

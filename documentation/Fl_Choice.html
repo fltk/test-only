@@ -17,27 +17,32 @@
 </PRE>
 </UL>
 <H3>Description</H3>
- This is a button that when pushed pops up a menu (or hierarchy of 
-menus) defined by an array of <A href=Fl_Menu_Item.html#Fl_Menu_Item><TT>
-Fl_Menu_Item</TT></A> objects.  Motif calls this an OptionButton. 
-<P>The only difference between this and a <A href=Fl_Menu_Button.html#Fl_Menu_Button>
-<TT>Fl_Menu_Button</TT></A> is that the name of the most recent chosen 
-menu item is displayed inside the box, while the label is displayed 
-outside the box.  However, since the use of this is most often to 
-control a single variable rather than do individual callbacks, some of 
-the <TT>Fl_Menu_Button</TT> methods are redescribed here in those 
-terms. </P>
-<P>When the user picks an item off the menu the <TT>value()</TT> is set 
-to that item and then the callback is done. </P>
-<P>All three mouse buttons pop up the menu.  The Forms behavior of the 
-first two buttons to increment/decrement the choice is not implemented. 
- This could be added with a subclass, however. </P>
-<P>The menu will also pop up in response to shortcuts indicated by 
-putting a '&amp;' character in the <TT>label()</TT>.  See <A href=Fl_Button.html#Fl_Button>
-<TT>Fl_Button</TT></A> for a description of this. </P>
-<P>Typing the <TT>shortcut()</TT> of any of the items will do exactly 
-the same as when you pick the item with the mouse.  The '&amp;' character in 
-item names are only looked at when the menu is popped up, however. </P>
+
+This is a button that when pushed pops up a menu (or hierarchy of
+menus) defined by an array of child items. The appearance is designed
+to look like a Windows "combo box" but it is somewhat different in
+that it does not contain a text editor, also the menu pops up with the
+current item under the cursor, which is immensely easier to use once
+you get used to it.  Motif calls this an OptionButton.
+
+<p><center><img src=choice.gif></center>
+
+<p>The user can change the value by popping up the menu by clicking
+anywhere in the widget and moving the cursor to a different item, or
+by typing up and down arrow keys to cycle amoung the items.  Typing
+the <a href="Fl_Widget.html#shortcut">shortcut()</a> of any of the
+items will also change the value to that item (The '&amp;' character
+in item names are only looked at when the menu is popped up,
+however).</P>
+
+<p>The menu will also pop up in response to shortcuts indicated by
+putting a '&amp;' character in the label() or to the 
+<a href="Fl_Widget.html#shortcut">shortcut()</a> of the Fl_Choice
+widget itself. The user can then use arrow keys or the mouse to change
+the selected item.
+
+<P>When the user changes the value() the callback is done.
+
 <H3>Methods</H3>
 <UL>
 <LI><A href=#Fl_Choice.Fl_Choice>Fl_Choice</A></LI>
