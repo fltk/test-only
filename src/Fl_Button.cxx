@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.62 2003/03/09 07:51:36 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.63 2003/07/23 04:55:50 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -125,8 +125,6 @@ int Button::handle(int event) {
 
 extern Widget* fl_did_clipping;
 
-extern Color fl_item_labelcolor(const Widget* widget);
-
 // Draw button-like widgets with an optional glyph. The glyph is given
 // a size (negative to put it on the right)
 void Button::draw(int glyph, int glyph_width) const
@@ -189,7 +187,7 @@ void Button::draw(int glyph, int glyph_width) const
       draw_label = false;
     }
     // this allows these buttons to be put into browser/menus:
-    labelcolor = fl_item_labelcolor(this);
+    //labelcolor = fl_item_labelcolor(this);
   } else {
     if ((damage()&DAMAGE_EXPOSE) && !box->fills_rectangle()) {
       // Erase the area behind non-square boxes
@@ -246,5 +244,5 @@ Button::Button(int x,int y,int w,int h, const char *l) : Widget(x,y,w,h,l) {
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.62 2003/03/09 07:51:36 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.63 2003/07/23 04:55:50 spitzak Exp $".
 //

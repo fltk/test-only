@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.64 2003/07/22 01:29:10 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.65 2003/07/23 04:55:50 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,6 +27,7 @@
 #include <fltk/events.h>
 #include <fltk/damage.h>
 #include <fltk/Box.h>
+#include <fltk/Item.h>
 #include <fltk/draw.h>
 #include <fltk/Tooltip.h>
 #include <config.h>
@@ -34,7 +35,6 @@
 #define checkmark(item) (item->type()>=Item::TOGGLE && item->type()<=Item::RADIO)
 
 using namespace fltk;
-extern const Widget* fl_item_parent;
 extern bool fl_hide_shortcut;
 
 void MenuBar::draw() {
@@ -43,11 +43,10 @@ void MenuBar::draw() {
   int x1 = 0; int y1 = 0; int w1 = w(); int h1 = this->h();
   box()->inset(x1,y1,w1,h1);
   int X = 3;
-  const Widget* saved = fl_item_parent;
-  fl_item_parent = this;
   if (Style::hide_shortcut &&
       !(event_key_state(LeftAltKey) || event_key_state(RightAltKey)))
     fl_hide_shortcut = true;
+  Item::set_style(this);
   for (int i = 0; i < children(); i++) {
     Widget* widget = child(i);
     if (!widget->visible()) continue;
@@ -74,7 +73,6 @@ void MenuBar::draw() {
     X += W;
   }
   fl_hide_shortcut = false;
-  fl_item_parent = saved;
   last_ = highlight_;
 }
 
@@ -174,5 +172,5 @@ MenuBar::MenuBar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.64 2003/07/22 01:29:10 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.65 2003/07/23 04:55:50 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: KDE.cxx,v 1.13 2003/06/25 06:11:43 spitzak Exp $"
+// "$Id: KDE.cxx,v 1.14 2003/07/23 04:55:50 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -229,19 +229,16 @@ extern "C" bool fltk_theme() {
     if ( (p = strtok_r(0, ",", &sv)) && atoi(p) >= 75 ) attrib = BOLD;
     if ( (p = strtok_r(0, ",", &sv)) && atoi(p) > 0 ) attrib |= ITALIC;
     fltk::Font* menufont = fltk::font(fontname, attrib);
-    Style* style;
-    if (menufont && (style = Style::find("item"))) {
-      style->labelfont = style->textfont = menufont;
-      style->labelsize = style->textsize = menufontsize;
+    if (menufont) {
+      Style* style;
 
-      if ((style = Style::find("menu bar"))) {
-	style->labelfont = style->textfont = menufont;
-	style->labelsize = style->textsize = menufontsize;
+      if ((style = Style::find("MenuBar"))) {
+	style->textfont = menufont;
+	style->textsize = menufontsize;
       }
-
-      if ((style = Style::find("menu title"))) {
-	style->labelfont = style->textfont = menufont;
-	style->labelsize = style->textsize = menufontsize;
+      if ((style = Style::find("PopupMenu"))) {
+	style->textfont = menufont;
+	style->textsize = menufontsize;
       }
     }
   }
@@ -332,5 +329,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: KDE.cxx,v 1.13 2003/06/25 06:11:43 spitzak Exp $".
+// End of "$Id: KDE.cxx,v 1.14 2003/07/23 04:55:50 spitzak Exp $".
 //

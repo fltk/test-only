@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.142 2003/07/22 01:29:10 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.143 2003/07/23 04:55:50 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -115,8 +115,6 @@ MenuTitle::MenuTitle(MenuState* m, int X, int Y, int W, int H, Widget* L)
 // then we could have used the buttonbox of the menu widget to control
 // the popup items so menus in the same program could appear different. Sigh!
 
-extern const Widget* fl_item_parent;
-
 void MenuTitle::draw() {
 
   Widget* style_widget = menustate->widget;
@@ -148,9 +146,8 @@ void MenuTitle::draw() {
   push_matrix();
   translate(5, (h()-widget->height())>>1);
   int save_w = widget->w(); widget->w(w()-10);
-  fl_item_parent = this;
+  Item::set_style(style_widget);
   widget->draw();
-  fl_item_parent = 0;
   widget->w(save_w);
   widget->clear_flag(SELECTED);
   pushed_ = 0;
@@ -181,18 +178,17 @@ public:
   static NamedStyle* default_style;
 };
 
-// The box, color, and selection color of all menus is taken from
-// this. The buttonbox is drawn around each item in the menu (nyi).
-// The color is rather clumsily replaced with the color()
-// of the calling widget to allow compatability with fltk 1.0 and
-// to allow popup menus to have different colors.
-
 static void revert(Style *s) {
   s->box = UP_BOX;
-  s->buttonbox = FLAT_BOX;
+  s->buttonbox = FLAT_BOX; // was used around selected items, ignored now
   s->leading = 4;
 }
 static NamedStyle style("Menu", revert, &MWindow::default_style);
+/** For compatability with random inconsistencies in the Windows
+    interface, the box drawn around the popup menu and the spacing
+    between the menu items is taken from this style rather than
+    from the Menu widget. This probably should be fixed somehow...
+*/
 NamedStyle* MWindow::default_style = &::style;
 
 // return any widget at a given level:
@@ -217,6 +213,7 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp, Widget* t)
   : MenuWindow(X, Y, Wp, Hp, 0), menustate(m), level(l)
 {
   style(default_style);
+  Item::set_style(menustate->widget);
 
   children = m->widget->children(m->indexes, l);
 
@@ -307,7 +304,6 @@ int MWindow::ypos(int index) {
   return y;
 }
 
-extern Color fl_item_labelcolor(const Widget* widget);
 extern bool fl_hide_shortcut;
 
 void MWindow::draw() {
@@ -318,6 +314,7 @@ void MWindow::draw() {
   if (Style::hide_shortcut &&
       !(event_key_state(LeftAltKey)||event_key_state(RightAltKey)))
     fl_hide_shortcut = true;
+  Item::set_style(menustate->widget);
   for (int i = 0; i < children; i++) {
     Widget* widget = get_widget(i);
     if (!widget->visible()) continue;
@@ -349,7 +346,6 @@ void MWindow::draw() {
       int save_w = widget->w(); widget->w(w);
       int save_flags = widget->flags();
       widget->flags(flags);
-      fl_item_parent = this;
       widget->draw();
       widget->w(save_w);
       pushed_ = 0;
@@ -364,10 +360,9 @@ void MWindow::draw() {
 	setfont(widget->textfont(), widget->textsize());
 	widget->labeltype()->draw(key_name(widget->shortcut()),
 				  x, y, w-3, ih,
-				  fl_item_labelcolor(widget),
+				  (flags&SELECTED) ? widget->selection_textcolor() : widget->textcolor(),
 				  flags|ALIGN_RIGHT);
       }
-      fl_item_parent = 0;
       widget->flags(save_flags);
     }
     y += ih;
@@ -840,5 +835,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.142 2003/07/22 01:29:10 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.143 2003/07/23 04:55:50 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.26 2003/04/27 01:54:52 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.27 2003/07/23 04:55:50 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -59,24 +59,29 @@ Item::Item(const char* l) : Widget(0,0,0,0,l) {
   set_flag(ALIGN_LEFT|ALIGN_INSIDE);
 }
 
-// Undocumented. A "parent" widget can be set here to select the
-// default textcolor for an item:
-const Widget* fl_item_parent;
+/** Modify the parent of the Item::default_style to this style.
+    If no style settings have been done to an Item, it will use the
+    textfont, textsize, textcolor, and possibly other settings
+    inherited from this style to draw itself. This is used by menus
+    and browsers to cause all the elements inside them to draw
+    using their settings.
 
-Color fl_item_labelcolor(const Widget* widget) {
-  if (widget->flags() & SELECTED) {
-    Color color = widget->style()->selection_textcolor;
-    if (color) return color;
-    if (fl_item_parent) return fl_item_parent->selection_textcolor();
-    return widget->selection_textcolor();
-  } else {
-    Color color = widget->style()->labelcolor;
-    if (color) return color;
-    if (fl_item_parent) return fl_item_parent->textcolor();
-    return widget->labelcolor();
-  }
+    Use Item::clear_style() to put this back so that \a style can
+    be deleted. This is the same as setting it to Widget::default_style.
+*/
+void Item::set_style(const Style* style) {
+  ::style.parent = style;
 }
 
+extern bool fl_use_textfont;
+
+/** By default an item just draws it's label using the textcolor.
+    If flags() has SELECTED on it uses selection_textcolor. This
+    assummes the caller has already drawn the background.
+
+    The current version can also draw check or radio buttons
+    but this functionality may be removed.
+*/
 void Item::draw() {
   //if (buttonbox() != NO_BOX) draw_buttonbox();
   int x = 0; int y = 0; int w = this->w(); int h = this->h();
@@ -93,15 +98,20 @@ void Item::draw() {
     draw_glyph(0, x+3, y+((h-gw)>>1), gw, gw, lflags);
     x += gw+3; w -= gw+3;
   }
-  draw_label(x+3, y, w-6, h, fl_item_labelcolor(this), flags());
+  Color color = 0;
+  if (flags() & SELECTED) color = selection_textcolor();
+  if (!color) color = textcolor();
+  fl_use_textfont = true;
+  draw_label(x+3, y, w-6, h, color, flags());
+  fl_use_textfont = false;
 }
 
-// Measure the space the draw() will take:
-// maybe this should be the default layout() function for Widget?
+/** Measure the space the draw() will take and set w() and h().
+    Maybe this should be the default layout() function for Widget? */
 void Item::layout() {
   if (w() && h()) return; // already at the correct size
   //int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
-  setfont(labelfont(), labelsize());
+  setfont(textfont(), textsize());
   int w = 250, h = 250; measure(label(), w, h, flags());
   if (type()) w += 15;
   if (image()) {
@@ -133,13 +143,18 @@ void ItemGroup::draw() {
   //if (box() != NO_BOX) draw_box();
   int x = 0; int y = 0; int w = this->w(); int h = this->h();
   //box()->inset(x,y,w,h);
-  draw_label(x+3, y, w-6, h, fl_item_labelcolor(this), flags());
+  Color color = 0;
+  if (flags() & SELECTED) color = selection_textcolor();
+  if (!color) color = textcolor();
+  fl_use_textfont = true;
+  draw_label(x+3, y, w-6, h, color, flags());
+  fl_use_textfont = false;
 }
 
 void ItemGroup::layout() {
   if (w() && h()) return; // already at the correct size
   //int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
-  setfont(labelfont(), labelsize());
+  setfont(textfont(), textsize());
   int h; int w = 0; 
   measure(label(), w, h, flags());
   if (image()) {

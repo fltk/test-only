@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.72 2003/02/02 10:39:23 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.73 2003/07/23 04:55:50 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -26,6 +26,7 @@
 #include <fltk/damage.h>
 #include <fltk/layout.h>
 #include <fltk/Box.h>
+#include <fltk/Item.h>
 #include <fltk/draw.h>
 #include <fltk/error.h>
 #include <stdlib.h>
@@ -372,8 +373,6 @@ glyph(const Widget* widget, int glyph, int x,int y,int w,int h, Flags f)
 // this is non-zero if a drag was started in a group open/close box:
 static char openclose_drag;
 
-extern const Widget* fl_item_parent;
-
 // Draws the current item:
 void Browser::draw_item() {
 
@@ -444,8 +443,7 @@ void Browser::draw_item() {
 		      (flags&SELECTED) ? widget->selection_textcolor()
 		      : widget->textcolor(), INVISIBLE);
   }
-  const Widget* saved_parent = fl_item_parent;
-  fl_item_parent = this;
+  Item::set_style(this);
   push_matrix();
   y += (int(leading())-1)/2;
   widget->x(x);
@@ -455,7 +453,6 @@ void Browser::draw_item() {
   widget->draw();
   widget->set_damage(0);
   pop_matrix();
-  fl_item_parent = saved_parent;
 
   widget->invert_flag(preview_open);
 }
@@ -582,6 +579,8 @@ void Browser::layout() {
   // clear the flags first so the other methods know it is ok to measure
   // the widgets:
   Widget::layout();
+
+  Item::set_style(this);
 
   // figure out the visible area:
   const int sw = scrollbar_width();
@@ -1137,5 +1136,5 @@ Browser::~Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.72 2003/02/02 10:39:23 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.73 2003/07/23 04:55:50 spitzak Exp $".
 //

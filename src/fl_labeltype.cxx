@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.37 2003/06/30 07:55:17 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.38 2003/07/23 04:55:50 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -148,6 +148,8 @@ void Widget::draw_inside_label(int X, int Y, int W, int H) const
   draw_label(X, Y, W, H, labelcolor(), flags());
 }
 
+bool fl_use_textfont;
+
 // Draw the label in any box, and using the passed labelcolor and flags.
 // This is used by Group and TabGroup to draw outside labels, and by
 // buttons to get the label color correct:
@@ -174,7 +176,10 @@ void Widget::draw_label(int X, int Y, int W, int H, Color color, Flags flags) co
       } else {
 	// put image to left
 	int text_w = W; int text_h = H;
-	setfont(labelfont(), labelsize());
+	if (fl_use_textfont)
+	  setfont(textfont(), textsize());
+	else
+	  setfont(labelfont(), labelsize());
 	measure(label_, text_w, text_h, flags);
 	int d = (W-(h+text_w))>>1;
 	if (d > 0) {X += d; W -= d;}
@@ -208,7 +213,10 @@ void Widget::draw_label(int X, int Y, int W, int H, Color color, Flags flags) co
   }
 
   if (label_ && *label_) {
-    setfont(labelfont(), labelsize());
+    if (fl_use_textfont)
+      setfont(textfont(), textsize());
+    else
+      setfont(labelfont(), labelsize());
     labeltype()->draw(label_, X, Y, W, H, color, flags);
   }
 
@@ -222,5 +230,5 @@ void Widget::measure_label(int& w, int& h) const {
 }
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.37 2003/06/30 07:55:17 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.38 2003/07/23 04:55:50 spitzak Exp $".
 //
