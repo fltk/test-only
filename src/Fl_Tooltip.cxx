@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.36 2001/03/12 00:49:03 spitzak Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.37 2001/07/16 19:38:18 robertk Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -123,7 +123,7 @@ tt_enter_area(Fl_Widget* w, int X, int Y, int W, int H, const char* t) {
   widget = w; ::X = X; ::Y = Y; ::W = W; ::H = H; tip = t;
   if (!t || !Fl_Tooltip::enabled()) return;
   float d = Fl_Tooltip::delay();
-  if (d < .01) d = .01;
+  if (d < (float).01) d = (float).01;
   Fl::add_timeout(d, (Fl_Timeout_Handler)tooltip_timeout);
 }
 
@@ -155,5 +155,5 @@ Fl_Named_Style* Fl_Tooltip::default_style =
   new Fl_Named_Style("Tooltip", revert, &Fl_Tooltip::default_style);
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.36 2001/03/12 00:49:03 spitzak Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.37 2001/07/16 19:38:18 robertk Exp $".
 //

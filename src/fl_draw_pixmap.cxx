@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_pixmap.cxx,v 1.10 2000/06/11 07:31:10 bill Exp $"
+// "$Id: fl_draw_pixmap.cxx,v 1.11 2001/07/16 19:38:18 robertk Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -127,6 +127,12 @@ static void cb2(void*v, int x, int y, int w, uchar* buf) {
 #endif
 
 uchar **fl_mask_bitmap; // if non-zero, create bitmap and store pointer here
+
+void fl_set_mask_bitmap(uchar **ppBitmap)
+{
+	fl_mask_bitmap = ppBitmap;
+}
+
 
 int fl_draw_pixmap(const char*const* di, int x, int y, Fl_Color bg) {
   pixmap_data d;
@@ -261,5 +267,5 @@ int fl_draw_pixmap(const char*const* di, int x, int y, Fl_Color bg) {
 }
 
 //
-// End of "$Id: fl_draw_pixmap.cxx,v 1.10 2000/06/11 07:31:10 bill Exp $".
+// End of "$Id: fl_draw_pixmap.cxx,v 1.11 2001/07/16 19:38:18 robertk Exp $".
 //

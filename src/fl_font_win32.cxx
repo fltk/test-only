@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.32 2001/07/10 08:14:39 clip Exp $"
+// "$Id: fl_font_win32.cxx,v 1.33 2001/07/16 19:38:18 robertk Exp $"
 //
 // WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -175,7 +175,15 @@ void fl_encoding(const char* f) {
 static int
 win_font_width(const char* c, int n) {
   int w = 0;
-  while (n--) w += fl_fontsize->width[uchar(*c++)];
+  // Just adding the characters won't work on all Windows versions
+  // since some of them (NT/2000/?) do kerning.
+  //while (n--) w += fl_fontsize->width[uchar(*c++)];
+  HDC screen =  GetDC(0);
+  SelectObject(screen, (HFONT)fl_fontsize->font);
+  SIZE size;
+  if(GetTextExtentPoint32(screen, c, n, &size))
+	  w = size.cx;
+  ReleaseDC(0, screen);
   return w;
 }
 
@@ -200,5 +208,5 @@ Fl_Font_Renderer *fl_font_renderer = &win_renderer;
 
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.32 2001/07/10 08:14:39 clip Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.33 2001/07/16 19:38:18 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.150 2001/07/10 08:14:39 clip Exp $"
+// "$Id: Fl_win32.cxx,v 1.151 2001/07/16 19:38:18 robertk Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1287,11 +1287,18 @@ void fl_get_system_colors() {
   // CET - FIXME - do encoding stuff
 }
 
+void swap_fl_coordinates(int newx, int newy, int *savex, int *savey) {
+	if(savex)  *savex = fl_x_;
+	if(savey)  *savey = fl_y_;
+	fl_y_ = newy;
+	fl_x_ = newx;
+}
+
 // CET - FIXME - need to add code here to resend button events to our
 // own window only
 void fl_bounce_button_press() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.150 2001/07/10 08:14:39 clip Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.151 2001/07/16 19:38:18 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.H,v 1.27 2001/07/10 08:14:38 clip Exp $"
+// "$Id: fl_draw.H,v 1.28 2001/07/16 19:38:17 robertk Exp $"
 //
 // The fltk drawing library
 //
@@ -181,6 +181,7 @@ FL_API void fl_rectf(int x, int y, int w, int h, Fl_Color);
 // XPM interpreter (probably should be part of Fl_Pixmap):
 FL_API int fl_draw_pixmap(const char*const* data, int x,int y,Fl_Color=FL_GRAY);
 FL_API int fl_measure_pixmap(const char*const* data, int &w, int &h);
+FL_API void fl_set_mask_bitmap(uchar **ppBitmap);
 
 // for GUI use only:
 extern FL_API void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
@@ -234,5 +235,5 @@ FL_API void fl_yxline(int x, int y, int y1, int x2, int y3);
 #endif
 
 //
-// End of "$Id: fl_draw.H,v 1.27 2001/07/10 08:14:38 clip Exp $".
+// End of "$Id: fl_draw.H,v 1.28 2001/07/16 19:38:17 robertk Exp $".
 //

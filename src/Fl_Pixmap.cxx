@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pixmap.cxx,v 1.12 2000/07/14 08:35:01 clip Exp $"
+// "$Id: Fl_Pixmap.cxx,v 1.13 2001/07/16 19:38:18 robertk Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -35,8 +35,6 @@
 #include <FL/x.H>
 #include <FL/Fl_Pixmap.H>
 
-extern uchar **fl_mask_bitmap; // used by fl_draw_pixmap.C to store mask
-
 void Fl_Pixmap::measure(int& W,int& H) {
   if (w < 0) fl_measure_pixmap(data, w, h);
   W=w; 
@@ -51,9 +49,9 @@ void Fl_Pixmap::draw(int X, int Y, int W, int H, int cx, int cy)
     id = fl_create_offscreen(w, h);
     fl_begin_offscreen(id);
     uchar *bitmap = 0;
-    fl_mask_bitmap = &bitmap;
+    fl_set_mask_bitmap(&bitmap);
     fl_draw_pixmap(data, 0, 0, FL_NO_COLOR);
-    fl_mask_bitmap = 0;
+    fl_set_mask_bitmap(0);
     if (bitmap) {
       mask = fl_create_bitmap(bitmap, w, h);
       delete[] bitmap;
@@ -64,5 +62,5 @@ void Fl_Pixmap::draw(int X, int Y, int W, int H, int cx, int cy)
 }
 
 //
-// End of "$Id: Fl_Pixmap.cxx,v 1.12 2000/07/14 08:35:01 clip Exp $".
+// End of "$Id: Fl_Pixmap.cxx,v 1.13 2001/07/16 19:38:18 robertk Exp $".
 //

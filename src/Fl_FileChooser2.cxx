@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.12 2001/03/28 19:53:45 robertk Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.13 2001/07/16 19:38:18 robertk Exp $"
 //
 // More Fl_FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -56,7 +56,9 @@
 #if defined(WIN32)
 #  include <direct.h>
 #  include <io.h>
+#ifndef _MSC_VER
 extern "C" int access(const char *, int);
+#endif
 #else
 #  include <unistd.h>
 #  include <pwd.h>
@@ -672,5 +674,5 @@ Fl_FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.12 2001/03/28 19:53:45 robertk Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.13 2001/07/16 19:38:18 robertk Exp $".
 //

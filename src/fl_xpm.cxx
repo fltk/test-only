@@ -1,5 +1,5 @@
 //
-// "$Id: fl_xpm.cxx,v 1.16 2001/05/15 14:05:39 robertk Exp $"
+// "$Id: fl_xpm.cxx,v 1.17 2001/07/16 19:38:18 robertk Exp $"
 //
 // XPM reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -35,8 +35,6 @@
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
-
-extern uchar **fl_mask_bitmap; // used by fl_draw_pixmap.cxx to store mask
 
 static int hexdigit(int x) {
   if (isdigit(x)) return x-'0';
@@ -164,9 +162,9 @@ void Fl_XPM_Image::read()
   id = fl_create_offscreen(w, h);
   fl_begin_offscreen(id);
   uchar *bitmap = 0;
-  fl_mask_bitmap = &bitmap;
+  fl_set_mask_bitmap(&bitmap);
   fl_draw_pixmap(ldatas, 0, 0, FL_NO_COLOR);
-  fl_mask_bitmap = 0;
+  fl_set_mask_bitmap(0);
   if (bitmap) {
     mask = fl_create_bitmap(bitmap, w, h);
     delete[] bitmap;
@@ -182,5 +180,5 @@ void Fl_XPM_Image::read()
 }
 
 //
-// End of "$Id: fl_xpm.cxx,v 1.16 2001/05/15 14:05:39 robertk Exp $"
+// End of "$Id: fl_xpm.cxx,v 1.17 2001/07/16 19:38:18 robertk Exp $"
 //

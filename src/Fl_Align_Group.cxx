@@ -38,7 +38,7 @@ void Fl_Align_Group::layout() {
   int n_lines = n_to_break() ? 
                 (children() / n_to_break() + (children() % n_to_break()?1:0)):
 		1;
-  bool variable_is_y = align() & (FL_ALIGN_TOP|FL_ALIGN_BOTTOM);
+  bool variable_is_y = (align() & (FL_ALIGN_TOP|FL_ALIGN_BOTTOM)) != 0;
   int nx = vertical() ? n_lines : n_to_break() ? n_to_break() : children(); 
   int ny = vertical() ? n_to_break() ? n_to_break() : children() : n_lines;
   int n_variable = variable_is_y ? ny : nx;

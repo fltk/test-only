@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.110 2001/07/10 08:14:38 clip Exp $"
+// "$Id: Fl_Menu.cxx,v 1.111 2001/07/16 19:38:18 robertk Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -454,7 +454,8 @@ int MenuWindow::handle(int event) {
     switch (Fl::event_key()) {
     case FL_Up:
       if (p.menubar && p.level == 0) ;
-      else if (backward(p, p.level));
+      else if (backward(p, p.level))
+		  ;  // do nothing
       return 1;
     case FL_Down:
       if (p.level || !p.menubar) forward(p, p.level);
@@ -754,5 +755,5 @@ int Fl_Menu_::pulldown(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.110 2001/07/10 08:14:38 clip Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.111 2001/07/16 19:38:18 robertk Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.77 2001/07/10 08:14:39 clip Exp $"
+// "$Id: fl_options.cxx,v 1.78 2001/07/16 19:38:18 robertk Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -40,7 +40,9 @@
 #if defined(WIN32)
 #  include <windows.h>
 #  include <io.h>
+#ifndef _MSC_VER
 extern "C" int access(const char *, int);
+#endif
 #  define F_OK 0
 #else
 #  include <unistd.h>
@@ -360,7 +362,7 @@ static int load_theme(const char *t) {
 
 int Fl::plugin(const char* t) {
   if (!t) return 0;
-  char temp[PATH_MAX], *p, *s;
+  char temp[PATH_MAX], *p, *s = 0;
   strncpy(temp, t, sizeof(temp));
   p = strtok_r(temp, CONF_WHITESPACE, &s);
   while (p) {
@@ -416,7 +418,7 @@ int fl_getconf(const char *key, char *value, int value_length) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.77 2001/07/10 08:14:39 clip Exp $".
+// End of "$Id: fl_options.cxx,v 1.78 2001/07/16 19:38:18 robertk Exp $".
 //
 
 

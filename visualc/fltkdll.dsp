@@ -365,9 +365,7 @@ DEP_CPP_FL_CX=\
 	"..\FL\Fl_Flags.H"\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Group.H"\
-	"..\FL\Fl_Image.H"\
 	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Shared_Image.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\Fl_Tooltip.H"\
 	"..\FL\Fl_Widget.H"\
@@ -551,26 +549,6 @@ DEP_CPP_FL_BI=\
 	"..\FL\Fl_Font.H"\
 	"..\FL\Fl_Image.H"\
 	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\win32.H"\
-	"..\FL\x.H"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\fl_bmp.cxx
-DEP_CPP_FL_BM=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Color.H"\
-	"..\FL\fl_draw.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Image.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Shared_Image.H"\
 	"..\FL\Fl_Style.H"\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
@@ -1302,26 +1280,6 @@ DEP_CPP_FL_GE=\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	"..\src\fl_get_key_win32.cxx"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\src\fl_gif.cxx
-DEP_CPP_FL_GI=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Color.H"\
-	"..\FL\fl_draw.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Image.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Shared_Image.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\win32.H"\
-	"..\FL\x.H"\
 	
 # End Source File
 # Begin Source File
@@ -2305,28 +2263,6 @@ DEP_CPP_FL_SHA=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\Fl_Shared_Image.cxx
-DEP_CPP_FL_SHAR=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Bitmap.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Color.H"\
-	"..\FL\fl_draw.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Image.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Shared_Image.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\win32.H"\
-	"..\FL\x.H"\
-	".\config.h"\
-	
-# End Source File
-# Begin Source File
-
 SOURCE=..\src\fl_show_colormap.cxx
 DEP_CPP_FL_SHO=\
 	"..\FL\Enumerations.H"\
@@ -2828,26 +2764,6 @@ SOURCE=..\src\Fl_XColor.H
 # End Source File
 # Begin Source File
 
-SOURCE=..\src\fl_xpm.cxx
-DEP_CPP_FL_XP=\
-	"..\FL\Enumerations.H"\
-	"..\FL\Fl.H"\
-	"..\FL\Fl_Boxtype.H"\
-	"..\FL\Fl_Color.H"\
-	"..\FL\fl_draw.H"\
-	"..\fl\fl_export.h"\
-	"..\FL\Fl_Flags.H"\
-	"..\FL\Fl_Font.H"\
-	"..\FL\Fl_Image.H"\
-	"..\FL\Fl_Labeltype.H"\
-	"..\FL\Fl_Shared_Image.H"\
-	"..\FL\Fl_Style.H"\
-	"..\FL\win32.H"\
-	"..\FL\x.H"\
-	
-# End Source File
-# Begin Source File
-
 SOURCE=..\OpenGL\gl_draw.cxx
 DEP_CPP_GL_DR=\
 	"..\FL\Enumerations.H"\
@@ -2970,10 +2886,6 @@ DEP_CPP_TRACK=\
 # Begin Source File
 
 SOURCE=..\glut\trackball.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\lib\fltkdll_imagesd.lib
 # End Source File
 # End Target
 # End Project

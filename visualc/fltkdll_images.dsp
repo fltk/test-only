@@ -153,6 +153,46 @@ LINK32=link.exe
 # Name "fltkdll_images - Win32 Release MinSize"
 # Begin Source File
 
+SOURCE=..\src\fl_bmp.cxx
+DEP_CPP_FL_BM=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Shared_Image.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_gif.cxx
+DEP_CPP_FL_GI=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Shared_Image.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	
+# End Source File
+# Begin Source File
+
 SOURCE=..\images\Fl_Guess_Image.cxx
 DEP_CPP_FL_GU=\
 	"..\FL\Enumerations.H"\
@@ -214,6 +254,48 @@ DEP_CPP_FL_PN=\
 	"..\FL\win32.H"\
 	"..\FL\x.H"\
 	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\Fl_Shared_Image.cxx
+DEP_CPP_FL_SH=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Bitmap.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Shared_Image.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	".\config.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\src\fl_xpm.cxx
+DEP_CPP_FL_XP=\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\fl\fl_export.h"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Shared_Image.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
 # End Source File
 # End Target

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.125 2001/03/12 00:49:03 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.126 2001/07/16 19:38:18 robertk Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,6 @@
 #include <FL/x.H>
 #include <FL/Fl_Style.H>
 #include <FL/Fl_Tooltip.H>
-#include <FL/Fl_Shared_Image.H>
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
@@ -57,16 +56,6 @@ int		Fl::damage_,
 		Fl::e_keysym;
 char		*Fl::e_text = "";
 int		Fl::e_length;
-
-const char *Fl_Shared_Image::fl_shared_image_root=0;
-
-Fl_Shared_Image  *Fl_Shared_Image::first_image = 0;
-
-int Fl_Shared_Image::image_used=0;
-size_t Fl_Shared_Image::mem_usage_limit=0;
-
-size_t Fl_Shared_Image::mem_used=0;
-int Fl_Shared_Image::forbid_delete = 1;
 
 static Fl_Window *xfocus;	// which window X thinks has focus
 static Fl_Window *xmousewin;// which window X thinks has FL_ENTER
@@ -676,5 +665,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.125 2001/03/12 00:49:03 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.126 2001/07/16 19:38:18 robertk Exp $".
 //
