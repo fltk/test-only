@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.66 1999/11/21 06:23:25 carl Exp $"
+// "$Id: Fl_Menu.cxx,v 1.67 1999/11/21 09:57:51 bill Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -81,7 +81,7 @@ static void mi_revert(Fl_Style* s) {
   s->selection_color = FL_BLUE_SELECTION_COLOR;
   s->selection_text_color = FL_WHITE;
   s->off_color = FL_WHITE;
-  s->parent = Fl_Widget::default_style;
+//s->parent = Fl_Widget::default_style;
 }
 
 Fl_Style* Fl_Menu_Item::default_style = new Fl_Named_Style("Menu_Item", mi_revert, &Fl_Menu_Item::default_style);
@@ -90,8 +90,12 @@ Fl_Style* Fl_Menu_Item::default_style = new Fl_Named_Style("Menu_Item", mi_rever
 // only the box, selection, and highlight colors are used):
 
 static void mt_revert(Fl_Style* s) {
+#if 1
+  mi_revert(s); // makes blue titles, like NT4.0, I like this better
+#else // win98 style?
   s->glyph = fl_glyph;
   s->box = FL_HIGHLIGHT_BOX;
+#endif
 // all other colors are zero
 //   s->selection_color = FL_BLUE_SELECTION_COLOR;
 //   s->selection_text_color = FL_WHITE;
@@ -333,7 +337,7 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
   }
 
   itemheight += leading();
-  W += itemheight; // More extra spacing
+  //W += itemheight; // More extra spacing
 
   if (selected >= 0 && !Wp) X -= W/2;
   int dx=0; int dy=0; int dw=0; int dh=0; box()->inset(dx,dy,dw,dh);
@@ -421,6 +425,7 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int /*erase*/) {
   // just with inactive color
   if (i == selected && !m->active() && Fl_Style::inactive_menu_hack)
     { fc = fl_inactive(fc); f = 0; }
+  else fc = fl_inactive(fc, f);
   if (m->submenu()) {
     int X=x; int Y=y; int W=w; int H=h;
     m->box()->inset(X,Y,W,H);
@@ -429,8 +434,7 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int /*erase*/) {
     // arrow right for themes because leading() really screws things up
     H -= leading();
     Y += leading()/2;
-    fc = fl_inactive(fc, f);
-    m->glyph()(FL_GLYPH_RIGHT, X+W-H, Y, H, H, bc, fc,f, FL_NO_BOX);
+    m->glyph()(FL_GLYPH_RIGHT, X+W-H, Y, H, H, bc, fc, f, FL_NO_BOX);
   } else if (m->shortcut_) {
     fl_font(label_font(), label_size());
     m->label_type()->draw(fl_shortcut_label(m->shortcut_), x, y, w-3, h,
@@ -864,5 +868,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.66 1999/11/21 06:23:25 carl Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.67 1999/11/21 09:57:51 bill Exp $".
 //

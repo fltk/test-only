@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph_choice.cxx,v 1.1 1999/11/21 06:23:29 carl Exp $"
+// "$Id: fl_glyph_choice.cxx,v 1.2 1999/11/21 09:57:51 bill Exp $"
 //
 // Glyph drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -28,11 +28,11 @@
 void fl_glyph_choice(int t, int x,int y,int w,int h, Fl_Color bc, Fl_Color fc,
                      Fl_Flags f, Fl_Boxtype box)
 {
-  int H = h/3;
+  int H = h/2;
   int Y = y + (h-H)/2;
-  FL_FLAT_BOX->draw(x,Y,w,H, fc, f);
+  box->draw(x,Y,w,H, bc, f);
 }
 
 //
-// End of "$Id: fl_glyph_choice.cxx,v 1.1 1999/11/21 06:23:29 carl Exp $".
+// End of "$Id: fl_glyph_choice.cxx,v 1.2 1999/11/21 09:57:51 bill Exp $".
 //
