@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.18.2.14.2.48.2.3 2003/11/11 04:13:26 easysw Exp $"
+# "$Id: Makefile,v 1.18.2.14.2.48.2.4 2003/12/02 02:51:48 easysw Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -66,14 +66,12 @@ CPPFILES = \
 	Fl_Positioner.cxx \
 	Fl_Preferences.cxx \
 	Fl_Progress.cxx \
-	Fl_Ps.cxx \
 	Fl_Repeat_Button.cxx \
 	Fl_Return_Button.cxx \
 	Fl_Roller.cxx \
 	Fl_Round_Button.cxx \
 	Fl_Scroll.cxx \
 	Fl_Scrollbar.cxx \
-	Fl_Shaped_Window.cxx \
 	Fl_Shared_Image.cxx \
 	Fl_Single_Window.cxx \
 	Fl_Slider.cxx \
@@ -84,7 +82,6 @@ CPPFILES = \
 	Fl_Tile.cxx \
 	Fl_Tiled_Image.cxx \
 	Fl_Tooltip.cxx \
-	Fl_Tree.cxx \
 	Fl_Valuator.cxx \
 	Fl_Value_Input.cxx \
 	Fl_Value_Output.cxx \
@@ -148,8 +145,7 @@ CPPFILES = \
 	fl_shortcut.cxx \
 	fl_show_colormap.cxx \
 	fl_symbols.cxx \
-	fl_vertex.cxx \
-	fl_utf8.cxx 
+	fl_vertex.cxx
 
 FLCPPFILES = \
 	forms_compatability.cxx \
@@ -180,7 +176,7 @@ IMGCPPFILES = \
 
 CFILES = fl_call_main.c flstring.c scandir.c numericsort.c vsnprintf.c
 
-CLEAN =	core* cmap *.obj *.lib
+CLEAN =	core* cmap
 
 ################################################################
 
@@ -312,13 +308,13 @@ $(IMGLIBNAME): $(IMGOBJECTS)
 
 libfltk_images.so.1.1: $(IMGOBJECTS) libfltk.so.1.1
 	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(IMGOBJECTS) -L. -lfltk
+	$(DSOCOMMAND) $@ $(IMGOBJECTS) $(IMAGELIBS) -L. -lfltk
 	-$(RM) libfltk_images.so
 	$(LN) libfltk_images.so.1.1 libfltk_images.so
 
 libfltk_images.sl.1.1: $(IMGOBJECTS) libfltk.sl.1.1
 	echo $(DSOCOMMAND) $@ ...
-	$(DSOCOMMAND) $@ $(IMGOBJECTS) -L. -lfltk
+	$(DSOCOMMAND) $@ $(IMGOBJECTS) $(IMAGELIBS) -L. -lfltk
 	-$(RM) libfltk_images.sl
 	$(LN) libfltk_images.sl.1.1 libfltk_images.sl
 
@@ -328,7 +324,7 @@ libfltk_images.1.1.dylib: $(IMGOBJECTS) libfltk.1.1.dylib
 		-install_name $(libdir)/$@ \
 		-current_version 1.1.4 \
 		-compatibility_version 1.1.0 \
-		$(GLOBJECTS) $(GLDLIBS) -L. -lfltk
+		$(IMGOBJECTS) $(LDLIBS) $(IMAGELIBS) -L. -lfltk
 	-$(RM) libfltk_images.dylib
 	$(LN) libfltk_images.1.1.dylib libfltk_images.dylib
 
@@ -586,5 +582,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile,v 1.18.2.14.2.48.2.3 2003/11/11 04:13:26 easysw Exp $".
+# End of "$Id: Makefile,v 1.18.2.14.2.48.2.4 2003/12/02 02:51:48 easysw Exp $".
 #

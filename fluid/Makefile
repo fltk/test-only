@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.10.2.6.2.23.2.1 2003/11/02 01:37:44 easysw Exp $"
+# "$Id: Makefile,v 1.10.2.6.2.23.2.2 2003/12/02 02:51:45 easysw Exp $"
 #
 # FLUID makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -95,5 +95,5 @@ rebuild:
 	./fluid -c widget_panel.fl
 
 #
-# End of "$Id: Makefile,v 1.10.2.6.2.23.2.1 2003/11/02 01:37:44 easysw Exp $".
+# End of "$Id: Makefile,v 1.10.2.6.2.23.2.2 2003/12/02 02:51:45 easysw Exp $".
 #

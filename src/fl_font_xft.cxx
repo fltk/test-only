@@ -1,9 +1,9 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.4.2.7.2.2 2003/11/02 01:37:47 easysw Exp $"
+// "$Id: fl_font_xft.cxx,v 1.4.2.7.2.3 2003/12/02 02:51:48 easysw Exp $"
 //
 // Xft font code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 2001-2004 Bill Spitzak and others.
+// Copyright 2001-2003 Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -89,7 +89,7 @@ Fl_Fontdesc* fl_fonts = built_in_table;
 int fl_font_ = 0;
 int fl_size_ = 0;
 XFontStruct* fl_xfont = 0;
-const char* fl_encoding_ = "iso8859-1";
+const char* fl_encoding_ = "iso10646-1";
 Fl_FontSize* fl_fontsize = 0;
 
 void fl_font(int fnum, int size) {
@@ -158,12 +158,14 @@ int fl_descent() { return current_font->descent; }
 
 double fl_width(const char *str, int n) {
   XGlyphInfo i;
-  XftTextExtents8(fl_display, current_font, (XftChar8 *)str, n, &i);
+  XftTextExtentsUtf8(fl_display, current_font, (XftChar8 *)str, n, &i);
   return i.xOff;
 }
 
-double fl_width(uchar c) {
-  return fl_width((const char *)(&c), 1);
+double fl_width(unsigned c) {
+  XGlyphInfo i;
+  XftTextExtents32(fl_display, current_font, (XftChar32 *)&c, 1, &i);
+  return i.xOff;
 }
 
 #if HAVE_GL
@@ -243,9 +245,9 @@ void fl_draw(const char *str, int n, int x, int y) {
   color.color.blue  = ((int)b)*0x101;
   color.color.alpha = 0xffff;
 
-  XftDrawString8(draw, &color, current_font, x, y, (XftChar8 *)str, n);
+  XftDrawStringUtf8(draw, &color, current_font, x, y, (XftChar8 *)str, n);
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.4.2.7.2.2 2003/11/02 01:37:47 easysw Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.4.2.7.2.3 2003/12/02 02:51:48 easysw Exp $"
 //

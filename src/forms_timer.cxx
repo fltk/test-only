@@ -1,9 +1,9 @@
 //
-// "$Id: forms_timer.cxx,v 1.4.2.3.2.3.2.2 2003/11/07 03:47:25 easysw Exp $"
+// "$Id: forms_timer.cxx,v 1.4.2.3.2.3.2.3 2003/12/02 02:51:49 easysw Exp $"
 //
 // Forms timer object for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -37,7 +37,6 @@
 #    include <sys/types.h> 
 #    include <sys/timeb.h>
 #  endif
-#elif MSDOS && !DJGPP
 #else
 #  include <time.h>
 #  include <sys/time.h>
@@ -45,26 +44,7 @@
 #include <stdio.h>
 
 #define FL_TIMER_BLINKRATE	0.2
-#if MSDOS && NANO_X
-#include <time.h>
 
-struct timeval {
-	unsigned long tv_sec, tv_usec;
-};
-static int gettimeofday(struct timeval *tp, void *tz)
-{
-	static unsigned long s, u;
-	tp->tv_sec = time(NULL);
-	if (tp->tv_sec == u) {
-		s += 20000;
-	} else {
-		s = 0;
-	}
-	tp->tv_usec = s;
-	u = tp->tv_sec;
-	return 0;
-}
-#endif
 void fl_gettime(long* sec, long* usec) {
 #ifdef WIN32
 # ifdef __MWERKS__
@@ -80,8 +60,8 @@ void fl_gettime(long* sec, long* usec) {
 # endif
 #else
   struct timeval tp;
-  //struct timezone tzp;
-  gettimeofday(&tp, 0/*&tzp*/);
+  struct timezone tzp;
+  gettimeofday(&tp, &tzp);
   *sec = tp.tv_sec;
   *usec = tp.tv_usec;
 #endif
@@ -182,5 +162,5 @@ void Fl_Timer::suspended(char d) {
 }
 
 //
-// End of "$Id: forms_timer.cxx,v 1.4.2.3.2.3.2.2 2003/11/07 03:47:25 easysw Exp $".
+// End of "$Id: forms_timer.cxx,v 1.4.2.3.2.3.2.3 2003/12/02 02:51:49 easysw Exp $".
 //

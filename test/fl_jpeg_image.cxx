@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg_image.cxx,v 1.5.2.3.2.1.2.2 2003/11/07 03:47:25 easysw Exp $"
+// "$Id: fl_jpeg_image.cxx,v 1.5.2.3.2.1.2.3 2003/12/02 02:51:49 easysw Exp $"
 //
 // fl_draw_image test program for the Fast Light Tool Kit (FLTK).
 //
@@ -20,7 +20,7 @@
 // The makefile assummes you decompressed and build these in a directory
 // called "jpeg-6a" in the same location as the "FL" directory.
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -44,7 +44,6 @@
 #include <FL/fl_draw.H>
 #include <stdio.h>
 #include <stdlib.h>
-#include <FL/fl_utf8.H>
 
 void readtheimage(const char *name); // below
 int width;
@@ -137,7 +136,7 @@ extern "C" {
 void readtheimage(const char *name) {
   struct jpeg_decompress_struct cinfo;
   struct jpeg_error_mgr jerr;
-  FILE * infile = fl_fopen(name, "rb");
+  FILE * infile = fopen(name, "rb");
   if (!infile) {
     fprintf(stderr, "can't open %s\n", name);
     exit(1);
@@ -198,5 +197,5 @@ void readtheimage(const char *name) {
 #endif
 
 //
-// End of "$Id: fl_jpeg_image.cxx,v 1.5.2.3.2.1.2.2 2003/11/07 03:47:25 easysw Exp $".
+// End of "$Id: fl_jpeg_image.cxx,v 1.5.2.3.2.1.2.3 2003/12/02 02:51:49 easysw Exp $".
 //

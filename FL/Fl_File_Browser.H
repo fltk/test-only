@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_File_Browser.H,v 1.1.2.4.2.3 2003/11/17 07:15:13 matthiaswm Exp $"
+// "$Id: Fl_File_Browser.H,v 1.1.2.4.2.4 2003/12/02 02:51:44 easysw Exp $"
 //
 // FileBrowser definitions.
 //
-// Copyright 1999-2004 by Michael Sweet.
+// Copyright 1999-2003 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -66,7 +66,7 @@ public:
     /** Gets the size of the icons. */
   uchar		iconsize() const { return (iconsize_); };
     /** Sets the size of the icons. The default size is 20 pixels. */
-  void		iconsize(uchar pixels) { iconsize_ = s; redraw(); };
+  void		iconsize(uchar pixels) { iconsize_ = pixels; redraw(); };
 
     /** Sets the filename filter. The pattern matching uses the 
      * fl_filename_match() function in FLTK. */
@@ -96,5 +96,5 @@ public:
 #endif // !_Fl_File_Browser_H_
 
 //
-// End of "$Id: Fl_File_Browser.H,v 1.1.2.4.2.3 2003/11/17 07:15:13 matthiaswm Exp $".
+// End of "$Id: Fl_File_Browser.H,v 1.1.2.4.2.4 2003/12/02 02:51:44 easysw Exp $".
 //

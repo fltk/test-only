@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Progress.cxx,v 1.1.2.6.2.1 2003/11/02 01:37:46 easysw Exp $"
+// "$Id: Fl_Progress.cxx,v 1.1.2.6.2.2 2003/12/02 02:51:47 easysw Exp $"
 //
 // Progress bar widget routines.
 //
-// Copyright 2000-2004 by Michael Sweet.
+// Copyright 2000-2003 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -105,5 +105,5 @@ Fl_Progress::Fl_Progress(int X, int Y, int W, int H, const char* l)
 
 
 //
-// End of "$Id: Fl_Progress.cxx,v 1.1.2.6.2.1 2003/11/02 01:37:46 easysw Exp $".
+// End of "$Id: Fl_Progress.cxx,v 1.1.2.6.2.2 2003/12/02 02:51:47 easysw Exp $".
 //

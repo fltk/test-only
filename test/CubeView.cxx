@@ -1,9 +1,9 @@
 //
-// "$Id: CubeView.cxx,v 1.4.2.4.2.3.2.1 2003/11/02 01:37:48 easysw Exp $"
+// "$Id: CubeView.cxx,v 1.4.2.4.2.3.2.2 2003/12/02 02:51:49 easysw Exp $"
 //
 // CubeView class implementation for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -147,7 +147,7 @@ void CubeView::draw() {
     if (!valid()) {
         glLoadIdentity();
         glViewport(0,0,w(),h());
-        glOrtho(-10,10,-10,10,-20040,10000);
+        glOrtho(-10,10,-10,10,-20030,10000);
         glEnable(GL_BLEND);
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     }
@@ -167,5 +167,5 @@ void CubeView::draw() {
 #endif /* HAVE_GL */
 
 //
-// End of "$Id: CubeView.cxx,v 1.4.2.4.2.3.2.1 2003/11/02 01:37:48 easysw Exp $".
+// End of "$Id: CubeView.cxx,v 1.4.2.4.2.3.2.2 2003/12/02 02:51:49 easysw Exp $".
 //

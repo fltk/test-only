@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile.in,v 1.1.2.6.2.1 2003/11/02 01:37:42 easysw Exp $"
+# "$Id: Makefile.in,v 1.1.2.6.2.2 2003/12/02 02:51:44 easysw Exp $"
 #
 # Header makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -54,5 +54,5 @@ uninstall:
 
 
 #
-# End of "$Id: Makefile.in,v 1.1.2.6.2.1 2003/11/02 01:37:42 easysw Exp $".
+# End of "$Id: Makefile.in,v 1.1.2.6.2.2 2003/12/02 02:51:44 easysw Exp $".
 #

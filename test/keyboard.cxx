@@ -1,5 +1,5 @@
 //
-// "$Id: keyboard.cxx,v 1.5.2.3.2.5.2.2 2003/11/07 03:47:25 easysw Exp $"
+// "$Id: keyboard.cxx,v 1.5.2.3.2.5.2.3 2003/12/02 02:51:49 easysw Exp $"
 //
 // Keyboard/event test program for the Fast Light Tool Kit (FLTK).
 //
@@ -17,7 +17,7 @@
 //
 // On IRIX the backslash key does not work.  A bug in XKeysymToKeycode?
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -103,11 +103,11 @@ int main(int argc, char** argv) {
     for (int i = 0; i < window->children(); i++) {
       Fl_Widget* b = window->child(i);
       if (b->callback() == (Fl_Callback*)key_cb) {
-	long i = (long)b->user_data();
+	int i = int(b->user_data());
 	if (!i) i = b->label()[0];
 	((Fl_Button*)b)->value(Fl::event_key(i));
       } else if (b->callback() == (Fl_Callback*)shift_cb) {
-	 long i = (long)b->user_data();
+	int i = int(b->user_data());
 	((Fl_Button*)b)->value(Fl::event_state(i));
       }
     }
@@ -139,5 +139,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: keyboard.cxx,v 1.5.2.3.2.5.2.2 2003/11/07 03:47:25 easysw Exp $".
+// End of "$Id: keyboard.cxx,v 1.5.2.3.2.5.2.3 2003/12/02 02:51:49 easysw Exp $".
 //

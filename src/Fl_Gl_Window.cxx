@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.12.2.22.2.13.2.3 2003/11/07 03:47:23 easysw Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.12.2.22.2.13.2.4 2003/12/02 02:51:46 easysw Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -31,7 +31,6 @@
 #include "Fl_Gl_Choice.H"
 #include <FL/Fl_Gl_Window.H>
 #include <stdlib.h>
-#include <FL/fl_utf8.H>
 
 ////////////////////////////////////////////////////////////////
 
@@ -76,7 +75,6 @@ void Fl_Gl_Window::show() {
         Fl::error("Insufficient GL support");
 	return;
       }
-
     }
 #if !defined(WIN32) && !defined(__APPLE__)
     Fl_X::make_xid(this, g->vis, g->colormap);
@@ -97,9 +95,7 @@ int Fl_Gl_Window::mode(int m, const int *a) {
   if (m == mode_ && a == alist) return 0;
 #ifndef __APPLE__
   int oldmode = mode_;
-#ifndef WIN32
   Fl_Gl_Choice* oldg = g;
-#endif
 #endif
   context(0);
   mode_ = m; alist = a;
@@ -135,25 +131,24 @@ void Fl_Gl_Window::make_current() {
     context_ = fl_create_gl_context(this, g);
     valid(0);
 
-#ifdef __APPLE__
-    GLint xywh[4];
-
-    if (window()) {
-      // MRS: This isn't quite right, but the parent window won't have its W and H updated yet...
-      xywh[0] = x();
-      xywh[1] = window()->h() - y() - h();
-    } else {
-      xywh[0] = 0;
-      xywh[1] = 0;
-    }
-
-    xywh[2] = W;
-    xywh[3] = H;
-    aglSetInteger(context_, AGL_BUFFER_RECT, xywh);
-//    printf("resize: xywh=[%d %d %d %d]\n", xywh[0], xywh[1], xywh[2], xywh[3]);
-
-    aglUpdateContext(context_);
-#endif // __APPLE__
+//#ifdef __APPLE__
+//    GLint xywh[4];
+//
+//    if (parent() && parent()->window()) {
+//      xywh[0] = x();
+//      xywh[1] = parent()->window()->h() - y() - h();
+//    } else {
+//      xywh[0] = 0;
+//      xywh[1] = 0;
+//    }
+//
+//    xywh[2] = w();
+//    xywh[3] = h();
+//    aglSetInteger(context_, AGL_BUFFER_RECT, xywh);
+//    printf("make_current: xywh=[%d %d %d %d]\n", xywh[0], xywh[1], xywh[2], xywh[3]);
+//
+//    aglUpdateContext(context_);
+//#endif // __APPLE__
   }
   fl_set_gl_context(this, context_);
 #if defined(WIN32) && USE_COLORMAP
@@ -261,7 +256,7 @@ void Fl_Gl_Window::flush() {
 #else
       SWAP_TYPE = UNDEFINED;
 #endif
-      const char* c = fl_getenv("GL_SWAP_TYPE");
+      const char* c = getenv("GL_SWAP_TYPE");
       if (c) {
 	if (!strcmp(c,"COPY")) SWAP_TYPE = COPY;
 	else if (!strcmp(c, "NODAMAGE")) SWAP_TYPE = NODAMAGE;
@@ -340,15 +335,26 @@ void Fl_Gl_Window::flush() {
 }
 
 void Fl_Gl_Window::resize(int X,int Y,int W,int H) {
+//  printf("Fl_Gl_Window::resize(X=%d, Y=%d, W=%d, H=%d)\n", X, Y, W, H);
   if (W != w() || H != h()) {
     valid(0);
 #ifdef __APPLE__
     GLint xywh[4];
-  xywh[0] = X;
-  xywh[1] = window()->h() - Y - H;
+
+    if (window()) {
+      // MRS: This isn't quite right, but the parent window won't have its W and H updated yet...
+      xywh[0] = x();
+      xywh[1] = window()->h() - y() - h();
+    } else {
+      xywh[0] = 0;
+      xywh[1] = 0;
+    }
+
     xywh[2] = W;
     xywh[3] = H;
     aglSetInteger(context_, AGL_BUFFER_RECT, xywh);
+//    printf("resize: xywh=[%d %d %d %d]\n", xywh[0], xywh[1], xywh[2], xywh[3]);
+
     aglUpdateContext(context_);
 #elif !defined(WIN32)
     if (!resizable() && overlay && overlay != this)
@@ -403,5 +409,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.12.2.22.2.13.2.3 2003/11/07 03:47:23 easysw Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.12.2.22.2.13.2.4 2003/12/02 02:51:46 easysw Exp $".
 //

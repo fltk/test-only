@@ -1,9 +1,9 @@
 //
-// "$Id: gl_draw.cxx,v 1.7.2.5.2.9.2.2 2003/11/07 03:47:25 easysw Exp $"
+// "$Id: gl_draw.cxx,v 1.7.2.5.2.9.2.3 2003/12/02 02:51:49 easysw Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -24,7 +24,7 @@
 //
 
 // Functions from <FL/gl.h>
-// See also Fl_Gl_Window and gl_start.C
+// See also Fl_Gl_Window and gl_start.cxx
 
 #include "flstring.h"
 #if HAVE_GL
@@ -35,8 +35,6 @@
 #include <FL/fl_draw.H>
 #include "Fl_Gl_Choice.H"
 #include "Fl_Font.H"
-#include <stdlib.h>
-#include <FL/fl_utf8.H>
 
 #if USE_XFT
 extern XFontStruct* fl_xxfont();
@@ -48,57 +46,36 @@ double gl_width(const char* s) {return fl_width(s);}
 double gl_width(const char* s, int n) {return fl_width(s,n);}
 double gl_width(uchar c) {return fl_width(c);}
 
-static Fl_FontSize *gl_fontsize;
-
 void  gl_font(int fontid, int size) {
   fl_font(fontid, size);
   if (!fl_fontsize->listbase) {
-    fl_fontsize->listbase = glGenLists(0x10000);
-  }
-  gl_fontsize = fl_fontsize;
-  glListBase(fl_fontsize->listbase);
-}
-
-static void get_list(int r) {
-  unsigned int ii = r * 0x400;
-  gl_fontsize->glok[r] = 1;
 #ifdef WIN32
-  HFONT oldFid = (HFONT)SelectObject(fl_gc, gl_fontsize->fid);
-  wglUseFontBitmapsW(fl_gc, ii, ii + 0x03ff, gl_fontsize->listbase+ii); 
+    int base = fl_fontsize->metr.tmFirstChar;
+    int count = fl_fontsize->metr.tmLastChar-base+1;
+    HFONT oldFid = (HFONT)SelectObject(fl_gc, fl_fontsize->fid);
+    fl_fontsize->listbase = glGenLists(256);
+    wglUseFontBitmaps(fl_gc, base, count, fl_fontsize->listbase+base); 
     SelectObject(fl_gc, oldFid);
 #elif defined(__APPLE__)
-    aglUseFont(aglGetCurrentContext(), gl_fontsize->font, gl_fontsize->face,
-               gl_fontsize->size, ii, 0x03ff fl_fontsize->listbase+ii);
+    // undefined characters automatically receive an empty GL list in aglUseFont
+    fl_fontsize->listbase = glGenLists(256);
+    aglUseFont(aglGetCurrentContext(), fl_fontsize->font, fl_fontsize->face,
+               fl_fontsize->size, 0, 256, fl_fontsize->listbase);
 #else
 #  if USE_XFT
     fl_xfont = fl_xxfont();
 #  endif // USE_XFT
-
-  for (int i = 0; i < 0x400; i++) {
-    XFontStruct *font = NULL;
-    unsigned short id;
-    XGetUtf8FontAndGlyph(gl_fontsize->font, ii, &font, &id); 
-    if (font) glXUseXFont(font->fid, id, 1, gl_fontsize->listbase+ii);
-    ii++;
-  }
+    int base = fl_xfont->min_char_or_byte2;
+    int count = fl_xfont->max_char_or_byte2-base+1;
+    fl_fontsize->listbase = glGenLists(256);
+    glXUseXFont(fl_xfont->fid, base, count, fl_fontsize->listbase+base);
 #endif
+  }
+  glListBase(fl_fontsize->listbase);
 }
 
 void gl_draw(const char* str, int n) {
-  static xchar *buf = NULL;
-  static int l = 0;
-  if (n > l) {
-    buf = (xchar*) realloc(buf, sizeof(xchar) * (n + 20));
-    l = n + 20;
-  }
-  n = fl_utf2unicode((const unsigned char*)str, n, buf);
-  int i;
-  for (i = 0; i < n; i++) {
-    unsigned int r;
-    r = (str[i] & 0xFC00) >> 10;
-    if (!gl_fontsize->glok[r]) get_list(r);
-  }
-  glCallLists(n, GL_UNSIGNED_SHORT, buf);
+  glCallLists(n, GL_UNSIGNED_BYTE, str);
 }
 
 void gl_draw(const char* str, int n, int x, int y) {
@@ -189,5 +166,5 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.7.2.5.2.9.2.2 2003/11/07 03:47:25 easysw Exp $".
+// End of "$Id: gl_draw.cxx,v 1.7.2.5.2.9.2.3 2003/12/02 02:51:49 easysw Exp $".
 //

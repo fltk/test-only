@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.18.2.12.2.19.2.3 2003/11/07 03:47:23 easysw Exp $"
+// "$Id: Fl_Menu.cxx,v 1.18.2.12.2.19.2.4 2003/12/02 02:51:46 easysw Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -34,7 +34,6 @@
 #include <FL/Fl_Menu_.H>
 #include <FL/fl_draw.H>
 #include <stdio.h>
-#include <stdlib.h>
 
 int Fl_Menu_Item::size() const {
   const Fl_Menu_Item* m = this;
@@ -643,7 +642,6 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
   // the main loop, runs until p.state goes to DONE_STATE:
   for (;;) {
 
-	
     // make sure all the menus are shown:
     {for (int k = menubar; k < pp.nummenus; k++)
       if (!pp.p[k]->shown()) {
@@ -651,6 +649,7 @@ const Fl_Menu_Item* Fl_Menu_Item::pulldown(
 	pp.p[k]->show();
       }
     }
+
     // get events:
     {const Fl_Menu_Item* oldi = pp.current_item;
     Fl::wait();
@@ -795,5 +794,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.18.2.12.2.19.2.3 2003/11/07 03:47:23 easysw Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.18.2.12.2.19.2.4 2003/12/02 02:51:46 easysw Exp $".
 //

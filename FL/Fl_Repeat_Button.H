@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Repeat_Button.H,v 1.5.2.5.2.3.2.2 2003/11/10 01:32:58 matthiaswm Exp $"
+// "$Id: Fl_Repeat_Button.H,v 1.5.2.5.2.3.2.3 2003/12/02 02:51:44 easysw Exp $"
 //
 // Repeat button header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -28,19 +28,12 @@
 #include "Fl.H"
 #include "Fl_Button.H"
 
-/** The Fl_Repeat_Button is a subclass of Fl_Button that generates a
- * callback when it is pressed and then repeatedly generates callbacks 
- * as long as it is held down. The speed of the repeat is fixed and 
- * depends on the implementation.
- */
 class FL_EXPORT Fl_Repeat_Button : public Fl_Button {
   static void repeat_callback(void *);
 public:
   int handle(int);
-    /** Creates a new Fl_Repeat_Button widget using the given \a position, 
-     * \a size, and \a label string. The default boxtype is \c FL_UP_BOX . */
-  Fl_Repeat_Button(int X,int Y,int W,int H,const char *label=0)
-    : Fl_Button(X,Y,W,H,label) {}
+  Fl_Repeat_Button(int X,int Y,int W,int H,const char *l=0)
+    : Fl_Button(X,Y,W,H,l) {}
   void deactivate() {
     Fl::remove_timeout(repeat_callback,this);
     Fl_Button::deactivate();
@@ -50,5 +43,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Repeat_Button.H,v 1.5.2.5.2.3.2.2 2003/11/10 01:32:58 matthiaswm Exp $".
+// End of "$Id: Fl_Repeat_Button.H,v 1.5.2.5.2.3.2.3 2003/12/02 02:51:44 easysw Exp $".
 //

@@ -1,11 +1,11 @@
 //
-// "$Id: Fl_File_Icon.cxx,v 1.1.2.14.2.2 2003/11/07 03:47:23 easysw Exp $"
+// "$Id: Fl_File_Icon.cxx,v 1.1.2.14.2.3 2003/12/02 02:51:46 easysw Exp $"
 //
 // Fl_File_Icon routines.
 //
 // KDE icon code donated by Maarten De Boer.
 //
-// Copyright 1999-2004 by Michael Sweet.
+// Copyright 1999-2003 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -43,11 +43,8 @@
 #include <stdlib.h>
 #include "flstring.h"
 #include <errno.h>
-#if !__APPLE__
 #include <sys/types.h>
-#endif
 #include <sys/stat.h>
-#include <FL/fl_utf8.H>
 #if (defined(WIN32) && ! defined(__CYGWIN__)) || defined(__EMX__)
 #  include <io.h>
 #  define F_OK	0
@@ -202,7 +199,7 @@ Fl_File_Icon::find(const char *filename,// I - Name of file */
     else
       filetype = PLAIN;
 #else
-    if (!fl_stat(filename, &fileinfo))
+    if (!stat(filename, &fileinfo))
     {
       if (S_ISDIR(fileinfo.st_mode))
         filetype = DIRECTORY;
@@ -480,5 +477,5 @@ Fl_File_Icon::labeltype(const Fl_Label *o,	// I - Label data
 
 
 //
-// End of "$Id: Fl_File_Icon.cxx,v 1.1.2.14.2.2 2003/11/07 03:47:23 easysw Exp $".
+// End of "$Id: Fl_File_Icon.cxx,v 1.1.2.14.2.3 2003/12/02 02:51:46 easysw Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: line_style.cxx,v 1.1.2.2.2.1.2.2 2003/11/07 03:47:25 easysw Exp $"
+// "$Id: line_style.cxx,v 1.1.2.2.2.1.2.3 2003/12/02 02:51:49 easysw Exp $"
 //
 // Line style demo for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 2000-2004 by Bill Spitzak and others.
+// Copyright 2000-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -52,9 +52,9 @@ void test_box::draw() {
   buf[3] = char(sliders[7]->value());
   buf[4] = 0;
   fl_line_style(
-    (long)choice[0]->mvalue()->user_data() +
-    (long)choice[1]->mvalue()->user_data() +
-    (long)choice[2]->mvalue()->user_data(),
+    (int)(choice[0]->mvalue()->user_data()) +
+    (int)(choice[1]->mvalue()->user_data()) +
+    (int)(choice[2]->mvalue()->user_data()),
     (int)(sliders[3]->value()),
     buf);
   fl_rect(10,10,w()-20,h()-20);
@@ -148,5 +148,5 @@ int main(int argc, char **argv) {
 
 
 //
-// End of "$Id: line_style.cxx,v 1.1.2.2.2.1.2.2 2003/11/07 03:47:25 easysw Exp $".
+// End of "$Id: line_style.cxx,v 1.1.2.2.2.1.2.3 2003/12/02 02:51:49 easysw Exp $".
 //

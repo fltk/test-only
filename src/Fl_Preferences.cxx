@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Preferences.cxx,v 1.1.2.22.2.4 2003/11/22 01:04:39 matthiaswm Exp $"
+// "$Id: Fl_Preferences.cxx,v 1.1.2.22.2.5 2003/12/02 02:51:47 easysw Exp $"
 //
 // Preferences methods for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 2002-2004 by Matthias Melcher.
+// Copyright 2002-2003 by Matthias Melcher.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -27,7 +27,6 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Preferences.H>
 #include <FL/filename.H>
-#include <FL/fl_utf8.H>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -39,6 +38,7 @@
 #  include <direct.h>
 #  include <io.h>
 #elif defined (__APPLE__)
+#  include <Carbon/Carbon.H>
 #  include <unistd.h>
 #else
 #  include <unistd.h>
@@ -60,9 +60,7 @@ char Fl_Preferences::nameBuffer[128];
  */
 Fl_Preferences::Fl_Preferences( Root root, const char *vendor, const char *application )
 {
-free(malloc(1)); // FIXME
   node = new Node( "." );
-  free(malloc(1)); // FIXME
   rootNode = new RootNode( this, root, vendor, application );
 }
 
@@ -558,7 +556,7 @@ int Fl_Preferences::Node::lastEntrySet = -1;
 
 // recursively create a path in the file system
 static char makePath( const char *path ) {
-  if (fl_access(path, 0)) {
+  if (access(path, 0)) {
     const char *s = strrchr( path, '/' );
     if ( !s ) return 0;
     int len = s-path;
@@ -567,7 +565,11 @@ static char makePath( const char *path ) {
     p[len] = 0;
     makePath( p );
     free( p );
-    fl_mkdir(path, 0777);
+#if defined(WIN32) && !defined(__CYGWIN__)
+    return ( mkdir( path ) == 0 );
+#else
+    return ( mkdir( path, 0777 ) == 0 );
+#endif // WIN32 && !__CYGWIN__
   }
   return 1;
 }
@@ -589,12 +591,9 @@ static void makePathForFile( const char *path )
 // - construct the name of the file that will hold our preferences
 Fl_Preferences::RootNode::RootNode( Fl_Preferences *prefs, Root root, const char *vendor, const char *application )
 {
-  char filename[ FL_PATH_MAX * 2]; filename[0] = 0;
-
+  char filename[ FL_PATH_MAX ]; filename[0] = 0;
 #ifdef WIN32
 #  define FLPREFS_RESOURCE	"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"
-#  define FLPREFS_RESOURCEW	L"Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Shell Folders"
-
   int appDataLen = strlen(vendor) + strlen(application) + 8;
   DWORD type, nn;
   LONG err;
@@ -602,37 +601,20 @@ Fl_Preferences::RootNode::RootNode( Fl_Preferences *prefs, Root root, const char
 
   switch (root) {
     case SYSTEM:
-	  if (fl_is_nt4()) {
-		err = RegOpenKeyW( HKEY_LOCAL_MACHINE, FLPREFS_RESOURCEW, &key );
-	  } else {
-        err = RegOpenKeyA( HKEY_LOCAL_MACHINE, FLPREFS_RESOURCE, &key );
-      }
+      err = RegOpenKey( HKEY_LOCAL_MACHINE, FLPREFS_RESOURCE, &key );
       if (err == ERROR_SUCCESS) {
 	nn = FL_PATH_MAX - appDataLen;
-      if (fl_is_nt4()) {
-        err = RegQueryValueExW( key, L"Common AppData", 0L, &type, (BYTE*)filename, &nn );
-	  } else {
-	    err = RegQueryValueExA( key, "Common AppData", 0L, &type, (BYTE*)filename, &nn );
-	  }
+	err = RegQueryValueEx( key, "Common AppData", 0L, &type, (BYTE*)filename, &nn );
 	if ( ( err != ERROR_SUCCESS ) && ( type == REG_SZ ) )
 	  filename[0] = 0;
-	    if (fl_is_nt4()) filename[1] = 0;
         RegCloseKey(key);
       }
       break;
     case USER:
-	  if (fl_is_nt4()) {
-		err = RegOpenKeyW( HKEY_CURRENT_USER, FLPREFS_RESOURCEW, &key );
-	  } else {
-        err = RegOpenKeyA( HKEY_CURRENT_USER, FLPREFS_RESOURCE, &key );
-      }
+      err = RegOpenKey( HKEY_CURRENT_USER, FLPREFS_RESOURCE, &key );
       if (err == ERROR_SUCCESS) {
 	nn = FL_PATH_MAX - appDataLen;
-      if (fl_is_nt4()) {
-        err = RegQueryValueExW( key, L"AppData", 0L, &type, (BYTE*)filename, &nn );
-	  } else {
-	    err = RegQueryValueExA( key, "AppData", 0L, &type, (BYTE*)filename, &nn );
-	  }
+	err = RegQueryValueEx( key, "AppData", 0L, &type, (BYTE*)filename, &nn );
 	if ( ( err != ERROR_SUCCESS ) && ( type == REG_SZ ) )
 	  filename[0] = 0;
         RegCloseKey(key);
@@ -640,16 +622,8 @@ Fl_Preferences::RootNode::RootNode( Fl_Preferences *prefs, Root root, const char
       break;
   }
 
-  if (fl_is_nt4()) {
-	if (!filename[1] && !filename[0]) {
-		strcpy(filename, "C:\\xd640");
-	} else {
-		xchar*b = (xchar*)_wcsdup((xchar*)filename);
-		filename[fl_unicode2utf(b, wcslen((xchar*)b), filename)] = 0;
-		free(b);
-    }
-  } else if (!filename[0]) {
-    strcpy(filename, "C:\\xd640");
+  if (!filename[0]) {
+    strcpy(filename, "C:\\FLTK");
   }
 
   snprintf(filename + strlen(filename), sizeof(filename) - strlen(filename),
@@ -677,19 +651,19 @@ Fl_Preferences::RootNode::RootNode( Fl_Preferences *prefs, Root root, const char
   const char *e;
   switch (root) {
     case USER:
-      if ((e = fl_getenv("HOME")) != NULL) {
+      if ((e = getenv("HOME")) != NULL) {
 	strlcpy(filename, e, sizeof(filename));
 
 	if (filename[strlen(filename)-1] != '/') {
-	  strlcat(filename, "/.xd640/", sizeof(filename));
+	  strlcat(filename, "/.fltk/", sizeof(filename));
 	} else {
-	  strlcat(filename, ".xd640/", sizeof(filename));
+	  strlcat(filename, ".fltk/", sizeof(filename));
 	}
 	break;
       }
 
     case SYSTEM:
-      strcpy(filename, "/etc/xd640/");
+      strcpy(filename, "/etc/fltk/");
       break;
   }
 
@@ -743,7 +717,7 @@ Fl_Preferences::RootNode::~RootNode()
 int Fl_Preferences::RootNode::read()
 {
   char buf[1024];
-  FILE *f = fl_fopen(filename_, "rb" );
+  FILE *f = fopen( filename_, "rb" );
   if ( !f ) return 0;
   fgets( buf, 1024, f );
   fgets( buf, 1024, f );
@@ -784,7 +758,7 @@ int Fl_Preferences::RootNode::read()
 // write the group tree and all entry leafs
 int Fl_Preferences::RootNode::write()
 {
-  FILE *f = fl_fopen(filename_, "wb" );
+  FILE *f = fopen( filename_, "wb" );
   if ( !f ) return 1;
   fprintf( f, "; FLTK preferences file format 1.0\n" );
   fprintf( f, "; vendor: %s\n", vendor_ );
@@ -1142,5 +1116,5 @@ char Fl_Preferences::Node::remove()
 
 
 //
-// End of "$Id: Fl_Preferences.cxx,v 1.1.2.22.2.4 2003/11/22 01:04:39 matthiaswm Exp $".
+// End of "$Id: Fl_Preferences.cxx,v 1.1.2.22.2.5 2003/12/02 02:51:47 easysw Exp $".
 //

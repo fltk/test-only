@@ -1,9 +1,9 @@
 //
-// "$Id: fl_dnd_win32.cxx,v 1.5.2.13.2.2 2003/11/07 03:47:24 easysw Exp $"
+// "$Id: fl_dnd_win32.cxx,v 1.5.2.13.2.3 2003/12/02 02:51:48 easysw Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -29,14 +29,11 @@
 #include <FL/Fl.H>
 #include <FL/x.H>
 #include <FL/Fl_Window.H>
-#include <FL/fl_utf8.H>
 #include "flstring.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
 #include <time.h>
-
-
 #if defined(__CYGWIN__)
 #include <sys/time.h>
 #include <unistd.h>
@@ -48,7 +45,6 @@ extern char *fl_selection_buffer[2];
 extern int fl_selection_length[2];
 extern int fl_selection_buffer_length[2];
 extern char fl_i_own_selection[2];
-extern char *fl_locale2utf8(const char *s, UINT codepage = 0);
 
 Fl_Window *fl_dnd_target_window = 0;
 
@@ -57,7 +53,7 @@ Fl_Window *fl_dnd_target_window = 0;
 
 #include <ole2.h>
 #include <shellapi.h>
-#include <shlobj.h>
+
 /**
  * subclass the IDropTarget to receive data from DnD operations
  */
@@ -165,7 +161,6 @@ public:
 
     FORMATETC fmt = { 0 };
     STGMEDIUM medium = { 0 };
-/*
     fmt.tymed = TYMED_HGLOBAL;
     fmt.dwAspect = DVASPECT_CONTENT;
     fmt.lindex = -1;
@@ -183,7 +178,6 @@ public:
       SetForegroundWindow( hwnd );
       return S_OK;
     }
-	*/
     fmt.tymed = TYMED_HGLOBAL;
     fmt.dwAspect = DVASPECT_CONTENT;
     fmt.lindex = -1;
@@ -192,26 +186,7 @@ public:
     if ( data->GetData( &fmt, &medium )==S_OK )
     {
       HDROP hdrop = (HDROP)medium.hGlobal;
-      int i, n, nn = 0, nf;
-      if (fl_is_nt4()) {
-        nf = DragQueryFileW( hdrop, (UINT)-1, 0, 0 );
-        for ( i=0; i<nf; i++ ) nn += DragQueryFileW( hdrop, i, 0, 0 );
-        nn += nf;
-        xchar *dst = (xchar *)malloc(nn * sizeof(xchar));
-	xchar *bu = dst;
-        for ( i=0; i<nf; i++ ) {
-	  n = DragQueryFileW( hdrop, i, (WCHAR*)dst, nn );
-	  dst += n;
-	  if ( i<nf-1 ) {
-	    *dst++ = L'\n';
-	  }
-	}
-        Fl::e_text = (char*) malloc(nn * 5 + 1);
-	Fl::e_length = fl_unicode2utf(bu, nn, Fl::e_text);
-        Fl::e_text[Fl::e_length] = 0;
-	free(bu);
-      } else {
-	nf = DragQueryFile( hdrop, (UINT)-1, 0, 0 );
+      int i, n, nn = 0, nf = DragQueryFile( hdrop, (UINT)-1, 0, 0 );
       for ( i=0; i<nf; i++ ) nn += DragQueryFile( hdrop, i, 0, 0 );
       nn += nf;
       Fl::e_length = nn-1;
@@ -219,17 +194,10 @@ public:
       for ( i=0; i<nf; i++ ) {
 	n = DragQueryFile( hdrop, i, dst, nn );
 	dst += n;
-	  if ( i<nf-1 ) {
-	    *dst++ = '\n';
-	  }
+	if ( i<nf-1 ) *dst++ = '\n';
       }
       *dst = 0;
-        char *b = fl_locale2utf8((char*)Fl::e_text, GetACP());      
-        free( Fl::e_text );
-        Fl::e_text = strdup(b);
-      }
-      
-      Fl::belowmouse()->handle(FL_DROP);
+      Fl::belowmouse()->handle(FL_PASTE);
       free( Fl::e_text );
       ReleaseStgMedium( &medium );
       SetForegroundWindow( hwnd );
@@ -281,7 +249,6 @@ public:
  * this is the actual object that FLTK can drop somewhere
  * - the implementation is minimal, but it should work with all decent Win32 drop targets
  */
-
 class FLDataObject : public IDataObject
 {
   DWORD m_cRefCount;
@@ -309,26 +276,12 @@ public:
   HRESULT STDMETHODCALLTYPE GetData( FORMATETC *pformatetcIn, STGMEDIUM *pmedium ) {
     if ((pformatetcIn->dwAspect & DVASPECT_CONTENT) &&
         (pformatetcIn->tymed & TYMED_HGLOBAL) &&
-        (pformatetcIn->cfFormat == CF_HDROP))
+        (pformatetcIn->cfFormat == CF_TEXT))
     {
-      HGLOBAL gh = GlobalAlloc( GHND| GMEM_SHARE, (fl_selection_length[0]+4) * sizeof(short) 
-		  + sizeof(DROPFILES));
-      unsigned short *pMem = (unsigned short*)GlobalLock( gh );
-	  if (!pMem) {
-		  GlobalFree(gh);
-		  return DV_E_FORMATETC;
-	  }
-	  DROPFILES *df =(DROPFILES*) pMem;
-	  df->pFiles = sizeof(DROPFILES);
-	  df->pt.x = 0;
-	  df->pt.y = 0;
-	  df->fNC = FALSE;
-	  df->fWide = TRUE;
-	  int l = fl_utf2unicode((unsigned char*)fl_selection_buffer[0], 
-		  fl_selection_length[0], (xchar*)(((char*)pMem) + sizeof(DROPFILES)));
-	  pMem[l] = 0;
-	  pMem[l + 1] = 0;
-	  pMem[l + 2] = 0;
+      HGLOBAL gh = GlobalAlloc( GHND, fl_selection_length[0]+1 );
+      char *pMem = (char*)GlobalLock( gh );
+      memmove( pMem, fl_selection_buffer[0], fl_selection_length[0] );
+      pMem[ fl_selection_length[0] ] = 0;      
       pmedium->tymed	      = TYMED_HGLOBAL;
       pmedium->hGlobal	      = gh;
       pmedium->pUnkForRelease = NULL;
@@ -341,7 +294,7 @@ public:
   {
     if ((pformatetc->dwAspect & DVASPECT_CONTENT) &&
         (pformatetc->tymed & TYMED_HGLOBAL) &&
-        (pformatetc->cfFormat == CF_HDROP))
+        (pformatetc->cfFormat == CF_TEXT))
       return S_OK;
     return DV_E_FORMATETC;	
   }  
@@ -396,5 +349,5 @@ int Fl::dnd()
 
 
 //
-// End of "$Id: fl_dnd_win32.cxx,v 1.5.2.13.2.2 2003/11/07 03:47:24 easysw Exp $".
+// End of "$Id: fl_dnd_win32.cxx,v 1.5.2.13.2.3 2003/12/02 02:51:48 easysw Exp $".
 //

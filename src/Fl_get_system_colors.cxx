@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_get_system_colors.cxx,v 1.6.2.7.2.13.2.3 2003/11/07 03:47:24 easysw Exp $"
+// "$Id: Fl_get_system_colors.cxx,v 1.6.2.7.2.13.2.4 2003/12/02 02:51:47 easysw Exp $"
 //
 // System color support for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,23 +26,18 @@
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
 #include <FL/x.H>
-#include <FL/fl_utf8.H>
+#include <FL/math.h>
 #include "flstring.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <FL/Fl_Pixmap.H>
 #include <FL/Fl_Tiled_Image.H>
 #include "tile.xpm"
-#include <FL/math.h>
 
 #if defined(__APPLE__) && defined(__MWERKS__)
-static int putenv(const char*)
-{
-	return 0;
-}
-#endif // _MACOS__ && __MWERKS__
+extern "C" int putenv(const char*);
+#endif // __APPLE__ && __MWERKS__
 
-const char* fl_unknown_color =  "Unknown color: %s";
 
 static char	fl_bg_set = 0;
 static char	fl_bg2_set = 0;
@@ -92,7 +87,7 @@ static void set_selection_color(uchar r, uchar g, uchar b) {
   Fl::set_color(FL_SELECTION_COLOR,r,g,b);
 }
 
-#if defined(WIN32) || defined(__APPLE__) || NANO_X || DJGPP
+#if defined(WIN32) || defined(__APPLE__)
 
 #  include <stdio.h>
 // simulation of XParseColor:
@@ -138,7 +133,7 @@ getsyscolor(int what, const char* arg, void (*func)(uchar,uchar,uchar))
   if (arg) {
     uchar r,g,b;
     if (!fl_parse_color(arg, r,g,b))
-      Fl::error(fl_unknown_color, arg);
+      Fl::error("Unknown color: %s", arg);
     else
       func(r,g,b);
   } else {
@@ -183,22 +178,15 @@ void Fl::get_system_colors()
 static void
 getsyscolor(const char *key1, const char* key2, const char *arg, const char *defarg, void (*func)(uchar,uchar,uchar))
 {
-#ifdef NANO_X //tanghao
-//	GR_COLOR x;
-//      func(x.red>>8, x.green>>8, x.blue>>8);
-#elif DJGPP
-	//FIXME_DJGPP
-#else
   if (!arg) {
     arg = XGetDefault(fl_display, key1, key2);
     if (!arg) arg = defarg;
   }
   XColor x;
   if (!XParseColor(fl_display, fl_colormap, arg, &x))
-    Fl::error(fl_unknown_color, arg);
+    Fl::error("Unknown color: %s", arg);
   else
     func(x.red>>8, x.green>>8, x.blue>>8);
-#endif
 }
 
 void Fl::get_system_colors()
@@ -238,10 +226,9 @@ Fl_Image	*Fl::scheme_bg_ = (Fl_Image *)0;
 static Fl_Pixmap	tile(tile_xpm);
 
 int Fl::scheme(const char *s) {
-#if !NANO_X
   if (!s) {
-    if ((s = fl_getenv("FLTK_SCHEME")) == NULL) {
-#if !defined(WIN32) && !defined(__APPLE__) && !DJGPP
+    if ((s = getenv("FLTK_SCHEME")) == NULL) {
+#if !defined(WIN32) && !defined(__APPLE__)
       const char* key = 0;
       if (Fl::first_window()) key = Fl::first_window()->xclass();
       if (!key) key = "fltk";
@@ -267,16 +254,11 @@ int Fl::scheme(const char *s) {
 
   // Load the scheme...
   return reload_scheme();
-#else
-  return -1;
-#endif
 }
 
 int Fl::reload_scheme() {
   Fl_Window *win;
 
-  get_system_colors();
-#if !NANO_X
   if (scheme_ && !strcasecmp(scheme_, "plastic")) {
     // Update the tile image to match the background color...
     uchar r, g, b;
@@ -345,11 +327,11 @@ int Fl::reload_scheme() {
     win->image(scheme_bg_);
     win->redraw();
   }
-#endif
+
   return 1;
 }
 
 
 //
-// End of "$Id: Fl_get_system_colors.cxx,v 1.6.2.7.2.13.2.3 2003/11/07 03:47:24 easysw Exp $".
+// End of "$Id: Fl_get_system_colors.cxx,v 1.6.2.7.2.13.2.4 2003/12/02 02:51:47 easysw Exp $".
 //

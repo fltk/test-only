@@ -1,9 +1,9 @@
 //
-// "$Id: fl_scroll_area.cxx,v 1.4.2.3.2.3.2.2 2003/11/07 03:47:25 easysw Exp $"
+// "$Id: fl_scroll_area.cxx,v 1.4.2.3.2.3.2.3 2003/12/02 02:51:48 easysw Exp $"
 //
 // Scrolling routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -78,16 +78,6 @@ void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
   static RGBColor fg = { 0x0000, 0x0000, 0x0000 }; RGBForeColor( &fg );
   CopyBits( GetPortBitMapForCopyBits( GetWindowPort(fl_window) ),
             GetPortBitMapForCopyBits( GetWindowPort(fl_window) ), &src, &dst, srcCopy, 0L);
-#elif NANO_X
-  GrCopyArea(fl_window,fl_gc,dest_x,dest_y,src_w,src_h,fl_window,src_x,src_y,MWROP_SRCCOPY);
-  for (;;) {
-    draw_area(data, dest_x, dest_y, src_w, src_h);
-    break;
-  }
-
-#elif DJGPP
-// FIXME_DJGPP
-    draw_area(data, dest_x, dest_y, src_w, src_h);
 #else
   XCopyArea(fl_display, fl_window, fl_window, fl_gc,
 	    src_x, src_y, src_w, src_h, dest_x, dest_y);
@@ -106,5 +96,5 @@ void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
 }
 
 //
-// End of "$Id: fl_scroll_area.cxx,v 1.4.2.3.2.3.2.2 2003/11/07 03:47:25 easysw Exp $".
+// End of "$Id: fl_scroll_area.cxx,v 1.4.2.3.2.3.2.3 2003/12/02 02:51:48 easysw Exp $".
 //

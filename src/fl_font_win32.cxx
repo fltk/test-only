@@ -1,9 +1,9 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.9.2.3.2.4.2.2 2003/11/07 03:47:24 easysw Exp $"
+// "$Id: fl_font_win32.cxx,v 1.9.2.3.2.4.2.3 2003/12/02 02:51:48 easysw Exp $"
 //
 // WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -22,11 +22,6 @@
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
-
-#include <FL/fl_utf8.H>
-#include "Fl_Font.H"
-#include <stdio.h>
-
 
 Fl_FontSize::Fl_FontSize(const char* name, int size) {
   int weight = FW_NORMAL;
@@ -59,12 +54,9 @@ Fl_FontSize::Fl_FontSize(const char* name, int size) {
   GetTextMetrics(fl_gc, &metr);
 //  BOOL ret = GetCharWidthFloat(fl_gc, metr.tmFirstChar, metr.tmLastChar, font->width+metr.tmFirstChar);
 // ...would be the right call, but is not implemented into Window95! (WinNT?)
-  //GetCharWidth(fl_gc, 0, 255, width);
-  int i;
-  for (i = 0; i < 64; i++) width[i] = NULL;
+  GetCharWidth(fl_gc, 0, 255, width);
 #if HAVE_GL
   listbase = 0;
-  for (i = 0; i < 64; i++) glok[i] = 0;
 #endif
   minsize = maxsize = size;
 }
@@ -85,8 +77,6 @@ Fl_FontSize::~Fl_FontSize() {
 #endif
   if (this == fl_fontsize) fl_fontsize = 0;
   DeleteObject(fid);
-  int i;
-  for (i = 0; i < 64; i++) free(width[i]);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -115,7 +105,6 @@ static Fl_Fontdesc built_in_table[] = {
 Fl_Fontdesc* fl_fonts = built_in_table;
 
 static Fl_FontSize* find(int fnum, int size) {
-  
   Fl_Fontdesc* s = fl_fonts+fnum;
   if (!s->name) s = fl_fonts; // use 0 if fnum undefined
   Fl_FontSize* f;
@@ -130,107 +119,42 @@ static Fl_FontSize* find(int fnum, int size) {
 ////////////////////////////////////////////////////////////////
 // Public interface:
 
-FL_EXPORT int fl_font_ = 0;
-FL_EXPORT int fl_size_ = 0;
+int fl_font_ = 0;
+int fl_size_ = 0;
 //static HDC font_gc;
 
-void Fl_Fltk::font(int fnum, int size) {
+void fl_font(int fnum, int size) {
   if (fnum == fl_font_ && size == fl_size_) return;
   fl_font_ = fnum; fl_size_ = size;
   fl_fontsize = find(fnum, size);
 }
 
-int Fl_Fltk::height() {
+int fl_height() {
   return (fl_fontsize->metr.tmAscent + fl_fontsize->metr.tmDescent);
 }
 
-int Fl_Fltk::descent() {
+int fl_descent() {
   return fl_fontsize->metr.tmDescent;
 }
 
-
-// Unicode string buffer
-static xchar *wstr = NULL;
-static int wstr_len	= 0;
-
-double Fl_Fltk::width(const char* c, int n) {
-  int i = 0;
-  double w = 0;
-  while (i < n) {
-    unsigned int ucs;
-    int l = fl_utf2ucs((const unsigned char*)c + i, n - i, &ucs);
-    if (l < 1) l = 1; 
-    i += l;
-    if (!fl_nonspacing(ucs)) {
-      w += Fl_Fltk::width(ucs);
-    }
-  }
+double fl_width(const char* c, int n) {
+  double w = 0.0;
+  while (n--) w += fl_fontsize->width[uchar(*c++)];
   return w;
 }
 
-double Fl_Fltk::width(unsigned int c) { 
-  unsigned int r;
-  r = (c & 0xFC00) >> 10;
-  if (!fl_fontsize->width[r]) {
-     	SelectObject(fl_gc, fl_fontsize->fid);
-     	fl_fontsize->width[r] = (int*) malloc(sizeof(int) * 0x0400);
-        SIZE s;
-	unsigned short i = 0, ii = r * 0x400;
-	for (; i < 0x400; i++) {
-		GetTextExtentPoint32W(fl_gc, (WCHAR*)&ii, 1, &s);
-		fl_fontsize->width[r][i] = s.cx;
-		ii++;
-	} 
-  }
-  return (double) fl_fontsize->width[r][c & 0x03FF];
+double fl_width(unsigned c) {
+  return fl_fontsize->width[c];
 }
 
-void Fl_Fltk::draw(const char* str, int n, int x, int y) {
-  int i = 0;
-  int lx = 0;
+void fl_draw(const char* str, int n, int x, int y) {
   COLORREF oldColor = SetTextColor(fl_gc, fl_RGB());
   SelectObject(fl_gc, fl_fontsize->fid);
-  while (i < n) {
-    unsigned int u;
-    unsigned short ucs;
-    int l = fl_utf2ucs((const unsigned char*)str + i, n - i, &u);
-    if (fl_nonspacing(u)) {
-	x -= lx;
-    } else {
-        lx = (int) Fl_Fltk::width(u);
-    }
-    ucs = u; 
-    if (l < 1) l = 1;
-    i += l;
-    TextOutW(fl_gc, x, y, (WCHAR*)&ucs, 1);
-    x += lx;
-  }
+  TextOut(fl_gc, x, y, str, n);
   SetTextColor(fl_gc, oldColor);
 }
 
-void Fl_Fltk::rtl_draw(const char* c, int n, int x, int y) {
-  int wn;
-  int i = 0;
-  int lx = 0;
-  if (n > wstr_len) {
-    wstr = (xchar*) realloc(wstr, sizeof(xchar) * n);
-    wstr_len = n;
-  }
-  wn = fl_utf2unicode((const unsigned char *)c, n, wstr);
-  COLORREF oldColor = SetTextColor(fl_gc, fl_RGB());
-  SelectObject(fl_gc, fl_fontsize->fid);
-  while (i < wn) {
-    lx = (int) Fl_Fltk::width(wstr[i]);
-    x -= lx;
-    TextOutW(fl_gc, x, y, (WCHAR*)wstr + i, 1);
-	if (fl_nonspacing(wstr[i])) {
-		x += lx;
-	}
-    i++;
-  }
-  SetTextColor(fl_gc, oldColor);
-}
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.9.2.3.2.4.2.2 2003/11/07 03:47:24 easysw Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.9.2.3.2.4.2.3 2003/12/02 02:51:48 easysw Exp $".
 //

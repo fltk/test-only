@@ -1,9 +1,9 @@
 //
-// "$Id: fl_set_font.cxx,v 1.5.2.3.2.8.2.2 2003/11/07 03:47:25 easysw Exp $"
+// "$Id: fl_set_font.cxx,v 1.5.2.3.2.8.2.3 2003/12/02 02:51:48 easysw Exp $"
 //
 // Font utilities for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -32,11 +32,11 @@
 #include "Fl_Font.H"
 #include <stdlib.h>
 
-static unsigned int table_size = 0;
+static int table_size;
 
 void Fl::set_font(Fl_Font fnum, const char* name) {
   while (fnum >= table_size) {
-    unsigned int i = table_size;
+    int i = table_size;
     if (!i) {	// don't realloc the built-in table
       table_size = 2*FL_FREE_FONT;
       i = FL_FREE_FONT;
@@ -55,15 +55,11 @@ void Fl::set_font(Fl_Font fnum, const char* name) {
       fl_fonts[i].n = 0;
 #endif // !WIN32 && !__APPLE__
     }
-
-  }
-  if ((int)fnum > 200) {
-      printf("no bu %s\n", fl_fonts[fnum - 1].name);
   }
   Fl_Fontdesc* s = fl_fonts+fnum;
   if (s->name) {
     if (!strcmp(s->name, name)) {s->name = name; return;}
-#if !defined(WIN32) && !defined(__APPLE__) && !NANO_X && !DJGPP
+#if !defined(WIN32) && !defined(__APPLE__)
     if (s->xlist && s->n >= 0) XFreeFontNames(s->xlist);
 #endif
     for (Fl_FontSize* f = s->first; f;) {
@@ -85,5 +81,5 @@ void Fl::set_font(Fl_Font fnum, Fl_Font from) {
 const char* Fl::get_font(Fl_Font fnum) {return fl_fonts[fnum].name;}
 
 //
-// End of "$Id: fl_set_font.cxx,v 1.5.2.3.2.8.2.2 2003/11/07 03:47:25 easysw Exp $".
+// End of "$Id: fl_set_font.cxx,v 1.5.2.3.2.8.2.3 2003/12/02 02:51:48 easysw Exp $".
 //

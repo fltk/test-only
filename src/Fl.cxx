@@ -1,9 +1,9 @@
 //
-// "$Id: Fl.cxx,v 1.24.2.41.2.55.2.4 2003/11/07 03:47:23 easysw Exp $"
+// "$Id: Fl.cxx,v 1.24.2.41.2.55.2.5 2003/12/02 02:51:46 easysw Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -30,11 +30,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include "flstring.h"
-#include <FL/Fl_Fltk.H>
 
-#if __APPLE__
-#include <Time.h>
-#endif
 
 //
 // Globals...
@@ -51,15 +47,15 @@ int		Fl::damage_,
 		Fl::e_x_root,
 		Fl::e_y_root,
 		Fl::e_dx,
-		Fl::e_dy;
-long		Fl::e_state;
-int		Fl::e_clicks,
+		Fl::e_dy,
+		Fl::e_state,
+		Fl::e_clicks,
 		Fl::e_is_click,
 		Fl::e_keysym;
 char		*Fl::e_text = (char *)"";
 int		Fl::e_length;
 int		Fl::visible_focus_ = 1,
-		Fl::dnd_text_ops_ = 0;
+		Fl::dnd_text_ops_ = 1;
 
 
 //
@@ -101,10 +97,8 @@ struct Timeout {
 };
 static Timeout* first_timeout, *free_timeout;
 
-#if !defined(WIN32) && !__APPLE__
-#if !MSDOS || DJGPP
+#ifndef WIN32
 #  include <sys/time.h>
-#endif
 #endif
 
 // I avoid the overhead of getting the current time when we have no
@@ -113,40 +107,12 @@ static Timeout* first_timeout, *free_timeout;
 // the current time, and the next call will actualy elapse time.
 static char reset_clock = 1;
 
-#if MSDOS && NANO_X
-#include <time.h>
-struct timeval {
-	unsigned long tv_sec, tv_usec;
-};
-static int gettimeofday(struct timeval *tp, void*tz)
-{
-	static unsigned long s, u;
-	tp->tv_sec = time(NULL);
-	if (tp->tv_sec == u) {
-		s += 20000;
-	} else {
-		s = 0;
-	}
-	tp->tv_usec = s;
-	u = tp->tv_sec;
-	return 0;
-}
-#endif
-
 static void elapse_timeouts() {
 #ifdef WIN32
   unsigned long newclock = GetTickCount();
   static unsigned long prevclock;
   double elapsed = (newclock-prevclock)/1000.0;
   prevclock = newclock;
-#elif __APPLE__
-  UnsignedWide newclock;
-  static UnsignedWide prevclock = {0.0};
-  Microseconds(&newclock);
-  double elapsed = (newclock.hi - prevclock.hi)/1000000.0 * 0x100000000 +
-    (newclock.lo - prevclock.lo) / 1000000.0;
-  prevclock.lo = newclock.lo;
-  prevclock.hi = newclock.hi;
 #else
   static struct timeval prevclock;
   struct timeval newclock;
@@ -317,13 +283,7 @@ double Fl::wait(double time_to_wait) {
 #define FOREVER 1e20
 
 int Fl::run() {
-#if NANO_X
-  while (1 || Fl_X::first) {
-#else
-  while (Fl_X::first) {
-#endif
-	wait(FOREVER);
-  }
+  while (Fl_X::first) wait(FOREVER);
   return 0;
 }
 
@@ -808,7 +768,7 @@ void Fl_Window::hide() {
 
 #ifdef WIN32
   if (ip->private_dc) ReleaseDC(ip->xid,ip->private_dc);
-  if (ip->xid == fl_window && fl_gc && fl->type != FL_GDI_DEVICE) {
+  if (ip->xid == fl_window && fl_gc) {
     ReleaseDC(fl_window, fl_gc);
     fl_window = (HWND)-1;
     fl_gc = 0;
@@ -872,8 +832,7 @@ int Fl_Window::handle(int ev)
 	// unmap because when the parent window is remapped we don't
 	// want to reappear.
 	if (visible()) {
-          Fl_Widget* p = parent(); 
-          for (;p->parent() && p->visible();p = p->parent()) {}
+	 Fl_Widget* p = parent(); for (;p->visible();p = p->parent()) {}
 	 if (p->type() >= FL_WINDOW) break; // don't do the unmap
 	}
 #ifdef __APPLE__
@@ -885,7 +844,10 @@ int Fl_Window::handle(int ev)
       }
       break;
     }
+//  } else if (ev == FL_FOCUS || ev == FL_UNFOCUS) {
+//    Fl_Tooltip::exit(Fl_Tooltip::current());
   }
+
   return Fl_Group::handle(ev);
 }
 
@@ -1016,26 +978,12 @@ void Fl_Widget::damage(uchar fl, int X, int Y, int W, int H) {
 }
 
 void Fl_Window::flush() {
-
-  if (!wm_resize) {
   make_current();
+//if (damage() == FL_DAMAGE_EXPOSE && can_boxcheat(box())) fl_boxcheat = this;
   fl_clip_region(i->region); i->region = 0;
   draw();
-  } else {
-    make_current();
-    //fl_clip_region(i->region); i->region = 0;
-    Fl_Offscreen o = fl_create_offscreen(w(), h());
-    fl_begin_offscreen(o);
-    wm_resize = 0;
-    draw();
-    fl_end_offscreen();
-    //make_current();
-    fl_clip_region(i->region); i->region = 0;
-    fl_copy_offscreen(0,0, w(), h(), o, 0, 0);
-    fl_delete_offscreen(o);
-  }
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.24.2.41.2.55.2.4 2003/11/07 03:47:23 easysw Exp $".
+// End of "$Id: Fl.cxx,v 1.24.2.41.2.55.2.5 2003/12/02 02:51:46 easysw Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: color_chooser.cxx,v 1.6.2.3.2.3.2.2 2003/11/07 03:47:25 easysw Exp $"
+// "$Id: color_chooser.cxx,v 1.6.2.3.2.3.2.3 2003/12/02 02:51:49 easysw Exp $"
 //
 // Color chooser test program for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -35,7 +35,7 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#if !defined(WIN32) && !defined(__APPLE__) && !NANO_X
+#if !defined(WIN32) && !defined(__APPLE__)
 #include "list_visuals.cxx"
 #endif
 
@@ -115,7 +115,7 @@ int main(int argc, char ** argv) {
 	   " - : default visual\n"
 	   " r : call Fl::visual(FL_RGB)\n"
 	   " c : call Fl::own_colormap()\n",argv[0]);
-#if !defined(WIN32) && !defined(__APPLE__) && !NANO_X
+#if !defined(WIN32) && !defined(__APPLE__)
     printf(" # : use this visual with an empty colormap:\n");
     list_visuals();
 #endif
@@ -127,7 +127,7 @@ int main(int argc, char ** argv) {
   } else if (argv[i][0] == 'c') {
     Fl::own_colormap();
   } else if (argv[i][0] != '-') {
-#if !defined(WIN32) && !defined(__APPLE__) && !NANO_X
+#if !defined(WIN32) && !defined(__APPLE__)
     int visid = atoi(argv[i]);
     fl_open_display();
     XVisualInfo templt; int num;
@@ -146,5 +146,5 @@ int main(int argc, char ** argv) {
 }
 
 //
-// End of "$Id: color_chooser.cxx,v 1.6.2.3.2.3.2.2 2003/11/07 03:47:25 easysw Exp $".
+// End of "$Id: color_chooser.cxx,v 1.6.2.3.2.3.2.3 2003/12/02 02:51:49 easysw Exp $".
 //

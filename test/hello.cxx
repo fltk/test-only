@@ -1,9 +1,9 @@
 //
-// "$Id: hello.cxx,v 1.4.2.3.2.1.2.2 2003/11/07 03:47:25 easysw Exp $"
+// "$Id: hello.cxx,v 1.4.2.3.2.1.2.3 2003/12/02 02:51:49 easysw Exp $"
 //
 // Hello, World! program for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,7 +26,6 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/Fl_Box.H>
-#include <stdlib.h>
 
 int main(int argc, char **argv) {
   Fl_Window *window = new Fl_Window(300,180);
@@ -35,11 +34,10 @@ int main(int argc, char **argv) {
   box->labelsize(36);
   box->labeltype(FL_SHADOW_LABEL);
   window->end();
-  
   window->show(argc, argv);
   return Fl::run();
 }
 
 //
-// End of "$Id: hello.cxx,v 1.4.2.3.2.1.2.2 2003/11/07 03:47:25 easysw Exp $".
+// End of "$Id: hello.cxx,v 1.4.2.3.2.1.2.3 2003/12/02 02:51:49 easysw Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: demo.cxx,v 1.8.2.5.2.7.2.2 2003/11/07 03:47:25 easysw Exp $"
+// "$Id: demo.cxx,v 1.8.2.5.2.7.2.3 2003/12/02 02:51:49 easysw Exp $"
 //
 // Main demo program for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,8 +26,6 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include <FL/fl_utf8.H>
-
 #if defined(WIN32) && !defined(__CYGWIN__)
 #  include <direct.h>
 #else
@@ -277,7 +275,7 @@ int load_the_menu(const char* fname)
   FILE *fin;
   char line[256], mname[64],iname[64],cname[64];
   int i,j;
-  fin = fl_fopen(fname,"r");
+  fin = fopen(fname,"r");
   if (fin == NULL)
   {
 //    fl_show_message("ERROR","","Cannot read the menu description file.");
@@ -342,6 +340,6 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: demo.cxx,v 1.8.2.5.2.7.2.2 2003/11/07 03:47:25 easysw Exp $".
+// End of "$Id: demo.cxx,v 1.8.2.5.2.7.2.3 2003/12/02 02:51:49 easysw Exp $".
 //
 

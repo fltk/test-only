@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Gl_Choice.cxx,v 1.5.2.7.2.11.2.2 2003/11/07 03:47:23 easysw Exp $"
+// "$Id: Fl_Gl_Choice.cxx,v 1.5.2.7.2.11.2.3 2003/12/02 02:51:46 easysw Exp $"
 //
 // OpenGL visual selection code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -30,9 +30,9 @@
 #  include <FL/x.H>
 #  include <stdlib.h>
 #  include "Fl_Gl_Choice.H"
-#include <FL/fl_utf8.H>
-#include <string.h>
-#ifdef __APPLE__
+#  include "flstring.h"
+
+#  ifdef __APPLE__
 #    include <FL/Fl_Window.H>
 #  endif
 
@@ -48,7 +48,7 @@ Fl_Gl_Choice *Fl_Gl_Choice::find(int m, const int *alistp) {
     if (g->mode == m && g->alist == alistp) 
       return g;
 
-#ifdef __APPLE__
+#  ifdef __APPLE__
   const int *blist;
   int list[32];
     
@@ -201,14 +201,14 @@ Fl_Gl_Choice *Fl_Gl_Choice::find(int m, const int *alistp) {
 #  ifdef WIN32
   g->pixelformat = pixelformat;
   g->pfd = chosen_pfd;
-#elif defined(__APPLE__)
+#  elif defined(__APPLE__)
   g->pixelformat = fmt;
 #  else
   g->vis = visp;
 
   if (/*MaxCmapsOfScreen(ScreenOfDisplay(fl_display,fl_screen))==1 && */
       visp->visualid == fl_visual->visualid &&
-      !fl_getenv("MESA_PRIVATE_CMAP"))
+      !getenv("MESA_PRIVATE_CMAP"))
     g->colormap = fl_colormap;
   else
     g->colormap = XCreateColormap(fl_display, RootWindow(fl_display,fl_screen),
@@ -266,7 +266,7 @@ GLContext fl_create_gl_context(Fl_Window* window, const Fl_Gl_Choice* g, int lay
   return context;
 }
 
-#elif defined(__APPLE__)
+#  elif defined(__APPLE__)
 GLContext fl_create_gl_context(Fl_Window* window, const Fl_Gl_Choice* g, int layer) {
     GLContext context, shared_ctx = context_list ? context_list[0] : 0;
     context = aglCreateContext( g->pixelformat, shared_ctx);
@@ -302,7 +302,7 @@ void fl_set_gl_context(Fl_Window* w, GLContext context) {
     cached_window = w;
 #  ifdef WIN32
     wglMakeCurrent(Fl_X::i(w)->private_dc, context);
-#elif defined(__APPLE__)
+#  elif defined(__APPLE__)
     if ( w->parent() ) { //: resize our GL buffer rectangle
       Rect wrect; GetWindowPortBounds( fl_xid(w), &wrect );
       GLint rect[] = { w->x(), wrect.bottom-w->h()-w->y(), w->w(), w->h() };
@@ -322,7 +322,7 @@ void fl_no_gl_context() {
   cached_window = 0;
 #  ifdef WIN32
   wglMakeCurrent(0, 0);
-#elif defined(__APPLE__)
+#  elif defined(__APPLE__)
   aglSetCurrentContext(0);
 #  else
   glXMakeCurrent(fl_display, 0, 0);
@@ -333,7 +333,7 @@ void fl_delete_gl_context(GLContext context) {
   if (cached_context == context) fl_no_gl_context();
 #  ifdef WIN32
   wglDeleteContext(context);
-#elif defined(__APPLE__)
+#  elif defined(__APPLE__)
   aglSetCurrentContext( NULL );
   aglSetDrawable( context, NULL );    
   aglDestroyContext( context );
@@ -343,8 +343,9 @@ void fl_delete_gl_context(GLContext context) {
   del_context(context);
 }
 
-#endif
+#endif // HAVE_GL
+
 
 //
-// End of "$Id: Fl_Gl_Choice.cxx,v 1.5.2.7.2.11.2.2 2003/11/07 03:47:23 easysw Exp $".
+// End of "$Id: Fl_Gl_Choice.cxx,v 1.5.2.7.2.11.2.3 2003/12/02 02:51:46 easysw Exp $".
 //

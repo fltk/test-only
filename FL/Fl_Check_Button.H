@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Check_Button.H,v 1.5.2.3.2.2.2.2 2003/11/06 05:46:20 matthiaswm Exp $"
+// "$Id: Fl_Check_Button.H,v 1.5.2.3.2.2.2.3 2003/12/02 02:51:43 easysw Exp $"
 //
 // Check button header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -28,22 +28,13 @@
 
 #include "Fl_Light_Button.H"
 
-/** Buttons generate callbacks when they are clicked by the user. You 
- * control exactly when and how by changing the values for type() and when().
- *   \image html Fl_Check_Button.gif
- * The Fl_Check_Button subclass display the \a on state by turning on a 
- * light, rather than drawing pushed in. The shape of the "light" is 
- * initially set to \c FL_DIAMOND_DOWN_BOX. The color of the light when
- * on is controlled with selection_color(), which defaults to \c FL_RED. */
 class FL_EXPORT Fl_Check_Button : public Fl_Light_Button {
 public:
-    /** Creates a new Fl_Check_Button widget using the given \a position, 
-     * \a size, and \a label string. */
-  Fl_Check_Button(int x,int y,int width,int height,const char *label = 0);
+  Fl_Check_Button(int x,int y,int w,int h,const char *l = 0);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Check_Button.H,v 1.5.2.3.2.2.2.2 2003/11/06 05:46:20 matthiaswm Exp $".
+// End of "$Id: Fl_Check_Button.H,v 1.5.2.3.2.2.2.3 2003/12/02 02:51:43 easysw Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: fl_curve.cxx,v 1.4.2.4.2.4.2.2 2003/11/07 03:47:24 easysw Exp $"
+// "$Id: fl_curve.cxx,v 1.4.2.4.2.4.2.3 2003/12/02 02:51:48 easysw Exp $"
 //
 // Bezier curve functions for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -32,7 +32,7 @@
 #include <FL/fl_draw.H>
 #include <math.h>
 
-void Fl_Fltk::curve(double X0, double Y0,
+void fl_curve(double X0, double Y0,
 	      double X1, double Y1,
 	      double X2, double Y2,
 	      double X3, double Y3) {
@@ -100,5 +100,5 @@ void Fl_Fltk::curve(double X0, double Y0,
 }
 
 //
-// End of "$Id: fl_curve.cxx,v 1.4.2.4.2.4.2.2 2003/11/07 03:47:24 easysw Exp $".
+// End of "$Id: fl_curve.cxx,v 1.4.2.4.2.4.2.3 2003/12/02 02:51:48 easysw Exp $".
 //

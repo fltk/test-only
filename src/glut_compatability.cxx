@@ -1,9 +1,9 @@
 //
-// "$Id: glut_compatability.cxx,v 1.4.2.5.2.4.2.2 2003/11/07 03:47:25 easysw Exp $"
+// "$Id: glut_compatability.cxx,v 1.4.2.5.2.4.2.3 2003/12/02 02:51:49 easysw Exp $"
 //
 // GLUT emulation routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -316,7 +316,7 @@ static Fl_Menu_Item* additem(menu *m) {
   return i;
 }
 
-void glutAddMenuEntry(char *label, void* value) {
+void glutAddMenuEntry(char *label, int value) {
   menu *m = &menus[glut_menu];
   Fl_Menu_Item* i = additem(m);
   i->text = label;
@@ -333,7 +333,7 @@ void glutAddSubMenu(char *label, int submenu) {
   i->flags = FL_PUP_SUBMENU;
 }
 
-void glutChangeToMenuEntry(int item, char *label, void* value) {
+void glutChangeToMenuEntry(int item, char *label, int value) {
   menu *m = &menus[glut_menu];
   Fl_Menu_Item* i = &m->m[item-1];
   i->text = label;
@@ -413,5 +413,5 @@ int glutLayerGet(GLenum type) {
 #endif
 
 //
-// End of "$Id: glut_compatability.cxx,v 1.4.2.5.2.4.2.2 2003/11/07 03:47:25 easysw Exp $".
+// End of "$Id: glut_compatability.cxx,v 1.4.2.5.2.4.2.3 2003/12/02 02:51:49 easysw Exp $".
 //

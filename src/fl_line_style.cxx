@@ -1,9 +1,9 @@
 //
-// "$Id: fl_line_style.cxx,v 1.3.2.3.2.10.2.2 2003/11/07 03:47:25 easysw Exp $"
+// "$Id: fl_line_style.cxx,v 1.3.2.3.2.10.2.3 2003/12/02 02:51:48 easysw Exp $"
 //
 // Line style code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -29,9 +29,7 @@
 #include "flstring.h"
 #include <stdio.h>
 
-const char* fl_cannot_create_pen = "fl_line_style(): Could not create GDI pen object.";
-
-void Fl_Fltk::line_style(int style, int width, char* dashes) {
+void fl_line_style(int style, int width, char* dashes) {
 #ifdef WIN32
   // According to Bill, the "default" cap and join should be the
   // "fastest" mode supported for the platform.  I don't know why
@@ -50,7 +48,7 @@ void Fl_Fltk::line_style(int style, int width, char* dashes) {
   LOGBRUSH penbrush = {BS_SOLID,fl_RGB(),0}; // can this be fl_brush()?
   HPEN newpen = ExtCreatePen(s1, width, &penbrush, n, n ? a : 0);
   if (!newpen) {
-    Fl::error(fl_cannot_create_pen);
+    Fl::error("fl_line_style(): Could not create GDI pen object.");
     return;
   }
   HPEN oldpen = (HPEN)SelectObject(fl_gc, newpen);
@@ -70,11 +68,6 @@ void Fl_Fltk::line_style(int style, int width, char* dashes) {
   style &= 0xff;
   if (style > 2) style = 2;
   PenPat(styles + style);
-#elif NANO_X
-// FIXME
-#elif DJGPP
-// FIXME_DJGPP
-  fl_gc->lno_width = width;
 #else
   int ndashes = dashes ? strlen(dashes) : 0;
   // emulate the WIN32 dash patterns on X
@@ -111,5 +104,5 @@ void Fl_Fltk::line_style(int style, int width, char* dashes) {
 
 
 //
-// End of "$Id: fl_line_style.cxx,v 1.3.2.3.2.10.2.2 2003/11/07 03:47:25 easysw Exp $".
+// End of "$Id: fl_line_style.cxx,v 1.3.2.3.2.10.2.3 2003/12/02 02:51:48 easysw Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: fl_read_image.cxx,v 1.1.2.1.2.2 2003/11/07 03:47:25 easysw Exp $"
+// "$Id: fl_read_image.cxx,v 1.1.2.1.2.3 2003/12/02 02:51:48 easysw Exp $"
 //
 // X11 image reading routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -35,10 +35,6 @@
 #  include "fl_read_image_win32.cxx"
 #elif defined(__APPLE__)
 #  include "fl_read_image_mac.cxx"
-#elif defined(NANO_X)
-#  include "fl_read_image_nx.cxx"
-#elif defined(DJGPP)
-#  include "fl_read_image_dj2.cxx"
 #else
 #  include <X11/Xutil.h>
 #  ifdef __sgi
@@ -397,5 +393,5 @@ fl_read_image(uchar *p,		// I - Pixel buffer or NULL to allocate
 #endif
 
 //
-// End of "$Id: fl_read_image.cxx,v 1.1.2.1.2.2 2003/11/07 03:47:25 easysw Exp $".
+// End of "$Id: fl_read_image.cxx,v 1.1.2.1.2.3 2003/12/02 02:51:48 easysw Exp $".
 //

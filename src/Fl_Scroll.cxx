@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.7.2.6.2.2.2.2 2003/11/07 03:47:24 easysw Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.7.2.6.2.2.2.3 2003/12/02 02:51:47 easysw Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -46,10 +46,8 @@ void Fl_Scroll::fix_scrollbar_order() {
   }
 }
 
-
 void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
   fl_clip(X,Y,W,H);
-
   Fl_Scroll* s = (Fl_Scroll*)v;
   // erase background if there is a boxtype:
   if (s->box()) {
@@ -105,6 +103,7 @@ void Fl_Scroll::bbox(int& X, int& Y, int& W, int& H) {
 void Fl_Scroll::draw() {
   fix_scrollbar_order();
   int X,Y,W,H; bbox(X,Y,W,H);
+
   uchar d = damage();
 
   if (d & FL_DAMAGE_ALL) { // full redraw
@@ -112,13 +111,7 @@ void Fl_Scroll::draw() {
     draw_clip(this, X, Y, W, H);
   } else {
     if (d & FL_DAMAGE_SCROLL) { // scroll the contents:
-#if 0 &&  NANO_X
-      d = d | FL_DAMAGE_ALL;
-      draw_box(box(),x(),y(),w(),h(),color());
-      draw_clip(this, X, Y, W, H);
-#else
       fl_scroll(X, Y, W, H, oldx-xposition_, oldy-yposition_, draw_clip, this);
-#endif
     }
     if (d & FL_DAMAGE_CHILD) { // draw damaged children
       fl_clip(X, Y, W, H);
@@ -273,5 +266,5 @@ int Fl_Scroll::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.7.2.6.2.2.2.2 2003/11/07 03:47:24 easysw Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.7.2.6.2.2.2.3 2003/12/02 02:51:47 easysw Exp $".
 //

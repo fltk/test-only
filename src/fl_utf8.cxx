@@ -1,5 +1,5 @@
 
-// "$Id: fl_utf8.cxx,v 1.1.2.1 2003/11/07 04:02:04 easysw Exp $"
+// "$Id: fl_utf8.cxx,v 1.1.2.2 2003/12/02 02:51:49 easysw Exp $"
 //
 // Unicode to UTF-8 conversion functions.
 //
@@ -59,11 +59,11 @@
 #include <stdlib.h>
 #else
 
-#if HAVE_XUTF8 && !NANO_X
-#include <libXutf8/Xutf8.h>
+#if !NANO_X
+#  include <libXutf8/Xutf8.h>
 #else 
-#include <ctype.h>
-#endif //HAVE_XUTF8
+#  include <ctype.h>
+#endif // !NANO_X
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -1118,6 +1118,6 @@ int fl_rmdir(const char* f)
 }
 
 //
-// End of "$Id: fl_utf8.cxx,v 1.1.2.1 2003/11/07 04:02:04 easysw Exp $".
+// End of "$Id: fl_utf8.cxx,v 1.1.2.2 2003/12/02 02:51:49 easysw Exp $".
 //
  

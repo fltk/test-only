@@ -1,9 +1,9 @@
 /*
- * "$Id: flstring.h,v 1.1.2.10.2.2 2003/11/07 03:47:25 easysw Exp $"
+ * "$Id: flstring.h,v 1.1.2.10.2.3 2003/12/02 02:51:49 easysw Exp $"
  *
  * Common string header file for the Fast Light Tool Kit (FLTK).
  *
- * Copyright 1998-2004 by Bill Spitzak and others.
+ * Copyright 1998-2003 by Bill Spitzak and others.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -69,15 +69,6 @@ int strncasecmp(const char*,const char*,int);
 char *strdup(const char*);
 #  endif
 
-#if defined(__APPLE__)
-#undef HAVE_SNPRINTF
-#undef HAVE_VSNPRINTF
-#define HAVE_SNPRINTF 1
-#define HAVE_VSNPRINTF 1
-
-#  endif
-
-
 #  if !HAVE_SNPRINTF
 FL_EXPORT extern int fl_snprintf(char *, size_t, const char *, ...);
 #    define snprintf fl_snprintf
@@ -110,5 +101,5 @@ FL_EXPORT extern size_t fl_strlcpy(char *, const char *, size_t);
 
 
 /*
- * End of "$Id: flstring.h,v 1.1.2.10.2.2 2003/11/07 03:47:25 easysw Exp $".
+ * End of "$Id: flstring.h,v 1.1.2.10.2.3 2003/12/02 02:51:49 easysw Exp $".
  */

@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_PNM_Image.cxx,v 1.1.2.10.2.3 2003/11/07 03:47:23 easysw Exp $"
+// "$Id: Fl_PNM_Image.cxx,v 1.1.2.10.2.4 2003/12/02 02:51:47 easysw Exp $"
 //
 // Fl_PNM_Image routines.
 //
-// Copyright 1997-2004 by Easy Software Products.
+// Copyright 1997-2003 by Easy Software Products.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -36,9 +36,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include "flstring.h"
-#include <FL/fl_utf8.H>
 
-const char* fl_pnm_early_eof = "Early end-of-file in PNM file \"%s\"!";
 
 //
 // 'Fl_PNM_Image::Fl_PNM_Image()' - Load a PNM image...
@@ -58,7 +56,7 @@ Fl_PNM_Image::Fl_PNM_Image(const char *name)	// I - File to read
 		maxval;		// Maximum pixel value
 
 
-  if ((fp = fl_fopen(name, "rb")) == NULL) return;
+  if ((fp = fopen(name, "rb")) == NULL) return;
 
   //
   // Read the file header in the format:
@@ -76,7 +74,7 @@ Fl_PNM_Image::Fl_PNM_Image(const char *name)	// I - File to read
   lineptr = fgets(line, sizeof(line), fp);
   if (!lineptr) {
     fclose(fp);
-    Fl::error(fl_pnm_early_eof, name);
+    Fl::error("Early end-of-file in PNM file \"%s\"!", name);
     return;
   }
 
@@ -178,5 +176,5 @@ Fl_PNM_Image::Fl_PNM_Image(const char *name)	// I - File to read
 
 
 //
-// End of "$Id: Fl_PNM_Image.cxx,v 1.1.2.10.2.3 2003/11/07 03:47:23 easysw Exp $".
+// End of "$Id: Fl_PNM_Image.cxx,v 1.1.2.10.2.4 2003/12/02 02:51:47 easysw Exp $".
 //

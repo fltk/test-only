@@ -1,9 +1,9 @@
 //
-// "$Id: fonts.cxx,v 1.5.2.3.2.2.2.2 2003/11/07 03:47:25 easysw Exp $"
+// "$Id: fonts.cxx,v 1.5.2.3.2.2.2.3 2003/12/02 02:51:49 easysw Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -134,7 +134,7 @@ int main(int argc, char **argv) {
   Fl::scheme(NULL);
   create_the_forms();
   int i = fl_choice("Which fonts:","-*","iso8859","All");
-  int k = (int)Fl::set_fonts(i ? (i>1 ? "*" : 0) : "-*");
+  int k = Fl::set_fonts(i ? (i>1 ? "*" : 0) : "-*");
   for (i = 0; i < k; i++) {
     int t; const char *name = Fl::get_font_name((Fl_Font)i,&t);
     char buffer[128];
@@ -150,7 +150,6 @@ int main(int argc, char **argv) {
     sprintf(buffer, "@F%d@.%s", i, name);
     name = buffer;
 #endif
-    free(malloc(5));
     fontobj->add(name);
     int *s; int n = Fl::get_font_sizes((Fl_Font)i, s);
     numsizes[i] = n;
@@ -166,5 +165,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.5.2.3.2.2.2.2 2003/11/07 03:47:25 easysw Exp $".
+// End of "$Id: fonts.cxx,v 1.5.2.3.2.2.2.3 2003/12/02 02:51:49 easysw Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Input_.cxx,v 1.21.2.11.2.24.2.3 2003/11/07 03:47:23 easysw Exp $"
+// "$Id: Fl_Input_.cxx,v 1.21.2.11.2.24.2.4 2003/12/02 02:51:46 easysw Exp $"
 //
 // Common input widget routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -36,14 +36,9 @@
 #include <math.h>
 #include "flstring.h"
 #include <stdlib.h>
-#include <stdio.h>
 #include <ctype.h>
-#include <FL/fl_utf8.H>
 
 #define MAXBUF 1024
-
-extern void fl_set_spot(int font, int size, int x, int y, int w, int h);
-extern void fl_reset_spot(void);
 
 ////////////////////////////////////////////////////////////////
 
@@ -60,10 +55,7 @@ const char* Fl_Input_::expand(const char* p, char* buf) const {
   int word_wrap;
 
   if (input_type()==FL_SECRET_INPUT) {
-    while (o<e && p < value_+size_) {
-      if (fl_utflen((unsigned char*)p, value_+size_-p) >= 0) *o++ = '*'; 
-      p++;
-    }
+    while (o<e && p < value_+size_) {*o++ = '*'; p++;}
   } else while (o<e) {
     if (wrap() && (p >= value_+size_ || isspace(*p))) {
       word_wrap = w() - Fl::box_dw(box()) - 2;
@@ -77,6 +69,7 @@ const char* Fl_Input_::expand(const char* p, char* buf) const {
       lastspace = p;
       lastspace_out = o;
     }
+
     if (p >= value_+size_) break;
     int c = *p++ & 255;
     if (c < ' ' || c == 127) {
@@ -87,6 +80,8 @@ const char* Fl_Input_::expand(const char* p, char* buf) const {
 	*o++ = '^';
 	*o++ = c ^ 0x40;
       }
+    } else if (c == 0xA0) { // nbsp
+      *o++ = ' ';
     } else {
       *o++ = c;
     }
@@ -103,17 +98,14 @@ double Fl_Input_::expandpos(
   int* returnn		// return offset into buf here
 ) const {
   int n = 0;
-  if (input_type()==FL_SECRET_INPUT) {
-    while (p<e) {
-      if (fl_utflen((unsigned char*)p, value_+size_-p) >= 0) n++; 
-      p++;
-    }
-  
-  } else while (p<e) {
+  if (input_type()==FL_SECRET_INPUT) n = e-p;
+  else while (p<e) {
     int c = *p++ & 255;
     if (c < ' ' || c == 127) {
       if (c == '\t' && input_type()==FL_MULTILINE_INPUT) n += 8-(n%8);
       else n += 2;
+    } else if (c >= 128 && c < 0xA0) {
+      n += 4;
     } else {
       n++;
     }
@@ -328,10 +320,6 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
   }
 
   fl_pop_clip();
-  if (Fl::focus() == this) {
-	fl_set_spot(textfont(), textsize(), 
-		xpos+curx, Y+ypos-fl_descent(), W, H);
-  }
 }
 
 static int isword(char c) {
@@ -411,23 +399,15 @@ void Fl_Input_::handle_mouse(int X, int Y, int /*W*/, int /*H*/, int drag) {
   const char *l, *r, *t; double f0 = Fl::event_x()-X+xscroll_;
   for (l = p, r = e; l<r; ) {
     double f;
-    int cw = fl_utflen((unsigned char*)l, e-l);
-    if (cw < 1) cw = 1;
-    t = l+cw;
+    t = l+(r-l+1)/2;
     f = X-xscroll_+expandpos(p, t, buf, 0);
     if (f <= Fl::event_x()) {l = t; f0 = Fl::event_x()-f;}
-    else r = t-cw;
+    else r = t-1;
   }
-
   if (l < e) { // see if closer to character on right:
-    double f1;
-    int cw = fl_utflen((unsigned char*)l, e-l);
-    if (cw > 0) {
-      f1 = X-xscroll_+expandpos(p, l + cw, buf, 0) - Fl::event_x();
-      if (f1 < f0) l = l+cw;
-    }
+    double f1 = X-xscroll_+expandpos(p, l+1, buf, 0)-Fl::event_x();
+    if (f1 < f0) l = l+1;
   }
-
   newpos = l-value();
 
   int newmark = drag ? mark() : newpos;
@@ -466,33 +446,12 @@ void Fl_Input_::handle_mouse(int X, int Y, int /*W*/, int /*H*/, int drag) {
 }
 
 int Fl_Input_::position(int p, int m) {
-  int is_same = 0;
   was_up_down = 0;
   if (p<0) p = 0;
   if (p>size()) p = size();
   if (m<0) m = 0;
   if (m>size()) m = size();
   if (p == position_ && m == mark_) return 0;
-  if (p == m) is_same = 1;
-
-  while (p < position_ && p > 0 && (size() - p) > 0 && 
-	(fl_utflen((unsigned char *)value() + p, size() - p) < 1)) { p--; }
-  int ul = fl_utflen((unsigned char *)value() + p, size() - p);
-  while (p < size() && p > position_ && ul < 0) {
-	p++; 
-	ul = fl_utflen((unsigned char *)value() + p, size() - p); 
-  }
-
-  while (m < mark_ && m > 0 && (size() - m) > 0 && 
-	(fl_utflen((unsigned char *)value() + m, size() - m) < 1)) { m--; }
-  ul = fl_utflen((unsigned char *)value() + m, size() - m);
-  while (m < size() && m > mark_ && ul < 0) {
-	m++; 
-	ul = fl_utflen((unsigned char *)value() + m, size() - m); 
-  }
-  if (is_same) m = p;
-  if (p == position_ && m == mark_) return 0;
-
   //if (Fl::selection_owner() == this) Fl::selection_owner(0);
   if (p != m) {
     if (p != position_) minimal_update(position_, p);
@@ -569,24 +528,13 @@ static void undobuffersize(int n) {
 // all changes go through here, delete characters b-e and insert text:
 int Fl_Input_::replace(int b, int e, const char* text, int ilen) {
 
-  int ul, om, op;
   was_up_down = 0;
 
-  
   if (b<0) b = 0;
   if (e<0) e = 0;
   if (b>size_) b = size_;
   if (e>size_) e = size_;
   if (e<b) {int t=b; b=e; e=t;}
-
-  while (b != e && b > 0 && (size_ - b) > 0 && 
-	(fl_utflen((unsigned char *)value_ + b, size_ - b) < 1)) { b--; }
-  ul = fl_utflen((unsigned char *)value_ + e, size_ - e);
-  while (e < size_ && e > 0 && ul < 0) { 
-	e++;
-	ul = fl_utflen((unsigned char *)value_ + e, size_ - e ); 
-  }
-
   if (text && !ilen) ilen = strlen(text);
   if (e<=b && !ilen) return 0; // don't clobber undo for a null operation
   if (size_+ilen-(e-b) > maximum_size_) {
@@ -633,9 +581,7 @@ int Fl_Input_::replace(int b, int e, const char* text, int ilen) {
     size_ += ilen;
   }
   undowidget = this;
-  om = mark_;
-  op = position_;
-  mark_ = position_ = undoat = b+ilen;
+  undoat = b+ilen;
 
   // Insertions into the word at the end of the line will cause it to
   // wrap to the next line, so we must indicate that the changes may start
@@ -646,10 +592,12 @@ int Fl_Input_::replace(int b, int e, const char* text, int ilen) {
     while (b > 0 && !isspace(index(b))) b--;
 
   // make sure we redraw the old selection or cursor:
-  if (om < b) b = om;
-  if (op < b) b = op;
+  if (mark_ < b) b = mark_;
+  if (position_ < b) b = position_;
 
   minimal_update(b);
+
+  mark_ = position_ = undoat;
 
   if (when()&FL_WHEN_CHANGED) do_callback(); else set_changed();
   return 1;
@@ -716,7 +664,6 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
     return 1;
 
   case FL_FOCUS:
-    fl_set_spot(textfont(), textsize(), x(), y(), w(), h());
     if (mark_ == position_) {
       minimal_update(size()+1);
     } else //if (Fl::selection_owner() != this)
@@ -724,11 +671,11 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
     return 1;
 
   case FL_UNFOCUS:
-    fl_reset_spot();
     if (mark_ == position_) {
       if (!(damage()&FL_DAMAGE_EXPOSE)) {minimal_update(position_); erase_cursor_only = 1;}
     } else //if (Fl::selection_owner() != this)
       minimal_update(mark_, position_);
+  case FL_HIDE:
     if (when() & FL_WHEN_RELEASE) maybe_do_callback();
     return 1;
 
@@ -746,7 +693,7 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
     return 1;
 
   case FL_RELEASE:
-    if (Fl::event_button() == 1) copy(0);
+    copy(0);
     return 1;
 
   case FL_PASTE: {
@@ -797,7 +744,6 @@ int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
         return 1;
       } else return replace(0, size(), t, e - t);
     }
-
     return replace(position(), mark(), t, e-t);}
 
   default:
@@ -906,5 +852,5 @@ Fl_Input_::~Fl_Input_() {
 }
 
 //
-// End of "$Id: Fl_Input_.cxx,v 1.21.2.11.2.24.2.3 2003/11/07 03:47:23 easysw Exp $".
+// End of "$Id: Fl_Input_.cxx,v 1.21.2.11.2.24.2.4 2003/12/02 02:51:46 easysw Exp $".
 //

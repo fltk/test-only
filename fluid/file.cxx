@@ -1,5 +1,5 @@
 //
-// "$Id: file.cxx,v 1.7.2.6.2.7.2.2 2003/11/07 03:47:22 easysw Exp $"
+// "$Id: file.cxx,v 1.7.2.6.2.7.2.3 2003/12/02 02:51:45 easysw Exp $"
 //
 // Fluid file routines for the Fast Light Tool Kit (FLTK).
 //
@@ -8,7 +8,7 @@
 // They are somewhat similar to tcl, using matching { and }
 // to quote strings.
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -33,7 +33,6 @@
 #include "../src/flstring.h"
 #include <stdarg.h>
 #include "alignment_panel.h"
-#include "../FL/fl_utf8.H"
 
 ////////////////////////////////////////////////////////////////
 // BASIC FILE WRITING:
@@ -42,7 +41,7 @@ static FILE *fout;
 
 int open_write(const char *s) {
   if (!s) {fout = stdout; return 1;}
-  FILE *f = fl_fopen(s,"w");
+  FILE *f = fopen(s,"w");
   if (!f) return 0;
   fout = f;
   return 1;
@@ -134,7 +133,7 @@ static const char *fname;
 int open_read(const char *s) {
   lineno = 1;
   if (!s) {fin = stdin; fname = "stdin"; return 1;}
-  FILE *f = fl_fopen(s,"r");
+  FILE *f = fopen(s,"r");
   if (!f) return 0;
   fin = f;
   fname = s;
@@ -638,5 +637,5 @@ void read_fdesign() {
 }
 
 //
-// End of "$Id: file.cxx,v 1.7.2.6.2.7.2.2 2003/11/07 03:47:22 easysw Exp $".
+// End of "$Id: file.cxx,v 1.7.2.6.2.7.2.3 2003/12/02 02:51:45 easysw Exp $".
 //

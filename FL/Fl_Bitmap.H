@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Bitmap.H,v 1.5.2.3.2.8.2.2 2003/11/10 01:32:58 matthiaswm Exp $"
+// "$Id: Fl_Bitmap.H,v 1.5.2.3.2.8.2.3 2003/12/02 02:51:43 easysw Exp $"
 //
 // Bitmap header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -30,8 +30,6 @@
 class Fl_Widget;
 struct Fl_Menu_Item;
 
-/** The Fl_Bitmap class supports caching and drawing of mono-color (bitmap) images. 
- * Images are drawn using the current color. */
 class FL_EXPORT Fl_Bitmap : public Fl_Image {
   public:
 
@@ -43,12 +41,10 @@ class FL_EXPORT Fl_Bitmap : public Fl_Image {
   unsigned id; // for internal use
 #endif // __APPLE__ || WIN32
   
-    /** The constructors create a new bitmap from the specified bitmap data. */
   Fl_Bitmap(const uchar *bits, int W, int H) :
     Fl_Image(W,H,0), array(bits), alloc_array(0), id(0) {data((const char **)&array, 1);}
   Fl_Bitmap(const char *bits, int W, int H) :
     Fl_Image(W,H,0), array((const uchar *)bits), alloc_array(0), id(0) {data((const char **)&array, 1);}
-    /** The destructor frees all memory and server resources that are used by the bitmap. */
   virtual ~Fl_Bitmap();
   virtual Fl_Image *copy(int W, int H);
   Fl_Image *copy() { return copy(w(), h()); }
@@ -62,5 +58,5 @@ class FL_EXPORT Fl_Bitmap : public Fl_Image {
 #endif
 
 //
-// End of "$Id: Fl_Bitmap.H,v 1.5.2.3.2.8.2.2 2003/11/10 01:32:58 matthiaswm Exp $".
+// End of "$Id: Fl_Bitmap.H,v 1.5.2.3.2.8.2.3 2003/12/02 02:51:43 easysw Exp $".
 //

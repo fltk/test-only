@@ -1,9 +1,9 @@
 //
-// "$Id: fl_draw.cxx,v 1.6.2.4.2.12.2.2 2003/11/07 03:47:24 easysw Exp $"
+// "$Id: fl_draw.cxx,v 1.6.2.4.2.12.2.3 2003/12/02 02:51:48 easysw Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -33,15 +33,11 @@
 #define min(a,b) ((a)<(b)?(a):(b))
 #include <FL/fl_draw.H>
 #include <FL/Fl_Image.H>
-#define MAXBUF 1024
-
 
 #include "flstring.h"
 #include <ctype.h>
-#include <FL/Fl_Device.H>
 
-FL_EXPORT Fl_Fltk fltk;
-FL_EXPORT Fl_Device * fl=&fltk;
+#define MAXBUF 1024
 
 char fl_draw_shortcut;	// set by fl_labeltypes.cxx
 
@@ -96,8 +92,8 @@ expand(const char* from, char* buf, double maxw, int& n, double &width,
     } else if (c < ' ' || c == 127) { // ^X
       *o++ = '^';
       *o++ = c ^ 0x40;
-    //} else if (c == 0xA0) { // non-breaking space
-    // *o++ = ' ';
+    } else if (c == 0xA0) { // non-breaking space
+      *o++ = ' ';
     } else if (c == '@' && draw_symbols) { // Symbol???
       if (p[1] && p[1] != '@')  break;
       *o++ = c;
@@ -329,5 +325,5 @@ void fl_measure(const char* str, int& w, int& h, int draw_symbols) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.6.2.4.2.12.2.2 2003/11/07 03:47:24 easysw Exp $".
+// End of "$Id: fl_draw.cxx,v 1.6.2.4.2.12.2.3 2003/12/02 02:51:48 easysw Exp $".
 //

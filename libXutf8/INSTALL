@@ -1,9 +1,0 @@
-
-Default install :
-
-        tar -xvzf Xutf8.tar.gz
-        cd Xutf8
-        ./configure --prefix=/usr
-	su -c "make install"
-
-		

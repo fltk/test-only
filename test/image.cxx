@@ -1,5 +1,5 @@
 //
-// "$Id: image.cxx,v 1.6.2.3.2.7.2.2 2003/11/07 03:47:25 easysw Exp $"
+// "$Id: image.cxx,v 1.6.2.3.2.7.2.3 2003/12/02 02:51:49 easysw Exp $"
 //
 // Fl_Image test program for the Fast Light Tool Kit (FLTK).
 //
@@ -7,7 +7,7 @@
 // as an icon or postage stamp.  Use fl_draw_image to go directly
 // from an buffered image that changes often.
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -80,7 +80,7 @@ void button_cb(Fl_Widget *,void *) {
 }
 
 #include <FL/x.H>
-#if !defined(WIN32) && !defined(__APPLE__) && !NANO_X
+#if !defined(WIN32) && !defined(__APPLE__)
 #include "list_visuals.cxx"
 #endif
 
@@ -96,7 +96,7 @@ int arg(int argc, char **argv, int &i) {
 }
 
 int main(int argc, char **argv) {
-#if !defined(WIN32) && !defined(__APPLE__) && !NANO_X
+#if !defined(WIN32) && !defined(__APPLE__)
   int i = 1;
 
   Fl::args(argc,argv,i,arg);
@@ -155,5 +155,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: image.cxx,v 1.6.2.3.2.7.2.2 2003/11/07 03:47:25 easysw Exp $".
+// End of "$Id: image.cxx,v 1.6.2.3.2.7.2.3 2003/12/02 02:51:49 easysw Exp $".
 //

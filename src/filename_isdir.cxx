@@ -1,9 +1,9 @@
 //
-// "$Id: filename_isdir.cxx,v 1.4.2.5.2.7.2.2 2003/11/07 03:47:24 easysw Exp $"
+// "$Id: filename_isdir.cxx,v 1.4.2.5.2.7.2.3 2003/12/02 02:51:48 easysw Exp $"
 //
 // Directory detection routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -26,14 +26,11 @@
 // Used by fl_file_chooser
 
 #include "flstring.h"
-#if !__APPLE__
 #include <sys/types.h>
 #include <sys/stat.h>
-#endif /* __APPLE__ */
 #include <ctype.h>
 #include <FL/filename.H>
-#include <FL/fl_utf8.H>
-#include <stdlib.h>
+
 
 #if defined(WIN32) || defined(__EMX__) && !defined(__CYGWIN__)
 static inline int isdirsep(char c) {return c=='/' || c=='\\';}
@@ -65,13 +62,11 @@ int fl_filename_isdir(const char* n) {
       n = fn;
     }
   }
-  int ret = !fl_stat(n, &s) && (s.st_mode&0170000)==0040000;
-  return ret;
 #endif
 
-   return !fl_stat(n, &s) && (s.st_mode&0170000)==0040000;
+  return !stat(n, &s) && (s.st_mode&0170000)==0040000;
 }
 
 //
-// End of "$Id: filename_isdir.cxx,v 1.4.2.5.2.7.2.2 2003/11/07 03:47:24 easysw Exp $".
+// End of "$Id: filename_isdir.cxx,v 1.4.2.5.2.7.2.3 2003/12/02 02:51:48 easysw Exp $".
 //

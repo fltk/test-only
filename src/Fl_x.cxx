@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_x.cxx,v 1.24.2.24.2.24.2.2 2003/11/07 03:47:24 easysw Exp $"
+// "$Id: Fl_x.cxx,v 1.24.2.24.2.24.2.3 2003/12/02 02:51:48 easysw Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -27,32 +27,20 @@
 #  include "Fl_win32.cxx"
 #elif defined(__APPLE__)
 #  include "Fl_mac.cxx"
-#elif defined(NANO_X)
-#  include "Fl_nx.cxx"
-#elif defined(DJGPP)
-#  include "Fl_dj2.cxx"
 #else
 
 #  define CONSOLIDATE_MOTION 1
 /**** Define this if your keyboard lacks a backspace key... ****/
 /* #define BACKSPACE_HACK 1 */
 
-#  include <config.h>
 #  include <FL/Fl.H>
 #  include <FL/x.H>
 #  include <FL/Fl_Window.H>
-#  include <FL/fl_utf8.H>
 #  include <stdio.h>
 #  include <stdlib.h>
 #  include "flstring.h"
 #  include <unistd.h>
 #  include <sys/time.h>
-#  include <X11/Xmd.h>
-#  include <X11/Xlocale.h>
-#  include <X11/Xlib.h>
-
-const char* fl_xio_error = "X I/O error";
-const char* fl_cannot_open_display = "Can't open display: %s";
 
 ////////////////////////////////////////////////////////////////
 // interface to poll/select call:
@@ -275,10 +263,11 @@ int fl_ready() {
 ////////////////////////////////////////////////////////////////
 
 Display *fl_display;
-Window fl_message_window = 0;
+Window fl_message_window;
 int fl_screen;
 XVisualInfo *fl_visual;
 Colormap fl_colormap;
+
 XIM fl_xim_im = 0;
 XIC fl_xim_ic = 0;
 char fl_is_over_the_spot = 0;
@@ -289,7 +278,6 @@ static Atom WM_PROTOCOLS;
 static Atom fl_MOTIF_WM_HINTS;
 static Atom TARGETS;
 static Atom CLIPBOARD;
-
 Atom fl_XdndAware;
 Atom fl_XdndSelection;
 Atom fl_XdndEnter;
@@ -300,9 +288,8 @@ Atom fl_XdndDrop;
 Atom fl_XdndStatus;
 Atom fl_XdndActionCopy;
 Atom fl_XdndFinished;
-Atom fl_XdndProxy;
-Atom fl_XaUtf8String;
-Atom fl_XaTextUriList;
+//Atom fl_XdndProxy;
+
 
 static void fd_callback(int,void *) {
   do_queued_events();
@@ -310,7 +297,7 @@ static void fd_callback(int,void *) {
 
 extern "C" {
   static int io_error_handler(Display*) {
-    Fl::fatal(fl_xio_error);
+    Fl::fatal("X I/O error");
     return 0;
   }
 
@@ -324,57 +311,60 @@ extern "C" {
   }
 }
 
-extern char *fl_get_font_xfld(int fnum, int size);
+extern char *fl_get_font_xfld(char *buffer, int bufsize, int fnum, int size);
 
-void fl_new_ic()
-{
-	XVaNestedList preedit_attr;
-	XVaNestedList status_attr;
-	static XFontSet   fs = NULL;
-	char *fnt;
-	char          **missing_list;
-	int           missing_count;
-	char          *def_string;
-	static XRectangle    spot;
-	if (!fs) { 
-		fnt = fl_get_font_xfld(0, 14);
-		fs = XCreateFontSet(fl_display,	fnt, &missing_list,
-			&missing_count, &def_string);
-	}
-	preedit_attr = XVaCreateNestedList(0,
-		XNSpotLocation, &spot,
-		XNFontSet, fs, NULL);
-	status_attr = XVaCreateNestedList(0,
-			XNAreaNeeded, &status_area,
-			XNFontSet, fs, NULL);
+void fl_new_ic() {
+  XVaNestedList preedit_attr;
+  XVaNestedList status_attr;
+  static XFontSet   fs = NULL;
+  char          **missing_list;
+  int           missing_count;
+  char          *def_string;
+  char		fnt[8192];
+  static XRectangle    spot;
 
-        fl_xim_ic = XCreateIC(fl_xim_im,
-                        XNInputStyle, (XIMPreeditPosition | XIMStatusArea),
+  if (!fs) { 
+    fl_get_font_xfld(fnt, sizeof(fnt), 0, 14);
+
+    fs = XCreateFontSet(fl_display, fnt, &missing_list,
+	                &missing_count, &def_string);
+  }
+
+  preedit_attr = XVaCreateNestedList(0,
+				     XNSpotLocation, &spot,
+				     XNFontSet, fs, NULL);
+  status_attr = XVaCreateNestedList(0,
+				    XNAreaNeeded, &status_area,
+				    XNFontSet, fs, NULL);
+
+  fl_xim_ic = XCreateIC(fl_xim_im,
+                	XNInputStyle, (XIMPreeditPosition | XIMStatusArea),
 			XNPreeditAttributes, preedit_attr,
 			XNStatusAttributes, status_attr,
-                        NULL);
-	if (!fl_xim_ic) {
-		
-         	fl_xim_ic = XCreateIC(fl_xim_im,
-                        XNInputStyle, (XIMPreeditPosition | XIMStatusNothing),
-			XNPreeditAttributes, preedit_attr,
-                        NULL);
-	}
-	XFree(preedit_attr);
-	XFree(status_attr);
-	if (!fl_xim_ic) {
-		fl_is_over_the_spot = 0;
-         	fl_xim_ic = XCreateIC(fl_xim_im,
-                        XNInputStyle, (XIMPreeditNothing | XIMStatusNothing),
-                        NULL);
-	} else {
-		fl_is_over_the_spot = 1;
-		XVaNestedList status_attr;
-		status_attr = XVaCreateNestedList(0, XNAreaNeeded, &status_area, NULL);
+                	NULL);
+  if (!fl_xim_ic) {
+    fl_xim_ic = XCreateIC(fl_xim_im,
+        		  XNInputStyle, (XIMPreeditPosition | XIMStatusNothing),
+			  XNPreeditAttributes, preedit_attr,
+        		  NULL);
+  }
 
-		XGetICValues(fl_xim_ic, XNStatusAttributes, status_attr, NULL);
-		XFree(status_attr);
-	}
+  XFree(preedit_attr);
+  XFree(status_attr);
+
+  if (!fl_xim_ic) {
+    fl_is_over_the_spot = 0;
+    fl_xim_ic = XCreateIC(fl_xim_im,
+        		  XNInputStyle, (XIMPreeditNothing | XIMStatusNothing),
+        		  NULL);
+  } else {
+    fl_is_over_the_spot = 1;
+    XVaNestedList status_attr;
+    status_attr = XVaCreateNestedList(0, XNAreaNeeded, &status_area, NULL);
+
+    XGetICValues(fl_xim_ic, XNStatusAttributes, status_attr, NULL);
+    XFree(status_attr);
+  }
 }
 
 
@@ -382,121 +372,125 @@ static XRectangle    spot;
 static int spotf = -1;
 static int spots = -1;
 
-void fl_reset_spot(void)
-{
-	spot.x = -1;
-	spot.y = -1;
-    	//if (fl_xim_ic) XUnsetICFocus(fl_xim_ic);
+void fl_reset_spot(void) {
+  spot.x = -1;
+  spot.y = -1;
+  //if (fl_xim_ic) XUnsetICFocus(fl_xim_ic);
 }
 
-void fl_set_spot(int font, int size, int x, int y, int w, int h)
-{
- 	int change = 0;
-	XVaNestedList preedit_attr;
-	static XFontSet   fs = NULL;
-	char          **missing_list;
-	int           missing_count;
-	char          *def_string;
-	char *fnt;
-	static XIC ic = NULL;
+void fl_set_spot(int font, int size, int x, int y, int w, int h) {
+  int change = 0;
+  XVaNestedList preedit_attr;
+  static XFontSet   fs = NULL;
+  char          **missing_list;
+  int           missing_count;
+  char          *def_string;
+  char fnt[8192];
+  static XIC ic = NULL;
 
-	if (!fl_xim_ic || !fl_is_over_the_spot) return;
-    	//XSetICFocus(fl_xim_ic);
-	if (x != spot.x || y != spot.y) { 
-		spot.x = x;
-		spot.y = y;
-		spot.height = h;
-		spot.width = w;
-		change = 1;
-	}
-	if (font != spotf || size != spots) {
-		spotf = font;
-		spots = size;
-		change = 1;
-		if (fs) {
-			XFreeFontSet(fl_display, fs);
-		}
-		fnt = fl_get_font_xfld(font, size);
-		fs = XCreateFontSet(fl_display,	fnt, &missing_list,
-			&missing_count, &def_string);
-		free(fnt);
-	}
-	if (fl_xim_ic != ic) {
-		ic = fl_xim_ic;
-		change = 1;
-	}
-	
-	if (!change) return;
-	
+  if (!fl_xim_ic || !fl_is_over_the_spot) return;
 
-	preedit_attr = XVaCreateNestedList(0,
-		XNSpotLocation, &spot,
-		XNFontSet, fs, NULL);
-	XSetICValues(fl_xim_ic, XNPreeditAttributes, preedit_attr, NULL);
-	XFree(preedit_attr);
+  //XSetICFocus(fl_xim_ic);
+
+  if (x != spot.x || y != spot.y) { 
+    spot.x = x;
+    spot.y = y;
+    spot.height = h;
+    spot.width = w;
+    change = 1;
+  }
+
+  if (font != spotf || size != spots) {
+    spotf = font;
+    spots = size;
+    change = 1;
+    if (fs) {
+      XFreeFontSet(fl_display, fs);
+    }
+    fl_get_font_xfld(fnt, sizeof(fnt), font, size);
+    fs = XCreateFontSet(fl_display, fnt, &missing_list,
+	                &missing_count, &def_string);
+    free(fnt);
+  }
+
+  if (fl_xim_ic != ic) {
+    ic = fl_xim_ic;
+    change = 1;
+  }
+
+  if (!change) return;
+
+  preedit_attr = XVaCreateNestedList(0,
+				     XNSpotLocation, &spot,
+				     XNFontSet, fs, NULL);
+  XSetICValues(fl_xim_ic, XNPreeditAttributes, preedit_attr, NULL);
+  XFree(preedit_attr);
 }
 
-void fl_set_status(int x, int y, int w, int h)
-{
-	XVaNestedList status_attr;
-	status_area.x = x;
-	status_area.y = y;
-	status_area.width = w;
-	status_area.height = h;
-	if (!fl_xim_ic) return;
-	status_attr = XVaCreateNestedList(0, XNArea, &status_area, NULL);
+void fl_set_status(int x, int y, int w, int h) {
+  if (!fl_xim_ic) return;
 
-	XSetICValues(fl_xim_ic, XNStatusAttributes, status_attr, NULL);
-	XFree(status_attr);
+  XVaNestedList status_attr;
+
+  status_area.x = x;
+  status_area.y = y;
+  status_area.width = w;
+  status_area.height = h;
+
+  status_attr = XVaCreateNestedList(0, XNArea, &status_area, NULL);
+
+  XSetICValues(fl_xim_ic, XNStatusAttributes, status_attr, NULL);
+
+  XFree(status_attr);
 }
 
-void fl_init_xim()
-{	
-	//XIMStyle *style;
-        XIMStyles *xim_styles;
-        if (!fl_display) return;
-        if (fl_xim_im) return;
+void fl_init_xim() {	
+  //XIMStyle *style;
+  XIMStyles *xim_styles;
+  if (!fl_display) return;
+  if (fl_xim_im) return;
 
-        fl_xim_im = XOpenIM(fl_display, NULL, NULL, NULL);
-        xim_styles = NULL;
-        fl_xim_ic = NULL;
+  fl_xim_im = XOpenIM(fl_display, NULL, NULL, NULL);
+  xim_styles = NULL;
+  fl_xim_ic = NULL;
 
-        if (fl_xim_im) {
-                XGetIMValues (fl_xim_im, XNQueryInputStyle,
-                        &xim_styles, NULL, NULL);
-        } else {
-               // Fl::warning("XOpenIM() failed\n");
-                return;
-        }
+  if (fl_xim_im) {
+    XGetIMValues(fl_xim_im, XNQueryInputStyle,
+                 &xim_styles, NULL, NULL);
+  } else {
+    Fl::warning("XOpenIM() failed");
+    return;
+  }
 
-        if (xim_styles && xim_styles->count_styles) {
-		fl_new_ic();
-        } else {
-                //Fl::warning("No XIM style found\n");
-                XCloseIM(fl_xim_im);
-                fl_xim_im = NULL;
-                return;
-        }
-        if (!fl_xim_ic) {
-                //Fl::warning("XCreateIC() failed\n");
-                XCloseIM(fl_xim_im);
-                XFree(xim_styles);
-                fl_xim_im = NULL;
-        }
+  if (xim_styles && xim_styles->count_styles) {
+    fl_new_ic();
+  } else {
+    Fl::warning("No XIM style found");
+    XCloseIM(fl_xim_im);
+    fl_xim_im = NULL;
+    return;
+  }
+
+  if (!fl_xim_ic) {
+    Fl::warning("XCreateIC() failed");
+    XCloseIM(fl_xim_im);
+    XFree(xim_styles);
+    fl_xim_im = NULL;
+  }
 }
 
 
 void fl_open_display() {
   if (fl_display) return;
 
-  setlocale(LC_CTYPE, "");
+//  setlocale(LC_CTYPE, "");
   XSetLocaleModifiers("");
 
   XSetIOErrorHandler(io_error_handler);
   XSetErrorHandler(xerror_handler);
 
   Display *d = XOpenDisplay(0);
-  if (!d) Fl::fatal(fl_cannot_open_display,XDisplayName(0));
+  if (!d) Fl::fatal("Can't open display: %s",XDisplayName(0));
 
   fl_open_display(d);
 }
@@ -519,22 +513,21 @@ void fl_open_display(Display* d) {
   fl_XdndStatus         = XInternAtom(d, "XdndStatus",		0);
   fl_XdndActionCopy     = XInternAtom(d, "XdndActionCopy",	0);
   fl_XdndFinished       = XInternAtom(d, "XdndFinished",	0);
-  fl_XdndProxy        	= XInternAtom(d, "XdndProxy",		0);
-  fl_XaUtf8String	= XInternAtom(d, "UTF8_STRING",		0);
-  fl_XaTextUriList	= XInternAtom(d, "text/uri-list",	0);
+  //fl_XdndProxy        = XInternAtom(d, "XdndProxy",		0);
 
   Fl::add_fd(ConnectionNumber(d), POLLIN, fd_callback);
 
   fl_screen = DefaultScreen(d);
+
   fl_message_window =
     XCreateSimpleWindow(d, RootWindow(d,fl_screen), 0,0,1,1,0, 0, 0);
-
 
 // construct an XVisualInfo that matches the default Visual:
   XVisualInfo templt; int num;
   templt.visualid = XVisualIDFromVisual(DefaultVisual(d, fl_screen));
   fl_visual = XGetVisualInfo(d, VisualIDMask, &templt, &num);
-  fl_colormap = DefaultColormap(fl_display,fl_screen);
+  fl_colormap = DefaultColormap(d, fl_screen);
+
   fl_init_xim();
 
 #if !USE_COLORMAP
@@ -573,7 +566,7 @@ Fl_Widget *fl_selection_requestor;
 char *fl_selection_buffer[2];
 int fl_selection_length[2];
 int fl_selection_buffer_length[2];
-char fl_i_own_selection[2] = {0,0};
+char fl_i_own_selection[2];
 
 // Call this when a "paste" operation happens:
 void Fl::paste(Fl_Widget &receiver, int clipboard) {
@@ -590,7 +583,7 @@ void Fl::paste(Fl_Widget &receiver, int clipboard) {
   // otherwise get the window server to return it:
   fl_selection_requestor = &receiver;
   Atom property = clipboard ? CLIPBOARD : XA_PRIMARY;
-  XConvertSelection(fl_display, property, fl_XaUtf8String, property,
+  XConvertSelection(fl_display, property, XA_STRING, property,
 		    fl_xid(Fl::first_window()), fl_event_time);
 }
 
@@ -684,7 +677,6 @@ static inline void checkdouble() {
 }
 
 static Fl_Window* resize_bug_fix;
-extern int (*fl_local_grab)(int); // in Fl.cxx
 
 extern "C" {
   static Bool fake_keyup_test(Display*, XEvent* event, char* previous) {
@@ -696,17 +688,16 @@ extern "C" {
 }
 
 ////////////////////////////////////////////////////////////////
+
 int fl_handle(const XEvent& thisevent)
 {
   XEvent xevent = thisevent;
   fl_xevent = &thisevent;
   Window xid = xevent.xany.window;
-  int filtered = 0;
   static Window xim_win = 0;
 
   if (fl_xim_ic && xevent.type == DestroyNotify && 
-	xid != xim_win && !fl_find(xid)) 
-  {
+      xid != xim_win && !fl_find(xid)) {
     XIM xim_im;
     xim_im = XOpenIM(fl_display, NULL, NULL, NULL);
     if (!xim_im) {
@@ -721,11 +712,11 @@ int fl_handle(const XEvent& thisevent)
          * This will cause a memory leak :-(
 	 */
     }
+
     return 0;
   }
 
-  if (fl_xim_ic && (xevent.type == FocusIn)) 
-  {
+  if (fl_xim_ic && (xevent.type == FocusIn)) {
     if (Fl::first_window() && Fl::first_window()->modal()) {
       Window x  = fl_xid(Fl::first_window());
       if (x != xim_win) {
@@ -746,10 +737,7 @@ int fl_handle(const XEvent& thisevent)
     }
   }
 
-  filtered = XFilterEvent((XEvent *)&xevent, 0);
-  if (filtered) {
-    return 1;
-  }
+  if (XFilterEvent((XEvent *)&xevent, 0)) return 1;
 
   switch (xevent.type) {
 
@@ -763,7 +751,7 @@ int fl_handle(const XEvent& thisevent)
 
   case SelectionNotify: {
     if (!fl_selection_requestor) return 0;
-    static unsigned char* buffer = 0;
+    static unsigned char* buffer;
     if (buffer) {XFree(buffer); buffer = 0;}
     long bytesread = 0;
     if (fl_xevent->xselection.property) for (;;) {
@@ -786,23 +774,20 @@ int fl_handle(const XEvent& thisevent)
 	buffer = portion;
       }
       bytesread += count*format/8;
-      buffer[bytesread] = 0;
       if (!remaining) break;
     }
     Fl::e_text = buffer ? (char*)buffer : (char *)"";
     Fl::e_length = bytesread;
+    fl_selection_requestor->handle(FL_PASTE);
     // Detect if this paste is due to Xdnd by the property name (I use
     // XA_SECONDARY for that) and send an XdndFinished message. It is not
     // clear if this has to be delayed until now or if it can be done
     // immediatly after calling XConvertSelection.
     if (fl_xevent->xselection.property == XA_SECONDARY &&
 	fl_dnd_source_window) {
-      fl_selection_requestor->handle(FL_DROP);
       fl_sendClientMessage(fl_dnd_source_window, fl_XdndFinished,
                            fl_xevent->xselection.requestor);
       fl_dnd_source_window = 0; // don't send a second time
-    } else {
-      fl_selection_requestor->handle(FL_PASTE);
     }
     return 1;}
 
@@ -821,7 +806,7 @@ int fl_handle(const XEvent& thisevent)
     e.time = fl_xevent->xselectionrequest.time;
     e.property = fl_xevent->xselectionrequest.property;
     if (e.target == TARGETS) {
-      Atom a = fl_XaUtf8String; //XA_STRING;
+      Atom a = XA_STRING;
       XChangeProperty(fl_display, e.requestor, e.property,
 		      XA_ATOM, sizeof(Atom)*8, 0, (unsigned char*)&a,
 		      sizeof(Atom));
@@ -857,15 +842,12 @@ int fl_handle(const XEvent& thisevent)
 
   int event = 0;
   Fl_Window* window = fl_find(xid);
-  static Fl_Widget *dnd_rec = NULL;
 
   if (window) switch (xevent.type) {
 
   case ClientMessage: {
     Atom message = fl_xevent->xclient.message_type;
     const long* data = fl_xevent->xclient.data.l;
-
-    if (Fl::pushed()) Fl::pushed()->handle(0);
     if ((Atom)(data[0]) == WM_DELETE_WINDOW) {
       event = FL_CLOSE;
     } else if (message == fl_XdndEnter) {
@@ -884,9 +866,8 @@ int fl_handle(const XEvent& thisevent)
 	  goto FAILED;
 	delete [] fl_dnd_source_types;
 	fl_dnd_source_types = new Atom[count+1];
-	for (unsigned i = 0; i < count; i++) {
+	for (unsigned i = 0; i < count; i++)
 	  fl_dnd_source_types[i] = ((Atom*)buffer)[i];
-        }
 	fl_dnd_source_types[count] = 0;
       } else {
       FAILED:
@@ -897,7 +878,7 @@ int fl_handle(const XEvent& thisevent)
 	fl_dnd_source_types[2] = data[4];
 	fl_dnd_source_types[3] = 0;
       }
-      fl_dnd_type = fl_XaTextUriList; //fl_dnd_source_types[0]; 
+      fl_dnd_type = fl_dnd_source_types[0]; // should pick text or url
       event = FL_DND_ENTER;
       break;
 
@@ -915,8 +896,6 @@ int fl_handle(const XEvent& thisevent)
       fl_dnd_source_action = data[4];
       fl_dnd_action = fl_XdndActionCopy;
       int accept = Fl::handle(FL_DND_DRAG, window);
-      dnd_rec = Fl::belowmouse();
-      if (!dnd_rec) dnd_rec = window;
       fl_sendClientMessage(data[0], fl_XdndStatus,
                            fl_xevent->xclient.window,
                            accept ? 1 : 0,
@@ -936,7 +915,7 @@ int fl_handle(const XEvent& thisevent)
       fl_dnd_source_window = data[0];
       fl_event_time = data[2];
       Window to_window = fl_xevent->xclient.window;
-      if (dnd_rec && dnd_rec->handle(FL_DND_RELEASE)) {
+      if (Fl::handle(FL_DND_RELEASE, window)) {
 	fl_selection_requestor = Fl::belowmouse();
 	XConvertSelection(fl_display, fl_XdndSelection,
 			  fl_dnd_type, XA_SECONDARY,
@@ -949,7 +928,6 @@ int fl_handle(const XEvent& thisevent)
 	fl_sendClientMessage(fl_dnd_source_window, fl_XdndFinished, to_window);
 	fl_dnd_source_window = 0;
       }
-      dnd_rec = NULL;
       return 1;
 
     }
@@ -988,53 +966,40 @@ int fl_handle(const XEvent& thisevent)
   KEYPRESS:
     int keycode = xevent.xkey.keycode;
     fl_key_vector[keycode/8] |= (1 << (keycode%8));
-    static char *buffer = NULL;
-    static int buffer_len = 0;
+    static char buffer[4096];
     int len;
     KeySym keysym;
-    if (buffer_len == 0) {
-	buffer_len = 4096;
-	buffer = (char*) malloc(buffer_len);
-    }
     if (xevent.type == KeyPress) {
       event = FL_KEYDOWN;
-      int len = 0;
-
-#if HAVE_XUTF8
-      if (fl_xim_ic) {
-        if (!filtered) {
-          Status status;
-          len = XUtf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
-                               buffer, buffer_len, &keysym, &status);
-          while (status == XBufferOverflow && buffer_len < 50000) {
-            buffer_len = buffer_len * 5 + 1;
-	    buffer = (char*)realloc(buffer, buffer_len);
-            len = XUtf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
-                               buffer, buffer_len, &keysym, &status);
-          }
-        } else {
-          keysym = XKeycodeToKeysym(fl_display, keycode, 0);
-        }
-      } else
-#endif // HAVE_XUTF8
-      {
       //static XComposeStatus compose;
-      len = XLookupString((XKeyEvent*)&(xevent.xkey),
-                             buffer, buffer_len, &keysym, 0/*&compose*/);
-      if (keysym && keysym < 0x400) { // a character in latin-1,2,3,4 sets
-	// force it to type a character (not sure if this ever is needed):
-#if HAVE_XUTF8
-          len = fl_ucs2utf(XKeysymToUcs(keysym), buffer);
-#else
-          if (!len) {buffer[0] = char(keysym); len = 1;}
-#endif // HAVE_XUTF8
 
-          if (len < 1) len = 1;
-	// ignore all effects of shift on the keysyms, which makes it a lot
-	// easier to program shortcuts and is Windoze-compatable:
-	keysym = XKeycodeToKeysym(fl_display, keycode, 0);
+      if (fl_xim_ic) {
+        Status status;
+        len = Xutf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
+                                buffer, sizeof(buffer) - 1, &keysym, &status);
+      } else {
+	len = XLookupString((XKeyEvent*)&(xevent.xkey),
+	                    buffer, sizeof(buffer) - 1, &keysym, 0/*&compose*/);
+
+	if (keysym && keysym < 0x100) { // a character in latin-1 set
+	  // force it to type a character (not sure if this ever is needed):
+	  if (!len) {
+	    if (keysym & 0x80) {
+	      buffer[0] = 0xc0 | (keysym >> 6);
+	      buffer[1] = 0x80 | (keysym & 0x3f);
+	      len = 2;
+	    } else {
+	      buffer[0] = keysym & 0x7f;
+	      len = 1;
+	    }
+	  }
+
+	  // ignore all effects of shift on the keysyms, which makes it a lot
+	  // easier to program shortcuts and is Windoze-compatable:
+	  keysym = XKeycodeToKeysym(fl_display, keycode, 0);
+	}
       }
-      }
+
       if (Fl::event_state(FL_CTRL) && keysym == '-') buffer[0] = 0x1f; // ^_
       buffer[len] = 0;
       Fl::e_text = buffer;
@@ -1067,7 +1032,7 @@ int fl_handle(const XEvent& thisevent)
     // Attempt to fix keyboards that send "delete" for the key in the
     // upper-right corner of the main keyboard.  But it appears that
     // very few of these remain?
-    static int got_backspace = 0;
+    static int got_backspace;
     if (!got_backspace) {
       if (keysym == FL_Delete) keysym = FL_BackSpace;
       else if (keysym == FL_BackSpace) got_backspace = 1;
@@ -1182,23 +1147,16 @@ int fl_handle(const XEvent& thisevent)
     XWindowAttributes actual;
     XGetWindowAttributes(fl_display, fl_xid(window), &actual);
     Window cr; int X, Y, W = actual.width, H = actual.height;
-    XTranslateCoordinates(fl_display, fl_xid(window), 
-			RootWindow(fl_display, fl_screen),
+    XTranslateCoordinates(fl_display, fl_xid(window), actual.root,
                           0, 0, &X, &Y, &cr);
 
-    if (event == FL_SHOW) {
-	if (window->x() > 0 && window->y() > 0) {
-		X = window->x();
-		Y = window->y();
-	}
-	XMoveWindow(fl_display, fl_xid(window), X, Y);
-    }
     // tell Fl_Window about it and set flag to prevent echoing:
     resize_bug_fix = window;
     window->resize(X, Y, W, H);
     break; // allow add_handler to do something too
     }
   }
+
   return Fl::handle(event, window);
 }
 
@@ -1257,14 +1215,12 @@ int fl_disable_transient_for; // secret method of removing TRANSIENT_FOR
 
 static const int childEventMask = ExposureMask;
 
-static const long XEventMask =
+static const int XEventMask =
 ExposureMask|StructureNotifyMask
 |KeyPressMask|KeyReleaseMask|KeymapStateMask|FocusChangeMask
 |ButtonPressMask|ButtonReleaseMask
 |EnterWindowMask|LeaveWindowMask
 |PointerMotionMask;
-
-int fl_show_it = 1;
 
 void Fl_X::make_xid(Fl_Window* win, XVisualInfo *visual, Colormap colormap)
 {
@@ -1336,6 +1292,7 @@ void Fl_X::make_xid(Fl_Window* win, XVisualInfo *visual, Colormap colormap)
 			       InputOutput,
 			       visual->visual,
 			       mask, &attr));
+  int showit = 1;
 
   if (!win->parent() && !attr.override_redirect) {
     // Communicate all kinds 'o junk to the X Window Manager:
@@ -1344,11 +1301,6 @@ void Fl_X::make_xid(Fl_Window* win, XVisualInfo *visual, Colormap colormap)
 
     XChangeProperty(fl_display, xp->xid, WM_PROTOCOLS,
  		    XA_ATOM, 32, 0, (uchar*)&WM_DELETE_WINDOW, 1);
-
-    // Make it receptive to DnD:
-    int version = 4;
-    XChangeProperty(fl_display, xp->xid, fl_XdndAware,
-                    XA_ATOM, sizeof(int)*8, 0, (unsigned char*)&version, 1);
 
     // send size limits and border:
     xp->sendxjunk();
@@ -1373,8 +1325,13 @@ void Fl_X::make_xid(Fl_Window* win, XVisualInfo *visual, Colormap colormap)
       Fl_Window* wp = xp->next->w;
       while (wp->parent()) wp = wp->window();
       XSetTransientForHint(fl_display, xp->xid, fl_xid(wp));
-      if (!wp->visible()) fl_show_it = 0; // guess that wm will not show it
+      if (!wp->visible()) showit = 0; // guess that wm will not show it
     }
+
+    // Make it receptive to DnD:
+    int version = 4;
+    XChangeProperty(fl_display, xp->xid, fl_XdndAware,
+		    XA_ATOM, sizeof(int)*8, 0, (unsigned char*)&version, 1);
 
     XWMHints *hints = XAllocWMHints();
     hints->input = True;
@@ -1383,7 +1340,7 @@ void Fl_X::make_xid(Fl_Window* win, XVisualInfo *visual, Colormap colormap)
       hints->flags |= StateHint;
       hints->initial_state = IconicState;
       fl_show_iconic = 0;
-      fl_show_it = 0;
+      showit = 0;
     }
     if (win->icon()) {
       hints->icon_pixmap = (Pixmap)win->icon();
@@ -1394,12 +1351,11 @@ void Fl_X::make_xid(Fl_Window* win, XVisualInfo *visual, Colormap colormap)
   }
 
   XMapWindow(fl_display, xp->xid);
-  if (fl_show_it) {
+  if (showit) {
     win->set_visible();
     win->handle(FL_SHOW); // get child windows to appear
     win->redraw();
   }
-  fl_show_it = 1;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1556,5 +1512,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.24.2.24.2.24.2.2 2003/11/07 03:47:24 easysw Exp $".
+// End of "$Id: Fl_x.cxx,v 1.24.2.24.2.24.2.3 2003/12/02 02:51:48 easysw Exp $".
 //

@@ -1,11 +1,11 @@
 dnl -*- sh -*-
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.33.2.31.2.91.2.7 2003/11/11 04:13:26 easysw Exp $"
+dnl "$Id: configure.in,v 1.33.2.31.2.91.2.8 2003/12/02 02:51:43 easysw Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
-dnl Copyright 1998-2004 by Bill Spitzak and others.
+dnl Copyright 1998-2003 by Bill Spitzak and others.
 dnl
 dnl This library is free software; you can redistribute it and/or
 dnl modify it under the terms of the GNU Library General Public
@@ -35,16 +35,14 @@ dnl FLTK library versions...
 FL_MAJOR_VERSION=1
 FL_MINOR_VERSION=2
 FL_PATCH_VERSION=0
-FL_RELEASE_VERSION=a1
+FL_RELEASE_VERSION=b1
 FL_API_VERSION=${FL_MAJOR_VERSION}.${FL_MINOR_VERSION}
-FL_FULL_VERSION=${FL_MAJOR_VERSION}.${FL_MINOR_VERSION}.${FL_PATCH_VERSION}${FL_RELEASE_VERSION}
 
 AC_SUBST(FL_MAJOR_VERSION)
 AC_SUBST(FL_MINOR_VERSION)
 AC_SUBST(FL_PATCH_VERSION)
 AC_SUBST(FL_RELEASE_VERSION)
 AC_SUBST(FL_API_VERSION)
-AC_SUBST(FL_FULL_VERSION)
 
 dnl Get the operating system and version number...
 uname=`uname`
@@ -414,39 +412,6 @@ if test "x$enable_threads" = xyes; then
     fi
 fi
 
-dnl# MICROWINDOWS ..........
-
-MICROWINFOLDER=""
-NANOX=0
-
-AC_ARG_WITH(microwin, [  --with-microwin=[microwindows base path]  Uses MicroWindows instead of X (specify path)],
-[
-    echo "Using MicroWindows instead of X..."
-    MICROWINFOLDER=$with_microwin
-    AC_DEFINE(USE_COLORMAP,0)
-    if test -d $MICROWINFOLDER/include/microwin; then
-        MWINCLUDES="-I$MICROWINFOLDER/include -I$MICROWINFOLDER/include/microwin"
-    else
-        MWINCLUDES="-I$MICROWINFOLDER/include"
-    fi
-
-    NANOX=1
-    CFLAGS="$CFLAGS -DNANO_X=1 $MWINCLUDES -DNANOXFOLDER='\"$MICROWINFOLDER/bin\"'"
-    CXXFLAGS="$CXXFLAGS -DNANO_X=1 $MWINCLUDES -DNANOXFOLDER='\"$MICROWINFOLDER/bin\"'"
-    MWLIBS="-L$MICROWINFOLDER/lib -lnano-X -lmwengine -lmwdrivers -lmwfonts -ljpeg"
-    LDFLAGS="$LDFLAGS -DNANO_X=1"
- ])
-
-AC_SUBST(MICROWINFOLDER)
-AC_SUBST(NANOX)
-AC_SUBST(MWLIBS)
-
-AC_ARG_WITH(xdrivers, [  --with-xdrivers    Specifies where the X drivers for Microwindows are ],
-[
-   NANOX=0
-])
-
-
 dnl Define OS-specific stuff...
 HLINKS=
 POSTBUILD=:
@@ -457,10 +422,10 @@ AC_ARG_WITH(links, [  --with-links            make header links for common missp
 case $uname in
     CYGWIN* | MINGW*)
 	dnl Cygwin environment...
-	CFLAGS="-mwindows -DWIN32 -mms-bitfields $CFLAGS"
-	CXXFLAGS="-mwindows -DWIN32 -mms-bitfields $CXXFLAGS"
+	CFLAGS="-mwindows -DWIN32 $CFLAGS"
+	CXXFLAGS="-mwindows -DWIN32 $CXXFLAGS"
 	LDFLAGS="-mwindows $LDFLAGS"
-	LIBS="$LIBS -lole32 -limm32 -luuid -lcomctl32 -lwinspool -lwsock32"
+	LIBS="$LIBS -lole32 -luuid -lcomctl32 -lwsock32"
 	OPTIM="$OPTIM"
 
 	if test x$enable_gl != xno; then
@@ -524,27 +489,25 @@ case $uname in
 	    THREADS="threads"
 	fi
 
-	if test $NANOX = 0; then
-	    dnl Check for X11...
-	    AC_PATH_XTRA
+	dnl Check for X11...
+	AC_PATH_XTRA
 
-	    if test x$no_x = xyes; then
-		AC_MSG_ERROR(Configure could not find required X11 libraries, aborting.)
-	    fi
+	if test x$no_x = xyes; then
+	    AC_MSG_ERROR(Configure could not find required X11 libraries, aborting.)
+	fi
 
-	    if test "x$X_PRE_LIBS" != x; then
-		AC_MSG_WARN(Ignoring libraries \"$X_PRE_LIBS\" requested by configure.)
-	    fi
+	if test "x$X_PRE_LIBS" != x; then
+	    AC_MSG_WARN(Ignoring libraries \"$X_PRE_LIBS\" requested by configure.)
+	fi
 
-	    LIBS="$LIBS -lXext -lX11 $X_EXTRA_LIBS"
-	    CFLAGS="$CFLAGS $X_CFLAGS"
-	    CXXFLAGS="$CXXFLAGS $X_CFLAGS"
-	    LDFLAGS="$X_LIBS $LDFLAGS"
+	LIBS="$LIBS -lXext -lX11 $X_EXTRA_LIBS"
+	CFLAGS="$CFLAGS $X_CFLAGS"
+	CXXFLAGS="$CXXFLAGS $X_CFLAGS"
+	LDFLAGS="$X_LIBS $LDFLAGS"
 
-	    if test "x$x_includes" != x; then
-		ac_cpp="$ac_cpp -I$x_includes"
-	    fi
- 	fi
+	if test "x$x_includes" != x; then
+	    ac_cpp="$ac_cpp -I$x_includes"
+	fi
 
 	dnl Check for OpenGL unless disabled...
 	GLLIB=
@@ -623,33 +586,6 @@ case $uname in
 	fi
 	;;
 esac
-
-BUILDXUTF8=""
-
-if test $NANOX = 0; then
-    AC_CHECK_LIB(X11, Xutf8LookupString,
-        AC_DEFINE(HAVE_X11_UTF8),
-	AC_CHECK_LIB(Xutf8, XGetUtf8FontAndGlyph,
-            AC_DEFINE(HAVE_LIBXUTF8)
-	    LIBS="-lXutf8 $LIBS", ,-lX11 $X_EXTRA_LIBS)
-
-        if test x$acx$ac_cv_lib_Xutf8_XGetUtf8FontAndGlyph = xno; then
-	    AC_DEFINE(HAVE_LIBXUTF8)
-	    LIBS="../libXutf8/libXutf8.a $LIBS"
-	    BUILDXUTF8="libXUtf8"
-	fi)
-fi
-
-AC_SUBST(BUILDXUTF8)
-
-#case $uname in
-#	MINGW*)
-#	    ;;
-#	*)
-#	    if test "x$XUTFLIB" = x ; then
-#   		AC_MSG_ERROR(You must install Xutf8 before compiling FLTK-UTF8)
-#	    fi
-#esac
 
 AC_SUBST(GLDEMOS)
 AC_SUBST(GLLIB)
@@ -921,11 +857,11 @@ fi
 
 dnl Write all of the files...
 AC_CONFIG_HEADER(config.h:configh.in)
-AC_OUTPUT(makeinclude fltk.list fltk-config FL/Makefile fluid/fluid.plist)
+AC_OUTPUT(makeinclude fltk.list fltk-config FL/Makefile)
 
 dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.7 2003/11/11 04:13:26 easysw Exp $".
+dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.8 2003/12/02 02:51:43 easysw Exp $".
 dnl

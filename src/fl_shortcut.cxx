@@ -1,9 +1,9 @@
 //
-// "$Id: fl_shortcut.cxx,v 1.4.2.9.2.7.2.2 2003/11/07 03:47:25 easysw Exp $"
+// "$Id: fl_shortcut.cxx,v 1.4.2.9.2.7.2.3 2003/12/02 02:51:49 easysw Exp $"
 //
 // Shortcut support routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -159,13 +159,10 @@ const char * fl_shortcut_label(int shortcut) {
   *p = 0;
   return buf;
 #else
-  const char* q = 0;
+  const char* q;
   if (key == FL_Enter || key == '\r') q="Enter";  // don't use Xlib's "Return":
   else if (key > 32 && key < 0x100) q = 0;
-#if !NANO_X && !DJGPP
-//FIXME_DJGPP
   else q = XKeysymToString(key);
-#endif
   if (!q) {*p++ = uchar(key); *p = 0; return buf;}
   if (p > buf) {strcpy(p,q); return buf;} else return q;
 #endif
@@ -175,7 +172,7 @@ const char * fl_shortcut_label(int shortcut) {
 #include <stdlib.h>
 int fl_old_shortcut(const char* s) {
   if (!s || !*s) return 0;
-  long n = 0;
+  int n = 0;
   if (*s == '#') {n |= FL_ALT; s++;}
   if (*s == '+') {n |= FL_SHIFT; s++;}
   if (*s == '^') {n |= FL_CTRL; s++;}
@@ -204,5 +201,5 @@ int Fl_Widget::test_shortcut() {
 }
 
 //
-// End of "$Id: fl_shortcut.cxx,v 1.4.2.9.2.7.2.2 2003/11/07 03:47:25 easysw Exp $".
+// End of "$Id: fl_shortcut.cxx,v 1.4.2.9.2.7.2.3 2003/12/02 02:51:49 easysw Exp $".
 //

@@ -1,9 +1,9 @@
 //
-// "$Id: fl_color_mac.cxx,v 1.1.2.4.2.2 2003/11/07 03:47:24 easysw Exp $"
+// "$Id: fl_color_mac.cxx,v 1.1.2.4.2.3 2003/12/02 02:51:48 easysw Exp $"
 //
 // MacOS color functions for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -35,7 +35,7 @@
 #include <FL/x.H>
 #include <FL/fl_draw.H>
 
-unsigned fl_cmap[256] = {
+static unsigned fl_cmap[256] = {
 #include "fl_cmap.h" // this is a file produced by "cmap.cxx":
 };
 
@@ -44,9 +44,9 @@ Fl_XMap fl_xmap[256];
 
 Fl_XMap* fl_current_xmap;
 
-Fl_Color fl_color_ = (Fl_Color)0;
+Fl_Color fl_color_;
 
-void Fl_Fltk::color(Fl_Color i) {
+void fl_color(Fl_Color i) {
   fl_color_ = i;
   int index;
   uchar r, g, b;
@@ -70,7 +70,7 @@ void Fl_Fltk::color(Fl_Color i) {
   RGBForeColor(&rgb);
 }
 
-void Fl_Fltk::color(uchar r, uchar g, uchar b) {
+void fl_color(uchar r, uchar g, uchar b) {
   RGBColor rgb; 
   fl_color_ = fl_rgb_color(r, g, b);
   rgb.red   = (r<<8)|r;
@@ -86,5 +86,5 @@ void Fl::set_color(Fl_Color i, unsigned c) {
 }
 
 //
-// End of "$Id: fl_color_mac.cxx,v 1.1.2.4.2.2 2003/11/07 03:47:24 easysw Exp $".
+// End of "$Id: fl_color_mac.cxx,v 1.1.2.4.2.3 2003/12/02 02:51:48 easysw Exp $".
 //

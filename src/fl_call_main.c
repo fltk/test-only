@@ -1,7 +1,7 @@
 /*
- * "$Id: fl_call_main.c,v 1.1.2.11.2.3.2.2 2003/11/07 03:47:24 easysw Exp $"
+ * "$Id: fl_call_main.c,v 1.1.2.11.2.3.2.3 2003/12/02 02:51:48 easysw Exp $"
  *
- * Copyright 1998-2004 by Bill Spitzak and others.
+ * Copyright 1998-2003 by Bill Spitzak and others.
  *
  * fl_call_main() calls main() for you Windows people.  Needs to be done in C
  * because Borland C++ won't let you call main() from C++.
@@ -46,7 +46,6 @@
 
 #if defined(WIN32) && !defined(FL_DLL) && !defined (__GNUC__)
 
-#include <FL/fl_utf8.H>
 #include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -62,21 +61,9 @@ extern int main(int, char *[]);
 # define __argv _argv
 #endif
 
-static int mbcs2utf(const char *s, int l, char *buf)
-{
-  xchar *mbwbuf;
-  if (!s) return 0;
-  mbwbuf = (xchar*)malloc((l * 6 +6) * sizeof(xchar));
-  l = mbstowcs(mbwbuf, s, l);
-  l = fl_unicode2utf(mbwbuf, l, buf);
-  free(mbwbuf);
-  return l;
-}
-
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                              LPSTR lpCmdLine, int nCmdShow) {
-  int rc, i;
-  char **ar;
+  int rc;
 
 #ifdef _DEBUG
  /*
@@ -95,26 +82,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   freopen("conout$", "w", stderr);
 #endif /* _DEBUG */
 
- 
-  ar = (char**) malloc(sizeof(char*) * (__argc + 1));
-  i = 0;
-  while (i < __argc) {
-    int l;
-    if (__wargv && fl_is_nt4()) {
-      for (l = 0; __wargv[i] && __wargv[i][l]; l++) {};
-      ar[i] = (char*) malloc((l * 5) + 1);
-      ar[i][fl_unicode2utf(__wargv[i], l, ar[i])] = 0;
-    } else {
-      for (l = 0; __argv[i] && __argv[i][l]; l++) {};
-      ar[i] = (char*) malloc((l * 5) + 1);
-      ar[i][mbcs2utf(__argv[i], l, ar[i])] = 0;
-    }
-    i++;  
-  }
-  ar[__argc] = 0;
-
   /* Run the standard main entry point function... */
-  rc = main(__argc, ar);
+  rc = main(__argc, __argv);
 
 #ifdef _DEBUG
   fclose(stdin);
@@ -131,6 +100,6 @@ static void dummy(void) {dummy();}
 #endif
 
 /*
- * End of "$Id: fl_call_main.c,v 1.1.2.11.2.3.2.2 2003/11/07 03:47:24 easysw Exp $".
+ * End of "$Id: fl_call_main.c,v 1.1.2.11.2.3.2.3 2003/12/02 02:51:48 easysw Exp $".
  */
 

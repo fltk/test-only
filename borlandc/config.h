@@ -1,9 +1,9 @@
 /*
- * "$Id: config.h,v 1.1.2.4.2.1 2003/11/02 01:37:42 easysw Exp $"
+ * "$Id: config.h,v 1.1.2.4.2.2 2003/12/02 02:51:44 easysw Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK) for Borland C++.
  *
- * Copyright 1998-2004 by Bill Spitzak and others.
+ * Copyright 1998-2003 by Bill Spitzak and others.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -218,5 +218,5 @@
 
 
 /*
- * End of "$Id: config.h,v 1.1.2.4.2.1 2003/11/02 01:37:42 easysw Exp $".
+ * End of "$Id: config.h,v 1.1.2.4.2.2 2003/12/02 02:51:44 easysw Exp $".
  */

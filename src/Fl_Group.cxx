@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Group.cxx,v 1.8.2.8.2.18.2.3 2003/11/07 03:47:23 easysw Exp $"
+// "$Id: Fl_Group.cxx,v 1.8.2.8.2.18.2.4 2003/12/02 02:51:46 easysw Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -107,14 +107,12 @@ static int navkey() {
   case FL_Down:
     return FL_Down;
   default:
-    if (Fl::event_text()) {
     switch (Fl::event_text()[0]) {
     case ctrl('N') : return FL_Down;
     case ctrl('P') : return FL_Up;
     case ctrl('F') : return FL_Right;
     case ctrl('B') : return FL_Left;
     }
-  }
   }
   return 0;
 }
@@ -417,9 +415,9 @@ void Fl_Group::init_sizes() {
   delete[] sizes_; sizes_ = 0;
 }
 
-int* Fl_Group::sizes() {
+short* Fl_Group::sizes() {
   if (!sizes_) {
-    int* p = sizes_ = new int[4*(children_+2)];
+    short* p = sizes_ = new short[4*(children_+2)];
     // first thing in sizes array is the group's size:
     if (type() < FL_WINDOW) {p[0] = x(); p[2] = y();} else {p[0] = p[2] = 0;}
     p[1] = p[0]+w(); p[3] = p[2]+h();
@@ -466,7 +464,7 @@ void Fl_Group::resize(int X, int Y, int W, int H) {
 
   } else if (children_) {
 
-    int* p = sizes();
+    short* p = sizes();
 
     // get changes in size/position from the initial size:
     int dx = X - p[0];
@@ -595,5 +593,5 @@ void Fl_Group::draw_outside_label(const Fl_Widget& widget) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.8.2.8.2.18.2.3 2003/11/07 03:47:23 easysw Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.8.2.8.2.18.2.4 2003/12/02 02:51:46 easysw Exp $".
 //

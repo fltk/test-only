@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_PNM_Image.H,v 1.1.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $"
+// "$Id: Fl_PNM_Image.H,v 1.1.2.2.2.3 2003/12/02 02:51:44 easysw Exp $"
 //
 // PNM image header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -41,5 +41,5 @@ class FL_EXPORT Fl_PNM_Image : public Fl_RGB_Image {
 #endif
 
 //
-// End of "$Id: Fl_PNM_Image.H,v 1.1.2.2.2.2 2003/11/19 02:46:11 matthiaswm Exp $".
+// End of "$Id: Fl_PNM_Image.H,v 1.1.2.2.2.3 2003/12/02 02:51:44 easysw Exp $".
 //

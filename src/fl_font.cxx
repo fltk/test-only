@@ -1,9 +1,9 @@
 //
-// "$Id: fl_font.cxx,v 1.9.2.5.2.6.2.2 2003/11/07 03:47:24 easysw Exp $"
+// "$Id: fl_font.cxx,v 1.9.2.5.2.6.2.3 2003/12/02 02:51:48 easysw Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -28,38 +28,64 @@
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
 #include <FL/x.H>
-#include <FL/fl_utf8.H>
 #include "Fl_Font.H"
 
 #include <stdio.h>
 #include <stdlib.h>
 
-
 #ifdef WIN32
 #  include "fl_font_win32.cxx"
 #elif defined(__APPLE__)
 #  include "fl_font_mac.cxx"
-#elif NANO_X
-#  include "fl_font_nx.cxx"
-#elif DJGPP
-#  include "fl_font_dj2.cxx"
-#elif USE_XFT
-#  include "fl_font_xft.cxx"
 #else
-#  include "fl_font_x.cxx"
+#  if USE_XFT
+#    include "fl_font_xft.cxx"
+#  else
+#    include "fl_font_x.cxx"
+#  endif // USE_XFT
+
+char *fl_get_font_xfld(char *buffer, int bufsize, int fnum, int size) {
+  static const char *fonts[] = {
+    "-*-helvetica-medium-r-normal--",
+    "-*-helvetica-bold-r-normal--",
+    "-*-helvetica-medium-o-normal--",
+    "-*-helvetica-bold-o-normal--",
+    "-*-courier-medium-r-normal--",
+    "-*-courier-bold-r-normal--",
+    "-*-courier-medium-o-normal--",
+    "-*-courier-bold-o-normal--",
+    "-*-times-medium-r-normal--",
+    "-*-times-bold-r-normal--",
+    "-*-times-medium-i-normal--",
+    "-*-times-bold-i-normal--",
+    "-*-symbol-",
+    "-*-lucidatypewriter-medium-r-normal-sans-",
+    "-*-lucidatypewriter-bold-r-normal-sans-",
+    "-*-*zapf dingbats-"
+  };
+
+  if (fnum < 0 || fnum >= (int)(sizeof(fonts) / sizeof(fonts[0]))) fnum = 0;
+
+  snprintf(buffer, bufsize,
+           "%s%d-*-*-*-*-*-iso10646-1,%s%d-*-*-*-*-*-iso8859-1",
+           fonts[fnum], size, fonts[fnum], size);
+
+//  printf("fl_get_font_xfld returning \"%s\"...\n", buffer);
+
+  return (buffer);
+}
 #endif // WIN32
 
 
-double Fl_Fltk::width(const char* c) {
-  if (c) return Fl_Fltk::width(c, strlen(c));
+double fl_width(const char* c) {
+  if (c) return fl_width(c, strlen(c));
   else return 0.0f;
 }
 
-void Fl_Fltk::draw(const char* str, int x, int y) {
-  Fl_Fltk::draw(str, strlen(str), x, y);
+void fl_draw(const char* str, int x, int y) {
+  fl_draw(str, strlen(str), x, y);
 }
 
-
 //
-// End of "$Id: fl_font.cxx,v 1.9.2.5.2.6.2.2 2003/11/07 03:47:24 easysw Exp $".
+// End of "$Id: fl_font.cxx,v 1.9.2.5.2.6.2.3 2003/12/02 02:51:48 easysw Exp $".
 //

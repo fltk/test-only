@@ -1,12 +1,12 @@
 //
-// "$Id: glpuzzle.cxx,v 1.8.2.5.2.2.2.2 2003/11/07 03:47:25 easysw Exp $"
+// "$Id: glpuzzle.cxx,v 1.8.2.5.2.2.2.3 2003/12/02 02:51:49 easysw Exp $"
 //
 // OpenGL puzzle demo for the Fast Light Tool Kit (FLTK).
 //
 // This is a GLUT demo program to demonstrate fltk's GLUT emulation.
 // Search for "fltk" to find all the changes
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -1149,11 +1149,11 @@ toggleSolve(void)
     if (solving) {
       freeSolutions();
       solving = 0;
-      glutChangeToMenuEntry(1, "Solving", (void*)1);
+      glutChangeToMenuEntry(1, "Solving", 1);
       glutSetWindowTitle("glpuzzle");
       movingPiece = 0;
     } else {
-      glutChangeToMenuEntry(1, "Stop solving", (void*)1);
+      glutChangeToMenuEntry(1, "Stop solving", 1);
       glutSetWindowTitle("Solving...");
       if (solvePuzzle()) {
         solving = 1;
@@ -1168,7 +1168,7 @@ void reset(void)
     if (solving) {
       freeSolutions();
       solving = 0;
-      glutChangeToMenuEntry(1, "Solving", (void*)1);
+      glutChangeToMenuEntry(1, "Solving", 1);
       glutSetWindowTitle("glpuzzle");
       movingPiece = 0;
       changeState();
@@ -1191,7 +1191,7 @@ keyboard(unsigned char c, int x, int y)
     if (solving) {
       freeSolutions();
       solving = 0;
-      glutChangeToMenuEntry(1, "Solving", (void*)1);
+      glutChangeToMenuEntry(1, "Solving", 1);
       glutSetWindowTitle("glpuzzle");
       movingPiece = 0;
       changeState();
@@ -1266,7 +1266,7 @@ mouse(int b, int s, int x, int y)
       if (solving) {
         freeSolutions();
         solving = 0;
-      glutChangeToMenuEntry(1, "Solving", (void*)1);
+      glutChangeToMenuEntry(1, "Solving", 1);
         glutSetWindowTitle("glpuzzle");
         movingPiece = 0;
       }
@@ -1308,7 +1308,7 @@ animate(void)
   if (solving) {
     if (!continueSolving()) {
       solving = 0;
-      glutChangeToMenuEntry(1, "Solving", (void*)1);
+      glutChangeToMenuEntry(1, "Solving", 1);
       glutSetWindowTitle("glpuzzle");
     }
   }
@@ -1473,9 +1473,9 @@ main(int argc, char **argv)
   glutMouseFunc(mouse);
   glutVisibilityFunc(visibility);
   glutCreateMenu(menu);
-  glutAddMenuEntry("Solve", (void*)1);
-  glutAddMenuEntry("Reset", (void*)2);
-  glutAddMenuEntry("Quit", (void*)3);
+  glutAddMenuEntry("Solve", 1);
+  glutAddMenuEntry("Reset", 2);
+  glutAddMenuEntry("Quit", 3);
   glutAttachMenu(GLUT_RIGHT_BUTTON);
   glutMainLoop();
   return 0;             /* ANSI C requires main to return int. */
@@ -1484,5 +1484,5 @@ main(int argc, char **argv)
 #endif // added for fltk's distribution
 
 //
-// End of "$Id: glpuzzle.cxx,v 1.8.2.5.2.2.2.2 2003/11/07 03:47:25 easysw Exp $".
+// End of "$Id: glpuzzle.cxx,v 1.8.2.5.2.2.2.3 2003/12/02 02:51:49 easysw Exp $".
 //

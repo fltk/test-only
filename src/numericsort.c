@@ -1,9 +1,9 @@
 /*
- * "$Id: numericsort.c,v 1.10.2.4.2.6.2.2 2003/11/07 03:47:25 easysw Exp $"
+ * "$Id: numericsort.c,v 1.10.2.4.2.6.2.3 2003/12/02 02:51:49 easysw Exp $"
  *
  * Numeric sorting routine for the Fast Light Tool Kit (FLTK).
  *
- * Copyright 1998-2004 by Bill Spitzak and others.
+ * Copyright 1998-2003 by Bill Spitzak and others.
  *
  * This library is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -29,16 +29,11 @@
 #include <config.h>
 #include <ctype.h>
 #include <stdlib.h>
-
-#if !__APPLE__
 #include <sys/types.h>
-#else
-#  define HAVE_DIRENT_H
-#endif
 
 #include <FL/filename.H>
 
-#if (!defined(WIN32) || defined(__CYGWIN__)) && !MSDOS
+#if !defined(WIN32) || defined(__CYGWIN__)
 #  ifdef HAVE_DIRENT_H
 #    include <dirent.h>
 #  else
@@ -110,5 +105,5 @@ int fl_numericsort(struct dirent **A, struct dirent **B) {
 }
 
 /*
- * End of "$Id: numericsort.c,v 1.10.2.4.2.6.2.2 2003/11/07 03:47:25 easysw Exp $".
+ * End of "$Id: numericsort.c,v 1.10.2.4.2.6.2.3 2003/12/02 02:51:49 easysw Exp $".
  */

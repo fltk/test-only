@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_Help_View.cxx,v 1.1.2.43.2.3 2003/11/07 03:47:23 easysw Exp $"
+// "$Id: Fl_Help_View.cxx,v 1.1.2.43.2.4 2003/12/02 02:51:46 easysw Exp $"
 //
 // Fl_Help_View widget routines.
 //
-// Copyright 1997-2004 by Easy Software Products.
+// Copyright 1997-2003 by Easy Software Products.
 // Image support donated by Matthias Melcher, Copyright 2000.
 //
 // This library is free software; you can redistribute it and/or
@@ -56,7 +56,6 @@
 #include <FL/Fl_Pixmap.H>
 #include <stdio.h>
 #include <stdlib.h>
-#include <FL/fl_utf8.H>
 #include "flstring.h"
 #include <ctype.h>
 #include <errno.h>
@@ -70,9 +69,7 @@
 
 #define MAX_COLUMNS	200
 
-#if MSDOS
-#define strcasecmp stricmp
-#endif
+
 //
 // Typedef the C API sort function type the only way I know how...
 //
@@ -548,11 +545,8 @@ Fl_Help_View::draw()
 
             if (strcasecmp(buf, "LI") == 0)
 	    {
-	      char buf[8];
-	      xchar b[] = {0x2022, 0x0};
-	      buf[fl_unicode2utf(b, 1, buf)] = 0;
-	      //fl_font(FL_SYMBOL, fsize);
-	      fl_draw(buf, xx - fsize + x() - leftline_, yy + y());
+	      fl_font(FL_SYMBOL, fsize);
+	      fl_draw("\267", xx - fsize + x() - leftline_, yy + y());
 	    }
 
 	    pushfont(font, fsize);
@@ -729,10 +723,7 @@ Fl_Help_View::draw()
 	  if (qch < 0)
 	    *s++ = '&';
 	  else {
-            int l;
-            l = fl_ucs2utf((unsigned int) qch, s);
-            if (l < 1) l = 1;
-            s += l;
+	    *s++ = qch;
 	    ptr = strchr(ptr, ';') + 1;
 	  }
 
@@ -774,15 +765,7 @@ Fl_Help_View::draw()
   fl_pop_clip();
 }
 
-const char* fl_untitled =  "Untitled";
-const char* fl_no_uri ="<HTML><HEAD><TITLE>Error</TITLE></HEAD>"
-             "<BODY><H1>Error</H1>"
-             "<P>Unable to follow the link \"%s\" - "
-             "no handler exists for this URI scheme.</P></BODY>";
-const char* fl_unable_to_follow =  "<HTML><HEAD><TITLE>Error</TITLE></HEAD>"
-               "<BODY><H1>Error</H1>"
-               "<P>Unable to follow the link \"%s\" - "
-               "%s.</P></BODY>";
+
 //
 // 'Fl_Help_View::find()' - Find the specified string...
 //
@@ -885,7 +868,6 @@ Fl_Help_View::format()
 				// Column widths
   Fl_Color	tc, rc;		// Table/row background color
 
-  table_offset = 0;
 
   // Reset document width...
   hsize_ = w() - 24;
@@ -905,7 +887,7 @@ Fl_Help_View::format()
 
     tc = rc = bgcolor_;
 
-    strcpy(title_, fl_untitled);
+    strcpy(title_, "Untitled");
 
     if (!value_)
       return;
@@ -1502,10 +1484,7 @@ Fl_Help_View::format()
 	if (qch < 0)
 	  *s++ = '&';
 	else {
-          int l;
-          l = fl_ucs2utf((unsigned int) qch, s);
-          if (l < 1) l = 1;
-          s += l;
+	  *s++ = qch;
 	  ptr = strchr(ptr, ';') + 1;
 	}
 
@@ -1921,10 +1900,7 @@ Fl_Help_View::format_table(int        *table_width,	// O - Total table width
       if (qch < 0)
 	*s++ = '&';
       else {
-        int l;
-        l = fl_ucs2utf((unsigned int) qch, s);
-        if (l < 1) l = 1;
-        s += l;
+	*s++ = qch;
 	ptr = strchr(ptr, ';') + 1;
       }
     }
@@ -2227,7 +2203,7 @@ Fl_Help_View::get_image(const char *name, int W, int H) {
   } else if (name[0] != '/' && strchr(name, ':') == NULL) {
     if (directory_[0]) snprintf(temp, sizeof(temp), "%s/%s", directory_, name);
     else {
-      fl_getcwd(dir, sizeof(dir));
+      getcwd(dir, sizeof(dir));
       snprintf(temp, sizeof(temp), "file:%s/%s", dir, name);
     }
 
@@ -2351,7 +2327,7 @@ Fl_Help_View::handle(int event)	// I - Event to handle
 	  snprintf(temp, sizeof(temp), "%s/%s", directory_, linkp->filename);
 	else
 	{
-	  fl_getcwd(dir, sizeof(dir));
+	  getcwd(dir, sizeof(dir));
 	  snprintf(temp, sizeof(temp), "file:%s/%s", dir, linkp->filename);
 	}
       }
@@ -2507,7 +2483,12 @@ Fl_Help_View::load(const char *f)// I - Filename to load (may also have target)
       strncmp(localname, "news:", 5) == 0)
   {
     // Remote link wasn't resolved...
-    snprintf(error, sizeof(error), fl_no_uri, localname);
+    snprintf(error, sizeof(error),
+             "<HTML><HEAD><TITLE>Error</TITLE></HEAD>"
+             "<BODY><H1>Error</H1>"
+	     "<P>Unable to follow the link \"%s\" - "
+	     "no handler exists for this URI scheme.</P></BODY>",
+	     localname);
     value_ = strdup(error);
   }
   else
@@ -2515,7 +2496,7 @@ Fl_Help_View::load(const char *f)// I - Filename to load (may also have target)
     if (strncmp(localname, "file:", 5) == 0)
       localname += 5;	// Adjust for local filename...
 
-    if ((fp = fl_fopen(localname, "rb")) != NULL)
+    if ((fp = fopen(localname, "rb")) != NULL)
     {
       fseek(fp, 0, SEEK_END);
       len = ftell(fp);
@@ -2527,7 +2508,11 @@ Fl_Help_View::load(const char *f)// I - Filename to load (may also have target)
     }
     else
     {
-      snprintf(error, sizeof(error), fl_unable_to_follow, 
+      snprintf(error, sizeof(error),
+               "<HTML><HEAD><TITLE>Error</TITLE></HEAD>"
+               "<BODY><H1>Error</H1>"
+	       "<P>Unable to follow the link \"%s\" - "
+	       "%s.</P></BODY>",
 	       localname, strerror(errno));
       value_ = strdup(error);
     }
@@ -2776,11 +2761,8 @@ quote_char(const char *p) {	// I - Quoted string
 
   if (!strchr(p, ';')) return -1;
   if (*p == '#') {
-    if (*(p+1) == 'x' || *(p+1) == 'X') {
-      return strtol(p+2, NULL, 16);
-    } else {
-      return atoi(p+1);
-    }
+    if (*(p+1) == 'x' || *(p+1) == 'X') return strtol(p+2, NULL, 16);
+    else return atoi(p+1);
   }
   for (i = (int)(sizeof(names) / sizeof(names[0])), nameptr = names; i > 0; i --, nameptr ++)
     if (strncmp(p, nameptr->name, nameptr->namelen) == 0)
@@ -2813,5 +2795,5 @@ hscrollbar_callback(Fl_Widget *s, void *)
 
 
 //
-// End of "$Id: Fl_Help_View.cxx,v 1.1.2.43.2.3 2003/11/07 03:47:23 easysw Exp $".
+// End of "$Id: Fl_Help_View.cxx,v 1.1.2.43.2.4 2003/12/02 02:51:46 easysw Exp $".
 //

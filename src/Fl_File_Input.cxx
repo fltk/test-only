@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_File_Input.cxx,v 1.1.2.6.2.3 2003/11/07 03:47:23 easysw Exp $"
+// "$Id: Fl_File_Input.cxx,v 1.1.2.6.2.4 2003/12/02 02:51:46 easysw Exp $"
 //
 // File_Input header file for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 // Original version Copyright 1998 by Curtis Edwards.
 //
 // This library is free software; you can redistribute it and/or
@@ -260,6 +260,7 @@ Fl_File_Input::handle_button(int event)		// I - Event
     // Found the end; truncate the value and update the buttons...
     *start = '\0';
     value(newvalue, start - newvalue);
+
     // Then do the callbacks, if necessary...
     if (when() & FL_WHEN_CHANGED) do_callback();
   }
@@ -269,5 +270,5 @@ Fl_File_Input::handle_button(int event)		// I - Event
 
 
 //
-// End of "$Id: Fl_File_Input.cxx,v 1.1.2.6.2.3 2003/11/07 03:47:23 easysw Exp $".
+// End of "$Id: Fl_File_Input.cxx,v 1.1.2.6.2.4 2003/12/02 02:51:46 easysw Exp $".
 //

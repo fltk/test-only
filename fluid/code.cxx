@@ -1,9 +1,9 @@
 //
-// "$Id: code.cxx,v 1.9.2.9.2.5.2.2 2003/11/07 03:47:22 easysw Exp $"
+// "$Id: code.cxx,v 1.9.2.9.2.5.2.3 2003/12/02 02:51:45 easysw Exp $"
 //
 // Code output routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -31,7 +31,6 @@
 #include <FL/Fl.H>
 #include "Fl_Type.h"
 #include "alignment_panel.h"
-#include <FL/fl_utf8.H>
 
 static FILE *code_file;
 static FILE *header_file;
@@ -262,13 +261,13 @@ int write_code(const char *s, const char *t) {
   indentation = 0;
   if (!s) code_file = stdout;
   else {
-    FILE *f = fl_fopen(s,"w");
+    FILE *f = fopen(s,"w");
     if (!f) return 0;
     code_file = f;
   }
   if (!t) header_file = stdout;
   else {
-    FILE *f = fl_fopen(t,"w");
+    FILE *f = fopen(t,"w");
     if (!f) {fclose(code_file); return 0;}
     header_file = f;
   }
@@ -333,7 +332,7 @@ int write_code(const char *s, const char *t) {
 }
 
 int write_strings(const char *sfile) {
-  FILE *fp = fl_fopen(sfile, "w");
+  FILE *fp = fopen(sfile, "w");
   Fl_Type *p;
   Fl_Widget_Type *w;
   int i;
@@ -464,5 +463,5 @@ void Fl_Type::write_code1() {
 void Fl_Type::write_code2() {}
 
 //
-// End of "$Id: code.cxx,v 1.9.2.9.2.5.2.2 2003/11/07 03:47:22 easysw Exp $".
+// End of "$Id: code.cxx,v 1.9.2.9.2.5.2.3 2003/12/02 02:51:45 easysw Exp $".
 //

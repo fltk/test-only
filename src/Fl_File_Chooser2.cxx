@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_File_Chooser2.cxx,v 1.1.2.24.2.5 2003/11/07 03:47:23 easysw Exp $"
+// "$Id: Fl_File_Chooser2.cxx,v 1.1.2.24.2.6 2003/12/02 02:51:46 easysw Exp $"
 //
 // More Fl_File_Chooser routines.
 //
-// Copyright 1999-2004 by Michael Sweet.
+// Copyright 1999-2003 by Michael Sweet.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -48,16 +48,13 @@
 #include <FL/fl_ask.H>
 #include <FL/x.H>
 #include <FL/Fl_Shared_Image.H>
-#include <FL/fl_utf8.H>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "flstring.h"
 #include <errno.h>
-#include <sys/stat.h>
-#if !__APPLE__
 #include <sys/types.h>
-#endif
+#include <sys/stat.h>
 
 #if defined(WIN32) && ! defined (__CYGWIN__)
 #  include <direct.h>
@@ -67,16 +64,9 @@
 #  ifdef DIRECTORY
 #    undef DIRECTORY
 #  endif // DIRECTORY
-#elif __APPLE__
-#  include <unistd.h>
 #else
 #  include <unistd.h>
-#  if !MSDOS
 #  include <pwd.h>
-#  else
-#    define strcasecmp stricmp
-#  endif
-
 #endif /* WIN32 */
 
 
@@ -226,7 +216,7 @@ Fl_File_Chooser::favoritesButtonCB()
 
   if (!v) {
     // Add current directory to favorites...
-    if (fl_getenv("HOME")) v = favoritesButton->size() - 5;
+    if (getenv("HOME")) v = favoritesButton->size() - 5;
     else v = favoritesButton->size() - 4;
 
     sprintf(menuname, "favorite%02d", v);
@@ -391,11 +381,7 @@ Fl_File_Chooser::fileListCB()
     return;
 
   if (!directory_[0]) {
-#if __APPLE__
-    snprintf(pathname, sizeof(pathname), "/%s", filename);
-#else
     strlcpy(pathname, filename, sizeof(pathname));
-#endif
   } else if (strcmp(directory_, "/") == 0) {
     snprintf(pathname, sizeof(pathname), "/%s", filename);
   } else {
@@ -500,6 +486,7 @@ Fl_File_Chooser::fileNameCB()
   }
 
   filename = pathname;
+
   // Now process things according to the key pressed...
   if (Fl::event_key() == FL_Enter  ||  Fl::event_key() == FL_KP_Enter)
   {
@@ -511,7 +498,7 @@ Fl_File_Chooser::fileNameCB()
     if (fl_filename_isdir(pathname)) {
 #endif /* WIN32 || __EMX__ */
       directory(pathname);
-    } else if ((type_ & CREATE) || fl_access(pathname, 0) == 0) {
+    } else if ((type_ & CREATE) || access(pathname, 0) == 0) {
       // New file or file exists...  If we are in multiple selection mode,
       // switch to single selection mode...
       if (type_ & MULTI)
@@ -646,13 +633,8 @@ Fl_File_Chooser::fileNameCB()
       fileList->redraw();
     }
 
-    if (!fileName->value() || fileName->value()[0] == 0) {
-      fileName->value("/", 1);
-      fileName->position(1,1);
-    }
-
     // See if we need to enable the OK button...
-    if ((type_ & CREATE || fl_access(fileName->value(), 0) == 0) &&
+    if ((type_ & CREATE || access(fileName->value(), 0) == 0) &&
         (!fl_filename_isdir(fileName->value()) || type_ & DIRECTORY))
       okButton->activate();
     else
@@ -740,7 +722,11 @@ Fl_File_Chooser::newdir()
     strlcpy(pathname, dir, sizeof(pathname));
 
   // Create the directory; ignore EEXIST errors...
-	fl_mkdir(pathname, 0777);
+#if defined(WIN32) && ! defined (__CYGWIN__)
+  if (mkdir(pathname))
+#else
+  if (mkdir(pathname, 0777))
+#endif /* WIN32 */
     if (errno != EEXIST)
     {
       fl_alert("%s", strerror(errno));
@@ -877,7 +863,7 @@ Fl_File_Chooser::update_favorites()
   favoritesButton->add(manage_favorites_label, FL_ALT + 'm', 0, 0, FL_MENU_DIVIDER);
   favoritesButton->add(filesystems_label, FL_ALT + 'f', 0);
     
-  if ((home = fl_getenv("HOME")) != NULL) {
+  if ((home = getenv("HOME")) != NULL) {
     quote_pathname(menuname, home, sizeof(menuname));
     favoritesButton->add(menuname, FL_ALT + 'h', 0);
   }
@@ -937,7 +923,7 @@ Fl_File_Chooser::update_preview()
     int		bytes;
     char	*ptr;
 
-    if (filename) fp = fl_fopen(filename, "rb");
+    if (filename) fp = fopen(filename, "rb");
     else fp = NULL;
 
     if (fp != NULL) {
@@ -977,7 +963,7 @@ Fl_File_Chooser::update_preview()
   } else {
     pbw = previewBox->w() - 20;
     pbh = previewBox->h() - 20;
-    if (image->w() < 1) return;
+
     if (image->w() > pbw || image->h() > pbh) {
       w   = pbw;
       h   = w * image->h() / image->w();
@@ -1177,5 +1163,5 @@ unquote_pathname(char       *dst,	// O - Destination string
 
 
 //
-// End of "$Id: Fl_File_Chooser2.cxx,v 1.1.2.24.2.5 2003/11/07 03:47:23 easysw Exp $".
+// End of "$Id: Fl_File_Chooser2.cxx,v 1.1.2.24.2.6 2003/12/02 02:51:46 easysw Exp $".
 //

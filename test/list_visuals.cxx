@@ -1,5 +1,5 @@
 //
-// "$Id: list_visuals.cxx,v 1.5.2.3.2.2.2.2 2003/11/07 03:47:25 easysw Exp $"
+// "$Id: list_visuals.cxx,v 1.5.2.3.2.2.2.3 2003/12/02 02:51:49 easysw Exp $"
 //
 // Visual list utility for the Fast Light Tool Kit (FLTK).
 //
@@ -11,7 +11,7 @@
 // This file may be #included in another program to make a function to
 // call to list the visuals.  Fl.H must be included first to indicate this.
 //
-// Copyright 1998-2004 by Bill Spitzak and others.
+// Copyright 1998-2003 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -31,7 +31,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-#if defined(WIN32) || defined(__APPLE__) || NANO_X
+#if defined(WIN32) || defined(__APPLE__)
 #include <FL/Fl.H>
 #include <FL/fl_message.H>
 
@@ -235,5 +235,5 @@ int main(int argc, char **argv) {
 #endif
 
 //
-// End of "$Id: list_visuals.cxx,v 1.5.2.3.2.2.2.2 2003/11/07 03:47:25 easysw Exp $".
+// End of "$Id: list_visuals.cxx,v 1.5.2.3.2.2.2.3 2003/12/02 02:51:49 easysw Exp $".
 //
