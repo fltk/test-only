@@ -126,9 +126,9 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
 # use "col = #rrggbb" to select a 24 bit color
 # use "col = num" to select a cmap entry
 [colors]                                          # user defined colors
-  green = #00c000
-  blue = #0000c0
-  red = 1
+  red = #ff0000
+  green = #00ff00
+  blue = #0000ff
   gray = 49
   black = 0
   puke green = 14
