@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.64 2004/12/12 22:23:21 spitzak Exp $"
+ * "$Id: configh.in,v 1.65 2004/12/18 19:02:59 spitzak Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -371,6 +371,19 @@
 */
 #define IGNORE_NUMLOCK 1
 
+/* Use the fltk::clipout() method to make redrawing blink less, by
+   drawing the widgets first, and then the background of the
+   window. FLTK now defaults to double buffered windows so this
+   produces no visible difference unless you do clear_double_buffer to
+   the window.
+
+   Timing tests show this somewhat slower than drawing overlapping
+   rectangles. This also prevents non-rectangular and overlapping
+   widgets from drawing correctly. Furthermore, OpenGL and Cairo do
+   not support clipout().
+*/
+#define USE_CLIPOUT 0
+
 /*
- * End of "$Id: configh.in,v 1.64 2004/12/12 22:23:21 spitzak Exp $".
+ * End of "$Id: configh.in,v 1.65 2004/12/18 19:02:59 spitzak Exp $".
  */

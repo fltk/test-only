@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.199 2004/12/12 22:23:25 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.200 2004/12/18 19:03:13 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1772,40 +1772,6 @@ bool fltk::handle()
 }
 
 ////////////////////////////////////////////////////////////////
-
-/**
- * Resizes the actual system window in response to a resize() call from
- * the program.
- */
-void Window::layout() {
-  if (layout_damage() & LAYOUT_WH)
-    free_backbuffer();
-  if (this == resize_from_system) {
-    // Ignore changes that came from the system
-    resize_from_system = 0;
-  } else if ((layout_damage()&LAYOUT_XYWH) && i) { // only for shown windows
-    // figure out where the window should be in it's parent:
-    int x = this->x(); int y = this->y();
-    for (Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
-      x += p->x(); y += p->y();
-    }
-    if (layout_damage() & LAYOUT_WH) {
-      // Some window managers refuse to allow resizes unless the resize
-      // information allows it:
-      if (minw == maxw && minh == maxh) size_range(w(), h(), w(), h());
-      XMoveResizeWindow(xdisplay, i->xid, x, y,
-			w()>0 ? w() : 1, h()>0 ? h() : 1);
-      // Wait for echo (relies on window having StaticGravity!!!)
-      i->wait_for_expose = true;
-    } else {
-      XMoveWindow(xdisplay, i->xid, x, y);
-    }
-  }
-  if (layout_damage() & ~LAYOUT_XY) Group::layout();
-  else layout_damage(0);
-}
-
-////////////////////////////////////////////////////////////////
 // Innards of Window::create()
 
 extern bool fl_show_iconic; // In Window.cxx, set by iconize() or -i switch
@@ -1980,6 +1946,7 @@ CreatedWindow* CreatedWindow::set_xid(Window* window, XWindow winxid) {
   CreatedWindow* x = new CreatedWindow;
   x->xid = winxid;
   x->backbuffer = 0;
+  x->frontbuffer = 0;
   x->overlay = false;
   x->window = window; window->i = x;
   x->region = 0;
@@ -2118,7 +2085,7 @@ const Window *Window::current_;
   work for DoubleBufferWindow!</i> */
 void Window::make_current() const {
   current_ = this;
-  draw_into(i->xid);
+  draw_into(i->frontbuffer ? i->frontbuffer : i->xid);
 }
 
 /*! \fn static Window* Window::current()
@@ -2182,38 +2149,28 @@ void fltk::stop_drawing(XWindow window) {
 #include <X11/extensions/Xdbe.h>
 #undef Window
 
-static bool use_xdbe; // true if we are using the XDBE extension
+static bool use_xdbe = false; // true if we are using the XDBE extension
 
 static bool can_xdbe() { // figure out use_xdbe.
-  static bool tried;
+  static bool tried = false;
   if (!tried) {
     tried = true;
+#if DISABLE_XDBE
     int event_base, error_base;
     if (!XdbeQueryExtension(xdisplay, &event_base, &error_base)) return false;
     XWindow root = RootWindow(xdisplay, xscreen);
     int numscreens = 1;
     XdbeScreenVisualInfo *a = XdbeGetVisualInfo(xdisplay, &root, &numscreens);
-    if (!a) return false;
-    for (int j = 0; j < a->count; j++)
-      if (a->visinfo[j].visual == xvisual->visualid
-	  /*&& a->visinfo[j].perflevel > 0*/) {use_xdbe = true; break;}
-    XdbeFreeVisualInfo(a);
+    if (a) {
+      for (int j = 0; j < a->count; j++)
+	if (a->visinfo[j].visual == xvisual->visualid
+	    /*&& a->visinfo[j].perflevel > 0*/) {use_xdbe = true; break;}
+      XdbeFreeVisualInfo(a);
+    }
+#endif
   }
   return use_xdbe;
 }
-
-#if 0
-// Useless attempt to stop it blinking on resizing. In fact the X design
-// just sucks, there is no way to do this when the window manager can
-// resize my windo at any time, like right in the middle of when I am drawing!
-extern "C" {
-  static Bool resize_test(Display*, XEvent* event, char* data) {
-    return
-      event->type == ConfigureNotify &&
-      event->xmapping.window == (XWindow)(data);
-  }
-}
-#endif
 
 #endif
 
@@ -2226,18 +2183,38 @@ void Window::flush() {
     bool eraseoverlay = i->overlay || (damage&DAMAGE_OVERLAY);
     if (eraseoverlay) damage &= ~DAMAGE_OVERLAY;
 
+    current_ = this;
+    XWindow frontbuffer = i->frontbuffer ? i->frontbuffer : i->xid;
+
     if (!i->backbuffer) { // we need to create back buffer
 #if USE_XDBE
-      if (can_xdbe())
+      if (can_xdbe()) {
+	if (!i->frontbuffer && !parent()) {
+	  XSetWindowAttributes attr;
+	  attr.border_pixel = 0;
+	  attr.colormap = xcolormap;
+	  attr.bit_gravity = 0; // StaticGravity;
+	  attr.event_mask =
+	    ExposureMask | StructureNotifyMask
+	    | KeyPressMask | KeyReleaseMask | KeymapStateMask | FocusChangeMask
+	    | ButtonPressMask | ButtonReleaseMask
+	    | EnterWindowMask | LeaveWindowMask
+	    | PointerMotionMask;
+	  int mask = CWBorderPixel|CWColormap|CWEventMask|CWBitGravity;
+	  i->frontbuffer = XCreateWindow(xdisplay, i->xid, 0,0,w(),h(),
+					 0, xvisual->depth, InputOutput,
+					 xvisual->visual, mask, &attr);
+	  XLowerWindow(xdisplay, i->frontbuffer);
+	  XMapWindow(xdisplay, i->frontbuffer);
+	  frontbuffer = i->frontbuffer;
+	}
 	i->backbuffer =
-	  XdbeAllocateBackBufferName(xdisplay, i->xid, XdbeUndefined);
-      else
+	  XdbeAllocateBackBufferName(xdisplay, frontbuffer, XdbeUndefined);
+      } else
 #endif
-	i->backbuffer = XCreatePixmap(xdisplay,xwindow,w(),h(),xvisual->depth);
+	i->backbuffer = XCreatePixmap(xdisplay,frontbuffer,w(),h(),xvisual->depth);
       i->backbuffer_bad = true;
     }
-
-    current_ = this;
 
     // draw the back buffer if it needs anything:
     if (damage
@@ -2264,24 +2241,18 @@ void Window::flush() {
 	  set_damage(DAMAGE_EXPOSE); draw();
 	  // hack to only copy the damage region from back to front:
 	  if (!(damage & ~DAMAGE_EXPOSE) && !i->overlay) {
-	    draw_into(i->xid);
+	    draw_into(frontbuffer);
 	    goto ALREADY_CLIPPED;
 	  }
 	  clip_region(0);
 	}
       }
 #if USE_XDBE
-# if 0 // useless attempt to make it not blink on resize
-      XSync(xdisplay, false);
-      XEvent temp;
-      if (XCheckIfEvent(xdisplay, &temp, resize_test, (char*)(i->xid)))
-	return;
-# endif
       // use the faster Xdbe swap command for all normal redraw():
       if (use_xdbe && !eraseoverlay && (damage&~DAMAGE_EXPOSE)) {
 	i->backbuffer_bad = true;
 	XdbeSwapInfo s;
-	s.swap_window = i->xid;
+	s.swap_window = frontbuffer;
 	s.swap_action = XdbeUndefined;
 	XdbeSwapBuffers(xdisplay, &s, 1);
 	return;
@@ -2289,7 +2260,7 @@ void Window::flush() {
 #endif
     }
 
-    draw_into(i->xid);
+    draw_into(frontbuffer);
 
     // Clip the copying of the pixmap to the damage area,
     // this makes it faster, especially if the damage area is small:
@@ -2302,7 +2273,7 @@ void Window::flush() {
     // it is much faster if I clip the rectangle requested down:
     int X,Y,W,H; clip_box(0,0,w(),h(),X,Y,W,H);
     // Copy the backbuffer to the window:
-    XCopyArea(xdisplay, i->backbuffer, xwindow, gc, X, Y, W, H, X, Y);
+    XCopyArea(xdisplay, i->backbuffer, frontbuffer, gc, X, Y, W, H, X, Y);
     if (i->overlay) draw_overlay();
     clip_region(0);
 
@@ -2335,6 +2306,52 @@ void Window::free_backbuffer() {
   i->backbuffer = 0;
 }
 
+////////////////////////////////////////////////////////////////
+
+/**
+ * Resizes the actual system window in response to a resize() call from
+ * the program.
+ */
+void Window::layout() {
+  if (i && (layout_damage() & LAYOUT_WH)) {
+#if USE_XDBE
+    if (use_xdbe) {
+      if (i->frontbuffer) {
+	XResizeWindow(xdisplay, i->frontbuffer, w()>0?w():1, h()>0?h():1);
+# if USE_XFT
+	// It appears XFT does not like the size changes:
+	stop_drawing(i->backbuffer);
+#endif
+      }
+    } else
+#endif
+      free_backbuffer();
+  }
+  if (this == resize_from_system) {
+    // Ignore changes that came from the system
+    resize_from_system = 0;
+  } else if ((layout_damage()&LAYOUT_XYWH) && i) { // only for shown windows
+    // figure out where the window should be in it's parent:
+    int x = this->x(); int y = this->y();
+    for (Widget* p = parent(); p && !p->is_window(); p = p->parent()) {
+      x += p->x(); y += p->y();
+    }
+    if (layout_damage() & LAYOUT_WH) {
+      // Some window managers refuse to allow resizes unless the resize
+      // information allows it:
+      if (minw == maxw && minh == maxh) size_range(w(), h(), w(), h());
+      XMoveResizeWindow(xdisplay, i->xid, x, y,
+			w()>0 ? w() : 1, h()>0 ? h() : 1);
+      // Wait for echo (relies on window having StaticGravity!!!)
+      i->wait_for_expose = true;
+    } else {
+      XMoveWindow(xdisplay, i->xid, x, y);
+    }
+  }
+  if (layout_damage() & ~LAYOUT_XY) Group::layout();
+  else layout_damage(0);
+}
+
 //
-// End of "$Id: Fl_x.cxx,v 1.199 2004/12/12 22:23:25 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.200 2004/12/18 19:03:13 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.138 2004/12/05 23:24:01 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.139 2004/12/18 19:03:09 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -608,7 +608,15 @@ void Group::layout() {
 void Group::draw() {
   int numchildren = children();
   if (damage() & ~DAMAGE_CHILD) {
-#if NO_CLIP_OUT
+#if USE_CLIPOUT
+    // Non-blinky draw, draw the inside widgets first, clip their areas
+    // out, and then draw the background:
+    push_clip(0, 0, w(), h());
+    int n; for (n = numchildren; n--;) draw_child(*child(n));
+    draw_box();
+    draw_label();
+    pop_clip();
+#else
     // blinky-draw:
     draw_box();
     draw_label();
@@ -617,14 +625,6 @@ void Group::draw() {
       w.set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
       update_child(w);
     }
-#else
-    // Non-blinky draw, draw the inside widgets first, clip their areas
-    // out, and then draw the background:
-    push_clip(0, 0, w(), h());
-    int n; for (n = numchildren; n--;) draw_child(*child(n));
-    draw_box();
-    draw_label();
-    pop_clip();
 #endif
     // labels are drawn without the clip for back compatability so they
     // can draw atop sibling widgets:
@@ -687,8 +687,8 @@ void Group::draw_child(Widget& w) const {
     w.set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
     w.draw();
     w.set_damage(0);
-#if !NO_CLIP_OUT
-    if (fl_did_clipping != &w) clip_out(0,0,w.w(),w.h());
+#if USE_CLIPOUT
+    if (fl_did_clipping != &w) clipout(0,0,w.w(),w.h());
 #endif
     pop_matrix();
   }
@@ -720,5 +720,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.138 2004/12/05 23:24:01 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.139 2004/12/18 19:03:09 spitzak Exp $".
 //

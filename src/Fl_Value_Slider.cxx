@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.cxx,v 1.55 2004/08/01 22:28:23 spitzak Exp $"
+// "$Id: Fl_Value_Slider.cxx,v 1.56 2004/12/18 19:03:12 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -79,7 +79,7 @@ void ValueSlider::draw() {
   // minimal-update the slider, if it indicates the background needs
   // to be drawn, draw that. We draw the slot if the current box type
   // has no border:
-#if !NO_CLIP_OUT
+#if USE_CLIPOUT
   if (Slider::draw(sx, sy, sw, sh, f2, iy==0)) {
 #endif
 
@@ -110,7 +110,7 @@ void ValueSlider::draw() {
       draw_ticks(sx, sy, sw, sh, (slider_size()+1)/2);
     }
 
-#if NO_CLIP_OUT
+#if !USE_CLIPOUT
     Slider::draw(sx, sy, sw, sh, f2, iy==0);
 #else
     pop_clip();
@@ -167,5 +167,5 @@ ValueSlider::ValueSlider(int x, int y, int w, int h, const char*l)
 }
 
 //
-// End of "$Id: Fl_Value_Slider.cxx,v 1.55 2004/08/01 22:28:23 spitzak Exp $".
+// End of "$Id: Fl_Value_Slider.cxx,v 1.56 2004/12/18 19:03:12 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.116 2004/12/16 18:40:41 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.117 2004/12/18 19:03:12 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -125,6 +125,7 @@ void Window::_Window() {
   child_of_ = 0;
   shortcut(EscapeKey);
   callback((Callback*)default_callback);
+  flags(DOUBLE);
 }
 
 /*! This constructor is for \e child windows. You should use the
@@ -804,6 +805,7 @@ void Window::destroy() {
 #if USE_X11
   stop_drawing(x->xid);
   if (x->region) XDestroyRegion(x->region);
+  if (x->frontbuffer) XDestroyWindow(xdisplay, x->frontbuffer);
   XDestroyWindow(xdisplay, x->xid);
 #elif defined(_WIN32)
   stop_drawing(x->xid);
@@ -831,5 +833,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.116 2004/12/16 18:40:41 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.117 2004/12/18 19:03:12 spitzak Exp $".
 //

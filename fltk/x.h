@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.31 2004/08/03 07:26:34 spitzak Exp $"
+// "$Id: x.h,v 1.32 2004/12/18 19:03:02 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -154,6 +154,7 @@ class FL_API CreatedWindow {
 public:
   XWindow xid;
   XWindow backbuffer;
+  XWindow frontbuffer;
   Window *window;
   Region region;
   void expose(int x, int y, int w, int h);
@@ -185,5 +186,5 @@ Window* find(XWindow xid);
 #endif
 
 //
-// End of "$Id: x.h,v 1.31 2004/08/03 07:26:34 spitzak Exp $".
+// End of "$Id: x.h,v 1.32 2004/12/18 19:03:02 spitzak Exp $".
 //

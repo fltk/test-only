@@ -1,4 +1,4 @@
-// "$Id: Fl_Tabs.cxx,v 1.75 2004/12/12 22:23:24 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.76 2004/12/18 19:03:12 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -389,15 +389,15 @@ void TabGroup::draw() {
 
   H = tab_height();
   if (damage() & DAMAGE_ALL) { // redraw the entire thing:
+#if USE_CLIPOUT
     push_clip(0, 0, w(), h());
-#if NO_CLIP_OUT
-    draw_background();
-#endif
     if (v) draw_child(*v);
-#if !NO_CLIP_OUT
     draw_background();
-#endif
     pop_clip();
+#else
+    draw_background();
+    if (v) draw_child(*v);
+#endif
   } else { // redraw the child
     if (v) update_child(*v);
   }
@@ -423,10 +423,10 @@ void TabGroup::draw() {
     }
 
   }
-#if !NO_CLIP_OUT
+#if USE_CLIPOUT
   if (damage() & DAMAGE_EXPOSE) {
-    clip_out(0, H>=0 ? 0 : h()+H, p[children()]+TABSLOPE, (H>=0?H:-H));
-    clip_out(0, H>0 ? H : 0, this->w(), h()-(H>=0?H:-H-1));
+    clipout(0, H>=0 ? 0 : h()+H, p[children()]+TABSLOPE, (H>=0?H:-H));
+    clipout(0, H>0 ? H : 0, this->w(), h()-(H>=0?H:-H-1));
     fl_did_clipping = this;
   }
 #endif
@@ -526,4 +526,4 @@ TabGroup::TabGroup(int X,int Y,int W, int H, const char *l)
   focus_index(0);
 }
 
-// End of "$Id: Fl_Tabs.cxx,v 1.75 2004/12/12 22:23:24 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.76 2004/12/18 19:03:12 spitzak Exp $".

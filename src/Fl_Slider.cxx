@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.76 2004/08/27 15:07:44 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.77 2004/12/18 19:03:12 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -320,7 +320,7 @@ void Slider::draw()
   // minimal-update the slider, if it indicates the background needs
   // to be drawn, draw that. We draw the slot if the current box type
   // has no border:
-#if !NO_CLIP_OUT
+#if USE_CLIPOUT
   if (draw(sx, sy, sw, sh, f2, iy==0)) {
 #endif
 
@@ -349,7 +349,7 @@ void Slider::draw()
       draw_ticks(ix, iy, iw, ih, (slider_size_+1)/2);
     }
 
-#if NO_CLIP_OUT
+#if !USE_CLIPOUT
     draw(sx, sy, sw, sh, f2, iy==0);
 #else
     pop_clip();
@@ -413,12 +413,12 @@ bool Slider::draw(int ix, int iy, int iw, int ih, Flags flags, bool slot)
     else sglyph=16;
   }
 
-#if !NO_CLIP_OUT
+#if USE_CLIPOUT
   if (damage()&DAMAGE_ALL) {
 
     push_clip(0, 0, w(), h());
     draw_glyph(sglyph, sx, sy, sw, sh, flags); // draw the slider
-    clip_out(sx, sy, sw, sh); // clip out the area of the slider
+    clipout(sx, sy, sw, sh); // clip out the area of the slider
 
   } else if (sp != old_position) {
 
@@ -432,7 +432,7 @@ bool Slider::draw(int ix, int iy, int iw, int ih, Flags flags, bool slot)
       if (slider_size_) push_clip(sx, old_position, sw, sh);
       else push_clip(ix, old_position, iw, iy+ih-old_position);
     }
-    clip_out(sx, sy, sw, sh); // don't erase new slider
+    clipout(sx, sy, sw, sh); // don't erase new slider
     
   } else {
 
@@ -466,11 +466,11 @@ bool Slider::draw(int ix, int iy, int iw, int ih, Flags flags, bool slot)
     THIN_DOWN_BOX->draw(slx, sly, slw, slh, style(), flags&INACTIVE|INVISIBLE);
     setcolor(BLACK);
     fillrect(slx+1,sly+1,slw-2,slh-2);
-#if !NO_CLIP_OUT
-    clip_out(slx, sly, slw, slh);
+#if USE_CLIPOUT
+    clipout(slx, sly, slw, slh);
 #endif
   }
-#if NO_CLIP_OUT
+#if !USE_CLIPOUT
   draw_glyph(sglyph, sx, sy, sw, sh, flags); // draw slider in new position
 #endif
   return true;
@@ -598,5 +598,5 @@ Slider::Slider(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.76 2004/08/27 15:07:44 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.77 2004/12/18 19:03:12 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Window.cxx,v 1.23 2004/07/06 05:49:31 spitzak Exp $"
+// "$Id: Fl_Menu_Window.cxx,v 1.24 2004/12/18 19:03:11 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -70,6 +70,7 @@ extern bool fl_overlay; // changes how color(x) works
 
 void MenuWindow::create() {
   set_override();
+  clear_double_buffer();
 #if USE_OVERLAY
   if (overlay() && fl_find_overlay_visual()) {
     XInstallColormap(xdisplay, fl_overlay_colormap);
@@ -118,5 +119,5 @@ MenuWindow::~MenuWindow() {
 }
 
 //
-// End of "$Id: Fl_Menu_Window.cxx,v 1.23 2004/07/06 05:49:31 spitzak Exp $".
+// End of "$Id: Fl_Menu_Window.cxx,v 1.24 2004/12/18 19:03:11 spitzak Exp $".
 //

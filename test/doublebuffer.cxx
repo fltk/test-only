@@ -1,5 +1,5 @@
 //
-// "$Id: doublebuffer.cxx,v 1.14 2004/06/25 19:02:10 xpxqx Exp $"
+// "$Id: doublebuffer.cxx,v 1.15 2004/12/18 19:03:14 spitzak Exp $"
 //
 // Test of double_buffer and overlay of Windows.
 // This demo shows how double buffering helps, by drawing the
@@ -149,6 +149,7 @@ int main(int argc, char** argv) {
 	     "@i;looks@n; faster (even though it really is the same speed "
 	     "or slower)");
   b1.callback(db_cb);
+  if (window.double_buffer()) b1.set();
   CheckButton b2(60+150,y,150,25,"overlay");
   b2.tooltip("Turns on a red overlay in above window. This is redrawn "
 	     "without having to redraw the basic image, so changes to it "
@@ -170,5 +171,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: doublebuffer.cxx,v 1.14 2004/06/25 19:02:10 xpxqx Exp $".
+// End of "$Id: doublebuffer.cxx,v 1.15 2004/12/18 19:03:14 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.188 2004/12/12 22:23:23 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.189 2004/12/18 19:03:08 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -524,8 +524,12 @@ Window* fltk::find(WindowPtr xid)
 {
   CreatedWindow *x;
   for (CreatedWindow **pp = &CreatedWindow::first; (x = *pp); pp = &x->next)
-    if (x->xid == xid) {
-      if (x != CreatedWindow::first) {
+#if USE_X11
+    if (x->xid == xid || x->frontbuffer==xid)
+#else
+    if (x->xid == xid)
+#endif
+      {if (x != CreatedWindow::first) {
 	// make this window be first to speed up searches
 	*pp = x->next;
 	x->next = CreatedWindow::first;
@@ -1140,5 +1144,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.188 2004/12/12 22:23:23 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.189 2004/12/18 19:03:08 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_visual.cxx,v 1.20 2004/07/25 23:22:14 spitzak Exp $"
+// "$Id: Fl_visual.cxx,v 1.21 2004/12/18 19:03:13 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -83,7 +83,7 @@ static int test_visual(XVisualInfo& v, int flags) {
 #endif
 #if USE_XDBE
   if (flags & DOUBLE_BUFFER) {
-    static XdbeScreenVisualInfo *xdbejunk;
+    static XdbeScreenVisualInfo *xdbejunk = 0;
     if (!xdbejunk) {
       int event_base, error_base;
       if (!XdbeQueryExtension(xdisplay, &event_base, &error_base)) return 0;
@@ -102,9 +102,6 @@ static int test_visual(XVisualInfo& v, int flags) {
 }
 
 bool fltk::visual(int flags) {
-#if USE_XDBE == 0
-  if (flags & DOUBLE_BUFFER) return false;
-#endif
   open_display();
   // always use default if possible:
   if (test_visual(*xvisual, flags)) return true;
@@ -148,5 +145,5 @@ bool fltk::visual(int flags) {
 #endif
 
 //
-// End of "$Id: Fl_visual.cxx,v 1.20 2004/07/25 23:22:14 spitzak Exp $".
+// End of "$Id: Fl_visual.cxx,v 1.21 2004/12/18 19:03:13 spitzak Exp $".
 //

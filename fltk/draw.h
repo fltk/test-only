@@ -1,5 +1,5 @@
 //
-// "$Id: draw.h,v 1.11 2004/09/05 21:40:40 spitzak Exp $"
+// "$Id: draw.h,v 1.12 2004/12/18 19:03:02 spitzak Exp $"
 //
 // The fltk drawing library
 //
@@ -56,7 +56,9 @@ FL_API void transform_distance(int& x, int& y);
 /*! \addtogroup clipping
   \{ */
 FL_API void push_clip(int x, int y, int w, int h);
-FL_API void clip_out(int x, int y, int w, int h);
+FL_API void clipout(int x, int y, int w, int h);
+// I got confused about the names. Probably this one will go away:
+inline void clip_out(int x, int y, int w, int h) {fltk::clipout(x,y,w,h);}
 FL_API void pop_clip();
 FL_API void push_no_clip();
 FL_API int not_clipped(int x, int y, int w, int h);
@@ -207,5 +209,5 @@ FL_API int draw_symbol(const char* label, int x,int y,int w,int h, Color);
 #endif
 
 //
-// End of "$Id: draw.h,v 1.11 2004/09/05 21:40:40 spitzak Exp $".
+// End of "$Id: draw.h,v 1.12 2004/12/18 19:03:02 spitzak Exp $".
 //

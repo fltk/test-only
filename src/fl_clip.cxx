@@ -1,5 +1,5 @@
 //
-// "$Id: fl_clip.cxx,v 1.25 2004/06/23 07:17:19 spitzak Exp $"
+// "$Id: fl_clip.cxx,v 1.26 2004/12/18 19:03:14 spitzak Exp $"
 //
 // The fltk graphics clipping stack.  These routines are always
 // linked into an fltk program.
@@ -185,13 +185,15 @@ void fltk::push_clip(int x, int y, int w, int h) {
   fl_restore_clip();
 }
 
-#if !NO_CLIP_OUT
 /*!
   Remove the rectangle from the current clip region, thus making it a
   more complex shape. This does not push the stack, it just replaces
   the top of it.
+
+  Some graphics backends (OpenGL and Cairo, at least) do not support
+  non-rectangular clip regions. This call does nothing on those.
 */
-void fltk::clip_out(int x, int y, int w, int h) {
+void fltk::clipout(int x, int y, int w, int h) {
   if (w <= 0 || h <= 0) return;
   Region current = rstack[rstackptr];
   // current must not be zero, you must push a rectangle first.  I
@@ -216,7 +218,6 @@ void fltk::clip_out(int x, int y, int w, int h) {
 #endif
   fl_restore_clip();
 }
-#endif
 
 /*!
   Pushes an empty clip region on the stack so nothing will be
@@ -389,5 +390,5 @@ int fltk::clip_box(int x,int y,int w,int h, int& X,int& Y,int& W,int& H) {
 }
 
 //
-// End of "$Id: fl_clip.cxx,v 1.25 2004/06/23 07:17:19 spitzak Exp $"
+// End of "$Id: fl_clip.cxx,v 1.26 2004/12/18 19:03:14 spitzak Exp $"
 //
