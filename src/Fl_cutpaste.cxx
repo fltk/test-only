@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_cutpaste.cxx,v 1.8 2000/07/10 07:35:43 spitzak Exp $"
+// "$Id: Fl_cutpaste.cxx,v 1.9 2000/07/13 08:52:44 spitzak Exp $"
 //
 // Cut/paste code for the Fast Light Tool Kit (FLTK).
 //
@@ -37,11 +37,13 @@
 #include <FL/Fl_Window.H>
 #include <FL/x.H>
 #include <string.h>
+//#include <stdio.h>
 
 static char *selection_buffer;
 static int selection_length;
 static int selection_buffer_length;
 static char beenhere;
+static Atom TARGETS;
 
 extern Fl_Widget *fl_selection_requestor; // widget doing request_paste()
 
@@ -79,15 +81,21 @@ static int selection_xevent_handler(int) {
     e.selection = fl_xevent->xselectionrequest.selection;
     e.target = fl_xevent->xselectionrequest.target;
     e.time = fl_xevent->xselectionrequest.time;
-    if (fl_xevent->xselectionrequest.target != XA_STRING || !selection_length) {
-      e.property = 0;
-    } else {
-      e.property = fl_xevent->xselectionrequest.property;
-    }
-    if (e.property) {
+    e.property = fl_xevent->xselectionrequest.property;
+    if (e.target == TARGETS) {
+      Atom a = XA_STRING;
+      XChangeProperty(fl_display, e.requestor, e.property,
+		      XA_ATOM, sizeof(Atom)*8, 0, (unsigned char*)&a,
+		      sizeof(Atom));
+    } else if (e.target == XA_STRING && selection_length) {
       XChangeProperty(fl_display, e.requestor, e.property,
 		      XA_STRING, 8, 0, (unsigned char *)selection_buffer,
 		      selection_length);
+    } else {
+//    char* x = XGetAtomName(fl_display,e.target);
+//    fprintf(stderr,"selection request of %s\n",x);
+//    XFree(x);
+      e.property = 0;
     }
     XSendEvent(fl_display, e.requestor, 0, 0, (XEvent *)&e);}
     return 1;
@@ -98,6 +106,14 @@ static int selection_xevent_handler(int) {
 }
 
 ////////////////////////////////////////////////////////////////
+
+static void setup_crap() {
+  if (!beenhere) {
+    beenhere = 1;
+    TARGETS = XInternAtom(fl_display, "TARGETS", 0);
+    Fl::add_handler(selection_xevent_handler);
+  }
+}
 
 // Call this when a "paste" operation happens:
 void Fl::paste(Fl_Widget &receiver) {
@@ -114,10 +130,7 @@ void Fl::paste(Fl_Widget &receiver) {
   fl_selection_requestor = &receiver;
   XConvertSelection(fl_display, XA_PRIMARY, XA_STRING, XA_PRIMARY,
 		    fl_xid(Fl::first_window()), fl_event_time);
-  if (!beenhere) {
-    Fl::add_handler(selection_xevent_handler);
-    beenhere = 1;
-  }
+  setup_crap();
 }
 
 ////////////////////////////////////////////////////////////////
@@ -135,14 +148,11 @@ void Fl::selection(Fl_Widget &owner, const char *stuff, int len) {
   selection_length = len;
   selection_owner(&owner);
   XSetSelectionOwner(fl_display, XA_PRIMARY, fl_message_window, fl_event_time);
-  if (!beenhere) {
-    Fl::add_handler(selection_xevent_handler);
-    beenhere = 1;
-  }
+  setup_crap();
 }
 
 #endif
 
 //
-// End of "$Id: Fl_cutpaste.cxx,v 1.8 2000/07/10 07:35:43 spitzak Exp $".
+// End of "$Id: Fl_cutpaste.cxx,v 1.9 2000/07/13 08:52:44 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.63 2000/07/10 07:35:43 spitzak Exp $"
+// "$Id: fl_options.cxx,v 1.64 2000/07/13 08:52:44 spitzak Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -53,12 +53,10 @@ extern "C" int access(const char *, int);
 #define PATH_MAX 128
 #endif
 
-const char* fl_startup_theme = 0;
 const char* Fl::scheme_ = 0;
 Fl_Color fl_bg_switch = 0; // set by -bg in Fl_arg.cxx
 
 const char* flconfig = 0;
-static const char* flconfig_section = "default";
 
 /* CET - FIXME - Add DISPLAY specific configuration at some point?
 static int match(const char* s1, const char* s2) {
@@ -90,8 +88,6 @@ static int display_match(const char* s) {
 }
 */
 
-static int theme_handler(int);
-
 extern void fl_get_system_colors();
 
 // one-time startup stuff
@@ -101,53 +97,22 @@ void fl_startup() {
     if (p) flconfig = strdup(p);
   }
 
-  /* CET - FIXME - Add DISPLAY specific configuration at some point?
-  conf_list clist = 0;
-  conf_entry* cent;
-  getconf_sections(flconfig, 0, &clist);
-  for (cent = clist; cent; cent = cent->next) if (display_match(cent->data)) {
-    flconfig_section = strdup(cent->data);
-    break;
-  }
-  conf_list_free(&clist);
-  printf("section: %s\n", flconfig_section); // CET - FIXME
-  */
-
+  fl_get_system_colors();
+  const char* s = Fl::scheme();
   char temp[PATH_MAX];
-  if (Fl::scheme()) Fl::scheme(Fl::scheme());
-  else if (!Fl::getconf("scheme", temp, sizeof(temp))) Fl::scheme(temp);
-  else fl_get_system_colors();
-  if (fl_startup_theme) Fl::theme(fl_startup_theme);
-  Fl::add_handler(theme_handler);
-
-/* CET - FIXME - Fix mousewheel stuff?
-  char temp[80];
-  if (!Fl::getconf("mouse wheel/mode", temp, sizeof(temp)))
-    fl_mousewheel_mode = atoi(temp);
-  if (!Fl::getconf("mouse wheel/delta", temp, sizeof(temp)))
-    fl_mousewheel_sdelta = strtod(temp, 0);
-  if (!Fl::getconf("mouse wheel/axis", temp, sizeof(temp))) {
-    if (!strcasecmp(temp, "x")) fl_mousewheel_delta = &Fl::e_x_delta;
-    if (!strcasecmp(temp, "z")) fl_mousewheel_delta = &Fl::e_z_delta;
-  }
-#ifndef WIN32
-  if (!Fl::getconf("mouse wheel/button 1", temp, sizeof(temp)))
-    fl_mousewheel_up = atoi(temp);
-  if (!Fl::getconf("mouse wheel/button 2", temp, sizeof(temp)))
-    fl_mousewheel_down = atoi(temp);
-#endif
-*/
+  if (!s && !getconf(flconfig, "default/scheme", temp, sizeof(temp))) s = temp;
+  Fl::scheme(s);
 
 }
 
-static Fl_Theme_Handler _theme_handler = 0;
-
-void Fl::theme_handler(Fl_Theme_Handler handler) {
-  _theme_handler = handler;
-}
-
-static int theme_handler(int e) {
-  return _theme_handler ? _theme_handler(e) : 0;
+int Fl::reload_scheme() {
+  Fl_Style::revert();
+  fl_get_system_colors();
+  const char* s = Fl::scheme();
+  char temp[PATH_MAX];
+  if (!s && !getconf(flconfig, "default/scheme", temp, sizeof(temp))) s = temp;
+  Fl::scheme(s);
+  return 0;
 }
 
 static Fl_Color grok_color(const char* cf, const char *colstr) {
@@ -171,45 +136,18 @@ static Fl_Font grok_font(const char* cf, const char* fontstr) {
   long l = strtoul(p, &q, 0);
   if (!*q) return fl_fonts+l;
 
-  static const char* fonts[] = {
-    "helvetica",
-    "helvetica bold",
-    "helvetica italic",
-    "helvetica bold italic",
-    "courier",
-    "courier bold",
-    "courier italic",
-    "courier bold italic",
-    "times",
-    "times bold",
-    "times italic",
-    "times bold italic",
-    "symbol",
-    "screen",
-    "screen bold",
-    "dingbats",
-    0
-  };
-
-  for (int i = 0; fonts[i]; i++)
-    if (!strcasecmp(p, fonts[i])) return fl_fonts + i;
-
-  // not found
-  return 0;
+  return fl_font(p);
 }
 
-
+static int load_theme(const char*);
 
 int Fl::scheme(const char *s) {
-  Fl::scheme_ = s;
-  Fl_Style::revert();
-  if (!s || !strcasecmp(s, "none")) return 0;
 
   char temp[PATH_MAX];
-  strncpy(temp, Fl::scheme(), sizeof(temp));
+  strncpy(temp, s, sizeof(temp));
   const char* p = access(temp, R_OK) ? 0 : temp;
-  if (!p && !conf_is_path_rooted(Fl::scheme())) {
-    snprintf(temp, sizeof(temp), "schemes/%s", Fl::scheme());
+  if (!p && !conf_is_path_rooted(s)) {
+    snprintf(temp, sizeof(temp), "schemes/%s", s);
     p = fl_find_config_file(temp);
   }
 
@@ -222,7 +160,7 @@ int Fl::scheme(const char *s) {
   strncpy(sfile, p, sizeof(sfile));
   if (!::getconf(sfile, "general/themes", temp, sizeof(temp)))
     for (p = strtok(temp, CONF_WHITESPACE); p; p = strtok(NULL, CONF_WHITESPACE))
-      Fl::theme(p);
+      load_theme(p);
   char valstr[80];
   Fl_Color col;
 
@@ -339,7 +277,7 @@ int Fl::scheme(const char *s) {
   return 0;
 }
 
-int Fl::theme(const char *t) {
+static int load_theme(const char *t) {
 // don't try to load themes if not linked to shared libraries
   //#ifdef FL_SHARED
   if (!t) { Fl_Style::revert(); return 0; }
@@ -407,15 +345,8 @@ const char* fl_find_config_file(const char* fn, int cflag) {
   return (cflag || !access(path, R_OK)) ? path : 0;
 }
 
-
-int Fl::getconf(const char *key, char *value, int value_length) {
-  char temp[80];
-  snprintf(temp, sizeof(temp), "%s/%s", flconfig_section, key);
-  return ::getconf(flconfig, temp, value, value_length);
-}
-
 //
-// End of "$Id: fl_options.cxx,v 1.63 2000/07/10 07:35:43 spitzak Exp $".
+// End of "$Id: fl_options.cxx,v 1.64 2000/07/13 08:52:44 spitzak Exp $".
 //
 
 
