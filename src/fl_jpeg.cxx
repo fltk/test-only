@@ -5,7 +5,7 @@
 #include <FL/x.H>
 #include <FL/Fl_Shared_Image.H>
 #include "config.h"
-#ifdef HAVE_JPEG
+#if HAVE_JPEG
 #include <stdio.h>
 extern "C" {
 #include <jpeglib.h>
