@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.cxx,v 1.23 2002/03/26 18:00:34 spitzak Exp $"
+// "$Id: Fl_Double_Window.cxx,v 1.24 2002/05/30 21:06:52 robertk Exp $"
 //
 // Double-buffered window code for the Fast Light Tool Kit (FLTK).
 //
@@ -121,7 +121,10 @@ void Fl_Double_Window::flush(bool eraseoverlay) {
     if (i->region && !(damage() & FL_DAMAGE_ALL)) {
       fl_clip_region(i->region); i->region = 0;
       set_damage(FL_DAMAGE_EXPOSE); draw();
-      if (eraseoverlay || !expose_only) fl_clip_region(0);
+	  // conditional on next line doesn't work right for 
+	  // keyboard focus drawing on Win32 with double-buffered windows.
+	  //if (eraseoverlay || !expose_only) fl_clip_region(0);
+      fl_clip_region(0);
     }
     // restore the graphics context:
     i->make_current();
@@ -176,5 +179,5 @@ Fl_Double_Window::~Fl_Double_Window() {
 }
 
 //
-// End of "$Id: Fl_Double_Window.cxx,v 1.23 2002/03/26 18:00:34 spitzak Exp $".
+// End of "$Id: Fl_Double_Window.cxx,v 1.24 2002/05/30 21:06:52 robertk Exp $".
 //
