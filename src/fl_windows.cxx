@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.6 1999/11/12 17:33:16 carl Exp $"
+// "$Id: fl_windows.cxx,v 1.7 1999/11/12 17:36:37 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -53,7 +53,7 @@ const Fl_Boxtype_ win98_menu_title_box = {
 };
 
 const Fl_Boxtype_ win98_menu_window_box = {
-  fl_frame, "2AARRIIWW", &win98_menu_window_box, &win98_menu_window_box, 2,2,4,4, 1
+  fl_frame, "2AAUUIIXX", &win98_menu_window_box, &win98_menu_window_box, 2,2,4,4, 1
 };
 
 int fl_windows() {
@@ -134,5 +134,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.6 1999/11/12 17:33:16 carl Exp $".
+// End of "$Id: fl_windows.cxx,v 1.7 1999/11/12 17:36:37 carl Exp $".
 //
