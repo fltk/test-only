@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.10.2.6.2.23.2.3 2004/04/06 22:37:23 rokan Exp $"
+# "$Id: Makefile,v 1.10.2.6.2.23.2.4 2004/11/09 01:52:31 rokan Exp $"
 #
 # FLUID makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -75,15 +75,15 @@ depend:	$(CPPFILES)
 include makedepend
 
 install: all
-	echo "Installing FLUID in $(bindir)..."
-	-$(MKDIR) $(bindir)
-	$(CP) $(FLUID) $(bindir)/fluid$(EXEEXT)
-	$(STRIP) $(bindir)/fluid$(EXEEXT)
-	$(bindir)/fltk-config --post $(bindir)/fluid$(EXEEXT)
-	$(CHMOD) 755 $(bindir)/fluid$(EXEEXT)
+	echo "Installing FLUID in $(DESTDIR)$(bindir)..."
+	-$(MKDIR) $(DESTDIR)$(bindir)
+	$(CP) $(FLUID) $(DESTDIR)$(bindir)/fluid$(EXEEXT)
+	$(STRIP) $(DESTDIR)$(bindir)/fluid$(EXEEXT)
+	$(DESTDIR)$(bindir)/fltk-config --post $(DESTDIR)$(bindir)/fluid$(EXEEXT)
+	$(CHMOD) 755 $(DESTDIR)$(bindir)/fluid$(EXEEXT)
 
 uninstall:
-	$(RM) $(bindir)/fluid
+	$(RM) $(DESTDIR)$(bindir)/fluid
 
 #
 # Note: The rebuild target can only be used if you have the original .fl
@@ -97,5 +97,5 @@ rebuild:
 	./fluid -c widget_panel.fl
 
 #
-# End of "$Id: Makefile,v 1.10.2.6.2.23.2.3 2004/04/06 22:37:23 rokan Exp $".
+# End of "$Id: Makefile,v 1.10.2.6.2.23.2.4 2004/11/09 01:52:31 rokan Exp $".
 #

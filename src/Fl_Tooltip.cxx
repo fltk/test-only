@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.38.2.24.2.6 2004/10/04 00:22:07 rokan Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.38.2.24.2.7 2004/11/09 01:52:33 rokan Exp $"
 //
 // Tooltip source file for the Fast Light Tool Kit (FLTK).
 //
@@ -98,12 +98,20 @@ void Fl_TooltipBox::draw() {
 static char recent_tooltip;
 
 static void recent_timeout(void*) {
+#ifdef DEBUG
+  puts("recent_timeout();");
+#endif // DEBUG
+
   recent_tooltip = 0;
 }
 
 static char recursion;
 
 static void tooltip_timeout(void*) {
+#ifdef DEBUG
+  puts("tooltip_timeout();");
+#endif // DEBUG
+
   if (recursion) return;
   recursion = 1;
   if (!tip || !*tip) {
@@ -137,6 +145,7 @@ Fl_Tooltip::enter_(Fl_Widget* w) {
   printf("Fl_Tooltip::enter_(w=%p)\n", w);
   printf("    window=%p\n", window);
 #endif // DEBUG
+
   // find the enclosing group with a tooltip:
   Fl_Widget* tw = w;
   for (;;) {
@@ -148,21 +157,16 @@ Fl_Tooltip::enter_(Fl_Widget* w) {
   enter_area(w, 0, 0, w->w(), w->h(), tw->tooltip());
 }
 
-
-
- 
-
 // Acts as though enter(widget) was done but does not pop up a
 // tooltip.  This is useful to prevent a tooltip from reappearing when
-// a modal overlapping window is deleted. Fltk does this automatically
+// a modal overlapping window is deleted. FLTK does this automatically
 // when you click the mouse button.
 void Fl_Tooltip::current(Fl_Widget* w) {
-//  enter(0);
 #ifdef DEBUG
   printf("Fl_Tooltip::current(w=%p)\n", w);
 #endif // DEBUG
-   
-   exit_(0);
+
+  exit_(0);
   // find the enclosing group with a tooltip:
   Fl_Widget* tw = w;
   for (;;) {
@@ -174,16 +178,16 @@ void Fl_Tooltip::current(Fl_Widget* w) {
   widget_ = w;
 }
 
-// This is called when a widget is destroyed:
+// Hide any visible tooltip.
 void
 Fl_Tooltip::exit_(Fl_Widget *w) {
 #ifdef DEBUG
-   printf("Fl_Tooltip::exit_(w=%p)\n", w);
-   printf("    widget=%p, window=%p\n", widget_, window)
+  printf("Fl_Tooltip::exit_(w=%p)\n", w);
+  printf("    widget=%p, window=%p\n", widget_, window);
 #endif // DEBUG
+
   if (!widget_ || w == window) return;
   widget_ = 0;
-
   Fl::remove_timeout(tooltip_timeout);
   Fl::remove_timeout(recent_timeout);
   if (window) window->hide();
@@ -193,6 +197,10 @@ Fl_Tooltip::exit_(Fl_Widget *w) {
   }
 }
 
+// Get ready to display a tooltip. The widget and the xywh box inside
+// it define an area the tooltip is for, this along with the current
+// mouse position places the tooltip (the mouse is assummed to point
+// inside or near the box).
 void
 Fl_Tooltip::enter_area(Fl_Widget* wid, int x,int y,int w,int h, const char* t)
 {
@@ -222,7 +230,7 @@ Fl_Tooltip::enter_area(Fl_Widget* wid, int x,int y,int w,int h, const char* t)
     // possible fix for the Windows titlebar, it seems to want the
     // window to be destroyed, moving it messes up the parenting:
     if (window) window->hide();
-#endif
+#endif // WIN32
     tooltip_timeout(0);
   } else {
     if (window) window->hide();
@@ -238,7 +246,7 @@ Fl_Tooltip::enter_area(Fl_Widget* wid, int x,int y,int w,int h, const char* t)
 void Fl_Widget::tooltip(const char *tt) {
   static char beenhere = 0;
   if (!beenhere) {
-    beenhere = 1;
+    beenhere          = 1;
     Fl_Tooltip::enter = Fl_Tooltip::enter_;
     Fl_Tooltip::exit  = Fl_Tooltip::exit_;
   }
@@ -246,5 +254,5 @@ void Fl_Widget::tooltip(const char *tt) {
 }
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.38.2.24.2.6 2004/10/04 00:22:07 rokan Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.38.2.24.2.7 2004/11/09 01:52:33 rokan Exp $".
 //

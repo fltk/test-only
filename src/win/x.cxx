@@ -1,5 +1,5 @@
 //
-// "$Id: x.cxx,v 1.1.2.2 2004/06/01 01:13:40 easysw Exp $"
+// "$Id: x.cxx,v 1.1.2.3 2004/11/09 01:52:34 rokan Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,7 @@
 #include <FL/Fl.H>
 #include <FL/x.H>
 #include <FL/Fl_Window.H>
+#include <FL/Enumerations.H>
 #include "../flstring.h"
 #include <stdio.h>
 #include <stdlib.h>
@@ -253,6 +254,7 @@ int fl_wait(double time_to_wait) {
 #endif
   }
 #endif // USE_ASYNC_SELECT
+
 
   fl_unlock_function();
 
@@ -726,10 +728,57 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     if (uMsg == WM_CHAR || uMsg == WM_SYSCHAR) {
       buffer[0] = char(wParam);
       Fl::e_length = 1;
-    } else if (Fl::e_keysym >= FL_KP && Fl::e_keysym <= FL_KP_Last &&
-               (state & FL_NUM_LOCK)) {
-      buffer[0] = Fl::e_keysym-FL_KP;
-      Fl::e_length = 1;
+
+    } else if (Fl::e_keysym >= FL_KP && Fl::e_keysym <= FL_KP_Last) {
+      if (state & FL_NUM_LOCK) {
+        // Convert to regular keypress...
+	buffer[0] = Fl::e_keysym-FL_KP;
+	Fl::e_length = 1;
+      } else {
+        // Convert to special keypress...
+	buffer[0] = 0;
+	Fl::e_length = 0;
+	switch (Fl::e_keysym) {
+	  case FL_KP + '0' :
+	    Fl::e_keysym = FL_Insert;
+	    break;
+	  case FL_KP + '1' :
+	    Fl::e_keysym = FL_End;
+	    break;
+	  case FL_KP + '2' :
+	    Fl::e_keysym = FL_Down;
+	    break;
+	  case FL_KP + '3' :
+	    Fl::e_keysym = FL_Page_Down;
+	    break;
+	  case FL_KP + '4' :
+	    Fl::e_keysym = FL_Left;
+	    break;
+	  case FL_KP + '6' :
+	    Fl::e_keysym = FL_Right;
+	    break;
+	  case FL_KP + '7' :
+	    Fl::e_keysym = FL_Home;
+	    break;
+	  case FL_KP + '8' :
+	    Fl::e_keysym = FL_Up;
+	    break;
+	  case FL_KP + '9' :
+	    Fl::e_keysym = FL_Page_Up;
+	    break;
+	  case FL_KP + '.' :
+	    Fl::e_keysym = FL_Delete;
+	    break;
+	  case FL_KP + '/' :
+	  case FL_KP + '*' :
+	  case FL_KP + '-' :
+	  case FL_KP + '+' :
+	    buffer[0] = Fl::e_keysym-FL_KP;
+	    Fl::e_length = 1;
+	    break;
+	}
+      }
+      
     } else {
       buffer[0] = 0;
       Fl::e_length = 0;
@@ -1196,5 +1245,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: x.cxx,v 1.1.2.2 2004/06/01 01:13:40 easysw Exp $".
+// End of "$Id: x.cxx,v 1.1.2.3 2004/11/09 01:52:34 rokan Exp $".
 //

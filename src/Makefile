@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.18.2.14.2.48.2.10 2004/04/11 22:32:08 easysw Exp $"
+# "$Id: Makefile,v 1.18.2.14.2.48.2.11 2004/11/09 01:52:33 rokan Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -217,7 +217,7 @@ libfltk.sl.$(FL_DSO_MAJOR): $(OBJECTS)
 libfltk.$(FL_DSO_MAJOR).dylib: $(OBJECTS)
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ \
-		-install_name $(libdir)/$@ \
+		-install_name $(DESTDIR)$(libdir)/$@ \
 		$(OBJECTS) $(LDLIBS)
 	-$(RM) libfltk.dylib
 	$(LN) libfltk.$(FL_DSO_MAJOR).dylib libfltk.dylib
@@ -251,7 +251,7 @@ libfltk_forms.sl.$(FL_DSO_MAJOR): $(FLOBJECTS) libfltk.sl.$(FL_DSO_MAJOR)
 libfltk_forms.$(FL_DSO_MAJOR).dylib: $(FLOBJECTS) libfltk.$(FL_DSO_MAJOR).dylib
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ \
-		-install_name $(libdir)/$@ \
+		-install_name $(DESTDIR)$(libdir)/$@ \
 		$(FLOBJECTS) $(LDLIBS) -L. -lfltk
 	-$(RM) libfltk_forms.dylib
 	$(LN) libfltk_forms.$(FL_DSO_MAJOR).dylib libfltk_forms.dylib
@@ -285,7 +285,7 @@ libfltk_gl.sl.$(FL_DSO_MAJOR): $(GLOBJECTS) libfltk.sl.$(FL_DSO_MAJOR)
 libfltk_gl.$(FL_DSO_MAJOR).dylib: $(GLOBJECTS) libfltk.$(FL_DSO_MAJOR).dylib
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ \
-		-install_name $(libdir)/$@ \
+		-install_name $(DESTDIR)$(libdir)/$@ \
 		$(GLOBJECTS) $(GLDLIBS) -L. -lfltk
 	-$(RM) libfltk_gl.dylib
 	$(LN) libfltk_gl.$(FL_DSO_MAJOR).dylib libfltk_gl.dylib
@@ -319,7 +319,7 @@ libfltk_images.sl.$(FL_DSO_MAJOR): $(IMGOBJECTS) libfltk.sl.$(FL_DSO_MAJOR)
 libfltk_images.$(FL_DSO_MAJOR).dylib: $(IMGOBJECTS) libfltk.$(FL_DSO_MAJOR).dylib
 	echo $(DSOCOMMAND) $@ ...
 	$(DSOCOMMAND) $@ \
-		-install_name $(libdir)/$@ \
+		-install_name $(DESTDIR)$(libdir)/$@ \
 		$(IMGOBJECTS) $(LDLIBS) $(IMAGELIBS) -L. -lfltk
 	-$(RM) libfltk_images.dylib
 	$(LN) libfltk_images.$(FL_DSO_MAJOR).dylib libfltk_images.dylib
@@ -424,169 +424,169 @@ install: $(LIBNAME) $(DSONAME) \
 	$(FLLIBNAME) $(FLDSONAME) \
 	$(GLLIBNAME) $(GLDSONAME) \
 	$(IMGLIBNAME) $(IMGDSONAME)
-	echo "Installing libraries in $(libdir)..."
-	-$(MKDIR) $(libdir)
-	$(RM) $(libdir)/$(LIBNAME)
-	-$(CP) $(LIBNAME) $(FLLIBNAME) $(GLLIBNAME) $(IMGLIBNAME) $(libdir)
-	$(RANLIB) $(libdir)/$(LIBNAME)
-	$(RANLIB) $(libdir)/$(FLLIBNAME)
+	echo "Installing libraries in $(DESTDIR)$(libdir)..."
+	-$(MKDIR) $(DESTDIR)$(libdir)
+	$(RM) $(DESTDIR)$(libdir)/$(LIBNAME)
+	-$(CP) $(LIBNAME) $(FLLIBNAME) $(GLLIBNAME) $(IMGLIBNAME) $(DESTDIR)$(libdir)
+	$(RANLIB) $(DESTDIR)$(libdir)/$(LIBNAME)
+	$(RANLIB) $(DESTDIR)$(libdir)/$(FLLIBNAME)
 	if test x$(GLLIBNAME) != x; then \
-		$(RANLIB) $(libdir)/$(GLLIBNAME); \
+		$(RANLIB) $(DESTDIR)$(libdir)/$(GLLIBNAME); \
 	fi
-	$(RANLIB) $(libdir)/$(IMGLIBNAME)
+	$(RANLIB) $(DESTDIR)$(libdir)/$(IMGLIBNAME)
 	if test x$(DSONAME) = xlibfltk.so.$(FL_DSO_MAJOR); then\
-		$(RM) $(libdir)/libfltk.so*;\
-		$(CP) libfltk.so.$(FL_DSO_MAJOR) $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk.so.$(FL_DSO_MAJOR); \
-		$(LN) libfltk.so.$(FL_DSO_MAJOR) $(libdir)/libfltk.so;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk.so*;\
+		$(CP) libfltk.so.$(FL_DSO_MAJOR) $(DESTDIR)$(libdir); \
+		$(CHMOD) 755 $(DESTDIR)$(libdir)/libfltk.so.$(FL_DSO_MAJOR); \
+		$(LN) libfltk.so.$(FL_DSO_MAJOR) $(DESTDIR)$(libdir)/libfltk.so;\
 	fi
 	if test x$(DSONAME) = xlibfltk.sl.$(FL_DSO_MAJOR); then\
-		$(RM) $(libdir)/libfltk.sl*;\
-		$(CP) libfltk.sl.$(FL_DSO_MAJOR) $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk.sl.$(FL_DSO_MAJOR); \
-		$(LN) libfltk.sl.$(FL_DSO_MAJOR) $(libdir)/libfltk.sl;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk.sl*;\
+		$(CP) libfltk.sl.$(FL_DSO_MAJOR) $(DESTDIR)$(libdir); \
+		$(CHMOD) 755 $(DESTDIR)$(libdir)/libfltk.sl.$(FL_DSO_MAJOR); \
+		$(LN) libfltk.sl.$(FL_DSO_MAJOR) $(DESTDIR)$(libdir)/libfltk.sl;\
 	fi
 	if test x$(DSONAME) = xlibfltk.$(FL_DSO_MAJOR).dylib; then\
-		$(RM) $(libdir)/libfltk.*dylib;\
-		$(CP) libfltk.$(FL_DSO_MAJOR).dylib $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk.$(FL_DSO_MAJOR).dylib; \
-		$(LN) libfltk.$(FL_DSO_MAJOR).dylib $(libdir)/libfltk.dylib;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk.*dylib;\
+		$(CP) libfltk.$(FL_DSO_MAJOR).dylib $(DESTDIR)$(libdir); \
+		$(CHMOD) 755 $(DESTDIR)$(libdir)/libfltk.$(FL_DSO_MAJOR).dylib; \
+		$(LN) libfltk.$(FL_DSO_MAJOR).dylib $(DESTDIR)$(libdir)/libfltk.dylib;\
 	fi
 	if test x$(DSONAME) = xlibfltk_s.a; then\
-		$(RM) $(libdir)/libfltk_s.a;\
-		$(CP) libfltk_s.a $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk_s.a; \
+		$(RM) $(DESTDIR)$(libdir)/libfltk_s.a;\
+		$(CP) libfltk_s.a $(DESTDIR)$(libdir); \
+		$(CHMOD) 755 $(DESTDIR)$(libdir)/libfltk_s.a; \
 	fi
 	if test x$(FLDSONAME) = xlibfltk_forms.so.$(FL_DSO_MAJOR); then\
-		$(RM) $(libdir)/libfltk_forms.so*;\
-		$(CP) libfltk_forms.so.$(FL_DSO_MAJOR) $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk_forms.so.$(FL_DSO_MAJOR); \
-		$(LN) libfltk_forms.so.$(FL_DSO_MAJOR) $(libdir)/libfltk_forms.so;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_forms.so*;\
+		$(CP) libfltk_forms.so.$(FL_DSO_MAJOR) $(DESTDIR)$(libdir); \
+		$(CHMOD) 755 $(DESTDIR)$(libdir)/libfltk_forms.so.$(FL_DSO_MAJOR); \
+		$(LN) libfltk_forms.so.$(FL_DSO_MAJOR) $(DESTDIR)$(libdir)/libfltk_forms.so;\
 	fi
 	if test x$(FLDSONAME) = xlibfltk_forms.sl.$(FL_DSO_MAJOR); then\
-		$(RM) $(libdir)/libfltk_forms.sl*;\
-		$(CP) libfltk_forms.sl.$(FL_DSO_MAJOR) $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk_forms.sl.$(FL_DSO_MAJOR); \
-		$(LN) libfltk_forms.sl.$(FL_DSO_MAJOR) $(libdir)/libfltk_forms.sl;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_forms.sl*;\
+		$(CP) libfltk_forms.sl.$(FL_DSO_MAJOR) $(DESTDIR)$(libdir); \
+		$(CHMOD) 755 $(DESTDIR)$(libdir)/libfltk_forms.sl.$(FL_DSO_MAJOR); \
+		$(LN) libfltk_forms.sl.$(FL_DSO_MAJOR) $(DESTDIR)$(libdir)/libfltk_forms.sl;\
 	fi
 	if test x$(FLDSONAME) = xlibfltk_forms.$(FL_DSO_MAJOR).dylib; then\
-		$(RM) $(libdir)/libfltk_forms.*dylib;\
-		$(CP) libfltk_forms.$(FL_DSO_MAJOR).dylib $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk_forms.$(FL_DSO_MAJOR).dylib; \
-		$(LN) libfltk_forms.$(FL_DSO_MAJOR).dylib $(libdir)/libfltk_forms.dylib;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_forms.*dylib;\
+		$(CP) libfltk_forms.$(FL_DSO_MAJOR).dylib $(DESTDIR)$(libdir); \
+		$(CHMOD) 755 $(DESTDIR)$(libdir)/libfltk_forms.$(FL_DSO_MAJOR).dylib; \
+		$(LN) libfltk_forms.$(FL_DSO_MAJOR).dylib $(DESTDIR)$(libdir)/libfltk_forms.dylib;\
 	fi
 	if test x$(FLDSONAME) = xlibfltk_forms_s.a; then\
-		$(RM) $(libdir)/libfltk_forms_s.a;\
-		$(CP) libfltk_forms_s.a $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk_forms.a; \
+		$(RM) $(DESTDIR)$(libdir)/libfltk_forms_s.a;\
+		$(CP) libfltk_forms_s.a $(DESTDIR)$(libdir); \
+		$(CHMOD) 755 $(DESTDIR)$(libdir)/libfltk_forms.a; \
 	fi
 	if test x$(GLDSONAME) = xlibfltk_gl.so.$(FL_DSO_MAJOR); then\
-		$(RM) $(libdir)/libfltk_gl.so*;\
-		$(CP) libfltk_gl.so.$(FL_DSO_MAJOR) $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk_gl.so.$(FL_DSO_MAJOR); \
-		$(LN) libfltk_gl.so.$(FL_DSO_MAJOR) $(libdir)/libfltk_gl.so;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_gl.so*;\
+		$(CP) libfltk_gl.so.$(FL_DSO_MAJOR) $(DESTDIR)$(libdir); \
+		$(CHMOD) 755 $(DESTDIR)$(libdir)/libfltk_gl.so.$(FL_DSO_MAJOR); \
+		$(LN) libfltk_gl.so.$(FL_DSO_MAJOR) $(DESTDIR)$(libdir)/libfltk_gl.so;\
 	fi
 	if test x$(GLDSONAME) = xlibfltk_gl.sl.$(FL_DSO_MAJOR); then\
-		$(RM) $(libdir)/libfltk_gl.sl*;\
-		$(CP) libfltk_gl.sl.$(FL_DSO_MAJOR) $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk_gl.sl.$(FL_DSO_MAJOR); \
-		$(LN) libfltk_gl.sl.$(FL_DSO_MAJOR) $(libdir)/libfltk_gl.sl;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_gl.sl*;\
+		$(CP) libfltk_gl.sl.$(FL_DSO_MAJOR) $(DESTDIR)$(libdir); \
+		$(CHMOD) 755 $(DESTDIR)$(libdir)/libfltk_gl.sl.$(FL_DSO_MAJOR); \
+		$(LN) libfltk_gl.sl.$(FL_DSO_MAJOR) $(DESTDIR)$(libdir)/libfltk_gl.sl;\
 	fi
 	if test x$(GLDSONAME) = xlibfltk_gl.$(FL_DSO_MAJOR).dylib; then\
-		$(RM) $(libdir)/libfltk_gl.*dylib;\
-		$(CP) libfltk_gl.$(FL_DSO_MAJOR).dylib $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk_gl.$(FL_DSO_MAJOR).dylib; \
-		$(LN) libfltk_gl.$(FL_DSO_MAJOR).dylib $(libdir)/libfltk_gl.dylib;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_gl.*dylib;\
+		$(CP) libfltk_gl.$(FL_DSO_MAJOR).dylib $(DESTDIR)$(libdir); \
+		$(CHMOD) 755 $(DESTDIR)$(libdir)/libfltk_gl.$(FL_DSO_MAJOR).dylib; \
+		$(LN) libfltk_gl.$(FL_DSO_MAJOR).dylib $(DESTDIR)$(libdir)/libfltk_gl.dylib;\
 	fi
 	if test x$(GLDSONAME) = xlibfltk_gl_s.a; then\
-		$(RM) $(libdir)/libfltk_gl_s.a;\
-		$(CP) libfltk_gl_s.a $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk_gl.a; \
+		$(RM) $(DESTDIR)$(libdir)/libfltk_gl_s.a;\
+		$(CP) libfltk_gl_s.a $(DESTDIR)$(libdir); \
+		$(CHMOD) 755 $(DESTDIR)$(libdir)/libfltk_gl.a; \
 	fi
 	if test x$(IMGDSONAME) = xlibfltk_images.so.$(FL_DSO_MAJOR); then\
-		$(RM) $(libdir)/libfltk_images.so*;\
-		$(CP) libfltk_images.so.$(FL_DSO_MAJOR) $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk_images.so.$(FL_DSO_MAJOR); \
-		$(LN) libfltk_images.so.$(FL_DSO_MAJOR) $(libdir)/libfltk_images.so;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_images.so*;\
+		$(CP) libfltk_images.so.$(FL_DSO_MAJOR) $(DESTDIR)$(libdir); \
+		$(CHMOD) 755 $(DESTDIR)$(libdir)/libfltk_images.so.$(FL_DSO_MAJOR); \
+		$(LN) libfltk_images.so.$(FL_DSO_MAJOR) $(DESTDIR)$(libdir)/libfltk_images.so;\
 	fi
 	if test x$(IMGDSONAME) = xlibfltk_images.sl.$(FL_DSO_MAJOR); then\
-		$(RM) $(libdir)/libfltk_images.sl*;\
-		$(CP) libfltk_images.sl.$(FL_DSO_MAJOR) $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk_images.sl.$(FL_DSO_MAJOR); \
-		$(LN) libfltk_images.sl.$(FL_DSO_MAJOR) $(libdir)/libfltk_images.sl;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_images.sl*;\
+		$(CP) libfltk_images.sl.$(FL_DSO_MAJOR) $(DESTDIR)$(libdir); \
+		$(CHMOD) 755 $(DESTDIR)$(libdir)/libfltk_images.sl.$(FL_DSO_MAJOR); \
+		$(LN) libfltk_images.sl.$(FL_DSO_MAJOR) $(DESTDIR)$(libdir)/libfltk_images.sl;\
 	fi
 	if test x$(IMGDSONAME) = xlibfltk_images.$(FL_DSO_MAJOR).dylib; then\
-		$(RM) $(libdir)/libfltk_images.*dylib;\
-		$(CP) libfltk_images.$(FL_DSO_MAJOR).dylib $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk_images.$(FL_DSO_MAJOR).dylib; \
-		$(LN) libfltk_images.$(FL_DSO_MAJOR).dylib $(libdir)/libfltk_images.dylib;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_images.*dylib;\
+		$(CP) libfltk_images.$(FL_DSO_MAJOR).dylib $(DESTDIR)$(libdir); \
+		$(CHMOD) 755 $(DESTDIR)$(libdir)/libfltk_images.$(FL_DSO_MAJOR).dylib; \
+		$(LN) libfltk_images.$(FL_DSO_MAJOR).dylib $(DESTDIR)$(libdir)/libfltk_images.dylib;\
 	fi
 	if test x$(IMGDSONAME) = xlibfltk_images_s.a; then\
-		$(RM) $(libdir)/libfltk_images_s.a;\
-		$(CP) libfltk_images_s.a $(libdir); \
-		$(CHMOD) 755 $(libdir)/libfltk_images.a; \
+		$(RM) $(DESTDIR)$(libdir)/libfltk_images_s.a;\
+		$(CP) libfltk_images_s.a $(DESTDIR)$(libdir); \
+		$(CHMOD) 755 $(DESTDIR)$(libdir)/libfltk_images.a; \
 	fi
 
 uninstall:
 	echo "Uninstalling libraries..."
-	$(RM) $(libdir)/$(LIBNAME)
+	$(RM) $(DESTDIR)$(libdir)/$(LIBNAME)
 	if test x$(DSONAME) = xlibfltk.so.$(FL_DSO_MAJOR); then\
-		$(RM) $(libdir)/libfltk.so*;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk.so*;\
 	fi
 	if test x$(DSONAME) = xlibfltk.sl.$(FL_DSO_MAJOR); then\
-		$(RM) $(libdir)/libfltk.sl*;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk.sl*;\
 	fi
 	if test x$(DSONAME) = xlibfltk.$(FL_DSO_MAJOR).dylib; then\
-		$(RM) $(libdir)/libfltk.*dylib;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk.*dylib;\
 	fi
 	if test x$(DSONAME) = xlibfltk_s.a; then\
-		$(RM) $(libdir)/libfltk_s.a;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_s.a;\
 	fi
-	$(RM) $(libdir)/$(FLLIBNAME);
+	$(RM) $(DESTDIR)$(libdir)/$(FLLIBNAME);
 	if test x$(FLDSONAME) = xlibfltk_forms.so.$(FL_DSO_MAJOR); then\
-		$(RM) $(libdir)/libfltk_forms.so*;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_forms.so*;\
 	fi
 	if test x$(FLDSONAME) = xlibfltk_forms.sl.$(FL_DSO_MAJOR); then\
-		$(RM) $(libdir)/libfltk_forms.sl*;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_forms.sl*;\
 	fi
 	if test x$(FLDSONAME) = xlibfltk_forms.$(FL_DSO_MAJOR).dylib; then\
-		$(RM) $(libdir)/libfltk_forms.*dylib;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_forms.*dylib;\
 	fi
 	if test x$(FLDSONAME) = xlibfltk_forms_s.a; then\
-		$(RM) $(libdir)/libfltk_forms_s.a;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_forms_s.a;\
 	fi
 	if test x$(GLLIBNAME) != x; then\
-		$(RM) $(libdir)/$(GLLIBNAME);\
+		$(RM) $(DESTDIR)$(libdir)/$(GLLIBNAME);\
 	fi
 	if test x$(GLDSONAME) = xlibfltk_gl.so.$(FL_DSO_MAJOR); then\
-		$(RM) $(libdir)/libfltk_gl.so*;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_gl.so*;\
 	fi
 	if test x$(GLDSONAME) = xlibfltk_gl.sl.$(FL_DSO_MAJOR); then\
-		$(RM) $(libdir)/libfltk_gl.sl*;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_gl.sl*;\
 	fi
 	if test x$(GLDSONAME) = xlibfltk_gl.$(FL_DSO_MAJOR).dylib; then\
-		$(RM) $(libdir)/libfltk_gl.*dylib;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_gl.*dylib;\
 	fi
 	if test x$(GLDSONAME) = xlibfltk_gl_s.a; then\
-		$(RM) $(libdir)/libfltk_gl_s.a;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_gl_s.a;\
 	fi
 	if test x$(IMGLIBNAME) != x; then\
-		$(RM) $(libdir)/$(IMGLIBNAME);\
+		$(RM) $(DESTDIR)$(libdir)/$(IMGLIBNAME);\
 	fi
 	if test x$(IMGDSONAME) = xlibfltk_images.so.$(FL_DSO_MAJOR); then\
-		$(RM) $(libdir)/libfltk_images.so*;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_images.so*;\
 	fi
 	if test x$(IMGDSONAME) = xlibfltk_images.sl.$(FL_DSO_MAJOR); then\
-		$(RM) $(libdir)/libfltk_images.sl*;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_images.sl*;\
 	fi
 	if test x$(IMGDSONAME) = xlibfltk_images.$(FL_DSO_MAJOR).dylib; then\
-		$(RM) $(libdir)/libfltk_images.*dylib;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_images.*dylib;\
 	fi
 	if test x$(IMGDSONAME) = xlibfltk_images_s.a; then\
-		$(RM) $(libdir)/libfltk_images_s.a;\
+		$(RM) $(DESTDIR)$(libdir)/libfltk_images_s.a;\
 	fi
 
 
 #
-# End of "$Id: Makefile,v 1.18.2.14.2.48.2.10 2004/04/11 22:32:08 easysw Exp $".
+# End of "$Id: Makefile,v 1.18.2.14.2.48.2.11 2004/11/09 01:52:33 rokan Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.18.2.12.2.19.2.10 2004/10/25 20:08:32 rokan Exp $"
+// "$Id: Fl_Menu.cxx,v 1.18.2.12.2.19.2.11 2004/11/09 01:52:32 rokan Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -791,5 +791,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.18.2.12.2.19.2.10 2004/10/25 20:08:32 rokan Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.18.2.12.2.19.2.11 2004/11/09 01:52:32 rokan Exp $".
 //

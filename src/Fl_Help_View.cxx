@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Help_View.cxx,v 1.1.2.43.2.10 2004/10/04 00:22:07 rokan Exp $"
+// "$Id: Fl_Help_View.cxx,v 1.1.2.43.2.11 2004/11/09 01:52:32 rokan Exp $"
 //
 // Fl_Help_View widget routines.
 //
@@ -1539,11 +1539,13 @@ Fl_Help_View::format()
 
       xx += ww;
     }
+
     do_align(block, line, xx, newalign, links);
 
     block->end = ptr;
     size_      = yy + hh;
   }
+
 
   if (ntargets_ > 1)
     qsort(targets_, ntargets_, sizeof(Fl_Help_Target),
@@ -2122,52 +2124,49 @@ Fl_Color				// O - Color value
 Fl_Help_View::get_color(const char *n,	// I - Color name
                         Fl_Color   c)	// I - Default color value
 {
-  int   i;                              // Looping var
+  int	i;				// Looping var
   int	rgb, r, g, b;			// RGB values
-
-  static const struct {                 // Color name table
-     const char *name;
-     int r, g, b;
-   } colors[] = {
-  	     { "black",          0x00, 0x00, 0x00 },
-  	     { "red",            0xff, 0x00, 0x00 },
-  	     { "green",          0x00, 0x80, 0x00 },
-  	     { "yellow",         0xff, 0xff, 0x00 },
-  	     { "blue",           0x00, 0x00, 0xff },
-  	     { "magenta",        0xff, 0x00, 0xff },
-  	     { "fuchsia",        0xff, 0x00, 0xff },
-  	     { "cyan",           0x00, 0xff, 0xff },
-  	     { "aqua",           0x00, 0xff, 0xff },
-  	     { "white",          0xff, 0xff, 0xff },
-  	     { "gray",           0x80, 0x80, 0x80 },
-  	     { "grey",           0x80, 0x80, 0x80 },
-  	     { "lime",           0x00, 0xff, 0x00 },
-  	     { "maroon",         0x80, 0x00, 0x00 },
-  	     { "navy",           0x00, 0x00, 0x80 },
-  	     { "olive",          0x80, 0x80, 0x00 },
-  	     { "purple",         0x80, 0x00, 0x80 },
-  	     { "silver",         0xc0, 0xc0, 0xc0 },
-  	     { "teal",           0x00, 0x80, 0x80 }
+  static const struct {			// Color name table
+    const char *name;
+    int r, g, b;
+  }	colors[] = {
+    { "black",		0x00, 0x00, 0x00 },
+    { "red",		0xff, 0x00, 0x00 },
+    { "green",		0x00, 0x80, 0x00 },
+    { "yellow",		0xff, 0xff, 0x00 },
+    { "blue",		0x00, 0x00, 0xff },
+    { "magenta",	0xff, 0x00, 0xff },
+    { "fuchsia",	0xff, 0x00, 0xff },
+    { "cyan",		0x00, 0xff, 0xff },
+    { "aqua",		0x00, 0xff, 0xff },
+    { "white",		0xff, 0xff, 0xff },
+    { "gray",		0x80, 0x80, 0x80 },
+    { "grey",		0x80, 0x80, 0x80 },
+    { "lime",		0x00, 0xff, 0x00 },
+    { "maroon",		0x80, 0x00, 0x00 },
+    { "navy",		0x00, 0x00, 0x80 },
+    { "olive",		0x80, 0x80, 0x00 },
+    { "purple",		0x80, 0x00, 0x80 },
+    { "silver",		0xc0, 0xc0, 0xc0 },
+    { "teal",		0x00, 0x80, 0x80 }
   };
 
 
-  if (!n || !n[0])
-    return (c);
+  if (!n || !n[0]) return c;
 
-  if (n[0] == '#')
-  {
+  if (n[0] == '#') {
     // Do hex color lookup
     rgb = strtol(n + 1, NULL, 16);
+
     if (strlen(n) > 4) {
       r = rgb >> 16;
       g = (rgb >> 8) & 255;
       b = rgb & 255;
     } else {
-  	  r = (rgb >> 8) * 17;
-  	  g = ((rgb >> 4) & 15) * 17;
-  	  b = (rgb & 15) * 17;
-  	}
-
+      r = (rgb >> 8) * 17;
+      g = ((rgb >> 4) & 15) * 17;
+      b = (rgb & 15) * 17;
+    }
     return (fl_rgb_color((uchar)r, (uchar)g, (uchar)b));
   } else {
     for (i = 0; i < (int)(sizeof(colors) / sizeof(colors[0])); i ++)
@@ -2802,5 +2801,5 @@ hscrollbar_callback(Fl_Widget *s, void *)
 
 
 //
-// End of "$Id: Fl_Help_View.cxx,v 1.1.2.43.2.10 2004/10/04 00:22:07 rokan Exp $".
+// End of "$Id: Fl_Help_View.cxx,v 1.1.2.43.2.11 2004/11/09 01:52:32 rokan Exp $".
 //

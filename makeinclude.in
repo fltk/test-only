@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.7.2.11.2.23.2.11 2004/07/28 05:25:35 matthiaswm Exp $"
+# "$Id: makeinclude.in,v 1.7.2.11.2.23.2.12 2004/11/09 01:52:30 rokan Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 #
@@ -52,8 +52,8 @@ MAKEDEPEND	= @MAKEDEPEND@
 
 # flags for C++ compiler:
 OPTIM		= @OPTIM@
-CFLAGS		= $(OPTIM) @CFLAGS@
-CXXFLAGS	= $(OPTIM) @CXXFLAGS@
+CFLAGS		= $(OPTIM) @CPPFLAGS@ @CFLAGS@
+CXXFLAGS	= $(OPTIM) @CPPFLAGS@ @CXXFLAGS@
 
 # program to make the archive:
 LIBNAME		= @LIBNAME@
@@ -149,5 +149,5 @@ CAT3EXT		= @CAT3EXT@
 	mv t.z $@
 
 #
-# End of "$Id: makeinclude.in,v 1.7.2.11.2.23.2.11 2004/07/28 05:25:35 matthiaswm Exp $".
+# End of "$Id: makeinclude.in,v 1.7.2.11.2.23.2.12 2004/11/09 01:52:30 rokan Exp $".
 #
