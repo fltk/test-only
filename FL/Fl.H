@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.23 1999/10/27 01:21:06 vincent Exp $"
+// "$Id: Fl.H,v 1.24 1999/10/27 08:40:50 bill Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -34,9 +34,6 @@
 
 class Fl_Widget;
 class Fl_Window;
-
-typedef unsigned long int Fl_Thread;
-typedef void* Fl_Mutex;
 
 class FL_API Fl {
   Fl() {}; // no constructor!
@@ -197,6 +194,11 @@ public:
 #endif
 
   // Mutltithreading support
+#if 1 // Bill Spitzak's simpler version in Fl_lock.cxx
+  static void lock();
+  static void unlock();
+  static void awake();
+#else
   static int thread_filedes[2];
   static void* thread_message;
   static Fl_Mutex main_lock;
@@ -235,11 +237,12 @@ public:
   // time, then several call to wait() in the the main thread should
   // let the user read each message ...
   static int awake(void* message = 0);	
+#endif
 
 };
 
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.23 1999/10/27 01:21:06 vincent Exp $".
+// End of "$Id: Fl.H,v 1.24 1999/10/27 08:40:50 bill Exp $".
 //

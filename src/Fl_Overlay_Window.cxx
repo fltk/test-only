@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Overlay_Window.cxx,v 1.11 1999/09/14 07:17:23 bill Exp $"
+// "$Id: Fl_Overlay_Window.cxx,v 1.12 1999/10/27 08:40:57 bill Exp $"
 //
 // Overlay window code for the Fast Light Tool Kit (FLTK).
 //
@@ -73,7 +73,7 @@ class _Fl_Overlay : public Fl_Window {
   void create();
 public:
   _Fl_Overlay(int x, int y, int w, int h) :
-    Fl_Window(x,y,w,h) {deactivate();}
+    Fl_Window(x,y,w,h) {set_flag(FL_INACTIVE);}
 };
 
 int Fl_Overlay_Window::can_do_overlay() {
@@ -125,5 +125,5 @@ void Fl_Overlay_Window::redraw_overlay() {
 #endif
 
 //
-// End of "$Id: Fl_Overlay_Window.cxx,v 1.11 1999/09/14 07:17:23 bill Exp $".
+// End of "$Id: Fl_Overlay_Window.cxx,v 1.12 1999/10/27 08:40:57 bill Exp $".
 //

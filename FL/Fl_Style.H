@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.H,v 1.5 1999/10/17 20:40:11 vincent Exp $"
+// "$Id: Fl_Style.H,v 1.6 1999/10/27 08:40:50 bill Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -86,12 +86,17 @@ struct FL_API Fl_Style {
 };
 
 // Create a global object of this type with correct parameter to define
-// a new style class. See example at the end in Fl_Input.cxx.
+// a new style class. See example at the end in Fl_Input.cxx.  Plugins can
+// search this to find the styles used by a program:
 class FL_API Fl_Style_Definer {
 public:
-  Fl_Style_Definer(char* name, Fl_Style& style);
+  const char* name;
+  Fl_Style* style;
+  Fl_Style_Definer* next;
+  static Fl_Style_Definer* first;
+  Fl_Style_Definer(char* n, Fl_Style& s) : name(n), style(&s), next(first) {
+    first = this;}
 };
-
 
 void fl_glyph(int, int,int,int,int, Fl_Color, Fl_Flags);
 
@@ -110,5 +115,5 @@ enum {	// glyph types
 #endif
 
 //
-// End of "$Id: Fl_Style.H,v 1.5 1999/10/17 20:40:11 vincent Exp $".
+// End of "$Id: Fl_Style.H,v 1.6 1999/10/27 08:40:50 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_Plugins.cxx,v 1.8 1999/10/25 21:12:11 mike Exp $"
+// "$Id: Fl_Style_Plugins.cxx,v 1.9 1999/10/27 08:40:58 bill Exp $"
 //
 // Style definition and plugin support
 //
@@ -38,6 +38,7 @@ int snprintf(char* str, size_t size, const char* fmt, ...);
 #endif
 
 #include <FL/dirent.h>
+#include <stdio.h>
 
 static bool theme = 0, loaded = 0;
 
@@ -49,6 +50,7 @@ static void ReadPlugin(char* s, const char* location, char* ext, char* func)
   if(!strcmp(s+strlen(s)-strlen(ext), ext)) {
     char s2[256];
     snprintf(s2, 256, "%s%s", location, s);
+    printf("ReadPlugin '%s'\n", s2);
     handle = FLDLopen(s2 );
 
     if(handle) {
@@ -71,6 +73,7 @@ static void ReadPlugin(char* s, const char* location, char* ext, char* func)
 
 static void ReadPlugins(const char* location, char* ext, char* func)
 {
+  printf("ReadPlugins '%s' '%s' '%s'\n", location, ext, func);
   dirent **d = 0;
   int n = filename_list(location, &d);
 
@@ -204,5 +207,5 @@ Fl_Color fl_parse_color(char*&s)
 void fl_use_image_in_style() { Fl_Shared_Image::get(0,0); }
 
 //
-// End of "$Id: Fl_Style_Plugins.cxx,v 1.8 1999/10/25 21:12:11 mike Exp $".
+// End of "$Id: Fl_Style_Plugins.cxx,v 1.9 1999/10/27 08:40:58 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.48 1999/10/26 15:43:11 mike Exp $"
+// "$Id: Fl.cxx,v 1.49 1999/10/27 08:40:52 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -133,7 +133,7 @@ void Fl::flush() {
     for (Fl_X* x = Fl_X::first; x; x = x->next) {
       if (x->wait_for_expose) {damage_ = 1; continue;}
       Fl_Window* w = x->w;
-      if (!w->visible()) continue;
+      if (!w->visible_r()) continue;
       while (w->damage() & FL_DAMAGE_LAYOUT) w->layout();
       if (w->damage()) {w->flush(); w->clear_damage();}
     }
@@ -606,23 +606,13 @@ Fl_Window::~Fl_Window() {
 
 extern const Fl_Window* fl_modal_for; // used by Fl_Window::create
 
-#include <FL/Fl_Style_Util.H>
-const char* fl_plugins_user_location;
-
 void Fl_Window::show() {
-  static bool plugins_loaded = 0;
   if (parent()) {
     set_visible();
     handle(FL_SHOW);
   } else if (!i) {
     Fl_Group::current(0); // get rid of very common user bug: forgot end()
-#ifndef WIN32
     fl_open_display();
-#endif
-    if (!plugins_loaded) {
-      fl_read_style_plugins(fl_plugins_user_location);
-      plugins_loaded = 1;
-    }
     // back compatability with older modal() and non_modal() flags:
     if (non_modal() && !fl_modal_for) {
       fl_modal_for = Fl::first_window();
@@ -804,5 +794,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.48 1999/10/26 15:43:11 mike Exp $".
+// End of "$Id: Fl.cxx,v 1.49 1999/10/27 08:40:52 bill Exp $".
 //

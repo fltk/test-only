@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.28 1999/10/27 01:21:04 vincent Exp $"
+ * "$Id: configh.in,v 1.29 1999/10/27 08:40:48 bill Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -28,44 +28,6 @@
 #include <sys/types.h>
 
 /*
- * FL_DEFAULT_STYLE:
- *
- * The default style for applications; normally we default to the
- * Microsoft Windows style, which also looks a lot like GTK, Qt, etc.
- *
- * You can change this by defining FL_DEFAULT_STYLE to one of the
- * following:
- *
- *    FL_WINDOWS_STYLE  - A style that looks like Microsoft Windows
- *    FL_MOTIF_STYLE    - A style that looks like standard CDE/Motif
- *    FL_SGI_STYLE      - A style that looks like the SGI "Indigo Magic"
- *                        version of Motif.
- *
- * This really doesn't do anything yet except change sliders - CET
- *
- */
-
-#define FL_DEFAULT_STYLE FL_WINDOWS_STYLE
-/*#define FL_DEFAULT_STYLE FL_MOTIF_STYLE*/
-/*#define FL_DEFAULT_STYLE FL_SGI_STYLE*/
-
-/*
- * BORDER_WIDTH:
- *
- * Thickness of FL_UP_BOX and FL_DOWN_BOX.  Current 1,2, and 3 are
- * supported.
- *
- * 3 is the historic FLTK look.
- * 2 is the default and looks like Microsoft Windows, KDE, and Qt.
- * 1 is a plausible future evolution...
- *
- * Note that this may be simulated at runtime by redefining the boxtypes
- * using Fl::set_boxtype().
- */
-
-#define BORDER_WIDTH 3
-
-/*
  * HAVE_GL:
  *
  * Do you have OpenGL? Set this to 0 if you don't have or plan to use
@@ -86,7 +48,8 @@
 /*
  * HAVE_XDBE:
  *
- * Do we have the X double-buffer extension?
+ * Do we have the X double-buffer extension?  Turning this on will
+ * make the list_visuals program produce more information.
  */
 
 #define HAVE_XDBE 0
@@ -94,13 +57,10 @@
 /*
  * USE_XDBE:
  *
- * Actually try to use the double-buffer extension?  Set this to zero
- * disable use of XDBE without breaking the list_visuals program.
- * This is now zero by default, as XDBE is broken on pretty much 
- * every system, with the newest versions of Irix having broken it
- * as well.  I think it is suffering from software rot, since nobody
- * uses it...  Reliable hardware double buffering can only be had by
- * using OpenGL, same as Windoze.
+ * Actually try to use the double-buffer extension?
+ * You can try this, it may speed up Fl_Double_Window.  However we have
+ * found most (all?) X implementations to be broken, or at least I
+ * don't understand the documentation, or something...
  */
 
 #define USE_XDBE 0
@@ -111,7 +71,7 @@
  * Use the X overlay extension?  FLTK will try to use an overlay
  * visual for Fl_Overlay_Window, the Gl_Window overlay, and for the
  * menus.  Setting this to zero will remove a substantial amount of
- * code from FLTK.  Overlays have only been tested on SGI servers!
+ * code from FLTK.  Overlays have only been tested on Irix!
  */
 
 #define HAVE_OVERLAY 0
@@ -241,6 +201,8 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 /*
  * HAVE_PTHREAD
  *
+ * Do we have MIT pthread
+ *
  * Do we have POSIX threads?
  */
   
@@ -257,5 +219,5 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define FLTK_LIBDIR ""
 
 /*
- * End of "$Id: configh.in,v 1.28 1999/10/27 01:21:04 vincent Exp $".
+ * End of "$Id: configh.in,v 1.29 1999/10/27 08:40:48 bill Exp $".
  */

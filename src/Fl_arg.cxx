@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.12 1999/10/11 01:00:29 vincent Exp $"
+// "$Id: Fl_arg.cxx,v 1.13 1999/10/27 08:41:00 bill Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,6 @@
 #include <FL/Fl_Window.H>
 #include <FL/filename.H>
 #include <FL/fl_draw.H>
-#include <FL/Fl_Style_Util.H>
 #include <ctype.h>
 #include <string.h>
 
@@ -57,12 +56,12 @@ static int match(const char *a, const char *match, int atleast = 1) {
 extern bool fl_show_iconic; // in Fl_x.C
 static char arg_called;
 static char return_i;
-static const char *name;
-static const char *geometry;
-static const char *title;
-static const char *fg = 0;
-static const char *bg = 0;
-static const char *bg2 = 0;
+static const char* name;
+static const char* geometry;
+static const char* fg = 0;
+static const char* bg = 0;
+static const char* bg2 = 0;
+extern const char* fl_theme;
 
 #ifndef WIN32
 #define COLOR_WINDOW 0
@@ -125,9 +124,6 @@ int Fl::arg(int argc, char **argv, int &i) {
     Fl::display(v);
 #endif
 
-  } else if (match(s, "title")) {
-    title = v;
-
   } else if (match(s, "name")) {
     name = v;
 
@@ -140,8 +136,8 @@ int Fl::arg(int argc, char **argv, int &i) {
   } else if (match(s, "fg") || match(s, "foreground")) {
     fg = v;
 
-/*  } else if (match(s, "theme")) {
-    fl_plugins_user_location = v;*/
+  } else if (match(s, "theme")) {
+    fl_theme = v;
 
   } else return 0; // unrecognized
 
@@ -198,9 +194,8 @@ void Fl_Window::show(int argc, char **argv) {
     }
   }
 
-  if (name) {xclass(name); name = 0;}
-  else if (!xclass()) xclass(filename_name(argv[0]));
-  if (title) {label(title); title = 0;}
+  if (!xclass()) xclass(filename_name(argv[0]));
+  if (name) {label(name); name = 0;}
   else if (!label()) label(xclass());
   show();
 
@@ -230,8 +225,8 @@ static const char * const helpmsg =
 "options are:\n"
 " -d[isplay] host:n.n\n"
 " -g[eometry] WxH+X+Y\n"
-" -t[itle] windowtitle\n"
-" -n[ame] classname\n"
+" -t[heme] theme\n"
+" -n[ame] windowname\n"
 " -i[conic]\n"
 " -fg color\n"
 " -bg color\n"
@@ -382,5 +377,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.12 1999/10/11 01:00:29 vincent Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.13 1999/10/27 08:41:00 bill Exp $".
 //

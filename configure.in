@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.58 1999/10/27 01:21:05 vincent Exp $"
+dnl# "$Id: configure.in,v 1.59 1999/10/27 08:40:48 bill Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -41,7 +41,8 @@ DSONAME=""
 dnl# Get the operating system and version number...
 
 uname=`uname`
-uversion=`uname -r | sed -e '1,$s/\.//g'`
+uversion=`uname -r | sed -e 's/-.*$//g;s/\.//g'`
+dnl# uversion=`uname -r | sed -e '1,$s/\.//g'`
 if test "$uname" = "IRIX64"; then
     uname="IRIX"
 fi
@@ -354,5 +355,5 @@ AC_OUTPUT(makeinclude)
 cp config.h FL/
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.58 1999/10/27 01:21:05 vincent Exp $".
+dnl# End of "$Id: configure.in,v 1.59 1999/10/27 08:40:48 bill Exp $".
 dnl#

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.13 1999/09/14 17:52:38 carl Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.14 1999/10/27 08:40:54 bill Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -397,8 +397,14 @@ class CellBox : public Fl_Box {
 public:
   CellBox(int X, int Y, int W, int H) : Fl_Box(X,Y,W,H) {}
   void draw();
+  void draw_n_clip();
   int handle(int);
 };
+
+void CellBox::draw_n_clip() {
+  draw();
+  fl_clip_out(x(), y(), w(), h());
+}
 
 void CellBox::draw() {
   for (int Y = 0; Y < ROWS; Y++) {
@@ -502,5 +508,5 @@ int fl_color_chooser(const char* name, Fl_Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.13 1999/09/14 17:52:38 carl Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.14 1999/10/27 08:40:54 bill Exp $".
 //

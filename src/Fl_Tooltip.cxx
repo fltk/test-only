@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.12 1999/10/03 06:31:39 bill Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.13 1999/10/27 08:40:59 bill Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -40,7 +40,7 @@ Fl_Style Fl_Tooltip::default_style = {
   // rest is zero
 };
 
-Fl_Style_Definer fl_tooltip_style_definer("tooltip", Fl_Tooltip::default_style);
+static Fl_Style_Definer x("tooltip", Fl_Tooltip::default_style);
 
 #define MAX_WIDTH 400
 
@@ -135,5 +135,5 @@ Fl_Tooltip::tooltip_exit(Fl_Widget *w) {
 void (*fl_tooltip_exit)(Fl_Widget *) = Fl_Tooltip::tooltip_exit;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.12 1999/10/03 06:31:39 bill Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.13 1999/10/27 08:40:59 bill Exp $".
 //

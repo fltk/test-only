@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Style.cxx,v 1.1 1999/10/22 03:11:21 vincent Exp $"
+// "$Id: Fl_Input_Style.cxx,v 1.2 1999/10/27 08:40:55 bill Exp $"
 //
 // Style of Fl_Input for the Fast Light Tool Kit (FLTK).
 //
@@ -48,8 +48,8 @@ Fl_Style Fl_Input::default_style = {
   FL_NORMAL_SIZE,// text_size
 };
 
-Fl_Style_Definer fl_input_style_definer("input", Fl_Input::default_style);
+static Fl_Style_Definer x("input", Fl_Input::default_style);
 
 //
-// End of "$Id: Fl_Input_Style.cxx,v 1.1 1999/10/22 03:11:21 vincent Exp $".
+// End of "$Id: Fl_Input_Style.cxx,v 1.2 1999/10/27 08:40:55 bill Exp $".
 //

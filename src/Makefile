@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.40 1999/10/22 03:11:22 vincent Exp $"
+# "$Id: Makefile,v 1.41 1999/10/27 08:41:02 bill Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -75,10 +75,7 @@ CPPFILES = \
 	Fl_Scrollbar.cxx \
 	Fl_Single_Window.cxx \
 	Fl_Slider.cxx \
-	Fl_Style_Plugins.cxx \
-	Fl_Style_Util.cxx \
 	Fl_Tabs.cxx \
-	Fl_Threads.cxx \
 	Fl_Tile.cxx \
 	Fl_Tooltip.cxx  \
 	Fl_Valuator.cxx \
@@ -98,6 +95,7 @@ CPPFILES = \
 	Fl_get_key.cxx \
 	Fl_get_system_colors.cxx \
 	Fl_grab.cxx \
+	Fl_lock.cxx \
 	Fl_own_colormap.cxx \
 	Fl_visual.cxx \
 	Fl_x.cxx \
@@ -125,6 +123,7 @@ CPPFILES = \
 	fl_glyph.cxx \
 	fl_labeltype.cxx \
 	fl_line_style.cxx \
+	fl_load_plugin.cxx \
 	fl_oval_box.cxx \
 	fl_overlay.cxx \
 	fl_overlay_visual.cxx \
@@ -168,6 +167,9 @@ CFILES = \
 
 # files that were deleted:
 #	fl_set_font.cxx \
+#	Fl_Threads.cxx \
+#	Fl_Style_Plugins.cxx \
+#	Fl_Style_Util.cxx \
 
 # Carl's style-reading source code:
 #	fl_options.cxx \
@@ -290,5 +292,5 @@ install: $(LIBRARY) $(DSONAME)
 	@-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.40 1999/10/22 03:11:22 vincent Exp $".
+# End of "$Id: Makefile,v 1.41 1999/10/27 08:41:02 bill Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.43 1999/10/03 06:31:38 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.44 1999/10/27 08:40:56 bill Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -83,7 +83,7 @@ Fl_Style Fl_Menu_Item::default_style = {
   // rest is zero
 };
 
-Fl_Style_Definer fl_menu_item_style_definer("menu_item", Fl_Menu_Item::default_style);
+static Fl_Style_Definer x("menu_item", Fl_Menu_Item::default_style);
 
 Fl_Style Fl_Menu_Item::title_style = {
   FL_FLAT_UP_BOX, // box
@@ -99,7 +99,7 @@ Fl_Style Fl_Menu_Item::title_style = {
   // rest is zero
 };
 
-Fl_Style_Definer fl_menu_title_style_definer("menu_title", Fl_Menu_Item::title_style);
+static Fl_Style_Definer z("menu_title", Fl_Menu_Item::title_style);
 
 // Return the style to use.  Inherit it if this is the first time this
 // one has been referenced.
@@ -803,5 +803,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.43 1999/10/03 06:31:38 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.44 1999/10/27 08:40:56 bill Exp $".
 //

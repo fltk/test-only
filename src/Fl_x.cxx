@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.38 1999/10/26 00:56:55 vincent Exp $"
+// "$Id: Fl_x.cxx,v 1.39 1999/10/27 08:41:02 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -172,10 +172,12 @@ static void do_queued_events() {
 #endif
 }
 
-double fl_wait(int timeout_flag, double time) {
+// these pointers are set by the Fl::lock() function:
+static void nothing() {}
+void (*fl_lock_function)() = nothing;
+void (*fl_unlock_function)() = nothing;
 
-  // clear the thread message
-  Fl::thread_message = 0;
+double fl_wait(int timeout_flag, double time) {
 
   // OpenGL and other broken libraries call XEventsQueued
   // unnecessarily and thus cause the file descriptor to not be ready,
@@ -188,21 +190,13 @@ double fl_wait(int timeout_flag, double time) {
   fdt[1] = fdsets[1];
   fdt[2] = fdsets[2];
 #endif
-  int n;
 
-  if (Fl::main_lock) Fl::unlock();
-
-  if (!timeout_flag) {
+  fl_unlock_function();
 #if HAVE_POLL
-    n = ::poll(fds, nfds, -1);
+  int n = ::poll(fds, nfds, timeout_flag ? (time>0 ? int(time*1000) : 0) : -1);
 #else
-    n = ::select(maxfd+1,&fdt[0],&fdt[1],&fdt[2],0);
-#endif
-  } else {
-#if HAVE_POLL
-    int n = ::poll(fds, nfds, time > 0.0 ? int(time*1000) : 0);
-#else
-    timeval t;
+  timeval t;
+  if (timeout_flag) {
     if (time <= 0.0) {
       t.tv_sec = 0;
       t.tv_usec = 0;
@@ -210,11 +204,10 @@ double fl_wait(int timeout_flag, double time) {
       t.tv_sec = int(time);
       t.tv_usec = int(1000000 * (time-t.tv_sec));
     }
-    n = ::select(maxfd+1,&fdt[0],&fdt[1],&fdt[2],&t);
-#endif
   }
-
-  if (Fl::main_lock) Fl::lock();
+  int n = ::select(maxfd+1,&fdt[0],&fdt[1],&fdt[2], timeout_flag ? &t : 0);
+#endif
+  fl_lock_function();
 
   if (n > 0) {
     for (int i=0; i<nfds; i++) {
@@ -257,23 +250,17 @@ static int xerror_handler(Display* d, XErrorEvent* e) {
   return 0;
 }
 
-static void thread_awake_cb(int fd, void*)
-{
-  read(fd, &Fl::thread_message, sizeof(void*));
-}
+const char* fl_theme = 0;
+#include <FL/fl_load_plugin.H>
 
 void fl_open_display() {
   if (fl_display) return;
-
-  // Init threads communication pipe to let threads awake FLTK from wait
-  pipe(Fl::thread_filedes);
-  Fl::add_fd(Fl::thread_filedes[0], FL_READ, thread_awake_cb);
 
   XSetIOErrorHandler(io_error_handler);
   XSetErrorHandler(xerror_handler);
 
   Display *d = XOpenDisplay(0);
-  if (!d) Fl::fatal("Can't open display: %s",XDisplayName(0));
+  if (!d) Fl::fatal("Can't open display \"%s\"",XDisplayName(0));
 
   fl_display = d;
 
@@ -288,6 +275,13 @@ void fl_open_display() {
   templt.visualid = XVisualIDFromVisual(DefaultVisual(fl_display,fl_screen));
   fl_visual = XGetVisualInfo(fl_display, VisualIDMask, &templt, &num);
   fl_colormap = DefaultColormap(fl_display,fl_screen);
+
+// Load the theme plugin:
+// THIS CODE MUST BE DUPLICATED FOR WIN32:
+  if (!fl_load_plugin(fl_theme ? fl_theme : "default", "fltk/themes")) {
+    if (fl_theme) Fl::fatal("Can't load theme \"%s\"", fl_theme);
+  }
+
 }
 
 void fl_close_display() {
@@ -820,5 +814,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.38 1999/10/26 00:56:55 vincent Exp $".
+// End of "$Id: Fl_x.cxx,v 1.39 1999/10/27 08:41:02 bill Exp $".
 //

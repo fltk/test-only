@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.cxx,v 1.10 1999/09/25 22:27:08 vincent Exp $"
+// "$Id: Fl_Light_Button.cxx,v 1.11 1999/10/27 08:40:56 bill Exp $"
 //
 // Lighted button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -81,7 +81,7 @@ Fl_Style Fl_Light_Button::default_style = {
   // rest is zero
 };
 
-Fl_Style_Definer fl_lightbutton_style_definer("light_button", Fl_Light_Button::default_style);
+static Fl_Style_Definer x("light_button", Fl_Light_Button::default_style);
 
 Fl_Light_Button::Fl_Light_Button(int x, int y, int w, int h, const char *l)
   : Fl_Button(x, y, w, h, l)
@@ -92,5 +92,5 @@ Fl_Light_Button::Fl_Light_Button(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Light_Button.cxx,v 1.10 1999/09/25 22:27:08 vincent Exp $".
+// End of "$Id: Fl_Light_Button.cxx,v 1.11 1999/10/27 08:40:56 bill Exp $".
 //

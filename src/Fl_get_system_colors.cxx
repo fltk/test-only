@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_get_system_colors.cxx,v 1.8 1999/08/16 07:31:23 bill Exp $"
+// "$Id: Fl_get_system_colors.cxx,v 1.9 1999/10/27 08:41:00 bill Exp $"
 //
 // System color support for the Fast Light Tool Kit (FLTK).
 //
@@ -85,6 +85,11 @@ Fl_Color fl_rgb(const char* name) {
   default: return FL_NO_COLOR;
   }
   int R,G,B; if (sscanf(name, pattern, &R,&G,&B) != 3) return FL_NO_COLOR;
+  switch(m) {
+  case 1: R *= 0x11; G *= 0x11; B *= 0x11; break;
+  case 3: R >>= 4; G >>= 4; B >>= 4; break;
+  case 4: R >>= 8; G >>= 8; B >>= 8; break;
+  }
   Fl_Color c = fl_rgb(R,G,B);
 #else
   XColor x;
@@ -97,5 +102,5 @@ Fl_Color fl_rgb(const char* name) {
 }
 
 //
-// End of "$Id: Fl_get_system_colors.cxx,v 1.8 1999/08/16 07:31:23 bill Exp $".
+// End of "$Id: Fl_get_system_colors.cxx,v 1.9 1999/10/27 08:41:00 bill Exp $".
 //

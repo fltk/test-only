@@ -1,0 +1,13 @@
+These are demonstrations of "themes" plugins for fltk.  To make them
+work, type "make" and copy or link this directory to ~/.fltk/themes.
+
+To make one of these themes the default, link it to
+~/.fltk/themes/default.
+
+The supplied code is really for demonstration purposes only!  Any real
+themes would probably be much more complex.  We also really need some
+"themes" written that parse KDE, Enlightenment, X resources, and other
+sources of theme information.
+
+Makefile is probably Linux-specific.
+
