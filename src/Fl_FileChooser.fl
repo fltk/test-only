@@ -2,12 +2,12 @@
 version 2.0000 
 images_dir ./ 
 do_not_include_H_from_C 
-header_name {.h} 
+header_name {.H} 
 code_name {.cxx} 
 gridx 5 
 gridy 5 
 snap 3
-decl {\#include <FL/Fl_FileChooser.h>} {} 
+decl {\#include <FL/Fl_FileChooser.H>} {} 
 
 decl {\#include <config.h>} {} 
 
@@ -22,7 +22,7 @@ class Fl_FileChooser {open
       callback {fileList->deselect();
 fileName->value("");
 window->hide();} open
-      xywh {391 243 375 315} resizable hotspot
+      xywh {269 372 375 315} resizable hotspot
       code0 {if (title) window->label(title);}
       code1 {\#include <stdio.h>}
       code2 {\#include <stdlib.h>}
@@ -33,47 +33,43 @@ window->hide();} open
         callback {if (dirMenu->value())
   directory(dirMenu->text(dirMenu->value()));
 else
-  directory("");} open selected
+  directory("");} open
         tooltip {Click to access directory tree.}
         private xywh {65 10 210 25}
-        code0 {
-#ifdef FLTK_2        
-        o->set_flag(FL_ALIGN_LEFT | FL_ALIGN_RIGHT);
-#else
-        o->align(FL_ALIGN_LEFT | FL_ALIGN_RIGHT);
-#endif        
-        }
+        code0 {o->set_flag(FL_ALIGN_LEFT | FL_ALIGN_RIGHT);
+        o->align(FL_ALIGN_LEFT | FL_ALIGN_RIGHT);}
       } {}
       Fl_Button upButton {
-        callback {up();} selected
+        callback {up();}
         tooltip {Click to display parent directory.}
         private xywh {280 10 25 25} image not_inlined {up.xbm} labelsize 8
       }
       Fl_Button newButton {
-        callback {newdir();} selected
+        callback {newdir();}
         tooltip {Click to create a new directory.}
         private xywh {310 10 25 25} image not_inlined {new.xbm} labelsize 8
       }
       Fl_Button {} {
         callback {fileList->filter("*");;
-rescan();} selected
+rescan();}
         tooltip {Click to show all files.}
         private xywh {340 10 25 25} align 524304 image not_inlined {allfiles.xbm} labelcolor 4 labelsize 28
       }
       Fl_Browser fileList {
-        callback {fileListCB();} selected
+        callback {fileListCB();}
         tooltip {Double-click to change directories.}
-        private xywh {10 45 355 180} type Hold resizable
+        private xywh {10 45 355 180} resizable
         code0 {\#include "filename.H"}
-        code1 {\#include "Fl_FileBrowser.h"}
+        code1 {\#include <FL/Fl_FileBrowser.H>}
         class Fl_FileBrowser
       }
       Fl_Input fileName {
         label {Filename:}
         callback {fileNameCB();} selected
+        tooltip {Type a filename or directory name here.}
         private xywh {10 245 355 25} align 5 when 8
         code0 {fileName->when(FL_WHEN_CHANGED | FL_WHEN_ENTER_KEY_ALWAYS);}
-        code1 {\#include "Fl_FileInput.h"}
+        code1 {\#include <FL/Fl_FileInput.H>}
         class Fl_FileInput
       }
       Fl_Return_Button okButton {
@@ -85,14 +81,14 @@ snprintf(pathname, sizeof(pathname), "%s/%s",
 if (filename_isdir(pathname))
   directory(pathname);
 else
-  window->hide();} selected
-        private xywh {240 280 55 25}
+  window->hide();}
+        private xywh {240 280 55 25} shortcut 0xff0d
       }
       Fl_Button {} {
         label Cancel
         callback {fileList->deselect();
 fileName->value("");
-window->hide();} selected
+window->hide();}
         private xywh {300 280 65 25}
       }
     }
@@ -153,30 +149,20 @@ rescan();} {}
   }
   decl {void rescan();} {public
   }
-  Function {show()} {return_type void
+  Function {exec()} {return_type void
   } {
-    code {window->show();
+    code {window->exec();
 fileList->deselect();} {}
   }
   Function {textcolor(Fl_Color c)} {return_type void
   } {
-    code {
-#ifdef FLTK_2    
-    fileList->textcolor(c);
-#else
-    fileList->text_color(c);
-#endif    
-    } {}
+    code {fileList->textcolor(c);
+    fileList->text_color(c);} {}
   }
   Function {textcolor()} {return_type Fl_Color
   } {
-    code {
-#ifdef FLTK_2    
-    return (fileList->textcolor());
-#else    
-    return (fileList->textcolor());
-#endif    
-    } {}
+    code {return (fileList->textcolor());
+    return (fileList->textcolor());} {}
   }
   Function {textfont(Fl_Font f)} {return_type void
   } {
@@ -184,13 +170,8 @@ fileList->deselect();} {}
   }
   Function {textfont()} {return_type Fl_Font
   } {
-    code {
-#ifdef FLTK_2    
-    return (fileList->text_font());
-#else
-    return (fileList->textfont());
-#endif    
-    } {}
+    code {return (fileList->text_font());
+    return (fileList->textfont());} {}
   }
   Function {textsize(uchar s)} {return_type void
   } {

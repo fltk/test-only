@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileBrowser.cxx,v 1.9 2000/01/16 07:44:33 robertk Exp $"
+// "$Id: Fl_FileBrowser.cxx,v 1.10 2000/06/27 02:55:29 easysw Exp $"
 //
 // Fl_FileBrowser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -217,6 +217,7 @@ Fl_FileBrowser::item_draw(void *p,	// I - List item data
   FL_BLINE	*line;			// Pointer to line
 
 
+  puts("Fl_FileBrowser::item_draw()");
   // Draw the list item text...
   line = (FL_BLINE *)p;
 
@@ -442,5 +443,5 @@ Fl_FileBrowser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_FileBrowser.cxx,v 1.9 2000/01/16 07:44:33 robertk Exp $".
+// End of "$Id: Fl_FileBrowser.cxx,v 1.10 2000/06/27 02:55:29 easysw Exp $".
 //

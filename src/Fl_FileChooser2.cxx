@@ -1,9 +1,9 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.8 2000/06/23 07:09:14 bill Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.9 2000/06/27 02:55:29 easysw Exp $"
 //
 // More Fl_FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
-// Copyright 1997-1999 by Easy Software Products.
+// Copyright 1997-2000 by Easy Software Products.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -59,6 +59,7 @@
 extern "C" int access(const char *, int);
 #else
 #  include <unistd.h>
+#  include <pwd.h>
 #endif /* WIN32 */
 
 
@@ -138,6 +139,7 @@ Fl_FileChooser::directory(const char *d)	// I - Directory to change to
   }
 
   dirMenu->value(levels);
+  dirMenu->redraw();
 
   // Rescan the directory...
   rescan();
@@ -179,7 +181,7 @@ Fl_FileChooser::count()
       return (1);
   }
 
-  for (i = 1, count = 0; i <= fileList->size(); i ++)
+  for (i = 0, count = 0; i < fileList->size(); i ++)
     if (fileList->selected(i))
     {
       // See if this file is a directory...
@@ -223,7 +225,7 @@ Fl_FileChooser::value(int f)	// I - File number
     return ((const char *)pathname);
   }
 
-  for (i = 1, count = 0; i <= fileList->size(); i ++)
+  for (i = 0, count = 0; i < fileList->size(); i ++)
     if (fileList->selected(i))
     {
       // See if this file is a directory...
@@ -302,7 +304,7 @@ Fl_FileChooser::value(const char *filename)	// I - Filename + directory
   // Then find the file in the file list and select it...
   count = fileList->size();
 
-  for (i = 1; i <= count; i ++)
+  for (i = 0; i < count; i ++)
     if (strcmp(fileList->text(i), slash) == 0)
     {
       fileList->select(i);
@@ -397,6 +399,7 @@ Fl_FileChooser::rescan()
 
   // Build the file list...
   fileList->load(directory_);
+  fileList->redraw();
 }
 
 
@@ -436,8 +439,10 @@ Fl_FileChooser::fileListCB()
 
   if (Fl::event_clicks() || Fl::event_key() == FL_Enter)
   {
+    puts("double-click");
     if (filename_isdir(pathname))
     {
+      puts("directory");
       directory(pathname);
       upButton->activate();
     }
@@ -489,7 +494,39 @@ Fl_FileChooser::fileNameCB()
     pathname[sizeof(pathname) - 1] = '\0';
   }
 #else
-  if (directory_[0] != '\0' && filename[0] != '/')
+  if (filename[0] == '~')
+  {
+    // Lookup user...
+    struct passwd	*pwd;
+
+    if (!filename[1] || filename[1] == '/')
+      pwd = getpwuid(getuid());
+    else
+    {
+      strncpy(pathname, filename + 1, sizeof(pathname) - 1);
+      pathname[sizeof(pathname) - 1] = '\0';
+
+      i = strlen(pathname) - 1;
+      if (pathname[i] == '/')
+        pathname[i] = '\0';
+
+      pwd = getpwnam(pathname);
+    }
+
+    if (pwd)
+    {
+      strncpy(pathname, pwd->pw_dir, sizeof(pathname) - 1);
+      pathname[sizeof(pathname) - 1] = '\0';
+
+      if (filename[strlen(filename) - 1] == '/')
+        strncat(pathname, "/", sizeof(pathname) - 1);
+    }
+    else
+      snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
+
+    endpwent();
+  }
+  else if (directory_[0] != '\0' && filename[0] != '/')
     snprintf(pathname, sizeof(pathname), "%s/%s", directory_, filename);
   else
   {
@@ -633,5 +670,5 @@ Fl_FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.8 2000/06/23 07:09:14 bill Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.9 2000/06/27 02:55:29 easysw Exp $".
 //

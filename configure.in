@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.82 2000/06/18 11:05:25 vincent Exp $"
+dnl# "$Id: configure.in,v 1.83 2000/06/27 02:55:29 easysw Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -298,8 +298,10 @@ if test -n "$GXX"; then
     CFLAGS="-Wall $CFLAGS"
     CXXFLAGS="-Wall -Wno-return-type $CXXFLAGS"
     if test -z "$DEBUGFLAG"; then
-        CFLAGS="$CFLAGS -O2 -fforce-mem -fforce-addr -fcaller-saves -fomit-frame-pointer"
-        CXXFLAGS="$CXXFLAGS -O2 -fforce-mem -fforce-addr -fcaller-saves -fomit-frame-pointer"
+    	# Note: Can't use -fomit-frame-pointer - prevents tools like
+	#       libsafe from working!
+        CFLAGS="$CFLAGS -O2 -fforce-mem -fforce-addr -fcaller-saves"
+        CXXFLAGS="$CXXFLAGS -O2 -fforce-mem -fforce-addr -fcaller-saves"
     fi
 
     # See if GCC supports -fno-exceptions...
@@ -406,5 +408,5 @@ AC_OUTPUT(makeinclude fltk-config Makefile)
 chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.82 2000/06/18 11:05:25 vincent Exp $".
+dnl# End of "$Id: configure.in,v 1.83 2000/06/27 02:55:29 easysw Exp $".
 dnl#

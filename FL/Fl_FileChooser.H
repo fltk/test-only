@@ -10,8 +10,8 @@
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Button.H>
 #include "filename.H"
-#include "Fl_FileBrowser.H"
-#include "Fl_FileInput.H"
+#include <FL/Fl_FileBrowser.H>
+#include <FL/Fl_FileInput.H>
 #include <FL/Fl_Return_Button.H>
 
 class FL_API Fl_FileChooser {
@@ -56,6 +56,7 @@ public:
   int count();
   void directory(const char *d);
   char * directory();
+  void exec();
   void filter(const char *p);
   const char * filter();
   void hide();
@@ -64,7 +65,6 @@ public:
   void label(const char *l);
   const char * label();
   void rescan();
-  void exec();
   void textcolor(Fl_Color c);
   Fl_Color textcolor();
   void textfont(Fl_Font f);

@@ -13,10 +13,10 @@ void Fl_FileChooser::cb_window(Fl_Window* o, void* v) {
 }
 
 inline void Fl_FileChooser::cb_dirMenu_i(Fl_Choice*, void*) {
-   if (dirMenu->value())
-     directory(dirMenu->text(dirMenu->value()));
-   else
-     directory("");
+  if (dirMenu->value())
+  directory(dirMenu->text(dirMenu->value()));
+else
+  directory("");
 }
 void Fl_FileChooser::cb_dirMenu(Fl_Choice* o, void* v) {
   ((Fl_FileChooser*)(o->parent()->user_data()))->cb_dirMenu_i(o,v);
@@ -102,11 +102,12 @@ Fl_FileChooser::Fl_FileChooser(const char *d, const char *p, int t, const char *
     w = o;
     o->callback((Fl_Callback*)cb_window, (void*)(this));
     ((Fl_Window*)(o))->hotspot(o);
-    { Fl_Choice* o = dirMenu = new Fl_Choice(65, 10, 210, 25, "Directory:");
+    { Fl_Choice* o = dirMenu = new Fl_Choice(65, 10, 210, 25, "Directory:"); o->begin();
       o->callback((Fl_Callback*)cb_dirMenu);
       o->tooltip("Click to access directory tree.");
-	  o->clear_flag(FL_ALIGN_MASK);
-	  o->set_flag(FL_ALIGN_LEFT | FL_ALIGN_RIGHT);
+      o->set_flag(FL_ALIGN_LEFT | FL_ALIGN_RIGHT);
+        o->align(FL_ALIGN_LEFT | FL_ALIGN_RIGHT);
+      o->end();
     }
     { Fl_Button* o = upButton = new Fl_Button(280, 10, 25, 25);
       o->image(bitmap_up);
@@ -125,24 +126,23 @@ Fl_FileChooser::Fl_FileChooser(const char *d, const char *p, int t, const char *
       o->label_color((Fl_Color)4);
       o->label_size(28);
       o->callback((Fl_Callback*)cb_);
-	  o->clear_flag(FL_ALIGN_MASK);
-      o->set_flag(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
+      o->align(FL_ALIGN_CENTER|FL_ALIGN_INSIDE);
       o->tooltip("Click to show all files.");
     }
     { Fl_FileBrowser* o = fileList = new Fl_FileBrowser(10, 45, 355, 180);
-      o->type(2);
       o->callback((Fl_Callback*)cb_fileList);
       Fl_Group::current()->resizable(o);
       o->tooltip("Double-click to change directories.");
     }
     { Fl_FileInput* o = fileName = new Fl_FileInput(10, 245, 355, 25, "Filename:");
       o->callback((Fl_Callback*)cb_fileName);
-	  o->clear_flag(FL_ALIGN_MASK);
-      o->set_flag(FL_ALIGN_TOP | FL_ALIGN_LEFT);
+      o->align(FL_ALIGN_TOP | FL_ALIGN_LEFT);
       o->when(FL_WHEN_ENTER_KEY);
+      o->tooltip("Type a filename or directory name here.");
       fileName->when(FL_WHEN_CHANGED | FL_WHEN_ENTER_KEY_ALWAYS);
     }
     { Fl_Return_Button* o = okButton = new Fl_Return_Button(240, 280, 55, 25, "OK");
+      o->shortcut(0xff0d);
       o->callback((Fl_Callback*)cb_okButton);
     }
     { Fl_Button* o = new Fl_Button(300, 280, 65, 25, "Cancel");
@@ -201,15 +201,17 @@ const char * Fl_FileChooser::label() {
 
 void Fl_FileChooser::exec() {
   window->exec();
-  fileList->deselect();
+fileList->deselect();
 }
 
 void Fl_FileChooser::textcolor(Fl_Color c) {
-  fileList->text_color(c);
+  fileList->textcolor(c);
+    fileList->text_color(c);
 }
 
 Fl_Color Fl_FileChooser::textcolor() {
-  return (fileList->text_color());
+  return (fileList->textcolor());
+    return (fileList->textcolor());
 }
 
 void Fl_FileChooser::textfont(Fl_Font f) {
@@ -218,6 +220,7 @@ void Fl_FileChooser::textfont(Fl_Font f) {
 
 Fl_Font Fl_FileChooser::textfont() {
   return (fileList->text_font());
+    return (fileList->textfont());
 }
 
 void Fl_FileChooser::textsize(uchar s) {
