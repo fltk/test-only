@@ -1,5 +1,5 @@
 //
-// "$Id: browser.cxx,v 1.8 2000/01/09 15:42:04 mike Exp $"
+// "$Id: browser.cxx,v 1.9 2000/04/24 08:31:29 bill Exp $"
 //
 // Browser test program for the Fast Light Tool Kit (FLTK).
 //
@@ -52,20 +52,17 @@ That was a blank line above this.
 @C2Green
 @C4Blue
 
-	You should try different browser types:
-	Fl_Browser
-	Fl_Select_Browser
-	Fl_Hold_Browser
-	Fl_Multi_Browser
 */
 
 #include <FL/Fl.H>
-#include <FL/Fl_Select_Browser.H>
-#include <FL/Fl_Double_Window.H>
+#include <FL/Fl_NewBrowser.H>
+#include <FL/Fl_Window.H>
 #include <stdio.h>
 #include <string.h>
 #include <errno.h>
 #include <stdlib.h>
+#include <FL/Fl_Item.H>
+#include <FL/Fl_Item_Group.H>
 
 void b_cb(Fl_Widget* o, void*) {
   printf("callback, selection = %d, event_clicks = %d\n",
@@ -81,17 +78,54 @@ int main(int argc, char **argv) {
   const char* fname = (i < argc) ? argv[i] : "browser.cxx";
   Fl_Window window(400,400,fname);
   window.box(FL_NO_BOX); // because it is filled with browser
-  Fl_Select_Browser browser(0,0,400,400,0);
-  browser.type(FL_MULTI_BROWSER);
+  Fl_Browser browser(0,0,400,400,0);
+  //browser.type(FL_MULTI_BROWSER);
   //browser.color(42);
   browser.callback(b_cb);
   // browser.scrollbar_right();
   //browser.has_scrollbar(Fl_Browser::BOTH_ALWAYS);
-  if (!browser.load(fname)) {
-    printf("Can't load %s, %s\n", fname, strerror(errno));
-    exit(1);
+
+  browser.begin();
+  new Fl_Item("Alpha");
+  new Fl_Item("Beta");
+  new Fl_Item("Ceta");
+  new Fl_Item("Delta");
+  (new Fl_Item("Epsilon and this item is a bit long"))->align(FL_ALIGN_LEFT);
+  Fl_Item_Group* g = new Fl_Item_Group("Closed group");
+  g->begin();
+  for (int j = 0; j < 10; j++) {
+    char buf[100];
+    sprintf(buf, "Child %d\n", j);
+    new Fl_Item(strdup(buf));
   }
-  browser.position(0);
+  g->end();
+  g = new Fl_Item_Group("Open group");
+  g->set_flag(FL_OPEN);
+  g->begin();
+  for (int j = 0; j < 10; j++) {
+    char buf[100];
+    sprintf(buf, "Child %d\n", j);
+    new Fl_Item(strdup(buf));
+  }
+  Fl_Group* k = new Fl_Item_Group("Open group");
+  k->set_flag(FL_OPEN);
+  k->begin();
+  for (int j = 0; j < 10; j++) {
+    char buf[100];
+    sprintf(buf, "Child %d\n", j);
+    new Fl_Item(strdup(buf));
+  }
+  k->end();
+  g->end();
+  for (int j = 0; j < 100; j++) {
+    char buf[100];
+    sprintf(buf, "Item %d\n", j);
+    new Fl_Item(strdup(buf));
+  }
+  new Fl_Item("The last item");
+  browser.end();
+
+  //browser.position(0);
   window.resizable(&browser);
   window.show(argc,argv);
 //  fl_mousewheel_up = 2;
@@ -100,6 +134,6 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: browser.cxx,v 1.8 2000/01/09 15:42:04 mike Exp $".
+// End of "$Id: browser.cxx,v 1.9 2000/04/24 08:31:29 bill Exp $".
 //
 

@@ -1,5 +1,5 @@
 //
-// "$Id: doublebuffer.cxx,v 1.4 1999/01/07 19:17:52 mike Exp $"
+// "$Id: doublebuffer.cxx,v 1.5 2000/04/24 08:31:29 bill Exp $"
 //
 // Double-buffering test program for the Fast Light Tool Kit (FLTK).
 //
@@ -78,14 +78,22 @@ void bad_draw(int w,int h,int which) {
 }
 
 class single_blink_window : public Fl_Single_Window {
-  void draw() {bad_draw(w(),h(),0); draw_child(*child(0));}
+  void draw() {
+    bad_draw(w(),h(),0);
+    child(0)->set_damage(FL_DAMAGE_ALL);
+    update_child(*child(0));
+  }
 public:
   single_blink_window(int x, int y,int w,int h,const char *l)
     : Fl_Single_Window(x,y,w,h,l) {resizable(this);}
 };
 
 class double_blink_window : public Fl_Double_Window {
-  void draw() {bad_draw(w(),h(),1); draw_child(*child(0));}
+  void draw() {
+    bad_draw(w(),h(),1);
+    child(0)->set_damage(FL_DAMAGE_ALL);
+    update_child(*child(0));
+  }
 public:
   double_blink_window(int x, int y, int w,int h,const char *l)
     : Fl_Double_Window(x,y,w,h,l) {resizable(this);}
@@ -122,5 +130,5 @@ int main() {
 }
 
 //
-// End of "$Id: doublebuffer.cxx,v 1.4 1999/01/07 19:17:52 mike Exp $".
+// End of "$Id: doublebuffer.cxx,v 1.5 2000/04/24 08:31:29 bill Exp $".
 //

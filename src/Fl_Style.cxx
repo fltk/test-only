@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.12 2000/04/11 08:16:44 bill Exp $"
+// "$Id: Fl_Style.cxx,v 1.13 2000/04/24 08:31:26 bill Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -42,7 +42,7 @@ static void revert(Fl_Style* s) {
   s->label_color           = FL_BLACK;
   s->selection_color	   = FL_BLUE_SELECTION_COLOR;
   s->selection_text_color  = FL_WHITE;
-  s->window_color          = FL_LIGHT2;
+  s->window_color          = fl_gray_ramp(FL_NUM_GRAY-1);
   s->highlight_color       = FL_NO_COLOR;
   s->highlight_label_color = FL_NO_COLOR;
   s->text_color            = FL_BLACK;
@@ -163,5 +163,5 @@ Fl_Named_Style* Fl_Style::find(const char* name) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.12 2000/04/11 08:16:44 bill Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.13 2000/04/24 08:31:26 bill Exp $".
 //

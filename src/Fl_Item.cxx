@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.3 2000/04/15 04:47:23 carl Exp $"
+// "$Id: Fl_Item.cxx,v 1.4 2000/04/24 08:31:25 bill Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -44,7 +44,7 @@ static Fl_Named_Style* style =
 
 Fl_Item::Fl_Item(const char* l) : Fl_Widget(0,0,0,0,l) {
   style(::style);
-  set_flag(FL_ALIGN_LEFT|FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
+  set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
 }
 
 void Fl_Item::draw() {
@@ -104,13 +104,13 @@ void Fl_Item::layout() {
 Fl_Menu_::Fl_Menu_(int x,int y,int w, int h,const char* l)
   : Fl_Group(x,y,w,h,l) {
   style(::style);
-  align(FL_ALIGN_LEFT|FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
+  align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
   end();
 }
 
 Fl_Menu_::Fl_Menu_(const char* l) : Fl_Group(0,0,0,0,l) {
   style(::style);
-  align(FL_ALIGN_LEFT|FL_ALIGN_RIGHT|FL_ALIGN_INSIDE);
+  align(FL_ALIGN_LEFT|FL_ALIGN_INSIDE);
   // end()?
 }
 
@@ -129,7 +129,7 @@ void Fl_Menu_::layout() {
 
 Fl_Divider::Fl_Divider() : Fl_Widget(0,0,0,0) {
   style(::style);
-  set_flag(FL_ALIGN_LEFT|FL_ALIGN_RIGHT|FL_ALIGN_INSIDE|FL_OUTPUT);
+  set_flag(FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_OUTPUT);
 }
 
 void Fl_Divider::draw() {

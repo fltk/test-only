@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.45 2000/04/10 06:45:40 bill Exp $"
+// "$Id: Fl.H,v 1.46 2000/04/24 08:31:20 bill Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -63,11 +63,11 @@ public: // should be private!
   static Fl_Widget* focus_;
   static Fl_Widget* selection_owner_;
   static Fl_Window* modal_;
-  static Fl_Window* grab_;
   static int compose_state;
 
   static void damage(int x) {damage_ = x;}
 
+  static int (*grab_)(int, void*);
   static void (*idle)();
 
 public:
@@ -109,10 +109,9 @@ public:
   static Fl_Window* first_window();
   static Fl_Window* next_window(const Fl_Window*);
   static Fl_Window* modal() {return modal_;}
-  static Fl_Window* grab() {return grab_;}
-  static void grab(Fl_Window*);
-  static void grab(Fl_Window&w) {grab(&w);}
-  static void release() {grab(0);}
+  static int (*grab())(int, void*) {return grab_;}
+  static void grab(int (*)(int, void*), void*);
+  static void release();
 
   // event information:
   static int event_x()		{return e_x;}
@@ -129,6 +128,7 @@ public:
   static int event_button()	{return e_keysym-FL_Button;}
   static int event_state()	{return e_state;}
   static int event_state(int i) {return e_state&i;}
+  static int event_pushed()	{return e_state&0x7f000000;}
   static int event_key()	{return e_keysym;}
   static int event_key(int);
   static int get_key(int);
@@ -200,7 +200,7 @@ public:
   static int event_shift() {return e_state&FL_SHIFT;}
   static int event_ctrl() {return e_state&FL_CTRL;}
   static int event_alt() {return e_state&FL_ALT;}
-  static int event_buttons() {return e_state&0x7f000000;}
+  static int event_buttons() {return event_pushed();}
   static int event_button1() {return e_state&FL_BUTTON1;}
   static int event_button2() {return e_state&FL_BUTTON2;}
   static int event_button3() {return e_state&FL_BUTTON3;}
@@ -229,5 +229,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.45 2000/04/10 06:45:40 bill Exp $".
+// End of "$Id: Fl.H,v 1.46 2000/04/24 08:31:20 bill Exp $".
 //

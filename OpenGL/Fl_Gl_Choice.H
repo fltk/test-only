@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.H,v 1.3 2000/04/24 05:09:41 carl Exp $"
+// "$Id: Fl_Gl_Choice.H,v 1.3 2000/04/24 08:31:22 bill Exp $"
 //
 // OpenGL definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -22,6 +22,9 @@
 //
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
+
+// THIS IS A PRIVATE HEADER FILE USED TO IMPLEMENT FLTK ONLY!!!
+// PLEASE STOP MOVING IT INTO THE PUBLIC HEADER DIRECTORY.  Thanks.  WAS
 
 // This is a private fltk header file.  The structures and functions
 // described here are subject to change in future versions.
@@ -81,5 +84,5 @@ void fl_no_gl_context();
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.H,v 1.3 2000/04/24 05:09:41 carl Exp $".
+// End of "$Id: Fl_Gl_Choice.H,v 1.3 2000/04/24 08:31:22 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.68 2000/04/16 08:31:50 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.69 2000/04/24 08:31:27 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -488,10 +488,12 @@ int fl_handle(const XEvent& xevent)
     break;
 
   case FocusIn:
+    xfocus = window;
     event = FL_FOCUS;
     break;
 
   case FocusOut:
+    if (window == xfocus) xfocus = 0;
     event = FL_UNFOCUS;
     break;
 
@@ -580,6 +582,7 @@ int fl_handle(const XEvent& xevent)
     // XInstallColormap(fl_display, Fl_X::i(window)->colormap);
     set_event_xy();
     Fl::e_state = xevent.xcrossing.state << 16;
+    xmousewin = window;
     event = FL_ENTER;
     break;
 
@@ -587,6 +590,7 @@ int fl_handle(const XEvent& xevent)
     if (xevent.xcrossing.detail == NotifyInferior) break;
     set_event_xy();
     Fl::e_state = xevent.xcrossing.state << 16;
+    if (window != xmousewin) xmousewin = 0;
     event = FL_LEAVE;
     break;
 
@@ -859,5 +863,5 @@ void Fl_Window::make_current() {
 
 
 //
-// End of "$Id: Fl_x.cxx,v 1.68 2000/04/16 08:31:50 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.69 2000/04/24 08:31:27 bill Exp $".
 //

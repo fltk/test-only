@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Flags.H,v 1.5 2000/02/14 11:32:33 bill Exp $"
+// "$Id: Fl_Flags.H,v 1.6 2000/04/24 08:31:20 bill Exp $"
 //
 // Unified flags set for fltk
 //
@@ -66,15 +66,14 @@ enum {
   FL_ALIGN_NOWRAP	= 0,
 #endif
 
-// Values used to store widget state, == FL_MENU_x<<8
+// Values used to store widget state:
   FL_INACTIVE		= 0x00000100, // does not get events, gray it out
   FL_MENU_STAYS_UP	= 0x00000200, // dont exit menu when picked
   FL_VALUE		= 0x00000400, // indicates true/down/on state
+  FL_OPEN		= 0x00000800, // this parent item in browser is open
   FL_INVISIBLE		= 0x00001000, // does not get events, does not draw
   FL_OUTPUT		= 0x00002000, // does not get events
-  FL_INACTIVE_MASK	= 0x00003000, // do not send events if true
   FL_CHANGED		= 0x00004000, // value changed since last callback
-  FL_OPEN		= 0x00008000, // this parent item in browser is open
 
 // Values used to draw boxes:
   FL_FOCUSED		= 0x00010000, // draw with keyboard focus

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.88 2000/04/16 08:31:45 bill Exp $"
+// "$Id: Fl.cxx,v 1.89 2000/04/24 08:31:24 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -41,8 +41,9 @@ Fl_Widget	*Fl::belowmouse_,
 		*Fl::pushed_,
 		*Fl::focus_,
 		*Fl::selection_owner_;
-Fl_Window	*Fl::grab_,	// most recent Fl::grab()
-		*Fl::modal_;	// topmost modal() window
+int		(*Fl::grab_)(int, void*);
+static void* grab_data;
+Fl_Window	*Fl::modal_;	// topmost modal() window
 int		Fl::damage_,
 		Fl::e_x,
 		Fl::e_y,
@@ -238,7 +239,6 @@ int Fl::event_inside(const Fl_Widget& o) /*const*/ {
 }
 
 void Fl::focus(Fl_Widget *o) {
-  if (grab()) return; // don't do anything while grab is on
   Fl_Widget *p = focus_;
   if (o != p) {
     focus_ = o;
@@ -248,7 +248,6 @@ void Fl::focus(Fl_Widget *o) {
 }
 
 void Fl::belowmouse(Fl_Widget *o) {
-  if (grab()) return; // don't do anything while grab is on
   Fl_Tooltip::enter(o);
   Fl_Widget *p = belowmouse_;
   if (o != p) {
@@ -267,28 +266,30 @@ void Fl::pushed(Fl_Widget *o) {
 // system thinks otherwise...
 
 // This is called whenever a window is added or hidden, and whenever
-// X says the focus or mouse window have changed.
+// X says the focus window has changed.
 
 void fl_fix_focus() {
 
   if (Fl::grab()) return; // don't do anything while grab is on.
 
-  // set focus based on Fl::modal() and xfocus
   Fl_Widget* w = xfocus;
-  if (w) {
-    while (w->parent()) w = w->parent();
-    if (Fl::modal()) w = Fl::modal();
-    if (!w->contains(Fl::focus())) {
-      Fl::e_keysym = 0; // make sure it does not look like navigation keystroke
-      if (w->takesevents() &&
-	  w->handle(FL_FOCUS) &&
-	  w->contains(Fl::focus()))
-	;
-      else Fl::focus(w); // give it focus even if it does not want it
-    }
-  } else
-    Fl::focus(0);
 
+  if (w) {
+    // System says this program has focus.
+    // Modal overrides anything the system says:
+    if (Fl::modal()) w = Fl::modal();
+    // Move to outermost window:
+    while (w->parent()) w = w->parent();
+    if (w->contains(Fl::focus())) return; // it already has it
+    // Give it the focus:
+    if (w->takesevents()) {
+      Fl::e_keysym = 0; // make sure it does not look like navigation keystroke
+      w->handle(FL_FOCUS);
+      if (w->contains(Fl::focus())) return; // it took it
+    }
+  }
+  // give nothing the focus:
+  Fl::focus(0);
 }
 
 #ifndef WIN32
@@ -327,65 +328,61 @@ void Fl::selection_owner(Fl_Widget *owner) {
 }
 
 ////////////////////////////////////////////////////////////////
-// "Grab" is done while menu systems are up.  This has several effects:
-// Events are all sent to the "grab window", which does not even
-// have to be displayed (and in the case of Fl_Menu.C it isn't).
-// The system is also told to "grab" events and send them to this app.
 
-// On both X and Win32 "this app" has to be identified by a window,
-// fltk just picks the top-most displayed window, which is not
+// "Grab" is done while menu systems are up.  This has two
+// effects: The window system is told to "grab" events and sed all of
+// them to this application, and all events we get are sent to the
+// "grab handler" rather than to normal widgest.
+
+// On both X and Win32 "this application" has to be identified by a
+// window, fltk just picks the top-most displayed window, which is not
 // necessarily where the events are really going!
 
-void Fl::grab(Fl_Window* w) {
-  if (w) {
-    if (!grab_) {
+void Fl::grab(int (*cb)(int, void*), void* user_data) {
+  grab_ = cb;
+  grab_data = user_data;
 #ifdef WIN32
-      HWND w = fl_xid(first_window());
-      SetActiveWindow(w); // is this necessary?
-      SetCapture(w);
+  HWND w = fl_xid(first_window());
+  SetActiveWindow(w); // is this necessary?
+  SetCapture(w);
 #else
-      XGrabPointer(fl_display,
-		   fl_xid(first_window()),
-		   1,
-		   ButtonPressMask|ButtonReleaseMask|
-		   ButtonMotionMask|PointerMotionMask,
-		   GrabModeAsync,
-		   GrabModeAsync, 
-		   None,
-		   0,
-		   fl_event_time);
-      XGrabKeyboard(fl_display,
-		    fl_xid(first_window()),
-		    1,
-		    GrabModeAsync,
-		    GrabModeAsync, 
-		    fl_event_time);
+  XGrabPointer(fl_display,
+	       fl_xid(first_window()),
+	       1,
+	       ButtonPressMask|ButtonReleaseMask|
+	       ButtonMotionMask|PointerMotionMask,
+	       GrabModeAsync,
+	       GrabModeAsync, 
+	       None,
+	       0,
+	       fl_event_time);
+  XGrabKeyboard(fl_display,
+		fl_xid(first_window()),
+		1,
+		GrabModeAsync,
+		GrabModeAsync, 
+		fl_event_time);
 #endif
-    }
-    if (pushed_) pushed_ = w;
-    grab_ = w;
+}
+
+void Fl::release() {
+  grab_ = 0;
+#ifdef WIN32
+  ReleaseCapture();
+#else
+  XUngrabKeyboard(fl_display, fl_event_time);
+  XUngrabPointer(fl_display, fl_event_time);
+  // this flush is done in case the picked menu item goes into
+  // an infinite loop, so we don't leave the X server locked up:
+  XFlush(fl_display);
+#endif
+  if (xmousewin) {
+    // send a FL_MOVE event so the enter/leave state is up to date
+    Fl::e_x = Fl::e_x_root-xmousewin->x();
+    Fl::e_y = Fl::e_y_root-xmousewin->y();
+    xmousewin->handle(FL_MOVE);
   } else {
-    if (grab_) {
-#ifdef WIN32
-      ReleaseCapture();
-#else
-      XUngrabKeyboard(fl_display, fl_event_time);
-      XUngrabPointer(fl_display, fl_event_time);
-      // this flush is done in case the picked menu item goes into
-      // an infinite loop, so we don't leave the X server locked up:
-      XFlush(fl_display);
-#endif
-      grab_ = 0;
-      pushed_ = 0;
-      if (xmousewin) {
-	// send a FL_MOVE event so the enter/leave state is up to date
-	Fl::e_x = Fl::e_x_root-xmousewin->x();
-	Fl::e_y = Fl::e_y_root-xmousewin->y();
-	xmousewin->handle(FL_MOVE);
-      } else {
-	Fl::belowmouse(0);
-      }
-    }
+    Fl::belowmouse(0);
   }
 }
 
@@ -423,6 +420,8 @@ void Fl::add_handler(int (*h)(int)) {
 
 int Fl::handle(int event, Fl_Window* window)
 {
+  if (grab_) return grab_(event, grab_data);
+
   Fl_Widget* w = window;
 
   switch (event) {
@@ -430,7 +429,6 @@ int Fl::handle(int event, Fl_Window* window)
   case FL_PUSH:
     Fl_Tooltip::enter((Fl_Widget*)0);
     if (pushed()) w = pushed();
-    else if (grab()) w = grab();
     else if (modal() && w != modal()) return 0;
     pushed_ = w;
     if (send(event, w, window)) return 1;
@@ -442,45 +440,36 @@ int Fl::handle(int event, Fl_Window* window)
   case FL_MOVE:
 //case FL_DRAG: // does not happen
     xmousewin = window; // this should already be set, but just in case.
-    if (grab()) w = grab();
     if (w != pushed()) send(FL_MOVE, w, window);
     if (pushed()) send(FL_DRAG, pushed(), window);
     return 1;
 
   case FL_RELEASE: {
     w = pushed();
-    if (!(event_state()&(FL_BUTTON1|FL_BUTTON2|FL_BUTTON3))) pushed_=0;
+    if (!(event_pushed())) pushed_=0;
     int r = w ? send(event, w, window) : 0;
-    // fl_fix_focus(); // not needed?
     return r;}
 
   case FL_UNFOCUS:
-    window = 0;
   case FL_FOCUS:
-    xfocus = window;
     fl_fix_focus();
     return 1;
 
   case FL_ENTER:
-    xmousewin = window;
-    if (!grab()) send(event, w, window);
+    send(event, w, window);
     return 1;
 
   case FL_LEAVE:
-    if (window == xmousewin) {
-      xmousewin = 0;
-      if (!grab()) belowmouse(0);
-    }
+    belowmouse(0);
     return 1;
 
   case FL_KEYBOARD:
 
     Fl_Tooltip::enter((Fl_Widget*)0);
     xfocus = window; // this should already be set, but just in case.
-    // fl_fix_focus(); clobbers e_keysym, so do not call this, or save it
 
     // Try sending keystroke to the focus, if any:
-    w = grab(); if (!w) w = focus();
+    w = focus();
     if (w && send(FL_KEYBOARD, w, window)) return 1;
 
     // try flipping the case of letter shortcuts:
@@ -502,8 +491,6 @@ int Fl::handle(int event, Fl_Window* window)
     // causes every widget in the window to be tried eventually, so
     // if something is interested in the event it should see it.
 
-    if (grab()) return send(event, grab(), window);
-
     w = focus();
     if (!w) {w = modal();
     if (!w) {w = window;}}
@@ -520,5 +507,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.88 2000/04/16 08:31:45 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.89 2000/04/24 08:31:24 bill Exp $".
 //

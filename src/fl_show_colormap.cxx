@@ -1,5 +1,5 @@
 //
-// "$Id: fl_show_colormap.cxx,v 1.12 2000/03/20 08:40:26 bill Exp $"
+// "$Id: fl_show_colormap.cxx,v 1.13 2000/04/24 08:31:28 bill Exp $"
 //
 // Colormap color selection dialog for the Fast Light Tool Kit (FLTK).
 //
@@ -40,8 +40,8 @@ class ColorMenu : public Fl_Window {
   int done;
   void drawbox(Fl_Color);
   void draw();
-  int handle(int);
 public:
+  int handle(int);
   ColorMenu(Fl_Color oldcol);
   Fl_Color run();
 };
@@ -76,6 +76,7 @@ int ColorMenu::handle(int e) {
   unsigned c = which;
   switch (e) {
   case FL_PUSH:
+  case FL_MOVE:
   case FL_DRAG: {
     int X = (Fl::event_x_root() - x() - BORDER);
     if (X >= 0) X = X/BOXSIZE;
@@ -87,7 +88,7 @@ int ColorMenu::handle(int e) {
       c = initial;
     } break;
   case FL_RELEASE:
-    if (!Fl::pushed()) done = 1;
+    if (!(Fl::event_pushed())) done = 1;
     return 1;
   case FL_KEYBOARD:
     switch (Fl::event_key()) {
@@ -118,6 +119,10 @@ int ColorMenu::handle(int e) {
   return 1;
 }
 
+static int handle(int e, void* data) {
+  return ((ColorMenu*)data)->handle(e);
+}
+
 Fl_Color ColorMenu::run() {
   if (which > 255) {
     move(FL_USEDEFAULT, FL_USEDEFAULT);
@@ -125,11 +130,11 @@ Fl_Color ColorMenu::run() {
     position(Fl::event_x_root()-(initial%8)*BOXSIZE-BOXSIZE/2-BORDER,
 	     Fl::event_y_root()-(initial/8)*BOXSIZE-BOXSIZE/2-BORDER);
   }
-  Fl::grab(this);
+  Fl::grab(::handle, this);
   show();
   done = 0;
   while (!done) Fl::wait();
-  Fl::grab(0);
+  Fl::release();
   return which;
 }
 
@@ -139,5 +144,5 @@ Fl_Color fl_show_colormap(Fl_Color oldcol) {
 }
 
 //
-// End of "$Id: fl_show_colormap.cxx,v 1.12 2000/03/20 08:40:26 bill Exp $".
+// End of "$Id: fl_show_colormap.cxx,v 1.13 2000/04/24 08:31:28 bill Exp $".
 //

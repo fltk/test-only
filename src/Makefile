@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.70 2000/04/16 08:31:50 bill Exp $"
+# "$Id: Makefile,v 1.71 2000/04/24 08:31:27 bill Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -31,7 +31,7 @@ CPPFILES = \
 	fl_bmp.cxx \
 	Fl_Browser.cxx \
 	Fl_Browser_.cxx \
-	Fl_Browser_load.cxx \
+	Fl_NewBrowser.cxx \
 	Fl_Box.cxx \
 	Fl_Button.cxx \
 	Fl_Check_Button.cxx \
@@ -57,6 +57,7 @@ CPPFILES = \
 	Fl_Item.cxx \
 	Fl_Light_Button.cxx \
 	Fl_Menu.cxx \
+	Fl_Menu_.cxx \
 	Fl_Menu_add.cxx \
 	Fl_Menu_Bar.cxx \
 	Fl_Menu_Button.cxx \
@@ -168,7 +169,6 @@ CFILES = \
 # files that were deleted:
 
 #	Fl_theme.cxx \
-#	Fl_Menu_.cxx \
 #	fl_background.cxx \
 #	fl_set_font.cxx \
 #	fl_set_fonts.cxx \
@@ -270,5 +270,5 @@ install: $(LIBRARY).a $(DSONAME)
 	@cp ../fltk-config $(bindir)
 
 #
-# End of "$Id: Makefile,v 1.70 2000/04/16 08:31:50 bill Exp $".
+# End of "$Id: Makefile,v 1.71 2000/04/24 08:31:27 bill Exp $".
 #

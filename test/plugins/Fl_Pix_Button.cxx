@@ -36,15 +36,15 @@ Fl_Pix_Button::Fl_Pix_Button(int x,int y,int w,int h,const char *l,Fl_Pixmap* bU
 void Fl_Pix_Button::draw()
 {
   if (type() == FL_HIDDEN_BUTTON) return;
-  if(!pix) return;
+  if (!pix) return;
   switch(value())
   {
-      case 0: if(hilight) pix->draw(x(),y(), w(), pix->h/3);
-              else pix->draw(x(),y(), w(), pix->h/3); 
+      case 0: if(hilight) pix->draw(x(),y(), w(), pix->h/3, 0, 0);
+              else pix->draw(x(),y(), w(), pix->h/3, 0, 0);
               break;
-      case 1: pix->draw(x(),y(), w(), pix->h/3); 
+      case 1: pix->draw(x(),y(), w(), pix->h/3, 0, 0);
               break;
-      default: pix->draw(x(),y(), w(), pix->h/3); 
+      default: pix->draw(x(),y(), w(), pix->h/3, 0, 0);
               break;
   }
   draw_label();
