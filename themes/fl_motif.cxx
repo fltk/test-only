@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.12 2001/01/02 00:20:29 clip Exp $"
+// "$Id: fl_motif.cxx,v 1.13 2001/02/20 16:12:07 robertk Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -80,15 +80,23 @@ static void motif_glyph(const Fl_Widget* widget, int t,
 //       if (f&FL_INACTIVE)
 //         { light = fl_inactive(light); dark = fl_inactive(dark); }
       fl_color((f & FL_VALUE) ? fc : bc);
-      fl_polygon(x+3,y1, x1,y+3, x+w-4,y1, x1,y+h-4);
+      //fl_polygon(x+3,y1, x1,y+3, x+w-4,y1, x1,y+h-4);
+	  fl_newpath(); fl_vertex(x+3, y1); fl_vertex(x1, y+3); 
+	  fl_vertex(x+w-4, y1); fl_vertex(x1, y+h-4); fl_closepath(); fl_fill();
 
-      fl_color(light); fl_line(x, y1, x1, y, x+w-1, y1);
-      fl_color(light); fl_line(x+1, y1, x1, y+1, x+w-2, y1);
-      fl_color(light); fl_line(x+2, y1, x1, y+2, x+w-3, y1);
+      //fl_color(light); fl_line(x, y1, x1, y, x+w-1, y1);
+      //fl_color(light); fl_line(x+1, y1, x1, y+1, x+w-2, y1);
+      //fl_color(light); fl_line(x+2, y1, x1, y+2, x+w-3, y1);
+      fl_color(light); fl_line(x, y1, x1, y); fl_line(x, y1, x+w-1, y1);
+      fl_color(light); fl_line(x+1, y1, x1, y+1); fl_line(x+1, y1, x+w-2, y1);
+      fl_color(light); fl_line(x+2, y1, x1, y+2); fl_line(x+2, y1, x+w-3, y1);
 
-      fl_color(dark); fl_line(x, y1, x1, y+h-1, x+w-1, y1);
-      fl_color(dark); fl_line(x+1, y1, x1, y+h-2, x+w-2, y1);
-      fl_color(dark); fl_line(x+2, y1, x1, y+h-3, x+w-3, y1);
+      //fl_color(dark); fl_line(x, y1, x1, y+h-1, x+w-1, y1);
+      //fl_color(dark); fl_line(x+1, y1, x1, y+h-2, x+w-2, y1);
+      //fl_color(dark); fl_line(x+2, y1, x1, y+h-3, x+w-3, y1);
+      fl_color(dark); fl_line(x, y1, x1, y+h-1); fl_line(x,y1, x+w-1, y1);
+      fl_color(dark); fl_line(x+1, y1, x1, y+h-2); fl_line(x+1, y1, x+w-2, y1);
+      fl_color(dark); fl_line(x+2, y1, x1, y+h-3); fl_line(x+2, y1, x+w-3, y1);
       break;
     }
     case FL_GLYPH_CHECK:
@@ -131,42 +139,66 @@ static void motif_glyph(const Fl_Widget* widget, int t,
       switch (t) {
       case FL_GLYPH_RIGHT:
       case FL_GLYPH_RIGHT_BUTTON:
-        fl_color(bc); fl_polygon(x,y, x+w-1,y+h/2, x,y+h-1);
+        //fl_color(bc); fl_polygon(x,y, x+w-1,y+h/2, x,y+h-1);
+		fl_color(bc); fl_newpath(); fl_vertex(x, y); fl_vertex(x+w-1, y+h/2); 
+		fl_vertex(x,y+h-1); fl_closepath(); fl_fill();
         fl_color(l2); fl_line(x+2,y+2, x+w-3,y+h/2);
         fl_color(d2); fl_line(x+2,y+h-3, x+w-3,y+h/2);
-        fl_color(l2); fl_line(x+1,y+h-2, x+1,y+1, x+w-2,y+h/2);
+        //fl_color(l2); fl_line(x+1,y+h-2, x+1,y+1, x+w-2,y+h/2);
+        fl_color(l2); fl_line(x+1,y+h-2, x+1,y+1); 
+		fl_line(x+1,y+h-2, x+w-2,y+h/2);
         fl_color(d2); fl_line(x+1,y+h-2, x+w-2,y+h/2);
-        fl_color(l1); fl_line(x,y+h-1, x,y, x+w-1,y+h/2);
+        //fl_color(l1); fl_line(x,y+h-1, x,y, x+w-1,y+h/2);
+        fl_color(l1); fl_line(x,y+h-1, x,y);
+		fl_line(x,y+h-1, x+w-1,y+h/2);
         fl_color(d1); fl_line(x,y+h-1, x+w-1,y+h/2);
 	break;
       case FL_GLYPH_LEFT:
       case FL_GLYPH_LEFT_BUTTON:
-        fl_color(bc); fl_polygon(x+w-1,y, x+w-1,y+h-1, x,y+h/2);
+        //fl_color(bc); fl_polygon(x+w-1,y, x+w-1,y+h-1, x,y+h/2);
+		fl_color(bc); fl_newpath(); fl_vertex(x+w-1, y); fl_vertex(x+w-1, y+h-1); 
+		fl_vertex(x,y+h/2); fl_closepath(); fl_fill();
         fl_color(d2); fl_line(x+w-3,y+h-3, x+2,y+h/2);
         fl_color(l2); fl_line(x+w-3,y+2, x+2,y+h/2);
-        fl_color(d2); fl_line(x+w-2,y+1, x+w-2,y+h-2, x+1,y+h/2);
+        //fl_color(d2); fl_line(x+w-2,y+1, x+w-2,y+h-2, x+1,y+h/2);
+        fl_color(d2); fl_line(x+w-2,y+1, x+w-2,y+h-2);
+		fl_line(x+w-2,y+1, x+1,y+h/2);
         fl_color(l2); fl_line(x+w-2,y+1, x+1,y+h/2);
-        fl_color(d1); fl_line(x+w-1,y, x+w-1,y+h-1, x,y+h/2);
+        //fl_color(d1); fl_line(x+w-1,y, x+w-1,y+h-1, x,y+h/2);
+        fl_color(d1); fl_line(x+w-1,y, x+w-1,y+h-1);
+		fl_line(x+w-1, y, x,y+h/2);
         fl_color(l1); fl_line(x+w-1,y, x,y+h/2);
 	break;
       case FL_GLYPH_DOWN:
       case FL_GLYPH_DOWN_BUTTON:
-        fl_color(bc); fl_polygon(x,y, x+w/2,y+h-1, x+w-1,y);
+        //fl_color(bc); fl_polygon(x,y, x+w/2,y+h-1, x+w-1,y);
+		fl_color(bc); fl_newpath(); fl_vertex(x, y); fl_vertex(x+w/2, y+h-1); 
+		fl_vertex(x+w-1,y); fl_closepath(); fl_fill();
         fl_color(l2); fl_line(x+2,y+2, x+w/2,y+h-3);
         fl_color(d2); fl_line(x+w-3,y+2, x+w/2,y+h-3);
-        fl_color(l2); fl_line(x+w-2,y+1, x+1,y+1, x+w/2,y+h-2);
+        //fl_color(l2); fl_line(x+w-2,y+1, x+1,y+1, x+w/2,y+h-2);
+        fl_color(l2); fl_line(x+w-2,y+1, x+1,y+1);
+		fl_line(x+w-2,y+1, x+w/2,y+h-2);
         fl_color(d2); fl_line(x+w-2,y+1, x+w/2,y+h-2);
-        fl_color(l1); fl_line(x+w-1,y, x,y, x+w/2,y+h-1);
+        //fl_color(l1); fl_line(x+w-1,y, x,y, x+w/2,y+h-1);
+        fl_color(l1); fl_line(x+w-1,y, x,y);
+		fl_line(x+w-1,y, x+w/2,y+h-1);
         fl_color(d1); fl_line(x+w-1,y, x+w/2,y+h-1);
 	break;
       case FL_GLYPH_UP:
       case FL_GLYPH_UP_BUTTON:
-        fl_color(bc); fl_polygon(x,y+h-1, x+w-1,y+h-1, x+w/2,y);
+        //fl_color(bc); fl_polygon(x,y+h-1, x+w-1,y+h-1, x+w/2,y);
+		fl_color(bc); fl_newpath(); fl_vertex(x, y+h-1); fl_vertex(x+w-1, y+h-1); 
+		fl_vertex(x+w/2,y); fl_closepath(); fl_fill();
         fl_color(d2); fl_line(x+w-3,y+h-3, x+w/2,y+2);
         fl_color(l2); fl_line(x+2,y+h-3, x+w/2,y+2);
-        fl_color(d2); fl_line(x+1,y+h-2, x+w-2,y+h-2, x+w/2,y+1);
+        //fl_color(d2); fl_line(x+1,y+h-2, x+w-2,y+h-2, x+w/2,y+1);
+        fl_color(d2); fl_line(x+1,y+h-2, x+w-2,y+h-2);
+		fl_line(x+1,y+h-2, x+w/2,y+1);
         fl_color(l2); fl_line(x+1,y+h-2, x+w/2,y+1);
-        fl_color(d1); fl_line(x,y+h-1, x+w-1,y+h-1, x+w/2,y);
+        //fl_color(d1); fl_line(x,y+h-1, x+w-1,y+h-1, x+w/2,y);
+        fl_color(d1); fl_line(x,y+h-1, x+w-1,y+h-1);
+		fl_line(x,y+h-1, x+w/2,y);
         fl_color(l1); fl_line(x,y+h-1, x+w/2,y);
 	break;
       }
@@ -267,5 +299,5 @@ int fl_motif()
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.12 2001/01/02 00:20:29 clip Exp $"
+// End of "$Id: fl_motif.cxx,v 1.13 2001/02/20 16:12:07 robertk Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_RGB_Image.H,v 1.3 2000/03/19 01:38:30 bill Exp $"
+// "$Id: Fl_RGB_Image.H,v 1.4 2001/02/20 16:12:06 robertk Exp $"
 //
 // RGB_Image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -35,11 +35,11 @@ public:
   Fl_RGB_Image(const uchar* d, int W, int H, int D=3)
     : data(d) {w = W; h = H; depth = D;}
   void draw(int, int, int, int, int cx, int cy);
-  void draw(int X, int Y) {draw(X,Y,w,h,0,0);}
+  void draw(int X, int Y) {Fl_RGB_Image::draw(X,Y,w,h,0,0);}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_RGB_Image.H,v 1.3 2000/03/19 01:38:30 bill Exp $".
+// End of "$Id: Fl_RGB_Image.H,v 1.4 2001/02/20 16:12:06 robertk Exp $".
 //

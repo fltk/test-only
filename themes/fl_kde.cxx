@@ -1,5 +1,5 @@
 //
-// "$Id: fl_kde.cxx,v 1.12 2001/01/02 00:20:29 clip Exp $"
+// "$Id: fl_kde.cxx,v 1.13 2001/02/20 16:12:07 robertk Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -186,7 +186,7 @@ int fl_kde(int co) {
     }
     if ( (p = strtok_r(0, ",", &sv)) && !strcmp(p, "75") ) fontbold = 1;
     if ( (p = strtok_r(0, ",", &sv)) && !strcmp(p, "1") ) fontitalic = 1;
-    font = fl_font(fontname);
+    font = fl_find_font(fontname);
     if (font && fontbold) font = font->bold();
     if (font && fontitalic) font = font->italic();
   }
@@ -208,7 +208,7 @@ int fl_kde(int co) {
     }
     if ( (p = strtok_r(0, ",", &sv)) && !strcmp(p, "75") ) fontbold = 1;
     if ( (p = strtok_r(0, ",", &sv)) && !strcmp(p, "1") ) fontitalic = 1;
-    menufont = fl_font(fontname);
+    menufont = fl_find_font(fontname);
     if (menufont && fontbold) menufont = font->bold();
     if (menufont && fontitalic) menufont = font->italic();
   }
@@ -367,5 +367,5 @@ int fl_kde(int co) {
 }
 
 //
-// End of "$Id: fl_kde.cxx,v 1.12 2001/01/02 00:20:29 clip Exp $".
+// End of "$Id: fl_kde.cxx,v 1.13 2001/02/20 16:12:07 robertk Exp $".
 //
