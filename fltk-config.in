@@ -4,7 +4,7 @@
 #
 # original version by James Dean Palmer, adapted by Vincent Penne
 #
-# "$Id: fltk-config.in,v 1.6 1999/12/07 23:33:28 vincent Exp $"
+# "$Id: fltk-config.in,v 1.7 1999/12/08 10:53:00 vincent Exp $"
 #
 
 MAJOR_VERSION=2
@@ -41,8 +41,16 @@ RANLIB="@RANLIB@"
 DSONAME="@DSONAME@"
 DSOCOMMAND="@DSOCOMMAND@"
 
+# flags for the linker
+LD_PLUGIN_FLAGS="@LD_PLUGIN_FLAGS@"	# to build some plugin
+
 # libraries to link with:
 IMAGELIBS="@LIBPNG@ @LIBJPEG@"
+
+# programs to make archive and build DSOs
+RANLIB="@RANLIB@"
+DSOCOMMAND="@DSOCOMMAND@"
+EXPORTCOMMAND="@EXPORTCOMMAND@"
 
 usage ()
 {
@@ -51,10 +59,16 @@ Options:
 	[--prefix[=DIR]]  return/set where FLTK is installed
 	[--exec-prefix[=DIR]]
 	[--version]
+
+options telling what we are doing :
 	[--use-gl]        use GL
 	[--use-images]    use extra image formats
 	[--use-glut]      use glut compatibility layer
 	[--use-forms]     use forms compatibility layer
+	[--build-plugin]  build a plugin
+	[--no-plugins]    build a program unable to load plugins (Linux only)
+
+options telling what information we request
 	[--cflags]        return flags to compile C using FLTK
 	[--cxxflags]      return flags to compile C++ using FLTK
 	[--ldflags]       return flags to link against FLTK
@@ -67,6 +81,8 @@ Options:
 
 if test $# -eq 0; then usage 1
 fi
+
+no_plugins=no
 
 # Parse command line options
 while test $# -gt 0 
@@ -108,6 +124,12 @@ do
       ;;
     --use-forms)
       use_forms=yes
+      ;;
+    --build-plugin)
+      build_plugin=yes
+      ;;
+    --no-plugins)
+      no_plugins=yes
       ;;
     --cflags)
       echo_cflags=yes
@@ -178,9 +200,17 @@ if test "$use_images" = "yes"; then
     LDSTATIC="$LDSTATIC $prefix/lib/libfltk_images.a $IMAGELIBS"
     LIBS="$LIBS $prefix/lib/libfltk_images.a"
 fi
-LDLIBS="$LDLIBS -lfltk @LDFLAGS@ @LIBS@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@"
-LDSTATIC="$LDSTATIC $prefix/lib/libfltk.a @LDFLAGS@ @LIBS@ @LDLIBS@ @X_EXTRA_LIBS@ -lm @LD_DLOPEN_FLAGS@"
+if test "$build_plugin" = "yes"; then
+    LDLIBS="$LDLIBS $LD_PLUGIN_FLAGS"
+    LDSTATIC="$LDSTATIC LD_PLUGIN_FLAGS"
+fi
+LDLIBS="$LDLIBS -lfltk @LDFLAGS@ @LIBS@ @LDLIBS@ @X_EXTRA_LIBS@ -lm"
+LDSTATIC="$LDSTATIC $prefix/lib/libfltk.a @LDFLAGS@ @LIBS@ @LDLIBS@ @X_EXTRA_LIBS@ -lm"
 LIBS="$LIBS $prefix/lib/libfltk.a"
+if test "$no_plugins" = "no"; then
+    LDLIBS="$LDLIBS @LD_DLOPEN_FLAGS@"
+    LDSTATIC="$LDSTATIC @LD_DLOPEN_FLAGS@"
+fi
 
 if test "$echo_ldflags" = "yes"; then
       my_libs=

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.35 1999/11/21 04:23:05 vincent Exp $"
+# "$Id: Makefile,v 1.36 1999/12/08 10:53:06 vincent Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -55,41 +55,38 @@ $(ALL):  ../lib/$(LIBNAME).a
 .SUFFIXES: .cxx .c .o .fl .h
 
 .cxx:
-	$(CXX) -I.. $(CXXFLAGS) $< -L../lib -lfltk $(LDLIBS) -o $@
+	$(CXX) $< `../fltk-config --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 
 .cxx.o:
-	$(CXX) -I.. $(CXXFLAGS) $< -c
+	$(CXX) `../fltk-config --cxxflags` $(DEBUGFLAGS) $< -c
 
 .fl.cxx .fl.h:
 	../fluid/fluid -c $<
 
 .fl:
 	../fluid/fluid -c $<
-	$(CXX) -I.. $(CXXFLAGS) $@.cxx -L../lib -lfltk $(LDLIBS) -o $@
+	$(CXX) $@.cxx `../fltk-config --cxxflags` $(DEBUGFLAGS) -o $@
 
 # Other programs needing special "help"...
 CubeView: CubeMain.o CubeView.o CubeViewUI.o
-	$(CXX) -I.. $(CXXFLAGS) CubeMain.o CubeView.o CubeViewUI.o \
-		-L../lib -lfltk $(GLDLIBS) -o $@
+	$(CXX) CubeMain.o CubeView.o CubeViewUI.o `../fltk-config --use-gl --ldflags` $(DEBUGFLAGS) -o $@
 CubeMain.o: CubeViewUI.h CubeView.h
 CubeView.o: CubeView.h
 
 glpuzzle: glpuzzle.cxx
-	$(CXX) -I.. $(CXXFLAGS) glpuzzle.cxx -L../lib -lfltk $(GLDLIBS) -o $@
+	$(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 cube: cube.cxx
-	$(CXX) -I.. $(CXXFLAGS) cube.cxx -L../lib -lfltk $(GLDLIBS) -o $@
+	$(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 fullscreen: fullscreen.cxx
-	$(CXX) -I.. $(CXXFLAGS) fullscreen.cxx -L../lib -lfltk $(GLDLIBS) -o $@
+	$(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 gl_overlay: gl_overlay.cxx
-	$(CXX) -I.. $(CXXFLAGS) gl_overlay.cxx -L../lib -lfltk $(GLDLIBS) -o $@
+	$(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 keyboard: keyboard.cxx keyboard_ui.cxx
-	$(CXX) -I.. $(CXXFLAGS) keyboard.cxx -L../lib -lfltk $(LDLIBS) -o $@
 mandelbrot: mandelbrot.cxx mandelbrot_ui.cxx
-	$(CXX) -I.. $(CXXFLAGS) mandelbrot.cxx -L../lib -lfltk $(LDLIBS) -o $@
 shape: shape.cxx
-	$(CXX) -I.. $(CXXFLAGS) shape.cxx -L../lib -lfltk $(GLDLIBS) -o $@
+	$(CXX) $< `../fltk-config --use-gl --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 image_file: image_file.cxx
-	$(CXX) -I.. $(CXXFLAGS) image_file.cxx -L../lib -lfltk -lfltk_images $(LDLIBS) $(IMAGELIBS) -o $@
+	$(CXX) $< `../fltk-config --use-images --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 
 # If you have libjpeg installed, you might want to try this test program:
 
@@ -106,5 +103,5 @@ install:
 	@echo Nothing to install in test directory.
 
 #
-# End of "$Id: Makefile,v 1.35 1999/11/21 04:23:05 vincent Exp $".
+# End of "$Id: Makefile,v 1.36 1999/12/08 10:53:06 vincent Exp $".
 #

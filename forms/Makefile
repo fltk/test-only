@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.4 1999/11/27 15:45:02 carl Exp $"
+# "$Id: Makefile,v 1.5 1999/12/08 10:53:03 vincent Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -66,7 +66,7 @@ $(LIBRARY).so.2 $(LIBRARY).sl.2: $(OBJECTS)
 	$(CC) -I.. $(CFLAGS) -c $<
 
 .cxx :
-	$(CXX) -I.. $(CXXFLAGS) $< $(LIBRARY).a -L../lib -lfltk $(LDLIBS) -o $@
+	$(CXX) $< `../fltk-config --use-forms --cxxflags --ldflags` $(DEBUGFLAGS) -o $@
 
 clean :
 	-@ rm -f *.o *.do $(LIBRARY).a $(DEMOS) core *~ makedepend
@@ -94,5 +94,5 @@ install: $(LIBRARY).a
 	fi
 
 #
-# End of "$Id: Makefile,v 1.4 1999/11/27 15:45:02 carl Exp $".
+# End of "$Id: Makefile,v 1.5 1999/12/08 10:53:03 vincent Exp $".
 #

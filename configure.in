@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.69 1999/11/27 15:44:43 carl Exp $"
+dnl# "$Id: configure.in,v 1.70 1999/12/08 10:53:00 vincent Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -219,25 +219,6 @@ if test "$ac_cv_have_overlay" = yes; then
     AC_DEFINE(HAVE_OVERLAY)
 fi
 
-have_dlopen=no
-AC_CHECK_LIB(c, dlopen, \
-     LD_DLOPEN_FLAGS=""
-     have_dlopen=yes,
-     AC_CHECK_LIB(dl, dlopen, \
-      LD_DLOPEN_FLAGS="-ldl" have_dlopen=yes,,),
-)
-
-if test $have_dlopen = yes; then
-    AC_DEFINE(HAVE_DLOPEN)
-    LD_PLUGIN_FLAGS="-shared"
-    if test "$uname" = "Linux"; then
-        LDLIBS="${LDLIBS} -rdynamic"
-    fi
-fi
-
-AC_SUBST(LD_DLOPEN_FLAGS)
-AC_SUBST(LD_PLUGIN_FLAGS)
-
 have_pthread=no
 AC_CHECK_LIB(c, pthread_create, \
      have_pthread=yes,
@@ -252,6 +233,25 @@ if test $have_pthread = yes; then
     AC_DEFINE(HAVE_PTHREAD)
 fi
 
+have_dlopen=no
+AC_CHECK_LIB(c, dlopen, \
+     LD_DLOPEN_FLAGS=""
+     have_dlopen=yes,
+     AC_CHECK_LIB(dl, dlopen, \
+      LDLIBS="$LDLIBS -ldl" GLDLIBS="$GLDLIBS -ldl" have_dlopen=yes,,),
+)
+
+if test $have_dlopen = yes; then
+    AC_DEFINE(HAVE_DLOPEN)
+    LD_PLUGIN_FLAGS="-shared"
+    if test "$uname" = "Linux"; then
+        LD_DLOPEN_FLAGS="${LD_DLOPEN_FLAGS} -rdynamic"
+    fi
+fi
+
+AC_SUBST(LD_DLOPEN_FLAGS)
+AC_SUBST(LD_PLUGIN_FLAGS)
+
 MAKEDEPEND="\$(CXX) -M"
 
 dnl# add warnings to compiler switches:
@@ -260,8 +260,9 @@ if test -n "$GXX"; then
     CFLAGS="-Wall $CFLAGS"
     CXXFLAGS="-Wall -Wno-return-type $CXXFLAGS"
     if test -z "$DEBUGFLAG"; then
-        CFLAGS="-O2 -fomit-frame-pointer $CFLAGS"
-        CXXFLAGS="-O2 -fno-exceptions -fomit-frame-pointer $CXXFLAGS"
+        CFLAGS="-fomit-frame-pointer $CFLAGS"
+        CXXFLAGS="-fno-exceptions -fomit-frame-pointer $CXXFLAGS"
+	DEBUGFLAG="-O2"
     fi
     if test $PICFLAG = 1; then
     	CFLAGS="-fPIC $CFLAGS"
@@ -284,29 +285,25 @@ else
         	CFLAGS="-fullwarn $CFLAGS"
         	CXXFLAGS="-fullwarn $CXXFLAGS"
 		if test -z "$DEBUGFLAG"; then
-        	    CFLAGS="-O2 -OPT:Olimit=3000 $CFLAGS"
-        	    CXXFLAGS="-O2 -OPT:Olimit=3000 $CXXFLAGS"
+	            DEBUGFLAG="-O2 -OPT:Olimit=3000"
 		fi
 	    else
         	CXXFLAGS="+w +pp $CXXFLAGS"
 		if test -z "$DEBUGFLAG"; then
-        	    CFLAGS="-O2 -Olimit=3000 $CFLAGS"
-        	    CXXFLAGS="-O2 -Olimit=3000 $CXXFLAGS"
+	            DEBUGFLAG="-O2 -Olimit=3000"
 		fi
 	    fi
 	    ;;
 	HP-UX*)
 	    # Running HP-UX; these options should work for the HP compilers.
 	    if test -z "$DEBUGFLAG"; then
-		CFLAGS="+O2 $CFLAGS"
-		CXXFLAGS="+O2 +W336,501,736,740,749,829 $CXXFLAGS"
+		DEBUGFLAG="+O2"
 	    fi
 	    ;;
 	SunOS*)
 	    # Solaris
 	    if test -z "$DEBUGFLAG"; then
-		CFLAGS="-O"
-		CXXFLAGS="-O"
+		DEBUGFLAG="-O"
 	    fi
 	    if test $PICFLAG = 1; then
 		CFLAGS="-KPIC $CFLAGS"
@@ -327,6 +324,7 @@ fi
 CFLAGS="$DEBUGFLAG $CFLAGS"
 CXXFLAGS="$DEBUGFLAG $CXXFLAGS"
 PREFIX=${prefix}
+AC_SUBST(DEBUGFLAG)
 
 if test "$PREFIX" = "NONE"; then
     AC_DEFINE_UNQUOTED(FLTK_LIBDIR, "${ac_default_prefix}")
@@ -352,5 +350,5 @@ AC_OUTPUT(makeinclude fltk-config)
 chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.69 1999/11/27 15:44:43 carl Exp $".
+dnl# End of "$Id: configure.in,v 1.70 1999/12/08 10:53:00 vincent Exp $".
 dnl#
