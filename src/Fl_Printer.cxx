@@ -1,3 +1,29 @@
+//
+// "$Id: Fl_Printer.cxx,v 1.1.2.2 2004/04/02 20:50:27 rokan Exp $"
+//
+// Preferences methods for the Fast Light Tool Kit (FLTK).
+//
+// Copyright 2002-2004 by Matthias Melcher.
+//
+// This library is free software; you can redistribute it and/or
+// modify it under the terms of the GNU Library General Public
+// License as published by the Free Software Foundation; either
+// version 2 of the License, or (at your option) any later version.
+//
+// This library is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+// Library General Public License for more details.
+//
+// You should have received a copy of the GNU Library General Public
+// License along with this library; if not, write to the Free Software
+// Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
+// USA.
+//
+// Please report all bugs and problems to "fltk-bugs@fltk.org".
+//
+
+
 #include <FL/Fl_Printer.H>
 #include <stdio.h>
 #include <stdlib.h>
@@ -48,6 +74,8 @@ const int Fl_Printer::page_formats[NO_PAGE_FORMATS][2]={
 
 };
 
+const char * Fl_Printer::doc_info_ = "Fltk Application";
+
 void Fl_Printer::place(double x, double y, double w, double h, double tx, double ty, double tw, double th, int align){
 
   double dx=0;
@@ -72,137 +100,8 @@ void Fl_Printer::place(double x, double y, double w, double h, double tx, double
 
 }
 
-//FL_EXPORT void Fl_Printer::fit(Fl_Widget * w, int align){fit(w->x(), w->y(), w->w(), w->h(), align);};
-//FL_EXPORT void Fl_Printer::fit(Fl_Widget * w, double dpi, int align){fit(w->x(), w->y(), w->w(), w->h(), dpi,  align);};
-
-// it rerurns: 
-// -2 - out of range
-// -1  - syntax error
-// 0  non-filled
-// + n -converted numbers. If pages is not null , it fills it by a set of pages to be printed.
-
-// This will  go in the foture to  Fl_Printer_Chooser...
-/*
-
- static const char * fl_printer_format_names_en = "User defined|A0|A1|A2|A3|A4|A5|A6|A7|A8|A9|"
-  "B0|B1|B2|B3|B4|B5|B6|B7|B8|B9|B10|C5 sheet|DLE|Executive|Folio|Ledger|Legal"
-  "Letter|Tabloid|Common Envelope #9";
+//
+// End of "$Id: Fl_Printer.cxx,v 1.1.2.2 2004/04/02 20:50:27 rokan Exp $"
+//
 
 
-int get_number (const char **selection, int * number){
-
-  int i;
-  int ret = 0;
-  const char * pos = strchr(*selection, ',');
-  const char * pos2 = strchr(*selection, '-');
-  if(!pos){
-    pos = pos2;
-    ret = 2;
-    if(!pos){
-      pos = 0;
-      ret = 0;
-    }
-  }else{
-    ret = 1;
-    if(pos2 && (pos2<pos)){
-      ret = 2;
-      pos = pos2;
-    }
-  }
-  int state = 0;
-  const char * c;
-  int digits = 0;
-  for(c = *selection; c<pos; c++){
-    if(isspace(*c)){
-      if(state == 1)
-        state = 2;
-      continue;
-    }
-    if(isdigit(*c)){
-      if(state == 2){
-        ret = -1;
-        pos =0;
-        break;
-      }
-      if(!state)
-        state = 1;
-      digits = 1;
-      continue;
-    }
-    ret = -1;
-    pos = 0;
-    break;
-  }
-
-  if(digits)
-    *number =  atoi(*selection);
-  else
-    *number =0;
-  if(ret>0)
-    pos++;
-  *selection = pos;
-  return ret;
-}
-
-
-
-
-int fl_validate_selection(const char * selection, int max, bool **pages=0){
-
-  int i;
-  const char *str = selection;
-  int result = 0;
-  int number;
-  if(pages){
-    if(*pages) delete[] *pages;
-    * pages = new bool[max];
-    for(i=0;i<max;i++)
-      (*pages)[i] = 0;
-  }
-  int from = 0;
-  int ret;
-  while(1){
-    ret = get_number(&str,&number);
-    if (ret < 0){
-      result = -1;
-      break;
-    }
-    if(!number){
-      if(from)
-        result = -1;
-      break;
-    }
-    result++;
-    if(from){
-      if(ret == 2 || number<from || number > max){
-        result = -1;
-        break;
-      }
-      if(pages)
-        for(i=from; i<= number; i++)
-          (*pages)[i-1] = 1;
-      from = 0;
-    }else{
-      if(number>max){
-        result = -1;
-        break;
-      }
-      if(ret == 2)
-        from = number;
-      else
-        if(pages)
-          (*pages)[number - 1] = 1;
-    }
-    if(!ret) break;
-  }
-  if(pages && (result <=0)) delete[] * pages;
-  return result;
-};
-
-
-
-
-
-
-
-*/

@@ -58,6 +58,7 @@ class FL_EXPORT Fl_GDI_Printer: public Fl_Printer{
   int style_;
   int width_;
   char * dashes_;
+  int nPages;
 
   long max_res_;
   uchar * mask;

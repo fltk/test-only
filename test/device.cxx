@@ -28,28 +28,12 @@
 #include <FL/Fl_Round_Button.H>
 
 
-
-
-
-//#include <FL/Fl_Printer.H>
 #include <FL/Fl_PS_Printer.H>
-
 
 #include "fl_printer_chooser.H"
 
-
-
 #include <FL/Fl_File_Chooser.H>
-
-
-
-
 #include <FL/fl_draw.H>
-
-
-
-
-
 
 
 #define sorceress_width 75
@@ -556,9 +540,7 @@ void make_image() {
 
 void print(Fl_Widget *, void *w) {
     Fl_Widget * g = (Fl_Widget *)w;
-
-    // Fl_Printer * p = fl_printer_chooser();
-    
+ 
     char * filename = fl_file_chooser("Print to file...","*.ps","*.ps");
     if(!filename) return;
     FILE * f = fopen(filename,"w");
@@ -579,9 +561,9 @@ void print2(Fl_Widget *, void *w) {
   Fl_Printer * p = fl_printer_chooser();
   if(!p) return;
   p->page(Fl_Printer::A4);
+  // fitting inside margins 1 inch wide
   p->place(g, FL_INCH, FL_INCH, p->page_width() - 2 * FL_INCH, p->page_height() - 2 * FL_INCH,  FL_ALIGN_CENTER);
   Fl_Device * c = p->set_current();
-  // fitting inside margins 1 inch wide
   fl_draw(g); 
   c->set_current();
   delete p; 
@@ -679,14 +661,6 @@ int main(int argc, char ** argv) {
   tx.box(FL_SHADOW_BOX);
   tx.labelsize(12);
 
-
-
-  /*
-  for(int i=0; i<FL_FREE_BOXTYPE; i++){
-    Fl_Box * b = new Fl_Box(360+41*(i%3),360+16*(i/3),40,15);
-    b->box((Fl_Boxtype)i);
-  };
-  */
 
 
   c2->end();

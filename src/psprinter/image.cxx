@@ -1,5 +1,5 @@
 //
-// "$Id: image.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// "$Id: image.cxx,v 1.1.2.2 2004/04/02 20:50:28 rokan Exp $"
 //
 // Postscript image drawing implementation for the Fast Light Tool Kit (FLTK).
 //
@@ -186,7 +186,7 @@ int Fl_PS_Printer::alpha_mask(const uchar * data, int w, int h, int D, int LD){
 
 
 
-
+// TODO: anybody has more efficient algoritm?
 static inline uchar swap_byte(const uchar i){
   uchar b =0;
   if(i & 1) b |= 128;
@@ -506,7 +506,7 @@ void Fl_PS_Printer::draw(Fl_Bitmap * bitmap,int XP, int YP, int WP, int HP, int 
 
 
 //
-// End of "$Id: image.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// End of "$Id: image.cxx,v 1.1.2.2 2004/04/02 20:50:28 rokan Exp $"
 //
 
 

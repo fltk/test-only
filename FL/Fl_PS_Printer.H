@@ -30,9 +30,6 @@ class FL_EXPORT Fl_PS_Printer:public Fl_Printer{
 
   double width_;
   double height_;
-  //double g_pw_, g_ph_,
-  //double lm_, tm_, rm_, bm_;
-  //int g_orientation_,
 
   int shape_;
   int linewidth_;// need for clipping, lang level 1-2
@@ -51,6 +48,7 @@ class FL_EXPORT Fl_PS_Printer:public Fl_Printer{
   Fl_Color bg_;
   int (*close_cmd_)(FILE *);
   int page_policy_;
+  int nPages;
 
 protected:
     int alpha_mask(const uchar * data, int w, int h, int D, int LD=0);
@@ -65,14 +63,12 @@ protected:
 
 
 public:
-   void page_policy(int p);
-   int page_policy(){return page_policy_;};
+    void page_policy(int p);
+    int page_policy(){return page_policy_;};
 
 
-   void close_command( int (*cmd)(FILE *)){close_cmd_=cmd;};
-   FILE * file(){return output;};
-
-    //void draw(Fl_Widget * w);
+    void close_command( int (*cmd)(FILE *)){close_cmd_=cmd;};
+    FILE * file(){return output;};
 
     Fl_PS_Printer(FILE *o, int lang_level, int pages = 0); // ps (aslo multi-page) constructor
     Fl_PS_Printer(FILE *o, int lang_level, int x, int y, int w, int h); //eps constructor
@@ -82,8 +78,6 @@ public:
 
     void page(double pw, double ph, int media = 0);
     void page(int format);
-    //void page();
-    //void margins(double left, double top, double right, double bottom);
 
     void Fl_PS_Printer::place(double x, double y, double tx, double ty, double scale = 1);
     
@@ -150,14 +144,11 @@ protected:  // implementation of drawing methods
     int font(){return font_;};
     int size(){return size_;};
     int height();
-    //double width(const char* s);
     double width(const char* s, int n);
     double width(unsigned c);
     int descent();
 
     void draw(const char* s, int n, int x, int y){transformed_draw(s,n,x,y);};
- //   void draw(const char* s, int x, int y){transformed_draw(s,x,y);};
-
 
     void draw_image(const uchar* d, int x,int y,int w,int h, int delta=3, int ldelta=0){draw_scalled_image(d,x,y,w,h,w,h,delta,ldelta);};
     void draw_image_mono(const uchar* d, int x,int y,int w,int h, int delta=1, int ld=0){draw_scalled_image_mono(d,x,y,w,h,w,h,delta,ld);};
@@ -166,10 +157,6 @@ protected:  // implementation of drawing methods
 
     void rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b);
 
-    //Fl_PS_Printer(FILE *o, int lang_level, int pages); // ps (aslo multi-page) constructor
-
-
-    //Fl_Device * set_current(){Fl_Device * c = fl
     void draw(Fl_Pixmap * pxm,int XP, int YP, int WP, int HP, int cx, int cy);
     void draw(Fl_RGB_Image * rgb,int XP, int YP, int WP, int HP, int cx, int cy);
     void draw(Fl_Bitmap * bitmap,int XP, int YP, int WP, int HP, int cx, int cy);

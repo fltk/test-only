@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Printer.H,v 1.1.2.3 2004/03/30 20:49:33 rokan Exp $"
+// "$Id: Fl_Printer.H,v 1.1.2.4 2004/04/02 20:50:27 rokan Exp $"
 //
 // Fl_Printer header file for the Fast Light Tool Kit (FLTK).
 //
@@ -47,6 +47,7 @@ const int NO_PAGE_FORMATS=30;
 
 class FL_EXPORT Fl_Printer:public Fl_Device{
   //static const char * creator_;
+  static const char * doc_info_;
 
 public:
 
@@ -88,10 +89,12 @@ public:
 
 protected:
 
-  int nPages;
   double pw_, ph_;
 
 public:
+  static void doc_info(const char * info){ doc_info_ = info;};
+  static const char * doc_info(){return doc_info_;};
+
   static const int page_formats[NO_PAGE_FORMATS][2];
   virtual void page(double pw, double ph, int media = 0)=0;
   virtual void page(int format)=0;
@@ -112,5 +115,5 @@ public:
 #endif
 
 //
-// "$Id: Fl_Printer.H,v 1.1.2.3 2004/03/30 20:49:33 rokan Exp $"
+// "$Id: Fl_Printer.H,v 1.1.2.4 2004/04/02 20:50:27 rokan Exp $"
 //

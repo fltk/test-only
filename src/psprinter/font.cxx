@@ -1,5 +1,5 @@
 //
-// "$Id: font.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// "$Id: font.cxx,v 1.1.2.2 2004/04/02 20:50:28 rokan Exp $"
 //
 // Postscript font drawing implementation for the Fast Light Tool Kit (FLTK).
 //
@@ -69,7 +69,7 @@ static const char *_fontNames[] = {
   "CourierBold",
   "ZapfDingbats"
 };
-// RK: CRITICAL: this is hacky/temporary implementation of fonts
+// TODO RK: CRITICAL: this is hacky/temporary implementation of fonts. All below should be replaced.
 
 void Fl_PS_Printer::font(int f, int s) {
 
@@ -83,11 +83,7 @@ void Fl_PS_Printer::font(int f, int s) {
 };
 
 
-/*
-double Fl_PS_Printer::width(const char* s){
-  return fl_disp.width(s); //Dirty...
-}
-*/
+
 double Fl_PS_Printer::width(unsigned c){
   return fl_disp.width(c); //Dirty...
 }
@@ -103,7 +99,7 @@ int Fl_PS_Printer::height(){
 }
 
 //
-// "$Id: font.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// "$Id: font.cxx,v 1.1.2.2 2004/04/02 20:50:28 rokan Exp $"
 //
 
 

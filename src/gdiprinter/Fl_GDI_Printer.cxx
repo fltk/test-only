@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_GDI_Printer.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// "$Id: Fl_GDI_Printer.cxx,v 1.1.2.2 2004/04/02 20:50:28 rokan Exp $"
 //
 // WIN32 GDI printing device for the Fast Light Tool Kit (FLTK).
 //
@@ -162,7 +162,7 @@ Fl_GDI_Printer::Fl_GDI_Printer(HDC gc, DEVMODE * mode ):Fl_Printer(),/*delete_mo
   
   gc_=gc;
 
-  static DOCINFO DocInfo = { sizeof(DOCINFO), "FLTK Document", NULL,0 };// declare DocInfo for use and set the name of the print job as 'Name Of Document'
+  static DOCINFO DocInfo = { sizeof(DOCINFO), doc_info(), NULL,0 };// declare DocInfo for use and set the name of the print job as 'Name Of Document'
   mode_  = (DEVMODE *)GlobalLock(mode);
   int orientation_ = 0;
   if(mode_->dmOrientation==DMORIENT_LANDSCAPE)
@@ -326,7 +326,7 @@ void Fl_GDI_Printer::set_normal(){
 };
 
 //
-// End of "$Id: Fl_GDI_Printer.cxx,v 1.1.2.1 2004/03/28 10:30:31 rokan Exp $"
+// End of "$Id: Fl_GDI_Printer.cxx,v 1.1.2.2 2004/04/02 20:50:28 rokan Exp $"
 //
 
 
