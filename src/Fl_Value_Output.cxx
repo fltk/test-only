@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Output.cxx,v 1.10 1999/03/18 22:59:10 carl Exp $"
+// "$Id: Fl_Value_Output.cxx,v 1.11 1999/04/03 22:16:13 carl Exp $"
 //
 // Value output widget for the Fast Light Tool Kit (FLTK).
 //
@@ -56,6 +56,11 @@ void Fl_Value_Output::draw() {
   if (damage()&~FL_DAMAGE_CHILD) output.clear_damage(FL_DAMAGE_ALL);
   output.draw();
   output.clear_damage();
+}
+
+void Fl_Value_Output::resize(int X, int Y, int W, int H) {
+  Fl_Valuator::resize(X, Y, W, H);
+  output.resize(X, Y, W, H);
 }
 
 int Fl_Value_Output::handle(int event) {
@@ -117,5 +122,5 @@ Fl_Value_Output::Fl_Value_Output(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Value_Output.cxx,v 1.10 1999/03/18 22:59:10 carl Exp $".
+// End of "$Id: Fl_Value_Output.cxx,v 1.11 1999/04/03 22:16:13 carl Exp $".
 //
