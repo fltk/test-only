@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.7 1999/03/23 13:42:17 carl Exp $"
+ * "$Id: config.h,v 1.8 1999/03/31 19:31:22 carl Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK) for Visual C++.
  *
@@ -129,6 +129,9 @@
 /*#undef HAVE_SNPRINTF*/
 #define HAVE_VSPRINTF 1
 
+extern "C" int snprintf(char* str, size_t size, const char* fmt, ...);
+extern "C" int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
+
 /*
  * HAVE_POLL:
  *
@@ -140,5 +143,5 @@
 #define strcasecmp(a,b) stricmp(a,b)
 
 /*
- * End of "$Id: config.h,v 1.7 1999/03/23 13:42:17 carl Exp $".
+ * End of "$Id: config.h,v 1.8 1999/03/31 19:31:22 carl Exp $".
  */
