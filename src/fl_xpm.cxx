@@ -1,5 +1,5 @@
 //
-// "$Id: fl_xpm.cxx,v 1.12 1999/11/01 15:40:49 mike Exp $"
+// "$Id: fl_xpm.cxx,v 1.13 2000/06/19 06:01:31 bill Exp $"
 //
 // XPM reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,9 +23,9 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-//
-// provide functions to measure and decompress XPM files
-//
+// Image type that reads an xpm file in from disk.  Normal use of xpm
+// files is to imbed them in the source code with #include, in that
+// case you want to use an Fl_Pixmap object.
 
 #include <FL/Fl.H>
 #include <FL/fl_draw.H>
@@ -34,12 +34,9 @@
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
+#include <stdlib.h>
 
 extern uchar **fl_mask_bitmap; // used by fl_draw_pixmap.cxx to store mask
-
-
-#define MAXSIZE 1024
-static char **data;
 
 static int hexdigit(int x) {
   if (isdigit(x)) return x-'0';
@@ -48,18 +45,23 @@ static int hexdigit(int x) {
   return 20;
 }
 
-static void read (char *name, int max = MAXSIZE) {
+#define MAXSIZE 2048
+#define INITIALLINES 1024
+
+static char** read(char *name, int oneline = 0) {
   FILE *f=fopen(name, "rb");
-  if (!f) { data=0; return; }
+  if (!f) return 0;
   // read all the c-strings out of the file:
-  data = new char*[MAXSIZE+1];
+  char* local_data[INITIALLINES];
+  char** data = local_data;
+  int malloc_size = INITIALLINES;
   char buffer[MAXSIZE+20];
   int i = 0;
-  while (i < max && fgets(buffer,MAXSIZE+20,f)) {
+  while (fgets(buffer,MAXSIZE+20,f)) {
     if (buffer[0] != '\"') continue;
     char *p = buffer;
     char *q = buffer+1;
-    while (*q != '\"') {
+    while (*q != '\"' && p < buffer+MAXSIZE) {
       if (*q == '\\') switch (*++q) {
       case '\n':
 	fgets(q,(buffer+MAXSIZE+20)-q,f); break;
@@ -95,13 +97,28 @@ static void read (char *name, int max = MAXSIZE) {
     }
     *p++ = 0;
     data[i] = new char[p-buffer];
-    memcpy(data[i],buffer,p-buffer);
+    memcpy(data[i], buffer,p-buffer);
     i++;
+    if (i >= malloc_size) {
+      malloc_size = 2*malloc_size;
+      if (data == local_data) {
+	data = (char**)malloc(malloc_size*sizeof(char*));
+	memcpy(data, local_data, i*sizeof(char*));
+      } else {
+	data = (char**)realloc(data, malloc_size*sizeof(char*));
+      }
+    }
+    if (oneline) break;
   }
-  data[i++] = 0; // put a null at the end
   fclose(f);
-}
+  data[i++] = 0; // null terminator
 
+  if (data == local_data) {
+    data = (char**)malloc(i*sizeof(char*));
+    memcpy(data, local_data, i*sizeof(char*));
+  }
+  return data;
+}
 
 int Fl_XPM_Image::test(unsigned char *datas, size_t)
 {
@@ -116,18 +133,16 @@ void Fl_XPM_Image::measure(int &W, int &H)
   }
   int loaded=0;
   char *const* ldatas = (char *const*)datas;
-  if(!ldatas)
-  {
-    ::read((char *)get_filename(), 1);
-    if(data == 0) { W=w=0; return; }
-    ldatas=data;
+  if (!ldatas) {
+    ldatas = ::read((char *)get_filename(), 1);
+    if (!ldatas) {W = w = 0; return;}
     loaded=1;
   }
 
   fl_measure_pixmap(ldatas, w, h);
-  if(loaded) {
-    while(*ldatas) delete *ldatas++;
-    delete[] data;
+  if (loaded) {
+    delete[] ldatas[0];
+    free((void*)ldatas);
   }
   W=w; H=h;
 }
@@ -137,11 +152,9 @@ void Fl_XPM_Image::read()
   id = mask = 0;
   int loaded=0;
   char *const* ldatas = (char *const*)datas;
-  if(!ldatas)
-  {
-    ::read((char *)get_filename());
-    if(data == 0) return;
-    ldatas=data;
+  if (!ldatas) {
+    ldatas = ::read((char *)get_filename());
+    if (!ldatas) return;
     loaded=1;
   }
   int w, h;
@@ -159,12 +172,13 @@ void Fl_XPM_Image::read()
   fl_end_offscreen();
 
   if(loaded) {
-    while(*ldatas) delete *ldatas++;
-    delete[] data;
+    char* const* save = ldatas;
+    while (*ldatas) delete[] *ldatas++;
+    free((void*)save);
   }
   return;
 }
 
 //
-// End of "$Id: fl_xpm.cxx,v 1.12 1999/11/01 15:40:49 mike Exp $"
+// End of "$Id: fl_xpm.cxx,v 1.13 2000/06/19 06:01:31 bill Exp $"
 //

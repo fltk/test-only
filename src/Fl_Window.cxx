@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.47 2000/06/12 09:01:51 carl Exp $"
+// "$Id: Fl_Window.cxx,v 1.48 2000/06/19 06:01:30 bill Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -146,7 +146,7 @@ int Fl_Window::handle(int event) {
     else
       XMapRaised(fl_display, i->xid);
 #endif
-    return 1;}
+    return 0;}
     
   case FL_HIDE:
     if (i) {
@@ -331,5 +331,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.47 2000/06/12 09:01:51 carl Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.48 2000/06/19 06:01:30 bill Exp $".
 //

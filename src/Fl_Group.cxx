@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.75 2000/06/18 07:57:30 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.76 2000/06/19 06:01:30 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -182,23 +182,20 @@ int Fl_Group::send(int event, Fl_Widget& to) {
     if (&to == Fl::pushed()) return 1; // don't send both move & drag to widget
     // figure out correct type of event:
     event = (to.contains(Fl::belowmouse())) ? FL_MOVE : FL_ENTER;
-    // These two do not require active so that tooltips work on inactive
-    // widgets.  Unfortunately this means enter/exit events cannot be used
-    // alone to turn highlighting on/off, the widget must test if it is
-    // active when drawing.
+    // Enter/exit are sent to inactive widgets so that tooltips will work.
   case FL_SHOW:
   case FL_HIDE:
+    // These events don't need the widget active.
     if (!to.visible()) return 0;
 
   default:
     if (!to.takesevents()) return 0;
   }
 
-  // Now send the event, and return if the widget does not "eat" it:
-  // We must adjust the xy of events sent to child windows so they
-  // are relative to that window.  All other widgets use absolute
-  // coordinates.
+  // Now send the event and return if the widget does not use it.
   if (to.is_window()) {
+    // We must adjust the xy of events sent to child windows so they
+    // are relative to that window.
     int save_x = Fl::e_x; Fl::e_x -= to.x();
     int save_y = Fl::e_y; Fl::e_y -= to.y();
     int ret = to.handle(event);
@@ -209,17 +206,19 @@ int Fl_Group::send(int event, Fl_Widget& to) {
     if (!to.handle(event)) return 0;
   }
 
-  // Successful completion of some events must set some global values:
   switch (event) {
 
   case FL_ENTER:
-    // only call Fl::belowmouse if the child widget did not do so:
+    // Successful completion of FL_ENTER means the widget is now the
+    // belowmouse widget, but only call Fl::belowmouse if the child
+    // widget did not do so:
     if (!to.contains(Fl::belowmouse())) Fl::belowmouse(to);
     break;
 
   case FL_PUSH:
-    // only call Fl::pushed if the child widget did not do so and
-    // if the mouse is still down:
+    // Successful completion of FL_PUSH means the widget is now the
+    // pushed widget, but only call Fl::belowmouse if the child
+    // widget did not do so and the mouse is still down:
     if (Fl::pushed() && !to.contains(Fl::pushed())) Fl::pushed(to);
     break;
   }
@@ -295,12 +294,6 @@ int Fl_Group::handle(int event) {
       if (Fl::event_inside(child(i)) && send(event, *child(i))) return 1;
     if (event == FL_PUSH) return 0;
     Fl::belowmouse(this);
-    return 1;
-
-  case FL_SHOW:
-  case FL_HIDE:
-    for (i = 0; i < numchildren; i++)
-      if (child(i)->visible()) child(i)->handle(event);
     return 1;
   }
 
@@ -577,5 +570,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.75 2000/06/18 07:57:30 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.76 2000/06/19 06:01:30 bill Exp $".
 //
