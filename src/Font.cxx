@@ -27,6 +27,7 @@
 #include <fltk/Font.h>
 #include <fltk/draw.h>
 #include <fltk/x.h>
+#include <fltk/string.h>
 
 // This fixes linkage problem in VC++ 6.0
 #if defined(_MSC_VER) && defined(__cplusplus)

@@ -28,7 +28,6 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <fltk/math.h>
-#include <fltk/string.h>
 #include <fltk/utf.h>
 
 using namespace fltk;

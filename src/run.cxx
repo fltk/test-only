@@ -30,6 +30,7 @@
 #include <fltk/Window.h>
 #include <fltk/Style.h>
 #include <fltk/Tooltip.h>
+#include <fltk/filename.h>
 
 #if defined(_WIN32) && USE_MULTIMONITOR && WINVER<0x0500
 // Why??
