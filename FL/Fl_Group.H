@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.H,v 1.14 1999/10/04 09:12:44 bill Exp $"
+// "$Id: Fl_Group.H,v 1.15 1999/10/09 18:34:55 vincent Exp $"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,7 @@
 #endif
 
 class Fl_Group : public Fl_Widget {
-
+  friend class Fl_Tabs;
   int children_;
   Fl_Widget** array_;
   Fl_Widget* savedfocus_;
@@ -103,5 +103,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Group.H,v 1.14 1999/10/04 09:12:44 bill Exp $".
+// End of "$Id: Fl_Group.H,v 1.15 1999/10/09 18:34:55 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.29 1999/10/07 07:04:57 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.30 1999/10/09 18:34:56 vincent Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -456,6 +456,7 @@ void Fl_Group::layout() {
   set_old_size();
 }
 
+#include <FL/Fl_Tabs.H>
 void Fl_Group::draw() {
   Fl_Widget*const* a = array();
   Fl_Widget*const* e = a+children_;
@@ -464,15 +465,22 @@ void Fl_Group::draw() {
     while (e > a) {
       Fl_Widget& w = **--e;
       if (w.visible() && w.type() < FL_WINDOW && w.box()->rectangular &&
-	  fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
+ 	  fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
+	if (w.box() != FL_NO_BOX && !clipped) {
+	  fl_clip(Fl::x(), Fl::y(), Fl::w(), Fl::h()); clipped = true;}
 	w.clear_damage(FL_DAMAGE_ALL);
 	w.draw();
 	w.clear_damage();
-	if (w.box() != FL_NO_BOX) {
-	  if (!clipped) {fl_clip(x(), y(), this->w(), h()); clipped = true;}
+	if (w.box() != FL_NO_BOX && w.type() != FL_TABS)
 	  fl_clip_out(w.x(), w.y(), w.w(), w.h());
-	}
       }
+    }
+    if (parent() && parent()->type() == FL_TABS) {
+      Fl_Tabs* t = (Fl_Tabs*)parent();
+      int H = t->tab_height();
+      fl_clip(t->x(), t->y()+(H>=0?H:0), t->w(), t->h()-(H>=0?H:-H));
+      t->draw_box();
+      fl_pop_clip();
     }
     draw_box();
     draw_label();
@@ -554,5 +562,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.29 1999/10/07 07:04:57 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.30 1999/10/09 18:34:56 vincent Exp $".
 //

@@ -37,6 +37,7 @@ Fl_Image_Box::Fl_Image_Box(char* f)
   strcat(s, f);
   img = Fl_JPEG_Image::get(s);
   dx_=dy_=2; dw_=dh_=4;
+  rectangular = 1;
 }
 
 
@@ -63,6 +64,7 @@ Fl_Image_NoBorderBox::Fl_Image_NoBorderBox(char* f)
   strcat(s, f);
   img = Fl_JPEG_Image::get(s);
   dx_=dy_=0; dw_=dh_=0;
+  rectangular = 1;
 }
 
 
