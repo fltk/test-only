@@ -42,7 +42,7 @@ if (f) browser->load(f);}
         }
         menuitem {} {
           label {&Quit}
-          callback {if (fl_ask("Are you sure you want to quit?")) exit(0);} selected
+          callback {if (fl_ask("Are you sure you want to quit?")) exit(0);}
           xywh {30 30 100 20} shortcut 0x80071
           code0 {\#include <stdlib.h>}
         }
@@ -144,8 +144,8 @@ if (f) browser->load(f);}
       xywh {50 65 300 25}
       code0 {o->value("This is an output text field");}
     }
-    Fl_Check_Button {} {
-      label check1
+    Fl_Check_Button check1 {
+      label check1 selected
       xywh {390 35 85 25}
     }
     Fl_Check_Button {} {
@@ -189,7 +189,7 @@ if (f) browser->load(f);}
       callback {exit(0);}
       xywh {400 310 120 30}
     }
-    Fl_Button {} {
+    Fl_Button cancel_button {
       label cancel
       xywh {400 350 120 30}
     }

@@ -58,11 +58,15 @@ Fl_Menu_Item menu_[] = {
  {0}
 };
 
+Fl_Check_Button *check1=(Fl_Check_Button *)0;
+
 Fl_Browser *browser=(Fl_Browser *)0;
 
 static void cb_OK(Fl_Return_Button*, void*) {
   exit(0);
 }
+
+Fl_Button *cancel_button=(Fl_Button *)0;
 
 Fl_Window* make_window() {
   Fl_Window* w;
@@ -77,7 +81,7 @@ Fl_Window* make_window() {
     { Fl_Output* o = new Fl_Output(50, 65, 300, 25, "output:");
       o->value("This is an output text field");
     }
-    new Fl_Check_Button(390, 35, 85, 25, "check1");
+    check1 = new Fl_Check_Button(390, 35, 85, 25, "check1");
     new Fl_Check_Button(390, 60, 85, 25, "check1");
     new Fl_Check_Button(390, 85, 85, 25, "check1");
     new Fl_Check_Button(390, 110, 85, 25, "check1");
@@ -101,7 +105,7 @@ Fl_Window* make_window() {
     { Fl_Return_Button* o = new Fl_Return_Button(400, 310, 120, 30, "OK");
       o->callback((Fl_Callback*)cb_OK);
     }
-    new Fl_Button(400, 350, 120, 30, "cancel");
+    cancel_button = new Fl_Button(400, 350, 120, 30, "cancel");
     o->end();
   }
   return w;

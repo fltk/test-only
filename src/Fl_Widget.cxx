@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.18 1999/09/18 22:55:33 vincent Exp $"
+// "$Id: Fl_Widget.cxx,v 1.19 1999/09/20 04:33:46 bill Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -181,12 +181,11 @@ int Fl_Widget::contains(const Fl_Widget *o) const {
 static inline int unique(const Fl_Style* s) {return s->child == s;}
 static inline void make_unique(Fl_Style* s) {s->child = s;}
 
-// Returns a style that can be modified.  This creates a unique
-// child of the current style if necessary.  Functions like widget->box(n)
-// call this.
+// Possibly replace this pointer with a new one that can be modified
+// and return that new one, with the const removed:
 
-Fl_Style* Fl_Widget::wstyle() {
-  Fl_Style* oldstyle = (Fl_Style*)style_; // cast away const
+Fl_Style* fl_unique_style(const Fl_Style* & pointer) {
+  Fl_Style* oldstyle = (Fl_Style*)pointer; // cast away const
   if (unique(oldstyle)) return oldstyle;
   Fl_Style* newstyle = new Fl_Style;
   *newstyle = *oldstyle;
@@ -197,7 +196,7 @@ Fl_Style* Fl_Widget::wstyle() {
   if (newstyle->next) newstyle->next->previous = &(newstyle->next);
   newstyle->previous = &(oldstyle->child);
   oldstyle->child = newstyle;
-  style_ = newstyle;
+  pointer = newstyle;
   return newstyle;
 }
 
@@ -298,6 +297,24 @@ void Fl_Style::seti(unsigned* p, unsigned v, int mask) {
     unsigned* p1 = (unsigned*)((char*)s + ((char*)p - (char*)this));
     if (!(s->mbf&mask)) s->seti(p1, v, mask);
   }
+}
+
+// Widgets set their own attributes by (possibly) creating a unique copy
+// of their current style and setting it there.  Because this copy does
+// not have any children the recursive search is not needed:
+
+void Fl_Widget::setp(const void* const * p, const void* v) {
+  int d = p-(const void**)&(style_->box);
+  Fl_Style* s = fl_unique_style(style_);
+  *((const void**)&(s->box) + d) = v;
+  s->mbf |= 1<< d;
+}
+
+void Fl_Widget::seti(const unsigned * p, unsigned v) {
+  int d = p-(unsigned*)&(style_->color);
+  Fl_Style* s = fl_unique_style(style_);
+  *((unsigned*)&(s->color) + d) = v;
+  s->mbf |= 1 << (d+((const void**)&(s->color) - ((const void**)&(s->box))));
 }
 
 // When a widget is destroyed it can destroy unique styles:
@@ -450,5 +467,5 @@ Fl_Style Fl_Output::default_style = {
 };
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.18 1999/09/18 22:55:33 vincent Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.19 1999/09/20 04:33:46 bill Exp $".
 //

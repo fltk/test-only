@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.25 1999/09/19 04:58:56 vincent Exp $"
+// "$Id: Fl_Widget.H,v 1.26 1999/09/20 04:33:44 bill Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -48,7 +48,6 @@ public:
   virtual ~Fl_Widget();
 
   const Fl_Style* style() const {return style_;}
-  Fl_Style* wstyle();
   int style(Fl_Style* s);
   int style(Fl_Style& s) {return style(&s);}
   int copy_style(const Fl_Style* s);
@@ -165,24 +164,24 @@ public:
   unsigned label_size()		const {return style_->label_size;}
   unsigned text_size()		const {return style_->text_size;}
 
-  void box(Fl_Boxtype a)	{wstyle()->box = a;}
-  void glyph(Fl_Glyph a)	{wstyle()->glyph = a;}
-  void label_font(Fl_Font a)	{wstyle()->label_font = a;}
-  void text_font(Fl_Font a)	{wstyle()->text_font = a;}
-  void label_type(Fl_Labeltype a) {wstyle()->label_type = a;}
-  void color(Fl_Color a)	{wstyle()->color = a;}
-  void up_color(Fl_Color a)	{wstyle()->color = a;}
-  void label_color(Fl_Color a)	{wstyle()->label_color = a;}
-  void selection_color(Fl_Color a) {wstyle()->selection_color = a;}
-  void selection_text_color(Fl_Color a) {wstyle()->selection_text_color = a;}
-  void on_color(Fl_Color a)	{wstyle()->selection_color = a;}
-  void down_color(Fl_Color a)	{wstyle()->selection_color = a;}
-  void off_color(Fl_Color a)	{wstyle()->off_color = a;}
-  void highlight_color(Fl_Color a) {wstyle()->highlight_color = a;}
-  void highlight_label_color(Fl_Color a) {wstyle()->highlight_label_color = a;}
-  void text_color(Fl_Color a)	{wstyle()->text_color = a;}
-  void label_size(unsigned a)	{wstyle()->label_size = a;}
-  void text_size(unsigned a)	{wstyle()->text_size = a;}
+  void box(Fl_Boxtype a)	{setp((const void**)&style_->box, a);}
+  void glyph(Fl_Glyph a)	{setp((const void**)&style_->glyph, (const void*)a);}
+  void label_font(Fl_Font a)	{setp((const void**)&style_->label_font, a);}
+  void text_font(Fl_Font a)	{setp((const void**)&style_->text_font, a);}
+  void label_type(Fl_Labeltype a) {setp((const void**)&style_->label_type, a);}
+  void color(Fl_Color a)	{seti(&style_->color, a);}
+  void up_color(Fl_Color a)	{seti(&style_->color, a);}
+  void label_color(Fl_Color a)	{seti(&style_->label_color, a);}
+  void selection_color(Fl_Color a) {seti(&style_->selection_color, a);}
+  void selection_text_color(Fl_Color a) {seti(&style_->selection_text_color, a);}
+  void on_color(Fl_Color a)	{seti(&style_->selection_color, a);}
+  void down_color(Fl_Color a)	{seti(&style_->selection_color, a);}
+  void off_color(Fl_Color a)	{seti(&style_->off_color, a);}
+  void highlight_color(Fl_Color a) {seti(&style_->highlight_color, a);}
+  void highlight_label_color(Fl_Color a) {seti(&style_->highlight_label_color, a);}
+  void text_color(Fl_Color a)	{seti(&style_->text_color, a);}
+  void label_size(unsigned a)	{seti(&style_->label_size, a);}
+  void text_size(unsigned a)	{seti(&style_->text_size, a);}
 
 #ifndef FLTK_2  // back-compatability section:
   Fl_Boxtype down_box()		const {return FL_DOWN_BOX;}
@@ -203,20 +202,20 @@ public:
 
   void down_box(Fl_Boxtype)	{}
   void fly_box(Fl_Boxtype)	{}
-  void color2(Fl_Color a)	{wstyle()->selection_color = a;}
-  void labeltype(Fl_Labeltype a) {wstyle()->label_type = a;}
-  void labelcolor(Fl_Color a)	{wstyle()->label_color = a;}
-  void down_labelcolor(Fl_Color a) {wstyle()->selection_text_color = a;}
-  void labelfont(Fl_Font a)	{wstyle()->label_font = a;}
-  void labelfont(unsigned a)	{wstyle()->label_font = fl_fonts+a;}
-  void labelsize(unsigned a)	{wstyle()->label_size = a;}
-  void fly_color(Fl_Color a)	{wstyle()->highlight_color = a;}
-  void textfont(Fl_Font a)	{wstyle()->text_font = a;}
-  void textfont(unsigned a)	{wstyle()->text_font = fl_fonts+a;}
-  void textsize(unsigned a)	{wstyle()->text_size = a;}
-  void textcolor(Fl_Color a)	{wstyle()->text_color = a;}
-  void selected_textcolor(Fl_Color a) {wstyle()->selection_text_color = a;}
-  void cursor_color(Fl_Color a)	{wstyle()->off_color = a;}
+  void color2(Fl_Color a)	{seti(&style_->selection_color, a);}
+  void labeltype(Fl_Labeltype a) {setp((const void**)&style_->label_type, a);}
+  void labelcolor(Fl_Color a)	{seti(&style_->label_color, a);}
+  void down_labelcolor(Fl_Color a) {seti(&style_->selection_text_color, a);}
+  void labelfont(Fl_Font a)	{setp((const void**)&style_->label_font, a);}
+  void labelfont(unsigned a)	{setp((const void**)&style_->label_font, fl_fonts+a);}
+  void labelsize(unsigned a)	{seti(&style_->label_size, a);}
+  void fly_color(Fl_Color a)	{seti(&style_->highlight_color, a);}
+  void textfont(Fl_Font a)	{setp((const void**)&style_->text_font, a);}
+  void textfont(unsigned a)	{setp((const void**)&style_->text_font, fl_fonts+a);}
+  void textsize(unsigned a)	{seti(&style_->text_size, a);}
+  void textcolor(Fl_Color a)	{seti(&style_->text_color, a);}
+  void selected_textcolor(Fl_Color a) {seti(&style_->selection_text_color, a);}
+  void cursor_color(Fl_Color a)	{seti(&style_->off_color, a);}
 #endif
 
 protected:
@@ -238,6 +237,9 @@ protected:
   void draw_glyph(int, int,int,int,int, Fl_Flags) const;
   Fl_Color draw_button() const; // special messy one for button style widgets
   void draw_button_label(int,int,int,int,Fl_Color) const;
+
+  void setp(const void* const *, const void*);
+  void seti(const unsigned*, unsigned);
 
 private:
 
@@ -268,5 +270,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.25 1999/09/19 04:58:56 vincent Exp $".
+// End of "$Id: Fl_Widget.H,v 1.26 1999/09/20 04:33:44 bill Exp $".
 //

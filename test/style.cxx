@@ -125,6 +125,7 @@ static void stylechange(int) {
 
 int main(int argc, char** argv) {
   Fl_Window* w = make_window();
+  check1->on_color(FL_WHITE); // test the style bit flags
   w->show(argc, argv);
   return Fl::run();
 }

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.40 1999/09/18 22:55:32 vincent Exp $"
+// "$Id: Fl_Menu.cxx,v 1.41 1999/09/20 04:33:45 bill Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -112,22 +112,22 @@ const Fl_Style* Fl_Menu_Item::style(int title) const {
   return s;
 }
 
-static inline int unique(const Fl_Style* s) {return s->child == s;}
-static inline void make_unique(Fl_Style* s) {s->child = s;}
+extern Fl_Style* fl_unique_style(const Fl_Style* & pointer); // in Fl_Widget.c
 
-Fl_Style* Fl_Menu_Item::wstyle() {
-  Fl_Style* oldstyle = (Fl_Style*)style(); // cast away const
-  if (unique(oldstyle)) return oldstyle;
-  Fl_Style* newstyle = new Fl_Style;
-  *newstyle = *oldstyle;
-  newstyle->mbf = 0;
-  make_unique(newstyle);
-  // insert it as first child into list:
-  if ((newstyle->next = oldstyle->child))
-    newstyle->next->previous = &(newstyle->next);
-  newstyle->previous = &(oldstyle->child);
-  style_ = newstyle;
-  return newstyle;
+void Fl_Menu_Item::setp(const void* const * p, const void* v) {
+  int d = p-(const void**)&(style_->box);
+  style_ = style();
+  Fl_Style* s = fl_unique_style(style_);
+  *((const void**)&(s->box) + d) = v;
+  s->mbf |= 1<< d;
+}
+
+void Fl_Menu_Item::seti(const unsigned * p, unsigned v) {
+  int d = p-(unsigned*)&(style_->color);
+  style_ = style();
+  Fl_Style* s = fl_unique_style(style_);
+  *((unsigned*)&(s->color) + d) = v;
+  s->mbf |= 1 << (d+((const void**)&(s->color) - ((const void**)&(s->box))));
 }
 
 ////////////////////////////////////////////////////////////////
@@ -383,7 +383,7 @@ void menutitle::draw() {
 
 void menuwindow::draw() {
 
-  if (damage() != FL_DAMAGE_CHILD) {	// complete redraw
+  if (damage() & FL_DAMAGE_ALL) {	// complete redraw
     box()->draw(0, 0, w(), h(), color(), FL_NO_FLAGS);
     if (menu) {
       const Fl_Menu_Item* m; int i;
@@ -799,5 +799,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.40 1999/09/18 22:55:32 vincent Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.41 1999/09/20 04:33:45 bill Exp $".
 //

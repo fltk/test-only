@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Item.H,v 1.25 1999/09/19 04:58:55 vincent Exp $"
+// "$Id: Fl_Menu_Item.H,v 1.26 1999/09/20 04:33:43 bill Exp $"
 //
 // Menu item header file for the Fast Light Tool Kit (FLTK).
 //
@@ -144,10 +144,10 @@ struct Fl_Menu_Item {
   FL_IMPORT static Fl_Style title_style;
 
 #ifndef FLTK_2
-  // this section is very bad.  Use of this will leak memory because the
-  // wstyle() is never destroyed.
-
-  Fl_Style* wstyle();
+  // This is temporary and bad.  Setting a style will create a new Fl_Style
+  // structure that is not deleted when the menu item is destroyed, because
+  // that adds a destructor that causes C++ to produce exit code for static
+  // menu item arrays.  Plan is to replace the whole Fl_Menu_Item design...
 
   Fl_Boxtype box()		const {return style()->box;}
   Fl_Glyph glyph()		const {return style()->glyph;}
@@ -164,20 +164,23 @@ struct Fl_Menu_Item {
   unsigned label_size()		const {return style()->label_size;}
   unsigned text_size()		const {return style()->text_size;}
 
-  void box(Fl_Boxtype a)	{wstyle()->box = a;}
-  void glyph(Fl_Glyph a)	{wstyle()->glyph = a;}
-  void label_font(Fl_Font a)	{wstyle()->label_font = a;}
-  void text_font(Fl_Font a)	{wstyle()->text_font = a;}
-  void label_type(Fl_Labeltype a) {wstyle()->label_type = a;}
-  void color(Fl_Color a)	{wstyle()->color = a;}
-  void label_color(Fl_Color a)	{wstyle()->label_color = a;}
-  void selection_color(Fl_Color a) {wstyle()->selection_color = a;}
-  void selection_text_color(Fl_Color a) {wstyle()->selection_text_color = a;}
-  void highlight_color(Fl_Color a) {wstyle()->highlight_color = a;}
-  void highlight_label_color(Fl_Color a) {wstyle()->highlight_label_color = a;}
-  void text_color(Fl_Color a)	{wstyle()->text_color = a;}
-  void label_size(unsigned a)	{wstyle()->label_size = a;}
-  void text_size(unsigned a)	{wstyle()->text_size = a;}
+  void setp(const void* const *, const void*);
+  void seti(const unsigned*, unsigned);
+
+  void box(Fl_Boxtype a)	{setp((const void**)&style_->box, a);}
+  void glyph(Fl_Glyph a)	{setp((const void**)&style_->glyph, (void*)a);}
+  void label_font(Fl_Font a)	{setp((const void**)&style_->label_font, a);}
+  void text_font(Fl_Font a)	{setp((const void**)&style_->text_font, a);}
+  void label_type(Fl_Labeltype a) {setp((const void**)&style_->label_type, a);}
+  void color(Fl_Color a)	{seti(&style_->color, a);}
+  void label_color(Fl_Color a)	{seti(&style_->label_color, a);}
+  void selection_color(Fl_Color a) {seti(&style_->selection_color, a);}
+  void selection_text_color(Fl_Color a) {seti(&style_->selection_text_color, a);}
+  void highlight_color(Fl_Color a) {seti(&style_->highlight_color, a);}
+  void highlight_label_color(Fl_Color a) {seti(&style_->highlight_label_color, a);}
+  void text_color(Fl_Color a)	{seti(&style_->text_color, a);}
+  void label_size(unsigned a)	{seti(&style_->label_size, a);}
+  void text_size(unsigned a)	{seti(&style_->text_size, a);}
 
   // even more back-comptability stuff:
   Fl_Boxtype down_box()		const {return FL_DOWN_BOX;}
@@ -198,21 +201,21 @@ struct Fl_Menu_Item {
 
   void down_box(Fl_Boxtype)	{}
   void fly_box(Fl_Boxtype)	{}
-  void down_color(Fl_Color a)	{wstyle()->selection_color = a;}
-  void color2(Fl_Color a)	{wstyle()->selection_color = a;}
-  void light_color(Fl_Color a)	{wstyle()->selection_color = a;}
-  void labeltype(Fl_Labeltype a) {wstyle()->label_type = a;}
-  void labelcolor(Fl_Color a)	{wstyle()->label_color = a;}
-  void down_labelcolor(Fl_Color a) {wstyle()->selection_text_color = a;}
-  void labelfont(Fl_Font a)	{wstyle()->label_font = a;}
-  void labelfont(unsigned a)	{wstyle()->label_font = fl_fonts+a;}
-  void labelsize(unsigned a)	{wstyle()->label_size = a;}
-  void fly_color(Fl_Color a)	{wstyle()->highlight_color = a;}
-  void textfont(Fl_Font a)	{wstyle()->text_font = a;}
-  void textfont(unsigned a)	{wstyle()->text_font = fl_fonts+a;}
-  void textsize(unsigned a)	{wstyle()->text_size = a;}
-  void textcolor(Fl_Color a)	{wstyle()->text_color = a;}
-  void selected_textcolor(Fl_Color a) {wstyle()->selection_text_color = a;}
+  void down_color(Fl_Color a)	{seti(&style_->selection_color, a);}
+  void color2(Fl_Color a)	{seti(&style_->selection_color, a);}
+  void light_color(Fl_Color a)	{seti(&style_->selection_color, a);}
+  void labeltype(Fl_Labeltype a) {setp((const void**)&style_->label_type, a);}
+  void labelcolor(Fl_Color a)	{seti(&style_->label_color, a);}
+  void down_labelcolor(Fl_Color a) {seti(&style_->selection_text_color, a);}
+  void labelfont(Fl_Font a)	{setp((const void**)&style_->label_font, a);}
+  void labelfont(unsigned a)	{setp((const void**)&style_->label_font, fl_fonts+a);}
+  void labelsize(unsigned a)	{seti(&style_->label_size, a);}
+  void fly_color(Fl_Color a)	{seti(&style_->highlight_color, a);}
+  void textfont(Fl_Font a)	{setp((const void**)&style_->text_font, a);}
+  void textfont(unsigned a)	{setp((const void**)&style_->text_font, fl_fonts+a);}
+  void textsize(unsigned a)	{seti(&style_->text_size, a);}
+  void textcolor(Fl_Color a)	{seti(&style_->text_color, a);}
+  void selected_textcolor(Fl_Color a) {seti(&style_->selection_text_color, a);}
 
   int checked() const {return flags_&FL_MENU_VALUE;}
   void check() {flags_ |= FL_MENU_VALUE;}
@@ -245,5 +248,5 @@ enum {	// back-compatability enum:
 #endif
 
 //
-// End of "$Id: Fl_Menu_Item.H,v 1.25 1999/09/19 04:58:55 vincent Exp $".
+// End of "$Id: Fl_Menu_Item.H,v 1.26 1999/09/20 04:33:43 bill Exp $".
 //

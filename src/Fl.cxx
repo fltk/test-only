@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.41 1999/09/18 14:13:12 vincent Exp $"
+// "$Id: Fl.cxx,v 1.42 1999/09/20 04:33:45 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -595,12 +595,21 @@ Fl_Window::~Fl_Window() {
   destroy();
 }
 
-// Outer windows replace the show() and hide() methods, even though
-// they are not virtual.  It may have been better to call them open() and
-// close(), but this is needed for back compatability.  In fltk 2.0 if
-// you call Fl_Widget::show() or hide() on an outer window nothing
-// happens, you must correctly cast to Fl_Window.
-//
+// Fl_Window::show()/hide() are different than Fl_Widget::show()/hide(),
+// even though they are not virtual functions.  This was necessary for
+// compatability with fltk 1.0.
+
+// Fl_Window::show()/hide() actually create and destroy the X window.
+// Fl_Window::show() also has the effect of raising an outer window if
+// it is already shown.  The method Fl_Window::shown() is true between
+// Fl_Window::show() and hide().
+
+// Fl_Widget::show()/hide() are ignored for outer windows, it is assummed
+// these are called only in response to the user iconizing/deiconizing
+// the window and thus the window is already in the right state.  For
+// child windows these do unmap/map the X window, this was so that
+// child windows inside tabs work.
+
 // The purpose is to save server resources, and to avoid the need to
 // have an extra state for a window to distinguish a program hide()
 // from a hide/iconize message from the system.  "shown() &&
@@ -654,9 +663,6 @@ int Fl_Window::exec(const Fl_Window* modal_for) {
 }
 
 void Fl_Window::hide() {
-//if (parent()) {
-//  Fl_Widget::show();
-//} else
   destroy();
 }
 
@@ -673,10 +679,6 @@ int Fl_Window::handle(int event) {
   }
   return Fl_Group::handle(event);
 }
-
-
-
-
 
 ////////////////////////////////////////////////////////////////
 // ~Fl_Widget() calls this: this function must get rid of any
@@ -778,5 +780,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.41 1999/09/18 14:13:12 vincent Exp $".
+// End of "$Id: Fl.cxx,v 1.42 1999/09/20 04:33:45 bill Exp $".
 //
