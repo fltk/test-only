@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Help_View.cxx,v 1.10 2004/12/30 11:38:55 spitzak Exp $"
+// "$Id$"
 //
 // Copyright 1997-2004 by Easy Software Products.
 // Image support donated by Matthias Melcher, Copyright 2000.
@@ -327,6 +327,7 @@ void
   int head, pre,                // Flags for text
     needspace;                  // Do we need whitespace?
   Box *b = box ()? box () : DOWN_BOX;
+  Rectangle tmp;
 
   // Box to draw...
 
@@ -347,19 +348,37 @@ void
     i++;
   }
   if (i == 2) {
+    tmp.w(ww);
+    tmp.h(ww);
+    tmp.x(17);
+    tmp.y(17);
     setcolor (GRAY50);
-    fillrect(ww, hh, 17, 17);
+    fillrect(tmp);
+	//old: fillrect(ww, hh, 17, 17);
   }
 
-  b->draw(0, 0, ww, hh, style(), OUTPUT);
+  tmp.w(ww);
+  tmp.h(ww);
+  tmp.x(0);
+  tmp.y(0);
+  //old: b->draw(0, 0, ww, hh, style(), OUTPUT);
+  b->draw(tmp, style());
 
   if (!value_)
     return;
 
   // Clip the drawing to the inside of the box...
   int X = 0, Y = 0, W = ww, H = hh;
-  b->inset(X, Y, W, H);
-  push_clip (X, Y, W, H);
+
+  tmp.w(W);
+  tmp.h(H);
+  tmp.x(X);
+  tmp.y(Y);
+  //old: b->inset(X, Y, W, H);
+  b->inset(tmp);
+  //old: push_clip (X, Y, W, H);
+  fltk::push_clip(tmp);
+
   setcolor (textcolor_);
 
   // Draw all visible blocks...
@@ -560,13 +579,23 @@ void
             }
 
             if (block->bgcolor != bgcolor_) {
-              setcolor (block->bgcolor);
-              fillrect (tx, ty, tw, th);
-              setcolor (textcolor_);
+              setcolor(block->bgcolor);
+              tmp.w(tw);
+              tmp.h(th);
+              tmp.x(tx);
+              tmp.y(ty);
+              fillrect(tmp);
+              setcolor(textcolor_);
             }
 
-            if (block->border)
-              strokerect (tx, ty, tw, th);
+			if (block->border) {
+              tmp.w (tw);
+              tmp.h (th);
+              tmp.x (tx);
+              tmp.y (ty);
+			  //strokerect (tx, ty, tw, th);
+              strokerect (tmp);
+			} // if
           } else if (strcasecmp (buf, "I") == 0 ||
                      strcasecmp (buf, "EM") == 0)
             pushfont (font->italic(), fsize);
@@ -633,10 +662,16 @@ void
               hh = 0;
             }
 
-            if (img)
-              img->draw (xx - leftline_,
-                         yy - (int)(getascent()+.5f) + 2,
-			 ww, hh, style(), OUTPUT);
+			if (img) {
+              tmp.w (ww);
+              tmp.h (hh);
+              tmp.x (xx - leftline_);
+              tmp.y (yy - (int)(getascent()+.5f) + 2);
+			  img->draw (tmp, style());
+              //old: img->draw (xx - leftline_,
+              //           yy - (int)(getascent()+.5f) + 2,
+			  //ww, hh, style(), OUTPUT);
+			}
 
             xx += ww;
             if ((height + 2) > hh)
@@ -721,7 +756,6 @@ void
 //
 // 'HelpView::format()' - Format the help text.
 //
-
 void HelpView::format ()
 {
   int i;                        // Looping var
@@ -2590,5 +2624,5 @@ static void hscrollbar_callback (Widget * s, void *)
 
 
 //
-// End of "$Id: Fl_Help_View.cxx,v 1.10 2004/12/30 11:38:55 spitzak Exp $".
+// End of "$Id$".
 //
