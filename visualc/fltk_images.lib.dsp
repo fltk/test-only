@@ -154,5 +154,17 @@ SOURCE=..\images\fl_png.cxx
 
 SOURCE=..\src\fl_xpm.cxx
 # End Source File
+# Begin Source File
+
+SOURCE=..\lib\fltk_jpeg.lib
+# End Source File
+# Begin Source File
+
+SOURCE=..\lib\fltk_png.lib
+# End Source File
+# Begin Source File
+
+SOURCE=..\lib\fltk_z.lib
+# End Source File
 # End Target
 # End Project
