@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.30 2000/09/11 07:29:33 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.31 2000/09/27 16:25:51 spitzak Exp $"
 //
 // The Fl_Menu_ base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Fl_Group
@@ -32,10 +32,66 @@
 
 ////////////////////////////////////////////////////////////////
 
+// The base Fl_List class just returns the widget from the Fl_Group's
+// children.  All Fl_Menu_s share a single instance of this by default,
+// so the default behavior is that child widgets appear as items in
+// the menu or browser.
+
+// Subclasses of Fl_List may want to call the base class to allow
+// normal widgets to be prepended to whatever they return.
+
+int Fl_List::children(const Fl_Menu_* menu, const int* indexes, int level) {
+  Fl_Group* group = (Fl_Group*)menu;
+  while (level--) {
+    int i = *indexes++;
+    if (i < 0 || i >= group->children()) return -1;
+    Fl_Widget* widget = group->child(i);
+    if (!widget->is_group()) return -1;
+    group = (Fl_Group*)widget;
+  }
+  return group->children();
+}
+
+Fl_Widget* Fl_List::child(const Fl_Menu_* menu, const int* indexes,int level) {
+  Fl_Group* group = (Fl_Group*)menu;
+  for (;;) {
+    int i = *indexes++;
+    if (i < 0 || i >= group->children()) return 0;
+    Fl_Widget* widget = group->child(i);
+    if (!level--) return widget;
+    if (!widget->is_group()) return 0;
+    group = (Fl_Group*)widget;
+  }
+}
+
+void Fl_List::flags_changed(const Fl_Menu_*, Fl_Widget*) {}
+
+Fl_List default_list; // this should be local!
+
+int Fl_Menu_::children(const int* indexes, int level) const {
+  return list_->children(this, indexes, level);
+}
+
+int Fl_Menu_::children() const {
+  return list_->children(this, 0, 0);
+}
+
+Fl_Widget* Fl_Menu_::child(const int* indexes, int level) const {
+  return list_->child(this, indexes, level);
+}
+
+Fl_Widget* Fl_Menu_::child(int n) const {
+  return list_->child(this, &n, 0);
+}
+
+////////////////////////////////////////////////////////////////
+
 FL_API int fl_dont_execute = 0; // hack for fluid
 
-void Fl_Menu_::execute(Fl_Widget* w) {
+// Do the callback for the current item:
+void Fl_Menu_::execute() {
   if (fl_dont_execute) return;
+  Fl_Widget* w = item();
   if (!w) {do_callback(); return;}
   if (w->type() == FL_TOGGLE_ITEM) {
     if (w->value()) w->clear_value(); else w->set_value();
@@ -65,6 +121,25 @@ void Fl_Menu_::execute(Fl_Widget* w) {
   w->do_callback(w, data);
 }
 
+int Fl_Menu_::goto_item(const int* indexes, int level) {
+  // The current item is remembered in the focus index from the Fl_Group
+  // at each level.  This is used by popup menus to pop up at the same
+  // item next time.
+  // If an Fl_List is used and it does not return Fl_Groups then the
+  // position is not remembered. For this reason Fl_Browser uses it's
+  // own storage of the indexes and replaces this function.
+  focus(indexes[0]);
+  for (int l = 0; l <= level; l++) {
+    item(child(indexes, l));
+    if (!item() || !item()->is_group()) continue;
+    Fl_Group* group = (Fl_Group*)item();
+    group->focus(l < level ? indexes[l+1] : -1);
+  }
+  // The return value is for subclasses that check to see if the current
+  // item has changed.
+  return 1;
+}
+
 ////////////////////////////////////////////////////////////////
 
 // recursive innards of handle_shortcut:
@@ -83,11 +158,11 @@ static Fl_Widget* shortcut_search(Fl_Group* g) {
 }
 
 int Fl_Menu_::handle_shortcut() {
-  Fl_Widget* w = shortcut_search(this);
-  if (w) {execute(w); return 1;}
+  Fl_Widget* widget = shortcut_search(this);
+  if (widget) {item(widget); execute(); return 1;}
   return 0;
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.30 2000/09/11 07:29:33 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.31 2000/09/27 16:25:51 spitzak Exp $"
 //

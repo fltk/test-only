@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.67 2000/08/20 04:31:38 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.68 2000/09/27 16:25:51 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -415,10 +415,9 @@ Fl_Flags Fl_Widget::draw_text_box() const {
 }
 
 Fl_Flags Fl_Widget::draw_text_box(int x, int y, int w, int h) const {
-  Fl_Flags f = draw_text_frame(x,y,w,h);
-  text_box()->inset(x,y,w,h); //if (w <= 0 || h <= 0) return;
-  fl_color(text_background());
-  fl_rectf(x,y,w,h);
+  Fl_Flags f = flags();
+  if (!active_r()) f |= FL_INACTIVE;
+  text_box()->draw(this, x,y,w,h, f|FL_TEXT_BOX);
   return f;
 }
 
@@ -453,6 +452,8 @@ Fl_Color Fl_Widget::box_color(Fl_Flags flags) const
 {
   if (flags & FL_SELECTED)
     return selection_color();
+  else if (flags & FL_TEXT_BOX)
+    return text_background();
   else if (flags & FL_HIGHLIGHT) {
     Fl_Color c = highlight_color();
     if (c) return c;
@@ -475,5 +476,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.67 2000/08/20 04:31:38 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.68 2000/09/27 16:25:51 spitzak Exp $".
 //

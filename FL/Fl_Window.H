@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.H,v 1.42 2000/08/11 00:53:47 clip Exp $"
+// "$Id: Fl_Window.H,v 1.43 2000/09/27 16:25:48 spitzak Exp $"
 //
 // Window header file for the Fast Light Tool Kit (FLTK).
 //
@@ -44,8 +44,7 @@ public:
   int border() const	{return !(flags() & FL_NOBORDER);}
   void set_modal()	{set_flag(FL_MODAL);}
   int modal() const	{return flags() & FL_MODAL;}
-  void set_non_modal()	{set_flag(FL_NON_MODAL);}
-  int non_modal() const	{return flags() & (FL_NON_MODAL|FL_MODAL);}
+  void set_non_modal()	{set_flag(FL_NON_MODAL);} // back compatability only!
 
   void move(int x, int y);
   void hotspot(int x, int y, int offscreen = 0);
@@ -86,8 +85,8 @@ public:
   void cursor(Fl_Cursor, Fl_Color=FL_BLACK, Fl_Color=FL_WHITE);
   static void default_callback(Fl_Window*, void* v);
 
-  const Fl_Window* modal_for() const { return modal_for_; }
-  void modal_for(const Fl_Window* w) { modal_for_ = w; }
+  const Fl_Window* modal_for() const {return modal_for_;}
+  void modal_for(const Fl_Window* w);
 
   virtual void layout();
   virtual void flush();
@@ -96,8 +95,6 @@ public:
 
 protected:
   virtual void create();
-  const void* sys_modal_for() const;
-
   static Fl_Window *current_;
 
 private:
@@ -123,5 +120,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Window.H,v 1.42 2000/08/11 00:53:47 clip Exp $".
+// End of "$Id: Fl_Window.H,v 1.43 2000/09/27 16:25:48 spitzak Exp $".
 //

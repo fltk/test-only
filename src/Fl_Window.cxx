@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.55 2000/08/20 04:31:38 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.56 2000/09/27 16:25:51 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -68,6 +68,11 @@ void Fl_Window::iconlabel(const char *iname) {label(label(), iname);}
 void Fl_Window::default_callback(Fl_Window* window, void* v) {
   window->hide();
   Fl_Widget::default_callback(window, v); // put on Fl::read_queue()
+  // if there are no visible windows we exit:
+  for (Fl_Window* w = Fl::first_window(); ; w = Fl::next_window(w)) {
+    if (!w) exit(0);
+    if (w->visible() && !w->parent()) break;
+  }
 }
 
 static void revert(Fl_Style* s) {
@@ -120,8 +125,40 @@ char fl_show_iconic; // set by iconize() or by -i Fl::arg switch
 int Fl_Window::handle(int event) {
   switch (event) {
     case FL_SHOW: {
-      if (!i) create();
+
+      // limit events to only this window if it is modal:
+      if (!parent() && modal()) {Fl::modal_ = this; fl_fix_focus();}
+
+      if (!shown()) {
+	if (!parent()) {
+	  // We are creating a new top-level window
+	  // this is the secret place where the world is initialized:
+	  static char started = 0;
+	  if (!started) {
+	    started = 1;
+#ifndef WIN32
+	    fl_open_display();
+#endif
+	    fl_startup(); // checks flconfig options and loads themes / schemes
+	  }
+	  layout();
+	  // back-compatability automatic size_range() based on resizable():
+	  if (!size_range_set) {
+	    if (resizable()) {
+	      Fl_Widget *o = resizable();
+	      int minw = o->w(); if (minw > 100) minw = 100;
+	      int minh = o->h(); if (minh > 100) minh = 100;
+	      size_range(w() - o->w() + minw, h() - o->h() + minh, 0, 0);
+	    } else {
+	      size_range(w(), h(), w(), h());
+	    }
+	  }
+	}
+	create();
+      }
+
       Fl_Group::handle(event); // make the child windows map first
+
 #ifdef WIN32
       int showtype;
       if (parent())
@@ -135,28 +172,32 @@ int Fl_Window::handle(int event) {
         showtype = SW_SHOWNORMAL;
       ShowWindow(i->xid, showtype);
 #else
-      if (parent())
-        XMapWindow(fl_display, i->xid);
-      else
-        XMapRaised(fl_display, i->xid);
+      XMapWindow(fl_display, i->xid);
 #endif
-      return 0; // why is this returning 0?
+      break;
     }
 
-    case FL_HIDE: {
-      //if (modal()) destroy(); // needed so modal can change next time
-      if (!parent()) {
+    case FL_HIDE:
+      // This test is not needed if we always destroy top-level windows:
+      if (this == Fl::modal_) {
+	// we are closing the modal window, find next one:
+	Fl_Window* w;
+	for (w = Fl::first_window(); w; w = Fl::next_window(w))
+	  if (w != this && w->modal() && w->visible()) break;
+	Fl::modal_ = w;
+      }
+      //      if (!parent()) {
+      // WAS: I temporarily removed this to see if I can get it to work...
         // We have to destroy the window because at least on my X system
         // just unmapping it causes undesired events to be generated. For
         // example, moving the cursor over the area of an unmapped window
         // causes the window behind it to get a LeaveNotify event!?  Not
         // sure whether this is a bug in XFree86 4 or not...
-        destroy();
-      } else {
-        XUnmapWindow(fl_display, i->xid);
-      }
+      //        destroy();
+      //      } else {
+      if (i) XUnmapWindow(fl_display, i->xid);
+      //      }
       break;
-    }
   }
 
   if (Fl_Group::handle(event)) return 1;
@@ -175,53 +216,21 @@ int Fl_Window::handle(int event) {
   return 0;
 }
 
-const void* Fl_Window::sys_modal_for() const {
-  const Fl_Window* w = modal_for_;
-  while (w && w->parent()) w = w->window();
-  if (w && w->shown()) return (void*)w->i->xid;
-  return 0;
-}
-
+// Fl_Window::show() should not actually be different than Fl_Widget::show,
+// as most of the work is done by Fl_Window::handle(FL_SHOW). However for
+// back compatability some stuff is done here, primarily it allows show()
+// to raise existing windows.
 void Fl_Window::show() {
-  // This should not be needed but it is because sometimes outer windows
-  // are created with the visible flag on, which prevents the FL_SHOW
-  // event from going through:
-  if (!shown()) clear_visible();
-
-  if (!parent()) {
-    if (modal()) {Fl::modal_ = this; fl_fix_focus();}
-    // if this is a modal or non modal window, recreate each time to make
-    // sure that modal_for is handled properly.
-    if (modal() || non_modal()) destroy();
-
-    if (!shown()) {
-      // Create a new top-level window
-
-      // this is the secret place where the world is initialized:
-      Fl_Group::current(0); // get rid of very common user bug: forgot end()
-      static char started = 0;
-      if (!started) {
-	started = 1;
-#ifndef WIN32
-	fl_open_display();
-#endif
-	fl_startup(); // checks flconfig options and loads themes / schemes
-      }
-
-      layout();
-      // back-compatability automatic size_range() based on resizable():
-      if (!size_range_set) {
-	if (resizable()) {
-	  Fl_Widget *o = resizable();
-	  int minw = o->w(); if (minw > 100) minw = 100;
-	  int minh = o->h(); if (minh > 100) minh = 100;
-	  size_range(w() - o->w() + minw, h() - o->h() + minh, 0, 0);
-	} else {
-	  size_range(w(), h(), w(), h());
-	}
-      }
-    } else if (visible()) {
-      // raise/deiconize windows
+  // get rid of very common user bug: forgot end():
+  Fl_Group::current(0);
+  if (!shown()) {
+    // This should not be needed but it is because sometimes outer windows
+    // are created with the visible flag on (when created with the xywh
+    // style of constructor).
+    clear_visible();
+  } else if (visible()) {
+    // raise/deiconize windows already-visible windows
+    if (!parent()) {
 #ifdef WIN32
       if (IsIconic(i->xid)) OpenIcon(i->xid);
       if (!Fl::grab() && border()) BringWindowToTop(i->xid);
@@ -229,13 +238,29 @@ void Fl_Window::show() {
       XMapRaised(fl_display, i->xid);
 #endif
     }
+    return;
   }
+  // The FL_NON_MODAL flag is for back compatability. If it is set
+  // we automatically change the modal_for() to the top-most window
+  // when show() is called. This is also done if modal() is set and
+  // modal_for() is not.
+  if (!parent() && (modal() && !modal_for() || (flags() & FL_NON_MODAL))) {
+    modal_for(Fl::first_window());
+    set_flag(FL_NON_MODAL); // make sure it does this next time
+  }
+  // Otherwise all the work is done by handle(FL_SHOW):
   Fl_Widget::show();
 }
 
 void Fl_Window::show(const Fl_Window* w) {
   modal_for(w);
   show();
+}
+
+void Fl_Window::modal_for(const Fl_Window* w) {
+  if (modal_for_ != w) destroy();
+  modal_for_ = w;
+  clear_flag(FL_NON_MODAL); // stop the back-compatability hack
 }
 
 int Fl_Window::exec(const Fl_Window* w) {
@@ -289,7 +314,7 @@ void Fl_Window::destroy() {
   if (this == Fl::modal_) { // we are closing the modal window, find next one:
     Fl_Window* w;
     for (w = Fl::first_window(); w; w = Fl::next_window(w))
-      if (w->modal()) break;
+      if (w->modal() && w->visible()) break;
     Fl::modal_ = w;
   }
 
@@ -328,5 +353,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.55 2000/08/20 04:31:38 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.56 2000/09/27 16:25:51 spitzak Exp $".
 //

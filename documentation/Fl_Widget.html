@@ -1,4 +1,5 @@
-<html><body>
+<html><head><title>Fl_Widget</title></head><body bgcolor = white>
+
 <hr break>
 <h2><A name=Fl_Widget>class Fl_Widget</A></h2>
 <hr>
@@ -74,10 +75,10 @@ to call <tt>redraw()</tt> after these. </P>
 <LI><A href=#hide>hide</A></LI>
 <LI><A href=#inside>inside</A></LI>
 <LI><A href=#label>label</A></LI>
-<LI><A href=#labelcolor>labelcolor</A></LI>
-<LI><A href=#labelfont>labelfont</A></LI>
-<LI><A href=#labelsize>labelsize</A></LI>
-<LI><A href=#labeltype>labeltype</A></LI>
+<LI><A href=#label_color>label_color</A></LI>
+<LI><A href=#label_font>label_font</A></LI>
+<LI><A href=#label_size>label_size</A></LI>
+<LI><A href=#label_type>label_type</A></LI>
 <LI><A href=#layout>layout</A></LI>
 <LI><A href=#measure_label>measure_label</A>
 <LI><A href=#output>output</A></LI>
@@ -199,7 +200,26 @@ is made, otherwise the pointer is just copied.  This is done so that
 either widget may be destroyed without deleting the style used by the
 other one.
 
-<h4>Fl_Boxtype Fl_Widget::box();<br>
+
+<h4>
+<a name=box>
+<a name=text_box>
+<a name=glyph>
+<a name=label_font>
+<a name=text_font>
+<a name=label_type>
+<a name=color>
+<a name=label_color>
+<a name=highlight_color>
+<a name=highlight_label_color>
+<a name=text_background>
+<a name=text_color>
+<a name=selection_color>
+<a name=selection_text_color>
+<a name=label_size>
+<a name=text_size>
+<a name=leading>
+Fl_Boxtype Fl_Widget::box();<br>
 Fl_Boxtype Fl_Widget::text_box();<br>
 Fl_Glyph Fl_Widget::glyph();<br>
 Fl_Font Fl_Widget::label_font();<br>
@@ -305,27 +325,27 @@ the label.  The value can be any of these constants or'd together:
 <LI><tt>FL_ALIGN_WRAP</tt></LI>
 </UL>
 
-<h4>Fl_Callback* Fl_Widget::callback() const
+<h4><a name=callback>Fl_Callback* Fl_Widget::callback() const
 <BR> void Fl_Widget::callback(Fl_Callback*, void* = 0)</A></h4>
 
 Each widget has a single callback.  You can set it or examine it with 
 these methods. 
 
 <h4><A name=user_data>void* Fl_Widget::user_data() const
-<BR> void Fl_Widget::user_data(void*)</A></h4>
+<BR>void Fl_Widget::user_data(void*)</A></h4>
 
-You can also just change the <tt>void *</tt> second argument to the 
+You can also just change the <tt>void*</tt> second argument to the 
 callback with the <tt>user_data</tt> methods. 
 
 <h4><A name=argument>void Fl_Widget::callback(void 
 (*)(Fl_Widget*, long), long = 0)
-<BR> long Fl_Widget::argument() const
-<BR> void Fl_Widget::argument(long)</A></h4>
+<BR>long Fl_Widget::argument() const
+<BR>void Fl_Widget::argument(long)</A></h4>
 
-For convenience you can also define the callback as taking a long 
-argument.  This is implemented by casting this to a <tt>Fl_Callback</tt>
-and casting the <tt>long</tt> to a <tt>void *</tt> and may not be 
-portable to some machines. 
+For convenience you can also define the callback as taking a long
+integer argument.  This is implemented by casting the function to a
+<tt>Fl_Callback</tt> and casting the <tt>long</tt> to a <tt>void
+*</tt> and may not be portable to some machines.
 
 <h4>void Fl_Widget::callback(void (*)(Fl_Widget*))</h4>
 
@@ -431,7 +451,7 @@ Indicate that the <i>outside</i> label needs to be redrawn.  This
 causes the parent widget to be redrawn in order to erase the old label
 and then produce the new one.
 
-<h4><A name=parent>Fl_Widget *Fl_Widget::parent() const</A></h4>
+<h4><A name=parent>Fl_Widget* Fl_Widget::parent() const</A></h4>
 
 Returns a pointer to the parent widget.  Usually this is a <A
 href=Fl_Group.html#Fl_Group> <tt>Fl_Group</tt></A> or <A

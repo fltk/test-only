@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.10 2000/08/11 00:53:48 clip Exp $"
+// "$Id: fl_motif.cxx,v 1.11 2000/09/27 16:25:52 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -177,12 +177,11 @@ static void motif_glyph(const Fl_Widget* widget, int t,
   }
 }
 
-// Although this is currently the default fltk glyph for a choice, we
-// may change the default to be less motif-like in the future.  So this
-// code replaces it anyway:
 static void choice_glyph(const Fl_Widget* widget, int,
 			 int x,int y,int w,int h, Fl_Flags f)
 {
+  fl_color(widget->color());
+  fl_rectf(x,y,w,h);
   int H = h/3;
   y += (h-H)/2;
   h = H;
@@ -221,16 +220,21 @@ int fl_motif()
   Fl_Style* s;
 
   if ((s = Fl_Style::find("menu"))) {
-    s->text_box = &thin_motif_menu_box;
-    s->selection_color = FL_GRAY;
-    s->selection_text_color = FL_RED;
+    s->text_box = &thin_motif_menu_box; // this does not work anymore...
     //s->leading = 0;
   }
 
   if ((s = Fl_Style::find("menu bar"))) {
     s->text_box = &thin_motif_menu_box;
-    s->selection_color = FL_GRAY;
-    s->selection_text_color = FL_BLACK;
+  }
+
+  if ((s = Fl_Style::find("menu button"))) {
+    s->text_box = &thin_motif_menu_box;
+  }
+
+  if ((s = Fl_Style::find("choice"))) {
+    s->text_box = &thin_motif_up_box;
+    s->glyph = choice_glyph;
   }
 
   if ((s = Fl_Style::find("scrollbar"))) {
@@ -259,19 +263,9 @@ int fl_motif()
     s->text_color = FL_DARK1;
   }
 
-  if ((s = Fl_Style::find("item"))) {
-    s->text_color = FL_DARK1;
-    s->selection_text_color = FL_BLACK;
-  }
-
-  if ((s = Fl_Style::find("choice"))) {
-    s->text_box = &thin_motif_up_box;
-    s->glyph = choice_glyph;
-  }
-
   return 0;
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.10 2000/08/11 00:53:48 clip Exp $"
+// End of "$Id: fl_motif.cxx,v 1.11 2000/09/27 16:25:52 spitzak Exp $"
 //

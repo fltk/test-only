@@ -1,4 +1,4 @@
-<html><head><title>Adding and Extending Widgets</title></head><body>
+<html><head><title>Adding and Extending Widgets</title></head><body bgcolor=white>
 
 <H1 ALIGN=RIGHT><A NAME=subclassing>7 - Adding and Extending Widgets</A></H1>
 
@@ -66,26 +66,36 @@ when(FL_WHEN_RELEASE);
 <H2>Handling Events</H2>
  The virtual method <TT>int Fl_Widget::handle(int event)</TT> is called 
 to handle each event passed to the widget. It can: 
+
 <UL>
-<LI>Change the state of the widget. </LI>
-<LI>Call <A href=Fl_Widget.html#Fl_Widget.redraw><TT>Fl_Widget::redraw()</TT>
-</A> if the widget needs to be redisplayed. </LI>
-<LI>Call <A href=Fl_Widget.html#Fl_Widget.damage><TT>
-Fl_Widget::damage(n)</TT></A> if  the widget needs a partial-update 
-(assumming you provide  support for this in your <TT>Fl_Widget::draw()</TT>
- method). </LI>
-<LI>Call <A href=Fl_Widget.html#Fl_Widget.do_callback><TT>
-Fl_Widget::do_callback()</TT></A> if a callback should be generated. </LI>
-<LI>Call <TT>Fl_Widget::handle()</TT> on child widgets. </LI>
+
+<LI>Change the state of the widget.
+
+<LI>Call <A href=Fl_Widget.html#redraw><TT>Fl_Widget::redraw()</TT>
+</A> if the widget needs to be redisplayed.
+
+<LI>Call <A href=Fl_Widget.html#damage><TT>
+Fl_Widget::damage(n)</TT></A> if the widget needs a partial-update
+(assumming you provide support for this in your
+<TT>Fl_Widget::draw()</TT> method).
+
+<LI>Call <A href=Fl_Widget.html#do_callback><TT>
+Fl_Widget::do_callback()</TT></A> if a callback should be generated.
+
+<LI>Call <TT>Fl_Widget::handle()</TT> on child widgets.
+
 </UL>
- Events are identified by the integer argument.  Other information 
-about the most recent event is stored in static locations and aquired 
+
+Events are identified by the integer argument.  Other information
+about the most recent event is stored in static locations and aquired
 by calling the <A href=events.html#events><TT>Fl::event_*()</TT></A>
- functions. This information remains valid until another event is 
-handled. 
+functions. This information remains valid until another event is
+handled.
+
 <P>Here is a sample <TT>handle()</TT> method for a widget that acts as 
 a pushbutton and also accepts the keystroke 'x' to cause the callback: </P>
 <UL>
+
 <PRE>
 int MyClass::handle(int event) {
   switch(event) {
@@ -125,21 +135,26 @@ int MyClass::handle(int event) {
  You must return non-zero if your <TT>handle()</TT> method uses the 
 event. If you return zero it indicates to the parent widget that it can 
 try sending the event to another widget. 
-<H2>Drawing the Widget</H2>
- The <TT>draw()</TT> virtual method is called when FLTK wants you to 
+
+<a name=draw><H2>Drawing the Widget</H2>
+
+The <TT>draw()</TT> virtual method is called when FLTK wants you to 
 redraw your widget.  It will be called if and only if <TT>damage()</TT>
  is non-zero, and <TT>damage()</TT> will be cleared to zero after it 
 returns. <TT>draw()</TT> should be declared protected, so that it can't 
 be called from non-drawing code. 
-<P><TT>damage()</TT> contains the bitwise-OR of all the <TT>damage(n)</TT>
- calls to this widget since it was last drawn.  This can be used for 
-minimal update, by only redrawing the parts whose bits are set.  FLTK 
-will turn on the <TT>FL_DAMAGE_ALL</TT> bit if it thinks the entire widget
-must be redrawn (e.g. for an expose event). </P>
-<P>Expose events (and the above <TT>damage(b,x,y,w,h)</TT>) will cause <TT>
-draw()</TT> to be called with FLTK's <A href=drawing.html#clipping>
-clipping</A> turned on.  You can greatly speed up redrawing in some 
-cases by testing <TT>fl_not_clipped(x,y,w,h)</TT> or <TT>fl_clip_box(...)</TT> and 
+
+<P><TT>damage()</TT> contains the bitwise-OR of all the
+<TT>damage(n)</TT> calls to this widget since it was last drawn.  This
+can be used for minimal update, by only redrawing the parts whose bits
+are set.  FLTK will turn on the <TT>FL_DAMAGE_ALL</TT> bit if it
+thinks the entire widget must be redrawn (e.g. for an expose event).
+
+<P>Expose events (and the above <TT>damage(b,x,y,w,h)</TT>) will cause
+<TT> draw()</TT> to be called with FLTK's <A
+href=drawing.html#clipping> clipping</A> turned on.  You can greatly
+speed up redrawing in some cases by testing
+<TT>fl_not_clipped(x,y,w,h)</TT> or <TT>fl_clip_box(...)</TT> and
 skipping invisible parts. </P>
 
 <P>FLTK provides a <a href=drawing.html>large number of basic drawing
@@ -218,11 +233,13 @@ int MyClass::handle(int event) {
 }
 </PRE>
 </UL>
+
  If you override <TT>draw()</TT> you need to draw all the children.  If <TT>
 redraw()</TT> or <TT>damage()</TT> is called on a child, <TT>
 damage(FL_DAMAGE_CHILD)</TT> is done to the group, so this bit of <TT>
 damage()</TT> can be used to indicate that a child needs to be drawn. 
- It is fastest if you avoid drawing anything else in this case: 
+It is fastest if you avoid drawing anything else in this case: 
+
 <UL>
 <PRE>
 int MyClass::draw() {
@@ -240,13 +257,16 @@ int MyClass::draw() {
 }
 </PRE>
 </UL>
+
 <TT>Fl_Group</TT> provides some protected methods to make drawing 
 easier: 
+
 <UL>
 <LI><A href=#draw_child>draw_child</A></LI>
 <LI><A href=#draw_outside_label>draw_outside_label</A></LI>
 <LI><A href=#update_child>update_child</A></LI>
 </UL>
+
 <H4><A name=draw_child>void Fl_Group::draw_child(Fl_Widget&amp;)</A></H4>
  This will force the child's <TT>damage()</TT> bits all to one and call <TT>
 draw()</TT> on it, then clear the <TT>damage()</TT>.  You should call 

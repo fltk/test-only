@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.22 2000/09/11 07:29:32 spitzak Exp $"
+// "$Id: Fl_Type.cxx,v 1.23 2000/09/27 16:25:50 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -53,9 +53,9 @@ Fl_Type *Fl_Type::first;
 Fl_Type *Fl_Type::current;
 
 class Widget_List : public Fl_List {
-  virtual int children(const Fl_Group*, const int* indexes, int level);
-  virtual Fl_Widget* child(const Fl_Group*, const int* indexes, int level);
-  virtual void flags_changed(const Fl_Group*, Fl_Widget*);
+  virtual int children(const Fl_Menu_*, const int* indexes, int level);
+  virtual Fl_Widget* child(const Fl_Menu_*, const int* indexes, int level);
+  virtual void flags_changed(const Fl_Menu_*, Fl_Widget*);
 };
 
 static Widget_List widgetlist;
@@ -77,7 +77,7 @@ Fl_Widget *make_widget_browser(int x,int y,int w,int h) {
   return widget_browser;
 }
 
-int Widget_List::children(const Fl_Group*, const int* indexes, int level) {
+int Widget_List::children(const Fl_Menu_*, const int* indexes, int level) {
   Fl_Type* item = Fl_Type::first;
   if (!item) return 0;
   for (int l = 0; l < level; l++) {
@@ -89,7 +89,7 @@ int Widget_List::children(const Fl_Group*, const int* indexes, int level) {
   return n;
 }
 
-Fl_Widget* Widget_List::child(const Fl_Group*, const int* indexes, int level) {
+Fl_Widget* Widget_List::child(const Fl_Menu_*, const int* indexes, int level) {
   Fl_Type* item = Fl_Type::first;
   if (!item) return 0;
   for (int l = 0;; l++) {
@@ -115,7 +115,7 @@ Fl_Widget* Widget_List::child(const Fl_Group*, const int* indexes, int level) {
   return widget;
 }
 
-void Widget_List::flags_changed(const Fl_Group*, Fl_Widget* w) {
+void Widget_List::flags_changed(const Fl_Menu_*, Fl_Widget* w) {
   Fl_Type* item = (Fl_Type*)(w->user_data());
   item->open_ = (w->flags()&FL_OPEN)!=0;
   int value = (w->flags()&FL_VALUE)!=0;
@@ -518,5 +518,5 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.22 2000/09/11 07:29:32 spitzak Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.23 2000/09/27 16:25:50 spitzak Exp $".
 //

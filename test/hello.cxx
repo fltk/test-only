@@ -1,7 +1,7 @@
 //
-// "$Id: hello.cxx,v 1.5 2000/01/16 07:44:42 robertk Exp $"
+// "$Id: hello.cxx,v 1.6 2000/09/27 16:25:52 spitzak Exp $"
 //
-// Hello, World! program for the Fast Light Tool Kit (FLTK).
+// Demo program from the fltk documentation.
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -29,8 +29,10 @@
 
 int main(int argc, char **argv) {
   Fl_Window *window = new Fl_Window(300,180);
-  Fl_Box *box = new Fl_Box(FL_UP_BOX,20,40,260,100,"Hello, World!");
+  Fl_Box *box = new Fl_Box(20,40,260,100,"Hello, World!");
+  box->box(FL_UP_BOX);
   box->label_font(FL_HELVETICA_BOLD_ITALIC);
+  //box->label_font(fl_font("arial bold italic"));
   box->label_size(36);
   box->label_type(FL_SHADOW_LABEL);
   window->end();
@@ -39,5 +41,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: hello.cxx,v 1.5 2000/01/16 07:44:42 robertk Exp $".
+// End of "$Id: hello.cxx,v 1.6 2000/09/27 16:25:52 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.H,v 1.26 2000/09/11 07:29:32 spitzak Exp $"
+// "$Id: Fl_Menu_.H,v 1.27 2000/09/27 16:25:48 spitzak Exp $"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,17 @@
 #include "Fl_Group.H"
 #include "Fl_Menu_Item.H"
 
+class Fl_Menu_;
+
+class FL_API Fl_List {
+public:
+  virtual int children(const Fl_Menu_*, const int* indexes, int level);
+  virtual Fl_Widget* child(const Fl_Menu_*, const int* indexes, int level);
+  virtual void flags_changed(const Fl_Menu_*, Fl_Widget*);
+};
+
 class FL_API Fl_Menu_ : public Fl_Group {
+
 public:
 
   Fl_Menu_(int,int,int,int, const char* l=0);
@@ -37,22 +47,29 @@ public:
   void layout();
   void draw();
 
-  int value() const {return focus();}
-  void value(int v) {focus(v);}
-  void value(const int* indexes, int level);
+  Fl_List* list() const {return list_;}
+  void list(Fl_List* l) {list_ = l;}
+
+  int children(const int* indexes, int level) const ;
+  int children() const ;
+  Fl_Widget* child(const int* indexes, int level) const ;
+  Fl_Widget* child(int index) const ;
 
   Fl_Widget* item() const {return item_;}
   void item(Fl_Widget* w) {item_ = w;}
+  virtual int goto_item(const int* indexes, int level);
 
   int popup(int x,int y, const char* title = 0);
   int pulldown(int x,int y,int w,int h, Fl_Widget* t=0, int menubar = 0);
   int handle_shortcut();
   void global();
-  void execute(Fl_Widget*);
+  void execute();
 
 #ifndef FLTK_2
   // Commented-out methods cannot be emulated.
 
+  int value() const {return focus();}
+  void value(int v) {focus(v);}
   int  size() const {return children();}
 
 //const Fl_Menu_Item* test_shortcut();
@@ -112,11 +129,12 @@ public:
 
 #endif
 private:
+  Fl_List* list_;
   Fl_Widget* item_;
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Menu_.H,v 1.26 2000/09/11 07:29:32 spitzak Exp $".
+// End of "$Id: Fl_Menu_.H,v 1.27 2000/09/27 16:25:48 spitzak Exp $".
 //

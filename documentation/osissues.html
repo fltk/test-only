@@ -1,4 +1,4 @@
-<html><body>
+<html><head><title>FLTK Operating System Issues</title></head><body bgcolor=white>
 
 <h1 align=right><a name=osissues>F - Operating System Issues</A></h1>
 
@@ -130,7 +130,7 @@ faster than iterating through the windows yourself.
 <br><a name=fl_gc>extern GC fl_gc;</h4>
 
 These variables are set before <TT>Fl_Widget::draw()</TT>
-is called, or by <A href=Fl_Window.html#Fl_Window.make_current><TT>
+is called, or by <A href=Fl_Window.html#make_current><TT>
 Fl_Window::make_current()</TT></a>.  They are needed by most Xlib
 drawing calls, a typical call is like this:
 
@@ -138,7 +138,7 @@ drawing calls, a typical call is like this:
 
 <p>Notice that <tt>fl_window</tt> is the X window id number.  Other
 information such as the position or size of the X window can be found
-by looking at <A href=Fl_Window.html#Fl_Window.make_current><TT>
+by looking at <A href=Fl_Window.html#make_current><TT>
 Fl_Window::current()</TT></A>, which returns a pointer to the <TT>
 Fl_Window</TT> being drawn.
 
@@ -354,12 +354,12 @@ and can be used to identify this application.
 <br><a name=fl_gc>extern HDC fl_gc;</h4>
 
 These are set before <tt>draw()</tt> is called, or by <a
-href=Fl_Window.html#Fl_Window.make_current><tt>Fl_Window::make_current()</tt>,
+href=Fl_Window.html#make_current><tt>Fl_Window::make_current()</tt></a>,
 and can be used as arguments to GDI32 calls.
 
 <p>Notice that <tt>fl_window</tt> is the window handle.  Other
 information such as the position or size of the window can be found
-by looking at <A href=Fl_Window.html#Fl_Window.make_current><TT>
+by looking at <A href=Fl_Window.html#make_current><TT>
 Fl_Window::current()</TT></A>, which returns a pointer to the <TT>
 Fl_Window</TT> being drawn.
 
@@ -401,8 +401,9 @@ standard <TT>main()</TT> entry point for you. <i>This function creates
 a console window when you use the debug version of the library.</i>
 
 <P>WIN32 applications without a console cannot write to <TT>stdout</TT>
-or <TT>stderr</TT>, even if they are run from a console window.  Any 
-output is silently thrown away.
+or <TT>stderr</TT>, <i>even if they are run from a console window</i>.  Any 
+output is silently thrown away. We are not sure why, but we do
+question the sanity of the software engineers there sometimes.
 
 <h3>Known Bugs</h3>
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.50 2000/09/11 07:29:33 spitzak Exp $"
+// "$Id: Fl_Choice.cxx,v 1.51 2000/09/27 16:25:51 spitzak Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -53,18 +53,14 @@ void Fl_Choice::draw() {
   }
 #endif
   Fl_Widget* o = item();
-  if (!o) item((o = child(value())));
+  if (!o) item(o = child(0));
   if (o) {
+    if (focused()) o->set_flag(FL_SELECTED);
+    else o->clear_flag(FL_SELECTED);
     fl_clip(X+2, Y+2, W-w1-2, H-4);
     o->x(X);
     o->y(Y+(H-o->height())/2);
     int save_w = o->w(); o->w(W-w1);
-#if MOTIF_STYLE
-    o->clear_flag(FL_SELECTED);
-#else
-    if (focused()) o->set_flag(FL_SELECTED);
-    else o->clear_flag(FL_SELECTED);
-#endif
     if (!(flags() & FL_NO_SHORTCUT_LABEL)) fl_draw_shortcut = 2;
     o->draw();
     fl_draw_shortcut = 0;
@@ -97,9 +93,9 @@ void Fl_Choice::draw() {
 #endif
 }
 
-int Fl_Choice::value(int v) {return value(&v, 0);}
+int Fl_Choice::value(int v) {return goto_item(&v, 0);}
 
-int Fl_Choice::value(const int* indexes, int level) {
+int Fl_Choice::goto_item(const int* indexes, int level) {
   // rather annoying kludge to try to detect if the item from an Fl_List
   // has changed by looking for the label and user data to change:
   Fl_Widget* save_item = item();
@@ -109,7 +105,7 @@ int Fl_Choice::value(const int* indexes, int level) {
     save_label = save_item->label();
     save_data = save_item->user_data();
   }
-  Fl_Menu_::value(indexes, level);
+  Fl_Menu_::goto_item(indexes, level);
   if (item() == save_item) {
     if (!save_item) return 0;
     if (save_label == save_item->label() && save_data==save_item->user_data())
@@ -136,10 +132,11 @@ int Fl_Choice::handle(int e) {
     return 1;
 
   case FL_PUSH:
-    // If you uncomment this line (or make a subclass that does this),
-    // a mouse click picks the current item, and the menu goes away.  The
-    // user must drag the mouse to select a different item.  Depending on
-    // the size and usage of the menu, this may be more user-friendly.
+    // Normally a mouse click pops up the menu. If you uncomment this line
+    // (or make a subclass that does this), a mouse click will re-pick the
+    // current item (it will popup the menu and immediately dismiss it).
+    // Depending on the size and usage of the menu this may be more
+    // user-friendly.
 //  Fl::event_is_click(0);
     take_focus();
   EXECUTE:
@@ -162,17 +159,17 @@ int Fl_Choice::handle(int e) {
       int i = value(); if (i < 0) i = children;
       while (i > 0) {
 	--i;
-	Fl_Widget* w = child(&i,0);
-	if (w->takesevents()) {value(i); execute(w); redraw(); break;}
+	Fl_Widget* w = child(i);
+	if (w->takesevents()) {goto_item(&i,0); execute(); return 1;}
       }
-      return 1;}
+      return 0;}
     case FL_Down: {
       int i = value();
       while (++i < children) {
-	Fl_Widget* w = child(&i,0);
-	if (w->takesevents()) {value(i); execute(w); redraw(); break;}
+	Fl_Widget* w = child(i);
+	if (w->takesevents()) {goto_item(&i,0); execute(); return 1;}
       }
-      return 1;}
+      return 0;}
     }
     return 0;
 
@@ -181,7 +178,11 @@ int Fl_Choice::handle(int e) {
   }
 }
 
-static Fl_Named_Style* style = new Fl_Named_Style("Choice", 0, &style);
+static void revert(Fl_Style* s) {
+  s->leading = 4;
+}
+
+static Fl_Named_Style* style = new Fl_Named_Style("Choice", revert, &style);
 
 Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,l) {
   value(0);
@@ -192,5 +193,5 @@ Fl_Choice::Fl_Choice(int x,int y,int w,int h, const char *l) : Fl_Menu_(x,y,w,h,
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.50 2000/09/11 07:29:33 spitzak Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.51 2000/09/27 16:25:51 spitzak Exp $".
 //

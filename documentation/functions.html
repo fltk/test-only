@@ -1,6 +1,6 @@
-<html><body>
+<html><head><title>Fl::functions</title></head><body bgcolor = white>
 
-<h1 align=right><A NAME=functions>B - Function Reference</A></h1>
+<h1 align=right><A NAME=functions>B - The Fl:: Functions</A></h1>
 
 This appendix describes all of the <tt>Fl::xyz</tt> functions.  These
 functions mostly are concerned with event handling and waiting for
@@ -8,11 +8,15 @@ events.  <tt>Fl::</tt> should be considered a namespace, although it
 is defined as a C++ class in the header file to work with older C++
 compilers.
 
-<p>There are a number of other functions with <tt>fl_xyz</tt> names,
-most of these are concerned with drawing or graphics state.
-These are described in the <a href=drawing.html>Drawing</a> and <a
-href=utility.html>Utility</a> sections of the appendix and in the
-documentation for individual <a href=widgets.html>Classes</a>.
+<p>FLTK also provides a number of global functions with
+<tt>fl_xyz</tt> names. The majority of these are concerned with
+drawing or graphics state, and are described in the <a
+href=drawing.html>Drawing</a> appendix. The others are a set of modal
+popup utility functions for asking questions described in 
+the <a href=utility.html>Utility</a> appendix.
+
+<p>Also see the description of all the classes listed in the <a
+href=widgets.html>Classes</a> appendix.
 
 <h3><A name=add_fd>void Fl::add_fd(int fd, void (*cb)(int, void 
 *), void* = 0)
@@ -127,7 +131,7 @@ can be done with other calls to FLTK.
 start of your program.  This does <I>not</I> open the display, instead
 switches that need the display open are stashed into static variables.
 Then you <I>must</I> display your first window by calling <A
-href=Fl_Window.html#Fl_Window.show> window-&gt;show(argc,argv)</A>,
+href=Fl_Window.html#show> window-&gt;show(argc,argv)</A>,
 which will do anything stored in the static variables.</p>
 
 <p><tt>callback</tt> lets you define your own switches.  It is called 
@@ -313,7 +317,7 @@ be a nul before that if the keystroke translates to a nul character or
 you paste a nul character. 
 
 <h3><A name=event_state>ulong Fl::event_state()
-<BR> unsigned int Fl::event_state(ulong)</A></h3>
+<BR>unsigned int Fl::event_state(ulong)</A></h3>
 
 This is a bitfield of what shift states were on and what mouse buttons 
 were held down during the most recent event.  The second version 
@@ -339,7 +343,7 @@ XFree86 server on Linux.  In addition there is a bug in the way X works
 so that the shift state is not correctly reported until the first event <I>
 after</I> the shift key is pressed or released. 
 
-<h3><A name=event_text>char *Fl::event_text()</A></h3>
+<A name=event_text><h3>char *Fl::event_text()</h3>
 
 Returns the ASCII text (in the future this may be UTF-8) produced by 
 the last <tt>FL_KEYBOARD</tt> or <tt>FL_PASTEM</tt> or possibly other 
@@ -348,6 +352,37 @@ that do not produce text. This pointer points at a static buffer and is
 only valid until the next event is processed. 
 
 <p>Under X this is the result of calling <tt>XLookupString()</tt>.</p>
+
+<a name=compose><h3>int Fl::compose(int&amp; del)</h3>
+
+<p>Use of this function is very simple.  Any text editing widget should
+call this for each <tt>FL_KEYBOARD</tt> event.
+
+<p>If <tt>true</tt> is returned, then it has modified the <a
+href=#event_text><tt>Fl::event_text()</tt></a> and <a
+href=#event_length><tt>Fl::event_length()</tt></a> to a set of
+<i>bytes</i> to insert (it may be of zero length!).  It will also set
+the <i>del</i> parameter to the number of <i>bytes</i> to the left of
+the cursor to delete, this is used to delete the results of the
+previous call to Fl::compose().
+
+<p>If <tt>false</tt> is returned, the keys should be treated as
+function keys.  You could insert the text anyways, if you don't know
+what else to do, <i>del</i> is set to zero and the <a
+href=#event_text><tt>Fl::event_text()</tt></a> and <a
+href=#event_length><tt>Fl::event_length()</tt></a> are left unchanged,
+length is zero for any function keys.
+
+<p>Though the current implementation returns immediately, future
+versions may take quite awhile, as they may pop up a window or do
+other user-interface things to allow characters to be selected.
+
+<a name=compose_reset><h3>int Fl::compose_reset()</h3>
+
+<p>If the user moves the cursor, be sure to call Fl::compose_reset().
+The next call to Fl::compose() will start out in an initial state.  In
+particular it will not set "del" to non-zero.  This call is very fast
+so it is ok to call it many times and in many places.
 
 <h3><A name=event_x>int Fl::event_x()
 <BR><A name=event_y>int Fl::event_y()</A></A></h3>
@@ -460,7 +495,7 @@ detects an invalid argument on the command-line.
 
 Returns the top-most <tt>modal()</tt> window currently shown.  This is
 the most recently <tt>shown()</tt> window with <A
-href=Fl_Window.html#Fl_Window.modal><tt> modal()</tt></A> true, or
+href=Fl_Window.html#modal><tt>modal()</tt></A> true, or
 <tt>NULL</tt> if there are no <tt>modal()</tt> windows
 <tt>shown()</tt>.  The <tt>modal()</tt> window has its
 <tt>handle()</tt> method called for all events, and no other windows
@@ -545,11 +580,10 @@ callback that no longer exists.
 
 <h3><A name=run>static Fl::run()</A></h3>
 
-As long as any windows are displayed this calls <tt>Fl::wait()</tt>
-repeatedly.  When all the windows are closed it returns zero
-(supposedly it would return non-zero on any errors, but fltk calls
-exit directly for these).  A normal program will end <tt>main()</tt>
-with <tt>return Fl::run();</tt>.
+Calls <a href=#wait><tt>Fl::wait()</tt></a> in an infinite loop. The only
+way out is for a callback to call <tt>exit()</tt> or <tt>abort()</tt>.
+A normal program will end <tt>main()</tt> with <tt>return
+Fl::run();</tt>.
 
 <h3><A name=selection>void Fl::selection(Fl_Widget *owner, const 
 char *stuff, int len)

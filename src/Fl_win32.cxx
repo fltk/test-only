@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.129 2000/08/20 04:31:38 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.130 2000/09/27 16:25:51 spitzak Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -540,7 +540,7 @@ static int mouse_event(Fl_Window *window, int what, int button,
 static const struct {unsigned short vk, fltk, extended;} vktab[] = {
   {VK_BACK,	FL_BackSpace},
   {VK_TAB,	FL_Tab},
-  {VK_CLEAR,	FL_KP+'5',	Fl_Clear},
+  {VK_CLEAR,	FL_KP+'5',	FL_Clear},
   {VK_RETURN,	FL_Enter,	FL_KP_Enter},
   {VK_SHIFT,	FL_Shift_L,	FL_Shift_R},
   {VK_CONTROL,	FL_Control_L,	FL_Control_R},
@@ -977,18 +977,20 @@ Fl_X* Fl_X::create(Fl_Window* w) {
     xp = w->x(); if (xp != FL_USEDEFAULT) xp -= dx;
     yp = w->y(); if (yp != FL_USEDEFAULT) yp -= dy;
 
-    // back compatability with older modal() and non_modal() flags:
-    HWND modal_for = 0;
-    if (w->modal() || w->non_modal()) {
-      modal_for = (HWND)w->sys_modal_for();
-      if (!modal_for) modal_for = Fl::first_window()->i->xid;
+    // Send child window information:
+    if (w->modal_for()) {
+      const Fl_Window* modal_for = w->modal_for();
+      while (modal_for && modal_for->parent()) modal_for = modal_for->window();
+      if (modal_for && modal_for->shown())
+	parent = modal_for->i->xid;
+      else
+	parent = 0;
+    } else if (fl_mdi_window) {
+      parent = fl_mdi_window->i->xid;
+    } else {
+      parent = 0;
     }
 
-    if (modal_for) {
-      parent = modal_for;
-    } else {
-      parent = fl_mdi_window ? fl_mdi_window->i->xid : 0;
-    }
     if (!w->modal()) style |= WS_SYSMENU | WS_MINIMIZEBOX;
   }
 
@@ -1270,5 +1272,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.129 2000/08/20 04:31:38 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.130 2000/09/27 16:25:51 spitzak Exp $".
 //

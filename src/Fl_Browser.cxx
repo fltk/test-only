@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.30 2000/09/11 07:29:33 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.31 2000/09/27 16:25:51 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -75,12 +75,12 @@ Fl_Widget* Fl_Browser::goto_top() {
   item_position[HERE] = 0;
   item_number[HERE] = 0;
   item_index[HERE][0] = 0;
-  if (children() <= 0) {
+  if (children(item_index[HERE],0) <= 0) {
     // empty browser must return a null widget
     item(0);
     return 0;
   }
-  item(child(0));
+  item(child(item_index[HERE],0));
   // skip leading invisible widgets:
   if (!item()->visible()) return forward();
   return item();
@@ -597,7 +597,7 @@ int Fl_Browser::item_select(int value, int do_callback) {
   damage_item(HERE);
   if (when() & do_callback) {
     clear_changed();
-    execute(item());
+    execute();
   } else if (do_callback) {
     set_changed();
   }
@@ -640,7 +640,7 @@ int Fl_Browser::item_select_only(int do_callback) {
     if (!set_focus()) return 0;
     if (when() & do_callback) {
       clear_changed();
-      execute(item());
+      execute();
     } else if (do_callback) {
       set_changed();
     }
@@ -772,7 +772,7 @@ int Fl_Browser::handle(int event) {
     DO_CALLBACK:
       clear_changed();
       goto_mark(FOCUS);
-      execute(item());
+      execute();
       return 1;
     }
 
@@ -914,5 +914,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.30 2000/09/11 07:29:33 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.31 2000/09/27 16:25:51 spitzak Exp $".
 //

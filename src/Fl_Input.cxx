@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.39 2000/09/07 08:52:35 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.40 2000/09/27 16:25:51 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -840,6 +840,7 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 
   case FL_UNFOCUS:
     show_cursor(0);
+  case FL_HIDE:
     if (when() & FL_WHEN_RELEASE) maybe_do_callback();
     return 1;
 
@@ -963,5 +964,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.39 2000/09/07 08:52:35 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.40 2000/09/27 16:25:51 spitzak Exp $".
 //

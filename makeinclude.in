@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.31 2000/07/14 08:34:59 clip Exp $"
+# "$Id: makeinclude.in,v 1.32 2000/09/27 16:25:47 spitzak Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -40,8 +40,10 @@ CC		=@CC@
 MAKEDEPEND	=@MAKEDEPEND@
 
 # flags for C++ compiler:
-CFLAGS		=@DEBUGFLAG@ -I@srcdir@ @CFLAGS@
-CXXFLAGS	=@DEBUGFLAG@ -I@srcdir@ @CXXFLAGS@ @X_CFLAGS@
+# WAS: I removed the -I@srcdir@, please use "xyz" rather than <xyz>
+# for files that are in the same directory as the source file.
+CFLAGS		=@DEBUGFLAG@ @CFLAGS@
+CXXFLAGS	=@DEBUGFLAG@ @CXXFLAGS@
 DSOCFLAGS	=@DSOCFLAGS@
 DEBUGFLAGS	=@DEBUGFLAG@
 
@@ -85,5 +87,5 @@ FLIMAGESLIB	=@FLIMAGESLIB@
 .SUFFIXES:	.c .cxx .h .fl .o
 
 #
-# End of "$Id: makeinclude.in,v 1.31 2000/07/14 08:34:59 clip Exp $".
+# End of "$Id: makeinclude.in,v 1.32 2000/09/27 16:25:47 spitzak Exp $".
 #

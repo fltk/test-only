@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.24 2000/07/14 08:35:01 clip Exp $"
+# "$Id: Makefile,v 1.25 2000/09/27 16:25:52 spitzak Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -123,10 +123,10 @@ install_shared:
 
 install_programs:
 
-#depend:
-#	$(MAKEDEPEND) $(XTRAFLAGS) $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
-#include makedepend
+depend:
+	$(MAKEDEPEND) -I.. $(XTRAFLAGS) $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
+include makedepend
 
 #
-# End of "$Id: Makefile,v 1.24 2000/07/14 08:35:01 clip Exp $".
+# End of "$Id: Makefile,v 1.25 2000/09/27 16:25:52 spitzak Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.39 2000/09/11 07:29:33 spitzak Exp $"
+// "$Id: fl_boxtype.cxx,v 1.40 2000/09/27 16:25:52 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -167,7 +167,6 @@ void Fl_Highlight_Box::draw(const Fl_Widget* widget,
 			    int x, int y, int w, int h, Fl_Flags f) const
 {
   if (f & (FL_HIGHLIGHT|FL_SELECTED|FL_VALUE)) {
-    if (f & FL_SELECTED) f |= FL_VALUE;
     down->draw(widget,x,y,w,h,f);
   } else {
     Fl_Flat_Box::draw(widget,x,y,w,h,f);
@@ -176,7 +175,10 @@ void Fl_Highlight_Box::draw(const Fl_Widget* widget,
 Fl_Highlight_Box::Fl_Highlight_Box(const char* n, const Fl_Boxtype b)
   : Fl_Flat_Box(n), down(b)
 {
-  dx_ = dy_ = dw_ = dh_ = 0;
+  dx_ = b->dx();
+  dy_ = b->dy();
+  dw_ = b->dw();
+  dh_ = b->dh();
   fills_rectangle_ = 1;
 }
 
@@ -192,5 +194,5 @@ const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
 const Fl_Boxtype_* Fl_Boxtype_::first = 0;
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.39 2000/09/11 07:29:33 spitzak Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.40 2000/09/27 16:25:52 spitzak Exp $".
 //

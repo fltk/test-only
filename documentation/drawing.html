@@ -1,5 +1,7 @@
-<HTML><BODY>
-<H1><A NAME=drawing>D - Drawing Things in FLTK</A></H1>
+<html>
+<head><title>Drawing Things in FLTK</title></head>
+<body bgcolor=white>
+<h1><a name=drawing>D - Drawing Things in FLTK</a></h1>
 
  This chapter covers the drawing functions that are provided with FLTK. 
 
@@ -11,10 +13,10 @@ behavior!
 
 <UL>
 
-<LI>The most common is inside the virtual method <A href=#draw><TT>
-Fl_Widget::draw()</TT></A>.  To write code  here, you must subclass one 
-of the existing <TT>Fl_Widget</TT> classes and implement your own 
-version of <TT>draw()</TT>. </LI>
+<LI>The most common is inside the virtual method <A
+href=subclassing.html#draw><TT> Fl_Widget::draw()</TT></A>.  To write
+code here, you must subclass one of the existing <TT>Fl_Widget</TT>
+classes and implement your own version of <TT>draw()</TT>. </LI>
 
 <LI>You can also write <a href=Fl_Boxtype.html>boxtypes</A> and <A
 href=Fl_Labeltype.html> labeltypes</A>.  These are small structures
@@ -28,9 +30,9 @@ can then be put into the <a
 href=Fl_Widget.html#image>Fl_Widget::image()</a> and be called by
 existing <TT>Fl_Widget::draw()</TT> methods.
 
-<LI>You can call <A href=Fl_Window.html#Fl_Window.make_current><TT>
+<LI>You can call <A href=Fl_Window.html#make_current><TT>
 Fl_Window::make_current()</TT></A> to do incremental update of a 
-widget. Use <A href=Fl_Widget.html#Fl_Widget.window><TT>
+widget. Use <A href=Fl_Widget.html#window><TT>
 Fl_Widget::window()</TT></A> to  find the window.</LI>
 
 </UL>
@@ -264,50 +266,75 @@ stack is 4.
 x,  float y)</H4>
  Concatenate another transformation onto the current one.  The rotation 
 angle is in degrees (not radians) and is counter-clockwise. 
-<H4>void fl_begin_line()
-<BR> void fl_end_line()</H4>
- Start and end drawing 1-pixel thick lines. 
-<H4>void fl_begin_loop()
-<BR> void fl_end_loop()</H4>
- Start and end drawing a closed sequence of 1-pixel thick lines. 
-<H4>void fl_begin_polygon()
-<BR> void fl_end_polygon()</H4>
- Start and end drawing a convex filled polygon. 
-<H4>void fl_begin_complex_polygon()
-<BR> void fl_gap()
-<BR> void fl_end_complex_polygon()</H4>
- Start and end drawing a complex filled polygon.  This polygon may be 
-concave, may have holes in it, or may be several disconnected pieces. 
-Call <TT>fl_gap()</TT> to seperate loops of the path (it is unnecessary 
-but harmless to call <TT>fl_gap()</TT> before the first vertex, after 
-the last one, or several times in a row).  For portability, you should 
-only draw polygons that appear the same whether &quot;even/odd&quot; or 
-&quot;non-zero&quot; winding rules are used to fill them.  This mostly means that 
-holes should be drawn in the opposite direction of the outside. 
-<P><TT>fl_gap()</TT> should only be called between <TT>
-fl_begin_complex_polygon()</TT> and <TT>fl_end_complex_polygon()</TT>. 
- To outline the polygon, use <TT>fl_begin_loop()</TT> and replace each <TT>
-fl_gap()</TT> with <TT>fl_end_loop();fl_begin_loop()<TT>. </TT></TT></P>
+
+<h4>void fl_begin()</h4>
+
+Clear the current "path" and start a new one.
+
 <H4>void fl_vertex(float x, float y)</H4>
- Add a single vertex to the current path. 
-<H4>void fl_curve(float x, float y, float x1, float y1, float x2, float 
-y2, float x3, float y3)</H4>
- Add a series of points on a Bezier curve to the path.  The curve ends 
+
+Add a single vertex to the current path. 
+
+<h4>void fl_curve(float x, float y, float x1, float y1, float x2, float y2, float x3, float y3)</H4>
+
+Add a series of points on a Bezier curve to the path.  The curve ends 
 (and two of the points) are at <TT>x,y</TT> and <TT>x3,y3</TT>. 
+
 <H4>void fl_arc(float x, float y, float r, float start, float end)</H4>
- Add a series of points to the current path on the arc of a circle (you 
+
+Add a series of points to the current path on the arc of a circle (you 
 can get elliptical paths by using scale and rotate before calling 
 this). <TT>x,y</TT> are the center of the circle, and <TT>r</TT> is its 
 radius. <TT>fl_arc()</TT> takes <TT>start</TT> and <TT>end</TT> angles 
 that are measured in degrees counter-clockwise from 3 o'clock.  If <TT>
 end</TT> is less than <TT>start</TT> then it draws the arc in a 
 clockwise direction. 
+
 <H4>void fl_circle(float x, float y, float r)</H4>
-<TT>fl_circle()</TT> is equivalent to <TT>fl_arc(...,0,360)</TT> but 
-may be faster.  It must be the <I>only</I> thing in the path: if you 
-want a circle as part of a complex polygon you must use <TT>fl_arc()</TT>
-. <I>This draws incorrectly if the transformation is both rotated and 
-non-square scaled.</I>
+
+<TT>fl_circle()</TT> is equivalent to <TT>fl_arc(...,0,360)</TT> but
+may be faster.  It must be the <I>only</I> thing in the path: if you
+want a circle as part of a complex polygon you must use
+<TT>fl_arc()</TT>. <I>This draws incorrectly if the transformation is
+both rotated and non-square scaled.</I>
+
+<h4>void fl_gap()</h4>
+
+Closes the current loop of the path by adding a segment to the first
+point. Then this sets things up so the next point starts a new line
+segment or loop. It is unnecessary but harmless to call
+<TT>fl_gap()</TT> before the first vertex, after the last one, or
+multiple times in a row.
+
+<h4> void fl_end_points()</h4>
+
+Draw each point in the current path as a dot.
+
+<h4> void fl_end_line()</h4>
+
+Draw the path as a line (see fl_line_type() for ways to set the
+thicknesss and dot pattern of the line).
+
+<h4>void fl_end_loop()</h4>
+
+Draw a closed path with a line, by adding a segment back to the first
+point and doing fl_end_line().
+
+<h4>void fl_end_polygon()</h4>
+
+Close the path and then fill with the current color.
+
+<h4>void fl_end_complex_polygon()</h4>
+
+Close the path and then fill with the current color. This invokes
+extra logic so that non-convex polygons can be drawn correctly
+(otherwise only convex polygons (all interior angles less or equal to
+180 degrees) will draw correctly.
+
+For portability, you should only draw polygons that appear the same
+whether &quot;even/odd&quot; or &quot;non-zero&quot; winding rules are
+used to fill them.  This mostly means that holes should be drawn in
+the opposite direction of the outside.
 
 <H3><A name=text>Text</A></H3>
 

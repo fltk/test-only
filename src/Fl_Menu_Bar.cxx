@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.40 2000/08/10 09:24:32 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.41 2000/09/27 16:25:51 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -45,7 +45,7 @@ void Fl_Menu_Bar::draw() {
 	widget->clear_flag(FL_HIGHLIGHT);
       int x1 = X; int y1 = y(); int w1 = W; int h1 = this->h();
       box()->inset(x1,y1,w1,h1);
-      text_box()->draw(this, X, y1+1, W, h1-2, widget->flags());
+      text_box()->draw(this, X, y1+1, W, h1-2, widget->flags()&~FL_VALUE);
       widget->x(X+5);
       widget->y(y()+(h()-widget->h())/2);
       int save_w = widget->w(); widget->w(W-10);
@@ -118,15 +118,15 @@ int Fl_Menu_Bar::handle(int event) {
 
 static void revert(Fl_Style* s) {
   s->box = FL_FLAT_BOX;
+  s->text_background = FL_GRAY; // controls color of the menu
 #if 0
   // NT 4.0 style
   s->text_box = FL_FLAT_BOX;
 #else
   // Windows98 style:
   s->text_box = FL_HIGHLIGHT_BOX;
-  s->selection_color = FL_GRAY;
-  s->selection_text_color = FL_BLACK;
 #endif
+  s->leading = 4;
 }
 
 static Fl_Named_Style* style = new Fl_Named_Style("Menu Bar", revert, &style);
@@ -138,5 +138,5 @@ Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.40 2000/08/10 09:24:32 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.41 2000/09/27 16:25:51 spitzak Exp $".
 //

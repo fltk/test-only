@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.85 2000/07/20 05:28:31 clip Exp $"
+dnl# "$Id: configure.in,v 1.86 2000/09/27 16:25:47 spitzak Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -59,11 +59,11 @@ dnl# it.
 
 LD="\${CXX}"
 LDLIBS="-lX11 -lXext"
-FLLIB="../lib/libfltk\${LIBEXT}"
-FLGLLIB="../lib/libfltk_gl\${LIBEXT}"
-FLGLUTLIB="../lib/libfltk_glut\${LIBEXT}"
-FLFORMSLIB="../lib/libfltk_forms\${LIBEXT}"
-FLIMAGESLIB="../lib/libfltk_images\${LIBEXT}"
+FLLIB="../lib/libfltk${LIBEXT}"
+FLGLLIB="../lib/libfltk_gl${LIBEXT}"
+FLGLUTLIB="../lib/libfltk_glut${LIBEXT}"
+FLFORMSLIB="../lib/libfltk_forms${LIBEXT}"
+FLIMAGESLIB="../lib/libfltk_images${LIBEXT}"
 DSOLIBNAME="libfltk"
 DSOLIBimagesNAME="libfltk_images"
 DSOLIBformsNAME="libfltk_forms"
@@ -127,11 +127,11 @@ AC_ARG_ENABLE(shared, [  --enable-shared         created shared libraries],[
 if eval "test x$enable_shared = xyes"; then
   BUILDTARGETS="static shared programs"
   INSTALLTARGETS="install_static install_shared install_programs"
-  FLLIB="../lib/libfltk\${DSOEXT}"
-  FLGLLIB="../lib/libfltk_gl\${DSOEXT}"
-  FLGLUTLIB="../lib/libfltk_glut\${DSOEXT}"
-  FLFORMSLIB="../lib/libfltk_forms\${DSOEXT}"
-  FLIMAGESLIB="../lib/libfltk_images\${DSOEXT}"
+  FLLIB="../lib/libfltk${DSOEXT}"
+  FLGLLIB="../lib/libfltk_gl${DSOEXT}"
+  FLGLUTLIB="../lib/libfltk_glut${DSOEXT}"
+  FLFORMSLIB="../lib/libfltk_forms${DSOEXT}"
+  FLIMAGESLIB="../lib/libfltk_images${DSOEXT}"
   EXEFLAGS="-DFL_SHARED"
   case $uname in
     WIN32)
@@ -206,9 +206,8 @@ AC_PATH_XTRA
 dnl# echo "Ignoring libraries \"$X_PRE_LIBS\" requested by configure."
 
 LIBS="$LIBS$X_LIBS"
-dnl# LIBS="$LIBS$X_LIBS"
-CFLAGS="$CFLAGS $X_CFLAGS"
-CPPFLAGS="$CPPFLAGS $X_CFLAGS"
+CFLAGS="$CFLAGS$X_CFLAGS"
+CXXFLAGS="$CXXFLAGS$X_CFLAGS"
 
 dnl# My test to see if OpenGL is on this machine:
 GLLIB=
@@ -301,15 +300,18 @@ dnl# add warnings to compiler switches:
 dnl# do this last so messing with switches does not break tests
 if test -n "$GXX"; then
     CFLAGS="-Wall $CFLAGS"
-    CXXFLAGS="-Wall -Wno-return-type $CXXFLAGS"
+    CXXFLAGS="-Wall $CXXFLAGS"
     if test -z "$DEBUGFLAG"; then
     	# Note: Can't use -fomit-frame-pointer - prevents tools like
 	#       libsafe from working!
-        CFLAGS="$CFLAGS -O2 -fforce-mem -fforce-addr -fcaller-saves"
-        CXXFLAGS="$CXXFLAGS -O2 -fforce-mem -fforce-addr -fcaller-saves"
+	# WAS: I removed the -fforce-mem, -fforce-addr, -fcaller-saves
+	#      They all seemed to make either no difference or enlarged
+	#      the code by a few hundred bytes.
+        DEBUGFLAG="-O2"
     fi
 
     # See if GCC supports -fno-exceptions...
+    # WAS: this DOES make a big difference in the code size!
     echo "Testing if GCC supports -fno-exceptions..."
     OLDCFLAGS="$CFLAGS"
     CFLAGS="$CFLAGS -fno-exceptions"
@@ -413,5 +415,5 @@ AC_OUTPUT(makeinclude fltk-config Makefile)
 chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.85 2000/07/20 05:28:31 clip Exp $".
+dnl# End of "$Id: configure.in,v 1.86 2000/09/27 16:25:47 spitzak Exp $".
 dnl#

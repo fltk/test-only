@@ -1,4 +1,5 @@
-<HTML><BODY>
+<html><head><title>FLTK Widgets & Attributes</title></head><body bgcolor = white>
+
 <H1 ALIGN=RIGHT><A NAME=common>3 - Common Widgets and Attributes</A></H1>
  This chapter describes many of the widgets that are provided with FLTK 
 and covers how to query and set the standard attributes. 
@@ -34,13 +35,17 @@ lbutton-&gt;type(FL_TOGGLE_BUTTON);
 rbutton-&gt;type(FL_RADIO_BUTTON);
 </PRE>
 </UL>
- For toggle and radio buttons, the <A href=Fl_Button.html#Fl_Button.value>
-<TT>value()</TT></A> method returns the current button state (0 = off, 
-1 = on).  The <A href=#Fl_Widget.set><TT>set()</TT></A> and <A href=#Fl_Widget.clear>
-<TT>clear()</TT></A> methods can be used on toggle buttons to turn a 
-toggle button on or off, respectively.  Radio buttons can be turned on 
-with the <A href=#Fl_Widget.setonly><TT>setonly()</TT></A> method; this 
-will also turn off other radio buttons in the same group. 
+
+For toggle and radio buttons, the <a
+href=Fl_Button.html#Fl_Button.value><tt>value()</tt></a> method
+returns the current button state (0 = off, 1 = on).  The <a
+href=Fl_Button.html#set><tt>set()</tt></a> and <a
+href=Fl_Button.html#clear><tt>clear()</tt></a> methods can be used on
+toggle buttons to turn a toggle button on or off, respectively.  Radio
+buttons can be turned on with the <a
+href=Fl_Button.html#setonly><tt>setonly()</tt></a> method; this will also
+turn off other radio buttons in the same group.
+
 <H2>Text</H2>
  FLTK provides several text widgets for displaying and receiving text: 
 <UL>
@@ -154,7 +159,7 @@ button-&gt;labelcolor(FL_WHITE);
 
 <H2><A NAME=boxtypes>Box Types</A></H2>
 
-<P><A href=Fl_Widget.html#Fl_Widget.box><TT>Fl_Widget::box()</TT></A>
+<P><A href=Fl_Widget.html#box><TT>Fl_Widget::box()</TT></A>
 is a pointer to a struct <a href=Fl_Boxtype.html>Fl_Boxtype_</a>.  This
 describes how to draw the box around the widget.  By making your own
 you can cause arbitrary drawing code to be called.
@@ -234,7 +239,7 @@ raised </LI>
 </UL>
 
 <P><A
-href=Fl_Widget.html#Fl_Widget.labeltype><TT>Fl_Widget::label_type()</TT></A>
+href=Fl_Widget.html#label_type><TT>Fl_Widget::label_type()</TT></A>
 is a pointer to a struct <a href=Fl_Labeltype.html>Fl_Labeltype_</a>.
 By making your own you can cause arbitrary drawing code to be called.
 
@@ -276,8 +281,8 @@ button-&gt;callback(xyz_callback, data);
 </PRE>
 </UL>
  Normally callbacks are performed only when the value of the widget 
-changes. You can change this using the <A href=Fl_Widget.html#Fl_Widget.when>
-<TT>when()</TT></A> method: 
+changes. You can change this using the <A
+href=Fl_Widget.html#when><TT>when()</TT></A> method:
 <UL>
 <PRE>
 button-&gt;when(FL_WHEN_NEVER);

@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.35 2000/08/21 03:56:24 spitzak Exp $"
+# "$Id: Makefile,v 1.36 2000/09/27 16:25:50 spitzak Exp $"
 #
 # Fluid makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -56,7 +56,7 @@ include ../makeinclude
 .cxx.o:
 	$(CXX) -I.. $(EXEFLAGS) $(XTRAFLAGS) $(CXXFLAGS) $< -c
 
-all: static shared programs
+all: static programs
 
 static:
 
@@ -108,5 +108,5 @@ rebuild:
 	./fluid -c widget_panel.fl
 
 #
-# End of "$Id: Makefile,v 1.35 2000/08/21 03:56:24 spitzak Exp $".
+# End of "$Id: Makefile,v 1.36 2000/09/27 16:25:50 spitzak Exp $".
 #

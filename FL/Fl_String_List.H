@@ -11,8 +11,8 @@ class FL_API Fl_String_List : public Fl_List {
   const char* const * array;
   int children_;
 public:
-  virtual int children(const Fl_Group*, const int* indexes, int level);
-  virtual Fl_Widget* child(const Fl_Group*, const int* indexes, int level);
+  virtual int children(const Fl_Menu_*, const int* indexes, int level);
+  virtual Fl_Widget* child(const Fl_Menu_*, const int* indexes, int level);
   Fl_String_List(const char*const* a, int n) : array(a), children_(n) {}
   Fl_String_List(const char*const* a);
   Fl_String_List(const char* S);

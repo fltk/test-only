@@ -1,5 +1,5 @@
 //
-// "$Id: fl_vertex.cxx,v 1.7 2000/07/14 08:35:01 clip Exp $"
+// "$Id: fl_vertex.cxx,v 1.8 2000/09/27 16:25:52 spitzak Exp $"
 //
 // Portable drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -71,27 +71,6 @@ void fl_rotate(double d) {
   }
 }
 
-static XPoint *p = (XPoint *)0;
-// typedef what the x,y fields in a point are:
-#ifdef WIN32
-typedef int COORD_T;
-#else
-typedef short COORD_T;
-#endif
-
-static int p_size;
-static int n;
-static int what;
-enum {LINE, LOOP, POLYGON, POINT_};
-
-void fl_begin_points() {n = 0; what = POINT_;}
-
-void fl_begin_line() {n = 0; what = LINE;}
-
-void fl_begin_loop() {n = 0; what = LOOP;}
-
-void fl_begin_polygon() {n = 0; what = POLYGON;}
-
 double fl_transform_x(double x, double y) {return x*m.a + y*m.c + m.x;}
 
 double fl_transform_y(double x, double y) {return x*m.b + y*m.d + m.y;}
@@ -100,128 +79,165 @@ double fl_transform_dx(double x, double y) {return x*m.a + y*m.c;}
 
 double fl_transform_dy(double x, double y) {return x*m.b + y*m.d;}
 
-static void fl_transformed_vertex(COORD_T x, COORD_T y) {
-  if (!n || x != p[n-1].x || y != p[n-1].y) {
-    if (n >= p_size) {
-      p_size = p ? 2*p_size : 16;
-      p = (XPoint *)realloc((void*)p, p_size*sizeof(*p));
+// typedef what the x,y fields in a point are:
+#ifdef WIN32
+typedef int COORD_T;
+#else
+typedef short COORD_T;
+#endif
+
+// Storage of the current path:
+static XPoint *point; // all the points
+static int point_array_size;
+static int points; // number of points
+static int loop_start; // point at start of current loop
+static int* loop; // number of points in each loop
+static int loops; // number of loops
+static int loop_array_size;
+// We also keep track of one circle:
+static int circle_x, circle_y, circle_w, circle_h;
+
+void fl_begin() {points = loop_start = loops = circle_w = 0;}
+
+static void transformed_vertex(COORD_T x, COORD_T y) {
+  if (!points || x != point[points-1].x || y != point[points-1].y) {
+    if (points >= point_array_size) {
+      point_array_size = point_array_size ? 2*point_array_size : 16;
+      point = (XPoint*)realloc((void*)point, point_array_size*sizeof(XPoint*));
     }
-    p[n].x = x;
-    p[n].y = y;
-    n++;
+    point[points].x = x;
+    point[points].y = y;
+    points++;
   }
 }
 
 void fl_transformed_vertex(double xf, double yf) {
-  fl_transformed_vertex(COORD_T(xf+.5), COORD_T(yf+.5));
+  transformed_vertex(COORD_T(xf+.5), COORD_T(yf+.5));
 }
 
 void fl_vertex(double x,double y) {
-  fl_transformed_vertex(x*m.a + y*m.c + m.x, x*m.b + y*m.d + m.y);
-}
-
-void fl_end_points() {
-#ifdef WIN32
-  for (int i=0; i<n; i++) SetPixel(fl_gc, p[i].x, p[i].y, fl_colorref);
-#else
-  if (n>1) XDrawPoints(fl_display, fl_window, fl_gc, p, n, 0);
-#endif
-}
-
-void fl_end_line() {
-#ifdef WIN32
-  if (n>1) Polyline(fl_gc, p, n);
-#else
-  if (n>1) XDrawLines(fl_display, fl_window, fl_gc, p, n, 0);
-#endif
-}
-
-static void fixloop() {  // remove equal points from closed path
-  while (n>2 && p[n-1].x == p[0].x && p[n-1].y == p[0].y) n--;
-}
-
-void fl_end_loop() {
-  fixloop();
-  if (n>2) fl_transformed_vertex((COORD_T)p[0].x, (COORD_T)p[0].y);
-  fl_end_line();
-}
-
-void fl_end_polygon() {
-  fixloop();
-#ifdef WIN32
-  if (n>2) {
-    SelectObject(fl_gc, fl_brush);
-    Polygon(fl_gc, p, n);
-  }
-#else
-  if (n>2) XFillPolygon(fl_display, fl_window, fl_gc, p, n, Convex, 0);
-#endif
-}
-
-static int gap;
-#ifdef WIN32
-static int counts[20];
-static int numcount;
-#endif
-
-void fl_begin_complex_polygon() {
-  fl_begin_polygon();
-  gap = 0;
-#ifdef WIN32
-  numcount = 0;
-#endif
+  transformed_vertex(COORD_T(x*m.a + y*m.c + m.x + .5),
+		     COORD_T(x*m.b + y*m.d + m.y + .5));
 }
 
 void fl_gap() {
-  while (n>gap+2 && p[n-1].x == p[gap].x && p[n-1].y == p[gap].y) n--;
-  if (n > gap+2) {
-    fl_transformed_vertex((COORD_T)p[gap].x, (COORD_T)p[gap].y);
-#ifdef WIN32
-    counts[numcount++] = n-gap;
-#endif
-    gap = n;
+  if (points > loop_start+2) {
+    // close the shape by duplicating first point:
+    transformed_vertex(point[loop_start].x, point[loop_start].y);
+    if (loops >= loop_array_size) {
+      loop_array_size = loop_array_size ? 2*loop_array_size : 16;
+      loop = (int*)realloc((void*)loop, loop_array_size*sizeof(int));
+    }
+    loop[loops++] = points-loop_start;
+    loop_start = points;
   } else {
-    n = gap;
+    points = loop_start;
   }
 }
 
-void fl_end_complex_polygon() {
-  fl_gap();
-#ifdef WIN32
-  if (n>2) {
-    SelectObject(fl_gc, fl_brush);
-    PolyPolygon(fl_gc, p, counts, numcount);
-  }
-#else
-  if (n>2) XFillPolygon(fl_display, fl_window, fl_gc, p, n, 0, 0);
-#endif
-}
-
-// shortcut the closed circles so they use XDrawArc:
-// warning: these do not draw rotated ellipses correctly!
-// See fl_arc.c for portable version.
+// Shortcut closed circles so they use XDrawArc.
+// Only 1 circle per path, ellipses do not work in rotated
+// coordinate systems, not connected with any other parts of path.
+// If this is a problem use fl_arc() for a correct but slower version.
 
 void fl_circle(double x, double y,double r) {
+  fl_gap(); // maybe it should do this?
   double xt = fl_transform_x(x,y);
   double yt = fl_transform_y(x,y);
   double rx = r * (m.c ? sqrt(m.a*m.a+m.c*m.c) : fabs(m.a));
   double ry = r * (m.b ? sqrt(m.b*m.b+m.d*m.d) : fabs(m.d));
-  int llx = int(xt-rx+.5);
-  int w = int(xt+rx+.5)-llx;
-  int lly = int(yt-ry+.5);
-  int h = int(yt+ry+.5)-lly;
+  circle_w = int(xt+rx+.5)-(circle_x = int(xt-rx+.5));
+  circle_h = int(yt+ry+.5)-(circle_y = int(yt-ry+.5));
+}
+
+void fl_end_points() {
 #ifdef WIN32
-  if (what==POLYGON) {
-    SelectObject(fl_gc, fl_brush);
-    Pie(fl_gc, llx, lly, llx+w, lly+h, 0,0, 0,0); 
-  } else
-    Arc(fl_gc, llx, lly, llx+w, lly+h, 0,0, 0,0); 
+  for (int i=0; i<points; i++)
+    SetPixel(fl_gc, point[i].x, point[i].y, fl_colorref);
 #else
-  (what == POLYGON ? XFillArc : XDrawArc)
-    (fl_display, fl_window, fl_gc, llx, lly, w, h, 0, 360*64);
+  if (points > 0) XDrawPoints(fl_display, fl_window, fl_gc, point, points, 0);
 #endif
 }
 
+void fl_end_line() {
+  if (circle_w > 0) {
+#ifdef WIN32
+    Arc(fl_gc, circle_x, circle_y, circle_x+circle_w, circle_y+circle_h, 0,0, 0,0); 
+#else
+    XDrawArc(fl_display, fl_window, fl_gc, circle_x, circle_y, circle_w, circle_h, 0, 360*64);
+#endif
+  }
+  int loop_start = 0;
+  for (int n = 0; n < loops; n++) {
+    int loop_size = loop[n];
+#ifdef WIN32
+    Polyline(fl_gc, point+loop_start, loop_size);
+#else
+    XDrawLines(fl_display, fl_window, fl_gc, point+loop_start, loop_size, 0);
+#endif
+    loop_start += loop_size;
+  }
+  int loop_size = points-loop_start;
+#ifdef WIN32
+  if (loop_size > 1) Polyline(fl_gc, point+loop_start, loop_size);
+#else
+  if (loop_size > 1) XDrawLines(fl_display, fl_window, fl_gc, point+loop_start, loop_size, 0);
+#endif
+}
+
+void fl_end_loop() {
+  // close the shape by duplicating first point:
+  if (points > loop_start+2)
+    transformed_vertex(point[loop_start].x, point[loop_start].y);
+  fl_end_line();
+}
+
+void fl_end_polygon() {
+  if (circle_w > 0) {
+#ifdef WIN32
+    SelectObject(fl_gc, fl_brush);
+    Pie(fl_gc, circle_x, circle_y, circle_x+circle_w, circle_y+circle_h, 0, 0, 0,0); 
+#else
+    XFillArc(fl_display, fl_window, fl_gc, circle_x, circle_y, circle_w, circle_h, 0, 360*64);
+#endif
+  }
+  if (loops) {
+    fl_gap();
+#ifdef WIN32
+    SelectObject(fl_gc, fl_brush);
+    PolyPolygon(fl_gc, point, loop, loops);
+#else
+    XFillPolygon(fl_display, fl_window, fl_gc, point, points, 0, 0);
+#endif
+  } else if (points > 2) {
+#ifdef WIN32
+    SelectObject(fl_gc, fl_brush);
+    Polygon(fl_gc, point, points);
+#else
+    XFillPolygon(fl_display, fl_window, fl_gc, point, points, Convex, 0);
+#endif
+  }
+}
+
+void fl_end_complex_polygon() {
+#ifndef WIN32
+  // For X this stops it from sending the Convex signal:
+  if (!loops) {
+    if (points > 2)
+      XFillPolygon(fl_display, fl_window, fl_gc, point, points, 0, 0);
+    return;
+  }
+#endif
+  fl_end_polygon();
+}
+
+// back-compatability functions:
+void fl_begin_points() {fl_begin();}
+void fl_begin_line() {fl_begin();}
+void fl_begin_loop() {fl_begin();}
+void fl_begin_polygon() {fl_begin();}
+void fl_begin_complex_polygon() {fl_begin();}
+
 //
-// End of "$Id: fl_vertex.cxx,v 1.7 2000/07/14 08:35:01 clip Exp $".
+// End of "$Id: fl_vertex.cxx,v 1.8 2000/09/27 16:25:52 spitzak Exp $".
 //

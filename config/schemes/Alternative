@@ -10,7 +10,7 @@ version = 1                                       # version number of scheme
 FLTK version = 2.0.0                              # minimum FLTK version needed
 
 [general]
-  themes = Alternative                            # theme plugins to load for this scheme
+#  themes = Alternative                            # theme plugins to load for this scheme
 
 [global colors]                                   # global color options
 #  background = gray                              # background color

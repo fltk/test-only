@@ -1,4 +1,5 @@
-<HTML><BODY>
+<html><head><title>FLTK Events</title></head><body bgcolor = white>
+
 <H1 ALIGN=RIGHT><A NAME=events>6 - Handling Events</A></H1>
  This chapter discusses the FLTK event model and how to handle events 
 in your program or widget. 
@@ -93,43 +94,52 @@ really hard to not to ignore any keystrokes!
 what windows are displayed or which one has the focus. </P>
 <H2>Widget Events</H2>
 <H3>FL_DEACTIVATE</H3>
- This widget is no longer active, due to <A href=Fl_Widget.html#Fl_Widget.deactivate>
+ This widget is no longer active, due to <A href=Fl_Widget.html#deactivate>
 <TT>deactivate()</TT></A> being called on it or one of its parents. <TT>
 active()</TT> may still be true after this, the widget is only active 
 if <TT>active()</TT> is true on it and all its parents (use <TT>
 active_r()</TT> to check this). 
 <H3>FL_ACTIVATE</H3>
- This widget is now active, due to <A href=Fl_Widget.html#Fl_Widget.activate>
+ This widget is now active, due to <A href=Fl_Widget.html#activate>
 <TT>activate()</TT></A> being called on it or one of its parents. 
 
 <H3>FL_HIDE</H3>
- This widget is no longer visible, due to <A href=Fl_Widget.html#Fl_Widget.hide><tt>hide()</tt></a> being called on it or one of its
-parents, or due to a parent window being minimized.  <tt>visible()</tt>
-may still be true after this, but the widget is visible only if
-<tt>visible()</tt> is true for it and all its parents (use
-<tt>visible_r()</tt> to check this).
+
+This widget is no longer visible, due to <A
+href=Fl_Widget.html#hide><tt>hide()</tt></a> being called on it or one
+of its parents, or due to a parent window being minimized.
+<tt>visible()</tt> may still be true after this, but the widget is
+visible only if <tt>visible()</tt> is true for it and all its parents
+(use <tt>visible_r()</tt> to check this).
 
 <h3>FL_SHOW</h3>
 
-This widget is visible again, due to <a href=Fl_Widget.html#Fl_Widget.show>
+This widget is visible again, due to <a href=Fl_Widget.html#show>
 <TT>show()</TT></A> being called on it or one of its parents, or due to 
 a parent window being restored. <I>Child <TT>Fl_Window</TT>s respond to 
 this by actually creating the window if not done already, so if you 
 subclass a window, be sure to pass <TT>FL_SHOW</TT> to the base class <TT>
 handle()</TT> method!</I>
+
 <H2>Clipboard Events</H2>
+
 <H3>FL_PASTE</H3>
- You should get this event some time after you call <A href=functions.html#paste>
-<TT>Fl::paste()</TT></A>.  The contents of <A href=functions.html#event_text>
-<TT>Fl::event_text()</TT></A> is the text to insert and the number of 
-characters is in <A href=functions.html#event_length><TT>
-Fl::event_length()</TT></A>. 
+
+You should get this event some time after you call <A
+href=functions.html#paste> <TT>Fl::paste()</TT></A>.  The contents of
+<A href=functions.html#event_text> <TT>Fl::event_text()</TT></A> is
+the text to insert and the number of characters is in <A
+href=functions.html#event_length><TT> Fl::event_length()</TT></A>.
+
 <H3>FL_SELECTIONCLEAR</H3>
- The <A href=functions.html#selection_owner>Fl::selection_owner()</A>
- will get this event before the selection is moved to another widget. 
- This indicates that some other widget or program has claimed the 
-selection. 
+
+The <A href=functions.html#selection_owner>Fl::selection_owner()</A>
+will get this event before the selection is moved to another widget.
+This indicates that some other widget or program has claimed the
+selection.
+
 <H2><A name=event_xxx>Fl::event_*() methods</A></H2>
+
  FLTK keeps the information about the most recent event in static 
 storage.  This information is good until the next event is processed. 
 Thus it is valid inside <TT>handle()</TT> and <TT>callback()</TT>
@@ -175,7 +185,7 @@ to leaf widgets.  These procedures control those leaf widgets: </P>
 <LI><A href=functions.html#modal><TT>Fl::modal</TT></A></LI>
 <LI><A href=functions.html#pushed><TT>Fl::pushed</TT></A></LI>
 <LI><A href=functions.html#release><TT>Fl::release</TT></A></LI>
-<LI><A href=Fl_Widget.html#Fl_Widget.take_focus><TT>Fl_Widget::take_focus</TT></A>
+<LI><A href=Fl_Widget.html#take_focus><TT>Fl_Widget::take_focus</TT></A>
 </LI>
 </UL>
 
@@ -200,16 +210,20 @@ handle arbitrary UTF-8 encoded text.
 <p>Use of this function is very simple.  Any text editing widget should
 call this for each <tt>FL_KEYBOARD</tt> event.
 
-<p>If <i>true</i> is returned, then it has modified the
-Fl::event_text() and Fl::event_length() to a set of <i>bytes</i> to
-insert (it may be of zero length!).  In will also set the "del"
-parameter to the number of <i>bytes</i> to the left of the cursor to
-delete, this is used to delete the results of the previous call to
-Fl::compose().
+<p>If <tt>true</tt> is returned, then it has modified the <a
+href=functions.html#event_text><tt>Fl::event_text()</tt></a> and <a
+href=functions.html#event_length><tt>Fl::event_length()</tt></a> to a
+set of <i>bytes</i> to insert (it may be of zero length!).  It will
+also set the <i>del</i> parameter to the number of <i>bytes</i> to the
+left of the cursor to delete, this is used to delete the results of
+the previous call to Fl::compose().
 
-<p>If <i>false</i> is returned, the keys should be treated as function
-keys, and del is set to zero.  You could insert the text anyways, if
-you don't know what else to do.
+<p>If <tt>false</tt> is returned, the keys should be treated as
+function keys.  You could insert the text anyways, if you don't know
+what else to do, <i>del</i> is set to zero and the <a
+href=functions.html#event_text><tt>Fl::event_text()</tt></a> and <a
+href=functions.html#event_length><tt>Fl::event_length()</tt></a> are
+left unchanged, length is zero for any function keys.
 
 <p>Though the current implementation returns immediately, future
 versions may take quite awhile, as they may pop up a window or do

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts.cxx,v 1.7 2000/08/20 04:31:39 spitzak Exp $"
+// "$Id: fl_list_fonts.cxx,v 1.8 2000/09/27 16:25:52 spitzak Exp $"
 //
 // Less-used font functions
 //
@@ -298,17 +298,22 @@ Fl_Font fl_font(const char* name) {
     if (!strncasecmp(name, fontname, length) && !fontname[length]) goto GOTIT;
   }
   // now try all the fonts on the server, using a binary search:
+  font = 0;
   {Fl_Font* list; int b = fl_list_fonts(list); int a = 0;
   while (a < b) {
     int c = (a+b)/2;
-    font = list[c];
-    const char* fontname = font->name();
+    Fl_Font testfont = list[c];
+    const char* fontname = testfont->name();
     int d = strncasecmp(name, fontname, length);
-    if (!d/* && !fontname[length]*/) goto GOTIT;
+    if (!d) {
+      // If we match a prefix of the font return it unless a better match found
+      font = testfont;
+      if (!fontname[length]) goto GOTIT;
+    }
     if (d > 0) a = c+1;
     else b = c;
   }}
-  return 0;
+  if (!font) return 0;
  GOTIT:
   if (attrib & FL_BOLD) font = font->bold_;
   if (attrib & FL_ITALIC) font = font->italic_;
@@ -316,5 +321,5 @@ Fl_Font fl_font(const char* name) {
 }
 
 //
-// End of "$Id: fl_list_fonts.cxx,v 1.7 2000/08/20 04:31:39 spitzak Exp $".
+// End of "$Id: fl_list_fonts.cxx,v 1.8 2000/09/27 16:25:52 spitzak Exp $".
 //
