@@ -1,5 +1,5 @@
 //
-// "$Id: KDE.cxx,v 1.18 2003/11/04 08:11:04 spitzak Exp $"
+// "$Id: KDE.cxx,v 1.19 2004/03/05 08:16:12 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -102,6 +102,61 @@ static void add_event_handler() {
 #endif
 ////////////////////////////////////////////////////////////////
 
+// Fonts have been seen defined several ways in the .kderc files:
+//
+// name,ptsize,pxlsize?,encoding?,weight,slant,<up to 4 mystery numbers>
+//
+// pxlsize?: some files have ptsize==-1, in this case this appears to be
+// a size in pixels, but I am unsure. When ptsize is greater than 0 this
+// seems to be some mystery number.
+//
+// encoding? early versions had the iso8859-1 type name here as text. Now
+// there is a number that may be the Windows number, or x from iso8859-x?
+// Sometimes it is zero. Currently I ignore this.
+
+static fltk::Font* grok_font(char* s, float& fontsize, char* fontencoding)
+{
+  char* sv; // to save strtok_r() state
+  const char* p;
+
+  // get the name:
+  char fontname[64] = "";
+  if ( (p = strtok_r(s, ",", &sv)) ) {
+    // Turn "adobe-foobar" into just "foobar":
+    char* q = strchr(p, '-');
+    if (q) p = q+1;
+    strncpy(fontname, p, sizeof(fontname));
+  }
+
+  // Read point size field:
+  fontsize = 12;
+  if ( (p = strtok_r(0, ",", &sv)) )
+    fontsize = atoi(p) * Monitor::all().dpi()/72;
+
+  // If it is bad, guess that the next is pixelsize:
+  p = strtok_r(0, ",", &sv);
+  if (fontsize < 5 || fontsize > 64) {
+    if (p) fontsize = atoi(p);
+    // go back to default if it looks completely messed up:
+    if (fontsize < 5 || fontsize > 64) fontsize = 12;
+  }
+
+  // next field may be the encoding:
+  fontencoding[0] = 0;
+  if ( (p = strtok_r(0, ",", &sv)) ) {
+    strncpy(fontencoding, p, sizeof(fontencoding));
+    // remove dash between iso and rest of text:
+    if (!strncasecmp(fontencoding, "iso-", 4))
+      memmove(fontencoding+3,fontencoding+4, strlen(fontencoding+4)+1);
+  }
+  // next two fields are the weight and slant:
+  int attrib = 0;
+  if ( (p = strtok_r(0, ",", &sv)) && atoi(p) >= 75 ) attrib = BOLD;
+  if ( (p = strtok_r(0, ",", &sv)) && atoi(p) > 0 ) attrib |= ITALIC;
+
+  return fltk::font(fontname, attrib);
+}
+
 extern "C" bool fltk_theme() {
 
   fltk::reset_theme();
@@ -166,84 +221,31 @@ extern "C" bool fltk_theme() {
   if (!getconf(kderc, "General/buttonBackground", s, sizeof(s)))
     button_background = color(s);
 
-  float pixels_per_point = Monitor::all().dpi()/72;
-
-  char* sv; // to save strtok_r() state
   if (!getconf(kderc, "General/font", s, sizeof(s))) {
-    char fontname[64] = "";
-
-    if ( (p = strtok_r(s, ",", &sv)) ) {
-      // strip leading foundry name, if any:
-      char* q = strchr(p, '-');
-      if (q) p = q+1;
-      strncpy(fontname, p, sizeof(fontname));
-    }
-
-    float fontsize = 12;
-    if ( (p = strtok_r(0, ",", &sv)) )
-      fontsize = atoi(p) * pixels_per_point;
-
-    strtok_r(0, ",", &sv); // I have no idea what this is
-    static char fontencoding[32] = "";
-    if ( (p = strtok_r(0, ",", &sv)) ) {
-      strncpy(fontencoding, p, sizeof(fontencoding));
-      if (!strncasecmp(fontencoding, "iso-", 4))
-        memmove(fontencoding+3,fontencoding+4, strlen(fontencoding+4)+1); // hack!
-    }
-    int attrib = 0;
-    if ( (p = strtok_r(0, ",", &sv)) && atoi(p) >= 75 ) attrib = BOLD;
-    if ( (p = strtok_r(0, ",", &sv)) && atoi(p) > 0 ) attrib |= ITALIC;
-    fltk::Font* font = fltk::font(fontname, attrib);
+    float fontsize; static char fontencoding[32];
+    fltk::Font* font = grok_font(s, fontsize, fontencoding);
     if (font) {
 // CET - FIXME    if (*fontencoding) fltk::encoding(fontencoding);
       Widget::default_style->labelfont(font);
       Widget::default_style->textfont(font);
-      Widget::default_style->labelsize(fontsize);
-      Widget::default_style->textsize(fontsize);
     }
+    Widget::default_style->labelsize(fontsize);
+    Widget::default_style->textsize(fontsize);
   }
 
   if (!getconf(kderc, "General/menuFont", s, sizeof(s))) {
-    char fontname[64] = "";
-
-    if ( (p = strtok_r(s, ",", &sv)) ) {
-      // strip leading foundry name, if any:
-      char* q = strchr(p, '-');
-      if (q) p = q+1;
-      strncpy(fontname, p, sizeof(fontname));
+    float fontsize; static char fontencoding[32];
+    fltk::Font* font = grok_font(s, fontsize, fontencoding);
+    Style* style;
+    if ((style = Style::find("MenuBar"))) {
+      if (font) style->textfont(font);
+      style->textsize(fontsize);
     }
-
-    float menufontsize = 12;
-    if ( (p = strtok_r(0, ",", &sv)) ) {
-      menufontsize = atoi(p) * pixels_per_point;
-    }
-
-    strtok_r(0, ",", &sv); // I have no idea what this is
-
-    static char menufontencoding[32] = "";
-    if ( (p = strtok_r(0, ",", &sv)) ) {
-      strncpy(menufontencoding, p, sizeof(menufontencoding));
-      if (!strncasecmp(menufontencoding, "iso-", 4))
-        memmove(menufontencoding+3,menufontencoding+4, strlen(menufontencoding+4)+1); // hack!
-    }
-    int attrib = 0;
-    if ( (p = strtok_r(0, ",", &sv)) && atoi(p) >= 75 ) attrib = BOLD;
-    if ( (p = strtok_r(0, ",", &sv)) && atoi(p) > 0 ) attrib |= ITALIC;
-    fltk::Font* menufont = fltk::font(fontname, attrib);
-    if (menufont) {
-      Style* style;
-
-      if ((style = Style::find("MenuBar"))) {
-	style->textfont(menufont);
-	style->textsize(menufontsize);
-      }
-      if ((style = Style::find("PopupMenu"))) {
-	style->textfont(menufont);
-	style->textsize(menufontsize);
-      }
+    if ((style = Style::find("PopupMenu"))) {
+      if (font) style->textfont(font);
+      style->textsize(fontsize);
     }
   }
-
 
   Style* style = Widget::default_style;
 
@@ -330,5 +332,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: KDE.cxx,v 1.18 2003/11/04 08:11:04 spitzak Exp $".
+// End of "$Id: KDE.cxx,v 1.19 2004/03/05 08:16:12 spitzak Exp $".
 //
