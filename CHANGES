@@ -2198,3 +2198,7 @@ Fixed the documentation to go through htmldoc better.
 Fl::add_check() functions that did Fl::add_timeout() did not cause the
 timeout to happen with the last version of the code.
 
+Fl_Output could take the default focus, this is changed so that
+an Fl_Input in the same window gets the focus.
+
+

@@ -1,9 +1,11 @@
 <html><head><title>Using OpenGL in FLTK</title></head><body bgcolor=white>
 
-<a name=opengl><h1>7 - Using OpenGL</h1></a>
+<h1>7 - Using OpenGL</h1>
 
  This chapter discusses using FLTK for your OpenGL applications. 
-<H2>Using OpenGL in FLTK</H2>
+
+<a name=glusing><H2>Using OpenGL in FLTK</H2></a>
+
 The easiest way to make an OpenGL display is to subclass <A href=Fl_Gl_Window.html#Fl_Gl_Window>
 <TT>Fl_Gl_Window</TT></A>. Your subclass must implement a <TT>draw()</TT>
 method which uses OpenGL calls to draw the display.  Your main program 
@@ -18,7 +20,9 @@ functions around your OpenGL code. </P>
 include the file <TT>&lt;GL/gl.h&gt;</TT>, define some extra drawing 
 functions provided by FLTK, and include the <TT>&lt;windows.h&gt;</TT> header 
 file needed by WIN32 applications. </P>
-<H2>Making a Subclass of Fl_Gl_Window</H2>
+
+<a name=glsubclass><H2>Making a Subclass of Fl_Gl_Window</H2></a>
+
 To make a subclass of Fl_Gl_Window, you must provide: 
 <UL>
 <LI>A class definition. </LI>
@@ -143,7 +147,9 @@ the FLUID output file will compile. </LI>
 </OL>
 You must put <TT>glwindow-&gt;show()</TT> in your main code after calling <TT>
 show()</TT> on the window containing the OpenGL window. 
-<H2>Using OpenGL in Normal FLTK Windows</H2>
+
+<a name=glnormal><H2>Using OpenGL in Normal FLTK Windows</H2></a>
+
 You can put OpenGL code into an <A href=#draw><TT>Fl_Widget::draw()</TT>
 </A> method or into the code for a <A href=common.html#boxtypes>boxtype</A>
 or other places with some care. 
@@ -189,7 +195,9 @@ for maximum portability: </P>
 Do <I>not</I> call <TT>gl_start()</TT> or <TT>gl_finish()</TT> when 
 drawing into an <TT>Fl_Gl_Window</TT>!
 <a name=drawing>
-<H2>OpenGL Drawing Functions</H2>
+
+<a name=glfunc><H2>OpenGL Drawing Functions</H2></a>
+
 FLTK provides some useful OpenGL drawing functions.  They can be 
 freely mixed with any OpenGL calls, and are defined by including <TT>
 &lt;fltk/gl.h&gt;</TT> (which you should include instead of the OpenGL header <TT>
@@ -228,7 +236,8 @@ the current OpenGL font at the given position.
 other control characters changed to ^X, and aligned with the edges or 
 center.  Exactly the same output as <A href=#fl_draw><TT>fl_draw()</TT></A>
 . 
-<h2>Speeding up OpenGL</h2>
+
+<a name=glspeed><h2>Speeding up OpenGL</h2></a>
 
 Performance of Fl_Gl_Window may be improved on some types of OpenGL
 implementations (in particular MESA or other software emulators) by
@@ -265,7 +274,8 @@ it or if you drag the window off the screen and back on. You have to
 exit and run the program again for it to see any changes to the
 environment variable.
 
-<H2>Using OpenGL Optimizer with FLTK</H2>
+<a name=gloptimizer><H2>Using OpenGL Optimizer with FLTK</H2></a>
+
 <A href=http://www.sgi.com/software/optimizer>OpenGL Optimizer</A> is a 
 scene graph toolkit for OpenGL available from Silicon Graphics for IRIX 
 and Microsoft Windows.  Versions are in the works for Solaris and 

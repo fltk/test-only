@@ -2,7 +2,7 @@
 
 <h1>Making Your Own Widgets</h1>
 
-<H2>Making a Subclass of Fl_Widget</H2>
+<a name=swidget><H2>Making a Subclass of Fl_Widget</H2></a>
 
 New widgets are created by <I>subclassing</I> an existing FLTK
 widget.
@@ -31,7 +31,7 @@ some or all of these may be necessary.
 MyClass(int x, int y, int w, int h, const char *label = 0);
 </pre></ul>
 
-This will allow the class to be used in <A href=fluid.html#fluid>FLUID</A>
+This will allow the class to be used in <A href=fluid.html>FLUID</A>
 without problems. 
 
 <p>The constructor must call the constructor for the base class and 
@@ -89,7 +89,7 @@ Fl_Widget::do_callback()</TT></A> if a callback should be generated.
 
 Events are identified by the integer argument.  Other information
 about the most recent event is stored in static locations and aquired
-by calling the <A href=events.html#events><TT>Fl::event_*()</TT></A>
+by calling the <A href=Fl.html#event><TT>Fl::event_*()</TT></A>
 functions. This information remains valid until another event is
 handled.
 
@@ -188,7 +188,7 @@ turned on to indicate that a child widget needs to have
 <p><tt>layout()</tt> should call <tt>redraw()</tt> if it determines
 that the display needs to be redrawn.
 
-<h2>Making a Composite Widget</H2>
+<a name=sgroup><h2>Making a Composite Widget</H2></a>
 
 <p>A "composite" widget contains a set of child widgets and makes it
 look like a single large widget. <a href="Fl_Group.html">Fl_Group</a>
@@ -305,7 +305,7 @@ call this on all the children if your own damage is equal to
 FL_DAMAGE_CHILD.  Nothing is done if the child is not
 <TT>visible()</TT> or if it is clipped.
 
-<h2>Making a subclass of Fl_Window</h2>
+<a name=swindow><h2>Making a subclass of Fl_Window</h2></a>
 
 You may want your widget to be a subclass of <TT>Fl_Window</TT>.  This 
 can be useful if your widget wants to occupy an entire window, and can 

@@ -1,7 +1,8 @@
 <html><head><title>FLTK Widgets & Attributes</title></head><body bgcolor = white>
 
-<H2>Callbacks</H2>
- Callbacks are functions that are called when the value of a widget 
+<h2><a name=callbacks>Callbacks</a></h2>
+
+Callbacks are functions that are called when the value of a widget 
 changes. A callback function is sent a <TT>Fl_Widget</TT> pointer of 
 the widget that changed and optionally a pointer to data of some sort: 
 <UL>
@@ -36,7 +37,8 @@ button-&gt;when(FL_WHEN_CHANGED | FL_WHEN_NOT_CHANGED);
 </PRE>
 </UL>
 
-<H2>Buttons</H2>
+<h2><a name=buttons>Buttons</a></h2>
+
  FLTK provides many types of buttons:
 <UL>
 <LI><TT>Fl_Button</TT> - A standard button. </LI>
@@ -81,7 +83,8 @@ buttons can be turned on with the <a
 href=Fl_Button.html#setonly><tt>setonly()</tt></a> method; this will also
 turn off other radio buttons in the same group.
 
-<H2>Text</H2>
+<h2><a name=text>Text</a></h2>
+
 FLTK provides several text widgets for displaying and receiving text:
 <UL>
 <LI><TT>Fl_Input</TT> - A standard one-line text input field. </LI>
@@ -103,7 +106,9 @@ input-&gt;value(&quot;Now is the time for all good men...&quot;);
 </UL>
 <p>The string is copied to the widget's own storage when you set the
 <tt>value()</tt> of the widget.
-<H2>Valuators</H2>
+
+<h2><a name=valuators>Valuators</a></h2>
+
  Unlike text widgets, valuators keep track of numbers instead of 
 strings. FLTK provides the following valuators: 
 <UL>
@@ -121,8 +126,10 @@ The <A href=Fl_Valuator.html#value><TT>value()</TT></A>
 <TT>minimum()</TT></A> and <A href=Fl_Valuator.html#maximum><TT>
 maximum()</TT></A> methods set the range of values that are reported by 
 the widget. 
-<H2>Groups</H2>
- The <TT>Fl_Group</TT> widget class is used as a general purpose 
+
+<h2><a name=groups>Groups</a></h2>
+
+The <TT>Fl_Group</TT> widget class is used as a general purpose 
 &quot;container&quot; widget.  Besides grouping radio buttons, the groups are 
 used to encapsulate windows, tabs, and scrolled windows.  The following 
 group classes are available with FLTK: 
@@ -135,7 +142,9 @@ any widgets together. </LI>
 <LI><TT>Fl_Tabs</TT> - Displays child widgets as tabs. </LI>
 <LI><TT>Fl_Window</TT> - A window on the screen. </LI>
 </UL>
-<H2>Setting the Size and Position of Widgets</H2>
+
+<h2><a name=size_common>Setting the Size and Position of Widgets</a></h2>
+
 The size and position of widgets is usually set when you create them.
 You can access them with the <tt>x()</tt>, <tt>y()</tt>, <tt>w()</tt>,
 and <tt>h()</tt> methods.
@@ -151,7 +160,7 @@ window-&gt;size(width, height);
 If you change a widget's size or position after it is displayed you
 will have to call <tt>redraw()</tt> on the widget's parent.
 
-<H2><A NAME=colors>Colors</A></H2>
+<h2><a name=colors_common>Colors</a></h2>
 
 The typedef <a href=Fl_Color.html>Fl_Color</a> is a 32-bit number that
 is used to store a color.  For most widgets only the "indexed" colors
@@ -192,7 +201,7 @@ button-&gt;labelcolor(FL_WHITE);
 </PRE>
 </UL>
 
-<H2><A NAME=boxtypes>Box Types</A></H2>
+<h2><a name=boxtypes>Box Types</a></h2>
 
 <P><A href=Fl_Widget.html#box><TT>Fl_Widget::box()</TT></A>
 is a pointer to a struct <a href=Fl_Boxtype.html>Fl_Boxtype_</a>.  This
@@ -208,7 +217,7 @@ already on the screen remains.  The <TT>FL_..._FRAME</TT> types only
 draw their edges, leaving the interior unchanged.  In the above diagram 
 the blue color is the area that is not drawn by the box. </P>
 
-<H2><A NAME=labels>Labels and Label Types</A></H2>
+<h2><a name=labels>Labels and Label Types</a></h2>
 
 The <TT>label()</TT>, <tt>image()</tt>, <TT>align()</TT>,
 <TT>labelfont()</TT>, <TT> labelsize()</TT>, and <TT>labeltype()</TT>
@@ -229,9 +238,9 @@ the image is first drawn so that redrawing it is very fast.
 
 <p>Different subclasses draw different types of images.  The provided
 types include
-<a href=Fl_Image.html#Fl_Bitmap><tt>Fl_Bitmap</tt></a>,
-<a href=Fl_Image.html#Fl_Pixmap><tt>Fl_Pixmap</tt></a>,
-<a href=Fl_Image.html#Fl_RGB_Image><tt>Fl_RGB_Image</tt></a>.
+<a href=Fl_Bitmap.html><tt>Fl_Bitmap</tt></a>,
+<a href=Fl_Pixmap.html><tt>Fl_Pixmap</tt></a>,
+<a href=Fl_RGB_Image.html><tt>Fl_RGB_Image</tt></a>.
 
 <H3>align()</H3>
  The <TT>align()</TT> method positions the label.  The following 
@@ -294,7 +303,9 @@ shape. </LI>
 <LI>[1-9] - rotates by a multiple of 45 degrees.  '6' does  nothing, 
 the others point in the direction of that key on a  numeric keypad. </LI>
 </UL>
-<H2>Shortcuts</H2>
+
+<h2><a name=shortcuts>Shortcuts</a></h2>
+
  Shortcuts are key sequences that activate widgets (usually buttons or 
 menu items).  The <TT>shortcut()</TT> method sets the shortcut for a 
 widget: 
@@ -310,6 +321,6 @@ button-&gt;shortcut(0); // no shortcut
 </UL>
 The shortcut value is the key event value (the ASCII value or one of
 the special keys like <a
-href="Fl.html#fl_key"><TT>FL_Enter</TT></a>) combined
+href="Fl.html#event_key"><TT>FL_Enter</TT></a>) combined
 with any modifiers (like shift, alt, and control).
 </BODY></HTML>

@@ -6,7 +6,7 @@
 
 This chapter covers the drawing functions that are provided with FLTK. 
 
-<h2>When Can You Draw Things in FLTK?</h2>
+<a name=dwhen><h2>When Can You Draw Things in FLTK?</h2></a>
 
 There are only certain places you can execute drawing code in FLTK. 
 Calling these functions at other places will result in undefined 
@@ -38,7 +38,7 @@ Fl_Widget::window()</tt></A> to  find the window.
 
 </ul>
 
-<H2>FLTK Drawing Functions</H2>
+<a name=dfunc><H2>FLTK Drawing Functions</H2></a>
 
 To use the drawing functions you must first include the <tt>
 &lt;fltk/fl_draw.h&gt;</tt> header file.  FLTK provides the following types of 
@@ -55,7 +55,7 @@ drawing functions:
 <li><A href=#images>Images</A>
 </ul>
 
-<a name=transformation><h2>Current Transformation</h2></a>
+<a name=dtransformation><h2>Current Transformation</h2></a>
 
 FLTK provides an arbitrary 2-D linear transformation (ie rotation,
 scale, skew, reflections, and translation).
@@ -100,7 +100,7 @@ change in future versions).
 Similar, but the translation is ignored, so this transforms a distance
 vector, instead of an actual point.
 
-<A name=clipping><h2>Clipping</h2></a>
+<A name=dclipping><h2>Clipping</h2></a>
 
 You can limit all your drawing to a region by calling <tt>
 fl_push_clip</tt>, and put the drawings back by using <tt>fl_pop_clip</tt>.
@@ -159,7 +159,7 @@ intersection is empty then <tt>W</tt> and <tt>H</tt> are set to zero.
 <p>This can be used to limit complex pixel operations (like drawing
 images) to the smallest rectangle needed to update the visible area.
 
-<A name=colors><h2>Colors</h2></a>
+<h2><a name=dcolors>Colors</a></h2>
 
 <a name=fl_color><h4>void fl_color(<a href=Fl_Color.html>Fl_Color</a>)</h4></a>
 
@@ -181,7 +181,7 @@ are not forced to set the screen to 8-bit mode)
 Returns the last <tt>fl_color()</tt> that was set.  This can be used 
 for state save/restore.
 
-<A name=lines><h2>Line dashes and thickness</h2></a>
+<a name=dlines><h2>Line dashes and thickness</h2></a>
 
 <a name=fl_line_style><h4>void fl_line_style(int style, int width=0, char* dashes=0)</h4></a>
 
@@ -220,7 +220,7 @@ array results in a solid line. Odd array sizes are not supported and
 result in undefined behavior.  <i>The dashes array does not work on
 Windows 95/98, use the dash styles instead.</i>
 
-<a name=path><h2>Path construction and drawing</h2></a>
+<h2><a name=dpath>Path construction and drawing</a></h2>
 
 These functions let you draw arbitrary shapes with 2-D linear
 transformations.  The functionality matches that found in Adobe&reg;
@@ -317,7 +317,7 @@ of the outside.
 Does <tt>fl_fill()</tt>, then sets the current color to
 <i>linecolor</i> and does <tt>fl_stroke</tt> with the same closed path.
 
-<A name=fast><h2>Drawing that bypasses the path mechanism</h2></a>
+<A name=dfast><h2>Drawing that bypasses the path mechanism</h2></a>
 
 For speed and convienence, and to get some necessary graphics on the
 rather primitive interface provided by X and Win32, fltk has some
@@ -365,7 +365,7 @@ and fill.
 
 </ul>
 
-<a name=text><h2>Text</h2></a>
+<a name=dtext><h2>Text</h2></a>
 
 See <a href=Fl_Font.html>Fl_Font</a> for a description of what can be
 passed as a font. For most uses one of the built-in constant fonts
@@ -473,13 +473,13 @@ Measure how wide and tall the string will be when printed by the
 <tt>fl_draw(...align)</tt> function.  If the incoming <i>w</i> is
 non-zero it will wrap to that width.
 
-<a name=images><h2>Images</h2></a>
+<a name=dimages><h2>Images</h2></a>
 
 If you plan to draw the same image many times, you may want an <a
 href=Fl_Image.html><tt>Fl_Image</tt></a> subclass such as <A
-href=Fl_Image.html#Fl_Bitmap><tt>Fl_Bitmap</tt></A>, <A
-href=Fl_Image.html#Fl_RGB_Image> <tt>Fl_RGB_Image</tt></A>, or <A
-href=Fl_Image.html#Fl_Pixmap><tt>Fl_Pixmap</tt></A> and call <a
+href=Fl_Bitmap.html><tt>Fl_Bitmap</tt></A>, <A
+href=Fl_RGB_Image.html> <tt>Fl_RGB_Image</tt></A>, or <A
+href=Fl_Pixmap.html><tt>Fl_Pixmap</tt></A> and call <a
 href=Fl_Image.html#draw><tt>draw()</tt></a> on them. The advantage of
 using the object is that FLTK will cache translated forms of the image
 (on X it uses a server pixmap) and thus redrawing is <I>much</I>

@@ -1,6 +1,7 @@
-<html><head><title>Fl::functions</title></head><body bgcolor = white>
+<html><head><title>class Fl</title></head><body bgcolor=white>
 
-<h1>The Fl:: Functions</h1>
+<h1>class Fl</h1>
+<hr>
 
 This appendix describes all of the <b><tt>Fl::foo()</tt></b>
 functions.  These functions mostly are concerned with event handling
@@ -104,7 +105,7 @@ href="drawing.html">Drawing</a> appendix. The others are a set of modal
 popup utility functions for asking questions described in 
 the <a href="utility.html">Utility</a> appendix.
 
-<h2>Startup functions</h2>
+<a name=startup><h2>Startup functions</h2></a>
 
 <a name="version"><h4>double Fl::version()</h4></a>
 
@@ -191,14 +192,14 @@ done.  Under WIN32 only color names of the form &quot;#xxxxxx&quot;
 are understood.</li>
 
 <li><tt>-theme name</tt> Calls <a
-href="Fl_Style.html#load_theme2">Fl_Style::load_theme(name)</a> and if
-found it calls <a href="Fl_Style.html#theme">Fl_Style::theme(x)</a>
+href="theme.html#load_theme2">Fl_Style::load_theme(name)</a> and if
+found it calls <a href="theme.html#theme">Fl_Style::theme(x)</a>
 with it. If the theme plugin is not found it exits with an error. The
 plugin is looked for in <tt>~/.fltk/name.theme</tt> and
 <tt>/usr/local/lib/name.theme</tt>.
 
 <li><tt>-scheme name</tt> Calls
-<a href="Fl_Style.html#scheme">Fl_Style::scheme(name)</a>. Some theme
+<a href="theme.html#scheme">Fl_Style::scheme(name)</a>. Some theme
 plugins may do something with this argument, typically it is used to
 name a file the theme reads.
 
@@ -310,7 +311,7 @@ added to in the future):
 <li><tt>int height_mm</tt> screen height in millimeters
 </ul>
 
-<h2>Waiting for events</h2>
+<a name=waiting><h2>Waiting for events</h2></a>
 
 <a name="wait"><h4>int Fl::wait()</h4></a>
 
@@ -575,7 +576,7 @@ Returns true if the specified idle callback is currently installed.
 
 Removes the specified idle callback, if it is installed.
 
-<h2>Redrawing</h2>
+<a name=flredraw><h2>Redrawing</h2></a>
 
 <a name="damage"><h4>int Fl::damage()</h4></a>
 
@@ -617,7 +618,7 @@ Returns the next visible() top-level window, returns NULL after the
 last one.  You can use this and first_window() to iterate through all
 the visible windows.
 
-<h2>Events</h2>
+<a name=events><h2>Events</h2></a>
 
 <a name="event"><h4>int Fl::event()</h4></a>
 
@@ -967,7 +968,7 @@ focus or if the widgets accept the focus. You may want to use <a
 href="Fl_Widget.html#take_focus">Fl_Widget::take_focus()</a> instead, it
 will test first.
 
-<h2>Copy, Paste, and Drag &amp; Drop</h2>
+<a name=copypaste><h2>Copy, Paste, and Drag &amp; Drop</h2></a>
 
 <a name="copy"><h4>void Fl::copy(const char *stuff, int len, bool clipboard=false)</h4></a>
 
@@ -1025,7 +1026,7 @@ that accepted it.
 href="x.html#dnd">system-specific variables</a> to change the type of
 data.
 
-<h2>Multithreading</h2>
+<h2><a name=fmultithread>Multithreading</a></h2>
 
 <a name="lock"><h4>void Fl::lock();</h4></a>
 
@@ -1088,7 +1089,7 @@ Returns an argument sent to an <a href="#awake"><tt>Fl::awake()</tt></a>
 call, or returns null if none. <i>The current implementation
 only has a one-entry queue and only returns the most recent value!</i>
 
-<h2>Errors</h2>
+<a name=errors><h2>Errors</h2></a>
 
 <h4><a name="warning">void (*Fl::warning)(const char *, ...)</a>
 <br><a name="error">void (*Fl::error)(const char *, ...)</a>

@@ -4,8 +4,10 @@
 
  This chapter shows how to use the Fast Light User-Interface Designer 
 (&quot;FLUID&quot;) to create your GUIs. 
-<H2>What is FLUID?</H2>
- The Fast Light User Interface Designer, or FLUID, is a graphical 
+
+<a name=fwhat><H2>What is FLUID?</H2></a>
+
+The Fast Light User Interface Designer, or FLUID, is a graphical 
 editor that is used to produce FLTK source code. 
 <P>FLUID edits and saves its state in <TT>.fl</TT> files.  These files are 
 text, and you can (with care) edit them in a text editor, perhaps to 
@@ -36,8 +38,11 @@ structures.  An unnamed widget has a blank name and no pointer is stored. </P>
 <P>Widgets may either call a named callback function that you write in 
 another source file, or you can supply a small piece of C++ source and 
 FLUID will write a private callback function into the <TT>.cxx</TT> file. </P>
-<H2>Running FLUID Under UNIX</H2>
- To run FLUID under UNIX, type: 
+
+<a name=frunning><H2>Running FLUID Under UNIX</H2></a>
+
+To run FLUID under UNIX, type:
+
 <UL>
 <PRE>
 fluid <I>filename.fl</I> &amp;</PRE>
@@ -65,12 +70,16 @@ at if the user calls it with the same switches.
 <P>In the current version, if you don't go into the background (with 
 '&amp;' then you will be able to abort FLUID by typing ^C on the terminal. It 
 will exit immediately, losing any changes. </P>
-<H2>Running FLUID Under Microsoft Windows</H2>
+
+<a name=fwin32><H2>Running FLUID Under Microsoft Windows</H2></a>
+
 To run FLUID under WIN32, double-click on the <I>FLUID.exe</I> file. 
 You can also run FLUID from the Command Prompt window (FLUID always 
 runs in the background under WIN32). 
-<H2>Compiling <TT>.fl</TT> files</H2>
- FLUID can also be called as a command-line &quot;compiler&quot; to create the 
+
+<a name=fcompile><H2>Compiling <TT>.fl</TT> files</H2></a>
+
+FLUID can also be called as a command-line &quot;compiler&quot; to create the 
 <TT>.cxx</TT> and <TT>.h</TT> file from a <TT>.fl</TT> file.  To do this type: 
 <UL><PRE>
 fluid -c <I>filename.fl</I>
@@ -95,7 +104,8 @@ files found to be compiled:
 	FLUID -c $&lt;
 </PRE>
 </UL>
-<H2>A Short Tutorial</H2>
+
+<a name=ftutorial><H2>A Short Tutorial</H2></a>
 
 FLUID is an amazingly powerful little program. However, this power
 comes at a price, as it is not always obvious how to accomplish seemingly
@@ -410,7 +420,8 @@ Header from Code". Select that option and set your desired file
 extensions and you are in business. You can include the CubeViewUI.h
 (or whatever extension you prefer) as you would any other C++ class.
 <HR BREAK>
-<H2>FLUID Reference</H2>
+
+<a name=freference><H2>FLUID Reference</H2></a>
 
 <H3>The Widget Browser</H3>
 The main window shows a menu bar and a scrolling browser of all 

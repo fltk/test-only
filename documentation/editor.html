@@ -5,7 +5,8 @@
 This chapter takes you through the design of a simple FLTK-based text 
 editor.
 
-<H2>Determining the Goals of the Text Editor</H2>
+<a name=egoals><H2>Determining the Goals of the Text Editor</H2></a>
+
  Since this will be the first big project you'll be doing with FLTK, 
 lets define what we want our text editor to do: 
 <OL>
@@ -17,7 +18,7 @@ lets define what we want our text editor to do:
 <LI>Search and replace functions. </LI>
 <LI>Keep track of when the file has been changed. </LI>
 </OL>
-<H2>Designing the Main Window</H2>
+<a name=edesign><H2>Designing the Main Window</H2></a>
  Now that we've outlined the goals for our editor, we can begin with 
 the design of our GUI.  Obviously the first thing that we need is a 
 window: 
@@ -28,7 +29,7 @@ Fl_Window *window;
 window = new Fl_Window(640, 480, &quot;Text Editor&quot;);
 </PRE>
 </UL>
-<H2>Variables</H2>
+<a name=evariables><H2>Variables</H2></a>
  Our text editor will need some global variables to keep track of 
 things: 
 <UL>
@@ -51,8 +52,10 @@ char               search[256] = &quot;&quot;;
  The <TT>window</TT> variable is our top-level window described 
 previously. We'll cover the other variables as we build the 
 application. 
-<H2>Menubars and Menus</H2>
- The first goal requires us to use a menubar and menus that define each 
+
+<a name=emenus><H2>Menubars and Menus</H2></a>
+
+The first goal requires us to use a menubar and menus that define each 
 function the editor needs to perform.  The <A href=Fl_Menu_Item.html#Fl_Menu_Item>
 <TT>Fl_Menu_Item</TT></A> structure is used to define the menus and 
 items in a menubar: 
@@ -95,7 +98,9 @@ menubar-&gt;menu(menuitems);
 </PRE>
 </UL>
  We'll define the callback functions later. 
-<H2>Editing the Text</H2>
+
+<a name=eediting><H2>Editing the Text</H2></a>
+
  To keep things simple our text editor will use the <A href=Fl_Multiline_Input.html#Fl_Multiline_Input>
 <TT>Fl_Multiline_Input</TT></A> widget to edit the text: 
 <UL>
@@ -117,8 +122,10 @@ input-&gt;when(FL_WHEN_CHANGED);
 input-&gt;textfont(FL_COURIER);
 </PRE>
 </UL>
-<H2>The Replace Dialog</H2>
- We can use the FLTK convenience functions for many of the editor's 
+
+<a name=ereplace><H2>The Replace Dialog</H2></a>
+
+We can use the FLTK convenience functions for many of the editor's 
 dialogs, however the replace dialog needs its own custom window.  To 
 keep things simple we will have a &quot;find&quot; string, a &quot;replace&quot; string, 
 and &quot;replace all&quot;, &quot;replace next&quot;, and &quot;cancel&quot; buttons.  The strings 
@@ -136,7 +143,9 @@ Fl_Button *replace_next = new Fl_Button(105, 70, 120, 25, &quot;Replace Next&quo
 Fl_Button *replace_cancel = new Fl_Button(230, 70, 60, 25, &quot;Cancel&quot;);
 </PRE>
 </UL>
-<H2>Callbacks</H2>
+
+<a name=ecallbacks><H2>Callbacks</H2></a>
+
  Now that we've defined the GUI components of our editor, we need to 
 define our callback functions. 
 <H3>changed_cb()</H3>
@@ -155,7 +164,7 @@ because some of the other callbacks will set the changed status to 0,
 and also because we want to show the changed status in the window's 
 title bar. 
 <H3>copy_cb()</H3>
- This callback function will call <A href=#Fl_Input.copy><TT>
+ This callback function will call <A href=Fl_Input.html#copy><TT>
 input-&gt;copy()</TT></A> to copy the currently selected text to the 
 clipboard: 
 <UL>
@@ -166,9 +175,9 @@ void copy_cb(void) {
 </PRE>
 </UL>
 <H3>cut_cb()</H3>
- This callback function will call <A href=Fl_Input.html#Fl_Input.copy><TT>
+ This callback function will call <A href=Fl_Input.html#copy><TT>
 input-&gt;copy()</TT></A> to copy the currently selected text to the 
-clipboard and then <A href=Fl_Input.html#Fl_Input.cut><TT>input-&gt;cut()</TT>
+clipboard and then <A href=Fl_Input.html#cut><TT>input-&gt;cut()</TT>
 </A> to delete it: 
 <UL>
 <PRE>
@@ -179,7 +188,7 @@ void cut_cb(void) {
 </PRE>
 </UL>
 <H3>delete_cb()</H3>
- This callback function will call <A href=Fl_Input.html#Fl_Input.cut><TT>
+ This callback function will call <A href=Fl_Input.html#cut><TT>
 input-&gt;cut()</TT></A> to delete the selected text: 
 <UL>
 <PRE>
@@ -189,9 +198,12 @@ void delete_cb(void) {
 </PRE>
 </UL>
 <H3>find_cb()</H3>
- This callback function asks for a search string using the <A href=Fl.html#fl_input>
-<TT>fl_input()</TT></A> convenience function and then calls the <TT>
-find2_cb()</TT> function to find the string: 
+
+This callback function asks for a search string using the <A
+href=utility.html#fl_input> <TT>fl_input()</TT></A> convenience
+function and then calls the <TT> find2_cb()</TT> function to find the
+string:
+
 <UL>
 <PRE>
 void find_cb(void) {
@@ -233,9 +245,11 @@ void find2_cb(void) {
 }
 </PRE>
 </UL>
- If the search string cannot be found we use the <A href=Fl.html#fl_alert><TT>
-fl_alert()</TT></A> convenience function to display a message to that 
-effect. 
+
+ If the search string cannot be found we use the <A
+href=utility.html#fl_alert><TT> fl_alert()</TT></A> convenience
+function to display a message to that effect.
+
 <H3>new_cb()</H3>
  This callback function will clear the input widget and current 
 filename. It also calls the <TT>check_save()</TT> function to give the 
@@ -416,7 +430,7 @@ void saveas_cb(void) {
  The <TT>save_file()</TT> function saves the current file to the 
 specified filename. 
 <H3>undo_cb()</H3>
- The undo callback just calls the <A href=Fl_Input.html#Fl_Input.undo><TT>
+ The undo callback just calls the <A href=Fl_Input.html#undo><TT>
 undo()</TT></A> method: 
 <UL>
 <PRE>
@@ -425,8 +439,10 @@ void undo_cb(void) {
 }
 </PRE>
 </UL>
-<H2>Other Functions</H2>
- Now that we've defined the callback functions, we need our support 
+
+<a name=eother><H2>Other Functions</H2></a>
+
+Now that we've defined the callback functions, we need our support 
 functions to make it all work: 
 <H3>check_save()</H3>
  This function checks to see if the current file needs to be saved.  If 
@@ -480,7 +496,7 @@ void load_file(char *newfile) {
 }
 </PRE>
 </UL>
- When loading the file we use the <A href=Fl_Input.html#Fl_Input.replace>
+ When loading the file we use the <A href=Fl_Input.html#replace>
 <TT>input-&gt;replace()</TT></A> method to &quot;replace&quot; the text at the end 
 of the buffer.  The <TT>pos</TT> variable keeps track of the end of the 
 buffer. 
@@ -539,8 +555,10 @@ void set_changed(int c) {
 }
 </PRE>
 </UL>
-<H2>Compiling the Editor</H2>
- The complete source for our text editor can be found in the <TT>
+
+<a name=ecompiling><H2>Compiling the Editor</H2></a>
+
+The complete source for our text editor can be found in the <TT>
 test/editor.cxx</TT> source file.  Both the Makefile and Visual C++ 
 workspace include the necessary rules to build the editor.  You can 
 also compile it using a standard compiler with: 
@@ -549,12 +567,16 @@ also compile it using a standard compiler with:
 CC -o editor editor.cxx -lfltk -lXext -lX11 -lm
 </PRE>
 </UL>
- As noted in <A href=basics.html#basics>Chapter 1</A>, you may need to 
+
+As noted in <A href=basics.html>Fltk Basics Chapter</A>, you may need to 
 include compiler and linker options to tell them where to find the FLTK 
 library. Also, the <TT>CC</TT> command may also be called <TT>gcc</TT>
  or <TT>c++</TT> on your system. 
 <P>Congratulations, you've just built your own text editor! </P>
-<H2>The Final Product</H2>
- The final editor window should look like the image below: 
+
+<a name=efinal><H2>The Final Product</H2></a>
+
+The final editor window should look like the image below: 
 <P ALIGN=CENTER><IMG src=./editor.gif></P>
-</BODY></HTML>
+
+</body></html>

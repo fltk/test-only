@@ -2,7 +2,7 @@
 
 <h1>Themes</h1>
 
-<h2>Theme plugins</h2>
+<a name=tplugins><h2>Theme plugins</h2></a>
 
 Just before the first window is shown, fltk calls the "theme"
 function, which is used to initialize the styles to the user's and
@@ -39,7 +39,7 @@ there is any problem (currently fltk ignores this return value), and
 should print to stderr or call Fl::warning() with any explanation of
 problems.
 
-<h2>Controlling themes</h2>
+<h2><a name=tcontrol>Controlling themes</a></h2>
 
 <a name=theme><h4>static Fl_Theme Fl_Style::theme();
 <br>static void theme(Fl_Theme f);</h4></a>
@@ -110,7 +110,7 @@ such as <a href=Fl_Color.html#fl_background>fl_background</a>. This is
 done by <a href=#reload_theme>reload_theme()</a> before loading the
 theme again.
 
-<h2>Implementing a Theme</h2>
+<a name=timplement><h2>Implementing a Theme</h2></a>
 
 To implement "themes" the theme code needs to write a number of static
 locations, primarily the default style of several classes. You

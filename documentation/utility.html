@@ -10,7 +10,7 @@ user dismisses them and then return the result.
 of the core of fltk.  If you don't like the way they look, copy the
 code and modify to to what you want.
 
-<h2>Color Choosers</h2>
+<a name=ucolor><h2>Color Choosers</h2></a>
 
 <H4><A name=fl_color_chooser>int fl_color_chooser(const char*, double 
 &amp;r, double &amp;g, double &amp;b)
@@ -49,7 +49,7 @@ index, or the old one if the user types ESC or clicks outside the window.
 
 <P ALIGN=CENTER><IMG src=./fl_show_colormap.gif></p>
 
-<h2>Popup messages and questions</h2>
+<a name=upopup><h2>Popup messages and questions</h2></a>
 
 <H4><A name=fl_message>void fl_message(const char *, ...)</A></H4>
 
@@ -76,7 +76,7 @@ for No.
 
 <P ALIGN=CENTER><IMG src=./fl_ask.gif border=1></p>
 
-<H4><A name=fl_choice2>int fl_choice(const char *q, const char *b0, 
+<H4><A name=fl_choice>int fl_choice(const char *q, const char *b0, 
 const char *b1, const char *b2, ...)</A></H4>
 
 Shows the message with three buttons below it marked with the strings
@@ -89,7 +89,7 @@ can hide buttons by passing <tt>NULL</tt> as their labels.
 
 <P ALIGN=CENTER><IMG src=./fl_choice.gif border=1></p>
 
-<H4><A name=fl_input2>const char *fl_input(const char *label, const char 
+<H4><A name=fl_input>const char *fl_input(const char *label, const char 
 *deflt = 0, ...)</A></H4>
 
 Pops up a window displaying a string, lets the user edit it, and 
@@ -120,7 +120,7 @@ widget with any label can be created and used as the icon, including widgets
 with callbacks! Calling this function with <tt>NULL</tt> will reset the
 icons to the FLTK default.
 
-<h2>File Chooser</h2>
+<a name=ufilechooser><h2>File Chooser</h2></a>
  
 <H4><A name=fl_file_chooser>char *fl_file_chooser(const char * message, 
 const char *pattern, const char *fname)</A></H4>

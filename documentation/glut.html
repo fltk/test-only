@@ -5,7 +5,7 @@
 This appendix describes the GLUT compatibility header file supplied 
 with FLTK. 
 
-<h2>Using the GLUT Compatibility Header File</h2>
+<a name=gusing><h2>Using the GLUT Compatibility Header File</h2></a>
 
 You should be able to compile existing GLUT source code by including
 <tt> &lt;fltk/glut.h&gt;</tt> instead of <tt>&lt;GL/glut.h&gt;</tt>.
@@ -31,7 +31,7 @@ you are having trouble porting your GLUT program.</p>
 <p>This has been tested with most of the demo programs that come with 
 the GLUT 3.3 distribution.</p>
 
-<h2>Known Problems</h2>
+<a name=gbugs><h2>Known Problems</h2></a>
 
 The following functions and/or arguments to functions are missing, and 
 you will have to replace them or comment them out for your code to 
@@ -92,7 +92,7 @@ href=Fl.html#args> <tt>Fl::args()</tt></A>, and will accept any
 abbreviation of these switches (such as &quot;-di&quot; for
 &quot;-display&quot;).</p>
 
-<h2>Mixing GLUT and FLTK Code</h2>
+<a name=gmixing><h2>Mixing GLUT and FLTK Code</h2></a>
 
 <p>You can make your GLUT window a child of a <tt>Fl_Window</tt> with the 
 following scheme.  The biggest trick is that GLUT insists on <tt>show()</tt>
@@ -125,7 +125,7 @@ loop calling <tt>Fl::wait()</tt> to run  the program.</li>
 </UL>
 
 <hR break>
-<h2><A name=Fl_Glut_Window>class Fl_Glut_Window</A></h2>
+<a name=Fl_Glut_Window><h2>class Fl_Glut_Window</h2></a>
 <hR>
 
 <h3>Class Hierarchy</h3>
