@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.H,v 1.1 1999/11/27 15:44:46 carl Exp $"
+// "$Id: Fl_Gl_Choice.H,v 1.1 2000/03/18 10:13:27 bill Exp $"
 //
 // OpenGL definitions for the Fast Light Tool Kit (FLTK).
 //
@@ -23,15 +23,20 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
+// This is a private fltk header file.  The structures and functions
+// described here are subject to change in future versions.
+//
 // An Fl_Gl_Choice structure stores all the system-dependent stuff needed
 // to implement an fltk OpenGL "mode".  For X this is a visual and colormap,
-// for Win32 this is a PixelFormat.
+// and for Win32 this is a PixelFormat.
 //
 // find() returns a new Fl_Gl_Choice, or an old one if it has already
 // been called before with the same mode.  If the system cannot do that
 // choice a null pointer is returned.
 //
-// This is used by Fl_Gl_Window, gl_start(), and gl_visual()
+// The second argument to find() is a glX attribute list.  This is
+// currently used to get an overlay visual on X.  This argument is
+// ignored on win32 or other non-glX systems.
 
 #ifndef Fl_Gl_Choice_H
 #define Fl_Gl_Choice_H
@@ -57,9 +62,6 @@ public:
   XVisualInfo *vis;
   Colormap colormap;
 #endif
-  // The optional second argument is a glX attribute list, it is used
-  // by the X implementation if non-zero.  Otherwise the attribute list
-  // is calculated from the mode bits:
   static Fl_Gl_Choice *find(int mode, const int * = 0);
 };
 
@@ -79,5 +81,5 @@ void fl_no_gl_context();
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.H,v 1.1 1999/11/27 15:44:46 carl Exp $".
+// End of "$Id: Fl_Gl_Choice.H,v 1.1 2000/03/18 10:13:27 bill Exp $".
 //

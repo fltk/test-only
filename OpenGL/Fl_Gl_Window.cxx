@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.4 2000/03/17 09:49:59 bill Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.5 2000/03/18 10:13:27 bill Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 #include <FL/Fl.H>
 #include <FL/x.H>
 #include <FL/Fl_Gl_Window.H>
-#include <FL/Fl_Gl_Choice.H>
+#include "Fl_Gl_Choice.H"
 
 ////////////////////////////////////////////////////////////////
 
@@ -117,11 +117,18 @@ void Fl_Gl_Window::make_current() {
 }
 
 void Fl_Gl_Window::ortho() {
-  GLint p[2];
-  glGetIntegerv(GL_MAX_VIEWPORT_DIMS, p);
+// Alpha NT seems to have a broken OpenGL that does not like negative coords:
+#ifdef _M_ALPHA
   glLoadIdentity();
-  glViewport(w()-p[0], h()-p[1], p[0], p[1]);
-  glOrtho(w()-p[0], w(), h()-p[1], h(), -1, 1);
+  glViewport(0, 0, w(), h());
+  glOrtho(0, w(), 0, h(), -1, 1);
+#else
+  GLint v[2];
+  glGetIntegerv(GL_MAX_VIEWPORT_DIMS, v);
+  glLoadIdentity();
+  glViewport(w()-v[0], h()-v[1], v[0], v[1]);
+  glOrtho(w()-v[0], w(), h()-v[1], h(), -1, 1);
+#endif
 }
 
 void Fl_Gl_Window::swap_buffers() {
@@ -141,11 +148,9 @@ uchar fl_overlay; // changes how fl_color() works
 void Fl_Gl_Window::flush() {
   make_current();
 
-#if HAVE_GL_OVERLAY
-#ifdef WIN32
+#if defined(_WIN32) && HAVE_GL_OVERLAY
   uchar save_valid = valid_;
   if (overlay && overlay!= this && damage() == FL_DAMAGE_OVERLAY) goto DRAW_OVERLAY_ONLY;
-#endif
 #endif
 
   if (mode_ & FL_DOUBLE) {
@@ -288,5 +293,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.4 2000/03/17 09:49:59 bill Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.5 2000/03/18 10:13:27 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.2 2000/01/10 06:31:06 bill Exp $"
+// "$Id: gl_draw.cxx,v 1.3 2000/03/18 10:13:28 bill Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,7 @@
 #include <FL/fl_draw.H>
 #include <FL/gl.h>
 #include <FL/x.H>
-#include <FL/Fl_Gl_Choice.H>
+#include "Fl_Gl_Choice.H"
 #include "../src/Fl_FontSize.H"
 #include <string.h>
 
@@ -140,5 +140,5 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.2 2000/01/10 06:31:06 bill Exp $".
+// End of "$Id: gl_draw.cxx,v 1.3 2000/03/18 10:13:28 bill Exp $".
 //

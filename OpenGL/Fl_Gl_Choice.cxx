@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.cxx,v 1.1 1999/11/27 15:44:50 carl Exp $"
+// "$Id: Fl_Gl_Choice.cxx,v 1.2 2000/03/18 10:13:27 bill Exp $"
 //
 // OpenGL visual selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 #include <FL/x.H>
 #include <stdlib.h>
 
-#include <FL/Fl_Gl_Choice.H>
+#include "Fl_Gl_Choice.H"
 
 static Fl_Gl_Choice *first;
 GLXContext fl_first_context;
@@ -47,29 +47,33 @@ Fl_Gl_Choice* Fl_Gl_Choice::find(int mode, const int* alist) {
 
 #ifdef WIN32    
 
-  PIXELFORMATDESCRIPTOR pfd = { 
-    sizeof(PIXELFORMATDESCRIPTOR), 1, 
-    PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL,
-    PFD_TYPE_RGBA, 8 };
-
-  if (mode & FL_INDEX) {
-    pfd.iPixelType = PFD_TYPE_COLORINDEX;
-    pfd.cColorBits = 8;
-  } else {
-    if (mode & FL_ALPHA) pfd.cAlphaBits = 8;
-    if (mode & FL_ACCUM) {
-      pfd.cAccumBits = 6;	// Wonko: I didn't find any documentation on those bits
-      pfd.cAccumGreenBits = 1;	// Wonko: They don't seem to get any support yet (4/98)
-      if (mode & FL_ALPHA) pfd.cAccumAlphaBits = 1;
-    }
-  }
-  if (mode & FL_DOUBLE) pfd.dwFlags |= PFD_DOUBLEBUFFER;
-  if (mode & FL_DEPTH) pfd.cDepthBits = 16;
-  if (mode & FL_STENCIL) pfd.cStencilBits = 1;
-  pfd.bReserved = 1; // always ask for overlay
-
+  // Replacement for ChoosePixelFormat() that finds one with an overlay
+  // if possible:
   if (!fl_gc) fl_GetDC(0);
-  int pixelFormat = ChoosePixelFormat(fl_gc, &pfd);
+  int pixelFormat = 0;
+  PIXELFORMATDESCRIPTOR chosen_pfd;
+  for (int i = 1; ; i++) {
+    PIXELFORMATDESCRIPTOR pfd;
+    if (!DescribePixelFormat(fl_gc, i, sizeof(pfd), &pfd)) break;
+    // continue if it does not satisfy our requirements:
+    if (~pfd.dwFlags & (PFD_DRAW_TO_WINDOW | PFD_SUPPORT_OPENGL)) continue;
+    if (pfd.iPixelType != ((mode&FL_INDEX)?1:0)) continue;
+    if ((mode & FL_ALPHA) && !pfd.cAlphaBits) continue;
+    if ((mode & FL_ACCUM) && !pfd.cAccumBits) continue;
+    if ((!(mode & FL_DOUBLE)) != (!(pfd.dwFlags & PFD_DOUBLEBUFFER))) continue;
+    if ((mode & FL_DEPTH) && !pfd.cDepthBits) continue;
+    if ((mode & FL_STENCIL) && !pfd.cStencilBits) continue;
+    // see if better than the one we have already:
+    if (pixelFormat) {
+      // offering overlay is better:
+      if (!(chosen_pfd.bReserved & 15) && (pfd.bReserved & 15)) {}
+      // otherwise more bit planes is better:
+      else if (chosen_pfd.cColorBits < pfd.cColorBits) {}
+      else continue;
+    }
+    pixelFormat = i;
+    chosen_pfd = pfd;
+  }
   if (!pixelFormat) return 0;
 
 #else
@@ -196,5 +200,5 @@ void fl_no_gl_context() {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.cxx,v 1.1 1999/11/27 15:44:50 carl Exp $".
+// End of "$Id: Fl_Gl_Choice.cxx,v 1.2 2000/03/18 10:13:27 bill Exp $".
 //
