@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.30 1999/05/05 20:50:16 carl Exp $"
+// "$Id: Fl_Menu.cxx,v 1.31 1999/05/06 01:27:27 carl Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -292,19 +292,30 @@ menuwindow::menuwindow(const Fl_Menu_Item* m, int X, int Y, int Wp, int Hp,
   if (t) Wtitle = t->measure(&Htitle, button) + 16;
   int W = 0;
   int num_dividers = 0;
+  int submenuflag = 0;
   if (m) for (; m->text; m = m->next()) {
     int h; int w1 = m->measure(&h, button);
     if (h>itemheight) itemheight = h;
-    if (m->flags&(FL_SUBMENU|FL_SUBMENU_POINTER)) w1 += 14;
+    if (m->flags&(FL_SUBMENU|FL_SUBMENU_POINTER)) submenuflag = 1;
     if (m->flags & FL_MENU_DIVIDER) num_dividers++;
     if (w1 > W) W = w1;
     if (m->shortcut_) {
-      w1 = int(fl_width(fl_shortcut_label(m->shortcut_))) + 8;
+      Fl_Label l;
+      l.value = fl_shortcut_label(m->shortcut_);
+      l.font = button ? button->textfont() : (Fl_Font)popup_style.textfont;
+      l.size = button ? button->textsize() : popup_style.textsize;
+      l.type = FL_NORMAL_LABEL;
+      int dum;
+      l.measure(w1, dum);
       if (w1 > hotKeysw) hotKeysw = w1;
     }
     if (m->labelcolor()) clear_overlay();
   }
   itemheight += itemheight/6 + 6; // Add extra spacing.  This seems OK.
+  W += itemheight; // More extra spacing
+
+  if (submenuflag && (itemheight > hotKeysw)) hotKeysw = itemheight;
+
   if (selected >= 0 && !Wp) X -= W/2;
   int BW = Fl::box_dx(box());
   W += hotKeysw+2*BW+7;
@@ -389,7 +400,7 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int erase) {
 
   // the shortcuts and arrows assumme fl_color() was left set by draw():
   if (m->submenu()) {
-    fl_draw_symbol("@>", x+w-h+6, y+3, h-6, h-6, FL_BLACK);
+    fl_draw_symbol("@>", x+w-h+6, y+3, h-6, h-6, m->active() ? FL_BLACK : inactive(FL_BLACK));
   } else if (m->shortcut_) {
     Fl_Font font = button ? button->textfont() : (Fl_Font)popup_style.textfont;
     int size = button ? button->textsize() : popup_style.textsize;
@@ -871,5 +882,5 @@ Fl_Color Fl_Menu_Item::down_labelcolor() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.30 1999/05/05 20:50:16 carl Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.31 1999/05/06 01:27:27 carl Exp $".
 //
