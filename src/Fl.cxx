@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.143 2002/05/06 06:31:26 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.144 2002/05/07 04:58:19 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -428,7 +428,7 @@ void Fl_Widget::throw_focus() {
 #ifndef _WIN32
   if (contains(fl_selection_requestor)) fl_selection_requestor = 0;
 #endif
-  if (contains(Fl::belowmouse())) Fl::belowmouse_ = 0;
+  if (contains(Fl::belowmouse())) {Fl::belowmouse_ = 0; Fl::e_is_click = 0;}
   if (contains(Fl::focus())) Fl::focus_ = 0;
   if (this == xfocus) xfocus = 0;
   if (this == xmousewin) xmousewin = 0;
@@ -622,5 +622,5 @@ bool Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.143 2002/05/06 06:31:26 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.144 2002/05/07 04:58:19 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.22 2002/05/06 06:31:27 spitzak Exp $"
+// "$Id: Fl_Valuator.cxx,v 1.23 2002/05/07 04:58:19 spitzak Exp $"
 //
 // Valuator widget for the Fast Light Tool Kit (FLTK).
 //
@@ -48,7 +48,7 @@ Fl_Valuator::Fl_Valuator(int X, int Y, int W, int H, const char* L)
 void Fl_Valuator::precision(int p) {
   int B = 1;
   for (int i=0; i<p; i++) B *= 10;
-  step_ = 1.0/B;
+  step_ = 1.0f/B;
 }
 #endif
 
@@ -188,5 +188,5 @@ int Fl_Valuator::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.22 2002/05/06 06:31:27 spitzak Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.23 2002/05/07 04:58:19 spitzak Exp $".
 //
