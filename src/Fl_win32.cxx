@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.204 2004/05/04 07:30:43 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.205 2004/05/09 08:22:48 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1525,10 +1525,9 @@ static HDC screen_gc; // result from last getDC()
     be destroyed the next time anything is drawn into a window!
 */
 HDC fltk::getDC() {
-  if (screen_gc) {DeleteDC(screen_gc); screen_gc = 0;}
-  if (gc) return gc;
-  if (CreatedWindow::first) return CreatedWindow::first->dc;
-  screen_gc = GetDC(0);
+//    if (gc) return gc;
+//    if (CreatedWindow::first) return CreatedWindow::first->dc;
+  if (!screen_gc) screen_gc = GetDC(0);
   return screen_gc;
 }
 
@@ -1651,5 +1650,5 @@ Cleanup::~Cleanup() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.204 2004/05/04 07:30:43 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.205 2004/05/09 08:22:48 spitzak Exp $".
 //

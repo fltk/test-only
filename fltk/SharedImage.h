@@ -1,5 +1,5 @@
 //
-// "$Id: SharedImage.h,v 1.9 2004/05/04 07:30:42 spitzak Exp $"
+// "$Id: SharedImage.h,v 1.10 2004/05/09 08:22:46 spitzak Exp $"
 //
 // Images that are all put in a tree by "name" (usually a filename)
 // so that if the same name is used more than once the same instance
@@ -119,9 +119,9 @@ struct FL_IMAGES_API ImageType {
   // Name of the filetype as it appear in the source code LOWERCASE!!!
   const char* name;
   // Function to test the filetype
-  bool (*test)(const uchar* datas, unsigned size=0);
+  bool (*test)(const uchar* datas, unsigned size);
   // Function to get/create an image of this type
-  SharedImage* (*get)(const char* name, const uchar* datas=0);
+  SharedImage* (*get)(const char* name, const uchar* datas);
 };
 extern FL_IMAGES_API ImageType image_filetypes[];
 
@@ -194,5 +194,5 @@ public:
 #endif
 
 //
-// End of "$Id: SharedImage.h,v 1.9 2004/05/04 07:30:42 spitzak Exp $"
+// End of "$Id: SharedImage.h,v 1.10 2004/05/09 08:22:46 spitzak Exp $"
 //
