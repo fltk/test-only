@@ -1,5 +1,5 @@
 /*
- * "$Id: config.h,v 1.25 2004/07/31 10:13:24 laza2000 Exp $"
+ * "$Id: config.h,v 1.26 2004/08/04 21:42:26 laza2000 Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -185,7 +185,9 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
  *
  */
  
-#define HAVE_LIBPNG 0
+#define HAVE_LIBPNG 1
+#define HAVE_LIBZ 1
+#define HAVE_LOCAL_PNG_H 1
 
 /*
  * HAVE_JPEG
@@ -194,7 +196,8 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
  *
  */
   
-#define HAVE_LIBJPEG 0
+#define HAVE_LIBJPEG 1
+#define HAVE_LOCAL_JPEG_H 1
 
 /*
  * Do we use exceptions?
@@ -220,5 +223,5 @@ extern int vsnprintf(char* str, size_t size, const char* fmt, va_list ap);
 #define CONF_CACHED
 
 /*
- * End of "$Id: config.h,v 1.25 2004/07/31 10:13:24 laza2000 Exp $".
+ * End of "$Id: config.h,v 1.26 2004/08/04 21:42:26 laza2000 Exp $".
  */
