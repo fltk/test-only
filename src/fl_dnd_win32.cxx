@@ -1,5 +1,5 @@
 //
-// "$Id: fl_dnd_win32.cxx,v 1.8 2003/04/20 03:17:51 easysw Exp $"
+// "$Id: fl_dnd_win32.cxx,v 1.9 2003/05/19 06:50:08 spitzak Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 // This is code for dragging *out* of the application. Code for dragging
@@ -34,7 +34,7 @@
 #if !defined(__GNUC__) || __GNUC__ >= 3
 
 #include <ole2.h>
-#include <ShellAPI.h>
+#include <shellapi.h>
 
 HANDLE fl_global_selection(int clipboard);
 
@@ -170,5 +170,5 @@ bool fltk::dnd()
 
 
 //
-// End of "$Id: fl_dnd_win32.cxx,v 1.8 2003/04/20 03:17:51 easysw Exp $".
+// End of "$Id: fl_dnd_win32.cxx,v 1.9 2003/05/19 06:50:08 spitzak Exp $".
 //

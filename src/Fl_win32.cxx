@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.186 2003/03/26 22:05:20 easysw Exp $"
+// "$Id: Fl_win32.cxx,v 1.187 2003/05/19 06:50:07 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -47,17 +47,6 @@
 //
 
 #define USE_ASYNC_SELECT
-
-//
-// USE_TRACK_MOUSE - define it if you have TrackMouseEvent()...
-//
-// Apparently, at least some versions of Cygwin/MingW don't provide
-// the TrackMouseEvent() function.  You can define this by hand
-// if you have it - this is only needed to support subwindow
-// enter/leave notification under Windows.
-//
-
-//#define USE_TRACK_MOUSE
 
 //
 // WM_SYNCPAINT is an "undocumented" message, which is finally defined in
@@ -587,17 +576,6 @@ public:
 
 ////////////////////////////////////////////////////////////////
 
-#ifndef TME_LEAVE
-#define TME_LEAVE 2
-#endif
-
-typedef struct _tagTRACKMOUSEEVENT {
-  DWORD cbSize;
-  DWORD dwFlags;
-  HWND	hwndTrack;
-  DWORD dwHoverTime;
-} _TRACKMOUSEEVENT, *_LPTRACKMOUSEEVENT;
-
 /* This code lifted from SDL, also under the LGPL - CET
 
    Special code to handle mouse leave events - this sucks...
@@ -610,7 +588,23 @@ typedef struct _tagTRACKMOUSEEVENT {
    Therefore, we implement our own version of _TrackMouseEvent() which
    uses our own implementation if TrackMouseEvent() is not available.
 */
-static BOOL (WINAPI *_TrackMouseEvent)(_TRACKMOUSEEVENT *ptme) = NULL;
+
+#ifdef TME_LEAVE
+# define _TRACKMOUSEEVENT TRACKMOUSEEVENT
+# define _TrackMouseEvent TrackMouseEvent
+#else
+
+# define TME_LEAVE 2
+
+jafklsjdfljas
+typedef struct _tagTRACKMOUSEEVENT {
+  DWORD cbSize;
+  DWORD dwFlags;
+  HWND	hwndTrack;
+  DWORD dwHoverTime;
+} _TRACKMOUSEEVENT, *_LPTRACKMOUSEEVENT;
+
+static BOOL (WINAPI *_TrackMouseFunction)(_TRACKMOUSEEVENT *ptme) = NULL;
 
 static VOID CALLBACK
 TrackMouseTimerProc(HWND hWnd, UINT, UINT idEvent, DWORD) {
@@ -637,10 +631,18 @@ WIN_TrackMouseEvent(_TRACKMOUSEEVENT *ptme)
   return FALSE;
 }
 
-static _TRACKMOUSEEVENT mouseevent = {
-  sizeof(_TRACKMOUSEEVENT),
-  TME_LEAVE
-};
+static BOOL _TrackMouseEvent(_TRACKMOUSEEVENT* ptme) {
+  // look for mouse leave events
+  if (!_TrackMouseFunction) {
+    /* Get the version of TrackMouseEvent() we use */
+    HMODULE handle = GetModuleHandle("USER32.DLL");
+    if (handle) _TrackMouseFunction =
+(BOOL(WINAPI*)(_TRACKMOUSEEVENT*))GetProcAddress(handle, "TrackMouseEvent");
+    if (!_TrackMouseFunction) _TrackMouseFunction = WIN_TrackMouseEvent;
+  }
+  return _TrackMouseFunction(ptme);
+}
+#endif
 
 ////////////////////////////////////////////////////////////////
 
@@ -649,6 +651,11 @@ static bool mouse_event(Window *window, int what, int button,
 {
   xmousewin = window;
   if (!window) return false;
+  _TRACKMOUSEEVENT tme;
+  tme.cbSize    = sizeof(_TRACKMOUSEEVENT);
+  tme.dwFlags   = TME_LEAVE;
+  tme.hwndTrack = xid(window);
+  _TrackMouseEvent(&tme);
   static int px, py, pmx, pmy;
   POINT pt;
   e_x = pt.x = (signed short)LOWORD(lParam);
@@ -703,18 +710,6 @@ static bool mouse_event(Window *window, int what, int button,
     if (e_x_root == pmx && e_y_root == pmy) return true;
     pmx = e_x_root; pmy = e_y_root;
     if (abs(e_x_root-px)>5 || abs(e_y_root-py)>5) e_is_click = 0;
-
-    // look for mouse leave events
-    if (!_TrackMouseEvent) {
-      /* Get the version of TrackMouseEvent() we use */
-      HMODULE handle = GetModuleHandle("USER32.DLL");
-      if (handle) _TrackMouseEvent =
-	(BOOL(WINAPI*)(_TRACKMOUSEEVENT*))GetProcAddress(handle, "TrackMouseEvent");
-      if (!_TrackMouseEvent) _TrackMouseEvent = WIN_TrackMouseEvent;
-    }
-    mouseevent.hwndTrack = xid(window);
-    _TrackMouseEvent(&mouseevent);
-
     return handle(MOVE,window);
   }
 }
@@ -798,6 +793,7 @@ extern bool fl_windows_damaged;
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+  //printf("Window %x msg %x\n", hWnd, uMsg);
   // Copy the message to msg so add_handler code can see it, it is
   // already there if this is called by DispatchMessage, but not if
   // Windows calls this directly.
@@ -907,18 +903,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_RBUTTONDBLCLK:mouse_event(window, 1, 3, wParam, lParam); return 0;
   case WM_RBUTTONUP:	mouse_event(window, 2, 3, wParam, lParam); return 0;
 
-  case WM_MOUSEMOVE:
-#ifdef USE_TRACK_MOUSE
-    if (belowmouse() != window) {
-      TRACKMOUSEEVENT tme;
-      tme.cbSize    = sizeof(TRACKMOUSEEVENT);
-      tme.dwFlags   = TME_LEAVE;
-      tme.hwndTrack = hWnd;
-      _TrackMouseEvent(&tme);
-    }
-#endif // USE_TRACK_MOUSE
-    mouse_event(window, 3, 0, wParam, lParam);
-    return 0;
+  case WM_MOUSEMOVE:    mouse_event(window, 3, 0, wParam, lParam); return 0;
 
   case WM_MOUSELEAVE:
     // In fltk2 we should only call handle(LEAVE) if the mouse is
@@ -1601,5 +1586,5 @@ bool fltk::get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.186 2003/03/26 22:05:20 easysw Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.187 2003/05/19 06:50:07 spitzak Exp $".
 //

@@ -72,6 +72,7 @@ void fltk::awake(void* msg) {
 ////////////////////////////////////////////////////////////////
 #elif HAVE_PTHREAD
 #include <unistd.h>
+#include <fcntl.h>
 #include <pthread.h>
 
 #ifdef PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP
@@ -126,7 +127,7 @@ void* fltk::thread_message() {
 }
 
 static void thread_awake_cb(int fd, void*) {
-  read(fd, &thread_message_, sizeof(void*));
+  while (read(fd, &thread_message_, sizeof(void*)) > 0);
 }
 
 void fltk::lock() {
@@ -134,6 +135,7 @@ void fltk::lock() {
   if (!thread_filedes[1]) { // initialize the mt support
     // Init threads communication pipe to let threads awake FLTK from wait
     pipe(thread_filedes);
+    fcntl(thread_filedes[0], F_SETFL, O_NONBLOCK);
     add_fd(thread_filedes[0], READ, thread_awake_cb);
     fl_lock_function = lock_function;
     fl_unlock_function = unlock;
