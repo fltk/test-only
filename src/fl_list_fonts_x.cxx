@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_x.cxx,v 1.5 2001/11/08 08:13:49 spitzak Exp $"
+// "$Id: fl_list_fonts_x.cxx,v 1.6 2001/11/14 09:21:43 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -38,7 +38,7 @@
 // no guarantee that all nice names are unique, and there is no reverse
 // translation other than to list all the fonts and find a match.
 
-#include "Fl_FontSize.h"
+#include <fltk/x.h>
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
@@ -272,5 +272,5 @@ int Fl_Font_::sizes(int*& sizep) const {
 }
 
 //
-// End of "$Id: fl_list_fonts_x.cxx,v 1.5 2001/11/08 08:13:49 spitzak Exp $"
+// End of "$Id: fl_list_fonts_x.cxx,v 1.6 2001/11/14 09:21:43 spitzak Exp $"
 //

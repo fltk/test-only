@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.1 2001/11/08 08:13:49 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.2 2001/11/14 09:21:42 spitzak Exp $"
 //
 // Copyright 2001 Bill Spitzak and others.
 //
@@ -57,23 +57,29 @@
 // are several web pages of information on how to do this.
 
 #include <fltk/Fl.h>
+#include <fltk/Fl_Font.h>
 #include <fltk/fl_draw.h>
-#include "Fl_FontSize.h"
 #include <fltk/x.h>
 #include <X11/Xft/Xft.h>
 #include <string.h>
 #include <stdlib.h>
 
-Fl_FontSize *fl_fontsize;
-#define current_font ((XftFont*)(fl_fontsize->font))
+class Fl_FontSize {
+public:
+  Fl_FontSize *next;	// linked list for this Fl_Fontdesc
+  XftFont* font;
+  const char* encoding;
+  Fl_FontSize(const char* xfontname);
+  unsigned size;
+  //~Fl_FontSize();
+};
 
-// Change the encoding in use now. This runs the font search again with
-// the new encoding.
+static Fl_FontSize *fl_fontsize;
+#define current_font (fl_fontsize->font)
+  
+// Change the encoding to use for the next font selection.
 void fl_encoding(const char* f) {
-  if (f != fl_encoding_) {
-    fl_encoding_ = f;
-    if (fl_font_) fl_font(fl_font_, fl_size_);
-  }
+  fl_encoding_ = f;
 }
 
 void fl_font(Fl_Font font, unsigned size) {
@@ -84,12 +90,12 @@ void fl_font(Fl_Font font, unsigned size) {
   Fl_FontSize* f;
   // search the fontsizes we have generated already
   for (f = font->first; f; f = f->next) {
-    if (f->minsize == size && !strcasecmp(f->encoding, fl_encoding_))
+    if (f->size == size && !strcasecmp(f->encoding, fl_encoding_))
       break;
   }
   if (!f) {
     f = new Fl_FontSize(font->name_);
-    f->next = (Fl_FontSize *)(font->first);
+    f->next = font->first;
     ((Fl_Font_*)font)->first = f;
   }
   fl_fontsize = f;
@@ -120,11 +126,8 @@ static XftFont* fontopen(const char* name, bool core) {
 
 Fl_FontSize::Fl_FontSize(const char* name) {
   encoding = fl_encoding_;
-  minsize = maxsize = fl_size_;
-#if HAVE_GL
-  listbase = 0;
-#endif
-  font = (void*)fontopen(name, false);
+  size = fl_size_;
+  font = fontopen(name, false);
 }
 
 // This call is used by opengl to get a bitmapped font. Xft actually does
@@ -139,17 +142,8 @@ XFontStruct* fl_xfont() {
 
 #if 0 // this is never called!
 Fl_FontSize::~Fl_FontSize() {
-// Delete list created by gl_draw().  This is not done by this code
-// as it will link in GL unnecessarily.  There should be some kind
-// of "free" routine pointer, or a subclass?
-// if (listbase) {
-//  int base = font->min_char_or_byte2;
-//  int size = font->max_char_or_byte2-base+1;
-//  int base = 0; int size = 256;
-//  glDeleteLists(listbase+base,size);
-// }
   if (this == fl_fontsize) fl_fontsize = 0;
-  XftFontClose(fl_display, (XftFont *)font);
+  XftFontClose(fl_display, font);
 }
 #endif
 
@@ -259,7 +253,7 @@ static Fl_Font_* make_a_font(char attrib, const char* name) {
   return newfont;
 }
 
-int fl_font_list(Fl_Font*& arrayp) {
+int fl_list_fonts(Fl_Font*& arrayp) {
   static Fl_Font *font_array = 0;
   static int num_fonts = 0;
 
@@ -355,5 +349,5 @@ int Fl_Font_::encodings(const char**& arrayp) const {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.1 2001/11/08 08:13:49 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.2 2001/11/14 09:21:42 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.16 2001/11/08 08:13:49 spitzak Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.17 2001/11/14 09:21:42 spitzak Exp $"
 //
 // _WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -25,7 +25,6 @@
 
 #include <fltk/Fl.h>
 #include <fltk/win32.h>
-#include "Fl_FontSize.h"
 #include <ctype.h>
 #include <string.h>
 #include <stdlib.h>
@@ -153,26 +152,6 @@ int fl_list_fonts(Fl_Font*& arrayp) {
   return num_fonts;
 }
 
-// deallocate Win32 fonts
-void fl_font_rid() {
-  for (int i = 0; i < 16; i++) {
-    for (Fl_FontSize* fs = (Fl_FontSize *)(fl_fonts+i)->first; fs;) {
-      Fl_FontSize* next = fs->next;
-      delete fs;
-      fs = next;
-    }
-    fl_fonts[i].first = 0;
-  }
-  for (int j = 0; j < num_fonts; j++) {
-    for (Fl_FontSize* fs = (Fl_FontSize *)font_array[j]->first; fs;) {
-      Fl_FontSize* next = fs->next;
-      delete fs;
-      fs = next;
-    }
-    ((Fl_Font_**)(font_array))[j]->first = 0;
-  }
-}
-
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.16 2001/11/08 08:13:49 spitzak Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.17 2001/11/14 09:21:42 spitzak Exp $"
 //

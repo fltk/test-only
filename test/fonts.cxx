@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.23 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: fonts.cxx,v 1.24 2001/11/14 09:21:43 spitzak Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -49,7 +49,9 @@ void FontDisplay::draw() {
   int ix = 0, iy = 0, iw = w(), ih = h();
   box()->inset(ix, iy, iw, ih);
   fl_push_clip(ix, iy, iw, ih);
-  fl_font(font, size); fl_encoding(encoding);
+  const char* saved_encoding = fl_encoding();
+  fl_encoding(encoding);
+  fl_font(font, size);
   fl_color(FL_BLACK);
   char buffer[32];
   for (int Y = 1; Y < 8; Y++) {
@@ -57,7 +59,7 @@ void FontDisplay::draw() {
 //    fl_draw(buffer, 32, x()+3, y()+3+size*Y);
     fl_draw(buffer, 32, 3, 3+fl_height()*Y);
   }
-  fl_font(FL_HELVETICA,10);
+  fl_encoding(saved_encoding);
   fl_pop_clip();
 }
 
@@ -208,5 +210,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.23 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: fonts.cxx,v 1.24 2001/11/14 09:21:43 spitzak Exp $".
 //

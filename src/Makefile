@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.96 2001/08/08 06:28:11 spitzak Exp $"
+# "$Id: Makefile,v 1.97 2001/11/14 09:21:42 spitzak Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -246,6 +246,10 @@ clean :
 
 depend:
 	$(MAKEDEPEND) -I.. $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
+	sed -e "s'\.o'\.shared\.o'" makedepend > foo
+	cat foo >> makedepend
+	rm foo
+
 include makedepend
 
 ################################################################
@@ -287,5 +291,5 @@ install_shared: shared
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.96 2001/08/08 06:28:11 spitzak Exp $".
+# End of "$Id: Makefile,v 1.97 2001/11/14 09:21:42 spitzak Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.47 2001/11/08 08:13:48 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.48 2001/11/14 09:21:42 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -571,7 +571,7 @@ void Fl_Browser::layout() {
   hscrollbar.value(xposition_, W, 0, last_max_width);
   hscrollbar.linesize(fl_height(text_font(), text_size()));
   Fl_Widget::layout();
-  damage(FL_DAMAGE_LAYOUT);
+  // damage(FL_DAMAGE_LAYOUT); WHAT IS THIS HERE FOR?
   focus(item_index[FOCUS][0]); // make value() work for top level
 }
 
@@ -606,7 +606,12 @@ bool Fl_Browser::set_focus() {
   damage_item(HERE); // so will draw focus box around item?
   damage_item(FOCUS); // so focus box around old focus item will be removed?
   set_mark(FOCUS, HERE); // current item is new focus item
-  if (item_position[FOCUS] < yposition_) {
+  if (damage()&FL_DAMAGE_LAYOUT) {
+    // center the focus
+    int y = item_position[FOCUS]-h()/2;
+    if (y < 0) y = 0;
+    yposition(y);
+  } else if (item_position[FOCUS] < yposition_) {
     yposition(item_position[FOCUS]); // make it first line
     goto_mark(FOCUS);
   } else {
@@ -969,5 +974,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.47 2001/11/08 08:13:48 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.48 2001/11/14 09:21:42 spitzak Exp $".
 //

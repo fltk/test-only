@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.39 2001/11/08 08:13:49 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.40 2001/11/14 09:21:42 spitzak Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -24,12 +24,25 @@
 //
 
 #include <fltk/x.h>
-#include "Fl_FontSize.h"
-
+#include <fltk/Fl_Font.h>
 #include <ctype.h>
 #include <stdlib.h>
 
-Fl_FontSize *fl_fontsize;
+class Fl_FontSize {
+public:
+  Fl_FontSize *next;	// linked list for a single Fl_Font_
+  Fl_FontSize *next_all;// linked list so we can destroy em all
+  unsigned size;
+  int charset;
+  int width[256];
+  HFONT font;
+  TEXTMETRIC metr;
+  Fl_FontSize(const char* fontname, int size, int charset);
+  ~Fl_FontSize();
+};
+
+static Fl_FontSize* fl_fontsize;
+static Fl_FontSize* all_fonts;
 
 Fl_FontSize::Fl_FontSize(const char* name, int size, int charset) {
   fl_fontsize = this;
@@ -69,29 +82,27 @@ Fl_FontSize::Fl_FontSize(const char* name, int size, int charset) {
   //...would be the right call, but is not implemented into Window95! (WinNT?)
   //GetCharWidth(fl_gc, 0, 255, fl_fontsize->width);
 
-  this->font = (void*)font;
-#if HAVE_GL
-  listbase = 0;
-#endif
-  minsize = maxsize = size;
+  this->font = font;
+  this->size = size;
   this->charset = charset;
+  next_all = all_fonts;
+  all_fonts = this;
 }
 
-#if HAVE_GL
 Fl_FontSize::~Fl_FontSize() {
-// Delete list created by gl_draw().  This is not done by this code
-// as it will link in GL unnecessarily.  There should be some kind
-// of "free" routine pointer, or a subclass?
-// if (listbase) {
-//  int base = font->min_char_or_byte2;
-//  int size = font->max_char_or_byte2-base+1;
-//  int base = 0; int size = 256;
-//  glDeleteLists(listbase+base,size);
-// }
   if (this == fl_fontsize) fl_fontsize = 0;
-  DeleteObject((HFONT)font);
+  DeleteObject(font);
 }
-#endif
+
+// Deallocate Win32 fonts on exit. Warning: it will crash if you try
+// to do any fonts after this, because the pointers are not changed!
+void fl_font_rid() {
+  for (Fl_FontSize* fontsize = all_fonts; fontsize;) {
+    Fl_FontSize* next = fontsize->next;
+    delete fontsize;
+    fontsize = next;
+  }
+}
 
 ////////////////////////////////////////////////////////////////
 
@@ -118,8 +129,9 @@ Fl_Font_ fl_fonts[] = {
 ////////////////////////////////////////////////////////////////
 // Public interface:
 
-#define current_font ((HFONT)(fl_fontsize->font))
+#define current_font (fl_fontsize->font)
 HFONT fl_xfont() {return current_font;}
+TEXTMETRIC* fl_textmetric() {return &(fl_fontsize->metr);}
 
 // we need to decode the encoding somehow!
 static int charset = DEFAULT_CHARSET;
@@ -131,12 +143,11 @@ void fl_font(Fl_Font font, unsigned size) {
 
   Fl_FontSize* f;
   // search the fontsizes we have generated already:
-  for (f = (Fl_FontSize *)font->first; f; f = f->next)
-    if (f->minsize <= size && f->maxsize >= size &&
-	f->charset == charset) break;
+  for (f = font->first; f; f = f->next)
+    if (f->size == size && f->charset == charset) break;
   if (!f) {
     f = new Fl_FontSize(font->name_, size, charset);
-    f->next = (Fl_FontSize *)font->first;
+    f->next = font->first;
     ((Fl_Font_*)font)->first = f;
   }
   fl_fontsize = f;
@@ -163,16 +174,17 @@ void fl_draw(const char *str, int n, int x, int y) {
   SelectObject(fl_gc, oldfont);
 }
 
+// Change the encoding to use for the next font selection.
 // Encodings is NYI. We need a way to translate the ISO encoding names
-// to Win32 encoding enumerations.
+// to Win32 encoding enumerations. Ie "iso8859-1" turns into ANSI_CHARSET,
+// etc.
 void fl_encoding(const char* f) {
   if (f != fl_encoding_) {
     fl_encoding_ = f;
     // charset = decode_the_encoding(f);
-    //if (fl_font_) fl_font(fl_font_, fl_size_);
   }
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.39 2001/11/08 08:13:49 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.40 2001/11/14 09:21:42 spitzak Exp $".
 //

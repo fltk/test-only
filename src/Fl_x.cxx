@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.115 2001/11/08 08:13:49 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.116 2001/11/14 09:21:42 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -642,7 +642,15 @@ bool fl_handle()
   case Expose:
   case GraphicsExpose:
     if (!window) break;
-    Fl_X::i(window)->wait_for_expose = false;
+    // If this window completely fills it's parent, parent will not get
+    // an expose event and the wait flag will not turn off. So force this:
+    if (Fl_X::i(window)->wait_for_expose) {
+      for (Fl_Window* w = window;;) {
+	Fl_X::i(w)->wait_for_expose = false;
+	w = w->window();
+	if (!w) break;
+      }
+    }
     window->damage(FL_DAMAGE_EXPOSE, fl_xevent.xexpose.x, fl_xevent.xexpose.y,
 		   fl_xevent.xexpose.width, fl_xevent.xexpose.height);
     return true;
@@ -894,6 +902,7 @@ void Fl_Window::layout() {
       //if (!resizable()) size_range(w(), h(), w(), h());
       XMoveResizeWindow(fl_display, i->xid, x, y,
 			w()>0 ? w() : 1, h()>0 ? h() : 1);
+      // Unfortunately X does not always produce expose event
       i->wait_for_expose = true;
     }
   }
@@ -1296,5 +1305,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.115 2001/11/08 08:13:49 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.116 2001/11/14 09:21:42 spitzak Exp $".
 //

@@ -381,7 +381,7 @@ Set the current font.  It is scaled so that the point size is
 <i>size</i> pixels tall.  The font size is unaffected by the current
 transformation.
 
-<h4><A name=fl_font>
+<h4><A name=fl_font_named>
 void fl_font(const char* name, unsigned size);<br>
 void fl_font(const char* name, int attributes, unsigned size);</h4>
 
@@ -395,19 +395,24 @@ name and attributes are interpreted.
 <h4><a name=fl_encoding>void fl_encoding(const char*);</h4>
 
 The encoding determines how the bytes sent to <a
-href=#fl_draw>fl_draw</a> are turned into glyphs. Unlike most toolkits
-there are no errors, if you pick an encoding that does not exist for
-this font, you will get some default encoding (for instance the Symbol
-font always works without having to set the encoding).  The only way
+href=#fl_draw>fl_draw</a> are turned into glyphs. If the current font
+cannot do the encoding, some default encoding will be used (for
+instance the Symbol font always works without having to set the
+encoding).
+
+<p>In current implementations you must call <a href=#fl_font>fl_font(...)</a>
+after this for the change in encoding to take effect.
+
+<p>The only way
 to find out what encodings are going to work is to call <a
 href=Fl_Font.html>Fl_Font::encodings()</a>.
 
-<p>Notice that only 8-bit encodings are supported. In the future we
-plan to support UTF-8 which is called "iso10646", at that time support
-for 8-bit encodings may be dropped anyway. Notice that fltk will
-<i>never</i> support "wide" encodings, as I consider them evil.
+<p>In general you should set this on startup to your locale, and leave
+it alone. We hope to support UTF-8 encoding by default in fltk in the
+future. It is likely that when this happens support for fl_encoding()
+will be removed.
 
-<p>Currently the default is "iso8859-1"
+<p>The default is "iso8859-1"
 
 <h4>Fl_Font fl_font()</h4>
 

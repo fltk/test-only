@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.30 2001/07/24 16:25:09 clip Exp $"
+# "$Id: Makefile,v 1.31 2001/11/14 09:21:43 spitzak Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -33,14 +33,12 @@ SCHEMES = Alternative KDE Classic Motif OldMotif Windows
 
 ################################################################
 
-XTRAFLAGS =
-
 include ../makeinclude
 
 %.shared.o : %.cxx
-	$(CXX) -I.. $(XTRAFLAGS) $(DSOCFLAGS) $(CXXFLAGS) -c $< -o $@
+	$(CXX) -I.. $(DSOCFLAGS) $(CXXFLAGS) -c $< -o $@
 %.shared.o : %.c
-	$(CC) -I.. $(XTRAFLAGS) $(DSOCFLAGS) $(CFLAGS) -c $< -o $@
+	$(CC) -I.. $(DSOCFLAGS) $(CFLAGS) -c $< -o $@
 
 LIBRARY = ../lib/$(LIBNAME)_themes
 
@@ -138,9 +136,13 @@ install_shared:
 install_programs:
 
 depend:
-	$(MAKEDEPEND) -I.. $(XTRAFLAGS) $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
+	$(MAKEDEPEND) -I.. $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
+	sed -e "s'\.o'\.shared\.o'" makedepend > foo
+	cat foo >> makedepend
+	rm foo
+
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.30 2001/07/24 16:25:09 clip Exp $".
+# End of "$Id: Makefile,v 1.31 2001/11/14 09:21:43 spitzak Exp $".
 #

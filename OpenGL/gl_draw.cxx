@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.16 2001/11/08 08:13:48 spitzak Exp $"
+// "$Id: gl_draw.cxx,v 1.17 2001/11/14 09:21:42 spitzak Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,6 @@
 #include <fltk/fl_draw.h>
 #include <fltk/gl.h>
 #include "Fl_Gl_Choice.h"
-#include "../src/Fl_FontSize.h"
 #include <string.h>
 
 int gl_height() {return fl_height();}
@@ -41,32 +40,50 @@ int gl_width(const char* s) {return fl_width(s);}
 int gl_width(const char* s, int n) {return fl_width(s,n);}
 int gl_width(uchar c) {return fl_width(c);}
 
-void  gl_font(Fl_Font pFont, int size) {
-  fl_font(pFont, size);
-  if (!fl_fontsize->listbase) {
+// binary tree of all the fonts+sizes we have made so far:
+struct FontSize {
+  Fl_Font font;
+  int size;
+  FontSize* left, *right;
+  int listbase;
+};
+static FontSize* root, *current;
+
+void  gl_font(Fl_Font font, int size) {
+  fl_font(font, size); // necessary so fl_measure() works
+  if (!current || current->font != font || current->size != size) {
+    FontSize** p = &root;
+    while (*p) {
+      if (font < (*p)->font) p = &((*p)->left);
+      else if (font > (*p)->font) p = &((*p)->right);
+      else if (size < (*p)->size) p = &((*p)->left);
+      else if (size > (*p)->size) p = &((*p)->right);
+      else {current = *p; goto GOTIT;}
+    }
+    *p = current = new FontSize;
+    current->font = font;
+    current->size = size;
+    current->left = current->right = 0;
+    current->listbase = glGenLists(256);
 #ifdef _WIN32
-    int base = fl_fontsize->metr.tmFirstChar;
-    int size = fl_fontsize->metr.tmLastChar-base+1;
-    HFONT oldFid = (HFONT)SelectObject(fl_gc, (HFONT)fl_fontsize->font);
-    fl_fontsize->listbase = glGenLists(256);
-    wglUseFontBitmaps(fl_gc, base, size, fl_fontsize->listbase+base); 
+    int base = fl_textmetric()->tmFirstChar;
+    int size = fl_textmetric()->tmLastChar - base + 1;
+    HFONT oldFid = (HFONT)SelectObject(fl_gc, fl_xfont());
+    wglUseFontBitmaps(fl_gc, base, size, current->listbase+base); 
     SelectObject(fl_gc, oldFid);
 #else
     XFontStruct* font = fl_xfont();
-    // CET - FIXME - this won't work if not using the normal X font renderer--
-    // CET - FIXME - that is, if using the Xft library renderer plugin!
     int base = font->min_char_or_byte2;
     int size = font->max_char_or_byte2-base+1;
-    fl_fontsize->listbase = glGenLists(256);
-    glXUseXFont(font->fid, base, size, fl_fontsize->listbase+base);
+    glXUseXFont(font->fid, base, size, current->listbase+base);
 #endif
   }
-  glListBase(fl_fontsize->listbase);
+ GOTIT:
+  glListBase(current->listbase);
 }
 
 void  gl_font(int fontid, int size) {
-  Fl_Font pFont = fl_fonts + (fontid % 16);
-  gl_font(pFont,size);
+  gl_font(fl_fonts + (fontid % 16), size);
 }
 
 void gl_draw(const char* str, int n) {
@@ -168,5 +185,5 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.16 2001/11/08 08:13:48 spitzak Exp $".
+// End of "$Id: gl_draw.cxx,v 1.17 2001/11/14 09:21:42 spitzak Exp $".
 //
