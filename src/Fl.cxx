@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.112 2000/10/18 07:18:24 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.113 2000/10/19 05:48:26 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -438,9 +438,39 @@ void Fl::add_handler(int (*h)(int)) {
   handlers = l;
 }
 
+// Returns true if the current key event can be altered to a similar
+// key event that the user may have intended as a shortcut. This will
+// flip the case for shortcut letter matches, and substitute function
+// keys for Emacs control characters:
+static bool alternate_key() {
+  // try flipping the case of letter shortcuts:
+  if (isalpha(Fl::e_text[0])) {Fl::e_text[0] ^= 0x20; return true;}
+  // try translating Emacs control keys:
+#define ctrl(x) (x^0x40)
+  int key = 0;
+  switch (Fl::e_text[0]) {
+  case ctrl('A') : key = FL_Home; goto K;
+  case ctrl('B') : key = FL_Left; goto K;
+  case ctrl('D') : key = FL_Delete; goto K;
+  case ctrl('E') : key = FL_End; goto K;
+  case ctrl('F') : key = FL_Right; goto K;
+  case ctrl('H') : key = FL_BackSpace; goto K;
+  case ctrl('K') : key = FL_Clear; goto K;
+  case ctrl('N') : key = FL_Down; goto K;
+  case ctrl('P') : key = FL_Up; goto K;
+  K: Fl::e_keysym = key; Fl::e_state &= ~FL_CTRL; Fl::e_text[0] = 0;
+  return true;
+  }
+  return false;
+}
+
 int Fl::handle(int event, Fl_Window* window)
 {
-  if (grab_) return grab_(event, grab_data);
+  if (grab_) {
+    if (grab_(event, grab_data)) return true;
+    if (event == FL_KEY && alternate_key()) return grab_(event, grab_data);
+    return false;
+  }
 
   Fl_Widget* to = window;
 
@@ -449,7 +479,7 @@ int Fl::handle(int event, Fl_Window* window)
   case FL_PUSH:
     if (!pushed()) {
       Fl_Tooltip::enter((Fl_Widget*)0);
-      if (modal() && window != modal()) return 0;
+      if (modal() && window != modal()) return false;
       pushed_ = window;
     }
     to = pushed();
@@ -457,7 +487,7 @@ int Fl::handle(int event, Fl_Window* window)
 
   case FL_DND_ENTER:
   case FL_DND_DRAG:
-    if (modal() && window != modal()) return 1;
+    if (modal() && window != modal()) return true;
     dnd_flag = 1;
     break;
 
@@ -466,16 +496,18 @@ int Fl::handle(int event, Fl_Window* window)
 //case FL_DRAG: // does not happen
     xmousewin = window; // this should already be set, but just in case.
     if (pushed()) {to = pushed_; event = FL_DRAG;}
-    else if (modal() && window != modal()) return 1;
+    else if (modal() && window != modal()) return true;
     break;
 
   case FL_DND_LEAVE:
     dnd_flag = 1;
+    belowmouse(0);
+    dnd_flag = 0;
+    return true;
+
   case FL_LEAVE:
     if (!pushed_) belowmouse(0);
-    dnd_flag = 0;
-    if (window) return 1;
-    break;
+    return true;
 
   case FL_RELEASE:
     to = pushed();
@@ -500,8 +532,7 @@ int Fl::handle(int event, Fl_Window* window)
     break;
   }
 
- TRY_KEY_AGAIN:
-  int ret = 0;
+  int ret = false;
   if (to && window) {
     int dx = window->x();
     int dy = window->y();
@@ -518,44 +549,23 @@ int Fl::handle(int event, Fl_Window* window)
     switch (event) {
     case FL_KEY:
       // if keyboard is ignored, try shortcut events:
-      if (handle(FL_SHORTCUT, window)) return 1;
-      // try flipping the case of letter shortcuts:
-      if (isalpha(event_text()[0])) {
-	char* c = (char*)event_text(); // cast away const
-	*c = isupper(*c) ? tolower(*c) : toupper(*c);
-	if (handle(FL_SHORTCUT, window)) return 1;
-      } else if (to && event_text()[0]) {
-	// try translating Emacs control keys:
-#define ctrl(x) (x^0x40)
-	int key = 0;
-	switch (event_text()[0]) {
-	case ctrl('A') : key = FL_Home; goto K;
-	case ctrl('B') : key = FL_Left; goto K;
-	case ctrl('D') : key = FL_Delete; goto K;
-	case ctrl('E') : key = FL_End; goto K;
-	case ctrl('F') : key = FL_Right; goto K;
-	case ctrl('H') : key = FL_BackSpace; goto K;
-	case ctrl('K') : key = FL_Clear; goto K;
-	case ctrl('N') : key = FL_Down; goto K;
-	case ctrl('P') : key = FL_Up; goto K;
-	K: e_keysym = key; e_state &= ~FL_CTRL; e_text[0] = 0;
-	goto TRY_KEY_AGAIN;
-	}
-      }
-      return 0;
+      if (handle(FL_SHORTCUT, window)) return true;
+      if (alternate_key())
+	return handle(e_text[0] ? FL_SHORTCUT : FL_KEY, window);
+      return false;
 
       // rejected mouse events produce FL_LEAVE events:
     case FL_DND_ENTER:
     case FL_DND_DRAG:
     case FL_ENTER:
     case FL_MOVE:
-      belowmouse(0);
+      belowmouse(window);
       break;
     }
 
     // try the chain of global event handlers:
     for (const handler_link *h = handlers; h; h = h->next)
-      if (h->handle(event)) {ret = 1; break;}
+      if (h->handle(event)) {ret = true; break;}
   }
   dnd_flag = 0;
 
@@ -568,5 +578,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.112 2000/10/18 07:18:24 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.113 2000/10/19 05:48:26 spitzak Exp $".
 //

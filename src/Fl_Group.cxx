@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.86 2000/09/27 16:25:51 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.87 2000/10/19 05:48:26 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -88,7 +88,14 @@ void Fl_Group::clear() {
 Fl_Group::~Fl_Group() {clear();}
 
 void Fl_Group::insert(Fl_Widget &o, int index) {
-  if (o.parent()) o.parent()->remove(o);
+  if (o.parent()) {
+    int n = o.parent()->find(o);
+    if (o.parent() == this) {
+      if (index > n) index--;
+      if (index == n) return;
+    }
+    o.parent()->remove(n);
+  }
   o.parent(this);
   if (children_ == 0) {
     // allocate for 1 child
@@ -564,5 +571,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.86 2000/09/27 16:25:51 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.87 2000/10/19 05:48:26 spitzak Exp $".
 //

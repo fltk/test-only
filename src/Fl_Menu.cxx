@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.98 2000/10/18 07:18:24 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.99 2000/10/19 05:48:26 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -156,7 +156,6 @@ class MenuWindow : public Fl_Menu_Window {
 public:
   MenuState* menustate;
   int level;
-  int which_item;	// which item in parent's menu this is
   MenuTitle* title;
   int is_menubar;
   int drawn_selected;	// last redraw has this selected
@@ -617,7 +616,6 @@ int Fl_Menu_::pulldown(
       p.indexes[p.level] = item;
       p.indexes[p.level+1] = -1;
       mw = new MenuWindow(&p, p.level, X,Y,W,H, 0);
-      mw->which_item = item;
       p.menus[p.nummenus++] = mw;
       // move all earlier menus to line up with this new one:
       int dy = mw->y()-nY;
@@ -666,14 +664,6 @@ int Fl_Menu_::pulldown(
 	while (p.nummenus > p.level+2) delete p.menus[--p.nummenus];
 	// see if this is the same submenu as before:
 	MenuWindow* oldmenu = p.menus[p.level+1];
-	if (oldmenu->which_item == oldindex) {
-	  // yes, leave it up with nothing selected:
-	  if (p.indexes[p.level+1] >= 0) {
-	    p.indexes[p.level+1] = -1;
-	    oldmenu->damage(FL_DAMAGE_CHILD);
-	  }
-	  continue;
-	}
 	// otherwise delete the previous submenu:
 	delete oldmenu;
 	p.nummenus--;
@@ -692,7 +682,6 @@ int Fl_Menu_::pulldown(
       }
       mw = new MenuWindow(&p, p.nummenus, nX, nY, 0, 0, title);
       p.menus[p.nummenus++] = mw;
-      mw->which_item = oldindex;
       if (title) goto SHOW_MENUBAR_TITLE;
       mw->show();
 
@@ -737,5 +726,5 @@ int Fl_Menu_::pulldown(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.98 2000/10/18 07:18:24 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.99 2000/10/19 05:48:26 spitzak Exp $".
 //

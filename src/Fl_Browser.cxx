@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.32 2000/10/17 07:50:08 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.33 2000/10/19 05:48:26 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -436,14 +436,19 @@ void Fl_Browser::draw_clip(int x, int y, int w, int h) {
   fl_pop_clip();
 }
 
+//#include <stdio.h>
+
 void Fl_Browser::draw() {
   uchar d = damage();
   if (d & FL_DAMAGE_ALL) { // full redraw
+    //printf("full redraw damage %x\n", d);
     draw_text_frame();
     draw_clip(X, Y, W, H);
   } else if (d & (FL_DAMAGE_EXPOSE|FL_DAMAGE_LAYOUT)) { // redraw contents
+    //printf("contents redraw damage %x\n", d);
     draw_clip(X, Y, W, H);
   } else { // minimal update
+    //printf("minimal redraw damage %x\n", d);
     if (scrolldx || scrolldy) {
       fl_scroll(X, Y, W, H, scrolldx, scrolldy, draw_clip_cb, this);
     }
@@ -761,7 +766,7 @@ int Fl_Browser::handle(int event) {
 	return 1;
       } else if (item_is_parent()) {
       TOGGLE_OPEN:
-	item()->flags(item()->flags() ^ FL_OPEN);
+	item()->invert_flag(FL_OPEN);
 	list()->flags_changed(this, item());
 	relayout();
 	goto RELEASE;
@@ -921,5 +926,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.32 2000/10/17 07:50:08 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.33 2000/10/19 05:48:26 spitzak Exp $".
 //

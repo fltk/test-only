@@ -77,19 +77,19 @@ static Fl_Group* current_group(Fl_Browser* tree) {
 
 static Fl_Group* add_folder(Fl_Group* parent,
 		       const char* name, int open, Fl_Image* image) {
+  parent->begin();
   Fl_Item_Group* o = new Fl_Item_Group(name);
   o->image(image);
   if (open) o->set_flag(FL_OPEN);
-  parent->add(o);
   parent->relayout();
   return o;
 }
 
 static Fl_Widget* add_paper(Fl_Group* parent,
 			   const char* name, int, Fl_Image* image) {
+  parent->begin();
   Fl_Item* o = new Fl_Item(name);
   o->image(image);
-  parent->add(o);
   parent->relayout();
   return o;
 }

@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.29 2000/05/27 01:17:33 carl Exp $"
+// "$Id: menubar.cxx,v 1.30 2000/10/19 05:48:26 spitzak Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -182,7 +182,9 @@ int main(int argc, char **argv) {
     hugemenu[i].text = strdup(buf);
   }
   
-  window = new Fl_Window(WIDTH,400);
+  Fl_Window window(WIDTH,400);
+  window.color(FL_WHITE);
+  window.tooltip("Press right button\nfor a pop-up menu");
   Fl_Menu_Bar menubar(0,0,WIDTH,HEIGHT); menubar.menu(menutable);
   menubar.find("&Font/Normal")->label_font(FL_HELVETICA);
   menubar.find("&Font/Bold")->label_font(FL_HELVETICA_BOLD);
@@ -206,8 +208,6 @@ int main(int argc, char **argv) {
   menubar.callback(test_cb);
   menubar.tooltip("This is a menu bar");
   menus[0] = &menubar;
-  Fl_Output out(0,HEIGHT,WIDTH,400-HEIGHT);
-  out.tooltip("Press right button\nfor a pop-up menu");
   Fl_Menu_Button mb1(100,100,120,25,"&menubutton"); mb1.menu(pulldown);
   mb1.callback(test_cb);
   mb1.tooltip("This is a menu button");
@@ -221,13 +221,13 @@ int main(int argc, char **argv) {
   mb.menu(menutable);
   mb.callback(test_cb);
   menus[3] = &mb;
-  window->resizable(&mb);
-  window->size_range(300,20);
-  window->end();
-  window->show(argc, argv);
+  window.resizable(&mb);
+  window.size_range(300,20);
+  window.end();
+  window.show(argc, argv);
   return Fl::run();
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.29 2000/05/27 01:17:33 carl Exp $".
+// End of "$Id: menubar.cxx,v 1.30 2000/10/19 05:48:26 spitzak Exp $".
 //

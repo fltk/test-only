@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_add.cxx,v 1.23 2000/10/18 17:01:48 spitzak Exp $"
+// "$Id: Fl_Menu_add.cxx,v 1.24 2000/10/19 05:48:26 spitzak Exp $"
 //
 // Menu utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -142,7 +142,7 @@ Fl_Widget* Fl_Menu_::add(
   /* find a matching menu item: */
   Fl_Widget* o = 0;
   if (replace_flag | find_flag) for (int n = group->children(); n--;) {
-    Fl_Widget* w = group->child(--n);
+    Fl_Widget* w = group->child(n);
     if (w->label() && !compare(w->label(), item)) {
       if (find_flag) return w;
       o = w;
@@ -222,5 +222,5 @@ Fl_Widget* Fl_Menu_::add(const char *str) {
 }
 
 //
-// End of "$Id: Fl_Menu_add.cxx,v 1.23 2000/10/18 17:01:48 spitzak Exp $".
+// End of "$Id: Fl_Menu_add.cxx,v 1.24 2000/10/19 05:48:26 spitzak Exp $".
 //
