@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw_image.cxx,v 1.10 2000/07/10 07:35:43 spitzak Exp $"
+// "$Id: fl_draw_image.cxx,v 1.11 2000/07/24 22:48:09 clip Exp $"
 //
 // Image drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -564,7 +564,7 @@ void fl_rectf(int x, int y, int w, int h, Fl_Color C) {
     fl_rectf(x,y,w,h);
   } else {
     uchar c[3];
-    c[0] = uchar(C>>24); c[1] = uchar(C>>16); c[2] = uchar(C>>8);
+    fl_get_color(C, c[0], c[1], c[2]);
     innards(c,x,y,w,h,0,0,0,0,0);
   }
 }
@@ -572,5 +572,5 @@ void fl_rectf(int x, int y, int w, int h, Fl_Color C) {
 #endif
 
 //
-// End of "$Id: fl_draw_image.cxx,v 1.10 2000/07/10 07:35:43 spitzak Exp $".
+// End of "$Id: fl_draw_image.cxx,v 1.11 2000/07/24 22:48:09 clip Exp $".
 //
