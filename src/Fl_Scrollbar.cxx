@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.38 2000/04/03 17:09:20 bill Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.39 2000/04/10 06:45:45 bill Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -147,7 +147,7 @@ int Fl_Scrollbar::handle(int event) {
 }
 
 void Fl_Scrollbar::draw() {
-  if (damage()&FL_DAMAGE_ALL) draw_window_box();
+  if (damage()&FL_DAMAGE_ALL) draw_window_frame();
 
   int X=x(); int Y=y(); int W=w(); int H=h(); window_box()->inset(X,Y,W,H);
 
@@ -197,5 +197,5 @@ Fl_Scrollbar::Fl_Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.38 2000/04/03 17:09:20 bill Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.39 2000/04/10 06:45:45 bill Exp $".
 //

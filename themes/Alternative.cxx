@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.22 2000/04/03 17:09:23 bill Exp $"
+// "$Id: Alternative.cxx,v 1.23 2000/04/10 06:45:47 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -86,6 +86,8 @@ static void draw(int which, int x,int y,int w,int h, int inset, Fl_Color color)
   }
 }
 
+static Fl_Style* scrollbarstyle;
+
 // a new glyph function
 static void
 alt_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
@@ -164,7 +166,16 @@ alt_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
     case FL_GLYPH_LEFT:
     case FL_GLYPH_UP:
     case FL_GLYPH_DOWN: {
-      if (box == FL_NO_BOX) { x += 2; y += 2; w -= 4; h -= 4; } // menu fudge factor
+      if (box == FL_NO_BOX) {
+	// menu fudge factor
+	if (w > 10) {x += (w-10)/2; y += (w-10)/2; w = h = 10;}
+//	x += 2; y += 2; w -= 4; h -= 4;
+//	x += 4; y += 4; w -= 8; h -= 8;
+      } else if (scrollbarstyle) {
+	// erase area behind scrollbars arrows
+	fl_color(scrollbarstyle->window_color);
+	fl_rectf(x,y,w,h);
+      }
       Fl_Color d1, d2, l1, l2;
       if (f&FL_VALUE) {
         d1 = FL_LIGHT3; d2 = FL_LIGHT1; l1 = FL_BLACK; l2 = FL_DARK2;
@@ -288,6 +299,7 @@ int fltk_theme(int, char**) {
   }
 
   if ((s = Fl_Style::find("scrollbar"))) {
+    scrollbarstyle = s;
     s->glyph = alt_glyph;
   }
 
@@ -302,5 +314,5 @@ int fltk_theme(int, char**) {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.22 2000/04/03 17:09:23 bill Exp $".
+// End of "$Id: Alternative.cxx,v 1.23 2000/04/10 06:45:47 bill Exp $".
 //

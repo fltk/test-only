@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.63 2000/04/03 17:09:18 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.64 2000/04/10 06:45:44 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -37,216 +37,6 @@
 
 Fl_Group* Fl_Group::current_;
 
-int Fl_Group::find(const Fl_Widget* o) const {
-  Fl_Widget*const* a = array();
-  int i; for (i=0; i < children_; ++i) if (*a++ == o) break;
-  return i;
-}
-
-// For back-compatability, we must adjust all events sent to child
-// windows so they are relative to that window.
-
-static int send(Fl_Widget* o, int event) {
-  if (!o->is_window()) return o->handle(event);
-  int save_x = Fl::e_x; Fl::e_x -= o->x();
-  int save_y = Fl::e_y; Fl::e_y -= o->y();
-  int ret = o->handle(event);
-  Fl::e_y = save_y;
-  Fl::e_x = save_x;
-  return ret;
-}
-
-// translate the current keystroke into up/down/left/right for navigation:
-#define ctrl(x) (x^0x40)
-static int navkey() {
-  switch (Fl::event_key()) {
-  case 0: // not an FL_KEYBOARD/FL_SHORTCUT event
-    break;
-  case FL_Tab:
-    if (Fl::event_state(FL_CTRL)) return 0; // reserved for Fl_Tabs
-    return Fl::event_state(FL_SHIFT) ? FL_Left : FL_Right;
-  case FL_Right:
-    return FL_Right;
-  case FL_Left:
-    return FL_Left;
-  case FL_Up:
-    return FL_Up;
-  case FL_Down:
-    return FL_Down;
-  default:
-    switch (Fl::event_text()[0]) {
-    case ctrl('N') : return FL_Down;
-    case ctrl('P') : return FL_Up;
-    case ctrl('F') : return FL_Right;
-    case ctrl('B') : return FL_Left;
-    }
-  }
-  return 0;
-}
-
-int Fl_Group::handle(int event) {return handle_i(event, 0);}
-
-static int try_focus(Fl_Group* g, int i) {
-  if (i >= g->children()) return 0;
-  Fl_Widget* w = g->child(i);
-  if (!w->takesevents()) return 0;
-  if (!w->handle(FL_FOCUS)) return 0; // see if it wants it
-  g->focus(i);
-  if (w->contains(Fl::focus())) return 1; // it called Fl::focus for us
-  Fl::focus(w);
-  return 1;
-}
-
-// Fl_Tabs (and perhaps others) set the i_take_focus flag:
-int Fl_Group::handle_i(int event, int i_take_focus) {
-  const int numchildren = children();
-  int i;
-
-  switch (event) {
-
-  case FL_FOCUS:
-    switch (navkey()) {
-    default:
-      if (focus_ >= 0 && try_focus(this, focus_)) return 1;
-    case FL_Right:
-    case FL_Down:
-      if (i_take_focus) {Fl::focus(this); focus_ = -1; return 1;}
-      for (i = 0; i < numchildren; ++i) if (try_focus(this, i)) return 1;
-      return 0;
-    case FL_Left:
-    case FL_Up:
-      for (i = numchildren; i--;) if (try_focus(this, i)) return 1;
-      if (i_take_focus) {Fl::focus(this); focus_ = -1; return 1;}
-      return 0;
-    }
-
-  case FL_UNFOCUS:
-    return 0;
-
-  case FL_ENTER:
-  case FL_MOVE:
-    for (i = numchildren; i--;) {
-      Fl_Widget* o = child(i);
-      if (o->visible() && Fl::event_inside(o)) {
-        if (o->contains(Fl::belowmouse())) {
-	  return send(o, FL_MOVE);
-        } else if (send(o, FL_ENTER)) {
-	  if (!o->contains(Fl::belowmouse())) Fl::belowmouse(o);
-	  return 1;
-        }
-      }
-    }
-    Fl::belowmouse(this);
-    return 1;
-
-  case FL_PUSH:
-    for (i = numchildren; i--;) {
-      Fl_Widget* o = child(i);
-      if (o->takesevents() && Fl::event_inside(o)) {
-	if (send(o,FL_PUSH)) {
-	  if (Fl::pushed() && !o->contains(Fl::pushed())) Fl::pushed(o);
-	  return 1;
-	}
-      }
-    }
-    return 0;
-
-  case FL_DRAG:
-  case FL_RELEASE:
-  case FL_KEYBOARD:
-    // These are supposed to be sent directly to the pushed() widget, ignore
-    // them if sent here:
-    return 0;
-
-  case FL_DEACTIVATE:
-  case FL_ACTIVATE:
-    for (i = 0; i < numchildren; ++i) {
-      Fl_Widget* o = child(i);
-      if (o->active()) o->handle(event);
-    }
-    return 1;
-
-  case FL_SHOW:
-  case FL_HIDE:
-    for (i = 0; i < numchildren; ++i) {
-      Fl_Widget* o = child(i);
-      if (o->visible()) o->handle(event);
-    }
-    return 1;
-
-  case FL_SHORTCUT: {
-    // see if any child widgets want the shortcut:
-    for (i = 0; i < numchildren; ++i) {
-      Fl_Widget* o = child(i);
-      if (o->takesevents() && send(o,event)) return 1;
-      // if they have shortcut() and don't otherwise use it, give them focus:
-      if (o->test_shortcut() && try_focus(this, i)) return 1;
-    }
-    // If we don't have focus we don't do any keyboard navigation:
-    if (!contains(Fl::focus())) return 0;
-
-    int key = navkey(); if (!key) return 0;
-
-    i = focus_;
-    // handle focus on the Fl_Tabs tabs:
-    if (focused() || i < 0 || i >= numchildren) {
-      if (key == FL_Right || key == FL_Down)
-	for (i = 0; i < numchildren; ++i) if (try_focus(this, i)) return 1;
-      return 0;
-    }
-
-    // loop from the current focus looking for a new focus, quit when
-    // we reach the original again:
-    int previous = i;
-    Fl_Widget* o = child(i);
-    int old_x = o->x();
-    int old_r = o->x()+o->w();
-    for (;;) {
-      switch (key) {
-      case FL_Right:
-      case FL_Down:
-	++i;
-	if (i >= children_) {
-	  if (parent()) return 0;
-	  i = 0;
-	}
-	break;
-      case FL_Left:
-      case FL_Up:
-	if (i) --i;
-	else {
-	  if (i_take_focus) {Fl::focus(this); focus_ = -1; return 1;}
-	  if (parent()) return 0;
-	  i = children_-1;
-	}
-	break;
-      default:
-	return 0;
-      }
-      if (i == previous) return 0;
-      switch (key) {
-      case FL_Down:
-      case FL_Up:
-	// for up/down, the widgets have to overlap horizontally:
-	o = child(i);
-	if (o->x() >= old_r || o->x()+o->w() <= old_x) continue;
-      }
-      if (try_focus(this, i)) return 1;
-    }
-    return 0;}
-
-  default:
-    for (i = numchildren; i--;) {
-      Fl_Widget* o = child(i);
-      if (o->takesevents() && send(o,event)) return 1;
-    }
-    return 0;
-
-  }
-}
-
-////////////////////////////////////////////////////////////////
-
 static void revert(Fl_Style* s) {
   s->box = FL_NO_BOX;
 }
@@ -257,7 +47,7 @@ static Fl_Named_Style* style = new Fl_Named_Style(0, revert, &style);
 Fl_Group::Fl_Group(int X,int Y,int W,int H,const char *l)
 : Fl_Widget(X,Y,W,H,l),
   children_(0),
-  focus_(-1),
+  focus_(0),
   array_(0),
   resizable_(0), // fltk 1.0 used (this)
   sizes_(0), // this is allocated when the group is end()ed.
@@ -343,7 +133,217 @@ void Fl_Group::replace(int index, Fl_Widget& o) {
   init_sizes();
 }
 
+int Fl_Group::find(const Fl_Widget* o) const {
+  while (o && o->parent() != this) o = o->parent();
+  Fl_Widget*const* a = array();
+  int i; for (i=0; i < children_; ++i) if (*a++ == o) break;
+  return i;
+}
+
 ////////////////////////////////////////////////////////////////
+// Handle
+
+// We must adjust the xy of events sent to child windows so they
+// are relative to that window.  All other widgets use absolute
+// coordinates:
+static int send_i(int event, Fl_Widget& to) {
+  if (!to.is_window()) return to.handle(event);
+  int save_x = Fl::e_x; Fl::e_x -= to.x();
+  int save_y = Fl::e_y; Fl::e_y -= to.y();
+  int ret = to.handle(event);
+  Fl::e_y = save_y;
+  Fl::e_x = save_x;
+  return ret;
+}
+
+// send(event,o) will decide if object o needs the event and then will
+// send it, and does some extra stuff if the widget likes the event.
+// Subclasses of Fl_Group can call this for every child.  The return
+// value is true if the child "ate" the event, if false you should
+// continue trying other children.
+
+int Fl_Group::send(int event, Fl_Widget& to) {
+  switch (event) {
+
+  case FL_UNFOCUS:
+  case FL_DRAG:
+  case FL_RELEASE:
+  case FL_KEYBOARD:
+  case FL_LEAVE:
+    // These events are sent directly by Fl.cxx to the widgets.  Trying
+    // to redirect them is a mistake.  It appears best to ignore attempts.
+    return 1; // return 1 so callers stops calling this.
+
+  case FL_FOCUS:
+    if (to.takesevents() && send_i(FL_FOCUS, to)) {
+      // only call Fl::focus if the child widget did not do so:
+      if (!to.contains(Fl::focus())) Fl::focus(&to);
+      return 1;
+    }
+    return 0;
+
+  case FL_ENTER:
+  case FL_MOVE:
+    // visible() rather than takesevents() so tooltips work on inactive:
+    if (to.visible() && Fl::event_inside(to)) {
+      // If the mouse is already in a child, just send the move events
+      // through.  Fltk does not do this directly like FL_DRAG so that
+      // widgets may overlap.
+      if (to.contains(Fl::belowmouse())) return send_i(FL_MOVE, to);
+      // Mouse is moving into a new child widget:
+      if (send_i(FL_ENTER, to)) {
+	// only call Fl::belowmouse if the child widget did not do so:
+	if (!to.contains(Fl::belowmouse())) Fl::belowmouse(to);
+	return 1;
+      }
+    }
+    return 0;
+
+  case FL_PUSH:
+    // Mouse events are supposedly sent to the belowmouse() widget, but
+    // handling them here allows overlapping Fl_Menu_Button widgets to
+    // consume some of the buttons:
+    if (to.takesevents() && Fl::event_inside(to)) {
+      if (send_i(FL_PUSH, to)) {
+	// only call Fl::pushed if the child widget did not do so and
+	// if the mouse is still down:
+	if (Fl::pushed() && !to.contains(Fl::pushed())) Fl::pushed(to);
+	return 1;
+      }
+    }
+    return 0;
+
+  case FL_DEACTIVATE:
+  case FL_ACTIVATE:
+    if (to.active()) send_i(event,to);
+    return 0; // return zero so all children are tried
+
+  case FL_SHOW:
+  case FL_HIDE:
+    if (to.visible()) send_i(event,to);
+    return 0; // return zero so all children are tried
+
+  default:
+    if (to.takesevents()) return send_i(event, to);
+    return 0;
+  }
+}
+
+// Translate the current keystroke into up/down/left/right for navigation,
+// returns zero for non shortcut/keyboard events:
+#define ctrl(x) (x^0x40)
+int Fl_Group::navigation_key() {
+  switch (Fl::event_key()) {
+  case 0: // not an FL_KEYBOARD/FL_SHORTCUT event
+    break;
+  case FL_Tab:
+    if (Fl::event_state(FL_CTRL)) return 0; // reserved for Fl_Tabs
+    return Fl::event_state(FL_SHIFT) ? FL_Left : FL_Right;
+  case FL_Right:
+    return FL_Right;
+  case FL_Left:
+    return FL_Left;
+  case FL_Up:
+    return FL_Up;
+  case FL_Down:
+    return FL_Down;
+  default:
+    switch (Fl::event_text()[0]) {
+    case ctrl('N') : return FL_Down;
+    case ctrl('P') : return FL_Up;
+    case ctrl('F') : return FL_Right;
+    case ctrl('B') : return FL_Left;
+    }
+  }
+  return 0;
+}
+
+int Fl_Group::handle(int event) {
+  const int numchildren = children();
+  int i;
+
+  switch (event) {
+
+  case FL_FOCUS:
+    if (contains(Fl::focus())) {
+      // This is called to indicate that the focus is being set/changed
+      focus_ = find(Fl::focus());
+      return 1;
+    }
+    // otherwise it indicates an attempt to give this widget focus:
+    switch (navigation_key()) {
+    default:
+      // try to give it to whatever child had focus last:
+      if (focus_ >= 0 && focus_ < children() &&
+	  send(event, *child(focus_))) return 1;
+      // otherwise fall through to search for first one that wants focus:
+    case FL_Right:
+    case FL_Down:
+      for (i=0; i < numchildren; ++i) if (send(event, *child(i))) return 1;
+      return 0;
+    case FL_Left:
+    case FL_Up:
+      break; // default is to try send the focus backwards
+    }
+    break;
+
+  case FL_SHORTCUT: {
+    // see if any other child widgets want the shortcut, search forward:
+    for (i=0; i < numchildren; ++i) if (send(event, *child(i))) return 1;
+
+    // If we don't have focus we don't do any keyboard navigation:
+    if (!contains(Fl::focus())) return 0;
+
+    int key = navigation_key(); if (!key) return 0;
+
+    i = focus_;
+
+    // loop from the current focus looking for a new focus, quit when
+    // we reach the original again:
+    int previous = i;
+    Fl_Widget* o = child(i);
+    int old_x = o->x();
+    int old_r = o->x()+o->w();
+    for (;;) {
+      switch (key) {
+      case FL_Right:
+      case FL_Down:
+	++i;
+	if (i >= children_) {
+	  if (parent()) return 0;
+	  i = 0;
+	}
+	break;
+      case FL_Left:
+      case FL_Up:
+	if (i) --i;
+	else {
+	  if (parent()) return 0;
+	  i = children_-1;
+	}
+	break;
+      default:
+	return 0;
+      }
+      if (i == previous) return 0;
+      switch (key) {
+      case FL_Down:
+      case FL_Up:
+	// for up/down, the widgets have to overlap horizontally:
+	o = child(i);
+	if (o->x() >= old_r || o->x()+o->w() <= old_x) continue;
+      }
+      if (send(FL_FOCUS, *child(i))) return 1;
+    }
+    return 0;}
+  }
+
+  for (i = numchildren; i--;) if (send(event, *child(i))) return 1;
+  return 0;
+}
+
+////////////////////////////////////////////////////////////////
+// Layout
 
 // sizes() array stores the initial positions of widgets as
 // left,right,top,bottom quads.  The first quad is the group, the
@@ -394,9 +394,7 @@ int* Fl_Group::sizes() {
   return sizes_;
 }
 
-
 void Fl_Group::layout() {
-
   // get changes from previous position:
   if (!resizable() || ow()==w() && oh()==h()) {
     if (!is_window()) {
@@ -453,26 +451,13 @@ void Fl_Group::layout() {
   set_old_size();
 }
 
-#include <FL/Fl_Tabs.H>
-#include <FL/Fl_Box.H>
-#include <FL/Fl_Button.H>
+////////////////////////////////////////////////////////////////
+// Draw
 
 void Fl_Group::draw() {
   Fl_Widget*const* a = array();
   Fl_Widget*const* e = a+children_;
-  if (damage() == FL_DAMAGE_CHILD) {
-    // only some child widget has been damaged, draw them without
-    // doing any clipping.  This is for maximum speed, even though
-    // the 
-    while (a < e) {
-      Fl_Widget& w = **a++;
-      if (w.damage() & FL_DAMAGE_CHILD_LABEL) {
-	draw_outside_label(w);
-	w.clear_damage(w.damage() & ~FL_DAMAGE_CHILD_LABEL);
-      }
-      update_child(w);
-    }
-  } else {
+  if (damage() & ~FL_DAMAGE_CHILD) {
     // Full redraw of the group:
     fl_clip(x(), y(), w(), h());
     while (e > a) draw_child(**--e);
@@ -481,6 +466,19 @@ void Fl_Group::draw() {
     e = a+children_;
     while (a < e) draw_outside_label(**a++);
     // perhaps fl_pop_clip() should be here?
+  } else {
+    // only some child widget has been damaged, draw them without
+    // doing any clipping.  This is for maximum speed, even though
+    // this may result in different output if this widget overlaps
+    // another widget or a label.
+    while (a < e) {
+      Fl_Widget& w = **a++;
+      if (w.damage() & FL_DAMAGE_CHILD_LABEL) {
+	draw_outside_label(w);
+	w.set_damage(w.damage() & ~FL_DAMAGE_CHILD_LABEL);
+      }
+      update_child(w);
+    }
   }
 }
 
@@ -512,12 +510,15 @@ void Fl_Group::draw_group_box() const {
 // Force a child to redraw and remove the rectangle it used from the clip
 // region:
 void Fl_Group::draw_child(Fl_Widget& w) const {
-  if (w.visible() && !w.is_window() &&
-      fl_not_clipped(w.x(), w.y(), w.w(), w.h())) {
-    w.clear_damage(FL_DAMAGE_ALL);
-    w.draw_n_clip();
-    w.clear_damage();
-  }
+  if (!w.visible() || w.is_window()) return;
+  int i = fl_not_clipped(w.x(), w.y(), w.w(), w.h());
+  if (!i) return;
+  // Partially-clipped children are not going to be redrawn so we must
+  // preserve their damage bits:
+  uchar save = (i>1) ? w.damage() : 0;
+  w.set_damage(FL_DAMAGE_ALL);
+  w.draw_n_clip();
+  w.set_damage(save);
 }
 
 // Redraw a single child in response to it's damage:
@@ -561,5 +562,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.63 2000/04/03 17:09:18 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.64 2000/04/10 06:45:44 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.84 2000/03/03 21:21:43 carl Exp $"
+// "$Id: Fl.cxx,v 1.85 2000/04/10 06:45:43 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -232,8 +232,8 @@ int Fl::event_inside(int x,int y,int w,int h) /*const*/ {
   return (mx >= 0 && mx < w && my >= 0 && my < h);
 }
 
-int Fl::event_inside(const Fl_Widget *o) /*const*/ {
-  return event_inside(o->x(),o->y(),o->w(),o->h());
+int Fl::event_inside(const Fl_Widget& o) /*const*/ {
+  return event_inside(o.x(), o.y(), o.w(), o.h());
 }
 
 void Fl::focus(Fl_Widget *o) {
@@ -242,6 +242,7 @@ void Fl::focus(Fl_Widget *o) {
   if (o != p) {
     focus_ = o;
     for (; p && !p->contains(o); p = p->parent()) p->handle(FL_UNFOCUS);
+    for (; o; o = o->parent()) o->handle(FL_FOCUS);
   }
 }
 
@@ -287,7 +288,7 @@ void fl_fix_focus(int sendmove) {
   } else
     Fl::focus(0);
 
-  if (!Fl::pushed()) {
+//  if (!Fl::pushed()) {
     // set belowmouse based on Fl::modal() and fl_xmousewin:
     w = fl_xmousewin;
     if (w) {
@@ -304,7 +305,7 @@ void fl_fix_focus(int sendmove) {
     } else {
       Fl::belowmouse(0);
     }
-  }
+//  }
 }
 
 #ifndef WIN32
@@ -397,25 +398,17 @@ int Fl::handle(int event, Fl_Window* window)
     return 1;
 
   case FL_MOVE:
-  case FL_DRAG:
+//  case FL_DRAG: // does not happen
     fl_xmousewin = window; // this should already be set, but just in case.
-    if (pushed()) {
-      // CET - FIXME - Experimental - Does this break anything?
-      // This sends move events to other windows even when the mouse
-      // button is held down.
-
-      // Apparently it breaks tiles and and causes cosmetic glitches in pack.
-      // Everything else works fine.
-//      if (w) send(event, w, window);
-
-      w = pushed();
-      event = FL_DRAG;
-    } else if (grab()) {
+    if (grab()) {
       w = grab();
-    } else if (modal() && w != modal()) {
-      return 0;
+    } else if (belowmouse()) {
+      if (event_inside(belowmouse())) w = belowmouse();
+      else belowmouse(0);
     }
-    return send(event, w, window);
+    if (w != pushed()) send(FL_MOVE, w, window);
+    if (pushed()) send(FL_DRAG, pushed(), window);
+    return 1;
 
   case FL_RELEASE: {
     w = pushed();
@@ -673,73 +666,6 @@ void Fl::selection_owner(Fl_Widget *owner) {
   selection_owner_ = owner;
 }
 
-#include <FL/fl_draw.H>
-
-void Fl_Widget::redraw() {
-  damage(FL_DAMAGE_ALL);
-}
-
-void Fl_Widget::damage(uchar flags) {
-  if (is_window()) {
-    // damage entire window by deleting the region:
-    Fl_X* i = Fl_X::i((Fl_Window*)this);
-    if (!i) return; // window not mapped, so ignore it
-    if (i->region) {XDestroyRegion(i->region); i->region = 0;}
-    damage_ |= flags;
-    Fl::damage(FL_DAMAGE_CHILD);
-  } else {
-    // damage only the rectangle covered by a child widget:
-    damage(flags, x(), y(), w(), h());
-  }
-}
-
-void Fl_Widget::damage(uchar flags, int X, int Y, int W, int H) {
-  Fl_Widget* window = this;
-  // mark all parent widgets between this and window with FL_DAMAGE_CHILD:
-  while (!window->is_window()) {
-    window->damage_ |= flags;
-    window = window->parent();
-    if (!window) return;
-    flags = FL_DAMAGE_CHILD;
-  }
-  Fl_X* i = Fl_X::i((Fl_Window*)window);
-  if (!i) return; // window not mapped, so ignore it
-
-  if (X<=0 && Y<=0 && W>=window->w() && H>=window->h()) {
-    // if damage covers entire window delete region:
-    window->damage(flags);
-    return;
-  }
-
-  // clip the damage to the window and quit if none:
-  if (X < 0) {W += X; X = 0;}
-  if (Y < 0) {H += Y; Y = 0;}
-  if (W > window->w()-X) W = window->w()-X;
-  if (H > window->h()-Y) H = window->h()-Y;
-  if (W <= 0 || H <= 0) return;
-
-  if (window->damage() & ~FL_DAMAGE_LAYOUT) {
-    // if we already have damage we must merge with existing region:
-    if (i->region) {
-#ifndef WIN32
-      XRectangle R;
-      R.x = X; R.y = Y; R.width = W; R.height = H;
-      XUnionRectWithRegion(&R, i->region, i->region);
-#else
-      Region R = XRectangleRegion(X, Y, W, H);
-      CombineRgn(i->region, i->region, R, RGN_OR);
-      XDestroyRegion(R);
-#endif
-    }
-  } else {
-    // create a new region:
-    if (i->region) XDestroyRegion(i->region);
-    i->region = XRectangleRegion(X,Y,W,H);
-  }
-  window->damage_ |= flags;
-  Fl::damage(FL_DAMAGE_CHILD);
-}
-
 void Fl_Window::flush() {
   make_current();
 //if (damage() == FL_DAMAGE_EXPOSE && can_boxcheat(box())) fl_boxcheat = this;
@@ -748,5 +674,5 @@ void Fl_Window::flush() {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.84 2000/03/03 21:21:43 carl Exp $".
+// End of "$Id: Fl.cxx,v 1.85 2000/04/10 06:45:43 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: demo.cxx,v 1.12 2000/01/16 07:44:40 robertk Exp $"
+// "$Id: demo.cxx,v 1.13 2000/04/10 06:45:46 bill Exp $"
 //
 // Main demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#if defined(WIN32) && !defined(CYGNUS)
+#if defined(WIN32) && !defined(__CYGWIN__)
 #  include <direct.h>
 #else
 #  include <unistd.h>
@@ -331,6 +331,6 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: demo.cxx,v 1.12 2000/01/16 07:44:40 robertk Exp $".
+// End of "$Id: demo.cxx,v 1.13 2000/04/10 06:45:46 bill Exp $".
 //
 

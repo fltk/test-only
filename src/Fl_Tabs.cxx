@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.37 2000/03/20 08:40:24 bill Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.38 2000/04/10 06:45:45 bill Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -125,27 +125,53 @@ Fl_Widget *Fl_Tabs::which(int event_x, int event_y) {
 
 int Fl_Tabs::handle(int event) {
 
-  Fl_Widget *o;
+  Fl_Widget *selected = this->value();
   int i;
   int backwards = 0;
 
   switch (event) {
 
+  case FL_FOCUS:
+    if (contains(Fl::focus())) {
+      // this is called to indicate that some child got the focus
+      /*if (Fl::focus() == this || focus() < 0)*/ damage(FL_DAMAGE_EXPOSE);
+      focus(Fl::focus() == this ? -1 : 0);
+      return 1;
+    }
+    // otherwise this indicates that somebody is trying to give focus to this
+    switch (navigation_key()) {
+    default:
+      if (focus() < 0) break;
+      // else fall through...
+    case FL_Left:
+    case FL_Up:
+      if (selected) return send(event, *selected);
+      break;
+    case FL_Right:
+    case FL_Down:
+      break;
+    } return 1;
+
+  case FL_UNFOCUS:
+    if (focus() < 0) damage(FL_DAMAGE_EXPOSE);
+    return 1;
+
+  // handle mouse events in the tabs:
   case FL_PUSH: {
     int H = tab_height();
     if (H >= 0) {
-      if (Fl::event_y() > y()+H) goto DEFAULT;
+      if (Fl::event_y() > y()+H) break;
     } else {
-      if (Fl::event_y() < y()+h()+H) goto DEFAULT;
+      if (Fl::event_y() < y()+h()+H) break;
     }}
   case FL_DRAG:
   case FL_RELEASE:
-    o = which(Fl::event_x(), Fl::event_y());
+    selected = which(Fl::event_x(), Fl::event_y());
     if (event == FL_RELEASE && !Fl::pushed()) {
       push(0);
-      if (o && value(o)) do_callback();
+      if (selected && value(selected)) do_callback();
     } else {
-      push(o);
+      push(selected);
     }
     return 1;
 
@@ -153,18 +179,14 @@ int Fl_Tabs::handle(int event) {
     switch (Fl::event_key()) {
     case ' ':
     case FL_Right:
-      goto MOVE;
+      break;
     case FL_BackSpace:
     case FL_Left:
       backwards = 1;
-      goto MOVE;
+      break;
     default:
       return 0;
     }
-
-  case FL_SHORTCUT:
-    if (Fl::event_key()!=FL_Tab || !Fl::event_state(FL_CTRL)) goto DEFAULT;
-    backwards = Fl::event_state(FL_SHIFT);
   MOVE:
     for (i = children()-1; i>0; i--) if (child(i)->visible()) break;
     if (backwards) {i = i ? i-1 : children()-1;}
@@ -172,20 +194,30 @@ int Fl_Tabs::handle(int event) {
     value(child(i)); do_callback();
     return 1;
 
-  case FL_UNFOCUS:
-    // this is an fltk bug?  Fl::focus() is already turned off...
-    damage(FL_DAMAGE_EXPOSE);
-  default:
-  DEFAULT: {
-    int pf = focused();
-    if (handle_i(event, 1)) {
-      // we must redraw if we gained or lost the focus:
-      if (focused() != pf) damage(FL_DAMAGE_EXPOSE);
-      return 1;
+  case FL_SHORTCUT:
+    if (Fl::event_key()==FL_Tab && Fl::event_state(FL_CTRL)) {
+      backwards = Fl::event_state(FL_SHIFT);
+      goto MOVE;
     }
-    return 0;}
+    if (!selected) return 0;
+    if (send(event, *selected)) return 1;
+    if (!contains(Fl::focus())) return 0;
+    switch (navigation_key()) {
+    case FL_Right:
+    case FL_Down:
+      if (focus() < 0 && selected) return send(FL_FOCUS, *selected);
+      else return 0;
+    case FL_Left:
+    case FL_Up:
+      if (focus() >= 0) {Fl::focus(this); return 1;}
+      else return 0;
+    default:
+      return 0;
+    }
+  }  
 
-  }
+  if (selected) return send(event, *selected);
+  return 0;
 }
 
 int Fl_Tabs::push(Fl_Widget *o) {
@@ -346,5 +378,5 @@ Fl_Tabs::Fl_Tabs(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.37 2000/03/20 08:40:24 bill Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.38 2000/04/10 06:45:45 bill Exp $".
 //

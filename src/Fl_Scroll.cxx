@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scroll.cxx,v 1.18 2000/03/20 08:40:24 bill Exp $"
+// "$Id: Fl_Scroll.cxx,v 1.19 2000/04/10 06:45:44 bill Exp $"
 //
 // Scroll widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,47 +27,19 @@
 #include <FL/Fl_Scroll.H>
 #include <FL/fl_draw.H>
 
-// Insure the scrollbars are the last children:
-void Fl_Scroll::fix_scrollbar_order() {
-  Fl_Widget*const* a = array();
-  if (a[children()-1] != &scrollbar) {
-    Fl_Widget** a = (Fl_Widget**)array();
-    int i,j; for (i = j = 0; j < children(); j++)
-      if (a[j] != &hscrollbar && a[j] != &scrollbar) a[i++] = a[j];
-    a[i++] = &hscrollbar;
-    a[i++] = &scrollbar;
-  }
-}
-
 void Fl_Scroll::draw_clip(void* v,int X, int Y, int W, int H) {
+  // Full redraw of the group:
   fl_clip(X,Y,W,H);
   Fl_Scroll* s = (Fl_Scroll*)v;
-  // erase background if there is a boxtype:
-  if (!(s->damage()&FL_DAMAGE_ALL)) {
-    fl_clip(X,Y,W,H);
-    s->draw_group_box();
-    fl_pop_clip();
-  }
+  // draw all the children, clipping them out of the region:
   Fl_Widget*const* a = s->array();
-  int R = X; int B = Y; // track bottom & right edge of all children
-  for (int i=s->children()-2; i--;) {
-    Fl_Widget& o = **a++;
-    s->draw_child(o);
-    s->draw_outside_label(o);
-    if (o.x()+o.w() > R) R = o.x()+o.w();
-    if (o.y()+o.h() > B) B = o.y()+o.h();
-  }
-  // fill any area to right & bottom of widgets:
-  if (R < X+W && B > Y) {
-    fl_clip(R,Y,X+W-R,B-Y);
-    s->draw_group_box();
-    fl_pop_clip();
-  }
-  if (B < Y+H) {
-    fl_clip(X,B,W,Y+H-B);
-    s->draw_group_box();
-    fl_pop_clip();
-  }
+  Fl_Widget*const* e = a+s->children();
+  while (e > a) s->draw_child(**--e);
+  // fill the rest of the region with color:
+  fl_color(s->color()); fl_rectf(X,Y,W,H);
+  // draw the outside labels:
+  e = a+s->children();
+  while (a < e) s->draw_outside_label(**a++);
   fl_pop_clip();
 }
 
@@ -84,33 +56,63 @@ void Fl_Scroll::bbox(int& X, int& Y, int& W, int& H) {
 }
 
 void Fl_Scroll::draw() {
-  fix_scrollbar_order();
   int X,Y,W,H; bbox(X,Y,W,H);
 
   uchar d = damage();
-
   if (d & FL_DAMAGE_ALL) { // full redraw
-    fl_clip(x(), y(), w(), h());
-    draw_group_box();
-    fl_pop_clip();
+    draw_frame();
     draw_clip(this, X, Y, W, H);
   } else {
-    if (d & FL_DAMAGE_SCROLL) { // scroll the contents:
-      fl_scroll(X, Y, W, H, oldx-xposition_, oldy-yposition_, draw_clip, this);
+    if (scrolldx || scrolldy) {
+      fl_scroll(X, Y, W, H, scrolldx, scrolldy, draw_clip, this);
     }
     if (d & FL_DAMAGE_CHILD) { // draw damaged children
       fl_clip(X, Y, W, H);
       Fl_Widget*const* a = array();
-      for (int i=children()-2; i--;) update_child(**a++);
+      Fl_Widget*const* e = a+children();
+      while (a < e) {
+	Fl_Widget& w = **a++;
+	if (w.damage() & FL_DAMAGE_CHILD_LABEL) {
+	  draw_outside_label(w);
+	  w.set_damage(w.damage() & ~FL_DAMAGE_CHILD_LABEL);
+	}
+	update_child(w);
+      }
       fl_pop_clip();
     }
   }
+  scrolldx = scrolldy = 0;
 
-  // accumulate bounding box of children:
-  int l = X; int r = X; int t = Y; int b = Y;
+  // draw the scrollbars:
+  if (d & FL_DAMAGE_ALL) {
+    scrollbar.set_damage(FL_DAMAGE_ALL);
+    hscrollbar.set_damage(FL_DAMAGE_ALL);
+    if (scrollbar.visible() && hscrollbar.visible()) {
+      // fill in the little box in the corner
+      fl_color(color());
+      fl_rectf(scrollbar.x(), hscrollbar.y(), scrollbar.w(), hscrollbar.h());
+    }
+  }
+  update_child(scrollbar);
+  update_child(hscrollbar);
+}
+
+void Fl_Scroll::layout() {
+
+  int X,Y,W,H; bbox(X,Y,W,H);
+
+  // move all the children and accumulate their bounding boxes:
   Fl_Widget*const* a = array();
-  for (int i=children()-2; i--;) {
+  int l = X; int r = X; int t = Y; int b = Y;
+  int dx = layoutdx + ox() - x();
+  int dy = layoutdy + oy() - y();
+  layoutdx = layoutdy = 0;
+  scrolldx += dx;
+  scrolldy += dy;
+  for (int i=children(); i--;) {
     Fl_Widget* o = *a++;
+    o->position(o->x()+dx, o->y()+dy);
+    o->layout();
     if (o->x() < l) l = o->x();
     if (o->y() < t) t = o->y();
     if (o->x()+o->w() > r) r = o->x()+o->w();
@@ -123,71 +125,41 @@ void Fl_Scroll::draw() {
       if (!scrollbar.visible()) {
 	scrollbar.set_visible();
 	W -= scrollbar.w();
-	d = FL_DAMAGE_ALL;
+	damage(FL_DAMAGE_ALL);
       }
     } else {
       if (scrollbar.visible()) {
 	scrollbar.clear_visible();
-	draw_clip(this,
-		  scrollbar.flags()&FL_ALIGN_LEFT ? X-scrollbar.w() : X+W,
-		  Y, scrollbar.w(), H);
 	W += scrollbar.w();
-	d = FL_DAMAGE_ALL;
+	damage(FL_DAMAGE_ALL);
       }
     }
     if ((type()&HORIZONTAL) && (type()&ALWAYS_ON || l < X || r > X+W)) {
       if (!hscrollbar.visible()) {
 	hscrollbar.set_visible();
 	H -= hscrollbar.h();
-	d = FL_DAMAGE_ALL;
+	damage(FL_DAMAGE_ALL);
       }
     } else {
       if (hscrollbar.visible()) {
 	hscrollbar.clear_visible();
-	draw_clip(this, X,
-		  scrollbar.flags()&FL_ALIGN_TOP ? Y-hscrollbar.h() : Y+H,
-		  W, hscrollbar.h());
 	H += hscrollbar.h();
-	d = FL_DAMAGE_ALL;
+	damage(FL_DAMAGE_ALL);
       }
     }
   }
 
   scrollbar.resize(scrollbar.flags()&FL_ALIGN_LEFT ? X-scrollbar.w() : X+W,
 		   Y, scrollbar.w(), H);
-  scrollbar.value(oldy = yposition_ = (Y-t), H, 0, b-t);
+  scrollbar.value(yposition_ = (Y-t), H, 0, b-t);
 
   hscrollbar.resize(X,
 		    scrollbar.flags()&FL_ALIGN_TOP ? Y-hscrollbar.h() : Y+H,
 		    W, hscrollbar.h());
-  hscrollbar.value(oldx = xposition_ = (X-l), W, 0, r-l);
-
-  // draw the scrollbars:
-  if (d & FL_DAMAGE_ALL) {
-    scrollbar.clear_damage(FL_DAMAGE_ALL);
-    hscrollbar.clear_damage(FL_DAMAGE_ALL);
-    if (scrollbar.visible() && hscrollbar.visible()) {
-      // fill in the little box in the corner
-      fl_color(color());
-      fl_rectf(scrollbar.x(), hscrollbar.y(), scrollbar.w(), hscrollbar.h());
-    }
-  }
-  update_child(scrollbar);
-  update_child(hscrollbar);
-}
-
-void Fl_Scroll::layout() {
-  fix_scrollbar_order();
-  // move all the children:
-  Fl_Widget*const* a = array();
-  int dx=ox()-x();
-  int dy=oy()-y();
-  for (int i=children()-2; i--;) {
-    Fl_Widget* o = *a++;
-    o->position(o->x()+dx, o->y()+dy);
-    o->layout();
-  }
-  set_old_size();Fl_Widget::layout();
+  hscrollbar.value(xposition_ = (X-l), W, 0, r-l);
+  set_old_size();
+  Fl_Widget::layout();
+  damage(FL_DAMAGE_SCROLL);
 }
 
 void Fl_Scroll::position(int X, int Y) {
@@ -196,13 +168,9 @@ void Fl_Scroll::position(int X, int Y) {
   if (!dx && !dy) return;
   xposition_ = X;
   yposition_ = Y;
-  Fl_Widget*const* a = array();
-  for (int i=children(); i--;) {
-    Fl_Widget* o = *a++;
-    if (o == &hscrollbar || o == &scrollbar) continue;
-    o->position(o->x()+dx, o->y()+dy);
-  }
-  damage(FL_DAMAGE_SCROLL);
+  layoutdx += dx;
+  layoutdy += dy;
+  relayout();
 }
 
 void Fl_Scroll::hscrollbar_cb(Fl_Widget* o, void*) {
@@ -218,22 +186,48 @@ void Fl_Scroll::scrollbar_cb(Fl_Widget* o, void*) {
 #define SLIDER_WIDTH 17
 
 Fl_Scroll::Fl_Scroll(int X,int Y,int W,int H,const char* L)
-  : Fl_Group(X,Y,W,H,L), 
+  : Fl_Group(X,Y,W,H,L), endgroup(0),
     scrollbar(X+W-SLIDER_WIDTH,Y,SLIDER_WIDTH,H-SLIDER_WIDTH),
     hscrollbar(X,Y+H-SLIDER_WIDTH,W-SLIDER_WIDTH,SLIDER_WIDTH) {
   type(BOTH);
   xposition_ = 0;
   yposition_ = 0;
+  scrolldx = scrolldy = layoutdx = layoutdy = 0;
+  hscrollbar.parent(this);
   hscrollbar.type(FL_HORIZONTAL);
   hscrollbar.callback(hscrollbar_cb);
+  scrollbar.parent(this);
   scrollbar.callback(scrollbar_cb);
+  Fl_Group::current(this);
 }
 
 int Fl_Scroll::handle(int event) {
-  fix_scrollbar_order();
+  // Auto-scroll to show the widget with focus when focus changes:
+  if (event == FL_FOCUS) {
+    if (contains(Fl::focus())) {
+      // indicates that the focus changed to a different child, scroll
+      // to show it:
+      Fl_Widget* w = Fl::focus();
+      int X,Y,R,B; bbox(X,Y,R,B); R += X; B += Y;
+      int x = w->x();
+      int r = x+w->w();
+      int dx = 0;
+      if (x < X) {dx = X-x; if (r+dx > R) {dx = R-r; if (dx < 0) dx = 0;}}
+      else if (r > R) {dx = R-r; if (x+dx < X) {dx = X-x; if (dx > 0) dx = 0;}}
+      int y = w->y();
+      int b = y+w->h();
+      int dy = 0;
+      if (y < Y) {dy = Y-y; if (b+dy > B) {dy = B-b; if (dy < 0) dy = 0;}}
+      else if (b > B) {dy = B-b; if (y+dy < Y) {dy = Y-y; if (dy > 0) dy = 0;}}
+      position(xposition_-dx+layoutdx, yposition_-dy+layoutdy);
+    }
+  } else {
+    if (send(event,scrollbar)) return 1;
+    if (send(event,hscrollbar)) return 1;
+  }
   return Fl_Group::handle(event);
 }
 
 //
-// End of "$Id: Fl_Scroll.cxx,v 1.18 2000/03/20 08:40:24 bill Exp $".
+// End of "$Id: Fl_Scroll.cxx,v 1.19 2000/04/10 06:45:44 bill Exp $".
 //

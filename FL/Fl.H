@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.44 2000/03/03 18:59:05 carl Exp $"
+// "$Id: Fl.H,v 1.45 2000/04/10 06:45:40 bill Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -137,17 +137,21 @@ public:
   static int compose(int &del);
   static void compose_reset() {compose_state = 0;}
   static int event_inside(int,int,int,int);
-  static int event_inside(const Fl_Widget*);
+  static int event_inside(const Fl_Widget&);
+  static int event_inside(const Fl_Widget* w) {return event_inside(*w);}
 
   // event destinations:
   static int handle(int, Fl_Window*);
+  static void add_handler(int (*h)(int));
   static Fl_Widget* belowmouse() {return belowmouse_;}
   static void belowmouse(Fl_Widget*);
+  static void belowmouse(Fl_Widget& w) {belowmouse(&w);}
   static Fl_Widget* pushed()	{return pushed_;}
   static void pushed(Fl_Widget*);
+  static void pushed(Fl_Widget& w) {pushed(&w);}
   static Fl_Widget* focus()	{return focus_;}
   static void focus(Fl_Widget*);
-  static void add_handler(int (*h)(int));
+  static void focus(Fl_Widget& w) {focus(&w);}
 
   // cut/paste:
   static Fl_Widget* selection_owner() {return selection_owner_;}
@@ -225,5 +229,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.44 2000/03/03 18:59:05 carl Exp $".
+// End of "$Id: Fl.H,v 1.45 2000/04/10 06:45:40 bill Exp $".
 //

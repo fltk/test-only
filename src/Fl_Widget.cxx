@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.54 2000/04/03 17:09:21 bill Exp $"
+// "$Id: Fl_Widget.cxx,v 1.55 2000/04/10 06:45:45 bill Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -25,7 +25,9 @@
 
 #include <FL/Fl.H>
 #include <FL/Fl_Widget.H>
-#include <FL/Fl_Group.H>
+#include <FL/Fl_Window.H>
+#include <FL/fl_draw.H>
+#include <FL/x.H>
 
 ////////////////////////////////////////////////////////////////
 // Duplicate the Forms queue for all callbacks from widgets.  The
@@ -63,8 +65,6 @@ Fl_Widget *Fl::readqueue() {
     
 ////////////////////////////////////////////////////////////////
 
-int Fl_Widget::handle(int e) { return (e == FL_ENTER) ? 1 : 0; }
-
 Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
   style_	= default_style;
   parent_	= 0;
@@ -82,6 +82,27 @@ Fl_Widget::Fl_Widget(int X, int Y, int W, int H, const char* L) {
   if (Fl_Group::current()) Fl_Group::current()->add(this);
 }
 
+Fl_Widget::~Fl_Widget() {
+#if 0
+  // This would be the logical thing to do, but it crashes composite
+  // objects, and greatly slows down the destruction of a tree:
+  if (parent_) parent_->remove(this);
+#else
+  // Instead this is used to prevent double destruction when the parent
+  // group is destroyed.  If you don't plan to destroy the group
+  // immediately, you better do the remove() yourself!
+  parent_ = 0;
+#endif
+  throw_focus();
+  if (style_->dynamic()) {
+    // When a widget is destroyed it can destroy unique styles:
+    delete (Fl_Style*)style_; // cast away const
+  }
+}
+
+////////////////////////////////////////////////////////////////
+// Damage:
+
 void Fl_Widget::layout() {
   damage_ &= ~FL_DAMAGE_LAYOUT;
 }
@@ -89,27 +110,15 @@ void Fl_Widget::layout() {
 int Fl_Widget::resize(int X, int Y, int W, int H) {
   if (x_ == X && y_ == Y && w_ == W && h_ == H) return 0;
   x_ = X; y_ = Y; w_ = W; h_ = H;
+  relayout();
+  return 1;
+}
+
+void Fl_Widget::relayout() {
   damage_ |= FL_DAMAGE_LAYOUT;
   for (Fl_Widget* w = this->parent(); w; w = w->parent())
     w->damage_ |= FL_DAMAGE_LAYOUT;
   Fl::damage(FL_DAMAGE_LAYOUT);
-  return 1;
-}
-
-int Fl_Widget::take_focus() {
-  if (focused()) return 1;
-  // if (!takesevents()) return 0; // we can assumme this is true?
-  Fl_Widget* child = this;
-  for (Fl_Group* group = parent(); ; group = group->parent()) {
-    if (!group) break;
-    if (group->is_group()) group->focus(child);
-    if (!group->takesevents()) return 0;
-    child = group;
-  }
-  if (!Fl::focus()) return 0;
-  handle(FL_FOCUS);
-  if (!contains(Fl::focus())) Fl::focus(this);
-  return 1;
 }
 
 void Fl_Widget::damage_label() {
@@ -119,6 +128,94 @@ void Fl_Widget::damage_label() {
   // outside label requires a marker flag and damage to parent:
   damage_ |= FL_DAMAGE_CHILD_LABEL;
   if (parent()) parent()->damage(FL_DAMAGE_CHILD);
+}
+
+void Fl_Widget::redraw() {
+  damage(FL_DAMAGE_ALL);
+}
+
+void Fl_Widget::damage(uchar flags) {
+  if (is_window()) {
+    // damage entire window by deleting the region:
+    Fl_X* i = Fl_X::i((Fl_Window*)this);
+    if (!i) return; // window not mapped, so ignore it
+    if (i->region) {XDestroyRegion(i->region); i->region = 0;}
+    damage_ |= flags;
+    Fl::damage(FL_DAMAGE_CHILD);
+  } else {
+    // damage only the rectangle covered by a child widget:
+    damage(flags, x(), y(), w(), h());
+  }
+}
+
+void Fl_Widget::damage(uchar flags, int X, int Y, int W, int H) {
+  Fl_Widget* window = this;
+  // mark all parent widgets between this and window with FL_DAMAGE_CHILD:
+  while (!window->is_window()) {
+    window->damage_ |= flags;
+    window = window->parent();
+    if (!window) return;
+    flags = FL_DAMAGE_CHILD;
+  }
+  Fl_X* i = Fl_X::i((Fl_Window*)window);
+  if (!i) return; // window not mapped, so ignore it
+
+  if (X<=0 && Y<=0 && W>=window->w() && H>=window->h()) {
+    // if damage covers entire window delete region:
+    window->damage(flags);
+    return;
+  }
+
+  // clip the damage to the window and quit if none:
+  if (X < 0) {W += X; X = 0;}
+  if (Y < 0) {H += Y; Y = 0;}
+  if (W > window->w()-X) W = window->w()-X;
+  if (H > window->h()-Y) H = window->h()-Y;
+  if (W <= 0 || H <= 0) return;
+
+  if (window->damage() & ~FL_DAMAGE_LAYOUT) {
+    // if we already have damage we must merge with existing region:
+    if (i->region) {
+#ifndef WIN32
+      XRectangle R;
+      R.x = X; R.y = Y; R.width = W; R.height = H;
+      XUnionRectWithRegion(&R, i->region, i->region);
+#else
+      Region R = XRectangleRegion(X, Y, W, H);
+      CombineRgn(i->region, i->region, R, RGN_OR);
+      XDestroyRegion(R);
+#endif
+    }
+  } else {
+    // create a new region:
+    if (i->region) XDestroyRegion(i->region);
+    i->region = XRectangleRegion(X,Y,W,H);
+  }
+  window->damage_ |= flags;
+  Fl::damage(FL_DAMAGE_CHILD);
+}
+
+////////////////////////////////////////////////////////////////
+// Events:
+
+int Fl_Widget::handle(int e) {
+  if (e == FL_ENTER) return 1; // needed for tooltips
+  return 0;
+}
+
+int Fl_Widget::take_focus() {
+  if (focused()) return 1;
+  // if (!takesevents()) return 0; // we can assumme this is true?
+  Fl_Widget* child = this;
+  for (Fl_Group* group = parent(); ; group = group->parent()) {
+    if (!group) break;
+    if (!group->takesevents()) return 0;
+    child = group;
+  }
+  if (!Fl::focus()) return 0;
+  handle(FL_FOCUS);
+  if (!contains(Fl::focus())) Fl::focus(this);
+  return 1;
 }
 
 void Fl_Widget::activate() {
@@ -191,29 +288,8 @@ int Fl_Widget::focused() const {return this == Fl::focus();}
 
 int Fl_Widget::belowmouse() const {return this == Fl::belowmouse();}
 
-// When a widget is destroyed it can destroy unique styles:
-
-Fl_Widget::~Fl_Widget() {
-#if 0
-  // this causes the color chooser (and perhaps other composite objects)
-  // to crash, and also slows down destruction.
-  if (parent_) parent_->remove(this);
-#else
-  // the original fltk hack, to prevent double destruction if the parent
-  // group is destroyed.  Note that if you don't plan to destroy the group
-  // you better do the remove() yourself!
-  parent_ = 0;
-#endif
-  throw_focus();
-  if (style_->dynamic()) {
-    Fl_Style* s = (Fl_Style*)style_; // cast away const
-    delete s;
-  }
-}
-
 ////////////////////////////////////////////////////////////////
-
-#include <FL/fl_draw.H>
+// Drawing methods (designed to be called from a draw() implementation):
 
 // Draw the surrounding box of a normal widget:
 void Fl_Widget::draw_box() const {
@@ -295,5 +371,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.54 2000/04/03 17:09:21 bill Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.55 2000/04/10 06:45:45 bill Exp $".
 //

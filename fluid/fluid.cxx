@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.36 2000/02/14 11:32:42 bill Exp $"
+// "$Id: fluid.cxx,v 1.37 2000/04/10 06:45:42 bill Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -65,7 +65,7 @@ const char *copyright =
 #include <ctype.h>
 #include <errno.h>
 
-#if defined(WIN32) && !defined(CYGNUS)
+#if defined(WIN32) && !defined(__CYGWIN__)
 # include <direct.h>
 #else
 # include <unistd.h>
@@ -500,5 +500,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.36 2000/02/14 11:32:42 bill Exp $".
+// End of "$Id: fluid.cxx,v 1.37 2000/04/10 06:45:42 bill Exp $".
 //

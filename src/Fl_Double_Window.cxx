@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Double_Window.cxx,v 1.17 1999/09/14 07:17:21 bill Exp $"
+// "$Id: Fl_Double_Window.cxx,v 1.18 2000/04/10 06:45:44 bill Exp $"
 //
 // Double-buffered window code for the Fast Light Tool Kit (FLTK).
 //
@@ -110,7 +110,7 @@ void Fl_Double_Window::flush(int eraseoverlay) {
     else
 #endif
       i->other_xid = fl_create_offscreen(w(), h());
-    clear_damage(FL_DAMAGE_ALL);
+    set_damage(FL_DAMAGE_ALL);
   }
 #if USE_XDBE
   if (use_xdbe) {
@@ -118,7 +118,7 @@ void Fl_Double_Window::flush(int eraseoverlay) {
     int copy = (i->region || eraseoverlay);
     if (i->backbuffer_bad) { // make sure we do a complete redraw...
       if (i->region) {XDestroyRegion(i->region); i->region = 0;}
-      clear_damage(FL_DAMAGE_ALL);
+      set_damage(FL_DAMAGE_ALL);
     }
     if (damage()) {
       fl_clip_region(i->region); i->region = 0;
@@ -195,5 +195,5 @@ Fl_Double_Window::~Fl_Double_Window() {
 }
 
 //
-// End of "$Id: Fl_Double_Window.cxx,v 1.17 1999/09/14 07:17:21 bill Exp $".
+// End of "$Id: Fl_Double_Window.cxx,v 1.18 2000/04/10 06:45:44 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_motif.cxx,v 1.2 2000/04/03 17:09:24 bill Exp $"
+// "$Id: fl_motif.cxx,v 1.3 2000/04/10 06:45:47 bill Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -64,6 +64,8 @@ thin_motif_always_up_box("motif up","VVHHVVHH");
 static const Fl_Highlight_Box
 thin_motif_menu_box("motif thin menu", &thin_motif_always_up_box);
 
+static Fl_Style* scrollbarstyle;
+
 static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color fc,
                 Fl_Flags f, Fl_Boxtype box)
 {
@@ -101,7 +103,16 @@ static void motif_glyph(int t, int x, int y, int w, int h, Fl_Color bc, Fl_Color
     case FL_GLYPH_DOWN: {
       if (h > w) {y += (h-w)/2; h = w;}
       else if (w > h) {x += (w-h)/2; w = h;}
-      if (box == FL_NO_BOX) { x += 4; y += 4; w -= 8; h -= 8; } // menu fudge factor
+      if (box == FL_NO_BOX) {
+	// menu fudge factor
+	if (w > 10) {x += (w-10)/2; y += (w-10)/2; w = h = 10;}
+//	x += 2; y += 2; w -= 4; h -= 4;
+//	x += 4; y += 4; w -= 8; h -= 8;
+      } else if (scrollbarstyle) {
+	// erase area behind scrollbars arrows
+	fl_color(scrollbarstyle->window_color);
+	fl_rectf(x,y,w,h);
+      }
       Fl_Color d1, d2, l1, l2;
       if (f&FL_VALUE) {
         d1 = FL_LIGHT2; d2 = FL_LIGHT2; l1 = FL_DARK3; l2 = FL_DARK3;
@@ -190,6 +201,7 @@ int fl_motif()
   }
 
   if ((s = Fl_Style::find("scrollbar"))) {
+    scrollbarstyle = s;
     s->window_box = &thin_motif_down_box;
     s->window_color = FL_DARK1;
   }
@@ -229,5 +241,5 @@ int fl_motif()
 }
 
 //
-// End of "$Id: fl_motif.cxx,v 1.2 2000/04/03 17:09:24 bill Exp $"
+// End of "$Id: fl_motif.cxx,v 1.3 2000/04/10 06:45:47 bill Exp $"
 //

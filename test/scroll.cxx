@@ -1,5 +1,5 @@
 //
-// "$Id: scroll.cxx,v 1.11 2000/01/16 07:44:44 robertk Exp $"
+// "$Id: scroll.cxx,v 1.12 2000/04/10 06:45:47 bill Exp $"
 //
 // Fl_Scroll test program for the Fast Light Tool Kit (FLTK).
 //
@@ -66,11 +66,13 @@ Fl_Scroll* thescroll;
 
 void box_cb(Fl_Widget* o, void*) {
   thescroll->box(((Fl_Button*)o)->value() ? (Fl_Boxtype)FL_DOWN_BOX : FL_NO_BOX);
+  thescroll->relayout();
   thescroll->redraw();
 }
 
 void type_cb(Fl_Widget*, void* v) {
   thescroll->type((long)v);
+  thescroll->relayout();
   thescroll->redraw();
 }
 
@@ -88,6 +90,7 @@ Fl_Menu_Item choices[] = {
 void align_cb(Fl_Widget*, void* v) {
   thescroll->scrollbar.clear_flag(FL_ALIGN_MASK);
   thescroll->scrollbar.set_flag((long)v);
+  thescroll->relayout();
   thescroll->redraw();
 }
 
@@ -144,5 +147,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: scroll.cxx,v 1.11 2000/01/16 07:44:44 robertk Exp $".
+// End of "$Id: scroll.cxx,v 1.12 2000/04/10 06:45:47 bill Exp $".
 //

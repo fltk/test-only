@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.H,v 1.21 2000/02/14 11:32:34 bill Exp $"
+// "$Id: Fl_Group.H,v 1.22 2000/04/10 06:45:40 bill Exp $"
 //
 // Group header file for the Fast Light Tool Kit (FLTK).
 //
@@ -53,7 +53,7 @@ protected:
   int ow() const {return ow_;}
   int oh() const {return oh_;}
   void set_old_size() {ox_=x();oy_=y();ow_=w();oh_=h();}
-  int handle_i(int, int);
+  int send(int, Fl_Widget&);
 
 public:
 
@@ -96,6 +96,7 @@ public:
   void focus(int i) {focus_ = i;}
   void focus(Fl_Widget* w) {focus(find(w));}
   int focus() const {return focus_;}
+  static int navigation_key();
 
   // back compatability function:
   Fl_Widget* & _ddfdesign_kludge() {return resizable_;}
@@ -107,10 +108,11 @@ public:
 class FL_API Fl_End {
 public:
   Fl_End() {Fl_Group::current()->end();}
+  Fl_End(Fl_Group* g) {Fl_Group::current(g);}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Group.H,v 1.21 2000/02/14 11:32:34 bill Exp $".
+// End of "$Id: Fl_Group.H,v 1.22 2000/04/10 06:45:40 bill Exp $".
 //

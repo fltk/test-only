@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.22 2000/04/03 17:09:20 bill Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.23 2000/04/10 06:45:45 bill Exp $"
 //
 // Value input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,22 +32,24 @@
 #include <FL/Fl_Group.H>
 #include <stdlib.h>
 
-//static Fl_Value_Input* hack_o_rama;
-
 void Fl_Value_Input::input_cb(Fl_Widget*, void* v) {
   Fl_Value_Input& t = *(Fl_Value_Input*)v;
   double nv;
   if (t.step()>=1.0) nv = strtol(t.input.value(), 0, 0);
   else nv = strtod(t.input.value(), 0);
-  //hack_o_rama = this;
-  t.handle_push();
-  t.handle_drag(nv);
-  t.handle_release();
-  //hack_o_rama = 0;
+  if (nv != t.value() || t.when() & FL_WHEN_NOT_CHANGED) {
+    t.set_value(nv);
+    if (t.when()) {
+      t.clear_changed();
+      t.do_callback();
+    } else {
+      t.set_changed();
+    }
+  }
 }
 
 void Fl_Value_Input::draw() {
-  if (damage()&~FL_DAMAGE_CHILD) input.clear_damage(FL_DAMAGE_ALL);
+  if (damage()&~FL_DAMAGE_CHILD) input.set_damage(FL_DAMAGE_ALL);
   input.copy_style(style()); // force it to use this style
   input.draw();
   input.clear_damage();
@@ -61,8 +63,7 @@ void Fl_Value_Input::layout() {
 }
 
 void Fl_Value_Input::value_damage() {
-//  if (hack_o_rama == this) {
-  // We only redraw the text if the numeric value is different..
+  // Only redraw the text if the numeric value is different..
   if (input.value()[0]) {
     double nv;
     if (step()>=1.0) nv = strtol(input.value(), 0, 0);
@@ -139,5 +140,5 @@ Fl_Value_Input::~Fl_Value_Input() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.22 2000/04/03 17:09:20 bill Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.23 2000/04/10 06:45:45 bill Exp $".
 //

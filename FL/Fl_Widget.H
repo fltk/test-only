@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.45 2000/04/03 17:09:12 bill Exp $"
+// "$Id: Fl_Widget.H,v 1.46 2000/04/10 06:45:40 bill Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -159,8 +159,10 @@ public:
   void	throw_focus()		;
 
   void	redraw()		;
+  void  relayout()		;
   uchar	damage() const		{return damage_;}
-  void	clear_damage(uchar c=0)	{damage_ = c;}
+  void	set_damage(uchar c)	{damage_ = c;}
+  void  clear_damage()		{damage_ = 0;}
   void	damage(uchar c)		;
   void	damage(uchar c,int,int,int,int);
   void	damage_label()		;
@@ -282,5 +284,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.45 2000/04/03 17:09:12 bill Exp $".
+// End of "$Id: Fl_Widget.H,v 1.46 2000/04/10 06:45:40 bill Exp $".
 //

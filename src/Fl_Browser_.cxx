@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.44 2000/04/03 17:09:17 bill Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.45 2000/04/10 06:45:44 bill Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -254,7 +254,7 @@ J1:
     top_ = item_first(); real_position_ = offset_ = 0;
     if (scrollbar.visible()) {
       scrollbar.clear_visible();
-      clear_damage(damage()|FL_DAMAGE_SCROLL);
+      set_damage(damage()|FL_DAMAGE_SCROLL);
     }
   }
 
@@ -269,7 +269,7 @@ J1:
     real_hposition_ = 0;
     if (hscrollbar.visible()) {
       hscrollbar.clear_visible();
-      clear_damage(damage()|FL_DAMAGE_SCROLL);
+      set_damage(damage()|FL_DAMAGE_SCROLL);
     }
   }
 
@@ -344,7 +344,7 @@ J1:
 	Y, scrollbar_width_, H);
     scrollbar.value(position_, H, 0, full_height_);
     scrollbar.linesize(dy);
-    if (drawsquare) scrollbar.clear_damage(FL_DAMAGE_ALL);
+    if (drawsquare) scrollbar.set_damage(FL_DAMAGE_ALL);
     update_child(scrollbar);
   }
   if (hscrollbar.visible()) {
@@ -353,7 +353,7 @@ J1:
 	W, scrollbar_width_);
     hscrollbar.value(hposition_, W, 0, full_width_);
     hscrollbar.linesize(dy);
-    if (drawsquare) hscrollbar.clear_damage(FL_DAMAGE_ALL);
+    if (drawsquare) hscrollbar.set_damage(FL_DAMAGE_ALL);
     update_child(hscrollbar);
   }
 
@@ -541,10 +541,10 @@ int Fl_Browser_::handle(int event) {
     return 0;
 
   case FL_SHORTCUT:
-    return handle_i(event,1);
+    return 0;
 
   case FL_PUSH:
-    if (!Fl::event_inside(X, Y, W, H)) return handle_i(event,1);
+    if (!Fl::event_inside(X, Y, W, H)) return Fl_Group::handle(event);
     take_focus();
     my = py = Fl::event_y();
     change = 0;
@@ -706,5 +706,5 @@ Fl_Browser_::Fl_Browser_(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.44 2000/04/03 17:09:17 bill Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.45 2000/04/10 06:45:44 bill Exp $".
 //

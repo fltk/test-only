@@ -1,5 +1,5 @@
 //
-// "$Id: fl_scroll_area.cxx,v 1.4 1999/01/07 19:17:42 mike Exp $"
+// "$Id: fl_scroll_area.cxx,v 1.5 2000/04/10 06:45:46 bill Exp $"
 //
 // Scrolling routines for the Fast Light Tool Kit (FLTK).
 //
@@ -70,11 +70,11 @@ void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
 #ifdef WIN32
   BitBlt(fl_gc, dest_x, dest_y, src_w, src_h, fl_gc, src_x, src_y,SRCCOPY);
   // NYI: need to redraw areas that the source of BitBlt was bad due to
-  // overlapped windows, probably similar to X version:
+  // overlapped windows, somehow similar to what X does.
 #else
   XCopyArea(fl_display, fl_window, fl_window, fl_gc,
 	    src_x, src_y, src_w, src_h, dest_x, dest_y);
-  // we have to sync the display and get the GraphicsExpose events! (sigh)
+// Synchronous update by waiting for graphics expose events:
   for (;;) {
     XEvent e; XWindowEvent(fl_display, fl_window, ExposureMask, &e);
     if (e.type == NoExpose) break;
@@ -89,5 +89,5 @@ void fl_scroll(int X, int Y, int W, int H, int dx, int dy,
 }
 
 //
-// End of "$Id: fl_scroll_area.cxx,v 1.4 1999/01/07 19:17:42 mike Exp $".
+// End of "$Id: fl_scroll_area.cxx,v 1.5 2000/04/10 06:45:46 bill Exp $".
 //

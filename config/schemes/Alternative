@@ -83,20 +83,19 @@ FLTK version = 2.0.0                              # minimum FLTK version needed
     off color = black                             # color of light when not selected
 
   [widgets/slider]                                # slider attributes
-    selection color = puke green                  # color of the slider button when pushed
+    color = puke green                  # color of the slider button when pushed
     selection text color = white                  # color of slider button glyph (if any) when pushed
-    box = down                                    # boxtype of the slider background area
+    window box = down                                    # boxtype of the slider background area
 
   [widgets/value slider]                          # slider attributes
-    selection color = puke green                  # color of the slider button when pushed
+    color = puke green                  # color of the slider button when pushed
     selection text color = white                  # color of slider button glyph (if any) when pushed
-    box = down                                    # boxtype of the slider background area
+    window box = down
 
   [widgets/scrollbar]                             # scroll bar attributes
-    selection color = light1                      # color of the scroll bar buttons when pushed
     selection text color = white                  # color of scroll bar button glyphs (if any) when pushed
-    color = scroll bar gray                       # color of scroll bar background area
-    box = down                                    # boxtype of the scroll bar background area
+    window color = scroll bar gray                       # color of scroll bar background area
+    window box = down
 
   [widgets/input]                                 # input widget attributes
     box = down                                    # boxtype of the input area

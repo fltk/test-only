@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.H,v 1.10 1999/12/15 08:30:51 bill Exp $"
+// "$Id: Fl_Valuator.H,v 1.11 2000/04/10 06:45:40 bill Exp $"
 //
 // Valuator header file for the Fast Light Tool Kit (FLTK).
 //
@@ -82,6 +82,7 @@ protected:
   double softclamp(double) const;
 
   virtual void value_damage(); // callback whenever value changes
+  void set_value(double v) {value_ = v;} // change w/o doing value_damage
 
 private:
 
@@ -98,5 +99,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Valuator.H,v 1.10 1999/12/15 08:30:51 bill Exp $".
+// End of "$Id: Fl_Valuator.H,v 1.11 2000/04/10 06:45:40 bill Exp $".
 //
