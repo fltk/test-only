@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.cxx,v 1.15 2001/07/24 16:25:08 clip Exp $"
+// "$Id: Fl_Gl_Choice.cxx,v 1.16 2001/07/29 22:07:03 spitzak Exp $"
 //
 // OpenGL visual selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -39,7 +39,7 @@ Fl_Gl_Choice* Fl_Gl_Choice::find(int mode) {
   
   for (g = first; g; g = g->next) if (g->mode == mode) return g;
 
-#ifdef WIN32
+#ifdef _WIN32
 
   // Replacement for ChoosePixelFormat() that finds one with an overlay
   // if possible:
@@ -131,7 +131,7 @@ Fl_Gl_Choice* Fl_Gl_Choice::find(int mode) {
   g->next = first;
   first = g;
 
-#ifdef WIN32
+#ifdef _WIN32
   g->pixelFormat = pixelFormat;
   g->pfd = chosen_pfd;
 #else
@@ -151,7 +151,7 @@ Fl_Gl_Choice* Fl_Gl_Choice::find(int mode) {
 
 static GLContext first_context;
 
-#ifdef WIN32
+#ifdef _WIN32
 
 GLContext fl_create_gl_context(const Fl_Window* window, const Fl_Gl_Choice* g, int layer) {
   Fl_X* i = Fl_X::i(window);
@@ -193,7 +193,7 @@ void fl_set_gl_context(const Fl_Window* w, GLContext context) {
   if (context != cached_context || w != cached_window) {
     cached_context = context;
     cached_window = w;
-#ifdef WIN32
+#ifdef _WIN32
     wglMakeCurrent(Fl_X::i(w)->private_dc, context);
 #else
     glXMakeCurrent(fl_display, fl_xid(w), context);
@@ -204,7 +204,7 @@ void fl_set_gl_context(const Fl_Window* w, GLContext context) {
 void fl_no_gl_context() {
   cached_context = 0;
   cached_window = 0;
-#ifdef WIN32
+#ifdef _WIN32
   wglMakeCurrent(0, 0);
 #else
   glXMakeCurrent(fl_display, 0, 0);
@@ -214,7 +214,7 @@ void fl_no_gl_context() {
 void fl_delete_gl_context(GLContext context) {
   if (cached_context == context) fl_no_gl_context();
   if (context != first_context) {
-#ifdef WIN32
+#ifdef _WIN32
     wglDeleteContext(context);
 #else
     glXDestroyContext(fl_display, context);
@@ -225,5 +225,5 @@ void fl_delete_gl_context(GLContext context) {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.cxx,v 1.15 2001/07/24 16:25:08 clip Exp $".
+// End of "$Id: Fl_Gl_Choice.cxx,v 1.16 2001/07/29 22:07:03 spitzak Exp $".
 //

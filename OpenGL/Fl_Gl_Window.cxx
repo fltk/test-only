@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.28 2001/07/24 16:25:08 clip Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.29 2001/07/29 22:07:03 spitzak Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -68,7 +68,7 @@ void Fl_Gl_Window::create() {
     gl_choice = Fl_Gl_Choice::find(mode_);
     if (!gl_choice) {Fl::error("Insufficient GL support"); return;}
   }
-#ifndef WIN32
+#ifndef _WIN32
   Fl_X::create(this, gl_choice->vis, gl_choice->colormap, -1);
   //if (overlay && overlay != this) ((Fl_Gl_Window*)overlay)->show();
 #else
@@ -78,7 +78,7 @@ void Fl_Gl_Window::create() {
 
 void Fl_Gl_Window::invalidate() {
   valid(0);
-#ifndef WIN32
+#ifndef _WIN32
   if (overlay) ((Fl_Gl_Window*)overlay)->valid(0);
 #endif
 }
@@ -105,7 +105,7 @@ void Fl_Gl_Window::make_current() {
     valid(0);
   }
   fl_set_gl_context(this, context_);
-#if defined(WIN32) && USE_COLORMAP
+#if defined(_WIN32) && USE_COLORMAP
   if (fl_palette) {
     fl_window = fl_xid(this); fl_gc = GetDC(fl_window);
     SelectPalette(fl_gc, fl_palette, FALSE);
@@ -131,7 +131,7 @@ void Fl_Gl_Window::ortho() {
 }
 
 void Fl_Gl_Window::swap_buffers() {
-#ifdef WIN32
+#ifdef _WIN32
 #if HAVE_GL_OVERLAY
   // Do not swap the overlay, to match GLX:
   wglSwapLayerBuffers(Fl_X::i(this)->private_dc, WGL_SWAP_MAIN_PLANE);
@@ -148,7 +148,7 @@ void Fl_Gl_Window::draw_swap() {
   if (!(mode_ & FL_NO_AUTO_SWAP)) swap_buffers();
 }
 
-#if HAVE_GL_OVERLAY && defined(WIN32)
+#if HAVE_GL_OVERLAY && defined(_WIN32)
 int fl_overlay_depth = 0;
 bool fl_overlay;
 #endif
@@ -158,7 +158,7 @@ bool fl_overlay;
 void Fl_Gl_Window::flush() {
   uchar save_valid = valid_;
 
-#if HAVE_GL_OVERLAY && defined(WIN32)
+#if HAVE_GL_OVERLAY && defined(_WIN32)
 
 #if SGI320_BUG
   bool fixcursor = false; // for fixing the SGI 320 bug
@@ -278,7 +278,7 @@ void Fl_Gl_Window::flush() {
     glFlush();
   }
 
-#if HAVE_GL_OVERLAY && defined(WIN32) && SGI320_BUG
+#if HAVE_GL_OVERLAY && defined(_WIN32) && SGI320_BUG
   if (fixcursor) SetCursor(Fl_X::i(this)->cursor);
 #endif
   valid(1);
@@ -286,7 +286,7 @@ void Fl_Gl_Window::flush() {
 
 void Fl_Gl_Window::layout() {
   valid(0);
-#ifndef WIN32
+#ifndef _WIN32
   if (!resizable() && overlay && overlay != this)
     ((Fl_Gl_Window*)overlay)->resize(0,0,w(),h());
 #endif
@@ -304,7 +304,7 @@ void Fl_Gl_Window::destroy() {
   context(0);
 #if HAVE_GL_OVERLAY
   if (overlay && overlay != this) {
-#ifdef WIN32
+#ifdef _WIN32
     fl_delete_gl_context((GLContext)overlay);
 #endif
     overlay = 0;
@@ -331,5 +331,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.28 2001/07/24 16:25:08 clip Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.29 2001/07/29 22:07:03 spitzak Exp $".
 //

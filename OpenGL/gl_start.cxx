@@ -1,5 +1,5 @@
 //
-// "$Id: gl_start.cxx,v 1.10 2001/07/23 09:50:03 spitzak Exp $"
+// "$Id: gl_start.cxx,v 1.11 2001/07/29 22:07:03 spitzak Exp $"
 //
 // OpenGL context routines for the Fast Light Tool Kit (FLTK).
 //
@@ -43,14 +43,14 @@
 #include "Fl_Gl_Choice.h"
 #include <fltk/fl_draw.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 static Fl_Gl_Choice* gl_choice;
 #endif
 
 int fl_gl_visual(int mode) {
   Fl_Gl_Choice *c = Fl_Gl_Choice::find(mode);
   if (!c) return 0;
-#ifdef WIN32
+#ifdef _WIN32
   gl_choice = c;
 #else
   fl_visual = c->vis;
@@ -69,7 +69,7 @@ Region XRectangleRegion(int x, int y, int w, int h); // in fl_rect.C
 
 void gl_start() {
   if (!context) {
-#ifdef WIN32
+#ifdef _WIN32
     if (!gl_choice) fl_gl_visual(0);
     context = fl_create_gl_context(Fl_Window::current(), gl_choice);
 #else
@@ -77,7 +77,7 @@ void gl_start() {
 #endif
   }
   fl_set_gl_context(Fl_Window::current(), context);
-#ifndef WIN32
+#ifndef _WIN32
   glXWaitX();
 #endif
   if (pw != Fl_Window::current()->w() || ph != Fl_Window::current()->h()) {
@@ -104,7 +104,7 @@ void gl_start() {
 
 void gl_finish() {
   glFlush();
-#ifndef WIN32
+#ifndef _WIN32
   glXWaitGL();
 #endif
 }
@@ -112,5 +112,5 @@ void gl_finish() {
 #endif
 
 //
-// End of "$Id: gl_start.cxx,v 1.10 2001/07/23 09:50:03 spitzak Exp $".
+// End of "$Id: gl_start.cxx,v 1.11 2001/07/29 22:07:03 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Overlay.cxx,v 1.15 2001/07/24 07:48:23 spitzak Exp $"
+// "$Id: Fl_Gl_Overlay.cxx,v 1.16 2001/07/29 22:07:03 spitzak Exp $"
 //
 // OpenGL overlay code for the Fast Light Tool Kit (FLTK).
 //
@@ -54,7 +54,7 @@ void Fl_Gl_Window::make_overlay() {overlay = this;}
 // "faked" by drawing into the main layers.  This is indicated by
 // setting overlay == this.
 
-#ifndef WIN32
+#ifndef _WIN32
 ////////////////////////////////////////////////////////////////
 // X version
 
@@ -141,7 +141,7 @@ void Fl_Gl_Window::make_overlay() {
 
 #else
 ////////////////////////////////////////////////////////////////
-// WIN32 version:
+// _WIN32 version:
 
 //static COLORREF *palette;
 extern int fl_overlay_depth;
@@ -197,7 +197,7 @@ bool Fl_Gl_Window::can_do_overlay() {
 void Fl_Gl_Window::redraw_overlay() {
   if (!shown()) return;
   make_overlay();
-#ifndef WIN32
+#ifndef _WIN32
   if (overlay != this)
     ((Fl_Gl_Window*)overlay)->redraw();
   else
@@ -209,7 +209,7 @@ void Fl_Gl_Window::make_overlay_current() {
   make_overlay();
 #if HAVE_GL_OVERLAY
   if (overlay != this) {
-#ifdef WIN32
+#ifdef _WIN32
     fl_set_gl_context(this, (GLContext)overlay);
 #else
     ((Fl_Gl_Window*)overlay)->make_current();
@@ -221,7 +221,7 @@ void Fl_Gl_Window::make_overlay_current() {
 
 void Fl_Gl_Window::hide_overlay() {
 #if HAVE_GL_OVERLAY
-#ifdef WIN32
+#ifdef _WIN32
   // nothing needs to be done?  Or should it be erased?
 #else
   if (overlay && overlay!=this) ((Fl_Gl_Window*)overlay)->hide();
@@ -232,5 +232,5 @@ void Fl_Gl_Window::hide_overlay() {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Overlay.cxx,v 1.15 2001/07/24 07:48:23 spitzak Exp $".
+// End of "$Id: Fl_Gl_Overlay.cxx,v 1.16 2001/07/29 22:07:03 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.14 2001/07/23 09:50:03 spitzak Exp $"
+// "$Id: gl_draw.cxx,v 1.15 2001/07/29 22:07:03 spitzak Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -44,7 +44,7 @@ int gl_width(uchar c) {return fl_width(c);}
 void  gl_font(Fl_Font pFont, int size) {
   fl_font(pFont, size);
   if (!fl_fontsize->listbase) {
-#ifdef WIN32
+#ifdef _WIN32
     int base = fl_fontsize->metr.tmFirstChar;
     int size = fl_fontsize->metr.tmLastChar-base+1;
     HFONT oldFid = (HFONT)SelectObject(fl_gc, (HFONT)fl_fontsize->font);
@@ -129,14 +129,14 @@ void gl_rect(int x, int y, int w, int h) {
 
 #if HAVE_GL_OVERLAY
 extern bool fl_overlay;
-#ifdef WIN32
+#ifdef _WIN32
 extern int fl_overlay_depth;
 #endif
 #endif
 
 void gl_color(Fl_Color i) {
 #if HAVE_GL_OVERLAY
-#ifndef WIN32
+#ifndef _WIN32
   if (fl_overlay) {glIndexi(int(fl_xpixel(i))); return;}
 #else
   if (fl_overlay && fl_overlay_depth) {
@@ -169,5 +169,5 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.14 2001/07/23 09:50:03 spitzak Exp $".
+// End of "$Id: gl_draw.cxx,v 1.15 2001/07/29 22:07:03 spitzak Exp $".
 //
