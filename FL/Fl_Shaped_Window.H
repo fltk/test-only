@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shaped_Window.H,v 1.1 2000/06/03 05:32:17 carl Exp $"
+// "$Id: Fl_Shaped_Window.H,v 1.2 2000/06/11 01:16:21 carl Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -35,11 +35,11 @@ class FL_API Fl_Shaped_Window : public Fl_Double_Window {
       : Fl_Double_Window(W,H,l) { shape_ = 0; lw = lh = 0; }
     Fl_Shaped_Window(int X, int Y, int W, int H, const char *l = 0)
       : Fl_Double_Window(X,Y,W,H,l) { shape_ = 0; lw = lh = 0; }
-    virtual void draw();
     void shape(Fl_Bitmap* b) { shape_ = b; }
     void shape(Fl_Bitmap& b) { shape_ = &b; }
 
   protected:
+    virtual void draw();
     Fl_Bitmap* shape_;
     int lw, lh;
 };
@@ -48,5 +48,5 @@ class FL_API Fl_Shaped_Window : public Fl_Double_Window {
 #endif
 
 //
-// End of "$Id: Fl_Shaped_Window.H,v 1.1 2000/06/03 05:32:17 carl Exp $"
+// End of "$Id: Fl_Shaped_Window.H,v 1.2 2000/06/11 01:16:21 carl Exp $"
 //

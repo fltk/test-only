@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tile.H,v 1.9 1999/10/17 20:40:12 vincent Exp $"
+// "$Id: Fl_Tile.H,v 1.10 2000/06/11 01:16:21 carl Exp $"
 //
 // Tile header file for the Fast Light Tool Kit (FLTK).
 //
@@ -29,6 +29,7 @@
 #include "Fl_Group.H"
 
 class FL_API Fl_Tile : public Fl_Group {
+protected:
   void layout();
 public:
   int handle(int);
@@ -39,5 +40,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Tile.H,v 1.9 1999/10/17 20:40:12 vincent Exp $".
+// End of "$Id: Fl_Tile.H,v 1.10 2000/06/11 01:16:21 carl Exp $".
 //

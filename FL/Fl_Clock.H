@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.H,v 1.13 2000/01/10 06:31:00 bill Exp $"
+// "$Id: Fl_Clock.H,v 1.14 2000/06/11 01:16:20 carl Exp $"
 //
 // Clock header file for the Fast Light Tool Kit (FLTK).
 //
@@ -57,8 +57,8 @@ private:
 // a Fl_Clock displays the current time always by using a timeout:
 
 class FL_API Fl_Clock : public Fl_Clock_Output {
-  int handle(int);
 public:
+  int handle(int);
   void update();
   Fl_Clock(int x,int y,int w,int h, const char *l = 0);
   Fl_Clock(uchar t,int x,int y,int w,int h, const char *l);
@@ -68,5 +68,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Clock.H,v 1.13 2000/01/10 06:31:00 bill Exp $".
+// End of "$Id: Fl_Clock.H,v 1.14 2000/06/11 01:16:20 carl Exp $".
 //
