@@ -1,5 +1,5 @@
 //
-// "$Id: fl_xpm.cxx,v 1.15 2000/09/05 17:36:21 spitzak Exp $"
+// "$Id: fl_xpm.cxx,v 1.16 2001/05/15 14:05:39 robertk Exp $"
 //
 // XPM reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -113,6 +113,8 @@ static char** read(char *name, int oneline = 0) {
   fclose(f);
   data[i++] = 0; // null terminator
 
+  if(!data[0])
+    return 0;
   if (data == local_data) {
     data = (char**)malloc(i*sizeof(char*));
     memcpy(data, local_data, i*sizeof(char*));
@@ -180,5 +182,5 @@ void Fl_XPM_Image::read()
 }
 
 //
-// End of "$Id: fl_xpm.cxx,v 1.15 2000/09/05 17:36:21 spitzak Exp $"
+// End of "$Id: fl_xpm.cxx,v 1.16 2001/05/15 14:05:39 robertk Exp $"
 //
