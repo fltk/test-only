@@ -2214,3 +2214,9 @@ needed for window managers written with fltk.
 
 More errors in docs from Alexander Mai
 
+Checked in 4/15/02
+////////////////////////////////////////////////////////////////
+
+Deactivated windows work (they stop events from going to children)
+
+

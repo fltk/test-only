@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.140 2002/04/12 07:23:57 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.141 2002/04/17 08:56:04 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -603,13 +603,23 @@ bool Fl::handle(int event, Fl_Window* window)
 
   bool ret = false;
   if (to) {
-    int wx = 0, wy = 0;
-    for (Fl_Widget *w = to; w; w = w->parent())
-      { wx += w->x(); wy += w->y(); }
-    int save_x = Fl::e_x; int save_y = Fl::e_y;
-    Fl::e_x = Fl::e_x_root-wx;Fl::e_y = Fl::e_y_root-wy;
-    ret = to->handle(event) != 0;
-    Fl::e_x = save_x; Fl::e_y = save_y;
+    // see if to should get events:
+    switch (event) {
+    default:
+      if (!to->takesevents()) break;
+      // otherwise fall through:
+    case FL_ENTER: // these events are always sent even to inactive widgets
+    case FL_MOVE:
+    case FL_SHOW:
+    case FL_HIDE:
+      int wx = 0, wy = 0;
+      for (Fl_Widget *w = to; w; w = w->parent())
+	{ wx += w->x(); wy += w->y(); }
+      int save_x = Fl::e_x; int save_y = Fl::e_y;
+      Fl::e_x = Fl::e_x_root-wx;Fl::e_y = Fl::e_y_root-wy;
+      ret = to->handle(event) != 0;
+      Fl::e_x = save_x; Fl::e_y = save_y;
+    }
   }
 
   if (ret) {
@@ -666,5 +676,5 @@ bool Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.140 2002/04/12 07:23:57 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.141 2002/04/17 08:56:04 spitzak Exp $".
 //
