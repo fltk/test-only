@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.in,v 1.22 1999/12/16 03:14:00 vincent Exp $"
+# "$Id: makeinclude.in,v 1.23 2000/03/04 00:21:46 robertk Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -38,8 +38,8 @@ CC		=@CC@
 MAKEDEPEND	=@MAKEDEPEND@
 
 # flags for C++ compiler:
-CFLAGS		=@CFLAGS@
-CXXFLAGS	=@CXXFLAGS@ @X_CFLAGS@
+CFLAGS		=-I@srcdir@ @CFLAGS@
+CXXFLAGS	=-I@srcdir@ @CXXFLAGS@ @X_CFLAGS@
 DLLCFLAGS	=@DLLCFLAGS@	# used for WIN32 dlls only
 DEBUGFLAGS	=@DEBUGFLAG@
 
@@ -67,5 +67,5 @@ IMAGELIBS	=@LIBPNG@ @LIBJPEG@
 THREADSLIBS	=@THREADSLIBS@
 
 #
-# End of "$Id: makeinclude.in,v 1.22 1999/12/16 03:14:00 vincent Exp $".
+# End of "$Id: makeinclude.in,v 1.23 2000/03/04 00:21:46 robertk Exp $".
 #
