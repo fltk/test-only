@@ -24,7 +24,15 @@ void ProgressBar::draw() {
   if (mPresent > mMax) mPresent = mMax;
   if (mPresent < mMin) mPresent = mMin;
   double pct = (mPresent - mMin) / mMax;
-  r.w(int(r.w()*pct+.5));
+
+  if (vertical()) {
+    int barHeight = int(r.h()*pct+.5);
+    r.y(r.y()+r.h()-barHeight);
+    r.h(barHeight);
+  } else {
+    r.w(int(r.w()*pct+.5));
+  }
+
   setcolor(selection_color());
   fillrect(r);
   if (mShowPct) {

@@ -1,42 +1,46 @@
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/Fl_ProgressBar.h>
+#include <fltk/run.h>
+#include <fltk/Window.h>
+#include <fltk/ProgressBar.h>
 
-  Fl_Window* w;
+using namespace fltk;
+
+Window* w;
 
 static void ptimer(void *o)
 {
-	Fl_ProgressBar *pbar = (Fl_ProgressBar *)o;
+	ProgressBar *pbar = (ProgressBar *)o;
 	if(pbar->position() < 100)
 	{
 		pbar->step(1);
-		Fl::add_timeout(0.1, ptimer, (void *)pbar);
+		add_timeout(0.1, ptimer, (void *)pbar);
 	}
 	else
 		w->hide();
 }
 
 int main(int argc, char **argv) {
-  Fl_ProgressBar* pbar;
-  { Fl_Window* o = new Fl_Window(400, 100);
+  ProgressBar* pbar;
+  { Window* o = new Window(400, 100);
+    o->begin();
     w = o;
-    { Fl_ProgressBar* o = new Fl_ProgressBar(25, 25, 330, 25, "Simple Progress Bar");
+    { ProgressBar* o = new ProgressBar(25, 25, 330, 25, "Simple Progress Bar");
 	  pbar = o;
-      o->box(FL_ENGRAVED_BOX);
-#if (FL_MAJOR_VERSION > 1)
-	  o->clear_flag(FL_ALIGN_MASK);
-	  o->set_flag(FL_ALIGN_BOTTOM);
+	  //pbar->set_vertical();
+      o->box(ENGRAVED_BOX);
+#if (MAJOR_VERSION > 1)
+	  o->clear_flag(ALIGN_MASK);
+	  o->set_flag(ALIGN_BOTTOM);
 #else
-	  o->align(FL_ALIGN_BOTTOM);
+	  o->align(ALIGN_BOTTOM);
 #endif
-	  o->selection_color(FL_BLUE);
-	  o->color(FL_WHITE);
-	  o->textcolor(FL_RED);
+	  o->selection_color(BLUE);
+	  o->color(WHITE);
+	  o->textcolor(RED);
     }
     o->end();
   }
-  Fl::add_timeout(0.1, ptimer, (void *)pbar);
+  add_timeout(0.1, ptimer, (void *)pbar);
   w->show(argc, argv);
 
-  return Fl::run();
+  return run();
 }
