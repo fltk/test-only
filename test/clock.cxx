@@ -1,5 +1,5 @@
 //
-// "$Id: clock.cxx,v 1.4 1999/01/07 19:17:50 mike Exp $"
+// "$Id: clock.cxx,v 1.5 2000/06/03 05:32:20 carl Exp $"
 //
 // Clock test program for the Fast Light Tool Kit (FLTK).
 //
@@ -24,28 +24,48 @@
 //
 
 #include <FL/Fl.H>
-#include <FL/Fl_Window.H>
-#include <FL/Fl_Clock.H>
+#include <FL/Fl_Shaped_Window.H>
 #include <FL/Fl_Round_Clock.H>
 
+#include "circle.xbm" // bitmap mask for window shape
+
+class ClockWindow : public Fl_Shaped_Window {
+  public:
+    ClockWindow(int W, int H, const char *l = 0) : Fl_Shaped_Window(W,H,l) {}
+    int handle(int);
+};
+
+int ClockWindow::handle(int e) {
+  static int bx, by;
+  switch(e) {
+    case FL_DRAG:
+      position(x()+Fl::event_x_root()-bx, y()+Fl::event_y_root()-by);
+    case FL_PUSH:
+      if (Fl::event_button() > 1) exit(0);
+      bx = Fl::event_x_root(); by = Fl::event_y_root();
+      show(); // so the window will click-to-front
+      return 1;
+  }
+  return Fl_Shaped_Window::handle(e);
+}
+
 int main(int argc, char **argv) {
-  Fl_Window window(220,220,"Fl_Clock");
-  Fl_Clock c1(0,0,220,220); // c1.color(2,1);
-  window.resizable(c1);
+  ClockWindow window(220, 220, "Fl_Round_Clock");
+  window.color(FL_BLACK);
+  window.clear_border(); // some window managers do this for you!
+  Fl_Round_Clock clock(2,2,216,216);
+  clock.tooltip("Drag the mouse with the left button to move\n"
+                "the clock and right click to exit.");
+  // window.resizable(clock); - Not today, maybe never!
   window.end();
-  Fl_Window window2(220,220,"Fl_Round_Clock");
-  Fl_Round_Clock c2(0,0,220,220); // c2.color(3,4);
-  window2.resizable(c2);
-  window2.end();
-  // my machine had a clock* Xresource set for another program, so
-  // I don't want the class to be "clock":
   window.xclass("Fl_Clock");
-  window2.xclass("Fl_Clock");
-  window.show(argc,argv);
-  window2.show();
+  window.show();
+  Fl_Bitmap shape(circle_bits, circle_width, circle_height); // window shape data
+  window.shape(shape);
+
   return Fl::run();
 }
 
 //
-// End of "$Id: clock.cxx,v 1.4 1999/01/07 19:17:50 mike Exp $".
+// End of "$Id: clock.cxx,v 1.5 2000/06/03 05:32:20 carl Exp $".
 //

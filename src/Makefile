@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.75 2000/05/27 01:17:30 carl Exp $"
+# "$Id: Makefile,v 1.76 2000/06/03 05:32:19 carl Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -72,6 +72,7 @@ CPPFILES = \
 	Fl_Roller.cxx \
 	Fl_Scroll.cxx \
 	Fl_Scrollbar.cxx \
+	Fl_Shaped_Window.cxx \
 	Fl_Single_Window.cxx \
 	Fl_Slider.cxx \
 	Fl_String_List.cxx \
@@ -269,5 +270,5 @@ install: $(LIBRARY).a $(DSONAME)
 	@cp ../fltk-config $(bindir)
 
 #
-# End of "$Id: Makefile,v 1.75 2000/05/27 01:17:30 carl Exp $".
+# End of "$Id: Makefile,v 1.76 2000/06/03 05:32:19 carl Exp $".
 #
