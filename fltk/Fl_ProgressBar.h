@@ -19,7 +19,7 @@ protected:
 	Fl_Color mTextColor;
 	FL_API void draw();
 public:
-	FL_API Fl_ProgressBar(int x, int y, int w, int h, const char *lbl);
+	FL_API Fl_ProgressBar(int x, int y, int w, int h, const char *lbl = 0);
 	void range(double min, double max, double step = 1)  { mMin = min; mMax = max; mStep = step; };
 	void step(double step)		{ mPresent += step; redraw(); };
 	double minimum()	{ return mMin; }
