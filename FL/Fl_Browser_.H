@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.H,v 1.6.2.4.2.3.2.2 2003/11/10 01:32:58 matthiaswm Exp $"
+// "$Id: Fl_Browser_.H,v 1.6.2.4.2.3.2.3 2003/11/11 04:13:26 easysw Exp $"
 //
 // Common browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -221,7 +221,7 @@ public:
     /** Gets the default text font for the lines in the browser. */
   Fl_Font textfont() const {return (Fl_Font)textfont_;}
     /** Sets the default text font to \a font */
-  void textfont(uchar fonts) {textfont_ = font;}
+  void textfont(uchar font) {textfont_ = font;}
     /** Gets the default text size for the lines in the browser. */
   uchar textsize() const {return textsize_;}
     /** Sets the default text size to \a size */
@@ -244,5 +244,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Browser_.H,v 1.6.2.4.2.3.2.2 2003/11/10 01:32:58 matthiaswm Exp $".
+// End of "$Id: Fl_Browser_.H,v 1.6.2.4.2.3.2.3 2003/11/11 04:13:26 easysw Exp $".
 //

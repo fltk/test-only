@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Box.H,v 1.5.2.4.2.4.2.2 2003/11/10 01:32:58 matthiaswm Exp $"
+// "$Id: Fl_Box.H,v 1.5.2.4.2.4.2.3 2003/11/11 04:13:26 easysw Exp $"
 //
 // Box header file for the Fast Light Tool Kit (FLTK).
 //
@@ -43,7 +43,7 @@ public:
 	: Fl_Widget(X,Y,W,H,l) {}
     /** This form of the constructor sets the box to the specified box type. */
   Fl_Box(Fl_Boxtype boxtype, int X, int Y, int W, int H, const char *l)
-	: Fl_Widget(X,Y,W,H,l) {box(b);}
+	: Fl_Widget(X,Y,W,H,l) {box(boxtype);}
 
   virtual int handle(int);
 };
@@ -51,5 +51,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Box.H,v 1.5.2.4.2.4.2.2 2003/11/10 01:32:58 matthiaswm Exp $".
+// End of "$Id: Fl_Box.H,v 1.5.2.4.2.4.2.3 2003/11/11 04:13:26 easysw Exp $".
 //

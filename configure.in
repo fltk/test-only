@@ -1,7 +1,7 @@
 dnl -*- sh -*-
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.33.2.31.2.91.2.6 2003/11/07 03:47:22 easysw Exp $"
+dnl "$Id: configure.in,v 1.33.2.31.2.91.2.7 2003/11/11 04:13:26 easysw Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -523,27 +523,29 @@ case $uname in
 	    AC_DEFINE(HAVE_PTHREAD)
 	    THREADS="threads"
 	fi
-	if [ test $NANOX = 0 ]; then
-	dnl Check for X11...
-	AC_PATH_XTRA
 
-	if test x$no_x = xyes; then
-	    AC_MSG_ERROR(Configure could not find required X11 libraries, aborting.)
-	fi
+	if test $NANOX = 0; then
+	    dnl Check for X11...
+	    AC_PATH_XTRA
 
-	if test "x$X_PRE_LIBS" != x; then
-	    AC_MSG_WARN(Ignoring libraries \"$X_PRE_LIBS\" requested by configure.)
-	fi
+	    if test x$no_x = xyes; then
+		AC_MSG_ERROR(Configure could not find required X11 libraries, aborting.)
+	    fi
 
-	LIBS="$LIBS -lXext -lX11 $X_EXTRA_LIBS"
-	CFLAGS="$CFLAGS $X_CFLAGS"
-	CXXFLAGS="$CXXFLAGS $X_CFLAGS"
-	LDFLAGS="$X_LIBS $LDFLAGS"
+	    if test "x$X_PRE_LIBS" != x; then
+		AC_MSG_WARN(Ignoring libraries \"$X_PRE_LIBS\" requested by configure.)
+	    fi
 
-	if test "x$x_includes" != x; then
-	    ac_cpp="$ac_cpp -I$x_includes"
-	fi
+	    LIBS="$LIBS -lXext -lX11 $X_EXTRA_LIBS"
+	    CFLAGS="$CFLAGS $X_CFLAGS"
+	    CXXFLAGS="$CXXFLAGS $X_CFLAGS"
+	    LDFLAGS="$X_LIBS $LDFLAGS"
+
+	    if test "x$x_includes" != x; then
+		ac_cpp="$ac_cpp -I$x_includes"
+	    fi
  	fi
+
 	dnl Check for OpenGL unless disabled...
 	GLLIB=
 
@@ -622,13 +624,23 @@ case $uname in
 	;;
 esac
 
+BUILDXUTF8=""
 
-XUTFLIB=
-if [ test $NANOX = 0 ]; then
-    AC_CHECK_LIB(Xutf8, XGetUtf8FontAndGlyph, \
-        AC_DEFINE(HAVE_XUTF8) XUTFLIB=" -lXutf8", ,\
-        -lX11 $X_EXTRA_LIBS)
+if test $NANOX = 0; then
+    AC_CHECK_LIB(X11, Xutf8LookupString,
+        AC_DEFINE(HAVE_X11_UTF8),
+	AC_CHECK_LIB(Xutf8, XGetUtf8FontAndGlyph,
+            AC_DEFINE(HAVE_LIBXUTF8)
+	    LIBS="-lXutf8 $LIBS", ,-lX11 $X_EXTRA_LIBS)
+
+        if test x$acx$ac_cv_lib_Xutf8_XGetUtf8FontAndGlyph = xno; then
+	    AC_DEFINE(HAVE_LIBXUTF8)
+	    LIBS="../libXutf8/libXutf8.a $LIBS"
+	    BUILDXUTF8="libXUtf8"
+	fi)
 fi
+
+AC_SUBST(BUILDXUTF8)
 
 #case $uname in
 #	MINGW*)
@@ -638,12 +650,6 @@ fi
 #   		AC_MSG_ERROR(You must install Xutf8 before compiling FLTK-UTF8)
 #	    fi
 #esac
-
-AC_SUBST(XUTFLIB)
-
-AC_CHECK_LIB(Xtst, XTestFakeButtonEvent, AC_DEFINE(HAVE_XTEST) \
-	LIBS="-lXtst $LIBS", , 
-	$X_EXTRA_LIBS)
 
 AC_SUBST(GLDEMOS)
 AC_SUBST(GLLIB)
@@ -921,5 +927,5 @@ dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.6 2003/11/07 03:47:22 easysw Exp $".
+dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.7 2003/11/11 04:13:26 easysw Exp $".
 dnl

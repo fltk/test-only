@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.12.2.6.2.14.2.1 2003/11/02 01:37:41 easysw Exp $"
+# "$Id: Makefile,v 1.12.2.6.2.14.2.2 2003/11/11 04:13:25 easysw Exp $"
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -25,7 +25,7 @@
 
 include makeinclude
 
-DIRS	=	src fluid test documentation
+DIRS	=	$(BUILDXUTF8) src fluid test documentation
 
 all: makeinclude
 	for dir in $(DIRS); do\
@@ -97,5 +97,5 @@ native-dist:
 
 
 #
-# End of "$Id: Makefile,v 1.12.2.6.2.14.2.1 2003/11/02 01:37:41 easysw Exp $".
+# End of "$Id: Makefile,v 1.12.2.6.2.14.2.2 2003/11/11 04:13:25 easysw Exp $".
 #
