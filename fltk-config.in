@@ -2,7 +2,9 @@
 # 
 # fltk-config
 #
-# "$Id: fltk-config.in,v 1.4 1999/12/06 21:08:54 vincent Exp $"
+# original version by James Dean Palmer, adapted by Vincent Penne
+#
+# "$Id: fltk-config.in,v 1.5 1999/12/06 21:34:29 vincent Exp $"
 #
 
 MAJOR_VERSION=2
@@ -10,7 +12,7 @@ MINOR_VERSION=0
 PATCH_VERSION=0
 VERSION="$MAJOR_VERSION.$MINOR_VERSION.$PATCH_VERSION"
 
-### BEGIN FLTK-CONFIG
+### BEGIN fltk-config
 
 prefix=@prefix@
 exec_prefix=@exec_prefix@
@@ -38,8 +40,6 @@ DSOCOMMAND="@DSOCOMMAND@"
 # libraries to link with:
 IMAGELIBS="@LIBPNG@ @LIBJPEG@"
 
-### END FLTK-CONFIG
-
 usage ()
 {
     echo "Usage: fltk-config [OPTIONS]
@@ -64,6 +64,7 @@ Options:
 if test $# -eq 0; then usage 1
 fi
 
+# Calculate the prefix from the location of *this* file
 prefix=`echo "$0" | sed 's/\/bin\/fltk-config//
 s/\/fltk-config//'`
 
@@ -165,6 +166,7 @@ if test "$echo_cxxflags" = "yes"; then
       echo $includes -I$prefix $FLTK_CXXFLAGS
 fi
 
+# Calculate libraries needed in funcion
 LDLIBS=""
 LDSTATIC=""
 LIBS=""
