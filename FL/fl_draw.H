@@ -148,6 +148,7 @@ inline void fl_end_loop() {fltk::closepath();fltk::strokepath();}
 
 // current font: (size was an int in fltk1.1)
 inline void fl_font(fltk::Font* f, float size) {fltk::setfont(f,size);}
+inline void fl_font(int f, float size) {fltk::setfont(fltk::font(f),size);}
 inline fltk::Font* fl_font() {return fltk::getfont();}
 inline float fl_size() {return fltk::getsize();}
 
@@ -190,5 +191,5 @@ inline void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {flt
 #endif
 
 //
-// End of "$Id: fl_draw.H,v 1.30 2003/01/19 07:54:59 spitzak Exp $".
+// End of "$Id: fl_draw.H,v 1.31 2003/01/19 22:07:22 spitzak Exp $".
 //

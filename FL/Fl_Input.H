@@ -5,7 +5,7 @@
 #include <fltk/Input.h>
 class Fl_Input : public fltk::Input {
 public:
-  Fl_Input(int x, int y, int w, int h, const char* l) : fltk::Input(x,y,w,h,l) {}
+  Fl_Input(int x, int y, int w, int h, const char* l=0) : fltk::Input(x,y,w,h,l) {}
   int wrap() const { return type() == fltk::Input::WORDWRAP; }
   void wrap(int b) { type(b ? fltk::Input::WORDWRAP : fltk::Input::MULTILINE);}
 };

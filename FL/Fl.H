@@ -16,6 +16,14 @@ typedef fltk::TimeoutHandler Fl_Timeout_Handler;
 
 namespace fltk {
 
+  class Widget;
+
+  // These are for back-compatability only:
+  inline fltk::Widget* selection_owner() {return 0;}
+  inline void selection_owner(fltk::Widget*) {}
+  inline void selection(fltk::Widget &owner, const char* b, int len) {
+    copy(b,len,false);}
+
   inline int x() {return screenInfo().x;}
   inline int y() {return screenInfo().y;}
   inline int w() {return screenInfo().w;}
