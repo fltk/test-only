@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.13 2002/02/10 22:57:48 spitzak Exp $"
+# "$Id: Makefile,v 1.14 2002/02/21 06:55:26 nafees Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -108,7 +108,7 @@ install_shared: shared
 	@rm -f $(libdir)/$(DSOLIBimagesNAME)$(DSOEXT)
 	@if [ "$(DSOSHORTEXT)" ]; then rm -f $(libdir)/$(DSOLIBimagesNAME)$(DSOSHORTEXT); fi
 	@cp $(DSO)$(DSOEXT) $(libdir)
-	@chmod 755 $(libdir)/$(DSOLIBglNAME)$(DSOEXT)
+	@chmod 755 $(libdir)/$(DSOLIBimagesNAME)$(DSOEXT)
 	@if [ "$(DSOSHORTEXT)" ]; then \
 		ln -s $(DSOLIBimagesNAME)$(DSOEXT) $(libdir)/$(DSOLIBimagesNAME)$(DSOSHORTEXT); fi
 	@if [ -f "../lib/$(DLLIMPORTNAME)" ]; then  cp ../lib/$(DLLIMPORTNAME) $(libdir); fi
@@ -116,5 +116,5 @@ install_shared: shared
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.13 2002/02/10 22:57:48 spitzak Exp $".
+# End of "$Id: Makefile,v 1.14 2002/02/21 06:55:26 nafees Exp $".
 #
