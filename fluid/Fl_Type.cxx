@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.cxx,v 1.7 1999/03/14 06:46:23 carl Exp $"
+// "$Id: Fl_Type.cxx,v 1.8 1999/03/18 05:33:22 carl Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -115,7 +115,7 @@ int Widget_Browser::item_height(void *l) const {
   return ((Fl_Type *)l)->visible ? textsize()+2 : 0;
 }
 
-int Widget_Browser::incr_height() const {return textsize()+2;}
+int Widget_Browser::incr_height() const {return textsize() + 2;}
 
 static Fl_Type* pushedtitle;
 
@@ -127,7 +127,7 @@ const char* Fl_Type::title() {
 
 extern const char* subclassname(Fl_Type*);
 
-void Widget_Browser::item_draw(void *v, int x, int y, int w, int h) const {
+void Widget_Browser::item_draw(void *v, int x, int y, int, int h) const {
   Fl_Type *l = (Fl_Type *)v;
   x += 3 + l->level * 10;
   fl_color(item_selected(v) ? selected_textcolor() : textcolor());
@@ -465,12 +465,12 @@ void Fl_Type::open() {
 void Fl_Type::setlabel(const char *) {}
 
 Fl_Type::~Fl_Type() {
+  if (parent) parent->remove_child(this);
   // warning: destructor only works for widgets that have been add()ed.
   if (widget_browser) widget_browser->deleting(this);
   if (prev) prev->next = next; else first = next;
   if (next) next->prev = prev; else last = prev;
   if (current == this) current = 0;
-  if (parent) parent->remove_child(this);
   modflag = 1;
 }
 
@@ -485,6 +485,17 @@ int Fl_Type::is_window() const {return 0;}
 int Fl_Type::is_code_block() const {return 0;}
 int Fl_Type::is_decl_block() const {return 0;}
 int Fl_Type::is_class() const {return 0;}
+int Fl_Type::is_counter() const {return 0;}
+int Fl_Type::is_adjuster() const {return 0;}
+int Fl_Type::is_slider() const {return 0;}
+int Fl_Type::is_scrollbar() const {return 0;}
+int Fl_Type::is_choice() const {return 0;}
+int Fl_Type::is_browser() const {return 0;}
+int Fl_Type::is_input() const {return 0;}
+int Fl_Type::is_menu() const {return 0;}
+int Fl_Type::is_value_input() const {return 0;}
+int Fl_Type::is_value_output() const {return 0;}
+int Fl_Type::is_value_slider() const {return 0;}
 
 ////////////////////////////////////////////////////////////////
 
@@ -648,5 +659,5 @@ void Fl_Type::read_property(const char *c) {
 int Fl_Type::read_fdesign(const char*, const char*) {return 0;}
 
 //
-// End of "$Id: Fl_Type.cxx,v 1.7 1999/03/14 06:46:23 carl Exp $".
+// End of "$Id: Fl_Type.cxx,v 1.8 1999/03/18 05:33:22 carl Exp $".
 //

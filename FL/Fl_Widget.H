@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.11 1999/03/16 16:34:41 carl Exp $"
+// "$Id: Fl_Widget.H,v 1.12 1999/03/18 05:33:21 carl Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -51,7 +51,7 @@ class Fl_Widget {
   friend class Fl_Group;
 
 public:
-  enum Widget_Attribute {
+  enum Attribute {
     LABELCOLOR = 0,
     LABELSIZE,
     LABELTYPE,
@@ -72,7 +72,7 @@ public:
     uchar not_dynamic;
 
     Style();
-    uchar& widget(Widget_Attribute a) { return widget_[a]; }
+    uchar& widget(Attribute a) { return widget_[a]; }
   };
 
   enum {INACTIVE=1, INVISIBLE=2, OUTPUT=4, SHORTCUT_LABEL=64, CHANGED=128 };
@@ -81,12 +81,29 @@ public:
 
   virtual void loadstyle();
 
+  // These next few functions are mainly used for FLUID
+  
+  // use the default style instead of any forced attributes
+  void use_default_style() { 
+    if (_style && !_style->not_dynamic) delete _style;
+    _style = 0;
+  }
+
+  // are we using default style?
+  int is_using_default_style() { return _style ? 0 : 1; }  
+
+  // after doing this setting attributes modifies the default style
   void modify_default_style() {
     if (_style && !_style->not_dynamic) delete _style;
     _style = default_style();
     _style->not_dynamic = 1;
   }
-  
+
+  // has this attribute been forced to a particular value?
+  int is_style_forced(Attribute a)
+    { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
+
+  // copy the style of another widget
   void copy_style(Fl_Widget* o)
     { wstyle(); *((Style*)_style) = *((Style*)o->style()); }
 
@@ -243,5 +260,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.11 1999/03/16 16:34:41 carl Exp $".
+// End of "$Id: Fl_Widget.H,v 1.12 1999/03/18 05:33:21 carl Exp $".
 //

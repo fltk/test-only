@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.h,v 1.4 1999/01/07 19:17:11 mike Exp $"
+// "$Id: Fl_Widget_Type.h,v 1.5 1999/03/18 05:33:24 carl Exp $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -73,7 +73,7 @@ public:
   uchar resizable() const;
   void resizable(uchar v);
 
-  virtual int textstuff(int what, Fl_Font &, int &, Fl_Color &);
+  virtual int textstuff(int what, Fl_Font &, int &, Fl_Color &, Fl_Color &);
   virtual Fl_Menu_Item *subtypes();
 
   virtual int is_widget() const;
@@ -90,5 +90,5 @@ void* const LOAD = (void *)9831;
 extern Fl_Widget_Type *current_widget; // one of the selected ones
 
 //
-// End of "$Id: Fl_Widget_Type.h,v 1.4 1999/01/07 19:17:11 mike Exp $".
+// End of "$Id: Fl_Widget_Type.h,v 1.5 1999/03/18 05:33:24 carl Exp $".
 //

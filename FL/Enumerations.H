@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.19 1999/03/14 06:46:12 carl Exp $"
+// "$Id: Enumerations.H,v 1.20 1999/03/18 05:33:18 carl Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -54,7 +54,7 @@
 // respectively.
 //
 
-#define FL_MAJOR_VERSION	1
+#define FL_MAJOR_VERSION	2
 #define FL_MINOR_VERSION	0
 #define FL_PATCH_VERSION	0
 #define FL_VERSION		((double)FL_MAJOR_VERSION + \
@@ -376,5 +376,5 @@ enum Fl_Widget_Style {
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.19 1999/03/14 06:46:12 carl Exp $".
+// End of "$Id: Enumerations.H,v 1.20 1999/03/18 05:33:18 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.16 1999/03/14 06:46:24 carl Exp $"
+// "$Id: fluid.cxx,v 1.17 1999/03/18 05:33:26 carl Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -24,7 +24,7 @@
 //
 
 const char *copyright =
-"The FLTK user interface designer version 1.0\n"
+"The FLTK user interface designer version 2.0\n"
 "Copyright 1998-1999 by Bill Spitzak and others.\n"
 "\n"
 "This library is free software; you can redistribute it and/or "
@@ -386,6 +386,7 @@ static void sigint(SIGARG) {
 
 int main(int argc,char **argv) {
   int i = 1;
+  
   if (!Fl::args(argc,argv,i,arg) || i < argc-1) {
     fprintf(stderr,"usage: %s <switches> name.fl\n"
 " -c : write .cxx and .h and exit\n"
@@ -418,5 +419,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.16 1999/03/14 06:46:24 carl Exp $".
+// End of "$Id: fluid.cxx,v 1.17 1999/03/18 05:33:26 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.H,v 1.8 1999/03/16 16:34:38 carl Exp $"
+// "$Id: Fl_Adjuster.H,v 1.9 1999/03/18 05:33:18 carl Exp $"
 //
 // Adjuster widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -36,7 +36,7 @@
 
 class Fl_Adjuster : public Fl_Valuator {
 public:
-  enum Adjuster_Attribute {
+  enum Attribute {
     FLY_COLOR = 0,
     FLY_BOX,
     AA_END
@@ -47,10 +47,14 @@ public:
     uchar sbf;
 
     Style();
-    uchar& adjuster(Adjuster_Attribute a) { return adjuster_[a]; }
+    uchar& adjuster(Attribute a) { return adjuster_[a]; }
   };
 
   Fl_Adjuster(int x,int y,int w,int h,const char *l=0);
+
+  int is_style_forced(Fl_Widget::Attribute a) { return Fl_Widget::is_style_forced(a); }
+  int is_style_forced(Attribute a)
+    { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
 
   void copy_style(Fl_Adjuster* o)
     { wstyle(); *((Style*)_style) = *((Style*)o->style()); }
@@ -84,5 +88,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Adjuster.H,v 1.8 1999/03/16 16:34:38 carl Exp $".
+// End of "$Id: Fl_Adjuster.H,v 1.9 1999/03/18 05:33:18 carl Exp $".
 //

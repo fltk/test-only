@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.H,v 1.8 1999/03/16 16:34:39 carl Exp $"
+// "$Id: Fl_Choice.H,v 1.9 1999/03/18 05:33:19 carl Exp $"
 //
 // Choice header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,7 @@
 
 class Fl_Choice : public Fl_Menu_ {
 public:
-  enum Choice_Attribute {
+  enum Attribute {
     FLY_COLOR = 0,
     FLY_BOX,
     CA_END
@@ -43,8 +43,13 @@ public:
     uchar sbf;
 
     Style();
-    uchar& choice(Choice_Attribute a) { return choice_[a]; }
+    uchar& choice(Attribute a) { return choice_[a]; }
   };
+
+  int is_style_forced(Fl_Widget::Attribute a) { return Fl_Widget::is_style_forced(a); }
+  int is_style_forced(Fl_Menu_::Attribute a) { return Fl_Menu_::is_style_forced(a); }
+  int is_style_forced(Attribute a)
+    { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
 
   void copy_style(Fl_Choice* o)
     { wstyle(); *((Style*)_style) = *((Style*)o->style()); }
@@ -74,5 +79,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Fl_Choice.H,v 1.8 1999/03/16 16:34:39 carl Exp $".
+// End of "$Id: Fl_Choice.H,v 1.9 1999/03/18 05:33:19 carl Exp $".
 //

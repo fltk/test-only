@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.H,v 1.8 1999/03/16 16:34:39 carl Exp $"
+// "$Id: Fl_Button.H,v 1.9 1999/03/18 05:33:19 carl Exp $"
 //
 // Button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -41,7 +41,7 @@ extern int fl_old_shortcut(const char*);
 
 class Fl_Button : public Fl_Widget {
 public:
-  enum Button_Attribute {
+  enum Attribute {
     FLY_COLOR = 0,
     FLY_BOX,
     DOWN_BOX,
@@ -54,8 +54,12 @@ public:
     uchar sbf;
 
     Style();
-    uchar& button(Button_Attribute a) { return button_[a]; }
+    uchar& button(Attribute a) { return button_[a]; }
   };
+
+  int is_style_forced(Fl_Widget::Attribute a) { return Fl_Widget::is_style_forced(a); }
+  int is_style_forced(Attribute a)
+    { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
 
   void copy_style(Fl_Button* o)
     { wstyle(); *((Style*)_style) = *((Style*)o->style()); }
@@ -105,5 +109,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Button.H,v 1.8 1999/03/16 16:34:39 carl Exp $".
+// End of "$Id: Fl_Button.H,v 1.9 1999/03/18 05:33:19 carl Exp $".
 //

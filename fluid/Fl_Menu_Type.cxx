@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Type.cxx,v 1.17 1999/03/14 06:46:23 carl Exp $"
+// "$Id: Fl_Menu_Type.cxx,v 1.18 1999/03/18 05:33:22 carl Exp $"
 //
 // Menu item code for the Fast Light Tool Kit (FLTK).
 //
@@ -89,7 +89,7 @@ Fl_Type *Fl_Menu_Item_Type::make() {
     if (force_parent && q->is_menu_item() || !q->is_parent()) p = p->parent;
   }
   force_parent = 0;
-  if (!p || !(p->is_menu_button() || p->is_menu_item() && p->is_parent())) {
+  if (!p || !(p->is_menu() || p->is_menu_item() && p->is_parent())) {
     fl_message("Please select a menu to add to");
     return 0;
   }
@@ -260,11 +260,10 @@ void Fl_Menu_Item_Type::write_item() {
   } else
     write_c(" 0,");
   if (user_data())
-    write_c(" (void*)(%s),", user_data());
+    write_c(" (void*)(%s)", user_data());
   else
     write_c(" 0,");
-  write_c(" %d, %d, %d, %d, %d", flags(),
-	  o->labeltype(), o->labelfont(), o->labelsize(), o->labelcolor());
+  write_c(" %d", flags());
   write_c("},\n");
 }
 
@@ -314,7 +313,39 @@ void Fl_Menu_Item_Type::write_code1() {
   if (init) write_c("%s}\n",indent());
 }
 
-void Fl_Menu_Item_Type::write_code2() {}
+const char* boxname(int);
+const char* labeltypename(int);
+
+void Fl_Menu_Item_Type::write_code2() {
+  int i; const char* name = menu_name(i);
+
+  if (o->is_style_forced(Fl_Widget::LABELCOLOR))
+    write_c("%s%s[%d].labelcolor((Fl_Color)%d);\n", indent(), name, i,
+            o->labelcolor());
+
+  if (o->is_style_forced(Fl_Widget::LABELFONT))
+    write_c("%s%s[%d].labelfont((Fl_Font)%d);\n", indent(), name, i,
+            o->labelfont());
+
+  if (o->is_style_forced(Fl_Widget::LABELSIZE))
+    write_c("%s%s[%d].labelsize(%d);\n", indent(), name, i, o->labelsize());
+
+  if (o->is_style_forced(Fl_Widget::LABELTYPE))
+    write_c("%s%s[%d].labeltype(FL_%s);\n", indent(), name, i,
+            labeltypename(o->labeltype()));
+
+  if (o->is_style_forced(Fl_Widget::COLOR2))
+    write_c("%s%s[%d].down_color((Fl_Color)%d);\n", indent(), name, i,
+            o->selection_color());
+
+  if (((Fl_Button*)o)->is_style_forced(Fl_Button::DOWN_LABELCOLOR))
+    write_c("%s%s[%d].down_labelcolor((Fl_Color)%d);\n", indent(), name, i,
+            ((Fl_Button*)o)->down_labelcolor());
+
+  if (((Fl_Button*)o)->is_style_forced(Fl_Button::DOWN_BOX))
+    write_c("%s%s[%d].down_box(FL_%s);\n", indent(), name, i,
+            boxname(((Fl_Button*)o)->down_box()));
+}
 
 ////////////////////////////////////////////////////////////////
 // This is the base class for widgets that contain a menu (ie
@@ -324,19 +355,18 @@ void Fl_Menu_Item_Type::write_code2() {}
 // with the child objects and updated as they change.
 
 class Fl_Menu_Type : public Fl_Widget_Type {
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& c) {
-    Fl_Menu_ *o = (Fl_Menu_*)(w==4 ? ((Fl_Widget_Type*)this->factory)->o : this->o);
+  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&) {
+    Fl_Menu_ *o = (Fl_Menu_*)(this->o);
     switch (w) {
-    case 4:
-    case 0: f = o->textfont(); s = o->textsize(); c = o->textcolor(); break;
+    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); break;
     case 1: o->textfont(f); break;
     case 2: o->textsize(s); break;
-    case 3: o->textcolor(c); break;
+    case 3: o->textcolor(tc); break;
     }
     return 1;
   }
 public:
-  int is_menu_button() const {return 1;}
+  int is_menu() const {return 1;}
   int is_parent() const {return 1;}
   int menusize;
   void build_menu();
@@ -369,9 +399,7 @@ void Fl_Menu_Type::build_menu() {
     if (menusize<n) {
       if (menusize) delete[] (Fl_Menu_Item*)(w->menu());
       menusize = n+10;
-      Fl_Menu_Item* mt = new Fl_Menu_Item[menusize];
-      memset(mt, 0, menusize*sizeof(Fl_Menu_Item));
-      w->menu(mt);
+      w->menu(new Fl_Menu_Item[menusize]);
     }
     // fill them all in:
     Fl_Menu_Item* m = (Fl_Menu_Item*)(w->menu());
@@ -386,6 +414,9 @@ void Fl_Menu_Type::build_menu() {
       m->labelfont(i->o->labelfont());
       m->labelsize(i->o->labelsize());
       m->labelcolor(i->o->labelcolor());
+      m->down_color(i->o->selection_color());
+      m->down_labelcolor(((Fl_Button*)i->o)->down_labelcolor());
+      m->down_box(((Fl_Button*)i->o)->down_box());
       m++;
       if (q->is_parent()) lvl++;
       int l1 =
@@ -438,6 +469,7 @@ static Fl_Menu_Item button_type_menu[] = {
 class Fl_Menu_Button_Type : public Fl_Menu_Type {
   Fl_Menu_Item *subtypes() {return button_type_menu;}
 public:
+  int is_menu_button() const {return 1;}
   virtual const char *type_name() {return "Fl_Menu_Button";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     return new Fl_Menu_Button(x,y,w,h,"menu");}
@@ -453,6 +485,7 @@ static Fl_Menu_Item dummymenu[] = {{"CHOICE"},{0}};
 
 class Fl_Choice_Type : public Fl_Menu_Type {
 public:
+  int is_choice() const {return 1;}
   virtual const char *type_name() {return "Fl_Choice";}
   Fl_Widget *widget(int x,int y,int w,int h) {
     Fl_Choice *o = new Fl_Choice(x,y,w,h,"choice:");
@@ -489,6 +522,8 @@ void Shortcut_Button::draw() {
   fl_draw(fl_shortcut_label(svalue),x()+6,y(),w(),h(),FL_ALIGN_LEFT);
 }
 
+#include "widget_panel.h"
+
 int Shortcut_Button::handle(int e) {
   when(0); type(FL_TOGGLE_BUTTON);
   if (e == FL_KEYBOARD) {
@@ -510,26 +545,11 @@ int Shortcut_Button::handle(int e) {
   } else {
     int r = Fl_Button::handle(e);
     if (e == FL_RELEASE && value() && Fl::focus() != this) take_focus();
+    if (e == FL_RELEASE && !value()) shortcut_in_cb(this, 0);
     return r;
   }
 }
   
-void shortcut_in_cb(Shortcut_Button* i, void* v) {
-  if (v == LOAD) {
-    if (!current_widget->is_button()) {i->hide(); return;}
-    i->show();
-    i->svalue = ((Fl_Button*)(current_widget->o))->shortcut();
-    i->redraw();
-  } else {
-    for (Fl_Type *o = Fl_Type::first; o; o = o->next)
-      if (o->selected && o->is_button()) {
-	Fl_Button* b = (Fl_Button*)(((Fl_Widget_Type*)o)->o);
-	b->shortcut(i->svalue);
-	if (o->is_menu_item()) ((Fl_Widget_Type*)o)->redraw();
-      }
-  }
-}
-
 //
-// End of "$Id: Fl_Menu_Type.cxx,v 1.17 1999/03/14 06:46:23 carl Exp $".
+// End of "$Id: Fl_Menu_Type.cxx,v 1.18 1999/03/18 05:33:22 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.H,v 1.10 1999/03/16 16:34:40 carl Exp $"
+// "$Id: Fl_Menu_.H,v 1.11 1999/03/18 05:33:20 carl Exp $"
 //
 // Menu base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -35,7 +35,7 @@
 
 class Fl_Menu_ : public Fl_Widget {
 public:
-  enum Menu_Attribute {
+  enum Attribute {
     TEXTFONT = 0,
     TEXTSIZE,
     TEXTCOLOR,
@@ -48,8 +48,12 @@ public:
     uchar sbf;
 
     Style();
-    uchar& menu(Menu_Attribute a) { return menu_[a]; }
+    uchar& menu(Attribute a) { return menu_[a]; }
   };
+
+  int is_style_forced(Fl_Widget::Attribute a) { return Fl_Widget::is_style_forced(a); }
+  int is_style_forced(Attribute a)
+    { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
 
   void copy_style(Fl_Menu_* o)
     { wstyle(); *((Style*)_style) = *((Style*)o->style()); }
@@ -117,5 +121,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Menu_.H,v 1.10 1999/03/16 16:34:40 carl Exp $".
+// End of "$Id: Fl_Menu_.H,v 1.11 1999/03/18 05:33:20 carl Exp $".
 //

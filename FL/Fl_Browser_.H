@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.H,v 1.9 1999/03/16 16:34:39 carl Exp $"
+// "$Id: Fl_Browser_.H,v 1.10 1999/03/18 05:33:18 carl Exp $"
 //
 // Common browser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -47,7 +47,7 @@
 
 class Fl_Browser_ : public Fl_Group {
 public:
-  enum Browser_Attribute {
+  enum Attribute {
     TEXTFONT = 0,
     TEXTSIZE,
     TEXTCOLOR,
@@ -60,11 +60,15 @@ public:
     uchar sbf;
 
     Style();
-    uchar& browser(Browser_Attribute a) { return browser_[a]; }
+    uchar& browser(Attribute a) { return browser_[a]; }
   };
 
   Fl_Scrollbar scrollbar;		// Vertical scrollbar
   Fl_Scrollbar hscrollbar;		// Horizontal scrollbar
+
+  int is_style_forced(Fl_Widget::Attribute a) { return Fl_Widget::is_style_forced(a); }
+  int is_style_forced(Attribute a)
+    { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
 
   void copy_style(Fl_Browser_* o)
     { wstyle(); *((Style*)_style) = *((Style*)o->style()); }
@@ -174,5 +178,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Fl_Browser_.H,v 1.9 1999/03/16 16:34:39 carl Exp $".
+// End of "$Id: Fl_Browser_.H,v 1.10 1999/03/18 05:33:18 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.13 1999/02/19 15:03:26 mike Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.14 1999/03/18 05:33:24 carl Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -261,23 +261,6 @@ void border_cb(Fl_Light_Button* i, void* v) {
     i->value(((Fl_Window*)(current_widget->o))->border());
   } else {
     ((Fl_Window*)(current_widget->o))->border(i->value());
-  }
-}
-
-void xclass_cb(Fl_Input* i, void* v) {
-  if (v == LOAD) {
-    if (!current_widget->is_window()) {i->hide(); return;}
-    i->show();
-    i->value(((Fl_Widget_Type *)current_widget)->xclass);
-  } else {
-    for (Fl_Type *o = Fl_Type::first; o; o = o->next)
-      if (o->selected && o->is_widget()) {
-	Fl_Widget_Type* w = (Fl_Widget_Type*)o;
-	if (w->is_window() || w->is_button())
-	  storestring(i->value(),w->xclass);
-	if (w->is_window()) ((Fl_Window*)(w->o))->xclass(w->xclass);
-	else if (w->is_menu_item()) w->redraw();
-      }
   }
 }
 
@@ -697,5 +680,5 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.13 1999/02/19 15:03:26 mike Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.14 1999/03/18 05:33:24 carl Exp $".
 //

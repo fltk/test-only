@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.H,v 1.8 1999/03/16 16:34:41 carl Exp $"
+// "$Id: Fl_Slider.H,v 1.9 1999/03/18 05:33:21 carl Exp $"
 //
 // Slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -42,7 +42,7 @@
 
 class Fl_Slider : public Fl_Valuator {
 public:
-  enum Slider_Attribute {
+  enum Attribute {
     FLY_COLOR = 0,
     SLIDER_BOX,
     SA_END
@@ -53,8 +53,12 @@ public:
     uchar sbf;
 
     Style();
-    uchar& slider(Slider_Attribute a) { return slider_[a]; }
+    uchar& slider(Attribute a) { return slider_[a]; }
   };
+
+  int is_style_forced(Fl_Widget::Attribute a) { return Fl_Widget::is_style_forced(a); }
+  int is_style_forced(Attribute a)
+    { if (!_style) return 0; return ((Style*)_style)->sbf & bf(a); }
 
   void copy_style(Fl_Slider* o)
     { wstyle(); *((Style*)_style) = *((Style*)o->style()); }
@@ -96,5 +100,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Slider.H,v 1.8 1999/03/16 16:34:41 carl Exp $".
+// End of "$Id: Fl_Slider.H,v 1.9 1999/03/18 05:33:21 carl Exp $".
 //
