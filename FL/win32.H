@@ -1,5 +1,5 @@
 //
-// "$Id: win32.H,v 1.15 1999/03/09 18:16:45 mike Exp $"
+// "$Id: win32.H,v 1.16 1999/06/17 20:10:22 gustavo Exp $"
 //
 // WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -78,6 +78,7 @@ public:
 		                 int &bt,int &bx,int &by);
   FL_EXPORT void setwindow(Fl_Window* wi) {w=wi; wi->i=this;}
   FL_EXPORT void flush() {w->flush();}
+  FL_EXPORT void layout() {w->layout();}
   FL_EXPORT void set_minmax(LPMINMAXINFO minmax);
   FL_EXPORT void mapraise();
   static FL_EXPORT Fl_X* make(Fl_Window*);
@@ -121,5 +122,5 @@ FL_EXPORT void fl_copy_offscreen(int x,int y,int w,int h,HBITMAP pixmap,int srcx
 #define fl_delete_offscreen(bitmap) DeleteObject(bitmap);
 
 //
-// End of "$Id: win32.H,v 1.15 1999/03/09 18:16:45 mike Exp $".
+// End of "$Id: win32.H,v 1.16 1999/06/17 20:10:22 gustavo Exp $".
 //
