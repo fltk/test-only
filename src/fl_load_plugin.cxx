@@ -1,5 +1,7 @@
 /* fl_plugin.cxx
  *
+ * "$Id: fl_load_plugin.cxx,v 1.15 2001/07/24 16:25:08 clip Exp $"
+ *
  * This is a wrapper to make it simple to load plugins on various
  * systems. fl_load_plugin(file, symbol) will load the file as a
  * plugin and then return a pointer to "symbol" in that file.
@@ -78,3 +80,7 @@ void* fl_load_plugin(const char* name, const char*) {
 }
 
 #endif
+
+//
+// End of "$Id: fl_load_plugin.cxx,v 1.15 2001/07/24 16:25:08 clip Exp $"
+//

@@ -1,5 +1,5 @@
 /*
-   "$Id: conf_get.c,v 1.16 2001/07/24 07:48:23 spitzak Exp $"
+   "$Id: conf_get.c,v 1.17 2001/07/24 16:25:08 clip Exp $"
 
     Configuration file routines for the Fast Light Tool Kit (FLTK).
 
@@ -26,7 +26,7 @@
 #include <fltk/vsnprintf.h>
 #include <config.h>
 
-#ifdef CONF_CACHED
+#ifndef CONF_CACHED
 
 extern int conf_is_path_rooted(const char *);
 extern const char* conf_dirname(const char *);
@@ -163,7 +163,7 @@ getconf(const char *configfile, const char *k, char *svalue, int slen)
 
 void conf_clear_cache(void) {}
 
-#else /* !CONF_CACHED */
+#else /* CONF_CACHED */
 
 #define NUM_CACHED 5
 
@@ -269,5 +269,5 @@ conf_clear_cache() {
 #endif
 
 /*
-    End of "$Id: conf_get.c,v 1.16 2001/07/24 07:48:23 spitzak Exp $".
+    End of "$Id: conf_get.c,v 1.17 2001/07/24 16:25:08 clip Exp $".
 */

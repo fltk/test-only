@@ -1,5 +1,5 @@
 //
-// "$Id: fl_conf.cxx,v 1.2 2001/07/24 07:48:23 spitzak Exp $"
+// "$Id: fl_conf.cxx,v 1.3 2001/07/24 16:25:08 clip Exp $"
 //
 // Config file reading routines for the Fast Light Tool Kit (FLTK).
 //
@@ -43,8 +43,6 @@
 #define PATH_MAX 128
 #endif
 
-#if USE_CONF || USE_PLUGINS
-
 // This should stay public so that programs can locate their config files
 // easily.
 const char* fl_find_config_file(const char* fn, bool cflag) {
@@ -76,8 +74,18 @@ const char* fl_find_config_file(const char* fn, bool cflag) {
   return (cflag || !access(path, R_OK)) ? path : 0;
 }
 
-#endif
+// flconfig_section is always "default".
+// For now... - CET
+
+extern FL_API const char* fl_config;
+extern FL_API const char* fl_config_section;
+
+int fl_getconf(const char *key, char *value, int value_length) {
+  char temp[80];
+  snprintf(temp, sizeof(temp), "%s/%s", fl_config_section, key);
+  return ::getconf(fl_config, temp, value, value_length);
+}
 
 //
-// End of "$Id: fl_conf.cxx,v 1.2 2001/07/24 07:48:23 spitzak Exp $".
+// End of "$Id: fl_conf.cxx,v 1.3 2001/07/24 16:25:08 clip Exp $".
 //
