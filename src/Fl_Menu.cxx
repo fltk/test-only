@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.154 2004/06/04 08:58:04 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.155 2004/10/02 04:12:35 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -408,7 +408,7 @@ int Menu::find_selected(Widget* widget, const int* indexes, int level,
       Widget* item = child(array, level);
       if (!item->visible()) continue;
       x += item->width()+leading;
-      if (x > mx) {if (item->takesevents()) ret = i; break;}
+      if (x > mx) {/*if (item->takesevents())*/ ret = i; break;}
     }
   } else {
     for (int i = 0; i < children; i++) {
@@ -416,7 +416,7 @@ int Menu::find_selected(Widget* widget, const int* indexes, int level,
       Widget* item = child(array, level);
       if (!item->visible()) continue;
       y += item->height()+leading; // find bottom edge
-      if (y > my) {if (item->takesevents()) ret = i; break;}
+      if (y > my) {/*if (item->takesevents())*/ ret = i; break;}
     }
   }
   Item::clear_style();
@@ -812,25 +812,22 @@ int MWindow::handle(int event) {
       if (!p.menubar || p.level || p.nummenus > 1) return 1;
     }
   EXECUTE: // execute the item pointed to by w and current item
-    // If they click outside menu we quit:
-    if (p.indexes[p.level]<0) {exit_modal(); return 1;}
-    // ignore clicks on inactive items:
-    widget = p.current_widget();
-    if (!widget->takesevents()) return 1;
+    if (p.indexes[p.level] >= 0) {
+      widget = p.current_widget();
+      if (widget->takesevents()) {
 #if 0
-    if ((widget->flags() & MENU_STAYS_UP) && (!p.menubar || p.level)) {
-      p.widget->focus(p.indexes, p.level);
-      p.widget->execute(widget);
-      Window* mw = p.menus[p.level];
-      if (widget->type() == Item::RADIO) mw->redraw();
-      else if (checkmark(widget)) mw->redraw(DAMAGE_CHILD);
-      return 1;
-    }
+	if ((widget->flags() & MENU_STAYS_UP) && (!p.menubar || p.level)) {
+	  p.widget->focus(p.indexes, p.level);
+	  p.widget->execute(widget);
+	  Window* mw = p.menus[p.level];
+	  if (widget->type() == Item::RADIO) mw->redraw();
+	  else if (checkmark(widget)) mw->redraw(DAMAGE_CHILD);
+	  return 1;
+	}
 #endif
-    // ignore clicks on menu titles unless it they have a callback:
-//  if (widget->callback() == Widget::default_callback &&
-//	p.current_children() >= 0) return 1;
-    p.state = DONE_STATE;
+	p.state = DONE_STATE;
+      }
+    }
     exit_modal();
     return 1;
   }
@@ -953,7 +950,9 @@ Widget* Menu::try_popup(
 
     MWindow* mw = p.menus[p.level];
 
-    if (p.menubar && !p.level) {
+    if (!widget->takesevents()) {
+      // create nothing for these
+    } else if (p.menubar && !p.level) {
       // create a submenu off a menubar with a title box:
       int nx,ny,nw,nh;
       p.widget->get_location(p.widget, p.indexes, 0,
@@ -980,7 +979,7 @@ Widget* Menu::try_popup(
 	p.fakemenu = mw;
       }
 
-    } else if (widget->takesevents() && p.current_children()>=0) {
+    } else if (p.current_children()>=0) {
       // Create a normal submenu:
       int nX = mw->x() + mw->w();
       int nY = mw->y() + mw->ypos(index) - mw->ypos(0);
@@ -1054,5 +1053,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.154 2004/06/04 08:58:04 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.155 2004/10/02 04:12:35 spitzak Exp $".
 //
