@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.194 2004/10/11 06:36:20 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.195 2004/10/25 05:29:10 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -40,7 +40,7 @@
 #include <unistd.h>
 #include <sys/time.h>
 #include <limits.h>
-//#include <locale.h>
+#include <locale.h>
 #include <fltk/visual.h>
 #include <fltk/Font.h>
 #include <fltk/Browser.h>
@@ -112,6 +112,9 @@ static void fl_new_ic()
   int predit = 0;
   int sarea = 0;
   XIMStyles* xim_styles = NULL;
+
+  if (!fl_xim_im)
+      return;
 
   if (!fl_xim_fs) {
     fl_xim_fs = XCreateFontSet(xdisplay,
@@ -535,7 +538,7 @@ static int xerror_handler(Display* d, XErrorEvent* e) {
 void fltk::open_display() {
   if (xdisplay) return;
 
-  //setlocale(LC_ALL, "");
+  setlocale(LC_CTYPE, "");
   XSetIOErrorHandler(io_error_handler);
   XSetErrorHandler(xerror_handler);
 
@@ -2324,5 +2327,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.194 2004/10/11 06:36:20 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.195 2004/10/25 05:29:10 spitzak Exp $".
 //
