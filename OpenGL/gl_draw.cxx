@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.29 2004/06/22 08:28:52 spitzak Exp $"
+// "$Id: gl_draw.cxx,v 1.30 2004/07/27 07:03:06 spitzak Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -91,14 +91,9 @@ void fltk::glsetfont(fltk::Font* font, float size) {
 }
 
 void fltk::gldrawtext(const char* str, int n) {
-  int count;
-  char* buffer = utf8to8(str,n,&count);
-  if (buffer) {
-    glCallLists(count, GL_UNSIGNED_BYTE, buffer);
-    utf8free(buffer);
-  } else {
-    glCallLists(n, GL_UNSIGNED_BYTE, str);
-  }
+  char buffer[1024];
+  int count = utf8toa(str, n, buffer, 1024);
+  glCallLists(count, GL_UNSIGNED_BYTE, buffer);
 }
 
 void fltk::gldrawtext(const char* str, int n, float x, float y, float z) {
@@ -192,5 +187,5 @@ void fltk::gldrawimage(const uchar* b, int x, int y, int w, int h, int d, int ld
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.29 2004/06/22 08:28:52 spitzak Exp $".
+// End of "$Id: gl_draw.cxx,v 1.30 2004/07/27 07:03:06 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.44 2004/07/06 05:49:31 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.45 2004/07/27 07:03:08 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -564,6 +564,14 @@ static void draw_arrowbar(Color col)
   BP; vv(-0.8f,1.0f); vv(0.2f,0.0f); vv(-0.8f,-1.0f); EF(col);
 }
 
+// Warning this extends outside the box:
+static void draw_doublearrow(Color col)
+{
+  BP; vv(-0.4f,-1.0f); vv(-1.4f,0.0f); vv(-0.4f,1.0f); EF(col);
+  BP; vv(0.4f,-1.0f); vv(1.4f,0.0f); vv(0.4f,1.0f); EF(col);
+  rectangle(-0.5f,-.4f, 0.5f, .4f, col);
+}
+
 static void draw_arrowbox(Color col)
 {
   BP; vv(-0.8f,1.0f); vv(0.2f,0.0f); vv(-0.8f,-1.0f); EF(col);
@@ -625,13 +633,6 @@ static void draw_arrow1bar(Color col)
 {
   draw_arrow1(col);
   rectangle(.7f,-1.0f,1.0f,1.0f, col);
-}
-
-static void draw_doublearrow(Color col)
-{
-  BP; vv(-0.2f,-.8f); vv(-1.0f,0.0f); vv(-0.2f,.8f); EF(col);
-  BP; vv(0.2f,-.8f); vv(1.0f,0.0f); vv(0.2f,.8f); EF(col);
-  rectangle(-0.3f,-.4f, 0.3f, .4f, col);
 }
 
 static void draw_circle(Color col) {
@@ -701,5 +702,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.44 2004/07/06 05:49:31 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.45 2004/07/27 07:03:08 spitzak Exp $".
 //

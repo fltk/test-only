@@ -1,5 +1,5 @@
 //
-// "$Id: utf.c,v 1.8 2004/07/18 03:23:27 spitzak Exp $"
+// "$Id: utf.c,v 1.9 2004/07/27 07:03:08 spitzak Exp $"
 //
 // Copyright 2004 by Bill Spitzak and others.
 //
@@ -108,14 +108,14 @@ unsigned utf8decode(const char* p, const char* end, int* len)
     goto UTF8_3;
 #if 0
   } else if (c == 0xed) {
-    // RFC 3629 says surrogate chars are illegal, this skips them.
-    // I have disabled this so that utf8encode/utf8decode of 16-bit
-    // values is the identity
+    // RFC 3629 says surrogate chars are illegal.
+    // I don't check this so that all 16-bit values are preserved
+    // when going through utf8encode/utf8decode.
     if (((unsigned char*)p)[1] >= 0xa0) goto FAIL;
     goto UTF8_3;
   } else if (c == 0xef) {
-    // Supposedly 0xfffe and 0xffff are also illegal characters
-    // I have disabled this test for the same reason
+    // 0xfffe and 0xffff are also illegal characters
+    // Again I don't check this so 16-bit values are preserved
     if (((unsigned char*)p)[1]==0xbf &&
 	((unsigned char*)p)[2]>=0xbe) goto FAIL;
     goto UTF8_3;
@@ -131,15 +131,12 @@ unsigned utf8decode(const char* p, const char* end, int* len)
   } else if (c == 0xf0) {
     if (((unsigned char*)p)[1] < 0x90) goto FAIL;
     goto UTF8_4;
-  } else if (c == 0xf4) {
-    if (((unsigned char*)p)[1] > 0x8f) goto FAIL; // after 0x10ffff
-    goto UTF8_4;
-  } else if (c < 0xf5) {
+  } else if (c < 0xf4) {
   UTF8_4:
     if (p+3 >= end || (p[2]&0xc0) != 0x80 || (p[3]&0xc0) != 0x80) goto FAIL;
     *len = 4;
 #if 0
-    // supposedly xxfffe and xxffff are illegal:
+    // All codes ending in fffe or ffff are illegal:
     if ((p[1]&0xf)==0xf &&
 	((unsigned char*)p)[2] == 0xbf &&
 	((unsigned char*)p)[3] >= 0xbe) goto FAIL;
@@ -149,6 +146,9 @@ unsigned utf8decode(const char* p, const char* end, int* len)
       ((p[1] & 0x3f) << 12) +
       ((p[2] & 0x3f) << 6) +
       ((p[3] & 0x3f));
+  } else if (c == 0xf4) {
+    if (((unsigned char*)p)[1] > 0x8f) goto FAIL; // after 0x10ffff
+    goto UTF8_4;
   } else {
   FAIL:
     *len = 1;
@@ -156,45 +156,13 @@ unsigned utf8decode(const char* p, const char* end, int* len)
   }
 }
 
-/*! Return non-zero if the characters between \a p and \a end
-    appear to be UTF-8 encoded. This will return non-zero if
-    at least one legal UTF-8 encoded character is found.
-
-    If at least one legal UTF-8 character is found, but also
-    some errorneous UTF-8 is found, this will return a negative
-    number. So is_utf8()>0 will return true for legal-only UTF-8.
-
-    Most of FLTK will work with strings no matter what this returns,
-    treating illegal UTF-8 sequences as individual bytes of ISO-8859-1
-    encoded text. However it may be useful to use this test before
-    passing a string to a system interface that either barfs on
-    illegal UTF-8 or is is much slower than the byte interface.
-*/
-int is_utf8(const char* p, const char* end) {
-  int ret = 0;
-  int err = 0;
-  while (p < end) {
-    unsigned char c = *(unsigned char*)p;
-    if (c < 0x80) {
-      p++;
-    } else if (c < 0xC2 || c > 0xf4) { // error byte
-      p++;
-      err = 1;
-    } else {
-      int len; utf8decode(p,end,&len);
-      if (len > 1) ret = len; else err = 1;
-      p += len;
-    }
-  }
-  return err ? -ret : ret;
-}
-
 /*! Return the length of a legal UTF-8 encoding that starts with
     this byte. Returns 1 for illegal bytes (0xc0, 0xc1, 0xf5 to 0xff).
 
-    <i>This function is depreciated. You should examine all the bytes
-    in the UTF-8 character for legality, so that raw ISO-8859-1
-    characters are less likely to be confused with UTF-8.</i>
+    <i>This function is depreciated. If the following bytes are
+    not legal UTF-8 then using this to step forward to the next
+    character will produce different positions than utf8decode()
+    will produce.
 */
 int utf8len(char cc) {
   unsigned char c = (unsigned char)cc;
@@ -297,7 +265,7 @@ int utf8bytes(unsigned ucs) {
 }
 
 /*! Write the UTF-8 encoding of \e ucs into \e buf and return the
-    number of bytes written. Up to 6 bytes may be written. If you know
+    number of bytes written. Up to 4 bytes may be written. If you know
     that \a ucs is less than 0x10000 then at most 3 bytes will be written.
     If you wish to speed this up, remember that anything less than 0x80
     is written as a single byte.
@@ -306,10 +274,10 @@ int utf8bytes(unsigned ucs) {
     according to RFC 3629. These are converted as though they are
     0xFFFD (REPLACEMENT CHARACTER).
 
-    If \a ucs is in the range 0xd800 to 0xdfff are "surrogate pairs"
-    and are supposed to be illegal in UTF-8. However I encode these
-    in the standard way, so that utf8decode will return the original
-    value unchanged.
+    \a ucs in the range 0xd800 to 0xdfff, or ending with 0xfffe or
+    0xffff are also illegal according to RFC 3629. However I encode
+    these as though they are legal, so that utf8encode/utf8decode will
+    be the identity for all codes between 0 and 0x10ffff.
 */
 int utf8encode(unsigned ucs, char* buf) {
   if (ucs < 0x000080U) {
@@ -332,269 +300,384 @@ int utf8encode(unsigned ucs, char* buf) {
     return 4;
   } else {
     // encode 0xfffd:
-    buf[0] = 0xef;
-    buf[1] = 0xbf;
-    buf[2] = 0xbd;
+    buf[0] = 0xefU;
+    buf[1] = 0xbfU;
+    buf[2] = 0xbdU;
     return 3;
   }
 }
 
 /*! Convert a UTF-8 sequence into an array of 32-bit Unicode indexes.
 
-    <i>If the conversion is the identity (ie every byte turns into the
-    matching 32-bit value) then null is returned</i>. You should then
-    pass the string to the 8-bit interface, or copy it yourself.
-    \e count is still set to the length. This appears to be a useful
-    optimization, as such strings are very common.
+    \a src points at the UTF-8, and \a srclen is the number of bytes to
+    convert.
 
-    If conversion is needed, the return value is a pointer to a
-    malloc() buffer, and the number of words written to the buffer are
-    returned in \e count. The buffer has one more location allocated
-    and a zero is put there so you can use it as a terminated string.
-    You must call free() or utf8free() on the buffer.
+    \a dst points at an array to write the Unicode to, and \a dstlen
+    is the number of locations in this array. At most \a dstlen-1
+    32-bit words will be written there, plus a 0 terminating
+    character. Thus this function will never overwrite the buffer and
+    will always return a zero-terminated string. If \a dstlen is zero
+    then \a dst can be null and no data is written, but the length is
+    returned.
 
-    Errors in the UTF-8 are converted as individual bytes, same as
-    utf8decode() does. This allows ISO-8859-1 text mistakenly identified
-    as UTF-8 to be printed correctly.
-*/
-unsigned* utf8to32(const char* text, int n, int* charcount) {
-  const char* p = text;
-  const char* e = text+n;
-  char sawutf8 = 0;
-  int count = 0;
-  unsigned* buffer;
-  while (p < e) {
-    if (*(unsigned char*)p < 0x80) p++; // ascii
-    else if (*(unsigned char*)p < 0xa0) {sawutf8 = 1; p++;} //cp1252
-    else if (*(unsigned char*)p < 0xC2) p++; // other bad code
-    else {
-      int len; utf8decode(p,e,&len);
-      if (len > 1) sawutf8 = 1;
-      else if (!len) len = 1;
-      p += len;
-    }
-    count++;
-  }
-  *charcount = count;
-  if (!sawutf8) return 0;
-  buffer = (unsigned*)(malloc((count+1)*sizeof(unsigned)));
-  count = 0;
-  p = text;
-  while (p < e) {
+    The return value is the number of words that \e would be written
+    to \a dst if it were long enough, not counting the terminating
+    zero. If the return value is greater or equal to \a dstlen it
+    indicates truncation, you can then allocate a new array of size
+    return+1 and call this again.
+
+    Errors in the UTF-8 are converted as though each byte in the
+    erroneous string is in the Microsoft CP1252 encoding. This allows
+    ISO-8859-1 text mistakenly identified as UTF-8 to be printed
+    correctly.  */
+unsigned utf8to32(const char* src, unsigned srclen,
+		  unsigned* dst, unsigned dstlen)
+{
+  const char* p = src;
+  const char* e = src+srclen;
+  unsigned count = 0;
+  if (dstlen) for (;;) {
+    if (p >= e) {dst[count] = 0; return count;}
     if (!(*p & 0x80)) { // ascii
-      buffer[count] = *p++;
+      dst[count] = *p++;
     } else {
       int len;
-      buffer[count] = utf8decode(p,e,&len);
+      dst[count] = utf8decode(p,e,&len);
       p += len;
     }
-    count++;
+    if (++count >= dstlen) {dst[count-1] = 0; break;}
+  }	
+  // we filled dst, measure the rest:
+  while (p < e) {
+    if (!(*p & 0x80)) p++;
+    else {
+      int len;
+      utf8decode(p,e,&len);
+      p += len;
+    }
+    ++count;
   }
-  return buffer;
+  return count;
 }
 
 /*! Convert a UTF-8 sequence into UTF-16 (the encoding used on Windows
-    for the "w" versions of calls).
+    for the "W" versions of calls).
 
-    <i>If the conversion is the identity (ie every byte turns into the
-    matching 16-bit value) then null is returned</i>. You should then
-    pass the string to the 8-bit interface, or copy it yourself.
-    \e count is still set to the length. This appears to be a useful
-    optimization.
+    \a src points at the UTF-8, and \a srclen is the number of bytes to
+    convert.
 
-    If conversion is needed, the return value is a pointer to a
-    malloc() buffer, and the number of words written to the buffer are
-    returned in \e count. The buffer has one more location allocated
-    and a zero is put there so it is a null-terminated string.
-    You must call free() or utf8free() on the buffer.
- 
-    Errors in the UTF-8 are converted as individual bytes, same as
-    utf8decode() does. This allows ISO-8859-1 text mistakenly identified
-    as UTF-8 to be printed correctly.
+    \a dst points at an array to write the UTF-16 to, and \a dstlen is
+    the number of locations in this array. At most \a dstlen-1 16-bit
+    words will be written there, plus a 0 terminating character. Thus
+    this function will never overwrite the buffer and will always
+    return a zero-terminated string. If \a dstlen is zero then \a dst
+    can be null and no data is written, but the length is returned.
+
+    \a dst is of type "unsigned short*" rather than "wchar_t*" due to
+    the unfortunate decision on Unix to define wchar_t to be 32 bits.
+    It appears that you need to use a cast on WindowsCE to send these
+    results to some Windows functions.
+
+    The return value is the number of words that \e would be written
+    to \a dst if it were long enough, not counting the terminating
+    zero. If the return value is greater or equal to \a dstlen it
+    indicates truncation, you can then allocate a new array of size
+    return+1 and call this again.
+
+    Errors in the UTF-8 are converted as though each byte in the
+    erroneous string is in the Microsoft CP1252 encoding. This allows
+    ISO-8859-1 text mistakenly identified as UTF-8 to be printed
+    correctly.
 
     Codes in the range 0x10000 to 0x10ffff are converted to "surrogate
-    pairs" which take two words each. Because of this lossage we
-    strongly recommend you do all your work in UTF-8.
-
-    Recommended code for calling a Windows interface function:
-
-    \code
-#ifdef _WIN32
-  int ucslen;
-  unsigned short* ucs = utf8to16(name, strlen(name), &ucslen);
-  if (ucs) {
-    fp = _wfopen(ucs, L"r");
-    utf8free(ucs);
-  } else
-#endif
-    fp = fopen(name, "r");
-    \endcode
-
-    The return type is not wchar_t, due to the unfortunate decision on
-    Unix to define that as being bigger than 16 bits. This apparently
-    requires you to cast the results on Windows CE?  */
-unsigned short* utf8to16(const char* text, int n, int* charcount) {
-  const char* p = text;
-  const char* e = text+n;
-  int sawutf8 = 0;
-  int count = 0;
-  unsigned short* buffer;
-  while (p < e) {
-    if (*(unsigned char*)p < 0x80) p++; // ascii
-    else if (*(unsigned char*)p < 0xa0) {sawutf8 = 1; p++;} //cp1252
-    else if (*(unsigned char*)p < 0xC2) p++; // other bad code
-    else {
-      int len; utf8decode(p,e,&len);
-      if (len > 1) {
-	sawutf8 = 1;
-	// detect a code that will turn into a surrogate pair:
-	if (len == 4) count++;
-      } else if (!len)
-	len = 1;
-      p += len;
-    }
-    count++;
-  }
-  *charcount = count;
-  if (!sawutf8) return 0;
-  buffer = (unsigned short*)(malloc((count+1)*sizeof(unsigned short)));
-  count = 0;
-  p = text;
-  while (p < e) {
+    pairs" which take two words each. Not all Windows functions expect
+    this.
+*/
+unsigned utf8to16(const char* src, unsigned srclen,
+		  unsigned short* dst, unsigned dstlen)
+{		  
+  const char* p = src;
+  const char* e = src+srclen;
+  unsigned count = 0;
+  if (dstlen) for (;;) {
+    if (p >= e) {dst[count] = 0; return count;}
     if (!(*p & 0x80)) { // ascii
-      buffer[count] = *p++;
+      dst[count] = *p++;
     } else {
-      int len;
-      unsigned ucs = utf8decode(p,e,&len);
+      int len; unsigned ucs = utf8decode(p,e,&len);
       p += len;
-      if (ucs < 0x10000U) {
-	buffer[count] = (unsigned short)ucs;
+      if (ucs < 0x10000) {
+	dst[count] = ucs;
       } else {
-	// write a surrogate pair:
-	buffer[count++] = (((ucs-0x10000u)>>10)&0x3ff) | 0xd800;
-	buffer[count] = (ucs&0x3ff) | 0xdc00;
+	// make a surrogate pair:
+	if (count+2 >= dstlen) {dst[count] = 0; count += 2; break;}
+	dst[count] = (((ucs-0x10000u)>>10)&0x3ff) | 0xd800;
+	dst[++count] = (ucs&0x3ff) | 0xdc00;
       }
     }
-    count++;
+    if (++count == dstlen) {dst[count-1] = 0; break;}
   }
-  buffer[count] = 0;
-  return buffer;
+  // we filled dst, measure the rest:
+  while (p < e) {
+    if (!(*p & 0x80)) p++;
+    else {
+      int len; unsigned ucs = utf8decode(p,e,&len);
+      p += len;
+      if (ucs >= 0x10000) ++count;
+    }
+    ++count;
+  }
+  return count;
 }
 
 /*! Convert a UTF-8 sequence into an array of 1-byte characters.
 
-    If the conversion is the identity (ie every byte is unchanged)
-    then null is returned. You should use the original buffer in this
-    case.  \e count is still set to the length. This appears to be a
-    useful optimization, as such strings are very common.
-
-    If conversion is needed, the return value is a pointer to a
-    malloc() buffer, and the number of bytes written to the buffer are
-    returned in \e count. The buffer has one more location allocated
-    and a null is put there so you can use it as a terminated string.
-    You must call free() or utf8free() on the buffer.
+    If the UTF-8 decodes to a character greater than 0xff then it is
+    replaced with '¿' (0xbf).
 
     Errors in the UTF-8 are converted as individual bytes, same as
     utf8decode() does. This allows ISO-8859-1 text mistakenly identified
-    as UTF-8 to be printed correctly. The cp1512 emulation is not done,
-    unexpected codes in the range 0x80-0x9f are returned unchanged.
+    as UTF-8 to be printed correctly (and possibly CP1512 on Windows).
 
-    If the UTF-8 decodes to a character greater than 0xff then it is
-    replaced with '¿' (0xbf).
+    \a src points at the UTF-8, and \a srclen is the number of bytes to
+    convert.
+
+    \a dst points at a char array to write, and \a dstlen is the
+    number of characters in this array. At most \a dstlen-1 chars
+    will be written there, plus a NUL terminating character. Thus
+    this function will never overwrite the buffer and will always
+    return a nul-terminated string. If \a dstlen is zero then \a dst
+    can be null and no data is written, but the length is returned.
+
+    The return value is the number of chars that \e would be written
+    to \a dst if it were long enough, not counting the terminating
+    nul. If the return value is greater or equal to \a dstlen it
+    indicates truncation, you can then allocate a new array of size
+    return+1 and call this again.
 */
-char* utf8to8(const char* text, int n, int* charcount) {
-  const char* p = text;
-  const char* e = text+n;
-  int sawutf8 = 0;
-  int count = 0;
-  char* buffer;
-  while (p < e) {
-    unsigned char c = *(unsigned char*)p;
-    if (c < 0xC2) p++; // ascii letter or bad code
-    else {
-      int len; utf8decode(p,e,&len);
-      if (len > 1) sawutf8 = 1;
-      else if (!len) len = 1;
-      p += len;
-    }
-    count++;
-  }
-  *charcount = count;
-  if (!sawutf8) return 0;
-  buffer = (char*)(malloc(count+1));
-  count = 0;
-  p = text;
-  while (p < e) {
-    unsigned char c = *(unsigned char*)p;
-    if (c < 0xC2) { // ascii letter or bad code
-      buffer[count] = c;
+unsigned utf8toa(const char* src, unsigned srclen,
+		 char* dst, unsigned dstlen)
+{
+  const char* p = src;
+  const char* e = src+srclen;
+  unsigned count = 0;
+  if (dstlen) for (;;) {
+    unsigned char c;
+    if (p >= e) {dst[count] = 0; return count;}
+    c = *(unsigned char*)p;
+    if (c < 0xC2) { // ascii or bad code
+      dst[count] = c;
       p++;
     } else {
+      int len; unsigned ucs = utf8decode(p,e,&len);
+      p += len;
+      if (ucs < 0x100) dst[count] = ucs;
+      else dst[count] = 0xbfU;
+    }
+    if (++count >= dstlen) {dst[count-1] = 0; break;}
+  }	
+  // we filled dst, measure the rest:
+  while (p < e) {
+    if (!(*p & 0x80)) p++;
+    else {
       int len;
-      unsigned ucs = utf8decode(p,e,&len);
-      if (ucs < 0x100) buffer[count] = ucs;
-      else buffer[count] = 0xbf;
+      utf8decode(p,e,&len);
       p += len;
     }
-    count++;
+    ++count;
   }
-  buffer[count] = 0;
-  return buffer;
+  return count;
 }
 
 /*! Turn UTF-16 (such as Windows uses for "wide characters") into UTF-8.
 
-    The return value is a pointer to a malloc() buffer, and the number
-    of bytes written to the buffer are returned in \e count. The
-    buffer has one more location allocated, if you put a zero there
-    you can use it as a terminated string.  You must call free() or
-    utf8free() on the buffer.
+    \a dst points at an array to write the UTF-8 to, and \a dstlen is
+    the number of bytes in this array. At most \a dstlen-1 bytes
+    will be written there, plus a 0 terminating character. Thus
+    this function will never overwrite the buffer and will always
+    return a zero-terminated string. If \a dstlen is zero then \a dst
+    can be null and no data is written, but the length is returned.
+
+    \a src points at the UTF-16, and \a srclen is the number of words
+    to convert. \a src is of type "unsigned short*" rather than
+    "wchar_t*" due to the unfortunate decision on Unix to define
+    wchar_t to be 32 bits.  It appears that you need to use a cast on
+    WindowsCE to send these results to some Windows functions.
+
+    The return value is the number of bytes that \e would be written
+    to \a dst if it were long enough, not counting the terminating
+    zero. If the return value is greater or equal to \a dstlen it
+    indicates truncation, you can then allocate a new array of size
+    return+1 and call this again.
 
     Unmatched halves of "surrogate pairs" are converted directly to
     the same Unicode value. This is supposedly the wrong thing to do,
-    but this way converting to UTF-8 and back is lossless.
+    but this way converting to UTF-8 and back again is lossless.
 */
-char* utf8from16(const unsigned short* wtext, int n, int* bytes) {
-  int count = 0;
-  int i;
-  char* buffer;
-  for (i = 0; i < n; i++) {
-    unsigned short ucs = wtext[i];
+unsigned utf8from16(char* dst, unsigned dstlen,
+		    const unsigned short* src, unsigned srclen) {
+  unsigned i = 0;
+  unsigned count = 0;
+  if (dstlen) for (;;) {
+    unsigned ucs;
+    if (i >= srclen) {dst[count] = 0; return count;}
+    ucs = src[i++];
+    if (ucs < 0x80U) {
+      dst[count] = ucs;
+      if (++count >= dstlen) {dst[count-1] = 0; break;}
+    } else if (ucs < 0x800U) { // 2 bytes
+      if (count+2 >= dstlen) {dst[count] = 0; count += 2; break;}
+      dst[count] = 0xc0 | (ucs >> 6);
+      dst[++count] = 0x80 | (ucs & 0x3F);
+    } else if (ucs >= 0xd800 && ucs <= 0xdbff && i < srclen &&
+	       src[i] >= 0xdc00 && src[i] <= 0xdfff) {
+      // surrogate pair
+      unsigned ucs2 = src[i++];
+      ucs = 0x10000U + ((ucs&0x3ff)<<10) + (ucs2&0x3ff);
+      // all surrogate pairs turn into 4-byte utf8
+      if (count+4 >= dstlen) {dst[count] = 0; count += 4; break;}
+      dst[count] = 0xf0 | (ucs >> 18);
+      dst[++count] = 0x80 | ((ucs >> 12) & 0x3F);
+      dst[++count] = 0x80 | ((ucs >> 6) & 0x3F);
+      dst[++count] = 0x80 | (ucs & 0x3F);
+    } else {
+      // all others are 3 bytes:
+      if (count+3 >= dstlen) {dst[count] = 0; count += 3; break;}
+      dst[count] = 0xe0 | (ucs >> 12);
+      dst[++count] = 0x80 | ((ucs >> 6) & 0x3F);
+      dst[++count] = 0x80 | (ucs & 0x3F);
+    }
+  }	
+  // we filled dst, measure the rest:
+  while (i < srclen) {
+    unsigned ucs = src[i++];
     if (ucs < 0x80U) {
       count++;
-    } else if (ucs < 0x800U) {
+    } else if (ucs < 0x800U) { // 2 bytes
       count += 2;
+    } else if (ucs >= 0xd800 && ucs <= 0xdbff && i < srclen-1 &&
+	       src[i+1] >= 0xdc00 && src[i+1] <= 0xdfff) {
+      // surrogate pair
+      ++i;
+      count += 4;
     } else {
       count += 3;
-      // detect and skip a surrogate pair:
-      if (ucs >= 0xd800 && ucs <= 0xdbff && i < n-1 &&
-	  wtext[i+1] >= 0xdc00 && wtext[i+1] <= 0xdfff) {
-	count++; // all surrogate pairs turn into 4-byte utf8
-	i++; // skip second half of surrogate pair
-      }
     }
   }
-  *bytes = count;
-  buffer = (char*)(malloc(count+1));
-  count = 0;
-  for (i = 0; i < n; i++) {
-    unsigned ucs = wtext[i];
-    if (ucs < 0x80U) {
-      buffer[count++] = (char)(ucs);
-    } else {
-      // detect and decode a surrogate pair:
-      if (ucs >= 0xd800 && ucs <= 0xdbff && i < n-1 &&
-	  wtext[i+1] >= 0xdc00 && wtext[i+1] <= 0xdfff) {
-	unsigned ucs2 = wtext[++i];
-	ucs = 0x10000U + ((ucs&0x3ff)<<10) + (ucs2&0x3ff);
-      }
-      count += utf8encode(ucs, buffer+count);
-    }
-  }
-  return buffer;
+  return count;
 }
 
+#ifdef _WIN32
+# include <windows.h>
+#endif
+
+/*! Convert the UTF-8 used by FLTK to the locale-specific encoding
+    used for filenames and some other calls on Windows. Unfortunatley
+    due to stupid design you will have to do this as needed for
+    filenames.
+
+    Like the other calls, up to \a dstlen bytes are written to \a dst,
+    including the null terminator. The return value is the number of bytes
+    that would be written, not counting the null terminator. If greator
+    or equal to \a dstlen then if you malloc a new array of size n+1 you
+    will have the space needed for the entire string.
+
+    On Unix or on Windows when a UTF-8 locale is in effect, this
+    does not change the data. It is copied and truncated as necessary to
+    the destination buffer and \a srclen is always returned.
+*/
+unsigned utf8tomb(const char* src, unsigned srclen,
+		  char* dst, unsigned dstlen)
+{
+#ifdef _WIN32
+  unsigned cp = GetACP();
+  if (cp != CP_UTF8) {
+    unsigned short lbuf[1024];
+    unsigned short* buf = lbuf;
+    unsigned length = utf8to16(src, srclen, buf, 1024);
+    unsigned ret;
+    if (length >= 1024) {
+      buf = (unsigned short*)(malloc((length+1)*sizeof(unsigned short)));
+      utf8to16(src, srclen, buf, length+1);
+    }
+    ret =
+      WideCharToMultiByte(cp, 0, buf, length, dst, dstlen, 0, 0) - 1;
+    // if it overflows, get the actual length:
+    if (ret >= dstlen-1)
+      ret =
+	WideCharToMultiByte(cp, 0, buf, length, 0, 0, 0, 0) - 1;
+    if (buf != lbuf) free((void*)buf);
+    return ret;
+  }
+#endif
+  // identity transform:
+  if (srclen <= dstlen) {
+    memcpy(dst, src, srclen);
+    dst[srclen] = 0;
+  } else {
+    memcpy(dst, src, dstlen-1);
+    dst[dstlen] = 0;
+  }
+  return srclen;
+}
+  
+/*! Convert a filename from the locale-specific multibyte encoding
+    used by Windows to UTF-8 as used by FLTK.
+
+    Like the other calls, up to \a dstlen bytes are written to \a dst,
+    including the null terminator. The return value is the number of bytes
+    that would be written, not counting the null terminator. If greator
+    or equal to \a dstlen then if you malloc a new array of size n+1 you
+    will have the space needed for the entire string.
+
+    On Unix or on Windows when a UTF-8 locale is in effect, this
+    does not change the data. It is copied and truncated as necessary to
+    the destination buffer and \a srclen is always returned.
+*/
+unsigned utf8frommb(char* dst, unsigned dstlen,
+		    const char* src, unsigned srclen)
+{
+#ifdef _WIN32
+  UINT cp = GetACP();
+  if (cp != CP_UTF8) {
+    unsigned short lbuf[1024];
+    unsigned short* buf = lbuf;
+    unsigned length;
+    unsigned ret;
+    length =
+      MultiByteToWideChar(cp, 0, src, srclen, buf, 1024);
+    if (length >= 1024) {
+      length = MultiByteToWideChar(cp, 0, src, srclen, 0, 0);
+      buf = (unsigned short*)(malloc(length*sizeof(unsigned short)));
+      MultiByteToWideChar(cp, 0, src, srclen, buf, length);
+    }
+    ret = utf8from16(dst, dstlen, buf, length);
+    if (buf != lbuf) free((void*)buf);
+    return ret;
+  }
+#endif
+  // identity transform:
+  if (srclen <= dstlen) {
+    memcpy(dst, src, srclen);
+    dst[srclen] = 0;
+  } else {
+    memcpy(dst, src, dstlen-1);
+    dst[dstlen] = 0;
+  }
+  return srclen;
+}
+  
+
+
 #if 0 // These are nyi...
+
+unsigned utf8from32(char* dst, unsigned dstlen,
+		    const unsigned short* src, unsigned srclen);
+
+// utf-8 cleanup, replaces errors with legal utf-8?
+unsigned utf8toutf8(char* dst, unsigned dstlen,
+		    const char* src, unsigned srclen);
+
 
 /*! Convert the local multi-byte encoding to UTF-8. A multi-byte
     encoding depends on the "locale" and may be used to store text
@@ -610,44 +693,7 @@ char* utf8from16(const unsigned short* wtext, int n, int* bytes) {
     In this case NULL is returned, and you should use the original
     buffer. \a bytes is set to strlen(mb).
 */
-char* utf8frommb(const char *mb, int* bytes) {
-#ifdef _WIN32
-  // ??
-#else
-  // Assumme that if no high bit is set, it is done. This is
-  // wrong for some mb encodings like UTF-7, but I don't think
-  // that is a problem:
-  int n = 0;
-  for (;;n++) {
-    if (!mb[n]) {bytes = n; return;}
-    if (mb[n]&0x80) break;
-  }
-  // get how many characters there are, allocate buffer, and convert:
-  int n = mbstowcs(0, mb, 0);
-  wchar_t* ucs = (wchar_t*)malloc((n+1)*sizeof(wchar_t));
-  n = mbstowcs(ucs, mb, n+1);
-  char* utf = utf8from32(ucs, n, bytes);
-  free((void*)ucs);
-  return utf;
 #endif
-}
-
-/*! Convert null-terminated utf8 *to* the mb encoding used by locale.
-  Used to turn a filename shown to the user in utf8 into a filename
-  to open (on Windows at least, not clear if you want this on Unix)
-*/
-char* utf8tomb(const char* src, int* bytes) {
-  NYI;
-}
-#endif
-
-/*! This is a wrapper for free(p). It is provided so you can free the
-    buffers returned by the utf8 converter functions without including
-    stdlib.h.
-*/
-void utf8free(void* p) {
-  free(p);
-}
 
 #ifdef __cplusplus
 }

@@ -1,5 +1,5 @@
 //
-// "$Id: filename_isdir.cxx,v 1.19 2004/07/19 23:33:05 laza2000 Exp $"
+// "$Id: filename_isdir.cxx,v 1.20 2004/07/27 07:03:07 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -40,21 +40,17 @@ static int last_op = 0;
 // This function makes sure that 'stat' is only called once if the users
 // queries different aspects on the same file. 'stat' can be relatively slow.
 static bool fill_stat(const char *name, int new_op) {
-  if (!last_statname) last_statname = (char*)malloc(FL_PATH_MAX);
+  if (!last_statname) {
+    last_statname = (char*)malloc(FL_PATH_MAX);
+    *last_statname = 0;
+  }
   if (last_op!=new_op && strcmp(last_statname, name)==0) return last_result;
   strncpy(last_statname, name, FL_PATH_MAX-1);
   last_statname[FL_PATH_MAX-1] = 0;
 #if defined(_WIN32) || defined(__EMX__)
-  int n;
   char namebuf[FL_PATH_MAX];
-  unsigned short* ucs = utf8to16(name, strlen(name), &n);
-  if (ucs) {
-    ZeroMemory(namebuf, sizeof(namebuf));
-    WideCharToMultiByte(GetACP(), 0, US2WC(ucs), n,
-			namebuf, sizeof(namebuf), NULL, 0);
-    name = namebuf;
-    utf8free(ucs);
-  }
+  utf8tomb(name, strlen(name), namebuf, FL_PATH_MAX);
+  name = namebuf;
   // _WIN32 apparently thinks A: is not a directory, but A:/ is!
   char buffer[4];
   if (name[0] && name[1]==':' && name[2] == 0) {
@@ -92,5 +88,5 @@ long int filename_mtime(const char *name) {
 }
 
 //
-// End of "$Id: filename_isdir.cxx,v 1.19 2004/07/19 23:33:05 laza2000 Exp $".
+// End of "$Id: filename_isdir.cxx,v 1.20 2004/07/27 07:03:07 spitzak Exp $".
 //

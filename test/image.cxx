@@ -66,21 +66,21 @@ uchar* make_image(int n) {
   uchar* image = new uchar[n*WIDTH*HEIGHT];
   uchar *p = image;
   for (int y = 0; y < HEIGHT; y++) {
-    double Y = double(y)/(HEIGHT-1);
+    int yint = y*8/HEIGHT;
     for (int x = 0; x < WIDTH; x++) {
-      int a = 255;
-      if (n > 3) { // add alpha channel...
-	a = x-WIDTH/2;
-	int b = y-HEIGHT/2;
-	a = (a*a+b*b)*255/(WIDTH/2*HEIGHT/2)-100;
-	if (a > 255) a = 255;
-	if (a < 0) a = 0;
+      int a = (x-WIDTH/4)*255*2/WIDTH;
+      if (a > 255) a = 255;
+      if (a < 0) a = 0;
+      if (n > 3) {
+	*p++ = (yint&1 ? 255 : 127);
+	*p++ = (yint&2 ? 255 : 127);
+	*p++ = (yint&4 ? 255 : 127);
+	*p++ = a;
+      } else {
+	*p++ = (yint&1 ? a : a/2);
+	*p++ = (yint&2 ? a : a/2);
+	*p++ = (yint&4 ? a : a/2);
       }
-      double X = double(x)/(WIDTH-1);
-      *p++ = uchar(a*((1-X)*(1-Y))); // red in upper-left
-      *p++ = uchar(a*((1-X)*Y));	// green in lower-left
-      *p++ = uchar(a*(X*Y));	// blue in lower-right
-      if (n > 3) *p++ = a;
     }
   }
   return image;
@@ -274,5 +274,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: image.cxx,v 1.20 2004/06/04 08:35:11 spitzak Exp $".
+// End of "$Id: image.cxx,v 1.21 2004/07/27 07:03:08 spitzak Exp $".
 //

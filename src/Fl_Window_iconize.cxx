@@ -1,4 +1,5 @@
-// "$Id: Fl_Window_iconize.cxx,v 1.21 2004/07/25 23:22:14 spitzak Exp $"
+//
+// "$Id: Fl_Window_iconize.cxx,v 1.22 2004/07/27 07:03:07 spitzak Exp $"
 //
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
@@ -55,5 +56,5 @@ void Window::iconize() {
 }
 
 //
-// End of "$Id: Fl_Window_iconize.cxx,v 1.21 2004/07/25 23:22:14 spitzak Exp $".
+// End of "$Id: Fl_Window_iconize.cxx,v 1.22 2004/07/27 07:03:07 spitzak Exp $".
 //

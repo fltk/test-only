@@ -1,5 +1,5 @@
 //
-// "$Id: scandir_win32.c,v 1.20 2004/07/15 16:27:27 spitzak Exp $"
+// "$Id: scandir_win32.c,v 1.21 2004/07/27 07:03:08 spitzak Exp $"
 //
 // _WIN32 scandir function for the Fast Light Tool Kit (FLTK).
 //
@@ -38,27 +38,17 @@ int scandir(const char *dirname, struct dirent ***namelist,
     int (*select)(struct dirent *),
     int (*compar)(struct dirent **, struct dirent **)) {
   int len;
-  char *findIn, *d;
+  char *d;
   WIN32_FIND_DATA find;
   HANDLE h;
   int nDir = 0, NDir = 0;
   struct dirent **dir = 0, *selectDir;
   unsigned long ret;
-  wchar_t	*ucs;
-  char	utf[MAX_PATH*6];
-  int n;
+  char findIn[MAX_PATH*4];
+  char utf[MAX_PATH*4];
 
-  len    = strlen(dirname);
-  findIn = malloc(len+5);
-  strcpy(findIn, dirname);
+  len = utf8tomb(dirname, strlen(dirname), findIn, MAX_PATH*4);
 
-  ucs = utf8to16(dirname, len, &n);
-  if (ucs) {
-	memset(findIn, 0, len+5);
-	WideCharToMultiByte(GetACP(), 0, ucs, n,
-			findIn, len+5, NULL, 0);
-	utf8free(ucs);
-  }
   for (d = findIn; *d; d++) if (*d=='/') *d='\\';
   if ((len==0)) { strcpy(findIn, ".\\*"); }
   if ((len==1)&& (d[-1]=='.')) { strcpy(findIn, ".\\*"); }
@@ -77,19 +67,7 @@ int scandir(const char *dirname, struct dirent ***namelist,
 #if 0
     const char* utf = find.cFileName;
 #else
-    // WAS: not sure if this is a good idea, does this mean the returned
-    // names may not work if passed to the non-W file commands?
-    // Also may want to check if GetACP() is CP_ACP or CP_UTF8
-    wchar_t	ucs[MAX_PATH];
-    char	utf[MAX_PATH*6];
-    int		i, len = 0;
-    int ucslen = MultiByteToWideChar(GetACP(), MB_PRECOMPOSED,
-				     (char*)find.cFileName,
-				     strlen(find.cFileName),
-				     (wchar_t*)ucs, MAX_PATH);
-    for (i = 0; i < ucslen; i++)
-      len += utf8encode(ucs[i], utf + len);
-    utf[len] = 0;
+    utf8frommb(utf, MAX_PATH*4, find.cFileName, strlen(find.cFileName));
 #endif
     selectDir=(struct dirent*)malloc(sizeof(struct dirent)+strlen(utf));
     strcpy(selectDir->d_name, utf);
@@ -124,5 +102,5 @@ int scandir(const char *dirname, struct dirent ***namelist,
 }
 
 //
-// End of "$Id: scandir_win32.c,v 1.20 2004/07/15 16:27:27 spitzak Exp $".
+// End of "$Id: scandir_win32.c,v 1.21 2004/07/27 07:03:08 spitzak Exp $".
 //

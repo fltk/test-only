@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.45 2004/07/19 23:43:08 laza2000 Exp $"
+// "$Id: Fl_Image.cxx,v 1.46 2004/07/27 07:03:07 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -369,6 +369,11 @@ void Image::copy(int X, int Y, int W, int H, int src_x, int src_y) const {
 #endif
 }
 
+// Link against msimg32 lib to get the AlphaBlend function:
+#if defined(_MSC_VER)
+# pragma comment(lib, "msimg32.lib")
+#endif
+
 /*! Merge the image over whatever is in the current output. If this
   image has no alpha this is the same as copy. If there is an alpha
   channel then pixels are replaced as a "non premultiplied over"
@@ -381,11 +386,12 @@ void Image::copy(int X, int Y, int W, int H, int src_x, int src_y) const {
   part of the image that then intersects x,y,w,h is then drawn.
 */
 void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
+
   // Draw bitmaps as documented, the rgb pretends to be black:
-  if (!rgb && alpha) { setcolor(BLACK); fill(X,Y,W,H,src_x,src_y); return; }
+  if (!rgb) { setcolor(BLACK); fill(X,Y,W,H,src_x,src_y); return; }
 
   // Don't waste time for solid white alpha:  
-  if (!alpha && rgb!=alpha) { copy(X,Y,W,H,src_x,src_y); return; }
+  if (!alpha) { copy(X,Y,W,H,src_x,src_y); return; }
 
   // okay now we know we have rgb and alpha, draw it:
   clip_code();
@@ -394,15 +400,16 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
   // I can't figure out how to combine a mask with existing region,
   // so the mask replaces the region instead. This can draw some of
   // the image outside the current clip region if it is not rectangular.
-  XSetClipMask(xdisplay, gc, (Pixmap)alpha);
+  if (alpha != rgb) XSetClipMask(xdisplay, gc, (Pixmap)alpha);
+  // alpha == rgb indicates a real alpha is in the source pixmap. I think
+  // the Render extension is needed to draw that...
   XSetClipOrigin(xdisplay, gc, x-src_x, y-src_y);
   XCopyArea(xdisplay, (Pixmap)rgb, xwindow, gc, src_x, src_y, w, h, x, y);
   // put the old clip region back:
   XSetClipOrigin(xdisplay, gc, 0, 0);
   fl_restore_clip();
 #elif defined(_WIN32)
-  if(alpha == rgb) 
-  {
+  if(alpha == rgb) {
     HDC new_dc = CreateCompatibleDC(dc);
     SelectObject(new_dc, (HGDIOBJ)rgb);	
     BLENDFUNCTION m_bf;
@@ -459,56 +466,30 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
 #endif
 }
 
-/* Enable alphablend support for Image::fill function 
- * NOTE: does not work on win95
- * NOTE: need to link against msimg32.lib
- *
- * AlphaBlend function used in fill only, cause fill does per-image
- * blending. AlphaBlend function can do per-pixel blending also,
- * but it needs premultiplied pixel data.
- *
- * - ML
- */
-#define USE_ALPHABLEND 1
+/** Draw the alpha channel in the current color.
 
-// WAS: The code is wrong. I suspect the new code is supposed to go
-// into the "over" method. The fill() method should not be using the
-// rgb data for anything. What it is supposed to do, if C is the
-// current color set with fltk::setcolor(), A is the alpha, and the
-// current display is B, is replace each pixel with B*(1-A)+A*C.
-// Another way of looking at it is that this does "over" with a
-// non-premultiplied image that is a solid rectangle of the current
-// color, but with the current alpha channel.
+  The alpha is used to mix each output pixel between it's current
+  color and the color set with fltk::setcolor(). Another way to state
+  this is that it acts like the rgb data is a solid rectangle of the
+  current color, and then draws the image, including any alpha
+  channel.
 
-// Link against msimg32 lib
-#if defined (USE_ALPHABLEND) && defined(_MSC_VER)
-# pragma comment(lib, "msimg32.lib")
-#endif
-
-
-/** Draw the alpha channel filled with a solid color.
-
-  The image is positioned so the pixel at src_x, src_y is placed at
-  x,y (or the equivalent if src_x,src_y are outside the image). The
-  part of the image that then intersects x,y,w,h is then drawn.
-
-  This is used internally by the _draw method to draw
-  inactive images. It may also be used by subclasses such
-  as xbmImage to implement solid color fill. It could be used
-  to draw nice glyphs (just like antialised fonts) but the current
-  version is really lame and can only produce 1-bit alpha.
-  I am still looking into methods for doing this...
+  This is very useful for making a 1-channel image that works just like
+  an anti-aliased character in a font, and can be drawn in any color.
+  It is also used to draw inactive images.
 */
 void Image::fill(int X, int Y, int W, int H, int src_x, int src_y) const
 {
   clip_code();
   // If there is no alpha channel then act like it is all white
   // and thus a rectangle should be drawn:
-  //if (!alpha) {fillrect(x,y,w,h); return;}	
+  if (!alpha) {fillrect(x,y,w,h); return;}	
 
   transform(x,y);
 #if USE_X11
-  XSetStipple(xdisplay, gc, (Pixmap)alpha);
+  if (alpha != rgb) XSetStipple(xdisplay, gc, (Pixmap)alpha);
+  // alpha == rgb indicates a real alpha is in the source pixmap. I think
+  // the Render extension is needed to draw that...
   int ox = x-src_x; if (ox < 0) ox += w_;
   int oy = y-src_y; if (oy < 0) oy += h_;
   XSetTSOrigin(xdisplay, gc, ox, oy);
@@ -516,14 +497,14 @@ void Image::fill(int X, int Y, int W, int H, int src_x, int src_y) const
   XFillRectangle(xdisplay, xwindow, gc, x, y, w, h);
   XSetFillStyle(xdisplay, gc, FillSolid);
 #elif defined(_WIN32)
-#ifdef USE_ALPHABLEND
-  if (alpha == rgb) 
-  {
+  HDC tempdc = CreateCompatibleDC(dc);
+  if (alpha == rgb) {
     // This is still not correct.. According to:
-    //   "if C is the current color set with fltk::setcolor(), A is the alpha, and the
-    //   current display is B, is replace each pixel with B*(1-A)+A*C."
-    fillrect(X,Y,w,h);
-    HDC tempdc = CreateCompatibleDC(dc);
+    //   "if C is the current color set with fltk::setcolor(),
+    //   A is the alpha, and the current display is B,
+    //   replace each pixel with B*(1-A)+A*C."
+    // (ie ignore the rgb and act like the current color is a solid rectangle
+    //fillrect(X,Y,w,h);
     SelectObject(tempdc, (HGDIOBJ)rgb);	
     BLENDFUNCTION m_bf;
     m_bf.BlendOp = AC_SRC_OVER;
@@ -531,28 +512,16 @@ void Image::fill(int X, int Y, int W, int H, int src_x, int src_y) const
     m_bf.AlphaFormat = 0x1;
     m_bf.SourceConstantAlpha = 50;
     AlphaBlend(dc, x,y,w,h, tempdc, src_x,src_y,w, h,m_bf); 
-    DeleteDC(tempdc);
-    return;
+  } else {
+    // 1-bit alpha
+    SetTextColor(dc, 0); // VP : seems necessary at least under win95
+    setbrush();
+    SelectObject(tempdc, (HBITMAP)alpha);
+    // On my machine this does not draw the right color! But lots of
+    // documentation indicates that this should work:
+    BitBlt(dc, x, y, w, h, tempdc, src_x, src_y, MASKPAT);
   }
-#endif
-#if 0
-  HBRUSH brush = CreatePatternBrush((HBITMAP)alpha);
-  int ox = x-src_x; if (ox < 0) ox += w_;
-  int oy = y-src_y; if (oy < 0) oy += h_;
-  SetBrushOrgEx(dc, ox, oy, 0);
-  SetTextColor(dc, current_xpixel);
-  HRGN rgn = CreateRectRgn(x,y,x+w,y+h);
-  FillRgn(dc, rgn, brush);
-  DeleteObject(rgn);
-  DeleteObject(brush);
-#else
-  SetTextColor(dc, 0); // VP : seems necessary at least under win95
-  setbrush();
-  HDC new_dc = CreateCompatibleDC(dc);
-  SelectObject(new_dc, (HBITMAP)alpha);
-  BitBlt(dc, x, y, w, h, new_dc, src_x, src_y, MASKPAT);
-  DeleteDC(new_dc);
-#endif
+  DeleteDC(tempdc);
 #elif defined(__APPLE__)
   // OSX version nyi
 #else
@@ -587,7 +556,7 @@ void Image::_draw(int x, int y, int w, int h, const Style* style, Flags flags) c
   method with your own which calculates the values and sets them if
   it has not done so already.
 */
-void Image::_measure(float& W, float& H) const { W=w(); H=h(); }
+void Image::_measure(float& W, float& H) const { W=float(w()); H=float(h()); }
 
 /*! If the image has no alpha, it claims to fill the box. This is
   only true if you draw the size it returned from measure() or
@@ -609,5 +578,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.45 2004/07/19 23:43:08 laza2000 Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.46 2004/07/27 07:03:07 spitzak Exp $".
 //

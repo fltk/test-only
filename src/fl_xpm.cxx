@@ -1,4 +1,4 @@
-// "$Id: fl_xpm.cxx,v 1.24 2004/07/07 05:11:03 spitzak Exp $"
+// "$Id: fl_xpm.cxx,v 1.25 2004/07/27 07:03:08 spitzak Exp $"
 // Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
@@ -127,7 +127,7 @@ static char** read(char *name, int oneline = 0) {
   looks like the start of a .xpm file. This returns true if the 
   data contains "/\* XPM".
 */
-bool xpmFileImage::test(const unsigned char *data, size_t)
+bool xpmFileImage::test(const unsigned char *data, unsigned)
 {
   return (strstr((char*) data,"/* XPM") != 0);
 }
@@ -196,5 +196,5 @@ void xpmFileImage::read()
 }
 
 //
-// End of "$Id: fl_xpm.cxx,v 1.24 2004/07/07 05:11:03 spitzak Exp $"
+// End of "$Id: fl_xpm.cxx,v 1.25 2004/07/27 07:03:08 spitzak Exp $"
 //

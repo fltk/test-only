@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.26 2004/07/19 23:46:23 laza2000 Exp $"
+// "$Id: win32.h,v 1.27 2004/07/27 07:03:07 spitzak Exp $"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -44,8 +44,6 @@
 
 extern "C" {
 	
-int win_8to16(const char *src, int sn, unsigned short *dst, int dn);
-
 // Function pointer declarations
 
 typedef HWND (WINAPI *pfCreateWindowExW)(DWORD dwExStyle, LPCWSTR lpClassName, LPCWSTR lpWindowName, DWORD dwStyle, int x, int y, int nWidth, int nHeight, HWND hWndParent, HMENU hMenu, HINSTANCE hInstance, LPVOID lpParam);
@@ -159,5 +157,5 @@ extern FL_API HCURSOR default_cursor;
 #endif
 
 //
-// End of "$Id: win32.h,v 1.26 2004/07/19 23:46:23 laza2000 Exp $".
+// End of "$Id: win32.h,v 1.27 2004/07/27 07:03:07 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.25 2004/07/13 22:53:35 laza2000 Exp $"
+// "$Id: fl_font_xft.cxx,v 1.26 2004/07/27 07:03:08 spitzak Exp $"
 //
 // Copyright 2004 Bill Spitzak and others.
 //
@@ -218,15 +218,10 @@ float fltk::getdescent() { return current->font->descent; }
 // uses the 8-bit interface:
 
 float fltk::getwidth(const char *str, int n) {
+  unsigned buffer[1024];
+  int count = utf8to32(str, n, buffer, 1024);
   XGlyphInfo i;
-  int count;
-  unsigned* buffer = utf8to32(str,n,&count);
-  if (buffer) {
-    XftTextExtents32(xdisplay, current->font, (XftChar32*)buffer, count, &i);
-    utf8free(buffer);
-  } else {
-    XftTextExtents8(xdisplay, current->font, (XftChar8*)str, n, &i);
-  }
+  XftTextExtents32(xdisplay, current->font, (XftChar32*)buffer, count, &i);
   return i.xOff;
 }
 
@@ -272,18 +267,11 @@ void fltk::drawtext_transformed(const char *str, int n, float x, float y) {
   color.color.blue  = b*0x101;
   color.color.alpha = 0xffff;
 
-  int count;
-  unsigned* buffer = utf8to32(str,n,&count);
-  if (buffer) {
-    XftDrawString32(xft_gc, &color, current->font,
-		    int(floorf(x+.5f)), int(floorf(y+.5f)),	
-		    (XftChar32*)buffer, count);
-    utf8free(buffer);
-  } else {
-    XftDrawString8(xft_gc, &color, current->font,
-		   int(floorf(x+.5f)), int(floorf(y+.5f)),	
-		   (XftChar8*)str, n);
-  }
+  unsigned buffer[1024];
+  int count = utf8to32(str, n, buffer, 1024);
+  XftDrawString32(xft_gc, &color, current->font,
+		  int(floorf(x+.5f)), int(floorf(y+.5f)),	
+		  (XftChar32*)buffer, count);
 }
 
 void fltk::stop_drawing(XWindow window) {
@@ -452,5 +440,5 @@ int fltk::Font::encodings(const char**& arrayp) {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.25 2004/07/13 22:53:35 laza2000 Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.26 2004/07/27 07:03:08 spitzak Exp $"
 //

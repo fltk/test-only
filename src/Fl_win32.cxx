@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.219 2004/07/19 23:33:05 laza2000 Exp $"
+// "$Id: Fl_win32.cxx,v 1.220 2004/07/27 07:03:07 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -627,6 +627,31 @@ void fltk::copy(const char *stuff, int len, bool clipboard) {
   }
 }
 
+static void pasteW(Widget& receiver, unsigned short* ucs) {
+  static char* previous_buffer = 0;
+  static int previous_length = 0;
+  int ucslen = wcslen(US2WC(ucs));
+  int len = utf8from16(previous_buffer, previous_length, ucs, ucslen);
+  if (len >= previous_length) {
+    delete[] previous_buffer;
+    previous_length = len+1;
+    previous_buffer = new char[previous_length];
+    len = utf8from16(previous_buffer, previous_length, ucs, ucslen);
+  }
+  e_text = previous_buffer;
+  // strip the CRLF pairs: ($%$#@^)
+  char* a = e_text;
+  char* b = a;
+  char* e = e_text+len;
+  while (a<e) {
+    if (*a == '\r' && a[1] == '\n') a++;
+    else *b++ = *a++;
+  }
+  *b = 0;
+  e_length = b - e_text;
+  receiver.handle(PASTE);
+}
+
 // Call this when a "paste" operation happens:
 void fltk::paste(Widget &receiver, bool clipboard) {
   if (!clipboard || i_own_selection) {
@@ -640,22 +665,7 @@ void fltk::paste(Widget &receiver, bool clipboard) {
     if (!OpenClipboard(NULL)) return;
     HANDLE h = GetClipboardData(CF_UNICODETEXT);
     if (h) {
-      unsigned short *ucs = (unsigned short*)GlobalLock(h);
-      static char* previous_buffer = 0;
-      if (previous_buffer) utf8free(previous_buffer);
-      int len;
-      e_text = previous_buffer = utf8from16(ucs, wcslen(US2WC(ucs)), &len);
-      // strip the CRLF pairs: ($%$#@^)
-      char* a = e_text;
-      char* b = a;
-      char* e = e_text+len;
-      while (a<e) {
-	if (*a == '\r' && a[1] == '\n') a++;
-	else *b++ = *a++;
-      }
-      *b = 0;
-      e_length = b - e_text;
-      receiver.handle(PASTE);
+      pasteW(receiver, (unsigned short*)GlobalLock(h));
       GlobalUnlock(h);
     }
     CloseClipboard();
@@ -666,21 +676,14 @@ void fltk::paste(Widget &receiver, bool clipboard) {
 // copies the given selection to such a block and returns it. It appears
 // this block is usually handed to Windows and Windows deletes it.
 HANDLE fl_global_selection(int clipboard) {
-  int n;
-  unsigned short* ucs = utf8to16(selection_buffer[clipboard],
-				 selection_length[clipboard],
-				 &n);
+  int n = utf8to16(selection_buffer[clipboard],
+		   selection_length[clipboard],
+		   0, 0);
   HANDLE h = GlobalAlloc(GHND, sizeof(unsigned short) * (n+1));
   LPWSTR p = (LPWSTR)GlobalLock(h);
-  if (ucs) {
-    memcpy(p, ucs, sizeof(unsigned short)*(n+1));
-    utf8free(ucs);
-  } else {
-    // utf8to16 returns null if conversion is raw byte values, copy them:
-    const unsigned char* q = (unsigned char*)(selection_buffer[clipboard]);
-    for (int i = 0; i < n; i++) p[i] = *q++;
-    p[n] = 0;
-  }
+  utf8to16(selection_buffer[clipboard],
+	   selection_length[clipboard],
+	   p, n+1);
   GlobalUnlock(h);
   return h;
 }
@@ -696,6 +699,8 @@ HANDLE fl_global_selection_ansi(int clipboard) {
   return h;
 }
 
+#include <stdio.h>
+
 // Determite if windows has unicode capability
 int has_unicode() 
 {
@@ -704,7 +709,8 @@ int has_unicode()
     OSVERSIONINFOA os;
     os.dwOSVersionInfoSize = sizeof(OSVERSIONINFOA);
     GetVersionExA(&os);
-    has_unicode = (os.dwPlatformId==VER_PLATFORM_WIN32_NT);		
+    has_unicode = (os.dwPlatformId==VER_PLATFORM_WIN32_NT);
+    printf("has_unicode = %d, GetACP() = %x\n", has_unicode, GetACP());
   }
   return has_unicode;
 }
@@ -844,21 +850,14 @@ public:
     fmt.lindex = -1;
     fmt.cfFormat = CF_UNICODETEXT;
     // if it is ASCII text, send an PASTE with that text
-    if ( data->GetData( &fmt, &medium )==S_OK )
-    {
-      unsigned short *stuff = (unsigned short*)GlobalLock( medium.hGlobal );
-      int stuff_len = wcslen(US2WC(stuff));
-      e_text = utf8from16(stuff, stuff_len, &e_length);
-      e_text[e_length] = 0;
-      target->handle(PASTE); // e_text will be invalid after this call
-      free(e_text); e_length = 0;
+    if ( data->GetData( &fmt, &medium )==S_OK ) {
+      pasteW(*target, (unsigned short*)GlobalLock( medium.hGlobal ));
       GlobalUnlock( medium.hGlobal );
       ReleaseStgMedium( &medium );
       SetForegroundWindow( hwnd );
       return S_OK;
     }
-    
-		fmt.tymed = TYMED_HGLOBAL;
+    fmt.tymed = TYMED_HGLOBAL;
     fmt.dwAspect = DVASPECT_CONTENT;
     fmt.lindex = -1;
     fmt.cfFormat = CF_TEXT;
@@ -894,11 +893,9 @@ public:
 	  dst += n;
 	  if ( i<nf-1 ) *dst++ = '\n';
 	}
-	*dst = 0;				
-	e_text = utf8from16(buffer, nn, &e_length);
-	target->handle(PASTE);
+	*dst = 0;
+	pasteW(*target, buffer);
 	free(buffer);
-	free(e_text);
       } else {
         char* buffer = (char*)malloc(nn+1);
         e_length = nn;
@@ -1300,14 +1297,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
      	  dbcsbuf[0] = (unsigned char) wParam;
 	}
 	dbcsbuf[2] = 0;
-	unsigned short ucs[11];
-	int ucslen, len = 0;
-	ucslen = MultiByteToWideChar(GetACP(), MB_PRECOMPOSED,
-                                    (char*)dbcsbuf, dbcsl, US2WC(ucs), 10);
-        // This is not doing the "surrogate characters"!!!
-     	for (int i = 0; i < ucslen; i++)
-	  len += utf8encode(ucs[i], buffer + len);      		
-	e_length = len;				
+	e_length = utf8frommb(buffer, 31, dbcsbuf, 2);
 	dbcsbuf[0] = 0;
       }
     } else {
@@ -1668,11 +1658,8 @@ void CreatedWindow::create(Window* window) {
   const char *name = window->label();
 
   int ucslen = 0;
-  static unsigned short ucs_name[1024+1];
-  if(name && *name) {
-    ucslen = win_8to16(name, strlen(name), ucs_name, 1024);		
-  }
-  ucs_name[ucslen] = 0;
+  static unsigned short ucs_name[1024];
+  if (name && *name) ucslen = utf8to16(name, strlen(name), ucs_name, 1024);
 	
   x->xid = __CreateWindowExW(styleEx,
                              L"fltk", (LPCWSTR)ucs_name, style,
@@ -1799,9 +1786,8 @@ void Window::label(const char *name,const char *iname) {
   if (i && !parent()) {
     if (!name) name = "";
     int ucslen;
-    static unsigned short ucs[1024+1];
-		ucslen = win_8to16(name, strlen(name), ucs, 1024);
-    ucs[ucslen] = 0;
+    static unsigned short ucs[1024];
+    ucslen = utf8to16(name, strlen(name), ucs, 1024);
     __SetWindowTextW(i->xid, (LPCWSTR)ucs);
     // if (!iname) iname = filename_name(name);
     // should do something with iname here, it should label the taskbar icon
@@ -1988,58 +1974,13 @@ Cleanup::~Cleanup() {
 
 extern "C" {
 
-// Convert UTF-8 to UTF-16 (widechar)
-// - src		source buffer
-// - sn			source buffer length
-// - dst		destination buffer
-// - dn			destination buffer length
-// Return number of characters stored in dest buffer.
-// If source length is longer than dest length, only dest length is converted.
-//
-// I would *really* like to have similar public function in utf.c
-// ie. the one that takes dest. buffer and length as params
-int win_8to16(const char *src, int sn, unsigned short *dst, int dn) 
-{
-  const char* p = src;
-  const char* e = src+sn;
-  int count = 0;
-
-  while (p < e) {
-    unsigned char c = *(unsigned char*)p;
-    if (c < 0xC2) { // ascii letter or bad code
-      dst[count] = c;
-      p++;
-    } else {
-      int len;
-      unsigned ucs = utf8decode(p,e,&len);
-      p += len;
-      if (ucs < 0x10000U) {
-	dst[count] = (unsigned short)ucs;
-      } else if (ucs > 0x10ffffU) {
-	// error!
-	dst[count] = 0xFFFD;
-      } else {
-	// write a surrogate pair:
-	dst[count++] = (((ucs-0x10000u)>>10)&0x3ff) | 0xd800;
-	dst[count] = (ucs&0x3ff) | 0xdc00;
-      }
-    }
-    count++;
-    if(count>=dn) {
-      break;
-    }
-  }
-  return count;
-}
-
 // Convert widechar to multibyte
 // src length is determited with wcslen
 static inline void CVT2ANSI(LPCWSTR src, char dst[], int dstlen) {
-  int len = 0;
-  if(src && *src) { 
-    len = WideCharToMultiByte(CP_ACP, 0, src, wcslen(src), dst, dstlen-1, NULL, NULL); 
-  }
-  dst[len] = 0;
+  // WAS: Should this use GetACP() instead of CP_ACP?
+  if (src && *src)
+    WideCharToMultiByte(CP_ACP, 0, src, wcslen(src), dst, dstlen-1, NULL, NULL); 
+  else dst[0] = 0;
 }
 
 HWND WINAPI ansi_CreateWindowExW(DWORD dwExStyle,
@@ -2136,5 +2077,5 @@ int WINAPI ansi_MessageBoxW(HWND hWnd, LPCWSTR lpText, LPCWSTR lpCaption, UINT u
 }; /* extern "C" */
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.219 2004/07/19 23:33:05 laza2000 Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.220 2004/07/27 07:03:07 spitzak Exp $".
 //

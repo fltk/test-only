@@ -1,5 +1,5 @@
 //
-// "$Id: fltk_theme_win32.cxx,v 1.4 2004/07/19 23:33:05 laza2000 Exp $"
+// "$Id: fltk_theme_win32.cxx,v 1.5 2004/07/27 07:03:08 spitzak Exp $"
 //
 // Copyright 2004 Bill Spitzak and others.
 //
@@ -159,17 +159,15 @@ extern "C" bool fltk_theme() {
 
     Font* font; float size;
     unsigned short *name;
-    char *buffer;
-    int count;
+    const int BUFLEN = 1024;
+    char buffer[BUFLEN];
 
     // get font info for regular widgets from LOGFONT structure
     name = (unsigned short *)ncm.lfMessageFont.lfFaceName;
-    buffer = utf8from16(name, wcslen(US2WC(name)), &count);
-    buffer[count] = 0;
+    utf8from16(buffer, BUFLEN, name, wcslen(US2WC(name)));
     font = fltk::font(buffer,
                      (ncm.lfMessageFont.lfWeight >= 600 ? BOLD : 0) +
                      (ncm.lfMessageFont.lfItalic ? ITALIC : 0));
-    free(buffer);
     size = float(win_fontsize(ncm.lfMessageFont.lfHeight));
 
     Widget::default_style->labelfont_ = font;
@@ -179,12 +177,10 @@ extern "C" bool fltk_theme() {
 
     // get font info for menu items from LOGFONT structure
     name = (unsigned short *)ncm.lfMenuFont.lfFaceName;
-    buffer = utf8from16(name, wcslen(US2WC(name)), &count);
-    buffer[count] = 0;
+    utf8from16(buffer, BUFLEN, name, wcslen(US2WC(name)));
     font = fltk::font(buffer,
                      (ncm.lfMenuFont.lfWeight >= 600 ? BOLD : 0) +
                      (ncm.lfMenuFont.lfItalic ? ITALIC : 0));
-    free(buffer);
     size = float(win_fontsize(ncm.lfMenuFont.lfHeight));
     if ((style = Style::find("MenuBar"))) {
       style->textfont_ = font;
@@ -197,13 +193,11 @@ extern "C" bool fltk_theme() {
 
     if ((style = Style::find("Tooltip"))) {
       name = (unsigned short *)ncm.lfStatusFont.lfFaceName;
-      buffer = utf8from16(name, wcslen(US2WC(name)), &count);
-      buffer[count] = 0;
+      utf8from16(buffer, BUFLEN, name, wcslen(US2WC(name)));
       // get font info for tooltips from LOGFONT structure
       font = fltk::font(buffer,
                        (ncm.lfStatusFont.lfWeight >= 600 ? BOLD : 0) +
                        (ncm.lfStatusFont.lfItalic ? ITALIC : 0));
-      free(buffer);
       size = float(win_fontsize(ncm.lfStatusFont.lfHeight));
 
       style->textfont_ = font;
@@ -271,5 +265,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: fltk_theme_win32.cxx,v 1.4 2004/07/19 23:33:05 laza2000 Exp $".
+// End of "$Id: fltk_theme_win32.cxx,v 1.5 2004/07/27 07:03:08 spitzak Exp $".
 //

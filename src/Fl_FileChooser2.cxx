@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.26 2004/07/21 07:16:00 laza2000 Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.27 2004/07/27 07:03:07 spitzak Exp $"
 //
 // More FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -373,17 +373,8 @@ FileChooser::newdir()
 
   // Create the directory; ignore EEXIST errors...
 #if defined(_WIN32) && !defined(__CYGWIN__)
-  int n, r;
-  unsigned short* ucs = utf8to16(pathname, strlen(pathname), &n);
-  char namebuf[1024];
-  if (ucs) {
-    memset(namebuf, 0, sizeof(namebuf));
-    WideCharToMultiByte(GetACP(), 0, (wchar_t*)ucs, n,
-			namebuf, sizeof(namebuf), NULL, 0);
-    utf8free(ucs);
-  } else
-    strcpy(namebuf, pathname);
-  
+  char namebuf[FL_PATH_MAX];
+  utf8tomb(pathname, strlen(pathname), namebuf, FL_PATH_MAX);
   if (mkdir(namebuf))
 #else
   if (mkdir(pathname, 0777))
@@ -683,5 +674,5 @@ FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.26 2004/07/21 07:16:00 laza2000 Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.27 2004/07/27 07:03:07 spitzak Exp $".
 //

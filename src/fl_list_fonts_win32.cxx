@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.29 2004/07/19 23:33:05 laza2000 Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.30 2004/07/27 07:03:08 spitzak Exp $"
 //
 // _WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -87,10 +87,9 @@ int Font::sizes(int*& sizep) {
   HDC dc = getDC();
   //cyPerInch = GetDeviceCaps(dc, LOGPIXELSY);
   //if (cyPerInch < 1) cyPerInch = 1;
-  if(has_unicode()) {
-    unsigned short ucs[1024+1];
-    int ucslen = win_8to16(name_, strlen(name_), ucs, 1024);;
-    ucs[ucslen] = 0;
+  if (has_unicode()) {
+    unsigned short ucs[1024];
+    int ucslen = utf8to16(name_, strlen(name_), ucs, 1024);;
     EnumFontFamiliesW(dc, (LPCWSTR)ucs, EnumSizeCb, 0);
   } else {
     EnumFontFamiliesA(dc, name_, (FONTENUMPROCA)EnumSizeCb, 0);
@@ -136,11 +135,9 @@ static int CALLBACK enumcbW(CONST LOGFONTW* lplf,
 //    if (lplf->lfWeight > 400 || strstr(name, " Bold") == name+strlen(name)-5)
 //      attrib = BOLD;
   int n = wcslen((LPCWSTR)name), count;
-  char *buffer;
-  buffer = utf8from16(name, wcslen((LPCWSTR)name), &count);
-  buffer[count] = 0;
+  char buffer[1024];
+  utf8from16(buffer, 1024, name, wcslen((LPCWSTR)name));
   font_array[num_fonts++] = fl_make_font(buffer, attrib);
-  free(buffer);
   return 1;
 }
 
@@ -182,5 +179,5 @@ int fltk::list_fonts(Font**& arrayp) {
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.29 2004/07/19 23:33:05 laza2000 Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.30 2004/07/27 07:03:08 spitzak Exp $"
 //

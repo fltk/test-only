@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Buffer.cxx,v 1.17 2004/07/19 23:55:22 laza2000 Exp $"
+// "$Id: Fl_Text_Buffer.cxx,v 1.18 2004/07/27 07:03:07 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -2270,14 +2270,11 @@ int
 TextBuffer::insertfile(const char *name, int pos, int buflen) {
   FILE *fp;  int r;
 #ifdef _WIN32
-  int ucslen;
-  unsigned short* ucs = utf8to16(name, strlen(name), &ucslen);
-  if (ucs) {
-    fp = _wfopen(US2WC(ucs), L"r");
-    utf8free(ucs);
-  } else
+  char buf[1024];
+  utf8tomb(name, strlen(name), buf, 1024);
+  name = buf;
 #endif
-    fp = fopen(name, "r");
+  fp = fopen(name, "r");
 
   if (!fp) return 1;
   char *buffer = new char[buflen];
@@ -2296,14 +2293,11 @@ int
 TextBuffer::outputfile(const char *name, int start, int end, int buflen) {
   FILE *fp;
 #ifdef _WIN32
-  int ucslen;
-  unsigned short* ucs = utf8to16(name, strlen(name), &ucslen);
-  if (ucs) {
-    fp = _wfopen(US2WC(ucs), L"w");
-    utf8free(ucs);
-  } else
+  char buf[1024];
+  utf8tomb(name, strlen(name), buf, 1024);
+  name = buf;
 #endif
-    fp = fopen(name, "w");
+  fp = fopen(name, "w");
   if (!fp) return 1;
   for (int n; (n = min(end - start, buflen)); start += n) {
     const char *p = text_range(start, start + n);
@@ -2319,5 +2313,5 @@ TextBuffer::outputfile(const char *name, int start, int end, int buflen) {
 
 
 //
-// End of "$Id: Fl_Text_Buffer.cxx,v 1.17 2004/07/19 23:55:22 laza2000 Exp $".
+// End of "$Id: Fl_Text_Buffer.cxx,v 1.18 2004/07/27 07:03:07 spitzak Exp $".
 //

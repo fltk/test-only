@@ -1,5 +1,5 @@
 /*
- * "$Id: fl_load_plugin.cxx,v 1.20 2004/07/19 23:33:05 laza2000 Exp $"
+ * "$Id: fl_load_plugin.cxx,v 1.21 2004/07/27 07:03:08 spitzak Exp $"
  *
  * This is a wrapper to make it simple to load plugins on various
  * systems. load_plugin(file, symbol) will load the file as a
@@ -25,9 +25,8 @@
 # include <winbase.h>
 
 void* load_plugin(const char* name, const char* symbol) {
-	unsigned short ucs[1024+1];
-	int ucslen = win_8to16(name, strlen(name), ucs, 1024);
-	ucs[ucslen] = 0;
+  unsigned short ucs[1024];
+  int ucslen = utf8to16(name, strlen(name), ucs, 1024);
   HINSTANCE handle = __LoadLibraryW((LPCWSTR)ucs);
   if (handle) {
     if (!symbol) return (void*)handle;
@@ -87,5 +86,5 @@ void* load_plugin(const char* name, const char*) {
 #endif
 
 //
-// End of "$Id: fl_load_plugin.cxx,v 1.20 2004/07/19 23:33:05 laza2000 Exp $"
+// End of "$Id: fl_load_plugin.cxx,v 1.21 2004/07/27 07:03:08 spitzak Exp $"
 //
