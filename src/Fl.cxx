@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.168 2003/09/27 23:57:12 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.169 2003/10/28 17:45:13 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,6 +23,14 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
+#ifdef _WIN32
+// This is needed for the Multi-Monitor stuff to work:
+# if WINVER<0x0500
+#  undef WINVER
+#  define WINVER 0x0500
+# endif
+#endif
+
 #include <fltk/run.h>
 #include <fltk/events.h>
 #include <fltk/error.h>
@@ -39,7 +47,7 @@
 #include <assert.h>
 // things that should be in different source files:
 #include <fltk/FL_VERSION.h>
-#include <fltk/ScreenInfo.h>
+#include <fltk/Monitor.h>
 
 using namespace fltk;
 
@@ -303,6 +311,8 @@ int fltk::wait(float time_to_wait) {
   }
 
   if (idle && !in_idle) {in_idle = true; idle(); in_idle = false;}
+
+  flush();
 
   return ret;
 }
@@ -715,5 +725,5 @@ bool fltk::handle(int event, Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.168 2003/09/27 23:57:12 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.169 2003/10/28 17:45:13 spitzak Exp $".
 //

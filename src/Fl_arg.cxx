@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.42 2003/06/24 07:10:48 spitzak Exp $"
+// "$Id: Fl_arg.cxx,v 1.43 2003/10/28 17:45:15 spitzak Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 #include <fltk/Window.h>
 #include <fltk/filename.h>
 #include <fltk/error.h>
-#include <fltk/ScreenInfo.h>
+#include <fltk/Monitor.h>
 #include <ctype.h>
 #include <string.h>
 #include <stdio.h>
@@ -139,8 +139,8 @@ void Window::show(int argc, char **argv) {
     sizes();//to allocate the array if this window was not end()ed...
     int flags = 0, gx = x(), gy = y(); unsigned int gw = w(), gh = h();
     flags = XParseGeometry(geometry, &gx, &gy, &gw, &gh);
-    if (flags & XNegative) gx = screenInfo().w-w()+gx;
-    if (flags & YNegative) gy = screenInfo().h-h()+gy;
+    if (flags & XNegative) gx = Monitor::all().w()-w()+gx;
+    if (flags & YNegative) gy = Monitor::all().h()-h()+gy;
     //  int mw,mh; minsize(mw,mh);
     //  if (mw > gw) gw = mw;
     //  if (mh > gh) gh = mh;
@@ -335,5 +335,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef _WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.42 2003/06/24 07:10:48 spitzak Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.43 2003/10/28 17:45:15 spitzak Exp $".
 //

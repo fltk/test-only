@@ -1,7 +1,7 @@
 dnl -*- sh -*-
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.109 2003/01/26 06:33:09 spitzak Exp $"
+dnl "$Id: configure.in,v 1.110 2003/10/28 17:45:12 spitzak Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -565,7 +565,7 @@ case $uname in
 	    AC_MSG_WARN(Ignoring libraries \"$X_PRE_LIBS\" requested by configure.)
 	fi
 
-	LIBS="$LIBS -lXext -lX11 $X_EXTRA_LIBS"
+	LIBS="$LIBS -lXext -lXinerama -lX11 $X_EXTRA_LIBS"
 	CFLAGS="$CFLAGS$X_CFLAGS"
 	CXXFLAGS="$CXXFLAGS$X_CFLAGS"
 	LDFLAGS="$X_LIBS $LDFLAGS"
@@ -919,5 +919,5 @@ dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.109 2003/01/26 06:33:09 spitzak Exp $".
+dnl End of "$Id: configure.in,v 1.110 2003/10/28 17:45:12 spitzak Exp $".
 dnl

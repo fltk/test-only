@@ -1,5 +1,5 @@
 //
-// "$Id: filename.h,v 1.10 2003/04/14 05:13:57 spitzak Exp $"
+// "$Id: filename.h,v 1.11 2003/10/28 17:45:13 spitzak Exp $"
 //
 // Filename header file for the Fast Light Tool Kit (FLTK).
 //
@@ -54,7 +54,9 @@ struct dirent {char d_name[1];};
 // though we are not going to look at anything other than the name. This
 // code seems to force the 64-bit version to be used:
 
-#define _GNU_SOURCE
+#ifndef _GNU_SOURCE
+# define _GNU_SOURCE
+#endif
 #include <features.h>
 #include <sys/types.h>
 #include <dirent.h>
@@ -81,5 +83,5 @@ FL_API int filename_list(const char *d, struct dirent ***);
 #endif
 
 //
-// End of "$Id: filename.h,v 1.10 2003/04/14 05:13:57 spitzak Exp $".
+// End of "$Id: filename.h,v 1.11 2003/10/28 17:45:13 spitzak Exp $".
 //

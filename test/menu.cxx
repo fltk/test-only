@@ -15,7 +15,6 @@
 #include <string.h>
 #include <fltk/HorizontalSlider.h>
 #include <fltk/StringList.h>
-#include <fltk/ScreenInfo.h>
 #include <fltk/events.h>
 using namespace fltk;
 
@@ -150,11 +149,6 @@ int main(int argc, char **argv) {
   window.size_range(300,20);
   window.end();
   window.show(argc, argv);
-
-  const ScreenInfo& info = screenInfo();
-  printf("info x,y,w,h = %d, %d, %d, %d\n", info.x, info.y, info.w, info.h);
-  printf("info width, height, depth = %d, %d, %d\n", info.width, info.height, info.depth);
-  printf("info dpi %g %g\n", info.dpi_x, info.dpi_y);
 
   return run();
 }

@@ -1,5 +1,5 @@
 //
-// "$Id: KDE.cxx,v 1.16 2003/09/03 06:08:07 spitzak Exp $"
+// "$Id: KDE.cxx,v 1.17 2003/10/28 17:45:16 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -29,7 +29,7 @@
 
 #include <fltk/Widget.h>
 #include <fltk/draw.h>
-#include <fltk/ScreenInfo.h>
+#include <fltk/Monitor.h>
 #include <fltk/events.h>
 #include <stdio.h>
 #include <string.h>
@@ -166,8 +166,7 @@ extern "C" bool fltk_theme() {
   if (!getconf(kderc, "General/buttonBackground", s, sizeof(s)))
     button_background = color(s);
 
-  const ScreenInfo& info = screenInfo();
-  float pixels_per_point = info.dpi_y/72;
+  float pixels_per_point = Monitor::all().dpi()/72;
 
   char* sv; // to save strtok_r() state
   if (!getconf(kderc, "General/font", s, sizeof(s))) {
@@ -331,5 +330,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: KDE.cxx,v 1.16 2003/09/03 06:08:07 spitzak Exp $".
+// End of "$Id: KDE.cxx,v 1.17 2003/10/28 17:45:16 spitzak Exp $".
 //

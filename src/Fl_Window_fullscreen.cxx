@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_fullscreen.cxx,v 1.19 2003/09/15 05:56:43 spitzak Exp $"
+// "$Id: Fl_Window_fullscreen.cxx,v 1.20 2003/10/28 17:45:15 spitzak Exp $"
 //
 // Fullscreen window support for the Fast Light Tool Kit (FLTK).
 //
@@ -24,7 +24,7 @@
 //
 
 #include <fltk/Window.h>
-#include <fltk/ScreenInfo.h>
+#include <fltk/Monitor.h>
 #include <fltk/events.h>
 #include <fltk/x.h>
 using namespace fltk;
@@ -84,13 +84,13 @@ static void fsonoff(XWindow xwindow, bool onoff) {
 #endif
 
 void Window::fullscreen() {
-  const ScreenInfo& info = screenInfo();
+  const Monitor& monitor = Monitor::find(x()+w()/2, y()+h()/2);
 #ifdef _WIN32
-  resize(info.x, info.y, info.w, info.h);
+  resize(monitor.x(), monitor.y(), monitor.w(), monitor.h());
   // Still missing: we need to tell Windows that this window can go atop
   // the taskbar.
 #elif (defined(__APPLE__) && !USE_X11)
-  resize(info.x, info.y, info.w, info.h);
+  resize(monitor.x(), monitor.y(), monitor.w(), monitor.h());
 #else
   // Most X window managers will not place the window where we want it unless
   // the border is turned off. And most (all except Irix 4DWM, as far as I
@@ -101,7 +101,7 @@ void Window::fullscreen() {
   // (KDE) ignore the positioning information:
   clear_border();
   if (shown()) i->sendxjunk();
-  resize(info.x, info.y, info.w, info.h);
+  resize(monitor.x(), monitor.y(), monitor.w(), monitor.h());
   //if (shown()) fsonoff(i->xid, true);
 #endif
 }
@@ -121,5 +121,5 @@ void Window::fullscreen_off(int X,int Y,int W,int H) {
 }
 
 //
-// End of "$Id: Fl_Window_fullscreen.cxx,v 1.19 2003/09/15 05:56:43 spitzak Exp $".
+// End of "$Id: Fl_Window_fullscreen.cxx,v 1.20 2003/10/28 17:45:15 spitzak Exp $".
 //

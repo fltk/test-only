@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.144 2003/08/05 08:09:55 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.145 2003/10/28 17:45:14 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -35,7 +35,7 @@
 #include <fltk/events.h>
 #include <fltk/damage.h>
 #include <fltk/run.h>
-#include <fltk/ScreenInfo.h>
+#include <fltk/Monitor.h>
 #include <ctype.h>
 
 #include <fltk/Item.h> // for TOGGLE, RADIO
@@ -209,6 +209,8 @@ int MWindow::is_parent(int index) {
   return n >= 0;
 }
 
+static const Monitor* monitor;
+
 MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp, Widget* t)
   : MenuWindow(X, Y, Wp, Hp, 0), menustate(m), level(l)
 {
@@ -265,9 +267,8 @@ MWindow::MWindow(MenuState* m, int l, int X, int Y, int Wp, int Hp, Widget* t)
 
   if (!Wp) {
     if (selected >= 0) X -= W/2;
-    if (X < 0) X = 0;
-    int w = screenInfo().w;
-    if (X > w-W) X = w-W;
+    if (X < monitor->x()) X = monitor->x();
+    if (X > monitor->r()-W) X = monitor->r()-W;
   }
 
   int dh = box->dh();
@@ -427,12 +428,12 @@ int MWindow::autoscroll(int i) {
   // figure out where the item is on the screen:
   int Y = ypos(i);
   // figure out where new top of menu should be:
-  if (y()+Y <= screenInfo().y) {
-    Y = -Y+BORDER;
+  if (y()+Y <= monitor->y()) {
+    Y = monitor->y()-Y+BORDER;
   } else {
     Widget* widget = get_widget(i);
     Y += widget->height()+int(leading());
-    if (y()+Y >= screenInfo().h) Y = screenInfo().h-Y-BORDER;
+    if (y()+Y >= monitor->b()) Y = monitor->b()-Y-BORDER;
     else return 0;
   }
   // move it to that new position:
@@ -662,7 +663,7 @@ int MWindow::handle(int event) {
   return MenuWindow::handle(event);
 }
 
-int Menu::popup(
+Widget *Menu::try_popup(
     int X, int Y, int W, int H,
     Widget* title,
     bool menubar)
@@ -690,6 +691,10 @@ int Menu::popup(
     X += event_x_root()-event_x();
     Y += event_y_root()-event_y();
   }
+  if (fltk::event() == fltk::PUSH)
+    monitor = &Monitor::find(event_x_root(), event_y_root());
+  else
+    monitor = &Monitor::all();
 
   MenuState p;
   p.nummenus = 1;
@@ -832,10 +837,22 @@ int Menu::popup(
   // Execute whatever item the user picked:
   focus(p.indexes, p.level);
   if (menubar && !p.level && checkmark(item())) redraw();
-  execute(item());
-  return 1;
+  return item();
+}
+
+int Menu::popup(
+    int X, int Y, int W, int H,
+    Widget* title,
+    bool menubar)
+{
+  Widget *selected = try_popup(X, Y, W, H, title, menubar);
+  if (selected) {
+	execute(selected);
+	return 1;
+  } 
+  return 0;
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.144 2003/08/05 08:09:55 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.145 2003/10/28 17:45:14 spitzak Exp $".
 //

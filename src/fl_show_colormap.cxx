@@ -1,5 +1,5 @@
 //
-// "$Id: fl_show_colormap.cxx,v 1.26 2002/12/10 02:01:02 easysw Exp $"
+// "$Id: fl_show_colormap.cxx,v 1.27 2003/10/28 17:45:15 spitzak Exp $"
 //
 // Colormap color selection dialog for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 
 #include <fltk/show_colormap.h>
 #include <fltk/MenuWindow.h>
-#include <fltk/ScreenInfo.h>
+#include <fltk/Monitor.h>
 #include <fltk/Box.h>
 #include <fltk/draw.h>
 #include <fltk/events.h>
@@ -40,6 +40,7 @@ using namespace fltk;
 
 class ColorMenu : public MenuWindow {
 public:
+  const Monitor* monitor;
   Color initial, which, previous;
   void drawbox(Color);
   void draw();
@@ -111,12 +112,14 @@ int ColorMenu::handle(int e) {
     int by = (c/8)*BOXSIZE+BORDER;
     int px = x();
     int py = y();
-    int w = screenInfo().w;
+    int w = monitor->w();
     if (px+bx+BOXSIZE+BORDER >= w) px = w-bx-BOXSIZE-BORDER;
-    int h = screenInfo().h;
+    int h = monitor->h();
     if (py+by+BOXSIZE+BORDER >= h) py = h-by-BOXSIZE-BORDER;
-    if (px+bx < BORDER) px = BORDER-bx;
-    if (py+by < BORDER) py = BORDER-by;
+    int x = monitor->x();
+    if (px+bx < x+BORDER) px = x+BORDER-bx;
+    int y = monitor->y();
+    if (py+by < y+BORDER) py = y+BORDER-by;
     position(px,py);
   }
   return 1;
@@ -135,5 +138,5 @@ Color fltk::show_colormap(Color oldcol) {
 }
 
 //
-// End of "$Id: fl_show_colormap.cxx,v 1.26 2002/12/10 02:01:02 easysw Exp $".
+// End of "$Id: fl_show_colormap.cxx,v 1.27 2003/10/28 17:45:15 spitzak Exp $".
 //

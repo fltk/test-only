@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.152 2003/09/15 05:56:43 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.153 2003/10/28 17:45:15 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -257,6 +257,8 @@ Atom textplain;
 Atom textplain2;
 Atom texturilist;
 //Atom XdndProxy;
+static Atom _NET_WORKAREA;
+static Atom _NET_CURRENT_DESKTOP;
 
 extern "C" {
 static int io_error_handler(Display*) {fatal("X I/O error"); return 0;}
@@ -312,6 +314,8 @@ void fltk::open_display(Display* d) {
   atom(	textplain2		, "TEXT");
   atom(	texturilist		, "text/uri-list");
   //atom(XdndProxy		, "XdndProxy");
+  atom(	_NET_WORKAREA		, "_NET_WORKAREA");
+  atom(	_NET_CURRENT_DESKTOP	, "_NET_CURRENT_DESKTOP");
 #undef atom
   Atom atoms[MAX_ATOMS];
   XInternAtoms(d, names, i, 0, atoms);
@@ -340,31 +344,195 @@ void fltk::close_display() {
   XCloseDisplay(xdisplay);
 }
 
+////////////////////////////////////////////////////////////////
+
 static bool reload_info = true;
 
-const ScreenInfo& fltk::screenInfo() {
-  static ScreenInfo info;
+/** Return a "monitor" that surrounds all the monitors.
+    If you have a single monitor, this returns a monitor structure that
+    defines it. If you have multiple monitors this returns a fake monitor
+    that surrounds all of them.
+*/
+const Monitor& Monitor::all() {
+  static Monitor monitor;
   if (reload_info) {
     reload_info = false;
     open_display();
+    monitor.set(0, 0,
+		DisplayWidth(xdisplay, xscreen),
+		DisplayHeight(xdisplay, xscreen));
 
-    // WAS: this should do something on multihead systems to match Windoze!
-    // I don't have multihead versions of either X or Windows to test...
-    info.x = 0;
-    info.y = 0;
-    info.width = DisplayWidth(xdisplay, xscreen);
-    info.height = DisplayHeight(xdisplay, xscreen);
-    info.w = info.width;
-    info.h = info.height;
+    // initially assume work area is entire monitor:
+    monitor.work = monitor;
+
+    // Try to get the work area from the X Desktop standard:
+    // First find out what desktop we are on, as it allows the work area
+    // to be different (however fltk will return whatever the first answer
+    // is even if the user changes the desktop, so this is not exactly
+    // right):
+    XWindow root = RootWindow(xdisplay, xscreen);
+    Atom actual=0; int format; unsigned long count, remaining;
+    unsigned char* buffer = 0;
+    XGetWindowProperty(xdisplay, root, _NET_CURRENT_DESKTOP,
+		       0, 1, false, XA_CARDINAL,
+		       &actual, &format, &count, &remaining, &buffer);
+    int desktop = 0;
+    if (buffer && actual == XA_CARDINAL && format == 32 && count > 0)
+      desktop = int(*(long*)buffer);
+    if (buffer) {XFree(buffer); buffer = 0;}
+    // Now get the workarea, which is an array of workareas for each
+    // desktop. The 4*desktop argument makes it index the correct
+    // distance into the workarea:
+    actual = 0;
+    XGetWindowProperty(xdisplay, root, _NET_WORKAREA,
+		       4*desktop, 4, false, XA_CARDINAL,
+		       &actual, &format, &count, &remaining, &buffer);
+    if (buffer && actual == XA_CARDINAL && format == 32 && count > 3) {
+      long* p = (long*)buffer;
+      monitor.work.set(int(p[0]),int(p[1]),int(p[2]),int(p[3]));
+    }
+    if (buffer) {XFree(buffer); buffer = 0;}
+
+    monitor.depth_ = xvisual->depth;
 
     // do any screens really return 0 for MM?
     int mm = DisplayWidthMM(xdisplay, xscreen);
-    info.dpi_x = mm ? info.width*25.4f/mm : 100.0f;
+    monitor.dpi_x_ = mm ? monitor.w()*25.4f/mm : 100.0f;
     mm = DisplayHeightMM(xdisplay, xscreen);
-    info.dpi_y = mm ? info.height*25.4f/mm : info.dpi_x;
+    monitor.dpi_y_ = mm ? monitor.h()*25.4f/mm : monitor.dpi_x_;
+
   }
-  return info;
+  return monitor;
 }
+
+#define USE_XINERAMA 1
+// The published API does not match what is on my RedHat 7.2 machine. For
+// the published API use 2, for RedHat use 1:
+#define XINERAMA_VERSION 1
+#if USE_XINERAMA
+extern "C" {
+#include <X11/extensions/Xinerama.h>
+}
+#endif
+static Monitor* monitors = 0;
+static int num_monitors=0;
+
+/** Return an array of all Monitors.
+    p is set to point to a static array of Monitor structures describing
+    all monitors connected to the system. If there is a "primary" monitor,
+    it will be first in the list.
+
+    Subsequent calls will usually
+    return the same array, but if a signal comes in indicating a change
+    it will probably delete the old array and return a new one.
+*/
+int Monitor::list(const Monitor** p) {
+  if (!num_monitors) {
+#if USE_XINERAMA
+#if XINERAMA_VERSION > 1
+    XRectangle* rects = 0; int count = 0;
+    int a=0; int b=0;
+    if (XineramaQueryExtension(xdisplay,&a,&b) &&
+	XineramaIsActive(xdisplay, message_window))
+      XineramaGetData(xdisplay, message_window, &rects, &count);
+#else
+    XineramaScreenInfo* rects = 0; int count = 0;
+    int a=0; int b=0;
+    if (XineramaQueryExtension(xdisplay,&a,&b))
+      rects = XineramaQueryScreens(xdisplay, &count);
+#endif
+    if (count > 1 && count < 100) {
+      const Monitor& a = all();
+      num_monitors = count;
+      monitors = new Monitor[count];
+      for (int i = 0; i < count; i++) {
+	Monitor& m = monitors[i];
+	m = a;
+#if XINERAMA_VERSION > 1
+	int x = rects[i].x;
+	int y = rects[i].y;
+#else
+	int x = rects[i].x_org;
+	int y = rects[i].y_org;
+#endif
+	int r = x+rects[i].width;
+	int b = y+rects[i].height;
+	m.set(x, y, r-x, b-y);
+	if (a.work.x() > x) x = a.work.x();
+	if (a.work.y() > y) y = a.work.y();
+	if (a.work.r() < r) r = a.work.r();
+	if (a.work.b() < b) b = a.work.b();
+	m.work.set(x, y, r-x, b-y);
+      }
+      XFree(rects);
+      goto DONE;
+    }
+    XFree(rects);
+#endif
+    num_monitors = 1; // indicate that Xinerama failed
+    monitors = (Monitor*)(&all());
+#if 0
+    // Guess for dual monitors when Xinerma is not working or it lies
+    // (which the NVidea drivers seem to do):
+    if (monitors->w() > 2*monitors->h()) {
+      num_monitors = 2;
+      monitors = new Monitor[2];
+      monitors[0] = monitors[1] = all();
+      monitors[0].w_ = monitors[1].x_ = monitors[0].w_/2;
+      monitors[1].w_ -= monitors[1].x_;
+      monitors[0].work.w_ = monitors[0].w_-monitors[0].work.x_;
+      monitors[1].work.w_ -= monitors[0].work.w_;
+      monitors[1].work.x_ = monitors[1].x_;
+    }
+#endif
+  DONE:;
+//      printf("Got %d monitors:\n", num_monitors);
+//      for (int i=0; i < num_monitors; i++) {
+//        const Monitor& m = monitors[i];
+//        printf(" %d %d %d %d, work %d %d %d %d\n",
+//  	     m.x(), m.y(), m.w(), m.h(),
+//  	     m.work.x(), m.work.y(), m.work.w(), m.work.h());
+//      }
+  }
+  *p = monitors;
+  return num_monitors;
+}
+
+/** Return a pointer to a Monitor structure describing the monitor
+    that contains or is closest to the given x,y, position.
+*/
+const Monitor& Monitor::find(int x, int y) {
+  const Monitor* monitors;
+  int count = list(&monitors);
+  const Monitor* ret = monitors+0;
+  if (count > 1) {
+    int r = 0;
+    for (int i = 0; i < count; i++) {
+      const Monitor& m = monitors[i];
+      // find distances to nearest edges:
+      int rx;
+      if (x <= m.x()) rx = m.x()-x;
+      else if (x >= m.r()) rx = x-m.r();
+      else rx = 0;
+      int ry;
+      if (y <= m.y()) ry = m.y()-y;
+      else if (y >= m.b()) ry = y-m.b();
+      else ry = 0;
+      // return this screen if inside:
+      if (rx <= 0 && ry <= 0) return m;
+      // use larger of horizontal and vertical distances:
+      if (rx < ry) rx = ry;
+      // remember if this is the closest screen:
+      if (!i || rx < r) {
+	ret = monitors+i;
+	r = rx;
+      }
+    }
+  }
+  return *ret;
+}
+
+////////////////////////////////////////////////////////////////
 
 void fltk::get_mouse(int &x, int &y) {
   open_display();
@@ -1442,5 +1610,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.152 2003/09/15 05:56:43 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.153 2003/10/28 17:45:15 spitzak Exp $".
 //

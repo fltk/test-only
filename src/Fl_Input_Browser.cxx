@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.cxx,v 1.21 2002/12/10 02:00:43 easysw Exp $"
+// "$Id: Fl_Input_Browser.cxx,v 1.22 2003/10/28 17:45:14 spitzak Exp $"
 //
 // Input Browser (Combo Box) widget for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 #include <fltk/InputBrowser.h>
 #include <fltk/MenuWindow.h>
 #include <fltk/Browser.h>
-#include <fltk/ScreenInfo.h>
+#include <fltk/Monitor.h>
 #include <fltk/events.h>
 #include <fltk/damage.h>
 #include <fltk/Box.h>
@@ -203,7 +203,8 @@ InputBrowser::handle(int e) {
       if (H < minh_) H = minh_;
       int X = mw->x();
       int Y = mw->y();
-      int down = screenInfo().height - Y;
+      const Monitor& monitor = Monitor::find(event_x_root(), event_y_root());
+      int down = monitor.h() - Y;
       int up = event_y_root() - event_y();
       if (H > down) {
         if (up > down) {
@@ -213,9 +214,9 @@ InputBrowser::handle(int e) {
           H = down;
         }
       }
-      if (X + W > screenInfo().width) {
-        X = screenInfo().width - W;
-        if (X < 0) { X = 0; W = screenInfo().width; }
+      if (X + W > monitor.r()) {
+        X = monitor.r() - W;
+        if (X < 0) { X = 0; W = monitor.r(); }
       }
       mw->resize(X, Y, W, H);
       b->Widget::size(W, H);
@@ -275,5 +276,5 @@ InputBrowser::draw() {
 }
 
 //
-// End of "$Id: Fl_Input_Browser.cxx,v 1.21 2002/12/10 02:00:43 easysw Exp $".
+// End of "$Id: Fl_Input_Browser.cxx,v 1.22 2003/10/28 17:45:14 spitzak Exp $".
 //

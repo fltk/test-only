@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_hotspot.cxx,v 1.20 2003/07/02 06:51:04 spitzak Exp $"
+// "$Id: Fl_Window_hotspot.cxx,v 1.21 2003/10/28 17:45:15 spitzak Exp $"
 //
 // Move windows but keep them on-screen.
 //
@@ -25,7 +25,7 @@
 
 #include <fltk/events.h>
 #include <fltk/Window.h>
-#include <fltk/ScreenInfo.h>
+#include <fltk/Monitor.h>
 #if defined(_WIN32)
 # include <fltk/x.h>
 #endif
@@ -58,20 +58,19 @@ void Window::hotspot(int cx, int cy, bool offscreen) {
     const int dr = 1;
     const int db = 1;
 #endif
-    int W = screenInfo().w;
-    if (X+w()+dr > W) X = W-dr-w();
-    if (X < dx) X = dx;
-    if (X+w() > W) X = W-w();
-    if (X < 0) X = 0;
-    int H = screenInfo().h;
-    if (Y+h()+db > H) Y = H-db-h();
-    if (Y < dy) Y = dy;
-    if (Y+h() > H) Y = H-h();
-    if (Y < 0) Y = 0;
+    const Monitor& monitor = Monitor::find(X,Y);
+    if (X+w()+dr > monitor.r()) X = monitor.r()-dr-w();
+    if (X < monitor.x()+dx) X = monitor.x()+dx;
+    if (X+w() > monitor.r()) X = monitor.r()-w();
+    if (X < monitor.x()) X = monitor.x();
+    if (Y+h()+db > monitor.h()) Y = monitor.h()-db-h();
+    if (Y < monitor.y()+dy) Y = monitor.y()+dy;
+    if (Y+h() > monitor.h()) Y = monitor.h()-h();
+    if (Y < monitor.y()) Y = monitor.y();
   }
   position(X,Y);
 }
 
 //
-// End of "$Id: Fl_Window_hotspot.cxx,v 1.20 2003/07/02 06:51:04 spitzak Exp $".
+// End of "$Id: Fl_Window_hotspot.cxx,v 1.21 2003/10/28 17:45:15 spitzak Exp $".
 //

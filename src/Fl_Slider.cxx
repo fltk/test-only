@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.67 2002/12/10 02:00:51 easysw Exp $"
+// "$Id: Fl_Slider.cxx,v 1.68 2003/10/28 17:45:14 spitzak Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -80,6 +80,8 @@ double Slider::position_value(int X, int w) {
   if (!horizontal()) flip = !flip;
   if (flip) X = w-X;
   double fraction = double(X)/w;
+  if (fraction <= 0) return A;
+  if (fraction >= 1) return B;
   // if both are negative, make the range positive:
   flip = (B <= 0);
   if (flip) {double t = A; A = -B; B = -t; fraction = 1-fraction;}
@@ -468,5 +470,5 @@ Slider::Slider(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.67 2002/12/10 02:00:51 easysw Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.68 2003/10/28 17:45:14 spitzak Exp $".
 //

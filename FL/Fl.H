@@ -10,6 +10,7 @@
 #include <fltk/Box.h>
 #include <fltk/error.h>
 #include <fltk/visual.h>
+#include <fltk/Monitor.h>
 
 namespace Fl = fltk;
 
@@ -25,10 +26,11 @@ namespace fltk {
   inline void selection(fltk::Widget &owner, const char* b, int len) {
     copy(b,len,false);}
 
-  inline int x() {return screenInfo().x;}
-  inline int y() {return screenInfo().y;}
-  inline int w() {return screenInfo().w;}
-  inline int h() {return screenInfo().h;}
+  // These are in fltk/Monitor.h but I did not want to include that:
+  inline int x() {return Monitor::all().x();}
+  inline int y() {return Monitor::all().y();}
+  inline int w() {return Monitor::all().w();}
+  inline int h() {return Monitor::all().h();}
 
   inline void set_color(Color c, uchar r, uchar g, uchar b) {
     set_color_index(c,color(r,g,b));

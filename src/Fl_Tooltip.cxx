@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.55 2003/09/03 06:08:07 spitzak Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.56 2003/10/28 17:45:15 spitzak Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -26,7 +26,7 @@
 
 #include <fltk/Tooltip.h>
 #include <fltk/MenuWindow.h>
-#include <fltk/ScreenInfo.h>
+#include <fltk/Monitor.h>
 #include <fltk/events.h>
 #include <fltk/run.h>
 #include <fltk/draw.h>
@@ -65,8 +65,6 @@ void TooltipBox::layout() {
   measure(label(), ww, hh, flags());
   ww += 6; hh += 6;
 
-  const ScreenInfo& info = screenInfo();
-
   // find position on the screen of the widget:
   int ox = event_x_root();
   //int ox = X+W/2;
@@ -75,15 +73,16 @@ void TooltipBox::layout() {
     //ox += p->x();
     oy += p->y();
   }
-  if (ox+ww > info.width) ox = info.width - ww;
-  if (ox < 0) ox = 0;
+  const Monitor& monitor = Monitor::find(ox, oy);
+  if (ox+ww > monitor.r()) ox = monitor.r() - ww;
+  if (ox < monitor.x()) ox = monitor.x();
   if (H > 30) {
     oy = event_y_root()+13;
-    if (oy+hh > info.height) oy -= 23+hh;
+    if (oy+hh > monitor.h()) oy -= 23+hh;
   } else {
-    if (oy+hh > info.height) oy -= (4+hh+H);
+    if (oy+hh > monitor.h()) oy -= (4+hh+H);
   }
-  if (oy < 0) oy = 0;
+  if (oy < monitor.y()) oy = monitor.y();
 
   resize(ox, oy, ww, hh);
   MenuWindow::layout();
@@ -221,5 +220,5 @@ static NamedStyle style("Tooltip", revert, &Tooltip::default_style);
 NamedStyle* Tooltip::default_style = &::style;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.55 2003/09/03 06:08:07 spitzak Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.56 2003/10/28 17:45:15 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: glut_compatability.cxx,v 1.11 2002/12/10 02:00:36 easysw Exp $"
+// "$Id: glut_compatability.cxx,v 1.12 2003/10/28 17:45:13 spitzak Exp $"
 //
 // GLUT emulation routines for the Fast Light Tool Kit (FLTK).
 //
@@ -82,6 +82,7 @@ int Fl_Glut_Window::handle(int event) {
   switch (event) {
 
   case FL_PUSH:
+    if (keyboard || special) Fl::focus(this);
     button = Fl::event_button()-1;
     if (button<0) button = 0;
     if (button>2) button = 2;
@@ -89,6 +90,13 @@ int Fl_Glut_Window::handle(int event) {
     mouse_down |= 1<<button;
     if (mouse) {mouse(button,GLUT_DOWN,ex,ey); return 1;}
     if (motion) return 1;
+    break;
+
+  case FL_MOUSEWHEEL:
+    button = Fl::event_dy();
+    while (button < 0) {mouse(3,GLUT_DOWN,ex,ey); ++button;}
+    while (button > 0) {mouse(4,GLUT_DOWN,ex,ey); --button;}
+    return 1;
     break;
 
   case FL_RELEASE:
@@ -121,14 +129,15 @@ int Fl_Glut_Window::handle(int event) {
     break;
 
   case FL_KEY:
+  case FL_SHORTCUT:
     if (Fl::event_text()[0]) {
       if (keyboard) {keyboard(Fl::event_text()[0],ex,ey); return 1;}
       break;
     } else {
       if (special) {
-	int i = Fl::event_key();
-	if (i > FL_F(0) && i <= FL_F_Last) i = i-FL_F(0);
-	special(i,ex,ey);
+	int k = Fl::event_key();
+	if (k > FL_F && k <= FL_F_Last) k = k-FL_F;
+	special(k,ex,ey);
 	return 1;
       }
       break;
@@ -366,5 +375,5 @@ int glutLayerGet(GLenum type) {
 #endif
 
 //
-// End of "$Id: glut_compatability.cxx,v 1.11 2002/12/10 02:00:36 easysw Exp $".
+// End of "$Id: glut_compatability.cxx,v 1.12 2003/10/28 17:45:13 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.196 2003/09/15 05:56:43 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.197 2003/10/28 17:45:15 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -308,34 +308,175 @@ static inline int fl_ready() {
 
 ////////////////////////////////////////////////////////////////
 
+// Turn this off to avoid using NT 5.0 / Windows 98 multi-monitor calls
+// Using this also required -DWINVER=0x0500
+#if (WINVER >= 0x0500)
+#define USE_MULTIMONITOR 1
+#else
+#define USE_MULTIMONITOR 0
+#endif
+
 static bool reload_info = true;
 
-const ScreenInfo& fltk::screenInfo() {
-  static ScreenInfo info;
+/** Return a "monitor" that surrounds all the monitors.
+    If you have a single monitor, this returns a monitor structure that
+    defines it. If you have multiple monitors this returns a fake monitor
+    that surrounds all of them.
+*/
+const Monitor& Monitor::all() {
+  static Monitor monitor;
   if (reload_info) {
     reload_info = false;
 
+#if USE_MULTIMONITOR
+    monitor.x_ = GetSystemMetrics(SM_XVIRTUALSCREEN);
+    monitor.y_ = GetSystemMetrics(SM_YVIRTUALSCREEN);
+    monitor.w_ = GetSystemMetrics(SM_CXVIRTUALSCREEN);
+    monitor.h_ = GetSystemMetrics(SM_CYVIRTUALSCREEN);
+#endif
+
+    // This is wrong, we should get the work area from the union of
+    // all the monitors in monitor list
     RECT r;
     SystemParametersInfo(SPI_GETWORKAREA, 0, &r, 0);
-    info.x = r.left;
-    info.y = r.top;
-    info.w = r.right - r.left;
-    info.h = r.bottom - r.top;
+    monitor.work.set(r.left, r.top, r.right - r.left, r.bottom - r.top);
 
     DEVMODE mode;
     EnumDisplaySettings(0, ENUM_CURRENT_SETTINGS, &mode);
-    info.width = mode.dmPelsWidth;
-    info.height = mode.dmPelsHeight;
-    info.depth = mode.dmBitsPerPel;
-
+#if !USE_MULTIMONITOR
+    monitor.x_ = 0;
+    monitor.y_ = 0;
+    monitor.w_ = mode.dmPelsWidth;
+    monitor.h_ = mode.dmPelsHeight;
+#endif
+    monitor.depth_ = mode.dmBitsPerPel;
     HDC screen = GetDC(0);
-    //info.width_mm = GetDeviceCaps(screen, HORZSIZE);
-    //info.height_mm = GetDeviceCaps(screen, VERTSIZE);
-    info.dpi_x = (float)GetDeviceCaps(screen, LOGPIXELSX);
-    info.dpi_y = (float)GetDeviceCaps(screen, LOGPIXELSY);
+    monitor.dpi_x_ = (float)GetDeviceCaps(screen, LOGPIXELSX);
+    monitor.dpi_y_ = (float)GetDeviceCaps(screen, LOGPIXELSY);
+
   }
-  return info;
+  return monitor;
 }
+
+static Monitor* monitors = 0;
+static int num_monitors=0;
+
+#if USE_MULTIMONITOR
+static int monitor_index;
+static BOOL CALLBACK monitor_cb(HMONITOR hMonitor,
+				HDC hdcMonitor,
+				LPRECT lprcMonitor,
+				LPARAM dwData)
+{
+  Monitor& m = monitors[monitor_index];
+  MONITORINFO mi;
+  mi.cbSize = sizeof(mi);
+  GetMonitorInfo(hMonitor, &mi);
+  m.x_ = mi.rcMonitor.left;
+  m.y_ = mi.rcMonitor.top;
+  m.w_ = mi.rcMonitor.right - m.x_;
+  m.h_ = mi.rcMonitor.bottom - m.y_;
+  m.work.x_ = mi.rcWork.left;
+  m.work.y_ = mi.rcWork.top;
+  m.work.w_ = mi.rcWork.right - m.work.x_;
+  m.work.h_ = mi.rcWork.bottom - m.work.y_;
+  // put the primary monitor first in list:
+  if (monitor_index && (mi.dwFlags&MONITORINFOF_PRIMARY)) {
+    Monitor t = monitors[0];
+    monitors[0] = m;
+    m = t;
+  }
+  monitor_index++;
+  return 0;
+}
+#endif
+
+/** Return an array of all Monitors.
+    p is set to point to a static array of Monitor structures describing
+    all monitors connected to the system. If there is a "primary" monitor,
+    it will be first in the list.
+
+    Subsequent calls will usually
+    return the same array, but if a signal comes in indicating a change
+    it will probably delete the old array and return a new one.
+*/
+int Monitor::list(const Monitor** p) {
+  if (!num_monitors) {
+#if USE_MULTIMONITOR
+    num_monitors = GetSystemMetrics(SM_CMONITORS);
+    monitors = new Monitor[num_monitors];
+    // put the dpy and other info into them all:
+    const Monitor& a = all();
+    for (int j = 0; j < num_monitors; j++) monitors[j] = a;
+    // now do the callback to get the per-monitor info:
+    monitor_index = 0;
+    EnumDisplayMonitors(0,0,monitor_cb,0);
+#else
+    num_monitors = 1; // indicate that Xinerama failed
+    monitors = (Monitor*)(&all());
+    // Guess if there are 2 monitors and assume they are side-by-side:
+    int w = GetSystemMetrics(SM_CXSCREEN);
+//  printf("SM_CXSCREEN = %d\n", w);
+    // Guess for Nvidea which reports only one big monitor:
+    if (w > monitors->h()*2) w = monitors->w()/2;
+    if (w < monitors->w()) {
+      num_monitors = 2;
+      monitors = new Monitor[2];
+      monitors[0] = monitors[1] = all();
+      monitors[0].w_ = monitors[1].x_ = w;
+      monitors[1].w_ -= w;
+      monitors[0].work.w_ = w-monitors[0].work.x_;
+      monitors[1].work.w_ -= monitors[0].work.w_;
+      monitors[1].work.x_ = w;
+    }
+#endif
+//      printf("Got %d monitors:\n", num_monitors);
+//      for (int i=0; i < num_monitors; i++) {
+//        const Monitor& m = monitors[i];
+//        printf(" %d %d %d %d, work %d %d %d %d\n",
+//  	     m.x(), m.y(), m.w(), m.h(),
+//  	     m.work.x(), m.work.y(), m.work.w(), m.work.h());
+//      }
+  }
+  *p = monitors;
+  return num_monitors;
+}
+
+/** Return a pointer to a Monitor structure describing the monitor
+    that contains or is closest to the given x,y, position.
+*/
+const Monitor& Monitor::find(int x, int y) {
+  const Monitor* monitors;
+  int count = list(&monitors);
+  const Monitor* ret = monitors+0;
+  if (count > 1) {
+    int r = 0;
+    for (int i = 0; i < count; i++) {
+      const Monitor& m = monitors[i];
+      // find distances to nearest edges:
+      int rx;
+      if (x <= m.x()) rx = m.x()-x;
+      else if (x >= m.r()) rx = x-m.r();
+      else rx = 0;
+      int ry;
+      if (y <= m.y()) ry = m.y()-y;
+      else if (y >= m.b()) ry = y-m.b();
+      else ry = 0;
+      // return this screen if inside:
+      if (rx <= 0 && ry <= 0) return m;
+      // use larger of horizontal and vertical distances:
+      if (rx < ry) rx = ry;
+      // remember if this is the closest screen:
+      if (!i || rx < r) {
+	ret = monitors+i;
+	r = rx;
+      }
+    }
+  }
+  return *ret;
+}
+
+////////////////////////////////////////////////////////////////
 
 void fltk::get_mouse(int &x, int &y) {
   POINT p;
@@ -1061,6 +1202,13 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_DISPLAYCHANGE:
   case WM_SETTINGCHANGE:
     reload_info = true;
+#if USE_MULTIMONITOR
+    delete[] monitors;
+#else
+    if (num_monitors > 1) delete[] monitors;
+#endif
+    monitors = 0;
+    num_monitors = 0;
   case WM_SYSCOLORCHANGE:
     reload_theme();
     break;
@@ -1557,5 +1705,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.196 2003/09/15 05:56:43 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.197 2003/10/28 17:45:15 spitzak Exp $".
 //

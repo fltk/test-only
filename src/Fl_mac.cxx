@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.9 2003/09/06 22:37:36 spitzak Exp $"
+// "$Id: Fl_mac.cxx,v 1.10 2003/10/28 17:45:15 spitzak Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -885,26 +885,81 @@ void fltk::open_display() {
   }
 }
 
+////////////////////////////////////////////////////////////////
+
 static bool reload_info = true;
 
-const ScreenInfo& fltk::screenInfo() {
-  static ScreenInfo info;
+/** Return a "monitor" that surrounds all the monitors.
+    If you have a single monitor, this returns a monitor structure that
+    defines it. If you have multiple monitors this returns a fake monitor
+    that surrounds all of them.
+*/
+const Monitor& Monitor::all() {
+  static Monitor monitor;
   if (reload_info) {
     reload_info = false;
     BitMap r;
     GetQDGlobalsScreenBits(&r);
-    info.x = r.bounds.left;
-    info.y = r.bounds.top + 20; // \todo 20 pixel menu bar?
-    info.width = r.bounds.right;
-    info.w = info.width-info.x;
-    info.height = r.bounds.bottom;
-    info.h = info.height-info.y;
+    monitor.x_ = monitor.work.x_ = r.bounds.left;
+    monitor.y_ = r.bounds.top; monitor.work.y_ = monitor.y_ + 20;
+    monitor.w_ = r.bounds.right - monitor.x_;
+    monitor.h_ = r.bounds.bottom - monitor.y_;
+    monitor.work = monitor;
     // I don't know if this scale info is available...
-    info.dpi_x = 100;
-    info.dpi_y = 100;
+    monitor.depth_ = 32;
+    monitor.dpi_x_ = 100;
+    monitor.dpi_y_ = 100;
+    monitor.name_ = "carbon";
   }
-  return info;
+  return monitor;
 }
+
+/** Return an array of all Monitors.
+    p is set to point to a static array of Monitor structures describing
+    all monitors connected to the system. Subsequent calls will usually
+    return the same array, but if a signal comes in indicating a change
+    it will probably delete the old array and return a new one.
+*/
+int Monitor::list(const Monitor** p) {
+  *p = &all();
+  return 1;
+}
+
+/** Return a pointer to a Monitor structure describing the monitor
+    that contains or is closest to the given x,y, position.
+*/
+const Monitor& Monitor::find(int x, int y) {
+  const Monitor* monitors;
+  int count = list(&monitors);
+  const Monitor* ret = monitors+0;
+  if (count > 1) {
+    int r = 0;
+    for (int i = 0; i < count; i++) {
+      const Monitor& m = monitors[i];
+      // find distances to nearest edges:
+      int rx;
+      if (x <= m.x()) rx = m.x()-x;
+      else if (x >= m.r()) rx = x-m.r();
+      else rx = 0;
+      int ry;
+      if (y <= m.y()) ry = m.y()-y;
+      else if (y >= m.b()) ry = y-m.b();
+      else ry = 0;
+      // return this screen if inside:
+      if (rx <= 0 && ry <= 0) return m;
+      // use larger of horizontal and vertical distances:
+      if (rx < ry) rx = ry;
+      // remember if this is the closest screen:
+      if (!i || rx < r) {
+	ret = monitors+i;
+	r = rx;
+      }
+    }
+  }
+  return *ret;
+}
+
+////////////////////////////////////////////////////////////////
 
 /**
  * get the current mouse pointer world coordinates
@@ -1525,6 +1580,6 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_mac.cxx,v 1.9 2003/09/06 22:37:36 spitzak Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.10 2003/10/28 17:45:15 spitzak Exp $".
 //
 

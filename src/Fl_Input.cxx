@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.82 2003/09/06 22:37:36 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.83 2003/10/28 17:45:14 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -1125,23 +1125,25 @@ int Input::handle(int event, int X, int Y, int W, int H) {
     if (when() & WHEN_RELEASE) maybe_do_callback();
     return 1;
 
+#if 0
   case SHORTCUT:
     // If the user types text to a widget that does not want it, it will
     // call here eventually. Take the focus on the assumption they are
     // trying to type into this text field:
-#if 1
+# if 1
     if (event_text()[0] < ' ' && event_key() != BackSpaceKey) return 0;
     if (event_state(ALT|META)) return 0;
-#else
+# else
     // attempt to see if nobody else interested in key. This did not
     // work as keys that did nothing still moved the focus.
     {static bool recursion;
     if (recursion) return 0;
     recursion = true; bool r = key_is_shortcut(); recursion = false;
     if (r) return 0;}
-#endif
+# endif
     position(size());
     take_focus();
+#endif
   case KEY:
     return handle_key();
 
@@ -1326,5 +1328,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.82 2003/09/06 22:37:36 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.83 2003/10/28 17:45:14 spitzak Exp $".
 //

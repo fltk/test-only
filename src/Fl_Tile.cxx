@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tile.cxx,v 1.23 2003/09/27 23:57:12 spitzak Exp $"
+// "$Id: Fl_Tile.cxx,v 1.24 2003/10/28 17:45:14 spitzak Exp $"
 //
 // Tile widget for the Fast Light Tool Kit (FLTK).
 //
@@ -66,7 +66,6 @@ void TiledGroup::position(int oix, int oiy, int newx, int newy) {
 }
 
 void TiledGroup::layout() {
-  if (!resizable()) resizable(this);
 #if 0
   // This code attempted to keep the current sizes. A better method may
   // be to just call init_sizes() after the user moves the borders.
@@ -87,6 +86,7 @@ void TiledGroup::layout() {
       position(p[5], p[7], p[5]+w()-llx, p[7]+h()-lly);
   }
 #endif
+  if (!resizable()) resizable(this);
   Group::layout();
 }
 
@@ -179,5 +179,5 @@ int TiledGroup::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Tile.cxx,v 1.23 2003/09/27 23:57:12 spitzak Exp $".
+// End of "$Id: Fl_Tile.cxx,v 1.24 2003/10/28 17:45:14 spitzak Exp $".
 //
