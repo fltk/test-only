@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Image.cxx,v 1.13 1999/08/27 17:45:23 vincent Exp $"
+// "$Id: Fluid_Image.cxx,v 1.14 1999/08/28 15:39:09 vincent Exp $"
 //
 // Pixmap label support for the Fast Light Tool Kit (FLTK).
 //
@@ -65,12 +65,11 @@ static uchar* fl_store_datas_from_file(const char *filename, size_t &size)
 }
 
 ////////////////////////////////////////////////////////////////
-#include <FL/Fl_Image_File.H>
 
 static char xpm_filetype[] = "XPM";
 class pixmap_image : public Fluid_Image {
 protected:
-  Fl_Image_File *p;
+  Fl_Shared_Image *p;
   int *linelength;
   char *filetype;
 public:
@@ -83,7 +82,7 @@ public:
 };
 
 int pixmap_image::test_file(char *buffer) {
-  return fl_is_xpm((uchar*)buffer, 0);
+  return Fl_XPM_Image::test((uchar*)buffer, 0);
 }
 
 void pixmap_image::label(Fl_Widget *o) {
@@ -98,7 +97,7 @@ void pixmap_image::write_static() {
   if (!p) return;
   if(image_file_header_written != write_number)
   {
-    write_c("#include <FL/Fl_Image_File.H>\n");
+    write_c("#include <FL/Fl_Shared_Image.H>\n");
     image_file_header_written = write_number;
   }
   if (inlined) {
@@ -135,32 +134,26 @@ void pixmap_image::write_static() {
     }
     leave_images_dir();
   }
-  write_c("static Fl_%s_Image *%s;\n", filetype, 
-	  unique_id(this, "image", filename_name(name()), 0));
 }
 
 void pixmap_image::write_code() {
   if (!p) return;
-  write_c("%sif (!%s) %s = new Fl_%s_Image(\"%s\"", indent(),  
-	  unique_id(this, "image", filename_name(name()), 0),
-	  unique_id(this, "image", filename_name(name()), 0),
-	  filetype, name());
+  write_c("%so->image(Fl_%s_Image::get(\"%s\"", indent(), filetype, name());
   if (inlined)
     write_c(", %s%s", filetype==xpm_filetype? "(uchar*)" : "",
 	    unique_id(this, "datas", filename_name(name()), 0));
-  write_c(");\n%so->image(%s);\n", indent(), 
-	  unique_id(this, "image", filename_name(name()), 0));
+  write_c("));\n");
 }
 
 pixmap_image::pixmap_image(const char *name, bool subclass) : Fluid_Image(name) {
   if(!subclass) {
     filetype = xpm_filetype;
-    p = new Fl_XPM_Image((char*) name);
+    p = Fl_XPM_Image::get((char*) name);
   }
+  inlined = 1;
 }
 
 pixmap_image::~pixmap_image() {
-  delete p;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -173,12 +166,12 @@ public:
 };
 
 int gif_image::test_file(char *buffer) {
-  return fl_is_gif((uchar*)buffer, 3);
+  return Fl_GIF_Image::test((uchar*)buffer, 3);
 }
 
 gif_image::gif_image(const char *name) : pixmap_image(name) {
   filetype = "GIF";
-  p = new Fl_GIF_Image((char*)name);
+  p = Fl_GIF_Image::get((char*)name);
 }
 
 gif_image::~gif_image() {
@@ -194,12 +187,12 @@ public:
 };
 
 int png_image::test_file(char *buffer) {
-  return fl_is_png((uchar*)buffer, 3);
+  return Fl_PNG_Image::test((uchar*)buffer, 3);
 }
 
 png_image::png_image(const char *name) : pixmap_image(name) {
   filetype = "PNG";
-  p = new Fl_PNG_Image((char*)name);
+  p = Fl_PNG_Image::get((char*)name);
 }
 
 png_image::~png_image() {
@@ -215,12 +208,12 @@ public:
 };
 
 int bmp_image::test_file(char *buffer) {
-  return fl_is_bmp((uchar*)buffer, 1024);
+  return Fl_BMP_Image::test((uchar*)buffer, 1024);
 }
 
 bmp_image::bmp_image(const char *name) : pixmap_image(name) {
   filetype = "BMP";
-  p = new Fl_BMP_Image((char*)name);
+  p = Fl_BMP_Image::get((char*)name);
 }
 
 bmp_image::~bmp_image() {
@@ -236,12 +229,12 @@ public:
 };
 
 int jpeg_image::test_file(char *buffer) {
-  return fl_is_jpeg((uchar*)buffer, 1024);
+  return Fl_JPEG_Image::test((uchar*)buffer, 1024);
 }
 
 jpeg_image::jpeg_image(const char *name) : pixmap_image(name) {
   filetype = "JPEG";
-  p = new Fl_JPEG_Image((char*)name);
+  p = Fl_JPEG_Image::get((char*)name);
 }
 
 jpeg_image::~jpeg_image() {
@@ -501,5 +494,5 @@ void set_images_dir_cb(Fl_Widget *, void *) {
 }
  
 //
-// End of "$Id: Fluid_Image.cxx,v 1.13 1999/08/27 17:45:23 vincent Exp $".
+// End of "$Id: Fluid_Image.cxx,v 1.14 1999/08/28 15:39:09 vincent Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fluid_Image.h,v 1.8 1999/08/25 09:24:04 vincent Exp $"
+// "$Id: Fluid_Image.h,v 1.9 1999/08/28 15:39:09 vincent Exp $"
 //
 // Pixmap image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,7 +32,7 @@
 #ifndef FLUID_IMAGE_H
 #define FLUID_IMAGE_H
 
-#include <FL/Fl_Image_File.H>
+#include <FL/Fl_Shared_Image.H>
 
 class Fluid_Image {
   const char *name_;
@@ -61,5 +61,5 @@ extern const char *images_dir;
 #endif
 
 //
-// End of "$Id: Fluid_Image.h,v 1.8 1999/08/25 09:24:04 vincent Exp $".
+// End of "$Id: Fluid_Image.h,v 1.9 1999/08/28 15:39:09 vincent Exp $".
 //

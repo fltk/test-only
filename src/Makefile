@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.30 1999/08/27 17:45:25 vincent Exp $"
+# "$Id: Makefile,v 1.31 1999/08/28 15:39:11 vincent Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -43,9 +43,9 @@ CPPFILES = \
 	Fl_Dial.cxx \
 	Fl_Double_Window.cxx \
 	Fl_Fly_Button.cxx \
+	fl_gif.cxx \
 	Fl_Group.cxx \
 	Fl_Image.cxx \
-	Fl_Image_File.cxx \
 	Fl_Input.cxx \
 	Fl_Input_.cxx \
 	Fl_Light_Button.cxx \
@@ -109,12 +109,10 @@ CPPFILES = \
 	fl_diamond_box.cxx \
 	fl_draw.cxx \
 	fl_draw_image.cxx \
-	fl_draw_image_file.cxx \
 	fl_draw_pixmap.cxx \
 	fl_engraved_label.cxx \
 	fl_file_chooser.cxx \
 	fl_font.cxx \
-	fl_gif.cxx \
 	fl_glyph.cxx \
 	fl_labeltype.cxx \
 	fl_line_style.cxx \
@@ -126,6 +124,7 @@ CPPFILES = \
 	fl_rounded_box.cxx \
 	fl_set_fonts.cxx \
 	fl_scroll_area.cxx \
+	Fl_Shared_Image.cxx \
 	fl_shadow_box.cxx \
 	fl_shortcut.cxx \
 	fl_show_colormap.cxx \
@@ -149,8 +148,8 @@ CPPglFILES = \
 	glut_font.cxx
 
 CPPimagesFILES = \
-	fl_png.cxx \
-	fl_jpeg.cxx
+	fl_jpeg.cxx\
+	fl_png.cxx
 
 CFILES = \
 	fl_call_main.c \
@@ -276,5 +275,5 @@ install: $(LIBRARY) $(DSONAME)
 	@-ln -s FL $(includedir)/Fl
 
 #
-# End of "$Id: Makefile,v 1.30 1999/08/27 17:45:25 vincent Exp $".
+# End of "$Id: Makefile,v 1.31 1999/08/28 15:39:11 vincent Exp $".
 #

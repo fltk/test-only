@@ -1,6 +1,9 @@
 // JPEG image decompression. From example code in libjpeg distribution.
 
-#include <FL/Fl_Image_File.H>
+#include <FL/Fl.H>
+#include <FL/fl_draw.H>
+#include <FL/x.H>
+#include <FL/Fl_Shared_Image.H>
 #include "config.h"
 #ifdef HAVE_JPEG
 #include <stdio.h>
@@ -19,7 +22,7 @@ typedef struct {
   JOCTET * start_datas, * datas;
 } my_source_mgr;
 
-#define INPUT_BUF_SIZE 256
+static int INPUT_BUF_SIZE;
 
 typedef my_source_mgr * my_src_ptr;
 
@@ -228,14 +231,21 @@ static void fl_draw_image_cb(void *v, int x, int y, int w, uchar *b)
 
 #endif
 
-int fl_measure_jpeg(char *filename, uchar *datas, int &w, int &h)
+void Fl_JPEG_Image::measure(int &W, int &H)
 {
 #if !HAVE_JPEG
-  return w=0;
+  w=W=0;
 #else
+  if (w>=0) { 
+    W=w; H=h; 
+    return; 
+  }
+
   struct jpeg_decompress_struct cinfo;
   struct my_error_mgr jerr;
   FILE* infile;
+
+  INPUT_BUF_SIZE = 4096;
 
   cinfo.err = jpeg_std_error(&jerr.pub);
   jerr.pub.error_exit = my_error_exit;
@@ -248,7 +258,8 @@ int fl_measure_jpeg(char *filename, uchar *datas, int &w, int &h)
      */
     jpeg_destroy_decompress(&cinfo);
     if (!datas) fclose(infile);
-    return w=0;
+    w=W=0;
+    return;
   }
 
   jpeg_create_decompress(&cinfo);
@@ -256,8 +267,10 @@ int fl_measure_jpeg(char *filename, uchar *datas, int &w, int &h)
   if (datas) {
     jpeg_rawdatas_src(&cinfo, (JOCTET*) datas);
   } else {
-    if ((infile = fopen(filename, "rb")) == NULL)
-      return 0;
+    if ((infile = fopen(get_filename(), "rb")) == NULL) {
+      w=W=0;
+      return;
+    }
     jpeg_stdio_src(&cinfo, infile);
   }
 
@@ -270,11 +283,65 @@ int fl_measure_jpeg(char *filename, uchar *datas, int &w, int &h)
 
   if (!datas) fclose(infile);
 
-  return w;
+  W=w;
+  H=h;
+  return;
 #endif
 }
 
-Fl_Offscreen fl_read_jpeg(char *filename, uchar *datas, Fl_Offscreen &mask)
+void Fl_JPEG_Image::read()
+{
+  id = mask = 0;
+#if HAVE_JPEG
+  struct jpeg_decompress_struct cinfo;
+  struct my_error_mgr jerr;
+  FILE* infile;
+
+  INPUT_BUF_SIZE = 4096;
+
+  cinfo.err = jpeg_std_error(&jerr.pub);
+  jerr.pub.error_exit = my_error_exit;
+  jerr.pub.output_message = output_message;
+
+  /* Establish the setjmp return context for my_error_exit to use. */
+  if (setjmp(jerr.setjmp_buffer)) {
+    /* If we get here, the JPEG code has signaled an error.
+     * We need to clean up the JPEG object, close the input file, and return.
+     */
+    jpeg_destroy_decompress(&cinfo);
+    if (!datas) fclose(infile);
+    return;
+  }
+
+  jpeg_create_decompress(&cinfo);
+
+  if (datas) {
+    jpeg_rawdatas_src(&cinfo, (JOCTET*) datas);
+  } else {
+    if ((infile = fopen(get_filename(), "rb")) == NULL)
+      return;
+    jpeg_stdio_src(&cinfo, infile);
+  }
+
+  jpeg_read_header(&cinfo, TRUE);
+
+  jpeg_start_decompress(&cinfo);
+
+  id = fl_create_offscreen(cinfo.output_width, cinfo.output_height);
+  fl_begin_offscreen(id);
+  fl_draw_image(fl_draw_image_cb, &cinfo, 0, 0, cinfo.output_width, cinfo.output_height, cinfo.output_components);
+  fl_end_offscreen();
+
+  jpeg_finish_decompress(&cinfo);
+
+  jpeg_destroy_decompress(&cinfo);
+
+  if (!datas)
+    fclose(infile);
+#endif
+}
+
+bool Fl_JPEG_Image::test(uchar* datas, size_t size)
 {
 #if !HAVE_JPEG
   return 0;
@@ -282,6 +349,8 @@ Fl_Offscreen fl_read_jpeg(char *filename, uchar *datas, Fl_Offscreen &mask)
   struct jpeg_decompress_struct cinfo;
   struct my_error_mgr jerr;
   FILE* infile;
+
+  INPUT_BUF_SIZE = size;
 
   cinfo.err = jpeg_std_error(&jerr.pub);
   jerr.pub.error_exit = my_error_exit;
@@ -299,38 +368,16 @@ Fl_Offscreen fl_read_jpeg(char *filename, uchar *datas, Fl_Offscreen &mask)
 
   jpeg_create_decompress(&cinfo);
 
-  if (datas) {
-    jpeg_rawdatas_src(&cinfo, (JOCTET*) datas);
-  } else {
-    if ((infile = fopen(filename, "rb")) == NULL)
-      return 0;
-    jpeg_stdio_src(&cinfo, infile);
-  }
+  jpeg_rawdatas_src(&cinfo, (JOCTET*) datas);
 
   jpeg_read_header(&cinfo, TRUE);
 
-  jpeg_start_decompress(&cinfo);
-
-  Fl_Offscreen id = fl_create_offscreen(cinfo.output_width, cinfo.output_height);
-  fl_begin_offscreen(id);
-  fl_draw_image(fl_draw_image_cb, &cinfo, 0, 0, cinfo.output_width, cinfo.output_height, cinfo.output_components);
-  fl_end_offscreen();
-  mask = 0;
-
-  jpeg_finish_decompress(&cinfo);
+  bool ispng = cinfo.image_width;
 
   jpeg_destroy_decompress(&cinfo);
 
-  if (!datas)
-    fclose(infile);
+  if (!datas) fclose(infile);
 
-  return id;
-
+  return ispng;
 #endif
-}
-
-bool fl_is_jpeg(uchar* datas, size_t size)
-{
-  int dummy;
-  return fl_measure_jpeg("dummy", datas, dummy, dummy) != 0;
 }

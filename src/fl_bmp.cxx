@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.3 1999/08/26 19:30:06 vincent Exp $"
+// "$Id: fl_bmp.cxx,v 1.4 1999/08/28 15:39:11 vincent Exp $"
 //
 // Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
 //
@@ -30,7 +30,10 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
-#include <FL/Fl_Image_File.H>
+#include <FL/Fl.H>
+#include <FL/fl_draw.H>
+#include <FL/x.H>
+#include <FL/Fl_Shared_Image.H>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -80,7 +83,7 @@ typedef unsigned char uchar;
 static FILE *bmpFile;
 static uchar* bmpDatas;
 
-bool fl_is_bmp(uchar* buffer, size_t size)
+bool Fl_BMP_Image::test(uchar* buffer, size_t size)
 {
   return !strncmp((char*)buffer, "BM", size<2? size:2);
 }
@@ -161,18 +164,24 @@ static short ReadLittleEndianUINT()
   return (c2 << 8) + c1;
 }
 
-int fl_measure_bmp(char *filename, uchar *pdatas, int &w, int &h)
+void Fl_BMP_Image::measure(int &W, int &H)
 {
-  bmpDatas = pdatas;
+  if (w>=0) { 
+    W=w; H=h; 
+    return; 
+  }
+
+  bmpDatas = datas;
 
   BITMAP_FILE_HEADER fileHeader;
   BITMAP_INFO_HEADER infoHeader;
 
-  if (!pdatas)
-    if ((bmpFile = fopen(filename, "rb")) == NULL)
+  if (!datas)
+    if ((bmpFile = fopen(get_filename(), "rb")) == NULL)
       {
 	SetError("Error while opening BMP texture file.");
-	return w=0;
+	w = W = 0;
+	return;
       }
 
   {
@@ -183,9 +192,10 @@ int fl_measure_bmp(char *filename, uchar *pdatas, int &w, int &h)
     // Check to make sure this is a BMP file
     if ((fileHeader.id1 != 'B') || (fileHeader.id2 != 'M'))
     {
-      if (!pdatas) fclose(bmpFile);
+      if (!datas) fclose(bmpFile);
       SetError("Error reading BMP texture file, not a legitimate BMP file.");
-      return w=0;
+      w = W = 0;
+      return;
     }
 
     // Reading Little Endian because BMPs are Intel based
@@ -199,14 +209,18 @@ int fl_measure_bmp(char *filename, uchar *pdatas, int &w, int &h)
     h = infoHeader.pixelHeight = ReadLittleEndianDWORD();
   }
 
-  if (!pdatas) fclose(bmpFile);
+  if (!datas) fclose(bmpFile);
 
-  return w;
+  W=w;
+  H=h;
+  return;
 }
 
-Fl_Offscreen fl_read_bmp(char *filename, uchar *pdatas, Fl_Offscreen &mask)
+void Fl_BMP_Image::read()
 {
-  bmpDatas = pdatas;
+  id = mask = 0;
+
+  bmpDatas = datas;
 
   BITMAP_FILE_HEADER fileHeader;
   BITMAP_INFO_HEADER infoHeader;
@@ -217,13 +231,12 @@ Fl_Offscreen fl_read_bmp(char *filename, uchar *pdatas, Fl_Offscreen &mask)
   unsigned char *rgbBuf;
   int scanLinePad;
   int linePad;
-  Fl_Offscreen id;
 
-  if (!pdatas)
-    if ((bmpFile = fopen(filename, "rb")) == NULL)
+  if (!datas)
+    if ((bmpFile = fopen(get_filename(), "rb")) == NULL)
       {
 	SetError("Error while opening BMP texture file.");
-	return 0;
+	return;
       }
 
   {
@@ -234,9 +247,9 @@ Fl_Offscreen fl_read_bmp(char *filename, uchar *pdatas, Fl_Offscreen &mask)
     // Check to make sure this is a BMP file
     if ((fileHeader.id1 != 'B') || (fileHeader.id2 != 'M'))
     {
-      if (!pdatas) fclose(bmpFile);
+      if (!datas) fclose(bmpFile);
       SetError("Error reading BMP texture file, not a legitimate BMP file.");
-      return 0;
+      return;
     }
 
     // Reading Little Endian because BMPs are Intel based
@@ -788,26 +801,25 @@ Fl_Offscreen fl_read_bmp(char *filename, uchar *pdatas, Fl_Offscreen &mask)
 	goto error;
     }
     
-    if(!pdatas) fclose(bmpFile);
+    if(!datas) fclose(bmpFile);
 
     id = fl_create_offscreen(_width, _height);
     fl_begin_offscreen(id);
     fl_draw_image(rgbBuf, 0, 0, _width, _height, PIXEL_SIZE);
     fl_end_offscreen();
-    mask = 0;
 
     delete []palette;
     delete rgbBuf;
-    return id;
+    return;
   }
 
 error:
   if(palette)
     delete []palette;
   delete rgbBuf;
-  return 0;
+  return;
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.3 1999/08/26 19:30:06 vincent Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.4 1999/08/28 15:39:11 vincent Exp $"
 //

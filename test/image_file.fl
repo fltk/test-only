@@ -13,10 +13,10 @@ Function {main()} {open return_type int
   code {fl_set_images_root_directory("images");} {}
   Fl_Window window {
     label {The background is a BMP file} open
-    xywh {191 155 660 405} resizable box NO_BOX visible
+    xywh {231 395 660 405} resizable box NO_BOX visible
   } {
     Fl_Box {} {
-      xywh {0 0 660 405} align 32 labelfont 1 labeltype SHADOW_LABEL image {ulon.bmp} labelcolor 3
+      xywh {0 0 660 405} align 32 labelfont 1 labeltype SHADOW_LABEL image not_inlined {ulon.bmp} labelcolor 3
     }
     Fl_Box {} {
       label {tiled GIF image loaded from disk}
@@ -24,32 +24,32 @@ Function {main()} {open return_type int
     }
     Fl_Box {} {
       label {PNG image with datas included in code}
-      xywh {85 33 170 102} align 32 box UP_BOX labelfont 1 labeltype SHADOW_LABEL image inlined {coucou.png} labelcolor 3
+      xywh {85 33 170 102} align 32 box UP_BOX labelfont 1 labeltype SHADOW_LABEL image {coucou.png} labelcolor 3
     }
     Fl_Box {} {
       label {XPM image loaded from disk}
-      xywh {408 16 134 109} labelfont 1 labeltype SHADOW_LABEL image {../porsche.xpm} labelcolor 3
+      xywh {408 16 134 109} labelfont 1 labeltype SHADOW_LABEL image not_inlined {../porsche.xpm} labelcolor 3
     }
     Fl_Value_Slider slider {
       label {Size of the image cache in kilo pixels (0 for unlimited)}
-      callback {fl_set_image_file_mem_usage_limit((int)o->value()*1024);} selected
+      callback {fl_set_images_cache_size((int)o->value()*1024);}
       xywh {40 368 288 22} type {Horz Knob} labelfont 1 labeltype SHADOW_LABEL labelcolor 3 maximum 100 step 1
     }
     Fl_Box {} {
       label {JPEG image stored in the executable}
-      xywh {395 195 230 150} box UP_BOX labelfont 1 labeltype SHADOW_LABEL image inlined {testimg.jpg} labelcolor 3
+      xywh {395 195 230 150} box UP_BOX labelfont 1 labeltype SHADOW_LABEL image {testimg.jpg} labelcolor 3
     }
   }
   Fl_Window browser_window {
     label {Image in the cache} open
-    xywh {724 601 255 100} visible
+    xywh {558 210 255 120} visible
   } {
     Fl_Browser browser {
-      xywh {0 0 255 65}
+      xywh {0 0 255 85}
     }
     Fl_Box {} {
-      label {Italic : out of the cache Grey : just loaded}
-      xywh {0 65 165 35} align 149
+      label {Italic : out of the cache Grey : just loaded} selected
+      xywh {0 85 165 35} align 149
     }
   }
   code {// Absolutly horrible code, please don't look at it !
@@ -57,14 +57,14 @@ Function {main()} {open return_type int
 window->show();
 browser_window->show();
 
-class image : public fl_image_file_struct {
+class image : public Fl_Shared_Image {
 public:
-	Fl_Offscreen get_id() { return id; }
-	char* get_filename() { return filename; }
+	ulong get_id() { return id; }
+	char* get_filename() { return name; }
 	static void check() { check_mem_usage(); }
 };
 
-Fl_Offscreen old_id[20];
+ulong old_id[20];
 int just_loaded[20];
 
 for(;;) {
@@ -75,11 +75,11 @@ for(;;) {
 		for(int i=0; i<window->children(); i++) {
 			w = window->child(i);
 			if(w->image()) {
-				Fl_Image_File* im = (Fl_Image_File*) w->image();
-				Fl_Offscreen id = ((image*)im->ifs)->get_id();
+				image* im = (image*) w->image();
+				ulong id = im->get_id();
 				char s[128];
 				if(id!=old_id[i]) just_loaded[i] = 20;
-				sprintf(s, "%s%s%s", just_loaded[i]? "@B15":"", !id? "@i":"", ((image*)im->ifs)->get_filename());
+				sprintf(s, "%s%s%s", just_loaded[i]? "@B15":"", !id? "@i":"", im->get_filename());
 				if(just_loaded[i]) just_loaded[i]--;
 				browser->add(s);
 				old_id[i] = id;

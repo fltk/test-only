@@ -1,5 +1,5 @@
 //
-// "$Id: fl_xpm.cxx,v 1.6 1999/08/26 19:30:06 vincent Exp $"
+// "$Id: fl_xpm.cxx,v 1.7 1999/08/28 15:39:12 vincent Exp $"
 //
 // XPM reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,8 +27,10 @@
 // provide functions to measure and decompress XPM files
 //
 
+#include <FL/Fl.H>
 #include <FL/fl_draw.H>
-#include <FL/fl_draw_image_file.H>
+#include <FL/x.H>
+#include <FL/Fl_Shared_Image.H>
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
@@ -48,7 +50,7 @@ static int hexdigit(int x) {
 
 static void read (char *name, int max = MAXSIZE) {
   FILE *f=fopen(name, "rb");
-  if (!f) { data=0; return; } // for subclasses
+  if (!f) { data=0; return; }
   // read all the c-strings out of the file:
   data = new char*[MAXSIZE+1];
   char buffer[MAXSIZE+20];
@@ -101,50 +103,54 @@ static void read (char *name, int max = MAXSIZE) {
 }
 
 
-bool fl_is_xpm(unsigned char *datas=0, size_t size=0)
+bool Fl_XPM_Image::test(unsigned char *datas=0, size_t size=0)
 {
   return (strstr((char*) datas,"/* XPM") != 0);
 }
 
-int fl_measure_xpm(char *filename, uchar *pdatas, int &w, int &h)
+void Fl_XPM_Image::measure(int &W, int &H)
 {
+  if (w>=0) { 
+    W=w; H=h; 
+    return; 
+  }
   bool loaded=0;
-  char *const* datas = (char *const*)pdatas;
-  if(!datas)
+  char *const* ldatas = (char *const*)datas;
+  if(!ldatas)
   {
-    read(filename, 1);
-    if(data == 0) return w=0;
-    datas=data;
+    ::read(get_filename(), 1);
+    if(data == 0) { W=w=0; return; }
+    ldatas=data;
     loaded=1;
   }
 
-  fl_measure_pixmap(datas, w, h);
+  fl_measure_pixmap(ldatas, w, h);
   if(loaded) {
-    while(*datas) delete *datas++;
+    while(*ldatas) delete *ldatas++;
     delete[] data;
   }
-  return w;
+  W=w; H=h;
 }
 
-Fl_Offscreen fl_read_xpm(char *filename, uchar *pdatas, Fl_Offscreen &mask)
+void Fl_XPM_Image::read()
 {
+  id = mask = 0;
   bool loaded=0;
-  char *const* datas = (char *const*)pdatas;
-  if(!datas)
+  char *const* ldatas = (char *const*)datas;
+  if(!ldatas)
   {
-    read(filename);
-    if(data == 0) return 0;
-    datas=data;
+    ::read(get_filename());
+    if(data == 0) return;
+    ldatas=data;
     loaded=1;
   }
   int w, h;
-  fl_measure_pixmap(datas, w, h);
-  Fl_Offscreen id;
+  fl_measure_pixmap(ldatas, w, h);
   id = fl_create_offscreen(w, h);
   fl_begin_offscreen((Fl_Offscreen)id);
   uchar *bitmap = 0;
   fl_mask_bitmap = &bitmap;
-  fl_draw_pixmap(datas, 0, 0, FL_BLACK);
+  fl_draw_pixmap(ldatas, 0, 0, FL_BLACK);
   fl_mask_bitmap = 0;
   if (bitmap) {
     mask = (Fl_Offscreen) fl_create_bitmap(bitmap, w, h);
@@ -153,12 +159,12 @@ Fl_Offscreen fl_read_xpm(char *filename, uchar *pdatas, Fl_Offscreen &mask)
   fl_end_offscreen();
 
   if(loaded) {
-    while(*datas) delete *datas++;
+    while(*ldatas) delete *ldatas++;
     delete[] data;
   }
-  return id;
+  return;
 }
 
 //
-// End of "$Id: fl_xpm.cxx,v 1.6 1999/08/26 19:30:06 vincent Exp $"
+// End of "$Id: fl_xpm.cxx,v 1.7 1999/08/28 15:39:12 vincent Exp $"
 //

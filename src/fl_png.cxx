@@ -1,5 +1,5 @@
 //
-// "$Id: fl_png.cxx,v 1.3 1999/08/26 19:30:06 vincent Exp $"
+// "$Id: fl_png.cxx,v 1.4 1999/08/28 15:39:12 vincent Exp $"
 //
 // PNG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -24,25 +24,28 @@
 //
 
 //
-// provide functions to measure and decompress PNG files
+// provides functions to measure and decompress PNG files
 
-#include <FL/Fl_Image_File.H>
+#include <FL/Fl.H>
+#include <FL/fl_draw.H>
+#include <FL/x.H>
+#include <FL/Fl_Shared_Image.H>
 #include "config.h"
 #if HAVE_PNG
 #include <png.h>
 #include <stdlib.h>
 
-static png_bytep datas;
+static png_bytep cur_datas;
 
 static void read_data_fn(png_structp png_ptr, png_bytep d, png_size_t length)
 {
-  memcpy(d, datas, length);
-  datas += length;
+  memcpy(d, cur_datas, length);
+  cur_datas += length;
 }
 #endif
 
 
-bool fl_is_png(unsigned char *datas, size_t size)
+bool Fl_PNG_Image::test(unsigned char *datas, size_t size)
 {
 #if !HAVE_PNG
   return 0;
@@ -51,11 +54,16 @@ bool fl_is_png(unsigned char *datas, size_t size)
 #endif
 }
 
-int fl_measure_png(char *filename, uchar *pdatas, int &w, int &h)
+void Fl_PNG_Image::measure(int &W, int &H)
 {
 #if !HAVE_PNG
-  return w=0;
+  W=H=0;
 #else
+  if (w>=0) { 
+    W=w; H=h; 
+    return; 
+  }
+
   png_structp png_ptr;
   png_infop info_ptr;
   png_uint_32 width, height;
@@ -63,26 +71,29 @@ int fl_measure_png(char *filename, uchar *pdatas, int &w, int &h)
 
   png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0,0,0);
 
-  if (png_ptr == NULL)
-    return w=0;
+  if (png_ptr == NULL) {
+    W = w = 0;
+    return;
+  }
   info_ptr = png_create_info_struct(png_ptr);
   FILE *fp=0;
-  if(pdatas)
+  if(datas)
   {
-    datas=(png_bytep)pdatas;
+    cur_datas=(png_bytep)datas;
     png_set_read_fn(png_ptr, NULL, read_data_fn);
   }
   else
-     fp = fopen(filename, "rb");
+     fp = fopen(get_filename(), "rb");
   if (info_ptr == NULL || (datas == NULL && fp == NULL))
   {
     png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
-    return w=0;
+    W = w = 0;
+    return;
   }
 
-  if(pdatas)
+  if(datas)
   {
-    if (png_sig_cmp(pdatas, (png_size_t)0, 8))
+    if (png_sig_cmp(datas, (png_size_t)0, 8))
       goto error;
   }
   else
@@ -99,7 +110,8 @@ int fl_measure_png(char *filename, uchar *pdatas, int &w, int &h)
   error:
     png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
     if(fp) fclose(fp);
-    return w=0;
+    W = w = 0;
+    return;
   }
 
   png_read_info(png_ptr, info_ptr);
@@ -107,20 +119,19 @@ int fl_measure_png(char *filename, uchar *pdatas, int &w, int &h)
   png_get_IHDR(png_ptr, info_ptr, &width, &height, &bit_depth,&color_type,
 	       NULL,NULL,NULL);
 
-  w=width;
-  h=height;
+  w=W=width;
+  h=H=height;
 
   png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
   if(fp) fclose(fp);
-  return w;
 #endif
 }
 
-Fl_Offscreen fl_read_png(char *filename, uchar *pdatas, Fl_Offscreen &mask)
+void Fl_PNG_Image::read()
 {
-#if !HAVE_PNG
-  return 0;
-#else
+  id = mask = 0;
+
+#if HAVE_PNG
   //  printf("reading '%s' ...\n", filename);
   png_structp png_ptr;
   png_infop info_ptr;
@@ -129,30 +140,31 @@ Fl_Offscreen fl_read_png(char *filename, uchar *pdatas, Fl_Offscreen &mask)
 
   png_ptr = png_create_read_struct(PNG_LIBPNG_VER_STRING, 0,0,0);
 
-  if (png_ptr == NULL)
-    return 0;
+  if (png_ptr == NULL) {
+    return;
+  }
   info_ptr = png_create_info_struct(png_ptr);
 
   FILE *fp=0;
-  if(pdatas)
+  if(datas)
   {
-    datas=(png_bytep)pdatas;
-    png_set_read_fn(png_ptr, datas, read_data_fn);
+    cur_datas=(png_bytep)datas;
+    png_set_read_fn(png_ptr, cur_datas, read_data_fn);
   }
   else
-     fp = fopen(filename, "rb");
+     fp = fopen(get_filename(), "rb");
   if (info_ptr == NULL || (datas == NULL && fp == NULL))
   {
     png_destroy_read_struct(&png_ptr, (png_infopp)NULL, (png_infopp)NULL);
-    return 0;
+    return;
   }
 
   unsigned char *buffer=0;
   png_bytep *row_pointers=0;
 
-  if(pdatas)
+  if(datas)
   {
-    if (png_sig_cmp(pdatas, (png_size_t)0, 8))
+    if (png_sig_cmp(datas, (png_size_t)0, 8))
       goto error;
   }
   else
@@ -171,7 +183,7 @@ Fl_Offscreen fl_read_png(char *filename, uchar *pdatas, Fl_Offscreen &mask)
     if(buffer) free(buffer);
     if(row_pointers) delete[] row_pointers;
     if(fp) fclose(fp);
-    return 0;
+    return;
   }
 
   png_read_info(png_ptr, info_ptr);
@@ -217,7 +229,7 @@ Fl_Offscreen fl_read_png(char *filename, uchar *pdatas, Fl_Offscreen &mask)
   buffer=(unsigned char *) malloc(rowbytes*height);
 
   row_pointers = new png_bytep[height];
-  for(png_uint_32 i=0; i<height; i++)
+  for (png_uint_32 i=0; i<height; i++)
     row_pointers[i]=buffer+rowbytes*i;
   png_read_image(png_ptr, row_pointers);
   delete row_pointers;
@@ -226,20 +238,17 @@ Fl_Offscreen fl_read_png(char *filename, uchar *pdatas, Fl_Offscreen &mask)
   png_read_end(png_ptr, NULL);
 
   png_destroy_read_struct(&png_ptr, &info_ptr, (png_infopp)NULL);
-  if(fp) fclose(fp);
+  if (fp) fclose(fp);
 
-  Fl_Offscreen id = fl_create_offscreen(width, height);
+  id = fl_create_offscreen(width, height);
   fl_begin_offscreen(id);
   fl_draw_image(buffer, 0, 0, width, height, d);
   fl_end_offscreen();
-  mask = 0;
 
   free(buffer);
-
-  return id;
 #endif
 }
 
 //
-// End of "$Id: fl_png.cxx,v 1.3 1999/08/26 19:30:06 vincent Exp $"
+// End of "$Id: fl_png.cxx,v 1.4 1999/08/28 15:39:12 vincent Exp $"
 //

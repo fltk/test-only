@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.40 1999/08/26 19:30:04 vincent Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.41 1999/08/28 15:39:08 vincent Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -1842,7 +1842,7 @@ void Fl_Widget_Type::write_properties() {
   }
   if (image) {
     write_string("image");
-    if (image->inlined) write_string("inlined");
+    if (!image->inlined) write_string("not_inlined");
     write_word(image->name());
   }
   if (o->color() != tplate->color())
@@ -1954,14 +1954,14 @@ void Fl_Widget_Type::read_property(const char *c) {
       o->labeltype((Fl_Labeltype)item_pointer(labeltypemenu,c));
     }
   } else if (!strcmp(c, "image")) {
-    bool inlined = 0;
+    bool inlined = 1;
     c = read_word();
-    if(!strcmp(c, "inlined")) {
-      inlined = 1;
+    if(!strcmp(c, "not_inlined")) {
+      inlined = 0;
       c = read_word();
     }
     Fluid_Image *i = Fluid_Image::find(c);
-    if(inlined) i->inlined = 1;
+    if(!inlined) i->inlined = 0;
     if (!i) read_error("Image file '%s' not found", c);
     setimage(i);
   } else if (!strcmp(c,"color")) {
@@ -2127,5 +2127,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.40 1999/08/26 19:30:04 vincent Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.41 1999/08/28 15:39:08 vincent Exp $".
 //

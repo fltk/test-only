@@ -1,5 +1,5 @@
 //
-// "$Id: fl_gif.cxx,v 1.3 1999/08/26 19:30:06 vincent Exp $"
+// "$Id: fl_gif.cxx,v 1.4 1999/08/28 15:39:12 vincent Exp $"
 //
 // fl_gif.cxx
 //
@@ -46,73 +46,82 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <FL/Fl.H>
 #include <FL/fl_draw.H>
-#include <FL/fl_draw_image_file.H>
+#include <FL/x.H>
+#include <FL/Fl_Shared_Image.H>
 
 typedef unsigned char uchar;
 
-#define NEXTBYTE (datas? *datas++ : getc(GifFile))
+#define NEXTBYTE (dat? *dat++ : getc(GifFile))
 #define GETSHORT(var) var = NEXTBYTE; var += NEXTBYTE << 8
 
 
-bool fl_is_gif(unsigned char *datas=0, size_t size=0)
+bool Fl_GIF_Image::test(unsigned char *datas=0, size_t size=0)
 {
   return !strncmp((char*) datas,"GIF", size<3? size:3);
 }
 
-int fl_measure_gif(
-    char *filename,       // filename
-    unsigned char* datas, // or datas to read
-    int  &w, int &h      // width and height
-) {
+void Fl_GIF_Image::measure(int  &W, int &H)
+{
+  if (w>=0) { 
+    W=w; H=h; 
+    return; 
+  }
 
   FILE *GifFile=0;
 
-  {char b[6];
-  if(datas)
+  char b[6];
+  uchar* dat = datas;
+  if(dat)
   {
-    memcpy(b, datas, 6);
-    datas+=6;
+    memcpy(b, dat, 6);
+    dat+=6;
   }
   else
   {
-    if ((GifFile=fopen(filename, "rb"))==NULL) return 0;
-    if (fread(b,1,6,GifFile)<6) return 0; /* quit on eof */
+    if ((GifFile=fopen(get_filename(), "rb"))==NULL) {
+      w=W=0;
+      return;
+    }
+    if (fread(b,1,6,GifFile)<6) {
+      w=W=0;
+      return; /* quit on eof */
+    }
   }
   if (b[0]!='G' || b[1]!='I' || b[2] != 'F') {
-    /*fprintf(stderr,"%s is not a GIF file.\n", infname);*/ return 0;}
-  /*if (b[3]!='8' || b[4]>'9' || b[5]!= 'a')
-    fprintf(stderr,"%s is version %c%c%c.\n",infname,b[3],b[4],b[5]);*/
+      w=W=0;
+    return;
   }
 
   GETSHORT(w);
   GETSHORT(h);
+  W=w;
+  H=h;
   if(!datas) fclose(GifFile);
-  return w;
 }
 
-Fl_Offscreen fl_read_gif(
-    char *filename,       // filename
-    unsigned char* datas, // or datas to read
-    Fl_Offscreen &mask
-) {
+void Fl_GIF_Image::read()
+{
+  id = mask = 0;
 
   int inumber=0;
   FILE *GifFile=0;
 
+  uchar* dat = datas;
   {char b[6];
-  if(datas)
+  if(dat)
   {
-    memcpy(b, datas, 6);
-    datas+=6;
+    memcpy(b, dat, 6);
+    dat+=6;
   }
   else
   {
-    if ((GifFile=fopen(filename, "rb"))==NULL) return 0;
-    if (fread(b,1,6,GifFile)<6) return 0; /* quit on eof */
+    if ((GifFile=fopen(get_filename(), "rb"))==NULL) return;
+    if (fread(b,1,6,GifFile)<6) return; /* quit on eof */
   }
   if (b[0]!='G' || b[1]!='I' || b[2] != 'F') {
-    /*fprintf(stderr,"%s is not a GIF file.\n", infname);*/ return 0;}
+    /*fprintf(stderr,"%s is not a GIF file.\n", infname);*/ return;}
   /*if (b[3]!='8' || b[4]>'9' || b[5]!= 'a')
     fprintf(stderr,"%s is version %c%c%c.\n",infname,b[3],b[4],b[5]);*/
   }
@@ -151,10 +160,10 @@ Fl_Offscreen fl_read_gif(
   for (;;) {
 
     int i = NEXTBYTE;
-    if (i<0) {/*fprintf(stderr,"%s: unexpected EOF\n",infname);*/ return 0;}
+    if (i<0) {/*fprintf(stderr,"%s: unexpected EOF\n",infname);*/ return;}
     int blocklen;
 
-    //  if (i == 0x3B) return 0;  eof code
+    //  if (i == 0x3B) return;  eof code
 
     if (i == 0x21) {		// a "gif extension"
 
@@ -225,7 +234,7 @@ Fl_Offscreen fl_read_gif(
   uchar *Image = new uchar[Width*Height];
   if (!Image) {
     //fprintf (stderr, "Insufficient memory\n");
-    return 0;
+    return;
   }
   int YC = 0, Pass = 0; /* Used to de-interlace the picture */
   uchar *p = Image;
@@ -388,7 +397,20 @@ Fl_Offscreen fl_read_gif(
 
   data[Height+2] = 0; // null to end string array
 
-  Fl_Offscreen id = fl_read_xpm(filename, (uchar*) data, mask);
+  id = fl_create_offscreen(w, h);
+  fl_begin_offscreen((Fl_Offscreen)id);
+
+extern uchar **fl_mask_bitmap; // used by fl_draw_pixmap.cxx to store mask
+
+  uchar *bitmap = 0;
+  fl_mask_bitmap = &bitmap;
+  fl_draw_pixmap(data, 0, 0, FL_BLACK);
+  fl_mask_bitmap = 0;
+  if (bitmap) {
+    mask = (Fl_Offscreen) fl_create_bitmap(bitmap, w, h);
+    delete[] bitmap;
+  }
+  fl_end_offscreen();
 
   delete Image;
   delete data[0];
@@ -396,9 +418,8 @@ Fl_Offscreen fl_read_gif(
   delete data;
   delete length;
   if(!datas) fclose(GifFile);
-  return id;
 }
 
 //
-// End of "$Id: fl_gif.cxx,v 1.3 1999/08/26 19:30:06 vincent Exp $"
+// End of "$Id: fl_gif.cxx,v 1.4 1999/08/28 15:39:12 vincent Exp $"
 //
