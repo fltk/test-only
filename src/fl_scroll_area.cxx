@@ -1,5 +1,5 @@
 //
-// "$Id: fl_scroll_area.cxx,v 1.15 2004/06/09 05:38:58 spitzak Exp $"
+// "$Id: fl_scroll_area.cxx,v 1.16 2004/07/11 18:15:31 laza2000 Exp $"
 //
 // Scrolling routines for the Fast Light Tool Kit (FLTK).
 //
@@ -28,8 +28,68 @@
 // into the drawing area.
 
 #include <config.h>
+#include <fltk/Window.h>
 #include <fltk/x.h>
 #include <fltk/draw.h>
+
+
+#ifdef _WIN32
+
+#ifndef SYSRGN
+// Missing declaration in old WIN32 API headers.
+// However, GDI32.dll exports this function since Windows 95
+extern "C" {
+  WINGDIAPI int WINAPI GetRandomRgn(HDC  hdc,    // handle to DC
+		                    HRGN hrgn,   // handle to region
+		                    INT  iNum    // must be SYSRGN
+	                           );
+}
+#define SYSRGN 4
+
+#endif /* SYSRGN */
+
+extern int has_unicode();
+
+// Return true if rect is completely visible on screen.
+// If other window is overlapping rect, return false.
+static bool is_visible(int x, int y, int w, int h) 
+{
+  // Get visible region of window
+  HRGN rgn0 = CreateRectRgn (0, 0, 0, 0);
+
+  // Copy system clipping region from fltk::dc
+  GetRandomRgn (fltk::dc, rgn0, SYSRGN);
+
+  if(has_unicode()) {
+    // Windows 9x operating systems the region is returned in window coordinates, 
+    // and on Windows XP/2k machines the region is in screen coordinates.. SIGH!
+    POINT pt = { 0, 0 };
+    ClientToScreen(fltk::xid(fltk::Window::current()), &pt);
+    OffsetRgn(rgn0, -pt.x, -pt.y);
+  }
+
+  HRGN rect = CreateRectRgn(x,y,x+w,y+h);
+  HRGN temp = CreateRectRgn(0,0,0,0);
+
+  bool ret;
+  if(CombineRgn(temp, rect, rgn0, RGN_AND) == NULLREGION) {
+    ret = false;
+  } else if (EqualRgn(temp, rect)) {
+    ret = true;
+  } else {
+    ret = false;
+  }
+
+  // Free resources
+  DeleteObject(rect);
+  DeleteObject(temp);
+  DeleteObject(rgn0);
+
+  return ret;
+}
+
+#endif /* _WIN32 */
+
 
 // scroll a rectangle and redraw the newly exposed portions:
 void fltk::scrollrect(int X, int Y, int W, int H, int dx, int dy,
@@ -84,10 +144,15 @@ void fltk::scrollrect(int X, int Y, int W, int H, int dx, int dy,
     if (!e.xgraphicsexpose.count) break;
   }
 #elif defined(_WIN32)
-  BitBlt(dc, dest_x+ox, dest_y+oy, src_w, src_h,
-	 dc, src_x+ox, src_y+oy, SRCCOPY);
-  // NYI: need to redraw areas that the source of BitBlt was bad due to
-  // overlapped windows, somehow similar to what X does.
+  if(is_visible(src_x+ox, src_y+oy, src_w, src_h)) {
+    BitBlt(dc, dest_x+ox, dest_y+oy, src_w, src_h,
+           dc, src_x+ox, src_y+oy, SRCCOPY);
+  } else {
+    // Window overlapping scroll area.
+    // Best we can do right now, is just redraw whole scroll area.
+    draw_area(data, X, Y, W, H);
+    return;
+  }
 #elif defined(__APPLE__)
   Rect src = { src_y, src_x, src_y+src_h, src_x+src_w };
   Rect dst = { dest_y, dest_x, dest_y+src_h, dest_x+src_w };
@@ -106,5 +171,5 @@ void fltk::scrollrect(int X, int Y, int W, int H, int dx, int dy,
 }
 
 //
-// End of "$Id: fl_scroll_area.cxx,v 1.15 2004/06/09 05:38:58 spitzak Exp $".
+// End of "$Id: fl_scroll_area.cxx,v 1.16 2004/07/11 18:15:31 laza2000 Exp $".
 //
