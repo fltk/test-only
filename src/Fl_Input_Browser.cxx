@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.cxx,v 1.4 2001/03/08 07:39:05 clip Exp $"
+// "$Id: Fl_Input_Browser.cxx,v 1.5 2001/03/11 16:14:29 spitzak Exp $"
 //
 // Input Browser (Combo Box) widget for the Fast Light Tool Kit (FLTK).
 //
@@ -102,6 +102,21 @@ static void ComboBrowser_cb(Fl_Widget *w, void *v) {
   mw->hide();
 }
 
+// Use this to copy all the items out of one group into another:
+class Share_List : public Fl_List {
+public:
+  Fl_Menu_* other;
+  int children(const Fl_Menu_*, const int* indexes, int level) {
+    return other->children(indexes, level);
+  }
+  Fl_Widget* child(const Fl_Menu_*, const int* indexes, int level) {
+    return other->child(indexes, level);
+  }
+  void flags_changed(const Fl_Menu_*, Fl_Widget* widget) {
+    return other->list()->flags_changed(other,widget);
+  }
+} share_list; // only one instance of this.
+
 int
 Fl_Input_Browser::handle(int e) {
   if (Fl::event_inside(input->x()+input->w(), 0, w()-(input->x()+input->w()), h()))
@@ -124,18 +139,18 @@ Fl_Input_Browser::handle(int e) {
       if (!children()) return 1;
       ib = this;
       // dummy W,H used -- will be replaced.
+      Fl_Group::current(0);
       mw = new ComboWindow(Fl::event_x_root()-Fl::event_x(),
                            Fl::event_y_root()-Fl::event_y()+h(),
                            200,400);
-      if (mw->parent()) mw->parent()->remove(mw);
-      mw->parent(0);
       mw->set_modal();
       mw->set_override();
       // dummy W,H used -- will be replaced.
       b = new ComboBrowser(0,0,200,400);
       if (type()&FL_INDENTED_INPUT_BROWSER) b->indented(1);
       b->text_box(FL_BORDER_BOX);
-      while (children()) b->add(child(0));
+      share_list.other = this;
+      b->list(&share_list);
       b->when(FL_WHEN_RELEASE_ALWAYS);
       b->callback(ComboBrowser_cb);
       mw->end();
@@ -173,7 +188,6 @@ Fl_Input_Browser::handle(int e) {
       Fl::focus(b);
       mw->exec();
       Fl::release();
-      while (b->children()) add(b->child(0));
       delete mw;
       if (type()&FL_NONEDITABLE_INPUT_BROWSER) throw_focus();
       else Fl::focus(input);
@@ -237,5 +251,5 @@ Fl_Input_Browser::draw() {
 }
 
 //
-// End of "$Id: Fl_Input_Browser.cxx,v 1.4 2001/03/08 07:39:05 clip Exp $".
+// End of "$Id: Fl_Input_Browser.cxx,v 1.5 2001/03/11 16:14:29 spitzak Exp $".
 //

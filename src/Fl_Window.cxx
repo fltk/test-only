@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.65 2001/03/08 07:39:06 clip Exp $"
+// "$Id: Fl_Window.cxx,v 1.66 2001/03/11 16:14:30 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -31,7 +31,7 @@
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/x.H>
-#include <stdlib.h>
+//#include <stdlib.h>
 #include <config.h>
 
 Fl_Window *Fl_Widget::window() const {
@@ -69,7 +69,9 @@ void Fl_Window::iconlabel(const char *iname) {label(label(), iname);}
 void Fl_Window::default_callback(Fl_Window* window, void* v) {
   window->hide();
   // if there are no visible windows we exit:
-  if (!Fl::first_window()) exit(0);
+  // Not anymore, it has been restored to fltk 1.0 behavior. Instead
+  // Fl::run() checks after each loop to see if all windows are closed.
+  // if (!Fl::first_window()) exit(0);
 }
 
 static void revert(Fl_Style* s) {
@@ -355,5 +357,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.65 2001/03/08 07:39:06 clip Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.66 2001/03/11 16:14:30 spitzak Exp $".
 //

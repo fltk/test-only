@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_x.cxx,v 1.2 2001/02/21 06:15:45 clip Exp $"
+// "$Id: fl_color_x.cxx,v 1.3 2001/03/11 16:14:30 spitzak Exp $"
 //
 // X color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -27,7 +27,6 @@
 
 #include <config.h>
 #include <FL/x.H>
-
 #include <string.h>
 
 ////////////////////////////////////////////////////////////////
@@ -314,5 +313,5 @@ void fl_line_style(int style, int width, char* dashes) {
 }
 
 //
-// End of "$Id: fl_color_x.cxx,v 1.2 2001/02/21 06:15:45 clip Exp $"
+// End of "$Id: fl_color_x.cxx,v 1.3 2001/03/11 16:14:30 spitzak Exp $"
 //

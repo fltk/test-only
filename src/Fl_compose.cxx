@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_compose.cxx,v 1.7 2000/09/05 17:36:21 spitzak Exp $"
+// "$Id: Fl_compose.cxx,v 1.8 2001/03/11 16:14:30 spitzak Exp $"
 //
 // Character compose processing for the Fast Light Tool Kit (FLTK).
 //
@@ -216,7 +216,7 @@ int Fl::compose(int& del) {
     return 1;
   }
 
-#ifndef _WIN32 // X only
+#ifndef WIN32 // X only
   // See if they typed a dead key.  This gets it into the same state as
   // typing prefix+accent:
   if (i >= 0xfe50 && i <= 0xfe5b) {

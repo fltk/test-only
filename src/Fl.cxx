@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.123 2001/03/08 23:49:29 robertk Exp $"
+// "$Id: Fl.cxx,v 1.124 2001/03/11 16:14:28 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -266,7 +266,7 @@ int Fl::wait(double time_to_wait) {
   if (first_timeout && first_timeout->time < time_to_wait)
     time_to_wait = first_timeout->time;
   if (time_to_wait <= 0.0) {
-    // do flush second so that the results of events are visible:
+    // do flush second so that the results of timeouts are visible:
     int ret = fl_wait(0.0);
     flush();
     return ret;
@@ -288,9 +288,10 @@ int Fl::wait() {
 }
 
 int Fl::run() {
-	while(Fl_X::first)
-		wait(0);
-	return(0);
+  while (first_window()) wait(FOREVER);
+  return(0);
+// WAS: This was tried for fltk 2.0, and the callback for closing the last
+// window in Fl_Window.C called exit(). This proved to be unpopular:
 //  for (;;) wait(FOREVER);
 }
 
@@ -361,6 +362,8 @@ void Fl::flush() {
       if (!w->visible_r()) continue;
       if (w->damage() & FL_DAMAGE_LAYOUT) w->layout();
       if (w->damage()) {w->flush(); w->clear_damage();}
+      // destroy damage regions for windows that don't use them:
+      if (x->region) {XDestroyRegion(x->region); x->region = 0;}
     }
   }
 #ifdef WIN32
@@ -683,5 +686,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.123 2001/03/08 23:49:29 robertk Exp $".
+// End of "$Id: Fl.cxx,v 1.124 2001/03/11 16:14:28 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.8 2001/02/21 06:15:44 clip Exp $"
+// "$Id: gl_draw.cxx,v 1.9 2001/03/11 16:14:28 spitzak Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -38,14 +38,14 @@
 #include "../src/Fl_FontSize.H"
 #include <string.h>
 
-void gl_font(Fl_Font f, int size) {fl_font(f, size);}
 int gl_height() {return fl_height();}
 int gl_descent() {return fl_descent();}
 int gl_width(const char* s) {return fl_width(s);}
 int gl_width(const char* s, int n) {return fl_width(s,n);}
 int gl_width(uchar c) {return fl_width(c);}
 
-void gl_draw(const char* str, int n) {
+void  gl_font(int fontid, int size) {
+  fl_font(fontid, size);
   if (!fl_fontsize->listbase) {
 #ifdef WIN32
     int base = fl_fontsize->metr.tmFirstChar;
@@ -63,11 +63,11 @@ void gl_draw(const char* str, int n) {
     glXUseXFont(((XFontStruct*)fl_xfont)->fid, base, size, fl_fontsize->listbase+base);
 #endif
   }
+  glListBase(fl_fontsize->listbase);
+}
 
-  glPushAttrib(GL_LIST_BIT);
-    glListBase(fl_fontsize->listbase);
-    glCallLists(n, GL_UNSIGNED_BYTE, str);
-  glPopAttrib();
+void gl_draw(const char* str, int n) {
+  glCallLists(n, GL_UNSIGNED_BYTE, str);
 }
 
 void gl_draw(const char* str, int n, int x, int y) {
@@ -158,5 +158,5 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.8 2001/02/21 06:15:44 clip Exp $".
+// End of "$Id: gl_draw.cxx,v 1.9 2001/03/11 16:14:28 spitzak Exp $".
 //

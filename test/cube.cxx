@@ -1,5 +1,5 @@
 //
-// "$Id: cube.cxx,v 1.10 2000/11/15 18:20:24 spitzak Exp $"
+// "$Id: cube.cxx,v 1.11 2001/03/11 16:14:30 spitzak Exp $"
 //
 // Another forms test program for the Fast Light Tool Kit (FLTK).
 //
@@ -154,6 +154,9 @@ int main(int argc, char **argv) {
   flat->value(1); cube->wire = 0; cube2->wire = 1;
   form->label("cube");
   form->show(argc,argv);
+#if 1
+  Fl::run();
+#else
   for (;form->visible();) {
     if (form->iconic() || !speed->value())
       Fl::wait();	// waits until something happens
@@ -166,9 +169,10 @@ int main(int argc, char **argv) {
     cube->redraw();
     cube2->redraw();
   }
+#endif
   return 0;
 }
 
 //
-// End of "$Id: cube.cxx,v 1.10 2000/11/15 18:20:24 spitzak Exp $".
+// End of "$Id: cube.cxx,v 1.11 2001/03/11 16:14:30 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.21 2001/02/20 06:59:49 spitzak Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.22 2001/03/11 16:14:28 spitzak Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -154,7 +154,7 @@ int fl_overlay_depth = 0;
 
 void Fl_Gl_Window::flush() {
   uchar save_valid = valid_;
-#ifdef _WIN32
+#ifdef WIN32
   // SGI 320 messes up overlay with user-defined cursors:
   bool fixcursor =
     Fl_X::i(this)->cursor && Fl_X::i(this)->cursor != fl_default_cursor;
@@ -277,7 +277,7 @@ void Fl_Gl_Window::flush() {
 void Fl_Gl_Window::layout() {
   if (ow() != w() || oh() != h()) {
     valid(0);
-#ifndef _WIN32
+#ifndef WIN32
     if (!resizable() && overlay && overlay != this)
       ((Fl_Gl_Window*)overlay)->resize(0,0,w(),h());
 #endif
@@ -328,5 +328,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.21 2001/02/20 06:59:49 spitzak Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.22 2001/03/11 16:14:28 spitzak Exp $".
 //

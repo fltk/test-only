@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Font.H,v 1.15 2001/02/20 19:58:49 robertk Exp $"
+// "$Id: Fl_Font.H,v 1.16 2001/03/11 16:14:28 spitzak Exp $"
 //
 // Fonts used by FLTK styles and drawing code
 //
@@ -92,8 +92,7 @@ FL_API Fl_Font fl_find_font(const char* name, int attrib = 0);
 FL_API int fl_list_fonts(Fl_Font*& arrayp);
 
 #ifndef FLTK_2
-#define FL_NORMAL_SIZE	(Fl_Widget::default_style ? \
-						Fl_Widget::default_style->label_size : 14)
+#define FL_NORMAL_SIZE	12
 #endif
 
 #endif

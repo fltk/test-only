@@ -7,6 +7,7 @@
 #include <FL/Fl_Box.H>
 #include <FL/Fl_Menu_Bar.H>
 #include <FL/Fl_Menu_Button.H>
+#include <FL/Fl_Input_Browser.H>
 #include <FL/Fl_Choice.H>
 #include <FL/Fl_Tooltip.H>
 #include <FL/fl_draw.H>
@@ -104,19 +105,26 @@ int main(int argc, char **argv) {
   mb.end();
   mb.type(Fl_Menu_Button::POPUP3);
 
-  Fl_Menu_Button mb1(100,100,120,25,"&menubutton");
+  Fl_Menu_Button mb1(10,50,100,25,"&menubutton");
   mb1.callback(callback);
   mb1.begin();
   build_hierarchy();
   mb1.end();
   mb1.tooltip("This is a menu button");
 
-  Fl_Choice ch(300,100,90,25,"&choice:");
+  Fl_Choice ch(220,50,100,25,"&choice:");
   ch.callback(callback);
   ch.begin();
   build_hierarchy();
   ch.end();
   ch.tooltip("This is a choice");
+
+  Fl_Input_Browser ib(410,50,100,25,"input_&browser:");
+  ib.callback(callback);
+  ib.begin();
+  build_hierarchy();
+  ib.end();
+  ib.tooltip("This is an Fl_Input_Browser");
 
   window.resizable(box);
   window.size_range(300,20);

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.25 2001/02/20 06:59:50 spitzak Exp $"
+// "$Id: fl_glyph.cxx,v 1.26 2001/03/11 16:14:30 spitzak Exp $"
 //
 // Glyph drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -138,8 +138,8 @@ void fl_glyph(const Fl_Widget* widget, int t,
       x1 = x+(w-w1)/2+i;
       y1 = y+(h-1)/2-w1+i;
       fl_vertex(x1, y1);
-      fl_vertex(x1, y1+2*w1);
       fl_vertex(x1+w1, y1+w1);
+      fl_vertex(x1, y1+2*w1);
       fl_fill_stroke(fl_color());
       break;
 
@@ -157,5 +157,5 @@ void fl_glyph(const Fl_Widget* widget, int t,
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.25 2001/02/20 06:59:50 spitzak Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.26 2001/03/11 16:14:30 spitzak Exp $".
 //
