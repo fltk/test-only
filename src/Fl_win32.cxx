@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.145 2001/03/20 18:21:53 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.146 2001/03/22 21:28:05 robertk Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -331,7 +331,7 @@ void Fl::copy(const char *stuff, int len, bool clipboard) {
   }
   memcpy(selection_buffer[clipboard], stuff, len);
   selection_buffer[clipboard][len] = 0; // needed for direct paste
-  selection_length[clibboard] = len;
+  selection_length[clipboard] = len;
   if (clipboard) {
     ignore_destroy = true;
     if (OpenClipboard(fl_xid(Fl::first_window()))) {
@@ -1281,5 +1281,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.145 2001/03/20 18:21:53 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.146 2001/03/22 21:28:05 robertk Exp $".
 //
