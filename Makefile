@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.33 2004/08/04 20:49:17 laza2000 Exp $"
+# "$Id$"
 #
 # Top-level makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -30,25 +30,25 @@ DIRS = src $(LOCALIMAGES) images OpenGL fluid test
 all: makeinclude
 	for dir in $(DIRS); do\
 		echo "=== making $$dir ===";\
-		(cd $$dir; $(MAKE) $(MFLAGS)) || break;\
+		(cd $$dir; $(MAKE) $(MFLAGS)) || exit $$?;\
 	done
 
 install: makeinclude
 	for dir in $(DIRS) documentation; do\
 		echo "=== installing $$dir ===";\
-		(cd $$dir; $(MAKE) $(MFLAGS) install) || break;\
+		(cd $$dir; $(MAKE) $(MFLAGS) install) || exit $$?;\
 	done
 
 uninstall: makeinclude
 	for dir in $(DIRS) documentation; do\
 		echo "=== uninstalling $$dir ===";\
-		(cd $$dir; $(MAKE) $(MFLAGS) uninstall) || break;\
+		(cd $$dir; $(MAKE) $(MFLAGS) uninstall) || exit $$?;\
 	done
 
 depend: makeinclude
 	for dir in $(DIRS); do\
 		echo "=== making dependencies in $$dir ===";\
-		(cd $$dir; $(MAKE) $(MFLAGS) depend) || break;\
+		(cd $$dir; $(MAKE) $(MFLAGS) depend) || exit $$?;\
 	done
 
 clean:
@@ -92,5 +92,5 @@ native-dist:
 
 
 #
-# End of "$Id: Makefile,v 1.33 2004/08/04 20:49:17 laza2000 Exp $".
+# End of "$Id$".
 #
