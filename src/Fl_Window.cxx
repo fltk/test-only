@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.56 2000/09/27 16:25:51 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.57 2000/09/28 23:35:23 clip Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -24,13 +24,14 @@
 //
 
 // The Fl_Window is a window in the fltk library.
-// This is the system-independent portions.  The huge amount of 
+// This is the system-independent portions.  The huge amount of
 // crap you need to do to communicate with X is in Fl_x.C, the
 // equivalent (but totally different) crap for MSWindows is in Fl_win32.C
 
 #include <FL/Fl.H>
 #include <FL/Fl_Window.H>
 #include <FL/x.H>
+#include <stdlib.h>
 #include <config.h>
 
 Fl_Window *Fl_Widget::window() const {
@@ -353,5 +354,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.56 2000/09/27 16:25:51 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.57 2000/09/28 23:35:23 clip Exp $".
 //

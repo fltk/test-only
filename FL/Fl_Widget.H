@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.H,v 1.55 2000/08/20 04:31:36 spitzak Exp $"
+// "$Id: Fl_Widget.H,v 1.56 2000/09/28 23:35:22 clip Exp $"
 //
 // Widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -248,6 +248,7 @@ public:
   void down_box(Fl_Boxtype a)           {text_box(a);}
   void slider(Fl_Boxtype a)             {box(a);}
   void fly_box(Fl_Boxtype)              {}
+  void color(Fl_Color a, Fl_Color b)    {color(a); selection_color(b);}
   void color2(Fl_Color a)               {selection_color(a);}
   void color3(Fl_Color a)               {text_background(a);}
   void labeltype(Fl_Labeltype a)        {label_type(a);}
@@ -291,5 +292,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Widget.H,v 1.55 2000/08/20 04:31:36 spitzak Exp $".
+// End of "$Id: Fl_Widget.H,v 1.56 2000/09/28 23:35:22 clip Exp $".
 //
