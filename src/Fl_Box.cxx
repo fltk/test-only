@@ -1,9 +1,13 @@
 //
-// "$Id: Fl_Box.cxx,v 1.29 2003/11/04 08:10:58 spitzak Exp $"
+// "$Id: Fl_Box.cxx,v 1.30 2003/11/04 08:16:04 spitzak Exp $"
 //
-// This is a box that is invisible due to not having a box. The
-// label still prints so it can be used to position labels. Also
-// this is useful as a resizable() widget.
+
+/** Widget with default box of NO_BOX.
+
+    This is a box that is invisible due to not having a box. The
+    label still prints so it can be used to position labels. Also
+    this is useful as a resizable() widget.
+*/
 
 #include <fltk/InvisibleBox.h>
 using namespace fltk;
@@ -34,5 +38,5 @@ void InvisibleBox::draw() {
 }
 
 //
-// End of "$Id: Fl_Box.cxx,v 1.29 2003/11/04 08:10:58 spitzak Exp $".
+// End of "$Id: Fl_Box.cxx,v 1.30 2003/11/04 08:16:04 spitzak Exp $".
 //
