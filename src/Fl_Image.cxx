@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.8 1999/08/28 19:51:43 vincent Exp $"
+// "$Id: Fl_Image.cxx,v 1.9 1999/10/18 06:11:08 bill Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -38,10 +38,11 @@ void Fl_Image::draw(int X, int Y, int W, int H, Fl_Flags f) {
   if (f & FL_ALIGN_BOTTOM) cy = h-H;
   else if (f & FL_ALIGN_TOP) cy = 0;
   else cy = h/2-H/2;
-  if (f & FL_ALIGN_TILED)
+  if (f & FL_ALIGN_TILED) {
     draw_tiled(X, Y, W, H, cx, cy);
-  else
+  } else {
     draw(X, Y, W, H, cx, cy);
+  }
 }
 
 // tiled image with minimal redraw
@@ -169,5 +170,5 @@ void Fl_Image::label(Fl_Menu_Item* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.8 1999/08/28 19:51:43 vincent Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.9 1999/10/18 06:11:08 bill Exp $".
 //

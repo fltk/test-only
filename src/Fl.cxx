@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.45 1999/10/11 20:56:24 vincent Exp $"
+// "$Id: Fl.cxx,v 1.46 1999/10/18 06:11:08 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -131,17 +131,11 @@ void Fl::flush() {
   if (damage()) {
     damage_ = 0;
     for (Fl_X* x = Fl_X::first; x; x = x->next) {
+      if (x->wait_for_expose) {damage_ = 1; continue;}
       Fl_Window* w = x->w;
-      if (w->damage() && w->visible()) {
-	if (x->wait_for_expose) {
-	  // leave Fl::damage() set so programs can tell damage still exists
-	  damage_ = 1;
-	} else {
-	  while (w->damage() & FL_DAMAGE_LAYOUT) w->layout();
-	  w->flush();
-	  w->clear_damage();
-	}
-      }
+      if (!w->visible()) continue;
+      while (w->damage() & FL_DAMAGE_LAYOUT) w->layout();
+      if (w->damage()) {w->flush(); w->clear_damage();}
     }
   }
 #ifndef WIN32
@@ -809,5 +803,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.45 1999/10/11 20:56:24 vincent Exp $".
+// End of "$Id: Fl.cxx,v 1.46 1999/10/18 06:11:08 bill Exp $".
 //

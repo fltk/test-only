@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg.cxx,v 1.10 1999/10/17 22:27:09 vincent Exp $"
+// "$Id: fl_jpeg.cxx,v 1.11 1999/10/18 06:11:09 bill Exp $"
 //
 // JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -352,7 +352,7 @@ void Fl_JPEG_Image::read()
   jpeg_start_decompress(&cinfo);
 
   id = (ulong)fl_create_offscreen(cinfo.output_width, cinfo.output_height);
-  fl_begin_offscreen((void*)id);
+  fl_begin_offscreen((Fl_Offscreen)id);
   fl_draw_image(fl_draw_image_cb, &cinfo, 0, 0, cinfo.output_width, cinfo.output_height, cinfo.output_components);
   fl_end_offscreen();
 
@@ -404,5 +404,5 @@ int Fl_JPEG_Image::test(uchar* datas, size_t size)
 }
 
 //
-// End of "$Id: fl_jpeg.cxx,v 1.10 1999/10/17 22:27:09 vincent Exp $"
+// End of "$Id: fl_jpeg.cxx,v 1.11 1999/10/18 06:11:09 bill Exp $"
 //
