@@ -1,5 +1,5 @@
 //
-// "$Id: fluid.cxx,v 1.31 1999/11/20 04:42:34 vincent Exp $"
+// "$Id: fluid.cxx,v 1.32 1999/12/22 01:12:30 vincent Exp $"
 //
 // FLUID main entry for the Fast Light Tool Kit (FLTK).
 //
@@ -330,6 +330,18 @@ void tt_cb(Fl_Widget *w, void *) {
   Fl_Tooltip::enable(m->value());
 }
 
+#include <string.h>
+#include <FL/fl_ask.H>
+char* scheme;
+void scheme_cb(Fl_Widget *, void *) {
+  const char* t = fl_input("Enter the name of a scheme :", scheme);
+  if (scheme) free(scheme);
+  scheme = strdup(t);
+  Fl_Style::start("style1");
+  Fl::scheme(scheme);
+  Fl_Style::start("fluid_style");
+}
+
 ////////////////////////////////////////////////////////////////
 
 extern Fl_Menu_Item New_Menu[];
@@ -362,6 +374,7 @@ Fl_Menu_Item Main_Menu[] = {
 //{"Activate", 0, nyi, 0, FL_MENU_DIVIDER},
   {"Show Overlays",FL_ALT+'O',toggle_overlays, 0, FL_MENU_TOGGLE|FL_MENU_VALUE},
   {"Preferences",FL_ALT+'p',show_alignment_cb},
+  {"Scheme", FL_ALT+'t', scheme_cb},
   {"Set images root directory", FL_ALT+'d', set_images_dir_cb},
   {0},
 {"&New", 0, 0, (void *)New_Menu, FL_SUBMENU_POINTER},
@@ -445,6 +458,7 @@ static void sigint(SIGARG) {
 #endif
 
 int main(int argc,char **argv) {
+  Fl_Style::start("fluid_style");
   int i = 1;
   if (!Fl::args(argc,argv,i,arg) || i < argc-1) {
     fprintf(stderr,"usage: %s <switches> name.fl\n"
@@ -465,7 +479,6 @@ int main(int argc,char **argv) {
     main_window->show(argc,argv);
   }
 
-  // Go back to "style1" name for edited dialog boxes
   if (c && !read_file(c,0)) {
     if (compile_only) {
       fprintf(stderr,"%s : %s\n", c, strerror(errno));
@@ -482,5 +495,5 @@ int main(int argc,char **argv) {
 }
 
 //
-// End of "$Id: fluid.cxx,v 1.31 1999/11/20 04:42:34 vincent Exp $".
+// End of "$Id: fluid.cxx,v 1.32 1999/12/22 01:12:30 vincent Exp $".
 //

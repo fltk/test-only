@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.58 1999/12/17 20:18:09 bill Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.59 1999/12/22 01:12:29 vincent Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -117,11 +117,13 @@ Fl_Type *Fl_Widget_Type::make() {
   }
 
   // Construct the Fl_Type:
+  Fl_Style::start("style1");
   Fl_Widget_Type *t = _make();
   if (!o) o = widget(0,0,100,100); // create template widget
   t->factory = this;
   // Construct the Fl_Widget:
   t->o = widget(X,Y,W,H);
+  Fl_Style::start("fluid_style");
   if (reading_file) t->o->label(0);
   else if (t->o->label()) t->label(t->o->label()); // allow editing
   t->o->user_data((void*)t);
@@ -1431,6 +1433,7 @@ void default_cb(Fl_Button*, void* v) {
   // this just assigns the pointer:
   current_widget->o->style((Fl_Style*)default_style);
   load_panel();
+  current_widget->redraw();
 }
 
 void revert_cb(Fl_Button*, void*) {
@@ -2188,5 +2191,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.58 1999/12/17 20:18:09 bill Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.59 1999/12/22 01:12:29 vincent Exp $".
 //

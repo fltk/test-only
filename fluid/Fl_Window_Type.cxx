@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_Type.cxx,v 1.21 1999/10/03 06:31:36 bill Exp $"
+// "$Id: Fl_Window_Type.cxx,v 1.22 1999/12/22 01:12:30 vincent Exp $"
 //
 // Window type code for the Fast Light Tool Kit (FLTK).
 //
@@ -134,6 +134,7 @@ Fl_Type *Fl_Window_Type::make() {
     fl_message("Please select a function");
     return 0;
   }
+  Fl_Style::start("style1");
   Fl_Window_Type *o = new Fl_Window_Type();
   if (!this->o) {// template widget
     this->o = new Fl_Window(100,100);
@@ -143,6 +144,7 @@ Fl_Type *Fl_Window_Type::make() {
   o->drag = 0;
   o->numselected = 0;
   Overlay_Window *w = new Overlay_Window(100,100);
+  Fl_Style::start("fluid_style");
   w->window = o;
   o->o = w;
   o->add(p);
@@ -651,5 +653,5 @@ int Fl_Window_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Window_Type.cxx,v 1.21 1999/10/03 06:31:36 bill Exp $".
+// End of "$Id: Fl_Window_Type.cxx,v 1.22 1999/12/22 01:12:30 vincent Exp $".
 //
