@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.94 2004/08/03 20:30:07 laza2000 Exp $"
+// "$Id: Fl_Browser.cxx,v 1.95 2004/08/04 05:59:50 laza2000 Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -841,8 +841,8 @@ void Browser::layout() {
   if (hscrollbar.visible()) H -= sw;
 
   int headerh = 0;
-  if (header_) { 
-    if (!header_[0]->h()) header_[0]->layout();
+  if (header_) {
+    header_[0]->layout();
     headerh = header_[0]->h();
     H -= headerh; Y += headerh;     
   }
@@ -1548,7 +1548,7 @@ void Browser::column_click_cb_(Widget *ww, void *d) {
   w->do_callback();
   w->selected_column_ = -1;
 }
-
+#include <fltk/Font.h>
 class BButton : public Button {
   uchar sides; // bit 0 set: user can drag left side, bit 1: right side
 public:
@@ -1802,5 +1802,5 @@ Browser::~Browser() {
 */
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.94 2004/08/03 20:30:07 laza2000 Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.95 2004/08/04 05:59:50 laza2000 Exp $".
 //
