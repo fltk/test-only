@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.189 2003/07/21 15:38:27 robertk Exp $"
+// "$Id: Fl_win32.cxx,v 1.190 2003/07/23 05:21:55 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1325,20 +1325,7 @@ void Window::label(const char *name,const char *iname) {
 // Drawing context
 
 const Window *Window::current_;
-HDC gc = 0; // the current context
-HDC screen_gc = 0; // the screen context
-
-FL_API HDC	getDC() {
-	if(gc)
-		return gc;
-	if(screen_gc)
-	{
-		ReleaseDC(0, screen_gc);
-		screen_gc = 0;
-	}
-	screen_gc = GetDC(0);
-	return screen_gc;
-}
+HDC fltk::gc;
 
 extern void fl_font_rid();
 
@@ -1520,25 +1507,18 @@ bool fltk::system_theme() {
   Widget::default_style->labelsize = size;
   Widget::default_style->textsize = size;
 
-  if ((style = Style::find("item"))) {
-    // get font info for menu items from LOGFONT structure
-    font = fltk::font((const char*)ncm.lfMenuFont.lfFaceName,
-		      (ncm.lfMenuFont.lfWeight >= 600 ? BOLD : 0) +
-		      (ncm.lfMenuFont.lfItalic ? ITALIC : 0));
-    size = float(win_fontsize(ncm.lfMenuFont.lfHeight));
-
-    style->labelfont = style->textfont = font;
-    style->labelsize = style->textsize = size;
-
-    if ((style = Style::find("menu bar"))) {
-      style->labelfont = style->textfont = font;
-      style->labelsize = style->textsize = size;
-    }
-
-    if ((style = Style::find("menu title"))) {
-      style->labelfont = style->textfont = font;
-      style->labelsize = style->textsize = size;
-    }
+  // get font info for menu items from LOGFONT structure
+  font = fltk::font((const char*)ncm.lfMenuFont.lfFaceName,
+		    (ncm.lfMenuFont.lfWeight >= 600 ? BOLD : 0) +
+		    (ncm.lfMenuFont.lfItalic ? ITALIC : 0));
+  size = float(win_fontsize(ncm.lfMenuFont.lfHeight));
+  if ((style = Style::find("MenuBar"))) {
+    style->textfont = font;
+    style->textsize = size;
+  }
+  if ((style = Style::find("PopupMenu"))) {
+    style->textfont = font;
+    style->textsize = size;
   }
 
   if ((style = Style::find("tooltip"))) {
@@ -1563,5 +1543,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.189 2003/07/21 15:38:27 robertk Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.190 2003/07/23 05:21:55 spitzak Exp $".
 //
