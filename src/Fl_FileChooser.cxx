@@ -16,7 +16,8 @@ void FileChooser::cb_window(Window* o, void* v) {
 
 inline void FileChooser::cb_dirMenu_i(Choice*, void*) {
   Widget* w = dirMenu->item();
-  directory(w ? w->label() : "");
+  // dirMenu reserved zero for "My Computer"
+  directory((dirMenu->value() > 0 && w) ? w->label() : "");
 }
 void FileChooser::cb_dirMenu(Choice* o, void* v) {
   ((FileChooser*)(o->parent()->user_data()))->cb_dirMenu_i(o,v);

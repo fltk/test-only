@@ -1,5 +1,5 @@
 //
-// "$Id: utf.c,v 1.7 2004/07/15 16:12:19 spitzak Exp $"
+// "$Id: utf.c,v 1.8 2004/07/18 03:23:27 spitzak Exp $"
 //
 // Copyright 2004 by Bill Spitzak and others.
 //
@@ -241,7 +241,7 @@ const char* utf8fwd(const char* p, const char* start, const char* end)
   if ((*p&0xc0) != 0x80) return p;
   // search backwards for a 0xc0 starting the character:
   for (a = p-1; ; --a) {
-    if (a <= start) return p;
+    if (a < start) return p;
     if (!(a[0]&0x80)) return p;
     if ((a[0]&0x40)) break;
   }
@@ -271,7 +271,7 @@ const char* utf8back(const char* p, const char* start, const char* end)
   if ((*p&0xc0) != 0x80) return p;
   // search backwards for a 0xc0 starting the character:
   for (a = p-1; ; --a) {
-    if (a <= start) return p;
+    if (a < start) return p;
     if (!(a[0]&0x80)) return p;
     if ((a[0]&0x40)) break;
   }

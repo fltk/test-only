@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.24 2004/03/14 07:29:41 spitzak Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.25 2004/07/18 03:23:27 spitzak Exp $"
 //
 // More FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -49,6 +49,8 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #if defined(_WIN32) && !defined(__CYGWIN__)
+#include <windows.h>
+#include <fltk/utf.h>
 # undef _POSIX_
 # include <direct.h>
 # include <io.h>
@@ -371,7 +373,18 @@ FileChooser::newdir()
 
   // Create the directory; ignore EEXIST errors...
 #if defined(_WIN32) && !defined(__CYGWIN__)
-  if (mkdir(pathname))
+  int n, r;
+  unsigned short* ucs = utf8to16(pathname, strlen(pathname), &n);
+  char namebuf[1024];
+  if (ucs) {
+    memset(namebuf, 0, sizeof(namebuf));
+    WideCharToMultiByte(GetACP(), 0, (wchar_t*)ucs, n,
+			namebuf, sizeof(namebuf), NULL, 0);
+    utf8free(ucs);
+  } else
+    strcpy(namebuf, pathname);
+  
+  if (mkdir(namebuf))
 #else
   if (mkdir(pathname, 0777))
 #endif /* _WIN32 || __EMX__ */
@@ -670,5 +683,5 @@ FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.24 2004/03/14 07:29:41 spitzak Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.25 2004/07/18 03:23:27 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: filename_isdir.cxx,v 1.17 2004/07/15 16:27:27 spitzak Exp $"
+// "$Id: filename_isdir.cxx,v 1.18 2004/07/18 03:23:27 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -48,7 +48,7 @@ static bool fill_stat(const char *name, int new_op) {
   char namebuf[FL_PATH_MAX];
   unsigned short* ucs = utf8to16(name, strlen(name), &n);
   if (ucs) {
-    memset(namebuf, 0, sizeof(namebuf));
+    ZeroMemory(namebuf, sizeof(namebuf));
     WideCharToMultiByte(GetACP(), 0, (wchar_t*)ucs, n,
 			namebuf, sizeof(namebuf), NULL, 0);
     name = namebuf;
@@ -91,5 +91,5 @@ long int filename_mtime(const char *name) {
 }
 
 //
-// End of "$Id: filename_isdir.cxx,v 1.17 2004/07/15 16:27:27 spitzak Exp $".
+// End of "$Id: filename_isdir.cxx,v 1.18 2004/07/18 03:23:27 spitzak Exp $".
 //
