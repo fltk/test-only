@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.28 2004/07/27 12:15:44 laza2000 Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.29 2004/07/30 05:35:32 spitzak Exp $"
 //
 // More FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -447,6 +447,7 @@ FileChooser::fileListCB()
     if (filename_isdir(pathname))
     {
       puts("directory");
+      fileList->deselect();
       directory(pathname);
       upButton->activate();
     } else {
@@ -675,5 +676,5 @@ FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.28 2004/07/27 12:15:44 laza2000 Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.29 2004/07/30 05:35:32 spitzak Exp $".
 //

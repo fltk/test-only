@@ -1,5 +1,5 @@
 //
-// "$Id: scandir_win32.c,v 1.22 2004/07/27 10:37:31 laza2000 Exp $"
+// "$Id: scandir_win32.c,v 1.23 2004/07/30 05:35:32 spitzak Exp $"
 //
 // _WIN32 scandir function for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,6 @@
 #include <string.h>
 #include <windows.h>
 #include <stdlib.h>
-#include <fltk/utf.h>
 
 struct dirent { char d_name[1]; };
 
@@ -45,7 +44,6 @@ int scandir(const char *dirname, struct dirent ***namelist,
   struct dirent **dir = 0, *selectDir;
   unsigned long ret;
   char findIn[MAX_PATH*4];
-  char utf[MAX_PATH*4];
 
   len = utf8tomb(dirname, strlen(dirname), findIn, MAX_PATH*4);
 
@@ -64,13 +62,8 @@ int scandir(const char *dirname, struct dirent ***namelist,
     return nDir;
   }
   do {
-#if 0
-    const char* utf = find.cFileName;
-#else
-    utf8frommb(utf, MAX_PATH*4, find.cFileName, strlen(find.cFileName));
-#endif
-    selectDir=(struct dirent*)malloc(sizeof(struct dirent)+strlen(utf));
-    strcpy(selectDir->d_name, utf);
+    selectDir=(struct dirent*)malloc(sizeof(struct dirent)+strlen(find.cFileName));
+    strcpy(selectDir->d_name, find.cFileName);
     if (!select || (*select)(selectDir)) {
       if (nDir==NDir) {
 	struct dirent **tempDir = calloc(sizeof(struct dirent*), NDir+33);
@@ -100,5 +93,5 @@ int scandir(const char *dirname, struct dirent ***namelist,
 }
 
 //
-// End of "$Id: scandir_win32.c,v 1.22 2004/07/27 10:37:31 laza2000 Exp $".
+// End of "$Id: scandir_win32.c,v 1.23 2004/07/30 05:35:32 spitzak Exp $".
 //
