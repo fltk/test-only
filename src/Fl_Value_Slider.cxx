@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.cxx,v 1.39 2002/02/25 09:00:22 spitzak Exp $"
+// "$Id: Fl_Value_Slider.cxx,v 1.40 2002/03/06 08:50:45 spitzak Exp $"
 //
 // Value slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -33,32 +33,38 @@
 extern void fl_dotted_box(int,int,int,int);
 
 void Fl_Value_Slider::draw() {
-  // figure out region of box, leaving room for tick marks:
-  int bx = 0, by = 0, bw = w(), bh = h();
-  int tick_size = 0;
-  if (horizontal()) {
-    switch (type()&TICK_BOTH) {
-    case TICK_BOTH: by = tick_size = h()/4; bh -= 2*tick_size; break;
-    case TICK_ABOVE: by = tick_size = h()/3; bh -= tick_size; break;
-    case TICK_BELOW: tick_size = h()/3; bh -= tick_size; break;
-    }
-  } else {
-    switch (type()&TICK_BOTH) {
-    case TICK_BOTH: bx = tick_size = w()/4; bw -= 2*tick_size; break;
-    case TICK_ABOVE: bx = tick_size = w()/3; bw -= tick_size; break;
-    case TICK_BELOW: tick_size = w()/3; bw -= tick_size; break;
+
+  // figure out the inner size of the box:
+  Fl_Boxtype box = this->box();
+  int ix = 0, iy = 0, iw = w(), ih = h();
+  box->inset(ix,iy,iw,ih);
+
+  // figure out where to draw the slider, leaving room for tick marks:
+  int sx = ix, sy = iy, sw = iw, sh = ih;
+  if (tick_size() && (type()&TICK_BOTH)) {
+    if (horizontal()) {
+      sh -= tick_size();
+      switch (type()&TICK_BOTH) {
+      case TICK_BOTH: sy += tick_size()/2; break;
+      case TICK_ABOVE: sy += tick_size(); break;
+      }
+    } else {
+      sw -= tick_size();
+      switch (type()&TICK_BOTH) {
+      case TICK_BOTH: sx += tick_size()/2; break;
+      case TICK_ABOVE: sx += tick_size(); break;
+      }
     }
   }
 
-  // figure out the inner size of the slider and text areas:
-  Fl_Boxtype box = this->box();
-  int ix = bx, iy = by, iw = bw, ih = bh;
-  box->inset(ix,iy,iw,ih);
-  int tx = ix, ty = iy, tw = iw, th = ih;
+  // figure out where to draw the text:
+  int tx = sx, ty = sy, tw = sw, th = sh;
   if (horizontal()) {
-    tw = 35; ix += tw; iw -= tw;
+    tw = 35; sx += tw; sw -= tw;
+    if (iy) {ty = iy; th = ih;} // if box has border, center text
   } else {
-    th = text_size(); ih -= th; ty += ih;
+    th = text_size(); sh -= th; ty += sh;
+    if (ix) {tx = ix; tw = iw;} // if box has border, center text
   }
 
   Fl_Flags flags = 0;
@@ -70,11 +76,13 @@ void Fl_Value_Slider::draw() {
   }
 
   // minimal-update the slider, if it indicates the background needs
-  // to be drawn, draw that:
-  if (Fl_Slider::draw(ix, iy, iw, ih, flags, iy==by)) {
+  // to be drawn, draw that. We draw the slot if the current box type
+  // has no border:
+  if (Fl_Slider::draw(sx, sy, sw, sh, flags, iy==0)) {
+
     // draw the box or the visible parts of the window
     if (!box->fills_rectangle()) parent()->draw_group_box();
-    box->draw(bx, by, bw, bh, color(), flags);
+    box->draw(0, 0, w(), h(), color(), flags);
 
     // draw the focus indicator inside the box:
     if (focused()) {
@@ -82,13 +90,21 @@ void Fl_Value_Slider::draw() {
       fl_dotted_box(ix+1, iy+1, iw-2, ih-2);
     }
 
-    if (tick_size && (damage() & FL_DAMAGE_ALL)) {
-      // first clip to the background area and erase it with draw_group_box:
-      fl_clip_out(bx, by, bw, bh);
-      if (box->fills_rectangle()) parent()->draw_group_box();
-      // now draw the ticks into the clipped area:
-      if (horizontal()) draw_ticks(ix, 0, iw, h());
-      else draw_ticks(0, iy, w(), ih);
+    if (type() & TICK_BOTH) {
+      if (horizontal()) {
+	switch (type()&TICK_BOTH) {
+	case TICK_ABOVE: sh = sy+sh/2-iy; sy = iy; break;
+	case TICK_BELOW: sy = sy+sh/2; sh = ih-sy; break;
+	case TICK_BOTH: sy = iy; sh = ih; break;
+	}
+      } else {
+	switch (type()&TICK_BOTH) {
+	case TICK_ABOVE: sw = sx+sw/2-ix; sx = ix; break;
+	case TICK_BELOW: sx = sx+sw/2; sw = iw-sx; break;
+	case TICK_BOTH: sx = ix; sw = iw; break;
+	}
+      }
+      draw_ticks(sx, sy, sw, sh);
     }
 
     fl_pop_clip();
@@ -100,7 +116,11 @@ void Fl_Value_Slider::draw() {
     // erase the background if not already done:
     if (!(damage()&FL_DAMAGE_ALL)) {
       if (!box->fills_rectangle()) parent()->draw_group_box();
-      box->draw(bx, by, bw, bh, color(), flags);
+      box->draw(0, 0, w(), h(), color(), flags);
+      if (focused()) {
+	fl_color(text_color());
+	fl_dotted_box(ix+1, iy+1, iw-2, ih-2);
+      }
     }
     // now draw the text:
     char buf[128];
@@ -135,5 +155,5 @@ Fl_Value_Slider::Fl_Value_Slider(int x, int y, int w, int h, const char*l)
 }
 
 //
-// End of "$Id: Fl_Value_Slider.cxx,v 1.39 2002/02/25 09:00:22 spitzak Exp $".
+// End of "$Id: Fl_Value_Slider.cxx,v 1.40 2002/03/06 08:50:45 spitzak Exp $".
 //

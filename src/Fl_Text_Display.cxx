@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.18 2002/02/10 22:57:49 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.19 2002/03/06 08:50:45 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -72,9 +72,6 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H,  const char* l)
   dragPos = dragType = dragging = 0;
   display_insert_position_hint = 0;
 
-  Fl_Group* current = Fl_Group::current();
-  Fl_Group::current(this);
-
   text_area.x = 0;
   text_area.y = 0;
   text_area.w = 0;
@@ -86,7 +83,7 @@ Fl_Text_Display::Fl_Text_Display(int X, int Y, int W, int H,  const char* l)
   mHScrollBar->callback((Fl_Callback*)h_scrollbar_cb, this);
   mHScrollBar->type(Fl_Scrollbar::HORIZONTAL);
 
-  Fl_Group::current(current);
+  end();
 
   mCursorOn = 0;
   mCursorPos = 0;
@@ -1882,7 +1879,17 @@ int Fl_Text_Display::handle(int event) {
   }
 
   switch (event) {
+
+    case FL_FOCUS:
+      show_cursor(mCursorOn); // redraws the cursor
+      return 1;
+
+    case FL_UNFOCUS:
+      show_cursor(mCursorOn); // redraws the cursor
+      return 1;
+
     case FL_PUSH: {
+        take_focus();
         if (Fl::event_state()&FL_SHIFT) return handle(FL_DRAG);
         dragging = 1;
         int pos = xy_to_position(Fl::event_x(), Fl::event_y(), CURSOR_POS);
@@ -1954,5 +1961,5 @@ int Fl_Text_Display::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.18 2002/02/10 22:57:49 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.19 2002/03/06 08:50:45 spitzak Exp $".
 //

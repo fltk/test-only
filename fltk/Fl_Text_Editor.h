@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Editor.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Text_Editor.h,v 1.2 2002/03/06 08:50:45 spitzak Exp $"
 //
 // Header file for Fl_Text_Editor class.
 //
@@ -91,7 +91,6 @@ class FL_API Fl_Text_Editor : public Fl_Text_Display {
 
   protected:
     int handle_key();
-
     int insert_mode_;
     Key_Binding* key_bindings;
     static Key_Binding* global_key_bindings;
@@ -101,6 +100,6 @@ class FL_API Fl_Text_Editor : public Fl_Text_Display {
 #endif
 
 //
-// End of "$Id: Fl_Text_Editor.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Text_Editor.h,v 1.2 2002/03/06 08:50:45 spitzak Exp $".
 //
 

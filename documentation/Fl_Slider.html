@@ -53,6 +53,7 @@ portions of how it is drawn.
 <li><a href=#position_value>position_value</a></li>
 <li><a href=#slider_position>slider_position</a></li>
 <li><a href=#slider_size>slider_size</a></li>
+<li><a href=#tick_size>tick_size</a></li>
 <li><a href=#type>type</a></li>
 </ul>
 
@@ -105,12 +106,23 @@ the slider (NYI).
 <p>The ticks are placed the <a
 href="Fl_Valuator#pagesize">pagesize()</a> apart.
 
-<a name=slider_size><h4>unsigned short Fl_Slider::slider_size() const
-<br>void Fl_Slider::slider_size(unsigned short)</h4></a>
+<a name=slider_size><h4>unsigned char Fl_Slider::slider_size() const
+<br>void Fl_Slider::slider_size(unsigned char)</h4></a>
 
 Get or set the dimensions of the moving piece of slider. This is
 measured in pixels in a direction perpendicular to the slider's movement.
 The default value is 12.
+
+<p>Setting slider_size() to zero will make the slider into a "fill"
+slider that draws a solid bar from the left/bottom to the current
+value. This is useful for indicating progress or as a output
+indicator.
+
+<a name=tick_size><h4>unsigned char Fl_Slider::tick_size() const
+<br>void Fl_Slider::tick_size(unsigned char)</h4></a>
+
+The slider is shrunk this many pixels so that the tick marks are
+visible next to it. The default value is 4.
 
 <a name=slider_position><h4>int Fl_Slider::slider_position(double value, int w); (protected)</h4></a>
 

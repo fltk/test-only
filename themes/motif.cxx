@@ -1,5 +1,5 @@
 //
-// "$Id: motif.cxx,v 1.17 2002/02/10 22:57:50 spitzak Exp $"
+// "$Id: motif.cxx,v 1.18 2002/03/06 08:50:45 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -259,6 +259,7 @@ extern "C" bool fltk_theme()
   }
 
   if ((s = Fl_Style::find("slider"))) {
+    s->box = &thin_motif_down_box;
     s->color = FL_DARK1;
   }
 
@@ -284,5 +285,5 @@ extern "C" bool fltk_theme()
 }
 
 //
-// End of "$Id: motif.cxx,v 1.17 2002/02/10 22:57:50 spitzak Exp $"
+// End of "$Id: motif.cxx,v 1.18 2002/03/06 08:50:45 spitzak Exp $"
 //

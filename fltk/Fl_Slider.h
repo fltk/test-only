@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.h,v 1.3 2002/02/25 09:00:19 spitzak Exp $"
+// "$Id: Fl_Slider.h,v 1.4 2002/03/06 08:50:45 spitzak Exp $"
 //
 // Slider header file for the Fast Light Tool Kit (FLTK).
 //
@@ -33,6 +33,7 @@
 class FL_API Fl_Slider : public Fl_Valuator {
 
   unsigned short slider_size_;
+  unsigned short tick_size_;
   unsigned short old_position;
 
 public:
@@ -45,10 +46,11 @@ public:
     TICK_BELOW		= 4,
     TICK_RIGHT		= TICK_BELOW,
     TICK_BOTH		= TICK_ABOVE|TICK_BELOW,
-    LOG			= 8
+    LOG			= 8,
+    FILL		= 16 // for back compatability only
   };
-  bool horizontal() const {return type()&HORIZONTAL;}
-  bool log() const {return type()&LOG;}
+  bool horizontal() const {return (type()&HORIZONTAL)!=0;}
+  bool log() const {return (type()&LOG)!=0;}
 
   void draw();
   int handle(int);
@@ -58,6 +60,8 @@ public:
 
   unsigned short slider_size() const {return slider_size_;}
   void slider_size(int n) {slider_size_ = (unsigned short)n;}
+  unsigned short tick_size() const {return tick_size_;}
+  void tick_size(int n) {tick_size_ = (unsigned short)n;}
   
 #ifndef FLTK_2
   // back comptability:
@@ -78,12 +82,12 @@ protected:
 #ifndef FLTK_2
 #define FL_VERT_SLIDER		Fl_Slider::VERTICAL
 #define FL_HOR_SLIDER		Fl_Slider::HORIZONTAL
-#define FL_VERT_FILL_SLIDER	Fl_Slider::VERTICAL
-#define FL_HOR_FILL_SLIDER	Fl_Slider::HORIZONTAL
+#define FL_VERT_FILL_SLIDER	Fl_Slider::VERTICAL|Fl_Slider::FILL
+#define FL_HOR_FILL_SLIDER	Fl_Slider::HORIZONTAL|Fl_Slider::FILL
 #define FL_VERT_NICE_SLIDER	Fl_Slider::VERTICAL
 #define FL_HOR_NICE_SLIDER	Fl_Slider::HORIZONTAL
-#define HORIZONTAL_FILL HORIZONTAL
-#define VERTICAL_FILL VERTICAL
+#define HORIZONTAL_FILL HORIZONTAL|Fl_Slider::FILL
+#define VERTICAL_FILL VERTICAL|Fl_Slider::FILL
 #define HORIZONTAL_NICE HORIZONTAL
 #define VERTICAL_NICE VERTICAL
 #endif
@@ -91,5 +95,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Fl_Slider.h,v 1.3 2002/02/25 09:00:19 spitzak Exp $".
+// End of "$Id: Fl_Slider.h,v 1.4 2002/03/06 08:50:45 spitzak Exp $".
 //

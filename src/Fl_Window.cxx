@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.81 2002/02/10 22:57:49 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.82 2002/03/06 08:50:45 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -103,78 +103,86 @@ bool fl_show_iconic; // set by iconize() or by -i Fl::arg switch
 
 int Fl_Window::handle(int event) {
   switch (event) {
-    case FL_SHOW: {
-      // Emulate the undocumented back-compatability modal() stuff:
-      if (flags()&(FL_MODAL|FL_NON_MODAL)) {
-	child_of(Fl::first_window()); // this may unmap window if it changes
-	if (flags()&FL_MODAL) Fl::modal(this, false);
-      }
-      if (!shown()) {
-	Fl_Style::load_theme();
-	fl_open_display();
-	layout();
-	// back-compatability automatic size_range() based on resizable():
-	if (!parent() && !size_range_set) {
-	  if (resizable()) {
-	    // find the innermost nested resizable():
-	    Fl_Widget *o = resizable();
-	    while (o->is_group()) {
-	      Fl_Widget* p = ((Fl_Group*)o)->resizable();
-	      if (!p || p == o) break;
-	      o = p;
-	    }
-	    int minw = w(); if (o->w() > 72) minw -= (o->w()-72);
-	    int minh = h(); if (o->h() > 72) minh -= (o->h()-72);
-	    size_range(minw, minh, 0, 0);
-	  } else {
-	    size_range(w(), h(), w(), h());
+  case FL_SHOW: {
+    // Emulate the undocumented back-compatability modal() stuff:
+    if (flags()&(FL_MODAL|FL_NON_MODAL)) {
+      child_of(Fl::first_window()); // this may unmap window if it changes
+      if (flags()&FL_MODAL) Fl::modal(this, false);
+    }
+    if (!shown()) {
+      Fl_Style::load_theme();
+      fl_open_display();
+      layout();
+      // back-compatability automatic size_range() based on resizable():
+      if (!parent() && !size_range_set) {
+	if (resizable()) {
+	  // find the innermost nested resizable():
+	  Fl_Widget *o = resizable();
+	  while (o->is_group()) {
+	    Fl_Widget* p = ((Fl_Group*)o)->resizable();
+	    if (!p || p == o) break;
+	    o = p;
 	  }
+	  int minw = w(); if (o->w() > 72) minw -= (o->w()-72);
+	  int minh = h(); if (o->h() > 72) minh -= (o->h()-72);
+	  size_range(minw, minh, 0, 0);
+	} else {
+	  size_range(w(), h(), w(), h());
 	}
-	create();
       }
-
-      Fl_Group::handle(event); // make the child windows map first
-
-#ifdef _WIN32
-      int showtype;
-      if (parent())
-        showtype = SW_RESTORE;
-      // If we've captured the mouse, we don't want do activate any
-      // other windows from the code, or we lose the capture.
-      // Also, we don't want to activate the window for tooltips.
-      else if (Fl::grab() || override())
-        showtype = SW_SHOWNOACTIVATE;
-      else if (fl_show_iconic)
-	showtype = SW_SHOWMINNOACTIVE,fl_show_iconic = false;
-      else
-        showtype = SW_SHOWNORMAL;
-
-      ShowWindow(i->xid, showtype);
-#else
-      XMapWindow(fl_display, i->xid);
-#endif
-      break;
+      create();
     }
 
-    case FL_HIDE:
-      if (flags()&FL_MODAL) Fl::modal(0, false);
-      if (i) XUnmapWindow(fl_display, i->xid);
-      break;
+    Fl_Group::handle(event); // make the child windows map first
+
+#ifdef _WIN32
+    int showtype;
+    if (parent())
+      showtype = SW_RESTORE;
+    // If we've captured the mouse, we don't want do activate any
+    // other windows from the code, or we lose the capture.
+    // Also, we don't want to activate the window for tooltips.
+    else if (Fl::grab() || override())
+      showtype = SW_SHOWNOACTIVATE;
+    else if (fl_show_iconic)
+      showtype = SW_SHOWMINNOACTIVE,fl_show_iconic = false;
+    else
+      showtype = SW_SHOWNORMAL;
+
+    ShowWindow(i->xid, showtype);
+#else
+    XMapWindow(fl_display, i->xid);
+#endif
+    return 1;}
+
+  case FL_HIDE:
+    if (flags()&FL_MODAL) Fl::modal(0, false);
+    if (i) XUnmapWindow(fl_display, i->xid);
+    break;
   }
 
   if (Fl_Group::handle(event)) return 1;
 
-  // Make the Escape key close windows:
-  if (event == FL_SHORTCUT && !parent() && test_shortcut()) {
-    do_callback();
+  switch (event) {
+  case FL_SHORTCUT:
+    // Make the Escape key close windows:
+    if (!parent() && test_shortcut()) {do_callback(); return 1;}
+    break;
+  case FL_PUSH:
+    // Because windows are opaque they must consume the clicks on them,
+    // otherwise if they were subwindows the clicks would get passed
+    // to widgets hidden behind them. On X unwanted clicks also raise
+    // the window (stupid Windows does this all the time even if the
+    // click is used, so doing it is redundant there).
+#ifndef _WIN32
+    {Fl_Window* w = this;
+    while (w->parent()) w = w->window();
+    XMapRaised(fl_display, w->i->xid);}
+#endif
+  case FL_DRAG:
+  case FL_RELEASE:
     return 1;
   }
-  // Raise windows that are clicked on, but don't raise when the
-  // user hits buttons.  Unfortunately stupid ol' Win32 does this
-  // all the time so there is not much I can do here...
-#ifndef _WIN32
-  if (event == FL_PUSH && !parent()) XMapRaised(fl_display, i->xid);
-#endif
   return 0;
 }
 
@@ -356,5 +364,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.81 2002/02/10 22:57:49 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.82 2002/03/06 08:50:45 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Editor.cxx,v 1.13 2002/01/28 08:03:00 spitzak Exp $"
+// "$Id: Fl_Text_Editor.cxx,v 1.14 2002/03/06 08:50:45 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -58,7 +58,7 @@ static struct {
   int state;
   Fl_Text_Editor::Key_Func func;
 } default_key_bindings[] = {
-  { FL_Escape,    FL_TEXT_EDITOR_ANY_STATE, Fl_Text_Editor::kf_ignore     },
+//{ FL_Escape,    FL_TEXT_EDITOR_ANY_STATE, Fl_Text_Editor::kf_ignore     },
   { FL_Enter,     FL_TEXT_EDITOR_ANY_STATE, Fl_Text_Editor::kf_enter      },
   { FL_KP_Enter,  FL_TEXT_EDITOR_ANY_STATE, Fl_Text_Editor::kf_enter      },
   { FL_BackSpace, FL_TEXT_EDITOR_ANY_STATE, Fl_Text_Editor::kf_backspace  },
@@ -120,11 +120,20 @@ static void kill_selection(Fl_Text_Editor* e) {
   }
 }
 
-// Any keys not in above table go to this, which emulates Emacs after
-// making sure the programmer did not want the key to do anything else
-// such as a menu item or button shortcut:
+// Any keys not in above table go to this:
+
 int Fl_Text_Editor::kf_default(int c, Fl_Text_Editor* e) {
-  if (Fl::handle(FL_SHORTCUT, e->window())) return 1;
+
+  // See if the key is a shortcut assigned to some other widget or menu item:
+  static bool recursion;
+  if (!recursion) {
+    recursion = true;
+    bool ret = Fl::handle(FL_SHORTCUT, e->window()) != 0;
+    recursion = false;
+    if (ret) return 1;
+  }
+
+  // Emulate Emacs for a lot of keys:
   int key = 0;
   switch (c) {
   case 'b': key = FL_Left; goto MOVE;
@@ -169,6 +178,7 @@ int Fl_Text_Editor::kf_default(int c, Fl_Text_Editor* e) {
 //case '/':  
 //  return Fl_Text_Editor::undo(c,e);
   }
+
   // insert other control characters into the text:
   if (Fl::event_length()) {
     kill_selection(e);
@@ -449,21 +459,24 @@ int Fl_Text_Editor::handle_key() {
 int Fl_Text_Editor::handle(int event) {
   if (!buffer()) return 0;
 
-  if (event == FL_PUSH && Fl::event_button() == 2) {
-    dragType = -1;
-    Fl::paste(*this,false);
-    Fl::focus(this);
-    return 1;
-  }
+  if (Fl_Text_Display::handle(event)) {
+    switch (event) {
 
-  switch (event) {
+    case FL_PUSH:
+      if (Fl::event_button() == 2) {
+	dragType = -1;
+	Fl::paste(*this,false);
+      }
+      return 1;
+
     case FL_FOCUS:
-      show_cursor(mCursorOn); // redraws the cursor
-      return 1;
+      return 2; // indicate that this widget should get initial focus
 
-    case FL_UNFOCUS:
-      show_cursor(mCursorOn); // redraws the cursor
+    default:
       return 1;
+    }
+  } else {
+    switch (event) {
 
     case FL_KEY:
       return handle_key();
@@ -481,11 +494,11 @@ int Fl_Text_Editor::handle(int event) {
 //    case FL_LEAVE:
 //      if (Fl::event_inside(text_area)) fl_cursor(FL_CURSOR_INSERT);
 //      else fl_cursor(FL_CURSOR_DEFAULT);
+    }
+    return 0;
   }
-
-  return Fl_Text_Display::handle(event);
 }
 
 //
-// End of "$Id: Fl_Text_Editor.cxx,v 1.13 2002/01/28 08:03:00 spitzak Exp $".
+// End of "$Id: Fl_Text_Editor.cxx,v 1.14 2002/03/06 08:50:45 spitzak Exp $".
 //

@@ -2082,3 +2082,29 @@ off and then release the mouse.
 Crash in the menus reported by Joe Perkins fixed, I think.
 
 Checked in 2/25/02
+
+////////////////////////////////////////////////////////////////
+
+Fl_Input could recurse forever in the check to see if a key is a
+shortcut for some other widget before using it as an Emacs key.  Also
+fixed the same problem with Fl_Text_Editor.
+
+Sliders changed from Qt/Windows-emulation to style more like Curtis
+did with the tick marks inside the box and behind the slider. Looks a
+lot nicer imho. The underlying functions used by draw() did not have
+to change, so they are sufficient to make a class that looks exactly
+like Qt however.
+
+If an Fl_Window was a subwindow it could return zero for FL_PUSH
+events and then they could be passed to widgets in the parent that are
+hidden behind the window. It now returns one for FL_PUSH all the time.
+
+Tried to fix another crash in Fl_Menu.cxx
+
+Fl_Text_Editor did not take focus when clicked on.
+
+Fl_Text_Editor left Fl_Group::current() pointed at itself in it's
+constructor.
+
+Checked in 3/5/02
+////////////////////////////////////////////////////////////////

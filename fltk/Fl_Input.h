@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.h,v 1.4 2002/01/31 22:54:49 robertk Exp $"
+// "$Id: Fl_Input.h,v 1.5 2002/03/06 08:50:45 spitzak Exp $"
 //
 // Input base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -108,6 +108,7 @@ private:
   void setfont() const;
 
   bool handle_key();
+  bool key_is_shortcut();
   void shift_position(int p);
   void shift_up_down_position(int p);
 
@@ -123,5 +124,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Input.h,v 1.4 2002/01/31 22:54:49 robertk Exp $".
+// End of "$Id: Fl_Input.h,v 1.5 2002/03/06 08:50:45 spitzak Exp $".
 //

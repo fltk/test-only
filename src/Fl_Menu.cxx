@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.122 2002/02/25 09:00:21 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.123 2002/03/06 08:50:45 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -435,6 +435,7 @@ static void autoscroll_timeout(void*) {
 static inline void setitem(MenuState& p, int level, int index) {
 
   if (p.level == level && p.indexes[level] == index) return;
+  if (level < 0) return; // this should not happen!
 
   if (level < p.nummenus && p.indexes[level] != index)
     p.menus[level]->redraw(FL_DAMAGE_CHILD);
@@ -764,5 +765,5 @@ int Fl_Menu_::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.122 2002/02/25 09:00:21 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.123 2002/03/06 08:50:45 spitzak Exp $".
 //

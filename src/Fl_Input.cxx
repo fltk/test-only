@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.58 2002/02/10 22:57:48 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.59 2002/03/06 08:50:45 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -794,6 +794,22 @@ void Fl_Input::shift_up_down_position(int p) {
   up_down_position(p, Fl::event_state(FL_SHIFT));
 }
 
+// Due to MicroSoft-compatable programs assigning the Emacs control keys
+// to menu items, this is about the best design I could come up with that
+// allows Emacs bindings but allows people who want to reuse those keys
+// for shortcuts to assign them. Previous solutions were not local to
+// Fl_Input, which made it difficult to add or change the key assignments.
+// This has a recursion test as some programs will turn the shortcut back
+// into a keystroke and report it here...
+bool Fl_Input::key_is_shortcut() {
+  static bool recursion;
+  if (recursion) return false;
+  recursion = true;
+  bool ret = Fl::handle(FL_SHORTCUT, window()) != 0;
+  recursion = false;
+  return ret;
+}
+
 bool Fl_Input::handle_key() {
 
   int i;
@@ -812,21 +828,21 @@ bool Fl_Input::handle_key() {
   switch (Fl::event_key()) {
 
   case 'b':
-    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    if (key_is_shortcut()) return true;
     ctrl = alt;
   case FL_Left:
     shift_position(ctrl ? word_start(position()-1) : position()-1);
     return true;
 
   case 'f':
-    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    if (key_is_shortcut()) return true;
     ctrl = alt;
   case FL_Right:
     shift_position(ctrl ? word_end(position()+1) : position()+1);
     return true;
 
   case 'p':
-    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    if (key_is_shortcut()) return true;
     ctrl = alt;
   case FL_Up:
     if (type() < MULTILINE) return false;
@@ -836,7 +852,7 @@ bool Fl_Input::handle_key() {
     return true;
 
   case 'n':
-    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    if (key_is_shortcut()) return true;
     ctrl = alt;
   case FL_Down:
     if (type() < MULTILINE) return false;
@@ -870,14 +886,14 @@ bool Fl_Input::handle_key() {
       else shift_position(i);
       return true;
     }
-    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    if (key_is_shortcut()) return true;
     ctrl = alt;
   case FL_Home:
     shift_position(ctrl ? 0 : line_start(position()));
     return true;
 
   case 'e':
-    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    if (key_is_shortcut()) return true;
     ctrl = alt;
   case FL_End:
     shift_position(ctrl ? size() : line_end(position()));
@@ -890,7 +906,7 @@ bool Fl_Input::handle_key() {
     return true;
 
   case 'd':
-    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    if (key_is_shortcut()) return true;
     ctrl = alt;
   case FL_Delete:
     // I don't know what CUA does with ctrl+delete, I made it delete words
@@ -900,7 +916,7 @@ bool Fl_Input::handle_key() {
     return true;
 
   case 'h': // retro-Emacs, modern versions do "help"
-    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    if (key_is_shortcut()) return true;
     ctrl = alt;
   case FL_BackSpace:
     // I don't know what CUA does with ctrl+backspace, I made it delete words
@@ -923,7 +939,7 @@ bool Fl_Input::handle_key() {
     return replace(position(), mark(), Fl::event_text(), 1);
 
   case 'k': // Emacs clear-to-end-of-line
-    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    if (key_is_shortcut()) return true;
     // alt should clear to end of paragraph, nyi
     i = line_end(position());
     if (i == position() && i < size()) i++;
@@ -933,35 +949,35 @@ bool Fl_Input::handle_key() {
     return true;
 
   case 'c':
-    if (!ctrl && Fl::handle(FL_SHORTCUT,window())) return true;
+    if (!ctrl && key_is_shortcut()) return true;
     return copy();
 
   case 'v':
-    if (!ctrl && Fl::handle(FL_SHORTCUT,window())) return true;
+    if (!ctrl && key_is_shortcut()) return true;
     Fl::paste(*this,true);
     return true;
 
   case 'w': // Emacs cut
-    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    if (key_is_shortcut()) return true;
     copy();
     return cut();
 
   case 'x':
-    if (!ctrl && Fl::handle(FL_SHORTCUT,window())) return true;
+    if (!ctrl && key_is_shortcut()) return true;
     copy();
     return cut();
 
   case 'y': // Emacs paste
-    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    if (key_is_shortcut()) return true;
     Fl::paste(*this,true);
     return true;
 
   case 'z':
-    if (!ctrl && Fl::handle(FL_SHORTCUT,window())) return true;
+    if (!ctrl && key_is_shortcut()) return true;
     return undo();
 
   case '/': // Emacs undo
-    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    if (key_is_shortcut()) return true;
     return undo();
 
     // Other interesting Emacs characters:
@@ -976,7 +992,7 @@ bool Fl_Input::handle_key() {
 
   // Insert any other keys (like ^J) into the text, if no shortcuts eat them:
   if (Fl::event_length()) {
-    if (Fl::handle(FL_SHORTCUT,window())) return true;
+    if (key_is_shortcut()) return true;
     return replace(position(), mark(), Fl::event_text(), Fl::event_length());
   }
 
@@ -1209,5 +1225,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.58 2002/02/10 22:57:48 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.59 2002/03/06 08:50:45 spitzak Exp $".
 //

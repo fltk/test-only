@@ -1,5 +1,5 @@
 //
-// "$Id: editor.cxx,v 1.11 2001/07/29 22:17:02 spitzak Exp $"
+// "$Id: editor.cxx,v 1.12 2002/03/06 08:50:45 spitzak Exp $"
 //
 // A simple text editor program for the Fast Light Tool Kit (FLTK).
 //
@@ -45,7 +45,7 @@
 #include <fltk/Fl_Return_Button.h>
 #include <fltk/Fl_Text_Buffer.h>
 #include <fltk/Fl_Text_Editor.h>
-
+#include <fltk/Fl_Input.h>
 
 int                changed = 0;
 char               filename[256] = "";
@@ -397,7 +397,7 @@ Fl_Menu_Item menuitems[] = {
 };
 
 Fl_Window* new_view() {
-  EditorWindow* w = new EditorWindow(512, 384, title);
+  EditorWindow* w = new EditorWindow(512, 384+22, title);
     w->begin();
     Fl_Menu_Bar* m = new Fl_Menu_Bar(0, 0, 512, 30);
     m->menu(menuitems);
@@ -412,6 +412,8 @@ Fl_Window* new_view() {
     m->find("&Search/Re&place Again")->user_data(w);
     w->editor = new Fl_Text_Editor(0, 30, 512, 354);
     w->editor->buffer(textbuf);
+    Fl_Input* i = new Fl_Input(0, 384, 512, 22);
+    i->value("Click here to test focus navigation");
   w->end();
   w->resizable(w->editor);
   w->callback((Fl_Callback *)close_cb, w);
@@ -432,5 +434,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: editor.cxx,v 1.11 2001/07/29 22:17:02 spitzak Exp $".
+// End of "$Id: editor.cxx,v 1.12 2002/03/06 08:50:45 spitzak Exp $".
 //

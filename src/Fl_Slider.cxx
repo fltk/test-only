@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.55 2002/02/25 09:00:22 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.56 2002/03/06 08:50:45 spitzak Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -80,27 +80,28 @@ void Fl_Slider::draw_ticks(int x, int y, int w, int h)
 
 void Fl_Slider::draw()
 {
-  // figure out region of box, leaving room for tick marks:
-  int bx = 0, by = 0, bw = w(), bh = h();
-  int tick_size = 0;
-  if (horizontal()) {
-    switch (type()&TICK_BOTH) {
-    case TICK_BOTH: by = tick_size = h()/4; bh -= 2*tick_size; break;
-    case TICK_ABOVE: by = tick_size = h()/3; bh -= tick_size; break;
-    case TICK_BELOW: tick_size = h()/3; bh -= tick_size; break;
-    }
-  } else {
-    switch (type()&TICK_BOTH) {
-    case TICK_BOTH: bx = tick_size = w()/4; bw -= 2*tick_size; break;
-    case TICK_ABOVE: bx = tick_size = w()/3; bw -= tick_size; break;
-    case TICK_BELOW: tick_size = w()/3; bw -= tick_size; break;
-    }
-  }
-
   // figure out the inner size of the box:
   Fl_Boxtype box = this->box();
-  int ix = bx, iy = by, iw = bw, ih = bh;
+  int ix = 0, iy = 0, iw = w(), ih = h();
   box->inset(ix,iy,iw,ih);
+
+  // figure out where to draw the slider, leaving room for tick marks:
+  int sx = ix, sy = iy, sw = iw, sh = ih;
+  if (tick_size_ && (type()&TICK_BOTH)) {
+    if (horizontal()) {
+      sh -= tick_size_;
+      switch (type()&TICK_BOTH) {
+      case TICK_BOTH: sy += tick_size_/2; break;
+      case TICK_ABOVE: sy += tick_size_; break;
+      }
+    } else {
+      sw -= tick_size_;
+      switch (type()&TICK_BOTH) {
+      case TICK_BOTH: sx += tick_size_/2; break;
+      case TICK_ABOVE: sx += tick_size_; break;
+      }
+    }
+  }
 
   Fl_Flags flags = 0;
   if (!active_r()) {
@@ -111,13 +112,13 @@ void Fl_Slider::draw()
   }
 
   // minimal-update the slider, if it indicates the background needs
-  // to be drawn, draw that:
-  if (draw(ix, iy, iw, ih, flags,
-	   iy==by // draw slot if it seems box has no border
-	   )) {
+  // to be drawn, draw that. We draw the slot if the current box type
+  // has no border:
+  if (draw(sx, sy, sw, sh, flags, iy==0)) {
+
     // draw the box or the visible parts of the window
     if (!box->fills_rectangle()) parent()->draw_group_box();
-    box->draw(bx, by, bw, bh, color(), flags);
+    box->draw(0, 0, w(), h(), color(), flags);
 
     // draw the focus indicator inside the box:
     if (focused()) {
@@ -125,13 +126,19 @@ void Fl_Slider::draw()
       fl_dotted_box(ix+1, iy+1, iw-2, ih-2);
     }
 
-    if (tick_size && (damage() & FL_DAMAGE_ALL)) {
-      // first clip to the background area and erase it with draw_group_box:
-      fl_clip_out(bx, by, bw, bh);
-      if (box->fills_rectangle()) parent()->draw_group_box();
-      // now draw the ticks into the clipped area:
-      if (horizontal()) draw_ticks(ix, 0, iw, h());
-      else draw_ticks(0, iy, w(), ih);
+    if (type() & TICK_BOTH) {
+      if (horizontal()) {
+	switch (type()&TICK_BOTH) {
+	case TICK_ABOVE: ih = sy+sh/2-iy; break;
+	case TICK_BELOW: ih += iy; iy = sy+sh/2; ih -= iy; break;
+	}
+      } else {
+	switch (type()&TICK_BOTH) {
+	case TICK_ABOVE: iw = sx+sw/2-ix; break;
+	case TICK_BELOW: iw += ix; ix = sx+sw/2; iw -= ix; break;
+	}
+      }
+      draw_ticks(ix, iy, iw, ih);
     }
 
     fl_pop_clip();
@@ -146,6 +153,9 @@ void Fl_Slider::draw()
 
 bool Fl_Slider::draw(int ix, int iy, int iw, int ih, Fl_Flags flags, bool slot)
 {
+  // for back compatability, use type flag to set slider size:
+  if (type()&FILL) slider_size(0);
+
   // if user directly set selected_color we use it:
   if (style()->selection_color) flags |= FL_SELECTED;
 
@@ -155,9 +165,11 @@ bool Fl_Slider::draw(int ix, int iy, int iw, int ih, Fl_Flags flags, bool slot)
   if (horizontal()) {
     sx = sp = ix+slider_position(value(),iw);
     sw = slider_size_;
+    if (!sw) {sw = sx-ix; sx = ix;} // fill slider
   } else {
     sy = sp = iy+slider_position(value(),ih);
     sh = slider_size_;
+    if (!sh) sh = iy+ih-sy; // fill slider
   }
 
   if (damage()&FL_DAMAGE_ALL) {
@@ -171,8 +183,13 @@ bool Fl_Slider::draw(int ix, int iy, int iw, int ih, Fl_Flags flags, bool slot)
     // update a moving slider:
     draw_glyph(0, sx, sy, sw, sh, flags); // draw slider in new position
     // clip to the region the old slider was in:
-    if (horizontal()) fl_push_clip(old_position, sy, sw, sh);
-    else fl_push_clip(sx, old_position, sw, sh);
+    if (horizontal()) {
+      if (slider_size_) fl_push_clip(old_position, sy, sw, sh);
+      else fl_push_clip(ix, iy, old_position, ih);
+    } else {
+      if (slider_size_) fl_push_clip(sx, old_position, sw, sh);
+      else fl_push_clip(ix, old_position, iw, iy+ih-old_position);
+    }
     fl_clip_out(sx, sy, sw, sh); // don't erase new slider
     
   } else {
@@ -189,15 +206,16 @@ bool Fl_Slider::draw(int ix, int iy, int iw, int ih, Fl_Flags flags, bool slot)
   if (slot) {
     const int slot_size_ = 6;
     int slx, sly, slw, slh;
+    int dx = (slider_size_-slot_size_)/2; if (dx < 0) dx = 0;
     if (horizontal()) {
-      slx = (slider_size_-slot_size_)/2;
-      slw = iw-2*slx;
+      slx = dx;
+      slw = iw-2*dx;
       slx += ix;
       sly = iy+(ih-slot_size_+1)/2;
       slh = slot_size_;
     } else {
-      sly = (slider_size_-slot_size_)/2;
-      slh = ih-2*sly;
+      sly = dx;
+      slh = ih-2*dx;
       sly += iy;
       slx = ix+(iw-slot_size_+1)/2;
       slw = slot_size_;
@@ -233,13 +251,13 @@ int Fl_Slider::handle(int event, int x, int y, int w, int h) {
     int X = slider_position(value(), w);
     if (event == FL_PUSH) {
       offcenter = mx-X;
-      if (offcenter < 0) offcenter = 0;
+      if (offcenter < (slider_size() ? 0 : -8)) offcenter = 0;
       else if (offcenter > slider_size_) offcenter = slider_size_;
       else return 1;
     }
-    X = mx-offcenter;
     double v;
   RETRY:
+    X = mx-offcenter;
     if (X < 0) {
       X = 0;
       offcenter = mx; if (offcenter < 0) offcenter = 0;
@@ -286,6 +304,7 @@ static void glyph(const Fl_Widget* widget, int glyph,
   // draw the divider line into slider:
   if (!glyph) {
     if (w < 4 || h < 4) return;
+    if (!((Fl_Slider*)widget)->slider_size()) return; // ignore FILL widgets
     if (widget->type()&1) { // horizontal
       x = x+(w+1)/2;
       fl_color(FL_DARK3);
@@ -313,9 +332,10 @@ Fl_Named_Style* Fl_Slider::default_style = &::style;
 Fl_Slider::Fl_Slider(int x, int y, int w, int h, const char* l)
 : Fl_Valuator(x, y, w, h, l) {
   style(default_style);
+  tick_size_ = 4;
   slider_size_ = 12;
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.55 2002/02/25 09:00:22 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.56 2002/03/06 08:50:45 spitzak Exp $".
 //
