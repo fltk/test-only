@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.96 2003/09/03 06:08:06 spitzak Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.97 2004/03/14 07:42:57 spitzak Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -1688,7 +1688,7 @@ void WidgetType::write_widget_code() {
 
   if (is_button()) {
     fltk::Button* b = (fltk::Button*)o;
-    if (b->value()) write_c("%so->value(1);\n", indent());
+    if (b->value()) write_c("%so->set_value();\n", indent());
     if (b->shortcut())
       write_c("%so->shortcut(0x%x);\n", indent(), b->shortcut());
   }
@@ -2146,5 +2146,5 @@ int WidgetType::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.96 2003/09/03 06:08:06 spitzak Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.97 2004/03/14 07:42:57 spitzak Exp $".
 //
