@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.32 2001/02/26 15:08:05 robertk Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.33 2001/03/01 02:00:53 clip Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -82,7 +82,7 @@ void Fl_TooltipBox::draw() {
 
 
 static void tooltip_timeout(void*) {
-  if (Fl::grab()) return;
+  if (Fl::grab() || Fl::grabbed()) return;
 
   if (window) delete window;
   Fl_Group* saveCurrent = Fl_Group::current();
@@ -155,5 +155,5 @@ Fl_Named_Style* Fl_Tooltip::default_style =
   new Fl_Named_Style("Tooltip", revert, &Fl_Tooltip::default_style);
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.32 2001/02/26 15:08:05 robertk Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.33 2001/03/01 02:00:53 clip Exp $".
 //

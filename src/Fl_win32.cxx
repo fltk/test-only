@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.140 2001/02/25 01:41:19 clip Exp $"
+// "$Id: Fl_win32.cxx,v 1.141 2001/03/01 02:00:53 clip Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -459,7 +459,7 @@ static int mouse_event(Fl_Window *window, int what, int button,
   case 0: // single-click
     Fl::e_clicks = 0;
   J1:
-    if (!Fl::grab()) SetCapture(fl_xid(window));
+    if (!(Fl::grab()||Fl::grabbed())) SetCapture(fl_xid(window));
     Fl::e_keysym = FL_Button + button;
     Fl::e_is_click = 1;
     px = pmx = Fl::e_x_root; py = pmy = Fl::e_y_root;
@@ -468,7 +468,7 @@ static int mouse_event(Fl_Window *window, int what, int button,
   case 2: // release:
     // WAS: this should turn off Fl::e_is_click if more than .2 second passed
     // since the push event!
-    if (!Fl::grab()) ReleaseCapture();
+    if (!(Fl::grab()||Fl::grabbed())) ReleaseCapture();
     Fl::e_keysym = FL_Button + button;
     return Fl::handle(FL_RELEASE,window);
 
@@ -592,7 +592,8 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     Fl::fatal("WM_QUIT message");
 
   case WM_CLOSE: // user clicked close box
-    if (Fl::grab() || Fl::modal() && window != Fl::modal()) return 0;
+    if ((Fl::grab() || Fl::grabbed() || Fl::modal()) && window != Fl::modal())
+      return 0;
     window->do_callback();
     return 1;
 
@@ -1253,5 +1254,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.140 2001/02/25 01:41:19 clip Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.141 2001/03/01 02:00:53 clip Exp $".
 //

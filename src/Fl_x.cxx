@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.104 2001/02/25 01:41:19 clip Exp $"
+// "$Id: Fl_x.cxx,v 1.105 2001/03/01 02:00:53 clip Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -521,7 +521,7 @@ int fl_handle(const XEvent& xevent)
     const long* data = fl_xevent->xclient.data.l;
 
     if (window && (Atom)(data[0]) == WM_DELETE_WINDOW) {
-      if (!Fl::grab() && !(Fl::modal() && window != Fl::modal()))
+      if (!(Fl::grab()||Fl::grabbed()) && !(Fl::modal() && window != Fl::modal()))
 	window->do_callback();
       return 1;
 
@@ -1157,5 +1157,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.104 2001/02/25 01:41:19 clip Exp $".
+// End of "$Id: Fl_x.cxx,v 1.105 2001/03/01 02:00:53 clip Exp $".
 //

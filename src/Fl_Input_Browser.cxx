@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.cxx,v 1.1 2001/02/28 21:19:50 clip Exp $"
+// "$Id: Fl_Input_Browser.cxx,v 1.2 2001/03/01 02:00:53 clip Exp $"
 //
 // Input Browser (Combo Box) widget for the Fast Light Tool Kit (FLTK).
 //
@@ -103,8 +103,12 @@ static void ComboBrowser_cb(Fl_Widget *w, void *v) {
 
 int
 Fl_Input_Browser::handle(int e) {
-  if (Fl::event_inside(input->x(), input->y(), input->w(), input->h()) || e == FL_KEY)
-    if (!(type()&FL_NONEDITABLE_INPUT_BROWSER)) return input->handle(e);
+  if ((Fl::event_inside(input->x(), input->y(), input->w(), input->h()) || e == FL_KEY)
+    && !(type()&FL_NONEDITABLE_INPUT_BROWSER) && Fl::pushed() != this)
+  {
+    if (e == FL_PUSH) Fl::pushed(input);
+    return input->handle(e);
+  }
   switch (e) {
     case FL_PUSH: {
       Fl::pushed(this);
@@ -151,6 +155,8 @@ Fl_Input_Browser::handle(int e) {
       return 1;
     }
 
+    case FL_ENTER: case FL_MOVE: return 1; break;
+
     case FL_RELEASE:
       damage(FL_DAMAGE_SCROLL);
       break;
@@ -161,14 +167,13 @@ Fl_Input_Browser::handle(int e) {
       return input->handle(e);
 
     case FL_DRAG:
-      if (!Fl::event_inside(0, 0, w(), h())) {
+      if (!Fl::event_inside(input->w(), 0, w()-input->w(), h())) {
         Fl::pushed(b);
         damage(FL_DAMAGE_SCROLL);
         return 1;
       }
-      break;
+      return 1;
   }
-
   return Fl_Menu_::handle(e);
 }
 
@@ -203,5 +208,5 @@ Fl_Input_Browser::draw() {
 }
 
 //
-// End of "$Id: Fl_Input_Browser.cxx,v 1.1 2001/02/28 21:19:50 clip Exp $".
+// End of "$Id: Fl_Input_Browser.cxx,v 1.2 2001/03/01 02:00:53 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.63 2001/02/20 16:12:07 robertk Exp $"
+// "$Id: Fl_Window.cxx,v 1.64 2001/03/01 02:00:53 clip Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -167,7 +167,7 @@ int Fl_Window::handle(int event) {
       // If we've captured the mouse, we dont want do activate any
       // other windows from the code, or we loose the capture.
       // Also, we don't want to activate the window for tooltips.
-      else if (Fl::grab() || !border())
+      else if (Fl::grab() || Fl::grabbed() || !border())
         showtype = SW_SHOWNOACTIVATE;
       else
         showtype = SW_SHOWNORMAL;
@@ -245,7 +245,7 @@ void Fl_Window::show() {
     // raise/deiconize windows already-visible windows
 #ifdef WIN32
     if (IsIconic(i->xid)) OpenIcon(i->xid);
-    if (!Fl::grab() && border()) BringWindowToTop(i->xid);
+    if (!(Fl::grab()||Fl::grabbed()) && border()) BringWindowToTop(i->xid);
 #else
     XMapRaised(fl_display, i->xid);
 #endif
@@ -355,5 +355,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.63 2001/02/20 16:12:07 robertk Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.64 2001/03/01 02:00:53 clip Exp $".
 //
