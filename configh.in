@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.38 2000/06/12 06:35:33 bill Exp $"
+ * "$Id: configh.in,v 1.39 2000/06/18 07:57:23 bill Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -129,13 +129,6 @@
 #  define vsnprintf fl_vsnprintf
 #endif /* !HAVE_VSNPRINTF */
 
-#define HAVE_ATOL 0
-
-#if ! HAVE_ATOL
-#  include <FL/conf.h>
-#  define atol(a) conf_atol(a)
-#endif /* !HAVE_ATOL */
-
 #define HAVE_STRCASECMP 0
 
 #if ! HAVE_STRCASECMP
@@ -152,12 +145,12 @@
 #define HAVE_SYS_SELECT_H 0
 
 /*
- * HAVE_POLL:
+ * USE_POLL:
  *
  * Use the Linux/Irix poll() call instead of select()
  */
 
-#define HAVE_POLL 0
+#define USE_POLL 0
 
 /*
  * HAVE_PNG
@@ -203,5 +196,5 @@
 #define CONFIGDIR "."
 
 /*
- * End of "$Id: configh.in,v 1.38 2000/06/12 06:35:33 bill Exp $".
+ * End of "$Id: configh.in,v 1.39 2000/06/18 07:57:23 bill Exp $".
  */

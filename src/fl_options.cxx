@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.60 2000/06/12 09:01:55 carl Exp $"
+// "$Id: fl_options.cxx,v 1.61 2000/06/18 07:57:33 bill Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -155,9 +155,9 @@ static Fl_Color grok_color(const char* cf, const char *colstr) {
   const char *p = colstr;
   snprintf(key, sizeof(key), "aliases/%s", colstr);
   if (!getconf(cf, key, val, sizeof(val))) p = val;
-
-  if (strspn(p, "0123456789") == strlen(p)) return (Fl_Color)atol(p);
-
+  char* q;
+  long l = strtoul(p, &q, 0);
+  if (!*q) return (Fl_Color)l;
   return fl_rgb(p);
 }
 
@@ -167,7 +167,9 @@ static Fl_Font grok_font(const char* cf, const char* fontstr) {
   snprintf(key, sizeof(key), "aliases/%s", fontstr);
   if (!getconf(cf, key, val, sizeof(val))) p = val;
 
-  if (strspn(p, "0123456789") == strlen(p)) return fl_fonts + atol(p);
+  char* q;
+  long l = strtoul(p, &q, 0);
+  if (!*q) return fl_fonts+l;
 
   static const char* fonts[] = {
     "helvetica",
@@ -195,6 +197,8 @@ static Fl_Font grok_font(const char* cf, const char* fontstr) {
   // not found
   return 0;
 }
+
+
 
 int Fl::scheme(const char *s) {
   Fl::scheme_ = s;
@@ -327,12 +331,12 @@ int Fl::scheme(const char *s) {
       // label size
       snprintf(temp, sizeof(temp), "widgets/%s/label size", cent->data);
       if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->label_size = atol(valstr);
+        style->label_size = (int)strtol(valstr,0,0);
 
       // text size
       snprintf(temp, sizeof(temp), "widgets/%s/text size", cent->data);
       if (!::getconf(sfile, temp, valstr, sizeof(valstr)))
-        style->text_size = atol(valstr);
+        style->text_size = (int)strtol(valstr,0,0);
 
     }
     conf_list_free(&clist);
@@ -379,7 +383,7 @@ int Fl::theme(const char *t) {
 #define HOMEFLTKDIR "/.fltk/"
 #else
 #define HOMEVAR "HOMEPATH"
-#define HOMEFLTKDIR "\\fltk\\"
+#define HOMEFLTKDIR "/fltk/"
 #endif
 
 #ifndef CONFIGDIR
@@ -401,7 +405,7 @@ const char* fl_find_config_file(const char* fn, int cflag) {
 #ifdef WIN32
   cptr = getenv("USERPROFILE");
   if (cptr) {
-    snprintf(path, sizeof(path), "%s\\Application Data\\fltk\\%s", cptr, fn);
+    snprintf(path, sizeof(path), "%s/Application Data/fltk/%s", cptr, fn);
     if (cflag || !access(path, R_OK)) return path;
   }
 #endif
@@ -418,7 +422,7 @@ int Fl::getconf(const char *key, char *value, int value_length) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.60 2000/06/12 09:01:55 carl Exp $".
+// End of "$Id: fl_options.cxx,v 1.61 2000/06/18 07:57:33 bill Exp $".
 //
 
 

@@ -1,5 +1,5 @@
 //
-// "$Id: iconize.cxx,v 1.5 2000/06/11 07:31:12 bill Exp $"
+// "$Id: iconize.cxx,v 1.6 2000/06/18 07:57:34 bill Exp $"
 //
 // Iconize test program for the Fast Light Tool Kit (FLTK).
 //
@@ -75,14 +75,15 @@ int main(int argc, char **argv) {
   control.show();
   control.callback(window_cb);
   int i = 3;
-  while (Fl::wait()) {
+  while (control.visible()) {
     int j = mainw.iconic();
     if (j != i) {printf("iconic %d\n", j); i = j;}
+    Fl::wait();
   }
   return 0;
 //  return Fl::run();
 }
 
 //
-// End of "$Id: iconize.cxx,v 1.5 2000/06/11 07:31:12 bill Exp $".
+// End of "$Id: iconize.cxx,v 1.6 2000/06/18 07:57:34 bill Exp $".
 //

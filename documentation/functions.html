@@ -1,41 +1,42 @@
-<HTML><BODY>
-<H1 ALIGN=RIGHT><A NAME=functions>B - Function Reference</A></H1>
+<html><body>
+
+<h1 align=right><A NAME=functions>B - Function Reference</A></h1>
 
 This appendix describes all of the <tt>Fl::xyz</tt> functions.  These
-are mostly concerned with describing the current event and with doing
-event handling and timing.  <tt>Fl::</tt> should be considered a
-namespace, although it is defined as a C++ class in the header file to
-work with older C++ compilers.
+functions mostly are concerned with event handling and waiting for
+events.  <tt>Fl::</tt> should be considered a namespace, although it
+is defined as a C++ class in the header file to work with older C++
+compilers.
 
-<p>There are a number of other functions with <tt>fl_xyz</tt> names.
+<p>There are a number of other functions with <tt>fl_xyz</tt> names,
+most of these are concerned with drawing or graphics state.
 These are described in the <a href=drawing.html>Drawing</a> and <a
 href=utility.html>Utility</a> sections of the appendix and in the
 documentation for individual <a href=widgets.html>Classes</a>.
 
-<H3><A name=add_fd>void Fl::add_fd(int fd, void (*cb)(int, void 
-*), void * = 0)
-<BR>void Fl::add_fd(int fd, int when, void (*cb)(int, void *), 
-void * = 0)</A>
-<BR><A name=remove_fd>void Fl::remove_fd(int)</A></H3>
+<h3><A name=add_fd>void Fl::add_fd(int fd, void (*cb)(int, void 
+*), void* = 0)
+<BR>void Fl::add_fd(int fd, int when, void (*cb)(int, void*), void* = 0)</A>
+<BR><A name=remove_fd>void Fl::remove_fd(int)</A></h3>
 
 Add file descriptor <tt>fd</tt> to listen to.  When the <tt>fd</tt>
-becomes ready for reading the callback is done.  The callback is
-passed the <tt>fd</tt> and the arbitrary <tt>void *</tt>
-argument. <tt> Fl::wait()</tt> will return immediately after calling
-the callback.
+becomes ready for reading <tt>Fl::wait()</tt> will call the callback
+and then return.  The callback is
+passed the <tt>fd</tt> and the arbitrary <tt>void*</tt> argument.
 
-<p>The second version takes a <tt>when</tt> bitfield, with the bits
-<tt> FL_READ</tt>, <tt>FL_WRITE</tt>, and <tt>FL_EXCEPT</tt> defined,
-to indicate when the callback should be done.</p> <p>There can only
-be one callback of each type for a file descriptor. <tt>
+<P>The second version takes a <tt>when</tt> bitfield, with the bits
+<tt>FL_READ</tt>, <tt>FL_WRITE</tt>, and <tt>FL_EXCEPT</tt> defined,
+to indicate when the callback should be done.
+
+<P>There can only be one callback of each type for a file descriptor. <tt>
 Fl::remove_fd()</tt> gets rid of <I>all</I> the callbacks for a given
-file descriptor.</p>
+file descriptor.
 
-<p>Under UNIX <I>any</I> file descriptor can be monitored (files,
-devices, pipes, sockets, etc.) Due to limitations in Microsoft
-Windows, WIN32 applications can only monitor sockets.</p>
+<P>Under UNIX <I>any</I> file descriptor can be monitored (files,
+devices, pipes, sockets, etc.) Due to limitations in Microsoft Windows,
+WIN32 applications can only monitor sockets.
 
-<H3><A name=add_handler>void Fl::add_handler(int (*f)(int))</A></H3>
+<h3><A name=add_handler>void Fl::add_handler(int (*f)(int))</A></h3>
 
 Install a function to parse unrecognized events.  If FLTK cannot 
 figure out what to do with an event, it calls each of these functions 
@@ -55,46 +56,48 @@ zero from its <tt>handle()</tt> method.  Exactly which  ones may change
 in future versions, however.</LI>
 </UL>
 
-<H3><A name=add_idle>Fl::add_idle(void (*cb)(void *), void *)</A></H3>
+<h3><A name=add_idle>Fl::add_idle(void (*cb)(void*), void*)</A></h3>
 
-Adds a callback function that is called by <tt>Fl::wait()</tt> when 
-there is nothing to do. This can be used for background processing. 
+Adds a callback function that is called every time by
+<tt>Fl::wait()</tt> and also makes it act as though the timeout is
+zero (this makes <tt>Fl::wait()</tt> return immediately, so if it is
+in a loop it is called repeatedly, and thus the idle fucntion is
+called repeatedly).  The idle function can be used to get background
+processing done.
 
-<p><I>Warning: this can absorb all your machine's time!</I></p>
+<P>You can have multiple idle callbacks. To remove an idle callback use <A
+href=#remove_idle><tt>Fl::remove_idle()</tt></A>.
 
-<p>You can have multiple idle callbacks. To remove an idle callback use <A
-href=#remove_idle><tt>Fl::remove_idle()</tt></A>.</p>
+<P><tt>Fl::wait()</tt> and <tt>Fl::check()</tt> call idle callbacks,
+but <tt>Fl::ready()</tt> does not.
 
-<p><tt>Fl::wait()</tt> and <tt>Fl::check()</tt> call idle callbacks,
-but <tt>Fl::ready()</tt> does not.</p>
+<P>The idle callback can call any FLTK functions, including
+<tt>Fl::wait()</tt>, <tt>Fl::check()</tt>, and <tt>Fl::ready()</tt>.
+Fltk will not recursively call the idle callback.
 
-<p>The idle callback can call any FLTK functions.  However if you call 
-something that calls <tt>Fl::wait()</tt> or <tt>Fl::check()</tt> (such
-as a message pop-up) you  should first remove the idle callback so that
-it does not recurse.</p>
+<h3><A name=add_timeout>void Fl::add_timeout(float t, void (*cb)(void*), void* = 0)</A></h3>
 
-<H3><A name=add_timeout>void Fl::add_timeout(float t, void 
-(*cb)(void *),void *v=0)</A></H3>
 
-Add a one-shot timeout callback.  The timeout will happen as soon as 
-possible after <tt>t</tt> seconds after the last time <tt>wait()</tt>
-was called.  The optional <tt>void *</tt> argument is passed to the 
-callback. 
+Add a one-shot timeout callback.  The function will be called by
+<tt>Fl::wait()</tt> at <i>t</i> seconds after this function is called
+(except if you call this inside a timeout callback, then the time is
+measured from when the callback was done, to allow accurate repeating
+events).  The optional <tt>void*</tt> argument is passed to the
+callback.
 
-<p>This code will print &quot;TICK&quot; each second on stdout, no matter what 
-else the user or program does:</p>
+<P>This code will print &quot;TICK&quot; each second on stdout:
 
-<UL><PRE>void callback(void *) {
-  printf(&quot;TICK\n&quot;);
-  Fl::add_timeout(1.0,callback);
+<UL><PRE>void callback(void*) {
+ printf(&quot;TICK\n&quot;);
+ Fl::add_timeout(1.0,callback);
 }
 
 main() {
-  Fl::add_timeout(1.0,callback);
-  Fl::run();
+ Fl::add_timeout(1.0,callback);
+ Fl::run();
 }</PRE></UL>
 
-<H3><A name=arg>int Fl::arg(int argc, char **argv, int &amp;i)</A></H3>
+<h3><A name=arg>int Fl::arg(int argc, char **argv, int &amp;i)</A></h3>
 
 Consume a single switch from <tt>argv</tt>, starting at word i. 
 Returns the number of words eaten (1 or 2, or 0 if it is not 
@@ -102,9 +105,9 @@ recognized) and adds the same value to <tt>i</tt>.  You can use this
 function if you prefer to control the incrementing through the 
 arguments yourself. 
 
-<H3><A name=args>int Fl::args(int argc, char **argv, int &amp;i, int 
+<h3><A name=args>int Fl::args(int argc, char **argv, int &amp;i, int 
 (*callback)(int, char**,int &amp;)=0)
-<BR> void Fl::args(int argc, char **argv)</A></H3>
+<BR> void Fl::args(int argc, char **argv)</A></h3>
 
 FLTK provides an <I>entirely optional</I> command-line switch parser. 
 You don't have to call it if you don't like them! Everything it can do 
@@ -163,8 +166,8 @@ The second form of <tt>Fl::args()</tt> is useful if your program does
 not have command line switches of its own.  It parses all the switches, 
 and if any are not recognized it calls <tt>Fl::abort(Fl::help)</tt>. 
 
-<H3><A name=belowmouse>Fl_Widget *Fl::belowmouse() const
-<BR>void Fl::belowmouse(Fl_Widget *)</A></H3>
+<h3><A name=belowmouse>Fl_Widget *Fl::belowmouse() const
+<BR>void Fl::belowmouse(Fl_Widget *)</A></h3>
 
 Get or set the widget that is below the mouse.  This is for 
 highlighting buttons.  It is not used to send <tt>FL_PUSH</tt> or <tt>
@@ -179,40 +182,37 @@ or any widget, because sending <tt>FL_ENTER</tt> is supposed to <I>test</I>
  if the widget wants the mouse (by it returning non-zero from <tt>
 handle()</tt>).</p>
 
-<H3><A name=check>int Fl::check()</A></H3>
 
-This does the same thing as <tt>Fl::wait(0)</tt>, except because it 
-does not have to return the elapsed time value it can be implemented 
-faster on certain systems.  Use this to interrupt a big calculation: 
+<h3><A name=check>static int Fl::check()</A></h3>
 
-<UL><PRE>while (!calculation_done()) {
-  calculate();
-  Fl::check();
-  if (user_hit_abort_button()) break;
-}</PRE></UL>
+Same as <tt>Fl::wait(0)</tt>.  Calling this during a big calculation
+will keep the screen up to date and the interface responsive:
 
-This returns non-zero if any windows are displayed, and 0 if no 
-windows are displayed. 
+<ul><pre>while (!calculation_done()) {
+ calculate();
+ Fl::check();
+ if (user_hit_abort_button()) break;
+}</pre></ul>
 
-<H3><A name=damage>int Fl::damage()</A></H3>
+<h3><A name=damage>int Fl::damage()</A></h3>
 
 If true then <A href=#flush><tt>flush()</tt></A> will do something. 
 
-<H3><A name=display>void Fl::display(const char *)</A></H3>
+<h3><A name=display>void Fl::display(const char *)</A></h3>
 
 Sets the X display to use for all windows.  Actually this just sets
 the environment variable $DISPLAY to the passed string, so this only
 works before you show() the first window or otherwise open the display,
 and does nothing useful under WIN32. 
 
-<H3><A name=event_button>int Fl::event_button()</A></H3>
+<h3><A name=event_button>int Fl::event_button()</A></h3>
 
 Returns which mouse button was pressed.  This returns garbage if the 
 most recent event was not a <tt>FL_PUSH</tt> or <tt>FL_RELEASE</tt>
 event. 
 
-<H3><A name=event_clicks>int Fl::event_clicks()
-<BR>void Fl::event_clicks(int)</A></H3>
+<h3><A name=event_clicks>int Fl::event_clicks()
+<BR>void Fl::event_clicks(int)</A></h3>
 
 The first form returns non-zero if the most recent <tt>FL_PUSH</tt> or <tt>
 FL_KEYBOARD</tt> was a &quot;double click&quot;.  Returns N-1 for N clicks.  A 
@@ -223,16 +223,16 @@ event_is_click()</tt> is true.
 Fl::event_clicks()</tt>.  This can be used to set it to zero so that 
 later code does not think an item was double-clicked.</p>
 
-<H3><A name=event_inside>int Fl::event_inside(const Fl_Widget *) const
-<BR>int Fl::event_inside(int x, int y, int w, int h)</A></H3>
+<h3><A name=event_inside>int Fl::event_inside(const Fl_Widget *) const
+<BR>int Fl::event_inside(int x, int y, int w, int h)</A></h3>
 
 Returns non-zero if the current <tt>event_x</tt> and <tt>event_y</tt>
 put it inside the widget or inside an arbitrary bounding box.  You 
 should always call this rather than doing your own comparison so you 
 are consistent about edge effects. 
 
-<H3><A name=event_is_click>int Fl::event_is_click()
-<BR>void Fl::event_is_click(0)</A></H3>
+<h3><A name=event_is_click>int Fl::event_is_click()
+<BR>void Fl::event_is_click(0)</A></h3>
 
 The first form returns non-zero if the mouse has not moved far enough 
 and not enough time has passed since the last <tt>FL_PUSH</tt> or <tt>
@@ -243,12 +243,12 @@ by <tt>Fl::event_is_click()</tt>.  Useful to prevent the <I>next</I>
 click from being counted as a double-click or to make a popup menu 
 pick an item with a single click.  Don't pass non-zero to this. 
 
-<H3><A name=event_key>int Fl::event_key()
+<h3><A name=event_key>int Fl::event_key()
 <BR> int Fl::event_key(int)</A>
-<BR><A name=get_key>int Fl::get_key(int)</A></H3>
+<BR><A name=get_key>int Fl::get_key(int)</A></h3>
 
-<tt>Fl::event_key()</tt> returns which key on the keyboard was last 
-pushed. 
+<tt>Fl::event_key()</tt> returns which key on the keyboard was last
+pushed.  It returns zero if the last event was not a key press or release.
 
 <p><tt>Fl::event_key(int)</tt> returns true if the given key was held 
 down (or pressed) <I>during</I> the last event.  This is constant until 
@@ -295,15 +295,15 @@ On X <tt>Fl::get_key(FL_Button+n)</tt> does not work.
 <p>On WIN32 <tt>Fl::get_key(FL_KP_Enter)</tt> and <tt>
 Fl::event_key(FL_KP_Enter)</tt> do not work.</p>
 
-<H3><A name=event_length>char *Fl::event_length()</A></H3>
+<h3><A name=event_length>char *Fl::event_length()</A></h3>
 
 Returns the length of the text in <tt>Fl::event_text()</tt>.  There 
 will always be a nul at this position in the text.  However there may 
 be a nul before that if the keystroke translates to a nul character or 
 you paste a nul character. 
 
-<H3><A name=event_state>ulong Fl::event_state()
-<BR> unsigned int Fl::event_state(ulong)</A></H3>
+<h3><A name=event_state>ulong Fl::event_state()
+<BR> unsigned int Fl::event_state(ulong)</A></h3>
 
 This is a bitfield of what shift states were on and what mouse buttons 
 were held down during the most recent event.  The second version 
@@ -329,7 +329,7 @@ XFree86 server on Linux.  In addition there is a bug in the way X works
 so that the shift state is not correctly reported until the first event <I>
 after</I> the shift key is pressed or released. 
 
-<H3><A name=event_text>char *Fl::event_text()</A></H3>
+<h3><A name=event_text>char *Fl::event_text()</A></h3>
 
 Returns the ASCII text (in the future this may be UTF-8) produced by 
 the last <tt>FL_KEYBOARD</tt> or <tt>FL_PASTEM</tt> or possibly other 
@@ -339,46 +339,46 @@ only valid until the next event is processed.
 
 <p>Under X this is the result of calling <tt>XLookupString()</tt>.</p>
 
-<H3><A name=event_x>int Fl::event_x()
-<BR><A name=event_y>int Fl::event_y()</A></A></H3>
+<h3><A name=event_x>int Fl::event_x()
+<BR><A name=event_y>int Fl::event_y()</A></A></h3>
 
 Returns the mouse position of the event relative to the <tt>Fl_Window</tt>
 it was passed to. 
 
-<H3><A name=event_x_root>int Fl::event_x_root()
-<BR><A name=event_y_root>int Fl::event_y_root()</A></A></H3>
+<h3><A name=event_x_root>int Fl::event_x_root()
+<BR><A name=event_y_root>int Fl::event_y_root()</A></A></h3>
 
 Returns the mouse position on the screen of the event.  To find the 
 absolute position of an <tt>Fl_Window</tt> on the screen, use the 
 difference between <tt>event_x_root(),event_y_root()</tt> and <tt>
 event_x(),event_y()</tt>. 
 
-<H3><A name=first_window>Fl_Window *Fl::first_window()</A></H3>
+<h3><A name=first_window>Fl_Window *Fl::first_window()</A></h3>
 
 Returns the first top-level window in the list of shown() windows.  If
 a modal() window is shown this is the top-most modal window, otherwise
 it is the most recent window to get an event.
 
-<H3><A name=first_window>void Fl::first_window(Fl_Window*)</A></H3>
+<h3><A name=first_window>void Fl::first_window(Fl_Window*)</A></h3>
 
 Since the first window is used by default as the "parent" of modal
 windows, changing it is useful.  This removes the window from wherever
 it is in the list and inserts it at the top.  This is not done if
 Fl::modal() is on or if the window is not shown().
 
-<H3><A name=next_window>Fl_Window *Fl::next_window(Fl_Window *)</A></H3>
+<h3><A name=next_window>Fl_Window *Fl::next_window(Fl_Window *)</A></h3>
 
 Returns the next top-level window in the list of shown() windows.  You can 
 use this call to iterate through all the windows that are shown(). 
 
-<H3><A name=flush>void Fl::flush()</A></H3>
+<h3><A name=flush>void Fl::flush()</A></h3>
 
 Causes all the windows that need it to be redrawn and graphics forced 
 out through the pipes.  This is what <tt>wait()</tt> does before 
 looking for events. 
 
-<H3><A name=focus>Fl_Widget *Fl::focus() const;
-<BR>void Fl::focus(Fl_Widget *)</A></H3>
+<h3><A name=focus>Fl_Widget *Fl::focus() const;
+<BR>void Fl::focus(Fl_Widget *)</A></h3>
 
 Get or set the widget that will receive <tt>FL_KEYBOARD</tt> events. 
 
@@ -389,7 +389,7 @@ this or any widget, because sending <tt>FL_FOCUS</tt> is supposed to <I>
 test</I> if the widget wants the focus (by it returning non-zero from <tt>
 handle()</tt>).</p>
 
-<H3><A name=get_mouse>void Fl::get_mouse(int &amp;x, int &amp;y)</A></H3>
+<h3><A name=get_mouse>void Fl::get_mouse(int &amp;x, int &amp;y)</A></h3>
 
 Return where the mouse is on the screen by doing a round-trip query to 
 the server.  You should use <tt>Fl::event_x_root()</tt> and <tt>
@@ -398,7 +398,7 @@ not sure if a mouse event has been processed recently (such as to
 position your first window).  If the display is not open, this will 
 open it. 
 
-<H3><A name=gl_visual>int Fl::gl_visual(int)</A></H3>
+<h3><A name=gl_visual>int Fl::gl_visual(int)</A></h3>
 
 This does the same thing as <A
 href=#visual><tt>Fl::visual(int)</tt></A> but also requires OpenGL
@@ -412,9 +412,9 @@ on some servers will reduce colormap flashing.
 <p>See <A href=Fl_Gl_Window.html#Fl_Gl_Window.mode><tt>Fl_Gl_Window</tt></A>
 for a list of additional values for the argument.</p>
 
-<H3><A name=grab>void grab(int (*)(int, void*), void*);
+<h3><A name=grab>void grab(int (*)(int, void*), void*);
 <BR>void release();
-<BR>int (*Fl::grab())(int, void*);</A></H3>
+<BR>int (*Fl::grab())(int, void*);</A></h3>
 
 This is used when pop-up menu systems are active.  All user events are
 sent to the passed function, rather than going to widgets.  The
@@ -432,21 +432,21 @@ while <tt>grab()</tt> is on.  On X this will lock up your screen!</I></p>
 <p><tt>Fl::grab()</tt> returns the current function, this is useful for
 checking if a grab is active.
 
-<H3><A name=h>int Fl::h()</A></H3>
+<h3><A name=h>int Fl::h()</A></h3>
 
 Returns the height of the screen in pixels. 
 
-<H3><A name=handle>int Fl::handle(int, Fl_Window *)</A></H3>
+<h3><A name=handle>int Fl::handle(int, Fl_Window *)</A></h3>
 
 Sends the event to a window for processing.  Returns non-zero if any 
 widget uses the event. 
 
-<H3><A name=help>const char *Fl::help</A></H3>
+<h3><A name=help>const char *Fl::help</A></h3>
 
 This is the usage string that is displayed if <tt>Fl::args()</tt>
 detects an invalid argument on the command-line. 
 
-<H3><A name=modal>Fl_Window *Fl::modal()</A></H3>
+<h3><A name=modal>Fl_Window *Fl::modal()</A></h3>
 
 Returns the top-most <tt>modal()</tt> window currently shown.  This is
 the most recently <tt>shown()</tt> window with <A
@@ -457,7 +457,7 @@ href=Fl_Window.html#Fl_Window.modal><tt> modal()</tt></A> true, or
 will have <tt>handle()</tt> called (<A href=#grab><tt>grab()</tt></A>
 overrides this).
 
-<H3><A name=own_colormap>void Fl::own_colormap()</A></H3>
+<h3><A name=own_colormap>void Fl::own_colormap()</A></h3>
 
 Makes FLTK use its own colormap.  This may make FLTK display better 
 and will reduce conflicts with other programs that want lots of colors. 
@@ -465,7 +465,7 @@ However the colors may flash as you move the cursor between windows.
 
 <p>This does nothing if the current visual is not colormapped.</p>
 
-<H3><A name=paste>void Fl::paste(Fl_Widget *receiver)</A></H3>
+<h3><A name=paste>void Fl::paste(Fl_Widget *receiver)</A></h3>
 
 Set things up so the receiver widget will be called with an <A href=#FL_PASTE>
 <tt>FL_PASTE</tt></A> event some time in the future. The reciever 
@@ -475,8 +475,8 @@ window system to take as long as necessary to retrieve the paste buffer
 (or even to screw up completely) without complex and error-prone 
 synchronization code in FLTK. 
 
-<H3><A name=pushed>Fl_Widget *Fl::pushed() const
-<BR>void Fl::pushed(Fl_Widget *)</A></H3>
+<h3><A name=pushed>Fl_Widget *Fl::pushed() const
+<BR>void Fl::pushed(Fl_Widget *)</A></h3>
 
 Get or set the widget that is being pushed. <tt>FL_DRAG</tt> or <tt>
 FL_RELEASE</tt> (and any more <tt>FL_PUSH</tt>) events will be sent to 
@@ -489,56 +489,62 @@ or any widget, because sending <tt>FL_PUSH</tt> is supposed to <I>test</I>
 if the widget wants the mouse (by it returning non-zero from <tt>
 handle()</tt>).</p>
 
-<H3><A name=readqueue>Fl_Widget *Fl::readqueue()</A></H3>
+<h3><A name=readqueue>Fl_Widget *Fl::readqueue()</A></h3>
 
 All <tt>Fl_Widgets</tt> that don't have a callback defined use a 
 default callback that puts a pointer to the widget in this queue, and 
 this method reads the oldest widget out of this queue. 
 
-<H3><A name=ready>int Fl::ready()</A></H3>
+<h3><A name=ready>static int Fl::ready()</A></h3>
 
-Returns non-zero if there are pending timeouts or events or file 
-descriptors.  This does <I>not</I> call <tt>Fl::flush()</tt> or any 
-callbacks, which is useful if your program is in a state where such 
-callbacks are illegal: 
+This is similar to <tt>Fl::check()</tt> except this does <I>not</I>
+call <tt>Fl::flush()</tt> or any callbacks, which is useful if your
+program is in a state where such callbacks are illegal.  This returns
+true if <tt>Fl::check()</tt> would do anything (it will continue to
+return true until you call <tt>Fl::check()</tt> or <tt>Fl::wait()</tt>).
 
-<UL><PRE>while (!calculation_done()) {
-  calculate();
-  if (Fl::ready()) {
-    do_expensive_cleanup();
-    Fl::check();
-    if (user_hit_abort_button()) break;
-  }
-}</PRE></UL>
+<ul><pre>while (!calculation_done()) {
+ calculate();
+ if (Fl::ready()) {
+   do_expensive_cleanup();
+   Fl::check();
+   if (user_hit_abort_button()) break;
+ }
+}</pre></ul>
 
-<H3><A name=redraw>void Fl::redraw()</A></H3>
+<h3><A name=redraw>void Fl::redraw()</A></h3>
 
 Redraws all widgets. 
 
-<H3><A name=remove_idle>void Fl::remove_idle(void (*cb)(void *), 
-void *= 0)</A></H3>
+<h3><A name=has_idle>static int Fl::has_idle(void (*cb)(void*), void* = 0)</A></h3>
 
-Removes the specified idle callback. 
+Returns true if the specified idle callback is currently installed.
 
-<H3><A name=remove_timeout>void Fl::remove_timeout(void (*cb)(void *),
-void *= 0)</A></H3>
+<h3><A name=remove_idle>static void Fl::remove_idle(void (*cb)(void*), void* = 0)</A></h3>
 
-Removes a timeout callback. It is harmless to remove a timeout 
-callback that no longer exists. 
+Removes the specified idle callback, if it is installed.
 
-<H3><A name=run>int Fl::run()</A></H3>
+<h3><A name=has_timeout>static int Fl::has_timeout(void (*cb)(void*), void* = 0)</A></h3>
 
-Runs FLTK until there are no windows displayed, and then returns a 
-zero. <tt>Fl::run()</tt> is <I>exactly equivalent to:</I>
+Returns true if the timeout exists and has not been called yet.
 
-<UL><PRE>while (Fl::wait());
-return 0;
-</PRE></UL>
+<h3><A name=remove_timeout>static void Fl::remove_timeout(void (*cb)(void*), void* = 0)</A></h3>
 
-<H3><A name=selection>void Fl::selection(Fl_Widget *owner, const 
+Removes a timeout callback. It is harmless to remove a timeout
+callback that no longer exists.
+
+<h3><A name=run>static Fl::run()</A></h3>
+
+As long as any windows are displayed this calls <tt>Fl::wait()</tt>
+repeatedly.  When all the windows are closed it returns zero
+(supposedly it would return non-zero on any errors, but fltk calls
+exit directly for these).  A normal program will end <tt>main()</tt>
+with <tt>return Fl::run();</tt>.
+
+<h3><A name=selection>void Fl::selection(Fl_Widget *owner, const 
 char *stuff, int len)
 <BR>const char* Fl::selection()
-<BR>int Fl::selection_length()</A></H3>
+<BR>int Fl::selection_length()</A></h3>
 
 The first form changes the current selection.  The block of text is 
 copied to an internal buffer by FLTK (be careful if doing this in 
@@ -550,8 +556,8 @@ at the buffer containing the current selection.  The contents of this
 buffer are undefined if this program does not own the current 
 selection. 
 
-<H3><A name=selection_owner>Fl_Widget *Fl::selection_owner() const
-<BR>void Fl::selection_owner(Fl_Widget *)</A></H3>
+<h3><A name=selection_owner>Fl_Widget *Fl::selection_owner() const
+<BR>void Fl::selection_owner(Fl_Widget *)</A></h3>
 
 The single-argument <tt>selection_owner(x)</tt> call can be used to
 move the selection to another widget or to set the owner to
@@ -565,7 +571,7 @@ probably be added in a future version to allow the selection to be made
 by a callback function.  The current interface will be emulated on top 
 of this.</I></p>
 
-<H3><A name=test_shortcut>int Fl::test_shortcut(ulong) const</A></H3>
+<h3><A name=test_shortcut>int Fl::test_shortcut(ulong) const</A></h3>
 
 Test the current event, which must be an <tt>FL_KEYBOARD</tt> or <tt>
 FL_SHORTCUT</tt>, against a shortcut value (described in <A
@@ -573,12 +579,13 @@ href=Fl_Button.html#Fl_Button.shortcut> <tt>Fl_Button</tt></A>).
 Returns non-zero if there is a match.  Not to be confused with <A
 href=#Fl_Widge.test_shortcut><tt> Fl_Widget::test_shortcut()</tt></A>.
 
-<H3><A name=visual>int Fl::visual(int)</A></H3>
+<h3><A name=visual>int Fl::visual(int)</A></h3>
 
-Selects a visual so that your graphics are drawn correctly.  This does 
-nothing if the default visual satisfies the capabilities, or if no 
-visual satisfies the capabilities, or on systems that don't have such 
-brain-dead notions. 
+Selects a visual so that your graphics are drawn correctly.  This is
+only allowed before you call show() on any windows.  This does nothing
+if the default visual satisfies the capabilities, or if no visual
+satisfies the capabilities, or on systems that don't have such
+brain-dead notions.
 
 <p>Only the following combinations do anything useful:</p>
 
@@ -608,54 +615,42 @@ This returns true if the system has the capabilities by default or
 FLTK suceeded in turing them on.  Your program will still work even if 
 this returns false (it just won't look as good). 
 
-<H3><A name=w>int Fl::w()</A></H3>
+<h3><A name=w>int Fl::w()</A></h3>
 
 Returns the width of the screen in pixels. 
 
-<H3><A name=wait>int Fl::wait()
-<BR>double Fl::wait(double time)</A></H3>
+<h3><A name=wait>static int Fl::wait()</a></h3>
 
-Calls <a name=flush><tt>Fl::flush()</tt> to make the screen update,
-then this function waits the until <i>either</i> the given time
-passes, or some event, timeout, idle, or file descriptor callback
-happens.  It executes all the things that are already ready when this
-is called, or that become ready simultaneously, for instance all
-pending events from the window system are executed.
+Same as <tt>Fl::wait(infinity)</tt>.  Call this repeatedly to "run"
+your program.  You can also check what happened each time after this
+returns, which is quite useful for managing program state.
 
-<p>It is important to realize that this returns immediately after
-callbacks and handlers are called, not when <i>time</i> passes.  The
-purpose of <tt>wait()</tt> is to return <i>when the state of your
-program has changed</i>, not for evenly spacing events.  Your program can
-check its global state and update things after each call to
-<tt>Fl::wait()</tt>, which can be very useful in complex programs.</p>
+<h3>static int Fl::wait(double time)</h3>
 
-<p>Plain <tt>wait()</tt> does an infinite timeout.  The return value is
-non-zero if there are any windows displayed after all the events and
-callbacks are handled.
+Waits until "something happens", or the given time interval passes.
+<i>It can return much sooner than the time if something happens.</i>
 
-<p><tt>wait(time)</tt> waits a <i>maximum</i> of <i>time</i> seconds.
-The return value is how much time remains.  If the return value is
-zero or negative then the entire time period elapsed.</p>
+<P>What this really does is call all idle callbacks, all elapsed
+timeouts, call <tt>Fl::flush()</tt> to get the screen to update, and
+then wait some time (zero if there are idle callbacks, the shortest of
+all pending timeouts, or the given time), for any events from the user
+or any <tt>Fl::add_fd()</tt> callbacks.  It then handles the events
+and calls the callbacks and then returns.
 
-<p>If you do several <tt>wait(time)</tt> calls in a row, the
-subsequent ones are measured from when the first one returned, even if
-you do time-consuming calculations after they return (or if the flush
-takes a long time).  This allows you to accurately make something
-happen at regular intervals.  This code will accurately call
-<tt>A()</tt> once per second (as long as A() takes less than a second
-to execute):</p>
+<P>The return value is non-zero if there are any visible windows (this
+may change in future versions of fltk).
 
-<UL><PRE>for (;;) {
-  for (float time = 1.0; time &gt; 0; ) time = Fl::wait(time);
-  A();
-}</PRE></UL>
+<P>The return value is whatever the select() system call returned.
+This will be negative if there was an error (this will happen on Unix
+if a signal happens), zero if the timeout occurred, and positive if
+any events or fd's came in.
 
-<p>PS: this accurate timing is currently broken due to some misguided
-fixes put into the fltk code.  I plan to fix it someday...
+<p>On Win32 the return value is zero if nothing happened and
+<i>time</i> is 0.0.  Otherwise 1 is returned.
 
-<H3><A name=warning>void (*Fl::warning)(const char *, ...)</A>
+<h3><A name=warning>void (*Fl::warning)(const char *, ...)</A>
 <BR><A name=error>void (*Fl::error)(const char *, ...)</A>
-<BR><A name=fatal>void (*Fl::fatal)(const char *, ...)</A></H3>
+<BR><A name=fatal>void (*Fl::fatal)(const char *, ...)</A></h3>
 
 FLTK will call these to print messages when unexpected conditions 
 occur.  By default they <tt>fprintf</tt> to <tt>stderr</tt>, and <tt>

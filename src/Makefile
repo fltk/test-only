@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.80 2000/06/12 09:01:53 carl Exp $"
+# "$Id: Makefile,v 1.81 2000/06/18 07:57:32 bill Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -149,7 +149,6 @@ CFILES = \
 	numericsort.c \
 	vsnprintf.c \
 	conf.c \
-	conf_atol.c \
 	conf_endtrim.c \
 	conf_get.c \
 	conf_keys.c \
@@ -265,5 +264,5 @@ install: $(LIBRARY)$(LIBEXT) $(DSO)$(DSOEXT)
 	@cp ../fltk-config $(bindir)
 
 #
-# End of "$Id: Makefile,v 1.80 2000/06/12 09:01:53 carl Exp $".
+# End of "$Id: Makefile,v 1.81 2000/06/18 07:57:32 bill Exp $".
 #

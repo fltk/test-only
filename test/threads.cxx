@@ -55,7 +55,8 @@ int main()
   fl_create_thread(prime_thread, prime_func, browser2);
 
   //  Fl::run();
-  while (Fl::wait()) {
+  while (w->visible()) {
+    Fl::wait();
     void* m = Fl::thread_message();
     if (m) printf("Recieved message: %d\n", int(m));
   }

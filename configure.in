@@ -1,7 +1,7 @@
 dnl# -*- sh -*-
 dnl# the "configure" script is made from this by running GNU "autoconf"
 dnl#
-dnl# "$Id: configure.in,v 1.80 2000/06/12 09:01:27 carl Exp $"
+dnl# "$Id: configure.in,v 1.81 2000/06/18 07:57:23 bill Exp $"
 dnl#
 dnl# Configuration script for the Fast Light Tool Kit (FLTK).
 dnl#
@@ -191,7 +191,6 @@ AC_CHECK_FUNCS(snprintf,
     if test "$uname" != "HP-UX"; then
         AC_DEFINE(HAVE_SNPRINTF)
     fi)
-AC_CHECK_FUNCS(atol)
 AC_CHECK_FUNCS(strcasecmp)
 AC_CHECK_FUNCS(vsprintf)
 
@@ -407,5 +406,5 @@ AC_OUTPUT(makeinclude fltk-config Makefile)
 chmod +x fltk-config
 
 dnl#
-dnl# End of "$Id: configure.in,v 1.80 2000/06/12 09:01:27 carl Exp $".
+dnl# End of "$Id: configure.in,v 1.81 2000/06/18 07:57:23 bill Exp $".
 dnl#

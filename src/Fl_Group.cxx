@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.74 2000/06/12 06:35:37 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.75 2000/06/18 07:57:30 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -296,6 +296,12 @@ int Fl_Group::handle(int event) {
     if (event == FL_PUSH) return 0;
     Fl::belowmouse(this);
     return 1;
+
+  case FL_SHOW:
+  case FL_HIDE:
+    for (i = 0; i < numchildren; i++)
+      if (child(i)->visible()) child(i)->handle(event);
+    return 1;
   }
 
   // For all other events, try to give to each child, starting at focus:
@@ -571,5 +577,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.74 2000/06/12 06:35:37 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.75 2000/06/18 07:57:30 bill Exp $".
 //

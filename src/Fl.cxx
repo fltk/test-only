@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.99 2000/06/12 06:35:36 bill Exp $"
+// "$Id: Fl.cxx,v 1.100 2000/06/18 07:57:30 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -71,7 +71,12 @@ static struct Timeout {
 } * timeout;
 static int numtimeouts;
 static int timeout_array_size;
-static int initclock; // if false we didn't call fl_elapsed() last time
+
+// I avoid the overhead of getting the current time when we have no
+// timeouts by setting this flag instead of getting the time.
+// In this case calling elapse_timeouts() does nothing, but records
+// the current time, and the next call will actualy elapse time.
+static char reset_clock = 1;
 
 void fl_fix_focus();
 
@@ -81,11 +86,86 @@ void fl_fix_focus();
 #include "Fl_x.cxx"
 #endif
 
-////////////////////////////////////////////////////////////////
+void (*Fl::idle)();
+static char in_idle;
+static char in_timeout;
+
+int Fl::wait(double time_to_wait) {
+  if (numtimeouts) {
+    elapse_timeouts();
+    if (timeout[0].time <= time_to_wait) time_to_wait = timeout[0].time;
+    while (numtimeouts) {
+      if (timeout[0].time > 0) break;
+      // The first timeout in the array has expired.
+      // We must remove timeout from array before doing the callback:
+      void (*cb)(void*) = timeout[0].cb;
+      void *arg = timeout[0].arg;
+      numtimeouts--;
+      if (numtimeouts)
+	memmove(timeout, timeout+1, numtimeouts*sizeof(Timeout));
+      // Now it is safe for the callback to do add_timeout:
+      in_timeout = 1;
+      cb(arg);
+      in_timeout = 0;
+    }
+  } else {
+    reset_clock = 1; // we are not going to check the clock
+  }
+  if (idle) {
+    if (!in_idle) {in_idle = 1; idle(); in_idle = 0;}
+    // the idle function may turn off idle, we can then wait:
+    if (idle) time_to_wait = 0.0;
+  }
+  if (time_to_wait <= 0.0) {
+    // do flush second so that the results of events are visible:
+    int ret = fl_wait(0.0);
+    flush();
+    return ret;
+  } else {
+    // do flush first so that user sees the display:
+    flush();
+    return fl_wait(time_to_wait);
+  }
+}
+
+int Fl::check() {
+  return wait(0.0);
+}
+
+#define FOREVER 1e20
+
+int Fl::wait() {
+  return wait(FOREVER);
+}
+
+int Fl::run() {
+  for (;;) {
+    // if there are no visible windows we return:
+    for (Fl_Window* w = first_window(); ; w = next_window(w)) {
+      if (!w) return 0;
+      if (w->visible() && !w->parent()) break;
+    }
+    wait(FOREVER);
+  }
+}
+
+int Fl::ready() {
+  if (numtimeouts) {
+    elapse_timeouts();
+    if (timeout[0].time <= 0) return 1;
+  } else {
+    reset_clock = 1;
+  }
+  return fl_ready();
+}
 
 void Fl::add_timeout(double t, Fl_Timeout_Handler cb, void *v) {
 
-  fl_elapsed();
+  // This little test gets rid of about half the calls to get the time
+  // and has the added advantage of making timeouts that think they
+  // are happening at regular intervals actually happen at regular
+  // intervals:
+  if (!in_timeout) elapse_timeouts();
 
   if (numtimeouts >= timeout_array_size) {
     timeout_array_size = 2*timeout_array_size+1;
@@ -107,6 +187,12 @@ void Fl::add_timeout(double t, Fl_Timeout_Handler cb, void *v) {
   numtimeouts++;
 }
 
+int Fl::has_timeout(void (*cb)(void *), void *v) {
+  for (int i=0; i<numtimeouts; i++)
+    if (timeout[i].cb == cb && timeout[i].arg==v) return 1;
+  return 0;
+}
+
 void Fl::remove_timeout(Fl_Timeout_Handler cb, void *v) {
   int i,j;
   for (i=j=0; i<numtimeouts; i++) {
@@ -114,90 +200,6 @@ void Fl::remove_timeout(Fl_Timeout_Handler cb, void *v) {
     else {if (j<i) timeout[j]=timeout[i]; j++;}
   }
   numtimeouts = j;
-}
-
-static int call_timeouts() {
-  int expired = 0;
-  while (numtimeouts) {
-    if (timeout[0].time > 0) break;
-    // we must remove timeout from array before doing the callback:
-    void (*cb)(void*) = timeout[0].cb;
-    void *arg = timeout[0].arg;
-    numtimeouts--; expired++;
-    if (numtimeouts) memmove(timeout, timeout+1, numtimeouts*sizeof(Timeout));
-    // now it is safe for the callback to do add_timeout:
-    cb(arg);
-  }
-  return expired;
-}
-
-void Fl::flush() {
-  if (damage()) {
-    damage_ = 0;
-    for (Fl_X* x = Fl_X::first; x; x = x->next) {
-      if (x->wait_for_expose) {damage_ = 1; continue;}
-      Fl_Window* w = x->w;
-      if (!w->visible_r()) continue;
-      if (w->damage() & FL_DAMAGE_LAYOUT) w->layout();
-      if (w->damage()) {w->flush(); w->clear_damage();}
-    }
-  }
-#ifndef WIN32
-  if (fl_display) XFlush(fl_display);
-#endif
-}
-
-void (*Fl::idle)();
-static char in_idle;
-static void callidle() {
-  if (!Fl::idle || in_idle) return;
-  in_idle = 1;
-  Fl::idle();
-  in_idle = 0;
-}
-
-int Fl::wait() {
-  callidle();
-  int expired = 0;
-  if (numtimeouts) {fl_elapsed(); expired = call_timeouts();}
-  flush();
-  if ((idle && !in_idle) || expired) {
-    fl_wait(1,0.0);
-  } else if (numtimeouts) {
-    fl_wait(1, timeout[0].time);
-  } else {
-    initclock = 0;
-    fl_wait(0,0);
-  }
-  // return true if any windows are visible:
-  for (Fl_X* x = Fl_X::first; x; x = x->next) if (x->w->visible_r()) return 1;
-  return 0;
-}
-
-double Fl::wait(double time) {
-  callidle();
-  int expired = 0;
-  if (numtimeouts) {time -= fl_elapsed(); expired = call_timeouts();}
-  flush();
-  double wait_time = (idle && !in_idle) || expired ? 0.0 : time;
-  if (numtimeouts && timeout[0].time < wait_time) wait_time = timeout[0].time;
-  fl_wait(1, wait_time);
-  return time - fl_elapsed();
-}
-
-int Fl::check() {
-  callidle();
-  if (numtimeouts) {fl_elapsed(); call_timeouts();}
-  fl_wait(1, 0.0);
-  flush();
-  // return true if any windows are visible:
-  for (Fl_X* x = Fl_X::first; x; x = x->next) if (x->w->visible_r()) return 1;
-  return 0;
-}
-
-int Fl::run() {
-  while (wait());
-  return 0;
 }
 
 ////////////////////////////////////////////////////////////////
@@ -238,6 +240,22 @@ void Fl::first_window(Fl_Window* window) {
 
 void Fl::redraw() {
   for (Fl_X* x = Fl_X::first; x; x = x->next) x->w->redraw();
+}
+
+void Fl::flush() {
+  if (damage()) {
+    damage_ = 0;
+    for (Fl_X* x = Fl_X::first; x; x = x->next) {
+      if (x->wait_for_expose) {damage_ = 1; continue;}
+      Fl_Window* w = x->w;
+      if (!w->visible_r()) continue;
+      if (w->damage() & FL_DAMAGE_LAYOUT) w->layout();
+      if (w->damage()) {w->flush(); w->clear_damage();}
+    }
+  }
+#ifndef WIN32
+  if (fl_display) XFlush(fl_display);
+#endif
 }
 
 ////////////////////////////////////////////////////////////////
@@ -511,5 +529,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.99 2000/06/12 06:35:36 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.100 2000/06/18 07:57:30 bill Exp $".
 //

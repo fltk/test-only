@@ -1,5 +1,5 @@
 //
-// "$Id: keyboard.cxx,v 1.7 1999/12/15 08:31:04 bill Exp $"
+// "$Id: keyboard.cxx,v 1.8 2000/06/18 07:57:34 bill Exp $"
 //
 // Keyboard/event test program for the Fast Light Tool Kit (FLTK).
 //
@@ -86,7 +86,9 @@ int main(int argc, char** argv) {
   Fl::add_handler(handle);
   Fl_Window *window = make_window();
   window->show(argc,argv);
-  while (Fl::wait()) {
+  for (;;) {
+    Fl::wait();
+    if (!window->visible()) break;
     
     // update all the buttons with the current key and shift state:
     for (int i = 0; i < window->children(); i++) {
@@ -129,5 +131,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: keyboard.cxx,v 1.7 1999/12/15 08:31:04 bill Exp $".
+// End of "$Id: keyboard.cxx,v 1.8 2000/06/18 07:57:34 bill Exp $".
 //
