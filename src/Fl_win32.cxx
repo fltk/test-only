@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.72 1999/11/24 09:18:01 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.73 1999/11/24 16:43:25 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -440,6 +440,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
   Fl_Window *window = fl_find(hWnd);
 
+ STUPID_MICROSOFT:
   if (window) switch (uMsg) {
 
   case WM_QUIT: // this should not happen?
@@ -522,8 +523,9 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       uMsg = fl_msg.message;
       wParam = fl_msg.wParam;
       lParam = fl_msg.lParam;
+      goto STUPID_MICROSOFT;
     }
-    // fall through to the WM_CHAR case:
+    // otherwise use it as a 0-character key...
   case WM_DEADCHAR:
   case WM_SYSDEADCHAR:
   case WM_CHAR:
@@ -552,26 +554,17 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       buffer[0] = 0;
       Fl::e_length = 0;
     }
-  SENDKEY:
     Fl::e_text = buffer;
     // for (int i = lParam&0xff; i--;)
     while (window->parent()) window = window->window();
     if (Fl::handle(FL_KEYBOARD,window)) return 0;
     break;
 
-  case WM_MOUSEWHEEL: {
-    static int total;
-    total += HIWORD(wParam);
-    if (total >= 120) {
-      total -= 120;
-      Fl::e_keysym = Fl_Wheel_Up;
-    } else if (total <= 120) {
-      total += 120;
-      Fl::e_keysym = Fl_Wheel_Down;
-    } else break;
-    Fl::e_length = 0;
-    buffer[0] = 0;
-    goto SENDKEY;
+  case WM_MOUSEWHEEL:
+    if (!Fl::mousewheel_mode()) break;
+    Fl::e_mousewheel = -1*(SHORT)(HIWORD(wParam))*Fl::mousewheel_sdelta()/120.0;
+    if (Fl::handle(FL_MOUSEWHEEL, window)) return 0;
+    break;
 
   case WM_GETMINMAXINFO:
     Fl_X::i(window)->set_minmax((LPMINMAXINFO)lParam);
@@ -895,5 +888,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.72 1999/11/24 09:18:01 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.73 1999/11/24 16:43:25 carl Exp $".
 //

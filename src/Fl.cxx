@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.65 1999/11/24 09:18:00 bill Exp $"
+// "$Id: Fl.cxx,v 1.66 1999/11/24 16:43:24 carl Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -31,6 +31,7 @@
 #include <ctype.h>
 #include <stdlib.h>
 #include <string.h>
+#include <config.h>
 
 //
 // Globals...
@@ -51,6 +52,20 @@ int		Fl::damage_,
 		Fl::e_keysym;
 char		*Fl::e_text = "";
 int		Fl::e_length;
+float           Fl::e_mousewheel; // current mousewheel delta in units
+
+static int      mousewheel_mode = 1; // 0: off  1: units = lines  2: units = pages
+static float    mousewheel_delta = 3.0; // scroll this many units per (normal size) wheel notch
+
+void Fl::get_mousewheel(int& mode, float& cdelta) {
+  mode = ::mousewheel_mode;
+  cdelta = Fl::e_mousewheel;
+}
+
+int Fl::mousewheel_mode() { return ::mousewheel_mode; }
+void Fl::mousewheel_mode(int mode) { ::mousewheel_mode = mode; }
+float Fl::mousewheel_sdelta() { return ::mousewheel_delta; }
+void Fl::mousewheel_sdelta(float sdelta) { ::mousewheel_delta = sdelta; }
 
 static double fl_elapsed();
 
@@ -621,6 +636,11 @@ static int started;
 extern const char* fl_up_box_revert;
 extern const char* fl_down_box_revert;
 
+#ifndef WIN32
+extern int fl_mousewheel_up;
+extern int fl_mousewheel_down;
+#endif
+
 // one-time startup stuff
 static void startup() {
   started = 1;
@@ -628,6 +648,18 @@ static void startup() {
   strcpy(fl_down_box_data, fl_down_box_revert);
   if (Fl::use_themes) Fl::loadtheme();
   if (Fl::use_schemes) Fl::loadscheme();
+
+  char temp[80];
+  if (!Fl::getconf("mouse wheel/mode", temp, sizeof(temp)))
+    Fl::mousewheel_mode(atoi(temp));
+  if (!Fl::getconf("mouse wheel/delta", temp, sizeof(temp)))
+    Fl::mousewheel_sdelta(strtod(temp, 0));
+#ifndef WIN32
+  if (!Fl::getconf("mouse wheel/up button", temp, sizeof(temp)))
+    fl_mousewheel_up = atoi(temp);
+  if (!Fl::getconf("mouse wheel/down button", temp, sizeof(temp)))
+    fl_mousewheel_down = atoi(temp);
+#endif
 }
 
 void Fl_Window::show() {
@@ -824,5 +856,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.65 1999/11/24 09:18:00 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.66 1999/11/24 16:43:24 carl Exp $".
 //

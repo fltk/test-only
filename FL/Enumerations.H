@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.36 1999/11/24 09:17:57 bill Exp $"
+// "$Id: Enumerations.H,v 1.37 1999/11/24 16:43:22 carl Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -72,7 +72,8 @@ enum Fl_Event {	// events
   FL_HIDE		= 15,
   FL_SHOW		= 16,
   FL_PASTE		= 17,
-  FL_SELECTIONCLEAR	= 18
+  FL_SELECTIONCLEAR	= 18,
+  FL_MOUSEWHEEL         = 19
 };
 
 enum Fl_When { // Fl_Widget::when():
@@ -87,14 +88,7 @@ enum Fl_When { // Fl_Widget::when():
 };
 
 // Fl::event_key() and Fl::get_key(n) (use ascii letters for all other keys):
-#define FL_Wheel_Left	0xfee0 // mouse wheel or trackball
-#define FL_Wheel_Right	0xfee1
-#define FL_Wheel_Up	0xfee2
-#define FL_Wheel_Down	0xfee3
 #define FL_Button	0xfee8 // use Fl_Button+n for mouse button n
-#define FL_Button1	0xfee9
-#define FL_Button2	0xfeea
-#define FL_Button3	0xfeeb
 #define FL_BackSpace	0xff08
 #define FL_Tab		0xff09
 #define FL_Enter	0xff0d
@@ -210,5 +204,5 @@ enum Fl_Thread_Policy {
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.36 1999/11/24 09:17:57 bill Exp $".
+// End of "$Id: Enumerations.H,v 1.37 1999/11/24 16:43:22 carl Exp $".
 //

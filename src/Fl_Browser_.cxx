@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser_.cxx,v 1.31 1999/11/24 09:18:00 bill Exp $"
+// "$Id: Fl_Browser_.cxx,v 1.32 1999/11/24 16:43:24 carl Exp $"
 //
 // Base Browser widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -491,7 +491,6 @@ int Fl_Browser_::handle(int event) {
 	select(l, !item_selected(l), 1);
 	return 1;
       case FL_Down:
-      case FL_Wheel_Down:
 	while ((l = item_next(l))) {
 	  if (Fl::event_state(FL_SHIFT|FL_CTRL))
 	    select(l, l1 ? item_selected(l1) : 1, 1);
@@ -499,7 +498,6 @@ int Fl_Browser_::handle(int event) {
 	}
 	return 1;
       case FL_Up:
-      case FL_Wheel_Up:
 	while ((l = item_prev(l))) {
 	  if (Fl::event_state(FL_SHIFT|FL_CTRL))
 	    select(l, l1 ? item_selected(l1) : 1, 1);
@@ -522,6 +520,16 @@ int Fl_Browser_::handle(int event) {
   static char whichway;
   static int py;
   switch (event) {
+  case FL_MOUSEWHEEL: {
+    int fh = full_height(), mode, pos;
+    float delta;
+    Fl::get_mousewheel(mode, delta);
+    if (mode == 1) pos = (int)(position() + incr_height()*delta); // scroll by lines
+    else pos = (int)(position() + H*delta - incr_height()); // mode == 2, scroll by pages
+    if (pos > fh - H) pos = fh - H;
+    position(pos);
+    return 1;
+  }
   case FL_PUSH:
     if (!Fl::event_inside(X, Y, W, H)) return 0;
     if (type() == FL_SELECT_BROWSER) deselect();
@@ -660,5 +668,5 @@ static void revert(Fl_Style* s) {
 Fl_Style* Fl_Browser_::default_style = new Fl_Named_Style("Browser", revert, &Fl_Browser_::default_style);
 
 //
-// End of "$Id: Fl_Browser_.cxx,v 1.31 1999/11/24 09:18:00 bill Exp $".
+// End of "$Id: Fl_Browser_.cxx,v 1.32 1999/11/24 16:43:24 carl Exp $".
 //

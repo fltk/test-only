@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.50 1999/11/24 09:18:02 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.51 1999/11/24 16:43:26 carl Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -375,6 +375,8 @@ static inline void checkdouble() {
 
 static Fl_Window* resize_from_system;
 
+unsigned fl_mousewheel_up = 4, fl_mousewheel_down = 5;
+
 int fl_handle(const XEvent& xevent)
 {
   fl_xevent = &xevent;
@@ -440,15 +442,17 @@ int fl_handle(const XEvent& xevent)
     return 1;
 
   case ButtonPress:
-    Fl::e_keysym = FL_Button + xevent.xbutton.button;
-    set_event_xy(); checkdouble();
-    if (xevent.xbutton.button == 4 || xevent.xbutton.button == 5) {
-      Fl::e_keysym = (xevent.xbutton.button==4) ? FL_Wheel_Up : FL_Wheel_Down;
-      Fl::e_text = "";
-      Fl::e_length = 0;
-      event = FL_KEYBOARD;
+    if ((xevent.xbutton.button == fl_mousewheel_up ||
+         xevent.xbutton.button == fl_mousewheel_down) &&
+         Fl::mousewheel_mode())
+    {
+      int direction = (xevent.xbutton.button == fl_mousewheel_up) ? -1 : 1;
+      Fl::e_mousewheel = Fl::mousewheel_sdelta()*direction;
+      event = FL_MOUSEWHEEL;
       break;
     }
+    Fl::e_keysym = FL_Button + xevent.xbutton.button;
+    set_event_xy(); checkdouble();
     Fl::e_state |= (FL_BUTTON1 << (xevent.xbutton.button-1));
     event = FL_PUSH;
     break;
@@ -464,9 +468,14 @@ int fl_handle(const XEvent& xevent)
 #endif
 
   case ButtonRelease:
+    if ((xevent.xbutton.button == fl_mousewheel_up ||
+         xevent.xbutton.button == fl_mousewheel_down) &&
+         Fl::mousewheel_mode())
+    {
+      break;
+    }
     Fl::e_keysym = FL_Button + xevent.xbutton.button;
     set_event_xy();
-    if (xevent.xbutton.button==4 || xevent.xbutton.button==5) break; // ignore mouse wheel
     Fl::e_state &= ~(FL_BUTTON1 << (xevent.xbutton.button-1));
     event = FL_RELEASE;
     break;
@@ -853,5 +862,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.50 1999/11/24 09:18:02 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.51 1999/11/24 16:43:26 carl Exp $".
 //
