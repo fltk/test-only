@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Font.H,v 1.5 1999/10/17 20:40:03 vincent Exp $"
+// "$Id: Fl_Font.H,v 1.6 1999/11/15 09:02:16 bill Exp $"
 //
 // Fonts used by FLTK styles and drawing code
 //
@@ -78,7 +78,7 @@ extern FL_API Fl_Font_ fl_fonts[16];
 #define FL_SCREEN_BOLD		(fl_fonts+14)
 #define FL_ZAPF_DINGBATS	(fl_fonts+15)
 
-#define FL_NORMAL_SIZE	14	// default size of all labels & text
+#define FL_NORMAL_SIZE	12	// default size of all labels & text
 
 // Return a font by name + attributes.  On X this will open the display
 // and list all the fonts!

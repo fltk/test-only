@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.12 1999/11/01 02:21:42 carl Exp $"
+// "$Id: fonts.cxx,v 1.13 1999/11/15 09:02:21 bill Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -48,9 +48,9 @@ void FontDisplay::draw() {
   fl_font(font, size, encoding);
   fl_color(FL_BLACK);
   char buffer[32];
-  for (int Y = 0; Y < 8; Y++) {
-    for (int X = 0; X < 32; X++) buffer[X] = (32*Y+X) % 95 +32;
-    fl_draw(buffer, 32, x()+3, y()+3+fl_height()*(Y+1));
+  for (int Y = 1; Y < 8; Y++) {
+    for (int X = 0; X < 32; X++) buffer[X] = (32*Y+X);
+    fl_draw(buffer, 32, x()+3, y()+3+fl_height()*Y);
   }
   fl_font(FL_HELVETICA,10);
   fl_pop_clip();
@@ -146,20 +146,10 @@ void size_cb(Fl_Widget *, long) {
   id_box->redraw();
 }
 
-char label[400];
-
 void create_the_forms() {
   form = new Fl_Window(550,390);
 
-  strcpy(label, "Hello, world!\n");
-  int i = strlen(label);
-  uchar c;
-  for (c = ' '+1; c < 127; c++) {if (!(c&0x1f)) label[i++]='\n'; label[i++]=c;}
-  label[i++] = '\n';
-  for (c = 0xA1; c; c++) {if (!(c&0x1f)) label[i++]='\n'; label[i++]=c;}
-  label[i] = 0;
-
-  textobj = new FontDisplay(FL_FRAME_BOX,10,10,530,160,label);
+  textobj = new FontDisplay(FL_FRAME_BOX,10,10,530,160);
   textobj->align(FL_ALIGN_TOP|FL_ALIGN_LEFT|FL_ALIGN_INSIDE|FL_ALIGN_CLIP);
   id_box = new Fl_Box(10, 172, 530, 15);
   id_box->box(FL_FRAME_BOX);
@@ -192,5 +182,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.12 1999/11/01 02:21:42 carl Exp $".
+// End of "$Id: fonts.cxx,v 1.13 1999/11/15 09:02:21 bill Exp $".
 //

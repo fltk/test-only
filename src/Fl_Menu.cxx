@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.59 1999/11/15 06:13:01 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.60 1999/11/15 09:02:19 bill Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -89,10 +89,10 @@ Fl_Style Fl_Menu_Item::default_style("Menu_Item", mi_revert);
 // only the box, selection, and highlight colors are used):
 
 static void mt_revert(Fl_Style* s) {
-  //s->box = FL_HIGHLIGHT_UP_BOX;
-  s->box = FL_FLAT_BOX;
-  s->selection_color = FL_BLUE_SELECTION_COLOR;
-  s->selection_text_color = FL_WHITE;
+  s->box = FL_HIGHLIGHT_UP_BOX;
+// all other colors are zero
+//   s->selection_color = FL_BLUE_SELECTION_COLOR;
+//   s->selection_text_color = FL_WHITE;
 // it actually acts like the menu_item's style is it's parent...
 //  s->parent = &Fl_Widget::default_style;
 }
@@ -199,7 +199,7 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_*,
     break;
   case 1: // selected menu item
     lflags = FL_VALUE | FL_ALIGN_LEFT;
-// Why?!
+// Why?! (it was so zero can mean "don't change")
 //    if (default_style.selection_color)
 //      lcolor = default_style.selection_color;
 //    if (default_style.selection_text_color)
@@ -851,5 +851,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.59 1999/11/15 06:13:01 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.60 1999/11/15 09:02:19 bill Exp $".
 //

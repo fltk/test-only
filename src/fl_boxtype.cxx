@@ -1,5 +1,5 @@
 //
-// "$Id: fl_boxtype.cxx,v 1.22 1999/11/14 08:42:49 bill Exp $"
+// "$Id: fl_boxtype.cxx,v 1.23 1999/11/15 09:02:20 bill Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -174,12 +174,12 @@ void fl_flatx(Fl_Boxtype b, int x, int y, int w, int h,
 }
 
 const Fl_Boxtype_ fl_flat_up_box = {
-  fl_flatx, 0, FL_UP_BOX, 2,2,4,4, true
+  fl_flatx, 0, FL_THIN_UP_BOX, 2,2,4,4, true
 };
 static Fl_Boxtype_Definer flatup("flat up", fl_flat_up_box);
 
 const Fl_Boxtype_ fl_flat_down_box = {
-  fl_flatx, 0, FL_DOWN_BOX, 2,2,4,4, true
+  fl_flatx, 0, FL_THIN_DOWN_BOX, 2,2,4,4, true
 };
 static Fl_Boxtype_Definer flatdown("flat down", fl_flat_down_box);
 
@@ -197,12 +197,12 @@ void fl_highlightx(Fl_Boxtype b, int x, int y, int w, int h,
 }
 
 const Fl_Boxtype_ fl_highlight_up_box = {
-  fl_highlightx, 0, FL_UP_BOX, 2,2,4,4, true
+  fl_highlightx, 0, FL_THIN_UP_BOX, 2,2,4,4, true
 };
 static Fl_Boxtype_Definer highlightup("highlight up", fl_highlight_up_box);
 
 const Fl_Boxtype_ fl_highlight_down_box = {
-  fl_highlightx, 0, FL_DOWN_BOX, 2,2,4,4, true
+  fl_highlightx, 0, FL_THIN_DOWN_BOX, 2,2,4,4, true
 };
 static Fl_Boxtype_Definer highlightdown("highlight down", fl_highlight_down_box);
 
@@ -215,5 +215,5 @@ const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
 Fl_Boxtype_Definer* Fl_Boxtype_Definer::first = 0;
 
 //
-// End of "$Id: fl_boxtype.cxx,v 1.22 1999/11/14 08:42:49 bill Exp $".
+// End of "$Id: fl_boxtype.cxx,v 1.23 1999/11/15 09:02:20 bill Exp $".
 //
