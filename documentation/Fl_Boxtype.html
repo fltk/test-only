@@ -1,40 +1,44 @@
-<head><title>Fl_Boxtype</title></head><body>
+<head><title>Fl_Boxtype</title></head><body bgcolor=white>
 
 <h2>typedef Fl_Boxtype</h2>
 
 <tt>Fl_Boxtype</tt> is a pointer to the structure
 <tt>Fl_Boxtype_</tt>, which contains the information needed to draw
-the rectangles around and inside widgets.  Boxtypes are used by
-<A href=Fl_Widget.html#box><TT>Fl_Widget::box()</TT></A>.
+the rectangles around and inside widgets.
+
+<p>Boxtypes are stored in the <a href=Fl_Style.html#box>box</a>, <a
+href=Fl_Style.html#button_box>button_box</a>, and <a
+href=Fl_Style.html#focus_box>focus_box</a> fields of the <a
+href=Fl_Style.html>Fl_Style</a> structure, and typically used by the
+<a href=Fl_Widget.html#draw>draw()</a> methods of
+<a href=Fl_Widget.html>Fl_Widget</a>s.
 
 <P ALIGN=CENTER><IMG src="boxtypes.gif"></P>
 
 <h3>Members</h3>
 
-<h4>void (*Fl_Boxtype_::draw_)(const Fl_Boxtype_* this,
-	       int,int,int,int, Fl_Color fill, Fl_Flags);</h4>
+<a name=draw><h4>virtual void Fl_Boxtype_::draw(int x, int y, int w, int h, Fl_Color fill, Fl_Flags) const;</h4></a>
 
-Pointer to the function that draws the box.  The first argument is the
-Fl_Boxtype_ itself, this allows access to the <tt>down</tt> or
-<tt>data</tt> value.  The next four integers are the x,y,w,h of the
-box to draw.  The next is the color to fill the interior of the box
-with.  The last argument is a set of bitflags.  The following values
-are of use to the boxes, ignore any other bits that are on:
+This is the function that draws the box. The four integers are the
+x,y,w,h of the rectangle to fill with the box.  The color is used to
+fill the interior of the box with (except for FRAME types which use it
+to draw the edge).  The last argument is a set of bitflags, the
+following ones are useful (ignore any other bits that are on):
 
 <p><ul>
 
 <li><tt>FL_INACTIVE</tt> - gray out the widget.
 
-<li><tt>FL_VALUE</tt> - draw the box pushed in, you can ignore this if
-the box type is already pushed in.
+<li><tt>FL_VALUE</tt> - draw the box pushed in. Typically this is
+implemented by calling another boxtype to do the drawing.
 
 <li><tt>FL_HIGHLIGHT</tt> - draw the box highlighted.  Usually you can
 ignore this because the fill color will also be changed.
 
 <li><tt>FL_INVISIBLE</tt> - you should only draw the outer edge of the
 box and not fill it in. This is used to draw the boxes around browsers
-and text widgets. You can ignore this and things will still draw
-ok, but they may flicker more than necessary.
+and text widgets, and to draw the focus box. You can ignore this and
+things will still draw ok, but they may flicker more than necessary.
 
 </ul>
 
@@ -43,53 +47,69 @@ and then draw a black outline:
 
 <UL>
 <PRE>
-void xyz_draw(const Fl_Boxtype_*, int x, int y, int w, int h,
-	      Fl_Color c, Fl_Flags f)
+void MyBoxtype::draw(int x, int y, int w, int h, Fl_Color c, Fl_Flags f) const
 {
+  // draw the interior:
   if (!(f&FL_INVISIBLE)) {
     fl_color(c);
-    fl_rectf(x, y, w, h);
+    fl_rectf(x+1, y+1, w-2, h-2);
   }
+  // draw the edge:
   fl_color(FL_BLACK);
   fl_rect(x, y, w, h);
 }
 </PRE>
 </ul>
 
-<h4>const void* Fl_Boxtype_::data;</h4>
+<a name=fills_rectangle><h4>int Fl_Boxtype_::fills_rectangle() const;</h4></a>
 
-This is a pointer to arbitrary data used by <tt>draw_()</tt>.  Often
-several boxtypes use the same <tt>draw_()</tt> but different data.
+Returns true if the draw function completely fills all the pixels in
+the rectangle passed to it (ignoring any <tt>FL_INVISIBLE</tt>
+flag). Many parts of fltk will take advantage of this to speed up
+drawing and eliminate blinking.
 
-<h4>const Fl_Boxtype_* Fl_Boxtype_::down;</h4>
+<p>This is an inline funcion, if you are making a subclass your
+constructor should set the protected member variable
+<tt>fills_rectangle_</tt> with the value you want returned.
 
-It is very common that a boxtype can use another boxtype to draw
-itself when <code>FL_VALUE</code> is set.  This pointer can be used to
-store a pointer to that other boxtype.  <tt>draw_()</tt> needs to
-check <tt>FL_VALUE</tt> and call <tt>this->down->draw()</tt>.
-
-<h4>int dx_, dy_, dw_, dh_;</h4>
-
-The values returned by the <tt>dx(), dy(), dw(), dh()</tt> methods.
-
-<h3>Methods</h3>
-
-<h4>void Fl_Boxtype_::draw(int x, int y, int w, int h, Fl_Color c,
-Fl_Flags f=0) const</h4>
-
-This is the public method to draw the box.  It is simply an inline
-function to call <tt>draw_</tt> with this boxtype as the first
-argument.
-
-<h4>int Fl_Boxtype_::dx() const;
-<br>int Fl_Boxtype_::dy() const;
-<br>int Fl_Boxtype_::dw() const;
-<br>int Fl_Boxtype_::dh() const;</h4>
+<h4>
+<a name=dx>int Fl_Boxtype::dx() const;</a><br>
+<a name=dy>int Fl_Boxtype::dy() const;</a><br>
+<a name=dw>int Fl_Boxtype::dw() const;</a><br>
+<a name=dh>int Fl_Boxtype::dh() const;</a><br>
+</h4>
 
 Return the offsets for the bounding box that should be subtracted when
 drawing the label inside the box.  These are all positive numbers, so
 dx() and dy() are added to the x and y, while dw() and dh() are
 subtracted from the width and height.  Usually dw() is two times dx(),
 and dh() is two times dy(), and usually dx() and dy() are equal.
+
+<p>These are inline functions, if you are making a subclass your
+constructor should set the protected members <tt>dx_, dy_, dw_</tt>,
+and <tt>dh_</tt> to initialize the return value.
+
+<a name=inset><h4>void Fl_Boxtype::inset(int& x, int& y, int& w, int& h) const;</h4></a>
+
+Changes the passed rectangle into a rectangle that matches the
+"interior" of the box. This is an inline function that just adds or
+subtracts <a href=#dx>dx()</a>, <a href=#dy>dy()</a>, <a
+href=#dw>dw()</a>, and <a href=#dh>dh()</a> from the passed values.
+
+<a name=Fl_Boxtype_><h4>Fl_Boxtype_::Fl_Boxtype_()</h4></a>
+
+Default constructor.
+
+<a name=Fl_Boxtype_><h4>Fl_Boxtype_::Fl_Boxtype_(const char* name)</h4></a>
+
+This constructs a "named" boxtype. It is added to a linked list of all
+named boxtypes. This list may be searched by the <a
+href=#find>find()</a> function to find a boxtype by name. This is
+useful for themes that want to parse a text file describing the theme.
+
+<a name=find><h4>static const Fl_Boxtype_* Fl_Boxtype_::find(const char* name);</h4></a>
+
+Locate the first boxtype with the given name. Case is ignored when
+doing the comparison. Returns NULL if no matching name is found.
 
 </body>

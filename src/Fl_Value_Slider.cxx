@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.cxx,v 1.40 2002/03/06 08:50:45 spitzak Exp $"
+// "$Id: Fl_Value_Slider.cxx,v 1.41 2002/03/10 23:10:23 spitzak Exp $"
 //
 // Value slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -29,8 +29,6 @@
 #include <fltk/Fl_Output.h>
 #include <fltk/Fl_Group.h>
 #include <config.h>
-
-extern void fl_dotted_box(int,int,int,int);
 
 void Fl_Value_Slider::draw() {
 
@@ -86,8 +84,7 @@ void Fl_Value_Slider::draw() {
 
     // draw the focus indicator inside the box:
     if (focused()) {
-      fl_color(text_color());
-      fl_dotted_box(ix+1, iy+1, iw-2, ih-2);
+      focus_box()->draw(ix+1, iy+1, iw-2, ih-2, text_color(), FL_INVISIBLE);
     }
 
     if (type() & TICK_BOTH) {
@@ -118,8 +115,7 @@ void Fl_Value_Slider::draw() {
       if (!box->fills_rectangle()) parent()->draw_group_box();
       box->draw(0, 0, w(), h(), color(), flags);
       if (focused()) {
-	fl_color(text_color());
-	fl_dotted_box(ix+1, iy+1, iw-2, ih-2);
+	focus_box()->draw(ix+1, iy+1, iw-2, ih-2, text_color(), FL_INVISIBLE);
       }
     }
     // now draw the text:
@@ -155,5 +151,5 @@ Fl_Value_Slider::Fl_Value_Slider(int x, int y, int w, int h, const char*l)
 }
 
 //
-// End of "$Id: Fl_Value_Slider.cxx,v 1.40 2002/03/06 08:50:45 spitzak Exp $".
+// End of "$Id: Fl_Value_Slider.cxx,v 1.41 2002/03/10 23:10:23 spitzak Exp $".
 //

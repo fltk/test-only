@@ -45,6 +45,7 @@ after changing any visible properties.
 <li><a href=#argument>argument</a></li>
 <li><a href=#belowmouse>belowmouse</a></li>
 <li><a href=#box>box</a></li>
+<li><a href=#button_box>button_box</a></li>
 <li><a href=#callback>callback</a></li>
 <li><a href=#changed>changed</a></li>
 <li><a href=#clear_flag>clear_flag</a></li>
@@ -70,6 +71,7 @@ after changing any visible properties.
 <li><a href=#draw_label>draw_label</a>
 <li><a href=#draw_inside_label>draw_inside_label</a>
 <li><a href=#flags>flags</a></li>
+<li><a href=#focus_box>focus_box</a></li>
 <li><a href=#focused>focused</a></li>
 <li><a href=#handle>handle</a></li>
 <li><a href=#height>height</a></li>
@@ -93,10 +95,10 @@ after changing any visible properties.
 <li><a href=#measure_label>measure_label</a>
 <li><a href=#output>output</a></li>
 <li><a href=#parent>parent</a></li>
+<li><a href=#position>position</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
-<li><a href=#position>position</a></li>
 <li><a href=#pushed>pushed</a></li>
 <li><a href=#redraw>redraw</a></li>
 <li><a href=#redraw_label>redraw_label</a></li>
@@ -113,11 +115,11 @@ after changing any visible properties.
 <li><a href=#shortcut>shortcut</a></li>
 <li><a href=#show>show</a></li>
 <li><a href=#size>size</a></li>
+<li><a href=#style>style</a></li>
+<li><a href=#take_focus>take_focus</a></li>
 </ul>
 </td><td align=left valign=top>
 <ul>
-<li><a href=#style>style</a></li>
-<li><a href=#take_focus>take_focus</a></li>
 <li><a href=#takesevents>takesevents</a></li>
 <li><a href=#test_shortcut>test_shortcut</a></li>
 <li><a href=#tooltip>tooltip</a></li>
@@ -210,18 +212,19 @@ returned.  This may be modified without changing other widgets.
 <h4>
 <a name=box>Fl_Boxtype Fl_Widget::box();</a><br>
 <a name=button_box>Fl_Boxtype Fl_Widget::button_box();</a><br>
-<a name=button_color>Fl_Color Fl_Widget::button_color();</a><br>
+<a name=focus_box>Fl_Boxtype Fl_Widget::focus_box();</a><br>
 <a name=glyph>Fl_Glyph Fl_Widget::glyph();</a><br>
 <a name=label_font>Fl_Font Fl_Widget::label_font();</a><br>
 <a name=text_font>Fl_Font Fl_Widget::text_font();</a><br>
 <a name=label_type>Fl_Labeltype Fl_Widget::label_type();</a><br>
 <a name=color>Fl_Color Fl_Widget::color();</a><br>
 <a name=label_color>Fl_Color Fl_Widget::label_color();</a><br>
-<a name=selection_color>Fl_Color Fl_Widget::selection_color();</a><br>
-<a name=selection_text_color>Fl_Color Fl_Widget::selection_text_color();</a><br>
 <a name=highlight_color>Fl_Color Fl_Widget::highlight_color();</a><br>
 <a name=highlight_label_color>Fl_Color Fl_Widget::highlight_label_color();</a><br>
+<a name=button_color>Fl_Color Fl_Widget::button_color();</a><br>
 <a name=text_color>Fl_Color Fl_Widget::text_color();</a><br>
+<a name=selection_color>Fl_Color Fl_Widget::selection_color();</a><br>
+<a name=selection_text_color>Fl_Color Fl_Widget::selection_text_color();</a><br>
 <a name=label_size>unsigned Fl_Widget::label_size();</a><br>
 <a name=text_size>unsigned Fl_Widget::text_size();</a><br>
 <a name=leading>unsigned Fl_Widget::leading();</a></h4>
@@ -230,6 +233,7 @@ Return the given field out of the <a href=#style>style()</a>.
 
 <h4>void Fl_Widget::box(Fl_Boxtype);<br>
 void Fl_Widget::button_box(Fl_Boxtype);<br>
+void Fl_Widget::focus_box(Fl_Boxtype);<br>
 void Fl_Widget::glyph(Fl_Glyph);<br>
 void Fl_Widget::label_font(Fl_Font);<br>
 void Fl_Widget::text_font(Fl_Font);<br>

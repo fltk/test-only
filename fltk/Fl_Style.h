@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.h,v 1.7 2002/02/10 22:57:47 spitzak Exp $"
+// "$Id: Fl_Style.h,v 1.8 2002/03/10 23:10:23 spitzak Exp $"
 //
 // Style structure used by Fl_Widgets
 //
@@ -43,6 +43,7 @@ extern "C" {typedef bool (*Fl_Theme)();}
 struct FL_API Fl_Style {
   Fl_Boxtype    box;
   Fl_Boxtype    button_box;
+  Fl_Boxtype	focus_box;
   Fl_Glyph      glyph;
   Fl_Font       label_font;
   Fl_Font       text_font;
@@ -115,5 +116,5 @@ FL_API const char* fl_find_config_file(char* out, int size, const char* name);
 #endif
 
 //
-// End of "$Id: Fl_Style.h,v 1.7 2002/02/10 22:57:47 spitzak Exp $".
+// End of "$Id: Fl_Style.h,v 1.8 2002/03/10 23:10:23 spitzak Exp $".
 //

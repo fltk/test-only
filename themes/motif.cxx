@@ -1,5 +1,5 @@
 //
-// "$Id: motif.cxx,v 1.18 2002/03/06 08:50:45 spitzak Exp $"
+// "$Id: motif.cxx,v 1.19 2002/03/10 23:10:25 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -222,6 +222,7 @@ extern "C" bool fltk_theme()
   Fl_Style::draw_boxes_inactive = false;
 
   Fl_Widget::default_style->button_box = &thin_motif_up_box;
+  Fl_Widget::default_style->focus_box = &thin_motif_down_box;
   Fl_Widget::default_style->box = &thin_motif_down_box;
   Fl_Widget::default_style->color = FL_GRAY;
   Fl_Widget::default_style->selection_color = FL_BLACK;
@@ -285,5 +286,5 @@ extern "C" bool fltk_theme()
 }
 
 //
-// End of "$Id: motif.cxx,v 1.18 2002/03/06 08:50:45 spitzak Exp $"
+// End of "$Id: motif.cxx,v 1.19 2002/03/10 23:10:25 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.56 2002/03/06 08:50:45 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.57 2002/03/10 23:10:23 spitzak Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -29,8 +29,6 @@
 #include <fltk/fl_draw.h>
 #include <math.h>
 #include <config.h>
-
-extern void fl_dotted_box(int,int,int,int);
 
 // Return the location of the left/top edge of a box of slider_size() would
 // be if the area the slider can move in is of width/height w.
@@ -122,8 +120,7 @@ void Fl_Slider::draw()
 
     // draw the focus indicator inside the box:
     if (focused()) {
-      fl_color(text_color());
-      fl_dotted_box(ix+1, iy+1, iw-2, ih-2);
+      focus_box()->draw(ix+1, iy+1, iw-2, ih-2, text_color(), FL_INVISIBLE);
     }
 
     if (type() & TICK_BOTH) {
@@ -337,5 +334,5 @@ Fl_Slider::Fl_Slider(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.56 2002/03/06 08:50:45 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.57 2002/03/10 23:10:23 spitzak Exp $".
 //

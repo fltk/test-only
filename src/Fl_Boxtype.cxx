@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.5 2002/01/23 08:46:00 spitzak Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.6 2002/03/10 23:10:23 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -32,25 +32,49 @@
 #include <fltk/fl_draw.h>
 #include <string.h>
 #include <config.h>
+#include <fltk/x.h>
 
 ////////////////////////////////////////////////////////////////
 
 // this draws the highlight rectangle inside a passed rectangle
-void fl_dotted_box(int x, int y, int w, int h) {
-  if (w <= 0 || h <= 0) return;
-  fl_line_style(FL_DOT);
-#ifdef _WIN32
+void Fl_Dotted_Frame::draw(int x,int y,int w,int h, Fl_Color c, Fl_Flags) const
+{
+  if (w <= 1 || h <= 1) return;
+  fl_color(c);
+#ifndef _WIN32
+  // X version uses stipple pattern because there seem to be too many
+  // servers with bugs when drawing dotted lines:
+  static const char pattern[] = {0xAA,0x55,0xAA,0x55,0xAA,0x55,0xAA,0x55,0xAA};
+  static Pixmap evenstipple, oddstipple;
+  if (!evenstipple) {
+    Window root = RootWindow(fl_display, fl_screen);
+    evenstipple = XCreateBitmapFromData(fl_display, root, pattern, 8, 8);
+    oddstipple = XCreateBitmapFromData(fl_display, root, pattern+1, 8, 8);
+  }
+  XSetStipple(fl_display, fl_gc,
+	      (fl_x_ + fl_y_)&1 ? oddstipple : evenstipple);
+  XSetFillStyle(fl_display, fl_gc, FillStippled);
+  // X documentation claims a nonzero line width is necessary for stipple
+  // to work, but on the X servers I tried it does not seem to be needed:
+  //XSetLineAttributes(fl_display, fl_gc, 1, LineSolid, CapButt, JoinMiter);
   fl_rect(x, y, w, h);
+  XSetFillStyle(fl_display, fl_gc, FillSolid);
+  // put line width back to zero:
+  //XSetLineAttributes(fl_display, fl_gc, 0, LineSolid, CapButt, JoinMiter);
 #else
-  // Seems that lots of X servers have bugs in the drivers and can't draw
-  // the lines backwards or up:
-  fl_line(x, y, x+w-1, y);
-  fl_line(x+w-1, y, x+w-1, y+h-1);
-  fl_line(x, y, x, y+h-1);
-  fl_line(x, y+h-1, x+w-1, y+h-1);
-#endif
+  fl_line_style(FL_DOT);
+  fl_rect(x, y, w, h);
   fl_line_style(0);
+#endif
 }
+
+Fl_Dotted_Frame::Fl_Dotted_Frame(const char* name) : Fl_Boxtype_(name) {
+  dx_ = dy_ = dw_ = dh_ = 1;
+  fills_rectangle_ = 0;
+}
+const Fl_Dotted_Frame fl_dotted_frame("dotted frame");
+
+////////////////////////////////////////////////////////////////
 
 void Fl_No_Box::draw(int, int, int, int, Fl_Color, Fl_Flags) const {}
 
@@ -195,5 +219,5 @@ const Fl_Boxtype_* Fl_Boxtype_::find(const char* name) {
 const Fl_Boxtype_* Fl_Boxtype_::first = 0;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.5 2002/01/23 08:46:00 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.6 2002/03/10 23:10:23 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.33 2002/02/10 22:57:48 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.34 2002/03/10 23:10:23 spitzak Exp $"
 //
 // Code for managing Fl_Style structures.
 //
@@ -45,6 +45,7 @@ Fl_Named_Style* Fl_Named_Style::first;
 static void revert(Fl_Style* s) {
   s->box                   = FL_DOWN_BOX;
   s->button_box		   = FL_UP_BOX;
+  s->focus_box		   = FL_DOTTED_FRAME;
   s->glyph                 = Fl_Widget::default_glyph;
   s->label_font            = FL_HELVETICA;
   s->text_font             = FL_HELVETICA;
@@ -108,6 +109,7 @@ void Fl_Widget::FIELD(TYPE v) {		\
 
 style_functions(Fl_Boxtype,box)
 style_functions(Fl_Boxtype,button_box)
+style_functions(Fl_Boxtype,focus_box)
 style_functions(Fl_Glyph,glyph)
 style_functions(Fl_Font,label_font)
 style_functions(Fl_Font,text_font)
@@ -331,5 +333,5 @@ void fl_background(Fl_Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.33 2002/02/10 22:57:48 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.34 2002/03/10 23:10:23 spitzak Exp $".
 //

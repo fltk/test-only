@@ -2118,3 +2118,17 @@ too. Fixing on either X or Windows looks difficult.
 
 Fixed the KDE theme plugin to correctly calculate pixel size of fonts
 from point size, added something to documentation about how to do this.
+
+Checked in 3/9/02
+////////////////////////////////////////////////////////////////
+
+Added focus_box to Fl_Style. You can change it (try -theme motif to
+see an example).
+
+X version uses stipple pattern to draw focus box, to avoid bugs that
+are in some X servers. We may want this on Windows, too, but I don't
+know how to get it.
+
+Fixed the documentation for Fl_Boxtype.
+
+

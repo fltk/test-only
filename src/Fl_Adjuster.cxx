@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.38 2002/03/06 08:50:45 spitzak Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.39 2002/03/10 23:10:23 spitzak Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -64,8 +64,6 @@ static void glyph(const Fl_Widget* widget, int t,
 // changing the value does not change the appearance:
 void Fl_Adjuster::value_damage() {}
 
-extern void fl_dotted_box(int,int,int,int);
-
 void Fl_Adjuster::draw() {
   int dx, dy, W, H;
   if (w()>=h()) {
@@ -92,8 +90,9 @@ void Fl_Adjuster::draw() {
 
   if (focused()) {
     Fl_Boxtype box = button_box();
-    fl_color(text_color());
-    fl_dotted_box(box->dx()+1, box->dy()+1, w()-box->dw()-2, h()-box->dh()-2);
+    focus_box()->draw(box->dx()+1, box->dy()+1,
+		      w()-box->dw()-2, h()-box->dh()-2,
+		      text_color(), FL_INVISIBLE);
   }
 
   last = highlight;
@@ -194,5 +193,5 @@ Fl_Adjuster::Fl_Adjuster(int x,int y,int w,int h,const char *l) : Fl_Valuator(x,
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.38 2002/03/06 08:50:45 spitzak Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.39 2002/03/10 23:10:23 spitzak Exp $".
 //

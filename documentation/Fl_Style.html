@@ -22,19 +22,25 @@ is deleted.
 
 <h3>Member variables</h3>
 
-<h4><a href=Fl_Boxtype.html>Fl_Boxtype</a> box;</h4>
+<a name=box><h4><a href=Fl_Boxtype.html>Fl_Boxtype</a> box;</h4>
 
 The type of box to draw around the outer edge of the widget (for the
 majority of widgets, some classes ignore this or use it to draw only
 text fields inside the widget). The default is <code>FL_DOWN_BOX</code>.
 
-<h4><a href=Fl_Boxtype.html>Fl_Boxtype</a> button_box;</h4>
+<a name=button_box><h4><a href=Fl_Boxtype.html>Fl_Boxtype</a> button_box;</h4>
 
 The type of box to draw buttons internal the widget (notice that <a
 href="Fl_Button.html">Fl_Button</a> uses <tt>box</tt>, however). The
 default is <code>FL_UP_BOX</code>.
 
-<h4>void (*glyph)(const <a href="Fl_Widget.html">Fl_Widget</a>*, int glyph, int x, int y, int w, int h, Fl_Flags);</h4>
+<a name=focus_box><h4><a href=Fl_Boxtype.html>Fl_Boxtype</a> focus_box;</h4>
+
+Type of box to draw to indicate focus. This is always called with the
+<tt>FL_INVISIBLE</tt> flag as only the border should be drawn. The
+default is <tt>FL_DOTTED_FRAME</tt>.
+
+<a name=glyph><h4>void (*glyph)(const <a href="Fl_Widget.html">Fl_Widget</a>*, int glyph, int x, int y, int w, int h, Fl_Flags);</h4>
 
 Draw part of a widget, called a "glyph". Examples are the up and down
 arrows on sliders, the slider itself, and check boxes. The base class
@@ -65,34 +71,34 @@ scrollbar
 ones in the fltk source code and in the sample theme plugins to see
 how the arguments are interpreted.
 
-<h4><a href=Fl_Font.html>Fl_Font</a> label_font;</h4>
+<a name=label_font><h4><a href=Fl_Font.html>Fl_Font</a> label_font;</h4>
 
 The font used to draw the label.  Default is <code>FL_HELVETICA</code>.
 
-<h4>unsigned int label_size;</h4>
+<a name=label_size><h4>unsigned int label_size;</h4>
 
 Size of <code>label_font</code>.  Default is 12.
 
-<h4><a href=Fl_Font.html>Fl_Font</a> text_font;</h4>
+<a name=text_font><h4><a href=Fl_Font.html>Fl_Font</a> text_font;</h4>
 
 Provides a font for text displays.  Default is <code>FL_HELVETICA</code>.
 
-<h4>unsigned int text_size;</h4>
+<a name=text_size><h4>unsigned int text_size;</h4>
 
 Size of <code>text_font</code>.  Checkboxes and some other widgets use
 this to control the size of the glyph. Default is 12.
 
-<h4>unsigned int leading;</h4>
+<a name=leading><h4>unsigned int leading;</h4>
 
 Extra spacing added between text lines or other things that are
 stacked vertically.  The default is 0 (menus have a default of 4).
 
-<h4><a href=Fl_Labeltype.html>Fl_Labeltype</a> label_type;</h4>
+<a name=label_type><h4><a href=Fl_Labeltype.html>Fl_Labeltype</a> label_type;</h4>
 
 How to draw the label.  This provides things like inset, shadow, and
 the symbols.  <code>FL_NORMAL_LABEL</code>.
 
-<h4><a href=Fl_Color.html>Fl_Color</a> color;</h4>
+<a name=color><h4><a href=Fl_Color.html>Fl_Color</a> color;</h4>
 
 Color of the widgets. The default is <code>FL_WHITE</code>. This color
 is inherited by text displays and browsers, most of the "gray" you see
@@ -106,43 +112,42 @@ href=Fl_Color#fl_background><code>fl_background(color)</code></a>
 instead, as this will set the entry for <code>FL_GRAY</code> and also
 set the "gray ramp" so that the edges of buttons are the same color.
 
-<h4><a href=Fl_Color.html>Fl_Color</a> label_color;</h4>
+<a name=label_color><h4><a href=Fl_Color.html>Fl_Color</a> label_color;</h4>
 
-Color used to draw labels and glyphs.  Default
-<code>FL_NO_COLOR</code>.
+Color used to draw labels and glyphs.  Default is <code>FL_BLACK</code>.
 
-<h4><a href=Fl_Color.html>Fl_Color</a> highlight_color;</h4>
+<a name=highlight_color><h4><a href=Fl_Color.html>Fl_Color</a> highlight_color;</h4>
 
 The color to draw the widget when the mouse is over it (for scrollbars
 and sliders this is used to color the buttons).  The default of
 zero disables highlighting.
 
-<h4><a href=Fl_Color.html>Fl_Color</a> highlight_label_color;</h4>
+<a name=highlight_label_color><h4><a href=Fl_Color.html>Fl_Color</a> highlight_label_color;</h4>
 
 Color to draw labels atop the <code>highlight_color</code>.  The
 default of zero leaves the <code>label_color</code> unchanged.
 
-<h4><a href=Fl_Color.html>Fl_Color</a> button_color;</h4>
+<a name=button_color><h4><a href=Fl_Color.html>Fl_Color</a> button_color;</h4>
 
 Color used when drawing internal buttons. Default is <code>FL_GRAY</code>.
 Check and radio buttons use this to color in the glyph.
 
-<h4><a href=Fl_Color.html>Fl_Color</a> text_color;</h4>
+<a name=text_color><h4><a href=Fl_Color.html>Fl_Color</a> text_color;</h4>
 
 Color to draw text inside the widget.  Default is black. Check and
 radio buttons use this to control the color of the checkmark.
 
-<h4><a href=Fl_Color.html>Fl_Color</a> selection_color;</h4>
+<a name=selection_color><h4><a href=Fl_Color.html>Fl_Color</a> selection_color;</h4>
 
 Color drawn behind selected text in inputs, or selected browser or
 menu items, or lit light buttons.  The default is Windows 95 blue.
 
-<h4><a href=Fl_Color.html>Fl_Color</a> selection_text_color;</h4>
+<a name=selection_text_color><h4><a href=Fl_Color.html>Fl_Color</a> selection_text_color;</h4>
 
 The color to draw text atop the <code>selection_color</code>.  The
 default is <code>FL_WHITE</code>.
 
-<h4>Fl_Named_Style* Fl_Style::find(const char* name);</h4>
+<a name=find><h4>Fl_Named_Style* Fl_Style::find(const char* name);</h4>
 
 <p>This is a <i>static</i> method on Fl_Style. It returns the first
 style found that matches the name.  Case is ignored and spaces and

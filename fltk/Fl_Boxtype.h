@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.h,v 1.2 2002/02/10 22:57:47 spitzak Exp $"
+// "$Id: Fl_Boxtype.h,v 1.3 2002/03/10 23:10:23 spitzak Exp $"
 //
 // Boxes used by FLTK styles.
 //
@@ -28,12 +28,6 @@
 
 #include "Fl_Color.h"
 #include "Fl_Flags.h"
-
-#ifdef _MSC_VER
-//#  pragma disable warning 4355
-#endif // _MSC_VER
-
-class FL_API Fl_Widget;
 
 // the abstract base class:
 class FL_API Fl_Boxtype_ {
@@ -220,6 +214,14 @@ public:
 extern FL_API const Fl_Border_Frame fl_border_frame;
 #define FL_BORDER_FRAME (&fl_border_frame)
 
+class FL_API Fl_Dotted_Frame : public Fl_Boxtype_ {
+public:
+  void draw(int,int,int,int, Fl_Color, Fl_Flags=0) const;
+  Fl_Dotted_Frame(const char* n);
+};
+extern FL_API const Fl_Dotted_Frame fl_dotted_frame;
+#define FL_DOTTED_FRAME (&fl_dotted_frame)
+
 #ifndef FLTK_2 // back compatability section
 #define FL_UP_FRAME (&fl_up_box)
 #define FL_DOWN_FRAME (&fl_down_box)
@@ -237,5 +239,5 @@ extern FL_API const Fl_Border_Frame fl_border_frame;
 #endif
 
 //
-// End of "$Id: Fl_Boxtype.h,v 1.2 2002/02/10 22:57:47 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.h,v 1.3 2002/03/10 23:10:23 spitzak Exp $".
 //

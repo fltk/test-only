@@ -1,5 +1,5 @@
 //
-// "$Id: file_chooser.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: file_chooser.cxx,v 1.7 2002/03/10 23:10:25 spitzak Exp $"
 //
 // File chooser test program for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,6 @@
 #include <fltk/Fl_Window.h>
 #include <fltk/Fl_Input.h>
 #include <fltk/fl_file_chooser.h>
-#include <fltk/Fl_FileIcon.h>
 
 #include <stdio.h>
 #include <string.h>
@@ -56,11 +55,11 @@ int main(int argc, char **argv) {
   button.callback(pickfile);
   window.end();
   window.show(argc, argv);
-  Fl_FileIcon::load_system_icons();
+  //  Fl_FileIcon::load_system_icons();
   fl_file_chooser_callback(thecb);
   return Fl::run();
 }
 
 //
-// End of "$Id: file_chooser.cxx,v 1.6 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: file_chooser.cxx,v 1.7 2002/03/10 23:10:25 spitzak Exp $".
 //

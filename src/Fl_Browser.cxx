@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.59 2002/02/10 22:57:48 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.60 2002/03/10 23:10:23 spitzak Exp $"
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -419,19 +419,9 @@ void Fl_Browser::draw_item() {
   }
 
   if (focused() && is_focus) {
-    fl_color((flags&FL_SELECTED) ? widget->selection_text_color()
-	     : widget->text_color());
-    fl_line_style(FL_DASH);
-    int w = widget->width();
-    if (x + w > X+W) {
-      // X bug?  clipped dashed rectangles don't draw exactly correct...
-      fl_line(x, y, X+W, y);
-      fl_line(x, y, x, y+h-1);
-      fl_line(x, y+h-1, X+W, y+h-1);
-    } else {
-      fl_rect(x, y, w, h);
-    }
-    fl_line_style(0);
+    focus_box()->draw(x, y, widget->width(), h,
+		      (flags&FL_SELECTED) ? widget->selection_text_color()
+		      : widget->text_color(), FL_INVISIBLE);
   }
   int save_x = fl_x_; fl_x_ += x;
   int save_y = fl_y_; fl_y_ += y+(leading()+1)/2-1;
@@ -1069,5 +1059,5 @@ Fl_Browser::~Fl_Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.59 2002/02/10 22:57:48 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.60 2002/03/10 23:10:23 spitzak Exp $".
 //
