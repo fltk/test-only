@@ -296,10 +296,6 @@ SOURCE=..\..\src\FileInput.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\filename_expand.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\filename_ext.cxx
 # End Source File
 # Begin Source File
@@ -317,10 +313,6 @@ SOURCE=..\..\src\filename_match.cxx
 # Begin Source File
 
 SOURCE=..\..\src\filename_normalize.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\filename_setext.cxx
 # End Source File
 # Begin Source File
 
@@ -673,14 +665,6 @@ SOURCE=..\..\src\Window_iconize.cxx
 # Begin Source File
 
 SOURCE=..\..\src\win32\WinMain.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\wintab.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\wintabx.h
 # End Source File
 # Begin Source File
 

@@ -1,5 +1,5 @@
 /*
- * "$Id: string.h,v 1.3 2004/12/14 16:14:08 leka Exp $"
+ * "$Id$"
  *
  * Common string header file for the Fast Light Tool Kit (FLTK).
  *
@@ -82,5 +82,5 @@ FL_API extern size_t fltk_strlcpy(char *, const char *, size_t);
 
 
 /*
- * End of "$Id: string.h,v 1.3 2004/12/14 16:14:08 leka Exp $".
+ * End of "$Id$".
  */

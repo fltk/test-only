@@ -129,7 +129,8 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MT /W3 /GX /Os /Ob2 /I "." /I "..\.." /D "NDEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /YX /c
-# ADD CPP /nologo /MD /GR /GX /Os /Ob2 /I "." /I "..\.." /D "NDEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /D "_MSC_DLL" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "USE_CONF" /YX /c
+# ADD CPP /MT /W3 /GR /GX /Os /Ob2 /Gf /Gy /I "." /I "..\.." /I "..\..\.." /D "NDEBUG" /D "FL_SHARED" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /D "FL_GL_LIBRARY" /D "FL_GLUT_LIBRARY" /YX /c
+# SUBTRACT CPP /nologo /Fr
 # ADD BASE MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "NDEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -141,7 +142,7 @@ LINK32=link.exe
 # ADD BASE LINK32 opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll.pdb" /machine:I386
 # SUBTRACT BASE LINK32 /pdb:none
 # ADD LINK32 opengl32.lib wsock32.lib kernel32.lib user32.lib gdi32.lib winspool.lib comdlg32.lib advapi32.lib shell32.lib ole32.lib oleaut32.lib uuid.lib /nologo /version:1.0 /subsystem:windows /dll /pdb:"fltkdll.pdb" /machine:I386 /out:"../../lib/fltkdll.dll" /implib:"../../lib/fltkdll.lib"
-# SUBTRACT LINK32 /pdb:none
+# SUBTRACT LINK32 /pdb:none /force
 
 !ENDIF 
 
@@ -173,15 +174,6 @@ DEP_CPP_ADDAR=\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -198,15 +190,6 @@ DEP_CPP_ADDCU=\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -269,15 +252,6 @@ DEP_CPP_ARGS_=\
 	"..\..\fltk\window.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -320,15 +294,6 @@ DEP_CPP_BMPIM=\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -436,15 +401,7 @@ DEP_CPP_CLIP_=\
 	"..\..\fltk\x.h"\
 	"..\..\src\osx\clip.cxx"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
+	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -476,15 +433,6 @@ DEP_CPP_COLOR=\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -574,15 +522,6 @@ DEP_CPP_CURSO=\
 	"..\..\fltk\window.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -680,15 +619,6 @@ DEP_CPP_DND_C=\
 	"..\..\src\win32\dnd.cxx"\
 	"..\..\src\x11\dnd.cxx"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -699,7 +629,10 @@ DEP_CPP_DRAW_=\
 	"..\..\fltk\draw.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\mac.h"\
 	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\win32.h"\
+	"..\..\fltk\x.h"\
 	".\config.h"\
 	
 # End Source File
@@ -713,8 +646,10 @@ DEP_CPP_DRAWI=\
 	"..\..\fltk\events.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
+	"..\..\fltk\font.h"\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\style.h"\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	"..\..\src\osx\drawimage.cxx"\
@@ -722,15 +657,6 @@ DEP_CPP_DRAWI=\
 	"..\..\src\x11\drawimage.cxx"\
 	"..\..\src\x11\XColorMap.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -782,15 +708,6 @@ DEP_CPP_ERROR=\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	".\fltk\string.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -810,15 +727,6 @@ DEP_CPP_EVENT=\
 	"..\..\src\win32\event_key_state.cxx"\
 	"..\..\src\x11\event_key_state.cxx"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -992,7 +900,7 @@ DEP_CPP_FILEIN=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\filename_expand.cxx
+SOURCE=..\..\src\filename_ext.cxx
 DEP_CPP_FILEN=\
 	"..\..\fltk\filename.h"\
 	"..\..\fltk\fl_api.h"\
@@ -1000,16 +908,8 @@ DEP_CPP_FILEN=\
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\filename_ext.cxx
-DEP_CPP_FILENA=\
-	"..\..\fltk\filename.h"\
-	"..\..\fltk\fl_api.h"\
-	
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\src\filename_isdir.cxx
-DEP_CPP_FILENAM=\
+DEP_CPP_FILENA=\
 	"..\..\fltk\color.h"\
 	"..\..\fltk\draw.h"\
 	"..\..\fltk\filename.h"\
@@ -1021,21 +921,26 @@ DEP_CPP_FILENAM=\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
+	".\fltk\string.h"\
 	
+
+!IF  "$(CFG)" == "fltkdll - Win32 Release"
+
+!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
+
+!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug MinSize"
+
+!ELSEIF  "$(CFG)" == "fltkdll - Win32 Release MinSize"
+
+# ADD CPP /YX
+
+!ENDIF 
+
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\src\filename_list.cxx
-DEP_CPP_FILENAME=\
+DEP_CPP_FILENAM=\
 	"..\..\fltk\filename.h"\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\utf.h"\
@@ -1045,7 +950,7 @@ DEP_CPP_FILENAME=\
 # Begin Source File
 
 SOURCE=..\..\src\filename_match.cxx
-DEP_CPP_FILENAME_=\
+DEP_CPP_FILENAME=\
 	"..\..\fltk\filename.h"\
 	"..\..\fltk\fl_api.h"\
 	
@@ -1053,18 +958,10 @@ DEP_CPP_FILENAME_=\
 # Begin Source File
 
 SOURCE=..\..\src\filename_normalize.cxx
-DEP_CPP_FILENAME_N=\
+DEP_CPP_FILENAME_=\
 	"..\..\fltk\filename.h"\
 	"..\..\fltk\fl_api.h"\
 	".\fltk\string.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\filename_setext.cxx
-DEP_CPP_FILENAME_S=\
-	"..\..\fltk\filename.h"\
-	"..\..\fltk\fl_api.h"\
 	
 # End Source File
 # Begin Source File
@@ -1081,15 +978,6 @@ DEP_CPP_FILLA=\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1106,15 +994,6 @@ DEP_CPP_FILLR=\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1174,15 +1053,6 @@ DEP_CPP_FLTK_=\
 	"..\..\src\x11\fltk_theme.cxx"\
 	".\config.h"\
 	".\fltk\string.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1207,22 +1077,13 @@ DEP_CPP_FONT_=\
 	"..\..\fltk\window.h"\
 	"..\..\fltk\x.h"\
 	"..\..\src\osx\Font.cxx"\
-	"..\..\src\win32\font.cxx"\
+	"..\..\src\win32\Font.cxx"\
 	"..\..\src\x11\Font.cxx"\
 	"..\..\src\x11\Font_xft.cxx"\
 	"..\..\src\x11\Font_xlfd.cxx"\
 	"..\..\src\x11\IFont.h"\
 	".\config.h"\
 	".\fltk\string.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1241,15 +1102,6 @@ DEP_CPP_GIFIM=\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1305,15 +1157,6 @@ DEP_CPP_IMAGE=\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1416,15 +1259,6 @@ DEP_CPP_KEY_N=\
 	"..\..\fltk\x.h"\
 	".\config.h"\
 	".\fltk\string.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1467,15 +1301,6 @@ DEP_CPP_LIST_=\
 	"..\..\src\x11\list_fonts_xlfd.cxx"\
 	".\config.h"\
 	".\fltk\string.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1494,15 +1319,6 @@ DEP_CPP_LOAD_=\
 	"..\..\fltk\x.h"\
 	"..\..\src\dlload_osx.cxx"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1609,11 +1425,13 @@ DEP_CPP_MENUB=\
 	"..\..\fltk\item.h"\
 	"..\..\fltk\menu.h"\
 	"..\..\fltk\menubar.h"\
+	"..\..\fltk\menuwindow.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
 	"..\..\fltk\tooltip.h"\
 	"..\..\fltk\widget.h"\
+	"..\..\fltk\window.h"\
 	".\config.h"\
 	
 # End Source File
@@ -1636,15 +1454,6 @@ DEP_CPP_MENUW=\
 	"..\..\fltk\window.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1740,15 +1549,6 @@ DEP_CPP_OVERL=\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1765,15 +1565,6 @@ DEP_CPP_OWN_C=\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1807,20 +1598,8 @@ DEP_CPP_PATH_=\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
+	".\fltk\string.h"\
 	
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\pktdef.h
 # End Source File
 # Begin Source File
 
@@ -1909,15 +1688,6 @@ DEP_CPP_READI=\
 	"..\..\src\x11\readimage.cxx"\
 	".\config.h"\
 	".\fltk\string.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -1968,20 +1738,6 @@ DEP_CPP_RGBIM=\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"jconfig.h"\
-	{$(INCLUDE)}"jerror.h"\
-	{$(INCLUDE)}"jmorecfg.h"\
-	{$(INCLUDE)}"jpegint.h"\
-	{$(INCLUDE)}"jpeglib.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -2024,7 +1780,7 @@ DEP_CPP_RUN_C=\
 	"..\..\fltk\events.h"\
 	"..\..\fltk\filename.h"\
 	"..\..\fltk\fl_api.h"\
-	"..\..\fltk\fl_version.h"\
+	"..\..\fltk\FL_VERSION.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\font.h"\
 	"..\..\fltk\group.h"\
@@ -2032,6 +1788,7 @@ DEP_CPP_RUN_C=\
 	"..\..\fltk\mac.h"\
 	"..\..\fltk\math.h"\
 	"..\..\fltk\menu.h"\
+	"..\..\fltk\menuwindow.h"\
 	"..\..\fltk\Monitor.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\run.h"\
@@ -2051,20 +1808,8 @@ DEP_CPP_RUN_C=\
 	"..\..\src\win32\run.cxx"\
 	"..\..\src\win32\wintab.h"\
 	"..\..\src\x11\run.cxx"\
-	"..\..\src\xutf8.cxx"\
+	"..\..\src\x11\xutf8.cxx"\
 	".\config.h"\
-	{$(INCLUDE)}"iconv.h"\
-	{$(INCLUDE)}"X11\extensions\Xdbe.h"\
-	{$(INCLUDE)}"X11\extensions\Xdbeproto.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -2073,7 +1818,7 @@ SOURCE=..\..\src\scandir.c
 DEP_CPP_SCAND=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\utf.h"\
-	"..\..\src\scandir_win32.c"\
+	"..\..\src\win32\scandir.c"\
 	".\config.h"\
 	
 # End Source File
@@ -2139,15 +1884,6 @@ DEP_CPP_SCROLLR=\
 	"..\..\fltk\window.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -2168,15 +1904,6 @@ DEP_CPP_SETCO=\
 	"..\..\src\x11\setcolor.cxx"\
 	"..\..\src\x11\XColorMap.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -2201,17 +1928,6 @@ DEP_CPP_SETVI=\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\Xdbe.h"\
-	{$(INCLUDE)}"X11\extensions\Xdbeproto.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -2249,16 +1965,6 @@ DEP_CPP_SHAPE=\
 	"..\..\fltk\x.h"\
 	"..\..\fltk\xbmimage.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\shape.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -2276,6 +1982,7 @@ DEP_CPP_SHARE=\
 	"..\..\fltk\symbol.h"\
 	"..\..\fltk\xbmimage.h"\
 	".\config.h"\
+	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -2421,12 +2128,14 @@ DEP_CPP_TABGR=\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\group.h"\
 	"..\..\fltk\layout.h"\
+	"..\..\fltk\menuwindow.h"\
 	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\symbol.h"\
 	"..\..\fltk\tabgroup.h"\
 	"..\..\fltk\tooltip.h"\
 	"..\..\fltk\widget.h"\
+	"..\..\fltk\window.h"\
 	".\config.h"\
 	
 # End Source File
@@ -2554,6 +2263,7 @@ DEP_CPP_TOOLT=\
 	"..\..\fltk\tooltip.h"\
 	"..\..\fltk\widget.h"\
 	"..\..\fltk\window.h"\
+	".\config.h"\
 	
 # End Source File
 # Begin Source File
@@ -2575,15 +2285,6 @@ DEP_CPP_UPBOX=\
 	"..\..\fltk\x.h"\
 	".\config.h"\
 	".\fltk\string.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -2698,6 +2399,7 @@ DEP_CPP_WIDGE=\
 	"..\..\fltk\style.h"\
 	"..\..\fltk\widget.h"\
 	".\config.h"\
+	".\fltk\string.h"\
 	
 # End Source File
 # Begin Source File
@@ -2743,15 +2445,6 @@ DEP_CPP_WINDO=\
 	"..\..\fltk\window.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -2773,15 +2466,6 @@ DEP_CPP_WINDOW=\
 	"..\..\fltk\window.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -2802,15 +2486,6 @@ DEP_CPP_WINDOW_=\
 	"..\..\fltk\win32.h"\
 	"..\..\fltk\window.h"\
 	"..\..\fltk\x.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -2830,24 +2505,11 @@ DEP_CPP_WINDOW_I=\
 	"..\..\fltk\window.h"\
 	"..\..\fltk\x.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\wintab.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\wintabx.h
+SOURCE=..\..\src\win32\WinMain.cxx
 # End Source File
 # Begin Source File
 
@@ -2866,15 +2528,6 @@ DEP_CPP_XBMIM=\
 	"..\..\fltk\x.h"\
 	"..\..\fltk\xbmimage.h"\
 	".\config.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # Begin Source File
@@ -2895,15 +2548,6 @@ DEP_CPP_XPMIM=\
 	"..\..\fltk\xpmimage.h"\
 	".\config.h"\
 	".\fltk\string.h"\
-	{$(INCLUDE)}"X11\extensions\XI.h"\
-	{$(INCLUDE)}"X11\extensions\XInput.h"\
-	{$(INCLUDE)}"X11\X.h"\
-	{$(INCLUDE)}"X11\Xatom.h"\
-	{$(INCLUDE)}"X11\Xfuncproto.h"\
-	{$(INCLUDE)}"X11\Xlib.h"\
-	{$(INCLUDE)}"X11\Xmd.h"\
-	{$(INCLUDE)}"X11\Xosdefs.h"\
-	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # End Target
