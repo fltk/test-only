@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.1 1999/10/27 08:41:08 bill Exp $"
+# "$Id: Makefile,v 1.2 1999/10/27 12:57:17 carl Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -60,10 +60,10 @@ clean :
 	-@ rm -f *.o *.po $(PROGRAM) $(PROGRAM2) $(CLEAN) core *~ makedepend
 	@touch makedepend
 
-depend:
-	$(MAKEDEPEND) $(INCLUDES) $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
-include makedepend
+#depend:
+#	$(MAKEDEPEND) $(INCLUDES) $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
+#include makedepend
 
 #
-# End of "$Id: Makefile,v 1.1 1999/10/27 08:41:08 bill Exp $".
+# End of "$Id: Makefile,v 1.2 1999/10/27 12:57:17 carl Exp $".
 #

@@ -22,7 +22,7 @@
 #include "config.h"
 
 #ifdef HAVE_PTHREAD
-
+#include <unistd.h>
 #include <pthread.h>
 
 #ifdef PTHREAD_RECURSIVE_MUTEX_INITIALIZER_NP
@@ -41,11 +41,11 @@ void Fl::unlock() {
 #else
 // Make a recursive lock out of the pthread mutex:
 
-static pthread_mutex_t = PTHREAD_MUTEX_INITIALIZER;
+static pthread_mutex_t mutex = PTHREAD_MUTEX_INITIALIZER;
 static pthread_t owner;
 static int counter = 0;
 
-static void lock() {
+static void _lock() {
   if (!counter || owner != pthread_self()) {
     pthread_mutex_lock(&mutex); owner = pthread_self();
   }
