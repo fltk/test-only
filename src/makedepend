@@ -6,7 +6,8 @@ Fl.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
 Fl.o: ../fltk/Flags.h ../fltk/Style.h ../fltk/Tooltip.h ../fltk/x.h
 Fl.o: ../fltk/draw.h ../fltk/FL_VERSION.h ../fltk/Monitor.h Fl_x.cxx
 Fl.o: ../fltk/visual.h ../fltk/Font.h ../fltk/Browser.h ../fltk/Menu.h
-Fl.o: ../fltk/Scrollbar.h ../fltk/Slider.h ../fltk/Valuator.h
+Fl.o: ../fltk/Scrollbar.h ../fltk/Slider.h ../fltk/Valuator.h ../fltk/utf.h
+Fl.o: xutf8.cxx
 Fl_Adjuster.o: ../fltk/Adjuster.h ../fltk/Valuator.h ../fltk/Box.h
 Fl_Adjuster.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 Fl_Adjuster.o: ../fltk/Symbol.h ../fltk/events.h ../fltk/damage.h
@@ -37,7 +38,8 @@ Fl_Box.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 Fl_Boxtype.o: ../config.h ../fltk/Box.h ../fltk/Color.h ../fltk/FL_API.h
 Fl_Boxtype.o: ../fltk/Flags.h ../fltk/Symbol.h ../fltk/Style.h
 Fl_Boxtype.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/draw.h ../fltk/x.h
-Fl_Boxtype.o: ../fltk/draw.h ../fltk/string.h ../fltk/math.h
+Fl_Boxtype.o: ../fltk/draw.h ../fltk/string.h ../fltk/string.h ../fltk/math.h
+Fl_Boxtype.o: ../fltk/math.h
 Fl_Button.o: ../fltk/events.h ../fltk/FL_API.h ../fltk/damage.h
 Fl_Button.o: ../fltk/Button.h ../fltk/Group.h ../fltk/Widget.h
 Fl_Button.o: ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h ../fltk/Box.h
@@ -52,7 +54,7 @@ Fl_Choice.o: ../fltk/events.h ../fltk/damage.h ../fltk/Box.h ../fltk/Symbol.h
 Fl_Choice.o: ../fltk/Item.h ../fltk/draw.h
 Fl_Clock.o: ../fltk/events.h ../fltk/FL_API.h ../fltk/damage.h
 Fl_Clock.o: ../fltk/Clock.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
-Fl_Clock.o: ../fltk/Flags.h ../fltk/draw.h
+Fl_Clock.o: ../fltk/Flags.h ../fltk/draw.h ../fltk/math.h
 Fl_Color_Chooser.o: ../fltk/events.h ../fltk/FL_API.h ../fltk/damage.h
 Fl_Color_Chooser.o: ../fltk/ColorChooser.h ../fltk/Group.h ../fltk/Widget.h
 Fl_Color_Chooser.o: ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h
@@ -61,8 +63,8 @@ Fl_Color_Chooser.o: ../fltk/ValueInput.h ../fltk/Valuator.h
 Fl_Color_Chooser.o: ../fltk/FloatInput.h ../fltk/NumericInput.h
 Fl_Color_Chooser.o: ../fltk/Input.h ../fltk/Box.h ../fltk/Symbol.h
 Fl_Color_Chooser.o: ../fltk/draw.h ../fltk/Item.h ../fltk/math.h
-Fl_Color_Chooser.o: ../fltk/Window.h ../fltk/ReturnButton.h ../fltk/Button.h
-Fl_Color_Chooser.o: ../fltk/ask.h
+Fl_Color_Chooser.o: ../fltk/math.h ../fltk/Window.h ../fltk/ReturnButton.h
+Fl_Color_Chooser.o: ../fltk/Button.h ../fltk/ask.h
 CycleButton.o: ../fltk/CycleButton.h ../fltk/Menu.h ../fltk/Group.h
 CycleButton.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
 CycleButton.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Button.h
@@ -71,45 +73,50 @@ CycleButton.o: ../fltk/Symbol.h ../fltk/Item.h ../fltk/draw.h
 Fl_Dial.o: ../fltk/Dial.h ../fltk/Valuator.h ../fltk/events.h
 Fl_Dial.o: ../fltk/FL_API.h ../fltk/damage.h ../fltk/Box.h ../fltk/Color.h
 Fl_Dial.o: ../fltk/Flags.h ../fltk/Symbol.h ../fltk/draw.h ../fltk/math.h
+Fl_Dial.o: ../fltk/math.h
 Fl_FileBrowser.o: ../fltk/FileBrowser.h ../fltk/Browser.h ../fltk/Menu.h
 Fl_FileBrowser.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h
 Fl_FileBrowser.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 Fl_FileBrowser.o: ../fltk/Scrollbar.h ../fltk/Slider.h ../fltk/Valuator.h
 Fl_FileBrowser.o: ../fltk/FileIcon.h ../fltk/draw.h ../fltk/filename.h
+Fl_FileBrowser.o: ../fltk/dirent.h ../fltk/filename.h ../fltk/string.h
 Fl_FileBrowser.o: ../fltk/string.h ../config.h
 Fl_FileChooser.o: ../fltk/FileChooser.h ../fltk/Window.h ../fltk/Group.h
 Fl_FileChooser.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
-Fl_FileChooser.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Choice.h
-Fl_FileChooser.o: ../fltk/Menu.h ../fltk/Button.h ../fltk/filename.h
-Fl_FileChooser.o: ../fltk/FileBrowser.h ../fltk/Browser.h ../fltk/Scrollbar.h
-Fl_FileChooser.o: ../fltk/Slider.h ../fltk/Valuator.h ../fltk/FileIcon.h
-Fl_FileChooser.o: ../fltk/FileInput.h ../fltk/Input.h ../fltk/ReturnButton.h
-Fl_FileChooser.o: ../fltk/Button.h ../fltk/string.h ../fltk/xbmImage.h
-Fl_FileChooser.o: ../fltk/Image.h ../fltk/Symbol.h
+Fl_FileChooser.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/string.h
+Fl_FileChooser.o: ../fltk/Choice.h ../fltk/Menu.h ../fltk/Button.h
+Fl_FileChooser.o: ../fltk/filename.h ../fltk/FileBrowser.h ../fltk/Browser.h
+Fl_FileChooser.o: ../fltk/Scrollbar.h ../fltk/Slider.h ../fltk/Valuator.h
+Fl_FileChooser.o: ../fltk/FileIcon.h ../fltk/FileInput.h ../fltk/Input.h
+Fl_FileChooser.o: ../fltk/ReturnButton.h ../fltk/Button.h ../fltk/string.h
+Fl_FileChooser.o: ../fltk/xbmImage.h ../fltk/Image.h ../fltk/Symbol.h
 Fl_FileChooser2.o: ../fltk/FileChooser.h ../fltk/Window.h ../fltk/Group.h
 Fl_FileChooser2.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
-Fl_FileChooser2.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Choice.h
-Fl_FileChooser2.o: ../fltk/Menu.h ../fltk/Button.h ../fltk/filename.h
-Fl_FileChooser2.o: ../fltk/FileBrowser.h ../fltk/Browser.h
+Fl_FileChooser2.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/string.h
+Fl_FileChooser2.o: ../fltk/Choice.h ../fltk/Menu.h ../fltk/Button.h
+Fl_FileChooser2.o: ../fltk/filename.h ../fltk/FileBrowser.h ../fltk/Browser.h
 Fl_FileChooser2.o: ../fltk/Scrollbar.h ../fltk/Slider.h ../fltk/Valuator.h
 Fl_FileChooser2.o: ../fltk/FileIcon.h ../fltk/FileInput.h ../fltk/Input.h
 Fl_FileChooser2.o: ../fltk/ReturnButton.h ../fltk/Button.h ../fltk/filename.h
-Fl_FileChooser2.o: ../fltk/ask.h ../fltk/string.h ../fltk/events.h
-Fl_FileChooser2.o: ../config.h
-Fl_FileIcon.o: ../fltk/FileIcon.h ../fltk/FL_API.h ../fltk/Color.h
-Fl_FileIcon.o: ../fltk/Flags.h ../fltk/Widget.h ../fltk/Style.h
-Fl_FileIcon.o: ../fltk/draw.h ../fltk/filename.h
+Fl_FileChooser2.o: ../fltk/dirent.h ../fltk/ask.h ../fltk/string.h
+Fl_FileChooser2.o: ../fltk/events.h ../config.h
+Fl_FileIcon.o: ../fltk/string.h ../fltk/FileIcon.h ../fltk/FL_API.h
+Fl_FileIcon.o: ../fltk/Color.h ../fltk/Flags.h ../fltk/Widget.h
+Fl_FileIcon.o: ../fltk/Style.h ../fltk/draw.h ../fltk/filename.h
+Fl_FileIcon.o: ../fltk/dirent.h ../fltk/filename.h
 Fl_FileIcon2.o: ../fltk/FileIcon.h ../fltk/FL_API.h ../fltk/Color.h
-Fl_FileIcon2.o: ../fltk/Flags.h ../fltk/filename.h ../fltk/draw.h ../config.h
-Fl_FileIcon2.o: ../fltk/string.h
+Fl_FileIcon2.o: ../fltk/Flags.h ../fltk/filename.h ../fltk/dirent.h
+Fl_FileIcon2.o: ../fltk/filename.h ../fltk/draw.h ../config.h
+Fl_FileIcon2.o: ../fltk/string.h ../fltk/string.h
 Fl_FileInput.o: ../fltk/events.h ../fltk/FL_API.h ../fltk/FileInput.h
 Fl_FileInput.o: ../fltk/Input.h
 Fl_Float_Input.o: ../fltk/events.h ../fltk/FL_API.h ../fltk/Widget.h
 Fl_Float_Input.o: ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h
 Fl_Float_Input.o: ../fltk/FloatInput.h ../fltk/NumericInput.h ../fltk/Input.h
+Fl_Float_Input.o: ../fltk/string.h
 fl_gif.o: ../config.h ../fltk/SharedImage.h ../fltk/Image.h ../fltk/Symbol.h
 fl_gif.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Color.h ../fltk/draw.h
-fl_gif.o: ../fltk/x.h ../fltk/draw.h
+fl_gif.o: ../fltk/x.h ../fltk/draw.h ../fltk/string.h
 Fl_Group.o: ../config.h ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h
 Fl_Group.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Box.h
 Fl_Group.o: ../fltk/Symbol.h ../fltk/draw.h ../fltk/events.h ../fltk/layout.h
@@ -123,7 +130,8 @@ Fl_Image.o: ../fltk/Flags.h ../fltk/Color.h ../fltk/Widget.h ../fltk/Style.h
 Fl_Image.o: ../fltk/events.h ../fltk/draw.h ../fltk/x.h ../fltk/draw.h
 Fl_Input.o: ../fltk/Input.h ../fltk/events.h ../fltk/FL_API.h
 Fl_Input.o: ../fltk/damage.h ../fltk/Box.h ../fltk/Color.h ../fltk/Flags.h
-Fl_Input.o: ../fltk/Symbol.h ../fltk/draw.h ../fltk/math.h ../fltk/utf.h
+Fl_Input.o: ../fltk/Symbol.h ../fltk/draw.h ../fltk/math.h ../fltk/math.h
+Fl_Input.o: ../fltk/utf.h ../fltk/string.h
 Fl_Input_Browser.o: ../fltk/InputBrowser.h ../fltk/Menu.h ../fltk/Group.h
 Fl_Input_Browser.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
 Fl_Input_Browser.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Input.h
@@ -135,8 +143,8 @@ Fl_Input_Browser.o: ../fltk/draw.h
 Fl_Item.o: ../fltk/Item.h ../fltk/Image.h ../fltk/Symbol.h ../fltk/FL_API.h
 Fl_Item.o: ../fltk/Flags.h ../fltk/Color.h ../fltk/CheckButton.h
 Fl_Item.o: ../fltk/Button.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Box.h
-Fl_Item.o: ../fltk/draw.h ../fltk/ItemGroup.h ../fltk/Menu.h ../fltk/Group.h
-Fl_Item.o: ../fltk/damage.h ../fltk/Divider.h
+Fl_Item.o: ../fltk/draw.h ../fltk/string.h ../fltk/ItemGroup.h ../fltk/Menu.h
+Fl_Item.o: ../fltk/Group.h ../fltk/damage.h ../fltk/Divider.h
 Fl_Light_Button.o: ../fltk/LightButton.h ../fltk/CheckButton.h
 Fl_Light_Button.o: ../fltk/Button.h ../fltk/Widget.h ../fltk/Style.h
 Fl_Light_Button.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
@@ -152,7 +160,7 @@ Fl_Menu_.o: ../fltk/Item.h
 Fl_Menu_add.o: ../fltk/Menu.h ../fltk/Group.h ../fltk/Widget.h
 Fl_Menu_add.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h
 Fl_Menu_add.o: ../fltk/Flags.h ../fltk/Item.h ../fltk/ItemGroup.h
-Fl_Menu_add.o: ../fltk/Menu.h ../fltk/Divider.h ARRAY.h
+Fl_Menu_add.o: ../fltk/Menu.h ../fltk/Divider.h ../fltk/string.h ARRAY.h
 Fl_Menu_Bar.o: ../fltk/MenuBar.h ../fltk/Menu.h ../fltk/Group.h
 Fl_Menu_Bar.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
 Fl_Menu_Bar.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/events.h
@@ -187,6 +195,7 @@ Fl_Pack.o: ../fltk/layout.h ../fltk/Box.h ../fltk/Symbol.h
 Fl_Pixmap.o: ../config.h ../fltk/xpmImage.h ../fltk/Image.h ../fltk/Symbol.h
 Fl_Pixmap.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Color.h ../fltk/draw.h
 Fl_Pixmap.o: ../fltk/x.h ../fltk/draw.h ../fltk/Style.h ../fltk/string.h
+Fl_Pixmap.o: ../fltk/string.h
 Fl_ProgressBar.o: ../fltk/ProgressBar.h ../fltk/Widget.h ../fltk/Style.h
 Fl_ProgressBar.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 Fl_ProgressBar.o: ../fltk/damage.h ../fltk/Box.h ../fltk/Symbol.h
@@ -208,6 +217,7 @@ Fl_RGB_Image.o: ../fltk/draw.h
 Fl_Roller.o: ../fltk/ThumbWheel.h ../fltk/Valuator.h ../fltk/events.h
 Fl_Roller.o: ../fltk/FL_API.h ../fltk/damage.h ../fltk/Box.h ../fltk/Color.h
 Fl_Roller.o: ../fltk/Flags.h ../fltk/Symbol.h ../fltk/draw.h ../fltk/math.h
+Fl_Roller.o: ../fltk/math.h
 Fl_Scroll.o: ../fltk/ScrollGroup.h ../fltk/Group.h ../fltk/Widget.h
 Fl_Scroll.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 Fl_Scroll.o: ../fltk/Scrollbar.h ../fltk/Slider.h ../fltk/Valuator.h
@@ -217,6 +227,7 @@ Fl_Scrollbar.o: ../config.h ../fltk/Scrollbar.h ../fltk/Slider.h
 Fl_Scrollbar.o: ../fltk/Valuator.h ../fltk/events.h ../fltk/FL_API.h
 Fl_Scrollbar.o: ../fltk/damage.h ../fltk/Box.h ../fltk/Color.h
 Fl_Scrollbar.o: ../fltk/Flags.h ../fltk/Symbol.h ../fltk/draw.h
+Fl_Scrollbar.o: ../fltk/math.h
 Fl_Shaped_Window.o: ../config.h ../fltk/ShapedWindow.h ../fltk/Window.h
 Fl_Shaped_Window.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h
 Fl_Shaped_Window.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
@@ -225,32 +236,34 @@ Fl_Shaped_Window.o: ../fltk/x.h ../fltk/draw.h
 Fl_Slider.o: ../fltk/Slider.h ../fltk/Valuator.h ../fltk/events.h
 Fl_Slider.o: ../fltk/FL_API.h ../fltk/damage.h ../fltk/Box.h ../fltk/Color.h
 Fl_Slider.o: ../fltk/Flags.h ../fltk/Symbol.h ../fltk/draw.h ../fltk/math.h
-Fl_Slider.o: ../config.h
+Fl_Slider.o: ../fltk/math.h ../config.h
 Fl_String_List.o: ../fltk/StringList.h ../fltk/Menu.h ../fltk/Group.h
 Fl_String_List.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
 Fl_String_List.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Item.h
 Fl_Style.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h
-Fl_Style.o: ../fltk/Flags.h ../fltk/string.h ../fltk/math.h ../fltk/run.h
-Fl_Style.o: ../config.h
+Fl_Style.o: ../fltk/Flags.h ../fltk/string.h ../fltk/string.h ../fltk/math.h
+Fl_Style.o: ../fltk/math.h ../fltk/run.h ../config.h
 Fl_Style_Set.o: ../fltk/StyleSet.h ../fltk/Style.h ../fltk/Color.h
 Fl_Style_Set.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Widget.h
+Fl_Style_Set.o: ../fltk/string.h
 Fl_Tabs.o: ../config.h ../fltk/TabGroup.h ../fltk/Group.h ../fltk/Widget.h
 Fl_Tabs.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 Fl_Tabs.o: ../fltk/events.h ../fltk/damage.h ../fltk/layout.h ../fltk/Box.h
 Fl_Tabs.o: ../fltk/Symbol.h ../fltk/draw.h ../fltk/Tooltip.h
-Fl_Text_Buffer.o: ../fltk/TextBuffer.h ../fltk/FL_API.h ../fltk/utf.h
+Fl_Text_Buffer.o: ../fltk/string.h ../fltk/TextBuffer.h ../fltk/FL_API.h
+Fl_Text_Buffer.o: ../fltk/utf.h
 Fl_Text_Display.o: ../fltk/TextBuffer.h ../fltk/FL_API.h
 Fl_Text_Display.o: ../fltk/TextDisplay.h ../fltk/Group.h ../fltk/Widget.h
 Fl_Text_Display.o: ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h
 Fl_Text_Display.o: ../fltk/Scrollbar.h ../fltk/Slider.h ../fltk/Valuator.h
 Fl_Text_Display.o: ../fltk/TextBuffer.h ../fltk/events.h ../fltk/damage.h
 Fl_Text_Display.o: ../fltk/Box.h ../fltk/Symbol.h ../fltk/draw.h
-Fl_Text_Display.o: ../fltk/utf.h
+Fl_Text_Display.o: ../fltk/utf.h ../fltk/string.h
 Fl_Text_Editor.o: ../fltk/TextEditor.h ../fltk/TextDisplay.h ../fltk/Group.h
 Fl_Text_Editor.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
 Fl_Text_Editor.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Scrollbar.h
 Fl_Text_Editor.o: ../fltk/Slider.h ../fltk/Valuator.h ../fltk/TextBuffer.h
-Fl_Text_Editor.o: ../fltk/Style.h ../fltk/events.h
+Fl_Text_Editor.o: ../fltk/Style.h ../fltk/events.h ../fltk/string.h
 Fl_Tile.o: ../fltk/TiledGroup.h ../fltk/Group.h ../fltk/Widget.h
 Fl_Tile.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 Fl_Tile.o: ../fltk/Window.h ../fltk/events.h ../fltk/layout.h
@@ -265,12 +278,13 @@ Fl_Tooltip.o: ../fltk/Box.h ../fltk/Symbol.h
 Fl_Valuator.o: ../fltk/Valuator.h ../fltk/Widget.h ../fltk/Style.h
 Fl_Valuator.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 Fl_Valuator.o: ../fltk/events.h ../fltk/damage.h ../fltk/math.h
+Fl_Valuator.o: ../fltk/math.h
 Fl_Value_Input.o: ../fltk/ValueInput.h ../fltk/Valuator.h
 Fl_Value_Input.o: ../fltk/FloatInput.h ../fltk/NumericInput.h ../fltk/Input.h
 Fl_Value_Input.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h
 Fl_Value_Input.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 Fl_Value_Input.o: ../fltk/events.h ../fltk/damage.h ../fltk/Box.h
-Fl_Value_Input.o: ../fltk/Symbol.h ../fltk/math.h
+Fl_Value_Input.o: ../fltk/Symbol.h ../fltk/math.h ../fltk/math.h
 ValueOutput.o: ../fltk/ValueOutput.h ../fltk/Valuator.h ../fltk/Widget.h
 ValueOutput.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h
 ValueOutput.o: ../fltk/Flags.h ../fltk/events.h ../fltk/damage.h
@@ -282,7 +296,7 @@ Fl_Value_Slider.o: ../fltk/Box.h ../fltk/Symbol.h
 Fl_Widget.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
 Fl_Widget.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/events.h
 Fl_Widget.o: ../fltk/damage.h ../fltk/layout.h ../fltk/Group.h
-Fl_Widget.o: ../fltk/Widget.h ../fltk/run.h ../config.h
+Fl_Widget.o: ../fltk/Widget.h ../fltk/run.h ../fltk/string.h ../config.h
 Fl_Window.o: ../config.h ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h
 Fl_Window.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 Fl_Window.o: ../fltk/events.h ../fltk/damage.h ../fltk/layout.h ../fltk/run.h
@@ -299,105 +313,126 @@ Fl_Window_iconize.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
 Fl_Window_iconize.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/x.h
 Fl_Window_iconize.o: ../fltk/draw.h
 Fl_abort.o: ../fltk/error.h ../fltk/FL_API.h ../fltk/string.h
+Fl_abort.o: ../fltk/string.h
 Fl_add_idle.o: ../fltk/run.h ../fltk/FL_API.h
 Fl_arg.o: ../config.h ../fltk/run.h ../fltk/FL_API.h ../fltk/Window.h
 Fl_arg.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
-Fl_arg.o: ../fltk/Flags.h ../fltk/filename.h ../fltk/error.h
-Fl_arg.o: ../fltk/Monitor.h ../fltk/x.h ../fltk/draw.h
+Fl_arg.o: ../fltk/Flags.h ../fltk/filename.h ../fltk/dirent.h
+Fl_arg.o: ../fltk/filename.h ../fltk/error.h ../fltk/Monitor.h
+Fl_arg.o: ../fltk/string.h ../fltk/x.h ../fltk/draw.h
 Fl_compose.o: ../config.h ../fltk/events.h ../fltk/FL_API.h
-Fl_display.o: ../fltk/run.h ../fltk/FL_API.h
+Fl_display.o: ../fltk/run.h ../fltk/FL_API.h ../fltk/string.h
 Fl_get_key.o: ../config.h ../fltk/events.h ../fltk/FL_API.h ../fltk/x.h
 Fl_get_key.o: ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h
 Fl_key_name.o: ../config.h ../fltk/events.h ../fltk/FL_API.h ../fltk/Widget.h
 Fl_key_name.o: ../fltk/Style.h ../fltk/Color.h ../fltk/Flags.h ../fltk/draw.h
-Fl_key_name.o: ../fltk/x.h ../fltk/draw.h
+Fl_key_name.o: ../fltk/string.h ../fltk/x.h ../fltk/draw.h
 Fl_lock.o: ../fltk/run.h ../fltk/FL_API.h ../config.h
 Fl_own_colormap.o: ../config.h ../fltk/visual.h ../fltk/FL_API.h ../fltk/x.h
 Fl_own_colormap.o: ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h
 Fl_visual.o: ../config.h ../fltk/visual.h ../fltk/FL_API.h ../fltk/x.h
 Fl_visual.o: ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h
-filename_absolute.o: ../fltk/filename.h ../fltk/FL_API.h
-filename_expand.o: ../fltk/filename.h ../fltk/FL_API.h
-filename_ext.o: ../fltk/filename.h ../fltk/FL_API.h
+filename_absolute.o: ../fltk/filename.h ../fltk/FL_API.h ../fltk/dirent.h
+filename_absolute.o: ../fltk/filename.h ../fltk/string.h
+filename_expand.o: ../fltk/filename.h ../fltk/FL_API.h ../fltk/dirent.h
+filename_expand.o: ../fltk/filename.h ../fltk/string.h
+filename_ext.o: ../fltk/filename.h ../fltk/FL_API.h ../fltk/dirent.h
+filename_ext.o: ../fltk/filename.h
 filename_isdir.o: ../config.h ../fltk/filename.h ../fltk/FL_API.h
+filename_isdir.o: ../fltk/dirent.h ../fltk/filename.h ../fltk/string.h
 filename_list.o: ../config.h ../fltk/filename.h ../fltk/FL_API.h
-filename_match.o: ../fltk/filename.h ../fltk/FL_API.h
-filename_setext.o: ../fltk/filename.h ../fltk/FL_API.h
+filename_list.o: ../fltk/dirent.h ../fltk/filename.h
+filename_match.o: ../fltk/filename.h ../fltk/FL_API.h ../fltk/dirent.h
+filename_match.o: ../fltk/filename.h
+filename_setext.o: ../fltk/filename.h ../fltk/FL_API.h ../fltk/dirent.h
+filename_setext.o: ../fltk/filename.h ../fltk/string.h
 fl_arc.o: ../config.h ../fltk/x.h ../fltk/draw.h ../fltk/Flags.h
 fl_arc.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/draw.h ../fltk/math.h
+fl_arc.o: ../fltk/math.h
 fl_arci.o: ../config.h ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h
-fl_arci.o: ../fltk/FL_API.h ../fltk/math.h ../fltk/x.h ../fltk/draw.h
+fl_arci.o: ../fltk/FL_API.h ../fltk/math.h ../fltk/math.h ../fltk/x.h
+fl_arci.o: ../fltk/draw.h
 fl_ask.o: ../fltk/events.h ../fltk/FL_API.h ../fltk/draw.h ../fltk/Flags.h
 fl_ask.o: ../fltk/Color.h ../fltk/ask.h ../fltk/Style.h ../fltk/Button.h
 fl_ask.o: ../fltk/ReturnButton.h ../fltk/Button.h ../fltk/Widget.h
 fl_ask.o: ../fltk/Window.h ../fltk/Group.h ../fltk/Input.h
 fl_ask.o: ../fltk/SecretInput.h ../fltk/Input.h ../fltk/string.h
+fl_ask.o: ../fltk/string.h
 fl_clip.o: ../config.h ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h
 fl_clip.o: ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 fl_clip.o: ../fltk/draw.h ../fltk/x.h ../fltk/draw.h
 fl_color.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h ../fltk/draw.h
 fl_color.o: ../fltk/Color.h ../config.h ../fltk/x.h ../fltk/draw.h fl_cmap.h
-fl_color.o: fl_color_x.cxx XColorMap.h
+fl_color.o: fl_color_x.cxx XColorMap.h ../fltk/string.h
 fl_cursor.o: ../config.h ../fltk/Cursor.h ../fltk/FL_API.h ../fltk/Window.h
 fl_cursor.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
 fl_cursor.o: ../fltk/Flags.h ../fltk/x.h ../fltk/draw.h ../fltk/draw.h
 fl_cursor.o: ../fltk/Color.h
 fl_curve.o: ../config.h ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h
-fl_curve.o: ../fltk/FL_API.h ../fltk/math.h ../fltk/x.h ../fltk/draw.h
+fl_curve.o: ../fltk/FL_API.h ../fltk/math.h ../fltk/math.h ../fltk/x.h
+fl_curve.o: ../fltk/draw.h
 fl_diamond_box.o: ../fltk/Box.h ../fltk/Color.h ../fltk/FL_API.h
 fl_diamond_box.o: ../fltk/Flags.h ../fltk/Symbol.h ../fltk/Style.h
 fl_diamond_box.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/draw.h
+fl_diamond_box.o: ../fltk/string.h
 fl_dnd.o: ../config.h fl_dnd_x.cxx ../fltk/Window.h ../fltk/Group.h
 fl_dnd.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h
 fl_dnd.o: ../fltk/Flags.h ../fltk/run.h ../fltk/events.h ../fltk/Cursor.h
 fl_dnd.o: ../fltk/x.h ../fltk/draw.h
 fl_draw.o: ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h ../fltk/FL_API.h
-fl_draw.o: ../fltk/math.h ../fltk/Font.h ../fltk/Style.h ../fltk/Widget.h
-fl_draw.o: ../fltk/Style.h ../fltk/Symbol.h
+fl_draw.o: ../fltk/math.h ../fltk/math.h ../fltk/Font.h ../fltk/Style.h
+fl_draw.o: ../fltk/string.h ../fltk/Widget.h ../fltk/Style.h ../fltk/Symbol.h
 fl_draw_image.o: ../config.h ../fltk/x.h ../fltk/draw.h ../fltk/Flags.h
 fl_draw_image.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/events.h
 fl_draw_image.o: ../fltk/draw.h fl_draw_image_x.cxx ../fltk/error.h
 fl_draw_image.o: XColorMap.h
 fl_draw_pixmap.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
-fl_draw_pixmap.o: ../fltk/draw.h ../fltk/Color.h ../config.h
+fl_draw_pixmap.o: ../fltk/draw.h ../fltk/Color.h ../config.h ../fltk/string.h
 fl_engraved_label.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
 fl_engraved_label.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/LabelType.h
 fl_engraved_label.o: ../fltk/draw.h
 fl_file_chooser.o: ../config.h ../fltk/file_chooser.h ../fltk/FL_API.h
 fl_file_chooser.o: ../fltk/FileChooser.h ../fltk/Window.h ../fltk/Group.h
 fl_file_chooser.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h
-fl_file_chooser.o: ../fltk/Flags.h ../fltk/Choice.h ../fltk/Menu.h
-fl_file_chooser.o: ../fltk/Button.h ../fltk/filename.h ../fltk/FileBrowser.h
-fl_file_chooser.o: ../fltk/Browser.h ../fltk/Scrollbar.h ../fltk/Slider.h
-fl_file_chooser.o: ../fltk/Valuator.h ../fltk/FileIcon.h ../fltk/FileInput.h
-fl_file_chooser.o: ../fltk/Input.h ../fltk/ReturnButton.h ../fltk/Button.h
+fl_file_chooser.o: ../fltk/Flags.h ../fltk/string.h ../fltk/Choice.h
+fl_file_chooser.o: ../fltk/Menu.h ../fltk/Button.h ../fltk/filename.h
+fl_file_chooser.o: ../fltk/FileBrowser.h ../fltk/Browser.h
+fl_file_chooser.o: ../fltk/Scrollbar.h ../fltk/Slider.h ../fltk/Valuator.h
+fl_file_chooser.o: ../fltk/FileIcon.h ../fltk/FileInput.h ../fltk/Input.h
+fl_file_chooser.o: ../fltk/ReturnButton.h ../fltk/Button.h
 fl_font.o: ../config.h ../fltk/Font.h ../fltk/Style.h ../fltk/Color.h
 fl_font.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/draw.h ../fltk/x.h
-fl_font.o: ../fltk/draw.h fl_font_xft.cxx ../fltk/events.h ../fltk/math.h
-fl_font.o: ../fltk/string.h ../fltk/utf.h
+fl_font.o: ../fltk/draw.h fl_font_x.cxx ../fltk/error.h ../fltk/math.h
+fl_font.o: ../fltk/math.h ../fltk/string.h ../fltk/utf.h IFont.h
 fl_glyph.o: ../fltk/Widget.h ../fltk/Style.h ../fltk/Color.h ../fltk/FL_API.h
 fl_glyph.o: ../fltk/Flags.h ../fltk/Box.h ../fltk/Symbol.h ../fltk/draw.h
 fl_labeltype.o: ../fltk/LabelType.h ../fltk/Style.h ../fltk/Color.h
 fl_labeltype.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/Box.h
 fl_labeltype.o: ../fltk/Symbol.h ../fltk/Image.h ../fltk/Widget.h
 fl_labeltype.o: ../fltk/Window.h ../fltk/Group.h ../fltk/Widget.h
-fl_labeltype.o: ../fltk/damage.h ../fltk/draw.h ../fltk/string.h ../config.h
+fl_labeltype.o: ../fltk/damage.h ../fltk/draw.h ../fltk/string.h
+fl_labeltype.o: ../fltk/string.h ../config.h
 fl_list_fonts.o: ../config.h ../fltk/Font.h ../fltk/Style.h ../fltk/Color.h
 fl_list_fonts.o: ../fltk/FL_API.h ../fltk/Flags.h ../fltk/string.h
+fl_list_fonts.o: ../fltk/string.h fl_list_fonts_x.cxx ../fltk/x.h
+fl_list_fonts.o: ../fltk/draw.h IFont.h
 fl_load_plugin.o: ../fltk/load_plugin.h ../fltk/FL_API.h ../config.h
 fl_oval_box.o: ../fltk/Box.h ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h
 fl_oval_box.o: ../fltk/Symbol.h ../fltk/Style.h ../fltk/draw.h
 fl_overlay.o: ../config.h ../fltk/x.h ../fltk/draw.h ../fltk/Flags.h
 fl_overlay.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/draw.h
-fl_overlay_visual.o: ../config.h
+fl_overlay_visual.o: ../config.h ../fltk/events.h ../fltk/FL_API.h
+fl_overlay_visual.o: ../fltk/x.h ../fltk/draw.h ../fltk/Flags.h
+fl_overlay_visual.o: ../fltk/Color.h
 fl_plastic_box.o: ../fltk/Box.h ../fltk/Color.h ../fltk/FL_API.h
 fl_plastic_box.o: ../fltk/Flags.h ../fltk/Symbol.h ../fltk/Style.h
-fl_plastic_box.o: ../fltk/draw.h
+fl_plastic_box.o: ../fltk/draw.h ../fltk/string.h
 fl_rect.o: ../config.h ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h
 fl_rect.o: ../fltk/FL_API.h ../fltk/x.h ../fltk/draw.h ../fltk/math.h
+fl_rect.o: ../fltk/math.h
 fl_round_box.o: ../fltk/Box.h ../fltk/Color.h ../fltk/FL_API.h
 fl_round_box.o: ../fltk/Flags.h ../fltk/Symbol.h ../fltk/Style.h
-fl_round_box.o: ../fltk/draw.h
+fl_round_box.o: ../fltk/draw.h ../fltk/string.h
 fl_rounded_box.o: ../fltk/Box.h ../fltk/Color.h ../fltk/FL_API.h
 fl_rounded_box.o: ../fltk/Flags.h ../fltk/Symbol.h ../fltk/Style.h
 fl_rounded_box.o: ../fltk/draw.h
@@ -409,6 +444,7 @@ Fl_Shared_Image.o: ../config.h ../fltk/events.h ../fltk/FL_API.h
 Fl_Shared_Image.o: ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h
 Fl_Shared_Image.o: ../fltk/SharedImage.h ../fltk/Image.h ../fltk/Symbol.h
 Fl_Shared_Image.o: ../fltk/xbmImage.h ../fltk/x.h ../fltk/draw.h
+Fl_Shared_Image.o: ../fltk/string.h
 fl_shadow_box.o: ../fltk/Box.h ../fltk/Color.h ../fltk/FL_API.h
 fl_shadow_box.o: ../fltk/Flags.h ../fltk/Symbol.h ../fltk/Style.h
 fl_shadow_box.o: ../fltk/draw.h
@@ -418,14 +454,16 @@ fl_show_colormap.o: ../fltk/Group.h ../fltk/Widget.h ../fltk/Style.h
 fl_show_colormap.o: ../fltk/Monitor.h ../fltk/Box.h ../fltk/Symbol.h
 fl_show_colormap.o: ../fltk/draw.h ../fltk/events.h ../fltk/damage.h
 fl_symbols.o: ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h ../fltk/FL_API.h
-fl_symbols.o: ../fltk/Symbol.h ../fltk/math.h ../fltk/error.h
+fl_symbols.o: ../fltk/Symbol.h ../fltk/math.h ../fltk/math.h ../fltk/error.h
+fl_symbols.o: ../fltk/string.h
 fl_vertex.o: ../config.h ../fltk/draw.h ../fltk/Flags.h ../fltk/Color.h
-fl_vertex.o: ../fltk/FL_API.h ../fltk/math.h ../fltk/x.h ../fltk/draw.h
+fl_vertex.o: ../fltk/FL_API.h ../fltk/math.h ../fltk/math.h ../fltk/x.h
+fl_vertex.o: ../fltk/draw.h
 fltk_theme.o: ../config.h fltk_theme_x.cxx ../fltk/Widget.h ../fltk/Style.h
 fltk_theme.o: ../fltk/Color.h ../fltk/FL_API.h ../fltk/Flags.h ../fltk/draw.h
-fltk_theme.o: ../fltk/Monitor.h ../fltk/events.h ../fltk/string.h ../fltk/x.h
-fltk_theme.o: ../fltk/draw.h
-scandir.o: ../config.h
-string.o: ../fltk/string.h ../fltk/FL_API.h
+fltk_theme.o: ../fltk/Monitor.h ../fltk/events.h ../fltk/string.h
+fltk_theme.o: ../fltk/string.h ../fltk/x.h ../fltk/draw.h
+scandir.o: ../config.h ../fltk/string.h ../fltk/dirent.h ../fltk/filename.h
+string.o: ../fltk/string.h ../fltk/FL_API.h ../fltk/string.h
 utf.o: ../fltk/utf.h ../fltk/FL_API.h
-vsnprintf.o: ../config.h ../fltk/string.h ../fltk/FL_API.h
+vsnprintf.o: ../config.h ../fltk/string.h ../fltk/FL_API.h ../fltk/string.h
