@@ -1,4 +1,4 @@
-CREDITS - Fast Light Tool Kit (FLTK) Version 1.1.5
+CREDITS - Fast Light Tool Kit (FLTK) Version 1.2
 --------------------------------------------------
 
     This file lists the people responsible for the toolkit you
@@ -51,3 +51,5 @@ OTHER CONTRIBUTORS
 	Emanuele Vicentini
 	Jim Wilson
 	Ken Yarnall
+	Jean-Marc Lienher
+	Roman Kantor
