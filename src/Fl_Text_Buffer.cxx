@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Buffer.cxx,v 1.3 2001/02/21 06:15:45 clip Exp $"
+// "$Id: Fl_Text_Buffer.cxx,v 1.4 2001/02/21 23:56:49 robertk Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -2255,9 +2255,14 @@ static int min( int i1, int i2 ) {
 
 int
 Fl_Text_Buffer::insertfile(const char *file, int pos, int buflen) {
-  FILE *fp;
+  FILE *fp;  int r;
   if (!(fp = fopen(file, "r"))) return 1;
-  char buffer[buflen]; int r;
+#ifdef WIN32
+  char *buffer = new char[buflen];
+  if(!buffer) return(2);
+#else
+  char buffer[buflen];
+#endif
   for (; (r = fread(buffer, 1, buflen - 1, fp)) > 0; pos += r) {
     buffer[r] = (char)0;
     insert(pos, buffer);
@@ -2265,6 +2270,9 @@ Fl_Text_Buffer::insertfile(const char *file, int pos, int buflen) {
 
   int e = ferror(fp) ? 2 : 0;
   fclose(fp);
+#ifdef WIN32
+  if(buffer) delete[] buffer;
+#endif
   return e;
 }
 
@@ -2286,5 +2294,5 @@ Fl_Text_Buffer::outputfile(const char *file, int start, int end, int buflen) {
 
 
 //
-// End of "$Id: Fl_Text_Buffer.cxx,v 1.3 2001/02/21 06:15:45 clip Exp $".
+// End of "$Id: Fl_Text_Buffer.cxx,v 1.4 2001/02/21 23:56:49 robertk Exp $".
 //
