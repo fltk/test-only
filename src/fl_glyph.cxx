@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.22 2001/01/02 00:20:28 clip Exp $"
+// "$Id: fl_glyph.cxx,v 1.23 2001/01/02 04:50:37 clip Exp $"
 //
 // Glyph drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,7 +27,6 @@
 #include <FL/Fl_Style.H>
 #include <FL/fl_draw.H>
 
-#include <stdio.h>//CET-FIXME
 void fl_glyph(const Fl_Widget* widget, int t,
 	      int x,int y,int w,int h, Fl_Flags f)
 {
@@ -96,7 +95,7 @@ void fl_glyph(const Fl_Widget* widget, int t,
   }
 
   // to draw the shape inactive, draw it twice to get the engraved look:
-  for (int i = (f&FL_INACTIVE) ? 1 : 0; i >= 0; i--) {
+  for (int i = (f&FL_INACTIVE && !f&FL_SELECTED) ? 1 : 0; i >= 0; i--) {
     fl_color(i ? Fl_Color(FL_LIGHT3) : color);
 
     int w1 = (w+2)/3; int x1,y1;
@@ -144,5 +143,5 @@ void fl_glyph(const Fl_Widget* widget, int t,
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.22 2001/01/02 00:20:28 clip Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.23 2001/01/02 04:50:37 clip Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.99 2000/10/19 05:48:26 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.100 2001/01/02 04:50:37 clip Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -89,7 +89,11 @@ struct MenuState {
 // of the calling widget to allow compatability with fltk 1.0 and
 // to allow popup menus to have different colors.
 
-static Fl_Named_Style* style = new Fl_Named_Style("Menu", 0, &style);
+static void revert(Fl_Style *s) {
+  s->text_box = FL_NO_BOX;
+}
+
+static Fl_Named_Style* style = new Fl_Named_Style("Menu", revert, &style);
 
 ////////////////////////////////////////////////////////////////
 
@@ -330,7 +334,7 @@ void MenuWindow::draw() {
 	  fl_pop_clip();
 	}
       }
-
+      if (!widget->active_r()) flags |= FL_INACTIVE;
       widget->x(x);
       widget->y(y+leading/2);
       int save_w = widget->w(); widget->w(w);
@@ -343,8 +347,8 @@ void MenuWindow::draw() {
 	int nh = widget->label_size()+2;
 	draw_glyph(FL_GLYPH_RIGHT, x+w-nh, y+(ih-nh)/2, nh, nh, flags);
       } else if (widget->shortcut()) {
-	Fl_Color c = (flags&FL_SELECTED) ? widget->selection_text_color() :
-	  widget->text_color();
+        Fl_Color c = widget->get_label_color(flags);
+        //fl_font(widget->text_font(), widget->text_size());
 	widget->label_type()->draw(Fl::key_name(widget->shortcut()),
 				   x, y, w-3, ih, c, flags | FL_ALIGN_RIGHT);
       }
@@ -726,5 +730,5 @@ int Fl_Menu_::pulldown(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.99 2000/10/19 05:48:26 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.100 2001/01/02 04:50:37 clip Exp $".
 //

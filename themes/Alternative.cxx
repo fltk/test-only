@@ -1,5 +1,5 @@
 //
-// "$Id: Alternative.cxx,v 1.30 2001/01/02 00:20:29 clip Exp $"
+// "$Id: Alternative.cxx,v 1.31 2001/01/02 04:50:37 clip Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -254,6 +254,7 @@ static void choice_glyph(const Fl_Widget* widget, int,
                          int x,int y,int w, int h,
                          Fl_Flags f)
 {
+  FL_FLAT_BOX->draw(widget,x,y,w,h,f);
   int H = h/3;
   int Y = y + (h-H)/2;
   widget->box()->draw(widget,x,Y,w,H,f);
@@ -339,5 +340,5 @@ int fltk_theme() {
 }
 
 //
-// End of "$Id: Alternative.cxx,v 1.30 2001/01/02 00:20:29 clip Exp $".
+// End of "$Id: Alternative.cxx,v 1.31 2001/01/02 04:50:37 clip Exp $".
 //
