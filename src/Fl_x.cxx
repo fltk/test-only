@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.84 2000/07/30 03:46:04 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.85 2000/07/31 05:52:46 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -262,10 +262,20 @@ int fl_screen;
 XVisualInfo *fl_visual;
 Colormap fl_colormap;
 
-static Atom wm_delete_window;
-static Atom wm_protocols;
-       Atom fl_motif_wm_hints;
+static Atom WM_DELETE_WINDOW;
+static Atom WM_PROTOCOLS;
+       Atom fl_MOTIF_WM_HINTS;
 static Atom FLTKChangeScheme;
+static Atom TARGETS;
+static Atom XdndAware;
+static Atom XdndSelection;
+static Atom XdndEnter;
+static Atom XdndPosition;
+static Atom XdndLeave;
+static Atom XdndDrop;
+static Atom XdndStatus;
+static Atom XdndActionCopy;
+static Atom XdndFinished;
 
 static void fd_callback(int,void *) {do_queued_events();}
 
@@ -296,10 +306,20 @@ void fl_open_display(Display* d) {
   fl_display = d;
   Fl::add_fd(ConnectionNumber(d), POLLIN, fd_callback);
 
-  wm_delete_window	= XInternAtom(d, "WM_DELETE_WINDOW", 0);
-  wm_protocols		= XInternAtom(d, "WM_PROTOCOLS", 0);
-  fl_motif_wm_hints	= XInternAtom(d, "_MOTIF_WM_HINTS", 0);
-  FLTKChangeScheme	= XInternAtom(d, "FLTKChangeScheme", 0);
+  WM_DELETE_WINDOW	= XInternAtom(d, "WM_DELETE_WINDOW",	0);
+  WM_PROTOCOLS		= XInternAtom(d, "WM_PROTOCOLS",	0);
+  fl_MOTIF_WM_HINTS	= XInternAtom(d, "_MOTIF_WM_HINTS",	0);
+  FLTKChangeScheme	= XInternAtom(d, "FLTKChangeScheme",	0);
+  TARGETS		= XInternAtom(d, "TARGETS",		0);
+  XdndAware		= XInternAtom(d, "XdndAware",		0);
+  XdndSelection		= XInternAtom(d, "XdndSelection",	0);
+  XdndEnter		= XInternAtom(d, "XdndEnter",		0);
+  XdndPosition		= XInternAtom(d, "XdndPosition",	0);
+  XdndLeave		= XInternAtom(d, "XdndLeave",		0);
+  XdndDrop		= XInternAtom(d, "XdndDrop",		0);
+  XdndStatus		= XInternAtom(d, "XdndStatus",		0);
+  XdndActionCopy	= XInternAtom(d, "XdndActionCopy",	0);
+  XdndFinished		= XInternAtom(d, "XdndFinished",	0);
 
   fl_screen = DefaultScreen(fl_display);
   // construct an XVisualInfo that matches the default Visual:
@@ -376,6 +396,69 @@ void Fl::get_mouse(int &x, int &y) {
 }
 
 ////////////////////////////////////////////////////////////////
+// code used for selections:
+
+static Fl_Widget *fl_selection_requestor;
+static char *selection_buffer;
+static int selection_length;
+static int selection_buffer_length;
+
+// Call this when a "paste" operation happens:
+void Fl::paste(Fl_Widget &receiver) {
+  if (selection_owner()) {
+    // We already have it, do it quickly without window server.
+    // Notice that the text is clobbered if set_selection is
+    // called in response to FL_PASTE!
+    Fl::e_text = selection_buffer;
+    Fl::e_length = selection_length;
+    receiver.handle(FL_PASTE);
+    return;
+  }
+  // otherwise get the window server to return it:
+  fl_selection_requestor = &receiver;
+  XConvertSelection(fl_display, XA_PRIMARY, XA_STRING, XA_PRIMARY,
+		    fl_xid(Fl::first_window()), fl_event_time);
+}
+
+// call this when you create a selection:
+void Fl::selection(Fl_Widget &owner, const char *stuff, int len) {
+  if (!stuff || len<0) return;
+  if (len+1 > selection_buffer_length) {
+    delete[] selection_buffer;
+    selection_buffer = new char[len+100];
+    selection_buffer_length = len+100;
+  }
+  memcpy(selection_buffer, stuff, len);
+  selection_buffer[len] = 0; // needed for direct paste
+  selection_length = len;
+  selection_owner(&owner);
+  XSetSelectionOwner(fl_display, XA_PRIMARY, fl_message_window, fl_event_time);
+}
+
+Atom fl_dnd_types[4]; // null-terminated list of data types being supplied
+Atom fl_dnd_action_request;
+Atom fl_dnd_action;
+
+static void sendClientMessage(Window window, Atom message,
+	long d0, long d1=0, long d2=0, long d3=0, long d4=0)
+{
+  XClientMessageEvent e;
+  e.type = ClientMessage;
+  e.serial = 0;
+  e.send_event = 0;
+  e.display = fl_display;
+  e.window = window;
+  e.message_type = message;
+  e.format = 32;
+  e.data.l[0] = d0;
+  e.data.l[1] = d1;
+  e.data.l[2] = d2;
+  e.data.l[3] = d3;
+  e.data.l[4] = d4;
+  XSendEvent(fl_display, window, 0, 0, (XEvent*)&e);
+}
+
+////////////////////////////////////////////////////////////////
 
 const XEvent* fl_xevent; // the current x event
 ulong fl_event_time; // the last timestamp from an x event
@@ -443,16 +526,63 @@ int fl_handle(const XEvent& xevent)
     XRefreshKeyboardMapping((XMappingEvent*)&xevent.xmapping);
     break;
 
-  case ClientMessage:
-    if (window && (Atom)(xevent.xclient.data.l[0]) == wm_delete_window) {
+  case ClientMessage: {
+    Atom message = fl_xevent->xclient.message_type;
+    const long* data = fl_xevent->xclient.data.l;
+
+    if (window && (Atom)(data[0]) == WM_DELETE_WINDOW) {
       if (!Fl::grab() && !(Fl::modal() && window != Fl::modal()))
 	window->do_callback();
       return 1;
-    } else if (xevent.xclient.message_type == FLTKChangeScheme) {
+
+    } else if (message == FLTKChangeScheme) {
       Fl::reload_scheme();
       return 1;
+
+    } else if (message == XdndEnter) {
+      // version number is data[1]>>24
+      // data[1]&1 indicates that XdndTypeList has all types, else:
+      for (int i = 2; i < 5; i++) fl_dnd_types[i-2] = data[i];
+      event = FL_DND_ENTER;
+      break;
+
+    } else if (message == XdndPosition) {
+      Fl::e_x_root = data[2]>>16;
+      Fl::e_y_root = data[2]&0xFFFF;
+      if (window) {
+	Fl::e_x = Fl::e_x_root-window->x();
+	Fl::e_y = Fl::e_y_root-window->y();
+      }
+      fl_event_time = data[3];
+      fl_dnd_action_request = data[4];
+      fl_dnd_action = XdndActionCopy;
+      int accept = Fl::handle(FL_DND_DRAG, window);
+      sendClientMessage(data[0], XdndStatus,
+			fl_xevent->xclient.window,
+			accept ? 1 : 0,
+			0, // used for xy rectangle to not send position inside
+			0, // used for width+height of rectangle
+			accept ? fl_dnd_action : None);
+      return 1;
+
+    } else if (message == XdndLeave) {
+      event = FL_DND_LEAVE;
+      break;
+
+    } else if (message == XdndDrop) {
+      fl_event_time = data[2];
+      Window to_window = fl_xevent->xclient.window;
+      Window from_window = data[0];
+      if (Fl::handle(FL_DND_RELEASE, window)) {
+	fl_selection_requestor = Fl::belowmouse();
+	XConvertSelection(fl_display,XdndSelection,fl_dnd_types[0],XA_PRIMARY,
+			  to_window, fl_event_time);
+      }
+      sendClientMessage(from_window, XdndFinished, to_window);
+      return 1;
+
     }
-    break;
+    break;}
 
   case UnmapNotify:
     window = fl_find(xevent.xmapping.window);
@@ -623,6 +753,56 @@ int fl_handle(const XEvent& xevent)
 		       xevent.xconfigure.width, xevent.xconfigure.height))
       resize_from_system = window;
     return 1;}
+
+  case SelectionNotify: {
+    if (!fl_selection_requestor) return 0;
+    static char *pastebuffer;
+    if (pastebuffer) {XFree(pastebuffer); pastebuffer = 0;}
+    if (fl_xevent->xselection.property != 0) {
+      Atom a; int f; unsigned long n,b;
+      if (!XGetWindowProperty(fl_display,
+			      fl_xevent->xselection.requestor,
+			      fl_xevent->xselection.property,
+			      0,100000,1,0,&a,&f,&n,&b,
+			      (unsigned char**)&pastebuffer)) {
+	Fl::e_text = pastebuffer;
+	Fl::e_length = int(n);
+	fl_selection_requestor->handle(FL_PASTE);
+      }
+    }}
+    return 1;
+
+  case SelectionClear:
+    Fl::selection_owner(0);
+    return 1;
+
+  case SelectionRequest: {
+    XSelectionEvent e;
+    e.type = SelectionNotify;
+    e.display = fl_display;
+    e.requestor = fl_xevent->xselectionrequest.requestor;
+    e.selection = fl_xevent->xselectionrequest.selection;
+    e.target = fl_xevent->xselectionrequest.target;
+    e.time = fl_xevent->xselectionrequest.time;
+    e.property = fl_xevent->xselectionrequest.property;
+    if (e.target == TARGETS) {
+      Atom a = XA_STRING;
+      XChangeProperty(fl_display, e.requestor, e.property,
+		      XA_ATOM, sizeof(Atom)*8, 0, (unsigned char*)&a,
+		      sizeof(Atom));
+    } else if (/*e.target == XA_STRING &&*/ selection_length) {
+      XChangeProperty(fl_display, e.requestor, e.property,
+		      e.target, 8, 0, (unsigned char *)selection_buffer,
+		      selection_length);
+    } else {
+//    char* x = XGetAtomName(fl_display,e.target);
+//    fprintf(stderr,"selection request of %s\n",x);
+//    XFree(x);
+      e.property = 0;
+    }
+    XSendEvent(fl_display, e.requestor, 0, 0, (XEvent *)&e);}
+    return 1;
+
   }
 
   return Fl::handle(event, window);
@@ -727,27 +907,32 @@ void Fl_X::create(Fl_Window* w,
   x->next = Fl_X::first;
   Fl_X::first = x;
 
-  if (!w->parent() && w->border()) {
-    // Communicate all kinds 'o junk to the X Window Manager:
-
-    w->label(w->label(), w->iconlabel());
-
-    XChangeProperty(fl_display, x->xid, wm_protocols,
- 		    XA_ATOM, 32, 0, (uchar*)&wm_delete_window, 1);
-
-    // send size limits and border:
-    x->sendxjunk();
+  if (!w->parent() && w->border()) { // send junk to X window manager:
 
     // Setting this allows the window manager to use the window's class
     // to look up things like border colors and icons in the xrdb database:
     XChangeProperty(fl_display, x->xid, XA_WM_CLASS, XA_STRING, 8, 0,
 		    (unsigned char *)w->xclass(), strlen(w->xclass()));
 
+    // Set the label:
+    w->label(w->label(), w->iconlabel());
+
+    // Makes the close button produce an event:
+    XChangeProperty(fl_display, x->xid, WM_PROTOCOLS,
+ 		    XA_ATOM, 32, 0, (uchar*)&WM_DELETE_WINDOW, 1);
+
+    // Make it receptive to DnD:
+    int version = 4;
+    XChangeProperty(fl_display, x->xid, XdndAware,
+		    XA_ATOM, sizeof(int)*8, 0, (unsigned char*)&version, 1);
+
+    // Send child window information:
     if (fl_modal_for)
       XSetTransientForHint(fl_display, x->xid, fl_modal_for->i->xid);
 
+    // Set up the icon and initial icon state:
     XWMHints hints;
-    hints.input = True;
+    hints.input = True; // some window managers require this to be sent?
     hints.flags = InputHint;
     if (fl_show_iconic) {
       hints.flags |= StateHint;
@@ -758,6 +943,9 @@ void Fl_X::create(Fl_Window* w,
       hints.flags       |= IconPixmapHint;
     }
     XSetWMHints(fl_display, x->xid, &hints);
+
+    // send size limits and border:
+    x->sendxjunk();
   }
 }
 
@@ -765,7 +953,7 @@ void Fl_X::create(Fl_Window* w,
 // Send X window stuff that can be changed over time:
 
 void Fl_X::sendxjunk() {
-  if (w->parent()) return; // it's not a window manager window!
+  if (w->parent() || !w->border()) return; // it's not a window manager window!
 
   XSizeHints hints;
   // memset(&hints, 0, sizeof(hints)); jreiser suggestion to fix purify?
@@ -819,7 +1007,7 @@ void Fl_X::sendxjunk() {
 
   XSetWMNormalHints(fl_display, xid, &hints);
   XChangeProperty(fl_display, xid,
-		  fl_motif_wm_hints, fl_motif_wm_hints,
+		  fl_MOTIF_WM_HINTS, fl_MOTIF_WM_HINTS,
 		  32, 0, (unsigned char *)prop, 5);
 }
 
@@ -916,5 +1104,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.84 2000/07/30 03:46:04 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.85 2000/07/31 05:52:46 spitzak Exp $".
 //

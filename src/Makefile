@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.83 2000/07/14 08:35:01 clip Exp $"
+# "$Id: Makefile,v 1.84 2000/07/31 05:52:46 spitzak Exp $"
 #
 # Library makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -94,7 +94,6 @@ CPPFILES = \
 	Fl_add_idle.cxx \
 	Fl_arg.cxx \
 	Fl_compose.cxx \
-	Fl_cutpaste.cxx \
 	Fl_display.cxx \
 	Fl_get_key.cxx \
 	Fl_lock.cxx \
@@ -227,7 +226,6 @@ $(DSO).so.2 $(DSO).sl.2: $(OBJECTS:.o=.shared.o)
 	rm -f $@
 	$(DSOCOMMAND) $(DSONAME) $(OBJECTS:.o=.shared.o) $(DSOLIBS)
 	@mv $(DSONAME) $@
-	
 
 DLLIMPORTNAME = $(LIBNAME).2.dll$(LIBEXT)
 $(DSO).2.dll: $(OBJECTS:.o=.shared.o)
@@ -288,5 +286,5 @@ install_shared: shared
 install_programs:
 
 #
-# End of "$Id: Makefile,v 1.83 2000/07/14 08:35:01 clip Exp $".
+# End of "$Id: Makefile,v 1.84 2000/07/31 05:52:46 spitzak Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.47 2000/06/10 04:10:15 carl Exp $"
+// "$Id: Enumerations.H,v 1.48 2000/07/31 05:52:46 spitzak Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -72,6 +72,10 @@ enum Fl_Event {	// events
   FL_VIEWCHANGE         = 16,
   FL_PASTE		= 17,
   FL_SELECTIONCLEAR	= 18,
+  FL_DND_ENTER		= 19,
+  FL_DND_DRAG		= 20,
+  FL_DND_LEAVE		= 21,
+  FL_DND_RELEASE	= 22,
 
 // back compatability values:
   FL_KEYBOARD		= FL_KEY
@@ -207,5 +211,5 @@ enum Fl_Damage {
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.47 2000/06/10 04:10:15 carl Exp $".
+// End of "$Id: Enumerations.H,v 1.48 2000/07/31 05:52:46 spitzak Exp $".
 //

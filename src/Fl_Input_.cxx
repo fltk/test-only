@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_.cxx,v 1.42 2000/06/11 07:31:07 bill Exp $"
+// "$Id: Fl_Input_.cxx,v 1.43 2000/07/31 05:52:46 spitzak Exp $"
 //
 // Common input widget routines for the Fast Light Tool Kit (FLTK).
 //
@@ -153,7 +153,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
 
   Fl_Flags fl = active_r() ? FL_NO_FLAGS : FL_INACTIVE;
   Fl_Color background = text_background();
-  if (!focused() && !size()) {
+  if (!show_cursor() && !size()) {
     // we have to erase it if cursor was there
     fl_color(background);
     fl_rectf(X, Y, W, H);
@@ -168,7 +168,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
   if (W > 12) {X += 3; W -= 6;} // add a left/right border
 
   int selstart, selend;
-  if (!focused() && !pushed())
+  if (!show_cursor() && !pushed())
     selstart = selend = 0;
   else if (position() <= mark()) {
     selstart = position(); selend = mark();
@@ -284,7 +284,7 @@ void Fl_Input_::drawtext(int X, int Y, int W, int H) {
     } else {
       // draw the cursor:
       fl_color(textcolor);
-      if (focused() && selstart == selend &&
+      if (show_cursor() && selstart == selend &&
 	  position() >= p-value() && position() <= e-value()) {
 	fl_rectf(X+curx-xscroll_, Y+ypos, 2, height);
       }
@@ -323,8 +323,8 @@ int Fl_Input_::lineboundary(int i) const {
   return index(i-1) == '\n' || index(i) == '\n';
 }
 
-void Fl_Input_::handle_mouse(int X, int Y,
-			     int W, int /*H*/, int drag) {
+void Fl_Input_::mouse_position(int X, int Y, int W, int /*H*/, int drag)
+{
   was_up_down = 0;
   if (!size()) return;
 
@@ -599,51 +599,19 @@ void Fl_Input_::maybe_do_callback() {
     clear_changed(); do_callback();}
 }
 
-int Fl_Input_::handletext(int event, int X, int Y, int W, int H) {
-  switch (event) {
-
-  case FL_FOCUS:
+void Fl_Input_::show_cursor(char v) {
+  if (v == show_cursor_) return;
+  show_cursor_ = v;
+  if (v) {
     if (mark_ == position_) {
       minimal_update(size()+1);
     } else //if (Fl::selection_owner() != this)
       minimal_update(mark_, position_);
-    return 1;
-
-  case FL_UNFOCUS:
+  } else {
     if (mark_ == position_) {
       if (!(damage()&FL_DAMAGE_EXPOSE)) {minimal_update(position_); erase_cursor_only = 1;}
     } else //if (Fl::selection_owner() != this)
       minimal_update(mark_, position_);
-    if (when() & FL_WHEN_RELEASE) maybe_do_callback();
-    return 1;
-
-  case FL_PUSH:
-    handle_mouse(X, Y, W, H, Fl::event_state(FL_SHIFT));
-    return 1;
-
-  case FL_DRAG:
-    handle_mouse(X, Y, W, H, 1);
-    return 1;
-
-  case FL_RELEASE:
-//  handle_mouse(X, Y, W, H, 1);
-    copy();
-    return 1;
-
-//   case FL_SELECTIONCLEAR:
-//     minimal_update(mark_, position_);
-//     mark_ = position_;
-//     return 1;
-
-  case FL_PASTE: {
-    // strip trailing control characters and spaces before pasting:
-    const char* t = Fl::event_text();
-    const char* e = t+Fl::event_length();
-    if (type()!=FL_MULTILINE_INPUT) while (e > t && *(uchar*)(e-1) <= ' ') e--;
-    return replace(position(), mark(), t, e-t);}
-
-  default:
-    return 0;
   }
 }
 
@@ -656,6 +624,7 @@ Fl_Input_::Fl_Input_(int x, int y, int w, int h, const char* l)
 {
   clear_flag(FL_ALIGN_MASK);
   set_flag(FL_ALIGN_LEFT);
+  show_cursor_ = 0;
   mark_ = position_ = size_ = 0;
   bufsize = 0;
   buffer  = 0;
@@ -749,5 +718,5 @@ Fl_Input_::~Fl_Input_() {
 }
 
 //
-// End of "$Id: Fl_Input_.cxx,v 1.42 2000/06/11 07:31:07 bill Exp $".
+// End of "$Id: Fl_Input_.cxx,v 1.43 2000/07/31 05:52:46 spitzak Exp $".
 //

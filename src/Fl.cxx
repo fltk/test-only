@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.104 2000/07/14 08:35:00 clip Exp $"
+// "$Id: Fl.cxx,v 1.105 2000/07/31 05:52:46 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -338,10 +338,6 @@ void fl_fix_focus() {
   Fl::focus(0);
 }
 
-#ifndef WIN32
-Fl_Widget *fl_selection_requestor; // from Fl_cutpaste.C
-#endif
-
 // This function is called by ~Fl_Widget() and by Fl_Widget::deactivate
 // and by Fl_Widget::hide().  It indicates that the widget does not want
 // to receive any more events, and also removes all global variables that
@@ -475,18 +471,26 @@ int Fl::handle(int event, Fl_Window* window)
   case FL_ENTER:
   case FL_MOVE:
 //case FL_DRAG: // does not happen
+  case FL_DND_ENTER:
+  case FL_DND_DRAG:
     xmousewin = window; // this should already be set, but just in case.
     if (pushed()) {to = pushed_; event = FL_DRAG;}
     else if (modal() && window != modal()) return 1;
     break;
 
   case FL_LEAVE:
+  case FL_DND_LEAVE:
     if (!pushed_) belowmouse(0);
     if (window) return 1;
+    break;
 
   case FL_RELEASE:
     to = pushed();
     if (!(event_pushed())) pushed_=0;
+    break;
+
+  case FL_DND_RELEASE:
+    to = belowmouse();
     break;
 
   case FL_KEY:
@@ -516,22 +520,32 @@ int Fl::handle(int event, Fl_Window* window)
     Fl::e_x = save_x;
   }
 
-  // if keyboard is ignored, try shortcut events:
-  if (!ret && event == FL_KEY) {
-    // try shortcut events:
-    if (handle(FL_SHORTCUT, window)) return 1;
-    // try flipping the case of letter shortcuts:
-    if (isalpha(event_text()[0])) {
-      char* c = (char*)event_text(); // cast away const
-      *c = isupper(*c) ? tolower(*c) : toupper(*c);
+  if (!ret) {
+    switch (event) {
+    case FL_KEY:
+      // if keyboard is ignored, try shortcut events:
       if (handle(FL_SHORTCUT, window)) return 1;
-    }
-    return 0;
-  }
+      // try flipping the case of letter shortcuts:
+      if (isalpha(event_text()[0])) {
+	char* c = (char*)event_text(); // cast away const
+	*c = isupper(*c) ? tolower(*c) : toupper(*c);
+	if (handle(FL_SHORTCUT, window)) return 1;
+      }
+      return 0;
 
-  // try the chain of global event handlers:
-  if (!ret) for (const handler_link *h = handlers; h; h = h->next)
-    if (h->handle(event)) {ret = 1; break;}
+      // rejected mouse events produce FL_LEAVE events:
+    case FL_ENTER:
+    case FL_MOVE:
+    case FL_DND_ENTER:
+    case FL_DND_DRAG:
+      belowmouse(0);
+      break;
+    }
+
+    // try the chain of global event handlers:
+    for (const handler_link *h = handlers; h; h = h->next)
+      if (h->handle(event)) {ret = 1; break;}
+  }
 
   if (event == FL_RELEASE && !pushed_ && xmousewin) {
     // send a dummy move event when the user releases the mouse:
@@ -542,5 +556,5 @@ int Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.104 2000/07/14 08:35:00 clip Exp $".
+// End of "$Id: Fl.cxx,v 1.105 2000/07/31 05:52:46 spitzak Exp $".
 //

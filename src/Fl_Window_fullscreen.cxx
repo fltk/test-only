@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window_fullscreen.cxx,v 1.9 2000/05/17 07:08:09 bill Exp $"
+// "$Id: Fl_Window_fullscreen.cxx,v 1.10 2000/07/31 05:52:46 spitzak Exp $"
 //
 // Fullscreen window support for the Fast Light Tool Kit (FLTK).
 //
@@ -28,14 +28,14 @@
 
 #ifndef WIN32
 #include <FL/x.H>
-extern Atom fl_motif_wm_hints; // in Fl_x.cxx
+extern Atom fl_MOTIF_WM_HINTS; // in Fl_x.cxx
 #endif
 
 void Fl_Window::fullscreen() {
 #ifdef WIN32
   // something must be done so that the taskbar is hidden...
 #else
-  // Irix 4DWM will work if we use the motif_wm_hints property to turn
+  // Irix 4DWM will work if we use the MOTIF_WM_HINTS property to turn
   // the border off.  Most other window managers will ignore this and
   // leave the border on.  Newer window managers will position the
   // window correctly even if the border is on, but far too many of
@@ -44,7 +44,7 @@ void Fl_Window::fullscreen() {
     // see the file /usr/include/X11/Xm/MwmUtil.h:
     long prop[5] = {2, 1, 0, 0, 0};
     XChangeProperty(fl_display, fl_xid(this),
-		    fl_motif_wm_hints, fl_motif_wm_hints,
+		    fl_MOTIF_WM_HINTS, fl_MOTIF_WM_HINTS,
 		    32, 0, (unsigned char *)prop, 5);
   }
 #endif
@@ -60,5 +60,5 @@ void Fl_Window::fullscreen_off(int X,int Y,int W,int H) {
 }
 
 //
-// End of "$Id: Fl_Window_fullscreen.cxx,v 1.9 2000/05/17 07:08:09 bill Exp $".
+// End of "$Id: Fl_Window_fullscreen.cxx,v 1.10 2000/07/31 05:52:46 spitzak Exp $".
 //

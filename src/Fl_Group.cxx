@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.77 2000/06/23 07:09:14 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.78 2000/07/31 05:52:46 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -168,6 +168,8 @@ int Fl_Group::send(int event, Fl_Widget& to) {
   case FL_DRAG:
   case FL_RELEASE:
   case FL_LEAVE:
+  case FL_DND_RELEASE:
+  case FL_DND_LEAVE:
     // These events are sent directly by Fl.cxx to the widgets.  Trying
     // to redirect them is a mistake.  It appears best to ignore attempts.
     return 1; // return 1 so callers stops calling this.
@@ -187,6 +189,12 @@ int Fl_Group::send(int event, Fl_Widget& to) {
   case FL_HIDE:
     // These events don't need the widget active.
     if (!to.visible()) return 0;
+    break;
+
+  case FL_DND_ENTER:
+  case FL_DND_DRAG:
+    // figure out correct type of event:
+    event = (to.contains(Fl::belowmouse())) ? FL_DND_DRAG : FL_DND_ENTER;
 
   default:
     if (!to.takesevents()) return 0;
@@ -209,6 +217,7 @@ int Fl_Group::send(int event, Fl_Widget& to) {
   switch (event) {
 
   case FL_ENTER:
+  case FL_DND_ENTER:
     // Successful completion of FL_ENTER means the widget is now the
     // belowmouse widget, but only call Fl::belowmouse if the child
     // widget did not do so:
@@ -290,11 +299,11 @@ int Fl_Group::handle(int event) {
   case FL_PUSH:
   case FL_ENTER:
   case FL_MOVE:
+  case FL_DND_ENTER:
+  case FL_DND_DRAG:
     for (i = numchildren; i--;)
       if (Fl::event_inside(child(i)) && send(event, *child(i))) return 1;
-    if (event == FL_PUSH) return 0;
-    Fl::belowmouse(this);
-    return 1;
+    return 0;
   }
 
   // For all other events, try to give to each child, starting at focus:
@@ -570,5 +579,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.77 2000/06/23 07:09:14 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.78 2000/07/31 05:52:46 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.120 2000/07/30 03:46:04 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.121 2000/07/31 05:52:46 spitzak Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -325,6 +325,67 @@ void Fl::get_mouse(int &x, int &y) {
   x = p.x;
   y = p.y;
 }
+
+////////////////////////////////////////////////////////////////
+// code used for selections:
+
+static Fl_Widget *fl_selection_requestor;
+static char *selection_buffer;
+static int selection_length;
+static int selection_buffer_length;
+static char ignore_destroy;
+
+// call this when you create a selection:
+void Fl::selection(Fl_Widget &owner, const char *stuff, int len) {
+  if (!stuff || len<0) return;
+  if (len+1 > selection_buffer_length) {
+    delete[] selection_buffer;
+    selection_buffer = new char[len+100];
+    selection_buffer_length = len+100;
+  }
+  memcpy(selection_buffer, stuff, len);
+  selection_buffer[len] = 0; // needed for direct paste
+  selection_length = len;
+  ignore_destroy = 1;
+  if (OpenClipboard(fl_xid(Fl::first_window()))) {
+    EmptyClipboard();
+    SetClipboardData(CF_TEXT, NULL);
+    CloseClipboard();
+  }
+  ignore_destroy = 0;
+  selection_owner(&owner);
+}
+
+// Call this when a "paste" operation happens:
+void Fl::paste(Fl_Widget &receiver) {
+  if (selection_owner()) {
+    // We already have it, do it quickly without window server.
+    // Notice that the text is clobbered if set_selection is
+    // called in response to FL_PASTE!
+    Fl::e_text = selection_buffer;
+    Fl::e_length = selection_length;
+    receiver.handle(FL_PASTE);
+  } else {
+    if (!OpenClipboard(fl_xid(Fl::first_window()))) return;
+    HANDLE h = GetClipboardData(CF_TEXT);
+    if (h) {
+      Fl::e_text = (LPSTR)GlobalLock(h);
+      LPSTR a,b;
+      a = b = Fl::e_text;
+      while (*a) { // strip the CRLF pairs ($%$#@^)
+	if (*a == '\r' && a[1] == '\n') a++;
+	else *b++ = *a++;
+      }
+      *b = 0;
+      Fl::e_length = b - Fl::e_text;
+      receiver.handle(FL_PASTE);
+      GlobalUnlock(h);
+    }
+    CloseClipboard();
+  }
+}
+
+////////////////////////////////////////////////////////////////
 
 #ifndef TME_LEAVE
 #define TME_LEAVE 2
@@ -737,6 +798,30 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_SETTINGCHANGE:
     Fl::reload_scheme();
     break;
+
+  case WM_DESTROYCLIPBOARD:
+    if (!ignore_destroy) {
+      Fl::selection_owner(0);
+      Fl::flush(); // get the redraw to happen
+    }
+    return 1;
+
+  case WM_RENDERALLFORMATS:
+    if (!OpenClipboard(fl_xid(Fl::first_window()))) return 0;
+    EmptyClipboard();
+    // fall through...
+  case WM_RENDERFORMAT: {
+    HANDLE h = GlobalAlloc(GHND, selection_length+1);
+    if (h) {
+      LPSTR p = (LPSTR)GlobalLock(h);
+      memcpy(p, selection_buffer, selection_length);
+      p[selection_length] = 0;
+      GlobalUnlock(h);
+      SetClipboardData(CF_TEXT, h);
+    }
+    if (fl_msg.message == WM_RENDERALLFORMATS)
+      CloseClipboard();
+    return 1;}
 
   default:
     if (Fl::handle(0,0)) return 0;
@@ -1158,5 +1243,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.120 2000/07/30 03:46:04 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.121 2000/07/31 05:52:46 spitzak Exp $".
 //

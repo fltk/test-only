@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.34 2000/06/11 07:31:07 bill Exp $"
+// "$Id: Fl_Input.cxx,v 1.35 2000/07/31 05:52:46 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -190,6 +190,7 @@ int Fl_Input::handle_key() {
 }
 
 int Fl_Input::handle(int event) {
+  int X=x(); int Y=y(); int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
   switch (event) {
 
   case FL_ENTER:
@@ -218,7 +219,13 @@ int Fl_Input::handle(int event) {
       position(position(),mark());// turns off the saved up/down arrow position
       break;
     }
-    break;
+    show_cursor(1);
+    return 1;
+
+  case FL_UNFOCUS:
+    show_cursor(0);
+    if (when() & FL_WHEN_RELEASE) maybe_do_callback();
+    return 1;
 
   case FL_SHORTCUT:
     // Typing any characters when no text field is selected causes 
@@ -230,19 +237,16 @@ int Fl_Input::handle(int event) {
     return handle_key();
 
   case FL_PUSH:
-    if (!focused()) {
-      take_focus();
-#if 0 // Misguided attempt to simulate Windoze select-all-on-first-click
-      // that it does for *some* (but not all) text fields:
-      if (type() != FL_MULTILINE_INPUT) {
-        position(size(), 0); // select everything
-        return 1;
-      }
-#endif
-    }
-    break;
+    take_focus();
+    mouse_position(X, Y, W, H, Fl::event_state(FL_SHIFT));
+    return 1;
+
+  case FL_DRAG:
+    mouse_position(X, Y, W, H, 1);
+    return 1;
 
   case FL_RELEASE:
+//  mouse_position(X, Y, W, H, 1);
     if (Fl::event_button() == 2) {
       Fl::event_is_click(0); // stop double click from picking a word
       Fl::paste(*this);
@@ -252,9 +256,23 @@ int Fl_Input::handle(int event) {
     }
     return 1;
 
+  case FL_DND_ENTER:
+  case FL_DND_DRAG:
+    take_focus();
+    Fl_Input_::mouse_position(X,Y,W,H,0);
+  case FL_DND_RELEASE:
+    return 1;
+
+  case FL_PASTE: {
+    // strip trailing control characters and spaces before pasting:
+    const char* t = Fl::event_text();
+    const char* e = t+Fl::event_length();
+    if (type()!=FL_MULTILINE_INPUT) while (e > t && *(uchar*)(e-1) <= ' ') e--;
+    return replace(position(), mark(), t, e-t);}
+
+  default:
+    return 0;
   }
-  int X=x(); int Y=y(); int W=w(); int H=h(); text_box()->inset(X,Y,W,H);
-  return Fl_Input_::handletext(event,X,Y,W,H);
 }
 
 Fl_Input::Fl_Input(int x, int y, int w, int h, const char *l)
@@ -264,5 +282,5 @@ Fl_Input::Fl_Input(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.34 2000/06/11 07:31:07 bill Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.35 2000/07/31 05:52:46 spitzak Exp $".
 //
