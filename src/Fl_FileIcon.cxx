@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileIcon.cxx,v 1.4 2000/01/07 22:58:52 mike Exp $"
+// "$Id: Fl_FileIcon.cxx,v 1.5 2000/01/08 21:16:23 mike Exp $"
 //
 // Fl_FileIcon routines for the Fast Light Tool Kit (FLTK).
 //
@@ -29,8 +29,6 @@
 //   Fl_FileIcon::add()               - Add data to an icon.
 //   Fl_FileIcon::find()              - Find an icon based upon a given file.
 //   Fl_FileIcon::draw()              - Draw an icon.
-//   Fl_FileIcon::label()             - Set the widgets label to an icon.
-//   Fl_FileIcon::labeltype()         - Draw the icon label.
 //
 
 //
@@ -411,41 +409,6 @@ Fl_FileIcon::draw(int      x,		// I - Upper-lefthand X
 }
 
 
-#if 0 // All the label type stuff has changed!  How do we do it now????
 //
-// 'Fl_FileIcon::label()' - Set the widget's label to an icon.
-//
-
-void
-Fl_FileIcon::label(Fl_Widget *w)	// I - Widget to label
-{
-  Fl::set_labeltype(_FL_ICON_LABEL, labeltype, 0);
-  w->label(_FL_ICON_LABEL, (const char*)this);
-}
-
-
-//
-// 'Fl_FileIcon::labeltype()' - Draw the icon label.
-//
-
-void
-Fl_FileIcon::labeltype(const Fl_Label *o,	// I - Label data
-                       int            x,	// I - X position of label
-		       int            y,	// I - Y position of label
-		       int            w,	// I - Width of label
-		       int            h,	// I - Height of label
-		       Fl_Align       a)	// I - Label alignment (not used)
-{
-  FileIcon *icon;			// Pointer to icon data
-
-
-  icon = (FileIcon *)(o->value);
-
-  icon->draw(x, y, w, h, (Fl_Color)(o->color));
-}
-#endif // 0
-
-
-//
-// End of "$Id: Fl_FileIcon.cxx,v 1.4 2000/01/07 22:58:52 mike Exp $".
+// End of "$Id: Fl_FileIcon.cxx,v 1.5 2000/01/08 21:16:23 mike Exp $".
 //
