@@ -1,4 +1,8 @@
 /*
+   "$Id: conf.h,v 1.4 1999/03/23 14:30:53 carl Exp $"
+
+    Configuration file routines for the Fast Light Tool Kit (FLTK).
+
     Carl Thompson's config file routines version 0.12
     Copyright 1995-1999 Carl Everard Thompson (clip@home.net)
 
@@ -390,5 +394,5 @@ extern "C" {
 #endif /* !CONF_H */
 
 /*
- * End of "$Id: conf.h,v 1.3 1999/03/23 05:11:51 carl Exp $".
+ * End of "$Id: conf.h,v 1.4 1999/03/23 14:30:53 carl Exp $".
  */
