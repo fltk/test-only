@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.41 2004/06/09 05:38:57 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.42 2004/07/04 17:30:29 laza2000 Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -356,7 +356,7 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
   // I found this in the documentation. It works, but (unbelivable!) it
   // blinks worse than the more complicated code below. Darn you, Gates!
   HDC new_dc = CreateCompatibleDC(dc);
-  SelectObject(new_dc, (Pixmap)rgb);
+  SelectObject(new_dc, (HBITMAP)rgb);
   MaskBlt(dc, x, y, w, h, new_dc, src_x, src_y,
 	  (HBITMAP)alpha, src_x, src_y,
 	  MAKEROP4(SRCCOPY,0xEE0000));
@@ -389,6 +389,24 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
 #endif
 }
 
+/* Enable alphablend support for Image::fill function 
+ * NOTE: does not work on win95
+ * NOTE: need to link against msimg32.lib
+ *
+ * AlphaBlend function used in fill only, cause fill does per-image
+ * blending. AlphaBlend function can do per-pixel blending also,
+ * but it needs premultiplied pixel data.
+ *
+ * - ML
+ */
+// #define USE_ALPHABLEND 1
+
+// Link against msimg32 lib
+#if defined (USE_ALPHABLEND) && defined(_MSC_VER)
+	#pragma comment(lib, "msimg32.lib")
+#endif
+
+
 /** Draw the alpha channel filled with a solid color.
 
   The image is positioned so the pixel at src_x, src_y is placed at
@@ -405,7 +423,10 @@ void Image::over(int X, int Y, int W, int H, int src_x, int src_y) const {
 void Image::fill(int X, int Y, int W, int H, int src_x, int src_y) const
 {
   clip_code();
-  if (!alpha) {fillrect(x,y,w,h); return;}
+#ifndef USE_ALPHABLEND
+  if (!alpha) {fillrect(x,y,w,h); return;}	
+#endif
+
   transform(x,y);
 #if USE_X11
   XSetStipple(xdisplay, gc, (Pixmap)alpha);
@@ -417,12 +438,40 @@ void Image::fill(int X, int Y, int W, int H, int src_x, int src_y) const
   XSetFillStyle(xdisplay, gc, FillSolid);
 #elif defined(_WIN32)
   HDC tempdc = CreateCompatibleDC(dc);
-  SelectObject(tempdc, (HGDIOBJ)alpha);
-  SetTextColor(dc, 0); // VP : seems necessary at least under win95
-  setbrush();
-  //SelectObject(dc, brush);
-  // secret bitblt code found in old MSWindows reference manual:
-  BitBlt(dc, x, y, w, h, tempdc, src_x, src_y, 0xE20746L);
+#ifdef USE_ALPHABLEND
+
+	if(rgb) {
+		if(alpha) {
+			SelectObject(tempdc, (HGDIOBJ)alpha);	
+			SetTextColor(dc, 0); // VP : seems necessary at least under win95
+			setbrush();
+			// secret bitblt code found in old MSWindows reference manual:
+			BitBlt(dc, x, y, w, h, tempdc, src_x, src_y, 0xE20746L);
+			SelectObject(tempdc, (HGDIOBJ)rgb);	
+			BitBlt(dc, x, y, w, h, tempdc, src_x, src_y, SRCPAINT);
+
+		} else {
+			
+			fillrect(X,Y,w,h);
+
+			SelectObject(tempdc, (HGDIOBJ)rgb);	
+			BLENDFUNCTION m_bf;
+			m_bf.BlendOp = AC_SRC_OVER;
+			m_bf.BlendFlags = 0;
+			m_bf.SourceConstantAlpha = 100;
+			m_bf.AlphaFormat = 0;
+			AlphaBlend(dc, x,y,w,h, tempdc, src_x,src_y,w, h,m_bf); 
+		}
+	} else 
+#endif
+	{
+			SelectObject(tempdc, (HGDIOBJ)alpha);	
+			SetTextColor(dc, 0); // VP : seems necessary at least under win95
+			setbrush();
+			// secret bitblt code found in old MSWindows reference manual:
+			BitBlt(dc, x, y, w, h, tempdc, src_x, src_y, 0xE20746L);
+	}
+
   DeleteDC(tempdc);
 #elif defined(__APPLE__)
   // OSX version nyi
@@ -440,9 +489,9 @@ void Image::_draw(int x, int y, int w, int h, const Style* style, Flags flags) c
 {
   if (flags & INACTIVE) {
     Color bg, fg; style->boxcolors(flags, bg, fg);
-    setcolor(GRAY90);
+    setcolor(GRAY90);		
     fill(x+1,y+1,w-1,h-1,0,0);
-    setcolor(fg);
+    setcolor(fg);		
     fill(x,y,w,h,0,0);
   } else {
     over(x,y,w,h,0,0);
@@ -480,5 +529,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.41 2004/06/09 05:38:57 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.42 2004/07/04 17:30:29 laza2000 Exp $".
 //
