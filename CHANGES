@@ -1,7 +1,5 @@
 CHANGES IN FLTK 1.2.0b1
 
-	- Added Search symbol to the search field of the Help
-	  Dialog (@serach). Added FLTK logo (@FLTK)
 	- re-merged all documentation that was checked in in 22/11/03
           with the current cvs version
 	- re-merged 16 to 32 bit coordintes changes that were lost in the 
