@@ -1,5 +1,5 @@
 //
-// "$Id: fl_windows.cxx,v 1.5 1999/11/11 14:17:27 carl Exp $"
+// "$Id: fl_windows.cxx,v 1.6 1999/11/12 17:33:16 carl Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -37,13 +37,24 @@
 #include <string.h>
 
 // a boxtype drawing function in fl_boxtype.cxx
+extern void fl_frame(Fl_Boxtype b, int x, int y, int w, int h,
+                     Fl_Color c, Fl_Flags f);
+
+// a boxtype drawing function in fl_boxtype.cxx
 extern void fl_flatx(Fl_Boxtype b, int x, int y, int w, int h,
                      Fl_Color c, Fl_Flags f);
+
+// some new boxtypes (look familiar?)
+static const Fl_Boxtype_ thick_motif_down_box = {
+};
 
 const Fl_Boxtype_ win98_menu_title_box = {
   fl_flatx, 0, FL_THIN_DOWN_BOX, FL_THIN_UP_BOX, 1,1,2,2,1
 };
 
+const Fl_Boxtype_ win98_menu_window_box = {
+  fl_frame, "2AARRIIWW", &win98_menu_window_box, &win98_menu_window_box, 2,2,4,4, 1
+};
 
 int fl_windows() {
   Fl_Style::revert(); // revert to FLTK default styles
@@ -63,19 +74,20 @@ int fl_windows() {
   Fl_Widget::default_style.set_label_size(12);
 
   Fl_Style* s;
+  if ((s = Fl_Style::find("menu window"))) {
+    s->set_box(&win98_menu_window_box);
+  }
+
   if ((s = Fl_Style::find("menu title"))) {
     s->set_box(&win98_menu_title_box);
     s->set_selection_color(FL_GRAY);
     s->set_selection_text_color(FL_BLACK);
     s->set_highlight_color(FL_GRAY);
+    s->set_glyph_box(FL_NO_BOX);
   }
 
   // highlighting must be on both the menu bar and menu title!
   if ((s = Fl_Style::find("menu item"))) {
-    s->set_glyph_box(FL_NO_BOX);
-  }
-
-  if ((s = Fl_Style::find("menu title"))) {
     s->set_glyph_box(FL_NO_BOX);
   }
 
@@ -114,6 +126,7 @@ int fl_windows() {
   }
 
   static Fl_Boxtype_Definer win98_menu_title("win98 menu title", win98_menu_title_box);
+  static Fl_Boxtype_Definer win98_menu_window("win98 menu window", win98_menu_window_box);
 
   Fl::redraw();
 
@@ -121,5 +134,5 @@ int fl_windows() {
 }
 
 //
-// End of "$Id: fl_windows.cxx,v 1.5 1999/11/11 14:17:27 carl Exp $".
+// End of "$Id: fl_windows.cxx,v 1.6 1999/11/12 17:33:16 carl Exp $".
 //
