@@ -321,16 +321,16 @@ Fl_Widget::Style * Fl_Widget::default_style(){
 }
 
 
-void Fl_Widget::Style::update_(Fl_Widget::Style * s, unsigned what){
-  if(s){
+void Fl_Widget::Style::update_(Fl_Widget::Style * s1, Fl_Widget::Style * s, unsigned what){
+  if(s1 && s){
     what &= ~s->flags();
-    if(COLOR & what) s->color_ = color_;
-    if(BOX & what) s->box_ = box_;
-    if(LABELTYPE & what) s->labeltype_ = labeltype_;
-    if(LABELCOLOR & what) s->labelcolor_ = labelcolor_;
-    if(LABELFONT & what) s->labelfont_ = labelfont_;
-    if(LABELSIZE & what) s->labelsize_ = labelsize_;
-    if(SELECTION_COLOR & what) s->selection_color_ = selection_color_;
+    if(COLOR & what) s->color_ = s1->color_;
+    if(BOX & what) s->box_ = s1->box_;
+    if(LABELTYPE & what) s->labeltype_ = s1->labeltype_;
+    if(LABELCOLOR & what) s->labelcolor_ = s1->labelcolor_;
+    if(LABELFONT & what) s->labelfont_ = s1->labelfont_;
+    if(LABELSIZE & what) s->labelsize_ = s1->labelsize_;
+    if(SELECTION_COLOR & what) s->selection_color_ = s1->selection_color_;
   }
 };
 

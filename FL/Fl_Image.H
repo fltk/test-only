@@ -196,7 +196,7 @@ class FL_EXPORT Fl_RGB_Image : public Fl_Image {
   void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}
   virtual void label(Fl_Widget*w);
   virtual void label(Fl_Menu_Item*m);
-  // virtual void uncache(); // RK: common uncache now
+
 };
 
 #endif // !Fl_Image_H

@@ -50,11 +50,18 @@ static uchar inactive_ramp[24] = {
   48, 48, 48, 49,
   49, 49, 50, 50,
   51, 51, 52, 52};
-static int draw_it_active = 1;
 
-int Fl::draw_box_active() { return draw_it_active; }
 
-uchar *fl_gray_ramp() {return (draw_it_active?active_ramp:inactive_ramp)-'A';}
+int Fl_Widget::draw_box_flags_ = ~0;
+
+void Fl_Widget::clear_draw_box_flag(int f){ draw_box_flags_ &= ~f;}
+void Fl_Widget::reset_draw_box_flag(int f){ draw_box_flags_ |= f;}
+
+int Fl::draw_box_active() { return Fl_Widget::draw_box_flags() & 1; }
+
+int Fl_Widget::draw_box_flags() { return draw_box_flags_; }
+
+uchar *fl_gray_ramp() {return ((Fl_Widget::DRAW_BOX_ACTIVE & Fl_Widget::draw_box_flags())?active_ramp:inactive_ramp)-'A';}
 
 void fl_frame(const char* s, int x, int y, int w, int h) {
   uchar *g = fl_gray_ramp();
@@ -344,13 +351,6 @@ int Fl::box_dh(Fl_Boxtype t) {if (t) return t->dh(); else return 0;}
 
 
 
-/*
-int Fl::box_dx(Fl_Boxtype t) {return fl_box_table[t].dx;}
-int Fl::box_dy(Fl_Boxtype t) {return fl_box_table[t].dy;}
-int Fl::box_dw(Fl_Boxtype t) {return fl_box_table[t].dw;}
-int Fl::box_dh(Fl_Boxtype t) {return fl_box_table[t].dh;}
-*/
-
 void fl_internal_boxtype(Fl_Boxtype t, Fl_Box_Draw_F* f) {
   if(! t) return;
   int i = Fl::box_index(t);
@@ -382,26 +382,11 @@ Fl_Boxtype Fl::box(int index){
 
 
 
-/*
-void fl_internal_boxtype(Fl_Boxtype t, Fl_Box_Draw_F* f) {
-  if (!fl_box_table[t].set) {
-    fl_box_table[t].f   = f;
-    fl_box_table[t].set = 1;
-  }
-}
-
-*/
-
 
 Fl_Box_Draw_F *Fl::get_boxtype(Fl_Boxtype t) {
   if(t) return t->function(); else return fl_no_box;
 }
 
-/*
-Fl_Box_Draw_F *Fl::get_boxtype(Fl_Boxtype t) {
-  return fl_box_table[t].f;
-}
-*/
 
 Fl_Boxtype fl_down(Fl_Boxtype b) {
   if(b)
@@ -409,15 +394,7 @@ Fl_Boxtype fl_down(Fl_Boxtype b) {
   else return FL_FLAT_BOX;
 }
 
-/*
-Fl_Boxtype fl_down(Fl_Boxtype b) {
-  if (b <FL_FREE_BOXTYPE) return (Fl_Boxtype)(b|1);
-  if (fl_box_table[b].set > 1)
-    return (Fl_Boxtype) fl_box_table[b].set;
-  else
-    return b;
-}
-*/
+
 
 //static Fl_Boxtype last_free_boxtype = (Fl_Boxtype)0xFF; //first possible free place, it speeds up searching
 //static Fl_Boxtype last_free_double_boxtype = (Fl_Boxtype)0xFE;  
@@ -428,46 +405,6 @@ void Fl::set_boxtype(Fl_Boxtype t, Fl_Box_Draw_F* f, uchar a, uchar b, uchar c, 
   int i = Fl::box_index(t);
   if(i) fl_table_set[i] = 1;
 }
-
-/*
-void Fl::set_boxtype(Fl_Boxtype t, Fl_Box_Draw_F* f,
-		      uchar a, uchar b, uchar c, uchar d) {
-  fl_box_table[t].f   = f;
-  fl_box_table[t].set = 1;
-  fl_box_table[t].dx  = a;
-  fl_box_table[t].dy  = b;
-  fl_box_table[t].dw  = c;
-  fl_box_table[t].dh  = d;
-  if(!f && (t>=FL_FREE_BOXTYPE)){
-      fl_box_table[t].set = 0;
-      if(t>last_free_boxtype)
-        last_free_boxtype = t;
-  };
-}
-*/
-
-/*
-Fl_Boxtype Fl::add_boxtype(Fl_Box_Draw_F* f, uchar a, uchar b, uchar c, uchar d, Fl_Boxtype down_box ) {
-  Fl_Boxtype t = last_free_boxtype;
-  while(t>=FL_FREE_BOXTYPE){
-    if(!fl_box_table[t].set){
-      fl_box_table[t].f   = f;
-      if(down_box > 0)
-        fl_box_table[t].set = down_box;
-      else 
-        fl_box_table[t].set = t;
-      fl_box_table[t].dx  = a;
-      fl_box_table[t].dy  = b;
-      fl_box_table[t].dw  = c;
-      fl_box_table[t].dh  = d;
-      last_free_boxtype = (Fl_Boxtype)(t-1);
-    }
-    t = (Fl_Boxtype)(t-1);
-  }
-  return FL_NO_BOX; // signalises no free place!
-}
-*/
-
 
 //Fl_Boxtype Fl::add_boxtype(Fl_Box_Draw_F* f, uchar a, uchar b, uchar c, uchar d){
 //  return add_boxtype(f, a, b, c, d, (Fl_Boxtype)(-1));
@@ -482,23 +419,13 @@ void Fl::set_boxtype(Fl_Symbol * t, Fl_Symbol * f) {
 
 
 
-/*
-void Fl::set_boxtype(Fl_Boxtype t, Fl_Boxtype f) {
-  fl_box_table[t] = fl_box_table[f];
-}
 
-*/
 
 void fl_draw_box(Fl_Symbol * t, int x, int y, int w, int h, Fl_Color c) {
   if(t) t->draw(x,y,w,h,c);
 }
 
-/*
 
-void fl_draw_box(Fl_Boxtype t, int x, int y, int w, int h, Fl_Color c) {
-  if (t && fl_box_table[t].f) fl_box_table[t].f(x,y,w,h,c);
-}
-*/
 //extern Fl_Widget *fl_boxcheat; // hack set by Fl_Window.cxx
 
 
@@ -513,43 +440,25 @@ void Fl_Widget::draw_box() const {
   draw_box(t, x_, y_, w_, h_, color());
 }
 
-/*
-void Fl_Widget::draw_box() const {
-  int t = box();
-  if (!t) return;
-//   if (this == fl_boxcheat) {
-//     fl_boxcheat = 0;
-//     if (t == FL_FLAT_BOX) return;
-//     t += 2; // convert box to frame
-//   }
-  draw_box((Fl_Boxtype)t, x_, y_, w_, h_, color());
-}
 
-*/
 
 void Fl_Widget::draw_box(Fl_Boxtype b, Fl_Color c) const {
   draw_box(b, x_, y_, w_, h_, c);
 }
 
 
-void Fl_Widget::draw_box(Fl_Boxtype b, int X, int Y, int W, int H, Fl_Color c)
+void Fl_Widget::draw_box_(Fl_Boxtype b, int X, int Y, int W, int H, Fl_Color c)
 const {
-  draw_it_active = active_r();
-  if(b)
+
+  if(b){
+    if(!active_r())
+      draw_box_flags_ &= ~1;
     b->draw(X, Y, W, H, c);
-  draw_it_active = 1;
+  }
+  draw_box_flags_ = ~0;
 }
 
-/*
 
-void Fl_Widget::draw_box(Fl_Boxtype b, int X, int Y, int W, int H, Fl_Color c)
-const {
-  draw_it_active = active_r();
-  fl_box_table[b].f(X, Y, W, H, c);
-  draw_it_active = 1;
-}
-
-*/
 
 
 //

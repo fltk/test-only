@@ -58,20 +58,22 @@ class FL_EXPORT Fl_Button : public Fl_Widget {
   int shortcut_;
   char value_;
   char oldval;
-  Fl_Boxtype * down_box_;
 
 
 protected:
 
 
   virtual void draw();
+  void draw_box_(Fl_Boxtype b, int x, int y, int w, int h, Fl_Color c) const;
 
 
 public:
+  enum {DRAW_BOX_VALUE = 2};
 
   class Style;
   static Style * default_style();
-  void style(Style *s );
+  void style(Style *s ){Fl_Widget::style((Fl_Widget::Style *)s);}
+  Style * style(){return (Style *) Fl_Widget::style();}
 
 
   virtual int handle(int event);
@@ -119,7 +121,6 @@ public:
     /** \deprecated same as selection_color() */
   void down_color(unsigned c) {selection_color(c);}
 
-  //~ char try_down_box(uchar b){if ((style_flags2_ & DOWN_BOX) || (b == down_box_)) return 0; down_box_ = b; return 1;}
 
 
 };

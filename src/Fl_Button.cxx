@@ -180,10 +180,10 @@ Fl_Button::Style::Style(Fl_Widget::Style * parent, unsigned mode):Fl_Widget::Sty
 
 
 
-void Fl_Button::Style::update(Fl_Widget::Style * s, unsigned what){
+void Fl_Button::Style::update_(Fl_Button::Style *s1, Fl_Widget::Style * s, unsigned what){
   if(!s) return;
-  Fl_Widget_Style::update_(s, what);
-  if(DOWN_BOX & ~(s->flags()) & what) ((Fl_Button::Style *)s)->down_box_ = down_box_;
+  Fl_Widget::Style::update_(s1, s, what);
+  if(DOWN_BOX & ~(s->flags()) & what) ((Fl_Button::Style *)s)->down_box_ = s1->down_box_;
 };
 
 void Fl_Button::Style::down_box(Fl_Boxtype b) {
@@ -203,10 +203,14 @@ Fl_Button::Style * Fl_Button::default_style(){
 }
 
 
-void Fl_Button::style(Fl_Button::Style * s){ Fl_Widget::style(s);}
+
+//static fl_widget_value = 1;
 
 
-
+void Fl_Button::draw_box_(Fl_Boxtype b, int X, int Y, int W, int H, Fl_Color c) const {
+  if(!value()) clear_draw_box_flag(DRAW_BOX_VALUE);
+  Fl_Widget::draw_box_(b, X, Y, W, H, c);
+}
 
 
 

@@ -275,6 +275,8 @@ enum Fl_Align {	// align() values
   FL_ALIGN_RIGHT_TOP		= FL_ALIGN_TOP_RIGHT,
   FL_ALIGN_LEFT_BOTTOM		= FL_ALIGN_BOTTOM_LEFT,
   FL_ALIGN_RIGHT_BOTTOM		= FL_ALIGN_BOTTOM_RIGHT,
+  FL_ALIGN_VERTICAL = FL_ALIGN_LEFT | FL_ALIGN_RIGHT,
+  FL_ALIGN_HORIZONTAL = FL_ALIGN_TOP | FL_ALIGN_BOTTOM,
   FL_ALIGN_NOWRAP		= 0 // for back compatability
 };
 
@@ -483,28 +485,28 @@ extern FL_EXPORT Fl_Boxtype fl_define_FL_OVAL_BOX();
 extern FL_EXPORT Fl_Boxtype fl_define_FL_PLASTIC_UP_BOX();
 /** \endcond */
 
-#define FL_ROUND_UP_BOX fl_define_FL_ROUND_UP_BOX()
-#define FL_ROUND_DOWN_BOX (Fl_Boxtype)(fl_define_FL_ROUND_UP_BOX()+1)
-#define FL_SHADOW_BOX fl_define_FL_SHADOW_BOX()
-#define FL_SHADOW_FRAME (Fl_Boxtype)(fl_define_FL_SHADOW_BOX()+2)
-#define FL_ROUNDED_BOX fl_define_FL_ROUNDED_BOX()
-#define FL_ROUNDED_FRAME (Fl_Boxtype)(fl_define_FL_ROUNDED_BOX()+2)
-#define FL_RFLAT_BOX fl_define_FL_RFLAT_BOX()
-#define FL_RSHADOW_BOX fl_define_FL_RSHADOW_BOX()
-#define FL_DIAMOND_UP_BOX fl_define_FL_DIAMOND_BOX()
-#define FL_DIAMOND_DOWN_BOX (Fl_Boxtype)(fl_define_FL_DIAMOND_BOX()+1)
-#define FL_OVAL_BOX fl_define_FL_OVAL_BOX()
-#define FL_OSHADOW_BOX (Fl_Boxtype)(fl_define_FL_OVAL_BOX()+1)
-#define FL_OVAL_FRAME (Fl_Boxtype)(fl_define_FL_OVAL_BOX()+2)
-#define FL_OFLAT_BOX (Fl_Boxtype)(fl_define_FL_OVAL_BOX()+3)
+#define FL_ROUND_UP_BOX (fl_define_FL_ROUND_UP_BOX())
+#define FL_ROUND_DOWN_BOX ((Fl_Boxtype)(fl_define_FL_ROUND_UP_BOX()+1))
+#define FL_SHADOW_BOX (fl_define_FL_SHADOW_BOX())
+#define FL_SHADOW_FRAME ((Fl_Boxtype)(fl_define_FL_SHADOW_BOX()+2))
+#define FL_ROUNDED_BOX (fl_define_FL_ROUNDED_BOX())
+#define FL_ROUNDED_FRAME ((Fl_Boxtype)(fl_define_FL_ROUNDED_BOX()+2))
+#define FL_RFLAT_BOX (fl_define_FL_RFLAT_BOX())
+#define FL_RSHADOW_BOX (fl_define_FL_RSHADOW_BOX())
+#define FL_DIAMOND_UP_BOX (fl_define_FL_DIAMOND_BOX())
+#define FL_DIAMOND_DOWN_BOX ((Fl_Boxtype)(fl_define_FL_DIAMOND_BOX()+1))
+#define FL_OVAL_BOX (fl_define_FL_OVAL_BOX())
+#define FL_OSHADOW_BOX ((Fl_Boxtype)(fl_define_FL_OVAL_BOX()+1))
+#define FL_OVAL_FRAME ((Fl_Boxtype)(fl_define_FL_OVAL_BOX()+2))
+#define FL_OFLAT_BOX ((Fl_Boxtype)(fl_define_FL_OVAL_BOX()+3))
 
 
-#define FL_PLASTIC_UP_BOX fl_define_FL_PLASTIC_UP_BOX()
-#define FL_PLASTIC_DOWN_BOX (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+1)
-#define FL_PLASTIC_UP_FRAME (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+2)
-#define FL_PLASTIC_DOWN_FRAME (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+3)
-#define FL_PLASTIC_THIN_UP_BOX (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+4)
-#define FL_PLASTIC_THIN_DOWN_BOX (Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+5)
+#define FL_PLASTIC_UP_BOX (fl_define_FL_PLASTIC_UP_BOX())
+#define FL_PLASTIC_DOWN_BOX ((Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+1))
+#define FL_PLASTIC_UP_FRAME ((Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+2))
+#define FL_PLASTIC_DOWN_FRAME ((Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+3))
+#define FL_PLASTIC_THIN_UP_BOX ((Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+4))
+#define FL_PLASTIC_THIN_DOWN_BOX ((Fl_Boxtype)(fl_define_FL_PLASTIC_UP_BOX()+5))
 
 
 /// Converts "up" dersion of a boxtype to "down" one

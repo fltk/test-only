@@ -29,12 +29,13 @@
 
 
 
-/** This small class is used for drawing various glyphs - arrows, checks etc. The constructor usually
+/** This is a base class for all boxes and various glyphs. The constructor usually
     takes a pointer to a drawing function. The basic color used is the current one but other ones 
     can be used by using functions like fl_darker() etc. within the function.
     Class is copyable and copy constructable and should be used directly by value - not by a pointer.
 */
 
+class Fl_Image;
 
 class FL_EXPORT Fl_Symbol{
   uchar type_;
@@ -56,7 +57,7 @@ public:
   int dh() const {return dh_;}
 
   Fl_Symbol & square(bool s){ if(s) type_ |=0x80; else  type_ &= ~((uchar)0x80); return  * this;}
-  bool square(){ return (type_ & 0x80) ?  1: 0;}
+  bool square(){ return (type_ & 0x80) ?  1 : 0;}
  
 
   
@@ -77,6 +78,9 @@ public:
   // Following draw functions, used within the constructors, must be scalable and draw the glyph
   // within  [-1, -1], [1,1] area which is scalled to x,y,w,h
   Fl_Symbol & set(void (* draw)(Fl_Color), uchar rot=0);
+
+  // Function sets the boxtype an an image. When the image is drawn, it is centered within (x,y,w,h) area but NOT rescaled.
+  Fl_Symbol & set(Fl_Image * s){type_ = 4; draw_ = (void *)s; dx_ = dy_ = dw_ = dh_ = 0; return * this;}
 
 
 

@@ -120,8 +120,7 @@ int main(int argc, char **argv) {
 #endif
 
   Fl_Window window(400,400); ::w = &window;
-  window.color(FL_WHITE);
-  Fl_Button b(140,160,120,120,"Image w/Alpha"); ::b = &b;
+  Fl_Button b(140,160,160,160,"Image w/Alpha"); ::b = &b;
 
   Fl_RGB_Image *rgb;
   Fl_Image *dergb;

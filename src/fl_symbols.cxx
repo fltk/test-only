@@ -36,6 +36,7 @@
 #include <FL/fl_draw.H>
 #include <FL/Fl_Symbol.H>
 #include "flstring.h"
+#include <FL/Fl_Image.H>
 
 typedef void (* Fl_Draw_Symbol)(Fl_Color);
 typedef int (* Fl_Draw_Symbol_)(int, int, int, int);
@@ -494,7 +495,7 @@ void Fl_Symbol::draw(int x, int y, int w, int h, Fl_Color color){
       h = w;
     }
   double angle = 0;
-  switch(type_ & 0x03){
+  switch(type_ & 0x04){
    case 0:
     ((Fl_Draw_Symbol_0)draw_)(x, y, w, h, color);
     break;
@@ -523,6 +524,11 @@ void Fl_Symbol::draw(int x, int y, int w, int h, Fl_Color color){
   case 3:
     fl_draw_symbol((const char *)draw_, x, y, w, h, color);
     break;
+  case 4:
+    Fl_Image * i = (Fl_Image *)draw_;
+    i->draw(x+w/2 - i->w()/2, y+h/2 - i->h()/2);
+    break;
+
   }
 };
 

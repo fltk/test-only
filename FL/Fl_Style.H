@@ -101,13 +101,14 @@ class FL_EXPORT Fl_Widget::Style {
 
   public:
     enum  {STATIC = 1,  HIGHLIGHT = 2, LABELTYPE=0x10, LABELCOLOR=0x20,
-      LABELFONT=0x40, LABELSIZE=0x80, COLOR=0x100, SELECTION_COLOR=0x200, BOX=0x400, DOWN_BOX =0x800,
-      TEXTCOLOR = 0x1000, TEXTFONT = 0x2000, TEXTSIZE = 0x4000,
-      REDRAW_LABEL = 0xF0, REDRAW = 0xFFFFFF00, ALL = 0xFFFFFFF0, NO_HIGHLIGHT = 0, NORMAL_HIGHLIGHT = HIGHLIGHT,
+      LABELFONT=0x40, LABELSIZE=0x80, 
+      COLOR=0x200, SELECTION_COLOR=0x400, BOX=0x800, 
+      REDRAW_LABEL = 0x1F0, REDRAW = 0xFFFFFE00, ALL = 0xFFFFFFF0, NO_HIGHLIGHT = 0, NORMAL_HIGHLIGHT = HIGHLIGHT,
       BASE = 1, };
+    static void update_(Style * s1, Style * s, unsigned what=ALL);
   protected:
-    void update_(Style * s, unsigned what=ALL);
-    virtual void update(Style * s, unsigned what){update_(s, what);};
+
+    virtual void update(Style * s, unsigned what){update_(this, s, what);};
   public:
 
     Style(Fl_Widget::Style * parent, unsigned highlight_parent);
@@ -152,16 +153,22 @@ class FL_EXPORT Fl_Button::Style : public Fl_Widget::Style {
   friend class Fl_Button;
   Fl_Boxtype down_box_;
   //uchar down_box_;
+public:
+    static void update_(Style* s1,  Fl_Widget::Style * s, unsigned what);
 protected:
   Style(Style * s):Fl_Widget::Style(s){};
 
   //reimplementation of virtual functions for new style
   void clear();
   Fl_Widget::Style * clone(){return new Style(this);} 
+
+
+  void update(Fl_Widget::Style * s, unsigned what){update_(this, s,what);}
 public:
+  enum {DOWN_BOX = 0x1000};
   Style * highlight(){return (Style *)highlight_();}
   Style * normal(){return (Style *)normal_();}
-  void update(Fl_Widget::Style * s, unsigned what);
+
 
   Fl_Boxtype down_box() const {return ((STATIC|DOWN_BOX) & flags()) ? down_box_ : (Fl_Boxtype)(((Fl_Button::Style *)next())->down_box_);};
   void down_box(Fl_Boxtype b);
@@ -174,6 +181,40 @@ typedef Fl_Button::Style Fl_Button_Style;
 #endif  // Fl_Button_Style_H
 
 
+
+///////////////////////  Fl_Cancel_Button::Style  //////////////////////
+
+#if defined(Fl_Cancel_Button_H) && !defined(Fl_Cancel_Button_Style_H)
+# define Fl_Cancel_Button_Style_H
+
+class FL_EXPORT Fl_Cancel_Button::Style : public Fl_Button::Style {
+  friend class Fl_Cancel_Button;
+  uchar symbol_align_;
+
+protected:
+  Style(Style * s):Fl_Button::Style(s){};
+
+  //reimplementation of virtual functions for new style
+  void clear();
+  Fl_Widget::Style * clone(){return new Style(this);} 
+  void cancel_button_update(Fl_Widget::Style * s, unsigned what);
+  void update(Fl_Widget::Style * s, unsigned what){cancel_button_update(s,what);}
+public:
+  enum {SYMBOL_ALIGN = 0x2000};
+  Style * highlight(){return (Style *)highlight_();}
+  Style * normal(){return (Style *)normal_();}
+
+
+
+  uchar symbol_align() const {return ((STATIC|SYMBOL_ALIGN) & flags()) ? symbol_align_ : (((Fl_Cancel_Button::Style *)next())->symbol_align_);};
+  void symbol_align(uchar a);
+  Style(Fl_Widget::Style * parent, unsigned mode);
+};
+
+typedef Fl_Cancel_Button::Style Fl_Cancel_Style;
+
+
+#endif  // Fl_Button_Style_H
 
 
 

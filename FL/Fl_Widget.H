@@ -104,6 +104,7 @@ protected:
   Style * style_;
 
 private:
+  static int draw_box_flags_;
   Fl_Group* parent_;
   Fl_Callback* callback_;
   void* user_data_;
@@ -140,6 +141,9 @@ private:
  
 protected:
 
+  static void clear_draw_box_flag(int f);
+  static void reset_draw_box_flag(int f);
+
   /** Creates a widget at the given position and size.
   *  The Fl_Widget is a protected constructor, but all derived widgets have a matching public 
   * constructor. It takes a value for x(), y(), w(), h(), and an optional 
@@ -162,7 +166,8 @@ protected:
 
   void draw_box() const;
   void draw_box(Fl_Boxtype, Fl_Color) const;
-  void draw_box(Fl_Boxtype, int,int,int,int, Fl_Color) const;
+  virtual void draw_box_(Fl_Boxtype, int,int,int,int, Fl_Color) const;
+  void draw_box(Fl_Boxtype b, int x, int y,int w,int h, Fl_Color c) const {draw_box_(b, x, y, w, h, c);}
   void draw_focus() {draw_focus(box(),x(),y(),w(),h());}
   void draw_focus(Fl_Boxtype, int,int,int,int) const;
   void draw_label() const;
@@ -171,6 +176,8 @@ protected:
   /** Creates widget-specific style if not allready made */
 
 public:
+  enum {DRAW_BOX_ACTIVE = 1};
+  static int draw_box_flags();
 
 
     /** Destroys the widget. Destroying single widgets is not very common, 
