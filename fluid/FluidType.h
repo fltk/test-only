@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Type.h,v 1.34 2002/12/09 04:52:22 spitzak Exp $"
+// "$Id: FluidType.h,v 1.1 2002/12/09 16:44:02 spitzak Exp $"
 //
 // Widget type header file for the Fast Light Tool Kit (FLTK).
 //
@@ -31,20 +31,20 @@
 // Please report all bugs and problems to "fltk-bugs@easysw.com".
 //
 
-#include <fltk/Fl_Widget.h>
+#include <fltk/Widget.h>
 #include "Fluid_Plugins.h"
 #include "Fluid_Image.h"
 
-class FLUID_API Fl_Type {
+class FLUID_API FluidType {
 
   friend class Widget_Browser;
-  friend Fl_Widget *make_type_browser(int,int,int,int,const char *l=0);
-  friend class Fl_Window_Type;
+  friend fltk::Widget *make_type_browser(int,int,int,int,const char *l=0);
+  friend class WindowType;
   virtual void setlabel(const char *); // virtual part of label(char*)
 
 protected:
 
-  Fl_Type();
+  FluidType();
 
   const char *name_;
   const char *label_;
@@ -55,32 +55,32 @@ protected:
 
 public:	// things that should not be public:
 
-  Fl_Type* parent;
-  Fl_Type* first_child;
-  Fl_Type* next_brother;
-  Fl_Type* previous_brother;
+  FluidType* parent;
+  FluidType* first_child;
+  FluidType* next_brother;
+  FluidType* previous_brother;
 
-  Fl_Type* walk(const Fl_Type* top) const;
-  Fl_Type* walk() const;
+  FluidType* walk(const FluidType* top) const;
+  FluidType* walk() const;
 
-  static Fl_Type *first;
+  static FluidType *first;
 
   char new_selected; // browser highlight
   char selected; // copied here by selection_changed()
   char open_;	// open/close state of this parent in browser
 
-  Fl_Type *factory;
+  FluidType *factory;
   const char *callback_name();
 
 public:
 
-  virtual ~Fl_Type();
-  virtual Fl_Type *make() = 0;
+  virtual ~FluidType();
+  virtual FluidType *make() = 0;
 
-  void add(Fl_Type *parent); // add as new child
-  void insert(Fl_Type *n); // insert into list before n
+  void add(FluidType *parent); // add as new child
+  void insert(FluidType *n); // insert into list before n
   void remove(); // remove from list
-  void move_before(Fl_Type*); // move before a sibling
+  void move_before(FluidType*); // move before a sibling
 
   virtual const char *title(); // string for browser
   virtual const char *type_name() const = 0; // type for code output
@@ -98,12 +98,12 @@ public:
   const char *user_data_type() const {return user_data_type_;}
   void user_data_type(const char *);
 
-  virtual Fl_Type* click_test(int,int);
-  virtual void add_child(Fl_Type*, Fl_Type* beforethis);
-  virtual void move_child(Fl_Type*, Fl_Type* beforethis);
-  virtual void remove_child(Fl_Type*);
+  virtual FluidType* click_test(int,int);
+  virtual void add_child(FluidType*, FluidType* beforethis);
+  virtual void move_child(FluidType*, FluidType* beforethis);
+  virtual void remove_child(FluidType*);
 
-  static Fl_Type *current;  // most recently picked object
+  static FluidType *current;  // most recently picked object
   virtual void open();	// what happens when you double-click
 
   // read and write data to a saved file:
@@ -154,10 +154,10 @@ struct Enumeration {
   const char* subclass;		// For type() of widgets, use this subclass
 };
 
-// Use this call to make a menu/Fl_Choice from a table. Warning this
-// will overwrite the user_data() of the Fl_Menu_:
-class Fl_Menu_;
-void set_menu(Fl_Menu_*, const Enumeration*);
+// Use this call to make a menu/Choice from a table. Warning this
+// will overwrite the user_data() of the fltk::Menu:
+namespace fltk {class Menu;}
+void set_menu(fltk::Menu*, const Enumeration*);
 
 // Converters from/to strings and values:
 const Enumeration* from_value(void* data, const Enumeration* table);
@@ -169,9 +169,9 @@ const char* number_to_text(int number, const Enumeration* table);
 
 ////////////////////////////////////////////////////////////////
 
-class FLUID_API Fl_Widget_Type : public Fl_Type {
-  virtual Fl_Widget *widget(int,int,int,int) = 0;
-  virtual Fl_Widget_Type *_make() = 0; // virtual constructor
+class FLUID_API WidgetType : public FluidType {
+  virtual fltk::Widget *widget(int,int,int,int);
+  virtual WidgetType *_make(); // virtual constructor
   virtual void setlabel(const char *);
 
   const char *extra_code_;
@@ -190,14 +190,14 @@ protected:
 public:
 
   char set_xy;
-  Fl_Widget *o;
+  fltk::Widget *o;
   int public_;
   
   Fluid_Image* image;
   void setimage(Fluid_Image*);
 
-  Fl_Widget_Type();
-  Fl_Type *make();
+  WidgetType();
+  FluidType *make();
   void open();
 
   const char *extra_code() const {return extra_code_;}
@@ -217,39 +217,41 @@ public:
   virtual void read_property(const char *);
   virtual int read_fdesign(const char*, const char*);
 
-  virtual ~Fl_Widget_Type();
+  virtual ~WidgetType();
   void redraw();
 
   const char* subclass() const;
   const char* array_name() const;
+
+  virtual const char *type_name() const;
 };
 
 #define LOAD ((void*)9831)
 
-FLUID_API extern Fl_Widget_Type *current_widget; // one of the selected ones
+FLUID_API extern WidgetType *current_widget; // one of the selected ones
 
 ////////////////////////////////////////////////////////////////
 
-class FLUID_API Fl_Group_Type : public Fl_Widget_Type {
+class FLUID_API GroupType : public WidgetType {
 public:
   const Enumeration* subtypes() const;
-  virtual ~Fl_Group_Type();
+  virtual ~GroupType();
   virtual const char *type_name() const;
-  Fl_Widget *widget(int x,int y,int w,int h);
-  Fl_Widget_Type* _make();
-  Fl_Type *make();
+  fltk::Widget *widget(int x,int y,int w,int h);
+  WidgetType* _make();
+  FluidType *make();
   void write_code();
-  void add_child(Fl_Type*, Fl_Type*);
-  void move_child(Fl_Type*, Fl_Type*);
-  void remove_child(Fl_Type*);
+  void add_child(FluidType*, FluidType*);
+  void move_child(FluidType*, FluidType*);
+  void remove_child(FluidType*);
   int is_parent() const;
   int is_group() const;
 };
 
 ////////////////////////////////////////////////////////////////
 
-//class FLUID_API Fl_Window_Type : public Fl_Widget_Type {
-class FLUID_API Fl_Window_Type : public Fl_Group_Type {
+//class FLUID_API WindowType : public WidgetType {
+class FLUID_API WindowType : public GroupType {
   const Enumeration* subtypes() const;
 
   friend class Overlay_Window;
@@ -262,22 +264,22 @@ class FLUID_API Fl_Window_Type : public Fl_Group_Type {
   enum {LEFT=1,RIGHT=2,BOTTOM=4,TOP=8,DRAG=16,BOX=32};
   void draw_overlay();
   void newdx();
-  void newposition(Fl_Widget_Type *,int &x,int &y,int &w,int &h);
+  void newposition(WidgetType *,int &x,int &y,int &w,int &h);
   int handle(int);
   virtual void setlabel(const char *);
   void write_code();
-  Fl_Widget_Type *_make() {return 0;} // we don't call this
-  Fl_Widget *widget(int,int,int,int) {return 0;}
+  WidgetType *_make() {return 0;} // we don't call this
+  fltk::Widget *widget(int,int,int,int) {return 0;}
   int recalc;		// set by fix_overlay()
   void moveallchildren();
-  void move_children(Fl_Type*, int);
-  Fl_Widget_Type* clicked_widget();
+  void move_children(FluidType*, int);
+  WidgetType* clicked_widget();
 
 public:
 
   uchar modal, non_modal, border;
 
-  Fl_Type *make();
+  FluidType *make();
   virtual const char *type_name() const;
 
   void open();
@@ -288,9 +290,9 @@ public:
   virtual void read_property(const char *);
   virtual int read_fdesign(const char*, const char*);
 
-  void add_child(Fl_Type*, Fl_Type*);
-  void move_child(Fl_Type*, Fl_Type*);
-  void remove_child(Fl_Type*);
+  void add_child(FluidType*, FluidType*);
+  void move_child(FluidType*, FluidType*);
+  void remove_child(FluidType*);
 
   int is_parent() const {return 1;}
   int is_group() const {return 1;}
@@ -301,10 +303,10 @@ public:
 // This header file also declares all the global functions in fluid:
 
 // object list operations:
-Fl_Widget *make_widget_browser(int x,int y,int w,int h);
+fltk::Widget *make_widget_browser(int x,int y,int w,int h);
 extern int modflag;
 void delete_all(int selected_only=0);
-void selection_changed(Fl_Type* new_current);
+void selection_changed(FluidType* new_current);
 
 // file operations:
 FLUID_API void write_word(const char *);
@@ -345,5 +347,5 @@ FLUID_API int storestring(const char *n, const char * & p, int nostrip=0);
 FLUID_API extern int include_H_from_C;
 
 //
-// End of "$Id: Fl_Type.h,v 1.34 2002/12/09 04:52:22 spitzak Exp $".
+// End of "$Id: FluidType.h,v 1.1 2002/12/09 16:44:02 spitzak Exp $".
 //
