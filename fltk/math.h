@@ -1,5 +1,5 @@
 //
-// "$Id: math.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: math.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $"
 //
 // Math header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,7 +28,7 @@
 
 #include <math.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 // things missing from <math.h>:
 
 // stop redefinition warnings
@@ -56,7 +56,7 @@
 
 #endif
 
-#if defined(WIN32) || defined(CRAY)
+#if defined(_WIN32) || defined(CRAY)
 
 inline double rint(double v) {return floor(v+.5);}
 inline double copysign(double a, double b) {return b<0 ? -a : a;}
@@ -66,5 +66,5 @@ inline double copysign(double a, double b) {return b<0 ? -a : a;}
 #endif
 
 //
-// End of "$Id: math.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: math.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $".
 //

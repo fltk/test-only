@@ -1,20 +1,22 @@
-// Simple threads support functions.  These should not really be part of
-// fltk, but without them we cannot write portable demo programs.  These
-// should be useful for other programs.
-
-// You must not include this file on systems that don't support either
-// pthreads or WIN32 threads.  This is because all functions are defined
-// inline here for maximum speed.
-
-// You MUST call Fl::lock() before calling create_thread!  This is
-// totally necessary, as calling Fl::unlock() without Fl::lock() having
-// been called first will crash!  Fl::lock/unlock uses it's own internal
-// implementation of mutex.
+// Inline classes to provide portable support for threads and mutexes.
+//
+// Fltk does not use this (it has an internal mutex implementation
+// that is used if Fl::lock() is called). This header file's only
+// purpose is so we can write portable demo programs. It may be useful
+// or an inspiration to people who want to try writing multithreaded
+// programs themselves.
+//
+// Fltk has no multithreaded support unless the main thread calls Fl::lock().
+// This main thread is the only thread allowed to call Fl::run or Fl::wait.
+// From then on fltk will be locked except when the main thread is actually
+// waiting for events from the user. Other threads must call Fl::lock() and
+// Fl::unlock() to surround calls to fltk (such as to change widgets or
+// redraw them).
 
 #ifndef Fl_Threads_H
 #define Fl_Threads_H
 
-#ifndef WIN32
+#ifndef _WIN32
 // pthreads:
 
 #include <pthread.h>
@@ -91,8 +93,7 @@ public:
 
 #endif
 
-#else
-// WIN32:
+#else // _WIN32:
 
 #include <windows.h>
 #include <process.h>

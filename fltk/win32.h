@@ -1,7 +1,7 @@
 //
-// "$Id: win32.h,v 1.2 2001/07/24 21:14:27 robertk Exp $"
+// "$Id: win32.h,v 1.3 2001/07/29 21:52:43 spitzak Exp $"
 //
-// WIN32 header file for the Fast Light Tool Kit (FLTK).
+// _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
 // Copyright 1998-1999 by Bill Spitzak and others.
 //
@@ -24,7 +24,7 @@
 //
 
 // Do not directly include this file, instead use <fltk/x.h>.  It will
-// include this file if WIN32 is defined.  This is to encourage
+// include this file if _WIN32 is defined.  This is to encourage
 // portability of even the system-specific code...
 
 
@@ -138,5 +138,5 @@ FL_API Fl_Window* fl_find(Window xid);
 #endif
 
 //
-// End of "$Id: win32.h,v 1.2 2001/07/24 21:14:27 robertk Exp $".
+// End of "$Id: win32.h,v 1.3 2001/07/29 21:52:43 spitzak Exp $".
 //

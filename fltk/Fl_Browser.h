@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.h,v 1.2 2001/07/24 16:05:15 robertk Exp $"
+// "$Id: Fl_Browser.h,v 1.3 2001/07/29 21:52:43 spitzak Exp $"
 //
 // Copyright 1998-2000 by Bill Spitzak and others.
 //
@@ -98,13 +98,13 @@ public:
   void set_top() { set_position(TOP); }
   void set_bottom() { set_position(BOTTOM); }
   void set_middle() { set_position(MIDDLE); }
-  bool item_select(bool value = true, bool do_callback = false);
-  bool item_select_only(bool do_callback = false);
+  bool item_select(bool value = true, int do_callback = 0);
+  bool item_select_only(int do_callback = 0);
   const int* indexes() const {return item_index[FOCUS];}
   int level() const {return item_level[FOCUS];}
 
   // fltk 1.0 Fl_Browser emulation: (see also Fl_Menu_.h)
-  bool deselect(bool do_callback = 0);
+  bool deselect(int do_callback = 0);
   bool select(int line, bool value = true);
   bool selected(int line);
   void topline(int line) {goto_number(line); set_top();}
@@ -158,5 +158,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Browser.h,v 1.2 2001/07/24 16:05:15 robertk Exp $".
+// End of "$Id: Fl_Browser.h,v 1.3 2001/07/29 21:52:43 spitzak Exp $".
 //

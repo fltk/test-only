@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Color.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $"
 //
 // Color value used by the Fast Light Tool Kit (FLTK).
 //
@@ -45,7 +45,7 @@ enum {
   FL_MAGENTA		= 0xf8,
   FL_CYAN		= 0xdf,
   FL_WHITE		= 0xff,
-  FL_BLUE_SELECTION_COLOR = 0x88, // WIN32-like selection color
+  FL_BLUE_SELECTION_COLOR = 0x88, // _WIN32-like selection color
 #ifndef FLTK_2
   FL_GRAY0		= 32,	// 'A' black
   FL_DARK3		= 39,	// 'H' about 33%
@@ -103,5 +103,5 @@ FL_API Fl_Color fl_nearest_color(Fl_Color);
 #endif
 
 //
-// End of "$Id: Fl_Color.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Color.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $".
 //

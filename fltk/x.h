@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: x.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -33,7 +33,7 @@
 
 #include "Fl_Color.h"
 
-#ifdef WIN32
+#ifdef _WIN32
 
 #include "win32.h"
 
@@ -127,9 +127,9 @@ inline Window fl_other_xid(const Fl_Window*w) {return Fl_X::i(w)->other_xid;}
 Fl_Window* fl_find(Window xid);
 
 #endif	//Fl_Window_H
-#endif	// not WIN32
+#endif	// not _WIN32
 #endif	//Fl_X_H
 
 //
-// End of "$Id: x.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: x.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $".
 //

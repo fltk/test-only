@@ -1,5 +1,5 @@
 //
-// "$Id: filename.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: filename.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $"
 //
 // Filename header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,7 +27,7 @@
 #define FL_FILENAME_H
 
 //
-// The following is only used when building DLLs under WIN32
+// The following is only used when building DLLs under _WIN32
 //
 
 #include <fltk/Enumerations.h>
@@ -44,7 +44,7 @@ FL_API int filename_isdir(const char*);
 
 // Portable "scandir" function.  Ugly but apparently necessary...
 
-#if defined(WIN32) && !defined(__CYGWIN__)
+#if defined(_WIN32) && !defined(__CYGWIN__)
 
 struct FL_API dirent {char d_name[1];};
 
@@ -68,5 +68,5 @@ FL_API int filename_list(const char *d, struct dirent ***);
 #endif
 
 //
-// End of "$Id: filename.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: filename.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $".
 //

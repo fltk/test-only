@@ -1,5 +1,5 @@
 /*
- * "$Id: vsnprintf.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+ * "$Id: vsnprintf.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $"
  *
  * vsnprintf() function for the Fast Light Tool Kit (FLTK).
  *
@@ -43,7 +43,7 @@
 
 #include <stdio.h>
 
-#ifdef WIN32
+#ifdef _WIN32
 # define vsnprintf _vsnprintf
 # define snprintf _snprintf
 
@@ -76,6 +76,6 @@
 
 #endif
 /*
- * End of "$Id: vsnprintf.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+ * End of "$Id: vsnprintf.h,v 1.2 2001/07/29 21:52:43 spitzak Exp $".
  */
 

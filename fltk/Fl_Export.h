@@ -1,8 +1,8 @@
 /*
- The following is only used when building DLLs under WIN32
+ The following is only used when building DLLs under _WIN32
 */
 
-#if defined(WIN32) && defined(FL_SHARED)
+#if defined(_WIN32) && defined(FL_SHARED)
 #  ifdef FL_LIBRARY
 #    define FL_API	__declspec(dllexport)
 #  else
