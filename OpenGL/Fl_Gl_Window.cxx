@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Window.cxx,v 1.7 2000/04/07 17:10:05 bill Exp $"
+// "$Id: Fl_Gl_Window.cxx,v 1.8 2000/04/10 17:54:12 carl Exp $"
 //
 // OpenGL window code for the Fast Light Tool Kit (FLTK).
 //
@@ -226,7 +226,7 @@ void Fl_Gl_Window::flush() {
 
 #if SWAP_TYPE == SWAP
       uchar old_damage = damage();
-      clear_damage(damage1_|old_damage); draw();
+      set_damage(damage1_|old_damage); draw();
       swap_buffers();
       damage1_ = old_damage;
 #else // SWAP_TYPE == UNDEFINED
@@ -306,5 +306,5 @@ void Fl_Gl_Window::draw_overlay() {}
 #endif
 
 //
-// End of "$Id: Fl_Gl_Window.cxx,v 1.7 2000/04/07 17:10:05 bill Exp $".
+// End of "$Id: Fl_Gl_Window.cxx,v 1.8 2000/04/10 17:54:12 carl Exp $".
 //
