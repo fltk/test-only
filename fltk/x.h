@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.23 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id: x.h,v 1.24 2004/02/05 07:21:20 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -72,7 +72,7 @@
 
 # undef Window
 
-#ifdef __FreeBSD__
+#if defined(__FreeBSD__) || defined(__APPLE__)
 typedef unsigned long	ulong;
 typedef unsigned int	uint;
 typedef unsigned char	uchar;
@@ -225,5 +225,5 @@ Window* find(XWindow xid);
 #endif
 
 //
-// End of "$Id: x.h,v 1.23 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id: x.h,v 1.24 2004/02/05 07:21:20 spitzak Exp $".
 //

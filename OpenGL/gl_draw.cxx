@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.27 2004/01/07 06:57:06 spitzak Exp $"
+// "$Id: gl_draw.cxx,v 1.28 2004/02/05 07:21:20 spitzak Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -35,6 +35,8 @@
 #include "GlChoice.h"
 using namespace fltk;
 
+extern GLContext fl_current_glcontext;
+
 #if USE_X11
 #undef HFONT
 #define HFONT XFontStruct*
@@ -48,46 +50,42 @@ struct FontSize {
 };
 static FontSize* root, *current;
 static HFONT current_xfont;
-bool setlistbase = true;
 
 void fltk::glsetfont(fltk::Font* font, float size) {
   setfont(font, size); // necessary so measure() works
   current_xfont = fltk::xfont();
-  setlistbase = true;
-}
-
-void fltk::gldrawtext(const char* str, int n) {
-  if (setlistbase) {
-    setlistbase = false;
-    if (!current || current->xfont != current_xfont) {
-      FontSize** p = &root;
-      while (*p) {
-	if (current_xfont < (*p)->xfont) p = &((*p)->left);
-	else if (current_xfont > (*p)->xfont) p = &((*p)->right);
-	else {current = *p; goto GOTIT;}
-      }
-      *p = current = new FontSize;
-      current->xfont = current_xfont;
-      current->left = current->right = 0;
-      current->listbase = glGenLists(256);
+  if (!fl_current_glcontext) return;
+  if (!current || current->xfont != current_xfont) {
+    FontSize** p = &root;
+    while (*p) {
+      if (current_xfont < (*p)->xfont) p = &((*p)->left);
+      else if (current_xfont > (*p)->xfont) p = &((*p)->right);
+      else {current = *p; goto GOTIT;}
+    }
+    *p = current = new FontSize;
+    current->xfont = current_xfont;
+    current->left = current->right = 0;
+    current->listbase = glGenLists(256);
 #if USE_X11
-      int base = current_xfont->min_char_or_byte2;
-      int size = current_xfont->max_char_or_byte2-base+1;
-      glXUseXFont(current_xfont->fid, base, size, current->listbase+base);
+    int base = current_xfont->min_char_or_byte2;
+    int size = current_xfont->max_char_or_byte2-base+1;
+    glXUseXFont(current_xfont->fid, base, size, current->listbase+base);
 #elif defined(_WIN32)
-      int base = textmetric()->tmFirstChar;
-      int size = textmetric()->tmLastChar - base + 1;
-      HDC hdc = GetDC(0);
-      HFONT oldFid = (HFONT)SelectObject(hdc, current_xfont);
-      wglUseFontBitmaps(hdc, base, size, current->listbase+base); 
-      SelectObject(hdc, oldFid);
+    int base = textmetric()->tmFirstChar;
+    int size = textmetric()->tmLastChar - base + 1;
+    HDC hdc = GetDC(0);
+    HFONT oldFid = (HFONT)SelectObject(hdc, current_xfont);
+    wglUseFontBitmaps(hdc, base, size, current->listbase+base); 
+    SelectObject(hdc, oldFid);
 #else
 #error
 #endif
-    }
-  GOTIT:
-    glListBase(current->listbase);
   }
+ GOTIT:
+  glListBase(current->listbase);
+}
+
+void fltk::gldrawtext(const char* str, int n) {
   glCallLists(n, GL_UNSIGNED_BYTE, str);
 }
 
@@ -182,5 +180,5 @@ void fltk::gldrawimage(const uchar* b, int x, int y, int w, int h, int d, int ld
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.27 2004/01/07 06:57:06 spitzak Exp $".
+// End of "$Id: gl_draw.cxx,v 1.28 2004/02/05 07:21:20 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.45 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id: Fl_arg.cxx,v 1.46 2004/02/05 07:21:20 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -51,7 +51,7 @@ int XParseGeometry(const char*, int*, int*, unsigned int*, unsigned int*);
 
 using namespace fltk;
 
-/*! \defgroup startup Functions to Call Before Showing a Window
+/*! \addtogroup startup
 
   Warning: most of these functions will not work (and may crash) after
   Window::show() has been called the first time. Calling
@@ -419,5 +419,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // if !USE_X11
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.45 2004/01/20 07:27:28 spitzak Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.46 2004/02/05 07:21:20 spitzak Exp $".
 //

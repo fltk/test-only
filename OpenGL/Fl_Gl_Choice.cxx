@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.cxx,v 1.23 2003/01/14 06:51:01 spitzak Exp $"
+// "$Id: Fl_Gl_Choice.cxx,v 1.24 2004/02/05 07:21:20 spitzak Exp $"
 //
 // OpenGL visual selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -175,12 +175,12 @@ GLContext fltk::create_gl_context(XVisualInfo* vis) {
 
 #endif
 
-static GLContext cached_context;
+GLContext fl_current_glcontext;
 static const Window* cached_window;
 
 void fltk::set_gl_context(const Window* w, GLContext context) {
-  if (context != cached_context || w != cached_window) {
-    cached_context = context;
+  if (context != fl_current_glcontext || w != cached_window) {
+    fl_current_glcontext = context;
     cached_window = w;
 #ifdef _WIN32
     wglMakeCurrent(CreatedWindow::find(w)->dc, context);
@@ -191,7 +191,7 @@ void fltk::set_gl_context(const Window* w, GLContext context) {
 }
 
 void fltk::no_gl_context() {
-  cached_context = 0;
+  fl_current_glcontext = 0;
   cached_window = 0;
 #ifdef _WIN32
   wglMakeCurrent(0, 0);
@@ -201,7 +201,7 @@ void fltk::no_gl_context() {
 }
 
 void fltk::delete_gl_context(GLContext context) {
-  if (cached_context == context) no_gl_context();
+  if (fl_current_glcontext == context) no_gl_context();
   if (context != first_context) {
 #ifdef _WIN32
     wglDeleteContext(context);
@@ -214,5 +214,5 @@ void fltk::delete_gl_context(GLContext context) {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.cxx,v 1.23 2003/01/14 06:51:01 spitzak Exp $".
+// End of "$Id: Fl_Gl_Choice.cxx,v 1.24 2004/02/05 07:21:20 spitzak Exp $".
 //

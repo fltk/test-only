@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.33 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id: fl_ask.cxx,v 1.34 2004/02/05 07:21:21 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -38,7 +38,7 @@
 
 using namespace fltk;
 
-/*! \defgroup dialogs Popup Dialog Services
+/*! \addtogroup dialogs
 
   FLTK provides a number of functions that create a popup window and
   Window::exec() it. These functions return when the user OK's or
@@ -296,5 +296,5 @@ const char *fltk::password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.33 2004/01/20 07:27:28 spitzak Exp $".
+// End of "$Id: fl_ask.cxx,v 1.34 2004/02/05 07:21:21 spitzak Exp $".
 //

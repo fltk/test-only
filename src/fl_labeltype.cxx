@@ -1,5 +1,5 @@
 //
-// "$Id: fl_labeltype.cxx,v 1.44 2003/11/04 08:11:03 spitzak Exp $"
+// "$Id: fl_labeltype.cxx,v 1.45 2004/02/05 07:21:21 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -186,11 +186,11 @@ void Widget::draw_label(int X, int Y, int W, int H, const Style* style, Flags fl
   // If label is drawn outside, draw the image only:
   if ((flags&15) && !(flags & ALIGN_INSIDE)) {
     if (!image_) return;
-    float fw = W;
-    float fh = H;
+    int fw = W;
+    int fh = H;
     image_->measure(fw, fh);
     if (flags & ALIGN_CLIP) push_clip(X, Y, W, H);
-    image_->draw(X+((W-int(fw))>>1), Y+((H-int(fh))>>1),W,H,style,flags);
+    image_->draw(X+((W-fw)>>1), Y+((H-fh)>>1),fw,fh,style,flags);
     if (flags & ALIGN_CLIP) pop_clip();
     return;
   }
@@ -294,9 +294,27 @@ void Group::draw_outside_label(Widget& w) const {
   int W = w.w();
   int H = w.h();
   if (align & ALIGN_TOP) {
-    align ^= (ALIGN_BOTTOM|ALIGN_TOP);
-    Y = 0;
-    H = w.y();
+    if (align & ALIGN_BOTTOM) {
+      // special cases to align on left or right side at top/bottom
+      if (align & ALIGN_LEFT) {
+	align &= ~(ALIGN_TOP|ALIGN_LEFT);
+      } else {
+	align &= ~ALIGN_BOTTOM;
+      }
+      if (align & ALIGN_RIGHT) {
+	X = X+W+3;
+	W = this->w()-X;
+	align = align&~ALIGN_RIGHT | ALIGN_LEFT;
+      } else {
+	X = 0;
+	W = w.x()-3;
+	align = align | ALIGN_RIGHT;
+      }
+    } else {
+      align ^= (ALIGN_BOTTOM|ALIGN_TOP);
+      Y = 0;
+      H = w.y();
+    }
   } else if (align & ALIGN_BOTTOM) {
     align ^= (ALIGN_BOTTOM|ALIGN_TOP);
     Y = Y+H;
@@ -332,5 +350,5 @@ void Widget::measure_label(int& w, int& h) const {
 }
 
 //
-// End of "$Id: fl_labeltype.cxx,v 1.44 2003/11/04 08:11:03 spitzak Exp $".
+// End of "$Id: fl_labeltype.cxx,v 1.45 2004/02/05 07:21:21 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.85 2004/01/06 06:43:02 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.86 2004/02/05 07:21:20 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -229,7 +229,7 @@ void Input::draw(int X, int Y, int W, int H)
   float desc = line_ascent(leading);
 
   Color background, textcolor;
-  style()->boxcolors(current_flags_highlight()|OUTPUT,background,textcolor);
+  style()->boxcolors(current_flags()|OUTPUT,background,textcolor);
 
   if (damage() & DAMAGE_ALL) {
     // draw and measure the inside label:
@@ -1595,5 +1595,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.85 2004/01/06 06:43:02 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.86 2004/02/05 07:21:20 spitzak Exp $".
 //

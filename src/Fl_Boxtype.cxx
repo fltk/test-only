@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Boxtype.cxx,v 1.15 2003/12/15 03:03:13 spitzak Exp $"
+// "$Id: Fl_Boxtype.cxx,v 1.16 2004/02/05 07:21:20 spitzak Exp $"
 //
 // Box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,7 +23,7 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-/** \defgroup boxes FLTK Box Types
+/** \addtogroup boxes FLTK Box Types
     These variables point at static instances of several classes of
     Box which can be put in as the box() attribute of widgets.
 
@@ -318,5 +318,5 @@ static HighlightBox highlightDownBox("highlight_down", THIN_DOWN_BOX);
 Box* const fltk::HIGHLIGHT_DOWN_BOX = &highlightDownBox;
 
 //
-// End of "$Id: Fl_Boxtype.cxx,v 1.15 2003/12/15 03:03:13 spitzak Exp $".
+// End of "$Id: Fl_Boxtype.cxx,v 1.16 2004/02/05 07:21:20 spitzak Exp $".
 //

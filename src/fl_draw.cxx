@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.36 2004/01/25 06:55:05 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.37 2004/02/05 07:21:21 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -257,9 +257,8 @@ static Segment* segments;
 static int segment_count;
 static int segment_array_size;
 
-// Create a new segment and insert it at index:
-static /*inline*/ void add(int index,
-			   const Symbol* symbol,
+// Create and append a new segment:
+static /*inline*/ void add(const Symbol* symbol,
 			   const char* start,
 			   const char* end,
 			   float x, float y, float w, float h
@@ -269,15 +268,11 @@ static /*inline*/ void add(int index,
   if (segment_count >= segment_array_size) {
     segment_array_size = segment_count ? 2*segment_count : 32;
     Segment* new_array = new Segment[segment_array_size];
-    memcpy(new_array, segments, index*sizeof(Segment));
-    memcpy(new_array+index+1, segments+index, (segment_count-index)*sizeof(Segment));
+    memcpy(new_array, segments, segment_count*sizeof(Segment));
     delete[] segments;
     segments = new_array;
-  } else {
-    memmove(segments+index+1, segments+index, (segment_count-index)*sizeof(Segment));
   }
-  segment_count++;
-  Segment& s = segments[index];
+  Segment& s = segments[segment_count++];
   s.symbol = symbol;
   s.start = start;
   s.end = end;
@@ -287,10 +282,26 @@ static /*inline*/ void add(int index,
   s.h = h;
 }
 
-bool fl_hide_shortcut; // set by Choice
-
 // As we build the segments we keep track of the furthest-right edge:
 static float max_x;
+
+// Move a line horizontally for alignment:
+static void align(int first_segment, float x, float w, float r, Flags flags) {
+  if (r > max_x) max_x = r;
+  float dx; 
+  if (flags & ALIGN_RIGHT) {
+    dx = w-(r-x);
+    if ((flags & ALIGN_LEFT) && dx > 0) return;
+  } else if (flags & ALIGN_LEFT) {
+    return;
+  } else {
+    dx = (w-(r-x))/2;
+  }
+  for (int i = first_segment; i < segment_count; i++)
+    segments[i].x += dx;
+}
+
+bool fl_hide_shortcut; // set by Choice
 
 // Find all the segments in a section of raw text and arrange them as
 // though they are aligned with the top-left corner at x,y and wrap at
@@ -309,32 +320,55 @@ static float wrap(
   const char* word_start = start; // where to start new segment
   float width = 0; 		// width of current text
   // start..p indicates current text segment being built
+  int first_segment = segment_count;
 
   for (const char* p = start; ;) {
-    float guesswidth = 0;
-    // stop only on "interesting" characters:
-    if (p >= end) ;
-    else if ((flags&ALIGN_WRAP) && *p == ' ') {
-      // don't split in the middle of sequential spaces:
-      if (word_start >= p) {word_start = ++p; continue;}
-    } else if (!(flags&RAW_LABEL) && (*p=='@' || *p=='&')) {
-      guesswidth=getsize();
-    } else {++p; continue;}
+    // figure out what we have next:
+    const Symbol* symbol = 0;
+    bool underscore = false;
+    const char* q = p;
 
-    // see if we want to split the previous text between words:
+    // stop only on "interesting" characters:
+  SKIP_LETTERS:
+    if (p >= end) ;
+    else if (*p==' ' && (flags&ALIGN_WRAP)) {
+      // spaces, find the end of all the sequential ones:
+      q = p+1; while (q<end && *q==' ') q++;
+    } else if (*p=='@' && !(flags&RAW_LABEL) && p+1<end) {
+      q = p+1;
+      if (*q == '@') q++;
+      else {
+	while (q<end && *q && !isspace(*q) && *q!='@' && *q!=';') q++;
+	symbol = Symbol::find(p+1,q);
+	if (!symbol) {++p; goto SKIP_LETTERS;}
+      }
+    } else if (*p=='&' && !(flags&RAW_LABEL) && p+1<end) {
+      q = p+1;
+      if (*q == '&') q++;
+      else {
+	if (isalnum(*q)) underscore = true;
+	else {++p; goto SKIP_LETTERS;}
+      }
+    } else {
+      ++p; goto SKIP_LETTERS;
+    }
+
+    // Wrap the current block of text:
     if (flags & ALIGN_WRAP) {
       float newwidth = width + getwidth(word_end, p-word_end);
-      if (x+newwidth+guesswidth > ix+w && word_start > start) {
+      if (x+newwidth+(symbol?getsize():0) > ix+w && word_start > start) {
 	// break before this word
 	if (word_end > start) {
-	  add(segment_count, 0, start, word_end, x, y+line_ascent,
+	  add(0, start, word_end, x, y+line_ascent,
 	      width, getsize());
-	  if (x+width > max_x) max_x = x+width;
+	  x += width;
 	}
+	align(first_segment, ix, w, x, flags);
 	y += line_spacing;
 	x = ix;
 	width = 0;
 	start = word_end = word_start;
+	first_segment = segment_count;
 	// back up and start formatting from start of new line:
 	if (word_start < p) {p = word_start+1; continue;}
       } else {
@@ -342,58 +376,42 @@ static float wrap(
 	word_end = p;
       }
     }
-    if (*p == ' ') {word_start = ++p; continue;}
+    // spaces are just added to the current block:
+    if (*p == ' ') {p = word_start = q; continue;}
+
+    // add text before this next object:
     if (start < p) {
-      // add text before this next object
       width += getwidth(word_end, p-word_end);
-      add(segment_count, 0, start, p, x, y+line_ascent, width, getsize());
+      add(0, start, p, x, y+line_ascent, width, getsize());
       x += width;
-      if (x > max_x) max_x = x;
     }
     if (p >= end) break;
     width = 0;
-    if (*p == '&') {
-      p++;
-      if (*p == '&') {
-	word_start = word_end = start = p; p++; continue;
-      }
-      // add an underscore under next letter:
+    if (underscore) {
       if (!fl_hide_shortcut) {
 	const char* us = "_";
-	add(segment_count, 0, us, us+1, x, y+line_ascent, getsize(),getsize());
+	add(0, us, us+1, x, y+line_ascent, getsize(),getsize());
       }
-    } else if (*p == '@') {
-      p++;
-      if (*p == '@') {
-	word_start = word_end = start = p; p++; continue;
-      }
-      // parse out an @-command:
-      const char* q = p;
-      while (*q && !isspace(*q) && *q != '@' && *q != ';') q++;
-      const Symbol* s = Symbol::find(p,q);
-      if (!s) {
-	// try a 1-character symbol for back-compatability
-	//q = p+1; s = Symbol::find(p,p+1);
-	//if (!s) {
-	  // try to ignore non-matching symbols
-	  word_start = word_end = start = p-1; continue;
-	  //}
-      }
-      Symbol::text(p);
-      float W,H; W = H = getsize(); s->measure(W,H);
+      p = q;
+    } else if (symbol) {
+      Symbol::text(p+1);
+      float W,H; W = H = getsize(); symbol->measure(W,H);
       Symbol::text("");
-      add(segment_count, s, p, q, x,
+      add(symbol, p+1, q, x,
 	  // center it's height vertically about the font center:
 	  y+line_ascent-(getascent()-getdescent()+H+1)/2, W, H);
       x += W;
-      if (x > max_x) max_x = x;
-      p = q;
       // skip the terminating space or semicolon:
-      if (isspace(*p) || *p==';') p++;
+      if (q < end && *q==';') q++;
+      p = q;
+    } else {
+      // handle @@ and &&
+      p++; q = p+1;
     }
     // start the next block of text:
-    word_start = word_end = start = p;
+    word_start = word_end = start = p; p = q;
   }
+  align(first_segment, ix, w, x, flags);
   return y;
 }
 
@@ -477,7 +495,7 @@ void fltk::drawtext(
   normal_color = getcolor();
   int h = int(split(str, W, H, flags)+.5);
   transform(X,Y);
-  int dx, dy;
+  int dy;
   if (flags & ALIGN_BOTTOM) {
     dy = Y+H-h;
     if ((flags & ALIGN_TOP) && dy > Y) dy = Y;
@@ -486,20 +504,20 @@ void fltk::drawtext(
   } else {
     dy = Y+((H-h)>>1);
   }
-  if (flags & ALIGN_RIGHT) {
-    dx = X+W-int(max_x+.5);
-    if ((flags & ALIGN_LEFT) && dx > X) dx = X;
-  } else if (flags & ALIGN_LEFT) {
-    dx = X;
-  } else {
-    dx = X+((W-int(max_x+.5))>>1);
-  }
   setfont(normal_font, normal_size);
   push_matrix();
   load_identity();
   if (bgboxcolor) {
     if (!fl_drawing_shadow) setcolor(bgboxcolor);
-    fillrect(int(dx), int(dy), int(max_x+.5), h);
+    int w = int(max_x+.5);
+    int dx = 0;
+    if (flags & ALIGN_RIGHT) {
+      dx = W-w;
+      if (flags & ALIGN_LEFT) if (dx > 0) dx = 0;
+    } else if (!(flags & ALIGN_LEFT)) {
+      dx = (W-w)>>1;
+    }
+    fillrect(X+dx, int(dy), w, h);
     if (fl_drawing_shadow) goto DONE;
     setcolor(normal_color);
   }
@@ -507,9 +525,9 @@ void fltk::drawtext(
     Segment& s = segments[h];
     if (s.symbol) {
       Symbol::text(s.start);
-      s.symbol->draw(s.x+dx, s.y+dy, s.w, s.h, Widget::default_style, 0);
+      s.symbol->draw(s.x+X, s.y+dy, s.w, s.h, Widget::default_style, 0);
     } else {
-      drawtext_transformed(s.start, s.end-s.start, s.x+dx, s.y+dy);
+      drawtext_transformed(s.start, s.end-s.start, s.x+X, s.y+dy);
     }
   }
   Symbol::text("");
@@ -533,5 +551,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.36 2004/01/25 06:55:05 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.37 2004/02/05 07:21:21 spitzak Exp $".
 //

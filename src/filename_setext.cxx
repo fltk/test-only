@@ -1,5 +1,5 @@
 //
-// "$Id: filename_setext.cxx,v 1.9 2004/01/20 07:27:28 spitzak Exp $"
+// "$Id: filename_setext.cxx,v 1.10 2004/02/05 07:21:21 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -24,7 +24,7 @@
 #include <fltk/filename.h>
 #include <string.h>
 
-/*! \defgroup utilities Non-fltk Utility Functions
+/*! \addtogroup utilities
 
   FLTK provides some functions that it uses internally that are
   necessary for portablity, or convienent for writing code.  These are
@@ -50,5 +50,5 @@ char *filename_setext(char *buf, const char *ext) {
 }
 
 //
-// End of "$Id: filename_setext.cxx,v 1.9 2004/01/20 07:27:28 spitzak Exp $".
+// End of "$Id: filename_setext.cxx,v 1.10 2004/02/05 07:21:21 spitzak Exp $".
 //

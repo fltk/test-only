@@ -1,9 +1,9 @@
 //
-// "$Id: button.cxx,v 1.8 2002/12/10 02:01:04 easysw Exp $"
+// "$Id: button.cxx,v 1.9 2004/02/05 07:21:21 spitzak Exp $"
 //
-// Button/callback test program for the Fast Light Tool Kit (FLTK).
+// Example2 program from the manual
 //
-// Copyright 1998-2003 by Bill Spitzak and others.
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -25,42 +25,32 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <fltk/Fl.h>
-#include <fltk/Fl_Window.h>
-#include <fltk/Fl_Button.h>
+#include <fltk/run.h>
+#include <fltk/Window.h>
+#include <fltk/Button.h>
+using namespace fltk;
 
-void beepcb(Fl_Widget *, void *) {
+void beepcb(Widget *, void *) {
   printf("\007"); fflush(stdout);
 }
 
-void exitcb(Fl_Widget *, void *) {
+void exitcb(Widget *, void *) {
   exit(0);
 }
 
-#if 0
-// test Fl::add_fd()...
-void stdin_cb(int, void*) {
-  char buf[1000];
-  gets(buf);
-  printf("stdin callback\n");
-}
-#endif
-
 int main(int argc, char ** argv) {
-  Fl_Window *window = new Fl_Window(320,65);
-  Fl_Button *b1 = new Fl_Button(20, 20, 80, 25, "&Beep");
+  Window *window = new Window(320,65);
+  window->begin();
+  Button *b1 = new Button(20, 20, 80, 25, "&Beep");
   b1->callback(beepcb,0);
-  /*Fl_Button *b2 =*/ new Fl_Button(120,20, 80, 25, "&no op");
-  Fl_Button *b3 = new Fl_Button(220,20, 80, 25, "E&xit");
+  /*Button *b2 =*/ new Button(120,20, 80, 25, "&no op");
+  Button *b3 = new Button(220,20, 80, 25, "E&xit");
   b3->callback(exitcb,0);
   window->end();
   window->show(argc,argv);
-#if 0
-  Fl::add_fd(0, stdin_cb);
-#endif
-  return Fl::run();
+  return run();
 }
 
 //
-// End of "$Id: button.cxx,v 1.8 2002/12/10 02:01:04 easysw Exp $".
+// End of "$Id: button.cxx,v 1.9 2004/02/05 07:21:21 spitzak Exp $".
 //

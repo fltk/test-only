@@ -1,5 +1,5 @@
 //
-// "$Id: Flags.h,v 1.3 2004/01/07 06:57:06 spitzak Exp $"
+// "$Id: Flags.h,v 1.4 2004/02/05 07:21:20 spitzak Exp $"
 //
 // Unified flags set for fltk. These flags control the appearance of
 // boxes and widgets. This same value is used to:
@@ -52,12 +52,30 @@ enum {
 
   // from Align, values are comptable with fltk 1.0:
   // These control the location and appearance of labels:
-  ALIGN_CENTER		= 0,	//!< (0) The label is centered
-  ALIGN_TOP		= 0x00000001, //!< The label is top-aligned
-  ALIGN_BOTTOM		= 0x00000002, //!< The label is bottom-aligned
-  ALIGN_LEFT		= 0x00000004, //!< The label is left-aligned
-  ALIGN_RIGHT		= 0x00000008, //!< The label is right-aligned
-  ALIGN_INSIDE		= 0x00000010, //!< The label is put inside widget
+  // Warning: unused numbers may change behavior!
+  ALIGN_CENTER		= 0,	//!< (0) The label is centered inside widget
+  ALIGN_TOP		= 1,	//!< Label is centered above widget
+  ALIGN_BOTTOM		= 2,	//!< Label is centered below widget
+  ALIGN_LEFTTOP		= 3,	//!< Label is left of widget at top
+  ALIGN_LEFT		= 4,	//!< Label is to left of widget
+  ALIGN_TOPLEFT		= 5,	//!< Label is left-justified above widget
+  ALIGN_BOTTOMLEFT	= 6,	//!< Label is left-justified below widget
+  ALIGN_LEFTBOTTOM	= 7,	//!< Label is left of widget at bottom
+  ALIGN_RIGHT		= 8,	//!< Label is to right of widget
+  ALIGN_TOPRIGHT	= 9,	//!< Label is right-justified above widget
+  ALIGN_BOTTOMRIGHT	= 10,	//!< Label is right-justified below widget
+  ALIGN_RIGHTTOP	= 11,	//!< Label is right of widget at top
+  ALIGN_CENTERLEFT	= 12,	//!< Label is centered in space left of widget
+  ALIGN_RIGHTBOTTOM	= 15,	//!< Label is right of widget at bottom
+  ALIGN_INSIDE		= 16,	//!< Label is inside widget, image centered
+  ALIGN_INSIDE_TOP	= 17,	//!< Label is inside widget at top
+  ALIGN_INSIDE_BOTTOM	= 18,	//!< Label is inside widget at bottom
+  ALIGN_INSIDE_LEFT	= 20,	//!< Label is inside widget at left
+  ALIGN_INSIDE_TOPLEFT	= 21,	//!< Label is inside widget at top left
+  ALIGN_INSIDE_BOTTOMLEFT=22,	//!< Label is inside widget at bottom left
+  ALIGN_INSIDE_RIGHT	= 24,	//!< Label is inside widget at right
+  ALIGN_INSIDE_TOPRIGHT	= 25,	//!< Label is inside widget at top right
+  ALIGN_INSIDE_BOTTOMRIGHT=26,	//!< Label is inside widget bottom right
   ALIGN_CLIP		= 0x00000040, //!< The label is clipped to the widget
   ALIGN_WRAP		= 0x00000080, //!< The label is word-wrapped
   ALIGN_MASK		= 0x000000FF, //!< Used to split align() from flags()
