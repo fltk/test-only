@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_File_Browser.cxx,v 1.1.2.23.2.4 2003/12/02 02:51:46 easysw Exp $"
+// "$Id: Fl_File_Browser.cxx,v 1.1.2.23.2.5 2004/02/26 03:08:00 easysw Exp $"
 //
 // Fl_File_Browser routines.
 //
@@ -421,7 +421,11 @@ Fl_File_Browser::load(const char     *directory,// I - Directory to load
 //  printf("Fl_File_Browser::load(\"%s\")\n", directory);
 
   clear();
+
   directory_ = directory;
+
+  if (!directory)
+    return (0);
 
   if (directory_[0] == '\0')
   {
@@ -639,5 +643,5 @@ Fl_File_Browser::filter(const char *pattern)	// I - Pattern string
 
 
 //
-// End of "$Id: Fl_File_Browser.cxx,v 1.1.2.23.2.4 2003/12/02 02:51:46 easysw Exp $".
+// End of "$Id: Fl_File_Browser.cxx,v 1.1.2.23.2.5 2004/02/26 03:08:00 easysw Exp $".
 //

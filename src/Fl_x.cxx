@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.24.2.24.2.24.2.3 2003/12/02 02:51:48 easysw Exp $"
+// "$Id: Fl_x.cxx,v 1.24.2.24.2.24.2.4 2004/02/26 03:08:00 easysw Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -1329,7 +1329,7 @@ void Fl_X::make_xid(Fl_Window* win, XVisualInfo *visual, Colormap colormap)
     }
 
     // Make it receptive to DnD:
-    int version = 4;
+    long version = 4;
     XChangeProperty(fl_display, xp->xid, fl_XdndAware,
 		    XA_ATOM, sizeof(int)*8, 0, (unsigned char*)&version, 1);
 
@@ -1512,5 +1512,5 @@ void Fl_Window::make_current() {
 #endif
 
 //
-// End of "$Id: Fl_x.cxx,v 1.24.2.24.2.24.2.3 2003/12/02 02:51:48 easysw Exp $".
+// End of "$Id: Fl_x.cxx,v 1.24.2.24.2.24.2.4 2004/02/26 03:08:00 easysw Exp $".
 //

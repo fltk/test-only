@@ -1,5 +1,5 @@
 /*
- * "$Id: scandir_win32.c,v 1.11.2.4.2.5.2.3 2003/12/02 02:51:49 easysw Exp $"
+ * "$Id: scandir_win32.c,v 1.11.2.4.2.5.2.4 2004/02/26 03:08:00 easysw Exp $"
  *
  * WIN32 scandir function for the Fast Light Tool Kit (FLTK).
  *
@@ -64,7 +64,7 @@ int fl_scandir(const char *dirname, struct dirent ***namelist,
     return nDir;
   }
   do {
-    selectDir=(struct dirent*)malloc(sizeof(struct dirent)+strlen(find.cFileName)+1);
+    selectDir=(struct dirent*)malloc(sizeof(struct dirent)+strlen(find.cFileName)+2);
     strcpy(selectDir->d_name, find.cFileName);
     if (find.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY) {
       // Append a trailing slash to directory names...
@@ -104,5 +104,5 @@ int fl_scandir(const char *dirname, struct dirent ***namelist,
 #endif
 
 /*
- * End of "$Id: scandir_win32.c,v 1.11.2.4.2.5.2.3 2003/12/02 02:51:49 easysw Exp $".
+ * End of "$Id: scandir_win32.c,v 1.11.2.4.2.5.2.4 2004/02/26 03:08:00 easysw Exp $".
  */
