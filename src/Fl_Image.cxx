@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.46 2004/07/27 07:03:07 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.47 2004/07/31 10:25:39 laza2000 Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -249,7 +249,7 @@ void Image::set_alpha_bitmap(const uchar* bitmap, int w, int h) {
   { 0x00, 0x08, 0x04, 0x0c, 0x02, 0x0a, 0x06, 0x0e,
     0x01, 0x09, 0x05, 0x0d, 0x03, 0x0b, 0x07, 0x0f };
   int Bpr = (w+7)/8;			//: bytes per row
-  int pad = Bpr&1, w1 = (w+7)/8, shr = ((w-1)&7)+1;
+  int pad = Bpr&1, w1 = (w+7)/8; //shr = ((w-1)&7)+1;
   uchar *newarray = new uchar[(Bpr+pad)*h], *dst = newarray;
   const uchar* src = bitmap;
   for (int i=0; i<h; i++) {
@@ -578,5 +578,5 @@ void Image::label(Widget* o) {
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.46 2004/07/27 07:03:07 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.47 2004/07/31 10:25:39 laza2000 Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.23 2004/07/19 22:24:52 laza2000 Exp $"
+// "$Id: fl_bmp.cxx,v 1.24 2004/07/31 10:25:39 laza2000 Exp $"
 //
 // bmpImage routines.
 //
@@ -131,12 +131,12 @@ void bmpImage::_measure(float &W, float &H) const
     // Old Windows/OS2 BMP header...
     W = read_word();
     H = read_word();
-    const_cast<bmpImage*>(this)->setsize(W,H);
+    const_cast<bmpImage*>(this)->setsize((int)W,(int)H);
   } else {
     // New BMP header...
     W = read_long();
     H = read_long();
-    const_cast<bmpImage*>(this)->setsize(W,H);
+    const_cast<bmpImage*>(this)->setsize((int)W,(int)H);
   }
 
   if (!datas) fclose(bmpFile);
@@ -546,5 +546,5 @@ read_long() {
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.23 2004/07/19 22:24:52 laza2000 Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.24 2004/07/31 10:25:39 laza2000 Exp $"
 //

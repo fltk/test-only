@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileIcon2.cxx,v 1.18 2004/03/14 07:29:41 spitzak Exp $"
+// "$Id: Fl_FileIcon2.cxx,v 1.19 2004/07/31 10:25:39 laza2000 Exp $"
 //
 // FileIcon loading routines for the Fast Light Tool Kit (FLTK).
 //
@@ -50,7 +50,9 @@
 # undef _POSIX_
 # include <io.h>
 # define access(a,b) _access(a,b)
-# define F_OK 04
+# ifndef F_OK
+#  define F_OK 04
+# endif
 #else
 # include <unistd.h>
 #endif
@@ -805,5 +807,5 @@ get_kde_val(char       *str,
 
 
 //
-// End of "$Id: Fl_FileIcon2.cxx,v 1.18 2004/03/14 07:29:41 spitzak Exp $".
+// End of "$Id: Fl_FileIcon2.cxx,v 1.19 2004/07/31 10:25:39 laza2000 Exp $".
 //

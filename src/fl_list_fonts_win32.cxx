@@ -1,5 +1,5 @@
 //
-// "$Id: fl_list_fonts_win32.cxx,v 1.31 2004/07/29 09:07:54 spitzak Exp $"
+// "$Id: fl_list_fonts_win32.cxx,v 1.32 2004/07/31 10:25:39 laza2000 Exp $"
 //
 // _WIN32 font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -89,7 +89,7 @@ int Font::sizes(int*& sizep) {
   //if (cyPerInch < 1) cyPerInch = 1;
   if (has_unicode()) {
     wchar_t ucs[1024];
-    int ucslen = utf8towc(name_, strlen(name_), ucs, 1024);;
+    utf8towc(name_, strlen(name_), ucs, 1024);
     EnumFontFamiliesW(dc, ucs, EnumSizeCb, 0);
   } else {
     EnumFontFamiliesA(dc, name_, (FONTENUMPROCA)EnumSizeCb, 0);
@@ -134,7 +134,6 @@ static int CALLBACK enumcbW(CONST LOGFONTW* lplf,
   int attrib = 0;
 //    if (lplf->lfWeight > 400 || strstr(name, " Bold") == name+strlen(name)-5)
 //      attrib = BOLD;
-  int n = wcslen(name), count;
   char buffer[1024];
   utf8fromwc(buffer, 1024, name, wcslen(name));
   font_array[num_fonts++] = fl_make_font(buffer, attrib);
@@ -179,5 +178,5 @@ int fltk::list_fonts(Font**& arrayp) {
 }
 
 //
-// End of "$Id: fl_list_fonts_win32.cxx,v 1.31 2004/07/29 09:07:54 spitzak Exp $"
+// End of "$Id: fl_list_fonts_win32.cxx,v 1.32 2004/07/31 10:25:39 laza2000 Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: scandir_win32.c,v 1.23 2004/07/30 05:35:32 spitzak Exp $"
+// "$Id: scandir_win32.c,v 1.24 2004/07/31 10:25:39 laza2000 Exp $"
 //
 // _WIN32 scandir function for the Fast Light Tool Kit (FLTK).
 //
@@ -30,6 +30,8 @@
 #include <string.h>
 #include <windows.h>
 #include <stdlib.h>
+
+#include <fltk/utf.h>
 
 struct dirent { char d_name[1]; };
 
@@ -93,5 +95,5 @@ int scandir(const char *dirname, struct dirent ***namelist,
 }
 
 //
-// End of "$Id: scandir_win32.c,v 1.23 2004/07/30 05:35:32 spitzak Exp $".
+// End of "$Id: scandir_win32.c,v 1.24 2004/07/31 10:25:39 laza2000 Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.48 2004/07/25 23:22:14 spitzak Exp $"
+// "$Id: Fl_arg.cxx,v 1.49 2004/07/31 10:25:39 laza2000 Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -338,8 +338,8 @@ int XParseGeometry(const char* string, int* x, int* y,
 {
   int mask = NoValue;
   register char *strind;
-  unsigned int tempWidth, tempHeight;
-  int tempX, tempY;
+  unsigned int tempWidth=0, tempHeight=0;
+  int tempX=0, tempY=0;
   char *nextCharacter;
 
   if ( (string == NULL) || (*string == '\0')) return(mask);
@@ -420,5 +420,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // if !USE_X11
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.48 2004/07/25 23:22:14 spitzak Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.49 2004/07/31 10:25:39 laza2000 Exp $".
 //
