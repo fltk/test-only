@@ -142,9 +142,5 @@ SOURCE=..\images\fl_jpeg.cxx
 
 SOURCE=..\images\fl_png.cxx
 # End Source File
-# Begin Source File
-
-SOURCE=..\src\Fl_Shared_Image.cxx
-# End Source File
 # End Target
 # End Project

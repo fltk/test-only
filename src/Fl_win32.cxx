@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.188 2003/06/24 07:10:48 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.189 2003/07/21 15:38:27 robertk Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1325,7 +1325,20 @@ void Window::label(const char *name,const char *iname) {
 // Drawing context
 
 const Window *Window::current_;
-HDC fltk::gc;
+HDC gc = 0; // the current context
+HDC screen_gc = 0; // the screen context
+
+FL_API HDC	getDC() {
+	if(gc)
+		return gc;
+	if(screen_gc)
+	{
+		ReleaseDC(0, screen_gc);
+		screen_gc = 0;
+	}
+	screen_gc = GetDC(0);
+	return screen_gc;
+}
 
 extern void fl_font_rid();
 
@@ -1550,5 +1563,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.188 2003/06/24 07:10:48 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.189 2003/07/21 15:38:27 robertk Exp $".
 //

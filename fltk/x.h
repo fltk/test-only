@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.19 2003/07/01 07:03:14 spitzak Exp $"
+// "$Id: x.h,v 1.20 2003/07/21 15:38:26 robertk Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -115,8 +115,10 @@ extern FL_API Atom dnd_action;
 ////////////////////////////////////////////////////////////////
 // drawing functions:
 
+class Drawable;
+
 extern FL_API GC	gc;
-extern FL_API class Drawable* drawable;
+extern FL_API Drawable* drawable;
 extern FL_API XWindow	xwindow;
 extern FL_API XFontStruct*	xfont();
 extern FL_API ulong	current_xpixel;
@@ -229,5 +231,5 @@ Window* find(XWindow xid);
 #endif
 
 //
-// End of "$Id: x.h,v 1.19 2003/07/01 07:03:14 spitzak Exp $".
+// End of "$Id: x.h,v 1.20 2003/07/21 15:38:26 robertk Exp $".
 //
