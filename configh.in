@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.11.2.11.2.15.2.5 2004/03/18 08:00:26 matthiaswm Exp $"
+ * "$Id: configh.in,v 1.11.2.11.2.15.2.6 2004/09/12 19:31:11 rokan Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  * @configure_input@
@@ -218,7 +218,19 @@
 #undef HAVE_PTHREAD
 #undef HAVE_PTHREAD_H
 
+/*
+ * Use "X Input Method" for i18n text input. Most familiar as the
+ * "dead key prefix" code. But Japanese users use this to run far more
+ * complex programs for selecting glyphs. You can turn it off on the
+ * (rare) systems that produce an "encoding" that fltk does not
+ * understand, you will still be able to type many Latin characters
+ * with fltk's right-Ctrl+letters input method.
+ * (this value may also disable Windows Input method in the future)
+ */
+ 
+#define USE_XIM			1
+
 
 /*
- * End of "$Id: configh.in,v 1.11.2.11.2.15.2.5 2004/03/18 08:00:26 matthiaswm Exp $".
+ * End of "$Id: configh.in,v 1.11.2.11.2.15.2.6 2004/09/12 19:31:11 rokan Exp $".
  */
