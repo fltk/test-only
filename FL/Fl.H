@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.H,v 1.15 1999/08/20 18:09:58 carl Exp $"
+// "$Id: Fl.H,v 1.16 1999/08/20 19:58:00 carl Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -157,6 +157,9 @@ public:
   static void get_color(Fl_Color c,uchar& r,uchar& g,uchar& b) {fl_get_color(c,r,g,b);}
   static void free_color(Fl_Color c, int = 0) {fl_free_color(c);}
 
+  static void background(uchar r, uchar g, uchar b) {fl_background(fl_rgb(r,g,b));}
+  static void foreground(uchar r, uchar g, uchar b) {fl_foreground(fl_rgb(r,g,b));}
+
   //static const char* get_font(Fl_Font);
   //static const char* get_font_name(Fl_Font, int* attributes = 0);
   //static int get_font_sizes(Fl_Font, int*& sizep);
@@ -191,5 +194,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl.H,v 1.15 1999/08/20 18:09:58 carl Exp $".
+// End of "$Id: Fl.H,v 1.16 1999/08/20 19:58:00 carl Exp $".
 //
