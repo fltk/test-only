@@ -41,19 +41,19 @@ Fl_Color fl_rgb(const char* name) {
     int m = n/3;
     const char *pattern = 0;
     switch(m) {
-    case 1: pattern = "%1x%1x%1x"; break;
-    case 2: pattern = "%2x%2x%2x"; break;
-    case 3: pattern = "%3x%3x%3x"; break;
-    case 4: pattern = "%4x%4x%4x"; break;
-    default: return FL_NO_COLOR;
+      case 1: pattern = "%1x%1x%1x"; break;
+      case 2: pattern = "%2x%2x%2x"; break;
+      case 3: pattern = "%3x%3x%3x"; break;
+      case 4: pattern = "%4x%4x%4x"; break;
+      default: return FL_NO_COLOR;
     }
     if (sscanf(name, pattern, &R,&G,&B) != 3) return FL_NO_COLOR;
     switch(m) {
-    case 1: R *= 0x11; G *= 0x11; B *= 0x11; break;
-    case 3: R >>= 4; G >>= 4; B >>= 4; break;
-    case 4: R >>= 8; G >>= 8; B >>= 8; break;
+      case 1: R *= 0x11; G *= 0x11; B *= 0x11; break;
+      case 3: R >>= 4; G >>= 4; B >>= 4; break;
+      case 4: R >>= 8; G >>= 8; B >>= 8; break;
     }
-    Fl_Color c = fl_rgb(R,G,B);
+    c = fl_rgb(R,G,B);
 #else
     XColor x;
     fl_open_display();
@@ -66,5 +66,5 @@ Fl_Color fl_rgb(const char* name) {
 }
 
 //
-// End of "$Id: fl_rgb.cxx,v 1.1 1999/11/29 08:47:06 bill Exp $".
+// End of "$Id: fl_rgb.cxx,v 1.2 2000/04/21 05:28:31 carl Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.96 2000/04/16 08:31:49 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.97 2000/04/21 05:28:31 carl Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -281,7 +281,7 @@ static double fl_wait(int timeout_flag, double time) {
     if (fl_msg.message == WM_FLSELECT) {
       // Got notification for socket
       for (int i = 0; i < nfds; i ++)
-        if (fd[i].fd == fl_msg.wParam) {
+        if (fd[i].fd == (int)fl_msg.wParam) {
 	  (fd[i].cb)(fd[i].fd, fd[i].arg);
 	  break;
 	}
@@ -582,7 +582,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       if (!i->region) i->region = CreateRectRgn(0,0,0,0);
       GetUpdateRgn(hWnd,i->region,0);
     }
-    window->clear_damage(window->damage()|FL_DAMAGE_EXPOSE);
+    window->set_damage(window->damage()|FL_DAMAGE_EXPOSE);
     i->flush();
     window->clear_damage();
     // This convinces MSWindows we have painted whatever they wanted
@@ -674,7 +674,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
   case WM_MOUSEWHEEL: {
     // Carl says this moves 3 lines per click.  MicroSoft reports 120 per
     // click.  Divide this out to pixels (for normal size + leading):
-    static int total;
     Fl::e_dy = -(SHORT)(HIWORD(wParam))*14*3/120;
     if (Fl::handle(FL_VIEWCHANGE, window)) return 0;
     break;
@@ -689,14 +688,14 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       if (wParam)
 	((Fl_Widget*)window)->show();
       else
-	((Fl_Wdiget*)window)->hide();
+	((Fl_Widget*)window)->hide();
     }
     break;
 
   case WM_SIZE:
     if (!window->parent()) {
       if (wParam == SIZE_MINIMIZED || wParam == SIZE_MAXHIDE) {
-	((Fl_Wdiget*)window)->hide();
+	((Fl_Widget*)window)->hide();
       } else {
 	((Fl_Widget*)window)->show();
 	if (window->resize(window->x(),window->y(),LOWORD(lParam),HIWORD(lParam)))
@@ -740,7 +739,6 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     break;
 
   default:
-  DEFAULT:
     if (Fl::handle(0,0)) return 0;
     break;
   }
@@ -1079,5 +1077,5 @@ void fl_windows_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.96 2000/04/16 08:31:49 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.97 2000/04/21 05:28:31 carl Exp $".
 //

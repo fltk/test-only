@@ -16,11 +16,13 @@ void fl_line_style(int style, int width, char* dashes) {
   } else {
     s1 |= style & 0xff; // allow them to pass any low 8 bits for style
   }
-  // if ((style || n) && !width) width = 1; // fix cards that do nothing for 0?
-  LOGBRUSH penbrush = {BS_SOLID,fl_RGB(),0}; // can this be fl_brush()?
+  if ((style || n) && !width) width = 1; // fix cards that do nothing for 0?
+  static LOGBRUSH penbrush = {BS_SOLID,fl_RGB(),0}; // can this be fl_brush()?
   HPEN newpen = ExtCreatePen(s1, width, &penbrush, n, n ? a : 0);
-  newpen = (HPEN)SelectObject(fl_gc,newpen);
-  DeleteObject(newpen);
+  SelectObject(fl_gc,newpen);
+  static HPEN oldpen;
+  if (oldpen) DeleteObject(oldpen);
+  oldpen = newpen;
 #else
   int ndashes = dashes ? strlen(dashes) : 0;
   // emulate the WIN32 dash patterns on X

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Gl_Choice.cxx,v 1.2 2000/03/18 10:13:27 bill Exp $"
+// "$Id: Fl_Gl_Choice.cxx,v 1.3 2000/04/21 05:28:30 carl Exp $"
 //
 // OpenGL visual selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -139,7 +139,7 @@ Fl_Gl_Choice* Fl_Gl_Choice::find(int mode, const int* alist) {
   first = g;
 
 #ifdef WIN32
-  g->pfd = pfd;
+  g->pfd = chosen_pfd;
   g->pixelFormat = pixelFormat;
 #else
   g->vis = vis;
@@ -200,5 +200,5 @@ void fl_no_gl_context() {
 #endif
 
 //
-// End of "$Id: Fl_Gl_Choice.cxx,v 1.2 2000/03/18 10:13:27 bill Exp $".
+// End of "$Id: Fl_Gl_Choice.cxx,v 1.3 2000/04/21 05:28:30 carl Exp $".
 //
