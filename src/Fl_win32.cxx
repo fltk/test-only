@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.123 2000/08/06 07:39:44 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.124 2000/08/08 21:32:59 clip Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -763,9 +763,16 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
   case WM_SHOWWINDOW:
     if (!window->parent()) {
-      if (wParam)
-	; // supposedly a Paint event will come in turn off iconize indicator
-      else
+      if (wParam) {
+        // figure out where OS really put window
+        RECT wr;
+        GetClientRect(fl_xid(window), &wr);
+        POINT wul = { 0, 0 };
+        ClientToScreen(fl_xid(window), &wul);
+        // tell Fl_Window about it
+        window->resize(wul.x, wul.y, wr.right, wr.bottom);
+	// supposedly a Paint event will come in turn off iconize indicator
+      } else
 	Fl_X::i(window)->wait_for_expose = 1;
     }
     break;
@@ -915,7 +922,6 @@ void Fl_Window::create() {
 }
 
 extern char fl_show_iconic; // set by iconize() or Fl_arg -i switch
-extern const Fl_Window* fl_modal_for;	// set by show(parent) or exec()
 const Fl_Window* fl_mdi_window;	// set by show_inside()
 HCURSOR fl_default_cursor;
 
@@ -970,8 +976,8 @@ Fl_X* Fl_X::create(Fl_Window* w) {
     xp = w->x(); if (xp != FL_USEDEFAULT) xp -= dx;
     yp = w->y(); if (yp != FL_USEDEFAULT) yp -= dy;
 
-    if (fl_modal_for) {
-      parent = fl_modal_for->i->xid;
+    if (w->modal_for()) {
+      parent = w->modal_for()->i->xid;
     } else {
       parent = fl_mdi_window ? fl_mdi_window->i->xid : 0;
     }
@@ -994,14 +1000,6 @@ Fl_X* Fl_X::create(Fl_Window* w) {
     NULL // creation parameters
     );
 //  x->mapped = 1;
-
-  // figure out where OS really put window
-  RECT wr;
-  GetClientRect(x->xid, &wr);
-  POINT wul = { 0, 0 };
-  ClientToScreen(x->xid, &wul);
-  // tell Fl_Window about it
-  w->resize(wul.x, wul.y, wr.right, wr.bottom);
 
   x->wait_for_expose = 1;
   x->next = Fl_X::first;
@@ -1264,5 +1262,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.123 2000/08/06 07:39:44 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.124 2000/08/08 21:32:59 clip Exp $".
 //

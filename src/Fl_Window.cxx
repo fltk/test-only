@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.50 2000/08/04 10:22:01 clip Exp $"
+// "$Id: Fl_Window.cxx,v 1.51 2000/08/08 21:32:58 clip Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -84,6 +84,7 @@ void Fl_Window::_Fl_Window() {
   iconlabel_ = 0;
   //resizable(0); // new default for group
   size_range_set = 0;
+  modal_for_ = 0;
   callback((Fl_Callback*)default_callback);
 }
 
@@ -114,7 +115,6 @@ const char* Fl_Window::xclass_ = "fltk";
 extern void fl_startup();
 extern void fl_fix_focus();
 
-const Fl_Window* fl_modal_for; // set by show(parent)
 char fl_show_iconic; // set by iconize() or by -i Fl::arg switch
 
 int Fl_Window::handle(int event) {
@@ -130,7 +130,7 @@ int Fl_Window::handle(int event) {
     if (parent())
       showtype = SW_RESTORE;
     // See if the window should be invisible initially:
-    else if (fl_show_iconic || fl_modal_for && !fl_modal_for->visible())
+    else if (fl_show_iconic || modal_for_ && !modal_for_->visible())
       showtype = SW_SHOWMINNOACTIVE;
     // If we've captured the mouse, we dont want do activate any
     // other windows from the code, or we loose the capture.
@@ -176,7 +176,6 @@ int Fl_Window::handle(int event) {
 }
 
 void Fl_Window::show() {
-      
   if (!parent()) {
 
     if (modal()) {Fl::modal_ = this; fl_fix_focus();}
@@ -214,10 +213,10 @@ void Fl_Window::show() {
       }
 
       // back compatability with older modal() and non_modal() flags:
-      if (non_modal() && !fl_modal_for) {
-	fl_modal_for = Fl::first_window();
-	while (fl_modal_for && fl_modal_for->parent())
-	  fl_modal_for = fl_modal_for->window();
+      if (non_modal() && !modal_for_) {
+	modal_for_ = Fl::first_window();
+	while (modal_for_ && modal_for_->parent())
+	  modal_for_ = modal_for_->window();
       }
     } else if (visible()) {
       // raise/deiconize windows
@@ -227,7 +226,6 @@ void Fl_Window::show() {
 #else
       XMapRaised(fl_display, i->xid);
 #endif
-      return;
     }
   }
   Fl_Widget::show();
@@ -236,9 +234,8 @@ void Fl_Window::show() {
 void Fl_Window::show(const Fl_Window* modal_for) {
   // find the outermost window and make sure it has been shown():
   while (modal_for && modal_for->parent()) modal_for = modal_for->window();
-  if (modal_for && modal_for->shown()) fl_modal_for = modal_for;
+  if (modal_for && modal_for->shown()) modal_for_ = modal_for;
   show();
-  fl_modal_for = 0;
 }
 
 int Fl_Window::exec(const Fl_Window* modal_for) {
@@ -332,5 +329,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.50 2000/08/04 10:22:01 clip Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.51 2000/08/08 21:32:58 clip Exp $".
 //

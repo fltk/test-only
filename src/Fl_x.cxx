@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.86 2000/08/06 07:39:44 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.87 2000/08/08 21:32:59 clip Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -740,6 +740,16 @@ int fl_handle(const XEvent& xevent)
     }
     break;}
 
+  case MapNotify: {
+    window = fl_find(xevent.xmapping.window);
+    // figure out where OS really put window
+    XWindowAttributes actual;
+    XGetWindowAttributes(fl_display, fl_xid(window), &actual);
+    // tell Fl_Window about it
+    window->resize(actual.x, actual.y, actual.width, actual.height);
+    break;
+  }
+
   case UnmapNotify:
     window = fl_find(xevent.xmapping.window);
     if (window) {Fl_X::i(window)->wait_for_expose = 1; return 1;}
@@ -1021,7 +1031,6 @@ void Fl_Window::create() {
 }
 
 extern char fl_show_iconic; // set by iconize() or Fl_arg -i switch
-extern const Fl_Window* fl_modal_for;	// set by show(parent) or exec()
 
 void Fl_X::create(Fl_Window* w,
 		  XVisualInfo *visual, Colormap colormap,
@@ -1074,12 +1083,6 @@ void Fl_X::create(Fl_Window* w,
 			 visual->visual,
 			 mask, &attr);
 
-  // figure out where OS really put window
-  XWindowAttributes actual;
-  XGetWindowAttributes(fl_display, x->xid, &actual);
-  // tell Fl_Window about it
-  w->resize(actual.x, actual.y, actual.width, actual.height);
-
   x->other_xid = 0;
   x->w = w; w->i = x;
   x->region = 0;
@@ -1107,8 +1110,8 @@ void Fl_X::create(Fl_Window* w,
 		    XA_ATOM, sizeof(int)*8, 0, (unsigned char*)&version, 1);
 
     // Send child window information:
-    if (fl_modal_for)
-      XSetTransientForHint(fl_display, x->xid, fl_modal_for->i->xid);
+    if (w->modal_for())
+      XSetTransientForHint(fl_display, x->xid, w->modal_for()->i->xid);
 
     // Set up the icon and initial icon state:
     XWMHints hints;
@@ -1284,5 +1287,5 @@ void fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.86 2000/08/06 07:39:44 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.87 2000/08/08 21:32:59 clip Exp $".
 //

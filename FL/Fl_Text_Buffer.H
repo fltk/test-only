@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Buffer.H,v 1.1 2000/08/04 10:21:59 clip Exp $"
+// "$Id: Fl_Text_Buffer.H,v 1.2 2000/08/08 21:32:59 clip Exp $"
 //
 // Header file for Fl_Text_Buffer class.
 //
@@ -129,6 +129,9 @@ class FL_API Fl_Text_Buffer {
     const char* highlight_text();
     void add_modify_callback(Fl_Text_Modify_Cb bufModifiedCB, void* cbArg);
     void remove_modify_callback(Fl_Text_Modify_Cb bufModifiedCB, void* cbArg);
+
+    void call_modify_callbacks() { call_modify_callbacks(0, 0, 0, 0, 0); }
+
     const char* line_text(int pos);
     int line_start(int pos);
     int line_end(int pos);
@@ -164,6 +167,9 @@ class FL_API Fl_Text_Buffer {
     Fl_Text_Selection* highlight_selection() { return &mHighlight; }
 
   protected:
+    void call_modify_callbacks(int pos, int nDeleted, int nInserted,
+                               int nRestyled, const char* deletedText);
+
     int insert_(int pos, const char* text);
     void remove_(int start, int end);
 
@@ -176,9 +182,6 @@ class FL_API Fl_Text_Buffer {
     void overlay_rectangular_(int startPos, int rectStart, int rectEnd,
                               const char* insText, int* nDeleted,
                               int* nInserted, int* endPos);
-
-    void call_modify_callbacks(int pos, int nDeleted, int nInserted,
-                               int nRestyled, const char *deletedText);
 
     void redisplay_selection(Fl_Text_Selection* oldSelection,
                              Fl_Text_Selection* newSelection);
@@ -225,5 +228,5 @@ class FL_API Fl_Text_Buffer {
 #endif
 
 //
-// End of "$Id: Fl_Text_Buffer.H,v 1.1 2000/08/04 10:21:59 clip Exp $".
+// End of "$Id: Fl_Text_Buffer.H,v 1.2 2000/08/08 21:32:59 clip Exp $".
 //
