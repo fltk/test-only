@@ -52,9 +52,7 @@ using namespace fltk;
   subclass.
 
 */
-#include <stdio.h>
 bool FloatInput::replace(int b, int e, const char* text, int ilen) {
-  printf("in '%s'\n", text);
   for (int n = 0; n < ilen; n++) {
     char ascii = text[n];
     compose_reset(); // ignore any foreign letters...
