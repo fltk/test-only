@@ -132,7 +132,87 @@ LIB32=link.exe -lib
 # Name "fltk - Win32 Release MinSize"
 # Begin Source File
 
+SOURCE=..\..\src\add_idle.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\addarc.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\addcurve.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Adjuster.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\AlignGroup.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\args.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\array.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\BarGroup.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\bmpImage.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Browser.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Button.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\CheckButton.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Choice.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\clip.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Clock.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Color.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\color_chooser.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\colormap.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\ComboBox.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\compose.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Cursor.cxx
 # End Source File
 # Begin Source File
 
@@ -140,11 +220,79 @@ SOURCE=..\..\src\CycleButton.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\default_glyph.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Dial.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\DiamondBox.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\dnd.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\draw_xpm.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\drawimage.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\drawtext.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\dump_compose.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\EngravedLabel.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\error.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\event_key_state.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\fastarrow.h
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\filename_absolute.cxx
+SOURCE=..\..\src\file_chooser.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\FileBrowser.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\FileChooser.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\FileChooser2.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\FileIcon.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\FileIcon2.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\FileInput.cxx
 # End Source File
 # Begin Source File
 
@@ -168,287 +316,19 @@ SOURCE=..\..\src\filename_match.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\filename_normalize.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\filename_setext.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\Fl.cxx
+SOURCE=..\..\src\fillarc.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\Fl_abort.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_add_idle.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Adjuster.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Align_Group.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_arc.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_arci.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_arg.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_ask.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Bar.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Bitmap.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_bmp.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Box.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_boxtype.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Browser.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Button.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_call_main.c
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Check_Button.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Choice.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_clip.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Clock.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_cmap.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_color.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Color_Chooser.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_compose.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_cursor.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_curve.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Dial.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_diamond_box.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_display.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_dnd.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_draw.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_draw_image.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_draw_pixmap.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_engraved_label.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_file_chooser.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_FileBrowser.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_FileChooser.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_FileChooser2.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_FileIcon.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_FileIcon2.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_FileInput.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Float_Input.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_font.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_fontsize.h
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_get_key.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_gif.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\OpenGL\Fl_Gl_Choice.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\OpenGL\Fl_Gl_Choice.H
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\OpenGL\Fl_Gl_Overlay.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\OpenGL\Fl_Gl_Window.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_glyph.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Group.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Highlight_Button.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Image.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Input.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Input_Browser.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Item.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_key_name.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_labeltype.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Light_Button.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_list_fonts.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_load_plugin.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_lock.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Menu.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Menu_.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Menu_add.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Menu_Bar.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Menu_Button.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Menu_global.cxx
+SOURCE=..\..\src\fillrect.cxx
 # End Source File
 # Begin Source File
 
@@ -456,207 +336,7 @@ SOURCE=..\..\src\Fl_Menu_Item.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\Fl_Menu_Window.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Multi_Image.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Numeric_Input.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Output.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_oval_box.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_overlay.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_overlay_visual.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_own_colormap.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Pack.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Pixmap.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_plastic_box.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_ProgressBar.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Radio_Button.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_rect.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Repeat_Button.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Return_Button.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_rgb.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_RGB_Image.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Roller.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_round_box.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_rounded_box.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Scroll.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_scroll_area.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Scrollbar.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_shadow_box.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Shaped_Window.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Shared_Image.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_show_colormap.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Slider.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_String_List.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Style.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Style_Set.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_symbols.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Tabs.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Text_Buffer.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Text_Display.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Text_Editor.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Tile.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Tiled_Image.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Tooltip.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Valuator.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Value_Input.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Value_Slider.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\fl_vertex.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_visual.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Widget.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Window.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Window_fullscreen.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Window_hotspot.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Window_iconize.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_XColor.H
+SOURCE=..\..\src\FloatInput.cxx
 # End Source File
 # Begin Source File
 
@@ -664,15 +344,55 @@ SOURCE=..\..\src\fltk_theme.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\OpenGL\gl_draw.cxx
+SOURCE=..\..\src\Font.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\OpenGL\gl_start.cxx
+SOURCE=..\..\src\gifImage.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\IFont.h
+SOURCE=..\..\src\Group.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\HighlightButton.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Image.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Input.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\InvisibleWidget.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Item.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\key_name.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\LightButton.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\list_fonts.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\load_plugin.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\lock.cxx
 # End Source File
 # Begin Source File
 
@@ -680,11 +400,159 @@ SOURCE=..\..\src\mediumarrow.h
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\Menu.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Menu_add.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Menu_global.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Menu_popup.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\MenuBar.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\MenuWindow.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\message.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\MultiImage.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\NumericInput.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Output.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\OvalBox.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\overlay_rect.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\own_colormap.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\PackedGroup.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\path.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\pktdef.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\PlasticBox.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\PopupMenu.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\ProgressBar.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\RadioButton.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\RepeatButton.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\ReturnButton.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\rgbImage.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\RoundBox.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\RoundedBox.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\run.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\scandir.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\shortcuts.cxx
+SOURCE=..\..\src\Scrollbar.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\ScrollGroup.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\scrollrect.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\setcolor.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\setdisplay.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\setvisual.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\ShadowBox.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\ShapedWindow.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\SharedImage.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\ShortcutAssignment.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\show_colormap.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Slider.cxx
 # End Source File
 # Begin Source File
 
@@ -696,11 +564,55 @@ SOURCE=..\..\src\string.c
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\glut\trackball.c
+SOURCE=..\..\src\StringList.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\glut\trackball.h
+SOURCE=..\..\src\Style.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\StyleSet.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Symbol.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\TabGroup.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\TextBuffer.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\TextDisplay.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\TextEditor.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\ThumbWheel.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\TiledGroup.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\TiledImage.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Tooltip.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\UpBox.cxx
 # End Source File
 # Begin Source File
 
@@ -708,11 +620,67 @@ SOURCE=..\..\src\utf.c
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\Valuator.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\ValueInput.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\ValueOutput.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\..\src\ValueSlider.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\..\src\vsnprintf.c
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Widget.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Widget_draw.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Window.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Window_fullscreen.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Window_hotspot.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\Window_iconize.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\win32\WinMain.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\wintab.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\wintabx.h
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xbmImage.cxx
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xpmImage.cxx
 # End Source File
 # End Target
 # End Project

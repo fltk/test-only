@@ -136,14 +136,6 @@ SOURCE=..\..\images\Fl_Guess_Image.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\Fl_Help_Dialog.cxx
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Help_View.cxx
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\images\fl_jpeg.cxx
 # End Source File
 # Begin Source File
@@ -152,19 +144,15 @@ SOURCE=..\..\images\fl_png.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\fl_xpm.cxx
+SOURCE=..\..\src\HelpDialog.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\lib\fltk_jpeg.lib
+SOURCE=..\..\src\HelpView.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\lib\fltk_png.lib
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\lib\fltk_z.lib
+SOURCE=..\..\src\xpmFileImage.cxx
 # End Source File
 # End Target
 # End Project

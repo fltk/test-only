@@ -184,10 +184,6 @@ SOURCE=..\..\fluid\file.cxx
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\fl_call_main.c
-# End Source File
-# Begin Source File
-
 SOURCE=..\..\fluid\Fl_Function_Type.cxx
 # End Source File
 # Begin Source File

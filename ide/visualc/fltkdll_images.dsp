@@ -155,72 +155,30 @@ LINK32=link.exe
 
 SOURCE=..\..\images\Fl_Guess_Image.cxx
 DEP_CPP_FL_GU=\
-	".. \..\fltk\color.h"\
-	".. \..\fltk\draw.h"\
-	".. \..\fltk\fl_api.h"\
-	".. \..\fltk\flags.h"\
-	".. \..\fltk\image.h"\
-	".. \..\fltk\mac.h"\
-	".. \..\fltk\sharedimage.h"\
-	".. \..\fltk\symbol.h"\
-	".. \..\fltk\win32.h"\
-	".. \..\fltk\x.h"\
-	".. \..\fltk\xbmimage.h"\
+	"..\..\fltk\color.h"\
+	"..\..\fltk\draw.h"\
+	"..\..\fltk\fl_api.h"\
+	"..\..\fltk\flags.h"\
+	"..\..\fltk\image.h"\
+	"..\..\fltk\mac.h"\
+	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\sharedimage.h"\
+	"..\..\fltk\symbol.h"\
+	"..\..\fltk\win32.h"\
+	"..\..\fltk\x.h"\
+	"..\..\fltk\xbmimage.h"\
 	".\config.h"\
+	{$(INCLUDE)}"X11\extensions\XI.h"\
+	{$(INCLUDE)}"X11\extensions\XInput.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # SUBTRACT CPP /D "FL_DLL"
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Help_Dialog.cxx
-DEP_CPP_FL_HE=\
-	".. \..\fltk\ask.h"\
-	".. \..\fltk\button.h"\
-	".. \..\fltk\color.h"\
-	".. \..\fltk\DoubleBufferWindow.h"\
-	".. \..\fltk\draw.h"\
-	".. \..\fltk\fl_api.h"\
-	".. \..\fltk\flags.h"\
-	".. \..\fltk\group.h"\
-	".. \..\fltk\HelpDialog.h"\
-	".. \..\fltk\HelpView.h"\
-	".. \..\fltk\image.h"\
-	".. \..\fltk\scrollbar.h"\
-	".. \..\fltk\sharedimage.h"\
-	".. \..\fltk\slider.h"\
-	".. \..\fltk\style.h"\
-	".. \..\fltk\symbol.h"\
-	".. \..\fltk\valuator.h"\
-	".. \..\fltk\widget.h"\
-	".. \..\fltk\window.h"\
-	".\fltk\string.h"\
-	
-# End Source File
-# Begin Source File
-
-SOURCE=..\..\src\Fl_Help_View.cxx
-DEP_CPP_FL_HEL=\
-	".. \..\fltk\box.h"\
-	".. \..\fltk\color.h"\
-	".. \..\fltk\cursor.h"\
-	".. \..\fltk\draw.h"\
-	".. \..\fltk\events.h"\
-	".. \..\fltk\fl_api.h"\
-	".. \..\fltk\flags.h"\
-	".. \..\fltk\font.h"\
-	".. \..\fltk\group.h"\
-	".. \..\fltk\HelpView.h"\
-	".. \..\fltk\image.h"\
-	".. \..\fltk\scrollbar.h"\
-	".. \..\fltk\sharedimage.h"\
-	".. \..\fltk\slider.h"\
-	".. \..\fltk\style.h"\
-	".. \..\fltk\symbol.h"\
-	".. \..\fltk\valuator.h"\
-	".. \..\fltk\widget.h"\
-	".. \..\fltk\xpmimage.h"\
-	".\fltk\string.h"\
-	
 # End Source File
 # Begin Source File
 
@@ -231,6 +189,7 @@ DEP_CPP_FL_JP=\
 	"..\..\fltk\fl_api.h"\
 	"..\..\fltk\flags.h"\
 	"..\..\fltk\image.h"\
+	"..\..\fltk\rectangle.h"\
 	"..\..\fltk\sharedimage.h"\
 	"..\..\fltk\symbol.h"\
 	"..\..\images\libjpeg\jconfig.h"\
@@ -239,47 +198,132 @@ DEP_CPP_FL_JP=\
 	"..\..\images\libjpeg\jpegint.h"\
 	"..\..\images\libjpeg\jpeglib.h"\
 	".\config.h"\
+	{$(INCLUDE)}"jconfig.h"\
+	{$(INCLUDE)}"jerror.h"\
+	{$(INCLUDE)}"jmorecfg.h"\
+	{$(INCLUDE)}"jpegint.h"\
+	{$(INCLUDE)}"jpeglib.h"\
 	
 # End Source File
 # Begin Source File
 
 SOURCE=..\..\images\fl_png.cxx
 DEP_CPP_FL_PN=\
-	".. \..\fltk\color.h"\
-	".. \..\fltk\draw.h"\
-	".. \..\fltk\fl_api.h"\
-	".. \..\fltk\flags.h"\
-	".. \..\fltk\image.h"\
-	".. \..\fltk\mac.h"\
-	".. \..\fltk\sharedimage.h"\
-	".. \..\fltk\symbol.h"\
-	".. \..\fltk\win32.h"\
-	".. \..\fltk\x.h"\
+	"..\..\fltk\color.h"\
+	"..\..\fltk\draw.h"\
+	"..\..\fltk\fl_api.h"\
+	"..\..\fltk\flags.h"\
+	"..\..\fltk\image.h"\
+	"..\..\fltk\mac.h"\
+	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\sharedimage.h"\
+	"..\..\fltk\symbol.h"\
+	"..\..\fltk\win32.h"\
+	"..\..\fltk\x.h"\
 	"..\..\images\libpng\png.h"\
 	"..\..\images\libpng\pngconf.h"\
+	"..\..\images\zlib\zconf.h"\
+	"..\..\images\zlib\zlib.h"\
 	".\config.h"\
+	{$(INCLUDE)}"png.h"\
+	{$(INCLUDE)}"pngconf.h"\
+	{$(INCLUDE)}"X11\extensions\XI.h"\
+	{$(INCLUDE)}"X11\extensions\XInput.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
+	{$(INCLUDE)}"zconf.h"\
+	{$(INCLUDE)}"zlib.h"\
 	
 NODEP_CPP_FL_PN=\
+	"..\..\..\INCLUDE\alloc.h"\
 	"..\..\images\libpng\alloc.h"\
-	"..\..\images\zlib\zlib.h"\
 	
 # End Source File
 # Begin Source File
 
-SOURCE=..\..\src\fl_xpm.cxx
-DEP_CPP_FL_XP=\
-	".. \..\fltk\color.h"\
-	".. \..\fltk\draw.h"\
-	".. \..\fltk\events.h"\
-	".. \..\fltk\fl_api.h"\
-	".. \..\fltk\flags.h"\
-	".. \..\fltk\image.h"\
-	".. \..\fltk\mac.h"\
-	".. \..\fltk\sharedimage.h"\
-	".. \..\fltk\symbol.h"\
-	".. \..\fltk\win32.h"\
-	".. \..\fltk\x.h"\
-	".. \..\fltk\xpmimage.h"\
+SOURCE=..\..\src\HelpDialog.cxx
+DEP_CPP_HELPD=\
+	"..\..\fltk\ask.h"\
+	"..\..\fltk\button.h"\
+	"..\..\fltk\color.h"\
+	"..\..\fltk\DoubleBufferWindow.h"\
+	"..\..\fltk\draw.h"\
+	"..\..\fltk\fl_api.h"\
+	"..\..\fltk\flags.h"\
+	"..\..\fltk\group.h"\
+	"..\..\fltk\HelpDialog.h"\
+	"..\..\fltk\HelpView.h"\
+	"..\..\fltk\image.h"\
+	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\scrollbar.h"\
+	"..\..\fltk\sharedimage.h"\
+	"..\..\fltk\slider.h"\
+	"..\..\fltk\style.h"\
+	"..\..\fltk\symbol.h"\
+	"..\..\fltk\valuator.h"\
+	"..\..\fltk\widget.h"\
+	"..\..\fltk\window.h"\
+	".\fltk\string.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\HelpView.cxx
+DEP_CPP_HELPV=\
+	"..\..\fltk\box.h"\
+	"..\..\fltk\color.h"\
+	"..\..\fltk\cursor.h"\
+	"..\..\fltk\draw.h"\
+	"..\..\fltk\events.h"\
+	"..\..\fltk\fl_api.h"\
+	"..\..\fltk\flags.h"\
+	"..\..\fltk\font.h"\
+	"..\..\fltk\group.h"\
+	"..\..\fltk\HelpView.h"\
+	"..\..\fltk\image.h"\
+	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\scrollbar.h"\
+	"..\..\fltk\sharedimage.h"\
+	"..\..\fltk\slider.h"\
+	"..\..\fltk\style.h"\
+	"..\..\fltk\symbol.h"\
+	"..\..\fltk\valuator.h"\
+	"..\..\fltk\widget.h"\
+	"..\..\fltk\xpmimage.h"\
+	".\fltk\string.h"\
+	
+# End Source File
+# Begin Source File
+
+SOURCE=..\..\src\xpmFileImage.cxx
+DEP_CPP_XPMFI=\
+	"..\..\fltk\color.h"\
+	"..\..\fltk\draw.h"\
+	"..\..\fltk\events.h"\
+	"..\..\fltk\fl_api.h"\
+	"..\..\fltk\flags.h"\
+	"..\..\fltk\image.h"\
+	"..\..\fltk\mac.h"\
+	"..\..\fltk\rectangle.h"\
+	"..\..\fltk\sharedimage.h"\
+	"..\..\fltk\symbol.h"\
+	"..\..\fltk\win32.h"\
+	"..\..\fltk\x.h"\
+	"..\..\fltk\xpmimage.h"\
+	{$(INCLUDE)}"X11\extensions\XI.h"\
+	{$(INCLUDE)}"X11\extensions\XInput.h"\
+	{$(INCLUDE)}"X11\X.h"\
+	{$(INCLUDE)}"X11\Xatom.h"\
+	{$(INCLUDE)}"X11\Xfuncproto.h"\
+	{$(INCLUDE)}"X11\Xlib.h"\
+	{$(INCLUDE)}"X11\Xmd.h"\
+	{$(INCLUDE)}"X11\Xosdefs.h"\
+	{$(INCLUDE)}"X11\Xutil.h"\
 	
 # End Source File
 # End Target
