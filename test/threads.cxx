@@ -48,11 +48,11 @@ int main()
   fl_create_thread(prime_thread, prime_func, browser1);
   // Several threads displaying in another browser
   fl_create_thread(prime_thread, prime_func, browser2);
-/*  fl_create_thread(prime_thread, prime_func, browser2);
   fl_create_thread(prime_thread, prime_func, browser2);
   fl_create_thread(prime_thread, prime_func, browser2);
   fl_create_thread(prime_thread, prime_func, browser2);
-  fl_create_thread(prime_thread, prime_func, browser2);*/
+  fl_create_thread(prime_thread, prime_func, browser2);
+  fl_create_thread(prime_thread, prime_func, browser2);
 
   //  Fl::run();
   while (Fl::wait()) {

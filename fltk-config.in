@@ -2,7 +2,7 @@
 # 
 # fltk-config
 #
-# "$Id"
+# "$Id: fltk-config.in,v 1.4 1999/12/06 21:08:54 vincent Exp $"
 #
 
 MAJOR_VERSION=2
@@ -21,8 +21,8 @@ libdir=@libdir@
 srcdir=@srcdir@
 
 # compiler names
-CXX=@CXX@
-CC=@CC@
+CXX="@CXX@"
+CC="@CC@"
 
 # flags for C++ compiler:
 CFLAGS="@CFLAGS@"
@@ -63,6 +63,9 @@ Options:
 
 if test $# -eq 0; then usage 1
 fi
+
+prefix=`echo "$0" | sed 's/\/bin\/fltk-config//
+s/\/fltk-config//'`
 
 # Parse command line options
 while test $# -gt 0 

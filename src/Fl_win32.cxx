@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.79 1999/12/06 18:50:09 vincent Exp $"
+// "$Id: Fl_win32.cxx,v 1.80 1999/12/06 21:08:56 vincent Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -60,8 +60,14 @@
 
 #ifndef WM_MOUSEWHEEL
 #  define WM_MOUSEWHEEL 0x020a
-#  define TRACKMOUSEEVENTUNDEFINED
 #endif
+
+#ifdef _MSVC_VER
+# if _MSVC_VER <= 11
+#  define TRACKMOUSEEVENTUNDEFINED
+# endif
+#endif
+
 // Borland 5 and VC5 are too old to have this new (post Win95) stuff
 #if defined(BORLAND5) || defined(TRACKMOUSEEVENTUNDEFINED)
 #define TME_LEAVE 2
@@ -75,7 +81,7 @@ typedef struct tagTRACKMOUSEEVENT {
 
 
 bool have_TrackMouseEvent = 1;
-BOOL /*WINAPI*/ (*ptTrackMouseEvent)(LPTRACKMOUSEEVENT);
+BOOL (*ptTrackMouseEvent)(LPTRACKMOUSEEVENT);
 void check_TrackMouseEvent() {
   HINSTANCE lib;
   lib = LoadLibrary("User32");
@@ -359,12 +365,12 @@ static int mouse_event(Fl_Window *window, int what, int button,
     if (abs(Fl::e_x_root-px)>5 || abs(Fl::e_y_root-py)>5) Fl::e_is_click = 0;
 
     // look for mouse leave events
-    mouseevent.hwndTrack = fl_xid(window);
     if (have_TrackMouseEvent) {
       if (!ptTrackMouseEvent) {
         check_TrackMouseEvent();
         if (!have_TrackMouseEvent) return Fl::handle(FL_MOVE,window);
       }
+      mouseevent.hwndTrack = fl_xid(window);
       ptTrackMouseEvent(&mouseevent);
     }
 
@@ -908,5 +914,5 @@ void Fl_Window::make_current() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.79 1999/12/06 18:50:09 vincent Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.80 1999/12/06 21:08:56 vincent Exp $".
 //
