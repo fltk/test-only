@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.h,v 1.5 2002/01/28 08:02:59 spitzak Exp $"
+// "$Id: Fl_Button.h,v 1.6 2002/09/16 00:29:05 spitzak Exp $"
 //
 // Button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,10 +38,10 @@ public:
     RADIO  = RESERVED_TYPE+2,
     HIDDEN = 3
   };
-  int   value() const {return Fl_Widget::value();}
-  int	value(int);
-  int	set();
-  int	clear();
+  bool  value() const {return Fl_Widget::value();}
+  bool	value(bool);
+  bool	set();
+  bool	clear();
   void	setonly();
   virtual int handle(int);
   Fl_Button(int,int,int,int,const char * = 0);
@@ -61,5 +61,5 @@ protected:
 #endif
 
 //
-// End of "$Id: Fl_Button.h,v 1.5 2002/01/28 08:02:59 spitzak Exp $".
+// End of "$Id: Fl_Button.h,v 1.6 2002/09/16 00:29:05 spitzak Exp $".
 //

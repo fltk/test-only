@@ -1,5 +1,5 @@
 # -*- mode: makefile -*-
-# "$Id: makeinclude.in,v 1.37 2002/08/06 07:20:47 spitzak Exp $"
+# "$Id: makeinclude.in,v 1.38 2002/09/16 00:29:05 spitzak Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # @configure_input@
@@ -81,16 +81,15 @@ FLGLUTLIB	=@FLGLUTLIB@
 FLFORMSLIB	=@FLFORMSLIB@
 FLIMAGESLIB	=@FLIMAGESLIB@
 
-EXEEXT		=@EXEEXT@
 BUILDTARGETS	=@BUILDTARGETS@
 INSTALLTARGETS	=@INSTALLTARGETS@
 
 # Build commands and filename extensions...
-.SUFFIXES:	.0 .1 .3 .c .cxx .h .fl .man .o .z $(EXEEXT)
+.SUFFIXES:	.0 .1 .3 .c .cxx .h .fl .man .o .z @EXEEXT@
 
-.o$(EXEEXT):
+.o@EXEEXT@:
 	@echo Linking $@...
-	@$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTK) $(LDLIBS) -o $@
+	@$(CXX) $(CXXFLAGS) $< $(LINKFLTK) $(LDLIBS) -o $@
 #	$(POSTBUILD) $@ ../FL/mac.r
 
 .c.o:
@@ -122,5 +121,5 @@ INSTALLTARGETS	=@INSTALLTARGETS@
 	@mv t.z $@
 
 #
-# End of "$Id: makeinclude.in,v 1.37 2002/08/06 07:20:47 spitzak Exp $".
+# End of "$Id: makeinclude.in,v 1.38 2002/09/16 00:29:05 spitzak Exp $".
 #

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.h,v 1.5 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: fl_draw.h,v 1.6 2002/09/16 00:29:05 spitzak Exp $"
 //
 // The fltk drawing library
 //
@@ -33,18 +33,18 @@
 // current transformation:
 FL_API void fl_push_matrix();
 FL_API void fl_pop_matrix();
-FL_API void fl_scale(double x, double y);
-FL_API void fl_scale(double x);
-FL_API void fl_translate(double x, double y);
+FL_API void fl_scale(float x, float y);
+FL_API void fl_scale(float x);
+FL_API void fl_translate(float x, float y);
 FL_API void fl_translate(int x, int y);
-FL_API void fl_rotate(double d);
-FL_API void fl_mult_matrix(double, double, double, double, double, double);
+FL_API void fl_rotate(float d);
+FL_API void fl_mult_matrix(float, float, float, float, float, float);
 FL_API void fl_load_identity();
 
 // get and use transformed positions:
-FL_API void fl_transform(double& x, double& y);
+FL_API void fl_transform(float& x, float& y);
 FL_API void fl_transform(int& x, int& y);
-FL_API void fl_transform_distance(double& x, double& y);
+FL_API void fl_transform_distance(float& x, float& y);
 
 // clip:
 FL_API void fl_push_clip(int x, int y, int w, int h);
@@ -80,16 +80,16 @@ enum {
 
 // Build the path:
 FL_API void fl_newpath();
-FL_API void fl_vertex(double x, double y);
+FL_API void fl_vertex(float x, float y);
 FL_API void fl_vertex(int x, int y);
 FL_API void fl_vertices(int n, const float v[][2]);
 FL_API void fl_vertices(int n, const int v[][2]);
 FL_API void fl_transformed_vertices(int n, const float v[][2]);
 FL_API void fl_closepath();
-FL_API void fl_curve(double,double,double,double,double,double,double,double);
-FL_API void fl_arc(double x,double y,double w,double h, double a1, double a2);
-FL_API void fl_circle(double x, double y, double r);
-FL_API void fl_ellipse(double x, double y, double w, double h);
+FL_API void fl_curve(float,float,float,float,float,float,float,float);
+FL_API void fl_arc(float x,float y,float w,float h, float a1, float a2);
+FL_API void fl_circle(float x, float y, float r);
+FL_API void fl_ellipse(float x, float y, float w, float h);
 
 // draw the path:
 FL_API void fl_points();
@@ -103,12 +103,12 @@ FL_API void fl_rectf(int x, int y, int w, int h);
 FL_API void fl_point(int x, int y);
 FL_API void fl_line(int,int, int,int);
 enum {FL_PIE, FL_CHORD, FL_ARC};
-FL_API void fl_pie(int x,int y,int w,int h,double a,double a2,int what=FL_PIE);
+FL_API void fl_pie(int x,int y,int w,int h,float a,float a2,int what=FL_PIE);
 
 // current font+size:
-FL_API void fl_font(Fl_Font, double size);
-FL_API void fl_font(const char*, double size);
-FL_API void fl_font(const char*, int attributes, double size);
+FL_API void fl_font(Fl_Font, float size);
+FL_API void fl_font(const char*, float size);
+FL_API void fl_font(const char*, int attributes, float size);
 
 // change the encoding used to draw bytes (depreciated)
 extern FL_API const char* fl_encoding_;
@@ -117,21 +117,21 @@ FL_API void fl_encoding(const char*);
 
 // information you can get about the current font+size+encoding:
 extern FL_API Fl_Font fl_font_;
-extern FL_API double fl_size_; // should be 2x2 transformation matrix
+extern FL_API float fl_size_; // should be 2x2 transformation matrix
 inline Fl_Font fl_font() {return fl_font_;}
-inline double fl_size() {return fl_size_;}
+inline float fl_size() {return fl_size_;}
 FL_API const char *fl_fontname(Fl_Font, int * = 0);
 
 // measure things in the current font:
-FL_API double fl_width(const char*);
-FL_API double fl_width(const char*, int n);
-FL_API double fl_height();
-FL_API double fl_descent();
+FL_API float fl_width(const char*);
+FL_API float fl_width(const char*, int n);
+FL_API float fl_height();
+FL_API float fl_descent();
 
 // draw using current font:
-FL_API void fl_transformed_draw(const char*, int n, double x, double y);
-FL_API void fl_draw(const char*, double x, double y);
-FL_API void fl_draw(const char*, int n, double x, double y);
+FL_API void fl_transformed_draw(const char*, int n, float x, float y);
+FL_API void fl_draw(const char*, float x, float y);
+FL_API void fl_draw(const char*, int n, float x, float y);
 
 // the "fancy" text formatter:
 FL_API void fl_measure(const char*, int& w, int& h, Fl_Flags);
@@ -207,5 +207,5 @@ FL_API void fl_yxline(int x, int y, int y1, int x2, int y3);
 #endif
 
 //
-// End of "$Id: fl_draw.h,v 1.5 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: fl_draw.h,v 1.6 2002/09/16 00:29:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileIcon.cxx,v 1.10 2001/07/29 22:04:43 spitzak Exp $"
+// "$Id: Fl_FileIcon.cxx,v 1.11 2002/09/16 00:29:06 spitzak Exp $"
 //
 // Fl_FileIcon routines for the Fast Light Tool Kit (FLTK).
 //
@@ -232,7 +232,7 @@ Fl_FileIcon::draw(int      x,		// I - Upper-lefthand X
   Fl_Color	c;		// Current color
   short		*d;		// Pointer to data
   short		*prim;		// Pointer to start of primitive...
-  double	scale;		// Scale of icon
+  float		scale;		// Scale of icon
 
 
   // Don't try to draw a NULL array!
@@ -243,8 +243,8 @@ Fl_FileIcon::draw(int      x,		// I - Upper-lefthand X
   scale = w < h ? w : h;
 
   fl_push_matrix();
-  fl_translate((float)x + 0.5 * ((float)w - scale),
-               (float)y + 0.5 * ((float)h + scale));
+  fl_translate(x + 0.5f * (w - scale),
+               y + 0.5f * (h + scale));
   fl_scale(scale, -scale);
 
   // Loop through the array until we see an unmatched END...
@@ -314,7 +314,7 @@ Fl_FileIcon::draw(int      x,		// I - Upper-lefthand X
 
       case VERTEX :
           if (prim)
-	    fl_vertex(d[1] * 0.0001, d[2] * 0.0001);
+	    fl_vertex(d[1] * 0.0001f, d[2] * 0.0001f);
 	  d += 3;
 	  break;
     }
@@ -325,5 +325,5 @@ Fl_FileIcon::draw(int      x,		// I - Upper-lefthand X
 
 
 //
-// End of "$Id: Fl_FileIcon.cxx,v 1.10 2001/07/29 22:04:43 spitzak Exp $".
+// End of "$Id: Fl_FileIcon.cxx,v 1.11 2002/09/16 00:29:06 spitzak Exp $".
 //

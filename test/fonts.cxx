@@ -1,5 +1,5 @@
 //
-// "$Id: fonts.cxx,v 1.25 2002/02/18 04:58:15 spitzak Exp $"
+// "$Id: fonts.cxx,v 1.26 2002/09/16 00:29:06 spitzak Exp $"
 //
 // Font demo program for the Fast Light Tool Kit (FLTK).
 //
@@ -105,7 +105,7 @@ void font_cb(Fl_Widget *, long) {
   if (!n) {
     // no sizes (this only happens on X)
     fl_font(f, pickedsize);
-    textobj->size = fl_height();
+    textobj->size = (int)fl_height();
   } else if (s[0] == 0) {
     // many sizes;
     int j = 1;
@@ -202,5 +202,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: fonts.cxx,v 1.25 2002/02/18 04:58:15 spitzak Exp $".
+// End of "$Id: fonts.cxx,v 1.26 2002/09/16 00:29:06 spitzak Exp $".
 //

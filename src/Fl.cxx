@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.149 2002/09/02 06:33:47 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.150 2002/09/16 00:29:05 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -33,7 +33,7 @@
 #include <string.h>
 #include <config.h>
 
-double Fl::version() {return FL_VERSION;}
+float Fl::version() {return FL_VERSION;}
 
 //
 // Globals...
@@ -82,7 +82,7 @@ FL_API void (*Fl_Tooltip::exit)(Fl_Widget *) = nothing;
 // to be checked to see if any should be called.
 
 struct Timeout {
-  double time;
+  float time;
   void (*cb)(void*);
   void* arg;
   Timeout* next;
@@ -103,14 +103,14 @@ static void elapse_timeouts() {
 #ifdef _WIN32
   unsigned long newclock = GetTickCount();
   static unsigned long prevclock;
-  double elapsed = (newclock-prevclock)/1000.0;
+  float elapsed = (newclock-prevclock)/1000.0f;
   prevclock = newclock;
 #else
   static struct timeval prevclock;
   struct timeval newclock;
   gettimeofday(&newclock, NULL);
-  double elapsed = newclock.tv_sec - prevclock.tv_sec +
-    (newclock.tv_usec - prevclock.tv_usec)/1000000.0;
+  float elapsed = newclock.tv_sec - prevclock.tv_sec +
+    (newclock.tv_usec - prevclock.tv_usec)/1000000.0f;
   prevclock.tv_sec = newclock.tv_sec;
   prevclock.tv_usec = newclock.tv_usec;
 #endif
@@ -125,15 +125,15 @@ static void elapse_timeouts() {
 // we were at calling the last timeout. This appears to make repeat_timeout
 // very accurate even when processing takes a significant portion of the
 // time interval:
-static double missed_timeout_by;
+static float missed_timeout_by;
 
-void Fl::add_timeout(double time, Fl_Timeout_Handler cb, void *arg) {
+void Fl::add_timeout(float time, Fl_Timeout_Handler cb, void *arg) {
   elapse_timeouts();
   repeat_timeout(time, cb, arg);
 }
 
-void Fl::repeat_timeout(double time, Fl_Timeout_Handler cb, void *arg) {
-  time += missed_timeout_by; if (time < -.05) time = 0;
+void Fl::repeat_timeout(float time, Fl_Timeout_Handler cb, void *arg) {
+  time += missed_timeout_by; if (time < -.05f) time = 0;
   Timeout* t = free_timeout;
   if (t) free_timeout = t->next;
   else t = new Timeout;
@@ -215,7 +215,7 @@ void (*Fl::idle)(); // see Fl_add_idle.cxx for the add/remove functions
 
 static char in_idle;
 
-#define FOREVER 1e20
+#define FOREVER 1e20f
 
 int Fl::run() {
   while (first_window()) wait(FOREVER);
@@ -229,7 +229,7 @@ int Fl::wait() {
   return wait(FOREVER);
 }
 
-int Fl::wait(double time_to_wait) {
+int Fl::wait(float time_to_wait) {
   int ret = 0;
   // checks are a bit messy so that add/remove and wait may be called
   // from inside them without causing an infinite loop. We must also
@@ -245,7 +245,7 @@ int Fl::wait(double time_to_wait) {
   if (idle) {
     if (!in_idle) {in_idle = 1; idle(); in_idle = 0;}
     // the idle function may turn off idle, we can then wait:
-    if (idle && time_to_wait > 0) {time_to_wait = 0.0; ret = 1;}
+    if (idle && time_to_wait > 0) {time_to_wait = 0; ret = 1;}
   }
   if (first_timeout) {
     elapse_timeouts();
@@ -266,13 +266,13 @@ int Fl::wait(double time_to_wait) {
       // Now it is safe for the callback to do add_timeout:
       cb(arg);
       // return immediately afterwards because timeout was done:
-      time_to_wait = 0.0; ret = 1;
+      time_to_wait = 0; ret = 1;
     }
   } else {
     reset_clock = 1; // remember that elapse_timeouts was not called
   }
   // run the system-specific part that waits for sockets & events:
-  if (time_to_wait <= 0.0) time_to_wait = 0.0;
+  if (time_to_wait <= 0) time_to_wait = 0;
   else flush();
   if (fl_wait(time_to_wait)) ret = 1;
   if (!time_to_wait) flush();
@@ -638,5 +638,5 @@ bool Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.149 2002/09/02 06:33:47 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.150 2002/09/16 00:29:05 spitzak Exp $".
 //

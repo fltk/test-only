@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.31 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: Fl_Clock.cxx,v 1.32 2002/09/16 00:29:05 spitzak Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -40,7 +40,7 @@ const float hourhand[4][2] = {{-0.5f, 0}, {0, 1.5f}, {0.5f, 0}, {0, -7.0f}};
 const float minhand[4][2] = {{-0.5f, 0}, {0, 1.5f}, {0.5f, 0}, {0, -11.5f}};
 const float sechand[4][2] = {{-0.1f, 0}, {0, 2.0f}, {0.1f, 0}, {0, -11.5f}};
 
-static void drawhand(double ang,const float v[][2],Fl_Color fill,Fl_Color line)
+static void drawhand(float ang,const float v[][2],Fl_Color fill,Fl_Color line)
 {
   fl_push_matrix();
   fl_rotate(ang);
@@ -50,12 +50,12 @@ static void drawhand(double ang,const float v[][2],Fl_Color fill,Fl_Color line)
 }
 
 void Fl_Clock_Output::drawhands(Fl_Color fill, Fl_Color line) {
-  drawhand(-360*(hour()+minute()/60.0)/12, hourhand, fill, line);
-  drawhand(-360*(minute()+second()/60.0)/60, minhand, fill, line);
-  drawhand(-360*(second()/60.0), sechand, fill, line);
+  drawhand(-360*(hour()+minute()/60.0f)/12, hourhand, fill, line);
+  drawhand(-360*(minute()+second()/60.0f)/60, minhand, fill, line);
+  drawhand(-360*(second()/60.0f), sechand, fill, line);
 }
 
-static void rect(double x, double y, double w, double h) {
+static void rect(float x, float y, float w, float h) {
   float v[4][2];
   v[0][0] = v[3][0] = float(x);
   v[1][0] = v[2][0] = float(x+w);
@@ -67,15 +67,15 @@ static void rect(double x, double y, double w, double h) {
 
 void Fl_Clock_Output::draw(int x, int y, int w, int h) {
   fl_push_matrix();
-  fl_translate(x+w/2.0-.5, y+h/2.0-.5);
-  fl_scale((w-1)/28.0, (h-1)/28.0);
+  fl_translate(x+w/2.0f-.5f, y+h/2.0f-.5f);
+  fl_scale((w-1)/28.0f, (h-1)/28.0f);
   if (type() == FL_ROUND_CLOCK) {
     fl_circle(0,0,14);
     fl_color(color()); fl_fill_stroke(FL_BLACK);
   }
   // draw the shadows:
   fl_push_matrix();
-  fl_translate(0.60, 0.60);
+  fl_translate(0.60f, 0.60f);
   Fl_Color c = fl_color_average(color(), FL_BLACK, .3);
   drawhands(c, c);
   fl_pop_matrix();
@@ -120,13 +120,13 @@ Fl_Clock::Fl_Clock(int x, int y, int w, int h, const char *l)
 static void tick(void *v) {
 #ifdef _WIN32
   ((Fl_Clock*)v)->value(time(0));
-  Fl::add_timeout(1.0, (Fl_Timeout_Handler)tick, v);
+  Fl::add_timeout(1.0f, (Fl_Timeout_Handler)tick, v);
 #else
   struct timeval t;
   gettimeofday(&t, 0);
   ((Fl_Clock*)v)->value(t.tv_sec);
-  double delay = 1.0-t.tv_usec*.000001;
-  if (delay < .1 || delay > .9) delay = 1.0;
+  float delay = 1.0f-t.tv_usec*.000001f;
+  if (delay < .1f || delay > .9f) delay = 1.0f;
   Fl::add_timeout(delay, (Fl_Timeout_Handler)tick, v);
 #endif
 }
@@ -167,5 +167,5 @@ Fl_Clock_Output::Fl_Clock_Output(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Clock.cxx,v 1.31 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.32 2002/09/16 00:29:05 spitzak Exp $".
 //

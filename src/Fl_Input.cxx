@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.70 2002/09/09 01:39:57 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.71 2002/09/16 00:29:06 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -84,7 +84,7 @@ const char* Fl_Input::expand(const char* p, char* buf,int wordwrap) const {
 }
 
 // After filling in such a buffer, find the width to e:
-double Fl_Input::expandpos(
+float Fl_Input::expandpos(
   const char* p,	// real string
   const char* e,	// pointer into real string
   const char* buf,	// conversion of real string by expand()
@@ -147,7 +147,7 @@ void Fl_Input::erase_cursor_at(int p) {
 
 ////////////////////////////////////////////////////////////////
 
-static double up_down_pos;
+static float up_down_pos;
 static bool was_up_down;
 static Fl_Input* dnd_target;
 static int dnd_target_position;
@@ -172,20 +172,20 @@ void Fl_Input::draw(int X, int Y, int W, int H)
 {
   setfont();
   int height = line_height();
-  double desc = height-fl_descent()-leading()/2.0;
+  float desc = height-fl_descent()-leading()/2.0f;
 
   if (damage() & FL_DAMAGE_ALL) {
     // draw and measure the inside label:
     if (label() && label()[0] && (!(flags()&15)||(flags()&FL_ALIGN_INSIDE))) {
       fl_font(label_font(), label_size());
-      double width = fl_width(label());
+      float width = fl_width(label());
       label_width = int(width+fl_width(":")+2.5);
       fl_color(color());
       fl_rectf(X, Y, label_width, H);
       Fl_Color color = label_color();
       if (!active_r()) color = fl_inactive(color);
       fl_color(color);
-      double y = Y+((H-height)>>1)+desc;
+      float y = Y+((H-height)>>1)+desc;
       fl_draw(label(), X+2, y);
       fl_draw(":", X+2+width, y);
       setfont();
@@ -326,7 +326,7 @@ void Fl_Input::draw(int X, int Y, int W, int H)
     if (selstart < selend && selstart <= e-value() && selend > p-value()) {
       const char* pp = value()+selstart;
       // draw unselected text before the selection:
-      double x1 = xpos;
+      float x1 = xpos;
       int offset1 = 0;
       if (pp > p) {
 	fl_color(textcolor);
@@ -335,7 +335,7 @@ void Fl_Input::draw(int X, int Y, int W, int H)
       }
       // draw selected text for this line:
       pp = value()+selend;
-      double x2 = X+W;
+      float x2 = X+W;
       int offset2;
       if (pp <= e) x2 = xpos+expandpos(p, pp, buf, &offset2);
       else offset2 = strlen(buf);
@@ -476,7 +476,7 @@ int Fl_Input::mouse_position(int X, int Y, int W, int /*H*/) const
 
   // Do a binary search for the character that starts before this position:
   int xpos = X-xscroll_; if (W > 12) xpos += 3;
-  const char *l, *r, *t; double f0 = Fl::event_x()-xpos;
+  const char *l, *r, *t; float f0 = Fl::event_x()-xpos;
   for (l = p, r = e; l<r; ) {
     t = l+(r-l+1)/2;
     int f = xpos+int(expandpos(p, t, buf, 0)+.5);
@@ -1196,7 +1196,7 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
     }
 #endif
     if (Fl::event_button() == 2) {
-      Fl::event_is_click(0); // stop double click from picking a word
+      Fl::event_is_click(0); // stop double-click from picking a word
       Fl::paste(*this,false);
     } else if (!Fl::event_is_click()) {
       // copy drag-selected text for middle-mouse click:
@@ -1281,5 +1281,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.70 2002/09/09 01:39:57 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.71 2002/09/16 00:29:06 spitzak Exp $".
 //

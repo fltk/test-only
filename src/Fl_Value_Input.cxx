@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.34 2002/07/15 05:55:38 spitzak Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.35 2002/09/16 00:29:06 spitzak Exp $"
 //
 // Copyright 1998-2002 by Bill Spitzak and others.
 //
@@ -85,8 +85,8 @@ void Fl_Value_Input::increment_cb() {
   handle_drag(value()+i);
 }
 
-#define INITIALREPEAT .5
-#define REPEAT .1
+#define INITIALREPEAT .5f
+#define REPEAT .1f
 
 void Fl_Value_Input::repeat_callback(void* v) {
   Fl_Value_Input* b = (Fl_Value_Input*)v;
@@ -212,5 +212,5 @@ Fl_Value_Input::~Fl_Value_Input() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.34 2002/07/15 05:55:38 spitzak Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.35 2002/09/16 00:29:06 spitzak Exp $".
 //

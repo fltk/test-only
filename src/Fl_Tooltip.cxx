@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.46 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.47 2002/09/16 00:29:06 spitzak Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -27,7 +27,7 @@
 #include <fltk/fl_draw.h>
 #include <fltk/Fl_Menu_Window.h>
 
-double		Fl_Tooltip::delay_ = 1.0f;
+float		Fl_Tooltip::delay_ = 1.0f;
 bool		Fl_Tooltip::enabled_ = true;
 
 #define MAX_WIDTH 400
@@ -165,7 +165,7 @@ Fl_Tooltip::enter_area(Fl_Widget* wid, int x,int y,int w,int h, const char* t)
       if (Fl::event_state() & FL_BUTTONS)
 	recent_tooltip = 0;
       else
-	Fl::add_timeout(.2, recent_timeout);
+	Fl::add_timeout(.2f, recent_timeout);
     }
   }
 }
@@ -190,5 +190,5 @@ static Fl_Named_Style style("Tooltip", revert, &Fl_Tooltip::default_style);
 Fl_Named_Style* Fl_Tooltip::default_style = &::style;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.46 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.47 2002/09/16 00:29:06 spitzak Exp $".
 //

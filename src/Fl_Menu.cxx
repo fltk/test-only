@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.128 2002/09/09 01:39:57 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.129 2002/09/16 00:29:06 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Fl_Menu_::popup and Fl_Menu_::pulldown methods.  See also the
@@ -463,7 +463,7 @@ static inline void setitem(MenuState& p, int level, int index) {
   // continue scrolling after a timeout:
   Fl::remove_timeout(autoscroll_timeout, &p);
   if (p.menus[level]->autoscroll(index))
-    Fl::repeat_timeout(.05, autoscroll_timeout, &p);
+    Fl::repeat_timeout(.05f, autoscroll_timeout, &p);
 }
 
 static int forward(MenuState& p, int menu) {
@@ -772,5 +772,5 @@ int Fl_Menu_::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.128 2002/09/09 01:39:57 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.129 2002/09/16 00:29:06 spitzak Exp $".
 //

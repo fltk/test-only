@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rounded_box.cxx,v 1.17 2002/01/23 08:46:02 spitzak Exp $"
+// "$Id: fl_rounded_box.cxx,v 1.18 2002/09/16 00:29:06 spitzak Exp $"
 //
 // Rounded box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -28,12 +28,12 @@
 
 static void rbox(int x, int y, int w, int h, Fl_Color fill, Fl_Color line) {
   // figure out diameter of circles for corners:
-  double d = w*4/5.0;
-  double d1 = h*4/5.0;
+  float d = w*(4/5.0f);
+  float d1 = h*(4/5.0f);
   if (d1 < d) d = d1;
   if (d > 30) d = 30;
-  double X = x;
-  double Y = y;
+  float X = x;
+  float Y = y;
   w--; h--;
   fl_arc(X, Y, d, d, 90, 180);
   fl_arc(X, Y+h-d, d, d, 180, 270);
@@ -80,5 +80,5 @@ Fl_RShadow_Box::Fl_RShadow_Box(const char* n) : Fl_Boxtype_(n) {
 const Fl_RShadow_Box fl_rshadow_box(0);
 
 //
-// End of "$Id: fl_rounded_box.cxx,v 1.17 2002/01/23 08:46:02 spitzak Exp $".
+// End of "$Id: fl_rounded_box.cxx,v 1.18 2002/09/16 00:29:06 spitzak Exp $".
 //

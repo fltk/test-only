@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Chart.cxx,v 1.15 2002/09/09 01:39:56 spitzak Exp $"
+// "$Id: Fl_Chart.cxx,v 1.16 2002/09/16 00:29:05 spitzak Exp $"
 //
 // Forms-compatible chart widget for the Fast Light Tool Kit (FLTK).
 //
@@ -30,7 +30,7 @@
 #include <string.h>
 #include <stdlib.h>
 
-#define ARCINC	(2.0*M_PI/360.0)
+#define ARCINC	float(M_PI/180)
 
 static void fl_rectbound(int x, int y, int w, int h, Fl_Color c, Fl_Color l) {
   fl_color(l); fl_rect(x, y, w, h);
@@ -41,31 +41,31 @@ static void fl_rectbound(int x, int y, int w, int h, Fl_Color c, Fl_Color l) {
 
 static void draw_barchart(int x,int y,int w,int h,
 			  int numb, FL_CHART_ENTRY entries[],
-			  double min, double max, int autosize, int maxnumb,
+			  float min, float max, int autosize, int maxnumb,
 			  Fl_Color textcolor)
 /* Draws a bar chart. x,y,w,h is the bounding box, entries the array of
    numb entries and min and max the boundaries. */
 {
-  double incr;
+  float incr;
   int zeroh;
-  double lh = fl_height();
+  float lh = fl_height();
   if (max == min) incr = h;
   else incr = h/(max-min);
   if ( (-min*incr) < lh) {
       incr = (h - lh + min*incr)/(max-min);
       zeroh = int(y+h-lh);
   } else {
-      zeroh = int(y+h+min * incr + .5);
+      zeroh = int(y+h+min * incr + .5f);
   }
-  int bwidth = int(w/double(autosize?numb:maxnumb)+.5);
+  int bwidth = int(w/float(autosize?numb:maxnumb)+.5f);
   /* Draw base line */
   fl_color(textcolor);
   fl_line(x, zeroh, x+w, zeroh);
-  if (min == 0.0 && max == 0.0) return; /* Nothing else to draw */
+  if (min == 0 && max == 0) return; /* Nothing else to draw */
   int i;
   /* Draw the bars */
   for (i=0; i<numb; i++) {
-      int h = int(entries[i].val*incr+.5);
+      int h = int(entries[i].val*incr+.5f);
       if (h < 0)
 	fl_rectbound(x+i*bwidth,zeroh,bwidth+1,-h+1, (Fl_Color)entries[i].col,
 		     textcolor);
@@ -83,37 +83,37 @@ static void draw_barchart(int x,int y,int w,int h,
 
 static void draw_horbarchart(int x,int y,int w,int h,
 			     int numb, FL_CHART_ENTRY entries[],
-			     double min, double max, int autosize, int maxnumb,
+			     float min, float max, int autosize, int maxnumb,
 			     Fl_Color textcolor)
 /* Draws a horizontal bar chart. x,y,w,h is the bounding box, entries the
    array of numb entries and min and max the boundaries. */
 {
   int i;
-  double lw = 0.0;		/* Maximal label width */
+  float lw = 0;		/* Maximal label width */
   /* Compute maximal label width */
   for (i=0; i<numb; i++) {
-      double w1 = fl_width(entries[i].str);
+      float w1 = fl_width(entries[i].str);
       if (w1 > lw) lw = w1;
   }
-  if (lw > 0.0) lw += 4.0;
-  double incr;
+  if (lw > 0) lw += 4;
+  float incr;
   int zeroh;
   if (max == min) incr = w;
   else incr = w/(max-min);
   if ( (-min*incr) < lw) {
       incr = (w - lw + min*incr)/(max-min);
-      zeroh = x+int(lw+.5);
+      zeroh = x+int(lw+.5f);
   } else {
-      zeroh = int(x-min * incr + .5);
+      zeroh = int(x-min * incr + .5f);
   }
-  int bwidth = int(h/double(autosize?numb:maxnumb)+.5);
+  int bwidth = int(h/float(autosize?numb:maxnumb)+.5f);
   /* Draw base line */
   fl_color(textcolor);
   fl_line(zeroh, y, zeroh, y+h);
-  if (min == 0.0 && max == 0.0) return; /* Nothing else to draw */
+  if (min == 0 && max == 0) return; /* Nothing else to draw */
   /* Draw the bars */
   for (i=0; i<numb; i++) {
-      int w = int(entries[i].val*incr+.5);
+      int w = int(entries[i].val*incr+.5f);
       if (w > 0)
 	fl_rectbound(zeroh,y+i*bwidth,w+1,bwidth+1, (Fl_Color)entries[i].col,
 		     textcolor);
@@ -131,24 +131,24 @@ static void draw_horbarchart(int x,int y,int w,int h,
 
 static void draw_linechart(int type, int x,int y,int w,int h,
 			   int numb, FL_CHART_ENTRY entries[],
-			   double min, double max, int autosize, int maxnumb,
+			   float min, float max, int autosize, int maxnumb,
 			   Fl_Color textcolor)
 /* Draws a line chart. x,y,w,h is the bounding box, entries the array of
    numb entries and min and max the boundaries. */
 {
   int i;
-  double lh = fl_height();
-  double incr;
-  if (max == min) incr = h-2.0*lh;
-  else incr = (h-2.0*lh)/ (max-min);
-  int zeroh = int(y+h-lh+min * incr + .5);
-  double bwidth = w/double(autosize?numb:maxnumb);
+  float lh = fl_height();
+  float incr;
+  if (max == min) incr = h-2*lh;
+  else incr = (h-2*lh)/ (max-min);
+  int zeroh = int(y+h-lh+min * incr + .5f);
+  float bwidth = w/float(autosize?numb:maxnumb);
   /* Draw the values */
   for (i=0; i<numb; i++) {
-      int x0 = x + int((i-.5)*bwidth+.5);
-      int x1 = x + int((i+.5)*bwidth+.5);
-      int y0 = i ? zeroh - int(entries[i-1].val*incr+.5) : 0;
-      int y1 = zeroh - int(entries[i].val*incr+.5);
+      int x0 = x + int((i-.5f)*bwidth+.5f);
+      int x1 = x + int((i+.5f)*bwidth+.5f);
+      int y0 = i ? zeroh - int(entries[i-1].val*incr+.5f) : 0;
+      int y1 = zeroh - int(entries[i].val*incr+.5f);
       if (type == FL_SPIKE_CHART) {
           fl_color((Fl_Color)entries[i].col);
           fl_line(x1, zeroh, x1, y1);
@@ -157,9 +157,9 @@ static void draw_linechart(int type, int x,int y,int w,int h,
           fl_line(x0,y0,x1,y1);
       } else if (type == FL_FILLED_CHART && i != 0) {
           fl_color((Fl_Color)entries[i-1].col);
-          if ((entries[i-1].val>0.0)!=(entries[i].val>0.0)) {
-            double ttt = entries[i-1].val/(entries[i-1].val-entries[i].val);
-            int xt = x + int((i-.5+ttt)*bwidth+.5);
+          if ((entries[i-1].val>0)!=(entries[i].val>0)) {
+            float ttt = entries[i-1].val/(entries[i-1].val-entries[i].val);
+            int xt = x + int((i-.5f+ttt)*bwidth+.5f);
             fl_newpath(); fl_vertex(x0, zeroh); fl_vertex(x0, y0);
             fl_vertex(xt, zeroh); fl_closepath(); fl_fill();
             fl_newpath(); fl_vertex(xt, zeroh); fl_vertex(x1, y1);
@@ -178,7 +178,9 @@ static void draw_linechart(int type, int x,int y,int w,int h,
   /* Draw the labels */
   for (i=0; i<numb; i++)
       fl_draw(entries[i].str,
-	      x+int((i+.5)*bwidth+.5), zeroh - int(entries[i].val*incr+.5),0,0,
+	      x+int((i+.5f)*bwidth+.5f),
+	      zeroh - int(entries[i].val*incr+.5f),
+	      0, 0,
 	      entries[i].val>=0 ? FL_ALIGN_BOTTOM : FL_ALIGN_TOP);
 }
 
@@ -189,33 +191,33 @@ static void draw_piechart(int x,int y,int w,int h,
    numb entries */
 {
   int i;
-  double xc,yc,rad;	/* center and radius */
-  double tot;		/* sum of values */
-  double incr;		/* increment in angle */
-  double curang;		/* current angle we are drawing */
-  double txc,tyc;	/* temporary center */
-  double lh = fl_height();
+  float xc,yc,rad;	/* center and radius */
+  float tot;		/* sum of values */
+  float incr;		/* increment in angle */
+  float curang;		/* current angle we are drawing */
+  float txc,tyc;	/* temporary center */
+  float lh = fl_height();
   /* compute center and radius */
-  xc = x+w/2.0; yc = y+h/2.0;
-  rad = h/2.0 - lh;
-  if (special) { yc += 0.1*rad; rad = 0.9*rad;}
+  xc = x+w/2.0f; yc = y+h/2.0f;
+  rad = h/2.0f - lh;
+  if (special) { yc += 0.1f*rad; rad = 0.9f*rad;}
   /* compute sum of values */
-  tot = 0.0;
+  tot = 0;
   for (i=0; i<numb; i++)
-    if (entries[i].val > 0.0) tot += entries[i].val;
-  if (tot == 0.0) return;
-  incr = 360.0/tot;
+    if (entries[i].val > 0) tot += entries[i].val;
+  if (tot == 0) return;
+  incr = 360/tot;
   /* Draw the pie */
-  curang = 0.0;
+  curang = 0;
   for (i=0; i<numb; i++)
-    if (entries[i].val > 0.0)
+    if (entries[i].val > 0)
     {
       txc = xc; tyc = yc;
       /* Correct for special pies */
       if (special && i==0)
       {
-        txc += 0.3*rad*cos(ARCINC*(curang+0.5*incr*entries[i].val));
-        tyc -= 0.3*rad*sin(ARCINC*(curang+0.5*incr*entries[i].val));
+        txc += 0.3f*rad*cosf(ARCINC*(curang+0.5f*incr*entries[i].val));
+        tyc -= 0.3f*rad*sinf(ARCINC*(curang+0.5f*incr*entries[i].val));
       }
       fl_color((Fl_Color)entries[i].col);
       fl_newpath(); fl_vertex(txc,tyc);
@@ -225,15 +227,15 @@ static void draw_piechart(int x,int y,int w,int h,
       fl_newpath(); fl_vertex(txc,tyc);
       fl_arc(txc,tyc,rad*2,rad*2, curang, curang+incr*entries[i].val);
       fl_closepath(); fl_stroke();
-      curang += 0.5 * incr * entries[i].val;
+      curang += 0.5f * incr * entries[i].val;
       /* draw the label */
-      double xl = txc + 1.1*rad*cos(ARCINC*curang);
+      float xl = txc + 1.1f*rad*cos(ARCINC*curang);
       fl_draw(entries[i].str,
-              int(xl+.5),
-              int(tyc - 1.1*rad*sin(ARCINC*curang)+.5),
+              int(xl+.5f),
+              int(tyc - 1.1f*rad*sinf(ARCINC*curang)+.5f),
               0, 0,
               xl<txc ? FL_ALIGN_RIGHT : FL_ALIGN_LEFT);
-      curang += 0.5 * incr * entries[i].val;
+      curang += 0.5f * incr * entries[i].val;
     }
 }
 
@@ -247,7 +249,7 @@ void Fl_Chart::draw() {
     ww--; hh--; // adjust for line thickness
 
     if (min >= max) {
-	min = max = 0.0;
+	min = max = 0;
 	for (int i=0; i<numb; i++) {
 	    if (entries[i].val < min) min = entries[i].val;
 	    if (entries[i].val > max) max = entries[i].val;
@@ -305,13 +307,13 @@ Fl_Widget(x,y,w,h,l) {
   entries    = (FL_CHART_ENTRY *)calloc(sizeof(FL_CHART_ENTRY), FL_CHART_MAX + 1);
 }
 
+Fl_Chart::~Fl_Chart() {
+  free(entries);
+}
+
 void Fl_Chart::clear() {
   numb = 0;
   redraw();
-}
-
-Fl_Chart::~Fl_Chart() {
-  free(entries);
 }
 
 void Fl_Chart::add(double val, const char *str, uchar col) {
@@ -394,5 +396,5 @@ void Fl_Chart::maxsize(int m) {
 }
 
 //
-// End of "$Id: Fl_Chart.cxx,v 1.15 2002/09/09 01:39:56 spitzak Exp $".
+// End of "$Id: Fl_Chart.cxx,v 1.16 2002/09/16 00:29:05 spitzak Exp $".
 //

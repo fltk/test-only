@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.55 2002/09/09 01:39:56 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.56 2002/09/16 00:29:05 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -27,21 +27,20 @@
 #include <fltk/Fl_Button.h>
 #include <fltk/Fl_Group.h>
 
-int Fl_Button::set() {
+bool Fl_Button::set() {
   clear_changed();
-  if (!value()) {set_value(); redraw(); return 1;}
-  return 0;
+  if (!value()) {set_value(); redraw(); return true;}
+  return false;
 }
 
-int Fl_Button::clear() {
+bool Fl_Button::clear() {
   clear_changed();
-  if (value()) {clear_value(); redraw(); return 1;}
-  return 0;
+  if (value()) {clear_value(); redraw(); return true;}
+  return false;
 }
 
-int Fl_Button::value(int v) {
-  v ? set() : clear();
-  return value();
+bool Fl_Button::value(bool v) {
+  return v ? set() : clear();
 }
 
 void Fl_Button::setonly() { // set this radio button on, turn others off
@@ -56,8 +55,8 @@ void Fl_Button::setonly() { // set this radio button on, turn others off
 static Fl_Button* held_down;
 
 int Fl_Button::handle(int event) {
-  static int oldval;
-  int newval;
+  static bool oldval;
+  bool newval;
   switch (event) {
   case FL_ENTER:
   case FL_LEAVE:
@@ -231,5 +230,5 @@ Fl_Button::Fl_Button(int x,int y,int w,int h, const char *l) : Fl_Widget(x,y,w,h
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.55 2002/09/09 01:39:56 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.56 2002/09/16 00:29:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: curve.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $"
+// "$Id: curve.cxx,v 1.10 2002/09/16 00:29:06 spitzak Exp $"
 //
 // Curve test program for the Fast Light Tool Kit (FLTK).
 //
@@ -29,7 +29,7 @@
 #include <fltk/fl_draw.h>
 #include <fltk/Fl_Toggle_Button.h>
 
-double args[9] = {
+float args[9] = {
   20,20, 50,200, 100,20, 200,200, 0};
 const char* name[9] = {
   "X0", "Y0", "X1", "Y1", "X2", "Y2", "X3", "Y3", "rotate"};
@@ -44,9 +44,9 @@ class Drawing : public Fl_Widget {
     fl_push_matrix();
 
     if (args[8]) {
-      fl_translate(w()/2.0, h()/2.0);
+      fl_translate(w()/2.0f, h()/2.0f);
       fl_rotate(args[8]);
-      fl_translate(-w()/2.0, -h()/2.0);
+      fl_translate(-w()/2.0f, -h()/2.0f);
     }
 
     fl_color(FL_BLACK);
@@ -94,6 +94,7 @@ int main(int argc, char** argv) {
   for (int n = 0; n<9; n++) {
     Fl_Slider* s = new Fl_Hor_Value_Slider(50,y,240,25,name[n]); y += 25;
     s->minimum(0); s->maximum(280);
+    s->type(Fl_Slider::HORIZONTAL | Fl_Slider::TICK_ABOVE);
     if (n == 8) s->maximum(360);
     s->step(1);
     s->value(args[n]);
@@ -110,5 +111,5 @@ int main(int argc, char** argv) {
 }
 
 //
-// End of "$Id: curve.cxx,v 1.9 2001/07/23 09:50:05 spitzak Exp $".
+// End of "$Id: curve.cxx,v 1.10 2002/09/16 00:29:06 spitzak Exp $".
 //

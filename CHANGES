@@ -2379,4 +2379,15 @@ A varies between even and odd integers and B is an integer.
 
 Fl_Valuator::step() values that are not integers or 1/integers work.
 
+////////////////////////////////////////////////////////////////
 
+Vertical scrollbars and Fl_Numeric_Input did mousewheel movement backwards.
+
+Changed the arguments for drawing and time from double to float. This
+seems to be more popular for drawing libraries and is faster. Big
+problem is that C++ will not resolve foo(int,int) and foo(float,float)
+unless you identify both arguments as floats or both are
+integers. Also VC++ warns about the int->float conversions. Both of
+these can be fixed with casts but I have not gotten all the VC++
+warnings out yet (I don't turn them off because the double->float
+warning is also turned off and I want that one).

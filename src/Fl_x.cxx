@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.133 2002/09/09 01:39:58 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.134 2002/09/16 00:29:06 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -163,7 +163,7 @@ void (*fl_unlock_function)() = nothing;
 
 // Wait up to the given time for any events or sockets to become ready,
 // do the callbacks for the events and sockets:
-static inline int fl_wait(double time_to_wait) {
+static inline int fl_wait(float time_to_wait) {
 
   // OpenGL and other broken libraries call XEventsQueued()
   // and thus cause the file descriptor to not be ready,
@@ -180,10 +180,10 @@ static inline int fl_wait(double time_to_wait) {
   fl_unlock_function();
 #if USE_POLL
   int n = ::poll(pollfds, nfds,
-		 (time_to_wait<2147483.648) ? int(time_to_wait*1000+.5) : -1);
+		 (time_to_wait<2147483.648f) ? int(time_to_wait*1000+.5f) : -1);
 #else
   int n;
-  if (time_to_wait < 2147483.648) {
+  if (time_to_wait < 2147483.648f) {
     timeval t;
     t.tv_sec = int(time_to_wait);
     t.tv_usec = int(1000000 * (time_to_wait-t.tv_sec));
@@ -1374,5 +1374,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.133 2002/09/09 01:39:58 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.134 2002/09/16 00:29:06 spitzak Exp $".
 //

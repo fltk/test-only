@@ -1,5 +1,5 @@
 //
-// "$Id: doublebuffer.cxx,v 1.9 2001/12/16 22:32:03 spitzak Exp $"
+// "$Id: doublebuffer.cxx,v 1.10 2002/09/16 00:29:06 spitzak Exp $"
 //
 // Double-buffering test program for the Fast Light Tool Kit (FLTK).
 //
@@ -60,9 +60,9 @@ void bad_draw(int w, int h, int n) {
   for (int i = 0; i < n; i++) {
     for (int j = i+1; j < n; j++) {
       fl_color((i+j)%(5*8*5)+FL_COLOR_CUBE);
-      fl_vertex(cos(2*M_PI*(j-1)/n+.1), sin(2*M_PI*(j-1)/n+.1));
-      fl_vertex(cos(2*M_PI*i/n+.1), sin(2*M_PI*i/n+.1));
-      fl_vertex(cos(2*M_PI*j/n+.1), sin(2*M_PI*j/n+.1));
+      fl_vertex(cosf(2*M_PI*(j-1)/n+.1), sinf(2*M_PI*(j-1)/n+.1));
+      fl_vertex(cosf(2*M_PI*i/n+.1), sinf(2*M_PI*i/n+.1));
+      fl_vertex(cosf(2*M_PI*j/n+.1), sinf(2*M_PI*j/n+.1));
       fl_fill_stroke(FL_WHITE);
     }
   }
@@ -124,5 +124,5 @@ int main() {
 }
 
 //
-// End of "$Id: doublebuffer.cxx,v 1.9 2001/12/16 22:32:03 spitzak Exp $".
+// End of "$Id: doublebuffer.cxx,v 1.10 2002/09/16 00:29:06 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.h,v 1.8 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: Fl_Input.h,v 1.9 2002/09/16 00:29:05 spitzak Exp $"
 //
 // Input base class header file for the Fast Light Tool Kit (FLTK).
 //
@@ -96,7 +96,7 @@ private:
   int label_width;
 
   const char* expand(const char*, char*, int) const;
-  double expandpos(const char*, const char*, const char*, int*) const;
+  float expandpos(const char*, const char*, const char*, int*) const;
   void minimal_update(int, int);
   void minimal_update(int p);
   void erase_cursor_at(int p);
@@ -121,5 +121,5 @@ private:
 #endif
 
 //
-// End of "$Id: Fl_Input.h,v 1.8 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: Fl_Input.h,v 1.9 2002/09/16 00:29:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: filename.h,v 1.4 2002/04/11 07:47:45 spitzak Exp $"
+// "$Id: filename.h,v 1.5 2002/09/16 00:29:05 spitzak Exp $"
 //
 // Filename header file for the Fast Light Tool Kit (FLTK).
 //
@@ -42,10 +42,20 @@ FL_API bool filename_isdir(const char*);
 
 struct dirent {char d_name[1];};
 
+#elif defined(__linux_)
+
+#define __USE_LARGEFILE64
+#define __USE_GNU
+#include <sys/types.h>
+#include <dirent.h>
+#define dirent dirent64
+#define scandir scandir64
+
 #else
 
 #include <sys/types.h>
 #include <dirent.h>
+
 // warning: on some systems (very few nowadays?) <dirent.h> may not exist.
 // The correct information is in one of these files:
 //#include <sys/ndir.h>
@@ -62,5 +72,5 @@ FL_API int filename_list(const char *d, struct dirent ***);
 #endif
 
 //
-// End of "$Id: filename.h,v 1.4 2002/04/11 07:47:45 spitzak Exp $".
+// End of "$Id: filename.h,v 1.5 2002/09/16 00:29:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: gl_draw.cxx,v 1.22 2002/07/01 15:28:18 spitzak Exp $"
+// "$Id: gl_draw.cxx,v 1.23 2002/09/16 00:29:05 spitzak Exp $"
 //
 // OpenGL drawing support routines for the Fast Light Tool Kit (FLTK).
 //
@@ -37,7 +37,7 @@
 // binary tree of all the fonts+sizes we have made so far:
 struct FontSize {
   Fl_Font font;
-  double size;
+  float size;
   FontSize* left, *right;
   int listbase;
 #if USE_XFT
@@ -46,7 +46,7 @@ struct FontSize {
 };
 static FontSize* root, *current;
 
-void gl_font(Fl_Font font, double size) {
+void gl_font(Fl_Font font, float size) {
   fl_font(font, size); // necessary so fl_measure() works
   size = fl_size(); // get the rounded value
   if (!current || current->font != font || current->size != size) {
@@ -84,7 +84,7 @@ void gl_font(Fl_Font font, double size) {
   glListBase(current->listbase);
 }
 
-void gl_font(int fontid, double size) {
+void gl_font(int fontid, float size) {
   gl_font(fl_fonts + (fontid % 16), size);
 }
 
@@ -92,8 +92,8 @@ void gl_draw(const char* str, int n) {
   glCallLists(n, GL_UNSIGNED_BYTE, str);
 }
 
-void gl_draw(const char* str, int n, double x, double y, double z) {
-  glRasterPos3d(x, y, z);
+void gl_draw(const char* str, int n, float x, float y, float z) {
+  glRasterPos3f(x, y, z);
   gl_draw(str, n);
 }
 
@@ -101,33 +101,33 @@ void gl_draw(const char* str) {
   gl_draw(str, strlen(str));
 }
 
-void gl_draw(const char* str, double x, double y, double z) {
+void gl_draw(const char* str, float x, float y, float z) {
   gl_draw(str, strlen(str), x, y, z);
 }
 
 #if USE_XFT
 // We must use the X font, the normal functions will use the Xft font:
 
-double gl_height() {
+float gl_height() {
   return current->xfont->ascent+current->xfont->descent;
 }
 
-double gl_descent() { return current->xfont->descent; }
+float gl_descent() { return current->xfont->descent; }
 
-double gl_width(const char* s, int n) {
+float gl_width(const char* s, int n) {
   return XTextWidth(current->xfont, s, n);
 }
 
-double gl_width(const char* s) {return gl_width(s, strlen(s));}
+float gl_width(const char* s) {return gl_width(s, strlen(s));}
 
 #else
 // The old X and Windows versions use exactly the same fonts for OpenGL
 // and for normal drawing, so we can share the functions:
 
-double gl_height() {return fl_height();}
-double gl_descent() {return fl_descent();}
-double gl_width(const char* s) {return fl_width(s);}
-double gl_width(const char* s, int n) {return fl_width(s,n);}
+float gl_height() {return fl_height();}
+float gl_descent() {return fl_descent();}
+float gl_width(const char* s) {return fl_width(s);}
+float gl_width(const char* s, int n) {return fl_width(s,n);}
 
 #endif
 
@@ -185,5 +185,5 @@ void gl_draw_image(const uchar* b, int x, int y, int w, int h, int d, int ld) {
 #endif
 
 //
-// End of "$Id: gl_draw.cxx,v 1.22 2002/07/01 15:28:18 spitzak Exp $".
+// End of "$Id: gl_draw.cxx,v 1.23 2002/09/16 00:29:05 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.10 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: fl_arci.cxx,v 1.11 2002/09/16 00:29:06 spitzak Exp $"
 //
 // Arc (integer) drawing functions for the Fast Light Tool Kit (FLTK).
 //
@@ -39,16 +39,16 @@
 #include <fltk/math.h>
 #endif
 
-void fl_pie(int x,int y,int w,int h,double a1,double a2, int what) {
+void fl_pie(int x,int y,int w,int h,float a1,float a2, int what) {
   if (w <= 0 || h <= 0) return;
   fl_transform(x,y);
 #ifdef _WIN32
   if (a1 == a2) return;
   w++; h++; // is this needed to match X?
-  int xa = x+w/2+int(w*cos(a1/180.0*M_PI));
-  int ya = y+h/2-int(h*sin(a1/180.0*M_PI));
-  int xb = x+w/2+int(w*cos(a2/180.0*M_PI));
-  int yb = y+h/2-int(h*sin(a2/180.0*M_PI));
+  int xa = x+w/2+int(w*cosf(a1*float(M_PI/180.0)));
+  int ya = y+h/2-int(h*sinf(a1*float(M_PI/180.0)));
+  int xb = x+w/2+int(w*cosf(a2*float(M_PI/180.0)));
+  int yb = y+h/2-int(h*sinf(a2*float(M_PI/180.0)));
   switch (what) {
   case FL_PIE:
     Pie(fl_gc, x, y, x+w, y+h, xa, ya, xb, yb); 
@@ -80,5 +80,5 @@ void fl_pie(int x,int y,int w,int h,double a1,double a2, int what) {
 }
 
 //
-// End of "$Id: fl_arci.cxx,v 1.10 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: fl_arci.cxx,v 1.11 2002/09/16 00:29:06 spitzak Exp $".
 //

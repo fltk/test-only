@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.43 2002/09/09 01:39:58 spitzak Exp $"
+// "$Id: fl_font_win32.cxx,v 1.44 2002/09/16 00:29:06 spitzak Exp $"
 //
 // _WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -137,7 +137,7 @@ TEXTMETRIC* fl_textmetric() {return &(fl_fontsize->metr);}
 // we need to decode the encoding somehow!
 static int charset = DEFAULT_CHARSET;
 
-void fl_font(Fl_Font font, double psize) {
+void fl_font(Fl_Font font, float psize) {
 
   // only integers supported right now, I think there is a newer
   // interface that takes arbitrary sizes, though...
@@ -160,13 +160,13 @@ void fl_font(Fl_Font font, double psize) {
   fl_fontsize = f;
 }
 
-double fl_height() {
+float fl_height() {
   return (fl_fontsize->metr.tmAscent + fl_fontsize->metr.tmDescent);
 }
 
-double fl_descent() { return fl_fontsize->metr.tmDescent; }
+float fl_descent() { return fl_fontsize->metr.tmDescent; }
   
-double fl_width(const char* c, int n) {
+float fl_width(const char* c, int n) {
   SIZE size;
   HDC dc = fl_getDC();
   SelectObject(dc, current_font);
@@ -175,10 +175,10 @@ double fl_width(const char* c, int n) {
   return size.cx;
 }
 
-void fl_transformed_draw(const char *str, int n, double x, double y) {
+void fl_transformed_draw(const char *str, int n, float x, float y) {
   SetTextColor(fl_gc, fl_colorref);
   HGDIOBJ oldfont = SelectObject(fl_gc, current_font);
-  TextOut(fl_gc, int(floor(x+.5)), int(floor(y+.5)), str, n);
+  TextOut(fl_gc, int(floorf(x+.5f)), int(floorf(y+.5f)), str, n);
   SelectObject(fl_gc, oldfont);
 }
 
@@ -194,5 +194,5 @@ void fl_encoding(const char* f) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.43 2002/09/09 01:39:58 spitzak Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.44 2002/09/16 00:29:06 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $"
+// "$Id: Fl_Color_Chooser.h,v 1.2 2002/09/16 00:29:05 spitzak Exp $"
 //
 // Color chooser header file for the Fast Light Tool Kit (FLTK).
 //
@@ -70,34 +70,34 @@ class FL_API Fl_Color_Chooser : public Fl_Group {
   Flcc_Value_Input rvalue;
   Flcc_Value_Input gvalue;
   Flcc_Value_Input bvalue;
-  double hue_, saturation_, value_;
-  double r_, g_, b_;
+  float hue_, saturation_, value_;
+  float r_, g_, b_;
   void set_valuators();
   static void rgb_cb(Fl_Widget*, void*);
   static void mode_cb(Fl_Widget*, void*);
 public:
   int mode() {return choice.value();}
-  double h() const {return hue_;}
-  double s() const {return saturation_;}
-  double v() const {return value_;}
-  double r() const {return r_;}
-  double g() const {return g_;}
-  double b() const {return b_;}
+  float h() const {return hue_;}
+  float s() const {return saturation_;}
+  float v() const {return value_;}
+  float r() const {return r_;}
+  float g() const {return g_;}
+  float b() const {return b_;}
   Fl_Color value() const;
   void value(Fl_Color);
-  int hsv(double,double,double);
-  int rgb(double,double,double);
-  static void hsv2rgb(double, double, double,double&,double&,double&);
-  static void rgb2hsv(double, double, double,double&,double&,double&);
+  int hsv(float,float,float);
+  int rgb(float,float,float);
+  static void hsv2rgb(float, float, float,float&,float&,float&);
+  static void rgb2hsv(float, float, float,float&,float&,float&);
   Fl_Color_Chooser(int,int,int,int,const char* = 0);
 };
 
-FL_API int fl_color_chooser(const char*name,double& r,double& g,double& b);
+FL_API int fl_color_chooser(const char*name, float& r, float& g, float& b);
 FL_API int fl_color_chooser(const char*name, uchar& r, uchar& g, uchar& b);
 FL_API int fl_color_chooser(const char*name, Fl_Color& c);
 
 #endif
 
 //
-// End of "$Id: Fl_Color_Chooser.h,v 1.1 2001/07/23 09:50:04 spitzak Exp $".
+// End of "$Id: Fl_Color_Chooser.h,v 1.2 2002/09/16 00:29:05 spitzak Exp $".
 //

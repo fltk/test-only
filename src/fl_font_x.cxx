@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_x.cxx,v 1.13 2002/09/09 01:39:58 spitzak Exp $"
+// "$Id: fl_font_x.cxx,v 1.14 2002/09/16 00:29:06 spitzak Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -80,7 +80,7 @@ Fl_FontSize::~Fl_FontSize() {
 // Placeholder function, Xft version needs to free something:
 void Fl_Drawable::free_gc() {draw = 0;}
 
-void fl_transformed_draw(const char *str, int n, double x, double y) {
+void fl_transformed_draw(const char *str, int n, float x, float y) {
   if (font_gc != fl_gc) {
     // I removed this, the user MUST set the font before drawing: (was)
     // if (!fl_fontsize) fl_font(FL_HELVETICA, FL_NORMAL_SIZE);
@@ -88,17 +88,17 @@ void fl_transformed_draw(const char *str, int n, double x, double y) {
     XSetFont(fl_display, fl_gc, current_font->fid);
   }
   XDrawString(fl_display, fl_window, fl_gc,
-	      int(floor(x+.5)),
-	      int(floor(y+.5)), str, n);
+	      int(floorf(x+.5f)),
+	      int(floorf(y+.5f)), str, n);
 }
 
-double fl_height() {
+float fl_height() {
   return (current_font->ascent + current_font->descent);
 }
 
-double fl_descent() { return current_font->descent; }
+float fl_descent() { return current_font->descent; }
 
-double fl_width(const char *c, int n) {
+float fl_width(const char *c, int n) {
   return XTextWidth(current_font, c, n);
 }
 
@@ -131,7 +131,7 @@ font_word(const char* p, int n) {
   return p;
 }
 
-void fl_font(Fl_Font font, double psize) {
+void fl_font(Fl_Font font, float psize) {
   Fl_FontSize* f = fl_fontsize;
 
   // only integers supported right now (this can be improved):
@@ -270,5 +270,5 @@ fl_fonts[] = {
 };
 
 //
-// End of "$Id: fl_font_x.cxx,v 1.13 2002/09/09 01:39:58 spitzak Exp $"
+// End of "$Id: fl_font_x.cxx,v 1.14 2002/09/16 00:29:06 spitzak Exp $"
 //

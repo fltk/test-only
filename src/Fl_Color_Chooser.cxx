@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.30 2002/01/20 07:37:15 spitzak Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.31 2002/09/16 00:29:05 spitzak Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -47,15 +47,15 @@
 #define UPDATE_HUE_BOX 1
 
 void Fl_Color_Chooser::hsv2rgb(
-	double H, double S, double V, double& r, double& g, double& b) {
+	float H, float S, float V, float& r, float& g, float& b) {
   if (S < 5.0e-6) {
     r = g = b = V;
   } else {
     int i = (int)H;  
-    double f = H - (float)i;
-    double p1 = V*(1.0-S);
-    double p2 = V*(1.0-S*f);
-    double p3 = V*(1.0-S*(1.0-f));
+    float f = H - (float)i;
+    float p1 = V*(1.0f-S);
+    float p2 = V*(1.0f-S*f);
+    float p3 = V*(1.0f-S*(1.0f-f));
     switch (i) {
     case 0: r = V;   g = p3;  b = p1;  break;
     case 1: r = p2;  g = V;   b = p1;  break;
@@ -68,16 +68,16 @@ void Fl_Color_Chooser::hsv2rgb(
 }
 
 void Fl_Color_Chooser::rgb2hsv(
-	double r, double g, double b, double& H, double& S, double& V) {
-  double maxv = r > g ? r : g; if (b > maxv) maxv = b;
+	float r, float g, float b, float& H, float& S, float& V) {
+  float maxv = r > g ? r : g; if (b > maxv) maxv = b;
   V = maxv;
   if (maxv>0) {
-    double minv = r < g ? r : g; if (b < minv) minv = b;
-    S = 1.0 - double(minv)/maxv;
+    float minv = r < g ? r : g; if (b < minv) minv = b;
+    S = 1.0f - float(minv)/maxv;
     if (maxv > minv) {
-      if (maxv == r) {H = (g-b)/double(maxv-minv); if (H<0) H += 6.0;}
-      else if (maxv == g) H = 2.0+(b-r)/double(maxv-minv);
-      else H = 4.0+(r-g)/double(maxv-minv);
+      if (maxv == r) {H = (g-b)/float(maxv-minv); if (H<0) H += 6;}
+      else if (maxv == g) H = 2+(b-r)/float(maxv-minv);
+      else H = 4+(r-g)/float(maxv-minv);
     }
   }
 }
@@ -99,9 +99,9 @@ void Fl_Color_Chooser::set_valuators() {
     break;
   case M_BYTE:
   case M_HEX:
-    rvalue.range(0,255); rvalue.step(1); rvalue.value(int(255*r_+.5));
-    gvalue.range(0,255); gvalue.step(1); gvalue.value(int(255*g_+.5));
-    bvalue.range(0,255); bvalue.step(1); bvalue.value(int(255*b_+.5));
+    rvalue.range(0,255); rvalue.step(1); rvalue.value(int(255*r_+.5f));
+    gvalue.range(0,255); gvalue.step(1); gvalue.value(int(255*g_+.5f));
+    bvalue.range(0,255); bvalue.step(1); bvalue.value(int(255*b_+.5f));
     break;
   case M_HSV:
     rvalue.range(0,6); rvalue.step(.001); rvalue.value(hue_);
@@ -111,12 +111,12 @@ void Fl_Color_Chooser::set_valuators() {
   }
 }
 
-int Fl_Color_Chooser::rgb(double r, double g, double b) {
+int Fl_Color_Chooser::rgb(float r, float g, float b) {
   if (r == r_ && g == g_ && b == b_) return 0;
   r_ = r; g_ = g; b_ = b;
-  double ph = hue_;
-  double ps = saturation_;
-  double pv = value_;
+  float ph = hue_;
+  float ps = saturation_;
+  float pv = value_;
   rgb2hsv(r,g,b,hue_,saturation_,value_);
   set_valuators();
   if (value_ != pv) {
@@ -131,14 +131,14 @@ int Fl_Color_Chooser::rgb(double r, double g, double b) {
   return 1;
 }
 
-int Fl_Color_Chooser::hsv(double h, double s, double v) {
-  h = fmod(h,6.0); if (h < 0.0) h += 6.0;
-  if (s < 0.0) s = 0.0; else if (s > 1.0) s = 1.0;
-  if (v < 0.0) v = 0.0; else if (v > 1.0) v = 1.0;
+int Fl_Color_Chooser::hsv(float h, float s, float v) {
+  h = fmodf(h,6.0f); if (h < 0) h += 6;
+  if (s < 0) s = 0; else if (s > 1) s = 1;
+  if (v < 0) v = 0; else if (v > 1) v = 1;
   if (h == hue_ && s == saturation_ && v == value_) return 0;
-  double ph = hue_;
-  double ps = saturation_;
-  double pv = value_;
+  float ph = hue_;
+  float ps = saturation_;
+  float pv = value_;
   hue_ = h; saturation_ = s; value_ = v;
   if (value_ != pv) {
 #ifdef UPDATE_HUE_BOX
@@ -156,34 +156,34 @@ int Fl_Color_Chooser::hsv(double h, double s, double v) {
 
 ////////////////////////////////////////////////////////////////
 
-static void tohs(double x, double y, double& h, double& s) {
+static void tohs(float x, float y, float& h, float& s) {
 #ifdef CIRCLE
   x = 2*x-1;
   y = 1-2*y;
-  s = sqrt(x*x+y*y); if (s > 1.0) s = 1.0;
-  h = (3.0/M_PI)*atan2(y,x);
-  if (h<0) h += 6.0;
+  s = sqrtf(x*x+y*y); if (s > 1) s = 1;
+  h = float(3.0/M_PI)*atan2f(y,x);
+  if (h<0) h += 6;
 #else
-  h = fmod(6.0*x,6.0); if (h < 0.0) h += 6.0;
-  s = 1.0-y; if (s < 0.0) s = 0.0; else if (s > 1.0) s = 1.0;
+  h = fmodf(6*x,6.0f); if (h < 0) h += 6;
+  s = 1-y; if (s < 0) s = 0; else if (s > 1) s = 1;
 #endif
 }
 
 int Flcc_HueBox::handle(int e) {
-  static double is;
+  static float is;
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
   switch (e) {
   case FL_PUSH:
     is = c->s();
   case FL_DRAG: {
-    double Xf, Yf, H, S;
+    float Xf, Yf, H, S;
     int ix = 0; int iy = 0; int iw = w(); int ih = h();
     box()->inset(ix, iy, iw, ih);
-    Xf = (Fl::event_x()-ix)/double(iw);
-    Yf = (Fl::event_y()-iy)/double(ih);
+    Xf = (Fl::event_x()-ix)/float(iw);
+    Yf = (Fl::event_y()-iy)/float(ih);
     tohs(Xf, Yf, H, S);
-    if (fabs(H-ih) < 3*6.0/w()) H = ih;
-    if (fabs(S-is) < 3*1.0/h()) S = is;
+    if (fabsf(H-ih) < 3*6.0f/w()) H = ih;
+    if (fabsf(S-is) < 3*1.0f/h()) S = is;
     if (Fl::event_state(FL_CTRL)) H = ih;
     if (c->hsv(H, S, c->v())) c->do_callback();
     } return 1;
@@ -196,20 +196,20 @@ static void generate_image(void* vv, int X, int Y, int W, uchar* buf) {
   Flcc_HueBox* v = (Flcc_HueBox*)vv;
   int x1 = 0; int y1 = 0; int w1 = v->w(); int h1 = v->h();
   v->box()->inset(x1,y1,w1,h1);
-  double Yf = double(Y)/h1;
+  float Yf = float(Y)/h1;
 #ifdef UPDATE_HUE_BOX
-  const double V = ((Fl_Color_Chooser*)(v->parent()))->v();
+  const float V = ((Fl_Color_Chooser*)(v->parent()))->v();
 #else
-  const double V = 1.0;
+  const float V = 1.0f;
 #endif
   for (int x = X; x < X+W; x++) {
-    double Xf = double(x)/w1;
-    double H,S; tohs(Xf,Yf,H,S);
-    double r,g,b;
+    float Xf = float(x)/w1;
+    float H,S; tohs(Xf,Yf,H,S);
+    float r,g,b;
     Fl_Color_Chooser::hsv2rgb(H,S,V,r,g,b);
-    *buf++ = uchar(255*r+.5);
-    *buf++ = uchar(255*g+.5);
-    *buf++ = uchar(255*b+.5);
+    *buf++ = uchar(255*r+.5f);
+    *buf++ = uchar(255*g+.5f);
+    *buf++ = uchar(255*b+.5f);
   }
 }
 
@@ -222,10 +222,10 @@ void Flcc_HueBox::draw() {
   if (damage() == FL_DAMAGE_VALUE) fl_pop_clip();
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
 #ifdef CIRCLE
-  int X = int(.5*(cos(c->h()*(M_PI/3.0))*c->s()+1) * (w1-6));
-  int Y = int(.5*(1-sin(c->h()*(M_PI/3.0))*c->s()) * (h1-6));
+  int X = int(.5f*(cosf(c->h()*float(M_PI/3.0))*c->s()+1) * (w1-6));
+  int Y = int(.5f*(1-sinf(c->h()*float(M_PI/3.0))*c->s()) * (h1-6));
 #else
-  int X = int(c->h()/6.0*(w1-6));
+  int X = int(c->h()/6.0f*(w1-6));
   int Y = int((1-c->s())*(h1-6));
 #endif
   if (X < 0) X = 0; else if (X > w1-6) X = w1-6;
@@ -238,17 +238,17 @@ void Flcc_HueBox::draw() {
 ////////////////////////////////////////////////////////////////
 
 int Flcc_ValueBox::handle(int e) {
-  static double iv;
+  static float iv;
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
   switch (e) {
   case FL_PUSH:
     iv = c->v();
   case FL_DRAG: {
-    double Yf;
+    float Yf;
     int x1 = 0; int y1 = 0; int w1 = w(); int h1 = h();
     box()->inset(x1,y1,w1,h1);
-    Yf = 1-(Fl::event_y()-y1)/double(h1);
-    if (fabs(Yf-iv)<(3*1.0/h())) Yf = iv;
+    Yf = 1-(Fl::event_y()-y1)/float(h1);
+    if (fabsf(Yf-iv)<(3*1.0f/h())) Yf = iv;
     if (c->hsv(c->h(),c->s(),Yf)) c->do_callback();
     } return 1;
   default:
@@ -256,15 +256,15 @@ int Flcc_ValueBox::handle(int e) {
   }
 }
 
-static double tr, tg, tb;
+static float tr, tg, tb;
 static void generate_vimage(void* vv, int X, int Y, int W, uchar* buf) {
   Flcc_ValueBox* v = (Flcc_ValueBox*)vv;
   int x1 = 0; int y1 = 0; int w1 = v->w(); int h1 = v->h();
   v->box()->inset(x1,y1,w1,h1);
-  double Yf = 255*(1.0-double(Y)/h1);
-  uchar r = uchar(tr*Yf+.5);
-  uchar g = uchar(tg*Yf+.5);
-  uchar b = uchar(tb*Yf+.5);
+  float Yf = 255*(1-float(Y)/h1);
+  uchar r = uchar(tr*Yf+.5f);
+  uchar g = uchar(tg*Yf+.5f);
+  uchar b = uchar(tb*Yf+.5f);
   for (int x = X; x < X+W; x++) {
     *buf++ = r; *buf++ = g; *buf++ = b;
   }
@@ -273,7 +273,7 @@ static void generate_vimage(void* vv, int X, int Y, int W, uchar* buf) {
 void Flcc_ValueBox::draw() {
   if (damage()&FL_DAMAGE_ALL) draw_frame();
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)parent();
-  c->hsv2rgb(c->h(),c->s(),1.0,tr,tg,tb);
+  c->hsv2rgb(c->h(),c->s(),1.0f,tr,tg,tb);
   int x1 = 0; int y1 = 0; int w1 = w(); int h1 = h();
   box()->inset(x1,y1,w1,h1);
   if (damage() == FL_DAMAGE_VALUE) fl_push_clip(x1,y1+py,w1,6);
@@ -289,9 +289,9 @@ void Flcc_ValueBox::draw() {
 
 void Fl_Color_Chooser::rgb_cb(Fl_Widget* o, void*) {
   Fl_Color_Chooser* c = (Fl_Color_Chooser*)(o->parent()->parent());
-  double r = c->rvalue.value();
-  double g = c->gvalue.value();
-  double b = c->bvalue.value();
+  float r = float(c->rvalue.value());
+  float g = float(c->gvalue.value());
+  float b = float(c->bvalue.value());
   if (c->mode() == M_HSV) {
     if (c->hsv(r,g,b)) c->do_callback();
     return;
@@ -349,13 +349,13 @@ Fl_Color_Chooser::Fl_Color_Chooser(int X, int Y, int W, int H, const char* L)
 
 Fl_Color Fl_Color_Chooser::value() const {
   Fl_Color ret =
-    fl_rgb(uchar(255*r()+.5), uchar(255*g()+.5), uchar(255*b()+.5));
+    fl_rgb(uchar(255*r()+.5f), uchar(255*g()+.5f), uchar(255*b()+.5f));
   return ret ? ret : FL_BLACK;
 }
 
 void Fl_Color_Chooser::value(Fl_Color c) {
   c = fl_get_color(c);
-  rgb(uchar(c>>24)/255.0, uchar(c>>16)/255.0, uchar(c>>8)/255.0);
+  rgb(uchar(c>>24)/255.0f, uchar(c>>16)/255.0f, uchar(c>>8)/255.0f);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -472,7 +472,7 @@ static int run_it(const char* name) {
   return window->exec();
 }
 
-int fl_color_chooser(const char* name, double& r, double& g, double& b) {
+int fl_color_chooser(const char* name, float& r, float& g, float& b) {
   make_it();
   chooser->rgb(r,g,b);
   if (!run_it(name)) return 0;
@@ -484,11 +484,11 @@ int fl_color_chooser(const char* name, double& r, double& g, double& b) {
 
 int fl_color_chooser(const char* name, uchar& r, uchar& g, uchar& b) {
   make_it();
-  chooser->rgb(r/255.0, g/255.0, b/255.0);
+  chooser->rgb(r/255.0f, g/255.0f, b/255.0f);
   if (!run_it(name)) return 0;
-  r = uchar(255*chooser->r()+.5);
-  g = uchar(255*chooser->g()+.5);
-  b = uchar(255*chooser->b()+.5);
+  r = uchar(255*chooser->r()+.5f);
+  g = uchar(255*chooser->g()+.5f);
+  b = uchar(255*chooser->b()+.5f);
   return 1;
 }
 
@@ -502,5 +502,5 @@ int fl_color_chooser(const char* name, Fl_Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.30 2002/01/20 07:37:15 spitzak Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.31 2002/09/16 00:29:05 spitzak Exp $".
 //

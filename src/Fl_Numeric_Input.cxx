@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Numeric_Input.cxx,v 1.4 2002/06/21 06:17:09 spitzak Exp $"
+// "$Id: Fl_Numeric_Input.cxx,v 1.5 2002/09/16 00:29:06 spitzak Exp $"
 //
 // Copyright 2002 by Bill Spitzak, Digital Domain, and others.
 //
@@ -67,7 +67,7 @@ int Fl_Numeric_Input::handle(int event) {
     }
     break;
   case FL_MOUSEWHEEL:
-    return handle_arrow(-Fl::event_dy());
+    return handle_arrow(Fl::event_dy());
   }
   return Fl_Input::handle(event);
 }

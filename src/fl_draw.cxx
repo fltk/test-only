@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.21 2002/09/09 01:39:58 spitzak Exp $"
+// "$Id: fl_draw.cxx,v 1.22 2002/09/16 00:29:06 spitzak Exp $"
 //
 // Label drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -54,7 +54,7 @@ const int* fl_column_widths_ = 0;
 struct Segment {
   const char* start;
   const char* end; // points after last character
-  double x,y;
+  float x,y;
 };
 
 // The results are put into this array of segments. This may increase
@@ -62,14 +62,14 @@ struct Segment {
 static Segment* segments;
 static int num_segments;
 
-static double max_x;
+static float max_x;
 
 // Create a new segment:
 static /*inline*/ void set(int index,
 		  const char* start,
 		  const char* end,
-		  double width,
-		  double x, double y, double w,
+		  float width,
+		  float x, float y, float w,
 		  Fl_Flags flags
 		  )
 {
@@ -96,15 +96,15 @@ static /*inline*/ void set(int index,
 
 // word-wrap a section of text into one segment per line:
 // Returns the y of the last line
-static double wrap(
+static float wrap(
   const char* start,
   const char* end,
-  double x, double y, double w,
+  float x, float y, float w,
   Fl_Flags flags,
   int& index
   )
 {
-  double width = 0;
+  float width = 0;
   if (flags & FL_ALIGN_WRAP) {
     const char* word_start = start;
     const char* word_end = start;
@@ -112,7 +112,7 @@ static double wrap(
       if (p >= end || *p == ' ') {
 	// test for word-wrap:
 	if (word_start < p) {
-	  double newwidth = width + fl_width(word_end, p-word_end);
+	  float newwidth = width + fl_width(word_end, p-word_end);
 	  if (word_end > start && newwidth > w) { // break before this word
 	    set(index++, start, word_end, width, x, y, w, flags);
 	    y += fl_height();
@@ -140,7 +140,7 @@ bool fl_hide_shortcut; // set by Fl_Choice
 // Parses and lays out the text into segments. Return value is the
 // y height of the text. The width is stored in max_x. The index is
 // set to be the number of segments.
-static double split(
+static float split(
     const char* str,
     int W, int /*H*/,
     Fl_Flags flags,
@@ -153,14 +153,14 @@ static double split(
   bool look_for_underscore = !(flags & FL_RAW_LABEL);
   bool saw_underscore = false;
 
-  double x = 0;
+  float x = 0;
   max_x = 0;
-  double y = 0;
-  double max_y = 0;
+  float y = 0;
+  float max_y = 0;
   const char* p = str;
   for (;;) {
     // find the next newline or tab:
-    double w; // width to format this segment into
+    float w; // width to format this segment into
     if (!*p || *p == '\n') {
       w = W-x;
     } else if (*p == '\t') {
@@ -171,7 +171,7 @@ static double split(
       p++;
       continue;
     }
-    double newy;
+    float newy;
     // Edit out any '&' sign if this is reasonably short label and use
     // it's position later to underscore a letter. This is done by
     // copying the text to the tempbuf and then reusing that buffer
@@ -197,7 +197,7 @@ static double split(
 	Segment& s = segments[i];
 	if (underscore_at >= s.start && underscore_at < s.end) {
 	  const char* text = "_";
-	  double save_y = s.y;
+	  float save_y = s.y;
 	  set(index, text, text+1, 0,
 	      s.x+fl_width(s.start, underscore_at-s.start), y, 0,
 	      FL_ALIGN_LEFT);
@@ -260,5 +260,5 @@ void fl_measure(const char* str, int& w, int& h, Fl_Flags flags) {
 //  }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.21 2002/09/09 01:39:58 spitzak Exp $".
+// End of "$Id: fl_draw.cxx,v 1.22 2002/09/16 00:29:06 spitzak Exp $".
 //

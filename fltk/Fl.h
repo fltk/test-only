@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.h,v 1.11 2002/02/10 22:57:47 spitzak Exp $"
+// "$Id: Fl.h,v 1.12 2002/09/16 00:29:05 spitzak Exp $"
 //
 // Main header file for the Fast Light Tool Kit (FLTK).
 //
@@ -78,7 +78,7 @@ public: // should be private!
 
 public:
 
-  static double version();
+  static float version();
 
   // argument parsers:
   static int arg(int, char**, int&);
@@ -93,7 +93,7 @@ public:
 
   // execution:
   static int wait();
-  static int wait(double time);
+  static int wait(float time);
   static int check();
   static int ready();
   static int run();
@@ -104,8 +104,8 @@ public:
   static void exit_modal() {exit_modal_ = true;}
   static bool exit_modal_flag() {return exit_modal_;}
 
-  static void add_timeout(double t,Fl_Timeout_Handler,void* v = 0);
-  static void repeat_timeout(double t, Fl_Timeout_Handler,void* = 0);
+  static void add_timeout(float t,Fl_Timeout_Handler,void* v = 0);
+  static void repeat_timeout(float t, Fl_Timeout_Handler,void* = 0);
   static bool has_timeout(Fl_Timeout_Handler, void* = 0);
   static void remove_timeout(Fl_Timeout_Handler, void* = 0);
   static void add_check(Fl_Timeout_Handler, void* = 0);
@@ -237,5 +237,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl.h,v 1.11 2002/02/10 22:57:47 spitzak Exp $".
+// End of "$Id: Fl.h,v 1.12 2002/09/16 00:29:05 spitzak Exp $".
 //

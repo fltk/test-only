@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_xft.cxx,v 1.9 2002/09/09 01:39:58 spitzak Exp $"
+// "$Id: fl_font_xft.cxx,v 1.10 2002/09/16 00:29:06 spitzak Exp $"
 //
 // Copyright 2001 Bill Spitzak and others.
 //
@@ -81,7 +81,7 @@ public:
   XftFont* font;
   const char* encoding;
   Fl_FontSize(const char* xfontname);
-  double size;
+  float size;
   //~Fl_FontSize();
 };
 
@@ -93,7 +93,7 @@ void fl_encoding(const char* f) {
   fl_encoding_ = f;
 }
 
-void fl_font(Fl_Font font, double size) {
+void fl_font(Fl_Font font, float size) {
   // Reduce the number of sizes by rounding to various multiples:
   size = rint(10*size)/10;
   if (font == fl_font_ && size == fl_size_ &&
@@ -163,14 +163,14 @@ Fl_FontSize::~Fl_FontSize() {
 #if 1
 // Some of the line spacings these return are insanely big!
 //int fl_height() { return current_font->height; }
-double fl_height() { return current_font->ascent + current_font->descent; }
-double fl_descent() { return current_font->descent; }
+float fl_height() { return current_font->ascent + current_font->descent; }
+float fl_descent() { return current_font->descent; }
 #else
-double fl_height() { return fl_size_;}
-double fl_descent() { return fl_size_/4;}
+float fl_height() { return fl_size_;}
+float fl_descent() { return fl_size_/4;}
 #endif
 
-double fl_width(const char *str, int n) {
+float fl_width(const char *str, int n) {
   XGlyphInfo i;
   XftTextExtents8(fl_display, current_font, (XftChar8 *)str, n, &i);
   return i.xOff;
@@ -198,7 +198,7 @@ void Fl_Drawable::free_gc() {
   }
 };
 
-void fl_transformed_draw(const char *str, int n, double x, double y) {
+void fl_transformed_draw(const char *str, int n, float x, float y) {
   XftDraw* draw = fl_drawable->draw;
 
   if (!draw) {
@@ -233,7 +233,7 @@ void fl_transformed_draw(const char *str, int n, double x, double y) {
   color.color.alpha = 0xffff;
 
   XftDrawString8(draw, &color, current_font,
-		 int(floor(x+.5)), int(floor(y+.5)),	
+		 int(floorf(x+.5f)), int(floorf(y+.5f)),	
 		 (XftChar8 *)str, n);
 }
 
@@ -355,12 +355,12 @@ int Fl_Font_::sizes(int*& sizep) const {
     delete[] array;
     array = new int[array_size = fs->nfont+1];
   }
-  array[0] = 0; int j = 1; // claim all fonts are scalable
+  array[0] = 0; int j = 1; // claim all fonts are scalable by putting a 0 in
   for (int i = 0; i < fs->nfont; i++) {
     double v;
-    if (XftPatternGetDouble(fs->fonts[i], XFT_PIXEL_SIZE, 0, &v) == XftResultMatch) {
+    if (XftPatternGetDouble(fs->fonts[i], XFT_PIXEL_SIZE, 0, &v)
+	== XftResultMatch)
       array[j++] = int(v);
-    }
   }
   qsort(array+1, j-1, sizeof(int), int_sort);
   XftFontSetDestroy(fs);
@@ -398,5 +398,5 @@ int Fl_Font_::encodings(const char**& arrayp) const {
 }
 
 //
-// End of "$Id: fl_font_xft.cxx,v 1.9 2002/09/09 01:39:58 spitzak Exp $"
+// End of "$Id: fl_font_xft.cxx,v 1.10 2002/09/16 00:29:06 spitzak Exp $"
 //

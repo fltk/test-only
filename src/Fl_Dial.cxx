@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.39 2002/07/01 15:28:19 spitzak Exp $"
+// "$Id: Fl_Dial.cxx,v 1.40 2002/09/16 00:29:06 spitzak Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -44,7 +44,7 @@ void Fl_Dial::draw() {
     fillcolor = fl_inactive(fillcolor);
     linecolor = fl_inactive(linecolor);
   }
-  double angle = (a2-a1)*(value()-minimum())/(maximum()-minimum()) + a1;
+  float angle = (a2-a1)*float((value()-minimum())/(maximum()-minimum())) + a1;
   if (type() == FILL) {
     if (damage()&FL_DAMAGE_EXPOSE && box() == FL_OVAL_BOX) {
       fl_push_clip(0, 0, w(), h());
@@ -65,16 +65,16 @@ void Fl_Dial::draw() {
       fl_color(color()); fl_fill();
     }
     fl_push_matrix();
-    fl_translate(X+W/2-.5, Y+H/2-.5);
+    fl_translate(X+W/2-.5f, Y+H/2-.5f);
     fl_scale(W-1, H-1);
     fl_rotate(45-angle);
     if (type() == LINE) {
-      fl_vertex(0.0,   0.0);
-      fl_vertex(-0.04, 0.0);
-      fl_vertex(-0.25, 0.25);
-      fl_vertex(0.0,   0.04);
+      fl_vertex(0,   0);
+      fl_vertex(-0.04f, 0.0f);
+      fl_vertex(-0.25f, 0.25f);
+      fl_vertex(0.0f,   0.04f);
     } else {
-      fl_circle(-0.20, 0.20, 0.07);
+      fl_circle(-0.20f, 0.20f, 0.07f);
     }
     fl_color(fillcolor); fl_fill_stroke(linecolor);
     fl_pop_matrix();
@@ -98,8 +98,8 @@ int Fl_Dial::handle(int event) {
     int mx = Fl::event_x()-X-W/2;
     int my = Fl::event_y()-Y-H/2;
     if (!mx && !my) return 1;
-    double angle = 270-atan2((float)-my, (float)mx)*180/M_PI;
-    double oldangle = (a2-a1)*(value()-minimum())/(maximum()-minimum()) + a1;
+    float angle = 270-atan2f((float)-my, (float)mx)*float(180/M_PI);
+    float oldangle = (a2-a1)*float((value()-minimum())/(maximum()-minimum())) + a1;
     while (angle < oldangle-180) angle += 360;
     while (angle > oldangle+180) angle -= 360;
     double val;
@@ -137,5 +137,5 @@ Fl_Dial::Fl_Dial(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.39 2002/07/01 15:28:19 spitzak Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.40 2002/09/16 00:29:06 spitzak Exp $".
 //
