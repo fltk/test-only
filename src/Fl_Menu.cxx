@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.34 1999/06/20 15:24:30 mike Exp $"
+// "$Id: Fl_Menu.cxx,v 1.35 1999/07/31 21:27:54 carl Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -559,7 +559,6 @@ int menuwindow::handle(int e) {
     switch (Fl::event_key()) {
     case FL_Tab:
       if (Fl::event_shift()&FL_SHIFT) goto BACKTAB;
-    case ' ':
       if (!forward(p.menu_number)) {p.item_number = -1; forward(p.menu_number);}
       return 1;
     case FL_BackSpace:
@@ -586,9 +585,9 @@ int menuwindow::handle(int e) {
       else if (p.menu_number>0)
 	setitem(p.menu_number-1, p.p[p.menu_number-1]->selected);
       return 1;
+    case ' ':
     case FL_Enter:
-      p.state = DONE_STATE;
-      return 1;
+      goto SELECTED;
     case FL_Escape:
       setitem(0, -1, 0);
       p.state = DONE_STATE;
@@ -627,6 +626,7 @@ int menuwindow::handle(int e) {
       else
 	p.state = PUSH_STATE;
     }} return 1;
+  SELECTED:
   case FL_RELEASE:
     // do nothing if they try to pick inactive items
     if (p.current_item && !p.current_item->activevisible()) return 1;
@@ -635,7 +635,16 @@ int menuwindow::handle(int e) {
     if (Fl::pushed()) return 1;
     if (!Fl::event_is_click() || p.state == PUSH_STATE ||
 	p.menubar && p.current_item && !p.current_item->submenu() // button
-	) p.state = DONE_STATE;
+	) {
+      const Fl_Menu_Item* m = p.current_item;
+      // directly call the callbacks for check/radio buttons:
+      if (m && button && (m->flags & (FL_MENU_TOGGLE|FL_MENU_RADIO))) {
+	((Fl_Menu_*)button)->picked(m);
+	p.p[p.menu_number]->redraw();
+      } else {
+	p.state = DONE_STATE;
+      }
+    }
     return 1;
   }
   return Fl_Window::handle(e);
@@ -856,5 +865,5 @@ Fl_Color Fl_Menu_Item::light_color() const { return (Fl_Color)attr(LIGHT_COLOR);
 Fl_Color Fl_Menu_Item::down_labelcolor() const { return (Fl_Color)attr(DOWN_LABELCOLOR); }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.34 1999/06/20 15:24:30 mike Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.35 1999/07/31 21:27:54 carl Exp $".
 //
