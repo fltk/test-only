@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.10 1999/03/20 14:27:16 carl Exp $"
+// "$Id: Fl_Group.cxx,v 1.11 1999/03/23 02:55:25 carl Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -447,7 +447,7 @@ void Fl_Group::update_child(Fl_Widget& w) const {
       fl_not_clipped(w.x(), w.y(), w.w(), w.h()))
   {
     if (w.damage() & FL_DAMAGE_CHILD_LABEL) draw_outside_label(w);
-    w.clear_damage(FL_DAMAGE_CHILD_LABEL);
+    w.clear_damage(w.damage()&~FL_DAMAGE_CHILD_LABEL);
     if (w.damage()) w.draw();	
     w.clear_damage();
   }
@@ -499,5 +499,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.10 1999/03/20 14:27:16 carl Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.11 1999/03/23 02:55:25 carl Exp $".
 //
