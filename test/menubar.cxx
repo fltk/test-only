@@ -1,5 +1,5 @@
 //
-// "$Id: menubar.cxx,v 1.8 1999/03/19 19:41:08 carl Exp $"
+// "$Id: menubar.cxx,v 1.9 1999/03/19 23:39:39 carl Exp $"
 //
 // Menubar test program for the Fast Light Tool Kit (FLTK).
 //
@@ -37,6 +37,8 @@
 
 Fl_Window *window;
 
+Fl_Menu_* menus[4];
+
 void test_cb(Fl_Widget* w, void*) {
   Fl_Menu_* mw = (Fl_Menu_*)w;
   const Fl_Menu_Item* m = mw->mvalue();
@@ -49,7 +51,7 @@ void test_cb(Fl_Widget* w, void*) {
   if (!strcmp("item 77", m->label())) {
     if (mw->find("button")) mw->replace("button", "Spitzak");
     else mw->replace("Spitzak", "button");
-    mw->redraw();
+    menus[0]->redraw();
   }
 }
 
@@ -169,8 +171,6 @@ Fl_Menu_Item pulldown[] = {
 
 #define WIDTH 600
 
-Fl_Menu_* menus[4];
-
 int main(int argc, char **argv) {
   for (int i=0; i<99; i++) {
     char buf[100];
@@ -220,5 +220,5 @@ int main(int argc, char **argv) {
 }
 
 //
-// End of "$Id: menubar.cxx,v 1.8 1999/03/19 19:41:08 carl Exp $".
+// End of "$Id: menubar.cxx,v 1.9 1999/03/19 23:39:39 carl Exp $".
 //
