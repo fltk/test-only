@@ -153,11 +153,11 @@ are set.  If the flag <tt>FL_DAMAGE_EXPOSE</tt> is on in
 inside it's bounding box. If you wish to simulate a non-square widget,
 you should call <a
 href=Fl_Group.html#draw_group_box><tt>Fl_Group::draw_group_box()</tt></a>
-with appropriate <a href=drawing.html#clipping>clipping</a>.
+with appropriate <a href=drawing.html#dclipping>clipping</a>.
 
 <P>Expose events (and the method <TT>expose(x,y,w,h)</TT>) will cause
 <TT>draw()</TT> to be called with FLTK's <A
-href=drawing.html#clipping>clipping</A> turned on.  You can greatly
+href=drawing.html#dclipping>clipping</A> turned on.  You can greatly
 speed up redrawing in some cases by testing
 <a href=drawing.html#fl_not_clipped><TT>fl_not_clipped(x,y,w,h)</TT></a>
 or <a href=drawing.html#fl_clip_box><TT>fl_clip_box(...)</TT></a> and

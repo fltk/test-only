@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.125 2002/04/02 08:33:32 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.126 2002/04/16 08:57:51 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -657,13 +657,16 @@ bool fl_handle()
 
     // tell Fl_Window about it and set flag to prevent echoing:
     if (window->resize(X, Y, W, H)) resize_from_system = window;
-    return true;
+    break; // allow add_handler to do something too
   }
 
   case UnmapNotify:
     window = fl_find(fl_xevent.xmapping.window);
-    if (window) {Fl_X::i(window)->wait_for_expose = true; return true;}
-    break;
+    if (!window) break;
+    if (window->parent()) break; // ignore child windows
+    // turning this flag makes iconic() return true:
+    Fl_X::i(window)->wait_for_expose = true;
+    break; // allow add_handler to do something too
 
   case Expose:
   case GraphicsExpose:
@@ -1336,5 +1339,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.125 2002/04/02 08:33:32 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.126 2002/04/16 08:57:51 spitzak Exp $".
 //

@@ -19,14 +19,16 @@ code and modify to to what you want.
 
 <P ALIGN=CENTER><IMG src=./fl_color_chooser.jpg></p>
 
-<p><tt>fl_color_chooser()</tt> pops up a window to let the user pick an 
-arbitrary RGB color.  They can pick the hue and saturation in the &quot;hue 
-box&quot; on the left (hold down CTRL to just change the saturation), and 
-the brighness using the vertical slider.  Or they can type the 8-bit 
-numbers into the RGB <A href=Fl_Value_Input.html#Fl_Value_Input><tt>
-Fl_Value_Input</tt></A> fields, or drag the mouse across them to adjust 
-them.  The pull-down menu lets the user set the input fields to show 
-RGB, HSV, or 8-bit RGB (0 to 255).</p>
+<p><tt>fl_color_chooser()</tt> pops up a window to let the user pick
+an arbitrary RGB color.  They can pick the hue and saturation in the
+&quot;hue box&quot; on the left (hold down CTRL to just change the
+saturation), and the brighness using the vertical slider.  Or they can
+type the 8-bit numbers into the RGB <A
+href=Fl_Value_Input.html><tt>Fl_Value_Input</tt></A> fields, or drag
+the mouse across them to adjust them.  The pull-down menu lets the
+user set the input fields to show RGB, HSV, or 8-bit RGB (0 to
+255).</p>
+
 <p>This returns non-zero if the user picks ok, and updates the RGB 
 values.  If the user picks cancel or closes the window this returns 
 zero and leaves RGB unchanged.</p>
@@ -60,7 +62,7 @@ The enter key is a shortcut for the OK button.
 
 <P ALIGN=CENTER><IMG src=./fl_message.gif border=1></p>
 
-<H4><A name=fl_>void fl_alert(const char *, ...)</A></H4>
+<H4><A name=fl_alert>void fl_alert(const char *, ...)</A></H4>
 
 Same as <tt>fl_message()</tt> except for the &quot;!&quot; symbol. 
 
@@ -103,8 +105,7 @@ commands in the label are after the default value.
 <H4><A name=fl_password>const char *fl_password(const char *label, 
 const char *deflt = 0, ...)</A></H4>
 
-Same as <tt>fl_input()</tt> except an <A
-href=Fl_Secret_Input.html#Fl_Secret_Input>
+Same as <tt>fl_input()</tt> except an <A href=Fl_Secret_Input.html>
 <tt>Fl_Secret_Input</tt></A> field is used.
 
 <P ALIGN=CENTER><IMG src=./fl_password.gif border=1></p>

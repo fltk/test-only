@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.169 2002/04/11 07:47:46 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.170 2002/04/16 08:57:51 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -585,7 +585,16 @@ static Fl_Window* resize_from_system;
 
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
+  // Copy the message to fl_msg so add_handler code can see it, it is
+  // already there if this is called by DispatchMessage, but not if
+  // Windows calls this directly.
+  fl_msg.hwnd = hWnd;
   fl_msg.message = uMsg;
+  fl_msg.wParam = wParam;
+  fl_msg.lParam = lParam;
+  //fl_msg.time = ???
+  //fl_msg.pt = ???
+  //fl_msg.lPrivate = ???
 
   Fl_Window *window = fl_find(hWnd);
 
@@ -1332,5 +1341,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.169 2002/04/11 07:47:46 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.170 2002/04/16 08:57:51 spitzak Exp $".
 //

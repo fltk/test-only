@@ -2201,4 +2201,16 @@ timeout to happen with the last version of the code.
 Fl_Output could take the default focus, this is changed so that
 an Fl_Input in the same window gets the focus.
 
+////////////////////////////////////////////////////////////////
+
+Valuators no longer have space and backspace as shortcuts
+
+Win32 version stores all the info passed to WndProc into fl_msg so an
+add_hander method can see it.
+
+MapNotify, ConfigureNotify and UnmapNotify events cause
+Fl::add_handler function to be called after fltk does it's stuff,
+needed for window managers written with fltk.
+
+More errors in docs from Alexander Mai
 

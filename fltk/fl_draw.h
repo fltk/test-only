@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.h,v 1.3 2001/11/08 08:13:48 spitzak Exp $"
+// "$Id: fl_draw.h,v 1.4 2002/04/16 08:57:51 spitzak Exp $"
 //
 // The fltk drawing library
 //
@@ -172,7 +172,7 @@ inline void fl_measure(const char* t, int& w, int& h) {
 #define fl_begin() fl_newpath()
 //void fl_frame(const char* s, int x, int y, int w, int h);
 //void fl_frame2(const char* s, int x, int y, int w, int h);
-#define fl_draw_box(b,x,y,w,h,c) ((b)->draw((x)*1.0,y,w,h,c))
+#define fl_draw_box(b,x,y,w,h,c) ((b)->draw(x,y,w,h,c))
 #define fl_shortcut_label(l) Fl::key_name(l)
 #define fl_begin_points()
 #define fl_end_points() fl_draw_points()
@@ -208,5 +208,5 @@ FL_API void fl_yxline(int x, int y, int y1, int x2, int y3);
 #endif
 
 //
-// End of "$Id: fl_draw.h,v 1.3 2001/11/08 08:13:48 spitzak Exp $".
+// End of "$Id: fl_draw.h,v 1.4 2002/04/16 08:57:51 spitzak Exp $".
 //
