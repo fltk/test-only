@@ -1,5 +1,5 @@
 //
-// "$Id: draw.h,v 1.15 2005/01/27 08:50:21 spitzak Exp $"
+// "$Id$"
 //
 // The fltk drawing library
 //
@@ -167,7 +167,7 @@ enum PixelType {
   LUMINANCE= 1, /*!< 1 byte, 0xff = white, 0 = black */
   //LUMA= 2, /*!< 2 bytes: brightness, alpha. Unpremultiplied. */
   RGB	= 3, /*!< 3 bytes: r,g,b */
-  RGBA	= 4, /*!< 4 bytes: r,g,b,a. Unpremultiplied. */
+  RGBA	= 4  /*!< 4 bytes: r,g,b,a. Unpremultiplied. */
   //MASK= 5, /*!< 1 byte alpha, fltk::getcolor() is used to fill it. */
   //ALUM= 6,/*!< 2 bytes: alpha, brightness. Unpremultiplied. */
   //BGR	= 7, /*!< 3 bytes: b,g,r */
@@ -201,5 +201,5 @@ FL_API void overlay_clear();
 #endif
 
 //
-// End of "$Id: draw.h,v 1.15 2005/01/27 08:50:21 spitzak Exp $".
+// End of "$Id$".
 //
