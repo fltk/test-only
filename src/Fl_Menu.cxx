@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.71 1999/12/15 08:30:58 bill Exp $"
+// "$Id: Fl_Menu.cxx,v 1.72 2000/01/05 09:58:48 bill Exp $"
 //
 // Menu code for the Fast Light Tool Kit (FLTK).
 //
@@ -66,13 +66,15 @@ const Fl_Menu_Item* Fl_Menu_Item::next(int n) const {
   return m;
 }
 
-// this style structure is only used for the frames of menuwindows
+// this style structure is only used for the frames of menuwindows:
 static void mw_revert(Fl_Style* s) {
   s->box = FL_UP_BOX;
   s->leading = 4;
 }
 
 static Fl_Style* menuwindow_default_style = new Fl_Named_Style("Menu_Window", mw_revert);
+
+// The default style for all menu items:
 
 static void mi_revert(Fl_Style* s) {
   s->box = FL_FLAT_BOX;
@@ -86,21 +88,18 @@ static void mi_revert(Fl_Style* s) {
 
 Fl_Style* Fl_Menu_Item::default_style = new Fl_Named_Style("Menu_Item", mi_revert, &Fl_Menu_Item::default_style);
 
-// This style is directly referenced for the menu titles (actually
-// only the box, selection, and highlight colors are used):
+// This style is directly referenced for the menu titles for some fields
+// (search this file for "title_style" to find out which).  This allows
+// the inconsistency in Win98 display to be emulated.
 
 static void mt_revert(Fl_Style* s) {
 #if 1
   mi_revert(s); // makes blue titles, like NT4.0, I like this better
-#else // win98 style?
+#else
+  // win98 style?
   s->glyph = fl_glyph;
   s->box = FL_HIGHLIGHT_BOX;
 #endif
-// all other colors are zero
-//   s->selection_color = FL_BLUE_SELECTION_COLOR;
-//   s->selection_text_color = FL_WHITE;
-// it actually acts like the menu_item's style is it's parent...
-//  s->parent = &Fl_Widget::default_style;
 }
 
 Fl_Style* Fl_Menu_Item::title_style = new Fl_Named_Style("Menu_Title", mt_revert, &Fl_Menu_Item::title_style);
@@ -225,10 +224,10 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_*,
   case 3: // highlighted menubar item
     lflags |= (FL_HIGHLIGHT|FL_ALIGN_CENTER);
     lbox = title_style->box;
-    lcolor = title_style->highlight_color;
-    if (!lcolor) lcolor = highlight_color();
-    llabel_color = title_style->highlight_label_color;
-    if (!llabel_color) llabel_color = highlight_label_color();
+    if (title_style->highlight_color) 
+      lcolor = title_style->highlight_color;
+    if (title_style->highlight_label_color) 
+      llabel_color = title_style->highlight_label_color;
     break;
   case 4: // plain menubar item
     lflags |= FL_ALIGN_CENTER;
@@ -275,7 +274,8 @@ void Fl_Menu_Item::draw(int x, int y, int w, int h, const Fl_Menu_*,
 }
 
 menutitle::menutitle(int X, int Y, int W, int H, const Fl_Menu_Item* L) :
-  Fl_Menu_Window(X, Y, W, H, 0) {
+  Fl_Menu_Window(X, Y, W, H, 0)
+{
   end();
   set_modal();
   clear_border();
@@ -452,7 +452,7 @@ void menuwindow::drawentry(const Fl_Menu_Item* m, int i, int /*erase*/) {
 }
 
 void menuwindow::draw() {
-  if (damage() & FL_DAMAGE_ALL) {	// complete redraw
+  if (damage() & (FL_DAMAGE_ALL|FL_DAMAGE_EXPOSE)) {	// complete redraw
     box()->draw(0, 0, w(), h(), color(), FL_FRAME_ONLY);
     if (menu) {
       const Fl_Menu_Item* m; int i;
@@ -869,5 +869,5 @@ const Fl_Menu_Item* Fl_Menu_Item::test_shortcut() const {
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.71 1999/12/15 08:30:58 bill Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.72 2000/01/05 09:58:48 bill Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Repeat_Button.H,v 1.8 1999/10/17 20:40:09 vincent Exp $"
+// "$Id: Fl_Repeat_Button.H,v 1.9 2000/01/05 09:58:43 bill Exp $"
 //
 // Repeat button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -33,14 +33,10 @@ public:
   int handle(int);
   Fl_Repeat_Button(int x,int y,int w,int h,const char *l=0)
     : Fl_Button(x,y,w,h,l) {}
-  void deactivate() {
-    Fl::remove_timeout(repeat_callback,this);
-    Fl_Button::deactivate();
-  }
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Repeat_Button.H,v 1.8 1999/10/17 20:40:09 vincent Exp $".
+// End of "$Id: Fl_Repeat_Button.H,v 1.9 2000/01/05 09:58:43 bill Exp $".
 //

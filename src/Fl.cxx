@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.73 1999/12/15 18:58:41 bill Exp $"
+// "$Id: Fl.cxx,v 1.74 2000/01/05 09:58:47 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -600,13 +600,15 @@ Fl_Window::~Fl_Window() {
 // these are called only in response to the user iconizing/deiconizing
 // the window and thus the window is already in the right state.  For
 // child windows these do unmap/map the X window, this was so that
-// child windows inside tabs work.
+// child windows inside Fl_Tabs work.
 
 // The purpose is to save server resources, and to avoid the need to
-// have an extra state for a window to distinguish a program hide()
-// from a hide/iconize message from the system.  "shown() &&
-// !visible()" means it is iconized, while !shown() means that the
-// program has hidden the window.
+// have a fourth state for the window:
+//
+// visible:		window->shown();
+// iconized:		window->shown() && !window->visible();
+// not on screen:	!window->shown();
+// not on screen but known by system: does not happen in fltk
 
 extern const Fl_Window* fl_modal_for; // used by Fl_Window::create
 
@@ -812,5 +814,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.73 1999/12/15 18:58:41 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.74 2000/01/05 09:58:47 bill Exp $".
 //
