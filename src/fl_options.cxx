@@ -1,5 +1,5 @@
 //
-// "$Id: fl_options.cxx,v 1.69 2000/07/30 03:46:04 spitzak Exp $"
+// "$Id: fl_options.cxx,v 1.70 2000/07/30 05:59:25 spitzak Exp $"
 //
 // Scheme and theme option handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -80,27 +80,21 @@ void fl_startup() {
   char temp[PATH_MAX];
   const char* s = Fl::scheme();
   if (!s && !fl_getconf("scheme", temp, sizeof(temp))) s = temp;
-  if (!s) fl_get_system_colors(); // WAS: I think it should do this always
   load_scheme(s);
+  beenhere = 1;
 
   const char *t = fl_startup_theme;
   if (!t && !fl_getconf("theme", temp, sizeof(temp))) t = temp;
   if (t) Fl::theme(t);
   if (fl_bg_switch) fl_background(fl_bg_switch);
-
-  beenhere = 1;
 }
 
-// When we change the scheme we automatically call reload_scheme if needed:
+// When we change the scheme we automatically call load_scheme if needed:
 int Fl::scheme(const char* s) {
   if (scheme_ == s) return 0;
   if (s && scheme_ && !strcmp(s,scheme_)) return 0;
   scheme_ = s;
-  if (beenhere) {
-    // this is in fact what I think reload_scheme() should do:
-    Fl_Style::revert();
-    load_scheme(s);
-  }
+  if (beenhere) load_scheme(s);
   return 1;
 }
 
@@ -132,9 +126,12 @@ static Fl_Font grok_font(const char* cf, const char* fontstr) {
 }
 
 static int load_scheme(const char *s) {
-  // The "none" case is apparently so -scheme none works.  There may be
-  // a better way to do this
-  if (!s || !strcasecmp(s, "none")) return 0;
+
+  Fl_Style::revert();
+  if (!s || !*s || !strcasecmp(s, "none")) {
+    fl_get_system_colors(); // WAS: I think this should be done always
+    return 0;
+  }
 
   char temp[PATH_MAX];
   strncpy(temp, s, sizeof(temp));
@@ -374,7 +371,7 @@ static int fl_getconf(const char *key, char *value, int value_length) {
 }
 
 //
-// End of "$Id: fl_options.cxx,v 1.69 2000/07/30 03:46:04 spitzak Exp $".
+// End of "$Id: fl_options.cxx,v 1.70 2000/07/30 05:59:25 spitzak Exp $".
 //
 
 
