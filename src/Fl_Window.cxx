@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.58 2000/10/17 07:50:08 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.59 2000/10/18 08:45:38 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -228,23 +228,6 @@ int Fl_Window::handle(int event) {
 void Fl_Window::show() {
   // get rid of very common user bug: forgot end():
   Fl_Group::current(0);
-  if (!shown()) {
-    // This should not be needed but it is because sometimes outer windows
-    // are created with the visible flag on (when created with the xywh
-    // style of constructor).
-    clear_visible();
-  } else if (visible()) {
-    // raise/deiconize windows already-visible windows
-    if (!parent()) {
-#ifdef WIN32
-      if (IsIconic(i->xid)) OpenIcon(i->xid);
-      if (!Fl::grab() && border()) BringWindowToTop(i->xid);
-#else
-      XMapRaised(fl_display, i->xid);
-#endif
-    }
-    return;
-  }
   // The FL_NON_MODAL flag is for back compatability. If it is set
   // we automatically change the modal_for() to the top-most window
   // when show() is called. This is also done if modal() is set and
@@ -252,6 +235,20 @@ void Fl_Window::show() {
   if (!parent() && (modal() && !modal_for() || (flags() & FL_NON_MODAL))) {
     modal_for(Fl::first_window());
     set_flag(FL_NON_MODAL); // make sure it does this next time
+  }
+  if (!shown()) {
+    // This should not be needed but it is because sometimes outer windows
+    // are created with the visible flag on (when created with the xywh
+    // style of constructor).
+    clear_visible();
+  } else if (!parent()) {
+    // raise/deiconize windows already-visible windows
+#ifdef WIN32
+    if (IsIconic(i->xid)) OpenIcon(i->xid);
+    if (!Fl::grab() && border()) BringWindowToTop(i->xid);
+#else
+    XMapRaised(fl_display, i->xid);
+#endif
   }
   // Otherwise all the work is done by handle(FL_SHOW):
   Fl_Widget::show();
@@ -358,5 +355,5 @@ Fl_Window::~Fl_Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.58 2000/10/17 07:50:08 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.59 2000/10/18 08:45:38 spitzak Exp $".
 //
