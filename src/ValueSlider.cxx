@@ -87,6 +87,9 @@ void ValueSlider::draw() {
     if (!box->fills_rectangle()) draw_background();
     box->draw(Rectangle(w(), h()), style(), flags|OUTPUT);
 
+    // draw the focus indicator inside the box:
+    focusbox()->draw(r, style(), flags|OUTPUT);
+
     if (type() & TICK_BOTH) {
       Rectangle tr(sr);
       if (horizontal()) {
@@ -114,7 +117,7 @@ void ValueSlider::draw() {
 #endif
 
   // draw the text:
-  if (damage() & (DAMAGE_ALL|DAMAGE_VALUE)) {
+  if (damage() & (DAMAGE_ALL|DAMAGE_VALUE|DAMAGE_HIGHLIGHT)) {
     push_clip(tr);
     // erase the background if not already done:
     if (!(damage()&DAMAGE_ALL)) {
@@ -128,10 +131,8 @@ void ValueSlider::draw() {
     setfont(textfont(), textsize());
     setcolor(inactive(textcolor(),flags));
     drawtext(buf, tr, 0);
-    pop_clip();
-  }
-
-  focusbox()->draw(r, style(), flags|OUTPUT);
+    pop_clip();    
+  }  
 }
 
 int ValueSlider::handle(int event) {

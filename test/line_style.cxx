@@ -1,6 +1,6 @@
-#include <FL/Fl_Menu_Item.H>
 #include <fltk/run.h>
 #include <fltk/Window.h>
+#include <fltk/Item.h>
 #include <fltk/ValueSlider.h>
 #include <fltk/draw.h>
 #include <fltk/Choice.h>
@@ -29,9 +29,9 @@ void test_box::draw() {
   buf[3] = char(sliders[7]->value());
   buf[4] = 0;
   line_style(
-    (int)(choice[0]->item()->user_data()) +
-    (int)(choice[1]->item()->user_data()) +
-    (int)(choice[2]->item()->user_data()),
+    (int)(choice[0]->get_item()->user_data()) +
+    (int)(choice[1]->get_item()->user_data()) +
+    (int)(choice[2]->get_item()->user_data()),
     (int)(sliders[3]->value()),
     buf);
   strokerect(Rectangle(10,10,w()-20,h()-20));
@@ -44,30 +44,33 @@ void test_box::draw() {
   line_style(SOLID);
 }
 
-Fl_Menu_Item style_menu[] = {
-  {"fltk::SOLID",	0, 0, (void*)SOLID},
-  {"fltk::DASH",	0, 0, (void*)DASH},
-  {"fltk::DOT",		0, 0, (void*)DOT},
-  {"fltk::DASHDOT",	0, 0, (void*)DASHDOT},
-  {"fltk::DASHDOTDOT",	0, 0, (void*)DASHDOTDOT},
-  {0}
-};
+void build_style_menu(Group *g) {
+  g->begin();
+  (new Item("fltk::SOLID"))->argument(SOLID);
+  (new Item("fltk::DASH"))->argument(DASH);
+  (new Item("fltk::DOT"))->argument(DOT);
+  (new Item("fltk::DASHDOT"))->argument(DASHDOT);
+  (new Item("fltk::DASHDOTDOT"))->argument(DASHDOTDOT);
+  g->end();
+}
 
-Fl_Menu_Item cap_menu[] = {
-  {"default",		0, 0, 0},
-  {"fltk::CAP_FLAT",	0, 0, (void*)CAP_FLAT},
-  {"fltk::CAP_ROUND",	0, 0, (void*)CAP_ROUND},
-  {"fltk::CAP_SQUARE",	0, 0, (void*)CAP_SQUARE},
-  {0}
-};
+void build_cap_menu(Group *g) {
+  g->begin();
+  new Item("default");
+  (new Item("fltk::CAP_FLAT"))->argument(CAP_FLAT);
+  (new Item("fltk::CAP_ROUND"))->argument(CAP_ROUND);
+  (new Item("fltk::CAP_SQUARE"))->argument(CAP_SQUARE);
+  g->end();
+}
 
-Fl_Menu_Item join_menu[] = {
-  {"default",		0, 0, 0},
-  {"fltk::JOIN_MITER",	0, 0, (void*)JOIN_MITER},
-  {"fltk::JOIN_ROUND",	0, 0, (void*)JOIN_ROUND},
-  {"fltk::JOIN_BEVEL",	0, 0, (void*)JOIN_BEVEL},
-  {0}
-};
+void build_join_menu(Group *g) {
+  g->begin();
+  new Item("default");
+  (new Item("fltk::JOIN_MITER"))->argument(JOIN_MITER);
+  (new Item("fltk::JOIN_ROUND"))->argument(JOIN_ROUND);
+  (new Item("fltk::JOIN_BEVEL"))->argument(JOIN_BEVEL);
+  g->end();
+}
 
 void do_redraw(Widget*,void*)
 {
@@ -84,11 +87,11 @@ void makeform(const char *) {
   sliders[2]= new ValueSlider(280,50,180,20,"B");
   sliders[2]->maximum(255);
   choice[0]= new Choice(280,70,180,20,"Style");
-  choice[0]->menu(style_menu);
+  build_style_menu(choice[0]);
   choice[1]= new Choice(280,90,180,20,"Cap");
-  choice[1]->menu(cap_menu);
+  build_cap_menu(choice[1]);
   choice[2]= new Choice(280,110,180,20,"Join");
-  choice[2]->menu(join_menu);
+  build_join_menu(choice[2]);
   sliders[3]= new ValueSlider(280,130,180,20,"Width");
   sliders[3]->maximum(20);
   sliders[4] = new Slider(200,170,70,20,"Dash");
