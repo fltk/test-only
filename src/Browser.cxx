@@ -818,10 +818,10 @@ bool Browser::set_item_visible(bool value)
   if (!item()) return false;
   if (value) {
     if (item()->visible()) return false;
-    item()->set_flag(INVISIBLE);
+    item()->clear_flag(INVISIBLE);
   } else {
     if (!item()->visible()) return false;
-    item()->clear_flag(INVISIBLE);
+    item()->set_flag(INVISIBLE);
   }
   list()->flags_changed(this, item());
   if (open_level[HERE] >= item_level[HERE]) relayout(LAYOUT_CHILD);
