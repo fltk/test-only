@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.86 2004/02/05 07:21:20 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.87 2004/03/05 08:12:54 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -209,7 +209,7 @@ static int line_spacing(float leading) {
   return int(getsize() + leading + .5);
 }
 static float line_ascent(float leading) {
-  return (line_spacing(leading) + getascent() - getdescent()) / 2;
+  return (line_spacing(leading) + getascent() - getdescent() - 1) / 2;
 }
 
 /*!
@@ -1595,5 +1595,5 @@ int Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.86 2004/02/05 07:21:20 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.87 2004/03/05 08:12:54 spitzak Exp $".
 //
