@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.20 1999/03/24 23:12:19 carl Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.21 1999/03/24 23:34:38 carl Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -1025,8 +1025,8 @@ void textcolor_cb(Fl_Light_Button* i, void* v) {
   Fl_Font n; int s; Fl_Color tc, stc;
   if (v == LOAD) {
     if (!current_widget->textstuff(0,n,s,tc,stc)) {i->hide(); return;}
-    if (current_widget->is_menu()) i->label("shortcut color:");
-    else i->label("text color:");
+    if (current_widget->is_menu()) i->label("shortcut color");
+    else i->label("text color");
     i->show();
   } else {
     tc = i->selection_color();
@@ -2468,5 +2468,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.20 1999/03/24 23:12:19 carl Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.21 1999/03/24 23:34:38 carl Exp $".
 //
