@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font_win32.cxx,v 1.12 1999/08/27 13:34:04 carl Exp $"
+// "$Id: fl_font_win32.cxx,v 1.13 1999/08/27 14:00:13 carl Exp $"
 //
 // WIN32 font selection routines for the Fast Light Tool Kit (FLTK).
 //
@@ -141,6 +141,7 @@ void fl_font(Fl_FontSize* s) {
 }
 
 void fl_font(Fl_Font s, unsigned size) {
+  if (!s) s = FL_HELVETICA;
   static Fl_Font curfont;
   if (s == curfont) { // see if it is the current font...
       Fl_FontSize* f = fl_font_;
@@ -200,5 +201,5 @@ void fl_draw(const char* str, int x, int y) {
 }
 
 //
-// End of "$Id: fl_font_win32.cxx,v 1.12 1999/08/27 13:34:04 carl Exp $".
+// End of "$Id: fl_font_win32.cxx,v 1.13 1999/08/27 14:00:13 carl Exp $".
 //
