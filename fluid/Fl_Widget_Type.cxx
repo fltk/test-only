@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget_Type.cxx,v 1.80 2001/12/16 22:32:02 spitzak Exp $"
+// "$Id: Fl_Widget_Type.cxx,v 1.81 2001/12/17 01:04:38 easysw Exp $"
 //
 // Widget type code for the Fast Light Tool Kit (FLTK).
 //
@@ -1608,7 +1608,14 @@ void Fl_Widget_Type::write_static() {
 	indentation += 2;
 	write_code_block((char *)callback());
 	indentation -= 2;
-    if (*(d-1) != ';') write_c(";");
+    if (*(d-1) != ';') {
+      const char *p = strrchr(callback(), '\n');
+      if (p) p ++;
+      else p = callback();
+      // Only add trailing semicolon if the last line is not a preprocessor
+      // statement...
+      if (*p != '#' && *p) write_c(";");
+    }
     write_c("\n}\n");
     if (k) {
       write_c("void %s::%s(%s* o, %s v)%s", k, cn, t, ut, get_opening_brace(1));
@@ -2163,5 +2170,5 @@ int Fl_Widget_Type::read_fdesign(const char* name, const char* value) {
 }
 
 //
-// End of "$Id: Fl_Widget_Type.cxx,v 1.80 2001/12/16 22:32:02 spitzak Exp $".
+// End of "$Id: Fl_Widget_Type.cxx,v 1.81 2001/12/17 01:04:38 easysw Exp $".
 //
