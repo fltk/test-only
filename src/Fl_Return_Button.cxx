@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Return_Button.cxx,v 1.38 2002/12/10 02:00:47 easysw Exp $"
+// "$Id: Fl_Return_Button.cxx,v 1.39 2003/11/04 08:11:01 spitzak Exp $"
 //
 // Return button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -29,8 +29,7 @@
 using namespace fltk;
 
 // this is public so draw_symbol can call it:
-void fl_glyph_return(const Widget*, int,
-		     int x,int y,int w,int h, Flags)
+void fl_glyph_return(int, int x,int y,int w,int h, const Style* style, Flags)
 {
   int size = w; if (h<size) size = h;
   int d = (size+2)/4; if (d<3) d = 3;
@@ -70,7 +69,7 @@ void ReturnButton::draw() {
 }
 
 static void revert(Style* s) {
-  s->glyph = fl_glyph_return;
+  s->glyph_ = fl_glyph_return;
 }
 static NamedStyle style("ReturnButton", revert, &ReturnButton::default_style);
 NamedStyle* ReturnButton::default_style = &::style;
@@ -78,11 +77,11 @@ NamedStyle* ReturnButton::default_style = &::style;
 ReturnButton::ReturnButton(int x,int y,int w,int h,const char *l)
   : Button(x,y,w,h,l)
 {
-  default_style->parent = style();
+  default_style->parent_ = style();
   style(default_style);
   shortcut('\r');
 }
 
 //
-// End of "$Id: Fl_Return_Button.cxx,v 1.38 2002/12/10 02:00:47 easysw Exp $".
+// End of "$Id: Fl_Return_Button.cxx,v 1.39 2003/11/04 08:11:01 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_plastic_box.cxx,v 1.4 2003/04/20 03:17:51 easysw Exp $"
+// "$Id: fl_plastic_box.cxx,v 1.5 2003/11/04 08:11:04 spitzak Exp $"
 //
 // "Plastic" drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -66,16 +66,18 @@ static void shade_frame(int x, int y, int w, int h, const char *c, Color bc) {
 // Diamond with an edge pattern like FrameBox:
 class PlasticBox : public FrameBox {
 public:
-  void draw(int,int,int,int, Color, Flags=0) const;
+  void _draw(int,int,int,int, const Style*, Flags=0) const;
   PlasticBox(const char* n, const char* s, const FrameBox* d=0)
-    : FrameBox(n, s, d) { fills_rectangle_ = 0; }
+    : FrameBox(n, s, d) {}
 };
 
-void PlasticBox::draw(int x, int y, int w, int h, Color bc, Flags f) const
+void PlasticBox::_draw(int x, int y, int w, int h, const Style* style, Flags f) const
 {
   const char* c = (f & VALUE) ? down->data() : data();
-  char buf[26]; if (f&INACTIVE && Style::draw_boxes_inactive) {
+  char buf[26]; if (f&INACTIVE && style->draw_boxes_inactive()) {
     fl_to_inactive(c, buf); c = buf;}
+
+  Color bc, fg; style->boxcolors(f, bc, fg);
 
   int		i, j;
   int		clen = strlen(c) - 1;
@@ -156,5 +158,5 @@ Box* const fltk::PLASTIC_UP_BOX = &plasticUpBox;
 // down_frame = "LLRRTTLL"
 
 //
-// End of "$Id: fl_plastic_box.cxx,v 1.4 2003/04/20 03:17:51 easysw Exp $".
+// End of "$Id: fl_plastic_box.cxx,v 1.5 2003/11/04 08:11:04 spitzak Exp $".
 //

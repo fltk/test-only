@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style.cxx,v 1.48 2003/09/03 06:08:06 spitzak Exp $"
+// "$Id: Fl_Style.cxx,v 1.49 2003/11/04 08:11:01 spitzak Exp $"
 //
 // Code for managing Style structures.
 //
@@ -45,27 +45,27 @@ NamedStyle* NamedStyle::first;
 // Do not change the contents of this ever.  The themes depend on getting
 // a known state initially.
 static void revert(Style* s) {
-  s->parent		= 0;	// this is the topmost style always
-  s->box		= DOWN_BOX;
-  s->buttonbox		= UP_BOX;
-  s->focusbox		= DOTTED_FRAME;
-  s->glyph		= Widget::default_glyph;
-  s->labelfont		= HELVETICA;
-  s->textfont		= HELVETICA;
-  s->labeltype		= NORMAL_LABEL;
-  s->color		= WHITE; // GRAY99?
-  s->textcolor		= BLACK;
-  s->selection_color	= WINDOWS_BLUE;
-  s->selection_textcolor= WHITE;
-  s->buttoncolor	= GRAY75;
-  s->labelcolor		= BLACK;
-  s->highlight_color	= NO_COLOR;
-  s->highlight_textcolor= NO_COLOR;
-  s->labelsize		= 12;
-  s->textsize		= 12;
-  s->leading		= 2;
-  s->scrollbar_width	= 15;
-  s->scrollbar_align	= ALIGN_RIGHT|ALIGN_BOTTOM;
+  s->parent_		= 0;	// this is the topmost style always
+  s->box_		= DOWN_BOX;
+  s->buttonbox_		= UP_BOX;
+  s->focusbox_		= DOTTED_FRAME;
+  s->glyph_		= Widget::default_glyph;
+  s->labelfont_		= HELVETICA;
+  s->textfont_		= HELVETICA;
+  s->labeltype_		= NORMAL_LABEL;
+  s->color_		= WHITE; // GRAY99?
+  s->textcolor_		= BLACK;
+  s->selection_color_	= WINDOWS_BLUE;
+  s->selection_textcolor_= WHITE;
+  s->buttoncolor_	= GRAY75;
+  s->labelcolor_	= BLACK;
+  s->highlight_color_	= NO_COLOR;
+  s->highlight_textcolor_= NO_COLOR;
+  s->labelsize_		= 12;
+  s->textsize_		= 12;
+  s->leading_		= 2;
+  s->scrollbar_width_	= 15;
+  s->scrollbar_align_	= ALIGN_RIGHT|ALIGN_BOTTOM;
 }
 
 static NamedStyle default_named_style("default", ::revert, &Widget::default_style);
@@ -80,7 +80,7 @@ bool Widget::copy_style(const Style* t) {
   if (style_ && style_->dynamic()) delete (Style*)style_;
   if (!t->dynamic()) {style_ = t; return false;}
   Style* newstyle = new Style;
-  newstyle->parent = (Style*)t;
+  newstyle->parent_ = (Style*)t;
   style_ = newstyle;
   return true;
 }
@@ -92,7 +92,7 @@ bool Widget::copy_style(const Style* t) {
 Style* unique_style(const Style* & pointer) {
   if (pointer->dynamic()) return (Style*)pointer;
   Style* newstyle = new Style;
-  newstyle->parent = (Style*)pointer;
+  newstyle->parent_ = (Style*)pointer;
   pointer = newstyle;
   return newstyle;
 }
@@ -100,20 +100,21 @@ Style* unique_style(const Style* & pointer) {
 // Retrieve/set values from a style, using parent's value if not in child:
 
 #define style_functions(TYPE,FIELD)	\
-TYPE Widget::FIELD() const {		\
-  for (const Style* s = style_;;) {	\
-    if (s->FIELD) return s->FIELD;	\
-    s = s->parent;			\
+TYPE Widget::FIELD() const {return style()->FIELD();} \
+TYPE Style::FIELD() const {		\
+  for (const Style* s = this;;) {	\
+    if (s->FIELD##_) return s->FIELD##_;\
+    s = s->parent_;			\
     if (!s) return 0;			\
   }					\
 }					\
 void Widget::FIELD(TYPE v) {		\
-  unique_style(style_)->FIELD = v;	\
+  unique_style(style_)->FIELD##_ = v;	\
 }
 
-style_functions(Box*,		box		)
-style_functions(Box*,		buttonbox	)
-style_functions(Box*,		focusbox	)
+style_functions(Symbol*,	box		)
+style_functions(Symbol*,	buttonbox	)
+style_functions(Symbol*,	focusbox	)
 style_functions(GlyphStyle,	glyph		)
 style_functions(Font*,		labelfont	)
 style_functions(Font*,		textfont	)
@@ -121,17 +122,18 @@ style_functions(LabelType*,	labeltype	)
 style_functions(Color,		color		)
 style_functions(Color,		textcolor	)
 style_functions(Color,		selection_color	)
-//style_functions(Color,	selection_textcolor)
+style_functions(Color,		selection_textcolor)
 style_functions(Color,		buttoncolor	)
 style_functions(Color,		labelcolor	)
 style_functions(Color,		highlight_color	)
-//style_functions(Color,	highlight_textcolor)
+style_functions(Color,		highlight_textcolor)
 style_functions(float,		labelsize	)
 style_functions(float,		textsize	)
 style_functions(float,		leading		)
 style_functions(unsigned char,	scrollbar_align	)
 style_functions(unsigned char,	scrollbar_width	)
 
+#if 0
 /** Color to draw text atop the selection_color.
 
     This searches the styles for the first one that has selection_textcolor,
@@ -183,8 +185,56 @@ Color Widget::highlight_textcolor() const
 void Widget::highlight_textcolor(Color v) {
   unique_style(style_)->highlight_textcolor = v;
 }
+#endif
 
-/*! \class NamedStyle
+/** Calculate the colors to draw a box and labels inside that box.
+
+    This is the standard function used by all the built-in fltk
+    Symbols and boxes to select the colors to draw. It provides a
+    somewhat Windows-like coloring scheme. The calling Widget
+    picks what flags to pass to the Symbols so that when they
+    call this they get the correct colors for each part of the
+    widget.
+
+    Flags that are understood:
+
+    HIGHLIGHT: if highlight_color() is non-zero, set bg to
+    highlight_color() and fg to highlight_textcolor().
+
+    SELECTED: if selection_color() is non-zero, set bg to
+    selection_color() and fg to selection_textcolor().
+
+    OUTPUT: Set bg to color(), fg to textcolor(). If false bg is set
+    to buttoncolor() and fg to labelcolor().  Widgets set this true
+    for their main box, and false for any buttons inside themselves.
+
+    INACTIVE: Change the fg to a gray color.
+
+    It then further modifies fg so that it contrasts with the bg.
+
+    Return value is \a flags with unused flags turned off. Currently
+    HIGHLIGHT is turned off if not usable due to a missing highlight_color().  */
+Flags Style::boxcolors(Flags flags, Color& bg, Color& fg) const {
+  // this is not correct! It should search the styles in order and
+  // decide what to do as it searches. For instance highligh_textcolor
+  // should only be used if set before or at the highlight_color style.
+  if ((flags & HIGHLIGHT) && (bg = highlight_color())) {
+    fg = contrast(highlight_textcolor(), bg);
+  } else {
+    flags &= ~HIGHLIGHT;
+    if ((flags & SELECTED) && (bg = selection_color())) {
+      fg = contrast(selection_textcolor(), bg);
+    } else {
+      flags &= ~SELECTED;
+      if (flags & OUTPUT) {bg = color(); fg = textcolor();}
+      else {bg = buttoncolor(); fg = labelcolor();}
+    }
+  }
+  if (flags & INACTIVE) fg = inactive(fg);
+  return flags;
+}
+
+/*! \class fltk::NamedStyle
 
   Typically a widget class will define a single NamedStyle that is
   used by all instances of that widget. A "theme" can locate this
@@ -201,14 +251,13 @@ void Widget::highlight_textcolor(Color v) {
   The "revert" function is mostly provided to make it easy to initialize
   the fields even though C++ does not allow a structure constant.
   It is also used to undo theme changes when fltk::reload_theme()
-  is called.
-*/
+  is called.  */
 
 static void plainrevert(Style*) {}
 
 NamedStyle::NamedStyle(const char* n, void (*revert)(Style*), NamedStyle** pds) {
   memset((void*)this, 0, sizeof(*this));
-  parent = Widget::default_style; // revert may want to change this
+  parent_ = Widget::default_style; // revert may want to change this
   if (revert) { revertfunc = revert; revert(this); }
   else revertfunc = plainrevert;
   next = NamedStyle::first;
@@ -241,9 +290,9 @@ Style* Style::find(const char* name) {
   return 0;
 }
 
-bool Style::hide_shortcut = true;
-bool Style::draw_boxes_inactive = true;
-int Style::wheel_scroll_lines = 3;
+bool Style::hide_shortcut_ = true;
+bool Style::draw_boxes_inactive_ = true;
+int Style::wheel_scroll_lines_ = 3;
 
 ////////////////////////////////////////////////////////////////
 // Themes:
@@ -331,12 +380,12 @@ bool fltk::reset_theme() {
   if (theme_loaded==2) return false;
   // revert to compiled defaults:
   // set_background((Color)0xc0c0c000); // not necessary?
-  Style::draw_boxes_inactive = 1;
+  Style::draw_boxes_inactive_ = 1;
   for (NamedStyle* p = NamedStyle::first; p; p = p->next) {
     if (p->name) {
       Style temp = *p;
       memset((void*)p, 0, sizeof(Style));
-      p->parent = temp.parent;
+      p->parent_ = temp.parent_;
       p->revertfunc = temp.revertfunc;
       p->revertfunc(p);
     }
@@ -381,5 +430,5 @@ void fltk::set_background(Color c) {
 }
 
 //
-// End of "$Id: Fl_Style.cxx,v 1.48 2003/09/03 06:08:06 spitzak Exp $".
+// End of "$Id: Fl_Style.cxx,v 1.49 2003/11/04 08:11:01 spitzak Exp $".
 //

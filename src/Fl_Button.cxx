@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Button.cxx,v 1.65 2003/09/03 06:08:06 spitzak Exp $"
+// "$Id: Fl_Button.cxx,v 1.66 2003/11/04 08:10:58 spitzak Exp $"
 //
 // Button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -63,7 +63,7 @@ int Button::handle(int event) {
   switch (event) {
   case ENTER:
   case LEAVE:
-    if (highlight_color() && takesevents()) redraw(DAMAGE_HIGHLIGHT);
+    redraw_highlight();
   case MOVE:
     return 1;
   case PUSH:
@@ -131,57 +131,47 @@ extern Widget* fl_did_clipping;
 // a size (negative to put it on the right)
 void Button::draw(int glyph, int glyph_width) const
 {
-  // For back-compatability color() is used if it is directly set
-  // and there is no glyph:
-  Color bg;
-  if (!glyph_width && style()->color) bg = style()->color;
-  else bg = this->buttoncolor();
-
-  Color fg = this->labelcolor();
-
-  // For back-compatability box() is used if it is directly set and
-  // there is no glyph:
-  Box* box = style()->box;
-  if (!box || glyph_width) box = this->buttonbox();
-
-  Flags flags = this->flags(); // flags to pass to draw_label
-  if (!active_r()) {
-    flags |= INACTIVE;
-  } else if (belowmouse()) {
-    flags |= HIGHLIGHT;
-    Color h = highlight_color();
-    if (h) {
-      bg = h;
-      fg = highlight_textcolor();
-      if (box == NO_BOX) box = FLAT_BOX;
-    }
+  // For back-compatability, setting color() or box() directly on a plain
+  // button will cause it to act like buttoncolor() or buttonbox() are
+  // set:
+  Style localstyle;
+  const Style* style = this->style();
+  if (!glyph_width) {
+    localstyle = *style;
+    if (localstyle.color_) localstyle.buttoncolor_ = localstyle.color_;
+    if (localstyle.box_) localstyle.buttonbox_ = localstyle.box_;
+    if (localstyle.labelcolor_) localstyle.textcolor_ = localstyle.labelcolor_;
+    style = &localstyle;
   }
 
-  Flags glyph_flags = flags; // flags to pass to draw_glyph
-  if (glyph_width) {
-    if (this == held_down) flags |= VALUE;
-    if (value()) glyph_flags |= VALUE;
-  } else if (value()) {
-    flags |= VALUE;
+  Flags flags = current_flags_highlight();
+
+  Flags glyph_flags = flags & ~(SELECTED|HIGHLIGHT); // flags to pass to draw_glyph
+  if (value()) {
+    glyph_flags |= VALUE;
     // Use the pushed-in color if the user has explicitly set it
     // on this widget:
-    if (style()->selection_color) {
-      bg = style()->selection_color;
-      fg = selection_textcolor();
-      if (box == NO_BOX) box = FLAT_BOX;
-    }
+    if (style->selection_color_) glyph_flags |= SELECTED;
+  }
+  if (glyph_width) {
+    if (this == held_down) flags |= VALUE; // outer box shows pushed-down state
+  } else if (value()) {
+    flags |= glyph_flags;
   }
 
   // only draw "inside" labels:
   bool draw_label = true;
   int x = 0, y = 0, w = this->w(), h = this->h();
 
+  Box* box = style->buttonbox();
+
   if (box == NO_BOX) {
-    // If the box is noBox we need to avoid drawing the label so
-    // that it does not blink and does not draw multiple times (which
-    // will make it look bold if antialiasing is on).
-    if ((damage()&(DAMAGE_EXPOSE|DAMAGE_HIGHLIGHT))) {
-      // erase the background behind where the label will draw:
+    Color bg;
+    if (flags & HIGHLIGHT && (bg = style->highlight_color())) {
+      setcolor(bg);
+      fillrect(0, 0, w, h);
+    } else if ((damage()&(DAMAGE_EXPOSE|DAMAGE_HIGHLIGHT))) {
+      // erase the background so we can redraw the label in the new color:
       draw_background();
     } else if (!label()) {
       // Assumme this is a button with an animated image label.
@@ -199,29 +189,25 @@ void Button::draw(int glyph, int glyph_width) const
       draw_background();
     }
     // Draw the box:
-    box->draw(0, 0, w, h, bg, flags);
+    box->draw(0, 0, w, h, style, flags);
     box->inset(x,y,w,h);
   }
 
   int lx = x; int lw = w;
   if (glyph_width < 0) {
     int g = -glyph_width;
-    draw_glyph(glyph, x+w-g-3, y+((h-g)>>1), g, g, glyph_flags);
+    (this->glyph())(glyph, x+w-g-3, y+((h-g)>>1), g, g, style, glyph_flags);
     lw = w-g-3;
   } else if (glyph_width > 0) {
     int g = glyph_width;
-    draw_glyph(glyph, x+3, y+((h-g)>>1), g, g, glyph_flags);
+    (this->glyph())(glyph, x+3, y+((h-g)>>1), g, g, style, glyph_flags);
     lx = x+g+3; lw = w-g-3;
   }
 
-  if (draw_label) {
-    // turn on this flag that makes some images draw differently:
-    if (focused()) flags |= SELECTED;
-    this->draw_label(lx, y, lw, h, fg, flags);
-  }
+  if (draw_label) this->draw_label(lx, y, lw, h, style, flags);
 
   if (focused())
-    focusbox()->draw(x+1, y+1, w-2, h-2, fg, INVISIBLE);
+    focusbox()->draw(x+1, y+1, w-2, h-2, style, flags|INVISIBLE);
 }
 
 void Button::draw() {
@@ -243,5 +229,5 @@ Button::Button(int x,int y,int w,int h, const char *l) : Widget(x,y,w,h,l) {
 }
 
 //
-// End of "$Id: Fl_Button.cxx,v 1.65 2003/09/03 06:08:06 spitzak Exp $".
+// End of "$Id: Fl_Button.cxx,v 1.66 2003/11/04 08:10:58 spitzak Exp $".
 //

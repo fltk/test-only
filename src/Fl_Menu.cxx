@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.145 2003/10/28 17:45:14 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.146 2003/11/04 08:11:00 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -120,33 +120,28 @@ void MenuTitle::draw() {
   Widget* style_widget = menustate->widget;
   Box* box = style_widget->buttonbox();
   // popup menus may have no box set:
-  if (box == NO_BOX) box = Widget::default_style->buttonbox;
+  if (box == NO_BOX) box = Widget::default_style->buttonbox();
 
   Flags flags;
-  Color color;
   if (!menustate->menubar) {
-    // a title on a popup menu
-    flags = 0;
-    color = style_widget->color();
+    // a title on a popup menu is drawn like a button
+    flags = OUTPUT;
   } else if (box == FLAT_BOX) {
-    // NT 4 style
-    flags = SELECTED;
+    // NT 4 style, drawn using selection_color()
+    flags = OUTPUT|SELECTED;
     if (widget->active()) widget->set_flag(SELECTED);
-    color = style_widget->selection_color();
   } else {
-    // Windows98 style
-    flags = VALUE;
-    color = style_widget->color();
+    // Windows98 style, draw as pushed box
+    flags = VALUE|OUTPUT;
   }
 
-  box->draw(0, 0, w(), h(), color, flags);
+  box->draw(0, 0, w(), h(), style_widget->style(), flags);
 
   // this allow a toggle or other widget to preview it's state:
   if (event_state(ANY_BUTTON)) pushed_ = widget;
   push_matrix();
   translate(5, (h()-widget->height())>>1);
   int save_w = widget->w(); widget->w(w()-10);
-
   widget->draw();
   widget->w(save_w);
   widget->clear_flag(SELECTED);
@@ -179,9 +174,9 @@ public:
 };
 
 static void revert(Style *s) {
-  s->box = UP_BOX;
-  s->buttonbox = FLAT_BOX; // was used around selected items, ignored now
-  s->leading = 4;
+  s->box_ = UP_BOX;
+  s->buttonbox_ = FLAT_BOX; // was used around selected items, ignored now
+  s->leading_ = 4;
 }
 static NamedStyle style("Menu", revert, &MWindow::default_style);
 /** For compatability with random inconsistencies in the Windows
@@ -308,11 +303,11 @@ int MWindow::ypos(int index) {
 extern bool fl_hide_shortcut;
 
 void MWindow::draw() {
-  if (damage() != DAMAGE_CHILD) box()->draw(0, 0, w(), h(), color(), 0);
+  if (damage() != DAMAGE_CHILD) box()->draw(0, 0, w(), h(), style(), OUTPUT);
   int x=0; int y=0; int w=this->w(); int h=0; box()->inset(x,y,w,h);
   int selected = level <= menustate->level ? menustate->indexes[level] : -1;
   int leading = int(this->leading());
-  if (Style::hide_shortcut &&
+  if (style()->hide_shortcut() &&
       !(event_key_state(LeftAltKey)||event_key_state(RightAltKey)))
     fl_hide_shortcut = true;
   Item::set_style(menustate->widget);
@@ -338,7 +333,7 @@ void MWindow::draw() {
 	// clipping so background pixmaps will work:
 	if (damage() == DAMAGE_CHILD) {
 	  push_clip(x,y,w,ih);
-	  box()->draw(0, 0, this->w(), this->h(), color(), 0);
+	  box()->draw(0, 0, this->w(), this->h(), style(), OUTPUT);
 	  pop_clip();
 	}
       }
@@ -358,11 +353,10 @@ void MWindow::draw() {
 	int nh = int(widget->textsize());
 	draw_glyph(GLYPH_RIGHT, x+w-nh, y+((ih-nh)>>1), nh, nh, flags);
       } else if (widget->shortcut()) {
-	setfont(widget->textfont(), widget->textsize());
 	widget->labeltype()->draw(key_name(widget->shortcut()),
 				  x, y, w-3, ih,
-				  (flags&SELECTED) ? widget->selection_textcolor() : widget->textcolor(),
-				  flags|ALIGN_RIGHT);
+				  widget->style(),
+				  flags|ALIGN_RIGHT|OUTPUT);
       }
       widget->flags(save_flags);
     }
@@ -513,7 +507,7 @@ int MWindow::handle(int event) {
     switch (event_key()) {
     case LeftAltKey:
     case RightAltKey:
-      if (Style::hide_shortcut && !event_clicks()) {
+      if (style()->hide_shortcut() && !event_clicks()) {
 	for (int i = 0; i < p.nummenus; i++)
 	  p.menus[i]->redraw();
       }
@@ -587,7 +581,7 @@ int MWindow::handle(int event) {
 	exit_modal();
 	return 1;
       }
-      if (Style::hide_shortcut) {
+      if (style()->hide_shortcut()) {
 	for (int i = 0; i < p.nummenus; i++)
 	  p.menus[i]->redraw();
       }
@@ -663,23 +657,23 @@ int MWindow::handle(int event) {
   return MenuWindow::handle(event);
 }
 
-Widget *Menu::try_popup(
+Widget* Menu::try_popup(
     int X, int Y, int W, int H,
     Widget* title,
     bool menubar)
 {
   Group::current(0); // fix possible programmer error...
 
-  MWindow::default_style->color = color();
-  // Incredible kludge! It appears that menus should be white for
-  // consistency. But instead they draw gray by default. This is controlled
-  // by the color() of the parent widget, detect if gray is attempted and
-  // draw all the menu items with the label color rather than the browser
-  // text color:
-  if (color() == GRAY75)
-    MWindow::default_style->textcolor = labelcolor();
+  // Incredible kludge! Menus are inconsistent, they should default to
+  // white to match browsers and other widgets. Unfortunately standard
+  // design is to make them gray. But then users expect the labelcolor/font
+  // to be used for the menu items. So I directly detect settings to gray
+  // and copy the label font in that case:
+  MWindow::default_style->color_ = color();
+  if (MWindow::default_style->color_ == GRAY75)
+    MWindow::default_style->textcolor_ = labelcolor();
   else
-    MWindow::default_style->textcolor = textcolor();
+    MWindow::default_style->textcolor_ = textcolor();
 
   // figure out where to pop up in screen coordinates:
   if (parent()) {
@@ -847,12 +841,12 @@ int Menu::popup(
 {
   Widget *selected = try_popup(X, Y, W, H, title, menubar);
   if (selected) {
-	execute(selected);
-	return 1;
-  } 
+    execute(selected);
+    return 1;
+  }
   return 0;
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.145 2003/10/28 17:45:14 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.146 2003/11/04 08:11:00 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_glyph.cxx,v 1.37 2003/09/03 06:08:07 spitzak Exp $"
+// "$Id: fl_glyph.cxx,v 1.38 2003/11/04 08:11:03 spitzak Exp $"
 //
 // Glyph drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -28,19 +28,9 @@
 #include <fltk/draw.h>
 using namespace fltk;
 
-void Widget::default_glyph(const Widget* widget, int glyph,
-			   int x,int y,int w,int h, Flags flags)
+void Widget::default_glyph(int glyph, int x,int y,int w,int h, const Style* style, Flags flags)
 {
-  Color bg, fg;
-  if ((flags & HIGHLIGHT) && (bg = widget->highlight_color())) {
-    fg = widget->highlight_textcolor();
-  } else if (flags & SELECTED) {
-    bg = widget->selection_color();
-    fg = widget->selection_textcolor();
-  } else {
-    bg = widget->buttoncolor();
-    fg = widget->textcolor();
-  }
+  Color bg, fg; style->boxcolors(flags, bg, fg);
 
   // handle special glyphs that don't draw the box:
   switch (glyph) {
@@ -51,8 +41,8 @@ void Widget::default_glyph(const Widget* widget, int glyph,
     // these glyphs do not have a box
     break;
   default: {
-    Box* box = widget->buttonbox();
-    box->draw(x,y,w,h, bg, flags);
+    Box* box = style->buttonbox();
+    box->draw(x,y,w,h, style, flags);
     box->inset(x,y,w,h);
     }
   }
@@ -115,5 +105,5 @@ void Widget::default_glyph(const Widget* widget, int glyph,
 }
 
 //
-// End of "$Id: fl_glyph.cxx,v 1.37 2003/09/03 06:08:07 spitzak Exp $".
+// End of "$Id: fl_glyph.cxx,v 1.38 2003/11/04 08:11:03 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: x.h,v 1.20 2003/07/21 15:38:26 robertk Exp $"
+// "$Id: x.h,v 1.21 2003/11/04 08:10:57 spitzak Exp $"
 //
 // X11 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -38,42 +38,46 @@
 
 #include "draw.h"
 
-#ifdef _WIN32
+#if defined(_WIN32) && !USE_X11
 # include "win32.h"
 
-#elif (defined(__APPLE__) && !USE_X11)
+#elif defined(__APPLE__) && !USE_X11
 # include "mac.h"
+
 #else
+#define USE_X11 1
 
 ////////////////////////////////////////////////////////////////
 // Try to get the parts of Xlib.h included while avoiding warnings:
 
-#define Window XWindow
+#ifndef DOXYGEN
+# define Window XWindow
 
-#if defined(_ABIN32) || defined(_ABI64) // fix for broken SGI Irix X .h files
-# pragma set woff 3322
-#endif
-#include <X11/Xlib.h>
-#include <X11/Xutil.h>
-#if defined(_ABIN32) || defined(_ABI64)
-# pragma reset woff 3322
-#endif
+# if defined(_ABIN32) || defined(_ABI64) // fix for broken SGI Irix X .h files
+#  pragma set woff 3322
+# endif
+# include <X11/Xlib.h>
+# include <X11/Xutil.h>
+# if defined(_ABIN32) || defined(_ABI64)
+#  pragma reset woff 3322
+# endif
 
-#include <X11/Xatom.h>
+# include <X11/Xatom.h>
 
-// you should define USE_XFT 1 if you want to call Xft:
-#if USE_XFT
-# include <X11/Xft/Xft.h>
-#else
+# if USE_XFT
+#  include <X11/Xft/Xft.h>
+# else
  typedef struct _XftDraw XftDraw;
-#endif
+# endif
 
-#undef Window
+# undef Window
 
 #ifdef __APPLE__
 typedef unsigned long	ulong;
 typedef unsigned int	uint;
 typedef unsigned char	uchar;
+#endif
+
 #endif
 
 extern FL_API Region	XRectangleRegion(int x, int y, int w, int h);
@@ -181,18 +185,6 @@ class FL_API Drawable {
 #define fl_delete_offscreen(id) XFreePixmap(::fltk::xdisplay, id)
 
 ////////////////////////////////////////////////////////////////
-// This is a binary offscreen image created from in-memory data. This is used
-// as an alpha mask by Image on systems that don't support alpha
-// blending.
-
-static inline Pixmap create_bitmap(const uchar* data, int w, int h) {
-  return XCreateBitmapFromData(xdisplay, xwindow, (char*)data,(w+7)&-8, h);
-}
-static inline void delete_bitmap(Pixmap id) {
-  XFreePixmap(xdisplay, id);
-}
-
-////////////////////////////////////////////////////////////////
 #ifdef fltk_Window_h // only include this if <fltk/Window.h> was included
 
 // When fltk tells X about a window, one of these objects is created.
@@ -231,5 +223,5 @@ Window* find(XWindow xid);
 #endif
 
 //
-// End of "$Id: x.h,v 1.20 2003/07/21 15:38:26 robertk Exp $".
+// End of "$Id: x.h,v 1.21 2003/11/04 08:10:57 spitzak Exp $".
 //

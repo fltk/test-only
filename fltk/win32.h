@@ -1,5 +1,5 @@
 //
-// "$Id: win32.h,v 1.20 2003/09/15 05:56:43 spitzak Exp $"
+// "$Id: win32.h,v 1.21 2003/11/04 08:10:57 spitzak Exp $"
 //
 // _WIN32 header file for the Fast Light Tool Kit (FLTK).
 //
@@ -155,13 +155,6 @@ FL_API void copy_offscreen(int x,int y,int w,int h,HBITMAP id,int srcx,int srcy)
 #define fl_delete_offscreen(bitmap) DeleteObject(bitmap);
 
 ////////////////////////////////////////////////////////////////
-// Binary images, created from in-memory data:
-
-FL_API Pixmap create_bitmap(const uchar* bitmap, int w, int h);
-
-static inline void delete_bitmap(Pixmap bitmap) {DeleteObject(bitmap);}
-
-////////////////////////////////////////////////////////////////
 #ifdef fltk_Window_h // only include this if <fltk/Fl_Window.h> was included
 
 // When fltk tells X about a window, one of these objects is created.
@@ -199,5 +192,5 @@ extern FL_API HCURSOR default_cursor;
 #endif
 
 //
-// End of "$Id: win32.h,v 1.20 2003/09/15 05:56:43 spitzak Exp $".
+// End of "$Id: win32.h,v 1.21 2003/11/04 08:10:57 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: mac.h,v 1.7 2003/08/25 15:28:47 spitzak Exp $"
+// "$Id: mac.h,v 1.8 2003/11/04 08:10:57 spitzak Exp $"
 //
 // Mac header file for the Fast Light Tool Kit (FLTK).
 //
@@ -129,15 +129,6 @@ class FL_API Drawable {
 #define fl_delete_offscreen(id) DisposeGWorld(id);
 
 ////////////////////////////////////////////////////////////////
-// This is a binary offscreen image created from in-memory data. This is used
-// as an alpha mask by Image on systems that don't support alpha
-// blending.
-
-extern Pixmap create_bitmap(const uchar* data, int w, int h);
-
-static inline void delete_bitmap(Pixmap id) {DisposeGWorld(id);}
-
-////////////////////////////////////////////////////////////////
 #ifdef fltk_Window_h // only include this if <fltk/Window.h> was included
 
 // When fltk tells X about a window, one of these objects is created.
@@ -178,6 +169,6 @@ extern const Widget* cursor_for;
 #endif
 
 //
-// End of "$Id: mac.h,v 1.7 2003/08/25 15:28:47 spitzak Exp $".
+// End of "$Id: mac.h,v 1.8 2003/11/04 08:10:57 spitzak Exp $".
 //
 

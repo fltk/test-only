@@ -1,5 +1,5 @@
 //
-// "$Id: fl_symbols.cxx,v 1.36 2003/08/05 08:09:55 spitzak Exp $"
+// "$Id: fl_symbols.cxx,v 1.37 2003/11/04 08:11:04 spitzak Exp $"
 //
 // Symbol drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -23,19 +23,31 @@
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
 //
 
-// These are small graphics drawn by the normal label-drawing
-// code when the string starts with an '@' sign.
-
-// Adapted from original code Written by Mark Overmars
-// Version 2.1 a
-// Date: Oct  2, 1992
-
 #include <fltk/draw.h>
 #include <fltk/Symbol.h>
 #include <fltk/math.h>
+#include <fltk/error.h>
 #include <string.h>
 #include <ctype.h>
 using namespace fltk;
+
+/*! \class fltk::Symbol
+
+    \brief A small named graphic
+
+    All small reusable graphics drawn by fltk are based on this class.
+    This includes bitmapped images, the boxes drawn around widgets,
+    symbols drawn into buttons, small symbols drawn between the letters
+    in labels, and a number of formatting symbols to change the color
+    or fontsize or alignment of labels.
+
+    Symbols are typically statically allocated and exist for the
+    life of the program. They may either be identified directly by
+    a pointer to them, or by a string name. The strings are stored in
+    a simple hash table that should be quite efficient up to a few
+    thousand named symbols.
+
+*/
 
 ////////////////////////////////////////////////////////////////
 // Hash table using Quadratic Probing and reallocation of table
@@ -95,7 +107,7 @@ static inline void init_hashtable() {
   // of symbols. If you add a lot of built-in symbols it is probably
   // a good idea to increase this:
   // Number must be prime!!!
-  hashtablesize = 79;
+  hashtablesize = 113;
   hashtable = new Symbol*[hashtablesize];
   memset(hashtable, 0, hashtablesize*sizeof(Symbol*));
 }
@@ -148,24 +160,40 @@ void Symbol::name(const char* name) {
   }
 }
 
-/** Locate a symbol by the name used to construct it. \a name points
-    at the start of the name, \a end points to the character after
-    the end (this allows the name to be extracted from a longer string
-    without having to copy it).
+/** Locate a symbol by the name used to construct it. Returns either
+    a pointer to the symbol, or null if it is undefined.
+*/
+const Symbol* Symbol::find(const char* name) {
+  if (!symbols_initialized) return 0; // does this ever happen?
+  return hashtable[hashindex(name, strlen(name), false)];
+}
 
-    To allow symbols to read "arguments" this will also try stripping
-    off a leading +/- sign and integer and any trailing text that
-    looks like comma-seperated integers, hex, or floating point
-    constant. For back-compatability it will also strip a leading '#'.
-    So the symbol "+400foo1,2,0xbeef" will lookup "foo".
+/** Locate a symbol by the substring after an '@' sign as used by
+    fltk::drawtext(). \a name points at the start of the name, \a end
+    points to the character after the end (this allows the name to be
+    extracted from a longer string without having to copy it).
+
+    fltk::drawtext() can pass "arguments" to symbols as extra text
+    before and after the actual name. This function strips off likely
+    arguments: it removes a leading '#', then it will remove a leading
+    +/- sign and integer, and any number of trailing comma-seperated
+    integers, hex, or floating point constants. So the symbol
+    "+400foo1,2.3,0xbeef" will lookup "foo".
+
+    When the symbol's draw() function is called, text() will have been
+    set to point at \a name, so the arguments can be read by the
+    symbol method. If draw() is called by something other than
+    fltk::drawtext() then text() will be a zero-length string.
+
 */
 const Symbol* Symbol::find(const char* name, const char* end) {
   if (!symbols_initialized) return 0; // does this ever happen?
 
   // for back-compatability a leading # is ignored:
   if (name[0] == '#') name++;
+
   // Remove any leading integer:
-  if (name < end-1 && (name[0]=='+' || name[0]=='-') && isdigit(name[1])) name++;
+  if (name < end-1 && (name[0]=='+'||name[0]=='-') && isdigit(name[1])) name++;
   while (name < end && isdigit(name[0])) name++;
 
   // Try the name without any more changes:
@@ -202,38 +230,28 @@ const Symbol* Symbol::find(const char* name, const char* end) {
     called from drawtext(). This is useful for extracting the
     arguments that are skipped by the find() method.
 */
-
 const char* Symbol::text_ = "";
 
-/** void Symbol::measure(float& w, float& h) const;
+/** \fn void Symbol::measure(float& w, float& h) const;
 
-    This virtual function is used to return the size a Symbol will
-    draw. The referenced variables w and h should be preset to a size
-    you \e want to draw the symbol. Many Symbols can scale and will
+    Returns the size a Symbol will draw.
+
+    The referenced variables w and h should be preset to a size
+    you \e want to draw the symbol, many Symbols can scale and will
     return without changing these values. Or they may alter the values to
     preserve aspect ratio. Or they may just return constant sizes.
+    This directly calls the _measure virtual function.
 */
 
-/** void Symbol::draw(float x, float y, float w, float h, Flags=0) const;
+/** Returns the size a Symbol will draw.
 
-    Virtual function to draw the symbol. \a xywh is the bounding box
-    (in the current coordinate system) that the symbol should be fit
-    into. If you can't do anything else you should crop your drawing
-    to this box.
-
-    The \a Flags can be used to control how the symbol is drawn.
-    (list useful ones like VALUE)
-
-    You can examine the current color with getcolor() and the current
-    font with getfont() and getsize(). If you want to draw letters
-    that line up with other text in a label you should place the
-    baseline at y+(getascent()-getdescent()+H)/2) where H is the
-    height that your measure() function returns.
+    The referenced variables w and h should be preset to a size
+    you \e want to draw the symbol, many Symbols can scale and will
+    return without changing these values. Or they may alter the values to
+    preserve aspect ratio. Or they may just return constant sizes.
+    This calls the virtual _measure function and rounds the results
+    to the nearest integer.
 */
-
-/** Return the width and height returned by the virtual measure()
-    function rounded to the nearest integer. This function is mostly
-    provided for back compatability.  */
 void Symbol::measure(int& w, int& h) const {
   float fw = w;
   float fh = h;
@@ -242,6 +260,144 @@ void Symbol::measure(int& w, int& h) const {
   h = int(fh+.5f);
 }
 
+/** Subclasses must implement this to change what the measure()
+    functions return. The default version return w and h unchanged,
+    indicating an image that can scale to any size.
+*/
+void Symbol::_measure(float& w, float& h) const {}
+
+/** \fn void Symbol::draw(float x, float y, float w, float h, Style*, Flags=0) const;
+    Draw the symbol in a box.
+
+    Calls the _draw() virtual function with the same arguements. The
+    \a style may be used to figure out colors to draw things, and the
+    \a flags may be used to further modify the appearance of the symbol
+    to indicate if it is pushed, highlighted, etc.
+*/
+
+/** \fn void Symbol::draw(int x, int y, int w, int h, Style*, Flags=0) const;
+
+    Draw the symbol in an integer box.
+
+    Call the integer version of _draw() with the same arguments. The
+    \a style may be used to figure out colors to draw things, and the
+    \a flags may be used to further modify the appearance of the symbol
+    to indicate if it is pushed, highlighted, etc.
+*/
+
+/** Virtual function to draw the symbol. This is named with an
+    underscore so that subclasses can define various draw() functions
+    with different arguments without breaking subclasses below them.
+    You should call draw(), which is an inline link to this function.
+
+    \a xywh is the bounding box (in the current coordinate system)
+    that the symbol should be fit into. If you can't do anything
+    else you should center your image and use fltk::push_clip() and
+    fltk::pop_clip() to not draw outside this area.
+
+    The \a Style can be used to color in your symbol. The main fields
+    you want from it is color() for blank areas and textcolor() for
+    labels (don't use labelcolor()).
+
+    The \a Flags can be used to control how the symbol is drawn.
+    INACTIVE, OUTPUT, VALUE, SELECTED, HIGHLIGHT are useful.
+
+    If your symbol is designed to be imbedded with an @-command into
+    fltk::drawtext() then you can examine the current color with
+    fltk::getcolor() and the current font with fltk::getfont() and
+    fltk::getsize(). If you want to draw letters that line up with
+    other text in a label you should place the baseline at
+    y+(H+fltk::getascent()-fltk::getdescent())/2) where H is the
+    height that your measure() function returns.
+
+    The default implementation calls the integer version of _draw()
+    after rounding all coordinates to the nearest integer.
+*/
+void Symbol::_draw(float x, float y, float w, float h, const Style* style, Flags flags) const
+{
+  static int recursion;
+  if (++recursion > 10)
+    fltk::warning("%s::_draw() not defined", name());
+  else {
+    int X = int(floor(x+.5));
+    int Y = int(floor(y+.5));
+    _draw(X, Y, int(floor(x+w+.5))-X, int(floor(y+h+.5))-Y, style, flags);
+  }
+  --recursion;
+}
+
+/** Your subclass can implement the integer version of _draw() instead
+    of the floating-point version, if wanted. This is probably a good
+    idea for boxes and fixed-size images that are expected to be drawn
+    as parts of the GUI. This also allows you to call some of the
+    integer-coordinate fltk drawing functions without
+
+    The default version calls the float version of _draw().
+*/
+void Symbol::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
+{
+  _draw(float(x), float(y), float(w), float(h), style, flags);
+}
+
+/** Return widget box-drawing hints.
+
+    This returns a pointer to a structure (which should be a static
+    constant) containing information used by widgets when they use
+    the Symbol as a box around the edges of the widget.
+
+    By default this returns a pointer to an all-zero structure. If
+    your symbol is intended to be a widget box you will want to
+    change this.
+
+    dx, dy, dw, dh = positive insets in pixels that should be applied
+    to the box area to get the area the contents should be drawn in.
+    Notice that dw and dh are subtracted from the width, and are
+    typically twice the dx and dy values.
+
+    fills_rectangle = if zero then no assumptions about the shape that
+    is drawn are made, except that it fits into the xywh passed to draw().
+
+    A value of one means that this will completely replace all pixels
+    in the xywh rectangle. Fltk can use this to avoid unnecessary
+    blinking when drawing single-buffered. Notice that it may be
+    useful to set this on many images.
+
+    A value of two means that the entire area inside the dx,dy,dw,dh
+    inset is filled with a solid rectangle of the color() from the
+    style. Many widgets will take advantage of this to accelerate
+    redrawing of interior text by erasing the rectangles themselves.
+    Widgets may also call draw() with the INVISIBLE flag to indicate
+    that you can skip drawing this rectangle, if you do this it can
+    greately reduce blinking in single-buffered windows, but it is
+    not required. Warning: some widgets such as Browser either assumme
+    this is true, or revert to extremely slow drawing if false.
+
+    A value of three means both the above are true.
+*/
+const BoxInfo* Symbol::boxinfo() const {
+  static BoxInfo b = {0,0,0,0,0};
+  return &b;
+}
+
+/** \fn int Symbol::fills_rectangle() const;
+    Returns boxinfo()->fills_rectangle
+*/
+/** \fn int Symbol::dx() const;
+    Returns boxinfo()->dx
+*/
+/** \fn int Symbol::dy() const;
+    Returns boxinfo()->dy
+*/
+/** \fn int Symbol::dw() const;
+    Returns boxinfo()->dw
+*/
+/** \fn int Symbol::dh() const;
+    Returns boxinfo()->dh
+*/
+/** \fn int Symbol::inset(int& x,int& y,int& w,int& h) const;
+    Adds dx,dy,dw,dh from boxinfo() to the passed box size.
+*/
+
 /**************** The routines seen by the user *************************/
 
 // Internal class to define scalable square symbols:
@@ -249,8 +405,8 @@ class SymbolSymbol : public Symbol {
   void (*drawit)(Color);
 public:
   SymbolSymbol(const char* name, void (*f)(Color)) : Symbol(name), drawit(f) {}
-  void draw(float x, float y, float w, float h, Flags=0) const;
-  void measure(float& w, float& h) const {} // returns size unchanged
+  void _draw(float x, float y, float w, float h, const Style*, Flags) const;
+  void _measure(float& w, float& h) const {} // returns size unchanged
 };
 
 /** Define a (hidden) subclass of Symbol that will draw a square icon.
@@ -292,7 +448,7 @@ void fltk::add_symbol(const char *name, void (*drawit)(Color), int scalable)
   new SymbolSymbol(name,drawit);
 }
 
-void SymbolSymbol::draw(float x, float y, float w, float h, Flags) const
+void SymbolSymbol::_draw(float x, float y, float w, float h, const Style*, Flags) const
 {
   const char* p = text();
   if (*p == '#') p++; // ignore equalscale indicator from fltk1.1
@@ -516,5 +672,5 @@ static void init_symbols(void) {
 }
 
 //
-// End of "$Id: fl_symbols.cxx,v 1.36 2003/08/05 08:09:55 spitzak Exp $".
+// End of "$Id: fl_symbols.cxx,v 1.37 2003/11/04 08:11:04 spitzak Exp $".
 //

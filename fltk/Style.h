@@ -1,5 +1,5 @@
 //
-// "$Id: Style.h,v 1.10 2003/09/03 06:08:06 spitzak Exp $"
+// "$Id: Style.h,v 1.11 2003/11/04 08:10:56 spitzak Exp $"
 //
 // Style structure used by Widgets
 //
@@ -32,7 +32,9 @@ namespace fltk {
 
 class FL_API Widget;
 
-class Box;
+class FL_API Symbol;
+typedef Symbol Box;
+
 extern FL_API Box* const UP_BOX;
 extern FL_API Box* const DOWN_BOX;
 extern FL_API Box* const THIN_UP_BOX;
@@ -93,39 +95,95 @@ extern FL_API LabelType* const SHADOW_LABEL;
 extern FL_API LabelType* const ENGRAVED_LABEL;
 extern FL_API LabelType* const EMBOSSED_LABEL;
 
-typedef void (*GlyphStyle)(const Widget*, int type,
-			  int,int,int,int,
-			  Flags);
+class Style;
 
-struct FL_API Style {
-  const Style* parent;
+typedef void (*GlyphStyle)(int type,
+			   int,int,int,int, const Style*,
+			   Flags);
+
+class FL_API Style {
+ public:
+  // Everything is public for various back-compatability hacks:
+  const Style* parent_;
   void  (*revertfunc)(Style*);
-
-  Box*		box;
-  Box*		buttonbox;
-  Box*		focusbox;
-  GlyphStyle	glyph;
-  Font*		labelfont;
-  Font*		textfont;
-  LabelType*	labeltype;
-  Color		color;
-  Color		textcolor;
-  Color		selection_color;
-  Color		selection_textcolor;
-  Color		buttoncolor;
-  Color		labelcolor;
-  Color		highlight_color;
-  Color		highlight_textcolor;
-  float		labelsize;
-  float		textsize;
-  float		leading;
-  unsigned char	scrollbar_align;
-  unsigned char	scrollbar_width;
-
+  Box*		box_;
+  Box*		buttonbox_;
+  Box*		focusbox_;
+  GlyphStyle	glyph_;
+  Font*		labelfont_;
+  Font*		textfont_;
+  LabelType*	labeltype_;
+  Color		color_;
+  Color		textcolor_;
+  Color		selection_color_;
+  Color		selection_textcolor_;
+  Color		buttoncolor_;
+  Color		labelcolor_;
+  Color		highlight_color_;
+  Color		highlight_textcolor_;
+  float		labelsize_;
+  float		textsize_;
+  float		leading_;
+  unsigned char	scrollbar_align_;
+  unsigned char	scrollbar_width_;
   // global settings:
-  static bool	hide_shortcut;
-  static bool   draw_boxes_inactive;
-  static int	wheel_scroll_lines;
+  static bool	hide_shortcut_;
+  static bool   draw_boxes_inactive_;
+  static int	wheel_scroll_lines_;
+
+  // Get functions, which search parents if value is zero:
+  Box*		box()		const;
+  Box*		buttonbox()	const;
+  Box*		focusbox()	const;
+  GlyphStyle	glyph()		const;
+  Font*		labelfont()	const;
+  Font*		textfont()	const;
+  LabelType*	labeltype()	const;
+  Color		color()		const;
+  Color		textcolor()	const;
+  Color		selection_color() const;
+  Color		selection_textcolor() const;
+  Color		buttoncolor()	const;
+  Color		labelcolor()	const;
+  Color		highlight_color() const;
+  Color		highlight_textcolor() const;
+  float		labelsize()	const;
+  float		textsize()	const;
+  float		leading()	const;
+  unsigned char	scrollbar_align() const;
+  unsigned char	scrollbar_width() const;
+
+  bool		hide_shortcut() const {return hide_shortcut_;}
+  bool		draw_boxes_inactive() const {return draw_boxes_inactive_;}
+  int		wheel_scroll_lines() const {return wheel_scroll_lines_;}
+
+  Flags boxcolors(Flags flags, Color& bg, Color& fg) const;
+
+  // Set functions:
+  void box		(Box* v)	{box_ = v;		}
+  void buttonbox	(Box* v)	{buttonbox_ = v;	}
+  void focusbox		(Box* v)	{focusbox_ = v;		}
+  void glyph		(GlyphStyle v)	{glyph_ = v; 		}
+  void labelfont	(Font* v)	{labelfont_ = v;	}
+  void textfont		(Font* v)	{textfont_ = v;		}
+  void labeltype	(LabelType* v)	{labeltype_ = v; 	}
+  void color		(Color v)	{color_ = v; 		}
+  void textcolor	(Color v)	{textcolor_ = v; 	}
+  void selection_color	(Color v)	{selection_color_ = v;	}
+  void selection_textcolor(Color v)	{selection_textcolor_ = v;}
+  void buttoncolor	(Color v)	{buttoncolor_ = v; 	}
+  void labelcolor	(Color v)	{labelcolor_ = v; 	}
+  void highlight_color	(Color v)	{highlight_color_ = v; 	}
+  void highlight_textcolor(Color v)	{highlight_textcolor_ = v;}
+  void labelsize	(float v)	{labelsize_ = v;	}
+  void textsize		(float v)	{textsize_ = v;		}
+  void leading		(float v)	{leading_ = v;		}
+  void scrollbar_align	(unsigned char v) {scrollbar_align_ = v;}	
+  void scrollbar_width	(unsigned char v) {scrollbar_width_ = v;}	
+
+  void hide_shortcut	(bool v)	{hide_shortcut_ = v;	}
+  void draw_boxes_inactive(bool v)	{draw_boxes_inactive_ = v;}
+  void wheel_scroll_lines(int v)	{wheel_scroll_lines_ = v;}
 
   Style(); // creates a dynamic() style
   bool dynamic() const {return !revertfunc;}
@@ -171,5 +229,5 @@ extern "C" FL_API bool fltk_theme();
 #endif
 
 //
-// End of "$Id: Style.h,v 1.10 2003/09/03 06:08:06 spitzak Exp $".
+// End of "$Id: Style.h,v 1.11 2003/11/04 08:10:56 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.42 2003/06/25 06:11:43 spitzak Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.43 2003/11/04 08:11:02 spitzak Exp $"
 //
 // Copyright 1998-2002 by Bill Spitzak and others.
 //
@@ -67,9 +67,11 @@ void ValueInput::draw() {
     input.set_damage(DAMAGE_ALL);
   }
   if (damage() & (DAMAGE_ALL | DAMAGE_HIGHLIGHT)) {
-    Flags f[2]; f[0] = f[1] = active_r() ? 0 : INACTIVE;
-    if (which_highlight && belowmouse())
-      f[which_highlight-1] = HIGHLIGHT;
+    Flags ff = current_flags_highlight();
+    Flags f[2];
+    f[0] = f[1] = ff & ~HIGHLIGHT;
+    if (which_highlight)
+      f[which_highlight-1] = ff;
     if (which_pushed && pushed())
       f[which_pushed-1] = VALUE | HIGHLIGHT;
     draw_glyph(GLYPH_UP_BUTTON, X+W, Y, bw, bw, f[0]);
@@ -108,13 +110,13 @@ int ValueInput::handle(int event) {
     else n = 0;
     if (n != which_highlight) {
       which_highlight = n;
-      redraw(DAMAGE_HIGHLIGHT);
+      redraw_highlight();
     }
     return 1;
   case LEAVE:
     if (which_highlight) {
       which_highlight = 0;
-      redraw(DAMAGE_HIGHLIGHT);
+      redraw_highlight();
     }
     return 1;
   case PUSH:
@@ -221,5 +223,5 @@ ValueInput::~ValueInput() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.42 2003/06/25 06:11:43 spitzak Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.43 2003/11/04 08:11:02 spitzak Exp $".
 //

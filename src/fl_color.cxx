@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.32 2003/06/24 07:10:48 spitzak Exp $"
+// "$Id: fl_color.cxx,v 1.33 2003/11/04 08:11:03 spitzak Exp $"
 //
 // Color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -26,10 +26,9 @@
 #include <fltk/Color.h>
 #include <fltk/draw.h>
 #include <config.h>
-#ifdef _WIN32 // Crap needed before windows.h so StockBrushes work
-# ifndef _WIN32_WINNT
-#  define _WIN32_WINNT 0x0500
-# endif
+#if defined(_WIN32) && USE_STOCK_BRUSH && _WIN32_WINNT<0x0500
+# undef _WIN32_WINNT
+# define _WIN32_WINNT 0x0500
 #endif
 #include <fltk/x.h>
 
@@ -119,5 +118,5 @@ Color fltk::get_color_index(Color i) {
 }
 
 //
-// End of "$Id: fl_color.cxx,v 1.32 2003/06/24 07:10:48 spitzak Exp $".
+// End of "$Id: fl_color.cxx,v 1.33 2003/11/04 08:11:03 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Slider.cxx,v 1.51 2002/12/10 02:00:51 easysw Exp $"
+// "$Id: Fl_Value_Slider.cxx,v 1.52 2003/11/04 08:11:02 spitzak Exp $"
 //
 // Value slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -64,26 +64,22 @@ void ValueSlider::draw() {
     if (ix) {tx = ix; tw = iw;} // if box has border, center text
   }
 
-  Flags flags = 0;
-  if (!active_r()) {
-    flags |= INACTIVE;
-  } else {
-    if (pushed()) flags |= VALUE;
-    if (belowmouse()) flags |= HIGHLIGHT;
-  }
+  Flags f2 = current_flags_highlight();
+  Flags flags = f2 & ~HIGHLIGHT;
+  if (pushed()) f2 |= VALUE;
 
   // minimal-update the slider, if it indicates the background needs
   // to be drawn, draw that. We draw the slot if the current box type
   // has no border:
-  if (Slider::draw(sx, sy, sw, sh, flags, iy==0)) {
+  if (Slider::draw(sx, sy, sw, sh, f2, iy==0)) {
 
     // draw the box or the visible parts of the window
     if (!box->fills_rectangle()) draw_background();
-    box->draw(0, 0, w(), h(), color(), flags);
+    box->draw(0, 0, w(), h(), style(), flags|OUTPUT);
 
     // draw the focus indicator inside the box:
     if (focused()) {
-      focusbox()->draw(ix+1, iy+1, iw-2, ih-2, textcolor(), INVISIBLE);
+      focusbox()->draw(ix+1, iy+1, iw-2, ih-2, style(), INVISIBLE);
     }
 
     if (type() & TICK_BOTH) {
@@ -101,7 +97,7 @@ void ValueSlider::draw() {
 	}
       }
       Color color = textcolor();
-      if (!active_r()) color = inactive(color);
+      if (flags&INACTIVE) color = inactive(color);
       setcolor(color);
       draw_ticks(sx, sy, sw, sh, (slider_size()+1)/2);
     }
@@ -115,9 +111,9 @@ void ValueSlider::draw() {
     // erase the background if not already done:
     if (!(damage()&DAMAGE_ALL)) {
       if (!box->fills_rectangle()) draw_background();
-      box->draw(0, 0, w(), h(), color(), flags);
+      box->draw(0, 0, w(), h(), style(), flags|OUTPUT);
       if (focused()) {
-	focusbox()->draw(ix+1, iy+1, iw-2, ih-2, textcolor(), INVISIBLE);
+	focusbox()->draw(ix+1, iy+1, iw-2, ih-2, style(), INVISIBLE);
       }
     }
     // now draw the text:
@@ -145,21 +141,21 @@ int ValueSlider::handle(int event) {
 }
 
 static void revert(Style *s) {
-  s->color = GRAY75;
-  s->box = FLAT_BOX;
-  //s->glyph = ::glyph;
+  s->color_ = GRAY75;
+  s->box_ = FLAT_BOX;
+  //s->glyph_ = ::glyph;
 }
 static NamedStyle style("ValueSlider", revert, &ValueSlider::default_style);
 NamedStyle* ValueSlider::default_style = &::style;
 
 ValueSlider::ValueSlider(int x, int y, int w, int h, const char*l)
 : Slider(x, y, w, h, l) {
-  if (!default_style->glyph) default_style->glyph = style()->glyph;
+  if (!default_style->glyph_) default_style->glyph_ = style()->glyph_;
   style(default_style);
   step(.01);
   //set_click_to_focus();
 }
 
 //
-// End of "$Id: Fl_Value_Slider.cxx,v 1.51 2002/12/10 02:00:51 easysw Exp $".
+// End of "$Id: Fl_Value_Slider.cxx,v 1.52 2003/11/04 08:11:02 spitzak Exp $".
 //

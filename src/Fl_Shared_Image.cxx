@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.31 2003/08/04 06:55:33 spitzak Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.32 2003/11/04 08:11:01 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -77,14 +77,9 @@ void SharedImage::check_mem_usage()
   do {
     limage=first_image;
     first_image->find_less_used();
-    if(limage->id) {
+    if (limage->id) {
       mem_used -= limage->w() * limage->h();
-      fl_delete_offscreen(Pixmap(limage->id));
-      limage->id=0;
-      if(limage->mask) {
-	delete_bitmap(Pixmap(limage->mask));
-	limage->mask = 0;
-      }
+      limage->destroy_cache();
     } else return;
   } while(mem_used >= mem_usage_limit);
 }
@@ -103,14 +98,9 @@ shared_image_destructor_class shared_image_destructor;
 
 void SharedImage::clear_cache()
 {
-  if(id) {
+  if (id) {
     mem_used -= w()*h();
-    fl_delete_offscreen((Pixmap)id);
-    id=0;
-    if(mask) {
-      delete_bitmap((Pixmap)mask);
-      mask = 0;
-    }
+    destroy_cache();
   }
   if (l1) l1->clear_cache();
   if (l2) l2->clear_cache();
@@ -185,15 +175,10 @@ void SharedImage::reload(const uchar* pdatas)
 {
   if (id) {
     mem_used -= w()*h();
-    fl_delete_offscreen((Pixmap)id);
-    id=0;
-    if (mask) {
-      delete_bitmap((Pixmap)mask);
-      mask = 0;
-    }
+    destroy_cache();
   }
   if (pdatas) datas = pdatas;
-  float W,H; measure(W,H);
+  float W=w_; float H=h_; measure(W,H);
 }
 void SharedImage::reload(const char* name, const uchar* pdatas)
 {
@@ -231,27 +216,27 @@ int SharedImage::remove(const char* name)
   else return 0;
 }
 
-void SharedImage::draw(float X, float Y, float W, float H, Flags flags) const
+void SharedImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
 {
-  if (w() < 0) measure(W,H);
-  if (w() == 0) return;
+  if (w_ < 0) {float W=w; float H=h; measure(W,H);}
+  if (w_ == 0) return;
   const_cast<SharedImage*>(this)->used =
     image_used++; // do this before check_mem_usage
   if (!id) // Need to uncompress the image ?
   {
-    mem_used += w()*h();
+    mem_used += w_*h_;
     check_mem_usage();
 
     const_cast<SharedImage*>(this)->read();
     if (!id) { // could not read the image for some reason ?
-      mem_used -= w()*h();
+      mem_used -= w_*h_;
       const_cast<SharedImage*>(this)->w_ = 0; // Will never try again ...
       return; 
     }
   }
-  _draw(X, Y, flags);
+  draw_cache(x,y,w,h,style,flags);
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.31 2003/08/04 06:55:33 spitzak Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.32 2003/11/04 08:11:01 spitzak Exp $"
 //

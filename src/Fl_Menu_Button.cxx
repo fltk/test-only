@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.56 2003/09/06 22:37:36 spitzak Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.57 2003/11/04 08:11:00 spitzak Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -46,25 +46,13 @@ void PopupMenu::draw() {
       || box == NO_BOX && damage()&DAMAGE_HIGHLIGHT && !focused()) {
     draw_background();
   }
-  Flags flags = this->flags();
-  Color color = this->buttoncolor();
-  Color labelcolor = this->labelcolor();
-  if (!active_r()) {
-    flags |= INACTIVE;
-  } else if (belowmouse()) {
-    flags |= HIGHLIGHT;
-    Color h = highlight_color();
-    if (h) {color = h; labelcolor = highlight_textcolor();}
-  }
-  box->draw(0, 0, this->w(), this->h(), color, flags);
+  Flags flags = current_flags_highlight();
+  box->draw(0, 0, this->w(), this->h(), style(), flags);
   int x,y,w,h;
   x = y = 0; w = this->w(); h = this->h(); box->inset(x,y,w,h);
-  if (!(flags&15) || (flags & ALIGN_INSIDE)) {
-    if (w > 11 && (flags&(ALIGN_LEFT|ALIGN_RIGHT))) {x += 3; w -= 6;}
-    draw_label(x,y,w,h, labelcolor, flags);
-  }
+  draw_label(x,y,w,h, style(), flags);
   if (focused())
-    focusbox()->draw(x+1, y+1, w-2, h-2, labelcolor, INVISIBLE);
+    focusbox()->draw(x+1, y+1, w-2, h-2, style(), flags|INVISIBLE);
   // draw the little mark at the right:
   int w1 = int(textsize());
   draw_glyph(GLYPH_DOWN, x+w-w1, y, w1, h, flags);
@@ -97,7 +85,7 @@ int PopupMenu::handle(int e) {
   case ENTER:
   case LEAVE:
     if (type()&7) return 0;
-    if (highlight_color() && takesevents()) redraw(DAMAGE_HIGHLIGHT);
+    redraw_highlight();
   case MOVE:
     return 1;
 
@@ -131,7 +119,7 @@ int PopupMenu::handle(int e) {
 }
 
 static void revert(Style* s) {
-  s->color = GRAY75;
+  s->color_ = GRAY75;
 //    s->box = UP_BOX;
 }
 static NamedStyle style("PopupMenu", revert, &PopupMenu::default_style);
@@ -146,5 +134,5 @@ PopupMenu::PopupMenu(int X,int Y,int W,int H,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.56 2003/09/06 22:37:36 spitzak Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.57 2003/11/04 08:11:00 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.153 2003/10/28 17:45:15 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.154 2003/11/04 08:11:03 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -74,7 +74,7 @@ static struct FD {
   void* arg;
 } *fd = 0;
 
-void fltk::add_fd(int n, int events, void (*cb)(int, void*), void *v) {
+void fltk::add_fd(int n, int events, FileHandler cb, void *v) {
   remove_fd(n,events);
   int i = nfds++;
   if (i >= fd_array_size) {
@@ -99,7 +99,7 @@ void fltk::add_fd(int n, int events, void (*cb)(int, void*), void *v) {
 #endif
 }
 
-void fltk::add_fd(int fd, void (*cb)(int, void*), void* v) {
+void fltk::add_fd(int fd, FileHandler cb, void* v) {
   add_fd(fd, POLLIN, cb, v);
 }
 
@@ -348,6 +348,15 @@ void fltk::close_display() {
 
 static bool reload_info = true;
 
+/** \class fltk::Monitor
+    Structure describing a monitor (screen).
+    Structure describing one of the monitors (screens) connected to
+    the system. You can ask for one by position with find(), ask for
+    all of them with list(), and ask for a fake one that surrounds all
+    of them with all(). You then look in the structure to get information
+    like the size and bit depth.
+*/
+
 /** Return a "monitor" that surrounds all the monitors.
     If you have a single monitor, this returns a monitor structure that
     defines it. If you have multiple monitors this returns a fake monitor
@@ -405,15 +414,15 @@ const Monitor& Monitor::all() {
   return monitor;
 }
 
-#define USE_XINERAMA 1
-// The published API does not match what is on my RedHat 7.2 machine. For
-// the published API use 2, for RedHat use 1:
-#define XINERAMA_VERSION 1
 #if USE_XINERAMA
 extern "C" {
 #include <X11/extensions/Xinerama.h>
+// Version 1 is what is on my RedHat 7.2 machine, with "XineramaQueryScreens"
+// Version 2 is what is in the Xinerama documentation, with "XineramaGetData"
+#define XINERAMA_VERSION 1
 }
 #endif
+
 static Monitor* monitors = 0;
 static int num_monitors=0;
 
@@ -471,9 +480,8 @@ int Monitor::list(const Monitor** p) {
 #endif
     num_monitors = 1; // indicate that Xinerama failed
     monitors = (Monitor*)(&all());
-#if 0
-    // Guess for dual monitors when Xinerma is not working or it lies
-    // (which the NVidea drivers seem to do):
+#if !USE_XINERAMA
+    // Guess for dual monitors placed next to each other:
     if (monitors->w() > 2*monitors->h()) {
       num_monitors = 2;
       monitors = new Monitor[2];
@@ -1554,34 +1562,34 @@ bool fltk::system_theme() {
 
   color = to_color(get_default("foreground"));
   if (color) {
-    Widget::default_style->labelcolor = color;
-    Widget::default_style->highlight_textcolor = color;
+    Widget::default_style->labelcolor(color);
+    Widget::default_style->highlight_textcolor(color);
   }
 
 #if MY_GET_DEFAULT
   color = to_color(get_default("Text.background"));
-  if (color) Widget::default_style->color = color;
+  if (color) Widget::default_style->color(color);
 
   color = to_color(get_default("Text.foreground"));
-  if (color) Widget::default_style->textcolor = color;
+  if (color) Widget::default_style->textcolor(color);
 
   color = to_color(get_default("Text.selectBackground"));
-  if (color) Widget::default_style->selection_color = color;
+  if (color) Widget::default_style->selection_color(color);
 
   color = to_color(get_default("Text.selectForeground"));
-  if (color) Widget::default_style->selection_textcolor = color;
+  if (color) Widget::default_style->selection_textcolor(color);
 #else
   color = to_color(get_default("Text","background"));
-  if (color) Widget::default_style->color = color;
+  if (color) Widget::default_style->color(color);
 
   color = to_color(get_default("Text","foreground"));
-  if (color) Widget::default_style->textcolor = color;
+  if (color) Widget::default_style->textcolor(color);
 
   color = to_color(get_default("Text","selectBackground"));
-  if (color) Widget::default_style->selection_color = color;
+  if (color) Widget::default_style->selection_color(color);
 
   color = to_color(get_default("Text","selectForeground"));
-  if (color) Widget::default_style->selection_textcolor = color;
+  if (color) Widget::default_style->selection_textcolor(color);
 #endif
 
   // also Scrollbar,width
@@ -1593,7 +1601,7 @@ bool fltk::system_theme() {
   // standards that arise:
 
   const char* w = get_default("wheel_scroll_lines");
-  if (w) Style::wheel_scroll_lines = atoi(w);
+  if (w) Widget::default_style->wheel_scroll_lines(atoi(w));
 
   w = get_default("wheel_up_button");
   if (w) wheel_up_button = atoi(w);
@@ -1610,5 +1618,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.153 2003/10/28 17:45:15 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.154 2003/11/04 08:11:03 spitzak Exp $".
 //

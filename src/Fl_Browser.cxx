@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.76 2003/09/03 06:08:06 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.77 2003/11/04 08:10:58 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -325,15 +325,11 @@ static xbmImage browser_plus(browser_plus_bits, browser_plus_width, browser_plus
 static xbmImage browser_minus(browser_minus_bits, browser_minus_width, browser_minus_height);
 
 static void
-glyph(const Widget* widget, int glyph, int x,int y,int w,int h, Flags f)
+glyph(int glyph, int x,int y,int w,int h, const Style* style, Flags f)
 {
-  if (f&SELECTED)
-    setcolor(widget->selection_textcolor());
-  else {
-    Color c = widget->textcolor();
-    if (c == BLACK) c = GRAY33;
-    setcolor(c);
-  }
+  Color bg, fg; style->boxcolors(f|OUTPUT, bg, fg);
+  if (fg == BLACK) fg = GRAY33;
+  setcolor(fg);
   int lx = x+w/2;
   int ly = y+(h-1)/2;
   switch (glyph) {
@@ -364,12 +360,12 @@ glyph(const Widget* widget, int glyph, int x,int y,int w,int h, Flags f)
     break;
 #else
   default: {
-    xbmImage* image = (glyph < OPEN_ELL) ? &browser_plus : &browser_minus;
     const int boxsize = browser_plus_width/2;
-    image->draw(lx-boxsize, ly-boxsize);
     drawline(lx, y, lx, ly-boxsize);
     if (glyph&1) drawline(lx, ly+boxsize, lx, y+h-1);
     drawline(lx+boxsize, ly, x+w, ly);
+    xbmImage* image = (glyph < OPEN_ELL) ? &browser_plus : &browser_minus;
+    image->draw(lx-boxsize, ly-boxsize);
     }
 #endif
   }
@@ -444,9 +440,7 @@ void Browser::draw_item() {
   }
 
   if (focused() && is_focus) {
-    focusbox()->draw(x, y, widget->width(), h,
-	(flags&SELECTED) ? widget->selection_textcolor() : widget->textcolor(),
-	INVISIBLE);
+    focusbox()->draw(x, y, widget->width(), h, style(), flags|(INVISIBLE|OUTPUT));
   }
 
   push_matrix();
@@ -1103,7 +1097,7 @@ bool Browser::display(int line, bool value) {
 #define SLIDER_WIDTH 16
 
 static void revert(Style* s) {
-  s->glyph = ::glyph;
+  s->glyph_ = ::glyph;
 }
 static NamedStyle style("Browser", revert, &Browser::default_style);
 NamedStyle* Browser::default_style = &::style;
@@ -1144,5 +1138,5 @@ Browser::~Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.76 2003/09/03 06:08:06 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.77 2003/11/04 08:10:58 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_round_box.cxx,v 1.31 2002/12/10 02:01:02 easysw Exp $"
+// "$Id: fl_round_box.cxx,v 1.32 2003/11/04 08:11:04 spitzak Exp $"
 //
 // Round box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -36,9 +36,9 @@ using namespace fltk;
 // Circle with an edge pattern like FrameBox:
 class RoundBox : public FrameBox {
 public:
-  void draw(int,int,int,int, Color, Flags=0) const;
+  void _draw(int,int,int,int, const Style*, Flags) const;
   RoundBox(const char* n, const char* s, const FrameBox* d=0)
-    : FrameBox(n, s, d) { fills_rectangle_ = 0; }
+    : FrameBox(n, s, d) {}
 };
 
 enum {UPPER_LEFT, LOWER_RIGHT, CLOSED, FILL};
@@ -82,37 +82,38 @@ static void lozenge(int which, int x,int y,int w,int h, Color color)
 
 extern void fl_to_inactive(const char* s, char* to);
 
-void RoundBox::draw(int x, int y, int w, int h,
-		    Color c, Flags f) const
+void RoundBox::_draw(int x, int y, int w, int h,
+		     const Style* style, Flags f) const
 {
   const char* s = (f & VALUE) ? down->data() : data();
-  char buf[26]; if (f&INACTIVE && Style::draw_boxes_inactive) {
+  char buf[26]; if (f&INACTIVE && style->draw_boxes_inactive()) {
     fl_to_inactive(s, buf); s = buf;}
+  Color bg, fg; style->boxcolors(f, bg, fg);
   if (!(f & INVISIBLE)) {
     // draw the interior, assumming the edges are the same thickness
     // as the normal square box:
     int d = strlen(s)/4;
     if (w > 2*d && h > 2*(d-1))
-      lozenge(FILL, x+d, y+d-1, w-2*d, h-2*(d-1), c);
+      lozenge(FILL, x+d, y+d-1, w-2*d, h-2*(d-1), bg);
   }
   const char* t;
   if (*s == '2') {t = s+1; s += 3;} else {t = s+2;}
   while (*s && *t && w > 0 && h > 0) {
-    Color c1 = *s + (GRAY00-'A'); s += 4;
-    Color c2 = *t + (GRAY00-'A'); t += 4;
-    lozenge(UPPER_LEFT,  x+1, y,   w-2, h, *s&&*t ? c1 : c);
+    Color c1 = *t + (GRAY00-'A'); t += 4;
+    Color c2 = *s + (GRAY00-'A'); s += 4;
+    lozenge(UPPER_LEFT,  x+1, y,   w-2, h, *s&&*t ? c1 : bg);
     lozenge(UPPER_LEFT,  x,   y,   w,   h, c1);
-    lozenge(LOWER_RIGHT, x+1, y,   w-2, h, *s&&*t ? c2 : c);
+    lozenge(LOWER_RIGHT, x+1, y,   w-2, h, *s&&*t ? c2 : bg);
     lozenge(LOWER_RIGHT, x,   y,   w,   h, c2);
     x++; y++; w -= 2; h -= 2;
   }
 }
 
-static RoundBox roundDownBox(0, "2WWMMPPAA");
+static RoundBox roundDownBox("round_down", "WWMMPPAA");
 Box* const fltk::ROUND_DOWN_BOX = &roundDownBox;
-static RoundBox roundUpBox(0, "2AAWWMMTT", &roundDownBox);
+static RoundBox roundUpBox("round_up", "AAWWMMTT", &roundDownBox);
 Box* const fltk::ROUND_UP_BOX = &roundUpBox;
 
 //
-// End of "$Id: fl_round_box.cxx,v 1.31 2002/12/10 02:01:02 easysw Exp $".
+// End of "$Id: fl_round_box.cxx,v 1.32 2003/11/04 08:11:04 spitzak Exp $".
 //

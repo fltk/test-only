@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tabs.cxx,v 1.66 2003/08/26 14:49:47 spitzak Exp $"
+// "$Id: Fl_Tabs.cxx,v 1.67 2003/11/04 08:11:01 spitzak Exp $"
 //
 // Tab widget for the Fast Light Tool Kit (FLTK).
 //
@@ -412,16 +412,15 @@ void TabGroup::draw_tab(int x1, int x2, int W, int H, Widget* o, int what) {
       y = 2;
       h = H-1;
     }
-    Color labelcolor = o->labelcolor();
-    o->draw_label(x, y, w, h, labelcolor, ALIGN_CENTER);
+    o->draw_label(x, y, w, h, o->style(), ALIGN_CENTER);
     if (sel && focused())
-      focusbox()->draw(x, y, w, h, labelcolor, INVISIBLE);
+      focusbox()->draw(x, y, w, h, style(), INVISIBLE);
   }
 }
 
 static void revert(Style* s) {
-  s->box = THIN_UP_BOX;
-  s->color = GRAY75;
+  s->box_ = THIN_UP_BOX;
+  s->color_ = GRAY75;
 }
 static NamedStyle style("Tabs", revert, &TabGroup::default_style);
 NamedStyle* TabGroup::default_style = &::style;
@@ -435,5 +434,5 @@ TabGroup::TabGroup(int X,int Y,int W, int H, const char *l)
 }
 
 //
-// End of "$Id: Fl_Tabs.cxx,v 1.66 2003/08/26 14:49:47 spitzak Exp $".
+// End of "$Id: Fl_Tabs.cxx,v 1.67 2003/11/04 08:11:01 spitzak Exp $".
 //

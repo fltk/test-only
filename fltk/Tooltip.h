@@ -1,5 +1,5 @@
 //
-// "$Id: Tooltip.h,v 1.4 2003/04/20 03:17:49 easysw Exp $"
+// "$Id: Tooltip.h,v 1.5 2003/11/04 08:10:57 spitzak Exp $"
 //
 // Code used to control the appearance of tooltips, and to pop them
 // up in response to events other than the mouse entering and exiting
@@ -51,16 +51,16 @@ public:
   static void current(Widget*);
 
   static NamedStyle* default_style;
-  static Font* font()		{ return default_style->labelfont; }
-  static void font(Font* i)	{ default_style->labelfont = i; }
-  static float size()		{ return default_style->labelsize; }
-  static void size(float s)	{ default_style->labelsize = s; }
-  static void color(Color c)	{ default_style->color = c; }
-  static Color color()		{ return default_style->color; }
-  static void textcolor(Color c){ default_style->textcolor = c; }
-  static Color textcolor()	{ return default_style->textcolor; }
-  static void box(Box* b)	{ default_style->box = b; }
-  static Box* box()		{ return default_style->box; }
+  static Font* font()		{ return default_style->labelfont(); }
+  static void font(Font* i)	{ default_style->labelfont(i); }
+  static float size()		{ return default_style->labelsize(); }
+  static void size(float s)	{ default_style->labelsize(s); }
+  static void color(Color c)	{ default_style->color(c); }
+  static Color color()		{ return default_style->color(); }
+  static void textcolor(Color c){ default_style->textcolor(c); }
+  static Color textcolor()	{ return default_style->textcolor(); }
+  static void box(Box* b)	{ default_style->box(b); }
+  static Box* box()		{ return default_style->box(); }
 
 private:
   static float delay_;
@@ -72,5 +72,5 @@ private:
 #endif
 
 //
-// End of "$Id: Tooltip.h,v 1.4 2003/04/20 03:17:49 easysw Exp $".
+// End of "$Id: Tooltip.h,v 1.5 2003/11/04 08:10:57 spitzak Exp $".
 //

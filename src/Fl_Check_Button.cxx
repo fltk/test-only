@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.43 2003/09/03 06:08:06 spitzak Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.44 2003/11/04 08:10:58 spitzak Exp $"
 //
 // Check button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -30,14 +30,15 @@
 
 using namespace fltk;
 
-static void default_glyph(const Widget* widget, int glyph,
-			  int x,int y,int w,int h, Flags flags)
+static void default_glyph(int glyph,
+			  int x,int y,int w,int h,
+			  const Style* style, Flags flags)
 {
-  Box* box = widget->box();
-  box->draw(x, y, w, h, widget->color(), flags);
+  Box* box = style->box();
+  box->draw(x, y, w, h, style, flags|OUTPUT);
   box->inset(x, y, w, h);
   if (flags & VALUE) {
-    setcolor(inactive(widget->textcolor(), flags));
+    setcolor(inactive(style->textcolor(), flags));
     if (h < 4) {fillrect(x+w/2-1,y+h/2-1,2,2); return;}
     x += 1;
     w = h - 2;
@@ -56,9 +57,9 @@ void CheckButton::draw() {
 }
 
 static void revert(Style* s) {
-  s->buttonbox = NO_BOX;
-  //s->box = DOWN_BOX;
-  s->glyph = ::default_glyph;
+  s->buttonbox_ = NO_BOX;
+  //s->box_ = DOWN_BOX;
+  s->glyph_ = ::default_glyph;
 }
 static NamedStyle style("Check_Button", revert, &CheckButton::default_style);
 NamedStyle* CheckButton::default_style = &::style;

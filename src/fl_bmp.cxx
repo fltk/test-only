@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.17 2003/08/04 06:55:33 spitzak Exp $"
+// "$Id: fl_bmp.cxx,v 1.18 2003/11/04 08:11:03 spitzak Exp $"
 //
 // Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
 //
@@ -168,7 +168,7 @@ static short ReadLittleEndianUINT()
 }
 #endif
 
-void bmpImage::measure(float &W, float &H) const
+void bmpImage::_measure(float &W, float &H) const
 {
 
   if (w() >= 0) { 
@@ -827,5 +827,5 @@ error:
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.17 2003/08/04 06:55:33 spitzak Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.18 2003/11/04 08:11:03 spitzak Exp $"
 //

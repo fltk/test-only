@@ -2,11 +2,11 @@
 
 using namespace fltk;
 
-void MultiImage::measure(float& w, float& h) const {
+void MultiImage::_measure(float& w, float& h) const {
   images[0]->measure(w,h);
 }
 
-void MultiImage::draw(float x, float y, float w, float h, Flags f) const
+void MultiImage::_draw(int x, int y, int w, int h, const Style* style, Flags f) const
 {
   int which = 0;
   Flags passed_flags = f;
@@ -15,5 +15,5 @@ void MultiImage::draw(float x, float y, float w, float h, Flags f) const
     // Test to make sure all the requested flags are on:
     if ((f & flags[i]) == flags[i]) {which = i; passed_flags = f&~flags[i];}
   }
-  images[which]->draw(x,y,w,h,passed_flags);
+  images[which]->draw(x,y,w,h,style,passed_flags);
 }

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_rounded_box.cxx,v 1.21 2002/12/10 02:01:02 easysw Exp $"
+// "$Id: fl_rounded_box.cxx,v 1.22 2003/11/04 08:11:04 spitzak Exp $"
 //
 // Rounded box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -48,47 +48,52 @@ static void rbox(int x, int y, int w, int h, Color fill, Color line) {
 
 class RoundedBox : public Box {
 public:
-  void draw(int x, int y, int w, int h, Color color, Flags f) const {
-    rbox(x, y, w, h, color, inactive(BLACK,f));
+  void _draw(int x, int y, int w, int h, const Style* style, Flags f) const {
+    Color bg, fg; style->boxcolors(f, bg, fg);
+    rbox(x, y, w, h, bg, fg);
   }
-  RoundedBox(const char* n) : Box(n) {
-    dx_ = dy_ = 1; dw_ = dh_ = 2;
-    fills_rectangle_ = 0;
+  const BoxInfo* boxinfo() const {
+    static BoxInfo b = {1,1,2,2,0};
+    return &b;
   }
+  RoundedBox(const char* n) : Box(n) {}
 };
-static RoundedBox roundedBox(0);
+static RoundedBox roundedBox("rounded");
 Box* const fltk::ROUNDED_BOX = &roundedBox;
 
 class RShadowBox : public Box {
 public:
-  void draw(int x, int y, int w, int h, Color color, Flags f) const {
+  void _draw(int x, int y, int w, int h, const Style* style, Flags f) const {
     w -= 3; h -= 3;
     // draw shadow:
     rbox(x+3, y+3, w, h, GRAY33, GRAY33);
     // draw the box:
-    roundedBox.draw(x, y, w, h, color, f);
+    roundedBox.draw(x, y, w, h, style, f);
   }
-  RShadowBox(const char* n) : Box(n) {
-    dx_ = dy_ = 1; dw_ = dh_ = 5;
-    fills_rectangle_ = 0;
+  const BoxInfo* boxinfo() const {
+    static BoxInfo b = {1,1,5,5,0};
+    return &b;
   }
+  RShadowBox(const char* n) : Box(n) {}
 };
-static RShadowBox rshadowBox(0);
+static RShadowBox rshadowBox("rshadow");
 Box* const fltk::RSHADOW_BOX = &rshadowBox;
 
 class RFlatBox : public Box {
 public:
-  void draw(int x, int y, int w, int h, Color color, Flags) const {
-    rbox(x, y, w, h, color, color);
+  void _draw(int x, int y, int w, int h, const Style* style, Flags f) const {
+    Color bg, fg; style->boxcolors(f, bg, fg);
+    rbox(x, y, w, h, bg, bg);
   }
-  RFlatBox(const char* n) : Box(n) {
-    dx_ = dy_ = 7; dw_ = dh_ = 14;
-    fills_rectangle_ = 0;
+  const BoxInfo* boxinfo() const {
+    static BoxInfo b = {7,7,14,14,0};
+    return &b;
   }
+  RFlatBox(const char* n) : Box(n) {}
 };
-static RFlatBox rflatBox(0);
+static RFlatBox rflatBox("rflat");
 Box* const fltk::RFLAT_BOX = &rflatBox;
 
 //
-// End of "$Id: fl_rounded_box.cxx,v 1.21 2002/12/10 02:01:02 easysw Exp $".
+// End of "$Id: fl_rounded_box.cxx,v 1.22 2003/11/04 08:11:04 spitzak Exp $".
 //

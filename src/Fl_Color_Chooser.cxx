@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Color_Chooser.cxx,v 1.34 2002/12/10 02:00:40 easysw Exp $"
+// "$Id: Fl_Color_Chooser.cxx,v 1.35 2003/11/04 08:10:59 spitzak Exp $"
 //
 // Color chooser for the Fast Light Tool Kit (FLTK).
 //
@@ -234,7 +234,7 @@ void ccHueBox::draw() {
   if (X < 0) X = 0; else if (X > w1-6) X = w1-6;
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
   //  color(c->v()>.75 ? BLACK : WHITE);
-  buttonbox()->draw(x1+X, y1+Y, 6, 6, color(), 0);
+  buttonbox()->draw(x1+X, y1+Y, 6, 6, style(), 0);
   px = X; py = Y;
 }
 
@@ -284,7 +284,7 @@ void ccValueBox::draw() {
   if (damage() == DAMAGE_VALUE) pop_clip();
   int Y = int((1-c->v()) * (h1-6));
   if (Y < 0) Y = 0; else if (Y > h1-6) Y = h1-6;
-  buttonbox()->draw(x1, y1+Y, w1, 6, color(), 0);
+  buttonbox()->draw(x1, y1+Y, w1, 6, style(), 0);
   py = Y;
 }
 
@@ -409,7 +409,9 @@ void CellBox::draw() {
     for (int X = 0; X < COLS; X++) {
       int xx = X*w()/COLS;
       int ww = (X+1)*w()/COLS - xx;
-      THIN_DOWN_BOX->draw(xx,yy,ww,hh,fl_color_cells[Y*COLS+X]);
+      THIN_DOWN_BOX->draw(xx,yy,ww,hh,style(),0);
+      setcolor(fl_color_cells[Y*COLS+X]);
+      fillrect(xx+1,yy+1,ww-2,hh-2);
     }
   }
 }
@@ -504,5 +506,5 @@ int fltk::color_chooser(const char* name, Color& c) {
 }
 
 //
-// End of "$Id: Fl_Color_Chooser.cxx,v 1.34 2002/12/10 02:00:40 easysw Exp $".
+// End of "$Id: Fl_Color_Chooser.cxx,v 1.35 2003/11/04 08:10:59 spitzak Exp $".
 //

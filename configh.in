@@ -1,5 +1,5 @@
 /*
- * "$Id: configh.in,v 1.54 2003/04/20 03:17:44 easysw Exp $"
+ * "$Id: configh.in,v 1.55 2003/11/04 08:10:54 spitzak Exp $"
  *
  * Configuration file for the Fast Light Tool Kit (FLTK).
  *
@@ -32,6 +32,123 @@
 
 
 /*
+ * Byte order of your machine: 1 = big-endian, 0 = little-endian.
+ */
+
+#define WORDS_BIGENDIAN		0
+
+
+/*
+ * Types used by fl_draw_image.  One of U32 or U64 must be defined.
+ * U16 is optional but FLTK will work better with it!
+ */
+
+#undef U16
+#undef U32
+#undef U64
+
+
+/*
+ * Setting this to zero will delete code to handle X and WIN32
+ * colormaps, this will save a good deal of code (especially for
+ * fl_draw_image), but FLTK will only work on TrueColor visuals.
+ */
+
+#define USE_COLORMAP		1
+
+
+/*
+ * Set this to 1 to compile for X11 on Windows or OS/X.
+ */
+#undef USE_X11
+
+
+/*
+ * Use the new Xft library to draw fonts. (ignored if !USE_X11)
+ */
+
+#define USE_XFT			0
+
+
+/*
+ * Do we have the X double-buffer extension?  Turning this on will
+ * make the list_visuals program produce more information.
+ * (ignored if !USE_X11)
+ */
+
+#define HAVE_XDBE		0
+
+
+/*
+ * Actually try to use the double-buffer extension? Fl_Double_Window
+ * and Fl_Overlay_Window will use this. The new version limits itself
+ * to doing swap without clipping turned on and should work on more
+ * X servers than the fltk1 version.
+ * (ignored if !USE_X11)
+ */
+
+#define USE_XDBE		HAVE_XDBE
+
+
+/*
+ * Did we detect the X overlay extension? This enables code to locate
+ * the overlay visual for use by Fl_Overlay_Window and Fl_Gl_Window.
+ * (ignored if !USE_X11)
+ */
+
+#define HAVE_OVERLAY		0
+
+
+/*
+ * Use the X overlay extension?  FLTK will try to use an overlay
+ * visual for Fl_Overlay_Window and for Fl_Menu_Window (i.e. the menus
+ * and tooltips).  This also adds a substantial amount of code to FLTK
+ * so that it can manage an extra visual.  Tested on IRIX and
+ * XFree86.  Does not work with current versions of Xft because Xft
+ * cannot handle the colormapped visuals that overlays normally use.
+ * (ignored if !USE_X11)
+ */
+
+#if USE_XFT
+#  define USE_OVERLAY		0
+#else
+#  define USE_OVERLAY		HAVE_OVERLAY
+#endif
+
+
+/*
+ * Use the Xinerama extension? This allows an X server to describe
+ * multiple monitors. If not used FLTK will assumme the entire X
+ * display area is one monitor, unless it is very wide, in which
+ * case FLTK will guess that it is two monitors next to each other.
+ * (ignored if !USE_X11)
+ */
+
+#define USE_XINERAMA		0
+ 
+
+/*
+ * Use the Windows NT5.0/Win98 multi-monitor calls? If ths is false it
+ * will guess 1 or 2 monitors, similar to the X version.
+ * (ignored if !_WIN32)
+ */
+
+#define USE_MULTIMONITOR	1
+
+
+/*
+ * Use the Windows NT4.0/Win95 "stock brushes" calls. These calls
+ * modernize the Win32 GDI into a "set current color" type of
+ * interface and make drawing substantially faster. Without them
+ * fltk must create/destroy "pens" and "brushes" whenever it wants
+ * to change the color it is drawing with.
+ * (ignored if !_WIN32)
+ */
+
+#define USE_STOCK_BRUSH		1
+
+
+/*
  * Set this to 0 if your system does not have OpenGL. This will
  * disable all the code in libfltk_gl and disable the demo programs
  * that use OpenGL.
@@ -46,64 +163,6 @@
  */
 
 #undef HAVE_GL_GLU_H
-
-
-/*
- * Setting this to zero will delete code to handle X and WIN32
- * colormaps, this will save a good deal of code (especially for
- * fl_draw_image), but FLTK will only work on TrueColor visuals.
- */
-
-#define USE_COLORMAP		1
-
-
-/*
- * Use the new Xft library to draw fonts.
- */
-
-#define USE_XFT			0
-
-
-/*
- * Do we have the X double-buffer extension?  Turning this on will
- * make the list_visuals program produce more information.
- */
-
-#define HAVE_XDBE		0
-
-
-/*
- * Actually try to use the double-buffer extension? Fl_Double_Window
- * and Fl_Overlay_Window will use this. The new version limits itself
- * to doing swap without clipping turned on and should work on more
- * X servers than the fltk1 version.
- */
-
-#define USE_XDBE		HAVE_XDBE
-
-
-/*
- * Did we detect the X overlay extension? This enables code to locate
- * the overlay visual for use by Fl_Overlay_Window and Fl_Gl_Window.
- */
-
-#define HAVE_OVERLAY		0
-
-
-/*
- * Use the X overlay extension?  FLTK will try to use an overlay
- * visual for Fl_Overlay_Window and for Fl_Menu_Window (i.e. the menus
- * and tooltips).  This also adds a substantial amount of code to FLTK
- * so that it can manage an extra visual.  Tested on IRIX and
- * XFree86.  Does not work with current versions of Xft because Xft
- * cannot handle the colormapped visuals that overlays normally use.
- */
-
-#if USE_XFT
-#  define USE_OVERLAY		1
-#else
-#  define USE_OVERLAY		HAVE_OVERLAY
-#endif
 
 
 /*
@@ -131,23 +190,8 @@
 
 
 /*
- * Byte order of your machine: 1 = big-endian, 0 = little-endian.
- */
-
-#define WORDS_BIGENDIAN		0
-
-
-/*
- * Types used by fl_draw_image.  One of U32 or U64 must be defined.
- * U16 is optional but FLTK will work better with it!
- */
-
-#undef U16
-#undef U32
-#undef U64
-
-/*
- * What header file(s) do we use for directory access?
+ * What header file(s) do we use for directory access
+ * (ignored for _WIN32)
  */
 
 #undef HAVE_DIRENT_H
@@ -158,16 +202,13 @@
 
 
 /*
- * Possibly missing sprintf-style functions:
+ * If these are false, fltk will define it's own replacement functions
+ * which will have an fl_ prefix. Use the fltk/string.h header file
+ * instead of <string.h> to call these.
  */
 
 #undef HAVE_VSNPRINTF
 #undef HAVE_SNPRINTF
-
-
-/*
- * String headers and functions...
- */
 
 #undef HAVE_STRING_H
 #undef HAVE_STRINGS_H
@@ -271,5 +312,5 @@
 
 
 /*
- * End of "$Id: configh.in,v 1.54 2003/04/20 03:17:44 easysw Exp $".
+ * End of "$Id: configh.in,v 1.55 2003/11/04 08:10:54 spitzak Exp $".
  */

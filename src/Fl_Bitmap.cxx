@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bitmap.cxx,v 1.23 2003/08/04 06:55:33 spitzak Exp $"
+// "$Id: Fl_Bitmap.cxx,v 1.24 2003/11/04 08:10:58 spitzak Exp $"
 //
 // Bitmap drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -29,13 +29,35 @@
 #include <fltk/xbmImage.h>
 using namespace fltk;
 
+/** Set the cached image to have a 1-bit alpha mask.
+
+    Subclasses can call this inside their _draw() method to set or
+    replace the alpha of the image with a 1-bit mask. This is useful
+    for image types that have only on/off transparency. The code to
+    do so would look something like this:
+
+    \code
+    MyImage::draw(x,y,w,h,style,flags) {
+      if (!mask) {
+        uchar* data = generate_ae_bitmap();
+	(const_cast<Image*>(this))->create_bitmap_mask(data,width,height);
+	free[] data;
+      }
+      draw_cache(x,y,w,h,style,flags);
+    }
+    \endcode
+
+    Each bit of the data is a pixel of alpha, where 1 indicates
+    opaque and 0 indicates clear. Each byte supplies 8 bits, the
+    high bit being the left-most one. Rows are padded out to the
+    next multiple of 8, so the left-most column of every row is
+    the high bit of the mask.
+*/
+void Image::create_bitmap_mask(const uchar* bitmap, int w, int h) {
+  w_ = w;
+  h_ = h;
 #ifdef _WIN32
-// replicate XCreateBitmapFromData:
-// Written by Matt
-// Updated by Mike to just make a simple 1-bit deep bitmap; I don't think it
-// needs to do the other stuff since 1-bit bitmaps are used for text, too...
-Pixmap fltk::create_bitmap(const uchar* bitmap, int w, int h) {
-  // this won't work ehen the user changes display mode during run or
+  // this won't work when the user changes display mode during run or
   // has two screens with differnet depths
   static uchar hiNibble[16] =
   { 0x00, 0x80, 0x40, 0xc0, 0x20, 0xa0, 0x60, 0xe0,
@@ -56,19 +78,38 @@ Pixmap fltk::create_bitmap(const uchar* bitmap, int w, int h) {
     if (pad)
       *dst++ = 0;
   }
-  Pixmap r = CreateBitmap(w, h, 1, 1, newarray);
+  mask = (void*)CreateBitmap(w, h, 1, 1, newarray);
   delete[] newarray;
-  return r;
-}
+#elif (defined(__APPLE__) && !USE_X11)
+  // nyi this is expected to make a GWorld object...
+#else
+  mask = (void*)XCreateBitmapFromData(xdisplay, xwindow, (char*)bitmap, (w+7)&-8, h);
 #endif
+}
 
-void xbmImage::draw(float x, float y, float, float, Flags flags) const
+void xbmImage::_draw(int x, int y, int w, int h, const Style* style, Flags flags) const
 {
-  if (!mask)
-    (const_cast<xbmImage*>(this))->mask = (void*)create_bitmap(array, w(),h());
-  _draw(x, y, flags);
+  if (!mask)	
+    (const_cast<xbmImage*>(this))->create_bitmap_mask(array, w_, h_);
+  draw_cache(x, y, w, h, style, flags);
+}
+
+/** Draw the bitmap filled with the current color.
+
+    Because bitmaps are only 1 channel, it makes sense to draw them
+    with a solid and settable color. This function does so. It will
+    draw them with the upper-left corner at the given position.
+
+    Note this has the same name as a virtual function on Symbol, but
+    it is not an override of that function.
+*/
+void xbmImage::draw(int x, int y) const {
+  if (!mask)	
+    (const_cast<xbmImage*>(this))->create_bitmap_mask(array, w_, h_);
+  transform(x,y);
+  Image::fill(x, y, w_, h_, 0, 0);
 }
 
 //
-// End of "$Id: Fl_Bitmap.cxx,v 1.23 2003/08/04 06:55:33 spitzak Exp $".
+// End of "$Id: Fl_Bitmap.cxx,v 1.24 2003/11/04 08:10:58 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Roller.cxx,v 1.34 2002/12/10 02:00:48 easysw Exp $"
+// "$Id: Fl_Roller.cxx,v 1.35 2003/11/04 08:11:01 spitzak Exp $"
 //
 // Roller widget for the Fast Light Tool Kit (FLTK).
 //
@@ -153,7 +153,7 @@ void ThumbWheel::draw() {
     }
   }
   if (focused()) {
-    focusbox()->draw(0,0,w(),h(), BLACK, INVISIBLE);
+    focusbox()->draw(0,0,w(),h(), style(), INVISIBLE);
   }
 }
 
@@ -163,5 +163,5 @@ ThumbWheel::ThumbWheel(int X,int Y,int W,int H,const char* L) : Valuator(X,Y,W,H
 }
 
 //
-// End of "$Id: Fl_Roller.cxx,v 1.34 2002/12/10 02:00:48 easysw Exp $".
+// End of "$Id: Fl_Roller.cxx,v 1.35 2003/11/04 08:11:01 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Slider.cxx,v 1.68 2003/10/28 17:45:14 spitzak Exp $"
+// "$Id: Fl_Slider.cxx,v 1.69 2003/11/04 08:11:01 spitzak Exp $"
 //
 // Slider widget for the Fast Light Tool Kit (FLTK).
 //
@@ -221,26 +221,22 @@ void Slider::draw()
     }
   }
 
-  Flags flags = 0;
-  if (!active_r()) {
-    flags |= INACTIVE;
-  } else {
-    if (pushed()) flags |= VALUE;
-    if (belowmouse()) flags |= HIGHLIGHT;
-  }
+  Flags f2 = current_flags_highlight();
+  Flags flags = f2 & ~HIGHLIGHT;
+  if (pushed()) f2 |= VALUE;
 
   // minimal-update the slider, if it indicates the background needs
   // to be drawn, draw that. We draw the slot if the current box type
   // has no border:
-  if (draw(sx, sy, sw, sh, flags, iy==0)) {
+  if (draw(sx, sy, sw, sh, f2, iy==0)) {
 
     // draw the box or the visible parts of the window
     if (!box->fills_rectangle()) draw_background();
-    box->draw(0, 0, w(), h(), color(), flags);
+    box->draw(0, 0, w(), h(), style(), flags|OUTPUT);
 
     // draw the focus indicator inside the box:
     if (focused()) {
-      focusbox()->draw(ix+1, iy+1, iw-2, ih-2, labelcolor(), INVISIBLE);
+      focusbox()->draw(ix+1, iy+1, iw-2, ih-2, style(), INVISIBLE);
     }
 
     if (type() & TICK_BOTH) {
@@ -256,7 +252,7 @@ void Slider::draw()
 	}
       }
       Color color = textcolor();
-      if (!active_r()) color = inactive(color);
+      if (flags&INACTIVE) color = inactive(color);
       setcolor(color);
       draw_ticks(ix, iy, iw, ih, (slider_size_+1)/2);
     }
@@ -277,31 +273,34 @@ bool Slider::draw(int ix, int iy, int iw, int ih, Flags flags, bool slot)
   if (type()&16/*FILL*/) slider_size(0);
 
   // if user directly set selected_color we use it:
-  if (style()->selection_color) flags |= SELECTED;
+  if (style()->selection_color_) flags |= SELECTED;
 
   // figure out where the slider should be:
   int sx = ix, sy = iy, sw = iw, sh = ih;
   int sp;
+  int sglyph = 0;
   if (horizontal()) {
     sx = sp = ix+slider_position(value(),iw);
     sw = slider_size_;
     if (!sw) {sw = sx-ix; sx = ix;} // fill slider
+    else sglyph=17;
   } else {
     sy = sp = iy+slider_position(value(),ih);
     sh = slider_size_;
-    if (!sh) sh = iy+ih-sy; // fill slider
+    if (!sh) {sh = iy+ih-sy;} // fill slider
+    else sglyph=16;
   }
 
   if (damage()&DAMAGE_ALL) {
 
     push_clip(0, 0, w(), h());
-    draw_glyph(0, sx, sy, sw, sh, flags); // draw the slider
+    draw_glyph(sglyph, sx, sy, sw, sh, flags); // draw the slider
     clip_out(sx, sy, sw, sh); // clip out the area of the slider
 
   } else if (sp != old_position) {
 
     // update a moving slider:
-    draw_glyph(0, sx, sy, sw, sh, flags); // draw slider in new position
+    draw_glyph(sglyph, sx, sy, sw, sh, flags); // draw slider in new position
     // clip to the region the old slider was in:
     if (horizontal()) {
       if (slider_size_) push_clip(old_position, sy, sw, sh);
@@ -315,7 +314,7 @@ bool Slider::draw(int ix, int iy, int iw, int ih, Flags flags, bool slot)
   } else {
 
     // update for the highlight turning on/off
-    if (damage() & DAMAGE_HIGHLIGHT) draw_glyph(0, sx, sy, sw, sh, flags);
+    if (damage() & DAMAGE_HIGHLIGHT) draw_glyph(sglyph, sx, sy, sw, sh, flags);
     // otherwise no changes
     return false;
 
@@ -340,8 +339,9 @@ bool Slider::draw(int ix, int iy, int iw, int ih, Flags flags, bool slot)
       slx = ix+(iw-slot_size_+1)/2;
       slw = slot_size_;
     }
-    buttonbox()->draw(slx, sly, slw, slh, BLACK,
-		       flags&INACTIVE|VALUE);
+    THIN_DOWN_BOX->draw(slx, sly, slw, slh, style(), flags&INACTIVE|INVISIBLE);
+    setcolor(BLACK);
+    fillrect(slx+1,sly+1,slw-2,slh-2);
     clip_out(slx, sly, slw, slh);
   }
   return true;
@@ -427,37 +427,33 @@ int Slider::handle(int event, int x, int y, int w, int h) {
 
 int Slider::handle(int event) {return handle(event,0,0,w(),h());}
 
-static void glyph(const Widget* widget, int glyph,
-		  int x,int y,int w,int h, Flags flags)
+static void glyph(int glyph, int x,int y,int w,int h, const Style* style, Flags flags)
 {
-  if (!glyph) flags &= ~VALUE;
-  Widget::default_glyph(widget, glyph, x, y, w, h, flags);
+  if (glyph<100) flags &= ~VALUE;
+  Widget::default_glyph(glyph, x, y, w, h, style, flags);
   // draw the divider line into slider:
-  if (!glyph) {
-    if (w < 4 || h < 4) return;
-    if (!((Slider*)widget)->slider_size()) return; // ignore FILL widgets
-    if (widget->type()&1) { // horizontal
-      x = x+(w+1)/2;
-      setcolor(GRAY33);
-      drawline(x-1, y+1, x-1, y+h-2);
-      setcolor(WHITE);
-      drawline(x, y+1, x, y+h-2);
-    } else {
-      y = y+(h+1)/2;
-      setcolor(GRAY33);
-      drawline(x+1, y-1, x+w-2, y-1);
-      setcolor(WHITE);
-      drawline(x+1, y, x+w-2, y);
-    }
+  if (w < 4 || h < 4) return;
+  if (glyph==17) { // horizontal
+    x = x+(w+1)/2;
+    setcolor(GRAY33);
+    drawline(x-1, y+1, x-1, y+h-2);
+    setcolor(WHITE);
+    drawline(x, y+1, x, y+h-2);
+  } else if (glyph==16) { // vertical
+    y = y+(h+1)/2;
+    setcolor(GRAY33);
+    drawline(x+1, y-1, x+w-2, y-1);
+    setcolor(WHITE);
+    drawline(x+1, y, x+w-2, y);
   }
 }
 
 static void revert(Style *s) {
-  s->color = GRAY75;
-  s->textcolor = GRAY33;
-  s->textsize = 8;
-  s->box = FLAT_BOX;
-  s->glyph = ::glyph;
+  s->color_ = GRAY75;
+  s->textcolor_ = GRAY33;
+  s->textsize_ = 8;
+  s->box_ = FLAT_BOX;
+  s->glyph_ = ::glyph;
 }
 static NamedStyle style("Slider", revert, &Slider::default_style);
 NamedStyle* Slider::default_style = &::style;
@@ -470,5 +466,5 @@ Slider::Slider(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Slider.cxx,v 1.68 2003/10/28 17:45:14 spitzak Exp $".
+// End of "$Id: Fl_Slider.cxx,v 1.69 2003/11/04 08:11:01 spitzak Exp $".
 //

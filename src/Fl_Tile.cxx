@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tile.cxx,v 1.24 2003/10/28 17:45:14 spitzak Exp $"
+// "$Id: Fl_Tile.cxx,v 1.25 2003/11/04 08:11:02 spitzak Exp $"
 //
 // Tile widget for the Fast Light Tool Kit (FLTK).
 //
@@ -65,28 +65,17 @@ void TiledGroup::position(int oix, int oiy, int newx, int newy) {
   }
 }
 
+// resizing is equivalent to moving  the lower-right corner (sort of):
 void TiledGroup::layout() {
-#if 0
-  // This code attempted to keep the current sizes. A better method may
-  // be to just call init_sizes() after the user moves the borders.
   int* p = sizes(); // remember the initial positions on first call here
   if (layout_damage() & LAYOUT_WH) {
     layout_damage(layout_damage() & ~LAYOUT_WH);
-    // find the lowest-right-most corner:
-    int* q = p+8; int llx = 1; int lly = 1;
-    int numchildren = children();
-    for (int i = 0; i < numchildren; q += 4, i++) {
-      if (q[1] > llx) llx = q[1];
-      if (q[3] > lly) lly = q[3];
-    }
     // drag the corner of the group to the new position:
-    position(llx, lly, w()+llx-p[1], h()+lly-p[3]);
+    position(p[1], p[3], w(), h());
     // drag the corner of the resizable() to the new position:
-    if (p[5] != llx || p[7] != lly)
-      position(p[5], p[7], p[5]+w()-llx, p[7]+h()-lly);
+    if (p[5] != p[1] || p[7] != p[3])
+      position(p[5], p[7], p[5]+w()-p[1], p[7]+h()-p[3]);
   }
-#endif
-  if (!resizable()) resizable(this);
   Group::layout();
 }
 
@@ -112,8 +101,6 @@ int TiledGroup::handle(int event) {
   case MOVE:
   case ENTER:
   case PUSH: {
-    // Search all the children to find the edges we are nearest, and also
-    // find the original position of those edges:
     int mindx = 100;
     int mindy = 100;
     int oldx = 0;
@@ -142,9 +129,8 @@ int TiledGroup::handle(int event) {
       }
     }
     sdrag = 0; sx = sy = 0;
-    // To grab an edge we must be inside the resizable area and close enough:
-    if (oldx>=q[4] && oldx<=q[5] && mindx <= GRABAREA) {sdrag=DRAGH; sx=oldx;}
-    if (oldy>=q[6] && oldy<=q[7] && mindy <= GRABAREA) {sdrag|=DRAGV; sy=oldy;}
+    if (mindx <= GRABAREA) {sdrag = DRAGH; sx = oldx;}
+    if (mindy <= GRABAREA) {sdrag |= DRAGV; sy = oldy;}
     cursor(cursors[sdrag]);
     if (sdrag) return 1;
     return Group::handle(event);
@@ -179,5 +165,5 @@ int TiledGroup::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Tile.cxx,v 1.24 2003/10/28 17:45:14 spitzak Exp $".
+// End of "$Id: Fl_Tile.cxx,v 1.25 2003/11/04 08:11:02 spitzak Exp $".
 //

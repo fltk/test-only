@@ -1,5 +1,5 @@
 //
-// "$Id: KDE.cxx,v 1.17 2003/10/28 17:45:16 spitzak Exp $"
+// "$Id: KDE.cxx,v 1.18 2003/11/04 08:11:04 spitzak Exp $"
 //
 // Theme plugin file for FLTK
 //
@@ -196,10 +196,10 @@ extern "C" bool fltk_theme() {
     fltk::Font* font = fltk::font(fontname, attrib);
     if (font) {
 // CET - FIXME    if (*fontencoding) fltk::encoding(fontencoding);
-      Widget::default_style->labelfont = font;
-      Widget::default_style->textfont = font;
-      Widget::default_style->labelsize = fontsize;
-      Widget::default_style->textsize = fontsize;
+      Widget::default_style->labelfont(font);
+      Widget::default_style->textfont(font);
+      Widget::default_style->labelsize(fontsize);
+      Widget::default_style->textsize(fontsize);
     }
   }
 
@@ -234,12 +234,12 @@ extern "C" bool fltk_theme() {
       Style* style;
 
       if ((style = Style::find("MenuBar"))) {
-	style->textfont = menufont;
-	style->textsize = menufontsize;
+	style->textfont(menufont);
+	style->textsize(menufontsize);
       }
       if ((style = Style::find("PopupMenu"))) {
-	style->textfont = menufont;
-	style->textsize = menufontsize;
+	style->textfont(menufont);
+	style->textsize(menufontsize);
       }
     }
   }
@@ -248,55 +248,55 @@ extern "C" bool fltk_theme() {
   Style* style = Widget::default_style;
 
   // turn off highlighting:
-  style->highlight_color = NO_COLOR;
-  style->highlight_textcolor = NO_COLOR;
+//    style->highlight_color(NO_COLOR);
+//    style->highlight_textcolor(NO_COLOR);
 
   if (background)
     fltk::set_background(background);
 
   if (foreground) {
-    style->labelcolor = foreground;
-    style->textcolor = foreground;
-    style->selection_textcolor = foreground;
+    style->labelcolor(foreground);
+    style->textcolor(foreground);
+    style->selection_textcolor(foreground);
   }
 
   if (button_background && button_background != background)
-    style->buttoncolor = button_background;
+    style->buttoncolor(button_background);
 
   if (window_background && window_background != background)
-    style->color = window_background;
+    style->color(window_background);
 
   if (window_foreground)
-    style->textcolor = style->selection_textcolor = window_foreground;
+    style->textcolor(window_foreground);
 
   if (select_background)
-    style->selection_color = select_background;
+    style->selection_color(select_background);
 
   if (select_foreground)
-    style->selection_textcolor = select_foreground;
+    style->selection_textcolor(select_foreground);
 
   if (button_foreground && button_foreground != foreground &&
       (style = Style::find("button"))) {
-    style->labelcolor = button_foreground;
+    style->labelcolor(button_foreground);
   }
 
 // Don't bother.  KDE gets it wrong.
 //  if ((style = Style::find("scrollbar"))) {
 //    if (background && window_background)
-//      style->color = fltk::lerp(background, window_background, 0.5);
+//      style->color(fltk::lerp(background, window_background, 0.5));
 //  }
 
 /* looks better for dark backgrounds
   if ((style = Style::find("scrollbar"))) {
-    if (foreground) style->color = 48;
+    if (foreground) style->color(48);
   }
 
   if ((style = Style::find("slider"))) {
-    if (foreground) style->color = 48;
+    if (foreground) style->color(48);
   }
 
   if ((style = Style::find("value slider"))) {
-    if (foreground) style->color = 48;
+    if (foreground) style->color(48);
   }
 */
 
@@ -304,21 +304,21 @@ extern "C" bool fltk_theme() {
   if (motif_style) {
 //  setcolor(GRAY90, GRAY85); // looks better for dark backgrounds
     if ((style = Style::find("menu"))) {
-      style->leading = 4;
+      style->leading(4);
     }
     if ((style = Style::find("check button"))) {
-      style->selection_color = GRAY66;
-      style->buttoncolor = GRAY75;
+      style->selection_color(GRAY66);
+      style->buttoncolor(GRAY75);
     }
   } else {
 
 //  if ((style = Style::find("menu"))) {
-//    style->leading = 8;
-//    style->box = &kdewin_menu_text_box;
+//    style->leading(8);
+//    style->box(&kdewin_menu_text_box);
 //  }
 
 //  if ((style = Style::find("scrollbar"))) {
-//    style->box = &kdewin_menu_text_box;
+//    style->box(&kdewin_menu_text_box);
 //  }
   }
 #endif
@@ -330,5 +330,5 @@ extern "C" bool fltk_theme() {
 }
 
 //
-// End of "$Id: KDE.cxx,v 1.17 2003/10/28 17:45:16 spitzak Exp $".
+// End of "$Id: KDE.cxx,v 1.18 2003/11/04 08:11:04 spitzak Exp $".
 //

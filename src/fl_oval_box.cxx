@@ -1,5 +1,5 @@
 //
-// "$Id: fl_oval_box.cxx,v 1.23 2002/12/10 02:01:02 easysw Exp $"
+// "$Id: fl_oval_box.cxx,v 1.24 2003/11/04 08:11:04 spitzak Exp $"
 //
 // Oval box drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -34,52 +34,53 @@ using namespace fltk;
 
 class OvalBox : public Box {
 public:
-  void draw(int x, int y, int w, int h, Color color, Flags f) const {
+  void _draw(int x, int y, int w, int h, const Style* style, Flags f) const {
     addellipse(x, y, w-1, h-1);
-    setcolor(color);
-    fillstrokepath(inactive(BLACK,f));
+    Color bg, fg; style->boxcolors(f,bg,fg);
+    setcolor(bg);
+    fillstrokepath(fg);
   }
-  OvalBox(const char* n) : Box(n) {
-    dx_ = dy_ = 1; dw_ = dh_ = 2;
-    fills_rectangle_ = 0;
+  const BoxInfo* boxinfo() const {
+    static BoxInfo b = {1,1,2,2,0};
+    return &b;
   }
+  OvalBox(const char* n) : Box(n) {}
 };
-static OvalBox ovalBox(0);
+static OvalBox ovalBox("oval");
 Box* const fltk::OVAL_BOX = &ovalBox;
 
 class OvalShadowBox : public Box {
 public:
-  void draw(int x, int y, int w, int h, Color color, Flags f) const {
+  void _draw(int x, int y, int w, int h, const Style* style, Flags f) const {
     w-=3; h-=3;
     addellipse(x+3, y+3, w, h);
     setcolor(GRAY33);
     fillpath();
-    ovalBox.draw(x, y, w, h, color, f);
+    ovalBox.draw(x, y, w, h, style, f);
   }
-  OvalShadowBox(const char* n) : Box(n) {
-    dx_ = dy_ = 1; dw_ = dh_ = 5;
-    fills_rectangle_ = 0;
+  const BoxInfo* boxinfo() const {
+    static BoxInfo b = {1,1,5,5,0};
+    return &b;
   }
+  OvalShadowBox(const char* n) : Box(n) {}
 };
-static OvalShadowBox ovalShadowBox(0);
+static OvalShadowBox ovalShadowBox("oval_shadow");
 Box* const fltk::OSHADOW_BOX = &ovalShadowBox;
 
 class OvalFlatBox : public Box {
 public:
-  void draw(int x, int y, int w, int h, Color color, Flags) const {
+  void _draw(int x, int y, int w, int h, const Style* style, Flags f) const {
     addellipse(x, y, w-1, h-1);
-    setcolor(color);
+    Color bg, fg; style->boxcolors(f,bg,fg);
+    setcolor(bg);
     fillpath();
   }
-  OvalFlatBox(const char* n) : Box(n) {
-    dx_ = dy_ = dw_ = dh_ = 0;
-    fills_rectangle_ = 0;
-  }
+  OvalFlatBox(const char* n) : Box(n) {}
 };
 static OvalFlatBox ovalFlatBox(0);
 Box* const fltk::OFLAT_BOX = &ovalFlatBox;
 
 
 //
-// End of "$Id: fl_oval_box.cxx,v 1.23 2002/12/10 02:01:02 easysw Exp $".
+// End of "$Id: fl_oval_box.cxx,v 1.24 2003/11/04 08:11:04 spitzak Exp $".
 //

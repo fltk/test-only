@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Text_Display.cxx,v 1.25 2003/09/03 06:08:07 spitzak Exp $"
+// "$Id: Fl_Text_Display.cxx,v 1.26 2003/11/04 08:11:01 spitzak Exp $"
 //
 // Copyright Mark Edel.  Permission to distribute under the LGPL for
 // the FLTK library granted by Mark Edel.
@@ -192,6 +192,7 @@ int TextDisplay::longest_vline() {
 ** Change the size of the displayed text area
 */
 void TextDisplay::layout() {
+//printf("TextDisplay::layout\n");
   if (!buffer() || !visible_r()) return;
   int X = 0, Y = 0, W = w(), H = h();
   box()->inset(X, Y, W, H);
@@ -203,10 +204,10 @@ void TextDisplay::layout() {
 
   /* Find the new maximum font height for this text display */
   setfont(textfont(), textsize());
-  mMaxsize = int(height()+leading());
+  mMaxsize = int(getascent()+getdescent()+leading());
   for (i = 0; i < mNStyles; i++) {
     setfont(mStyleTable[i].font, mStyleTable[i].size);
-    mMaxsize = max(mMaxsize, int(height()+leading()));
+    mMaxsize = max(mMaxsize, int(getascent()+getdescent()+leading()));
   }
 
   // did we have scrollbars initially?
@@ -1759,12 +1760,16 @@ void TextDisplay::extend_range_for_styles( int *start, int *end ) {
 
 // The draw() method.  It tries to minimize what is draw as much as possible.
 void TextDisplay::draw(void) {
-  // don't even try if there is no associated text buffer!
+//printf("TextDisplay::draw\n");
+   // don't even try if there is no associated text buffer!
   if (!buffer()) { draw_box(); return; }
+
+  // check if sizes have been initialized:
+  if (!text_area.w || !text_area.h) layout();
 
   // draw the non-text, non-scrollbar areas.
   if (damage() & DAMAGE_ALL) {
-    //printf("drawing all\n");
+//printf("drawing rectangles\n");
     // draw the box()
     draw_frame();
 
@@ -1796,7 +1801,7 @@ void TextDisplay::draw(void) {
     // blank the previous cursor protrusions
   }
   else if (damage() & (DAMAGE_SCROLL | DAMAGE_VALUE)) {
-    //printf("blanking previous cursor extrusions at Y: %d\n", mCursorOldY);
+//printf("blanking previous cursor extrusions at Y: %d\n", mCursorOldY);
     // CET - FIXME - save old cursor position instead and just draw side needed?
     push_clip(text_area.x-LEFT_MARGIN,
                  text_area.y,
@@ -1820,7 +1825,7 @@ void TextDisplay::draw(void) {
 
   // draw all of the text
   if (damage() & (DAMAGE_ALL | DAMAGE_VALUE)) {
-    //printf("drawing all text\n");
+//printf("drawing all text\n");
     int X, Y, W, H;
     if (clip_box(text_area.x, text_area.y, text_area.w, text_area.h,
                     X, Y, W, H)) {
@@ -1831,8 +1836,8 @@ void TextDisplay::draw(void) {
       // Draw the whole area...
       drawtext(text_area.x, text_area.y, text_area.w, text_area.h);
     }
-  }
-  else if (damage() & DAMAGE_SCROLL) {
+  } else if (damage() & DAMAGE_SCROLL) {
+//printf("drawing some lines of text\n");
     // draw some lines of text
     push_clip(text_area.x, text_area.y,
                  text_area.w, text_area.h);
@@ -1851,6 +1856,7 @@ void TextDisplay::draw(void) {
   if (damage() & (DAMAGE_ALL | DAMAGE_SCROLL | DAMAGE_VALUE)
       && !buffer()->primary_selection()->selected() &&
       mCursorOn && focused()) {
+//printf("drawing cursor\n");
     push_clip(text_area.x-LEFT_MARGIN,
                  text_area.y,
                  text_area.w+LEFT_MARGIN+RIGHT_MARGIN,
@@ -2008,5 +2014,5 @@ int TextDisplay::handle(int event) {
 
 
 //
-// End of "$Id: Fl_Text_Display.cxx,v 1.25 2003/09/03 06:08:07 spitzak Exp $".
+// End of "$Id: Fl_Text_Display.cxx,v 1.26 2003/11/04 08:11:01 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_shadow_box.cxx,v 1.18 2002/12/10 02:01:02 easysw Exp $"
+// "$Id: fl_shadow_box.cxx,v 1.19 2003/11/04 08:11:04 spitzak Exp $"
 //
 // Shadow box drawing routines for the Fast Light Tool Kit (FLTK).
 //
@@ -32,27 +32,29 @@ using namespace fltk;
 
 class ShadowBox : public Box {
 public:
-  void draw(int x, int y, int w, int h, Color color, Flags f) const
+  void _draw(int x, int y, int w, int h, const Style* style, Flags f) const
   {
+    Color bg, fg; style->boxcolors(f, bg, fg);
     w-=SIZE; h-=SIZE;
-    if (!(f & INVISIBLE)) {
-      setcolor(color);
+    if (w > 2 && h > 2 && !(f & INVISIBLE)) {
+      setcolor(bg);
       fillrect(x+1,y+1,w-2,h-2);
     }
     setcolor(GRAY33);
     fillrect(x+SIZE, y+h,  w, SIZE);
     fillrect(x+w,  y+SIZE, SIZE,  h);
-    setcolor(inactive(BLACK,f));
+    setcolor(fg);
     strokerect(x,y,w,h);
   }
-  ShadowBox(const char* n) : Box(n) {
-    dx_ = dy_ = 1; dw_ = dh_ = 2+SIZE;
-    fills_rectangle_ = 0;
+  const BoxInfo* boxinfo() const {
+    static BoxInfo b = {1,1,2+SIZE,2+SIZE,0};
+    return &b;
   }
+  ShadowBox(const char* n) : Box(n) {}
 };
-static ShadowBox shadowBox(0);
+static ShadowBox shadowBox("shadow_box");
 Box* const fltk::SHADOW_BOX = &shadowBox;
 
 //
-// End of "$Id: fl_shadow_box.cxx,v 1.18 2002/12/10 02:01:02 easysw Exp $".
+// End of "$Id: fl_shadow_box.cxx,v 1.19 2003/11/04 08:11:04 spitzak Exp $".
 //

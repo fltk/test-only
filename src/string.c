@@ -1,5 +1,5 @@
 /*
- * "$Id: string.c,v 1.4 2003/04/20 03:17:51 easysw Exp $"
+ * "$Id: string.c,v 1.5 2003/11/04 08:11:04 spitzak Exp $"
  *
  * BSD string functions for the Fast Light Tool Kit (FLTK).
  *
@@ -26,7 +26,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <fltk/string.h>
-
 
 /*
  * 'fltk_strdup()' - Duplicate a string.
@@ -166,5 +165,5 @@ fltk_strlcpy(char *dst,		/* I - Destination buffer */
 
 
 /*
- * End of "$Id: string.c,v 1.4 2003/04/20 03:17:51 easysw Exp $".
+ * End of "$Id: string.c,v 1.5 2003/11/04 08:11:04 spitzak Exp $".
  */

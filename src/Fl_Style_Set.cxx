@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_Set.cxx,v 1.5 2003/06/24 07:10:48 spitzak Exp $"
+// "$Id: Fl_Style_Set.cxx,v 1.6 2003/11/04 08:11:01 spitzak Exp $"
 //
 // Code for switching between named classes of style
 //
@@ -57,7 +57,7 @@ StyleSet::StyleSet() {
   // Update parent entries 
   // (suppose only possible parent is Widget::default_style    
   for (l = NamedStyle::first; l; l = l->next) {
-    if (l->parent) l->parent = default_style;
+    if (l->parent_) l->parent_ = default_style;
   }
   first_style = NamedStyle::first;
   NamedStyle::first = saved;
@@ -95,5 +95,5 @@ StyleSet::~StyleSet() {
 }
 
 //
-// End of "$Id: Fl_Style_Set.cxx,v 1.5 2003/06/24 07:10:48 spitzak Exp $".
+// End of "$Id: Fl_Style_Set.cxx,v 1.6 2003/11/04 08:11:01 spitzak Exp $".
 //

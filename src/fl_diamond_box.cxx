@@ -1,5 +1,5 @@
 //
-// "$Id: fl_diamond_box.cxx,v 1.27 2002/12/10 02:00:58 easysw Exp $"
+// "$Id: fl_diamond_box.cxx,v 1.28 2003/11/04 08:11:03 spitzak Exp $"
 //
 // Diamond box code for the Fast Light Tool Kit (FLTK).
 //
@@ -39,22 +39,22 @@ using namespace fltk;
 // Diamond with an edge pattern like FrameBox:
 class DiamondBox : public FrameBox {
 public:
-  void draw(int,int,int,int, Color, Flags=0) const;
+  void _draw(int,int,int,int, const Style*, Flags=0) const;
   DiamondBox(const char* n, const char* s, const FrameBox* d=0)
-    : FrameBox(n, s, d) { fills_rectangle_ = 0; }
+    : FrameBox(n, s, d) { }
 };
 
 extern void fl_to_inactive(const char* s, char* to);
 
-void DiamondBox::draw(int x, int y, int w, int h,
-			  Color c, Flags f) const
+void DiamondBox::_draw(int x, int y, int w, int h,
+		       const Style* style, Flags flags) const
 {
   int x1 = x+w/2;
   if (w&1) w--; else {w -= 2; x++;}
   int y1 = y+h/2;
   if (h&1) h--; else {h -= 2; y++;}
-  const char* s = (f & VALUE) ? down->data() : data();
-  char buf[26]; if (f&INACTIVE && Style::draw_boxes_inactive) {
+  const char* s = (flags & VALUE) ? down->data() : data();
+  char buf[26]; if (flags&INACTIVE && style->draw_boxes_inactive()) {
     fl_to_inactive(s, buf); s = buf;}
   const char* t;
   if (*s == '2') {t = s+1; s += 3;} else {t = s+2;}
@@ -75,7 +75,8 @@ void DiamondBox::draw(int x, int y, int w, int h,
     t += 2;
     x++; y++; w -= 2; h -= 2;
   }
-  if (w > 0 && h > 0 && !(f & INVISIBLE)) {
+  if (w > 0 && h > 0 && !(flags & INVISIBLE)) {
+    Color bg, fg; style->boxcolors(flags, bg, fg);
     // draw the interior, assumming the edges are the same thickness
     // as the normal square box:
     newpath();
@@ -83,16 +84,16 @@ void DiamondBox::draw(int x, int y, int w, int h,
     addvertex(x1, y);
     addvertex(x+w,y1);
     addvertex(x1,y+h);
-    setcolor(c);
-    fillstrokepath(c);
+    setcolor(bg);
+    fillstrokepath(bg);
   }
 }
 
-static DiamondBox diamondDownBox(0, "2WWMMPPAA");
+static DiamondBox diamondDownBox("diamond_down", "2WWMMPPAA");
 Box* const fltk::DIAMOND_DOWN_BOX = &diamondDownBox;
-static DiamondBox diamondUpBox(0, "2AAWWMMTT", &diamondDownBox);
+static DiamondBox diamondUpBox("diamond_up", "2AAWWMMTT", &diamondDownBox);
 Box* const fltk::DIAMOND_UP_BOX = &diamondUpBox;
 
 //
-// End of "$Id: fl_diamond_box.cxx,v 1.27 2002/12/10 02:00:58 easysw Exp $".
+// End of "$Id: fl_diamond_box.cxx,v 1.28 2003/11/04 08:11:03 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Help_View.cxx,v 1.4 2003/08/05 08:09:54 spitzak Exp $"
+// "$Id: Fl_Help_View.cxx,v 1.5 2003/11/04 08:10:59 spitzak Exp $"
 //
 // HelpView widget routines.
 //
@@ -353,7 +353,7 @@ void
     fillrect(ww, hh, 17, 17);
   }
 
-  b->draw(0, 0, ww, hh, bgcolor_);
+  b->draw(0, 0, ww, hh, style(), OUTPUT);
 
   if (!value_)
     return;
@@ -637,7 +637,8 @@ void
 
             if (img)
               img->draw (xx - leftline_,
-                         yy - (int)(getascent()+.5f) + 2);
+                         yy - (int)(getascent()+.5f) + 2,
+			 ww, hh, style(), OUTPUT);
 
             xx += ww;
             if ((height + 2) > hh)
@@ -2592,5 +2593,5 @@ static void hscrollbar_callback (Widget * s, void *)
 
 
 //
-// End of "$Id: Fl_Help_View.cxx,v 1.4 2003/08/05 08:09:54 spitzak Exp $".
+// End of "$Id: Fl_Help_View.cxx,v 1.5 2003/11/04 08:10:59 spitzak Exp $".
 //

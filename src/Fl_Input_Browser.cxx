@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.cxx,v 1.22 2003/10/28 17:45:14 spitzak Exp $"
+// "$Id: Fl_Input_Browser.cxx,v 1.23 2003/11/04 08:10:59 spitzak Exp $"
 //
 // Input Browser (Combo Box) widget for the Fast Light Tool Kit (FLTK).
 //
@@ -48,7 +48,6 @@ InputBrowser::InputBrowser(int x, int y, int w, int h, const char *l)
   minh_ = 10;
   maxw_ = 600;
   maxh_ = 400;
-  over_now = 0; over_last = 1;
 }
 
 // these are only used when in grabbed state so only one exists at once
@@ -153,19 +152,9 @@ public:
 
 int
 InputBrowser::handle(int e) {
-  int TX, TY = 0, TW, TH = h();
-  if (type()&NONEDITABLE) {
-    TX = 0; TW = w();
-  } else {
-    TX = input.x()+input.w(); TW = w()-(input.x()+input.w());
-  }
-  if (event_inside(TX, TY, TW, TH))
-    over_now = 1;
-  else
-    over_now = 0;
-  if (over_now != over_last) redraw(DAMAGE_HIGHLIGHT);
-
   if (e == FOCUS) fltk::focus(input);
+
+  if (e == ENTER || e == LEAVE) redraw_highlight();
 
   if ((event_inside(input.x(), input.y(), input.w(), input.h()) || e == KEY)
     && !(type()&NONEDITABLE) && !pushed())
@@ -247,8 +236,6 @@ InputBrowser::handle(int e) {
 
 void
 InputBrowser::draw() {
-  Flags f = flags();
-  if (!active_r()) f |= INACTIVE;
   minw_ = w();
   if (damage()&DAMAGE_ALL) draw_frame();
   int X = 0, Y = 0, W = w(), H = h(); box()->inset(X, Y, W, H);
@@ -266,15 +253,14 @@ InputBrowser::draw() {
     input.set_damage(0);
   }
   if (damage()&(DAMAGE_ALL|DAMAGE_VALUE|DAMAGE_HIGHLIGHT)) {
+    Flags f = current_flags_highlight();
     if (ib == this) f |= VALUE;
-    if (over_now) f |= HIGHLIGHT;
     X += W-W1; W = W1;
     // draw the little mark at the right:
     draw_glyph(GLYPH_DOWN_BUTTON, X, Y, W, H, f);
-    over_last = over_now;
   }
 }
 
 //
-// End of "$Id: Fl_Input_Browser.cxx,v 1.22 2003/10/28 17:45:14 spitzak Exp $".
+// End of "$Id: Fl_Input_Browser.cxx,v 1.23 2003/11/04 08:10:59 spitzak Exp $".
 //

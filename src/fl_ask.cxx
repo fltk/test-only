@@ -1,5 +1,5 @@
 //
-// "$Id: fl_ask.cxx,v 1.30 2003/06/24 07:10:48 spitzak Exp $"
+// "$Id: fl_ask.cxx,v 1.31 2003/11/04 08:11:03 spitzak Exp $"
 //
 // Standard dialog functions for the Fast Light Tool Kit (FLTK).
 //
@@ -41,17 +41,17 @@
 using namespace fltk;
 
 static void m_revert(Style* s) {
-  s->box = NO_BOX;
+  s->box_ = NO_BOX;
 }
 static NamedStyle m_style("Message", m_revert, &message_style);
 NamedStyle* fltk::message_style = &m_style;
 
 static void i_revert(Style* s) {
-  s->box = THIN_UP_BOX;
-  s->labelfont = TIMES_BOLD;
-  s->labelsize = 34;
-  s->color = WHITE;
-  s->labelcolor = BLUE;
+  s->box_ = THIN_UP_BOX;
+  s->labelfont_ = TIMES_BOLD;
+  s->labelsize_ = 34;
+  s->color_ = WHITE;
+  s->textcolor_ = s->labelcolor_ = BLUE;
 }
 static NamedStyle i_style("Icon", i_revert, &fltk::icon_style);
 NamedStyle* fltk::icon_style = &i_style;
@@ -232,5 +232,5 @@ const char *fltk::password(const char *fmt, const char *defstr, ...) {
 }
 
 //
-// End of "$Id: fl_ask.cxx,v 1.30 2003/06/24 07:10:48 spitzak Exp $".
+// End of "$Id: fl_ask.cxx,v 1.31 2003/11/04 08:11:03 spitzak Exp $".
 //

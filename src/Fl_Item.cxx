@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Item.cxx,v 1.30 2003/09/03 06:08:06 spitzak Exp $"
+// "$Id: Fl_Item.cxx,v 1.31 2003/11/04 08:10:59 spitzak Exp $"
 //
 // Widget designed to be an item in a menu or browser.
 //
@@ -53,8 +53,8 @@ NamedStyle* Item::default_style = &::style;
 Item::Item(const char* l) : Widget(0,0,0,0,l) {
   // we need to defer setting the glyph to here because C++ has no way
   // to make sure the check button style is constructed before this style:
-  if (!default_style->glyph)
-    default_style->glyph = CheckButton::default_style->glyph;
+  if (!default_style->glyph_)
+    default_style->glyph_ = CheckButton::default_style->glyph_;
   style(default_style);
   set_flag(ALIGN_LEFT|ALIGN_INSIDE);
 }
@@ -70,7 +70,7 @@ Item::Item(const char* l) : Widget(0,0,0,0,l) {
     be deleted. This is the same as setting it to Widget::default_style.
 */
 void Item::set_style(const Style* style) {
-  ::style.parent = style;
+  ::style.parent_ = style;
 }
 
 /** By default an item just draws it's label using the textcolor.
@@ -96,9 +96,7 @@ void Item::draw() {
     draw_glyph(0, x+3, y+((h-gw)>>1), gw, gw, lflags);
     x += gw+3; w -= gw+3;
   }
-  draw_label(x, y, w, h,
-	flags() & SELECTED ? selection_textcolor() : textcolor(),
-	flags()|OUTPUT);
+  draw_label(x, y, w, h, style(), flags()|OUTPUT);
 }
 
 /** Measure the space the draw() will take and set w() and h().
@@ -126,6 +124,7 @@ int Item::handle(int) {return 0;}
 ////////////////////////////////////////////////////////////////
 
 #include <fltk/ItemGroup.h>
+#include <fltk/damage.h>
 
 ItemGroup::ItemGroup(const char* l) : Menu(0,0,0,0,l) {
   style(::style);
@@ -135,12 +134,12 @@ ItemGroup::ItemGroup(const char* l) : Menu(0,0,0,0,l) {
 // implementation of draw & layout should be identical to Item type()==0
 
 void ItemGroup::draw() {
-  //if (box() != NO_BOX) draw_box();
-  int x = 0; int y = 0; int w = this->w(); int h = this->h();
-  //box()->inset(x,y,w,h);
-  draw_label(x, y, w, h,
-	flags() & SELECTED ? selection_textcolor() : textcolor(),
-	flags()|OUTPUT);
+  if (damage()&~DAMAGE_CHILD) {
+    //if (box() != NO_BOX) draw_box();
+    int x = 0; int y = 0; int w = this->w(); int h = this->h();
+    //box()->inset(x,y,w,h);
+    draw_label(x, y, w, h, style(), flags()|OUTPUT);
+  }
 }
 
 void ItemGroup::layout() {

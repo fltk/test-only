@@ -1,5 +1,5 @@
 //
-// "$Id: xpmImage.h,v 1.7 2003/08/05 08:09:54 spitzak Exp $"
+// "$Id: xpmImage.h,v 1.8 2003/11/04 08:10:57 spitzak Exp $"
 //
 // Image subclass that draws the data from an xpm format file.
 // XPM is a file format designed for small icons in X, it can
@@ -41,10 +41,8 @@ public:
   // some compilers with bugs may need this one: (?)
   xpmImage(char ** d) : data(d) {w_ = -1;}
 
-  void measure(float&, float&) const;
-  void measure(int& w, int& h) const {Symbol::measure(w,h);}
-  void draw(float, float, float, float, Flags = 0) const;
-  void draw(float x, float y, Flags f = 0) const {draw(x,y,w_,h_,f);}
+  void _measure(float&, float&) const;
+  void _draw(int, int, int, int, const Style*, Flags = 0) const;
 
 };
 
@@ -53,5 +51,5 @@ public:
 #endif
 
 //
-// End of "$Id: xpmImage.h,v 1.7 2003/08/05 08:09:54 spitzak Exp $".
+// End of "$Id: xpmImage.h,v 1.8 2003/11/04 08:10:57 spitzak Exp $".
 //

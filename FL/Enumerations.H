@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.57 2003/09/06 22:37:36 spitzak Exp $"
+// "$Id: Enumerations.H,v 1.58 2003/11/04 08:10:55 spitzak Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -200,6 +200,7 @@ enum {
   FL_ALIGN_IMAGE_OVER_TEXT	= 0,
   FL_ALIGN_CLIP			= fltk::ALIGN_CLIP,
   FL_ALIGN_WRAP			= fltk::ALIGN_WRAP,
+  FL_ALIGN_MASK			= fltk::ALIGN_MASK,
   FL_ALIGN_TOP_LEFT		= FL_ALIGN_TOP | FL_ALIGN_LEFT,
   FL_ALIGN_TOP_RIGHT		= FL_ALIGN_TOP | FL_ALIGN_RIGHT,
   FL_ALIGN_BOTTOM_LEFT		= FL_ALIGN_BOTTOM | FL_ALIGN_LEFT,
@@ -352,5 +353,5 @@ enum Fl_Damage {
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.57 2003/09/06 22:37:36 spitzak Exp $".
+// End of "$Id: Enumerations.H,v 1.58 2003/11/04 08:10:55 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_mac.cxx,v 1.10 2003/10/28 17:45:15 spitzak Exp $"
+// "$Id: Fl_mac.cxx,v 1.11 2003/11/04 08:11:03 spitzak Exp $"
 //
 // MacOS specific code for the Fast Light Tool Kit (FLTK).
 //
@@ -85,7 +85,7 @@ static struct FD {
 static int G_pipe[2] = { 0,0 };		// work around pthread_cancel() problem
 static pthread_mutex_t select_mutex;	// lock for above data
 
-void fltk::add_fd(int n, int events, void (*cb)(int, void*), void *v) {
+void fltk::add_fd(int n, int events, FileHandler cb, void *v) {
   remove_fd(n, events);
   pthread_mutex_lock(&select_mutex);
   int i = nfds++;
@@ -104,7 +104,7 @@ void fltk::add_fd(int n, int events, void (*cb)(int, void*), void *v) {
   pthread_mutex_unlock(&select_mutex);
 }
 
-void fltk::add_fd(int fd, void (*cb)(int, void*), void* v) {
+void fltk::add_fd(int fd, FileHandler cb, void* v) {
   add_fd(fd, POLLIN, cb, v);
 }
 
@@ -1580,6 +1580,6 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_mac.cxx,v 1.10 2003/10/28 17:45:15 spitzak Exp $".
+// End of "$Id: Fl_mac.cxx,v 1.11 2003/11/04 08:11:03 spitzak Exp $".
 //
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.32 2003/08/05 08:13:21 spitzak Exp $"
+// "$Id: Fl_Image.cxx,v 1.33 2003/11/04 08:10:59 spitzak Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -31,32 +31,41 @@
 
 using namespace fltk;
 
-// WAS: I took out the indirection pointers as that will not work, because
-// it bypasses the virtual draw function on Image. We either need to
-// make the _draw() function able to print a pixmap+bitmap onto another
-// device, or we need each Image subclass to be able to print onto
-// a device.
+/*! \class fltk::Image
+
+  \brief Cached constant image with optional alpha
+
+  This subclass of Symbol draws a very common thing: a fixed-size
+  bitmapped color image with alpha information. The base class
+  provides support for caching a rendered version of the image,
+  and a function to draw this cached version on the screen.
+
+  The subclasses are required to provide a _draw() method that
+  fills in this cache if possible and then calls the base class
+  method to draw it. The subclasses are also required to either
+  fill in w_ and h_ in the constructor, or provide a _measure()
+  method that calculates them.
+
+*/
 
 void fl_restore_clip(); // in rect.C
 
-// Most subclasses have draw() create the "mask" and "id" the first time
-// they are called and then call this method to quickly get them onto the
-// screen:
+/** Draw the cached image after _draw() creates it.
 
-void Image::_draw(float XP, float YP, Flags) const
+    _draw() methods should call this after they have filled in the
+    w_, h_, mask, and id fields.
+*/
+void Image::draw_cache(int Xi, int Yi, int Wi, int Hi, const Style* style, Flags flags) const
 {
-  // Calculate X,Y,W,H which is the box we are going to fill, and
-  // calculate cx, cy which is the coordinate in the image of X,Y:
-  int X,Y,W,H; clip_box((int)XP,(int)YP,w(),h(),X,Y,W,H);
-  int cx = X-(int)XP;
-  int cy = Y-(int)YP;
-  // clip the box down to the size of image, quit if empty:
-  //if (cx < 0) {W += cx; X -= cx; cx = 0;}
-  if (cx+W > w()) W = w()-cx;
-  if (W <= 0) return;
-  //if (cy < 0) {H += cy; Y -= cy; cy = 0;}
-  if (cy+H > h()) H = h()-cy;
-  if (H <= 0) return;
+
+  // cx,cy = coordinate in image of upper-left pixel to draw
+  // X,Y,W,H = box to fill with the image
+  if (w()< Wi) Wi = w();
+  if (h()< Hi) Hi = h();
+  int X,Y,W,H; clip_box(Xi,Yi,Wi,Hi,X,Y,W,H);
+  int cx = X-Xi;
+  int cy = Y-Yi;
+  if (W <= 0 || H <= 0) return;
   // convert to Xlib coordinates:
   transform(X,Y);
 
@@ -103,27 +112,9 @@ void Image::_draw(float XP, float YP, Flags) const
       fl_restore_clip();
 #endif
     } else {
-      // mask only
-#ifdef _WIN32
-      HDC tempdc = CreateCompatibleDC(gc);
-      SelectObject(tempdc, (HGDIOBJ)mask);
-      SetTextColor(gc, 0); // VP : seems necessary at least under win95
-      setbrush();
-      //SelectObject(gc, brush);
-      // secret bitblt code found in old MSWindows reference manual:
-      BitBlt(gc, X, Y, W, H, tempdc, cx, cy, 0xE20746L);
-      DeleteDC(tempdc);
-#elif (defined(__APPLE__) && !USE_X11)
-      // OSX version nyi
-#else
-      XSetStipple(xdisplay, gc, (Pixmap)mask);
-      int ox = X-cx; if (ox < 0) ox += w();
-      int oy = Y-cy; if (oy < 0) oy += h();
-      XSetTSOrigin(xdisplay, gc, ox, oy);
-      XSetFillStyle(xdisplay, gc, FillStippled);
-      XFillRectangle(xdisplay, xwindow, gc, X, Y, W, H);
-      XSetFillStyle(xdisplay, gc, FillSolid);
-#endif
+      Color bg, fg; style->boxcolors(flags, bg, fg);
+      setcolor(fg);
+      fill(X, Y, W, H, cx, cy);
     }
   } else if (id) {
     // pix only, no mask
@@ -131,24 +122,83 @@ void Image::_draw(float XP, float YP, Flags) const
   } // else { no mask or id, probably an error... }
 }
 
-// The default version of measure returns constants from the structure
-// that should have been set by a subclasses' constructor:
-void Image::measure(float& W, float& H) const { W=w(); H=h(); }
+/** Draw the cached alpha channel filled with a solid color.
 
-Image::~Image() {
-  if (mask) delete_bitmap((Pixmap)mask);
+    This draws the cached mask image, filled with the current color.
+    It is clipped to the \a XYWH rectangle, and the pixel \a cx,cy
+    is placed in the upper-left corner of this rectangle.
+
+    This is used internally by the draw_cache method to draw
+    inactive images. It may also be used by subclasses such
+    as xbmImage to implement solid color fill.
+*/
+void Image::fill(int X, int Y, int W, int H, int cx, int cy) const
+{
+#ifdef _WIN32
+  HDC tempdc = CreateCompatibleDC(gc);
+  SelectObject(tempdc, (HGDIOBJ)mask);
+  SetTextColor(gc, 0); // VP : seems necessary at least under win95
+  setbrush();
+  //SelectObject(gc, brush);
+  // secret bitblt code found in old MSWindows reference manual:
+  BitBlt(gc, X, Y, W, H, tempdc, cx, cy, 0xE20746L);
+  DeleteDC(tempdc);
+#elif (defined(__APPLE__) && !USE_X11)
+  // OSX version nyi
+#else
+  XSetStipple(xdisplay, gc, (Pixmap)mask);
+  int ox = X-cx; if (ox < 0) ox += w();
+  int oy = Y-cy; if (oy < 0) oy += h();
+  XSetTSOrigin(xdisplay, gc, ox, oy);
+  XSetFillStyle(xdisplay, gc, FillStippled);
+  XFillRectangle(xdisplay, xwindow, gc, X, Y, W, H);
+  XSetFillStyle(xdisplay, gc, FillSolid);
+#endif
+}
+
+/*! By default Image assummes the constructor set the w_ and h_
+  fields, and returns them.
+
+  For many subclasses (such as ones that read a file!) you certainly
+  want to defer this calculation until first use. The way to do this
+  is to put zero into the w_ and h_ in the constructor, and override this
+  method with your own which calculates the values and sets them if
+  it has not done so already.
+*/
+void Image::_measure(float& W, float& H) const { W=w(); H=h(); }
+
+/*! Get rid of the cached image (the mask and id objects) that
+  were created by _draw(). */
+void Image::destroy_cache() {
+#ifdef _WIN32
+  if (mask) DeleteObject((Pixmap)mask);
   if (id) fl_delete_offscreen((Pixmap)id);
+#elif (defined(__APPLE__) && !USE_X11)
+  if (mask) DisposeGWorld((Pixmap)mask);
+  if (id) fl_delete_offscreen((Pixmap)id);
+#else
+  if (mask) XFreePixmap(xdisplay, (Pixmap)mask);
+  if (id) fl_delete_offscreen((Pixmap)id);
+#endif
+  mask = 0;
+  id = 0;
+}
+
+/*! The destructor calls destroy_cache(). */
+Image::~Image() {
+  destroy_cache();
 }
 
 #include <fltk/Widget.h>
-// this could probably be inline but they cause the above header
-// files to be included by Image.h:
 
+/*! This is a 1.1 back-compatability function. It is the same as
+  doing widget->image(this) and widget->label(0).
+*/
 void Image::label(Widget* o) {
   o->image(this);
   o->label(0);
 }
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.32 2003/08/05 08:13:21 spitzak Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.33 2003/11/04 08:10:59 spitzak Exp $".
 //

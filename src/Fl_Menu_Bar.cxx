@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.67 2003/09/06 22:37:36 spitzak Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.68 2003/11/04 08:11:00 spitzak Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -43,7 +43,7 @@ void MenuBar::draw() {
   int x1 = 0; int y1 = 0; int w1 = w(); int h1 = this->h();
   box()->inset(x1,y1,w1,h1);
   int X = 3;
-  if (Style::hide_shortcut &&
+  if (style()->hide_shortcut() &&
       !(event_key_state(LeftAltKey) || event_key_state(RightAltKey)))
     fl_hide_shortcut = true;
   Item::set_style(this);
@@ -60,7 +60,7 @@ void MenuBar::draw() {
       else
 	widget->clear_flag(HIGHLIGHT);
       widget->clear_flag(SELECTED);
-      buttonbox()->draw(X, y1+1, W, h1-2, color(), widget->flags()&~VALUE);
+      buttonbox()->draw(X, y1+1, W, h1-2, style(), widget->flags()&~VALUE);
       int save_w = widget->w(); widget->w(W-10);
       int save_h = widget->h(); widget->h(h1-2);
       push_matrix();
@@ -122,7 +122,7 @@ int MenuBar::handle(int event) {
   	return 1;
       }
     }
-    if (Style::hide_shortcut &&
+    if (style()->hide_shortcut() &&
 	!event_clicks() &&
 	(event_key() == LeftAltKey || event_key() == RightAltKey)) redraw();
     return 0;
@@ -131,7 +131,7 @@ int MenuBar::handle(int event) {
     // only the Alt key does. Setting the shortcut to zero will disable
     // the alt key shortcut.
     if (event_key() != LeftAltKey && event_key() != RightAltKey) break;
-    if (Style::hide_shortcut) redraw();
+    if (style()->hide_shortcut()) redraw();
     if (shortcut() != LeftAltKey && shortcut() != RightAltKey) break;
     // checking for event_clicks insures that the keyup matches the
     // keydown that preceeded it, so Alt was pressed & released without
@@ -152,14 +152,14 @@ int MenuBar::handle(int event) {
 // done here for highlight boxes.
 
 static void revert(Style* s) {
-  s->color = GRAY75;
-  s->box = FLAT_BOX;
+  s->color_ = GRAY75;
+  s->box_ = FLAT_BOX;
 #if 0
   // NT 4.0 style
-  s->buttonbox = FLAT_BOX;
+  s->buttonbox_ = FLAT_BOX;
 #else
   // Windows98 style:
-  s->buttonbox = HIGHLIGHT_UP_BOX;
+  s->buttonbox_ = HIGHLIGHT_UP_BOX;
 #endif
 }
 static NamedStyle style("MenuBar", revert, &MenuBar::default_style);
@@ -173,5 +173,5 @@ MenuBar::MenuBar(int x,int y,int w,int h,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.67 2003/09/06 22:37:36 spitzak Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.68 2003/11/04 08:11:00 spitzak Exp $".
 //

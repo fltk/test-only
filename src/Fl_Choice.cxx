@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Choice.cxx,v 1.74 2003/08/05 08:09:54 spitzak Exp $"
+// "$Id: Fl_Choice.cxx,v 1.75 2003/11/04 08:10:58 spitzak Exp $"
 //
 // Choice widget for the Fast Light Tool Kit (FLTK).
 //
@@ -40,39 +40,37 @@ void Choice::draw() {
   int X=0; int Y=0; int W=w(); int H=h();
   box()->inset(X,Y,W,H);
   int w1 = H*4/5;
-  if (damage() & DAMAGE_ALL) {
-    draw_frame();
-    // draw the little mark at the right:
-    Flags flags = this->flags();
-    if (!active_r())
-      flags |= INACTIVE;
-    else if (belowmouse())
-      flags |= HIGHLIGHT;
+  if (damage() & DAMAGE_ALL) draw_frame();
+  // draw the little mark at the right:
+  if (damage() & (DAMAGE_ALL|DAMAGE_HIGHLIGHT)) {
+    Flags flags = current_flags_highlight();
     draw_glyph(GLYPH_DOWN_BUTTON, X+W-w1, Y, w1, H, flags);
   }
-  setcolor(color());
-  fillrect(X,Y,W-w1,H);
-  if (focused()) {
-    setcolor(selection_color());
-    fillrect(X+2, Y+2, W-w1-4, H-4);
-  }
-  Widget* o = get_focus();
-  //if (!o && children()) o = child(0);
-  if (o) {
-    Item::set_style(this);
-    if (focused()) o->set_flag(SELECTED);
-    else o->clear_flag(SELECTED);
-    push_clip(X+2, Y, W-w1-2, H);
-    push_matrix();
-    translate(X, Y+((H-o->height())>>1));
-    int save_w = o->w(); o->w(W-w1);
-    fl_hide_shortcut = true;
-    o->draw();
-    fl_hide_shortcut = false;
-    Item::clear_style();
-    o->w(save_w);
-    pop_matrix();
-    pop_clip();
+  if (damage() & (DAMAGE_ALL|DAMAGE_VALUE)) {
+    setcolor(color());
+    fillrect(X,Y,W-w1,H);
+    if (focused()) {
+      setcolor(selection_color());
+      fillrect(X+2, Y+2, W-w1-4, H-4);
+    }
+    Widget* o = get_focus();
+    //if (!o && children()) o = child(0);
+    if (o) {
+      Item::set_style(this);
+      if (focused()) o->set_flag(SELECTED);
+      else o->clear_flag(SELECTED);
+      push_clip(X+2, Y, W-w1-2, H);
+      push_matrix();
+      translate(X, Y+((H-o->height())>>1));
+      int save_w = o->w(); o->w(W-w1);
+      fl_hide_shortcut = true;
+      o->draw();
+      fl_hide_shortcut = false;
+      Item::clear_style();
+      o->w(save_w);
+      pop_matrix();
+      pop_clip();
+    }
   }
 }
 
@@ -119,12 +117,12 @@ int Choice::handle(int e) {
 
   case FOCUS:
   case UNFOCUS:
-    redraw(DAMAGE_HIGHLIGHT);
+    redraw(DAMAGE_VALUE);
     return 1;
 
   case ENTER:
   case LEAVE:
-    if (highlight_color() && takesevents()) redraw(DAMAGE_HIGHLIGHT);
+    redraw_highlight();
   case MOVE:
     return 1;
 
@@ -222,5 +220,5 @@ Choice::Choice(int x,int y,int w,int h, const char *l) : Menu(x,y,w,h,l) {
 }
 
 //
-// End of "$Id: Fl_Choice.cxx,v 1.74 2003/08/05 08:09:54 spitzak Exp $".
+// End of "$Id: Fl_Choice.cxx,v 1.75 2003/11/04 08:10:58 spitzak Exp $".
 //

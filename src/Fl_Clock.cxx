@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Clock.cxx,v 1.35 2002/12/10 02:00:40 easysw Exp $"
+// "$Id: Fl_Clock.cxx,v 1.36 2003/11/04 08:10:59 spitzak Exp $"
 //
 // Clock widget for the Fast Light Tool Kit (FLTK).
 //
@@ -143,9 +143,9 @@ int Clock::handle(int event) {
 }
 
 static void revert(Style* s) {
-  s->selection_color = GRAY85;
-  //s->buttoncolor = GRAY33;
-  //s->textcolor = BLACK;
+  s->selection_color_ = GRAY85;
+  //s->buttoncolor_ = GRAY33;
+  //s->textcolor_ = BLACK;
 }
 static NamedStyle style("Clock", revert, &Clock::default_style);
 NamedStyle* Clock::default_style = &::style;
@@ -162,5 +162,5 @@ ClockOutput::ClockOutput(int x, int y, int w, int h, const char *l)
 }
 
 //
-// End of "$Id: Fl_Clock.cxx,v 1.35 2002/12/10 02:00:40 easysw Exp $".
+// End of "$Id: Fl_Clock.cxx,v 1.36 2003/11/04 08:10:59 spitzak Exp $".
 //

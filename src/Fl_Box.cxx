@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Box.cxx,v 1.28 2003/01/19 07:55:00 spitzak Exp $"
+// "$Id: Fl_Box.cxx,v 1.29 2003/11/04 08:10:58 spitzak Exp $"
 //
 // This is a box that is invisible due to not having a box. The
 // label still prints so it can be used to position labels. Also
@@ -9,8 +9,8 @@
 using namespace fltk;
 
 static void revert(Style* s) {
-  s->color = GRAY75;
-  s->box = NO_BOX;
+  s->color_ = GRAY75;
+  s->box_ = NO_BOX;
 }
 // this is unnamed as there is no need for themes to alter this:
 static NamedStyle style(0, revert, &InvisibleBox::default_style);
@@ -34,5 +34,5 @@ void InvisibleBox::draw() {
 }
 
 //
-// End of "$Id: Fl_Box.cxx,v 1.28 2003/01/19 07:55:00 spitzak Exp $".
+// End of "$Id: Fl_Box.cxx,v 1.29 2003/11/04 08:10:58 spitzak Exp $".
 //

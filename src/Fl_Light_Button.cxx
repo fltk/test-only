@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Light_Button.cxx,v 1.36 2003/02/02 10:39:23 spitzak Exp $"
+// "$Id: Fl_Light_Button.cxx,v 1.37 2003/11/04 08:11:00 spitzak Exp $"
 //
 // Lighted button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,27 +32,24 @@
 
 using namespace fltk;
 
-static void glyph(const Widget* widget, int/*t*/,
-		  int x,int y,int w,int h, Flags f)
+static void glyph(int/*t*/,
+		  int x,int y,int w,int h, const Style* style, Flags f)
 {
   int ww = w/2+1;
-  Color color;
   if (f & VALUE) {
-    f = f&INACTIVE;
-    color = widget->selection_color();
-  } else if ((color = widget->style()->color)) {
+    f = f&INACTIVE | SELECTED;
+  } else if (style->color_) {
     // if user set the color of the button draw that color
-    f = f&INACTIVE;
+    f = f&INACTIVE | OUTPUT;
   } else {
     f = f&INACTIVE | INVISIBLE; // draw frame only
-    color = widget->buttoncolor();
   }
-  THIN_DOWN_BOX->draw(x+((w-ww)>>1), y, ww, h, color, f);
+  THIN_DOWN_BOX->draw(x+((w-ww)>>1), y, ww, h, style, f);
 }
 
 static void revert(Style* s) {
-  s->selection_color = YELLOW;
-  s->glyph = glyph;
+  s->selection_color_ = YELLOW;
+  s->glyph_ = glyph;
 }
 static NamedStyle style("Light_Button", revert, &LightButton::default_style);
 NamedStyle* LightButton::default_style = &::style;
@@ -60,10 +57,10 @@ NamedStyle* LightButton::default_style = &::style;
 LightButton::LightButton(int x, int y, int w, int h, const char *l)
   : CheckButton(x, y, w, h, l)
 {
-  default_style->parent = Button::default_style;
+  default_style->parent_ = Button::default_style;
   style(default_style);
 }
 
 //
-// End of "$Id: Fl_Light_Button.cxx,v 1.36 2003/02/02 10:39:23 spitzak Exp $".
+// End of "$Id: Fl_Light_Button.cxx,v 1.37 2003/11/04 08:11:00 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.cxx,v 1.48 2003/09/03 06:08:06 spitzak Exp $"
+// "$Id: Fl_Adjuster.cxx,v 1.49 2003/11/04 08:10:58 spitzak Exp $"
 //
 // Adjuster widget for the Fast Light Tool Kit (FLTK).
 //
@@ -47,21 +47,12 @@ enum {
   GLYPH_SLOWARROW
 };
 
-static void glyph(const Widget* widget, int t,
-		  int x,int y,int w,int h, Flags flags)
+static void glyph(int t, int x,int y,int w,int h, const Style* s, Flags flags)
 {
-  Color bg, fg;
-
-  if ((flags & HIGHLIGHT) && (bg = widget->highlight_color())) {
-    fg = widget->highlight_textcolor();
-  } else {
-    bg = widget->buttoncolor();
-    fg = inactive(widget->textcolor(),flags);
-  }
-  widget->buttonbox()->draw(x,y,w,h, bg, flags);
-  setcolor(fg);
+  s->buttonbox()->draw(x,y,w,h,s,flags);
   xbmImage* b = arrows[t-GLYPH_FASTARROW];
-  b->draw(x+((w-b->width())>>1), y+((h-b->height())>>1));
+  b->draw(x+((w-b->width())>>1), y+((h-b->height())>>1),
+	  b->width(), b->height(), s, flags);
 }
 
 // changing the value does not change the appearance:
@@ -95,7 +86,7 @@ void Adjuster::draw() {
     Box* box = buttonbox();
     focusbox()->draw(box->dx()+1, box->dy()+1,
 		      w()-box->dw()-2, h()-box->dh()-2,
-		      labelcolor(), INVISIBLE);
+		      style(), INVISIBLE);
   }
 
   last = highlight;
@@ -174,8 +165,8 @@ int Adjuster::handle(int event) {
 }
 
 static void revert(Style* s) {
-  s->box = NO_BOX; // for compatability if in the future it draws the box
-  s->glyph = glyph;
+  s->box_ = NO_BOX; // for compatability if in the future it draws the box
+  s->glyph_ = glyph;
 }
 static NamedStyle style("Adjuster", revert, &Adjuster::default_style);
 NamedStyle* Adjuster::default_style = &::style;
@@ -189,5 +180,5 @@ Adjuster::Adjuster(int x,int y,int w,int h,const char *l) : Valuator(x,y,w,h,l) 
 }
 
 //
-// End of "$Id: Fl_Adjuster.cxx,v 1.48 2003/09/03 06:08:06 spitzak Exp $".
+// End of "$Id: Fl_Adjuster.cxx,v 1.49 2003/11/04 08:10:58 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.127 2003/09/27 23:57:12 spitzak Exp $"
+// "$Id: Fl_Group.cxx,v 1.128 2003/11/04 08:10:59 spitzak Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -41,8 +41,8 @@ using namespace fltk;
 FL_API Group* Group::current_;
 
 static void revert(Style* s) {
-  s->color = GRAY75;
-  s->box = NO_BOX;
+  s->color_ = GRAY75;
+  s->box_ = NO_BOX;
 }
 
 // This style is unnamed since there is no reason for themes to change it:
@@ -448,7 +448,7 @@ void Group::draw() {
 #if 0
     // blinky-draw:
     draw_box();
-    draw_inside_label();
+    draw_label();
     int n; for (n = 0; n < numchildren; n++) {
       Widget& w = *child(n);
       w.set_damage(DAMAGE_ALL|DAMAGE_EXPOSE);
@@ -460,7 +460,7 @@ void Group::draw() {
     push_clip(0, 0, w(), h());
     int n; for (n = numchildren; n--;) draw_child(*child(n));
     draw_box();
-    draw_inside_label();
+    draw_label();
     pop_clip();
 #endif
     // labels are drawn without the clip for back compatability so they
@@ -500,7 +500,7 @@ void Widget::draw_background() const {
   translate(-x(), -y());
   if (!parent()->box()->fills_rectangle()) parent()->draw_background();
   parent()->draw_box();
-  parent()->draw_inside_label();
+  parent()->draw_label();
   pop_matrix();
   pop_clip();
 }
@@ -555,5 +555,5 @@ void Group::fix_old_positions() {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.127 2003/09/27 23:57:12 spitzak Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.128 2003/11/04 08:10:59 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_.cxx,v 1.50 2003/08/05 08:09:55 spitzak Exp $"
+// "$Id: Fl_Menu_.cxx,v 1.51 2003/11/04 08:11:00 spitzak Exp $"
 //
 // The Menu base class is used by browsers, choices, menu bars
 // menu buttons, and perhaps other things.  It is simply an Group
@@ -75,7 +75,6 @@ static List default_list;
 Menu::Menu(int x,int y,int w, int h,const char* l)
   : Group(x,y,w,h,l), list_(&default_list), item_(0) {
   callback(default_callback);
-  end();
 }
 
 int Menu::children(const int* indexes, int level) const {
@@ -255,5 +254,5 @@ int Menu::handle_shortcut() {
 }
 
 //
-// End of "$Id: Fl_Menu_.cxx,v 1.50 2003/08/05 08:09:55 spitzak Exp $"
+// End of "$Id: Fl_Menu_.cxx,v 1.51 2003/11/04 08:11:00 spitzak Exp $"
 //

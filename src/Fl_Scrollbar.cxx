@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Scrollbar.cxx,v 1.66 2003/09/03 06:08:06 spitzak Exp $"
+// "$Id: Fl_Scrollbar.cxx,v 1.67 2003/11/04 08:11:01 spitzak Exp $"
 //
 // Scroll bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -117,16 +117,15 @@ int Scrollbar::handle(int event) {
     return 0;
   case ENTER:
   case MOVE:
-    if (!highlight_color()) return 1;
     if (which_part != which_highlight) {
       which_highlight = which_part;
-      redraw(DAMAGE_HIGHLIGHT);
+      redraw_highlight();
     }
     return 1;
   case LEAVE:
     if (which_highlight) {
       which_highlight = 0;
-      redraw(DAMAGE_HIGHLIGHT);
+      redraw_highlight();
     }
     return 1;
   case PUSH:
@@ -181,7 +180,7 @@ int Scrollbar::handle(int event) {
     return 1;
   case MOUSEWHEEL: {
     float n = (vertical() ? -event_dy() : event_dx())
-      * Style::wheel_scroll_lines * linesize();
+      * style()->wheel_scroll_lines() * linesize();
     if (fabsf(n) > pagesize()) n = (n<0)?-pagesize():pagesize();
     handle_drag(value()+n);
     return 1;
@@ -244,17 +243,17 @@ void Scrollbar::draw() {
 
 }
 
-static void glyph(const Widget* widget, int glyph,
-		  int x,int y,int w,int h, Flags flags)
+static void glyph(int glyph,
+		  int x,int y,int w,int h, const Style* style, Flags flags)
 {
-  if (!glyph) flags &= ~VALUE;
-  Widget::default_glyph(widget, glyph, x, y, w, h, flags);
+  if (glyph<100) flags &= ~VALUE;
+  Widget::default_glyph(glyph, x, y, w, h, style, flags);
 }
 
 static void revert(Style* s) {
-  s->box = FLAT_BOX;
-  s->color = GRAY60;
-  s->glyph = ::glyph;
+  s->box_ = FLAT_BOX;
+  s->color_ = GRAY60;
+  s->glyph_ = ::glyph;
 }
 static NamedStyle style("Scrollbar", revert, &Scrollbar::default_style);
 NamedStyle* Scrollbar::default_style = &::style;
@@ -268,5 +267,5 @@ Scrollbar::Scrollbar(int X, int Y, int W, int H, const char* L)
 }
 
 //
-// End of "$Id: Fl_Scrollbar.cxx,v 1.66 2003/09/03 06:08:06 spitzak Exp $".
+// End of "$Id: Fl_Scrollbar.cxx,v 1.67 2003/11/04 08:11:01 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg.cxx,v 1.14 2003/08/04 06:55:33 spitzak Exp $"
+// "$Id: fl_jpeg.cxx,v 1.15 2003/11/04 08:10:57 spitzak Exp $"
 //
 // JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -256,7 +256,7 @@ static void drawimage_cb(void *v, int/*x*/, int/*y*/, int/*w*/, uchar *b)
 static void declare_now(void*) { }
 #endif
 
-void fltk::jpegImage::measure(float &W, float &H) const
+void fltk::jpegImage::_measure(float &W, float &H) const
 {
 #if !HAVE_LIBJPEG
   const_cast<jpegImage*>(this)->w_ = 0;
@@ -409,5 +409,5 @@ bool fltk::jpegImage::test(const uchar* datas, unsigned size)
 }
 
 //
-// End of "$Id: fl_jpeg.cxx,v 1.14 2003/08/04 06:55:33 spitzak Exp $"
+// End of "$Id: fl_jpeg.cxx,v 1.15 2003/11/04 08:10:57 spitzak Exp $"
 //

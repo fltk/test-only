@@ -7,7 +7,7 @@
 
 #ifndef FL_API
 
-#if defined(_WIN32) && defined(FL_SHARED)
+#if !defined(DOXYGEN) && defined(_WIN32) && defined(FL_SHARED)
 #  ifdef FL_LIBRARY
 #    define FL_API	__declspec(dllexport)
 #  else
@@ -41,6 +41,6 @@
 #  define FL_GL_API
 #endif
 
-typedef unsigned char uchar;
+typedef unsigned char	uchar;
 
 #endif

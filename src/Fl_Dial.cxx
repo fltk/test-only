@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Dial.cxx,v 1.44 2003/09/03 06:08:06 spitzak Exp $"
+// "$Id: Fl_Dial.cxx,v 1.45 2003/11/04 08:10:59 spitzak Exp $"
 //
 // Circular dial widget for the Fast Light Tool Kit (FLTK).
 //
@@ -122,9 +122,9 @@ int Dial::handle(int event) {
 }
 
 static void revert(Style* s) {
-  s->box = OVAL_BOX;
-  s->selection_color = GRAY60;
-  s->highlight_color = BLACK;
+  s->box_ = OVAL_BOX;
+  s->selection_color_ = GRAY60;
+  s->highlight_color_ = BLACK;
 }
 static NamedStyle style("Dial", revert, &Dial::default_style);
 NamedStyle* Dial::default_style = &::style;
@@ -138,5 +138,5 @@ Dial::Dial(int x, int y, int w, int h, const char* l)
 }
 
 //
-// End of "$Id: Fl_Dial.cxx,v 1.44 2003/09/03 06:08:06 spitzak Exp $".
+// End of "$Id: Fl_Dial.cxx,v 1.45 2003/11/04 08:10:59 spitzak Exp $".
 //

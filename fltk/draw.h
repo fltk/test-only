@@ -1,5 +1,5 @@
 //
-// "$Id: draw.h,v 1.5 2003/07/01 07:03:14 spitzak Exp $"
+// "$Id: draw.h,v 1.6 2003/11/04 08:10:57 spitzak Exp $"
 //
 // The fltk drawing library
 //
@@ -105,8 +105,8 @@ FL_API void strokerect(int x, int y, int w, int h);
 FL_API void fillrect(int x, int y, int w, int h);
 FL_API void drawpoint(float x, float y);
 FL_API void drawpoint(int x, int y);
-FL_API void drawline(float,float, float,float);
-FL_API void drawline(int,int, int,int);
+FL_API void drawline(float x0, float y0, float x1, float y1);
+FL_API void drawline(int x0, int y0, int x1, int y1);
 enum {FILLPIE, FILLARC, STROKEPIE, STROKEARC};
 FL_API void fillpie(int x,int y,int w,int h,float a,float a2,int what=FILLPIE);
 inline void strokepie(int x,int y,int w,int h,float a,float a2) {
@@ -175,5 +175,5 @@ FL_API int draw_symbol(const char* label, int x,int y,int w,int h, Color);
 #endif
 
 //
-// End of "$Id: draw.h,v 1.5 2003/07/01 07:03:14 spitzak Exp $".
+// End of "$Id: draw.h,v 1.6 2003/11/04 08:10:57 spitzak Exp $".
 //

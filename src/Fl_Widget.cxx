@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.104 2003/09/06 22:37:36 spitzak Exp $"
+// "$Id: Fl_Widget.cxx,v 1.105 2003/11/04 08:11:02 spitzak Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -193,6 +193,17 @@ void Widget::redraw_label() {
   if (!(flags()&15) || (flags() & ALIGN_INSIDE)) redraw();
   // outside label requires a marker flag and damage to parent:
   else redraw(DAMAGE_CHILD_LABEL);
+}
+
+/** Causes a redraw if highlighting changes.
+
+    Calls redraw(DAMAGE_HIGHLIGHT) if this widget is active
+    and has a non-zero highlight_color(). This is designed to be
+    called in response to ENTER and EXIT events.
+*/
+void Widget::redraw_highlight() {
+  if (takesevents() && active_r() && highlight_color())
+    redraw(DAMAGE_HIGHLIGHT);
 }
 
 ////////////////////////////////////////////////////////////////
@@ -533,8 +544,8 @@ void Widget::draw()
     // check for completely blank widgets. We must not clip to their
     // area because it will break lots of programs that assumme these
     // can overlap any other widgets:
-    if (!label() && !image() ||
-	align() != ALIGN_CENTER && !(align()&ALIGN_INSIDE)) {
+    if (!image() && (!label() ||
+		     align() != ALIGN_CENTER && !(align()&ALIGN_INSIDE))) {
       fl_did_clipping = this;
       return;
     }
@@ -543,9 +554,9 @@ void Widget::draw()
   } else {
     draw_box();
   }
-  draw_inside_label();
+  draw_label();
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.104 2003/09/06 22:37:36 spitzak Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.105 2003/11/04 08:11:02 spitzak Exp $".
 //

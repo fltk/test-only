@@ -1,5 +1,5 @@
 //
-// "$Id: Widget.h,v 1.9 2003/09/03 06:08:06 spitzak Exp $"
+// "$Id: Widget.h,v 1.10 2003/11/04 08:10:57 spitzak Exp $"
 //
 // The base class of all widgets.
 //
@@ -61,7 +61,7 @@ public:
   void	style(const Style& s) { style_ = &s; }
   bool	copy_style(const Style* s);
   static NamedStyle* default_style;
-  static void default_glyph(const Widget*,int,int,int,int,int,Flags);
+  static void default_glyph(int,int,int,int,int,const Style*,Flags);
 
   Group* parent() const	{ return parent_; }
   void	parent(Group* w)	{ parent_ = w; }
@@ -171,6 +171,7 @@ public:
   void	redraw()		;
   void	redraw(uchar c)		;
   void	redraw_label()		;
+  void	redraw_highlight()	;
   void	redraw(int,int,int,int)	;
   uchar	damage() const		{ return damage_; }
   void	set_damage(uchar c)	{ damage_ = c; } // should be called damage(c)
@@ -185,14 +186,15 @@ public:
   void	repeat_timeout(float)	;
   void  remove_timeout()	;
 
+  Flags current_flags() const	;
+  Flags current_flags_highlight() const	;
+  void	draw_background() const	;
   void  draw_frame() const	;
   void  draw_box() const	;
   void  draw_glyph(int t, int x,int y,int w,int h, Flags f) const
-    { glyph()(this,t,x,y,w,h,f); }
-  void  draw_label(int x,int y,int w,int h, Color, Flags) const ;
-  void  draw_inside_label(int x,int y,int w,int h) const ;
-  void	draw_inside_label() const;
-  void	draw_background() const	;
+    { glyph()(t,x,y,w,h,style_,f); }
+  void	draw_label() const	;
+  void  draw_label(int x,int y,int w,int h, const Style*, Flags) const ;
   void	cursor(Cursor*) const	;
 
   void	measure_label(int&, int&) const ;
@@ -251,6 +253,8 @@ public:
   Color	fly_color()		const { return highlight_color(); }
   Color	selected_textcolor()	const { return selection_textcolor(); }
   Color	cursor_color()		const { return selection_color(); }
+  float text_size()		const { return textsize(); }
+  float label_size()		const { return labelsize(); }
 
   void down_box(Box* a)		{ box(a); }
   void slider(Box* a)		{ buttonbox(a); }
@@ -264,6 +268,8 @@ public:
   void textfont(unsigned a)	{ textfont(font(a)); }
   void selected_textcolor(Color a) { selection_textcolor(a); }
   void cursor_color(Color a)	{ selection_color(a); }
+  void text_size(float n)	{ textsize(n); }
+  void label_size(float n)	{ labelsize(n); }
 
 #endif
 
@@ -302,5 +308,5 @@ enum { // Widget::when() values
 #endif
 
 //
-// End of "$Id: Widget.h,v 1.9 2003/09/03 06:08:06 spitzak Exp $".
+// End of "$Id: Widget.h,v 1.10 2003/11/04 08:10:57 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Box.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: Box.h,v 1.3 2003/11/04 08:10:56 spitzak Exp $"
 //
 // Define your own values for box() on a widget by making one of these.
 //
@@ -28,28 +28,11 @@
 
 #include "Color.h"
 #include "Flags.h"
+#include "Symbol.h"
 
 namespace fltk {
 
-class FL_API Box {
-protected:
-  int dx_, dy_, dw_, dh_;
-  int fills_rectangle_;
-public:
-  virtual void draw(int,int,int,int, Color, Flags=0) const = 0;
-  int fills_rectangle() const {return fills_rectangle_;}
-  int dx() const {return dx_;}
-  int dy() const {return dy_;}
-  int dw() const {return dw_;}
-  int dh() const {return dh_;}
-  void inset(int&X,int&Y,int&W,int&H) const {X+=dx_; Y+=dy_; W-=dw_; H-=dh_;}
-  const char* name;
-  Box* next;
-  static Box* first;
-  Box() : name(0) {}
-  Box(const char* n) : name(n), next(first) {first = this;}
-  static Box* find(const char* name);
-};
+typedef Symbol Box;
 
 // draw a pattern of lines around a box, pattern is from the data string
 // in which 'A'=GRAY00, 'X'=GRAY99, other characters are gray levels:
@@ -57,16 +40,19 @@ class FL_API FrameBox : public Box {
 protected:
   const char* data_;
   const FrameBox* down;
+  BoxInfo boxinfo_;
 public:
   const char* data() const {return data_;}
-  void draw(int,int,int,int, Color, Flags=0) const;
+  void _draw(int, int, int, int, const Style*, Flags) const;
+  const BoxInfo* boxinfo() const;
   FrameBox(const char* n, const char* c, const FrameBox* d=0);
 };
 
 // no border, tiling pattern is in absolute coordinates:
 class FL_API FlatBox : public Box {
 public:
-  void draw(int,int,int,int, Color, Flags=0) const;
+  void _draw(int, int, int, int, const Style*, Flags) const;
+  const BoxInfo* boxinfo() const;
   FlatBox(const char* n);
 };
 
@@ -74,7 +60,8 @@ public:
 class FL_API HighlightBox : public FlatBox {
   const Box* down;
 public:
-  void draw(int,int,int,int, Color, Flags=0) const;
+  void _draw(int, int, int, int, const Style*, Flags) const;
+  const BoxInfo* boxinfo() const;
   HighlightBox(const char* n, const Box* d);
 };
 
@@ -83,5 +70,5 @@ public:
 #endif
 
 //
-// End of "$Id: Box.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: Box.h,v 1.3 2003/11/04 08:10:56 spitzak Exp $".
 //

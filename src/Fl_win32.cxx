@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.197 2003/10/28 17:45:15 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.198 2003/11/04 08:11:03 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -125,7 +125,7 @@ static struct FD {
 } *fd = 0;
 
 
-void fltk::add_fd(int n, int events, void (*cb)(int, void*), void *v) {
+void fltk::add_fd(int n, int events, FileHandler cb, void *v) {
   remove_fd(n,events);
   int i = nfds++;
   if (i >= fd_array_size) {
@@ -150,7 +150,7 @@ void fltk::add_fd(int n, int events, void (*cb)(int, void*), void *v) {
 #endif // USE_ASYNC_SELECT
 }
 
-void fltk::add_fd(int fd, void (*cb)(int, void*), void* v) {
+void fltk::add_fd(int fd, FileHandler cb, void* v) {
   add_fd(fd, POLLIN, cb, v);
 }
 
@@ -307,14 +307,6 @@ static inline int fl_ready() {
 }
 
 ////////////////////////////////////////////////////////////////
-
-// Turn this off to avoid using NT 5.0 / Windows 98 multi-monitor calls
-// Using this also required -DWINVER=0x0500
-#if (WINVER >= 0x0500)
-#define USE_MULTIMONITOR 1
-#else
-#define USE_MULTIMONITOR 0
-#endif
 
 static bool reload_info = true;
 
@@ -576,7 +568,7 @@ HANDLE fl_global_selection(int clipboard) {
 
 static Window *dnd_target_window = 0;
 
-/**
+/*
  * subclass the IDropTarget to receive data from DnD operations
  */
 class FlDropTarget : public IDropTarget
@@ -1581,51 +1573,51 @@ bool fltk::system_theme() {
 // Color slider_background = win_color(GetSysColor(COLOR_SCROLLBAR));
 
   fltk::set_background(background);
-  Widget::default_style->labelcolor = foreground;
-  Widget::default_style->highlight_textcolor = foreground;
-  Widget::default_style->color = text_background;
-  Widget::default_style->textcolor = text_foreground;
-  Widget::default_style->selection_color = select_background;
-  Widget::default_style->selection_textcolor = select_foreground;
+  Widget::default_style->labelcolor_ = foreground;
+  Widget::default_style->highlight_textcolor_ = foreground;
+  Widget::default_style->color_ = text_background;
+  Widget::default_style->textcolor_ = text_foreground;
+  Widget::default_style->selection_color_ = select_background;
+  Widget::default_style->selection_textcolor_ = select_foreground;
 
   Style* style;
 
   if ((style = Style::find("ScrollBar"))) {
 //    style->color = lerp(slider_background, text_background, .5);
-    style->color = lerp(background, text_background, .5);
+    style->color_ = lerp(background, text_background, .5);
   }
 
   if (menuitem_background != background || menuitem_foreground != foreground) {
     if ((style = Style::find("MenuBar"))) {
-      style->color = menuitem_background;
-      style->textcolor = menuitem_foreground;
-//    style->selection_color = select_background;
-//    style->selection_textcolor = select_foreground;
+      style->color_ = menuitem_background;
+      style->textcolor_ = menuitem_foreground;
+//    style->selection_color_ = select_background;
+//    style->selection_textcolor_ = select_foreground;
     }
     if ((style = Style::find("PopupMenu"))) {
-      style->color = menuitem_background;
-      style->textcolor = menuitem_foreground;
-//    style->selection_color = select_background;
-//    style->selection_textcolor = select_foreground;
+      style->color_ = menuitem_background;
+      style->textcolor_ = menuitem_foreground;
+//    style->selection_color_ = select_background;
+//    style->selection_textcolor_ = select_foreground;
     }
   }
 
 /* This is the same as the defaults:
   if ((style = Style::find("menu title"))) {
-    style->highlight_color = GRAY75;
-    style->highlight_textcolor = foreground;
-    style->selection_color = GRAY75;
-    style->selection_textcolor = foreground;
+    style->highlight_color_ = GRAY75;
+    style->highlight_textcolor_ = foreground;
+    style->selection_color_ = GRAY75;
+    style->selection_textcolor_ = foreground;
   }
 */
 
   if ((style = Style::find("MenuBar"))) {
-    style->highlight_color = GRAY75; // enable title highlightig
+    style->highlight_color_ = GRAY75; // enable title highlightig
   }
 
   if ((style = Style::find("Tooltip"))) {
-    style->color = tooltip_background;
-    style->textcolor = tooltip_foreground;
+    style->color_ = tooltip_background;
+    style->textcolor_ = tooltip_foreground;
   }
 
   /*
@@ -1664,10 +1656,10 @@ bool fltk::system_theme() {
 		    (ncm.lfMessageFont.lfItalic ? ITALIC : 0));
   size = float(win_fontsize(ncm.lfMessageFont.lfHeight));
 
-  Widget::default_style->labelfont = font;
-  Widget::default_style->textfont = font;
-  Widget::default_style->labelsize = size;
-  Widget::default_style->textsize = size;
+  Widget::default_style->labelfont_ = font;
+  Widget::default_style->textfont_ = font;
+  Widget::default_style->labelsize_ = size;
+  Widget::default_style->textsize_ = size;
 
   // get font info for menu items from LOGFONT structure
   font = fltk::font((const char*)ncm.lfMenuFont.lfFaceName,
@@ -1675,12 +1667,12 @@ bool fltk::system_theme() {
 		    (ncm.lfMenuFont.lfItalic ? ITALIC : 0));
   size = float(win_fontsize(ncm.lfMenuFont.lfHeight));
   if ((style = Style::find("MenuBar"))) {
-    style->textfont = font;
-    style->textsize = size;
+    style->textfont_ = font;
+    style->textsize_ = size;
   }
   if ((style = Style::find("PopupMenu"))) {
-    style->textfont = font;
-    style->textsize = size;
+    style->textfont_ = font;
+    style->textsize_ = size;
   }
 
   if ((style = Style::find("Tooltip"))) {
@@ -1690,20 +1682,20 @@ bool fltk::system_theme() {
 		      (ncm.lfStatusFont.lfItalic ? ITALIC : 0));
     size = float(win_fontsize(ncm.lfStatusFont.lfHeight));
 
-    style->labelfont = style->textfont = font;
-    style->labelsize = style->textsize = size;
+    style->textfont_ = font;
+    style->textsize_ = size;
   }
 
   // grab mousewheel stuff from Windows
   UINT delta;
   SystemParametersInfo(SPI_GETWHEELSCROLLLINES, 0, (PVOID)&delta, 0);
-  if (delta == WHEEL_PAGESCROLL) Style::wheel_scroll_lines = 10000;
-  else Style::wheel_scroll_lines = (int)delta;
+  if (delta == WHEEL_PAGESCROLL) Style::wheel_scroll_lines_ = 10000;
+  else Style::wheel_scroll_lines_ = (int)delta;
 
   // CET - FIXME - do encoding stuff
   return true;
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.197 2003/10/28 17:45:15 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.198 2003/11/04 08:11:03 spitzak Exp $".
 //

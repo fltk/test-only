@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Bar.cxx,v 1.6 2003/02/02 10:39:22 spitzak Exp $"
+// "$Id: Fl_Bar.cxx,v 1.7 2003/11/04 08:10:58 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -31,9 +31,9 @@ using namespace fltk;
 
 static void revert(Style *s) {
   //s->box = UP_BOX;
-  s->box = FLAT_BOX;
-  s->color = GRAY75;
-  s->labelsize = 10;
+  s->box_ = FLAT_BOX;
+  s->color_ = GRAY75;
+  s->labelsize_ = 10;
 }
 static NamedStyle style("BarGroup", revert, &BarGroup::default_style);
 NamedStyle* BarGroup::default_style = &::style;
@@ -126,10 +126,11 @@ void BarGroup::draw()
   } else if (damage() & ~(DAMAGE_CHILD|DAMAGE_HIGHLIGHT)) {
     draw_box();
     int x = 0,y = 0,w = this->w(),h = this->h(); box()->inset(x,y,w,h);
+    Flags flags = current_flags();
     if (type() & 1) // horizontal
-      draw_inside_label(saved_size, y, w-saved_size, h);
+      draw_label(saved_size, y, w-saved_size, h, style(), flags);
     else
-      draw_inside_label(x, saved_size, w, h-saved_size);
+      draw_label(x, saved_size, w, h-saved_size, style(), flags);
   }
   if (damage() & (DAMAGE_EXPOSE|DAMAGE_HIGHLIGHT)) {
     Flags f = 0;

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_gif.cxx,v 1.16 2003/08/04 06:55:33 spitzak Exp $"
+// "$Id: fl_gif.cxx,v 1.17 2003/11/04 08:11:03 spitzak Exp $"
 //
 // gif.cxx
 //
@@ -60,7 +60,7 @@ bool gifImage::test(const uchar *datas, unsigned size)
   return !strncmp((char*) datas,"GIF", 3);
 }
 
-void gifImage::measure(float &W, float &H) const
+void gifImage::_measure(float &W, float &H) const
 {
   if (w() >= 0) { 
     W = w(); H = h(); 
@@ -404,7 +404,7 @@ void gifImage::read()
   draw_xpm(data, 0, 0, BLACK);
   set_mask_bitmap(0);
   if (bitmap) {
-    mask = (void*)create_bitmap(bitmap, w(), h());
+    create_bitmap_mask(bitmap, w(), h());
     delete[] bitmap;
   }
   fl_end_offscreen();
@@ -418,5 +418,5 @@ void gifImage::read()
 }
 
 //
-// End of "$Id: fl_gif.cxx,v 1.16 2003/08/04 06:55:33 spitzak Exp $"
+// End of "$Id: fl_gif.cxx,v 1.17 2003/11/04 08:11:03 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_dnd_win32.cxx,v 1.9 2003/05/19 06:50:08 spitzak Exp $"
+// "$Id: fl_dnd_win32.cxx,v 1.10 2003/11/04 08:11:03 spitzak Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
 // This is code for dragging *out* of the application. Code for dragging
@@ -38,9 +38,7 @@
 
 HANDLE fl_global_selection(int clipboard);
 
-/**
- * this class is needed to allow FLTK apps to be a DnD source
- */
+// this class is needed to allow FLTK apps to be a DnD source
 class FLDropSource : public IDropSource
 {
   DWORD m_cRefCount;
@@ -74,7 +72,7 @@ public:
   }
 };
 
-/**
+/*
  * this is the actual object that FLTK can drop somewhere
  * - the implementation is minimal, but it should work with all decent Win32 drop targets
  */
@@ -134,7 +132,7 @@ public:
 };
 
 
-/**
+/*
  * drag and drop whatever is in the cut-copy-paste buffer
  * - create a selection first using: 
  *     copy(const char *stuff, int len, 0)
@@ -170,5 +168,5 @@ bool fltk::dnd()
 
 
 //
-// End of "$Id: fl_dnd_win32.cxx,v 1.9 2003/05/19 06:50:08 spitzak Exp $".
+// End of "$Id: fl_dnd_win32.cxx,v 1.10 2003/11/04 08:11:03 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Tooltip.cxx,v 1.56 2003/10/28 17:45:15 spitzak Exp $"
+// "$Id: Fl_Tooltip.cxx,v 1.57 2003/11/04 08:11:02 spitzak Exp $"
 //
 // Tooltip code for the Fast Light Tool Kit (FLTK).
 //
@@ -91,7 +91,7 @@ void TooltipBox::layout() {
 void TooltipBox::draw() {
   draw_box();
   int X=0; int Y=0; int W=w(); int H=h(); //box()->inset(X,Y,W,H);
-  draw_label(X, Y, W, H, textcolor(), flags()|OUTPUT);
+  draw_label(X, Y, W, H, style(), flags()|OUTPUT);
 }
 
 static bool recent_tooltip;
@@ -211,14 +211,14 @@ void Tooltip::enter(Widget* wid, int x,int y,int w,int h,
 }
 
 static void revert(Style* s) {
-  s->box = BORDER_BOX;
-  s->color = (Color)215;
-  //s->textcolor = GRAY33;
-  //s->labelcolor = BLACK;
+  s->box_ = BORDER_BOX;
+  s->color_ = (Color)215;
+  //s->textcolor_ = GRAY33;
+  //s->labelcolor_ = BLACK;
 }
 static NamedStyle style("Tooltip", revert, &Tooltip::default_style);
 NamedStyle* Tooltip::default_style = &::style;
 
 //
-// End of "$Id: Fl_Tooltip.cxx,v 1.56 2003/10/28 17:45:15 spitzak Exp $".
+// End of "$Id: Fl_Tooltip.cxx,v 1.57 2003/11/04 08:11:02 spitzak Exp $".
 //

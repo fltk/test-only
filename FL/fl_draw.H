@@ -169,8 +169,9 @@ inline void fl_draw(const char* s, int x,int y,int w,int h, fltk::Flags f) {fltk
 // boxtypes:
 //void fl_frame(const char* s, int x, int y, int w, int h);
 //void fl_frame2(const char* s, int x, int y, int w, int h);
-#include <fltk/Box.h>
-inline void fl_draw_box(fltk::Box* b, int x, int y, int w, int h, fltk::Color c) {b->draw(x,y,w,h,c);}
+// This no longer works because boxes take a style, not a color:
+//  #include <fltk/Box.h>
+//  inline void fl_draw_box(fltk::Box* b, int x, int y, int w, int h, fltk::Color c) {b->draw(x,y,w,h,c);}
 
 // images:
 #define fl_draw_image fltk::drawimage
@@ -191,5 +192,5 @@ inline void fl_rectf(int x, int y, int w, int h, uchar r, uchar g, uchar b) {flt
 #endif
 
 //
-// End of "$Id: fl_draw.H,v 1.32 2003/01/19 22:37:00 spitzak Exp $".
+// End of "$Id: fl_draw.H,v 1.33 2003/11/04 08:10:56 spitzak Exp $".
 //

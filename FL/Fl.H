@@ -4,7 +4,6 @@
 #include "Enumerations.H"
 #include <fltk/run.h>
 #include <fltk/events.h>
-#include <fltk/ScreenInfo.h>
 #include <fltk/Color.h>
 #include <fltk/Font.h>
 #include <fltk/Box.h>
