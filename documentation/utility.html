@@ -1,6 +1,6 @@
 <html><head><title>FLTK Utility Functions</title></head><body bgcolor=white>
 
-<a name=functions><h1>F - Utility Function Reference</h1></a>
+<h1>Utility Function Reference</h1>
 
 This appendix describes all the pop-up window utilities fltk
 provides.  These functions pop up a modal window and wait until the
@@ -10,10 +10,12 @@ user dismisses them and then return the result.
 of the core of fltk.  If you don't like the way they look, copy the
 code and modify to to what you want.
 
-<H3><A name=fl_color_chooser>int fl_color_chooser(const char*, double 
+<h2>Color Choosers</h2>
+
+<H4><A name=fl_color_chooser>int fl_color_chooser(const char*, double 
 &amp;r, double &amp;g, double &amp;b)
 <BR> int fl_color_chooser(const char *, uchar &amp;r, uchar &amp;g, uchar &amp;b)</A>
-</H3>
+</H4>
 
 <P ALIGN=CENTER><IMG src=./fl_color_chooser.jpg></p>
 
@@ -38,7 +40,7 @@ color the user picks!  You can however use <A href=drawing.html#fl_rectf><tt>
 fl_rectf()</tt></A> to fill a region with a simulated color using 
 dithering.</p>
 
-<H3><A name=fl_show_colormap>int fl_show_colormap(int oldcol)</A></H3>
+<H4><A name=fl_show_colormap>int fl_show_colormap(int oldcol)</A></H4>
 
 <tt>fl_show_colormap()</tt> pops up a panel of the 256 colors you can 
 access with "indexed" <A href=Fl_Color.html><tt>Fl_Color</tt></A>
@@ -47,7 +49,9 @@ index, or the old one if the user types ESC or clicks outside the window.
 
 <P ALIGN=CENTER><IMG src=./fl_show_colormap.gif></p>
 
-<H3><A name=fl_message>void fl_message(const char *, ...)</A></H3>
+<h2>Popup messages and questions</h2>
+
+<H4><A name=fl_message>void fl_message(const char *, ...)</A></H4>
 
 Displays a printf-style message in a pop-up box with an &quot;OK&quot; button, 
 waits for the user to hit the button.  The message will wrap to fit the 
@@ -56,13 +60,13 @@ The enter key is a shortcut for the OK button.
 
 <P ALIGN=CENTER><IMG src=./fl_message.gif border=1></p>
 
-<H3><A name=fl_>void fl_alert(const char *, ...)</A></H3>
+<H4><A name=fl_>void fl_alert(const char *, ...)</A></H4>
 
 Same as <tt>fl_message()</tt> except for the &quot;!&quot; symbol. 
 
 <P ALIGN=CENTER><IMG src=./fl_alert.gif border=1></p>
 
-<H3><A name=fl_ask>int fl_ask(const char *, ...)</A></H3>
+<H4><A name=fl_ask>int fl_ask(const char *, ...)</A></H4>
 
 Displays a printf-style message in a pop-up box with an
 &quot;Yes&quot; and &quot;No&quot; button and waits for the user to
@@ -72,8 +76,8 @@ for No.
 
 <P ALIGN=CENTER><IMG src=./fl_ask.gif border=1></p>
 
-<H3><A name=fl_choice2>int fl_choice(const char *q, const char *b0, 
-const char *b1, const char *b2, ...)</A></H3>
+<H4><A name=fl_choice2>int fl_choice(const char *q, const char *b0, 
+const char *b1, const char *b2, ...)</A></H4>
 
 Shows the message with three buttons below it marked with the strings
 <tt> b0</tt>, <tt>b1</tt>, and <tt>b2</tt>.  Returns 0, 1, or 2
@@ -85,8 +89,8 @@ can hide buttons by passing <tt>NULL</tt> as their labels.
 
 <P ALIGN=CENTER><IMG src=./fl_choice.gif border=1></p>
 
-<H3><A name=fl_input2>const char *fl_input(const char *label, const char 
-*deflt = 0, ...)</A></H3>
+<H4><A name=fl_input2>const char *fl_input(const char *label, const char 
+*deflt = 0, ...)</A></H4>
 
 Pops up a window displaying a string, lets the user edit it, and 
 return the new value.  The cancel button returns <tt>NULL</tt>. <I>The 
@@ -96,8 +100,8 @@ commands in the label are after the default value.
 
 <P ALIGN=CENTER><IMG src=./fl_input.gif border=1></p>
 
-<H3><A name=fl_password>const char *fl_password(const char *label, 
-const char *deflt = 0, ...)</A></H3>
+<H4><A name=fl_password>const char *fl_password(const char *label, 
+const char *deflt = 0, ...)</A></H4>
 
 Same as <tt>fl_input()</tt> except an <A
 href=Fl_Secret_Input.html#Fl_Secret_Input>
@@ -105,19 +109,21 @@ href=Fl_Secret_Input.html#Fl_Secret_Input>
 
 <P ALIGN=CENTER><IMG src=./fl_password.gif border=1></p>
 
-<H3><A name=fl_message_font>void fl_message_font(Fl_Font, int size)</A></H3>
+<H4><A name=fl_message_font>void fl_message_font(Fl_Font, int size)</A></H4>
 
 Change the font and font size used for the messages in all the popups. 
 
-<H3><A name=fl_message_icon>void fl_message_icon(Fl_Widget *)</A></H3>
+<H4><A name=fl_message_icon>void fl_message_icon(Fl_Widget *)</A></H4>
 
 Sets the widget that will be displayed as the icon for all the popups.  Any
 widget with any label can be created and used as the icon, including widgets
 with callbacks! Calling this function with <tt>NULL</tt> will reset the
 icons to the FLTK default.
+
+<h2>File Chooser</h2>
  
-<H3><A name=fl_file_chooser>char *fl_file_chooser(const char * message, 
-const char *pattern, const char *fname)</A></H3>
+<H4><A name=fl_file_chooser>char *fl_file_chooser(const char * message, 
+const char *pattern, const char *fname)</A></H4>
 
 FLTK provides a &quot;tab completion&quot; file chooser that makes it easy to 
 choose files from large directories.  This file chooser has several 
@@ -146,16 +152,16 @@ called this defaults to a blank string.</p>
 <p>The returned value points at a static buffer that is only good until 
 the next time <tt>fl_file_chooser()</tt> is called.</p>
 
-<H3><A name=fl_file_chooser_callback>void fl_file_chooser_callback(void 
-(*cb)(const char *))</A></H3>
+<H4><A name=fl_file_chooser_callback>void fl_file_chooser_callback(void 
+(*cb)(const char *))</A></H4>
 
 Set a function that is called every time the user clicks a file in the 
 currently popped-up file chooser.  This could be used to preview the 
 contents of the file.  It has to be reasonably fast, and cannot create 
 FLTK windows. 
 
-<H3><A name=filename_list>int filename_list(const char *d, dirent 
-***list)</A></H3>
+<H4><A name=filename_list>int filename_list(const char *d, dirent 
+***list)</A></H4>
 
 This is a portable and const-correct wrapper for the
 <tt>fl_scandir</tt> function. <tt>d</tt> is the name of a directory
@@ -175,28 +181,28 @@ an attempt is made to put unpadded numbers in consecutive order.
 <UL><PRE>for (int i = return_value; i &gt; 0;) free((void*)(list[--i]));
 free((void*)list);</PRE></UL>
 
-<H3><A name=filename_isdir>int filename_isdir(const char *f)</A></H3>
+<H4><A name=filename_isdir>int filename_isdir(const char *f)</A></H4>
 
 Returns non-zero if the file exists and is a directory. 
 
-<H3><A name=filename_name>const char *filename_name(const char *f)</A></H3>
+<H4><A name=filename_name>const char *filename_name(const char *f)</A></H4>
 
 Returns a pointer to the character after the last slash, or to the 
 start of the filename if there is none. 
 
-<H3><A name=filename_ext>const char *filename_ext(const char *f)</A></H3>
+<H4><A name=filename_ext>const char *filename_ext(const char *f)</A></H4>
 
 Returns a pointer to the last period in <tt>filename_name(f)</tt>, or 
 a pointer to the trailing nul if none. 
 
-<H3><A name=filename_setext>char *filename_setext(char *f, const char 
-*ext)</A></H3>
+<H4><A name=filename_setext>char *filename_setext(char *f, const char 
+*ext)</A></H4>
 
 Does <tt>strcpy(filename_ext(f), ext ? ext : &quot;&quot;)</tt>.  Returns a 
 pointer to <tt>f</tt>. 
 
-<H3><A name=filename_expand>int filename_expand(char *out, const char
-*in)</A></H3>
+<H4><A name=filename_expand>int filename_expand(char *out, const char
+*in)</A></H4>
 
 Splits <tt>in</tt> at each slash character.  Replaces any occurrance 
 of <tt>$X</tt> with <tt>getenv(&quot;X&quot;)</tt> (leaving it as <tt>$X</tt> if 
@@ -209,8 +215,8 @@ Returns non-zero if any changes were made. <I>In true retro
 programming style, it is up to you to provide a buffer big enough for 
 the result.  1024 characters should be enough.</I>
 
-<H3><A name=filename_absolute>int filename_absolute(char *out, const 
-char *in)</A></H3>
+<H4><A name=filename_absolute>int filename_absolute(char *out, const 
+char *in)</A></H4>
 
 If <tt>in</tt> does not start with a slash, this prepends the current 
 working directory to <tt>in</tt> and then deletes any occurances of <tt>
@@ -220,8 +226,8 @@ changes were made. <I>In true retro programming style, it is up to you
 to provide a buffer big enough for the result.  1024 characters should 
 be enough.</I>
 
-<H3><A name=filename_match>int filename_match(const char *f, const char 
-*pattern)</A></H3>
+<H4><A name=filename_match>int filename_match(const char *f, const char 
+*pattern)</A></H4>
 
 Returns true if <tt>f</tt> matches <tt>pattern</tt>.  The following 
 syntax is used by <tt>pattern</tt>: 

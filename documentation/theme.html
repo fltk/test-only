@@ -1,0 +1,222 @@
+<head><title>FLTK Themes</title></head><body bgcolor=white>
+
+<h1>Themes</h1>
+
+<h2>Theme plugins</h2>
+
+Just before the first window is shown, fltk calls the "theme"
+function, which is used to initialize the styles to the user's and
+programmer's preferences.
+
+<p>There are several ways to change the "theme" function:
+
+<p>If fltk is dynamically linked (or statically linked on some Unix
+systems, including Linux if -shared was given to the linker) a "theme
+plugin" can be loaded. This is a plugin that defines a function called
+fltk_theme(). If nothing is done fltk will automatically look for a
+plugin in <tt>~/.fltk/default.theme</tt> and
+<tt>/usr/local/lib/fltk/default.theme</tt> (<tt>%SystemDrive%</tt> is
+added on Windows).
+
+<p>If fltk is statically linked (or in all cases on some Unix systems
+such as Irix), your program can replace fltk_theme with it's own
+definition by linking a object file that defines fltk_theme().
+
+<p>You can call Fl_Style::theme(function) to set the function
+directly.
+
+<p>If fltk is dynamically linked and <a
+href="Fl.html#args">Fl::args()</a> is used, the theme may be loaded by
+name by the -theme switch. This calls
+Fl_Style::theme(Fl_Style::load_theme(name)).
+
+<p>Theme functions are actually of the form
+<tt>extern&nbsp;"C"&nbsp;bool&nbsp;fltk_theme()</tt> (future versions
+of fltk are likely to add arguments to provide the plugin filename to
+this function prototype). A typedef of <tt>Fl_Theme</tt> is
+provided. They are expected to return true on success and false if
+there is any problem (currently fltk ignores this return value), and
+should print to stderr or call Fl::warning() with any explanation of
+problems.
+
+<h2>Controlling themes</h2>
+
+<a name=theme><h4>static Fl_Theme Fl_Style::theme();
+<br>static void theme(Fl_Theme f);</h4></a>
+
+Get or set the function that will be called when the theme is loaded.
+
+<a name=scheme><h4>static const char* Fl_Style::scheme();
+<br>static void Fl_Style::scheme(const char* f);</h4></a>
+
+Fltk also keeps track of a single string pointer that can be used as
+an "argument" to the theme function, perhaps to identify a file it
+should read. The default value is null. If you use <a
+href="Fl.html#args">Fl::args()</a> then the "-scheme" switch sets
+this.
+
+<a name=load_theme><h4>static Fl_Theme Fl_Style::load_theme(const char* name);</h4></a>
+
+Locate a theme plugin by name, load it into memory, and return the
+fltk_theme() function. Returns null if the plugin is not found or
+there is a problem loading it or locating the fltk_theme() function,
+and prints information about what went wrong to stderr.
+
+<p>".theme" is added to the end of the name if not already there and
+<a href=#fl_find_config_file>fl_find_config_file()</a> is called to
+locate the plugin (this means you can provide a full pathname for the
+plugin). If the plugin is found it is loaded with <a
+href=#fl_load_plugin>fl_load_plugin()</a>.
+
+<p>If the name is null, the empty string, or if it "default" and there
+is no plugin named "default", then the built-in fltk_theme() function
+is returned. This built-in calls <a
+href=#fl_get_system_colors>fl_get_system_colors()</a>.
+
+<p>If fltk is statically linked then null, the empty string, and
+"default" return the built-in fltk_theme(), otherwise an error is
+printed and null is returned.
+
+<a name=load_theme2><h4>static void Fl_Style::load_theme();</h4></a>
+
+If this <i>has not</i> been called before, it loads the current theme
+by running the Fl_Style::theme() function. If that has not been set it
+sets it to <a href=#load_theme>Fl_Style::load_theme("default")</a>.
+Progams can call this before showing the first window to force the
+theme to be loaded, otherwise fltk waits until the first window is
+shown to call this.
+
+<a name=reload_theme><h4>static void Fl_Style::reload_theme();</h4></a>
+
+If <a href=#load_theme2>Fl_Style::load_theme(void)</a> <i>has</i> been
+called before, this calls <a href=#revert>Fl_Style::revert()</a> and
+then re-runs the theme function. This will allow the theme to respond
+to changes in any system configuration or files. This does nothing if
+themes have not been started yet to avoid wasting time before it matters.
+
+<p>On Windows this is automatically called in response to a
+<tt>WM_SYSCOLORCHANGE</tt>. On X the theme itself needs to set up some
+event handler to call this, see the KDE theme source code for an example.
+
+<p>A program should call this if it changes the <a
+href=#theme>Fl_Style::theme()</a> or <a
+href=#scheme>Fl_Style::scheme()</a>.
+
+<a name=revert><h4>static void Fl_Style::revert();</h4></a>
+
+Return all the styles to their default settings (by calling the
+revert() function on each of them) and also undo some global settings
+such as <a href=Fl_Color.html#fl_background>fl_background</a>. This is
+done by <a href=#reload_theme>reload_theme()</a> before loading the
+theme again.
+
+<h2>Implementing a Theme</h2>
+
+To implement "themes" the theme code needs to write a number of static
+locations, primarily the default style of several classes. You
+ususally only need to change a few styles to implement a theme.  All
+widgets inherit from the default style anything that they don't set
+themselves.
+
+<p>The following functions are useful when writing a theme.
+
+<a name=fl_get_system_colors><h4>bool fl_get_system_colors();</h4></a>
+
+Read system configuration (GetSysColor() and similar functions on
+Win32, on X it reads a <i>few</i> entries from the xrdb database) and
+retrieve information such as colors and fonts and put them into the
+styles. This is what the default theme does, many other themes will
+find this useful.
+
+<a name=fl_find_config_file><h4>const char* fl_find_config_file(char* out, int size, const char* name);</h4></a>
+
+Search for a file in fltk's configuration directories, and return the
+found filename. If necessary the <i>out</i> buffer is used to printf
+the filename and a pointer to that is returned, <i>size</i> is the
+length of this buffer. Returns null if the filename is not found.
+
+<p>If the name starts with '/' or '.' (or on Windows if it starts with
+'\\' or the second character is a ':') then it is returned unchanged
+(note that this does not check for existence of the file).
+
+<p>Otherwise the following locations are searched in order and the
+first one found is returned:
+
+<ul>
+
+<li><tt>~/.fltk/</tt><i>name</i></li>
+
+<li><tt>%HOMEPATH%/fltk/</tt><i>name</i></li> (Windows only)
+
+<li><tt>%USERPROFILE%/fltk/</tt><i>name</i></li> (Windows only)
+
+<li><tt>/usr/local/lib/fltk/</tt><i>name</i></li> (this may be changed
+by a configuration option when fltk is compiled)
+
+</ul>
+
+<a name=fl_load_plugin><h4>void* fl_load_plugin(const char* name, const char* symbol);</h4></a>
+
+Loads a shared object (DLL) in a portable way. <i>name</i> is a
+complete filename (such as one located by <a
+href=#fl_find_config_file><tt>fl_find_config_file()</tt></a>) and
+<i>symbol</i> is the name of some object in the plugin.
+
+<p>If the plugin file successfully loads (or has already been loaded)
+then a pointer to the given symbol is returned. If the plugin is not
+found or the symbol is not in it then an appropriate error message is
+printed on stderr and null is returned.
+
+<p>You can pass <tt>NULL</tt> as the <i>symbol</i> to indicate that
+you just want to load the plugin. In this case a non-zero value is
+returned if the plugin successfully loads, but you cannot use this
+value for anything other than to test for success.
+
+<h4>Fl_Widget::default_style</h4>
+
+Provides all the defaults described above.  This is the only style
+that does not have a parent.  Highlighting is disabled by default, to
+turn it on you should set highlight color.
+
+<h4>Fl_Style::find("input")</h4>
+
+This style is used by Fl_Input, but a few other widgets directly refer
+to it to draw imbedded text editing fields.
+
+<h4>Fl_Style::find("output")</h4>
+
+This style is used by Fl_Output, but a few other widgets directly
+refer to it to draw imbedded display fields.  Setting the color to
+gray will simulate NeXTStep or other user interfaces where
+interactivity is indicated by color.
+
+<h4>Fl_Style::find("Check_Button")</h4>
+
+Styles usually need to mess with the button_color and glyph function
+here to get check marks correct.
+
+<h4>Fl_Style::find("menu")</h4>
+
+This style is used for the pop-up menu windows.
+<code>button_box</code> is drawn around each item, and
+<code>selection_color</code> is used to color the current one.
+
+<h4>Fl_Style::find("item")</h4>
+
+Menu items.  If you use checkmarks in menus you will have to make
+similar fixes to this as to check_button.  Notice that the box drawn
+around each item is chosen by "menu", not by this.
+
+<h4>Fl_Style::find("Scrollbar")</h4>
+
+Styles usually need to mess with the box, button_box, button_color,
+and glyph function to get these to appear correctly.
+
+<h4>Fl_Tooltip::default_style</h4>
+
+The box and color of this controls the appearance of the tooltips.
+This is always linked in, so you don't need find().  Tooltips also
+have some other static fields to set the timeout and position, see the
+<a href="Fl_Tooltip.html">Fl_Tooltip</a> documentation.
+
+</body></html>

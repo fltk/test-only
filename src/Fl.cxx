@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.139 2002/04/11 07:47:45 spitzak Exp $"
+// "$Id: Fl.cxx,v 1.140 2002/04/12 07:23:57 spitzak Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -218,7 +218,8 @@ static char in_idle;
 int Fl::wait(double time_to_wait) {
   int ret = 0;
   // checks are a bit messy so that add/remove and wait may be called
-  // from inside them without causing an infinite loop:
+  // from inside them without causing an infinite loop. We must also
+  // do them first so that they can install an idle or timeout function:
   if (next_check == first_check) {
     while (next_check) {
       Check* check = next_check;
@@ -250,6 +251,8 @@ int Fl::wait(double time_to_wait) {
       free_timeout = t;
       // Now it is safe for the callback to do add_timeout:
       cb(arg);
+      // return immediately afterwards because timeout was done:
+      time_to_wait = 0.0; ret = 1;
     }
   } else {
     reset_clock = 1; // remember that elapse_timeouts was not called
@@ -663,5 +666,5 @@ bool Fl::handle(int event, Fl_Window* window)
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.139 2002/04/11 07:47:45 spitzak Exp $".
+// End of "$Id: Fl.cxx,v 1.140 2002/04/12 07:23:57 spitzak Exp $".
 //

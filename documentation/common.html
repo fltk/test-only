@@ -1,19 +1,51 @@
 <html><head><title>FLTK Widgets & Attributes</title></head><body bgcolor = white>
 
-<a name=common><h1>3 - Common Widgets and Attributes</h1></a>
+<H2>Callbacks</H2>
+ Callbacks are functions that are called when the value of a widget 
+changes. A callback function is sent a <TT>Fl_Widget</TT> pointer of 
+the widget that changed and optionally a pointer to data of some sort: 
+<UL>
+<PRE>
+void xyz_callback(Fl_Widget *w, void *data) {
+...
+}
+</PRE>
+</UL>
+ The <TT>callback()</TT> method sets the callback function for a 
+widget.  You can optionally pass a pointer to some data needed for the 
+callback: 
+<UL>
+<PRE>
+int xyz_data;
 
- This chapter describes many of the widgets that are provided with FLTK 
-and covers how to query and set the standard attributes. 
+button-&gt;callback(xyz_callback, data);
+</PRE>
+</UL>
+ Normally callbacks are performed only when the value of the widget 
+changes. You can change this using the <A
+href=Fl_Widget.html#when><TT>when()</TT></A> method:
+<UL>
+<PRE>
+button-&gt;when(FL_WHEN_NEVER);
+button-&gt;when(FL_WHEN_CHANGED);
+button-&gt;when(FL_WHEN_RELEASE);
+button-&gt;when(FL_WHEN_RELEASE_ALWAYS);
+button-&gt;when(FL_WHEN_ENTER_KEY);
+button-&gt;when(FL_WHEN_ENTER_KEY_ALWAYS);
+button-&gt;when(FL_WHEN_CHANGED | FL_WHEN_NOT_CHANGED);
+</PRE>
+</UL>
+
 <H2>Buttons</H2>
  FLTK provides many types of buttons:
 <UL>
-<LI><TT>Fl_Button</TT> - A standard push button. </LI>
-<LI><TT>Fl_Check_Button</TT> - A button with a check box. </LI>
+<LI><TT>Fl_Button</TT> - A standard button. </LI>
+<LI><TT>Fl_Check_Button</TT> - A toggle button with a check box. </LI>
 <LI><TT>Fl_Light_Button</TT> - A push button with a light. </LI>
-<LI><TT>Fl_Repeat_Button</TT> - A push button that repeats when held. </LI>
+<LI><TT>Fl_Repeat_Button</TT> - A push button that repeats it's callback when held. </LI>
 <LI><TT>Fl_Return_Button</TT> - A push button that is activated by the 
 Enter key. </LI>
-<LI><TT>Fl_Round_Button</TT> - A button with a check circle. </LI>
+<LI><TT>Fl_Radio_Button</TT> - A button with a circular mark. </LI>
 </UL>
 <P ALIGN=CENTER><IMG SRC="buttons.gif">
 <P>For all of these buttons you just need to include the corresponding <TT>
@@ -26,20 +58,22 @@ Fl_Light_Button *lbutton = new Fl_Light_Button(x, y, width, height);
 Fl_Round_Button *rbutton = new Fl_Round_Button(x, y, width, height, &quot;label&quot;);
 </PRE>
 </UL>
- Each button has an associated <A href=Fl_Button.html#type><TT>
-type()</TT></A> which allows it to behave as a push button, toggle 
-button, or radio button: 
+Each button has an associated <A
+href=Fl_Button.html#type><TT>type()</TT></A> which allows it to behave
+as a push button, toggle button, or radio button. This type is
+defaulted for each button type but you can change it.
 <UL>
 <PRE>
-button-&gt;type(0);
-lbutton-&gt;type(FL_TOGGLE_BUTTON);
-rbutton-&gt;type(FL_RADIO_BUTTON);
+button-&gt;type(0); // default for all other buttons
+button-&gt;type(FL_TOGGLE_BUTTON); // default for Fl_Check_Button & Fl_Light_Button
+button-&gt;type(FL_RADIO_BUTTON); // default for Fl_Radio_Button
 </PRE>
 </UL>
 
-For toggle and radio buttons, the <a
+The <a
 href=Fl_Button.html#value><tt>value()</tt></a> method
-returns the current button state (0 = off, 1 = on).  The <a
+returns the current button state (0 = off, 1 = on) (push buttons are
+on while they are held down).  The <a
 href=Fl_Button.html#set><tt>set()</tt></a> and <a
 href=Fl_Button.html#clear><tt>clear()</tt></a> methods can be used on
 toggle buttons to turn a toggle button on or off, respectively.  Radio
@@ -48,7 +82,7 @@ href=Fl_Button.html#setonly><tt>setonly()</tt></a> method; this will also
 turn off other radio buttons in the same group.
 
 <H2>Text</H2>
- FLTK provides several text widgets for displaying and receiving text: 
+FLTK provides several text widgets for displaying and receiving text:
 <UL>
 <LI><TT>Fl_Input</TT> - A standard one-line text input field. </LI>
 <LI><TT>Fl_Output</TT> - A standard one-line text output field. </LI>
@@ -259,41 +293,6 @@ shape. </LI>
 <LI>+[1-9] or -[1-9] tweaks the scaling a little bigger or  smaller. </LI>
 <LI>[1-9] - rotates by a multiple of 45 degrees.  '6' does  nothing, 
 the others point in the direction of that key on a  numeric keypad. </LI>
-</UL>
-<H2>Callbacks</H2>
- Callbacks are functions that are called when the value of a widget 
-changes. A callback function is sent a <TT>Fl_Widget</TT> pointer of 
-the widget that changed and optionally a pointer to data of some sort: 
-<UL>
-<PRE>
-void xyz_callback(Fl_Widget *w, void *data) {
-...
-}
-</PRE>
-</UL>
- The <TT>callback()</TT> method sets the callback function for a 
-widget.  You can optionally pass a pointer to some data needed for the 
-callback: 
-<UL>
-<PRE>
-int xyz_data;
-
-button-&gt;callback(xyz_callback, data);
-</PRE>
-</UL>
- Normally callbacks are performed only when the value of the widget 
-changes. You can change this using the <A
-href=Fl_Widget.html#when><TT>when()</TT></A> method:
-<UL>
-<PRE>
-button-&gt;when(FL_WHEN_NEVER);
-button-&gt;when(FL_WHEN_CHANGED);
-button-&gt;when(FL_WHEN_RELEASE);
-button-&gt;when(FL_WHEN_RELEASE_ALWAYS);
-button-&gt;when(FL_WHEN_ENTER_KEY);
-button-&gt;when(FL_WHEN_ENTER_KEY_ALWAYS);
-button-&gt;when(FL_WHEN_CHANGED | FL_WHEN_NOT_CHANGED);
-</PRE>
 </UL>
 <H2>Shortcuts</H2>
  Shortcuts are key sequences that activate widgets (usually buttons or 

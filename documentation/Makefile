@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.16 2002/01/27 04:59:47 spitzak Exp $"
+# "$Id: Makefile,v 1.17 2002/04/12 07:23:53 spitzak Exp $"
 #
 # Documentation makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -49,11 +49,11 @@ HTMLFILES	= \
 	common.html \
 	editor.html \
 	fluid.html \
-	subclassing.html \
-	opengl.html \
+	Fl.html \
 	widgets.html \
 	Fl_Adjuster.html \
 	Fl_Bar.html \
+	Fl_Bitmap.html \
 	Fl_Box.html \
 	Fl_Boxtype.html \
 	Fl_Browser.html \
@@ -88,12 +88,15 @@ HTMLFILES	= \
 	Fl_Multi_Browser.html \
 	Fl_Multiline_Input.html \
 	Fl_Multiline_Output.html \
+	Fl_Named_Style.html \
 	Fl_Numeric_Input.html \
 	Fl_Output.html \
 	Fl_Overlay_Window.html \
 	Fl_Pack.html \
+	Fl_Pixmap.html \
 	Fl_Positioner.html \
 	Fl_Repeat_Button.html \
+	Fl_RGB_Image.html \
 	Fl_Return_Button.html \
 	Fl_Roller.html \
 	Fl_Round_Button.html \
@@ -103,6 +106,7 @@ HTMLFILES	= \
 	Fl_Single_Window.html \
 	Fl_Slider.html \
 	Fl_Style.html \
+	Fl_Style_Set.html \
 	Fl_Tabs.html \
 	Fl_Tile.html \
 	Fl_Valuator.html \
@@ -112,11 +116,12 @@ HTMLFILES	= \
 	Fl_Widget.html \
 	Fl_Window.html \
 	Fl_Wordwrap_Input.html \
-	Fl.html \
-	enumerations.html \
-	drawing.html \
-	events.html \
 	utility.html \
+	subclassing.html \
+	events.html \
+	drawing.html \
+	opengl.html \
+	theme.html \
 	x.html \
 	win32.html \
 	forms.html \
@@ -171,5 +176,5 @@ fltk.pdf: $(HTMLFILES)
 	@$(HTMLDOC) -f fltk.pdf --jpeg --compression=9 --duplex --verbose --toclevels 2 --titleimage FL.gif $(HTMLFILES)
 
 #
-# End of "$Id: Makefile,v 1.16 2002/01/27 04:59:47 spitzak Exp $".
+# End of "$Id: Makefile,v 1.17 2002/04/12 07:23:53 spitzak Exp $".
 #

@@ -1,0 +1,47 @@
+<head><title>Fl_Named_Style</title></head><body bgcolor=white>
+
+<hr break>
+<h2>class Fl_Named_Style</h2>
+<hr>
+
+<h4>Fl_Named_Style(const char* name, void (*revert)(Fl_Style*), Fl_Style** pointer);</h4>
+
+This subclass of <a href="Fl_Style.html"><tt>Fl_Style</tt></a> creates
+a style that can be returned by <a
+href="Fl_Style.html#find">Fl_Style::find()</a>. It also provides a
+"revert" method that is used to restore the initial state so that
+themes can be switched.
+
+<p><i>name</i> is the name you want themes to use to look up the
+style. If you don't care if themes can modify your class you can just
+use <tt>NULL</tt> for the name.
+
+<p><i>revert</i> is a function that initializes the style to it's
+default value. The style is cleared to zero (meaning inherit from the
+default style) before revert is called. If revert is NULL then
+all-zeros is the default.
+
+<p><i>pointer</i> is a back-pointer to the pointer to the
+style. This allows multiple themes to exist at once, if an application
+wants it (for instance a theme-editor application would like
+this). The application can change this pointer to point at different
+style structures and then all widgets that are constructed after that
+get the new style. If you don't plan to use your widget in such a
+program you can make a static instance of your style (rather than
+using new) and pass null as this pointer.
+
+<p>Here is an example of a class that wants the box to default to
+FL_ROUND_BOX:
+
+<ul><pre><code>static void revert(Fl_Style* s) {
+  s->box = FL_ROUND_BOX;
+}
+static Fl_Named_Style* style = new Fl_Named_Style("MyWidget", revert, &style);
+
+MyWidget::MyWidget(int x, int y, int w, int h, const char *l)
+  : Fl_Widget(x,y,w,h,l)
+{
+  style(::style);
+}</code></pre></ul>
+
+</body></html>

@@ -2186,3 +2186,15 @@ Cleaned up the button drawing code a little more.
 Fl::add_timeout caused Fl::wait to return 0
 
 Numerous typos in documentation reported by Alexander Mai fixed.
+
+Turned off DND-out per popular demand at Digital Domain. What is
+everybody's opinion? This seems to be how KDE and WinXP work.
+
+Checked in 4/11/02
+////////////////////////////////////////////////////////////////
+
+Fixed the documentation to go through htmldoc better.
+
+Fl::add_check() functions that did Fl::add_timeout() did not cause the
+timeout to happen with the last version of the code.
+
