@@ -76,7 +76,7 @@ void PackedGroup::layout() {
     // we only need to do something special if the group is resized:
     if (!(layout_damage() & (LAYOUT_WH|LAYOUT_DAMAGE)) || !children()) {
       Group::layout();
-      if (!(layout_damage() & LAYOUT_DAMAGE)) break;
+      if (!(layout_damage() & LAYOUT_CHILD)) break;
     }
 
     // clear the layout flags, so any resizes of children will set them again:
@@ -135,11 +135,15 @@ void PackedGroup::layout() {
       widget->layout();
     }
 
-    // A non-resizable widget will become the size of it's items:
+    // A non-resizable widget will become the size of its items:
     int W = w();
-    if (r.w()<0 || !resizable() && !saw_horizontal) W -= r.w();
+    if (r.w()<0 || !resizable() && !saw_horizontal) {
+      W -= r.w()+(saw_vertical?spacing_:0);
+    }
     int H = h();
-    if (r.h()<0 || !resizable() && !saw_vertical) H -= r.h();
+    if (r.h()<0 || !resizable() && !saw_vertical) {
+      H -= r.h()+(saw_horizontal?spacing_:0);
+    }
     Widget::resize(W,H);
   }
 }

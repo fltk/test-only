@@ -106,9 +106,6 @@ ComboBrowser::ComboBrowser(int x, int y, int w, int h)
   style(default_style);
 }
 
-extern int fl_pushed_dx;
-extern int fl_pushed_dy;
-
 int
 ComboBrowser::handle(int event) {
   switch (event) {
@@ -129,12 +126,7 @@ ComboBrowser::handle(int event) {
   case RELEASE:
   case DRAG:
     // this causes a drag-in to the widget to work:
-    if (event_inside(Rectangle(0, 0, w(), h()))) {
-      fltk::pushed(this);
-      // remember the mouse offset so we can send DRAG/RELEASE directly:
-      fl_pushed_dx = e_x-e_x_root;
-      fl_pushed_dy = e_y-e_y_root;
-    }
+    if (event_inside(Rectangle(0, 0, w(), h()))) fltk::pushed(this);
     else return 0;
   }
 #if 0

@@ -30,6 +30,7 @@
 #include <fltk/math.h>
 #include <fltk/x.h>
 #include <stdlib.h>
+#include <fltk/string.h>
 using namespace fltk;
 
 /** \addtogroup drawing

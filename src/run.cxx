@@ -1068,16 +1068,6 @@ void fltk::add_event_handler(int (*h)(int, Window*)) {
 
 bool (*fl_local_grab)(int); // used by fl_dnd_x.cxx
 
-// Set event_x() and event_y() correctly for target widget and send event:
-static bool send_from_root(Widget* widget, int event) {
-  e_x = e_x_root;
-  e_y = e_y_root;
-  for (Widget *t= widget->parent(); t; t = t->parent()) {
-    e_x -= t->x(); e_y -= t->y();
-  }
-  return widget->send(event) != 0;
-}
-
 // Similar to !modal->contains(b) but it also follows the child_of
 // pointers to windows. Possibly this is what contains() should do always.
 static bool outside_modal(const Widget* b) {
@@ -1094,8 +1084,6 @@ static bool outside_modal(const Widget* b) {
   }
 }
 
-
-extern int fl_pushed_dx, fl_pushed_dy;
 Window* fl_actual_window;
 
 /*!
@@ -1164,25 +1152,17 @@ bool fltk::handle(int event, Window* window)
     if (to->contains(belowmouse())) return 0;
   case MOVE:
   case DRAG: // does not happen from system code, but user code may send this
-    if (pushed()) {
-      e_x = e_x_root+fl_pushed_dx;
-      e_y = e_y_root+fl_pushed_dy;
-      return pushed()->handle(DRAG) != 0;
-    }
+    if (pushed()) return pushed()->send(DRAG) != 0;
     {Widget* pbm = belowmouse();
     if (outside_modal(to)) to = modal_;
-    bool ret = to && send_from_root(to,MOVE);
+    bool ret = to && to->send(MOVE);
     if (pbm != belowmouse()) Tooltip::enter(belowmouse());
     return ret;}
 
   case RELEASE:
     to = pushed();
     if (!event_state(ANY_BUTTON)) pushed_=0;
-    if (to) {
-      e_x = e_x_root+fl_pushed_dx;
-      e_y = e_y_root+fl_pushed_dy;
-      return to->handle(RELEASE) != 0;
-    }
+    if (to) return to->send(RELEASE) != 0;
     break;
 
   case LEAVE:
@@ -1212,7 +1192,7 @@ bool fltk::handle(int event, Window* window)
     to = focus();
     if (outside_modal(to)) to = modal_;
     while (to) {
-      if (send_from_root(to,event)) return true;
+      if (to->send(event)) return true;
       to = to->parent();
     }
     // If nothing wanted the keystroke, try sending shortcut event to
@@ -1235,7 +1215,7 @@ bool fltk::handle(int event, Window* window)
 
   // restrict to modal widgets:
   if (outside_modal(to)) to = modal_;
-  if (to && send_from_root(to,event)) {dnd_flag = false; return true;}
+  if (to && to->send(event)) {dnd_flag = false; return true;}
   dnd_flag = false;
 
  CALL_GLOBAL_HANDLERS:

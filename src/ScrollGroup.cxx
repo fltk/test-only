@@ -406,7 +406,13 @@ int ScrollGroup::handle(int event) {
     break;
 
   case MOUSEWHEEL:
-    return scrollbar.send(event);
+    {
+      if ( scrollbar.visible() && !fltk::event_state( fltk::ALT ) ) {
+        return scrollbar.send(event);
+      } else {
+        return Group::handle( event );
+      }
+    }
 
   case KEY:
     if (scrollbar.send(event)) return 1;

@@ -1,5 +1,5 @@
 //
-// "$Id: scandir_win32.c,v 1.25 2004/08/06 16:43:48 laza2000 Exp $"
+// "$Id$"
 //
 // _WIN32 scandir function for the Fast Light Tool Kit (FLTK).
 //
@@ -38,7 +38,6 @@ struct dirent { char d_name[1]; };
 int scandir(const char *dirname, struct dirent ***namelist,
     int (*select)(struct dirent *),
     int (*compar)(struct dirent **, struct dirent **)) {
-  int len;
   char *d;
   WIN32_FIND_DATA find;
   HANDLE h;
@@ -47,14 +46,13 @@ int scandir(const char *dirname, struct dirent ***namelist,
   unsigned long ret;
   char findIn[MAX_PATH*4];
 
-  len = utf8tomb(dirname, strlen(dirname), findIn, MAX_PATH*4);
+  utf8tomb(dirname, strlen(dirname), findIn, _MAX_PATH);
+  d = findIn+strlen(findIn);
+  if (d==findIn) *d++ = '.';
+  if (*(d-1)!='/' && *(d-1)!='\\') *d++ = '/';
+  *d++ = '*';
+  *d++ = 0;
 
-  for (d = findIn; *d; d++) if (*d=='/') *d='\\';
-  if ((len==0)) { strcpy(findIn, ".\\*"); }
-  if ((len==1)&& (d[-1]=='.')) { strcpy(findIn, ".\\*"); }
-  if ((len>0) && (d[-1]=='\\')) { *d++ = '*'; *d = 0; }
-  if ((len>1) && (d[-1]=='.') && (d[-2]=='\\')) { d[-1] = '*'; }
-  
   if ((h=FindFirstFile(findIn, &find))==INVALID_HANDLE_VALUE) {
     ret = GetLastError();
     if (ret != ERROR_NO_MORE_FILES) {
@@ -95,5 +93,5 @@ int scandir(const char *dirname, struct dirent ***namelist,
 }
 
 //
-// End of "$Id: scandir_win32.c,v 1.25 2004/08/06 16:43:48 laza2000 Exp $".
+// End of "$Id$".
 //

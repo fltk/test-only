@@ -37,6 +37,7 @@
   contents of Tooltip::default_style.
 */
 
+#include <config.h>
 #include <fltk/Tooltip.h>
 #include <fltk/MenuWindow.h>
 #include <fltk/Monitor.h>
@@ -107,16 +108,15 @@ static void recent_timeout(void*) {
 
 static bool recursion;
 
-// We must destroy the window on Win32, as the parenting is permanently
-// remembered and it won't pop up ever again. On X I assumme it is somewhat
-// more efficient to move the existing window around than to destroy and
-// recreate it:
+// Both Win32 and OSX don't like trying to reuse the window for the next
+// tooltip. It's possible this is the right thing to do on X11 as well,
+// but this is how we have always been doing it:
 static inline void hide_tooltip() {
   if (Tooltip::instance())
-#ifdef _WIN32
-    Tooltip::instance()->destroy();
-#else
+#if USE_X11
     Tooltip::instance()->hide();
+#else
+    Tooltip::instance()->destroy();
 #endif
 }
 
@@ -177,9 +177,8 @@ void Tooltip::enter(Widget* widget, const Rectangle& rectangle,
   current_data_ = data;
   // popup the tooltip immediately if it was recently up:
   if (recent_tooltip || Tooltip::delay() < .1) {
-#ifdef WIN32
-    // possible fix for the Windows titlebar, it seems to want the
-    // window to be destroyed, moving it messes up the parenting:
+#if !USE_X11
+    // On Win32 and OSX trying to resize the existing tooltip does not work
     hide_tooltip();
 #endif
     tooltip_timeout(0);

@@ -727,14 +727,10 @@ int Widget::handle(int event) {
   }
 }
 
-int fl_pushed_dx;
-int fl_pushed_dy;
-
 /*! Wrapper for handle(). This should be called to send
   events. It does a few things:
-  - It adjusts event_x/y to be relative to the widget
-    (It is the caller's responsibility to see if the
-    mouse is pointing at the widget).
+  - It calculates event_x()/event_y() to be relative to the widget.
+    The previous values are restored before this returns.
   - It makes sure the widget is active and/or visible if the event
     requres this.
   - If this is not the fltk::belowmouse() widget then it changes
@@ -747,10 +743,12 @@ int fl_pushed_dy;
 */
 int Widget::send(int event) {
 
+  int dx = x(); int dy = y();
+  for (Widget* p = parent(); p; p = p->parent()) {dx += p->x(); dy += p->y();}
   int save_x = e_x;
-  e_x -= x();
   int save_y = e_y;
-  e_y -= y();
+  e_x = e_x_root-dx;
+  e_y = e_y_root-dy;
 
   int ret = 0;
   switch (event) {
@@ -805,9 +803,6 @@ int Widget::send(int event) {
       if (event_state(0x0f000000) && !contains(fltk::pushed())) {
 	fltk::pushed(this);
 	if (click_to_focus()) take_focus();
-	// remember the mouse offset so we can send DRAG/RELEASE directly:
-	fl_pushed_dx = e_x-e_x_root;
-	fl_pushed_dy = e_y-e_y_root;
       }
     }
     break;
