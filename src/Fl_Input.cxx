@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input.cxx,v 1.61 2002/04/11 07:47:46 spitzak Exp $"
+// "$Id: Fl_Input.cxx,v 1.62 2002/05/16 07:48:11 spitzak Exp $"
 //
 // Input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -1003,11 +1003,10 @@ int Fl_Input::handle(int event) {
   return handle(event, X+label_width, Y, W-label_width, H);
 }
 
-// set this to 1 to get the ability to drag selected text out to other
-// widgets, like some IDEs do, and KDE does, and apparently WinXP does.
-// This appears to mostly be a pain because you cannot select a region
-// inside the current region.
-#define DND_OUT 0
+// Set this to 1 to get the ability to drag selected text out to other
+// widgets. Qt and KDE does this. Other systems seem to support this only in
+// multiline or rich-text type widgets.
+#define DND_OUT 1
 
 int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 #if DND_OUT
@@ -1219,5 +1218,5 @@ int Fl_Input::handle(int event, int X, int Y, int W, int H) {
 }
 
 //
-// End of "$Id: Fl_Input.cxx,v 1.61 2002/04/11 07:47:46 spitzak Exp $".
+// End of "$Id: Fl_Input.cxx,v 1.62 2002/05/16 07:48:11 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.173 2002/05/07 04:58:19 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.174 2002/05/16 07:48:11 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -387,6 +387,190 @@ void Fl::paste(Fl_Widget &receiver, bool clipboard) {
   }
 }
 
+// Communicating data to Win32 requires it to be in "global memory", this
+// copies the given selection to such a block and returns it. It appears
+// this block is usually handed to Windows and Windows deletes it.
+HANDLE fl_global_selection(int clipboard) {
+  HANDLE h = GlobalAlloc(GHND, selection_length[clipboard]+1);
+  if (h) {
+    LPSTR p = (LPSTR)GlobalLock(h);
+    memcpy(p, selection_buffer[clipboard], selection_length[clipboard]);
+    p[selection_length[clipboard]] = 0;
+    GlobalUnlock(h);
+  }
+  return h;
+}
+
+////////////////////////////////////////////////////////////////
+
+// Drag-n-drop requires GCC 3.x or a non-GNU compiler...
+#if !defined(__GNUC__) || __GNUC__ >= 3
+
+// I believe this was written by Matthias Melcher, correct?
+
+#include <ole2.h>
+#include <ShellApi.h>
+
+static Fl_Window *fl_dnd_target_window = 0;
+
+/**
+ * subclass the IDropTarget to receive data from DnD operations
+ */
+class FLDropTarget : public IDropTarget
+{
+  DWORD m_cRefCount;
+  DWORD lastEffect;
+  int px, py;
+public:
+  FLDropTarget() : m_cRefCount(0) { } // initialize
+  HRESULT STDMETHODCALLTYPE QueryInterface( REFIID riid, LPVOID *ppvObject ) {
+    if (IID_IUnknown==riid || IID_IDropTarget==riid)
+    {
+      *ppvObject=this;
+      ((LPUNKNOWN)*ppvObject)->AddRef();
+      return S_OK;
+    }
+    *ppvObject = NULL;
+    return E_NOINTERFACE;
+  }
+  ULONG STDMETHODCALLTYPE AddRef() { return ++m_cRefCount; }
+  ULONG STDMETHODCALLTYPE Release() {
+    long nTemp;
+    nTemp = --m_cRefCount;
+    if(nTemp==0)
+      delete this;
+    return nTemp;
+  }
+  HRESULT STDMETHODCALLTYPE DragEnter( IDataObject *pDataObj, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect) {
+    if( !pDataObj ) return E_INVALIDARG;
+    // set e_modifiers here from grfKeyState, set e_x and e_root_x
+    // check if FLTK handles this drag and return if it can't (i.e. BMP drag without filename)
+    POINT ppt; 
+    Fl::e_x_root = ppt.x = pt.x; 
+    Fl::e_y_root = ppt.y = pt.y;
+    HWND hWnd = WindowFromPoint( ppt );
+    Fl_Window *target = fl_find( hWnd );
+    if (target) {
+      Fl::e_x = Fl::e_x_root-target->x();
+      Fl::e_y = Fl::e_y_root-target->y();
+    }
+    fl_dnd_target_window = target;
+    px = pt.x; py = pt.y;
+      // FLTK has no mechanism yet for the different drop effects, so we allow move and copy
+    if ( target && Fl::handle( FL_DND_ENTER, target ) )
+      *pdwEffect = DROPEFFECT_MOVE|DROPEFFECT_COPY; //|DROPEFFECT_LINK;
+    else
+      *pdwEffect = DROPEFFECT_NONE;
+    lastEffect = *pdwEffect;
+    Fl::flush(); // get the display to update for local drags
+    return S_OK;
+  }
+  HRESULT STDMETHODCALLTYPE DragOver( DWORD grfKeyState, POINTL pt, DWORD *pdwEffect) {
+    if ( px==pt.x && py==pt.y ) 
+    {
+      *pdwEffect = lastEffect;
+      return S_OK;
+    }
+    if ( !fl_dnd_target_window )
+    {
+      *pdwEffect = lastEffect = DROPEFFECT_NONE;
+      return S_OK;
+    }
+    // set e_modifiers here from grfKeyState, set e_x and e_root_x
+    Fl::e_x_root = pt.x; 
+    Fl::e_y_root = pt.y;
+    if (fl_dnd_target_window) {
+      Fl::e_x = Fl::e_x_root-fl_dnd_target_window->x();
+      Fl::e_y = Fl::e_y_root-fl_dnd_target_window->y();
+    }
+    // Fl_Group will change DND_DRAG into DND_ENTER and DND_LEAVE if needed
+    if ( Fl::handle( FL_DND_DRAG, fl_dnd_target_window ) )
+      *pdwEffect = DROPEFFECT_MOVE|DROPEFFECT_COPY|DROPEFFECT_LINK;
+    else 
+      *pdwEffect = DROPEFFECT_NONE;
+    px = pt.x; py = pt.y;
+    lastEffect = *pdwEffect;
+    Fl::flush(); // get the display to update for local drags
+    return S_OK;
+  }
+  HRESULT STDMETHODCALLTYPE DragLeave() {
+    if ( fl_dnd_target_window )
+    {
+      Fl::handle( FL_DND_LEAVE, fl_dnd_target_window );
+      Fl::flush(); // get the display to update for local drags
+      fl_dnd_target_window = 0;
+    }
+    return S_OK;
+  }
+  HRESULT STDMETHODCALLTYPE Drop( IDataObject *data, DWORD grfKeyState, POINTL pt, DWORD *pdwEffect) {
+    if ( !fl_dnd_target_window )
+      return S_OK;
+    Fl_Window *target = fl_dnd_target_window;
+    fl_dnd_target_window = 0;
+    Fl::e_x_root = pt.x; 
+    Fl::e_y_root = pt.y;
+    if (target) {
+      Fl::e_x = Fl::e_x_root-target->x();
+      Fl::e_y = Fl::e_y_root-target->y();
+    }
+    // tell FLTK that the user released an object on this widget
+    if ( !Fl::handle( FL_DND_RELEASE, target ) )
+      return S_OK;
+    
+    Fl_Widget *w = target;
+    while (w->parent()) w = w->window();
+    HWND hwnd = fl_xid( (Fl_Window*)w );
+
+    FORMATETC fmt = { 0 };
+    STGMEDIUM medium = { 0 };
+    fmt.tymed = TYMED_HGLOBAL;
+    fmt.dwAspect = DVASPECT_CONTENT;
+    fmt.lindex = -1;
+    fmt.cfFormat = CF_TEXT;
+    // if it is ASCII text, send an FL_PASTE with that text
+    if ( data->GetData( &fmt, &medium )==S_OK )
+    {
+      void *stuff = GlobalLock( medium.hGlobal );
+      //long len = GlobalSize( medium.hGlobal );
+      Fl::e_length = strlen( (char*)stuff ); // min(strlen, len)
+      Fl::e_text = (char*)stuff;
+      target->handle(FL_PASTE); // e_text will be invalid after this call
+      GlobalUnlock( medium.hGlobal );
+      ReleaseStgMedium( &medium );
+      SetForegroundWindow( hwnd );
+      return S_OK;
+    }
+    fmt.tymed = TYMED_HGLOBAL;
+    fmt.dwAspect = DVASPECT_CONTENT;
+    fmt.lindex = -1;
+    fmt.cfFormat = CF_HDROP;
+    // if it is a pathname list, send an FL_PASTE with a \n seperated list of filepaths
+    if ( data->GetData( &fmt, &medium )==S_OK )
+    {
+      HDROP hdrop = (HDROP)medium.hGlobal;
+      int i, n, nn = 0, nf = DragQueryFile( hdrop, (UINT)-1, 0, 0 );
+      for ( i=0; i<nf; i++ ) nn += DragQueryFile( hdrop, i, 0, 0 );
+      nn += nf;
+      Fl::e_length = nn-1;
+      char *dst = Fl::e_text = (char*)malloc(nn+1);
+      for ( i=0; i<nf; i++ ) {
+	n = DragQueryFile( hdrop, i, dst, nn );
+	dst += n;
+	if ( i<nf-1 ) *dst++ = '\n';
+      }
+      *dst = 0;
+      target->handle(FL_PASTE);
+      free( Fl::e_text );
+      ReleaseStgMedium( &medium );
+      SetForegroundWindow( hwnd );
+      return S_OK;
+    }
+    return S_OK;
+  }
+} flDropTarget;
+
+#endif
+
 ////////////////////////////////////////////////////////////////
 
 #ifndef TME_LEAVE
@@ -477,6 +661,7 @@ static bool mouse_event(Fl_Window *window, int what, int button,
 
   switch (what) {
   case 1: // double-click
+    // This is not detecting triple-clicks, does anybody know how to fix?
     if (Fl::e_is_click) {Fl::e_clicks++; goto J1;}
   case 0: // single-click
     Fl::e_clicks = 0;
@@ -928,19 +1113,12 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     CloseClipboard();
     OpenClipboard(NULL);
     // fall through...
-  case WM_RENDERFORMAT: {
-    HANDLE h = GlobalAlloc(GHND, selection_length[1]+1);
-    if (h) {
-      LPSTR p = (LPSTR)GlobalLock(h);
-      memcpy(p, selection_buffer[1], selection_length[1]);
-      p[selection_length[1]] = 0;
-      GlobalUnlock(h);
-      SetClipboardData(CF_TEXT, h);
-    }
+  case WM_RENDERFORMAT:
+    SetClipboardData(CF_TEXT, fl_global_selection(1));
     // Windoze also seems unhappy if I don't do this. Documentation very
     // unclear on what is correct:
     if (fl_msg.message == WM_RENDERALLFORMATS) CloseClipboard();
-    return 1;}
+    return 1;
 
   default:
     if (Fl::handle(0,0)) return 0;
@@ -1109,6 +1287,13 @@ void Fl_X::create(Fl_Window* window) {
   x->next = Fl_X::first;
   Fl_X::first = x;
 
+  // Drag-n-drop requires GCC 3.x or a non-GNU compiler...
+#if !defined(__GNUC__) || __GNUC__ >= 3
+  // Register all windows for potential drag'n'drop operations
+  static bool oleInitialized = false;
+  if (!oleInitialized) {oleInitialized = true; OleInitialize(0L);}
+  RegisterDragDrop(x->xid, &flDropTarget);
+#endif
 }
 
 ////////////////////////////////////////////////////////////////
@@ -1388,5 +1573,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.173 2002/05/07 04:58:19 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.174 2002/05/16 07:48:11 spitzak Exp $".
 //

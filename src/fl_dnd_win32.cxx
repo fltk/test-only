@@ -1,9 +1,11 @@
 //
-// "$Id: fl_dnd_win32.cxx,v 1.5 2001/09/10 01:16:17 spitzak Exp $"
+// "$Id: fl_dnd_win32.cxx,v 1.6 2002/05/16 07:48:11 spitzak Exp $"
 //
 // Drag & Drop code for the Fast Light Tool Kit (FLTK).
+// This is code for dragging *out* of the application. Code for dragging
+// into the application is in Fl_win32.cxx
 //
-// Copyright 1998-1999 by Bill Spitzak and others.
+// Copyright 1998-2002 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -20,37 +22,153 @@
 // Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 // USA.
 //
-// Please report all bugs and problems to "fltk-bugs@easysw.com".
-//
+// Please report all bugs and problems to "fltk-bugs@fltk.org
 
-
-// Dummy version of dnd for now, it waits until the FL_RELEASE and
-// then does nothing.  The real version should drag the ascii text stored
-// in selection_buffer (length = selection_length) and drop it on the
-// target. It should either not return until the mouse is released
-// or it should cause the DRAG+RELEASE events to not be passed to the
-// program somehow. I'm pretty sure this is a simple call in _WIN32:
+// I believe this was written by Matthias Melcher, correct?
 
 #include <fltk/Fl.h>
 #include <fltk/Fl_Window.h>
+#include <fltk/x.h>
 
-static bool grabfunc(int event) {
-  if (event == FL_RELEASE) Fl::pushed(0);
+// All of the following code requires GCC 3.x or a non-GNU compiler...
+#if !defined(__GNUC__) || __GNUC__ >= 3
+
+#include <ole2.h>
+#include <ShellAPI.h>
+
+HANDLE fl_global_selection(int clipboard);
+
+/**
+ * this class is needed to allow FLTK apps to be a DnD source
+ */
+class FLDropSource : public IDropSource
+{
+  DWORD m_cRefCount;
+public:
+  FLDropSource() { m_cRefCount = 0; }
+  HRESULT STDMETHODCALLTYPE QueryInterface( REFIID riid, LPVOID *ppvObject ) {
+    if (IID_IUnknown==riid || IID_IDropSource==riid)
+    {
+      *ppvObject=this;
+      ((LPUNKNOWN)*ppvObject)->AddRef();
+      return S_OK;
+    }
+    *ppvObject = NULL;
+    return E_NOINTERFACE;
+  }
+  ULONG STDMETHODCALLTYPE AddRef() { return ++m_cRefCount; }
+  ULONG STDMETHODCALLTYPE Release() {
+    long nTemp;
+    nTemp = --m_cRefCount;
+    if(nTemp==0)
+      delete this;
+    return nTemp;
+  }
+  STDMETHODIMP GiveFeedback( ulong ) { return DRAGDROP_S_USEDEFAULTCURSORS; }
+  STDMETHODIMP QueryContinueDrag( BOOL esc, DWORD keyState ) { 
+    if ( esc ) 
+      return DRAGDROP_S_CANCEL;
+    if ( !(keyState & MK_LBUTTON) ) 
+      return DRAGDROP_S_DROP;
+    return S_OK;
+  }
+};
+
+/**
+ * this is the actual object that FLTK can drop somewhere
+ * - the implementation is minimal, but it should work with all decent Win32 drop targets
+ */
+class FLDataObject : public IDataObject
+{
+  DWORD m_cRefCount;
+public:
+  FLDataObject() { m_cRefCount = 1; }
+  HRESULT STDMETHODCALLTYPE QueryInterface( REFIID riid, LPVOID *ppvObject ) {
+    if (IID_IUnknown==riid || IID_IDataObject==riid)
+    {
+      *ppvObject=this;
+      ((LPUNKNOWN)*ppvObject)->AddRef();
+      return S_OK;
+    }
+    *ppvObject = NULL;
+    return E_NOINTERFACE;
+  }
+  ULONG STDMETHODCALLTYPE AddRef() { return ++m_cRefCount; }
+  ULONG STDMETHODCALLTYPE Release() {
+    long nTemp;
+    nTemp = --m_cRefCount;
+    if(nTemp==0)
+      delete this;
+    return nTemp;
+  }
+  // GetData currently allows ASCII text through Global Memory only
+  HRESULT STDMETHODCALLTYPE GetData( FORMATETC *pformatetcIn, STGMEDIUM *pmedium ) {
+    if ((pformatetcIn->dwAspect & DVASPECT_CONTENT) &&
+        (pformatetcIn->tymed & TYMED_HGLOBAL) &&
+        (pformatetcIn->cfFormat == CF_TEXT))
+    {
+      pmedium->tymed	      = TYMED_HGLOBAL;
+      pmedium->hGlobal	      = fl_global_selection(0);
+      pmedium->pUnkForRelease = NULL;
+      return S_OK;
+    }
+    return DV_E_FORMATETC;
+  }
+  HRESULT STDMETHODCALLTYPE QueryGetData( FORMATETC *pformatetc )
+  {
+    if ((pformatetc->dwAspect & DVASPECT_CONTENT) &&
+        (pformatetc->tymed & TYMED_HGLOBAL) &&
+        (pformatetc->cfFormat == CF_TEXT))
+      return S_OK;
+    return DV_E_FORMATETC;	
+  }  
+  // all the following methods are not really needed for a DnD object
+  HRESULT STDMETHODCALLTYPE GetDataHere( FORMATETC *pformatetcIn, STGMEDIUM *pmedium) { return E_NOTIMPL; }
+  HRESULT STDMETHODCALLTYPE GetCanonicalFormatEtc( FORMATETC *in, FORMATETC *out) { return E_NOTIMPL; }
+  HRESULT STDMETHODCALLTYPE SetData( FORMATETC *pformatetc, STGMEDIUM *pmedium, BOOL fRelease) { return E_NOTIMPL; }
+  HRESULT STDMETHODCALLTYPE EnumFormatEtc( DWORD dir, IEnumFORMATETC **ppenumFormatEtc) { return E_NOTIMPL; }
+  HRESULT STDMETHODCALLTYPE DAdvise( FORMATETC *pformatetc, DWORD advf,
+      IAdviseSink *pAdvSink, DWORD *pdwConnection) { return E_NOTIMPL; }
+  HRESULT STDMETHODCALLTYPE DUnadvise( DWORD dwConnection) { return E_NOTIMPL; }
+  HRESULT STDMETHODCALLTYPE EnumDAdvise( IEnumSTATDATA **ppenumAdvise) { return E_NOTIMPL; }
+};
+
+
+/**
+ * drag and drop whatever is in the cut-copy-paste buffer
+ * - create a selection first using: 
+ *     Fl::copy(const char *stuff, int len, 0)
+ */
+bool Fl::dnd()
+{
+  DWORD dropEffect;
+  ReleaseCapture();
+
+  FLDataObject *fdo = new FLDataObject;
+  fdo->AddRef();
+  FLDropSource *fds = new FLDropSource;
+  fds->AddRef();
+
+  HRESULT ret = DoDragDrop( fdo, fds, DROPEFFECT_MOVE|DROPEFFECT_LINK|DROPEFFECT_COPY, &dropEffect );
+
+  fdo->Release();
+  fds->Release();
+
+  // Windows handled the mouse release, remember that:
+  pushed_ = 0;
+  e_state &= ~FL_BUTTONS;
+
+  return ret==DRAGDROP_S_DROP; // or DD_S_CANCEL
+}
+#else
+bool Fl::dnd()
+{
+  // Always indicate DnD failed when using GCC < 3...
   return false;
 }
-
-extern bool (*fl_local_grab)(int); // in Fl.cxx
-
-bool Fl::dnd() {
-  Fl::first_window()->cursor(FL_CURSOR_HAND);
-  fl_local_grab = grabfunc;
-  while (Fl::pushed()) Fl::wait();
-  Fl::first_window()->cursor(FL_CURSOR_DEFAULT);
-  fl_local_grab = 0;
-  return true;
-}
+#endif // !__GNUC__ || __GNUC__ >= 3
 
 
 //
-// End of "$Id: fl_dnd_win32.cxx,v 1.5 2001/09/10 01:16:17 spitzak Exp $".
+// End of "$Id: fl_dnd_win32.cxx,v 1.6 2002/05/16 07:48:11 spitzak Exp $".
 //

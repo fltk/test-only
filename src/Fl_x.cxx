@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.128 2002/05/13 05:10:39 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.129 2002/05/16 07:48:11 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -253,6 +253,7 @@ Atom fl_XdndStatus;
 Atom fl_XdndActionCopy;
 Atom fl_XdndFinished;
 Atom fl_textplain;
+Atom fl_texturilist;
 //Atom fl_XdndProxy;
 
 extern "C" {
@@ -301,6 +302,7 @@ void fl_open_display(Display* d) {
   fl_XdndActionCopy     = XInternAtom(d, "XdndActionCopy",	0);
   fl_XdndFinished       = XInternAtom(d, "XdndFinished",	0);
   fl_textplain	      	= XInternAtom(d, "text/plain",		0);
+  fl_texturilist      	= XInternAtom(d, "text/uri-list",	0);
   //fl_XdndProxy        = XInternAtom(d, "XdndProxy",		0);
 
   fl_screen = DefaultScreen(d);
@@ -574,16 +576,23 @@ bool fl_handle()
 	fl_dnd_source_types[2] = data[4];
 	fl_dnd_source_types[3] = 0;
       }
+      // This should return one of the fl_dnd_source_types. Unfortunately
+      // no way to just force it to cough up whatever data is "most text-like"
+      // instead I have to select from a list of known types. We may need
+      // to add to this list in the future, turn on the #if to print the
+      // types if you get a drop that you think should work.
+      fl_dnd_type = fl_textplain; // try this if no matches, it may work
+      for (int i = 0; ; i++) {
+	Atom type = fl_dnd_source_types[i]; if (!type) break;
 #if 0 // print what types are being pasted:
-      for (int i = 0; fl_dnd_source_types[i]; i++) {
-	char* x = XGetAtomName(fl_display, fl_dnd_source_types[i]);
+	char* x = XGetAtomName(fl_display, type);
 	printf("source type of %s\n",x);
 	XFree(x);
-      }
+#else
+	if (type == fl_textplain) {fl_dnd_type = type; break;} // our favorite
+	if (type == fl_texturilist) fl_dnd_type = type; // ok
 #endif
-      // This should return one of the fl_dnd_source_types but the values
-      // are a mess. It appears this works well:
-      fl_dnd_type = fl_textplain;
+      }
       event = FL_DND_ENTER;
       break;
 
@@ -1355,5 +1364,5 @@ bool fl_get_system_colors() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.128 2002/05/13 05:10:39 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.129 2002/05/16 07:48:11 spitzak Exp $".
 //
