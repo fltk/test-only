@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# "$Id: fltk-config.in,v 1.12.2.16.2.3 2004/03/18 08:00:27 matthiaswm Exp $"
+# "$Id: fltk-config.in,v 1.12.2.16.2.4 2004/03/28 10:30:29 rokan Exp $"
 # 
 # FLTK configuration utility.
 #
@@ -60,6 +60,7 @@ LIBNAME="@LIBNAME@"
 DSONAME="@DSONAME@"
 DSOLINK="@DSOLINK@"
 IMAGELIBS="@IMAGELIBS@"
+PSLIBS="@PSLIBS@"
 SHAREDSUFFIX="@SHAREDSUFFIX@"
 
 usage ()
@@ -74,6 +75,8 @@ Options telling what we are doing:
 	[--use-images]    use extra image formats (PNG, JPEG)
 	[--use-glut]      use glut compatibility layer
 	[--use-forms]     use forms compatibility layer
+	[--use-postscript]     use postscript printing library
+	[--use-gdiprinter]     use windows printing library
 
 Options telling what information we request:
 	[--cflags]        return flags to compile C using FLTK
@@ -127,6 +130,12 @@ do
 	    ;;
 	--use-images)
 	    use_images=yes
+	    ;;
+	--use-postscript)
+	    use_postscript=yes
+	    ;;
+	--use-gdiprinter)
+	    use_gdiprinter=yes
 	    ;;
 	--cflags)
 	    echo_cflags=yes
@@ -193,6 +202,16 @@ if test x$use_images = xyes; then
     LDLIBS="-lfltk_images$SHAREDSUFFIX $IMAGELIBS $LDLIBS"
     LDSTATIC="$libdir/libfltk_images.a $IMAGELIBS $LDSTATIC"
 fi
+
+if test x$use_gdiprinter = xyes; then
+    LDSTATIC="$libdir/libfltk_gdi.a $GDILIBS $LDSTATIC"
+fi
+
+if test x$use_postscript = xyes; then
+    LDLIBS="-lfltk_ps$SHAREDSUFFIX $PSLIBS $LDLIBS"
+    LDSTATIC="$libdir/libfltk_ps.a $PSLIBS $LDSTATIC"
+fi
+
 
 LDLIBS="$DSOLINK $LDFLAGS $LDLIBS"
 LDSTATIC="$LDFLAGS $LDSTATIC"
@@ -266,5 +285,5 @@ if test "$echo_libs" = "yes"; then
 fi
 
 #
-# End of "$Id: fltk-config.in,v 1.12.2.16.2.3 2004/03/18 08:00:27 matthiaswm Exp $".
+# End of "$Id: fltk-config.in,v 1.12.2.16.2.4 2004/03/28 10:30:29 rokan Exp $".
 #

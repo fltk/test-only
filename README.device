@@ -1,0 +1,116 @@
+Fl_Device
+=========
+
+The platform-specific drawing code in src is now moved into subdirectories xlib, win and carbon. It is implemented inside methods of particular device classes. Recently these directories do not have makefiles but the files are included from files in parent directory - this might probably change in  the future. The names of the files resemble the ones in src directory, fl_ prefix was stripped to distinguish them from parent ones, so that ie "xlib/vertex.cxx", "xlib/rect.cxx"... are included from parent files fl_vertex, fl_rect...etc. 
+
+There are also two more subdirectories - "psprinter" and "gdiprinter" which do have their makefiles to build libraries "libfltk_ps" and under windows also libfltk_gdi is built.  Visual C builds fltkps.lib respectively fltkgdi.lib. 
+
+The class structure is:
+
+Fl_Device
+   |
+   |___ Fl_Printer
+   |      |
+   |      |___Fl_PS_Printer
+   |      |___Fl_GDI_Printer
+   |
+   |
+   |___ Fl_Display
+          |
+          |___Fl_Xlib_Display
+          |___Fl_Win_Display
+          |___Fl_Carbon_Display
+
+
+The base class Fl_Device defines all (pure virtual) methods for drawing primitives, the original drawing functions are implemented in fl_draw.H as inline ones in a manner 
+
+   inline fl_draw(...){fl_device->draw(...);};
+
+where  fl_device points to the current active device. The methods are protected, but they are friendly to fltk drawing functions. The user should not use them directly but rather by setting current device and then use fl_draw(...) methods. There is also new function fl_draw(Fl_Widget *)  function in fl_draw which must not be used inside widgets but for sole purpose of drawing widgets to the printers.
+
+
+
+
+Fl_Device and image classless
+============================
+Each device implements also drawing of three basic image classes: RGB, Bitmap and Pixmap. Each new device must also implement drawing of these three image types in methods like
+
+  Fl_My_Device::draw(Fl_RGB_Image * im, int X, int Y, int W, int H, int cx, int cy);
+  
+but do not need to have fallback to draw_empty or adjust X,y,W,H,cx,cy with respect to the clipping (this is done prior calling device specific code inside image draw method). If it wants to use a cache, this cache must be a subclass of Fl_Image_Cache class with addition of particular cache data. Fl_Image_Cache has a constructor
+
+  Fl_Image_Cache::Fl_Image_Cache(Fl_Image * im, Fl_Device * dev);
+   
+which adds the the cache pointers to the image and the device cache lists (so you do not need to care about these). Its destructor automatically uncaches the image and removes cache from device list. The cache is also destructed (image is uncached) if image is destructed or device is destructed.
+The first thing you have to do inside device drawing method is to check if recent cache is valid by calling check_image_cache method like
+
+   Fl_My_Cache *cache = (Fl_My_Cache *) check_image_cache(img);
+   
+which checks if recent cache belongs to particular device and if not, it uncaches and returns zero. So if cache is 0, you build first cache data and then perform actual drawing.
+
+
+Making your own image classes with low-level (platform specific) drawings
+=========================================================================
+If user derives his/her own image class and do not override draw() method or do not use platform specific code in it or use standard fltk primitives such as fl_draw_image(...), he/she are fine and do not need to care about devices. However if he/she want to use special low-level code (ie for performance reasons), the code should look like:
+
+void Fl_My_Image::draw(int X, int Y, int W, int H, int cx, int cy){
+  .. 
+  switch((Fl_Device::current())->type()){
+    case FL_XLIB_DISPLAY:
+        ...
+        ... // code to draw to X server
+        ...
+        break;
+    case FL_PS_PRINTER:
+        ...
+        ... // code to draw to postscript
+        ...
+        break;
+    ...
+    ...
+    default:
+        draw_empty() // fallback, unknown device
+  };
+}
+
+with sections for all devices (and all platforms) he wants your code to work with.
+
+Fl_Printer
+==========
+Fl_Printer has additional printer-specific methods for paging:
+
+  int Fl_Printer::page(int format);
+  int Fl_Printer::page(int w, int h, int media=0); 
+  
+It also has methods scaling and placing drawings on the page:
+ 
+  void Fl_Printer::place(double x, double y, double tx, double ty, double scale = 1);
+  void Fl_Printer::place(double x, double y, double w, double h, double tx, double ty, double tw, double th, int align = FL_ALIGN_CENTER);
+  void Fl_Printer::place(Fl_Widget * w, double tx, double ty, double tw, double th, int align = FL_ALIGN_CENTER );
+
+  
+Fl_Display
+==========
+Fl_Display is a base class for screen displays, (it allready implements some non-specific code (curve, arc) which can be overridden by subclasses if the particular dev. type knows more efficient method) In the future it will also define methods for event delivery (keyboard, mouse, ...) so that it would fully encapsulate both input and output of the terminal. All the drawing code to the screen is implemented in methods of one of subclass display.
+In the future the user should be also able to choose particular display type during configure (i.e. under unix/linux Xlib (or/and with +Xrender extensions), framebuffer, or even a virtual plug-in display so the application  could load the display on run-time - i.e if DISPLAY environment variable is defined (because all methods are virtual, we need to link somehow only the device pointer or constructor). For mac there might be possibility to use Quartz or Xlib for remote displays etc...
+
+device program in test subdirectory
+===================================
+This program should test the precision of drawings. The rectangles - first widget -are drawn by rect, rectf and clipping.  Theoretically the black rectangle in the center should be invisible -fully clipped but because of the uncertaity of rendering of particular printer driver you could see very thin lines surrounding x (idealy up to  1 pixel of particular printer resolution). On the display all the color rectangles should be 1 pixel thick and black rectangle should be invisible.
+
+The device includes fl_printer_chooser.H file (also in test directory) which opens either external printing command or PrintDlg dialog under windows. This is temporary printing dialog and should be replaced by  better one.
+
+
+TO DO:
+======
+- additional devices ? 
+- Image masking and alpha channel for Fl_GDI_Printer
+- Font handling (including resource loading) for Postscript 
+- printing of OpenGL windows (probably by creating offscreen with defined resolution and then using fl_draw_image...)
+- cleanup
+
+
+
+R.
+
+   

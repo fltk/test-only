@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pixmap.cxx,v 1.9.2.4.2.22.2.5 2004/03/18 08:01:01 matthiaswm Exp $"
+// "$Id: Fl_Pixmap.cxx,v 1.9.2.4.2.22.2.6 2004/03/28 10:30:30 rokan Exp $"
 //
 // Pixmap drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -41,8 +41,10 @@
 #include "flstring.h"
 #include <ctype.h>
 
-extern uchar **fl_mask_bitmap; // used by fl_draw_pixmap.cxx to store mask
-void fl_restore_clip(); // in fl_rect.cxx
+#include <FL/Fl_Device.H>
+
+//extern uchar **fl_mask_bitmap; // used by fl_draw_pixmap.cxx to store mask
+//void fl_restore_clip(); // in fl_rect.cxx
 
 void Fl_Pixmap::measure() {
   int W, H;
@@ -79,88 +81,17 @@ void Fl_Pixmap::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
   if (cy < 0) {H += cy; Y -= cy; cy = 0;}
   if (cy+H > h()) H = h()-cy;
   if (H <= 0) return;
-  if (!id) {
-    id = fl_create_offscreen(w(), h());
-    fl_begin_offscreen((Fl_Offscreen)id);
-    uchar *bitmap = 0;
-    fl_mask_bitmap = &bitmap;
-    fl_draw_pixmap(data(), 0, 0, FL_BLACK);
-    fl_mask_bitmap = 0;
-    if (bitmap) {
-      mask = fl_create_bitmask(w(), h(), bitmap);
-      delete[] bitmap;
-    }
-
-    fl_end_offscreen();
-  }
-#ifdef WIN32
-  if (mask) {
-    HDC new_gc = CreateCompatibleDC(fl_gc);
-    SelectObject(new_gc, (void*)mask);
-    BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCAND);
-    SelectObject(new_gc, (void*)id);
-    BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCPAINT);
-    DeleteDC(new_gc);
-  } else {
-    fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)id, cx, cy);
-  }
-#elif defined(__APPLE__)
-  if (mask) {
-    Rect src, dst;
-    src.left = cx; src.right = cx+W;
-    src.top = cy; src.bottom = cy+H;
-    dst.left = X; dst.right = X+W;
-    dst.top = Y; dst.bottom = Y+H;
-    RGBColor rgb;
-    rgb.red = 0xffff; rgb.green = 0xffff; rgb.blue = 0xffff;
-    RGBBackColor(&rgb);
-    rgb.red = 0x0000; rgb.green = 0x0000; rgb.blue = 0x0000;
-    RGBForeColor(&rgb);
-    CopyMask(GetPortBitMapForCopyBits((GrafPtr)id),
-	     GetPortBitMapForCopyBits((GrafPtr)mask), 
-	     GetPortBitMapForCopyBits(GetWindowPort(fl_window)),
-             &src, &src, &dst);
-  } else {
-    fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)id, cx, cy);
-  }
-#else
-  if (mask) {
-    // I can't figure out how to combine a mask with existing region,
-    // so cut the image down to a clipped rectangle:
-    int nx, ny; fl_clip_box(X,Y,W,H,nx,ny,W,H);
-    cx += nx-X; X = nx;
-    cy += ny-Y; Y = ny;
-    // make X use the bitmap as a mask:
-    XSetClipMask(fl_display, fl_gc, mask);
-    int ox = X-cx; if (ox < 0) ox += w();
-    int oy = Y-cy; if (oy < 0) oy += h();
-    XSetClipOrigin(fl_display, fl_gc, X-cx, Y-cy);
-  }
-  fl_copy_offscreen(X, Y, W, H, id, cx, cy);
-  if (mask) {
-    // put the old clip region back
-    XSetClipOrigin(fl_display, fl_gc, 0, 0);
-    fl_restore_clip();
-  }
-#endif
+ 
+  // RK: drawing to the device
+  fl_device->draw(this, X, Y, W, H, cx, cy);
 }
 
 Fl_Pixmap::~Fl_Pixmap() {
-  uncache();
+  //uncache(); //RK: implemented in base class 
   delete_data();
 }
 
-void Fl_Pixmap::uncache() {
-  if (id) {
-    fl_delete_offscreen((Fl_Offscreen)id);
-    id = 0;
-  }
 
-  if (mask) {
-    fl_delete_bitmask((Fl_Bitmask)mask);
-    mask = 0;
-  }
-}
 
 void Fl_Pixmap::label(Fl_Widget* widget) {
   widget->image(this);
@@ -460,6 +391,15 @@ void Fl_Pixmap::desaturate() {
   }
 }
 
+#ifdef __APPLE__ // RK: HACK different devices should be implemented as a seperate libray and using modified makefiles
+  #include "carbon/Pixmap.cxx"
+#elif defined(WIN32)
+  #include "win/Pixmap.cxx"
+#else
+  #include "xlib/Pixmap.cxx"
+#endif  // __APPLE__
+
+
 //
-// End of "$Id: Fl_Pixmap.cxx,v 1.9.2.4.2.22.2.5 2004/03/18 08:01:01 matthiaswm Exp $".
+// End of "$Id: Fl_Pixmap.cxx,v 1.9.2.4.2.22.2.6 2004/03/28 10:30:30 rokan Exp $".
 //

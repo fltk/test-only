@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.H,v 1.5.2.3.2.16.2.4 2004/03/18 08:00:34 matthiaswm Exp $"
+// "$Id: Fl_Image.H,v 1.5.2.3.2.16.2.5 2004/03/28 10:30:29 rokan Exp $"
 //
 // Image header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,6 +32,29 @@ class Fl_Widget;
 struct Fl_Menu_Item;
 struct Fl_Label;
 
+
+class Fl_Image;
+class Fl_Device;
+
+//RK: This is base class for all image caches. It also functions as a list of images for devices.
+// Constructor inserts the image/cache to the list, destructor removes it from both image and the list.
+
+class Fl_Image_Cache{
+protected:
+  friend class Fl_Device;
+  Fl_Image_Cache * prev;   // for list of caches in device
+  Fl_Image_Cache * next;   // for list of caches in device
+  Fl_Image * image;
+  Fl_Device * device;
+  
+public:
+  Fl_Image_Cache(Fl_Image * im, Fl_Device * dev);
+  virtual ~Fl_Image_Cache();
+};
+  
+   
+
+
 /** Fl_Image is the base class used for caching and drawing all kinds of images in FLTK. 
  * This class keeps track of common image data such as the pixels, colormap, width, height, 
  * and depth. Virtual methods are used to provide type-specific image handling.
@@ -39,6 +62,7 @@ struct Fl_Label;
  * Since the Fl_Image class does not support image drawing by itself, calling the
  * draw() method results in a box with an X in it being drawn instead. 
  */
+
 class FL_EXPORT Fl_Image {
   int w_, h_, d_, ld_, count_;
   const char * const *data_;
@@ -48,6 +72,10 @@ class FL_EXPORT Fl_Image {
   Fl_Image(const Fl_Image &);
 
   protected:
+  friend class Fl_Image_Cache;
+  friend class Fl_Device;
+
+  Fl_Image_Cache * cache_;
 
     /** This protected method sets the image width. */
   void w(int W) {w_ = W;}
@@ -87,10 +115,11 @@ class FL_EXPORT Fl_Image {
      * Use the count() method to find the size of the data array. */
   const char * const *data() const {return data_;}
   
+
     /** The constructor creates an empty image with the specified width, height, and depth. 
      * The width and height are in pixels. The depth is 0 for bitmaps, 1 for pixmap (colormap) 
      * images, and 1 to 4 for color images. */
-  Fl_Image(int W, int H, int D) {w_ = W; h_ = H; d_ = D; ld_ = 0; count_ = 0; data_ = 0;}
+  Fl_Image(int W, int H, int D) {w_ = W; h_ = H; d_ = D; ld_ = 0; count_ = 0; data_ = 0; cache_ = 0;}
     /** The destructor is a virtual method that frees all memory used by the image. */
   virtual ~Fl_Image();
     /** The copy() method creates a copy of the specified image. The image is resized to
@@ -123,10 +152,13 @@ class FL_EXPORT Fl_Image {
     /** The draw() methods draw the image. This form specifies the upper-lefthand corner of 
      * the image. */
   void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}
+
+
     /** If the image has been cached for display, delete the cache data. This allows you to 
      * change the data used for the image and then redraw it without recreating an 
      * image object. */
-  virtual void uncache();
+  virtual void uncache(){delete cache_;};   // RK: CRITICAL common uncache might not need to be virtual any more
+
 };
 
 /** The Fl_RGB_Image class supports caching and drawing of full-color images with 1 to 4 
@@ -136,21 +168,12 @@ class FL_EXPORT Fl_Image {
  */
 class FL_EXPORT Fl_RGB_Image : public Fl_Image {
   public:
-
   const uchar *array;
   int alloc_array; // Non-zero if array was allocated
 
-#if defined(__APPLE__) || defined(WIN32)
-  void *id; // for internal use
-  void *mask; // for internal use (mask bitmap)
-#else
-  unsigned id; // for internal use
-  unsigned mask; // for internal use (mask bitmap)
-#endif // __APPLE__ || WIN32
-
     /** The constructor creates a new image from the specified data. */
   Fl_RGB_Image(const uchar *bits, int W, int H, int D=3, int LD=0) :
-    Fl_Image(W,H,D), array(bits), alloc_array(0), id(0), mask(0) {data((const char **)&array, 1); ld(LD);}
+    Fl_Image(W,H,D), array(bits), alloc_array(0){data((const char **)&array, 1); ld(LD);}
   virtual ~Fl_RGB_Image();
   virtual Fl_Image *copy(int W, int H);
   Fl_Image *copy() { return copy(w(), h()); }
@@ -160,11 +183,11 @@ class FL_EXPORT Fl_RGB_Image : public Fl_Image {
   void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}
   virtual void label(Fl_Widget*w);
   virtual void label(Fl_Menu_Item*m);
-  virtual void uncache();
+  // virtual void uncache(); // RK: common uncache now
 };
 
 #endif // !Fl_Image_H
 
 //
-// End of "$Id: Fl_Image.H,v 1.5.2.3.2.16.2.4 2004/03/18 08:00:34 matthiaswm Exp $".
+// End of "$Id: Fl_Image.H,v 1.5.2.3.2.16.2.5 2004/03/28 10:30:29 rokan Exp $".
 //

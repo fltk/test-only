@@ -403,6 +403,10 @@ SOURCE=..\src\Fl_Preferences.cxx
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\Fl_Printer.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\Fl_Progress.cxx
 # End Source File
 # Begin Source File

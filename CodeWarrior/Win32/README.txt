@@ -6,7 +6,7 @@ Loading:
 
   The Win32 version of the CW project file for Windows98,
   Windows2000, etc. is located in 
-  fltk-1.1.x/CodeWarrior/Win32/FLTK.mcp
+  fltk-1.2.x/CodeWarrior/Win32/FLTK.mcp
   
 Targets:
 

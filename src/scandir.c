@@ -17,7 +17,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA 02111-1307
 USA.  */
 
 #if defined(WIN32) && !defined(__CYGWIN__)
-#  include "scandir_win32.c"
+#  include "win/scandir.c"
 #else
 
 #  include "flstring.h"
@@ -120,5 +120,5 @@ fl_scandir(const char *dir, struct dirent ***namelist,
 #endif
 
 /*
- * End of "$Id: scandir.c,v 1.4.2.1.2.2.2.2 2003/12/02 02:51:49 easysw Exp $".
+ * End of "$Id: scandir.c,v 1.4.2.1.2.2.2.3 2004/03/28 10:30:31 rokan Exp $".
  */

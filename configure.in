@@ -1,7 +1,7 @@
 dnl -*- sh -*-
 dnl the "configure" script is made from this by running GNU "autoconf"
 dnl
-dnl "$Id: configure.in,v 1.33.2.31.2.91.2.9 2004/03/18 08:00:27 matthiaswm Exp $"
+dnl "$Id: configure.in,v 1.33.2.31.2.91.2.10 2004/03/28 10:30:29 rokan Exp $"
 dnl
 dnl Configuration script for the Fast Light Tool Kit (FLTK).
 dnl
@@ -82,21 +82,28 @@ dnl Define the libraries and link options we'll need.
 LINKFLTK="-lfltk"
 LINKFLTKGL="-lfltk_gl"
 LINKFLTKIMG="-lfltk_images"
+LINKFLTKPS="-lfltk_ps"
+LINKFLTKGDI=
 GLDEMOS="gldemos"
 
 LIBNAME="../lib/libfltk.a"
 FLLIBNAME="../lib/libfltk_forms.a"
 GLLIBNAME="../lib/libfltk_gl.a"
 IMGLIBNAME="../lib/libfltk_images.a"
-
+PSLIBNAME="../../lib/libfltk_ps.a"
+GDILIBNAME="../../lib/libfltk_gdi.a"
 AC_SUBST(FLLIBNAME)
 AC_SUBST(GLDEMOS)
 AC_SUBST(GLLIBNAME)
 AC_SUBST(IMGLIBNAME)
+AC_SUBST(PSLIBNAME)
+AC_SUBST(GDILIBNAME)
 AC_SUBST(LIBNAME)
 AC_SUBST(LINKFLTK)
 AC_SUBST(LINKFLTKGL)
 AC_SUBST(LINKFLTKIMG)
+AC_SUBST(LINKFLTKPS)
+
 
 dnl Handle compile-time options...
 AC_ARG_ENABLE(debug, [  --enable-debug          turn on debugging [default=no]])
@@ -120,6 +127,7 @@ if test x$enable_shared = xyes; then
             FLDSONAME="libfltk_forms.$FL_API_VERSION.dylib"
             GLDSONAME="libfltk_gl.$FL_API_VERSION.dylib"
             IMGDSONAME="libfltk_images.$FL_API_VERSION.dylib"
+	    PSDSONAME="libfltk_ps.$FL_API_VERSION.dylib"
 	    DSOCOMMAND="\$(CC) $DSOFLAGS -dynamiclib -lc -o"
 	    ;;
 
@@ -128,6 +136,7 @@ if test x$enable_shared = xyes; then
             FLDSONAME="libfltk_forms.so.$FL_API_VERSION"
             GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
             IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
+	    PSDSONAME="libfltk_ps.so.$FL_API_VERSION"
 	    DSOCOMMAND="\$(CXX) -h \$@ \$(LDLIBS) -G $DEBUGFLAG -o"
 	    if test "x$libdir" != "x/usr/lib"; then
 		    DSOLINK="-R$libdir"
@@ -138,6 +147,7 @@ if test x$enable_shared = xyes; then
             FLDSONAME="libfltk_forms.sl.$FL_API_VERSION"
             GLDSONAME="libfltk_gl.sl.$FL_API_VERSION"
             IMGDSONAME="libfltk_images.sl.$FL_API_VERSION"
+	    PSDSONAME="libfltk_ps.sl.$FL_API_VERSION"
 	    DSOCOMMAND="ld -b -z +h \$@ $DEBUGFLAG -o"
 	    if test "x$libdir" != "x/usr/lib"; then
 		    DSOLINK="-Wl,-rpath,$libdir"
@@ -148,7 +158,8 @@ if test x$enable_shared = xyes; then
             FLDSONAME="libfltk_forms.so.$FL_API_VERSION"
             GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
             IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
-            DSOCOMMAND="\$(CXX) -Wl,-soname,\$@,-set_version,sgi1.1 \$(LDLIBS) -shared $DEBUGFLAG -o"
+	    PSDSONAME="libfltk_ps.so.$FL_API_VERSION"
+            DSOCOMMAND="\$(CXX) -Wl,-soname,\$@,-set_version,sgi1.2 \$(LDLIBS) -shared $DEBUGFLAG -o"
 	    if test "x$libdir" != "x/usr/lib" -a "x$libdir" != "x/usr/lib32" -a "x$libdir" != "x/usr/lib64"; then
 		    DSOLINK="-Wl,-rpath,$libdir"
             fi
@@ -158,6 +169,7 @@ if test x$enable_shared = xyes; then
             FLDSONAME="libfltk_forms.so.$FL_API_VERSION"
             GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
             IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
+	    PSDSONAME="libfltk_ps.so.$FL_API_VERSION"
             DSOCOMMAND="\$(CXX) -Wl,-soname,\$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
 	    if test "x$libdir" != "x/usr/lib" -a "x$libdir" != "x/usr/lib32"; then
 		    DSOLINK="-Wl,-rpath,$libdir"
@@ -168,6 +180,7 @@ if test x$enable_shared = xyes; then
             FLDSONAME="libfltk_forms.so.$FL_API_VERSION"
             GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
             IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
+	    PSDSONAME="libfltk_ps.so.$FL_API_VERSION"
             DSOCOMMAND="\$(CXX) -Wl,-soname,\$@ \$(LDLIBS) -shared -fPIC $DEBUGFLAG -o"
 	    if test "x$libdir" != "x/usr/lib"; then
 		    DSOLINK="-Wl,-rpath,$libdir"
@@ -178,6 +191,7 @@ if test x$enable_shared = xyes; then
             FLDSONAME="libfltk_forms_s.a"
             GLDSONAME="libfltk_gl_s.a"
             IMGDSONAME="libfltk_images_s.a"
+	    PSDSONAME="libfltk_ps_s.a"
             DSOCOMMAND="\$(CXX) -Wl,-bexpall,-bM:SRE,-bnoentry -o"
             SHAREDSUFFIX="_s"
             ;;
@@ -190,11 +204,12 @@ if test x$enable_shared = xyes; then
             FLDSONAME="libfltk_forms.so.$FL_API_VERSION"
             GLDSONAME="libfltk_gl.so.$FL_API_VERSION"
             IMGDSONAME="libfltk_images.so.$FL_API_VERSION"
+	    PSDSONAME="libfltk_ps.so.$FL_API_VERSION"
             DSOCOMMAND="\$(CXX) -Wl,-soname,\$@ \$(LDLIBS) -shared $DEBUGFLAG -o"
 	    ;;
     esac
 
-    LINKSHARED="-L../src -lfltk_images$SHAREDSUFFIX -lfltk_forms$SHAREDSUFFIX -lfltk$SHAREDSUFFIX"
+    LINKSHARED="-L../src -L../src/psprinter -lfltk_ps$SHAREDSUFFIX  -lfltk_images$SHAREDSUFFIX -lfltk_forms$SHAREDSUFFIX -lfltk$SHAREDSUFFIX"
 else
     DSOCOMMAND="echo"
     DSOLINK=""
@@ -202,10 +217,19 @@ else
     FLDSONAME=""
     GLDSONAME=""
     IMGDSONAME=""
+    PSDSONAME=""
     PICFLAG=0
     SHAREDSUFFIX=""
     FLUID="fluid"
-    LINKSHARED="-L../lib -lfltk_images -lfltk_forms -lfltk"
+    #RK modified
+    case $uname in
+	CYGWIN | MINGW*)
+	    LINKSHARED="-L../lib -lfltk_gdi -lfltk_ps -lfltk_images -lfltk_forms -lfltk"
+	    ;;
+	*)
+            LINKSHARED="-L../lib -lfltk_ps -lfltk_images -lfltk_forms -lfltk"
+	    ;;
+    esac
 fi
 
 AC_SUBST(DSOCOMMAND)
@@ -214,6 +238,7 @@ AC_SUBST(DSONAME)
 AC_SUBST(FLDSONAME)
 AC_SUBST(GLDSONAME)
 AC_SUBST(IMGDSONAME)
+AC_SUBST(PSDSONAME)
 AC_SUBST(SHAREDSUFFIX)
 AC_SUBST(LINKSHARED)
 AC_SUBST(FLUID)
@@ -418,6 +443,9 @@ dnl Define OS-specific stuff...
 HLINKS=
 POSTBUILD=:
 THREADS=
+#RK: GDI
+GDIDIR=
+
 
 AC_ARG_WITH(links, [  --with-links            make header links for common misspellings])
 
@@ -453,6 +481,9 @@ case $uname in
 	if test "x$with_links" != xyes; then
 		HLINKS="#"
 	fi
+	# setting GRIDIR adn linking...
+	GDIDIR="src/gdiprinter"
+	LINKFLTKGDI="-lfltk_gdi"
 	;;
 
     Darwin*)
@@ -594,6 +625,8 @@ AC_SUBST(GLLIB)
 AC_SUBST(HLINKS)
 AC_SUBST(POSTBUILD)
 AC_SUBST(THREADS)
+AC_SUBST(GDIDIR)
+AC_SUBST(LINKFLTKGDI)
 
 dnl Figure out the appropriate formatted man page extension...
 case "$uname" in
@@ -865,5 +898,5 @@ dnl Make sure the fltk-config script is executable...
 chmod +x fltk-config
 
 dnl
-dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.9 2004/03/18 08:00:27 matthiaswm Exp $".
+dnl End of "$Id: configure.in,v 1.33.2.31.2.91.2.10 2004/03/28 10:30:29 rokan Exp $".
 dnl

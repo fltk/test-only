@@ -1,5 +1,5 @@
 #
-# "$Id: makeinclude.mingw,v 1.1.2.3.2.11 2002/07/14 17:03:31 easysw Exp $"
+# "$Id: makeinclude.mingw,v 1.1.2.3.2.11.2.1 2004/03/28 10:30:30 rokan Exp $"
 #
 # Make include file for the Fast Light Tool Kit (FLTK).
 # (this file for MingW using GCC 2.95.x)
@@ -80,6 +80,8 @@ LIBNAME		= ../lib/libfltk.a
 FLLIBNAME	= ../lib/libfltk_forms.a
 GLLIBNAME	= ../lib/libfltk_gl.a
 IMGLIBNAME	= ../lib/libfltk_images.a
+PSLIBNAME	= ../../lib/libfltk_ps.a
+GDILIBNAME	= ../../lib/libfltk_gdi.a
 LIBCOMMAND	= ar -ruv
 RANLIB		= ranlib
 DSONAME		=
@@ -95,6 +97,8 @@ LINKFLTK	=-L../lib -lfltk
 LINKFLTKGL	=-L../lib -lfltk_gl
 LINKFLTKFORMS	=-L../lib -lfltk_forms -lfltk
 LINKFLTKIMG	=-L../lib -lfltk_images -lfltk
+LINKFLTKPS	=-L../lib -lfltk_ps -lfltk
+LINKFLTKGDI	=-L../lib -lfltk_gdi -lfltk
 IMAGELIBS	=
 
 # Do we build the OpenGL demos?
@@ -103,24 +107,26 @@ GLDEMOS		=gldemos
 # Do we build the threads demo?
 THREADS		=threads
 
+
 # Be quiet when building...
 .SILENT:
 
 # Build commands and filename extensions...
 .SUFFIXES:	.c .cxx .h .fl .o
 
+# RK: HACK to include fltk root directory from src/psprinter and src/gdiprinter, -I../.. is added
 .cxx:
 	echo Compiling and linking $@...
-	$(CXX) -I.. $(CXXFLAGS) $< $(LINKFLTK) $(LDLIBS) -o $@
+	$(CXX) -I.. -I../.. $(CXXFLAGS) $< $(LINKFLTK) $(LDLIBS) -o $@
 
 .c.o:
 	echo Compiling $@...
-	$(CC) -I.. $(CXXFLAGS) $< -c
+	$(CC) -I.. -I../.. $(CXXFLAGS) $< -c
 
 .cxx.o:
 	echo Compiling $@...
-	$(CXX) -I.. $(CXXFLAGS) $< -c
+	$(CXX) -I.. -I../.. $(CXXFLAGS) $< -c
 
 #
-# End of "$Id: makeinclude.mingw,v 1.1.2.3.2.11 2002/07/14 17:03:31 easysw Exp $".
+# End of "$Id: makeinclude.mingw,v 1.1.2.3.2.11.2.1 2004/03/28 10:30:30 rokan Exp $".
 #

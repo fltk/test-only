@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.19.2.7.2.38.2.2 2003/12/02 02:51:49 easysw Exp $"
+# "$Id: Makefile,v 1.19.2.7.2.38.2.3 2004/03/28 10:30:32 rokan Exp $"
 #
 # Test/example program makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -44,6 +44,7 @@ CPPFILES =\
 	cursor.cxx \
 	curve.cxx \
 	demo.cxx \
+	device.cxx \
 	doublebuffer.cxx \
 	editor.cxx \
 	fast_slow.cxx \
@@ -104,6 +105,7 @@ ALL =	\
 	cursor$(EXEEXT) \
 	curve$(EXEEXT) \
 	demo$(EXEEXT) \
+	device$(EXEEXT) \
 	doublebuffer$(EXEEXT) \
 	editor$(EXEEXT) \
 	fast_slow$(EXEEXT) \
@@ -215,6 +217,11 @@ curve$(EXEEXT): curve.o
 demo$(EXEEXT): demo.o
 	echo Linking $@...
 	$(CXX) -I.. $(CXXFLAGS) -o $@ $< $(LINKFLTKFORMS) $(LDLIBS)
+	$(POSTBUILD) $@ ../FL/mac.r
+
+device$(EXEEXT): device.o
+	echo Linking $@...
+	$(CXX) -I.. $(CXXFLAGS) device.o -o $@ $(LINKFLTKPS)  $(LINKFLTKGDI)  $(LDLIBS)
 	$(POSTBUILD) $@ ../FL/mac.r
 
 doublebuffer$(EXEEXT): doublebuffer.o
@@ -372,5 +379,5 @@ shape$(EXEEXT): shape.o
 
 
 #
-# End of "$Id: Makefile,v 1.19.2.7.2.38.2.2 2003/12/02 02:51:49 easysw Exp $".
+# End of "$Id: Makefile,v 1.19.2.7.2.38.2.3 2004/03/28 10:30:32 rokan Exp $".
 #

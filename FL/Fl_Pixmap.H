@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Pixmap.H,v 1.6.2.8.2.9.2.4 2004/03/18 08:00:35 matthiaswm Exp $"
+// "$Id: Fl_Pixmap.H,v 1.6.2.8.2.9.2.5 2004/03/28 10:30:29 rokan Exp $"
 //
 // Pixmap header file for the Fast Light Tool Kit (FLTK).
 //
@@ -49,19 +49,13 @@ class FL_EXPORT Fl_Pixmap : public Fl_Image {
   public:
 
   int alloc_data; // Non-zero if data was allocated
-#if defined(__APPLE__) || defined(WIN32)
-  void *id; // for internal use
-  void *mask; // for internal use (mask bitmap)
-#else
-  unsigned id; // for internal use
-  unsigned mask; // for internal use (mask bitmap)
-#endif // __APPLE__ || WIN32
   
+
     /** The constructors create a new pixmap from the specified XPM data. */
-  explicit Fl_Pixmap(char * const * D) : Fl_Image(-1,0,1), alloc_data(0), id(0), mask(0) {set_data((const char*const*)D); measure();}
-  explicit Fl_Pixmap(uchar* const * D) : Fl_Image(-1,0,1), alloc_data(0), id(0), mask(0) {set_data((const char*const*)D); measure();}
-  explicit Fl_Pixmap(const char * const * D) : Fl_Image(-1,0,1), alloc_data(0), id(0), mask(0) {set_data((const char*const*)D); measure();}
-  explicit Fl_Pixmap(const uchar* const * D) : Fl_Image(-1,0,1), alloc_data(0), id(0), mask(0) {set_data((const char*const*)D); measure();}
+  explicit Fl_Pixmap(char * const * D) : Fl_Image(-1,0,1), alloc_data(0) {set_data((const char*const*)D); measure();}
+  explicit Fl_Pixmap(uchar* const * D) : Fl_Image(-1,0,1), alloc_data(0) {set_data((const char*const*)D); measure();}
+  explicit Fl_Pixmap(const char * const * D) : Fl_Image(-1,0,1), alloc_data(0) {set_data((const char*const*)D); measure();}
+  explicit Fl_Pixmap(const uchar* const * D) : Fl_Image(-1,0,1), alloc_data(0) {set_data((const char*const*)D); measure();}
     /** The destructor free all memory and server resources that are used by the pixmap. */
   virtual ~Fl_Pixmap();
   virtual Fl_Image *copy(int W, int H);
@@ -72,11 +66,11 @@ class FL_EXPORT Fl_Pixmap : public Fl_Image {
   void draw(int X, int Y) {draw(X, Y, w(), h(), 0, 0);}
   virtual void label(Fl_Widget*w);
   virtual void label(Fl_Menu_Item*m);
-  virtual void uncache();
+  //virtual void uncache();
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Pixmap.H,v 1.6.2.8.2.9.2.4 2004/03/18 08:00:35 matthiaswm Exp $".
+// End of "$Id: Fl_Pixmap.H,v 1.6.2.8.2.9.2.5 2004/03/28 10:30:29 rokan Exp $".
 //

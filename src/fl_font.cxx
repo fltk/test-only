@@ -1,5 +1,5 @@
 //
-// "$Id: fl_font.cxx,v 1.9.2.5.2.6.2.4 2004/03/18 08:01:06 matthiaswm Exp $"
+// "$Id: fl_font.cxx,v 1.9.2.5.2.6.2.5 2004/03/28 10:30:31 rokan Exp $"
 //
 // Font selection code for the Fast Light Tool Kit (FLTK).
 //
@@ -24,57 +24,15 @@
 //
 
 // Select fonts from the FLTK font table.
-#include "flstring.h"
-#include <FL/Fl.H>
-#include <FL/fl_draw.H>
-#include <FL/x.H>
-#include "Fl_Font.H"
 
-#include <stdio.h>
-#include <stdlib.h>
 
 #ifdef WIN32
-#  include "fl_font_win32.cxx"
+#  include "win/font.cxx"
 #elif defined(__APPLE__)
-#  include "fl_font_mac.cxx"
+#  include "carbon/font.cxx"
 #else
-#  if USE_XFT
-#    include "fl_font_xft.cxx"
-#  else
-#    include "fl_font_x.cxx"
-#  endif // USE_XFT
-
-char *fl_get_font_xfld(char *buffer, int bufsize, int fnum, int size) {
-  static const char *fonts[] = {
-    "-*-helvetica-medium-r-normal--",
-    "-*-helvetica-bold-r-normal--",
-    "-*-helvetica-medium-o-normal--",
-    "-*-helvetica-bold-o-normal--",
-    "-*-courier-medium-r-normal--",
-    "-*-courier-bold-r-normal--",
-    "-*-courier-medium-o-normal--",
-    "-*-courier-bold-o-normal--",
-    "-*-times-medium-r-normal--",
-    "-*-times-bold-r-normal--",
-    "-*-times-medium-i-normal--",
-    "-*-times-bold-i-normal--",
-    "-*-symbol-",
-    "-*-lucidatypewriter-medium-r-normal-sans-",
-    "-*-lucidatypewriter-bold-r-normal-sans-",
-    "-*-*zapf dingbats-"
-  };
-
-  if (fnum < 0 || fnum >= (int)(sizeof(fonts) / sizeof(fonts[0]))) fnum = 0;
-
-  snprintf(buffer, bufsize,
-           "%s%d-*-*-*-*-*-iso10646-1,%s%d-*-*-*-*-*-iso8859-1",
-           fonts[fnum], size, fonts[fnum], size);
-
-//  printf("fl_get_font_xfld returning \"%s\"...\n", buffer);
-
-  return (buffer);
-}
-#endif // WIN32
+#  include "xlib/font.cxx"
+#endif
 
 
 double fl_width(const char* c) {
@@ -87,5 +45,5 @@ void fl_draw(const char* str, int x, int y) {
 }
 
 //
-// End of "$Id: fl_font.cxx,v 1.9.2.5.2.6.2.4 2004/03/18 08:01:06 matthiaswm Exp $".
+// End of "$Id: fl_font.cxx,v 1.9.2.5.2.6.2.5 2004/03/28 10:30:31 rokan Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arci.cxx,v 1.4.2.5.2.3.2.4 2004/03/18 08:01:04 matthiaswm Exp $"
+// "$Id: fl_arci.cxx,v 1.4.2.5.2.3.2.5 2004/03/28 10:30:31 rokan Exp $"
 //
 // Arc (integer) drawing functions for the Fast Light Tool Kit (FLTK).
 //
@@ -33,48 +33,15 @@
 
 // 3/10/98: created
 
-#include <FL/fl_draw.H>
-#include <FL/x.H>
-#ifdef WIN32
-#include <FL/math.h>
-#endif
 
-void fl_arc(int x,int y,int w,int h,double a1,double a2) {
-  if (w <= 0 || h <= 0) return;
 #ifdef WIN32
-  int xa = x+w/2+int(w*cos(a1/180.0*M_PI));
-  int ya = y+h/2-int(h*sin(a1/180.0*M_PI));
-  int xb = x+w/2+int(w*cos(a2/180.0*M_PI));
-  int yb = y+h/2-int(h*sin(a2/180.0*M_PI));
-  Arc(fl_gc, x, y, x+w, y+h, xa, ya, xb, yb); 
+#  include "win/arci.cxx"
 #elif defined(__APPLE__)
-  Rect r; r.left=x; r.right=x+w; r.top=y; r.bottom=y+h;
-  a1 = a2-a1; a2 = 450-a2;
-  FrameArc(&r, (short int)a2, (short int)a1);
+#  include "carbon/arci.cxx"
 #else
-  XDrawArc(fl_display, fl_window, fl_gc, x,y,w-1,h-1, int(a1*64),int((a2-a1)*64));
+#  include "xlib/arci.cxx"
 #endif
-}
-
-void fl_pie(int x,int y,int w,int h,double a1,double a2) {
-  if (w <= 0 || h <= 0) return;
-#ifdef WIN32
-  if (a1 == a2) return;
-  int xa = x+w/2+int(w*cos(a1/180.0*M_PI));
-  int ya = y+h/2-int(h*sin(a1/180.0*M_PI));
-  int xb = x+w/2+int(w*cos(a2/180.0*M_PI));
-  int yb = y+h/2-int(h*sin(a2/180.0*M_PI));
-  SelectObject(fl_gc, fl_brush());
-  Pie(fl_gc, x, y, x+w, y+h, xa, ya, xb, yb); 
-#elif defined(__APPLE__)
-  Rect r; r.left=x; r.right=x+w; r.top=y; r.bottom=y+h;
-  a1 = a2-a1; a2 = 450-a2;
-  PaintArc(&r, (short int)a2, (short int)a1);
-#else
-  XFillArc(fl_display, fl_window, fl_gc, x,y,w,h, int(a1*64),int((a2-a1)*64));
-#endif
-}
 
 //
-// End of "$Id: fl_arci.cxx,v 1.4.2.5.2.3.2.4 2004/03/18 08:01:04 matthiaswm Exp $".
+// End of "$Id: fl_arci.cxx,v 1.4.2.5.2.3.2.5 2004/03/28 10:30:31 rokan Exp $".
 //

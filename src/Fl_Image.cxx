@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Image.cxx,v 1.5.2.3.2.24.2.5 2004/03/18 08:00:59 matthiaswm Exp $"
+// "$Id: Fl_Image.cxx,v 1.5.2.3.2.24.2.6 2004/03/28 10:30:30 rokan Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -32,16 +32,39 @@
 #include "flstring.h"
 
 
-void fl_restore_clip(); // from fl_rect.cxx
+// void fl_restore_clip(); // from fl_rect.cxx
 
 //
 // Base image class...
 //
+#include <FL/Fl_Device.H>
+
+
+  
+Fl_Image_Cache::~Fl_Image_Cache(){
+  if(next)
+    next->prev = prev;
+  if(prev)
+     prev->next = next; //removing from chain;
+  else // is first
+     device->image_caches = next;
+ image->cache_ = 0;
+};
+
+
+Fl_Image_Cache::Fl_Image_Cache(Fl_Image * im, Fl_Device * dev) 
+  :prev(0), image(im), device(dev){
+  im->cache_ = this;
+  // inserting cache in front of device cache list
+  if((next = dev->image_caches))
+    dev->image_caches->prev = this;
+  dev->image_caches = this; 
+};
+
+
 
 Fl_Image::~Fl_Image() {
-}
-
-void Fl_Image::uncache() {
+  uncache();
 }
 
 void Fl_Image::draw(int XP, int YP, int, int, int, int) {
@@ -118,22 +141,15 @@ Fl_Image::measure(const Fl_Label *lo,		// I - Label
 // RGB image class...
 //
 
+
 Fl_RGB_Image::~Fl_RGB_Image() {
-  uncache();
+  // uncache(); // RK: implemented in base class
   if (alloc_array) delete[] (uchar *)array;
 }
 
-void Fl_RGB_Image::uncache() {
-  if (id) {
-    fl_delete_offscreen((Fl_Offscreen)id);
-    id = 0;
-  }
 
-  if (mask) {
-    fl_delete_bitmask((Fl_Bitmask)mask);
-    mask = 0;
-  }
-}
+
+
 
 Fl_Image *Fl_RGB_Image::copy(int W, int H) {
   // Optimize the simple copy where the width and height are the same,
@@ -291,7 +307,11 @@ void Fl_RGB_Image::desaturate() {
   d(new_d);
 }
 
+
+
 void Fl_RGB_Image::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
+
+  // Device independent part
   // Don't draw an empty image...
   if (!d() || !array) {
     draw_empty(XP, YP);
@@ -308,83 +328,12 @@ void Fl_RGB_Image::draw(int XP, int YP, int WP, int HP, int cx, int cy) {
   if (cy < 0) {H += cy; Y -= cy; cy = 0;}
   if (cy+H > h()) H = h()-cy;
   if (H <= 0) return;
-  if (!id) {
-    id = fl_create_offscreen(w(), h());
-    fl_begin_offscreen((Fl_Offscreen)id);
-    fl_draw_image(array, 0, 0, w(), h(), d(), ld());
-    fl_end_offscreen();
-
-    if (d() == 2 || d() == 4) {
-      mask = fl_create_alphamask(w(), h(), d(), ld(), array);
-    }
-  }
-#ifdef WIN32
-  if (mask) {
-    HDC new_gc = CreateCompatibleDC(fl_gc);
-    SelectObject(new_gc, (void*)mask);
-    BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCAND);
-    SelectObject(new_gc, (void*)id);
-    BitBlt(fl_gc, X, Y, W, H, new_gc, cx, cy, SRCPAINT);
-    DeleteDC(new_gc);
-  } else {
-    fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)id, cx, cy);
-  }
-#elif defined(__APPLE__)
-  if (mask) {
-    Rect src, dst;
-    // MRS: STR #114 says we should be using cx, cy, W, and H...
-//    src.left = 0; src.right = w();
-//    src.top = 0; src.bottom = h();
-//    dst.left = X; dst.right = X+w();
-//    dst.top = Y; dst.bottom = Y+h();
-    src.left = cx; src.right = cx+W;
-    src.top = cy; src.bottom = cy+H;
-    dst.left = X; dst.right = X+W;
-    dst.top = Y; dst.bottom = Y+H;
-    RGBColor rgb;
-    rgb.red = 0xffff; rgb.green = 0xffff; rgb.blue = 0xffff;
-    RGBBackColor(&rgb);
-    rgb.red = 0x0000; rgb.green = 0x0000; rgb.blue = 0x0000;
-    RGBForeColor(&rgb);
-
-#  if 0
-    // MRS: This *should* work, but doesn't on my system (iBook); change to
-    //      "#if 1" and restore the corresponding code in Fl_Bitmap.cxx
-    //      to test the real alpha channel support.
-    CopyDeepMask(GetPortBitMapForCopyBits((GrafPtr)id),
-	         GetPortBitMapForCopyBits((GrafPtr)mask), 
-	         GetPortBitMapForCopyBits(GetWindowPort(fl_window)),
-                 &src, &src, &dst, blend, NULL);
-#  else // Fallback to screen-door transparency...
-    CopyMask(GetPortBitMapForCopyBits((GrafPtr)id),
-	     GetPortBitMapForCopyBits((GrafPtr)mask), 
-	     GetPortBitMapForCopyBits(GetWindowPort(fl_window)),
-             &src, &src, &dst);
-#  endif // 0
-  } else {
-    fl_copy_offscreen(X, Y, W, H, (Fl_Offscreen)id, cx, cy);
-  }
-#else
-  if (mask) {
-    // I can't figure out how to combine a mask with existing region,
-    // so cut the image down to a clipped rectangle:
-    int nx, ny; fl_clip_box(X,Y,W,H,nx,ny,W,H);
-    cx += nx-X; X = nx;
-    cy += ny-Y; Y = ny;
-    // make X use the bitmap as a mask:
-    XSetClipMask(fl_display, fl_gc, mask);
-    int ox = X-cx; if (ox < 0) ox += w();
-    int oy = Y-cy; if (oy < 0) oy += h();
-    XSetClipOrigin(fl_display, fl_gc, X-cx, Y-cy);
-  }
-  fl_copy_offscreen(X, Y, W, H, id, cx, cy);
-  if (mask) {
-    // put the old clip region back
-    XSetClipOrigin(fl_display, fl_gc, 0, 0);
-    fl_restore_clip();
-  }
-#endif
+  
+  // RK: draw to Device
+  fl_device->draw(this, X, Y, W, H, cx, cy);
+  
 }
+
 
 void Fl_RGB_Image::label(Fl_Widget* widget) {
   widget->image(this);
@@ -395,7 +344,16 @@ void Fl_RGB_Image::label(Fl_Menu_Item* m) {
   m->label(_FL_IMAGE_LABEL, (const char*)this);
 }
 
+#ifdef __APPLE__ // RK: HACK different devices should be implemented as a seperate libray and using modified makefiles
+  #include "carbon/Image.cxx"
+#elif defined(WIN32)
+  #include "win/Image.cxx"
+#else
+  #include "xlib/Image.cxx"
+#endif  // __APPLE__
+
+
 
 //
-// End of "$Id: Fl_Image.cxx,v 1.5.2.3.2.24.2.5 2004/03/18 08:00:59 matthiaswm Exp $".
+// End of "$Id: Fl_Image.cxx,v 1.5.2.3.2.24.2.6 2004/03/28 10:30:30 rokan Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_set_fonts.cxx,v 1.6.2.5.2.6.2.4 2004/03/18 08:01:06 matthiaswm Exp $"
+// "$Id: fl_set_fonts.cxx,v 1.6.2.5.2.6.2.5 2004/03/28 10:30:31 rokan Exp $"
 //
 // More font utilities for the Fast Light Tool Kit (FLTK).
 //
@@ -30,15 +30,13 @@
 #include <stdlib.h>
 
 #ifdef WIN32
-#  include "fl_set_fonts_win32.cxx"
+#  include "win/set_fonts.cxx"
 #elif defined(__APPLE__)
-#  include "fl_set_fonts_mac.cxx"
-#elif USE_XFT
-#  include "fl_set_fonts_xft.cxx"
+#  include "carbon/set_fonts.cxx"
 #else
-#  include "fl_set_fonts_x.cxx"
+#  include "xlib/set_fonts.cxx"
 #endif // WIN32
 
 //
-// End of "$Id: fl_set_fonts.cxx,v 1.6.2.5.2.6.2.4 2004/03/18 08:01:06 matthiaswm Exp $".
+// End of "$Id: fl_set_fonts.cxx,v 1.6.2.5.2.6.2.5 2004/03/28 10:30:31 rokan Exp $".
 //

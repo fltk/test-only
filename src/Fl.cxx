@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.24.2.41.2.55.2.6 2004/03/18 08:00:56 matthiaswm Exp $"
+// "$Id: Fl.cxx,v 1.24.2.41.2.55.2.7 2004/03/28 10:30:30 rokan Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -984,6 +984,69 @@ void Fl_Window::flush() {
   draw();
 }
 
+
+Fl_Device::~Fl_Device(){
+  while(image_caches)  delete image_caches;
+};
+
+
+
+#ifdef __APPLE__ 
+#  define FL_DISPLAY Fl_Carbon_Display
+#  include "carbon/Fl_Carbon_Display.H"
+#elif defined(WIN32)
+#  define FL_DISPLAY Fl_Win_Display
+#  include "win/Fl_Win_Display.H"
+#else
+#  define FL_DISPLAY Fl_Xlib_Display
+#  include "xlib/Fl_Xlib_Display.H"
+#endif  // __APPLE__
+
+FL_EXPORT FL_DISPLAY fl_disp;
+Fl_Device * fl_device=&fl_disp;
+
+#ifdef WIN32
+  extern FL_EXPORT void pop_xmaps();
+  extern FL_EXPORT void push_xmaps();
+#endif
+
+Fl_Device * Fl_Device::current(){ return fl_device;};
+/*
+Fl_Device * FL_DISPLAY::set_current(){
+  if(fl_device == this) return this;
+  if(fl_device == &fl_disp){
+    Fl::flush();
+#ifdef WIN32
+    push_xmaps();
+#endif
+  }
+
+  Fl_Device * c = fl_device;
+  fl_device = this;
+  return c;
+};
+*/
+
+Fl_Device * Fl_Device::set_current(){
+  if(fl_device == this) return this;
+  Fl_Device * c = fl_device;
+  fl_device = this;
+  return c;
+};
+
+#ifdef WIN32
+Fl_Device * FL_DISPLAY::set_current(){
+  if(fl_device == this) return this;
+  if(fl_device == &fl_disp) Fl::flush();
+  Fl_Device * c = fl_device;
+  fl_device = this;
+
+  if(fl_device == &fl_disp)
+    pop_xmaps(); // also sets fl_gc back
+  return c;
+};
+#endif
+
 //
-// End of "$Id: Fl.cxx,v 1.24.2.41.2.55.2.6 2004/03/18 08:00:56 matthiaswm Exp $".
+// End of "$Id: Fl.cxx,v 1.24.2.41.2.55.2.7 2004/03/28 10:30:30 rokan Exp $".
 //

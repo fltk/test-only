@@ -1,5 +1,5 @@
 //
-// "$Id: Enumerations.H,v 1.18.2.14.2.28.2.7 2004/03/18 08:00:27 matthiaswm Exp $"
+// "$Id: Enumerations.H,v 1.18.2.14.2.28.2.8 2004/03/28 10:30:29 rokan Exp $"
 //
 // Enumerations for the Fast Light Tool Kit (FLTK).
 //
@@ -408,6 +408,15 @@ enum Fl_Damage {
   FL_DAMAGE_ALL      = 0x80
 };
 
+enum Fl_Device_Type{
+  FL_XLIB_DISPLAY = 1,
+  FL_CARBON_DISPLAY = 2,
+  FL_WIN_DISPLAY = 3,
+  FL_PS_PRINTER = 256,
+  FL_GDI_PRINTER = 257
+};
+  
+
 // FLTK 1.0.x compatibility definitions...
 #  ifdef FLTK_1_0_COMPAT
 #    define contrast	fl_contrast
@@ -419,5 +428,5 @@ enum Fl_Damage {
 #endif
 
 //
-// End of "$Id: Enumerations.H,v 1.18.2.14.2.28.2.7 2004/03/18 08:00:27 matthiaswm Exp $".
+// End of "$Id: Enumerations.H,v 1.18.2.14.2.28.2.8 2004/03/28 10:30:29 rokan Exp $".
 //

@@ -506,10 +506,12 @@ DEP_CPP_FL_CO=\
 	"..\fl\win32.h"\
 	"..\fl\x.h"\
 	"..\src\fl_cmap.h"\
-	"..\src\fl_color_mac.cxx"\
-	"..\src\fl_color_win32.cxx"\
 	"..\src\Fl_XColor.H"\
 	".\config.h"\
+	
+NODEP_CPP_FL_CO=\
+	"..\src\fl_color_mac.cxx"\
+	"..\src\fl_color_win32.cxx"\
 	
 # End Source File
 # Begin Source File
@@ -636,11 +638,13 @@ DEP_CPP_FL_DN=\
 	"..\fl\mac.H"\
 	"..\fl\win32.h"\
 	"..\fl\x.h"\
-	"..\src\fl_dnd_mac.cxx"\
-	"..\src\fl_dnd_win32.cxx"\
 	"..\src\fl_dnd_x.cxx"\
 	"..\src\flstring.h"\
 	".\config.h"\
+	
+NODEP_CPP_FL_DN=\
+	"..\src\fl_dnd_mac.cxx"\
+	"..\src\fl_dnd_win32.cxx"\
 	
 # End Source File
 # Begin Source File
@@ -693,11 +697,13 @@ DEP_CPP_FL_DRA=\
 	"..\fl\mac.H"\
 	"..\fl\win32.h"\
 	"..\fl\x.h"\
-	"..\src\fl_draw_image_mac.cxx"\
-	"..\src\fl_draw_image_win32.cxx"\
 	"..\src\Fl_XColor.H"\
 	"..\src\flstring.h"\
 	".\config.h"\
+	
+NODEP_CPP_FL_DRA=\
+	"..\src\fl_draw_image_mac.cxx"\
+	"..\src\fl_draw_image_win32.cxx"\
 	
 # End Source File
 # Begin Source File
@@ -946,12 +952,14 @@ DEP_CPP_FL_FO=\
 	"..\fl\win32.h"\
 	"..\fl\x.h"\
 	"..\src\fl_font.h"\
+	"..\src\flstring.h"\
+	".\config.h"\
+	
+NODEP_CPP_FL_FO=\
 	"..\src\fl_font_mac.cxx"\
 	"..\src\fl_font_win32.cxx"\
 	"..\src\fl_font_x.cxx"\
 	"..\src\fl_font_xft.cxx"\
-	"..\src\flstring.h"\
-	".\config.h"\
 	
 # End Source File
 # Begin Source File
@@ -967,6 +975,8 @@ DEP_CPP_FL_GE=\
 	"..\fl\mac.H"\
 	"..\fl\win32.h"\
 	"..\fl\x.h"\
+	
+NODEP_CPP_FL_GE=\
 	"..\src\Fl_get_key_mac.cxx"\
 	"..\src\fl_get_key_win32.cxx"\
 	
@@ -1647,6 +1657,10 @@ DEP_CPP_FL_PR=\
 # End Source File
 # Begin Source File
 
+SOURCE=..\src\Fl_Printer.cxx
+# End Source File
+# Begin Source File
+
 SOURCE=..\src\Fl_Progress.cxx
 DEP_CPP_FL_PRO=\
 	"..\fl\enumerations.h"\
@@ -1819,12 +1833,14 @@ DEP_CPP_FL_SET=\
 	"..\fl\win32.h"\
 	"..\fl\x.h"\
 	"..\src\fl_font.h"\
+	"..\src\flstring.h"\
+	".\config.h"\
+	
+NODEP_CPP_FL_SET=\
 	"..\src\fl_set_fonts_mac.cxx"\
 	"..\src\fl_set_fonts_win32.cxx"\
 	"..\src\fl_set_fonts_x.cxx"\
 	"..\src\fl_set_fonts_xft.cxx"\
-	"..\src\flstring.h"\
-	".\config.h"\
 	
 # End Source File
 # Begin Source File
@@ -2230,10 +2246,12 @@ DEP_CPP_FL_X_=\
 	"..\fl\mac.H"\
 	"..\fl\win32.h"\
 	"..\fl\x.h"\
-	"..\src\Fl_mac.cxx"\
-	"..\src\fl_win32.cxx"\
 	"..\src\flstring.h"\
 	".\config.h"\
+	
+NODEP_CPP_FL_X_=\
+	"..\src\Fl_mac.cxx"\
+	"..\src\fl_win32.cxx"\
 	
 # End Source File
 # Begin Source File

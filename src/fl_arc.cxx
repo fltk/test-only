@@ -1,5 +1,5 @@
 //
-// "$Id: fl_arc.cxx,v 1.4.2.3.2.6.2.4 2004/03/18 08:01:04 matthiaswm Exp $"
+// "$Id: fl_arc.cxx,v 1.4.2.3.2.6.2.5 2004/03/28 10:30:31 rokan Exp $"
 //
 // Arc functions for the Fast Light Tool Kit (FLTK).
 //
@@ -29,8 +29,9 @@
 
 #include <FL/fl_draw.H>
 #include <FL/math.h>
+#include <FL/Fl_Display.H>
 
-void fl_arc(double x, double y, double r, double start, double end) {
+void Fl_Display::arc(double x, double y, double r, double start, double end) {
 
   // draw start point accurately:
   
@@ -67,12 +68,12 @@ void fl_arc(double x, double y, double r, double start, double end) {
   }
 }
 
-#if 0 // portable version.  X-specific one in fl_vertex.cxx
+#if 0 // portable version.  X-specific one in xlib/vertex.cxx
 void fl_circle(double x,double y,double r) {
   _fl_arc(x, y, r, r, 0, 360);
 }
 #endif
 
 //
-// End of "$Id: fl_arc.cxx,v 1.4.2.3.2.6.2.4 2004/03/18 08:01:04 matthiaswm Exp $".
+// End of "$Id: fl_arc.cxx,v 1.4.2.3.2.6.2.5 2004/03/28 10:30:31 rokan Exp $".
 //

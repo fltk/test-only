@@ -453,6 +453,27 @@ Package=<4>
 
 ###############################################################################
 
+Project: "device"=".\device.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+    Begin Project Dependency
+    Project_Dep_Name fltk
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltkgdi
+    End Project Dependency
+    Begin Project Dependency
+    Project_Dep_Name fltkps
+    End Project Dependency
+}}}
+
+###############################################################################
+
 Project: "doublebuffer"=".\doublebuffer.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -555,6 +576,18 @@ Package=<4>
 
 ###############################################################################
 
+Project: "fltkgdi"=".\fltkgdi.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
 Project: "fltkgl"=".\fltkgl.dsp" - Package Owner=<4>
 
 Package=<5>
@@ -568,6 +601,18 @@ Package=<4>
 ###############################################################################
 
 Project: "fltkimages"=".\fltkimages.dsp" - Package Owner=<4>
+
+Package=<5>
+{{{
+}}}
+
+Package=<4>
+{{{
+}}}
+
+###############################################################################
+
+Project: "fltkps"=".\fltkps.dsp" - Package Owner=<4>
 
 Package=<5>
 {{{
