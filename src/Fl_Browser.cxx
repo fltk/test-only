@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Browser.cxx,v 1.77 2003/11/04 08:10:58 spitzak Exp $"
+// "$Id: Fl_Browser.cxx,v 1.78 2003/11/09 02:48:21 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -960,6 +960,7 @@ int Browser::handle(int event) {
       }
       return 1;
     case ReturnKey:
+    case KeypadEnter:
       if (!(when() & WHEN_ENTER_KEY)) break;
       if (!goto_visible_focus()) break;
       clear_changed();
@@ -1138,5 +1139,5 @@ Browser::~Browser() {
 }
 
 //
-// End of "$Id: Fl_Browser.cxx,v 1.77 2003/11/04 08:10:58 spitzak Exp $".
+// End of "$Id: Fl_Browser.cxx,v 1.78 2003/11/09 02:48:21 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_FileChooser2.cxx,v 1.22 2003/11/09 02:26:30 spitzak Exp $"
+// "$Id: Fl_FileChooser2.cxx,v 1.23 2003/11/09 02:48:21 spitzak Exp $"
 //
 // More FileChooser routines for the Fast Light Tool Kit (FLTK).
 //
@@ -438,7 +438,7 @@ FileChooser::fileListCB()
   }
 #endif /* _WIN32 || __EMX__ */
 
-  if (event_clicks() || event_key() == ReturnKey)
+  if (event_clicks() || event_key() == ReturnKey || event_key()==KeypadEnter)
   {
     puts("double-click");
     if (filename_isdir(pathname))
@@ -536,7 +536,7 @@ FileChooser::fileNameCB()
   }
 #endif /* _WIN32 || __EMX__ */
 
-  if (event_key() == ReturnKey)
+  if (event_key() == ReturnKey || event_key()==KeypadEnter)
   {
     // Enter pressed - select or change directory...
     if (filename_isdir(pathname))
@@ -671,5 +671,5 @@ FileChooser::fileNameCB()
 
 
 //
-// End of "$Id: Fl_FileChooser2.cxx,v 1.22 2003/11/09 02:26:30 spitzak Exp $".
+// End of "$Id: Fl_FileChooser2.cxx,v 1.23 2003/11/09 02:48:21 spitzak Exp $".
 //

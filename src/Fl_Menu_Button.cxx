@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Button.cxx,v 1.57 2003/11/04 08:11:00 spitzak Exp $"
+// "$Id: Fl_Menu_Button.cxx,v 1.58 2003/11/09 02:48:21 spitzak Exp $"
 //
 // Menu button widget for the Fast Light Tool Kit (FLTK).
 //
@@ -110,7 +110,9 @@ int PopupMenu::handle(int e) {
     return handle_shortcut();
 
   case KEY:
-    if (event_key() == ReturnKey || event_key() == SpaceKey) goto EXECUTE;
+    if (event_key() == ReturnKey ||
+	event_key() == KeypadEnter ||
+	event_key() == SpaceKey) goto EXECUTE;
     return 0;
 
   default:
@@ -134,5 +136,5 @@ PopupMenu::PopupMenu(int X,int Y,int W,int H,const char *l)
 }
 
 //
-// End of "$Id: Fl_Menu_Button.cxx,v 1.57 2003/11/04 08:11:00 spitzak Exp $".
+// End of "$Id: Fl_Menu_Button.cxx,v 1.58 2003/11/09 02:48:21 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Input_Browser.cxx,v 1.23 2003/11/04 08:10:59 spitzak Exp $"
+// "$Id: Fl_Input_Browser.cxx,v 1.24 2003/11/09 02:48:21 spitzak Exp $"
 //
 // Input Browser (Combo Box) widget for the Fast Light Tool Kit (FLTK).
 //
@@ -123,7 +123,9 @@ ComboBrowser::handle(int event) {
 static void ComboBrowser_cb(Widget*, void*) {
   // we get callbacks for all keys?
   if (event() != KEY && event() != RELEASE) return;
-  if (event() == KEY && event_key() != ReturnKey
+  if (event() == KEY
+      && event_key() != ReturnKey
+      && event_key() != KeypadEnter
       && event_key() != ' ')
     return;
   Widget *item = b->item();
@@ -262,5 +264,5 @@ InputBrowser::draw() {
 }
 
 //
-// End of "$Id: Fl_Input_Browser.cxx,v 1.23 2003/11/04 08:10:59 spitzak Exp $".
+// End of "$Id: Fl_Input_Browser.cxx,v 1.24 2003/11/09 02:48:21 spitzak Exp $".
 //

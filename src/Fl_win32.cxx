@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.198 2003/11/04 08:11:03 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.199 2003/11/09 02:48:21 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1327,6 +1327,8 @@ void CreatedWindow::create(Window* window) {
     wc.cbSize = sizeof(WNDCLASSEX);
     RegisterClassEx(&wc);
     fl_wake_msg = RegisterWindowMessage("fltk::ThreadWakeup");
+    // This is needed or multiple DLL's get confused (?):
+    UnregisterClass(wc.lpszClassName, xdisplay);
 #if USE_DRAGDROP
     OleInitialize(0L);
 #endif
@@ -1697,5 +1699,5 @@ bool fltk::system_theme() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.198 2003/11/04 08:11:03 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.199 2003/11/09 02:48:21 spitzak Exp $".
 //

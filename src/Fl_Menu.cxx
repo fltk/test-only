@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu.cxx,v 1.146 2003/11/04 08:11:00 spitzak Exp $"
+// "$Id: Fl_Menu.cxx,v 1.147 2003/11/09 02:48:21 spitzak Exp $"
 //
 // Implementation of popup menus.  These are called by using the
 // Menu::popup and Menu::pulldown methods.  See also the
@@ -533,6 +533,7 @@ int MWindow::handle(int event) {
       return 1;
     case SpaceKey:
     case ReturnKey:
+    case KeypadEnter:
       goto EXECUTE;
     case EscapeKey:
       exit_modal();
@@ -848,5 +849,5 @@ int Menu::popup(
 }
 
 //
-// End of "$Id: Fl_Menu.cxx,v 1.146 2003/11/04 08:11:00 spitzak Exp $".
+// End of "$Id: Fl_Menu.cxx,v 1.147 2003/11/09 02:48:21 spitzak Exp $".
 //
