@@ -1,9 +1,5 @@
-//
-// "$Id: fl_xpm.cxx,v 1.23 2004/07/04 17:26:01 laza2000 Exp $"
-//
-// XPM reading code for the Fast Light Tool Kit (FLTK).
-//
-// Copyright 1998-2003 by Bill Spitzak and others.
+// "$Id: fl_xpm.cxx,v 1.24 2004/07/07 05:11:03 spitzak Exp $"
+// Copyright 1998-2004 by Bill Spitzak and others.
 //
 // This library is free software; you can redistribute it and/or
 // modify it under the terms of the GNU Library General Public
@@ -21,17 +17,18 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
-// Image type that reads an xpm file in from disk.  Normal use of xpm
-// files is to imbed them in the source code with #include, in that
-// case you want to use an xpmImage object.
+/*! \class fltk::xpmFileImage
 
-// Currently commented out as it has the same name as the non-file
-// version. We need to figure out an efficient method of having both
-// in-memory and file data, probably by making all the file ones
-// subclasses...
+  Image type that reads a .xpm (X Pixmap) file in from disk.
 
+  The normal use of a .xpm file is to #include it into
+  your source code. In that case you want to use an fltk::xpmImage
+  object.
+
+*/
+
+#include <fltk/SharedImage.h>
 #include <fltk/xpmImage.h>
 #include <fltk/events.h>
 #include <fltk/draw.h>
@@ -126,8 +123,10 @@ static char** read(char *name, int oneline = 0) {
   return data;
 }
 
-#include <fltk/SharedImage.h>
-
+/*! Test a block of data read from the start of the file to see if it
+  looks like the start of a .xpm file. This returns true if the 
+  data contains "/\* XPM".
+*/
 bool xpmFileImage::test(const unsigned char *data, size_t)
 {
   return (strstr((char*) data,"/* XPM") != 0);
@@ -143,12 +142,16 @@ void xpmFileImage::_measure(float &W, float &H) const
   char *const* ldata = (char *const*)datas;
   if (!ldata) {
     ldata = ::read((char *)get_filename(), 1);
-    if (!ldata) { W = H = 0; const_cast<xpmFileImage*>(this)->setsize(0,0); return; }
+    if (!ldata) {
+      W = H = 0;
+      const_cast<xpmFileImage*>(this)->setsize(0,0);
+      return;
+    }
     loaded=1;
   }
 
-	int _W,_H;
-	measure_xpm(ldata,_W,_H);
+  int _W,_H;
+  measure_xpm(ldata,_W,_H);
   const_cast<xpmFileImage*>(this)->setsize(_W,_H);
 
   if (loaded) {
@@ -156,7 +159,7 @@ void xpmFileImage::_measure(float &W, float &H) const
     free((void*)ldata);
   }
   W=w(); 
-	H=h();
+  H=h();
 }
 
 void xpmFileImage::read()
@@ -172,26 +175,26 @@ void xpmFileImage::read()
   int w, h;
   measure_xpm(ldata, w, h);
 
-	ImageDraw idraw(const_cast<xpmFileImage*>(this));
+  ImageDraw idraw(const_cast<xpmFileImage*>(this));
 
   uchar *bitmap = 0;
   set_mask_bitmap(&bitmap);
   draw_xpm(ldata, 0, 0, NO_COLOR);
   set_mask_bitmap(0);
   if (bitmap) {
-      (const_cast<xpmFileImage*>(this))->set_alpha_bitmap(bitmap, this->w(), this->h());
-      delete[] bitmap;
+    (const_cast<xpmFileImage*>(this))->set_alpha_bitmap(bitmap, this->w(), this->h());
+    delete[] bitmap;
   }
 
-  if(loaded) {
-    char* const* save = ldata;
-    while (*ldata) delete[] *ldata++;
-    free((void*)save);
+  if (loaded) {
+    char* const* p = ldata;
+    while (*p) delete[] *p++;
+    free((void*)ldata);
   }
-  
-	return;
+
+  return;
 }
 
 //
-// End of "$Id: fl_xpm.cxx,v 1.23 2004/07/04 17:26:01 laza2000 Exp $"
+// End of "$Id: fl_xpm.cxx,v 1.24 2004/07/07 05:11:03 spitzak Exp $"
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color_win32.cxx,v 1.40 2004/07/06 05:49:31 spitzak Exp $"
+// "$Id: fl_color_win32.cxx,v 1.41 2004/07/07 05:11:03 spitzak Exp $"
 //
 // _WIN32 color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -99,8 +99,8 @@ void fltk::line_style(int style, int width, char* dashes) {
 static HPEN stockpen = (HPEN)GetStockObject(DC_PEN);
 static HBRUSH stockbrush = (HBRUSH)GetStockObject(DC_BRUSH);
 
-typedef COLORREF (*f_SetDCPenColor)(HDC hdc, COLORREF crColor);
-typedef COLORREF (*f_SetDCBrushColor)(HDC hdc, COLORREF crColor);
+typedef COLORREF (WINAPI *f_SetDCPenColor)(HDC hdc, COLORREF crColor);
+typedef COLORREF (WINAPI *f_SetDCBrushColor)(HDC hdc, COLORREF crColor);
 
 static f_SetDCPenColor	 __SetDCPenColor = NULL;
 static f_SetDCBrushColor __SetDCBrushColor = NULL;
@@ -231,5 +231,5 @@ fl_select_palette(void)
 #endif
 
 //
-// End of "$Id: fl_color_win32.cxx,v 1.40 2004/07/06 05:49:31 spitzak Exp $".
+// End of "$Id: fl_color_win32.cxx,v 1.41 2004/07/07 05:11:03 spitzak Exp $".
 //

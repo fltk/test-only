@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.216 2004/07/06 05:49:31 spitzak Exp $"
+// "$Id: Fl_win32.cxx,v 1.217 2004/07/07 05:11:02 spitzak Exp $"
 //
 // _WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -1215,7 +1215,7 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
     static char buffer[31]; // must be big enough for fltk::compose() output
     static char dbcsbuf[3];
     if (uMsg == WM_CHAR || uMsg == WM_SYSCHAR) {
-      if (IsDBCSLeadByte((unsigned char)wParam)) {
+      if (!dbcsbuf[0] && IsDBCSLeadByte((unsigned char)wParam)) {
 	dbcsbuf[0] = (char)wParam;
 	break;
       }
@@ -1834,5 +1834,5 @@ Cleanup::~Cleanup() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.216 2004/07/06 05:49:31 spitzak Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.217 2004/07/07 05:11:02 spitzak Exp $".
 //

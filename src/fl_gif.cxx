@@ -1,15 +1,17 @@
-//
-// "$Id: fl_gif.cxx,v 1.20 2004/07/04 17:28:31 laza2000 Exp $"
-//
-// gif.cxx
-//
-// Convert GIF to Offscreen. Currently, do GIF-->XPM-->Offscreen !!
-//
+// "$Id: fl_gif.cxx,v 1.21 2004/07/07 05:11:03 spitzak Exp $"
 
+/*! \class fltk::gifImage
 
-// (from fluid)
-// Read a .gif file and convert it to a "xpm" format (actually my
-// modified one with compressed colormaps).
+  This can either display an image from a .gif image file, or from a
+  block of data that is the contents of the image file. By using a
+  block of data the image can be compiled into a program, this is whta
+  Fluid does to imbed gif images into the source code and is currently
+  the most efficient way to get a Fluid program to produce an image.
+
+  To use data, pass a non-null pointer as the second argument to the
+  constructor. The filename is ignored in this case, but the "guess image"
+  code uses this to identify identical images and reuse them (nyi)
+*/
 
 // Extensively modified from original code for gif2ras by
 // Patrick J. Naughton of Sun Microsystems.  The original
@@ -40,8 +42,7 @@
  *                     Sun Microsystems, Inc.
  *                     2550 Garcia Ave, MS 14-40
  *                     Mountain View, CA 94043
- *                     (415) 336-1080
- */
+ * (415) 336-1080 */
 
 #include <config.h>
 #include <fltk/SharedImage.h>
@@ -56,6 +57,7 @@ using namespace fltk;
 #define NEXTBYTE (dat? *dat++ : getc(GifFile))
 #define GETSHORT(var) var = NEXTBYTE; var += NEXTBYTE << 8
 
+/*! Tests block of data to see if it looks like the start of a .gif file. */
 bool gifImage::test(const uchar *datas, unsigned size)
 {
   return !strncmp((char*) datas,"GIF", 3);
@@ -65,33 +67,24 @@ void gifImage::_measure(float &W, float &H) const
 {
   if (w() >= 0) { 
     W = (float)w(); 
-	H = (float)h(); 
+    H = (float)h(); 
     return; 
   }
 
+  const uchar* dat = datas;
   FILE *GifFile=0;
 
-  char b[6];
-  const uchar* dat = datas;
-  if(dat)
-  {
-    memcpy(b, dat, 6);
-    dat+=6;
-  }
-  else
-  {
-    if ((GifFile=fopen(get_filename(), "rb"))==NULL) {
+  if (dat) {
+    dat += 6;
+  } else { // set up to read from file, return 0x0 for any errors:
+    GifFile=fopen(get_filename(), "rb");
+    char b[6];
+    if (!GifFile || fread(b,1,6,GifFile) < 6 ||
+	b[0]!='G' || b[1]!='I' || b[2] != 'F') {
+      fclose(GifFile);
       const_cast<gifImage*>(this)->setsize(0,0);
       return;
     }
-    if (fread(b,1,6,GifFile)<6) {
-      const_cast<gifImage*>(this)->setsize(0,0);
-      return; /* quit on eof */
-    }
-  }
-  if (b[0]!='G' || b[1]!='I' || b[2] != 'F') {
-    const_cast<gifImage*>(this)->setsize(0,0);
-    return;
   }
 
   int w,h; GETSHORT(w); GETSHORT(h);
@@ -103,26 +96,22 @@ void gifImage::_measure(float &W, float &H) const
 
 void gifImage::read()
 {
-  int inumber=0;
+  const uchar* dat = datas;
   FILE *GifFile=0;
 
-  const uchar* dat = datas;
-  {char b[6];
-  if(dat)
-  {
-    memcpy(b, dat, 6);
-    dat+=6;
+  if (dat) {
+    dat += 6;
+  } else { // set up to read from file, quit silently on any errors:
+    GifFile=fopen(get_filename(), "rb");
+    char b[6];
+    if (!GifFile || fread(b,1,6,GifFile) < 6 ||
+	b[0]!='G' || b[1]!='I' || b[2] != 'F') {
+      fclose(GifFile);
+      return;
+    }
   }
-  else
-  {
-    if ((GifFile=fopen(get_filename(), "rb"))==NULL) return;
-    if (fread(b,1,6,GifFile)<6) return; /* quit on eof */
-  }
-  if (b[0]!='G' || b[1]!='I' || b[2] != 'F') {
-    /*fprintf(stderr,"%s is not a GIF file.\n", infname);*/ return;}
-  /*if (b[3]!='8' || b[4]>'9' || b[5]!= 'a')
-    fprintf(stderr,"%s is version %c%c%c.\n",infname,b[3],b[4],b[5]);*/
-  }
+
+  int inumber=0; // which image from animated gif file to read
 
   int Width; GETSHORT(Width);
   int Height; GETSHORT(Height);
@@ -414,5 +403,5 @@ void gifImage::read()
 }
 
 //
-// End of "$Id: fl_gif.cxx,v 1.20 2004/07/04 17:28:31 laza2000 Exp $"
+// End of "$Id: fl_gif.cxx,v 1.21 2004/07/07 05:11:03 spitzak Exp $"
 //

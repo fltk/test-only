@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.184 2004/07/06 05:49:31 spitzak Exp $"
+// "$Id: Fl_x.cxx,v 1.185 2004/07/07 05:11:03 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -223,6 +223,8 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
   static fltk::Font *spotf = NULL;
   static Widget *spotw = NULL;
   static XPoint	spot, spot_set;
+  static Color background_orig, textcolor_orig;
+  static Color background, textcolor;
   XFontSet fs = NULL;
 
   if (!fl_xim_ic || !fl_is_over_the_spot) return;
@@ -258,6 +260,13 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
     change = 1;
   }
 
+  w->style()->boxcolors(w->current_flags()|OUTPUT,background,textcolor);
+  if (background_orig != background || textcolor_orig != textcolor) {
+    background_orig = background;
+    textcolor_orig = textcolor;
+    change = 1;
+  }
+
   if (!change) return;
 
   if (f) {
@@ -270,6 +279,8 @@ void fl_set_spot(fltk::Font *f, Widget *w, int x, int y)
     preedit_attr =
       XVaCreateNestedList(0,
 			  XNSpotLocation, &spot_set,
+			  XNForeground, xpixel(textcolor),
+			  XNBackground, xpixel(background),
 			  XNFontSet, fl_xim_fs, NULL);
     if (preedit_attr) {
       XSetICValues(fl_xim_ic, XNPreeditAttributes, preedit_attr, NULL);
@@ -1194,14 +1205,6 @@ bool fltk::handle()
   }
 
   case UnmapNotify:
-#if USE_XIM
-    if (xim_win) {
-	  xim_win = 0;
-	  if (fl_xim_ic)
-	    XDestroyIC(fl_xim_ic);
-	  fl_xim_ic = NULL;
-    }
-#endif
     window = find(xevent.xmapping.window);
     if (!window) break;
     if (window->parent()) break; // ignore child windows
@@ -2162,5 +2165,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.184 2004/07/06 05:49:31 spitzak Exp $".
+// End of "$Id: Fl_x.cxx,v 1.185 2004/07/07 05:11:03 spitzak Exp $".
 //

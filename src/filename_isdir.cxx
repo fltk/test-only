@@ -1,5 +1,5 @@
 //
-// "$Id: filename_isdir.cxx,v 1.14 2004/01/25 06:55:05 spitzak Exp $"
+// "$Id: filename_isdir.cxx,v 1.15 2004/07/07 05:11:03 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -26,6 +26,10 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <stdlib.h>
+#ifdef _WIN32
+#include <windows.h>
+#include <fltk/utf.h>
+#endif
 
 static struct stat last_stat;
 static char *last_statname = 0;
@@ -36,6 +40,17 @@ static int last_op = 0;
 // queries different aspects on the same file. 'stat' can be relatively slow.
 static bool fill_stat(const char *name, int new_op) {
 #if defined(_WIN32) || defined(__EMX__)
+  int n;
+  char namebuf[FL_PATH_MAX];
+  unsigned short* ucs = utf8to16(name,
+				 strlen(name),
+ 				 &n);
+  if (ucs) {
+    WideCharToMultiByte(GetACP(), 0, ucs, n,
+ 			namebuf, sizeof(namebuf), NULL, 0);
+    name = namebuf;
+    utf8free(ucs);
+  }
   // _WIN32 apparently thinks A: is not a directory, but A:/ is!
   char buffer[4];
   if (name[0] && name[1]==':' && name[2] == 0) {
@@ -80,5 +95,5 @@ long int filename_mtime(const char *name) {
 }
 
 //
-// End of "$Id: filename_isdir.cxx,v 1.14 2004/01/25 06:55:05 spitzak Exp $".
+// End of "$Id: filename_isdir.cxx,v 1.15 2004/07/07 05:11:03 spitzak Exp $".
 //
