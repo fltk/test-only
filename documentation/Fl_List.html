@@ -1,0 +1,137 @@
+<html><head><title>Fl_List</title></head><body bgcolor = white>
+<HR break>
+<h2>class Fl_List</h2>
+<HR>
+
+<h3>Include Files</h3>
+
+<ul><pre>
+#include &lt;FL/Fl_Menu_.H&gt;
+</pre></ul>
+
+<h3>Description</h3>
+
+Allows an <a href=Fl_Browser.html>Fl_Browser</a> or <a
+href=Fl_Choice.html>Fl_Choice</a> or other subclass of <a
+href=Fl_Menu_.html>Fl_Menu_</a> to display a hierarchy of data that is
+managed by the application rather than FLTK. This is done by creating
+a "dummy" widget, typically a subclass of <a
+href=Fl_Item.html>Fl_Item</a>, that describes a particular item that
+the browser or menu should display. Only one item is examined at any
+time and thus the dummy widget can be reused, so there is very little
+space overhead.
+
+<p>This is designed for data formats where finding the Nth child of a
+parent is a very quick operation, ie an array. If your data is a list
+you can search it, the performance is probably acceptable for small
+lists with less than a hundred or so items. For a bidirectional list
+it may be useful to cache the last request and do a relative search,
+as Fl_Browser and Fl_Menu will usually ask for adjoining items.
+
+<p>If you wish to make a hierarcial Fl_Browser, you must have space in
+your data to store the state of the FL_OPEN flag on each parent item,
+and must implement the flags_changed() method.
+
+<p>If you wish to use an Fl_Multi_Browser you must also have space in
+your data to store the state of the FL_VALUE flag on each item, and
+must implement the flags_changed() method.
+
+<H3>Methods</H3>
+
+<CENTER>
+<TABLE width=90%>
+<TR><TD align=left valign=top>
+<UL>
+<li><a href=#children>children</a></li>
+<li><a href=#child>child</a></li>
+<li><a href=#flags_changed>flags_changed</a></li>
+</ul>
+</TD></TR>
+</TABLE>
+</center>
+
+<a name=children><h4>virtual int children(const Fl_Menu_* group, const int* indexes, int level);</h4>
+
+Return how many children are under a given item. If <i>level</i> is
+zero, this should return how many items are at the top
+level. Otherwise <i>indexes</i> is an array of <i>level</i> numbers
+indicating the index of an item at the top level, the index of the an
+item that is the child of that, and so on.
+
+<p>This should return -1 if the item is not a "parent" item or the
+index array is illegal. It is not necessary to return the correct
+value until the parent is "open", which means the FL_OPEN flag was set
+in it, so if it is expensive to calculate the number you can return 1
+for any closed parent.
+
+<p>Here is a sample implementation, where <tt>Node</tt> is a data type
+that you have defined:
+
+<ul><pre>
+int My_Fl_List::children(const Fl_Menu_*, const int* indexes, int level) {
+  Node* node = root;
+  for (int l = 0; l &lt; level; l++) {
+    if (indexes[l] >= node->children_count()) return -1;
+    node = node->child(indexes[l]);
+    if (!node->is_parent()) return -1;
+  }
+  return node->children_count();
+}
+</ul></pre>
+
+<a name=child><h4>virtual Fl_Widget* child(const Fl_Menu_* group, const int* indexes, int level);</h4>
+
+Return a given child as a widget. draw() and measure() will be called
+on this widget to figure out where to place it and to draw it.
+Typical implementations create a reusable <a
+href=Fl_Item.html>Fl_Item</a> and fill it in with the correct data.
+This should return NULL if there is anything illegal about the indexes.
+
+<p>Here is a sample implementation, where <tt>Node</tt> is a data type
+that you have defined:
+
+<ul><pre>
+Fl_Widget* My_Fl_List::child(const Fl_Menu_*, const int* indexes, int level) {
+  Node* node = root;
+  for (int l = 0; l &lt;= level; l++) {
+    if (!node->is_parent()) return -1;
+    if (indexes[l] >= node->children_count()) return -1;
+    node = node->child(indexes[l]);
+  }
+  static Fl_Widget* widget;
+  if (!widget) {
+    Fl_Group::current(0);
+    widget = new Fl_Item();
+  }
+  widget->label(node->text());
+  widget->w(0); // cause measure() to be called
+  widget->user_data(node);
+  if (node->selected) widget->set_flag(FL_VALUE);
+  else widget->clear_flag(FL_VALUE);
+  if (node->is_parent() && node->open) widget->set_flag(FL_OPEN);
+  else widget->clear_flag(FL_OPEN);
+  return widget;
+}
+</pre></ul>
+
+<a name=flags_changed><h4>virtual void flags_changed(const Fl_Menu_* group, Fl_Widget* widget);</h4>
+
+
+This is called if the browser changes any flags on a widget, so that
+you can copy the values to permanent storage, and perhaps change other
+displays of the selection.
+
+<p>Currently on the FL_VALUE and FL_OPEN flags are ever changed.
+
+<p>Here is a sample implementation, where <tt>Node</tt> is a data type
+that you have defined:
+
+<ul><pre>
+void My_Fl_List::flags_changed(const Fl_Menu_*, Fl_Widget* widget) {
+  Node* node = (Node*)(widget->user_data());
+  node->open = (widget->flags() &amp; FL_OPEN) !=0;
+  node->selected = (widget->flags() &amp; FL_VALUE) != 0;
+}
+</pre></ul>
+
+</BODY></HTML>
