@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.85 2000/04/10 06:45:43 bill Exp $"
+// "$Id: Fl.cxx,v 1.86 2000/04/11 17:14:11 bill Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -402,9 +402,9 @@ int Fl::handle(int event, Fl_Window* window)
     fl_xmousewin = window; // this should already be set, but just in case.
     if (grab()) {
       w = grab();
-    } else if (belowmouse()) {
-      if (event_inside(belowmouse())) w = belowmouse();
-      else belowmouse(0);
+//     } else if (belowmouse()) {
+//       if (event_inside(belowmouse())) w = belowmouse();
+//       else belowmouse(0);
     }
     if (w != pushed()) send(FL_MOVE, w, window);
     if (pushed()) send(FL_DRAG, pushed(), window);
@@ -674,5 +674,5 @@ void Fl_Window::flush() {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.85 2000/04/10 06:45:43 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.86 2000/04/11 17:14:11 bill Exp $".
 //

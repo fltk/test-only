@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.55 2000/04/10 06:45:45 bill Exp $"
+// "$Id: Fl_Widget.cxx,v 1.56 2000/04/11 17:14:12 bill Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -198,9 +198,12 @@ void Fl_Widget::damage(uchar flags, int X, int Y, int W, int H) {
 ////////////////////////////////////////////////////////////////
 // Events:
 
-int Fl_Widget::handle(int e) {
-  if (e == FL_ENTER) return 1; // needed for tooltips
-  return 0;
+int Fl_Widget::handle(int event) {
+  // Must return 1 for tooltips and mouse tracking to work.  A
+  // subclass can return zero to make itself "invisible" so that
+  // it does not effect highlighting.
+  if (event == FL_ENTER) return 1;
+  else return 0;
 }
 
 int Fl_Widget::take_focus() {
@@ -371,5 +374,5 @@ void Fl_Widget::draw_n_clip()
 }
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.55 2000/04/10 06:45:45 bill Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.56 2000/04/11 17:14:12 bill Exp $".
 //

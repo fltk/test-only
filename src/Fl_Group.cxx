@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Group.cxx,v 1.64 2000/04/10 06:45:44 bill Exp $"
+// "$Id: Fl_Group.cxx,v 1.65 2000/04/11 17:14:12 bill Exp $"
 //
 // Group widget for the Fast Light Tool Kit (FLTK).
 //
@@ -187,10 +187,13 @@ int Fl_Group::send(int event, Fl_Widget& to) {
     // visible() rather than takesevents() so tooltips work on inactive:
     if (to.visible() && Fl::event_inside(to)) {
       // If the mouse is already in a child, just send the move events
-      // through.  Fltk does not do this directly like FL_DRAG so that
-      // widgets may overlap.
-      if (to.contains(Fl::belowmouse())) return send_i(FL_MOVE, to);
-      // Mouse is moving into a new child widget:
+      // through.  Fltk does not do this directly like it does for
+      // FL_DRAG so that widgets may overlap:
+      if (to.contains(Fl::belowmouse())) {
+	if (&to != Fl::pushed()) send_i(FL_MOVE, to);
+	return 1;
+      }
+      // Mouse is moving into a new child widget, see if it wants it:
       if (send_i(FL_ENTER, to)) {
 	// only call Fl::belowmouse if the child widget did not do so:
 	if (!to.contains(Fl::belowmouse())) Fl::belowmouse(to);
@@ -286,6 +289,12 @@ int Fl_Group::handle(int event) {
       break; // default is to try send the focus backwards
     }
     break;
+
+  case FL_ENTER:
+  case FL_MOVE:
+    for (i = numchildren; i--;) if (send(event, *child(i))) return 1;
+    Fl::belowmouse(this);
+    return 1;
 
   case FL_SHORTCUT: {
     // see if any other child widgets want the shortcut, search forward:
@@ -562,5 +571,5 @@ void Fl_Group::draw_outside_label(Fl_Widget& w) const {
 }
 
 //
-// End of "$Id: Fl_Group.cxx,v 1.64 2000/04/10 06:45:44 bill Exp $".
+// End of "$Id: Fl_Group.cxx,v 1.65 2000/04/11 17:14:12 bill Exp $".
 //
