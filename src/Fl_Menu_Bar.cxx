@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Menu_Bar.cxx,v 1.10 1999/04/13 20:18:40 carl Exp $"
+// "$Id: Fl_Menu_Bar.cxx,v 1.11 1999/04/13 20:33:01 carl Exp $"
 //
 // Menu bar widget for the Fast Light Tool Kit (FLTK).
 //
@@ -165,9 +165,10 @@ void Fl_Menu_Bar::loadstyle() const {
 }
 
 Fl_Menu_Bar::Fl_Menu_Bar(int x,int y,int w,int h,const char *l) : Fl_Menu_(x,y,w,h,l) {
+  last_tb = current_tb = 0;
   for (int i = 0; i < FL_MAX_MENU_TITLES; i++) titles[i] = new TitleBox;
 }
 
 //
-// End of "$Id: Fl_Menu_Bar.cxx,v 1.10 1999/04/13 20:18:40 carl Exp $".
+// End of "$Id: Fl_Menu_Bar.cxx,v 1.11 1999/04/13 20:33:01 carl Exp $".
 //
