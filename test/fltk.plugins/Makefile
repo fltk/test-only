@@ -1,5 +1,5 @@
 #
-# "$Id: Makefile,v 1.2 1999/09/27 18:28:11 vincent Exp $"
+# "$Id: Makefile,v 1.3 1999/10/09 15:32:18 vincent Exp $"
 #
 # FLTK-plugin makefile for the Fast Light Tool Kit (FLTK).
 #
@@ -23,10 +23,11 @@
 # Please report all bugs and problems to "fltk-bugs@easysw.com".
 #
 
-all : essai.fltk-style-plugin essai.fltk-theme-plugin
-
 PROGRAM = essai.fltk-style-plugin
 PROGRAM2 = essai.fltk-theme-plugin
+PROGRAM3 = buildin.fltk-style-plugin
+
+all	: $(PROGRAM) $(PROGRAM2) $(PROGRAM3)
 
 CPPFILES = \
 	style_plugin.cxx
@@ -34,10 +35,17 @@ CPPFILES = \
 CPPFILES2 = \
 	theme_plugin.cxx
 
+CPPFILES3 = \
+	buildin_plugin.cxx
+
 ################################################################
 
-OBJECTS = $(CPPFILES:.cxx=.o)
+OBJECTS = $(CPPFILES:.cxx=.o) ../../src/fl_jpeg.o ../../src/fl_draw_image.o
 OBJECTS2 = $(CPPFILES2:.cxx=.o)
+OBJECTS3 = $(CPPFILES3:.cxx=.o) ../../src/fl_diamond_box.o \
+	../../src/fl_rounded_box.o ../../src/fl_round_box.o \
+	../../src/fl_oval_box.o ../../src/fl_shadow_box.o \
+	../../src/fl_vertex.o
 
 INCLUDES = -I../..
 
@@ -49,23 +57,36 @@ include ../../makeinclude
 	$(CXX) -DFL_DLL -DFL_INPLUGIN -fPIC $(INCLUDES) $(CXXFLAGS) $(SUPFLAGS) -c $<
 
 $(PROGRAM) : $(OBJECTS) ../../lib/$(LIBNAME)
-	$(CXX) $(LD_DLL_FLAGS) $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS)
+	$(CXX)  $(LD_DLL_FLAGS) $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS)
 
 $(PROGRAM2) : $(OBJECTS2) ../../lib/$(LIBNAME)
-	$(CXX) $(LD_DLL_FLAGS) $(CXXFLAGS) -o $(PROGRAM2) $(OBJECTS2)
+	$(CXX) $(LD_DLL_FLAGS) $(CXXFLAGS) -o $(PROGRAM2) $(OBJECTS2) 
+
+$(PROGRAM3) : $(OBJECTS3) ../../lib/$(LIBNAME)
+	$(CXX) $(LD_DLL_FLAGS) $(CXXFLAGS) -o $(PROGRAM3) $(OBJECTS3)
 
 win32 : $(OBJECTS) $(OBJECTS2) ../../lib/$(LIBNAME)
 	dllwrap $(CXXFLAGS) -o $(PROGRAM) $(OBJECTS) -L../../lib -lfltkdll.2 $(GLDLIBS)
 	dllwrap $(CXXFLAGS) -o $(PROGRAM2) $(OBJECTS2) -L../../lib -lfltkdll.2 $(GLDLIBS)
+	dllwrap $(CXXFLAGS) -o $(PROGRAM3) $(OBJECTS3) -L../../lib -lfltkdll.2 $(GLDLIBS)
 
 clean :
 	-@ rm -f *.o $(PROGRAM) $(PROGRAM2) $(CLEAN) core *~ makedepend
 	@touch makedepend
+
+install : $(PROGRAM) $(PROGRAM2) $(PROGRAM3)
+	mkdir -p $(libdir)/fltk/plugins
+	mkdir -p $(libdir)/fltk/images
+	rm -f $(libdir)/fltk/plugins/*
+	rm -f $(libdir)/fltk/images/*
+	cp *.fltk* $(libdir)/fltk/plugins
+	cp ../images/bg*.jpeg $(libdir)/fltk/images
+	cp ../fltkrc $(libdir)/fltk
 
 depend:
 	$(MAKEDEPEND) $(INCLUDES) $(CXXFLAGS) $(CPPFILES) $(CFILES) > makedepend
 include makedepend
 
 #
-# End of "$Id: Makefile,v 1.2 1999/09/27 18:28:11 vincent Exp $".
+# End of "$Id: Makefile,v 1.3 1999/10/09 15:32:18 vincent Exp $".
 #

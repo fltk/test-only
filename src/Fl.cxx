@@ -1,5 +1,5 @@
 //
-// "$Id: Fl.cxx,v 1.43 1999/10/03 06:31:37 bill Exp $"
+// "$Id: Fl.cxx,v 1.44 1999/10/09 15:32:15 vincent Exp $"
 //
 // Main event handling code for the Fast Light Tool Kit (FLTK).
 //
@@ -610,9 +610,13 @@ Fl_Window::~Fl_Window() {
 // !visible()" means it is iconized, while !shown() means that the
 // program has hidden the window.
 
-extern const Fl_Window* fl_modal_for; // in Fl_x.cxx
+extern const Fl_Window* fl_modal_for; // used by Fl_Window::create
+
+#include <FL/Fl_Style_Util.H>
+const char* fl_plugins_user_location;
 
 void Fl_Window::show() {
+  static bool plugins_loaded = 0;
   if (parent()) {
     set_visible();
     handle(FL_SHOW);
@@ -620,6 +624,10 @@ void Fl_Window::show() {
     Fl_Group::current(0); // get rid of very common user bug: forgot end()
 #ifndef WIN32
     fl_open_display();
+    if (!plugins_loaded) {
+      fl_read_style_plugins(fl_plugins_user_location);
+      plugins_loaded = 1;
+    }
 #endif
     // back compatability with older modal() and non_modal() flags:
     if (non_modal() && !fl_modal_for) {
@@ -801,5 +809,5 @@ int fl_old_shortcut(const char* s) {
 }
 
 //
-// End of "$Id: Fl.cxx,v 1.43 1999/10/03 06:31:37 bill Exp $".
+// End of "$Id: Fl.cxx,v 1.44 1999/10/09 15:32:15 vincent Exp $".
 //

@@ -131,10 +131,11 @@ int main(int argc, char** argv) {
 }
 
 
-#include <FL/Fl_Shared_Image.H>
+/*#include <FL/Fl_Shared_Image.H>
 // to make sure images routines are linked in ...
 // this function is never called !
 void style_use_whole_fltk()
 {
-  Fl_Shared_Image::guess(0);
+  Fl_Shared_Image::get(0,0);
 }
+*/

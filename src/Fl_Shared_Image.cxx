@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.cxx,v 1.8 1999/09/19 05:01:42 vincent Exp $"
+// "$Id: Fl_Shared_Image.cxx,v 1.9 1999/10/09 15:32:16 vincent Exp $"
 //
 // Image drawing code for the Fast Light Tool Kit (FLTK).
 //
@@ -168,7 +168,7 @@ Fl_Shared_Image* Fl_Shared_Image::get(Fl_Shared_Image* (*create)(),
   return image;
 }
 
-void Fl_Shared_Image::reload(uchar* datas)
+void Fl_Shared_Image::reload(uchar* pdatas)
 {
   if (id) {
     mem_used -= w*h;
@@ -179,13 +179,13 @@ void Fl_Shared_Image::reload(uchar* datas)
       mask = 0;
     }
   }
-  if (datas) datas = datas;
+  if (pdatas) datas = pdatas;
   measure(w, h);
 }
-void Fl_Shared_Image::reload(char* name, uchar* datas)
+void Fl_Shared_Image::reload(char* name, uchar* pdatas)
 {
   Fl_Shared_Image *image=Fl_Shared_Image::find(first_image, name);
-  if (image) image->reload(datas);
+  if (image) image->reload(pdatas);
 }
 
 void Fl_Shared_Image::remove_from_tree(Fl_Shared_Image*& p, Fl_Shared_Image* image) {
@@ -242,5 +242,5 @@ void Fl_Shared_Image::draw(int X, int Y, int W, int H,
 }
 
 //
-// End of "$Id: Fl_Shared_Image.cxx,v 1.8 1999/09/19 05:01:42 vincent Exp $"
+// End of "$Id: Fl_Shared_Image.cxx,v 1.9 1999/10/09 15:32:16 vincent Exp $"
 //

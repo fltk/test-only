@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_Plugins.cxx,v 1.3 1999/09/27 18:28:09 vincent Exp $"
+// "$Id: Fl_Style_Plugins.cxx,v 1.4 1999/10/09 15:32:16 vincent Exp $"
 //
 // Style definition and plugin support
 //
@@ -31,11 +31,17 @@
 
 #ifdef FLDLopen
 
+#if !HAVE_VSNPRINTF || defined(__hpux)
+extern "C" {
+int snprintf(char* str, size_t size, const char* fmt, ...);
+}
+#endif
+
 #include <FL/dirent.h>
 
 static bool theme = 0, loaded = 0;
 
-static void ReadPlugin(char* s, char* location, char* ext, char* func)
+static void ReadPlugin(char* s, const char* location, char* ext, char* func)
 {
   FLDLhandle handle;
   loaded = 0;
@@ -48,7 +54,6 @@ static void ReadPlugin(char* s, char* location, char* ext, char* func)
     if(handle) {
 
       int used = 0;
-      s[strlen(s)-strlen(ext)] = 0;
 
       Fl_Style_Plugin_Entry* e = (Fl_Style_Plugin_Entry*) FLDLsym( handle, func);
       if(e) {
@@ -65,7 +70,7 @@ static void ReadPlugin(char* s, char* location, char* ext, char* func)
   }
 }
 
-static void ReadPlugins(char* location, char* ext, char* func)
+static void ReadPlugins(const char* location, char* ext, char* func)
 {
   dirent **d = 0;
   int n = filename_list(location, &d);
@@ -79,27 +84,53 @@ static void ReadPlugins(char* location, char* ext, char* func)
 
 }
 
-void fl_read_style_plugins()
-{
-  fl_default_style_def();
-  theme = 0;
-  // Priority order in case of duplicate plugin name is from the most local to the most global
-  ReadPlugins("./", STYLE_EXTENSION, STYLE_FUNCTION);
-  ReadPlugins("fltk.plugins/", STYLE_EXTENSION, STYLE_FUNCTION);
 #ifndef WIN32
-  char s[256];
-  snprintf(s, 256, "%s/.fltk/plugins/", getenv("HOME"));
+#include <unistd.h>
+#endif
+
+void fl_read_style_plugins(const char* location)
+{
+  char s[1024];
+  // Priority order is from the most local to the most global
+
+  theme = 0;
+#ifndef WIN32
+  if (getuid() == geteuid()) {
+#endif
+    if (location) ReadPlugins(location, STYLE_EXTENSION, STYLE_FUNCTION);
+    ReadPlugins("./", STYLE_EXTENSION, STYLE_FUNCTION);
+    ReadPlugins("fltk.plugins/", STYLE_EXTENSION, STYLE_FUNCTION);
+#ifndef WIN32
+    snprintf(s, 1024, "%s/.fltk/plugins/", getenv("HOME"));
+    ReadPlugins(s, STYLE_EXTENSION, STYLE_FUNCTION);
+  }
+  ReadPlugins(FLTK_LIBDIR"/lib/fltk/plugins/", STYLE_EXTENSION, STYLE_FUNCTION);
+#else
+  snprintf(s, 1024, "%s/fltk/plugins/", getenv("WINDIR"));
   ReadPlugins(s, STYLE_EXTENSION, STYLE_FUNCTION);
 #endif
 
   theme = 1;
   loaded = 0;
-  ReadPlugins("fltk.plugins/", THEME_EXTENSION, THEME_FUNCTION);
-  if (loaded) return;
-  ReadPlugins("./", THEME_EXTENSION, THEME_FUNCTION);
 #ifndef WIN32
-  if (loaded) return;
-  snprintf(s, 256, "%s/.fltk/plugins/", getenv("HOME"));
+  if (getuid() == geteuid()) {
+#endif
+    if (location) {
+      ReadPlugins(location, THEME_EXTENSION, THEME_FUNCTION);
+      if (loaded) return;
+    }
+    ReadPlugins("fltk.plugins/", THEME_EXTENSION, THEME_FUNCTION);
+    if (loaded) return;
+    ReadPlugins("./", THEME_EXTENSION, THEME_FUNCTION);
+    if (loaded) return;
+#ifndef WIN32
+    snprintf(s, 1024, "%s/.fltk/plugins/", getenv("HOME"));
+    ReadPlugins(s, THEME_EXTENSION, THEME_FUNCTION);
+    if (loaded) return;
+  }
+  ReadPlugins(FLTK_LIBDIR"/lib/fltk/plugins/", THEME_EXTENSION, THEME_FUNCTION);
+#else
+  snprintf(s, 1024, "%s/fltk/plugins/", getenv("WINDIR"));
   ReadPlugins(s, THEME_EXTENSION, THEME_FUNCTION);
 #endif
 
@@ -107,7 +138,7 @@ void fl_read_style_plugins()
 
 #else
 
-void fl_read_style_plugins() {}
+void fl_read_style_plugins(const char*) {}
 
 #endif
 
@@ -128,7 +159,7 @@ inline bool is(char* sep, char c)
 char* fl_parse_word(char*&s)
 {
   static char* word;
-  static char symbols[] = ",=();#[]";
+  static char symbols[] = ",=();#[]{}";
   if (*s == 0) return s;
   while(*s && isspace(*s)) s++;
   char* s2;
@@ -168,87 +199,12 @@ Fl_Color fl_parse_color(char*&s)
   free(w);
 }
 
-
-static bool parse_color(Fl_Style& style, char* s) { 
-  style.set_color(fl_parse_color(s)); return 1; }
-static bool parse_label_color(Fl_Style& style, char* s) { 
-  style.set_label_color(fl_parse_color(s)); return 1; }
-static bool parse_selection_color(Fl_Style& style, char* s) { 
-  style.set_selection_color(fl_parse_color(s)); return 1; }
-static bool parse_selection_text_color(Fl_Style& style, char* s) { 
-  style.set_selection_text_color(fl_parse_color(s)); return 1; }
-static bool parse_off_color(Fl_Style& style, char* s) { 
-  style.set_off_color(fl_parse_color(s)); return 1; }
-static bool parse_highlight_color(Fl_Style& style, char* s) { 
-  style.set_highlight_color(fl_parse_color(s)); return 1; }
-static bool parse_highlight_label_color(Fl_Style& style, char* s) { 
-  style.set_highlight_label_color(fl_parse_color(s)); return 1; }
-static bool parse_text_color(Fl_Style& style, char* s) { 
-  style.set_text_color(fl_parse_color(s)); return 1; }
-
-
-
-#include <FL/Fl_Boxtype.H>
-struct fl_box {
-  char* name;
-  Fl_Boxtype_ bt;
-};
-
-static fl_box  boxtypes[] = {
-{"no_box", fl_no_box},
-{"flat_box", fl_flat_box},
-{"flat_up_box", fl_flat_up_box},
-{"flat_down_box", fl_flat_down_box},
-{"normal_box", fl_normal_box},
-{"down_box", fl_down_box},
-{"thin_box", fl_thin_box},
-{"thin_down_box", fl_thin_down_box},
-{"engraved_box", fl_engraved_box},
-{"embossed_box", fl_embossed_box},
-{"border_box", fl_border_box},
-{"shadow_box", fl_shadow_box},
-{"rounded_box", fl_rounded_box},
-{"rshadow_box", fl_rshadow_box},
-{"rflat_box", fl_rflat_box},
-{"round_box", fl_round_box},
-{"round_down_box", fl_round_down_box},
-{"diamond_box", fl_diamond_box},
-{"diamond_down_box", fl_diamond_down_box},
-{"oval_box", fl_oval_box},
-{"oval_shadow_box", fl_oval_shadow_box},
-{"oval_flat_box", fl_oval_flat_box},
-{"border_frame", fl_border_frame },
-{0,0}
-};
-
-static bool parse_boxtype(Fl_Style& style, char* s)
-{
-  char* w = fl_parse_word(s);
-  for (fl_box* b = boxtypes; b->name; b++)
-    if (!strcmp(w, b->name)) {
-      style.set_box(&b->bt);
-      return 1;
-    }
-  return 0;
-}
-
-void fl_default_style_def()
-{
-  static bool default_set = 0;
-  if (!default_set) {
-    fl_add_style_entry_def("box", parse_boxtype);
-    fl_add_style_entry_def("color", parse_color);
-    fl_add_style_entry_def("label_color", parse_label_color);
-    fl_add_style_entry_def("selection_color", parse_selection_color);
-    fl_add_style_entry_def("selection_text_color", parse_selection_text_color);
-    fl_add_style_entry_def("off_color", parse_off_color);
-    fl_add_style_entry_def("highlight_color", parse_highlight_color);
-    fl_add_style_entry_def("highlight_label_color", parse_highlight_label_color);
-    fl_add_style_entry_def("text_color", parse_text_color);
-    default_set = 1;
-  }
-}
+// Link in the Fl_Shared_Image basic routines (~5Kb of code) so that plugins
+// with images works (but they still need to provide fl_draw_image and the
+// decompression routine ...)
+#include <FL/Fl_Shared_Image.H>
+fl_use_image_in_style() { Fl_Shared_Image::get(0,0); }
 
 //
-// End of "$Id: Fl_Style_Plugins.cxx,v 1.3 1999/09/27 18:28:09 vincent Exp $".
+// End of "$Id: Fl_Style_Plugins.cxx,v 1.4 1999/10/09 15:32:16 vincent Exp $".
 //

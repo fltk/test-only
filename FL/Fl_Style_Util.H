@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Style_Util.H,v 1.3 1999/09/27 12:20:01 vincent Exp $"
+// "$Id: Fl_Style_Util.H,v 1.4 1999/10/09 15:32:14 vincent Exp $"
 //
 // Style definition and plugin support
 //
@@ -31,6 +31,12 @@
 #define THEME_EXTENSION ".fltk-theme-plugin"
 #define THEME_FUNCTION "theme_plugin"
 
+// If you think that loading plugins is unsecure, then uncomment this and
+// FLTK won't load any theme and style plugins
+// (Note that currently plugins are anyway loaded only if getuid == geteuid
+//  so SUID program cannot load plugins anyway ...)
+#define UNSECURE_FLTK
+
 class Fl_Style;
 
 // Definition of the style associated to a class of widget
@@ -43,8 +49,9 @@ struct Fl_Style_D {
 typedef bool (Fl_Style_Entry_Parser)(Fl_Style& style, char* s);
 typedef void (Fl_Style_Plugin_Entry)();
 
-// Call this at any moment to make fltk read all styles and themes plugins
-void fl_read_style_plugins();
+// Call this at any moment to make fltk read all styles and themes plugins.
+// They will be first searched in 'location'.
+void fl_read_style_plugins(const char* location);
 
 void fl_default_style_def();
 
@@ -54,11 +61,14 @@ Fl_Style* fl_search_style(char* name);
 void fl_add_style_entry_def(char* name, Fl_Style_Entry_Parser parser);
 bool fl_parse_style_entry(char* name, Fl_Style& style, char* s);
 char* fl_parse_word(char*&s);
-/*#include <FL/Fl_Color.H>
-Fl_Color fl_parse_color(char*&s);*/
+//#include <FL/Fl_Color.H>
+typedef unsigned int Fl_Color;
+Fl_Color fl_parse_color(char*&s);
+
+extern const char* fl_plugins_user_location;
 
 #endif
 
 //
-// End of "$Id: Fl_Style_Util.H,v 1.3 1999/09/27 12:20:01 vincent Exp $".
+// End of "$Id: Fl_Style_Util.H,v 1.4 1999/10/09 15:32:14 vincent Exp $".
 //

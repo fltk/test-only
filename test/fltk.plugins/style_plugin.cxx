@@ -35,7 +35,7 @@ Fl_Image_Box::Fl_Image_Box(char* f)
   getcwd(s, 1023);
   strcat(s, "/");
   strcat(s, f);
-  img = Fl_Shared_Image::guess(s)->get(s);
+  img = Fl_JPEG_Image::get(s);
   dx_=dy_=2; dw_=dh_=4;
 }
 
@@ -61,7 +61,7 @@ Fl_Image_NoBorderBox::Fl_Image_NoBorderBox(char* f)
   getcwd(s, 1023);
   strcat(s, "/");
   strcat(s, f);
-  img = Fl_Shared_Image::guess(s)->get(s);
+  img = Fl_JPEG_Image::get(s);
   dx_=dy_=0; dw_=dh_=0;
 }
 
@@ -72,6 +72,7 @@ static bool parse_imagebox(Fl_Style& style, char* s)
   bool flat = 0;
   if ( (flat = strcmp(w, "image_box")) && strcmp(w, "image_flat_box")) 
     return 0; // Give the hand to another parser
+  if (*fl_parse_word(s) != '(') return 0;
   w = fl_parse_word(s);
   style.set_box(flat? new Fl_Image_NoBorderBox(w) : new Fl_Image_Box(w));
   return 1;

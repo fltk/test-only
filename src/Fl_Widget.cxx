@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Widget.cxx,v 1.20 1999/09/20 16:36:48 vincent Exp $"
+// "$Id: Fl_Widget.cxx,v 1.21 1999/10/09 15:32:16 vincent Exp $"
 //
 // Base widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -235,7 +235,7 @@ void Fl_Style::add_child(Fl_Style* s) const {
     bf <<= 1;
     if (!*p) *p = *q; else bf |= 1;
   }
-  // We do this only if the mbf has not been set manually ...
+  // We use the calculated bf only if mbf has not been set manually ...
   if (!s->mbf) s->mbf = bf;
 }
 
@@ -271,7 +271,7 @@ int Fl_Widget::copy_style(const Fl_Style* t) {
 void Fl_Style::setp(const void** p, const void* v) {
   const int mask = 1 << (p-(const void**)&box);
   mbf |= mask;
-  setp(p, v, mask);
+  setp(p, v, mask);	// propagate into children
 }
 
 void Fl_Style::setp(const void** p, const void* v, int mask) {
@@ -288,7 +288,7 @@ void Fl_Style::seti(unsigned* p, unsigned v) {
   const int mask = 1 << (p-(unsigned*)&color) + 
                         ((const void**)&color-(const void**)&box);
   mbf |= mask;
-  seti(p, v, mask);
+  seti(p, v, mask);	// propagate into children
 }
 
 void Fl_Style::seti(unsigned* p, unsigned v, int mask) {
@@ -416,5 +416,5 @@ Fl_Style Fl_Widget::default_style = {
 };
 
 //
-// End of "$Id: Fl_Widget.cxx,v 1.20 1999/09/20 16:36:48 vincent Exp $".
+// End of "$Id: Fl_Widget.cxx,v 1.21 1999/10/09 15:32:16 vincent Exp $".
 //

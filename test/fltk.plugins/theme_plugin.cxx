@@ -45,6 +45,7 @@ static bool read_conf(char* f)
   return 1;
 }
 
+#include "config.h"
 FLDLE void theme_plugin()
 {
   if (!read_conf("fltkrc")) {
@@ -52,7 +53,14 @@ FLDLE void theme_plugin()
     getcwd(s, 1023);
     chdir(getenv("HOME"));
     chdir(".fltk");
-    read_conf("../.fltkrc");
+    if (!read_conf("../.fltkrc")) {
+#ifndef WIN32
+      read_conf(FLTK_LIBDIR"/lib/fltk/fltkrc");
+#else
+      chdir(getenv("WINDIR"));
+      ReadPlugins("fltk/fltkrc");
+#endif
+    }
     chdir(s);
   }
 }

@@ -1,5 +1,5 @@
 mkdir -p ~/.fltk/plugins
 mkdir -p ~/.fltk/images
-cp essai.fltk* ~/.fltk/plugins
+cp *.fltk* ~/.fltk/plugins
 cp ../images/bg*.jpeg ~/.fltk/images
 cp ../fltkrc ~/.fltkrc

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_arg.cxx,v 1.10 1999/09/28 08:08:50 bill Exp $"
+// "$Id: Fl_arg.cxx,v 1.11 1999/10/09 15:32:16 vincent Exp $"
 //
 // Optional argument initialization code for the Fast Light Tool Kit (FLTK).
 //
@@ -31,6 +31,7 @@
 #include <FL/Fl_Window.H>
 #include <FL/filename.H>
 #include <FL/fl_draw.H>
+#include <FL/Fl_Style_Util.H>
 #include <ctype.h>
 #include <string.h>
 
@@ -138,6 +139,9 @@ int Fl::arg(int argc, char **argv, int &i) {
 
   } else if (match(s, "fg") || match(s, "foreground")) {
     fg = v;
+
+/*  } else if (match(s, "theme")) {
+    fl_plugins_user_location = v;*/
 
   } else return 0; // unrecognized
 
@@ -378,5 +382,5 @@ int XParseGeometry(const char* string, int* x, int* y,
 #endif // ifdef WIN32
 
 //
-// End of "$Id: Fl_arg.cxx,v 1.10 1999/09/28 08:08:50 bill Exp $".
+// End of "$Id: Fl_arg.cxx,v 1.11 1999/10/09 15:32:16 vincent Exp $".
 //
