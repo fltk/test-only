@@ -1,5 +1,5 @@
 //
-// "$Id: MenuWindow.h,v 1.2 2002/12/10 02:00:29 easysw Exp $"
+// "$Id: MenuWindow.h,v 1.3 2003/04/14 05:13:57 spitzak Exp $"
 //
 // A MenuWindow tries to tell the system to display it as fast as possible
 // and without any borders. On X this does override-redirect. Earlier
@@ -46,8 +46,8 @@ public:
   void set_overlay() {clear_flag(NO_OVERLAY);}
   void clear_overlay() {set_flag(NO_OVERLAY);}
   ~MenuWindow();
-  MenuWindow(int W, int H, const char *l = 0) : Window(W,H,l) {}
-  MenuWindow(int X, int Y, int W, int H, const char *l = 0) : Window(X,Y,W,H,l) {}
+  MenuWindow(int W, int H, const char *l = 0) : Window(W,H,l) {set_override();}
+  MenuWindow(int X, int Y, int W, int H, const char *l = 0) : Window(X,Y,W,H,l) {set_override();}
 
 };
 
@@ -56,5 +56,5 @@ public:
 #endif
 
 //
-// End of "$Id: MenuWindow.h,v 1.2 2002/12/10 02:00:29 easysw Exp $".
+// End of "$Id: MenuWindow.h,v 1.3 2003/04/14 05:13:57 spitzak Exp $".
 //

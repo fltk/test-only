@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Window.cxx,v 1.97 2003/04/06 18:55:23 spitzak Exp $"
+// "$Id: Fl_Window.cxx,v 1.98 2003/04/14 05:13:58 spitzak Exp $"
 //
 // Window widget class for the Fast Light Tool Kit (FLTK).
 //
@@ -118,67 +118,19 @@ static void keep_app_active() {
 
 int Window::handle(int event) {
   switch (event) {
-  case SHOW: {
-    // Emulate the undocumented back-compatability modal() stuff:
-    if (flags()&(MODAL|NON_MODAL)) {
-      child_of(first()); // this may unmap window if it changes
-      if (flags()&MODAL) modal(this, false);
-    }
-    if (!shown()) {
-      Style::load_theme();
-      open_display();
-      layout();
-      // back-compatability automatic size_range() based on resizable():
-      if (!parent() && !size_range_set) {
-	if (resizable()) {
-	  // find the innermost nested resizable():
-	  Widget *o = resizable();
-	  while (o->is_group()) {
-	    Widget* p = ((Group*)o)->resizable();
-	    if (!p || p == o) break;
-	    o = p;
-	  }
-	  int minw = w(); if (o->w() > 72) minw -= (o->w()-72);
-	  int minh = h(); if (o->h() > 72) minh -= (o->h()-72);
-	  size_range(minw, minh, 0, 0);
-	} else {
-	  size_range(w(), h(), w(), h());
-	}
-      }
-      create();
-    }
-
+  case SHOW:
+    // create the window, which will recursively call this:
+    if (!shown()) {show(); return 1;}
     Group::handle(event); // make the child windows map first
-
 #ifdef _WIN32
-    int showtype;
-    if (parent())
-      showtype = SW_RESTORE;
-    // If we've captured the mouse, we don't want do activate any
-    // other windows from the code, or we lose the capture.
-    // Also, we don't want to activate the window for tooltips.
-    else if (fl_show_iconic)
-      showtype = SW_SHOWMINNOACTIVE,fl_show_iconic = false;
-    else if (grab() || override())
-      showtype = SW_SHOWNOACTIVATE;
-    else
-      showtype = SW_SHOWNORMAL;
-
-    ShowWindow(i->xid, showtype);
+    ShowWindow(i->xid, SW_RESTORE);
 #elif (defined(__APPLE__) && !USE_X11)
-    if (parent()) return 1; // needs to update clip and redraw...
-    if (fl_show_iconic) {
-      fl_show_iconic = 0;
-      CollapseWindow( i->xid, true ); // \todo Mac ; untested
-      //ShowWindow(i->xid); // ???
-    } else {
-      // need way to de-iconize?
-      ShowWindow(i->xid);
-    }
+    if (parent()) ; // needs to update clip and redraw...
+    else ShowWindow(i->xid);
 #else
     XMapWindow(xdisplay, i->xid);
 #endif
-    return 1;}
+    return 1;
 
   case HIDE:
     if (flags()&MODAL) modal(0, false);
@@ -215,26 +167,105 @@ int Window::handle(int event) {
 #endif
 #if !defined(_WIN32) && !(defined(__APPLE__) && !USE_X11)
   case PUSH:
-    // Unused clicks raise windows:
-    XMapRaised(xdisplay, i->xid);
+    show();
+    //XMapRaised(xdisplay, i->xid);
 #endif
   }
   return 0;
 }
 
-// Window::show() should not actually be different than Widget::show,
-// as most of the work is done by Window::handle(SHOW). However for
-// back compatability some stuff is done here, primarily it allows show()
-// to raise existing windows.
+// Window::show() is different than Window::handle(SHOW) in that it
+// creates windows, and it raises top-level windows. As show() is not
+// a virtual function, this will not be called if a Widget pointer
+// is used to call show(). In that case nothing is done if visible()
+// is true, the window is mapped but not raised if it has been created,
+// and this is called if it has not been created yet.
 void Window::show() {
   // get rid of very common user bug: forgot end():
   Group::current(0);
+  // Emulate the undocumented back-compatability modal() stuff:
+  if (flags()&(MODAL|NON_MODAL)) {
+    child_of(first()); // this may unmap window if it changes
+    if (flags()&MODAL) modal(this, false);
+  }
+
+  // If the window does not exist yet, create it:
   if (!shown()) {
+
     // If the window was created with the xywh constructor, the visible()
     // flag was left on, turn it off:
     clear_visible();
-  } else if (!parent()) {
-    // raise/deiconize windows already-visible windows
+
+    // open the display:
+    Style::load_theme();
+    open_display();
+    layout();
+
+    // back-compatability automatic size_range() based on resizable():
+    if (!parent() && !size_range_set) {
+      if (resizable()) {
+	// find the innermost nested resizable():
+	Widget *o = resizable();
+	while (o->is_group()) {
+	  Widget* p = ((Group*)o)->resizable();
+	  if (!p || p == o) break;
+	  o = p;
+	}
+	int minw = w(); if (o->w() > 72) minw -= (o->w()-72);
+	int minh = h(); if (o->h() > 72) minh -= (o->h()-72);
+	size_range(minw, minh, 0, 0);
+      } else {
+	size_range(w(), h(), w(), h());
+      }
+    }
+
+    // Raise any parent windows, to get around stupid window managers
+    // that think "child of" means "next to" rather than "above":
+    //if (child_of() && !override()) ((Window*)child_of())->show();
+
+    create();
+
+    // create & map child windows:
+    Group::handle(SHOW);
+
+    // map the window:
+#ifdef _WIN32
+    int showtype;
+    if (parent())
+      showtype = SW_RESTORE;
+    else if (fl_show_iconic)
+      showtype = SW_SHOWMINNOACTIVE,fl_show_iconic = false;
+    // If we've captured the mouse, we don't want do activate any
+    // other windows from the code, or we lose the capture.
+    // Also, we don't want to activate the window for tooltips.
+    else if (grab() || override())
+      showtype = SW_SHOWNOACTIVATE;
+    else
+      showtype = SW_SHOWNORMAL;
+    ShowWindow(i->xid, showtype);
+#elif (defined(__APPLE__) && !USE_X11)
+    if (parent()) return 1; // needs to update clip and redraw...
+    if (fl_show_iconic) {
+      fl_show_iconic = 0;
+      CollapseWindow( i->xid, true ); // \todo Mac ; untested
+      //ShowWindow(i->xid); // ???
+    } else {
+      // need way to de-iconize?
+      ShowWindow(i->xid);
+    }
+#else
+    XMapRaised(xdisplay, i->xid);
+#endif
+
+    set_visible();
+    return;
+  }
+
+  // raise+map+deiconize windows already-visible windows:
+  if (!parent()) {
+    // Raise any parent windows, to get around stupid window managers
+    // that think "child of" means "next to" rather than "above":
+    //if (child_of() && !override()) ((Window*)child_of())->show();
 #ifdef _WIN32
     if (IsIconic(i->xid)) OpenIcon(i->xid);
     if (!grab() && !override()) BringWindowToTop(i->xid);
@@ -244,19 +275,19 @@ void Window::show() {
     if (!grab() && !override()) {
       BringToFront(i->xid);
       SelectWindow(i->xid);
-      if (i == CreatedWindow::first && !i->next) {
-	// if this is the only window, bring the application to the front
-	// WAS: perhaps it should always do this?
-	ProcessSerialNumber psn;
-	OSErr err = GetCurrentProcess( &psn );
-	if ( err==noErr ) SetFrontProcess( &psn );
-      }
+      // bring the application to the front
+      ProcessSerialNumber psn;
+      OSErr err = GetCurrentProcess( &psn );
+      if ( err==noErr ) SetFrontProcess( &psn );
     }
 #else
     XMapRaised(xdisplay, i->xid);
 #endif
   }
-  // Otherwise all the work is done by handle(SHOW):
+
+  // This will call handle(SHOW) if visible is false, which will
+  // cause the window to be mapped. Does nothing if visible is
+  // already true:
   Widget::show();
 }
 
@@ -408,5 +439,5 @@ Window::~Window() {
 }
 
 //
-// End of "$Id: Fl_Window.cxx,v 1.97 2003/04/06 18:55:23 spitzak Exp $".
+// End of "$Id: Fl_Window.cxx,v 1.98 2003/04/14 05:13:58 spitzak Exp $".
 //
