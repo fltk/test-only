@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Round_Button.H,v 1.5.2.3.2.2.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Round_Button.H,v 1.5.2.3.2.2.2.2 2003/11/10 01:32:58 matthiaswm Exp $"
 //
 // Round button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -28,13 +28,25 @@
 
 #include "Fl_Light_Button.H"
 
+/** Buttons generate callbacks when they are clicked by the user. 
+ * You control exactly when and how by changing the values for 
+ * type() and when().
+ *   \image html Fl_Round_Button.gif
+ * The Fl_Round_Button subclass display the \a on state by turning 
+ * on a light, rather than drawing pushed in. The shape of the 
+ * "light" is initially set to \c FL_ROUND_DOWN_BOX. The color 
+ * of the light when on is controlled with selection_color(), 
+ * which defaults to \c FL_RED.
+ */
 class FL_EXPORT Fl_Round_Button : public Fl_Light_Button {
 public:
+    /** Creates a new Fl_Round_Button widget using the given \a position, 
+     * \a size, and \a label string. */
   Fl_Round_Button(int x,int y,int w,int h,const char *l = 0);
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Round_Button.H,v 1.5.2.3.2.2.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Round_Button.H,v 1.5.2.3.2.2.2.2 2003/11/10 01:32:58 matthiaswm Exp $".
 //

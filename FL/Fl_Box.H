@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Box.H,v 1.5.2.4.2.4.2.1 2003/11/02 01:37:41 easysw Exp $"
+// "$Id: Fl_Box.H,v 1.5.2.4.2.4.2.2 2003/11/10 01:32:58 matthiaswm Exp $"
 //
 // Box header file for the Fast Light Tool Kit (FLTK).
 //
@@ -30,13 +30,19 @@
 #include "Fl_Widget.H"
 #endif
 
+/** This widget simply draws its box, and possibly it's label. Putting it before some other
+ * widgets and making it big enough to surround them will let you draw a frame around them. */
 class FL_EXPORT Fl_Box : public Fl_Widget {
 protected:
   void draw();
 public:
+    /** The constructor sets box() to \c FL_NO_BOX, which means it is invisible. However such
+     * widgets are useful as placeholders or Fl_Group::resizable() values. To change the box 
+     * to something visible, use box(n). */
   Fl_Box(int X, int Y, int W, int H, const char *l=0)
 	: Fl_Widget(X,Y,W,H,l) {}
-  Fl_Box(Fl_Boxtype b, int X, int Y, int W, int H, const char *l)
+    /** This form of the constructor sets the box to the specified box type. */
+  Fl_Box(Fl_Boxtype boxtype, int X, int Y, int W, int H, const char *l)
 	: Fl_Widget(X,Y,W,H,l) {box(b);}
 
   virtual int handle(int);
@@ -45,5 +51,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Box.H,v 1.5.2.4.2.4.2.1 2003/11/02 01:37:41 easysw Exp $".
+// End of "$Id: Fl_Box.H,v 1.5.2.4.2.4.2.2 2003/11/10 01:32:58 matthiaswm Exp $".
 //

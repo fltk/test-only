@@ -1,5 +1,5 @@
 //
-// "$Id: fl_utf8.H,v 1.1.2.1 2003/11/07 04:02:04 easysw Exp $"
+// "$Id: fl_utf8.H,v 1.1.2.2 2003/11/10 01:32:58 matthiaswm Exp $"
 //
 // Unicode to UTF-8 conversion functions header.
 //
@@ -58,30 +58,30 @@
 
 
 #if __MACOS__
-#include <wchar.h>
-#include <stat.h>
-#define xchar wchar_t
+#  include <wchar.h>
+#  include <stat.h>
+#  define xchar wchar_t:
 #else
-#include <sys/types.h>
-#include <sys/stat.h>
-#ifndef _WIN32 
-#ifndef NANO_X
-#ifndef DJGPP
-#if HAVE_XUTF8
-#include <libXutf8/Xutf8.h>
-#endif
-#include <X11/Xlocale.h>
-#include <X11/Xlib.h>
-#include <locale.h>
-#endif
-#endif
-#endif
-#if defined(WIN32)
-#include <ctype.h>
-#define xchar wchar_t
-#else
-#define xchar unsigned short
-#endif
+#  include <sys/types.h>
+#  include <sys/stat.h>
+#  ifndef _WIN32 
+#    ifndef NANO_X
+#      ifndef DJGPP
+#        if HAVE_XUTF8
+#          include <libXutf8/Xutf8.h>
+#        endif
+#        include <X11/Xlocale.h>
+#        include <X11/Xlib.h>
+#        include <locale.h>
+#      endif
+#    endif
+#  endif
+#  if defined(WIN32)
+#    include <ctype.h>
+#    define xchar wchar_t
+#  else
+#    define xchar unsigned short
+#  endif
 #endif
 
 #  ifdef __cplusplus
@@ -128,6 +128,6 @@ FL_EXPORT int fl_mkdir(const char* f, int mode);
 #endif
  
 //
-// End of "$Id: fl_utf8.H,v 1.1.2.1 2003/11/07 04:02:04 easysw Exp $".
+// End of "$Id: fl_utf8.H,v 1.1.2.2 2003/11/10 01:32:58 matthiaswm Exp $".
 //
 

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Return_Button.H,v 1.5.2.3.2.3.2.1 2003/11/02 01:37:42 easysw Exp $"
+// "$Id: Fl_Return_Button.H,v 1.5.2.3.2.3.2.2 2003/11/10 01:32:58 matthiaswm Exp $"
 //
 // Return button header file for the Fast Light Tool Kit (FLTK).
 //
@@ -27,17 +27,24 @@
 #define Fl_Return_Button_H
 #include "Fl_Button.H"
 
+/** The Fl_Return_Button is a subclass of Fl_Button that generates a
+ * callback when it is pressed or when the user presses the \a Enter key. 
+ * A carriage-return symbol is drawn next to the button label.
+ *   \image html Fl_Return_Button.gif
+ */
 class FL_EXPORT Fl_Return_Button : public Fl_Button {
 protected:
   void draw();
 public:
   int handle(int);
-  Fl_Return_Button(int X, int Y, int W, int H,const char *l=0)
-    : Fl_Button(X,Y,W,H,l) {}
+    /** Creates a new Fl_Return_Button widget using the given \a position, 
+     * \a size, and \a label string. The default boxtype is \c FL_UP_BOX . */
+  Fl_Return_Button(int X, int Y, int W, int H,const char *label=0)
+    : Fl_Button(X,Y,W,H,label) {}
 };
 
 #endif
 
 //
-// End of "$Id: Fl_Return_Button.H,v 1.5.2.3.2.3.2.1 2003/11/02 01:37:42 easysw Exp $".
+// End of "$Id: Fl_Return_Button.H,v 1.5.2.3.2.3.2.2 2003/11/10 01:32:58 matthiaswm Exp $".
 //

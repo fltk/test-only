@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Adjuster.H,v 1.5.2.3.2.3.2.1 2003/11/02 01:37:41 easysw Exp $"
+// "$Id: Fl_Adjuster.H,v 1.5.2.3.2.3.2.2 2003/11/10 01:32:58 matthiaswm Exp $"
 //
 // Adjuster widget header file for the Fast Light Tool Kit (FLTK).
 //
@@ -32,6 +32,15 @@
 #include "Fl_Valuator.H"
 #endif
 
+/** The Fl_Adjuster widget was inspired from Prisms, and has proven to be very useful for
+ * values that need a large dynamic range.
+ *   \image html adjuster1.gif
+ * 
+ * When you press a button and drag to the right the value increases. When you drag to 
+ * the left it decreases. The largest button adjusts by 100 * step(), the next by 
+ * 10 * step() and that smallest button by step(). Clicking on the buttons increments 
+ * by 10 times the amount dragging by a pixel does. Shift + click decrements by 10 times
+ * the amount. */
 class FL_EXPORT Fl_Adjuster : public Fl_Valuator {
   int drag;
   int ix;
@@ -41,7 +50,12 @@ protected:
   int handle(int);
   void value_damage();
 public:
-  Fl_Adjuster(int X,int Y,int W,int H,const char *l=0);
+    /** Creates a new Fl_Adjuster widget using the given position, size, and label string. 
+     * It looks best if one of the dimensions is 3 times the other. */
+  Fl_Adjuster(int X,int Y,int W,int H,const char *label=0);
+    /** If "soft" is turned on, the user is allowed to drag the value outside the range. 
+     * If they drag the value to one of the ends, let go, then grab again and continue to 
+     * drag, they can get to any value. Default is one. */
   void soft(int s) {soft_ = s;}
   int soft() const {return soft_;}
 };
@@ -49,5 +63,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Adjuster.H,v 1.5.2.3.2.3.2.1 2003/11/02 01:37:41 easysw Exp $".
+// End of "$Id: Fl_Adjuster.H,v 1.5.2.3.2.3.2.2 2003/11/10 01:32:58 matthiaswm Exp $".
 //
