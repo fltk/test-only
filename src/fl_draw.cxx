@@ -1,5 +1,5 @@
 //
-// "$Id: fl_draw.cxx,v 1.46 2004/07/29 08:08:58 laza2000 Exp $"
+// "$Id: fl_draw.cxx,v 1.47 2004/07/29 08:24:24 laza2000 Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -195,14 +195,13 @@ static const NothingSymbol nothingsymbol;
   You should start positive numbers with '+' for compatability with possible
   future versions of fltk.
 */
+#include <fltk/ask.h>
 class MxSymbol : public Symbol {
 public:
   MxSymbol() : Symbol("mx") {}
   void _draw(float x, float y, float w, float h, const Style*, Flags) const {}
   void _measure(float& w, float& h) const {
-    float W = (float)strtod(text()+1,0);
-    ::dx += W;
-    w += W;
+    w = (float)strtod(text()+2,0);
   }
 };
 static const MxSymbol mxsymbol;
@@ -721,5 +720,5 @@ void fltk::measure(const char* str, int& w, int& h, Flags flags) {
 }
 
 //
-// End of "$Id: fl_draw.cxx,v 1.46 2004/07/29 08:08:58 laza2000 Exp $".
+// End of "$Id: fl_draw.cxx,v 1.47 2004/07/29 08:24:24 laza2000 Exp $".
 //
