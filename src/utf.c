@@ -1,5 +1,5 @@
 //
-// "$Id: utf.c,v 1.4 2004/06/24 07:05:22 spitzak Exp $"
+// "$Id: utf.c,v 1.5 2004/06/28 20:46:30 xpxqx Exp $"
 //
 // Copyright 2004 by Bill Spitzak and others.
 //
@@ -269,6 +269,23 @@ const char* utf8back(const char* p, const char* start, const char* end)
   }
   if (a + utf8valid(a,end) > p) return a;
   return p;
+}
+
+/*! Returns number of bytes required to encode given Unicode point as UTF-8. */
+int utf8bytes(unsigned ucs) {
+  if (ucs < 0x000080U) {
+    return 1;
+  } else if (ucs < 0x000800U) {
+    return 2;
+  } else if (ucs < 0x010000U) {
+    return 3;
+  } else if (ucs < 0x00200000U) {
+    return 4;
+  } else if (ucs < 0x04000000U) {
+    return 5;
+  } else {
+    return 6;
+  }
 }
 
 /*! Write the UTF-8 encoding of \e ucs into \e buf and return the

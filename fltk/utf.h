@@ -1,5 +1,5 @@
 /*
- * "$Id: utf.h,v 1.3 2004/06/23 07:17:17 spitzak Exp $"
+ * "$Id: utf.h,v 1.4 2004/06/28 20:46:28 xpxqx Exp $"
  *
  * UTF-8 functions used by fltk
  *
@@ -36,6 +36,7 @@ extern "C" {
 #endif /* __cplusplus */
 
 FL_API int 		is_utf8(const char*, const char* end);
+FL_API int		utf8bytes(unsigned ucs);
 FL_API unsigned		utf8decode(const char*, const char* end, int* len);
 FL_API int		utf8encode(unsigned, char*);
 FL_API int		utf8valid(const char*, const char* end);
