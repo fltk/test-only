@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_win32.cxx,v 1.98 2000/04/24 08:31:27 bill Exp $"
+// "$Id: Fl_win32.cxx,v 1.99 2000/04/25 07:50:43 bill Exp $"
 //
 // WIN32-specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -540,14 +540,19 @@ static Fl_Window* resize_from_system;
 static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam)
 {
   static char buffer[2];
-  static int cnt=0;
 
+#if 0
+  // Not sure what this is, it may be left over from earlier attempts to
+  // treat WM_PAINT as an expose event, rather than painting in response
+  // to it.
+  static int cnt=0;
   if(uMsg == WM_SYNCPAINT) {
     if(cnt) {
       InvalidateRect(fl_window,0,FALSE);
       cnt = 0;
     } else cnt = 1;
   } else if (uMsg == WM_PAINT) cnt = 0;
+#endif
 
   fl_msg.message = uMsg;
 
@@ -565,16 +570,13 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
 
   case WM_PAINT: {
 
-    // This might be a better alternative, where we fully ignore NT's
-    // "facilities" for painting. MS expects applications to paint according
-    // to a very restrictive paradigm, and this is the way I found of
-    // working around it. In a sense, we are using WM_PAINT simply as an
-    // "exposure alert", like the X event.
-
     Fl_X *i = Fl_X::i(window);
     i->wait_for_expose = 0;
-    // if region == entire window we should delete i->region, else
+    // We need to merge this damage into fltk's damage.  I do this in
+    // reverse, telling Win32 about fltk's damage and then reading back
+    // the new accumulated region.
     if (window->damage()) {
+      // If there is no region the entire window is damaged
       if (i->region) {
 	InvalidateRgn(hWnd,i->region,FALSE);
 	GetUpdateRgn(hWnd,i->region,0);
@@ -584,10 +586,14 @@ static LRESULT CALLBACK WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lPar
       GetUpdateRgn(hWnd,i->region,0);
     }
     window->set_damage(window->damage()|FL_DAMAGE_EXPOSE);
+    // These next two statements should not be here, so that all update
+    // is deferred until Fl::flush() is called during idle.  However Win32
+    // apparently is very unhappy if we don't obey it and draw right now.
+    // Very annoying!
     i->flush();
     window->clear_damage();
     // This convinces MSWindows we have painted whatever they wanted
-    // us to paint, and stops it from sending WM_PAINT messages.
+    // us to paint, and stops it from sending WM_PAINT messages:
     ValidateRgn(hWnd,NULL);
     } break;
 
@@ -853,6 +859,7 @@ Fl_X* Fl_X::create(Fl_Window* w) {
   int yp = w->y();
 
   int dx, dy, dw, dh;
+  int showit = 1;
   if (w->parent()) {
     style = WS_CLIPCHILDREN | WS_CLIPSIBLINGS | WS_CHILD;
     styleEx = WS_EX_WINDOWEDGE | WS_EX_CONTROLPARENT;
@@ -867,6 +874,7 @@ Fl_X* Fl_X::create(Fl_Window* w) {
     yp = w->y(); if (yp != FL_USEDEFAULT) yp -= dy;
     if (fl_modal_for) {
       parent = fl_modal_for->i->xid;
+      if (!fl_modal_for->visible()) showit = 0;
     } else {
       parent = fl_mdi_window ? fl_mdi_window->i->xid : 0;
     }
@@ -893,14 +901,19 @@ Fl_X* Fl_X::create(Fl_Window* w) {
   x->next = Fl_X::first;
   Fl_X::first = x;
 
-  w->redraw(); // force draw to happen
+  x->wait_for_expose = 1;
+  if (fl_show_iconic) {showit = 0; fl_show_iconic = 0;}
+  if (showit) {
+    w->set_visible();
+    w->handle(FL_SHOW); // get child windows to appear
+    w->redraw(); // force draw to happen
+  }
   // If we've captured the mouse, we dont want do activate any
   // other windows from the code, or we loose the capture.
   // Also, we don't want to activate the window for tooltips.
-  ShowWindow(x->xid, fl_show_iconic ? SW_SHOWMINNOACTIVE :
+  ShowWindow(x->xid, !showit ? SW_SHOWMINNOACTIVE :
 	     (Fl::grab() || style&WS_POPUP) ? SW_SHOWNOACTIVATE :
 	     SW_SHOWNORMAL);
-  fl_show_iconic = 0;
   return x;
 }
 
@@ -1081,5 +1094,5 @@ void fl_windows_colors() {
 }
 
 //
-// End of "$Id: Fl_win32.cxx,v 1.98 2000/04/24 08:31:27 bill Exp $".
+// End of "$Id: Fl_win32.cxx,v 1.99 2000/04/25 07:50:43 bill Exp $".
 //

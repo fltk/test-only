@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.69 2000/04/24 08:31:27 bill Exp $"
+// "$Id: Fl_x.cxx,v 1.70 2000/04/25 07:50:44 bill Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -707,7 +707,7 @@ void Fl_X::create(Fl_Window* w,
   x->next = Fl_X::first;
   Fl_X::first = x;
 
-  w->redraw(); // force draw to happen
+  int showit = 1;
 
   if (!w->parent() && w->border()) {
     // Communicate all kinds 'o junk to the X Window Manager:
@@ -735,8 +735,10 @@ void Fl_X::create(Fl_Window* w,
 		      (unsigned char *)buffer, p-buffer-1);
     }
 
-    if (fl_modal_for)
+    if (fl_modal_for) {
       XSetTransientForHint(fl_display, x->xid, fl_modal_for->i->xid);
+      if (!fl_modal_for->visible()) showit = 0;
+    }
 
     XWMHints hints;
     hints.input = True;
@@ -745,6 +747,7 @@ void Fl_X::create(Fl_Window* w,
       hints.flags |= StateHint;
       hints.initial_state = IconicState;
       fl_show_iconic = 0;
+      showit = 0;
     }
     if (w->icon()) {
       hints.icon_pixmap = (Pixmap)w->icon();
@@ -754,6 +757,11 @@ void Fl_X::create(Fl_Window* w,
   }
 
   XMapWindow(fl_display, x->xid);
+  if (showit) {
+    w->set_visible();
+    w->handle(FL_SHOW); // get child windows to appear
+    w->redraw();
+  }
 }
 
 ////////////////////////////////////////////////////////////////
@@ -863,5 +871,5 @@ void Fl_Window::make_current() {
 
 
 //
-// End of "$Id: Fl_x.cxx,v 1.69 2000/04/24 08:31:27 bill Exp $".
+// End of "$Id: Fl_x.cxx,v 1.70 2000/04/25 07:50:44 bill Exp $".
 //
