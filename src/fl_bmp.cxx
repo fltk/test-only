@@ -1,5 +1,5 @@
 //
-// "$Id: fl_bmp.cxx,v 1.4 1999/08/28 15:39:11 vincent Exp $"
+// "$Id: fl_bmp.cxx,v 1.5 1999/08/29 20:08:03 bill Exp $"
 //
 // Adapted to FLTK by Vincent Penne (vincent.penne@wanadoo.fr)
 //
@@ -88,7 +88,7 @@ bool Fl_BMP_Image::test(uchar* buffer, size_t size)
   return !strncmp((char*)buffer, "BM", size<2? size:2);
 }
 
-inline void SetError(char* s)
+inline void SetError(char* /*s*/)
 {
   //  fprintf(stderr, s);
 }
@@ -154,6 +154,7 @@ static unsigned short ReadLittleEndianDWORD()
 // Returns:   The unsigned integer read from the file
 //
 //////////////////////////////////////////////////////////////////////////
+#if 0
 static short ReadLittleEndianUINT()
 {
   char c1, c2;
@@ -163,6 +164,7 @@ static short ReadLittleEndianUINT()
 
   return (c2 << 8) + c1;
 }
+#endif
 
 void Fl_BMP_Image::measure(int &W, int &H)
 {
@@ -821,5 +823,5 @@ error:
 }
 
 //
-// End of "$Id: fl_bmp.cxx,v 1.4 1999/08/28 15:39:11 vincent Exp $"
+// End of "$Id: fl_bmp.cxx,v 1.5 1999/08/29 20:08:03 bill Exp $"
 //

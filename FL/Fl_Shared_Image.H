@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Shared_Image.H,v 1.3 1999/08/29 19:53:27 vincent Exp $"
+// "$Id: Fl_Shared_Image.H,v 1.4 1999/08/29 20:08:00 bill Exp $"
 //
 // Image file header file for the Fast Light Tool Kit (FLTK).
 //
@@ -157,8 +157,8 @@ extern Fl_Bitmap nosuch_bitmap;
 
 class Fl_UNKNOWN_Image {
 public:
-  static bool test(unsigned char *datas, size_t size=0) { return 1; };
-  static Fl_Shared_Image* get(char* name, uchar* datas = 0) { 
+  static bool test(unsigned char *, size_t =0) { return 1; };
+  static Fl_Shared_Image* get(char*, uchar* = 0) { 
     return (Fl_Shared_Image*) &nosuch_bitmap; 
   };
 };
@@ -166,5 +166,5 @@ public:
 #endif
 
 //
-// End of "$Id: Fl_Shared_Image.H,v 1.3 1999/08/29 19:53:27 vincent Exp $"
+// End of "$Id: Fl_Shared_Image.H,v 1.4 1999/08/29 20:08:00 bill Exp $"
 //

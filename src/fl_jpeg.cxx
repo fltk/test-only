@@ -1,5 +1,5 @@
 //
-// "$Id: fl_jpeg.cxx,v 1.5 1999/08/29 19:53:31 vincent Exp $"
+// "$Id: fl_jpeg.cxx,v 1.6 1999/08/29 20:08:03 bill Exp $"
 //
 // JPEG reading code for the Fast Light Tool Kit (FLTK).
 //
@@ -171,7 +171,7 @@ skip_input_data (j_decompress_ptr cinfo, long num_bytes)
  */
 
 METHODDEF(void)
-term_source (j_decompress_ptr cinfo)
+term_source (j_decompress_ptr /*cinfo*/)
 {
   /* no work necessary here */
 }
@@ -216,7 +216,7 @@ struct my_error_mgr {
 typedef struct my_error_mgr * my_error_ptr;
 
 METHODDEF(void)
-output_message (j_common_ptr cinfo)
+output_message (j_common_ptr /*cinfo*/)
 {
 }
 
@@ -240,6 +240,12 @@ my_error_exit (j_common_ptr cinfo)
 
 static void fl_draw_image_cb(void *v, int x, int y, int w, uchar *b)
 {
+  // x,y,w *should* be used, if this can be called by fl_draw_image
+  // while clipping is on.  However when an Fl_Offscreen is being
+  // created the clipping is off, so these are not used.
+  // To handle them, skip until you reach line y (y always increases).
+  // Decode the line, then shift the region [x..x+w-1] to [0..w-1]
+  // (the provided buffer is always big enough for this).
   jpeg_decompress_struct * ptcinfo = (jpeg_decompress_struct *) v;
   jpeg_read_scanlines(ptcinfo, (JSAMPLE**)&b, 1);
 }
@@ -258,7 +264,7 @@ void Fl_JPEG_Image::measure(int &W, int &H)
 
   struct jpeg_decompress_struct cinfo;
   struct my_error_mgr jerr;
-  FILE* infile;
+  FILE* infile = 0;
 
   INPUT_BUF_SIZE = 4096;
 
@@ -272,7 +278,7 @@ void Fl_JPEG_Image::measure(int &W, int &H)
      * We need to clean up the JPEG object, close the input file, and return.
      */
     jpeg_destroy_decompress(&cinfo);
-    if (!datas) fclose(infile);
+    if (!infile) fclose(infile);
     w=W=0;
     return;
   }
@@ -296,7 +302,7 @@ void Fl_JPEG_Image::measure(int &W, int &H)
 
   jpeg_destroy_decompress(&cinfo);
 
-  if (!datas) fclose(infile);
+  if (infile) fclose(infile);
 
   return;
 #endif
@@ -308,7 +314,7 @@ void Fl_JPEG_Image::read()
 #if HAVE_JPEG
   struct jpeg_decompress_struct cinfo;
   struct my_error_mgr jerr;
-  FILE* infile;
+  FILE* infile = 0;
 
   INPUT_BUF_SIZE = 4096;
 
@@ -322,7 +328,7 @@ void Fl_JPEG_Image::read()
      * We need to clean up the JPEG object, close the input file, and return.
      */
     jpeg_destroy_decompress(&cinfo);
-    if (!datas) fclose(infile);
+    if (infile) fclose(infile);
     return;
   }
 
@@ -349,8 +355,7 @@ void Fl_JPEG_Image::read()
 
   jpeg_destroy_decompress(&cinfo);
 
-  if (!datas)
-    fclose(infile);
+  if (infile) fclose(infile);
 #endif
 }
 
@@ -361,7 +366,7 @@ bool Fl_JPEG_Image::test(uchar* datas, size_t size)
 #else
   struct jpeg_decompress_struct cinfo;
   struct my_error_mgr jerr;
-  FILE* infile;
+  FILE* infile = 0;
 
   INPUT_BUF_SIZE = size;
 
@@ -375,7 +380,7 @@ bool Fl_JPEG_Image::test(uchar* datas, size_t size)
      * We need to clean up the JPEG object, close the input file, and return.
      */
     jpeg_destroy_decompress(&cinfo);
-    if (!datas) fclose(infile);
+    if (infile) fclose(infile);
     return 0;
   }
 
@@ -387,12 +392,12 @@ bool Fl_JPEG_Image::test(uchar* datas, size_t size)
 
   jpeg_destroy_decompress(&cinfo);
 
-  if (!datas) fclose(infile);
+  if (infile) fclose(infile);
 
   return 1;
 #endif
 }
 
 //
-// End of "$Id: fl_jpeg.cxx,v 1.5 1999/08/29 19:53:31 vincent Exp $"
+// End of "$Id: fl_jpeg.cxx,v 1.6 1999/08/29 20:08:03 bill Exp $"
 //

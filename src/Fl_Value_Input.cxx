@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Value_Input.cxx,v 1.16 1999/08/16 07:31:22 bill Exp $"
+// "$Id: Fl_Value_Input.cxx,v 1.17 1999/08/29 20:08:03 bill Exp $"
 //
 // Value input widget for the Fast Light Tool Kit (FLTK).
 //
@@ -32,18 +32,18 @@
 #include <FL/Fl_Group.H>
 #include <stdlib.h>
 
-static Fl_Value_Input* hack_o_rama;
+//static Fl_Value_Input* hack_o_rama;
 
 void Fl_Value_Input::input_cb(Fl_Widget*, void* v) {
   Fl_Value_Input& t = *(Fl_Value_Input*)v;
   double nv;
   if (t.step()>=1.0) nv = strtol(t.input.value(), 0, 0);
   else nv = strtod(t.input.value(), 0);
-  hack_o_rama = &t;
+  //hack_o_rama = this;
   t.handle_push();
   t.handle_drag(nv);
   t.handle_release();
-  hack_o_rama = 0;
+  //hack_o_rama = 0;
 }
 
 void Fl_Value_Input::draw() {
@@ -57,10 +57,18 @@ void Fl_Value_Input::layout() {
   Fl_Valuator::layout();
   input.resize(x(), y(), w(), h());
   input.layout();
+  value_damage();
 }
 
 void Fl_Value_Input::value_damage() {
-  if (hack_o_rama==this) return;
+//  if (hack_o_rama == this) {
+  // We only redraw the text if the numeric value is different..
+  if (input.value()[0]) {
+    double nv;
+    if (step()>=1.0) nv = strtol(input.value(), 0, 0);
+    else nv = strtod(input.value(), 0);
+    if (nv == value()) return;
+  }
   char buf[128];
   format(buf);
   input.value(buf);
@@ -123,7 +131,6 @@ Fl_Value_Input::Fl_Value_Input(int x, int y, int w, int h, const char* l)
   input.callback(input_cb, this);
   input.when(FL_WHEN_CHANGED);
   align(FL_ALIGN_LEFT);
-  value_damage();
 }
 
 Fl_Value_Input::~Fl_Value_Input() {
@@ -132,5 +139,5 @@ Fl_Value_Input::~Fl_Value_Input() {
 }
 
 //
-// End of "$Id: Fl_Value_Input.cxx,v 1.16 1999/08/16 07:31:22 bill Exp $".
+// End of "$Id: Fl_Value_Input.cxx,v 1.17 1999/08/29 20:08:03 bill Exp $".
 //
