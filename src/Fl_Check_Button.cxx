@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Check_Button.cxx,v 1.48 2004/08/01 22:28:22 spitzak Exp $"
+// "$Id: Fl_Check_Button.cxx,v 1.49 2004/11/15 16:53:26 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -19,7 +19,6 @@
 // USA.
 //
 // Please report all bugs and problems to "fltk-bugs@fltk.org".
-//
 
 #include <fltk/CheckButton.h>
 #include <fltk/Group.h>
