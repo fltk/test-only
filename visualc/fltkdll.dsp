@@ -1,5 +1,5 @@
 # Microsoft Developer Studio Project File - Name="fltkdll" - Package Owner=<4>
-# Microsoft Developer Studio Generated Build File, Format Version 5.00
+# Microsoft Developer Studio Generated Build File, Format Version 6.00
 # ** DO NOT EDIT **
 
 # TARGTYPE "Win32 (x86) Dynamic-Link Library" 0x0102
@@ -17,12 +17,12 @@ CFG=fltkdll - Win32 Debug
 !MESSAGE 
 !MESSAGE Possible choices for configuration are:
 !MESSAGE 
-!MESSAGE "fltkdll - Win32 Release" (based on\
- "Win32 (x86) Dynamic-Link Library")
+!MESSAGE "fltkdll - Win32 Release" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE "fltkdll - Win32 Debug" (based on "Win32 (x86) Dynamic-Link Library")
 !MESSAGE 
 
 # Begin Project
+# PROP AllowPerConfigDependencies 0
 # PROP Scc_ProjName ""
 # PROP Scc_LocalPath ""
 CPP=cl.exe
@@ -70,7 +70,7 @@ LINK32=link.exe
 # PROP Ignore_Export_Lib 0
 # PROP Target_Dir ""
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /FD /c
-# ADD CPP /nologo /MTd /Gm /GX /Zi /Od /I "." /I ".." /D "_DEBUG" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /c
+# ADD CPP /nologo /MTd /Gm /GX /Zi /Od /Ob2 /I "." /I ".." /D "_DEBUG" /D "FL_DLL" /D "FL_LIBRARY" /D "WIN32" /D "_WINDOWS" /D "WIN32_LEAN_AND_MEAN" /D "VC_EXTRA_LEAN" /D "WIN32_EXTRA_LEAN" /YX /c
 # ADD BASE MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD MTL /nologo /D "_DEBUG" /mktyplib203 /o /win32 "NUL"
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -92,3433 +92,2390 @@ LINK32=link.exe
 # Begin Source File
 
 SOURCE=..\src\filename_absolute.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FILEN=\
-	"..\fl\filename.h"\
-	{$(INCLUDE)}"sys\types.h"\
+	"..\FL\filename.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\filename_expand.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FILENA=\
-	"..\fl\filename.h"\
-	{$(INCLUDE)}"sys\types.h"\
+	"..\FL\filename.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\filename_ext.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FILENAM=\
-	"..\fl\filename.h"\
-	{$(INCLUDE)}"sys\types.h"\
+	"..\FL\filename.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\filename_isdir.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FILENAME=\
-	"..\fl\filename.h"\
+	"..\FL\filename.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\stat.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\filename_list.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FILENAME_=\
-	"..\fl\filename.h"\
+	"..\FL\filename.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\filename_match.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FILENAME_M=\
-	"..\fl\filename.h"\
-	{$(INCLUDE)}"sys\types.h"\
+	"..\FL\filename.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\filename_setext.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FILENAME_S=\
-	"..\fl\filename.h"\
-	{$(INCLUDE)}"sys\types.h"\
+	"..\FL\filename.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_CX=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_style_util.h"\
-	"..\fl\fl_tooltip.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Style_Util.H"\
+	"..\FL\Fl_Tooltip.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_abort.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_AB=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_add_idle.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_AD=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Adjuster.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_ADJ=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_adjuster.h"\
-	"..\fl\fl_bitmap.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_image.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Adjuster.H"\
+	"..\FL\Fl_Bitmap.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Widget.H"\
 	"..\src\fastarrow.h"\
 	"..\src\mediumarrow.h"\
 	"..\src\slowarrow.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_arc.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_AR=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
 	"..\FL\math.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_arci.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_ARC=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	"..\FL\math.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_arg.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_ARG=\
-	"..\fl\enumerations.h"\
-	"..\fl\filename.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_style_util.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
-	{$(INCLUDE)}"sys\types.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\filename.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Style_Util.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_ask.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_AS=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_ask.h"\
-	"..\fl\fl_box.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_button.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_input.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_return_button.h"\
-	"..\fl\fl_secret_input.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\fl_ask.H"\
+	"..\FL\Fl_Box.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Return_Button.H"\
+	"..\FL\Fl_Secret_Input.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Bitmap.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_BI=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_bitmap.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_image.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Bitmap.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_bmp.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_BM=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_image.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_shared_image.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Shared_Image.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Box.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_BO=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_box.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Box.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_boxtype.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_BOX=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Browser.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_BR=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_browser.h"\
-	"..\fl\fl_browser_.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_scrollbar.h"\
-	"..\fl\fl_slider.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Browser.H"\
+	"..\FL\Fl_Browser_.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Scrollbar.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Browser_.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_BRO=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_browser.h"\
-	"..\fl\fl_browser_.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_output.h"\
-	"..\fl\fl_scrollbar.h"\
-	"..\fl\fl_slider.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Browser.H"\
+	"..\FL\Fl_Browser_.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Output.H"\
+	"..\FL\Fl_Scrollbar.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Browser_load.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_BROW=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_browser.h"\
-	"..\fl\fl_browser_.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_scrollbar.h"\
-	"..\fl\fl_slider.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Browser.H"\
+	"..\FL\Fl_Browser_.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Scrollbar.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Button.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_BU=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_button.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Chart.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_CH=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_chart.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_output.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Chart.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Output.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	"..\FL\math.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Check_Button.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_CHE=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_button.h"\
-	"..\fl\fl_check_button.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Check_Button.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Choice.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_CHO=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_choice.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_menu_.h"\
-	"..\fl\fl_menu_item.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Choice.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Clock.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_CL=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_clock.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Clock.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_color.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_CO=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	"..\src\fl_cmap.h"\
 	"..\src\fl_color_win32.cxx"\
 	"..\src\Fl_XColor.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Color_Chooser.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_COL=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_box.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_button.h"\
-	"..\fl\fl_choice.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_color_chooser.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_input.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_menu_.h"\
-	"..\fl\fl_menu_item.h"\
-	"..\fl\fl_return_button.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_value_input.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Box.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Choice.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Color_Chooser.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Return_Button.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Value_Input.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	"..\FL\math.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Counter.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_COU=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_counter.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_output.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Counter.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Output.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_cursor.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_CU=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_curve.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_CUR=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_cutpaste.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_CUT=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
-	"..\src\fl_cutpaste_win32.cxx"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	"..\src\Fl_cutpaste_win32.cxx"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Dial.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_DI=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_dial.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Dial.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Widget.H"\
 	"..\FL\math.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_diamond_box.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_DIA=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_display.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_DIS=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Double_Window.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_DO=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_double_window.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Double_Window.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_draw.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_DR=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_draw_image.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_DRA=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	"..\src\fl_draw_image_win32.cxx"\
 	"..\src\Fl_XColor.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_draw_pixmap.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_DRAW=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_engraved_label.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_EN=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_file_chooser.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_FI=\
-	"..\fl\enumerations.h"\
-	"..\fl\filename.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_box.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_browser_.h"\
-	"..\fl\fl_button.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_file_chooser.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_input.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_return_button.h"\
-	"..\fl\fl_scrollbar.h"\
-	"..\fl\fl_slider.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\filename.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Box.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Browser_.H"\
+	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\fl_file_chooser.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Return_Button.H"\
+	"..\FL\Fl_Scrollbar.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Fly_Button.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_FL=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_button.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_fly_button.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Fly_Button.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_font.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_FO=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	"..\src\fl_font_win32.cxx"\
-	"..\src\fl_fontsize.h"\
+	"..\src\Fl_FontSize.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_get_key.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_GE=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
-	"..\src\fl_get_key_win32.cxx"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	"..\src\Fl_get_key_win32.cxx"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_get_system_colors.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_GET=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_input.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	"..\FL\math.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_gif.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_GI=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_image.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_shared_image.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Shared_Image.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Gl_Choice.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_GL=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	"..\FL\gl.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	"..\src\Fl_Gl_Choice.H"\
 	".\config.h"\
-	{$(INCLUDE)}"GL\gl.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Gl_Overlay.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_GL_=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_gl_window.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Gl_Window.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	"..\FL\gl.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	"..\src\Fl_Gl_Choice.H"\
 	".\config.h"\
-	{$(INCLUDE)}"GL\gl.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Gl_Window.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_GL_W=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_gl_window.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Gl_Window.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	"..\FL\gl.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	"..\src\Fl_Gl_Choice.H"\
 	".\config.h"\
-	{$(INCLUDE)}"GL\gl.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_glyph.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_GLY=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_grab.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_GR=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Group.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_GRO=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_tabs.h"\
-	"..\fl\fl_tooltip.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Box.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Tabs.H"\
+	"..\FL\Fl_Tooltip.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Guess_Image.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_GU=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_bitmap.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_image.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_shared_image.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Bitmap.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Shared_Image.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Image.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_IM=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_image.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_menu_item.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Input.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_IN=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_input.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Input_.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_INP=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_input.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_jpeg.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_JP=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_image.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_shared_image.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Shared_Image.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_labeltype.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_LA=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_image.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Light_Button.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_LI=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_button.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_light_button.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Light_Button.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Menu.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_ME=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_image.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_menu_.h"\
-	"..\fl\fl_menu_item.h"\
-	"..\fl\fl_menu_window.h"\
-	"..\fl\fl_single_window.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Menu_Window.H"\
+	"..\FL\Fl_Single_Window.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Menu_.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_MEN=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_menu_.h"\
-	"..\fl\fl_menu_item.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Menu_add.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_MENU=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_menu_.h"\
-	"..\fl\fl_menu_item.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Menu_Bar.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_MENU_=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_menu_.h"\
-	"..\fl\fl_menu_bar.h"\
-	"..\fl\fl_menu_item.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Bar.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Menu_Button.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_MENU_B=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_menu_.h"\
-	"..\fl\fl_menu_button.h"\
-	"..\fl\fl_menu_item.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Button.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Menu_global.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_MENU_G=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_menu_.h"\
-	"..\fl\fl_menu_item.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Menu_Window.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_MENU_W=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_menu_window.h"\
-	"..\fl\fl_single_window.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Menu_Window.H"\
+	"..\FL\Fl_Single_Window.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Output.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_OU=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_input.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_output.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Output.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_oval_box.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_OV=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_overlay.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_OVE=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_overlay_visual.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_OVER=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Overlay_Window.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_OVERL=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_double_window.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_overlay_window.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Double_Window.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Overlay_Window.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_own_colormap.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_OW=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Pack.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_PA=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_pack.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Pack.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Pixmap.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_PI=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_image.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_pixmap.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Pixmap.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_png.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_PN=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_image.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_shared_image.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Shared_Image.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Positioner.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_PO=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_input.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_positioner.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Positioner.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_rect.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_RE=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Repeat_Button.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_REP=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_button.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_repeat_button.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Repeat_Button.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Return_Button.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_RET=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_button.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_return_button.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Return_Button.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Roller.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_RO=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_roller.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Roller.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_round_box.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_ROU=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_rounded_box.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_ROUN=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Scroll.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_SC=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_scroll.h"\
-	"..\fl\fl_scrollbar.h"\
-	"..\fl\fl_slider.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Scroll.H"\
+	"..\FL\Fl_Scrollbar.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_scroll_area.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_SCR=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Scrollbar.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_SCRO=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_scrollbar.h"\
-	"..\fl\fl_slider.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Scrollbar.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_shadow_box.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_SH=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Shared_Image.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_SHA=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_bitmap.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_image.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_shared_image.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Bitmap.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Shared_Image.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_shortcut.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_SHO=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_show_colormap.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_SHOW=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_show_colormap.h"\
-	"..\fl\fl_single_window.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\fl_show_colormap.H"\
+	"..\FL\Fl_Single_Window.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Single_Window.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_SI=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_single_window.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Single_Window.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Slider.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_SL=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_slider.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Style_Plugins.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_ST=\
-	"..\fl\dirent.h"\
-	"..\fl\enumerations.h"\
-	"..\fl\filename.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_image.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_plugins.h"\
-	"..\fl\fl_shared_image.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_style_util.h"\
+	"..\FL\dirent.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\filename.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Plugins.H"\
+	"..\FL\Fl_Shared_Image.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Style_Util.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Style_Util.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_STY=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_input.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_output.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_style_util.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Output.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Style_Util.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_symbols.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_SY=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Tabs.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_TA=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_tabs.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Tabs.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Tile.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_TI=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_tile.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Tile.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Tooltip.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_TO=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_menu_window.h"\
-	"..\fl\fl_single_window.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_tooltip.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Menu_Window.H"\
+	"..\FL\Fl_Single_Window.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Tooltip.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Valuator.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_VA=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Widget.H"\
 	"..\FL\math.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Value_Input.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_VAL=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_input.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_value_input.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Value_Input.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Value_Output.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_VALU=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_output.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_value_output.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Output.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Value_Output.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Value_Slider.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_VALUE=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_output.h"\
-	"..\fl\fl_slider.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_value_slider.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Output.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Value_Slider.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_vertex.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_VE=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	"..\FL\math.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_visual.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_VI=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Widget.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_WI=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_input.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_output.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Output.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Window.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_WIN=\
-	"..\fl\conf.h"\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\conf.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\stat.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Window_fullscreen.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_WIND=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Window_hotspot.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_WINDO=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_Window_iconize.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_WINDOW=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\Fl_x.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_X_=\
-	"..\fl\enumerations.h"\
-	"..\fl\filename.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
-	"..\src\fl_win32.cxx"\
+	"..\FL\Enumerations.H"\
+	"..\FL\filename.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	"..\src\Fl_win32.cxx"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\fl_xpm.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FL_XP=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_image.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_shared_image.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Shared_Image.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\forms_bitmap.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FORMS=\
-	"..\fl\enumerations.h"\
-	"..\fl\filename.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_ask.h"\
-	"..\fl\fl_bitmap.h"\
-	"..\fl\fl_box.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_browser.h"\
-	"..\fl\fl_browser_.h"\
-	"..\fl\fl_button.h"\
-	"..\fl\fl_chart.h"\
-	"..\fl\fl_check_button.h"\
-	"..\fl\fl_choice.h"\
-	"..\fl\fl_clock.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_counter.h"\
-	"..\fl\fl_dial.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_file_chooser.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_formsbitmap.h"\
-	"..\fl\fl_formspixmap.h"\
-	"..\fl\fl_free.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_image.h"\
-	"..\fl\fl_input.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_light_button.h"\
-	"..\fl\fl_menu_.h"\
-	"..\fl\fl_menu_button.h"\
-	"..\fl\fl_menu_item.h"\
-	"..\fl\fl_pixmap.h"\
-	"..\fl\fl_positioner.h"\
-	"..\fl\fl_round_button.h"\
-	"..\fl\fl_scrollbar.h"\
-	"..\fl\fl_show_colormap.h"\
-	"..\fl\fl_slider.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_timer.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_value_slider.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\forms.h"\
-	{$(INCLUDE)}"sys\types.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\filename.H"\
+	"..\FL\Fl.H"\
+	"..\FL\fl_ask.H"\
+	"..\FL\Fl_Bitmap.H"\
+	"..\FL\Fl_Box.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Browser.H"\
+	"..\FL\Fl_Browser_.H"\
+	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Chart.H"\
+	"..\FL\Fl_Check_Button.H"\
+	"..\FL\Fl_Choice.H"\
+	"..\FL\Fl_Clock.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Counter.H"\
+	"..\FL\Fl_Dial.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\fl_file_chooser.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_FormsBitmap.H"\
+	"..\FL\Fl_FormsPixmap.H"\
+	"..\FL\Fl_Free.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Light_Button.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Button.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Pixmap.H"\
+	"..\FL\Fl_Positioner.H"\
+	"..\FL\Fl_Round_Button.H"\
+	"..\FL\Fl_Scrollbar.H"\
+	"..\FL\fl_show_colormap.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Timer.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Value_Slider.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\forms.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\forms_compatability.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FORMS_=\
-	"..\fl\enumerations.h"\
-	"..\fl\filename.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_ask.h"\
-	"..\fl\fl_bitmap.h"\
-	"..\fl\fl_box.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_browser.h"\
-	"..\fl\fl_browser_.h"\
-	"..\fl\fl_button.h"\
-	"..\fl\fl_chart.h"\
-	"..\fl\fl_check_button.h"\
-	"..\fl\fl_choice.h"\
-	"..\fl\fl_clock.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_counter.h"\
-	"..\fl\fl_dial.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_file_chooser.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_formsbitmap.h"\
-	"..\fl\fl_formspixmap.h"\
-	"..\fl\fl_free.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_image.h"\
-	"..\fl\fl_input.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_light_button.h"\
-	"..\fl\fl_menu_.h"\
-	"..\fl\fl_menu_button.h"\
-	"..\fl\fl_menu_item.h"\
-	"..\fl\fl_pixmap.h"\
-	"..\fl\fl_positioner.h"\
-	"..\fl\fl_repeat_button.h"\
-	"..\fl\fl_return_button.h"\
-	"..\fl\fl_round_button.h"\
-	"..\fl\fl_scrollbar.h"\
-	"..\fl\fl_show_colormap.h"\
-	"..\fl\fl_slider.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_timer.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_value_slider.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\forms.h"\
-	{$(INCLUDE)}"sys\types.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\filename.H"\
+	"..\FL\Fl.H"\
+	"..\FL\fl_ask.H"\
+	"..\FL\Fl_Bitmap.H"\
+	"..\FL\Fl_Box.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Browser.H"\
+	"..\FL\Fl_Browser_.H"\
+	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Chart.H"\
+	"..\FL\Fl_Check_Button.H"\
+	"..\FL\Fl_Choice.H"\
+	"..\FL\Fl_Clock.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Counter.H"\
+	"..\FL\Fl_Dial.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\fl_file_chooser.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_FormsBitmap.H"\
+	"..\FL\Fl_FormsPixmap.H"\
+	"..\FL\Fl_Free.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Light_Button.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Button.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Pixmap.H"\
+	"..\FL\Fl_Positioner.H"\
+	"..\FL\Fl_Repeat_Button.H"\
+	"..\FL\Fl_Return_Button.H"\
+	"..\FL\Fl_Round_Button.H"\
+	"..\FL\Fl_Scrollbar.H"\
+	"..\FL\fl_show_colormap.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Timer.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Value_Slider.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\forms.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\forms_free.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FORMS_F=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_free.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Free.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\forms_fselect.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FORMS_FS=\
-	"..\fl\enumerations.h"\
-	"..\fl\filename.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_ask.h"\
-	"..\fl\fl_bitmap.h"\
-	"..\fl\fl_box.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_browser.h"\
-	"..\fl\fl_browser_.h"\
-	"..\fl\fl_button.h"\
-	"..\fl\fl_chart.h"\
-	"..\fl\fl_check_button.h"\
-	"..\fl\fl_choice.h"\
-	"..\fl\fl_clock.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_counter.h"\
-	"..\fl\fl_dial.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_file_chooser.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_formsbitmap.h"\
-	"..\fl\fl_formspixmap.h"\
-	"..\fl\fl_free.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_image.h"\
-	"..\fl\fl_input.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_light_button.h"\
-	"..\fl\fl_menu_.h"\
-	"..\fl\fl_menu_button.h"\
-	"..\fl\fl_menu_item.h"\
-	"..\fl\fl_pixmap.h"\
-	"..\fl\fl_positioner.h"\
-	"..\fl\fl_round_button.h"\
-	"..\fl\fl_scrollbar.h"\
-	"..\fl\fl_show_colormap.h"\
-	"..\fl\fl_slider.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_timer.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_value_slider.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\forms.h"\
-	{$(INCLUDE)}"sys\types.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\filename.H"\
+	"..\FL\Fl.H"\
+	"..\FL\fl_ask.H"\
+	"..\FL\Fl_Bitmap.H"\
+	"..\FL\Fl_Box.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Browser.H"\
+	"..\FL\Fl_Browser_.H"\
+	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Chart.H"\
+	"..\FL\Fl_Check_Button.H"\
+	"..\FL\Fl_Choice.H"\
+	"..\FL\Fl_Clock.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Counter.H"\
+	"..\FL\Fl_Dial.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\fl_file_chooser.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_FormsBitmap.H"\
+	"..\FL\Fl_FormsPixmap.H"\
+	"..\FL\Fl_Free.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Light_Button.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Button.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Pixmap.H"\
+	"..\FL\Fl_Positioner.H"\
+	"..\FL\Fl_Round_Button.H"\
+	"..\FL\Fl_Scrollbar.H"\
+	"..\FL\fl_show_colormap.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Timer.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Value_Slider.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\forms.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\forms_pixmap.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FORMS_P=\
-	"..\fl\enumerations.h"\
-	"..\fl\filename.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_ask.h"\
-	"..\fl\fl_bitmap.h"\
-	"..\fl\fl_box.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_browser.h"\
-	"..\fl\fl_browser_.h"\
-	"..\fl\fl_button.h"\
-	"..\fl\fl_chart.h"\
-	"..\fl\fl_check_button.h"\
-	"..\fl\fl_choice.h"\
-	"..\fl\fl_clock.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_counter.h"\
-	"..\fl\fl_dial.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_file_chooser.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_formsbitmap.h"\
-	"..\fl\fl_formspixmap.h"\
-	"..\fl\fl_free.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_image.h"\
-	"..\fl\fl_input.h"\
-	"..\fl\fl_input_.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_light_button.h"\
-	"..\fl\fl_menu_.h"\
-	"..\fl\fl_menu_button.h"\
-	"..\fl\fl_menu_item.h"\
-	"..\fl\fl_pixmap.h"\
-	"..\fl\fl_positioner.h"\
-	"..\fl\fl_round_button.h"\
-	"..\fl\fl_scrollbar.h"\
-	"..\fl\fl_show_colormap.h"\
-	"..\fl\fl_slider.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_timer.h"\
-	"..\fl\fl_valuator.h"\
-	"..\fl\fl_value_slider.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
-	"..\fl\forms.h"\
-	{$(INCLUDE)}"sys\types.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\filename.H"\
+	"..\FL\Fl.H"\
+	"..\FL\fl_ask.H"\
+	"..\FL\Fl_Bitmap.H"\
+	"..\FL\Fl_Box.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Browser.H"\
+	"..\FL\Fl_Browser_.H"\
+	"..\FL\Fl_Button.H"\
+	"..\FL\Fl_Chart.H"\
+	"..\FL\Fl_Check_Button.H"\
+	"..\FL\Fl_Choice.H"\
+	"..\FL\Fl_Clock.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Counter.H"\
+	"..\FL\Fl_Dial.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\fl_file_chooser.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_FormsBitmap.H"\
+	"..\FL\Fl_FormsPixmap.H"\
+	"..\FL\Fl_Free.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Image.H"\
+	"..\FL\Fl_Input.H"\
+	"..\FL\Fl_Input_.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Light_Button.H"\
+	"..\FL\Fl_Menu_.H"\
+	"..\FL\Fl_Menu_Button.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Pixmap.H"\
+	"..\FL\Fl_Positioner.H"\
+	"..\FL\Fl_Round_Button.H"\
+	"..\FL\Fl_Scrollbar.H"\
+	"..\FL\fl_show_colormap.H"\
+	"..\FL\Fl_Slider.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Timer.H"\
+	"..\FL\Fl_Valuator.H"\
+	"..\FL\Fl_Value_Slider.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
+	"..\FL\forms.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\forms_timer.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_FORMS_T=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_timer.h"\
-	"..\fl\fl_widget.h"\
-	{$(INCLUDE)}"sys\timeb.h"\
-	{$(INCLUDE)}"sys\types.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Timer.H"\
+	"..\FL\Fl_Widget.H"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\gl_draw.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_GL_DR=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	"..\FL\gl.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
-	"..\src\fl_fontsize.h"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
+	"..\src\Fl_FontSize.H"\
 	"..\src\Fl_Gl_Choice.H"\
 	".\config.h"\
-	{$(INCLUDE)}"GL\gl.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\gl_start.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_GL_ST=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_draw.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\fl_draw.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	"..\FL\gl.h"\
-	"..\fl\win32.h"\
-	"..\fl\x.h"\
+	"..\FL\win32.H"\
+	"..\FL\x.H"\
 	"..\src\Fl_Gl_Choice.H"\
 	".\config.h"\
-	{$(INCLUDE)}"GL\gl.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\glut_compatability.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_GLUT_=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_gl_window.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_menu_item.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Gl_Window.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Menu_Item.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	"..\FL\gl.h"\
-	"..\fl\glut.h"\
+	"..\FL\glut.H"\
 	".\config.h"\
-	{$(INCLUDE)}"GL\gl.h"\
-	{$(INCLUDE)}"GL\glu.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\glut_font.cxx
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_GLUT_F=\
-	"..\fl\enumerations.h"\
-	"..\fl\fl.h"\
-	"..\fl\fl_boxtype.h"\
-	"..\fl\fl_color.h"\
-	"..\fl\fl_flags.h"\
-	"..\fl\fl_font.h"\
-	"..\fl\fl_gl_window.h"\
-	"..\fl\fl_group.h"\
-	"..\fl\fl_labeltype.h"\
-	"..\fl\fl_style.h"\
-	"..\fl\fl_widget.h"\
-	"..\fl\fl_window.h"\
+	"..\FL\Enumerations.H"\
+	"..\FL\Fl.H"\
+	"..\FL\Fl_Boxtype.H"\
+	"..\FL\Fl_Color.H"\
+	"..\FL\Fl_Flags.H"\
+	"..\FL\Fl_Font.H"\
+	"..\FL\Fl_Gl_Window.H"\
+	"..\FL\Fl_Group.H"\
+	"..\FL\Fl_Labeltype.H"\
+	"..\FL\Fl_Style.H"\
+	"..\FL\Fl_Widget.H"\
+	"..\FL\Fl_Window.H"\
 	"..\FL\gl.h"\
-	"..\fl\glut.h"\
+	"..\FL\glut.H"\
 	".\config.h"\
-	{$(INCLUDE)}"GL\gl.h"\
-	{$(INCLUDE)}"GL\glu.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\numericsort.c
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_NUMER=\
-	"..\fl\filename.h"\
+	"..\FL\filename.H"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\scandir.c
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_SCAND=\
 	"..\src\scandir_win32.c"\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # Begin Source File
 
 SOURCE=..\src\vsnprintf.c
-
-!IF  "$(CFG)" == "fltkdll - Win32 Release"
-
-!ELSEIF  "$(CFG)" == "fltkdll - Win32 Debug"
-
 DEP_CPP_VSNPR=\
 	".\config.h"\
-	{$(INCLUDE)}"sys\types.h"\
 	
-
-!ENDIF 
-
 # End Source File
 # End Target
 # End Project

@@ -1,5 +1,5 @@
 //
-// "$Id: fl_color.cxx,v 1.15 1999/08/25 08:14:13 bill Exp $"
+// "$Id: fl_color.cxx,v 1.16 1999/10/17 15:20:27 mike Exp $"
 //
 // Color functions for the Fast Light Tool Kit (FLTK).
 //
@@ -293,7 +293,7 @@ void fl_get_color(Fl_Color i, uchar& r, uchar& g, uchar& b) {
   b = uchar(i>>8);
 }
 
-Fl_Color fl_color_average(Fl_Color color1, Fl_Color color2, float weight) {
+Fl_Color fl_color_average(Fl_Color color1, Fl_Color color2, double weight) {
   Fl_Color rgb1 = fl_get_color(color1);
   Fl_Color rgb2 = fl_get_color(color2);
   if (rgb1 == rgb2) return color1;
@@ -319,5 +319,5 @@ Fl_Color fl_contrast(Fl_Color fg, Fl_Color bg) {
 }
 
 //
-// End of "$Id: fl_color.cxx,v 1.15 1999/08/25 08:14:13 bill Exp $".
+// End of "$Id: fl_color.cxx,v 1.16 1999/10/17 15:20:27 mike Exp $".
 //
