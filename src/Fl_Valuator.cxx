@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_Valuator.cxx,v 1.32 2003/12/15 03:03:13 spitzak Exp $"
+// "$Id: Fl_Valuator.cxx,v 1.33 2004/06/27 01:25:03 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -288,7 +288,7 @@ int Valuator::handle(int event) {
       }
       return 0;
     }
-    case MOUSEWHEEL: {
+    case MOUSEWHEEL: if (vertical()) {
       handle_drag(value()+event_dy()*linesize());
       return 1;
     }
@@ -297,5 +297,5 @@ int Valuator::handle(int event) {
 }
 
 //
-// End of "$Id: Fl_Valuator.cxx,v 1.32 2003/12/15 03:03:13 spitzak Exp $".
+// End of "$Id: Fl_Valuator.cxx,v 1.33 2004/06/27 01:25:03 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_x.cxx,v 1.179 2004/06/25 18:38:42 xpxqx Exp $"
+// "$Id: Fl_x.cxx,v 1.180 2004/06/27 01:25:03 spitzak Exp $"
 //
 // X specific code for the Fast Light Tool Kit (FLTK).
 // This file is #included by Fl.cxx
@@ -48,6 +48,66 @@
 #if !defined(X_HAVE_UTF8_STRING) && defined(HAVE_ICONV_H)
 #  include <errno.h>
 #  include <iconv.h>
+
+// Emulate Xutf8LookupString from XFree86 using locale-dependent
+// multibyte to UTF-8 trancoding using iconv (Yuck!).
+int Xutf8LookupString(XIC ic, XKeyPressedEvent* event,
+		      char* buffer, int buffer_len,
+		      KeySym *keysym, Status* status)
+{
+  static iconv_t cd_to = 0;
+
+  // WAS: "char" did not work for me. I tried "ISO_8859-1" and it worked,
+  // but there must be some way to determine the correct string for the
+  // locale...
+  if (!cd_to) cd_to = iconv_open("UTF-8", "char");
+
+  // If iconv is not going to work, report no conversion, which makes
+  // my code call XLookupString (this is probably not exact emulation
+  // of Xutf8LookupString):
+  if (cd_to == (iconv_t)(-1)) {
+    *status = XLookupNone;
+    return 0;
+  }
+
+  static char* mb_buffer = 0;
+  static int mb_buffer_len;
+  if (!mb_buffer) mb_buffer = (char*)malloc(mb_buffer_len = buffer_len);
+  else if (buffer_len > mb_buffer_len)
+    mb_buffer = (char*)realloc(mb_buffer, mb_buffer_len = buffer_len);
+  int len = XmbLookupString(ic, event, mb_buffer, mb_buffer_len, keysym, status);
+
+  switch (*status) { 
+  case XLookupChars:
+  case XLookupKeySym:
+  case XLookupBoth:
+    break;
+  default:
+    return len; // return the error back to the caller
+  }
+
+//   printf("mb:");
+//   for (int i = 0; i < len; i++) printf(" %02x", mb_buffer[i]&0xFF);
+
+  char* inbuf = mb_buffer;
+  size_t inbytesleft = mb_buffer_len;
+  char* outbuf = buffer;
+  size_t outbytesleft = buffer_len;
+  if (iconv(cd_to, &inbuf, &inbytesleft, &outbuf, &outbytesleft) < 0) {
+    if (errno==E2BIG) {
+      *status = XBufferOverflow;
+      // guess that the remaining characters are the number of bytes needed:
+      return buffer_len + inbytesleft;
+    }
+  }
+
+//   printf(" utf8:");
+//   for (int i = 0; buffer+i < outbuf; i++) printf(" %02x", buffer[i]&0xff);
+//   printf("\n");
+
+  // otherwise, even on conversion errors, we return the result length:
+  return outbuf-buffer;
+}
 #endif
 
 using namespace fltk;
@@ -1324,19 +1384,8 @@ bool fltk::handle()
     RETRY:
       buffer[0] = 0;
       keysym = 0;
-#if defined(X_HAVE_UTF8_STRING)
       len = Xutf8LookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
 			      buffer, buffer_len-1, &keysym, &status);
-#elif defined(HAVE_ICONV_H)
-      // Locale-dependent multibyte to UTF-8 trancoding using iconv (Yuck!).
-      static iconv_t cd_to = iconv_open("UTF-8", "char");
-      if (cd_to == (iconv_t)(-1))
-	goto NO_XIM;
-      len = XmbLookupString(fl_xim_ic, (XKeyPressedEvent *)&xevent.xkey,
-                            buffer, buffer_len - 1, &keysym, &status);
-#else
-      goto NO_XIM;
-#endif
       switch (status) {
       case XBufferOverflow:
 	buffer_len = len+1;
@@ -1349,41 +1398,11 @@ bool fltk::handle()
       default:
 	goto NO_XIM;
       }
-#if !defined(X_HAVE_UTF8_STRING) && defined(HAVE_ICONV_H)
-      static char* buffer2 = 0;
-      static int buffer2_len;
-      if (!buffer2) buffer2 = (char*) malloc(buffer2_len = 20);
-      if (buffer2_len < buffer_len)
-        buffer2 = (char*) realloc(buffer2, (buffer2_len = buffer_len));
-      RETRY2:
-      const char* inbuf = buffer;
-      size_t inbytesleft = len;
-      char* outbuf = buffer2;
-      size_t outbytesleft = buffer2_len - 1;
-      if (iconv(cd_to,&inbuf,&inbytesleft,&outbuf,&outbytesleft)==(size_t)(-1)){
-        switch (errno) {
-        case EILSEQ:
-        case EINVAL:
-          outbuf = 0; // Terminate the buffer at the error.
-          break;
-        case E2BIG:
-          buffer2_len += (inbytesleft+1);
-          buffer2 = (char*)realloc(buffer2, buffer2_len);
-          goto RETRY2;
-        }
-      }
-      len = int(outbuf - buffer2);
-      // swap buffers
-      char* tmpbuf = buffer; buffer = buffer2; buffer2 = tmpbuf;
-      int tmplen = buffer_len; buffer_len = buffer2_len; buffer2_len = tmplen;
-#endif
     } else {
     NO_XIM:
       len = XLookupString(&(xevent.xkey), buffer, buffer_len-1, &keysym, 0);
       // Make ctrl+dash produce ^_ like it used to:
       if (xevent.xbutton.state&4 && keysym == '-') buffer[0] = 0x1f;
-      // Any keys producing foreign letters produces the bottom 8 bits:
-      if (!len && keysym < 0xf00) {buffer[0]=(char)keysym; len = 1;}
     }
     buffer[len] = 0;
     e_text = buffer;
@@ -2172,5 +2191,5 @@ void Window::free_backbuffer() {
 }
 
 //
-// End of "$Id: Fl_x.cxx,v 1.179 2004/06/25 18:38:42 xpxqx Exp $".
+// End of "$Id: Fl_x.cxx,v 1.180 2004/06/27 01:25:03 spitzak Exp $".
 //

@@ -1,5 +1,5 @@
 //
-// "$Id: Fl_compose.cxx,v 1.22 2004/06/24 07:05:17 spitzak Exp $"
+// "$Id: Fl_compose.cxx,v 1.23 2004/06/27 01:25:03 spitzak Exp $"
 //
 // Copyright 1998-2003 by Bill Spitzak and others.
 //
@@ -27,7 +27,7 @@
 using namespace fltk;
 
 // Before searching anything the following conversions are made:
-// '"', ';' -> ":"     "/" -> "|"    "=",'_' -> "-"
+// ';' -> ":"     "|" -> "/"    "=",'_' -> "-"
 
 // This table starts at character 0xA0 (non-breaking space)
 // The characters may be typed in either order after the compose key.
@@ -40,11 +40,11 @@ using namespace fltk;
 static const char compose_pairs[] = {
   "  "	// nbsp
   "! "	// inverted !
-  "c|"	// cent		 (was "% ")
+  "c/"	// cent		 (was "% ")
   "l-"	// pound	 (was "# ")
   "xo"	// currency	 (was "$ ")
   "y-"	// yen
-  "| "	// broken bar
+  "/ "	// broken bar
   "s "	// section	 (was "& ", X uses "so")
   ": "	// dieresis
   "c "	// copyright	 (X uses "co")
@@ -94,7 +94,7 @@ static const char compose_pairs[] = {
   "~O"
   ":O"
   "x "	// multiply
-  "O|"
+  "O/"
   "`U"
   "'U"
   "^U"
@@ -126,7 +126,7 @@ static const char compose_pairs[] = {
   "~o"
   ":o"
   "-:"	// divide
-  "o|"
+  "o/"
   "`u"
   "'u"
   "^u"
@@ -134,6 +134,134 @@ static const char compose_pairs[] = {
   "'y"
   "th"
   ":y"
+  // End of ISO-8859-1, start of Unicode:
+  "-A" // U+0100
+  "-a"
+  "uA" // A+ugonek?
+  "ua" // a+ugonek?
+  ",A" // ?
+  ",a"
+  "'C"
+  "'c"
+  "^C"
+  "^c"
+  "*C" // dot?
+  "*c"
+  "vC"
+  "vc"
+  "'D" // has a 'v' over a D
+  "'d"
+  "-D" // U+0110
+  "-d"
+  "-E"
+  "-e"
+  "uE"
+  "ue"
+  "*E"
+  "*e"
+  ",E"
+  ",e"
+  "vE"
+  "ve"
+  "^G"
+  "^g"
+  "uG"
+  "ug"
+  "*G" // U+0120
+  "*g"
+  ",G"
+  "'g"
+  "^H"
+  "^h"
+  "-H"
+  "-h"
+  "~I"
+  "~i"
+  "-I"
+  "-i"
+  "uI"
+  "ui"
+  ",I"
+  ",i"
+  "*I" // U+0130
+  "*i" // dot-less i?
+  "IJ"
+  "ij"
+  "^J"
+  "^j"
+  ",K"
+  ",k"
+  "k " // small capital K?
+  "'L"
+  "'l"
+  ",L"
+  ",l"
+  "'L"
+  "'l" // U+0140
+  "*L"
+  "*l"
+  "/L"
+  "/l"
+  "'N"
+  "'n"
+  ",N"
+  ",n"
+  "vN"
+  "vn"
+  "n " // 'n
+  ",N"
+  ",n"
+  "-O"
+  "-o"
+  "uO"
+  "uo"
+  "\"O" // U+0150
+  "\"o"
+  "OE"
+  "oe"
+  "'R"
+  "'r"
+  ",R"
+  ",r"
+  "vR"
+  "vr"
+  "'S"
+  "'s"
+  "^S"
+  "^s"
+  ",S"
+  ",s"
+  "vS" // U+0160
+  "vs"
+  ",T"
+  ",t"
+  "'T" // has a 'v' over it
+  "'t" // has a quote
+  "-T"
+  "-t"
+  "~U"
+  "~u"
+  "-U"
+  "-u"
+  "uU"
+  "uu"
+  "*U"
+  "*u"
+  "\"U" // U+0170
+  "\"u"
+  ",U"
+  ",u"
+  "^W"
+  "^w"
+  "^Y"
+  "^y"
+  ":Y"
+  "'Z"
+  "'z"
+  "*Z"
+  "*z"
+  "vZ"
+  "vz" // U+017E
 };
 
 #if USE_X11 // X only
@@ -148,12 +276,12 @@ static const char dead_keys[] = {
   '\'',	// XK_dead_acute
   '^',	// XK_dead_circumflex
   '~',	// XK_dead_tilde
-  '_',	// XK_dead_macron
+  '-',	// XK_dead_macron
   0,	// XK_dead_breve
   '.',	// XK_dead_abovedot
   ':',	// XK_dead_diaeresis
   '*',	// XK_dead_abovering
-  0,	// XK_dead_doubleacute
+  '"',	// XK_dead_doubleacute
   'v',	// XK_dead_caron
   ','	// XK_dead_cedilla
 //   0,	// XK_dead_ogonek
@@ -192,8 +320,8 @@ bool fltk::compose(int& del) {
 
   del = 0;
   char ascii = e_text[0];
-  if      (ascii == '"' || ascii == ';') ascii = ':';
-  else if (ascii == '/') ascii = '|';
+  if      (ascii == ';') ascii = ':';
+  else if (ascii == '|') ascii = '/';
   else if (ascii == '_' || ascii == '=') ascii = '-';
 
   static int plen;
@@ -221,11 +349,13 @@ bool fltk::compose(int& del) {
       }
     if (compose_state != 1) return true;
 
+#if 0
     // The right-hand ctrl and any letter "quotes" the control character:
     if (e_length && event_key()<128) {
       compose_state = 0;
       return true;
     }
+#endif
 
   } else if (compose_state) { // second character of compose
 
@@ -253,6 +383,7 @@ bool fltk::compose(int& del) {
   // typing prefix+accent:
   if (i >= 0xfe50 && i <= 0xfe5b) {
     compose_state = dead_keys[i-0xfe50];
+    plen = e_length;
     return true;
   }
 #else
