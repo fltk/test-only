@@ -1,5 +1,5 @@
 //
-// "$Id: symbols.cxx,v 1.15 2004/08/01 02:49:02 spitzak Exp $"
+// "$Id: symbols.cxx,v 1.16 2004/08/22 15:55:01 leka Exp $"
 //
 // Symbol test program for the Fast Light Tool Kit (FLTK).
 //
@@ -100,8 +100,8 @@ int main(int argc, char** argv) {
     char buffer[256];
     for (unsigned j = 0; j < sizeof(specialtable)/sizeof(*specialtable); j++) {
       if (!strcmp(specialtable[j].name, symbol->name())) {
-	browser.add(specialtable[j].text);
-	goto CONTINUE;
+        browser.add(specialtable[j].text);
+        goto CONTINUE;
       }
     }
     snprintf(buffer, 256, "@t@@%s;\t@n@%s;", symbol->name(), symbol->name());
@@ -111,3 +111,7 @@ int main(int argc, char** argv) {
   window.show(argc, argv);
   return fltk::run();
 }
+
+/*
+ * End of "$Id: symbols.cxx,v 1.16 2004/08/22 15:55:01 leka Exp $".
+ */
