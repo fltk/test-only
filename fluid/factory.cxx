@@ -1,5 +1,5 @@
 //
-// "$Id: factory.cxx,v 1.8 1999/03/31 19:14:21 carl Exp $"
+// "$Id: factory.cxx,v 1.9 1999/04/03 15:50:51 carl Exp $"
 //
 // Widget factory code for the Fast Light Tool Kit (FLTK).
 //
@@ -149,17 +149,7 @@ static Fl_Menu_Item browser_type_menu[] = {
 class Fl_Browser_Type : public Fl_Widget_Type {
   int is_browser() const {return 1;}
   Fl_Menu_Item *subtypes() {return browser_type_menu;}
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color& stc) {
-    Fl_Browser *o = (Fl_Browser*)(this->o);
-    switch (w) {
-    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); stc = o->selected_textcolor(); break;
-    case 1: o->textfont(f); break;
-    case 2: o->textsize(s); break;
-    case 3: o->textcolor(tc); break;
-    case 4: o->selected_textcolor(stc); break;
-    }
-    return 1;
-  }
+  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color& stc);
 public:
   virtual const char *type_name() {return "Fl_Browser";}
   Fl_Widget *widget(int x,int y,int w,int h) {
@@ -175,6 +165,18 @@ public:
 };
 static Fl_Browser_Type Fl_Browser_type;
 
+int Fl_Browser_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color& stc) {
+  Fl_Browser *o = (Fl_Browser*)(this->o);
+  switch (w) {
+    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); stc = o->selected_textcolor(); break;
+    case 1: o->textfont(f); break;
+    case 2: o->textsize(s); break;
+    case 3: o->textcolor(tc); break;
+    case 4: o->selected_textcolor(stc); break;
+  }
+  return 1;
+}
+
 ////////////////////////////////////////////////////////////////
 
 #include <FL/Fl_Counter.H>
@@ -184,16 +186,7 @@ static Fl_Menu_Item counter_type_menu[] = {
   {0}};
 class Fl_Counter_Type : public Fl_Widget_Type {
   Fl_Menu_Item *subtypes() {return counter_type_menu;}
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&) {
-    Fl_Counter *o = (Fl_Counter*)(this->o);
-    switch (w) {
-    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); break;
-    case 1: o->textfont(f); break;
-    case 2: o->textsize(s); break;
-    case 3: o->textcolor(tc); break;
-    }
-    return 1;
-  }
+  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&);
   int is_valuator() const {return 1;}
   int is_counter() const {return 1;}
 public:
@@ -203,6 +196,17 @@ public:
   Fl_Widget_Type *_make() {return new Fl_Counter_Type();}
 };
 static Fl_Counter_Type Fl_Counter_type;
+
+int Fl_Counter_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&) {
+  Fl_Counter *o = (Fl_Counter*)(this->o);
+  switch (w) {
+    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); break;
+    case 1: o->textfont(f); break;
+    case 2: o->textsize(s); break;
+    case 3: o->textcolor(tc); break;
+  }
+  return 1;
+}
 
 ////////////////////////////////////////////////////////////////
 
@@ -217,17 +221,7 @@ static Fl_Menu_Item input_type_menu[] = {
 class Fl_Input_Type : public Fl_Widget_Type {
   int is_input() const {return 1;}
   Fl_Menu_Item *subtypes() {return input_type_menu;}
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color& stc) {
-    Fl_Input_ *o = (Fl_Input_*)(this->o);
-    switch (w) {
-    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); stc = o->selected_textcolor(); break;
-    case 1: o->textfont(f); break;
-    case 2: o->textsize(s); break;
-    case 3: o->textcolor(tc); break;
-    case 4: o->selected_textcolor(stc); break;
-    }
-    return 1;
-  }
+  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color& stc);
 public:
   virtual const char *type_name() {return "Fl_Input";}
   Fl_Widget *widget(int x,int y,int w,int h) {
@@ -238,6 +232,18 @@ public:
   Fl_Widget_Type *_make() {return new Fl_Input_Type();}
 };
 static Fl_Input_Type Fl_Input_type;
+
+int Fl_Input_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color& stc) {
+  Fl_Input_ *o = (Fl_Input_*)(this->o);
+  switch (w) {
+    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); stc = o->selected_textcolor(); break;
+    case 1: o->textfont(f); break;
+    case 2: o->textsize(s); break;
+    case 3: o->textcolor(tc); break;
+    case 4: o->selected_textcolor(stc); break;
+  }
+  return 1;
+}
 
 ////////////////////////////////////////////////////////////////
 
@@ -367,16 +373,7 @@ class Fl_Value_Input_Type : public Fl_Widget_Type {
 public:
   int is_value_input() const {return 1;}
   virtual const char *type_name() {return "Fl_Value_Input";}
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&) {
-    Fl_Value_Input *o = (Fl_Value_Input*)(this->o);
-    switch (w) {
-    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); break;
-    case 1: o->textfont(f); break;
-    case 2: o->textsize(s); break;
-    case 3: o->textcolor(tc); break;
-    }
-    return 1;
-  }
+  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&);
   int is_valuator() const {return 1;}
   Fl_Widget *widget(int x,int y,int w,int h) {
     Fl_Value_Input *o = new Fl_Value_Input(x,y,w,h,"value:");
@@ -386,6 +383,17 @@ public:
 };
 static Fl_Value_Input_Type Fl_Value_Input_type;
 
+int Fl_Value_Input_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&) {
+  Fl_Value_Input *o = (Fl_Value_Input*)(this->o);
+  switch (w) {
+    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); break;
+    case 1: o->textfont(f); break;
+    case 2: o->textsize(s); break;
+    case 3: o->textcolor(tc); break;
+  }
+  return 1;
+}
+
 ////////////////////////////////////////////////////////////////
 
 #include <FL/Fl_Value_Output.H>
@@ -393,16 +401,7 @@ class Fl_Value_Output_Type : public Fl_Widget_Type {
 public:
   int is_value_output() const {return 1;}
   virtual const char *type_name() {return "Fl_Value_Output";}
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&) {
-    Fl_Value_Output *o = (Fl_Value_Output*)(this->o);
-    switch (w) {
-    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); break;
-    case 1: o->textfont(f); break;
-    case 2: o->textsize(s); break;
-    case 3: o->textcolor(tc); break;
-    }
-    return 1;
-  }
+  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&);
   int is_valuator() const {return 1;}
   Fl_Widget *widget(int x,int y,int w,int h) {
     Fl_Value_Output *o = new Fl_Value_Output(x,y,w,h,"value:");
@@ -412,20 +411,22 @@ public:
 };
 static Fl_Value_Output_Type Fl_Value_Output_type;
 
-////////////////////////////////////////////////////////////////
-
-#include <FL/Fl_Value_Slider.H>
-class Fl_Value_Slider_Type : public Fl_Slider_Type {
-  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&) {
-    Fl_Value_Slider *o = (Fl_Value_Slider*)(this->o);
-    switch (w) {
+int Fl_Value_Output_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&) {
+  Fl_Value_Output *o = (Fl_Value_Output*)(this->o);
+  switch (w) {
     case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); break;
     case 1: o->textfont(f); break;
     case 2: o->textsize(s); break;
     case 3: o->textcolor(tc); break;
-    }
-    return 1;
   }
+  return 1;
+}
+
+////////////////////////////////////////////////////////////////
+
+#include <FL/Fl_Value_Slider.H>
+class Fl_Value_Slider_Type : public Fl_Slider_Type {
+  int textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&);
 public:
   int is_value_slider() const {return 1;}
   virtual const char *type_name() {return "Fl_Value_Slider";}
@@ -434,6 +435,17 @@ public:
   Fl_Widget_Type *_make() {return new Fl_Value_Slider_Type();}
 };
 static Fl_Value_Slider_Type Fl_Value_Slider_type;
+
+int Fl_Value_Slider_Type::textstuff(int w, Fl_Font& f, int& s, Fl_Color& tc, Fl_Color&) {
+  Fl_Value_Slider *o = (Fl_Value_Slider*)(this->o);
+  switch (w) {
+    case 0: f = o->textfont(); s = o->textsize(); tc = o->textcolor(); break;
+    case 1: o->textfont(f); break;
+    case 2: o->textsize(s); break;
+    case 3: o->textcolor(tc); break;
+  }
+  return 1;
+}
 
 ////////////////////////////////////////////////////////////////
 
@@ -681,5 +693,5 @@ int lookup_symbol(const char *name, int &v, int numberok) {
 }
 
 //
-// End of "$Id: factory.cxx,v 1.8 1999/03/31 19:14:21 carl Exp $".
+// End of "$Id: factory.cxx,v 1.9 1999/04/03 15:50:51 carl Exp $".
 //
